@@ -6,12 +6,12 @@
   "family": "美濃系",
   "parent_shape_id": null,
   "required_pieces": [
-    { "piece": "玉", "square": "2二", "optional": false },
-    { "piece": "銀", "square": "3二", "optional": false },
-    { "piece": "金", "square": "4一", "optional": false },
-    { "piece": "金", "square": "5二", "optional": false }
+    { "piece": "玉", "square": "2b", "optional": false },
+    { "piece": "銀", "square": "3b", "optional": false },
+    { "piece": "金", "square": "4a", "optional": false },
+    { "piece": "金", "square": "5b", "optional": false }
   ],
-  "typical_build_order": ["2二", "3二", "4一", "5二"],
+  "typical_build_order": ["2b", "3b", "4a", "5b"],
   "characteristics": "四間飛車でよく使われる、完成が早くバランスの良い囲い。玉を盤の端に寄せてから銀と金でひし形に囲む。",
   "beginner_friendliness": {
     "score": 5,

@@ -151,12 +151,16 @@ function main() {
   for (const type of Object.keys(schemasByType)) {
     instancesByType[type] = [];
 
-    // 1) data/examples/<type>.example.json
-    const examplePath = join(EXAMPLES_DIR, `${type}.example.json`);
-    if (existsSync(examplePath)) {
-      const instance = loadJson(examplePath);
-      validateAgainstSchema(instance, schemasByType[type], `examples/${type}.example.json`, errors);
-      instancesByType[type].push({ instance, label: `examples/${type}.example.json`, warningsOnly: true });
+    // 1) data/examples/<type>.example.json および data/examples/<type>.<なにか>.example.json
+    //    (例: openings.example.json と openings.ibisha.example.json の両方を1つのtypeとして拾う)
+    if (existsSync(EXAMPLES_DIR)) {
+      const pattern = new RegExp(`^${type}(\\.[a-z0-9_]+)*\\.example\\.json$`);
+      for (const file of readdirSync(EXAMPLES_DIR).filter((f) => pattern.test(f))) {
+        const examplePath = join(EXAMPLES_DIR, file);
+        const instance = loadJson(examplePath);
+        validateAgainstSchema(instance, schemasByType[type], `examples/${file}`, errors);
+        instancesByType[type].push({ instance, label: `examples/${file}`, warningsOnly: true });
+      }
     }
 
     // 2) data/<type>/*.json (Phase1以降の本番データ)
