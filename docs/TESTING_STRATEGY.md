@@ -2,7 +2,7 @@
 
 ## 現状
 
-Node.js環境がまだ構築されていないため(Phase 0の作業)、実行可能なテストはまだ存在しない。ここでは方針とテストの種類を先に決めておき、Phase 0以降で順次有効化する。
+`apps/`(本実装)向けのNode.js環境はまだ構築されていない(Phase 0本体の作業)。一方、Phase 0着手前の技術検証(`spike/`)・プロトタイプ検証(`prototypes/`)・共通ユーティリティ(`scripts/lib/`)では、それぞれ独立したNode.js環境([node:test](https://nodejs.org/api/test.html)使用)でテストが既に存在し実行できる(例: `scripts/lib/usi-coordinates.test.mjs`、`prototypes/shape-matcher/*.test.mjs`)。これらは検証用途のテストであり、`apps/` 本実装向けのテスト基盤ではない。ここでは方針とテストの種類を先に決めておき、Phase 0本体(`apps/` の作成)以降で本実装向けのテスト基盤として順次有効化する。
 
 ## テストの種類
 
