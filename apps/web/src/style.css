@@ -1,0 +1,62 @@
+body {
+  font-family: sans-serif;
+  max-width: 640px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+h1 {
+  font-size: 1.25rem;
+}
+
+#status {
+  margin-bottom: 0.5rem;
+  font-weight: bold;
+}
+
+#board {
+  border-collapse: collapse;
+  margin-bottom: 0.75rem;
+}
+
+#board td {
+  width: 2.5rem;
+  height: 2.5rem;
+  border: 1px solid #333;
+  text-align: center;
+  vertical-align: middle;
+  font-size: 1.1rem;
+  background: #f3d9a4;
+}
+
+.piece-sente {
+  color: #111;
+}
+
+.piece-gote {
+  color: #a33;
+  display: inline-block;
+  transform: rotate(180deg);
+}
+
+#hands {
+  margin-bottom: 0.75rem;
+  font-size: 0.9rem;
+}
+
+#controls {
+  margin-bottom: 0.5rem;
+}
+
+#error {
+  color: #a33;
+  min-height: 1.2rem;
+  margin-bottom: 0.5rem;
+}
+
+#history {
+  font-size: 0.85rem;
+  max-height: 6rem;
+  overflow-y: auto;
+  padding-left: 1.2rem;
+}

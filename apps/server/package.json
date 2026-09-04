@@ -3,8 +3,10 @@
   "version": "0.0.1",
   "private": true,
   "type": "module",
-  "description": "将棋コーチ サーバー側実装。Phase 0時点では shogiops による合法手判定のみを持つ(エンジン連携・コーチングロジックは未着手)。",
+  "description": "将棋コーチ サーバー側実装。Phase 0時点では合法手判定・USI疎通・居飛車AI最小序盤進行・最小HTTP APIを持つ(コーチングロジックは未着手)。",
   "scripts": {
+    "dev": "tsx watch src/server.ts",
+    "start": "tsx src/server.ts",
     "test": "vitest run",
     "typecheck": "tsc --noEmit"
   },
@@ -13,6 +15,7 @@
   },
   "devDependencies": {
     "@types/node": "^26.4.1",
+    "tsx": "^4.23.13",
     "typescript": "^7.0.2",
     "vitest": "^5.0.0"
   }

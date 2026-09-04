@@ -14,26 +14,16 @@
 // 序盤の一定手数(maxForcedPlies)を過ぎたら undefined を返す。呼び出し側はこの場合、
 // 実際のエンジン(UsiEngine.go())にbestmoveを問い合わせて対局を最後まで進行させる想定。
 
-import { parseSfen } from "shogiops/sfen";
 import { isDrop, parseUsi } from "shogiops/util";
 import { getLegalMoves } from "../rules/legalMoves.js";
+import { parsePosition } from "../rules/sfenPosition.js";
 
-export class InvalidSfenError extends Error {}
+export { InvalidSfenError } from "../rules/sfenPosition.js";
 
 export const DEFAULT_MAX_FORCED_OPPONENT_PLIES = 6;
 
 export interface PickForcedOpponentMoveOptions {
   maxForcedPlies?: number;
-}
-
-function parsePosition(sfen: string) {
-  const parsed = parseSfen("standard", sfen);
-  if (parsed.isErr) {
-    throw new InvalidSfenError(
-      `SFENの解析に失敗しました: "${sfen}" (${parsed.error?.message ?? "unknown error"})`,
-    );
-  }
-  return parsed.value;
 }
 
 /**

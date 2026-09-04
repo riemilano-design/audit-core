@@ -4,22 +4,11 @@
 // 局面(SFEN)を入力として結果を返す純粋関数として実装する
 // (docs/TESTING_STRATEGY.md「ロジック単体テスト」の方針に従う)。
 
-import { parseSfen } from "shogiops/sfen";
 import { makeUsi, parsePieceName, parseUsi } from "shogiops/util";
 import type { MoveOrDrop } from "shogiops/types";
-import type { Position } from "shogiops/variant/position";
+import { parsePosition } from "./sfenPosition.js";
 
-export class InvalidSfenError extends Error {}
-
-function parsePosition(sfen: string): Position {
-  const parsed = parseSfen("standard", sfen);
-  if (parsed.isErr) {
-    throw new InvalidSfenError(
-      `SFENの解析に失敗しました: "${sfen}" (${parsed.error?.message ?? "unknown error"})`,
-    );
-  }
-  return parsed.value;
-}
+export { InvalidSfenError } from "./sfenPosition.js";
 
 /**
  * 局面(SFEN)における、現在の手番の合法手をすべてUSI形式で返す。

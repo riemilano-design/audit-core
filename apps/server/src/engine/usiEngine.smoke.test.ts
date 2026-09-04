@@ -9,14 +9,11 @@
 // バイナリが見つからない環境ではこのテストをスキップする。
 
 import { existsSync } from "node:fs";
-import path from "node:path";
-import { fileURLToPath } from "node:url";
 import { describe, it } from "vitest";
+import { resolveEnginePath } from "./enginePath.js";
 import { UsiEngine } from "./usiEngine.js";
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const DEFAULT_ENGINE_PATH = path.join(__dirname, "..", "..", "engine", "YaneuraOu-by-gcc");
-const ENGINE_PATH = process.env.SHOGI_ENGINE_PATH ?? DEFAULT_ENGINE_PATH;
+const ENGINE_PATH = resolveEnginePath();
 const engineAvailable = existsSync(ENGINE_PATH);
 
 if (!engineAvailable) {
