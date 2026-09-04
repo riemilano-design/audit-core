@@ -1,0 +1,12 @@
+{
+  "name": "shape-matcher-prototype",
+  "private": true,
+  "type": "module",
+  "description": "Phase 0(shogiops疎通)からPhase 1(coach-logic-dev)への橋渡し検証: SFEN + data/shapes 1件から required_pieces との一致判定を返す純粋関数のプロトタイプ。apps/ 本実装ではない。",
+  "scripts": {
+    "test": "node --test"
+  },
+  "dependencies": {
+    "shogiops": "^0.21.0"
+  }
+}
