@@ -1,0 +1,77 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://sgogi-coach.local/schemas/intents.schema.json",
+  "title": "Intent",
+  "description": "相手の指し手から読み取れる意図(例: 棒銀)。今の狙いと次の狙いをセットで持つ。詳細は docs/DATA_MODEL.md を参照。",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "name",
+    "opening_id",
+    "recognition_pattern",
+    "current_aim_explanation",
+    "next_aim_explanation",
+    "confidence_level",
+    "source"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9_]+$",
+      "description": "一意な識別子(例: boh_gin)"
+    },
+    "name": { "type": "string", "description": "表記(例: 棒銀)" },
+    "opening_id": {
+      "type": "string",
+      "description": "この意図が属する openings.id への参照"
+    },
+    "recognition_pattern": {
+      "type": "array",
+      "minItems": 1,
+      "description": "この意図を検知するための指し手の手がかり(順不同でも良い断片的なシグネチャ)",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["piece", "to"],
+        "properties": {
+          "piece": { "type": "string", "description": "動く駒(例: 銀)" },
+          "to": { "type": "string", "description": "移動先のマス目、または移動先の傾向(例: 3六)" },
+          "order_hint": { "type": "integer", "description": "手順の中でのおおよその順序(任意)" }
+        }
+      }
+    },
+    "current_aim_explanation": {
+      "type": "string",
+      "description": "初心者向けの「相手が今何をしているか」の説明"
+    },
+    "next_aim_explanation": {
+      "type": "string",
+      "description": "初心者向けの「相手が次に何をしてきそうか」の説明"
+    },
+    "affects_target_shapes": {
+      "type": "array",
+      "description": "この意図がある場合に、自分が目指す形の優先度をどう調整すべきかのヒント(任意)",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["shape_id", "adjustment"],
+        "properties": {
+          "shape_id": { "type": "string", "description": "対象の shapes.id" },
+          "adjustment": {
+            "type": "string",
+            "enum": ["prioritize", "deprioritize"],
+            "description": "prioritize=優先すべき, deprioritize=後回しにすべき"
+          },
+          "reason": { "type": "string", "description": "その調整をする理由(初心者向け)" }
+        }
+      }
+    },
+    "source": { "type": "string", "description": "参考にした出典" },
+    "confidence_level": {
+      "type": "string",
+      "enum": ["high", "medium", "low"],
+      "description": "判定の確からしさ。UI側の言い回し(断定 or 「〜かもしれません」)を左右する"
+    }
+  }
+}

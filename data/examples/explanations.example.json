@@ -1,0 +1,12 @@
+{
+  "id": "expl_mino_step1_silver",
+  "stage": "candidate_move",
+  "purpose": "王様を安全な場所に囲うための準備として、守りの銀を整えます。",
+  "move": "3i3h",
+  "reason": "この銀は本美濃囲いの完成に必要な駒で、相手が棒銀で急いで攻めてきているため、早めに動かして囲いを完成させておくと安心です。",
+  "refers_to_shape_id": "mino_honmino",
+  "refers_to_intent_id": "boh_gin",
+  "confidence_level": "medium",
+  "glossary_terms": ["gin", "kakoi", "boh_gin"],
+  "template_id": "purpose_move_reason_v1"
+}

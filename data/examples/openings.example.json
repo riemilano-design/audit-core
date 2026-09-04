@@ -1,0 +1,13 @@
+{
+  "id": "shikenbisha",
+  "name": "四間飛車",
+  "name_kana": "しけんびしゃ",
+  "side": "self",
+  "family": "振り飛車系",
+  "leads_to_shape_ids": ["mino_honmino"],
+  "scenario": {
+    "status": "not_implemented"
+  },
+  "source": "一般的な四間飛車の定義(飛車を4筋に振る戦法)に基づく(仮データ)",
+  "confidence_level": "high"
+}

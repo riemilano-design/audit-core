@@ -1,0 +1,21 @@
+{
+  "id": "boh_gin",
+  "name": "棒銀",
+  "opening_id": "ibisha",
+  "recognition_pattern": [
+    { "piece": "銀", "to": "3七", "order_hint": 1 },
+    { "piece": "銀", "to": "3六", "order_hint": 2 },
+    { "piece": "銀", "to": "3五", "order_hint": 3 }
+  ],
+  "current_aim_explanation": "相手は銀をまっすぐ前に押し出して、あなたの陣形の横(3筋側)を攻めようとしています。",
+  "next_aim_explanation": "このあと銀がさらに前に進み、あなたの飛車や歩とぶつかる展開になりやすいです。囲いを急いで固めるより、この攻めに対応する手を優先した方が良い場面が近づいています。",
+  "affects_target_shapes": [
+    {
+      "shape_id": "mino_honmino",
+      "adjustment": "prioritize",
+      "reason": "相手が早い攻めを狙っているため、時間のかかる囲いより早く完成する本美濃囲いを優先する方が安全なため"
+    }
+  ],
+  "source": "棒銀戦法の一般的な手順(銀を3七→3六→3五と進める型)に基づく(仮データ)",
+  "confidence_level": "medium"
+}

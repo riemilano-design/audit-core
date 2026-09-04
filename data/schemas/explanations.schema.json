@@ -1,0 +1,61 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://sgogi-coach.local/schemas/explanations.schema.json",
+  "title": "Explanation",
+  "description": "教育用データパイプラインの②〜⑧のうち、ユーザーに見せる文章として出力される部分すべてに使う共通の型。「目的→手→理由」の構造を強制する。詳細は docs/DATA_MODEL.md を参照。",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "stage", "purpose", "reason", "confidence_level"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9_]+$",
+      "description": "一意な識別子"
+    },
+    "stage": {
+      "type": "string",
+      "enum": [
+        "current_shape",
+        "opponent_intent",
+        "opponent_next_aim",
+        "reachable_shape",
+        "candidate_move"
+      ],
+      "description": "教育用データパイプラインのどの段階の説明か(局面そのものと『初心者向け説明』自体はstageを持たない)"
+    },
+    "purpose": {
+      "type": "string",
+      "description": "目的(なぜこれをするのか、初心者向け文章)。「目的→手→理由」の最初の要素"
+    },
+    "move": {
+      "type": ["string", "null"],
+      "description": "手(USI形式の指し手記法、例: 2g2f)。stageがcandidate_moveの場合のみ値を持つ。それ以外はnull"
+    },
+    "reason": {
+      "type": "string",
+      "description": "理由(その目的のためになぜその手・形が良いのか)。「目的→手→理由」の最後の要素"
+    },
+    "refers_to_shape_id": {
+      "type": ["string", "null"],
+      "description": "参照する shapes.id(任意)"
+    },
+    "refers_to_intent_id": {
+      "type": ["string", "null"],
+      "description": "参照する intents.id(任意)"
+    },
+    "confidence_level": {
+      "type": "string",
+      "enum": ["high", "medium", "low"],
+      "description": "断定を避けるべきかどうかの判断材料。lowの場合はUI側で「〜かもしれません」等の控えめな言い回しにする"
+    },
+    "glossary_terms": {
+      "type": "array",
+      "description": "この文章に含まれる将棋用語のキー一覧(用語集を参照してツールチップ表示するため)",
+      "items": { "type": "string" }
+    },
+    "template_id": {
+      "type": ["string", "null"],
+      "description": "生成に使ったテンプレートの識別子(任意、デバッグ・一貫性確認用)"
+    }
+  }
+}

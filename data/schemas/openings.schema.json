@@ -1,0 +1,49 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://sgogi-coach.local/schemas/openings.schema.json",
+  "title": "Opening",
+  "description": "戦型(例: 四間飛車、居飛車)。将来の対局シナリオ拡張(docs/SCENARIOS.md)を見込んだ器を持つが、scenarioフィールドは現段階では使用しない。",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "name", "name_kana", "side", "family", "leads_to_shape_ids", "confidence_level", "source"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9_]+$",
+      "description": "一意な識別子(例: shikenbisha)"
+    },
+    "name": { "type": "string", "description": "表記(例: 四間飛車)" },
+    "name_kana": { "type": "string", "description": "読み仮名" },
+    "side": {
+      "type": "string",
+      "enum": ["self", "opponent"],
+      "description": "MVPでは self=四間飛車(自分側), opponent=居飛車(AI側)"
+    },
+    "family": {
+      "type": "string",
+      "description": "分類(例: 振り飛車系、居飛車系)"
+    },
+    "leads_to_shape_ids": {
+      "type": "array",
+      "description": "この戦型がつながりやすい shapes.id の一覧",
+      "items": { "type": "string" }
+    },
+    "scenario": {
+      "type": ["object", "null"],
+      "description": "対局シナリオ(AI序盤制御)の将来拡張用フィールド。docs/SCENARIOS.md 参照。現段階では必ず null にする",
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": ["not_implemented"],
+          "description": "現段階では常に not_implemented。値を実装するのはPhase4以降"
+        }
+      }
+    },
+    "source": { "type": "string", "description": "参考にした出典" },
+    "confidence_level": {
+      "type": "string",
+      "enum": ["high", "medium", "low"],
+      "description": "内容の確からしさ"
+    }
+  }
+}

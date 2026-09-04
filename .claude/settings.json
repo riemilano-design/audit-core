@@ -1,0 +1,17 @@
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash scripts/hooks/validate-data-hook.sh",
+            "timeout": 30,
+            "statusMessage": "将棋データのスキーマ検証中..."
+          }
+        ]
+      }
+    ]
+  }
+}

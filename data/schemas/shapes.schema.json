@@ -1,0 +1,88 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://sgogi-coach.local/schemas/shapes.schema.json",
+  "title": "Shape",
+  "description": "囲い・陣形そのもの。自分が目指す形にも、相手の陣形の判定にも使う共通の型。詳細な意味づけは docs/DATA_MODEL.md を参照。",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "name",
+    "name_kana",
+    "side",
+    "family",
+    "required_pieces",
+    "characteristics",
+    "beginner_friendliness",
+    "confidence_level",
+    "source"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9_]+$",
+      "description": "一意な識別子(例: mino_honmino)"
+    },
+    "name": { "type": "string", "description": "表記(例: 本美濃囲い)" },
+    "name_kana": { "type": "string", "description": "読み仮名(例: ほんみのがこい)" },
+    "side": {
+      "type": "string",
+      "enum": ["self", "opponent", "both"],
+      "description": "self=自分の目標になり得る, opponent=相手陣形の判定用, both=両方"
+    },
+    "family": {
+      "type": "string",
+      "description": "形のグループ名(例: 美濃系)。同じfamily内の発展関係はparent_shape_idで表す"
+    },
+    "parent_shape_id": {
+      "type": ["string", "null"],
+      "description": "この形の元になる、より基本的な形のid(例: 高美濃囲いのparentはmino_honmino)。無ければnull"
+    },
+    "required_pieces": {
+      "type": "array",
+      "minItems": 1,
+      "description": "完成に必要な駒の配置一覧",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["piece", "square", "optional"],
+        "properties": {
+          "piece": { "type": "string", "description": "駒の種類(例: 玉、金、銀)" },
+          "square": { "type": "string", "description": "マス目(例: 2二)" },
+          "optional": { "type": "boolean", "description": "trueなら必須ではない構成要素" }
+        }
+      }
+    },
+    "typical_build_order": {
+      "type": "array",
+      "description": "典型的な組み方の順序。道筋提示(Phase2以降)に使う。required_piecesのsquareを順番に並べる",
+      "items": { "type": "string" }
+    },
+    "characteristics": {
+      "type": "string",
+      "description": "初心者向けの特徴説明"
+    },
+    "beginner_friendliness": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["score", "reason"],
+      "properties": {
+        "score": { "type": "integer", "minimum": 1, "maximum": 5, "description": "初心者向き度(1〜5、5が最も組みやすい)" },
+        "reason": { "type": "string", "description": "その評価点をつけた理由" }
+      }
+    },
+    "weak_against": {
+      "type": "string",
+      "description": "この形が苦手とする攻め筋の説明(任意)"
+    },
+    "source": {
+      "type": "string",
+      "description": "参考にした出典(書籍名・サイト名など)"
+    },
+    "confidence_level": {
+      "type": "string",
+      "enum": ["high", "medium", "low"],
+      "description": "内容の確からしさ。lowの場合は人間の確認を必須とする"
+    }
+  }
+}

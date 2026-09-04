@@ -1,0 +1,23 @@
+{
+  "id": "mino_honmino",
+  "name": "本美濃囲い",
+  "name_kana": "ほんみのがこい",
+  "side": "self",
+  "family": "美濃系",
+  "parent_shape_id": null,
+  "required_pieces": [
+    { "piece": "玉", "square": "2二", "optional": false },
+    { "piece": "銀", "square": "3二", "optional": false },
+    { "piece": "金", "square": "4一", "optional": false },
+    { "piece": "金", "square": "5二", "optional": false }
+  ],
+  "typical_build_order": ["2二", "3二", "4一", "5二"],
+  "characteristics": "四間飛車でよく使われる、完成が早くバランスの良い囲い。玉を盤の端に寄せてから銀と金でひし形に囲む。",
+  "beginner_friendliness": {
+    "score": 5,
+    "reason": "駒の動かし方が少なく、初めて囲いを組む人でも手順を覚えやすいため"
+  },
+  "weak_against": "横からの攻めや玉頭(玉の真上)からの攻めにはやや弱い。高美濃・銀冠などへの発展で強化できる。",
+  "source": "一般的な四間飛車の入門書における標準的な本美濃囲いの説明に基づく(要出典確認・仮データ)",
+  "confidence_level": "medium"
+}
