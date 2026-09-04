@@ -1,0 +1,12 @@
+{
+  "id": "expl_current_shape_sample",
+  "stage": "current_shape",
+  "purpose": "今、自分の陣形がどんな形になっているかを知り、この先どんな囲いを目指せるかを考えるための土台にします。",
+  "move": null,
+  "reason": "現在は本美濃囲いに必要な玉・銀・金二枚がすべて所定の位置に収まっており、四間飛車でよく使われる基本の囲いが完成しています。ここからさらに金と桂馬を足して高美濃囲いへ発展させることもできます。",
+  "refers_to_shape_id": "mino_honmino",
+  "refers_to_intent_id": null,
+  "confidence_level": "medium",
+  "glossary_terms": ["mino_gakoi", "gyoku", "gin", "kin"],
+  "template_id": null
+}

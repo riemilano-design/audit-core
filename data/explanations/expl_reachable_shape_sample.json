@@ -1,0 +1,12 @@
+{
+  "id": "expl_reachable_shape_sample",
+  "stage": "reachable_shape",
+  "purpose": "本美濃囲いの次にどんな形を目指せるかを知り、より上部に強い守りを考えるためです。",
+  "move": null,
+  "reason": "本美濃囲いに金一枚と桂馬を足して高美濃囲いへ発展させると、玉の頭上(上部)からの攻めに強くなります。相手が急な攻めを仕掛けてきていない場面であれば、目指す価値のある発展形です。",
+  "refers_to_shape_id": "mino_takamino",
+  "refers_to_intent_id": null,
+  "confidence_level": "medium",
+  "glossary_terms": ["mino_gakoi", "takamino", "kei"],
+  "template_id": null
+}

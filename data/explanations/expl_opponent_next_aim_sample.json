@@ -1,0 +1,12 @@
+{
+  "id": "expl_opponent_next_aim_sample",
+  "stage": "opponent_next_aim",
+  "purpose": "相手が次に何を狙ってきそうかを先読みし、今のうちに備えておくためです。",
+  "move": null,
+  "reason": "相手は6筋の歩を6四・6五と伸ばして角道をぶつけようとしており、角交換が起きたあとは飛車や銀で一気に攻め込んでくる可能性があります。今のうちに囲いを固めておくと、そのあとの攻めに対応しやすくなります。",
+  "refers_to_shape_id": null,
+  "refers_to_intent_id": "hayajikake",
+  "confidence_level": "medium",
+  "glossary_terms": ["hayajikake", "kakukoukan"],
+  "template_id": null
+}

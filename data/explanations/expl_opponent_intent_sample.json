@@ -1,0 +1,12 @@
+{
+  "id": "expl_opponent_intent_sample",
+  "stage": "opponent_intent",
+  "purpose": "相手が今どんな作戦で攻めようとしているかを把握し、慌てずに対応を考えるためです。",
+  "move": null,
+  "reason": "相手は銀を3七→3六→3五とまっすぐ前に進める棒銀という攻め方を選んでいます。横から一直線に攻めてくる速い戦法なので、放っておくと自陣が整う前に攻め込まれることがあります。",
+  "refers_to_shape_id": null,
+  "refers_to_intent_id": "boh_gin",
+  "confidence_level": "medium",
+  "glossary_terms": ["boh_gin", "gin"],
+  "template_id": null
+}
