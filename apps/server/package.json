@@ -1,0 +1,19 @@
+{
+  "name": "@sgogi-coach/server",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "description": "将棋コーチ サーバー側実装。Phase 0時点では shogiops による合法手判定のみを持つ(エンジン連携・コーチングロジックは未着手)。",
+  "scripts": {
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "shogiops": "^0.21.0"
+  },
+  "devDependencies": {
+    "@types/node": "^26.4.1",
+    "typescript": "^7.0.2",
+    "vitest": "^5.0.0"
+  }
+}

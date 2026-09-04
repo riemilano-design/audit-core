@@ -1,0 +1,12 @@
+{
+  "name": "sgogi-coach",
+  "private": true,
+  "type": "module",
+  "description": "将棋コーチ: 将棋初心者向けAIコーチアプリ。ルートpackage.jsonはワークスペース定義と開発補助スクリプトのみを持つ(アプリ本体の依存は apps/* 配下)。",
+  "workspaces": [
+    "apps/*"
+  ],
+  "scripts": {
+    "validate:data": "node scripts/validate-data.mjs"
+  }
+}
