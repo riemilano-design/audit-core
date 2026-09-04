@@ -48,7 +48,7 @@
         "required": ["piece", "square", "optional"],
         "properties": {
           "piece": { "type": "string", "description": "駒の種類(例: 玉、金、銀)" },
-          "square": { "type": "string", "description": "マス目(例: 2二)" },
+          "square": { "type": "string", "description": "マス目(USI形式、例: 2b)" },
           "optional": { "type": "boolean", "description": "trueなら必須ではない構成要素" }
         }
       }

@@ -36,7 +36,7 @@
         "required": ["piece", "to"],
         "properties": {
           "piece": { "type": "string", "description": "動く駒(例: 銀)" },
-          "to": { "type": "string", "description": "移動先のマス目、または移動先の傾向(例: 3六)" },
+          "to": { "type": "string", "description": "移動先のマス目(USI形式、例: 3f)、または移動先の傾向" },
           "order_hint": { "type": "integer", "description": "手順の中でのおおよその順序(任意)" }
         }
       }
