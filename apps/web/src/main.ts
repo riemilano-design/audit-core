@@ -2,7 +2,17 @@
 // docs/PHASES.md Phase0の目的「盤面が表示され、対局が(仮のUIで良いので)成立する」を満たす
 // 最小限の実装。着手はUSI形式のテキスト入力で行う(盤面上のクリック操作は未実装)。
 
-import { fetchGameState, isMoveError, startNewGame, submitMove, type GameStateResponse } from "./gameApi.js";
+import {
+  fetchGameState,
+  isMoveError,
+  startNewGame,
+  submitMove,
+  type CoachExplanation,
+  type CoachStage,
+  type CoachStatus,
+  type ConfidenceLevel,
+  type GameStateResponse,
+} from "./gameApi.js";
 import { PIECE_KANJI } from "./pieceKanji.js";
 import { parseSfenBoardPart, parseSfenHands, parseSfenTurn } from "./sfenBoard.js";
 import "./style.css";
@@ -21,6 +31,8 @@ app.innerHTML = `
     <button id="newGame">新しい対局</button>
   </div>
   <div id="error"></div>
+  <h2>将棋の意味を読む</h2>
+  <div id="coach"></div>
   <h2>指し手履歴</h2>
   <ol id="history"></ol>
 `;
@@ -30,9 +42,65 @@ const handsEl = document.querySelector<HTMLDivElement>("#hands")!;
 const statusEl = document.querySelector<HTMLDivElement>("#status")!;
 const errorEl = document.querySelector<HTMLDivElement>("#error")!;
 const historyEl = document.querySelector<HTMLOListElement>("#history")!;
+const coachEl = document.querySelector<HTMLDivElement>("#coach")!;
 const moveInput = document.querySelector<HTMLInputElement>("#moveInput")!;
 const submitButton = document.querySelector<HTMLButtonElement>("#submitMove")!;
 const newGameButton = document.querySelector<HTMLButtonElement>("#newGame")!;
+
+// 「棋譜解析結果を見る画面」ではなく「対局しながら意味を理解する画面」を意識し、
+// 将棋用語を知らない初心者にも伝わる短い日本語ラベルに変換する
+// (これらはUI表示上の見出し文言であり、将棋の事実そのものではない)。
+const STAGE_LABELS: Record<CoachStage, string> = {
+  current_shape: "【今の局面】自分の形",
+  opponent_intent: "【相手は何をしている？】",
+  opponent_next_aim: "【このあと何を狙っている？】",
+};
+
+const STATUS_LABELS: Record<CoachStatus, string> = {
+  none: "まだ判断できません",
+  forming: "途中(まだ断定できません)",
+  matched: "検出しました",
+  completed: "完成しています",
+};
+
+const CONFIDENCE_LABELS: Record<ConfidenceLevel, string> = {
+  high: "確信度: 高",
+  medium: "確信度: 中",
+  low: "確信度: 低(参考程度に)",
+};
+
+function renderCoach(coach: CoachExplanation[] | undefined): void {
+  coachEl.innerHTML = "";
+
+  if (!coach) {
+    const p = document.createElement("p");
+    p.className = "coach-unavailable";
+    p.textContent = "この局面の説明を取得できませんでした。対局は続けられます。";
+    coachEl.appendChild(p);
+    return;
+  }
+
+  for (const item of coach) {
+    const section = document.createElement("section");
+    section.className = `coach-stage coach-status-${item.status}`;
+
+    const title = document.createElement("h3");
+    title.textContent = STAGE_LABELS[item.stage] ?? item.stage;
+    section.appendChild(title);
+
+    const badge = document.createElement("span");
+    badge.className = "coach-badge";
+    badge.textContent = `${STATUS_LABELS[item.status] ?? item.status}(${CONFIDENCE_LABELS[item.confidence_level]})`;
+    section.appendChild(badge);
+
+    const reason = document.createElement("p");
+    reason.className = "coach-reason";
+    reason.textContent = item.reason;
+    section.appendChild(reason);
+
+    coachEl.appendChild(section);
+  }
+}
 
 function renderBoard(sfen: string): void {
   const board = parseSfenBoardPart(sfen);
@@ -87,6 +155,7 @@ function render(state: GameStateResponse): void {
   renderHands(state.sfen);
   renderStatus(state);
   renderHistory(state.moveHistory);
+  renderCoach(state.coach);
 }
 
 function setError(message: string): void {

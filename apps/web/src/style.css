@@ -60,3 +60,71 @@ h1 {
   overflow-y: auto;
   padding-left: 1.2rem;
 }
+
+#coach {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  margin-bottom: 1rem;
+}
+
+.coach-stage {
+  border: 1px solid #ccc;
+  border-left-width: 4px;
+  border-radius: 4px;
+  padding: 0.6rem 0.8rem;
+  background: #fafafa;
+}
+
+.coach-stage h3 {
+  margin: 0 0 0.3rem;
+  font-size: 0.95rem;
+}
+
+.coach-badge {
+  display: inline-block;
+  font-size: 0.75rem;
+  padding: 0.1rem 0.5rem;
+  border-radius: 999px;
+  background: #e0e0e0;
+  color: #333;
+  margin-bottom: 0.4rem;
+}
+
+.coach-reason {
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.coach-unavailable {
+  font-size: 0.85rem;
+  color: #666;
+}
+
+/* 検知状態ごとの色分け(左のアクセントバーとバッジの色のみ変える。文言自体は変えない) */
+.coach-status-none {
+  border-left-color: #999;
+}
+.coach-status-none .coach-badge {
+  background: #eee;
+  color: #666;
+}
+
+.coach-status-forming {
+  border-left-color: #d9a441;
+}
+.coach-status-forming .coach-badge {
+  background: #fbe7c6;
+  color: #7a5310;
+}
+
+.coach-status-matched,
+.coach-status-completed {
+  border-left-color: #3a7d44;
+}
+.coach-status-matched .coach-badge,
+.coach-status-completed .coach-badge {
+  background: #d9f0dd;
+  color: #1f5c2a;
+}

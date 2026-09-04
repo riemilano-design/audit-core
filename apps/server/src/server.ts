@@ -3,11 +3,11 @@
 // 対局は同時に1つだけ(Phase0の検証目的には十分。複数対局の管理は将来必要になれば設計する)。
 
 import { createServer, type IncomingMessage, type ServerResponse } from "node:http";
+import { buildStateResponse } from "./api/stateResponse.js";
 import { resolveEnginePath } from "./engine/enginePath.js";
 import { UsiEngine } from "./engine/usiEngine.js";
 import {
   createInitialGameState,
-  getStatus,
   HumanMoveError,
   playHumanMove,
   playOpponentMove,
@@ -34,10 +34,6 @@ function getEngine(): Promise<UsiEngine> {
     })();
   }
   return engineReady;
-}
-
-function stateResponse(current: GameState) {
-  return { ...current, status: getStatus(current) };
 }
 
 function sendJson(res: ServerResponse, statusCode: number, body: unknown): void {
@@ -95,7 +91,7 @@ async function handleMove(req: IncomingMessage, res: ServerResponse): Promise<vo
   }
 
   state = await playOpponentMove(state, await getEngine());
-  sendJson(res, 200, stateResponse(state));
+  sendJson(res, 200, buildStateResponse(state));
 }
 
 const server = createServer((req, res) => {
@@ -110,13 +106,13 @@ const server = createServer((req, res) => {
   }
 
   if (req.method === "GET" && req.url === "/api/game") {
-    sendJson(res, 200, stateResponse(state));
+    sendJson(res, 200, buildStateResponse(state));
     return;
   }
 
   if (req.method === "POST" && req.url === "/api/game/new") {
     state = createInitialGameState();
-    sendJson(res, 200, stateResponse(state));
+    sendJson(res, 200, buildStateResponse(state));
     return;
   }
 
