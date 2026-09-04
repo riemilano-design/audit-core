@@ -1,0 +1,12 @@
+{
+  "name": "shogi-coach-spike",
+  "private": true,
+  "type": "module",
+  "description": "Phase 0 technical spike: shogiops + YaneuraOu (USI) minimal integration check. Not part of the production app.",
+  "scripts": {
+    "smoke-test": "node smoke-test.mjs"
+  },
+  "dependencies": {
+    "shogiops": "^0.21.0"
+  }
+}
