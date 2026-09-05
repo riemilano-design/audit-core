@@ -102,6 +102,47 @@ describe("buildStateResponse", () => {
     }
   });
 
+  // Phase4: current.wasLastOpponentMoveForced(gameSession.tsが確定させた事実)が
+  // safeExplainPosition経由でexplanationGenerator.tsまで正しく伝播することを確認する。
+  it("Phase4: wasLastOpponentMoveForced=true かつ intent全noneの場合、事実ベースの新文言が伝播する", () => {
+    const state: GameState = { ...gameStateAfter([]), wasLastOpponentMoveForced: true };
+    const response = buildStateResponse(state);
+    const opponentIntent = findStage(response.coach!, "opponent_intent");
+    const nextAim = findStage(response.coach!, "opponent_next_aim");
+
+    expect(opponentIntent.reason).toBe(
+      "相手の今の手は、対局序盤の決まった手順によるものです。そのため、狙いはまだ判定できません。",
+    );
+    expect(nextAim.reason).toBe(
+      "相手の今の手は、対局序盤の決まった手順によるものです。そのため、狙いはまだ判定できません。",
+    );
+  });
+
+  it("Phase4: wasLastOpponentMoveForced=false(未指定含む)かつintent全noneの場合、従来文言のまま伝播する", () => {
+    const stateWithFalse: GameState = { ...gameStateAfter([]), wasLastOpponentMoveForced: false };
+    const stateWithUndefined: GameState = gameStateAfter([]);
+
+    for (const state of [stateWithFalse, stateWithUndefined]) {
+      const opponentIntent = findStage(buildStateResponse(state).coach!, "opponent_intent");
+      expect(opponentIntent.reason).toBe(
+        "相手の狙いは、まだはっきりとは分かりません。特定の作戦を決めつけず、もう少し様子を見てみましょう。",
+      );
+    }
+  });
+
+  it("Phase4: wasLastOpponentMoveForced=trueでも、intentが一致していれば既存のintent説明を優先する", () => {
+    const moveHistory = interleaveWithSenteFillers(HAYAJIKAKE_GOTE_MOVES_FULL);
+    const forcedState: GameState = { ...gameStateAfter(moveHistory), wasLastOpponentMoveForced: true };
+    const notForcedState: GameState = { ...gameStateAfter(moveHistory), wasLastOpponentMoveForced: false };
+
+    const forcedIntent = findStage(buildStateResponse(forcedState).coach!, "opponent_intent");
+    const notForcedIntent = findStage(buildStateResponse(notForcedState).coach!, "opponent_intent");
+
+    expect(forcedIntent).toEqual(notForcedIntent);
+    expect(forcedIntent.refers_to_intent_id).toBe("hayajikake");
+    expect(forcedIntent.reason).toContain("早仕掛けの形になっています");
+  });
+
   it("forming状態: 途中段階のIntentを断定表現にしない", () => {
     const moveHistory = interleaveWithSenteFillers([HAYAJIKAKE_GOTE_MOVES_FULL[0]!]);
     const state = gameStateAfter(moveHistory);

@@ -150,7 +150,21 @@ function buildCurrentShapeStage(shapeResults: ShapeFormationResult[]): StageResu
   };
 }
 
-function buildOpponentIntentStage(intentResults: IntentDetectionResult[]): StageResult {
+// Phase4: forcedOpponentOpening/scenarioOpponentOpeningの強制進行フェーズでは、
+// intentDetector.tsの3件が全てnoneになることが構造上ほぼ必ず起きる
+// (data/intents/*.jsonのrecognition_patternは、強制進行の機械的な手順とは
+// 無関係なため)。この場合に限り、将棋上の意図を推測するのではなく、
+// 「直近の相手の手はシステムの決まった手順によるものである」という、
+// wasLastOpponentMoveForced(呼び出し元が確定させた事実)だけをそのまま説明する。
+// intentが1件でも検出されている場合(best !== undefined)は、この文言は一切使わず
+// 既存のintent説明を必ず優先する(呼び出し側の分岐、下記参照)。
+const OPPONENT_UNCLASSIFIED_FORCED_OPENING_REASON =
+  "相手の今の手は、対局序盤の決まった手順によるものです。そのため、狙いはまだ判定できません。";
+
+function buildOpponentIntentStage(
+  intentResults: IntentDetectionResult[],
+  wasLastOpponentMoveForced: boolean = false,
+): StageResult {
   const best = pickBest(intentResults);
 
   if (!best) {
@@ -161,13 +175,16 @@ function buildOpponentIntentStage(intentResults: IntentDetectionResult[]): Stage
         stage: "opponent_intent",
         purpose: PURPOSE_TEMPLATES.opponent_intent,
         move: null,
-        reason:
-          "相手の狙いは、まだはっきりとは分かりません。特定の作戦を決めつけず、もう少し様子を見てみましょう。",
+        reason: wasLastOpponentMoveForced
+          ? OPPONENT_UNCLASSIFIED_FORCED_OPENING_REASON
+          : "相手の狙いは、まだはっきりとは分かりません。特定の作戦を決めつけず、もう少し様子を見てみましょう。",
         refers_to_shape_id: null,
         refers_to_intent_id: null,
         confidence_level: "low",
         glossary_terms: [],
-        template_id: "opponent_intent_unclassified",
+        template_id: wasLastOpponentMoveForced
+          ? "opponent_intent_unclassified_forced_opening"
+          : "opponent_intent_unclassified",
       },
     };
   }
@@ -194,7 +211,10 @@ function buildOpponentIntentStage(intentResults: IntentDetectionResult[]): Stage
   };
 }
 
-function buildOpponentNextAimStage(intentResults: IntentDetectionResult[]): StageResult {
+function buildOpponentNextAimStage(
+  intentResults: IntentDetectionResult[],
+  wasLastOpponentMoveForced: boolean = false,
+): StageResult {
   const best = pickBest(intentResults);
 
   if (!best) {
@@ -205,12 +225,16 @@ function buildOpponentNextAimStage(intentResults: IntentDetectionResult[]): Stag
         stage: "opponent_next_aim",
         purpose: PURPOSE_TEMPLATES.opponent_next_aim,
         move: null,
-        reason: "相手の狙いがまだ定まっていないため、次に何をしてきそうかも現時点では判断できません。",
+        reason: wasLastOpponentMoveForced
+          ? OPPONENT_UNCLASSIFIED_FORCED_OPENING_REASON
+          : "相手の狙いがまだ定まっていないため、次に何をしてきそうかも現時点では判断できません。",
         refers_to_shape_id: null,
         refers_to_intent_id: null,
         confidence_level: "low",
         glossary_terms: [],
-        template_id: "opponent_next_aim_unclassified",
+        template_id: wasLastOpponentMoveForced
+          ? "opponent_next_aim_unclassified_forced_opening"
+          : "opponent_next_aim_unclassified",
       },
     };
   }
@@ -234,11 +258,15 @@ function buildOpponentNextAimStage(intentResults: IntentDetectionResult[]): Stag
   };
 }
 
-function buildStages(shapeResults: ShapeFormationResult[], intentResults: IntentDetectionResult[]): StageResult[] {
+function buildStages(
+  shapeResults: ShapeFormationResult[],
+  intentResults: IntentDetectionResult[],
+  wasLastOpponentMoveForced: boolean = false,
+): StageResult[] {
   return [
     buildCurrentShapeStage(shapeResults),
-    buildOpponentIntentStage(intentResults),
-    buildOpponentNextAimStage(intentResults),
+    buildOpponentIntentStage(intentResults, wasLastOpponentMoveForced),
+    buildOpponentNextAimStage(intentResults, wasLastOpponentMoveForced),
   ];
 }
 
@@ -250,8 +278,9 @@ function buildStages(shapeResults: ShapeFormationResult[], intentResults: Intent
 export function generateExplanations(
   shapeResults: ShapeFormationResult[],
   intentResults: IntentDetectionResult[],
+  wasLastOpponentMoveForced: boolean = false,
 ): Explanation[] {
-  return buildStages(shapeResults, intentResults).map((s) => s.explanation);
+  return buildStages(shapeResults, intentResults, wasLastOpponentMoveForced).map((s) => s.explanation);
 }
 
 /** generateExplanationsのExplanationに、Web API/UI向けの生の判定状態(status)を添えたもの。 */
@@ -267,8 +296,12 @@ export interface CoachExplanation extends Explanation {
 export function generateCoachExplanations(
   shapeResults: ShapeFormationResult[],
   intentResults: IntentDetectionResult[],
+  wasLastOpponentMoveForced: boolean = false,
 ): CoachExplanation[] {
-  return buildStages(shapeResults, intentResults).map((s) => ({ ...s.explanation, status: s.status }));
+  return buildStages(shapeResults, intentResults, wasLastOpponentMoveForced).map((s) => ({
+    ...s.explanation,
+    status: s.status,
+  }));
 }
 
 export interface ExplainPositionOptions extends DetectIntentsOptions, AnalyzeShapeFormationOptions {}
@@ -282,22 +315,28 @@ export function explainPosition(
   sfen: string,
   moveHistory: string[],
   options: ExplainPositionOptions = {},
+  wasLastOpponentMoveForced: boolean = false,
 ): Explanation[] {
   const shapeResults = analyzeShapeFormation(sfen, moveHistory, options);
   const intentResults = detectIntents(sfen, moveHistory, options);
-  return generateExplanations(shapeResults, intentResults);
+  return generateExplanations(shapeResults, intentResults, wasLastOpponentMoveForced);
 }
 
 /**
  * explainPositionのstatus付き版。apps/server/src/server.ts(HTTP API)が、
  * UI側でforming/matched/completed/noneのバッジ表示を出し分けるために使う。
+ *
+ * wasLastOpponentMoveForced(Phase4): 呼び出し元(api/stateResponse.ts)が
+ * GameState.wasLastOpponentMoveForcedをそのまま渡す想定の追加引数。省略時はfalse
+ * (既存呼び出し元の挙動を変えない)。
  */
 export function explainPositionWithStatus(
   sfen: string,
   moveHistory: string[],
   options: ExplainPositionOptions = {},
+  wasLastOpponentMoveForced: boolean = false,
 ): CoachExplanation[] {
   const shapeResults = analyzeShapeFormation(sfen, moveHistory, options);
   const intentResults = detectIntents(sfen, moveHistory, options);
-  return generateCoachExplanations(shapeResults, intentResults);
+  return generateCoachExplanations(shapeResults, intentResults, wasLastOpponentMoveForced);
 }

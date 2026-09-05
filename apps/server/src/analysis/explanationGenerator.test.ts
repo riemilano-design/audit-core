@@ -177,6 +177,69 @@ describe("generateExplanations", () => {
     }
   });
 
+  // Phase4: forcedOpponentOpening/scenarioOpponentOpeningの強制進行中、intentが
+  // 全く検出されない(=data/intents/*.jsonの3件全てnone)場合に限り、将棋上の意図を
+  // 推測するのではなく「直近の相手の手はシステムの決まった手順によるものである」
+  // という事実だけを説明する。intentが検出されている場合はこの新文言を一切使わず、
+  // 既存のintent説明を必ず優先する。
+  const FORCED_OPENING_FACT_REASON =
+    "相手の今の手は、対局序盤の決まった手順によるものです。そのため、狙いはまだ判定できません。";
+
+  it("opponent_intent / opponent_next_aim (Phase4-A): 全intentがnone かつ 強制進行中の場合、事実ベースの新文言になる", () => {
+    const explanations = generateExplanations(NO_SHAPE_RESULTS, NO_INTENT_RESULTS, true);
+    const opponentIntent = findStage(explanations, "opponent_intent");
+    const nextAim = findStage(explanations, "opponent_next_aim");
+
+    expect(opponentIntent.reason).toBe(FORCED_OPENING_FACT_REASON);
+    expect(nextAim.reason).toBe(FORCED_OPENING_FACT_REASON);
+    // 将棋上の推測(戦法名・「〜を狙っている」等)を含まないこと
+    for (const intent of getIntents()) {
+      expect(opponentIntent.reason).not.toContain(intent.name);
+      expect(nextAim.reason).not.toContain(intent.name);
+    }
+    expect(opponentIntent.refers_to_intent_id).toBeNull();
+    expect(opponentIntent.confidence_level).toBe("low");
+  });
+
+  it("opponent_intent / opponent_next_aim (Phase4-B): 全intentがnone かつ 強制進行中でない場合、従来の文言のまま", () => {
+    const explanations = generateExplanations(NO_SHAPE_RESULTS, NO_INTENT_RESULTS, false);
+    const opponentIntent = findStage(explanations, "opponent_intent");
+    const nextAim = findStage(explanations, "opponent_next_aim");
+
+    expect(opponentIntent.reason).toBe(
+      "相手の狙いは、まだはっきりとは分かりません。特定の作戦を決めつけず、もう少し様子を見てみましょう。",
+    );
+    expect(nextAim.reason).toBe("相手の狙いがまだ定まっていないため、次に何をしてきそうかも現時点では判断できません。");
+  });
+
+  it("opponent_intent / opponent_next_aim (Phase4-C): intentが一致していれば、強制進行中でも既存のintent説明を優先する", () => {
+    const moveHistory = interleaveWithSenteFillers(HAYAJIKAKE_GOTE_MOVES_FULL);
+    const sfen = sfenAfter(moveHistory);
+    const shapeResults = analyzeShapeFormation(sfen, moveHistory);
+    const intentResults = detectIntents(sfen, moveHistory);
+
+    const forced = generateExplanations(shapeResults, intentResults, true);
+    const notForced = generateExplanations(shapeResults, intentResults, false);
+
+    // wasLastOpponentMoveForcedの値に関わらず、intent一致時の結果は完全に同一(既存挙動を絶対に変えない)。
+    expect(forced).toEqual(notForced);
+
+    const opponentIntent = findStage(forced, "opponent_intent");
+    expect(opponentIntent.refers_to_intent_id).toBe("hayajikake");
+    expect(opponentIntent.reason).not.toBe(FORCED_OPENING_FACT_REASON);
+  });
+
+  it("opponent_intent / opponent_next_aim (Phase4-D): 強制進行中でなくintentが一致していれば、従来通りの結果になる", () => {
+    const moveHistory = interleaveWithSenteFillers(HAYAJIKAKE_GOTE_MOVES_FULL);
+    const sfen = sfenAfter(moveHistory);
+    const shapeResults = analyzeShapeFormation(sfen, moveHistory);
+    const intentResults = detectIntents(sfen, moveHistory);
+
+    const withDefaultArg = generateExplanations(shapeResults, intentResults);
+    const withExplicitFalse = generateExplanations(shapeResults, intentResults, false);
+    expect(withExplicitFalse).toEqual(withDefaultArg);
+  });
+
   it("同じ入力に対して常に同じ結果を返す(決定的。LLM等の非決定的な作文をしない)", () => {
     const first = generateExplanations([TEST_HONMINO], NO_INTENT_RESULTS);
     const second = generateExplanations([TEST_HONMINO], NO_INTENT_RESULTS);

@@ -162,7 +162,14 @@ export function safeExplainPosition(
   options: ExplainPositionOptions = {},
 ): CoachExplanation[] | undefined {
   try {
-    return explainPositionWithStatus(current.sfen, current.moveHistory, options);
+    // Phase4: current.wasLastOpponentMoveForced(gameSession.tsが確定させた事実)を
+    // そのままexplanationGenerator.tsへ渡す。ここでは真偽の判定・推測は一切行わない。
+    return explainPositionWithStatus(
+      current.sfen,
+      current.moveHistory,
+      options,
+      current.wasLastOpponentMoveForced ?? false,
+    );
   } catch (err) {
     console.error("説明生成(analysis/explanationGenerator.ts)でエラーが発生しました:", err);
     return undefined;

@@ -22,6 +22,18 @@ export interface GameState {
    * 通常対局(undefined)では従来通りforcedOpponentOpeningを使う。
    */
   scenario?: ScenarioId;
+  /**
+   * 直近の相手(居飛車)の着手が、forcedOpponentOpening/scenarioOpponentOpeningの
+   * 強制進行によって実際に選択・採用された手だったかどうかの確定事実(Phase4)。
+   * forcedPliesUsedから推測しない(forcedPliesUsedは「王手を飛車でしか
+   * 回避できない」等でpickForcedOpponentMove/pickScenarioMoveがundefinedを返した
+   * 回には増えないままエンジンのbestmoveが採用されることがあり、その値だけでは
+   * 直近の一手が本当にforcedだったかを再現できないため)。playOpponentMove内で
+   * forcedMoveの有無をその場で確認し、その結果だけを記録する。
+   * 相手がまだ一度も指していない場合(初期状態)や、人間の着手ではこの値は
+   * 変化しない。省略時(古いテストフィクスチャ等)はfalse相当として扱われる。
+   */
+  wasLastOpponentMoveForced?: boolean;
 }
 
 export interface GameStatus {
@@ -32,7 +44,7 @@ export interface GameStatus {
 export class HumanMoveError extends Error {}
 
 export function createInitialGameState(scenario?: ScenarioId): GameState {
-  return { sfen: INITIAL_SFEN, moveHistory: [], forcedPliesUsed: 0, scenario };
+  return { sfen: INITIAL_SFEN, moveHistory: [], forcedPliesUsed: 0, scenario, wasLastOpponentMoveForced: false };
 }
 
 export function getStatus(state: GameState): GameStatus {
@@ -56,6 +68,9 @@ export function playHumanMove(state: GameState, moveUsi: string): GameState {
     moveHistory: [...state.moveHistory, moveUsi],
     forcedPliesUsed: state.forcedPliesUsed,
     scenario: state.scenario,
+    // 人間の着手では「直近の相手の着手がforcedだったか」という事実は変わらないため、
+    // そのまま引き継ぐ(Phase4)。
+    wasLastOpponentMoveForced: state.wasLastOpponentMoveForced,
   };
 }
 
@@ -77,19 +92,26 @@ export async function playOpponentMove(state: GameState, engine: OpponentEngine)
 
   let moveUsi: string;
   let forcedPliesUsed = state.forcedPliesUsed;
+  // Phase4: forcedMoveの有無(=forcedOpponentOpening/scenarioOpponentOpeningの
+  // 手が実際に採用されたか)を、その場で確定的に記録する。forcedPliesUsedからの
+  // 逆算・推測はしない(GameState.wasLastOpponentMoveForcedのコメント参照)。
+  let wasLastOpponentMoveForced: boolean;
 
   if (forcedMove) {
     moveUsi = forcedMove;
     forcedPliesUsed += 1;
+    wasLastOpponentMoveForced = true;
   } else {
     engine.position(state.sfen);
     const { bestmove } = await engine.go({ movetimeMs: 1000 });
     if (!bestmove || bestmove === "resign" || bestmove === "win") {
       // エンジンが指し手を返さない(投了等)場合は局面を変えずそのまま返す。
-      // 終局判定自体はgetStatus側(isGameOver)に委ねる。
+      // 終局判定自体はgetStatus側(isGameOver)に委ねる。実際に着手が行われて
+      // いないため、wasLastOpponentMoveForcedも含め既存状態をそのまま維持する。
       return state;
     }
     moveUsi = bestmove;
+    wasLastOpponentMoveForced = false;
   }
 
   const nextSfen = applyMove(state.sfen, moveUsi);
@@ -98,5 +120,6 @@ export async function playOpponentMove(state: GameState, engine: OpponentEngine)
     moveHistory: [...state.moveHistory, moveUsi],
     forcedPliesUsed,
     scenario: state.scenario,
+    wasLastOpponentMoveForced,
   };
 }

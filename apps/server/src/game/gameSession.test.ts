@@ -63,6 +63,14 @@ describe("playOpponentMove", () => {
     expect(engine.go).not.toHaveBeenCalled();
   });
 
+  // Phase4 A: forced moveが実際に採用された場合、wasLastOpponentMoveForcedはtrueになる。
+  it("強制進行の手が採用された場合、wasLastOpponentMoveForcedはtrueになる", async () => {
+    const state: GameState = { sfen: GOTE_TURN_SFEN, moveHistory: ["7g7f"], forcedPliesUsed: 0 };
+    const engine = unusedEngineMock();
+    const next = await playOpponentMove(state, engine);
+    expect(next.wasLastOpponentMoveForced).toBe(true);
+  });
+
   it("強制進行の手数を使い切った後は、エンジンのbestmoveを使う", async () => {
     const state: GameState = {
       sfen: GOTE_TURN_SFEN,
@@ -85,6 +93,27 @@ describe("playOpponentMove", () => {
     expect(next.forcedPliesUsed).toBe(DEFAULT_MAX_FORCED_OPPONENT_PLIES);
   });
 
+  // Phase4 B: engineのbestmoveが採用された場合、wasLastOpponentMoveForcedはfalseになる。
+  it("エンジンのbestmoveが採用された場合、wasLastOpponentMoveForcedはfalseになる", async () => {
+    const state: GameState = {
+      sfen: GOTE_TURN_SFEN,
+      moveHistory: [],
+      forcedPliesUsed: DEFAULT_MAX_FORCED_OPPONENT_PLIES,
+      wasLastOpponentMoveForced: true,
+    };
+    const engine = {
+      position: vi.fn(),
+      go: vi.fn(async () => ({
+        bestmove: "3c3d",
+        ponder: undefined,
+        scoreCp: undefined,
+        infoLines: [],
+      })),
+    };
+    const next = await playOpponentMove(state, engine);
+    expect(next.wasLastOpponentMoveForced).toBe(false);
+  });
+
   it("エンジンがresignを返した場合、局面を変えずそのまま返す", async () => {
     const state: GameState = {
       sfen: GOTE_TURN_SFEN,
@@ -104,6 +133,28 @@ describe("playOpponentMove", () => {
     expect(next).toEqual(state);
   });
 
+  // Phase4 C: 実際に着手が行われないケース(resign等)では、既存のwasLastOpponentMoveForced
+  // をそのまま維持する(推測で書き換えない)。
+  it("エンジンがresignを返した場合、wasLastOpponentMoveForcedは変化しない(既存値を維持)", async () => {
+    const state: GameState = {
+      sfen: GOTE_TURN_SFEN,
+      moveHistory: [],
+      forcedPliesUsed: DEFAULT_MAX_FORCED_OPPONENT_PLIES,
+      wasLastOpponentMoveForced: true,
+    };
+    const engine = {
+      position: vi.fn(),
+      go: vi.fn(async () => ({
+        bestmove: "resign",
+        ponder: undefined,
+        scoreCp: undefined,
+        infoLines: [],
+      })),
+    };
+    const next = await playOpponentMove(state, engine);
+    expect(next.wasLastOpponentMoveForced).toBe(true);
+  });
+
   it("scenario指定時は、forcedOpponentOpeningではなくscenarioOpponentOpeningの手を使う", async () => {
     // 通常のforcedOpponentOpeningなら最も若い筋の歩(1c1d)を選ぶはずの局面だが、
     // hayajikakeシナリオでは1手目として6c6dを選ぶはず(scenarioOpponentOpening.test.ts参照)。
@@ -119,6 +170,19 @@ describe("playOpponentMove", () => {
     expect(next.forcedPliesUsed).toBe(1);
     expect(next.scenario).toBe("hayajikake");
     expect(engine.position).not.toHaveBeenCalled();
+  });
+
+  // Phase4 D: scenario対局でもforced moveが採用された場合はtrueになる。
+  it("scenario対局でforced moveが採用された場合、wasLastOpponentMoveForcedはtrueになる", async () => {
+    const state: GameState = {
+      sfen: GOTE_TURN_SFEN,
+      moveHistory: ["7g7f"],
+      forcedPliesUsed: 0,
+      scenario: "hayajikake",
+    };
+    const engine = unusedEngineMock();
+    const next = await playOpponentMove(state, engine);
+    expect(next.wasLastOpponentMoveForced).toBe(true);
   });
 
   it("scenarioの手を使い切った後は、エンジンのbestmoveにフォールバックする", async () => {
@@ -142,5 +206,27 @@ describe("playOpponentMove", () => {
     expect(engine.go).toHaveBeenCalled();
     expect(next.moveHistory).toEqual(["3c3d"]);
     expect(next.scenario).toBe("hayajikake");
+  });
+
+  // Phase4 E: scenarioの手を使い切ってengine fallbackになった場合はfalseになる。
+  it("scenarioの手を使い切ってengineにフォールバックした場合、wasLastOpponentMoveForcedはfalseになる", async () => {
+    const state: GameState = {
+      sfen: GOTE_TURN_SFEN,
+      moveHistory: [],
+      forcedPliesUsed: 2,
+      scenario: "hayajikake",
+      wasLastOpponentMoveForced: true,
+    };
+    const engine = {
+      position: vi.fn(),
+      go: vi.fn(async () => ({
+        bestmove: "3c3d",
+        ponder: undefined,
+        scoreCp: undefined,
+        infoLines: [],
+      })),
+    };
+    const next = await playOpponentMove(state, engine);
+    expect(next.wasLastOpponentMoveForced).toBe(false);
   });
 });
