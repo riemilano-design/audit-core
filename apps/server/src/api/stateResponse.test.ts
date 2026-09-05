@@ -15,8 +15,10 @@ import {
   buildStateResponse,
   buildStateResponseWithPlan,
   computePlanChangeAfterMove,
+  computePlanChangeReasonAfterMove,
   computeReachablePlan,
   safeComputePlanChangeAfterMove,
+  safeComputePlanChangeReasonAfterMove,
   safeComputeReachablePlan,
   type CachedReachablePlan,
 } from "./stateResponse.js";
@@ -272,6 +274,30 @@ function planChangeFixtureSfen(): string {
   }
   const hands = Hands.from(Hand.empty(), Hand.from([["rook", 1]]));
   const pos = Shogi.from({ board, hands, turn: "sente", moveNumber: 1 }, false).unwrap();
+  return makeSfen(pos);
+}
+
+// Phase3 Unit2(計画崩れの理由分類)専用の局面。玉8h・金6i・金5hは既に揃い、
+// 対象マスは7h(銀)。銀は6gの1枚のみ(候補手は"6g7h"の1件)、
+// ユーザーが無関係な歩(1g)を指せるようにし、相手(gote)には桂馬を7eに配置する
+// (7eの桂馬は6g・8gのどちらにも1手で到達でき、6gの銀を直接取れる)。
+function planChangeCaptureFixtureSfen(): string {
+  let board = Board.empty();
+  const pieces: Array<{ square: string; color: "sente" | "gote"; role: Role }> = [
+    { square: "8h", color: "sente", role: "king" },
+    { square: "6i", color: "sente", role: "gold" },
+    { square: "5h", color: "sente", role: "gold" },
+    { square: "6g", color: "sente", role: "silver" },
+    { square: "1g", color: "sente", role: "pawn" },
+    { square: "7e", color: "gote", role: "knight" },
+  ];
+  for (const { square, color, role } of pieces) {
+    const sq = parseSquareName(square);
+    if (sq === undefined) throw new Error(`invalid square: ${square}`);
+    board = board.clone();
+    board.set(sq, { color, role });
+  }
+  const pos = Shogi.from({ board, hands: Hands.empty(), turn: "sente", moveNumber: 1 }, false).unwrap();
   return makeSfen(pos);
 }
 
@@ -642,5 +668,116 @@ describe("buildStateResponseWithPlan: planChanged", () => {
     const state = gameStateAfter([]);
     const response = buildStateResponseWithPlan(state, undefined, {}, undefined, true);
     expect(response.plan.planChanged).toBe(true);
+  });
+
+  it("planChangeReasonを省略した場合はnullになる(Unit1までの既存呼び出しとの後方互換)", () => {
+    const state = gameStateAfter([]);
+    const response = buildStateResponseWithPlan(state, undefined);
+    expect(response.plan.planChangeReason).toBeNull();
+  });
+
+  it("planChangeReason=\"candidate_piece_captured\"を渡すとレスポンスにそのまま反映される", () => {
+    const state = gameStateAfter([]);
+    const response = buildStateResponseWithPlan(state, undefined, {}, undefined, true, "candidate_piece_captured");
+    expect(response.plan.planChangeReason).toBe("candidate_piece_captured");
+  });
+});
+
+// Phase3 Unit2(崩れた理由の分類のみ、人間承認済み)。分類そのもの(candidate_piece_
+// captured/unknown)の網羅的なテストはplanChangeReason.test.tsで行う。ここでは
+// GameState/実際のpathPlanner.ts結果を経由した統合(computePlanChangeReasonAfterMove)
+// の配線を検証する。
+describe("computePlanChangeReasonAfterMove / safeComputePlanChangeReasonAfterMove", () => {
+  it("相手の手で残存候補の駒が捕獲された場合、planChangeReason: candidate_piece_capturedになる", () => {
+    const sfenBefore = planChangeCaptureFixtureSfen();
+    const stateBefore = customGameState(sfenBefore);
+
+    const sfenAfterUserMove = applyMove(sfenBefore, "1g1f"); // 提案手(6g7h)とは無関係な手
+    const sfenAfterOpponentMove = applyMove(sfenAfterUserMove, "7e6g"); // 桂馬が銀を取る
+    const stateAfter: GameState = {
+      sfen: sfenAfterOpponentMove,
+      moveHistory: ["1g1f", "7e6g"],
+      forcedPliesUsed: 0,
+    };
+
+    // 前提確認: このシナリオでは実際にplanChangedがtrueになる(computePlanChangeAfterMove、
+    // Unit1のロジックは今回変更していないため、既存の挙動としてそのまま成立する)。
+    const planChanged = computePlanChangeAfterMove(stateBefore, stateAfter, "1g1f", { initialSfen: sfenBefore });
+    expect(planChanged).toBe(true);
+
+    const reason = computePlanChangeReasonAfterMove(stateBefore, stateAfter, "1g1f", { initialSfen: sfenBefore });
+    expect(reason).toBe("candidate_piece_captured");
+  });
+
+  it("駒の捕獲以外の理由(王手放置等)で崩れた場合、planChangeReason: unknownになる", () => {
+    // Unit1の実機再現テストと同じフィクスチャ(相手が飛車を8筋へ打ち、王の移動先が
+    // 利きに入るため候補手が非合法になる。駒は取られていない)。
+    const sfenBefore = planChangeFixtureSfen();
+    const stateBefore = customGameState(sfenBefore);
+
+    const sfenAfterUserMove = applyMove(sfenBefore, "1g1f");
+    const sfenAfterOpponentMove = applyMove(sfenAfterUserMove, "R*8a");
+    const stateAfter: GameState = {
+      sfen: sfenAfterOpponentMove,
+      moveHistory: ["1g1f", "R*8a"],
+      forcedPliesUsed: 0,
+    };
+
+    const planChanged = computePlanChangeAfterMove(stateBefore, stateAfter, "1g1f", { initialSfen: sfenBefore });
+    expect(planChanged).toBe(true);
+
+    const reason = computePlanChangeReasonAfterMove(stateBefore, stateAfter, "1g1f", { initialSfen: sfenBefore });
+    expect(reason).toBe("unknown");
+  });
+
+  it("planChanged: falseの場合、planChangeReasonは常にnullになる", () => {
+    // ユーザーが提案手をそのまま指した場合(除外後の残存候補が無くplanChanged: false)。
+    const sfenBefore = honminoOneMoveFromCompleteSfen();
+    const stateBefore = customGameState(sfenBefore);
+    const sfenAfterUserMove = applyMove(sfenBefore, "7i8h");
+    const stateAfter: GameState = { sfen: sfenAfterUserMove, moveHistory: ["7i8h"], forcedPliesUsed: 0 };
+
+    const planChanged = computePlanChangeAfterMove(stateBefore, stateAfter, "7i8h", { initialSfen: sfenBefore });
+    expect(planChanged).toBe(false);
+
+    const reason = computePlanChangeReasonAfterMove(stateBefore, stateAfter, "7i8h", { initialSfen: sfenBefore });
+    expect(reason).toBeNull();
+  });
+
+  it("stateBeforeMove時点で候補手が無い場合、planChangeReasonはnullになる", () => {
+    const stateBefore = gameStateAfter([]);
+    const stateAfter = gameStateAfter([]);
+    const reason = computePlanChangeReasonAfterMove(stateBefore, stateAfter, "7g7f");
+    expect(reason).toBeNull();
+  });
+
+  it("同一入力に対して常に同じ結果を返す(決定的)", () => {
+    const sfenBefore = planChangeCaptureFixtureSfen();
+    const stateBefore = customGameState(sfenBefore);
+    const sfenAfterUserMove = applyMove(sfenBefore, "1g1f");
+    const sfenAfterOpponentMove = applyMove(sfenAfterUserMove, "7e6g");
+    const stateAfter: GameState = {
+      sfen: sfenAfterOpponentMove,
+      moveHistory: ["1g1f", "7e6g"],
+      forcedPliesUsed: 0,
+    };
+
+    const first = computePlanChangeReasonAfterMove(stateBefore, stateAfter, "1g1f", { initialSfen: sfenBefore });
+    const second = computePlanChangeReasonAfterMove(stateBefore, stateAfter, "1g1f", { initialSfen: sfenBefore });
+    expect(second).toBe(first);
+  });
+
+  it("計算中に例外が起きてもsafeComputePlanChangeReasonAfterMoveはnullを返し、例外を外へ漏らさない", () => {
+    const inconsistentState: GameState = {
+      sfen: DEFAULT_INITIAL_SFEN,
+      moveHistory: ["7g7f"], // このsfenはこの履歴の結果ではない
+      forcedPliesUsed: 0,
+    };
+
+    const result = safeComputePlanChangeReasonAfterMove(inconsistentState, inconsistentState, "7g7f");
+    expect(result).toBeNull();
+
+    // computePlanChangeReasonAfterMove自体は(安全側ラッパーではないため)例外を伝播する。
+    expect(() => computePlanChangeReasonAfterMove(inconsistentState, inconsistentState, "7g7f")).toThrow();
   });
 });

@@ -119,13 +119,21 @@ function renderCoach(coach: CoachExplanation[] | undefined): void {
 function renderPlan(plan: ReachablePlanBody): void {
   planEl.innerHTML = "";
 
-  // Phase3 Unit1(計画崩れの検知のみ): 断定的・評価的な表現は使わず、事実のみを
-  // 短く伝える(承認事項4)。新しい候補手・変更理由の表示はUnit1のスコープ外。
+  // Phase3 Unit1/Unit2: 断定的・評価的な表現は使わず、事実のみを短く伝える
+  // (人間承認済み)。理由が事実として断定できない場合(unknown)は追加の文言を
+  // 出さない。新しい候補手そのものは既存のPhase2表示(下記)をそのまま使う。
   if (plan.planChanged) {
     const p = document.createElement("p");
     p.className = "plan-changed";
     p.textContent = "前回の計画が使えなくなりました。";
     planEl.appendChild(p);
+
+    if (plan.planChangeReason === "candidate_piece_captured") {
+      const reasonP = document.createElement("p");
+      reasonP.className = "plan-changed-reason";
+      reasonP.textContent = "予定していた駒が、相手の手によって取られました。";
+      planEl.appendChild(reasonP);
+    }
   }
 
   if (plan.reachableShapes.length > 0) {

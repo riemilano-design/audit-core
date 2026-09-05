@@ -23,10 +23,12 @@ import {
   type CandidateMoveExplanationResult,
 } from "../analysis/candidateMoveExplanation.js";
 import { detectPlanChange, type PlanSnapshot } from "../analysis/planChangeDetector.js";
+import { classifyPlanChangeReason, type PlanChangeReason } from "../analysis/planChangeReason.js";
 import { getLegalMoves } from "../rules/legalMoves.js";
 import type { LowPriorityEngine } from "../engine/prioritizedEngine.js";
 
 export type { PlanSnapshot } from "../analysis/planChangeDetector.js";
+export type { PlanChangeReason } from "../analysis/planChangeReason.js";
 
 export interface StateResponseBody extends GameState {
   status: GameStatus;
@@ -70,9 +72,16 @@ export interface ReachablePlanBody {
    * Phase3 Unit1(計画崩れの検知のみ): 相手の手によって、ユーザーが着手する直前に
    * 保持していた計画(PlanSnapshot)の前提が機械的に崩れたかどうか。
    * 判定条件はplanChangeDetector.ts参照(候補Aのみ、人間承認済み)。
-   * 再計画・変更理由の生成・詳細なUI表示はUnit1のスコープ外(別Unitで扱う)。
    */
   planChanged: boolean;
+  /**
+   * Phase3 Unit2(崩れた理由の分類のみ、人間承認済み): planChangeReason.ts参照。
+   * planChanged===falseの場合は常にnull。事実として断定できない場合は
+   * "unknown"になる(「候補手が非合法になった」ことを無条件に「相手が原因」と
+   * 断定しないため)。再計画ロジックの新規実装は行わない(Phase2の既存の
+   * ⑤⑥⑦⑧再計算がそのまま新しい候補手として使われる)。
+   */
+  planChangeReason: PlanChangeReason | null;
 }
 
 export interface StateResponseBodyWithPlan extends StateResponseBody {
@@ -203,10 +212,12 @@ function safeComputeRankedPlanContext(
  * ユーザーが選んだshapeId。省略時・reachableShapesに含まれない値の場合は
  * computeRankedPlanContext側でranked[0]にフォールバックする。
  *
- * planChangedは、Phase3 Unit1(計画崩れの検知)の結果を呼び出し元(server.ts)から
- * そのまま受け取って埋め込むだけの値(このモジュール自身は検知ロジックを持たない。
- * 検知はcomputePlanChangeAfterMove/safeComputePlanChangeAfterMoveが行う)。
- * 省略時はfalse(検知対象外の呼び出し、例: 新規対局直後・目標形変更直後)。
+ * planChanged・planChangeReasonは、Phase3 Unit1/Unit2の結果を呼び出し元
+ * (server.ts)からそのまま受け取って埋め込むだけの値(このモジュール自身は
+ * 検知・分類ロジックを持たない。検知はcomputePlanChangeAfterMove/
+ * safeComputePlanChangeAfterMoveが、理由分類はcomputePlanChangeReasonAfterMove/
+ * safeComputePlanChangeReasonAfterMoveが行う)。省略時はそれぞれfalse/null
+ * (検知対象外の呼び出し、例: 新規対局直後・目標形変更直後)。
  */
 export function buildStateResponseWithPlan(
   current: GameState,
@@ -214,6 +225,7 @@ export function buildStateResponseWithPlan(
   options: ExplainPositionOptions = {},
   selectedTargetShapeId?: string,
   planChanged = false,
+  planChangeReason: PlanChangeReason | null = null,
 ): StateResponseBodyWithPlan {
   const base = buildStateResponse(current, options);
   const context = safeComputeRankedPlanContext(current, options, selectedTargetShapeId);
@@ -244,7 +256,10 @@ export function buildStateResponseWithPlan(
     candidateMove = undefined;
   }
 
-  return { ...base, plan: { reachableShapes, candidateMoveState, candidateMove, resolvedTargetShapeId, planChanged } };
+  return {
+    ...base,
+    plan: { reachableShapes, candidateMoveState, candidateMove, resolvedTargetShapeId, planChanged, planChangeReason },
+  };
 }
 
 /**
@@ -309,21 +324,42 @@ export async function safeComputeReachablePlan(
 }
 
 /**
- * Phase3 Unit1(計画崩れの検知のみ、人間承認済み)。
  * stateBeforeMove(ユーザーが着手する直前の局面)から⑤⑥⑦を計算してPlanSnapshotを
- * 作り、stateAfterMove(その後ユーザーの着手・相手の着手を経た局面)における
- * 現在のtargetShapeId・合法手一覧と突き合わせて、計画が崩れたかを判定する。
+ * 作る(Phase3 Unit1・Unit2で共通の下準備。判定ロジックそのものは持たない)。
+ * 計画(候補手)が1件も無かった場合(candidateMoveState: "unavailable"に相当)は
+ * undefinedを返す(=崩すべき計画自体が無い)。
+ *
+ * computePlanChangeAfterMoveのUnit1時点の挙動を変えないための内部ヘルパー。
+ */
+function buildPlanSnapshotBeforeMove(
+  stateBeforeMove: GameState,
+  options: ExplainPositionOptions,
+  selectedTargetShapeId: string | undefined,
+): PlanSnapshot | undefined {
+  const beforeContext = computeRankedPlanContext(stateBeforeMove, options, selectedTargetShapeId);
+  const candidateMoves = beforeContext.pathPlanResult?.candidateMoves ?? [];
+  if (!beforeContext.resolvedTargetShapeId || candidateMoves.length === 0) return undefined;
+
+  return {
+    targetShapeId: beforeContext.resolvedTargetShapeId,
+    candidateMoveUsis: candidateMoves.map((c) => c.moveUsi),
+  };
+}
+
+/**
+ * Phase3 Unit1(計画崩れの検知のみ、人間承認済み)。
+ * stateAfterMove(その後ユーザーの着手・相手の着手を経た局面)における
+ * 現在のtargetShapeId・合法手一覧と、buildPlanSnapshotBeforeMoveが作った
+ * PlanSnapshotを突き合わせて、計画が崩れたかを判定する。
  *
  * 【判定条件(候補Aのみ)】
  * planChangeDetector.ts参照。targetPieceの消失・typical_build_orderの変化・
  * より良い別ルートの発見・エンジン評価値等は一切判定条件に含めない。
+ * detectPlanChange自体はUnit1から一切変更していない。
  *
  * 【エンジン非依存】
  * getLegalMoves(rules/legalMoves.ts、shogiopsベース)のみを使い、
  * PrioritizedEngine/MultiPVには一切触れない。
- *
- * stateBeforeMoveの時点で計画(候補手)が1件も無かった場合(candidateMoveState:
- * "unavailable"に相当)は、崩すべき計画自体が無いためfalseを返す。
  *
  * 例外はそのまま伝播する(呼び出し元のsafeComputePlanChangeAfterMoveが処理する)。
  */
@@ -334,14 +370,8 @@ export function computePlanChangeAfterMove(
   options: ExplainPositionOptions = {},
   selectedTargetShapeId?: string,
 ): boolean {
-  const beforeContext = computeRankedPlanContext(stateBeforeMove, options, selectedTargetShapeId);
-  const candidateMoves = beforeContext.pathPlanResult?.candidateMoves ?? [];
-  if (!beforeContext.resolvedTargetShapeId || candidateMoves.length === 0) return false;
-
-  const previousSnapshot: PlanSnapshot = {
-    targetShapeId: beforeContext.resolvedTargetShapeId,
-    candidateMoveUsis: candidateMoves.map((c) => c.moveUsi),
-  };
+  const previousSnapshot = buildPlanSnapshotBeforeMove(stateBeforeMove, options, selectedTargetShapeId);
+  if (!previousSnapshot) return false;
 
   const afterContext = computeRankedPlanContext(stateAfterMove, options, selectedTargetShapeId);
   const currentLegalMoveUsis = getLegalMoves(stateAfterMove.sfen);
@@ -365,5 +395,57 @@ export function safeComputePlanChangeAfterMove(
   } catch (err) {
     console.error("計画崩れ検知(Phase3 Unit1, planChangeDetector)でエラーが発生しました:", err);
     return false;
+  }
+}
+
+/**
+ * Phase3 Unit2(崩れた理由の分類のみ、人間承認済み)。
+ * computePlanChangeAfterMoveと同じ判定(detectPlanChange)を経てplanChangedが
+ * trueの場合にのみ、classifyPlanChangeReason(エンジン・LLM非依存)で理由を分類する。
+ * falseの場合、または崩すべき計画自体が無かった場合はnullを返す。
+ *
+ * 呼び出し元(server.ts)がcomputePlanChangeAfterMoveと同じstateBeforeMove/
+ * stateAfterMove/playedMoveUsiの組み合わせで呼ぶことを前提とする
+ * (両関数は同じ入力から独立に判定するため、二重にengine等を呼ぶことはないが、
+ * ⑤⑥⑦の計算(エンジン不要・軽量)は両関数でそれぞれ1回ずつ行われる)。
+ *
+ * 例外はそのまま伝播する(呼び出し元のsafeComputePlanChangeReasonAfterMoveが処理する)。
+ */
+export function computePlanChangeReasonAfterMove(
+  stateBeforeMove: GameState,
+  stateAfterMove: GameState,
+  playedMoveUsi: string,
+  options: ExplainPositionOptions = {},
+  selectedTargetShapeId?: string,
+): PlanChangeReason | null {
+  const previousSnapshot = buildPlanSnapshotBeforeMove(stateBeforeMove, options, selectedTargetShapeId);
+  if (!previousSnapshot) return null;
+
+  const afterContext = computeRankedPlanContext(stateAfterMove, options, selectedTargetShapeId);
+  const currentLegalMoveUsis = getLegalMoves(stateAfterMove.sfen);
+
+  const changed = detectPlanChange(previousSnapshot, playedMoveUsi, afterContext.resolvedTargetShapeId, currentLegalMoveUsis);
+  if (!changed) return null;
+
+  return classifyPlanChangeReason(previousSnapshot, playedMoveUsi, stateAfterMove.sfen);
+}
+
+/**
+ * computePlanChangeReasonAfterMoveの安全側ラッパー(safeComputePlanChangeAfterMoveと
+ * 同じパターン)。失敗時はconsole.errorに留め、nullを返す(対局進行には
+ * 一切影響させない)。
+ */
+export function safeComputePlanChangeReasonAfterMove(
+  stateBeforeMove: GameState,
+  stateAfterMove: GameState,
+  playedMoveUsi: string,
+  options: ExplainPositionOptions = {},
+  selectedTargetShapeId?: string,
+): PlanChangeReason | null {
+  try {
+    return computePlanChangeReasonAfterMove(stateBeforeMove, stateAfterMove, playedMoveUsi, options, selectedTargetShapeId);
+  } catch (err) {
+    console.error("計画崩れ理由判定(Phase3 Unit2, planChangeReason)でエラーが発生しました:", err);
+    return null;
   }
 }

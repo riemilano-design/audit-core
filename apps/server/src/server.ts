@@ -21,7 +21,9 @@ import {
   buildStateResponseWithPlan,
   safeComputeReachablePlan,
   safeComputePlanChangeAfterMove,
+  safeComputePlanChangeReasonAfterMove,
   type CachedReachablePlan,
+  type PlanChangeReason,
 } from "./api/stateResponse.js";
 import { resolveEnginePath } from "./engine/enginePath.js";
 import { PrioritizedEngine } from "./engine/prioritizedEngine.js";
@@ -62,6 +64,9 @@ let backgroundPlanKey: string | undefined;
 // 既存の設計方針を踏襲する)。新規対局・目標形変更のいずれでもリセットする
 // (承認事項5: 目標形変更・ユーザー自身の正常な進行を「計画崩れ」として扱わない)。
 let lastPlanChanged = false;
+// Phase3 Unit2(崩れた理由の分類のみ、人間承認済み)。lastPlanChangedと必ずペアで
+// 更新・リセットする(lastPlanChangedがfalseの間はnullのまま)。
+let lastPlanChangeReason: PlanChangeReason | null = null;
 
 /** 局面(sfen)と選択中の目標形(selectedTargetShapeId、未選択ならundefined)から、
  * バックグラウンド解析の進行中判定に使うキーを作る。 */
@@ -210,11 +215,20 @@ async function handleMove(req: IncomingMessage, res: ServerResponse): Promise<vo
   // Phase3 Unit1: 相手の着手を経た現在の局面が、ユーザー着手直前の計画の前提を
   // 崩したかを判定する(エンジン非依存、候補Aのみ。planChangeDetector.ts参照)。
   const planChanged = safeComputePlanChangeAfterMove(stateBeforeMove, state, move, {}, selectedTargetShapeId);
+  // Phase3 Unit2: 崩れた場合のみ理由を分類する(エンジン非依存。planChangeReason.ts参照)。
+  const planChangeReason = planChanged
+    ? safeComputePlanChangeReasonAfterMove(stateBeforeMove, state, move, {}, selectedTargetShapeId)
+    : null;
   lastPlanChanged = planChanged;
+  lastPlanChangeReason = planChangeReason;
 
   // ⑤⑥⑦(エンジン不要)までを含めた状態を即座に返す。⑧(MultiPV参考評価)は
   // まだ完了していなければcandidateMoveState: "pending"になる(レスポンスをブロックしない)。
-  sendJson(res, 200, buildStateResponseWithPlan(state, backgroundPlan, {}, selectedTargetShapeId, planChanged));
+  sendJson(
+    res,
+    200,
+    buildStateResponseWithPlan(state, backgroundPlan, {}, selectedTargetShapeId, planChanged, planChangeReason),
+  );
 
   // レスポンス送出後、バックグラウンドで⑧を計算する(fire-and-forget)。
   void runBackgroundPlanAnalysis(state, selectedTargetShapeId);
@@ -248,14 +262,20 @@ async function handleTargetShape(req: IncomingMessage, res: ServerResponse): Pro
   // 弾かれるが、不要になったキャッシュを明示的に破棄して残さないようにする。)
   backgroundPlan = undefined;
   backgroundPlanKey = undefined;
-  // Phase3 Unit1(承認事項5): 目標形の変更はユーザー自身の操作であり、
-  // 「相手の手による計画崩れ」ではないため、計画崩れ状態をリセットする。
+  // Phase3 Unit1/Unit2(承認事項5): 目標形の変更はユーザー自身の操作であり、
+  // 「相手の手による計画崩れ」ではないため、計画崩れ状態・理由をリセットする
+  // (両者は必ずペアで更新・リセットする)。
   lastPlanChanged = false;
+  lastPlanChangeReason = null;
 
   // 局面(sfen)自体は変わらないため、⑤⑥(エンジン不要)は同期的に返しつつ、
   // ⑦⑧はcandidateMoveState: "pending"から始まり、バックグラウンド解析の完了を待つ
   // (POST /api/game/moveと同じ非同期方針)。
-  sendJson(res, 200, buildStateResponseWithPlan(state, backgroundPlan, {}, selectedTargetShapeId, lastPlanChanged));
+  sendJson(
+    res,
+    200,
+    buildStateResponseWithPlan(state, backgroundPlan, {}, selectedTargetShapeId, lastPlanChanged, lastPlanChangeReason),
+  );
 
   void runBackgroundPlanAnalysis(state, selectedTargetShapeId);
 }
@@ -279,9 +299,14 @@ const server = createServer((req, res) => {
     // GET /api/gameは新規のエンジン解析を開始しない。既にバックグラウンドで
     // 完了・キャッシュされている⑧があれば返すだけ(buildStateResponseWithPlan内で
     // sfen・選択中の目標形の両方が一致するかを確認する)。
-    // Phase3 Unit1: lastPlanChangedは直近のPOST /api/game/moveでの判定結果を
-    // そのまま返す(このリクエスト自体は着手を伴わないため、新たな判定は行わない)。
-    sendJson(res, 200, buildStateResponseWithPlan(state, backgroundPlan, {}, selectedTargetShapeId, lastPlanChanged));
+    // Phase3 Unit1/Unit2: lastPlanChanged/lastPlanChangeReasonは直近の
+    // POST /api/game/moveでの判定結果をそのまま返す(このリクエスト自体は
+    // 着手を伴わないため、新たな判定は行わない)。
+    sendJson(
+      res,
+      200,
+      buildStateResponseWithPlan(state, backgroundPlan, {}, selectedTargetShapeId, lastPlanChanged, lastPlanChangeReason),
+    );
     return;
   }
 
@@ -296,9 +321,15 @@ const server = createServer((req, res) => {
     backgroundPlan = undefined;
     backgroundPlanKey = undefined;
     selectedTargetShapeId = undefined;
-    // Phase3 Unit1(承認事項D): 新規対局開始時は計画崩れ状態もリセットする。
+    // Phase3 Unit1/Unit2(承認事項D): 新規対局開始時は計画崩れ状態・理由も
+    // リセットする(両者は必ずペアで更新・リセットする)。
     lastPlanChanged = false;
-    sendJson(res, 200, buildStateResponseWithPlan(state, backgroundPlan, {}, selectedTargetShapeId, lastPlanChanged));
+    lastPlanChangeReason = null;
+    sendJson(
+      res,
+      200,
+      buildStateResponseWithPlan(state, backgroundPlan, {}, selectedTargetShapeId, lastPlanChanged, lastPlanChangeReason),
+    );
     return;
   }
 

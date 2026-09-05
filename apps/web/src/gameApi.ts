@@ -83,10 +83,16 @@ export interface ReachablePlanBody {
    * どれが現在の対象かを示すために使う。目指せる形が1件も無い場合はnull。 */
   resolvedTargetShapeId: string | null;
   /** Phase3 Unit1(計画崩れの検知のみ): 相手の手によって、ユーザーが着手する直前の
-   * 計画の前提が機械的に崩れたかどうか。再計画・変更理由・詳細な候補手表示は
-   * 含まない(別Unitのスコープ)。 */
+   * 計画の前提が機械的に崩れたかどうか。 */
   planChanged: boolean;
+  /** Phase3 Unit2(崩れた理由の分類のみ): planChanged===falseの場合は常にnull。
+   * 事実として断定できない場合は"unknown"になる(候補手が非合法になったことを
+   * 無条件に「相手が原因」と断定しないため)。 */
+  planChangeReason: PlanChangeReason | null;
 }
+
+// apps/server/src/analysis/planChangeReason.ts の PlanChangeReason に対応する型。
+export type PlanChangeReason = "candidate_piece_captured" | "unknown";
 
 export interface GameStateResponse {
   sfen: string;
