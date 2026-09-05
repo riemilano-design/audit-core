@@ -251,6 +251,36 @@ function customGameState(sfen: string): GameState {
   return { sfen, moveHistory: [], forcedPliesUsed: 0 };
 }
 
+// honminoMultipleCandidatesSfen()と同じ駒配置に、相手(gote)が指せる無害な歩(1c)を
+// 追加したもの。Phase3の既知課題(兄弟候補の誤検知)の統合テスト専用
+// (相手がこの計画と無関係な手(1c1d)を指すシナリオを構成するために必要)。
+function honminoMultipleCandidatesWithOpponentPawnSfen(): string {
+  return customSfen([
+    { square: "8h", color: "sente", role: "king" },
+    { square: "6i", color: "sente", role: "gold" },
+    { square: "5h", color: "sente", role: "gold" },
+    { square: "6g", color: "sente", role: "silver" },
+    { square: "8g", color: "sente", role: "silver" },
+    { square: "1c", color: "gote", role: "pawn" },
+  ]);
+}
+
+// honminoMultipleCandidatesSfen()と同じ駒配置に、ユーザーが指せる無害な歩(1g)と、
+// 6gの銀を直接捕獲できる相手(gote)の桂馬(7e)を追加したもの
+// (planChangeCaptureFixtureSfenと同じ考え方だが、兄弟候補(8g7h)が生き残る
+// ことを確認するために複数候補の局面を使う)。
+function honminoMultipleCandidatesWithCaptureFixtureSfen(): string {
+  return customSfen([
+    { square: "8h", color: "sente", role: "king" },
+    { square: "6i", color: "sente", role: "gold" },
+    { square: "5h", color: "sente", role: "gold" },
+    { square: "6g", color: "sente", role: "silver" },
+    { square: "8g", color: "sente", role: "silver" },
+    { square: "1g", color: "sente", role: "pawn" },
+    { square: "7e", color: "gote", role: "knight" },
+  ]);
+}
+
 // Phase3 Unit1(計画崩れの検知)専用の局面。honminoOneMoveFromCompleteSfen()と同じ
 // 「王が7iにあり8hへ1手(7i8h)で本美濃が完成する」局面に、
 // - ユーザーが提案手(7i8h)以外に指せる、無関係な歩(1g)
@@ -582,6 +612,47 @@ describe("computePlanChangeAfterMove / safeComputePlanChangeAfterMove", () => {
     const stateAfter: GameState = { sfen: sfenAfterUserMove, moveHistory: ["7i8h"], forcedPliesUsed: 0 };
 
     const planChanged = computePlanChangeAfterMove(stateBefore, stateAfter, "7i8h", { initialSfen: sfenBefore });
+    expect(planChanged).toBe(false);
+  });
+
+  // 【既知課題の修正確認(人間承認済み)】
+  // 複数候補(6g7h/8g7h、いずれも移動先マス7hを共有する兄弟候補)のうち、
+  // ユーザーが1つ(6g7h)をそのまま指し、相手はこの計画と完全に無関係な手
+  // (1c1d)を指す。修正前はここでplanChanged: trueに誤検知していた
+  // (兄弟候補8g7hが、ユーザー自身の着手で7hが埋まったせいで非合法になるため)。
+  // 手作りのlegalMoves配列ではなく、実際のapplyMove/getLegalMoves(pathPlanner経由)を
+  // 使って検証する。
+  it("複数候補(兄弟候補)のうち1つをそのまま指し、相手が無関係な手を指した場合はplanChanged: falseになる(既知課題の修正確認)", () => {
+    const sfenBefore = honminoMultipleCandidatesWithOpponentPawnSfen();
+    const stateBefore = customGameState(sfenBefore);
+
+    const sfenAfterUserMove = applyMove(sfenBefore, "6g7h"); // 複数候補のうち1つをそのまま指す
+    const sfenAfterOpponentMove = applyMove(sfenAfterUserMove, "1c1d"); // 相手はこの計画と無関係な手
+    const stateAfter: GameState = {
+      sfen: sfenAfterOpponentMove,
+      moveHistory: ["6g7h", "1c1d"],
+      forcedPliesUsed: 0,
+    };
+
+    const planChanged = computePlanChangeAfterMove(stateBefore, stateAfter, "6g7h", { initialSfen: sfenBefore });
+    expect(planChanged).toBe(false);
+  });
+
+  // 兄弟候補の一方だけが相手に実際に捕獲され、もう一方は生きている場合。
+  // 「候補の一部が使えなくなった」だけでは計画変更と判定しない、という既存方針を維持する。
+  it("兄弟候補の一方だけが相手に捕獲されても、もう一方が合法ならplanChanged: falseのまま", () => {
+    const sfenBefore = honminoMultipleCandidatesWithCaptureFixtureSfen();
+    const stateBefore = customGameState(sfenBefore);
+
+    const sfenAfterUserMove = applyMove(sfenBefore, "1g1f"); // 提案手以外の無関係な手
+    const sfenAfterOpponentMove = applyMove(sfenAfterUserMove, "7e6g"); // 桂馬が6gの銀を取る(8gの銀は無傷)
+    const stateAfter: GameState = {
+      sfen: sfenAfterOpponentMove,
+      moveHistory: ["1g1f", "7e6g"],
+      forcedPliesUsed: 0,
+    };
+
+    const planChanged = computePlanChangeAfterMove(stateBefore, stateAfter, "1g1f", { initialSfen: sfenBefore });
     expect(planChanged).toBe(false);
   });
 

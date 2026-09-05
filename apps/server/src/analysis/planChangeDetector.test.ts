@@ -18,16 +18,30 @@ describe("detectPlanChange", () => {
     expect(detectPlanChange(previous, "7i8h", "mino_honmino", [])).toBe(false);
   });
 
-  it("複数候補のうち1つを指した場合、残りの候補を対象に判定する(残りが合法ならfalse)", () => {
+  // 【兄弟候補の除外(既知課題の修正、人間承認済み)】
+  // pathPlanner.tsは1回のPathPlanResultで常に同じtargetSquare(移動先マス)を
+  // 共有するcandidateMovesを返す。ユーザーがそのうち1つを実際に指すと、
+  // targetSquareが自分の駒で埋まり、残りの兄弟候補(同じtargetSquareを持つ候補)は
+  // 相手の着手と無関係に非合法化される。これは相手による計画崩壊ではなく、
+  // 計画を正常に実行した結果であるため、falseと判定する。
+  it("複数候補のうち1つを指した場合、同じ移動先マスを持つ兄弟候補も除外され、残存候補が無くfalse", () => {
     const previous: PlanSnapshot = { targetShapeId: "mino_honmino", candidateMoveUsis: ["6g7h", "8g7h"] };
-    // 6g7hを指した後、残る8g7hが現在も合法手に含まれている。
-    expect(detectPlanChange(previous, "6g7h", "mino_honmino", ["8g7h"])).toBe(false);
+    // 8g7hは6g7hと同じ移動先マス(7h)を持つ兄弟候補のため、legalMovesの中身に
+    // 関わらず除外される(実際にはユーザー自身の着手で7hが埋まり非合法化される)。
+    expect(detectPlanChange(previous, "6g7h", "mino_honmino", ["1f1e"])).toBe(false);
   });
 
-  it("複数候補のうち1つを指した場合、残りの候補が現在すべて非合法ならtrue", () => {
-    const previous: PlanSnapshot = { targetShapeId: "mino_honmino", candidateMoveUsis: ["6g7h", "8g7h"] };
-    // 6g7hを指した後、残る8g7hが現在の合法手に含まれていない(相手の手等で失われた)。
-    expect(detectPlanChange(previous, "6g7h", "mino_honmino", ["1g1f"])).toBe(true);
+  it("異なる移動先マスを持つ候補は兄弟候補として除外されない(残りが合法ならfalse)", () => {
+    const previous: PlanSnapshot = { targetShapeId: "mino_honmino", candidateMoveUsis: ["6g7h", "8g8h"] };
+    // 8g8hは6g7hと異なる移動先マス(8h)を持つため、除外されず比較対象に残る。
+    // 現在も合法手に含まれているためfalse。
+    expect(detectPlanChange(previous, "6g7h", "mino_honmino", ["8g8h"])).toBe(false);
+  });
+
+  it("異なる移動先マスを持つ候補が現在すべて非合法な場合は、引き続きtrueになる(兄弟候補除外の副作用で見逃さない)", () => {
+    const previous: PlanSnapshot = { targetShapeId: "mino_honmino", candidateMoveUsis: ["6g7h", "8g8h"] };
+    // 8g8hは兄弟候補ではないため除外されないが、現在の合法手には含まれていない。
+    expect(detectPlanChange(previous, "6g7h", "mino_honmino", ["1f1e"])).toBe(true);
   });
 
   it("ユーザーが提案手以外を指し、残存候補がすべて現在非合法な場合はtrue", () => {
@@ -38,5 +52,36 @@ describe("detectPlanChange", () => {
   it("ユーザーが提案手以外を指し、残存候補が現在も合法な場合はfalse", () => {
     const previous: PlanSnapshot = { targetShapeId: "mino_honmino", candidateMoveUsis: ["7i8h"] };
     expect(detectPlanChange(previous, "1g1f", "mino_honmino", ["7i8h", "1f1e"])).toBe(false);
+  });
+
+  it("playedMoveUsiのパースに失敗する場合、兄弟候補としての除外は行わない(安全側)", () => {
+    const previous: PlanSnapshot = { targetShapeId: "mino_honmino", candidateMoveUsis: ["6g7h", "8g7h"] };
+    // "invalid"はUSIとしてパースできないため、isSiblingCandidateはfalseを返す
+    // (誤って除外せず、remainingに残す。falseに倒すよりtrue側に残す方針)。
+    // playedMoveUsi自体との完全一致でも除外されないため、両方の候補が
+    // remainingに残り、いずれも現在の合法手に含まれていなければtrueになる。
+    expect(detectPlanChange(previous, "invalid", "mino_honmino", ["1f1e"])).toBe(true);
+  });
+
+  it("候補側(USI)のパースに失敗する場合も、兄弟候補としての除外は行わない(安全側)", () => {
+    const previous: PlanSnapshot = { targetShapeId: "mino_honmino", candidateMoveUsis: ["invalid", "8g7h"] };
+    // "invalid"はplayedMoveUsi("6g7h")と完全一致もしないため除外されず、
+    // 現在の合法手にも含まれていないためtrueになる
+    // ("8g7h"は6g7hの兄弟候補として正しく除外される)。
+    expect(detectPlanChange(previous, "6g7h", "mino_honmino", ["1f1e"])).toBe(true);
+  });
+
+  it("ドロップ手にも移動先マス(to)比較が適用される(兄弟候補として除外される)", () => {
+    const previous: PlanSnapshot = { targetShapeId: "mino_honmino", candidateMoveUsis: ["P*5e"] };
+    // "5e5d"(通常手、移動先5e...ではなく5d)ではなく、同じ移動先(5e)を持つ
+    // 別のドロップ候補との組み合わせで確認する。
+    const previousWithSiblingDrop: PlanSnapshot = {
+      targetShapeId: "mino_honmino",
+      candidateMoveUsis: ["P*5e", "S*5e"],
+    };
+    // P*5eを指した後、同じ5eへのドロップであるS*5eも兄弟候補として除外される。
+    expect(detectPlanChange(previousWithSiblingDrop, "P*5e", "mino_honmino", ["1f1e"])).toBe(false);
+    // 参考: 単独のドロップ候補をそのまま指した場合は、従来通り完全一致除外でfalse。
+    expect(detectPlanChange(previous, "P*5e", "mino_honmino", [])).toBe(false);
   });
 });

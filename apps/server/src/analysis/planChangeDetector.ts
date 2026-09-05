@@ -8,22 +8,52 @@
 //
 // 【判定条件(人間承認済み)】
 // 「ユーザーが着手する直前に保存したPlanSnapshotのcandidateMoveUsisのうち、
-// 今回ユーザーが実際に指した手を除いたものについて、現在局面で合法な手が
-// 1つも残っていない場合」をplanChanged=trueとする。
+// 今回ユーザーが実際に指した手、および同じ移動先マス(targetSquare)を持つ
+// 兄弟候補を除いたものについて、現在局面で合法な手が1つも残っていない場合」を
+// planChanged=trueとする。
 // - targetShapeIdが前回と現在で一致しない場合(目標形の選択変更・フォールバック
 //   変化を含む)は判定対象外(false)とする。ユーザー自身の操作による変化を
 //   「相手の手による崩れ」と混同しないため。
 // - 除外後に比較対象の候補手が0件になった場合(=ユーザーが唯一の候補手を
-//   そのまま指した場合を含む)は、「計画が崩れた」とは断定せずfalseとする
+//   そのまま指した場合、または複数候補のうち1つを指して兄弟候補も含めて
+//   除外された場合を含む)は、「計画が崩れた」とは断定せずfalseとする
 //   (承認事項3: 比較対象が無いことと、相手による崩れは別事象として扱う)。
 // - 上記以外(targetPieceの消失・typical_build_orderの変化・より良い別ルートの
 //   発見・エンジン評価値等)は、今回のUnit1では判定条件に一切含めない。
+//
+// 【兄弟候補の除外について(Unit1の既知課題を修正、人間承認済み)】
+// pathPlanner.tsの設計上、1回のPathPlanResultが返すcandidateMovesは常に同じ
+// targetSquare(移動先マス)を共有する。そのため、ユーザーが複数候補のうち
+// 1つを実際に指すと、targetSquareが自分の駒で埋まり、残りの兄弟候補は
+// 「自分の駒がある場所には動けない」という基本ルールにより、相手の着手とは
+// 無関係に非合法化される。これは相手による計画崩壊ではなく、計画を正常に
+// 実行した結果であるため、実際に指した手と同じ移動先マスを持つ候補も
+// remainingから除外する。USI文字列のパースにはshogiops/utilの既存
+// parseUsi(pathPlanner.ts等が既に使っている手法)を再利用し、新しい将棋知識・
+// 評価値・利き判定・エンジン・LLMは一切導入しない。
+// パースに失敗した場合(型上ほぼ起こらないが安全側の設計として)は、
+// 誤って除外しない(=remainingに残す。falseに倒すよりtrue側に残す)。
+
+import { parseUsi } from "shogiops/util";
 
 export interface PlanSnapshot {
   /** ⑥で実際に採用されたshapeId(resolvedTargetShapeId)。 */
   targetShapeId: string;
   /** ⑦(pathPlanner.ts)が返したcandidateMovesのUSI文字列一覧。 */
   candidateMoveUsis: string[];
+}
+
+/**
+ * candidateUsiが、playedMoveUsiと同じ移動先マス(to)を持つ「兄弟候補」かどうかを
+ * 判定する。いずれかのパースに失敗した場合は、安全側に倒し兄弟候補とは
+ * 判定しない(=falseを返し、remainingに残す)。
+ */
+function isSiblingCandidate(candidateUsi: string, playedMoveUsi: string): boolean {
+  const playedMove = parseUsi(playedMoveUsi);
+  if (!playedMove) return false;
+  const candidateMove = parseUsi(candidateUsi);
+  if (!candidateMove) return false;
+  return candidateMove.to === playedMove.to;
 }
 
 /**
@@ -41,7 +71,9 @@ export function detectPlanChange(
   if (!previous) return false;
   if (previous.targetShapeId !== currentTargetShapeId) return false;
 
-  const remaining = previous.candidateMoveUsis.filter((usi) => usi !== playedMoveUsi);
+  const remaining = previous.candidateMoveUsis.filter(
+    (usi) => usi !== playedMoveUsi && !isSiblingCandidate(usi, playedMoveUsi),
+  );
   if (remaining.length === 0) return false;
 
   const legalSet = new Set(currentLegalMoveUsis);
