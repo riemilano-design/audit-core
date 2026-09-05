@@ -15,6 +15,7 @@ import {
   isMoveError,
   selectTargetShape,
   shouldShowPlanChangedNotice,
+  shouldShowNextConsiderations,
   startNewGame,
   submitMove,
   type CoachExplanation,
@@ -343,6 +344,37 @@ function renderRouteProgress(plan: ReachablePlanBody): void {
   planEl.appendChild(section);
 }
 
+// 【Phase6 Unit4】「今の局面で分かっていること」。直前の一手による差分(Unit2/Unit3)
+// ではなく、現在の局面について既に確定している事実を並べる。
+// 文言・マス目の日本語表記・指し手の棋譜表記・並び順はすべてサーバー側
+// (nextConsiderationDetector.ts / nextConsiderationExplanation.ts)で確定済みで、
+// ここでは受け取った文字列をそのまま表示するだけ。判定・文言生成・並び替え・
+// フィルタはweb側に一切持たない。
+// 表示位置は経路(.route-section)の直後・候補手(.candidate-section)の直前
+// (人間承認済み)。
+function renderNextConsiderations(plan: ReachablePlanBody): void {
+  if (!shouldShowNextConsiderations(plan)) return;
+
+  const section = document.createElement("div");
+  section.className = "next-considerations-section";
+
+  const heading = document.createElement("h3");
+  heading.textContent = "今の局面で分かっていること";
+  section.appendChild(heading);
+
+  const list = document.createElement("ul");
+  list.className = "next-considerations-messages";
+  for (const message of plan.nextConsiderations) {
+    const li = document.createElement("li");
+    li.className = `next-consideration next-consideration-${message.kind}`;
+    li.textContent = message.text;
+    list.appendChild(li);
+  }
+  section.appendChild(list);
+
+  planEl.appendChild(section);
+}
+
 function renderPlan(plan: ReachablePlanBody): void {
   planEl.innerHTML = "";
 
@@ -415,6 +447,9 @@ function renderPlan(plan: ReachablePlanBody): void {
   }
 
   renderRouteProgress(plan);
+
+  // 【Phase6 Unit4】経路(道のり)の直後、候補手セクションの直前に置く(人間承認済み)。
+  renderNextConsiderations(plan);
 
   // 【Phase5 #7 要件2・4・6】候補手セクション本体。
   // reachableShapesが0件(=選択中の形が特定できない)場合でも、候補手が

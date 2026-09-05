@@ -1,8 +1,10 @@
 import { describe, expect, it } from "vitest";
 import {
   getPlanChangeReasonMessage,
+  shouldShowNextConsiderations,
   shouldShowPlanChangedNotice,
   type LastMoveOutcomeBody,
+  type NextConsiderationMessage,
   type PlanChangeReason,
 } from "./gameApi.js";
 
@@ -82,5 +84,44 @@ describe("shouldShowPlanChangedNotice", () => {
         lastMoveOutcome: outcome(["played_non_candidate", "route_lost"]),
       }),
     ).toBe(false);
+  });
+});
+
+// Phase6 Unit4: 「今の局面で分かっていること」の表示可否。
+// web側が持ってよいのは「サーバーが返した件数が0かどうか」の判定だけで、
+// 文言生成・文言の加工・並び替え・フィルタ・将棋の判断は一切持たない。
+describe("shouldShowNextConsiderations", () => {
+  function messages(kinds: string[]): NextConsiderationMessage[] {
+    return kinds.map((kind) => ({ kind, text: `${kind}のテキスト` }));
+  }
+
+  it("空配列なら表示しない(ブロックごと描画しない)", () => {
+    expect(shouldShowNextConsiderations({ nextConsiderations: [] })).toBe(false);
+  });
+
+  it("1件でもあれば表示する", () => {
+    expect(shouldShowNextConsiderations({ nextConsiderations: messages(["in_check"]) })).toBe(true);
+  });
+
+  it("メッセージの種類によって表示可否を変えない(サーバーの判断をweb側で覆さない)", () => {
+    const kinds = [
+      "in_check",
+      "route_first_move_playable",
+      "no_playable_route_first_move",
+      "shape_completed",
+      "ordering_note",
+    ];
+    for (const kind of kinds) {
+      expect(shouldShowNextConsiderations({ nextConsiderations: messages([kind]) })).toBe(true);
+    }
+  });
+
+  it("サーバーが返した並び・内容を変更しない(判定に使うのは件数だけ)", () => {
+    const nextConsiderations = messages(["route_first_move_playable", "ordering_note"]);
+    const before = nextConsiderations.map((m) => `${m.kind}:${m.text}`);
+
+    shouldShowNextConsiderations({ nextConsiderations });
+
+    expect(nextConsiderations.map((m) => `${m.kind}:${m.text}`)).toEqual(before);
   });
 });

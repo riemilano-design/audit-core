@@ -122,6 +122,17 @@ export interface LastMoveOutcomeBody {
   messages: MoveOutcomeMessage[];
 }
 
+// apps/server/src/analysis/nextConsiderationExplanation.ts の NextConsiderationMessage に
+// 対応する型(Phase6 Unit4: 今の局面で分かっていること)。
+// kindはサーバー側のメッセージ種別(in_check / route_first_move_playable /
+// no_playable_route_first_move / shape_completed / ordering_note)。UI側は表示の
+// 出し分けにしか使わないため、種類の一覧はサーバー側だけが持つ
+// (MoveOutcomeMessageと同じ方針で、web側に同じ列挙を重複させない)。
+export interface NextConsiderationMessage {
+  kind: string;
+  text: string;
+}
+
 export interface ReachablePlanBody {
   reachableShapes: RankedReachableShape[];
   /** Phase6 Unit1: 選択中の形の未達成マスごとの経路。無い場合は空配列。 */
@@ -133,6 +144,11 @@ export interface ReachablePlanBody {
   candidateMoveLabels: Record<string, string>;
   /** Phase6 Unit2: 直前の一手で何が変わったか。新規対局直後・目標形変更直後はnull。 */
   lastMoveOutcome: LastMoveOutcomeBody | null;
+  /** Phase6 Unit4: 今の局面で分かっていること(直前の一手による差分ではない)。
+   * 事実の抽出も文言生成もサーバー側(nextConsiderationDetector.ts /
+   * nextConsiderationExplanation.ts)で完了しており、ここでは表示するだけ。
+   * 表示すべき事実が無い場合・目標形が決まっていない場合・対局終了時は空配列。 */
+  nextConsiderations: NextConsiderationMessage[];
   candidateMoveState: CandidateMoveState;
   candidateMove: CandidateMoveExplanationResult | undefined;
   /** ⑦⑧の計算に実際に使われたshapeId(ユーザーが選択したもの、または未選択/無効時の
@@ -201,6 +217,20 @@ export function shouldShowPlanChangedNotice(
   if (!plan.planChanged) return false;
   const hasRouteLostMessage = plan.lastMoveOutcome?.messages.some((m) => m.kind === "route_lost") ?? false;
   return !hasRouteLostMessage;
+}
+
+/**
+ * Phase6 Unit4: 「今の局面で分かっていること」ブロックを表示してよいかを返す。
+ *
+ * 判定材料はサーバーが返した件数だけで、将棋のルール判定・文言生成・文言の加工・
+ * 並び替え・フィルタは一切行わない(それらはすべてサーバー側で確定済み)。
+ * shouldShowPlanChangedNoticeと同じく、DOM非依存の純粋関数としてテストするために
+ * gameApi.tsに置く。
+ */
+export function shouldShowNextConsiderations(
+  plan: Pick<ReachablePlanBody, "nextConsiderations">,
+): boolean {
+  return plan.nextConsiderations.length > 0;
 }
 
 export interface GameStateResponse {

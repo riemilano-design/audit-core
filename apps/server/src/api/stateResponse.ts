@@ -32,8 +32,14 @@ import {
 } from "../analysis/moveOutcomeDetector.js";
 import { explainMoveOutcome, type MoveOutcomeMessage } from "../analysis/moveOutcomeExplanation.js";
 import { detectBoardEvents, type BoardEvent } from "../analysis/boardEventDetector.js";
+import { detectNextConsiderations } from "../analysis/nextConsiderationDetector.js";
+import {
+  explainNextConsiderations,
+  type NextConsiderationMessage,
+} from "../analysis/nextConsiderationExplanation.js";
 import { explainBoardEvents, type BoardEventMessage } from "../analysis/boardEventExplanation.js";
 import { getLegalMoves } from "../rules/legalMoves.js";
+import { isInCheck } from "../rules/gameStatus.js";
 import { toJapaneseMoveHistory } from "../notation/japaneseMoveHistory.js";
 import type { LowPriorityEngine } from "../engine/prioritizedEngine.js";
 
@@ -41,6 +47,7 @@ export type { PlanSnapshot } from "../analysis/planChangeDetector.js";
 export type { PlanChangeReason } from "../analysis/planChangeReason.js";
 export type { MoveOutcome } from "../analysis/moveOutcomeDetector.js";
 export type { BoardEvent } from "../analysis/boardEventDetector.js";
+export type { NextConsiderationMessage } from "../analysis/nextConsiderationExplanation.js";
 
 export interface StateResponseBody extends GameState {
   status: GameStatus;
@@ -159,6 +166,14 @@ export interface ReachablePlanBody {
    * 比較できない場合はnull(前の状態についての誤った差分説明を残さないため)。
    */
   lastMoveOutcome: LastMoveOutcomeBody | null;
+  /**
+   * Phase6 Unit4: 現在の局面について分かっていること(直前の一手による差分ではない)。
+   * 事実の抽出はanalysis/nextConsiderationDetector.ts、文言は
+   * analysis/nextConsiderationExplanation.tsが担当し、ここでは配線するだけ。
+   * 表示すべき事実が無い場合・目標形が決まっていない場合・対局終了時は空配列
+   * (呼び出し側はブロックごと描画しない)。
+   */
+  nextConsiderations: NextConsiderationMessage[];
   candidateMoveState: CandidateMoveState;
   /** candidateMoveState: "ready"の場合のみ値を持つ。それ以外はundefined。 */
   candidateMove: CandidateMoveExplanationResult | undefined;
@@ -323,6 +338,45 @@ function toCandidateMoveLabels(routePlanResult: ShapeRoutePlanResult | undefined
   return labels;
 }
 
+/**
+ * Phase6 Unit4: 現在局面について分かっていることを組み立てる。
+ *
+ * 判定・文言生成は一切ここに持たない(事実はnextConsiderationDetector.ts、文言は
+ * nextConsiderationExplanation.tsの責務)。ここで行うのは、既に計算済みの
+ * RankedPlanContext・対局状態・王手(rules/gameStatus.tsのisInCheck)を渡す配線だけ。
+ *
+ * 自分側の色は、既存のShapeFormationResult.perspectiveColorをそのまま使う
+ * (新しい色判定ロジックは作らない)。
+ *
+ * Phase1のcoachやPhase6 Unit1〜3と同様、ここでの失敗を対局本体へ波及させない
+ * (失敗時は空配列=ブロック非表示に落とす)。
+ */
+function toNextConsiderations(
+  current: GameState,
+  context: RankedPlanContext | undefined,
+  isGameEnd: boolean,
+): NextConsiderationMessage[] {
+  if (!context?.resolvedTargetShapeId) return [];
+  const shapeResult = context.shapeResults.find((r) => r.shapeId === context.resolvedTargetShapeId);
+  if (!shapeResult) return [];
+
+  try {
+    const facts = detectNextConsiderations({
+      targetShapeId: context.resolvedTargetShapeId,
+      shapeName: shapeResult.name,
+      missingSquares: shapeResult.missingSquares,
+      routes: context.routePlanResult?.routes ?? [],
+      candidateMoves: context.routePlanResult?.candidateMoves ?? [],
+      isGameEnd,
+      inCheck: isInCheck(current.sfen, shapeResult.perspectiveColor),
+    });
+    return explainNextConsiderations(facts, current.sfen);
+  } catch (err) {
+    console.error("今の局面で分かっていること(Phase6 Unit4)の計算でエラーが発生しました:", err);
+    return [];
+  }
+}
+
 /** 選択中の形の「今どこまで出来ているか」を、既存の判定結果からそのまま組み立てる。 */
 function toTargetShapeProgress(context: RankedPlanContext | undefined): TargetShapeProgress | null {
   if (!context?.resolvedTargetShapeId) return null;
@@ -483,6 +537,7 @@ export function buildStateResponseWithPlan(
             messages: [...explainBoardEvents(lastBoardEvents), ...explainMoveOutcome(lastMoveOutcome)],
           }
         : null,
+      nextConsiderations: toNextConsiderations(current, context, base.status.isEnd),
       candidateMoveState,
       candidateMove,
       resolvedTargetShapeId,

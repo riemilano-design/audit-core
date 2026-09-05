@@ -1091,3 +1091,70 @@ describe("computeBoardEventsAfterMove / buildStateResponseWithPlan: 盤面イベ
     ]);
   });
 });
+
+// 以下、Phase6 Unit4(今の局面で分かっていること)の配線テスト。
+// 事実の抽出・文言生成そのものは nextConsiderationDetector.test.ts /
+// nextConsiderationExplanation.test.ts が担当し、ここで確認するのは配線のみ。
+describe("buildStateResponseWithPlan: nextConsiderations(Phase6 Unit4)", () => {
+  it("現在の局面について分かっていることが、文言としてレスポンスに含まれる", () => {
+    const state = gameStateAfter([]);
+    const response = buildStateResponseWithPlan(state, undefined);
+
+    // 初期局面では、経路の一手目が複数指せる(=対応の文言 + 並び順の注記)。
+    const kinds = response.plan.nextConsiderations.map((m) => m.kind);
+    expect(kinds.filter((k) => k === "route_first_move_playable").length).toBeGreaterThanOrEqual(2);
+    expect(kinds[kinds.length - 1]).toBe("ordering_note");
+    expect(response.plan.nextConsiderations[0]?.text).toContain("道のりの一手目です。");
+  });
+
+  it("目標形が決まっていない場合は空配列", () => {
+    const state = gameStateAfter([]);
+    const response = buildStateResponseWithPlan(state, undefined, { shapes: [] });
+
+    expect(response.plan.resolvedTargetShapeId).toBeNull();
+    expect(response.plan.nextConsiderations).toEqual([]);
+  });
+
+  it("王手を受けている局面では、ルール上の制約を先頭に述べる", () => {
+    // 先手(ユーザー側)の玉に王手がかかっている局面を直接組み立てる。
+    const sfen = "4k4/9/9/9/9/9/4r4/9/4K4 b - 1";
+    const state: GameState = { sfen, moveHistory: [], forcedPliesUsed: 0 };
+    const response = buildStateResponseWithPlan(state, undefined, { initialSfen: sfen });
+
+    if (response.plan.resolvedTargetShapeId !== null) {
+      expect(response.plan.nextConsiderations[0]?.kind).toBe("in_check");
+      expect(response.plan.nextConsiderations[0]?.text).toContain("王手を解消する手しか指せません");
+    }
+  });
+
+  it("同じ局面に対して常に同じ結果を返す(決定的)", () => {
+    const state = gameStateAfter([]);
+
+    expect(buildStateResponseWithPlan(state, undefined).plan.nextConsiderations).toEqual(
+      buildStateResponseWithPlan(state, undefined).plan.nextConsiderations,
+    );
+  });
+
+  it("さまざまな局面で例外を投げず、常に配列を返す(対局本体を止めない)", () => {
+    const states = [
+      gameStateAfter([]),
+      gameStateAfter(["7g7f", "3c3d"]),
+      gameStateAfter(["7i7h", "3c3d", "5i6h", "8c8d"]),
+    ];
+
+    for (const state of states) {
+      expect(() => buildStateResponseWithPlan(state, undefined)).not.toThrow();
+      expect(Array.isArray(buildStateResponseWithPlan(state, undefined).plan.nextConsiderations)).toBe(true);
+    }
+  });
+
+  it("既存のUnit1〜3のフィールドを壊さない", () => {
+    const state = gameStateAfter([]);
+    const response = buildStateResponseWithPlan(state, undefined);
+
+    expect(response.plan.routes.length).toBeGreaterThan(0);
+    expect(response.plan.targetShapeProgress).not.toBeNull();
+    expect(response.plan.lastMoveOutcome).toBeNull();
+    expect(response.coach).toEqual(buildStateResponse(state).coach);
+  });
+});

@@ -280,6 +280,45 @@ h1 {
   margin-bottom: 0.2rem;
 }
 
+/* Phase6 Unit4: 「今の局面で分かっていること」。経路(.route-section)の直後・
+   候補手(.candidate-section)の直前に置き、既存セクションと同じ表現方法
+   (左のアクセントバー)で並びが読み取れるようにする(装飾のみ。判定・文言は
+   サーバー側)。 */
+.next-considerations-section {
+  border: 1px solid #ccc;
+  border-left-width: 4px;
+  border-left-color: #8d86ab;
+  border-radius: 4px;
+  padding: 0.6rem 0.8rem;
+  margin-bottom: 0.8rem;
+  background: #fafafa;
+}
+
+.next-considerations-section h3 {
+  margin: 0 0 0.3rem;
+  font-size: 0.95rem;
+}
+
+.next-considerations-messages {
+  margin: 0;
+  padding-left: 1.1rem;
+}
+
+.next-consideration {
+  margin-bottom: 0.2rem;
+  line-height: 1.5;
+}
+
+/* 並び順の注記は、事実そのものではなく表示上の説明のため、控えめに見せる
+   (文言はサーバー側で確定済みで、ここでは変更しない)。 */
+.next-consideration-ordering_note {
+  list-style: none;
+  margin-left: -1.1rem;
+  margin-top: 0.4rem;
+  color: #555;
+  font-size: 0.85rem;
+}
+
 /* Phase6 Unit1: 「選択した形 → 必要なマス → 今どこまで出来ているか → 未達成部分の
    道のり → その最初の一手」という因果を示すUI(装飾のみ。判定・計算はサーバー側)。
    候補手セクション(.candidate-section)の直前に置き、同じ表現方法(左のアクセント
