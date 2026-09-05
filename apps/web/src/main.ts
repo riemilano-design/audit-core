@@ -5,6 +5,7 @@
 import {
   fetchGameState,
   isMoveError,
+  selectTargetShape,
   startNewGame,
   submitMove,
   type CoachExplanation,
@@ -110,6 +111,11 @@ function renderCoach(coach: CoachExplanation[] | undefined): void {
 // 順位(1位/2位/3位等)は表示しない(shapeGraphRankingの1位を唯一の正解として
 // 強調しないため)。候補手は「候補の一つ」「この手の目的」という中立な見出しに留め、
 // 「おすすめ」「正解」「安全」等の断定語は使わない。
+//
+// 目標形選択UI(docs/PHASES.md Phase2完了条件): 各候補はクリックして選択できる。
+// 選択中の候補は「[選択中]」という中立なテキストで示すのみとし(「おすすめ」
+// 「唯一の正解」等の断定はしない)、新しい色・装飾は追加しない(既存style.cssは
+// 変更しない)。未選択の候補も引き続きすべて表示し続ける。
 function renderPlan(plan: ReachablePlanBody): void {
   planEl.innerHTML = "";
 
@@ -122,7 +128,15 @@ function renderPlan(plan: ReachablePlanBody): void {
     list.className = "reachable-shapes";
     for (const shape of plan.reachableShapes) {
       const li = document.createElement("li");
-      li.textContent = shape.status === "completed" ? `${shape.name}(完成しています)` : shape.name;
+      const button = document.createElement("button");
+      button.type = "button";
+      const completedSuffix = shape.status === "completed" ? "(完成しています)" : "";
+      const selectedSuffix = shape.shapeId === plan.resolvedTargetShapeId ? "[選択中]" : "";
+      button.textContent = [shape.name + completedSuffix, selectedSuffix].filter(Boolean).join(" ");
+      button.addEventListener("click", () => {
+        void handleSelectTargetShape(shape.shapeId);
+      });
+      li.appendChild(button);
       list.appendChild(li);
     }
     planEl.appendChild(list);
@@ -263,6 +277,26 @@ async function handleSubmitMove(): Promise<void> {
     setError(`通信エラー: ${err instanceof Error ? err.message : String(err)}`);
   } finally {
     submitButton.disabled = false;
+  }
+}
+
+// 目標形選択UI: reachableShapesの候補クリックから呼ばれる。
+// 局面(sfen)自体は変わらないため、submitMoveと同じ非同期(pending→ready)の
+// 流れを流用する(既存のschedulePlanRefreshによるポーリングをそのまま使う)。
+async function handleSelectTargetShape(shapeId: string): Promise<void> {
+  setError("");
+  try {
+    const result = await selectTargetShape(shapeId);
+    if (isMoveError(result)) {
+      setError(result.error);
+      return;
+    }
+    render(result);
+    if (result.plan.candidateMoveState === "pending") {
+      schedulePlanRefresh(result.sfen);
+    }
+  } catch (err) {
+    setError(`通信エラー: ${err instanceof Error ? err.message : String(err)}`);
   }
 }
 

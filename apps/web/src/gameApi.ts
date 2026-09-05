@@ -78,6 +78,10 @@ export interface ReachablePlanBody {
   reachableShapes: RankedReachableShape[];
   candidateMoveState: CandidateMoveState;
   candidateMove: CandidateMoveExplanationResult | undefined;
+  /** ⑦⑧の計算に実際に使われたshapeId(ユーザーが選択したもの、または未選択/無効時の
+   * フォールバックとしてranked[0]が採用されたもの)。reachableShapesの表示で
+   * どれが現在の対象かを示すために使う。目指せる形が1件も無い場合はnull。 */
+  resolvedTargetShapeId: string | null;
 }
 
 export interface GameStateResponse {
@@ -120,6 +124,18 @@ export async function submitMove(move: string): Promise<GameStateResponse | Move
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ move }),
+  });
+  return parseJson<GameStateResponse | MoveErrorResponse>(res);
+}
+
+/** 目標形選択UI(docs/PHASES.md Phase2完了条件)から、目指せる形の1つを選ぶ。
+ * 選択したshapeIdが実際に採用されるかはサーバー側(stateResponse.ts)が判断する
+ * (reachableShapesに含まれない場合は既存動作のranked[0]へ安全にフォールバックする)。 */
+export async function selectTargetShape(shapeId: string): Promise<GameStateResponse | MoveErrorResponse> {
+  const res = await fetch("/api/game/target-shape", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ shapeId }),
   });
   return parseJson<GameStateResponse | MoveErrorResponse>(res);
 }

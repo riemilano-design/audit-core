@@ -279,7 +279,7 @@ describe("buildStateResponseWithPlan", () => {
     ]);
 
     const computed = await computeReachablePlan(state, engine, { initialSfen: sfen });
-    const cachedPlan: CachedReachablePlan = { sfen, plan: computed };
+    const cachedPlan: CachedReachablePlan = { sfen, targetShapeId: computed.targetShapeId, plan: computed };
 
     const response = buildStateResponseWithPlan(state, cachedPlan, { initialSfen: sfen });
 
@@ -293,6 +293,7 @@ describe("buildStateResponseWithPlan", () => {
     const state = customGameState(sfen);
     const staleCachedPlan: CachedReachablePlan = {
       sfen: DEFAULT_INITIAL_SFEN, // 別の局面(古い解析結果)
+      targetShapeId: undefined,
       plan: {
         reachableShapes: [],
         candidateMove: { status: "ready", notReadyReason: null, explanations: [] },
@@ -316,7 +317,11 @@ describe("buildStateResponseWithPlan", () => {
     const computed = await computeReachablePlan(state, engine, { initialSfen: sfen });
     expect(computed.candidateMove?.explanations.map((e) => e.move).sort()).toEqual(["6g7h", "8g7h"]);
 
-    const response = buildStateResponseWithPlan(state, { sfen, plan: computed }, { initialSfen: sfen });
+    const response = buildStateResponseWithPlan(
+      state,
+      { sfen, targetShapeId: computed.targetShapeId, plan: computed },
+      { initialSfen: sfen },
+    );
     expect(response.plan.candidateMove?.explanations).toHaveLength(2);
   });
 
@@ -335,6 +340,109 @@ describe("buildStateResponseWithPlan", () => {
     const first = buildStateResponseWithPlan(state, undefined, { initialSfen: sfen });
     const second = buildStateResponseWithPlan(state, undefined, { initialSfen: sfen });
     expect(second).toEqual(first);
+  });
+});
+
+// 目標形選択UI(docs/PHASES.md Phase2完了条件「ユーザーが2〜3個の候補から目標形を
+// 選べるUI」)向けのselectedTargetShapeId対応(computeRankedPlanContext内の分岐)の検証。
+// honminoOneMoveFromCompleteSfen()は、reachableShapesの上位3件が
+// ["mino_honmino", "mino_takamino", "mino_ginkanmuri"](matchScore降順)になり、
+// mino_honmino/mino_takaminoはどちらも次の対象マスが8h(玉)で、同じ候補手
+// (7i8h)を持つ(pathPlanner.tsの独自ロジックではなく、たまたま両shapeのdataが
+// この局面では同じ対象マスを指しているため)。候補手のUSI自体は同じでも、
+// どちらのshapeを対象にしたかはcandidateMove.explanations[0].refers_to_shape_idと
+// resolvedTargetShapeIdで判別できる。
+describe("目標形選択(selectedTargetShapeId)", () => {
+  it("未選択時は従来通りranked[0](mino_honmino)が採用される", () => {
+    const sfen = honminoOneMoveFromCompleteSfen();
+    const state = customGameState(sfen);
+
+    const response = buildStateResponseWithPlan(state, undefined, { initialSfen: sfen });
+
+    expect(response.plan.resolvedTargetShapeId).toBe("mino_honmino");
+    expect(response.plan.reachableShapes.map((s) => s.shapeId)).toEqual([
+      "mino_honmino",
+      "mino_takamino",
+      "mino_ginkanmuri",
+    ]);
+  });
+
+  it("有効なselectedTargetShapeId(reachableShapes内)を指定すると、そのshapeが採用される", async () => {
+    const sfen = honminoOneMoveFromCompleteSfen();
+    const state = customGameState(sfen);
+    const engine = makeMockLowPriorityEngine([
+      multiPvResult([{ multipv: 1, score: { type: "cp", value: 5 }, pv: [] }]), // baseline
+      multiPvResult([{ multipv: 1, score: { type: "cp", value: 10 }, pv: [] }]), // 候補7i8h
+    ]);
+
+    const computed = await computeReachablePlan(state, engine, { initialSfen: sfen }, "mino_takamino");
+
+    expect(computed.targetShapeId).toBe("mino_takamino");
+    expect(computed.candidateMove?.status).toBe("ready");
+    expect(computed.candidateMove?.explanations[0]?.refers_to_shape_id).toBe("mino_takamino");
+    // reachableShapesの一覧(⑥の表示)自体はランキングそのままで、選択によって
+    // 並び替えたり除外したりしない(⑦⑧の対象だけが変わる)。
+    expect(computed.reachableShapes.map((s) => s.shapeId)).toEqual([
+      "mino_honmino",
+      "mino_takamino",
+      "mino_ginkanmuri",
+    ]);
+
+    const response = buildStateResponseWithPlan(
+      state,
+      { sfen, targetShapeId: computed.targetShapeId, plan: computed },
+      { initialSfen: sfen },
+      "mino_takamino",
+    );
+    expect(response.plan.resolvedTargetShapeId).toBe("mino_takamino");
+    expect(response.plan.candidateMoveState).toBe("ready");
+  });
+
+  it("reachableShapesに存在しないselectedTargetShapeIdはranked[0]へフォールバックする", () => {
+    const sfen = honminoOneMoveFromCompleteSfen();
+    const state = customGameState(sfen);
+
+    const response = buildStateResponseWithPlan(
+      state,
+      undefined,
+      { initialSfen: sfen },
+      "shape_that_does_not_exist",
+    );
+
+    expect(response.plan.resolvedTargetShapeId).toBe("mino_honmino");
+    expect(response.plan.candidateMoveState).toBe("pending");
+  });
+
+  it("同一SFENでtargetShapeIdだけ変更した場合、古いcachedPlanを再利用しない(stale扱い)", async () => {
+    const sfen = honminoOneMoveFromCompleteSfen();
+    const state = customGameState(sfen);
+    const engine = makeMockLowPriorityEngine([
+      multiPvResult([{ multipv: 1, score: { type: "cp", value: 5 }, pv: [] }]), // baseline
+      multiPvResult([{ multipv: 1, score: { type: "cp", value: 10 }, pv: [] }]), // 候補7i8h
+    ]);
+
+    // mino_honmino(未選択時のranked[0]相当)を対象に計算し、それをキャッシュとする。
+    const computedForHonmino = await computeReachablePlan(state, engine, { initialSfen: sfen });
+    const cachedPlan: CachedReachablePlan = {
+      sfen,
+      targetShapeId: computedForHonmino.targetShapeId,
+      plan: computedForHonmino,
+    };
+    expect(cachedPlan.targetShapeId).toBe("mino_honmino");
+
+    // 同じsfenのまま、選択をmino_takaminoに変更してレスポンスを組み立てる。
+    // sfenは一致するが、cachedPlanはmino_honmino向けの結果なので使ってはならない。
+    const response = buildStateResponseWithPlan(
+      state,
+      cachedPlan,
+      { initialSfen: sfen },
+      "mino_takamino",
+    );
+
+    expect(response.plan.resolvedTargetShapeId).toBe("mino_takamino");
+    // "ready"のまま古い(mino_honmino向けの)candidateMoveを返してはいけない。
+    expect(response.plan.candidateMoveState).toBe("pending");
+    expect(response.plan.candidateMove).toBeUndefined();
   });
 });
 

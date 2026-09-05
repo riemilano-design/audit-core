@@ -40,10 +40,25 @@ let state: GameState = createInitialGameState();
 let prioritizedEngine: PrioritizedEngine | undefined;
 let prioritizedEngineReady: Promise<PrioritizedEngine> | undefined;
 
-// ⑧のバックグラウンド解析結果のキャッシュ(完了した局面のsfen付き)。
+// 目標形選択UI(POST /api/game/target-shape)でユーザーが選んだshapeId。
+// GameStateには含めない(対局進行そのものとは独立した、コーチ機能側の選択状態のため。
+// backgroundPlan/backgroundPlanKeyと同じ「モジュール変数で保持し、新規対局開始時に
+// 手動でリセットする」既存の設計方針を踏襲する)。実際に採用されるshapeId
+// (resolvedTargetShapeId)は、reachableShapesに含まれるかどうかで
+// stateResponse.ts側が決める(未指定・無効値の場合はranked[0]にフォールバック)。
+let selectedTargetShapeId: string | undefined;
+
+// ⑧のバックグラウンド解析結果のキャッシュ(完了した局面のsfen・目標形の組み合わせ付き)。
 let backgroundPlan: CachedReachablePlan | undefined;
-// 現在バックグラウンド解析が進行中の局面(sfen)。同一局面への二重起動を防ぐ。
-let backgroundPlanSfen: string | undefined;
+// 現在バックグラウンド解析が進行中の(局面, 選択中の目標形)の組み合わせ。
+// 同一局面かつ同一選択への二重起動を防ぐ(sfenだけでなく選択も変わったら別扱いにする)。
+let backgroundPlanKey: string | undefined;
+
+/** 局面(sfen)と選択中の目標形(selectedTargetShapeId、未選択ならundefined)から、
+ * バックグラウンド解析の進行中判定に使うキーを作る。 */
+function planKey(sfen: string, targetShapeId: string | undefined): string {
+  return `${sfen}::${targetShapeId ?? ""}`;
+}
 
 // エンジンはUSIハンドシェイク(usi->usiok, isready->readyok)が完了するまで
 // position/goを受け付けられない。初回呼び出し時に1度だけハンドシェイクし、以後使い回す。
@@ -77,30 +92,48 @@ function getPrioritizedEngine(): Promise<PrioritizedEngine> {
  * 従来ここで捕捉されていなかった。そのため、try全体を囲うcatchを追加し、
  * どの段階の失敗であっても外部へ例外を漏らさず、対局そのものには一切影響させない
  * (safeComputeReachablePlan/safeExplainPositionと同じ「失敗時はconsole.errorのみ」
- * という既存方針をこの関数全体にも適用する)。backgroundPlanSfenの解除は
+ * という既存方針をこの関数全体にも適用する)。backgroundPlanKeyの解除は
  * 従来どおりfinallyで行う(成功・失敗いずれの経路でも確実に解除される)。
  */
-async function runBackgroundPlanAnalysis(current: GameState): Promise<void> {
-  if (backgroundPlanSfen === current.sfen) return; // 同一局面の解析が既に進行中
+/**
+ * targetShapeIdAtTrigger は、この解析を起動した時点(呼び出し元がstateと共に
+ * 同期的に読んだ時点)のselectedTargetShapeIdのスナップショット。
+ * 非同期処理の間にモジュール変数selectedTargetShapeIdが変わっても、この関数内では
+ * 常にトリガー時点の値を使う(prioritizedEngine.tsのposition()/goMultiPv()引数の
+ * スナップショット方針と同じ考え方)。
+ */
+async function runBackgroundPlanAnalysis(
+  current: GameState,
+  targetShapeIdAtTrigger: string | undefined,
+): Promise<void> {
+  const key = planKey(current.sfen, targetShapeIdAtTrigger);
+  if (backgroundPlanKey === key) return; // 同一局面・同一選択の解析が既に進行中
 
-  backgroundPlanSfen = current.sfen;
+  backgroundPlanKey = key;
   try {
     const engine = await getPrioritizedEngine();
-    const result = await safeComputeReachablePlan(current, engine.asLowPriority());
+    const result = await safeComputeReachablePlan(current, engine.asLowPriority(), {}, targetShapeIdAtTrigger);
     if (!result) return; // 計算失敗(safeComputeReachablePlan側でconsole.error済み)
 
     // 世代チェック: 解析完了時点で現在の対局状態が進んでいたら、この結果は
     // 古い局面に対するものなので破棄する(ユーザーが解析完了前に次の手を指した場合)。
     if (state.sfen !== current.sfen) return;
+    // 世代チェック(目標形選択): 解析完了時点で選択が変わっていたら、この結果は
+    // 古い選択に対するものなので破棄する(ユーザーが解析完了前に別の形を選んだ場合)。
+    if (selectedTargetShapeId !== targetShapeIdAtTrigger) return;
 
-    backgroundPlan = { sfen: current.sfen, plan: result };
+    backgroundPlan = {
+      sfen: current.sfen,
+      targetShapeId: result.targetShapeId,
+      plan: { reachableShapes: result.reachableShapes, candidateMove: result.candidateMove },
+    };
   } catch (err) {
     // getPrioritizedEngine()の失敗(エンジン起動・ハンドシェイク失敗等)を含め、
     // バックグラウンド解析のあらゆる失敗が未処理のPromise rejectionとして
     // 外へ漏れないようにする(対局そのものには影響させない)。
     console.error("バックグラウンド候補手解析(runBackgroundPlanAnalysis)でエラーが発生しました:", err);
   } finally {
-    if (backgroundPlanSfen === current.sfen) backgroundPlanSfen = undefined;
+    if (backgroundPlanKey === key) backgroundPlanKey = undefined;
   }
 }
 
@@ -163,10 +196,47 @@ async function handleMove(req: IncomingMessage, res: ServerResponse): Promise<vo
 
   // ⑤⑥⑦(エンジン不要)までを含めた状態を即座に返す。⑧(MultiPV参考評価)は
   // まだ完了していなければcandidateMoveState: "pending"になる(レスポンスをブロックしない)。
-  sendJson(res, 200, buildStateResponseWithPlan(state, backgroundPlan));
+  sendJson(res, 200, buildStateResponseWithPlan(state, backgroundPlan, {}, selectedTargetShapeId));
 
   // レスポンス送出後、バックグラウンドで⑧を計算する(fire-and-forget)。
-  void runBackgroundPlanAnalysis(state);
+  void runBackgroundPlanAnalysis(state, selectedTargetShapeId);
+}
+
+/**
+ * 目標形選択UI(docs/PHASES.md Phase2完了条件「ユーザーが2〜3個の候補から目標形を
+ * 選べるUI」)から呼ばれる。選択されたshapeIdが実際に現在のreachableShapesに
+ * 含まれるかどうかの妥当性判定はここでは行わない(stateResponse.ts側の
+ * computeRankedPlanContextが、局面が進むたびに変わるreachableShapesと突き合わせて
+ * 都度判定する。含まれなければ安全にranked[0]へフォールバックする)。
+ */
+async function handleTargetShape(req: IncomingMessage, res: ServerResponse): Promise<void> {
+  let body: unknown;
+  try {
+    body = await readJsonBody(req);
+  } catch {
+    sendJson(res, 400, { error: "リクエストボディがJSONとして解析できません" });
+    return;
+  }
+
+  const shapeId = (body as { shapeId?: unknown } | undefined)?.shapeId;
+  if (typeof shapeId !== "string") {
+    sendJson(res, 400, { error: "リクエストボディにshapeId(string)が必要です" });
+    return;
+  }
+
+  selectedTargetShapeId = shapeId;
+  // 選択が変わった時点で、古い選択に対するバックグラウンド解析結果を破棄する。
+  // (buildStateResponseWithPlan側のsfen+targetShapeId一致チェックだけでも古い結果は
+  // 弾かれるが、不要になったキャッシュを明示的に破棄して残さないようにする。)
+  backgroundPlan = undefined;
+  backgroundPlanKey = undefined;
+
+  // 局面(sfen)自体は変わらないため、⑤⑥(エンジン不要)は同期的に返しつつ、
+  // ⑦⑧はcandidateMoveState: "pending"から始まり、バックグラウンド解析の完了を待つ
+  // (POST /api/game/moveと同じ非同期方針)。
+  sendJson(res, 200, buildStateResponseWithPlan(state, backgroundPlan, {}, selectedTargetShapeId));
+
+  void runBackgroundPlanAnalysis(state, selectedTargetShapeId);
 }
 
 const server = createServer((req, res) => {
@@ -187,8 +257,8 @@ const server = createServer((req, res) => {
   if (req.method === "GET" && url.pathname === "/api/game") {
     // GET /api/gameは新規のエンジン解析を開始しない。既にバックグラウンドで
     // 完了・キャッシュされている⑧があれば返すだけ(buildStateResponseWithPlan内で
-    // sfenが一致するかを確認する)。
-    sendJson(res, 200, buildStateResponseWithPlan(state, backgroundPlan));
+    // sfen・選択中の目標形の両方が一致するかを確認する)。
+    sendJson(res, 200, buildStateResponseWithPlan(state, backgroundPlan, {}, selectedTargetShapeId));
     return;
   }
 
@@ -198,16 +268,25 @@ const server = createServer((req, res) => {
     // 詳細はscenarioOpponentOpening.tsを参照)。未指定・不明な値は従来どおりの通常対局。
     const scenarioParam = url.searchParams.get("scenario");
     state = createInitialGameState(isScenarioId(scenarioParam) ? scenarioParam : undefined);
-    // 新しい対局を開始したので、前の対局のバックグラウンド解析結果は破棄する。
+    // 新しい対局を開始したので、前の対局のバックグラウンド解析結果・目標形選択は破棄する。
     // POST /api/game/new自体はMultiPVを実行しない(従来どおり軽量なレスポンス)。
     backgroundPlan = undefined;
-    backgroundPlanSfen = undefined;
-    sendJson(res, 200, buildStateResponseWithPlan(state, backgroundPlan));
+    backgroundPlanKey = undefined;
+    selectedTargetShapeId = undefined;
+    sendJson(res, 200, buildStateResponseWithPlan(state, backgroundPlan, {}, selectedTargetShapeId));
     return;
   }
 
   if (req.method === "POST" && url.pathname === "/api/game/move") {
     handleMove(req, res).catch((err) => {
+      console.error(err);
+      sendJson(res, 500, { error: "サーバー内部エラー" });
+    });
+    return;
+  }
+
+  if (req.method === "POST" && url.pathname === "/api/game/target-shape") {
+    handleTargetShape(req, res).catch((err) => {
       console.error(err);
       sendJson(res, 500, { error: "サーバー内部エラー" });
     });
