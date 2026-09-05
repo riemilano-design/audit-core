@@ -92,7 +92,41 @@ export interface ReachablePlanBody {
 }
 
 // apps/server/src/analysis/planChangeReason.ts の PlanChangeReason に対応する型。
-export type PlanChangeReason = "candidate_piece_captured" | "unknown";
+export type PlanChangeReason =
+  | "candidate_piece_captured"
+  | "candidate_move_illegal_due_to_check"
+  | "candidate_piece_pinned"
+  | "unknown";
+
+/**
+ * planChanged/planChangeReasonから、ユーザーに表示してよい理由文言を導く純粋関数
+ * (DOM非依存、テスト容易性のためgameApi.ts側に置く)。
+ *
+ * - planChanged===falseの場合は常にnull(理由文言を絶対に表示しない)。
+ *   plan.planChangeReasonの値だけでは判定せず、必ずplanChangedとの組み合わせで
+ *   判定する(人間指示のとおり)。
+ * - "unknown"、および既知の3種以外の値(サーバー側が将来追加する未知の理由を含む)は
+ *   すべてnullを返す(=理由を断定しない安全側の既定動作)。新しい将棋ロジックは
+ *   一切追加しない、既存の3分類をそのまま日本語文言へ変換するだけの対応表。
+ */
+export function getPlanChangeReasonMessage(
+  plan: Pick<ReachablePlanBody, "planChanged" | "planChangeReason">,
+): string | null {
+  if (!plan.planChanged) return null;
+
+  switch (plan.planChangeReason) {
+    case "candidate_piece_captured":
+      return "予定していた駒が、相手の手によって取られました。";
+    case "candidate_move_illegal_due_to_check":
+      return "相手の手によって、予定していた玉の移動ができなくなりました。";
+    case "candidate_piece_pinned":
+      return "相手の手によって、予定していた駒が動かせなくなりました。";
+    default:
+      // "unknown"・null・将来サーバー側が追加する未知の値は、理由を断定せず
+      // 文言を表示しない(従来通り「前回の計画が使えなくなりました。」のみ)。
+      return null;
+  }
+}
 
 export interface GameStateResponse {
   sfen: string;

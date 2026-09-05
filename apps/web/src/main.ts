@@ -4,6 +4,7 @@
 
 import {
   fetchGameState,
+  getPlanChangeReasonMessage,
   isMoveError,
   selectTargetShape,
   startNewGame,
@@ -120,18 +121,20 @@ function renderPlan(plan: ReachablePlanBody): void {
   planEl.innerHTML = "";
 
   // Phase3 Unit1/Unit2: 断定的・評価的な表現は使わず、事実のみを短く伝える
-  // (人間承認済み)。理由が事実として断定できない場合(unknown)は追加の文言を
-  // 出さない。新しい候補手そのものは既存のPhase2表示(下記)をそのまま使う。
+  // (人間承認済み)。理由が事実として断定できない場合(unknown・将来の未知の値を
+  // 含む、getPlanChangeReasonMessage参照)は追加の文言を出さない。新しい候補手
+  // そのものは既存のPhase2表示(下記)をそのまま使う。
   if (plan.planChanged) {
     const p = document.createElement("p");
     p.className = "plan-changed";
     p.textContent = "前回の計画が使えなくなりました。";
     planEl.appendChild(p);
 
-    if (plan.planChangeReason === "candidate_piece_captured") {
+    const reasonMessage = getPlanChangeReasonMessage(plan);
+    if (reasonMessage) {
       const reasonP = document.createElement("p");
       reasonP.className = "plan-changed-reason";
-      reasonP.textContent = "予定していた駒が、相手の手によって取られました。";
+      reasonP.textContent = reasonMessage;
       planEl.appendChild(reasonP);
     }
   }

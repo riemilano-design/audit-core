@@ -1,14 +1,18 @@
 import { Board } from "shogiops/board";
-import { Hands } from "shogiops/hands";
+import { Hand, Hands } from "shogiops/hands";
 import { makeSfen } from "shogiops/sfen";
 import { Shogi } from "shogiops/variant/shogi";
 import { parseSquareName } from "shogiops/util";
 import { describe, expect, it } from "vitest";
 import { classifyPlanChangeReason } from "./planChangeReason.js";
 import type { PlanSnapshot } from "./planChangeDetector.js";
+import { applyMove } from "../rules/applyMove.js";
 
-/** 任意の駒配置からSFENを組み立てる(stateResponse.test.tsのcustomSfen()と同じ方式)。 */
-function customSfen(pieces: Array<{ square: string; color: "sente" | "gote"; role: Parameters<Board["set"]>[1]["role"] }>): string {
+/** 任意の駒配置(+持ち駒)からSFENを組み立てる(stateResponse.test.tsのcustomSfen()と同じ方式)。 */
+function customSfen(
+  pieces: Array<{ square: string; color: "sente" | "gote"; role: Parameters<Board["set"]>[1]["role"] }>,
+  hands: Hands = Hands.empty(),
+): string {
   let board = Board.empty();
   for (const { square, color, role } of pieces) {
     const sq = parseSquareName(square);
@@ -16,14 +20,15 @@ function customSfen(pieces: Array<{ square: string; color: "sente" | "gote"; rol
     board = board.clone();
     board.set(sq, { color, role });
   }
-  const pos = Shogi.from({ board, hands: Hands.empty(), turn: "sente", moveNumber: 1 }, false).unwrap();
+  const pos = Shogi.from({ board, hands, turn: "sente", moveNumber: 1 }, false).unwrap();
   return makeSfen(pos);
 }
 
 describe("classifyPlanChangeReason", () => {
   it("残存候補の移動元にあった自駒が相手の着手後に無くなっている場合はcandidate_piece_captured", () => {
-    const previous: PlanSnapshot = { targetShapeId: "mino_honmino", candidateMoveUsis: ["6g7h", "8g7h"] };
-    // 6g7hはユーザーが指した(除外対象)。残る8g7hの移動元(8g)には、
+    // 8g8hは6g7hと異なる移動先マス(8h)を持つため兄弟候補として除外されない。
+    const previous: PlanSnapshot = { targetShapeId: "mino_honmino", candidateMoveUsis: ["6g7h", "8g8h"] };
+    // 6g7hはユーザーが指した(除外対象)。残る8g8hの移動元(8g)には、
     // 相手の着手で自分の銀が取られたため何も無い局面を想定する。
     const afterSfen = customSfen([{ square: "8h", color: "sente", role: "king" }]);
     expect(classifyPlanChangeReason(previous, "6g7h", afterSfen)).toBe("candidate_piece_captured");
@@ -64,6 +69,65 @@ describe("classifyPlanChangeReason", () => {
     const previous: PlanSnapshot = { targetShapeId: "mino_honmino", candidateMoveUsis: ["P*5e"] };
     const afterSfen = customSfen([{ square: "8h", color: "sente", role: "king" }]);
     expect(classifyPlanChangeReason(previous, "1g1f", afterSfen)).toBe("unknown");
+  });
+
+  // 【今回追加(候補C: 王手放置)】実際のSFEN・applyMoveを使い、相手の飛車によって
+  // 候補手(玉の移動)が非合法になるケースを再現する(Unit1の実機再現フィクスチャと同型)。
+  it("相手の飛車によって候補手(玉の移動)が相手の利きに入り非合法になった場合はcandidate_move_illegal_due_to_check", () => {
+    const sfenBefore = customSfen(
+      [
+        { square: "7i", color: "sente", role: "king" },
+        { square: "7h", color: "sente", role: "silver" },
+        { square: "6i", color: "sente", role: "gold" },
+        { square: "5h", color: "sente", role: "gold" },
+        { square: "1g", color: "sente", role: "pawn" },
+      ],
+      Hands.from(Hand.empty(), Hand.from([["rook", 1]])),
+    );
+    const sfenAfterUser = applyMove(sfenBefore, "1g1f"); // 候補手(7i8h)とは無関係な手
+    const sfenAfterOpponent = applyMove(sfenAfterUser, "R*8a"); // 相手が飛車を8筋へ打つ
+
+    const previous: PlanSnapshot = { targetShapeId: "mino_honmino", candidateMoveUsis: ["7i8h"] };
+    expect(classifyPlanChangeReason(previous, "1g1f", sfenAfterOpponent)).toBe("candidate_move_illegal_due_to_check");
+  });
+
+  // 【今回追加(候補D: ピン)】実際のSFEN・applyMoveを使い、相手の飛車によって
+  // 候補駒(銀)がピンされ、候補手が非合法になるケースを再現する。
+  it("相手の飛車によって候補駒(銀)がピンされ候補手が非合法になった場合はcandidate_piece_pinned", () => {
+    // 玉6i・銀6g(同じ6筋)を用意し、相手が飛車を6筋上(6a)へ打つとピンが発生する。
+    const sfenBefore = customSfen(
+      [
+        { square: "6i", color: "sente", role: "king" },
+        { square: "6g", color: "sente", role: "silver" },
+        { square: "1g", color: "sente", role: "pawn" },
+      ],
+      Hands.from(Hand.empty(), Hand.from([["rook", 1]])),
+    );
+    const sfenAfterUser = applyMove(sfenBefore, "1g1f"); // 候補手(6g7h)とは無関係な手
+    const sfenAfterOpponent = applyMove(sfenAfterUser, "R*6a"); // 相手が飛車を6筋へ打ち、銀をピンする
+
+    const previous: PlanSnapshot = { targetShapeId: "mino_honmino", candidateMoveUsis: ["6g7h"] };
+    expect(classifyPlanChangeReason(previous, "1g1f", sfenAfterOpponent)).toBe("candidate_piece_pinned");
+  });
+
+  // ピンされている駒でも、移動先マスが相手駒の捕獲を伴う場合は安全側でunknownに倒す
+  // (discovered attack等の追加考慮が必要になるため、今回の判定範囲には含めない、承認済み)。
+  it("ピンされている駒の移動先が相手駒の捕獲を伴う場合は、安全側でunknownのままになる", () => {
+    const sfenBefore = customSfen(
+      [
+        { square: "6i", color: "sente", role: "king" },
+        { square: "6g", color: "sente", role: "silver" },
+        { square: "7h", color: "gote", role: "pawn" }, // 6g7hの移動先(7h)に相手の歩を配置
+        { square: "1g", color: "sente", role: "pawn" },
+      ],
+      Hands.from(Hand.empty(), Hand.from([["rook", 1]])),
+    );
+    const sfenAfterUser = applyMove(sfenBefore, "1g1f");
+    const sfenAfterOpponent = applyMove(sfenAfterUser, "R*6a");
+
+    const previous: PlanSnapshot = { targetShapeId: "mino_honmino", candidateMoveUsis: ["6g7h"] };
+    // 6g7hは(捕獲を伴うため)判定対象から外れ、他に残存候補が無いのでunknownになる。
+    expect(classifyPlanChangeReason(previous, "1g1f", sfenAfterOpponent)).toBe("unknown");
   });
 
   it("同じ入力に対して常に同じ結果を返す(決定的)", () => {

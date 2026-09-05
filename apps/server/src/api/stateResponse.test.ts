@@ -636,6 +636,12 @@ describe("computePlanChangeAfterMove / safeComputePlanChangeAfterMove", () => {
 
     const planChanged = computePlanChangeAfterMove(stateBefore, stateAfter, "6g7h", { initialSfen: sfenBefore });
     expect(planChanged).toBe(false);
+
+    // 【今回追加(既知課題修正後の理由分類との整合性確認)】
+    // planChanged: falseの場合、理由分類(computePlanChangeReasonAfterMove)も
+    // 呼ばれるべきではなく、nullになる(server.tsの配線と同じ前提)。
+    const reason = computePlanChangeReasonAfterMove(stateBefore, stateAfter, "6g7h", { initialSfen: sfenBefore });
+    expect(reason).toBeNull();
   });
 
   // 兄弟候補の一方だけが相手に実際に捕獲され、もう一方は生きている場合。
@@ -654,6 +660,9 @@ describe("computePlanChangeAfterMove / safeComputePlanChangeAfterMove", () => {
 
     const planChanged = computePlanChangeAfterMove(stateBefore, stateAfter, "1g1f", { initialSfen: sfenBefore });
     expect(planChanged).toBe(false);
+
+    const reason = computePlanChangeReasonAfterMove(stateBefore, stateAfter, "1g1f", { initialSfen: sfenBefore });
+    expect(reason).toBeNull();
   });
 
   it("ユーザーが提案手以外を指し、相手の手が残存候補を機械的に非合法にした場合はplanChanged: trueになる", () => {
@@ -780,9 +789,11 @@ describe("computePlanChangeReasonAfterMove / safeComputePlanChangeReasonAfterMov
     expect(reason).toBe("candidate_piece_captured");
   });
 
-  it("駒の捕獲以外の理由(王手放置等)で崩れた場合、planChangeReason: unknownになる", () => {
+  it("王手放置(候補手の玉移動が相手の利きに入る)で崩れた場合、planChangeReason: candidate_move_illegal_due_to_checkになる", () => {
     // Unit1の実機再現テストと同じフィクスチャ(相手が飛車を8筋へ打ち、王の移動先が
     // 利きに入るため候補手が非合法になる。駒は取られていない)。
+    // 今回のUnit2追加分類により、unknownではなくcandidate_move_illegal_due_to_checkに
+    // 正しく分類されることを確認する(pos.squareAttackers、既存shogiops APIのみ使用)。
     const sfenBefore = planChangeFixtureSfen();
     const stateBefore = customGameState(sfenBefore);
 
@@ -798,7 +809,7 @@ describe("computePlanChangeReasonAfterMove / safeComputePlanChangeReasonAfterMov
     expect(planChanged).toBe(true);
 
     const reason = computePlanChangeReasonAfterMove(stateBefore, stateAfter, "1g1f", { initialSfen: sfenBefore });
-    expect(reason).toBe("unknown");
+    expect(reason).toBe("candidate_move_illegal_due_to_check");
   });
 
   it("planChanged: falseの場合、planChangeReasonは常にnullになる", () => {
