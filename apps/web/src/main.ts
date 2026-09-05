@@ -1,6 +1,13 @@
 // Phase 0時点での仮の盤面UI。
 // docs/PHASES.md Phase0の目的「盤面が表示され、対局が(仮のUIで良いので)成立する」を満たす
-// 最小限の実装。着手はUSI形式のテキスト入力で行う(盤面上のクリック操作は未実装)。
+// 最小限の実装。
+//
+// 【Phase5: 盤面クリック操作】
+// 駒・持ち駒をクリックして着手できるようにする(docs/PHASES.md Phase5、人間承認済み)。
+// 合法手判定は一切ここで再実装せず、サーバーが返すlegalMoves(rules/legalMoves.tsの
+// getLegalMovesをそのまま配線したもの、gameApi.ts参照)を文字列としてフィルタ・
+// グルーピングするだけに留める。USI形式のテキスト入力欄・「指す」ボタンは
+// フォールバックとしてそのまま残す。
 
 import {
   fetchGameState,
@@ -52,6 +59,60 @@ const planEl = document.querySelector<HTMLDivElement>("#plan")!;
 const moveInput = document.querySelector<HTMLInputElement>("#moveInput")!;
 const submitButton = document.querySelector<HTMLButtonElement>("#submitMove")!;
 const newGameButton = document.querySelector<HTMLButtonElement>("#newGame")!;
+
+// 【Phase5: 盤面クリック操作の選択状態】
+// selectedFrom: 移動元として選択中の盤上のマス(USI形式、例: "7g")。
+// selectedDropRole: 打つ駒として選択中の持ち駒の駒種(例: "P")。
+// 両方同時には選択されない(片方を選ぶともう片方は解除する)。
+let selectedFrom: string | undefined;
+let selectedDropRole: string | undefined;
+// 直近にrender()した対局状態。renderInteractive()(選択状態の変更だけを反映する
+// 再描画。ネットワーク通信は行わない)から参照するために保持する。
+let currentState: GameStateResponse | undefined;
+
+function clearSelection(): void {
+  selectedFrom = undefined;
+  selectedDropRole = undefined;
+}
+
+// 盤面座標(0始まりの行・列)からUSI形式のマス表記(例: "7g")を求める。
+// SFEN盤面部分は一段目(段a)を先頭行とし、各段は9筋から1筋の順で並ぶ
+// (docs/DATA_MODEL.md「確定事項: 座標形式」の規約どおり。表示用のsfenBoard.tsの
+// 解析結果(行=段、列=筋9→1の順)と対応させただけで、新しい座標規約は作らない)。
+function squareNameAt(rowIndex: number, colIndex: number): string {
+  const file = 9 - colIndex;
+  const rank = String.fromCharCode("a".charCodeAt(0) + rowIndex);
+  return `${file}${rank}`;
+}
+
+// 合法手一覧(USI形式)から、指定した移動元マスにある駒を動かす場合の、
+// 移動先マスごとの候補USI一覧を求める(移動先が同じでも成り/不成りの両方が
+// 合法な場合は2件になる)。合法手判定そのものはサーバー(rules/legalMoves.ts)の
+// 結果をそのまま使い、ここでは文字列のフィルタ・グルーピングのみ行う。
+function destinationsFromSquare(square: string, legalMoves: string[]): Map<string, string[]> {
+  const map = new Map<string, string[]>();
+  for (const usi of legalMoves) {
+    if (usi.length < 4 || usi[2] === "*") continue; // 打つ手(P*5e等)は対象外
+    if (usi.slice(0, 2) !== square) continue;
+    const to = usi.slice(2, 4);
+    const list = map.get(to) ?? [];
+    list.push(usi);
+    map.set(to, list);
+  }
+  return map;
+}
+
+// 合法手一覧(USI形式)から、指定した持ち駒(role、例: "P")を打つ場合の、
+// 移動先マスごとの候補USI一覧を求める(打つ手に成り/不成りの区別はないため、
+// 移動先1つにつき必ず1件)。
+function destinationsFromDropRole(role: string, legalMoves: string[]): Map<string, string[]> {
+  const map = new Map<string, string[]>();
+  for (const usi of legalMoves) {
+    if (usi.length !== 4 || usi[1] !== "*" || usi[0] !== role) continue;
+    map.set(usi.slice(2, 4), [usi]);
+  }
+  return map;
+}
 
 // 「棋譜解析結果を見る画面」ではなく「対局しながら意味を理解する画面」を意識し、
 // 将棋用語を知らない初心者にも伝わる短い日本語ラベルに変換する
@@ -193,12 +254,27 @@ function renderPlan(plan: ReachablePlanBody): void {
   // 候補手セクションを無理に表示しない(既存のPhase1表示のみを維持する)。
 }
 
-function renderBoard(sfen: string): void {
-  const board = parseSfenBoardPart(sfen);
+// 【Phase5】盤面クリックで着手できるようにする。合法手判定はstate.legalMoves
+// (サーバーのgetLegalMovesをそのまま配線したもの)をフィルタするだけで、
+// ここでは将棋ルールを一切判定しない。
+// canSelect: 現在の手番が先手(人間側、CLAUDE.md「現在のスコープ」の先後固定)かつ
+// 対局が終了していない場合のみ、自分の駒・持ち駒をクリック可能にする
+// (相手側の駒は選択できるようにしない)。
+function renderBoard(state: GameStateResponse): void {
+  const board = parseSfenBoardPart(state.sfen);
+  const turn = parseSfenTurn(state.sfen);
+  const canSelect = turn === "sente" && !state.status.isEnd;
+  const destinations = selectedFrom
+    ? destinationsFromSquare(selectedFrom, state.legalMoves)
+    : selectedDropRole
+      ? destinationsFromDropRole(selectedDropRole, state.legalMoves)
+      : new Map<string, string[]>();
+
   boardEl.innerHTML = "";
-  for (const rank of board) {
+  board.forEach((rank, rowIndex) => {
     const tr = document.createElement("tr");
-    for (const square of rank) {
+    rank.forEach((square, colIndex) => {
+      const squareName = squareNameAt(rowIndex, colIndex);
       const td = document.createElement("td");
       if (square) {
         const span = document.createElement("span");
@@ -206,19 +282,88 @@ function renderBoard(sfen: string): void {
         span.textContent = PIECE_KANJI[square.piece] ?? square.piece;
         td.appendChild(span);
       }
+
+      const isSelected = squareName === selectedFrom;
+      if (isSelected) td.classList.add("square-selected");
+
+      const candidates = destinations.get(squareName);
+      if (candidates && candidates.length > 0) {
+        // 成り/不成りの両方が合法な場合のみcandidates.length===2になる
+        // (強制成りの局面ではgetLegalMovesが不成り側を返さないため、自然に1件になる)。
+        td.classList.add("square-destination");
+        td.addEventListener("click", () => {
+          void handleBoardMoveClick(candidates);
+        });
+      } else if (isSelected) {
+        // 選択中のマスをもう一度クリックしたら選択解除する。
+        td.addEventListener("click", () => {
+          clearSelection();
+          renderInteractive();
+        });
+      } else if (canSelect && square?.color === "sente") {
+        td.classList.add("square-selectable");
+        td.addEventListener("click", () => {
+          selectedFrom = squareName;
+          selectedDropRole = undefined;
+          renderInteractive();
+        });
+      }
+
       tr.appendChild(td);
-    }
+    });
     boardEl.appendChild(tr);
-  }
+  });
 }
 
-function renderHands(sfen: string): void {
-  const hands = parseSfenHands(sfen);
+// 【Phase5】先手(人間)の持ち駒だけをクリック可能なボタンにする。後手の持ち駒は
+// 従来通りテキスト表示のまま(選択できるようにしない)。
+function renderHands(state: GameStateResponse): void {
+  const hands = parseSfenHands(state.sfen);
+  const turn = parseSfenTurn(state.sfen);
+  const canSelect = turn === "sente" && !state.status.isEnd;
   const format = (h: Record<string, number>) =>
     Object.entries(h)
       .map(([piece, count]) => `${PIECE_KANJI[piece] ?? piece}${count > 1 ? `x${count}` : ""}`)
       .join(" ") || "なし";
-  handsEl.textContent = `先手持ち駒: ${format(hands.sente)} / 後手持ち駒: ${format(hands.gote)}`;
+
+  handsEl.innerHTML = "";
+
+  const senteLabel = document.createElement("span");
+  senteLabel.textContent = "先手持ち駒: ";
+  handsEl.appendChild(senteLabel);
+
+  const senteEntries = Object.entries(hands.sente);
+  if (senteEntries.length === 0) {
+    handsEl.appendChild(document.createTextNode("なし"));
+  } else {
+    senteEntries.forEach(([piece, count], i) => {
+      const label = `${PIECE_KANJI[piece] ?? piece}${count > 1 ? `x${count}` : ""}`;
+      if (canSelect) {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = selectedDropRole === piece ? "hand-piece hand-piece-selected" : "hand-piece";
+        button.textContent = label;
+        button.addEventListener("click", () => {
+          selectedDropRole = selectedDropRole === piece ? undefined : piece;
+          selectedFrom = undefined;
+          renderInteractive();
+        });
+        handsEl.appendChild(button);
+      } else {
+        handsEl.appendChild(document.createTextNode(label));
+      }
+      if (i < senteEntries.length - 1) handsEl.appendChild(document.createTextNode(" "));
+    });
+  }
+
+  handsEl.appendChild(document.createTextNode(` / 後手持ち駒: ${format(hands.gote)}`));
+}
+
+// selectedFrom/selectedDropRoleの変更だけを画面へ反映する(サーバーへは問い合わせない)。
+function renderInteractive(): void {
+  if (!currentState) return;
+  renderBoard(currentState);
+  renderHands(currentState);
 }
 
 function renderStatus(state: GameStateResponse): void {
@@ -246,9 +391,11 @@ function renderHistory(moveHistory: string[]): void {
 let lastRenderedSfen: string | undefined;
 
 function render(state: GameStateResponse): void {
+  currentState = state;
+  clearSelection();
   lastRenderedSfen = state.sfen;
-  renderBoard(state.sfen);
-  renderHands(state.sfen);
+  renderBoard(state);
+  renderHands(state);
   renderStatus(state);
   renderHistory(state.moveHistory);
   renderCoach(state.coach);
@@ -277,27 +424,49 @@ function schedulePlanRefresh(sfenAtSubmit: string): void {
   }, 1500);
 }
 
-async function handleSubmitMove(): Promise<void> {
-  const move = moveInput.value.trim();
-  if (!move) return;
-  submitButton.disabled = true;
+// テキスト入力欄からの着手・盤面クリックからの着手の両方が使う共通処理。
+// 合法性の最終確認は既存通りサーバー(POST /api/game/move、applyMove.ts)側で行う
+// (ここでは通信結果の反映のみ)。戻り値は着手が成功したかどうか。
+async function playMove(moveUsi: string): Promise<boolean> {
   setError("");
   try {
-    const result = await submitMove(move);
+    const result = await submitMove(moveUsi);
     if (isMoveError(result)) {
       setError(result.error);
-      return;
+      return false;
     }
-    moveInput.value = "";
     render(result);
     if (result.plan.candidateMoveState === "pending") {
       schedulePlanRefresh(result.sfen);
     }
+    return true;
   } catch (err) {
     setError(`通信エラー: ${err instanceof Error ? err.message : String(err)}`);
-  } finally {
-    submitButton.disabled = false;
+    return false;
   }
+}
+
+async function handleSubmitMove(): Promise<void> {
+  const move = moveInput.value.trim();
+  if (!move) return;
+  submitButton.disabled = true;
+  const succeeded = await playMove(move);
+  if (succeeded) moveInput.value = "";
+  submitButton.disabled = false;
+}
+
+// 【Phase5】盤面クリックで移動先マスを選んだときの着手。
+// candidatesは同じ移動先に対応するUSI候補(1件、または成り/不成りの2件)。
+// 2件の場合のみ、その場で成り/不成りを確認する(強制成りの場合はgetLegalMovesが
+// 最初から1件しか返さないため、ここでは分岐しない=新しい成り判定ロジックを作らない)。
+async function handleBoardMoveClick(candidates: string[]): Promise<void> {
+  let moveUsi = candidates[0];
+  if (!moveUsi) return;
+  if (candidates.length > 1) {
+    const promote = window.confirm("成りますか?");
+    moveUsi = candidates.find((usi) => usi.endsWith("+") === promote) ?? moveUsi;
+  }
+  await playMove(moveUsi);
 }
 
 // 目標形選択UI: reachableShapesの候補クリックから呼ばれる。

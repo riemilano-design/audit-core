@@ -139,6 +139,13 @@ export interface GameStateResponse {
   // POST /api/game/moveのレスポンスをブロックしないバックグラウンド処理のため、
   // candidateMoveState: "pending"の間はcandidateMoveがまだ無いことがある。
   plan: ReachablePlanBody;
+  /**
+   * Phase5: 現在の局面における、現在の手番の合法手一覧(USI形式)。
+   * apps/server/src/rules/legalMoves.ts の判定結果をそのまま返すもので、
+   * 合法手判定ロジック自体はサーバー側にある(ここでは再実装しない)。
+   * 盤面クリックUIは、この一覧をfrom/drop種でフィルタして移動先を求める。
+   */
+  legalMoves: string[];
 }
 
 export interface MoveErrorResponse {

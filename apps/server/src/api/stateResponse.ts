@@ -37,6 +37,12 @@ export interface StateResponseBody extends GameState {
    * 説明生成の失敗時(想定外のデータ不整合等)はundefinedになる(対局自体は継続する)。
    */
   coach: CoachExplanation[] | undefined;
+  /**
+   * Phase5: 現在の局面(current.sfen)における、現在の手番の合法手一覧(USI形式)。
+   * rules/legalMoves.ts の getLegalMoves をそのまま呼んだ結果であり、判定ロジックは
+   * 一切ここに持たない(盤面クリックUIが移動先/打てるマスを求めるために使う配線のみ)。
+   */
+  legalMoves: string[];
 }
 
 /**
@@ -181,7 +187,12 @@ export function safeExplainPosition(
 // 特定の局面を直接検証したい場合にのみ上書きする(analysis/intentDetector.tsの
 // sfen/moveHistory整合性チェックを、任意の盤面に対しても有効なまま使うため)。
 export function buildStateResponse(current: GameState, options: ExplainPositionOptions = {}): StateResponseBody {
-  return { ...current, status: getStatus(current), coach: safeExplainPosition(current, options) };
+  return {
+    ...current,
+    status: getStatus(current),
+    coach: safeExplainPosition(current, options),
+    legalMoves: getLegalMoves(current.sfen),
+  };
 }
 
 /** ⑤⑥⑦の計算(エンジン不要)も、Phase1のcoach同様に失敗を対局本体へ波及させない。 */

@@ -39,9 +39,43 @@ h1 {
   transform: rotate(180deg);
 }
 
+/* Phase5: 盤面クリック操作(駒選択・移動先・持ち駒を打つ操作の見た目のみ。
+   将棋ルールの判定はここでは行わない) */
+.square-selectable {
+  cursor: pointer;
+}
+
+.square-selectable:hover {
+  background: #e9c98a;
+}
+
+.square-selected {
+  background: #f7ec8f !important;
+}
+
+.square-destination {
+  cursor: pointer;
+  background: #bfe3bf !important;
+}
+
 #hands {
   margin-bottom: 0.75rem;
   font-size: 0.9rem;
+}
+
+.hand-piece {
+  cursor: pointer;
+  border: 1px solid #999;
+  border-radius: 4px;
+  background: #fff;
+  padding: 0.1rem 0.4rem;
+  margin-right: 0.2rem;
+  font-size: 0.9rem;
+}
+
+.hand-piece-selected {
+  background: #f7ec8f;
+  border-color: #b8960a;
 }
 
 #controls {
