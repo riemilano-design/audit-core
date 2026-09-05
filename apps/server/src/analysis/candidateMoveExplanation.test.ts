@@ -1,11 +1,14 @@
 import { describe, expect, it } from "vitest";
 import {
   buildCandidateMoveExplanation,
+  buildRouteCandidateMoveExplanation,
   explainCandidateMoves,
+  explainRouteCandidateMoves,
   type CandidateMoveExplanationResult,
 } from "./candidateMoveExplanation.js";
 import type { CandidateMoveSafetyCheckResult } from "./candidateMoveSafetyCheck.js";
 import type { PathPlanCandidateMove, PathPlanResult } from "./pathPlanner.js";
+import type { RouteCandidateMove, ShapeRoutePlanResult } from "./routePlanner.js";
 import type { ShapeFormationResult } from "./shapeFormationAnalyzer.js";
 
 function makePathPlanResult(overrides: Partial<PathPlanResult> & { shapeId: string }): PathPlanResult {
@@ -225,6 +228,140 @@ describe("buildCandidateMoveExplanation", () => {
   it("同一入力に対して常に同じ結果を返す(決定的)", () => {
     expect(buildCandidateMoveExplanation(pathPlanResult, shapeResult, candidate)).toEqual(
       buildCandidateMoveExplanation(pathPlanResult, shapeResult, candidate),
+    );
+  });
+});
+
+// Phase6 Unit1: routePlanner.ts(複数の未達成マス・複数手の経路)版の説明生成。
+describe("buildRouteCandidateMoveExplanation / explainRouteCandidateMoves", () => {
+  const shapeResult = makeShapeResult({ shapeId: "mino_honmino", name: "本美濃囲い" });
+
+  function makeRouteCandidate(overrides: Partial<RouteCandidateMove> = {}): RouteCandidateMove {
+    return {
+      moveUsi: overrides.moveUsi ?? "5i6h",
+      kind: overrides.kind ?? "route_step",
+      targetSquare: overrides.targetSquare ?? "8h",
+      targetPiece: overrides.targetPiece ?? "玉",
+      routeSquares: overrides.routeSquares ?? ["5i", "6h", "7h", "8h"],
+      remainingStepsAfter: overrides.remainingStepsAfter ?? 2,
+      clearingSquare: overrides.clearingSquare ?? null,
+    };
+  }
+
+  function makeRoutePlanResult(candidateMoves: RouteCandidateMove[]): ShapeRoutePlanResult {
+    return { shapeId: "mino_honmino", routes: [], candidateMoves, unresolvedReason: null };
+  }
+
+  it("経路の途中の1手は、目標マス・経路・残り手数を日本語表記で説明する", () => {
+    const explanation = buildRouteCandidateMoveExplanation("mino_honmino", shapeResult, makeRouteCandidate());
+
+    expect(explanation.reason).toContain("本美濃囲い");
+    expect(explanation.reason).toContain("玉を８八へ運ぶ経路");
+    expect(explanation.reason).toContain("５九→６八→７八→８八");
+    expect(explanation.reason).toContain("残り2手");
+    expect(explanation.template_id).toBe("candidate_move_route_step");
+    // 内部データ(move)はUSI形式のまま保持する(docs/DATA_MODEL.mdの座標表記の規約)。
+    expect(explanation.move).toBe("5i6h");
+  });
+
+  it("目標マスに到達する1手は、その形の一部が出来る手として説明する", () => {
+    const candidate = makeRouteCandidate({
+      moveUsi: "7i7h",
+      targetSquare: "7h",
+      targetPiece: "銀",
+      routeSquares: ["7i", "7h"],
+      remainingStepsAfter: 0,
+    });
+
+    const explanation = buildRouteCandidateMoveExplanation("mino_honmino", shapeResult, candidate);
+
+    expect(explanation.reason).toContain("銀が７八に入り");
+    expect(explanation.reason).toContain("必要な配置の一つ");
+    expect(explanation.template_id).toBe("candidate_move_route_arrival");
+  });
+
+  it("準備手は、退避先の良し悪しを判断していないことを明示する", () => {
+    const candidate = makeRouteCandidate({
+      moveUsi: "7g7f",
+      kind: "preparation",
+      targetSquare: "7g",
+      targetPiece: "桂",
+      routeSquares: ["8i", "7g"],
+      remainingStepsAfter: null,
+      clearingSquare: "7g",
+    });
+
+    const explanation = buildRouteCandidateMoveExplanation("mino_takamino", shapeResult, candidate);
+
+    expect(explanation.reason).toContain("７七には今、自分の駒があります");
+    expect(explanation.reason).toContain("先にこの駒を動かす必要があります");
+    expect(explanation.reason).toContain("どこへ動かすかは、この形の観点だけでは決まりません");
+    expect(explanation.template_id).toBe("candidate_move_preparation");
+  });
+
+  it("いずれの説明も、断定的な表現(最善・おすすめ・安全)やエンジン評価値を含まない", () => {
+    const candidates = [
+      makeRouteCandidate(),
+      makeRouteCandidate({ remainingStepsAfter: 0 }),
+      makeRouteCandidate({ kind: "preparation", remainingStepsAfter: null, clearingSquare: "8h" }),
+    ];
+
+    for (const candidate of candidates) {
+      const { reason } = buildRouteCandidateMoveExplanation("mino_honmino", shapeResult, candidate);
+      for (const forbidden of ["最善", "おすすめ", "安全", "正解です", "悪手", "評価値", "cp"]) {
+        expect(reason).not.toContain(forbidden);
+      }
+      expect(reason).toContain("唯一の正解ではありません");
+    }
+  });
+
+  it("候補手が0件の場合はnot_ready(no_candidate_moves)を返す", () => {
+    const result = explainRouteCandidateMoves(
+      makeRoutePlanResult([]),
+      [shapeResult],
+      makeSafetyCheckResult(0),
+    );
+
+    expect(result.status).toBe("not_ready");
+    expect(result.notReadyReason).toBe("no_candidate_moves");
+    expect(result.explanations).toEqual([]);
+  });
+
+  it("エンジンの参考評価が得られない場合は説明を1件も生成しない(CLAUDE.mdルール3番)", () => {
+    const result = explainRouteCandidateMoves(
+      makeRoutePlanResult([makeRouteCandidate()]),
+      [shapeResult],
+      makeSafetyCheckResult(1, { available: false }),
+    );
+
+    expect(result.status).toBe("not_ready");
+    expect(result.notReadyReason).toBe("engine_reference_unavailable");
+    expect(result.explanations).toEqual([]);
+  });
+
+  it("scoreつきのMultiPV行が得られた候補手だけが説明対象になる", () => {
+    const candidates = [
+      makeRouteCandidate({ moveUsi: "5i6h" }),
+      makeRouteCandidate({ moveUsi: "7i7h", targetSquare: "7h", routeSquares: ["7i", "7h"], remainingStepsAfter: 0 }),
+    ];
+    const safetyCheck = makeSafetyCheckResult(2, {
+      multiPvPerEval: [[{ multipv: 1, score: { type: "cp", value: 10 }, pv: [] }], []],
+    });
+
+    const result = explainRouteCandidateMoves(makeRoutePlanResult(candidates), [shapeResult], safetyCheck);
+
+    expect(result.status).toBe("ready");
+    expect(result.explanations.map((e) => e.move)).toEqual(["5i6h"]);
+  });
+
+  it("同一入力に対して常に同じ結果を返す(決定的)", () => {
+    const routePlan = makeRoutePlanResult([makeRouteCandidate()]);
+    const safetyCheck = makeSafetyCheckResult(1, {
+      multiPvPerEval: [[{ multipv: 1, score: { type: "cp", value: 0 }, pv: [] }]],
+    });
+
+    expect(explainRouteCandidateMoves(routePlan, [shapeResult], safetyCheck)).toEqual(
+      explainRouteCandidateMoves(routePlan, [shapeResult], safetyCheck),
     );
   });
 });

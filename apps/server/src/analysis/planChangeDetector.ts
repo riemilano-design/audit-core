@@ -34,7 +34,18 @@
 // パースに失敗した場合(型上ほぼ起こらないが安全側の設計として)は、
 // 誤って除外しない(=remainingに残す。falseに倒すよりtrue側に残す)。
 
-import { parseUsi } from "shogiops/util";
+// 【Phase6 Unit1で追加した兄弟候補の判定基準(移動元が同じ場合)】
+// routePlanner.tsは「経路を塞いでいる自分の駒をどかす準備手」を候補にすることがある。
+// 準備手は「同じ駒(同じ移動元)を、別々の移動先へ動かす」候補の集まりであるため、
+// ユーザーがそのうち1つを実際に指すと、その駒は移動元から居なくなり、残りの準備手は
+// 相手の着手とは無関係に非合法化する。これは計画を正常に実行した結果であって
+// 相手による計画崩壊ではないため、移動先が同じ場合(既存基準)に加えて、
+// 移動元が同じ場合も兄弟候補として除外する。
+// なお従来のpathPlanner.tsの候補は常に移動先が同一だったため、移動元が同じ候補は
+// 必ず移動先も同じであり既に除外されていた。したがってこの追加は、
+// 既存(Phase3)の判定結果を変えない(テストで固定している)。
+
+import { isDrop, parseUsi } from "shogiops/util";
 
 export interface PlanSnapshot {
   /** ⑥で実際に採用されたshapeId(resolvedTargetShapeId)。 */
@@ -44,16 +55,20 @@ export interface PlanSnapshot {
 }
 
 /**
- * candidateUsiが、playedMoveUsiと同じ移動先マス(to)を持つ「兄弟候補」かどうかを
- * 判定する。いずれかのパースに失敗した場合は、安全側に倒し兄弟候補とは
+ * candidateUsiが、playedMoveUsiと同じ移動先マス(to)、または同じ移動元マス(from)を持つ
+ * 「兄弟候補」かどうかを判定する(移動元による判定を加えた理由はファイル冒頭のコメント参照)。
+ * いずれかのパースに失敗した場合は、安全側に倒し兄弟候補とは
  * 判定しない(=falseを返し、remainingに残す)。
+ * ドロップ(打つ手)は移動元を持たないため、移動元による判定の対象外とする。
  */
 function isSiblingCandidate(candidateUsi: string, playedMoveUsi: string): boolean {
   const playedMove = parseUsi(playedMoveUsi);
   if (!playedMove) return false;
   const candidateMove = parseUsi(candidateUsi);
   if (!candidateMove) return false;
-  return candidateMove.to === playedMove.to;
+  if (candidateMove.to === playedMove.to) return true;
+  if (isDrop(candidateMove) || isDrop(playedMove)) return false;
+  return candidateMove.from === playedMove.from;
 }
 
 /**

@@ -22,7 +22,11 @@ import {
   safeComputeReachablePlan,
   safeComputePlanChangeAfterMove,
   safeComputePlanChangeReasonAfterMove,
+  safeComputeMoveOutcomeAfterMove,
+  safeComputeBoardEventsAfterMove,
+  type BoardEvent,
   type CachedReachablePlan,
+  type MoveOutcome,
   type PlanChangeReason,
 } from "./api/stateResponse.js";
 import { resolveEnginePath } from "./engine/enginePath.js";
@@ -67,6 +71,13 @@ let lastPlanChanged = false;
 // Phase3 Unit2(崩れた理由の分類のみ、人間承認済み)。lastPlanChangedと必ずペアで
 // 更新・リセットする(lastPlanChangedがfalseの間はnullのまま)。
 let lastPlanChangeReason: PlanChangeReason | null = null;
+// Phase6 Unit2(直前の一手で何が変わったか)。lastPlanChanged/lastPlanChangeReasonと
+// 同じ「モジュール変数で保持し、次の状態変化まで使い回す」方針。新規対局・目標形変更の
+// いずれでもnullにリセットする(前の形についての差分説明を残さないため)。
+let lastMoveOutcome: MoveOutcome | null = null;
+// Phase6 Unit3(盤面で実際に起きたこと: 捕獲・王手・成り)。lastMoveOutcomeと同じ
+// ライフサイクルで保持・リセットする(表示もlastMoveOutcomeと同じブロック内に出る)。
+let lastBoardEvents: BoardEvent[] = [];
 
 /** 局面(sfen)と選択中の目標形(selectedTargetShapeId、未選択ならundefined)から、
  * バックグラウンド解析の進行中判定に使うキーを作る。 */
@@ -180,7 +191,37 @@ function readJsonBody(req: IncomingMessage): Promise<unknown> {
   });
 }
 
+/**
+ * Phase5: POST /api/game/moveの直列化用キュー。
+ *
+ * 【背景・原因(人間承認済みの調査結果)】
+ * handleMoveInternal は `state = playHumanMove(...)` の後、`await getPrioritizedEngine()` /
+ * `await playOpponentMove(...)` という2箇所のawaitを経る。この間にNode.jsのイベントループが
+ * 別のリクエストを処理できてしまうため、1件目のリクエストが「人間の着手だけ反映し、
+ * 相手の応手がまだ反映されていない中間状態」のときに2件目のリクエストが割り込むと、
+ * 2件目は「まだ相手の手番であるはずの局面」に対して人間の着手を試みることになり、
+ * UIが直前に合法と判定して見せた手が非合法として拒否される(実際に再現・確認済み)。
+ *
+ * 【対応方針】
+ * 合法手判定(getLegalMoves)・将棋ルール(applyMove等)は一切変更せず、
+ * リクエストの処理順序だけを1件ずつに直列化する(既存ロジック上の不具合修正)。
+ * moveQueueは常にresolveする(個々のリクエストの成否に関わらず、次のリクエストの
+ * 開始を妨げない)。各リクエスト自身の成否・エラーレスポンスは、従来通り
+ * handleMoveInternalの戻り値(Promise)がそのまま呼び出し元(server作成部の
+ * .catch())へ伝播することで扱う(本キュー自体はエラーハンドリングの経路を変えない)。
+ */
+let moveQueue: Promise<void> = Promise.resolve();
+
 async function handleMove(req: IncomingMessage, res: ServerResponse): Promise<void> {
+  const task = moveQueue.then(() => handleMoveInternal(req, res));
+  moveQueue = task.then(
+    () => undefined,
+    () => undefined,
+  );
+  return task;
+}
+
+async function handleMoveInternal(req: IncomingMessage, res: ServerResponse): Promise<void> {
   let body: unknown;
   try {
     body = await readJsonBody(req);
@@ -222,12 +263,29 @@ async function handleMove(req: IncomingMessage, res: ServerResponse): Promise<vo
   lastPlanChanged = planChanged;
   lastPlanChangeReason = planChangeReason;
 
+  // Phase6 Unit2: 相手が実際に応手したかどうかは、指し手履歴の増分から確定的に分かる
+  // (ユーザーの手だけ増えていれば相手は指していない)。推測はしない。
+  const opponentMoveUsi =
+    state.moveHistory.length === stateBeforeMove.moveHistory.length + 2
+      ? (state.moveHistory[state.moveHistory.length - 1] ?? null)
+      : null;
+  lastBoardEvents = safeComputeBoardEventsAfterMove(stateBeforeMove, move, opponentMoveUsi);
+  lastMoveOutcome = safeComputeMoveOutcomeAfterMove(
+    stateBeforeMove,
+    state,
+    move,
+    opponentMoveUsi,
+    {},
+    selectedTargetShapeId,
+    planChangeReason,
+  );
+
   // ⑤⑥⑦(エンジン不要)までを含めた状態を即座に返す。⑧(MultiPV参考評価)は
   // まだ完了していなければcandidateMoveState: "pending"になる(レスポンスをブロックしない)。
   sendJson(
     res,
     200,
-    buildStateResponseWithPlan(state, backgroundPlan, {}, selectedTargetShapeId, planChanged, planChangeReason),
+    buildStateResponseWithPlan(state, backgroundPlan, {}, selectedTargetShapeId, planChanged, planChangeReason, lastMoveOutcome, lastBoardEvents),
   );
 
   // レスポンス送出後、バックグラウンドで⑧を計算する(fire-and-forget)。
@@ -267,6 +325,9 @@ async function handleTargetShape(req: IncomingMessage, res: ServerResponse): Pro
   // (両者は必ずペアで更新・リセットする)。
   lastPlanChanged = false;
   lastPlanChangeReason = null;
+  // 目標形が変わった直後は、前の形についての差分説明を絶対に残さない(Phase6 Unit2)。
+  lastMoveOutcome = null;
+  lastBoardEvents = [];
 
   // 局面(sfen)自体は変わらないため、⑤⑥(エンジン不要)は同期的に返しつつ、
   // ⑦⑧はcandidateMoveState: "pending"から始まり、バックグラウンド解析の完了を待つ
@@ -274,7 +335,7 @@ async function handleTargetShape(req: IncomingMessage, res: ServerResponse): Pro
   sendJson(
     res,
     200,
-    buildStateResponseWithPlan(state, backgroundPlan, {}, selectedTargetShapeId, lastPlanChanged, lastPlanChangeReason),
+    buildStateResponseWithPlan(state, backgroundPlan, {}, selectedTargetShapeId, lastPlanChanged, lastPlanChangeReason, lastMoveOutcome, lastBoardEvents),
   );
 
   void runBackgroundPlanAnalysis(state, selectedTargetShapeId);
@@ -305,7 +366,7 @@ const server = createServer((req, res) => {
     sendJson(
       res,
       200,
-      buildStateResponseWithPlan(state, backgroundPlan, {}, selectedTargetShapeId, lastPlanChanged, lastPlanChangeReason),
+      buildStateResponseWithPlan(state, backgroundPlan, {}, selectedTargetShapeId, lastPlanChanged, lastPlanChangeReason, lastMoveOutcome, lastBoardEvents),
     );
     return;
   }
@@ -325,10 +386,12 @@ const server = createServer((req, res) => {
     // リセットする(両者は必ずペアで更新・リセットする)。
     lastPlanChanged = false;
     lastPlanChangeReason = null;
+    lastMoveOutcome = null;
+    lastBoardEvents = [];
     sendJson(
       res,
       200,
-      buildStateResponseWithPlan(state, backgroundPlan, {}, selectedTargetShapeId, lastPlanChanged, lastPlanChangeReason),
+      buildStateResponseWithPlan(state, backgroundPlan, {}, selectedTargetShapeId, lastPlanChanged, lastPlanChangeReason, lastMoveOutcome, lastBoardEvents),
     );
     return;
   }

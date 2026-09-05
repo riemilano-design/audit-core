@@ -84,4 +84,32 @@ describe("detectPlanChange", () => {
     // 参考: 単独のドロップ候補をそのまま指した場合は、従来通り完全一致除外でfalse。
     expect(detectPlanChange(previous, "P*5e", "mino_honmino", [])).toBe(false);
   });
+
+  // 【Phase6 Unit1で追加した判定基準(移動元が同じ場合)】
+  // routePlanner.tsは「経路を塞ぐ自駒をどかす準備手」を候補にすることがあり、
+  // それらは同じ駒(同じ移動元)を別々の移動先へ動かす候補の集まりになる。
+  // ユーザーがそのうち1つを指すと、その駒は移動元から居なくなるため残りは
+  // 相手の着手と無関係に非合法化する(計画を実行した結果であり、崩れではない)。
+  it("同じ移動元マスを持つ候補(準備手の兄弟)は、1つを指すと残りも除外されfalseになる", () => {
+    const previous: PlanSnapshot = {
+      targetShapeId: "mino_takamino",
+      // 7gの歩をどかす準備手が複数あった、という想定(移動先は異なる)。
+      candidateMoveUsis: ["7g7f", "7g6f"],
+    };
+    // 7g7fを指した後、7g6fは移動元(7g)が同じ兄弟候補として除外されるため、
+    // 残存候補が無くなりfalse(相手のせいで崩れた、とは判定しない)。
+    expect(detectPlanChange(previous, "7g7f", "mino_takamino", ["1g1f"])).toBe(false);
+  });
+
+  it("移動元も移動先も異なる候補は兄弟候補として除外しない(従来の判定を維持する)", () => {
+    const previous: PlanSnapshot = {
+      targetShapeId: "mino_honmino",
+      candidateMoveUsis: ["7i7h", "5i6h"],
+    };
+    // 7i7hを指した後も5i6hは別の駒・別の移動先なので残存する。
+    // 残存候補が合法なら従来通りfalse。
+    expect(detectPlanChange(previous, "7i7h", "mino_honmino", ["5i6h"])).toBe(false);
+    // 残存候補が非合法になっていればtrue(相手の手による崩れの検知)。
+    expect(detectPlanChange(previous, "7i7h", "mino_honmino", ["1g1f"])).toBe(true);
+  });
 });

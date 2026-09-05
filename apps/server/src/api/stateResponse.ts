@@ -16,19 +16,31 @@ import { analyzeShapeFormation, type ShapeFormationResult } from "../analysis/sh
 import { detectIntents } from "../analysis/intentDetector.js";
 import { selectTargetPurpose } from "../analysis/targetPurposeSelector.js";
 import { rankReachableShapes, type RankedReachableShape } from "../analysis/shapeGraphRanking.js";
-import { planPathToShape, type PathPlanResult } from "../analysis/pathPlanner.js";
+import { planRoutesToShape, type ShapeRoutePlanResult } from "../analysis/routePlanner.js";
 import { checkCandidateMovesSafety } from "../analysis/candidateMoveSafetyCheck.js";
 import {
-  explainCandidateMoves,
+  explainRouteCandidateMoves,
   type CandidateMoveExplanationResult,
 } from "../analysis/candidateMoveExplanation.js";
+import { toJapaneseMoveSquares, toJapaneseSquare, toJapaneseSquarePath } from "../notation/japaneseSquare.js";
 import { detectPlanChange, type PlanSnapshot } from "../analysis/planChangeDetector.js";
 import { classifyPlanChangeReason, type PlanChangeReason } from "../analysis/planChangeReason.js";
+import {
+  detectMoveOutcome,
+  type MoveOutcome,
+  type MoveOutcomeSnapshot,
+} from "../analysis/moveOutcomeDetector.js";
+import { explainMoveOutcome, type MoveOutcomeMessage } from "../analysis/moveOutcomeExplanation.js";
+import { detectBoardEvents, type BoardEvent } from "../analysis/boardEventDetector.js";
+import { explainBoardEvents, type BoardEventMessage } from "../analysis/boardEventExplanation.js";
 import { getLegalMoves } from "../rules/legalMoves.js";
+import { toJapaneseMoveHistory } from "../notation/japaneseMoveHistory.js";
 import type { LowPriorityEngine } from "../engine/prioritizedEngine.js";
 
 export type { PlanSnapshot } from "../analysis/planChangeDetector.js";
 export type { PlanChangeReason } from "../analysis/planChangeReason.js";
+export type { MoveOutcome } from "../analysis/moveOutcomeDetector.js";
+export type { BoardEvent } from "../analysis/boardEventDetector.js";
 
 export interface StateResponseBody extends GameState {
   status: GameStatus;
@@ -43,6 +55,13 @@ export interface StateResponseBody extends GameState {
    * 一切ここに持たない(盤面クリックUIが移動先/打てるマスを求めるために使う配線のみ)。
    */
   legalMoves: string[];
+  /**
+   * Phase5: moveHistory(USI形式)の各手を、notation/japaneseMoveHistory.ts(shogiops標準の
+   * makeJapaneseMoveOrDropをそのまま利用)で日本語棋譜表記へ変換したもの。
+   * moveHistoryと同じ並び・同じ長さ。変換できなかった手はnull(UI側がUSI表記へ
+   * フォールバックする)。棋譜表記の生成ロジックはここには一切持たない(配線のみ)。
+   */
+  moveHistoryJapanese: (string | null)[];
 }
 
 /**
@@ -60,10 +79,86 @@ export interface StateResponseBody extends GameState {
  */
 export type CandidateMoveState = "unavailable" | "pending" | "ready";
 
+/**
+ * Phase6 Unit1: 選択中の形について「今どこまで出来ているか」をUIが表示するための情報。
+ * shapeFormationAnalyzer.tsの判定結果(matchedSquares/missingSquares)をそのまま
+ * 日本語表記へ変換して渡すだけで、新しい判定は一切行わない。
+ */
+export interface TargetShapeProgress {
+  shapeId: string;
+  name: string;
+  /** 既にその形の一部として成立しているマス(日本語表記、例: "６九") */
+  matchedSquareLabels: string[];
+  /** まだ埋まっていないマス(日本語表記) */
+  missingSquareLabels: string[];
+}
+
+/**
+ * Phase6 Unit1: 未達成マス1つ分の経路(UI表示用の要約)。
+ * routePlanner.tsのShapeSquareRouteから、UIが「選択した形 → 必要なマス →
+ * 現在の局面からの経路 → 今指せる最初の一手」という因果を示すために必要な項目だけを
+ * 抜き出したもの(判定・計算はここでは一切行わない)。
+ */
+export interface ShapeRouteSummary {
+  /** 目標マス(USI形式。識別用) */
+  targetSquare: string;
+  /** 目標マスに置く駒種(日本語表記、data/shapes/*.jsonそのまま) */
+  targetPiece: string;
+  /** 目標マス(日本語表記、例: "８八") */
+  targetSquareLabel: string;
+  /** 経路(日本語表記、例: "５九→６八→７八→８八") */
+  routeLabel: string;
+  /** 目標マスまでの残り手数 */
+  remainingSteps: number;
+  /** 経路の1手目を現在の局面で指せるか */
+  hasPlayableFirstMove: boolean;
+  /** 経路上で最初に自分の駒が居るマス(日本語表記)。無ければnull。 */
+  blockingSquareLabel: string | null;
+}
+
+/**
+ * Phase6 Unit2: 直前の一手で何が変わったかの表示用データ。
+ * 事実の抽出はanalysis/moveOutcomeDetector.ts、文言はanalysis/moveOutcomeExplanation.tsが
+ * 担当し、ここでは表示用の入れ物にまとめるだけ(判定・文言生成は持たない)。
+ */
+export interface LastMoveOutcomeBody {
+  /** ユーザーの着手(日本語棋譜表記。変換できない場合はマス目表記へフォールバック) */
+  playedMoveLabel: string;
+  /** 相手の応手。相手が指していない場合はnull。 */
+  opponentMoveLabel: string | null;
+  /**
+   * 表示するメッセージ。変化が無かった場合も「特に変化なし」の1件が入る(空にはならない)。
+   * Phase6 Unit3で、盤面の出来事(捕獲・王手・成り)のメッセージが先頭に加わる
+   * (起きた順。形・経路についての説明はその後ろ)。
+   */
+  messages: (BoardEventMessage | MoveOutcomeMessage)[];
+}
+
 export interface ReachablePlanBody {
   /** shapeGraphRankingの上位(最大3件)の「目指せる形」。1位を唯一の正解として
    * 強調しない前提で、呼び出し側(UI)は並列表示する。 */
   reachableShapes: RankedReachableShape[];
+  /**
+   * Phase6 Unit1: 選択中の形の未達成マスごとの経路。routePlanner.tsの結果をそのまま
+   * 要約したもの(候補手が表示される理由をユーザーが追跡できるようにするための情報)。
+   * 経路を計算できない場合・選択中の形が無い場合は空配列。
+   */
+  routes: ShapeRouteSummary[];
+  /**
+   * Phase6 Unit1: 選択中の形が今どこまで出来ているか。選択中の形が無い場合はnull。
+   */
+  targetShapeProgress: TargetShapeProgress | null;
+  /**
+   * Phase6 Unit1: 候補手(USI形式)→ マス目の日本語表記("５九→６八")の対応表。
+   * UIが候補手を日本語で表示するためのもの(docs/DATA_MODEL.mdの座標表記の規約に従い、
+   * 変換はサーバー側のnotation/japaneseSquare.tsに集約し、web側に重複させない)。
+   */
+  candidateMoveLabels: Record<string, string>;
+  /**
+   * Phase6 Unit2: 直前の一手で何が変わったか。新規対局直後・目標形変更直後・
+   * 比較できない場合はnull(前の状態についての誤った差分説明を残さないため)。
+   */
+  lastMoveOutcome: LastMoveOutcomeBody | null;
   candidateMoveState: CandidateMoveState;
   /** candidateMoveState: "ready"の場合のみ値を持つ。それ以外はundefined。 */
   candidateMove: CandidateMoveExplanationResult | undefined;
@@ -119,19 +214,22 @@ interface RankedPlanContext {
   shapeResults: ShapeFormationResult[];
   /** shapeGraphRankingの上位3件。 */
   reachableShapes: RankedReachableShape[];
-  /** 実際にpathPlanner.tsへ渡されたshapeId。reachableShapesが空ならundefined。
+  /** 実際にroutePlanner.tsへ渡されたshapeId。reachableShapesが空ならundefined。
    * ユーザーが選択したshapeId(selectedTargetShapeId)がreachableShapesに含まれて
    * いればそれ、含まれない(未選択・無効値)場合はranked[0]にフォールバックした結果。 */
   resolvedTargetShapeId: string | undefined;
-  /** resolvedTargetShapeIdについてのみ計算したpathPlanner結果。対象shapeが無ければundefined。 */
-  pathPlanResult: PathPlanResult | undefined;
+  /** resolvedTargetShapeIdについてのみ計算したroutePlanner結果。対象shapeが無ければundefined。 */
+  routePlanResult: ShapeRoutePlanResult | undefined;
 }
 
 /**
  * ⑤自分の目的 → ⑥目指せる形のランキング → ⑦候補手生成を計算する。
  * いずれもエンジン不要・高速な純粋関数(targetPurposeSelector.ts / shapeGraphRanking.ts /
- * pathPlanner.ts、Phase2 Unit1/Unit2。ここでは一切変更しない)。
- * 例外はそのまま呼び出し元へ伝播する(呼び出し元がそれぞれ安全に扱う)。
+ * routePlanner.ts)。例外はそのまま呼び出し元へ伝播する(呼び出し元がそれぞれ安全に扱う)。
+ *
+ * Phase6 Unit1で、⑦の候補手生成をpathPlanner.ts(単一目標マス・1手先読み)から
+ * routePlanner.ts(複数の未達成マス・複数手の経路)へ切り替えた。pathPlanner.ts自体は
+ * 温存しており(削除も変更もしていない)、この呼び出し経路から使わなくなっただけである。
  *
  * selectedTargetShapeIdは、ユーザーが目標形選択UIで選んだshapeId(任意)。
  * reachableShapes(上位3件)に含まれる場合のみ採用し、⑦の対象として使う。
@@ -155,8 +253,87 @@ function computeRankedPlanContext(
       : undefined;
   const top = selected ?? ranked[0];
   const resolvedTargetShapeId = top?.shapeId;
-  const pathPlanResult = top ? planPathToShape(current.sfen, shapeResults, top.shapeId) : undefined;
-  return { shapeResults, reachableShapes, resolvedTargetShapeId, pathPlanResult };
+  const routePlanResult = top ? planRoutesToShape(current.sfen, shapeResults, top.shapeId) : undefined;
+  return { shapeResults, reachableShapes, resolvedTargetShapeId, routePlanResult };
+}
+
+/** routePlanner.tsの経路を、UI表示用の要約(日本語表記つき)へ変換するだけの関数。 */
+function toRouteSummaries(routePlanResult: ShapeRoutePlanResult | undefined): ShapeRouteSummary[] {
+  if (!routePlanResult) return [];
+  return routePlanResult.routes.map((route) => ({
+    targetSquare: route.targetSquare,
+    targetPiece: route.targetPiece,
+    targetSquareLabel: toJapaneseSquare(route.targetSquare),
+    routeLabel: toJapaneseSquarePath(route.routeSquares),
+    remainingSteps: route.remainingSteps,
+    hasPlayableFirstMove: route.firstMoveUsis.length > 0,
+    blockingSquareLabel: route.blockingSquare === null ? null : toJapaneseSquare(route.blockingSquare),
+  }));
+}
+
+/** RankedPlanContextを、moveOutcomeDetector.tsが比較に使うスナップショットへ変換する。 */
+function toMoveOutcomeSnapshot(context: RankedPlanContext): MoveOutcomeSnapshot {
+  const shapeResult = context.shapeResults.find((r) => r.shapeId === context.resolvedTargetShapeId);
+  return {
+    targetShapeId: context.resolvedTargetShapeId,
+    matchedSquares: shapeResult?.matchedSquares ?? [],
+    routes: context.routePlanResult?.routes ?? [],
+    candidateMoves: context.routePlanResult?.candidateMoves ?? [],
+  };
+}
+
+/**
+ * 直前の一手の表示ラベルを決める。
+ * 指し手履歴の日本語棋譜表記(notation/japaneseMoveHistory.ts)が使える場合はそれを使い、
+ * 使えない場合のみマス目表記へフォールバックする。履歴の末尾がMoveOutcomeの
+ * 指し手と一致することを確認してから使う(古い結果に別の手の表記を付けないため)。
+ */
+function resolveMoveLabels(
+  moveHistory: string[],
+  moveHistoryJapanese: (string | null)[],
+  outcome: MoveOutcome,
+): Pick<LastMoveOutcomeBody, "playedMoveLabel" | "opponentMoveLabel"> {
+  const last = moveHistory.length - 1;
+  const fallbackPlayed = toJapaneseMoveSquares(outcome.playedMoveUsi);
+  const fallbackOpponent =
+    outcome.opponentMoveUsi === null ? null : toJapaneseMoveSquares(outcome.opponentMoveUsi);
+
+  if (outcome.opponentMoveUsi !== null) {
+    const matches =
+      moveHistory[last] === outcome.opponentMoveUsi && moveHistory[last - 1] === outcome.playedMoveUsi;
+    return {
+      playedMoveLabel: (matches ? moveHistoryJapanese[last - 1] : null) ?? fallbackPlayed,
+      opponentMoveLabel: (matches ? moveHistoryJapanese[last] : null) ?? fallbackOpponent,
+    };
+  }
+
+  const matches = moveHistory[last] === outcome.playedMoveUsi;
+  return {
+    playedMoveLabel: (matches ? moveHistoryJapanese[last] : null) ?? fallbackPlayed,
+    opponentMoveLabel: null,
+  };
+}
+
+/** 候補手のUSI表記を、UI表示用の日本語のマス目表記へ変換した対応表を作る。 */
+function toCandidateMoveLabels(routePlanResult: ShapeRoutePlanResult | undefined): Record<string, string> {
+  const labels: Record<string, string> = {};
+  for (const candidate of routePlanResult?.candidateMoves ?? []) {
+    labels[candidate.moveUsi] = toJapaneseMoveSquares(candidate.moveUsi);
+  }
+  return labels;
+}
+
+/** 選択中の形の「今どこまで出来ているか」を、既存の判定結果からそのまま組み立てる。 */
+function toTargetShapeProgress(context: RankedPlanContext | undefined): TargetShapeProgress | null {
+  if (!context?.resolvedTargetShapeId) return null;
+  const shapeResult = context.shapeResults.find((r) => r.shapeId === context.resolvedTargetShapeId);
+  if (!shapeResult) return null;
+  return {
+    shapeId: shapeResult.shapeId,
+    name: shapeResult.name,
+    matchedSquareLabels: shapeResult.matchedSquares.map((square) => toJapaneseSquare(square)),
+    missingSquareLabels: shapeResult.missingSquares.map((square) => toJapaneseSquare(square)),
+  };
 }
 
 // 説明生成は対局の合法性判定とは独立した機能である。ここで万一例外が起きても
@@ -186,12 +363,27 @@ export function safeExplainPosition(
 // (対局は常にstartposから始まるため)。テストコードが、実際の対局進行を経ずに
 // 特定の局面を直接検証したい場合にのみ上書きする(analysis/intentDetector.tsの
 // sfen/moveHistory整合性チェックを、任意の盤面に対しても有効なまま使うため)。
+/**
+ * moveHistoryの日本語棋譜表記への変換に失敗しても(想定外のデータ不整合等)、
+ * 対局そのもの(status/sfen等)には影響させない(safeExplainPositionと同じ安全側の方針)。
+ * 失敗時はmoveHistoryと同じ長さのnull配列を返し、UI側が全件USI表記へフォールバックする。
+ */
+function safeToJapaneseMoveHistory(moveHistory: string[], initialSfen?: string): (string | null)[] {
+  try {
+    return toJapaneseMoveHistory(moveHistory, initialSfen);
+  } catch (err) {
+    console.error("指し手履歴の日本語棋譜表記変換(notation/japaneseMoveHistory.ts)でエラーが発生しました:", err);
+    return moveHistory.map(() => null);
+  }
+}
+
 export function buildStateResponse(current: GameState, options: ExplainPositionOptions = {}): StateResponseBody {
   return {
     ...current,
     status: getStatus(current),
     coach: safeExplainPosition(current, options),
     legalMoves: getLegalMoves(current.sfen),
+    moveHistoryJapanese: safeToJapaneseMoveHistory(current.moveHistory, options.initialSfen),
   };
 }
 
@@ -244,18 +436,20 @@ export function buildStateResponseWithPlan(
   selectedTargetShapeId?: string,
   planChanged = false,
   planChangeReason: PlanChangeReason | null = null,
+  lastMoveOutcome: MoveOutcome | null = null,
+  lastBoardEvents: BoardEvent[] = [],
 ): StateResponseBodyWithPlan {
   const base = buildStateResponse(current, options);
   const context = safeComputeRankedPlanContext(current, options, selectedTargetShapeId);
   const reachableShapes = context?.reachableShapes ?? [];
   const resolvedTargetShapeId = context?.resolvedTargetShapeId ?? null;
-  const hasCandidateMoves = (context?.pathPlanResult?.candidateMoves.length ?? 0) > 0;
+  const hasCandidateMoves = (context?.routePlanResult?.candidateMoves.length ?? 0) > 0;
 
   let candidateMoveState: CandidateMoveState;
   let candidateMove: CandidateMoveExplanationResult | undefined;
 
   if (!hasCandidateMoves) {
-    // pathPlanner.tsが対象の形について候補手を1つも返せない(=解析する対象が無い)。
+    // routePlanner.tsが対象の形について候補手を1つも返せない(=解析する対象が無い)。
     candidateMoveState = "unavailable";
     candidateMove = undefined;
   } else if (
@@ -276,7 +470,25 @@ export function buildStateResponseWithPlan(
 
   return {
     ...base,
-    plan: { reachableShapes, candidateMoveState, candidateMove, resolvedTargetShapeId, planChanged, planChangeReason },
+    plan: {
+      reachableShapes,
+      routes: toRouteSummaries(context?.routePlanResult),
+      targetShapeProgress: toTargetShapeProgress(context),
+      candidateMoveLabels: toCandidateMoveLabels(context?.routePlanResult),
+      lastMoveOutcome: lastMoveOutcome
+        ? {
+            ...resolveMoveLabels(current.moveHistory, base.moveHistoryJapanese, lastMoveOutcome),
+            // 盤面で実際に起きたこと(捕獲・王手・成り)を先に述べ、そのあとで
+            // 形・経路についての説明を述べる。
+            messages: [...explainBoardEvents(lastBoardEvents), ...explainMoveOutcome(lastMoveOutcome)],
+          }
+        : null,
+      candidateMoveState,
+      candidateMove,
+      resolvedTargetShapeId,
+      planChanged,
+      planChangeReason,
+    },
   };
 }
 
@@ -304,9 +516,9 @@ export async function computeReachablePlan(
   targetShapeId: string | undefined;
 }> {
   const context = computeRankedPlanContext(current, options, selectedTargetShapeId);
-  const pathPlanResult = context.pathPlanResult;
+  const routePlanResult = context.routePlanResult;
 
-  if (!pathPlanResult || pathPlanResult.candidateMoves.length === 0) {
+  if (!routePlanResult || routePlanResult.candidateMoves.length === 0) {
     return {
       reachableShapes: context.reachableShapes,
       candidateMove: undefined,
@@ -314,8 +526,8 @@ export async function computeReachablePlan(
     };
   }
 
-  const safetyCheck = await checkCandidateMovesSafety(current.sfen, pathPlanResult.candidateMoves, engine);
-  const candidateMove = explainCandidateMoves(pathPlanResult, context.shapeResults, safetyCheck);
+  const safetyCheck = await checkCandidateMovesSafety(current.sfen, routePlanResult.candidateMoves, engine);
+  const candidateMove = explainRouteCandidateMoves(routePlanResult, context.shapeResults, safetyCheck);
   return { reachableShapes: context.reachableShapes, candidateMove, targetShapeId: context.resolvedTargetShapeId };
 }
 
@@ -355,7 +567,7 @@ function buildPlanSnapshotBeforeMove(
   selectedTargetShapeId: string | undefined,
 ): PlanSnapshot | undefined {
   const beforeContext = computeRankedPlanContext(stateBeforeMove, options, selectedTargetShapeId);
-  const candidateMoves = beforeContext.pathPlanResult?.candidateMoves ?? [];
+  const candidateMoves = beforeContext.routePlanResult?.candidateMoves ?? [];
   if (!beforeContext.resolvedTargetShapeId || candidateMoves.length === 0) return undefined;
 
   return {
@@ -446,6 +658,112 @@ export function computePlanChangeReasonAfterMove(
   if (!changed) return null;
 
   return classifyPlanChangeReason(previousSnapshot, playedMoveUsi, stateAfterMove.sfen);
+}
+
+/**
+ * Phase6 Unit2(直前の一手で何が変わったかの抽出)。
+ * ユーザー着手直前(stateBeforeMove)と、相手の応手まで終えた現在(stateAfterMove)の
+ * ⑤⑥⑦をそれぞれ計算し、moveOutcomeDetector.tsで差分を取る。
+ *
+ * planChangeReasonは、呼び出し元が既存のcomputePlanChangeReasonAfterMoveで得た値を
+ * そのまま渡す(このモジュールも、moveOutcomeDetector.tsも、理由の判定は自前で行わない)。
+ *
+ * 【比較できない場合はnullを返す】
+ * 相手が応手していない(終局等で手番が自分に戻っていない)局面では、routePlanner.tsが
+ * not_self_turnで経路を返さないため、差分を取ると「経路が全て失われた」という誤った
+ * 事実になる。この場合は比較自体を行わずnullを返す(推測しない)。
+ *
+ * 【エンジン非依存】
+ * ⑧(MultiPV参考評価)には一切触れない。したがって「良い手だったか」は判定できないし、
+ * 判定しない。
+ *
+ * 例外はそのまま伝播する(呼び出し元のsafeComputeMoveOutcomeAfterMoveが処理する)。
+ */
+export function computeMoveOutcomeAfterMove(
+  stateBeforeMove: GameState,
+  stateAfterMove: GameState,
+  playedMoveUsi: string,
+  opponentMoveUsi: string | null,
+  options: ExplainPositionOptions = {},
+  selectedTargetShapeId?: string,
+  planChangeReason: PlanChangeReason | null = null,
+): MoveOutcome | null {
+  const afterContext = computeRankedPlanContext(stateAfterMove, options, selectedTargetShapeId);
+  if (afterContext.routePlanResult?.unresolvedReason === "not_self_turn") return null;
+
+  const beforeContext = computeRankedPlanContext(stateBeforeMove, options, selectedTargetShapeId);
+
+  return detectMoveOutcome(
+    toMoveOutcomeSnapshot(beforeContext),
+    toMoveOutcomeSnapshot(afterContext),
+    playedMoveUsi,
+    opponentMoveUsi,
+    planChangeReason,
+  );
+}
+
+/**
+ * Phase6 Unit3(盤面で実際に起きたこと)。
+ * ユーザーの着手と(あれば)相手の応手について、捕獲・王手・成りだけを抽出する。
+ * 判定はanalysis/boardEventDetector.tsが行い、ここは配線のみ。
+ *
+ * 形・経路(Unit1/Unit2)とは独立した、将棋のルールだけから決まる事実であり、
+ * エンジンの評価値には一切依存しない。
+ *
+ * 例外はそのまま伝播する(呼び出し元のsafeComputeBoardEventsAfterMoveが処理する)。
+ */
+export function computeBoardEventsAfterMove(
+  stateBeforeMove: GameState,
+  playedMoveUsi: string,
+  opponentMoveUsi: string | null,
+): BoardEvent[] {
+  return detectBoardEvents(stateBeforeMove.sfen, playedMoveUsi, opponentMoveUsi);
+}
+
+/**
+ * computeBoardEventsAfterMoveの安全側ラッパー(他のsafe*と同じパターン)。
+ * 失敗時はconsole.errorに留め、空配列を返す(対局進行には一切影響させない)。
+ */
+export function safeComputeBoardEventsAfterMove(
+  stateBeforeMove: GameState,
+  playedMoveUsi: string,
+  opponentMoveUsi: string | null,
+): BoardEvent[] {
+  try {
+    return computeBoardEventsAfterMove(stateBeforeMove, playedMoveUsi, opponentMoveUsi);
+  } catch (err) {
+    console.error("盤面の出来事の抽出(Phase6 Unit3, boardEventDetector)でエラーが発生しました:", err);
+    return [];
+  }
+}
+
+/**
+ * computeMoveOutcomeAfterMoveの安全側ラッパー(他のsafe*と同じパターン)。
+ * 失敗時はconsole.errorに留め、nullを返す(対局進行には一切影響させない)。
+ */
+export function safeComputeMoveOutcomeAfterMove(
+  stateBeforeMove: GameState,
+  stateAfterMove: GameState,
+  playedMoveUsi: string,
+  opponentMoveUsi: string | null,
+  options: ExplainPositionOptions = {},
+  selectedTargetShapeId?: string,
+  planChangeReason: PlanChangeReason | null = null,
+): MoveOutcome | null {
+  try {
+    return computeMoveOutcomeAfterMove(
+      stateBeforeMove,
+      stateAfterMove,
+      playedMoveUsi,
+      opponentMoveUsi,
+      options,
+      selectedTargetShapeId,
+      planChangeReason,
+    );
+  } catch (err) {
+    console.error("直前の一手の変化の抽出(Phase6 Unit2, moveOutcomeDetector)でエラーが発生しました:", err);
+    return null;
+  }
 }
 
 /**

@@ -9,6 +9,29 @@ h1 {
   font-size: 1.25rem;
 }
 
+/* Phase5: #layout配下(#boardColumn/#infoColumn)のレイアウト。
+   既定(スマートフォン等の狭い画面)ではブロック要素として縦積みのまま
+   (gridを適用しない=現状維持)。盤面(#board td)は9マス×2.5rem=22.5rem
+   (=360px)なので、それが窮屈にならない横幅がある画面でだけ2カラムにする。 */
+@media (min-width: 900px) {
+  body {
+    max-width: 1000px;
+  }
+
+  #layout {
+    display: grid;
+    grid-template-columns: minmax(380px, 440px) 1fr;
+    gap: 0 2rem;
+    align-items: start;
+  }
+
+  /* grid item既定のmin-width:autoのままだと、#history等の内容量次第で
+     右カラムがはみ出す(横スクロールが発生する)ことがあるための対策。 */
+  #infoColumn {
+    min-width: 0;
+  }
+}
+
 #status {
   margin-bottom: 0.5rem;
   font-weight: bold;
@@ -56,6 +79,18 @@ h1 {
 .square-destination {
   cursor: pointer;
   background: #bfe3bf !important;
+}
+
+/* Phase5: 直前の相手の手のハイライト(装飾のみ)。square-selected/square-destinationは
+   背景色(!important)を使うため、こちらは枠線(box-shadow)にして、同じマスに
+   両方付いても見分けがつくようにする。 */
+.square-last-move-from {
+  box-shadow: inset 0 0 0 3px #4a7fd1;
+}
+
+.square-last-move-to {
+  box-shadow: inset 0 0 0 3px #2f5fae;
+  background: #dce8fb;
 }
 
 #hands {
@@ -161,4 +196,132 @@ h1 {
 .coach-status-completed .coach-badge {
   background: #d9f0dd;
   color: #1f5c2a;
+}
+
+/* Phase5 #7: 「目指せる形」と「この形へ近づく手の候補」の関係を示すUI(装飾・文言のみ。
+   判定ロジック・データは一切変更しない)。 */
+.plan-intro {
+  font-size: 0.85rem;
+  color: #555;
+  margin: 0.2rem 0 0.6rem;
+}
+
+.reachable-shapes {
+  padding-left: 1.2rem;
+  margin: 0 0 0.8rem;
+}
+
+/* 選択中の形を視覚的にも分かるようにする(文言の「[選択中]」表示に加えた装飾)。 */
+.reachable-shape-selected {
+  background: #fbe7c6;
+  border-radius: 4px;
+  padding: 0.1rem 0.3rem;
+}
+
+/* 「選択中の形→その形に近づく候補手」の親子関係を、左のアクセントバー(既存の
+   .coach-stageと同じ表現方法)で視覚的につなげる。 */
+.candidate-section {
+  border: 1px solid #ccc;
+  border-left-width: 4px;
+  border-left-color: #d9a441;
+  border-radius: 4px;
+  padding: 0.6rem 0.8rem;
+  margin-bottom: 0.8rem;
+  background: #fafafa;
+}
+
+.candidate-section h3 {
+  margin: 0 0 0.3rem;
+  font-size: 0.95rem;
+}
+
+.candidate-section-description {
+  font-size: 0.85rem;
+  color: #555;
+  margin: 0 0 0.6rem;
+}
+
+.plan-unavailable {
+  font-size: 0.85rem;
+  color: #666;
+  margin: 0;
+}
+
+/* Phase6 Unit2: 「直前の一手で何が変わったか」。既存の道のり・候補手セクションと
+   同じ表現方法(左のアクセントバー)で、その上に置く。 */
+.last-move-section {
+  border: 1px solid #ccc;
+  border-left-width: 4px;
+  border-left-color: #7a9a7e;
+  border-radius: 4px;
+  padding: 0.6rem 0.8rem;
+  margin-bottom: 0.8rem;
+  background: #fafafa;
+}
+
+.last-move-section h3 {
+  margin: 0 0 0.3rem;
+  font-size: 0.95rem;
+}
+
+.last-move-moves {
+  font-size: 0.85rem;
+  color: #555;
+  margin: 0 0 0.4rem;
+}
+
+.last-move-messages {
+  padding-left: 1.2rem;
+  margin: 0;
+}
+
+.last-move-message {
+  font-size: 0.9rem;
+  margin-bottom: 0.2rem;
+}
+
+/* Phase6 Unit1: 「選択した形 → 必要なマス → 今どこまで出来ているか → 未達成部分の
+   道のり → その最初の一手」という因果を示すUI(装飾のみ。判定・計算はサーバー側)。
+   候補手セクション(.candidate-section)の直前に置き、同じ表現方法(左のアクセント
+   バー)で「道のり → 候補手」という並びが読み取れるようにする。 */
+.route-section {
+  border: 1px solid #ccc;
+  border-left-width: 4px;
+  border-left-color: #6b8fb5;
+  border-radius: 4px;
+  padding: 0.6rem 0.8rem;
+  margin-bottom: 0.8rem;
+  background: #fafafa;
+}
+
+.route-section h3 {
+  margin: 0 0 0.3rem;
+  font-size: 0.95rem;
+}
+
+.route-progress-done,
+.route-list-heading {
+  font-size: 0.85rem;
+  color: #555;
+  margin: 0 0 0.4rem;
+}
+
+.route-list {
+  padding-left: 1.2rem;
+  margin: 0;
+}
+
+.route-list li {
+  margin-bottom: 0.3rem;
+}
+
+.route-main {
+  display: block;
+  font-size: 0.9rem;
+}
+
+.route-note {
+  display: block;
+  font-size: 0.8rem;
+  color: #666;
 }

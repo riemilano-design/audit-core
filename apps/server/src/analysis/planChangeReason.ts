@@ -59,18 +59,21 @@ export type PlanChangeReason =
   | "unknown";
 
 /**
- * candidateUsiが、playedMoveUsiと同じ移動先マス(to)を持つ「兄弟候補」かどうかを
- * 判定する。planChangeDetector.ts の isSiblingCandidate と同じ判定基準
- * (人間承認済み、今回はplanChangeDetector.tsを変更しないため同じロジックを
- * ここでも独立に適用する)。いずれかのパースに失敗した場合は安全側に倒し、
- * 兄弟候補とは判定しない。
+ * candidateUsiが、playedMoveUsiと同じ移動先マス(to)または同じ移動元マス(from)を持つ
+ * 「兄弟候補」かどうかを判定する。planChangeDetector.ts の isSiblingCandidate と
+ * 同じ判定基準を、同じ理由(両者が同じremainingを見るため)でここでも独立に適用する
+ * (移動元による判定を加えた理由はplanChangeDetector.tsのファイル冒頭コメント参照。
+ * Phase6 Unit1でroutePlanner.tsが準備手を候補にするようになったことへの対応)。
+ * いずれかのパースに失敗した場合は安全側に倒し、兄弟候補とは判定しない。
  */
 function isSiblingCandidate(candidateUsi: string, playedMoveUsi: string): boolean {
   const playedMove = parseUsi(playedMoveUsi);
   if (!playedMove) return false;
   const candidateMove = parseUsi(candidateUsi);
   if (!candidateMove) return false;
-  return candidateMove.to === playedMove.to;
+  if (candidateMove.to === playedMove.to) return true;
+  if (isDrop(candidateMove) || isDrop(playedMove)) return false;
+  return candidateMove.from === playedMove.from;
 }
 
 /**

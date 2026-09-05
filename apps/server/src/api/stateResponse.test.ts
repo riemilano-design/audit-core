@@ -17,6 +17,10 @@ import {
   computePlanChangeAfterMove,
   computePlanChangeReasonAfterMove,
   computeReachablePlan,
+  computeBoardEventsAfterMove,
+  computeMoveOutcomeAfterMove,
+  safeComputeBoardEventsAfterMove,
+  safeComputeMoveOutcomeAfterMove,
   safeComputePlanChangeAfterMove,
   safeComputePlanChangeReasonAfterMove,
   safeComputeReachablePlan,
@@ -373,16 +377,52 @@ function planChangeCaptureFixtureSfen(): string {
 }
 
 describe("buildStateResponseWithPlan", () => {
-  it("candidate moveが空: 初期局面(玉が8hへ1手で届かない)ではcandidateMoveState: unavailableになる", () => {
+  // 【Phase6 Unit1で挙動が変わったテスト】
+  // 以前はpathPlanner.ts(単一目標マス・1手先読み)を使っていたため、初期局面では
+  // typical_build_order先頭の8h(玉)へ1手で届かず、candidateMoveState: "unavailable"に
+  // なっていた(docs/PHASES.md Phase5「実対局確認で判明した設計上の限界」)。
+  // routePlanner.ts(複数の未達成マス・複数手の経路)に切り替えたことで、
+  // 初期局面でも経路と候補手が計算できるようになった。
+  it("初期局面でも経路が計算され、候補手あり(pending)になる(Phase6 Unit1)", () => {
     const state = gameStateAfter([]);
     const response = buildStateResponseWithPlan(state, undefined);
 
     expect(response.plan.reachableShapes.length).toBeGreaterThan(0);
-    expect(response.plan.candidateMoveState).toBe("unavailable");
+    expect(response.plan.candidateMoveState).toBe("pending");
+    // ⑧の説明はエンジン参考評価を伴うため、この時点(バックグラウンド解析前)ではまだ無い。
     expect(response.plan.candidateMove).toBeUndefined();
     // Phase1の既存coach(shapeDetector/shapeFormationAnalyzer/intentDetector/explanationGenerator)は
     // buildStateResponseと完全に同じ内容のまま壊れていないこと。
     expect(response.coach).toEqual(buildStateResponse(state).coach);
+  });
+
+  it("選択中の形について、必要なマス・現在の進み具合・経路がレスポンスに含まれる(Phase6 Unit1)", () => {
+    const state = gameStateAfter([]);
+    const response = buildStateResponseWithPlan(state, undefined);
+
+    // 「選択した形 → 必要なマス → 今どこまで出来ているか」をUIが辿れること。
+    expect(response.plan.targetShapeProgress?.shapeId).toBe(response.plan.resolvedTargetShapeId);
+    expect(response.plan.targetShapeProgress?.matchedSquareLabels).toEqual(["６九"]);
+    expect(response.plan.targetShapeProgress?.missingSquareLabels).toEqual(["８八", "７八", "５八"]);
+
+    // 「未達成マス → 現在の局面からの経路 → 今指せる最初の一手があるか」を辿れること。
+    const kingRoute = response.plan.routes.find((r) => r.targetSquare === "8h");
+    expect(kingRoute?.targetPiece).toBe("玉");
+    expect(kingRoute?.targetSquareLabel).toBe("８八");
+    expect(kingRoute?.routeLabel).toBe("５九→６八→７八→８八");
+    expect(kingRoute?.remainingSteps).toBe(3);
+    expect(kingRoute?.hasPlayableFirstMove).toBe(true);
+    expect(kingRoute?.blockingSquareLabel).toBe("８八");
+  });
+
+  it("候補手を計算できない局面(相手の手番)ではcandidateMoveState: unavailableになる", () => {
+    // routePlanner.tsは相手の手番では候補を返さない(not_self_turn)。
+    const state = gameStateAfter(["7g7f"]);
+    const response = buildStateResponseWithPlan(state, undefined);
+
+    expect(response.plan.candidateMoveState).toBe("unavailable");
+    expect(response.plan.candidateMove).toBeUndefined();
+    expect(response.plan.routes).toEqual([]);
   });
 
   it("候補手はあるが、まだバックグラウンド解析が完了していない(cachedPlanなし)場合はpendingになる", () => {
@@ -496,10 +536,13 @@ describe("目標形選択(selectedTargetShapeId)", () => {
   it("有効なselectedTargetShapeId(reachableShapes内)を指定すると、そのshapeが採用される", async () => {
     const sfen = honminoOneMoveFromCompleteSfen();
     const state = customGameState(sfen);
-    const engine = makeMockLowPriorityEngine([
-      multiPvResult([{ multipv: 1, score: { type: "cp", value: 5 }, pv: [] }]), // baseline
-      multiPvResult([{ multipv: 1, score: { type: "cp", value: 10 }, pv: [] }]), // 候補7i8h
-    ]);
+    // mino_takaminoは本美濃より必要なマスが多く、routePlanner.tsが複数の目標マスに
+    // ついて候補手を返すため、エンジンへの問い合わせ回数は局面によって変わる。
+    // ここで検証したいのは「どのshapeが対象に採用されたか」なので、回数に依存しない
+    // 関数形式のモックを使う。
+    const engine = makeMockLowPriorityEngine(() =>
+      multiPvResult([{ multipv: 1, score: { type: "cp", value: 10 }, pv: [] }]),
+    );
 
     const computed = await computeReachablePlan(state, engine, { initialSfen: sfen }, "mino_takamino");
 
@@ -616,8 +659,10 @@ describe("computeReachablePlan / safeComputeReachablePlan", () => {
     expect(result.candidateMove?.notReadyReason).toBe("insufficient_engine_data");
   });
 
-  it("shapeが見つからない/候補手が空(初期局面)の場合、engineに一切問い合わせずcandidateMove: undefinedを返す", async () => {
-    const state = gameStateAfter([]);
+  it("候補手が空の場合(相手の手番)、engineに一切問い合わせずcandidateMove: undefinedを返す", async () => {
+    // Phase6 Unit1以降、初期局面では候補手が計算できるようになったため、
+    // 「候補手が空」の例としてroutePlanner.tsが候補を返さない相手の手番を使う。
+    const state = gameStateAfter(["7g7f"]);
     const engine = makeMockLowPriorityEngine([]);
 
     const result = await computeReachablePlan(state, engine);
@@ -902,5 +947,147 @@ describe("computePlanChangeReasonAfterMove / safeComputePlanChangeReasonAfterMov
 
     // computePlanChangeReasonAfterMove自体は(安全側ラッパーではないため)例外を伝播する。
     expect(() => computePlanChangeReasonAfterMove(inconsistentState, inconsistentState, "7g7f")).toThrow();
+  });
+});
+
+// Phase6 Unit2(直前の一手で何が変わったか)。事実の抽出そのものの網羅的なテストは
+// moveOutcomeDetector.test.ts / moveOutcomeExplanation.test.ts で行う。
+// ここではGameStateを経由した配線(スナップショットの作り方・ラベル・null条件)を検証する。
+describe("computeMoveOutcomeAfterMove / safeComputeMoveOutcomeAfterMove", () => {
+  it("候補手を指して目標マスが完成した場合、その事実が抽出される", () => {
+    const stateBefore = gameStateAfter([]);
+    // 初期局面で7i7h(銀を7hへ)は候補手であり、本美濃の7hが完成する。
+    const stateAfter = gameStateAfter(["7i7h", "1c1d"]);
+
+    const outcome = computeMoveOutcomeAfterMove(stateBefore, stateAfter, "7i7h", "1c1d");
+
+    expect(outcome?.playedMoveUsi).toBe("7i7h");
+    expect(outcome?.opponentMoveUsi).toBe("1c1d");
+    expect(outcome?.facts.map((f) => f.kind)).toContain("route_completed");
+    expect(outcome?.facts.map((f) => f.kind)).toContain("played_candidate");
+  });
+
+  it("相手が応手しておらず手番が自分に戻っていない場合は、差分を取らずnullを返す", () => {
+    // 相手の手番の局面ではroutePlanner.tsが経路を返さないため、差分を取ると
+    // 「経路が全て失われた」という誤った事実になる。比較自体を行わない。
+    const stateBefore = gameStateAfter([]);
+    const stateAfter = gameStateAfter(["7i7h"]);
+
+    expect(computeMoveOutcomeAfterMove(stateBefore, stateAfter, "7i7h", null)).toBeNull();
+  });
+
+  it("planChangeReasonをそのまま原因として引き継ぐ(自前で理由を判定しない)", () => {
+    const sfenBefore = planChangeCaptureFixtureSfen();
+    const stateBefore = customGameState(sfenBefore);
+    const sfenAfterUser = applyMove(sfenBefore, "1g1f");
+    const sfenAfterOpponent = applyMove(sfenAfterUser, "7e6g");
+    const stateAfter: GameState = {
+      sfen: sfenAfterOpponent,
+      moveHistory: ["1g1f", "7e6g"],
+      forcedPliesUsed: 0,
+    };
+
+    const outcome = computeMoveOutcomeAfterMove(
+      stateBefore,
+      stateAfter,
+      "1g1f",
+      "7e6g",
+      { initialSfen: sfenBefore },
+      undefined,
+      "candidate_piece_captured",
+    );
+
+    const lost = outcome?.facts.find((f) => f.kind === "route_lost");
+    expect(lost?.cause).toBe("candidate_piece_captured");
+  });
+
+  it("safe版は、局面と履歴が矛盾していても例外を投げずnullを返す", () => {
+    const inconsistentState: GameState = { sfen: DEFAULT_INITIAL_SFEN, moveHistory: ["7g7f"], forcedPliesUsed: 0 };
+
+    expect(safeComputeMoveOutcomeAfterMove(inconsistentState, inconsistentState, "7g7f", null)).toBeNull();
+  });
+});
+
+describe("buildStateResponseWithPlan: lastMoveOutcome", () => {
+  it("MoveOutcomeを渡すと、日本語棋譜表記のラベルとメッセージがレスポンスに入る", () => {
+    const stateBefore = gameStateAfter([]);
+    const stateAfter = gameStateAfter(["7i7h", "1c1d"]);
+    const outcome = computeMoveOutcomeAfterMove(stateBefore, stateAfter, "7i7h", "1c1d");
+
+    const response = buildStateResponseWithPlan(stateAfter, undefined, {}, undefined, false, null, outcome);
+
+    expect(response.plan.lastMoveOutcome?.playedMoveLabel).toBe("７八銀");
+    expect(response.plan.lastMoveOutcome?.opponentMoveLabel).toBe("１四歩");
+    expect(response.plan.lastMoveOutcome!.messages.length).toBeGreaterThan(0);
+    // 説明文に評価語が混ざらないこと(moveOutcomeExplanation.tsの方針)。
+    for (const message of response.plan.lastMoveOutcome!.messages) {
+      for (const forbidden of ["最善", "おすすめ", "安全", "悪手", "形勢"]) {
+        expect(message.text).not.toContain(forbidden);
+      }
+    }
+  });
+
+  it("MoveOutcomeを渡さない場合(新規対局直後・目標形変更直後)はnullになる", () => {
+    const state = gameStateAfter([]);
+
+    const response = buildStateResponseWithPlan(state, undefined);
+
+    expect(response.plan.lastMoveOutcome).toBeNull();
+  });
+});
+
+// Phase6 Unit3(盤面で実際に起きたこと: 捕獲・王手・成り)。事実抽出そのものの
+// 網羅的なテストはboardEventDetector.test.ts / boardEventExplanation.test.tsで行う。
+// ここではGameStateを経由した配線と、Unit2の説明との共存を検証する。
+describe("computeBoardEventsAfterMove / buildStateResponseWithPlan: 盤面イベント", () => {
+  it("相手が自分の駒を取った場合、その事実が抽出される", () => {
+    // 後手の歩を1筋で下ろし、1gに残っている自分の歩を取らせる(同時に成る)。
+    const history = ["9g9f", "1c1d", "8g8f", "1d1e", "7g7f", "1e1f"];
+    const stateBefore = gameStateAfter(history);
+    const stateAfter = gameStateAfter([...history, "5g5f", "1f1g+"]);
+
+    const events = computeBoardEventsAfterMove(stateBefore, "5g5f", "1f1g+");
+
+    expect(events).toEqual([
+      { kind: "captured_by_opponent", piece: "歩", square: "1g" },
+      { kind: "promoted_by_opponent", piece: "歩", square: "1g" },
+    ]);
+    expect(stateAfter.moveHistory).toHaveLength(8);
+  });
+
+  it("何も起きていない手ではイベントを返さない", () => {
+    expect(computeBoardEventsAfterMove(gameStateAfter([]), "7g7f", "1c1d")).toEqual([]);
+  });
+
+  it("safe版は、非合法な指し手を渡されても例外を投げず空配列を返す", () => {
+    expect(safeComputeBoardEventsAfterMove(gameStateAfter([]), "9a9b", null)).toEqual([]);
+  });
+
+  it("盤面イベントのメッセージが、形・経路の説明より前に並ぶ(Unit2と共存する)", () => {
+    const history = ["9g9f", "1c1d", "8g8f", "1d1e", "7g7f", "1e1f"];
+    const stateBefore = gameStateAfter(history);
+    const stateAfter = gameStateAfter([...history, "7i7h", "1f1g+"]);
+    const outcome = computeMoveOutcomeAfterMove(stateBefore, stateAfter, "7i7h", "1f1g+");
+    const events = computeBoardEventsAfterMove(stateBefore, "7i7h", "1f1g+");
+
+    const response = buildStateResponseWithPlan(stateAfter, undefined, {}, undefined, false, null, outcome, events);
+
+    const kinds = response.plan.lastMoveOutcome!.messages.map((m) => m.kind);
+    // 先頭2件が盤面の出来事、そのあとに形・経路の説明(Unit2)が続く。
+    expect(kinds.slice(0, 2)).toEqual(["captured_by_opponent", "promoted_by_opponent"]);
+    expect(kinds).toContain("route_completed");
+  });
+
+  it("盤面イベントを渡さない場合、Unit2の説明だけが返る(既存動作を変えない)", () => {
+    const stateBefore = gameStateAfter([]);
+    const stateAfter = gameStateAfter(["7i7h", "1c1d"]);
+    const outcome = computeMoveOutcomeAfterMove(stateBefore, stateAfter, "7i7h", "1c1d");
+
+    const response = buildStateResponseWithPlan(stateAfter, undefined, {}, undefined, false, null, outcome);
+
+    expect(response.plan.lastMoveOutcome!.messages.map((m) => m.kind)).toEqual([
+      "played_candidate",
+      "route_completed",
+    ]);
   });
 });

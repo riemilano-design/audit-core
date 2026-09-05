@@ -74,8 +74,65 @@ export interface CandidateMoveExplanationResult {
 // (エンジンの参考評価が取れても、評価データが不十分だった場合等)。
 export type CandidateMoveState = "unavailable" | "pending" | "ready";
 
+// apps/server/src/api/stateResponse.ts の TargetShapeProgress に対応する型
+// (Phase6 Unit1: 選択中の形が今どこまで出来ているか)。
+// マス目は既にサーバー側(notation/japaneseSquare.ts)で日本語表記に変換済み。
+export interface TargetShapeProgress {
+  shapeId: string;
+  name: string;
+  matchedSquareLabels: string[];
+  missingSquareLabels: string[];
+}
+
+// apps/server/src/api/stateResponse.ts の ShapeRouteSummary に対応する型
+// (Phase6 Unit1: 未達成マスごとの経路)。
+// 「選択した形 → 必要なマス → 現在の局面からの経路 → 今指せる最初の一手」という
+// 因果をUIが示すための表示用データで、判定・計算はすべてサーバー側にある。
+export interface ShapeRouteSummary {
+  /** 目標マス(USI形式。識別用) */
+  targetSquare: string;
+  /** 目標マスに置く駒種(例: "玉") */
+  targetPiece: string;
+  /** 目標マス(日本語表記、例: "８八") */
+  targetSquareLabel: string;
+  /** 経路(日本語表記、例: "５九→６八→７八→８八") */
+  routeLabel: string;
+  remainingSteps: number;
+  /** 経路の1手目を現在の局面で指せるか */
+  hasPlayableFirstMove: boolean;
+  /** 経路上で最初に自分の駒が居るマス(日本語表記)。無ければnull。 */
+  blockingSquareLabel: string | null;
+}
+
+// apps/server/src/analysis/moveOutcomeExplanation.ts の MoveOutcomeMessage に対応する型
+// (Phase6 Unit2: 直前の一手で何が変わったか)。
+// kindはサーバー側の事実の種類(route_advanced等)。UI側は表示の出し分け用にしか使わないため、
+// 種類の一覧はサーバー側だけが持つ(web側に同じ列挙を重複させない)。
+export interface MoveOutcomeMessage {
+  kind: string;
+  text: string;
+}
+
+// apps/server/src/api/stateResponse.ts の LastMoveOutcomeBody に対応する型。
+// 文言・マス目の日本語表記はすべてサーバー側で生成済みで、ここでは表示するだけ。
+export interface LastMoveOutcomeBody {
+  playedMoveLabel: string;
+  opponentMoveLabel: string | null;
+  /** 変化が無かった場合も「特に変化なし」の1件が入る(空にはならない)。 */
+  messages: MoveOutcomeMessage[];
+}
+
 export interface ReachablePlanBody {
   reachableShapes: RankedReachableShape[];
+  /** Phase6 Unit1: 選択中の形の未達成マスごとの経路。無い場合は空配列。 */
+  routes: ShapeRouteSummary[];
+  /** Phase6 Unit1: 選択中の形の進み具合。選択中の形が無い場合はnull。 */
+  targetShapeProgress: TargetShapeProgress | null;
+  /** Phase6 Unit1: 候補手(USI形式)→ マス目の日本語表記("５九→６八")の対応表。
+   * 変換はサーバー側(notation/japaneseSquare.ts)にあり、ここでは表示に使うだけ。 */
+  candidateMoveLabels: Record<string, string>;
+  /** Phase6 Unit2: 直前の一手で何が変わったか。新規対局直後・目標形変更直後はnull。 */
+  lastMoveOutcome: LastMoveOutcomeBody | null;
   candidateMoveState: CandidateMoveState;
   candidateMove: CandidateMoveExplanationResult | undefined;
   /** ⑦⑧の計算に実際に使われたshapeId(ユーザーが選択したもの、または未選択/無効時の
@@ -128,6 +185,24 @@ export function getPlanChangeReasonMessage(
   }
 }
 
+/**
+ * Phase6 Unit3 ⑦: Phase3の「前回の計画が使えなくなりました。」を表示してよいかを返す。
+ *
+ * Unit2の`route_lost`メッセージ(「…道のりが、今の局面では続けられなくなりました。」)は
+ * Phase3の通知と同じ事象を述べるため、両方出すと重複する。その場合はPhase3側を出さない。
+ *
+ * 判定ロジック(planChangeDetector/planChangeReason/moveOutcomeDetector)は一切変更せず、
+ * ここで行うのは「どちらを表示するか」という表示上の判断だけ
+ * (getPlanChangeReasonMessageと同じく、DOM非依存の純粋関数としてテストするためgameApi.tsに置く)。
+ */
+export function shouldShowPlanChangedNotice(
+  plan: Pick<ReachablePlanBody, "planChanged" | "lastMoveOutcome">,
+): boolean {
+  if (!plan.planChanged) return false;
+  const hasRouteLostMessage = plan.lastMoveOutcome?.messages.some((m) => m.kind === "route_lost") ?? false;
+  return !hasRouteLostMessage;
+}
+
 export interface GameStateResponse {
   sfen: string;
   moveHistory: string[];
@@ -146,6 +221,14 @@ export interface GameStateResponse {
    * 盤面クリックUIは、この一覧をfrom/drop種でフィルタして移動先を求める。
    */
   legalMoves: string[];
+  /**
+   * Phase5: moveHistoryと同じ並び・同じ長さの、日本語棋譜表記(例: "７六歩")。
+   * apps/server/src/notation/japaneseMoveHistory.ts(shogiops標準のmakeJapaneseMoveOrDrop)が
+   * 生成したものをそのまま返す。変換できなかった手はnull(この場合UI側は
+   * 対応するmoveHistoryのUSI表記を代わりに表示する)。棋譜表記の変換ロジックは
+   * サーバー側にあり、ここでは再実装しない。
+   */
+  moveHistoryJapanese: (string | null)[];
 }
 
 export interface MoveErrorResponse {

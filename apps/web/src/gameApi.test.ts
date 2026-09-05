@@ -1,5 +1,10 @@
 import { describe, expect, it } from "vitest";
-import { getPlanChangeReasonMessage, type PlanChangeReason } from "./gameApi.js";
+import {
+  getPlanChangeReasonMessage,
+  shouldShowPlanChangedNotice,
+  type LastMoveOutcomeBody,
+  type PlanChangeReason,
+} from "./gameApi.js";
 
 describe("getPlanChangeReasonMessage", () => {
   it("planChanged=falseの場合、reasonがnullでも理由文言を表示しない", () => {
@@ -45,5 +50,37 @@ describe("getPlanChangeReasonMessage", () => {
     // 意図的にキャストして、安全側のフォールバック(default節)を検証する。
     const unknownReason = "some_future_reason_not_yet_known" as PlanChangeReason;
     expect(getPlanChangeReasonMessage({ planChanged: true, planChangeReason: unknownReason })).toBeNull();
+  });
+});
+
+// Phase6 Unit3 ⑦: Phase3の「前回の計画が使えなくなりました。」と、Unit2の
+// route_lostメッセージが同じ事象を二重に述べるのを防ぐ表示判断。
+describe("shouldShowPlanChangedNotice", () => {
+  function outcome(kinds: string[]): LastMoveOutcomeBody {
+    return {
+      playedMoveLabel: "７八銀",
+      opponentMoveLabel: "１四歩",
+      messages: kinds.map((kind) => ({ kind, text: "" })),
+    };
+  }
+
+  it("planChanged=falseなら表示しない", () => {
+    expect(shouldShowPlanChangedNotice({ planChanged: false, lastMoveOutcome: null })).toBe(false);
+  });
+
+  it("planChanged=trueで、route_lostの説明が無ければ表示する(従来どおり)", () => {
+    expect(shouldShowPlanChangedNotice({ planChanged: true, lastMoveOutcome: null })).toBe(true);
+    expect(
+      shouldShowPlanChangedNotice({ planChanged: true, lastMoveOutcome: outcome(["played_non_candidate"]) }),
+    ).toBe(true);
+  });
+
+  it("planChanged=trueでも、route_lostの説明があれば重複するため表示しない", () => {
+    expect(
+      shouldShowPlanChangedNotice({
+        planChanged: true,
+        lastMoveOutcome: outcome(["played_non_candidate", "route_lost"]),
+      }),
+    ).toBe(false);
   });
 });
