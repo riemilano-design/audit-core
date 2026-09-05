@@ -4,6 +4,9 @@
 
 | ファイル | 何が書いてあるか | 主な読者 |
 |---|---|---|
+| [PROJECT_VISION.md](PROJECT_VISION.md) | このアプリが最終的に何を実現しようとしているのか(核心的な強み・完成イメージ・完成の判定基準)。**正本** | 全員 |
+| [ARCHITECTURE.md](ARCHITECTURE.md) | 全体構造とモジュールの責務境界、Unit間の境界、変えない構造上の約束。**正本** | 実装する人・エージェント全員 |
+| [AGENT_PROTOCOL.md](AGENT_PROTOCOL.md) | 3役(司令塔・実装担当・承認/監査担当)と専門エージェントの協働ルール、GO/REVISE/HUMANの運用。**正本** | AIエージェントを使う人全員 |
 | [DATA_MODEL.md](DATA_MODEL.md) | 教育用データパイプライン(9段階)の詳細設計と、shapes/openings/intents/explanations 各スキーマの意味 | データを作る人・ロジックを実装する人 |
 | [SCENARIOS.md](SCENARIOS.md) | 「対局シナリオ」(AIに棒銀・早仕掛けなどを指させて練習させる仕組み)の将来設計。今は未実装 | 将来Phase4以降の実装者 |
 | [PHASES.md](PHASES.md) | Phase 0〜5 の開発計画、各Phaseの成果物と完了条件 | プロジェクト全体の進行管理者(人間) |

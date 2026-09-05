@@ -58,6 +58,9 @@
 | ファイル | 内容 |
 |---|---|
 | [docs/README.md](docs/README.md) | ドキュメント全体の目次 |
+| [docs/PROJECT_VISION.md](docs/PROJECT_VISION.md) | このアプリの完成像(核心的な強み・完成イメージ・完成の判定基準) |
+| [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | 全体構造とモジュール・Unitの責務境界 |
+| [docs/AGENT_PROTOCOL.md](docs/AGENT_PROTOCOL.md) | 3役(司令塔・実装担当・承認/監査担当)と専門エージェントの協働ルール |
 | [docs/DATA_MODEL.md](docs/DATA_MODEL.md) | 教育用データパイプラインとスキーマ設計の詳細 |
 | [docs/SCENARIOS.md](docs/SCENARIOS.md) | 対局シナリオ(AI序盤制御)の将来設計 |
 | [docs/PHASES.md](docs/PHASES.md) | Phase 0〜5 の開発計画と受け入れ基準 |
