@@ -119,6 +119,15 @@ function renderCoach(coach: CoachExplanation[] | undefined): void {
 function renderPlan(plan: ReachablePlanBody): void {
   planEl.innerHTML = "";
 
+  // Phase3 Unit1(計画崩れの検知のみ): 断定的・評価的な表現は使わず、事実のみを
+  // 短く伝える(承認事項4)。新しい候補手・変更理由の表示はUnit1のスコープ外。
+  if (plan.planChanged) {
+    const p = document.createElement("p");
+    p.className = "plan-changed";
+    p.textContent = "前回の計画が使えなくなりました。";
+    planEl.appendChild(p);
+  }
+
   if (plan.reachableShapes.length > 0) {
     const heading = document.createElement("h3");
     heading.textContent = "目指せる形の候補";

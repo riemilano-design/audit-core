@@ -82,6 +82,10 @@ export interface ReachablePlanBody {
    * フォールバックとしてranked[0]が採用されたもの)。reachableShapesの表示で
    * どれが現在の対象かを示すために使う。目指せる形が1件も無い場合はnull。 */
   resolvedTargetShapeId: string | null;
+  /** Phase3 Unit1(計画崩れの検知のみ): 相手の手によって、ユーザーが着手する直前の
+   * 計画の前提が機械的に崩れたかどうか。再計画・変更理由・詳細な候補手表示は
+   * 含まない(別Unitのスコープ)。 */
+  planChanged: boolean;
 }
 
 export interface GameStateResponse {

@@ -22,7 +22,11 @@ import {
   explainCandidateMoves,
   type CandidateMoveExplanationResult,
 } from "../analysis/candidateMoveExplanation.js";
+import { detectPlanChange, type PlanSnapshot } from "../analysis/planChangeDetector.js";
+import { getLegalMoves } from "../rules/legalMoves.js";
 import type { LowPriorityEngine } from "../engine/prioritizedEngine.js";
+
+export type { PlanSnapshot } from "../analysis/planChangeDetector.js";
 
 export interface StateResponseBody extends GameState {
   status: GameStatus;
@@ -62,6 +66,13 @@ export interface ReachablePlanBody {
    * 無い場合はnull。
    */
   resolvedTargetShapeId: string | null;
+  /**
+   * Phase3 Unit1(計画崩れの検知のみ): 相手の手によって、ユーザーが着手する直前に
+   * 保持していた計画(PlanSnapshot)の前提が機械的に崩れたかどうか。
+   * 判定条件はplanChangeDetector.ts参照(候補Aのみ、人間承認済み)。
+   * 再計画・変更理由の生成・詳細なUI表示はUnit1のスコープ外(別Unitで扱う)。
+   */
+  planChanged: boolean;
 }
 
 export interface StateResponseBodyWithPlan extends StateResponseBody {
@@ -191,12 +202,18 @@ function safeComputeRankedPlanContext(
  * selectedTargetShapeIdは、目標形選択UI(POST /api/game/target-shape)で
  * ユーザーが選んだshapeId。省略時・reachableShapesに含まれない値の場合は
  * computeRankedPlanContext側でranked[0]にフォールバックする。
+ *
+ * planChangedは、Phase3 Unit1(計画崩れの検知)の結果を呼び出し元(server.ts)から
+ * そのまま受け取って埋め込むだけの値(このモジュール自身は検知ロジックを持たない。
+ * 検知はcomputePlanChangeAfterMove/safeComputePlanChangeAfterMoveが行う)。
+ * 省略時はfalse(検知対象外の呼び出し、例: 新規対局直後・目標形変更直後)。
  */
 export function buildStateResponseWithPlan(
   current: GameState,
   cachedPlan: CachedReachablePlan | undefined,
   options: ExplainPositionOptions = {},
   selectedTargetShapeId?: string,
+  planChanged = false,
 ): StateResponseBodyWithPlan {
   const base = buildStateResponse(current, options);
   const context = safeComputeRankedPlanContext(current, options, selectedTargetShapeId);
@@ -227,7 +244,7 @@ export function buildStateResponseWithPlan(
     candidateMove = undefined;
   }
 
-  return { ...base, plan: { reachableShapes, candidateMoveState, candidateMove, resolvedTargetShapeId } };
+  return { ...base, plan: { reachableShapes, candidateMoveState, candidateMove, resolvedTargetShapeId, planChanged } };
 }
 
 /**
@@ -288,5 +305,65 @@ export async function safeComputeReachablePlan(
   } catch (err) {
     console.error("候補手プラン計算(⑧, candidateMoveSafetyCheck/candidateMoveExplanation)でエラーが発生しました:", err);
     return undefined;
+  }
+}
+
+/**
+ * Phase3 Unit1(計画崩れの検知のみ、人間承認済み)。
+ * stateBeforeMove(ユーザーが着手する直前の局面)から⑤⑥⑦を計算してPlanSnapshotを
+ * 作り、stateAfterMove(その後ユーザーの着手・相手の着手を経た局面)における
+ * 現在のtargetShapeId・合法手一覧と突き合わせて、計画が崩れたかを判定する。
+ *
+ * 【判定条件(候補Aのみ)】
+ * planChangeDetector.ts参照。targetPieceの消失・typical_build_orderの変化・
+ * より良い別ルートの発見・エンジン評価値等は一切判定条件に含めない。
+ *
+ * 【エンジン非依存】
+ * getLegalMoves(rules/legalMoves.ts、shogiopsベース)のみを使い、
+ * PrioritizedEngine/MultiPVには一切触れない。
+ *
+ * stateBeforeMoveの時点で計画(候補手)が1件も無かった場合(candidateMoveState:
+ * "unavailable"に相当)は、崩すべき計画自体が無いためfalseを返す。
+ *
+ * 例外はそのまま伝播する(呼び出し元のsafeComputePlanChangeAfterMoveが処理する)。
+ */
+export function computePlanChangeAfterMove(
+  stateBeforeMove: GameState,
+  stateAfterMove: GameState,
+  playedMoveUsi: string,
+  options: ExplainPositionOptions = {},
+  selectedTargetShapeId?: string,
+): boolean {
+  const beforeContext = computeRankedPlanContext(stateBeforeMove, options, selectedTargetShapeId);
+  const candidateMoves = beforeContext.pathPlanResult?.candidateMoves ?? [];
+  if (!beforeContext.resolvedTargetShapeId || candidateMoves.length === 0) return false;
+
+  const previousSnapshot: PlanSnapshot = {
+    targetShapeId: beforeContext.resolvedTargetShapeId,
+    candidateMoveUsis: candidateMoves.map((c) => c.moveUsi),
+  };
+
+  const afterContext = computeRankedPlanContext(stateAfterMove, options, selectedTargetShapeId);
+  const currentLegalMoveUsis = getLegalMoves(stateAfterMove.sfen);
+
+  return detectPlanChange(previousSnapshot, playedMoveUsi, afterContext.resolvedTargetShapeId, currentLegalMoveUsis);
+}
+
+/**
+ * computePlanChangeAfterMoveの安全側ラッパー(safeComputeRankedPlanContextと同じパターン)。
+ * 失敗時はconsole.errorに留め、falseを返す(対局進行には一切影響させない)。
+ */
+export function safeComputePlanChangeAfterMove(
+  stateBeforeMove: GameState,
+  stateAfterMove: GameState,
+  playedMoveUsi: string,
+  options: ExplainPositionOptions = {},
+  selectedTargetShapeId?: string,
+): boolean {
+  try {
+    return computePlanChangeAfterMove(stateBeforeMove, stateAfterMove, playedMoveUsi, options, selectedTargetShapeId);
+  } catch (err) {
+    console.error("計画崩れ検知(Phase3 Unit1, planChangeDetector)でエラーが発生しました:", err);
+    return false;
   }
 }

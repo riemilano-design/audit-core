@@ -1,5 +1,5 @@
 import { Board } from "shogiops/board";
-import { Hands } from "shogiops/hands";
+import { Hand, Hands } from "shogiops/hands";
 import { makeSfen } from "shogiops/sfen";
 import { Shogi } from "shogiops/variant/shogi";
 import { parseSquareName } from "shogiops/util";
@@ -7,13 +7,16 @@ import type { Role } from "shogiops/types";
 import { describe, expect, it, vi } from "vitest";
 import type { CoachExplanation } from "../analysis/explanationGenerator.js";
 import { DEFAULT_INITIAL_SFEN, replayMoveHistory } from "../analysis/moveHistory.js";
+import { applyMove } from "../rules/applyMove.js";
 import type { GameState } from "../game/gameSession.js";
 import type { MultiPvGoResult } from "../engine/usiEngine.js";
 import type { LowPriorityEngine } from "../engine/prioritizedEngine.js";
 import {
   buildStateResponse,
   buildStateResponseWithPlan,
+  computePlanChangeAfterMove,
   computeReachablePlan,
+  safeComputePlanChangeAfterMove,
   safeComputeReachablePlan,
   type CachedReachablePlan,
 } from "./stateResponse.js";
@@ -244,6 +247,32 @@ function honminoMultipleCandidatesSfen(): string {
 
 function customGameState(sfen: string): GameState {
   return { sfen, moveHistory: [], forcedPliesUsed: 0 };
+}
+
+// Phase3 Unit1(計画崩れの検知)専用の局面。honminoOneMoveFromCompleteSfen()と同じ
+// 「王が7iにあり8hへ1手(7i8h)で本美濃が完成する」局面に、
+// - ユーザーが提案手(7i8h)以外に指せる、無関係な歩(1g)
+// - 相手(gote)が打てる飛車1枚(持ち駒)
+// を追加したもの。相手が飛車を8筋へ打つと、王が8hへ動けば飛車の利きに入るため
+// (王手放置)、候補手7i8hが機械的に非合法になる(=相手の手による崩れの検証に使う)。
+function planChangeFixtureSfen(): string {
+  let board = Board.empty();
+  const pieces: Array<{ square: string; role: Parameters<typeof board.set>[1]["role"] }> = [
+    { square: "7i", role: "king" },
+    { square: "7h", role: "silver" },
+    { square: "6i", role: "gold" },
+    { square: "5h", role: "gold" },
+    { square: "1g", role: "pawn" },
+  ];
+  for (const { square, role } of pieces) {
+    const sq = parseSquareName(square);
+    if (sq === undefined) throw new Error(`invalid square: ${square}`);
+    board = board.clone();
+    board.set(sq, { color: "sente", role });
+  }
+  const hands = Hands.from(Hand.empty(), Hand.from([["rook", 1]]));
+  const pos = Shogi.from({ board, hands, turn: "sente", moveNumber: 1 }, false).unwrap();
+  return makeSfen(pos);
 }
 
 describe("buildStateResponseWithPlan", () => {
@@ -512,5 +541,106 @@ describe("computeReachablePlan / safeComputeReachablePlan", () => {
     const first = await computeReachablePlan(state, makeEngine(), { initialSfen: sfen });
     const second = await computeReachablePlan(state, makeEngine(), { initialSfen: sfen });
     expect(second).toEqual(first);
+  });
+});
+
+// Phase3 Unit1(計画崩れの検知のみ、人間承認済み)。判定条件そのもの(候補A)の
+// 網羅的なテストはplanChangeDetector.test.tsで行う。ここではGameState/実際の
+// pathPlanner.ts結果を経由した統合(computePlanChangeAfterMove)の配線を検証する。
+describe("computePlanChangeAfterMove / safeComputePlanChangeAfterMove", () => {
+  it("ユーザーが提案手をそのまま指した場合、除外後の残存候補が無くplanChanged: falseになる", () => {
+    const sfenBefore = honminoOneMoveFromCompleteSfen();
+    const stateBefore = customGameState(sfenBefore);
+
+    const sfenAfterUserMove = applyMove(sfenBefore, "7i8h");
+    const stateAfter: GameState = { sfen: sfenAfterUserMove, moveHistory: ["7i8h"], forcedPliesUsed: 0 };
+
+    const planChanged = computePlanChangeAfterMove(stateBefore, stateAfter, "7i8h", { initialSfen: sfenBefore });
+    expect(planChanged).toBe(false);
+  });
+
+  it("ユーザーが提案手以外を指し、相手の手が残存候補を機械的に非合法にした場合はplanChanged: trueになる", () => {
+    const sfenBefore = planChangeFixtureSfen();
+    const stateBefore = customGameState(sfenBefore);
+
+    const sfenAfterUserMove = applyMove(sfenBefore, "1g1f"); // 提案手(7i8h)とは無関係な手
+    const sfenAfterOpponentMove = applyMove(sfenAfterUserMove, "R*8a"); // 相手が飛車を8筋へ打つ
+    const stateAfter: GameState = {
+      sfen: sfenAfterOpponentMove,
+      moveHistory: ["1g1f", "R*8a"],
+      forcedPliesUsed: 0,
+    };
+
+    const planChanged = computePlanChangeAfterMove(stateBefore, stateAfter, "1g1f", { initialSfen: sfenBefore });
+    expect(planChanged).toBe(true);
+  });
+
+  it("ユーザーが提案手以外を指したが、相手の手が計画に無関係な場合はplanChanged: falseのままになる", () => {
+    const sfenBefore = planChangeFixtureSfen();
+    const stateBefore = customGameState(sfenBefore);
+
+    const sfenAfterUserMove = applyMove(sfenBefore, "1g1f");
+    const sfenAfterOpponentMove = applyMove(sfenAfterUserMove, "R*1a"); // 8筋に利きが無い場所へ打つ
+    const stateAfter: GameState = {
+      sfen: sfenAfterOpponentMove,
+      moveHistory: ["1g1f", "R*1a"],
+      forcedPliesUsed: 0,
+    };
+
+    const planChanged = computePlanChangeAfterMove(stateBefore, stateAfter, "1g1f", { initialSfen: sfenBefore });
+    expect(planChanged).toBe(false);
+  });
+
+  it("stateBeforeMove時点で候補手が無い(unavailable相当)場合はplanChanged: falseになる", () => {
+    const stateBefore = gameStateAfter([]); // 初期局面: 玉が8hへ1手で届かないためcandidateMovesは空
+    const stateAfter = gameStateAfter([]);
+
+    const planChanged = computePlanChangeAfterMove(stateBefore, stateAfter, "7g7f");
+    expect(planChanged).toBe(false);
+  });
+
+  it("同一入力に対して常に同じ結果を返す(決定的)", () => {
+    const sfenBefore = planChangeFixtureSfen();
+    const stateBefore = customGameState(sfenBefore);
+    const sfenAfterUserMove = applyMove(sfenBefore, "1g1f");
+    const sfenAfterOpponentMove = applyMove(sfenAfterUserMove, "R*8a");
+    const stateAfter: GameState = {
+      sfen: sfenAfterOpponentMove,
+      moveHistory: ["1g1f", "R*8a"],
+      forcedPliesUsed: 0,
+    };
+
+    const first = computePlanChangeAfterMove(stateBefore, stateAfter, "1g1f", { initialSfen: sfenBefore });
+    const second = computePlanChangeAfterMove(stateBefore, stateAfter, "1g1f", { initialSfen: sfenBefore });
+    expect(second).toBe(first);
+  });
+
+  it("計算中に例外が起きてもsafeComputePlanChangeAfterMoveはfalseを返し、例外を外へ漏らさない", () => {
+    // buildStateResponseの既存テスト(不正な局面)と同じ、わざと矛盾したGameState。
+    const inconsistentState: GameState = {
+      sfen: DEFAULT_INITIAL_SFEN,
+      moveHistory: ["7g7f"], // このsfenはこの履歴の結果ではない
+      forcedPliesUsed: 0,
+    };
+
+    const result = safeComputePlanChangeAfterMove(inconsistentState, inconsistentState, "7g7f");
+    expect(result).toBe(false);
+
+    // computePlanChangeAfterMove自体は(安全側ラッパーではないため)例外を伝播する。
+    expect(() => computePlanChangeAfterMove(inconsistentState, inconsistentState, "7g7f")).toThrow();
+  });
+});
+
+describe("buildStateResponseWithPlan: planChanged", () => {
+  it("planChangedを省略した場合はfalseになる(Phase2までの既存呼び出しとの後方互換)", () => {
+    const state = gameStateAfter([]);
+    const response = buildStateResponseWithPlan(state, undefined);
+    expect(response.plan.planChanged).toBe(false);
+  });
+
+  it("planChanged=trueを渡すとレスポンスにそのまま反映される", () => {
+    const state = gameStateAfter([]);
+    const response = buildStateResponseWithPlan(state, undefined, {}, undefined, true);
+    expect(response.plan.planChanged).toBe(true);
   });
 });

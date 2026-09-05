@@ -20,6 +20,7 @@ import { createServer, type IncomingMessage, type ServerResponse } from "node:ht
 import {
   buildStateResponseWithPlan,
   safeComputeReachablePlan,
+  safeComputePlanChangeAfterMove,
   type CachedReachablePlan,
 } from "./api/stateResponse.js";
 import { resolveEnginePath } from "./engine/enginePath.js";
@@ -53,6 +54,14 @@ let backgroundPlan: CachedReachablePlan | undefined;
 // 現在バックグラウンド解析が進行中の(局面, 選択中の目標形)の組み合わせ。
 // 同一局面かつ同一選択への二重起動を防ぐ(sfenだけでなく選択も変わったら別扱いにする)。
 let backgroundPlanKey: string | undefined;
+
+// Phase3 Unit1(計画崩れの検知のみ、人間承認済み)。直近のPOST /api/game/moveで
+// safeComputePlanChangeAfterMoveが判定した結果をここに保持し、以後のGET /api/game
+// (schedulePlanRefreshによるポーリング等)でも同じ結果を返す(backgroundPlan/
+// selectedTargetShapeIdと同じ「モジュール変数で保持し、次の状態変化まで使い回す」
+// 既存の設計方針を踏襲する)。新規対局・目標形変更のいずれでもリセットする
+// (承認事項5: 目標形変更・ユーザー自身の正常な進行を「計画崩れ」として扱わない)。
+let lastPlanChanged = false;
 
 /** 局面(sfen)と選択中の目標形(selectedTargetShapeId、未選択ならundefined)から、
  * バックグラウンド解析の進行中判定に使うキーを作る。 */
@@ -181,6 +190,10 @@ async function handleMove(req: IncomingMessage, res: ServerResponse): Promise<vo
     return;
   }
 
+  // Phase3 Unit1: ユーザーが着手する直前の局面(=この時点のstate)を、計画崩れ検知の
+  // 比較基準として保持しておく(承認事項A「ユーザーが着手する直前」のスナップショット)。
+  const stateBeforeMove = state;
+
   try {
     state = playHumanMove(state, move);
   } catch (err) {
@@ -194,9 +207,14 @@ async function handleMove(req: IncomingMessage, res: ServerResponse): Promise<vo
   const engine = await getPrioritizedEngine();
   state = await playOpponentMove(state, engine.asHighPriority());
 
+  // Phase3 Unit1: 相手の着手を経た現在の局面が、ユーザー着手直前の計画の前提を
+  // 崩したかを判定する(エンジン非依存、候補Aのみ。planChangeDetector.ts参照)。
+  const planChanged = safeComputePlanChangeAfterMove(stateBeforeMove, state, move, {}, selectedTargetShapeId);
+  lastPlanChanged = planChanged;
+
   // ⑤⑥⑦(エンジン不要)までを含めた状態を即座に返す。⑧(MultiPV参考評価)は
   // まだ完了していなければcandidateMoveState: "pending"になる(レスポンスをブロックしない)。
-  sendJson(res, 200, buildStateResponseWithPlan(state, backgroundPlan, {}, selectedTargetShapeId));
+  sendJson(res, 200, buildStateResponseWithPlan(state, backgroundPlan, {}, selectedTargetShapeId, planChanged));
 
   // レスポンス送出後、バックグラウンドで⑧を計算する(fire-and-forget)。
   void runBackgroundPlanAnalysis(state, selectedTargetShapeId);
@@ -230,11 +248,14 @@ async function handleTargetShape(req: IncomingMessage, res: ServerResponse): Pro
   // 弾かれるが、不要になったキャッシュを明示的に破棄して残さないようにする。)
   backgroundPlan = undefined;
   backgroundPlanKey = undefined;
+  // Phase3 Unit1(承認事項5): 目標形の変更はユーザー自身の操作であり、
+  // 「相手の手による計画崩れ」ではないため、計画崩れ状態をリセットする。
+  lastPlanChanged = false;
 
   // 局面(sfen)自体は変わらないため、⑤⑥(エンジン不要)は同期的に返しつつ、
   // ⑦⑧はcandidateMoveState: "pending"から始まり、バックグラウンド解析の完了を待つ
   // (POST /api/game/moveと同じ非同期方針)。
-  sendJson(res, 200, buildStateResponseWithPlan(state, backgroundPlan, {}, selectedTargetShapeId));
+  sendJson(res, 200, buildStateResponseWithPlan(state, backgroundPlan, {}, selectedTargetShapeId, lastPlanChanged));
 
   void runBackgroundPlanAnalysis(state, selectedTargetShapeId);
 }
@@ -258,7 +279,9 @@ const server = createServer((req, res) => {
     // GET /api/gameは新規のエンジン解析を開始しない。既にバックグラウンドで
     // 完了・キャッシュされている⑧があれば返すだけ(buildStateResponseWithPlan内で
     // sfen・選択中の目標形の両方が一致するかを確認する)。
-    sendJson(res, 200, buildStateResponseWithPlan(state, backgroundPlan, {}, selectedTargetShapeId));
+    // Phase3 Unit1: lastPlanChangedは直近のPOST /api/game/moveでの判定結果を
+    // そのまま返す(このリクエスト自体は着手を伴わないため、新たな判定は行わない)。
+    sendJson(res, 200, buildStateResponseWithPlan(state, backgroundPlan, {}, selectedTargetShapeId, lastPlanChanged));
     return;
   }
 
@@ -273,7 +296,9 @@ const server = createServer((req, res) => {
     backgroundPlan = undefined;
     backgroundPlanKey = undefined;
     selectedTargetShapeId = undefined;
-    sendJson(res, 200, buildStateResponseWithPlan(state, backgroundPlan, {}, selectedTargetShapeId));
+    // Phase3 Unit1(承認事項D): 新規対局開始時は計画崩れ状態もリセットする。
+    lastPlanChanged = false;
+    sendJson(res, 200, buildStateResponseWithPlan(state, backgroundPlan, {}, selectedTargetShapeId, lastPlanChanged));
     return;
   }
 
