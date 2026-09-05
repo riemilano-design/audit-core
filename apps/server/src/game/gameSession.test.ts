@@ -30,6 +30,11 @@ describe("createInitialGameState / getStatus", () => {
     expect(state.forcedPliesUsed).toBe(0);
     expect(getStatus(state)).toEqual({ isEnd: false, outcome: undefined });
   });
+
+  it("scenarioを指定すると、GameStateにそのまま保持される(通常対局は従来どおりundefined)", () => {
+    expect(createInitialGameState().scenario).toBeUndefined();
+    expect(createInitialGameState("hayajikake").scenario).toBe("hayajikake");
+  });
 });
 
 describe("playHumanMove", () => {
@@ -97,5 +102,45 @@ describe("playOpponentMove", () => {
     };
     const next = await playOpponentMove(state, engine);
     expect(next).toEqual(state);
+  });
+
+  it("scenario指定時は、forcedOpponentOpeningではなくscenarioOpponentOpeningの手を使う", async () => {
+    // 通常のforcedOpponentOpeningなら最も若い筋の歩(1c1d)を選ぶはずの局面だが、
+    // hayajikakeシナリオでは1手目として6c6dを選ぶはず(scenarioOpponentOpening.test.ts参照)。
+    const state: GameState = {
+      sfen: GOTE_TURN_SFEN,
+      moveHistory: ["7g7f"],
+      forcedPliesUsed: 0,
+      scenario: "hayajikake",
+    };
+    const engine = unusedEngineMock();
+    const next = await playOpponentMove(state, engine);
+    expect(next.moveHistory).toEqual(["7g7f", "6c6d"]);
+    expect(next.forcedPliesUsed).toBe(1);
+    expect(next.scenario).toBe("hayajikake");
+    expect(engine.position).not.toHaveBeenCalled();
+  });
+
+  it("scenarioの手を使い切った後は、エンジンのbestmoveにフォールバックする", async () => {
+    // hayajikakeは2手しか無いため、forcedPliesUsed=2の時点で既に尽きている。
+    const state: GameState = {
+      sfen: GOTE_TURN_SFEN,
+      moveHistory: [],
+      forcedPliesUsed: 2,
+      scenario: "hayajikake",
+    };
+    const engine = {
+      position: vi.fn(),
+      go: vi.fn(async () => ({
+        bestmove: "3c3d",
+        ponder: undefined,
+        scoreCp: undefined,
+        infoLines: [],
+      })),
+    };
+    const next = await playOpponentMove(state, engine);
+    expect(engine.go).toHaveBeenCalled();
+    expect(next.moveHistory).toEqual(["3c3d"]);
+    expect(next.scenario).toBe("hayajikake");
   });
 });

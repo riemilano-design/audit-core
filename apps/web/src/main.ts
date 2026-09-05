@@ -12,6 +12,7 @@ import {
   type CoachStatus,
   type ConfidenceLevel,
   type GameStateResponse,
+  type ReachablePlanBody,
 } from "./gameApi.js";
 import { PIECE_KANJI } from "./pieceKanji.js";
 import { parseSfenBoardPart, parseSfenHands, parseSfenTurn } from "./sfenBoard.js";
@@ -33,6 +34,8 @@ app.innerHTML = `
   <div id="error"></div>
   <h2>将棋の意味を読む</h2>
   <div id="coach"></div>
+  <h2>目指せる形</h2>
+  <div id="plan"></div>
   <h2>指し手履歴</h2>
   <ol id="history"></ol>
 `;
@@ -43,6 +46,7 @@ const statusEl = document.querySelector<HTMLDivElement>("#status")!;
 const errorEl = document.querySelector<HTMLDivElement>("#error")!;
 const historyEl = document.querySelector<HTMLOListElement>("#history")!;
 const coachEl = document.querySelector<HTMLDivElement>("#coach")!;
+const planEl = document.querySelector<HTMLDivElement>("#plan")!;
 const moveInput = document.querySelector<HTMLInputElement>("#moveInput")!;
 const submitButton = document.querySelector<HTMLButtonElement>("#submitMove")!;
 const newGameButton = document.querySelector<HTMLButtonElement>("#newGame")!;
@@ -102,6 +106,59 @@ function renderCoach(coach: CoachExplanation[] | undefined): void {
   }
 }
 
+// ⑥「目指せる形」・⑧「その手の目的」の表示。
+// 順位(1位/2位/3位等)は表示しない(shapeGraphRankingの1位を唯一の正解として
+// 強調しないため)。候補手は「候補の一つ」「この手の目的」という中立な見出しに留め、
+// 「おすすめ」「正解」「安全」等の断定語は使わない。
+function renderPlan(plan: ReachablePlanBody): void {
+  planEl.innerHTML = "";
+
+  if (plan.reachableShapes.length > 0) {
+    const heading = document.createElement("h3");
+    heading.textContent = "目指せる形の候補";
+    planEl.appendChild(heading);
+
+    const list = document.createElement("ul");
+    list.className = "reachable-shapes";
+    for (const shape of plan.reachableShapes) {
+      const li = document.createElement("li");
+      li.textContent = shape.status === "completed" ? `${shape.name}(完成しています)` : shape.name;
+      list.appendChild(li);
+    }
+    planEl.appendChild(list);
+  }
+
+  if (plan.candidateMoveState === "ready" && plan.candidateMove?.status === "ready") {
+    const moveHeading = document.createElement("h3");
+    moveHeading.textContent = "この形へ近づく手の候補";
+    planEl.appendChild(moveHeading);
+
+    for (const explanation of plan.candidateMove.explanations) {
+      const section = document.createElement("section");
+      section.className = "candidate-move";
+
+      const moveLabel = document.createElement("p");
+      moveLabel.className = "candidate-move-usi";
+      moveLabel.textContent = `候補手: ${explanation.move ?? ""}`;
+      section.appendChild(moveLabel);
+
+      const reason = document.createElement("p");
+      reason.className = "candidate-move-reason";
+      reason.textContent = explanation.reason;
+      section.appendChild(reason);
+
+      planEl.appendChild(section);
+    }
+  } else if (plan.candidateMoveState === "pending") {
+    const p = document.createElement("p");
+    p.className = "plan-pending";
+    p.textContent = "候補手を計算中です(しばらくすると表示されます)。";
+    planEl.appendChild(p);
+  }
+  // candidateMoveState: "unavailable"、またはcandidateMove.status: "not_ready"の場合は、
+  // 候補手セクションを無理に表示しない(既存のPhase1表示のみを維持する)。
+}
+
 function renderBoard(sfen: string): void {
   const board = parseSfenBoardPart(sfen);
   boardEl.innerHTML = "";
@@ -150,16 +207,40 @@ function renderHistory(moveHistory: string[]): void {
   });
 }
 
+// 直近にrender()した局面のsfen。バックグラウンド解析の再取得結果を反映してよいか
+// (=ユーザーが間にもう一手指していないか)を判定するために使う。
+let lastRenderedSfen: string | undefined;
+
 function render(state: GameStateResponse): void {
+  lastRenderedSfen = state.sfen;
   renderBoard(state.sfen);
   renderHands(state.sfen);
   renderStatus(state);
   renderHistory(state.moveHistory);
   renderCoach(state.coach);
+  renderPlan(state.plan);
 }
 
 function setError(message: string): void {
   errorEl.textContent = message;
+}
+
+// ⑧(MultiPV参考評価)はサーバー側でバックグラウンド計算されるため、着手直後の
+// レスポンスではcandidateMoveState: "pending"のことがある。少し待って1回だけ
+// 状態を取り直し、その間にユーザーが別の手を指していなければ再描画する
+// (対局の進行そのものはこの再取得を待たない)。
+function schedulePlanRefresh(sfenAtSubmit: string): void {
+  setTimeout(() => {
+    if (lastRenderedSfen !== sfenAtSubmit) return; // 既に別の局面へ進んでいる
+    fetchGameState()
+      .then((state) => {
+        if (lastRenderedSfen !== sfenAtSubmit) return; // 取得中にさらに進んでいた
+        render(state);
+      })
+      .catch(() => {
+        // 再取得の失敗は対局そのものに影響させない(静かに諦める)。
+      });
+  }, 1500);
 }
 
 async function handleSubmitMove(): Promise<void> {
@@ -175,6 +256,9 @@ async function handleSubmitMove(): Promise<void> {
     }
     moveInput.value = "";
     render(result);
+    if (result.plan.candidateMoveState === "pending") {
+      schedulePlanRefresh(result.sfen);
+    }
   } catch (err) {
     setError(`通信エラー: ${err instanceof Error ? err.message : String(err)}`);
   } finally {

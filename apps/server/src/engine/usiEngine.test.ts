@@ -1,0 +1,141 @@
+// UsiEngine.go()/setMultiPv()/goMultiPv() の決定的な単体テスト。
+// 実エンジンバイナリは使わない(usiEngine.smoke.test.tsとは別に、プロセスなしで検証する)。
+//
+// UsiEngineのgo()/goMultiPv()は内部で send() → waitForLine() という順で動く。
+// send()は実プロセス(this.proc)が無いと例外を投げるため、send()自体をスタブ化し、
+// dispatch()(readlineの"line"イベントで呼ばれる、実際はprivateだがテストからは
+// ブラケットアクセスで到達可能)を直接呼んでエンジン出力を模擬する。
+// これにより、プロセスを一切起動せずに「送ったコマンド」「受け取った行の解析結果」を
+// 決定的に検証できる。
+
+import { describe, expect, it, vi } from "vitest";
+import { parseBestmoveLine, UsiEngine } from "./usiEngine.js";
+
+function dispatchLine(engine: UsiEngine, line: string): void {
+  // dispatch()はprivateだが、テストからの直接呼び出しのためブラケットアクセスする
+  // (実プロセスを起動せずにreadlineの"line"イベントを模擬する唯一の方法)。
+  (engine as unknown as { dispatch(line: string): void }).dispatch(line);
+}
+
+describe("parseBestmoveLine", () => {
+  it("bestmove行からbestmove/ponderを取り出す", () => {
+    expect(parseBestmoveLine(["info depth 1", "bestmove 7g7f ponder 3c3d"])).toEqual({
+      bestmove: "7g7f",
+      ponder: "3c3d",
+    });
+  });
+
+  it("ponderが無いbestmove行も扱える", () => {
+    expect(parseBestmoveLine(["bestmove 7g7f"])).toEqual({ bestmove: "7g7f", ponder: undefined });
+  });
+
+  it("bestmove行が無い場合は両方undefined", () => {
+    expect(parseBestmoveLine(["info depth 1"])).toEqual({ bestmove: undefined, ponder: undefined });
+  });
+});
+
+describe("UsiEngine.setMultiPv", () => {
+  it("setoption name MultiPV value <N> を送信する", () => {
+    const engine = new UsiEngine("dummy-path");
+    const sendSpy = vi.spyOn(engine, "send").mockImplementation(() => {});
+
+    engine.setMultiPv(3);
+
+    expect(sendSpy).toHaveBeenCalledWith("setoption name MultiPV value 3");
+  });
+});
+
+describe("UsiEngine.go (8. 既存single-bestmove APIが従来どおり動く)", () => {
+  it("bestmove/ponder/scoreCp(最後に観測されたscore cp)を返す", async () => {
+    const engine = new UsiEngine("dummy-path");
+    vi.spyOn(engine, "send").mockImplementation(() => {});
+
+    const goPromise = engine.go({ movetimeMs: 10 });
+    dispatchLine(engine, "info depth 1 score cp 10 pv 7g7f");
+    dispatchLine(engine, "info depth 2 score cp 42 pv 7g7f 3c3d");
+    dispatchLine(engine, "bestmove 7g7f ponder 3c3d");
+
+    await expect(goPromise).resolves.toEqual({
+      bestmove: "7g7f",
+      ponder: "3c3d",
+      scoreCp: 42,
+      infoLines: [
+        "info depth 1 score cp 10 pv 7g7f",
+        "info depth 2 score cp 42 pv 7g7f 3c3d",
+        "bestmove 7g7f ponder 3c3d",
+      ],
+    });
+  });
+});
+
+describe("UsiEngine.goMultiPv", () => {
+  it("6. 複数のmultipv行を、multipv番号昇順の決定的な順序で返す", async () => {
+    const engine = new UsiEngine("dummy-path");
+    vi.spyOn(engine, "send").mockImplementation(() => {});
+
+    const goPromise = engine.goMultiPv({ movetimeMs: 10 });
+    // わざと2番→1番の順で観測させ、出力側でmultipv昇順に並び替えられることを確認する。
+    dispatchLine(engine, "info depth 5 multipv 2 score cp 30 pv 3c3d");
+    dispatchLine(engine, "info depth 5 multipv 1 score cp 50 pv 7g7f");
+    dispatchLine(engine, "bestmove 7g7f");
+
+    const result = await goPromise;
+    expect(result.lines.map((l) => l.multipv)).toEqual([1, 2]);
+    expect(result.lines[0]).toEqual({ multipv: 1, score: { type: "cp", value: 50 }, pv: ["7g7f"] });
+    expect(result.lines[1]).toEqual({ multipv: 2, score: { type: "cp", value: 30 }, pv: ["3c3d"] });
+  });
+
+  it("同じmultipv番号のinfo行が複数回来た場合、最後に観測された内容を採用する", async () => {
+    const engine = new UsiEngine("dummy-path");
+    vi.spyOn(engine, "send").mockImplementation(() => {});
+
+    const goPromise = engine.goMultiPv({ movetimeMs: 10 });
+    dispatchLine(engine, "info depth 1 multipv 1 score cp 5 pv 7g7f");
+    dispatchLine(engine, "info depth 3 multipv 1 score cp 55 pv 7g7f 8c8d");
+    dispatchLine(engine, "bestmove 7g7f");
+
+    const result = await goPromise;
+    expect(result.lines).toEqual([{ multipv: 1, score: { type: "cp", value: 55 }, pv: ["7g7f", "8c8d"] }]);
+  });
+
+  it("bestmove/ponderを返す(単一bestmove APIと同じ解析)", async () => {
+    const engine = new UsiEngine("dummy-path");
+    vi.spyOn(engine, "send").mockImplementation(() => {});
+
+    const goPromise = engine.goMultiPv({ movetimeMs: 10 });
+    dispatchLine(engine, "info multipv 1 score cp 10 pv 7g7f");
+    dispatchLine(engine, "bestmove 7g7f ponder 3c3d");
+
+    const result = await goPromise;
+    expect(result.bestmove).toBe("7g7f");
+    expect(result.ponder).toBe("3c3d");
+  });
+
+  it("malformedなinfo行が混ざっていても安全に無視し、bestmoveの解析には影響しない", async () => {
+    const engine = new UsiEngine("dummy-path");
+    vi.spyOn(engine, "send").mockImplementation(() => {});
+
+    const goPromise = engine.goMultiPv({ movetimeMs: 10 });
+    dispatchLine(engine, "info string this is a debug message with no score");
+    dispatchLine(engine, "info multipv 1 score cp 10 pv 7g7f");
+    dispatchLine(engine, "bestmove 7g7f");
+
+    const result = await goPromise;
+    expect(result.bestmove).toBe("7g7f");
+    expect(result.lines).toEqual([{ multipv: 1, score: { type: "cp", value: 10 }, pv: ["7g7f"] }]);
+  });
+
+  it("10. 同一の観測入力に対して常に同じ結果になる(決定的)", async () => {
+    async function run(): Promise<unknown> {
+      const engine = new UsiEngine("dummy-path");
+      vi.spyOn(engine, "send").mockImplementation(() => {});
+      const goPromise = engine.goMultiPv({ movetimeMs: 10 });
+      dispatchLine(engine, "info depth 5 multipv 2 score cp 30 pv 3c3d");
+      dispatchLine(engine, "info depth 5 multipv 1 score cp 50 pv 7g7f");
+      dispatchLine(engine, "bestmove 7g7f");
+      return goPromise;
+    }
+
+    expect(await run()).toEqual(await run());
+  });
+});

@@ -27,6 +27,7 @@ import {
   type MoveEvent,
 } from "./moveHistory.js";
 import { japaneseToRole } from "./pieceMapping.js";
+import { findMoveEvidence } from "./signatureEvidence.js";
 import {
   getIntents,
   type AffectsTargetShape,
@@ -76,16 +77,14 @@ function evaluateIntent(opponentEvents: MoveEvent[], intent: IntentDefinition): 
 
   for (const signature of intent.recognition_pattern) {
     const expectedRole = japaneseToRole(signature.piece);
-    const evidenceEvent = opponentEvents.find(
-      (event) => event.role === expectedRole && event.toSquare === signature.to,
-    );
+    const evidence = findMoveEvidence(opponentEvents, OPPONENT_COLOR, expectedRole, signature.to);
 
-    if (evidenceEvent) {
+    if (evidence) {
       matchedSignatures.push({
         piece: signature.piece,
         to: signature.to,
         orderHint: signature.order_hint,
-        evidence: { ply: evidenceEvent.ply, moveUsi: evidenceEvent.moveUsi },
+        evidence,
       });
     } else {
       unmatchedSignatures.push(signature);

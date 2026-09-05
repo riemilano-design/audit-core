@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { detectIntents } from "./intentDetector.js";
-import { detectShapes, type ShapeDetectionResult } from "./shapeDetector.js";
 import { getShapes } from "./shapeRepository.js";
+import { analyzeShapeFormation, type ShapeFormationResult } from "./shapeFormationAnalyzer.js";
 import { getIntents, type IntentDefinition } from "./intentRepository.js";
 import { DEFAULT_INITIAL_SFEN, replayMoveHistory } from "./moveHistory.js";
 import { explainPosition, generateExplanations, type Explanation } from "./explanationGenerator.js";
@@ -32,7 +32,9 @@ function findStage(explanations: Explanation[], stage: Explanation["stage"]): Ex
 const HAYAJIKAKE_GOTE_MOVES_FULL = ["6c6d", "6d6e"];
 
 // 本美濃(mino_honmino)の必須駒配置(8h玉・7h銀・6i金・5h金)そのもの。
-const TEST_HONMINO: ShapeDetectionResult = {
+// completedはUnit5の設計上、shape_formation_evidenceの有無を問わない
+// (物理的に形が完成していれば経緯を問わず完成として良いため)。
+const TEST_HONMINO: ShapeFormationResult = {
   shapeId: "mino_honmino",
   name: "本美濃囲い",
   side: "self",
@@ -44,11 +46,12 @@ const TEST_HONMINO: ShapeDetectionResult = {
   matchedSquares: ["8h", "7h", "6i", "5h"],
   missingSquares: [],
   optionalMatchedSquares: [],
+  formationEvidence: [],
   dataConfidenceLevel: "medium",
   characteristics: "四間飛車でよく使われる、完成が早くバランスの良い囲い。",
 };
 
-const NO_SHAPE_RESULTS: ShapeDetectionResult[] = getShapes().map((shape) => ({
+const NO_SHAPE_RESULTS: ShapeFormationResult[] = getShapes().map((shape) => ({
   shapeId: shape.id,
   name: shape.name,
   side: shape.side,
@@ -60,6 +63,7 @@ const NO_SHAPE_RESULTS: ShapeDetectionResult[] = getShapes().map((shape) => ({
   matchedSquares: [],
   missingSquares: shape.required_pieces.filter((p) => !p.optional).map((p) => p.square),
   optionalMatchedSquares: [],
+  formationEvidence: [],
   dataConfidenceLevel: shape.confidence_level,
   characteristics: shape.characteristics,
 }));
@@ -96,8 +100,15 @@ describe("generateExplanations", () => {
     expect(currentShape.move).toBeNull();
   });
 
-  it("current_shape: Shapeがforming(全shapeがmatchScore<1)の場合、断定しない言い回しになる", () => {
-    const forming: ShapeDetectionResult = { ...TEST_HONMINO, status: "forming", matchScore: 0.5, missingSquares: ["5h"] };
+  it("current_shape: Shapeがforming(未完成だが、実際に駒が動いた証拠がある)の場合、断定しない言い回しになる", () => {
+    const forming: ShapeFormationResult = {
+      ...TEST_HONMINO,
+      status: "forming",
+      matchScore: 0.5,
+      missingSquares: ["5h"],
+      // shape_formation_evidence: 玉が実際に8hへ動いたという指し手履歴上の根拠がある状態を模す。
+      formationEvidence: [{ square: "8h", piece: "玉", evidence: { ply: 2, moveUsi: "5i6h" } }],
+    };
     const explanations = generateExplanations([forming], NO_INTENT_RESULTS);
     const currentShape = findStage(explanations, "current_shape");
 
@@ -120,7 +131,7 @@ describe("generateExplanations", () => {
   it("opponent_intent / opponent_next_aim: Unit1/Unit2と統合し、早仕掛けmatched局面で一貫した説明になる", () => {
     const moveHistory = interleaveWithSenteFillers(HAYAJIKAKE_GOTE_MOVES_FULL);
     const sfen = sfenAfter(moveHistory);
-    const shapeResults = detectShapes(sfen);
+    const shapeResults = analyzeShapeFormation(sfen, moveHistory);
     const intentResults = detectIntents(sfen, moveHistory);
     const explanations = generateExplanations(shapeResults, intentResults);
 
@@ -140,7 +151,7 @@ describe("generateExplanations", () => {
   it("opponent_intent: Intentがforming(途中段階)の場合、断定しない言い回しになる", () => {
     const moveHistory = interleaveWithSenteFillers([HAYAJIKAKE_GOTE_MOVES_FULL[0]!]);
     const sfen = sfenAfter(moveHistory);
-    const shapeResults = detectShapes(sfen);
+    const shapeResults = analyzeShapeFormation(sfen, moveHistory);
     const intentResults = detectIntents(sfen, moveHistory);
     const explanations = generateExplanations(shapeResults, intentResults);
 
@@ -184,13 +195,29 @@ describe("generateExplanations", () => {
   });
 });
 
+describe("explainPosition: Unit5(shape_formation_evidence)の統合確認", () => {
+  it("初期局面(1手も指していない)では、偶然一致した駒だけを根拠に特定の形を『作ろうとしている』と説明しない", () => {
+    // 初期局面は本美濃囲いの必須マスの1つ(6九金)にたまたま金が置かれているが、
+    // 一度も動いていないため、これを「作ろうとしている可能性があります」と
+    // 説明するのは誤り(Unit4のブラウザ実地確認で発見された問題)。
+    const explanations = explainPosition(DEFAULT_INITIAL_SFEN, []);
+    const currentShape = findStage(explanations, "current_shape");
+
+    expect(currentShape.refers_to_shape_id).toBeNull();
+    expect(currentShape.template_id).toBe("current_shape_unclassified");
+    for (const shape of getShapes()) {
+      expect(currentShape.reason).not.toContain(shape.name);
+    }
+  });
+});
+
 describe("explainPosition (Unit1/Unit2との統合)", () => {
   it("SFEN+moveHistoryから直接、Unit1(detectShapes)・Unit2(detectIntents)を経由して説明を生成する", () => {
     const moveHistory = interleaveWithSenteFillers(HAYAJIKAKE_GOTE_MOVES_FULL);
     const sfen = sfenAfter(moveHistory);
 
     const viaIntegration = explainPosition(sfen, moveHistory);
-    const viaManual = generateExplanations(detectShapes(sfen), detectIntents(sfen, moveHistory));
+    const viaManual = generateExplanations(analyzeShapeFormation(sfen, moveHistory), detectIntents(sfen, moveHistory));
 
     expect(viaIntegration).toEqual(viaManual);
   });

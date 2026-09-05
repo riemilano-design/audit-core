@@ -3,11 +3,23 @@
 // 本実装(apps/server)向けに型付けし直したもの。spike自体は変更していない。
 //
 // このモジュールの責任範囲は USI プロトコルでのやり取りに限定する。
-// 候補手の安全確認(MultiPV等)・コーチングロジックはここでは扱わない
-// (docs/ROLES.md・.claude/agents/engine-integration.md を参照)。
+// 候補手の安全確認(MultiPV結果とcandidateMovesの突き合わせ、閾値判定等)・
+// コーチングロジックはここでは扱わない(docs/ROLES.md・
+// .claude/agents/engine-integration.md を参照。安全確認自体は
+// apps/server/src/analysis/candidateMoveSafetyCheck.ts の責務)。
+//
+// 【Phase2 Unit3で追加したMultiPV対応について】
+// 既存の go()/GoResult(単一bestmove API)は一切変更していない
+// (呼び出し側・既存の挙動を壊さないため)。MultiPV対応は setMultiPv() /
+// goMultiPv() という新規メソッドとして追加し、bestmove行の解析だけを
+// parseBestmoveLine() として共通化した(go()もこれを使うよう内部実装を
+// 差し替えたが、go()が返すGoResultの形・値は従来と完全に同じ)。
+// info行のmultipv/score/pvの解析は usiInfoParser.ts (新規, 決定的な純粋関数)に
+// 委譲し、ここでは重複するパーサーを作らない。
 
 import { spawn, type ChildProcessWithoutNullStreams } from "node:child_process";
 import { createInterface, type Interface } from "node:readline";
+import { parseInfoLine, type UsiScore } from "./usiInfoParser.js";
 
 export class UsiEngineTimeoutError extends Error {}
 
@@ -19,6 +31,28 @@ export interface GoResult {
   bestmove: string | undefined;
   ponder: string | undefined;
   scoreCp: number | undefined;
+  infoLines: string[];
+}
+
+/** collected行群からbestmove/ponderを取り出す(go()/goMultiPv()共通)。 */
+export function parseBestmoveLine(collected: string[]): { bestmove: string | undefined; ponder: string | undefined } {
+  const bestmoveLine = collected.find((l) => l.startsWith("bestmove"));
+  const match = bestmoveLine?.match(/^bestmove (\S+)(\s+ponder\s+(\S+))?/);
+  return { bestmove: match?.[1], ponder: match?.[3] };
+}
+
+/** MultiPVの1本の読み筋。usiInfoParser.tsのUsiInfoLineから、安全確認が必要とする分だけを持つ。 */
+export interface MultiPvLine {
+  multipv: number;
+  score: UsiScore | undefined;
+  pv: string[];
+}
+
+export interface MultiPvGoResult {
+  bestmove: string | undefined;
+  ponder: string | undefined;
+  /** multipv番号昇順・重複はcollected内で最後に観測された内容を採用した、決定的な順序の一覧。 */
+  lines: MultiPvLine[];
   infoLines: string[];
 }
 
@@ -109,11 +143,10 @@ export class UsiEngine {
       timeoutMs: movetimeMs + 10_000,
     });
 
-    const bestmoveLine = collected.find((l) => l.startsWith("bestmove"));
-    const match = bestmoveLine?.match(/^bestmove (\S+)(\s+ponder\s+(\S+))?/);
-    const bestmove = match?.[1];
-    const ponder = match?.[3];
+    const { bestmove, ponder } = parseBestmoveLine(collected);
 
+    // 挙動は変更前と完全に同じ(collected内で最後に見つかった`score cp`を採用する)。
+    // multipvを区別しない単純な走査のため、MultiPV設定時の解釈にはgoMultiPv()を使うこと。
     let scoreCp: number | undefined;
     for (const line of collected) {
       const m = line.match(/\bscore cp (-?\d+)/);
@@ -121,6 +154,55 @@ export class UsiEngine {
     }
 
     return { bestmove, ponder, scoreCp, infoLines: collected };
+  }
+
+  /**
+   * エンジンにMultiPV(複数の候補読み筋)を設定する。
+   * `setoption`はUSIプロトコル上、通常`isready`より前(usiok受信後)に送るものだが、
+   * 実際にいつ送るか(対局中に何度でも変更可能か等)はエンジン実装依存であり、
+   * その呼び出しタイミングの管理は呼び出し側の責務とする(本メソッドはコマンド送信のみ)。
+   */
+  setMultiPv(multiPv: number): void {
+    this.send(`setoption name MultiPV value ${multiPv}`);
+  }
+
+  /**
+   * go()と同じく`go movetime`でエンジンに読ませ、bestmoveに加えて、
+   * info行のmultipv/score/pvをusiInfoParser.ts経由で構造化して返す。
+   * 同じmultipv番号のinfo行が複数回出力された場合(探索が深くなるにつれて更新される)は、
+   * collected内で最後に観測された内容を採用する(go()のscoreCpが「最後に見つかった値」を
+   * 採用しているのと同じ考え方)。返すlinesはmultipv番号昇順の決定的な順序に並べる。
+   *
+   * MultiPVを何本読ませるかはsetMultiPv()で事前に設定しておく(本メソッド自体は
+   * setoptionを送らない。責務を分離するため)。
+   */
+  async goMultiPv({ movetimeMs = 2000 }: GoOptions = {}): Promise<MultiPvGoResult> {
+    this.send(`go movetime ${movetimeMs}`);
+    const { collected } = await this.waitForLine((line) => line.startsWith("bestmove"), {
+      timeoutMs: movetimeMs + 10_000,
+    });
+
+    const { bestmove, ponder } = parseBestmoveLine(collected);
+
+    const linesByMultipv = new Map<number, MultiPvLine>();
+    for (const line of collected) {
+      const parsed = parseInfoLine(line);
+      if (!parsed) continue;
+      linesByMultipv.set(parsed.multipv, { multipv: parsed.multipv, score: parsed.score, pv: parsed.pv });
+    }
+    const lines = [...linesByMultipv.values()].sort((a, b) => a.multipv - b.multipv);
+
+    return { bestmove, ponder, lines, infoLines: collected };
+  }
+
+  /**
+   * 実行中の探索(go/goMultiPv)に、できるだけ早くbestmoveを返すよう指示する
+   * USIプロトコル標準コマンド。本メソッドはコマンド送信のみを行い、実際にいつ
+   * bestmove行が来るかはエンジン実装依存(既存のgo()/goMultiPv()のwaitForLineが
+   * そのまま拾う。呼び出しタイミングの管理・優先度制御はengine/prioritizedEngine.tsの責務)。
+   */
+  stop(): void {
+    this.send("stop");
   }
 
   quit(): void {

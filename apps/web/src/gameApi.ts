@@ -31,6 +31,55 @@ export interface CoachExplanation {
   status: CoachStatus;
 }
 
+// apps/server/src/analysis/shapeGraphRanking.ts の RankedReachableShape に対応する型
+// (⑥目指せる形のランキング。上位3件、1位を唯一の正解として強調しない)。
+export interface RankedReachableShape {
+  shapeId: string;
+  name: string;
+  family: string;
+  parentShapeId: string | null;
+  status: "none" | "forming" | "completed";
+  matchScore: number;
+  adjustment: "prioritize" | "deprioritize" | null;
+  reason: string | null;
+  sourceIntentId: string | null;
+}
+
+// apps/server/src/analysis/candidateMoveExplanation.ts の CandidateMoveExplanationResult に
+// 対応する型(⑧その手の目的。エンジンのMultiPV参考評価と対応付けできた候補手だけが入る)。
+export type CandidateMoveExplanationStatus = "not_ready" | "ready";
+export type CandidateMoveExplanationNotReadyReason =
+  | "no_candidate_moves"
+  | "shape_result_not_found"
+  | "engine_reference_unavailable"
+  | "insufficient_engine_data";
+
+export interface CandidateMoveExplanation {
+  id: string;
+  purpose: string;
+  move: string | null;
+  reason: string;
+  refers_to_shape_id: string | null;
+  confidence_level: ConfidenceLevel;
+}
+
+export interface CandidateMoveExplanationResult {
+  status: CandidateMoveExplanationStatus;
+  notReadyReason: CandidateMoveExplanationNotReadyReason | null;
+  explanations: CandidateMoveExplanation[];
+}
+
+// apps/server/src/api/stateResponse.ts の CandidateMoveState / ReachablePlanBody に対応する型。
+// candidateMoveStateが"ready"であっても、candidateMove.statusが"not_ready"のことがある
+// (エンジンの参考評価が取れても、評価データが不十分だった場合等)。
+export type CandidateMoveState = "unavailable" | "pending" | "ready";
+
+export interface ReachablePlanBody {
+  reachableShapes: RankedReachableShape[];
+  candidateMoveState: CandidateMoveState;
+  candidateMove: CandidateMoveExplanationResult | undefined;
+}
+
 export interface GameStateResponse {
   sfen: string;
   moveHistory: string[];
@@ -38,6 +87,10 @@ export interface GameStateResponse {
   status: GameStatus;
   // 説明生成に失敗した場合(想定外の不整合等)はundefined(対局自体は継続する)。
   coach: CoachExplanation[] | undefined;
+  // ⑤〜⑧(自分の目的・目指せる形・候補手・その手の目的)。エンジンのMultiPV参考評価は
+  // POST /api/game/moveのレスポンスをブロックしないバックグラウンド処理のため、
+  // candidateMoveState: "pending"の間はcandidateMoveがまだ無いことがある。
+  plan: ReachablePlanBody;
 }
 
 export interface MoveErrorResponse {

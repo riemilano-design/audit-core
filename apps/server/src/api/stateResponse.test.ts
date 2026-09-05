@@ -3,11 +3,20 @@ import { Hands } from "shogiops/hands";
 import { makeSfen } from "shogiops/sfen";
 import { Shogi } from "shogiops/variant/shogi";
 import { parseSquareName } from "shogiops/util";
-import { describe, expect, it } from "vitest";
+import type { Role } from "shogiops/types";
+import { describe, expect, it, vi } from "vitest";
 import type { CoachExplanation } from "../analysis/explanationGenerator.js";
 import { DEFAULT_INITIAL_SFEN, replayMoveHistory } from "../analysis/moveHistory.js";
 import type { GameState } from "../game/gameSession.js";
-import { buildStateResponse } from "./stateResponse.js";
+import type { MultiPvGoResult } from "../engine/usiEngine.js";
+import type { LowPriorityEngine } from "../engine/prioritizedEngine.js";
+import {
+  buildStateResponse,
+  buildStateResponseWithPlan,
+  computeReachablePlan,
+  safeComputeReachablePlan,
+  type CachedReachablePlan,
+} from "./stateResponse.js";
 
 const SENTE_FILLERS = ["1g1f", "2g2f", "3g3f", "4g4f", "5g5f", "6g6f", "9g9f", "8g8f"];
 
@@ -153,6 +162,247 @@ describe("buildStateResponse", () => {
     const state = gameStateAfter(moveHistory);
     const first = buildStateResponse(state);
     const second = buildStateResponse(state);
+    expect(second).toEqual(first);
+  });
+});
+
+// 以下、Phase2 ⑤〜⑧(buildStateResponseWithPlan / computeReachablePlan)のテスト。
+// 実エンジンは使わず、LowPriorityEngine(Pick<UsiEngine,"position"|"setMultiPv"|"goMultiPv">)
+// と構造的に一致するモックで決定的に検証する(candidateMoveSafetyCheck.test.tsと同じ方式)。
+
+function multiPvResult(lines: MultiPvGoResult["lines"], bestmove = "7i8h"): MultiPvGoResult {
+  return { bestmove, ponder: undefined, lines, infoLines: [] };
+}
+
+function makeMockLowPriorityEngine(
+  responses: MultiPvGoResult[] | (() => MultiPvGoResult),
+): LowPriorityEngine {
+  let call = 0;
+  return {
+    position: vi.fn(),
+    setMultiPv: vi.fn(),
+    goMultiPv: vi.fn(async () => {
+      if (typeof responses === "function") return responses();
+      const result = responses[call];
+      call += 1;
+      if (!result) throw new Error("モックエンジンへの想定外の呼び出し(レスポンス不足)");
+      return result;
+    }),
+  };
+}
+
+function makeThrowingLowPriorityEngine(): LowPriorityEngine {
+  return {
+    position: vi.fn(),
+    setMultiPv: vi.fn(),
+    goMultiPv: vi.fn(async () => {
+      throw new Error("エンジンがタイムアウトした、という想定");
+    }),
+  };
+}
+
+/** 任意の駒配置からSFENを組み立てる(honminoCompletedSfen()と同じ方式の一般化)。
+ * shogiopsのShogi.from(..., false)は相手玉の不在等を許容するため、
+ * テストに必要な駒だけを配置すればよい。 */
+function customSfen(pieces: Array<{ square: string; color: "sente" | "gote"; role: Role }>): string {
+  let board = Board.empty();
+  for (const { square, color, role } of pieces) {
+    const sq = parseSquareName(square);
+    if (sq === undefined) throw new Error(`invalid square: ${square}`);
+    board = board.clone();
+    board.set(sq, { color, role });
+  }
+  const pos = Shogi.from({ board, hands: Hands.empty(), turn: "sente", moveNumber: 1 }, false).unwrap();
+  return makeSfen(pos);
+}
+
+// 本美濃囲い(mino_honmino)のうち、玉だけが7iにあり(8hへ1手で届く)、
+// 銀7h・金6i・金5hは既に揃っている局面。missingSquares=["8h"]、
+// typical_build_order上の対象マスは"8h"(玉)になり、7i8hという合法な候補手が1件だけ存在する。
+function honminoOneMoveFromCompleteSfen(): string {
+  return customSfen([
+    { square: "7i", color: "sente", role: "king" },
+    { square: "7h", color: "sente", role: "silver" },
+    { square: "6i", color: "sente", role: "gold" },
+    { square: "5h", color: "sente", role: "gold" },
+  ]);
+}
+
+// 玉8h・金6i・金5hは既に揃い、対象マスは7h(銀)。6g・8gの2枚の銀からそれぞれ
+// 1手(斜め後退)で7hへ到達できる(複数候補の検証用。将棋の実戦性は問わない、
+// 合法手抽出ロジックの検証が目的)。6iの金も物理的には7hへ動けるが、対象マスの
+// 駒種(銀)と一致しないためpathPlanner.tsの駒種フィルタで候補から除外される。
+function honminoMultipleCandidatesSfen(): string {
+  return customSfen([
+    { square: "8h", color: "sente", role: "king" },
+    { square: "6i", color: "sente", role: "gold" },
+    { square: "5h", color: "sente", role: "gold" },
+    { square: "6g", color: "sente", role: "silver" },
+    { square: "8g", color: "sente", role: "silver" },
+  ]);
+}
+
+function customGameState(sfen: string): GameState {
+  return { sfen, moveHistory: [], forcedPliesUsed: 0 };
+}
+
+describe("buildStateResponseWithPlan", () => {
+  it("candidate moveが空: 初期局面(玉が8hへ1手で届かない)ではcandidateMoveState: unavailableになる", () => {
+    const state = gameStateAfter([]);
+    const response = buildStateResponseWithPlan(state, undefined);
+
+    expect(response.plan.reachableShapes.length).toBeGreaterThan(0);
+    expect(response.plan.candidateMoveState).toBe("unavailable");
+    expect(response.plan.candidateMove).toBeUndefined();
+    // Phase1の既存coach(shapeDetector/shapeFormationAnalyzer/intentDetector/explanationGenerator)は
+    // buildStateResponseと完全に同じ内容のまま壊れていないこと。
+    expect(response.coach).toEqual(buildStateResponse(state).coach);
+  });
+
+  it("候補手はあるが、まだバックグラウンド解析が完了していない(cachedPlanなし)場合はpendingになる", () => {
+    const sfen = honminoOneMoveFromCompleteSfen();
+    const state = customGameState(sfen);
+
+    const response = buildStateResponseWithPlan(state, undefined, { initialSfen: sfen });
+
+    expect(response.plan.candidateMoveState).toBe("pending");
+    expect(response.plan.candidateMove).toBeUndefined();
+  });
+
+  it("cachedPlanのsfenが現在の局面と一致する場合、readyになりcandidateMoveをそのまま使う", async () => {
+    const sfen = honminoOneMoveFromCompleteSfen();
+    const state = customGameState(sfen);
+    // checkCandidateMovesSafetyはbaseline局面+各候補手の1:baseline, 2:候補 の順でgoMultiPvを呼ぶ。
+    const engine = makeMockLowPriorityEngine([
+      multiPvResult([{ multipv: 1, score: { type: "cp", value: 5 }, pv: [] }]), // baseline
+      multiPvResult([{ multipv: 1, score: { type: "cp", value: 10 }, pv: [] }]), // 候補7i8h
+    ]);
+
+    const computed = await computeReachablePlan(state, engine, { initialSfen: sfen });
+    const cachedPlan: CachedReachablePlan = { sfen, plan: computed };
+
+    const response = buildStateResponseWithPlan(state, cachedPlan, { initialSfen: sfen });
+
+    expect(response.plan.candidateMoveState).toBe("ready");
+    expect(response.plan.candidateMove?.status).toBe("ready");
+    expect(response.plan.candidateMove?.explanations.map((e) => e.move)).toEqual(["7i8h"]);
+  });
+
+  it("cachedPlanのsfenが現在の局面と一致しない(stale)場合は無視し、pending/unavailableとして扱う", () => {
+    const sfen = honminoOneMoveFromCompleteSfen();
+    const state = customGameState(sfen);
+    const staleCachedPlan: CachedReachablePlan = {
+      sfen: DEFAULT_INITIAL_SFEN, // 別の局面(古い解析結果)
+      plan: {
+        reachableShapes: [],
+        candidateMove: { status: "ready", notReadyReason: null, explanations: [] },
+      },
+    };
+
+    const response = buildStateResponseWithPlan(state, staleCachedPlan, { initialSfen: sfen });
+
+    // staleな結果がそのまま混入していないこと(pendingとして扱われる)。
+    expect(response.plan.candidateMoveState).toBe("pending");
+    expect(response.plan.candidateMove).toBeUndefined();
+  });
+
+  it("複数候補: 対象マスへ複数の合法手がある場合、reachableShapes/candidateMoveの両方に反映される", async () => {
+    const sfen = honminoMultipleCandidatesSfen();
+    const state = customGameState(sfen);
+    const engine = makeMockLowPriorityEngine(() =>
+      multiPvResult([{ multipv: 1, score: { type: "cp", value: 0 }, pv: [] }], "6g7h"),
+    );
+
+    const computed = await computeReachablePlan(state, engine, { initialSfen: sfen });
+    expect(computed.candidateMove?.explanations.map((e) => e.move).sort()).toEqual(["6g7h", "8g7h"]);
+
+    const response = buildStateResponseWithPlan(state, { sfen, plan: computed }, { initialSfen: sfen });
+    expect(response.plan.candidateMove?.explanations).toHaveLength(2);
+  });
+
+  it("通常対局(scenario未指定)・scenario対局のどちらでもエラーにならない", () => {
+    const normalState: GameState = { ...gameStateAfter([]), scenario: undefined };
+    const scenarioState: GameState = { ...gameStateAfter([]), scenario: "hayajikake" };
+
+    expect(() => buildStateResponseWithPlan(normalState, undefined)).not.toThrow();
+    expect(() => buildStateResponseWithPlan(scenarioState, undefined)).not.toThrow();
+  });
+
+  it("同一入力に対して常に同じ結果を返す(決定的)", () => {
+    const sfen = honminoOneMoveFromCompleteSfen();
+    const state = customGameState(sfen);
+
+    const first = buildStateResponseWithPlan(state, undefined, { initialSfen: sfen });
+    const second = buildStateResponseWithPlan(state, undefined, { initialSfen: sfen });
+    expect(second).toEqual(first);
+  });
+});
+
+describe("computeReachablePlan / safeComputeReachablePlan", () => {
+  it("MultiPV参考評価が取得できる場合、candidateMove.statusがreadyになる", async () => {
+    const sfen = honminoOneMoveFromCompleteSfen();
+    const state = customGameState(sfen);
+    const engine = makeMockLowPriorityEngine([
+      multiPvResult([{ multipv: 1, score: { type: "cp", value: 5 }, pv: [] }]), // baseline
+      multiPvResult([{ multipv: 1, score: { type: "cp", value: 25 }, pv: [] }]), // 候補7i8h
+    ]);
+
+    const result = await computeReachablePlan(state, engine, { initialSfen: sfen });
+
+    expect(result.candidateMove?.status).toBe("ready");
+    expect(result.candidateMove?.explanations).toHaveLength(1);
+    expect(result.reachableShapes.length).toBeGreaterThan(0);
+  });
+
+  it("MultiPV取得失敗(エンジン例外)の場合、safeComputeReachablePlanはundefinedを返し例外を外へ漏らさない", async () => {
+    const sfen = honminoOneMoveFromCompleteSfen();
+    const state = customGameState(sfen);
+    const engine = makeThrowingLowPriorityEngine();
+
+    const result = await safeComputeReachablePlan(state, engine, { initialSfen: sfen });
+    expect(result).toBeUndefined();
+
+    // computeReachablePlan自体は(安全側ラッパーではないため)例外を伝播する。
+    await expect(computeReachablePlan(state, engine, { initialSfen: sfen })).rejects.toThrow();
+  });
+
+  it("候補手との対応付け(評価データ)が不十分な場合、candidateMove.statusはnot_ready(insufficient_engine_data)になる", async () => {
+    const sfen = honminoOneMoveFromCompleteSfen();
+    const state = customGameState(sfen);
+    // scoreを含まないMultiPV結果(=評価データが得られなかった、という想定)。
+    // baseline自体は何でもよく、候補手側(2件目)をscore無しにする。
+    const engine = makeMockLowPriorityEngine([
+      multiPvResult([{ multipv: 1, score: { type: "cp", value: 5 }, pv: [] }]),
+      multiPvResult([]),
+    ]);
+
+    const result = await computeReachablePlan(state, engine, { initialSfen: sfen });
+
+    expect(result.candidateMove?.status).toBe("not_ready");
+    expect(result.candidateMove?.notReadyReason).toBe("insufficient_engine_data");
+  });
+
+  it("shapeが見つからない/候補手が空(初期局面)の場合、engineに一切問い合わせずcandidateMove: undefinedを返す", async () => {
+    const state = gameStateAfter([]);
+    const engine = makeMockLowPriorityEngine([]);
+
+    const result = await computeReachablePlan(state, engine);
+
+    expect(result.candidateMove).toBeUndefined();
+    expect(engine.goMultiPv).not.toHaveBeenCalled();
+  });
+
+  it("同一入力に対して常に同じ結果を返す(決定的)", async () => {
+    const sfen = honminoOneMoveFromCompleteSfen();
+    const state = customGameState(sfen);
+    const makeEngine = () =>
+      makeMockLowPriorityEngine([
+        multiPvResult([{ multipv: 1, score: { type: "cp", value: 1 }, pv: [] }]), // baseline
+        multiPvResult([{ multipv: 1, score: { type: "cp", value: 1 }, pv: [] }]), // 候補7i8h
+      ]);
+
+    const first = await computeReachablePlan(state, makeEngine(), { initialSfen: sfen });
+    const second = await computeReachablePlan(state, makeEngine(), { initialSfen: sfen });
     expect(second).toEqual(first);
   });
 });
