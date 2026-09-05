@@ -1,8 +1,10 @@
 import { describe, expect, it } from "vitest";
 import {
   getPlanChangeReasonMessage,
+  shouldRetryPlanRefresh,
   shouldShowNextConsiderations,
   shouldShowPlanChangedNotice,
+  PLAN_REFRESH_MAX_ATTEMPTS,
   type LastMoveOutcomeBody,
   type NextConsiderationMessage,
   type PlanChangeReason,
@@ -123,5 +125,42 @@ describe("shouldShowNextConsiderations", () => {
     shouldShowNextConsiderations({ nextConsiderations });
 
     expect(nextConsiderations.map((m) => `${m.kind}:${m.text}`)).toEqual(before);
+  });
+});
+
+// ⑧(MultiPV参考評価)の再取得を続けてよいかの判定。
+// Phase6の通し確認で、1回だけの再取得ではエンジンの解析(実測で約8秒)に間に合わず、
+// サーバーが"ready"なのに画面が「計算中」のまま止まることが判明したため、上限付きの
+// リトライへ変更した。web側が持つのは「状態」と「試行回数」による判定だけで、
+// 将棋の判断は一切持たない。
+describe("shouldRetryPlanRefresh", () => {
+  it('"pending"の間はリトライする', () => {
+    expect(shouldRetryPlanRefresh({ candidateMoveState: "pending" }, 1)).toBe(true);
+  });
+
+  it('"ready"になったらリトライしない', () => {
+    expect(shouldRetryPlanRefresh({ candidateMoveState: "ready" }, 1)).toBe(false);
+  });
+
+  it('"unavailable"(そもそも候補手が無い)ならリトライしない', () => {
+    expect(shouldRetryPlanRefresh({ candidateMoveState: "unavailable" }, 1)).toBe(false);
+  });
+
+  it("上限回数に達したら、まだpendingでもリトライしない(無限に回さない)", () => {
+    expect(
+      shouldRetryPlanRefresh({ candidateMoveState: "pending" }, PLAN_REFRESH_MAX_ATTEMPTS - 1),
+    ).toBe(true);
+    expect(shouldRetryPlanRefresh({ candidateMoveState: "pending" }, PLAN_REFRESH_MAX_ATTEMPTS)).toBe(
+      false,
+    );
+    expect(
+      shouldRetryPlanRefresh({ candidateMoveState: "pending" }, PLAN_REFRESH_MAX_ATTEMPTS + 1),
+    ).toBe(false);
+  });
+
+  it("上限は有限で、実測の解析時間(約8秒)を1.5秒間隔でカバーできる", () => {
+    expect(Number.isInteger(PLAN_REFRESH_MAX_ATTEMPTS)).toBe(true);
+    expect(PLAN_REFRESH_MAX_ATTEMPTS).toBeGreaterThanOrEqual(6);
+    expect(PLAN_REFRESH_MAX_ATTEMPTS).toBeLessThanOrEqual(20);
   });
 });

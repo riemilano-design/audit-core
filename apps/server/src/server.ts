@@ -393,6 +393,13 @@ const server = createServer((req, res) => {
       200,
       buildStateResponseWithPlan(state, backgroundPlan, {}, selectedTargetShapeId, lastPlanChanged, lastPlanChangeReason, lastMoveOutcome, lastBoardEvents),
     );
+
+    // レスポンス送出後、バックグラウンドで⑧を計算する(fire-and-forget)。
+    // POST /api/game/move・POST /api/game/target-shape と同じ扱い。これが無いと、
+    // 新規対局直後は解析が一度も起動せず、候補手が「計算中」のまま止まる
+    // (Phase6の通し確認で判明。二重起動防止・stale result防止は
+    // runBackgroundPlanAnalysis側のbackgroundPlanKey/planKeyがそのまま効く)。
+    void runBackgroundPlanAnalysis(state, selectedTargetShapeId);
     return;
   }
 

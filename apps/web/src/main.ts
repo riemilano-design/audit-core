@@ -16,6 +16,7 @@ import {
   selectTargetShape,
   shouldShowPlanChangedNotice,
   shouldShowNextConsiderations,
+  shouldRetryPlanRefresh,
   startNewGame,
   submitMove,
   type CoachExplanation,
@@ -721,21 +722,38 @@ function setError(message: string): void {
 }
 
 // ⑧(MultiPV参考評価)はサーバー側でバックグラウンド計算されるため、着手直後の
-// レスポンスではcandidateMoveState: "pending"のことがある。少し待って1回だけ
-// 状態を取り直し、その間にユーザーが別の手を指していなければ再描画する
+// レスポンスではcandidateMoveState: "pending"のことがある。少し待って状態を取り直し、
+// その間にユーザーが別の手を指していなければ再描画する
 // (対局の進行そのものはこの再取得を待たない)。
-function schedulePlanRefresh(sfenAtSubmit: string): void {
+//
+// 【Phase6 通し確認で判明した問題への対応】
+// 以前は1.5秒後に1回だけ再取得していたが、エンジンの解析は完了までに数秒かかる
+// (実測で約8秒)ため常に空振りし、サーバー側が"ready"で候補手の説明を持っているのに
+// 画面は「候補手を計算中です」のまま止まっていた。上限付きのリトライへ変更する
+// (リトライしてよいかの判定はgameApi.tsのshouldRetryPlanRefresh。無限には回さない)。
+//
+// 【再描画を"pending"のうちは行わないことについて】
+// render()はclearSelection()を呼ぶため、リトライのたびに再描画すると、盤面クリックで
+// 駒を選択中のユーザーの選択が繰り返し解除されてしまう。再取得中は局面が進んでいない
+// (lastRenderedSfenで保証)ので、まだ"pending"の間は画面の内容が変わらない。
+// そのため、状態が"pending"でなくなったときだけ再描画する。
+const PLAN_REFRESH_INTERVAL_MS = 1500;
+
+function schedulePlanRefresh(sfenAtSubmit: string, attempt = 1): void {
   setTimeout(() => {
     if (lastRenderedSfen !== sfenAtSubmit) return; // 既に別の局面へ進んでいる
     fetchGameState()
       .then((state) => {
         if (lastRenderedSfen !== sfenAtSubmit) return; // 取得中にさらに進んでいた
-        render(state);
+        if (state.plan.candidateMoveState !== "pending") render(state);
+        if (shouldRetryPlanRefresh(state.plan, attempt)) {
+          schedulePlanRefresh(sfenAtSubmit, attempt + 1);
+        }
       })
       .catch(() => {
         // 再取得の失敗は対局そのものに影響させない(静かに諦める)。
       });
-  }, 1500);
+  }, PLAN_REFRESH_INTERVAL_MS);
 }
 
 // テキスト入力欄からの着手・盤面クリックからの着手の両方が使う共通処理。
@@ -818,10 +836,22 @@ async function handleSelectTargetShape(shapeId: string): Promise<void> {
   }
 }
 
+// 描画したうえで、⑧がまだ計算中なら完了を取りに行く。
+// 着手時・目標形変更時は playMove / handleSelectTargetShape が個別に予約しているが、
+// 「新しい対局」と初回ページロードにはこの予約が無く、⑧が計算中のまま画面が
+// 「候補手を計算中です」で止まる経路になっていた(Phase6の通し確認で判明)。
+// 両方をこのヘルパー経由にそろえる。
+function renderAndScheduleRefresh(state: GameStateResponse): void {
+  render(state);
+  if (state.plan.candidateMoveState === "pending") {
+    schedulePlanRefresh(state.sfen);
+  }
+}
+
 async function handleNewGame(): Promise<void> {
   setError("");
   const state = await startNewGame();
-  render(state);
+  renderAndScheduleRefresh(state);
 }
 
 submitButton.addEventListener("click", () => {
@@ -835,5 +865,5 @@ newGameButton.addEventListener("click", () => {
 });
 
 fetchGameState()
-  .then(render)
+  .then(renderAndScheduleRefresh)
   .catch((err) => setError(`初期状態の取得に失敗しました: ${err instanceof Error ? err.message : String(err)}`));

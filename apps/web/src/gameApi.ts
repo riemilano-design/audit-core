@@ -233,6 +233,31 @@ export function shouldShowNextConsiderations(
   return plan.nextConsiderations.length > 0;
 }
 
+/**
+ * ⑧(MultiPV参考評価)の再取得を、あと何回まで試してよいかの上限。
+ * エンジンは基準局面1回＋候補手ごとに1回ずつ直列に探索するため、完了まで数秒かかる
+ * (実測で約8秒)。1回だけの再取得では間に合わず、サーバー側が"ready"になっているのに
+ * 画面が「計算中」のまま止まる状態が起きていた。上限を設けて有限回で必ず止める。
+ */
+export const PLAN_REFRESH_MAX_ATTEMPTS = 10;
+
+/**
+ * ⑧の再取得をもう一度予約してよいかを返す純粋関数
+ * (DOM非依存、テスト容易性のためgameApi.ts側に置く)。
+ *
+ * - "ready"(解析完了)・"unavailable"(そもそも候補手が無い)になったら止める
+ * - まだ"pending"でも、上限回数に達したら止める(無限にポーリングしない)
+ *
+ * 判定材料はサーバーが返した状態と試行回数だけで、将棋の判断は一切行わない。
+ */
+export function shouldRetryPlanRefresh(
+  plan: Pick<ReachablePlanBody, "candidateMoveState">,
+  attempt: number,
+): boolean {
+  if (plan.candidateMoveState !== "pending") return false;
+  return attempt < PLAN_REFRESH_MAX_ATTEMPTS;
+}
+
 export interface GameStateResponse {
   sfen: string;
   moveHistory: string[];
