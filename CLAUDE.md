@@ -47,11 +47,10 @@
 
 ## 現段階でやらないこと
 
-- アプリ本体(盤面UI・対局ロジック)のコード実装
-- 定跡・形・意図データの大量生成
-- 「対局シナリオ」(標準居飛車/棒銀/斜め棒銀/早仕掛けなど)による AI 序盤制御の実装 ― 構造だけ [docs/SCENARIOS.md](docs/SCENARIOS.md) に設計し、実装は着手しない
+- 定跡・形・意図データの大量生成(上記「絶対に守るルール」4番)
+- 「対局シナリオ」(標準居飛車/棒銀/斜め棒銀/早仕掛けなど)による AI 序盤制御の本実装 ― 構造は [docs/SCENARIOS.md](docs/SCENARIOS.md) に設計済みだが、本実装は見送り中(判断の記録は [docs/PHASES.md](docs/PHASES.md) の Phase 4)
 
-これらは開発基盤(このコミット群)が固まってから、[docs/PHASES.md](docs/PHASES.md) の Phase に沿って着手する。
+着手済み・完了済みの範囲は [docs/PHASES.md](docs/PHASES.md) の「現在地」を正とする。
 
 ## ドキュメント一覧
 
@@ -63,7 +62,7 @@
 | [docs/AGENT_PROTOCOL.md](docs/AGENT_PROTOCOL.md) | 3役(司令塔・実装担当・承認/監査担当)と専門エージェントの協働ルール |
 | [docs/DATA_MODEL.md](docs/DATA_MODEL.md) | 教育用データパイプラインとスキーマ設計の詳細 |
 | [docs/SCENARIOS.md](docs/SCENARIOS.md) | 対局シナリオ(AI序盤制御)の将来設計 |
-| [docs/PHASES.md](docs/PHASES.md) | Phase 0〜5 の開発計画と受け入れ基準 |
+| [docs/PHASES.md](docs/PHASES.md) | Phase 0〜6 の開発計画と受け入れ基準 |
 | [docs/GIT_WORKFLOW.md](docs/GIT_WORKFLOW.md) | ブランチ戦略・コミット規約 |
 | [docs/TESTING_STRATEGY.md](docs/TESTING_STRATEGY.md) | 自動テスト戦略 |
 | [docs/ROLES.md](docs/ROLES.md) | 人間とAIエージェントの役割分担 |
@@ -79,7 +78,7 @@ sgogi-coach/
 ├── data/
 │   ├── schemas/        # shapes/openings/intents/explanations のJSON Schema(確定)
 │   └── examples/       # スキーマ検証用の最小サンプル(本番データではない)
-├── apps/               # 未着手。Phase 0 で作成
+├── apps/               # アプリ本体(Phase 0 で作成済み)
 │   ├── web/
 │   └── server/
 ├── spike/              # Phase 0着手前の技術検証(shogiops+やねうら王のUSI疎通確認)。apps/本実装ではない
@@ -87,4 +86,4 @@ sgogi-coach/
 └── scripts/            # 開発補助スクリプト(データ検証など)
 ```
 
-`apps/` はまだ存在しない。作成するのは Phase 0 から。`spike/`・`prototypes/` はPhase 0着手前の技術検証であり、`apps/` の代わりにはならない。
+`apps/` は Phase 0 で作成済み(`apps/web`・`apps/server`)。`spike/`・`prototypes/` はPhase 0着手前の技術検証であり、`apps/` の本実装とは別物である。

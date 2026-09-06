@@ -9,7 +9,7 @@
 | [AGENT_PROTOCOL.md](AGENT_PROTOCOL.md) | 3役(司令塔・実装担当・承認/監査担当)と専門エージェントの協働ルール、GO/REVISE/HUMANの運用。**正本** | AIエージェントを使う人全員 |
 | [DATA_MODEL.md](DATA_MODEL.md) | 教育用データパイプライン(9段階)の詳細設計と、shapes/openings/intents/explanations 各スキーマの意味 | データを作る人・ロジックを実装する人 |
 | [SCENARIOS.md](SCENARIOS.md) | 「対局シナリオ」(AIに棒銀・早仕掛けなどを指させて練習させる仕組み)の将来設計。今は未実装 | 将来Phase4以降の実装者 |
-| [PHASES.md](PHASES.md) | Phase 0〜5 の開発計画、各Phaseの成果物と完了条件 | プロジェクト全体の進行管理者(人間) |
+| [PHASES.md](PHASES.md) | Phase 0〜6 の開発計画、各Phaseの成果物と完了条件 | プロジェクト全体の進行管理者(人間) |
 | [GIT_WORKFLOW.md](GIT_WORKFLOW.md) | ブランチの切り方、コミットメッセージの書き方、マージの手順 | コードやデータを変更する人・エージェント全員 |
 | [TESTING_STRATEGY.md](TESTING_STRATEGY.md) | 何をどう自動テストするか | ロジックを実装する人 |
 | [ROLES.md](ROLES.md) | 人間が判断すべきこと・AIに任せてよいこと・エージェント間の分担 | プロジェクトを進める人全員 |
