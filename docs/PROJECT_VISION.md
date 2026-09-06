@@ -6,7 +6,7 @@
 
 この文書に書かれた内容は、**人間(プロジェクトの最終意思決定者)が決定したものだけ**である。AIエージェントはこの文書を根拠に判断してよく、**新しい案を自由に提案してよい**。ただし、この文書の内容を人間の承認なしに変更・確定してはならない。変更したほうがよいと考えた場合は、変更を実行せずに提案として提示し、人間の判断を仰ぐこと。
 
-関連する正本: [ARCHITECTURE.md](ARCHITECTURE.md)(構造と責務境界)、[PHASES.md](PHASES.md)(開発計画)、[CHANGE_MANAGEMENT.md](CHANGE_MANAGEMENT.md)(仕様変更の手順)、[AGENT_PROTOCOL.md](AGENT_PROTOCOL.md)(エージェントの協働ルール)。人間とAIの判断権限の線引きは [ROLES.md](ROLES.md) が担当する。
+関連する正本: [LONG_TERM_VISION.md](LONG_TERM_VISION.md)(MVPの先にある長期構想。本文書の完成条件には含まれない)、[ARCHITECTURE.md](ARCHITECTURE.md)(構造と責務境界)、[PHASES.md](PHASES.md)(開発計画)、[CHANGE_MANAGEMENT.md](CHANGE_MANAGEMENT.md)(仕様変更の手順)、[AGENT_PROTOCOL.md](AGENT_PROTOCOL.md)(エージェントの協働ルール)。人間とAIの判断権限の線引きは [ROLES.md](ROLES.md) が担当する。
 
 ---
 
@@ -82,6 +82,7 @@
 - 目標形: 美濃囲い系(本美濃・高美濃・銀冠)
 - プラットフォーム: Webブラウザ
 - 想定ユーザー: プログラミング経験・将棋経験ともに前提としない初心者
+- 実験機能: **指す前にユーザーが「この手は何のため」を申告する仕組み**(MVPの中心機能ではなく、最小の実験機能として含める。詳細は [LONG_TERM_VISION.md](LONG_TERM_VISION.md))
 
 このスコープを広げる変更には人間の承認が必要である。
 
@@ -89,7 +90,7 @@
 
 ## 5. 将来拡張(MVPには含めない)
 
-以下はMVPの完成条件に含めない。着手の判断は、MVPの完成を人間が確認したあとで別途行う。
+以下はMVPの完成条件に含めない。着手の判断は、MVPの完成を人間が確認したあとで別途行う。これらを含めた全体像は [LONG_TERM_VISION.md](LONG_TERM_VISION.md) にある。
 
 - 対局後の振り返り
 - 学習履歴・上達の可視化

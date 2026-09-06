@@ -283,6 +283,12 @@ Phase 5では新しい将棋知識・判定ロジックを追加しないとい�
 
 ---
 
+## MVPスコープの記録追加(Phase未割り当て)
+
+人間の承認により、「指す前にユーザーが目的を申告する仕組み」(最小の実験機能)が [../CLAUDE.md](../CLAUDE.md) の「現在のスコープ」に追加された。詳細は [LONG_TERM_VISION.md](LONG_TERM_VISION.md)。どのPhaseで実装するかは未確定であり、本ファイルの既存Phase構成・完了条件は変更しない。
+
+---
+
 ## Phaseをまたぐ共通ルール
 
 - 各Phase内の作業は [GIT_WORKFLOW.md](GIT_WORKFLOW.md) のブランチ運用に従う

@@ -21,6 +21,7 @@
 - 目標形: **美濃囲い系**(本美濃・高美濃・銀冠など)
 - プラットフォーム: Webブラウザ
 - 想定ユーザー: プログラミング経験・将棋経験ともに前提としない初心者
+- 実験機能: **指す前にユーザーが「この手は何のため」を申告する仕組み**(MVPの中心機能ではなく、最小の実験機能として含める。詳細は [docs/LONG_TERM_VISION.md](docs/LONG_TERM_VISION.md))
 
 このスコープを広げる変更(戦型追加・目標形追加など)は、必ず人間の承認を経ること。詳細は [docs/PHASES.md](docs/PHASES.md)。
 
@@ -58,6 +59,7 @@
 |---|---|
 | [docs/README.md](docs/README.md) | ドキュメント全体の目次 |
 | [docs/PROJECT_VISION.md](docs/PROJECT_VISION.md) | このアプリの完成像(核心的な強み・完成イメージ・完成の判定基準) |
+| [docs/LONG_TERM_VISION.md](docs/LONG_TERM_VISION.md) | 長期構想(このアプリが最終的に何になろうとしているか)。MVPの完成条件ではない |
 | [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | 全体構造とモジュール・Unitの責務境界 |
 | [docs/AGENT_PROTOCOL.md](docs/AGENT_PROTOCOL.md) | 3役(司令塔・実装担当・承認/監査担当)と専門エージェントの協働ルール |
 | [docs/DATA_MODEL.md](docs/DATA_MODEL.md) | 教育用データパイプラインとスキーマ設計の詳細 |
