@@ -158,9 +158,9 @@ describe("shouldRetryPlanRefresh", () => {
     ).toBe(false);
   });
 
-  it("上限は有限で、実測の解析時間(約8秒)を1.5秒間隔でカバーできる", () => {
+  it("上限は有限で、実測の解析時間(18〜19秒)を1.5秒間隔でカバーできる", () => {
     expect(Number.isInteger(PLAN_REFRESH_MAX_ATTEMPTS)).toBe(true);
-    expect(PLAN_REFRESH_MAX_ATTEMPTS).toBeGreaterThanOrEqual(6);
-    expect(PLAN_REFRESH_MAX_ATTEMPTS).toBeLessThanOrEqual(20);
+    expect(PLAN_REFRESH_MAX_ATTEMPTS).toBeGreaterThanOrEqual(14);
+    expect(PLAN_REFRESH_MAX_ATTEMPTS).toBeLessThanOrEqual(40);
   });
 });

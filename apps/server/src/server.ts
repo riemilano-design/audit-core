@@ -357,17 +357,27 @@ const server = createServer((req, res) => {
   const url = new URL(req.url ?? "/", "http://localhost");
 
   if (req.method === "GET" && url.pathname === "/api/game") {
-    // GET /api/gameは新規のエンジン解析を開始しない。既にバックグラウンドで
-    // 完了・キャッシュされている⑧があれば返すだけ(buildStateResponseWithPlan内で
-    // sfen・選択中の目標形の両方が一致するかを確認する)。
+    // GET /api/gameは、既にバックグラウンドで完了・キャッシュされている⑧があれば
+    // それを返す(buildStateResponseWithPlan内でsfen・選択中の目標形の両方が
+    // 一致するかを確認する)。
     // Phase3 Unit1/Unit2: lastPlanChanged/lastPlanChangeReasonは直近の
     // POST /api/game/moveでの判定結果をそのまま返す(このリクエスト自体は
     // 着手を伴わないため、新たな判定は行わない)。
-    sendJson(
-      res,
-      200,
-      buildStateResponseWithPlan(state, backgroundPlan, {}, selectedTargetShapeId, lastPlanChanged, lastPlanChangeReason, lastMoveOutcome, lastBoardEvents),
-    );
+    //
+    // ただし、返す予定のcandidateMoveStateが"pending"(まだ解析結果が無い)場合に
+    // 限り、runBackgroundPlanAnalysisを起動する。ページを開いただけ(POSTを一度も
+    // 経ていない)の経路には解析を起動する呼び出し元が存在せず、候補手が
+    // 「計算中」のまま永久に止まっていたため(実機確認で判明)。
+    // 既にキャッシュ済み("ready"/"unavailable")なら再起動する必要は無く、
+    // 同一局面・同一選択への多重起動はrunBackgroundPlanAnalysis冒頭の
+    // backgroundPlanKeyによるガードがPOST側と同様に防ぐ。
+    const body = buildStateResponseWithPlan(state, backgroundPlan, {}, selectedTargetShapeId, lastPlanChanged, lastPlanChangeReason, lastMoveOutcome, lastBoardEvents);
+
+    if (body.plan.candidateMoveState === "pending") {
+      void runBackgroundPlanAnalysis(state, selectedTargetShapeId);
+    }
+
+    sendJson(res, 200, body);
     return;
   }
 
