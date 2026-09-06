@@ -3,11 +3,11 @@
 // 最小限の「検証用対局シナリオ」。
 //
 // 重要な位置づけ: これはdocs/SCENARIOS.mdが将来設計する本格的な「対局シナリオ」機能
-// (Phase4以降、data/openings/*.jsonのscenarioフィールドを使う予定のもの)の
+// (将来、data/openings/*.jsonのscenarioフィールドを使う想定のもの)の
 // 先取り実装ではない。docs/SCENARIOS.mdが強調する「認識(recognition)データと
 // 制御(control)データを混同しない」という方針に従い、本ファイルの指し手列は
 // data/へは一切書き込まず、コード内の検証専用定数として完全に閉じている
-// (本格実装が必要になった場合は、改めてPhase4で別途設計する)。
+// (本格実装が必要になった場合は、改めて別途設計する。Phase 4 では見送りと判断済み)。
 //
 // スクリプトの中身(相手がどう指すか)は、data/intents/boh_gin.json /
 // hayajikake.jsonのrecognition_pattern(既存データ、変更していない)が要求する
