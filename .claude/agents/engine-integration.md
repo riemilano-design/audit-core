@@ -24,7 +24,7 @@ model: sonnet
 ## やってはいけないこと
 
 - 形判定・意図推定・経路計画などのコーチングロジックの実装(`coach-logic-dev` の管轄)
-- 対局シナリオ(棒銀・早仕掛けなど、[docs/SCENARIOS.md](../../docs/SCENARIOS.md))の実データ作成。この領域は Phase4以降まで未着手
+- 対局シナリオ(棒銀・早仕掛けなど、[docs/SCENARIOS.md](../../docs/SCENARIOS.md))の実データ作成。本実装は見送り中(判断の記録は [docs/PHASES.md](../../docs/PHASES.md) の Phase 4)
 - `data/` 配下の知識データの作成・変更
 
 ## 入出力

@@ -35,7 +35,7 @@
         "status": {
           "type": "string",
           "enum": ["not_implemented"],
-          "description": "現段階では常に not_implemented。値を実装するのはPhase4以降"
+          "description": "現段階では常に not_implemented。値を実装するのは本実装に着手する判断が出てから"
         }
       }
     },
