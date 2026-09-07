@@ -174,6 +174,10 @@ Phase1では、explanationsは単発の候補手説明(1レコード=1手)のみ
 
 **Kind 1 と Kind 3 の境界の判定規則**: 新しいレコードが `affects_target_shapes` を持つ場合は Kind 3 として扱う。持たない場合のみ Kind 1 とする。
 
+**Kind 3 の検証方法**: 相手AI制御データ(`openings.scenario`)については、有段者レビューが得られない場合、[KIND3_VERIFICATION.md](KIND3_VERIFICATION.md) の多段階検証プロトコル + 人間による最終採用判断で代替できる。**これは検証方法の拡張であって、Kind 3 の定義および人間承認要件の緩和ではない。** AI検証は有段者レビューと同等の知識的保証を持つものではない。
+
+**`review_status` との関係**: `review_status` は**ユーザーへの知識露出**を制御する。Kind 3 制御データの**検証・採用状態**はこれと**完全に分離して管理**し、一方の値から他方を導出しない。**AI検証済みを `human_reviewed` として扱わない。** `review_status` の3値は変更・追加しない。
+
 **独立監査の指摘(併記)**: 現行スキーマでは shapes / openings のレコードに `affects_target_shapes` フィールドが無いため、新規の shape / opening は機械的にすべて Kind 1 と判定される。したがって、実際の安全網は下記の露出制御が単独で担っている。
 
 ## 運用区分 `review_status`(「追加の自由」と「ユーザーへの露出」を分ける)

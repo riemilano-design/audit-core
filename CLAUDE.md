@@ -67,7 +67,8 @@
 | [docs/AGENT_PROTOCOL.md](docs/AGENT_PROTOCOL.md) | 3役(司令塔・実装担当・承認/監査担当)と専門エージェントの協働ルール |
 | [docs/DATA_MODEL.md](docs/DATA_MODEL.md) | 教育用データパイプラインとスキーマ設計の詳細 |
 | [docs/SCENARIOS.md](docs/SCENARIOS.md) | 対局シナリオ(AI序盤制御)の将来設計 |
-| [docs/PHASES.md](docs/PHASES.md) | Phase 0〜6 の開発計画と受け入れ基準 |
+| [docs/KIND3_VERIFICATION.md](docs/KIND3_VERIFICATION.md) | Kind 3(相手AI制御データ)の多段階検証プロトコル(有段者レビューの代替) |
+| [docs/PHASES.md](docs/PHASES.md) | Phase 0〜7 の開発計画と受け入れ基準 |
 | [docs/GIT_WORKFLOW.md](docs/GIT_WORKFLOW.md) | ブランチ戦略・コミット規約 |
 | [docs/TESTING_STRATEGY.md](docs/TESTING_STRATEGY.md) | 自動テスト戦略 |
 | [docs/ROLES.md](docs/ROLES.md) | 人間とAIエージェントの役割分担 |
