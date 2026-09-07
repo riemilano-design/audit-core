@@ -419,6 +419,7 @@ Phase 7 の定義 → 実装STEP群
   - 相手AIの着手選択は **Kind 3(判断的知識)**として扱う。実運用の制御データとして有効化する前に、**有段者によるレビュー、または [KIND3_VERIFICATION.md](KIND3_VERIFICATION.md) の多段階検証プロトコル(Phase A〜E)+ Phase F の人間による最終採用判断**を経ることを必須とする。有段者レビューが可能な場合はそちらを優先する。**検証方法が変わっても、Kind 3 の定義および Kind 3 が人間承認事項であることは変わらない。** AI検証は有段者レビューと同等の知識的保証を持つものではない
   - **制御データの置き場所は `openings.scenario` とする方針**(人間承認済み・D1)。ただし具体的な schema 構造・制御手順は**別途の仕様確定STEP**で決める
   - **前提条件**: 本ファイルの Phase 4 の記録・[DATA_MODEL.md](DATA_MODEL.md)・[SCENARIOS.md](SCENARIOS.md) の3箇所が「`data/openings/*.json` の `scenario` は `null` のまま維持する / 現段階では値を入れない」と記載している。**その仕様確定STEP(Kind 2 のスキーマ確定 + Kind 3 の制御手順確定 + [KIND3_VERIFICATION.md](KIND3_VERIFICATION.md) の検証)を人間承認とともに経るまで、`scenario` は `null` のまま維持する。** その仕様確定STEPでは上記3文書を同時に更新する必要がある
+  - **非開示境界**(ζ-4a で確定済み): 相手AIの狙い・制御手順・選択理由は、`GameState`(サーバー内部)には保持してよいが、APIレスポンスへは出さない。公開境界は [ARCHITECTURE.md](ARCHITECTURE.md) 6. の `toPublicGameState()` を唯一の出口とする許可リスト方式で、`GameState` へフィールドを追加しても既定では公開されない。`verification_*`・エンジン情報・[KIND3_VERIFICATION.md](KIND3_VERIFICATION.md) の Phase A〜F の検証結果も通常のゲームAPIでは返さない。一方、`coach` が述べる戦法名・狙いの説明は**認識側**の出力であり、Phase 1 の完了条件どおり公開を維持する(制御側と混同しない)
   - Phase 7 の定義段階では、具体的な制御手順や新しい将棋知識を確定しない
 - **Unit 2: 認識の時系列**
   - 指し手履歴から認識状態を**毎回再計算**する。対局中に永続的な認識状態を保持して結果を積み上げる方式にしない(`server.ts` にモジュール変数を増やさない)

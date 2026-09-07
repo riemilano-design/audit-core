@@ -49,7 +49,41 @@ export type { MoveOutcome } from "../analysis/moveOutcomeDetector.js";
 export type { BoardEvent } from "../analysis/boardEventDetector.js";
 export type { NextConsiderationMessage } from "../analysis/nextConsiderationExplanation.js";
 
-export interface StateResponseBody extends GameState {
+/**
+ * ブラウザへ公開してよい対局状態だけを明示列挙した型(許可リスト方式)。
+ *
+ * GameState(game/gameSession.ts)はサーバー内部の対局状態であり、相手AIの制御に
+ * 関わる情報(scenario / wasLastOpponentMoveForced など)を含む。Phase 7 Unit 1 では
+ * 相手AIが選んだ狙いをユーザーに開示しないため(docs/PHASES.md Phase 4「その後の変更」・
+ * docs/SCENARIOS.md)、内部状態をそのまま公開できない。
+ *
+ * ここで公開してよいものだけを列挙し、toPublicGameState()を唯一の変換境界にすることで、
+ * GameStateへフィールドを追加しても既定では公開されない(除外リスト方式にしない)。
+ *
+ * forcedPliesUsed について: これは相手が何手を強制進行で指したかという内部制御寄りの
+ * 情報だが、既存のAPIレスポンスに含まれており、最小変更のため公開のまま維持する
+ * (人間承認済み)。ζ-4c で狙い選択の制御手順が確定した際、この値が選ばれた狙いの
+ * 間接的な手がかりになり得るため、公開の可否を改めて検討する必要がある。
+ */
+export interface PublicGameState {
+  sfen: string;
+  moveHistory: string[];
+  forcedPliesUsed: number;
+}
+
+/**
+ * サーバー内部の対局状態から、公開してよい情報だけを取り出す唯一の変換境界。
+ * この関数を通らない公開経路を作らないこと(docs/ARCHITECTURE.md 8.)。
+ */
+function toPublicGameState(current: GameState): PublicGameState {
+  return {
+    sfen: current.sfen,
+    moveHistory: current.moveHistory,
+    forcedPliesUsed: current.forcedPliesUsed,
+  };
+}
+
+export interface StateResponseBody extends PublicGameState {
   status: GameStatus;
   /**
    * Unit3(analysis/explanationGenerator.ts)による「現在の形・相手の意図・相手の次の狙い」の説明。
@@ -433,7 +467,7 @@ function safeToJapaneseMoveHistory(moveHistory: string[], initialSfen?: string):
 
 export function buildStateResponse(current: GameState, options: ExplainPositionOptions = {}): StateResponseBody {
   return {
-    ...current,
+    ...toPublicGameState(current),
     status: getStatus(current),
     coach: safeExplainPosition(current, options),
     legalMoves: getLegalMoves(current.sfen),

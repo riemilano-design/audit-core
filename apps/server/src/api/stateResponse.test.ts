@@ -1158,3 +1158,80 @@ describe("buildStateResponseWithPlan: nextConsiderations(Phase6 Unit4)", () => {
     expect(response.coach).toEqual(buildStateResponse(state).coach);
   });
 });
+
+// ζ-4a: 内部状態(GameState)と公開状態(StateResponseBody)の境界を、許可リスト方式
+// (toPublicGameState)で確立したことの検証。docs/ARCHITECTURE.md 6.「公開境界」参照。
+describe("公開境界(内部状態とAPIレスポンスの分離、ζ-4a)", () => {
+  // buildStateResponseが返すキーが、公開してよいと定めた7件ちょうどであること
+  // (許可リスト方式であることの直接の確認)。
+  const PUBLIC_KEYS = ["coach", "forcedPliesUsed", "legalMoves", "moveHistory", "moveHistoryJapanese", "sfen", "status"];
+
+  it("buildStateResponseのキーが公開許可リストの7件と完全一致する", () => {
+    const state = gameStateAfter([]);
+    const response = buildStateResponse(state);
+
+    expect(Object.keys(response).sort()).toEqual([...PUBLIC_KEYS].sort());
+  });
+
+  it("buildStateResponseWithPlanのキーが公開許可リスト7件+planの8件と完全一致する", () => {
+    const state = gameStateAfter([]);
+    const response = buildStateResponseWithPlan(state, undefined);
+
+    expect(Object.keys(response).sort()).toEqual([...PUBLIC_KEYS, "plan"].sort());
+  });
+
+  it("GameStateにscenario/wasLastOpponentMoveForcedを設定しても、レスポンスはそれらを持たない", () => {
+    // scenario(相手AI制御用シナリオ識別子)・wasLastOpponentMoveForced(強制進行の
+    // 確定事実)は、いずれも相手AIの制御に関わる内部情報であり、ユーザーへ非開示とする
+    // (docs/PHASES.md Phase 7 Unit 1「選んだものはユーザーに開示しない」)。
+    const state: GameState = {
+      ...gameStateAfter([]),
+      scenario: "hayajikake",
+      wasLastOpponentMoveForced: true,
+    };
+
+    const response = buildStateResponse(state);
+    const responseWithPlan = buildStateResponseWithPlan(state, undefined);
+
+    expect(response).not.toHaveProperty("scenario");
+    expect(response).not.toHaveProperty("wasLastOpponentMoveForced");
+    expect(responseWithPlan).not.toHaveProperty("scenario");
+    expect(responseWithPlan).not.toHaveProperty("wasLastOpponentMoveForced");
+  });
+
+  // 【本STEPの中心】将来GameStateに未知のフィールド(Unit 1が足しうる制御情報を
+  // 模したもの)を追加しても、許可リスト方式(toPublicGameState)により既定では
+  // 公開されないことを直接確認する。除外リスト方式(...currentをそのまま展開する
+  // 実装)であれば、この未知フィールドはそのままレスポンスへ漏れてしまう。
+  it("GameStateに未知のフィールドを追加しても、レスポンスのキー構成は変わらない(将来のフィールド追加が漏れないことの担保)", () => {
+    const stateWithUnknownField = {
+      ...gameStateAfter([]),
+      futureOpponentControlSecret: "この値は絶対に公開されてはならない",
+    } as GameState;
+
+    const response = buildStateResponse(stateWithUnknownField);
+    const responseWithPlan = buildStateResponseWithPlan(stateWithUnknownField, undefined);
+
+    expect(Object.keys(response).sort()).toEqual([...PUBLIC_KEYS].sort());
+    expect(Object.keys(responseWithPlan).sort()).toEqual([...PUBLIC_KEYS, "plan"].sort());
+    expect(response).not.toHaveProperty("futureOpponentControlSecret");
+  });
+
+  // 回帰確認: 非開示にするのは「制御側」(相手AIが実際に選んだシナリオ等)の情報であり、
+  // 「認識側」(指し手の観測から推定した戦法名・狙いの説明、coach)は
+  // docs/PHASES.md Phase 1 の完了条件どおり引き続き公開する(両者を混同しない)。
+  it("scenario/wasLastOpponentMoveForcedを設定した状態でも、認識側のcoach出力は引き続き含まれる", () => {
+    const moveHistory = interleaveWithSenteFillers(HAYAJIKAKE_GOTE_MOVES_FULL);
+    const state: GameState = {
+      ...gameStateAfter(moveHistory),
+      scenario: "hayajikake",
+      wasLastOpponentMoveForced: false,
+    };
+
+    const response = buildStateResponse(state);
+
+    expect(response.coach).toBeDefined();
+    const opponentIntent = findStage(response.coach!, "opponent_intent");
+    expect(opponentIntent.reason).toContain("早仕掛けの形になっています");
+  });
+});

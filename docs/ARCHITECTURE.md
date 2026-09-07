@@ -184,6 +184,25 @@ Phase 6 の4 Unit とは別の新しい表示ブロックとして設ける。�
 
 対局状態・目標形の選択・直前の解析結果は `server.ts` のモジュール変数が保持する(同時に1対局のみ)。新規対局・目標形変更のときは、前の状態についての説明が残らないようにリセットする。
 
+### 公開境界(内部状態とAPIレスポンスの分離)
+
+`GameState`(`game/gameSession.ts`)は**サーバー内部の対局状態**であり、相手AIの制御に関わる情報を含む。Phase 7 Unit 1 では相手AIが選んだ狙いをユーザーに開示しないため([PHASES.md](PHASES.md) Phase 4「その後の変更」・[SCENARIOS.md](SCENARIOS.md))、内部状態をそのまま公開しない。
+
+```
+GameState(内部・非公開)
+  → toPublicGameState()      ← 唯一の変換境界。許可リスト方式
+  → PublicGameState
+  → StateResponseBody(+ status / coach / legalMoves / moveHistoryJapanese / plan)
+  → browser
+```
+
+- **公開してよい情報**: 盤面・指し手履歴・日本語棋譜・終局状態・合法手・コーチ出力(`coach`)・目標形と経路と候補手(`plan`)
+- **公開しない情報**: 相手AIが選んだ狙い・制御手順・次に指す制御候補・選択理由・`openings.scenario`・`recognition_pattern` の生データ・`review_status`・`verification_*`・エンジン名やバージョンや探索条件・[KIND3_VERIFICATION.md](KIND3_VERIFICATION.md) の Phase A〜F の検証結果・エンジン評価値の生値
+- **認識側と制御側を区別する**: `coach` が述べる戦法名・狙いの説明は**認識側**(指し手の観測から推定した仮説)の出力であり、[PHASES.md](PHASES.md) Phase 1 の完了条件により公開する。非公開にするのは**制御側**(相手AIが実際に選んだもの)である。同じ戦法名でも出所によって扱いが異なる
+- `forcedPliesUsed` は内部制御寄りの情報だが、既存のAPIレスポンスに含まれており、最小変更のため公開のまま維持する(人間承認済み)。**狙いの選択手順が確定した時点で、選ばれた狙いの間接的な手がかりにならないかを改めて検討する**(Unit 1 の実装STEP)
+- **クライアントが相手AIの制御状態を指定できる経路を作らない。** 現在の `POST /api/game/new?scenario=` は検証用の暫定経路であり、その扱いは Unit 1 の実装STEPで決める
+- `verification_*` やエンジンの検証記録は、将来 [KIND3_VERIFICATION.md](KIND3_VERIFICATION.md) Phase F で人間が読む必要があるが、読み手は開発者であって対局中のユーザーではない。**通常のゲームAPI(`/api/game*`)では返さない。** 提示手段は別途決める
+
 ---
 
 ## 7. テストの方針
@@ -206,6 +225,7 @@ Phase 6 の4 Unit とは別の新しい表示ブロックとして設ける。�
 6. 「事実の抽出」と「文言」を同じモジュールに混ぜない
 7. コーチ機能の失敗を対局本体へ波及させない
 8. Unit の責務境界をまたぐ変更を単独で行わない
+9. 内部状態と公開状態の境界を**許可リスト方式**で保つ(公開してよいものを明示列挙し、除外リスト方式にしない)。`toPublicGameState()` を通らない公開経路を作らない
 
 ---
 
