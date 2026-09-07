@@ -15,7 +15,8 @@
     "characteristics",
     "beginner_friendliness",
     "confidence_level",
-    "source"
+    "source",
+    "review_status"
   ],
   "properties": {
     "id": {
@@ -83,6 +84,11 @@
       "type": "string",
       "enum": ["high", "medium", "low"],
       "description": "内容の確からしさ。lowの場合は人間の確認を必須とする"
+    },
+    "review_status": {
+      "type": "string",
+      "enum": ["draft", "human_reviewed", "expert_verified"],
+      "description": "知識を追加してよいかと、ユーザーへ見せてよいかを分離する運用区分。draft=AIが追加した未レビューの知識(戦法・狙い・陣形の名前としてユーザーへ断定的に見せる経路では使わない)、human_reviewed=人間のレビューを経たもの、expert_verified=有段者・一次資料による確認を経たもの。意味の定義はdocs/DATA_MODEL.mdを正とする"
     }
   }
 }

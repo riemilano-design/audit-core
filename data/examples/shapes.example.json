@@ -19,5 +19,6 @@
   },
   "weak_against": "横からの攻めや玉頭(玉の真上)からの攻めにはやや弱い。高美濃・銀冠などへの発展で強化できる。",
   "source": "一般的な四間飛車の入門書における標準的な本美濃囲いの説明に基づく(要出典確認・仮データ)",
-  "confidence_level": "medium"
+  "confidence_level": "medium",
+  "review_status": "draft"
 }

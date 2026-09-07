@@ -7,5 +7,6 @@
   "leads_to_shape_ids": [],
   "scenario": null,
   "source": "一般的な居飛車の定義(飛車を初期位置から動かさない戦法)に基づく(仮データ)",
-  "confidence_level": "high"
+  "confidence_level": "high",
+  "review_status": "draft"
 }

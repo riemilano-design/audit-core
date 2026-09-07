@@ -2,6 +2,7 @@
   "id": "naname_bogin",
   "name": "斜め棒銀",
   "opening_id": "ibisha",
+  "side": "opponent",
   "recognition_pattern": [
     { "piece": "銀", "to": "4b", "order_hint": 1 },
     { "piece": "銀", "to": "5c", "order_hint": 2 },
@@ -22,5 +23,6 @@
     }
   ],
   "source": "対四間飛車の斜め棒銀(4六銀左戦法)に関する将棋情報サイトの検索結果要約(日々頓死『斜め棒銀戦法(4六銀左急戦)の基本定跡と指し方』、note.com『四間飛車初心者の壁をぶっ壊す(vs斜め棒銀編)』、Wikipedia『4六銀左戦法』)に基づく。銀が7九→6八→5七→4六と進む経路はこれらの検索結果要約で確認したが、一次資料のページ本文までは直接確認できていない(要追加確認)。追記(座標規約レビューセッション): Wikipedia『4六銀左戦法』本文を一次資料として直接確認したところ、「対四間飛車基本図 ▲4六銀まで」という図と「居飛車側が…▲4六銀-▲3五歩を絡めて」という記述、および盤面図で居飛車の玉が8八(先手陣)にある配置から、この資料では居飛車側を先手として記述していることが確認できた。本アプリのMVP仕様ではopponent=居飛車=後手固定のため、recognition_pattern.toは元資料の先手絶対座標(6八→5七→4六、USI: 6h→5g→4f)を180度回転し、後手絶対座標(4二→5三→6四、USI: 4b→5c→6d)に変換して記録している(変換にはscripts/lib/usi-coordinates.mjsのrotateSquare180()を使用)。",
-  "confidence_level": "medium"
+  "confidence_level": "medium",
+  "review_status": "human_reviewed"
 }

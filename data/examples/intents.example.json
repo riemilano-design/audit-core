@@ -2,6 +2,7 @@
   "id": "boh_gin",
   "name": "棒銀",
   "opening_id": "ibisha",
+  "side": "opponent",
   "recognition_pattern": [
     { "piece": "銀", "to": "3g", "order_hint": 1 },
     { "piece": "銀", "to": "3f", "order_hint": 2 },
@@ -17,5 +18,6 @@
     }
   ],
   "source": "棒銀戦法の一般的な手順(銀を3七→3六→3五と進める型)に基づく(仮データ)",
-  "confidence_level": "medium"
+  "confidence_level": "medium",
+  "review_status": "draft"
 }

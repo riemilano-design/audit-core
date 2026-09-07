@@ -5,7 +5,7 @@
   "description": "戦型(例: 四間飛車、居飛車)。将来の対局シナリオ拡張(docs/SCENARIOS.md)を見込んだ器を持つが、scenarioフィールドは現段階では使用しない。",
   "type": "object",
   "additionalProperties": false,
-  "required": ["id", "name", "name_kana", "side", "family", "leads_to_shape_ids", "confidence_level", "source"],
+  "required": ["id", "name", "name_kana", "side", "family", "leads_to_shape_ids", "confidence_level", "source", "review_status"],
   "properties": {
     "id": {
       "type": "string",
@@ -17,7 +17,7 @@
     "side": {
       "type": "string",
       "enum": ["self", "opponent"],
-      "description": "MVPでは self=四間飛車(自分側), opponent=居飛車(AI側)"
+      "description": "self=自分側の戦型, opponent=相手側の戦型"
     },
     "family": {
       "type": "string",
@@ -39,11 +39,31 @@
         }
       }
     },
+    "recognition_pattern": {
+      "type": "array",
+      "minItems": 1,
+      "description": "この戦型を指し手の並びから認識するための手がかり(任意フィールド。値を持たない戦型は認識の候補にならない)。「飛車を初期位置から動かさない」のような否定的な条件は現在の表現では書けない(その表現方法は未確定であり、必要になった時点で人間の承認を経て決める)",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["piece", "to"],
+        "properties": {
+          "piece": { "type": "string", "description": "動く駒(例: 銀)" },
+          "to": { "type": "string", "description": "移動先のマス目(USI形式、例: 3f)、または移動先の傾向" },
+          "order_hint": { "type": "integer", "description": "手順の中でのおおよその順序(任意)" }
+        }
+      }
+    },
     "source": { "type": "string", "description": "参考にした出典" },
     "confidence_level": {
       "type": "string",
       "enum": ["high", "medium", "low"],
       "description": "内容の確からしさ"
+    },
+    "review_status": {
+      "type": "string",
+      "enum": ["draft", "human_reviewed", "expert_verified"],
+      "description": "知識を追加してよいかと、ユーザーへ見せてよいかを分離する運用区分。draft=AIが追加した未レビューの知識(戦法・狙い・陣形の名前としてユーザーへ断定的に見せる経路では使わない)、human_reviewed=人間のレビューを経たもの、expert_verified=有段者・一次資料による確認を経たもの。意味の定義はdocs/DATA_MODEL.mdを正とする"
     }
   }
 }

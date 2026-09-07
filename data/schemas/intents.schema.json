@@ -9,11 +9,13 @@
     "id",
     "name",
     "opening_id",
+    "side",
     "recognition_pattern",
     "current_aim_explanation",
     "next_aim_explanation",
     "confidence_level",
-    "source"
+    "source",
+    "review_status"
   ],
   "properties": {
     "id": {
@@ -25,6 +27,11 @@
     "opening_id": {
       "type": "string",
       "description": "この意図が属する openings.id への参照"
+    },
+    "side": {
+      "type": "string",
+      "enum": ["self", "opponent"],
+      "description": "self=自分側の意図, opponent=相手側の意図"
     },
     "recognition_pattern": {
       "type": "array",
@@ -72,6 +79,11 @@
       "type": "string",
       "enum": ["high", "medium", "low"],
       "description": "判定の確からしさ。UI側の言い回し(断定 or 「〜かもしれません」)を左右する"
+    },
+    "review_status": {
+      "type": "string",
+      "enum": ["draft", "human_reviewed", "expert_verified"],
+      "description": "知識を追加してよいかと、ユーザーへ見せてよいかを分離する運用区分。draft=AIが追加した未レビューの知識(戦法・狙い・陣形の名前としてユーザーへ断定的に見せる経路では使わない)、human_reviewed=人間のレビューを経たもの、expert_verified=有段者・一次資料による確認を経たもの。意味の定義はdocs/DATA_MODEL.mdを正とする"
     }
   }
 }

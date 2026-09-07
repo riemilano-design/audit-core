@@ -42,7 +42,7 @@ data/                         将棋知識の唯一のソース(shapes/openings/
 | 段階 | 主な担当 | 備考 |
 |---|---|---|
 | ① 局面 | `rules/sfenPosition.ts`(shogiops) | データとしては持たない |
-| ② 戦型・形 | `analysis/shapeDetector.ts` → `shapeFormationAnalyzer.ts` | 静的一致に「実際にその形へ向かう動きが観測されたか」の証拠を足す |
+| ② 戦型・形 | 形: `analysis/shapeDetector.ts` → `shapeFormationAnalyzer.ts` / 戦型: **未実装** | 形は静的一致に「実際にその形へ向かう動きが観測されたか」の証拠を足す。戦型の認識モジュールはまだ無い(`data/openings/` は実行時に読み込まれていない) |
 | ③ 相手の意図 | `analysis/intentDetector.ts` | `data/intents/` を照合。断定できなければ申告しない |
 | ④ 相手の次の狙い | `analysis/intentDetector.ts` + `explanationGenerator.ts` | |
 | ⑤ 自分の目的 | `analysis/targetPurposeSelector.ts` | 静的データを持たず実行時に算出 |
@@ -52,6 +52,12 @@ data/                         将棋知識の唯一のソース(shapes/openings/
 | ⑨ 初心者向け説明 | `analysis/explanationGenerator.ts`、および Phase 6 の各 `*Explanation.ts` | |
 
 補助モジュール: `shapeRepository.ts` / `intentRepository.ts`(`data/` の読み込みのみ)、`moveHistory.ts`(指し手履歴の再生)、`signatureEvidence.ts`(履歴内の一致判定)、`pieceMapping.ts`(日本語駒名 ⇔ shogiops の Role)。
+
+### ②〜④は確定値ではなく「認識(仮説)」
+
+戦型(②)・陣形(②)・狙い(③④)は、いずれも**その時点までの指し手から観測できた範囲の仮説**として、同じ形で扱う。持つ情報は `status`(`none` / `forming` / `matched`)・内部スコア・根拠(`evidence`: 何手目のどの指し手で観測されたか)である。`matched` は「そのパターンの全シグネチャが観測された」という**観測事実**であって、「相手の戦法はこれである」という断定ではない。**確定値としては扱わない。** 意味の定義は [DATA_MODEL.md](DATA_MODEL.md)。
+
+認識の対象は自分・相手の両方とする。現状は陣形が自分側(`shapeFormationAnalyzer.ts`)、狙いが相手側(`intentDetector.ts` が相手の色を前提にしている)だけを扱い、戦型はどちらも扱っていない。`intentDetector.ts` の相手色の前提の解消と、戦型認識モジュールの新設が必要になる。着手時期は [PHASES.md](PHASES.md) を参照。
 
 ---
 
@@ -123,6 +129,7 @@ Phase 6 は「毎手説明」を4つの Unit に分けて実装した。**Unit �
 | Unit 2 | 直前の一手による**形・経路の変化**(差分) | 着手前の局面 + 現在局面 | `moveOutcomeDetector.ts` / `moveOutcomeExplanation.ts` |
 | Unit 3 | 直前の一手で**盤面に起きたこと**(捕獲・王手・成り) | 着手前後の各局面遷移 | `boardEventDetector.ts` / `boardEventExplanation.ts` |
 | Unit 4 | **現在局面の静的な状態**の整理(差分ではない) | 現在局面のみ | `nextConsiderationDetector.ts` / `nextConsiderationExplanation.ts`、`notation/japaneseMove.ts`、`rules/gameStatus.isInCheck` |
+| 対局経過ブロック(新規・未実装) | **対局開始から現在までに認識(仮説)がどう変わってきたか**と、その根拠になった手 | 指し手履歴(および対応する各中間局面) | 未実装。Phase 6 の Unit ではない |
 
 境界の要点:
 
@@ -130,6 +137,28 @@ Phase 6 は「毎手説明」を4つの Unit に分けて実装した。**Unit �
 - Unit 4 は Unit 1〜3 の出力を**読むだけ**で、変更しない。
 - 同じ事実を複数の Unit が重ねて表示しない(重複が生じた場合は表示側で抑止し、判定ロジックは変更しない)。
 - いずれの Unit もエンジン・LLM に依存しない。決定的な純粋関数である。
+- **対局経過ブロックを Unit 4 に混ぜない。** Unit 4 は現在局面の静的な状態だけを扱い、対局全体の経過を扱わない。Unit 1〜4 の責務・文言・実装は、この新ブロックの追加によって変更しない。
+
+### 対局経過ブロック(「ここまでの対局で分かってきたこと」)
+
+Phase 6 の4 Unit とは別の新しい表示ブロックとして設ける。画面上の表示順は次で確定している。
+
+```
+直前の一手(Unit 2・3)
+  → ここまでの対局で分かってきたこと(新規)
+  → 今の局面で分かっていること(Unit 4)
+  → 候補手
+```
+
+このブロックが述べてよいのは次の3種だけである。
+
+1. 認識が変わった時点と、その根拠になった手
+2. 現在の認識の `status` を、断定しない言い回しで述べたもの
+3. 何も認識できていない場合の穏当な文
+
+評価語・推奨・「だからこう指すべき」・エンジンの評価値・一致率などの数値・相手の心理は述べない(認識結果を根拠に手を勧めるロジックは導入しない)。
+
+このブロックは**状態を持たない**。`server.ts` にモジュール変数を増やさず、指し手履歴から毎回再計算して認識の時系列を再構成する。決定的な純粋関数であり、エンジンにも LLM にも依存しない。
 
 ---
 
@@ -184,9 +213,10 @@ Phase 6 は「毎手説明」を4つの Unit に分けて実装した。**Unit �
 
 以下は現時点で決まっていない。決まっているかのように扱わないこと。
 
-- **Phase 7 以降の構造**: [PHASES.md](PHASES.md) の計画は Phase 6 までであり、その先の構造は未定。
+- **Phase 7 以降の構造**: [PHASES.md](PHASES.md) の Phase としての計画は Phase 6 までであり、その先の構造は未定。戦法認識を対局経過から形成するという方針そのものは人間の承認を経て確定している([PHASES.md](PHASES.md))が、それを実現するモジュール構成・着手順は未確定である。
+- **対局経過の再計算に必要な中間局面**: 指し手履歴を途中まで切り詰めて認識を再計算する際、対応する中間局面のSFENも同時に用意する必要がある(独立監査の指摘)。用意の方法は実装STEPで具体化する。
 - **`analysis/pathPlanner.ts` の最終的な扱い**: Phase 6 Unit 1 で `routePlanner.ts` へ切り替えたため本番経路からは使われていないが、削除するかどうかは未決(現状は温存)。
 - **複数対局の同時進行**: 現在は単一対局のみ。設計していない。
-- **対局シナリオ(AI序盤制御)**: [SCENARIOS.md](SCENARIOS.md) に将来設計があるが未実装。`engine/scenarioOpponentOpening.ts` は検証用であり、本番機能ではない。
+- **対局シナリオ(AI序盤制御)**: [SCENARIOS.md](SCENARIOS.md) に将来設計があるが未実装。`engine/scenarioOpponentOpening.ts` は検証用であり、本番機能ではない。相手AIに狙いを持たせる(ユーザーには開示しない)という方針は人間の判断により確定したが、実装方式は未確定([SCENARIOS.md](SCENARIOS.md))。
 - **shape座標の一次資料**: 一部が未検証。`data/` の `source` に経緯が記録されているため、勝手に修正しない。
 - **将来拡張**(対局後の振り返り・学習履歴・複数戦型)の構造: [PROJECT_VISION.md](PROJECT_VISION.md) 5. のとおり MVP 対象外で、設計していない。
