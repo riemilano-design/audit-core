@@ -127,7 +127,7 @@ MVPでは、**role=self(自分)を color=sente(先手)に固定し、role=oppone
 - `family`: 振り飛車系・居飛車系などの分類
 - `leads_to_shape_ids`: この戦型がどの shapes(形)につながりやすいか
 - `recognition_pattern`: この戦型を指し手の並びから認識するための手がかり(任意フィールド)。値を持たない戦型は認識の候補にならない。「飛車を初期位置から動かさない」のような否定的な条件は現在の表現では書けない(その表現方法は未確定であり、必要になった時点で人間の承認を経て決める)
-- `scenario`: 将来の対局シナリオ拡張用の任意フィールド。**現段階では値を入れない。** 詳細は [SCENARIOS.md](SCENARIOS.md)
+- `scenario`: 対局シナリオ(AI序盤制御)の制御用データ(任意フィールド)。制御方式は「序盤の数手を `moves` の手順で強制進行させ、以降はエンジンに任せる」(人間承認済み)。`variants` に相手AIが毎局1つを選ぶ候補を持ち、各 variant は `target_intent_id` / `moves` / `verification_method` / `verification_status` / `verification_record` を持つ。**実データへの値の投入は、[KIND3_VERIFICATION.md](KIND3_VERIFICATION.md) の検証と Phase F の人間による最終採用判断を経てから行う(現時点では `null`)。** 詳細は [SCENARIOS.md](SCENARIOS.md)・[KIND3_VERIFICATION.md](KIND3_VERIFICATION.md)
 - `source` / `confidence_level`
 - `review_status`: 追加してよいかと見せてよいかを分離する運用区分(`draft`/`human_reviewed`/`expert_verified`)。定義は下記「運用区分 `review_status`」節を参照
 
@@ -200,10 +200,32 @@ AI は Kind 1 の知識を `draft` として**件数の制限なく**追加し�
 
 **露出制御文言の同期(記録)**: ζ-1 以前は、露出制御の対象に「陣形」を含まない文書が `CLAUDE.md`・[ROLES.md](ROLES.md)・[AGENT_PROTOCOL.md](AGENT_PROTOCOL.md)・[PROJECT_VISION.md](PROJECT_VISION.md)・`.claude/agents/shogi-content-curator.md` の5件あった。STEP ζ-1 でこの5件すべてを本文書・スキーマと同じ「戦法・陣形・狙い」に同期済みであり、露出制御上の文言差は現在解消している。Phase 7 の実装は、この同期済みの状態を前提としてよい。
 
+## 検証・採用状態 `verification_*`(Kind 3 制御データ用)
+
+Kind 3 の相手AI制御データ(`openings.scenario.variants[]`)が、検証を経て実運用に採用してよい状態かを管理する。手順は [KIND3_VERIFICATION.md](KIND3_VERIFICATION.md)。
+
+| フィールド | 値 | 意味 |
+|---|---|---|
+| `verification_method` | `expert_review` / `ai_multi_stage` / `null` | どの方法で検証したか。`expert_review` は有段者レビューを実施した場合のみ |
+| `verification_status` | `unverified` / `ai_verified` / `human_approved` | 検証・採用状態。**`human_approved` は人間のみが設定できる** |
+| `verification_record` | object / `null` | 検証の記録(使用エンジン名・バージョン・探索条件・各Phaseの結果・不一致の有無・最終判断者・日付など) |
+
+**`review_status` との関係**: `review_status` は**ユーザーへの知識露出**を制御し、`verification_*` は**制御データを実運用に使ってよいか**を制御する。**両者は完全に分離しており、一方の値から他方を導出しない。AI検証済みを `human_reviewed` として扱わない。**
+
+**保持単位**: variant 単位で持つ。[KIND3_VERIFICATION.md](KIND3_VERIFICATION.md) が「検証単位は1つの狙い = 1本の手順列」と定めているため。
+
+**`verification_record` の中身を固定しない理由**: 記録項目が運用の中で変わりうるため、`additionalProperties: true` とする(他のスキーマが `additionalProperties: false` を採っているのに対する例外であり、人間の承認を経ている)。
+
+**運用規則**:
+
+- AI検証で問題が確認された場合、`verification_status` を `unverified` へ戻す(`review_status` は触らない)
+- 有段者レビューが後日可能になった場合、`ai_multi_stage` から `expert_review` への追認・格上げができる
+- **未承認の Kind 3 制御データが実運用に入らないゲートを実装要件とする**(実装方式は今後のSTEP)
+
 ## 用語集データについて
 
 初心者向けの用語説明(用語集)は、上記4スキーマとは別に既存の `glossary.json`(v0.1設計時に構想)を継続利用する想定で、今回は新規にスキーマ化しない。`explanations.glossary_terms` はこの用語集のキーを参照する形にする。
 
 ## IDの参照関係
 
-`intents.opening_id` → `openings.id`、`explanations.refers_to_shape_id` → `shapes.id`、`explanations.refers_to_intent_id` → `intents.id`、`openings.leads_to_shape_ids` → `shapes.id[]`、`shapes.parent_shape_id` → `shapes.id`。参照先が存在しないIDを書かないこと(将来 `scripts/validate-data.mjs` で機械チェックする。[TESTING_STRATEGY.md](TESTING_STRATEGY.md) 参照)。
+`intents.opening_id` → `openings.id`、`explanations.refers_to_shape_id` → `shapes.id`、`explanations.refers_to_intent_id` → `intents.id`、`openings.leads_to_shape_ids` → `shapes.id[]`、`shapes.parent_shape_id` → `shapes.id`、`openings.scenario.variants[].target_intent_id` → `intents.id`(**この参照は検証時のテスト・オラクルとしてのみ使い、実行時のAI制御手順の生成・選択には使わない**)。参照先が存在しないIDを書かないこと(将来 `scripts/validate-data.mjs` で機械チェックする。[TESTING_STRATEGY.md](TESTING_STRATEGY.md) 参照)。

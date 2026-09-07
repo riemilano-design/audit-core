@@ -121,7 +121,7 @@ D-1・D-3 は**有段者でなくても実施できる**。
 
 `review_status` はユーザーへの知識露出を制御する。**Kind 3 制御データの検証・採用状態はこれとは完全に分離して管理し、一方の値から他方を導出しない。**
 
-**フィールド案(未確定・スキーマ未反映)**:
+**フィールド定義(ζ-4b で確定済み)**:
 
 | 案 | 値 | 意味 |
 |---|---|---|
@@ -129,7 +129,7 @@ D-1・D-3 は**有段者でなくても実施できる**。
 | `verification_status` | `unverified` / `ai_verified` / `human_approved` | `human_approved` は**人間のみが設定できる** |
 | `verification_record` | object | 使用エンジン名・バージョン・探索条件・各Phaseの結果・不一致の有無・最終判断者・日付 |
 
-**この3フィールドは案であり、スキーマには反映していない。** 正式なスキーマ定義は、`data/schemas/openings.schema.json` と [DATA_MODEL.md](DATA_MODEL.md) を**同時に**変更する別STEPで行う([CHANGE_MANAGEMENT.md](CHANGE_MANAGEMENT.md))。
+**この3フィールドは `data/schemas/openings.schema.json` の `scenario.variants[]` に、variant 単位で定義済みである。** 定義の正は [DATA_MODEL.md](DATA_MODEL.md) と `data/schemas/openings.schema.json` とする。
 
 **運用規則**:
 
@@ -151,7 +151,6 @@ D-1・D-3 は**有段者でなくても実施できる**。
 ## 未確定事項
 
 - Phase B の記録から人間が判断する際の観点(運用しながら整理する)
-- `verification_*` フィールドの正式なスキーマ定義(別STEP)
 - 実運用ゲートの実装方式(別STEP)
 - 検証ツールの具体的な実装(`scripts/` 配下。別STEP)
 - 使用するエンジンの選定(利用可能性を実装STEPで確認する)

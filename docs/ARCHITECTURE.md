@@ -237,6 +237,6 @@ GameState(内部・非公開)
 - **対局経過の再計算に必要な中間局面**: 指し手履歴を途中まで切り詰めて認識を再計算する際、対応する中間局面のSFENも同時に用意する必要がある(独立監査の指摘)。用意の方法は実装STEPで具体化する。
 - **`analysis/pathPlanner.ts` の最終的な扱い**: Phase 6 Unit 1 で `routePlanner.ts` へ切り替えたため本番経路からは使われていないが、削除するかどうかは未決(現状は温存)。
 - **複数対局の同時進行**: 現在は単一対局のみ。設計していない。
-- **対局シナリオ(AI序盤制御)**: [SCENARIOS.md](SCENARIOS.md) に将来設計があるが未実装。`engine/scenarioOpponentOpening.ts` は検証用であり、本番機能ではない。相手AIに狙いを持たせる(ユーザーには開示しない)という方針は人間の判断により確定したが、実装方式は未確定([SCENARIOS.md](SCENARIOS.md))。
+- **対局シナリオ(AI序盤制御)**: [SCENARIOS.md](SCENARIOS.md) に将来設計があるが未実装。`engine/scenarioOpponentOpening.ts` は検証用であり、本番機能ではない。相手AIに狙いを持たせる(ユーザーには開示しない)という方針は人間の判断により確定したが、実装方式は未確定([SCENARIOS.md](SCENARIOS.md))。制御方式(序盤の数手を `scenario` の手順で強制進行させ、以降はエンジンに任せる)とスキーマ構造は人間の承認を経て確定したが、**手順そのものの内容・毎局の選択方法・ランダム性の有無は引き続き未確定**である([DATA_MODEL.md](DATA_MODEL.md)・[KIND3_VERIFICATION.md](KIND3_VERIFICATION.md))。
 - **shape座標の一次資料**: 一部が未検証。`data/` の `source` に経緯が記録されているため、勝手に修正しない。
 - **将来拡張**(対局後の振り返り・学習履歴・複数戦型)の構造: [PROJECT_VISION.md](PROJECT_VISION.md) 5. のとおり MVP 対象外で、設計していない。

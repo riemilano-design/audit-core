@@ -30,12 +30,53 @@
     },
     "scenario": {
       "type": ["object", "null"],
-      "description": "対局シナリオ(AI序盤制御)の将来拡張用フィールド。docs/SCENARIOS.md 参照。現段階では必ず null にする",
+      "additionalProperties": false,
+      "description": "対局シナリオ(AI序盤制御)の制御用データ。制御方式は「序盤の数手をmovesの手順で強制進行させ、以降はエンジンに任せる」(人間承認済み)。docs/SCENARIOS.md・docs/KIND3_VERIFICATION.md 参照。実データへの値の投入は、docs/KIND3_VERIFICATION.md の検証と Phase F の人間による最終採用判断を経てから行う(現時点では null)",
+      "required": ["status", "variants"],
       "properties": {
         "status": {
           "type": "string",
-          "enum": ["not_implemented"],
-          "description": "現段階では常に not_implemented。値を実装するのは本実装に着手する判断が出てから"
+          "enum": ["not_implemented", "defined"],
+          "description": "not_implemented=受け皿のみ、defined=variantsが定義済み"
+        },
+        "variants": {
+          "type": "array",
+          "minItems": 1,
+          "description": "相手AIが毎局1つを選ぶ候補。選んだものはユーザーへ開示しない(docs/PHASES.md Phase 4)",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["id", "target_intent_id", "moves", "verification_method", "verification_status"],
+            "properties": {
+              "id": { "type": "string", "pattern": "^[a-z0-9_]+$", "description": "variantの一意な識別子" },
+              "target_intent_id": {
+                "type": "string",
+                "description": "この手順が実現しようとする intents.id。docs/KIND3_VERIFICATION.md Phase A-3 の検証時にテスト・オラクルとして参照するためのものであり、実行時のAI制御手順の生成・選択には使用しない(docs/SCENARIOS.md の認識用データと制御用データの分離)"
+              },
+              "moves": {
+                "type": "array",
+                "minItems": 1,
+                "items": { "type": "string" },
+                "description": "強制進行させる相手側の手順(USI形式、指す順)。座標形式の規約は docs/DATA_MODEL.md"
+              },
+              "source": { "type": "string", "description": "手順の出典・作成経緯" },
+              "verification_method": {
+                "type": ["string", "null"],
+                "enum": ["expert_review", "ai_multi_stage", null],
+                "description": "どの方法で検証したか。expert_reviewは有段者レビューを実施した場合のみ。定義は docs/KIND3_VERIFICATION.md"
+              },
+              "verification_status": {
+                "type": "string",
+                "enum": ["unverified", "ai_verified", "human_approved"],
+                "description": "検証・採用状態。human_approvedは人間のみが設定できる。review_status(ユーザーへの知識露出の制御)とは完全に分離し、一方の値から他方を導出しない"
+              },
+              "verification_record": {
+                "type": ["object", "null"],
+                "additionalProperties": true,
+                "description": "検証の記録(使用エンジン名・バージョン・探索条件・各Phaseの結果・不一致の有無・最終判断者・日付など)。記録項目が運用で変わりうるため中身を固定しない"
+              }
+            }
+          }
         }
       }
     },
