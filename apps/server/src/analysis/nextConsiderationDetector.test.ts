@@ -31,6 +31,7 @@ function inputFor(
   return {
     targetShapeId: shapeId,
     shapeName: shapeResult?.name ?? null,
+    shapeReviewStatus: shapeResult?.reviewStatus ?? null,
     missingSquares: shapeResult?.missingSquares ?? [],
     routes: plan.routes,
     candidateMoves: plan.candidateMoves,
@@ -83,6 +84,7 @@ describe("detectNextConsiderations", () => {
         targetSquare: null,
         targetPiece: null,
         shapeName: null,
+        shapeReviewStatus: null,
       });
       // 王手があっても、指せる一手の対応は引き続き述べる。
       expect(facts.some((f) => f.kind === "route_first_move_playable")).toBe(true);
@@ -135,6 +137,7 @@ describe("detectNextConsiderations", () => {
         targetSquare: "7h",
         targetPiece: "銀",
         shapeName: null,
+        shapeReviewStatus: null,
       });
     });
 
@@ -171,6 +174,7 @@ describe("detectNextConsiderations", () => {
           targetSquare: null,
           targetPiece: null,
           shapeName: null,
+          shapeReviewStatus: null,
         },
       ]);
     });
@@ -224,6 +228,7 @@ describe("detectNextConsiderations", () => {
           targetSquare: null,
           targetPiece: null,
           shapeName: "本美濃囲い",
+          shapeReviewStatus: "human_reviewed",
         },
       ]);
     });
@@ -234,6 +239,24 @@ describe("detectNextConsiderations", () => {
       );
 
       expect(facts).toEqual([]);
+    });
+
+    // STEP ζ-5: shapeReviewStatusは、選択中の形(実データ)のreview_statusを
+    // そのまま引き継ぐだけで、このモジュール自体は名前を出してよいかを判断しない
+    // (判断はanalysis/nameExposure.tsに集約する)。
+    it("shapeReviewStatusは、実データ(inputFor)のreview_statusをそのまま引き継ぐ(銀冠はdraft)", () => {
+      const facts = detectNextConsiderations(inputFor("mino_ginkanmuri", { missingSquares: [] }));
+
+      expect(facts).toEqual([
+        {
+          kind: "shape_completed",
+          moveUsi: null,
+          targetSquare: null,
+          targetPiece: null,
+          shapeName: "銀冠",
+          shapeReviewStatus: "draft",
+        },
+      ]);
     });
   });
 

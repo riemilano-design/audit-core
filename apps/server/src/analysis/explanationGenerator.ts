@@ -25,10 +25,12 @@
 // 用語キーの正式な一覧は未確認)。そのため、安全に導出できるshape_id/intent_id自体
 // のみを入れるに留める(例: ["boh_gin"])。将来、用語集データが追加された時点で拡張する。
 
-import type { IntentDetectionResult } from "./intentDetector.js";
+import type { IntentDetectionResult, MatchedSignature } from "./intentDetector.js";
 import { detectIntents, type DetectIntentsOptions } from "./intentDetector.js";
 import type { ShapeFormationResult } from "./shapeFormationAnalyzer.js";
 import { analyzeShapeFormation, type AnalyzeShapeFormationOptions } from "./shapeFormationAnalyzer.js";
+import { exposeName } from "./nameExposure.js";
+import { toJapaneseSquare } from "../notation/japaneseSquare.js";
 
 // "candidate_move"はdata/schemas/explanations.schema.jsonのstage enumに元々含まれていた
 // 値(スキーマ変更ではなく、TS側の型をスキーマに追いつかせる追加)。
@@ -126,12 +128,27 @@ function buildCurrentShapeStage(shapeResults: ShapeFormationResult[]): StageResu
     };
   }
 
-  const lead =
-    best.status === "completed"
-      ? `今、${best.name}の形ができています。`
-      : `${best.name}を作ろうとしている可能性があります(まだ完成はしていません)。`;
-
-  const reason = best.characteristics ? `${lead} ${best.characteristics}` : lead;
+  // 論点1(甲、STEP ζ-5): formingの段階では、review_statusに関わらず戦法・陣形の
+  // 名前を一切出さない(CLAUDE.mdルール4・6)。completedの場合のみ、review_statusが
+  // "draft"かどうかで名前の出し方を変える(analysis/nameExposure.ts、露出経路1)。
+  let lead: string;
+  let reason: string;
+  if (best.status === "completed") {
+    const exposed = exposeName(best.name, best.reviewStatus, "shape");
+    lead =
+      exposed.pendingNote === null
+        ? `今、${exposed.name}の形ができています。`
+        : `今、${exposed.name}と呼ばれる並びに近い形になっています。ただし、この形の説明は内容を確認中のため、参考程度に見てください。`;
+    reason = best.characteristics ? `${lead} ${best.characteristics}` : lead;
+  } else {
+    // 指摘A(ζ-5成果物監査REVISE): formingではcharacteristicsを連結しない。
+    // data/shapes/*.jsonのcharacteristicsは本文中に他の形・戦法の名前を含む場合が
+    // あり(例: mino_takamino「本美濃囲いで5八にあった金を…」)、連結するとforming
+    // でも名前が漏れてしまう(CLAUDE.mdルール4・6違反)。formingでは承認済みの
+    // ワンセンテンス(lead)のみをreasonとする。
+    lead = "今の陣形は、選んだ形に近づいてきていますが、まだ完成していません。";
+    reason = lead;
+  }
 
   return {
     status: best.status,
@@ -161,6 +178,74 @@ function buildCurrentShapeStage(shapeResults: ShapeFormationResult[]): StageResu
 const OPPONENT_UNCLASSIFIED_FORCED_OPENING_REASON =
   "相手の今の手は、対局序盤の決まった手順によるものです。そのため、狙いはまだ判定できません。";
 
+function buildOpponentIntentUnclassifiedStage(wasLastOpponentMoveForced: boolean): StageResult {
+  return {
+    status: "none",
+    explanation: {
+      id: "runtime_opponent_intent_unclassified",
+      stage: "opponent_intent",
+      purpose: PURPOSE_TEMPLATES.opponent_intent,
+      move: null,
+      reason: wasLastOpponentMoveForced
+        ? OPPONENT_UNCLASSIFIED_FORCED_OPENING_REASON
+        : "相手の狙いは、まだはっきりとは分かりません。特定の作戦を決めつけず、もう少し様子を見てみましょう。",
+      refers_to_shape_id: null,
+      refers_to_intent_id: null,
+      confidence_level: "low",
+      glossary_terms: [],
+      template_id: wasLastOpponentMoveForced
+        ? "opponent_intent_unclassified_forced_opening"
+        : "opponent_intent_unclassified",
+    },
+  };
+}
+
+/** matchedSignaturesのうち、evidence.plyが最大のものを返す。同値の場合は
+ * recognition_pattern順(=matchedSignaturesの並び順)で先のものを採用する
+ * (決定的にするため。STEP ζ-5で確定済みの規則)。 */
+function pickLatestMatchedSignature(signatures: MatchedSignature[]): MatchedSignature {
+  return signatures.reduce((latest, current) => (current.evidence.ply > latest.evidence.ply ? current : latest));
+}
+
+/** signature.toの筋(1〜9)から、機械的に「向き」の言い回しを決める
+ * (STEP ζ-5で確定済み。MVPは自分=先手固定の前提)。 */
+function directionForSquare(usiSquare: string): string {
+  const file = Number(usiSquare[0]);
+  if (file >= 1 && file <= 3) return "あなたから見て右側";
+  if (file >= 4 && file <= 6) return "盤の中央";
+  return "あなたから見て左側";
+}
+
+// 論点1(甲、STEP ζ-5): opponent_intentがformingの段階では、review_statusに
+// 関わらず戦法名・current_aim_explanation(名前を前提に書かれた文章)を一切出さない。
+// 代わりに、実際に観測できている指し手の事実(手数・駒・マス・大まかな方向)だけを
+// 機械的に述べる(CLAUDE.mdルール5: 将棋の事実判断はLLMにさせない。ここでも
+// 判断は一切増やしていない。既にintentDetector.tsが確定させたmatchedSignaturesを
+// そのまま読むだけ)。
+function buildOpponentIntentFormingStage(best: IntentDetectionResult): StageResult {
+  const signature = pickLatestMatchedSignature(best.matchedSignatures);
+  const reason =
+    `${signature.evidence.ply}手目の${signature.piece}${toJapaneseSquare(signature.to)}から、` +
+    `相手の駒が${directionForSquare(signature.to)}へ向かってきているように見えます。` +
+    `ただ、これがどの作戦になるかは、まだ決まっていません。`;
+
+  return {
+    status: "forming",
+    explanation: {
+      id: `runtime_opponent_intent_${best.intentId}`,
+      stage: "opponent_intent",
+      purpose: PURPOSE_TEMPLATES.opponent_intent,
+      move: null,
+      reason,
+      refers_to_shape_id: null,
+      refers_to_intent_id: best.intentId,
+      confidence_level: capConfidence(best.dataConfidenceLevel, "medium"),
+      glossary_terms: [best.intentId],
+      template_id: "opponent_intent_forming",
+    },
+  };
+}
+
 function buildOpponentIntentStage(
   intentResults: IntentDetectionResult[],
   wasLastOpponentMoveForced: boolean = false,
@@ -168,31 +253,21 @@ function buildOpponentIntentStage(
   const best = pickBest(intentResults);
 
   if (!best) {
-    return {
-      status: "none",
-      explanation: {
-        id: "runtime_opponent_intent_unclassified",
-        stage: "opponent_intent",
-        purpose: PURPOSE_TEMPLATES.opponent_intent,
-        move: null,
-        reason: wasLastOpponentMoveForced
-          ? OPPONENT_UNCLASSIFIED_FORCED_OPENING_REASON
-          : "相手の狙いは、まだはっきりとは分かりません。特定の作戦を決めつけず、もう少し様子を見てみましょう。",
-        refers_to_shape_id: null,
-        refers_to_intent_id: null,
-        confidence_level: "low",
-        glossary_terms: [],
-        template_id: wasLastOpponentMoveForced
-          ? "opponent_intent_unclassified_forced_opening"
-          : "opponent_intent_unclassified",
-      },
-    };
+    return buildOpponentIntentUnclassifiedStage(wasLastOpponentMoveForced);
   }
 
-  const lead =
-    best.matchStatus === "matched"
-      ? `相手は${best.name}の形になっています。`
-      : `相手は${best.name}を狙っている可能性があります(まだ断定はできません)。`;
+  if (best.matchStatus === "forming") {
+    return buildOpponentIntentFormingStage(best);
+  }
+
+  // best.matchStatus === "matched"。露出経路2(STEP ζ-5): review_statusが"draft"の
+  // 場合は名前を出さず、既存のunclassified文言に落とす(新しい文言は作らない)。
+  const exposed = exposeName(best.name, best.reviewStatus, "shape");
+  if (exposed.pendingNote !== null) {
+    return buildOpponentIntentUnclassifiedStage(wasLastOpponentMoveForced);
+  }
+
+  const lead = `相手は${best.name}の形になっています。`;
 
   return {
     status: best.matchStatus,
@@ -204,17 +279,23 @@ function buildOpponentIntentStage(
       reason: `${lead} ${best.currentAimExplanation}`,
       refers_to_shape_id: null,
       refers_to_intent_id: best.intentId,
-      confidence_level: capConfidence(best.dataConfidenceLevel, best.matchStatus === "matched" ? "high" : "medium"),
+      confidence_level: capConfidence(best.dataConfidenceLevel, "high"),
       glossary_terms: [best.intentId],
       template_id: `opponent_intent_${best.matchStatus}`,
     },
   };
 }
 
+/**
+ * 論点1(甲、STEP ζ-5): opponent_next_aimがformingの段階では、ステージ自体を
+ * 出力配列から落とす(表示しない。人間承認済みの文言仕様どおり)。matchedでも
+ * noneでもない(=forming)場合にのみnullを返し、呼び出し側(buildStages)が
+ * 配列から除外する。
+ */
 function buildOpponentNextAimStage(
   intentResults: IntentDetectionResult[],
   wasLastOpponentMoveForced: boolean = false,
-): StageResult {
+): StageResult | null {
   const best = pickBest(intentResults);
 
   if (!best) {
@@ -239,7 +320,9 @@ function buildOpponentNextAimStage(
     };
   }
 
-  const hedge = best.matchStatus === "matched" ? "" : "まだ断定はできませんが、";
+  if (best.matchStatus === "forming") {
+    return null;
+  }
 
   return {
     status: best.matchStatus,
@@ -248,10 +331,10 @@ function buildOpponentNextAimStage(
       stage: "opponent_next_aim",
       purpose: PURPOSE_TEMPLATES.opponent_next_aim,
       move: null,
-      reason: `${hedge}${best.nextAimExplanation}`,
+      reason: best.nextAimExplanation,
       refers_to_shape_id: null,
       refers_to_intent_id: best.intentId,
-      confidence_level: capConfidence(best.dataConfidenceLevel, best.matchStatus === "matched" ? "high" : "medium"),
+      confidence_level: capConfidence(best.dataConfidenceLevel, "high"),
       glossary_terms: [best.intentId],
       template_id: `opponent_next_aim_${best.matchStatus}`,
     },
@@ -267,7 +350,7 @@ function buildStages(
     buildCurrentShapeStage(shapeResults),
     buildOpponentIntentStage(intentResults, wasLastOpponentMoveForced),
     buildOpponentNextAimStage(intentResults, wasLastOpponentMoveForced),
-  ];
+  ].filter((stage): stage is StageResult => stage !== null);
 }
 
 /**

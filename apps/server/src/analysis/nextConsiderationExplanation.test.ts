@@ -36,6 +36,7 @@ function fact(kind: NextConsiderationKind, overrides: Partial<NextConsiderationF
     targetSquare: null,
     targetPiece: null,
     shapeName: null,
+    shapeReviewStatus: null,
     ...overrides,
   };
 }
@@ -48,6 +49,7 @@ function factsFor(shapeId: string, sfen: string = INITIAL_SFEN): NextConsiderati
   return detectNextConsiderations({
     targetShapeId: shapeId,
     shapeName: shapeResult?.name ?? null,
+    shapeReviewStatus: shapeResult?.reviewStatus ?? null,
     missingSquares: shapeResult?.missingSquares ?? [],
     routes: plan.routes,
     candidateMoves: plan.candidateMoves,
@@ -62,7 +64,7 @@ describe("explainNextConsiderations", () => {
       fact("in_check"),
       fact("route_first_move_playable", { moveUsi: "7i7h", targetSquare: "7h", targetPiece: "銀" }),
       fact("no_playable_route_first_move"),
-      fact("shape_completed", { shapeName: "本美濃囲い" }),
+      fact("shape_completed", { shapeName: "本美濃囲い", shapeReviewStatus: "human_reviewed" }),
     ];
 
     const messages = explainNextConsiderations(all, INITIAL_SFEN);
@@ -124,7 +126,7 @@ describe("explainNextConsiderations", () => {
 
   it("形完成の文言は承認済みのとおり", () => {
     const messages = explainNextConsiderations(
-      [fact("shape_completed", { shapeName: "本美濃囲い" })],
+      [fact("shape_completed", { shapeName: "本美濃囲い", shapeReviewStatus: "human_reviewed" })],
       INITIAL_SFEN,
     );
 
@@ -194,7 +196,7 @@ describe("explainNextConsiderations", () => {
           [
             fact("in_check"),
             fact("no_playable_route_first_move"),
-            fact("shape_completed", { shapeName: "本美濃囲い" }),
+            fact("shape_completed", { shapeName: "本美濃囲い", shapeReviewStatus: "human_reviewed" }),
           ],
           INITIAL_SFEN,
         ),
@@ -210,5 +212,36 @@ describe("explainNextConsiderations", () => {
 
   it("事実が空なら文言も空", () => {
     expect(explainNextConsiderations([], INITIAL_SFEN)).toEqual([]);
+  });
+
+  // STEP ζ-5: 露出経路5(必要なマスの説明)。review_statusが"draft"の場合にだけ
+  // 注記("内容を確認中")が付く(analysis/nameExposure.tsのsite="squares")。
+  describe("review_statusによる名前の露出制御(STEP ζ-5)", () => {
+    it("draftの形の場合、名前に(内容を確認中)の注記が付く", () => {
+      const messages = explainNextConsiderations(
+        [fact("shape_completed", { shapeName: "銀冠", shapeReviewStatus: "draft" })],
+        INITIAL_SFEN,
+      );
+
+      expect(messages[0]?.text).toBe("「銀冠」(内容を確認中)に必要なマスは、すべて埋まっています。");
+    });
+
+    it("human_reviewedの形の場合、注記は付かない", () => {
+      const messages = explainNextConsiderations(
+        [fact("shape_completed", { shapeName: "本美濃囲い", shapeReviewStatus: "human_reviewed" })],
+        INITIAL_SFEN,
+      );
+
+      expect(messages[0]?.text).toBe("「本美濃囲い」に必要なマスは、すべて埋まっています。");
+    });
+
+    it("expert_verifiedの形の場合も、注記は付かない(human_reviewedと区別しない)", () => {
+      const messages = explainNextConsiderations(
+        [fact("shape_completed", { shapeName: "本美濃囲い", shapeReviewStatus: "expert_verified" })],
+        INITIAL_SFEN,
+      );
+
+      expect(messages[0]?.text).toBe("「本美濃囲い」に必要なマスは、すべて埋まっています。");
+    });
   });
 });

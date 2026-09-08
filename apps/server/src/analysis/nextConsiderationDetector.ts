@@ -26,6 +26,7 @@
 // 経路の一手なのか」という対応を示すためだけのもの。
 
 import type { RouteCandidateMove, ShapeSquareRoute } from "./routePlanner.js";
+import type { ReviewStatus } from "./nameExposure.js";
 
 export type NextConsiderationKind =
   /** 自玉に王手がかかっている(将棋のルール上の制約であり、評価ではない) */
@@ -47,6 +48,9 @@ export interface NextConsiderationFact {
   targetPiece: string | null;
   /** kind: "shape_completed" の場合の形の名前。それ以外はnull。 */
   shapeName: string | null;
+  /** kind: "shape_completed" の場合の、その形のreview_status。それ以外(shapeNameがnullの場合)はnull。
+   * 名前を出してよいかの判断はanalysis/nameExposure.tsに集約し、このモジュールでは判断しない。 */
+  shapeReviewStatus: ReviewStatus | null;
 }
 
 /**
@@ -58,6 +62,9 @@ export interface NextConsiderationInput {
   targetShapeId: string | undefined;
   /** 選択中の形の名前(shapeFormationAnalyzer.tsのname)。分からない場合はnull。 */
   shapeName: string | null;
+  /** 選択中の形のreview_status(shapeFormationAnalyzer.tsのreviewStatus)。shapeNameが
+   * nullの場合はnull。 */
+  shapeReviewStatus: ReviewStatus | null;
   /** 選択中の形の未達成マス(shapeFormationAnalyzer.tsのmissingSquares)。 */
   missingSquares: string[];
   /** routePlanner.tsのroutes。 */
@@ -80,6 +87,7 @@ function makeFact(
     targetSquare: overrides.targetSquare ?? null,
     targetPiece: overrides.targetPiece ?? null,
     shapeName: overrides.shapeName ?? null,
+    shapeReviewStatus: overrides.shapeReviewStatus ?? null,
   };
 }
 
@@ -111,7 +119,12 @@ export function detectNextConsiderations(input: NextConsiderationInput): NextCon
   if (input.missingSquares.length === 0) {
     // 形の名前が分からない場合は文言を組み立てられないため、推測せず何も述べない。
     if (input.shapeName === null) return [];
-    return [makeFact("shape_completed", { shapeName: input.shapeName })];
+    return [
+      makeFact("shape_completed", {
+        shapeName: input.shapeName,
+        shapeReviewStatus: input.shapeReviewStatus,
+      }),
+    ];
   }
 
   const facts: NextConsiderationFact[] = [];

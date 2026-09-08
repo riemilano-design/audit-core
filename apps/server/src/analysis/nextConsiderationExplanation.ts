@@ -27,6 +27,7 @@
 import { toJapaneseMove } from "../notation/japaneseMove.js";
 import { toJapaneseMoveSquares, toJapaneseSquare } from "../notation/japaneseSquare.js";
 import type { NextConsiderationFact, NextConsiderationKind } from "./nextConsiderationDetector.js";
+import { exposeName } from "./nameExposure.js";
 
 /** 表示メッセージの種類。事実の種類に、表示上の注記(ordering_note)を加えたもの。 */
 export type NextConsiderationMessageKind = NextConsiderationKind | "ordering_note";
@@ -66,9 +67,15 @@ function factText(fact: NextConsiderationFact, sfen: string): string | null {
     case "no_playable_route_first_move":
       return "今の局面では、選んだ形へ向かう道のりの一手目を、どれも指すことができません。";
 
-    case "shape_completed":
+    case "shape_completed": {
       if (fact.shapeName === null) return null;
-      return `「${fact.shapeName}」に必要なマスは、すべて埋まっています。`;
+      // fact.shapeNameがある場合、契約上fact.shapeReviewStatusも必ず伴う
+      // (nextConsiderationDetector.ts参照)。名前を出してよいかの判断は
+      // analysis/nameExposure.tsに集約する(露出経路5、STEP ζ-5)。
+      const exposed = exposeName(fact.shapeName, fact.shapeReviewStatus ?? "draft", "squares");
+      const suffix = exposed.pendingNote === null ? "" : `(${exposed.pendingNote})`;
+      return `「${exposed.name}」${suffix}に必要なマスは、すべて埋まっています。`;
+    }
   }
 }
 

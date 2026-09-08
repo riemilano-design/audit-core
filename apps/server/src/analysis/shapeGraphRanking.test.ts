@@ -24,6 +24,7 @@ function makeShapeResult(overrides: Partial<ShapeFormationResult> & { shapeId: s
     missingSquares: overrides.missingSquares ?? [],
     optionalMatchedSquares: overrides.optionalMatchedSquares ?? [],
     dataConfidenceLevel: overrides.dataConfidenceLevel ?? "medium",
+    reviewStatus: overrides.reviewStatus ?? "human_reviewed",
     characteristics: overrides.characteristics ?? "",
     formationEvidence: overrides.formationEvidence ?? [],
   };

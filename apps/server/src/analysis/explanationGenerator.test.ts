@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { detectIntents } from "./intentDetector.js";
+import { detectIntents, type IntentDetectionResult } from "./intentDetector.js";
 import { getShapes } from "./shapeRepository.js";
 import { analyzeShapeFormation, type ShapeFormationResult } from "./shapeFormationAnalyzer.js";
 import { getIntents, type IntentDefinition } from "./intentRepository.js";
@@ -48,6 +48,7 @@ const TEST_HONMINO: ShapeFormationResult = {
   optionalMatchedSquares: [],
   formationEvidence: [],
   dataConfidenceLevel: "medium",
+  reviewStatus: "human_reviewed",
   characteristics: "四間飛車でよく使われる、完成が早くバランスの良い囲い。",
 };
 
@@ -65,6 +66,7 @@ const NO_SHAPE_RESULTS: ShapeFormationResult[] = getShapes().map((shape) => ({
   optionalMatchedSquares: [],
   formationEvidence: [],
   dataConfidenceLevel: shape.confidence_level,
+  reviewStatus: shape.review_status,
   characteristics: shape.characteristics,
 }));
 
@@ -73,6 +75,7 @@ const NO_INTENT_RESULTS = getIntents().map((intent) => ({
   name: intent.name,
   openingId: intent.opening_id,
   dataConfidenceLevel: intent.confidence_level,
+  reviewStatus: intent.review_status,
   matchStatus: "none" as const,
   matchScore: 0,
   matchedSignatures: [],
@@ -112,8 +115,49 @@ describe("generateExplanations", () => {
     const explanations = generateExplanations([forming], NO_INTENT_RESULTS);
     const currentShape = findStage(explanations, "current_shape");
 
-    expect(currentShape.reason).toContain("可能性があります");
+    // 論点1(甲、STEP ζ-5): formingの段階では戦法・陣形の名前を一切出さない。
+    expect(currentShape.reason).toContain("まだ完成していません");
     expect(currentShape.reason).not.toContain("完成しています");
+    for (const shape of getShapes()) {
+      expect(currentShape.reason).not.toContain(shape.name);
+    }
+  });
+
+  it("current_shape: forming時、characteristicsが他の形の名前を含む形(高美濃囲い/銀冠)でも名前が漏れない(指摘A回帰テスト)", () => {
+    // mino_takamino.characteristicsは「本美濃囲いで5八にあった金を…」と本美濃囲いの
+    // 名前を含み、mino_ginkanmuri.characteristicsは「高美濃囲いからさらに銀を…」と
+    // 高美濃囲いの名前を含む。TEST_HONMINOのcharacteristics(他形名を含まない)だけでは
+    // この漏れを検出できない(成果物監査REVISE指摘A)ため、実データからこの2件を使う。
+    const takamino = getShapes().find((s) => s.id === "mino_takamino")!;
+    const ginkanmuri = getShapes().find((s) => s.id === "mino_ginkanmuri")!;
+
+    for (const shapeDef of [takamino, ginkanmuri]) {
+      const forming: ShapeFormationResult = {
+        shapeId: shapeDef.id,
+        name: shapeDef.name,
+        side: shapeDef.side,
+        family: shapeDef.family,
+        parentShapeId: shapeDef.parent_shape_id ?? null,
+        perspectiveColor: "sente",
+        status: "forming",
+        matchScore: 0.5,
+        matchedSquares: [],
+        missingSquares: ["7g"],
+        optionalMatchedSquares: [],
+        formationEvidence: [{ square: "8h", piece: "玉", evidence: { ply: 2, moveUsi: "5i6h" } }],
+        dataConfidenceLevel: shapeDef.confidence_level,
+        reviewStatus: shapeDef.review_status,
+        characteristics: shapeDef.characteristics,
+      };
+
+      const explanations = generateExplanations([forming], NO_INTENT_RESULTS);
+      const currentShape = findStage(explanations, "current_shape");
+
+      expect(currentShape.reason).toBe("今の陣形は、選んだ形に近づいてきていますが、まだ完成していません。");
+      for (const shape of getShapes()) {
+        expect(currentShape.reason).not.toContain(shape.name);
+      }
+    }
   });
 
   it("current_shape: 全shapeがnone(matchScore 0)の場合、特定の形を断定せず『未分類』の説明になる", () => {
@@ -156,11 +200,18 @@ describe("generateExplanations", () => {
     const explanations = generateExplanations(shapeResults, intentResults);
 
     const opponentIntent = findStage(explanations, "opponent_intent");
-    expect(opponentIntent.reason).toContain("可能性があります");
-    expect(opponentIntent.reason).toContain("断定はできません");
+    // 論点1(甲、STEP ζ-5): formingの段階では戦法名・current_aim_explanationを一切出さず、
+    // 観測できている事実(手数・駒・マス・大まかな方向)だけを機械的に述べる。
+    expect(opponentIntent.reason).toContain("ように見えます");
+    expect(opponentIntent.reason).toContain("まだ決まっていません");
+    const hayajikake = getIntents().find((i) => i.id === "hayajikake")!;
+    for (const intent of getIntents()) {
+      expect(opponentIntent.reason).not.toContain(intent.name);
+    }
+    expect(opponentIntent.reason).not.toContain(hayajikake.current_aim_explanation);
 
-    const nextAim = findStage(explanations, "opponent_next_aim");
-    expect(nextAim.reason).toContain("断定はできません");
+    // opponent_next_aim(甲、STEP ζ-5): formingの段階ではステージ自体を出力配列から落とす。
+    expect(explanations.find((e) => e.stage === "opponent_next_aim")).toBeUndefined();
   });
 
   it("opponent_intent / opponent_next_aim: 全intentがnoneの場合、特定の意図を断定しない", () => {
@@ -255,6 +306,65 @@ describe("generateExplanations", () => {
       expect(explanation.reason.length).toBeGreaterThan(0);
       expect(["high", "medium", "low"]).toContain(explanation.confidence_level);
     }
+  });
+
+  // STEP ζ-5: review_statusによる名前の露出制御(analysis/nameExposure.ts)。
+  describe("review_statusによる名前の露出制御(STEP ζ-5)", () => {
+    it("current_shape completed: draftのshapeの場合、名前に注記付きの文言になる(露出経路1)", () => {
+      const draftHonmino: ShapeFormationResult = { ...TEST_HONMINO, reviewStatus: "draft" };
+      const explanations = generateExplanations([draftHonmino], NO_INTENT_RESULTS);
+      const currentShape = findStage(explanations, "current_shape");
+
+      expect(currentShape.reason).toBe(
+        "今、本美濃囲いと呼ばれる並びに近い形になっています。ただし、この形の説明は内容を確認中のため、参考程度に見てください。 " +
+          TEST_HONMINO.characteristics,
+      );
+    });
+
+    it("current_shape completed: human_reviewedのshapeの場合、注記は付かない(従来どおり)", () => {
+      const explanations = generateExplanations([TEST_HONMINO], NO_INTENT_RESULTS);
+      const currentShape = findStage(explanations, "current_shape");
+
+      expect(currentShape.reason).toBe(`今、本美濃囲いの形ができています。 ${TEST_HONMINO.characteristics}`);
+    });
+
+    it("opponent_intent matched: draftのintentの場合、名前を出さず既存のunclassified文言に落ちる(露出経路2)", () => {
+      const draftMatchedIntent: IntentDetectionResult = {
+        intentId: "boh_gin",
+        name: "棒銀",
+        openingId: "ibisha",
+        dataConfidenceLevel: "medium",
+        reviewStatus: "draft",
+        matchStatus: "matched",
+        matchScore: 1,
+        matchedSignatures: [
+          { piece: "銀", to: "7c", evidence: { ply: 2, moveUsi: "7c7d" } },
+          { piece: "銀", to: "7d", evidence: { ply: 4, moveUsi: "7d7e" } },
+        ],
+        unmatchedSignatures: [],
+        currentAimExplanation: "テスト用の説明文",
+        nextAimExplanation: "テスト用の次の狙い",
+      };
+
+      const explanations = generateExplanations(NO_SHAPE_RESULTS, [draftMatchedIntent]);
+      const opponentIntent = findStage(explanations, "opponent_intent");
+
+      // 新しい文言は作らず、既存のunclassified(全intentがnoneの場合)と完全に同じ文言に落ちる。
+      const unclassified = findStage(generateExplanations(NO_SHAPE_RESULTS, NO_INTENT_RESULTS), "opponent_intent");
+      expect(opponentIntent).toEqual(unclassified);
+      expect(opponentIntent.reason).not.toContain("棒銀");
+    });
+
+    it("opponent_intent matched: human_reviewedのintentの場合、名前を出す(従来どおり)", () => {
+      const moveHistory = interleaveWithSenteFillers(HAYAJIKAKE_GOTE_MOVES_FULL);
+      const sfen = sfenAfter(moveHistory);
+      const shapeResults = analyzeShapeFormation(sfen, moveHistory);
+      const intentResults = detectIntents(sfen, moveHistory);
+      const explanations = generateExplanations(shapeResults, intentResults);
+
+      const opponentIntent = findStage(explanations, "opponent_intent");
+      expect(opponentIntent.reason).toContain("早仕掛けの形になっています");
+    });
   });
 });
 

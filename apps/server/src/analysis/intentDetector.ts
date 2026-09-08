@@ -57,6 +57,9 @@ export interface IntentDetectionResult {
   openingId: string;
   /** data/intents/*.json 側の「この知識データ自体への自信度」(検知の確信度とは別概念) */
   dataConfidenceLevel: IntentDefinition["confidence_level"];
+  /** data/intents/*.json の review_status をそのまま引き継ぐ。名前を出してよいかの
+   * 判断はanalysis/nameExposure.tsに集約し、このモジュールでは判断しない。 */
+  reviewStatus: IntentDefinition["review_status"];
   /** シグネチャが1つも観測されない/一部観測/全て観測、の3段階。断定を避けるための土台。 */
   matchStatus: IntentMatchStatus;
   /** 観測されたシグネチャの割合。0〜1。決定的な値(同じ入力なら常に同じ値)。 */
@@ -108,6 +111,7 @@ function evaluateIntent(opponentEvents: MoveEvent[], intent: IntentDefinition): 
     name: intent.name,
     openingId: intent.opening_id,
     dataConfidenceLevel: intent.confidence_level,
+    reviewStatus: intent.review_status,
     matchStatus,
     matchScore,
     matchedSignatures,

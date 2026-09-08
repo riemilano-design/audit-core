@@ -33,6 +33,10 @@ export interface IntentDefinition {
   next_aim_explanation: string;
   affects_target_shapes?: AffectsTargetShape[];
   confidence_level: "high" | "medium" | "low";
+  /** 知識を追加してよいかと、ユーザーへ見せてよいかを分離する運用区分
+   * (data/schemas/intents.schema.json参照)。名前を出してよいかの判断は
+   * analysis/nameExposure.tsに集約し、このモジュールでは判断しない。 */
+  review_status: "draft" | "human_reviewed" | "expert_verified";
   [key: string]: unknown;
 }
 
@@ -45,7 +49,8 @@ function isIntentDefinition(value: unknown): value is IntentDefinition {
     typeof v.id === "string" &&
     typeof v.name === "string" &&
     typeof v.opening_id === "string" &&
-    Array.isArray(v.recognition_pattern)
+    Array.isArray(v.recognition_pattern) &&
+    typeof v.review_status === "string"
   );
 }
 

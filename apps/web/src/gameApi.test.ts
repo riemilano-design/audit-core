@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   getPlanChangeReasonMessage,
+  reviewNoteSuffix,
   shouldRetryPlanRefresh,
   shouldShowNextConsiderations,
   shouldShowPlanChangedNotice,
@@ -162,5 +163,68 @@ describe("shouldRetryPlanRefresh", () => {
     expect(Number.isInteger(PLAN_REFRESH_MAX_ATTEMPTS)).toBe(true);
     expect(PLAN_REFRESH_MAX_ATTEMPTS).toBeGreaterThanOrEqual(14);
     expect(PLAN_REFRESH_MAX_ATTEMPTS).toBeLessThanOrEqual(40);
+  });
+});
+
+// STEP ζ-5: docs/PHASES.md Phase7 Unit4「draftの表示」表(人間承認済み)どおりに
+// 注記が「」の外側へ付くことを固定するためのテスト。前回の実装は注記を「」の内側に
+// 入れてしまっていた(main.tsのwithPendingReviewNote)ため、今回はreviewNoteSuffix自体と、
+// main.tsが実際に組み立てる文言(組み上がりの見出し・候補手セクションの見出し・
+// 目標形の選択ボタン)の両方を検証する。
+describe("reviewNoteSuffix", () => {
+  it("注記がnullの場合は空文字を返す(「」の外に何も付かない)", () => {
+    expect(reviewNoteSuffix(null)).toBe("");
+  });
+
+  it("注記がある場合は括弧で囲んだサフィックスを返す", () => {
+    expect(reviewNoteSuffix("内容を確認中の形")).toBe("(内容を確認中の形)");
+  });
+});
+
+describe("STEP ζ-5: 承認済み文言(注記は「」の外側)", () => {
+  it("組み上がりの見出し(main.ts:301相当)", () => {
+    const name = "銀冠";
+    const heading = `「${name}」${reviewNoteSuffix("内容を確認中の形")}の組み上がり`;
+    expect(heading).toBe("「銀冠」(内容を確認中の形)の組み上がり");
+  });
+
+  it("組み上がりの見出し(注記なし)", () => {
+    const name = "本美濃";
+    const heading = `「${name}」${reviewNoteSuffix(null)}の組み上がり`;
+    expect(heading).toBe("「本美濃」の組み上がり");
+  });
+
+  it("候補手セクションの見出し(main.ts:480相当)", () => {
+    const selectedShapeName = "銀冠";
+    const selectedShapeNote = "内容を確認中の形";
+    const heading = `「${selectedShapeName}」${reviewNoteSuffix(selectedShapeNote)}に近づく手の候補`;
+    expect(heading).toBe("「銀冠」(内容を確認中の形)に近づく手の候補");
+  });
+
+  it("候補手セクションの見出し(注記なし)", () => {
+    const selectedShapeName = "本美濃";
+    const selectedShapeNote = null;
+    const heading = `「${selectedShapeName}」${reviewNoteSuffix(selectedShapeNote)}に近づく手の候補`;
+    expect(heading).toBe("「本美濃」に近づく手の候補");
+  });
+
+  it("候補手セクションの見出し(選択中の形が無い場合のフォールバックは維持)", () => {
+    const selectedShapeName: string | null = null;
+    const heading = selectedShapeName
+      ? `「${selectedShapeName}」${reviewNoteSuffix(null)}に近づく手の候補`
+      : "この形へ近づく手の候補";
+    expect(heading).toBe("この形へ近づく手の候補");
+  });
+
+  it("目標形の選択ボタン(main.ts:446相当、これは元々正しい仕様どおり内側のまま)", () => {
+    const shapeName = "銀冠";
+    const displayName = shapeName + reviewNoteSuffix("内容を確認中の形");
+    expect(displayName).toBe("銀冠(内容を確認中の形)");
+  });
+
+  it("目標形の選択ボタン(注記なし)", () => {
+    const shapeName = "本美濃";
+    const displayName = shapeName + reviewNoteSuffix(null);
+    expect(displayName).toBe("本美濃");
   });
 });

@@ -241,6 +241,14 @@ h1 {
   margin: 0 0 0.6rem;
 }
 
+/* STEP ζ-5: 選択中の形のreview_statusが"draft"の場合にだけ出る注意書き
+   (analysis/nameExposure.tsの文言をそのまま表示するだけ)。 */
+.candidate-section-review-note {
+  font-size: 0.85rem;
+  color: #8a5a00;
+  margin: 0 0 0.6rem;
+}
+
 .plan-unavailable {
   font-size: 0.85rem;
   color: #666;

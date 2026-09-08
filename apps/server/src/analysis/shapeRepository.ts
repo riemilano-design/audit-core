@@ -29,6 +29,10 @@ export interface ShapeDefinition {
   typical_build_order?: string[];
   characteristics: string;
   confidence_level: "high" | "medium" | "low";
+  /** 知識を追加してよいかと、ユーザーへ見せてよいかを分離する運用区分
+   * (data/schemas/shapes.schema.json参照)。名前を出してよいかの判断は
+   * analysis/nameExposure.tsに集約し、このモジュールでは判断しない。 */
+  review_status: "draft" | "human_reviewed" | "expert_verified";
   [key: string]: unknown;
 }
 
@@ -42,7 +46,8 @@ function isShapeDefinition(value: unknown): value is ShapeDefinition {
     typeof v.name === "string" &&
     typeof v.side === "string" &&
     typeof v.family === "string" &&
-    Array.isArray(v.required_pieces)
+    Array.isArray(v.required_pieces) &&
+    typeof v.review_status === "string"
   );
 }
 

@@ -11,6 +11,7 @@ function makeIntentResult(overrides: Partial<IntentDetectionResult> & { intentId
     name: overrides.name ?? overrides.intentId,
     openingId: overrides.openingId ?? "ibisha",
     dataConfidenceLevel: overrides.dataConfidenceLevel ?? "medium",
+    reviewStatus: overrides.reviewStatus ?? "human_reviewed",
     matchStatus: overrides.matchStatus ?? "forming",
     matchScore: overrides.matchScore ?? 0.5,
     matchedSignatures: overrides.matchedSignatures ?? [],

@@ -31,8 +31,11 @@ export interface CoachExplanation {
   status: CoachStatus;
 }
 
-// apps/server/src/analysis/shapeGraphRanking.ts の RankedReachableShape に対応する型
+// apps/server/src/api/stateResponse.ts の ReachableShapeBody に対応する型
 // (⑥目指せる形のランキング。上位3件、1位を唯一の正解として強調しない)。
+// STEP ζ-5: reviewStatusの生値は公開されない(サーバー側のanalysis/nameExposure.tsに
+// 判断を集約するため)。pendingReviewNoteはreview_statusが"draft"の場合にだけ入る注記で、
+// それ以外はnull。web側はこの注記の文言を作らず、有無だけを見て表示する。
 export interface RankedReachableShape {
   shapeId: string;
   name: string;
@@ -43,6 +46,7 @@ export interface RankedReachableShape {
   adjustment: "prioritize" | "deprioritize" | null;
   reason: string | null;
   sourceIntentId: string | null;
+  pendingReviewNote: string | null;
 }
 
 // apps/server/src/analysis/candidateMoveExplanation.ts の CandidateMoveExplanationResult に
@@ -82,6 +86,12 @@ export interface TargetShapeProgress {
   name: string;
   matchedSquareLabels: string[];
   missingSquareLabels: string[];
+  /**
+   * STEP ζ-5: この形のreview_statusが"draft"の場合にだけ入る注記
+   * (サーバー側analysis/nameExposure.tsのsite="shape")。それ以外はnull。
+   * review_status自体(生の値)は公開されない。
+   */
+  pendingReviewNote: string | null;
 }
 
 // apps/server/src/api/stateResponse.ts の ShapeRouteSummary に対応する型
@@ -151,6 +161,12 @@ export interface ReachablePlanBody {
   nextConsiderations: NextConsiderationMessage[];
   candidateMoveState: CandidateMoveState;
   candidateMove: CandidateMoveExplanationResult | undefined;
+  /**
+   * STEP ζ-5(経路6): 候補手セクションに添える注意書き。選択中の形のreview_statusが
+   * "draft"の場合にだけ入る(サーバー側analysis/nameExposure.tsのsite="section")。
+   * 個々の候補手の説明文自体は変更されない。選択中の形が無い場合はnull。
+   */
+  pendingReviewNote: string | null;
   /** ⑦⑧の計算に実際に使われたshapeId(ユーザーが選択したもの、または未選択/無効時の
    * フォールバックとしてranked[0]が採用されたもの)。reachableShapesの表示で
    * どれが現在の対象かを示すために使う。目指せる形が1件も無い場合はnull。 */
@@ -231,6 +247,18 @@ export function shouldShowNextConsiderations(
   plan: Pick<ReachablePlanBody, "nextConsiderations">,
 ): boolean {
   return plan.nextConsiderations.length > 0;
+}
+
+/**
+ * STEP ζ-5: pendingReviewNoteの有無だけを見て、括弧書きの注記サフィックス("(注記)")を返す
+ * (無ければ空文字)。review_status自体(生の値)はサーバー側から渡ってこないため、ここでは
+ * 解釈しようがない。注記の文言はサーバー側(analysis/nameExposure.ts)が決めたものをそのまま
+ * 使い、web側で新しい文言を作らない。名前と組み合わせる位置(「」の内側/外側)は呼び出し側に
+ * 委ねる(人間承認済みの文言仕様に合わせるため)。shouldShowPlanChangedNoticeと同じく、
+ * DOM非依存の純粋関数としてテストするためgameApi.tsに置く。
+ */
+export function reviewNoteSuffix(pendingReviewNote: string | null): string {
+  return pendingReviewNote ? `(${pendingReviewNote})` : "";
 }
 
 /**

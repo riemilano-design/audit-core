@@ -13,6 +13,7 @@ import {
   fetchGameState,
   getPlanChangeReasonMessage,
   isMoveError,
+  reviewNoteSuffix,
   selectTargetShape,
   shouldShowPlanChangedNotice,
   shouldShowNextConsiderations,
@@ -290,7 +291,7 @@ function renderRouteProgress(plan: ReachablePlanBody): void {
   section.className = "route-section";
 
   const heading = document.createElement("h3");
-  heading.textContent = `「${progress.name}」の組み上がり`;
+  heading.textContent = `「${progress.name}」${reviewNoteSuffix(progress.pendingReviewNote)}の組み上がり`;
   section.appendChild(heading);
 
   const done = document.createElement("p");
@@ -409,7 +410,9 @@ function renderPlan(plan: ReachablePlanBody): void {
   // 選択中の形の名前(候補手セクションの見出し・親子関係の表示に使う)。
   // reachableShapesの中からresolvedTargetShapeIdと一致するものを探すだけで、
   // 新しい判定は行わない(既存フィールドの参照のみ)。
+  // 【STEP ζ-5】見出しで注記を「」の外側に置くため、名前と注記を別々に保持する。
   let selectedShapeName: string | null = null;
+  let selectedShapeNote: string | null = null;
 
   if (plan.reachableShapes.length > 0) {
     const heading = document.createElement("h3");
@@ -432,12 +435,14 @@ function renderPlan(plan: ReachablePlanBody): void {
         // 「[選択中]」表示に加えて、CSSクラスで背景色等の見た目を変えるのみ)。
         li.classList.add("reachable-shape-selected");
         selectedShapeName = shape.name;
+        selectedShapeNote = shape.pendingReviewNote;
       }
       const button = document.createElement("button");
       button.type = "button";
+      const displayName = shape.name + reviewNoteSuffix(shape.pendingReviewNote);
       const completedSuffix = shape.status === "completed" ? "(完成しています)" : "";
       const selectedSuffix = isSelected ? "[選択中]" : "";
-      button.textContent = [shape.name + completedSuffix, selectedSuffix].filter(Boolean).join(" ");
+      button.textContent = [displayName + completedSuffix, selectedSuffix].filter(Boolean).join(" ");
       button.addEventListener("click", () => {
         void handleSelectTargetShape(shape.shapeId);
       });
@@ -468,8 +473,21 @@ function renderPlan(plan: ReachablePlanBody): void {
     candidateSection.className = "candidate-section";
 
     const moveHeading = document.createElement("h3");
-    moveHeading.textContent = selectedShapeName ? `「${selectedShapeName}」に近づく手の候補` : "この形へ近づく手の候補";
+    moveHeading.textContent = selectedShapeName
+      ? `「${selectedShapeName}」${reviewNoteSuffix(selectedShapeNote)}に近づく手の候補`
+      : "この形へ近づく手の候補";
     candidateSection.appendChild(moveHeading);
+
+    // 【STEP ζ-5(経路6)】選択中の形のreview_statusが"draft"の場合にだけ、
+    // サーバー側(analysis/nameExposure.ts)が決めた注意書きをそのまま1行表示する。
+    // 個々の候補手の説明文自体は変更しない(見出し名の表示がフォールバックしても
+    // この注意書きは独立に出る)。
+    if (plan.pendingReviewNote) {
+      const reviewNote = document.createElement("p");
+      reviewNote.className = "candidate-section-review-note";
+      reviewNote.textContent = plan.pendingReviewNote;
+      candidateSection.appendChild(reviewNote);
+    }
 
     // 【Phase5 #7 要件2】この見出しの下の内容が「今選択している形に対する、
     // 今の局面から指せる候補手」であることを明示する。

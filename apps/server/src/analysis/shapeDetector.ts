@@ -34,6 +34,9 @@ export interface ShapeDetectionResult {
   optionalMatchedSquares: string[];
   /** data/shapes/*.json 側の「この知識データ自体への自信度」(検知の確信度とは別概念)。intentDetector.tsのdataConfidenceLevelと対応。 */
   dataConfidenceLevel: ShapeDefinition["confidence_level"];
+  /** data/shapes/*.json の review_status をそのまま引き継ぐ。名前を出してよいかの
+   * 判断はanalysis/nameExposure.tsに集約し、このモジュールでは判断しない。 */
+  reviewStatus: ShapeDefinition["review_status"];
   /** 後続(説明生成)処理がそのまま使えるよう、shape定義からそのまま引き継ぐ初心者向け特徴説明 */
   characteristics: string;
 }
@@ -115,6 +118,7 @@ function evaluateShapeForPerspective(
     missingSquares,
     optionalMatchedSquares,
     dataConfidenceLevel: shape.confidence_level,
+    reviewStatus: shape.review_status,
     characteristics: shape.characteristics,
   };
 }

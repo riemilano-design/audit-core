@@ -35,6 +35,7 @@ function makeShapeResult(overrides: Partial<ShapeFormationResult> & { shapeId: s
     missingSquares: overrides.missingSquares ?? [],
     optionalMatchedSquares: overrides.optionalMatchedSquares ?? [],
     dataConfidenceLevel: overrides.dataConfidenceLevel ?? "medium",
+    reviewStatus: overrides.reviewStatus ?? "human_reviewed",
     characteristics: overrides.characteristics ?? "",
     formationEvidence: overrides.formationEvidence ?? [],
   };
@@ -73,6 +74,7 @@ const MULTI_GOLD_SHAPE: ShapeDefinition = {
   typical_build_order: ["5e"],
   characteristics: "",
   confidence_level: "medium",
+  review_status: "human_reviewed",
 };
 
 describe("planPathToShape", () => {

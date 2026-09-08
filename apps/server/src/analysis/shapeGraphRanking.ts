@@ -54,6 +54,9 @@ export interface RankedReachableShape {
   reason: string | null;
   /** adjustmentの根拠となったintentのid。中立の場合はnull。 */
   sourceIntentId: string | null;
+  /** data/shapes/*.json の review_status をそのまま引き継ぐ。名前を出してよいかの
+   * 判断はanalysis/nameExposure.tsに集約し、このモジュールでは判断しない。 */
+  reviewStatus: ShapeFormationResult["reviewStatus"];
 }
 
 // tierの数値は「並べ替え用の内部順序」であり、prioritize/deprioritizeの間の
@@ -115,6 +118,7 @@ export function rankReachableShapes(
         adjustment: purpose?.adjustment ?? null,
         reason: purpose?.reason ?? null,
         sourceIntentId: purpose?.sourceIntentId ?? null,
+        reviewStatus: r.reviewStatus,
       };
     });
 

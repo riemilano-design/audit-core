@@ -35,6 +35,7 @@ function makeShapeResult(overrides: Partial<ShapeFormationResult> & { shapeId: s
     missingSquares: overrides.missingSquares ?? [],
     optionalMatchedSquares: overrides.optionalMatchedSquares ?? [],
     dataConfidenceLevel: overrides.dataConfidenceLevel ?? "medium",
+    reviewStatus: overrides.reviewStatus ?? "human_reviewed",
     characteristics: overrides.characteristics ?? "",
     formationEvidence: overrides.formationEvidence ?? [],
   };
@@ -229,6 +230,25 @@ describe("buildCandidateMoveExplanation", () => {
     expect(buildCandidateMoveExplanation(pathPlanResult, shapeResult, candidate)).toEqual(
       buildCandidateMoveExplanation(pathPlanResult, shapeResult, candidate),
     );
+  });
+
+  // 指摘B(成果物監査REVISE): 呼び出し元が無いデッドコードでも、nameExposure.tsの
+  // ゲートを素通りしないことを検証する(将来この関数が再有効化された場合の保険)。
+  it("shapeResult.reviewStatusがdraftの場合、名前に内容確認中の注記が添えられる", () => {
+    const draftShapeResult = makeShapeResult({
+      shapeId: "mino_ginkanmuri",
+      name: "銀冠",
+      reviewStatus: "draft",
+    });
+
+    const explanation = buildCandidateMoveExplanation(pathPlanResult, draftShapeResult, candidate);
+
+    expect(explanation.reason).toContain("銀冠(内容を確認中の形)");
+  });
+
+  it("shapeResult.reviewStatusがhuman_reviewedの場合、注記は添えられない(現行動作を変えない)", () => {
+    const explanation = buildCandidateMoveExplanation(pathPlanResult, shapeResult, candidate);
+    expect(explanation.reason).not.toContain("内容を確認中");
   });
 });
 

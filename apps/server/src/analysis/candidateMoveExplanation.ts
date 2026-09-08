@@ -44,6 +44,7 @@ import {
   type ConfidenceLevel,
   type Explanation,
 } from "./explanationGenerator.js";
+import { exposeName } from "./nameExposure.js";
 import type { CandidateMoveSafetyCheckResult } from "./candidateMoveSafetyCheck.js";
 import type { PathPlanCandidateMove, PathPlanResult } from "./pathPlanner.js";
 import type { RouteCandidateMove, ShapeRoutePlanResult } from "./routePlanner.js";
@@ -84,13 +85,25 @@ function notReady(reason: CandidateMoveExplanationNotReadyReason): CandidateMove
   return { status: "not_ready", notReadyReason: reason, explanations: [] };
 }
 
-/** ⑦の候補手1件を、⑧「その手の目的」の説明(Explanation)へ変換する。 */
+/**
+ * ⑦の候補手1件を、⑧「その手の目的」の説明(Explanation)へ変換する。
+ *
+ * 【デッドコードへのゲート適用について(指摘B、成果物監査REVISE対応)】
+ * この関数は現在テストからしか呼ばれていない(旧pathPlanner経路)。本番経路は
+ * buildRouteCandidateMoveExplanation(下記)であり、そちらの説明文は経路6の設計
+ * (stateResponse.ts側が独立にpendingReviewNoteを出す)によりここでは変更しない。
+ * 一方この関数には、そのような独立した注記の出し口が存在しない(呼び出し元自体が
+ * ない)ため、将来この関数が再有効化されたときに名前がゲートを素通りしないよう、
+ * nameExposure.tsの判断をこの関数自身の中で完結させる(nameが登場するすべての
+ * 箇所を、exposeName()が返す表示用の名前で置き換える)。
+ */
 export function buildCandidateMoveExplanation(
   pathPlanResult: Pick<PathPlanResult, "shapeId" | "targetSquare" | "targetPiece">,
-  shapeResult: Pick<ShapeFormationResult, "name" | "dataConfidenceLevel">,
+  shapeResult: Pick<ShapeFormationResult, "name" | "dataConfidenceLevel" | "reviewStatus">,
   candidate: PathPlanCandidateMove,
 ): Explanation {
-  const shapeName = shapeResult.name;
+  const exposed = exposeName(shapeResult.name, shapeResult.reviewStatus, "shape");
+  const shapeName = exposed.pendingNote === null ? exposed.name : `${exposed.name}(${exposed.pendingNote})`;
   const targetPiece = pathPlanResult.targetPiece;
   const targetSquare = pathPlanResult.targetSquare;
 

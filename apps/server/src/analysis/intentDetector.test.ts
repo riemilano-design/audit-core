@@ -171,6 +171,7 @@ describe("detectIntents", () => {
       current_aim_explanation: "",
       next_aim_explanation: "",
       confidence_level: "medium",
+      review_status: "human_reviewed",
     };
     const results = detectIntents(sfen, moveHistory, { intents: [onlyHayajikake] });
     expect(results).toHaveLength(1);

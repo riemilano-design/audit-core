@@ -61,6 +61,7 @@ const TEST_HONMINO: ShapeDefinition = {
   ],
   characteristics: "",
   confidence_level: "medium",
+  review_status: "human_reviewed",
 };
 
 const HONMINO_COMPLETE_PIECES: PieceFixture[] = [

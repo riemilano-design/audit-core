@@ -38,6 +38,7 @@ import {
   type NextConsiderationMessage,
 } from "../analysis/nextConsiderationExplanation.js";
 import { explainBoardEvents, type BoardEventMessage } from "../analysis/boardEventExplanation.js";
+import { exposeName } from "../analysis/nameExposure.js";
 import { getLegalMoves } from "../rules/legalMoves.js";
 import { isInCheck } from "../rules/gameStatus.js";
 import { toJapaneseMoveHistory } from "../notation/japaneseMoveHistory.js";
@@ -129,6 +130,12 @@ export interface TargetShapeProgress {
   matchedSquareLabels: string[];
   /** まだ埋まっていないマス(日本語表記) */
   missingSquareLabels: string[];
+  /**
+   * STEP ζ-5: この形のreview_statusが"draft"の場合にだけ入る注記
+   * (analysis/nameExposure.tsのsite="shape")。それ以外はnull。
+   * review_status自体(生の値)は公開しない(analysis/nameExposure.tsに判断を集約する)。
+   */
+  pendingReviewNote: string | null;
 }
 
 /**
@@ -172,10 +179,30 @@ export interface LastMoveOutcomeBody {
   messages: (BoardEventMessage | MoveOutcomeMessage)[];
 }
 
+/**
+ * STEP ζ-5: analysis/shapeGraphRanking.tsのRankedReachableShapeのうち、
+ * ブラウザへ公開してよいフィールドだけを明示列挙した型(許可リスト方式)。
+ * PublicGameStateと同じ理由(docs/ARCHITECTURE.md 8.)で、reviewStatusの生値は
+ * 列挙しない(名前を出してよいかの判断はanalysis/nameExposure.tsに集約する)。
+ */
+export interface ReachableShapeBody {
+  shapeId: string;
+  name: string;
+  family: string;
+  parentShapeId: string | null;
+  status: RankedReachableShape["status"];
+  matchScore: number;
+  adjustment: RankedReachableShape["adjustment"];
+  reason: string | null;
+  sourceIntentId: string | null;
+  /** review_statusが"draft"の場合にだけ入る注記(analysis/nameExposure.tsのsite="shape")。 */
+  pendingReviewNote: string | null;
+}
+
 export interface ReachablePlanBody {
   /** shapeGraphRankingの上位(最大3件)の「目指せる形」。1位を唯一の正解として
    * 強調しない前提で、呼び出し側(UI)は並列表示する。 */
-  reachableShapes: RankedReachableShape[];
+  reachableShapes: ReachableShapeBody[];
   /**
    * Phase6 Unit1: 選択中の形の未達成マスごとの経路。routePlanner.tsの結果をそのまま
    * 要約したもの(候補手が表示される理由をユーザーが追跡できるようにするための情報)。
@@ -208,6 +235,14 @@ export interface ReachablePlanBody {
   candidateMoveState: CandidateMoveState;
   /** candidateMoveState: "ready"の場合のみ値を持つ。それ以外はundefined。 */
   candidateMove: CandidateMoveExplanationResult | undefined;
+  /**
+   * STEP ζ-5(経路6): 候補手セクションに添える注意書き。選択中の形のreview_statusが
+   * "draft"の場合にだけ入る(analysis/nameExposure.tsのsite="section")。
+   * 個々の候補手の説明文自体(candidateMoveExplanation.tsの文言)は変更しない。
+   * 候補手見出しの名前表示(TargetShapeProgress.pendingReviewNote)がフォールバック
+   * しても、この注意書きは独立に出る。選択中の形が無い場合はnull。
+   */
+  pendingReviewNote: string | null;
   /**
    * ⑦⑧の計算に実際に使われたshapeId(ユーザーが選択したものか、未選択/無効時の
    * フォールバックとしてranked[0]が採用されたものか、いずれか)。reachableShapesの
@@ -395,6 +430,7 @@ function toNextConsiderations(
     const facts = detectNextConsiderations({
       targetShapeId: context.resolvedTargetShapeId,
       shapeName: shapeResult.name,
+      shapeReviewStatus: shapeResult.reviewStatus,
       missingSquares: shapeResult.missingSquares,
       routes: context.routePlanResult?.routes ?? [],
       candidateMoves: context.routePlanResult?.candidateMoves ?? [],
@@ -418,7 +454,42 @@ function toTargetShapeProgress(context: RankedPlanContext | undefined): TargetSh
     name: shapeResult.name,
     matchedSquareLabels: shapeResult.matchedSquares.map((square) => toJapaneseSquare(square)),
     missingSquareLabels: shapeResult.missingSquares.map((square) => toJapaneseSquare(square)),
+    pendingReviewNote: exposeName(shapeResult.name, shapeResult.reviewStatus, "shape").pendingNote,
   };
+}
+
+/**
+ * STEP ζ-5(経路6): 候補手セクションに添える注意書き。選択中の形(resolvedTargetShapeId)の
+ * review_statusが"draft"の場合にだけ注記(site="section")を返す。候補手が実際に
+ * 表示されているか(candidateMoveState)には依存せず、選択中の形自体から独立に決まる
+ * (候補手見出しの名前表示がフォールバックしても、この注意書きは漏れないようにするため)。
+ */
+function toPlanPendingReviewNote(context: RankedPlanContext | undefined): string | null {
+  if (!context?.resolvedTargetShapeId) return null;
+  const shapeResult = context.shapeResults.find((r) => r.shapeId === context.resolvedTargetShapeId);
+  if (!shapeResult) return null;
+  return exposeName(shapeResult.name, shapeResult.reviewStatus, "section").pendingNote;
+}
+
+/**
+ * RankedPlanContextのreachableShapes(内部型RankedReachableShape[])を、
+ * 公開してよいフィールドだけを明示列挙したReachableShapeBody[]へ変換する
+ * (toPublicGameState()と同じ許可リスト方式)。reviewStatusの生値は列挙しないため、
+ * フィールドを追加しても既定では公開されない。
+ */
+function toReachableShapeBodies(reachableShapes: RankedReachableShape[]): ReachableShapeBody[] {
+  return reachableShapes.map((shape) => ({
+    shapeId: shape.shapeId,
+    name: shape.name,
+    family: shape.family,
+    parentShapeId: shape.parentShapeId,
+    status: shape.status,
+    matchScore: shape.matchScore,
+    adjustment: shape.adjustment,
+    reason: shape.reason,
+    sourceIntentId: shape.sourceIntentId,
+    pendingReviewNote: exposeName(shape.name, shape.reviewStatus, "shape").pendingNote,
+  }));
 }
 
 // 説明生成は対局の合法性判定とは独立した機能である。ここで万一例外が起きても
@@ -526,7 +597,7 @@ export function buildStateResponseWithPlan(
 ): StateResponseBodyWithPlan {
   const base = buildStateResponse(current, options);
   const context = safeComputeRankedPlanContext(current, options, selectedTargetShapeId);
-  const reachableShapes = context?.reachableShapes ?? [];
+  const reachableShapes = toReachableShapeBodies(context?.reachableShapes ?? []);
   const resolvedTargetShapeId = context?.resolvedTargetShapeId ?? null;
   const hasCandidateMoves = (context?.routePlanResult?.candidateMoves.length ?? 0) > 0;
 
@@ -571,6 +642,7 @@ export function buildStateResponseWithPlan(
       nextConsiderations: toNextConsiderations(current, context, base.status.isEnd),
       candidateMoveState,
       candidateMove,
+      pendingReviewNote: toPlanPendingReviewNote(context),
       resolvedTargetShapeId,
       planChanged,
       planChangeReason,

@@ -6,6 +6,7 @@ import { parseSquareName } from "shogiops/util";
 import type { Role } from "shogiops/types";
 import { describe, expect, it, vi } from "vitest";
 import type { CoachExplanation } from "../analysis/explanationGenerator.js";
+import { getIntents } from "../analysis/intentRepository.js";
 import { DEFAULT_INITIAL_SFEN, replayMoveHistory } from "../analysis/moveHistory.js";
 import { applyMove } from "../rules/applyMove.js";
 import type { GameState } from "../game/gameSession.js";
@@ -155,13 +156,18 @@ describe("buildStateResponse", () => {
 
     expect(opponentIntent.status).toBe("forming");
     expect(opponentIntent.refers_to_intent_id).toBe("hayajikake");
-    expect(opponentIntent.reason).toContain("可能性があります");
-    expect(opponentIntent.reason).toContain("断定はできません");
+    // 論点1(甲、STEP ζ-5): formingの段階では戦法名・current_aim_explanationを
+    // 一切出さず、観測できている事実だけを機械的に述べる。
+    expect(opponentIntent.reason).toContain("ように見えます");
+    expect(opponentIntent.reason).toContain("まだ決まっていません");
     expect(opponentIntent.reason).not.toContain("早仕掛けの形になっています");
+    for (const intent of getIntents()) {
+      expect(opponentIntent.reason).not.toContain(intent.name);
+    }
 
-    const nextAim = findStage(response.coach!, "opponent_next_aim");
-    expect(nextAim.status).toBe("forming");
-    expect(nextAim.reason).toContain("断定はできません");
+    // opponent_next_aim(甲、STEP ζ-5): formingの段階ではステージ自体をレスポンスの
+    // 配列に含めない(表示しない)。
+    expect(response.coach!.find((e) => e.stage === "opponent_next_aim")).toBeUndefined();
   });
 
   it("matched状態: Intentが完全一致した場合は確信度の高い言い回しになる", () => {
@@ -506,6 +512,49 @@ describe("buildStateResponseWithPlan", () => {
     const first = buildStateResponseWithPlan(state, undefined, { initialSfen: sfen });
     const second = buildStateResponseWithPlan(state, undefined, { initialSfen: sfen });
     expect(second).toEqual(first);
+  });
+
+  // STEP ζ-5: review_statusによる名前の露出制御。data/shapes/mino_ginkanmuri.jsonは
+  // review_status: "draft"(人間承認済みの実データ)。
+  describe("review_statusによる名前の露出制御(STEP ζ-5)", () => {
+    it("draftの形(銀冠)を選択すると、pendingReviewNoteが注記付きで返る(経路3・4・6・7の材料)", () => {
+      const state = gameStateAfter([]);
+      const response = buildStateResponseWithPlan(state, undefined, {}, "mino_ginkanmuri");
+
+      expect(response.plan.resolvedTargetShapeId).toBe("mino_ginkanmuri");
+      // 経路3・7(組み上がり見出し・候補手見出し、main.tsが名前と組み合わせて表示する)。
+      expect(response.plan.targetShapeProgress?.pendingReviewNote).toBe("内容を確認中の形");
+      // 経路6(候補手セクションの注意書き。選択中の形から独立に決まる)。
+      expect(response.plan.pendingReviewNote).toBe(
+        "この形の説明は内容を確認中のため、参考程度に見てください。",
+      );
+      // 経路4(選択ボタン。reachableShapesの各要素)。
+      const ginkanmuriButton = response.plan.reachableShapes.find((s) => s.shapeId === "mino_ginkanmuri");
+      expect(ginkanmuriButton?.pendingReviewNote).toBe("内容を確認中の形");
+    });
+
+    it("human_reviewedの形(本美濃)を選択すると、pendingReviewNoteはすべてnull", () => {
+      const state = gameStateAfter([]);
+      const response = buildStateResponseWithPlan(state, undefined, {}, "mino_honmino");
+
+      expect(response.plan.resolvedTargetShapeId).toBe("mino_honmino");
+      expect(response.plan.targetShapeProgress?.pendingReviewNote).toBeNull();
+      expect(response.plan.pendingReviewNote).toBeNull();
+      const honminoButton = response.plan.reachableShapes.find((s) => s.shapeId === "mino_honmino");
+      expect(honminoButton?.pendingReviewNote).toBeNull();
+    });
+
+    it("reviewStatusの生値はレスポンスに出ない(reachableShapes・targetShapeProgressのどちらにも無い)", () => {
+      const state = gameStateAfter([]);
+      const response = buildStateResponseWithPlan(state, undefined, {}, "mino_ginkanmuri");
+
+      expect(response.plan.reachableShapes.length).toBeGreaterThan(0);
+      for (const shape of response.plan.reachableShapes) {
+        expect(shape).not.toHaveProperty("reviewStatus");
+      }
+      expect(response.plan.targetShapeProgress).not.toBeNull();
+      expect(response.plan.targetShapeProgress).not.toHaveProperty("reviewStatus");
+    });
   });
 });
 
