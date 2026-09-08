@@ -614,23 +614,46 @@ Phase 7 Unit 4 の「4段階それぞれの具体的な文章・判定条件・�
 
 #### 露出制御の実装要件(ζ-3 で確定)
 
-`review_status` は現時点で `apps/` から**一切参照されていない**。`ShapeDefinition` は `review_status` をフィールドとして持ってすらいない。その結果、`draft` の「銀冠」が次の5経路で断定表示されている(ζ-3 の実測)。
+`review_status` は ζ-3 の時点で `apps/` から**一切参照されておらず**、`ShapeDefinition` は `review_status` をフィールドとして持ってすらいなかった。その結果、`draft` の「銀冠」が次の**7経路**で断定表示されていた。
 
-| 経路 | 現行の表示 |
-|---|---|
-| 現在の形の説明(`explanationGenerator.ts`) | 今、銀冠の形ができています。 |
-| 相手の狙いの説明(`explanationGenerator.ts`) | 相手は{名前}の形になっています。(intents は全件 `human_reviewed` のため現状は影響なし) |
-| 目標形の進捗(`stateResponse.ts` → `apps/web/src/main.ts`) | 「銀冠」の組み上がり |
-| 目標形の選択ボタン(`apps/web/src/main.ts`) | 銀冠 |
-| 必要なマスの説明(`nextConsiderationExplanation.ts`) | 「銀冠」に必要なマスは、すべて埋まっています。 |
+**訂正の記録**: ζ-3 はこれを「5経路」と記載したが、STEP ζ-5 の計画レビューで**2経路の見落とし**(候補手の説明文・候補手セクションの見出し)が独立監査により指摘され、実コードで確認された。以下は訂正後の7経路である。
+
+| # | 経路 | ζ-3 時点の表示 | `draft` のときの表示(ζ-5 で実装) |
+|---|---|---|---|
+| 1 | 現在の形の説明(`explanationGenerator.ts`) | 今、銀冠の形ができています。 | 今、銀冠と呼ばれる並びに近い形になっています。ただし、この形の説明は内容を確認中のため、参考程度に見てください。 |
+| 2 | 相手の狙いの説明(`explanationGenerator.ts`) | 相手は{名前}の形になっています。 | **名前を出さず、既存の unclassified 文言に落とす**(新しい文言を作らない)。intents は全件 `human_reviewed` のため現状の画面に変化はない |
+| 3 | 目標形の進捗(`stateResponse.ts` → `apps/web/src/main.ts`) | 「銀冠」の組み上がり | 「銀冠」(内容を確認中の形)の組み上がり |
+| 4 | 目標形の選択ボタン(`apps/web/src/main.ts`) | 銀冠 | 銀冠(内容を確認中の形) |
+| 5 | 必要なマスの説明(`nextConsiderationExplanation.ts`) | 「銀冠」に必要なマスは、すべて埋まっています。 | 「銀冠」(内容を確認中)に必要なマスは、すべて埋まっています。 |
+| 6 | **候補手の説明文(`candidateMoveExplanation.ts`)** | 「銀冠」の銀を…(1つの説明文に最大4回、名前が出る) | **説明文は変えない。** 候補手セクションの見出しの直下に「この形の説明は内容を確認中のため、参考程度に見てください。」を1行出す |
+| 7 | **候補手セクションの見出し(`apps/web/src/main.ts`)** | 「銀冠」に近づく手の候補 | 「銀冠」(内容を確認中の形)に近づく手の候補 |
+
+経路6で名前の出現ごとに注記を付けない理由は、1つの説明文に最大4回名前が出るため初心者に読めなくなるからである(人間承認済み)。見出し(経路7)がフォールバックしても注意書きは独立に出るため、漏れない。
 
 実装要件:
 
-1. `ShapeDefinition` / `OpeningDefinition` / `IntentDefinition` が `review_status` を読み込む
+1. `ShapeDefinition` / `IntentDefinition` が `review_status` を読み込む(`apps/` は `data/openings/` を `scenarioRepository` 経由でしか読んでおらず、戦型名をユーザーへ出す経路が存在しないため、openings は対象外)
 2. 戦法・陣形・狙いの名前をユーザーへ出す経路は**すべて1つの関数を通す**。ζ-4a の `toPublicGameState()` と同じ許可リスト方式とし、経路を新設しても既定では名前が素通りしないようにする
 3. `draft` の場合の表示は上記「`draft` の表示」に従う
+4. `review_status` の**生値はAPIレスポンスへ出さない**。出すのは表示用の注記だけとし、名前を出してよいかの判断はサーバー側に閉じる
+5. 現在は本番から呼ばれていない経路(`candidateMoveExplanation.ts` の旧 pathPlanner 経路)にも同じゲートを通す。**将来の再有効化で名前が素通りしないようにするため**であり、削除はしない
 
-**この5経路の是正は Phase 7 完了条件「`draft` の知識が断定表示されない」の対象であり、Unit 4 の実装STEPで必ず扱う。**
+**この7経路の是正は Phase 7 完了条件「`draft` の知識が断定表示されない」の対象であり、Unit 4 の実装STEP(ζ-5)で扱う。**
+
+
+#### 既知事項(STEP ζ-5 で発見。未処遇)
+
+<!-- check-docs: track-visibility -->
+
+| # | 内容 | ユーザーに見えるか | 状態 |
+|---|---|---|---|
+| Z-1 | **知識データの本文に、他の戦法・陣形の名前が直書きされている。** 露出制御は「表示するレコード自身の `review_status`」しかゲートできないため、本文中に埋め込まれた別レコードの名前は素通りする。該当箇所: `data/intents/hayajikake.json` の `next_aim_explanation`(「棒銀や斜め棒銀」)、`data/intents/naname_bogin.json` の `current_aim_explanation`(「棒銀とは違い」)と `next_aim_explanation`(「棒銀と同じく」)、`data/shapes/mino_takamino.json` の `characteristics`(「本美濃囲い」)、`data/shapes/mino_ginkanmuri.json` の `characteristics`(「高美濃囲い」)、`data/shapes/mino_honmino.json` の `characteristics`(「四間飛車」)。**現時点では、これらのレコードが `draft` になった場合、または本文が `forming` の段階で表示される経路ができた場合に問題が顕在化する** | はい | **次Phaseへ持ち越す**(人間の判断。ζ-5 の報告時点で処遇決定) |
+
+**なぜ表示側で対処しないか**: どの語が戦法・陣形の名前かを機械的に判別することはできず、判別を試みればそれは将棋の事実判断であり [../CLAUDE.md](../CLAUDE.md) ルール5 に抵触する。正しい対処は表示側ではなく `data/` 側の本文修正(Kind 1 の記述的知識の修正)であり、ζ-5 の範囲外とした。
+
+**ζ-5 で対処済みの部分**: `forming` の段階では `current_aim_explanation` / `next_aim_explanation` / `characteristics` を**表示しない**ため、`forming` 経由での漏れは塞がれている。残るのは `matched` / `completed` の段階で、そのレコード自身が `human_reviewed` でありながら本文が別の名前を含む場合である。
+
+**人間の処遇判断**: **次Phaseへ持ち越す**(STEP ζ-5 の報告時点で人間が決定)。したがって Phase 7 の完了判定においては、この項目が未処遇であることを理由に完了を妨げない。対処は `data/` 側の本文修正(Kind 1 の記述的知識の修正)として次Phaseで扱う。
 
 
 **触ってよい主なディレクトリ**: `apps/server/src/engine/`, `apps/server/src/analysis/`, `apps/server/src/api/`, `apps/web/`, `data/intents/`, `data/openings/`(ただし `data/` の変更は Tier A + 露出制御の監査対象、`data/schemas/` の変更は Kind 2 として人間承認必須である)
