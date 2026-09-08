@@ -16,7 +16,7 @@ model: sonnet
 - `data/schemas/*.schema.json` に準拠したデータ(記述的知識)の下書き作成
 - 既存データとの整合性チェック(ID参照が解決するか、familyやparent_shape_idの関係が矛盾していないか)
 - 出典(`source`)の明記、内容の確からしさに応じた `confidence_level` の設定
-- 追加したレコードの運用区分を未レビュー(`review_status: draft`)として扱うこと(このフィールドは STEP ε でスキーマに追加される予定。それまでは作業報告の中で未レビューである旨を明示する)
+- 追加したレコードの運用区分を未レビュー(`review_status: draft`)として扱うこと(**このフィールドは STEP ε で `data/schemas/shapes.schema.json` / `openings.schema.json` / `intents.schema.json` の必須フィールドとして追加済みである。** 値を必ず設定すること)
 
 ## やって良いこと
 

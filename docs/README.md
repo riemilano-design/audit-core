@@ -9,7 +9,7 @@
 | [ARCHITECTURE.md](ARCHITECTURE.md) | 全体構造とモジュールの責務境界、Unit間の境界、変えない構造上の約束。**正本** | 実装する人・エージェント全員 |
 | [AGENT_PROTOCOL.md](AGENT_PROTOCOL.md) | 3役(司令塔・実装担当・承認/監査担当)と専門エージェントの協働ルール、GO/REVISE/HUMANの運用。**正本** | AIエージェントを使う人全員 |
 | [DATA_MODEL.md](DATA_MODEL.md) | 教育用データパイプライン(9段階)の詳細設計、shapes/openings/intents/explanations 各スキーマの意味、将棋知識の3分類と運用区分(`review_status`) | データを作る人・ロジックを実装する人 |
-| [SCENARIOS.md](SCENARIOS.md) | 「対局シナリオ」(AIに棒銀・早仕掛けなどを指させる仕組み)の設計。相手AIに狙いを持たせる方針(ユーザーには開示しない)と、ユーザーが練習テーマを選ぶ機能(見送り中)を分けて扱う。いずれも未実装 | 対局シナリオ本実装の要否を再検討する人 |
+| [SCENARIOS.md](SCENARIOS.md) | 「対局シナリオ」(AIに棒銀・早仕掛けなどを指させる仕組み)の設計。**Phase 7 の再定義により、これは開発・検証専用の機構であり本番の基本体験には使わない**([../CLAUDE.md](../CLAUDE.md) の「絶対的な上位原則」)。過去の方針とその撤回の経緯を残している | 開発・検証用の制御機構を扱う人 |
 | [KIND3_VERIFICATION.md](KIND3_VERIFICATION.md) | 判断的知識(Kind 3)の相手AI制御データについて、有段者レビューが得られない場合の多段階検証プロトコル。**AI検証は有段者レビューと同等の保証を持たない** | Kind 3 制御データを扱う人 |
 | [PHASES.md](PHASES.md) | Phase 0〜7 の開発計画、各Phaseの成果物と完了条件、および完了後の記録(実機点検・仕様変更の記録を含む) | プロジェクト全体の進行管理者(人間) |
 | [GIT_WORKFLOW.md](GIT_WORKFLOW.md) | ブランチの切り方、コミットメッセージの書き方、マージの手順 | コードやデータを変更する人・エージェント全員 |

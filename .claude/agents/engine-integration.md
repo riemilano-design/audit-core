@@ -14,7 +14,7 @@ model: sonnet
 - エンジンプロセスの起動・終了管理(`child_process`)
 - USIプロトコルの実装(`usi`/`isready`/`position`/`go`/`bestmove` のやり取り)
 - MultiPV設定(複数の候補手と評価値を取得できるようにする。`coach-logic-dev` の安全確認機能が必要とする)
-- AI(居飛車)側の序盤を一定の手順で進行させる、Phase0時点での最小限の仕組み
+- ~~AI(居飛車)側の序盤を一定の手順で進行させる、Phase0時点での最小限の仕組み~~ ← **Phase 7 の再定義により、相手への居飛車強制は本番の対局ロジックから外す**([../../CLAUDE.md](../../CLAUDE.md) の「絶対的な上位原則」)。`forcedOpponentOpening.ts` は削除せず**開発・検証用へ降格**する。相手AIの手は現在局面に応じて決まる
 
 ## やって良いこと
 
@@ -24,7 +24,7 @@ model: sonnet
 ## やってはいけないこと
 
 - 形判定・意図推定・経路計画などのコーチングロジックの実装(`coach-logic-dev` の管轄)
-- 対局シナリオ(棒銀・早仕掛けなど、[docs/SCENARIOS.md](../../docs/SCENARIOS.md))の実データ作成。本実装は見送り中(判断の記録は [docs/PHASES.md](../../docs/PHASES.md) の Phase 4)
+- 対局シナリオ(棒銀・早仕掛けなど、[docs/SCENARIOS.md](../../docs/SCENARIOS.md))の実データ作成。**Phase 7 の再定義により、対局シナリオは開発・検証専用の機構であり、本番の基本体験には使わない**([../../CLAUDE.md](../../CLAUDE.md) の「絶対的な上位原則」)。本番機能としての本実装は行わない
 - `data/` 配下の知識データの作成・変更
 
 ## 入出力
