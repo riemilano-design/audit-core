@@ -417,7 +417,7 @@ Phase 7 の定義 → 実装STEP群
   - MVPで候補とする範囲は既存方針どおり `data/intents/` の居飛車系3件(棒銀・斜め棒銀・早仕掛け)
   - **相手AIを制御するデータと、ユーザーの対局から認識するためのデータは分離する**([SCENARIOS.md](SCENARIOS.md) の設計方針)。`recognition_pattern` を AI 制御用の手順として流用しない
   - 相手AIの着手選択は **Kind 3(判断的知識)**として扱う。実運用の制御データとして有効化する前に、**有段者によるレビュー、または [KIND3_VERIFICATION.md](KIND3_VERIFICATION.md) の多段階検証プロトコル(Phase A〜E)+ Phase F の人間による最終採用判断**を経ることを必須とする。有段者レビューが可能な場合はそちらを優先する。**検証方法が変わっても、Kind 3 の定義および Kind 3 が人間承認事項であることは変わらない。** AI検証は有段者レビューと同等の知識的保証を持つものではない
-  - **制御データの置き場所は `openings.scenario` とする方針**(人間承認済み・D1)。**スキーマ構造と制御方式(序盤の数手を `moves` の手順で強制進行させ、以降はエンジンに任せる)は確定済み**([DATA_MODEL.md](DATA_MODEL.md)・`data/schemas/openings.schema.json`)。**手順そのものの内容・毎局の選択方法・ランダム性の有無は、引き続き別途の仕様確定STEPで決める**
+  - **制御データの置き場所は `openings.scenario` とする方針**(人間承認済み・D1)。**スキーマ構造と制御方式(序盤の数手を `moves` の手順で強制進行させ、以降はエンジンに任せる)は確定済み**([DATA_MODEL.md](DATA_MODEL.md)・`data/schemas/openings.schema.json`)。**毎局の選択方法・ランダム性の有無も STEP ζ-4c-1 で確定した**(毎局 seed 付きランダムで、承認済み variant から重み付けなしに均等に1件を選ぶ。seed と選択結果は非公開)。**手順そのものの内容(具体的な `moves`)は、引き続き別途の仕様確定STEPで決める**
   - **前提条件**: 本ファイルの Phase 4 の記録・[DATA_MODEL.md](DATA_MODEL.md)・[SCENARIOS.md](SCENARIOS.md) の3箇所が「`data/openings/*.json` の `scenario` は `null` のまま維持する / 現段階では値を入れない」と記載している。**その仕様確定STEP(Kind 2 のスキーマ確定 + Kind 3 の制御手順確定 + [KIND3_VERIFICATION.md](KIND3_VERIFICATION.md) の検証)を人間承認とともに経るまで、`scenario` は `null` のまま維持する。** その仕様確定STEPでは上記3文書を同時に更新する必要がある
   - **非開示境界**(ζ-4a で確定済み): 相手AIの狙い・制御手順・選択理由は、`GameState`(サーバー内部)には保持してよいが、APIレスポンスへは出さない。公開境界は [ARCHITECTURE.md](ARCHITECTURE.md) 6. の `toPublicGameState()` を唯一の出口とする許可リスト方式で、`GameState` へフィールドを追加しても既定では公開されない。`verification_*`・エンジン情報・[KIND3_VERIFICATION.md](KIND3_VERIFICATION.md) の Phase A〜F の検証結果も通常のゲームAPIでは返さない。一方、`coach` が述べる戦法名・狙いの説明は**認識側**の出力であり、Phase 1 の完了条件どおり公開を維持する(制御側と混同しない)
   - Phase 7 の定義段階では、具体的な制御手順や新しい将棋知識を確定しない
@@ -492,7 +492,7 @@ Unit 1 が盤上に認識対象となる相手AIの狙いを作り、Unit 2 以�
 
 | 判断 | 内容 |
 |---|---|
-| D1 | 相手AIの制御データは `openings.scenario` を使用する方針とする。ただし具体的な schema 構造・制御手順は別途仕様確定する(**その後 schema 構造と制御方式は人間の承認を経て確定した。手順の内容・選択方法・ランダム性は引き続き未確定。変更前の記述は履歴として本行に残す**) |
+| D1 | 相手AIの制御データは `openings.scenario` を使用する方針とする。ただし具体的な schema 構造・制御手順は別途仕様確定する(**その後 schema 構造と制御方式、および選択方法・ランダム性は人間の承認を経て確定した。手順の内容(`moves`)のみ引き続き未確定。変更前の記述は履歴として本行に残す**) |
 | D2 | 相手AIの着手選択は Kind 3 として扱う。**有段者レビューを必須要件から外し**、有段者レビュー**または** [KIND3_VERIFICATION.md](KIND3_VERIFICATION.md) の多段階検証 + 人間による最終採用判断を必須とする(**D6 により変更。変更前の記述は履歴として本行に残す**) |
 | D3 | Phase 7 の戦型認識は、現行 `recognition_pattern` で表現可能な自分側から開始する。現時点では相手側の居飛車を認識するための否定条件表現は導入しない。相手側については狙いの認識を中心とする |
 | D4 | Unit 5(自分側の認識)は Phase 7 に含める。自分側の Kind 1 知識は件数制限なく `draft` として追加可能とする |

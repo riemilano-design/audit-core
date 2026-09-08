@@ -263,7 +263,6 @@ export function shouldRetryPlanRefresh(
 export interface GameStateResponse {
   sfen: string;
   moveHistory: string[];
-  forcedPliesUsed: number;
   status: GameStatus;
   // 説明生成に失敗した場合(想定外の不整合等)はundefined(対局自体は継続する)。
   coach: CoachExplanation[] | undefined;

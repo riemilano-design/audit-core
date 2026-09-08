@@ -90,6 +90,8 @@ candidateMoveExplanation(⑧その手の目的)
 
 `shapeRepository.ts` / `intentRepository.ts` は読み込みと最低限の形式チェックのみを行う。判定ロジックの中に将棋知識をハードコードしない。
 
+STEP ζ-4c-1 で追加した `engine/scenarioRepository.ts`(`data/openings/*.json` の `scenario` を読む)は、`data/` を読み込むモジュールが `engine/` 配下に置かれた最初の例である。これは認識用データ(`analysis/` 配下の各repositoryが読む `recognition_pattern` 等)を読む既存のrepositoryとは分離した、制御用データ専用の読み込みであり([SCENARIOS.md](SCENARIOS.md))、既存の `analysis/` 側の責務を変更するものではない。
+
 ### 4.3 「事実の抽出」と「文言」を分離する
 
 Phase 6 以降のモジュールは必ず対になる。
@@ -199,8 +201,8 @@ GameState(内部・非公開)
 - **公開してよい情報**: 盤面・指し手履歴・日本語棋譜・終局状態・合法手・コーチ出力(`coach`)・目標形と経路と候補手(`plan`)
 - **公開しない情報**: 相手AIが選んだ狙い・制御手順・次に指す制御候補・選択理由・`openings.scenario`・`recognition_pattern` の生データ・`review_status`・`verification_*`・エンジン名やバージョンや探索条件・[KIND3_VERIFICATION.md](KIND3_VERIFICATION.md) の Phase A〜F の検証結果・エンジン評価値の生値
 - **認識側と制御側を区別する**: `coach` が述べる戦法名・狙いの説明は**認識側**(指し手の観測から推定した仮説)の出力であり、[PHASES.md](PHASES.md) Phase 1 の完了条件により公開する。非公開にするのは**制御側**(相手AIが実際に選んだもの)である。同じ戦法名でも出所によって扱いが異なる
-- `forcedPliesUsed` は内部制御寄りの情報だが、既存のAPIレスポンスに含まれており、最小変更のため公開のまま維持する(人間承認済み)。**狙いの選択手順が確定した時点で、選ばれた狙いの間接的な手がかりにならないかを改めて検討する**(Unit 1 の実装STEP)
-- **クライアントが相手AIの制御状態を指定できる経路を作らない。** 現在の `POST /api/game/new?scenario=` は検証用の暫定経路であり、その扱いは Unit 1 の実装STEPで決める
+- `forcedPliesUsed` は内部制御寄りの情報であり、STEP ζ-4c-1(人間承認済み)により非公開へ移した。強制進行の手数は、選ばれた狙いの手順長を通じて狙いの間接的な手がかりになりうるため、非公開とする。ζ-4a 時点では「最小変更のため公開のまま維持し、狙いの選択手順が確定した時点で再検討する」としていたが、その再検討の結果として非公開になった
+- **クライアントが相手AIの制御状態を指定できる経路を作らない。** `POST /api/game/new?scenario=` は環境変数 `SHOGI_DEV_SCENARIO` を設定した開発モードでのみ有効な検証用の経路であり(STEP ζ-4c-1)、通常のブラウザ経路(`SHOGI_DEV_SCENARIO` 未設定)ではクライアントが指定しても無視され、相手AIの制御状態を指定できない
 - `verification_*` やエンジンの検証記録は、将来 [KIND3_VERIFICATION.md](KIND3_VERIFICATION.md) Phase F で人間が読む必要があるが、読み手は開発者であって対局中のユーザーではない。**通常のゲームAPI(`/api/game*`)では返さない。** 提示手段は別途決める
 
 ---
@@ -237,6 +239,6 @@ GameState(内部・非公開)
 - **対局経過の再計算に必要な中間局面**: 指し手履歴を途中まで切り詰めて認識を再計算する際、対応する中間局面のSFENも同時に用意する必要がある(独立監査の指摘)。用意の方法は実装STEPで具体化する。
 - **`analysis/pathPlanner.ts` の最終的な扱い**: Phase 6 Unit 1 で `routePlanner.ts` へ切り替えたため本番経路からは使われていないが、削除するかどうかは未決(現状は温存)。
 - **複数対局の同時進行**: 現在は単一対局のみ。設計していない。
-- **対局シナリオ(AI序盤制御)**: [SCENARIOS.md](SCENARIOS.md) に将来設計があるが未実装。`engine/scenarioOpponentOpening.ts` は検証用であり、本番機能ではない。相手AIに狙いを持たせる(ユーザーには開示しない)という方針は人間の判断により確定したが、実装方式は未確定([SCENARIOS.md](SCENARIOS.md))。制御方式(序盤の数手を `scenario` の手順で強制進行させ、以降はエンジンに任せる)とスキーマ構造は人間の承認を経て確定したが、**手順そのものの内容・毎局の選択方法・ランダム性の有無は引き続き未確定**である([DATA_MODEL.md](DATA_MODEL.md)・[KIND3_VERIFICATION.md](KIND3_VERIFICATION.md))。
+- **対局シナリオ(AI序盤制御)**: [SCENARIOS.md](SCENARIOS.md) に将来設計があるが未実装。`engine/scenarioOpponentOpening.ts` は検証用であり、本番機能ではない。相手AIに狙いを持たせる(ユーザーには開示しない)という方針は人間の判断により確定したが、実装方式は未確定([SCENARIOS.md](SCENARIOS.md))。制御方式(序盤の数手を `scenario` の手順で強制進行させ、以降はエンジンに任せる)とスキーマ構造は人間の承認を経て確定した。**毎局の選択方法・ランダム性の有無も STEP ζ-4c-1 で確定した**(毎局 seed 付きランダムで、承認済み variant から重み付けなしに均等に1件を選ぶ。seed と選択結果は公開しない)。**手順そのものの内容(具体的な `moves`)は引き続き未確定**である([DATA_MODEL.md](DATA_MODEL.md)・[KIND3_VERIFICATION.md](KIND3_VERIFICATION.md))。
 - **shape座標の一次資料**: 一部が未検証。`data/` の `source` に経緯が記録されているため、勝手に修正しない。
 - **将来拡張**(対局後の振り返り・学習履歴・複数戦型)の構造: [PROJECT_VISION.md](PROJECT_VISION.md) 5. のとおり MVP 対象外で、設計していない。

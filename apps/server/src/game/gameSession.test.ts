@@ -1,5 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
 import { DEFAULT_MAX_FORCED_OPPONENT_PLIES } from "../engine/forcedOpponentOpening.js";
+import type { ApprovedScenarioVariant } from "../engine/scenarioRepository.js";
 import {
   createInitialGameState,
   getStatus,
@@ -228,5 +229,142 @@ describe("playOpponentMove", () => {
     };
     const next = await playOpponentMove(state, engine);
     expect(next.wasLastOpponentMoveForced).toBe(false);
+  });
+});
+
+// STEP ζ-4c-1: createInitialGameStateの第2引数(相手AI制御の候補・seed)。
+describe("createInitialGameState (相手AI制御, STEP ζ-4c-1)", () => {
+  it("controlを渡さない場合、opponentControlはundefinedのまま(既存の呼び出し・挙動を変えない)", () => {
+    expect(createInitialGameState().opponentControl).toBeUndefined();
+    expect(createInitialGameState("hayajikake").opponentControl).toBeUndefined();
+  });
+
+  it("control.variantsが空配列の場合、opponentControlは作られるがselectedVariantIdはundefined(承認済み候補0件)", () => {
+    const state = createInitialGameState(undefined, { variants: [], seed: 1 });
+    expect(state.opponentControl).toEqual({ seed: 1, selectedVariantId: undefined, movesUsed: 0 });
+  });
+
+  it("control.variantsに1件だけあれば、それが必ず選ばれる", () => {
+    const variant: ApprovedScenarioVariant = {
+      openingId: "test_opening",
+      variantId: "test_variant",
+      targetIntentId: "hayajikake",
+      moves: ["6c6d"],
+    };
+    const state = createInitialGameState(undefined, { variants: [variant], seed: 1 });
+    expect(state.opponentControl?.selectedVariantId).toBe("test_opening/test_variant");
+    expect(state.opponentControl?.movesUsed).toBe(0);
+    expect(state.opponentControl?.seed).toBe(1);
+  });
+});
+
+// STEP ζ-4c-1: playOpponentMoveの経路1(相手AI制御, opponentControl)。
+// 経路の優先順位は 1.opponentControl -> 2.scenario -> 3.forcedOpponentOpening -> 4.エンジン。
+describe("playOpponentMove (相手AI制御, STEP ζ-4c-1)", () => {
+  const variant: ApprovedScenarioVariant = {
+    openingId: "test_opening",
+    variantId: "test_variant",
+    targetIntentId: "hayajikake",
+    // gameSession.playOpponentMoveのテスト内で既に合法性が確認されている手順
+    // (scenarioOpponentOpening.tsのHAYAJIKAKE_SCRIPTと同じ手。新しい将棋知識ではない)。
+    moves: ["6c6d", "6d6e"],
+  };
+
+  it("承認済みvariantが0件(selectedVariantIdがundefined)のとき、既存のforcedOpponentOpeningの経路が変わらず使われる", async () => {
+    const state: GameState = {
+      sfen: GOTE_TURN_SFEN,
+      moveHistory: ["7g7f"],
+      forcedPliesUsed: 0,
+      opponentControl: { seed: 1, selectedVariantId: undefined, movesUsed: 0 },
+    };
+    const engine = unusedEngineMock();
+    const next = await playOpponentMove(state, engine, []);
+    expect(next.moveHistory).toEqual(["7g7f", expect.any(String)]);
+    expect(next.forcedPliesUsed).toBe(1);
+    expect(next.wasLastOpponentMoveForced).toBe(true);
+    expect(engine.position).not.toHaveBeenCalled();
+  });
+
+  it("scenario指定時、承認済みvariantが0件でも既存のscenarioOpponentOpeningの経路が変わらず使われる", async () => {
+    const state: GameState = {
+      sfen: GOTE_TURN_SFEN,
+      moveHistory: ["7g7f"],
+      forcedPliesUsed: 0,
+      scenario: "hayajikake",
+      opponentControl: { seed: 1, selectedVariantId: undefined, movesUsed: 0 },
+    };
+    const engine = unusedEngineMock();
+    const next = await playOpponentMove(state, engine, []);
+    expect(next.moveHistory).toEqual(["7g7f", "6c6d"]);
+    expect(engine.position).not.toHaveBeenCalled();
+  });
+
+  it("承認済みvariantの1手目が現局面で合法なら、それを採用しmovesUsedを1増やす", async () => {
+    const state: GameState = {
+      sfen: GOTE_TURN_SFEN,
+      moveHistory: ["7g7f"],
+      forcedPliesUsed: 0,
+      opponentControl: { seed: 1, selectedVariantId: "test_opening/test_variant", movesUsed: 0 },
+    };
+    const engine = unusedEngineMock();
+    const next = await playOpponentMove(state, engine, [variant]);
+    expect(next.moveHistory).toEqual(["7g7f", "6c6d"]);
+    expect(next.opponentControl).toEqual({ seed: 1, selectedVariantId: "test_opening/test_variant", movesUsed: 1 });
+    expect(next.wasLastOpponentMoveForced).toBe(true);
+    expect(engine.position).not.toHaveBeenCalled();
+  });
+
+  it("次の手がその場の局面で非合法な場合、フォールバックしmovesUsedは増えない", async () => {
+    // moves[1]("6d6e")は、まだ1手目("6c6d")が適用されておらず(GOTE_TURN_SFENのまま)、
+    // gote歩は6cのままなので非合法(scenarioOpponentOpening.test.tsの
+    // 「人間の手でシナリオの想定局面が崩れ、次の手が非合法になった場合はundefinedを返す」と同じ考え方)。
+    const state: GameState = {
+      sfen: GOTE_TURN_SFEN,
+      moveHistory: ["7g7f"],
+      forcedPliesUsed: 0,
+      opponentControl: { seed: 1, selectedVariantId: "test_opening/test_variant", movesUsed: 1 },
+    };
+    const engine = unusedEngineMock();
+    const next = await playOpponentMove(state, engine, [variant]);
+    // 経路1が発動せず、経路3(forcedOpponentOpening)へフォールバックする。
+    expect(next.opponentControl?.movesUsed).toBe(1);
+    expect(next.wasLastOpponentMoveForced).toBe(true);
+    expect(engine.position).not.toHaveBeenCalled();
+  });
+
+  it("複数手にわたって、承認済みvariantの手が順に指され、使い切ると次の経路へフォールバックする。playHumanMoveを挟んでもopponentControlは引き継がれる", async () => {
+    let state: GameState = {
+      sfen: GOTE_TURN_SFEN,
+      moveHistory: ["7g7f"],
+      forcedPliesUsed: 0,
+      opponentControl: { seed: 1, selectedVariantId: "test_opening/test_variant", movesUsed: 0 },
+    };
+    const engine = unusedEngineMock();
+
+    // 1手目: variantの手(6c6d)が採用される。
+    state = await playOpponentMove(state, engine, [variant]);
+    expect(state.moveHistory.at(-1)).toBe("6c6d");
+    expect(state.opponentControl?.movesUsed).toBe(1);
+
+    // 人間側の一手(playHumanMoveを挟んでもopponentControlが消えないことの確認)。
+    state = playHumanMove(state, "1g1f");
+    expect(state.opponentControl).toEqual({ seed: 1, selectedVariantId: "test_opening/test_variant", movesUsed: 1 });
+
+    // 2手目: variantの手(6d6e)が採用される。
+    state = await playOpponentMove(state, engine, [variant]);
+    expect(state.moveHistory.at(-1)).toBe("6d6e");
+    expect(state.opponentControl?.movesUsed).toBe(2);
+
+    // 人間側の一手。
+    state = playHumanMove(state, "2g2f");
+    expect(state.opponentControl?.movesUsed).toBe(2);
+
+    // 3手目: variantのmovesを使い切った(moves[2]は存在しない)ため、
+    // 次の経路(forcedOpponentOpening、state.scenarioは未指定)へフォールバックする。
+    state = await playOpponentMove(state, engine, [variant]);
+    expect(state.opponentControl?.movesUsed).toBe(2);
+    expect(state.forcedPliesUsed).toBe(1);
+    expect(state.wasLastOpponentMoveForced).toBe(true);
+    expect(engine.position).not.toHaveBeenCalled();
   });
 });

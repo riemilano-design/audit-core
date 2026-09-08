@@ -3,7 +3,7 @@ import { isLegalMove } from "../rules/legalMoves.js";
 import { applyMove } from "../rules/applyMove.js";
 import { DEFAULT_INITIAL_SFEN } from "../analysis/moveHistory.js";
 import { detectIntents } from "../analysis/intentDetector.js";
-import { isScenarioId, pickScenarioMove, type ScenarioId } from "./scenarioOpponentOpening.js";
+import { isDevScenarioEnabled, isScenarioId, pickScenarioMove, type ScenarioId } from "./scenarioOpponentOpening.js";
 
 // gameSession.playOpponentMove相当の最小再現(人間側の手は無関係の合法手で埋める)。
 // 実際のgameSession/applyMoveをそのまま使い、指し手選択(pickScenarioMove)以外の
@@ -105,5 +105,24 @@ describe("pickScenarioMove", () => {
     // hayajikakeの2手目(6d6e)は、6dに歩が既に無ければ非合法になる。
     // ここでは1手目を適用せずに2手目のstepIndexを渡すことで、その状況を再現する。
     expect(pickScenarioMove(DEFAULT_INITIAL_SFEN, 1, "hayajikake")).toBeUndefined();
+  });
+});
+
+// STEP ζ-4c-1(C-5): `?scenario=`は開発モード(SHOGI_DEV_SCENARIO環境変数)限定。
+// isDevScenarioEnabled()自体はGameStateに依存しない純粋関数だが、
+// 「クライアントが相手AIの制御状態を指定できる経路を作らない」という公開境界
+// (docs/ARCHITECTURE.md 6.)に関わる判定のため、isScenarioIdと同じこのファイルに置く。
+describe("isDevScenarioEnabled(STEP ζ-4c-1)", () => {
+  it("SHOGI_DEV_SCENARIOが未設定なら無効", () => {
+    expect(isDevScenarioEnabled({})).toBe(false);
+  });
+
+  it("SHOGI_DEV_SCENARIOが空文字なら無効", () => {
+    expect(isDevScenarioEnabled({ SHOGI_DEV_SCENARIO: "" })).toBe(false);
+  });
+
+  it("SHOGI_DEV_SCENARIOに値が設定されていれば有効", () => {
+    expect(isDevScenarioEnabled({ SHOGI_DEV_SCENARIO: "1" })).toBe(true);
+    expect(isDevScenarioEnabled({ SHOGI_DEV_SCENARIO: "true" })).toBe(true);
   });
 });

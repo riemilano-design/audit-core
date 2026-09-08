@@ -31,7 +31,8 @@ import {
 } from "./api/stateResponse.js";
 import { resolveEnginePath } from "./engine/enginePath.js";
 import { PrioritizedEngine } from "./engine/prioritizedEngine.js";
-import { isScenarioId } from "./engine/scenarioOpponentOpening.js";
+import { isDevScenarioEnabled, isScenarioId } from "./engine/scenarioOpponentOpening.js";
+import { getApprovedScenarioVariants } from "./engine/scenarioRepository.js";
 import { UsiEngine } from "./engine/usiEngine.js";
 import {
   createInitialGameState,
@@ -43,7 +44,7 @@ import {
 
 const PORT = Number(process.env.PORT ?? 3000);
 
-let state: GameState = createInitialGameState();
+let state: GameState = createInitialGameState(undefined, { variants: getApprovedScenarioVariants() });
 let prioritizedEngine: PrioritizedEngine | undefined;
 let prioritizedEngineReady: Promise<PrioritizedEngine> | undefined;
 
@@ -251,7 +252,7 @@ async function handleMoveInternal(req: IncomingMessage, res: ServerResponse): Pr
   }
 
   const engine = await getPrioritizedEngine();
-  state = await playOpponentMove(state, engine.asHighPriority());
+  state = await playOpponentMove(state, engine.asHighPriority(), getApprovedScenarioVariants());
 
   // Phase3 Unit1: 相手の着手を経た現在の局面が、ユーザー着手直前の計画の前提を
   // 崩したかを判定する(エンジン非依存、候補Aのみ。planChangeDetector.ts参照)。
@@ -384,9 +385,14 @@ const server = createServer((req, res) => {
   if (req.method === "POST" && url.pathname === "/api/game/new") {
     // ?scenario=boh_gin | hayajikake を指定すると、検証用シナリオ対局として開始する
     // (docs/SCENARIOS.mdの本格的な対局シナリオ機能とは別の、Phase1検証専用の仕組み。
-    // 詳細はscenarioOpponentOpening.tsを参照)。未指定・不明な値は従来どおりの通常対局。
+    // 詳細はscenarioOpponentOpening.tsを参照)。
+    // STEP ζ-4c-1(C-5): この`?scenario=`はSHOGI_DEV_SCENARIO環境変数が設定された
+    // 開発モードでのみ有効。未設定の場合は指定があっても無視し、通常対局として開始する
+    // (クライアントが相手AIの制御状態を指定できる経路を通常運用では作らないため。
+    // docs/ARCHITECTURE.md 6.)。未指定・不明な値も従来どおり通常対局。
     const scenarioParam = url.searchParams.get("scenario");
-    state = createInitialGameState(isScenarioId(scenarioParam) ? scenarioParam : undefined);
+    const scenario = isDevScenarioEnabled() && isScenarioId(scenarioParam) ? scenarioParam : undefined;
+    state = createInitialGameState(scenario, { variants: getApprovedScenarioVariants() });
     // 新しい対局を開始したので、前の対局のバックグラウンド解析結果・目標形選択は破棄する。
     // POST /api/game/new自体はMultiPVを実行しない(従来どおり軽量なレスポンス)。
     backgroundPlan = undefined;

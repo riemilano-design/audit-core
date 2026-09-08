@@ -27,6 +27,16 @@ export function isScenarioId(value: unknown): value is ScenarioId {
   return value === "boh_gin" || value === "hayajikake";
 }
 
+/**
+ * `?scenario=`(検証用の対局シナリオ指定)を有効にするかどうかを、環境変数から
+ * 純粋関数として判定する。engine/enginePath.tsのSHOGI_ENGINE_PATHと同じ
+ * 「未設定なら既定の(=無効化された)挙動」という書き方に合わせる。
+ * STEP ζ-4c-1(C-5): `?scenario=`は開発モード限定とする。
+ */
+export function isDevScenarioEnabled(env: NodeJS.ProcessEnv = process.env): boolean {
+  return Boolean(env.SHOGI_DEV_SCENARIO);
+}
+
 // data/intents/boh_gin.json の recognition_pattern(銀 7c→7d→7e)へ実際に到達する手順。
 // 銀が通る前に、同じ筋の歩(7c/7d/7e)を1マスずつ先に退避させる必要がある
 // (7c/7dは初期配置で歩に占有されているため)。

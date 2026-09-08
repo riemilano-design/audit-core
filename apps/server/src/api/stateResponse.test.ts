@@ -1162,22 +1162,35 @@ describe("buildStateResponseWithPlan: nextConsiderations(Phase6 Unit4)", () => {
 // ζ-4a: 内部状態(GameState)と公開状態(StateResponseBody)の境界を、許可リスト方式
 // (toPublicGameState)で確立したことの検証。docs/ARCHITECTURE.md 6.「公開境界」参照。
 describe("公開境界(内部状態とAPIレスポンスの分離、ζ-4a)", () => {
-  // buildStateResponseが返すキーが、公開してよいと定めた7件ちょうどであること
-  // (許可リスト方式であることの直接の確認)。
-  const PUBLIC_KEYS = ["coach", "forcedPliesUsed", "legalMoves", "moveHistory", "moveHistoryJapanese", "sfen", "status"];
+  // buildStateResponseが返すキーが、公開してよいと定めた6件ちょうどであること
+  // (許可リスト方式であることの直接の確認)。forcedPliesUsedはSTEP ζ-4c-1(C-6、
+  // 人間承認済み)により非公開へ移した(下記「forcedPliesUsedが公開されない」参照)。
+  const PUBLIC_KEYS = ["coach", "legalMoves", "moveHistory", "moveHistoryJapanese", "sfen", "status"];
 
-  it("buildStateResponseのキーが公開許可リストの7件と完全一致する", () => {
+  it("buildStateResponseのキーが公開許可リストの6件と完全一致する", () => {
     const state = gameStateAfter([]);
     const response = buildStateResponse(state);
 
     expect(Object.keys(response).sort()).toEqual([...PUBLIC_KEYS].sort());
   });
 
-  it("buildStateResponseWithPlanのキーが公開許可リスト7件+planの8件と完全一致する", () => {
+  it("buildStateResponseWithPlanのキーが公開許可リスト6件+planの7件と完全一致する", () => {
     const state = gameStateAfter([]);
     const response = buildStateResponseWithPlan(state, undefined);
 
     expect(Object.keys(response).sort()).toEqual([...PUBLIC_KEYS, "plan"].sort());
+  });
+
+  // STEP ζ-4c-1(C-6): forcedPliesUsedはGameStateに存在するが、レスポンスには一切現れない。
+  it("forcedPliesUsedはGameStateに存在するが、レスポンスには一切現れない", () => {
+    const state = gameStateAfter([]);
+    expect(state.forcedPliesUsed).toBe(0);
+
+    const response = buildStateResponse(state);
+    const responseWithPlan = buildStateResponseWithPlan(state, undefined);
+
+    expect(response).not.toHaveProperty("forcedPliesUsed");
+    expect(responseWithPlan).not.toHaveProperty("forcedPliesUsed");
   });
 
   it("GameStateにscenario/wasLastOpponentMoveForcedを設定しても、レスポンスはそれらを持たない", () => {
@@ -1197,6 +1210,28 @@ describe("公開境界(内部状態とAPIレスポンスの分離、ζ-4a)", () 
     expect(response).not.toHaveProperty("wasLastOpponentMoveForced");
     expect(responseWithPlan).not.toHaveProperty("scenario");
     expect(responseWithPlan).not.toHaveProperty("wasLastOpponentMoveForced");
+  });
+
+  // STEP ζ-4c-1: GameState.opponentControl(相手AI制御の内部状態。seed・選択済み
+  // variantId・movesUsed)は、GameState経由でもAPI経由でも一切公開しない。
+  it("GameStateにopponentControlを設定しても、レスポンスにopponentControl/seed/selectedVariantId/movesUsedが一切現れない", () => {
+    const state: GameState = {
+      ...gameStateAfter([]),
+      opponentControl: { seed: 123456, selectedVariantId: "ibisha/boh_gin", movesUsed: 2 },
+    };
+
+    const response = buildStateResponse(state);
+    const responseWithPlan = buildStateResponseWithPlan(state, undefined);
+
+    expect(response).not.toHaveProperty("opponentControl");
+    expect(responseWithPlan).not.toHaveProperty("opponentControl");
+
+    const responseJson = JSON.stringify(response);
+    const responseWithPlanJson = JSON.stringify(responseWithPlan);
+    for (const secret of ["opponentControl", "selectedVariantId", "movesUsed", "123456", "ibisha/boh_gin"]) {
+      expect(responseJson).not.toContain(secret);
+      expect(responseWithPlanJson).not.toContain(secret);
+    }
   });
 
   // 【本STEPの中心】将来GameStateに未知のフィールド(Unit 1が足しうる制御情報を

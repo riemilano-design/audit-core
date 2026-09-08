@@ -60,15 +60,13 @@ export type { NextConsiderationMessage } from "../analysis/nextConsiderationExpl
  * ここで公開してよいものだけを列挙し、toPublicGameState()を唯一の変換境界にすることで、
  * GameStateへフィールドを追加しても既定では公開されない(除外リスト方式にしない)。
  *
- * forcedPliesUsed について: これは相手が何手を強制進行で指したかという内部制御寄りの
- * 情報だが、既存のAPIレスポンスに含まれており、最小変更のため公開のまま維持する
- * (人間承認済み)。ζ-4c で狙い選択の制御手順が確定した際、この値が選ばれた狙いの
- * 間接的な手がかりになり得るため、公開の可否を改めて検討する必要がある。
+ * forcedPliesUsed について: STEP ζ-4c-1(C-6、人間承認済み)により非公開へ移した。
+ * 強制進行の手数は、選ばれた狙いの手順長を通じて狙いの間接的な手がかりになりうるため、
+ * 非公開とする(人間承認済み)。
  */
 export interface PublicGameState {
   sfen: string;
   moveHistory: string[];
-  forcedPliesUsed: number;
 }
 
 /**
@@ -79,7 +77,6 @@ function toPublicGameState(current: GameState): PublicGameState {
   return {
     sfen: current.sfen,
     moveHistory: current.moveHistory,
-    forcedPliesUsed: current.forcedPliesUsed,
   };
 }
 
