@@ -68,6 +68,12 @@
 
 いずれの段階でも断定しない言い回しを既定とし([../CLAUDE.md](../CLAUDE.md) のルール6番)、認識結果を根拠に「だからこう指すべき」とは述べない。表示ブロックとしての責務境界は [ARCHITECTURE.md](ARCHITECTURE.md) 5. を参照。
 
+**適用範囲(STEP ζ-3 で人間が確定)**: この表は**相手の狙いと自分の形の両方**に適用する。対局経過ブロックだけに限定しない。したがって既存の Phase 1 コーチ説明も、`forming` の段階では戦法・陣形の名前を出さない。
+
+**`forming` では説明文も出さない(同)**: `data/intents/*.json` の `current_aim_explanation` / `next_aim_explanation` には本文中に戦法名を含むものがある(`naname_bogin`・`hayajikake`)。名前のプレースホルダだけを伏せても説明文から名前が漏れるため、`forming` ではこれらの説明文を表示しない。これらは `matched` の初出で名前を導入するときに初めて使う。
+
+**各段階の具体的な文言**は [PHASES.md](PHASES.md) Phase 7「Unit 4 の文言仕様(STEP ζ-3 で確定・人間承認済み)」にある。段階の判定は `apps/server/src/analysis/intentDetector.ts` の既存判定をそのまま使い、**新しい閾値を設けない**。一致率(`matchScore`)は表示にも段階判定にも使わない。
+
 ## 座標表記の規約
 
 座標に関する設計は、**「座標形式(表記のフォーマット)」**と**「盤面上の意味・視点(その座標がどちら側の絶対座標か)」**という、別々の2つの設計事項として扱う。この2つを混同しないこと。
@@ -193,6 +199,10 @@ Phase1では、explanationsは単発の候補手説明(1レコード=1手)のみ
 `mino_ginkanmuri` は `confidence_level: "low"` で一次資料未検証のため `draft` とする(STEP ε-2)。
 
 AI は Kind 1 の知識を `draft` として**件数の制限なく**追加してよい。ただし `draft` の知識は上記の露出制御に従う。
+
+**`draft` の表示方法(STEP ζ-3 で人間が確定)**: 上記の2択のうち、**「断定しない言い回しに留める」を採る。** 表示対象から外すと `draft` の形を目標形として選べなくなり、Phase 6 の既存機能を壊すためである。`draft` の名前を出す場合は「内容を確認中」の注記を必ず添える。具体的な文言は [PHASES.md](PHASES.md) Phase 7「Unit 4 の文言仕様」の「`draft` の表示」を参照。
+
+**露出制御の実装要件(同)**: `review_status` を、戦法・陣形・狙いの名前をユーザーへ出してよいかの**唯一のゲート**とする。名前を出す経路はすべて1つの関数を通し、[ARCHITECTURE.md](ARCHITECTURE.md) 6. の `toPublicGameState()` と同じ許可リスト方式にする(経路を新設しても既定では名前が素通りしないようにするため)。**ζ-3 の時点では `review_status` は `apps/` から一切参照されておらず、`draft` の `mino_ginkanmuri`(銀冠)が5経路で断定表示されている。** その一覧と是正要件は [PHASES.md](PHASES.md) Phase 7「Unit 4 の文言仕様」の「露出制御の実装要件」にある。
 
 **このフィールドは `data/schemas/shapes.schema.json` / `openings.schema.json` / `intents.schema.json` に必須フィールドとして追加済み(STEP ε)。** 必須化により未指定のレコードは構造上存在しなくなったが、`draft` を実際にどう扱うか(認識処理での利用可否など)の判断は今回のSTEPでは行っていない。今後の実装STEPで判断する。
 
