@@ -244,10 +244,10 @@ export interface ReachablePlanBody {
    */
   pendingReviewNote: string | null;
   /**
-   * ⑦⑧の計算に実際に使われたshapeId(ユーザーが選択したものか、未選択/無効時の
-   * フォールバックとしてranked[0]が採用されたものか、いずれか)。reachableShapesの
-   * どれが現在の「目標」かをUI側でハイライトするために使う。目指せる形が1件も
-   * 無い場合はnull。
+   * ⑦⑧の計算に実際に使われたshapeId。ユーザーが選択したshapeIdがreachableShapes
+   * に含まれる場合のみ値を持つ。未選択・無効値の場合はnull(Phase 7 Unit 0で
+   * ranked[0]への自動フォールバックを廃止した。目標形は選ぶまで存在しない)。
+   * reachableShapesのどれが現在の「目標」かをUI側でハイライトするために使う。
    */
   resolvedTargetShapeId: string | null;
   /**
@@ -277,10 +277,11 @@ export interface StateResponseBodyWithPlan extends StateResponseBody {
  * それぞれ世代識別子として使う)。
  *
  * targetShapeIdは「実際に採用された(resolvedTargetShapeId)」値であり、
- * ユーザーが指定した生の値そのものではない(未選択・無効時のranked[0]フォールバックも
- * 含む)。同じsfenでも目標形が変わればcandidateMovesの中身は変わり得るため、
- * sfenだけを世代識別子にすると古い目標形の結果を新しい目標形の結果として
- * 誤って返しかねない(このバグを避けるためのフィールド追加)。
+ * ユーザーが指定した生の値そのものではない。未選択・無効値の場合はundefined
+ * (Phase 7 Unit 0でranked[0]への自動フォールバックを廃止した)。同じsfenでも
+ * 目標形が変わればcandidateMovesの中身は変わり得るため、sfenだけを世代識別子に
+ * すると古い目標形の結果を新しい目標形の結果として誤って返しかねない
+ * (このバグを避けるためのフィールド追加)。
  */
 export interface CachedReachablePlan {
   sfen: string;
@@ -295,9 +296,10 @@ interface RankedPlanContext {
   shapeResults: ShapeFormationResult[];
   /** shapeGraphRankingの上位3件。 */
   reachableShapes: RankedReachableShape[];
-  /** 実際にroutePlanner.tsへ渡されたshapeId。reachableShapesが空ならundefined。
-   * ユーザーが選択したshapeId(selectedTargetShapeId)がreachableShapesに含まれて
-   * いればそれ、含まれない(未選択・無効値)場合はranked[0]にフォールバックした結果。 */
+  /** 実際にroutePlanner.tsへ渡されたshapeId。ユーザーが選択したshapeId
+   * (selectedTargetShapeId)がreachableShapesに含まれていればそれ、
+   * 含まれない(未選択・無効値)場合はundefined(Phase 7 Unit 0。
+   * 目標形は選ぶまで存在しないものとして扱う)。 */
   resolvedTargetShapeId: string | undefined;
   /** resolvedTargetShapeIdについてのみ計算したroutePlanner結果。対象shapeが無ければundefined。 */
   routePlanResult: ShapeRoutePlanResult | undefined;
@@ -314,8 +316,13 @@ interface RankedPlanContext {
  *
  * selectedTargetShapeIdは、ユーザーが目標形選択UIで選んだshapeId(任意)。
  * reachableShapes(上位3件)に含まれる場合のみ採用し、⑦の対象として使う。
- * 含まれない場合(未指定・無効なshapeId・対局が進んで候補から外れた等)は、
- * 従来通りranked[0]にフォールバックする(既存動作を変えない安全側の既定値)。
+ * 含まれない場合(未指定・無効なshapeId・対局が進んで候補から外れた等)は
+ * undefinedのままにする(Phase 7 Unit 0)。目標形は「対局開始時に自動選択される
+ * もの」ではなく「ユーザーが選ぶまで存在しないもの」として扱う
+ * ([../../../../CLAUDE.md](../../../../CLAUDE.md) の「絶対的な上位原則」)。
+ * その結果、resolvedTargetShapeId / routePlanResult(ひいてはtargetShapeProgress /
+ * routes / candidateMove)は未選択の間undefinedになる。reachableShapes(目指せる形の
+ * 候補)自体は、選ぶ手段を残すためこれまでどおり計算・提供する。
  */
 function computeRankedPlanContext(
   current: GameState,
@@ -332,7 +339,7 @@ function computeRankedPlanContext(
     selectedTargetShapeId !== undefined
       ? reachableShapes.find((s) => s.shapeId === selectedTargetShapeId)
       : undefined;
-  const top = selected ?? ranked[0];
+  const top = selected;
   const resolvedTargetShapeId = top?.shapeId;
   const routePlanResult = top ? planRoutesToShape(current.sfen, shapeResults, top.shapeId) : undefined;
   return { shapeResults, reachableShapes, resolvedTargetShapeId, routePlanResult };
@@ -576,7 +583,8 @@ function safeComputeRankedPlanContext(
  *
  * selectedTargetShapeIdは、目標形選択UI(POST /api/game/target-shape)で
  * ユーザーが選んだshapeId。省略時・reachableShapesに含まれない値の場合は
- * computeRankedPlanContext側でranked[0]にフォールバックする。
+ * computeRankedPlanContext側でundefinedのままになる(Phase 7 Unit 0で
+ * ranked[0]への自動フォールバックを廃止した。目標形は選ぶまで存在しない)。
  *
  * planChanged・planChangeReasonは、Phase3 Unit1/Unit2の結果を呼び出し元
  * (server.ts)からそのまま受け取って埋め込むだけの値(このモジュール自身は
@@ -660,8 +668,9 @@ export function buildStateResponseWithPlan(
  *
  * selectedTargetShapeIdの扱いはbuildStateResponseWithPlanと同じ
  * (computeRankedPlanContext参照)。戻り値のtargetShapeIdは、実際に採用された
- * (フォールバック後の)shapeIdであり、呼び出し元(server.ts)がCachedReachablePlanの
- * 世代識別子として保持する。
+ * shapeId(選択されていなければundefined。Phase 7 Unit 0でranked[0]への
+ * 自動フォールバックを廃止した。目標形は選ぶまで存在しない)であり、
+ * 呼び出し元(server.ts)がCachedReachablePlanの世代識別子として保持する。
  */
 export async function computeReachablePlan(
   current: GameState,

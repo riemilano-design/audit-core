@@ -42,7 +42,7 @@ if (!app) throw new Error("#appが見つかりません");
 // PC等の十分な横幅ではCSS Grid(style.css参照)でこの2つを横並びにし、
 // 狭い画面では通常のブロック要素として縦積みのままにする。
 app.innerHTML = `
-  <h1>将棋コーチ (Phase 0 仮UI)</h1>
+  <h1>将棋コーチ</h1>
   <div id="layout">
     <div id="boardColumn">
       <div id="status"></div>
@@ -50,7 +50,7 @@ app.innerHTML = `
       <div id="hands"></div>
       <div id="controls">
         <input id="moveInput" type="text" placeholder="例: 7g7f" autocomplete="off" />
-        <button id="submitMove">指す(四間飛車側)</button>
+        <button id="submitMove">指す</button>
         <button id="newGame">新しい対局</button>
       </div>
       <div id="error"></div>
@@ -666,12 +666,12 @@ function renderInteractive(): void {
 function renderStatus(state: GameStateResponse): void {
   if (state.status.isEnd) {
     const outcome = state.status.outcome;
-    const winnerLabel = outcome?.winner === "sente" ? "先手(四間飛車側)" : outcome?.winner === "gote" ? "後手(居飛車側)" : "引き分け";
+    const winnerLabel = outcome?.winner === "sente" ? "あなた(先手)" : outcome?.winner === "gote" ? "相手(後手)" : "引き分け";
     statusEl.textContent = `対局終了: ${winnerLabel}${outcome?.result ? `(${outcome.result})` : ""}`;
     return;
   }
   const turn = parseSfenTurn(state.sfen);
-  statusEl.textContent = turn === "sente" ? "手番: 先手(あなた・四間飛車側)" : "手番: 後手(AI・居飛車側、思考中...)";
+  statusEl.textContent = turn === "sente" ? "手番: あなた(先手)" : "手番: 相手(後手・考えています...)";
 }
 
 // 【Phase5】指し手履歴を日本語棋譜表記(例: "７六歩")で表示する。

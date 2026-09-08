@@ -53,7 +53,8 @@ let prioritizedEngineReady: Promise<PrioritizedEngine> | undefined;
 // backgroundPlan/backgroundPlanKeyと同じ「モジュール変数で保持し、新規対局開始時に
 // 手動でリセットする」既存の設計方針を踏襲する)。実際に採用されるshapeId
 // (resolvedTargetShapeId)は、reachableShapesに含まれるかどうかで
-// stateResponse.ts側が決める(未指定・無効値の場合はranked[0]にフォールバック)。
+// stateResponse.ts側が決める(未指定・無効値の場合はnull。Phase 7 Unit 0で
+// ranked[0]への自動フォールバックを廃止した。目標形は選ぶまで存在しない)。
 let selectedTargetShapeId: string | undefined;
 
 // ⑧のバックグラウンド解析結果のキャッシュ(完了した局面のsfen・目標形の組み合わせ付き)。
@@ -298,7 +299,8 @@ async function handleMoveInternal(req: IncomingMessage, res: ServerResponse): Pr
  * 選べるUI」)から呼ばれる。選択されたshapeIdが実際に現在のreachableShapesに
  * 含まれるかどうかの妥当性判定はここでは行わない(stateResponse.ts側の
  * computeRankedPlanContextが、局面が進むたびに変わるreachableShapesと突き合わせて
- * 都度判定する。含まれなければ安全にranked[0]へフォールバックする)。
+ * 都度判定する。含まれなければ目標形は決まらない。Phase 7 Unit 0で
+ * ranked[0]への自動フォールバックを廃止した。目標形は選ぶまで存在しない)。
  */
 async function handleTargetShape(req: IncomingMessage, res: ServerResponse): Promise<void> {
   let body: unknown;

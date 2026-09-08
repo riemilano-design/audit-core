@@ -228,13 +228,12 @@ describe("generateExplanations", () => {
     }
   });
 
-  // Phase4: forcedOpponentOpening/scenarioOpponentOpeningの強制進行中、intentが
+  // Phase4: scenarioOpponentOpening(開発モード)/承認済みvariantの強制進行フェーズでは、
   // 全く検出されない(=data/intents/*.jsonの3件全てnone)場合に限り、将棋上の意図を
   // 推測するのではなく「直近の相手の手はシステムの決まった手順によるものである」
   // という事実だけを説明する。intentが検出されている場合はこの新文言を一切使わず、
   // 既存のintent説明を必ず優先する。
-  const FORCED_OPENING_FACT_REASON =
-    "相手の今の手は、対局序盤の決まった手順によるものです。そのため、狙いはまだ判定できません。";
+  const FORCED_OPENING_FACT_REASON = "相手の今の手は、対局序盤の決まった手順によるものです。";
 
   it("opponent_intent / opponent_next_aim (Phase4-A): 全intentがnone かつ 強制進行中の場合、事実ベースの新文言になる", () => {
     const explanations = generateExplanations(NO_SHAPE_RESULTS, NO_INTENT_RESULTS, true);

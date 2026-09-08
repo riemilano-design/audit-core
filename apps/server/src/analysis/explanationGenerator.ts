@@ -167,7 +167,7 @@ function buildCurrentShapeStage(shapeResults: ShapeFormationResult[]): StageResu
   };
 }
 
-// Phase4: forcedOpponentOpening/scenarioOpponentOpeningの強制進行フェーズでは、
+// Phase4: scenarioOpponentOpening(開発モード)/承認済みvariantの強制進行フェーズでは、
 // intentDetector.tsの3件が全てnoneになることが構造上ほぼ必ず起きる
 // (data/intents/*.jsonのrecognition_patternは、強制進行の機械的な手順とは
 // 無関係なため)。この場合に限り、将棋上の意図を推測するのではなく、
@@ -176,7 +176,7 @@ function buildCurrentShapeStage(shapeResults: ShapeFormationResult[]): StageResu
 // intentが1件でも検出されている場合(best !== undefined)は、この文言は一切使わず
 // 既存のintent説明を必ず優先する(呼び出し側の分岐、下記参照)。
 const OPPONENT_UNCLASSIFIED_FORCED_OPENING_REASON =
-  "相手の今の手は、対局序盤の決まった手順によるものです。そのため、狙いはまだ判定できません。";
+  "相手の今の手は、対局序盤の決まった手順によるものです。";
 
 function buildOpponentIntentUnclassifiedStage(wasLastOpponentMoveForced: boolean): StageResult {
   return {

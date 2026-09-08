@@ -167,9 +167,10 @@ export interface ReachablePlanBody {
    * 個々の候補手の説明文自体は変更されない。選択中の形が無い場合はnull。
    */
   pendingReviewNote: string | null;
-  /** ⑦⑧の計算に実際に使われたshapeId(ユーザーが選択したもの、または未選択/無効時の
-   * フォールバックとしてranked[0]が採用されたもの)。reachableShapesの表示で
-   * どれが現在の対象かを示すために使う。目指せる形が1件も無い場合はnull。 */
+  /** ⑦⑧の計算に実際に使われたshapeId(ユーザーが選択したもの)。未選択・無効値の
+   * 場合はnull(Phase 7 Unit 0でranked[0]への自動フォールバックを廃止した。
+   * 目標形は選ぶまで存在しない)。reachableShapesの表示でどれが現在の対象かを
+   * 示すために使う。目指せる形が1件も無い場合もnull。 */
   resolvedTargetShapeId: string | null;
   /** Phase3 Unit1(計画崩れの検知のみ): 相手の手によって、ユーザーが着手する直前の
    * 計画の前提が機械的に崩れたかどうか。 */
@@ -348,7 +349,8 @@ export async function submitMove(move: string): Promise<GameStateResponse | Move
 
 /** 目標形選択UI(docs/PHASES.md Phase2完了条件)から、目指せる形の1つを選ぶ。
  * 選択したshapeIdが実際に採用されるかはサーバー側(stateResponse.ts)が判断する
- * (reachableShapesに含まれない場合は既存動作のranked[0]へ安全にフォールバックする)。 */
+ * (reachableShapesに含まれない場合は目標形は決まらない。Phase 7 Unit 0で
+ * ranked[0]への自動フォールバックを廃止した。目標形は選ぶまで存在しない)。 */
 export async function selectTargetShape(shapeId: string): Promise<GameStateResponse | MoveErrorResponse> {
   const res = await fetch("/api/game/target-shape", {
     method: "POST",

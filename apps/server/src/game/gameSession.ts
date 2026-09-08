@@ -1,17 +1,21 @@
-// 四間飛車(自分=先手)vs居飛車(AI=後手)の対局を1局分だけ進行させる、
-// Phase 0時点での最小限のゲームセッション。
-// legalMoves/applyMove(合法手判定)・forcedOpponentOpening(相手の最小序盤進行)・
-// scenarioOpponentOpening(検証用シナリオ進行)・UsiEngine(エンジンのbestmove)を束ねる。
+// 初期局面から始まる対局を1局分だけ進行させる、サーバー側のゲームセッション。
+// legalMoves/applyMove(合法手判定)・scenarioOpponentOpening(検証用シナリオ進行)・
+// UsiEngine(エンジンのbestmove)を束ねる。
 //
 // STEP ζ-4c-1: 相手AI制御機構(opponentControlSelector.ts・scenarioRepository.ts)を
 // 追加した。ただし承認済み(verification_status: human_approved)のscenario variantは
 // 実データとして存在しない(data/openings/*.jsonのscenarioはnullのまま)ため、
 // 現時点では常に候補0件であり、この経路が実際に発動することはない。
+//
+// Phase 7 Unit 0: forcedOpponentOpening(居飛車強制)は本番導線から外した
+// ([../../../../CLAUDE.md](../../../../CLAUDE.md) の「絶対的な上位原則」)。
+// state.scenario指定時(開発モード ?scenario=)のみscenarioOpponentOpeningを使い、
+// 通常対局ではエンジンのbestmoveへ落ちる。forcedOpponentOpening.ts自体は
+// 削除せず、開発・検証用およびテスト用に残す。
 
 import { makeSfen, parseSfen } from "shogiops/sfen";
 import type { Outcome } from "shogiops/types";
 import type { UsiEngine } from "../engine/usiEngine.js";
-import { pickForcedOpponentMove } from "../engine/forcedOpponentOpening.js";
 import { generateOpponentControlSeed, selectVariant } from "../engine/opponentControlSelector.js";
 import { pickScenarioMove, type ScenarioId } from "../engine/scenarioOpponentOpening.js";
 import type { ApprovedScenarioVariant } from "../engine/scenarioRepository.js";
@@ -32,16 +36,18 @@ export interface GameState {
   forcedPliesUsed: number;
   /**
    * 検証用シナリオ(scenarioOpponentOpening.ts)を指定した対局かどうか。
-   * 通常対局(undefined)では従来通りforcedOpponentOpeningを使う。
+   * 通常対局(undefined)ではforcedOpponentOpeningを使わず、エンジンのbestmoveへ落ちる。
    */
   scenario?: ScenarioId;
   /**
-   * 直近の相手(居飛車)の着手が、forcedOpponentOpening/scenarioOpponentOpeningの
-   * 強制進行によって実際に選択・採用された手だったかどうかの確定事実(Phase4)。
+   * 直近の相手の着手が、次の2経路のいずれかによって実際に選択・採用された
+   * 手だったかどうかの確定事実。
+   * - 経路1: 承認済みvariant(opponentControl)による選択
+   * - 経路2: state.scenario指定時(開発・検証モード専用)のscenarioOpponentOpeningによる選択
    * forcedPliesUsedから推測しない(forcedPliesUsedは「王手を飛車でしか
-   * 回避できない」等でpickForcedOpponentMove/pickScenarioMoveがundefinedを返した
-   * 回には増えないままエンジンのbestmoveが採用されることがあり、その値だけでは
-   * 直近の一手が本当にforcedだったかを再現できないため)。playOpponentMove内で
+   * 回避できない」等でpickScenarioMoveがundefinedを返した回には増えないまま
+   * エンジンのbestmoveが採用されることがあり、その値だけでは直近の一手が
+   * 本当にforcedだったかを再現できないため)。playOpponentMove内で
    * forcedMoveの有無をその場で確認し、その結果だけを記録する。
    * 相手がまだ一度も指していない場合(初期状態)や、人間の着手ではこの値は
    * 変化しない。省略時(古いテストフィクスチャ等)はfalse相当として扱われる。
@@ -111,7 +117,7 @@ export function getStatus(state: GameState): GameStatus {
 }
 
 /**
- * 人間(四間飛車=先手)の一手を適用する。非合法な手はHumanMoveErrorを投げる
+ * 人間(先手)の一手を適用する。非合法な手はHumanMoveErrorを投げる
  * (呼び出し側でユーザーへのエラー表示に使う想定)。
  */
 export function playHumanMove(state: GameState, moveUsi: string): GameState {
@@ -167,17 +173,20 @@ function pickOpponentControlMove(
 }
 
 /**
- * 居飛車(相手=後手)の一手を選び適用する。既に終局している場合は何もせずstateを
- * そのまま返す。優先順位は次の4段階(上から順に試し、得られなければ次へ
+ * 相手の一手を選び適用する。既に終局している場合は何もせずstateを
+ * そのまま返す。優先順位は次の3段階(上から順に試し、得られなければ次へ
  * フォールバックする。STEP ζ-4c-1で経路1を追加した):
  *   1. state.opponentControlが選んでいるvariantの手(現局面で合法な場合のみ)
- *   2. state.scenario指定時はscenarioOpponentOpening
- *   3. forcedOpponentOpening
- *   4. エンジンのbestmove
+ *   2. state.scenario指定時のみscenarioOpponentOpening(開発モード ?scenario= 専用)
+ *   3. エンジンのbestmove(通常対局はここが既定経路になる。Phase 7 Unit 0)
+ *
+ * forcedOpponentOpening(旧・居飛車強制の経路)は本番導線から外れており、
+ * この関数からは呼ばれない([../../../../CLAUDE.md](../../../../CLAUDE.md) の
+ * 「絶対的な上位原則」)。ファイル自体は開発・検証用およびテスト用に残す。
  *
  * approvedVariantsは、経路1の実体(moves)を解決するために必要な承認済みvariant一覧
  * (server.tsがscenarioRepository.tsから取得して渡す想定)。省略時(空配列)は
- * 経路1が発動せず、既存(経路2→3→4)と完全に同じ挙動になる。
+ * 経路1が発動せず、経路2→3のみになる。
  */
 export async function playOpponentMove(
   state: GameState,
@@ -202,17 +211,22 @@ export async function playOpponentMove(
     wasLastOpponentMoveForced = true;
     opponentControl = { ...state.opponentControl!, movesUsed: state.opponentControl!.movesUsed + 1 };
   } else {
+    // Phase 7 Unit 0: forcedOpponentOpening(旧・経路3)は本番導線から外す。
+    // state.scenario指定時(開発モード ?scenario=)のみscenarioOpponentOpeningを使う。
+    // 通常対局(state.scenarioが無い)ではforcedMoveは常にundefinedとなり、
+    // 経路3(エンジンのbestmove)へ落ちる。pickForcedOpponentMove自体・
+    // forcedOpponentOpening.tsは削除せず、開発・検証用およびテスト用に残す。
     const forcedMove = state.scenario
       ? pickScenarioMove(state.sfen, state.forcedPliesUsed, state.scenario)
-      : pickForcedOpponentMove(state.sfen, state.forcedPliesUsed);
+      : undefined;
 
     if (forcedMove) {
-      // 経路2/3: state.scenario指定時はscenarioOpponentOpening、それ以外はforcedOpponentOpening。
+      // 経路2: state.scenario指定時のscenarioOpponentOpening(開発モード専用)。
       moveUsi = forcedMove;
       forcedPliesUsed += 1;
       wasLastOpponentMoveForced = true;
     } else {
-      // 経路4: エンジンのbestmove。
+      // 経路3: エンジンのbestmove。
       engine.position(state.sfen);
       const { bestmove } = await engine.go({ movetimeMs: 1000 });
       if (!bestmove || bestmove === "resign" || bestmove === "win") {

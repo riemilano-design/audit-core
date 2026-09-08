@@ -54,22 +54,48 @@ describe("playHumanMove", () => {
 });
 
 describe("playOpponentMove", () => {
-  it("強制進行の範囲内では、エンジンを呼ばずに指し手を選ぶ", async () => {
+  // Phase 7 Unit 0: forcedOpponentOpening(居飛車強制)は本番導線から外れた
+  // ([../../../../CLAUDE.md](../../../../CLAUDE.md) の「絶対的な上位原則」)。
+  // 旧テスト「強制進行の範囲内では、エンジンを呼ばずに指し手を選ぶ」が固定していた
+  // 仕様(通常対局でforcedOpponentOpeningを使う)は撤回されたため、「通常対局
+  // (scenario未指定)では、forcedPliesUsedの範囲内でもエンジンのbestmoveへ落ちる」
+  // ことを検証する形へ書き換える。
+  it("通常対局(scenario未指定)では、forcedPliesUsedの範囲内でもエンジンのbestmoveを使う", async () => {
     const state: GameState = { sfen: GOTE_TURN_SFEN, moveHistory: ["7g7f"], forcedPliesUsed: 0 };
-    const engine = unusedEngineMock();
+    const engine = {
+      position: vi.fn(),
+      go: vi.fn(async () => ({
+        bestmove: "3c3d",
+        ponder: undefined,
+        scoreCp: undefined,
+        infoLines: [],
+      })),
+    };
     const next = await playOpponentMove(state, engine);
-    expect(next.moveHistory).toEqual(["7g7f", expect.any(String)]);
-    expect(next.forcedPliesUsed).toBe(1);
-    expect(engine.position).not.toHaveBeenCalled();
-    expect(engine.go).not.toHaveBeenCalled();
+    expect(engine.position).toHaveBeenCalledWith(GOTE_TURN_SFEN);
+    expect(engine.go).toHaveBeenCalled();
+    expect(next.moveHistory).toEqual(["7g7f", "3c3d"]);
+    // forcedOpponentOpeningの経路を通らないため、forcedPliesUsedは増えないまま。
+    expect(next.forcedPliesUsed).toBe(0);
   });
 
-  // Phase4 A: forced moveが実際に採用された場合、wasLastOpponentMoveForcedはtrueになる。
-  it("強制進行の手が採用された場合、wasLastOpponentMoveForcedはtrueになる", async () => {
+  // Phase 7 Unit 0: 旧テスト「強制進行の手が採用された場合、wasLastOpponentMoveForcedは
+  // trueになる」(scenario未指定)が固定していた仕様も撤回されたため、
+  // 「通常対局ではwasLastOpponentMoveForcedがfalseになる(エンジンの手が採用される)」
+  // ことを検証する形へ書き換える。
+  it("通常対局(scenario未指定)でエンジンのbestmoveが採用された場合、wasLastOpponentMoveForcedはfalseになる", async () => {
     const state: GameState = { sfen: GOTE_TURN_SFEN, moveHistory: ["7g7f"], forcedPliesUsed: 0 };
-    const engine = unusedEngineMock();
+    const engine = {
+      position: vi.fn(),
+      go: vi.fn(async () => ({
+        bestmove: "3c3d",
+        ponder: undefined,
+        scoreCp: undefined,
+        infoLines: [],
+      })),
+    };
     const next = await playOpponentMove(state, engine);
-    expect(next.wasLastOpponentMoveForced).toBe(true);
+    expect(next.wasLastOpponentMoveForced).toBe(false);
   });
 
   it("強制進行の手数を使い切った後は、エンジンのbestmoveを使う", async () => {
@@ -156,8 +182,8 @@ describe("playOpponentMove", () => {
     expect(next.wasLastOpponentMoveForced).toBe(true);
   });
 
-  it("scenario指定時は、forcedOpponentOpeningではなくscenarioOpponentOpeningの手を使う", async () => {
-    // 通常のforcedOpponentOpeningなら最も若い筋の歩(1c1d)を選ぶはずの局面だが、
+  it("scenario指定時は、エンジンのbestmoveではなくscenarioOpponentOpeningの手を使う", async () => {
+    // scenarioOpponentOpening.test.tsと揃えた検証用の局面であり、
     // hayajikakeシナリオでは1手目として6c6dを選ぶはず(scenarioOpponentOpening.test.ts参照)。
     const state: GameState = {
       sfen: GOTE_TURN_SFEN,
@@ -259,7 +285,9 @@ describe("createInitialGameState (相手AI制御, STEP ζ-4c-1)", () => {
 });
 
 // STEP ζ-4c-1: playOpponentMoveの経路1(相手AI制御, opponentControl)。
-// 経路の優先順位は 1.opponentControl -> 2.scenario -> 3.forcedOpponentOpening -> 4.エンジン。
+// 経路の優先順位は 1.opponentControl -> 2.scenario(開発モード専用) -> 3.エンジン。
+// Phase 7 Unit 0: forcedOpponentOpening(旧・経路3)は本番導線から外れ、
+// scenario未指定の場合は経路2を飛ばして直接エンジンへ落ちる。
 describe("playOpponentMove (相手AI制御, STEP ζ-4c-1)", () => {
   const variant: ApprovedScenarioVariant = {
     openingId: "test_opening",
@@ -270,19 +298,32 @@ describe("playOpponentMove (相手AI制御, STEP ζ-4c-1)", () => {
     moves: ["6c6d", "6d6e"],
   };
 
-  it("承認済みvariantが0件(selectedVariantIdがundefined)のとき、既存のforcedOpponentOpeningの経路が変わらず使われる", async () => {
+  // Phase 7 Unit 0: 旧テスト「承認済みvariantが0件のとき、既存のforcedOpponentOpeningの
+  // 経路が変わらず使われる」が固定していた仕様(通常対局でforcedOpponentOpeningを使う)は
+  // 撤回されたため、「通常対局(scenario未指定)ではエンジンへ落ちる」ことを検証する
+  // 形へ書き換える。
+  it("承認済みvariantが0件(selectedVariantIdがundefined)かつscenario未指定のとき、通常対局ではエンジンへ落ちる", async () => {
     const state: GameState = {
       sfen: GOTE_TURN_SFEN,
       moveHistory: ["7g7f"],
       forcedPliesUsed: 0,
       opponentControl: { seed: 1, selectedVariantId: undefined, movesUsed: 0 },
     };
-    const engine = unusedEngineMock();
+    const engine = {
+      position: vi.fn(),
+      go: vi.fn(async () => ({
+        bestmove: "3c3d",
+        ponder: undefined,
+        scoreCp: undefined,
+        infoLines: [],
+      })),
+    };
     const next = await playOpponentMove(state, engine, []);
-    expect(next.moveHistory).toEqual(["7g7f", expect.any(String)]);
-    expect(next.forcedPliesUsed).toBe(1);
-    expect(next.wasLastOpponentMoveForced).toBe(true);
-    expect(engine.position).not.toHaveBeenCalled();
+    expect(engine.position).toHaveBeenCalledWith(GOTE_TURN_SFEN);
+    expect(engine.go).toHaveBeenCalled();
+    expect(next.moveHistory).toEqual(["7g7f", "3c3d"]);
+    expect(next.forcedPliesUsed).toBe(0);
+    expect(next.wasLastOpponentMoveForced).toBe(false);
   });
 
   it("scenario指定時、承認済みvariantが0件でも既存のscenarioOpponentOpeningの経路が変わらず使われる", async () => {
@@ -314,7 +355,11 @@ describe("playOpponentMove (相手AI制御, STEP ζ-4c-1)", () => {
     expect(engine.position).not.toHaveBeenCalled();
   });
 
-  it("次の手がその場の局面で非合法な場合、フォールバックしmovesUsedは増えない", async () => {
+  // Phase 7 Unit 0: 旧テストは非合法時のフォールバック先をforcedOpponentOpening
+  // (経路3、当時)としていたが、この経路は本番導線から外れた。scenario未指定の
+  // 通常対局では、経路1が発動しない場合エンジン(経路3)へ直接フォールバックする
+  // ことを検証する形へ書き換える。
+  it("次の手がその場の局面で非合法な場合、経路1は発動せず(movesUsedは増えない)、通常対局ではエンジンへフォールバックする", async () => {
     // moves[1]("6d6e")は、まだ1手目("6c6d")が適用されておらず(GOTE_TURN_SFENのまま)、
     // gote歩は6cのままなので非合法(scenarioOpponentOpening.test.tsの
     // 「人間の手でシナリオの想定局面が崩れ、次の手が非合法になった場合はundefinedを返す」と同じ考え方)。
@@ -324,47 +369,72 @@ describe("playOpponentMove (相手AI制御, STEP ζ-4c-1)", () => {
       forcedPliesUsed: 0,
       opponentControl: { seed: 1, selectedVariantId: "test_opening/test_variant", movesUsed: 1 },
     };
-    const engine = unusedEngineMock();
+    const engine = {
+      position: vi.fn(),
+      go: vi.fn(async () => ({
+        bestmove: "3c3d",
+        ponder: undefined,
+        scoreCp: undefined,
+        infoLines: [],
+      })),
+    };
     const next = await playOpponentMove(state, engine, [variant]);
-    // 経路1が発動せず、経路3(forcedOpponentOpening)へフォールバックする。
     expect(next.opponentControl?.movesUsed).toBe(1);
-    expect(next.wasLastOpponentMoveForced).toBe(true);
-    expect(engine.position).not.toHaveBeenCalled();
+    expect(next.wasLastOpponentMoveForced).toBe(false);
+    expect(engine.position).toHaveBeenCalledWith(GOTE_TURN_SFEN);
+    expect(engine.go).toHaveBeenCalled();
+    expect(next.moveHistory).toEqual(["7g7f", "3c3d"]);
   });
 
-  it("複数手にわたって、承認済みvariantの手が順に指され、使い切ると次の経路へフォールバックする。playHumanMoveを挟んでもopponentControlは引き継がれる", async () => {
+  // Phase 7 Unit 0: 旧テストは、variantを使い切った後のフォールバック先を
+  // forcedOpponentOpening(当時の経路3)としていたが、この経路は本番導線から
+  // 外れた。scenario未指定の通常対局では、variantを使い切るとエンジンへ
+  // フォールバックすることを検証する形へ書き換える。
+  it("複数手にわたって、承認済みvariantの手が順に指され、使い切ると通常対局ではエンジンへフォールバックする。playHumanMoveを挟んでもopponentControlは引き継がれる", async () => {
     let state: GameState = {
       sfen: GOTE_TURN_SFEN,
       moveHistory: ["7g7f"],
       forcedPliesUsed: 0,
       opponentControl: { seed: 1, selectedVariantId: "test_opening/test_variant", movesUsed: 0 },
     };
-    const engine = unusedEngineMock();
+    const engine = {
+      position: vi.fn(),
+      go: vi.fn(async () => ({
+        bestmove: "3c3d",
+        ponder: undefined,
+        scoreCp: undefined,
+        infoLines: [],
+      })),
+    };
 
-    // 1手目: variantの手(6c6d)が採用される。
+    // 1手目: variantの手(6c6d)が採用される(経路1。エンジンは呼ばれない)。
     state = await playOpponentMove(state, engine, [variant]);
     expect(state.moveHistory.at(-1)).toBe("6c6d");
     expect(state.opponentControl?.movesUsed).toBe(1);
+    expect(engine.position).not.toHaveBeenCalled();
 
     // 人間側の一手(playHumanMoveを挟んでもopponentControlが消えないことの確認)。
     state = playHumanMove(state, "1g1f");
     expect(state.opponentControl).toEqual({ seed: 1, selectedVariantId: "test_opening/test_variant", movesUsed: 1 });
 
-    // 2手目: variantの手(6d6e)が採用される。
+    // 2手目: variantの手(6d6e)が採用される(経路1。エンジンは呼ばれない)。
     state = await playOpponentMove(state, engine, [variant]);
     expect(state.moveHistory.at(-1)).toBe("6d6e");
     expect(state.opponentControl?.movesUsed).toBe(2);
+    expect(engine.position).not.toHaveBeenCalled();
 
     // 人間側の一手。
     state = playHumanMove(state, "2g2f");
     expect(state.opponentControl?.movesUsed).toBe(2);
 
     // 3手目: variantのmovesを使い切った(moves[2]は存在しない)ため、
-    // 次の経路(forcedOpponentOpening、state.scenarioは未指定)へフォールバックする。
+    // scenario未指定の通常対局ではエンジンへフォールバックする(Phase 7 Unit 0)。
     state = await playOpponentMove(state, engine, [variant]);
     expect(state.opponentControl?.movesUsed).toBe(2);
-    expect(state.forcedPliesUsed).toBe(1);
-    expect(state.wasLastOpponentMoveForced).toBe(true);
-    expect(engine.position).not.toHaveBeenCalled();
+    expect(state.forcedPliesUsed).toBe(0);
+    expect(state.wasLastOpponentMoveForced).toBe(false);
+    expect(engine.position).toHaveBeenCalledTimes(1);
+    expect(engine.go).toHaveBeenCalledTimes(1);
+    expect(state.moveHistory.at(-1)).toBe("3c3d");
   });
 });
