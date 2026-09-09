@@ -146,7 +146,13 @@ function buildCurrentShapeStage(shapeResults: ShapeFormationResult[]): StageResu
     // あり(例: mino_takamino「本美濃囲いで5八にあった金を…」)、連結するとforming
     // でも名前が漏れてしまう(CLAUDE.mdルール4・6違反)。formingでは承認済みの
     // ワンセンテンス(lead)のみをreasonとする。
-    lead = "今の陣形は、選んだ形に近づいてきていますが、まだ完成していません。";
+    // Phase 7 Unit 3: 目標形の選択UIを廃止したため、「選んだ形」という
+    // ユーザーの選択を前提にした言い方をやめた。実際に起きているのは
+    // 「盤面から、あらかじめ用意されている形のどれかに近づいていると認識できた」
+    // ことである(判定は shapeFormationAnalyzer のまま。文言だけを変えている)。
+    // forming では形の名前を出さない制約(ζ-5)があるため、名前は入れない。
+    // 「あらかじめ用意されている形」は同ファイルの none 用文言と同じ語。
+    lead = "今の陣形は、あらかじめ用意されている形のどれかに近づいてきているように見えますが、まだ完成していません。";
     reason = lead;
   }
 

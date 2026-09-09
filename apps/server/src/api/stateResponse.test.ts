@@ -1394,7 +1394,7 @@ describe("Unit 3: 候補手のラベルに駒名を付ける", () => {
 describe("Unit 3: filterContradictoryConsiderations", () => {
   const noPlayable = {
     kind: "no_playable_route_first_move",
-    text: "今の局面では、選んだ形へ向かう道のりの一手目を、どれも指すことができません。",
+    text: "今の局面では、その形へ向かう道のりの一手目を、どれも指すことができません。",
   } satisfies NextConsiderationMessage;
   const completed = { kind: "shape_completed", text: "形ができています。" } satisfies NextConsiderationMessage;
 
@@ -1447,7 +1447,7 @@ describe("buildStateResponseWithPlan: lastMoveOutcome", () => {
     expect(response.plan.lastMoveOutcome?.playedMoveLabel).toBe("７八銀");
     expect(response.plan.lastMoveOutcome?.opponentMoveLabel).toBe("１四歩");
     // Unit 3(情報構造の整理・既知事項 U0-1): 目標形が未選択(selectedTargetShapeId:
-    // undefined)のときは「目標にしている形について特に大きな変化はありませんでした」を
+    // undefined)のときは「今の陣形に近い形について特に大きな変化はありませんでした」を
     // 返さない。存在しない目標形を指す文言を出さないための仕様である。
     expect(response.plan.lastMoveOutcome!.messages.some((m) => m.kind === "no_notable_change")).toBe(false);
     // 説明文に評価語が混ざらないこと(moveOutcomeExplanation.tsの方針)。

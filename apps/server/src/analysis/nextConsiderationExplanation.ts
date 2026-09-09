@@ -65,7 +65,9 @@ function factText(fact: NextConsiderationFact, sfen: string): string | null {
     }
 
     case "no_playable_route_first_move":
-      return "今の局面では、選んだ形へ向かう道のりの一手目を、どれも指すことができません。";
+      // Phase 7 Unit 3: 「選んだ形」をやめる。直前に形の名前つきの見出しが
+      // 出ているため、「その形」で何を指すかは画面から追える。
+      return "今の局面では、その形へ向かう道のりの一手目を、どれも指すことができません。";
 
     case "shape_completed": {
       if (fact.shapeName === null) return null;

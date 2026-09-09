@@ -120,7 +120,7 @@ describe("explainNextConsiderations", () => {
     const messages = explainNextConsiderations([fact("no_playable_route_first_move")], INITIAL_SFEN);
 
     expect(messages[0]?.text).toBe(
-      "今の局面では、選んだ形へ向かう道のりの一手目を、どれも指すことができません。",
+      "今の局面では、その形へ向かう道のりの一手目を、どれも指すことができません。",
     );
   });
 

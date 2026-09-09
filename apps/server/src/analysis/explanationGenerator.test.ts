@@ -156,7 +156,9 @@ describe("generateExplanations", () => {
       const explanations = generateExplanations([forming], NO_INTENT_RESULTS);
       const currentShape = findStage(explanations, "current_shape");
 
-      expect(currentShape.reason).toBe("今の陣形は、選んだ形に近づいてきていますが、まだ完成していません。");
+      expect(currentShape.reason).toBe(
+        "今の陣形は、あらかじめ用意されている形のどれかに近づいてきているように見えますが、まだ完成していません。",
+      );
       for (const shape of getShapes()) {
         expect(currentShape.reason).not.toContain(shape.name);
       }

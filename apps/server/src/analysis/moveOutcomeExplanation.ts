@@ -29,7 +29,8 @@ export interface MoveOutcomeMessage {
 
 /** 事実が1件も無い場合の文言(無理に何かを言わない)。 */
 export const NO_NOTABLE_CHANGE_TEXT =
-  "この手のあと、目標にしている形について特に大きな変化はありませんでした。";
+  // Phase 7 Unit 3: 「目標にしている形」も選択UIがあった頃の言い方のため差し替えた。
+  "この手のあと、今の陣形に近い形について特に大きな変化はありませんでした。";
 
 /**
  * 原因の文言。planChangeReason.tsが確定分類した3種のみを扱う
@@ -62,7 +63,9 @@ function factText(fact: MoveOutcomeFact): string {
 
   switch (fact.kind) {
     case "target_shape_changed":
-      return "目標にする形が変わりました。ここからは新しい形について道のりを表示します。";
+      // Phase 7 Unit 3: 「目標にする形」はユーザーが目標を選んでいた頃の言い方。
+      // 今は盤面から認識した形が変わっただけなので、そう読める文言にする。
+      return "今の陣形に近い形が変わりました。ここからは新しい形について道のりを表示します。";
 
     case "played_candidate":
       return fact.candidateKind === "preparation"

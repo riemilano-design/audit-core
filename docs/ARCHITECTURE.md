@@ -127,7 +127,7 @@ Phase 6 は「毎手説明」を4つの Unit に分けて実装した。**Unit �
 
 | Unit | 扱う情報 | 入力 | 代表モジュール |
 |---|---|---|---|
-| Unit 1 | 選んだ形への**経路**と、現在局面で指せる最初の一手・準備手 | 現在局面 | `routePlanner.ts`、`notation/japaneseSquare.ts` |
+| Unit 1 | 認識できた形への**経路**と、現在局面で指せる最初の一手・準備手 | 現在局面 | `routePlanner.ts`、`notation/japaneseSquare.ts` |
 | Unit 2 | 直前の一手による**形・経路の変化**(差分) | 着手前の局面 + 現在局面 | `moveOutcomeDetector.ts` / `moveOutcomeExplanation.ts` |
 | Unit 3 | 直前の一手で**盤面に起きたこと**(捕獲・王手・成り) | 着手前後の各局面遷移 | `boardEventDetector.ts` / `boardEventExplanation.ts` |
 | Unit 4 | **現在局面の静的な状態**の整理(差分ではない) | 現在局面のみ | `nextConsiderationDetector.ts` / `nextConsiderationExplanation.ts`、`notation/japaneseMove.ts`、`rules/gameStatus.isInCheck` |
