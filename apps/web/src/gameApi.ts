@@ -93,6 +93,9 @@ export interface TargetShapeProgress {
    * (data/shapes/*.json の characteristics)。web側では表示するだけ。 */
   description: string;
   matchedSquareLabels: string[];
+  /** Unit 3: 同じマスを「駒名：座標」で表したもの(例: "金：６九")。
+   * 駒名は現在の盤から読んだ結果で、形の定義(required_pieces)の駒種ではない。 */
+  matchedPieceLabels: string[];
   missingSquareLabels: string[];
   /**
    * STEP ζ-5: この形のreview_statusが"draft"の場合にだけ入る注記

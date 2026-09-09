@@ -14,7 +14,7 @@ import {
 import { getStatus, type GameState, type GameStatus } from "../game/gameSession.js";
 import { analyzeShapeFormation, type ShapeFormationResult } from "../analysis/shapeFormationAnalyzer.js";
 import type { ShapeStatus } from "../analysis/shapeDetector.js";
-import { toMovingPieceName } from "../notation/japaneseMove.js";
+import { toMovingPieceName, toPieceNameAt } from "../notation/japaneseMove.js";
 import { detectIntents } from "../analysis/intentDetector.js";
 import { selectTargetPurpose } from "../analysis/targetPurposeSelector.js";
 import { rankReachableShapes, type RankedReachableShape } from "../analysis/shapeGraphRanking.js";
@@ -160,6 +160,8 @@ export interface TargetShapeProgress {
   description: string;
   /** 既にその形の一部として成立しているマス(日本語表記、例: "６九") */
   matchedSquareLabels: string[];
+  /** 同じマスを「駒名：座標」で表したもの(例: "金：６九")。駒名は現在の盤から読む。 */
+  matchedPieceLabels: string[];
   /** まだ埋まっていないマス(日本語表記) */
   missingSquareLabels: string[];
   /**
@@ -586,7 +588,29 @@ function toCandidateMoveLabels(
   return labels;
 }
 
+/**
+ * 「玉：８八」のような、盤上のそのマスにある駒の名前つきの表記(人間の指示⑥)。
+ *
+ * 駒名は**現在の盤(SFEN)のそのマスを読むだけ**で決まる。形の定義(required_pieces)の
+ * 駒種は使わない ― data/shapes/*.json の座標は一次資料未確認のため保留中であり、
+ * ここで使うと保留の趣旨に反する。読めない場合はマス目だけの表記に落とす。
+ */
+function toPieceAtSquareLabel(sfen: string, usiSquare: string): string {
+  const square = toJapaneseSquare(usiSquare);
+  const piece = safeToPieceNameAt(sfen, usiSquare);
+  return piece ? `${piece}：${square}` : square;
+}
+
 /** 駒名の取得は表示上の都合であり、失敗しても対局・解析を止めない。 */
+function safeToPieceNameAt(sfen: string, usiSquare: string): string | null {
+  try {
+    return toPieceNameAt(sfen, usiSquare);
+  } catch (err) {
+    console.error("マス上の駒名の解決(notation/japaneseMove.ts)でエラーが発生しました:", err);
+    return null;
+  }
+}
+
 function safeToMovingPieceName(sfen: string, moveUsi: string): string | null {
   try {
     return toMovingPieceName(sfen, moveUsi);
@@ -608,7 +632,7 @@ function safeToMovingPieceName(sfen: string, moveUsi: string): string | null {
  */
 function toReferenceShapes(context: RankedPlanContext | undefined): ReferenceShapeBody[] {
   if (!context) return [];
-  return context.shapeResults.map((shape) => {
+  return sortByParentChain(context.shapeResults).map((shape) => {
     const exposed = exposeName(shape.name, shape.reviewStatus, "shape");
     return {
       shapeId: shape.shapeId,
@@ -620,6 +644,36 @@ function toReferenceShapes(context: RankedPlanContext | undefined): ReferenceSha
       missingSquareLabels: shape.missingSquares.map((square) => toJapaneseSquare(square)),
     };
   });
+}
+
+/**
+ * [5]「参考になる囲い」の並び順(人間の承認済み)。
+ *
+ * parent_shape_id の鎖の**祖先側から**並べる(本美濃囲い → 高美濃囲い → 銀冠)。
+ * これは既存の記述的データが表す構造上の順序であり、「初級→中級→上級」のような
+ * 新しい意味付けはしない。matchScore・rankReachableShapes の順位は使わない。
+ *
+ * 深さ(ルートからの距離)が同じ形が複数ある場合(将来、別系統の囲いが追加されて
+ * 兄弟関係になった場合)は、**順位を発明せず入力の順序をそのまま保つ**
+ * (配列の sort は安定なので同じ深さの相対順序は変わらない)。この状態は
+ * docs/PHASES.md に記録し、人間へ報告する対象である。
+ */
+function sortByParentChain(shapes: ShapeFormationResult[]): ShapeFormationResult[] {
+  const parentById = new Map(shapes.map((shape) => [shape.shapeId, shape.parentShapeId]));
+  const depthOf = (shapeId: string): number => ancestorIdsOf(shapeId, parentById).length;
+  return [...shapes].sort((a, b) => depthOf(a.shapeId) - depthOf(b.shapeId));
+}
+
+/**
+ * 同じ深さの形が複数あり、[5] の並び順が parent_shape_id だけでは一意に決まらないか。
+ * true のときは人間へ報告する(順位を発明しないため、表示は入力順のままになる)。
+ */
+export function hasAmbiguousReferenceOrder(
+  shapes: Pick<ShapeFormationResult, "shapeId" | "parentShapeId">[],
+): boolean {
+  const parentById = new Map(shapes.map((shape) => [shape.shapeId, shape.parentShapeId]));
+  const depths = shapes.map((shape) => ancestorIdsOf(shape.shapeId, parentById).length);
+  return new Set(depths).size !== depths.length;
 }
 
 /**
@@ -673,7 +727,10 @@ function toNextConsiderations(
  * 「今の形が何か」を断定しないための制約であり、ここには当たらない)。
  * review_status が draft の場合は既存の pendingReviewNote が併記される。
  */
-function toTargetShapeProgress(context: RankedPlanContext | undefined): TargetShapeProgress | null {
+function toTargetShapeProgress(
+  context: RankedPlanContext | undefined,
+  sfen: string,
+): TargetShapeProgress | null {
   if (!context?.resolvedTargetShapeId) return null;
   const shapeResult = context.shapeResults.find((r) => r.shapeId === context.resolvedTargetShapeId);
   if (!shapeResult) return null;
@@ -682,6 +739,9 @@ function toTargetShapeProgress(context: RankedPlanContext | undefined): TargetSh
     name: shapeResult.name,
     description: shapeResult.characteristics,
     matchedSquareLabels: shapeResult.matchedSquares.map((square) => toJapaneseSquare(square)),
+    matchedPieceLabels: shapeResult.matchedSquares.map((square) =>
+      toPieceAtSquareLabel(sfen, square),
+    ),
     missingSquareLabels: shapeResult.missingSquares.map((square) => toJapaneseSquare(square)),
     pendingReviewNote: exposeName(shapeResult.name, shapeResult.reviewStatus, "shape").pendingNote,
   };
@@ -995,7 +1055,7 @@ export function buildStateResponseWithPlan(
     plan: {
       reachableShapes,
       routes: toRouteSummaries(context?.routePlanResult),
-      targetShapeProgress: toTargetShapeProgress(context),
+      targetShapeProgress: toTargetShapeProgress(context, current.sfen),
       candidateMoveLabels: toCandidateMoveLabels(context?.routePlanResult, current.sfen),
       referenceShapes: toReferenceShapes(context),
       directionNote:

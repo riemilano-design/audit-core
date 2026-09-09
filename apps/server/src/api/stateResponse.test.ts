@@ -583,7 +583,8 @@ describe("buildStateResponseWithPlan", () => {
 describe("目標形選択(selectedTargetShapeId)", () => {
   // Phase 7 Unit 0: 目標形は対局開始時に自動選択されない。ユーザーが選ぶまでは
   // resolvedTargetShapeId / targetShapeProgress / routes / candidateMoveのいずれも
-  // 出ないが、reachableShapes(目指せる形の候補、選ぶ手段)は引き続き提供する。
+  // 出ないが、reachableShapes は引き続き提供する(Unit 3 で選択UIは廃止したが、
+  // ランキング自体は [5]「参考になる囲い」の材料として残っている)。
   it("未選択時は目標形が決まらない(resolvedTargetShapeIdはnull、reachableShapesは引き続き出る)", () => {
     const sfen = honminoOneMoveFromCompleteSfen();
     const state = customGameState(sfen);

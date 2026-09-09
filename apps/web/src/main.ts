@@ -65,8 +65,10 @@ app.innerHTML = `
       <div id="why"></div>
       <h2>どう指すか</h2>
       <div id="howto"></div>
-      <h2>参考になる囲い</h2>
-      <div id="reference"></div>
+      <details id="referenceDetails">
+        <summary>参考になる囲い</summary>
+        <div id="reference"></div>
+      </details>
       <details id="historyDetails">
         <summary>指し手履歴</summary>
         <ol id="history"></ol>
@@ -450,23 +452,21 @@ function renderRouteProgress(plan: ReachablePlanBody): void {
   heading.textContent = `「${progress.name}」${reviewNoteSuffix(progress.pendingReviewNote)}の組み上がり`;
   section.appendChild(heading);
 
-  // Unit 3(人間の承認済み): ユーザーが選んだ目標形が「どういう形なのか」は、
-  // これまで画面のどこにも出ていなかった。data/shapes/*.json の characteristics を
-  // サーバーがそのまま運んできたものを、ここで1回だけ出す(用語の説明を複数箇所で
-  // 繰り返さないため、他の場所には出さない)。
-  if (progress.description) {
-    const description = document.createElement("p");
-    description.className = "route-progress-description";
-    description.textContent = progress.description;
-    section.appendChild(description);
-  }
+  // Unit 3(重複の除去): 形の説明(characteristics)はここには出さない。
+  // 同じ文が [5]「参考になる囲い」にもあり、同じ内容を2箇所で述べることになるため
+  // ([5] を「囲いを知る場所」、ここ [4] を「どう指すかを見る場所」と役割で分ける)。
+  // progress.description 自体はサーバーから引き続き届く(表示をやめただけ)。
 
   const done = document.createElement("p");
   done.className = "route-progress-done";
+  // 人間の指示⑥: 座標だけでなく「駒名：座標」で、どの駒のことか追えるようにする。
+  // 駒名は現在の盤から読んだものがサーバーで解決済み(matchedPieceLabels)。
+  const doneLabels =
+    progress.matchedPieceLabels.length === progress.matchedSquareLabels.length
+      ? progress.matchedPieceLabels
+      : progress.matchedSquareLabels;
   done.textContent =
-    progress.matchedSquareLabels.length > 0
-      ? `できているマス: ${progress.matchedSquareLabels.join("、")}`
-      : "できているマス: まだありません";
+    doneLabels.length > 0 ? `できているマス: ${doneLabels.join("、")}` : "できているマス: まだありません";
   section.appendChild(done);
 
   if (plan.routes.length > 0) {
@@ -588,14 +588,19 @@ function renderReferenceShapes(plan: ReachablePlanBody | undefined): void {
     characteristics.textContent = shape.characteristics;
     li.appendChild(characteristics);
 
-    // 今の盤で既に成立しているマスだけを出す(現在の盤面から機械的に決まる事実)。
-    // 「これから作るマス」は完成形の座標を述べることになるため、ここでは出さない。
-    if (shape.matchedSquareLabels.length > 0) {
-      const matched = document.createElement("p");
-      matched.className = "reference-shape-matched";
-      matched.textContent = `今の盤でできているマス: ${shape.matchedSquareLabels.join("、")}`;
-      li.appendChild(matched);
-    }
+    // Unit 3(重複の除去): 「今できているマス」はここには出さない。
+    // 同じ内容が [4]「どう指すか」の組み上がりにあり、役割としても現在の進捗は [4] 側。
+    // [5] は「将棋にはこういう形がある」を知る場所に徹する。
+
+    // ① 完成形の盤の置き場所(人間の指示により、DOM構造だけ先に用意する)。
+    // data/shapes/*.json の座標は一次資料未確認のため、**中身はまだ描画しない**。
+    // 人間による座標の確認が完了したら、この要素の中に完成形の盤を描画する。
+    // 確認されていない座標を一般知識で補完してはいけない。
+    const boardSlot = document.createElement("div");
+    boardSlot.className = "reference-shape-board";
+    boardSlot.dataset.shapeId = shape.shapeId;
+    boardSlot.hidden = true;
+    li.appendChild(boardSlot);
 
     list.appendChild(li);
   }

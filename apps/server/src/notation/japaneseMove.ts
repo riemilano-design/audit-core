@@ -22,7 +22,7 @@
 // lastDest は渡さない(常にマス目を明示した表記になる)。
 
 import { makeJapaneseMoveOrDrop } from "shogiops/notation/japanese";
-import { isDrop, parseUsi } from "shogiops/util";
+import { isDrop, parseSquareName, parseUsi } from "shogiops/util";
 import { parsePosition } from "../rules/sfenPosition.js";
 import { roleToJapanese } from "../analysis/pieceMapping.js";
 
@@ -55,6 +55,22 @@ export function toMovingPieceName(sfen: string, moveUsi: string): string | null 
   try {
     if (isDrop(move)) return roleToJapanese(move.role);
     const piece = parsePosition(sfen).board.get(move.from);
+    return piece ? roleToJapanese(piece.role) : null;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * sfen の局面で、指定したマス(USI形式、例: "8h")にある駒の日本語の駒名を返す。
+ * 盤を読むだけで、将棋の判断はしない。駒が無い/読めない場合は null。
+ */
+export function toPieceNameAt(sfen: string, usiSquare: string): string | null {
+  const square = parseSquareName(usiSquare);
+  if (square === undefined) return null;
+
+  try {
+    const piece = parsePosition(sfen).board.get(square);
     return piece ? roleToJapanese(piece.role) : null;
   } catch {
     return null;

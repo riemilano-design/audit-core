@@ -209,13 +209,8 @@ h1 {
   background: #fafafa;
 }
 
-/* Unit 3: 目標形の説明(data/shapes/*.json の characteristics)。
-   画面の中でここ1箇所だけに出す。 */
-.route-progress-description {
-  margin: 0 0 0.3rem;
-  font-size: 0.85rem;
-  color: #444;
-}
+/* Unit 3(重複の除去): 形の説明は [5]「参考になる囲い」に一本化したため、
+   [4] 側の .route-progress-description は使わなくなったので削除した。 */
 
 /* Unit 3: 候補手セクション全体に1回だけ出す但し書き。 */
 .candidate-section-shared-note {
@@ -292,17 +287,27 @@ h1 {
   line-height: 1.6;
 }
 
-.reference-shape-matched {
-  margin: 0.3rem 0 0;
-  font-size: 0.8rem;
-  color: #555;
+/* ① 完成形の盤の置き場所。data/shapes/*.json の座標が人間に確認されるまで
+   中身は描画しない(hidden のまま)。確認後にここへ小型の盤を入れる。 */
+.reference-shape-board {
+  margin-top: 0.4rem;
 }
 
+/* [5] は参考資料なので既定で折りたたむ(見出しは常に見える)。
+   本文はスクロールせずに [0]〜[4] を読めるようにするための措置で、
+   情報そのものは削っていない。 */
+#referenceDetails > summary,
 #historyDetails > summary {
   cursor: pointer;
   font-size: 0.85rem;
   font-weight: bold;
   padding: 0.2rem 0;
+}
+
+#referenceDetails > summary {
+  font-family: inherit;
+  font-size: 1.05rem;
+  margin-top: 0.6rem;
 }
 
 .coach-stage {
