@@ -396,22 +396,85 @@ export type RecognizedDirectionReason = "single" | "none" | "ambiguous";
 export interface RecognizedDirection {
   shapeId: string | undefined;
   reason: RecognizedDirectionReason;
-  /** reason: "ambiguous" のときに認識されていた形の件数(報告・テスト用)。 */
+  /** 認識されていた(forming の)形の件数。報告・テスト用。 */
   formingCount: number;
 }
 
+/** shapeId から parent_shape_id をたどった祖先の一覧。循環していても止まる(安全側)。 */
+function ancestorIdsOf(
+  shapeId: string,
+  parentById: Map<string, string | null>,
+): string[] {
+  const ancestors: string[] = [];
+  const seen = new Set<string>([shapeId]);
+  let current = parentById.get(shapeId) ?? null;
+  while (current !== null && !seen.has(current)) {
+    ancestors.push(current);
+    seen.add(current);
+    current = parentById.get(current) ?? null;
+  }
+  return ancestors;
+}
+
+/**
+ * 認識できた形が複数あるときに、道のり・候補手の対象を1件へ絞る規則(人間の承認済み)。
+ *
+ * 【根拠は parent_shape_id だけである】
+ * data/shapes/*.json の parent_shape_id は 本美濃囲い → 高美濃囲い → 銀冠 という
+ * 「基本の形から発展させた形」の関係を表す既存の記述的データである。forming が複数
+ * あるとき、**そのうち他のすべての祖先になっている形(= 最も基本となる、一番近い
+ * 到達点)** を対象とする。
+ *
+ *   本美濃 + 高美濃 + 銀冠 → 本美濃
+ *   高美濃 + 銀冠         → 高美濃
+ *   本美濃 + 銀冠         → 本美濃(祖先はたどって判定する)
+ *   1件のみ               → その形
+ *   0件                   → 対象を決めない(候補手を出さない)
+ *
+ * 【使わないもの(人間が明示した禁止事項)】
+ * - rankReachableShapes の順位(ranked[0] フォールバックの復活にあたる)
+ * - matchScore による並べ替え
+ * - 新しい閾値・将棋知識にもとづく判定
+ * これらを構造として排除するため、**入力は shapeResults(全形)であり、
+ * ranked.slice(0, 3) ではない。** ranked を入力にすると、対象になりうる形の集合を
+ * matchScore が決めることになる(形が3件の現状では同じ結果だが、形が増えた時点で
+ * 効き始める)。
+ *
+ * 【一意に決まらない場合】
+ * forming が複数あり、そのうちのどれも他すべての祖先でない場合(例: 将来、別系統の
+ * 囲いが追加されて兄弟関係になった場合)は、対象を決めずに "ambiguous" を返す。
+ * ここで順位付けを発明しない([../../../../CLAUDE.md](../../../../CLAUDE.md)
+ * 「絶対に守るルール」4番)。この状態は人間へ報告する対象である。
+ */
 export function resolveRecognizedDirection(
-  reachableShapes: Pick<RankedReachableShape, "shapeId" | "status">[],
+  shapes: Pick<ShapeFormationResult, "shapeId" | "status" | "parentShapeId">[],
 ): RecognizedDirection {
-  const forming = reachableShapes.filter((shape) => shape.status === "forming");
+  const forming = shapes.filter((shape) => shape.status === "forming");
+  if (forming.length === 0) {
+    return { shapeId: undefined, reason: "none", formingCount: 0 };
+  }
   if (forming.length === 1) {
     return { shapeId: forming[0]!.shapeId, reason: "single", formingCount: 1 };
   }
-  return {
-    shapeId: undefined,
-    reason: forming.length === 0 ? "none" : "ambiguous",
-    formingCount: forming.length,
-  };
+
+  const parentById = new Map(shapes.map((shape) => [shape.shapeId, shape.parentShapeId]));
+  const ancestorsById = new Map(
+    forming.map((shape) => [shape.shapeId, ancestorIdsOf(shape.shapeId, parentById)]),
+  );
+
+  // 他のすべての forming の祖先(または自分自身)になっている形を探す。
+  const rootMost = forming.filter((candidate) =>
+    forming.every(
+      (other) =>
+        other.shapeId === candidate.shapeId ||
+        (ancestorsById.get(other.shapeId) ?? []).includes(candidate.shapeId),
+    ),
+  );
+
+  if (rootMost.length === 1) {
+    return { shapeId: rootMost[0]!.shapeId, reason: "single", formingCount: forming.length };
+  }
+  return { shapeId: undefined, reason: "ambiguous", formingCount: forming.length };
 }
 
 /** 方向が1つに定まらないときに [4] へ出す一文(人間が指定した文言)。 */
@@ -433,12 +496,15 @@ function computeRankedPlanContext(
   // 候補手の対象を「局面から認識できた方向性」から決める(resolveRecognizedDirection)。
   // selectedTargetShapeId は開発・検証用の POST /api/game/target-shape のためだけに残す
   // (Unit 0 で forcedOpponentOpening を残したのと同じ扱い)。明示された場合はそれを優先する。
-  const direction = resolveRecognizedDirection(reachableShapes);
+  // 入力は shapeResults(全形)。ranked.slice(0, 3) を渡すと、対象になりうる形の集合を
+  // matchScore が決めることになるため、渡さない(resolveRecognizedDirection のコメント参照)。
+  const direction = resolveRecognizedDirection(shapeResults);
   const explicit =
     selectedTargetShapeId !== undefined
       ? reachableShapes.find((s) => s.shapeId === selectedTargetShapeId)
       : undefined;
-  const top = explicit ?? reachableShapes.find((s) => s.shapeId === direction.shapeId);
+  const top =
+    explicit ?? (direction.shapeId !== undefined ? shapeResults.find((s) => s.shapeId === direction.shapeId) : undefined);
   const resolvedTargetShapeId = top?.shapeId;
   const routePlanResult = top ? planRoutesToShape(current.sfen, shapeResults, top.shapeId) : undefined;
   return { shapeResults, reachableShapes, resolvedTargetShapeId, routePlanResult, direction };

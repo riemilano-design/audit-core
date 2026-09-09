@@ -10,7 +10,7 @@ import { getIntents } from "../analysis/intentRepository.js";
 import { getShapes } from "../analysis/shapeRepository.js";
 import type { BoardEventMessage } from "../analysis/boardEventExplanation.js";
 import { toMovingPieceName } from "../notation/japaneseMove.js";
-import type { RankedReachableShape } from "../analysis/shapeGraphRanking.js";
+import type { ShapeFormationResult } from "../analysis/shapeFormationAnalyzer.js";
 import type { NextConsiderationMessage } from "../analysis/nextConsiderationExplanation.js";
 import { DEFAULT_INITIAL_SFEN, replayMoveHistory } from "../analysis/moveHistory.js";
 import { applyMove } from "../rules/applyMove.js";
@@ -1298,40 +1298,74 @@ describe("Unit 3: partitionUrgentMessages([0]「今すぐ対処が必要なこ�
   });
 });
 
-describe("Unit 3: resolveRecognizedDirection(認識できた方向性)", () => {
-  const shape = (shapeId: string, status: "none" | "forming" | "completed") =>
-    ({ shapeId, status }) as Pick<RankedReachableShape, "shapeId" | "status">;
+// 人間が承認した規則: forming が複数あるときは parent_shape_id の鎖をたどり、
+// 他のすべての祖先になっている形(= 最も基本となる形)を対象にする。
+// ranked[0]・matchScore・新しい閾値は一切使わない。
+describe("Unit 3: resolveRecognizedDirection(parent_shape_id の鎖で1件へ絞る)", () => {
+  type Shape = Pick<ShapeFormationResult, "shapeId" | "status" | "parentShapeId">;
+  const shape = (
+    shapeId: string,
+    status: "none" | "forming" | "completed",
+    parentShapeId: string | null,
+  ): Shape => ({ shapeId, status, parentShapeId });
 
-  it("formingがちょうど1件のときだけ、その形を対象にする", () => {
-    const result = resolveRecognizedDirection([
-      shape("mino_honmino", "forming"),
-      shape("mino_takamino", "none"),
-    ]);
+  // data/shapes/*.json の実際の鎖: 本美濃(ルート) → 高美濃 → 銀冠
+  const honmino = (status: "none" | "forming" | "completed") => shape("mino_honmino", status, null);
+  const takamino = (status: "none" | "forming" | "completed") =>
+    shape("mino_takamino", status, "mino_honmino");
+  const ginkanmuri = (status: "none" | "forming" | "completed") =>
+    shape("mino_ginkanmuri", status, "mino_takamino");
+
+  it("forming 3件(本美濃+高美濃+銀冠)なら、最も祖先側の本美濃を対象にする", () => {
+    const result = resolveRecognizedDirection([honmino("forming"), takamino("forming"), ginkanmuri("forming")]);
+
+    expect(result).toEqual({ shapeId: "mino_honmino", reason: "single", formingCount: 3 });
+  });
+
+  it("forming 2件(高美濃+銀冠)なら高美濃を対象にする", () => {
+    const result = resolveRecognizedDirection([honmino("completed"), takamino("forming"), ginkanmuri("forming")]);
+
+    expect(result).toEqual({ shapeId: "mino_takamino", reason: "single", formingCount: 2 });
+  });
+
+  it("forming 2件(本美濃+銀冠、間の高美濃はforming でない)でも祖先をたどって本美濃を対象にする", () => {
+    const result = resolveRecognizedDirection([honmino("forming"), takamino("none"), ginkanmuri("forming")]);
+
+    expect(result).toEqual({ shapeId: "mino_honmino", reason: "single", formingCount: 2 });
+  });
+
+  it("forming 1件ならその形を対象にする", () => {
+    const result = resolveRecognizedDirection([honmino("forming"), takamino("none"), ginkanmuri("none")]);
 
     expect(result).toEqual({ shapeId: "mino_honmino", reason: "single", formingCount: 1 });
   });
 
-  it("formingが0件なら対象を決めない", () => {
-    const result = resolveRecognizedDirection([shape("mino_honmino", "none")]);
+  it("forming 0件なら対象を決めない(候補手を出さない)", () => {
+    const result = resolveRecognizedDirection([honmino("none"), takamino("completed"), ginkanmuri("none")]);
 
     expect(result).toEqual({ shapeId: undefined, reason: "none", formingCount: 0 });
   });
 
-  it("formingが2件以上なら対象を決めない(同点を裁く規則を発明しない)", () => {
+  it("鎖でつながらない兄弟同士のときは対象を決めない(順位付けを発明しない)", () => {
     const result = resolveRecognizedDirection([
-      shape("mino_honmino", "forming"),
-      shape("mino_takamino", "forming"),
-      shape("mino_ginkanmuri", "forming"),
+      shape("family_a_root", "forming", null),
+      shape("family_b_root", "forming", null),
     ]);
 
-    expect(result).toEqual({ shapeId: undefined, reason: "ambiguous", formingCount: 3 });
+    expect(result).toEqual({ shapeId: undefined, reason: "ambiguous", formingCount: 2 });
+  });
+
+  it("parent_shape_id が循環していても止まり、対象を決めずに返す", () => {
+    const result = resolveRecognizedDirection([
+      shape("a", "forming", "b"),
+      shape("b", "forming", "a"),
+    ]);
+
+    expect(result.reason).toBe("ambiguous");
   });
 
   it("completedは方向の判断に使わない(ranked[0]フォールバックを復活させない)", () => {
-    const result = resolveRecognizedDirection([
-      shape("mino_honmino", "completed"),
-      shape("mino_takamino", "completed"),
-    ]);
+    const result = resolveRecognizedDirection([honmino("completed"), takamino("completed")]);
 
     expect(result.shapeId).toBeUndefined();
     expect(result.reason).toBe("none");
