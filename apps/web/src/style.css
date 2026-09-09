@@ -52,6 +52,24 @@ h1 {
   background: #f3d9a4;
 }
 
+/* Phase 7 Unit 3: 盤の外側の目盛り(筋・段)。盤のマス(td)とは別の見た目にして、
+   駒を置けるマスと誤解されないようにする。 */
+#board th {
+  width: 1.4rem;
+  height: 2.5rem;
+  border: none;
+  background: transparent;
+  color: #666;
+  font-size: 0.75rem;
+  font-weight: normal;
+  text-align: center;
+  vertical-align: middle;
+}
+
+#board tr.board-file-header th {
+  height: 1.2rem;
+}
+
 .piece-sente {
   color: #111;
 }
@@ -228,6 +246,58 @@ h1 {
   margin: 0;
 }
 
+/* Phase 7 Unit 3: 方向が1つに定まらないときの一文([4] の先頭)。 */
+.direction-note {
+  margin: 0 0 0.5rem;
+  font-size: 0.88rem;
+  color: #555;
+  border-left: 4px solid #bbb;
+  background: #f4f4f4;
+  padding: 0.45rem 0.7rem;
+  border-radius: 4px;
+}
+
+/* Phase 7 Unit 3: [5]「参考になる囲い」。操作UIではなく学習用の参考資料なので、
+   クリックできそうな見た目(ボタン・カーソル変化)にしない。 */
+.reference-intro {
+  margin: 0 0 0.5rem;
+  font-size: 0.82rem;
+  color: #666;
+}
+
+.reference-shapes {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.reference-shape {
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 0.5rem 0.75rem;
+  background: #fcfcfc;
+}
+
+.reference-shape-name {
+  margin: 0 0 0.2rem;
+  font-size: 0.92rem;
+}
+
+.reference-shape-characteristics {
+  margin: 0;
+  font-size: 0.85rem;
+  line-height: 1.6;
+}
+
+.reference-shape-matched {
+  margin: 0.3rem 0 0;
+  font-size: 0.8rem;
+  color: #555;
+}
+
 #historyDetails > summary {
   cursor: pointer;
   font-size: 0.85rem;
@@ -296,28 +366,11 @@ h1 {
   color: #1f5c2a;
 }
 
-/* Phase5 #7: 「目指せる形」と候補手セクションの関係を示すUI(装飾・文言のみ。
-   見出しは Unit 3 で「「◯◯」に近づく手の候補」に一本化した。
-   判定ロジック・データは一切変更しない)。 */
-.plan-intro {
-  font-size: 0.85rem;
-  color: #555;
-  margin: 0.2rem 0 0.6rem;
-}
+/* Phase 7 Unit 3: 目標形の選択UIを廃止したため、.plan-intro / .reachable-shapes /
+   .reachable-shape-selected は使わなくなったので削除した。囲いの一覧は
+   [5]「参考になる囲い」(.reference-shapes)へ移り、選択状態を示す装飾は持たない。 */
 
-.reachable-shapes {
-  padding-left: 1.2rem;
-  margin: 0 0 0.8rem;
-}
-
-/* 選択中の形を視覚的にも分かるようにする(文言の「[選択中]」表示に加えた装飾)。 */
-.reachable-shape-selected {
-  background: #fbe7c6;
-  border-radius: 4px;
-  padding: 0.1rem 0.3rem;
-}
-
-/* 「選択中の形→その形に近づく候補手」の親子関係を、左のアクセントバー(既存の
+/* 「認識できた形→その形に近づく候補手」の親子関係を、左のアクセントバー(既存の
    .coach-stageと同じ表現方法)で視覚的につなげる。 */
 .candidate-section {
   border: 1px solid #ccc;

@@ -15,7 +15,6 @@ import {
   isMoveError,
   reviewNoteSuffix,
   groupCandidateExplanationsByReason,
-  selectTargetShape,
   shouldShowPlanChangedNotice,
   shouldShowNextConsiderations,
   shouldRetryPlanRefresh,
@@ -66,6 +65,8 @@ app.innerHTML = `
       <div id="why"></div>
       <h2>どう指すか</h2>
       <div id="howto"></div>
+      <h2>参考になる囲い</h2>
+      <div id="reference"></div>
       <details id="historyDetails">
         <summary>指し手履歴</summary>
         <ol id="history"></ol>
@@ -84,6 +85,7 @@ const happenedEl = document.querySelector<HTMLDivElement>("#happened")!;
 const aimEl = document.querySelector<HTMLDivElement>("#aim")!;
 const whyEl = document.querySelector<HTMLDivElement>("#why")!;
 const planEl = document.querySelector<HTMLDivElement>("#howto")!;
+const referenceEl = document.querySelector<HTMLDivElement>("#reference")!;
 const moveInput = document.querySelector<HTMLInputElement>("#moveInput")!;
 const submitButton = document.querySelector<HTMLButtonElement>("#submitMove")!;
 const newGameButton = document.querySelector<HTMLButtonElement>("#newGame")!;
@@ -194,6 +196,10 @@ const STAGE_LABELS: Record<CoachStage, string> = {
 };
 
 /** [2]「狙い」に入れる段。[3]へ回すのは opponent_next_aim だけ。 */
+/** [5] の導入文。人間が指示した思想(「どれを選びますか?」ではない)をそのまま文にしたもの。 */
+const REFERENCE_INTRO_TEXT =
+  "将棋にはこういう形があります。今の局面では、そのうちどの形に近い部分があるかをコーチが説明します。";
+
 const AIM_STAGES: CoachStage[] = ["current_shape", "opponent_intent"];
 const WHY_STAGES: CoachStage[] = ["opponent_next_aim"];
 
@@ -348,9 +354,10 @@ function renderUrgent(plan: ReachablePlanBody | undefined): void {
 // 強調しないため)。候補手は「候補の一つ」「この手の目的」という中立な見出しに留め、
 // 「おすすめ」「正解」「安全」等の断定語は使わない。
 //
-// 目標形選択UI(docs/PHASES.md Phase2完了条件): 各候補はクリックして選択できる。
-// 選択中の候補は「[選択中]」という中立なテキストで示すのみとし(「おすすめ」
-// 「唯一の正解」等の断定はしない)。未選択の候補も引き続きすべて表示し続ける。
+// 【Phase 7 Unit 3 で廃止した仕組み】目標形選択UI(候補をクリックして選ぶ、
+// 選択中を「[選択中]」で示す)は廃止した。囲いは選択肢ではなく参考資料として
+// [5]「参考になる囲い」(renderReferenceShapes)に置く。道のり・候補手の対象は、
+// 選択ではなくサーバーが局面から認識した方向性(resolveRecognizedDirection)で決まる。
 //
 // 【Phase5 #7】「目指せる形」と候補手セクションの関係(見出しは Unit 3 で
 // 「「◯◯」に近づく手の候補」に一本化し、未選択時のフォールバック見出しは廃止した)、および
@@ -533,56 +540,90 @@ function renderNextConsiderations(plan: ReachablePlanBody): void {
   planEl.appendChild(section);
 }
 
-/** [4]「どう指すか」。目標形の選択 → 組み上がり → 道のり → 候補手を1本の流れにする。 */
+/**
+ * [5]「参考になる囲い」。
+ *
+ * 【これは操作UIではない(Phase 7 Unit 3 の基本仕様)】
+ * ユーザーに「どの囲いを目指しますか?」と選ばせるためのものではなく、
+ * 「将棋にはこういう完成形がある」を知るための学習用の参考資料である。
+ * クリックできる要素は置かない。
+ *
+ * 【完成形の盤・駒名+座標を出していないことについて】
+ * data/shapes/*.json の座標は、各ファイルの source 自身が一次資料で未確認と記しており、
+ * mino_takamino は source が記す先手視点の記述と保存座標の左右が一致していない。
+ * 人間による座標の確定を待つため、完成形の盤も駒名+座標の一覧も出さない(人間の指示)。
+ * ここで出すのは名前・認識状態・特徴と、今の盤で既に成立しているマスだけである。
+ */
+function renderReferenceShapes(plan: ReachablePlanBody | undefined): void {
+  referenceEl.innerHTML = "";
+  const shapes = plan?.referenceShapes ?? [];
+  if (shapes.length === 0) return;
+
+  const intro = document.createElement("p");
+  intro.className = "reference-intro";
+  intro.textContent = REFERENCE_INTRO_TEXT;
+  referenceEl.appendChild(intro);
+
+  const list = document.createElement("ul");
+  list.className = "reference-shapes";
+  for (const shape of shapes) {
+    const li = document.createElement("li");
+    li.className = "reference-shape";
+
+    const title = document.createElement("h3");
+    title.className = "reference-shape-name";
+    title.textContent = shape.name + reviewNoteSuffix(shape.pendingReviewNote);
+    li.appendChild(title);
+
+    // 認識状態は既存のラベル(STATUS_LABELS)をそのまま使い、新しい文言を作らない。
+    if (shape.status !== "none") {
+      const badge = document.createElement("span");
+      badge.className = `coach-badge reference-shape-status-${shape.status}`;
+      badge.textContent = STATUS_LABELS[shape.status] ?? shape.status;
+      li.appendChild(badge);
+    }
+
+    const characteristics = document.createElement("p");
+    characteristics.className = "reference-shape-characteristics";
+    characteristics.textContent = shape.characteristics;
+    li.appendChild(characteristics);
+
+    // 今の盤で既に成立しているマスだけを出す(現在の盤面から機械的に決まる事実)。
+    // 「これから作るマス」は完成形の座標を述べることになるため、ここでは出さない。
+    if (shape.matchedSquareLabels.length > 0) {
+      const matched = document.createElement("p");
+      matched.className = "reference-shape-matched";
+      matched.textContent = `今の盤でできているマス: ${shape.matchedSquareLabels.join("、")}`;
+      li.appendChild(matched);
+    }
+
+    list.appendChild(li);
+  }
+  referenceEl.appendChild(list);
+}
+
+/** [4]「どう指すか」。局面から認識できた方向性 → 組み上がり → 道のり → 候補手。 */
 function renderPlan(plan: ReachablePlanBody): void {
   planEl.innerHTML = "";
 
   // 「前回の計画が使えなくなりました」は [1]「今、盤で起きたこと」へ移した
   // (renderHappened参照)。同じ事実を2つのブロックで述べないため、ここでは出さない。
 
-  // 選択中の形の名前(候補手セクションの見出し・親子関係の表示に使う)。
-  // reachableShapesの中からresolvedTargetShapeIdと一致するものを探すだけで、
-  // 新しい判定は行わない(既存フィールドの参照のみ)。
-  // 【STEP ζ-5】見出しで注記を「」の外側に置くため、名前と注記を別々に保持する。
-  let selectedShapeName: string | null = null;
-  let selectedShapeNote: string | null = null;
+  // Phase 7 Unit 3: 目標形をユーザーに選ばせるUIは廃止した。囲いは「選択肢」ではなく
+  // 「参考資料」として [5]「参考になる囲い」に置く(renderReferenceShapes)。
+  // ここで扱うのは、サーバーが局面から認識した方向性(plan.resolvedTargetShapeId)だけで、
+  // web側は新しい判定を持たない。
+  const recognized = plan.reachableShapes.find((shape) => shape.shapeId === plan.resolvedTargetShapeId);
+  const selectedShapeName: string | null = recognized?.name ?? null;
+  const selectedShapeNote: string | null = recognized?.pendingReviewNote ?? null;
 
-  if (plan.reachableShapes.length > 0) {
-    const heading = document.createElement("h3");
-    heading.textContent = "目指せる形の候補";
-    planEl.appendChild(heading);
-
-    // 【Phase5 #7 要件1】「目指せる形」と下の候補手の関係を一目で分かるようにする。
-    const intro = document.createElement("p");
-    intro.className = "plan-intro";
-    intro.textContent = "ここで形を選ぶと、その形に近づくための候補手が下に表示されます。";
-    planEl.appendChild(intro);
-
-    const list = document.createElement("ul");
-    list.className = "reachable-shapes";
-    for (const shape of plan.reachableShapes) {
-      const li = document.createElement("li");
-      const isSelected = shape.shapeId === plan.resolvedTargetShapeId;
-      if (isSelected) {
-        // 【Phase5 #7 要件3】選択中の形を視覚的にも分かるようにする(文言の
-        // 「[選択中]」表示に加えて、CSSクラスで背景色等の見た目を変えるのみ)。
-        li.classList.add("reachable-shape-selected");
-        selectedShapeName = shape.name;
-        selectedShapeNote = shape.pendingReviewNote;
-      }
-      const button = document.createElement("button");
-      button.type = "button";
-      const displayName = shape.name + reviewNoteSuffix(shape.pendingReviewNote);
-      const completedSuffix = shape.status === "completed" ? "(完成しています)" : "";
-      const selectedSuffix = isSelected ? "[選択中]" : "";
-      button.textContent = [displayName + completedSuffix, selectedSuffix].filter(Boolean).join(" ");
-      button.addEventListener("click", () => {
-        void handleSelectTargetShape(shape.shapeId);
-      });
-      li.appendChild(button);
-      list.appendChild(li);
-    }
-    planEl.appendChild(list);
+  // 方向が1つに定まらないときは、サーバーが返した一文だけを出して候補手を出さない
+  // (ranked[0] フォールバックを復活させないための仕様。文言は人間が指定したもの)。
+  if (plan.directionNote) {
+    const note = document.createElement("p");
+    note.className = "direction-note";
+    note.textContent = plan.directionNote;
+    planEl.appendChild(note);
   }
 
   renderRouteProgress(plan);
@@ -591,7 +632,7 @@ function renderPlan(plan: ReachablePlanBody): void {
   renderNextConsiderations(plan);
 
   // 【Phase5 #7 要件2・4・6】候補手セクション本体。
-  // reachableShapesが0件(=選択中の形が特定できない)場合でも、候補手が
+  // reachableShapesが0件(=認識できた方向が無い)場合でも、候補手が
   // "ready"/"pending"/"unavailable"のいずれかであれば、その状態を伝える。
   // candidateMove.status: "not_ready"(candidateMoveStateは"ready")の場合のみ、
   // 既存仕様のまま何も表示しない(今回の変更対象外。実装後の報告で明記する)。
@@ -606,7 +647,7 @@ function renderPlan(plan: ReachablePlanBody): void {
   if (selectedShapeName === null) return;
 
   if (hasReadyExplanation || shouldShowUnavailableMessage || shouldShowPendingMessage) {
-    // 【Phase5 #7 要件6】「選択中の形→その形に近づく候補手」という親子関係が
+    // 【Phase5 #7 要件6】「認識できた形→その形に近づく候補手」という親子関係が
     // 視覚的にも分かるよう、見出し・説明・中身をひとつの枠(candidate-section)にまとめる。
     const candidateSection = document.createElement("div");
     candidateSection.className = "candidate-section";
@@ -615,7 +656,7 @@ function renderPlan(plan: ReachablePlanBody): void {
     moveHeading.textContent = `「${selectedShapeName}」${reviewNoteSuffix(selectedShapeNote)}に近づく手の候補`;
     candidateSection.appendChild(moveHeading);
 
-    // 【STEP ζ-5(経路6)】選択中の形のreview_statusが"draft"の場合にだけ、
+    // 【STEP ζ-5(経路6)】対象の形のreview_statusが"draft"の場合にだけ、
     // サーバー側(analysis/nameExposure.ts)が決めた注意書きをそのまま1行表示する。
     // 個々の候補手の説明文自体は変更しない(見出し名の表示がフォールバックしても
     // この注意書きは独立に出る)。
@@ -699,6 +740,11 @@ function renderPlan(plan: ReachablePlanBody): void {
 // 自分の駒・持ち駒をクリック可能にする(相手側の駒は選択できるようにしない)。
 // moveInFlight中はクリックハンドラを一切付けない(destinationのハイライト自体は
 // 見た目としてそのまま残し、二重送信だけを防ぐ)。
+// 盤の目盛り。squareNameAt(rowIndex, colIndex) が返すマス名と対応させる
+// (左端が9筋・上端が一段。盤の描画順そのものは変更していない)。
+const BOARD_FILE_LABELS = ["９", "８", "７", "６", "５", "４", "３", "２", "１"];
+const BOARD_RANK_LABELS = ["一", "二", "三", "四", "五", "六", "七", "八", "九"];
+
 function renderBoard(state: GameStateResponse): void {
   const board = parseSfenBoardPart(state.sfen);
   const turn = parseSfenTurn(state.sfen);
@@ -710,8 +756,29 @@ function renderBoard(state: GameStateResponse): void {
       : new Map<string, string[]>();
 
   boardEl.innerHTML = "";
+
+  // Phase 7 Unit 3: 盤の外側に筋(９〜１)と段(一〜九)を表示する。
+  // 「６八って盤のどこ?」を盤を見ながら理解できるようにするための目盛りであり、
+  // 盤の向き・駒の配置ロジックは一切変更していない(squareNameAtの結果に合わせるだけ)。
+  const headRow = document.createElement("tr");
+  headRow.className = "board-file-header";
+  headRow.appendChild(document.createElement("th"));
+  for (let colIndex = 0; colIndex < 9; colIndex += 1) {
+    const th = document.createElement("th");
+    // squareNameAtと同じ規則(左端が9筋)で筋の数字を出す。
+    th.textContent = BOARD_FILE_LABELS[colIndex] ?? "";
+    headRow.appendChild(th);
+  }
+  boardEl.appendChild(headRow);
+
   board.forEach((rank, rowIndex) => {
     const tr = document.createElement("tr");
+
+    const rankTh = document.createElement("th");
+    rankTh.className = "board-rank-label";
+    rankTh.textContent = BOARD_RANK_LABELS[rowIndex] ?? "";
+    tr.appendChild(rankTh);
+
     rank.forEach((square, colIndex) => {
       const squareName = squareNameAt(rowIndex, colIndex);
       const td = document.createElement("td");
@@ -891,6 +958,7 @@ function render(state: GameStateResponse): void {
   renderAim(state.coach);
   renderWhy(state.coach, state.plan);
   renderPlan(state.plan);
+  renderReferenceShapes(state.plan);
 }
 
 function setError(message: string): void {
@@ -992,28 +1060,13 @@ async function handleBoardMoveClick(candidates: string[]): Promise<void> {
   await playMove(moveUsi);
 }
 
-// 目標形選択UI: reachableShapesの候補クリックから呼ばれる。
-// 局面(sfen)自体は変わらないため、submitMoveと同じ非同期(pending→ready)の
-// 流れを流用する(既存のschedulePlanRefreshによるポーリングをそのまま使う)。
-async function handleSelectTargetShape(shapeId: string): Promise<void> {
-  setError("");
-  try {
-    const result = await selectTargetShape(shapeId);
-    if (isMoveError(result)) {
-      setError(result.error);
-      return;
-    }
-    render(result);
-    if (result.plan.candidateMoveState === "pending") {
-      schedulePlanRefresh(result.sfen);
-    }
-  } catch (err) {
-    setError(`通信エラー: ${err instanceof Error ? err.message : String(err)}`);
-  }
-}
+// Phase 7 Unit 3: 目標形選択UI(reachableShapesの候補クリック)は廃止したため、
+// その入口だったhandleSelectTargetShapeも削除した。囲いは選択肢ではなく参考資料として
+// [5]「参考になる囲い」に置く。サーバー側の POST /api/game/target-shape 自体は
+// 開発・検証用に残してある(api/stateResponse.ts の computeRankedPlanContext 参照)。
 
 // 描画したうえで、⑧がまだ計算中なら完了を取りに行く。
-// 着手時・目標形変更時は playMove / handleSelectTargetShape が個別に予約しているが、
+// 着手時は playMove が個別に予約しているが、
 // 「新しい対局」と初回ページロードにはこの予約が無く、⑧が計算中のまま画面が
 // 「候補手を計算中です」で止まる経路になっていた(Phase6の通し確認で判明)。
 // 両方をこのヘルパー経由にそろえる。

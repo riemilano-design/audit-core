@@ -13,6 +13,8 @@ import {
 } from "../analysis/explanationGenerator.js";
 import { getStatus, type GameState, type GameStatus } from "../game/gameSession.js";
 import { analyzeShapeFormation, type ShapeFormationResult } from "../analysis/shapeFormationAnalyzer.js";
+import type { ShapeStatus } from "../analysis/shapeDetector.js";
+import { toMovingPieceName } from "../notation/japaneseMove.js";
 import { detectIntents } from "../analysis/intentDetector.js";
 import { selectTargetPurpose } from "../analysis/targetPurposeSelector.js";
 import { rankReachableShapes, type RankedReachableShape } from "../analysis/shapeGraphRanking.js";
@@ -123,6 +125,23 @@ export type CandidateMoveState = "unavailable" | "pending" | "ready";
  * shapeFormationAnalyzer.tsの判定結果(matchedSquares/missingSquares)をそのまま
  * 日本語表記へ変換して渡すだけで、新しい判定は一切行わない。
  */
+/**
+ * [5]「参考になる囲い」の1件。学習用の参考資料であり、選択肢ではない。
+ * 完成形の駒配置は、座標の根拠が人間に確認されるまで返さない(toReferenceShapes参照)。
+ */
+export interface ReferenceShapeBody {
+  shapeId: string;
+  name: string;
+  pendingReviewNote: string | null;
+  characteristics: string;
+  /** 現在の局面についての認識状態(none / forming / completed)。 */
+  status: ShapeStatus;
+  /** 既に成立しているマス(日本語表記)。現在の形との関係を示すために使う。 */
+  matchedSquareLabels: string[];
+  /** まだ埋まっていないマス(日本語表記)。 */
+  missingSquareLabels: string[];
+}
+
 /** [3]「なぜそれが重要か」に出す、完成した自分の形の弱点。data/shapes/*.json の
  * weak_against をそのまま運ぶだけで、新しい文言は作らない。 */
 export interface ShapeWeaknessBody {
@@ -277,6 +296,10 @@ export interface ReachablePlanBody {
   /** [0]「今すぐ対処が必要なこと」に出すメッセージ。該当が無ければ空配列
    * (partitionUrgentMessages参照。文言はすべて既存のもの)。 */
   urgentMessages: { kind: string; text: string }[];
+  /** [5]「参考になる囲い」。学習用の参考資料で、選択肢ではない。 */
+  referenceShapes: ReferenceShapeBody[];
+  /** 方向が1つに定まらないときに [4] へ出す一文。定まっている場合はnull。 */
+  directionNote: string | null;
   /**
    * Phase3 Unit1(計画崩れの検知のみ): 相手の手によって、ユーザーが着手する直前に
    * 保持していた計画(PlanSnapshot)の前提が機械的に崩れたかどうか。
@@ -328,6 +351,8 @@ interface RankedPlanContext {
    * 含まれない(未選択・無効値)場合はundefined(Phase 7 Unit 0。
    * 目標形は選ぶまで存在しないものとして扱う)。 */
   resolvedTargetShapeId: string | undefined;
+  /** Phase 7 Unit 3: 局面から認識できた方向性(1件に定まったか、定まらなかったか)。 */
+  direction: RecognizedDirection;
   /** resolvedTargetShapeIdについてのみ計算したroutePlanner結果。対象shapeが無ければundefined。 */
   routePlanResult: ShapeRoutePlanResult | undefined;
 }
@@ -351,6 +376,48 @@ interface RankedPlanContext {
  * routes / candidateMove)は未選択の間undefinedになる。reachableShapes(目指せる形の
  * 候補)自体は、選ぶ手段を残すためこれまでどおり計算・提供する。
  */
+/**
+ * Phase 7 Unit 3: 道のり・候補手の対象を「局面から認識できた方向性」から決める。
+ *
+ * 【ranked[0] フォールバックを復活させないこと(人間の確定した制約)】
+ * `rankReachableShapes` の順位は matchScore と intent 由来の調整を含む「望ましさ」の
+ * 並びであり、Unit 0 で「1位を自動的に目標形にする」ことを人間が廃止した。ここでは
+ * 順位を一切使わない。使うのは `shapeFormationAnalyzer` の `status` だけで、これは
+ * `formationEvidence`(実際にその駒がそのマスへ動いた証拠)を要求する認識結果である。
+ *
+ * 【1つに定まらない場合は何も返さない】
+ * forming がちょうど1件のときだけ、その形を対象とする。0件(まだ何も認識できていない)
+ * でも、2件以上(方向が1つに定まらない)でも undefined を返し、候補手を生成しない。
+ * 同点を裁く規則をここで発明しない(CLAUDE.mdルール4番: 判定結果・優先度を人間の
+ * 承認なしに確定しない)。
+ */
+export type RecognizedDirectionReason = "single" | "none" | "ambiguous";
+
+export interface RecognizedDirection {
+  shapeId: string | undefined;
+  reason: RecognizedDirectionReason;
+  /** reason: "ambiguous" のときに認識されていた形の件数(報告・テスト用)。 */
+  formingCount: number;
+}
+
+export function resolveRecognizedDirection(
+  reachableShapes: Pick<RankedReachableShape, "shapeId" | "status">[],
+): RecognizedDirection {
+  const forming = reachableShapes.filter((shape) => shape.status === "forming");
+  if (forming.length === 1) {
+    return { shapeId: forming[0]!.shapeId, reason: "single", formingCount: 1 };
+  }
+  return {
+    shapeId: undefined,
+    reason: forming.length === 0 ? "none" : "ambiguous",
+    formingCount: forming.length,
+  };
+}
+
+/** 方向が1つに定まらないときに [4] へ出す一文(人間が指定した文言)。 */
+export const DIRECTION_UNDECIDED_TEXT =
+  "この局面では、まだ特定の囲いへの方向は決まっていません。";
+
 function computeRankedPlanContext(
   current: GameState,
   options: ExplainPositionOptions = {},
@@ -362,14 +429,19 @@ function computeRankedPlanContext(
   const ranked = rankReachableShapes(shapeResults, targetPurpose);
   // docs/PHASES.mdが明記する「ユーザーが2〜3個の候補から目標形を選べるUI」に基づく件数。
   const reachableShapes = ranked.slice(0, 3);
-  const selected =
+  // Phase 7 Unit 3: ユーザーに目標形を選ばせるUIは廃止した。本番導線では、道のり・
+  // 候補手の対象を「局面から認識できた方向性」から決める(resolveRecognizedDirection)。
+  // selectedTargetShapeId は開発・検証用の POST /api/game/target-shape のためだけに残す
+  // (Unit 0 で forcedOpponentOpening を残したのと同じ扱い)。明示された場合はそれを優先する。
+  const direction = resolveRecognizedDirection(reachableShapes);
+  const explicit =
     selectedTargetShapeId !== undefined
       ? reachableShapes.find((s) => s.shapeId === selectedTargetShapeId)
       : undefined;
-  const top = selected;
+  const top = explicit ?? reachableShapes.find((s) => s.shapeId === direction.shapeId);
   const resolvedTargetShapeId = top?.shapeId;
   const routePlanResult = top ? planRoutesToShape(current.sfen, shapeResults, top.shapeId) : undefined;
-  return { shapeResults, reachableShapes, resolvedTargetShapeId, routePlanResult };
+  return { shapeResults, reachableShapes, resolvedTargetShapeId, routePlanResult, direction };
 }
 
 /** routePlanner.tsの経路を、UI表示用の要約(日本語表記つき)へ変換するだけの関数。 */
@@ -430,12 +502,58 @@ function resolveMoveLabels(
 }
 
 /** 候補手のUSI表記を、UI表示用の日本語のマス目表記へ変換した対応表を作る。 */
-function toCandidateMoveLabels(routePlanResult: ShapeRoutePlanResult | undefined): Record<string, string> {
+/**
+ * 候補手の表示ラベル。Phase 7 Unit 3 から「駒名：移動元→移動先」の形にする
+ * (例: "金：６七→６六")。駒名は現在局面のSFENの移動元マスを読むだけで決まり、
+ * 将棋の判断は入れない。駒名が取れない場合は従来どおりマス目だけの表記に落とす。
+ */
+function toCandidateMoveLabels(
+  routePlanResult: ShapeRoutePlanResult | undefined,
+  sfen: string,
+): Record<string, string> {
   const labels: Record<string, string> = {};
   for (const candidate of routePlanResult?.candidateMoves ?? []) {
-    labels[candidate.moveUsi] = toJapaneseMoveSquares(candidate.moveUsi);
+    const squares = toJapaneseMoveSquares(candidate.moveUsi);
+    const piece = safeToMovingPieceName(sfen, candidate.moveUsi);
+    labels[candidate.moveUsi] = piece ? `${piece}：${squares}` : squares;
   }
   return labels;
+}
+
+/** 駒名の取得は表示上の都合であり、失敗しても対局・解析を止めない。 */
+function safeToMovingPieceName(sfen: string, moveUsi: string): string | null {
+  try {
+    return toMovingPieceName(sfen, moveUsi);
+  } catch (err) {
+    console.error("候補手の駒名の解決(notation/japaneseMove.ts)でエラーが発生しました:", err);
+    return null;
+  }
+}
+
+/**
+ * [5]「参考になる囲い」に出す一覧。ユーザーが選ぶための候補ではなく、
+ * 「将棋にはこういう完成形がある」という学習用の参考資料である。
+ *
+ * 【完成形の駒配置(required_pieces)をここで返さないこと】
+ * data/shapes/*.json の座標は、各ファイルの source 自身が「一次資料による確認を
+ * 行っていない」と記しており、特に mino_takamino は source が記す先手視点の記述と
+ * 保存座標の左右が一致していない。人間による座標の確定を待つため、完成形の盤も
+ * 駒名+座標の一覧も出さない(人間の指示)。ここで返すのは名前と特徴だけである。
+ */
+function toReferenceShapes(context: RankedPlanContext | undefined): ReferenceShapeBody[] {
+  if (!context) return [];
+  return context.shapeResults.map((shape) => {
+    const exposed = exposeName(shape.name, shape.reviewStatus, "shape");
+    return {
+      shapeId: shape.shapeId,
+      name: exposed.name,
+      pendingReviewNote: exposed.pendingNote,
+      characteristics: shape.characteristics,
+      status: shape.status,
+      matchedSquareLabels: shape.matchedSquares.map((square) => toJapaneseSquare(square)),
+      missingSquareLabels: shape.missingSquares.map((square) => toJapaneseSquare(square)),
+    };
+  });
 }
 
 /**
@@ -812,7 +930,12 @@ export function buildStateResponseWithPlan(
       reachableShapes,
       routes: toRouteSummaries(context?.routePlanResult),
       targetShapeProgress: toTargetShapeProgress(context),
-      candidateMoveLabels: toCandidateMoveLabels(context?.routePlanResult),
+      candidateMoveLabels: toCandidateMoveLabels(context?.routePlanResult, current.sfen),
+      referenceShapes: toReferenceShapes(context),
+      directionNote:
+        context && context.direction.reason !== "single" && context.resolvedTargetShapeId === undefined
+          ? DIRECTION_UNDECIDED_TEXT
+          : null,
       urgentMessages: partition.urgent,
       lastMoveOutcome: lastMoveOutcome
         ? {

@@ -9,6 +9,8 @@ import type { CoachExplanation } from "../analysis/explanationGenerator.js";
 import { getIntents } from "../analysis/intentRepository.js";
 import { getShapes } from "../analysis/shapeRepository.js";
 import type { BoardEventMessage } from "../analysis/boardEventExplanation.js";
+import { toMovingPieceName } from "../notation/japaneseMove.js";
+import type { RankedReachableShape } from "../analysis/shapeGraphRanking.js";
 import type { NextConsiderationMessage } from "../analysis/nextConsiderationExplanation.js";
 import { DEFAULT_INITIAL_SFEN, replayMoveHistory } from "../analysis/moveHistory.js";
 import { applyMove } from "../rules/applyMove.js";
@@ -33,6 +35,7 @@ import {
   filterLastMoveMessagesForTargetShape,
   partitionUrgentMessages,
   filterContradictoryConsiderations,
+  resolveRecognizedDirection,
 } from "./stateResponse.js";
 
 const SENTE_FILLERS = ["1g1f", "2g2f", "3g3f", "4g4f", "5g5f", "6g6f", "9g9f", "8g8f"];
@@ -1292,6 +1295,64 @@ describe("Unit 3: partitionUrgentMessages([0]「今すぐ対処が必要なこ�
     expect(result.urgent).toEqual([]);
     expect(result.lastMoveMessages).toEqual([captured]);
     expect(result.nextConsiderations).toEqual([routeNote]);
+  });
+});
+
+describe("Unit 3: resolveRecognizedDirection(認識できた方向性)", () => {
+  const shape = (shapeId: string, status: "none" | "forming" | "completed") =>
+    ({ shapeId, status }) as Pick<RankedReachableShape, "shapeId" | "status">;
+
+  it("formingがちょうど1件のときだけ、その形を対象にする", () => {
+    const result = resolveRecognizedDirection([
+      shape("mino_honmino", "forming"),
+      shape("mino_takamino", "none"),
+    ]);
+
+    expect(result).toEqual({ shapeId: "mino_honmino", reason: "single", formingCount: 1 });
+  });
+
+  it("formingが0件なら対象を決めない", () => {
+    const result = resolveRecognizedDirection([shape("mino_honmino", "none")]);
+
+    expect(result).toEqual({ shapeId: undefined, reason: "none", formingCount: 0 });
+  });
+
+  it("formingが2件以上なら対象を決めない(同点を裁く規則を発明しない)", () => {
+    const result = resolveRecognizedDirection([
+      shape("mino_honmino", "forming"),
+      shape("mino_takamino", "forming"),
+      shape("mino_ginkanmuri", "forming"),
+    ]);
+
+    expect(result).toEqual({ shapeId: undefined, reason: "ambiguous", formingCount: 3 });
+  });
+
+  it("completedは方向の判断に使わない(ranked[0]フォールバックを復活させない)", () => {
+    const result = resolveRecognizedDirection([
+      shape("mino_honmino", "completed"),
+      shape("mino_takamino", "completed"),
+    ]);
+
+    expect(result.shapeId).toBeUndefined();
+    expect(result.reason).toBe("none");
+  });
+});
+
+describe("Unit 3: 候補手のラベルに駒名を付ける", () => {
+  it("初期局面の7g7fは「歩：７七→７六」になる", () => {
+    const response = buildStateResponseWithPlan(gameStateAfter([]), undefined, {});
+
+    // 候補手が出ない局面でもラベル生成そのものは検証できるよう、変換関数の結果を直接見る。
+    expect(toMovingPieceName(DEFAULT_INITIAL_SFEN, "7g7f")).toBe("歩");
+    expect(response.plan.candidateMoveLabels).toBeDefined();
+  });
+
+  it("移動元に駒が無い場合はnullを返し、呼び出し側がマス目だけの表記に落とせる", () => {
+    expect(toMovingPieceName(DEFAULT_INITIAL_SFEN, "5e5d")).toBeNull();
+  });
+
+  it("USIとして解釈できない文字列はnullを返す", () => {
+    expect(toMovingPieceName(DEFAULT_INITIAL_SFEN, "zzzz")).toBeNull();
   });
 });
 

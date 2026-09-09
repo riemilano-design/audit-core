@@ -22,8 +22,9 @@
 // lastDest は渡さない(常にマス目を明示した表記になる)。
 
 import { makeJapaneseMoveOrDrop } from "shogiops/notation/japanese";
-import { parseUsi } from "shogiops/util";
+import { isDrop, parseUsi } from "shogiops/util";
 import { parsePosition } from "../rules/sfenPosition.js";
+import { roleToJapanese } from "../analysis/pieceMapping.js";
 
 export { InvalidSfenError } from "../rules/sfenPosition.js";
 
@@ -37,6 +38,29 @@ export { InvalidSfenError } from "../rules/sfenPosition.js";
  * sfen 自体が不正な場合は parsePosition の InvalidSfenError がそのまま伝播する
  * (既存の notation/japaneseMoveHistory.ts と同じ前提)。
  */
+/**
+ * sfen の局面で moveUsi を指すときに「動かす駒」の日本語の駒名(例: "金")を返す。
+ *
+ * Phase 7 Unit 3(初心者向けの表記): 候補手を「６七→６六」ではなく
+ * 「歩：６七→６六」と表示するために使う。盤上の移動元マスにある駒を読むだけで、
+ * 将棋の判断は一切しない。打つ手(drop)の場合は打つ駒の名前を返す。
+ *
+ * 変換できなかった場合(USIとして解釈できない、移動元に駒が無い、対応表に無い駒種)は
+ * null を返す。呼び出し側は駒名なしの表記へフォールバックする。
+ */
+export function toMovingPieceName(sfen: string, moveUsi: string): string | null {
+  const move = parseUsi(moveUsi);
+  if (!move) return null;
+
+  try {
+    if (isDrop(move)) return roleToJapanese(move.role);
+    const piece = parsePosition(sfen).board.get(move.from);
+    return piece ? roleToJapanese(piece.role) : null;
+  } catch {
+    return null;
+  }
+}
+
 export function toJapaneseMove(sfen: string, moveUsi: string): string | null {
   const move = parseUsi(moveUsi);
   if (!move) return null;

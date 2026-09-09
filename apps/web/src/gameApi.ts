@@ -33,6 +33,8 @@ export interface CoachExplanation {
 
 // apps/server/src/api/stateResponse.ts の ReachableShapeBody に対応する型
 // (⑥目指せる形のランキング。上位3件、1位を唯一の正解として強調しない)。
+// 【Phase 7 Unit 3】この一覧をユーザーが選ぶUIは廃止した。順位は道のり・候補手の
+// 対象決定には使わない(サーバー側 resolveRecognizedDirection が status だけで決める)。
 // STEP ζ-5: reviewStatusの生値は公開されない(サーバー側のanalysis/nameExposure.tsに
 // 判断を集約するため)。pendingReviewNoteはreview_statusが"draft"の場合にだけ入る注記で、
 // それ以外はnull。web側はこの注記の文言を作らず、有無だけを見て表示する。
@@ -162,6 +164,19 @@ export interface ShapeWeaknessBody {
   text: string;
 }
 
+// apps/server/src/api/stateResponse.ts の ReferenceShapeBody に対応する型
+// (Unit 3: [5]「参考になる囲い」)。完成形の駒配置は、座標の根拠が人間に確認される
+// まで返ってこない(サーバー側 toReferenceShapes のコメント参照)。
+export interface ReferenceShapeBody {
+  shapeId: string;
+  name: string;
+  pendingReviewNote: string | null;
+  characteristics: string;
+  status: "none" | "forming" | "completed";
+  matchedSquareLabels: string[];
+  missingSquareLabels: string[];
+}
+
 // apps/server/src/api/stateResponse.ts の partitionUrgentMessages が返すメッセージ。
 // どれが「今すぐ対処が必要」かの判断はサーバー側にあり、web側は表示するだけ。
 export interface UrgentMessage {
@@ -182,6 +197,10 @@ export interface ReachablePlanBody {
   lastMoveOutcome: LastMoveOutcomeBody | null;
   /** Unit 3: [0]「今すぐ対処が必要なこと」。該当が無ければ空配列。 */
   urgentMessages: UrgentMessage[];
+  /** Unit 3: [5]「参考になる囲い」。学習用の参考資料で、選択肢ではない。 */
+  referenceShapes: ReferenceShapeBody[];
+  /** Unit 3: 局面から認識できた方向が1つに定まらないときの一文。定まっていればnull。 */
+  directionNote: string | null;
   /** Unit 3: [3]「なぜそれが重要か」に出す、完成した自分の形の弱点。無ければnull。 */
   shapeWeakness: ShapeWeaknessBody | null;
   /** Phase6 Unit4: 今の局面で分かっていること(直前の一手による差分ではない)。
