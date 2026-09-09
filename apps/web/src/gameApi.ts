@@ -187,7 +187,10 @@ export interface ReachablePlanBody {
   /** Phase6 Unit4: 今の局面で分かっていること(直前の一手による差分ではない)。
    * 事実の抽出も文言生成もサーバー側(nextConsiderationDetector.ts /
    * nextConsiderationExplanation.ts)で完了しており、ここでは表示するだけ。
-   * 表示すべき事実が無い場合・目標形が決まっていない場合・対局終了時は空配列。 */
+   * 表示すべき事実が無い場合・目標形が決まっていない場合・対局終了時は空配列。
+   * 【Unit 3 で契約が変わった】王手("in_check")は urgentMessages へ移り、ここには来ない。
+   * 候補手がある局面では "no_playable_route_first_move" も来ない
+   * (どちらもサーバー側で確定済み。web側は表示するだけ)。 */
   nextConsiderations: NextConsiderationMessage[];
   candidateMoveState: CandidateMoveState;
   candidateMove: CandidateMoveExplanationResult | undefined;

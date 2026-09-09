@@ -185,9 +185,15 @@ export interface LastMoveOutcomeBody {
   /** 相手の応手。相手が指していない場合はnull。 */
   opponentMoveLabel: string | null;
   /**
-   * 表示するメッセージ。変化が無かった場合も「特に変化なし」の1件が入る(空にはならない)。
-   * Phase6 Unit3で、盤面の出来事(捕獲・王手・成り)のメッセージが先頭に加わる
-   * (起きた順。形・経路についての説明はその後ろ)。
+   * 表示するメッセージ。Phase6 Unit3で、盤面の出来事(捕獲・成り)のメッセージが先頭に
+   * 加わる(起きた順。形・経路についての説明はその後ろ)。
+   *
+   * 【Unit 3(情報構造の整理)で契約が変わった】**空配列になり得る。**
+   * - 目標形が未選択のときは「特に変化なし」("no_notable_change")を返さない
+   *   (filterLastMoveMessagesForTargetShape。既知事項 U0-1)
+   * - 王手("check_received")は [0] の urgentMessages へ移し、ここには残さない
+   *   (partitionUrgentMessages)
+   * 利用側(apps/web/src/gameApi.ts の LastMoveOutcomeBody)にも同じ契約を書いてある。
    */
   messages: (BoardEventMessage | MoveOutcomeMessage)[];
 }
@@ -241,7 +247,10 @@ export interface ReachablePlanBody {
    * Phase6 Unit4: 現在の局面について分かっていること(直前の一手による差分ではない)。
    * 事実の抽出はanalysis/nextConsiderationDetector.ts、文言は
    * analysis/nextConsiderationExplanation.tsが担当し、ここでは配線するだけ。
-   * 表示すべき事実が無い場合・目標形が決まっていない場合・対局終了時は空配列
+   * 表示すべき事実が無い場合・目標形が決まっていない場合・対局終了時は空配列。
+   * 【Unit 3 で契約が変わった】王手("in_check")は [0] の urgentMessages へ移す
+   * (partitionUrgentMessages)。候補手が1件でもある局面では
+   * "no_playable_route_first_move" を除く(filterContradictoryConsiderations)
    * (呼び出し側はブロックごと描画しない)。
    */
   nextConsiderations: NextConsiderationMessage[];
