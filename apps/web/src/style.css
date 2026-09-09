@@ -32,6 +32,55 @@ h1 {
   }
 }
 
+/* Phase 7 Unit 3: 3カラム化(人間が確定した仕様。docs/PHASES.md 参照)。
+   [盤面] | [0〜3: 状況・狙い・重要性] | [4〜5: どう指すか・参考囲い・履歴]
+
+   【DOMを変えずに2列へ分ける方法】
+   #infoColumn の直下は次の9要素で、境目は6番目の h2「どう指すか」である。
+     0: h2 今の局面を読む  1: #urgent  2: #happened  3: #aim  4: #why
+     5: h2 どう指すか      6: #howto   7: details#referenceDetails  8: details#historyDetails
+   CSS Grid で列を割り当てると行の高さが左右で結合し(行の高さ = その行の最大要素)、
+   片側に大きな空きが出る。そこでマルチカラムに強制カラムブレイクを組み合わせ、
+   DOM を変えずに独立した2つの流れを作る。
+
+   情報を削って高さを下げているのではなく、レイアウトだけで解決している。
+   1200px 未満では縦積み(既存の @media (min-width: 900px) の2カラム)のまま。 */
+@media (min-width: 1200px) {
+  /* 上下の余白を詰める。3カラムにしても body の上下マージン(既定 2rem)が
+     そのままだと 900px をわずかに超えるため(実測: 本文の下端 898px に対し
+     文書全体 930px)。情報は一切削っていない。 */
+  body {
+    max-width: 1400px;
+    margin-top: 0.75rem;
+    margin-bottom: 0.75rem;
+  }
+
+  h1 {
+    margin-top: 0;
+    margin-bottom: 0.5rem;
+  }
+
+  #layout {
+    grid-template-columns: minmax(380px, 440px) 1fr;
+  }
+
+  #infoColumn {
+    columns: 2;
+    column-gap: 2rem;
+  }
+
+  /* ブロックが列をまたいで途中で分割されないようにする。 */
+  #infoColumn > * {
+    break-inside: avoid;
+  }
+
+  /* [4]「どう指すか」以降を2列目の先頭へ送る。ここが [0〜3] と [4〜5] の境目。 */
+  #infoColumn > h2:nth-of-type(2) {
+    break-before: column;
+    margin-top: 0;
+  }
+}
+
 #status {
   margin-bottom: 0.5rem;
   font-weight: bold;
