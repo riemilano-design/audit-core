@@ -40,6 +40,7 @@ function makeShapeResult(overrides: Partial<ShapeFormationResult> & { shapeId: s
     dataConfidenceLevel: overrides.dataConfidenceLevel ?? "medium",
     reviewStatus: overrides.reviewStatus ?? "human_reviewed",
     characteristics: overrides.characteristics ?? "",
+    weakAgainst: overrides.weakAgainst,
     formationEvidence: overrides.formationEvidence ?? [],
   };
 }
@@ -246,6 +247,7 @@ describe("planRoutesToShape", () => {
       required_pieces: [{ piece: "玉", square: "5e", optional: false }],
       typical_build_order: ["5e"],
       characteristics: "",
+      weakAgainst: undefined,
       confidence_level: "medium",
       review_status: "human_reviewed",
     };
@@ -274,6 +276,7 @@ describe("planRoutesToShape", () => {
       required_pieces: [{ piece: "銀", square: "5c", optional: false }],
       typical_build_order: ["5c"],
       characteristics: "",
+      weakAgainst: undefined,
       confidence_level: "medium",
       review_status: "human_reviewed",
     };
@@ -309,6 +312,7 @@ describe("planRoutesToShape", () => {
       required_pieces: [{ piece: "金", square: "5e", optional: false }],
       typical_build_order: ["5e"],
       characteristics: "",
+      weakAgainst: undefined,
       confidence_level: "medium",
       review_status: "human_reviewed",
     };

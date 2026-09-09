@@ -26,6 +26,7 @@ function makeShapeResult(overrides: Partial<ShapeFormationResult> & { shapeId: s
     dataConfidenceLevel: overrides.dataConfidenceLevel ?? "medium",
     reviewStatus: overrides.reviewStatus ?? "human_reviewed",
     characteristics: overrides.characteristics ?? "",
+    weakAgainst: overrides.weakAgainst,
     formationEvidence: overrides.formationEvidence ?? [],
   };
 }

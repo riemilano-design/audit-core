@@ -28,6 +28,9 @@ export interface ShapeDefinition {
   required_pieces: ShapeRequiredPiece[];
   typical_build_order?: string[];
   characteristics: string;
+  /** data/schemas/shapes.schema.json では必須ではないため optional。
+   * 「この囲いは何に弱いか」を初心者向けに述べた既存の文で、新規に作るものではない。 */
+  weak_against?: string;
   confidence_level: "high" | "medium" | "low";
   /** 知識を追加してよいかと、ユーザーへ見せてよいかを分離する運用区分
    * (data/schemas/shapes.schema.json参照)。名前を出してよいかの判断は

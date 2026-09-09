@@ -79,10 +79,18 @@ export interface CandidateMoveExplanationResult {
    * status: "not_ready"の場合は常に空配列(=UI表示対象から除外される)。
    */
   explanations: Explanation[];
+  /**
+   * 候補手セクション全体に1回だけ添える但し書き(Unit 3 情報構造の整理)。
+   * 以前は同じ文を候補手ごとの reason 末尾へ繰り返し連結していたが、候補手3件に
+   * 同じ但し書きが3回並ぶ重複になっていた(Unit 1 の実測)。文言そのものは変えず、
+   * 置き場所だけをセクション単位へ移している(新しい文言は作っていない)。
+   * status: "not_ready" の場合は常に空配列。
+   */
+  sharedNotes: string[];
 }
 
 function notReady(reason: CandidateMoveExplanationNotReadyReason): CandidateMoveExplanationResult {
-  return { status: "not_ready", notReadyReason: reason, explanations: [] };
+  return { status: "not_ready", notReadyReason: reason, explanations: [], sharedNotes: [] };
 }
 
 /**
@@ -199,7 +207,9 @@ export function explainCandidateMoves(
     return notReady("insufficient_engine_data");
   }
 
-  return { status: "ready", notReadyReason: null, explanations };
+  // 旧経路(buildCandidateMoveExplanation)は但し書きをreason末尾に持ったままなので、
+  // セクション単位の共通注記は持たない。本番経路はexplainRouteCandidateMoves側。
+  return { status: "ready", notReadyReason: null, explanations, sharedNotes: [] };
 }
 
 // ============================================================================
@@ -234,6 +244,29 @@ function exampleDisclaimer(shapeName: string): string {
   return `これは${shapeName}を目指す進め方の一例であり、唯一の正解ではありません。`;
 }
 
+/**
+ * 準備手についての但し書き。以前は準備手の reason 末尾に毎回連結していたものを、
+ * セクション単位へ移した(文言は変えていない)。
+ */
+export const PREPARATION_DESTINATION_NOTE = "どこへ動かすかは、この形の観点だけでは決まりません。";
+
+/**
+ * 候補手セクション全体に1回だけ添える但し書きを組み立てる。
+ * 文言は既存のもの(exampleDisclaimer / PREPARATION_DESTINATION_NOTE)をそのまま使い、
+ * 新しい文言は作らない。準備手が1件も無い場合は退避先についての但し書きを出さない。
+ */
+export function buildRouteCandidateSharedNotes(
+  shapeName: string,
+  candidates: Pick<RouteCandidateMove, "kind">[],
+): string[] {
+  const notes: string[] = [];
+  if (candidates.some((candidate) => candidate.kind === "preparation")) {
+    notes.push(PREPARATION_DESTINATION_NOTE);
+  }
+  notes.push(exampleDisclaimer(shapeName));
+  return notes;
+}
+
 /** ⑦の候補手1件(経路つき)を、⑧「その手の目的」の説明(Explanation)へ変換する。 */
 export function buildRouteCandidateMoveExplanation(
   shapeId: string,
@@ -252,19 +285,17 @@ export function buildRouteCandidateMoveExplanation(
     reason =
       `${clearingSquare}には今、自分の駒があります。` +
       `「${shapeName}」の${candidate.targetPiece}を${targetSquare}へ進めるには、` +
-      `先にこの駒を動かす必要があります。この手はそのための候補の一つです。` +
-      `(どこへ動かすかは、この形の観点だけでは決まりません。${exampleDisclaimer(shapeName)})`;
+      `先にこの駒を動かす必要があります。この手はそのための候補の一つです。`;
     templateId = ROUTE_TEMPLATE_IDS.preparation;
   } else if (candidate.remainingStepsAfter === 0) {
     reason =
       `この手で${candidate.targetPiece}が${targetSquare}に入り、` +
-      `「${shapeName}」に必要な配置の一つができます。(${exampleDisclaimer(shapeName)})`;
+      `「${shapeName}」に必要な配置の一つができます。`;
     templateId = ROUTE_TEMPLATE_IDS.route_arrival;
   } else {
     reason =
       `「${shapeName}」の${candidate.targetPiece}を${targetSquare}へ運ぶ経路(${routePath})の1手目です。` +
-      `この手のあと、${targetSquare}まで残り${candidate.remainingStepsAfter}手です。` +
-      `(${exampleDisclaimer(shapeName)})`;
+      `この手のあと、${targetSquare}まで残り${candidate.remainingStepsAfter}手です。`;
     templateId = ROUTE_TEMPLATE_IDS.route_step;
   }
 
@@ -316,16 +347,23 @@ export function explainRouteCandidateMoves(
     return notReady("engine_reference_unavailable");
   }
 
-  const explanations = routePlanResult.candidateMoves
+  const usableCandidates = routePlanResult.candidateMoves
     .map((candidate, index) => ({ candidate, evaluation: safetyCheck.evaluations[index] }))
     .filter(({ evaluation }) => hasUsableEvaluation(evaluation))
-    .map(({ candidate }) =>
-      buildRouteCandidateMoveExplanation(routePlanResult.shapeId, shapeResult, candidate),
-    );
+    .map(({ candidate }) => candidate);
+
+  const explanations = usableCandidates.map((candidate) =>
+    buildRouteCandidateMoveExplanation(routePlanResult.shapeId, shapeResult, candidate),
+  );
 
   if (explanations.length === 0) {
     return notReady("insufficient_engine_data");
   }
 
-  return { status: "ready", notReadyReason: null, explanations };
+  return {
+    status: "ready",
+    notReadyReason: null,
+    explanations,
+    sharedNotes: buildRouteCandidateSharedNotes(shapeResult.name, usableCandidates),
+  };
 }

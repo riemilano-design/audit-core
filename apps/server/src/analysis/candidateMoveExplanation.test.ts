@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import {
   buildCandidateMoveExplanation,
   buildRouteCandidateMoveExplanation,
+  buildRouteCandidateSharedNotes,
   explainCandidateMoves,
   explainRouteCandidateMoves,
   type CandidateMoveExplanationResult,
@@ -37,6 +38,7 @@ function makeShapeResult(overrides: Partial<ShapeFormationResult> & { shapeId: s
     dataConfidenceLevel: overrides.dataConfidenceLevel ?? "medium",
     reviewStatus: overrides.reviewStatus ?? "human_reviewed",
     characteristics: overrides.characteristics ?? "",
+    weakAgainst: overrides.weakAgainst,
     formationEvidence: overrides.formationEvidence ?? [],
   };
 }
@@ -74,6 +76,7 @@ describe("explainCandidateMoves", () => {
       status: "not_ready",
       notReadyReason: "no_candidate_moves",
       explanations: [],
+      sharedNotes: [],
     });
   });
 
@@ -315,8 +318,12 @@ describe("buildRouteCandidateMoveExplanation / explainRouteCandidateMoves", () =
 
     expect(explanation.reason).toContain("７七には今、自分の駒があります");
     expect(explanation.reason).toContain("先にこの駒を動かす必要があります");
-    expect(explanation.reason).toContain("どこへ動かすかは、この形の観点だけでは決まりません");
     expect(explanation.template_id).toBe("candidate_move_preparation");
+    // Unit 3(情報構造の整理): 退避先を判断していない旨の但し書きは、候補手ごとに
+    // 繰り返さずセクション単位で1回だけ出す。文言自体は変えていない。
+    expect(buildRouteCandidateSharedNotes("高美濃囲い", [candidate])).toContain(
+      "どこへ動かすかは、この形の観点だけでは決まりません。",
+    );
   });
 
   it("いずれの説明も、断定的な表現(最善・おすすめ・安全)やエンジン評価値を含まない", () => {
@@ -331,8 +338,13 @@ describe("buildRouteCandidateMoveExplanation / explainRouteCandidateMoves", () =
       for (const forbidden of ["最善", "おすすめ", "安全", "正解です", "悪手", "評価値", "cp"]) {
         expect(reason).not.toContain(forbidden);
       }
-      expect(reason).toContain("唯一の正解ではありません");
     }
+
+    // Unit 3(情報構造の整理): 「唯一の正解ではありません」は候補手ごとに繰り返さず、
+    // セクション単位で1回だけ出す。ユーザーに届く文言は変わっていない。
+    const notes = buildRouteCandidateSharedNotes(shapeResult.name, candidates);
+    expect(notes.join("")).toContain("唯一の正解ではありません");
+    expect(notes.filter((note) => note.includes("唯一の正解ではありません"))).toHaveLength(1);
   });
 
   it("候補手が0件の場合はnot_ready(no_candidate_moves)を返す", () => {

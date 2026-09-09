@@ -50,6 +50,7 @@ const TEST_HONMINO: ShapeFormationResult = {
   dataConfidenceLevel: "medium",
   reviewStatus: "human_reviewed",
   characteristics: "四間飛車でよく使われる、完成が早くバランスの良い囲い。",
+  weakAgainst: undefined,
 };
 
 const NO_SHAPE_RESULTS: ShapeFormationResult[] = getShapes().map((shape) => ({
@@ -68,6 +69,7 @@ const NO_SHAPE_RESULTS: ShapeFormationResult[] = getShapes().map((shape) => ({
   dataConfidenceLevel: shape.confidence_level,
   reviewStatus: shape.review_status,
   characteristics: shape.characteristics,
+  weakAgainst: undefined,
 }));
 
 const NO_INTENT_RESULTS = getIntents().map((intent) => ({
@@ -148,6 +150,7 @@ describe("generateExplanations", () => {
         dataConfidenceLevel: shapeDef.confidence_level,
         reviewStatus: shapeDef.review_status,
         characteristics: shapeDef.characteristics,
+        weakAgainst: undefined,
       };
 
       const explanations = generateExplanations([forming], NO_INTENT_RESULTS);

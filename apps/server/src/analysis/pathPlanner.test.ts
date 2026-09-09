@@ -37,6 +37,7 @@ function makeShapeResult(overrides: Partial<ShapeFormationResult> & { shapeId: s
     dataConfidenceLevel: overrides.dataConfidenceLevel ?? "medium",
     reviewStatus: overrides.reviewStatus ?? "human_reviewed",
     characteristics: overrides.characteristics ?? "",
+    weakAgainst: overrides.weakAgainst,
     formationEvidence: overrides.formationEvidence ?? [],
   };
 }
@@ -73,6 +74,7 @@ const MULTI_GOLD_SHAPE: ShapeDefinition = {
   required_pieces: [{ piece: "金", square: "5e", optional: false }],
   typical_build_order: ["5e"],
   characteristics: "",
+  weakAgainst: undefined,
   confidence_level: "medium",
   review_status: "human_reviewed",
 };

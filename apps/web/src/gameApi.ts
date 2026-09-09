@@ -71,6 +71,9 @@ export interface CandidateMoveExplanationResult {
   status: CandidateMoveExplanationStatus;
   notReadyReason: CandidateMoveExplanationNotReadyReason | null;
   explanations: CandidateMoveExplanation[];
+  /** Unit 3: 候補手セクション全体に1回だけ添える但し書き。以前は候補手ごとの
+   * reason末尾に同じ文が繰り返されていた。文言はサーバー側の既存のもの。 */
+  sharedNotes: string[];
 }
 
 // apps/server/src/api/stateResponse.ts の CandidateMoveState / ReachablePlanBody に対応する型。
@@ -84,6 +87,9 @@ export type CandidateMoveState = "unavailable" | "pending" | "ready";
 export interface TargetShapeProgress {
   shapeId: string;
   name: string;
+  /** Unit 3: ユーザーが選んだ目標形が「どういう形なのか」の説明
+   * (data/shapes/*.json の characteristics)。web側では表示するだけ。 */
+  description: string;
   matchedSquareLabels: string[];
   missingSquareLabels: string[];
   /**
@@ -128,7 +134,10 @@ export interface MoveOutcomeMessage {
 export interface LastMoveOutcomeBody {
   playedMoveLabel: string;
   opponentMoveLabel: string | null;
-  /** 変化が無かった場合も「特に変化なし」の1件が入る(空にはならない)。 */
+  /** Unit 3(情報構造の整理)で契約が変わった。**空配列になり得る。**
+   * - 目標形が未選択のときは「特に変化なし」(no_notable_change)を返さない(既知事項 U0-1)
+   * - 王手(check_received)は [0] の urgentMessages へ移し、ここには残さない
+   * いずれもサーバー側(api/stateResponse.ts)で確定済みで、web側は表示するだけ。 */
   messages: MoveOutcomeMessage[];
 }
 
@@ -139,6 +148,23 @@ export interface LastMoveOutcomeBody {
 // 出し分けにしか使わないため、種類の一覧はサーバー側だけが持つ
 // (MoveOutcomeMessageと同じ方針で、web側に同じ列挙を重複させない)。
 export interface NextConsiderationMessage {
+  kind: string;
+  text: string;
+}
+
+// apps/server/src/api/stateResponse.ts の ShapeWeaknessBody に対応する型
+// (Unit 3: [3]「なぜそれが重要か」に出す、完成した自分の形の弱点)。
+// 文言は data/shapes/*.json の weak_against そのままで、web側は表示するだけ。
+export interface ShapeWeaknessBody {
+  shapeId: string;
+  name: string;
+  pendingReviewNote: string | null;
+  text: string;
+}
+
+// apps/server/src/api/stateResponse.ts の partitionUrgentMessages が返すメッセージ。
+// どれが「今すぐ対処が必要」かの判断はサーバー側にあり、web側は表示するだけ。
+export interface UrgentMessage {
   kind: string;
   text: string;
 }
@@ -154,6 +180,10 @@ export interface ReachablePlanBody {
   candidateMoveLabels: Record<string, string>;
   /** Phase6 Unit2: 直前の一手で何が変わったか。新規対局直後・目標形変更直後はnull。 */
   lastMoveOutcome: LastMoveOutcomeBody | null;
+  /** Unit 3: [0]「今すぐ対処が必要なこと」。該当が無ければ空配列。 */
+  urgentMessages: UrgentMessage[];
+  /** Unit 3: [3]「なぜそれが重要か」に出す、完成した自分の形の弱点。無ければnull。 */
+  shapeWeakness: ShapeWeaknessBody | null;
   /** Phase6 Unit4: 今の局面で分かっていること(直前の一手による差分ではない)。
    * 事実の抽出も文言生成もサーバー側(nextConsiderationDetector.ts /
    * nextConsiderationExplanation.ts)で完了しており、ここでは表示するだけ。
@@ -248,6 +278,40 @@ export function shouldShowNextConsiderations(
   plan: Pick<ReachablePlanBody, "nextConsiderations">,
 ): boolean {
   return plan.nextConsiderations.length > 0;
+}
+
+/**
+ * Unit 3(情報構造の整理): 理由文が同一の候補手を1行にまとめる。
+ *
+ * Unit 1 の実測で、候補手3件のうち2件(７七→３三・７七→４四)の理由文が完全に同一で、
+ * 同じ説明が2度並んでいた。ここで行うのは「reasonが文字列として等しいものをまとめ、
+ * 指し手のラベルを並記する」だけで、将棋の判断・文言の生成は一切しない。
+ * 並び順は入力順を保つ(サーバーが決めた順序を変えない)。
+ * shouldShowPlanChangedNoticeと同じく、DOM非依存の純粋関数としてテストするため
+ * gameApi.tsに置く。
+ */
+export interface GroupedCandidateMove {
+  /** 同じ理由を持つ候補手の指し手ラベル(表示用。日本語表記が無い場合はUSIのまま)。 */
+  moveLabels: string[];
+  reason: string;
+}
+
+export function groupCandidateExplanationsByReason(
+  explanations: Pick<CandidateMoveExplanation, "move" | "reason">[],
+  candidateMoveLabels: Record<string, string>,
+): GroupedCandidateMove[] {
+  const groups: GroupedCandidateMove[] = [];
+  for (const explanation of explanations) {
+    const moveUsi = explanation.move ?? "";
+    const label = candidateMoveLabels[moveUsi] ?? moveUsi;
+    const existing = groups.find((group) => group.reason === explanation.reason);
+    if (existing) {
+      existing.moveLabels.push(label);
+    } else {
+      groups.push({ moveLabels: [label], reason: explanation.reason });
+    }
+  }
+  return groups;
 }
 
 /**

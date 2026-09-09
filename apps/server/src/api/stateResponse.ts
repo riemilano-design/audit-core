@@ -123,9 +123,22 @@ export type CandidateMoveState = "unavailable" | "pending" | "ready";
  * shapeFormationAnalyzer.tsの判定結果(matchedSquares/missingSquares)をそのまま
  * 日本語表記へ変換して渡すだけで、新しい判定は一切行わない。
  */
+/** [3]「なぜそれが重要か」に出す、完成した自分の形の弱点。data/shapes/*.json の
+ * weak_against をそのまま運ぶだけで、新しい文言は作らない。 */
+export interface ShapeWeaknessBody {
+  shapeId: string;
+  name: string;
+  /** review_statusが"draft"の場合にだけ入る注記。それ以外はnull。 */
+  pendingReviewNote: string | null;
+  text: string;
+}
+
 export interface TargetShapeProgress {
   shapeId: string;
   name: string;
+  /** data/shapes/*.json の characteristics をそのまま運んだもの(新しい文言ではない)。
+   * ユーザーが選んだ目標形が「どういう形なのか」を [4] で一度だけ説明するために使う。 */
+  description: string;
   /** 既にその形の一部として成立しているマス(日本語表記、例: "６九") */
   matchedSquareLabels: string[];
   /** まだ埋まっていないマス(日本語表記) */
@@ -250,6 +263,11 @@ export interface ReachablePlanBody {
    * reachableShapesのどれが現在の「目標」かをUI側でハイライトするために使う。
    */
   resolvedTargetShapeId: string | null;
+  /** [3]「なぜそれが重要か」に出す、完成した自分の形の弱点。該当が無ければnull。 */
+  shapeWeakness: ShapeWeaknessBody | null;
+  /** [0]「今すぐ対処が必要なこと」に出すメッセージ。該当が無ければ空配列
+   * (partitionUrgentMessages参照。文言はすべて既存のもの)。 */
+  urgentMessages: { kind: string; text: string }[];
   /**
    * Phase3 Unit1(計画崩れの検知のみ): 相手の手によって、ユーザーが着手する直前に
    * 保持していた計画(PlanSnapshot)の前提が機械的に崩れたかどうか。
@@ -451,7 +469,17 @@ function toNextConsiderations(
   }
 }
 
-/** 選択中の形の「今どこまで出来ているか」を、既存の判定結果からそのまま組み立てる。 */
+/** 選択中の形の「今どこまで出来ているか」を、既存の判定結果からそのまま組み立てる。
+ *
+ * 【description について(Unit 3 情報構造の整理)】
+ * ユーザーが自分で選んだ目標形の名前は [4]「どう指すか」に必ず出るが、その形が
+ * どういう形なのかの説明はどこにも出ていなかった。ここで返す description は
+ * data/shapes/*.json の characteristics をそのまま運ぶだけで、新しい文言は作らない。
+ * これは「盤面がその形である」という断定ではなく、ユーザーが選んだ目標の説明である
+ * (formingでcharacteristicsを連結しないexplanationGenerator.tsの制約は、
+ * 「今の形が何か」を断定しないための制約であり、ここには当たらない)。
+ * review_status が draft の場合は既存の pendingReviewNote が併記される。
+ */
 function toTargetShapeProgress(context: RankedPlanContext | undefined): TargetShapeProgress | null {
   if (!context?.resolvedTargetShapeId) return null;
   const shapeResult = context.shapeResults.find((r) => r.shapeId === context.resolvedTargetShapeId);
@@ -459,9 +487,37 @@ function toTargetShapeProgress(context: RankedPlanContext | undefined): TargetSh
   return {
     shapeId: shapeResult.shapeId,
     name: shapeResult.name,
+    description: shapeResult.characteristics,
     matchedSquareLabels: shapeResult.matchedSquares.map((square) => toJapaneseSquare(square)),
     missingSquareLabels: shapeResult.missingSquares.map((square) => toJapaneseSquare(square)),
     pendingReviewNote: exposeName(shapeResult.name, shapeResult.reviewStatus, "shape").pendingNote,
+  };
+}
+
+/**
+ * [3]「なぜそれが重要か」に出す、自分の形の弱点(data/shapes/*.json の weak_against)。
+ *
+ * 【表示条件(人間の承認済み仕様)】
+ * 実際にその形が認定された場合(status === "completed")だけ返す。ShapeStatus は
+ * none / forming / completed の3値で "matched" は存在しないため、条件は completed のみ。
+ * forming・none では返さない(形を断定していない段階で、その形の弱点を述べないため)。
+ *
+ * 本文に他の戦法名が直書きされている点(既知事項 Z-1)は、人間が次Phaseへ持ち越しと
+ * 処遇済みである。ここでは data/ の本文を書き換えず、表示条件だけを決める。
+ */
+function toShapeWeakness(shapeResults: ShapeFormationResult[] | undefined): ShapeWeaknessBody | null {
+  if (!shapeResults) return null;
+  const completed = shapeResults.filter((r) => r.status === "completed" && r.weakAgainst);
+  if (completed.length === 0) return null;
+  // 複数が同時に completed になり得るため、必須マスが多い(=より具体的な)ものを1件だけ選ぶ。
+  // 「どれが優れているか」の判断ではなく、重複表示を避けるための機械的な選択である。
+  const best = completed.reduce((a, b) => (b.matchedSquares.length > a.matchedSquares.length ? b : a));
+  const exposed = exposeName(best.name, best.reviewStatus, "shape");
+  return {
+    shapeId: best.shapeId,
+    name: exposed.name,
+    pendingReviewNote: exposed.pendingNote,
+    text: best.weakAgainst as string,
   };
 }
 
@@ -593,6 +649,102 @@ function safeComputeRankedPlanContext(
  * safeComputePlanChangeReasonAfterMoveが行う)。省略時はそれぞれfalse/null
  * (検知対象外の呼び出し、例: 新規対局直後・目標形変更直後)。
  */
+/**
+ * 既知事項 U0-1 の解消(人間の承認済み仕様)。
+ * 目標形が選ばれていないのに「選んだ形」「目標にしている形」を指す説明は返さない。
+ * 代替の文言は新規に作らず、該当する説明そのものを落とす。
+ *
+ * 落とすのは stage: "current_shape" かつ status が "forming" のものだけである。
+ * - "completed": 「今、◯◯の形ができています」は目標形の選択と無関係に成立する事実
+ * - "none": 「どの形ともまだ一致していません」も目標形と無関係
+ * - "forming": 文言が「今の陣形は、選んだ形に近づいてきていますが…」であり、
+ *   目標形が未選択のときは指す対象が存在しない
+ */
+export function filterCoachForTargetShape(
+  coach: CoachExplanation[] | undefined,
+  hasTargetShape: boolean,
+): CoachExplanation[] | undefined {
+  if (coach === undefined || hasTargetShape) return coach;
+  return coach.filter((item) => !(item.stage === "current_shape" && item.status === "forming"));
+}
+
+/**
+ * 既知事項 U0-1 の解消(人間の承認済み仕様)。
+ * 目標形が選ばれていない間は「この手のあと、目標にしている形について特に大きな
+ * 変化はありませんでした。」(kind: "no_notable_change")を返さない。
+ * 盤面で実際に起きたこと(捕獲・成り・王手)はそのまま残す。
+ */
+export function filterLastMoveMessagesForTargetShape(
+  messages: (BoardEventMessage | MoveOutcomeMessage)[],
+  hasTargetShape: boolean,
+): (BoardEventMessage | MoveOutcomeMessage)[] {
+  if (hasTargetShape) return messages;
+  return messages.filter((message) => message.kind !== "no_notable_change");
+}
+
+/**
+ * [0]「今すぐ対処が必要なこと」に出すメッセージ(Unit 3 情報構造の整理)。
+ *
+ * 【なぜサーバー側で振り分けるか】
+ * 既存の方針(gameApi.tsのコメント)どおり、メッセージ種別(kind)の一覧はサーバー側だけが
+ * 持ち、web側に同じ列挙を重複させない。どのメッセージが「今すぐ対処が必要」かの判断も
+ * 将棋の判断であり、web側に持たせない([../../../../CLAUDE.md](../../../../CLAUDE.md)
+ * 「絶対に守るルール」5番)。
+ *
+ * 【重複の解消】
+ * 王手は2つの経路から同じ内容が届く。
+ * - 盤面で起きたこと: "check_received"(相手の手であなたの玉に王手がかかっています。)
+ * - 今の局面の事実: "in_check"(今、あなたの玉に王手がかかっています。ルール上…)
+ * 両方出すと同じ事実を2箇所で述べることになるため、"in_check" があるときはそちらだけを
+ * 使い、"check_received" は落とす。"in_check" は目標形が選ばれていないと生成されない
+ * (toNextConsiderationsが目標形の無い局面では空を返す)ため、その場合だけ
+ * "check_received" を [0] に回す。文言はどちらもサーバー側の既存のもので、新しい文言は
+ * 作らない。
+ */
+const URGENT_BOARD_EVENT_KIND = "check_received";
+const URGENT_NEXT_CONSIDERATION_KIND = "in_check";
+
+export interface UrgentPartition {
+  urgent: { kind: string; text: string }[];
+  lastMoveMessages: (BoardEventMessage | MoveOutcomeMessage)[];
+  nextConsiderations: NextConsiderationMessage[];
+}
+
+export function partitionUrgentMessages(
+  lastMoveMessages: (BoardEventMessage | MoveOutcomeMessage)[],
+  nextConsiderations: NextConsiderationMessage[],
+): UrgentPartition {
+  const inCheckNotices = nextConsiderations.filter((m) => m.kind === URGENT_NEXT_CONSIDERATION_KIND);
+  const checkReceived = lastMoveMessages.filter((m) => m.kind === URGENT_BOARD_EVENT_KIND);
+
+  // "in_check" があればそれだけを使う(同じ王手を2度述べない)。
+  const urgent = inCheckNotices.length > 0 ? [...inCheckNotices] : [...checkReceived];
+
+  return {
+    urgent,
+    lastMoveMessages: lastMoveMessages.filter((m) => m.kind !== URGENT_BOARD_EVENT_KIND),
+    nextConsiderations: nextConsiderations.filter((m) => m.kind !== URGENT_NEXT_CONSIDERATION_KIND),
+  };
+}
+
+/**
+ * 「今の局面では、選んだ形へ向かう道のりの一手目を、どれも指すことができません。」
+ * (kind: "no_playable_route_first_move")は、同じ画面の下に候補手が並ぶと初心者には
+ * 矛盾して読める(Unit 1 の実測で2回再現)。候補手が1件でもある局面では、この一文を
+ * 出さない。厳密には「道のりの一手目」と「準備手」は別のものだが、その区別を画面で
+ * 説明せずに両方出すことが混乱の原因だったため、表示側で出し分ける。
+ * 判定は候補手の有無という機械的な事実だけで行い、将棋の判断はしない。
+ */
+const CONTRADICTORY_WITH_CANDIDATES_KIND = "no_playable_route_first_move";
+
+export function filterContradictoryConsiderations(
+  nextConsiderations: NextConsiderationMessage[],
+  hasCandidateMoves: boolean,
+): NextConsiderationMessage[] {
+  if (!hasCandidateMoves) return nextConsiderations;
+  return nextConsiderations.filter((m) => m.kind !== CONTRADICTORY_WITH_CANDIDATES_KIND);
+}
+
 export function buildStateResponseWithPlan(
   current: GameState,
   cachedPlan: CachedReachablePlan | undefined,
@@ -632,26 +784,39 @@ export function buildStateResponseWithPlan(
     candidateMove = undefined;
   }
 
+  const partition = partitionUrgentMessages(
+    lastMoveOutcome
+      ? filterLastMoveMessagesForTargetShape(
+          // 盤面で実際に起きたこと(捕獲・王手・成り)を先に述べ、そのあとで
+          // 形・経路についての説明を述べる。
+          [...explainBoardEvents(lastBoardEvents), ...explainMoveOutcome(lastMoveOutcome)],
+          resolvedTargetShapeId !== null,
+        )
+      : [],
+    toNextConsiderations(current, context, base.status.isEnd),
+  );
+
   return {
     ...base,
+    coach: filterCoachForTargetShape(base.coach, resolvedTargetShapeId !== null),
     plan: {
       reachableShapes,
       routes: toRouteSummaries(context?.routePlanResult),
       targetShapeProgress: toTargetShapeProgress(context),
       candidateMoveLabels: toCandidateMoveLabels(context?.routePlanResult),
+      urgentMessages: partition.urgent,
       lastMoveOutcome: lastMoveOutcome
         ? {
             ...resolveMoveLabels(current.moveHistory, base.moveHistoryJapanese, lastMoveOutcome),
-            // 盤面で実際に起きたこと(捕獲・王手・成り)を先に述べ、そのあとで
-            // 形・経路についての説明を述べる。
-            messages: [...explainBoardEvents(lastBoardEvents), ...explainMoveOutcome(lastMoveOutcome)],
+            messages: partition.lastMoveMessages,
           }
         : null,
-      nextConsiderations: toNextConsiderations(current, context, base.status.isEnd),
+      nextConsiderations: filterContradictoryConsiderations(partition.nextConsiderations, hasCandidateMoves),
       candidateMoveState,
       candidateMove,
       pendingReviewNote: toPlanPendingReviewNote(context),
       resolvedTargetShapeId,
+      shapeWeakness: toShapeWeakness(context?.shapeResults),
       planChanged,
       planChangeReason,
     },

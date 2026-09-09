@@ -39,6 +39,9 @@ export interface ShapeDetectionResult {
   reviewStatus: ShapeDefinition["review_status"];
   /** 後続(説明生成)処理がそのまま使えるよう、shape定義からそのまま引き継ぐ初心者向け特徴説明 */
   characteristics: string;
+  /** 同じくshape定義からそのまま引き継ぐ「何に弱いか」。data側で未定義の場合はundefined。
+   * このモジュールは中身を判断せず、そのまま運ぶだけである。 */
+  weakAgainst: string | undefined;
 }
 
 export class ShapeDetectorError extends Error {}
@@ -120,6 +123,7 @@ function evaluateShapeForPerspective(
     dataConfidenceLevel: shape.confidence_level,
     reviewStatus: shape.review_status,
     characteristics: shape.characteristics,
+    weakAgainst: typeof shape.weak_against === "string" ? shape.weak_against : undefined,
   };
 }
 

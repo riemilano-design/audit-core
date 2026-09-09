@@ -130,11 +130,109 @@ h1 {
   padding-left: 1.2rem;
 }
 
-#coach {
+/* Unit 3(情報構造の整理): 右カラムは [0] 今すぐ対処が必要なこと → [1] 今、盤で
+   起きたこと → [2] 狙い → [3] なぜそれが重要か → [4] どう指すか の5ブロック。
+   同じ意味の情報を別カードに分散させないため、[2][3] は内側を小見出し(h4)で
+   区切るだけにして、カードそのものは増やさない。 */
+#aim,
+#why {
   display: flex;
   flex-direction: column;
-  gap: 0.6rem;
-  margin-bottom: 1rem;
+  gap: 0.4rem;
+  margin-bottom: 0.7rem;
+}
+
+#urgent,
+#happened {
+  margin-bottom: 0.7rem;
+}
+
+/* [0]「今すぐ対処が必要なこと」。該当が無いときは中身が空になり、
+   marginだけが残らないよう:emptyで畳む。 */
+#urgent:empty,
+#happened:empty,
+#aim:empty,
+#why:empty {
+  margin-bottom: 0;
+}
+
+#urgent h3 {
+  margin: 0 0 0.3rem;
+  font-size: 0.95rem;
+  color: #8a2a1a;
+}
+
+.urgent-messages {
+  margin: 0;
+  padding-left: 1.1rem;
+  border-left: 4px solid #b23a26;
+  background: #fdf1ee;
+  padding: 0.5rem 0.8rem 0.5rem 1.6rem;
+  border-radius: 4px;
+  font-size: 0.9rem;
+}
+
+.coach-purpose {
+  margin: 0 0 0.2rem;
+  font-size: 0.78rem;
+  color: #666;
+}
+
+.coach-stage-title {
+  margin: 0 0 0.2rem;
+  font-size: 0.88rem;
+}
+
+.shape-weakness {
+  border: 1px solid #ccc;
+  border-left-width: 4px;
+  border-radius: 4px;
+  padding: 0.5rem 0.8rem;
+  background: #fafafa;
+}
+
+/* Unit 3: 目標形の説明(data/shapes/*.json の characteristics)。
+   画面の中でここ1箇所だけに出す。 */
+.route-progress-description {
+  margin: 0 0 0.3rem;
+  font-size: 0.85rem;
+  color: #444;
+}
+
+/* Unit 3: 候補手セクション全体に1回だけ出す但し書き。 */
+.candidate-section-shared-note {
+  margin: 0 0 0.3rem;
+  font-size: 0.78rem;
+  color: #666;
+}
+
+/* Unit 3: 指し手履歴は主情報ではないので既定で折りたたむ。 */
+/* Unit 3: 1画面に収めるための余白の調整。文言・情報は一切削っていない。 */
+#infoColumn h2 {
+  margin: 0.6rem 0 0.4rem;
+  font-size: 1.05rem;
+}
+
+#infoColumn h2:first-child {
+  margin-top: 0;
+}
+
+#aim > h3,
+#why > h3,
+#urgent > h3 {
+  margin: 0 0 0.25rem;
+  font-size: 0.95rem;
+}
+
+.coach-reason {
+  margin: 0;
+}
+
+#historyDetails > summary {
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: bold;
+  padding: 0.2rem 0;
 }
 
 .coach-stage {
@@ -145,9 +243,9 @@ h1 {
   background: #fafafa;
 }
 
-.coach-stage h3 {
-  margin: 0 0 0.3rem;
-  font-size: 0.95rem;
+.coach-stage {
+  /* [2][3] の内側の項目。1件ずつが独立したカードに見えないよう、枠は軽くする。 */
+  padding: 0.45rem 0.7rem;
 }
 
 .coach-badge {
@@ -198,7 +296,8 @@ h1 {
   color: #1f5c2a;
 }
 
-/* Phase5 #7: 「目指せる形」と「この形へ近づく手の候補」の関係を示すUI(装飾・文言のみ。
+/* Phase5 #7: 「目指せる形」と候補手セクションの関係を示すUI(装飾・文言のみ。
+   見出しは Unit 3 で「「◯◯」に近づく手の候補」に一本化した。
    判定ロジック・データは一切変更しない)。 */
 .plan-intro {
   font-size: 0.85rem;

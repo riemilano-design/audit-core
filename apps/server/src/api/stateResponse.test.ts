@@ -7,6 +7,9 @@ import type { Role } from "shogiops/types";
 import { describe, expect, it, vi } from "vitest";
 import type { CoachExplanation } from "../analysis/explanationGenerator.js";
 import { getIntents } from "../analysis/intentRepository.js";
+import { getShapes } from "../analysis/shapeRepository.js";
+import type { BoardEventMessage } from "../analysis/boardEventExplanation.js";
+import type { NextConsiderationMessage } from "../analysis/nextConsiderationExplanation.js";
 import { DEFAULT_INITIAL_SFEN, replayMoveHistory } from "../analysis/moveHistory.js";
 import { applyMove } from "../rules/applyMove.js";
 import type { GameState } from "../game/gameSession.js";
@@ -26,6 +29,10 @@ import {
   safeComputePlanChangeReasonAfterMove,
   safeComputeReachablePlan,
   type CachedReachablePlan,
+  filterCoachForTargetShape,
+  filterLastMoveMessagesForTargetShape,
+  partitionUrgentMessages,
+  filterContradictoryConsiderations,
 } from "./stateResponse.js";
 
 const SENTE_FILLERS = ["1g1f", "2g2f", "3g3f", "4g4f", "5g5f", "6g6f", "9g9f", "8g8f"];
@@ -468,7 +475,7 @@ describe("buildStateResponseWithPlan", () => {
       targetShapeId: undefined,
       plan: {
         reachableShapes: [],
-        candidateMove: { status: "ready", notReadyReason: null, explanations: [] },
+        candidateMove: { status: "ready", notReadyReason: null, explanations: [], sharedNotes: [] },
       },
     };
 
@@ -1191,6 +1198,148 @@ describe("computeMoveOutcomeAfterMove / safeComputeMoveOutcomeAfterMove", () => 
   });
 });
 
+// Unit 3(情報構造の整理)。既知事項 U0-1 の解消と、[3]「なぜそれが重要か」に出す弱点。
+describe("Unit 3: 目標形が未選択のときに、存在しない目標形を指す説明を返さない", () => {
+  const coach = (stage: CoachExplanation["stage"], status: CoachExplanation["status"]): CoachExplanation =>
+    ({
+      id: `runtime_${stage}_${status}`,
+      stage,
+      purpose: "テスト用",
+      move: null,
+      reason: "テスト用",
+      refers_to_shape_id: null,
+      refers_to_intent_id: null,
+      confidence_level: "low",
+      glossary_terms: [],
+      template_id: `${stage}_${status}`,
+      status,
+    }) as CoachExplanation;
+
+  it("未選択のとき、current_shapeのformingだけを落とす", () => {
+    const input = [
+      coach("current_shape", "forming"),
+      coach("current_shape", "completed"),
+      coach("current_shape", "none"),
+      coach("opponent_intent", "forming"),
+    ];
+
+    const filtered = filterCoachForTargetShape(input, false);
+
+    expect(filtered?.map((c) => `${c.stage}:${c.status}`)).toEqual([
+      "current_shape:completed",
+      "current_shape:none",
+      "opponent_intent:forming",
+    ]);
+  });
+
+  it("選択済みのときは何も落とさない", () => {
+    const input = [coach("current_shape", "forming")];
+
+    expect(filterCoachForTargetShape(input, true)).toEqual(input);
+  });
+
+  it("coachがundefinedならundefinedのまま返す", () => {
+    expect(filterCoachForTargetShape(undefined, false)).toBeUndefined();
+  });
+
+  it("未選択のとき、no_notable_changeだけを落とし盤面の出来事は残す", () => {
+    const messages = [
+      { kind: "captured_by_opponent" as const, text: "取られました。" },
+      { kind: "no_notable_change" as const, text: "特に大きな変化はありませんでした。" },
+    ];
+
+    expect(filterLastMoveMessagesForTargetShape(messages, false)).toEqual([messages[0]]);
+    expect(filterLastMoveMessagesForTargetShape(messages, true)).toEqual(messages);
+  });
+});
+
+describe("Unit 3: partitionUrgentMessages([0]「今すぐ対処が必要なこと」)", () => {
+  const checkReceived = {
+    kind: "check_received",
+    text: "相手の手で、あなたの玉に王手がかかっています。",
+  } satisfies BoardEventMessage;
+  const captured = {
+    kind: "captured_by_opponent",
+    text: "あなたの角が取られました。",
+  } satisfies BoardEventMessage;
+  const inCheck = {
+    kind: "in_check",
+    text: "今、あなたの玉に王手がかかっています。",
+  } satisfies NextConsiderationMessage;
+  const routeNote = {
+    kind: "route_first_move_playable",
+    text: "７七桂は、道のりの一手目です。",
+  } satisfies NextConsiderationMessage;
+
+  it("in_checkがあるときは、それだけを[0]に出し、check_receivedは落とす", () => {
+    const result = partitionUrgentMessages([checkReceived, captured], [inCheck, routeNote]);
+
+    expect(result.urgent).toEqual([inCheck]);
+    expect(result.lastMoveMessages).toEqual([captured]);
+    expect(result.nextConsiderations).toEqual([routeNote]);
+  });
+
+  it("in_checkが無いとき(目標形未選択等)は、check_receivedを[0]に回す", () => {
+    const result = partitionUrgentMessages([checkReceived, captured], []);
+
+    expect(result.urgent).toEqual([checkReceived]);
+    expect(result.lastMoveMessages).toEqual([captured]);
+  });
+
+  it("王手が無ければ[0]は空で、他は素通しする", () => {
+    const result = partitionUrgentMessages([captured], [routeNote]);
+
+    expect(result.urgent).toEqual([]);
+    expect(result.lastMoveMessages).toEqual([captured]);
+    expect(result.nextConsiderations).toEqual([routeNote]);
+  });
+});
+
+describe("Unit 3: filterContradictoryConsiderations", () => {
+  const noPlayable = {
+    kind: "no_playable_route_first_move",
+    text: "今の局面では、選んだ形へ向かう道のりの一手目を、どれも指すことができません。",
+  } satisfies NextConsiderationMessage;
+  const completed = { kind: "shape_completed", text: "形ができています。" } satisfies NextConsiderationMessage;
+
+  it("候補手があるときは、矛盾して読める一文を落とす", () => {
+    expect(filterContradictoryConsiderations([noPlayable, completed], true)).toEqual([completed]);
+  });
+
+  it("候補手が無いときはそのまま残す", () => {
+    expect(filterContradictoryConsiderations([noPlayable, completed], false)).toEqual([noPlayable, completed]);
+  });
+});
+
+describe("Unit 3: shapeWeakness([3]「なぜそれが重要か」)", () => {
+  // 先手が 玉8八・銀7八・金6九・金5八 を組み上げ、本美濃囲いがcompletedになる手順。
+  // 後手の手は形の判定に関与しない歩突きで埋めている。
+  const HONMINO_COMPLETED_MOVES = [
+    "7g7f", "1c1d",
+    "8h7g", "2c2d",
+    "5i6h", "3c3d",
+    "6h7h", "4c4d",
+    "7h8h", "5c5d",
+    "7i7h", "6c6d",
+    "4i5h",
+  ];
+
+  it("形が完成していない初期局面では返さない", () => {
+    const response = buildStateResponseWithPlan(gameStateAfter([]), undefined, {});
+
+    expect(response.plan.shapeWeakness).toBeNull();
+  });
+
+  it("形が完成したら、data/shapes/*.json の weak_against をそのまま返す", () => {
+    const response = buildStateResponseWithPlan(gameStateAfter(HONMINO_COMPLETED_MOVES), undefined, {});
+
+    expect(response.plan.shapeWeakness?.shapeId).toBe("mino_honmino");
+    expect(response.plan.shapeWeakness?.text).toContain("横からの攻め");
+    // 新しい文言を作らないこと(data側の本文と完全一致する)。
+    expect(response.plan.shapeWeakness?.text).toBe(getShapes().find((s) => s.id === "mino_honmino")?.weak_against);
+  });
+});
+
 describe("buildStateResponseWithPlan: lastMoveOutcome", () => {
   it("MoveOutcomeを渡すと、日本語棋譜表記のラベルとメッセージがレスポンスに入る", () => {
     const stateBefore = gameStateAfter([]);
@@ -1201,7 +1350,10 @@ describe("buildStateResponseWithPlan: lastMoveOutcome", () => {
 
     expect(response.plan.lastMoveOutcome?.playedMoveLabel).toBe("７八銀");
     expect(response.plan.lastMoveOutcome?.opponentMoveLabel).toBe("１四歩");
-    expect(response.plan.lastMoveOutcome!.messages.length).toBeGreaterThan(0);
+    // Unit 3(情報構造の整理・既知事項 U0-1): 目標形が未選択(selectedTargetShapeId:
+    // undefined)のときは「目標にしている形について特に大きな変化はありませんでした」を
+    // 返さない。存在しない目標形を指す文言を出さないための仕様である。
+    expect(response.plan.lastMoveOutcome!.messages.some((m) => m.kind === "no_notable_change")).toBe(false);
     // 説明文に評価語が混ざらないこと(moveOutcomeExplanation.tsの方針)。
     for (const message of response.plan.lastMoveOutcome!.messages) {
       for (const forbidden of ["最善", "おすすめ", "安全", "悪手", "形勢"]) {

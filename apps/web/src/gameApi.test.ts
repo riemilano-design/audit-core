@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import {
   getPlanChangeReasonMessage,
   reviewNoteSuffix,
+  groupCandidateExplanationsByReason,
   shouldRetryPlanRefresh,
   shouldShowNextConsiderations,
   shouldShowPlanChangedNotice,
@@ -171,6 +172,55 @@ describe("shouldRetryPlanRefresh", () => {
 // 入れてしまっていた(main.tsのwithPendingReviewNote)ため、今回はreviewNoteSuffix自体と、
 // main.tsが実際に組み立てる文言(組み上がりの見出し・候補手セクションの見出し・
 // 目標形の選択ボタン)の両方を検証する。
+describe("groupCandidateExplanationsByReason", () => {
+  const labels = { "6g6f": "６七→６六", "7g3c": "７七→３三", "7g4d": "７七→４四" };
+
+  it("理由文が同一の候補手を1行にまとめ、指し手を並記する", () => {
+    const groups = groupCandidateExplanationsByReason(
+      [
+        { move: "6g6f", reason: "金を進めるための候補です。" },
+        { move: "7g3c", reason: "桂を進めるための候補です。" },
+        { move: "7g4d", reason: "桂を進めるための候補です。" },
+      ],
+      labels,
+    );
+
+    expect(groups).toEqual([
+      { moveLabels: ["６七→６六"], reason: "金を進めるための候補です。" },
+      { moveLabels: ["７七→３三", "７七→４四"], reason: "桂を進めるための候補です。" },
+    ]);
+  });
+
+  it("サーバーが返した順序を変えない", () => {
+    const groups = groupCandidateExplanationsByReason(
+      [
+        { move: "7g3c", reason: "B" },
+        { move: "6g6f", reason: "A" },
+        { move: "7g4d", reason: "B" },
+      ],
+      labels,
+    );
+
+    expect(groups.map((g) => g.reason)).toEqual(["B", "A"]);
+  });
+
+  it("日本語表記が無い指し手はUSIのまま表示する", () => {
+    const groups = groupCandidateExplanationsByReason([{ move: "9i9h", reason: "A" }], labels);
+
+    expect(groups[0]?.moveLabels).toEqual(["9i9h"]);
+  });
+
+  it("moveがnullでも落ちない", () => {
+    const groups = groupCandidateExplanationsByReason([{ move: null, reason: "A" }], labels);
+
+    expect(groups[0]?.moveLabels).toEqual([""]);
+  });
+
+  it("候補手が0件なら空配列を返す", () => {
+    expect(groupCandidateExplanationsByReason([], labels)).toEqual([]);
+  });
+});
+
 describe("reviewNoteSuffix", () => {
   it("注記がnullの場合は空文字を返す(「」の外に何も付かない)", () => {
     expect(reviewNoteSuffix(null)).toBe("");
@@ -208,12 +258,14 @@ describe("STEP ζ-5: 承認済み文言(注記は「」の外側)", () => {
     expect(heading).toBe("「本美濃」に近づく手の候補");
   });
 
-  it("候補手セクションの見出し(選択中の形が無い場合のフォールバックは維持)", () => {
+  // Unit 3(既知事項 U0-1 の解消): 選択中の形が無い場合のフォールバック見出し
+  // 「この形へ近づく手の候補」は廃止した。目標形が未選択のときは候補手セクション
+  // そのものを出さないため、指す対象の無い「この形」という文言は画面に出ない。
+  it("候補手セクションの見出しは、選択中の形がある場合にしか作られない", () => {
     const selectedShapeName: string | null = null;
-    const heading = selectedShapeName
-      ? `「${selectedShapeName}」${reviewNoteSuffix(null)}に近づく手の候補`
-      : "この形へ近づく手の候補";
-    expect(heading).toBe("この形へ近づく手の候補");
+
+    // main.ts の renderPlan は selectedShapeName が null の時点で return する。
+    expect(selectedShapeName).toBeNull();
   });
 
   it("目標形の選択ボタン(main.ts:446相当、これは元々正しい仕様どおり内側のまま)", () => {
