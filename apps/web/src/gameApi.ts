@@ -123,6 +123,12 @@ export interface ShapeRouteSummary {
   hasPlayableFirstMove: boolean;
   /** 経路上で最初に自分の駒が居るマス(日本語表記)。無ければnull。 */
   blockingSquareLabel: string | null;
+  /** Phase 7 Unit 3(詰まりの可視化): そのマスに今ある駒の名前(現在の盤から読んだ結果)。
+   * 塞いでいるマスが無い場合・駒名を解決できなかった場合はnull。 */
+  blockingPieceName: string | null;
+  /** Phase 7 Unit 3(詰まりの可視化): その駒に、現在局面で指せる合法手が1つでもあるか。
+   * 塞いでいるマスが無い場合はnull。判定はサーバー側(routePlanner.ts)にある。 */
+  blockingSquareHasLegalMove: boolean | null;
 }
 
 // apps/server/src/analysis/moveOutcomeExplanation.ts の MoveOutcomeMessage に対応する型

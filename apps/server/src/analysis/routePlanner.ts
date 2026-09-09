@@ -125,6 +125,17 @@ export interface ShapeSquareRoute {
   alternativeRoutes: ShapeSquareRouteOption[];
   /** 経路上で最初に自分の駒が居るマス(USI形式)。無ければnull。 */
   blockingSquare: string | null;
+  /**
+   * blockingSquareに居る自駒が、現在局面で指せる合法手を1つでも持っているか。
+   * blockingSquareがnullの場合はnull。
+   *
+   * getLegalMoves()の結果を移動元マスで絞るだけの機械的な事実であり、
+   * 「その駒を動かすべきか」「どこへ動かすのが良いか」という将棋の判断は一切含まない。
+   * preparatoryMoveUsisとは別物である(preparatoryMoveUsisは、経路の1手目が指せない
+   * 場合にだけ作られ、frozenSquaresの駒を除外し、成る手も除外する。こちらは
+   * それらの絞り込みを一切行わない「その駒に合法手があるか」だけの事実)。
+   */
+  blockingSquareHasLegalMove: boolean | null;
   /** 1手目が指せない理由。指せる場合・理由が特定できない場合はnull。 */
   blockedReason: RouteBlockedReason | null;
   /**
@@ -384,6 +395,18 @@ function collectPreparatoryMoveUsis(
 }
 
 /**
+ * そのマスに居る駒が、現在局面で指せる合法手を1つでも持っているかを返す。
+ * getLegalMoves()の結果を移動元マスで絞るだけで、将棋の判断は一切含まない
+ * (成る手・frozenSquaresの除外もしない。collectPreparatoryMoveUsisとは目的が違う)。
+ */
+function hasLegalMoveFrom(legalMoves: string[], from: Square): boolean {
+  return legalMoves.some((moveUsi) => {
+    const move = parseUsi(moveUsi);
+    return move !== undefined && !isDrop(move) && move.from === from;
+  });
+}
+
+/**
  * typical_build_orderを「どのマスから埋めていくかのヒント」として、未達成マスを並べ替える。
  * typical_build_orderは唯一の正解手順ではないため、ここでも順序のヒントとしてのみ使い、
  * 「build orderの先頭1マスだけを見る」という扱い(pathPlanner.tsの挙動)はしない。
@@ -527,6 +550,8 @@ export function planRoutesToShape(
       firstMoveUsis: primaryOption.firstMoveUsis,
       alternativeRoutes,
       blockingSquare: blockingSquare === undefined ? null : makeSquareName(blockingSquare),
+      blockingSquareHasLegalMove:
+        blockingSquare === undefined ? null : hasLegalMoveFrom(legalMoves, blockingSquare),
       blockedReason: blocked ? "occupied_by_own_piece" : null,
       preparatoryMoveUsis: blocked ? collectPreparatoryMoveUsis(legalMoves, blockingSquare, frozenSquares) : [],
     });

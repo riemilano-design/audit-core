@@ -275,14 +275,16 @@ describe("buildRouteCandidateMoveExplanation / explainRouteCandidateMoves", () =
     return { shapeId: "mino_honmino", routes: [], candidateMoves, unresolvedReason: null };
   }
 
-  it("経路の途中の1手は、目標マス・経路・残り手数を日本語表記で説明する", () => {
+  // Phase 7 Unit 3(人間承認済み): reasonは「この先どうなるか」の一文に限定した。
+  // 経路の並び・塞がりの事実は道のり側([4]の.route-section)へ一本化したため、
+  // ここでは述べない(判定・分岐条件・使用フィールドは変えていない)。
+  it("経路の途中の1手は、目標マスまでの残り手数を日本語表記で説明する", () => {
     const explanation = buildRouteCandidateMoveExplanation("mino_honmino", shapeResult, makeRouteCandidate());
 
-    expect(explanation.reason).toContain("本美濃囲い");
-    expect(explanation.reason).toContain("玉を８八へ運ぶ経路");
-    expect(explanation.reason).toContain("５九→６八→７八→８八");
-    expect(explanation.reason).toContain("残り2手");
+    expect(explanation.reason).toBe("８八まで残り2手です。");
     expect(explanation.template_id).toBe("candidate_move_route_step");
+    // 経路の並びは道のり側に出るため、候補手の説明では繰り返さない。
+    expect(explanation.reason).not.toContain("５九→６八→７八→８八");
     // 内部データ(move)はUSI形式のまま保持する(docs/DATA_MODEL.mdの座標表記の規約)。
     expect(explanation.move).toBe("5i6h");
   });
@@ -298,8 +300,9 @@ describe("buildRouteCandidateMoveExplanation / explainRouteCandidateMoves", () =
 
     const explanation = buildRouteCandidateMoveExplanation("mino_honmino", shapeResult, candidate);
 
-    expect(explanation.reason).toContain("銀が７八に入り");
-    expect(explanation.reason).toContain("必要な配置の一つ");
+    // Phase 7 Unit 3(人間承認済み): 見出しが「この先」になるため「この手で」は落とす。
+    expect(explanation.reason).toBe("銀が７八に入り、「本美濃囲い」に必要な配置の一つができます。");
+    expect(explanation.reason).not.toContain("この手で");
     expect(explanation.template_id).toBe("candidate_move_route_arrival");
   });
 
@@ -316,8 +319,11 @@ describe("buildRouteCandidateMoveExplanation / explainRouteCandidateMoves", () =
 
     const explanation = buildRouteCandidateMoveExplanation("mino_takamino", shapeResult, candidate);
 
-    expect(explanation.reason).toContain("７七には今、自分の駒があります");
-    expect(explanation.reason).toContain("先にこの駒を動かす必要があります");
+    // Phase 7 Unit 3(人間承認済みの文言): 「この先どうなるか」の一文に限定する。
+    // 「◯◯には今、自分の駒があります…先に動かす必要があります」という塞がりの事実は
+    // 道のり側([4]の.route-section)へ一本化した。
+    expect(explanation.reason).toBe("桂を７七へ動かせるようになります。");
+    expect(explanation.reason).not.toContain("７七には今、自分の駒があります");
     expect(explanation.template_id).toBe("candidate_move_preparation");
     // Unit 3(情報構造の整理): 退避先を判断していない旨の但し書きは、候補手ごとに
     // 繰り返さずセクション単位で1回だけ出す。文言自体は変えていない。

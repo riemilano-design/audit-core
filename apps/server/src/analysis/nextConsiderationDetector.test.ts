@@ -52,6 +52,7 @@ function route(overrides: Partial<ShapeSquareRoute> = {}): ShapeSquareRoute {
     firstMoveUsis: [],
     alternativeRoutes: [],
     blockingSquare: null,
+    blockingSquareHasLegalMove: null,
     blockedReason: null,
     preparatoryMoveUsis: [],
     ...overrides,

@@ -108,6 +108,30 @@ describe("planRoutesToShape", () => {
     expect(route?.blockedReason).toBeNull();
   });
 
+  // Phase 7 Unit 3(詰まりの可視化): 「塞いでいる駒に指せる手があるか」は、
+  // getLegalMoves()を移動元で絞るだけの機械的な事実として持つ。
+  it("3-2. 塞いでいる駒に合法手が1つも無い場合、blockingSquareHasLegalMoveがfalseになる", () => {
+    const route = routeFor("mino_honmino", "8h");
+
+    // 初期局面の8hは先手の角。4方向の斜めが7g歩・9g歩・7i銀・9i香で塞がっており、
+    // この角から指せる合法手は1つも無い(将棋のルールから決まる事実)。
+    expect(route?.blockingSquare).toBe("8h");
+    expect(route?.blockingSquareHasLegalMove).toBe(false);
+  });
+
+  it("3-3. 塞いでいる駒に合法手がある場合はtrue、塞いでいるマスが無ければnullになる", () => {
+    const knight = routeFor("mino_takamino", "7g");
+    const silver = routeFor("mino_honmino", "7h");
+
+    // 7gは先手の歩。7g7fが指せるためtrue。
+    expect(knight?.blockingSquare).toBe("7g");
+    expect(knight?.blockingSquareHasLegalMove).toBe(true);
+
+    // 7i→7hの経路上に自分の駒は無い。
+    expect(silver?.blockingSquare).toBeNull();
+    expect(silver?.blockingSquareHasLegalMove).toBeNull();
+  });
+
   it("4. 本美濃囲い: 銀・金も経路を持ち、1手で到達できる場合は残り手数0になる", () => {
     const silver = routeFor("mino_honmino", "7h");
     const gold = routeFor("mino_honmino", "5h");

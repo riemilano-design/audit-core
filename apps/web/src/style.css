@@ -261,6 +261,29 @@ h1 {
 /* Unit 3(重複の除去): 形の説明は [5]「参考になる囲い」に一本化したため、
    [4] 側の .route-progress-description は使わなくなったので削除した。 */
 
+/* Phase 7 Unit 3: 候補手を「次の一歩」と「この先」の2段で見せる。
+   小見出しであることが分かる程度の強調に留め、良し悪しを示す装飾はしない。 */
+.candidate-move {
+  margin-bottom: 0.6rem;
+}
+
+.candidate-move-subheading {
+  margin: 0 0 0.1rem;
+  font-size: 0.78rem;
+  font-weight: bold;
+  color: #666;
+}
+
+.candidate-move-usi {
+  margin: 0 0 0.4rem;
+  font-size: 0.9rem;
+}
+
+.candidate-move-reason {
+  margin: 0;
+  font-size: 0.85rem;
+}
+
 /* Unit 3: 候補手セクション全体に1回だけ出す但し書き。 */
 .candidate-section-shared-note {
   margin: 0 0 0.3rem;
@@ -571,6 +594,20 @@ h1 {
 .route-main {
   display: block;
   font-size: 0.9rem;
+}
+
+/* Phase 7 Unit 3(詰まりの可視化): 目標・残り手数・塞がりの事実を行で分ける。
+   情報を増やしたのではなく、道のりの1行に詰め込んでいたものを読める形に割った。 */
+.route-steps {
+  display: block;
+  font-size: 0.85rem;
+  color: #555;
+}
+
+.route-blocked {
+  display: block;
+  font-size: 0.85rem;
+  color: #555;
 }
 
 .route-note {

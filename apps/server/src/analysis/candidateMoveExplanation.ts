@@ -49,7 +49,7 @@ import type { CandidateMoveSafetyCheckResult } from "./candidateMoveSafetyCheck.
 import type { PathPlanCandidateMove, PathPlanResult } from "./pathPlanner.js";
 import type { RouteCandidateMove, ShapeRoutePlanResult } from "./routePlanner.js";
 import type { ShapeFormationResult } from "./shapeFormationAnalyzer.js";
-import { toJapaneseSquare, toJapaneseSquarePath } from "../notation/japaneseSquare.js";
+import { toJapaneseSquare } from "../notation/japaneseSquare.js";
 
 export type CandidateMoveExplanationStatus = "not_ready" | "ready";
 
@@ -224,7 +224,18 @@ export function explainCandidateMoves(
 // エンジンのscore(cp/mate)そのものは説明文に含めない。
 // typical_build_orderは唯一の正解手順として扱わない。
 // 準備手については、退避先の良し悪しを判断していないことを文章で明示する
-// (「どこへ動かすかは、この形の観点だけでは決まりません」)。
+// (「どこへ動かすかは、この形の観点だけでは決まりません」)。この但し書きは
+// buildRouteCandidateSharedNotesでセクション単位に1回だけ出す(Unit 3)。
+//
+// 【Phase 7 Unit 3: reasonは「この先どうなるか」の一文に限定する(人間承認済み)】
+// web側は候補手を「次の一歩」(指し手のラベル)と「この先」(このreason)の2段で表示する。
+// 見出しが「この先」であることと、経路・塞いでいるマスが道のり側([4]の.route-section)に
+// 出るようになったことから、reasonからは次の3つを外した:
+//   - 「この手で」「この手のあと、」という、見出しと重複する語り出し
+//   - 「◯◯には今、自分の駒があります…先に動かす必要があります」という塞がりの事実
+//     (道のり側へ一本化した。ARCHITECTURE.md 5.「同じ情報を一回だけ」)
+//   - 経路(routeSquares)の並び(同上。道のり側に出る)
+// 判定・分岐条件・使用フィールドは一切変えていない(文言の長さだけを変えた)。
 //
 // 【座標表記】
 // docs/DATA_MODEL.md「座標表記の規約」に従い、説明文中のマス目は
@@ -275,27 +286,20 @@ export function buildRouteCandidateMoveExplanation(
 ): Explanation {
   const shapeName = shapeResult.name;
   const targetSquare = toJapaneseSquare(candidate.targetSquare);
-  const routePath = toJapaneseSquarePath(candidate.routeSquares);
 
   let reason: string;
   let templateId: string;
 
   if (candidate.kind === "preparation") {
-    const clearingSquare = toJapaneseSquare(candidate.clearingSquare ?? candidate.targetSquare);
-    reason =
-      `${clearingSquare}には今、自分の駒があります。` +
-      `「${shapeName}」の${candidate.targetPiece}を${targetSquare}へ進めるには、` +
-      `先にこの駒を動かす必要があります。この手はそのための候補の一つです。`;
+    reason = `${candidate.targetPiece}を${targetSquare}へ動かせるようになります。`;
     templateId = ROUTE_TEMPLATE_IDS.preparation;
   } else if (candidate.remainingStepsAfter === 0) {
     reason =
-      `この手で${candidate.targetPiece}が${targetSquare}に入り、` +
+      `${candidate.targetPiece}が${targetSquare}に入り、` +
       `「${shapeName}」に必要な配置の一つができます。`;
     templateId = ROUTE_TEMPLATE_IDS.route_arrival;
   } else {
-    reason =
-      `「${shapeName}」の${candidate.targetPiece}を${targetSquare}へ運ぶ経路(${routePath})の1手目です。` +
-      `この手のあと、${targetSquare}まで残り${candidate.remainingStepsAfter}手です。`;
+    reason = `${targetSquare}まで残り${candidate.remainingStepsAfter}手です。`;
     templateId = ROUTE_TEMPLATE_IDS.route_step;
   }
 

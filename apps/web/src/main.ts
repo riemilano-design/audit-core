@@ -483,21 +483,47 @@ function renderRouteProgress(plan: ReachablePlanBody): void {
     for (const route of plan.routes) {
       const li = document.createElement("li");
 
-      const main = document.createElement("span");
-      main.className = "route-main";
-      main.textContent =
-        `${route.targetPiece}を${route.targetSquareLabel}へ ` +
-        `… 残り${route.remainingSteps}手(${route.routeLabel})`;
-      li.appendChild(main);
+      // 【Phase 7 Unit 3(詰まりの可視化)。人間承認済み】
+      // 以前は「玉を８八へ … 残り1手(７八→８八)」の1行だけで、初心者には
+      // 「玉を８八へ動かせばいい」としか読めなかった(なぜ進めないのかが画面に無い)。
+      // 目標・残り手数・塞がりの事実を行で分け、道のりの中で完結させる。
+      const target = document.createElement("span");
+      target.className = "route-main";
+      target.textContent = `${route.targetPiece}を${route.targetSquareLabel}へ`;
+      li.appendChild(target);
 
-      // Unit 3(情報構造の整理): ここにあった2つの注記は出さない。
-      // - 「◯◯には今、自分の駒があります。」は、下の候補手の理由文と完全に重複していた
-      //   (Unit 1 の実測で同じ事実が画面に5回出ていた)。候補手側へ一本化する
+      const steps = document.createElement("span");
+      steps.className = "route-steps";
+      steps.textContent = `残り${route.remainingSteps}手(${route.routeLabel})`;
+      li.appendChild(steps);
+
+      // 「どのマスを、何の駒が塞いでいるか」は現在の盤のそのマスを読むだけ、
+      // 「その駒に指せる手があるか」は合法手を移動元で絞るだけの機械的な事実で、
+      // どちらもサーバー側(routePlanner.ts / stateResponse.ts)で確定済み。
+      // ここでは受け取った値を並べるだけで、将棋の判断は一切しない。
+      if (route.blockingSquareLabel !== null && route.blockingPieceName !== null) {
+        const blocked = document.createElement("span");
+        blocked.className = "route-blocked";
+        blocked.textContent = `${route.blockingSquareLabel}が${route.blockingPieceName}で塞がっています。`;
+        li.appendChild(blocked);
+
+        // その駒に合法手が1つも無い場合だけ添える(合法手がある場合は、その手が
+        // 下の候補手に「次の一歩」として並ぶため、ここで重ねて述べない)。
+        if (route.blockingSquareHasLegalMove === false) {
+          const stuck = document.createElement("span");
+          stuck.className = "route-blocked";
+          stuck.textContent = `その${route.blockingPieceName}から指せる手はありません。`;
+          li.appendChild(stuck);
+        }
+      }
+
+      // Unit 3(情報構造の整理): ここにあった2つの注記は今も出さない。
       // - 「この道のりの一手目は、今の局面では指せません。」は、同じ画面の下に候補手が
       //   並ぶため矛盾して読める。サーバー側(filterContradictoryConsiderations)で
       //   同種の一文を出し分けており、ここでも繰り返さない
-      // 判定・データは変えていない(route.blockingSquareLabel / hasPlayableFirstMove は
-      // 引き続きサーバーから届く)。表示をやめただけである。
+      // 一方「◯◯には今、自分の駒があります。」に相当する事実は、Phase 7 Unit 3 で
+      // 候補手の理由文から外し、上の .route-blocked へ一本化した(置き場所の変更であり、
+      // 判定・データは変えていない)。
 
       list.appendChild(li);
     }
@@ -708,12 +734,29 @@ function renderPlan(plan: ReachablePlanBody): void {
         const section = document.createElement("section");
         section.className = "candidate-move";
 
+        // 【Phase 7 Unit 3。人間承認済み】候補手を「次の一歩」(今この局面で指せる手)と
+        // 「この先」(その手のあと何ができるようになるか)の2段に分ける。以前は
+        // 「候補手: ◯◯」の1行に、経路の1手目も準備手も区別なく横並びになっていた。
+        // どちらに属するかの区別はサーバー側の kind / clearingSquare / targetPiece /
+        // targetSquare から既に決まっており(reasonの文面がそれを反映する)、
+        // web側で新しい判定はしない。「この手を指せば囲いが完成に近づく」のような
+        // 意味付けは足さない。
+        const nextStepHeading = document.createElement("p");
+        nextStepHeading.className = "candidate-move-subheading";
+        nextStepHeading.textContent = "次の一歩";
+        section.appendChild(nextStepHeading);
+
         const moveLabel = document.createElement("p");
         moveLabel.className = "candidate-move-usi";
         // 【Phase6 Unit1】マス目はサーバー側(notation/japaneseSquare.ts)で変換済みの
         // 日本語表記を使う。対応表に無い場合(想定外)はUSI表記へフォールバックする。
-        moveLabel.textContent = `候補手: ${group.moveLabels.join(" / ")}`;
+        moveLabel.textContent = group.moveLabels.join(" / ");
         section.appendChild(moveLabel);
+
+        const aheadHeading = document.createElement("p");
+        aheadHeading.className = "candidate-move-subheading";
+        aheadHeading.textContent = "この先";
+        section.appendChild(aheadHeading);
 
         const reason = document.createElement("p");
         reason.className = "candidate-move-reason";

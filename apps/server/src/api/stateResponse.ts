@@ -193,6 +193,18 @@ export interface ShapeRouteSummary {
   hasPlayableFirstMove: boolean;
   /** 経路上で最初に自分の駒が居るマス(日本語表記)。無ければnull。 */
   blockingSquareLabel: string | null;
+  /**
+   * Phase 7 Unit 3(詰まりの可視化): blockingSquareに今ある駒の名前
+   * (現在の盤=SFENのそのマスを読んだ結果。形の定義の駒種ではない)。
+   * blockingSquareが無い場合・駒名を解決できなかった場合はnull。
+   */
+  blockingPieceName: string | null;
+  /**
+   * Phase 7 Unit 3(詰まりの可視化): blockingSquareの駒に、現在局面で指せる合法手が
+   * 1つでもあるか(routePlanner.tsのblockingSquareHasLegalMoveをそのまま渡すだけ)。
+   * blockingSquareが無い場合はnull。「動かすべきか」の判断は一切含まない。
+   */
+  blockingSquareHasLegalMove: boolean | null;
 }
 
 /**
@@ -513,7 +525,10 @@ function computeRankedPlanContext(
 }
 
 /** routePlanner.tsの経路を、UI表示用の要約(日本語表記つき)へ変換するだけの関数。 */
-function toRouteSummaries(routePlanResult: ShapeRoutePlanResult | undefined): ShapeRouteSummary[] {
+function toRouteSummaries(
+  routePlanResult: ShapeRoutePlanResult | undefined,
+  sfen: string,
+): ShapeRouteSummary[] {
   if (!routePlanResult) return [];
   return routePlanResult.routes.map((route) => ({
     targetSquare: route.targetSquare,
@@ -523,6 +538,10 @@ function toRouteSummaries(routePlanResult: ShapeRoutePlanResult | undefined): Sh
     remainingSteps: route.remainingSteps,
     hasPlayableFirstMove: route.firstMoveUsis.length > 0,
     blockingSquareLabel: route.blockingSquare === null ? null : toJapaneseSquare(route.blockingSquare),
+    // 駒名は現在の盤(SFEN)のそのマスを読むだけで決まる(toPieceAtSquareLabelと同じ理由で、
+    // 形の定義side=required_piecesの駒種は使わない)。
+    blockingPieceName: route.blockingSquare === null ? null : safeToPieceNameAt(sfen, route.blockingSquare),
+    blockingSquareHasLegalMove: route.blockingSquareHasLegalMove,
   }));
 }
 
@@ -1058,7 +1077,7 @@ export function buildStateResponseWithPlan(
     coach: filterCoachForTargetShape(base.coach, resolvedTargetShapeId !== null),
     plan: {
       reachableShapes,
-      routes: toRouteSummaries(context?.routePlanResult),
+      routes: toRouteSummaries(context?.routePlanResult, current.sfen),
       targetShapeProgress: toTargetShapeProgress(context, current.sfen),
       candidateMoveLabels: toCandidateMoveLabels(context?.routePlanResult, current.sfen),
       referenceShapes: toReferenceShapes(context),

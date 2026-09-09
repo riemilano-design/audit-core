@@ -427,6 +427,19 @@ describe("buildStateResponseWithPlan", () => {
     expect(kingRoute?.remainingSteps).toBe(3);
     expect(kingRoute?.hasPlayableFirstMove).toBe(true);
     expect(kingRoute?.blockingSquareLabel).toBe("８八");
+
+    // Phase 7 Unit 3(詰まりの可視化): 「何が塞いでいるか」「その駒に指せる手があるか」。
+    // 駒名は現在の盤(SFEN)の8hを読んだ結果(初期局面の8hは先手の角)であり、
+    // 形の定義(required_pieces)の駒種ではない。
+    expect(kingRoute?.blockingPieceName).toBe("角");
+    // 初期局面の8hの角は、4方向の斜めが自分の駒で塞がっていて合法手が1つも無い。
+    expect(kingRoute?.blockingSquareHasLegalMove).toBe(false);
+
+    // 塞いでいるマスが無い経路では、どちらもnullになる(推測で値を埋めない)。
+    const silverRoute = response.plan.routes.find((r) => r.targetSquare === "7h");
+    expect(silverRoute?.blockingSquareLabel).toBeNull();
+    expect(silverRoute?.blockingPieceName).toBeNull();
+    expect(silverRoute?.blockingSquareHasLegalMove).toBeNull();
   });
 
   it("候補手を計算できない局面(相手の手番)ではcandidateMoveState: unavailableになる", () => {
