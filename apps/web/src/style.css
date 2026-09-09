@@ -160,6 +160,70 @@ h1 {
   background: #dce8fb;
 }
 
+/* 【Phase 7: 候補手の盤上表示(人間承認済み)】
+   盤の上にSVGを重ね、候補手を「移動元 → 移動先」の破線の矢印で描く。
+   既存のハイライトとの強さの序列を必ず保つこと:
+     背景色(選択中 #f7ec8f / 移動先 #bfe3bf) > 青の実線枠(相手の直前の手) > 灰色の破線(候補手)
+   候補手が一番弱い。最善手・おすすめと読めてはいけないため、色は無彩色にし、
+   線は細い破線に留める。順位は付けない(既定では全件が同じ薄さ)。 */
+#boardArea {
+  position: relative;
+}
+
+#boardOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  /* 盤のクリック(指す操作)を妨げない。矢印は見るだけのもの。 */
+  pointer-events: none;
+}
+
+.candidate-arrow {
+  stroke: #8a8a8a;
+  stroke-width: 1.5;
+  stroke-dasharray: 4 3;
+  opacity: 0.55;
+}
+
+/* 候補手の行を押したときだけ濃くする。濃くしても、相手の直前の手(青の実線)より弱い。 */
+.candidate-arrow-emphasized {
+  stroke: #4a4a4a;
+  stroke-width: 2.5;
+  opacity: 0.95;
+}
+
+/* 移動元(どの駒が動くのか)。矢じりだけでは向きしか分からないため、始点にも印を置く。 */
+.candidate-origin {
+  fill: #8a8a8a;
+  opacity: 0.55;
+}
+
+.candidate-origin-emphasized {
+  fill: #4a4a4a;
+  opacity: 0.95;
+}
+
+/* 凡例。免責の一文は候補手セクションに既にあるため、ここでは繰り返さない
+   (docs/ARCHITECTURE.md 5.「同じ情報を一回だけ」)。 */
+#boardLegend:empty {
+  display: none;
+}
+
+.board-legend-text {
+  margin: 0.2rem 0 0.5rem;
+  font-size: 0.75rem;
+  color: #666;
+}
+
+.board-legend-text::before {
+  content: "";
+  display: inline-block;
+  width: 1.6rem;
+  margin-right: 0.35rem;
+  vertical-align: middle;
+  border-top: 1.5px dashed #8a8a8a;
+}
+
 #hands {
   margin-bottom: 0.75rem;
   font-size: 0.9rem;
@@ -277,6 +341,29 @@ h1 {
 .candidate-move-usi {
   margin: 0 0 0.4rem;
   font-size: 0.9rem;
+}
+
+/* 【Phase 7】1手ずつ押して、盤上でその手を濃く見られるようにする。
+   押しても対局は進まない(指す操作は盤のクリックのみ)ので、「指すボタン」と
+   誤解されない見た目にする ― 塗りつぶさず、下線で「押せる」ことだけを示す。 */
+.candidate-move-button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  text-decoration: underline dotted;
+  text-underline-offset: 3px;
+}
+
+.candidate-move-button:hover {
+  text-decoration: underline solid;
+}
+
+.candidate-move-button-emphasized {
+  font-weight: bold;
+  text-decoration: underline solid;
 }
 
 .candidate-move-reason {

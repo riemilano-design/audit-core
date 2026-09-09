@@ -312,6 +312,28 @@ export function shouldShowNextConsiderations(
 }
 
 /**
+ * Phase 7(候補手の盤上表示): 盤に描いてよい候補手(USI)を取り出す。
+ *
+ * **既に画面に出ている候補手だけを返す。** 判定は候補手セクションの表示条件
+ * (candidateMoveState === "ready" かつ candidateMove.status === "ready")と同一で、
+ * 盤にだけ余分な手が出ることはない。CLAUDE.md「絶対に守るルール」3番(安全確認を
+ * 経ていない候補手をユーザーに見せない)は、explanations に入る時点でサーバー側が
+ * 満たしており、ここで判定をやり直さない。
+ *
+ * 将棋の判断・順位付けは一切しない(サーバーが返した順序のまま返す)。
+ * shouldShowNextConsiderations等と同じく、DOM非依存の純粋関数としてテストするため
+ * gameApi.tsに置く。
+ */
+export function candidateMoveUsisOnBoard(
+  plan: Pick<ReachablePlanBody, "candidateMoveState" | "candidateMove">,
+): string[] {
+  if (plan.candidateMoveState !== "ready" || plan.candidateMove?.status !== "ready") return [];
+  return plan.candidateMove.explanations
+    .map((explanation) => explanation.move)
+    .filter((move): move is string => move !== null);
+}
+
+/**
  * Unit 3(情報構造の整理): 理由文が同一の候補手を1行にまとめる。
  *
  * Unit 1 の実測で、候補手3件のうち2件(７七→３三・７七→４四)の理由文が完全に同一で、
@@ -322,8 +344,16 @@ export function shouldShowNextConsiderations(
  * gameApi.tsに置く。
  */
 export interface GroupedCandidateMove {
-  /** 同じ理由を持つ候補手の指し手ラベル(表示用。日本語表記が無い場合はUSIのまま)。 */
-  moveLabels: string[];
+  /**
+   * 同じ理由を持つ候補手。表示用のラベル(日本語表記が無い場合はUSIのまま)と、
+   * 盤上の表示で使うUSIを対にして持つ。
+   *
+   * 【Phase 7: USIを併せて持つ理由】盤上に「移動元→移動先」を描くには、
+   * 表示ラベルではなくUSIが要る(ラベルは「玉：７八→６八」のような表示用文字列で、
+   * マスの解決に使えない)。ラベルとUSIを別々の配列に分けると対応がずれ得るため、
+   * 1件ずつ組にして持つ。並び順はサーバーが決めた順序のまま。
+   */
+  moves: Array<{ usi: string; label: string }>;
   reason: string;
 }
 
@@ -337,13 +367,14 @@ export function groupCandidateExplanationsByReason(
     const label = candidateMoveLabels[moveUsi] ?? moveUsi;
     const existing = groups.find((group) => group.reason === explanation.reason);
     if (existing) {
-      existing.moveLabels.push(label);
+      existing.moves.push({ usi: moveUsi, label });
     } else {
-      groups.push({ moveLabels: [label], reason: explanation.reason });
+      groups.push({ moves: [{ usi: moveUsi, label }], reason: explanation.reason });
     }
   }
   return groups;
 }
+
 
 /**
  * STEP ζ-5: pendingReviewNoteの有無だけを見て、括弧書きの注記サフィックス("(注記)")を返す

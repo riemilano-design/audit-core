@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import {
   getPlanChangeReasonMessage,
   reviewNoteSuffix,
+  candidateMoveUsisOnBoard,
   groupCandidateExplanationsByReason,
   shouldRetryPlanRefresh,
   shouldShowNextConsiderations,
@@ -172,6 +173,55 @@ describe("shouldRetryPlanRefresh", () => {
 // 入れてしまっていた(main.tsのwithPendingReviewNote)ため、今回はreviewNoteSuffix自体と、
 // main.tsが実際に組み立てる文言(組み上がりの見出し・候補手セクションの見出し・
 // 目標形の選択ボタン)の両方を検証する。
+describe("candidateMoveUsisOnBoard", () => {
+  const ready = (moves: (string | null)[]) => ({
+    candidateMoveState: "ready" as const,
+    candidateMove: {
+      status: "ready" as const,
+      notReadyReason: null,
+      sharedNotes: [],
+      explanations: moves.map((move, index) => ({
+        id: `e${index}`,
+        purpose: "",
+        move,
+        reason: "",
+        refers_to_shape_id: null,
+        confidence_level: "medium" as const,
+      })),
+    },
+  });
+
+  it("画面に出ている候補手のUSIを、サーバーが返した順序のまま返す", () => {
+    expect(candidateMoveUsisOnBoard(ready(["7h7g", "7h8h"]))).toEqual(["7h7g", "7h8h"]);
+  });
+
+  it("moveがnullの説明は盤に描けないため除く", () => {
+    expect(candidateMoveUsisOnBoard(ready(["7h7g", null]))).toEqual(["7h7g"]);
+  });
+
+  // CLAUDE.md「絶対に守るルール」3番: 安全確認を経ていない候補手を見せない。
+  // 候補手セクションが何も出さない状態では、盤にも描かない(表示条件を一致させる)。
+  it("candidateMoveStateがreadyでなければ何も描かない", () => {
+    expect(candidateMoveUsisOnBoard({ ...ready(["7h7g"]), candidateMoveState: "pending" })).toEqual([]);
+    expect(candidateMoveUsisOnBoard({ ...ready(["7h7g"]), candidateMoveState: "unavailable" })).toEqual([]);
+  });
+
+  it("candidateMoveが未取得・not_readyなら何も描かない", () => {
+    expect(candidateMoveUsisOnBoard({ candidateMoveState: "ready", candidateMove: undefined })).toEqual([]);
+    expect(
+      candidateMoveUsisOnBoard({
+        candidateMoveState: "ready",
+        candidateMove: {
+          status: "not_ready",
+          notReadyReason: "engine_reference_unavailable",
+          explanations: [],
+          sharedNotes: [],
+        },
+      }),
+    ).toEqual([]);
+  });
+});
+
 describe("groupCandidateExplanationsByReason", () => {
   const labels = { "6g6f": "６七→６六", "7g3c": "７七→３三", "7g4d": "７七→４四" };
 
@@ -185,9 +235,16 @@ describe("groupCandidateExplanationsByReason", () => {
       labels,
     );
 
+    // Phase 7: 盤上表示のため、表示ラベルとUSIを対にして持つ。
     expect(groups).toEqual([
-      { moveLabels: ["６七→６六"], reason: "金を進めるための候補です。" },
-      { moveLabels: ["７七→３三", "７七→４四"], reason: "桂を進めるための候補です。" },
+      { moves: [{ usi: "6g6f", label: "６七→６六" }], reason: "金を進めるための候補です。" },
+      {
+        moves: [
+          { usi: "7g3c", label: "７七→３三" },
+          { usi: "7g4d", label: "７七→４四" },
+        ],
+        reason: "桂を進めるための候補です。",
+      },
     ]);
   });
 
@@ -207,13 +264,13 @@ describe("groupCandidateExplanationsByReason", () => {
   it("日本語表記が無い指し手はUSIのまま表示する", () => {
     const groups = groupCandidateExplanationsByReason([{ move: "9i9h", reason: "A" }], labels);
 
-    expect(groups[0]?.moveLabels).toEqual(["9i9h"]);
+    expect(groups[0]?.moves).toEqual([{ usi: "9i9h", label: "9i9h" }]);
   });
 
   it("moveがnullでも落ちない", () => {
     const groups = groupCandidateExplanationsByReason([{ move: null, reason: "A" }], labels);
 
-    expect(groups[0]?.moveLabels).toEqual([""]);
+    expect(groups[0]?.moves).toEqual([{ usi: "", label: "" }]);
   });
 
   it("候補手が0件なら空配列を返す", () => {

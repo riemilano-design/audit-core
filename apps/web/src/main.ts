@@ -14,6 +14,7 @@ import {
   getPlanChangeReasonMessage,
   isMoveError,
   reviewNoteSuffix,
+  candidateMoveUsisOnBoard,
   groupCandidateExplanationsByReason,
   shouldShowPlanChangedNotice,
   shouldShowNextConsiderations,
@@ -48,7 +49,11 @@ app.innerHTML = `
   <div id="layout">
     <div id="boardColumn">
       <div id="status"></div>
-      <table id="board"></table>
+      <div id="boardArea">
+        <table id="board"></table>
+        <svg id="boardOverlay" aria-hidden="true"></svg>
+      </div>
+      <div id="boardLegend"></div>
       <div id="hands"></div>
       <div id="controls">
         <input id="moveInput" type="text" placeholder="例: 7g7f" autocomplete="off" />
@@ -78,6 +83,9 @@ app.innerHTML = `
 `;
 
 const boardEl = document.querySelector<HTMLTableElement>("#board")!;
+const boardAreaEl = document.querySelector<HTMLDivElement>("#boardArea")!;
+const boardOverlayEl = document.querySelector<SVGSVGElement>("#boardOverlay")!;
+const boardLegendEl = document.querySelector<HTMLDivElement>("#boardLegend")!;
 const handsEl = document.querySelector<HTMLDivElement>("#hands")!;
 const statusEl = document.querySelector<HTMLDivElement>("#status")!;
 const errorEl = document.querySelector<HTMLDivElement>("#error")!;
@@ -750,7 +758,29 @@ function renderPlan(plan: ReachablePlanBody): void {
         moveLabel.className = "candidate-move-usi";
         // 【Phase6 Unit1】マス目はサーバー側(notation/japaneseSquare.ts)で変換済みの
         // 日本語表記を使う。対応表に無い場合(想定外)はUSI表記へフォールバックする。
-        moveLabel.textContent = group.moveLabels.join(" / ");
+        // 【Phase 7】1手ずつ独立したボタンにして、押した手だけを盤上で濃くする
+        // (人間承認済み)。押しても対局は進まない ― 指す操作は従来どおり盤のクリックだけで、
+        // ここは盤のどこを指しているかを見るためのものである。
+        group.moves.forEach((move, index) => {
+          if (index > 0) moveLabel.appendChild(document.createTextNode(" / "));
+          const button = document.createElement("button");
+          button.type = "button";
+          button.className =
+            move.usi === emphasizedCandidateUsi
+              ? "candidate-move-button candidate-move-button-emphasized"
+              : "candidate-move-button";
+          button.textContent = move.label;
+          button.setAttribute("aria-pressed", String(move.usi === emphasizedCandidateUsi));
+          button.addEventListener("click", () => {
+            // もう一度押したら強調をやめる(既定の「全件を薄く」へ戻る)。
+            emphasizedCandidateUsi = move.usi === emphasizedCandidateUsi ? null : move.usi;
+            if (currentState) {
+              renderBoard(currentState);
+              renderPlan(currentState.plan);
+            }
+          });
+          moveLabel.appendChild(button);
+        });
         section.appendChild(moveLabel);
 
         const aheadHeading = document.createElement("p");
@@ -796,6 +826,122 @@ function renderPlan(plan: ReachablePlanBody): void {
 const BOARD_FILE_LABELS = ["９", "８", "７", "６", "５", "４", "３", "２", "１"];
 const BOARD_RANK_LABELS = ["一", "二", "三", "四", "五", "六", "七", "八", "九"];
 
+// 【Phase 7: 候補手の盤上表示(人間承認済み)】
+//
+// docs/PHASES.md の Unit 3 は「盤面上の対象駒 → 移動元を強調 → 移動先を矢印で表示」を
+// 基本UIとして掲げているが、これまで盤に出ていたのは相手の直前の手だけで、候補手は
+// 右カラムの文字情報にとどまっていた。ここでその不足を埋める。
+//
+// 【この描画が絶対にしないこと】
+// 将棋の判断は一切しない。描くマスは候補手のUSIから機械的に決まる。順位付け・強調による
+// おすすめの表明もしない(既定では全件を同じ薄さで描く)。描く対象は
+// candidateMove.explanations にある手だけであり、これは CLAUDE.md「絶対に守るルール」3番
+// (安全確認を経ていない候補手を見せない)に従って既に画面に出ている手と同一である
+// (盤にだけ余分な手が出ることはない)。
+//
+// 【視覚言語(人間承認済み)】
+// 既存のハイライトは、背景色(選択中・移動先)と青の実線枠(相手の直前の手)を使っている。
+// 候補手はそれらより弱い「灰色の細い破線」にして、最善手と読めないようにする。
+// 既定は全件を薄く、候補手の行を押したときだけその1件を濃くする(濃くしても青の実線より弱い)。
+let emphasizedCandidateUsi: string | null = null;
+
+/** 描画中の盤で、マス名 -> そのマスの td を引くための表(renderBoardが毎回作り直す)。 */
+let squareCells = new Map<string, HTMLTableCellElement>();
+
+const SVG_NS = "http://www.w3.org/2000/svg";
+
+/**
+ * 候補手を、盤に重ねたSVGへ「移動元 → 移動先」の破線の矢印として描く。
+ *
+ * マスの位置は描画済みの td の実寸(getBoundingClientRect)から求めるため、盤のサイズや
+ * 段・筋の目盛りの有無に依存しない。盤がまだレイアウトされていない場合は何も描かない。
+ */
+function renderCandidateArrows(plan: ReachablePlanBody): void {
+  boardOverlayEl.replaceChildren();
+  boardLegendEl.replaceChildren();
+
+  const moveUsis = candidateMoveUsisOnBoard(plan);
+  if (moveUsis.length === 0) return;
+
+  const areaRect = boardAreaEl.getBoundingClientRect();
+  if (areaRect.width === 0 || areaRect.height === 0) return;
+
+  boardOverlayEl.setAttribute("viewBox", `0 0 ${areaRect.width} ${areaRect.height}`);
+  boardOverlayEl.setAttribute("width", String(areaRect.width));
+  boardOverlayEl.setAttribute("height", String(areaRect.height));
+
+  // 矢じり。薄い線用と濃い線用で色が違うため2つ用意する(形は同じ)。
+  const defs = document.createElementNS(SVG_NS, "defs");
+  for (const [id, color] of [["candidateArrowHead", "#8a8a8a"], ["candidateArrowHeadEmphasized", "#4a4a4a"]]) {
+    const marker = document.createElementNS(SVG_NS, "marker");
+    marker.setAttribute("id", id!);
+    marker.setAttribute("viewBox", "0 0 10 10");
+    marker.setAttribute("refX", "9");
+    marker.setAttribute("refY", "5");
+    marker.setAttribute("markerWidth", "5");
+    marker.setAttribute("markerHeight", "5");
+    marker.setAttribute("orient", "auto-start-reverse");
+    const path = document.createElementNS(SVG_NS, "path");
+    path.setAttribute("d", "M 0 1 L 10 5 L 0 9 z");
+    path.setAttribute("fill", color!);
+    marker.appendChild(path);
+    defs.appendChild(marker);
+  }
+  boardOverlayEl.appendChild(defs);
+
+  const centerOf = (squareName: string): { x: number; y: number } | null => {
+    const cell = squareCells.get(squareName);
+    if (!cell) return null;
+    const rect = cell.getBoundingClientRect();
+    return { x: rect.left - areaRect.left + rect.width / 2, y: rect.top - areaRect.top + rect.height / 2 };
+  };
+
+  let drewAny = false;
+  for (const moveUsi of moveUsis) {
+    // 移動元・移動先の解釈は、相手の直前の手のハイライトと同じ既存関数を使う
+    // (同じことを2つの関数で書かない)。打つ手には移動元が無いため描かない
+    // ― routePlanner.tsは打つ手を候補にしないので通常は起こらないが、
+    // 描けないものを推測で描かない。
+    const squares = parseMoveSquares(moveUsi);
+    if (squares.from === undefined) continue;
+
+    const from = centerOf(squares.from);
+    const to = centerOf(squares.to);
+    if (!from || !to) continue;
+
+    const emphasized = moveUsi === emphasizedCandidateUsi;
+    const line = document.createElementNS(SVG_NS, "line");
+    line.setAttribute("x1", String(from.x));
+    line.setAttribute("y1", String(from.y));
+    line.setAttribute("x2", String(to.x));
+    line.setAttribute("y2", String(to.y));
+    line.setAttribute("class", emphasized ? "candidate-arrow candidate-arrow-emphasized" : "candidate-arrow");
+    line.setAttribute(
+      "marker-end",
+      emphasized ? "url(#candidateArrowHeadEmphasized)" : "url(#candidateArrowHead)",
+    );
+    boardOverlayEl.appendChild(line);
+
+    const origin = document.createElementNS(SVG_NS, "circle");
+    origin.setAttribute("cx", String(from.x));
+    origin.setAttribute("cy", String(from.y));
+    origin.setAttribute("r", "4");
+    origin.setAttribute("class", emphasized ? "candidate-origin candidate-origin-emphasized" : "candidate-origin");
+    boardOverlayEl.appendChild(origin);
+
+    drewAny = true;
+  }
+
+  if (!drewAny) return;
+
+  // 凡例(人間承認済みの文言)。免責の一文は候補手セクションに既にあるため、ここでは
+  // 繰り返さない(docs/ARCHITECTURE.md 5.「同じ情報を一回だけ」)。
+  const legend = document.createElement("p");
+  legend.className = "board-legend-text";
+  legend.textContent = "破線＝「次の一歩」の候補";
+  boardLegendEl.appendChild(legend);
+}
+
 function renderBoard(state: GameStateResponse): void {
   const board = parseSfenBoardPart(state.sfen);
   const turn = parseSfenTurn(state.sfen);
@@ -807,6 +953,8 @@ function renderBoard(state: GameStateResponse): void {
       : new Map<string, string[]>();
 
   boardEl.innerHTML = "";
+  // Phase 7: 盤上に候補手を描くための、マス名 -> td の対応表を作り直す。
+  squareCells = new Map<string, HTMLTableCellElement>();
 
   // Phase 7 Unit 3: 盤の外側に筋(９〜１)と段(一〜九)を表示する。
   // 「６八って盤のどこ?」を盤を見ながら理解できるようにするための目盛りであり、
@@ -833,6 +981,7 @@ function renderBoard(state: GameStateResponse): void {
     rank.forEach((square, colIndex) => {
       const squareName = squareNameAt(rowIndex, colIndex);
       const td = document.createElement("td");
+      squareCells.set(squareName, td);
       if (square) {
         const span = document.createElement("span");
         span.className = square.color === "sente" ? "piece-sente" : "piece-gote";
@@ -880,6 +1029,9 @@ function renderBoard(state: GameStateResponse): void {
     });
     boardEl.appendChild(tr);
   });
+
+  // 盤の描画が終わってから、その実寸を使って候補手を重ね描きする。
+  renderCandidateArrows(state.plan);
 }
 
 // 【Phase5】先手(人間)の持ち駒だけをクリック可能なボタンにする。後手の持ち駒は
@@ -994,6 +1146,10 @@ function updateLastOpponentMoveHighlight(moveHistory: string[]): void {
 }
 
 function render(state: GameStateResponse): void {
+  // Phase 7: 局面が変わったら候補手の強調を解除する(前の局面で押した手を残さない)。
+  // render()は同じ局面のまま何度も呼ばれる(バックグラウンド解析の再取得)ため、
+  // sfenが変わったときだけ解除する。
+  if (state.sfen !== lastRenderedSfen) emphasizedCandidateUsi = null;
   currentState = state;
   clearSelection();
   updateLastOpponentMoveHighlight(state.moveHistory);
