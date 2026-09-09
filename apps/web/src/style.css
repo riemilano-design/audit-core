@@ -37,7 +37,7 @@ h1 {
 
    【DOMを変えずに2列へ分ける方法】
    #infoColumn の直下は次の9要素で、境目は6番目の h2「どう指すか」である。
-     0: h2 今の局面を読む  1: #urgent  2: #happened  3: #aim  4: #why
+     0: h2 今の局面      1: #urgent  2: #happened  3: #aim  4: #why
      5: h2 どう指すか      6: #howto   7: details#referenceDetails  8: details#historyDetails
    CSS Grid で列を割り当てると行の高さが左右で結合し(行の高さ = その行の最大要素)、
    片側に大きな空きが出る。そこでマルチカラムに強制カラムブレイクを組み合わせ、

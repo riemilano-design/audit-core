@@ -58,7 +58,7 @@ app.innerHTML = `
       <div id="error"></div>
     </div>
     <div id="infoColumn">
-      <h2>今の局面を読む</h2>
+      <h2>今の局面</h2>
       <div id="urgent"></div>
       <div id="happened"></div>
       <div id="aim"></div>
@@ -315,7 +315,10 @@ function renderWhy(coach: CoachExplanation[] | undefined, plan: ReachablePlanBod
 
     const title = document.createElement("h4");
     title.className = "coach-stage-title";
-    title.textContent = `「${weakness.name}」${reviewNoteSuffix(weakness.pendingReviewNote)}が弱いところ`;
+    // 人間が承認した文言(2026-09-09)。「弱いところ」は説明書的で、初心者には
+    // 「どんな攻めに気をつけるか」の方が直感的であるため。形の名前は、[3] の上に
+    // 別の形の話が並ぶことがあるので、どの囲いの話かが分かるよう残している。
+    title.textContent = `「${weakness.name}」${reviewNoteSuffix(weakness.pendingReviewNote)}が苦手な攻め`;
     section.appendChild(title);
 
     const text = document.createElement("p");
