@@ -58,6 +58,9 @@ app.innerHTML = `
         <input id="moveInput" type="text" placeholder="例: 7g7f" autocomplete="off" />
         <button id="submitMove">指す</button>
         <button id="newGame">新しい対局</button>
+        <!-- STEP 4-7B(P-11。人間承認済みの文言): 盤クリックでも着手できることの案内。
+             局面に依らず常時表示する(H-3: 入力欄直下の1行)。 -->
+        <p id="moveHint" class="move-hint">盤の駒を押しても指せます</p>
       </div>
       <div id="error"></div>
     </div>
@@ -1241,8 +1244,10 @@ async function handleSubmitMove(): Promise<void> {
   const move = moveInput.value.trim();
   if (!move) return;
   submitButton.disabled = true;
-  const succeeded = await playMove(move);
-  if (succeeded) moveInput.value = "";
+  await playMove(move);
+  // STEP 4-7B(P-11。人間承認済み): 成功・失敗(非合法・通信エラー)にかかわらず
+  // 入力欄をクリアする。
+  moveInput.value = "";
   submitButton.disabled = false;
 }
 
@@ -1280,6 +1285,8 @@ function renderAndScheduleRefresh(state: GameStateResponse): void {
 
 async function handleNewGame(): Promise<void> {
   setError("");
+  // STEP 4-7B(P-11。人間承認済み): 「新しい対局」時も入力欄をクリアする。
+  moveInput.value = "";
   const state = await startNewGame();
   renderAndScheduleRefresh(state);
 }

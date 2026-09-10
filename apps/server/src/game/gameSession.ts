@@ -82,6 +82,17 @@ export interface GameStatus {
 
 export class HumanMoveError extends Error {}
 
+/**
+ * STEP 4-7B(P-11。人間承認 H-1): IllegalMoveErrorのmessage(開発用。
+ * 末尾に"(局面: "…SFEN…")"を含む)から、ユーザー向けのHumanMoveErrorに渡す文だけを
+ * 作る純粋関数。末尾の"(局面: "…")"を取り除くだけで、それ以外の文言は一切変えない
+ * (新しい文言を作らない)。該当する末尾が無ければそのまま返す
+ * (例: applyMove.tsの「指し手の解析に失敗しました: "…"」はSFENを含まないため無変更)。
+ */
+export function toHumanMoveErrorMessage(message: string): string {
+  return message.replace(/\(局面: ".*"\)$/, "").trimEnd();
+}
+
 export interface OpponentControlOptions {
   /** 相手AI制御の候補(承認済みvariantのみ)。省略時はopponentControlを作らない。 */
   variants?: ApprovedScenarioVariant[];
@@ -125,7 +136,7 @@ export function playHumanMove(state: GameState, moveUsi: string): GameState {
   try {
     nextSfen = applyMove(state.sfen, moveUsi);
   } catch (err) {
-    if (err instanceof IllegalMoveError) throw new HumanMoveError(err.message);
+    if (err instanceof IllegalMoveError) throw new HumanMoveError(toHumanMoveErrorMessage(err.message));
     throw err;
   }
   return {

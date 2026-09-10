@@ -7,6 +7,7 @@ import {
   HumanMoveError,
   playHumanMove,
   playOpponentMove,
+  toHumanMoveErrorMessage,
   type GameState,
 } from "./gameSession.js";
 
@@ -50,6 +51,36 @@ describe("playHumanMove", () => {
     const state = createInitialGameState();
     expect(() => playHumanMove(state, "5e5d")).toThrow(HumanMoveError);
     expect(state.moveHistory).toEqual([]);
+  });
+
+  // STEP 4-7B(P-11。人間承認 H-1): ユーザー向けのHumanMoveError.messageから
+  // SFENを除去する。
+  it("非合法な手のHumanMoveError.messageがSFENを含まず、既存文からSFEN部分だけを除いた文になる", () => {
+    const state = createInitialGameState();
+    let thrown: unknown;
+    try {
+      playHumanMove(state, "5e5d");
+    } catch (err) {
+      thrown = err;
+    }
+    expect(thrown).toBeInstanceOf(HumanMoveError);
+    expect((thrown as HumanMoveError).message).toBe('非合法な指し手です: "5e5d"');
+    expect((thrown as HumanMoveError).message).not.toContain("局面:");
+    expect((thrown as HumanMoveError).message).not.toContain(state.sfen);
+  });
+});
+
+describe("toHumanMoveErrorMessage", () => {
+  it("末尾の「(局面: \"…\")」を取り除く", () => {
+    expect(
+      toHumanMoveErrorMessage('非合法な指し手です: "7g7f"(局面: "lnsgkgsnl/9/ppppppppp/9/9/9/PPPPPPPPP/9/LNSGKGSNL b - 1")'),
+    ).toBe('非合法な指し手です: "7g7f"');
+  });
+
+  it("該当する末尾が無ければそのまま返す(applyMove.tsの解析失敗メッセージ)", () => {
+    expect(toHumanMoveErrorMessage('指し手の解析に失敗しました: "xyz"')).toBe(
+      '指し手の解析に失敗しました: "xyz"',
+    );
   });
 });
 

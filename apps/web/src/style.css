@@ -248,6 +248,13 @@ h1 {
   margin-bottom: 0.5rem;
 }
 
+/* STEP 4-7B(P-11。人間承認済みの文言・配置): 入力欄直下の案内文。 */
+.move-hint {
+  margin: 0.2rem 0 0;
+  font-size: 0.85rem;
+  color: #666;
+}
+
 #error {
   color: #a33;
   min-height: 1.2rem;
