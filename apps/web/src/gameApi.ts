@@ -62,7 +62,13 @@ export type CandidateMoveExplanationNotReadyReason =
   | "no_candidate_moves"
   | "shape_result_not_found"
   | "engine_reference_unavailable"
-  | "insufficient_engine_data";
+  | "insufficient_engine_data"
+  /** STEP 4-2(2026-09-10人間承認・決定5): 基準局面の評価値が取得できず、
+   * 低下量を検証できなかったため候補手を全件除外した(サーバー側で判定済み)。 */
+  | "baseline_evaluation_unavailable"
+  /** STEP 4-2(2026-09-10人間承認): 候補手の安全確認(評価値低下・詰みの判定)の
+   * 結果、候補手が全件除外された(サーバー側candidateMoveReferenceFilter.tsで判定済み)。 */
+  | "excluded_by_reference_evaluation";
 
 export interface CandidateMoveExplanation {
   id: string;

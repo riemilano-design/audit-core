@@ -180,6 +180,8 @@ Phase1では、explanationsは単発の候補手説明(1レコード=1手)のみ
 | **Kind 2 構造的知識** | スキーマの形式・フィールドの意味・参照関係の変更 | `openings` への `recognition_pattern` の追加 | 緩和しない。[AGENT_PROTOCOL.md](AGENT_PROTOCOL.md) 10. の Tier A + 人間承認。`data/schemas/*.schema.json` と本文書を**必ず同時に**直す |
 | **Kind 3 判断的知識** | 判定結果・優先度・閾値・安全性・ゲーム挙動を変えるもの | `intents.affects_target_shapes` の `adjustment`、相手AIの着手選択、エンジンの利用範囲 | 緩和しない。**人間承認必須** |
 
+**（2026-09-10 追記）** エンジンの利用範囲(Kind 3)のうち、候補手の安全確認に用いる評価値低下の閾値(300cp)とルール3番の解釈は、2026-09-10 に人間が承認した([docs/PHASES.md](PHASES.md) Unit 4 再設計案 STEP 4-2 の承認記録・実測表を参照。閾値は本アプリ内の候補手除外基準であり将棋一般の客観的閾値ではない旨の但し書きを含む)。
+
 **Kind 1 と Kind 3 の境界の判定規則**: 新しいレコードが `affects_target_shapes` を持つ場合は Kind 3 として扱う。持たない場合のみ Kind 1 とする。
 
 **Kind 3 の検証方法**: 相手AI制御データ(`openings.scenario`)については、有段者レビューが得られない場合、[KIND3_VERIFICATION.md](KIND3_VERIFICATION.md) の多段階検証プロトコル + 人間による最終採用判断で代替できる。**これは検証方法の拡張であって、Kind 3 の定義および人間承認要件の緩和ではない。** AI検証は有段者レビューと同等の知識的保証を持つものではない。

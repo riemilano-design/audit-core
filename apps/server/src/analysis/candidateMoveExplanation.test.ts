@@ -48,14 +48,32 @@ function makeShapeResult(overrides: Partial<ShapeFormationResult> & { shapeId: s
 // 「安全」を意味しない(ファイル冒頭コメント参照)。
 // multiPvPerEvalを指定しない場合、各evaluationはmultiPv: []
 // (=scoreが取得できなかった、という状態)になる。
+//
+// STEP 4-2(2026-09-10人間承認・決定5)対応: explainRouteCandidateMovesが
+// candidateMoveReferenceFilter.tsによる安全確認を行うようになったため、基準局面
+// (baselineMultiPv)にscoreが無いと候補手が全件除外(not_ready/
+// baseline_evaluation_unavailable)されるようになった。このヘルパを使う既存の
+// explainRouteCandidateMoves系テストは「基準局面の評価値が得られている」ことを
+// 前提にしていた(意図はengineReferenceAvailable/hasUsableEvaluationの検証であり、
+// 基準局面の有無の検証ではない)ため、既定値を「基準局面にscoreつきの行が1件ある
+// (cp 0)」へ補完する。期待値は変更していない(基準局面のscore無しを検証する箇所は
+// 個別にbaselineMultiPv: []を明示的に渡す)。
 function makeSafetyCheckResult(
   evaluationsCount: number,
-  options: { available?: boolean; multiPvPerEval?: CandidateMoveSafetyCheckResult["evaluations"][number]["multiPv"][] } = {},
+  options: {
+    available?: boolean;
+    multiPvPerEval?: CandidateMoveSafetyCheckResult["evaluations"][number]["multiPv"][];
+    baselineMultiPv?: CandidateMoveSafetyCheckResult["baselineMultiPv"];
+  } = {},
 ): CandidateMoveSafetyCheckResult {
-  const { available = true, multiPvPerEval } = options;
+  const {
+    available = true,
+    multiPvPerEval,
+    baselineMultiPv = [{ multipv: 1, score: { type: "cp", value: 0 }, pv: [] }],
+  } = options;
   return {
     baselineSfen: "startpos",
-    baselineMultiPv: [],
+    baselineMultiPv,
     evaluations: Array.from({ length: evaluationsCount }, (_, i) => ({
       moveUsi: `dummy${i}`,
       resultingSfen: "startpos",
@@ -390,6 +408,48 @@ describe("buildRouteCandidateMoveExplanation / explainRouteCandidateMoves", () =
 
     expect(result.status).toBe("ready");
     expect(result.explanations.map((e) => e.move)).toEqual(["5i6h"]);
+  });
+
+  // STEP 4-2(2026-09-10人間承認): candidateMoveReferenceFilter.tsによる安全確認の統合。
+  it("STEP 4-2: 基準局面との評価値低下が閾値(300cp)以上の候補だけが除外される(一部除外)", () => {
+    const candidates = [
+      makeRouteCandidate({ moveUsi: "5i6h" }),
+      makeRouteCandidate({ moveUsi: "7i7h", targetSquare: "7h", routeSquares: ["7i", "7h"], remainingStepsAfter: 0 }),
+    ];
+    const safetyCheck = makeSafetyCheckResult(2, {
+      baselineMultiPv: [{ multipv: 1, score: { type: "cp", value: 0 }, pv: [] }],
+      multiPvPerEval: [
+        // 低下0(安全側)。B(0) + C(0) = 0 < 300のため残る。
+        [{ multipv: 1, score: { type: "cp", value: 0 }, pv: [] }],
+        // 低下300(閾値ちょうど)。B(0) + C(300) = 300 >= 300のため除外される。
+        [{ multipv: 1, score: { type: "cp", value: 300 }, pv: [] }],
+      ],
+    });
+
+    const result = explainRouteCandidateMoves(makeRoutePlanResult(candidates), [shapeResult], safetyCheck);
+
+    expect(result.status).toBe("ready");
+    expect(result.explanations.map((e) => e.move)).toEqual(["5i6h"]);
+  });
+
+  it("STEP 4-2: 全候補が閾値以上の低下で除外されると、not_ready(excluded_by_reference_evaluation)になる", () => {
+    const candidates = [
+      makeRouteCandidate({ moveUsi: "5i6h" }),
+      makeRouteCandidate({ moveUsi: "7i7h", targetSquare: "7h", routeSquares: ["7i", "7h"], remainingStepsAfter: 0 }),
+    ];
+    const safetyCheck = makeSafetyCheckResult(2, {
+      baselineMultiPv: [{ multipv: 1, score: { type: "cp", value: 0 }, pv: [] }],
+      multiPvPerEval: [
+        [{ multipv: 1, score: { type: "cp", value: 300 }, pv: [] }],
+        [{ multipv: 1, score: { type: "mate", value: 3 }, pv: [] }],
+      ],
+    });
+
+    const result = explainRouteCandidateMoves(makeRoutePlanResult(candidates), [shapeResult], safetyCheck);
+
+    expect(result.status).toBe("not_ready");
+    expect(result.notReadyReason).toBe("excluded_by_reference_evaluation");
+    expect(result.explanations).toEqual([]);
   });
 
   it("同一入力に対して常に同じ結果を返す(決定的)", () => {

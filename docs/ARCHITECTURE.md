@@ -49,7 +49,7 @@ data/                         将棋知識の唯一のソース(shapes/openings/
 | ⑤ 自分の目的 | `analysis/targetPurposeSelector.ts` | 静的データを持たず実行時に算出 |
 | ⑥ 目指せる形 | `analysis/shapeGraphRanking.ts` | 上位3件をユーザーに提示し、1位を唯一の正解として強調しない |
 | ⑦ 代表的な候補手 | `analysis/routePlanner.ts` | Phase 6 Unit 1 以降はこちらが本番経路 |
-| ⑧ その手の目的 | `analysis/candidateMoveSafetyCheck.ts` → `candidateMoveExplanation.ts` | エンジンのMultiPVと突き合わせるのはここだけ |
+| ⑧ その手の目的 | `analysis/candidateMoveSafetyCheck.ts` → `analysis/candidateMoveReferenceFilter.ts` → `candidateMoveExplanation.ts` | エンジンのMultiPVと突き合わせるのはここだけ。**STEP 4-2(2026-09-10人間承認)**: 基準局面との評価値低下・詰みの判定(安全確認)は `candidateMoveReferenceFilter.ts` が行う |
 | ⑨ 初心者向け説明 | `analysis/explanationGenerator.ts`、および Phase 6 の各 `*Explanation.ts` | |
 
 補助モジュール: `shapeRepository.ts` / `intentRepository.ts`(`data/` の読み込みのみ)、`moveHistory.ts`(指し手履歴の再生)、`signatureEvidence.ts`(履歴内の一致判定)、`pieceMapping.ts`(日本語駒名 ⇔ shogiops の Role)。
@@ -67,10 +67,14 @@ data/                         将棋知識の唯一のソース(shapes/openings/
 ```
 routePlanner(⑦候補手を列挙)
         ↓
-candidateMoveSafetyCheck(MultiPVと突き合わせ、悪手でないかを確認)
+candidateMoveSafetyCheck(MultiPVを取得し、candidateMovesと対応付ける)
+        ↓
+candidateMoveReferenceFilter(基準局面との評価値低下・詰みの判定で除外する)
         ↓
 candidateMoveExplanation(⑧その手の目的)
 ```
+
+**STEP 4-2(2026-09-10人間承認。docs/PHASES.md Unit 4 再設計案)**: `candidateMoveSafetyCheck.ts` はMultiPV結果の取得・対応付けのみを行い(処理内容は変更していない)、「安全確認を経た候補手」かどうかの判定(基準局面との評価値低下が閾値300cp未満、かつ候補手後に相手視点で詰みにならないこと)は `analysis/candidateMoveReferenceFilter.ts` が行う。閾値は本アプリ内の候補手除外基準であり、将棋一般の客観的な安全閾値ではない(根拠・但し書きは同ファイルのコメントと docs/PHASES.md の承認記録を参照)。
 
 - エンジンに触れてよいのは `engine/` と、`analysis/candidateMoveSafetyCheck.ts` からの参照評価のみ。
 - **エンジンの評価値を根拠に「この手が良い/悪い」とユーザーへ述べない。** 一方で、安全確認を経ていない候補手をユーザーに見せない([PROJECT_VISION.md](PROJECT_VISION.md) 4.3)。

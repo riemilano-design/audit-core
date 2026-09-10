@@ -46,6 +46,7 @@ import {
 } from "./explanationGenerator.js";
 import { exposeName } from "./nameExposure.js";
 import type { CandidateMoveSafetyCheckResult } from "./candidateMoveSafetyCheck.js";
+import { filterCandidateMovesByReferenceEvaluation } from "./candidateMoveReferenceFilter.js";
 import type { PathPlanCandidateMove, PathPlanResult } from "./pathPlanner.js";
 import type { RouteCandidateMove, ShapeRoutePlanResult } from "./routePlanner.js";
 import type { ShapeFormationResult } from "./shapeFormationAnalyzer.js";
@@ -68,7 +69,19 @@ export type CandidateMoveExplanationNotReadyReason =
    * MultiPV行が1件も得られず(エンジンの中断・タイムアウト等)、
    * 説明できる候補が1件も残らなかった。
    */
-  | "insufficient_engine_data";
+  | "insufficient_engine_data"
+  /**
+   * 2026-09-10人間承認(STEP 4-2・決定5): 基準局面(候補手を指す前の局面)の
+   * MultiPV結果にscoreつきの行が1件も無く、評価値の低下量を検証できなかった
+   * (candidateMoveReferenceFilter.tsのbaselineUnavailable)。候補手側のscore無しを
+   * 個別除外している既存挙動と対称に、この場合は候補手を全件除外する。
+   */
+  | "baseline_evaluation_unavailable"
+  /**
+   * 2026-09-10人間承認(STEP 4-2・決定1〜3): candidateMoveReferenceFilter.tsによる
+   * 安全確認(基準局面との評価値低下・詰みの判定)の結果、候補手が全件除外された。
+   */
+  | "excluded_by_reference_evaluation";
 
 export interface CandidateMoveExplanationResult {
   status: CandidateMoveExplanationStatus;
@@ -327,6 +340,14 @@ export function buildRouteCandidateMoveExplanation(
  * (status: "not_ready" のときは explanations が常に空で、UIは候補手を一切表示しない。
  * CLAUDE.mdルール3番)。
  *
+ * 【STEP 4-2(2026-09-10人間承認)】hasUsableEvaluationによる個別除外(scoreが
+ * 1件も無い候補の除外)の後に、candidateMoveReferenceFilter.tsによる安全確認
+ * (基準局面との評価値低下・詰みの判定)を適用する。基準局面の評価値が取得できない
+ * 場合は候補手を全件除外する(baseline_evaluation_unavailable、決定5)。
+ * 安全確認の結果として候補手が全件除外された場合はexcluded_by_reference_evaluation
+ * を返す。判定ロジック自体はcandidateMoveReferenceFilter.tsに置き、ここでは
+ * その結果を使って候補手を絞り込むだけで、新しい評価規則はここでは作らない。
+ *
  * routePlanResult.candidateMoves と safetyCheck.evaluations は同じ順序で1:1対応する
  * (呼び出し側が candidateMoves をそのまま checkCandidateMovesSafety へ渡す前提。
  * Phase2版と同じ契約であり、新しい対応付けロジックは作らない)。
@@ -351,23 +372,35 @@ export function explainRouteCandidateMoves(
     return notReady("engine_reference_unavailable");
   }
 
+  const referenceFilter = filterCandidateMovesByReferenceEvaluation(safetyCheck);
+  if (referenceFilter.baselineUnavailable) {
+    return notReady("baseline_evaluation_unavailable");
+  }
+
   const usableCandidates = routePlanResult.candidateMoves
-    .map((candidate, index) => ({ candidate, evaluation: safetyCheck.evaluations[index] }))
-    .filter(({ evaluation }) => hasUsableEvaluation(evaluation))
+    .map((candidate, index) => ({
+      candidate,
+      evaluation: safetyCheck.evaluations[index],
+      excludedByReference: referenceFilter.excluded[index] ?? false,
+    }))
+    .filter(({ evaluation }) => hasUsableEvaluation(evaluation));
+
+  const safeCandidates = usableCandidates
+    .filter(({ excludedByReference }) => !excludedByReference)
     .map(({ candidate }) => candidate);
 
-  const explanations = usableCandidates.map((candidate) =>
+  const explanations = safeCandidates.map((candidate) =>
     buildRouteCandidateMoveExplanation(routePlanResult.shapeId, shapeResult, candidate),
   );
 
   if (explanations.length === 0) {
-    return notReady("insufficient_engine_data");
+    return notReady(usableCandidates.length === 0 ? "insufficient_engine_data" : "excluded_by_reference_evaluation");
   }
 
   return {
     status: "ready",
     notReadyReason: null,
     explanations,
-    sharedNotes: buildRouteCandidateSharedNotes(shapeResult.name, usableCandidates),
+    sharedNotes: buildRouteCandidateSharedNotes(shapeResult.name, safeCandidates),
   };
 }
