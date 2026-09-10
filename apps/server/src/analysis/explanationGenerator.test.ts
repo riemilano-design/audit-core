@@ -98,13 +98,15 @@ describe("generateExplanations", () => {
     expect(explanations.map((e) => e.stage)).toEqual(["current_shape", "opponent_intent", "opponent_next_aim"]);
   });
 
-  it("current_shape: Shapeがcompletedの場合、名称と根拠(shapes.characteristics由来)を含む説明を返す", () => {
+  it("current_shape: Shapeがcompletedの場合、名称を含む説明を返す", () => {
     const explanations = generateExplanations([TEST_HONMINO], NO_INTENT_RESULTS);
     const currentShape = findStage(explanations, "current_shape");
 
     expect(currentShape.refers_to_shape_id).toBe("mino_honmino");
     expect(currentShape.reason).toContain("本美濃囲い");
-    expect(currentShape.reason).toContain(TEST_HONMINO.characteristics);
+    // STEP 4-6(H-1、人間承認済み): completedのreasonはlead(1文)のみとし、
+    // characteristicsは連結しない(同じ文が[5]「参考になる囲い」にあるため)。
+    expect(currentShape.reason).not.toContain(TEST_HONMINO.characteristics);
     expect(currentShape.confidence_level).not.toBe("low");
     expect(currentShape.purpose).toBeTruthy();
     expect(currentShape.move).toBeNull();
@@ -333,9 +335,10 @@ describe("generateExplanations", () => {
       const explanations = generateExplanations([draftHonmino], NO_INTENT_RESULTS);
       const currentShape = findStage(explanations, "current_shape");
 
+      // STEP 4-6(H-1、人間承認済み): completedのreasonはlead(1文)のみ。characteristicsは
+      // 連結しない([5]「参考になる囲い」に説明を任せる)。
       expect(currentShape.reason).toBe(
-        "今、本美濃囲いと呼ばれる並びに近い形になっています。ただし、この形の説明は内容を確認中のため、参考程度に見てください。 " +
-          TEST_HONMINO.characteristics,
+        "今、本美濃囲いと呼ばれる並びに近い形になっています。ただし、この形の説明は内容を確認中のため、参考程度に見てください。",
       );
     });
 
@@ -343,7 +346,8 @@ describe("generateExplanations", () => {
       const explanations = generateExplanations([TEST_HONMINO], NO_INTENT_RESULTS);
       const currentShape = findStage(explanations, "current_shape");
 
-      expect(currentShape.reason).toBe(`今、本美濃囲いの形ができています。 ${TEST_HONMINO.characteristics}`);
+      // STEP 4-6(H-1、人間承認済み): characteristicsは連結せずlead(1文)のみ残す。
+      expect(currentShape.reason).toBe("今、本美濃囲いの形ができています。");
     });
 
     it("opponent_intent matched: draftのintentの場合、名前を出さず既存のunclassified文言に落ちる(露出経路2)", () => {

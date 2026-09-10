@@ -275,20 +275,18 @@ function exampleDisclaimer(shapeName: string): string {
 export const PREPARATION_DESTINATION_NOTE = "どこへ動かすかは、この形の観点だけでは決まりません。";
 
 /**
- * 候補手セクション全体に1回だけ添える但し書きを組み立てる。
- * 文言は既存のもの(exampleDisclaimer / PREPARATION_DESTINATION_NOTE)をそのまま使い、
- * 新しい文言は作らない。準備手が1件も無い場合は退避先についての但し書きを出さない。
+ * 候補手セクション全体に添える但し書き。
+ *
+ * STEP 4-6(E-1、人間承認済み): web側固定文①(main.ts。「上の道のりのうち、今の局面で
+ * 指せる最初の一手です。将棋として最も良い手を選んでいるわけではありません。」)だけを
+ * 残すため、ここが返していた②(PREPARATION_DESTINATION_NOTE)・③(exampleDisclaimer)は
+ * 表示しない。判定・データは変えない(空配列を返すだけの表示側フィルタ)。
  */
 export function buildRouteCandidateSharedNotes(
-  shapeName: string,
-  candidates: Pick<RouteCandidateMove, "kind">[],
+  _shapeName: string,
+  _candidates: Pick<RouteCandidateMove, "kind">[],
 ): string[] {
-  const notes: string[] = [];
-  if (candidates.some((candidate) => candidate.kind === "preparation")) {
-    notes.push(PREPARATION_DESTINATION_NOTE);
-  }
-  notes.push(exampleDisclaimer(shapeName));
-  return notes;
+  return [];
 }
 
 /** ⑦の候補手1件(経路つき)を、⑧「その手の目的」の説明(Explanation)へ変換する。 */

@@ -32,6 +32,7 @@ import {
   type MoveOutcome,
   type MoveOutcomeSnapshot,
 } from "../analysis/moveOutcomeDetector.js";
+import type { MoveOutcomeFact } from "../analysis/moveOutcomeDetector.js";
 import { explainMoveOutcome, type MoveOutcomeMessage } from "../analysis/moveOutcomeExplanation.js";
 import { detectBoardEvents, type BoardEvent, type BoardEventKind } from "../analysis/boardEventDetector.js";
 import { detectNextConsiderations } from "../analysis/nextConsiderationDetector.js";
@@ -816,6 +817,29 @@ export function hasAmbiguousReferenceOrder(
  * [4]非表示と矛盾して残ってしまう。in_check自体はpartitionUrgentMessagesが
  * urgentMessages([0])へ移すため、ここでは何も特別扱いしない。
  */
+/**
+ * STEP 4-6(D、人間承認済み)。[4]「今の局面で分かっていること」のうち、候補手の
+ * 「次の一歩・この先」と同じ事実を重ねて述べる次の3種を表示側で落とす
+ * (nextConsiderationDetector.tsの判定・explainNextConsiderationsの文言生成自体は
+ * 変えない)。
+ * - "route_first_move_playable"(棋譜表記の一手目の案内)
+ * - "ordering_note"(並び順の注記)
+ * - "shape_completed"(「…に必要なマスは、すべて埋まっています。」。[2]の
+ *   「今、{形}の形ができています。」と重複するため)
+ * "no_playable_route_first_move"・"in_check" はここでは触らない(既存規則のまま)。
+ */
+const NEXT_CONSIDERATION_KINDS_TO_DROP: Record<string, true> = {
+  route_first_move_playable: true,
+  ordering_note: true,
+  shape_completed: true,
+};
+
+export function filterNextConsiderationsForDisplay(
+  messages: NextConsiderationMessage[],
+): NextConsiderationMessage[] {
+  return messages.filter((message) => NEXT_CONSIDERATION_KINDS_TO_DROP[message.kind] !== true);
+}
+
 function toNextConsiderations(
   current: GameState,
   context: RankedPlanContext | undefined,
@@ -837,7 +861,7 @@ function toNextConsiderations(
       isGameEnd,
       inCheck: isInCheck(current.sfen, shapeResult.perspectiveColor),
     });
-    return explainNextConsiderations(facts, current.sfen);
+    return filterNextConsiderationsForDisplay(explainNextConsiderations(facts, current.sfen));
   } catch (err) {
     console.error("今の局面で分かっていること(Phase6 Unit4)の計算でエラーが発生しました:", err);
     return [];
@@ -990,6 +1014,38 @@ function filterSquareLostIfSuppressed(
 ): (BoardEventMessage | MoveOutcomeMessage | CaptureSummaryMessage)[] {
   if (!shouldSuppressSquareLost(current, options, lastMoveOutcome)) return messages;
   return messages.filter((message) => message.kind !== "square_lost");
+}
+
+/**
+ * STEP 4-6(A・B、人間承認済み)。[1]に出す前に、事実(MoveOutcomeFact)の段階で
+ * 表示側フィルタを掛ける(moveOutcomeDetector.tsの判定・explainMoveOutcomeの
+ * 文言生成自体は変えない。ARCHITECTURE 5.の「表示側フィルタ」の流儀)。
+ *
+ * - kind: "preparation_resolved"(「先に他の駒を動かす必要はなくなりました。」)は
+ *   常に落とす(2026-09-10人間判断d。単独で立つ場合も含む)。
+ * - kind: "played_non_candidate"(「候補手には含まれていませんでした。」)は
+ *   常に落とす(B)。
+ * - kind: "played_candidate" かつ candidateKind: "preparation"(「準備手の候補の
+ *   一つです。」)は、同じfactsに"route_first_move_available"が併存するときだけ
+ *   落とす(A-1)。準備手でないplayed_candidateは触らない。
+ *
+ * 絞った結果factsが0件になった手番は、explainMoveOutcomeの既存分岐により
+ * "no_notable_change"(既存文)が返る。これは「事実が0件の手番」に対する従来どおりの
+ * 挙動であり、新しい文言ではない。
+ */
+export function filterMoveOutcomeFactsForDisplay(outcome: MoveOutcome): MoveOutcome {
+  const hasRouteFirstMoveAvailable = outcome.facts.some(
+    (fact) => fact.kind === "route_first_move_available",
+  );
+  const facts = outcome.facts.filter((fact: MoveOutcomeFact) => {
+    if (fact.kind === "preparation_resolved") return false;
+    if (fact.kind === "played_non_candidate") return false;
+    if (fact.kind === "played_candidate" && fact.candidateKind === "preparation" && hasRouteFirstMoveAvailable) {
+      return false;
+    }
+    return true;
+  });
+  return { ...outcome, facts };
 }
 
 /** 選択中の形の「今どこまで出来ているか」を、既存の判定結果からそのまま組み立てる。
@@ -1347,7 +1403,7 @@ export function buildStateResponseWithPlan(
             // 形・経路についての説明を述べ、最後に駒の得喪の集約(M-1)を1行加える。
             [
               ...explainBoardEvents(lastBoardEvents),
-              ...explainMoveOutcome(lastMoveOutcome),
+              ...explainMoveOutcome(filterMoveOutcomeFactsForDisplay(lastMoveOutcome)),
               ...toCaptureSummaryMessages(current, options),
             ],
             internalResolvedTargetShapeId !== null,

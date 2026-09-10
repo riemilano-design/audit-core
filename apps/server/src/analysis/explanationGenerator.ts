@@ -139,7 +139,10 @@ function buildCurrentShapeStage(shapeResults: ShapeFormationResult[]): StageResu
       exposed.pendingNote === null
         ? `今、${exposed.name}の形ができています。`
         : `今、${exposed.name}と呼ばれる並びに近い形になっています。ただし、この形の説明は内容を確認中のため、参考程度に見てください。`;
-    reason = best.characteristics ? `${lead} ${best.characteristics}` : lead;
+    // STEP 4-6(H-1、人間承認済み): completedのcharacteristicsは[5]「参考になる囲い」の
+    // 同じ文と重複するため連結しない([5]へ説明を任せる)。lead(1文)だけをreasonにする。
+    // 新しい文言は作らない。formingの分岐(else)は変更していない。
+    reason = lead;
   } else {
     // 指摘A(ζ-5成果物監査REVISE): formingではcharacteristicsを連結しない。
     // data/shapes/*.jsonのcharacteristicsは本文中に他の形・戦法の名前を含む場合が

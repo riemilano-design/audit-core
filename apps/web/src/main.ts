@@ -12,12 +12,10 @@
 import {
   fetchGameState,
   formatGameEndStatus,
-  getPlanChangeReasonMessage,
   isMoveError,
   reviewNoteSuffix,
   candidateMoveUsisOnBoard,
   groupCandidateExplanationsByReason,
-  shouldShowPlanChangedNotice,
   shouldShowNextConsiderations,
   shouldRetryPlanRefresh,
   startNewGame,
@@ -262,6 +260,10 @@ function appendCoachItem(container: HTMLElement, item: CoachExplanation): void {
  * バッジ(判定状態と確信度)は、以前は説明カード3枚それぞれに付いていた。
  * 同じ意味の情報が3箇所に並ぶ重複だったため、[2]「狙い」に1つだけ出す。
  * 出すのは自分の形(current_shape)のものとし、無ければ表示しない。
+ *
+ * STEP 4-6(G-1、人間承認済み): 直後の文「今、{形}の形ができています。」と同じ事実を
+ * 述べており、「確信度」も未説明用語のため、この関数は呼び出さない(バッジを出さない)。
+ * 判定は変えていないため、関数自体は残す。
  */
 function appendAimBadge(container: HTMLElement, coach: CoachExplanation[]): void {
   const source = coach.find((item) => item.stage === "current_shape");
@@ -291,7 +293,7 @@ function renderAim(coach: CoachExplanation[] | undefined): void {
   const heading = document.createElement("h3");
   heading.textContent = "狙い";
   aimEl.appendChild(heading);
-  appendAimBadge(aimEl, coach);
+  // STEP 4-6(G-1、人間承認済み): appendAimBadgeを呼ばず、バッジを描画しない。
 
   for (const item of items) {
     appendCoachItem(aimEl, item);
@@ -431,24 +433,11 @@ function renderHappened(plan: ReachablePlanBody): void {
   happenedEl.innerHTML = "";
   renderLastMoveOutcome(plan);
 
-  // Phase3 Unit1/Unit2: 断定的・評価的な表現は使わず、事実のみを短く伝える
-  // (人間承認済み)。理由が事実として断定できない場合は追加の文言を出さない。
-  // 【Phase6 Unit3 ⑦】Phase3の通知とUnit2のroute_lostは同じ事象を二重に述べることが
-  // あるため、その場合はPhase3側を表示しない(判定はgameApi.tsに切り出してある)。
-  if (shouldShowPlanChangedNotice(plan)) {
-    const p = document.createElement("p");
-    p.className = "plan-changed";
-    p.textContent = "前回の計画が使えなくなりました。";
-    happenedEl.appendChild(p);
-
-    const reasonMessage = getPlanChangeReasonMessage(plan);
-    if (reasonMessage) {
-      const reasonP = document.createElement("p");
-      reasonP.className = "plan-changed-reason";
-      reasonP.textContent = reasonMessage;
-      happenedEl.appendChild(reasonP);
-    }
-  }
+  // STEP 4-6(C、人間承認済み): 「前回の計画が使えなくなりました。」と理由文3種は、
+  // 理由文がrenderLastMoveOutcome([1]の「〜が取られました」等)と同じ事実を述べており、
+  // 「前回の計画」も未説明用語だったため、描画をやめる(shouldShowPlanChangedNotice /
+  // getPlanChangeReasonMessageの経路を呼ばない)。gameApi.tsの関数とサーバーの
+  // planChangedはAPI互換のため残す。
 }
 
 // 【Phase6 Unit1】「選択した形 → その形に必要なマス → 今どこまで出来ているか →

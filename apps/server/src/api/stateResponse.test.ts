@@ -14,6 +14,8 @@ import type { ShapeFormationResult } from "../analysis/shapeFormationAnalyzer.js
 import type { NextConsiderationMessage } from "../analysis/nextConsiderationExplanation.js";
 import type { PieceThreatMessage } from "../analysis/pieceThreatExplanation.js";
 import { DEFAULT_INITIAL_SFEN, replayMoveHistory } from "../analysis/moveHistory.js";
+import type { MoveOutcomeFact } from "../analysis/moveOutcomeDetector.js";
+import { explainMoveOutcome, NO_NOTABLE_CHANGE_TEXT } from "../analysis/moveOutcomeExplanation.js";
 import { applyMove } from "../rules/applyMove.js";
 import { isInCheck } from "../rules/gameStatus.js";
 import type { GameState } from "../game/gameSession.js";
@@ -35,6 +37,8 @@ import {
   type CachedReachablePlan,
   filterCoachForTargetShape,
   filterLastMoveMessagesForTargetShape,
+  filterMoveOutcomeFactsForDisplay,
+  filterNextConsiderationsForDisplay,
   partitionUrgentMessages,
   filterContradictoryConsiderations,
   resolveRecognizedDirection,
@@ -1752,16 +1756,18 @@ describe("computeBoardEventsAfterMove / buildStateResponseWithPlan: 盤面イベ
 // 事実の抽出・文言生成そのものは nextConsiderationDetector.test.ts /
 // nextConsiderationExplanation.test.ts が担当し、ここで確認するのは配線のみ。
 describe("buildStateResponseWithPlan: nextConsiderations(Phase6 Unit4)", () => {
-  it("現在の局面について分かっていることが、文言としてレスポンスに含まれる", () => {
+  // STEP 4-6(D、人間承認済み): route_first_move_playable・ordering_noteは候補手の
+  // 「次の一歩・この先」と重複するため、[4]では表示側フィルタ(filterNextConsiderationsForDisplay)
+  // で落とすようになった。旧期待値(件数・末尾kind・先頭text)はこの変更で成立しなくなったため、
+  // 「フィルタ後は空配列になる」という新しい期待値に置き換える。
+  it("現在の局面について分かっていること: route_first_move_playable/ordering_noteはD(STEP 4-6)により表示されない", () => {
     // Phase 7 Unit 0: 目標形は自動選択されない(明示的に選択してから検証する)。
     const state = gameStateAfter([]);
     const response = buildStateResponseWithPlan(state, undefined, {}, "mino_honmino");
 
-    // 初期局面では、経路の一手目が複数指せる(=対応の文言 + 並び順の注記)。
-    const kinds = response.plan.nextConsiderations.map((m) => m.kind);
-    expect(kinds.filter((k) => k === "route_first_move_playable").length).toBeGreaterThanOrEqual(2);
-    expect(kinds[kinds.length - 1]).toBe("ordering_note");
-    expect(response.plan.nextConsiderations[0]?.text).toContain("道のりの一手目です。");
+    // 初期局面では経路の一手目が複数指せる状態だが、D(STEP 4-6)によりその案内・並び順の
+    // 注記は[4]に出さない(候補手側の「次の一歩・この先」に一本化)。
+    expect(response.plan.nextConsiderations).toEqual([]);
   });
 
   it("目標形が決まっていない場合は空配列", () => {
@@ -2488,5 +2494,102 @@ describe("STEP 4-5: 終局・王手中の表示", () => {
     expect(response.status.isEnd).toBe(false);
     expect(isInCheck(sfen, "sente")).toBe(true);
     expect(response.plan.shapeWeakness?.shapeId).toBe("mino_honmino");
+  });
+});
+
+// STEP 4-6(A・B、人間承認済み): [1]に出す前に、MoveOutcomeFactの段階で表示側フィルタを
+// 掛ける。moveOutcomeDetector.tsの判定・explainMoveOutcomeの文言生成そのものは変えない
+// (このテストではfactsを直接組み立てて検証する)。
+describe("STEP 4-6: filterMoveOutcomeFactsForDisplay(A・B)", () => {
+  function fact(kind: MoveOutcomeFact["kind"], overrides: Partial<MoveOutcomeFact> = {}): MoveOutcomeFact {
+    return {
+      kind,
+      targetSquare: null,
+      targetPiece: null,
+      remainingStepsBefore: null,
+      remainingStepsAfter: null,
+      blockingSquare: null,
+      candidateKind: null,
+      cause: null,
+      ...overrides,
+    };
+  }
+
+  function outcomeWith(facts: MoveOutcomeFact[]): MoveOutcome {
+    return { playedMoveUsi: "7g7f", opponentMoveUsi: "3c3d", facts };
+  }
+
+  it("A(2026-09-10人間判断d): preparation_resolvedが単独で立つ場合でも出さない", () => {
+    const outcome = outcomeWith([fact("preparation_resolved")]);
+    expect(filterMoveOutcomeFactsForDisplay(outcome).facts).toEqual([]);
+  });
+
+  it("A-1: route_first_move_available・preparation_resolved・準備手のplayed_candidateが併存するときは、route_first_move_availableだけ残す", () => {
+    const outcome = outcomeWith([
+      fact("played_candidate", { candidateKind: "preparation" }),
+      fact("route_first_move_available"),
+      fact("preparation_resolved"),
+    ]);
+    expect(filterMoveOutcomeFactsForDisplay(outcome).facts.map((f) => f.kind)).toEqual([
+      "route_first_move_available",
+    ]);
+  });
+
+  it("A-1: 準備手のplayed_candidateが単独で立つ場合は残す", () => {
+    const outcome = outcomeWith([fact("played_candidate", { candidateKind: "preparation" })]);
+    expect(filterMoveOutcomeFactsForDisplay(outcome).facts.map((f) => f.kind)).toEqual(["played_candidate"]);
+  });
+
+  it("準備手でないplayed_candidateは、route_first_move_availableと併存しても残す(A-1の対象外)", () => {
+    const outcome = outcomeWith([
+      fact("played_candidate", { candidateKind: "route_step" }),
+      fact("route_first_move_available"),
+    ]);
+    expect(filterMoveOutcomeFactsForDisplay(outcome).facts.map((f) => f.kind)).toEqual([
+      "played_candidate",
+      "route_first_move_available",
+    ]);
+  });
+
+  it("B: played_non_candidateが単独で立つ場合、フィルタ後は空になりexplainMoveOutcomeの既存文(no_notable_change)になる", () => {
+    const outcome = outcomeWith([fact("played_non_candidate")]);
+    const filtered = filterMoveOutcomeFactsForDisplay(outcome);
+    expect(filtered.facts).toEqual([]);
+    expect(explainMoveOutcome(filtered)).toEqual([{ kind: "no_notable_change", text: NO_NOTABLE_CHANGE_TEXT }]);
+  });
+
+  it("フィルタの対象外の事実(route_advancedなど)はそのまま残る", () => {
+    const outcome = outcomeWith([fact("route_advanced", { remainingStepsBefore: 3, remainingStepsAfter: 2 })]);
+    expect(filterMoveOutcomeFactsForDisplay(outcome).facts).toEqual(outcome.facts);
+  });
+});
+
+// STEP 4-6(D、人間承認済み): [4]のroute_first_move_playable・ordering_note・
+// shape_completedを表示側で落とす。no_playable_route_first_move・in_checkは対象外。
+describe("STEP 4-6: filterNextConsiderationsForDisplay(D)", () => {
+  const playable = {
+    kind: "route_first_move_playable",
+    text: "７七桂は、道のりの一手目です。",
+  } satisfies NextConsiderationMessage;
+  const ordering = { kind: "ordering_note", text: "並び順の注記。" } satisfies NextConsiderationMessage;
+  const completed = {
+    kind: "shape_completed",
+    text: "この形に必要なマスは、すべて埋まっています。",
+  } satisfies NextConsiderationMessage;
+  const noPlayable = {
+    kind: "no_playable_route_first_move",
+    text: "今の局面では、その形へ向かう道のりの一手目を、どれも指すことができません。",
+  } satisfies NextConsiderationMessage;
+  const inCheck = {
+    kind: "in_check",
+    text: "今、あなたの玉に王手がかかっています。",
+  } satisfies NextConsiderationMessage;
+
+  it("route_first_move_playable・ordering_note・shape_completedを落とす", () => {
+    expect(filterNextConsiderationsForDisplay([playable, ordering, completed])).toEqual([]);
+  });
+
+  it("no_playable_route_first_move・in_checkは対象外(既存規則のまま残す)", () => {
+    expect(filterNextConsiderationsForDisplay([noPlayable, inCheck])).toEqual([noPlayable, inCheck]);
   });
 });

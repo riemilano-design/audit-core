@@ -343,11 +343,9 @@ describe("buildRouteCandidateMoveExplanation / explainRouteCandidateMoves", () =
     expect(explanation.reason).toBe("桂を７七へ動かせるようになります。");
     expect(explanation.reason).not.toContain("７七には今、自分の駒があります");
     expect(explanation.template_id).toBe("candidate_move_preparation");
-    // Unit 3(情報構造の整理): 退避先を判断していない旨の但し書きは、候補手ごとに
-    // 繰り返さずセクション単位で1回だけ出す。文言自体は変えていない。
-    expect(buildRouteCandidateSharedNotes("高美濃囲い", [candidate])).toContain(
-      "どこへ動かすかは、この形の観点だけでは決まりません。",
-    );
+    // STEP 4-6(E-1、人間承認済み): 「どこへ動かすかは、この形の観点だけでは決まりません。」は
+    // web側固定文①と重複するため、buildRouteCandidateSharedNotesは表示しない(空配列)。
+    expect(buildRouteCandidateSharedNotes("高美濃囲い", [candidate])).toEqual([]);
   });
 
   it("いずれの説明も、断定的な表現(最善・おすすめ・安全)やエンジン評価値を含まない", () => {
@@ -364,11 +362,10 @@ describe("buildRouteCandidateMoveExplanation / explainRouteCandidateMoves", () =
       }
     }
 
-    // Unit 3(情報構造の整理): 「唯一の正解ではありません」は候補手ごとに繰り返さず、
-    // セクション単位で1回だけ出す。ユーザーに届く文言は変わっていない。
+    // STEP 4-6(E-1、人間承認済み): 「これは〜唯一の正解ではありません。」もweb側固定文①
+    // (「将棋として最も良い手を選んでいるわけではありません。」)と同義のため表示しない。
     const notes = buildRouteCandidateSharedNotes(shapeResult.name, candidates);
-    expect(notes.join("")).toContain("唯一の正解ではありません");
-    expect(notes.filter((note) => note.includes("唯一の正解ではありません"))).toHaveLength(1);
+    expect(notes).toEqual([]);
   });
 
   it("候補手が0件の場合はnot_ready(no_candidate_moves)を返す", () => {
