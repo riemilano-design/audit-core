@@ -4,7 +4,12 @@ import { getShapes } from "./shapeRepository.js";
 import { analyzeShapeFormation, type ShapeFormationResult } from "./shapeFormationAnalyzer.js";
 import { getIntents, type IntentDefinition } from "./intentRepository.js";
 import { DEFAULT_INITIAL_SFEN, replayMoveHistory } from "./moveHistory.js";
-import { explainPosition, generateExplanations, type Explanation } from "./explanationGenerator.js";
+import {
+  explainPosition,
+  generateCoachExplanations,
+  generateExplanations,
+  type Explanation,
+} from "./explanationGenerator.js";
 
 const SENTE_FILLERS = ["1g1f", "2g2f", "3g3f", "4g4f", "5g5f", "6g6f", "9g9f", "8g8f"];
 
@@ -215,8 +220,17 @@ describe("generateExplanations", () => {
     }
     expect(opponentIntent.reason).not.toContain(hayajikake.current_aim_explanation);
 
-    // opponent_next_aim(甲、STEP ζ-5): formingの段階ではステージ自体を出力配列から落とす。
-    expect(explanations.find((e) => e.stage === "opponent_next_aim")).toBeUndefined();
+    // opponent_next_aim(STEP 4-4、人間承認R-1、2026-09-10): formingの段階でも
+    // ステージは落とさず、noneと同じ既存の汎用文(戦法名を含まない)を出す。
+    // ζ-5が禁止したのは戦法名を含むnext_aim_explanationの表示であり、この汎用文は
+    // 禁止範囲に含まれない。
+    const nextAim = findStage(explanations, "opponent_next_aim");
+    expect(nextAim.reason).toBe("相手の狙いがまだ定まっていないため、次に何をしてきそうかも現時点では判断できません。");
+    expect(nextAim.refers_to_intent_id).toBeNull();
+    expect(nextAim.glossary_terms).toEqual([]);
+    for (const intent of getIntents()) {
+      expect(nextAim.reason).not.toContain(intent.name);
+    }
   });
 
   it("opponent_intent / opponent_next_aim: 全intentがnoneの場合、特定の意図を断定しない", () => {
@@ -368,6 +382,77 @@ describe("generateExplanations", () => {
 
       const opponentIntent = findStage(explanations, "opponent_intent");
       expect(opponentIntent.reason).toContain("早仕掛けの形になっています");
+    });
+  });
+
+  // STEP 4-4(人間承認R-1、2026-09-10): opponent_next_aimがforming状態でも
+  // ステージ自体は落とさず、既存の汎用文(戦法名を含まない)を出す。
+  describe("opponent_next_aim: formingでもステージを落とさない(STEP 4-4)", () => {
+    it("狙いがformingのとき、opponent_next_aimの段がstatus forming・汎用文・refers_to_intent_id null・glossary_terms空で含まれる", () => {
+      const moveHistory = interleaveWithSenteFillers([HAYAJIKAKE_GOTE_MOVES_FULL[0]!]);
+      const sfen = sfenAfter(moveHistory);
+      const shapeResults = analyzeShapeFormation(sfen, moveHistory);
+      const intentResults = detectIntents(sfen, moveHistory);
+      const coachExplanations = generateCoachExplanations(shapeResults, intentResults);
+
+      const nextAim = coachExplanations.find((e) => e.stage === "opponent_next_aim");
+      expect(nextAim).toBeDefined();
+      expect(nextAim!.status).toBe("forming");
+      expect(nextAim!.reason).toBe(
+        "相手の狙いがまだ定まっていないため、次に何をしてきそうかも現時点では判断できません。",
+      );
+      expect(nextAim!.refers_to_intent_id).toBeNull();
+      expect(nextAim!.glossary_terms).toEqual([]);
+    });
+
+    it("狙いがforming、かつwasLastOpponentMoveForcedがtrueのとき、既存のforced文言になる", () => {
+      const moveHistory = interleaveWithSenteFillers([HAYAJIKAKE_GOTE_MOVES_FULL[0]!]);
+      const sfen = sfenAfter(moveHistory);
+      const shapeResults = analyzeShapeFormation(sfen, moveHistory);
+      const intentResults = detectIntents(sfen, moveHistory);
+      const coachExplanations = generateCoachExplanations(shapeResults, intentResults, true);
+
+      const nextAim = coachExplanations.find((e) => e.stage === "opponent_next_aim");
+      expect(nextAim).toBeDefined();
+      expect(nextAim!.status).toBe("forming");
+      expect(nextAim!.reason).toBe("相手の今の手は、対局序盤の決まった手順によるものです。");
+    });
+
+    it("formingのopponent_next_aimのreasonに、いずれの作戦名(棒銀・斜め棒銀・早仕掛け)も含まれない", () => {
+      const moveHistory = interleaveWithSenteFillers([HAYAJIKAKE_GOTE_MOVES_FULL[0]!]);
+      const sfen = sfenAfter(moveHistory);
+      const shapeResults = analyzeShapeFormation(sfen, moveHistory);
+      const intentResults = detectIntents(sfen, moveHistory);
+      const explanations = generateExplanations(shapeResults, intentResults);
+
+      const nextAim = findStage(explanations, "opponent_next_aim");
+      for (const intent of getIntents()) {
+        expect(nextAim.reason).not.toContain(intent.name);
+      }
+    });
+
+    it("狙いがnoneのとき、opponent_next_aimは従来どおりstatus none・同じ汎用文になる", () => {
+      const coachExplanations = generateCoachExplanations(NO_SHAPE_RESULTS, NO_INTENT_RESULTS);
+      const nextAim = coachExplanations.find((e) => e.stage === "opponent_next_aim");
+      expect(nextAim).toBeDefined();
+      expect(nextAim!.status).toBe("none");
+      expect(nextAim!.reason).toBe(
+        "相手の狙いがまだ定まっていないため、次に何をしてきそうかも現時点では判断できません。",
+      );
+    });
+
+    it("狙いがmatchedのとき、opponent_next_aimは従来どおりstatus matched・next_aim_explanationになる", () => {
+      const moveHistory = interleaveWithSenteFillers(HAYAJIKAKE_GOTE_MOVES_FULL);
+      const sfen = sfenAfter(moveHistory);
+      const shapeResults = analyzeShapeFormation(sfen, moveHistory);
+      const intentResults = detectIntents(sfen, moveHistory);
+      const coachExplanations = generateCoachExplanations(shapeResults, intentResults);
+
+      const nextAim = coachExplanations.find((e) => e.stage === "opponent_next_aim");
+      const hayajikake = getIntents().find((i) => i.id === "hayajikake")!;
+      expect(nextAim).toBeDefined();
+      expect(nextAim!.status).toBe("matched");
+      expect(nextAim!.reason).toBe(hayajikake.next_aim_explanation);
     });
   });
 });

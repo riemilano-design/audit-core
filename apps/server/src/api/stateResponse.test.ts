@@ -172,9 +172,17 @@ describe("buildStateResponse", () => {
       expect(opponentIntent.reason).not.toContain(intent.name);
     }
 
-    // opponent_next_aim(甲、STEP ζ-5): formingの段階ではステージ自体をレスポンスの
-    // 配列に含めない(表示しない)。
-    expect(response.coach!.find((e) => e.stage === "opponent_next_aim")).toBeUndefined();
+    // opponent_next_aim(STEP 4-4、人間承認R-1、2026-09-10): formingの段階でも
+    // ステージは落とさず、既存の汎用文(戦法名を含まない)を出す。ζ-5が禁止したのは
+    // 戦法名を含むnext_aim_explanationの表示であり、この汎用文は禁止範囲に含まれない。
+    const opponentNextAim = findStage(response.coach!, "opponent_next_aim");
+    expect(opponentNextAim.status).toBe("forming");
+    expect(opponentNextAim.reason).toBe(
+      "相手の狙いがまだ定まっていないため、次に何をしてきそうかも現時点では判断できません。",
+    );
+    for (const intent of getIntents()) {
+      expect(opponentNextAim.reason).not.toContain(intent.name);
+    }
   });
 
   it("matched状態: Intentが完全一致した場合は確信度の高い言い回しになる", () => {
@@ -1521,6 +1529,34 @@ describe("STEP 4-1: buildStateResponseWithPlan(P-1手順の実測。方向が本
     const response = buildStateResponseWithPlan(state, undefined, {});
 
     expect(response.plan.resolvedTargetShapeId).toBe("mino_takamino");
+  });
+});
+
+describe("STEP 4-4: buildStateResponseWithPlan(forming時もopponent_next_aimを含める、人間承認R-1)", () => {
+  // 実機検証で観測された手順(docs/PHASES.md「ランク別実機プレイ検証の記録」P-1局)。
+  // 14手目の歩6d(相手)で早仕掛けがforming判定になる。
+  const P1_MOVE_HISTORY = [
+    "7g7f", "8c8d",
+    "6g6f", "4a3b",
+    "2h6h", "7c7d",
+    "5i4h", "3c3d",
+    "4h3h", "6a6b",
+    "3h2h", "7a7b",
+    "3i3h", "6c6d",
+  ];
+
+  it("14手目(歩6d、早仕掛けforming)で、coachにopponent_next_aimの段がstatus forming・汎用文で含まれ、戦法名を含まない", () => {
+    const state = gameStateAfter(P1_MOVE_HISTORY);
+    const response = buildStateResponseWithPlan(state, undefined, {});
+
+    const opponentNextAim = findStage(response.coach!, "opponent_next_aim");
+    expect(opponentNextAim.status).toBe("forming");
+    expect(opponentNextAim.reason).toBe(
+      "相手の狙いがまだ定まっていないため、次に何をしてきそうかも現時点では判断できません。",
+    );
+    for (const intent of getIntents()) {
+      expect(opponentNextAim.reason).not.toContain(intent.name);
+    }
   });
 });
 

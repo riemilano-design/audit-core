@@ -293,11 +293,40 @@ function buildOpponentIntentStage(
 }
 
 /**
- * 論点1(甲、STEP ζ-5): opponent_next_aimがformingの段階では、ステージ自体を
- * 出力配列から落とす(表示しない。人間承認済みの文言仕様どおり)。matchedでも
- * noneでもない(=forming)場合にのみnullを返し、呼び出し側(buildStages)が
- * 配列から除外する。
+ * 変更履歴(参考): 論点1(甲、STEP ζ-5)では、opponent_next_aimがformingの段階では
+ * ステージ自体を出力配列から落としていた(matchedでもnoneでもない(=forming)場合に
+ * nullを返し、呼び出し側(buildStages)が配列から除外する動き)。
+ *
+ * 現在の仕様(STEP 4-4、人間承認R-1、2026-09-10): formingでもステージを落とさない。
+ * ζ-5が禁止したのは戦法名を含むnext_aim_explanationの表示であり、この既存の汎用文
+ * (名前を含まない)までは禁止範囲に含めない。formingのときは`!best`(none)と同じ
+ * unclassifiedの段(reason・template_idとも既存のもの)を返し、statusだけ"forming"にする。
  */
+function buildOpponentNextAimUnclassifiedStage(
+  status: "none" | "forming",
+  wasLastOpponentMoveForced: boolean,
+): StageResult {
+  return {
+    status,
+    explanation: {
+      id: "runtime_opponent_next_aim_unclassified",
+      stage: "opponent_next_aim",
+      purpose: PURPOSE_TEMPLATES.opponent_next_aim,
+      move: null,
+      reason: wasLastOpponentMoveForced
+        ? OPPONENT_UNCLASSIFIED_FORCED_OPENING_REASON
+        : "相手の狙いがまだ定まっていないため、次に何をしてきそうかも現時点では判断できません。",
+      refers_to_shape_id: null,
+      refers_to_intent_id: null,
+      confidence_level: "low",
+      glossary_terms: [],
+      template_id: wasLastOpponentMoveForced
+        ? "opponent_next_aim_unclassified_forced_opening"
+        : "opponent_next_aim_unclassified",
+    },
+  };
+}
+
 function buildOpponentNextAimStage(
   intentResults: IntentDetectionResult[],
   wasLastOpponentMoveForced: boolean = false,
@@ -305,29 +334,11 @@ function buildOpponentNextAimStage(
   const best = pickBest(intentResults);
 
   if (!best) {
-    return {
-      status: "none",
-      explanation: {
-        id: "runtime_opponent_next_aim_unclassified",
-        stage: "opponent_next_aim",
-        purpose: PURPOSE_TEMPLATES.opponent_next_aim,
-        move: null,
-        reason: wasLastOpponentMoveForced
-          ? OPPONENT_UNCLASSIFIED_FORCED_OPENING_REASON
-          : "相手の狙いがまだ定まっていないため、次に何をしてきそうかも現時点では判断できません。",
-        refers_to_shape_id: null,
-        refers_to_intent_id: null,
-        confidence_level: "low",
-        glossary_terms: [],
-        template_id: wasLastOpponentMoveForced
-          ? "opponent_next_aim_unclassified_forced_opening"
-          : "opponent_next_aim_unclassified",
-      },
-    };
+    return buildOpponentNextAimUnclassifiedStage("none", wasLastOpponentMoveForced);
   }
 
   if (best.matchStatus === "forming") {
-    return null;
+    return buildOpponentNextAimUnclassifiedStage("forming", wasLastOpponentMoveForced);
   }
 
   return {
