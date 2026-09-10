@@ -702,3 +702,65 @@ h1 {
   font-size: 0.8rem;
   color: #666;
 }
+
+/* Phase 7 Unit 4 STEP 4-7A(2026-09-10 人間承認済み): 3カラム(1200px 以上)のときだけ、
+   カードとブロックの余白を詰めて画面密度を上げる。情報・文言・DOM・情報階層は一切変えていない。
+   既存のベース値(1200px 未満で使われる値)はそのまま残し、ここでは上書きだけを行う。
+   行送り(line-height)・フォントサイズ・盤の大きさ・列構成は変えない(人間の判断で今回の対象外)。 */
+@media (min-width: 1200px) {
+  body {
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  h1 {
+    margin-bottom: 0.25rem;
+  }
+
+  #infoColumn h2 {
+    margin-bottom: 0.25rem;
+  }
+
+  .last-move-section,
+  .coach-stage,
+  .shape-weakness,
+  .urgent-messages,
+  .route-section,
+  .candidate-section {
+    padding-top: 0.4rem;
+    padding-bottom: 0.4rem;
+  }
+
+  #urgent,
+  #happened,
+  #aim,
+  #why {
+    margin-bottom: 0.5rem;
+  }
+
+  #aim,
+  #why {
+    gap: 0.3rem;
+  }
+
+  .last-move-section,
+  .route-section,
+  .candidate-section {
+    margin-bottom: 0.5rem;
+  }
+
+  #aim > h3,
+  #why > h3,
+  #urgent > h3 {
+    margin-bottom: 0.15rem;
+  }
+
+  .coach-purpose,
+  .coach-stage-title {
+    margin-bottom: 0.1rem;
+  }
+
+  .candidate-move {
+    margin-bottom: 0.4rem;
+  }
+}
