@@ -11,6 +11,7 @@
 
 import {
   fetchGameState,
+  formatGameEndStatus,
   getPlanChangeReasonMessage,
   isMoveError,
   reviewNoteSuffix,
@@ -1092,9 +1093,9 @@ function renderInteractive(): void {
 
 function renderStatus(state: GameStateResponse): void {
   if (state.status.isEnd) {
-    const outcome = state.status.outcome;
-    const winnerLabel = outcome?.winner === "sente" ? "あなた(先手)" : outcome?.winner === "gote" ? "相手(後手)" : "引き分け";
-    statusEl.textContent = `対局終了: ${winnerLabel}${outcome?.result ? `(${outcome.result})` : ""}`;
+    // STEP 4-5(Y-1、人間承認済み): 文字列の組み立てはgameApi.tsの純粋関数に切り出した
+    // (結果種別の英語の括弧書きを削除しただけで、勝者の表記は変えていない)。
+    statusEl.textContent = formatGameEndStatus(state.status);
     return;
   }
   const turn = parseSfenTurn(state.sfen);

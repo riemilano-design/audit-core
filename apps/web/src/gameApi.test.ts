@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import {
+  formatGameEndStatus,
   getPlanChangeReasonMessage,
   reviewNoteSuffix,
   candidateMoveUsisOnBoard,
@@ -8,6 +9,7 @@ import {
   shouldShowNextConsiderations,
   shouldShowPlanChangedNotice,
   PLAN_REFRESH_MAX_ATTEMPTS,
+  type GameStatus,
   type LastMoveOutcomeBody,
   type NextConsiderationMessage,
   type PlanChangeReason,
@@ -335,5 +337,46 @@ describe("STEP ζ-5: 承認済み文言(注記は「」の外側)", () => {
     const shapeName = "本美濃";
     const displayName = shapeName + reviewNoteSuffix(null);
     expect(displayName).toBe("本美濃");
+  });
+});
+
+// STEP 4-5(Y-1、人間承認済み、人間指定テスト10): 終局時の状態行から結果種別の英語の
+// 括弧書き(例: "(checkmate)")だけが消え、勝者の表記(先手/後手/引き分け)は
+// 従来どおりであることを確認する。main.tsはDOM前提でテスト基盤が無いため、
+// 切り出した純粋関数をここで検証する(reviewNoteSuffix等と同じ流儀)。
+describe("formatGameEndStatus(STEP 4-5, Y-1)", () => {
+  it("自分(先手)が勝った場合、結果種別を含まない「対局終了: あなた(先手)」になる", () => {
+    const status: GameStatus = { isEnd: true, outcome: { result: "checkmate", winner: "sente" } };
+    const text = formatGameEndStatus(status);
+
+    expect(text).toBe("対局終了: あなた(先手)");
+    expect(text).not.toContain("(checkmate)");
+    expect(text).not.toContain("checkmate");
+  });
+
+  it("相手(後手)が勝った場合、「対局終了: 相手(後手)」になる(以前の仕様書に書かれていた挙動)", () => {
+    const status: GameStatus = { isEnd: true, outcome: { result: "checkmate", winner: "gote" } };
+
+    expect(formatGameEndStatus(status)).toBe("対局終了: 相手(後手)");
+  });
+
+  it("winnerがundefinedの場合(引き分け等)、「対局終了: 引き分け」になる", () => {
+    const status: GameStatus = { isEnd: true, outcome: { result: "draw", winner: undefined } };
+
+    expect(formatGameEndStatus(status)).toBe("対局終了: 引き分け");
+  });
+
+  it("詰み以外の結果種別(stalemate)でも、結果種別を含まない", () => {
+    const status: GameStatus = { isEnd: true, outcome: { result: "stalemate", winner: "gote" } };
+    const text = formatGameEndStatus(status);
+
+    expect(text).toBe("対局終了: 相手(後手)");
+    expect(text).not.toContain("stalemate");
+  });
+
+  it("outcomeがundefinedでも例外を投げず、引き分け表記に落ちる(安全側)", () => {
+    const status: GameStatus = { isEnd: true, outcome: undefined };
+
+    expect(formatGameEndStatus(status)).toBe("対局終了: 引き分け");
   });
 });

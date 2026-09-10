@@ -11,6 +11,22 @@ export interface GameStatus {
   outcome: GameOutcome | undefined;
 }
 
+/**
+ * STEP 4-5(Y-1、人間承認済み)。終局時の状態行の文字列を組み立てる純粋関数。
+ * 勝者の表記はrenderStatusの既存ロジックと同じ(先手/後手/引き分け)。
+ * 【変更点】以前は末尾に`(${outcome.result})`という結果種別の英語(例: "checkmate")を
+ * そのまま括弧書きしていたが、これを削除しただけ(削除のみ。新しい日本語の対応表は
+ * 作らない。詰みの事実は[0]のT-1の文が別途述べる)。
+ * DOM非依存の純粋関数としてテストするため、reviewNoteSuffix等と同じ流儀でここに置く
+ * (main.tsはDOM前提でテスト基盤が無いため)。
+ */
+export function formatGameEndStatus(status: Pick<GameStatus, "outcome">): string {
+  const outcome = status.outcome;
+  const winnerLabel =
+    outcome?.winner === "sente" ? "あなた(先手)" : outcome?.winner === "gote" ? "相手(後手)" : "引き分け";
+  return `対局終了: ${winnerLabel}`;
+}
+
 // apps/server/src/analysis/explanationGenerator.ts の CoachExplanation に対応する型。
 // data/schemas/explanations.schema.json 準拠のフィールド(purpose/reason等)に、
 // UI側でforming/matched/completed/noneを出し分けるためのstatusを加えたもの。

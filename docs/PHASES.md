@@ -1261,6 +1261,33 @@ Unit 4(「ここまでの対局で分かってきたこと」)は認識を文章
 
 
 **STEP 4-4 の完了記録(2026-09-10。人間の判断)**: 計画レビュー GO、成果監査 GO、`apps/server` 532/532・`apps/web` 44/44、両 typecheck 0。完了確認は本番関数 `buildStateResponseWithPlan` で行い、P-1 局 14手目で [3] の段が forming・汎用文・戦法名なしで出ること、C局 30手目で [2] の根拠が「18手目の銀５三から」のまま後退していないことを確認した。**ブラウザの実機確認では、ライブ対局の相手AIが署名に一致する手(６四歩・４二銀)を指さなかったため、forming 時の [3] の画面は直接確認できていない**(none 時の同じブロック・同じ描画経路は画面で確認済み)。人間はこの事実を記録に残したうえで、開発用シナリオ機構による追加確認を必須とせず、コミットを承認した。
+
+**STEP 4-5 の承認記録(2026-09-10)**: 「終局・王手中の表示」について、人間が次を承認した(計画レビュー3回目で GO)。
+
+- 実装原則: 終局・詰み・王手の判定は `rules/gameStatus.ts` の既存関数(`isGameOver` / `getGameOutcome` / `isInCheck`)だけで決める。自作の詰み判定・王手判定は追加しない
+- T-1(文言。[0] に1文、kind `game_end`): 自分が詰まされた「あなたの玉が詰み(逃げ場がなく、王手を防げない状態)になり、対局は終了しました。」/ 相手を詰ませた「相手の玉を詰み(逃げ場がなく、王手を防げない状態)にして、対局は終了しました。」/ 詰み以外の終局「対局は終了しました。」。区別するのは `getGameOutcome().result === "checkmate"` かどうかとその `winner` だけで、新しい終局結果の分類は作らない
+- U-1: 終局時の [1] は、盤面の出来事(捕獲・成り・王手。`BoardEventMessage`)と駒の得喪の集約(`CaptureSummaryMessage`、STEP 4-3b)だけ残し、形・道のりについての差分文(`MoveOutcomeMessage`)は出さない。判定(`moveOutcomeDetector.ts`)は変えず、メッセージの型(kind)を見て表示側で落とす
+- V-1: 「配置が崩れました」(`square_lost`)は、**直前の自分の手が玉の移動(移動元の駒が玉)で、かつその手を指す前の局面で自玉に王手がかかっていた場合だけ**抑止する(王手回避以外の玉の移動では従来どおり出す)。着手前局面は `analysis/moveHistory.ts` の `replayMoveHistory` で `current.moveHistory` を再生して得る。末尾の手が一致しない・再生が例外を投げる・添字が範囲外のいずれかであれば安全側に倒し抑止しない
+- W-1: 終局時は [2][3] を出さない(coach を空配列にする削除)。`explanationGenerator.ts` 自体は変更しない
+- X-1: 王手中(非終局)は [4] を丸ごと出さない(道のり・候補手・組み上がり・`resolvedTargetShapeId`・`directionNote` のすべてを空/null にする)。終局時も同じ全項目を空にする。王手中・終局時はエンジンの `MultiPV` 参考評価(`checkCandidateMovesSafety`)を起動しない(`computeReachablePlan` が早期に `candidateMove: undefined` を返す)。[0] の王手表示・[1][2][3] は王手中は現行どおり出す(削るのは [4] だけ)
+- Y-1: web の状態行から結果種別の英語の括弧書き(例 `(checkmate)`)だけを削除する(`apps/web/src/gameApi.ts` の純粋関数 `formatGameEndStatus`)。勝者の表記(先手/後手/引き分け)は変えない。日本語の対応表は作らない
+- Z-1: 「完成しています」の判定は本 STEP では変えない。「囲いの内側」の定義・文言は別 STEP へ持ち越す
+- 出力と内部の区別: 出力の `plan.resolvedTargetShapeId` は王手中・終局時に null にするが、内部の `context.resolvedTargetShapeId`(`toNextConsiderations` の判定・`filterCoachForTargetShape`・`filterLastMoveMessagesForTargetShape` の入力)は王手中も実際の認識値のまま使う。王手中の `plan.nextConsiderations` は「`in_check` だけ」ではなく**空**になる(`in_check` は既存の `partitionUrgentMessages` が [0] へ移すため。王手の文言は [0] にそのまま届く)
+- P-8 との関係: X-1 により、王手中の3文(「その歩から指せる手はありません」「道のりの一手目を、どれも指すことができません」「候補手を表示できません」)は [4] ごと出なくなる。P-8 の残りの項目(準備手の直後の3文、「今の局面で分かっていること」と候補手の同一事実、「自分の狙い」の目的文と免責2文の反復)は本 STEP の対象外であり、4-6 で扱う。**P-8・U1-5・U1-6・P-6・P-7 の状態欄は本記録では変更しない**(人間の別途の確認まで「未処遇」のまま残す)
+- 表示優先順位: 終局時は [0] が詰み/終局の文だけ、[1] は盤面の出来事+得喪の集約、[2][3][4] は非表示。王手中(非終局)は [0] が王手+当たり等の既存表示、[1][2][3] は現行どおり、[4] のみ非表示。通常時は現行維持
+
+実装: `apps/server/src/api/stateResponse.ts`(`buildStateResponseWithPlan` に `suppressPlan = base.status.isEnd || isInCheck(current.sfen, "sente")` を新設し [4] の出力項目を空にする、`toGameEndMessage` で T-1 の文を組み立てる、`filterLastMoveMessagesForGameEnd` で U-1 を実装、`shouldSuppressSquareLost` で V-1 を実装、`computeReachablePlan` に同条件の早期 return を追加)。`apps/web/src/gameApi.ts`(純粋関数 `formatGameEndStatus` を追加)・`apps/web/src/main.ts`(`renderStatus` をこの関数の呼び出しへ置換)。`rules/*` / `moveOutcomeDetector.ts` / `nextConsiderationDetector.ts` / `routePlanner.ts` / `shapeFormationAnalyzer.ts` / `explanationGenerator.ts` / `data/` は無変更。
+
+**STEP 4-5 の完了記録(2026-09-10。人間の判断)**: 計画レビュー GO(3回目)、成果監査 GO、`apps/server` 540/540(新規9件)・`apps/web` 49/49(新規5件)、両 typecheck 0。完了確認は本番関数 `buildStateResponseWithPlan` / `computeReachablePlan` に手組みの SFEN(自分が詰まされた局面・相手を詰ませた局面・stalemate・本美濃囲いが認識される非終局の王手局面・王手を玉移動で回避した直後の局面)を与えた出力で行った(詰み局面はライブ対局では作りにくいため)。
+
+**STEP 4-5 の実機確認の追記(2026-09-10。人間の判断)**: 司令塔がブラウザ(1440×900)の実対局で行った実機確認の結果を記録する。
+
+- 42手目、相手の桂打ちによる王手の局面: [0] に既存の王手の文が先頭、続いて当たりの行。[1][2][3] は維持。[4](道のり・組み上がり・候補手・`directionNote`)は非表示
+- 44手目、玉の移動(２八→１七)で王手を回避した直後: [1] に「配置が崩れました」が出ず、得喪の集約の1行のみ
+- 48手目、自分が詰まされた局面: 状態行「対局終了: 相手(後手)」(英語の結果種別なし)。[0] は詰みの文のみ。[1] は「相手の手で、あなたの２五の桂が取られました。」と得喪の集約。[2][3][4] は非表示。中央カラムは 900px に収まった
+- 詰み以外の終局(stalemate)はライブでは作れず、本番関数の出力で「対局は終了しました。」を確認した
+- 終局画面の [1] に既存の「前回の計画が使えなくなりました。」が残る(web 側の別経路。4-6 の削除対象として持ち越し。4-5 では触れない。人間の判断)
+- 上記の実機確認に対する成果監査で、[3](`shapeWeakness`)が終局時にも W-1 のガード(`coach` と同じ `base.status.isEnd`)にかかっておらず残っていた漏れを指摘された(REVISE)。指摘を受け、`apps/server/src/api/stateResponse.ts` の `buildStateResponseWithPlan` で `shapeWeakness` を終局時に `null` にする修正を追加した(王手中(非終局)は従来どおり出す)。修正後のテストは `apps/server` 542/542(STEP 4-5 合計11件。元9件に加え、終局系の既存4件へ `shapeWeakness` の `null` 検証を追加、および本美濃囲いが完成したまま詰まされた局面・完成したまま王手中の局面の回帰テスト2件を新規追加)・`apps/web` 49/49(変更なし)、両 typecheck 0
 #### Unit 1 の実測記録(2026-09-09)
 
 **この節は観測結果の記録であり、仕様の決定ではない。** 人間の指示により、Unit 1 では実装による調整・手加減・新しい仕様の追加を行っていない。処遇の判断は人間が行う。

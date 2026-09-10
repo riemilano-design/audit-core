@@ -15,6 +15,7 @@ import type { NextConsiderationMessage } from "../analysis/nextConsiderationExpl
 import type { PieceThreatMessage } from "../analysis/pieceThreatExplanation.js";
 import { DEFAULT_INITIAL_SFEN, replayMoveHistory } from "../analysis/moveHistory.js";
 import { applyMove } from "../rules/applyMove.js";
+import { isInCheck } from "../rules/gameStatus.js";
 import type { GameState } from "../game/gameSession.js";
 import type { MultiPvGoResult } from "../engine/usiEngine.js";
 import type { LowPriorityEngine } from "../engine/prioritizedEngine.js";
@@ -37,6 +38,10 @@ import {
   partitionUrgentMessages,
   filterContradictoryConsiderations,
   resolveRecognizedDirection,
+  GAME_END_SELF_CHECKMATE_TEXT,
+  GAME_END_OPPONENT_CHECKMATE_TEXT,
+  GAME_END_OTHER_TEXT,
+  type MoveOutcome,
 } from "./stateResponse.js";
 
 const SENTE_FILLERS = ["1g1f", "2g2f", "3g3f", "4g4f", "5g5f", "6g6f", "9g9f", "8g8f"];
@@ -315,6 +320,26 @@ function honminoMultipleCandidatesSfen(): string {
 
 function customGameState(sfen: string): GameState {
   return { sfen, moveHistory: [], forcedPliesUsed: 0 };
+}
+
+/**
+ * STEP 4-5: customSfenと同じ方式で、手番(turn)だけ指定できる版。
+ * 「相手を詰ませた」局面(手番=gote)を組み立てるために必要(customSfen自体は
+ * 既存テストの前提を変えないため、turnを常にsenteに固定したまま変更しない)。
+ */
+function customSfenWithTurn(
+  pieces: Array<{ square: string; color: "sente" | "gote"; role: Role }>,
+  turn: "sente" | "gote",
+): string {
+  let board = Board.empty();
+  for (const { square, color, role } of pieces) {
+    const sq = parseSquareName(square);
+    if (sq === undefined) throw new Error(`invalid square: ${square}`);
+    board = board.clone();
+    board.set(sq, { color, role });
+  }
+  const pos = Shogi.from({ board, hands: Hands.empty(), turn, moveNumber: 1 }, false).unwrap();
+  return makeSfen(pos);
 }
 
 // honminoMultipleCandidatesSfen()と同じ駒配置に、相手(gote)が指せる無害な歩(9c)を
@@ -1747,16 +1772,32 @@ describe("buildStateResponseWithPlan: nextConsiderations(Phase6 Unit4)", () => {
     expect(response.plan.nextConsiderations).toEqual([]);
   });
 
-  it("王手を受けている局面では、ルール上の制約を先頭に述べる", () => {
-    // 先手(ユーザー側)の玉に王手がかかっている局面を直接組み立てる。
-    const sfen = "4k4/9/9/9/9/9/4r4/9/4K4 b - 1";
+  // STEP 4-5(2026-09-10人間承認、計画レビューでの指摘により書き直し): この局面
+  // (両玉+飛車だけ)ではresolvedTargetShapeIdが常にnullになり、if文の中身が一度も
+  // 実行されないまま「合格」していた(空洞化)。加えて、旧い期待値
+  // (nextConsiderations[0].kindがin_check)自体が、partitionUrgentMessagesの既存挙動
+  // (in_checkはurgentMessages([0])へ移り、nextConsiderationsには残らない)と矛盾していた。
+  // 形が実際に認識される新しいSFEN(本美濃囲いの銀3h・金4i・金5hが揃い、玉だけ3i)を使い、
+  // 「王手の制約は[0]の先頭に出て、[4]([1]のnextConsiderations)には残らない」という
+  // 正しい内容で書き直す(STEP 4-5の主題そのものであるため、下記の新describeでも
+  // 同じ局面をより広く検証する)。
+  it("王手を受けている局面では、ルール上の制約を[0]の先頭に述べ、nextConsiderationsには残らない", () => {
+    const sfen = customSfen([
+      { square: "3i", color: "sente", role: "king" },
+      { square: "3h", color: "sente", role: "silver" },
+      { square: "4i", color: "sente", role: "gold" },
+      { square: "5h", color: "sente", role: "gold" },
+      { square: "4g", color: "gote", role: "knight" },
+    ]);
     const state: GameState = { sfen, moveHistory: [], forcedPliesUsed: 0 };
-    const response = buildStateResponseWithPlan(state, undefined, { initialSfen: sfen });
+    const response = buildStateResponseWithPlan(state, undefined, { initialSfen: sfen }, "mino_honmino");
 
-    if (response.plan.resolvedTargetShapeId !== null) {
-      expect(response.plan.nextConsiderations[0]?.kind).toBe("in_check");
-      expect(response.plan.nextConsiderations[0]?.text).toContain("王手を解消する手しか指せません");
-    }
+    // STEP 4-5(X-1): 王手中は出力のresolvedTargetShapeIdをnullにする([4]非表示のため)。
+    // 内部では実際に認識されている(urgentMessages/coachが機能していることで確認できる)。
+    expect(response.plan.resolvedTargetShapeId).toBeNull();
+    expect(response.plan.urgentMessages[0]?.kind).toBe("in_check");
+    expect(response.plan.urgentMessages[0]?.text).toContain("王手を解消する手しか指せません");
+    expect(response.plan.nextConsiderations).toEqual([]);
   });
 
   it("同じ局面に対して常に同じ結果を返す(決定的)", () => {
@@ -2085,5 +2126,367 @@ describe("公開境界(内部状態とAPIレスポンスの分離、ζ-4a)", () 
     expect(response.coach).toBeDefined();
     const opponentIntent = findStage(response.coach!, "opponent_intent");
     expect(opponentIntent.reason).toContain("早仕掛けの形になっています");
+  });
+});
+
+// STEP 4-5(2026-09-10人間承認済み): 終局・王手中の表示。
+// 終局・詰み・王手の判定はすべてrules/gameStatus.tsの既存関数(isGameOver/getGameOutcome/
+// isInCheck)に委ねる。自作の詰み判定・王手判定は一切追加しない。
+// 人間指定テスト12項目のうち、web側のテスト10(gameApi.test.ts)を除く項目をここで扱う。
+describe("STEP 4-5: 終局・王手中の表示", () => {
+  // 人間指定テスト1: 自分(先手)が詰まされた終局。
+  // 玉9a・自分の歩8a(逃げ場を塞ぐ)。王手側: 飛車9c(王手そのもの、9bは素通し)・
+  // 金8b(9aの逃げ場を塞ぐ・銀7aに守られている)・銀7a(8bを守る)。
+  function selfCheckmateSfen(): string {
+    return customSfen([
+      { square: "9a", color: "sente", role: "king" },
+      { square: "8a", color: "sente", role: "pawn" },
+      { square: "9c", color: "gote", role: "rook" },
+      { square: "8b", color: "gote", role: "gold" },
+      { square: "7a", color: "gote", role: "silver" },
+    ]);
+  }
+
+  // 人間指定テスト2: 相手(後手)を詰ませた終局。selfCheckmateSfenを左右反転・先後反転しただけ
+  // (同じ構成を後手側に置き、手番をgoteにする)。
+  function opponentCheckmateSfen(): string {
+    return customSfenWithTurn(
+      [
+        { square: "1a", color: "gote", role: "king" },
+        { square: "2a", color: "gote", role: "pawn" },
+        { square: "1c", color: "sente", role: "rook" },
+        { square: "2b", color: "sente", role: "gold" },
+        { square: "3a", color: "sente", role: "silver" },
+      ],
+      "gote",
+    );
+  }
+
+  // 人間指定テスト3: 詰み以外の終局(stalemate)。
+  // 玉9aの逃げ場3マス(8a・9b・8b)を後手の桂馬3枚が塞ぎ、いずれも捕獲すると
+  // 別の遠隔駒(飛車5a・9e、角6d)に取り返されるため実質捕獲できない(=移動不可)。
+  // 桂馬自体は隣接マスを攻撃しないため、現時点で玉に王手はかかっていない。
+  function stalemateSfen(): string {
+    return customSfen([
+      { square: "9a", color: "sente", role: "king" },
+      { square: "8a", color: "gote", role: "knight" },
+      { square: "9b", color: "gote", role: "knight" },
+      { square: "8b", color: "gote", role: "knight" },
+      { square: "5a", color: "gote", role: "rook" },
+      { square: "9e", color: "gote", role: "rook" },
+      { square: "6d", color: "gote", role: "bishop" },
+    ]);
+  }
+
+  // 人間指定テスト4・8: 非終局の王手局面。本美濃囲いの銀3h・金4i・金5hは既に揃い、
+  // 玉だけ3i(missing: 2h)。後手の桂馬4gが3iへ桂馬跳びで王手する(3i2h等へ逃げられるため
+  // 詰みではない)。selectedTargetShapeId="mino_honmino"により、王手中でも内部の
+  // resolvedTargetShapeIdが実際に解決されることを確認できる(単なる両玉だけの局面では
+  // 検証にならないため、計画レビューで指摘された)。
+  function checkNotMateSfen(): string {
+    return customSfen([
+      { square: "3i", color: "sente", role: "king" },
+      { square: "3h", color: "sente", role: "silver" },
+      { square: "4i", color: "sente", role: "gold" },
+      { square: "5h", color: "sente", role: "gold" },
+      { square: "4g", color: "gote", role: "knight" },
+    ]);
+  }
+
+  // 成果監査REVISE(2026-09-10、修正1): 本美濃囲い(mino_honmino)が完成した状態のまま、
+  // 桂馬の王手で詰まされた局面(監査担当が実機で再現)。玉2h・銀3h・金4i・金5hの
+  // 本美濃完成に、桂3f(王手そのもの)・香1a(1g/1h/1iを制圧)・角4h(3g/3iを制圧)・
+  // 銀1h(2g/2iを制圧。捕獲しても香1aの利きが引き続き玉に届くため王手が続く)を加え、
+  // 玉の全逃げ場を塞いだ(shogiopsのisEnd/outcomeで検証済み)。
+  function honminoCompletedCheckmateSfen(): string {
+    return customSfen([
+      { square: "2h", color: "sente", role: "king" },
+      { square: "3h", color: "sente", role: "silver" },
+      { square: "4i", color: "sente", role: "gold" },
+      { square: "5h", color: "sente", role: "gold" },
+      { square: "1a", color: "gote", role: "lance" },
+      { square: "1h", color: "gote", role: "silver" },
+      { square: "4h", color: "gote", role: "bishop" },
+      { square: "3f", color: "gote", role: "knight" },
+    ]);
+  }
+
+  // 成果監査REVISE: 上記と同じ本美濃完成の駒配置に、王手をかける桂3fだけを加えた
+  // 非終局の局面(玉2hには他に逃げ場があるため詰みではない)。削りすぎ防止用
+  // (王手中でも[3]shapeWeaknessは出続けることを確認する)。
+  function honminoCompletedCheckedNotMateSfen(): string {
+    return customSfen([
+      { square: "2h", color: "sente", role: "king" },
+      { square: "3h", color: "sente", role: "silver" },
+      { square: "4i", color: "sente", role: "gold" },
+      { square: "5h", color: "sente", role: "gold" },
+      { square: "3f", color: "gote", role: "knight" },
+    ]);
+  }
+
+  it("1: 自分が詰まされた局面では、urgentMessagesに詰みの文(自分側)だけが入り、[2][3][4]も出ない", () => {
+    const sfen = selfCheckmateSfen();
+    const state: GameState = { sfen, moveHistory: [], forcedPliesUsed: 0 };
+    const response = buildStateResponseWithPlan(state, undefined, { initialSfen: sfen });
+
+    expect(response.status.isEnd).toBe(true);
+    expect(response.status.outcome?.result).toBe("checkmate");
+    expect(response.status.outcome?.winner).toBe("gote");
+    expect(response.plan.urgentMessages).toEqual([{ kind: "game_end", text: GAME_END_SELF_CHECKMATE_TEXT }]);
+    expect(response.coach).toEqual([]);
+    expect(response.plan.routes).toEqual([]);
+    expect(response.plan.targetShapeProgress).toBeNull();
+    expect(response.plan.resolvedTargetShapeId).toBeNull();
+    expect(response.plan.candidateMoveState).toBe("unavailable");
+    expect(response.plan.candidateMove).toBeUndefined();
+    expect(response.plan.candidateMoveLabels).toEqual({});
+    expect(response.plan.directionNote).toBeNull();
+    // 成果監査REVISE(W-1の漏れ): 終局時は[3](shapeWeakness)も出さない。
+    expect(response.plan.shapeWeakness).toBeNull();
+  });
+
+  it("2: 相手を詰ませた局面では、urgentMessagesに詰みの文(相手側)だけが入る", () => {
+    const sfen = opponentCheckmateSfen();
+    const state: GameState = { sfen, moveHistory: [], forcedPliesUsed: 0 };
+    const response = buildStateResponseWithPlan(state, undefined, { initialSfen: sfen });
+
+    expect(response.status.isEnd).toBe(true);
+    expect(response.status.outcome?.result).toBe("checkmate");
+    expect(response.status.outcome?.winner).toBe("sente");
+    expect(response.plan.urgentMessages).toEqual([{ kind: "game_end", text: GAME_END_OPPONENT_CHECKMATE_TEXT }]);
+    expect(response.coach).toEqual([]);
+    // 成果監査REVISE(W-1の漏れ): 終局時は[3](shapeWeakness)も出さない。
+    expect(response.plan.shapeWeakness).toBeNull();
+  });
+
+  it("3: 詰み以外の終局(stalemate)では、urgentMessagesに「対局は終了しました。」だけが入る", () => {
+    const sfen = stalemateSfen();
+    const state: GameState = { sfen, moveHistory: [], forcedPliesUsed: 0 };
+    const response = buildStateResponseWithPlan(state, undefined, { initialSfen: sfen });
+
+    expect(response.status.isEnd).toBe(true);
+    expect(response.status.outcome?.result).not.toBe("checkmate");
+    expect(response.plan.urgentMessages).toEqual([{ kind: "game_end", text: GAME_END_OTHER_TEXT }]);
+    expect(response.coach).toEqual([]);
+    // 成果監査REVISE(W-1の漏れ): 終局時は[3](shapeWeakness)も出さない。
+    expect(response.plan.shapeWeakness).toBeNull();
+  });
+
+  it("4・8・11: 非終局の王手局面では、[0]に既存の王手の文が入り、nextConsiderations/[4]は空、coachにopponent_intentが残る", () => {
+    const sfen = checkNotMateSfen();
+    const state: GameState = { sfen, moveHistory: [], forcedPliesUsed: 0 };
+    const response = buildStateResponseWithPlan(state, undefined, { initialSfen: sfen }, "mino_honmino");
+
+    expect(response.status.isEnd).toBe(false);
+    expect(response.plan.urgentMessages).toEqual([
+      {
+        kind: "in_check",
+        text: "今、あなたの玉に王手がかかっています。ルール上、王手を解消する手しか指せません。",
+      },
+    ]);
+    // nextConsiderationsが空であること(in_checkが「だけ」残るのではなく、
+    // in_check自体がpartitionUrgentMessagesにより[0]へ移り、ここには何も残らない。
+    // 計画レビュー2回目の訂正どおり)。
+    expect(response.plan.nextConsiderations).toEqual([]);
+    expect(response.plan.routes).toEqual([]);
+    expect(response.plan.targetShapeProgress).toBeNull();
+    expect(response.plan.resolvedTargetShapeId).toBeNull();
+    expect(response.plan.candidateMoveState).toBe("unavailable");
+    expect(response.plan.candidateMove).toBeUndefined();
+    expect(response.plan.candidateMoveLabels).toEqual({});
+    // [2][3]は王手中も現行どおり出る(coachは空にしない)。opponent_intentの残存を確認する。
+    expect(response.coach?.map((c) => c.stage)).toContain("opponent_intent");
+  });
+
+  it("5: 王手を玉移動で回避した局面では、square_lostが出ない(V-1)", () => {
+    const sfenBefore = customSfen([
+      { square: "2h", color: "sente", role: "king" },
+      { square: "3h", color: "sente", role: "silver" },
+      { square: "4i", color: "sente", role: "gold" },
+      { square: "2b", color: "gote", role: "lance" },
+    ]);
+    // 2b の香で2h の玉に王手がかかっている(2h3iが唯一の逃げ方の一つ)。
+    expect(isInCheck(sfenBefore, "sente")).toBe(true);
+
+    const sfenAfterUser = applyMove(sfenBefore, "2h3i");
+    const sfenAfter = applyMove(sfenAfterUser, "2b2c");
+
+    const stateBefore: GameState = { sfen: sfenBefore, moveHistory: [], forcedPliesUsed: 0 };
+    const stateAfter: GameState = { sfen: sfenAfter, moveHistory: ["2h3i", "2b2c"], forcedPliesUsed: 0 };
+
+    const outcome = computeMoveOutcomeAfterMove(
+      stateBefore,
+      stateAfter,
+      "2h3i",
+      "2b2c",
+      { initialSfen: sfenBefore },
+      "mino_honmino",
+    );
+    // 判定(moveOutcomeDetector.ts)自体は変えていないため、square_lostの事実は
+    // そのまま検出される(玉が2hから離れ、本美濃囲いの必須マスの一つが崩れたため)。
+    expect(outcome?.facts.map((f) => f.kind)).toEqual(["square_lost"]);
+
+    const events = computeBoardEventsAfterMove(stateBefore, "2h3i", "2b2c");
+    const response = buildStateResponseWithPlan(
+      stateAfter,
+      undefined,
+      { initialSfen: sfenBefore },
+      "mino_honmino",
+      false,
+      null,
+      outcome,
+      events,
+    );
+
+    // 表示側フィルタ(V-1)により、square_lostは[1]に出ない。
+    expect(response.plan.lastMoveOutcome?.messages).toEqual([]);
+  });
+
+  it("6: 王手と無関係な通常の玉移動では、square_lostが従来どおり出る", () => {
+    const sfenBefore = customSfen([
+      { square: "2h", color: "sente", role: "king" },
+      { square: "3h", color: "sente", role: "silver" },
+      { square: "4i", color: "sente", role: "gold" },
+      { square: "9c", color: "gote", role: "pawn" },
+    ]);
+    expect(isInCheck(sfenBefore, "sente")).toBe(false);
+
+    const sfenAfterUser = applyMove(sfenBefore, "2h1h");
+    const sfenAfter = applyMove(sfenAfterUser, "9c9d");
+
+    const stateBefore: GameState = { sfen: sfenBefore, moveHistory: [], forcedPliesUsed: 0 };
+    const stateAfter: GameState = { sfen: sfenAfter, moveHistory: ["2h1h", "9c9d"], forcedPliesUsed: 0 };
+
+    const outcome = computeMoveOutcomeAfterMove(
+      stateBefore,
+      stateAfter,
+      "2h1h",
+      "9c9d",
+      { initialSfen: sfenBefore },
+      "mino_honmino",
+    );
+
+    const events = computeBoardEventsAfterMove(stateBefore, "2h1h", "9c9d");
+    const response = buildStateResponseWithPlan(
+      stateAfter,
+      undefined,
+      { initialSfen: sfenBefore },
+      "mino_honmino",
+      false,
+      null,
+      outcome,
+      events,
+    );
+
+    expect(response.plan.lastMoveOutcome?.messages.map((m) => m.kind)).toContain("square_lost");
+  });
+
+  it("7・12: 終局時は[2][3][4]が出ず、[1]の盤面事実・得喪の集約は現行どおり出る(形の差分文だけが落ちる)", () => {
+    // toCaptureSummaryMessages/computeBoardEventsAfterMoveは current.moveHistory と
+    // options.initialSfen だけから計算する既存の配線であり、current.sfen(終局判定に
+    // 使う局面)とは独立している。これを利用し、「双方が取った局面」(既存テストと
+    // 同じ構成)から得た本物の盤面イベント・得喪集約に、手動構成したsquare_lost
+    // (形・道のりの差分文の代表例)を混ぜ、終局状態(current.sfen=詰みの局面)で
+    // どちらが残りどちらが落ちるかを検証する。
+    // 【注記】current.sfenとcurrent.moveHistoryが意図的に不整合(sfenは詰みの局面、
+    // moveHistoryは無関係な捕獲の履歴)なため、buildStateResponse内部のcoach生成・
+    // ⑤⑥⑦計算(analyzeShapeFormationの整合性チェック)がShapeFormationAnalysisErrorを
+    // 投げるが、これは既存のsafeExplainPosition/safeComputeRankedPlanContextが
+    // console.errorに留めて安全に空へ倒す想定どおりの経路であり(対局本体を止めない、
+    // Phase1以来の既存方針)、このテスト自体が検証したい[1]のフィルタ結果には影響しない。
+    // 実行時にこのエラーログが標準エラー出力に出るのは既知・想定内である。
+    const captureBaseSfen = buildMutualCaptureSfen();
+    const moveHistory = ["5e5d", "3d3e"];
+    const boardEvents = computeBoardEventsAfterMove(
+      { sfen: captureBaseSfen, moveHistory: [], forcedPliesUsed: 0 },
+      "5e5d",
+      "3d3e",
+    );
+    const lastMoveOutcome: MoveOutcome = {
+      playedMoveUsi: "5e5d",
+      opponentMoveUsi: "3d3e",
+      facts: [
+        {
+          kind: "square_lost",
+          targetSquare: "3h",
+          targetPiece: null,
+          remainingStepsBefore: null,
+          remainingStepsAfter: null,
+          blockingSquare: null,
+          candidateKind: null,
+          cause: null,
+        },
+      ],
+    };
+
+    const state: GameState = { sfen: selfCheckmateSfen(), moveHistory, forcedPliesUsed: 0 };
+    const response = buildStateResponseWithPlan(
+      state,
+      undefined,
+      { initialSfen: captureBaseSfen },
+      "mino_honmino",
+      false,
+      null,
+      lastMoveOutcome,
+      boardEvents,
+    );
+
+    expect(response.status.isEnd).toBe(true);
+    // [2][3][4]
+    expect(response.coach).toEqual([]);
+    expect(response.plan.routes).toEqual([]);
+    expect(response.plan.targetShapeProgress).toBeNull();
+    expect(response.plan.candidateMoveState).toBe("unavailable");
+    // 成果監査REVISE(W-1の漏れ): 終局時は[3](shapeWeakness)も出さない。
+    expect(response.plan.shapeWeakness).toBeNull();
+    // [1]: 盤面イベント・得喪の集約は残り、形の差分文(square_lost)は落ちる。
+    const kinds = response.plan.lastMoveOutcome!.messages.map((m) => m.kind);
+    expect(kinds).toContain("captured_by_you");
+    expect(kinds).toContain("captured_by_opponent");
+    expect(kinds).toContain("capture_summary");
+    expect(kinds).not.toContain("square_lost");
+  });
+
+  it("9: 王手中・終局時は、computeReachablePlanがエンジン(MultiPV)を一切呼ばない", async () => {
+    const sfen = checkNotMateSfen();
+    const state: GameState = { sfen, moveHistory: [], forcedPliesUsed: 0 };
+    const engine = makeMockLowPriorityEngine([]);
+
+    const result = await computeReachablePlan(state, engine, { initialSfen: sfen }, "mino_honmino");
+
+    // 王手中でなければ候補手が存在するはずの局面であることの確認
+    // (suppressPlanが無ければcandidateMoveが計算されていたはずの局面、という前提の担保)。
+    expect(result.targetShapeId).toBe("mino_honmino");
+    expect(result.candidateMove).toBeUndefined();
+    expect(engine.goMultiPv).not.toHaveBeenCalled();
+
+    const endSfen = selfCheckmateSfen();
+    const endState: GameState = { sfen: endSfen, moveHistory: [], forcedPliesUsed: 0 };
+    const endResult = await computeReachablePlan(endState, engine, { initialSfen: endSfen });
+    expect(endResult.candidateMove).toBeUndefined();
+    expect(engine.goMultiPv).not.toHaveBeenCalled();
+  });
+
+  it("成果監査REVISE: 本美濃囲いが完成したまま詰まされた局面では、shapeWeaknessもnullになる(W-1の漏れの回帰テスト)", () => {
+    const sfen = honminoCompletedCheckmateSfen();
+    const state: GameState = { sfen, moveHistory: [], forcedPliesUsed: 0 };
+    const response = buildStateResponseWithPlan(state, undefined, { initialSfen: sfen }, "mino_honmino");
+
+    expect(response.status.isEnd).toBe(true);
+    expect(response.status.outcome?.result).toBe("checkmate");
+    expect(response.status.outcome?.winner).toBe("gote");
+    expect(response.plan.urgentMessages).toEqual([{ kind: "game_end", text: GAME_END_SELF_CHECKMATE_TEXT }]);
+    expect(response.coach).toEqual([]);
+    expect(response.plan.shapeWeakness).toBeNull();
+  });
+
+  it("成果監査REVISE(削りすぎ防止): 本美濃囲いが完成したまま王手を受けている(非終局)局面では、shapeWeaknessは従来どおり残る", () => {
+    const sfen = honminoCompletedCheckedNotMateSfen();
+    const state: GameState = { sfen, moveHistory: [], forcedPliesUsed: 0 };
+    const response = buildStateResponseWithPlan(state, undefined, { initialSfen: sfen }, "mino_honmino");
+
+    expect(response.status.isEnd).toBe(false);
+    expect(isInCheck(sfen, "sente")).toBe(true);
+    expect(response.plan.shapeWeakness?.shapeId).toBe("mino_honmino");
   });
 });

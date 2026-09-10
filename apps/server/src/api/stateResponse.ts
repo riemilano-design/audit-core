@@ -33,7 +33,7 @@ import {
   type MoveOutcomeSnapshot,
 } from "../analysis/moveOutcomeDetector.js";
 import { explainMoveOutcome, type MoveOutcomeMessage } from "../analysis/moveOutcomeExplanation.js";
-import { detectBoardEvents, type BoardEvent } from "../analysis/boardEventDetector.js";
+import { detectBoardEvents, type BoardEvent, type BoardEventKind } from "../analysis/boardEventDetector.js";
 import { detectNextConsiderations } from "../analysis/nextConsiderationDetector.js";
 import {
   explainNextConsiderations,
@@ -42,14 +42,21 @@ import {
 import { explainBoardEvents, type BoardEventMessage } from "../analysis/boardEventExplanation.js";
 import { exposeName } from "../analysis/nameExposure.js";
 import { getLegalMoves } from "../rules/legalMoves.js";
-import { isInCheck } from "../rules/gameStatus.js";
+import { isGameOver, isInCheck } from "../rules/gameStatus.js";
+import { parsePosition } from "../rules/sfenPosition.js";
 import { listAttackedPieces } from "../rules/attackedPieces.js";
 import { detectPieceThreats } from "../analysis/pieceThreatDetector.js";
 import { explainPieceThreats, type PieceThreatMessage } from "../analysis/pieceThreatExplanation.js";
-import { explainCaptureSummary, type CaptureSummaryMessage } from "../analysis/captureSummary.js";
+import {
+  explainCaptureSummary,
+  type CaptureSummaryMessage,
+  type CaptureSummaryMessageKind,
+} from "../analysis/captureSummary.js";
 import { toJapaneseMoveHistory } from "../notation/japaneseMoveHistory.js";
 import type { LowPriorityEngine } from "../engine/prioritizedEngine.js";
 import { buildRecognitionTimeline } from "../analysis/recognitionTimeline.js";
+import { replayMoveHistory, DEFAULT_INITIAL_SFEN } from "../analysis/moveHistory.js";
+import { isDrop, parseUsi } from "shogiops/util";
 
 export type { PlanSnapshot } from "../analysis/planChangeDetector.js";
 export type { PlanChangeReason } from "../analysis/planChangeReason.js";
@@ -801,11 +808,19 @@ export function hasAmbiguousReferenceOrder(
  *
  * Phase1のcoachやPhase6 Unit1〜3と同様、ここでの失敗を対局本体へ波及させない
  * (失敗時は空配列=ブロック非表示に落とす)。
+ *
+ * 【STEP 4-5(X-1、人間承認済み)】王手中・終局時は[4]を丸ごと出さないため、
+ * routes・candidateMovesを空にしてdetectNextConsiderationsへ渡す(suppressPlan)。
+ * 終局時はdetectNextConsiderations自身がisGameEndで空配列を返すため実質影響しないが、
+ * 王手中(非終局)はこれが無いと「道のりの一手目です」「どれも指せません」が
+ * [4]非表示と矛盾して残ってしまう。in_check自体はpartitionUrgentMessagesが
+ * urgentMessages([0])へ移すため、ここでは何も特別扱いしない。
  */
 function toNextConsiderations(
   current: GameState,
   context: RankedPlanContext | undefined,
   isGameEnd: boolean,
+  suppressPlan: boolean,
 ): NextConsiderationMessage[] {
   if (!context?.resolvedTargetShapeId) return [];
   const shapeResult = context.shapeResults.find((r) => r.shapeId === context.resolvedTargetShapeId);
@@ -817,8 +832,8 @@ function toNextConsiderations(
       shapeName: shapeResult.name,
       shapeReviewStatus: shapeResult.reviewStatus,
       missingSquares: shapeResult.missingSquares,
-      routes: context.routePlanResult?.routes ?? [],
-      candidateMoves: context.routePlanResult?.candidateMoves ?? [],
+      routes: suppressPlan ? [] : context.routePlanResult?.routes ?? [],
+      candidateMoves: suppressPlan ? [] : context.routePlanResult?.candidateMoves ?? [],
       isGameEnd,
       inCheck: isInCheck(current.sfen, shapeResult.perspectiveColor),
     });
@@ -871,6 +886,110 @@ function toCaptureSummaryMessages(current: GameState, options: ExplainPositionOp
     console.error("駒の得喪(Phase7 Unit4 STEP 4-3b, captureSummary)の計算でエラーが発生しました:", err);
     return [];
   }
+}
+
+/**
+ * STEP 4-5(T-1、人間承認済み)。[0]に出す終局・詰みの文。既存のgetGameOutcome
+ * (rules/gameStatus.ts)の結果だけを見て文言を決める、新しい終局判定は一切行わない。
+ * 詰み(result === "checkmate")とそれ以外だけを区別する(仕様1参照)。
+ */
+export const GAME_END_SELF_CHECKMATE_TEXT =
+  "あなたの玉が詰み(逃げ場がなく、王手を防げない状態)になり、対局は終了しました。";
+export const GAME_END_OPPONENT_CHECKMATE_TEXT =
+  "相手の玉を詰み(逃げ場がなく、王手を防げない状態)にして、対局は終了しました。";
+export const GAME_END_OTHER_TEXT = "対局は終了しました。";
+
+function toGameEndMessage(status: GameStatus): { kind: string; text: string } {
+  const outcome = status.outcome;
+  if (outcome?.result === "checkmate") {
+    if (outcome.winner === "gote") return { kind: "game_end", text: GAME_END_SELF_CHECKMATE_TEXT };
+    if (outcome.winner === "sente") return { kind: "game_end", text: GAME_END_OPPONENT_CHECKMATE_TEXT };
+  }
+  return { kind: "game_end", text: GAME_END_OTHER_TEXT };
+}
+
+/**
+ * STEP 4-5(U-1、人間承認済み)。終局時の[1]は、盤面の出来事(BoardEventMessage、
+ * 捕獲・成り・王手)と駒の得喪の集約(CaptureSummaryMessage)だけ残し、形・道のりに
+ * ついての差分文(MoveOutcomeMessage、moveOutcomeDetector.tsのkind一覧)は出さない。
+ * 判定(moveOutcomeDetector.ts)は変えず、メッセージの型(kind)だけを見て
+ * 表示側で落とす(ARCHITECTURE 5.の流儀)。
+ */
+const GAME_END_KEEP_KINDS: Record<BoardEventKind | CaptureSummaryMessageKind, true> = {
+  captured_by_you: true,
+  captured_by_opponent: true,
+  promoted_by_you: true,
+  promoted_by_opponent: true,
+  check_given: true,
+  check_received: true,
+  capture_summary: true,
+};
+
+function filterLastMoveMessagesForGameEnd(
+  messages: (BoardEventMessage | MoveOutcomeMessage | CaptureSummaryMessage)[],
+  isGameEnd: boolean,
+): (BoardEventMessage | MoveOutcomeMessage | CaptureSummaryMessage)[] {
+  if (!isGameEnd) return messages;
+  const keep = GAME_END_KEEP_KINDS as Record<string, true | undefined>;
+  return messages.filter((message) => keep[message.kind] === true);
+}
+
+/**
+ * STEP 4-5(V-1、人間承認済み)。「配置が崩れました」(square_lost)を、直前の自分の手が
+ * 王手回避の玉移動だった場合に抑止する(表示側フィルタ。moveOutcomeDetector.tsの
+ * 判定自体は変えない)。
+ *
+ * 【着手前局面の入手】current.moveHistoryをoptions.initialSfenから再生する
+ * (analysis/moveHistory.tsのreplayMoveHistoryをそのまま使うだけ)。末尾k手
+ * (opponentMoveUsiがあればk=2、無ければk=1)がlastMoveOutcomeの手と一致することを
+ * 確認したうえで、その直前の局面を取り出す。一致しない・再生が例外を投げる・kが
+ * 範囲外のいずれかであれば安全側に倒し、抑止しない(従来どおりsquare_lostを出す)。
+ *
+ * 【抑止条件】playedMoveUsiが打つ手でなく、移動元の駒が自分の玉(king)であり、かつ
+ * その手を指す前の局面で自玉に王手がかかっていた(isInCheck、rules/の既存関数)。
+ * 玉の判定はrules/経由のshogiops読み取りのみで、自作の判定は行わない。
+ */
+function shouldSuppressSquareLost(current: GameState, options: ExplainPositionOptions, lastMoveOutcome: MoveOutcome): boolean {
+  try {
+    const { moveHistory } = current;
+    const k = lastMoveOutcome.opponentMoveUsi !== null ? 2 : 1;
+    const last = moveHistory.length - 1;
+    if (last - (k - 1) < 0) return false;
+    if (k === 2) {
+      if (moveHistory[last] !== lastMoveOutcome.opponentMoveUsi) return false;
+      if (moveHistory[last - 1] !== lastMoveOutcome.playedMoveUsi) return false;
+    } else if (moveHistory[last] !== lastMoveOutcome.playedMoveUsi) {
+      return false;
+    }
+
+    const beforeIndex = moveHistory.length - k;
+    const { sfens } = replayMoveHistory(moveHistory, options.initialSfen ?? DEFAULT_INITIAL_SFEN);
+    const sfenBefore = sfens[beforeIndex];
+    if (sfenBefore === undefined) return false;
+
+    const move = parseUsi(lastMoveOutcome.playedMoveUsi);
+    if (!move || isDrop(move)) return false;
+
+    const piece = parsePosition(sfenBefore).board.get(move.from);
+    if (!piece || piece.role !== "king") return false;
+
+    return isInCheck(sfenBefore, "sente");
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * shouldSuppressSquareLostがtrueの場合にkind: "square_lost"のメッセージだけを取り除く。
+ */
+function filterSquareLostIfSuppressed(
+  messages: (BoardEventMessage | MoveOutcomeMessage | CaptureSummaryMessage)[],
+  current: GameState,
+  options: ExplainPositionOptions,
+  lastMoveOutcome: MoveOutcome,
+): (BoardEventMessage | MoveOutcomeMessage | CaptureSummaryMessage)[] {
+  if (!shouldSuppressSquareLost(current, options, lastMoveOutcome)) return messages;
+  return messages.filter((message) => message.kind !== "square_lost");
 }
 
 /** 選択中の形の「今どこまで出来ているか」を、既存の判定結果からそのまま組み立てる。
@@ -1180,14 +1299,25 @@ export function buildStateResponseWithPlan(
   const base = buildStateResponse(current, options);
   const context = safeComputeRankedPlanContext(current, options, selectedTargetShapeId);
   const reachableShapes = toReachableShapeBodies(context?.reachableShapes ?? []);
-  const resolvedTargetShapeId = context?.resolvedTargetShapeId ?? null;
-  const hasCandidateMoves = (context?.routePlanResult?.candidateMoves.length ?? 0) > 0;
+  // STEP 4-5(人間承認済み): 出力と内部で resolvedTargetShapeId を分ける。
+  // 内部値(internalResolvedTargetShapeId)は、toNextConsiderations・
+  // filterCoachForTargetShape・filterLastMoveMessagesForTargetShape(U0-1)の入力として
+  // 王手中も実際の認識値のまま使う。出力(resolvedTargetShapeId)だけをsuppressPlanで
+  // nullにする(section 10、計画レビュー2回目の訂正)。
+  const internalResolvedTargetShapeId = context?.resolvedTargetShapeId ?? null;
+  // STEP 4-5(人間承認済み): 終局または王手中は[4]を丸ごと出さない(X-1)。
+  // 終局・王手・詰みの判定はrules/gameStatus.tsの既存関数(isInCheck、
+  // base.status.isEndはgetGameOutcome/isGameOver由来)だけで決める。
+  const suppressPlan = base.status.isEnd || isInCheck(current.sfen, "sente");
+  const resolvedTargetShapeId = suppressPlan ? null : internalResolvedTargetShapeId;
+  const hasCandidateMoves = !suppressPlan && (context?.routePlanResult?.candidateMoves.length ?? 0) > 0;
 
   let candidateMoveState: CandidateMoveState;
   let candidateMove: CandidateMoveExplanationResult | undefined;
 
   if (!hasCandidateMoves) {
-    // routePlanner.tsが対象の形について候補手を1つも返せない(=解析する対象が無い)。
+    // routePlanner.tsが対象の形について候補手を1つも返せない(=解析する対象が無い)場合と、
+    // 終局・王手中でsuppressPlanによりhasCandidateMovesがfalseに強制された場合の両方。
     candidateMoveState = "unavailable";
     candidateMove = undefined;
   } else if (
@@ -1206,37 +1336,55 @@ export function buildStateResponseWithPlan(
     candidateMove = undefined;
   }
 
+  // STEP 4-5(人間承認済み): [1]に出す前に、U0-1の既存フィルタ → V-1(square_lost抑止)→
+  // U-1(終局時は盤面の出来事+得喪集約だけ残す)の順で表示側フィルタを重ねる
+  // (いずれも既存の判定結果に対する表示側の絞り込みであり、判定自体は変えない)。
+  const lastMoveMessagesForPartition = lastMoveOutcome
+    ? filterLastMoveMessagesForGameEnd(
+        filterSquareLostIfSuppressed(
+          filterLastMoveMessagesForTargetShape(
+            // 盤面で実際に起きたこと(捕獲・王手・成り)を先に述べ、そのあとで
+            // 形・経路についての説明を述べ、最後に駒の得喪の集約(M-1)を1行加える。
+            [
+              ...explainBoardEvents(lastBoardEvents),
+              ...explainMoveOutcome(lastMoveOutcome),
+              ...toCaptureSummaryMessages(current, options),
+            ],
+            internalResolvedTargetShapeId !== null,
+          ),
+          current,
+          options,
+          lastMoveOutcome,
+        ),
+        base.status.isEnd,
+      )
+    : [];
+
   const partition = partitionUrgentMessages(
-    lastMoveOutcome
-      ? filterLastMoveMessagesForTargetShape(
-          // 盤面で実際に起きたこと(捕獲・王手・成り)を先に述べ、そのあとで
-          // 形・経路についての説明を述べ、最後に駒の得喪の集約(M-1)を1行加える。
-          [
-            ...explainBoardEvents(lastBoardEvents),
-            ...explainMoveOutcome(lastMoveOutcome),
-            ...toCaptureSummaryMessages(current, options),
-          ],
-          resolvedTargetShapeId !== null,
-        )
-      : [],
-    toNextConsiderations(current, context, base.status.isEnd),
+    lastMoveMessagesForPartition,
+    toNextConsiderations(current, context, base.status.isEnd, suppressPlan),
     toPieceThreatMessages(current, base.status.isEnd),
   );
 
+  // STEP 4-5(T-1、人間承認済み): 終局時の[0]は詰み・終局の文だけにする
+  // (check_received・in_check・当たり等の既存の王手表示は終局時には出さない)。
+  const urgentMessages = base.status.isEnd ? [toGameEndMessage(base.status)] : partition.urgent;
+
   return {
     ...base,
-    coach: filterCoachForTargetShape(base.coach, resolvedTargetShapeId !== null),
+    // STEP 4-5(W-1、人間承認済み): 終局時は[2][3]を出さない(coachを空にする)。
+    coach: base.status.isEnd ? [] : filterCoachForTargetShape(base.coach, internalResolvedTargetShapeId !== null),
     plan: {
       reachableShapes,
-      routes: toRouteSummaries(context?.routePlanResult, current.sfen),
-      targetShapeProgress: toTargetShapeProgress(context, current.sfen),
-      candidateMoveLabels: toCandidateMoveLabels(context?.routePlanResult, current.sfen),
+      routes: suppressPlan ? [] : toRouteSummaries(context?.routePlanResult, current.sfen),
+      targetShapeProgress: suppressPlan ? null : toTargetShapeProgress(context, current.sfen),
+      candidateMoveLabels: suppressPlan ? {} : toCandidateMoveLabels(context?.routePlanResult, current.sfen),
       referenceShapes: toReferenceShapes(context),
       directionNote:
-        context && context.direction.reason !== "single" && context.resolvedTargetShapeId === undefined
+        !suppressPlan && context && context.direction.reason !== "single" && context.resolvedTargetShapeId === undefined
           ? DIRECTION_UNDECIDED_TEXT
           : null,
-      urgentMessages: partition.urgent,
+      urgentMessages,
       lastMoveOutcome: lastMoveOutcome
         ? {
             ...resolveMoveLabels(current.moveHistory, base.moveHistoryJapanese, lastMoveOutcome),
@@ -1248,7 +1396,9 @@ export function buildStateResponseWithPlan(
       candidateMove,
       pendingReviewNote: toPlanPendingReviewNote(context),
       resolvedTargetShapeId,
-      shapeWeakness: toShapeWeakness(context?.shapeResults),
+      // STEP 4-5 成果監査REVISE(人間承認済みW-1の漏れ): 終局時は[3]も出さない。
+      // coachと同じガード(base.status.isEnd)。王手中(非終局)は従来どおり出す。
+      shapeWeakness: base.status.isEnd ? null : toShapeWeakness(context?.shapeResults),
       planChanged,
       planChangeReason,
     },
@@ -1282,7 +1432,12 @@ export async function computeReachablePlan(
   const context = computeRankedPlanContext(current, options, selectedTargetShapeId);
   const routePlanResult = context.routePlanResult;
 
-  if (!routePlanResult || routePlanResult.candidateMoves.length === 0) {
+  // STEP 4-5(X-1、人間承認済み): 終局または王手中は、候補手のMultiPV参考評価
+  // (checkCandidateMovesSafety)を一切起動しない。判定はrules/gameStatus.tsの
+  // 既存関数(isGameOver・isInCheck)だけで決める。
+  const suppressPlan = isGameOver(current.sfen) || isInCheck(current.sfen, "sente");
+
+  if (suppressPlan || !routePlanResult || routePlanResult.candidateMoves.length === 0) {
     return {
       reachableShapes: context.reachableShapes,
       candidateMove: undefined,
