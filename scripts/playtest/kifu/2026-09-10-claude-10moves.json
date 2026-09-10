@@ -1,0 +1,26 @@
+{
+  "id": "2026-09-10-claude-10moves",
+  "source": "docs/PLAYTEST_LOOP_PROPOSAL.md 付録 A",
+  "moves": [
+    "7g7f",
+    "4a3b",
+    "2g2f",
+    "3c3d",
+    "8h7g",
+    "3b3c",
+    "2h6h",
+    "3c2d",
+    "5i4h",
+    "2b7g+",
+    "8i7g",
+    "B*2g",
+    "3i3h",
+    "2g5d+",
+    "4h3i",
+    "5d7f",
+    "3i2h",
+    "7f7g",
+    "6i5h",
+    "7g9i"
+  ]
+}
