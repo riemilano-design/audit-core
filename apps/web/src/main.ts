@@ -371,6 +371,10 @@ function renderUrgent(plan: ReachablePlanBody | undefined): void {
 // 選択中を「[選択中]」で示す)は廃止した。囲いは選択肢ではなく参考資料として
 // [5]「参考になる囲い」(renderReferenceShapes)に置く。道のり・候補手の対象は、
 // 選択ではなくサーバーが局面から認識した方向性(resolveRecognizedDirection)で決まる。
+// 【STEP 4-1】resolveRecognizedDirectionは、現在のstatus(forming/completed)だけでなく、
+// 対局のこれまでの指し手履歴の中で一度でもcompletedになった形の集合も見る(一度進んだ
+// 認識が、駒が動いて崩れたときに手前の形へ後退しないようにするため)。ranked(順位・
+// matchScore)は使わない。この判断はサーバー側のみで行い、web側では判定しない。
 //
 // 【Phase5 #7】「目指せる形」と候補手セクションの関係(見出しは Unit 3 で
 // 「「◯◯」に近づく手の候補」に一本化し、未選択時のフォールバック見出しは廃止した)、および

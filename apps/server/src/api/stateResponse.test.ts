@@ -1387,6 +1387,111 @@ describe("Unit 3: resolveRecognizedDirection(parent_shape_id の鎖で1件へ絞
   });
 });
 
+// 人間が承認した規則(2026-09-10、P-1: 方向の後退を止める): everCompletedShapeIds
+// (これまでに一度でもcompletedになった形の集合)が空でないときは、そのうち他の要素の
+// 祖先でない形M(=最も発展した完了形)を求め、forming のうちMの子孫だけを候補にする。
+// M自身へのフォールバックは行わず(none)、review_statusによる除外も行わない
+// (draftの銀冠も候補に含める)。
+describe("STEP 4-1: resolveRecognizedDirection(everCompletedShapeIdsで方向の後退を止める)", () => {
+  type Shape = Pick<ShapeFormationResult, "shapeId" | "status" | "parentShapeId">;
+  const shape = (
+    shapeId: string,
+    status: "none" | "forming" | "completed",
+    parentShapeId: string | null,
+  ): Shape => ({ shapeId, status, parentShapeId });
+
+  const honmino = (status: "none" | "forming" | "completed") => shape("mino_honmino", status, null);
+  const takamino = (status: "none" | "forming" | "completed") =>
+    shape("mino_takamino", status, "mino_honmino");
+  const ginkanmuri = (status: "none" | "forming" | "completed") =>
+    shape("mino_ginkanmuri", status, "mino_takamino");
+
+  it("everCompleted={本美濃}、本美濃forming+高美濃formingのときは高美濃を対象にする(P-1の核心)", () => {
+    const result = resolveRecognizedDirection(
+      [honmino("forming"), takamino("forming")],
+      new Set(["mino_honmino"]),
+    );
+
+    expect(result).toEqual({ shapeId: "mino_takamino", reason: "single", formingCount: 2 });
+  });
+
+  it("everCompleted={本美濃, 高美濃}、銀冠(draft)formingのみのときは銀冠を対象にする", () => {
+    // 入力は shapeResults(全形)である前提のため、completed に転じた本美濃・高美濃も
+    // (祖先の鎖をたどるために)一緒に渡す。ranked.slice(0,3) 由来の一部だけを渡すと、
+    // ancestorIdsOfが親を辿れず誤ってambiguousになる。
+    const result = resolveRecognizedDirection(
+      [honmino("completed"), takamino("completed"), ginkanmuri("forming")],
+      new Set(["mino_honmino", "mino_takamino"]),
+    );
+
+    expect(result).toEqual({ shapeId: "mino_ginkanmuri", reason: "single", formingCount: 1 });
+  });
+
+  it("everCompleted={本美濃}、本美濃だけforming(子孫のformingが無い)のときはnone(M自身へフォールバックしない)", () => {
+    const result = resolveRecognizedDirection([honmino("forming")], new Set(["mino_honmino"]));
+
+    expect(result).toEqual({ shapeId: undefined, reason: "none", formingCount: 1 });
+  });
+
+  it("everCompleted={本美濃}、本美濃の子2件(兄弟)がformingのときはambiguous(順位付けを発明しない)", () => {
+    const result = resolveRecognizedDirection(
+      [
+        shape("family_a_child", "forming", "mino_honmino"),
+        shape("family_b_child", "forming", "mino_honmino"),
+      ],
+      new Set(["mino_honmino"]),
+    );
+
+    expect(result).toEqual({ shapeId: undefined, reason: "ambiguous", formingCount: 2 });
+  });
+});
+
+// STEP 4-1 の配線(computeRankedPlanContext内でbuildRecognitionTimelineの出力と
+// 現在completedのidを集合として組み立てる部分)を担保する統合テスト。
+// 単体テスト(直前のdescribe)は組み立て済みの集合を渡すため、配線のバグを検出できない。
+describe("STEP 4-1: buildStateResponseWithPlan(P-1手順の実測。方向が本美濃へ後退しない)", () => {
+  // P-1(docs/PHASES.md「ランク別実機プレイ検証の記録(2026-09-10)」)で観測された手順。
+  // 先手が本美濃囲い(2h玉・3h銀・4i金・5h金)を組んだあと、5八の金を4七へ進めて
+  // 高美濃囲い(2h玉・3h銀・4i金・4g金・3g桂)へ発展させようとする途中の局面を辿る。
+  // 4g4fで4七の歩を退かしてから5h4gで金を進めるため、5h4g直後は本美濃の必須マス(5h)が
+  // 崩れてforming に戻る。このとき対象が本美濃へ後退しないことがSTEP 4-1の検証対象。
+  // 後手の手は形の判定に関与しない歩突きで、ファイルごとに1手ずつ別々に埋める
+  // (合法性はreplayMoveHistoryで確認済み。香の往復のような非合法な埋め手は使わない)。
+  const FULL_HISTORY = [
+    "7g7f", "1c1d",
+    "6g6f", "2c2d",
+    "2h6h", "3c3d",
+    "5i4h", "4c4d",
+    "4h3h", "5c5d",
+    "3h2h", "6c6d",
+    "3i3h", "7c7d",
+    "6i5h", "8c8d",
+    "4g4f", "9c9d",
+    "5h4g",
+  ];
+
+  it("6i5h直後(本美濃completed、まだ4七金なし)は高美濃を対象にする", () => {
+    const state = gameStateAfter(FULL_HISTORY.slice(0, 15));
+    const response = buildStateResponseWithPlan(state, undefined, {});
+
+    expect(response.plan.resolvedTargetShapeId).toBe("mino_takamino");
+  });
+
+  it("4g4f直後(5h4gの前。本美濃はまだcompletedのまま)も高美濃を対象にする", () => {
+    const state = gameStateAfter(FULL_HISTORY.slice(0, 17));
+    const response = buildStateResponseWithPlan(state, undefined, {});
+
+    expect(response.plan.resolvedTargetShapeId).toBe("mino_takamino");
+  });
+
+  it("5h4g直後(本美濃がformingへ戻る)でも高美濃を対象にし続ける(P-1: 本美濃へ後退しない)", () => {
+    const state = gameStateAfter(FULL_HISTORY);
+    const response = buildStateResponseWithPlan(state, undefined, {});
+
+    expect(response.plan.resolvedTargetShapeId).toBe("mino_takamino");
+  });
+});
+
 describe("Unit 3: 候補手のラベルに駒名を付ける", () => {
   it("初期局面の7g7fは「歩：７七→７六」になる", () => {
     const response = buildStateResponseWithPlan(gameStateAfter([]), undefined, {});

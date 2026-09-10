@@ -45,6 +45,7 @@ import { getLegalMoves } from "../rules/legalMoves.js";
 import { isInCheck } from "../rules/gameStatus.js";
 import { toJapaneseMoveHistory } from "../notation/japaneseMoveHistory.js";
 import type { LowPriorityEngine } from "../engine/prioritizedEngine.js";
+import { buildRecognitionTimeline } from "../analysis/recognitionTimeline.js";
 
 export type { PlanSnapshot } from "../analysis/planChangeDetector.js";
 export type { PlanChangeReason } from "../analysis/planChangeReason.js";
@@ -431,13 +432,54 @@ function ancestorIdsOf(
 }
 
 /**
+ * forming が複数あるとき、そのうち他のすべての祖先(または自分自身)になっている形を
+ * 1件へ絞る。根拠は parent_shape_id の鎖だけ(data/shapes/*.json の既存の記述的
+ * データ)。0件(該当なし)・2件以上(どれも他すべての祖先でない、真の兄弟関係)の
+ * ときは undefined を返す(順位付けを発明しない)。
+ * resolveRecognizedDirection の従来規則・新規則の両方から共有する。
+ */
+function pickRootMostAncestor(
+  list: Pick<ShapeFormationResult, "shapeId" | "parentShapeId">[],
+  parentById: Map<string, string | null>,
+): string | undefined {
+  const ancestorsById = new Map(
+    list.map((shape) => [shape.shapeId, ancestorIdsOf(shape.shapeId, parentById)]),
+  );
+  const rootMost = list.filter((candidate) =>
+    list.every(
+      (other) =>
+        other.shapeId === candidate.shapeId ||
+        (ancestorsById.get(other.shapeId) ?? []).includes(candidate.shapeId),
+    ),
+  );
+  return rootMost.length === 1 ? rootMost[0]!.shapeId : undefined;
+}
+
+/**
  * 認識できた形が複数あるときに、道のり・候補手の対象を1件へ絞る規則(人間の承認済み)。
  *
- * 【根拠は parent_shape_id だけである】
+ * 【根拠は parent_shape_id と、これまでに一度でも completed になった形の履歴だけである】
  * data/shapes/*.json の parent_shape_id は 本美濃囲い → 高美濃囲い → 銀冠 という
- * 「基本の形から発展させた形」の関係を表す既存の記述的データである。forming が複数
- * あるとき、**そのうち他のすべての祖先になっている形(= 最も基本となる、一番近い
- * 到達点)** を対象とする。
+ * 「基本の形から発展させた形」の関係を表す既存の記述的データである。
+ * `everCompletedShapeIds` は、対局のこれまでの指し手履歴の中で一度でも completed に
+ * なったことのある形の id 集合(呼び出し元が buildRecognitionTimeline の
+ * `kind === "shape" && to === "completed"` から組み立てて渡す。このモジュールでは
+ * 計算しない)。
+ *
+ * 【STEP 4-1 で追加した規則(人間承認済み。P-1: 方向の後退を止める)】
+ * `everCompletedShapeIds` が**空でない**場合、そのうち「他の要素の祖先でない形」
+ * (= これまでに到達した中で最も発展した完了形。M と呼ぶ)を求め、forming のうち
+ * M の子孫(M 自身は含まない)だけを候補にする。これにより、一度 高美濃 まで
+ * 認識が進んだあと、金が動いて本美濃の必須マスが崩れて本美濃が forming に戻っても、
+ * 対象が本美濃へ後退しない(M=本美濃の子孫である高美濃・銀冠のうち forming のものだけを
+ * 見る)。M が2件以上(どれも他の completed 履歴の祖先でない = 別系統に分岐した場合)は
+ * ambiguous。候補が0件は none、2件以上は下記の従来規則と同じ絞り込みを候補内で行う。
+ * `everCompletedShapeIds` が空(まだ何も completed になっていない対局)のときは、
+ * 下記の従来規則をそのまま使う。
+ *
+ * 【従来規則(everCompletedShapeIds が空のときに使う規則)】
+ * forming が複数あるとき、**そのうち他のすべての祖先になっている形(= 最も基本となる、
+ * 一番近い到達点)** を対象とする。
  *
  *   本美濃 + 高美濃 + 銀冠 → 本美濃
  *   高美濃 + 銀冠         → 高美濃
@@ -448,6 +490,8 @@ function ancestorIdsOf(
  * 【使わないもの(人間が明示した禁止事項)】
  * - rankReachableShapes の順位(ranked[0] フォールバックの復活にあたる)
  * - matchScore による並べ替え
+ * - review_status による対象の除外
+ * - M 自身へのフォールバック
  * - 新しい閾値・将棋知識にもとづく判定
  * これらを構造として排除するため、**入力は shapeResults(全形)であり、
  * ranked.slice(0, 3) ではない。** ranked を入力にすると、対象になりうる形の集合を
@@ -455,40 +499,61 @@ function ancestorIdsOf(
  * 効き始める)。
  *
  * 【一意に決まらない場合】
- * forming が複数あり、そのうちのどれも他すべての祖先でない場合(例: 将来、別系統の
- * 囲いが追加されて兄弟関係になった場合)は、対象を決めずに "ambiguous" を返す。
- * ここで順位付けを発明しない([../../../../CLAUDE.md](../../../../CLAUDE.md)
- * 「絶対に守るルール」4番)。この状態は人間へ報告する対象である。
+ * forming(または上記の候補)が複数あり、そのうちのどれも他すべての祖先でない場合
+ * (例: 将来、別系統の囲いが追加されて兄弟関係になった場合)は、対象を決めずに
+ * "ambiguous" を返す。ここで順位付けを発明しない
+ * ([../../../../CLAUDE.md](../../../../CLAUDE.md)「絶対に守るルール」4番)。
+ * この状態は人間へ報告する対象である。
  */
 export function resolveRecognizedDirection(
   shapes: Pick<ShapeFormationResult, "shapeId" | "status" | "parentShapeId">[],
+  everCompletedShapeIds: ReadonlySet<string> = new Set(),
 ): RecognizedDirection {
   const forming = shapes.filter((shape) => shape.status === "forming");
-  if (forming.length === 0) {
-    return { shapeId: undefined, reason: "none", formingCount: 0 };
-  }
-  if (forming.length === 1) {
-    return { shapeId: forming[0]!.shapeId, reason: "single", formingCount: 1 };
-  }
-
+  const formingCount = forming.length;
   const parentById = new Map(shapes.map((shape) => [shape.shapeId, shape.parentShapeId]));
-  const ancestorsById = new Map(
-    forming.map((shape) => [shape.shapeId, ancestorIdsOf(shape.shapeId, parentById)]),
-  );
 
-  // 他のすべての forming の祖先(または自分自身)になっている形を探す。
-  const rootMost = forming.filter((candidate) =>
-    forming.every(
-      (other) =>
-        other.shapeId === candidate.shapeId ||
-        (ancestorsById.get(other.shapeId) ?? []).includes(candidate.shapeId),
-    ),
-  );
-
-  if (rootMost.length === 1) {
-    return { shapeId: rootMost[0]!.shapeId, reason: "single", formingCount: forming.length };
+  if (everCompletedShapeIds.size === 0) {
+    // 従来規則(everCompletedShapeIdsが空のときは、Unit3までの挙動から変更しない)。
+    if (forming.length === 0) {
+      return { shapeId: undefined, reason: "none", formingCount: 0 };
+    }
+    if (forming.length === 1) {
+      return { shapeId: forming[0]!.shapeId, reason: "single", formingCount: 1 };
+    }
+    const resolved = pickRootMostAncestor(forming, parentById);
+    return resolved !== undefined
+      ? { shapeId: resolved, reason: "single", formingCount }
+      : { shapeId: undefined, reason: "ambiguous", formingCount };
   }
-  return { shapeId: undefined, reason: "ambiguous", formingCount: forming.length };
+
+  // STEP 4-1: これまでに一度でもcompletedになった形の集合から、最も発展した
+  // 完了形M(=他のどの要素の祖先にもなっていない形)を求める。
+  const everCompletedList = [...everCompletedShapeIds];
+  const rootMostCompleted = everCompletedList.filter(
+    (id) => !everCompletedList.some((other) => other !== id && ancestorIdsOf(other, parentById).includes(id)),
+  );
+  if (rootMostCompleted.length !== 1) {
+    // 0件(循環など)・2件以上(別系統に分岐した完了履歴)はどちらも一意に決まらない。
+    return { shapeId: undefined, reason: "ambiguous", formingCount };
+  }
+  const mostDevelopedCompletedId = rootMostCompleted[0]!;
+
+  const candidates = forming.filter(
+    (shape) =>
+      shape.shapeId !== mostDevelopedCompletedId &&
+      ancestorIdsOf(shape.shapeId, parentById).includes(mostDevelopedCompletedId),
+  );
+  if (candidates.length === 0) {
+    return { shapeId: undefined, reason: "none", formingCount };
+  }
+  if (candidates.length === 1) {
+    return { shapeId: candidates[0]!.shapeId, reason: "single", formingCount };
+  }
+  const resolved = pickRootMostAncestor(candidates, parentById);
+  return resolved !== undefined
+    ? { shapeId: resolved, reason: "single", formingCount }
+    : { shapeId: undefined, reason: "ambiguous", formingCount };
 }
 
 /** 方向が1つに定まらないときに [4] へ出す一文(人間が指定した文言)。 */
@@ -512,7 +577,32 @@ function computeRankedPlanContext(
   // (Unit 0 で forcedOpponentOpening を残したのと同じ扱い)。明示された場合はそれを優先する。
   // 入力は shapeResults(全形)。ranked.slice(0, 3) を渡すと、対象になりうる形の集合を
   // matchScore が決めることになるため、渡さない(resolveRecognizedDirection のコメント参照)。
-  const direction = resolveRecognizedDirection(shapeResults);
+  //
+  // STEP 4-1: 「これまでに一度でもcompletedになった形」の集合(everCompletedShapeIds)を、
+  // 指し手履歴の認識タイムライン(buildRecognitionTimeline、Unit 2で作った既存モジュール。
+  // ここではそのまま呼ぶだけで、recognitionTimeline.ts自体は変更しない)から求めて渡す。
+  // これがないと、一度 高美濃 まで認識が進んだあとに金が動いて本美濃の必須マスが崩れ
+  // 本美濃が forming に戻ったとき、対象が本美濃へ後退してしまう(P-1)。
+  // 現在 completed の shapeResults の id も念のため加える(初期局面から既に completed な
+  // 検証用SFENでは、履歴が空で時系列に遷移が現れないための保険。結果は変わらない)。
+  // server.tsにモジュール変数は持たせず、毎回moveHistoryから再計算する
+  // (recognitionTimeline.tsが「状態を持たない」前提のまま)。ranked/matchScoreは
+  // ここでも使わない。
+  const timeline = buildRecognitionTimeline(current.moveHistory, {
+    shapes: options.shapes,
+    intents: options.intents,
+    initialSfen: options.initialSfen,
+  });
+  const everCompletedShapeIds = new Set<string>();
+  for (const entry of timeline) {
+    if (entry.kind === "shape" && entry.to === "completed") {
+      everCompletedShapeIds.add(entry.targetId);
+    }
+  }
+  for (const shape of shapeResults) {
+    if (shape.status === "completed") everCompletedShapeIds.add(shape.shapeId);
+  }
+  const direction = resolveRecognizedDirection(shapeResults, everCompletedShapeIds);
   const explicit =
     selectedTargetShapeId !== undefined
       ? reachableShapes.find((s) => s.shapeId === selectedTargetShapeId)

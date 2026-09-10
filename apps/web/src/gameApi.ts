@@ -34,7 +34,11 @@ export interface CoachExplanation {
 // apps/server/src/api/stateResponse.ts の ReachableShapeBody に対応する型
 // (⑥目指せる形のランキング。上位3件、1位を唯一の正解として強調しない)。
 // 【Phase 7 Unit 3】この一覧をユーザーが選ぶUIは廃止した。順位は道のり・候補手の
-// 対象決定には使わない(サーバー側 resolveRecognizedDirection が status だけで決める)。
+// 対象決定には使わない(サーバー側 resolveRecognizedDirection が決める)。
+// 【STEP 4-1】resolveRecognizedDirectionは、現在のstatus(forming/completed)だけでなく、
+// 対局のこれまでの指し手履歴の中で一度でもcompletedになった形の集合も見る(一度進んだ
+// 認識が、駒が動いて崩れたときに手前の形へ後退しないようにするため)。ranked(順位・
+// matchScore)は使わない。この判断はサーバー側のみで行う。
 // STEP ζ-5: reviewStatusの生値は公開されない(サーバー側のanalysis/nameExposure.tsに
 // 判断を集約するため)。pendingReviewNoteはreview_statusが"draft"の場合にだけ入る注記で、
 // それ以外はnull。web側はこの注記の文言を作らず、有無だけを見て表示する。
