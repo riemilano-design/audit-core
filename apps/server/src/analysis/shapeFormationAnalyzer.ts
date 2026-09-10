@@ -128,6 +128,33 @@ export function analyzeShapeFormation(
     );
   }
 
+  return analyzeShapeFormationFromEvents(sfen, events, { shapes });
+}
+
+/**
+ * Phase 7 Unit 2(認識の時系列): 既に再生済みのMoveEventを受け取る版。
+ *
+ * analyzeShapeFormationとの違いは**入力の受け取り方だけ**で、判定
+ * (resolveStatus / buildFormationEvidence)は同一のものを呼ぶ。新しい判定方式・
+ * 閾値は一切足していない。
+ *
+ * 【なぜ必要か】認識の時系列は、各plyについて履歴の先頭からの部分列で判定する。
+ * analyzeShapeFormationをplyごとに呼ぶと、そのたびに履歴を頭から再生し直すため
+ * O(n^2)になる(120手で実測2,037ms)。再生を1回に共有するための入り口である。
+ *
+ * 【呼び出し側の責務】この関数は**sfenとeventsの整合を検証しない**
+ * (analyzeShapeFormationが行っているfinalSfenとの突き合わせを持たない)。
+ * 整合は、1回の再生から得たsfensとeventsを組で渡す呼び出し側が担保すること。
+ * 不整合な組を渡すと、局面と履歴が食い違ったまま判定される。
+ */
+export function analyzeShapeFormationFromEvents(
+  sfen: string,
+  events: MoveEvent[],
+  options: AnalyzeShapeFormationOptions = {},
+): ShapeFormationResult[] {
+  const shapes = options.shapes ?? getShapes();
+  const shapeMatches = detectShapes(sfen, shapes);
+
   return shapeMatches.map((shapeMatch) => {
     const shapeDef = shapes.find((s) => s.id === shapeMatch.shapeId);
     const formationEvidence = shapeDef ? buildFormationEvidence(shapeMatch, shapeDef, events) : [];

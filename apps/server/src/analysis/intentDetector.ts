@@ -156,6 +156,28 @@ export function detectIntents(
     );
   }
 
+  return detectIntentsFromEvents(events, options);
+}
+
+/**
+ * Phase 7 Unit 2(認識の時系列): 既に再生済みのMoveEventを受け取る版。
+ *
+ * detectIntentsとの違いは**入力の受け取り方だけ**で、判定(evaluateIntent)も
+ * 相手の手だけを見るという前提(OPPONENT_COLOR)も並び順も同一である。
+ * 新しい判定方式・閾値は一切足していない。
+ *
+ * 【なぜ必要か】認識の時系列は、各plyについて履歴の先頭からの部分列で判定する。
+ * detectIntentsをplyごとに呼ぶと、そのたびに履歴を頭から再生し直すためO(n^2)に
+ * なる。再生を1回に共有するための入り口である。
+ *
+ * 【呼び出し側の責務】この関数は**局面と履歴の整合を検証しない**
+ * (detectIntentsが行うsfenとfinalSfenの突き合わせを持たず、sfenを受け取りもしない)。
+ * 整合は、1回の再生から得たeventsを使う呼び出し側が担保すること。
+ */
+export function detectIntentsFromEvents(
+  events: MoveEvent[],
+  options: DetectIntentsOptions = {},
+): IntentDetectionResult[] {
   const opponentEvents = events.filter((event) => event.color === OPPONENT_COLOR);
   const intents = options.intents ?? getIntents();
 

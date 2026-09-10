@@ -2,6 +2,27 @@ import { describe, expect, it } from "vitest";
 import { InvalidSfenError, MoveHistoryError, replayMoveHistory } from "./moveHistory.js";
 
 describe("replayMoveHistory", () => {
+  // Phase 7 Unit 2: 各手を適用した後の局面。再生の途中で既に計算しているものを返すだけで、
+  // 新しい計算・判定はしていない。
+  it("各手を適用した後の局面を、手数+1件そろえて返す", () => {
+    const history = ["7g7f", "3c3d", "2g2f"];
+    const { finalSfen, sfens } = replayMoveHistory(history);
+
+    expect(sfens).toHaveLength(history.length + 1);
+    // 先頭は初期局面(まだ1手も指していない)、末尾はfinalSfenと一致する。
+    expect(sfens[0]).toContain(" b - 1");
+    expect(sfens.at(-1)).toBe(finalSfen);
+    // 途中の局面は、その手数まで進んだ局面になっている(手数はSFEN末尾の数字)。
+    expect(sfens[1]).toContain(" w - 2");
+    expect(sfens[2]).toContain(" b - 3");
+  });
+
+  it("空の履歴でも、初期局面1件だけを返す", () => {
+    const { finalSfen, sfens } = replayMoveHistory([]);
+
+    expect(sfens).toEqual([finalSfen]);
+  });
+
   it("空の履歴の場合、初期局面をそのままfinalSfenとして返す", () => {
     const { events, finalSfen } = replayMoveHistory([]);
     expect(events).toEqual([]);

@@ -35,6 +35,16 @@ export interface MoveHistoryReplay {
   events: MoveEvent[];
   /** moveHistoryをすべて適用した後の局面のSFEN */
   finalSfen: string;
+  /**
+   * Phase 7 Unit 2(認識の時系列): 各手を適用した**後**の局面のSFEN。
+   * `sfens[0]` は initialSfen、`sfens[i]` は i手目まで適用した局面で、
+   * 要素数は `moveHistory.length + 1`。末尾は `finalSfen` と等しい。
+   *
+   * 履歴を途中まで切り詰めて認識を再計算する際、対応する中間局面が必要になる
+   * (docs/PHASES.md Phase 7 Unit 2)。再生の途中で既に計算しているものを
+   * 捨てずに返すだけであり、新しい計算・判定は行っていない。
+   */
+  sfens: string[];
 }
 
 /**
@@ -48,6 +58,7 @@ export function replayMoveHistory(
 ): MoveHistoryReplay {
   let sfen = initialSfen;
   const events: MoveEvent[] = [];
+  const sfens: string[] = [initialSfen];
 
   moveHistory.forEach((moveUsi, index) => {
     const pos = parsePosition(sfen);
@@ -72,7 +83,8 @@ export function replayMoveHistory(
 
     // 合法性の確認・局面遷移そのものはapplyMove.tsに委ねる(非合法ならIllegalMoveErrorが伝播する)。
     sfen = applyMove(sfen, moveUsi);
+    sfens.push(sfen);
   });
 
-  return { events, finalSfen: sfen };
+  return { events, finalSfen: sfen, sfens };
 }
