@@ -1840,6 +1840,106 @@ describe("buildStateResponseWithPlan: 駒が当たっている(STEP 4-3)", () =>
   });
 });
 
+/**
+ * 双方が捕獲する局面を作るための最小構成(5筋・3筋にそれぞれ向き合う歩を1組ずつ置く)。
+ * boardEventDetector.test.ts / captureSummary.test.ts と同じ方式(両玉+指定駒)。
+ */
+function buildMutualCaptureSfen(): string {
+  let board = Board.empty();
+  const place = (square: string, color: "sente" | "gote", role: Role): void => {
+    const sq = parseSquareName(square);
+    if (sq === undefined) throw new Error(`invalid square: ${square}`);
+    board = board.clone();
+    board.set(sq, { color, role });
+  };
+  place("9i", "sente", "king");
+  place("1a", "gote", "king");
+  place("5e", "sente", "pawn");
+  place("5d", "gote", "pawn");
+  place("3e", "sente", "pawn");
+  place("3d", "gote", "pawn");
+
+  const pos = Shogi.from({ board, hands: Hands.empty(), turn: "sente", moveNumber: 1 }, false).unwrap();
+  return makeSfen(pos);
+}
+
+// STEP 4-3b(2026-09-10人間承認): [1]の末尾に「駒の得喪」(N-3)の集約を1行加える。
+// 集約そのもの(J・K-1・L-1・O)の網羅的なテストはanalysis/captureSummary.test.tsが担当し、
+// ここで確認するのは配線(current.moveHistory全体から毎回再計算され、[1]の末尾に付くこと・
+// 目標形の有無に依存しないこと)だけ。
+describe("buildStateResponseWithPlan: 駒の得喪の集約(STEP 4-3b)", () => {
+  it("P-1局24手目: 相手のみが複数駒種を取っている(K-1の正規化・L-1の固定順)", () => {
+    const moves22 =
+      "7g7f 8c8d 6g6f 4a4b 2h6h 3c3d 5i4h 2b3c 4h3h 5c5d 3h2h 4b5c 3i3h 7c7d 6i5h 8d8e 4g4f 8e8f 5h4g 8f8g+ 3g3f 8g8h"
+        .split(" ");
+    const stateBefore = gameStateAfter(moves22);
+    const moves24 = [...moves22, "2i3g", "8h9i"];
+    const stateAfter = gameStateAfter(moves24);
+
+    const outcome = computeMoveOutcomeAfterMove(stateBefore, stateAfter, "2i3g", "8h9i");
+    const response = buildStateResponseWithPlan(stateAfter, undefined, {}, undefined, false, null, outcome);
+
+    const captureMessages = response.plan.lastMoveOutcome!.messages.filter((m) => m.kind === "capture_summary");
+    expect(captureMessages.map((m) => m.text)).toEqual([
+      "ここまでに、相手があなたの角を1枚、香を1枚、歩を1枚取っています。あなたはまだ駒を取っていません。",
+    ]);
+  });
+
+  it("A局32手目: 相手のみが複数駒種を取っている(香1枚・歩3枚)", () => {
+    const moves30 =
+      "7g7f 4a4b 6g6f 3c3d 2h6h 4b3c 5i4h 3c4d 4h3h 5c5d 3h2h 5d5e 3i3h 7c7d 6i5h 7a6b 4g4f 8c8d 5h4g 6b5c 3g3f 4d5d 2i3g 5c6d 6f6e 5d6e 7i7h 6e7f 7h7g 7f8g"
+        .split(" ");
+    const stateBefore = gameStateAfter(moves30);
+    const moves32 = [...moves30, "9i9h", "8g9h"];
+    const stateAfter = gameStateAfter(moves32);
+
+    const outcome = computeMoveOutcomeAfterMove(stateBefore, stateAfter, "9i9h", "8g9h");
+    const response = buildStateResponseWithPlan(stateAfter, undefined, {}, undefined, false, null, outcome);
+
+    const captureMessages = response.plan.lastMoveOutcome!.messages.filter((m) => m.kind === "capture_summary");
+    expect(captureMessages.map((m) => m.text)).toEqual([
+      "ここまでに、相手があなたの香を1枚、歩を3枚取っています。あなたはまだ駒を取っていません。",
+    ]);
+  });
+
+  it("双方が取った局面では、双方の文言になる", () => {
+    const sfen = buildMutualCaptureSfen();
+    const stateBefore: GameState = { sfen, moveHistory: [], forcedPliesUsed: 0 };
+    const moveHistory = ["5e5d", "3d3e"];
+    const stateAfter: GameState = {
+      sfen: replayMoveHistory(moveHistory, sfen).finalSfen,
+      moveHistory,
+      forcedPliesUsed: 0,
+    };
+
+    const outcome = computeMoveOutcomeAfterMove(stateBefore, stateAfter, "5e5d", "3d3e", { initialSfen: sfen });
+    const response = buildStateResponseWithPlan(
+      stateAfter,
+      undefined,
+      { initialSfen: sfen },
+      undefined,
+      false,
+      null,
+      outcome,
+    );
+
+    const captureMessages = response.plan.lastMoveOutcome!.messages.filter((m) => m.kind === "capture_summary");
+    expect(captureMessages.map((m) => m.text)).toEqual([
+      "ここまでに、あなたは相手の歩を1枚、相手はあなたの歩を1枚取っています。",
+    ]);
+  });
+
+  it("0枚のときはcapture_summaryの行が無い", () => {
+    const stateBefore = gameStateAfter([]);
+    const stateAfter = gameStateAfter(["7g7f", "3c3d"]);
+    const outcome = computeMoveOutcomeAfterMove(stateBefore, stateAfter, "7g7f", "3c3d");
+
+    const response = buildStateResponseWithPlan(stateAfter, undefined, {}, undefined, false, null, outcome);
+
+    expect(response.plan.lastMoveOutcome!.messages.some((m) => m.kind === "capture_summary")).toBe(false);
+  });
+});
+
 // ζ-4a: 内部状態(GameState)と公開状態(StateResponseBody)の境界を、許可リスト方式
 // (toPublicGameState)で確立したことの検証。docs/ARCHITECTURE.md 6.「公開境界」参照。
 describe("公開境界(内部状態とAPIレスポンスの分離、ζ-4a)", () => {

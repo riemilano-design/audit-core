@@ -55,8 +55,12 @@ const TARGET_ROLES_AFTER_NORMALIZATION: ReadonlySet<Role> = new Set([
  * 成駒を元の駒種へ正規化する(B-1・I-1 の判定・並び順のためだけに使う内部表)。
  * 表示名は変えない(表示名は analysis/pieceThreatExplanation.ts の別の表が担当する)。
  * ここに無い役職(玉・歩・成駒6種以外の基本駒)はそのまま返す。
+ *
+ * STEP 4-3b(2026-09-10人間承認): analysis/captureSummary.ts の成駒の正規化(K-1)が
+ * 同じ対応表を必要とするため、複製せずここから export して共有する。この関数自体の
+ * 挙動(対象・戻り値)は変えていない。
  */
-function normalizeRole(role: Role): Role {
+export function normalizeRole(role: Role): Role {
   switch (role) {
     case "dragon":
       return "rook";

@@ -46,6 +46,7 @@ import { isInCheck } from "../rules/gameStatus.js";
 import { listAttackedPieces } from "../rules/attackedPieces.js";
 import { detectPieceThreats } from "../analysis/pieceThreatDetector.js";
 import { explainPieceThreats, type PieceThreatMessage } from "../analysis/pieceThreatExplanation.js";
+import { explainCaptureSummary, type CaptureSummaryMessage } from "../analysis/captureSummary.js";
 import { toJapaneseMoveHistory } from "../notation/japaneseMoveHistory.js";
 import type { LowPriorityEngine } from "../engine/prioritizedEngine.js";
 import { buildRecognitionTimeline } from "../analysis/recognitionTimeline.js";
@@ -232,7 +233,7 @@ export interface LastMoveOutcomeBody {
    *   (partitionUrgentMessages)
    * 利用側(apps/web/src/gameApi.ts の LastMoveOutcomeBody)にも同じ契約を書いてある。
    */
-  messages: (BoardEventMessage | MoveOutcomeMessage)[];
+  messages: (BoardEventMessage | MoveOutcomeMessage | CaptureSummaryMessage)[];
 }
 
 /**
@@ -855,6 +856,23 @@ function toPieceThreatMessages(current: GameState, isGameEnd: boolean): PieceThr
   }
 }
 
+/**
+ * 「駒の得喪」(N-3・STEP 4-3b・2026-09-10人間承認)。対局開始からの指し手履歴全体を
+ * 毎回再生して数え直す、状態を持たない集約(analysis/captureSummary.tsの責務)。
+ * ここで行うのは指し手履歴と初期局面を渡す配線だけ。
+ *
+ * Phase1のcoachやPhase6の各Unitと同様、ここでの失敗を対局本体へ波及させない
+ * (失敗時は空配列=表示しないに落とす)。
+ */
+function toCaptureSummaryMessages(current: GameState, options: ExplainPositionOptions): CaptureSummaryMessage[] {
+  try {
+    return explainCaptureSummary(current.moveHistory, options.initialSfen);
+  } catch (err) {
+    console.error("駒の得喪(Phase7 Unit4 STEP 4-3b, captureSummary)の計算でエラーが発生しました:", err);
+    return [];
+  }
+}
+
 /** 選択中の形の「今どこまで出来ているか」を、既存の判定結果からそのまま組み立てる。
  *
  * 【description について(Unit 3 情報構造の整理)】
@@ -1071,9 +1089,9 @@ export function filterCoachForTargetShape(
  * 盤面で実際に起きたこと(捕獲・成り・王手)はそのまま残す。
  */
 export function filterLastMoveMessagesForTargetShape(
-  messages: (BoardEventMessage | MoveOutcomeMessage)[],
+  messages: (BoardEventMessage | MoveOutcomeMessage | CaptureSummaryMessage)[],
   hasTargetShape: boolean,
-): (BoardEventMessage | MoveOutcomeMessage)[] {
+): (BoardEventMessage | MoveOutcomeMessage | CaptureSummaryMessage)[] {
   if (hasTargetShape) return messages;
   return messages.filter((message) => message.kind !== "no_notable_change");
 }
@@ -1108,12 +1126,12 @@ const URGENT_NEXT_CONSIDERATION_KIND = "in_check";
 
 export interface UrgentPartition {
   urgent: { kind: string; text: string }[];
-  lastMoveMessages: (BoardEventMessage | MoveOutcomeMessage)[];
+  lastMoveMessages: (BoardEventMessage | MoveOutcomeMessage | CaptureSummaryMessage)[];
   nextConsiderations: NextConsiderationMessage[];
 }
 
 export function partitionUrgentMessages(
-  lastMoveMessages: (BoardEventMessage | MoveOutcomeMessage)[],
+  lastMoveMessages: (BoardEventMessage | MoveOutcomeMessage | CaptureSummaryMessage)[],
   nextConsiderations: NextConsiderationMessage[],
   pieceThreats: PieceThreatMessage[] = [],
 ): UrgentPartition {
@@ -1192,8 +1210,12 @@ export function buildStateResponseWithPlan(
     lastMoveOutcome
       ? filterLastMoveMessagesForTargetShape(
           // 盤面で実際に起きたこと(捕獲・王手・成り)を先に述べ、そのあとで
-          // 形・経路についての説明を述べる。
-          [...explainBoardEvents(lastBoardEvents), ...explainMoveOutcome(lastMoveOutcome)],
+          // 形・経路についての説明を述べ、最後に駒の得喪の集約(M-1)を1行加える。
+          [
+            ...explainBoardEvents(lastBoardEvents),
+            ...explainMoveOutcome(lastMoveOutcome),
+            ...toCaptureSummaryMessages(current, options),
+          ],
           resolvedTargetShapeId !== null,
         )
       : [],
