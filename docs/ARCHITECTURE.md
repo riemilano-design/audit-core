@@ -135,7 +135,7 @@ Phase 6 は「毎手説明」を4つの Unit に分けて実装した。**Unit �
 | Unit 1 | 認識できた形への**経路**と、現在局面で指せる最初の一手・準備手 | 現在局面 | `routePlanner.ts`、`notation/japaneseSquare.ts` |
 | Unit 2 | 直前の一手による**形・経路の変化**(差分) | 着手前の局面 + 現在局面 | `moveOutcomeDetector.ts` / `moveOutcomeExplanation.ts` |
 | Unit 3 | 直前の一手で**盤面に起きたこと**(捕獲・王手・成り) | 着手前後の各局面遷移 | `boardEventDetector.ts` / `boardEventExplanation.ts` |
-| Unit 4 | **現在局面の静的な状態**の整理(差分ではない) | 現在局面のみ | `nextConsiderationDetector.ts` / `nextConsiderationExplanation.ts`、`notation/japaneseMove.ts`、`rules/gameStatus.isInCheck` |
+| Unit 4 | **現在局面の静的な状態**の整理(差分ではない) | 現在局面のみ | `nextConsiderationDetector.ts` / `nextConsiderationExplanation.ts`、`notation/japaneseMove.ts`、`rules/gameStatus.isInCheck`。**STEP 4-3(2026-09-10人間承認)**: 「駒が当たっている」事実は `rules/attackedPieces.ts`(shogiops `squareAttackers` への薄い委譲)→ `analysis/pieceThreatDetector.ts`(対象駒種のフィルタ・並び順)→ `analysis/pieceThreatExplanation.ts`(文言) |
 | 対局経過ブロック(**2026-09-10 に「設けない」ことが人間承認で確定。下記参照**) | **対局開始から現在までに認識(仮説)がどう変わってきたか**と、その根拠になった手。および**駒の得喪に関する事実の集約**(N3-2) | 指し手履歴(および対応する各中間局面) | 未実装。Phase 6 の Unit ではない |
 
 境界の要点:

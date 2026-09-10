@@ -12,6 +12,7 @@ import type { BoardEventMessage } from "../analysis/boardEventExplanation.js";
 import { toMovingPieceName } from "../notation/japaneseMove.js";
 import type { ShapeFormationResult } from "../analysis/shapeFormationAnalyzer.js";
 import type { NextConsiderationMessage } from "../analysis/nextConsiderationExplanation.js";
+import type { PieceThreatMessage } from "../analysis/pieceThreatExplanation.js";
 import { DEFAULT_INITIAL_SFEN, replayMoveHistory } from "../analysis/moveHistory.js";
 import { applyMove } from "../rules/applyMove.js";
 import type { GameState } from "../game/gameSession.js";
@@ -1311,6 +1312,37 @@ describe("Unit 3: partitionUrgentMessages([0]「今すぐ対処が必要なこ�
     expect(result.lastMoveMessages).toEqual([captured]);
     expect(result.nextConsiderations).toEqual([routeNote]);
   });
+
+  // STEP 4-3(2026-09-10人間承認 D): 第3引数pieceThreatsは、王手のあとに連結する。
+  const pieceAttacked = {
+    kind: "piece_attacked",
+    text: "あなたの８八の角に、相手の８七の金が当たっています(次の相手の手で取られる可能性があります)。",
+  } satisfies PieceThreatMessage;
+
+  it("王手と当たりの両方があるとき、王手(in_check)を先頭にして当たりをそのあとに連結する", () => {
+    const result = partitionUrgentMessages([checkReceived, captured], [inCheck, routeNote], [pieceAttacked]);
+
+    expect(result.urgent).toEqual([inCheck, pieceAttacked]);
+  });
+
+  it("王手(check_received経路)と当たりの両方があるとき、check_receivedを先頭にして当たりをそのあとに連結する", () => {
+    const result = partitionUrgentMessages([checkReceived, captured], [], [pieceAttacked]);
+
+    expect(result.urgent).toEqual([checkReceived, pieceAttacked]);
+  });
+
+  it("当たりだけがあるとき(王手なし)は、当たりだけを[0]に出す", () => {
+    const result = partitionUrgentMessages([captured], [routeNote], [pieceAttacked]);
+
+    expect(result.urgent).toEqual([pieceAttacked]);
+  });
+
+  it("第3引数を省略した場合は既存の2引数呼び出しと同じ結果になる(後方互換)", () => {
+    const withoutThirdArg = partitionUrgentMessages([checkReceived, captured], [inCheck, routeNote]);
+    const withEmptyThirdArg = partitionUrgentMessages([checkReceived, captured], [inCheck, routeNote], []);
+
+    expect(withoutThirdArg).toEqual(withEmptyThirdArg);
+  });
 });
 
 // 人間が承認した規則: forming が複数あるときは parent_shape_id の鎖をたどり、
@@ -1721,6 +1753,90 @@ describe("buildStateResponseWithPlan: nextConsiderations(Phase6 Unit4)", () => {
     expect(response.plan.targetShapeProgress).not.toBeNull();
     expect(response.plan.lastMoveOutcome).toBeNull();
     expect(response.coach).toEqual(buildStateResponse(state).coach);
+  });
+});
+
+// STEP 4-3(2026-09-10人間承認): [0]「今すぐ対処が必要なこと」に「駒が当たっている」
+// 事実を加える。事実の抽出・文言生成そのものはrules/attackedPieces.test.ts /
+// analysis/pieceThreatDetector.test.ts / analysis/pieceThreatExplanation.test.ts が担当し、
+// ここで確認するのは配線(目標形の有無に依存しないこと・終局後は出さないこと)だけ。
+describe("buildStateResponseWithPlan: 駒が当たっている(STEP 4-3)", () => {
+  it("目標形が無い局面でも、urgentMessagesに当たりが出る(A局30手目)", () => {
+    const moves =
+      "7g7f 4a4b 6g6f 3c3d 2h6h 4b3c 5i4h 3c4d 4h3h 5c5d 3h2h 5d5e 3i3h 7c7d 6i5h 7a6b 4g4f 8c8d 5h4g 6b5c 3g3f 4d5d 2i3g 5c6d 6f6e 5d6e 7i7h 6e7f 7h7g 7f8g".split(
+        " ",
+      );
+    const state = gameStateAfter(moves);
+
+    // 目標形が無い局面であること(shapes: []で明示的に形データを与えない)。
+    const response = buildStateResponseWithPlan(state, undefined, { shapes: [] });
+
+    expect(response.plan.resolvedTargetShapeId).toBeNull();
+    const attackedMessages = response.plan.urgentMessages.filter((m) => m.kind === "piece_attacked");
+    expect(attackedMessages.map((m) => m.text)).toEqual([
+      "あなたの８八の角に、相手の８七の金が当たっています(次の相手の手で取られる可能性があります)。",
+      "あなたの７七の銀に、相手の８七の金が当たっています(次の相手の手で取られる可能性があります)。",
+    ]);
+    // 歩(９七)への当たりはB-1の対象外なので出ない。
+    expect(response.plan.urgentMessages.some((m) => m.text.includes("９七の歩"))).toBe(false);
+  });
+
+  it("経路の候補手が無い実戦局面(C局30手目)でも、桂への当たりが出る", () => {
+    const moves =
+      "7g7f 3c3d 6g6f 5c5d 2h6h 3a4b 5i4h 8b5b 4h3h 5d5e 3h2h 4c4d 3i3h 7c7d 6i5h 4d4e 7i7h 4b5c 7h6g 4a4b 3g3f 5c4d 2i3g 3d3e 3f3e 4b3c 4g4f 4e4f P*4g P*3f".split(
+        " ",
+      );
+    const state = gameStateAfter(moves);
+
+    const response = buildStateResponseWithPlan(state, undefined, {});
+
+    const attackedMessages = response.plan.urgentMessages.filter((m) => m.kind === "piece_attacked");
+    expect(attackedMessages.map((m) => m.text)).toEqual([
+      "あなたの３七の桂に、相手の３六の歩が当たっています(次の相手の手で取られる可能性があります)。",
+    ]);
+  });
+
+  it("成駒(と金)が攻め駒の実戦局面(P-1局22手目)で、銀・桂・香の3件が並ぶ", () => {
+    const moves =
+      "7g7f 8c8d 6g6f 4a4b 2h6h 3c3d 5i4h 2b3c 4h3h 5c5d 3h2h 4b5c 3i3h 7c7d 6i5h 8d8e 4g4f 8e8f 5h4g 8f8g+ 3g3f 8g8h"
+        .split(" ")
+        .slice(0, 22);
+    const state = gameStateAfter(moves);
+
+    const response = buildStateResponseWithPlan(state, undefined, {});
+
+    const attackedMessages = response.plan.urgentMessages.filter((m) => m.kind === "piece_attacked");
+    expect(attackedMessages.map((m) => m.text)).toEqual([
+      "あなたの７九の銀に、相手の８八のと金が当たっています(次の相手の手で取られる可能性があります)。",
+      "あなたの８九の桂に、相手の８八のと金が当たっています(次の相手の手で取られる可能性があります)。",
+      "あなたの９九の香に、相手の８八のと金が当たっています(次の相手の手で取られる可能性があります)。",
+    ]);
+  });
+
+  it("通常の駒組みの局面(P-1局6〜16手目)では当たりが出ない(角道に入った歩を含めない)", () => {
+    const allMoves =
+      "7g7f 8c8d 6g6f 4a4b 2h6h 3c3d 5i4h 2b3c 4h3h 5c5d 3h2h 4b5c 3i3h 7c7d 6i5h 8d8e".split(" ");
+
+    for (const ply of [6, 8, 10, 12, 14, 16]) {
+      const state = gameStateAfter(allMoves.slice(0, ply));
+      const response = buildStateResponseWithPlan(state, undefined, {});
+      expect(response.plan.urgentMessages.filter((m) => m.kind === "piece_attacked")).toEqual([]);
+    }
+  });
+
+  // 王手と当たりが同時にある局面での並び順(王手が先頭)は、partitionUrgentMessagesの
+  // 単体テスト(上のdescribe「Unit 3: partitionUrgentMessages」)で確認済み。
+
+  it("終局局面(詰み)では、当たりを出さない", () => {
+    // 先手の知将棋(gote)が7cの桂に8eの銀を取られる状態にありつつ、gote自身は
+    // 1iの香による王手から一切逃れられない(詰み)局面。
+    const sfen = "7pk/7p1/2n6/9/1S7/9/9/9/K7L w - 1";
+    const state: GameState = { sfen, moveHistory: [], forcedPliesUsed: 0 };
+
+    const response = buildStateResponseWithPlan(state, undefined, { initialSfen: sfen });
+
+    expect(response.status.isEnd).toBe(true);
+    expect(response.plan.urgentMessages.filter((m) => m.kind === "piece_attacked")).toEqual([]);
   });
 });
 

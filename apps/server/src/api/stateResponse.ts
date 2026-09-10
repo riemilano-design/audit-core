@@ -43,6 +43,9 @@ import { explainBoardEvents, type BoardEventMessage } from "../analysis/boardEve
 import { exposeName } from "../analysis/nameExposure.js";
 import { getLegalMoves } from "../rules/legalMoves.js";
 import { isInCheck } from "../rules/gameStatus.js";
+import { listAttackedPieces } from "../rules/attackedPieces.js";
+import { detectPieceThreats } from "../analysis/pieceThreatDetector.js";
+import { explainPieceThreats, type PieceThreatMessage } from "../analysis/pieceThreatExplanation.js";
 import { toJapaneseMoveHistory } from "../notation/japaneseMoveHistory.js";
 import type { LowPriorityEngine } from "../engine/prioritizedEngine.js";
 import { buildRecognitionTimeline } from "../analysis/recognitionTimeline.js";
@@ -825,6 +828,33 @@ function toNextConsiderations(
   }
 }
 
+/**
+ * Phase 7 Unit 4 STEP 4-3: 「駒が当たっている」という現在局面の静的な事実を組み立てる。
+ *
+ * 判定・文言生成は一切ここに持たない(事実はrules/attackedPieces.ts →
+ * analysis/pieceThreatDetector.ts、文言はanalysis/pieceThreatExplanation.tsの責務)。
+ * ここで行うのは局面(SFEN)と対局終了状態を渡す配線だけ。
+ *
+ * toNextConsiderationsと異なり、目標形の有無に依存しない(人間承認済み仕様E)。
+ * 自分の色は、CLAUDE.mdが定めるMVPの前提(自分=先手固定)にそのまま従い"sente"を使う
+ * (新しい色判定ロジックは作らない)。終局後は出さない(仕様Eの制約)。
+ *
+ * Phase1のcoachやPhase6の各Unitと同様、ここでの失敗を対局本体へ波及させない
+ * (失敗時は空配列=表示しないに落とす)。
+ */
+function toPieceThreatMessages(current: GameState, isGameEnd: boolean): PieceThreatMessage[] {
+  if (isGameEnd) return [];
+
+  try {
+    const attackedPieces = listAttackedPieces(current.sfen, "sente");
+    const facts = detectPieceThreats(attackedPieces);
+    return explainPieceThreats(facts);
+  } catch (err) {
+    console.error("駒が当たっていること(Phase7 Unit4 STEP 4-3)の計算でエラーが発生しました:", err);
+    return [];
+  }
+}
+
 /** 選択中の形の「今どこまで出来ているか」を、既存の判定結果からそのまま組み立てる。
  *
  * 【description について(Unit 3 情報構造の整理)】
@@ -1066,6 +1096,12 @@ export function filterLastMoveMessagesForTargetShape(
  * (toNextConsiderationsが目標形の無い局面では空を返す)ため、その場合だけ
  * "check_received" を [0] に回す。文言はどちらもサーバー側の既存のもので、新しい文言は
  * 作らない。
+ *
+ * 【STEP 4-3で追加した第3引数 pieceThreats について】
+ * 「駒が当たっている」(kind: "piece_attacked")は王手とは別の事実であり
+ * (rules/attackedPieces.tsが自分の玉を対象外にしているため、王手と重ならない)、
+ * フィルタする必要は無い。人間承認済みの並び順(D)どおり、王手の行を先頭に置き、
+ * そのあとに連結するだけ。
  */
 const URGENT_BOARD_EVENT_KIND = "check_received";
 const URGENT_NEXT_CONSIDERATION_KIND = "in_check";
@@ -1079,12 +1115,14 @@ export interface UrgentPartition {
 export function partitionUrgentMessages(
   lastMoveMessages: (BoardEventMessage | MoveOutcomeMessage)[],
   nextConsiderations: NextConsiderationMessage[],
+  pieceThreats: PieceThreatMessage[] = [],
 ): UrgentPartition {
   const inCheckNotices = nextConsiderations.filter((m) => m.kind === URGENT_NEXT_CONSIDERATION_KIND);
   const checkReceived = lastMoveMessages.filter((m) => m.kind === URGENT_BOARD_EVENT_KIND);
 
   // "in_check" があればそれだけを使う(同じ王手を2度述べない)。
-  const urgent = inCheckNotices.length > 0 ? [...inCheckNotices] : [...checkReceived];
+  const checkMessages = inCheckNotices.length > 0 ? [...inCheckNotices] : [...checkReceived];
+  const urgent = [...checkMessages, ...pieceThreats];
 
   return {
     urgent,
@@ -1160,6 +1198,7 @@ export function buildStateResponseWithPlan(
         )
       : [],
     toNextConsiderations(current, context, base.status.isEnd),
+    toPieceThreatMessages(current, base.status.isEnd),
   );
 
   return {
