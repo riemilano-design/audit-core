@@ -18,13 +18,10 @@ import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import {
-  buildStateResponseWithPlan,
-  safeComputeReachablePlan,
   safeComputePlanChangeAfterMove,
   safeComputePlanChangeReasonAfterMove,
   safeComputeMoveOutcomeAfterMove,
   safeComputeBoardEventsAfterMove,
-  type CachedReachablePlan,
 } from "../../apps/server/src/api/stateResponse.js";
 import { resolveEnginePath } from "../../apps/server/src/engine/enginePath.js";
 import { PrioritizedEngine } from "../../apps/server/src/engine/prioritizedEngine.js";
@@ -38,6 +35,12 @@ import {
   type GameState,
   type OpponentEngine,
 } from "../../apps/server/src/game/gameSession.js";
+import {
+  buildErrorLine,
+  buildImmediateRecord,
+  buildReadyRecord,
+  buildSummaryLine,
+} from "./lib/recorder.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const SCRIPT_DIR = __dirname;
@@ -65,21 +68,6 @@ function makeFixedOpponentEngine(moveUsi: string): OpponentEngine {
       scoreCp: undefined,
       infoLines: [],
     }),
-  };
-}
-
-/** server.ts の runBackgroundPlanAnalysis と同じ組み立てで CachedReachablePlan を作る。
- * safeComputeReachablePlan が失敗(undefined)を返した場合は undefined のまま
- * (buildStateResponseWithPlan 側でcandidateMoveStateが pending 扱いになる)。 */
-function toCachedPlan(
-  sfen: string,
-  result: Awaited<ReturnType<typeof safeComputeReachablePlan>>,
-): CachedReachablePlan | undefined {
-  if (!result) return undefined;
-  return {
-    sfen,
-    targetShapeId: result.targetShapeId,
-    plan: { reachableShapes: result.reachableShapes, candidateMove: result.candidateMove },
   };
 }
 
@@ -132,40 +120,23 @@ async function main(): Promise<void> {
 
     // 初期局面(POST /api/game/new相当)。
     {
-      const t0 = Date.now();
-      const response = buildStateResponseWithPlan(state, undefined, {}, undefined, false, null, null, []);
-      lines.push(
-        JSON.stringify({
-          kind: "record",
-          ply: 0,
-          sfen: state.sfen,
-          senteMove: null,
-          goteMove: null,
-          phase: "immediate",
-          elapsedMs: Date.now() - t0,
-          response,
-        }),
-      );
+      const { line } = buildImmediateRecord(state, 0, null, null, false, null, null, []);
+      lines.push(line);
     }
     {
-      const t0 = Date.now();
-      const result = await safeComputeReachablePlan(state, engine.asLowPriority(), {}, undefined);
-      const cachedPlan = toCachedPlan(state.sfen, result);
-      const response = buildStateResponseWithPlan(state, cachedPlan, {}, undefined, false, null, null, []);
-      const elapsedMs = Date.now() - t0;
-      readyMsPerPly.push(elapsedMs);
-      lines.push(
-        JSON.stringify({
-          kind: "record",
-          ply: 0,
-          sfen: state.sfen,
-          senteMove: null,
-          goteMove: null,
-          phase: "ready",
-          elapsedMs,
-          response,
-        }),
+      const { line, elapsedMs } = await buildReadyRecord(
+        state,
+        0,
+        null,
+        null,
+        engine.asLowPriority(),
+        false,
+        null,
+        null,
+        [],
       );
+      readyMsPerPly.push(elapsedMs);
+      lines.push(line);
     }
 
     for (let i = 0; i < moves.length; i += 2) {
@@ -173,8 +144,7 @@ async function main(): Promise<void> {
       const g = moves[i + 1];
       if (m === undefined || g === undefined) {
         lines.push(
-          JSON.stringify({
-            kind: "error",
+          buildErrorLine({
             reason: "odd_move_count",
             message: "棋譜の手数が偶数(先後交互)ではありません",
           }),
@@ -189,8 +159,7 @@ async function main(): Promise<void> {
       } catch (err) {
         if (err instanceof HumanMoveError) {
           lines.push(
-            JSON.stringify({
-              kind: "error",
+            buildErrorLine({
               ply: stateBeforeMove.moveHistory.length,
               move: m,
               reason: "human_move_error",
@@ -207,8 +176,7 @@ async function main(): Promise<void> {
 
       if (state.moveHistory[state.moveHistory.length - 1] !== g) {
         lines.push(
-          JSON.stringify({
-            kind: "error",
+          buildErrorLine({
             ply: state.moveHistory.length,
             move: g,
             reason: "opponent_move_mismatch",
@@ -240,65 +208,30 @@ async function main(): Promise<void> {
       const ply = state.moveHistory.length;
 
       {
-        const t0 = Date.now();
-        const response = buildStateResponseWithPlan(
-          state,
-          undefined,
-          {},
-          undefined,
-          planChanged,
-          planChangeReason,
-          moveOutcome,
-          boardEvents,
-        );
-        lines.push(
-          JSON.stringify({
-            kind: "record",
-            ply,
-            sfen: state.sfen,
-            senteMove: m,
-            goteMove: g,
-            phase: "immediate",
-            elapsedMs: Date.now() - t0,
-            response,
-          }),
-        );
+        const { line } = buildImmediateRecord(state, ply, m, g, planChanged, planChangeReason, moveOutcome, boardEvents);
+        lines.push(line);
       }
       {
-        const t0 = Date.now();
-        const result = await safeComputeReachablePlan(state, engine.asLowPriority(), {}, undefined);
-        const cachedPlan = toCachedPlan(state.sfen, result);
-        const response = buildStateResponseWithPlan(
+        const { line, elapsedMs } = await buildReadyRecord(
           state,
-          cachedPlan,
-          {},
-          undefined,
+          ply,
+          m,
+          g,
+          engine.asLowPriority(),
           planChanged,
           planChangeReason,
           moveOutcome,
           boardEvents,
         );
-        const elapsedMs = Date.now() - t0;
         readyMsPerPly.push(elapsedMs);
-        lines.push(
-          JSON.stringify({
-            kind: "record",
-            ply,
-            sfen: state.sfen,
-            senteMove: m,
-            goteMove: g,
-            phase: "ready",
-            elapsedMs,
-            response,
-          }),
-        );
+        lines.push(line);
       }
 
       pliesCompleted = ply;
     }
 
     const totalMs = Date.now() - totalStart;
-    lines.push(JSON.stringify({ kind: "summary", plies: pliesCompleted, totalMs, readyMsPerPly }));
+    lines.push(buildSummaryLine({ plies: pliesCompleted, totalMs, readyMsPerPly }));
   } catch (err) {
     if (err instanceof ReplayHaltError) {
       exitCode = 1;
