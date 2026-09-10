@@ -69,9 +69,9 @@ const HAYAJIKAKE_GOTE_MOVES_FULL = ["6c6d", "6d6e"];
 function honminoCompletedSfen(): string {
   let board = Board.empty();
   const pieces: Array<{ square: string; role: Parameters<typeof board.set>[1]["role"] }> = [
-    { square: "8h", role: "king" },
-    { square: "7h", role: "silver" },
-    { square: "6i", role: "gold" },
+    { square: "2h", role: "king" },
+    { square: "3h", role: "silver" },
+    { square: "4i", role: "gold" },
     { square: "5h", role: "gold" },
   ];
   for (const { square, role } of pieces) {
@@ -189,7 +189,7 @@ describe("buildStateResponse", () => {
   });
 
   it("completed状態: Shapeが完成した局面は名指しで表示される", () => {
-    // 本美濃(king8h)は初期配置の角(8h)を動かしてから組む必要があり、実対局の
+    // 本美濃(king2h)は初期配置の飛車(2h)を動かしてから組む必要があり、実対局の
     // 指し手列で再現すると長くなるため、ここではmoveHistory=[]・initialSfenを
     // この局面自体に上書きして(analysis/intentDetector.tsのsfen/moveHistory整合性
     // チェックを満たしたうえで)直接検証する。
@@ -232,7 +232,7 @@ describe("buildStateResponse", () => {
 // 実エンジンは使わず、LowPriorityEngine(Pick<UsiEngine,"position"|"setMultiPv"|"goMultiPv">)
 // と構造的に一致するモックで決定的に検証する(candidateMoveSafetyCheck.test.tsと同じ方式)。
 
-function multiPvResult(lines: MultiPvGoResult["lines"], bestmove = "7i8h"): MultiPvGoResult {
+function multiPvResult(lines: MultiPvGoResult["lines"], bestmove = "3i2h"): MultiPvGoResult {
   return { bestmove, ponder: undefined, lines, infoLines: [] };
 }
 
@@ -278,29 +278,29 @@ function customSfen(pieces: Array<{ square: string; color: "sente" | "gote"; rol
   return makeSfen(pos);
 }
 
-// 本美濃囲い(mino_honmino)のうち、玉だけが7iにあり(8hへ1手で届く)、
-// 銀7h・金6i・金5hは既に揃っている局面。missingSquares=["8h"]、
-// typical_build_order上の対象マスは"8h"(玉)になり、7i8hという合法な候補手が1件だけ存在する。
+// 本美濃囲い(mino_honmino)のうち、玉だけが3iにあり(2hへ1手で届く)、
+// 銀3h・金4i・金5hは既に揃っている局面。missingSquares=["2h"]、
+// typical_build_order上の対象マスは"2h"(玉)になり、3i2hという合法な候補手が1件だけ存在する。
 function honminoOneMoveFromCompleteSfen(): string {
   return customSfen([
-    { square: "7i", color: "sente", role: "king" },
-    { square: "7h", color: "sente", role: "silver" },
-    { square: "6i", color: "sente", role: "gold" },
+    { square: "3i", color: "sente", role: "king" },
+    { square: "3h", color: "sente", role: "silver" },
+    { square: "4i", color: "sente", role: "gold" },
     { square: "5h", color: "sente", role: "gold" },
   ]);
 }
 
-// 玉8h・金6i・金5hは既に揃い、対象マスは7h(銀)。6g・8gの2枚の銀からそれぞれ
-// 1手(斜め後退)で7hへ到達できる(複数候補の検証用。将棋の実戦性は問わない、
-// 合法手抽出ロジックの検証が目的)。6iの金も物理的には7hへ動けるが、対象マスの
+// 玉2h・金4i・金5hは既に揃い、対象マスは3h(銀)。4g・2gの2枚の銀からそれぞれ
+// 1手(斜め後退)で3hへ到達できる(複数候補の検証用。将棋の実戦性は問わない、
+// 合法手抽出ロジックの検証が目的)。4iの金も物理的には3hへ動けるが、対象マスの
 // 駒種(銀)と一致しないためpathPlanner.tsの駒種フィルタで候補から除外される。
 function honminoMultipleCandidatesSfen(): string {
   return customSfen([
-    { square: "8h", color: "sente", role: "king" },
-    { square: "6i", color: "sente", role: "gold" },
+    { square: "2h", color: "sente", role: "king" },
+    { square: "4i", color: "sente", role: "gold" },
     { square: "5h", color: "sente", role: "gold" },
-    { square: "6g", color: "sente", role: "silver" },
-    { square: "8g", color: "sente", role: "silver" },
+    { square: "4g", color: "sente", role: "silver" },
+    { square: "2g", color: "sente", role: "silver" },
   ]);
 }
 
@@ -308,50 +308,50 @@ function customGameState(sfen: string): GameState {
   return { sfen, moveHistory: [], forcedPliesUsed: 0 };
 }
 
-// honminoMultipleCandidatesSfen()と同じ駒配置に、相手(gote)が指せる無害な歩(1c)を
+// honminoMultipleCandidatesSfen()と同じ駒配置に、相手(gote)が指せる無害な歩(9c)を
 // 追加したもの。Phase3の既知課題(兄弟候補の誤検知)の統合テスト専用
-// (相手がこの計画と無関係な手(1c1d)を指すシナリオを構成するために必要)。
+// (相手がこの計画と無関係な手(9c9d)を指すシナリオを構成するために必要)。
 function honminoMultipleCandidatesWithOpponentPawnSfen(): string {
   return customSfen([
-    { square: "8h", color: "sente", role: "king" },
-    { square: "6i", color: "sente", role: "gold" },
+    { square: "2h", color: "sente", role: "king" },
+    { square: "4i", color: "sente", role: "gold" },
     { square: "5h", color: "sente", role: "gold" },
-    { square: "6g", color: "sente", role: "silver" },
-    { square: "8g", color: "sente", role: "silver" },
-    { square: "1c", color: "gote", role: "pawn" },
+    { square: "4g", color: "sente", role: "silver" },
+    { square: "2g", color: "sente", role: "silver" },
+    { square: "9c", color: "gote", role: "pawn" },
   ]);
 }
 
-// honminoMultipleCandidatesSfen()と同じ駒配置に、ユーザーが指せる無害な歩(1g)と、
-// 6gの銀を直接捕獲できる相手(gote)の桂馬(7e)を追加したもの
-// (planChangeCaptureFixtureSfenと同じ考え方だが、兄弟候補(8g7h)が生き残る
+// honminoMultipleCandidatesSfen()と同じ駒配置に、ユーザーが指せる無害な歩(9g)と、
+// 4gの銀を直接捕獲できる相手(gote)の桂馬(3e)を追加したもの
+// (planChangeCaptureFixtureSfenと同じ考え方だが、兄弟候補(2g3h)が生き残る
 // ことを確認するために複数候補の局面を使う)。
 function honminoMultipleCandidatesWithCaptureFixtureSfen(): string {
   return customSfen([
-    { square: "8h", color: "sente", role: "king" },
-    { square: "6i", color: "sente", role: "gold" },
+    { square: "2h", color: "sente", role: "king" },
+    { square: "4i", color: "sente", role: "gold" },
     { square: "5h", color: "sente", role: "gold" },
-    { square: "6g", color: "sente", role: "silver" },
-    { square: "8g", color: "sente", role: "silver" },
-    { square: "1g", color: "sente", role: "pawn" },
-    { square: "7e", color: "gote", role: "knight" },
+    { square: "4g", color: "sente", role: "silver" },
+    { square: "2g", color: "sente", role: "silver" },
+    { square: "9g", color: "sente", role: "pawn" },
+    { square: "3e", color: "gote", role: "knight" },
   ]);
 }
 
 // Phase3 Unit1(計画崩れの検知)専用の局面。honminoOneMoveFromCompleteSfen()と同じ
-// 「王が7iにあり8hへ1手(7i8h)で本美濃が完成する」局面に、
-// - ユーザーが提案手(7i8h)以外に指せる、無関係な歩(1g)
+// 「王が3iにあり2hへ1手(3i2h)で本美濃が完成する」局面に、
+// - ユーザーが提案手(3i2h)以外に指せる、無関係な歩(9g)
 // - 相手(gote)が打てる飛車1枚(持ち駒)
-// を追加したもの。相手が飛車を8筋へ打つと、王が8hへ動けば飛車の利きに入るため
-// (王手放置)、候補手7i8hが機械的に非合法になる(=相手の手による崩れの検証に使う)。
+// を追加したもの。相手が飛車を2筋へ打つと、王が2hへ動けば飛車の利きに入るため
+// (王手放置)、候補手3i2hが機械的に非合法になる(=相手の手による崩れの検証に使う)。
 function planChangeFixtureSfen(): string {
   let board = Board.empty();
   const pieces: Array<{ square: string; role: Parameters<typeof board.set>[1]["role"] }> = [
-    { square: "7i", role: "king" },
-    { square: "7h", role: "silver" },
-    { square: "6i", role: "gold" },
+    { square: "3i", role: "king" },
+    { square: "3h", role: "silver" },
+    { square: "4i", role: "gold" },
     { square: "5h", role: "gold" },
-    { square: "1g", role: "pawn" },
+    { square: "9g", role: "pawn" },
   ];
   for (const { square, role } of pieces) {
     const sq = parseSquareName(square);
@@ -364,19 +364,19 @@ function planChangeFixtureSfen(): string {
   return makeSfen(pos);
 }
 
-// Phase3 Unit2(計画崩れの理由分類)専用の局面。玉8h・金6i・金5hは既に揃い、
-// 対象マスは7h(銀)。銀は6gの1枚のみ(候補手は"6g7h"の1件)、
-// ユーザーが無関係な歩(1g)を指せるようにし、相手(gote)には桂馬を7eに配置する
-// (7eの桂馬は6g・8gのどちらにも1手で到達でき、6gの銀を直接取れる)。
+// Phase3 Unit2(計画崩れの理由分類)専用の局面。玉2h・金4i・金5hは既に揃い、
+// 対象マスは3h(銀)。銀は4gの1枚のみ(候補手は"4g3h"の1件)、
+// ユーザーが無関係な歩(9g)を指せるようにし、相手(gote)には桂馬を3eに配置する
+// (3eの桂馬は4g・2gのどちらにも1手で到達でき、4gの銀を直接取れる)。
 function planChangeCaptureFixtureSfen(): string {
   let board = Board.empty();
   const pieces: Array<{ square: string; color: "sente" | "gote"; role: Role }> = [
-    { square: "8h", color: "sente", role: "king" },
-    { square: "6i", color: "sente", role: "gold" },
+    { square: "2h", color: "sente", role: "king" },
+    { square: "4i", color: "sente", role: "gold" },
     { square: "5h", color: "sente", role: "gold" },
-    { square: "6g", color: "sente", role: "silver" },
-    { square: "1g", color: "sente", role: "pawn" },
-    { square: "7e", color: "gote", role: "knight" },
+    { square: "4g", color: "sente", role: "silver" },
+    { square: "9g", color: "sente", role: "pawn" },
+    { square: "3e", color: "gote", role: "knight" },
   ];
   for (const { square, color, role } of pieces) {
     const sq = parseSquareName(square);
@@ -416,27 +416,28 @@ describe("buildStateResponseWithPlan", () => {
 
     // 「選択した形 → 必要なマス → 今どこまで出来ているか」をUIが辿れること。
     expect(response.plan.targetShapeProgress?.shapeId).toBe(response.plan.resolvedTargetShapeId);
-    expect(response.plan.targetShapeProgress?.matchedSquareLabels).toEqual(["６九"]);
-    expect(response.plan.targetShapeProgress?.missingSquareLabels).toEqual(["８八", "７八", "５八"]);
+    expect(response.plan.targetShapeProgress?.matchedSquareLabels).toEqual(["４九"]);
+    expect(response.plan.targetShapeProgress?.missingSquareLabels).toEqual(["２八", "３八", "５八"]);
 
     // 「未達成マス → 現在の局面からの経路 → 今指せる最初の一手があるか」を辿れること。
-    const kingRoute = response.plan.routes.find((r) => r.targetSquare === "8h");
+    const kingRoute = response.plan.routes.find((r) => r.targetSquare === "2h");
     expect(kingRoute?.targetPiece).toBe("玉");
-    expect(kingRoute?.targetSquareLabel).toBe("８八");
-    expect(kingRoute?.routeLabel).toBe("５九→６八→７八→８八");
+    expect(kingRoute?.targetSquareLabel).toBe("２八");
+    expect(kingRoute?.routeLabel).toBe("５九→４八→３八→２八");
     expect(kingRoute?.remainingSteps).toBe(3);
     expect(kingRoute?.hasPlayableFirstMove).toBe(true);
-    expect(kingRoute?.blockingSquareLabel).toBe("８八");
+    expect(kingRoute?.blockingSquareLabel).toBe("２八");
 
     // Phase 7 Unit 3(詰まりの可視化): 「何が塞いでいるか」「その駒に指せる手があるか」。
-    // 駒名は現在の盤(SFEN)の8hを読んだ結果(初期局面の8hは先手の角)であり、
+    // 駒名は現在の盤(SFEN)の2hを読んだ結果(初期局面の2hは先手の飛車)であり、
     // 形の定義(required_pieces)の駒種ではない。
-    expect(kingRoute?.blockingPieceName).toBe("角");
-    // 初期局面の8hの角は、4方向の斜めが自分の駒で塞がっていて合法手が1つも無い。
-    expect(kingRoute?.blockingSquareHasLegalMove).toBe(false);
+    expect(kingRoute?.blockingPieceName).toBe("飛");
+    // 初期局面の2hの飛車は、h段の空きマスへ動けるため合法手がある
+    // (「合法手が1つも無い場合にfalseになる」ことは routePlanner.test.ts 3-2 で検証する)。
+    expect(kingRoute?.blockingSquareHasLegalMove).toBe(true);
 
     // 塞いでいるマスが無い経路では、どちらもnullになる(推測で値を埋めない)。
-    const silverRoute = response.plan.routes.find((r) => r.targetSquare === "7h");
+    const silverRoute = response.plan.routes.find((r) => r.targetSquare === "3h");
     expect(silverRoute?.blockingSquareLabel).toBeNull();
     expect(silverRoute?.blockingPieceName).toBeNull();
     expect(silverRoute?.blockingSquareHasLegalMove).toBeNull();
@@ -480,7 +481,7 @@ describe("buildStateResponseWithPlan", () => {
 
     expect(response.plan.candidateMoveState).toBe("ready");
     expect(response.plan.candidateMove?.status).toBe("ready");
-    expect(response.plan.candidateMove?.explanations.map((e) => e.move)).toEqual(["7i8h"]);
+    expect(response.plan.candidateMove?.explanations.map((e) => e.move)).toEqual(["3i2h"]);
   });
 
   it("cachedPlanのsfenが現在の局面と一致しない(stale)場合は無視し、pending/unavailableとして扱う", () => {
@@ -508,11 +509,11 @@ describe("buildStateResponseWithPlan", () => {
     const sfen = honminoMultipleCandidatesSfen();
     const state = customGameState(sfen);
     const engine = makeMockLowPriorityEngine(() =>
-      multiPvResult([{ multipv: 1, score: { type: "cp", value: 0 }, pv: [] }], "6g7h"),
+      multiPvResult([{ multipv: 1, score: { type: "cp", value: 0 }, pv: [] }], "4g3h"),
     );
 
     const computed = await computeReachablePlan(state, engine, { initialSfen: sfen }, "mino_honmino");
-    expect(computed.candidateMove?.explanations.map((e) => e.move).sort()).toEqual(["6g7h", "8g7h"]);
+    expect(computed.candidateMove?.explanations.map((e) => e.move).sort()).toEqual(["2g3h", "4g3h"]);
 
     const response = buildStateResponseWithPlan(
       state,
@@ -787,13 +788,13 @@ describe("computePlanChangeAfterMove / safeComputePlanChangeAfterMove", () => {
     const sfenBefore = honminoOneMoveFromCompleteSfen();
     const stateBefore = customGameState(sfenBefore);
 
-    const sfenAfterUserMove = applyMove(sfenBefore, "7i8h");
-    const stateAfter: GameState = { sfen: sfenAfterUserMove, moveHistory: ["7i8h"], forcedPliesUsed: 0 };
+    const sfenAfterUserMove = applyMove(sfenBefore, "3i2h");
+    const stateAfter: GameState = { sfen: sfenAfterUserMove, moveHistory: ["3i2h"], forcedPliesUsed: 0 };
 
     const planChanged = computePlanChangeAfterMove(
       stateBefore,
       stateAfter,
-      "7i8h",
+      "3i2h",
       { initialSfen: sfenBefore },
       "mino_honmino",
     );
@@ -812,18 +813,18 @@ describe("computePlanChangeAfterMove / safeComputePlanChangeAfterMove", () => {
     const sfenBefore = honminoMultipleCandidatesWithOpponentPawnSfen();
     const stateBefore = customGameState(sfenBefore);
 
-    const sfenAfterUserMove = applyMove(sfenBefore, "6g7h"); // 複数候補のうち1つをそのまま指す
-    const sfenAfterOpponentMove = applyMove(sfenAfterUserMove, "1c1d"); // 相手はこの計画と無関係な手
+    const sfenAfterUserMove = applyMove(sfenBefore, "4g3h"); // 複数候補のうち1つをそのまま指す
+    const sfenAfterOpponentMove = applyMove(sfenAfterUserMove, "9c9d"); // 相手はこの計画と無関係な手
     const stateAfter: GameState = {
       sfen: sfenAfterOpponentMove,
-      moveHistory: ["6g7h", "1c1d"],
+      moveHistory: ["4g3h", "9c9d"],
       forcedPliesUsed: 0,
     };
 
     const planChanged = computePlanChangeAfterMove(
       stateBefore,
       stateAfter,
-      "6g7h",
+      "4g3h",
       { initialSfen: sfenBefore },
       "mino_honmino",
     );
@@ -835,7 +836,7 @@ describe("computePlanChangeAfterMove / safeComputePlanChangeAfterMove", () => {
     const reason = computePlanChangeReasonAfterMove(
       stateBefore,
       stateAfter,
-      "6g7h",
+      "4g3h",
       { initialSfen: sfenBefore },
       "mino_honmino",
     );
@@ -849,18 +850,18 @@ describe("computePlanChangeAfterMove / safeComputePlanChangeAfterMove", () => {
     const sfenBefore = honminoMultipleCandidatesWithCaptureFixtureSfen();
     const stateBefore = customGameState(sfenBefore);
 
-    const sfenAfterUserMove = applyMove(sfenBefore, "1g1f"); // 提案手以外の無関係な手
-    const sfenAfterOpponentMove = applyMove(sfenAfterUserMove, "7e6g"); // 桂馬が6gの銀を取る(8gの銀は無傷)
+    const sfenAfterUserMove = applyMove(sfenBefore, "9g9f"); // 提案手以外の無関係な手
+    const sfenAfterOpponentMove = applyMove(sfenAfterUserMove, "3e4g"); // 桂馬が4gの銀を取る(2gの銀は無傷)
     const stateAfter: GameState = {
       sfen: sfenAfterOpponentMove,
-      moveHistory: ["1g1f", "7e6g"],
+      moveHistory: ["9g9f", "3e4g"],
       forcedPliesUsed: 0,
     };
 
     const planChanged = computePlanChangeAfterMove(
       stateBefore,
       stateAfter,
-      "1g1f",
+      "9g9f",
       { initialSfen: sfenBefore },
       "mino_honmino",
     );
@@ -869,7 +870,7 @@ describe("computePlanChangeAfterMove / safeComputePlanChangeAfterMove", () => {
     const reason = computePlanChangeReasonAfterMove(
       stateBefore,
       stateAfter,
-      "1g1f",
+      "9g9f",
       { initialSfen: sfenBefore },
       "mino_honmino",
     );
@@ -881,18 +882,18 @@ describe("computePlanChangeAfterMove / safeComputePlanChangeAfterMove", () => {
     const sfenBefore = planChangeFixtureSfen();
     const stateBefore = customGameState(sfenBefore);
 
-    const sfenAfterUserMove = applyMove(sfenBefore, "1g1f"); // 提案手(7i8h)とは無関係な手
-    const sfenAfterOpponentMove = applyMove(sfenAfterUserMove, "R*8a"); // 相手が飛車を8筋へ打つ
+    const sfenAfterUserMove = applyMove(sfenBefore, "9g9f"); // 提案手(7i8h)とは無関係な手
+    const sfenAfterOpponentMove = applyMove(sfenAfterUserMove, "R*2a"); // 相手が飛車を2筋へ打つ
     const stateAfter: GameState = {
       sfen: sfenAfterOpponentMove,
-      moveHistory: ["1g1f", "R*8a"],
+      moveHistory: ["9g9f", "R*2a"],
       forcedPliesUsed: 0,
     };
 
     const planChanged = computePlanChangeAfterMove(
       stateBefore,
       stateAfter,
-      "1g1f",
+      "9g9f",
       { initialSfen: sfenBefore },
       "mino_honmino",
     );
@@ -904,18 +905,18 @@ describe("computePlanChangeAfterMove / safeComputePlanChangeAfterMove", () => {
     const sfenBefore = planChangeFixtureSfen();
     const stateBefore = customGameState(sfenBefore);
 
-    const sfenAfterUserMove = applyMove(sfenBefore, "1g1f");
-    const sfenAfterOpponentMove = applyMove(sfenAfterUserMove, "R*1a"); // 8筋に利きが無い場所へ打つ
+    const sfenAfterUserMove = applyMove(sfenBefore, "9g9f");
+    const sfenAfterOpponentMove = applyMove(sfenAfterUserMove, "R*9a"); // 2筋に利きが無い場所へ打つ
     const stateAfter: GameState = {
       sfen: sfenAfterOpponentMove,
-      moveHistory: ["1g1f", "R*1a"],
+      moveHistory: ["9g9f", "R*9a"],
       forcedPliesUsed: 0,
     };
 
     const planChanged = computePlanChangeAfterMove(
       stateBefore,
       stateAfter,
-      "1g1f",
+      "9g9f",
       { initialSfen: sfenBefore },
       "mino_honmino",
     );
@@ -933,25 +934,25 @@ describe("computePlanChangeAfterMove / safeComputePlanChangeAfterMove", () => {
   it("同一入力に対して常に同じ結果を返す(決定的)", () => {
     const sfenBefore = planChangeFixtureSfen();
     const stateBefore = customGameState(sfenBefore);
-    const sfenAfterUserMove = applyMove(sfenBefore, "1g1f");
-    const sfenAfterOpponentMove = applyMove(sfenAfterUserMove, "R*8a");
+    const sfenAfterUserMove = applyMove(sfenBefore, "9g9f");
+    const sfenAfterOpponentMove = applyMove(sfenAfterUserMove, "R*2a");
     const stateAfter: GameState = {
       sfen: sfenAfterOpponentMove,
-      moveHistory: ["1g1f", "R*8a"],
+      moveHistory: ["9g9f", "R*2a"],
       forcedPliesUsed: 0,
     };
 
     const first = computePlanChangeAfterMove(
       stateBefore,
       stateAfter,
-      "1g1f",
+      "9g9f",
       { initialSfen: sfenBefore },
       "mino_honmino",
     );
     const second = computePlanChangeAfterMove(
       stateBefore,
       stateAfter,
-      "1g1f",
+      "9g9f",
       { initialSfen: sfenBefore },
       "mino_honmino",
     );
@@ -1010,11 +1011,11 @@ describe("computePlanChangeReasonAfterMove / safeComputePlanChangeReasonAfterMov
     const sfenBefore = planChangeCaptureFixtureSfen();
     const stateBefore = customGameState(sfenBefore);
 
-    const sfenAfterUserMove = applyMove(sfenBefore, "1g1f"); // 提案手(6g7h)とは無関係な手
-    const sfenAfterOpponentMove = applyMove(sfenAfterUserMove, "7e6g"); // 桂馬が銀を取る
+    const sfenAfterUserMove = applyMove(sfenBefore, "9g9f"); // 提案手(6g7h)とは無関係な手
+    const sfenAfterOpponentMove = applyMove(sfenAfterUserMove, "3e4g"); // 桂馬が銀を取る
     const stateAfter: GameState = {
       sfen: sfenAfterOpponentMove,
-      moveHistory: ["1g1f", "7e6g"],
+      moveHistory: ["9g9f", "3e4g"],
       forcedPliesUsed: 0,
     };
 
@@ -1023,7 +1024,7 @@ describe("computePlanChangeReasonAfterMove / safeComputePlanChangeReasonAfterMov
     const planChanged = computePlanChangeAfterMove(
       stateBefore,
       stateAfter,
-      "1g1f",
+      "9g9f",
       { initialSfen: sfenBefore },
       "mino_honmino",
     );
@@ -1032,7 +1033,7 @@ describe("computePlanChangeReasonAfterMove / safeComputePlanChangeReasonAfterMov
     const reason = computePlanChangeReasonAfterMove(
       stateBefore,
       stateAfter,
-      "1g1f",
+      "9g9f",
       { initialSfen: sfenBefore },
       "mino_honmino",
     );
@@ -1048,18 +1049,18 @@ describe("computePlanChangeReasonAfterMove / safeComputePlanChangeReasonAfterMov
     const sfenBefore = planChangeFixtureSfen();
     const stateBefore = customGameState(sfenBefore);
 
-    const sfenAfterUserMove = applyMove(sfenBefore, "1g1f");
-    const sfenAfterOpponentMove = applyMove(sfenAfterUserMove, "R*8a");
+    const sfenAfterUserMove = applyMove(sfenBefore, "9g9f");
+    const sfenAfterOpponentMove = applyMove(sfenAfterUserMove, "R*2a");
     const stateAfter: GameState = {
       sfen: sfenAfterOpponentMove,
-      moveHistory: ["1g1f", "R*8a"],
+      moveHistory: ["9g9f", "R*2a"],
       forcedPliesUsed: 0,
     };
 
     const planChanged = computePlanChangeAfterMove(
       stateBefore,
       stateAfter,
-      "1g1f",
+      "9g9f",
       { initialSfen: sfenBefore },
       "mino_honmino",
     );
@@ -1068,7 +1069,7 @@ describe("computePlanChangeReasonAfterMove / safeComputePlanChangeReasonAfterMov
     const reason = computePlanChangeReasonAfterMove(
       stateBefore,
       stateAfter,
-      "1g1f",
+      "9g9f",
       { initialSfen: sfenBefore },
       "mino_honmino",
     );
@@ -1080,13 +1081,13 @@ describe("computePlanChangeReasonAfterMove / safeComputePlanChangeReasonAfterMov
     // Phase 7 Unit 0: 目標形は自動選択されない(明示的に選択してから検証する)。
     const sfenBefore = honminoOneMoveFromCompleteSfen();
     const stateBefore = customGameState(sfenBefore);
-    const sfenAfterUserMove = applyMove(sfenBefore, "7i8h");
-    const stateAfter: GameState = { sfen: sfenAfterUserMove, moveHistory: ["7i8h"], forcedPliesUsed: 0 };
+    const sfenAfterUserMove = applyMove(sfenBefore, "3i2h");
+    const stateAfter: GameState = { sfen: sfenAfterUserMove, moveHistory: ["3i2h"], forcedPliesUsed: 0 };
 
     const planChanged = computePlanChangeAfterMove(
       stateBefore,
       stateAfter,
-      "7i8h",
+      "3i2h",
       { initialSfen: sfenBefore },
       "mino_honmino",
     );
@@ -1095,7 +1096,7 @@ describe("computePlanChangeReasonAfterMove / safeComputePlanChangeReasonAfterMov
     const reason = computePlanChangeReasonAfterMove(
       stateBefore,
       stateAfter,
-      "7i8h",
+      "3i2h",
       { initialSfen: sfenBefore },
       "mino_honmino",
     );
@@ -1112,25 +1113,25 @@ describe("computePlanChangeReasonAfterMove / safeComputePlanChangeReasonAfterMov
   it("同一入力に対して常に同じ結果を返す(決定的)", () => {
     const sfenBefore = planChangeCaptureFixtureSfen();
     const stateBefore = customGameState(sfenBefore);
-    const sfenAfterUserMove = applyMove(sfenBefore, "1g1f");
-    const sfenAfterOpponentMove = applyMove(sfenAfterUserMove, "7e6g");
+    const sfenAfterUserMove = applyMove(sfenBefore, "9g9f");
+    const sfenAfterOpponentMove = applyMove(sfenAfterUserMove, "3e4g");
     const stateAfter: GameState = {
       sfen: sfenAfterOpponentMove,
-      moveHistory: ["1g1f", "7e6g"],
+      moveHistory: ["9g9f", "3e4g"],
       forcedPliesUsed: 0,
     };
 
     const first = computePlanChangeReasonAfterMove(
       stateBefore,
       stateAfter,
-      "1g1f",
+      "9g9f",
       { initialSfen: sfenBefore },
       "mino_honmino",
     );
     const second = computePlanChangeReasonAfterMove(
       stateBefore,
       stateAfter,
-      "1g1f",
+      "9g9f",
       { initialSfen: sfenBefore },
       "mino_honmino",
     );
@@ -1160,11 +1161,11 @@ describe("computeMoveOutcomeAfterMove / safeComputeMoveOutcomeAfterMove", () => 
     // Phase 7 Unit 0: 目標形は自動選択されない(明示的に選択してから検証する)。
     const stateBefore = gameStateAfter([]);
     // 初期局面で7i7h(銀を7hへ)は候補手であり、本美濃の7hが完成する。
-    const stateAfter = gameStateAfter(["7i7h", "1c1d"]);
+    const stateAfter = gameStateAfter(["3i3h", "1c1d"]);
 
-    const outcome = computeMoveOutcomeAfterMove(stateBefore, stateAfter, "7i7h", "1c1d", {}, "mino_honmino");
+    const outcome = computeMoveOutcomeAfterMove(stateBefore, stateAfter, "3i3h", "1c1d", {}, "mino_honmino");
 
-    expect(outcome?.playedMoveUsi).toBe("7i7h");
+    expect(outcome?.playedMoveUsi).toBe("3i3h");
     expect(outcome?.opponentMoveUsi).toBe("1c1d");
     expect(outcome?.facts.map((f) => f.kind)).toContain("route_completed");
     expect(outcome?.facts.map((f) => f.kind)).toContain("played_candidate");
@@ -1175,10 +1176,10 @@ describe("computeMoveOutcomeAfterMove / safeComputeMoveOutcomeAfterMove", () => 
     // 「経路が全て失われた」という誤った事実になる。比較自体を行わない。
     // Phase 7 Unit 0: 目標形は自動選択されない(明示的に選択してから検証する)。
     const stateBefore = gameStateAfter([]);
-    const stateAfter = gameStateAfter(["7i7h"]);
+    const stateAfter = gameStateAfter(["3i3h"]);
 
     expect(
-      computeMoveOutcomeAfterMove(stateBefore, stateAfter, "7i7h", null, {}, "mino_honmino"),
+      computeMoveOutcomeAfterMove(stateBefore, stateAfter, "3i3h", null, {}, "mino_honmino"),
     ).toBeNull();
   });
 
@@ -1186,19 +1187,19 @@ describe("computeMoveOutcomeAfterMove / safeComputeMoveOutcomeAfterMove", () => 
     // Phase 7 Unit 0: 目標形は自動選択されない(明示的に選択してから検証する)。
     const sfenBefore = planChangeCaptureFixtureSfen();
     const stateBefore = customGameState(sfenBefore);
-    const sfenAfterUser = applyMove(sfenBefore, "1g1f");
-    const sfenAfterOpponent = applyMove(sfenAfterUser, "7e6g");
+    const sfenAfterUser = applyMove(sfenBefore, "9g9f");
+    const sfenAfterOpponent = applyMove(sfenAfterUser, "3e4g");
     const stateAfter: GameState = {
       sfen: sfenAfterOpponent,
-      moveHistory: ["1g1f", "7e6g"],
+      moveHistory: ["9g9f", "3e4g"],
       forcedPliesUsed: 0,
     };
 
     const outcome = computeMoveOutcomeAfterMove(
       stateBefore,
       stateAfter,
-      "1g1f",
-      "7e6g",
+      "9g9f",
+      "3e4g",
       { initialSfen: sfenBefore },
       "mino_honmino",
       "candidate_piece_captured",
@@ -1423,14 +1424,16 @@ describe("Unit 3: filterContradictoryConsiderations", () => {
 describe("Unit 3: shapeWeakness([3]「なぜそれが重要か」)", () => {
   // 先手が 玉8八・銀7八・金6九・金5八 を組み上げ、本美濃囲いがcompletedになる手順。
   // 後手の手は形の判定に関与しない歩突きで埋めている。
+  // 正本座標(2h玉・3h銀・4i金・5h金)の本美濃を初期局面から作る手順。
+  // 2hには先手の飛車がいるため、まず飛車を6八へ振って2hを空ける(採用資料S8の手順)。
+  // 玉 5i→4h→3h→2h、銀 3i→3h、金 6i→5h。4iの金は初期位置のまま必須マスを満たす。
   const HONMINO_COMPLETED_MOVES = [
-    "7g7f", "1c1d",
-    "8h7g", "2c2d",
-    "5i6h", "3c3d",
-    "6h7h", "4c4d",
-    "7h8h", "5c5d",
-    "7i7h", "6c6d",
-    "4i5h",
+    "2h6h", "1c1d",
+    "5i4h", "2c2d",
+    "4h3h", "3c3d",
+    "3h2h", "4c4d",
+    "3i3h", "5c5d",
+    "6i5h",
   ];
 
   it("形が完成していない初期局面では返さない", () => {
@@ -1452,12 +1455,12 @@ describe("Unit 3: shapeWeakness([3]「なぜそれが重要か」)", () => {
 describe("buildStateResponseWithPlan: lastMoveOutcome", () => {
   it("MoveOutcomeを渡すと、日本語棋譜表記のラベルとメッセージがレスポンスに入る", () => {
     const stateBefore = gameStateAfter([]);
-    const stateAfter = gameStateAfter(["7i7h", "1c1d"]);
-    const outcome = computeMoveOutcomeAfterMove(stateBefore, stateAfter, "7i7h", "1c1d");
+    const stateAfter = gameStateAfter(["3i3h", "1c1d"]);
+    const outcome = computeMoveOutcomeAfterMove(stateBefore, stateAfter, "3i3h", "1c1d");
 
     const response = buildStateResponseWithPlan(stateAfter, undefined, {}, undefined, false, null, outcome);
 
-    expect(response.plan.lastMoveOutcome?.playedMoveLabel).toBe("７八銀");
+    expect(response.plan.lastMoveOutcome?.playedMoveLabel).toBe("３八銀");
     expect(response.plan.lastMoveOutcome?.opponentMoveLabel).toBe("１四歩");
     // Unit 3(情報構造の整理・既知事項 U0-1): 目標形が未選択(selectedTargetShapeId:
     // undefined)のときは「今の陣形に近い形について特に大きな変化はありませんでした」を
@@ -1511,9 +1514,9 @@ describe("computeBoardEventsAfterMove / buildStateResponseWithPlan: 盤面イベ
     // Phase 7 Unit 0: 目標形は自動選択されない(明示的に選択してから検証する)。
     const history = ["9g9f", "1c1d", "8g8f", "1d1e", "7g7f", "1e1f"];
     const stateBefore = gameStateAfter(history);
-    const stateAfter = gameStateAfter([...history, "7i7h", "1f1g+"]);
-    const outcome = computeMoveOutcomeAfterMove(stateBefore, stateAfter, "7i7h", "1f1g+", {}, "mino_honmino");
-    const events = computeBoardEventsAfterMove(stateBefore, "7i7h", "1f1g+");
+    const stateAfter = gameStateAfter([...history, "3i3h", "1f1g+"]);
+    const outcome = computeMoveOutcomeAfterMove(stateBefore, stateAfter, "3i3h", "1f1g+", {}, "mino_honmino");
+    const events = computeBoardEventsAfterMove(stateBefore, "3i3h", "1f1g+");
 
     const response = buildStateResponseWithPlan(
       stateAfter,
@@ -1535,8 +1538,8 @@ describe("computeBoardEventsAfterMove / buildStateResponseWithPlan: 盤面イベ
   it("盤面イベントを渡さない場合、Unit2の説明だけが返る(既存動作を変えない)", () => {
     // Phase 7 Unit 0: 目標形は自動選択されない(明示的に選択してから検証する)。
     const stateBefore = gameStateAfter([]);
-    const stateAfter = gameStateAfter(["7i7h", "1c1d"]);
-    const outcome = computeMoveOutcomeAfterMove(stateBefore, stateAfter, "7i7h", "1c1d", {}, "mino_honmino");
+    const stateAfter = gameStateAfter(["3i3h", "1c1d"]);
+    const outcome = computeMoveOutcomeAfterMove(stateBefore, stateAfter, "3i3h", "1c1d", {}, "mino_honmino");
 
     const response = buildStateResponseWithPlan(stateAfter, undefined, {}, "mino_honmino", false, null, outcome);
 

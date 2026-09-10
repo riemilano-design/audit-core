@@ -18,14 +18,14 @@ function findResult(results: ShapeFormationResult[], shapeId: string): ShapeForm
   return found;
 }
 
-// 本美濃(mino_honmino)の完成配置(8h玉・7h銀・6i金・5h金)を、指し手を経由せず
+// 本美濃(mino_honmino)の完成配置(2h玉・3h銀・4i金・5h金)を、指し手を経由せず
 // 直接盤面へ配置したSFEN(「completedはformation_evidenceの有無を問わない」ことの検証用)。
 function honminoCompletedSfen(): string {
   let board = Board.empty();
   const pieces: Array<{ square: string; role: Parameters<typeof board.set>[1]["role"] }> = [
-    { square: "8h", role: "king" },
-    { square: "7h", role: "silver" },
-    { square: "6i", role: "gold" },
+    { square: "2h", role: "king" },
+    { square: "3h", role: "silver" },
+    { square: "4i", role: "gold" },
     { square: "5h", role: "gold" },
   ];
   for (const { square, role } of pieces) {
@@ -39,12 +39,12 @@ function honminoCompletedSfen(): string {
 }
 
 describe("analyzeShapeFormation", () => {
-  it("初期局面(1手も指していない): 6九金の偶然の一致だけではforming扱いにしない(status: none)", () => {
+  it("初期局面(1手も指していない): 4九金の偶然の一致だけではforming扱いにしない(status: none)", () => {
     const results = analyzeShapeFormation(DEFAULT_INITIAL_SFEN, []);
     const honmino = findResult(results, "mino_honmino");
 
-    // shape_match(静的な一致)としては6九金が一致していることは正しく検出する
-    expect(honmino.matchedSquares).toContain("6i");
+    // shape_match(静的な一致)としては4九金が一致していることは正しく検出する
+    expect(honmino.matchedSquares).toContain("4i");
     // しかし指し手履歴が空なので、shape_formation_evidence(実際に動いた証拠)は無い
     expect(honmino.formationEvidence).toEqual([]);
     // その結果、プロダクト向けのstatusは"forming"ではなく"none"になる
@@ -61,22 +61,22 @@ describe("analyzeShapeFormation", () => {
   });
 
   it("Shape形成へ向かう手が複数観測される局面: 実際に動いた駒だけがformation_evidenceに載り、status: forming", () => {
-    // 銀(7i->7h)・金(4i->5h、斜め前へ)を実際に動かす。どちらも本美濃囲いの必須マスへの移動。
+    // 銀(3i->3h)・金(6i->5h、斜め前へ)を実際に動かす。どちらも本美濃囲いの必須マスへの移動。
     // 相手(gote)の手は無関係な手でよい(findMoveEvidenceはperspectiveColor=senteの手しか見ない)。
-    const moveHistory = ["7i7h", "3c3d", "4i5h"];
+    const moveHistory = ["3i3h", "3c3d", "6i5h"];
     const { finalSfen } = replayMoveHistory(moveHistory, DEFAULT_INITIAL_SFEN);
 
     const results = analyzeShapeFormation(finalSfen, moveHistory);
     const honmino = findResult(results, "mino_honmino");
 
-    expect(honmino.matchedSquares.sort()).toEqual(["5h", "6i", "7h"]);
-    expect(honmino.missingSquares).toEqual(["8h"]);
-    // 実際に動かした2枚(7h銀・5h金)がformation_evidenceに載る。
-    // 6i金は動いていない(偶然の一致のまま)ためformation_evidenceには含まれない。
+    expect(honmino.matchedSquares.sort()).toEqual(["3h", "4i", "5h"]);
+    expect(honmino.missingSquares).toEqual(["2h"]);
+    // 実際に動かした2枚(3h銀・5h金)がformation_evidenceに載る。
+    // 4i金は動いていない(偶然の一致のまま)ためformation_evidenceには含まれない。
     const evidencedSquares = honmino.formationEvidence.map((e) => e.square).sort();
-    expect(evidencedSquares).toEqual(["5h", "7h"]);
-    expect(honmino.formationEvidence.find((e) => e.square === "7h")?.evidence.moveUsi).toBe("7i7h");
-    expect(honmino.formationEvidence.find((e) => e.square === "5h")?.evidence.moveUsi).toBe("4i5h");
+    expect(evidencedSquares).toEqual(["3h", "5h"]);
+    expect(honmino.formationEvidence.find((e) => e.square === "3h")?.evidence.moveUsi).toBe("3i3h");
+    expect(honmino.formationEvidence.find((e) => e.square === "5h")?.evidence.moveUsi).toBe("6i5h");
     expect(honmino.status).toBe("forming");
   });
 
@@ -110,7 +110,7 @@ describe("analyzeShapeFormation", () => {
   });
 
   it("同じ入力に対して常に同じ結果を返す(決定的)", () => {
-    const moveHistory = ["7i7h", "3c3d", "4i5h"];
+    const moveHistory = ["3i3h", "3c3d", "6i5h"];
     const { finalSfen } = replayMoveHistory(moveHistory, DEFAULT_INITIAL_SFEN);
     const first = analyzeShapeFormation(finalSfen, moveHistory);
     const second = analyzeShapeFormation(finalSfen, moveHistory);

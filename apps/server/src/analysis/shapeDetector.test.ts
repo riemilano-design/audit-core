@@ -45,7 +45,7 @@ function firstResult(results: ShapeDetectionResult[]): ShapeDetectionResult {
 }
 
 // テスト専用の最小shape定義(data/shapes/配下の本番データは変更しない)。
-// 本美濃囲いの必須駒配置(8h玉・7h銀・6i金・5h金)をそのまま使う。
+// 本美濃囲いの必須駒配置(2h玉・3h銀・4i金・5h金)をそのまま使う。
 const TEST_HONMINO: ShapeDefinition = {
   id: "test_honmino",
   name: "本美濃囲い(テスト用)",
@@ -54,9 +54,9 @@ const TEST_HONMINO: ShapeDefinition = {
   family: "美濃系",
   parent_shape_id: null,
   required_pieces: [
-    { piece: "玉", square: "8h", optional: false },
-    { piece: "銀", square: "7h", optional: false },
-    { piece: "金", square: "6i", optional: false },
+    { piece: "玉", square: "2h", optional: false },
+    { piece: "銀", square: "3h", optional: false },
+    { piece: "金", square: "4i", optional: false },
     { piece: "金", square: "5h", optional: false },
   ],
   characteristics: "",
@@ -65,9 +65,9 @@ const TEST_HONMINO: ShapeDefinition = {
 };
 
 const HONMINO_COMPLETE_PIECES: PieceFixture[] = [
-  { square: "8h", color: "sente", role: "king" },
-  { square: "7h", color: "sente", role: "silver" },
-  { square: "6i", color: "sente", role: "gold" },
+  { square: "2h", color: "sente", role: "king" },
+  { square: "3h", color: "sente", role: "silver" },
+  { square: "4i", color: "sente", role: "gold" },
   { square: "5h", color: "sente", role: "gold" },
 ];
 
@@ -81,14 +81,14 @@ describe("detectShapes", () => {
   });
 
   it("形成中の局面(必須駒の一部のみ一致) -> status: forming, 0 < matchScore < 1", () => {
-    const partial = HONMINO_COMPLETE_PIECES.filter((p) => p.square === "8h" || p.square === "7h");
+    const partial = HONMINO_COMPLETE_PIECES.filter((p) => p.square === "2h" || p.square === "3h");
     const sfen = buildSfen(partial);
     const result = firstResult(detectShapes(sfen, [TEST_HONMINO]));
 
     expect(result.status).toBe("forming");
     expect(result.matchScore).toBeCloseTo(0.5);
-    expect(result.matchedSquares.sort()).toEqual(["7h", "8h"]);
-    expect(result.missingSquares.sort()).toEqual(["5h", "6i"]);
+    expect(result.matchedSquares.sort()).toEqual(["2h", "3h"]);
+    expect(result.missingSquares.sort()).toEqual(["4i", "5h"]);
   });
 
   it("形が成立している局面 -> status: completed, matchScore: 1", () => {
@@ -105,7 +105,7 @@ describe("detectShapes", () => {
   });
 
   it("複数Shape候補がある場合、それぞれ独立にstatus/matchScoreを返し、一致度が高い順に並ぶ", () => {
-    // 本美濃が完成している局面は、高美濃(6g金・7g桂が未配置)・銀冠(8g銀・7h金が不一致)
+    // 本美濃が完成している局面は、高美濃(4g金・3g桂が未配置)・銀冠(2g銀・3h金が不一致)
     // からは見ると「まだ途中/ほぼ無関係」に見える、という現実の形の親子関係を再現する。
     const realShapes = getShapes();
     const sfen = buildSfen(HONMINO_COMPLETE_PIECES);

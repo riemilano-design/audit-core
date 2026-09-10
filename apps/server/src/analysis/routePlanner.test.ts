@@ -82,122 +82,155 @@ describe("planRoutesToShape", () => {
   it("1. 本美濃囲い: 初期局面で未達成マスすべての経路が typical_build_order 順に返る", () => {
     const plan = planRoutesToShape(INITIAL_SFEN, initialShapeResults(), "mino_honmino");
 
-    // data/shapes/mino_honmino.json: typical_build_order = ["8h","7h","6i","5h"]。
-    // 初期局面では6i(金)だけが一致しているため、未達成は 8h / 7h / 5h の3件。
-    expect(plan.routes.map((r) => r.targetSquare)).toEqual(["8h", "7h", "5h"]);
+    // data/shapes/mino_honmino.json: typical_build_order = ["2h","3h","4i","5h"]。
+    // 初期局面では4i(金)だけが一致しているため、未達成は 2h / 3h / 5h の3件。
+    expect(plan.routes.map((r) => r.targetSquare)).toEqual(["2h", "3h", "5h"]);
     expect(plan.unresolvedReason).toBeNull();
   });
 
-  it("2. 本美濃囲い: 玉は8八まで3手の経路を持ち、その1手目が現在局面で指せる", () => {
-    const route = routeFor("mino_honmino", "8h");
+  it("2. 本美濃囲い: 玉は2八まで3手の経路を持ち、その1手目が現在局面で指せる", () => {
+    const route = routeFor("mino_honmino", "2h");
 
     expect(route?.targetPiece).toBe("玉");
     expect(route?.fromSquare).toBe("5i");
-    expect(route?.routeSquares).toEqual(["5i", "6h", "7h", "8h"]);
+    expect(route?.routeSquares).toEqual(["5i", "4h", "3h", "2h"]);
     expect(route?.remainingSteps).toBe(3);
     // pathPlanner.ts(1手先読み)ではここが候補ゼロになっていた局面。
-    expect(route?.firstMoveUsis).toEqual(["5i6h"]);
+    expect(route?.firstMoveUsis).toEqual(["5i4h"]);
   });
 
-  it("3. 本美濃囲い: 目標マス8hを自分の駒(角)が占有していることを検出する", () => {
-    const route = routeFor("mino_honmino", "8h");
+  it("3. 本美濃囲い: 目標マス2hを自分の駒(飛車)が占有していることを検出する", () => {
+    const route = routeFor("mino_honmino", "2h");
 
-    // 8hは先手の角の初期位置。1手目自体は指せるため、blockedReasonはnullのまま
+    // 2hは先手の飛車の初期位置。1手目自体は指せるため、blockedReasonはnullのまま
     // 「経路上に自分の駒がいる」という事実だけをblockingSquareで持つ。
-    expect(route?.blockingSquare).toBe("8h");
+    expect(route?.blockingSquare).toBe("2h");
     expect(route?.blockedReason).toBeNull();
   });
 
   // Phase 7 Unit 3(詰まりの可視化): 「塞いでいる駒に指せる手があるか」は、
   // getLegalMoves()を移動元で絞るだけの機械的な事実として持つ。
   it("3-2. 塞いでいる駒に合法手が1つも無い場合、blockingSquareHasLegalMoveがfalseになる", () => {
-    const route = routeFor("mino_honmino", "8h");
+    // 実データ+初期局面には「目標マスを塞ぎ、かつ合法手が0件」の駒が存在しない
+    // (2hの飛車は6手、2g・3gの歩はいずれも1手前へ出られる)。そのため、検証したい
+    // 条件だけを満たす最小の局面を組み立てる。
+    // 2hの香は前方一直線にしか動けず、自分の歩(2g)に塞がれて合法手が0件になる。
+    const sfen = buildCustomSfen(
+      [
+        { square: "2h", piece: { color: "sente", role: "lance" } },
+        { square: "2g", piece: { color: "sente", role: "pawn" } },
+      ],
+      "5i",
+    );
+    const shape: ShapeDefinition = {
+      id: "test_blocked_by_immobile_piece",
+      name: "テスト用(目標マスを動けない駒が塞ぐ)",
+      name_kana: "てすとよう",
+      side: "self",
+      family: "test",
+      parent_shape_id: null,
+      required_pieces: [{ piece: "玉", square: "2h", optional: false }],
+      typical_build_order: ["2h"],
+      characteristics: "",
+      weakAgainst: undefined,
+      confidence_level: "medium",
+      review_status: "human_reviewed",
+    };
+    const shapeResults = [makeShapeResult({ shapeId: shape.id, missingSquares: ["2h"] })];
 
-    // 初期局面の8hは先手の角。4方向の斜めが7g歩・9g歩・7i銀・9i香で塞がっており、
-    // この角から指せる合法手は1つも無い(将棋のルールから決まる事実)。
-    expect(route?.blockingSquare).toBe("8h");
+    const plan = planRoutesToShape(sfen, shapeResults, shape.id, { shapes: [shape] });
+    const route = plan.routes.find((r) => r.targetSquare === "2h");
+
+    // 旧テストと同じ3条件を維持する。
+    // (1) 目標マスに自分の駒がいる。
+    expect(route).toBeDefined();
+    expect(route?.blockingSquare).toBe("2h");
+    // (2) その駒に合法手が1つも無い(将棋のルールから決まる事実)。
     expect(route?.blockingSquareHasLegalMove).toBe(false);
+    // (3) 経路の1手目自体は指せるため、blockedReasonはnullのまま。
+    expect(route?.firstMoveUsis.length).toBeGreaterThan(0);
+    expect(route?.blockedReason).toBeNull();
   });
 
   it("3-3. 塞いでいる駒に合法手がある場合はtrue、塞いでいるマスが無ければnullになる", () => {
-    const knight = routeFor("mino_takamino", "7g");
-    const silver = routeFor("mino_honmino", "7h");
+    const knight = routeFor("mino_takamino", "3g");
+    const silver = routeFor("mino_honmino", "3h");
 
-    // 7gは先手の歩。7g7fが指せるためtrue。
-    expect(knight?.blockingSquare).toBe("7g");
+    // 3gは先手の歩。3g3fが指せるためtrue。
+    expect(knight?.blockingSquare).toBe("3g");
     expect(knight?.blockingSquareHasLegalMove).toBe(true);
 
-    // 7i→7hの経路上に自分の駒は無い。
+    // 3i→3hの経路上に自分の駒は無い。
     expect(silver?.blockingSquare).toBeNull();
     expect(silver?.blockingSquareHasLegalMove).toBeNull();
   });
 
   it("4. 本美濃囲い: 銀・金も経路を持ち、1手で到達できる場合は残り手数0になる", () => {
-    const silver = routeFor("mino_honmino", "7h");
+    const silver = routeFor("mino_honmino", "3h");
     const gold = routeFor("mino_honmino", "5h");
 
-    expect(silver?.routeSquares).toEqual(["7i", "7h"]);
-    expect(silver?.firstMoveUsis).toEqual(["7i7h"]);
-    expect(gold?.routeSquares).toEqual(["4i", "5h"]);
-    expect(gold?.firstMoveUsis).toEqual(["4i5h"]);
+    expect(silver?.routeSquares).toEqual(["3i", "3h"]);
+    expect(silver?.firstMoveUsis).toEqual(["3i3h"]);
+    expect(gold?.routeSquares).toEqual(["6i", "5h"]);
+    expect(gold?.firstMoveUsis).toEqual(["6i5h"]);
   });
 
-  it("5. 本美濃囲い: 既に達成済みのマス(6i)の金を動かす候補(6i5h)を生成しない", () => {
+  it("5. 本美濃囲い: 既に達成済みのマス(4i)の金を動かす候補(4i5h)を生成しない", () => {
     const plan = planRoutesToShape(INITIAL_SFEN, initialShapeResults(), "mino_honmino");
     const goldRoute = plan.routes.find((r) => r.targetSquare === "5h");
 
-    // 6iの金は既に本美濃囲いの一部として成立しているため、動かすと形が壊れる。
-    // 5hへ向かわせる金は、必ず未使用の4iの金でなければならない。
-    expect(goldRoute?.fromSquare).toBe("4i");
-    expect(goldRoute?.firstMoveUsis).not.toContain("6i5h");
-    expect(plan.candidateMoves.map((c) => c.moveUsi)).not.toContain("6i5h");
+    // 4iの金は既に本美濃囲いの一部として成立しているため、動かすと形が壊れる。
+    // 5hへ向かわせる金は、必ず未使用の6iの金でなければならない。
+    expect(goldRoute?.fromSquare).toBe("6i");
+    expect(goldRoute?.firstMoveUsis).not.toContain("4i5h");
+    expect(plan.candidateMoves.map((c) => c.moveUsi)).not.toContain("4i5h");
     for (const route of plan.routes) {
-      expect(route.fromSquare).not.toBe("6i");
+      expect(route.fromSquare).not.toBe("4i");
     }
   });
 
-  it("6. 高美濃囲い: 初期局面から経路が生成され、金6gは2手の経路になる", () => {
+  it("6. 高美濃囲い: 初期局面から経路が生成され、金4gは2手の経路になる", () => {
     const plan = planRoutesToShape(INITIAL_SFEN, initialShapeResults(), "mino_takamino");
-    const gold = plan.routes.find((r) => r.targetSquare === "6g");
+    const gold = plan.routes.find((r) => r.targetSquare === "4g");
 
     expect(plan.routes.length).toBeGreaterThan(0);
-    expect(gold?.fromSquare).toBe("4i");
-    expect(gold?.routeSquares).toEqual(["4i", "5h", "6g"]);
+    expect(gold?.fromSquare).toBe("6i");
+    expect(gold?.routeSquares).toEqual(["6i", "5h", "4g"]);
     expect(gold?.remainingSteps).toBe(2);
-    expect(gold?.firstMoveUsis).toEqual(["4i5h"]);
+    expect(gold?.firstMoveUsis).toEqual(["6i5h"]);
   });
 
-  it("7. 高美濃囲い: 目標マスを自分の歩が塞ぐ桂7gについて、準備手(7g7f)を生成する", () => {
+  it("7. 高美濃囲い: 目標マスを自分の歩が塞ぐ桂3gについて、準備手(3g3f)を生成する", () => {
     const plan = planRoutesToShape(INITIAL_SFEN, initialShapeResults(), "mino_takamino");
-    const knight = plan.routes.find((r) => r.targetSquare === "7g");
+    const knight = plan.routes.find((r) => r.targetSquare === "3g");
 
-    expect(knight?.fromSquare).toBe("8i");
+    expect(knight?.fromSquare).toBe("2i");
     expect(knight?.firstMoveUsis).toEqual([]);
     expect(knight?.blockedReason).toBe("occupied_by_own_piece");
-    expect(knight?.blockingSquare).toBe("7g");
-    expect(knight?.preparatoryMoveUsis).toEqual(["7g7f"]);
+    expect(knight?.blockingSquare).toBe("3g");
+    expect(knight?.preparatoryMoveUsis).toEqual(["3g3f"]);
 
-    const preparation = plan.candidateMoves.find((c) => c.moveUsi === "7g7f");
+    const preparation = plan.candidateMoves.find((c) => c.moveUsi === "3g3f");
     expect(preparation?.kind).toBe("preparation");
-    expect(preparation?.clearingSquare).toBe("7g");
+    expect(preparation?.clearingSquare).toBe("3g");
     expect(preparation?.remainingStepsAfter).toBeNull();
   });
 
-  it("8. 銀冠: 初期局面から経路が生成され、銀8gは2手の経路になる", () => {
+  it("8. 銀冠: 初期局面から経路が生成され、銀2gは2手の経路になる", () => {
     const plan = planRoutesToShape(INITIAL_SFEN, initialShapeResults(), "mino_ginkanmuri");
-    const silver = plan.routes.find((r) => r.targetSquare === "8g");
+    const silver = plan.routes.find((r) => r.targetSquare === "2g");
 
     expect(plan.routes.length).toBeGreaterThan(0);
-    expect(silver?.fromSquare).toBe("7i");
-    expect(silver?.routeSquares).toEqual(["7i", "7h", "8g"]);
-    expect(silver?.firstMoveUsis).toEqual(["7i7h"]);
+    expect(silver?.fromSquare).toBe("3i");
+    expect(silver?.routeSquares).toEqual(["3i", "3h", "2g"]);
+    expect(silver?.firstMoveUsis).toEqual(["3i3h"]);
   });
 
   it("9. 銀冠: 同じ駒種が複数必要でも、同一の駒を2つの目標へ二重に割り当てない", () => {
     const plan = planRoutesToShape(INITIAL_SFEN, initialShapeResults(), "mino_ginkanmuri");
     const goldRoutes = plan.routes.filter((r) => r.targetPiece === "金");
 
-    // 銀冠は金を2枚(7h・6g)必要とする。別々の駒が割り当てられていること。
+    // 銀冠は金を2枚(3h・4g)必要とする。別々の駒が割り当てられていること。
     expect(goldRoutes).toHaveLength(2);
     expect(new Set(goldRoutes.map((r) => r.fromSquare)).size).toBe(2);
 
@@ -205,14 +238,14 @@ describe("planRoutesToShape", () => {
     expect(new Set(fromSquares).size).toBe(fromSquares.length);
   });
 
-  it("9-2. 1つの駒が、行き先の違う複数の候補手に同時に現れない(銀冠の6九の金)", () => {
-    // 銀冠では6九の金が「6七へ向かう代替経路」と「7八へ向かう代表」の両方になり得る。
+  it("9-2. 1つの駒が、行き先の違う複数の候補手に同時に現れない(銀冠の4九の金)", () => {
+    // 銀冠では4九の金が「4七へ向かう代替経路」と「3八へ向かう代表」の両方になり得る。
     // そのまま候補手にすると同じ駒に行き先の違う候補が2つ並び、なぜその手が出ているのかを
     // 追跡できなくなるため、代替経路側を取り除く。
     const plan = planRoutesToShape(INITIAL_SFEN, initialShapeResults(), "mino_ginkanmuri");
 
-    expect(plan.candidateMoves.map((c) => c.moveUsi)).not.toContain("6i5h");
-    expect(plan.candidateMoves).toContainEqual(expect.objectContaining({ moveUsi: "6i7h" }));
+    expect(plan.candidateMoves.map((c) => c.moveUsi)).not.toContain("4i5h");
+    expect(plan.candidateMoves).toContainEqual(expect.objectContaining({ moveUsi: "4i3h" }));
 
     const fromSquares = plan.candidateMoves.map((c) => c.routeSquares[0]);
     expect(new Set(fromSquares).size).toBe(fromSquares.length);
@@ -228,12 +261,12 @@ describe("planRoutesToShape", () => {
 
   it("11. 候補手は、どの目標マスへ向かう経路の何手目かを追跡できる情報を持つ", () => {
     const plan = planRoutesToShape(INITIAL_SFEN, initialShapeResults(), "mino_honmino");
-    const kingStep = plan.candidateMoves.find((c) => c.moveUsi === "5i6h");
+    const kingStep = plan.candidateMoves.find((c) => c.moveUsi === "5i4h");
 
     expect(kingStep?.kind).toBe("route_step");
-    expect(kingStep?.targetSquare).toBe("8h");
+    expect(kingStep?.targetSquare).toBe("2h");
     expect(kingStep?.targetPiece).toBe("玉");
-    expect(kingStep?.routeSquares).toEqual(["5i", "6h", "7h", "8h"]);
+    expect(kingStep?.routeSquares).toEqual(["5i", "4h", "3h", "2h"]);
     // 3手の経路の1手目なので、指した後の残りは2手。
     expect(kingStep?.remainingStepsAfter).toBe(2);
     expect(kingStep?.clearingSquare).toBeNull();
@@ -365,18 +398,27 @@ describe("planRoutesToShape", () => {
 
     for (const shapeId of ALL_SHAPE_IDS) {
       const plan = planRoutesToShape(sfen, shapeResults, shapeId);
+      // 経路が0件だと下のループが空振りして常に通ってしまうため、件数も明示する。
+      expect(plan.routes.length, shapeId).toBeGreaterThan(0);
       for (const route of plan.routes) {
+        expect(route.routeSquares.length, `${shapeId} / ${route.targetSquare}`).toBeGreaterThan(0);
         for (const square of [...route.routeSquares, route.fromSquare, route.targetSquare]) {
           expect(square, `${shapeId} / ${route.targetSquare}`).toMatch(/^[1-9][a-i]$/);
         }
       }
     }
 
-    // 盤外を通れないため、この局面の銀7hの経路は7g→7f→6g→7hの3手になる。
+    // 多段の経路でも盤内だけで組まれることを、具体値でも確かめる。
+    // この局面の先手玉は6hにあり、高美濃の目標マス2hまでは h段の空きマス(5h・4h・3h)を
+    // 通って4手かかる(玉は斜めにも動けるため、6h→2hの最短手数は筋の差4に等しい)。
     const takamino = planRoutesToShape(sfen, shapeResults, "mino_takamino");
-    const silver = takamino.routes.find((r) => r.targetSquare === "7h");
-    expect(silver?.routeSquares).toEqual(["7g", "7f", "6g", "7h"]);
-    expect(silver?.remainingSteps).toBe(3);
+    const king = takamino.routes.find((r) => r.targetSquare === "2h");
+    expect(king?.targetPiece).toBe("玉");
+    expect(king?.fromSquare).toBe("6h");
+    expect(king?.remainingSteps).toBe(4);
+    expect(king?.routeSquares).toHaveLength(5);
+    expect(king?.routeSquares[0]).toBe("6h");
+    expect(king?.routeSquares.at(-1)).toBe("2h");
   });
 
   it("18. 対象のShapeFormationResultが無い場合は例外を投げずshape_result_not_foundを返す", () => {
@@ -387,7 +429,7 @@ describe("planRoutesToShape", () => {
   });
 
   it("19. side=opponentのshapeは対象外(shape_not_self_side)", () => {
-    const shapeResults = [makeShapeResult({ shapeId: "mino_honmino", side: "opponent", missingSquares: ["8h"] })];
+    const shapeResults = [makeShapeResult({ shapeId: "mino_honmino", side: "opponent", missingSquares: ["2h"] })];
 
     const plan = planRoutesToShape(INITIAL_SFEN, shapeResults, "mino_honmino");
 

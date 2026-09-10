@@ -84,10 +84,10 @@ describe("planPathToShape", () => {
     const shapeResults = analyzeShapeFormation(DEFAULT_INITIAL_SFEN, []);
     const result = planPathToShape(DEFAULT_INITIAL_SFEN, shapeResults, "mino_honmino");
 
-    // data/shapes/mino_honmino.json: typical_build_order = ["8h","7h","6i","5h"]。
-    // 初期局面では6i(金)だけが偶然一致しているため、missingSquares = [8h,7h,5h]。
-    // buildOrder中で最初にmissingへ一致するのは"8h"。
-    expect(result.targetSquare).toBe("8h");
+    // data/shapes/mino_honmino.json: typical_build_order = ["2h","3h","4i","5h"]。
+    // 初期局面では4i(金)だけが偶然一致しているため、missingSquares = [2h,3h,5h]。
+    // buildOrder中で最初にmissingへ一致するのは"2h"。
+    expect(result.targetSquare).toBe("2h");
     expect(result.targetPiece).toBe("玉");
   });
 
@@ -158,7 +158,7 @@ describe("planPathToShape", () => {
   });
 
   it("6b. shapeResultsに存在しない無関係なshapeIdを指定した場合も安全に未解決を返す", () => {
-    const shapeResults = [makeShapeResult({ shapeId: "mino_honmino", missingSquares: ["8h"] })];
+    const shapeResults = [makeShapeResult({ shapeId: "mino_honmino", missingSquares: ["2h"] })];
     const result = planPathToShape(INITIAL_SFEN, shapeResults, "nonexistent_shape");
 
     expect(result.candidateMoves).toEqual([]);
@@ -197,7 +197,7 @@ describe("planPathToShape", () => {
   });
 
   it("8. 不正なSFENの場合、rules層のInvalidSfenErrorをそのまま伝播させる(独自エラーに置き換えない)", () => {
-    const shapeResults = [makeShapeResult({ shapeId: "mino_honmino", missingSquares: ["8h"] })];
+    const shapeResults = [makeShapeResult({ shapeId: "mino_honmino", missingSquares: ["2h"] })];
     expect(() => planPathToShape("not a valid sfen", shapeResults, "mino_honmino")).toThrow(InvalidSfenError);
   });
 

@@ -14,25 +14,24 @@ import { getLegalMoves } from "../rules/legalMoves.js";
 /**
  * 形と狙いの両方が動く、実際に指せる手順(全手が合法であることを確認済み)。
  *
- * - 先手: 角を8hからどけたうえで、玉を5i→6h→7h→8h、銀7i→7h、金4i→5h と動かして
- *   本美濃囲い(玉8h・銀7h・金6i・金5h)を作る。6iの金は初期位置のまま
+ * - 先手: 飛車を2hからどけたうえで(2h6h)、玉を5i→4h→3h→2h、銀3i→3h、金6i→5h と動かして
+ *   本美濃囲い(玉2h・銀3h・金4i・金5h)を作る。4iの金は初期位置のまま
  * - 後手: 6筋の歩を2回突く。これは data/intents/hayajikake.json の
  *   recognition_pattern(歩 6d → 6e)そのもので、狙いの段階が動く
  *
  * 期待される遷移(既存の判定から機械的に決まる。将棋的な良し悪しの主張ではない):
  *   ply 2  狙い hayajikake      none    -> forming    (6c6d)
  *   ply 4  狙い hayajikake      forming -> matched    (6d6e)
- *   ply 9  形   3件すべて        none    -> forming    (7h8h)
- *   ply 13 形   mino_honmino    forming -> completed  (4i5h)
+ *   ply 9  形   3件すべて        none    -> forming    (3h2h)
+ *   ply 11 形   mino_honmino    forming -> completed  (6i5h)
  */
 const SHAPE_AND_INTENT = [
-  "7g7f", "6c6d",
-  "8h7g", "6d6e",
-  "5i6h", "3c3d",
-  "6h7h", "8c8d",
-  "7h8h", "4a3b",
-  "7i7h", "3b4b",
-  "4i5h", "4b3b",
+  "2h6h", "6c6d",
+  "5i4h", "6d6e",
+  "4h3h", "3c3d",
+  "3h2h", "8c8d",
+  "3i3h", "4a3b",
+  "6i5h", "3b4b",
 ];
 
 describe("buildRecognitionTimeline", () => {
@@ -63,9 +62,9 @@ describe("buildRecognitionTimeline", () => {
       (entry) => entry.kind === "shape" && entry.targetId === "mino_honmino" && entry.to === "completed",
     );
 
-    // 玉8h・銀7h・金6i・金5h が揃うのは 4i5h(最終手)。
+    // 玉2h・銀3h・金4i・金5h が揃うのは 6i5h(最終手の1手前、先手の最終手)。
     expect(completed).toBeDefined();
-    expect(completed?.moveUsi).toBe("4i5h");
+    expect(completed?.moveUsi).toBe("6i5h");
   });
 
   it("相手の狙いの変化も、根拠になった手とともに記録される", () => {

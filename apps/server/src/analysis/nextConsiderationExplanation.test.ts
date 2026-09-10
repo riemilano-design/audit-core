@@ -181,9 +181,9 @@ describe("explainNextConsiderations", () => {
       const messages = explainNextConsiderations(factsFor("mino_ginkanmuri"), INITIAL_SFEN);
       const texts = messages.map((m) => m.text).join("");
 
-      expect(texts).toContain("７八");
-      expect(texts).toContain("８八");
-      // USI形式のマス目("7h"等)がそのまま文言に混ざらないこと。
+      expect(texts).toContain("３八");
+      expect(texts).toContain("２八");
+      // USI形式のマス目("3h"等)がそのまま文言に混ざらないこと。
       expect(texts).not.toMatch(/[1-9][a-i]/);
     });
 

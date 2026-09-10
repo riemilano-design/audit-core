@@ -54,16 +54,16 @@ function kinds(facts: { kind: string }[]): string[] {
   return facts.map((f) => f.kind);
 }
 
-/** 玉8h・金6i・金5hが揃い、7h(銀)だけが未達成。銀は6gの1枚のみで、相手の桂が7eにいる。 */
+/** 玉2h・金4i・金5hが揃い、3h(銀)だけが未達成。銀は4gの1枚のみで、相手の桂が3eにいる。 */
 function silverCaptureFixture(): string {
   let board = Board.empty();
   const pieces: Array<{ square: string; color: "sente" | "gote"; role: Parameters<typeof board.set>[1]["role"] }> = [
-    { square: "8h", color: "sente", role: "king" },
-    { square: "6i", color: "sente", role: "gold" },
+    { square: "2h", color: "sente", role: "king" },
+    { square: "4i", color: "sente", role: "gold" },
     { square: "5h", color: "sente", role: "gold" },
-    { square: "6g", color: "sente", role: "silver" },
-    { square: "1g", color: "sente", role: "pawn" },
-    { square: "7e", color: "gote", role: "knight" },
+    { square: "4g", color: "sente", role: "silver" },
+    { square: "9g", color: "sente", role: "pawn" },
+    { square: "3e", color: "gote", role: "knight" },
   ];
   for (const { square, color, role } of pieces) {
     const sq = parseSquareName(square);
@@ -75,15 +75,15 @@ function silverCaptureFixture(): string {
   return makeSfen(pos);
 }
 
-/** 玉7i・銀7h・金6i・金5h。あと7i8hで本美濃が完成する。相手は持ち駒に飛車1枚。 */
+/** 玉3i・銀3h・金4i・金5h。あと3i2hで本美濃が完成する。相手は持ち駒に飛車1枚。 */
 function rookDropFixture(): string {
   let board = Board.empty();
   const pieces: Array<{ square: string; role: Parameters<typeof board.set>[1]["role"] }> = [
-    { square: "7i", role: "king" },
-    { square: "7h", role: "silver" },
-    { square: "6i", role: "gold" },
+    { square: "3i", role: "king" },
+    { square: "3h", role: "silver" },
+    { square: "4i", role: "gold" },
     { square: "5h", role: "gold" },
-    { square: "1g", role: "pawn" },
+    { square: "9g", role: "pawn" },
   ];
   for (const { square, role } of pieces) {
     const sq = parseSquareName(square);
@@ -98,15 +98,15 @@ function rookDropFixture(): string {
 
 describe("detectMoveOutcome", () => {
   it("1. 候補手を指して目標マスが完成した場合、played_candidateとroute_completedを返す", () => {
-    // 初期局面で7i7h(銀を7hへ)は候補手であり、この手で本美濃の7hが完成する。
-    const { before, after } = playPair(INITIAL_SFEN, [], "mino_honmino", "7i7h", "1c1d");
+    // 初期局面で3i3h(銀を3hへ)は候補手であり、この手で本美濃の3hが完成する。
+    const { before, after } = playPair(INITIAL_SFEN, [], "mino_honmino", "3i3h", "1c1d");
 
-    const outcome = detectMoveOutcome(before, after, "7i7h", "1c1d");
+    const outcome = detectMoveOutcome(before, after, "3i3h", "1c1d");
 
     expect(kinds(outcome.facts)).toContain("played_candidate");
     expect(kinds(outcome.facts)).toContain("route_completed");
     const completed = outcome.facts.find((f) => f.kind === "route_completed");
-    expect(completed?.targetSquare).toBe("7h");
+    expect(completed?.targetSquare).toBe("3h");
     expect(completed?.targetPiece).toBe("銀");
     expect(completed?.remainingStepsAfter).toBe(0);
     // 経路があった目標マスの完成はroute_completedだけで表し、二重に報告しない。
@@ -123,27 +123,27 @@ describe("detectMoveOutcome", () => {
   });
 
   it("3. 経路の1手目を指した場合、route_advancedになり route_assignee_changed は出ない", () => {
-    // 玉8hの経路は 5i→6h→7h→8h。5i6hで残り3手→2手になるが、担当は同じ玉のまま。
-    const { before, after } = playPair(INITIAL_SFEN, [], "mino_honmino", "5i6h", "1c1d");
+    // 玉2hの経路は 5i→4h→3h→2h。5i4hで残り3手→2手になるが、担当は同じ玉のまま。
+    const { before, after } = playPair(INITIAL_SFEN, [], "mino_honmino", "5i4h", "1c1d");
 
-    const outcome = detectMoveOutcome(before, after, "5i6h", "1c1d");
+    const outcome = detectMoveOutcome(before, after, "5i4h", "1c1d");
 
     const advanced = outcome.facts.find((f) => f.kind === "route_advanced");
-    expect(advanced?.targetSquare).toBe("8h");
+    expect(advanced?.targetSquare).toBe("2h");
     expect(advanced?.remainingStepsBefore).toBe(3);
     expect(advanced?.remainingStepsAfter).toBe(2);
-    // fromSquareは5i→6hに変わるが、これは同じ玉が進んだだけであり担当変更ではない。
+    // fromSquareは5i→4hに変わるが、これは同じ玉が進んだだけであり担当変更ではない。
     expect(kinds(outcome.facts)).not.toContain("route_assignee_changed");
   });
 
   it("4. 経路上の駒が相手に取られた場合、route_lostになりcauseに確定分類が入る", () => {
     const sfen = silverCaptureFixture();
-    const { before, after } = playPair(sfen, [], "mino_honmino", "1g1f", "7e6g", sfen);
+    const { before, after } = playPair(sfen, [], "mino_honmino", "9g9f", "3e4g", sfen);
 
-    const outcome = detectMoveOutcome(before, after, "1g1f", "7e6g", "candidate_piece_captured");
+    const outcome = detectMoveOutcome(before, after, "9g9f", "3e4g", "candidate_piece_captured");
 
     const lost = outcome.facts.find((f) => f.kind === "route_lost");
-    expect(lost?.targetSquare).toBe("7h");
+    expect(lost?.targetSquare).toBe("3h");
     expect(lost?.targetPiece).toBe("銀");
     expect(lost?.cause).toBe("candidate_piece_captured");
     // 完成ではないので、route_completedにはならない。
@@ -152,27 +152,27 @@ describe("detectMoveOutcome", () => {
 
   it("5. 経路の1手目が指せなくなった場合、route_first_move_unavailableになる", () => {
     const sfen = rookDropFixture();
-    const { before, after } = playPair(sfen, [], "mino_honmino", "1g1f", "R*8a", sfen);
+    const { before, after } = playPair(sfen, [], "mino_honmino", "9g9f", "R*2a", sfen);
 
-    const outcome = detectMoveOutcome(before, after, "1g1f", "R*8a", "candidate_move_illegal_due_to_check");
+    const outcome = detectMoveOutcome(before, after, "9g9f", "R*2a", "candidate_move_illegal_due_to_check");
 
     const unavailable = outcome.facts.find((f) => f.kind === "route_first_move_unavailable");
-    expect(unavailable?.targetSquare).toBe("8h");
+    expect(unavailable?.targetSquare).toBe("2h");
     expect(unavailable?.cause).toBe("candidate_move_illegal_due_to_check");
-    // 経路自体は残っている(玉は7iのまま)ので、route_lostにはしない。
+    // 経路自体は残っている(玉は3iのまま)ので、route_lostにはしない。
     expect(kinds(outcome.facts)).not.toContain("route_lost");
   });
 
   it("6. 塞いでいた自分の駒がどいた場合、preparation_resolvedになる", () => {
-    // 高美濃の桂7gは、初期局面では自分の歩(7g)に塞がれている。7g7fでその歩がどく。
-    const { before, after } = playPair(INITIAL_SFEN, [], "mino_takamino", "7g7f", "1c1d");
+    // 高美濃の桂3gは、初期局面では自分の歩(3g)に塞がれている。3g3fでその歩がどく。
+    const { before, after } = playPair(INITIAL_SFEN, [], "mino_takamino", "3g3f", "1c1d");
 
-    const outcome = detectMoveOutcome(before, after, "7g7f", "1c1d");
+    const outcome = detectMoveOutcome(before, after, "3g3f", "1c1d");
 
     const resolved = outcome.facts.find((f) => f.kind === "preparation_resolved");
-    expect(resolved?.targetSquare).toBe("7g");
+    expect(resolved?.targetSquare).toBe("3g");
     expect(resolved?.targetPiece).toBe("桂");
-    expect(resolved?.blockingSquare).toBe("7g");
+    expect(resolved?.blockingSquare).toBe("3g");
     // 1手目が指せるようになったことも同時に事実として出る。
     expect(kinds(outcome.facts)).toContain("route_first_move_available");
   });
@@ -215,18 +215,18 @@ describe("detectMoveOutcome", () => {
 
   it("10. planChangeReasonが\"unknown\"の場合、原因を断定せずcause: nullにする", () => {
     const sfen = silverCaptureFixture();
-    const { before, after } = playPair(sfen, [], "mino_honmino", "1g1f", "7e6g", sfen);
+    const { before, after } = playPair(sfen, [], "mino_honmino", "9g9f", "3e4g", sfen);
 
-    const outcome = detectMoveOutcome(before, after, "1g1f", "7e6g", "unknown");
+    const outcome = detectMoveOutcome(before, after, "9g9f", "3e4g", "unknown");
 
     expect(outcome.facts.find((f) => f.kind === "route_lost")?.cause).toBeNull();
   });
 
   it("11. planChangeReasonが渡されない場合もcause: nullで、事実だけを返す", () => {
     const sfen = silverCaptureFixture();
-    const { before, after } = playPair(sfen, [], "mino_honmino", "1g1f", "7e6g", sfen);
+    const { before, after } = playPair(sfen, [], "mino_honmino", "9g9f", "3e4g", sfen);
 
-    const outcome = detectMoveOutcome(before, after, "1g1f", "7e6g");
+    const outcome = detectMoveOutcome(before, after, "9g9f", "3e4g");
 
     expect(outcome.facts.find((f) => f.kind === "route_lost")?.cause).toBeNull();
   });

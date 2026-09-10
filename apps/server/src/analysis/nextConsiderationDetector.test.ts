@@ -103,29 +103,34 @@ describe("detectNextConsiderations", () => {
       const facts = detectNextConsiderations(inputFor("mino_ginkanmuri"));
       const steps = facts.filter((f) => f.kind === "route_first_move_playable");
 
-      // routePlanner.tsが返す候補手(routes順): 5i6h(8hへ・残り2) / 4i5h(6gへ・残り1) /
-      // 7i7h(8gへ・残り1) / 6i7h(7hへ・残り0)。これを残り手数の少ない順に並べ替える。
-      expect(steps.map((f) => f.moveUsi)).toEqual(["6i7h", "4i5h", "7i7h", "5i6h"]);
-      expect(steps.map((f) => f.targetSquare)).toEqual(["7h", "6g", "8g", "8h"]);
+      // routePlanner.tsが返す候補手(routes順 = typical_build_order順):
+      // 5i4h(2hへ・残り2) / 4i3h(4gへ・残り1) / 3i3h(2gへ・残り1) / 6i5h(3hへ・残り2)。
+      // 4gへは4iの金も6iの金も2手で同着だが、routePlanner.tsの規則
+      // 「経路の短い順、同じ長さならマス名の昇順」により4iの金が代表になる。
+      // 4iは4gへ割り当て済み(assignedSquares)なので、3hへは6iの金が3手で向かう。
+      // これを残り手数の少ない順に並べ替える。
+      expect(steps.map((f) => f.moveUsi)).toEqual(["4i3h", "3i3h", "5i4h", "6i5h"]);
+      expect(steps.map((f) => f.targetSquare)).toEqual(["4g", "2g", "2h", "3h"]);
     });
 
     it("残り手数が同じ場合、routePlanner.tsのroutesの順序を保つ(銀冠・初期局面)", () => {
       const facts = detectNextConsiderations(inputFor("mino_ginkanmuri"));
       const steps = facts.filter((f) => f.kind === "route_first_move_playable");
 
-      // 4i5h(6gへ)と7i7h(8gへ)はどちらも残り1手。routesでは6gが8gより先に並ぶため、
-      // その順序をそのまま保つ(どちらが良いかという判断はしない)。
-      const sameSteps = steps.slice(1, 3).map((f) => f.targetSquare);
-      expect(sameSteps).toEqual(["6g", "8g"]);
+      // 4i3h(4gへ)と3i3h(2gへ)はどちらも残り1手で、並べ替え後の先頭2件になる。
+      // routesでは4gが2gより先に並ぶため、その順序をそのまま保つ
+      // (どちらが良いかという判断はしない)。
+      const sameSteps = steps.slice(0, 2).map((f) => f.targetSquare);
+      expect(sameSteps).toEqual(["4g", "2g"]);
     });
 
     it("残り手数が同じ場合、routesの順序を保つ(本美濃・初期局面)", () => {
       const facts = detectNextConsiderations(inputFor("mino_honmino"));
       const steps = facts.filter((f) => f.kind === "route_first_move_playable");
 
-      // 7i7h(7hへ・残り0)と4i5h(5hへ・残り0)は同数。routesでは7hが5hより先。
-      expect(steps.map((f) => f.moveUsi)).toEqual(["7i7h", "4i5h", "5i6h"]);
-      expect(steps.map((f) => f.targetSquare)).toEqual(["7h", "5h", "8h"]);
+      // 3i3h(3hへ・残り0)と6i5h(5hへ・残り0)は同数。routesでは3hが5hより先。
+      expect(steps.map((f) => f.moveUsi)).toEqual(["3i3h", "6i5h", "5i4h"]);
+      expect(steps.map((f) => f.targetSquare)).toEqual(["3h", "5h", "2h"]);
     });
 
     it("目標マスと駒種を、routePlanner.tsの値そのまま持つ", () => {
@@ -134,8 +139,8 @@ describe("detectNextConsiderations", () => {
 
       expect(step).toEqual({
         kind: "route_first_move_playable",
-        moveUsi: "7i7h",
-        targetSquare: "7h",
+        moveUsi: "3i3h",
+        targetSquare: "3h",
         targetPiece: "銀",
         shapeName: null,
         shapeReviewStatus: null,
@@ -143,15 +148,15 @@ describe("detectNextConsiderations", () => {
     });
 
     it("準備手(preparation)は扱わない(高美濃・初期局面)", () => {
-      // 高美濃の初期局面には、7gへの経路を塞ぐ駒をどかす準備手(7g7f)が候補手に含まれる。
+      // 高美濃の初期局面には、3gへの経路を塞ぐ駒をどかす準備手(3g3f)が候補手に含まれる。
       const input = inputFor("mino_takamino");
       expect(input.candidateMoves.some((c) => c.kind === "preparation")).toBe(true);
 
       const facts = detectNextConsiderations(input);
       const moveUsis = facts.filter((f) => f.kind === "route_first_move_playable").map((f) => f.moveUsi);
 
-      expect(moveUsis).not.toContain("7g7f");
-      expect(moveUsis).toEqual(["7i7h", "4i5h", "5i6h"]);
+      expect(moveUsis).not.toContain("3g3f");
+      expect(moveUsis).toEqual(["3i3h", "6i5h", "5i4h"]);
     });
   });
 
