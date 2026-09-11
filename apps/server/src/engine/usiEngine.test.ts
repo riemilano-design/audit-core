@@ -9,7 +9,7 @@
 // 決定的に検証できる。
 
 import { describe, expect, it, vi } from "vitest";
-import { parseBestmoveLine, UsiEngine } from "./usiEngine.js";
+import { buildGoCommand, parseBestmoveLine, UsiEngine } from "./usiEngine.js";
 
 function dispatchLine(engine: UsiEngine, line: string): void {
   // dispatch()はprivateだが、テストからの直接呼び出しのためブラケットアクセスする
@@ -45,6 +45,38 @@ describe("UsiEngine.setMultiPv", () => {
   });
 });
 
+describe("UsiEngine.setThreads", () => {
+  it("setoption name Threads value <N> を送信する", () => {
+    const engine = new UsiEngine("dummy-path");
+    const sendSpy = vi.spyOn(engine, "send").mockImplementation(() => {});
+
+    engine.setThreads(1);
+
+    expect(sendSpy).toHaveBeenCalledWith("setoption name Threads value 1");
+  });
+});
+
+describe("buildGoCommand", () => {
+  it("nodes指定時は`go nodes N`を送り、movetimeは送らない", () => {
+    expect(buildGoCommand({ nodes: 4_000_000 })).toEqual({
+      command: "go nodes 4000000",
+      timeoutMs: 60_000,
+    });
+  });
+
+  it("nodes未指定時は従来どおり`go movetime 2000`(既定)", () => {
+    expect(buildGoCommand()).toEqual({ command: "go movetime 2000", timeoutMs: 12_000 });
+  });
+
+  it("movetimeMs指定時は従来どおり`go movetime N`", () => {
+    expect(buildGoCommand({ movetimeMs: 500 })).toEqual({ command: "go movetime 500", timeoutMs: 10_500 });
+  });
+
+  it("nodesが0のときはmovetime扱い(既定条件のままの逃げ道)", () => {
+    expect(buildGoCommand({ nodes: 0 })).toEqual({ command: "go movetime 2000", timeoutMs: 12_000 });
+  });
+});
+
 describe("UsiEngine.go (8. 既存single-bestmove APIが従来どおり動く)", () => {
   it("bestmove/ponder/scoreCp(最後に観測されたscore cp)を返す", async () => {
     const engine = new UsiEngine("dummy-path");
@@ -65,6 +97,34 @@ describe("UsiEngine.go (8. 既存single-bestmove APIが従来どおり動く)", 
         "bestmove 7g7f ponder 3c3d",
       ],
     });
+  });
+});
+
+describe("UsiEngine.go (nodes指定)", () => {
+  it("nodes指定時は`go nodes N`を送信する(movetimeは送らない)", async () => {
+    const engine = new UsiEngine("dummy-path");
+    const sendSpy = vi.spyOn(engine, "send").mockImplementation(() => {});
+
+    const goPromise = engine.go({ nodes: 20_000 });
+    dispatchLine(engine, "bestmove 7g7f");
+    await goPromise;
+
+    expect(sendSpy).toHaveBeenCalledWith("go nodes 20000");
+    expect(sendSpy).not.toHaveBeenCalledWith(expect.stringContaining("movetime"));
+  });
+});
+
+describe("UsiEngine.goMultiPv (nodes指定)", () => {
+  it("nodes指定時は`go nodes N`を送信する(movetimeは送らない)", async () => {
+    const engine = new UsiEngine("dummy-path");
+    const sendSpy = vi.spyOn(engine, "send").mockImplementation(() => {});
+
+    const goPromise = engine.goMultiPv({ nodes: 20_000 });
+    dispatchLine(engine, "bestmove 7g7f");
+    await goPromise;
+
+    expect(sendSpy).toHaveBeenCalledWith("go nodes 20000");
+    expect(sendSpy).not.toHaveBeenCalledWith(expect.stringContaining("movetime"));
   });
 });
 

@@ -140,4 +140,18 @@ describe("compareNormalizedLines", () => {
     expect(result.baselineLineCount).toBe(3);
     expect(result.fileLineCount).toBe(2);
   });
+
+  // STEP T-6(A-3): meta行のsearchMode/nodes/threadsは正規化の除外一覧に含めない
+  // (=条件が違う記録は一致しない)。
+  it("searchModeが違う2本は一致しない", () => {
+    const baseline = normalizeJsonl(
+      `${JSON.stringify(metaLine({ searchMode: "nodes", nodes: 4_000_000, threads: 1 }))}\n`,
+    );
+    const target = normalizeJsonl(
+      `${JSON.stringify(metaLine({ searchMode: "movetime", nodes: 0, threads: 1 }))}\n`,
+    );
+    const result = compareNormalizedLines(baseline, target, "b.jsonl");
+    expect(result.matches).toBe(false);
+    expect(result.diffs[0]?.paths).toContain("searchMode");
+  });
 });

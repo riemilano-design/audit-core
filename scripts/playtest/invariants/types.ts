@@ -13,8 +13,11 @@
 
 import type { StateResponseBodyWithPlan } from "../../../apps/server/src/api/stateResponse.js";
 
-/** docs/PLAYTEST_LOOP_PROPOSAL.md 4.4 の6型。 */
-export type InvariantType = "沈黙" | "矛盾" | "断定" | "未説明用語" | "盤との不一致" | "陳腐化";
+/** docs/PLAYTEST_LOOP_PROPOSAL.md 4.4 の6型。
+ * STEP T-6(B-1、人間承認済み。docs/COVERAGE_AND_OUTCOME_PROPOSAL.md 7.1)で
+ * 7型目「結果」を追加した(局面・エンジン評価に基づく損得の観測。他の6型と異なり、
+ * 説明の言い方ではなく実際に起きた結果を対象にする)。 */
+export type InvariantType = "沈黙" | "矛盾" | "断定" | "未説明用語" | "盤との不一致" | "陳腐化" | "結果";
 
 /** 4.5の概念の境界: draft(AIが自由に追加してよい) / approved(人間だけが有効化する)。
  * 本STEP(T-2)で作る5件はすべてdraft(コードにapprovedの値は書かない)。
@@ -49,6 +52,13 @@ export interface MetaLine {
    * このファイルの追加であり、固定棋譜のmeta自体は変えない。 */
   mode?: string;
   profile?: string;
+  /** STEP T-6(A-3)が回帰モード(replay.ts)のmeta行に追加したフィールド。
+   * 探索(explore.ts)のmetaには無いためoptional。"nodes"は`go nodes N`固定、
+   * "movetime"は`--nodes 0`で本番条件(movetime)のまま再生した場合。
+   * check.tsが「## 入力」の混在警告に使う(STEP T-6計画書2. A-4)。 */
+  searchMode?: "nodes" | "movetime";
+  nodes?: number;
+  threads?: number;
 }
 
 /** 不変条件1件が検出した1件分。束ねる単位は(invariantId, condition)。 */

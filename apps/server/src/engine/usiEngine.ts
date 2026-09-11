@@ -25,6 +25,8 @@ export class UsiEngineTimeoutError extends Error {}
 
 export interface GoOptions {
   movetimeMs?: number;
+  /** 指定時は`go nodes N`を送る(movetimeは送らない)。回帰用の探索量固定に使う。 */
+  nodes?: number;
 }
 
 export interface GoResult {
@@ -32,6 +34,28 @@ export interface GoResult {
   ponder: string | undefined;
   scoreCp: number | undefined;
   infoLines: string[];
+}
+
+// ノード数指定(`go nodes N`)のgoコマンド待ちのタイムアウト。
+// ノード数を固定しても、実際にそのノード数を読み切るまでの所要時間は
+// 実行環境の負荷(CPU使用率等)で変動するため、movetimeベースの
+// タイムアウト(movetimeMs + 10_000)とは別に、十分な余裕を持つ固定値とする。
+const NODES_GO_TIMEOUT_MS = 60_000;
+
+/**
+ * go()/goMultiPv()共通: GoOptionsから実際に送るgoコマンド文字列と
+ * bestmove待ちのタイムアウトを決める純粋関数。
+ * nodesが指定されていれば`go nodes N`(タイムアウトはNODES_GO_TIMEOUT_MS固定)、
+ * 無ければ従来どおり`go movetime N`(タイムアウトはmovetimeMs + 10_000)。
+ */
+export function buildGoCommand({ movetimeMs = 2000, nodes }: GoOptions = {}): {
+  command: string;
+  timeoutMs: number;
+} {
+  if (nodes !== undefined && nodes > 0) {
+    return { command: `go nodes ${nodes}`, timeoutMs: NODES_GO_TIMEOUT_MS };
+  }
+  return { command: `go movetime ${movetimeMs}`, timeoutMs: movetimeMs + 10_000 };
 }
 
 /** collected行群からbestmove/ponderを取り出す(go()/goMultiPv()共通)。 */
@@ -137,10 +161,11 @@ export class UsiEngine {
     this.send(`position ${base}${movesPart}`);
   }
 
-  async go({ movetimeMs = 2000 }: GoOptions = {}): Promise<GoResult> {
-    this.send(`go movetime ${movetimeMs}`);
+  async go(options: GoOptions = {}): Promise<GoResult> {
+    const { command, timeoutMs } = buildGoCommand(options);
+    this.send(command);
     const { collected } = await this.waitForLine((line) => line.startsWith("bestmove"), {
-      timeoutMs: movetimeMs + 10_000,
+      timeoutMs,
     });
 
     const { bestmove, ponder } = parseBestmoveLine(collected);
@@ -167,6 +192,15 @@ export class UsiEngine {
   }
 
   /**
+   * エンジンに探索スレッド数を設定する。
+   * `setMultiPv()`と同様、いつ送るか(対局中に変更可能か等)はエンジン実装依存であり、
+   * その呼び出しタイミングの管理は呼び出し側の責務とする(本メソッドはコマンド送信のみ)。
+   */
+  setThreads(threads: number): void {
+    this.send(`setoption name Threads value ${threads}`);
+  }
+
+  /**
    * go()と同じく`go movetime`でエンジンに読ませ、bestmoveに加えて、
    * info行のmultipv/score/pvをusiInfoParser.ts経由で構造化して返す。
    * 同じmultipv番号のinfo行が複数回出力された場合(探索が深くなるにつれて更新される)は、
@@ -176,10 +210,11 @@ export class UsiEngine {
    * MultiPVを何本読ませるかはsetMultiPv()で事前に設定しておく(本メソッド自体は
    * setoptionを送らない。責務を分離するため)。
    */
-  async goMultiPv({ movetimeMs = 2000 }: GoOptions = {}): Promise<MultiPvGoResult> {
-    this.send(`go movetime ${movetimeMs}`);
+  async goMultiPv(options: GoOptions = {}): Promise<MultiPvGoResult> {
+    const { command, timeoutMs } = buildGoCommand(options);
+    this.send(command);
     const { collected } = await this.waitForLine((line) => line.startsWith("bestmove"), {
-      timeoutMs: movetimeMs + 10_000,
+      timeoutMs,
     });
 
     const { bestmove, ponder } = parseBestmoveLine(collected);

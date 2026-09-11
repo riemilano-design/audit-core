@@ -73,8 +73,10 @@ function fromSquareOf(moveUsi: string): string {
   return moveUsi.slice(0, 2);
 }
 
-/** USI形式の指し手(ドロップではない)から移動先マスを取り出す(成り"+"は無視)。 */
-function toSquareOf(moveUsi: string): string {
+/** USI形式の指し手(ドロップではない)から移動先マスを取り出す(成り"+"は無視)。
+ * STEP T-6(B-3)がinvariants/i6-advice-then-loss.tsと共用するためexportした
+ * (実装は変えていない)。 */
+export function toSquareOf(moveUsi: string): string {
   return moveUsi.slice(2, 4);
 }
 

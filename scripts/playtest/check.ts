@@ -24,7 +24,7 @@ import { invariants } from "./invariants/index.js";
 import type { Finding, InvariantType, MetaLine, RecordLine } from "./invariants/types.js";
 import { buildDenominatorReport, type DenominatorInput, type DenominatorReport, type DenominatorRow } from "./lib/denominators.js";
 
-const ALL_TYPES: InvariantType[] = ["沈黙", "矛盾", "断定", "未説明用語", "盤との不一致", "陳腐化"];
+const ALL_TYPES: InvariantType[] = ["沈黙", "矛盾", "断定", "未説明用語", "盤との不一致", "陳腐化", "結果"];
 
 const DISCLAIMER =
   "不変条件(approved と draft)による検出であり、仕様・既知事項・異常の有無を確定するものではない。approved の検出は STEP の完了条件に関わる(docs/AGENT_PROTOCOL.md 11.)。0件は『有効な不変条件が捉える範囲では検出されない』を意味する。";
@@ -37,6 +37,9 @@ interface InputFileResult {
   gitHead: string | null;
   mode: string | undefined;
   profile: string | undefined;
+  searchMode: "nodes" | "movetime" | undefined;
+  nodes: number | undefined;
+  threads: number | undefined;
   records: RecordLine[];
   findings: Finding[];
 }
@@ -70,6 +73,9 @@ function readInputFile(filePath: string): InputFileResult {
   const gitHead = meta?.gitHead ?? null;
   const mode = meta?.mode;
   const profile = meta?.profile;
+  const searchMode = meta?.searchMode;
+  const nodes = meta?.nodes;
+  const threads = meta?.threads;
 
   const records = lines.filter((l): l is RecordLine => l.kind === "record");
 
@@ -80,7 +86,22 @@ function readInputFile(filePath: string): InputFileResult {
     }
   }
 
-  return { filePath, kifuId, gitHead, mode, profile, records, findings };
+  return { filePath, kifuId, gitHead, mode, profile, searchMode, nodes, threads, records, findings };
+}
+
+/** 入力行に出す表示用のプロファイル(A-4)。meta.profileがあればそれ、
+ * 無ければ「固定」(固定棋譜=replay.tsの記録はprofileを持たないため)。 */
+function displayProfile(input: InputFileResult): string {
+  return input.profile ?? "固定";
+}
+
+/** 入力の探索条件(meta.searchMode/nodes/threadsの組)を混在検出用に1つの文字列へ
+ * まとめる(A-4)。いずれも無い入力(探索の記録等)は"不明"として扱う。 */
+function searchConditionKey(input: InputFileResult): string {
+  if (input.searchMode === undefined && input.nodes === undefined && input.threads === undefined) {
+    return "不明";
+  }
+  return `searchMode=${input.searchMode ?? "不明"}, nodes=${input.nodes ?? "不明"}, threads=${input.threads ?? "不明"}`;
 }
 
 function groupFindings(allFindings: Finding[]): Group[] {
@@ -110,7 +131,15 @@ function groupFindings(allFindings: Finding[]): Group[] {
 
 function typeCounts(allFindings: Finding[]): Record<InvariantType, number> {
   const invariantTypeById = new Map(invariants.map((inv) => [inv.id, inv.type]));
-  const counts: Record<InvariantType, number> = { 沈黙: 0, 矛盾: 0, 断定: 0, 未説明用語: 0, 盤との不一致: 0, 陳腐化: 0 };
+  const counts: Record<InvariantType, number> = {
+    沈黙: 0,
+    矛盾: 0,
+    断定: 0,
+    未説明用語: 0,
+    盤との不一致: 0,
+    陳腐化: 0,
+    結果: 0,
+  };
   for (const finding of allFindings) {
     const type = invariantTypeById.get(finding.invariantId);
     if (type) counts[type] += 1;
@@ -145,12 +174,20 @@ function renderMarkdown(
   lines.push("");
   lines.push("## 入力");
   for (const input of inputs) {
-    lines.push(`- ${input.filePath}(kifuId: ${input.kifuId}, gitHead: ${input.gitHead ?? "不明"}, 検出 ${input.findings.length} 件)`);
+    lines.push(
+      `- ${input.filePath}(kifuId: ${input.kifuId}, gitHead: ${input.gitHead ?? "不明"}, profile: ${displayProfile(input)}, 検出 ${input.findings.length} 件)`,
+    );
   }
   const distinctGitHeads = new Set(inputs.map((input) => input.gitHead ?? "不明"));
   if (distinctGitHeads.size >= 2) {
     lines.push(
       `- 注意: 入力の gitHead が混在しています(${Array.from(distinctGitHeads).join(", ")})。`,
+    );
+  }
+  const distinctSearchConditions = new Set(inputs.map((input) => searchConditionKey(input)));
+  if (distinctSearchConditions.size >= 2) {
+    lines.push(
+      `- 注意: 入力の探索条件が混在しています(${Array.from(distinctSearchConditions).join(", ")})。`,
     );
   }
   lines.push("");

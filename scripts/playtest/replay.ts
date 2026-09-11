@@ -9,6 +9,7 @@
 // 将棋の判断・評価・閾値・文言はここでは一切書かない。
 //
 // 使い方: npx tsx scripts/playtest/replay.ts <kifu.json> [--out <file.jsonl>]
+//         [--nodes <N>] [--threads <N>]
 //
 // 位置づけの詳細は scripts/playtest/README.md を参照。開発補助であり本番導線には
 // 含めない(apps/・data/・docs/・.claude/ は変更しない)。
@@ -42,10 +43,20 @@ import {
   buildReadyRecord,
   buildSummaryLine,
 } from "./lib/recorder.js";
+import { withFixedSearch } from "./lib/fixedSearchEngine.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const SCRIPT_DIR = __dirname;
 const REPO_ROOT = path.join(__dirname, "..", "..");
+
+// STEP T-6(A-3)。docs/STEP_T-6_PLAN_2026-09-11.md 2. A-3、人間の決定
+// (2026-09-11。提案書7.1、設問1 = (b))に従う。回帰モード(replay.ts)だけ
+// 探索量を固定ノード数(既定4,000,000)・Threads=1にする(本番の既定値
+// movetime 2000・Threadsの既定は変えない。探索モード(explore.ts)は本番条件の
+// まま)。この既定値はハーネスの引数であって、将棋の判断・本番の閾値ではない
+// (README参照)。
+const DEFAULT_NODES = 4_000_000;
+const DEFAULT_THREADS = 1;
 
 interface FixedKifu {
   id: string;
@@ -81,12 +92,22 @@ async function main(): Promise<void> {
   const args = process.argv.slice(2);
   const kifuArg = args[0];
   if (!kifuArg || kifuArg.startsWith("--")) {
-    console.error("使い方: npx tsx scripts/playtest/replay.ts <kifu.json> [--out <file.jsonl>]");
+    console.error(
+      "使い方: npx tsx scripts/playtest/replay.ts <kifu.json> [--out <file.jsonl>] [--nodes <N>] [--threads <N>]",
+    );
     process.exit(1);
   }
 
   const outIndex = args.indexOf("--out");
   const outArg = outIndex !== -1 ? args[outIndex + 1] : undefined;
+
+  const nodesIndex = args.indexOf("--nodes");
+  const nodes = nodesIndex !== -1 ? Number(args[nodesIndex + 1]) : DEFAULT_NODES;
+
+  const threadsIndex = args.indexOf("--threads");
+  const threads = threadsIndex !== -1 ? Number(args[threadsIndex + 1]) : DEFAULT_THREADS;
+
+  const searchMode: "nodes" | "movetime" = nodes > 0 ? "nodes" : "movetime";
 
   const kifu = JSON.parse(readFileSync(path.resolve(kifuArg), "utf-8")) as FixedKifu;
   const kifuId = kifu.id;
@@ -103,12 +124,17 @@ async function main(): Promise<void> {
   }
 
   const enginePath = resolveEnginePath();
-  lines.push(JSON.stringify({ kind: "meta", kifuId, startedAt, gitHead, enginePath }));
+  lines.push(
+    JSON.stringify({ kind: "meta", kifuId, startedAt, gitHead, enginePath, searchMode, nodes, threads }),
+  );
 
   const rawEngine = new UsiEngine(enginePath);
   rawEngine.start();
   await rawEngine.usiHandshake();
   await rawEngine.isReady();
+  // STEP T-6(A-3): setMultiPvと同じ運用(呼び出しタイミングの管理は呼び出し側の
+  // 責務。usiEngine.ts参照)で、ハンドシェイク後にThreadsを固定する。
+  rawEngine.setThreads(threads);
   const engine = new PrioritizedEngine(rawEngine);
 
   let exitCode = 0;
@@ -134,7 +160,7 @@ async function main(): Promise<void> {
         0,
         null,
         null,
-        engine.asLowPriority(),
+        withFixedSearch(engine.asLowPriority(), nodes),
         false,
         null,
         null,
@@ -226,7 +252,7 @@ async function main(): Promise<void> {
           ply,
           m,
           g,
-          engine.asLowPriority(),
+          withFixedSearch(engine.asLowPriority(), nodes),
           planChanged,
           planChangeReason,
           moveOutcome,
