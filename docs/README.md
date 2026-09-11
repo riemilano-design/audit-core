@@ -19,6 +19,7 @@
 | [TESTING_STRATEGY.md](TESTING_STRATEGY.md) | 何をどう自動テストするか(対局回帰を含む) | ロジックを実装する人 |
 | [ROLES.md](ROLES.md) | 人間が判断すべきこと・AIに任せてよいこと・エージェント間の分担 | プロジェクトを進める人全員 |
 | [CHANGE_MANAGEMENT.md](CHANGE_MANAGEMENT.md) | 仕様が変わったとき、CLAUDE.md/docs/schemas/agents/コードのどこを直すべきか | 仕様変更を扱う人全員 |
+| [STEP_5-1_PLAN_2026-09-11.md](STEP_5-1_PLAN_2026-09-11.md) | STEP 5-1(LP-1・LP-2 の修正)の計画 → 監査 REVISE → 実装 → 回帰 → 実測 → 完了までを一つのファイルで読める記録(2026-09-11)。外側のループが初めて「直す」に使われた STEP の証拠。**写しであり正本ではない**(正本は PHASES.md) | Unit 5 以降の STEP を計画する人・工程の実例を読む人 |
 | [COVERAGE_AND_OUTCOME_PROPOSAL.md](COVERAGE_AND_OUTCOME_PROPOSAL.md) | 外側のループの測る対象を「言うべきことを言っているか」へ広げる案(2026-09-11)。**提案であり正本ではない。承認前** | 工程を変更する人 |
 
 ## 用語メモ
