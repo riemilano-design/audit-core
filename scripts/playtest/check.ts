@@ -1,7 +1,9 @@
-// STEP T-2(不変条件 I-1〜I-5・draftと集約報告)。
-// docs/PLAYTEST_LOOP_PROPOSAL.md 4.3・4.4・4.5・6. の T-2 に従う。
+// STEP T-2(不変条件 I-1〜I-5・draftと集約報告)。STEP T-5(T5-B・T5-C)で
+// 分母(観測の集計)の追加と表記の更新を行った。
+// docs/PLAYTEST_LOOP_PROPOSAL.md 4.3・4.4・4.5・6. の T-2、
+// docs/STEP_T-5_PLAN_2026-09-11.md 2. T5-B・T5-C に従う。
 //
-// T-1(replay.ts)が保存したJSONLに対して、不変条件(すべてdraft)を適用し、
+// T-1(replay.ts)が保存したJSONLに対して、不変条件(draft・approved)を適用し、
 // 検出を「型 × 発生条件」で束ねてMarkdown報告を標準出力へ書く。
 //
 // 使い方: npx tsx scripts/playtest/check.ts <a.jsonl> [<b.jsonl> ...] [--json <out.json>]
@@ -10,23 +12,32 @@
 // - 検出を理由に仕様・閾値・文言を変えること、既知事項の表に載せること、不変条件を
 //   approvedにすること(4.5 規則1・2)。
 // - 将棋の判断・評価。
-// - exit code を 0 以外にすること(draftの不変条件は何もブロックしない。4.5)。
+// - exit code を 0 以外にすること(STEP T-5では変えない。exit codeの扱い自体は
+//   人間承認事項。docs/STEP_T-5_PLAN_2026-09-11.md 5.)。
+// - T5-Bの分母集計を理由に仕様・閾値・文言を変えること(分母は観測の集計であり、
+//   不変条件ではない。docs/AGENT_PROTOCOL.md 11.)。
 
 import { readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
 
 import { invariants } from "./invariants/index.js";
 import type { Finding, InvariantType, MetaLine, RecordLine } from "./invariants/types.js";
+import { buildDenominatorReport, type DenominatorInput, type DenominatorReport, type DenominatorRow } from "./lib/denominators.js";
 
 const ALL_TYPES: InvariantType[] = ["沈黙", "矛盾", "断定", "未説明用語", "盤との不一致", "陳腐化"];
 
 const DISCLAIMER =
-  "draft の不変条件による検出であり、仕様・既知事項・異常の有無を確定するものではない。0件は『有効な不変条件が捉える範囲では検出されない』を意味する。";
+  "不変条件(approved と draft)による検出であり、仕様・既知事項・異常の有無を確定するものではない。approved の検出は STEP の完了条件に関わる(docs/AGENT_PROTOCOL.md 11.)。0件は『有効な不変条件が捉える範囲では検出されない』を意味する。";
+
+const DENOMINATOR_NOTE = "観測の集計であり、不変条件ではない。何も異常と呼ばない。";
 
 interface InputFileResult {
   filePath: string;
   kifuId: string;
   gitHead: string | null;
+  mode: string | undefined;
+  profile: string | undefined;
+  records: RecordLine[];
   findings: Finding[];
 }
 
@@ -57,6 +68,8 @@ function readInputFile(filePath: string): InputFileResult {
   const meta = lines.find((l) => l.kind === "meta") as MetaLine | undefined;
   const kifuId = meta?.kifuId ?? path.basename(filePath);
   const gitHead = meta?.gitHead ?? null;
+  const mode = meta?.mode;
+  const profile = meta?.profile;
 
   const records = lines.filter((l): l is RecordLine => l.kind === "record");
 
@@ -67,7 +80,7 @@ function readInputFile(filePath: string): InputFileResult {
     }
   }
 
-  return { filePath, kifuId, gitHead, findings };
+  return { filePath, kifuId, gitHead, mode, profile, records, findings };
 }
 
 function groupFindings(allFindings: Finding[]): Group[] {
@@ -105,16 +118,55 @@ function typeCounts(allFindings: Finding[]): Record<InvariantType, number> {
   return counts;
 }
 
-function renderMarkdown(inputs: InputFileResult[], allFindings: Finding[], groups: Group[]): string {
+/** 表1件分(入力ごと、またはプロファイルごと)をMarkdownのテーブル行として並べる。
+ * T5-B(分母の報告)の6列をそのまま出す(観測の集計であり、判断はしない)。 */
+function renderDenominatorTable(rows: DenominatorRow[]): string[] {
+  const lines: string[] = [];
+  lines.push("| 対象 | 全手数 | 認識あり | 道のりあり | 候補手あり | 候補手が全件除外 | いずれも無し(沈黙) |");
+  lines.push("|---|---|---|---|---|---|---|");
+  for (const row of rows) {
+    const c = row.counts;
+    lines.push(
+      `| ${row.label} | ${c.totalPlies} | ${c.hasRecognition} | ${c.hasRoute} | ${c.hasCandidateMove} | ${c.candidateExcluded} | ${c.silent} |`,
+    );
+  }
+  return lines;
+}
+
+function renderMarkdown(
+  inputs: InputFileResult[],
+  allFindings: Finding[],
+  groups: Group[],
+  denominatorReport: DenominatorReport,
+): string {
   const lines: string[] = [];
 
-  lines.push("# 対局記録の不変条件チェック(draft)");
+  lines.push("# 対局記録の不変条件チェック");
   lines.push("");
   lines.push("## 入力");
   for (const input of inputs) {
     lines.push(`- ${input.filePath}(kifuId: ${input.kifuId}, gitHead: ${input.gitHead ?? "不明"}, 検出 ${input.findings.length} 件)`);
   }
+  const distinctGitHeads = new Set(inputs.map((input) => input.gitHead ?? "不明"));
+  if (distinctGitHeads.size >= 2) {
+    lines.push(
+      `- 注意: 入力の gitHead が混在しています(${Array.from(distinctGitHeads).join(", ")})。`,
+    );
+  }
   lines.push("");
+
+  lines.push("## 分母(観測の集計)");
+  lines.push("");
+  lines.push(DENOMINATOR_NOTE);
+  lines.push("");
+  lines.push(...renderDenominatorTable(denominatorReport.perInput));
+  lines.push("");
+  if (denominatorReport.perProfile) {
+    lines.push("### プロファイルごとの小計(探索モードのみ)");
+    lines.push("");
+    lines.push(...renderDenominatorTable(denominatorReport.perProfile));
+    lines.push("");
+  }
 
   lines.push("## 型ごとの件数");
   lines.push("");
@@ -171,7 +223,15 @@ function main(): void {
   const allFindings = inputs.flatMap((i) => i.findings);
   const groups = groupFindings(allFindings);
 
-  console.log(renderMarkdown(inputs, allFindings, groups));
+  const denominatorInputs: DenominatorInput[] = inputs.map((i) => ({
+    kifuId: i.kifuId,
+    mode: i.mode,
+    profile: i.profile,
+    records: i.records,
+  }));
+  const denominatorReport = buildDenominatorReport(denominatorInputs);
+
+  console.log(renderMarkdown(inputs, allFindings, groups, denominatorReport));
 
   if (jsonOut) {
     const json = {
@@ -179,6 +239,7 @@ function main(): void {
       invariants: invariants.map((inv) => ({ id: inv.id, type: inv.type, status: inv.status })),
       findings: allFindings,
       groups: groups.map((g) => ({ ...g, examples: g.examples })),
+      denominators: denominatorReport,
     };
     writeFileSync(path.resolve(jsonOut), `${JSON.stringify(json, null, 2)}\n`, "utf-8");
   }

@@ -2,7 +2,7 @@
 
 対局ハーネス(docs/PLAYTEST_LOOP_PROPOSAL.md の外側のループ)。**開発補助であり、本番導線(apps/)には含めない。**
 
-現在実装済みなのは STEP T-1(固定棋譜モード)・STEP T-2(不変条件 I-1〜I-5・draft と集約報告)・STEP T-3(探索モードと対局者の多様化)。
+現在実装済みなのは STEP T-1(固定棋譜モード)・STEP T-2(不変条件 I-1〜I-5・draft と集約報告)・STEP T-3(探索モードと対局者の多様化)・STEP T-5(比較の道具 `compare.ts`・分母の報告・表記の更新)。
 
 ## 位置づけ
 
@@ -60,20 +60,35 @@ npx tsx scripts/playtest/explore.ts --games 10 --seed 1 --plies 60 --out-dir /pa
 
 **この出力の意味について**: 探索の出力(JSONL・kifu JSON)は**観測**であり、何も拘束しない。`check.ts` の検出(=候補事象)も、既知事項・仕様・`kifu/` への登録に自動では昇格しない(docs/AGENT_PROTOCOL.md 11.)。局面列を固定棋譜として `scripts/playtest/kifu/` へ登録するかどうかは、人間の判断による。
 
-## 不変条件チェック(STEP T-2)
+## 不変条件チェック(STEP T-2・STEP T-5 で表記を更新)
 
-T-1 が保存した JSONL(1件以上)に対して、不変条件 I-1〜I-5(`scripts/playtest/invariants/`、すべて `status: "draft"`)を適用し、検出を「型 × 発生条件」で束ねた報告を標準出力(Markdown)へ書く。常に exit 0(draft は何もブロックしない。docs/AGENT_PROTOCOL.md 11.)。
+T-1 が保存した JSONL(1件以上)に対して、不変条件 I-1〜I-5(`scripts/playtest/invariants/`。**I-1・I-2 は 2026-09-11 に人間承認で `status: "approved"`、他は `status: "draft"`**)を適用し、検出を「型 × 発生条件」で束ねた報告を標準出力(Markdown)へ書く。常に exit 0(`approved` を含め、検出は何もブロックしない。exit code の扱い自体は人間承認事項)。
 
 ```
 npx tsx scripts/playtest/check.ts scripts/playtest/out/run1.jsonl scripts/playtest/out/run2.jsonl
 npx tsx scripts/playtest/check.ts scripts/playtest/out/run1.jsonl --json scripts/playtest/out/check.json
 ```
 
-`--json` を指定すると、機械可読の結果(`{ inputs, invariants, findings, groups }`)も同じ内容で書き出す。
+`--json` を指定すると、機械可読の結果(`{ inputs, invariants, findings, groups, denominators }`)も同じ内容で書き出す。入力の `gitHead` が2種類以上ある場合、「## 入力」節の末尾に混在している旨の注意が1行出る。
 
-**この報告の意味について**: draft の不変条件による検出であり、仕様・既知事項・異常の有無を確定するものではない。0件は「有効な不変条件が捉える範囲では検出されない」ことを意味する(docs/AGENT_PROTOCOL.md 11. 規則5)。有効化(`approved`)・既知事項への追加・仕様変更は、この報告からは自動で起きない(人間の判断が要る)。
+**この報告の意味について**: 不変条件(`approved` と `draft`)による検出であり、仕様・既知事項・異常の有無を確定するものではない。`approved` の検出は STEP の完了条件に関わる(docs/AGENT_PROTOCOL.md 11.)。0件は「有効な不変条件が捉える範囲では検出されない」ことを意味する(docs/AGENT_PROTOCOL.md 11. 規則5)。有効化(`draft` → `approved`)・既知事項への追加・仕様変更は、この報告からは自動で起きない(人間の判断が要る)。
 
 不変条件を追加する場合は `scripts/playtest/invariants/i*.ts` を1件追加し、`index.ts` の一覧に加える。`status` は draft のまま追加してよいが、`approved` にする操作(=STEP の完了条件に入れる)は人間承認事項(docs/AGENT_PROTOCOL.md 11.)。
+
+### 分母(観測の集計。STEP T-5 T5-B)
+
+`check.ts` の報告に「## 分母(観測の集計)」節が出る。入力(kifuId)ごとに、`phase: "ready"` の record 行を「全手数・認識あり・道のりあり・候補手あり・候補手が全件除外・いずれも無し(沈黙)」の6列で数えたもの(定義は既存フィールドの機械的な読み取りのみ、`scripts/playtest/lib/denominators.ts`)。探索の記録(`meta.mode === "explore"`)は `meta.profile` ごとの小計行もあわせて出る。**観測の集計であり、不変条件ではない。何も異常と呼ばない。**
+
+## 比較の道具(STEP T-5 T5-A)
+
+複数の JSONL を読み、実行のたびに変わる値(record 行の `elapsedMs`、meta 行の `startedAt`/`gitHead`/`enginePath`、summary 行の `totalMs`/`readyMsPerPly`)を除いて正規化し、1本目を基準に他のファイルと比較する。揺れの観測(同じ棋譜を複数回再生した結果を比べる)に使う。常に exit 0(観測であり判断はしない)。
+
+```
+npx tsx scripts/playtest/compare.ts run-01.jsonl run-02.jsonl run-03.jsonl
+npx tsx scripts/playtest/compare.ts run-01.jsonl run-02.jsonl --json compare.json
+```
+
+出力は Markdown(入力一覧、基準と一致した本数、差があった行の `ply`・`phase`・JSON の差分パス(最大数件))と `--json` の機械可読な結果。
 
 ## reports/(探索の集約報告の保管)
 

@@ -44,6 +44,11 @@ export interface MetaLine {
   startedAt: string;
   gitHead: string | null;
   enginePath: string;
+  /** STEP T-3(探索モード)がmeta行に追加したフィールド。固定棋譜(replay.ts)の
+   * metaには無いためoptional。STEP T-5(T5-B)が分母のプロファイル別小計に使う。
+   * このファイルの追加であり、固定棋譜のmeta自体は変えない。 */
+  mode?: string;
+  profile?: string;
 }
 
 /** 不変条件1件が検出した1件分。束ねる単位は(invariantId, condition)。 */
