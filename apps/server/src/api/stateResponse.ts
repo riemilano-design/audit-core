@@ -173,10 +173,14 @@ export interface TargetShapeProgress {
   description: string;
   /** 既にその形の一部として成立しているマス(日本語表記、例: "６九") */
   matchedSquareLabels: string[];
+  /** 同じマスをUSI形式で表したもの(matchedSquareLabelsと同じ順)。 */
+  matchedSquares: string[];
   /** 同じマスを「駒名：座標」で表したもの(例: "金：６九")。駒名は現在の盤から読む。 */
   matchedPieceLabels: string[];
   /** まだ埋まっていないマス(日本語表記) */
   missingSquareLabels: string[];
+  /** 同じマスをUSI形式で表したもの(missingSquareLabelsと同じ順)。 */
+  missingSquares: string[];
   /**
    * STEP ζ-5: この形のreview_statusが"draft"の場合にだけ入る注記
    * (analysis/nameExposure.tsのsite="shape")。それ以外はnull。
@@ -1081,10 +1085,12 @@ function toTargetShapeProgress(
     name: shapeResult.name,
     description: shapeResult.characteristics,
     matchedSquareLabels: shapeResult.matchedSquares.map((square) => toJapaneseSquare(square)),
+    matchedSquares: shapeResult.matchedSquares,
     matchedPieceLabels: shapeResult.matchedSquares.map((square) =>
       toPieceAtSquareLabel(sfen, square),
     ),
     missingSquareLabels: shapeResult.missingSquares.map((square) => toJapaneseSquare(square)),
+    missingSquares: shapeResult.missingSquares,
     pendingReviewNote: exposeName(shapeResult.name, shapeResult.reviewStatus, "shape").pendingNote,
   };
 }

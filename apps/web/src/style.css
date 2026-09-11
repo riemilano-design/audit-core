@@ -121,7 +121,9 @@ h1 {
 }
 
 .piece-gote {
-  color: #a33;
+  /* STEP 5-4(W-1、人間承認済み): 相手の駒は黒(#222程度)で回転だけで先後を分ける。
+     赤は事実の危険専用(当たり・王手の印と帯)にする。持ち駒欄は元々色指定が無く対象外。 */
+  color: #222;
   display: inline-block;
   transform: rotate(180deg);
 }
@@ -162,7 +164,10 @@ h1 {
    既存のハイライトとの強さの序列を必ず保つこと:
      背景色(選択中 #f7ec8f / 移動先 #bfe3bf) > 青の実線枠(相手の直前の手) > 灰色の破線(候補手)
    候補手が一番弱い。最善手・おすすめと読めてはいけないため、色は無彩色にし、
-   線は細い破線に留める。順位は付けない(既定では全件が同じ薄さ)。 */
+   線は細い破線に留める。順位は付けない(既定では全件が同じ薄さ)。
+   【STEP 5-4(人間承認済み)】赤い輪(当たっている自分の駒)・赤枠(当てている相手の駒)は
+   事実の印として常時描く。青枠(直前の手)と同じマスに重なってよい(両方描く。
+   序列の対象ではなく、事実の印同士は重なりを許容する)。 */
 #boardArea {
   position: relative;
 }
@@ -200,24 +205,97 @@ h1 {
   opacity: 0.95;
 }
 
+/* STEP 5-4(W-2、人間承認済み): 事実の印(常時)。当たっている自分の駒=実線の赤い輪、
+   当てている相手の駒=細い赤枠。web側で利きを判定せず、サーバーが返したマスに描くだけ。 */
+.board-mark-attacked {
+  fill: none;
+  stroke: #b8321f;
+  stroke-width: 2.5;
+}
+
+.board-mark-attacker {
+  fill: none;
+  stroke: #b8321f;
+  stroke-width: 1.5;
+}
+
+/* STEP 5-4(W-5、人間承認済み): ④これから作るマス(破線の輪)。塗り(緑・青灰)はtdの
+   背景で表す(下記 .square-shape-matched / .square-opponent-evidence)。 */
+.board-mark-missing {
+  fill: none;
+  stroke: #6f6f6f;
+  stroke-width: 1.5;
+  stroke-dasharray: 4 3;
+}
+
+/* STEP 5-4(W-5、人間承認済み): ②の根拠のマス(淡い青灰)・④のできているマス(淡い緑)の
+   td背景。選択中(#f7ec8f)・移動先(#bfe3bf)は!importantのため、これらの塗りより常に
+   優先される(操作中の見え方を優先)。
+   【不具合修正(実機報告)】盤マスの既定背景 `#board td { background: #f3d9a4 }` は
+   IDを含むため詳細度(1,0,1)が単純クラス(0,1,0)より高く、後勝ちにならず既定色に
+   負けていた。!importantは使わず(!importantは選択中・移動先だけに残す)、
+   `#board td` と同等以上の詳細度になるよう `#board td.クラス名` の形にして直す。 */
+#board td.square-opponent-evidence {
+  background: #dfe4ec;
+}
+
+#board td.square-shape-matched {
+  background: #d6ead9;
+}
+
 /* 凡例。免責の一文は候補手セクションに既にあるため、ここでは繰り返さない
-   (docs/ARCHITECTURE.md 5.「同じ情報を一回だけ」)。 */
+   (docs/ARCHITECTURE.md 5.「同じ情報を一回だけ」)。
+   【STEP 5-4(W-3、人間承認済み)】「当たり / 直前の手 / 次の一歩」の3項目を、
+   印の有無にかかわらず常時出す(項目の増減・注記は無し)。 */
 #boardLegend:empty {
   display: none;
 }
 
-.board-legend-text {
+.board-legend-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.9rem;
   margin: 0.2rem 0 0.5rem;
+  padding: 0;
+  list-style: none;
   font-size: 0.75rem;
   color: #666;
 }
 
-.board-legend-text::before {
-  content: "";
+.board-legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.board-legend-icon {
   display: inline-block;
+  width: 0.9rem;
+  height: 0.9rem;
+}
+
+/* 「当たり」項目: 赤い輪+赤枠の2つの小さな図形を並べる。 */
+.board-legend-icon-ring {
+  border-radius: 50%;
+  border: 2px solid #b8321f;
+}
+
+.board-legend-icon-square {
+  border: 1.5px solid #b8321f;
+  margin-left: -0.35rem;
+}
+
+/* 「直前の手」項目: 青枠(既存の.square-last-move-toと同じ配色)。 */
+.board-legend-icon-frame {
+  border: 2px solid #2f5fae;
+  background: #dce8fb;
+}
+
+/* 「次の一歩」項目: 破線の矢印線(既存の候補手の矢印と同じ配色)。 */
+.board-legend-icon-arrow {
   width: 1.6rem;
-  margin-right: 0.35rem;
-  vertical-align: middle;
+  height: 0;
+  margin-top: 0.45rem;
   border-top: 1.5px dashed #8a8a8a;
 }
 
@@ -310,6 +388,12 @@ h1 {
   padding: 0.5rem 0.8rem 0.5rem 1.6rem;
   border-radius: 4px;
   font-size: 0.9rem;
+}
+
+/* STEP 5-4(W-4、人間承認済み): 当たりが4駒以上のときの「ほかN駒」の1行。
+   他の行と同じ文字色のまま、集約行であることが分かるよう斜体にする。 */
+.urgent-others {
+  font-style: italic;
 }
 
 .coach-purpose {
@@ -724,6 +808,14 @@ h1 {
   display: block;
   font-size: 0.8rem;
   color: #666;
+}
+
+/* STEP 5-4(W-5、人間承認済み): ②④の本文末尾に置く、盤の印の意味を説明する行。 */
+.board-mark-explanation {
+  display: block;
+  font-size: 0.8rem;
+  color: #666;
+  margin: 0.3rem 0 0;
 }
 
 /* Phase 7 Unit 4 STEP 4-7A(2026-09-10 人間承認済み): 3カラム(1200px 以上)のときだけ、

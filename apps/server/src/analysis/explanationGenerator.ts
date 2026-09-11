@@ -98,6 +98,20 @@ type RawStatus = ShapeFormationResult["status"] | IntentDetectionResult["matchSt
 interface StageResult {
   explanation: Explanation;
   status: RawStatus;
+  /**
+   * STEP 5-4(S-3): opponent_intentの根拠のマス(USI形式。recognition_pattern順
+   * = matchedSignaturesの並び順で重複除去)。forming・matched(露出制御で
+   * unclassifiedへ落ちない場合)のときだけ入る。それ以外(unclassified・
+   * 他ステージ)はundefined(名前も根拠も出さない、という露出制御に従う)。
+   * ExplanationインターフェースにはCLAUDE.md/DATA_MODEL.mdの規約(89行付近の
+   * コメント)により足さない。API層(CoachExplanation)にだけ運ぶ。
+   */
+  evidenceSquares?: string[];
+}
+
+/** 配列から重複を除き、最初に現れた順序を保つ(recognition_pattern順 = matchedSignatures順)。 */
+function uniqueInOrder(values: string[]): string[] {
+  return [...new Set(values)];
 }
 
 function buildCurrentShapeStage(shapeResults: ShapeFormationResult[]): StageResult {
@@ -252,6 +266,7 @@ function buildOpponentIntentFormingStage(best: IntentDetectionResult): StageResu
       glossary_terms: [best.intentId],
       template_id: "opponent_intent_forming",
     },
+    evidenceSquares: uniqueInOrder(best.matchedSignatures.map((s) => s.to)),
   };
 }
 
@@ -292,6 +307,7 @@ function buildOpponentIntentStage(
       glossary_terms: [best.intentId],
       template_id: `opponent_intent_${best.matchStatus}`,
     },
+    evidenceSquares: uniqueInOrder(best.matchedSignatures.map((s) => s.to)),
   };
 }
 
@@ -389,6 +405,9 @@ export function generateExplanations(
 /** generateExplanationsのExplanationに、Web API/UI向けの生の判定状態(status)を添えたもの。 */
 export interface CoachExplanation extends Explanation {
   status: RawStatus;
+  /** STEP 5-4(S-3): opponent_intentの根拠のマス(USI形式)。StageResult.evidenceSquares
+   * 参照。statusと同じくスキーマ外のAPI層フィールド(Explanation自体には無い)。 */
+  evidenceSquares?: string[];
 }
 
 /**
@@ -404,6 +423,7 @@ export function generateCoachExplanations(
   return buildStages(shapeResults, intentResults, wasLastOpponentMoveForced).map((s) => ({
     ...s.explanation,
     status: s.status,
+    evidenceSquares: s.evidenceSquares,
   }));
 }
 

@@ -10,6 +10,8 @@ import {
   shouldShowNextConsiderations,
   shouldShowPlanChangedNotice,
   splitCoachByStage,
+  partitionPieceThreatsForBoard,
+  boardMarksFromState,
   PLAN_REFRESH_MAX_ATTEMPTS,
   type CoachExplanation,
   type CoachStage,
@@ -17,6 +19,9 @@ import {
   type LastMoveOutcomeBody,
   type NextConsiderationMessage,
   type PlanChangeReason,
+  type ReachablePlanBody,
+  type TargetShapeProgress,
+  type UrgentMessage,
 } from "./gameApi.js";
 
 // STEP 5-2: splitCoachByStageのテスト用フィクスチャ。stage以外のフィールドは
@@ -506,5 +511,128 @@ describe("formatGameEndStatus(STEP 4-5, Y-1)", () => {
     const status: GameStatus = { isEnd: true, outcome: undefined };
 
     expect(formatGameEndStatus(status)).toBe("対局終了: 引き分け");
+  });
+});
+
+// STEP 5-4(W-4・W-6、人間承認済み): 当たりが4駒以上のときに、盤に描いてよい上位3件と
+// 帯の「ほかN駒」の元になる件数を取り出す純粋関数。
+function makeThreatMessage(square: string, attackerSquares: string[] = []): UrgentMessage {
+  return { kind: "piece_attacked", text: `${square}の駒が当たっています`, square, attackerSquares };
+}
+
+describe("partitionPieceThreatsForBoard(STEP 5-4, W-4)", () => {
+  it("0件の場合、drawnは空・othersCountは0", () => {
+    expect(partitionPieceThreatsForBoard([])).toEqual({ drawn: [], othersCount: 0 });
+  });
+
+  it("3件の場合、drawnに3件とも入り、othersCountは0", () => {
+    const messages = [makeThreatMessage("6h"), makeThreatMessage("9i"), makeThreatMessage("7g")];
+    const result = partitionPieceThreatsForBoard(messages);
+    expect(result.drawn).toEqual(messages);
+    expect(result.othersCount).toBe(0);
+  });
+
+  it("5件の場合、drawnは並び順の先頭3件、othersCountは2", () => {
+    const messages = [
+      makeThreatMessage("6h"),
+      makeThreatMessage("9i"),
+      makeThreatMessage("7g"),
+      makeThreatMessage("5c"),
+      makeThreatMessage("3d"),
+    ];
+    const result = partitionPieceThreatsForBoard(messages);
+    expect(result.drawn).toEqual(messages.slice(0, 3));
+    expect(result.othersCount).toBe(2);
+  });
+
+  it("王手の行が混ざっていても、当たり(piece_attacked)以外は数えない", () => {
+    const messages: UrgentMessage[] = [
+      makeThreatMessage("6h"),
+      { kind: "check", text: "王手されています" },
+      makeThreatMessage("9i"),
+      makeThreatMessage("7g"),
+      makeThreatMessage("5c"),
+    ];
+    const result = partitionPieceThreatsForBoard(messages);
+    expect(result.drawn).toEqual([messages[0], messages[2], messages[3]]);
+    expect(result.othersCount).toBe(1);
+  });
+
+  it("squareの無い旧応答の行は、drawnにもothersCountにも含めない(壊れない)", () => {
+    const withoutSquare: UrgentMessage = { kind: "piece_attacked", text: "旧応答の当たりの行" };
+    const messages = [withoutSquare, makeThreatMessage("6h")];
+    const result = partitionPieceThreatsForBoard(messages);
+    expect(result.drawn).toEqual([messages[1]]);
+    expect(result.othersCount).toBe(0);
+  });
+});
+
+// STEP 5-4(W-2・W-5・W-6、人間承認済み): 盤に描く印の座標をAPIの応答から取り出す純粋関数。
+function makeProgress(overrides: Partial<TargetShapeProgress> = {}): TargetShapeProgress {
+  return {
+    shapeId: "honmino",
+    name: "本美濃",
+    description: "",
+    matchedSquareLabels: [],
+    matchedPieceLabels: [],
+    missingSquareLabels: [],
+    pendingReviewNote: null,
+    ...overrides,
+  };
+}
+
+describe("boardMarksFromState(STEP 5-4, W-2・W-5・W-6)", () => {
+  it("当たり4駒以上の局面では、上位3件の当たり駒・攻め駒だけを返す(重複除去)", () => {
+    const plan: Pick<ReachablePlanBody, "urgentMessages" | "targetShapeProgress"> = {
+      urgentMessages: [
+        makeThreatMessage("6h", ["7g"]),
+        makeThreatMessage("9i", ["7g"]),
+        makeThreatMessage("7g", ["8h"]),
+        makeThreatMessage("5c", ["4d"]),
+      ],
+      targetShapeProgress: null,
+    };
+    const marks = boardMarksFromState(plan, undefined);
+    expect(marks.attacked).toEqual(["6h", "9i", "7g"]);
+    expect(marks.attackers).toEqual(["7g", "8h"]);
+    expect(marks.evidence).toEqual([]);
+    expect(marks.matched).toEqual([]);
+    expect(marks.missing).toEqual([]);
+  });
+
+  it("②opponent_intentのevidenceSquaresを重複除去して集める(他stageは無視)", () => {
+    const plan: Pick<ReachablePlanBody, "urgentMessages" | "targetShapeProgress"> = {
+      urgentMessages: [],
+      targetShapeProgress: null,
+    };
+    const intent1 = makeCoachExplanation("i1", "opponent_intent");
+    intent1.evidenceSquares = ["6d"];
+    const intent2 = makeCoachExplanation("i2", "opponent_intent");
+    intent2.evidenceSquares = ["6d", "7c"];
+    const shape1 = makeCoachExplanation("s1", "current_shape");
+    shape1.evidenceSquares = ["9i"];
+    const coach: CoachExplanation[] = [intent1, intent2, shape1];
+    const marks = boardMarksFromState(plan, coach);
+    expect(marks.evidence).toEqual(["6d", "7c"]);
+  });
+
+  it("④のmatchedSquares・missingSquaresをそのまま返す", () => {
+    const plan: Pick<ReachablePlanBody, "urgentMessages" | "targetShapeProgress"> = {
+      urgentMessages: [],
+      targetShapeProgress: makeProgress({ matchedSquares: ["2h", "3h", "4i"], missingSquares: ["5h"] }),
+    };
+    const marks = boardMarksFromState(plan, undefined);
+    expect(marks.matched).toEqual(["2h", "3h", "4i"]);
+    expect(marks.missing).toEqual(["5h"]);
+  });
+
+  it("旧応答(square・matchedSquares・evidenceSquaresが無い)では、すべて空配列になり壊れない", () => {
+    const plan: Pick<ReachablePlanBody, "urgentMessages" | "targetShapeProgress"> = {
+      urgentMessages: [{ kind: "piece_attacked", text: "旧応答の当たりの行" }],
+      targetShapeProgress: makeProgress(),
+    };
+    const coach: CoachExplanation[] = [makeCoachExplanation("i1", "opponent_intent")];
+    const marks = boardMarksFromState(plan, coach);
+    expect(marks).toEqual({ attacked: [], attackers: [], evidence: [], matched: [], missing: [] });
   });
 });

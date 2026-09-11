@@ -389,6 +389,81 @@ describe("generateExplanations", () => {
     });
   });
 
+  // STEP 5-4(S-3、2026-09-11人間承認): opponent_intentの根拠のマス(evidenceSquares)。
+  // CoachExplanation(API層)にだけ運ぶ。Explanation(スキーマ準拠)には含めない。
+  describe("evidenceSquares(STEP 5-4 S-3)", () => {
+    it("forming: matchedSignatures[].toを重複除去し、recognition_pattern順(=matchedSignatures順)で入る", () => {
+      const moveHistory = interleaveWithSenteFillers([HAYAJIKAKE_GOTE_MOVES_FULL[0]!]);
+      const sfen = sfenAfter(moveHistory);
+      const shapeResults = analyzeShapeFormation(sfen, moveHistory);
+      const intentResults = detectIntents(sfen, moveHistory);
+      const coachExplanations = generateCoachExplanations(shapeResults, intentResults);
+
+      const opponentIntent = coachExplanations.find((e) => e.stage === "opponent_intent")!;
+      expect(opponentIntent.status).toBe("forming");
+      const matchedIntent = intentResults.find((r) => r.matchStatus === "forming")!;
+      const expectedSquares = [...new Set(matchedIntent.matchedSignatures.map((s) => s.to))];
+      expect(expectedSquares.length).toBeGreaterThan(0);
+      expect(opponentIntent.evidenceSquares).toEqual(expectedSquares);
+    });
+
+    it("matched(human_reviewed): evidenceSquaresが付く", () => {
+      const moveHistory = interleaveWithSenteFillers(HAYAJIKAKE_GOTE_MOVES_FULL);
+      const sfen = sfenAfter(moveHistory);
+      const shapeResults = analyzeShapeFormation(sfen, moveHistory);
+      const intentResults = detectIntents(sfen, moveHistory);
+      const coachExplanations = generateCoachExplanations(shapeResults, intentResults);
+
+      const opponentIntent = coachExplanations.find((e) => e.stage === "opponent_intent")!;
+      expect(opponentIntent.status).toBe("matched");
+      const matchedIntent = intentResults.find((r) => r.matchStatus === "matched")!;
+      const expectedSquares = [...new Set(matchedIntent.matchedSignatures.map((s) => s.to))];
+      expect(expectedSquares.length).toBeGreaterThan(0);
+      expect(opponentIntent.evidenceSquares).toEqual(expectedSquares);
+    });
+
+    it("unclassified(全intentがnone): evidenceSquaresは付かない(undefined)", () => {
+      const coachExplanations = generateCoachExplanations(NO_SHAPE_RESULTS, NO_INTENT_RESULTS);
+      const opponentIntent = coachExplanations.find((e) => e.stage === "opponent_intent")!;
+      expect(opponentIntent.status).toBe("none");
+      expect(opponentIntent.evidenceSquares).toBeUndefined();
+    });
+
+    it("draftのintentがmatchedでunclassifiedへ落ちる場合、evidenceSquaresは付かない(undefined)", () => {
+      const draftMatchedIntent: IntentDetectionResult = {
+        intentId: "boh_gin",
+        name: "棒銀",
+        openingId: "ibisha",
+        dataConfidenceLevel: "medium",
+        reviewStatus: "draft",
+        matchStatus: "matched",
+        matchScore: 1,
+        matchedSignatures: [
+          { piece: "銀", to: "7c", evidence: { ply: 2, moveUsi: "7c7d" } },
+          { piece: "銀", to: "7d", evidence: { ply: 4, moveUsi: "7d7e" } },
+        ],
+        unmatchedSignatures: [],
+        currentAimExplanation: "テスト用の説明文",
+        nextAimExplanation: "テスト用の次の狙い",
+      };
+
+      const coachExplanations = generateCoachExplanations(NO_SHAPE_RESULTS, [draftMatchedIntent]);
+      const opponentIntent = coachExplanations.find((e) => e.stage === "opponent_intent")!;
+      expect(opponentIntent.evidenceSquares).toBeUndefined();
+    });
+
+    it("generateExplanations(Explanation)にはevidenceSquaresキー自体が無い", () => {
+      const moveHistory = interleaveWithSenteFillers(HAYAJIKAKE_GOTE_MOVES_FULL);
+      const sfen = sfenAfter(moveHistory);
+      const shapeResults = analyzeShapeFormation(sfen, moveHistory);
+      const intentResults = detectIntents(sfen, moveHistory);
+      const explanations = generateExplanations(shapeResults, intentResults);
+
+      const opponentIntent = findStage(explanations, "opponent_intent");
+      expect(Object.prototype.hasOwnProperty.call(opponentIntent, "evidenceSquares")).toBe(false);
+    });
+  });
+
   // STEP 4-4(人間承認R-1、2026-09-10): opponent_next_aimがforming状態でも
   // ステージ自体は落とさず、既存の汎用文(戦法名を含まない)を出す。
   describe("opponent_next_aim: formingでもステージを落とさない(STEP 4-4)", () => {

@@ -45,6 +45,13 @@ export interface CoachExplanation {
   glossary_terms: string[];
   template_id: string;
   status: CoachStatus;
+  /**
+   * STEP 5-4(S-3): stage === "opponent_intent" のときだけ入る、②の見立ての
+   * 根拠になったマス(USI)。unclassified・draftで名前が出せない場合は付かない
+   * (露出制御に従う。サーバー側analysis/explanationGeneratorが決定済み)。
+   * 旧応答(このフィールドが無い場合)ではundefinedになり、盤に印を描かないだけで壊れない。
+   */
+  evidenceSquares?: string[];
 }
 
 // apps/server/src/api/stateResponse.ts の ReachableShapeBody に対応する型
@@ -123,6 +130,17 @@ export interface TargetShapeProgress {
    * 駒名は現在の盤から読んだ結果で、形の定義(required_pieces)の駒種ではない。 */
   matchedPieceLabels: string[];
   missingSquareLabels: string[];
+  /**
+   * STEP 5-4(S-2): matchedSquareLabelsと同じ順のマス(USI形式)。盤にできているマスの
+   * 塗り(淡い緑)を描くために使う。旧応答(このフィールドが無い場合)ではundefinedになり、
+   * 盤に印を描かないだけで壊れない。
+   */
+  matchedSquares?: string[];
+  /**
+   * STEP 5-4(S-2): missingSquareLabelsと同じ順のマス(USI形式)。盤にこれから作るマスの
+   * 破線の輪を描くために使う。
+   */
+  missingSquares?: string[];
   /**
    * STEP ζ-5: この形のreview_statusが"draft"の場合にだけ入る注記
    * (サーバー側analysis/nameExposure.tsのsite="shape")。それ以外はnull。
@@ -217,6 +235,17 @@ export interface ReferenceShapeBody {
 export interface UrgentMessage {
   kind: string;
   text: string;
+  /**
+   * STEP 5-4(S-1): 当たっている自分の駒のマス(USI形式)。kind === "piece_attacked" の
+   * 行だけ持つ。旧応答(このフィールドが無い場合)ではundefinedになり、盤に印を
+   * 描かないだけで壊れない。
+   */
+  square?: string;
+  /**
+   * STEP 5-4(S-1): 当てている相手の駒のマス(USI形式。既存の攻め駒の並び順のまま)。
+   * kind === "piece_attacked" の行だけ持つ。
+   */
+  attackerSquares?: string[];
 }
 
 export interface ReachablePlanBody {
@@ -462,6 +491,76 @@ export function splitCoachByStage(coach: CoachExplanation[] | undefined): CoachB
     else if (item.stage === "opponent_next_aim") opponentNextAim.push(item);
   }
   return { opponentIntent, currentShape, opponentNextAim };
+}
+
+/**
+ * STEP 5-4(W-4): 当たり(urgentMessages)のうち、盤に印を描いてよい上位3件と、
+ * それ以外の件数を取り出す純粋関数。
+ *
+ * 対象は kind === "piece_attacked" かつ square を持つ行だけ(square が無い旧応答の
+ * 行は対象外とし、drawnにもothersCountの数え上げにも含めない=古い応答でも
+ * 帯の表示が壊れない)。並び順はサーバーが返した既存の並び(D の固定順)のまま
+ * 変えず、先頭3件をdrawnとして返す。王手・詰みの行(kindが違う)は対象外。
+ * shouldShowPlanChangedNotice等と同じく、DOM非依存の純粋関数としてテストするため
+ * gameApi.tsに置く。将棋の判断(何が当たりか)は一切行わない。
+ */
+export interface PieceThreatBoardPartition {
+  drawn: UrgentMessage[];
+  othersCount: number;
+}
+
+export function partitionPieceThreatsForBoard(messages: UrgentMessage[]): PieceThreatBoardPartition {
+  const threats = messages.filter((m) => m.kind === "piece_attacked" && m.square !== undefined);
+  return { drawn: threats.slice(0, 3), othersCount: Math.max(0, threats.length - 3) };
+}
+
+/**
+ * STEP 5-4(W-2・W-5・W-6): 盤に描く印の座標(USI)を、APIの応答から取り出す純粋関数。
+ *
+ * - attacked: 当たっている自分の駒のマス(partitionPieceThreatsForBoardのdrawn = 上位3件のみ)
+ * - attackers: 当てている相手の駒のマス(同じdrawnの3件から。重複除去。当たりが複数の
+ *   駒から同じマスを攻めていても印は1つでよいため)
+ * - evidence: ②(opponent_intent)の見立ての根拠になったマス(重複除去)
+ * - matched: ④のできているマス(targetShapeProgress.matchedSquares)
+ * - missing: ④のこれから作るマス(targetShapeProgress.missingSquares)
+ *
+ * いずれもサーバーが確定した値をそのまま集めるだけで、web側で利き・当たり・形・狙いの
+ * 判定は一切行わない。フィールドが無い(旧応答)場合は該当する配列が空になるだけで、
+ * 盤に印を描かない=壊れない。
+ */
+export interface BoardMarks {
+  attacked: string[];
+  attackers: string[];
+  evidence: string[];
+  matched: string[];
+  missing: string[];
+}
+
+export function boardMarksFromState(
+  plan: Pick<ReachablePlanBody, "urgentMessages" | "targetShapeProgress">,
+  coach: CoachExplanation[] | undefined,
+): BoardMarks {
+  const { drawn } = partitionPieceThreatsForBoard(plan.urgentMessages);
+  const attacked = drawn.map((m) => m.square).filter((square): square is string => square !== undefined);
+
+  const attackerSet = new Set<string>();
+  for (const message of drawn) {
+    for (const square of message.attackerSquares ?? []) attackerSet.add(square);
+  }
+
+  const evidenceSet = new Set<string>();
+  for (const item of coach ?? []) {
+    if (item.stage !== "opponent_intent") continue;
+    for (const square of item.evidenceSquares ?? []) evidenceSet.add(square);
+  }
+
+  return {
+    attacked,
+    attackers: [...attackerSet],
+    evidence: [...evidenceSet],
+    matched: plan.targetShapeProgress?.matchedSquares ?? [],
+    missing: plan.targetShapeProgress?.missingSquares ?? [],
+  };
 }
 
 /**

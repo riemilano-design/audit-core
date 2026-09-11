@@ -20,6 +20,8 @@ import {
   shouldShowNextConsiderations,
   shouldRetryPlanRefresh,
   splitCoachByStage,
+  partitionPieceThreatsForBoard,
+  boardMarksFromState,
   startNewGame,
   submitMove,
   type CoachExplanation,
@@ -339,6 +341,16 @@ function renderOpponentAim(coach: CoachExplanation[] | undefined): void {
   for (const item of opponentIntent) {
     appendCoachItem(opponentAimEl, item, { showTitle: false });
   }
+
+  // STEP 5-4(W-5、人間承認済み。H-1 (a)): 根拠のマス(evidenceSquares)があるときは
+  // 常に、承認済みの説明行を本文の末尾に置く(開閉・排他は5-3)。文言は一字も変えない。
+  const hasEvidence = opponentIntent.some((item) => (item.evidenceSquares?.length ?? 0) > 0);
+  if (hasEvidence) {
+    const note = document.createElement("p");
+    note.className = "board-mark-explanation";
+    note.textContent = "盤の淡い青灰の塗り＝この見立ての根拠になった相手の駒";
+    opponentAimEl.appendChild(note);
+  }
 }
 
 /**
@@ -423,6 +435,12 @@ function renderWhy(coach: CoachExplanation[] | undefined, plan: ReachablePlanBod
  * から「いま注意する駒」へ変える(中身が非評価の事実である利きの有無であることに
  * 見出しを合わせた、承認済みの新しい文言)。該当が無ければ要素ごとhiddenにする
  * (読む列の最上部から帯自体を消し、①が最上段になる)。
+ *
+ * 【STEP 5-4(W-4、人間承認済み)】当たり(kind === "piece_attacked")の行が4件以上のとき、
+ * partitionPieceThreatsForBoardが返す上位3件(盤に描く駒と同じ3件)はそのままの文で出し、
+ * 4件目以降は出さず、代わりに「ほかN駒」の1行を置く(承認済み文言)。並び順を保ったまま
+ * 挿入するため、超過分の最初の位置に1回だけ置く。王手・詰みの行(kindが違う)・
+ * squareの無い旧応答の行は対象外で、従来どおり全件出す(壊れない)。
  */
 function renderUrgent(plan: ReachablePlanBody | undefined): void {
   urgentEl.innerHTML = "";
@@ -434,9 +452,24 @@ function renderUrgent(plan: ReachablePlanBody | undefined): void {
   heading.textContent = "いま注意する駒";
   urgentEl.appendChild(heading);
 
+  const { drawn, othersCount } = partitionPieceThreatsForBoard(messages);
+  const drawnSet = new Set(drawn);
+
   const list = document.createElement("ul");
   list.className = "urgent-messages";
+  let othersInserted = false;
   for (const message of messages) {
+    const isTruncatedThreat = message.kind === "piece_attacked" && message.square !== undefined && !drawnSet.has(message);
+    if (isTruncatedThreat) {
+      if (!othersInserted && othersCount > 0) {
+        const othersLi = document.createElement("li");
+        othersLi.className = "urgent-others";
+        othersLi.textContent = `ほか${othersCount}駒`;
+        list.appendChild(othersLi);
+        othersInserted = true;
+      }
+      continue;
+    }
     const li = document.createElement("li");
     li.textContent = message.text;
     list.appendChild(li);
@@ -587,6 +620,16 @@ function renderShapeCompletion(plan: ReachablePlanBody): void {
         : `これから作るマス: ${progress.missingSquareLabels.join("、")}(道のりは今の局面では計算できませんでした)`;
     }
     section.appendChild(note);
+  }
+
+  // STEP 5-4(W-5、人間承認済み。H-1 (a)): matchedSquares・missingSquaresの
+  // どちらかがあるときは常に、承認済みの説明行を本文の末尾に置く(開閉・排他は5-3)。
+  // 文言は一字も変えない。
+  if ((progress.matchedSquares?.length ?? 0) > 0 || (progress.missingSquares?.length ?? 0) > 0) {
+    const explanation = document.createElement("p");
+    explanation.className = "board-mark-explanation";
+    explanation.textContent = "盤の淡い緑の塗り＝できているマス、破線の輪＝これから作るマス";
+    section.appendChild(explanation);
   }
 
   myAimEl.appendChild(section);
@@ -954,17 +997,26 @@ let squareCells = new Map<string, HTMLTableCellElement>();
 const SVG_NS = "http://www.w3.org/2000/svg";
 
 /**
- * 候補手を、盤に重ねたSVGへ「移動元 → 移動先」の破線の矢印として描く。
+ * STEP 5-4(W-2・W-3・W-4、人間承認済み): 盤に重ねたSVGへ、候補手の破線矢印(既存のまま)と、
+ * 盤の印(事実の印。常時)をまとめて描く。
+ *
+ * - 候補手の破線矢印: 従来どおり(変更なし)。
+ * - 事実の印(常時): 当たっている自分の駒 = 実線の赤い輪、当てている相手の駒 = 細い赤枠。
+ *   マスはboardMarksFromState(サーバーの既存結果から取り出すだけの純粋関数)から取り、
+ *   web側で利きを判定しない。当たりが4駒以上の場合はpartitionPieceThreatsForBoardにより
+ *   上位3件しか渡ってこない(boardMarksFromStateの内部でも同じ関数を使う)。
+ * - ④のこれから作るマス = 破線の輪(できているマスの淡い緑・②の根拠の淡い青灰の塗りは
+ *   tdの背景で表すため、ここでは描かない。renderBoard側でクラスを付ける)。
  *
  * マスの位置は描画済みの td の実寸(getBoundingClientRect)から求めるため、盤のサイズや
  * 段・筋の目盛りの有無に依存しない。盤がまだレイアウトされていない場合は何も描かない。
+ *
+ * 凡例(#boardLegend)は「当たり / 直前の手 / 次の一歩」の3項目を、印の有無にかかわらず
+ * 常時出す(H-2、人間の決定)。
  */
-function renderCandidateArrows(plan: ReachablePlanBody): void {
+function renderBoardMarks(plan: ReachablePlanBody, coach: CoachExplanation[] | undefined): void {
   boardOverlayEl.replaceChildren();
   boardLegendEl.replaceChildren();
-
-  const moveUsis = candidateMoveUsisOnBoard(plan);
-  if (moveUsis.length === 0) return;
 
   const areaRect = boardAreaEl.getBoundingClientRect();
   if (areaRect.width === 0 || areaRect.height === 0) return;
@@ -992,14 +1044,19 @@ function renderCandidateArrows(plan: ReachablePlanBody): void {
   }
   boardOverlayEl.appendChild(defs);
 
-  const centerOf = (squareName: string): { x: number; y: number } | null => {
+  const rectOf = (squareName: string): DOMRect | null => {
     const cell = squareCells.get(squareName);
-    if (!cell) return null;
-    const rect = cell.getBoundingClientRect();
+    return cell ? cell.getBoundingClientRect() : null;
+  };
+
+  const centerOf = (squareName: string): { x: number; y: number } | null => {
+    const rect = rectOf(squareName);
+    if (!rect) return null;
     return { x: rect.left - areaRect.left + rect.width / 2, y: rect.top - areaRect.top + rect.height / 2 };
   };
 
-  let drewAny = false;
+  // 候補手の破線矢印(既存のまま。変更なし)。
+  const moveUsis = candidateMoveUsisOnBoard(plan);
   for (const moveUsi of moveUsis) {
     // 移動元・移動先の解釈は、相手の直前の手のハイライトと同じ既存関数を使う
     // (同じことを2つの関数で書かない)。打つ手には移動元が無いため描かない
@@ -1031,17 +1088,78 @@ function renderCandidateArrows(plan: ReachablePlanBody): void {
     origin.setAttribute("r", "4");
     origin.setAttribute("class", emphasized ? "candidate-origin candidate-origin-emphasized" : "candidate-origin");
     boardOverlayEl.appendChild(origin);
-
-    drewAny = true;
   }
 
-  if (!drewAny) return;
+  // STEP 5-4(W-2・W-4): 事実の印(常時)。当たっている自分の駒 = 実線の赤い輪、
+  // 当てている相手の駒 = 細い赤枠。青枠(直前の手)と同じマスに重なっても両方描く。
+  const marks = boardMarksFromState(plan, coach);
 
-  // 凡例(人間承認済みの文言)。免責の一文は候補手セクションに既にあるため、ここでは
-  // 繰り返さない(docs/ARCHITECTURE.md 5.「同じ情報を一回だけ」)。
-  const legend = document.createElement("p");
-  legend.className = "board-legend-text";
-  legend.textContent = "破線＝「次の一歩」の候補";
+  for (const squareName of marks.attacked) {
+    const rect = rectOf(squareName);
+    const center = centerOf(squareName);
+    if (!rect || !center) continue;
+    const circle = document.createElementNS(SVG_NS, "circle");
+    circle.setAttribute("cx", String(center.x));
+    circle.setAttribute("cy", String(center.y));
+    circle.setAttribute("r", String(rect.width * 0.44));
+    circle.setAttribute("class", "board-mark-attacked");
+    boardOverlayEl.appendChild(circle);
+  }
+
+  for (const squareName of marks.attackers) {
+    const rect = rectOf(squareName);
+    const center = centerOf(squareName);
+    if (!rect || !center) continue;
+    const side = rect.width * 0.85;
+    const square = document.createElementNS(SVG_NS, "rect");
+    square.setAttribute("x", String(center.x - side / 2));
+    square.setAttribute("y", String(center.y - side / 2));
+    square.setAttribute("width", String(side));
+    square.setAttribute("height", String(side));
+    square.setAttribute("class", "board-mark-attacker");
+    boardOverlayEl.appendChild(square);
+  }
+
+  // STEP 5-4(W-5、人間承認済み。H-1 (a)): ④これから作るマスの破線の輪。
+  // できているマス(淡い緑)・②の根拠(淡い青灰)はtdの背景で表す(renderBoard側)。
+  for (const squareName of marks.missing) {
+    const rect = rectOf(squareName);
+    const center = centerOf(squareName);
+    if (!rect || !center) continue;
+    const circle = document.createElementNS(SVG_NS, "circle");
+    circle.setAttribute("cx", String(center.x));
+    circle.setAttribute("cy", String(center.y));
+    circle.setAttribute("r", String(rect.width * 0.38));
+    circle.setAttribute("class", "board-mark-missing");
+    boardOverlayEl.appendChild(circle);
+  }
+
+  // STEP 5-4(W-3、人間承認済み。H-2): 凡例「当たり / 直前の手 / 次の一歩」の3項目を、
+  // 印の有無にかかわらず常時出す(注記なし)。
+  const legend = document.createElement("ul");
+  legend.className = "board-legend-list";
+
+  const attackedItem = document.createElement("li");
+  attackedItem.className = "board-legend-item";
+  const ringIcon = document.createElement("span");
+  ringIcon.className = "board-legend-icon board-legend-icon-ring";
+  const squareIcon = document.createElement("span");
+  squareIcon.className = "board-legend-icon board-legend-icon-square";
+  attackedItem.append(ringIcon, squareIcon, document.createTextNode("当たり"));
+
+  const lastMoveItem = document.createElement("li");
+  lastMoveItem.className = "board-legend-item";
+  const frameIcon = document.createElement("span");
+  frameIcon.className = "board-legend-icon board-legend-icon-frame";
+  lastMoveItem.append(frameIcon, document.createTextNode("直前の手"));
+
+  const candidateItem = document.createElement("li");
+  candidateItem.className = "board-legend-item";
+  const arrowIcon = document.createElement("span");
+  arrowIcon.className = "board-legend-icon board-legend-icon-arrow";
+  candidateItem.append(arrowIcon, document.createTextNode("次の一歩"));
+
+  legend.append(attackedItem, lastMoveItem, candidateItem);
   boardLegendEl.appendChild(legend);
 }
 
@@ -1058,6 +1176,13 @@ function renderBoard(state: GameStateResponse): void {
   boardEl.innerHTML = "";
   // Phase 7: 盤上に候補手を描くための、マス名 -> td の対応表を作り直す。
   squareCells = new Map<string, HTMLTableCellElement>();
+
+  // STEP 5-4(W-5、人間承認済み。H-1 (a)): ②の根拠のマス(淡い青灰)・④のできているマス
+  // (淡い緑)のtd背景は、印の座標をサーバーの既存結果から取り出すだけの純粋関数
+  // (boardMarksFromState)から取る(web側で判定しない)。
+  const boardMarks = boardMarksFromState(state.plan, state.coach);
+  const evidenceSquares = new Set(boardMarks.evidence);
+  const matchedSquares = new Set(boardMarks.matched);
 
   // Phase 7 Unit 3: 盤の外側に筋(９〜１)と段(一〜九)を表示する。
   // 「６八って盤のどこ?」を盤を見ながら理解できるようにするための目盛りであり、
@@ -1098,6 +1223,11 @@ function renderBoard(state: GameStateResponse): void {
       if (currentHighlightedMove?.from === squareName) td.classList.add("square-last-move-from");
       if (currentHighlightedMove?.to === squareName) td.classList.add("square-last-move-to");
 
+      // STEP 5-4(W-5、人間承認済み。H-1 (a)): 根拠があるときは常に塗る。選択中・移動先の
+      // 背景(!important)が付く場合はそちらが勝つ(操作中の見え方を優先、style.css参照)。
+      if (evidenceSquares.has(squareName)) td.classList.add("square-opponent-evidence");
+      if (matchedSquares.has(squareName)) td.classList.add("square-shape-matched");
+
       const isSelected = squareName === selectedFrom;
       if (isSelected) td.classList.add("square-selected");
 
@@ -1133,8 +1263,8 @@ function renderBoard(state: GameStateResponse): void {
     boardEl.appendChild(tr);
   });
 
-  // 盤の描画が終わってから、その実寸を使って候補手を重ね描きする。
-  renderCandidateArrows(state.plan);
+  // 盤の描画が終わってから、その実寸を使って候補手・盤の印を重ね描きする。
+  renderBoardMarks(state.plan, state.coach);
 }
 
 // 【Phase5】先手(人間)の持ち駒だけをクリック可能なボタンにする。後手の持ち駒は

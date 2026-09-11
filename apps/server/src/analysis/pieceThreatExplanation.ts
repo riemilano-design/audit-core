@@ -31,6 +31,13 @@ export type PieceThreatMessageKind = "piece_attacked";
 export interface PieceThreatMessage {
   kind: PieceThreatMessageKind;
   text: string;
+  /** 当たっている自分の駒のマス(USI形式)。fact.squareをそのまま写す。 */
+  square: string;
+  /**
+   * 当てている相手の駒のマス(USI形式)。fact.attackersの並び順のまま。
+   * 名前が解決できず文から落ちた攻め駒(toNamedAttackersの結果)は除く。
+   */
+  attackerSquares: string[];
 }
 
 /**
@@ -74,11 +81,16 @@ function attackerPhrase(attackers: NamedAttacker[]): string {
   return `相手の${parts.join("と")}が`;
 }
 
+interface FactMessage {
+  text: string;
+  attackerSquares: string[];
+}
+
 /**
  * 事実1件を文言へ変換する。自分の駒・攻め駒のいずれの名前も解決できない場合はnullを返し、
  * 呼び出し側がその事実を表示しない(推測して名前を補わない)。
  */
-function factText(fact: PieceThreatFact): string | null {
+function factText(fact: PieceThreatFact): FactMessage | null {
   const ownName = pieceName(fact.role);
   if (ownName === null) return null;
 
@@ -86,7 +98,8 @@ function factText(fact: PieceThreatFact): string | null {
   if (attackers.length === 0) return null;
 
   const ownSquare = toJapaneseSquare(fact.square);
-  return `あなたの${ownSquare}の${ownName}に、${attackerPhrase(attackers)}当たっています(次の相手の手で取られる可能性があります)。`;
+  const text = `あなたの${ownSquare}の${ownName}に、${attackerPhrase(attackers)}当たっています(次の相手の手で取られる可能性があります)。`;
+  return { text, attackerSquares: attackers.map((attacker) => attacker.square) };
 }
 
 /**
@@ -96,9 +109,14 @@ function factText(fact: PieceThreatFact): string | null {
 export function explainPieceThreats(facts: PieceThreatFact[]): PieceThreatMessage[] {
   const messages: PieceThreatMessage[] = [];
   for (const fact of facts) {
-    const text = factText(fact);
-    if (text === null) continue;
-    messages.push({ kind: "piece_attacked", text });
+    const result = factText(fact);
+    if (result === null) continue;
+    messages.push({
+      kind: "piece_attacked",
+      text: result.text,
+      square: fact.square,
+      attackerSquares: result.attackerSquares,
+    });
   }
   return messages;
 }

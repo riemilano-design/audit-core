@@ -17,6 +17,8 @@ describe("explainPieceThreats", () => {
       {
         kind: "piece_attacked",
         text: "あなたの８八の角に、相手の８七の金が当たっています(次の相手の手で取られる可能性があります)。",
+        square: "8h",
+        attackerSquares: ["8g"],
       },
     ]);
   });
@@ -37,6 +39,8 @@ describe("explainPieceThreats", () => {
       {
         kind: "piece_attacked",
         text: "あなたの５五の金に、相手の５四の金と５六の歩が当たっています(次の相手の手で取られる可能性があります)。",
+        square: "5e",
+        attackerSquares: ["5d", "5f"],
       },
     ]);
   });
@@ -85,6 +89,9 @@ describe("explainPieceThreats", () => {
       {
         kind: "piece_attacked",
         text: "あなたの５五の金に、相手の５六の飛が当たっています(次の相手の手で取られる可能性があります)。",
+        square: "5e",
+        // 名前が解決できない攻め駒(6f・lion)はtoNamedAttackersの結果に合わせて除かれる。
+        attackerSquares: ["5f"],
       },
     ]);
 

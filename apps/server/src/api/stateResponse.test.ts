@@ -456,6 +456,9 @@ describe("buildStateResponseWithPlan", () => {
     expect(response.plan.targetShapeProgress?.shapeId).toBe(response.plan.resolvedTargetShapeId);
     expect(response.plan.targetShapeProgress?.matchedSquareLabels).toEqual(["４九"]);
     expect(response.plan.targetShapeProgress?.missingSquareLabels).toEqual(["２八", "３八", "５八"]);
+    // STEP 5-4(S-2): USI形式のマス目が、日本語表記のラベル配列と同じ順で入ること。
+    expect(response.plan.targetShapeProgress?.matchedSquares).toEqual(["4i"]);
+    expect(response.plan.targetShapeProgress?.missingSquares).toEqual(["2h", "3h", "5h"]);
 
     // 「未達成マス → 現在の局面からの経路 → 今指せる最初の一手があるか」を辿れること。
     const kingRoute = response.plan.routes.find((r) => r.targetSquare === "2h");
@@ -1609,6 +1612,8 @@ describe("Unit 3: partitionUrgentMessages([0]「今すぐ対処が必要なこ�
   const pieceAttacked = {
     kind: "piece_attacked",
     text: "あなたの８八の角に、相手の８七の金が当たっています(次の相手の手で取られる可能性があります)。",
+    square: "8h",
+    attackerSquares: ["8g"],
   } satisfies PieceThreatMessage;
 
   it("王手と当たりの両方があるとき、王手(in_check)を先頭にして当たりをそのあとに連結する", () => {
