@@ -68,7 +68,17 @@ function makeRecord(
   };
 }
 
-const SFEN = "lnsgkgsnl/1r5b1/ppppppppp/9/9/9/PPPPPPPPP/1B5R1/LNSGKGSNL b - 16";
+// apps/server/src/rules/attackedPieces.test.ts と同じ実戦局面(A局30手目・８七金の
+// 直後)。7gの銀・9gの歩・8hの角に金8gの利きが届いている(2026-09-11 STEP T-7b:
+// 緊急事態の対象駒種を[0]と同じ集合に狭めたため、captureSquareが実際に攻撃されて
+// いる駒でなければfactsに現れず発火しない。以前は初期局面のSFENに歩しか無い7gを
+// captureSquareに使っていたが、[0]の対象駒種フィルタ導入後は発火しなくなるため、
+// 対象駒種(銀)が実際に当たっている局面へ差し替えた)。
+const SFEN = "ln1gk1snl/1r5b1/p2p1p1pp/1pps2p2/4p4/5PP2/PgS1PGNPP/1B1R2SK1/LN3G2L b 3p 31";
+
+// apps/server/src/rules/attackedPieces.test.ts と同じ実戦局面(C局30手目・３六歩打の
+// 直後)。3gの桂に歩3fの利きが届いている。
+const KNIGHT_ATTACKED_SFEN = "lnsgk2nl/4r2b1/pp1p2gpp/2p2s3/4p1P2/2PP1pp2/PP1SPPNPP/1B1RG1SK1/LN3G2L b - 31";
 
 describe("I-7 urgent but other talk", () => {
   it("発火する(urgent_empty): urgentMessagesが空", () => {
@@ -137,5 +147,36 @@ describe("I-7 urgent but other talk", () => {
     });
 
     expect(i7UrgentButOtherTalk.check([record])).toEqual([]);
+  });
+
+  it("発火しない: captureSquareの駒が[0]の対象駒種でない(歩)", () => {
+    // SFENの9gは歩(9g・8gの金から利きが届いている)であり、[0]の対象駒種
+    // (飛・角・金・銀・桂・香)に含まれないため、緊急事態そのものが成立しない。
+    const record = makeRecord(
+      16,
+      SFEN,
+      false,
+      { urgentMessages: [] },
+      makeEngineReference({ afterPass: { scoreCp: 1410, mate: null, bestmove: "8g9g", captureSquare: "9g" } }),
+    );
+
+    expect(i7UrgentButOtherTalk.check([record])).toEqual([]);
+  });
+
+  it("発火する: captureSquareの駒が[0]の対象駒種(桂)", () => {
+    // KNIGHT_ATTACKED_SFENの3gは桂であり、歩3fから利きが届いている
+    // ([0]の対象駒種に含まれるため緊急事態が成立する)。
+    const record = makeRecord(
+      31,
+      KNIGHT_ATTACKED_SFEN,
+      false,
+      { urgentMessages: [] },
+      makeEngineReference({ afterPass: { scoreCp: 1410, mate: null, bestmove: "3f3g", captureSquare: "3g" } }),
+    );
+
+    const findings = i7UrgentButOtherTalk.check([record]);
+
+    expect(findings).toHaveLength(1);
+    expect(findings[0]?.condition).toBe("urgent_empty");
   });
 });

@@ -22,6 +22,11 @@
 //
 // detectBoardEventsが例外を投げた場合は、その行を検出しない(try/catch。
 // 推測しない)。
+//
+// 2026-09-11人間決定(docs/OBSERVATION_I6_I7_2026-09-11.md 4.): 持ち越し。
+// 定義を狭める候補として注記のみ残す:「取られた駒が、助言の手(候補手・道のりの
+// 一手)の移動元・移動先・利きの線上にある」に限る。実装は別STEPで判断する
+// (この注記の追加時点では判定を変えていない)。
 
 import { detectBoardEvents } from "../../../apps/server/src/analysis/boardEventDetector.js";
 import { deriveAdviceSource } from "../lib/adviceSource.js";
