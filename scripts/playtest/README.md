@@ -2,7 +2,7 @@
 
 対局ハーネス(docs/PLAYTEST_LOOP_PROPOSAL.md の外側のループ)。**開発補助であり、本番導線(apps/)には含めない。**
 
-現在実装済みなのは STEP T-1(固定棋譜モード)・STEP T-2(不変条件 I-1〜I-5・draft と集約報告)・STEP T-3(探索モードと対局者の多様化)・STEP T-5(比較の道具 `compare.ts`・分母の報告・表記の更新)・STEP T-6(回帰モードのエンジン条件の固定・不変条件の型「結果」・I-6(draft))・STEP T-7(エンジンの参考評価 `engineReference` の記録・I-7(draft))。
+現在実装済みなのは STEP T-1(固定棋譜モード)・STEP T-2(不変条件 I-1〜I-5・draft と集約報告)・STEP T-3(探索モードと対局者の多様化)・STEP T-5(比較の道具 `compare.ts`・分母の報告・表記の更新)・STEP T-6(回帰モードのエンジン条件の固定・不変条件の型「結果」・I-6(draft))・STEP T-7(エンジンの参考評価 `engineReference` の記録・I-7(draft))・STEP T-8(帯を `adviceSource` に足し、I-8(draft))・STEP U6-0(不変条件 I-9(draft)。誤認を測る)。
 
 ## 位置づけ
 
@@ -84,7 +84,7 @@ npx tsx scripts/playtest/explore.ts --games 10 --seed 1 --plies 60 --out-dir /pa
 
 ## 不変条件チェック(STEP T-2・STEP T-5・STEP T-6・STEP T-7 で表記を更新)
 
-T-1 が保存した JSONL(1件以上)に対して、不変条件 I-1〜I-7(`scripts/playtest/invariants/`。**I-1・I-2 は 2026-09-11 に人間承認で `status: "approved"`、他(I-3〜I-7)は `status: "draft"`**)を適用し、検出を「型 × 発生条件」で束ねた報告を標準出力(Markdown)へ書く。常に exit 0(`approved` を含め、検出は何もブロックしない。exit code の扱い自体は人間承認事項)。
+T-1 が保存した JSONL(1件以上)に対して、不変条件 I-1〜I-9(`scripts/playtest/invariants/`。**I-1・I-2 は 2026-09-11 に人間承認で `status: "approved"`、他(I-3〜I-9)は `status: "draft"`**)を適用し、検出を「型 × 発生条件」で束ねた報告を標準出力(Markdown)へ書く。常に exit 0(`approved` を含め、検出は何もブロックしない。exit code の扱い自体は人間承認事項)。
 
 ```
 npx tsx scripts/playtest/check.ts scripts/playtest/out/run1.jsonl scripts/playtest/out/run2.jsonl
@@ -108,6 +108,23 @@ npx tsx scripts/playtest/check.ts scripts/playtest/out/run1.jsonl --json scripts
 - 検出しない: `engineReference` が `null`(測っていない)、終局。`captureSquare` の駒が [0] の対象駒種でない(歩・成駒等)。`urgentMessages` に当たりの行があっても `route_shown` に該当すれば検出する(「[0] が当たりを述べていても道のりの進捗を並べれば事故は起きる」という意図)
 
 **閾値 300cp は draft の初期値であり、将棋一般の閾値ではない**(2026-09-11 人間決定。`I7_DROP_THRESHOLD_CP`。approved 化の前に人間が再判断する)。**これは「最善手を言え」ではない**。候補手そのものの良し悪し(最善手かどうか)は判断せず、盤の事実とエンジンの参考評価から「先に言うべき事実」の有無だけを拾う。
+
+### I-8(draft。STEP T-8)
+
+**I-8**(`invariants/i8-band-piece-then-captured.ts`、`status: "draft"`、型「結果」)は、`docs/BASELINE_2026-09-12.md` 3.3(2026-09-12 人間決定)を実装したもの: **帯([0]「いま注意する駒」)が名指しした駒を自分が動かし、その直後の相手の手でその駒が取られた**場合を検出する。基準値の 4 局で、人間が「誤らせる型(最優先)」と判定した局が I-1〜I-7 のすべてで 0 件になったため追加された(I-6 は `adviceSource`(候補手・道のり)だけを見て帯を対象にしないため)。
+
+- 判定: 直前の ready 行(t-2)の帯に `piece_attacked` があり、`senteMove` の移動元がその名指しマスに含まれ(`lib/adviceSource.ts` の `movesBandNamedPiece`。打つ手は対象外)、本番関数 `detectBoardEvents` の結果に `captured_by_opponent` かつ移動先のマスの事象があるとき。`detectBoardEvents` が例外を投げた行は検出しない。
+- `condition` は `deriveAdviceSource`(`band` / `candidate` / `route`)。帯が名指しした駒を動かす手が同時に候補手・道のりにも載っていた場合は `band` ではなく `candidate`/`route` になる(重なりを隠さないため)。
+- **この不変条件が言わないこと**: 「帯の言うとおりに逃がしたら取られた」を数えるものではない(帯は「どこへ逃げれば安全か」を言わないため、名指しされた駒を動かす手が逃げる手とは限らない)。因果も主張しない(動かさなくても取られていたかは判定しない)。I-6 と違い「取り返す手が合法手に無い」ことは要求しないため、**I-6 より広い**(両方に出る行がありうる)。
+
+### I-9(draft。STEP U6-0)
+
+**I-9**(`invariants/i9-shape-claim-without-evidence.ts`、`status: "draft"`、型「盤との不一致」)は、docs/PHASES.md「Unit 6 の再定義と決定」H-5(2026-09-12 人間承認)を実装したもの: ④が特定の形(`plan.targetShapeProgress`)の組み上がりを出しているのに、指し手で作られたことが確認できる証拠(`formationEvidence`)がほとんど無い場合を検出する。背景は縛った初心者の3局目の観測(docs/OBSERVATION_BEGINNER_CLAUDE_2026-09-12.md 3.。玉を初形から一度も動かしていないのに④が「本美濃囲いに近づいている」と言い続けた)。
+
+- 記録(JSONL)には `formationEvidence` が入っていないため、`sfen` と `moveHistory` から本番関数 `analyzeShapeFormation`(`apps/server/src/analysis/shapeFormationAnalyzer.ts`)を**呼び直して**再計算する(判定ロジックは複製しない)。
+- 検出条件: `targetShapeProgress` の `shapeId` と一致する結果の `formationEvidence.length <= 1`(`I9_MAX_EVIDENCE`)かつ `targetShapeProgress.missingSquares.length >= 2`(`I9_MIN_MISSING`)。`missingSquares` は応答の値をそのまま使い、再計算しない。
+- **証拠1件・欠け2件以上という閾値は draft の初期値であり、将棋一般の閾値ではない**(H-5。approved 化の前に人間が再判断する。H-3 の順序: (i) I-9 で誤認を測る → (ii) 量だけ増やす → (iii) 同じ4局で再測定 → (iv) それから閾値を判断)。
+- **この不変条件が言わないこと**: 形の名前が間違っているとは主張しない。ユーザーがその形を目指していたかどうかは判定しない。因果(この一致が原因で誤認した等)も主張しない。言えるのは「④が組み上がりを出している局面で、証拠が n 件・欠けが m 件だった」という記録上の事実だけである。
 
 ### `adviceSource`(記録ではなく事後判定)について
 
