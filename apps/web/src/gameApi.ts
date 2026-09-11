@@ -794,3 +794,42 @@ export function buildKifuJson(moveHistory: string[], now: Date): KifuJson {
     moves: [...moveHistory],
   };
 }
+
+/**
+ * STEP 5-C(A-5、P-16対応): `window.confirm`をやめ、画面の中で成り・不成を選ぶために、
+ * 「同じ移動先に対応する2件のUSI候補から、成る側・成らない側を選ぶ」機械的な判定だけを
+ * 切り出したもの。`usi.endsWith("+")`かどうかだけを見る(将棋の判断は一切しない。
+ * 成れるかどうかの判定自体はサーバーのlegalMovesのまま)。該当する側が無ければ
+ * その側はnullを返す(呼び出し側main.tsで、その側のボタンを押しても何もしない扱いにする)。
+ */
+export function splitPromotionCandidates(candidates: string[]): { promote: string | null; keep: string | null } {
+  const promote = candidates.find((usi) => usi.endsWith("+")) ?? null;
+  const keep = candidates.find((usi) => !usi.endsWith("+")) ?? null;
+  return { promote, keep };
+}
+
+/**
+ * STEP 5-C(A-5b、人間承認済みの文言の表。docs/PHASES.md「STEP 5-Cの文言の承認記録」が
+ * 正本): 成り選択の画面に出す説明の2文目を、動かす駒の駒種(SFENの駒文字、成りでない
+ * 大文字1文字。例: "P")から引くだけの純粋関数。
+ *
+ * 角・飛は成っても元の動きを一つも失わず一マスの動きが加わるだけ、歩・香・桂・銀は
+ * 成ると動き方が金と同じものに置き換わる、という将棋の事実の違いにより、2文目を
+ * 駒種で出し分けている(この事実の正しさは人間承認済み。web側はここで判定を作らず、
+ * 承認済みの表を引くだけにする)。
+ *
+ * 表に無い駒種(玉・金・既に成っている駒など、そもそも成れない駒)が渡された場合は
+ * 空文字を返し、2文目を出さない(推測で文を作らないため)。
+ */
+const PROMOTION_NOTE_BY_ROLE: Readonly<Record<string, string>> = {
+  P: "成ると、金と同じ動き方に変わります。",
+  L: "成ると、金と同じ動き方に変わります。",
+  N: "成ると、金と同じ動き方に変わります。",
+  S: "成ると、金と同じ動き方に変わります。",
+  B: "成ると、今の動きはそのままで、まわりの一マスへも動けるようになります。",
+  R: "成ると、今の動きはそのままで、まわりの一マスへも動けるようになります。",
+};
+
+export function promotionNoteForRole(piece: string): string {
+  return PROMOTION_NOTE_BY_ROLE[piece] ?? "";
+}

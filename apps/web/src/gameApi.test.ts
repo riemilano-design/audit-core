@@ -19,6 +19,8 @@ import {
   summarizeOpponentAim,
   summarizeWhy,
   summarizeMyAim,
+  splitPromotionCandidates,
+  promotionNoteForRole,
   PLAN_REFRESH_MAX_ATTEMPTS,
   type CoachExplanation,
   type CoachStage,
@@ -803,5 +805,69 @@ describe("buildKifuJson", () => {
     // 返り値を書き換えても、呼び出し側の入力配列は変化しない。
     result.moves.push("2g2f");
     expect(moveHistory).toEqual(["7g7f", "3c3d"]);
+  });
+});
+
+describe("splitPromotionCandidates", () => {
+  it("成る側・成らない側の両方がある場合、それぞれのUSIを返す", () => {
+    expect(splitPromotionCandidates(["8h3c+", "8h3c"])).toEqual({ promote: "8h3c+", keep: "8h3c" });
+  });
+
+  it("配列の並び順が逆でも同じ結果になる(endsWith(\"+\")だけを見る)", () => {
+    expect(splitPromotionCandidates(["8h3c", "8h3c+"])).toEqual({ promote: "8h3c+", keep: "8h3c" });
+  });
+
+  it("成る側が無い場合、promoteはnullになる", () => {
+    expect(splitPromotionCandidates(["8h3c"])).toEqual({ promote: null, keep: "8h3c" });
+  });
+
+  it("成らない側が無い場合、keepはnullになる", () => {
+    expect(splitPromotionCandidates(["8h3c+"])).toEqual({ promote: "8h3c+", keep: null });
+  });
+
+  it("空配列の場合、両方nullになる", () => {
+    expect(splitPromotionCandidates([])).toEqual({ promote: null, keep: null });
+  });
+});
+
+describe("promotionNoteForRole", () => {
+  it("歩(P)の場合、金と同じ動き方に変わる旨の文を返す", () => {
+    expect(promotionNoteForRole("P")).toBe("成ると、金と同じ動き方に変わります。");
+  });
+
+  it("香(L)の場合、金と同じ動き方に変わる旨の文を返す", () => {
+    expect(promotionNoteForRole("L")).toBe("成ると、金と同じ動き方に変わります。");
+  });
+
+  it("桂(N)の場合、金と同じ動き方に変わる旨の文を返す", () => {
+    expect(promotionNoteForRole("N")).toBe("成ると、金と同じ動き方に変わります。");
+  });
+
+  it("銀(S)の場合、金と同じ動き方に変わる旨の文を返す", () => {
+    expect(promotionNoteForRole("S")).toBe("成ると、金と同じ動き方に変わります。");
+  });
+
+  it("角(B)の場合、今の動きに一マス加わる旨の文を返す", () => {
+    expect(promotionNoteForRole("B")).toBe("成ると、今の動きはそのままで、まわりの一マスへも動けるようになります。");
+  });
+
+  it("飛(R)の場合、今の動きに一マス加わる旨の文を返す", () => {
+    expect(promotionNoteForRole("R")).toBe("成ると、今の動きはそのままで、まわりの一マスへも動けるようになります。");
+  });
+
+  it("表に無い駒種(玉)の場合、空文字を返す(2文目を出さない)", () => {
+    expect(promotionNoteForRole("K")).toBe("");
+  });
+
+  it("表に無い駒種(金)の場合、空文字を返す", () => {
+    expect(promotionNoteForRole("G")).toBe("");
+  });
+
+  it("成り駒(+付き、例: +P)の場合、空文字を返す", () => {
+    expect(promotionNoteForRole("+P")).toBe("");
+  });
+
+  it("空文字が渡された場合、空文字を返す", () => {
+    expect(promotionNoteForRole("")).toBe("");
   });
 });

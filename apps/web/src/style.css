@@ -243,6 +243,31 @@ h1 {
   background: #d6ead9;
 }
 
+/* STEP 5-C(P-16対応、人間承認済み。H-2): 成り・不成の選択のまとまり。
+   盤の直下・凡例の前に置く。保留が無いとき(#promotionChoiceが空)は箱ごと隠す
+   (空の箱を残さない)。ボタンの見た目は#controls等の既存のボタンに合わせ、
+   新しい色は作らない(3つのボタンを同じ見た目にし、どれかを目立たせない)。 */
+#promotionChoice:empty {
+  display: none;
+}
+
+.promotion-choice {
+  margin: 0.3rem 0 0.6rem;
+  padding: 0.5rem 0.6rem;
+  border: 1px solid #999;
+  border-radius: 4px;
+  background: #fafafa;
+}
+
+.promotion-choice p {
+  margin: 0 0 0.4rem;
+  font-size: 0.9rem;
+}
+
+.promotion-choice-buttons button {
+  margin: 0 0.5rem 0 0;
+}
+
 /* 凡例。免責の一文は候補手セクションに既にあるため、ここでは繰り返さない
    (docs/ARCHITECTURE.md 5.「同じ情報を一回だけ」)。
    【STEP 5-4(W-3、人間承認済み)】「当たり / 直前の手 / 次の一歩」の3項目を、

@@ -33,6 +33,8 @@ import {
   summarizeMyAim,
   startNewGame,
   submitMove,
+  splitPromotionCandidates,
+  promotionNoteForRole,
   type CoachExplanation,
   type CoachStage,
   type CoachStatus,
@@ -41,7 +43,7 @@ import {
   type ReachablePlanBody,
 } from "./gameApi.js";
 import { PIECE_KANJI } from "./pieceKanji.js";
-import { parseSfenBoardPart, parseSfenHands, parseSfenTurn } from "./sfenBoard.js";
+import { parseSfenBoardPart, parseSfenHands, parseSfenTurn, type BoardSquare } from "./sfenBoard.js";
 import "./style.css";
 
 const app = document.querySelector<HTMLDivElement>("#app");
@@ -74,6 +76,11 @@ app.innerHTML = `
         <table id="board"></table>
         <svg id="boardOverlay" aria-hidden="true"></svg>
       </div>
+      <!-- STEP 5-C(P-16対応、人間承認済み。H-2): 成り・不成の選択を画面の中に出す
+           まとまり。盤の直下・凡例(#boardLegend)の前に置く。保留中(pendingPromotion)
+           でなければ空にする(空の箱を残さない。style.cssの#promotionChoice:emptyで
+           非表示にする)。 -->
+      <div id="promotionChoice"></div>
       <div id="boardLegend"></div>
       <div id="hands"></div>
       <div id="controls">
@@ -124,6 +131,7 @@ app.innerHTML = `
 const boardEl = document.querySelector<HTMLTableElement>("#board")!;
 const boardAreaEl = document.querySelector<HTMLDivElement>("#boardArea")!;
 const boardOverlayEl = document.querySelector<SVGSVGElement>("#boardOverlay")!;
+const promotionChoiceEl = document.querySelector<HTMLDivElement>("#promotionChoice")!;
 const boardLegendEl = document.querySelector<HTMLDivElement>("#boardLegend")!;
 const handsEl = document.querySelector<HTMLDivElement>("#hands")!;
 const statusEl = document.querySelector<HTMLDivElement>("#status")!;
@@ -149,6 +157,14 @@ let selectedDropRole: string | undefined;
 // 直近にrender()した対局状態。renderInteractive()(選択状態の変更だけを反映する
 // 再描画。ネットワーク通信は行わない)から参照するために保持する。
 let currentState: GameStateResponse | undefined;
+
+// 【STEP 5-C: 成り・不成の選択を画面の中で保留する状態】
+// candidatesが2件(成り・不成りの両方が合法)のときだけ立てる。着手はまだ送らず、
+// 「成る」「成らない」「この手をやめる」のいずれかが押されるまで待つ
+// (window.confirmをやめた代わり。P-16対応)。fromは成り選択の文言(2文目)を
+// 決めるために動かす駒を読むためだけに使う(squareNameAtの逆変換で読む。
+// 新しい座標規約は作らない)。
+let pendingPromotion: { candidates: string[]; from: string; to: string } | null = null;
 
 // 【Phase5】POST /api/game/moveの送信中(サーバーの応答待ち)かどうか。
 // サーバー側(server.ts)のリクエスト直列化と対になるクライアント側の対策で、
@@ -179,6 +195,18 @@ function squareNameAt(rowIndex: number, colIndex: number): string {
   const file = 9 - colIndex;
   const rank = String.fromCharCode("a".charCodeAt(0) + rowIndex);
   return `${file}${rank}`;
+}
+
+// squareNameAt(rowIndex, colIndex)の逆変換。STEP 5-C(成り選択の説明文)で、保留中の
+// 移動元マス(USI形式、例: "7g")にある駒を読むためだけに使う。新しい座標規約は
+// 作らず、squareNameAtと同じ対応(左端が9筋)を逆にたどるだけ。
+function pieceAtSquare(board: BoardSquare[][], squareName: string): BoardSquare {
+  const file = Number(squareName[0]);
+  const rank = squareName[1];
+  if (!Number.isInteger(file) || !rank) return null;
+  const rowIndex = rank.charCodeAt(0) - "a".charCodeAt(0);
+  const colIndex = 9 - file;
+  return board[rowIndex]?.[colIndex] ?? null;
 }
 
 // 合法手一覧(USI形式)から、指定した移動元マスにある駒を動かす場合の、
@@ -1347,7 +1375,9 @@ function renderBoardMarks(
 function renderBoard(state: GameStateResponse): void {
   const board = parseSfenBoardPart(state.sfen);
   const turn = parseSfenTurn(state.sfen);
-  const interactive = turn === "sente" && !state.status.isEnd && !moveInFlight;
+  // STEP 5-C(A-4): 成り・不成の選択が保留中は、moveInFlightと同じ扱いで盤のクリックを
+  // 受け付けない(別の着手が始まらないようにする。やめるにはこの手をやめるボタンのみ)。
+  const interactive = turn === "sente" && !state.status.isEnd && !moveInFlight && pendingPromotion === null;
   const destinations = selectedFrom
     ? destinationsFromSquare(selectedFrom, state.legalMoves)
     : selectedDropRole
@@ -1455,7 +1485,8 @@ function renderBoard(state: GameStateResponse): void {
 function renderHands(state: GameStateResponse): void {
   const hands = parseSfenHands(state.sfen);
   const turn = parseSfenTurn(state.sfen);
-  const interactive = turn === "sente" && !state.status.isEnd && !moveInFlight;
+  // STEP 5-C(A-4): renderBoardと同じ理由で、保留中は持ち駒のクリックも受け付けない。
+  const interactive = turn === "sente" && !state.status.isEnd && !moveInFlight && pendingPromotion === null;
   const format = (h: Record<string, number>) =>
     Object.entries(h)
       .map(([piece, count]) => `${PIECE_KANJI[piece] ?? piece}${count > 1 ? `x${count}` : ""}`)
@@ -1494,11 +1525,84 @@ function renderHands(state: GameStateResponse): void {
   handsEl.appendChild(document.createTextNode(` / 後手持ち駒: ${format(hands.gote)}`));
 }
 
-// selectedFrom/selectedDropRoleの変更だけを画面へ反映する(サーバーへは問い合わせない)。
+// 【STEP 5-C: 成り・不成の選択(P-16対応)】
+// pendingPromotionが立っているときだけ、盤の直下・凡例の前(#promotionChoice)に
+// 選ぶためのまとまりを描く。文言は一字も変えない(docs/PHASES.md「STEP 5-Cの文言の
+// 承認記録」が正本)。2文目の駒種による出し分けは、gameApi.tsのpromotionNoteForRole
+// (人間承認済みの表を引くだけの純粋関数)に従うだけで、ここでは将棋の判定をしない。
+// 保留が無いときはpromotionChoiceEl.replaceChildren()で空にする(空の箱を残さない。
+// style.cssの#promotionChoice:emptyで非表示にする)。
+function renderPromotionChoice(): void {
+  if (!pendingPromotion || !currentState) {
+    promotionChoiceEl.replaceChildren();
+    return;
+  }
+  const { candidates, from } = pendingPromotion;
+  const { promote, keep } = splitPromotionCandidates(candidates);
+  const board = parseSfenBoardPart(currentState.sfen);
+  const movedPiece = pieceAtSquare(board, from);
+  const note = promotionNoteForRole(movedPiece?.piece ?? "");
+
+  const container = document.createElement("div");
+  container.className = "promotion-choice";
+
+  const commonText = document.createElement("p");
+  commonText.textContent = "この駒は、ここで成る(裏返す)ことができます。";
+  container.appendChild(commonText);
+
+  if (note !== "") {
+    const noteText = document.createElement("p");
+    noteText.textContent = note;
+    container.appendChild(noteText);
+  }
+
+  const buttons = document.createElement("div");
+  buttons.className = "promotion-choice-buttons";
+
+  const promoteButton = document.createElement("button");
+  promoteButton.type = "button";
+  promoteButton.textContent = "成る";
+  promoteButton.addEventListener("click", () => {
+    if (!promote) return;
+    pendingPromotion = null;
+    void playMove(promote);
+  });
+  buttons.appendChild(promoteButton);
+
+  const keepButton = document.createElement("button");
+  keepButton.type = "button";
+  keepButton.textContent = "成らない";
+  keepButton.addEventListener("click", () => {
+    if (!keep) return;
+    pendingPromotion = null;
+    void playMove(keep);
+  });
+  buttons.appendChild(keepButton);
+
+  const cancelButton = document.createElement("button");
+  cancelButton.type = "button";
+  cancelButton.textContent = "この手をやめる";
+  cancelButton.addEventListener("click", () => {
+    // 【STEP 5-C(H-3): やめ方はこのボタンのみ】着手はせず、保留と駒の選択
+    // (selectedFrom・selectedDropRole)を解除して再描画する。盤の他のマスを押した
+    // ときの自動の取り消しは入れない(人間決定)。
+    pendingPromotion = null;
+    clearSelection();
+    renderInteractive();
+  });
+  buttons.appendChild(cancelButton);
+
+  container.appendChild(buttons);
+  promotionChoiceEl.replaceChildren(container);
+}
+
+// selectedFrom/selectedDropRole/pendingPromotionの変更だけを画面へ反映する
+// (サーバーへは問い合わせない)。
 function renderInteractive(): void {
   if (!currentState) return;
   renderBoard(currentState);
   renderHands(currentState);
+  renderPromotionChoice();
 }
 
 function renderStatus(state: GameStateResponse): void {
@@ -1565,12 +1669,19 @@ function render(state: GameStateResponse): void {
   // render()は同じ局面のまま何度も呼ばれる(バックグラウンド解析の再取得)ため、
   // sfenが変わったときだけ解除する。
   if (state.sfen !== lastRenderedSfen) emphasizedCandidateUsi = null;
+  // STEP 5-C: 保留の解除は局面が変わったとき(新しい対局・新しい着手)だけに限る。
+  // schedulePlanRefreshは局面が変わっていない同じsfenのままrender(state)を呼ぶことが
+  // ある(⑧の参考評価がpendingでなくなった通知)ため、ここを無条件にすると、
+  // ユーザーが成り・不成を選んでいる最中に選択のまとまりが黙って消えてしまう
+  // (P-16と同種の見えにくい欠陥になる)。emphasizedCandidateUsiと同じ条件を使う。
+  if (state.sfen !== lastRenderedSfen) pendingPromotion = null;
   currentState = state;
   clearSelection();
   updateLastOpponentMoveHighlight(state.moveHistory);
   lastRenderedSfen = state.sfen;
   renderBoard(state);
   renderHands(state);
+  renderPromotionChoice();
   renderStatus(state);
   renderHistory(state.moveHistory, state.moveHistoryJapanese);
   // 【STEP 5-2(構造。人間承認済み)】読む列(帯 → ① → ② → ③ → ④)→
@@ -1607,6 +1718,10 @@ function setError(message: string): void {
 // 駒を選択中のユーザーの選択が繰り返し解除されてしまう。再取得中は局面が進んでいない
 // (lastRenderedSfenで保証)ので、まだ"pending"の間は画面の内容が変わらない。
 // そのため、状態が"pending"でなくなったときだけ再描画する。
+// 【STEP 5-C】この再描画は局面が変わらないまま(同じsfenのまま)render(state)を呼ぶ
+// ため、render()側でpendingPromotion(成り・不成の保留)を無条件に解除すると、
+// ユーザーが選んでいる最中に選択のまとまりが黙って消えてしまう。render()は
+// sfenが変わったときだけpendingPromotionを解除する(emphasizedCandidateUsiと同じ条件)。
 const PLAN_REFRESH_INTERVAL_MS = 1500;
 
 function schedulePlanRefresh(sfenAtSubmit: string, attempt = 1): void {
@@ -1664,15 +1779,21 @@ async function playMove(moveUsi: string): Promise<boolean> {
 
 // 【Phase5】盤面クリックで移動先マスを選んだときの着手。
 // candidatesは同じ移動先に対応するUSI候補(1件、または成り/不成りの2件)。
-// 2件の場合のみ、その場で成り/不成りを確認する(強制成りの場合はgetLegalMovesが
-// 最初から1件しか返さないため、ここでは分岐しない=新しい成り判定ロジックを作らない)。
+// 【STEP 5-C(P-16対応)】2件の場合は、その場で決めず(window.confirmは埋め込み
+// ブラウザで何も表示せず常に不成が選ばれていた)、pendingPromotionを立てて
+// 再描画するだけにする。実際の着手はrenderPromotionChoiceが描くボタンから行う。
+// 強制成りの場合はgetLegalMovesが最初から1件しか返さないため、ここでは分岐しない
+// (新しい成り判定ロジックを作らない)。
 async function handleBoardMoveClick(candidates: string[]): Promise<void> {
   if (moveInFlight) return;
-  let moveUsi = candidates[0];
+  const moveUsi = candidates[0];
   if (!moveUsi) return;
   if (candidates.length > 1) {
-    const promote = window.confirm("成りますか?");
-    moveUsi = candidates.find((usi) => usi.endsWith("+") === promote) ?? moveUsi;
+    const { from, to } = parseMoveSquares(moveUsi);
+    if (from === undefined) return; // 打つ手には成り/不成りの区別が無いため、ここには来ない
+    pendingPromotion = { candidates, from, to };
+    renderInteractive();
+    return;
   }
   await playMove(moveUsi);
 }
