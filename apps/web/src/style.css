@@ -361,6 +361,39 @@ h1 {
   color: #666;
 }
 
+/* P-17対応(人間承認済み): 保存操作の一行+折りたたみ。空のとき(何も保存操作を
+   行っていない・次の着手や新しい対局で消えたとき)は箱ごと隠す
+   (#promotionChoiceと同じ考え方)。 */
+#saveKifuStatus:empty {
+  display: none;
+}
+
+.save-kifu-status-line {
+  margin: 0.3rem 0 0.2rem;
+  font-size: 0.85rem;
+  color: #333;
+}
+
+#saveKifuStatus summary {
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: bold;
+  padding: 0.2rem 0;
+}
+
+#saveKifuStatus pre {
+  font-size: 0.8rem;
+  line-height: 1.4;
+  white-space: pre-wrap;
+  word-break: break-all;
+  max-height: 12rem;
+  overflow-y: auto;
+  background: #fafafa;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 0.5rem;
+}
+
 #error {
   color: #a33;
   min-height: 1.2rem;

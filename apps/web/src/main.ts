@@ -94,6 +94,12 @@ app.innerHTML = `
              局面に依らず常時表示する(H-3: 元は入力欄直下の1行)。 -->
         <p id="moveHint" class="move-hint">盤の駒を押して指します</p>
       </div>
+      <!-- P-17対応(人間承認済み): 保存操作の結果を画面が知らないため、成功を断定せず
+           「依頼しました」という一行と、コピーで逃げられるよう常に閉じた折りたたみで
+           JSON文字列を出す。次に指したとき・新しい対局を始めたときに空にする
+           (handleSaveKifu / renderのsaveKifuStatusMoveCount参照)。空のときは
+           style.cssの#saveKifuStatus:emptyで隠す。 -->
+      <div id="saveKifuStatus"></div>
       <div id="error"></div>
     </div>
     <div id="infoColumn">
@@ -135,6 +141,7 @@ const promotionChoiceEl = document.querySelector<HTMLDivElement>("#promotionChoi
 const boardLegendEl = document.querySelector<HTMLDivElement>("#boardLegend")!;
 const handsEl = document.querySelector<HTMLDivElement>("#hands")!;
 const statusEl = document.querySelector<HTMLDivElement>("#status")!;
+const saveKifuStatusEl = document.querySelector<HTMLDivElement>("#saveKifuStatus")!;
 const errorEl = document.querySelector<HTMLDivElement>("#error")!;
 const historyEl = document.querySelector<HTMLOListElement>("#history")!;
 const urgentEl = document.querySelector<HTMLDivElement>("#urgent")!;
@@ -1638,6 +1645,11 @@ function renderHistory(moveHistory: string[], moveHistoryJapanese: (string | nul
 // 直近にrender()した局面のsfen。バックグラウンド解析の再取得結果を反映してよいか
 // (=ユーザーが間にもう一手指していないか)を判定するために使う。
 let lastRenderedSfen: string | undefined;
+// P-17対応: #saveKifuStatus(保存を依頼した旨の一行+折りたたみ)を表示したときの
+// state.moveHistory.lengthを覚えておく。undefinedは「何も表示していない」を表す。
+// currentStateが無い状態で表示したとき(手数が分からない)は-1という実在しない値を
+// 入れ、次にrender()が呼ばれた時点(=状態が読み込めた時点)で必ず消えるようにする。
+let saveKifuStatusMoveCount: number | undefined;
 
 // 【Phase5】直前の相手の手のハイライトを、新しい手が指されたときだけ張り直す。
 // render()はbackground poll(schedulePlanRefresh)等、同じmoveHistoryのまま
@@ -1675,6 +1687,16 @@ function render(state: GameStateResponse): void {
   // ユーザーが成り・不成を選んでいる最中に選択のまとまりが黙って消えてしまう
   // (P-16と同種の見えにくい欠陥になる)。emphasizedCandidateUsiと同じ条件を使う。
   if (state.sfen !== lastRenderedSfen) pendingPromotion = null;
+  // P-17対応: #saveKifuStatusは「次に指したとき・新しい対局を始めたとき」に消す
+  // (人間承認済み)。render()はバックグラウンド解析の再取得でも同じ局面のまま
+  // 何度も呼ばれる(手数は変わらない)ため、手数(state.moveHistory.length)が
+  // 表示時と変わったときだけ消す。sfenは同じでも指し手前後で必ず手数が変わるため、
+  // これで「保存を押した直後の再描画で消えてしまう」ことを避けつつ、次の着手・
+  // 新しい対局では確実に消える(新しい対局は手数が0に戻るため必ず異なる)。
+  if (saveKifuStatusMoveCount !== undefined && state.moveHistory.length !== saveKifuStatusMoveCount) {
+    saveKifuStatusEl.innerHTML = "";
+    saveKifuStatusMoveCount = undefined;
+  }
   currentState = state;
   clearSelection();
   updateLastOpponentMoveHighlight(state.moveHistory);
@@ -1830,17 +1852,85 @@ async function handleNewGame(): Promise<void> {
 // buildKifuJsonが返すのはscripts/playtest/kifu/の固定棋譜と同じ形
 // ({ id, source, moves })で、moves以外(コーチの文言・評価・エンジンの読み筋・
 // SFEN・時刻)は含めない。
+// P-17対応(人間承認済み): ダウンロードのclick()自体は成功しても、埋め込み
+// ブラウザでは最終的なファイルへのrenameが起きないことがあり、その場合は画面から
+// 成功も失敗も見えない(「押しても何も起きない」ように見える)。これは環境側の
+// 問題でアプリからは直せないため、アプリ側では「黙っていること」だけを直す。
+// ダウンロードの試行に加えて、常に一行の案内(成功を断定しない文言)と、
+// 常に閉じた折りたたみ(#saveKifuStatus内の<details>、コピーで逃げられるように
+// JSON文字列を<pre>で置く。コピーボタンは付けない。クリップボードAPIも埋め込み
+// ブラウザで黙って失敗しうるため、同じ「黙って消える」型を増やさないという
+// 人間の判断)を出す。
+function renderSaveKifuStatusLine(children: (string | Node)[]): HTMLParagraphElement {
+  const line = document.createElement("p");
+  line.className = "save-kifu-status-line";
+  children.forEach((child) => {
+    line.appendChild(typeof child === "string" ? document.createTextNode(child) : child);
+  });
+  return line;
+}
+
+function renderSaveKifuDetails(json: string): HTMLDetailsElement {
+  // 既存の#routeDetails・#referenceDetails・#historyDetailsと同じ作り
+  // (<details>+<summary>)。open属性を付けないため常に閉じた状態になる
+  // (この関数は保存を押すたびに新しく要素を作り直すため、開閉状態が残らない)。
+  const details = document.createElement("details");
+  const summary = document.createElement("summary");
+  summary.textContent = "対局の記録(JSON)";
+  const pre = document.createElement("pre");
+  pre.textContent = json;
+  details.appendChild(summary);
+  details.appendChild(pre);
+  return details;
+}
+
 function handleSaveKifu(): void {
-  if (!currentState) return;
-  const kifu = buildKifuJson(currentState.moveHistory, new Date());
-  const json = `${JSON.stringify(kifu, null, 2)}\n`;
-  const blob = new Blob([json], { type: "application/json" });
-  const url = URL.createObjectURL(blob);
-  const anchor = document.createElement("a");
-  anchor.href = url;
-  anchor.download = `${kifu.id}.json`;
-  anchor.click();
-  URL.revokeObjectURL(url);
+  if (!currentState) {
+    saveKifuStatusEl.innerHTML = "";
+    saveKifuStatusEl.appendChild(
+      renderSaveKifuStatusLine(["対局の状態がまだ読み込めていないため、保存できません。"]),
+    );
+    // 手数が分からないため、実在しない値を入れて次のrender()で必ず消す。
+    saveKifuStatusMoveCount = -1;
+    return;
+  }
+  const moveCount = currentState.moveHistory.length;
+  let json: string | undefined;
+  try {
+    const kifu = buildKifuJson(currentState.moveHistory, new Date());
+    json = `${JSON.stringify(kifu, null, 2)}\n`;
+    const filename = `${kifu.id}.json`;
+    const blob = new Blob([json], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const anchor = document.createElement("a");
+    anchor.href = url;
+    anchor.download = filename;
+    anchor.click();
+    URL.revokeObjectURL(url);
+
+    const filenameCode = document.createElement("code");
+    filenameCode.textContent = filename;
+    saveKifuStatusEl.innerHTML = "";
+    saveKifuStatusEl.appendChild(
+      renderSaveKifuStatusLine([
+        "この対局の記録の保存を、ブラウザに依頼しました。保存先(ふつうは「ダウンロード」フォルダ)に ",
+        filenameCode,
+        " が届いているか確かめてください。届いていないときは、下の「対局の記録(JSON)」を開いてコピーしてください。",
+      ]),
+    );
+    saveKifuStatusEl.appendChild(renderSaveKifuDetails(json));
+    saveKifuStatusMoveCount = moveCount;
+  } catch {
+    saveKifuStatusEl.innerHTML = "";
+    saveKifuStatusEl.appendChild(renderSaveKifuStatusLine(["保存の操作でエラーが起きました"]));
+    // JSONの生成自体は済んでいれば(失敗したのはBlob/ダウンロード側であれば)、
+    // コピーで逃げられるよう折りたたみは出す。JSON生成自体が失敗したときは
+    // 出しようがないため一行だけになる。
+    if (json !== undefined) {
+      saveKifuStatusEl.appendChild(renderSaveKifuDetails(json));
+    }
+    saveKifuStatusMoveCount = moveCount;
+  }
 }
 
 newGameButton.addEventListener("click", () => {
