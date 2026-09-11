@@ -760,3 +760,37 @@ export async function selectTargetShape(shapeId: string): Promise<GameStateRespo
   });
   return parseJson<GameStateResponse | MoveErrorResponse>(res);
 }
+
+/**
+ * STEP 5-A(A-2、人間承認済み): 現在の対局の指し手履歴(moveHistory)を、
+ * scripts/playtest/replay.ts が読む固定棋譜と同じ形のJSONにする純粋関数。
+ *
+ * 型は scripts/playtest/replay.ts の FixedKifu(`{ id: string; source: string;
+ * moves: string[] }`)と同じ形。web側とscriptsは別のビルド単位のためimportはせず、
+ * 同じ形の型をweb側にも置くだけで、将棋の判断・変換ロジックは一切持たない。
+ *
+ * - id: `YYYY-MM-DD-live-{手数}moves`(例: `2026-09-12-live-20moves`)。日付は
+ *   `now`のローカル日付(年-月-日をゼロ埋め2桁で)。手数は`moveHistory.length`。
+ *   衝突(同じ日に同じ手数を複数回保存)の扱いは決めていない(計画書F-1・H-1参照。
+ *   H-1が(a)ブラウザのダウンロードのため、ここでは何もしない)。
+ * - source: 固定文字列(人間承認済み、H-3)。ファイルの中身に入るだけで画面には出ない。
+ * - moves: `moveHistory`をそのまま(並び替え・加工をしない)。呼び出し側の配列を
+ *   書き換えないよう、新しい配列としてコピーする。
+ */
+export interface KifuJson {
+  id: string;
+  source: string;
+  moves: string[];
+}
+
+export function buildKifuJson(moveHistory: string[], now: Date): KifuJson {
+  const year = String(now.getFullYear()).padStart(4, "0");
+  const month = String(now.getMonth() + 1).padStart(2, "0");
+  const day = String(now.getDate()).padStart(2, "0");
+  const id = `${year}-${month}-${day}-live-${moveHistory.length}moves`;
+  return {
+    id,
+    source: "apps/web の対局から保存",
+    moves: [...moveHistory],
+  };
+}

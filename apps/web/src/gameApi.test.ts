@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import {
+  buildKifuJson,
   formatGameEndStatus,
   getPlanChangeReasonMessage,
   reviewNoteSuffix,
@@ -756,5 +757,51 @@ describe("summarizeMyAim", () => {
     expect(summarizeMyAim({ reason: "途中の説明1文目。詳しい説明。", status: "forming" }, null)).toBe(
       "途中の説明1文目。",
     );
+  });
+});
+
+describe("buildKifuJson", () => {
+  it("0手の場合、movesが空配列でidの手数が0movesになる", () => {
+    const result = buildKifuJson([], new Date(2026, 8, 12));
+    expect(result).toEqual({
+      id: "2026-09-12-live-0moves",
+      source: "apps/web の対局から保存",
+      moves: [],
+    });
+  });
+
+  it("奇数手の場合、idの手数がmoveHistory.lengthと一致する", () => {
+    const moveHistory = ["7g7f", "3c3d", "2g2f"];
+    const result = buildKifuJson(moveHistory, new Date(2026, 8, 12));
+    expect(result.id).toBe("2026-09-12-live-3moves");
+    expect(result.moves).toEqual(moveHistory);
+  });
+
+  it("偶数手の場合、idの手数がmoveHistory.lengthと一致する", () => {
+    const moveHistory = ["7g7f", "3c3d", "2g2f", "8c8d"];
+    const result = buildKifuJson(moveHistory, new Date(2026, 8, 12));
+    expect(result.id).toBe("2026-09-12-live-4moves");
+    expect(result.moves).toEqual(moveHistory);
+  });
+
+  it("月・日が1桁のとき、idの日付がゼロ埋め2桁になる(1月5日)", () => {
+    const result = buildKifuJson(["7g7f"], new Date(2026, 0, 5));
+    expect(result.id).toBe("2026-01-05-live-1moves");
+  });
+
+  it("sourceは固定文字列である", () => {
+    const result = buildKifuJson(["7g7f"], new Date(2026, 8, 12));
+    expect(result.source).toBe("apps/web の対局から保存");
+  });
+
+  it("movesは入力と同じ内容だが、別配列である(入力を書き換えない)", () => {
+    const moveHistory = ["7g7f", "3c3d"];
+    const result = buildKifuJson(moveHistory, new Date(2026, 8, 12));
+    expect(result.moves).toEqual(moveHistory);
+    expect(result.moves).not.toBe(moveHistory);
+
+    // 返り値を書き換えても、呼び出し側の入力配列は変化しない。
+    result.moves.push("2g2f");
+    expect(moveHistory).toEqual(["7g7f", "3c3d"]);
   });
 });

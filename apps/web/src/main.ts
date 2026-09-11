@@ -10,6 +10,7 @@
 // フォールバックとしてそのまま残す。
 
 import {
+  buildKifuJson,
   fetchGameState,
   formatGameEndStatus,
   isMoveError,
@@ -75,6 +76,10 @@ app.innerHTML = `
         <input id="moveInput" type="text" placeholder="例: 7g7f" autocomplete="off" />
         <button id="submitMove">指す</button>
         <button id="newGame">新しい対局</button>
+        <!-- STEP 5-A(A-1、人間承認済み。H-2): 現在の対局の棋譜(指し手だけ)を
+             ブラウザのダウンロードでJSON書き出しする。0手のときはdisabled
+             (render()で手数に応じて更新する。空の棋譜を作らないため)。 -->
+        <button id="saveKifu" disabled>この対局を保存</button>
         <!-- STEP 4-7B(P-11。人間承認済みの文言): 盤クリックでも着手できることの案内。
              局面に依らず常時表示する(H-3: 入力欄直下の1行)。 -->
         <p id="moveHint" class="move-hint">盤の駒を押しても指せます</p>
@@ -132,6 +137,7 @@ const referenceEl = document.querySelector<HTMLDivElement>("#reference")!;
 const moveInput = document.querySelector<HTMLInputElement>("#moveInput")!;
 const submitButton = document.querySelector<HTMLButtonElement>("#submitMove")!;
 const newGameButton = document.querySelector<HTMLButtonElement>("#newGame")!;
+const saveKifuButton = document.querySelector<HTMLButtonElement>("#saveKifu")!;
 
 // 【Phase5: 盤面クリック操作の選択状態】
 // selectedFrom: 移動元として選択中の盤上のマス(USI形式、例: "7g")。
@@ -1576,6 +1582,8 @@ function render(state: GameStateResponse): void {
   renderRouteList(state.plan);
   renderPlan(state.plan);
   renderReferenceShapes(state.plan);
+  // STEP 5-A(A-1、人間承認済み): 0手のときは空の棋譜を作らないため保存操作を無効にする。
+  saveKifuButton.disabled = state.moveHistory.length === 0;
 }
 
 function setError(message: string): void {
@@ -1708,6 +1716,24 @@ async function handleNewGame(): Promise<void> {
   renderAndScheduleRefresh(state);
 }
 
+// STEP 5-A(A-1、人間承認済み。H-1 (a)): 現在の対局の棋譜(指し手だけ)を
+// ブラウザのダウンロードでJSON書き出しする。サーバーはファイルを書かない。
+// buildKifuJsonが返すのはscripts/playtest/kifu/の固定棋譜と同じ形
+// ({ id, source, moves })で、moves以外(コーチの文言・評価・エンジンの読み筋・
+// SFEN・時刻)は含めない。
+function handleSaveKifu(): void {
+  if (!currentState) return;
+  const kifu = buildKifuJson(currentState.moveHistory, new Date());
+  const json = `${JSON.stringify(kifu, null, 2)}\n`;
+  const blob = new Blob([json], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+  const anchor = document.createElement("a");
+  anchor.href = url;
+  anchor.download = `${kifu.id}.json`;
+  anchor.click();
+  URL.revokeObjectURL(url);
+}
+
 submitButton.addEventListener("click", () => {
   void handleSubmitMove();
 });
@@ -1716,6 +1742,9 @@ moveInput.addEventListener("keydown", (event) => {
 });
 newGameButton.addEventListener("click", () => {
   void handleNewGame();
+});
+saveKifuButton.addEventListener("click", () => {
+  handleSaveKifu();
 });
 
 fetchGameState()
