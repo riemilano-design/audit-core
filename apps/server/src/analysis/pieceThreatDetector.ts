@@ -3,9 +3,9 @@
 // 機械的に選び・並べる(Phase 7 Unit 4「[0] 今すぐ対処が必要なこと」)。
 //
 // 【このモジュールがやること】
-// - 対象駒種のフィルタ(B-1): 飛・角・金・銀・桂・香のみ。玉(王手で扱う)と歩は除く。
-//   成駒(龍・馬・成銀・成桂・成香・と金)は元の駒種に正規化してから判定する
-//   (と金は歩として除外)。
+// - 対象駒種のフィルタ(B-1): 飛・角・金・銀・桂・香と、と金。玉(王手で扱う)と歩は除く。
+//   成駒(龍・馬・成銀・成桂・成香)は元の駒種に正規化してから判定する。
+//   と金だけは 2026-09-11 の人間決定 (b) により金と同価値として扱う(targetRoleOf)。
 // - 並び順(D): 自分の駒(行)を 飛→角→金→銀→桂→香 の固定順、同じ駒種は
 //   筋(1〜9)の大きい順で並べる。
 // - 1行内の攻め駒の並び順(決定 I-1): 正規化後の駒種で 飛→角→金→銀→桂→香→歩→玉 の
@@ -40,7 +40,8 @@ export interface PieceThreatFact {
 
 /**
  * B-1 で対象とする自分の駒種(正規化後)。飛・角・金・銀・桂・香のみ。
- * 玉(王手で扱う)と歩は含めない。
+ * 玉(王手で扱う)と歩は含めない(と金は targetRoleOf により gold に写るため、
+ * この集合には歩として現れず、対象に含まれる)。
  */
 const TARGET_ROLES_AFTER_NORMALIZATION: ReadonlySet<Role> = new Set([
   "rook",
@@ -79,11 +80,22 @@ export function normalizeRole(role: Role): Role {
   }
 }
 
+/**
+ * [0](B-1・D・I-1)専用の対応。2026-09-11 の人間決定 (b): と金は金と同価値として
+ * [0] の対象に含める。歩は引き続き除く。得喪の集計(K-1、captureSummary.ts)は
+ * 変えない(captureSummary.ts は normalizeRole をそのまま使い続ける)。
+ * 攻め駒側の並び順(I-1)も と金=金の位置に置く(人間の決定 A)。
+ */
+export function targetRoleOf(role: Role): Role {
+  if (role === "tokin") return "gold";
+  return normalizeRole(role);
+}
+
 /** D・I-1で共通の「並び順」を決める駒種の固定順(正規化後)。飛→角→金→銀→桂→香→歩→玉。 */
 const ROLE_ORDER: readonly Role[] = ["rook", "bishop", "gold", "silver", "knight", "lance", "pawn", "king"];
 
 function roleOrderIndex(role: Role): number {
-  const index = ROLE_ORDER.indexOf(normalizeRole(role));
+  const index = ROLE_ORDER.indexOf(targetRoleOf(role));
   // ROLE_ORDERに無い役職(標準将棋のB-1対象・攻め駒として現れ得ない役職)は
   // 並び順を発明せず末尾へ送る。
   return index === -1 ? ROLE_ORDER.length : index;
@@ -114,7 +126,7 @@ function byRoleOrderThenFileDescending<T extends { square: string; role: Role }>
  * 決定的な純粋関数(同じ入力に対しては常に同じ結果を返す)。
  */
 export function detectPieceThreats(attackedPieces: AttackedPiece[]): PieceThreatFact[] {
-  const targeted = attackedPieces.filter((piece) => TARGET_ROLES_AFTER_NORMALIZATION.has(normalizeRole(piece.role)));
+  const targeted = attackedPieces.filter((piece) => TARGET_ROLES_AFTER_NORMALIZATION.has(targetRoleOf(piece.role)));
 
   const facts: PieceThreatFact[] = targeted.map((piece) => ({
     square: piece.square,

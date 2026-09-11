@@ -4,10 +4,11 @@
 
 import { describe, expect, it } from "vitest";
 import type { AttackedPiece } from "../rules/attackedPieces.js";
+import { listAttackedPieces } from "../rules/attackedPieces.js";
 import { detectPieceThreats } from "./pieceThreatDetector.js";
 
 describe("detectPieceThreats", () => {
-  it("B-1: 玉・歩・と金(=歩)を除き、飛角金銀桂香(成駒を含む)を対象にする", () => {
+  it("B-1: 玉・歩を除き、飛角金銀桂香(成駒を含む)と、と金を対象にする", () => {
     const attacked: AttackedPiece[] = [
       { square: "1a", role: "king", attackers: [{ square: "9i", role: "pawn" }] },
       { square: "2a", role: "pawn", attackers: [{ square: "9i", role: "pawn" }] },
@@ -30,11 +31,29 @@ describe("detectPieceThreats", () => {
 
     expect(squares).not.toContain("1a"); // 玉
     expect(squares).not.toContain("2a"); // 歩
-    expect(squares).not.toContain("3a"); // と金(歩として除外)
+    expect(squares).toContain("3a"); // と金(2026-09-11 人間決定 (b): 金と同価値として対象に含める)
     expect(squares).toEqual(
-      expect.arrayContaining(["9a", "8b", "6c", "5b", "4a", "3b", "2b", "7a", "6a", "8a", "1c"]),
+      expect.arrayContaining(["3a", "9a", "8b", "6c", "5b", "4a", "3b", "2b", "7a", "6a", "8a", "1c"]),
     );
-    expect(result).toHaveLength(11);
+    expect(result).toHaveLength(12);
+  });
+
+  it("06-S3 54手目(2026-09-11の人間決定の完了条件): と金への当たりが[0]に検出される", () => {
+    // 探索06-S3 54手目(先手番)。先手のと金(7c)に相手の桂(8a)が当たっている。
+    const sfen = "ln2k1snl/4rg1b1/1G+Pp1p1pp/pp3sp2/4p4/1S1P1PPP1/PP1bPGNSP/1Rp3GK1/LN6L b - 55";
+
+    const attacked = listAttackedPieces(sfen, "sente");
+    const result = detectPieceThreats(attacked);
+
+    expect(result).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          square: "7c",
+          role: "tokin",
+          attackers: expect.arrayContaining([{ square: "8a", role: "knight" }]),
+        }),
+      ]),
+    );
   });
 
   it("D: 飛→角→金→銀→桂→香の固定順、同じ駒種は筋の大きい順で並べる", () => {
@@ -52,6 +71,18 @@ describe("detectPieceThreats", () => {
     const result = detectPieceThreats(attacked);
 
     expect(result.map((fact) => fact.square)).toEqual(["6a", "1a", "2a", "4a", "3a", "9a", "5a"]);
+  });
+
+  it("D: と金は金と同順位で、銀より前・角より後に並ぶ(2026-09-11人間決定(b))", () => {
+    const attacked: AttackedPiece[] = [
+      { square: "4a", role: "silver", attackers: [{ square: "9i", role: "pawn" }] },
+      { square: "3a", role: "tokin", attackers: [{ square: "9i", role: "pawn" }] },
+      { square: "1a", role: "bishop", attackers: [{ square: "9i", role: "pawn" }] },
+    ];
+
+    const result = detectPieceThreats(attacked);
+
+    expect(result.map((fact) => fact.square)).toEqual(["1a", "3a", "4a"]);
   });
 
   it("1行内の攻め駒は決定Ⅰ-1の順(飛→角→金→銀→桂→香→歩→玉、同駒種は筋の大きい順)に並ぶ", () => {
@@ -77,6 +108,28 @@ describe("detectPieceThreats", () => {
       { square: "4a", role: "pawn" },
       { square: "2a", role: "pawn" },
       { square: "1a", role: "king" },
+    ]);
+  });
+
+  it("I-1: 攻め駒側のと金は金の位置(銀・歩より前)に並ぶ(2026-09-11人間決定A)", () => {
+    const attacked: AttackedPiece[] = [
+      {
+        square: "5e",
+        role: "gold",
+        attackers: [
+          { square: "3a", role: "silver" },
+          { square: "4a", role: "pawn" },
+          { square: "2a", role: "tokin" },
+        ],
+      },
+    ];
+
+    const result = detectPieceThreats(attacked);
+
+    expect(result[0]!.attackers).toEqual([
+      { square: "2a", role: "tokin" },
+      { square: "3a", role: "silver" },
+      { square: "4a", role: "pawn" },
     ]);
   });
 
