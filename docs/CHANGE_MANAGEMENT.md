@@ -21,6 +21,7 @@
 | エージェントの責任範囲が変わる | `.claude/agents/*.md`(本体)+ `docs/ROLES.md`(表のみ更新) |
 | 新しいコマンド・フックが必要になる | `.claude/commands/` または `.claude/settings.json` |
 | 人間/AIの判断権限の線引きが変わる | `docs/ROLES.md` |
+| 対局回帰・不変条件(外側のループ)の設計が変わる | `docs/AGENT_PROTOCOL.md`(2a.・11.)+ `docs/TESTING_STRATEGY.md`(6.)+ `docs/ROLES.md` + `docs/PHASES.md`(共通ルール)。不変条件の有効化・無効化は**人間の承認必須** |
 
 ## 将棋知識の3分類
 

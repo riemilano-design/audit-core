@@ -18,9 +18,12 @@
 | [TESTING_STRATEGY.md](TESTING_STRATEGY.md) | 何をどう自動テストするか(対局回帰を含む) | ロジックを実装する人 |
 | [ROLES.md](ROLES.md) | 人間が判断すべきこと・AIに任せてよいこと・エージェント間の分担 | プロジェクトを進める人全員 |
 | [CHANGE_MANAGEMENT.md](CHANGE_MANAGEMENT.md) | 仕様が変わったとき、CLAUDE.md/docs/schemas/agents/コードのどこを直すべきか | 仕様変更を扱う人全員 |
+| [COVERAGE_AND_OUTCOME_PROPOSAL.md](COVERAGE_AND_OUTCOME_PROPOSAL.md) | 外側のループの測る対象を「言うべきことを言っているか」へ広げる案(2026-09-11)。**提案であり正本ではない。承認前** | 工程を変更する人 |
 
 ## 用語メモ
 
 - **スキーマ(schema)**: データが従うべき「型紙」。「このフィールドは必須」「この値は文字列」のようなルールをJSON形式で定義したもの。`data/schemas/` 以下にある。
 - **フック(hook)**: 特定の操作(ファイル保存など)をきっかけに自動で実行される処理。`.claude/settings.json` で設定する。
 - **エージェント(agent)**: 特定の役割に特化したClaude Codeの担当者設定。`.claude/agents/` 以下にある。詳しくは [ROLES.md](ROLES.md)。
+- **対局回帰**: 対局そのものを入力にする回帰検査。記録した棋譜を再生して API レスポンスを保存し、不変条件で検査する([TESTING_STRATEGY.md](TESTING_STRATEGY.md) 6.)。
+- **候補事象**: 不変条件による自動検出のうち、人間の仕分け(直す / 受容 / 持ち越す)を待つもの([AGENT_PROTOCOL.md](AGENT_PROTOCOL.md) 5.・11.)。
