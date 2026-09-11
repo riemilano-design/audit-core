@@ -110,7 +110,7 @@ sgogi-coach/
 │   └── server/
 ├── spike/              # Phase 0着手前の技術検証(shogiops+やねうら王のUSI疎通確認)。apps/本実装ではない
 ├── prototypes/         # Phase 0着手前のプロトタイプ検証(shape-matcher等)。apps/本実装ではない
-└── scripts/            # 開発補助スクリプト(データ検証など)
+└── scripts/            # 開発補助スクリプト(データ検証・対局ハーネスなど)
 ```
 
 `apps/` は Phase 0 で作成済み(`apps/web`・`apps/server`)。`spike/`・`prototypes/` はPhase 0着手前の技術検証であり、`apps/` の本実装とは別物である。

@@ -58,11 +58,11 @@ npx tsx scripts/playtest/explore.ts --games 10 --seed 1 --plies 60 --out-dir /pa
 - 出力: 局ごとに `game-NN.jsonl`(T-1 と同じ形式。`meta` に `mode: "explore"`・`profile`・`seed`・`randomRate`・`pliesCap` を追加)と `game-NN.kifu.json`(`{ id, source: "explore", profile, seed, moves }`。`replay.ts` でそのまま再生できる形式)。最後に `check.ts`(変更なし)を10局へ実行した結果を `report.md`・`report.json` として同じディレクトリへ書く
 - 終了条件: 終局(`isGameOver`)・相手または自分のエンジンが手を返さない・`--plies` 到達。理由は各 `game-NN.jsonl` の末尾付近の `{"kind":"end","reason",...}` 行に書く
 
-**この出力の意味について**: 探索の出力(JSONL・kifu JSON)は**観測**であり、何も拘束しない。`check.ts` の検出(=候補事象)も、既知事項・仕様・`kifu/` への登録に自動では昇格しない(docs/PLAYTEST_LOOP_PROPOSAL.md 4.5)。局面列を固定棋譜として `scripts/playtest/kifu/` へ登録するかどうかは、人間の判断による。
+**この出力の意味について**: 探索の出力(JSONL・kifu JSON)は**観測**であり、何も拘束しない。`check.ts` の検出(=候補事象)も、既知事項・仕様・`kifu/` への登録に自動では昇格しない(docs/AGENT_PROTOCOL.md 11.)。局面列を固定棋譜として `scripts/playtest/kifu/` へ登録するかどうかは、人間の判断による。
 
 ## 不変条件チェック(STEP T-2)
 
-T-1 が保存した JSONL(1件以上)に対して、不変条件 I-1〜I-5(`scripts/playtest/invariants/`、すべて `status: "draft"`)を適用し、検出を「型 × 発生条件」で束ねた報告を標準出力(Markdown)へ書く。常に exit 0(draft は何もブロックしない。docs/PLAYTEST_LOOP_PROPOSAL.md 4.5)。
+T-1 が保存した JSONL(1件以上)に対して、不変条件 I-1〜I-5(`scripts/playtest/invariants/`、すべて `status: "draft"`)を適用し、検出を「型 × 発生条件」で束ねた報告を標準出力(Markdown)へ書く。常に exit 0(draft は何もブロックしない。docs/AGENT_PROTOCOL.md 11.)。
 
 ```
 npx tsx scripts/playtest/check.ts scripts/playtest/out/run1.jsonl scripts/playtest/out/run2.jsonl
@@ -71,9 +71,13 @@ npx tsx scripts/playtest/check.ts scripts/playtest/out/run1.jsonl --json scripts
 
 `--json` を指定すると、機械可読の結果(`{ inputs, invariants, findings, groups }`)も同じ内容で書き出す。
 
-**この報告の意味について**: draft の不変条件による検出であり、仕様・既知事項・異常の有無を確定するものではない。0件は「有効な不変条件が捉える範囲では検出されない」ことを意味する(docs/PLAYTEST_LOOP_PROPOSAL.md 4.5 規則5)。有効化(`approved`)・既知事項への追加・仕様変更は、この報告からは自動で起きない(人間の判断が要る)。
+**この報告の意味について**: draft の不変条件による検出であり、仕様・既知事項・異常の有無を確定するものではない。0件は「有効な不変条件が捉える範囲では検出されない」ことを意味する(docs/AGENT_PROTOCOL.md 11. 規則5)。有効化(`approved`)・既知事項への追加・仕様変更は、この報告からは自動で起きない(人間の判断が要る)。
 
-不変条件を追加する場合は `scripts/playtest/invariants/i*.ts` を1件追加し、`index.ts` の一覧に加える。`status` は draft のまま追加してよいが、`approved` にする操作(=STEP の完了条件に入れる)は人間承認事項(docs/PLAYTEST_LOOP_PROPOSAL.md 4.5)。
+不変条件を追加する場合は `scripts/playtest/invariants/i*.ts` を1件追加し、`index.ts` の一覧に加える。`status` は draft のまま追加してよいが、`approved` にする操作(=STEP の完了条件に入れる)は人間承認事項(docs/AGENT_PROTOCOL.md 11.)。
+
+## reports/(探索の集約報告の保管)
+
+`scripts/playtest/reports/` は追跡対象(`out/` と異なり `.gitignore` されない)。探索モードの集約報告(`report.md`・`report.json`)のうち、検証材料として保持すると人間が判断したものをコピーして置く。ここに置いた候補事象は仕分け(直す/受容/持ち越す)待ちであり、既知事項・仕様への登録を意味しない。
 
 ## typecheck
 

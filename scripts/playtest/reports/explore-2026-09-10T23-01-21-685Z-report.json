@@ -1,0 +1,577 @@
+{
+  "inputs": [
+    {
+      "path": "/Users/midoriko/Desktop/sgogi-coach/scripts/playtest/out/explore-2026-09-10T23-01-21-685Z/game-01.jsonl",
+      "kifuId": "explore-2026-09-10T23:01:21.685Z-01-S1",
+      "gitHead": "37174b9e86baf30f5d016e3cc30e0b948140b7fb"
+    },
+    {
+      "path": "/Users/midoriko/Desktop/sgogi-coach/scripts/playtest/out/explore-2026-09-10T23-01-21-685Z/game-02.jsonl",
+      "kifuId": "explore-2026-09-10T23:01:21.685Z-02-S1",
+      "gitHead": "37174b9e86baf30f5d016e3cc30e0b948140b7fb"
+    },
+    {
+      "path": "/Users/midoriko/Desktop/sgogi-coach/scripts/playtest/out/explore-2026-09-10T23-01-21-685Z/game-03.jsonl",
+      "kifuId": "explore-2026-09-10T23:01:21.685Z-03-S2",
+      "gitHead": "37174b9e86baf30f5d016e3cc30e0b948140b7fb"
+    },
+    {
+      "path": "/Users/midoriko/Desktop/sgogi-coach/scripts/playtest/out/explore-2026-09-10T23-01-21-685Z/game-04.jsonl",
+      "kifuId": "explore-2026-09-10T23:01:21.685Z-04-S2",
+      "gitHead": "37174b9e86baf30f5d016e3cc30e0b948140b7fb"
+    },
+    {
+      "path": "/Users/midoriko/Desktop/sgogi-coach/scripts/playtest/out/explore-2026-09-10T23-01-21-685Z/game-05.jsonl",
+      "kifuId": "explore-2026-09-10T23:01:21.685Z-05-S3",
+      "gitHead": "37174b9e86baf30f5d016e3cc30e0b948140b7fb"
+    },
+    {
+      "path": "/Users/midoriko/Desktop/sgogi-coach/scripts/playtest/out/explore-2026-09-10T23-01-21-685Z/game-06.jsonl",
+      "kifuId": "explore-2026-09-10T23:01:21.685Z-06-S3",
+      "gitHead": "37174b9e86baf30f5d016e3cc30e0b948140b7fb"
+    },
+    {
+      "path": "/Users/midoriko/Desktop/sgogi-coach/scripts/playtest/out/explore-2026-09-10T23-01-21-685Z/game-07.jsonl",
+      "kifuId": "explore-2026-09-10T23:01:21.685Z-07-E",
+      "gitHead": "433b0060215c57c88785ab0c7a42447ae7471639"
+    },
+    {
+      "path": "/Users/midoriko/Desktop/sgogi-coach/scripts/playtest/out/explore-2026-09-10T23-01-21-685Z/game-08.jsonl",
+      "kifuId": "explore-2026-09-10T23:01:21.685Z-08-E",
+      "gitHead": "433b0060215c57c88785ab0c7a42447ae7471639"
+    },
+    {
+      "path": "/Users/midoriko/Desktop/sgogi-coach/scripts/playtest/out/explore-2026-09-10T23-01-21-685Z/game-09.jsonl",
+      "kifuId": "explore-2026-09-10T23:01:21.685Z-09-R",
+      "gitHead": "433b0060215c57c88785ab0c7a42447ae7471639"
+    },
+    {
+      "path": "/Users/midoriko/Desktop/sgogi-coach/scripts/playtest/out/explore-2026-09-10T23-01-21-685Z/game-10.jsonl",
+      "kifuId": "explore-2026-09-10T23:01:21.685Z-10-R",
+      "gitHead": "433b0060215c57c88785ab0c7a42447ae7471639"
+    }
+  ],
+  "invariants": [
+    {
+      "id": "I-1",
+      "type": "沈黙",
+      "status": "draft"
+    },
+    {
+      "id": "I-2",
+      "type": "矛盾",
+      "status": "draft"
+    },
+    {
+      "id": "I-3",
+      "type": "矛盾",
+      "status": "draft"
+    },
+    {
+      "id": "I-4",
+      "type": "矛盾",
+      "status": "draft"
+    },
+    {
+      "id": "I-5",
+      "type": "沈黙",
+      "status": "draft"
+    }
+  ],
+  "findings": [
+    {
+      "invariantId": "I-1",
+      "kifuId": "explore-2026-09-10T23:01:21.685Z-01-S1",
+      "ply": 20,
+      "phase": "ready",
+      "condition": "excluded_by_reference_evaluation",
+      "detail": "候補手が全件除外(notReadyReason: excluded_by_reference_evaluation)されているが、道のりは 2 件表示されたままです。除外を伝えるメッセージはありません。",
+      "sfen": "l2gk1snl/1r1s3b1/p2pppgp1/2p3p1p/1p1n3P1/2P3P2/PPSPPPK1P/1B4S1R/LN1G1G1NL b - 21",
+      "senteMove": "2h1h",
+      "goteMove": "7c6e"
+    },
+    {
+      "invariantId": "I-1",
+      "kifuId": "explore-2026-09-10T23:01:21.685Z-01-S1",
+      "ply": 22,
+      "phase": "ready",
+      "condition": "excluded_by_reference_evaluation",
+      "detail": "候補手が全件除外(notReadyReason: excluded_by_reference_evaluation)されているが、道のりは 1 件表示されたままです。除外を伝えるメッセージはありません。",
+      "sfen": "l2gk1snl/1r1s3b1/p2pppgp1/2p3p1p/1p5P1/2P3P2/PPSPnP2P/1B4SKR/LN1G1G1NL b p 23",
+      "senteMove": "3g2h",
+      "goteMove": "6e5g"
+    },
+    {
+      "invariantId": "I-1",
+      "kifuId": "explore-2026-09-10T23:01:21.685Z-01-S1",
+      "ply": 24,
+      "phase": "ready",
+      "condition": "excluded_by_reference_evaluation",
+      "detail": "候補手が全件除外(notReadyReason: excluded_by_reference_evaluation)されているが、道のりは 2 件表示されたままです。除外を伝えるメッセージはありません。",
+      "sfen": "l2gk1snl/1r1s3b1/p2pppgp1/2p3p1p/1p5P1/2P3P2/PPSP1P2P/1B2G1SKR/LN3+n1NL b gp 25",
+      "senteMove": "6i5h",
+      "goteMove": "5g4i+"
+    },
+    {
+      "invariantId": "I-1",
+      "kifuId": "explore-2026-09-10T23:01:21.685Z-01-S1",
+      "ply": 26,
+      "phase": "ready",
+      "condition": "excluded_by_reference_evaluation",
+      "detail": "候補手が全件除外(notReadyReason: excluded_by_reference_evaluation)されているが、道のりは 1 件表示されたままです。除外を伝えるメッセージはありません。",
+      "sfen": "l2gk1snl/1r1s3b1/p2pppgp1/2p3p1p/1p5P1/2P3P2/PPSP1P2P/1B3+nSKR/LN5NL b 2gp 27",
+      "senteMove": "5h4h",
+      "goteMove": "4i4h"
+    },
+    {
+      "invariantId": "I-1",
+      "kifuId": "explore-2026-09-10T23:01:21.685Z-01-S1",
+      "ply": 32,
+      "phase": "ready",
+      "condition": "excluded_by_reference_evaluation",
+      "detail": "候補手が全件除外(notReadyReason: excluded_by_reference_evaluation)されているが、道のりは 1 件表示されたままです。除外を伝えるメッセージはありません。",
+      "sfen": "l2gk1snl/1r1s3b1/p2pppgp1/2p3p1p/1p5P1/2P3P1P/PPSP1PNK1/1g3+nS1R/L7L b bgnp 33",
+      "senteMove": "2h2g",
+      "goteMove": "8i8h"
+    },
+    {
+      "invariantId": "I-2",
+      "kifuId": "explore-2026-09-10T23:01:21.685Z-01-S1",
+      "ply": 22,
+      "phase": "ready",
+      "condition": "played_candidate:not_ready",
+      "detail": "指し手 3g2h について「直前に表示していた候補手の一つです」と述べていますが、直前のready行(ply 20)の候補手状態は \"not_ready\" で、この手を含んでいませんでした。",
+      "sfen": "l2gk1snl/1r1s3b1/p2pppgp1/2p3p1p/1p5P1/2P3P2/PPSPnP2P/1B4SKR/LN1G1G1NL b p 23",
+      "senteMove": "3g2h",
+      "goteMove": "6e5g"
+    },
+    {
+      "invariantId": "I-2",
+      "kifuId": "explore-2026-09-10T23:01:21.685Z-01-S1",
+      "ply": 26,
+      "phase": "ready",
+      "condition": "played_candidate:not_ready",
+      "detail": "指し手 5h4h について「直前に表示していた候補手の一つです」と述べていますが、直前のready行(ply 24)の候補手状態は \"not_ready\" で、この手を含んでいませんでした。",
+      "sfen": "l2gk1snl/1r1s3b1/p2pppgp1/2p3p1p/1p5P1/2P3P2/PPSP1P2P/1B3+nSKR/LN5NL b 2gp 27",
+      "senteMove": "5h4h",
+      "goteMove": "4i4h"
+    },
+    {
+      "invariantId": "I-2",
+      "kifuId": "explore-2026-09-10T23:01:21.685Z-01-S1",
+      "ply": 28,
+      "phase": "ready",
+      "condition": "played_candidate:not_ready",
+      "detail": "指し手 2i3g について「直前に表示していた候補手の一つです」と述べていますが、直前のready行(ply 26)の候補手状態は \"not_ready\" で、この手を含んでいませんでした。",
+      "sfen": "l2gk1snl/1r1s3b1/p2pppgp1/2p3p1p/1p5P1/2P3P2/PPSP1PN1P/1Bg2+nSKR/LN6L b gp 29",
+      "senteMove": "2i3g",
+      "goteMove": "G*7h"
+    },
+    {
+      "invariantId": "I-2",
+      "kifuId": "explore-2026-09-10T23:01:21.685Z-01-S1",
+      "ply": 34,
+      "phase": "ready",
+      "condition": "played_candidate:not_ready",
+      "detail": "指し手 2g2h について「直前に表示していた候補手の一つです」と述べていますが、直前のready行(ply 32)の候補手状態は \"not_ready\" で、この手を含んでいませんでした。",
+      "sfen": "l2gk1snl/1r1s3b1/p2pppgp1/2p3p1p/1p5P1/2P3P1P/PPSP1PN2/1g4+nKR/L7L b bgsnp 35",
+      "senteMove": "2g2h",
+      "goteMove": "4h3h"
+    },
+    {
+      "invariantId": "I-1",
+      "kifuId": "explore-2026-09-10T23:01:21.685Z-02-S1",
+      "ply": 36,
+      "phase": "ready",
+      "condition": "excluded_by_reference_evaluation",
+      "detail": "候補手が全件除外(notReadyReason: excluded_by_reference_evaluation)されているが、道のりは 3 件表示されたままです。除外を伝えるメッセージはありません。",
+      "sfen": "ln2k2n1/2s1r2sl/ppp2pg1p/4p1pp1/9/2g1P4/PPB1GPP1P/3RGK3/LNS3SNL b 2Pb2p 37",
+      "senteMove": "5i4h",
+      "goteMove": "8e7f"
+    },
+    {
+      "invariantId": "I-1",
+      "kifuId": "explore-2026-09-10T23:01:21.685Z-02-S1",
+      "ply": 38,
+      "phase": "ready",
+      "condition": "excluded_by_reference_evaluation",
+      "detail": "候補手が全件除外(notReadyReason: excluded_by_reference_evaluation)されているが、道のりは 3 件表示されたままです。除外を伝えるメッセージはありません。",
+      "sfen": "ln2k2n1/2s1r2sl/ppp2pg1p/4p1pp1/9/4P4/PPg1GPP1P/3RG1K2/LNS3SNL b 2P2b2p 39",
+      "senteMove": "4h3h",
+      "goteMove": "7f7g"
+    },
+    {
+      "invariantId": "I-1",
+      "kifuId": "explore-2026-09-10T23:01:21.685Z-02-S1",
+      "ply": 40,
+      "phase": "ready",
+      "condition": "excluded_by_reference_evaluation",
+      "detail": "候補手が全件除外(notReadyReason: excluded_by_reference_evaluation)されているが、道のりは 2 件表示されたままです。除外を伝えるメッセージはありません。",
+      "sfen": "ln2k2n1/2s1r2sl/ppp2pg1p/4p1pp1/9/4P4/PP2GPP1P/3gG2K1/LNS3SNL b 2Pr2b2p 41",
+      "senteMove": "3h2h",
+      "goteMove": "7g6h"
+    },
+    {
+      "invariantId": "I-1",
+      "kifuId": "explore-2026-09-10T23:01:21.685Z-02-S1",
+      "ply": 42,
+      "phase": "ready",
+      "condition": "excluded_by_reference_evaluation",
+      "detail": "候補手が全件除外(notReadyReason: excluded_by_reference_evaluation)されているが、道のりは 1 件表示されたままです。除外を伝えるメッセージはありません。",
+      "sfen": "ln2k2n1/2s1r2sl/ppp2pg1p/4p1pp1/9/4P4/PP2GPP1P/4G1SK1/LNg4NL b 2Pr2bs2p 43",
+      "senteMove": "3i3h",
+      "goteMove": "6h7i"
+    },
+    {
+      "invariantId": "I-1",
+      "kifuId": "explore-2026-09-10T23:01:21.685Z-02-S1",
+      "ply": 46,
+      "phase": "ready",
+      "condition": "excluded_by_reference_evaluation",
+      "detail": "候補手が全件除外(notReadyReason: excluded_by_reference_evaluation)されているが、道のりは 1 件表示されたままです。除外を伝えるメッセージはありません。",
+      "sfen": "ln2k2n1/2s1r2sl/ppp2pg1p/4p1pp1/9/4P4/PP3PP1P/3GG1SK1/g6NL b 2Pr2bsnl2p 47",
+      "senteMove": "6g6h",
+      "goteMove": "8i9i"
+    },
+    {
+      "invariantId": "I-1",
+      "kifuId": "explore-2026-09-10T23:01:21.685Z-02-S1",
+      "ply": 48,
+      "phase": "ready",
+      "condition": "excluded_by_reference_evaluation",
+      "detail": "候補手が全件除外(notReadyReason: excluded_by_reference_evaluation)されているが、道のりは 1 件表示されたままです。除外を伝えるメッセージはありません。",
+      "sfen": "ln2k2n1/2s1r2sl/ppp2pg1p/4p1pp1/9/3bP4/PP3PP1P/4G1SK1/g2G3NL b 2Prbsnl2p 49",
+      "senteMove": "6h6i",
+      "goteMove": "B*6f"
+    },
+    {
+      "invariantId": "I-2",
+      "kifuId": "explore-2026-09-10T23:01:21.685Z-02-S1",
+      "ply": 38,
+      "phase": "ready",
+      "condition": "played_candidate:not_ready",
+      "detail": "指し手 4h3h について「直前に表示していた候補手の一つです」と述べていますが、直前のready行(ply 36)の候補手状態は \"not_ready\" で、この手を含んでいませんでした。",
+      "sfen": "ln2k2n1/2s1r2sl/ppp2pg1p/4p1pp1/9/4P4/PPg1GPP1P/3RG1K2/LNS3SNL b 2P2b2p 39",
+      "senteMove": "4h3h",
+      "goteMove": "7f7g"
+    },
+    {
+      "invariantId": "I-2",
+      "kifuId": "explore-2026-09-10T23:01:21.685Z-02-S1",
+      "ply": 40,
+      "phase": "ready",
+      "condition": "played_candidate:not_ready",
+      "detail": "指し手 3h2h について「直前に表示していた候補手の一つです」と述べていますが、直前のready行(ply 38)の候補手状態は \"not_ready\" で、この手を含んでいませんでした。",
+      "sfen": "ln2k2n1/2s1r2sl/ppp2pg1p/4p1pp1/9/4P4/PP2GPP1P/3gG2K1/LNS3SNL b 2Pr2b2p 41",
+      "senteMove": "3h2h",
+      "goteMove": "7g6h"
+    },
+    {
+      "invariantId": "I-2",
+      "kifuId": "explore-2026-09-10T23:01:21.685Z-02-S1",
+      "ply": 42,
+      "phase": "ready",
+      "condition": "played_candidate:not_ready",
+      "detail": "指し手 3i3h について「直前に表示していた候補手の一つです」と述べていますが、直前のready行(ply 40)の候補手状態は \"not_ready\" で、この手を含んでいませんでした。",
+      "sfen": "ln2k2n1/2s1r2sl/ppp2pg1p/4p1pp1/9/4P4/PP2GPP1P/4G1SK1/LNg4NL b 2Pr2bs2p 43",
+      "senteMove": "3i3h",
+      "goteMove": "6h7i"
+    },
+    {
+      "invariantId": "I-2",
+      "kifuId": "explore-2026-09-10T23:01:21.685Z-02-S1",
+      "ply": 44,
+      "phase": "ready",
+      "condition": "played_candidate:not_ready",
+      "detail": "指し手 5g6g について「直前に表示していた候補手の一つです」と述べていますが、直前のready行(ply 42)の候補手状態は \"not_ready\" で、この手を含んでいませんでした。",
+      "sfen": "ln2k2n1/2s1r2sl/ppp2pg1p/4p1pp1/9/4P4/PP1G1PP1P/4G1SK1/Lg5NL b 2Pr2bsn2p 45",
+      "senteMove": "5g6g",
+      "goteMove": "7i8i"
+    },
+    {
+      "invariantId": "I-2",
+      "kifuId": "explore-2026-09-10T23:01:21.685Z-02-S1",
+      "ply": 48,
+      "phase": "ready",
+      "condition": "played_candidate:not_ready",
+      "detail": "指し手 6h6i について「直前に表示していた候補手の一つです」と述べていますが、直前のready行(ply 46)の候補手状態は \"not_ready\" で、この手を含んでいませんでした。",
+      "sfen": "ln2k2n1/2s1r2sl/ppp2pg1p/4p1pp1/9/3bP4/PP3PP1P/4G1SK1/g2G3NL b 2Prbsnl2p 49",
+      "senteMove": "6h6i",
+      "goteMove": "B*6f"
+    },
+    {
+      "invariantId": "I-2",
+      "kifuId": "explore-2026-09-10T23:01:21.685Z-02-S1",
+      "ply": 50,
+      "phase": "ready",
+      "condition": "played_candidate:not_ready",
+      "detail": "指し手 6i5i について「直前に表示していた候補手の一つです」と述べていますが、直前のready行(ply 48)の候補手状態は \"not_ready\" で、この手を含んでいませんでした。",
+      "sfen": "ln2k2n1/2s1r2sl/ppp2pg1p/4p1pp1/9/3bP4/PP3PP1P/4G1SK1/g3G1sNL b 2Prbnl2p 51",
+      "senteMove": "6i5i",
+      "goteMove": "S*3i"
+    },
+    {
+      "invariantId": "I-1",
+      "kifuId": "explore-2026-09-10T23:01:21.685Z-05-S3",
+      "ply": 20,
+      "phase": "ready",
+      "condition": "excluded_by_reference_evaluation",
+      "detail": "候補手が全件除外(notReadyReason: excluded_by_reference_evaluation)されているが、道のりは 1 件表示されたままです。除外を伝えるメッセージはありません。",
+      "sfen": "lnsg1g1nl/2r1k2b1/pp1ppp1pp/2p3p2/9/2PP5/PP2P+sPPP/1B1R2SK1/LNS2G1NL b gp 21",
+      "senteMove": "5h4g",
+      "goteMove": "4f4g+"
+    },
+    {
+      "invariantId": "I-1",
+      "kifuId": "explore-2026-09-10T23:01:21.685Z-05-S3",
+      "ply": 22,
+      "phase": "ready",
+      "condition": "excluded_by_reference_evaluation",
+      "detail": "候補手が全件除外(notReadyReason: excluded_by_reference_evaluation)されているが、道のりは 1 件表示されたままです。除外を伝えるメッセージはありません。",
+      "sfen": "lnsg1g1nl/2r1k2b1/pp1ppp1pp/2p3p2/9/2PP2P2/PP2+s2PP/1B1R2SK1/LNS2G1NL b g2p 23",
+      "senteMove": "3g3f",
+      "goteMove": "4g5g"
+    },
+    {
+      "invariantId": "I-1",
+      "kifuId": "explore-2026-09-10T23:01:21.685Z-05-S3",
+      "ply": 54,
+      "phase": "ready",
+      "condition": "excluded_by_reference_evaluation",
+      "detail": "候補手が全件除外(notReadyReason: excluded_by_reference_evaluation)されているが、道のりは 1 件表示されたままです。除外を伝えるメッセージはありません。",
+      "sfen": "l1sg1g1nl/r3k4/1pnppp1pp/p1p3p2/9/2Pb2PP1/1P2+b1NKP/g5S2/1g2S3L b RSNl4p 55",
+      "senteMove": "2h2g",
+      "goteMove": "7b9b"
+    },
+    {
+      "invariantId": "I-2",
+      "kifuId": "explore-2026-09-10T23:01:21.685Z-05-S3",
+      "ply": 24,
+      "phase": "ready",
+      "condition": "played_candidate:not_ready",
+      "detail": "指し手 2i3g について「直前に表示していた候補手の一つです」と述べていますが、直前のready行(ply 22)の候補手状態は \"not_ready\" で、この手を含んでいませんでした。",
+      "sfen": "lnsg1g1nl/2r1k2b1/pp1ppp1pp/2p3p2/9/2PP2P2/PP4NPP/1B1+s2SK1/LNS2G2L b rg2p 25",
+      "senteMove": "2i3g",
+      "goteMove": "5g6h"
+    },
+    {
+      "invariantId": "I-2",
+      "kifuId": "explore-2026-09-10T23:01:21.685Z-05-S3",
+      "ply": 56,
+      "phase": "ready",
+      "condition": "played_candidate:not_ready",
+      "detail": "指し手 2g2h について「直前に表示していた候補手の一つです」と述べていますが、直前のready行(ply 54)の候補手状態は \"not_ready\" で、この手を含んでいませんでした。",
+      "sfen": "l1sg1g1nl/r3k4/1pnppp1pp/p1p1l1p2/9/2Pb2PP1/1P2+b1N1P/g5SK1/1g2S3L b RSN4p 57",
+      "senteMove": "2g2h",
+      "goteMove": "L*5d"
+    },
+    {
+      "invariantId": "I-1",
+      "kifuId": "explore-2026-09-10T23:01:21.685Z-06-S3",
+      "ply": 18,
+      "phase": "ready",
+      "condition": "excluded_by_reference_evaluation",
+      "detail": "候補手が全件除外(notReadyReason: excluded_by_reference_evaluation)されているが、道のりは 2 件表示されたままです。除外を伝えるメッセージはありません。",
+      "sfen": "ln1gk1snl/1r1s3b1/p1ppgp1p1/4p1p1p/9/1pPP1P3/PP2P1PPP/1B1RG1SK1/LNS2G1NL b - 19",
+      "senteMove": "4g4f",
+      "goteMove": "8e8f"
+    },
+    {
+      "invariantId": "I-1",
+      "kifuId": "explore-2026-09-10T23:01:21.685Z-06-S3",
+      "ply": 22,
+      "phase": "ready",
+      "condition": "excluded_by_reference_evaluation",
+      "detail": "候補手が全件除外(notReadyReason: excluded_by_reference_evaluation)されているが、道のりは 1 件表示されたままです。除外を伝えるメッセージはありません。",
+      "sfen": "ln1gk1snl/1r1s3b1/p1ppgp1p1/4p1p1p/9/2PP1PP2/P3PG1PP/1+p1R2SK1/LNS2G1NL b bp 23",
+      "senteMove": "3g3f",
+      "goteMove": "8g8h"
+    },
+    {
+      "invariantId": "I-1",
+      "kifuId": "explore-2026-09-10T23:01:21.685Z-06-S3",
+      "ply": 24,
+      "phase": "ready",
+      "condition": "excluded_by_reference_evaluation",
+      "detail": "候補手が全件除外(notReadyReason: excluded_by_reference_evaluation)されているが、道のりは 2 件表示されたままです。除外を伝えるメッセージはありません。",
+      "sfen": "ln1gk1snl/1r1s3b1/p1ppgp1p1/4p1p1p/9/2PP1PP2/P3PGNPP/3R2SK1/LN+p2G2L b bsp 25",
+      "senteMove": "2i3g",
+      "goteMove": "8h7i"
+    },
+    {
+      "invariantId": "I-1",
+      "kifuId": "explore-2026-09-10T23:01:21.685Z-06-S3",
+      "ply": 28,
+      "phase": "ready",
+      "condition": "excluded_by_reference_evaluation",
+      "detail": "候補手が全件除外(notReadyReason: excluded_by_reference_evaluation)されているが、道のりは 1 件表示されたままです。除外を伝えるメッセージはありません。",
+      "sfen": "ln1gk1snl/3s3b1/p1ppgp1p1/4p1p1p/9/2PP1PPP1/P1b1PGNSP/3R3K1/L+r+p2G2L b snp 29",
+      "senteMove": "3h2g",
+      "goteMove": "B*7g"
+    },
+    {
+      "invariantId": "I-2",
+      "kifuId": "explore-2026-09-10T23:01:21.685Z-06-S3",
+      "ply": 20,
+      "phase": "ready",
+      "condition": "played_candidate:not_ready",
+      "detail": "指し手 5h4g について「直前に表示していた候補手の一つです」と述べていますが、直前のready行(ply 18)の候補手状態は \"not_ready\" で、この手を含んでいませんでした。",
+      "sfen": "ln1gk1snl/1r1s3b1/p1ppgp1p1/4p1p1p/9/2PP1P3/P+p2PGPPP/1B1R2SK1/LNS2G1NL b p 21",
+      "senteMove": "5h4g",
+      "goteMove": "8f8g+"
+    },
+    {
+      "invariantId": "I-1",
+      "kifuId": "explore-2026-09-10T23:01:21.685Z-10-R",
+      "ply": 30,
+      "phase": "ready",
+      "condition": "excluded_by_reference_evaluation",
+      "detail": "候補手が全件除外(notReadyReason: excluded_by_reference_evaluation)されているが、道のりは 3 件表示されたままです。除外を伝えるメッセージはありません。",
+      "sfen": "l2gkg1nl/6rb1/ppnsps1pp/2pp1pp2/9/2PPP1P2/PPBGSPNPP/L7R/1NS1KG2L b - 31",
+      "senteMove": "5h1h",
+      "goteMove": "5b3b"
+    },
+    {
+      "invariantId": "I-1",
+      "kifuId": "explore-2026-09-10T23:01:21.685Z-10-R",
+      "ply": 58,
+      "phase": "ready",
+      "condition": "excluded_by_reference_evaluation",
+      "detail": "候補手が全件除外(notReadyReason: excluded_by_reference_evaluation)されているが、道のりは 3 件表示されたままです。除外を伝えるメッセージはありません。",
+      "sfen": "l3kg1nl/3g3b1/1p1sp3p/3p1p1p1/p1p6/4PP3/PPnG4P/L1RKG2+p1/1NS3+r1L b Sbsn4p 59",
+      "senteMove": "4g4f",
+      "goteMove": "6e7g"
+    },
+    {
+      "invariantId": "I-1",
+      "kifuId": "explore-2026-09-10T23:01:21.685Z-10-R",
+      "ply": 60,
+      "phase": "ready",
+      "condition": "excluded_by_reference_evaluation",
+      "detail": "候補手が全件除外(notReadyReason: excluded_by_reference_evaluation)されているが、道のりは 3 件表示されたままです。除外を伝えるメッセージはありません。",
+      "sfen": "l3kg1nl/3g3b1/1p1sp3p/3p1p1p1/p1p6/4PP3/PPKG4P/L1R1G2+p1/1NSs2+r1L b SNbn4p 61",
+      "senteMove": "6h7g",
+      "goteMove": "S*6i"
+    }
+  ],
+  "groups": [
+    {
+      "invariantId": "I-1",
+      "condition": "excluded_by_reference_evaluation",
+      "count": 21,
+      "plies": [
+        "explore-2026-09-10T23:01:21.685Z-01-S1#20",
+        "explore-2026-09-10T23:01:21.685Z-01-S1#22",
+        "explore-2026-09-10T23:01:21.685Z-01-S1#24",
+        "explore-2026-09-10T23:01:21.685Z-01-S1#26",
+        "explore-2026-09-10T23:01:21.685Z-01-S1#32",
+        "explore-2026-09-10T23:01:21.685Z-02-S1#36",
+        "explore-2026-09-10T23:01:21.685Z-02-S1#38",
+        "explore-2026-09-10T23:01:21.685Z-02-S1#40",
+        "explore-2026-09-10T23:01:21.685Z-02-S1#42",
+        "explore-2026-09-10T23:01:21.685Z-02-S1#46",
+        "explore-2026-09-10T23:01:21.685Z-02-S1#48",
+        "explore-2026-09-10T23:01:21.685Z-05-S3#20",
+        "explore-2026-09-10T23:01:21.685Z-05-S3#22",
+        "explore-2026-09-10T23:01:21.685Z-05-S3#54",
+        "explore-2026-09-10T23:01:21.685Z-06-S3#18",
+        "explore-2026-09-10T23:01:21.685Z-06-S3#22",
+        "explore-2026-09-10T23:01:21.685Z-06-S3#24",
+        "explore-2026-09-10T23:01:21.685Z-06-S3#28",
+        "explore-2026-09-10T23:01:21.685Z-10-R#30",
+        "explore-2026-09-10T23:01:21.685Z-10-R#58",
+        "explore-2026-09-10T23:01:21.685Z-10-R#60"
+      ],
+      "examples": [
+        {
+          "invariantId": "I-1",
+          "kifuId": "explore-2026-09-10T23:01:21.685Z-01-S1",
+          "ply": 20,
+          "phase": "ready",
+          "condition": "excluded_by_reference_evaluation",
+          "detail": "候補手が全件除外(notReadyReason: excluded_by_reference_evaluation)されているが、道のりは 2 件表示されたままです。除外を伝えるメッセージはありません。",
+          "sfen": "l2gk1snl/1r1s3b1/p2pppgp1/2p3p1p/1p1n3P1/2P3P2/PPSPPPK1P/1B4S1R/LN1G1G1NL b - 21",
+          "senteMove": "2h1h",
+          "goteMove": "7c6e"
+        },
+        {
+          "invariantId": "I-1",
+          "kifuId": "explore-2026-09-10T23:01:21.685Z-01-S1",
+          "ply": 22,
+          "phase": "ready",
+          "condition": "excluded_by_reference_evaluation",
+          "detail": "候補手が全件除外(notReadyReason: excluded_by_reference_evaluation)されているが、道のりは 1 件表示されたままです。除外を伝えるメッセージはありません。",
+          "sfen": "l2gk1snl/1r1s3b1/p2pppgp1/2p3p1p/1p5P1/2P3P2/PPSPnP2P/1B4SKR/LN1G1G1NL b p 23",
+          "senteMove": "3g2h",
+          "goteMove": "6e5g"
+        },
+        {
+          "invariantId": "I-1",
+          "kifuId": "explore-2026-09-10T23:01:21.685Z-01-S1",
+          "ply": 24,
+          "phase": "ready",
+          "condition": "excluded_by_reference_evaluation",
+          "detail": "候補手が全件除外(notReadyReason: excluded_by_reference_evaluation)されているが、道のりは 2 件表示されたままです。除外を伝えるメッセージはありません。",
+          "sfen": "l2gk1snl/1r1s3b1/p2pppgp1/2p3p1p/1p5P1/2P3P2/PPSP1P2P/1B2G1SKR/LN3+n1NL b gp 25",
+          "senteMove": "6i5h",
+          "goteMove": "5g4i+"
+        }
+      ]
+    },
+    {
+      "invariantId": "I-2",
+      "condition": "played_candidate:not_ready",
+      "count": 13,
+      "plies": [
+        "explore-2026-09-10T23:01:21.685Z-01-S1#22",
+        "explore-2026-09-10T23:01:21.685Z-01-S1#26",
+        "explore-2026-09-10T23:01:21.685Z-01-S1#28",
+        "explore-2026-09-10T23:01:21.685Z-01-S1#34",
+        "explore-2026-09-10T23:01:21.685Z-02-S1#38",
+        "explore-2026-09-10T23:01:21.685Z-02-S1#40",
+        "explore-2026-09-10T23:01:21.685Z-02-S1#42",
+        "explore-2026-09-10T23:01:21.685Z-02-S1#44",
+        "explore-2026-09-10T23:01:21.685Z-02-S1#48",
+        "explore-2026-09-10T23:01:21.685Z-02-S1#50",
+        "explore-2026-09-10T23:01:21.685Z-05-S3#24",
+        "explore-2026-09-10T23:01:21.685Z-05-S3#56",
+        "explore-2026-09-10T23:01:21.685Z-06-S3#20"
+      ],
+      "examples": [
+        {
+          "invariantId": "I-2",
+          "kifuId": "explore-2026-09-10T23:01:21.685Z-01-S1",
+          "ply": 22,
+          "phase": "ready",
+          "condition": "played_candidate:not_ready",
+          "detail": "指し手 3g2h について「直前に表示していた候補手の一つです」と述べていますが、直前のready行(ply 20)の候補手状態は \"not_ready\" で、この手を含んでいませんでした。",
+          "sfen": "l2gk1snl/1r1s3b1/p2pppgp1/2p3p1p/1p5P1/2P3P2/PPSPnP2P/1B4SKR/LN1G1G1NL b p 23",
+          "senteMove": "3g2h",
+          "goteMove": "6e5g"
+        },
+        {
+          "invariantId": "I-2",
+          "kifuId": "explore-2026-09-10T23:01:21.685Z-01-S1",
+          "ply": 26,
+          "phase": "ready",
+          "condition": "played_candidate:not_ready",
+          "detail": "指し手 5h4h について「直前に表示していた候補手の一つです」と述べていますが、直前のready行(ply 24)の候補手状態は \"not_ready\" で、この手を含んでいませんでした。",
+          "sfen": "l2gk1snl/1r1s3b1/p2pppgp1/2p3p1p/1p5P1/2P3P2/PPSP1P2P/1B3+nSKR/LN5NL b 2gp 27",
+          "senteMove": "5h4h",
+          "goteMove": "4i4h"
+        },
+        {
+          "invariantId": "I-2",
+          "kifuId": "explore-2026-09-10T23:01:21.685Z-01-S1",
+          "ply": 28,
+          "phase": "ready",
+          "condition": "played_candidate:not_ready",
+          "detail": "指し手 2i3g について「直前に表示していた候補手の一つです」と述べていますが、直前のready行(ply 26)の候補手状態は \"not_ready\" で、この手を含んでいませんでした。",
+          "sfen": "l2gk1snl/1r1s3b1/p2pppgp1/2p3p1p/1p5P1/2P3P2/PPSP1PN1P/1Bg2+nSKR/LN6L b gp 29",
+          "senteMove": "2i3g",
+          "goteMove": "G*7h"
+        }
+      ]
+    }
+  ]
+}
