@@ -26,7 +26,10 @@ export const i2PlayedCandidateMismatch: Invariant = {
   id: ID,
   title: "「直前に表示していた候補手の一つです」と述べるが、直前は表示していなかった",
   type: "矛盾",
-  status: "draft",
+  // STEP 5-1(H-3、2026-09-11人間承認): このファイル冒頭の「このファイル自体には
+  // approvedの値を一切書かない」(types.tsコメント)はT-2時点の記述であり、I-2は
+  // 2026-09-11の人間承認でapprovedになった(判定条件自体は変えていない、C-2)。
+  status: "approved",
   source: "docs/PLAYTEST_LOOP_PROPOSAL.md 付録A C-2、P-9",
   check(records: RecordLine[]): Finding[] {
     const readyRecords = records.filter((r) => r.phase === "ready");

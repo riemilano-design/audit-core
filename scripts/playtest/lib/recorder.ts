@@ -105,9 +105,14 @@ export function buildImmediateRecord(
   return { line, response };
 }
 
-/** ready行の組み立て結果(readyMsPerPlyの集計に使うelapsedMsも含む)。 */
+/** ready行の組み立て結果(readyMsPerPlyの集計に使うelapsedMsも含む)。
+ * STEP 5-1(B-3、人間承認済み。LP-2): cachedPlanを併せて返す。この行が表す局面で
+ * 実際にキャッシュされていた計画(バックグラウンド解析が未完了ならundefined)を、
+ * replay.ts/explore.tsがserver.tsのbackgroundPlanと同じ役割で
+ * safeComputeMoveOutcomeAfterMoveの新引数(displayedPlan)へ渡すためのもの。 */
 export interface ReadyRecordLineResult extends RecordLineResult {
   elapsedMs: number;
+  cachedPlan: CachedReachablePlan | undefined;
 }
 
 /**
@@ -149,7 +154,7 @@ export async function buildReadyRecord(
     elapsedMs,
     response,
   });
-  return { line, response, elapsedMs };
+  return { line, response, elapsedMs, cachedPlan };
 }
 
 /**

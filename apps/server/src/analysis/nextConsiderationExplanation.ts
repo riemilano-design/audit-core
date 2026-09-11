@@ -29,8 +29,20 @@ import { toJapaneseMoveSquares, toJapaneseSquare } from "../notation/japaneseSqu
 import type { NextConsiderationFact, NextConsiderationKind } from "./nextConsiderationDetector.js";
 import { exposeName } from "./nameExposure.js";
 
-/** 表示メッセージの種類。事実の種類に、表示上の注記(ordering_note)を加えたもの。 */
-export type NextConsiderationMessageKind = NextConsiderationKind | "ordering_note";
+/**
+ * 表示メッセージの種類。事実の種類に、表示上の注記(ordering_note)を加えたもの。
+ *
+ * "candidate_moves_excluded"(STEP 5-1、人間承認済み)は、検出器
+ * (nextConsiderationDetector.ts)が確定させる事実ではなく、配線層
+ * (api/stateResponse.ts)がcandidateMoveの除外結果(既にcandidateMoveReferenceFilter.ts
+ * が確定させたnotReadyReason)を読んで組み立てる表示メッセージ。ordering_noteと同じ
+ * 「表示メッセージの種類」の層に置き、検出器の「エンジン評価に一切触れない」契約
+ * (ファイル冒頭コメント)は変えない。
+ */
+export type NextConsiderationMessageKind =
+  | NextConsiderationKind
+  | "ordering_note"
+  | "candidate_moves_excluded";
 
 export interface NextConsiderationMessage {
   kind: NextConsiderationMessageKind;

@@ -15,6 +15,7 @@ import {
   isMoveError,
   reviewNoteSuffix,
   candidateMoveUsisOnBoard,
+  isCandidateMovesExcluded,
   groupCandidateExplanationsByReason,
   shouldShowNextConsiderations,
   shouldRetryPlanRefresh,
@@ -536,7 +537,14 @@ function renderRouteProgress(plan: ReachablePlanBody): void {
   } else if (progress.missingSquareLabels.length > 0) {
     const note = document.createElement("p");
     note.className = "route-note";
-    note.textContent = `これから作るマス: ${progress.missingSquareLabels.join("、")}(道のりは今の局面では計算できませんでした)`;
+    // STEP 5-1(A-4、人間承認済み。LP-1): 候補手が除外された結果routesが空のときは、
+    // 「道のりは今の局面では計算できませんでした」という括弧書きが事実に反する
+    // (道のりは計算できたが、候補手を表示していないだけ)。isCandidateMovesExcludedは
+    // A-1と同一条件をサーバーの確定値から読むだけの純粋関数で、web側で新しい判定は
+    // 持たない。既存文から括弧書きを外すだけで、新しい文は作らない。
+    note.textContent = isCandidateMovesExcluded(plan)
+      ? `これから作るマス: ${progress.missingSquareLabels.join("、")}`
+      : `これから作るマス: ${progress.missingSquareLabels.join("、")}(道のりは今の局面では計算できませんでした)`;
     section.appendChild(note);
   }
 

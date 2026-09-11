@@ -360,6 +360,23 @@ export function candidateMoveUsisOnBoard(
 }
 
 /**
+ * STEP 5-1(A-4、人間承認済み。LP-1): 候補手が安全確認の結果として全件除外された
+ * (excluded_by_reference_evaluation)かどうか。サーバー側(api/stateResponse.ts)の
+ * candidatesExcluded判定と同一条件で、判定をweb側で新設せず、既に確定した値
+ * (candidateMoveState / candidateMove.status / notReadyReason)を読むだけの
+ * DOM非依存の純粋関数。renderRouteProgressが道のり欄の括弧書きの出し分けに使う。
+ */
+export function isCandidateMovesExcluded(
+  plan: Pick<ReachablePlanBody, "candidateMoveState" | "candidateMove">,
+): boolean {
+  return (
+    plan.candidateMoveState === "ready" &&
+    plan.candidateMove?.status === "not_ready" &&
+    plan.candidateMove.notReadyReason === "excluded_by_reference_evaluation"
+  );
+}
+
+/**
  * Unit 3(情報構造の整理): 理由文が同一の候補手を1行にまとめる。
  *
  * Unit 1 の実測で、候補手3件のうち2件(７七→３三・７七→４四)の理由文が完全に同一で、

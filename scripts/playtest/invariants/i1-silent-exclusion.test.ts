@@ -84,6 +84,41 @@ describe("I-1 silent exclusion", () => {
     expect(findings[0]?.ply).toBe(16);
   });
 
+  it("発火する: routesが空でも、除外を伝えるメッセージ(candidate_moves_excluded)が無ければ発火する(STEP 5-1 C-1)", () => {
+    const record = makeRecord(16, {
+      candidateMoveState: "ready",
+      candidateMove: {
+        status: "not_ready",
+        notReadyReason: "excluded_by_reference_evaluation",
+        explanations: [],
+        sharedNotes: [],
+      },
+      routes: [],
+      nextConsiderations: [],
+    });
+
+    const findings = i1SilentExclusion.check([record]);
+
+    expect(findings).toHaveLength(1);
+    expect(findings[0]?.condition).toBe("excluded_by_reference_evaluation");
+  });
+
+  it("発火しない: 除外を伝えるメッセージがあり、routesも空なら発火しない(STEP 5-1 C-1)", () => {
+    const record = makeRecord(16, {
+      candidateMoveState: "ready",
+      candidateMove: {
+        status: "not_ready",
+        notReadyReason: "excluded_by_reference_evaluation",
+        explanations: [],
+        sharedNotes: [],
+      },
+      routes: [],
+      nextConsiderations: [{ kind: "candidate_moves_excluded", text: "候補手は、指した後の局面を確かめた結果、今は表示していません。" }],
+    });
+
+    expect(i1SilentExclusion.check([record])).toEqual([]);
+  });
+
   it("発火しない: 候補手がreadyのとき", () => {
     const record = makeRecord(14, {
       candidateMoveState: "ready",

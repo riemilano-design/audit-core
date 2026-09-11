@@ -17,7 +17,11 @@ import type { StateResponseBodyWithPlan } from "../../../apps/server/src/api/sta
 export type InvariantType = "沈黙" | "矛盾" | "断定" | "未説明用語" | "盤との不一致" | "陳腐化";
 
 /** 4.5の概念の境界: draft(AIが自由に追加してよい) / approved(人間だけが有効化する)。
- * 本STEPで作る5件はすべてdraft(コードにapprovedの値は書かない)。 */
+ * 本STEP(T-2)で作る5件はすべてdraft(コードにapprovedの値は書かない)。
+ * 【STEP 5-1(2026-09-11人間承認)】I-1・I-2はSTEP 5-1でapprovedになった
+ * (i1-silent-exclusion.ts・i2-played-candidate-mismatch.ts参照)。approvedにする
+ * 操作自体が人間承認事項であることは変わらない(このファイルの判定ロジックには
+ * 影響しない)。 */
 export type InvariantStatus = "draft" | "approved";
 
 /** T-1のJSONLの"kind":"record"行(1行分)。replay.ts / scripts/playtest/README.md の

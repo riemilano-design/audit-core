@@ -280,6 +280,11 @@ async function handleMoveInternal(req: IncomingMessage, res: ServerResponse): Pr
     {},
     selectedTargetShapeId,
     planChangeReason,
+    // STEP 5-1(B-2、人間承認済み。LP-2): backgroundPlanはこの時点(playHumanMove/
+    // playOpponentMoveの直後)ではstateBeforeMoveのまま(runBackgroundPlanAnalysis完了時
+    // にのみ書き換わる)。「実際に表示していた計画」としてそのまま渡す
+    // (backgroundPlan未設定ならnull=表示していた計画が無い)。
+    backgroundPlan ?? null,
   );
 
   // ⑤⑥⑦(エンジン不要)までを含めた状態を即座に返す。⑧(MultiPV参考評価)は

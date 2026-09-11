@@ -244,6 +244,10 @@ async function runOneGame(params: {
         {},
         undefined,
         planChangeReason,
+        // STEP 5-1(B-3、人間承認済み。LP-2): server.tsと同じ呼び出し順を保つため、
+        // stateBeforeMoveの局面のready行(latestReady)で実際にキャッシュされていた
+        // 計画を渡す。
+        latestReady.cachedPlan ?? null,
       );
 
       const ply = state.moveHistory.length;

@@ -4,6 +4,7 @@ import {
   getPlanChangeReasonMessage,
   reviewNoteSuffix,
   candidateMoveUsisOnBoard,
+  isCandidateMovesExcluded,
   groupCandidateExplanationsByReason,
   shouldRetryPlanRefresh,
   shouldShowNextConsiderations,
@@ -221,6 +222,61 @@ describe("candidateMoveUsisOnBoard", () => {
         },
       }),
     ).toEqual([]);
+  });
+});
+
+// STEP 5-1(A-4、人間承認済み。LP-1): A-1と同一条件のDOM非依存の純粋関数。
+describe("isCandidateMovesExcluded", () => {
+  it("candidateMoveStateがreadyかつnot_ready・excluded_by_reference_evaluationのときだけtrue", () => {
+    expect(
+      isCandidateMovesExcluded({
+        candidateMoveState: "ready",
+        candidateMove: {
+          status: "not_ready",
+          notReadyReason: "excluded_by_reference_evaluation",
+          explanations: [],
+          sharedNotes: [],
+        },
+      }),
+    ).toBe(true);
+  });
+
+  it("candidateMoveStateがreadyでなければfalse", () => {
+    expect(
+      isCandidateMovesExcluded({
+        candidateMoveState: "pending",
+        candidateMove: undefined,
+      }),
+    ).toBe(false);
+    expect(
+      isCandidateMovesExcluded({
+        candidateMoveState: "unavailable",
+        candidateMove: undefined,
+      }),
+    ).toBe(false);
+  });
+
+  it("candidateMoveがreadyのときはfalse", () => {
+    expect(
+      isCandidateMovesExcluded({
+        candidateMoveState: "ready",
+        candidateMove: { status: "ready", notReadyReason: null, explanations: [], sharedNotes: [] },
+      }),
+    ).toBe(false);
+  });
+
+  it("除外以外のnotReadyReasonではfalse", () => {
+    expect(
+      isCandidateMovesExcluded({
+        candidateMoveState: "ready",
+        candidateMove: {
+          status: "not_ready",
+          notReadyReason: "engine_reference_unavailable",
+          explanations: [],
+          sharedNotes: [],
+        },
+      }),
+    ).toBe(false);
   });
 });
 

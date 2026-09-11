@@ -621,6 +621,106 @@ describe("buildStateResponseWithPlan", () => {
       expect(response.plan.targetShapeProgress).not.toHaveProperty("reviewStatus");
     });
   });
+
+  // STEP 5-1(A-1〜A-3、人間承認済み。LP-1): 候補手が安全確認(candidateMoveReferenceFilter.ts)で
+  // 全件除外されたとき、道のり([4])の指示形と矢印(candidateMoveLabels)を出さず、
+  // 除外の事実をnextConsiderations先頭に加える。
+  describe("STEP 5-1: 候補手が全件除外されたとき(candidatesExcluded)", () => {
+    function excludedCachedPlan(sfen: string): CachedReachablePlan {
+      return {
+        sfen,
+        targetShapeId: "mino_honmino",
+        plan: {
+          reachableShapes: [],
+          candidateMove: {
+            status: "not_ready",
+            notReadyReason: "excluded_by_reference_evaluation",
+            explanations: [],
+            sharedNotes: [],
+          },
+        },
+      };
+    }
+
+    it("除外時: routes/candidateMoveLabelsが空になり、nextConsiderations先頭に除外の事実が入り、targetShapeProgressは残る", () => {
+      const sfen = honminoOneMoveFromCompleteSfen();
+      const state = customGameState(sfen);
+
+      const response = buildStateResponseWithPlan(
+        state,
+        excludedCachedPlan(sfen),
+        { initialSfen: sfen },
+        "mino_honmino",
+      );
+
+      expect(response.plan.candidateMoveState).toBe("ready");
+      expect(response.plan.candidateMove?.status).toBe("not_ready");
+      expect(response.plan.routes).toEqual([]);
+      expect(response.plan.candidateMoveLabels).toEqual({});
+      expect(response.plan.targetShapeProgress).not.toBeNull();
+      expect(response.plan.nextConsiderations[0]).toEqual({
+        kind: "candidate_moves_excluded",
+        text: "候補手は、指した後の局面を確かめた結果、今は表示していません。",
+      });
+    });
+
+    it("pending(cachedPlanなし)では従来どおりroutesが残り、除外の事実は出ない", () => {
+      const sfen = honminoOneMoveFromCompleteSfen();
+      const state = customGameState(sfen);
+
+      const response = buildStateResponseWithPlan(state, undefined, { initialSfen: sfen }, "mino_honmino");
+
+      expect(response.plan.candidateMoveState).toBe("pending");
+      expect(response.plan.routes.length).toBeGreaterThan(0);
+      expect(response.plan.candidateMoveLabels).not.toEqual({});
+      expect(response.plan.nextConsiderations.some((m) => m.kind === "candidate_moves_excluded")).toBe(false);
+    });
+
+    it("ready(除外されていない)では従来どおりroutesが残り、除外の事実は出ない", async () => {
+      const sfen = honminoOneMoveFromCompleteSfen();
+      const state = customGameState(sfen);
+      const engine = makeMockLowPriorityEngine([
+        multiPvResult([{ multipv: 1, score: { type: "cp", value: 5 }, pv: [] }]),
+        multiPvResult([{ multipv: 1, score: { type: "cp", value: 10 }, pv: [] }]),
+      ]);
+      const computed = await computeReachablePlan(state, engine, { initialSfen: sfen }, "mino_honmino");
+      const cachedPlan: CachedReachablePlan = { sfen, targetShapeId: computed.targetShapeId, plan: computed };
+
+      const response = buildStateResponseWithPlan(state, cachedPlan, { initialSfen: sfen }, "mino_honmino");
+
+      expect(response.plan.candidateMoveState).toBe("ready");
+      expect(response.plan.candidateMove?.status).toBe("ready");
+      expect(response.plan.routes.length).toBeGreaterThan(0);
+      expect(response.plan.candidateMoveLabels).not.toEqual({});
+      expect(response.plan.nextConsiderations.some((m) => m.kind === "candidate_moves_excluded")).toBe(false);
+    });
+
+    it("他のnotReadyReason(insufficient_engine_data)では除外扱いにならず、routesが残る", () => {
+      const sfen = honminoOneMoveFromCompleteSfen();
+      const state = customGameState(sfen);
+      const cachedPlan: CachedReachablePlan = {
+        sfen,
+        targetShapeId: "mino_honmino",
+        plan: {
+          reachableShapes: [],
+          candidateMove: {
+            status: "not_ready",
+            notReadyReason: "insufficient_engine_data",
+            explanations: [],
+            sharedNotes: [],
+          },
+        },
+      };
+
+      const response = buildStateResponseWithPlan(state, cachedPlan, { initialSfen: sfen }, "mino_honmino");
+
+      expect(response.plan.candidateMoveState).toBe("ready");
+      expect(response.plan.candidateMove?.notReadyReason).toBe("insufficient_engine_data");
+      expect(response.plan.routes.length).toBeGreaterThan(0);
+      expect(response.plan.candidateMoveLabels).not.toEqual({});
+      expect(response.plan.nextConsiderations.some((m) => m.kind === "candidate_moves_excluded")).toBe(false);
+    });
+  });
 });
 
 // 目標形選択UI(docs/PHASES.md Phase2完了条件「ユーザーが2〜3個の候補から目標形を
@@ -1251,6 +1351,161 @@ describe("computeMoveOutcomeAfterMove / safeComputeMoveOutcomeAfterMove", () => 
     const inconsistentState: GameState = { sfen: DEFAULT_INITIAL_SFEN, moveHistory: ["7g7f"], forcedPliesUsed: 0 };
 
     expect(safeComputeMoveOutcomeAfterMove(inconsistentState, inconsistentState, "7g7f", null)).toBeNull();
+  });
+
+  // STEP 5-1(B-1、人間承認済み。LP-2): displayedPlan引数(三値)による、
+  // 「実際に表示していた候補手」との照合。
+  describe("displayedPlan(実際に表示していた候補手との照合)", () => {
+    function candidateReadyPlan(sfen: string, moveUsi: string): CachedReachablePlan {
+      return {
+        sfen,
+        targetShapeId: "mino_honmino",
+        plan: {
+          reachableShapes: [],
+          candidateMove: {
+            status: "ready",
+            notReadyReason: null,
+            explanations: [
+              {
+                id: "candidate_test",
+                stage: "candidate_move",
+                purpose: "テスト用",
+                move: moveUsi,
+                reason: "テスト用",
+                refers_to_shape_id: null,
+                refers_to_intent_id: null,
+                confidence_level: "low",
+                glossary_terms: [],
+                template_id: "candidate_test",
+              },
+            ],
+            sharedNotes: [],
+          },
+        },
+      };
+    }
+
+    it("displayedPlanを省略(undefined)した場合は、従来どおりroutePlannerの候補でplayed_candidateが出る", () => {
+      const stateBefore = gameStateAfter([]);
+      const stateAfter = gameStateAfter(["3i3h", "1c1d"]);
+
+      const outcome = computeMoveOutcomeAfterMove(stateBefore, stateAfter, "3i3h", "1c1d", {}, "mino_honmino");
+
+      expect(outcome?.facts.map((f) => f.kind)).toContain("played_candidate");
+    });
+
+    it("displayedPlanのsfen・targetShapeIdが一致しstatus:readyで、その手を含む場合はplayed_candidateが出る", () => {
+      const stateBefore = gameStateAfter([]);
+      const stateAfter = gameStateAfter(["3i3h", "1c1d"]);
+      const displayedPlan = candidateReadyPlan(stateBefore.sfen, "3i3h");
+
+      const outcome = computeMoveOutcomeAfterMove(
+        stateBefore,
+        stateAfter,
+        "3i3h",
+        "1c1d",
+        {},
+        "mino_honmino",
+        null,
+        displayedPlan,
+      );
+
+      expect(outcome?.facts.map((f) => f.kind)).toContain("played_candidate");
+    });
+
+    it("displayedPlanのsfenが一致しない場合は、表示していなかった扱いになりplayed_candidateが出ない", () => {
+      const stateBefore = gameStateAfter([]);
+      const stateAfter = gameStateAfter(["3i3h", "1c1d"]);
+      const displayedPlan = candidateReadyPlan(honminoOneMoveFromCompleteSfen(), "3i3h"); // 別の局面
+
+      const outcome = computeMoveOutcomeAfterMove(
+        stateBefore,
+        stateAfter,
+        "3i3h",
+        "1c1d",
+        {},
+        "mino_honmino",
+        null,
+        displayedPlan,
+      );
+
+      expect(outcome?.facts.map((f) => f.kind)).not.toContain("played_candidate");
+      expect(outcome?.facts.map((f) => f.kind)).not.toContain("played_non_candidate");
+    });
+
+    it("displayedPlanのtargetShapeIdが一致しない場合は、表示していなかった扱いになりplayed_candidateが出ない", () => {
+      const stateBefore = gameStateAfter([]);
+      const stateAfter = gameStateAfter(["3i3h", "1c1d"]);
+      const displayedPlan: CachedReachablePlan = {
+        ...candidateReadyPlan(stateBefore.sfen, "3i3h"),
+        targetShapeId: "mino_takamino",
+      };
+
+      const outcome = computeMoveOutcomeAfterMove(
+        stateBefore,
+        stateAfter,
+        "3i3h",
+        "1c1d",
+        {},
+        "mino_honmino",
+        null,
+        displayedPlan,
+      );
+
+      expect(outcome?.facts.map((f) => f.kind)).not.toContain("played_candidate");
+      expect(outcome?.facts.map((f) => f.kind)).not.toContain("played_non_candidate");
+    });
+
+    it("displayedPlan.plan.candidateMove.statusがnot_readyの場合は、表示していなかった扱いになりplayed_candidateが出ない", () => {
+      const stateBefore = gameStateAfter([]);
+      const stateAfter = gameStateAfter(["3i3h", "1c1d"]);
+      const displayedPlan: CachedReachablePlan = {
+        sfen: stateBefore.sfen,
+        targetShapeId: "mino_honmino",
+        plan: {
+          reachableShapes: [],
+          candidateMove: {
+            status: "not_ready",
+            notReadyReason: "excluded_by_reference_evaluation",
+            explanations: [],
+            sharedNotes: [],
+          },
+        },
+      };
+
+      const outcome = computeMoveOutcomeAfterMove(
+        stateBefore,
+        stateAfter,
+        "3i3h",
+        "1c1d",
+        {},
+        "mino_honmino",
+        null,
+        displayedPlan,
+      );
+
+      expect(outcome?.facts.map((f) => f.kind)).not.toContain("played_candidate");
+      expect(outcome?.facts.map((f) => f.kind)).not.toContain("played_non_candidate");
+    });
+
+    it("displayedPlanがnull(表示していた計画が無い)の場合は、played_candidateが出ない", () => {
+      const stateBefore = gameStateAfter([]);
+      const stateAfter = gameStateAfter(["3i3h", "1c1d"]);
+
+      const outcome = computeMoveOutcomeAfterMove(
+        stateBefore,
+        stateAfter,
+        "3i3h",
+        "1c1d",
+        {},
+        "mino_honmino",
+        null,
+        null,
+      );
+
+      expect(outcome?.facts.map((f) => f.kind)).not.toContain("played_candidate");
+      expect(outcome?.facts.map((f) => f.kind)).not.toContain("played_non_candidate");
+    });
   });
 });
 

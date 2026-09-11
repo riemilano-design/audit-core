@@ -22,6 +22,7 @@ import {
   safeComputePlanChangeReasonAfterMove,
   safeComputeMoveOutcomeAfterMove,
   safeComputeBoardEventsAfterMove,
+  type CachedReachablePlan,
 } from "../../apps/server/src/api/stateResponse.js";
 import { resolveEnginePath } from "../../apps/server/src/engine/enginePath.js";
 import { PrioritizedEngine } from "../../apps/server/src/engine/prioritizedEngine.js";
@@ -117,6 +118,10 @@ async function main(): Promise<void> {
 
   try {
     let state: GameState = createInitialGameState(undefined, { variants: getApprovedScenarioVariants() });
+    // STEP 5-1(B-3、人間承認済み。LP-2): server.tsのbackgroundPlanと同じ役割の変数。
+    // stateBeforeMoveの局面で実際にキャッシュされていた計画(直前のready行のもの)を
+    // safeComputeMoveOutcomeAfterMoveの新引数(displayedPlan)へ渡すために保持する。
+    let latestReadyCachedPlan: CachedReachablePlan | undefined;
 
     // 初期局面(POST /api/game/new相当)。
     {
@@ -124,7 +129,7 @@ async function main(): Promise<void> {
       lines.push(line);
     }
     {
-      const { line, elapsedMs } = await buildReadyRecord(
+      const { line, elapsedMs, cachedPlan } = await buildReadyRecord(
         state,
         0,
         null,
@@ -137,6 +142,7 @@ async function main(): Promise<void> {
       );
       readyMsPerPly.push(elapsedMs);
       lines.push(line);
+      latestReadyCachedPlan = cachedPlan;
     }
 
     for (let i = 0; i < moves.length; i += 2) {
@@ -203,6 +209,9 @@ async function main(): Promise<void> {
         {},
         undefined,
         planChangeReason,
+        // STEP 5-1(B-3、人間承認済み。LP-2): server.tsと同じ呼び出し順を保つため、
+        // stateBeforeMoveの局面のready行(直前ply)で実際にキャッシュされていた計画を渡す。
+        latestReadyCachedPlan ?? null,
       );
 
       const ply = state.moveHistory.length;
@@ -212,7 +221,7 @@ async function main(): Promise<void> {
         lines.push(line);
       }
       {
-        const { line, elapsedMs } = await buildReadyRecord(
+        const { line, elapsedMs, cachedPlan } = await buildReadyRecord(
           state,
           ply,
           m,
@@ -225,6 +234,7 @@ async function main(): Promise<void> {
         );
         readyMsPerPly.push(elapsedMs);
         lines.push(line);
+        latestReadyCachedPlan = cachedPlan;
       }
 
       pliesCompleted = ply;

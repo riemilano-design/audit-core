@@ -572,6 +572,16 @@ export function resolveRecognizedDirection(
 export const DIRECTION_UNDECIDED_TEXT =
   "この局面では、まだ特定の囲いへの方向は決まっていません。";
 
+/**
+ * STEP 5-1(LP-1、人間承認済み)。候補手が安全確認(candidateMoveReferenceFilter.ts)の
+ * 結果として全件除外されたときに [4] の先頭へ出す一文。事実(確かめた・表示していない)
+ * だけを述べ、除外の理由(評価値低下か詰みか)や評価語は出さない
+ * (CLAUDE.md「絶対に守るルール」6番、計画docs/STEP_5-1_PLAN_2026-09-11.md H-1)。
+ * この文の中身は人間承認済みのため一字も変えないこと。
+ */
+export const CANDIDATE_MOVES_EXCLUDED_TEXT =
+  "候補手は、指した後の局面を確かめた結果、今は表示していません。";
+
 function computeRankedPlanContext(
   current: GameState,
   options: ExplainPositionOptions = {},
@@ -1392,6 +1402,20 @@ export function buildStateResponseWithPlan(
     candidateMove = undefined;
   }
 
+  // STEP 5-1(A-1、人間承認済み): 候補手が安全確認(candidateMoveReferenceFilter.ts)で
+  // 全件除外された、という機械的な事実。新しい将棋知識・閾値・エンジン呼び出しは
+  // 使わず、既に確定した判定結果(candidateMoveState/candidateMove.notReadyReason)を
+  // 読むだけ。baseline_evaluation_unavailable等の他のnotReadyReasonはここでは
+  // 対象にしない(計画docs/STEP_5-1_PLAN_2026-09-11.md H-4、人間の決定により持ち越し)。
+  const candidatesExcluded =
+    candidateMoveState === "ready" &&
+    candidateMove?.status === "not_ready" &&
+    candidateMove.notReadyReason === "excluded_by_reference_evaluation";
+  // STEP 5-1(A-2、人間承認済み): 除外時は道のりの指示形([4]の「残りN手(…)」)と
+  // 盤上の矢印のラベル(candidateMoveLabels)を出さない。targetShapeProgressは
+  // (「目標の説明」として)残す。suppressPlanと同じ書き方で、除外時だけ追加で空にする。
+  const suppressRoutesAndLabels = suppressPlan || candidatesExcluded;
+
   // STEP 4-5(人間承認済み): [1]に出す前に、U0-1の既存フィルタ → V-1(square_lost抑止)→
   // U-1(終局時は盤面の出来事+得喪集約だけ残す)の順で表示側フィルタを重ねる
   // (いずれも既存の判定結果に対する表示側の絞り込みであり、判定自体は変えない)。
@@ -1418,7 +1442,10 @@ export function buildStateResponseWithPlan(
 
   const partition = partitionUrgentMessages(
     lastMoveMessagesForPartition,
-    toNextConsiderations(current, context, base.status.isEnd, suppressPlan),
+    // STEP 5-1(A-2、人間承認済み): 除外時もsuppressRoutesAndLabelsにより
+    // routes/candidateMovesを空にして渡す(検出器自体は変えない。除外手を
+    // route_first_move_playable / no_playable_route_first_move として述べさせないため)。
+    toNextConsiderations(current, context, base.status.isEnd, suppressRoutesAndLabels),
     toPieceThreatMessages(current, base.status.isEnd),
   );
 
@@ -1432,9 +1459,13 @@ export function buildStateResponseWithPlan(
     coach: base.status.isEnd ? [] : filterCoachForTargetShape(base.coach, internalResolvedTargetShapeId !== null),
     plan: {
       reachableShapes,
-      routes: suppressPlan ? [] : toRouteSummaries(context?.routePlanResult, current.sfen),
+      // STEP 5-1(A-2、人間承認済み): 除外時(candidatesExcluded)もroutes/
+      // candidateMoveLabelsを空にする(既存のsuppressPlanと同じ書き方)。
+      // targetShapeProgressは「目標の説明」として残すため、suppressPlanのみで判定する
+      // (candidatesExcludedでは変えない)。
+      routes: suppressRoutesAndLabels ? [] : toRouteSummaries(context?.routePlanResult, current.sfen),
       targetShapeProgress: suppressPlan ? null : toTargetShapeProgress(context, current.sfen),
-      candidateMoveLabels: suppressPlan ? {} : toCandidateMoveLabels(context?.routePlanResult, current.sfen),
+      candidateMoveLabels: suppressRoutesAndLabels ? {} : toCandidateMoveLabels(context?.routePlanResult, current.sfen),
       referenceShapes: toReferenceShapes(context),
       directionNote:
         !suppressPlan && context && context.direction.reason !== "single" && context.resolvedTargetShapeId === undefined
@@ -1447,7 +1478,16 @@ export function buildStateResponseWithPlan(
             messages: partition.lastMoveMessages,
           }
         : null,
-      nextConsiderations: filterContradictoryConsiderations(partition.nextConsiderations, hasCandidateMoves),
+      // STEP 5-1(A-3、人間承認済み): partitionUrgentMessagesの後・
+      // filterContradictoryConsiderationsの後(いずれのフィルタにも掛からない位置)に、
+      // 除外の事実を先頭へ追加する。filterNextConsiderationsForDisplayの落とす一覧
+      // (NEXT_CONSIDERATION_KINDS_TO_DROP)には加えない。
+      nextConsiderations: candidatesExcluded
+        ? [
+            { kind: "candidate_moves_excluded" as const, text: CANDIDATE_MOVES_EXCLUDED_TEXT },
+            ...filterContradictoryConsiderations(partition.nextConsiderations, hasCandidateMoves),
+          ]
+        : filterContradictoryConsiderations(partition.nextConsiderations, hasCandidateMoves),
       candidateMoveState,
       candidateMove,
       pendingReviewNote: toPlanPendingReviewNote(context),
@@ -1652,6 +1692,25 @@ export function computePlanChangeReasonAfterMove(
  * ⑧(MultiPV参考評価)には一切触れない。したがって「良い手だったか」は判定できないし、
  * 判定しない。
  *
+ * 【STEP 5-1(B-1、人間承認済み。LP-2)displayedPlanについて】
+ * 末尾引数displayedPlanは「実際に表示していた候補手」との照合に使う。三値の意味を
+ * 固定する。
+ * - undefined(既定。引数を渡さない)= 照合しない。従来どおりbefore.candidateMoves
+ *   (routePlanner.tsの候補、安全確認前)をそのまま使う。既存の呼び出し・既存テストの
+ *   挙動を変えないためのもの。
+ * - null(呼び出し側は表示情報を持っているが、表示していた計画が無い。
+ *   backgroundPlan未設定・解析失敗)= 表示していた候補手は空集合として扱う。
+ * - CachedReachablePlan = displayedPlan.sfen === stateBeforeMove.sfen &&
+ *   displayedPlan.targetShapeId === beforeContext.resolvedTargetShapeId &&
+ *   displayedPlan.plan.candidateMove?.status === "ready" の場合のみ、
+ *   explanations.map(e => e.move) の非null集合を「表示していた候補手」とする。
+ *   いずれか不一致なら空集合(=その局面では表示していなかった)。
+ * null または CachedReachablePlan のとき、beforeのcandidateMovesをこの集合に
+ * 含まれるmoveUsiだけへ絞ってdetectMoveOutcomeへ渡す。detectMoveOutcome自体・
+ * moveOutcomeDetector.tsは変えない(「表示していた候補が0件なら候補手だったかに
+ * 言及しない」という既存規則がそのまま効く)。afterContext側・routes・
+ * matchedSquaresは変えない。
+ *
  * 例外はそのまま伝播する(呼び出し元のsafeComputeMoveOutcomeAfterMoveが処理する)。
  */
 export function computeMoveOutcomeAfterMove(
@@ -1662,19 +1721,55 @@ export function computeMoveOutcomeAfterMove(
   options: ExplainPositionOptions = {},
   selectedTargetShapeId?: string,
   planChangeReason: PlanChangeReason | null = null,
+  displayedPlan: CachedReachablePlan | null | undefined = undefined,
 ): MoveOutcome | null {
   const afterContext = computeRankedPlanContext(stateAfterMove, options, selectedTargetShapeId);
   if (afterContext.routePlanResult?.unresolvedReason === "not_self_turn") return null;
 
   const beforeContext = computeRankedPlanContext(stateBeforeMove, options, selectedTargetShapeId);
+  const beforeSnapshot = toMoveOutcomeSnapshot(beforeContext);
+
+  const beforeSnapshotForDetection =
+    displayedPlan === undefined
+      ? beforeSnapshot
+      : {
+          ...beforeSnapshot,
+          candidateMoves: beforeSnapshot.candidateMoves.filter((c) =>
+            toDisplayedCandidateMoveUsis(displayedPlan, stateBeforeMove, beforeContext).has(c.moveUsi),
+          ),
+        };
 
   return detectMoveOutcome(
-    toMoveOutcomeSnapshot(beforeContext),
+    beforeSnapshotForDetection,
     toMoveOutcomeSnapshot(afterContext),
     playedMoveUsi,
     opponentMoveUsi,
     planChangeReason,
   );
+}
+
+/**
+ * STEP 5-1(B-1、人間承認済み)。displayedPlanが「stateBeforeMoveの局面で実際に
+ * 表示していた候補手」と一致する場合のみ、その候補手(USI)の集合を返す。
+ * 一致しない場合・displayedPlanがnullの場合は空集合(=表示していなかった)。
+ */
+function toDisplayedCandidateMoveUsis(
+  displayedPlan: CachedReachablePlan | null,
+  stateBeforeMove: GameState,
+  beforeContext: RankedPlanContext,
+): Set<string> {
+  if (
+    displayedPlan &&
+    displayedPlan.sfen === stateBeforeMove.sfen &&
+    displayedPlan.targetShapeId === beforeContext.resolvedTargetShapeId &&
+    displayedPlan.plan.candidateMove?.status === "ready"
+  ) {
+    const moves = displayedPlan.plan.candidateMove.explanations
+      .map((e) => e.move)
+      .filter((move): move is string => move !== null);
+    return new Set(moves);
+  }
+  return new Set();
 }
 
 /**
@@ -1724,6 +1819,7 @@ export function safeComputeMoveOutcomeAfterMove(
   options: ExplainPositionOptions = {},
   selectedTargetShapeId?: string,
   planChangeReason: PlanChangeReason | null = null,
+  displayedPlan: CachedReachablePlan | null | undefined = undefined,
 ): MoveOutcome | null {
   try {
     return computeMoveOutcomeAfterMove(
@@ -1734,6 +1830,7 @@ export function safeComputeMoveOutcomeAfterMove(
       options,
       selectedTargetShapeId,
       planChangeReason,
+      displayedPlan,
     );
   } catch (err) {
     console.error("直前の一手の変化の抽出(Phase6 Unit2, moveOutcomeDetector)でエラーが発生しました:", err);
