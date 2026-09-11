@@ -38,6 +38,18 @@ function baseResponse(planOverrides: Partial<ReachablePlanBody> = {}): StateResp
   };
 }
 
+/** 帯([0])が squares の駒を名指ししているプラン(STEP T-8)。 */
+function bandPlan(squares: string[]): Partial<ReachablePlanBody> {
+  return {
+    urgentMessages: squares.map((square) => ({
+      kind: "piece_attacked",
+      text: `あなたの${square}の駒に、相手の駒が当たっています(次の相手の手で取られる可能性があります)。`,
+      square,
+      attackerSquares: [],
+    })) as unknown as ReachablePlanBody["urgentMessages"],
+  };
+}
+
 function makeReadyRecord(ply: number, planOverrides: Partial<ReachablePlanBody>): RecordLine {
   const response = baseResponse(planOverrides);
   return {
@@ -130,5 +142,65 @@ describe("deriveAdviceSource", () => {
     });
 
     expect(deriveAdviceSource(previous, "6g6f")).toBe("route");
+  });
+
+  // --- STEP T-8 で足した "band" ---
+
+  it("候補手・道のりに無く、帯が名指しした駒を動かす手なら band", () => {
+    const previous = makeReadyRecord(28, bandPlan(["7i", "9i"]));
+    expect(deriveAdviceSource(previous, "7i7h")).toBe("band");
+  });
+
+  it("帯が名指ししていない駒を動かす手は none のまま", () => {
+    const previous = makeReadyRecord(28, bandPlan(["7i"]));
+    expect(deriveAdviceSource(previous, "2g2f")).toBe("none");
+  });
+
+  it("打つ手(ドロップ)は band にならない", () => {
+    const previous = makeReadyRecord(28, bandPlan(["P*"]));
+    expect(deriveAdviceSource(previous, "P*8h")).toBe("none");
+  });
+
+  it("帯に square が無い行は名指ししていない扱い(推測しない)", () => {
+    const previous = makeReadyRecord(28, {
+      urgentMessages: [{ kind: "piece_attacked", text: "当たっています。" }],
+    });
+    expect(deriveAdviceSource(previous, "7i7h")).toBe("none");
+  });
+
+  // 順序の保証: band は candidate/route の後に判定する(I-6 の挙動を変えないため)。
+  it("帯の駒を動かす手でも、候補手に載っていれば candidate が優先される", () => {
+    const previous = makeReadyRecord(28, {
+      ...bandPlan(["7i"]),
+      candidateMoveState: "ready",
+      candidateMove: {
+        status: "ready",
+        notReadyReason: null,
+        explanations: [
+          {
+            id: "e1",
+            stage: "candidate_move",
+            purpose: "p",
+            move: "7i7h",
+            reason: "r",
+            refers_to_shape_id: null,
+            refers_to_intent_id: null,
+            confidence_level: "low",
+            glossary_terms: [],
+            template_id: "t",
+          },
+        ],
+        sharedNotes: [],
+      },
+    });
+    expect(deriveAdviceSource(previous, "7i7h")).toBe("candidate");
+  });
+
+  it("帯の駒を動かす手でも、道のりに載っていれば route が優先される", () => {
+    const previous = makeReadyRecord(28, {
+      ...bandPlan(["7i"]),
+      candidateMoveLabels: { "7i7h": "本美濃囲い" },
+    });
+    expect(deriveAdviceSource(previous, "7i7h")).toBe("route");
   });
 });

@@ -68,8 +68,10 @@ export function pickByS1Rule(response: StateResponseBodyWithPlan): string | unde
   return undefined;
 }
 
-/** USI形式の指し手(ドロップではない)から移動元マスを取り出す。 */
-function fromSquareOf(moveUsi: string): string {
+/** USI形式の指し手(ドロップではない)から移動元マスを取り出す。
+ * STEP T-8(I-8)がinvariants/i8-band-piece-then-captured.tsと共用するためexportした
+ * (実装は変えていない。exportを足しただけ)。 */
+export function fromSquareOf(moveUsi: string): string {
   return moveUsi.slice(0, 2);
 }
 
