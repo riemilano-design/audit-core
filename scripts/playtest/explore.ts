@@ -60,6 +60,11 @@ const DEFAULT_GAMES = 10;
 const DEFAULT_SEED = 1;
 const DEFAULT_PLIES_CAP = 60;
 
+// STEP T-7(A-2)。docs/STEP_T-7_PLAN_2026-09-11.md 2. A-2に従う。探索モードは
+// 相手の手・自分側プロファイルの条件を一切変えない(既存のとおり)。engineReference
+// (参考評価。ハーネスの観測)だけは固定ノード数で測る(replay.tsの既定と同じ値)。
+const DEFAULT_REFERENCE_NODES = 4_000_000;
+
 /** 終了理由。将棋の良し悪しの判断は含まず、いずれも機械的な事実だけを表す。 */
 type EndReason = "game_over" | "opponent_no_move" | "self_no_move" | "plies_cap" | "human_move_error";
 
@@ -149,6 +154,7 @@ async function runOneGame(params: {
       seed,
       randomRate,
       pliesCap,
+      referenceNodes: DEFAULT_REFERENCE_NODES,
     }),
   );
 
@@ -176,6 +182,8 @@ async function runOneGame(params: {
     null,
     null,
     [],
+    engine.asLowPriority(),
+    DEFAULT_REFERENCE_NODES,
   );
   readyMsPerPly.push(latestReady.elapsedMs);
   lines.push(latestReady.line);
@@ -275,6 +283,8 @@ async function runOneGame(params: {
         planChangeReason,
         moveOutcome,
         boardEvents,
+        engine.asLowPriority(),
+        DEFAULT_REFERENCE_NODES,
       );
       readyMsPerPly.push(latestReady.elapsedMs);
       lines.push(latestReady.line);

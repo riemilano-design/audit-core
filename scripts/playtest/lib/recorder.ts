@@ -23,6 +23,7 @@ import {
 } from "../../../apps/server/src/api/stateResponse.js";
 import type { GameState } from "../../../apps/server/src/game/gameSession.js";
 import type { LowPriorityEngine } from "../../../apps/server/src/engine/prioritizedEngine.js";
+import { measureEngineReference, type EngineReference } from "./engineReference.js";
 
 /** server.tsのrunBackgroundPlanAnalysisと同じ組み立てでCachedReachablePlanを作る。
  * safeComputeReachablePlanが失敗(undefined)を返した場合はundefinedのまま
@@ -54,6 +55,9 @@ function buildRecordLine(params: {
   phase: "immediate" | "ready";
   elapsedMs: number;
   response: StateResponseBodyWithPlan;
+  /** STEP T-7(A-2)。ready行のみ渡す(immediate行はundefinedのまま渡し、
+   * JSON.stringifyがキー自体を出力しない挙動を利用する)。 */
+  engineReference?: EngineReference | null;
 }): string {
   return JSON.stringify({
     kind: "record",
@@ -64,6 +68,7 @@ function buildRecordLine(params: {
     phase: params.phase,
     elapsedMs: params.elapsedMs,
     response: params.response,
+    engineReference: params.engineReference,
   });
 }
 
@@ -130,6 +135,15 @@ export async function buildReadyRecord(
   planChangeReason: PlanChangeReason | null,
   moveOutcome: MoveOutcome | null,
   boardEvents: BoardEvent[],
+  // STEP T-7(A-2): engineReference(参考評価。ハーネスの観測)を測るための
+  // engine/ノード数。呼び出し側の候補手計算用engine(nodes固定でラップ済みの
+  // こともある)とは別に、raw(未ラップ)のLowPriorityEngineを渡すことで、
+  // withFixedSearch(lib/fixedSearchEngine.ts)がgoMultiPvのnodesを常に自分の
+  // 固定値へ上書きする挙動と衝突せず、referenceNodesがそのまま使われるようにする
+  // (呼び出し側のnodes固定と独立に指定できる)。0なら測らない(engineReferenceは
+  // null。referenceEngineは呼ばれない)。
+  referenceEngine: LowPriorityEngine,
+  referenceNodes: number,
 ): Promise<ReadyRecordLineResult> {
   const t0 = Date.now();
   const result = await safeComputeReachablePlan(state, engine, {}, undefined);
@@ -144,6 +158,8 @@ export async function buildReadyRecord(
     moveOutcome,
     boardEvents,
   );
+  const engineReference =
+    referenceNodes > 0 ? await measureEngineReference(state.sfen, referenceEngine, referenceNodes) : null;
   const elapsedMs = Date.now() - t0;
   const line = buildRecordLine({
     ply,
@@ -153,6 +169,7 @@ export async function buildReadyRecord(
     phase: "ready",
     elapsedMs,
     response,
+    engineReference,
   });
   return { line, response, elapsedMs, cachedPlan };
 }

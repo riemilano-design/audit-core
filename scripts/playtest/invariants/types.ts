@@ -12,6 +12,7 @@
 //   だけで、必要最小の追加型(RecordLine等、JSONLの入れ物)のみを新設する。
 
 import type { StateResponseBodyWithPlan } from "../../../apps/server/src/api/stateResponse.js";
+import type { EngineReference } from "../lib/engineReference.js";
 
 /** docs/PLAYTEST_LOOP_PROPOSAL.md 4.4 の6型。
  * STEP T-6(B-1、人間承認済み。docs/COVERAGE_AND_OUTCOME_PROPOSAL.md 7.1)で
@@ -38,6 +39,9 @@ export interface RecordLine {
   phase: "immediate" | "ready";
   elapsedMs: number;
   response: StateResponseBodyWithPlan;
+  /** STEP T-7(A-2)。ready行のみに付く、エンジンの参考評価(ハーネスの観測)。
+   * immediate行には付けない(optional)。測っていない・測れない場合はnull。 */
+  engineReference?: EngineReference | null;
 }
 
 /** T-1のJSONLの"kind":"meta"行(先頭行)。 */

@@ -9,7 +9,7 @@
 // 将棋の判断・評価・閾値・文言はここでは一切書かない。
 //
 // 使い方: npx tsx scripts/playtest/replay.ts <kifu.json> [--out <file.jsonl>]
-//         [--nodes <N>] [--threads <N>]
+//         [--nodes <N>] [--threads <N>] [--reference-nodes <N>]
 //
 // 位置づけの詳細は scripts/playtest/README.md を参照。開発補助であり本番導線には
 // 含めない(apps/・data/・docs/・.claude/ は変更しない)。
@@ -93,7 +93,7 @@ async function main(): Promise<void> {
   const kifuArg = args[0];
   if (!kifuArg || kifuArg.startsWith("--")) {
     console.error(
-      "使い方: npx tsx scripts/playtest/replay.ts <kifu.json> [--out <file.jsonl>] [--nodes <N>] [--threads <N>]",
+      "使い方: npx tsx scripts/playtest/replay.ts <kifu.json> [--out <file.jsonl>] [--nodes <N>] [--threads <N>] [--reference-nodes <N>]",
     );
     process.exit(1);
   }
@@ -108,6 +108,14 @@ async function main(): Promise<void> {
   const threads = threadsIndex !== -1 ? Number(args[threadsIndex + 1]) : DEFAULT_THREADS;
 
   const searchMode: "nodes" | "movetime" = nodes > 0 ? "nodes" : "movetime";
+
+  // STEP T-7(A-2)。docs/STEP_T-7_PLAN_2026-09-11.md 2. A-2に従う。既定は
+  // --nodes と同じ値(--nodes 0のときはDEFAULT_NODES)。エンジンの参考評価
+  // (engineReference。ハーネスの観測)を測るためのノード数で、候補手計算(⑧)の
+  // 探索量固定(--nodes)とは独立の値として扱う(lib/recorder.tsのreferenceEngine参照)。
+  const referenceNodesIndex = args.indexOf("--reference-nodes");
+  const referenceNodes =
+    referenceNodesIndex !== -1 ? Number(args[referenceNodesIndex + 1]) : nodes > 0 ? nodes : DEFAULT_NODES;
 
   const kifu = JSON.parse(readFileSync(path.resolve(kifuArg), "utf-8")) as FixedKifu;
   const kifuId = kifu.id;
@@ -125,7 +133,17 @@ async function main(): Promise<void> {
 
   const enginePath = resolveEnginePath();
   lines.push(
-    JSON.stringify({ kind: "meta", kifuId, startedAt, gitHead, enginePath, searchMode, nodes, threads }),
+    JSON.stringify({
+      kind: "meta",
+      kifuId,
+      startedAt,
+      gitHead,
+      enginePath,
+      searchMode,
+      nodes,
+      threads,
+      referenceNodes,
+    }),
   );
 
   const rawEngine = new UsiEngine(enginePath);
@@ -165,6 +183,8 @@ async function main(): Promise<void> {
         null,
         null,
         [],
+        engine.asLowPriority(),
+        referenceNodes,
       );
       readyMsPerPly.push(elapsedMs);
       lines.push(line);
@@ -257,6 +277,8 @@ async function main(): Promise<void> {
           planChangeReason,
           moveOutcome,
           boardEvents,
+          engine.asLowPriority(),
+          referenceNodes,
         );
         readyMsPerPly.push(elapsedMs);
         lines.push(line);
