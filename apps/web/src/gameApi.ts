@@ -432,6 +432,39 @@ export function reviewNoteSuffix(pendingReviewNote: string | null): string {
 }
 
 /**
+ * STEP 5-2(A-2、人間承認済み): coachをstageごとに分ける純粋関数。
+ *
+ * 現行[2]「狙い」は current_shape(自分の狙い)と opponent_intent(相手の狙い)の
+ * 2枚のカードを1つの箱にまとめていたが、見せ方の確定(2026-09-11 決定2の1)で
+ * ②(相手の狙い)と④(自分の目的)という別々の箱へ分けることになった。main.ts側で
+ * `coach.find(item => item.stage === "...")` を複数箇所に書くのではなく、
+ * ここに分岐を集約する(DOM非依存の純粋関数としてテストするため、
+ * shouldShowPlanChangedNotice等と同じ流儀でgameApi.tsに置く)。
+ *
+ * 将棋の判断は一切行わない。stage文字列の一致だけで機械的に振り分けるだけで、
+ * 文言・順序(入力順のまま)・件数は一切変更しない。coachがundefined
+ * (説明生成に失敗した場合)は3つとも空配列を返す(coach自体の有無に応じた
+ * 表示文言の出し分けはmain.ts側の責務のまま、ここでは判定しない)。
+ */
+export interface CoachByStage {
+  opponentIntent: CoachExplanation[];
+  currentShape: CoachExplanation[];
+  opponentNextAim: CoachExplanation[];
+}
+
+export function splitCoachByStage(coach: CoachExplanation[] | undefined): CoachByStage {
+  const opponentIntent: CoachExplanation[] = [];
+  const currentShape: CoachExplanation[] = [];
+  const opponentNextAim: CoachExplanation[] = [];
+  for (const item of coach ?? []) {
+    if (item.stage === "opponent_intent") opponentIntent.push(item);
+    else if (item.stage === "current_shape") currentShape.push(item);
+    else if (item.stage === "opponent_next_aim") opponentNextAim.push(item);
+  }
+  return { opponentIntent, currentShape, opponentNextAim };
+}
+
+/**
  * ⑧(MultiPV参考評価)の再取得を、あと何回まで試してよいかの上限。
  * エンジンは基準局面1回＋候補手ごとに1回ずつ直列に探索するため、完了まで数秒〜数十秒かかる。
  * 実機実測では1手あたり18〜19秒かかっている(以前の「約8秒」という前提は実測で否定された)。

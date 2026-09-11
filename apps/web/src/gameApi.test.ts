@@ -9,12 +9,32 @@ import {
   shouldRetryPlanRefresh,
   shouldShowNextConsiderations,
   shouldShowPlanChangedNotice,
+  splitCoachByStage,
   PLAN_REFRESH_MAX_ATTEMPTS,
+  type CoachExplanation,
+  type CoachStage,
   type GameStatus,
   type LastMoveOutcomeBody,
   type NextConsiderationMessage,
   type PlanChangeReason,
 } from "./gameApi.js";
+
+// STEP 5-2: splitCoachByStageのテスト用フィクスチャ。stage以外のフィールドは
+// テストの主旨と無関係なため固定値で埋める(idだけ呼び出し側で判別できるよう変える)。
+function makeCoachExplanation(id: string, stage: CoachStage): CoachExplanation {
+  return {
+    id,
+    stage,
+    purpose: `purpose-${id}`,
+    reason: `reason-${id}`,
+    refers_to_shape_id: null,
+    refers_to_intent_id: null,
+    confidence_level: "medium",
+    glossary_terms: [],
+    template_id: `template-${id}`,
+    status: "forming",
+  };
+}
 
 describe("getPlanChangeReasonMessage", () => {
   it("planChanged=falseの場合、reasonがnullでも理由文言を表示しない", () => {
@@ -333,6 +353,58 @@ describe("groupCandidateExplanationsByReason", () => {
 
   it("候補手が0件なら空配列を返す", () => {
     expect(groupCandidateExplanationsByReason([], labels)).toEqual([]);
+  });
+});
+
+describe("splitCoachByStage(STEP 5-2, A-2)", () => {
+  it("undefinedの場合、3つとも空配列を返す", () => {
+    expect(splitCoachByStage(undefined)).toEqual({
+      opponentIntent: [],
+      currentShape: [],
+      opponentNextAim: [],
+    });
+  });
+
+  it("空配列の場合、3つとも空配列を返す", () => {
+    expect(splitCoachByStage([])).toEqual({
+      opponentIntent: [],
+      currentShape: [],
+      opponentNextAim: [],
+    });
+  });
+
+  it("stageごとに振り分ける(1件ずつ)", () => {
+    const opponentIntent = makeCoachExplanation("a", "opponent_intent");
+    const currentShape = makeCoachExplanation("b", "current_shape");
+    const opponentNextAim = makeCoachExplanation("c", "opponent_next_aim");
+
+    expect(splitCoachByStage([opponentIntent, currentShape, opponentNextAim])).toEqual({
+      opponentIntent: [opponentIntent],
+      currentShape: [currentShape],
+      opponentNextAim: [opponentNextAim],
+    });
+  });
+
+  it("同じstageが複数件でも、入力順のまま同じバケツへ入れる", () => {
+    const first = makeCoachExplanation("a", "opponent_intent");
+    const second = makeCoachExplanation("b", "opponent_intent");
+
+    const result = splitCoachByStage([first, second]);
+
+    expect(result.opponentIntent).toEqual([first, second]);
+    expect(result.currentShape).toEqual([]);
+    expect(result.opponentNextAim).toEqual([]);
+  });
+
+  it("サーバーが返した順序を変えない(stageが混在していても各バケツ内は入力順)", () => {
+    const a = makeCoachExplanation("a", "current_shape");
+    const b = makeCoachExplanation("b", "opponent_intent");
+    const c = makeCoachExplanation("c", "current_shape");
+
+    const result = splitCoachByStage([a, b, c]);
+
+    expect(result.currentShape).toEqual([a, c]);
+    expect(result.opponentIntent).toEqual([b]);
   });
 });
 

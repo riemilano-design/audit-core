@@ -32,19 +32,20 @@ h1 {
   }
 }
 
-/* Phase 7 Unit 3: 3カラム化(人間が確定した仕様。docs/PHASES.md 参照)。
-   [盤面] | [0〜3: 状況・狙い・重要性] | [4〜5: どう指すか・参考囲い・履歴]
+/* 【STEP 5-2(構造。人間承認済み)】3カラム化の方式を変更した。
+   [盤面] | [読む列 #readColumn(帯・①〜④)] | [操作する列 #actColumn(⑤・道のり・
+   参考になる囲い・履歴)]
 
-   【DOMを変えずに2列へ分ける方法】
-   #infoColumn の直下は次の9要素で、境目は6番目の h2「どう指すか」である。
-     0: h2 今の局面      1: #urgent  2: #happened  3: #aim  4: #why
-     5: h2 どう指すか      6: #howto   7: details#referenceDetails  8: details#historyDetails
-   CSS Grid で列を割り当てると行の高さが左右で結合し(行の高さ = その行の最大要素)、
-   片側に大きな空きが出る。そこでマルチカラムに強制カラムブレイクを組み合わせ、
-   DOM を変えずに独立した2つの流れを作る。
-
-   情報を削って高さを下げているのではなく、レイアウトだけで解決している。
-   1200px 未満では縦積み(既存の @media (min-width: 900px) の2カラム)のまま。 */
+   Unit 3時代はDOMを1列のまま(#infoColumn直下がフラット)残し、CSSのマルチカラム+
+   強制カラムブレイク(h2:nth-of-type(2))で見かけ上2列に割っていたが、STEP 5-2で
+   DOM自体を#readColumn/#actColumnの2つの実在するdivに分けたため、この技法は不要に
+   なった(削除)。ここではCSS Gridで#layoutを素直に3列にする。#infoColumnは
+   display:contentsにして自身をグリッドから消し、子の#readColumn/#actColumnを
+   #layoutの直接のグリッドアイテムにする(#boardColumnと高さが結合しないよう、
+   align-items:startは既存のまま維持する)。
+   1200px未満では縦積み(既存の @media (min-width: 900px) の2カラム。この幅では
+   #infoColumnは通常のブロック要素のままなので、#readColumn→#actColumnは
+   自然に縦積みになる)のまま。 */
 @media (min-width: 1200px) {
   /* 上下の余白を詰める。3カラムにしても body の上下マージン(既定 2rem)が
      そのままだと 900px をわずかに超えるため(実測: 本文の下端 898px に対し
@@ -61,23 +62,19 @@ h1 {
   }
 
   #layout {
-    grid-template-columns: minmax(380px, 440px) 1fr;
+    grid-template-columns: minmax(380px, 440px) 1fr 1fr;
   }
 
   #infoColumn {
-    columns: 2;
-    column-gap: 2rem;
+    display: contents;
   }
 
-  /* ブロックが列をまたいで途中で分割されないようにする。 */
-  #infoColumn > * {
-    break-inside: avoid;
-  }
-
-  /* [4]「どう指すか」以降を2列目の先頭へ送る。ここが [0〜3] と [4〜5] の境目。 */
-  #infoColumn > h2:nth-of-type(2) {
-    break-before: column;
-    margin-top: 0;
+  #readColumn,
+  #actColumn {
+    /* grid item既定のmin-width:autoのままだと、#history等の内容量次第で
+       列がはみ出す(横スクロールが発生する)ことがあるための対策
+       (900px時点の#infoColumnと同じ理由)。 */
+    min-width: 0;
   }
 }
 
@@ -268,12 +265,15 @@ h1 {
   padding-left: 1.2rem;
 }
 
-/* Unit 3(情報構造の整理): 右カラムは [0] 今すぐ対処が必要なこと → [1] 今、盤で
-   起きたこと → [2] 狙い → [3] なぜそれが重要か → [4] どう指すか の5ブロック。
-   同じ意味の情報を別カードに分散させないため、[2][3] は内側を小見出し(h4)で
-   区切るだけにして、カードそのものは増やさない。 */
-#aim,
-#why {
+/* 【STEP 5-2(構造。人間承認済み)】読む列は 帯(いま注意する駒)→ ① 何が起きているか →
+   ② 相手の狙い → ③ 何が重要か → ④ 自分の目的 の並び。同じ意味の情報を別カードに
+   分散させないため、②④ はカード内の小見出しを出さず(カードが1枚のみになった)、
+   ③ は従来どおり内側を小見出し(h4)で区切るだけにして、カードそのものは増やさない。
+   旧#aim(current_shape・opponent_intentの2カードを1つの箱にまとめていたもの)は
+   #opponentAim(②)と#myAim(④)に分割したため、ここも同様に分ける。 */
+#opponentAim,
+#why,
+#myAim {
   display: flex;
   flex-direction: column;
   gap: 0.4rem;
@@ -285,12 +285,14 @@ h1 {
   margin-bottom: 0.7rem;
 }
 
-/* [0]「今すぐ対処が必要なこと」。該当が無いときは中身が空になり、
-   marginだけが残らないよう:emptyで畳む。 */
+/* 帯「いま注意する駒」。該当が無いときはhidden属性で要素ごと消すため:emptyの対策は
+   不要になったが、他の3ブロック(内容が無ければ中身が空になる)はmarginだけが
+   残らないよう:emptyで畳む。 */
 #urgent:empty,
 #happened:empty,
-#aim:empty,
-#why:empty {
+#opponentAim:empty,
+#why:empty,
+#myAim:empty {
   margin-bottom: 0;
 }
 
@@ -392,11 +394,16 @@ h1 {
   font-size: 1.05rem;
 }
 
-#infoColumn h2:first-child {
+/* 【STEP 5-2】以前はh2「今の局面」が#infoColumnの直接の最初の子だったため
+   :first-childで選べたが、読む列/操作する列に分けたことで、①/⑤の見出しは
+   それぞれ#readColumn/#actColumnの最初のh2要素になった(帯#urgentは見出しの
+   前にある通常のdivのため、:first-childでは選べない)。:first-of-typeで
+   「その列で最初に現れるh2」を選ぶ。 */
+#readColumn > h2:first-of-type,
+#actColumn > h2:first-of-type {
   margin-top: 0;
 }
 
-#aim > h3,
 #why > h3,
 #urgent > h3 {
   margin: 0 0 0.25rem;
@@ -459,15 +466,24 @@ h1 {
   margin-top: 0.4rem;
 }
 
-/* [5] は参考資料なので既定で折りたたむ(見出しは常に見える)。
-   本文はスクロールせずに [0]〜[4] を読めるようにするための措置で、
-   情報そのものは削っていない。 */
+/* 「参考になる囲い」「指し手履歴」は参考資料・付随情報なので既定で折りたたむ
+   (見出しは常に見える)。本文はスクロールせずに主要な情報を読めるようにするための
+   措置で、情報そのものは削っていない。
+   【STEP 5-2(構造。人間承認済み)】道のりの一覧(details 道のり)も同じ理由(⑤の
+   候補手セクションを主に読み、道のりは必要なときだけ開く)で既定閉の折りたたみに
+   したため、同じ見た目を適用する。 */
+#routeDetails > summary,
 #referenceDetails > summary,
 #historyDetails > summary {
   cursor: pointer;
   font-size: 0.85rem;
   font-weight: bold;
   padding: 0.2rem 0;
+}
+
+#routeDetails > summary {
+  font-family: inherit;
+  margin-top: 0.6rem;
 }
 
 #referenceDetails > summary {
@@ -740,13 +756,15 @@ h1 {
 
   #urgent,
   #happened,
-  #aim,
-  #why {
+  #opponentAim,
+  #why,
+  #myAim {
     margin-bottom: 0.5rem;
   }
 
-  #aim,
-  #why {
+  #opponentAim,
+  #why,
+  #myAim {
     gap: 0.3rem;
   }
 
@@ -756,7 +774,6 @@ h1 {
     margin-bottom: 0.5rem;
   }
 
-  #aim > h3,
   #why > h3,
   #urgent > h3 {
     margin-bottom: 0.15rem;

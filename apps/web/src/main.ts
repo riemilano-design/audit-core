@@ -19,6 +19,7 @@ import {
   groupCandidateExplanationsByReason,
   shouldShowNextConsiderations,
   shouldRetryPlanRefresh,
+  splitCoachByStage,
   startNewGame,
   submitMove,
   type CoachExplanation,
@@ -42,7 +43,16 @@ if (!app) throw new Error("#appが見つかりません");
 // #coach + #plan から、人間が承認した5ブロック(#urgent / #happened / #aim / #why /
 // #howto)+ 折りたたんだ #historyDetails へ変えた。#board, #hands, #controls,
 // #history のidは従来どおりで、盤面まわりのレンダリングは無変更である。
-// PC等の十分な横幅ではCSS Grid(style.css参照)でこの2つを横並びにし、
+// 【STEP 5-2(構造。人間承認済み、docs/PHASES.md「見せ方の確定」決定2の1・2)で
+// 変わった点】#infoColumnを「読む列」#readColumnと「操作する列」#actColumnの
+// 2つに分けた。#readColumnは帯(いま注意する駒。中身が無ければhiddenにする)→
+// ①〜④(何が起きているか/相手の狙い/何が重要か/自分の目的)。#actColumnは
+// ⑤(候補手)→道のり(details、既定閉)→参考になる囲い→指し手履歴。
+// 旧#aim(current_shape・opponent_intentの2カードを1つの箱にまとめていたもの)は
+// #opponentAim(②)と#myAim(④)に分割した。旧#howtoは#candidatesに改名した
+// (docs/STEP_5-2_PLAN_2026-09-11.md A-1のid指定どおり)。情報の内容・文言は
+// 変えていない(置き場所と見出しだけの変更)。
+// PC等の十分な横幅ではCSS Grid(style.css参照)で3列(盤|読む列|操作する列)にし、
 // 狭い画面では通常のブロック要素として縦積みのままにする。
 app.innerHTML = `
   <h1>将棋コーチ</h1>
@@ -66,21 +76,33 @@ app.innerHTML = `
       <div id="error"></div>
     </div>
     <div id="infoColumn">
-      <h2>今の局面</h2>
-      <div id="urgent"></div>
-      <div id="happened"></div>
-      <div id="aim"></div>
-      <div id="why"></div>
-      <h2>どう指すか</h2>
-      <div id="howto"></div>
-      <details id="referenceDetails">
-        <summary>参考になる囲い</summary>
-        <div id="reference"></div>
-      </details>
-      <details id="historyDetails">
-        <summary>指し手履歴</summary>
-        <ol id="history"></ol>
-      </details>
+      <div id="readColumn">
+        <div id="urgent"></div>
+        <h2>① 何が起きているか</h2>
+        <div id="happened"></div>
+        <h2>② 相手の狙い</h2>
+        <div id="opponentAim"></div>
+        <h2>③ 何が重要か</h2>
+        <div id="why"></div>
+        <h2>④ 自分の目的</h2>
+        <div id="myAim"></div>
+      </div>
+      <div id="actColumn">
+        <h2>⑤ 候補手</h2>
+        <div id="candidates"></div>
+        <details id="routeDetails">
+          <summary>道のり</summary>
+          <div id="routeList"></div>
+        </details>
+        <details id="referenceDetails">
+          <summary>参考になる囲い</summary>
+          <div id="reference"></div>
+        </details>
+        <details id="historyDetails">
+          <summary>指し手履歴</summary>
+          <ol id="history"></ol>
+        </details>
+      </div>
     </div>
   </div>
 `;
@@ -95,9 +117,11 @@ const errorEl = document.querySelector<HTMLDivElement>("#error")!;
 const historyEl = document.querySelector<HTMLOListElement>("#history")!;
 const urgentEl = document.querySelector<HTMLDivElement>("#urgent")!;
 const happenedEl = document.querySelector<HTMLDivElement>("#happened")!;
-const aimEl = document.querySelector<HTMLDivElement>("#aim")!;
+const opponentAimEl = document.querySelector<HTMLDivElement>("#opponentAim")!;
 const whyEl = document.querySelector<HTMLDivElement>("#why")!;
-const planEl = document.querySelector<HTMLDivElement>("#howto")!;
+const myAimEl = document.querySelector<HTMLDivElement>("#myAim")!;
+const planEl = document.querySelector<HTMLDivElement>("#candidates")!;
+const routeListEl = document.querySelector<HTMLDivElement>("#routeList")!;
 const referenceEl = document.querySelector<HTMLDivElement>("#reference")!;
 const moveInput = document.querySelector<HTMLInputElement>("#moveInput")!;
 const submitButton = document.querySelector<HTMLButtonElement>("#submitMove")!;
@@ -199,22 +223,28 @@ function lastOpponentMoveSquares(moveHistory: string[]): { from: string | undefi
 // 「棋譜解析結果を見る画面」ではなく「対局しながら意味を理解する画面」を意識し、
 // 将棋用語を知らない初心者にも伝わる短い日本語ラベルに変換する
 // (これらはUI表示上の見出し文言であり、将棋の事実そのものではない)。
-// Unit 3(情報構造の整理): 段ごとに独立したカードの見出しを並べるのをやめ、
-// [2]「狙い」・[3]「なぜそれが重要か」という2つの情報単位の中の小見出しにする。
-// 見出しの文言は人間が承認した5ブロック構成のものをそのまま使う。
+// Unit 3(情報構造の整理)で、段ごとに独立したカードの見出しを並べるのをやめ、
+// 情報単位の中の小見出しにした。
+// 【STEP 5-2】②(相手の狙い)・④(自分の目的)は、ブロックの見出し自体が
+// 「② 相手の狙い」「④ 自分の目的」になったため、カード内の小見出しは重複するので
+// 出さない(appendCoachItemのshowTitle:false)。③(なぜそれが重要か)は現行どおり
+// このラベルをカード内の小見出しとして使う。
 const STAGE_LABELS: Record<CoachStage, string> = {
   current_shape: "自分の狙い",
   opponent_intent: "相手の狙い",
   opponent_next_aim: "このあと起こりやすいこと",
 };
 
-/** [2]「狙い」に入れる段。[3]へ回すのは opponent_next_aim だけ。 */
 /** [5] の導入文。人間が指示した思想(「どれを選びますか?」ではない)をそのまま文にしたもの。 */
 const REFERENCE_INTRO_TEXT =
   "将棋にはこういう形があります。今の局面では、そのうちどの形に近い部分があるかをコーチが説明します。";
 
-const AIM_STAGES: CoachStage[] = ["current_shape", "opponent_intent"];
 const WHY_STAGES: CoachStage[] = ["opponent_next_aim"];
+
+/** coachがundefined(説明生成に失敗した場合)に②④で表示する既存の文言。
+ * Unit 3の旧#aimで使っていたものと同じ文で、②④に分割しても両方に出す
+ * (どちらのブロックも「この局面の説明」の一部であるため)。 */
+const COACH_UNAVAILABLE_TEXT = "この局面の説明を取得できませんでした。対局は続けられます。";
 
 const STATUS_LABELS: Record<CoachStatus, string> = {
   none: "まだ判断できません",
@@ -230,22 +260,28 @@ const CONFIDENCE_LABELS: Record<ConfidenceLevel, string> = {
 };
 
 /**
- * 1件の説明を、[2]・[3] の中の1項目として描く。
+ * 1件の説明を、情報単位の中の1項目として描く。
  *
  * 【purposeについて(Unit 3・人間の承認済み)】
  * サーバーは以前から purpose(この情報を何のために見るのか)を返していたが、web側が
  * 一切描画していなかった。[../../../CLAUDE.md](../../../CLAUDE.md)「絶対に守るルール」
  * 1番(目的→手→理由の順で説明を構成する)を画面上でも満たすため、reasonの前に置く。
  * 文言はサーバーが返したものをそのまま表示するだけで、web側で作らない。
+ *
+ * 【STEP 5-2】showTitle(既定true)をfalseにすると、カード内の小見出し(h4)を
+ * 出さない。②「相手の狙い」④「自分の目的」は、ブロックの見出し自体が同じ意味を
+ * 述べるため重複を避ける(呼び出し側で使い分ける。文はpurpose/reasonのみ変わらず出す)。
  */
-function appendCoachItem(container: HTMLElement, item: CoachExplanation): void {
+function appendCoachItem(container: HTMLElement, item: CoachExplanation, options?: { showTitle?: boolean }): void {
   const section = document.createElement("section");
   section.className = `coach-stage coach-status-${item.status}`;
 
-  const title = document.createElement("h4");
-  title.className = "coach-stage-title";
-  title.textContent = STAGE_LABELS[item.stage] ?? item.stage;
-  section.appendChild(title);
+  if (options?.showTitle !== false) {
+    const title = document.createElement("h4");
+    title.className = "coach-stage-title";
+    title.textContent = STAGE_LABELS[item.stage] ?? item.stage;
+    section.appendChild(title);
+  }
 
   const purpose = document.createElement("p");
   purpose.className = "coach-purpose";
@@ -279,29 +315,62 @@ function appendAimBadge(container: HTMLElement, coach: CoachExplanation[]): void
   container.appendChild(badge);
 }
 
-/** [2]「狙い」。自分の狙いと相手の狙いを、1つの情報単位として並べる。 */
-function renderAim(coach: CoachExplanation[] | undefined): void {
-  aimEl.innerHTML = "";
+/**
+ * ②「相手の狙い」(STEP 5-2)。以前は[2]「狙い」の中でcurrent_shapeと1つの箱に
+ * まとまっていたopponent_intentのカードを、独立したブロックとして置く。
+ * カード内の小見出し(appendCoachItemのh4)は、ブロックの見出し「② 相手の狙い」と
+ * 意味が重複するため出さない(showTitle:false)。purpose/reasonの文はそのまま。
+ */
+function renderOpponentAim(coach: CoachExplanation[] | undefined): void {
+  opponentAimEl.innerHTML = "";
 
   if (!coach) {
     const p = document.createElement("p");
     p.className = "coach-unavailable";
-    p.textContent = "この局面の説明を取得できませんでした。対局は続けられます。";
-    aimEl.appendChild(p);
+    p.textContent = COACH_UNAVAILABLE_TEXT;
+    opponentAimEl.appendChild(p);
     return;
   }
 
-  const items = coach.filter((item) => AIM_STAGES.includes(item.stage));
-  if (items.length === 0) return;
+  // STEP 4-6(G-1、人間承認済み): appendAimBadgeを呼ばず、バッジを描画しない
+  // (この方針はUnit 3から変えていない)。
 
-  const heading = document.createElement("h3");
-  heading.textContent = "狙い";
-  aimEl.appendChild(heading);
-  // STEP 4-6(G-1、人間承認済み): appendAimBadgeを呼ばず、バッジを描画しない。
-
-  for (const item of items) {
-    appendCoachItem(aimEl, item);
+  const { opponentIntent } = splitCoachByStage(coach);
+  for (const item of opponentIntent) {
+    appendCoachItem(opponentAimEl, item, { showTitle: false });
   }
+}
+
+/**
+ * ④「自分の目的」(STEP 5-2)。directionNote(局面から認識できた方向が1つに
+ * 定まらないときの一文。以前は[4]「どう指すか」renderPlanの先頭にあった)→
+ * current_shapeのカード(②と同じ理由でshowTitle:false)→ 組み上がり
+ * (renderShapeCompletion。できているマス・これから作るマス)の順に並べる。
+ * 見せ方の確定(2026-09-11)決定2の1「directionNoteは④の先頭」のとおり。
+ */
+function renderMyAim(coach: CoachExplanation[] | undefined, plan: ReachablePlanBody): void {
+  myAimEl.innerHTML = "";
+
+  if (plan.directionNote) {
+    const note = document.createElement("p");
+    note.className = "direction-note";
+    note.textContent = plan.directionNote;
+    myAimEl.appendChild(note);
+  }
+
+  if (!coach) {
+    const p = document.createElement("p");
+    p.className = "coach-unavailable";
+    p.textContent = COACH_UNAVAILABLE_TEXT;
+    myAimEl.appendChild(p);
+  } else {
+    const { currentShape } = splitCoachByStage(coach);
+    for (const item of currentShape) {
+      appendCoachItem(myAimEl, item, { showTitle: false });
+    }
+  }
+
+  renderShapeCompletion(plan);
 }
 
 /**
@@ -346,17 +415,23 @@ function renderWhy(coach: CoachExplanation[] | undefined, plan: ReachablePlanBod
 }
 
 /**
- * [0]「今すぐ対処が必要なこと」。どのメッセージが該当するかはサーバー側
+ * 帯「いま注意する駒」。どのメッセージが該当するかはサーバー側
  * (api/stateResponse.tsのpartitionUrgentMessages)が決めており、web側は表示するだけ。
- * 該当が無ければ要素ごと出さない(空のカードを残さない)。
+ * 行の文言(当たり・王手・詰み)は既存のまま変えていない。
+ *
+ * 【STEP 5-2(見せ方の確定 決定2の2、人間承認済み)】見出しを「今すぐ対処が必要なこと」
+ * から「いま注意する駒」へ変える(中身が非評価の事実である利きの有無であることに
+ * 見出しを合わせた、承認済みの新しい文言)。該当が無ければ要素ごとhiddenにする
+ * (読む列の最上部から帯自体を消し、①が最上段になる)。
  */
 function renderUrgent(plan: ReachablePlanBody | undefined): void {
   urgentEl.innerHTML = "";
   const messages = plan?.urgentMessages ?? [];
+  urgentEl.hidden = messages.length === 0;
   if (messages.length === 0) return;
 
   const heading = document.createElement("h3");
-  heading.textContent = "今すぐ対処が必要なこと";
+  heading.textContent = "いま注意する駒";
   urgentEl.appendChild(heading);
 
   const list = document.createElement("ul");
@@ -450,7 +525,15 @@ function renderHappened(plan: ReachablePlanBody): void {
 // マス目は既に日本語表記に変換済み)の表示のみで、判定・計算は一切しない。
 // 「この手が良いから表示している」と誤解させないため、候補手が「形に近づく経路の
 // 一手」であることを言葉で明示し、強さ・良し悪しには一切触れない。
-function renderRouteProgress(plan: ReachablePlanBody): void {
+//
+// 【STEP 5-2(構造。人間承認済み)】以前は1つの関数(renderRouteProgress)が
+// 「組み上がり」(見出し・できているマス・これから作るマス)と「道のりの一覧」
+// (各目標マスへの残り手数・塞がり)を1つの.route-sectionにまとめて[4]「どう指すか」
+// (旧planEl)へ描いていたが、見せ方の確定(決定2の1)により組み上がりは④「自分の目的」
+// (myAimEl)へ、道のりの一覧は操作する列の折りたたみ(#routeList)へ分かれた。
+// そのため関数を renderShapeCompletion(組み上がり) と renderRouteList(道のりの一覧)
+// の2つに分ける。文言・判定は変えていない。
+function renderShapeCompletion(plan: ReachablePlanBody): void {
   const progress = plan.targetShapeProgress;
   if (!progress) return;
 
@@ -463,7 +546,7 @@ function renderRouteProgress(plan: ReachablePlanBody): void {
 
   // Unit 3(重複の除去): 形の説明(characteristics)はここには出さない。
   // 同じ文が [5]「参考になる囲い」にもあり、同じ内容を2箇所で述べることになるため
-  // ([5] を「囲いを知る場所」、ここ [4] を「どう指すかを見る場所」と役割で分ける)。
+  // ([5] を「囲いを知る場所」、ここ ④ を「どう指すかを見る場所」と役割で分ける)。
   // progress.description 自体はサーバーから引き続き届く(表示をやめただけ)。
 
   const done = document.createElement("p");
@@ -478,77 +561,98 @@ function renderRouteProgress(plan: ReachablePlanBody): void {
     doneLabels.length > 0 ? `できているマス: ${doneLabels.join("、")}` : "できているマス: まだありません";
   section.appendChild(done);
 
-  if (plan.routes.length > 0) {
-    const routesHeading = document.createElement("p");
-    routesHeading.className = "route-list-heading";
-    routesHeading.textContent = "これから作るマスと、そこまでの道のり:";
-    section.appendChild(routesHeading);
-
-    const list = document.createElement("ul");
-    list.className = "route-list";
-    for (const route of plan.routes) {
-      const li = document.createElement("li");
-
-      // 【Phase 7 Unit 3(詰まりの可視化)。人間承認済み】
-      // 以前は「玉を８八へ … 残り1手(７八→８八)」の1行だけで、初心者には
-      // 「玉を８八へ動かせばいい」としか読めなかった(なぜ進めないのかが画面に無い)。
-      // 目標・残り手数・塞がりの事実を行で分け、道のりの中で完結させる。
-      const target = document.createElement("span");
-      target.className = "route-main";
-      target.textContent = `${route.targetPiece}を${route.targetSquareLabel}へ`;
-      li.appendChild(target);
-
-      const steps = document.createElement("span");
-      steps.className = "route-steps";
-      steps.textContent = `残り${route.remainingSteps}手(${route.routeLabel})`;
-      li.appendChild(steps);
-
-      // 「どのマスを、何の駒が塞いでいるか」は現在の盤のそのマスを読むだけ、
-      // 「その駒に指せる手があるか」は合法手を移動元で絞るだけの機械的な事実で、
-      // どちらもサーバー側(routePlanner.ts / stateResponse.ts)で確定済み。
-      // ここでは受け取った値を並べるだけで、将棋の判断は一切しない。
-      if (route.blockingSquareLabel !== null && route.blockingPieceName !== null) {
-        const blocked = document.createElement("span");
-        blocked.className = "route-blocked";
-        blocked.textContent = `${route.blockingSquareLabel}が${route.blockingPieceName}で塞がっています。`;
-        li.appendChild(blocked);
-
-        // その駒に合法手が1つも無い場合だけ添える(合法手がある場合は、その手が
-        // 下の候補手に「次の一歩」として並ぶため、ここで重ねて述べない)。
-        if (route.blockingSquareHasLegalMove === false) {
-          const stuck = document.createElement("span");
-          stuck.className = "route-blocked";
-          stuck.textContent = `その${route.blockingPieceName}から指せる手はありません。`;
-          li.appendChild(stuck);
-        }
-      }
-
-      // Unit 3(情報構造の整理): ここにあった2つの注記は今も出さない。
-      // - 「この道のりの一手目は、今の局面では指せません。」は、同じ画面の下に候補手が
-      //   並ぶため矛盾して読める。サーバー側(filterContradictoryConsiderations)で
-      //   同種の一文を出し分けており、ここでも繰り返さない
-      // 一方「◯◯には今、自分の駒があります。」に相当する事実は、Phase 7 Unit 3 で
-      // 候補手の理由文から外し、上の .route-blocked へ一本化した(置き場所の変更であり、
-      // 判定・データは変えていない)。
-
-      list.appendChild(li);
-    }
-    section.appendChild(list);
-  } else if (progress.missingSquareLabels.length > 0) {
+  // 【STEP 5-2(A-2、人間承認済み)】以前は「これから作るマス: X、Y」という行は、
+  // routesが空(道のりが無い)場合にだけ出ていた(routesがあるときは、この文言の
+  // 代わりに下の道のり一覧の見出し「これから作るマスと、そこまでの道のり:」の中に
+  // しか現れていなかった)。道のり一覧を④の外(操作する列の折りたたみ)へ移したため、
+  // ④単独でも「これから作るマスは何か」が分かるよう、routesの有無に関わらず
+  // このマス目一覧の行を常に出す(0件なら行自体を出さない)。これは新しい文ではなく、
+  // 既存文(下のroutes.length===0の分岐と同じ文言)をroutesがある場合にも広げた
+  // 派生表示であり、括弧書き「(道のりは今の局面では計算できませんでした)」は
+  // routesが実際に計算できている場合には付けない(routesが0件かつ除外でない場合の
+  // 5-1の出し分けはそのまま維持する)。
+  if (progress.missingSquareLabels.length > 0) {
     const note = document.createElement("p");
     note.className = "route-note";
-    // STEP 5-1(A-4、人間承認済み。LP-1): 候補手が除外された結果routesが空のときは、
-    // 「道のりは今の局面では計算できませんでした」という括弧書きが事実に反する
-    // (道のりは計算できたが、候補手を表示していないだけ)。isCandidateMovesExcludedは
-    // A-1と同一条件をサーバーの確定値から読むだけの純粋関数で、web側で新しい判定は
-    // 持たない。既存文から括弧書きを外すだけで、新しい文は作らない。
-    note.textContent = isCandidateMovesExcluded(plan)
-      ? `これから作るマス: ${progress.missingSquareLabels.join("、")}`
-      : `これから作るマス: ${progress.missingSquareLabels.join("、")}(道のりは今の局面では計算できませんでした)`;
+    if (plan.routes.length > 0) {
+      note.textContent = `これから作るマス: ${progress.missingSquareLabels.join("、")}`;
+    } else {
+      // STEP 5-1(A-4、人間承認済み。LP-1): 候補手が除外された結果routesが空のときは、
+      // 「道のりは今の局面では計算できませんでした」という括弧書きが事実に反する
+      // (道のりは計算できたが、候補手を表示していないだけ)。isCandidateMovesExcludedは
+      // A-1と同一条件をサーバーの確定値から読むだけの純粋関数で、web側で新しい判定は
+      // 持たない。既存文から括弧書きを外すだけで、新しい文は作らない。
+      note.textContent = isCandidateMovesExcluded(plan)
+        ? `これから作るマス: ${progress.missingSquareLabels.join("、")}`
+        : `これから作るマス: ${progress.missingSquareLabels.join("、")}(道のりは今の局面では計算できませんでした)`;
+    }
     section.appendChild(note);
   }
 
-  planEl.appendChild(section);
+  myAimEl.appendChild(section);
+}
+
+/** 操作する列の折りたたみ「道のり」。各目標マスへの残り手数・塞がりの一覧
+ * (renderShapeCompletionから分離。文言・判定は変えていない)。 */
+function renderRouteList(plan: ReachablePlanBody): void {
+  routeListEl.innerHTML = "";
+  if (plan.routes.length === 0) return;
+
+  const routesHeading = document.createElement("p");
+  routesHeading.className = "route-list-heading";
+  routesHeading.textContent = "これから作るマスと、そこまでの道のり:";
+  routeListEl.appendChild(routesHeading);
+
+  const list = document.createElement("ul");
+  list.className = "route-list";
+  for (const route of plan.routes) {
+    const li = document.createElement("li");
+
+    // 【Phase 7 Unit 3(詰まりの可視化)。人間承認済み】
+    // 以前は「玉を８八へ … 残り1手(７八→８八)」の1行だけで、初心者には
+    // 「玉を８八へ動かせばいい」としか読めなかった(なぜ進めないのかが画面に無い)。
+    // 目標・残り手数・塞がりの事実を行で分け、道のりの中で完結させる。
+    const target = document.createElement("span");
+    target.className = "route-main";
+    target.textContent = `${route.targetPiece}を${route.targetSquareLabel}へ`;
+    li.appendChild(target);
+
+    const steps = document.createElement("span");
+    steps.className = "route-steps";
+    steps.textContent = `残り${route.remainingSteps}手(${route.routeLabel})`;
+    li.appendChild(steps);
+
+    // 「どのマスを、何の駒が塞いでいるか」は現在の盤のそのマスを読むだけ、
+    // 「その駒に指せる手があるか」は合法手を移動元で絞るだけの機械的な事実で、
+    // どちらもサーバー側(routePlanner.ts / stateResponse.ts)で確定済み。
+    // ここでは受け取った値を並べるだけで、将棋の判断は一切しない。
+    if (route.blockingSquareLabel !== null && route.blockingPieceName !== null) {
+      const blocked = document.createElement("span");
+      blocked.className = "route-blocked";
+      blocked.textContent = `${route.blockingSquareLabel}が${route.blockingPieceName}で塞がっています。`;
+      li.appendChild(blocked);
+
+      // その駒に合法手が1つも無い場合だけ添える(合法手がある場合は、その手が
+      // 下の候補手に「次の一歩」として並ぶため、ここで重ねて述べない)。
+      if (route.blockingSquareHasLegalMove === false) {
+        const stuck = document.createElement("span");
+        stuck.className = "route-blocked";
+        stuck.textContent = `その${route.blockingPieceName}から指せる手はありません。`;
+        li.appendChild(stuck);
+      }
+    }
+
+    // Unit 3(情報構造の整理): ここにあった2つの注記は今も出さない。
+    // - 「この道のりの一手目は、今の局面では指せません。」は、同じ画面の下に候補手が
+    //   並ぶため矛盾して読める。サーバー側(filterContradictoryConsiderations)で
+    //   同種の一文を出し分けており、ここでも繰り返さない
+    // 一方「◯◯には今、自分の駒があります。」に相当する事実は、Phase 7 Unit 3 で
+    // 候補手の理由文から外し、上の .route-blocked へ一本化した(置き場所の変更であり、
+    // 判定・データは変えていない)。
+
+    list.appendChild(li);
+  }
+  routeListEl.appendChild(list);
 }
 
 // 【Phase6 Unit4】「今の局面で分かっていること」。直前の一手による差分(Unit2/Unit3)
@@ -557,8 +661,9 @@ function renderRouteProgress(plan: ReachablePlanBody): void {
 // (nextConsiderationDetector.ts / nextConsiderationExplanation.ts)で確定済みで、
 // ここでは受け取った文字列をそのまま表示するだけ。判定・文言生成・並び替え・
 // フィルタはweb側に一切持たない。
-// 表示位置は経路(.route-section)の直後・候補手(.candidate-section)の直前
-// (人間承認済み)。
+// 表示位置は⑤(#candidates)の中で、候補手セクション(.candidate-section)の直前
+// (人間承認済み。STEP 5-2で組み上がり.route-sectionは④myAimElへ移ったが、
+// この相対位置(候補手セクションの直前)自体は変えていない)。
 function renderNextConsiderations(plan: ReachablePlanBody): void {
   if (!shouldShowNextConsiderations(plan)) return;
 
@@ -664,18 +769,11 @@ function renderPlan(plan: ReachablePlanBody): void {
   const selectedShapeName: string | null = recognized?.name ?? null;
   const selectedShapeNote: string | null = recognized?.pendingReviewNote ?? null;
 
-  // 方向が1つに定まらないときは、サーバーが返した一文だけを出して候補手を出さない
-  // (ranked[0] フォールバックを復活させないための仕様。文言は人間が指定したもの)。
-  if (plan.directionNote) {
-    const note = document.createElement("p");
-    note.className = "direction-note";
-    note.textContent = plan.directionNote;
-    planEl.appendChild(note);
-  }
-
-  renderRouteProgress(plan);
-
-  // 【Phase6 Unit4】経路(道のり)の直後、候補手セクションの直前に置く(人間承認済み)。
+  // 【STEP 5-2(構造。人間承認済み)】directionNoteは④「自分の目的」(renderMyAim)の
+  // 先頭へ移した(見せ方の確定 決定2の1)。組み上がり(renderShapeCompletion)も④へ、
+  // 道のりの一覧(renderRouteList)は操作する列の折りたたみへ移り、ここでは呼ばない。
+  // 【Phase6 Unit4】「今の局面で分かっていること」は候補手セクションの直前に置く
+  // (人間承認済み。位置は変えていない)。
   renderNextConsiderations(plan);
 
   // 【Phase5 #7 要件2・4・6】候補手セクション本体。
@@ -1163,12 +1261,14 @@ function render(state: GameStateResponse): void {
   renderHands(state);
   renderStatus(state);
   renderHistory(state.moveHistory, state.moveHistoryJapanese);
-  // Unit 3(情報構造の整理): [0] 今すぐ対処が必要なこと → [1] 今、盤で起きたこと →
-  // [2] 狙い → [3] なぜそれが重要か → [4] どう指すか の順に描く。
+  // 【STEP 5-2(構造。人間承認済み)】読む列(帯 → ① → ② → ③ → ④)→
+  // 操作する列(⑤ → 道のり → 参考になる囲い)の順に描く。
   renderUrgent(state.plan);
   renderHappened(state.plan);
-  renderAim(state.coach);
+  renderOpponentAim(state.coach);
   renderWhy(state.coach, state.plan);
+  renderMyAim(state.coach, state.plan);
+  renderRouteList(state.plan);
   renderPlan(state.plan);
   renderReferenceShapes(state.plan);
 }
