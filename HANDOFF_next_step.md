@@ -39,6 +39,7 @@
 ## 3. 進め方の約束(変わらないもの)
 
 - 人間承認前にコミットしない。検証と状態変更を同一シェルで連結しない。
+- **コミットは `git add` を使わずパス指定で行う**(`git commit <パス> -m "..."`)。共有のステージ領域を通らないので、並行セッションの変更と混ざらない([docs/AGENT_PROTOCOL.md](docs/AGENT_PROTOCOL.md) 3. の 8)。
 - `apps/` を変える STEP は固定棋譜モードの対局回帰(approved の I-1・I-2 が 0 件)を完了条件に含める。回帰は `npx tsx scripts/playtest/replay.ts <kifu>`(既定で Threads=1・nodes 4,000,000)、比較は `compare.ts`、集約は `check.ts`。
 - 正本の改定(TESTING_STRATEGY 6.・AGENT_PROTOCOL 11.)は T-8 の後にまとめる(提案書 5.)。
 - 未処遇の既知事項は `scripts/check-docs.mjs` が併記する(2026-09-12 時点で U1-1・U1-12・P-4・P-5・P-13・U0-1 に **P-17** が加わる)。
