@@ -323,6 +323,12 @@ h1 {
   margin-bottom: 0.5rem;
 }
 
+/* STEP 5-B(A-3、人間承認済み): 入力欄・「指す」の削除後、残るボタン同士の間隔を
+   確保する(色・ボタン自体の見た目は変えない)。 */
+#controls button + button {
+  margin-left: 0.5rem;
+}
+
 /* STEP 4-7B(P-11。人間承認済みの文言・配置): 入力欄直下の案内文。 */
 .move-hint {
   margin: 0.2rem 0 0;

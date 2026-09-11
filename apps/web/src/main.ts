@@ -6,8 +6,12 @@
 // 駒・持ち駒をクリックして着手できるようにする(docs/PHASES.md Phase5、人間承認済み)。
 // 合法手判定は一切ここで再実装せず、サーバーが返すlegalMoves(rules/legalMoves.tsの
 // getLegalMovesをそのまま配線したもの、gameApi.ts参照)を文字列としてフィルタ・
-// グルーピングするだけに留める。USI形式のテキスト入力欄・「指す」ボタンは
-// フォールバックとしてそのまま残す。
+// グルーピングするだけに留める。
+//
+// 【STEP 5-B: USI形式の入力欄の廃止】
+// USI形式のテキスト入力欄(「例: 7g7f」)・「指す」ボタンは、初心者がUSI形式を
+// 知らない前提(docs/PLAYTEST_PERSONA_BEGINNER.md)から廃止した(人間承認済み)。
+// 指す操作は盤面クリックの経路(handleBoardMoveClick)のみになる。
 
 import {
   buildKifuJson,
@@ -73,16 +77,15 @@ app.innerHTML = `
       <div id="boardLegend"></div>
       <div id="hands"></div>
       <div id="controls">
-        <input id="moveInput" type="text" placeholder="例: 7g7f" autocomplete="off" />
-        <button id="submitMove">指す</button>
         <button id="newGame">新しい対局</button>
         <!-- STEP 5-A(A-1、人間承認済み。H-2): 現在の対局の棋譜(指し手だけ)を
              ブラウザのダウンロードでJSON書き出しする。0手のときはdisabled
              (render()で手数に応じて更新する。空の棋譜を作らないため)。 -->
         <button id="saveKifu" disabled>この対局を保存</button>
-        <!-- STEP 4-7B(P-11。人間承認済みの文言): 盤クリックでも着手できることの案内。
-             局面に依らず常時表示する(H-3: 入力欄直下の1行)。 -->
-        <p id="moveHint" class="move-hint">盤の駒を押しても指せます</p>
+        <!-- STEP 4-7B(P-11。人間承認済みの文言、STEP 5-B(H-1 (a)、人間承認済み)で
+             入力欄の廃止に合わせて文言を差し替え): 盤クリックで着手することの案内。
+             局面に依らず常時表示する(H-3: 元は入力欄直下の1行)。 -->
+        <p id="moveHint" class="move-hint">盤の駒を押して指します</p>
       </div>
       <div id="error"></div>
     </div>
@@ -134,8 +137,6 @@ const myAimEl = document.querySelector<HTMLDivElement>("#myAim")!;
 const planEl = document.querySelector<HTMLDivElement>("#candidates")!;
 const routeListEl = document.querySelector<HTMLDivElement>("#routeList")!;
 const referenceEl = document.querySelector<HTMLDivElement>("#reference")!;
-const moveInput = document.querySelector<HTMLInputElement>("#moveInput")!;
-const submitButton = document.querySelector<HTMLButtonElement>("#submitMove")!;
 const newGameButton = document.querySelector<HTMLButtonElement>("#newGame")!;
 const saveKifuButton = document.querySelector<HTMLButtonElement>("#saveKifu")!;
 
@@ -1625,7 +1626,7 @@ function schedulePlanRefresh(sfenAtSubmit: string, attempt = 1): void {
   }, PLAN_REFRESH_INTERVAL_MS);
 }
 
-// テキスト入力欄からの着手・盤面クリックからの着手の両方が使う共通処理。
+// 盤面クリックからの着手が使う共通処理(STEP 5-Bで入力欄からの着手は廃止した)。
 // 合法性の最終確認は既存通りサーバー(POST /api/game/move、applyMove.ts)側で行う
 // (ここでは通信結果の反映のみ)。戻り値は着手が成功したかどうか。
 //
@@ -1659,17 +1660,6 @@ async function playMove(moveUsi: string): Promise<boolean> {
     moveInFlight = false;
     renderInteractive();
   }
-}
-
-async function handleSubmitMove(): Promise<void> {
-  const move = moveInput.value.trim();
-  if (!move) return;
-  submitButton.disabled = true;
-  await playMove(move);
-  // STEP 4-7B(P-11。人間承認済み): 成功・失敗(非合法・通信エラー)にかかわらず
-  // 入力欄をクリアする。
-  moveInput.value = "";
-  submitButton.disabled = false;
 }
 
 // 【Phase5】盤面クリックで移動先マスを選んだときの着手。
@@ -1706,8 +1696,6 @@ function renderAndScheduleRefresh(state: GameStateResponse): void {
 
 async function handleNewGame(): Promise<void> {
   setError("");
-  // STEP 4-7B(P-11。人間承認済み): 「新しい対局」時も入力欄をクリアする。
-  moveInput.value = "";
   // STEP 5-3(A-2、人間承認済み。H-4 (a)): 新しい対局では①〜④の開閉を既定
   // (①開・②③④閉)へ戻す(手が進んでも維持する開閉と違い、対局そのものが
   // 変わるため)。
@@ -1734,12 +1722,6 @@ function handleSaveKifu(): void {
   URL.revokeObjectURL(url);
 }
 
-submitButton.addEventListener("click", () => {
-  void handleSubmitMove();
-});
-moveInput.addEventListener("keydown", (event) => {
-  if (event.key === "Enter") void handleSubmitMove();
-});
 newGameButton.addEventListener("click", () => {
   void handleNewGame();
 });
