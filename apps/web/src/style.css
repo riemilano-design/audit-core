@@ -364,13 +364,61 @@ h1 {
 }
 
 /* 帯「いま注意する駒」。該当が無いときはhidden属性で要素ごと消すため:emptyの対策は
-   不要になったが、他の3ブロック(内容が無ければ中身が空になる)はmarginだけが
-   残らないよう:emptyで畳む。 */
-#urgent:empty,
-#happened:empty,
-#opponentAim:empty,
-#why:empty,
-#myAim:empty {
+   不要。 */
+#urgent:empty {
+  margin-bottom: 0;
+}
+
+/*
+ * 【STEP 5-3(A-2、人間承認済み)】①〜④を「要約行+本文(開いたときだけ表示)」にする。
+ * .block-summary: 番号+名前の見出し(h2)の下に置く要約行。本文があるときはbutton化し、
+ * aria-expanded/aria-controlsでキーボードでも開閉できるようにする(main.ts
+ * renderExpandableBlock参照)。本文が無いとき(例: ①で盤の出来事がまだ無い初期局面)は
+ * button化せず、ただの行として要約(空文字のこともある)だけを出す。
+ */
+.block-summary {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem;
+  width: 100%;
+  font: inherit;
+  text-align: left;
+  color: inherit;
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+}
+
+button.block-summary {
+  cursor: pointer;
+}
+
+.block-summary-text {
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.block-summary-icon {
+  flex-shrink: 0;
+  font-size: 0.7rem;
+  color: #666;
+  padding-top: 0.2rem;
+}
+
+.block-body {
+  margin-top: 0.35rem;
+}
+
+/* 本文が無く要約も空文字のとき(①で盤の出来事がまだ無い初期局面等)は、
+ * 以前の:empty(中身が無いブロックのmarginを畳む)と同じ役割を、
+ * main.tsが付けるblock-emptyクラスで再現する。
+ */
+#happened.block-empty,
+#opponentAim.block-empty,
+#why.block-empty,
+#myAim.block-empty {
   margin-bottom: 0;
 }
 
@@ -672,7 +720,9 @@ h1 {
   margin: 0 0 0.6rem;
 }
 
-.plan-unavailable {
+.plan-unavailable,
+.plan-pending,
+.plan-excluded {
   font-size: 0.85rem;
   color: #666;
   margin: 0;
@@ -711,44 +761,10 @@ h1 {
   margin-bottom: 0.2rem;
 }
 
-/* Phase6 Unit4: 「今の局面で分かっていること」。経路(.route-section)の直後・
-   候補手(.candidate-section)の直前に置き、既存セクションと同じ表現方法
-   (左のアクセントバー)で並びが読み取れるようにする(装飾のみ。判定・文言は
-   サーバー側)。 */
-.next-considerations-section {
-  border: 1px solid #ccc;
-  border-left-width: 4px;
-  border-left-color: #8d86ab;
-  border-radius: 4px;
-  padding: 0.6rem 0.8rem;
-  margin-bottom: 0.8rem;
-  background: #fafafa;
-}
-
-.next-considerations-section h3 {
-  margin: 0 0 0.3rem;
-  font-size: 0.95rem;
-}
-
-.next-considerations-messages {
-  margin: 0;
-  padding-left: 1.1rem;
-}
-
-.next-consideration {
-  margin-bottom: 0.2rem;
-  line-height: 1.5;
-}
-
-/* 並び順の注記は、事実そのものではなく表示上の説明のため、控えめに見せる
-   (文言はサーバー側で確定済みで、ここでは変更しない)。 */
-.next-consideration-ordering_note {
-  list-style: none;
-  margin-left: -1.1rem;
-  margin-top: 0.4rem;
-  color: #555;
-  font-size: 0.85rem;
-}
+/* STEP 5-3(A-4、人間承認済み): 「今の局面で分かっていること」(旧
+   renderNextConsiderations/.next-considerations-section)は廃止した(H-2。小見出しを
+   出さない方針に伴い、候補手が0件のときの理由文はcandidateAbsenceReasonTextへ一本化
+   したため、この専用セクションは使われなくなった)。 */
 
 /* Phase6 Unit1: 「選択した形 → 必要なマス → 今どこまで出来ているか → 未達成部分の
    道のり → その最初の一手」という因果を示すUI(装飾のみ。判定・計算はサーバー側)。

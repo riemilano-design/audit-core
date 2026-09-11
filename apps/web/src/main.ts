@@ -17,11 +17,15 @@ import {
   candidateMoveUsisOnBoard,
   isCandidateMovesExcluded,
   groupCandidateExplanationsByReason,
-  shouldShowNextConsiderations,
   shouldRetryPlanRefresh,
   splitCoachByStage,
   partitionPieceThreatsForBoard,
   boardMarksFromState,
+  firstSentence,
+  summarizeHappened,
+  summarizeOpponentAim,
+  summarizeWhy,
+  summarizeMyAim,
   startNewGame,
   submitMove,
   type CoachExplanation,
@@ -318,39 +322,173 @@ function appendAimBadge(container: HTMLElement, coach: CoachExplanation[]): void
 }
 
 /**
+ * STEP 5-3(A-2、人間承認済み): ①〜④の開閉の状態(モジュール変数)。
+ * DOMに持つと1.5秒ごとの再取得・着手のたびの再描画で失われるため、
+ * emphasizedCandidateUsi等と同じくモジュール変数に持つ(F-7)。
+ * 既定は①開・②③④閉(人間の決定H-4 (a))。新しい対局でこの既定へ戻す
+ * (handleNewGame参照)。②と④は排他(片方を開くともう片方を閉じる)。③は独立。
+ */
+interface ReadColumnOpenState {
+  happened: boolean;
+  opponentAim: boolean;
+  why: boolean;
+  myAim: boolean;
+}
+
+const DEFAULT_READ_COLUMN_OPEN: ReadColumnOpenState = {
+  happened: true,
+  opponentAim: false,
+  why: false,
+  myAim: false,
+};
+
+let readColumnOpen: ReadColumnOpenState = { ...DEFAULT_READ_COLUMN_OPEN };
+
+/**
+ * STEP 5-3(A-2): ①〜④共通の「要約行+本文」の描画。containerの中身をこの関数が
+ * 丸ごと作り直す。buildBodyが何もbodyElに追加しなかった場合(本文が空)は、
+ * 要約行だけを出し、開閉の印(button化・アイコン)を出さない
+ * (押しても何も開かないボタンを置かないため)。
+ */
+function renderExpandableBlock(
+  container: HTMLElement,
+  bodyId: string,
+  summaryText: string,
+  isOpen: boolean,
+  onToggle: () => void,
+  buildBody: (bodyEl: HTMLElement) => void,
+): void {
+  container.innerHTML = "";
+
+  const bodyEl = document.createElement("div");
+  bodyEl.id = bodyId;
+  bodyEl.className = "block-body";
+  buildBody(bodyEl);
+
+  const hasBody = bodyEl.childNodes.length > 0;
+  container.classList.toggle("block-empty", !hasBody && summaryText.length === 0);
+
+  const summaryRow = document.createElement(hasBody ? "button" : "div");
+  summaryRow.className = "block-summary";
+  if (hasBody) {
+    (summaryRow as HTMLButtonElement).type = "button";
+    summaryRow.setAttribute("aria-expanded", String(isOpen));
+    summaryRow.setAttribute("aria-controls", bodyId);
+    summaryRow.addEventListener("click", onToggle);
+  }
+
+  const textSpan = document.createElement("span");
+  textSpan.className = "block-summary-text";
+  textSpan.textContent = summaryText;
+  summaryRow.appendChild(textSpan);
+
+  if (hasBody) {
+    const icon = document.createElement("span");
+    icon.className = "block-summary-icon";
+    icon.setAttribute("aria-hidden", "true");
+    icon.textContent = isOpen ? "▼" : "▶";
+    summaryRow.appendChild(icon);
+  }
+
+  container.appendChild(summaryRow);
+
+  bodyEl.hidden = !hasBody || !isOpen;
+  container.appendChild(bodyEl);
+}
+
+/**
+ * STEP 5-3(A-2): ①〜④の開閉状態を変えたあと、読む列4ブロックと盤(印の連動、A-3)を
+ * 描き直す。renderBoard(currentState)を呼ぶのは、②④の根拠・できているマスのtd背景が
+ * 開閉状態で変わるため(evidenceSquares/matchedSquaresの計算がreadColumnOpenを見る)。
+ * render()全体ではなくこの4関数+盤だけを呼ぶのは、render()のclearSelection()で
+ * 盤面クリックの選択状態を勝手に消さないため。
+ */
+function refreshReadColumnAndBoard(): void {
+  if (!currentState) return;
+  renderHappened(currentState.plan);
+  renderOpponentAim(currentState.coach);
+  renderWhy(currentState.coach, currentState.plan);
+  renderMyAim(currentState.coach, currentState.plan);
+  renderBoard(currentState);
+}
+
+function toggleHappened(): void {
+  readColumnOpen = { ...readColumnOpen, happened: !readColumnOpen.happened };
+  refreshReadColumnAndBoard();
+}
+
+/** ②と④は排他(決定2の5)。②を開くときは④を閉じる。 */
+function toggleOpponentAim(): void {
+  const opening = !readColumnOpen.opponentAim;
+  readColumnOpen = {
+    ...readColumnOpen,
+    opponentAim: opening,
+    myAim: opening ? false : readColumnOpen.myAim,
+  };
+  refreshReadColumnAndBoard();
+}
+
+function toggleWhy(): void {
+  readColumnOpen = { ...readColumnOpen, why: !readColumnOpen.why };
+  refreshReadColumnAndBoard();
+}
+
+/** ④と②は排他(決定2の5)。④を開くときは②を閉じる。 */
+function toggleMyAim(): void {
+  const opening = !readColumnOpen.myAim;
+  readColumnOpen = {
+    ...readColumnOpen,
+    myAim: opening,
+    opponentAim: opening ? false : readColumnOpen.opponentAim,
+  };
+  refreshReadColumnAndBoard();
+}
+
+/**
  * ②「相手の狙い」(STEP 5-2)。以前は[2]「狙い」の中でcurrent_shapeと1つの箱に
  * まとまっていたopponent_intentのカードを、独立したブロックとして置く。
  * カード内の小見出し(appendCoachItemのh4)は、ブロックの見出し「② 相手の狙い」と
  * 意味が重複するため出さない(showTitle:false)。purpose/reasonの文はそのまま。
+ *
+ * 【STEP 5-3(A-2)】要約行(summarizeOpponentAim)+本文(既存の全文)の開閉にした。
+ * coachが無い場合の要約は、本文と同じCOACH_UNAVAILABLE_TEXTの1文目を使う
+ * (新しい文は作らず、既存文からの抜粋という同じ規則を適用しただけ)。
  */
 function renderOpponentAim(coach: CoachExplanation[] | undefined): void {
-  opponentAimEl.innerHTML = "";
-
-  if (!coach) {
-    const p = document.createElement("p");
-    p.className = "coach-unavailable";
-    p.textContent = COACH_UNAVAILABLE_TEXT;
-    opponentAimEl.appendChild(p);
-    return;
-  }
-
-  // STEP 4-6(G-1、人間承認済み): appendAimBadgeを呼ばず、バッジを描画しない
-  // (この方針はUnit 3から変えていない)。
-
   const { opponentIntent } = splitCoachByStage(coach);
-  for (const item of opponentIntent) {
-    appendCoachItem(opponentAimEl, item, { showTitle: false });
-  }
+  const summaryText = !coach
+    ? firstSentence(COACH_UNAVAILABLE_TEXT)
+    : opponentIntent.length > 0
+      ? summarizeOpponentAim(opponentIntent[0]!)
+      : "";
 
-  // STEP 5-4(W-5、人間承認済み。H-1 (a)): 根拠のマス(evidenceSquares)があるときは
-  // 常に、承認済みの説明行を本文の末尾に置く(開閉・排他は5-3)。文言は一字も変えない。
-  const hasEvidence = opponentIntent.some((item) => (item.evidenceSquares?.length ?? 0) > 0);
-  if (hasEvidence) {
-    const note = document.createElement("p");
-    note.className = "board-mark-explanation";
-    note.textContent = "盤の淡い青灰の塗り＝この見立ての根拠になった相手の駒";
-    opponentAimEl.appendChild(note);
-  }
+  renderExpandableBlock(opponentAimEl, "opponentAim-body", summaryText, readColumnOpen.opponentAim, toggleOpponentAim, (body) => {
+    if (!coach) {
+      const p = document.createElement("p");
+      p.className = "coach-unavailable";
+      p.textContent = COACH_UNAVAILABLE_TEXT;
+      body.appendChild(p);
+      return;
+    }
+
+    // STEP 4-6(G-1、人間承認済み): appendAimBadgeを呼ばず、バッジを描画しない
+    // (この方針はUnit 3から変えていない)。
+
+    for (const item of opponentIntent) {
+      appendCoachItem(body, item, { showTitle: false });
+    }
+
+    // STEP 5-4(W-5、人間承認済み。H-1 (a)): 根拠のマス(evidenceSquares)があるときは
+    // 常に、承認済みの説明行を本文の末尾に置く。②の本文は開いたときだけ表示される
+    // (bodyEl.hidden)ため、この説明行も自然に「開いたときだけ」見える(A-3)。
+    const hasEvidence = opponentIntent.some((item) => (item.evidenceSquares?.length ?? 0) > 0);
+    if (hasEvidence) {
+      const note = document.createElement("p");
+      note.className = "board-mark-explanation";
+      note.textContent = "盤の淡い青灰の塗り＝この見立ての根拠になった相手の駒";
+      body.appendChild(note);
+    }
+  });
 }
 
 /**
@@ -359,71 +497,87 @@ function renderOpponentAim(coach: CoachExplanation[] | undefined): void {
  * current_shapeのカード(②と同じ理由でshowTitle:false)→ 組み上がり
  * (renderShapeCompletion。できているマス・これから作るマス)の順に並べる。
  * 見せ方の確定(2026-09-11)決定2の1「directionNoteは④の先頭」のとおり。
+ *
+ * 【STEP 5-3(A-2)】要約行(summarizeMyAim)+本文(既存の全文)の開閉にした。
  */
 function renderMyAim(coach: CoachExplanation[] | undefined, plan: ReachablePlanBody): void {
-  myAimEl.innerHTML = "";
+  const { currentShape } = splitCoachByStage(coach);
+  const progress = plan.targetShapeProgress;
+  const summaryText = !coach
+    ? firstSentence(COACH_UNAVAILABLE_TEXT)
+    : currentShape.length > 0
+      ? summarizeMyAim(currentShape[0]!, progress)
+      : "";
 
-  if (plan.directionNote) {
-    const note = document.createElement("p");
-    note.className = "direction-note";
-    note.textContent = plan.directionNote;
-    myAimEl.appendChild(note);
-  }
-
-  if (!coach) {
-    const p = document.createElement("p");
-    p.className = "coach-unavailable";
-    p.textContent = COACH_UNAVAILABLE_TEXT;
-    myAimEl.appendChild(p);
-  } else {
-    const { currentShape } = splitCoachByStage(coach);
-    for (const item of currentShape) {
-      appendCoachItem(myAimEl, item, { showTitle: false });
+  renderExpandableBlock(myAimEl, "myAim-body", summaryText, readColumnOpen.myAim, toggleMyAim, (body) => {
+    if (plan.directionNote) {
+      const note = document.createElement("p");
+      note.className = "direction-note";
+      note.textContent = plan.directionNote;
+      body.appendChild(note);
     }
-  }
 
-  renderShapeCompletion(plan);
+    if (!coach) {
+      const p = document.createElement("p");
+      p.className = "coach-unavailable";
+      p.textContent = COACH_UNAVAILABLE_TEXT;
+      body.appendChild(p);
+    } else {
+      for (const item of currentShape) {
+        appendCoachItem(body, item, { showTitle: false });
+      }
+    }
+
+    renderShapeCompletion(body, plan);
+  });
 }
 
 /**
  * [3]「なぜそれが重要か」。このあと起こりやすいことと、完成した自分の形の弱点。
  * どちらも既存のデータ(intentのnext_aim_explanation / shapeのweak_against)で、
  * 新しい文言は作らない。該当が無ければブロックごと出さない。
+ *
+ * 【STEP 5-3(A-2)】要約行(summarizeWhy)+本文(既存の全文)の開閉にした。③は②④と
+ * 独立(排他の対象ではない)。weaknessだけがあってitemsが無い場合(通常は起こらない。
+ * opponent_next_aimはcoachが定義されていれば常に1件生成されるため)、要約は
+ * weakness.textの1文目にする(新しい文は作らず、既存の抜粋規則を適用しただけ)。
  */
 function renderWhy(coach: CoachExplanation[] | undefined, plan: ReachablePlanBody | undefined): void {
-  whyEl.innerHTML = "";
-
   const items = (coach ?? []).filter((item) => WHY_STAGES.includes(item.stage));
   const weakness = plan?.shapeWeakness ?? null;
-  if (items.length === 0 && !weakness) return;
+  const summaryText = items.length > 0 ? summarizeWhy(items[0]!) : weakness ? firstSentence(weakness.text) : "";
 
-  const heading = document.createElement("h3");
-  heading.textContent = "なぜそれが重要か";
-  whyEl.appendChild(heading);
+  renderExpandableBlock(whyEl, "why-body", summaryText, readColumnOpen.why, toggleWhy, (body) => {
+    if (items.length === 0 && !weakness) return;
 
-  for (const item of items) {
-    appendCoachItem(whyEl, item);
-  }
+    const heading = document.createElement("h3");
+    heading.textContent = "なぜそれが重要か";
+    body.appendChild(heading);
 
-  if (weakness) {
-    const section = document.createElement("section");
-    section.className = "shape-weakness";
+    for (const item of items) {
+      appendCoachItem(body, item);
+    }
 
-    const title = document.createElement("h4");
-    title.className = "coach-stage-title";
-    // 人間が承認した文言(2026-09-09)。「弱いところ」は説明書的で、初心者には
-    // 「どんな攻めに気をつけるか」の方が直感的であるため。形の名前は、[3] の上に
-    // 別の形の話が並ぶことがあるので、どの囲いの話かが分かるよう残している。
-    title.textContent = `「${weakness.name}」${reviewNoteSuffix(weakness.pendingReviewNote)}が苦手な攻め`;
-    section.appendChild(title);
+    if (weakness) {
+      const section = document.createElement("section");
+      section.className = "shape-weakness";
 
-    const text = document.createElement("p");
-    text.className = "coach-reason";
-    text.textContent = weakness.text;
-    section.appendChild(text);
+      const title = document.createElement("h4");
+      title.className = "coach-stage-title";
+      // 人間が承認した文言(2026-09-09)。「弱いところ」は説明書的で、初心者には
+      // 「どんな攻めに気をつけるか」の方が直感的であるため。形の名前は、[3] の上に
+      // 別の形の話が並ぶことがあるので、どの囲いの話かが分かるよう残している。
+      title.textContent = `「${weakness.name}」${reviewNoteSuffix(weakness.pendingReviewNote)}が苦手な攻め`;
+      section.appendChild(title);
 
-    whyEl.appendChild(section);
-  }
+      const text = document.createElement("p");
+      text.className = "coach-reason";
+      text.textContent = weakness.text;
+      section.appendChild(text);
+
+      body.appendChild(section);
+    }
+  });
 }
 
 /**
@@ -505,7 +659,7 @@ function renderUrgent(plan: ReachablePlanBody | undefined): void {
 // 文言・マス目の日本語表記はすべてサーバー側(moveOutcomeExplanation.ts /
 // japaneseSquare.ts / japaneseMoveHistory.ts)で生成済みで、ここでは表示するだけ。
 // 判定・文言生成はweb側に一切持たない。
-function renderLastMoveOutcome(plan: ReachablePlanBody): void {
+function renderLastMoveOutcome(target: HTMLElement, plan: ReachablePlanBody): void {
   const outcome = plan.lastMoveOutcome;
   if (!outcome) return;
 
@@ -533,23 +687,30 @@ function renderLastMoveOutcome(plan: ReachablePlanBody): void {
   }
   section.appendChild(list);
 
-  happenedEl.appendChild(section);
+  target.appendChild(section);
 }
 
 /**
  * [1]「今、盤で起きたこと」。直前の一手と、その手で起きた事実をまとめる。
  * Phase3の「前回の計画が使えなくなりました」もここへ入れ、同じ事実を別ブロックで
  * もう一度述べないようにする(Unit 1 の実測で、同じ事実が4箇所に並んでいた)。
+ *
+ * 【STEP 5-3(A-2)】要約行(summarizeHappened)+本文(既存の全文)の開閉にした。
+ * lastMoveOutcomeが無い(初期局面)場合は要約行が空文字になり、本文も空になる
+ * (renderExpandableBlockが開閉の印を出さない)。
  */
 function renderHappened(plan: ReachablePlanBody): void {
-  happenedEl.innerHTML = "";
-  renderLastMoveOutcome(plan);
+  const summaryText = summarizeHappened(plan.lastMoveOutcome);
 
-  // STEP 4-6(C、人間承認済み): 「前回の計画が使えなくなりました。」と理由文3種は、
-  // 理由文がrenderLastMoveOutcome([1]の「〜が取られました」等)と同じ事実を述べており、
-  // 「前回の計画」も未説明用語だったため、描画をやめる(shouldShowPlanChangedNotice /
-  // getPlanChangeReasonMessageの経路を呼ばない)。gameApi.tsの関数とサーバーの
-  // planChangedはAPI互換のため残す。
+  renderExpandableBlock(happenedEl, "happened-body", summaryText, readColumnOpen.happened, toggleHappened, (body) => {
+    renderLastMoveOutcome(body, plan);
+
+    // STEP 4-6(C、人間承認済み): 「前回の計画が使えなくなりました。」と理由文3種は、
+    // 理由文がrenderLastMoveOutcome([1]の「〜が取られました」等)と同じ事実を述べており、
+    // 「前回の計画」も未説明用語だったため、描画をやめる(shouldShowPlanChangedNotice /
+    // getPlanChangeReasonMessageの経路を呼ばない)。gameApi.tsの関数とサーバーの
+    // planChangedはAPI互換のため残す。
+  });
 }
 
 // 【Phase6 Unit1】「選択した形 → その形に必要なマス → 今どこまで出来ているか →
@@ -566,7 +727,7 @@ function renderHappened(plan: ReachablePlanBody): void {
 // (myAimEl)へ、道のりの一覧は操作する列の折りたたみ(#routeList)へ分かれた。
 // そのため関数を renderShapeCompletion(組み上がり) と renderRouteList(道のりの一覧)
 // の2つに分ける。文言・判定は変えていない。
-function renderShapeCompletion(plan: ReachablePlanBody): void {
+function renderShapeCompletion(target: HTMLElement, plan: ReachablePlanBody): void {
   const progress = plan.targetShapeProgress;
   if (!progress) return;
 
@@ -632,7 +793,7 @@ function renderShapeCompletion(plan: ReachablePlanBody): void {
     section.appendChild(explanation);
   }
 
-  myAimEl.appendChild(section);
+  target.appendChild(section);
 }
 
 /** 操作する列の折りたたみ「道のり」。各目標マスへの残り手数・塞がりの一覧
@@ -698,36 +859,34 @@ function renderRouteList(plan: ReachablePlanBody): void {
   routeListEl.appendChild(list);
 }
 
-// 【Phase6 Unit4】「今の局面で分かっていること」。直前の一手による差分(Unit2/Unit3)
-// ではなく、現在の局面について既に確定している事実を並べる。
-// 文言・マス目の日本語表記・指し手の棋譜表記・並び順はすべてサーバー側
-// (nextConsiderationDetector.ts / nextConsiderationExplanation.ts)で確定済みで、
-// ここでは受け取った文字列をそのまま表示するだけ。判定・文言生成・並び替え・
-// フィルタはweb側に一切持たない。
-// 表示位置は⑤(#candidates)の中で、候補手セクション(.candidate-section)の直前
-// (人間承認済み。STEP 5-2で組み上がり.route-sectionは④myAimElへ移ったが、
-// この相対位置(候補手セクションの直前)自体は変えていない)。
-function renderNextConsiderations(plan: ReachablePlanBody): void {
-  if (!shouldShowNextConsiderations(plan)) return;
-
-  const section = document.createElement("div");
-  section.className = "next-considerations-section";
-
-  const heading = document.createElement("h3");
-  heading.textContent = "今の局面で分かっていること";
-  section.appendChild(heading);
-
-  const list = document.createElement("ul");
-  list.className = "next-considerations-messages";
-  for (const message of plan.nextConsiderations) {
-    const li = document.createElement("li");
-    li.className = `next-consideration next-consideration-${message.kind}`;
-    li.textContent = message.text;
-    list.appendChild(li);
+/**
+ * STEP 5-3(A-4、人間承認済み。H-1〜H-3): 候補手のボタンが0件のとき、⑤に出す
+ * 「候補手が出ない理由の文」を決める。
+ *
+ * - 除外(isCandidateMovesExcluded): 5-1の一文(サーバー側stateResponse.tsが
+ *   candidatesExcluded時にplan.nextConsiderationsの先頭へ必ず入れる契約
+ *   (kind: "candidate_moves_excluded")なので、先頭の要素の文をそのまま使う。
+ * - unavailable: nextConsiderationsの理由文(先頭の要素。あれば)。無ければ既存の
+ *   「現在の局面では、この形に近づく候補手を表示できません。」の文。
+ * - pending: 既存の「候補手を計算中です(しばらくすると表示されます)。」の文。
+ * - それ以外(候補手が0件の理由が上記いずれでもない、既存仕様で元々何も表示して
+ *   いなかった状態): null(何も表示しない。今回の変更対象外)。
+ *
+ * 文言はすべて既存のもの(サーバーの値、または元からある固定文)で、混ぜて
+ * 新しい文は作らない。以前あった小見出し「今の局面で分かっていること」
+ * (旧renderNextConsiderations)は出さない(H-2)。
+ */
+function candidateAbsenceReasonText(plan: ReachablePlanBody): string | null {
+  if (isCandidateMovesExcluded(plan)) {
+    return plan.nextConsiderations[0]?.text ?? null;
   }
-  section.appendChild(list);
-
-  planEl.appendChild(section);
+  if (plan.candidateMoveState === "unavailable") {
+    return plan.nextConsiderations[0]?.text ?? "現在の局面では、この形に近づく候補手を表示できません。";
+  }
+  if (plan.candidateMoveState === "pending") {
+    return "候補手を計算中です(しばらくすると表示されます)。";
+  }
+  return null;
 }
 
 /**
@@ -815,18 +974,9 @@ function renderPlan(plan: ReachablePlanBody): void {
   // 【STEP 5-2(構造。人間承認済み)】directionNoteは④「自分の目的」(renderMyAim)の
   // 先頭へ移した(見せ方の確定 決定2の1)。組み上がり(renderShapeCompletion)も④へ、
   // 道のりの一覧(renderRouteList)は操作する列の折りたたみへ移り、ここでは呼ばない。
-  // 【Phase6 Unit4】「今の局面で分かっていること」は候補手セクションの直前に置く
-  // (人間承認済み。位置は変えていない)。
-  renderNextConsiderations(plan);
-
-  // 【Phase5 #7 要件2・4・6】候補手セクション本体。
-  // reachableShapesが0件(=認識できた方向が無い)場合でも、候補手が
-  // "ready"/"pending"/"unavailable"のいずれかであれば、その状態を伝える。
-  // candidateMove.status: "not_ready"(candidateMoveStateは"ready")の場合のみ、
-  // 既存仕様のまま何も表示しない(今回の変更対象外。実装後の報告で明記する)。
-  const hasReadyExplanation = plan.candidateMoveState === "ready" && plan.candidateMove?.status === "ready";
-  const shouldShowUnavailableMessage = plan.candidateMoveState === "unavailable";
-  const shouldShowPendingMessage = plan.candidateMoveState === "pending";
+  // 【STEP 5-3(A-4、人間承認済み)】以前ここにあった「今の局面で分かっていること」
+  // (旧renderNextConsiderations)の小見出しは出さない(H-2)。候補手が0件のときの
+  // 理由文はcandidateAbsenceReasonTextに一本化した(下記)。
 
   // Unit 3(既知事項 U0-1 の解消): 目標形が選ばれていない間は、候補手セクションを
   // まるごと出さない。以前は未選択でも「この形へ近づく手の候補」「この形に近づく
@@ -834,129 +984,142 @@ function renderPlan(plan: ReachablePlanBody): void {
   // 代わりの文言は新しく作らず、セクションごと出さないことで解消する。
   if (selectedShapeName === null) return;
 
-  if (hasReadyExplanation || shouldShowUnavailableMessage || shouldShowPendingMessage) {
-    // 【Phase5 #7 要件6】「認識できた形→その形に近づく候補手」という親子関係が
-    // 視覚的にも分かるよう、見出し・説明・中身をひとつの枠(candidate-section)にまとめる。
-    const candidateSection = document.createElement("div");
-    candidateSection.className = "candidate-section";
+  // 【Phase5 #7 要件2・4・6】候補手セクション本体。
+  // reachableShapesが0件(=認識できた方向が無い)場合でも、候補手が
+  // "ready"/"pending"/"unavailable"のいずれかであれば、その状態を伝える。
+  // candidateMove.status: "not_ready"(candidateMoveStateは"ready")の場合のみ、
+  // 既存仕様のまま何も表示しない(今回の変更対象外)。
+  const hasReadyExplanation =
+    plan.candidateMoveState === "ready" &&
+    plan.candidateMove?.status === "ready" &&
+    (plan.candidateMove?.explanations.length ?? 0) > 0;
 
-    const moveHeading = document.createElement("h3");
-    moveHeading.textContent = `「${selectedShapeName}」${reviewNoteSuffix(selectedShapeNote)}に近づく手の候補`;
-    candidateSection.appendChild(moveHeading);
+  // 【STEP 5-3(A-4、人間承認済み。H-1〜H-3)】候補手のボタンが0件のときは、
+  // 見出し「「{形}」に近づく手の候補」・説明文・「次の一歩」「この先」の小見出しを
+  // 一切出さず、理由の文だけを⑤に出す(決定2の4の⑤)。
+  if (!hasReadyExplanation) {
+    const reasonText = candidateAbsenceReasonText(plan);
+    if (reasonText === null) return;
 
-    // 【STEP ζ-5(経路6)】対象の形のreview_statusが"draft"の場合にだけ、
-    // サーバー側(analysis/nameExposure.ts)が決めた注意書きをそのまま1行表示する。
-    // 個々の候補手の説明文自体は変更しない(見出し名の表示がフォールバックしても
-    // この注意書きは独立に出る)。
-    if (plan.pendingReviewNote) {
-      const reviewNote = document.createElement("p");
-      reviewNote.className = "candidate-section-review-note";
-      reviewNote.textContent = plan.pendingReviewNote;
-      candidateSection.appendChild(reviewNote);
-    }
-
-    // 【Phase5 #7 要件2】この見出しの下の内容が「今選択している形に対する、
-    // 今の局面から指せる候補手」であることを明示する。
-    // 【Phase6 Unit1】さらに、これらが上の「道のり」の最初の一手であること、
-    // および将棋としての強さで選んだ手ではないことを明示する
-    // (「エンジンの最善手」と混同させないため)。
-    const description = document.createElement("p");
-    description.className = "candidate-section-description";
-    description.textContent =
-      "上の道のりのうち、今の局面で指せる最初の一手です。将棋として最も良い手を選んでいるわけではありません。";
-    candidateSection.appendChild(description);
-
-    if (hasReadyExplanation) {
-      // Unit 3(情報構造の整理): 但し書き(「唯一の正解ではありません」等)は、
-      // 以前は候補手ごとの理由文の末尾に繰り返し入っていた(候補手3件なら3回)。
-      // サーバー側がセクション単位でまとめて返すようになったので、ここで1回だけ出す。
-      // 文言はサーバーが返したものをそのまま表示する。
-      for (const note of plan.candidateMove!.sharedNotes) {
-        const noteP = document.createElement("p");
-        noteP.className = "candidate-section-shared-note";
-        noteP.textContent = note;
-        candidateSection.appendChild(noteP);
-      }
-
-      // Unit 3: 理由文が同一の候補手(例: ７七→３三 と ７七→４四)は1行にまとめ、
-      // 指し手のラベルを並記する。まとめ方はgameApi.tsの純粋関数に切り出してある。
-      const groups = groupCandidateExplanationsByReason(
-        plan.candidateMove!.explanations,
-        plan.candidateMoveLabels,
-      );
-      for (const group of groups) {
-        const section = document.createElement("section");
-        section.className = "candidate-move";
-
-        // 【Phase 7 Unit 3。人間承認済み】候補手を「次の一歩」(今この局面で指せる手)と
-        // 「この先」(その手のあと何ができるようになるか)の2段に分ける。以前は
-        // 「候補手: ◯◯」の1行に、経路の1手目も準備手も区別なく横並びになっていた。
-        // どちらに属するかの区別はサーバー側の kind / clearingSquare / targetPiece /
-        // targetSquare から既に決まっており(reasonの文面がそれを反映する)、
-        // web側で新しい判定はしない。「この手を指せば囲いが完成に近づく」のような
-        // 意味付けは足さない。
-        const nextStepHeading = document.createElement("p");
-        nextStepHeading.className = "candidate-move-subheading";
-        nextStepHeading.textContent = "次の一歩";
-        section.appendChild(nextStepHeading);
-
-        const moveLabel = document.createElement("p");
-        moveLabel.className = "candidate-move-usi";
-        // 【Phase6 Unit1】マス目はサーバー側(notation/japaneseSquare.ts)で変換済みの
-        // 日本語表記を使う。対応表に無い場合(想定外)はUSI表記へフォールバックする。
-        // 【Phase 7】1手ずつ独立したボタンにして、押した手だけを盤上で濃くする
-        // (人間承認済み)。押しても対局は進まない ― 指す操作は従来どおり盤のクリックだけで、
-        // ここは盤のどこを指しているかを見るためのものである。
-        group.moves.forEach((move, index) => {
-          if (index > 0) moveLabel.appendChild(document.createTextNode(" / "));
-          const button = document.createElement("button");
-          button.type = "button";
-          button.className =
-            move.usi === emphasizedCandidateUsi
-              ? "candidate-move-button candidate-move-button-emphasized"
-              : "candidate-move-button";
-          button.textContent = move.label;
-          button.setAttribute("aria-pressed", String(move.usi === emphasizedCandidateUsi));
-          button.addEventListener("click", () => {
-            // もう一度押したら強調をやめる(既定の「全件を薄く」へ戻る)。
-            emphasizedCandidateUsi = move.usi === emphasizedCandidateUsi ? null : move.usi;
-            if (currentState) {
-              renderBoard(currentState);
-              renderPlan(currentState.plan);
-            }
-          });
-          moveLabel.appendChild(button);
-        });
-        section.appendChild(moveLabel);
-
-        const aheadHeading = document.createElement("p");
-        aheadHeading.className = "candidate-move-subheading";
-        aheadHeading.textContent = "この先";
-        section.appendChild(aheadHeading);
-
-        const reason = document.createElement("p");
-        reason.className = "candidate-move-reason";
-        reason.textContent = group.reason;
-        section.appendChild(reason);
-
-        candidateSection.appendChild(section);
-      }
-    } else if (shouldShowPendingMessage) {
-      const p = document.createElement("p");
-      p.className = "plan-pending";
-      p.textContent = "候補手を計算中です(しばらくすると表示されます)。";
-      candidateSection.appendChild(p);
-    } else if (shouldShowUnavailableMessage) {
-      // 【Phase5 #7 要件4・5】「候補が無い」ことを将棋の事実として断定せず、
-      // あくまで「現在の機能では表示できない」という事実だけを伝える。
-      const p = document.createElement("p");
-      p.className = "plan-unavailable";
-      p.textContent = "現在の局面では、この形に近づく候補手を表示できません。";
-      candidateSection.appendChild(p);
-    }
-
-    planEl.appendChild(candidateSection);
+    const p = document.createElement("p");
+    p.className =
+      plan.candidateMoveState === "pending"
+        ? "plan-pending"
+        : isCandidateMovesExcluded(plan)
+          ? "plan-excluded"
+          : "plan-unavailable";
+    p.textContent = reasonText;
+    planEl.appendChild(p);
+    return;
   }
+
+  // 【Phase5 #7 要件6】「認識できた形→その形に近づく候補手」という親子関係が
+  // 視覚的にも分かるよう、見出し・説明・中身をひとつの枠(candidate-section)にまとめる。
+  const candidateSection = document.createElement("div");
+  candidateSection.className = "candidate-section";
+
+  const moveHeading = document.createElement("h3");
+  moveHeading.textContent = `「${selectedShapeName}」${reviewNoteSuffix(selectedShapeNote)}に近づく手の候補`;
+  candidateSection.appendChild(moveHeading);
+
+  // 【STEP ζ-5(経路6)】対象の形のreview_statusが"draft"の場合にだけ、
+  // サーバー側(analysis/nameExposure.ts)が決めた注意書きをそのまま1行表示する。
+  // 個々の候補手の説明文自体は変更しない(見出し名の表示がフォールバックしても
+  // この注意書きは独立に出る)。
+  if (plan.pendingReviewNote) {
+    const reviewNote = document.createElement("p");
+    reviewNote.className = "candidate-section-review-note";
+    reviewNote.textContent = plan.pendingReviewNote;
+    candidateSection.appendChild(reviewNote);
+  }
+
+  // 【Phase5 #7 要件2】この見出しの下の内容が「今選択している形に対する、
+  // 今の局面から指せる候補手」であることを明示する。
+  // 【Phase6 Unit1】さらに、これらが上の「道のり」の最初の一手であること、
+  // および将棋としての強さで選んだ手ではないことを明示する
+  // (「エンジンの最善手」と混同させないため)。
+  // 【STEP 5-3(H-1、人間承認済み)】「上の」を削除した(道のりは④の折りたたみへ
+  // 移り、この位置と合わなくなっていたため。既存文からの削除のみ、新しい文は
+  // 作らない)。
+  const description = document.createElement("p");
+  description.className = "candidate-section-description";
+  description.textContent =
+    "道のりのうち、今の局面で指せる最初の一手です。将棋として最も良い手を選んでいるわけではありません。";
+  candidateSection.appendChild(description);
+
+  // Unit 3(情報構造の整理): 但し書き(「唯一の正解ではありません」等)は、
+  // 以前は候補手ごとの理由文の末尾に繰り返し入っていた(候補手3件なら3回)。
+  // サーバー側がセクション単位でまとめて返すようになったので、ここで1回だけ出す。
+  // 文言はサーバーが返したものをそのまま表示する。
+  for (const note of plan.candidateMove!.sharedNotes) {
+    const noteP = document.createElement("p");
+    noteP.className = "candidate-section-shared-note";
+    noteP.textContent = note;
+    candidateSection.appendChild(noteP);
+  }
+
+  // Unit 3: 理由文が同一の候補手(例: ７七→３三 と ７七→４四)は1行にまとめ、
+  // 指し手のラベルを並記する。まとめ方はgameApi.tsの純粋関数に切り出してある。
+  const groups = groupCandidateExplanationsByReason(plan.candidateMove!.explanations, plan.candidateMoveLabels);
+  for (const group of groups) {
+    const section = document.createElement("section");
+    section.className = "candidate-move";
+
+    // 【Phase 7 Unit 3。人間承認済み】候補手を「次の一歩」(今この局面で指せる手)と
+    // 「この先」(その手のあと何ができるようになるか)の2段に分ける。以前は
+    // 「候補手: ◯◯」の1行に、経路の1手目も準備手も区別なく横並びになっていた。
+    // どちらに属するかの区別はサーバー側の kind / clearingSquare / targetPiece /
+    // targetSquare から既に決まっており(reasonの文面がそれを反映する)、
+    // web側で新しい判定はしない。「この手を指せば囲いが完成に近づく」のような
+    // 意味付けは足さない。
+    const nextStepHeading = document.createElement("p");
+    nextStepHeading.className = "candidate-move-subheading";
+    nextStepHeading.textContent = "次の一歩";
+    section.appendChild(nextStepHeading);
+
+    const moveLabel = document.createElement("p");
+    moveLabel.className = "candidate-move-usi";
+    // 【Phase6 Unit1】マス目はサーバー側(notation/japaneseSquare.ts)で変換済みの
+    // 日本語表記を使う。対応表に無い場合(想定外)はUSI表記へフォールバックする。
+    // 【Phase 7】1手ずつ独立したボタンにして、押した手だけを盤上で濃くする
+    // (人間承認済み)。押しても対局は進まない ― 指す操作は従来どおり盤のクリックだけで、
+    // ここは盤のどこを指しているかを見るためのものである。
+    group.moves.forEach((move, index) => {
+      if (index > 0) moveLabel.appendChild(document.createTextNode(" / "));
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className =
+        move.usi === emphasizedCandidateUsi
+          ? "candidate-move-button candidate-move-button-emphasized"
+          : "candidate-move-button";
+      button.textContent = move.label;
+      button.setAttribute("aria-pressed", String(move.usi === emphasizedCandidateUsi));
+      button.addEventListener("click", () => {
+        // もう一度押したら強調をやめる(既定の「全件を薄く」へ戻る)。
+        emphasizedCandidateUsi = move.usi === emphasizedCandidateUsi ? null : move.usi;
+        if (currentState) {
+          renderBoard(currentState);
+          renderPlan(currentState.plan);
+        }
+      });
+      moveLabel.appendChild(button);
+    });
+    section.appendChild(moveLabel);
+
+    const aheadHeading = document.createElement("p");
+    aheadHeading.className = "candidate-move-subheading";
+    aheadHeading.textContent = "この先";
+    section.appendChild(aheadHeading);
+
+    const reason = document.createElement("p");
+    reason.className = "candidate-move-reason";
+    reason.textContent = group.reason;
+    section.appendChild(reason);
+
+    candidateSection.appendChild(section);
+  }
+
+  planEl.appendChild(candidateSection);
 }
 
 // 【Phase5】盤面クリックで着手できるようにする。合法手判定はstate.legalMoves
@@ -1013,8 +1176,16 @@ const SVG_NS = "http://www.w3.org/2000/svg";
  *
  * 凡例(#boardLegend)は「当たり / 直前の手 / 次の一歩」の3項目を、印の有無にかかわらず
  * 常時出す(H-2、人間の決定)。
+ *
+ * 【STEP 5-3(A-3、人間承認済み)】openStateを受け取り、④のこれから作るマスの破線の輪は
+ * openState.myAimが開いているときだけ描く(決定2の5)。事実の印(当たり・攻め駒)は
+ * 開閉に関わらず常時描く(F-5・5-4のまま)。
  */
-function renderBoardMarks(plan: ReachablePlanBody, coach: CoachExplanation[] | undefined): void {
+function renderBoardMarks(
+  plan: ReachablePlanBody,
+  coach: CoachExplanation[] | undefined,
+  openState: Pick<ReadColumnOpenState, "myAim">,
+): void {
   boardOverlayEl.replaceChildren();
   boardLegendEl.replaceChildren();
 
@@ -1120,18 +1291,21 @@ function renderBoardMarks(plan: ReachablePlanBody, coach: CoachExplanation[] | u
     boardOverlayEl.appendChild(square);
   }
 
-  // STEP 5-4(W-5、人間承認済み。H-1 (a)): ④これから作るマスの破線の輪。
-  // できているマス(淡い緑)・②の根拠(淡い青灰)はtdの背景で表す(renderBoard側)。
-  for (const squareName of marks.missing) {
-    const rect = rectOf(squareName);
-    const center = centerOf(squareName);
-    if (!rect || !center) continue;
-    const circle = document.createElementNS(SVG_NS, "circle");
-    circle.setAttribute("cx", String(center.x));
-    circle.setAttribute("cy", String(center.y));
-    circle.setAttribute("r", String(rect.width * 0.38));
-    circle.setAttribute("class", "board-mark-missing");
-    boardOverlayEl.appendChild(circle);
+  // STEP 5-4(W-5)→5-3(A-3、人間承認済み): ④これから作るマスの破線の輪は、
+  // ④が開いているときだけ描く(決定2の5)。できているマス(淡い緑)・②の根拠
+  // (淡い青灰)はtdの背景で表す(renderBoard側。同じくopenStateで開閉に連動)。
+  if (openState.myAim) {
+    for (const squareName of marks.missing) {
+      const rect = rectOf(squareName);
+      const center = centerOf(squareName);
+      if (!rect || !center) continue;
+      const circle = document.createElementNS(SVG_NS, "circle");
+      circle.setAttribute("cx", String(center.x));
+      circle.setAttribute("cy", String(center.y));
+      circle.setAttribute("r", String(rect.width * 0.38));
+      circle.setAttribute("class", "board-mark-missing");
+      boardOverlayEl.appendChild(circle);
+    }
   }
 
   // STEP 5-4(W-3、人間承認済み。H-2): 凡例「当たり / 直前の手 / 次の一歩」の3項目を、
@@ -1177,12 +1351,13 @@ function renderBoard(state: GameStateResponse): void {
   // Phase 7: 盤上に候補手を描くための、マス名 -> td の対応表を作り直す。
   squareCells = new Map<string, HTMLTableCellElement>();
 
-  // STEP 5-4(W-5、人間承認済み。H-1 (a)): ②の根拠のマス(淡い青灰)・④のできているマス
-  // (淡い緑)のtd背景は、印の座標をサーバーの既存結果から取り出すだけの純粋関数
-  // (boardMarksFromState)から取る(web側で判定しない)。
+  // STEP 5-4(W-5、人間承認済み。H-1 (a))→5-3(A-3、人間承認済み): ②の根拠のマス
+  // (淡い青灰)・④のできているマス(淡い緑)のtd背景は、印の座標をサーバーの既存結果
+  // から取り出すだけの純粋関数(boardMarksFromState)から取る(web側で判定しない)。
+  // 5-3で②④に開閉を付けたため、その列が開いているときだけ塗る(決定2の5)。
   const boardMarks = boardMarksFromState(state.plan, state.coach);
-  const evidenceSquares = new Set(boardMarks.evidence);
-  const matchedSquares = new Set(boardMarks.matched);
+  const evidenceSquares = new Set(readColumnOpen.opponentAim ? boardMarks.evidence : []);
+  const matchedSquares = new Set(readColumnOpen.myAim ? boardMarks.matched : []);
 
   // Phase 7 Unit 3: 盤の外側に筋(９〜１)と段(一〜九)を表示する。
   // 「６八って盤のどこ?」を盤を見ながら理解できるようにするための目盛りであり、
@@ -1264,7 +1439,7 @@ function renderBoard(state: GameStateResponse): void {
   });
 
   // 盤の描画が終わってから、その実寸を使って候補手・盤の印を重ね描きする。
-  renderBoardMarks(state.plan, state.coach);
+  renderBoardMarks(state.plan, state.coach, readColumnOpen);
 }
 
 // 【Phase5】先手(人間)の持ち駒だけをクリック可能なボタンにする。後手の持ち駒は
@@ -1525,6 +1700,10 @@ async function handleNewGame(): Promise<void> {
   setError("");
   // STEP 4-7B(P-11。人間承認済み): 「新しい対局」時も入力欄をクリアする。
   moveInput.value = "";
+  // STEP 5-3(A-2、人間承認済み。H-4 (a)): 新しい対局では①〜④の開閉を既定
+  // (①開・②③④閉)へ戻す(手が進んでも維持する開閉と違い、対局そのものが
+  // 変わるため)。
+  readColumnOpen = { ...DEFAULT_READ_COLUMN_OPEN };
   const state = await startNewGame();
   renderAndScheduleRefresh(state);
 }

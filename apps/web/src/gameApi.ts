@@ -648,6 +648,106 @@ export async function submitMove(move: string): Promise<GameStateResponse | Move
   return parseJson<GameStateResponse | MoveErrorResponse>(res);
 }
 
+/**
+ * STEP 5-3(A-1、人間承認済み): ①〜④の要約行の文字列を、サーバーの値だけから作る
+ * 純粋関数群。将棋の判断はしない(既存の文からの機械的な抜粋、または既存の行の
+ * そのままの組み立てだけ)。
+ */
+
+/**
+ * サーバー側 apps/server/src/analysis/boardEventDetector.ts の BoardEventKind を
+ * そのまま写した定数(web側は新しい種類を追加・判定しない)。①の要約行の材料になる、
+ * 「盤の出来事」を表すkindの一覧。
+ */
+export const BOARD_EVENT_KINDS = [
+  "captured_by_you",
+  "captured_by_opponent",
+  "check_given",
+  "check_received",
+  "promoted_by_you",
+  "promoted_by_opponent",
+] as const;
+
+const BOARD_EVENT_KIND_SET: ReadonlySet<string> = new Set(BOARD_EVENT_KINDS);
+
+/**
+ * 「。」で分割し、空要素を除いた列から1件選び、末尾に「。」を戻す。
+ * 「。」が無ければ全文をそのまま返す。文の切り出しは機械的な文字列処理であり、
+ * 将棋の意味判断は行わない。
+ */
+function pickSentence(text: string, pick: (sentences: string[]) => string | undefined): string {
+  if (!text.includes("。")) return text;
+  const sentences = text.split("。").filter((s) => s.length > 0);
+  const picked = pick(sentences);
+  return picked !== undefined ? `${picked}。` : text;
+}
+
+/** 1文目(「。」で区切った先頭の文に「。」を戻したもの)。無ければ全文。 */
+export function firstSentence(text: string): string {
+  return pickSentence(text, (sentences) => sentences[0]);
+}
+
+/** 末尾の一文(「。」で区切った最後の文に「。」を戻したもの)。無ければ全文。 */
+export function lastSentence(text: string): string {
+  return pickSentence(text, (sentences) => sentences[sentences.length - 1]);
+}
+
+/**
+ * ①「何が起きているか」の要約行。
+ *
+ * `messages`に盤の出来事(BOARD_EVENT_KINDS)の行があれば、その先頭の行の1文目。
+ * 無ければ既存の行と同じ組み立て(「あなた: {played} / 相手: {opponent}」。相手の手が
+ * 無ければ「あなた: {played}」)。`outcome`が無い(初期局面)なら空文字。
+ */
+export function summarizeHappened(outcome: LastMoveOutcomeBody | null): string {
+  if (!outcome) return "";
+
+  const boardEvent = outcome.messages.find((m) => BOARD_EVENT_KIND_SET.has(m.kind));
+  if (boardEvent) return firstSentence(boardEvent.text);
+
+  return outcome.opponentMoveLabel
+    ? `あなた: ${outcome.playedMoveLabel} / 相手: ${outcome.opponentMoveLabel}`
+    : `あなた: ${outcome.playedMoveLabel}`;
+}
+
+/** ②「相手の狙い」の要約行。既存の文(reason)の1文目。 */
+export function summarizeOpponentAim(item: Pick<CoachExplanation, "reason">): string {
+  return firstSentence(item.reason);
+}
+
+/** ③「何が重要か」の要約行。既存の文(reason)の末尾の一文。 */
+export function summarizeWhy(item: Pick<CoachExplanation, "reason">): string {
+  return lastSentence(item.reason);
+}
+
+/**
+ * ④「自分の目的」の要約行。
+ *
+ * - `status === "none"`: `reason`の1文目(既存の未認識の文)。
+ * - `status === "completed"`: `reason`を分割せず全文を返す(非draftの完成は
+ *   「今、{形}の形ができています。」の1文だが、draftの完成はζ-5の露出制御により
+ *   「名前」+「確認中の注記」の2文がセットになっており、切り離すとCLAUDE.mdルール4
+ *   (未レビューの知識を断定的に見せない)に反するため)。
+ * - `status === "forming"`かつ`progress`があり`progress.pendingReviewNote === null`
+ *   (露出制御でそのまま名前を出せる形): 承認済みの新しい文
+ *   「今の陣形は、{progress.name}に近づいているように見えますが、まだ完成していません。」
+ * - それ以外(`progress`が無い、または`draft`で名前を出せない): `reason`の1文目
+ *   (既存の途中の文。名前を出さない)。
+ *
+ * web側は新しい判定を持たない(名前を出してよいかはサーバーの`pendingReviewNote`と
+ * `reason`の文にすべて従う)。
+ */
+export function summarizeMyAim(
+  item: Pick<CoachExplanation, "reason" | "status">,
+  progress: Pick<TargetShapeProgress, "name" | "pendingReviewNote"> | null,
+): string {
+  if (item.status === "completed") return item.reason;
+  if (item.status === "forming" && progress && progress.pendingReviewNote === null) {
+    return `今の陣形は、${progress.name}に近づいているように見えますが、まだ完成していません。`;
+  }
+  return firstSentence(item.reason);
+}
+
 /** 目標形選択UI(docs/PHASES.md Phase2完了条件)から、目指せる形の1つを選ぶ。
  * 選択したshapeIdが実際に採用されるかはサーバー側(stateResponse.ts)が判断する
  * (reachableShapesに含まれない場合は目標形は決まらない。Phase 7 Unit 0で

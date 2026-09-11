@@ -12,6 +12,12 @@ import {
   splitCoachByStage,
   partitionPieceThreatsForBoard,
   boardMarksFromState,
+  firstSentence,
+  lastSentence,
+  summarizeHappened,
+  summarizeOpponentAim,
+  summarizeWhy,
+  summarizeMyAim,
   PLAN_REFRESH_MAX_ATTEMPTS,
   type CoachExplanation,
   type CoachStage,
@@ -634,5 +640,121 @@ describe("boardMarksFromState(STEP 5-4, W-2・W-5・W-6)", () => {
     const coach: CoachExplanation[] = [makeCoachExplanation("i1", "opponent_intent")];
     const marks = boardMarksFromState(plan, coach);
     expect(marks).toEqual({ attacked: [], attackers: [], evidence: [], matched: [], missing: [] });
+  });
+});
+
+// STEP 5-3(A-1・A-5、人間承認済み): 要約行の純粋関数群のテスト。
+describe("firstSentence / lastSentence", () => {
+  it("「。」が1個の場合、firstSentence・lastSentenceとも同じ1文(「。」つき)を返す", () => {
+    expect(firstSentence("これは文です。")).toBe("これは文です。");
+    expect(lastSentence("これは文です。")).toBe("これは文です。");
+  });
+
+  it("「。」が複数の場合、firstSentenceは先頭の文、lastSentenceは末尾の文を返す", () => {
+    const text = "1文目です。2文目です。3文目です。";
+    expect(firstSentence(text)).toBe("1文目です。");
+    expect(lastSentence(text)).toBe("3文目です。");
+  });
+
+  it("「。」が無い場合、全文をそのまま返す", () => {
+    expect(firstSentence("句点が無い文")).toBe("句点が無い文");
+    expect(lastSentence("句点が無い文")).toBe("句点が無い文");
+  });
+});
+
+describe("summarizeHappened", () => {
+  it("outcomeが無い(初期局面)場合、空文字を返す", () => {
+    expect(summarizeHappened(null)).toBe("");
+  });
+
+  it("盤の出来事(BoardEventKind)の行が先頭にあれば、その行の1文目を返す", () => {
+    const outcome: LastMoveOutcomeBody = {
+      playedMoveLabel: "７六歩",
+      opponentMoveLabel: "３四歩",
+      messages: [
+        { kind: "captured_by_you", text: "相手の歩を取りました。持ち駒が1枚増えました。" },
+        { kind: "route_advanced", text: "経路が1歩進みました。" },
+      ],
+    };
+    expect(summarizeHappened(outcome)).toBe("相手の歩を取りました。");
+  });
+
+  it("盤の出来事の行が無い場合、既存の「あなた/相手」の行を返す", () => {
+    const outcome: LastMoveOutcomeBody = {
+      playedMoveLabel: "７六歩",
+      opponentMoveLabel: "３四歩",
+      messages: [{ kind: "route_advanced", text: "経路が1歩進みました。" }],
+    };
+    expect(summarizeHappened(outcome)).toBe("あなた: ７六歩 / 相手: ３四歩");
+  });
+
+  it("相手の手が無い場合、「あなた」だけの行を返す", () => {
+    const outcome: LastMoveOutcomeBody = {
+      playedMoveLabel: "７六歩",
+      opponentMoveLabel: null,
+      messages: [],
+    };
+    expect(summarizeHappened(outcome)).toBe("あなた: ７六歩");
+  });
+});
+
+describe("summarizeOpponentAim / summarizeWhy", () => {
+  it("summarizeOpponentAimはreasonの1文目を返す", () => {
+    expect(summarizeOpponentAim({ reason: "相手は棒銀に近い動きをしています。詳しい説明。" })).toBe(
+      "相手は棒銀に近い動きをしています。",
+    );
+  });
+
+  it("summarizeWhyはreasonの末尾の一文を返す", () => {
+    expect(summarizeWhy({ reason: "1文目の説明。今後の見通しは判断できません。" })).toBe(
+      "今後の見通しは判断できません。",
+    );
+  });
+});
+
+describe("summarizeMyAim", () => {
+  it("status===noneの場合、reasonの1文目を返す(未認識)", () => {
+    expect(
+      summarizeMyAim(
+        { reason: "今の陣形は、あらかじめ用意されている形のどれともまだはっきり一致していません。詳しい説明。", status: "none" },
+        null,
+      ),
+    ).toBe("今の陣形は、あらかじめ用意されている形のどれともまだはっきり一致していません。");
+  });
+
+  it("status===completedかつ非draftの場合、reasonを全文(1文)そのまま返す", () => {
+    const reason = "今、本美濃囲いの形ができています。";
+    expect(summarizeMyAim({ reason, status: "completed" }, makeProgress({ pendingReviewNote: null }))).toBe(reason);
+  });
+
+  it("status===completedかつdraftの場合、名前+確認中の注記の2文を分割せず全文を返す", () => {
+    const reason =
+      "今、銀冠と呼ばれる並びに近い形になっています。ただし、この形の説明は内容を確認中のため、参考程度に見てください。";
+    expect(
+      summarizeMyAim(
+        { reason, status: "completed" },
+        makeProgress({ name: "銀冠", pendingReviewNote: "この形の説明は内容を確認中です。" }),
+      ),
+    ).toBe(reason);
+  });
+
+  it("status===formingかつprogressがありpendingReviewNoteがnullの場合、承認済みの新しい文を返す", () => {
+    const progress = makeProgress({ name: "本美濃囲い", pendingReviewNote: null });
+    expect(
+      summarizeMyAim({ reason: "途中の説明1文目。詳しい説明。", status: "forming" }, progress),
+    ).toBe("今の陣形は、本美濃囲いに近づいているように見えますが、まだ完成していません。");
+  });
+
+  it("status===formingかつprogressがdraft(pendingReviewNoteがある)の場合、名前を出さずreasonの1文目を返す", () => {
+    const progress = makeProgress({ name: "銀冠", pendingReviewNote: "この形の説明は内容を確認中です。" });
+    expect(summarizeMyAim({ reason: "途中の説明1文目。詳しい説明。", status: "forming" }, progress)).toBe(
+      "途中の説明1文目。",
+    );
+  });
+
+  it("status===formingかつprogressが無い場合、reasonの1文目を返す", () => {
+    expect(summarizeMyAim({ reason: "途中の説明1文目。詳しい説明。", status: "forming" }, null)).toBe(
+      "途中の説明1文目。",
+    );
   });
 });
