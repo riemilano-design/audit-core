@@ -8,6 +8,6 @@
   ],
   "scripts": {
     "validate:data": "node scripts/validate-data.mjs",
-    "typecheck:scripts": "tsc --noEmit -p scripts/tsconfig.json && tsc --noEmit -p scripts/playtest/tsconfig.json"
+    "typecheck:scripts": "node scripts/typecheck-scripts.mjs"
   }
 }
