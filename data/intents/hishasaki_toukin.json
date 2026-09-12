@@ -1,15 +1,23 @@
 {
   "id": "hishasaki_toukin",
-  "name": "飛車先を破ってと金を作る",
+  "name": "と金作り",
   "opening_id": "ibisha",
   "side": "opponent",
   "recognition_pattern": [
-    { "piece": "歩", "to": "8f", "order_hint": 1 },
-    { "piece": "歩", "to": "8g", "order_hint": 2 }
+    {
+      "piece": "歩",
+      "to": "8f",
+      "order_hint": 1
+    },
+    {
+      "piece": "歩",
+      "to": "8g",
+      "order_hint": 2
+    }
   ],
   "current_aim_explanation": "相手は8筋の歩を8六→8七とさらに進めて、あなたの駒が最初に並んでいた三段の中へ入り込もうとしています。歩はその三段に入ると「と金」に成ることができ、と金は金と同じ動きができる強い駒になります。",
   "next_aim_explanation": "このあと相手の歩が成って、あなたの陣地の中に居座る駒ができる可能性があります。いったん入り込まれると取り除くのに手数がかかるため、成られる前にその歩の前を止めるか、その筋から玉を遠ざけておくと安心です。",
-  "source": "本アプリ自身の実測記録から起こした下書き。docs/PLAYTEST_RANKED_2026-09-10.md 89行が『飛車先の歩交換、と金の侵入、玉頭への銀・飛の集中のいずれにも反応しない』、docs/PHASES.md 1565行が『角取り・桂取り・と金の侵入・玉頭の銀のいずれにも [0] は出ない』として、と金を作られる場面を認識できないことを観測している。recognition_pattern の 8f・8g は、固定棋譜で実際に起きた手そのもの: 2026-09-12-live-30moves-claude-1 の20・22手目(8e8f → 8f8g+)、同 claude-2 の22・24手目(8e8f → 8f8g+)。8f は hishasaki_fugokan と重複するが、両者は独立に判定されるため一方が他方を妨げない(apps/server/src/analysis/intentDetector.ts の evaluateIntent は intent ごとに独立)。有段者・一次資料による確認は経ていない。",
+  "source": "【AI起草 / 出典は下記】本アプリ自身の実測記録から起こした下書き。docs/PLAYTEST_RANKED_2026-09-10.md 89行が『飛車先の歩交換、と金の侵入、玉頭への銀・飛の集中のいずれにも反応しない』、docs/PHASES.md 1565行が『角取り・桂取り・と金の侵入・玉頭の銀のいずれにも [0] は出ない』として、と金を作られる場面を認識できないことを観測している。recognition_pattern の 8f・8g は、固定棋譜で実際に起きた手そのもの: 2026-09-12-live-30moves-claude-1 の20・22手目(8e8f → 8f8g+)、同 claude-2 の22・24手目(8e8f → 8f8g+)。8f は hishasaki_fugokan と重複するが、両者は独立に判定されるため一方が他方を妨げない(apps/server/src/analysis/intentDetector.ts の evaluateIntent は intent ごとに独立)。有段者・一次資料による確認は経ていない。【name についての注記(2026-09-13)】旧 name「飛車先を破ってと金を作る」は動詞句で、定型文に入れると「相手は飛車先を破ってと金を作るの形になっています。」と壊れたため名詞句へ直した。飛車先という文脈は current_aim_explanation が述べている。",
   "confidence_level": "medium",
   "review_status": "draft"
 }
