@@ -147,6 +147,20 @@ h1 {
   background: #bfe3bf !important;
 }
 
+/* STEP 5-E(H-1・H-4a、人間承認済み): 移動先の緑(.square-destination)のうち、
+   「その移動先に相手の駒が届く」ものだけをこの色にする(新しい印は足さず、色を
+   二つに分けるだけ。選べなくはしない=cursor: pointerのまま)。
+   色は既存の赤丸(.board-mark-attacked、#b8321f)と同じ色相(赤系)にする。
+   【濃さの決め方(2026-09-12 人間決定): 目ではなく数字で決める。UIの色の区別の
+   目安 3:1 を、盤の地色(#f3d9a4)と、分けた相手である緑(#bfe3bf)の両方に対して
+   満たすこと。】初版の #e3bfbf は 1.22:1 / 1.20:1 で足りず、#c4574a に変えた
+   (盤 3.18:1 / 緑 3.11:1)。さらに濃くすると駒の字(黒)が読みにくくなるため、
+   字の対比 4.81:1(文字の目安 4.5:1 を上回る)を保てる範囲で選んだ。 */
+.square-destination-threatened {
+  cursor: pointer;
+  background: #c4574a !important;
+}
+
 /* Phase5: 直前の相手の手のハイライト(装飾のみ)。square-selected/square-destinationは
    背景色(!important)を使うため、こちらは枠線(box-shadow)にして、同じマスに
    両方付いても見分けがつくようにする。 */
@@ -271,7 +285,9 @@ h1 {
 /* 凡例。免責の一文は候補手セクションに既にあるため、ここでは繰り返さない
    (docs/ARCHITECTURE.md 5.「同じ情報を一回だけ」)。
    【STEP 5-4(W-3、人間承認済み)】「当たり / 直前の手 / 次の一歩」の3項目を、
-   印の有無にかかわらず常時出す(項目の増減・注記は無し)。 */
+   印の有無にかかわらず常時出す(項目の増減・注記は無し)。
+   【STEP 5-E(W-2、人間承認済み)】「相手の駒が届く移動先」の1項目を追加し、4項目に
+   なった。既存3項目の文言・見た目・並びは変えていない(末尾に追加しただけ)。 */
 #boardLegend:empty {
   display: none;
 }
@@ -322,6 +338,13 @@ h1 {
   height: 0;
   margin-top: 0.45rem;
   border-top: 1.5px dashed #8a8a8a;
+}
+
+/* STEP 5-E(W-2、人間承認済み): 「相手の駒が届く移動先」項目。
+   .square-destination-threatened と同じ色を、盤マス塗りと同じ見た目(四角の塗り)で示す。 */
+.board-legend-icon-escape-threat {
+  background: #c4574a;
+  border: 1px solid #8f3a30;
 }
 
 #hands {

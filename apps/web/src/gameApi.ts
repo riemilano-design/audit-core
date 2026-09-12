@@ -608,6 +608,17 @@ export interface GameStateResponse {
    */
   legalMoves: string[];
   /**
+   * STEP 5-E(H-1・H-4a): legalMovesのうち、「その手を指した後、移動先のマスに
+   * 相手の駒が届く」ものだけを抜き出したUSI形式の配列(legalMovesの部分集合。同じ
+   * 表記・同じ形。apps/server/src/api/stateResponse.ts の escapeSquareThreats を
+   * そのまま受け取る)。
+   * web側はこの配列で判定をしない。既存のdestinationsFromSquare/destinationsFromDropRoleが
+   * legalMovesを前方一致で絞るのと同じ要領で、選んでいる駒の移動先のうちこの配列にも
+   * 入っているマスを、緑(.square-destination)ではなく赤系(.square-destination-threatened)で
+   * 塗るためだけに使う(H-4a。逃げ先を勧める文言・強調は一切出さない)。
+   */
+  escapeSquareThreats: string[];
+  /**
    * Phase5: moveHistoryと同じ並び・同じ長さの、日本語棋譜表記(例: "７六歩")。
    * apps/server/src/notation/japaneseMoveHistory.ts(shogiops標準のmakeJapaneseMoveOrDrop)が
    * 生成したものをそのまま返す。変換できなかった手はnull(この場合UI側は

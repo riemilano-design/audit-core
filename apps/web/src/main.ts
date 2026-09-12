@@ -1218,6 +1218,8 @@ const SVG_NS = "http://www.w3.org/2000/svg";
  *
  * 凡例(#boardLegend)は「当たり / 直前の手 / 次の一歩」の3項目を、印の有無にかかわらず
  * 常時出す(H-2、人間の決定)。
+ * 【STEP 5-E(W-2、人間承認済み)】「相手の駒が届く移動先」の1項目を追加。既存3項目と
+ * 同じく、印(この場合は色分け)の有無にかかわらず常時出す。
  *
  * 【STEP 5-3(A-3、人間承認済み)】openStateを受け取り、④のこれから作るマスの破線の輪は
  * openState.myAimが開いているときだけ描く(決定2の5)。事実の印(当たり・攻め駒)は
@@ -1375,7 +1377,15 @@ function renderBoardMarks(
   arrowIcon.className = "board-legend-icon board-legend-icon-arrow";
   candidateItem.append(arrowIcon, document.createTextNode("次の一歩"));
 
-  legend.append(attackedItem, lastMoveItem, candidateItem);
+  // STEP 5-E(W-2、人間承認済み。文言は一字も変えない): 移動先の緑を二つに分けたうちの
+  // 赤系の意味を凡例に足す。既存3項目と同じく常時出す。
+  const escapeThreatItem = document.createElement("li");
+  escapeThreatItem.className = "board-legend-item";
+  const escapeThreatIcon = document.createElement("span");
+  escapeThreatIcon.className = "board-legend-icon board-legend-icon-escape-threat";
+  escapeThreatItem.append(escapeThreatIcon, document.createTextNode("相手の駒が届く移動先"));
+
+  legend.append(attackedItem, lastMoveItem, candidateItem, escapeThreatItem);
   boardLegendEl.appendChild(legend);
 }
 
@@ -1390,6 +1400,9 @@ function renderBoard(state: GameStateResponse): void {
     : selectedDropRole
       ? destinationsFromDropRole(selectedDropRole, state.legalMoves)
       : new Map<string, string[]>();
+  // STEP 5-E(H-1・H-4a): サーバーが渡したescapeSquareThreats(legalMovesの部分集合)を
+  // Setにするだけ。web側で利き・安全性の判定はしない(サーバーの結果をそのまま使う)。
+  const escapeThreatUsis = new Set(state.escapeSquareThreats);
 
   boardEl.innerHTML = "";
   // Phase 7: 盤上に候補手を描くための、マス名 -> td の対応表を作り直す。
@@ -1454,7 +1467,11 @@ function renderBoard(state: GameStateResponse): void {
       if (candidates && candidates.length > 0) {
         // 成り/不成りの両方が合法な場合のみcandidates.length===2になる
         // (強制成りの局面ではgetLegalMovesが不成り側を返さないため、自然に1件になる)。
-        td.classList.add("square-destination");
+        // STEP 5-E(H-1・H-4a): このマスへの候補手のうち1つでもescapeSquareThreatsに
+        // 含まれていれば「相手の駒が届く移動先」として赤系にする(新しい印は足さず、
+        // 既存の移動先の緑を二つに分けるだけ。選べなくはしない)。
+        const threatened = candidates.some((usi) => escapeThreatUsis.has(usi));
+        td.classList.add(threatened ? "square-destination-threatened" : "square-destination");
         if (interactive) {
           td.addEventListener("click", () => {
             void handleBoardMoveClick(candidates);

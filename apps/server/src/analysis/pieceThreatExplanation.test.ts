@@ -4,6 +4,7 @@
 // factsを渡して、文言化だけを確認する)。
 
 import { describe, expect, it } from "vitest";
+import type { PieceEscapeSquareStatus } from "./escapeSquareThreat.js";
 import type { PieceThreatFact } from "./pieceThreatDetector.js";
 import { explainPieceThreats } from "./pieceThreatExplanation.js";
 
@@ -99,5 +100,89 @@ describe("explainPieceThreats", () => {
       { square: "5e", role: "gold", attackers: [{ square: "6f", role: "lion" }] },
     ];
     expect(explainPieceThreats(allUnresolvable)).toEqual([]);
+  });
+});
+
+// STEP 5-E(H-2・2026-09-12人間承認)。「どちらもできない」の一文。
+// 判定(合法手の有無・移動先が届くか)はここでは行わず、既に計算済みのescapeStatuses
+// (square → PieceEscapeSquareStatus)を渡すだけで確認する。
+describe("explainPieceThreats: escapeStatuses(STEP 5-E)", () => {
+  const facts: PieceThreatFact[] = [
+    { square: "7h", role: "gold", attackers: [{ square: "8h", role: "horse" }] },
+  ];
+
+  it("escapeStatusesを渡さない場合は何も足さない(STEP 4-3までの既存呼び出しとの後方互換)", () => {
+    expect(explainPieceThreats(facts)).toEqual([
+      {
+        kind: "piece_attacked",
+        text: "あなたの７八の金に、相手の８八の馬が当たっています(次の相手の手で取られる可能性があります)。",
+        square: "7h",
+        attackerSquares: ["8h"],
+      },
+    ]);
+  });
+
+  it("その駒の合法手が1つも無い場合、末尾に「この駒は今、動かせるマスがありません。」を足す", () => {
+    const escapeStatuses = new Map<string, PieceEscapeSquareStatus>([
+      ["7h", { hasNoLegalMoves: true, allDestinationsAttacked: false }],
+    ]);
+
+    const messages = explainPieceThreats(facts, escapeStatuses);
+
+    expect(messages[0]!.text).toBe(
+      "あなたの７八の金に、相手の８八の馬が当たっています(次の相手の手で取られる可能性があります)。この駒は今、動かせるマスがありません。",
+    );
+  });
+
+  it("合法手はあるが移動先すべてに相手の駒が届く場合、末尾に「この駒が動けるマスは、どれも相手の駒が届いています。」を足す", () => {
+    const escapeStatuses = new Map<string, PieceEscapeSquareStatus>([
+      ["7h", { hasNoLegalMoves: false, allDestinationsAttacked: true }],
+    ]);
+
+    const messages = explainPieceThreats(facts, escapeStatuses);
+
+    expect(messages[0]!.text).toBe(
+      "あなたの７八の金に、相手の８八の馬が当たっています(次の相手の手で取られる可能性があります)。この駒が動けるマスは、どれも相手の駒が届いています。",
+    );
+  });
+
+  it("移動先の一部にしか相手の駒が届かない場合、何も足さない", () => {
+    const escapeStatuses = new Map<string, PieceEscapeSquareStatus>([
+      ["7h", { hasNoLegalMoves: false, allDestinationsAttacked: false }],
+    ]);
+
+    const messages = explainPieceThreats(facts, escapeStatuses);
+
+    expect(messages[0]!.text).toBe(
+      "あなたの７八の金に、相手の８八の馬が当たっています(次の相手の手で取られる可能性があります)。",
+    );
+  });
+
+  it("escapeStatusesにそのマスの記載が無い場合も何も足さない", () => {
+    const escapeStatuses = new Map<string, PieceEscapeSquareStatus>([
+      ["9i", { hasNoLegalMoves: true, allDestinationsAttacked: false }],
+    ]);
+
+    const messages = explainPieceThreats(facts, escapeStatuses);
+
+    expect(messages[0]!.text).toBe(
+      "あなたの７八の金に、相手の８八の馬が当たっています(次の相手の手で取られる可能性があります)。",
+    );
+  });
+
+  it("複数の駒それぞれに正しいescapeStatusesを対応させる", () => {
+    const multiFacts: PieceThreatFact[] = [
+      { square: "7h", role: "gold", attackers: [{ square: "8h", role: "horse" }] },
+      { square: "8i", role: "knight", attackers: [{ square: "8h", role: "horse" }] },
+    ];
+    const escapeStatuses = new Map<string, PieceEscapeSquareStatus>([
+      ["7h", { hasNoLegalMoves: false, allDestinationsAttacked: true }],
+      ["8i", { hasNoLegalMoves: true, allDestinationsAttacked: false }],
+    ]);
+
+    const messages = explainPieceThreats(multiFacts, escapeStatuses);
+
+    expect(messages[0]!.text.endsWith("この駒が動けるマスは、どれも相手の駒が届いています。")).toBe(true);
+    expect(messages[1]!.text.endsWith("この駒は今、動かせるマスがありません。")).toBe(true);
   });
 });

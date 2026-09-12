@@ -2,6 +2,16 @@
 // 日本語(STEP 4-3・2026-09-10 人間承認: C-1)へ変換する。事実 → 文言の対応表であり、
 // 新しい判断は一切行わない([../../../../docs/ARCHITECTURE.md](../../../../docs/ARCHITECTURE.md) 4.3)。
 //
+// 【STEP 5-E(H-2・2026-09-12人間承認)で追加した「どちらもできない」の一文】
+// 帯が名指しした駒について、次の2つの事実のときだけ、文の末尾に1文を足す。
+// - その駒の合法手が1つも無い: 「この駒は今、動かせるマスがありません。」
+// - 合法手はあるが、移動先すべてに相手の駒が届く:
+//   「この駒が動けるマスは、どれも相手の駒が届いています。」
+// 判定(合法手の有無・移動先が届くかどうか)は一切ここで行わない。
+// analysis/escapeSquareThreat.ts が既に集計した結果(PieceEscapeSquareStatus)を
+// square(自分の駒のマス)ごとの対応表として引数で受け取り、このモジュールは
+// その結果からどちらの文言を足すか(あるいは何も足さないか)を選ぶだけ。
+//
 // 【文言の方針(C-1)】
 // 「あなたの{マス}の{駒名}に、相手の{マス}の{駒名}が当たっています
 // (次の相手の手で取られる可能性があります)。」
@@ -24,6 +34,7 @@ import type { Role } from "shogiops/types";
 import { toJapaneseSquare } from "../notation/japaneseSquare.js";
 import { roleToJapanese } from "./pieceMapping.js";
 import type { PieceThreatAttacker, PieceThreatFact } from "./pieceThreatDetector.js";
+import type { PieceEscapeSquareStatus } from "./escapeSquareThreat.js";
 
 /** [0]「今すぐ対処が必要なこと」に出す、駒が当たっている事実のメッセージ種別。 */
 export type PieceThreatMessageKind = "piece_attacked";
@@ -87,10 +98,31 @@ interface FactMessage {
 }
 
 /**
+ * STEP 5-E(H-2)。「どちらもできない」の一文(人間承認済み。一字も変えないこと)。
+ * 「利いています」は使わない(「利き」は将棋用語のためルール2番に当たる。帯の既存文
+ * 「当たっています」に合わせて「届いています」にする、という2026-09-12人間決定)。
+ */
+const NO_LEGAL_MOVES_TEXT = "この駒は今、動かせるマスがありません。";
+const ALL_DESTINATIONS_ATTACKED_TEXT = "この駒が動けるマスは、どれも相手の駒が届いています。";
+
+/**
+ * escapeStatusが示す2つの事実のうち、どちらかに当てはまれば末尾に1文を足す。
+ * どちらにも当てはまらない(escapeStatusが無い場合を含む)ときは何も足さない。
+ * 判定(合法手の有無・移動先が届くか)は一切ここで行わず、既に計算済みの
+ * escapeStatusを読むだけ。
+ */
+function appendEscapeSquareSentence(text: string, escapeStatus: PieceEscapeSquareStatus | undefined): string {
+  if (escapeStatus === undefined) return text;
+  if (escapeStatus.hasNoLegalMoves) return `${text}${NO_LEGAL_MOVES_TEXT}`;
+  if (escapeStatus.allDestinationsAttacked) return `${text}${ALL_DESTINATIONS_ATTACKED_TEXT}`;
+  return text;
+}
+
+/**
  * 事実1件を文言へ変換する。自分の駒・攻め駒のいずれの名前も解決できない場合はnullを返し、
  * 呼び出し側がその事実を表示しない(推測して名前を補わない)。
  */
-function factText(fact: PieceThreatFact): FactMessage | null {
+function factText(fact: PieceThreatFact, escapeStatus: PieceEscapeSquareStatus | undefined): FactMessage | null {
   const ownName = pieceName(fact.role);
   if (ownName === null) return null;
 
@@ -98,18 +130,28 @@ function factText(fact: PieceThreatFact): FactMessage | null {
   if (attackers.length === 0) return null;
 
   const ownSquare = toJapaneseSquare(fact.square);
-  const text = `あなたの${ownSquare}の${ownName}に、${attackerPhrase(attackers)}当たっています(次の相手の手で取られる可能性があります)。`;
+  const baseText = `あなたの${ownSquare}の${ownName}に、${attackerPhrase(attackers)}当たっています(次の相手の手で取られる可能性があります)。`;
+  const text = appendEscapeSquareSentence(baseText, escapeStatus);
   return { text, attackerSquares: attackers.map((attacker) => attacker.square) };
 }
 
 /**
  * pieceThreatDetector.ts が確定させた並び順(D)を、そのままの順序で文言へ変換する。
  * 並び替え・フィルタはdetector側の責務であり、ここでは行わない。
+ *
+ * escapeStatusesは、STEP 5-E(H-2)の一文を足すかどうかの判定材料(square →
+ * PieceEscapeSquareStatus)。呼び出し側(analysis/escapeSquareThreat.ts の
+ * summarizeEscapeSquareThreatsForSquare)が既に計算した結果をそのまま渡すだけで、
+ * このモジュール自身は合法手や利きの判定を一切行わない。渡さない場合は何も足さない
+ * (STEP 4-3時点の既存呼び出しとの後方互換)。
  */
-export function explainPieceThreats(facts: PieceThreatFact[]): PieceThreatMessage[] {
+export function explainPieceThreats(
+  facts: PieceThreatFact[],
+  escapeStatuses: ReadonlyMap<string, PieceEscapeSquareStatus> = new Map(),
+): PieceThreatMessage[] {
   const messages: PieceThreatMessage[] = [];
   for (const fact of facts) {
-    const result = factText(fact);
+    const result = factText(fact, escapeStatuses.get(fact.square));
     if (result === null) continue;
     messages.push({
       kind: "piece_attacked",

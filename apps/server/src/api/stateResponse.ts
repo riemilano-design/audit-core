@@ -48,6 +48,7 @@ import { parsePosition } from "../rules/sfenPosition.js";
 import { listAttackedPieces } from "../rules/attackedPieces.js";
 import { detectPieceThreats } from "../analysis/pieceThreatDetector.js";
 import { explainPieceThreats, type PieceThreatMessage } from "../analysis/pieceThreatExplanation.js";
+import { detectEscapeSquareThreats, summarizeEscapeSquareThreatsForSquare } from "../analysis/escapeSquareThreat.js";
 import {
   explainCaptureSummary,
   type CaptureSummaryMessage,
@@ -109,6 +110,18 @@ export interface StateResponseBody extends PublicGameState {
    * 一切ここに持たない(盤面クリックUIが移動先/打てるマスを求めるために使う配線のみ)。
    */
   legalMoves: string[];
+  /**
+   * STEP 5-E(S-2): legalMovesのうち、「その手を指した後、移動先のマスに相手の駒が
+   * 届く」ものだけを抜き出したUSI形式の配列(legalMovesの部分集合。同じ表記・同じ形)。
+   * 判定はanalysis/escapeSquareThreat.tsのdetectEscapeSquareThreatsにそのまま委ね、
+   * ここでは合法手すべてに対する計算結果からattacked===trueのものを選ぶだけ
+   * (新しい判定はしない)。
+   *
+   * web側はこの配列を判定には使わず、選んだ駒の移動先(前方一致でlegalMovesを絞るのと
+   * 同じ方法)のうち、この配列にも含まれるマスへ印を付けるためだけに使う想定
+   * (H-1・H-4a。「逃げるべきマス」を推奨する文言・強調はサーバー側では一切生成しない)。
+   */
+  escapeSquareThreats: string[];
   /**
    * Phase5: moveHistory(USI形式)の各手を、notation/japaneseMoveHistory.ts(shogiops標準の
    * makeJapaneseMoveOrDropをそのまま利用)で日本語棋譜表記へ変換したもの。
@@ -895,6 +908,13 @@ function toNextConsiderations(
  *
  * Phase1のcoachやPhase6の各Unitと同様、ここでの失敗を対局本体へ波及させない
  * (失敗時は空配列=表示しないに落とす)。
+ *
+ * 【STEP 5-E(H-2)で追加した「どちらもできない」の一文について】
+ * analysis/escapeSquareThreat.ts の detectEscapeSquareThreats は「現在の手番」の合法手を
+ * 対象にする。server.ts は自分(sente)の指し手を適用した直後に必ず playOpponentMove まで
+ * 進めてから状態を返す(=非終局のレスポンスでは常にsenteの手番に戻っている)ため、
+ * listAttackedPieces(..., "sente") と同じ前提でそのまま使ってよい。新しい色判定は
+ * 一切行わない。
  */
 function toPieceThreatMessages(current: GameState, isGameEnd: boolean): PieceThreatMessage[] {
   if (isGameEnd) return [];
@@ -902,9 +922,13 @@ function toPieceThreatMessages(current: GameState, isGameEnd: boolean): PieceThr
   try {
     const attackedPieces = listAttackedPieces(current.sfen, "sente");
     const facts = detectPieceThreats(attackedPieces);
-    return explainPieceThreats(facts);
+    const escapeThreats = detectEscapeSquareThreats(current.sfen);
+    const escapeStatuses = new Map(
+      facts.map((fact) => [fact.square, summarizeEscapeSquareThreatsForSquare(escapeThreats, fact.square)]),
+    );
+    return explainPieceThreats(facts, escapeStatuses);
   } catch (err) {
-    console.error("駒が当たっていること(Phase7 Unit4 STEP 4-3)の計算でエラーが発生しました:", err);
+    console.error("駒が当たっていること(Phase7 Unit4 STEP 4-3・5-E)の計算でエラーが発生しました:", err);
     return [];
   }
 }
@@ -1197,12 +1221,30 @@ function safeToJapaneseMoveHistory(moveHistory: string[], initialSfen?: string):
   }
 }
 
+/**
+ * STEP 5-E(S-2): legalMovesのうち、指した後の移動先に相手の駒が届く手だけを
+ * 抜き出す。判定はanalysis/escapeSquareThreat.tsに委ね、ここではattacked===trueの
+ * ものを選ぶだけ(新しい判定はしない)。legalMovesと同じく、失敗時は空配列に落として
+ * 対局本体へ波及させない(safeToJapaneseMoveHistoryと同じ方針)。
+ */
+function safeEscapeSquareThreats(sfen: string): string[] {
+  try {
+    return detectEscapeSquareThreats(sfen)
+      .filter((threat) => threat.attacked)
+      .map((threat) => threat.move);
+  } catch (err) {
+    console.error("逃げ先の当たり(STEP 5-E・analysis/escapeSquareThreat.ts)の計算でエラーが発生しました:", err);
+    return [];
+  }
+}
+
 export function buildStateResponse(current: GameState, options: ExplainPositionOptions = {}): StateResponseBody {
   return {
     ...toPublicGameState(current),
     status: getStatus(current),
     coach: safeExplainPosition(current, options),
     legalMoves: getLegalMoves(current.sfen),
+    escapeSquareThreats: safeEscapeSquareThreats(current.sfen),
     moveHistoryJapanese: safeToJapaneseMoveHistory(current.moveHistory, options.initialSfen),
   };
 }

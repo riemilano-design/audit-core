@@ -2149,10 +2149,12 @@ describe("buildStateResponseWithPlan: 駒が当たっている(STEP 4-3)", () =>
     const response = buildStateResponseWithPlan(state, undefined, {});
 
     const attackedMessages = response.plan.urgentMessages.filter((m) => m.kind === "piece_attacked");
+    // STEP 5-E(H-2): 銀(7i)・香(9i)は合法手の移動先すべてに相手の駒が届くため
+    // 一文が付く(7i7h・7i8h、9i9hのいずれも届く)。桂(8i)は8i7gが届かないため付かない。
     expect(attackedMessages.map((m) => m.text)).toEqual([
-      "あなたの７九の銀に、相手の８八のと金が当たっています(次の相手の手で取られる可能性があります)。",
+      "あなたの７九の銀に、相手の８八のと金が当たっています(次の相手の手で取られる可能性があります)。この駒が動けるマスは、どれも相手の駒が届いています。",
       "あなたの８九の桂に、相手の８八のと金が当たっています(次の相手の手で取られる可能性があります)。",
-      "あなたの９九の香に、相手の８八のと金が当たっています(次の相手の手で取られる可能性があります)。",
+      "あなたの９九の香に、相手の８八のと金が当たっています(次の相手の手で取られる可能性があります)。この駒が動けるマスは、どれも相手の駒が届いています。",
     ]);
   });
 
@@ -2180,6 +2182,54 @@ describe("buildStateResponseWithPlan: 駒が当たっている(STEP 4-3)", () =>
 
     expect(response.status.isEnd).toBe(true);
     expect(response.plan.urgentMessages.filter((m) => m.kind === "piece_attacked")).toEqual([]);
+  });
+});
+
+// STEP 5-E(S-2、2026-09-12人間承認): escapeSquareThreatsは、legalMovesのうち
+// 「指した後、移動先に相手の駒が届く」ものだけを抜き出したUSI形式の配列。
+// 判定そのものはanalysis/escapeSquareThreat.test.tsが担当し、ここでは配線
+// (buildStateResponseが実際の局面に対して正しい部分集合を返すこと)だけを確認する。
+describe("buildStateResponse: escapeSquareThreats(STEP 5-E)", () => {
+  it("A局30手目: 銀(7g)は8fへ動くと届くが、7f・6fへは届かない。角の移動先(7i)は届かない", () => {
+    const moves =
+      "7g7f 4a4b 6g6f 3c3d 2h6h 4b3c 5i4h 3c4d 4h3h 5c5d 3h2h 5d5e 3i3h 7c7d 6i5h 7a6b 4g4f 8c8d 5h4g 6b5c 3g3f 4d5d 2i3g 5c6d 6f6e 5d6e 7i7h 6e7f 7h7g 7f8g".split(
+        " ",
+      );
+    const state = gameStateAfter(moves);
+
+    const response = buildStateResponse(state);
+
+    expect(response.legalMoves).toContain("7g8f");
+    expect(response.legalMoves).toContain("7g7f");
+    expect(response.legalMoves).toContain("8h7i");
+
+    expect(response.escapeSquareThreats).toContain("7g8f");
+    expect(response.escapeSquareThreats).not.toContain("7g7f");
+    expect(response.escapeSquareThreats).not.toContain("8h7i");
+
+    // escapeSquareThreatsは常にlegalMovesの部分集合である。
+    for (const move of response.escapeSquareThreats) {
+      expect(response.legalMoves).toContain(move);
+    }
+  });
+
+  it("通常の駒組みの局面(P-1局6手目)では、少なくとも1件は届かない手が含まれる(空配列固定ではない)", () => {
+    const moves = "7g7f 8c8d 6g6f 4a4b 2h6h 3c3d".split(" ");
+    const state = gameStateAfter(moves);
+
+    const response = buildStateResponse(state);
+
+    expect(response.escapeSquareThreats.length).toBeLessThan(response.legalMoves.length);
+  });
+
+  it("終局局面(詰み)では、legalMoves・escapeSquareThreatsとも空配列", () => {
+    const sfen = "7pk/7p1/2n6/9/1S7/9/9/9/K7L w - 1";
+    const state: GameState = { sfen, moveHistory: [], forcedPliesUsed: 0 };
+
+    const response = buildStateResponse(state, { initialSfen: sfen });
+
+    expect(response.legalMoves).toEqual([]);
+    expect(response.escapeSquareThreats).toEqual([]);
   });
 });
 
@@ -2286,19 +2336,28 @@ describe("buildStateResponseWithPlan: 駒の得喪の集約(STEP 4-3b)", () => {
 // ζ-4a: 内部状態(GameState)と公開状態(StateResponseBody)の境界を、許可リスト方式
 // (toPublicGameState)で確立したことの検証。docs/ARCHITECTURE.md 6.「公開境界」参照。
 describe("公開境界(内部状態とAPIレスポンスの分離、ζ-4a)", () => {
-  // buildStateResponseが返すキーが、公開してよいと定めた6件ちょうどであること
+  // buildStateResponseが返すキーが、公開してよいと定めた7件ちょうどであること
   // (許可リスト方式であることの直接の確認)。forcedPliesUsedはSTEP ζ-4c-1(C-6、
   // 人間承認済み)により非公開へ移した(下記「forcedPliesUsedが公開されない」参照)。
-  const PUBLIC_KEYS = ["coach", "legalMoves", "moveHistory", "moveHistoryJapanese", "sfen", "status"];
+  // escapeSquareThreatsはSTEP 5-E(S-2、2026-09-12人間承認)で追加した公開フィールド。
+  const PUBLIC_KEYS = [
+    "coach",
+    "escapeSquareThreats",
+    "legalMoves",
+    "moveHistory",
+    "moveHistoryJapanese",
+    "sfen",
+    "status",
+  ];
 
-  it("buildStateResponseのキーが公開許可リストの6件と完全一致する", () => {
+  it("buildStateResponseのキーが公開許可リストの7件と完全一致する", () => {
     const state = gameStateAfter([]);
     const response = buildStateResponse(state);
 
     expect(Object.keys(response).sort()).toEqual([...PUBLIC_KEYS].sort());
   });
 
-  it("buildStateResponseWithPlanのキーが公開許可リスト6件+planの7件と完全一致する", () => {
+  it("buildStateResponseWithPlanのキーが公開許可リスト7件+planの7件と完全一致する", () => {
     const state = gameStateAfter([]);
     const response = buildStateResponseWithPlan(state, undefined);
 

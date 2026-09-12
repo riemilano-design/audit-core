@@ -31,6 +31,9 @@ function baseResponse(sfen: string, isEnd: boolean, planOverrides: Partial<Reach
     status: { isEnd, outcome: undefined },
     coach: undefined,
     legalMoves: [],
+    // STEP 5-E(S-2): StateResponseBodyWithPlan に必須で足された欄。
+    // 判定には使わないため、この土台では空配列にする。
+    escapeSquareThreats: [],
     moveHistoryJapanese: [],
     plan: { ...basePlan(), ...planOverrides },
   };
