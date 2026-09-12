@@ -2,8 +2,16 @@
 // エンジンの参考評価(analysis/engineReference.ts の EngineReference)から作る、
 // 決定的な純粋関数。エンジンもLLMもここでは呼ばない(EngineReferenceは引数で受け取る)。
 //
-// 【規則(人間承認済み。2026-09-12の9.10改定を反映。計画書 9.10 まで1つも変えないこと)】
-// 「出さない」(null)は次の2つだけ。それ以外はすべて文を返す。
+// 【規則(人間承認済み。2026-09-12の9.10改定、および9.14.1改定を反映。
+// 計画書 9.14.1 まで1つも変えないこと)】
+// 「出さない」(null)は次の3つだけ。それ以外はすべて文を返す。
+// 0. EngineReferenceが無い(engineReference===null)→ 出さない(9.14.1)。
+//    measureEngineReference(analysis/engineReference.ts)は終局と自玉が
+//    王手中の局面では探索を1本も行わずnullを返す(isGameOver・isInCheck)。
+//    測っていないのに「急がない」と言うのは断定できないことを断定することに
+//    なる(CLAUDE.mdルール6番)。測っていないから言わないのであって、急がない
+//    から言わないのではない。H-7の「閾値未満でも言う」とは別の話であり、
+//    H-7の例外ではない(詳細は下記関数内コメント、計画書9.14.1)。
 // 1. mateが絡む → 出さない(H-2)。dropCpは両方がcpのときだけ算出されるため、
 //    mateが絡む局面はdropCp===nullになる。「出さないと決めた」ことは計画書6.の
 //    宿題として記録済み(mateが出る局面を含む記録が取れた時点で再提示する)。
@@ -13,15 +21,29 @@
 //    「③が出る局面」の中でだけ行う(計画書2.1の実測A=10・B=8・C=2は、この
 //    母集団の中で数えた値のため、母集団をそろえないと10件からずれる)。
 //
-// 上記の2つに当てはまらない場合は、すべて次のいずれかの文を返す(nullにしない)。
+// 上記の3つに当てはまらない場合は、すべて次のいずれかの文を返す(nullにしない)。
 // - (B) captureSquareが帯に含まれ、帯が2件以上 →
 //   「いま注意する駒のうち、このまま何もしないと、あなたの{マス}の{駒名}が
 //   取られる可能性があります。」
 // - (C) captureSquareが帯に含まれない →
 //   「このまま何もしないと、あなたの{マス}の{駒名}が取られる可能性があります。」
-// - それ以外すべて(EngineReferenceが無い・dropCpがnullまたは閾値未満・
-//   captureSquareが無い・駒名が解決できない)→
-//   「いまのところ、急いで対応することはありません。」
+// - それ以外すべて(dropCpがnullまたは閾値未満・captureSquareが無い・
+//   駒名が解決できない。EngineReference自体は測れている場合)→
+//   帯(bandSquares)が1件以上あるかどうかで次のいずれかを返す(9.10改定。
+//   人間承認済みの文言。一字も変えないこと)。
+//   - 帯が1件以上:
+//     「取られる可能性のある駒はありますが、いまのところ、急いで対応することは
+//     ありません。」
+//   - 帯が空:
+//     「いまのところ、急いで対応することはありません。」(今のまま)
+//
+// 【9.10改定の理由(人間の言葉)】
+// 初心者は「当たっている=危ない」と思っていて、当たっていても急がないことが
+// あるのを知らない。2文を続けて読むとアプリが自分と矛盾しているように見える。
+// 帯を見たうえで急がないと言っていることが伝われば、当たっていても急がない
+// ことがあるという、初心者が一番知らないことを画面が自然に教える。
+// 判定に使うのはこの関数が既に受け取っているbandSquaresだけであり、新しい
+// 入力・判定・閾値・盤の計算はここでは作らない(2026-09-12人間の指示)。
 //
 // 【9.10の理由(人間の言葉)】
 // 枝を刈って焦点を渡すのがこのアプリの中心だとすれば、「いま急ぐことは無い」は
@@ -94,9 +116,23 @@ function pieceNameAt(sfen: string, usiSquare: string): string | null {
 /**
  * 閾値未満・captureSquareが無い・駒名が解決できないなど、③を「出さない」の
  * ではなく「急ぐ話が無い」ことを伝える既定文(9.10。人間承認済み。一字も
- * 変えないこと)。
+ * 変えないこと)。帯(bandSquares)が空のときはこちら。
  */
 const NO_RUSH_TEXT = "いまのところ、急いで対応することはありません。";
+
+/**
+ * 帯(bandSquares)が1件以上あるときの既定文(9.10改定。人間承認済み。一字も
+ * 変えないこと)。判定に使うのはbandSquaresの有無だけ(新しい入力は無い)。
+ */
+const NO_RUSH_TEXT_WITH_BAND =
+  "取られる可能性のある駒はありますが、いまのところ、急いで対応することはありません。";
+
+/**
+ * 「急ぐ話が無い」ことを伝える既定文を、帯(bandSquares)の有無で選ぶ。
+ */
+function noRushText(bandSquares: readonly string[]): string {
+  return bandSquares.length > 0 ? NO_RUSH_TEXT_WITH_BAND : NO_RUSH_TEXT;
+}
 
 /**
  * ③(相手の次の狙い)の文を組み立てる。上記の規則に従い、null(「出さない」)を
@@ -105,8 +141,24 @@ const NO_RUSH_TEXT = "いまのところ、急いで対応することはあり�
 export function explainPieceThreatFocus(input: PieceThreatFocusInput): string | null {
   const { engineReference, bandSquares, sfen } = input;
 
-  // EngineReferenceが無い → 急ぐ話にならない
-  if (engineReference === null) return NO_RUSH_TEXT;
+  // EngineReferenceが無い → 出さない(2026-09-12。計画書9.14.1)。
+  // measureEngineReference(analysis/engineReference.ts)は終局と自玉が王手中の
+  // 局面では探索を1本も行わずnullを返す(isGameOver・isInCheck)。measured
+  // していないのに「急がない」と言うのは、断定できないことを断定することに
+  // なる(CLAUDE.md「絶対に守るルール」6番に反する)。測っていないから言わない
+  // のであって、急がないから言わないのではない。
+  // これはH-7の例外ではなく別の話である(人間の言葉):
+  // 「H-7は『閾値を超えなくても言う』だ。測った結果、急ぐほどではなかった、
+  // という意味がある。engineReference===nullは『そもそも測っていない』だ。
+  // measureEngineReferenceは王手中と終局では探索を1本も行わない。測って
+  // いないのに『急がない』と言うのは、断定できないことを断定している。
+  // CLAUDE.mdルール6に正面から反する。だから出さない。H-7の『閾値未満でも
+  // 言う』は無傷だ。」
+  // 王手中は帯(urgentMessages)が「王手を解消する手しか指せません」と言って
+  // おり、それ自体が最大の枝刈りなので③が足すものは無い。将来③に王手用の
+  // 文を作るかどうかは、mateの宿題(計画書6.)と同じ場所でまとめて決める。
+  // 今は作らない(人間の決定)。
+  if (engineReference === null) return null;
 
   // 1. mateが絡む → 出さない(H-2)。baseline/afterPassのどちらかにmateが
   //    立っている場合はここで止める。
@@ -114,11 +166,11 @@ export function explainPieceThreatFocus(input: PieceThreatFocusInput): string | 
 
   // dropCpが無い、または閾値未満 → 急ぐ話にならない
   const { dropCp } = engineReference;
-  if (dropCp === null || dropCp < DROP_THRESHOLD_CP) return NO_RUSH_TEXT;
+  if (dropCp === null || dropCp < DROP_THRESHOLD_CP) return noRushText(bandSquares);
 
   // captureSquareが無い → 急ぐ話にならない
   const captureSquare = engineReference.afterPass.captureSquare;
-  if (captureSquare === null) return NO_RUSH_TEXT;
+  if (captureSquare === null) return noRushText(bandSquares);
 
   const inBand = bandSquares.includes(captureSquare);
 
@@ -128,7 +180,7 @@ export function explainPieceThreatFocus(input: PieceThreatFocusInput): string | 
   if (inBand && bandSquares.length === 1) return null;
 
   const name = pieceNameAt(sfen, captureSquare);
-  if (name === null) return NO_RUSH_TEXT; // 駒名が解決できない → 急ぐ話にならない
+  if (name === null) return noRushText(bandSquares); // 駒名が解決できない → 急ぐ話にならない
 
   const squareText = toJapaneseSquare(captureSquare);
 

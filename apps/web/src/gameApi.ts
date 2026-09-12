@@ -267,6 +267,12 @@ export interface ReachablePlanBody {
   directionNote: string | null;
   /** Unit 3: [3]「なぜそれが重要か」に出す、完成した自分の形の弱点。無ければnull。 */
   shapeWeakness: ShapeWeaknessBody | null;
+  /**
+   * STEP 5-F(A-2b): ③(相手の次の狙い)の文(サーバー側
+   * analysis/pieceThreatFocusExplanation.tsの結果)。undefined/nullのどちらも
+   * 「このAPIのこの仕組みからは何も足さない(既存の表示のまま)」を意味する。
+   */
+  focusText?: string | null;
   /** Phase6 Unit4: 今の局面で分かっていること(直前の一手による差分ではない)。
    * 事実の抽出も文言生成もサーバー側(nextConsiderationDetector.ts /
    * nextConsiderationExplanation.ts)で完了しており、ここでは表示するだけ。

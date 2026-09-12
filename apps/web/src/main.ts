@@ -583,21 +583,43 @@ function renderMyAim(coach: CoachExplanation[] | undefined, plan: ReachablePlanB
  * 独立(排他の対象ではない)。weaknessだけがあってitemsが無い場合(通常は起こらない。
  * opponent_next_aimはcoachが定義されていれば常に1件生成されるため)、要約は
  * weakness.textの1文目にする(新しい文は作らず、既存の抜粋規則を適用しただけ)。
+ *
+ * 【STEP 5-F(H-7、9.10)】plan.focusTextが文字列のときは、それを③の要約行として
+ * 使い、opponent_next_aimの固定文(items)は出さない(サーバー側の判断による
+ * 置き換え)。focusTextがnull/undefinedのときは既存の挙動のまま(items/summarizeWhy/
+ * firstSentenceを変えない)。shapeWeaknessはどちらの場合も既存のまま出す(H-7で
+ * 「別の話なので残す」と決まっている)。
+ *
+ * 【STEP 5-F(9.14.2)】focusTextは1文で要約行と同じ内容になるため、展開した本文
+ * には出さない(展開しても増える情報が無いため)。本文にはweaknessのみ出す。
+ * focusTextがあってweaknessが無い場合、本文は何も追加しない(hasBody=falseとなり、
+ * renderExpandableBlockの既存の空表示の扱いにより開閉の印は出ない)。
  */
 function renderWhy(coach: CoachExplanation[] | undefined, plan: ReachablePlanBody | undefined): void {
   const items = (coach ?? []).filter((item) => WHY_STAGES.includes(item.stage));
   const weakness = plan?.shapeWeakness ?? null;
-  const summaryText = items.length > 0 ? summarizeWhy(items[0]!) : weakness ? firstSentence(weakness.text) : "";
+  const focusText = plan?.focusText ?? null;
+  const summaryText =
+    focusText != null
+      ? focusText
+      : items.length > 0
+        ? summarizeWhy(items[0]!)
+        : weakness
+          ? firstSentence(weakness.text)
+          : "";
 
   renderExpandableBlock(whyEl, "why-body", summaryText, readColumnOpen.why, toggleWhy, (body) => {
-    if (items.length === 0 && !weakness) return;
+    const hasBodyContent = focusText != null ? weakness != null : items.length > 0 || !!weakness;
+    if (!hasBodyContent) return;
 
     const heading = document.createElement("h3");
     heading.textContent = "なぜそれが重要か";
     body.appendChild(heading);
 
-    for (const item of items) {
-      appendCoachItem(body, item);
+    if (focusText == null) {
+      for (const item of items) {
+        appendCoachItem(body, item);
+      }
     }
 
     if (weakness) {

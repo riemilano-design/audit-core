@@ -6,7 +6,8 @@
 // 計算の中身は変えていない(A-1)。その後A-2b(9.3)で、measureEngineReferenceの
 // 第3引数(nodes)を必須からoptionalへ変えた(本番はmovetime既定で呼ぶため。
 // 「nodesで固定しない」という人間決定に従う)。EngineReferenceの返り値の形
-// (nodesフィールドの型・存在)は変えていない。
+// (nodesフィールドの存在)は変えていない。nodesの型はnumber|nullへ広げた
+// (movetimeのときは「ノード数で制限していない」を表すnull。0にしない)。
 // 本番関数(rules/gameStatus.ts の isGameOver/isInCheck、rules/sfenPosition.ts の
 // parsePosition)は import して呼ぶだけで、複製・改変はしない。
 // 将棋の判断(良し悪し)・新しい閾値はここでは一切行わない。
@@ -53,8 +54,15 @@ export interface EngineReference {
   /** baseline.scoreCp − (−afterPass.scoreCp)(先手視点の落ち幅)。両方cpの
    * ときだけ算出し、それ以外(mateが絡む・いずれかが欠測)はnull。 */
   dropCp: number | null;
-  /** 実際に使ったノード数(呼び出し時の引数のコピー。観測記録用)。 */
-  nodes: number;
+  /**
+   * 実際に使ったノード数(呼び出し時の引数のコピー。観測記録用)。
+   * **nodesを指定せずmovetimeで探索した場合はnull**(「ノード数で制限していない」の意味)。
+   * 0にしない ― 0は「0ノード探索した」と読めてしまい、後から読んだ人が測定値として
+   * 誤読しうるため(2026-09-12 人間の指示。同日、CPU 0%を「止まっている」と読み違えて
+   * 再現確認を124回空費した件と同じ型の取り違えを避ける)。
+   * ハーネス(scripts/playtest)は常にnodesを渡すため、記録の値は従来どおり。
+   */
+  nodes: number | null;
 }
 
 /** SFENの手番フィールド(空白区切りの2番目、"b"または"w")を入れ替えた
@@ -137,10 +145,9 @@ export async function measureEngineReference(
       baseline,
       afterPass: { ...afterPassSide, captureSquare },
       dropCp,
-      // nodesを省略した場合(movetime探索)は0にする。EngineReference.nodesの型・
-      // 存在は変えない(STEP 5-F 9.3の制約)。このフィールドを読むのはハーネスの
-      // 記録用途(scripts/playtest)のみで、本番(③)はこの値を読まない。
-      nodes: nodes ?? 0,
+      // nodesを省略した場合(movetime探索)はnull =「ノード数で制限していない」。
+      // 0にしない(型定義のコメント参照。2026-09-12 人間の指示)。
+      nodes: nodes ?? null,
     };
   } catch {
     return null;

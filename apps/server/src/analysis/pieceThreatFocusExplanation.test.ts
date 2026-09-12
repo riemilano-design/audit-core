@@ -1,11 +1,11 @@
-// pieceThreatFocusExplanation.ts(STEP 5-F、docs/STEP_5-F_PLAN_2026-09-12.md A-2a、9.10)のテスト。
+// pieceThreatFocusExplanation.ts(STEP 5-F、docs/STEP_5-F_PLAN_2026-09-12.md A-2a、9.10・9.14.1)のテスト。
 //
 // 【校正について】
 // 固定棋譜4局の記録(scripts/playtest/out/baseline-2026-09-12/*.jsonl。
 // .gitignore配下のためテストからは参照しない)にこの関数を実際に掛け、計画書9.10の
-// 実測(A=10件・B=8件・C=2件・「いまのところ、急いで対応することはありません。」=39件、
-// engineReferenceのあるready行59件)と一致することを確かめた(2026-09-12。手元で1回
-// 実行して確認する方式=計画書「測り方(i)」)。
+// 実測(A=10件・B=8件・C=2件、「急がない」のうち帯あり(新しい文)=5件・帯なし
+// (従来の文)=34件、engineReferenceのあるready行59件)と一致することを確かめた
+// (2026-09-12。手元で1回実行して確認する方式=計画書「測り方(i)」)。
 // 以下のテストのSFEN・マス・駒名は、その校正で実際に出た組み合わせをそのまま
 // 使っている(初期局面の9i=香・7i=銀・6i=金・8i=桂は標準の初期配置そのもの)。
 
@@ -26,12 +26,20 @@ function reference(overrides: Partial<EngineReference> = {}): EngineReference {
 }
 
 const NO_RUSH_TEXT = "いまのところ、急いで対応することはありません。";
+const NO_RUSH_TEXT_WITH_BAND =
+  "取られる可能性のある駒はありますが、いまのところ、急いで対応することはありません。";
 
 describe("explainPieceThreatFocus", () => {
-  it("EngineReferenceがnullなら「いまのところ、急いで対応することはありません。」", () => {
+  it("9.14.1改定: EngineReferenceがnull(測っていない)なら出さない", () => {
     expect(
       explainPieceThreatFocus({ engineReference: null, bandSquares: [], sfen: INITIAL_SFEN }),
-    ).toBe(NO_RUSH_TEXT);
+    ).toBeNull();
+  });
+
+  it("9.14.1改定: EngineReferenceがnullなら、帯が空でなくても出さない(王手中に「急がない」と言ってしまう不具合の再発防止)", () => {
+    expect(
+      explainPieceThreatFocus({ engineReference: null, bandSquares: ["6h"], sfen: INITIAL_SFEN }),
+    ).toBeNull();
   });
 
   it("閾値(300cp)未満なら「いまのところ、急いで対応することはありません。」", () => {
@@ -88,6 +96,20 @@ describe("explainPieceThreatFocus", () => {
       afterPass: { scoreCp: -300, mate: null, bestmove: "5f5e", captureSquare: "5e" },
     });
     // 初期局面の5eは空マス(pieceThreatFocusExplanationは推測して名前を付けない)。
+    expect(
+      explainPieceThreatFocus({ engineReference, bandSquares: [], sfen: INITIAL_SFEN }),
+    ).toBe(NO_RUSH_TEXT);
+  });
+
+  it("9.10改定: 帯が1件以上あるとき、急がない文の前に「取られる可能性のある駒はありますが、」が付く", () => {
+    const engineReference = reference({ dropCp: 299 }); // 閾値未満 → 急がない文の分岐に入る
+    expect(
+      explainPieceThreatFocus({ engineReference, bandSquares: ["6h"], sfen: INITIAL_SFEN }),
+    ).toBe(NO_RUSH_TEXT_WITH_BAND);
+  });
+
+  it("9.10改定: 帯が空のときは従来どおり「いまのところ、急いで対応することはありません。」", () => {
+    const engineReference = reference({ dropCp: 299 }); // 閾値未満 → 急がない文の分岐に入る
     expect(
       explainPieceThreatFocus({ engineReference, bandSquares: [], sfen: INITIAL_SFEN }),
     ).toBe(NO_RUSH_TEXT);
