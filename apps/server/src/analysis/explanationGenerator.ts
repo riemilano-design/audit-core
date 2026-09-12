@@ -86,6 +86,99 @@ function pickBest<T extends { matchScore: number }>(results: T[]): T | undefined
   return best && best.matchScore > 0 ? best : undefined;
 }
 
+// ---------------------------------------------------------------------------
+// STEP U6-I2a(狙いの選び方の規則。docs/STEP_U6-I_PLAN_2026-09-12.md 6.)
+//
+// 【なぜ要るか】STEP U6-I1 の実測で、1局目 20〜30手目に
+// boh_gin(human_reviewed・2/3一致・[2] に事実文が出る)が
+// hishasaki_fugokan(draft・3/3一致・[2] は「分かりません」に落ちる)に負け、
+// 画面が後退した(同計画書 5.5 (b))。pickBest が matchScore しか見ないためである。
+//
+// 【このブロックがやること】「どの候補を [2][3] に出すか」の並べ方を選べるようにする。
+// 既定("current")では既存の pickBest をそのまま呼び、**挙動を1文字も変えない**
+// (U6-F が directionRule を足したときと同じ形)。
+//
+// 【このブロックが絶対にやらないこと】
+// - 将棋の判断を足さない。使うのは、intentDetector.ts が既に確定させた
+//   matchScore・matchStatus と、data/ 側で確定済みの review_status だけである。
+// - 新しい数値の重み・閾値を作らない。すべて辞書式(キーの順番)で決める。
+// - 候補を捨てない。どの規則も**並べ替えだけ**で、matchScore>0 の候補が1件でもあれば
+//   必ず1件返す(捨てると「認識あり」が消え、沈黙が増えるため。U6-I1 5.3 参照)。
+// - 形(buildCurrentShapeStage)の選び方は変えない。上の pickBest はそのまま残す。
+// ---------------------------------------------------------------------------
+
+export type IntentPickRule =
+  /** 既存の規則。matchScore降順(同点はintentId昇順)の先頭。既定 */
+  | "current"
+  /** 案1「出せる文が先」: [2]に文が出せるか → 一致度 → intentId */
+  | "speakable_first"
+  /** 案2「出せる文が先、同点は審査済み」: [2]に文が出せるか → 一致度 → 審査済みか → intentId */
+  | "speakable_then_reviewed"
+  /** 案3「審査済みが先」: 審査済みか → 一致度 → intentId(人間が素朴案として名指ししたもの) */
+  | "reviewed_first";
+
+/**
+ * 本番の既定。**この定数は本番の画面に効く**(server.ts の4箇所は options に {} を渡すため、
+ * options.intentPickRule は undefined になり、この既定引数が使われる)。
+ * 一方 options.intentPickRule による呼び出しごとの上書きは、HTTP からは到達しない
+ * 計測・テスト専用の入り口である(U6-F の directionRule と同じ。
+ * docs/STEP_UNIT6_PLAN_2026-09-12.md 13.12 (4c))。
+ *
+ * 2026-09-12、人間の決定により "current" から "speakable_then_reviewed"(案2)へ変更した。
+ * 4局59手の実測で、②が「分かりません」に落ちた行が 11 → 0 になり、沈黙・6列・
+ * 不変条件 I-1〜I-9 はいずれも変わらなかった(docs/STEP_U6-I_PLAN_2026-09-12.md 8.)。
+ */
+const DEFAULT_INTENT_PICK_RULE: IntentPickRule = "speakable_then_reviewed";
+
+/**
+ * その候補を選んだとき、[2](opponent_intent)に**実際に文が出せるか**。
+ *
+ * buildOpponentIntentStage の分岐をそのまま述語にしただけで、新しい判断は足していない。
+ * 「出せない」のは matched かつ draft のときだけで、このとき露出制御(nameExposure)が
+ * 名前と current_aim_explanation を止め、既存の unclassified 文(「相手の狙いは、まだ
+ * はっきりとは分かりません。」)へ落ちる。draft かどうかの判断は exposeName に委ね、
+ * ここで review_status を直接読まない(判断を2箇所に散らさないため)。
+ */
+function canSpeakAtIntentStage(result: IntentDetectionResult): boolean {
+  if (result.matchStatus !== "matched") return true;
+  return exposeName(result.name, result.reviewStatus, "shape").pendingNote === null;
+}
+
+/** 審査済み(human_reviewed / expert_verified)か。draft だけが false。 */
+function isReviewed(result: IntentDetectionResult): boolean {
+  return exposeName(result.name, result.reviewStatus, "shape").pendingNote === null;
+}
+
+/** 規則ごとの比較関数。いずれも最後は intentId 昇順で決定的に決まる。 */
+function compareByRule(rule: IntentPickRule, a: IntentDetectionResult, b: IntentDetectionResult): number {
+  const flag = (value: boolean) => (value ? 1 : 0);
+  const speakable = flag(canSpeakAtIntentStage(b)) - flag(canSpeakAtIntentStage(a));
+  const reviewed = flag(isReviewed(b)) - flag(isReviewed(a));
+  const score = b.matchScore - a.matchScore;
+  const id = a.intentId.localeCompare(b.intentId);
+
+  if (rule === "speakable_first") return speakable || score || id;
+  if (rule === "speakable_then_reviewed") return speakable || score || reviewed || id;
+  return reviewed || score || id; // "reviewed_first"
+}
+
+/**
+ * [2][3] に出す狙いを1件選ぶ。**並べ替えだけで、候補を捨てない。**
+ *
+ * rule === "current" のときは既存の pickBest をそのまま呼ぶため、**既存の挙動と完全に
+ * 同じ**である(呼び出し側が未ソートの配列を渡した場合の挙動も含めて変えない)。
+ */
+function pickBestIntent(
+  results: IntentDetectionResult[],
+  rule: IntentPickRule = DEFAULT_INTENT_PICK_RULE,
+): IntentDetectionResult | undefined {
+  if (rule === "current") return pickBest(results);
+
+  const candidates = results.filter((result) => result.matchScore > 0);
+  if (candidates.length === 0) return undefined;
+  return [...candidates].sort((a, b) => compareByRule(rule, a, b))[0];
+}
+
 // Explanationはdata/schemas/explanations.schema.json準拠のフィールドのみを持つ
 // (additionalProperties: falseのスキーマにそのまま流用できる状態を保つため)。
 // 一方、Web API層はバッジ表示等のために「forming/matched/completed/none」という
@@ -273,8 +366,9 @@ function buildOpponentIntentFormingStage(best: IntentDetectionResult): StageResu
 function buildOpponentIntentStage(
   intentResults: IntentDetectionResult[],
   wasLastOpponentMoveForced: boolean = false,
+  rule: IntentPickRule = DEFAULT_INTENT_PICK_RULE,
 ): StageResult {
-  const best = pickBest(intentResults);
+  const best = pickBestIntent(intentResults, rule);
 
   if (!best) {
     return buildOpponentIntentUnclassifiedStage(wasLastOpponentMoveForced);
@@ -349,8 +443,9 @@ function buildOpponentNextAimUnclassifiedStage(
 function buildOpponentNextAimStage(
   intentResults: IntentDetectionResult[],
   wasLastOpponentMoveForced: boolean = false,
+  rule: IntentPickRule = DEFAULT_INTENT_PICK_RULE,
 ): StageResult | null {
-  const best = pickBest(intentResults);
+  const best = pickBestIntent(intentResults, rule);
 
   if (!best) {
     return buildOpponentNextAimUnclassifiedStage("none", wasLastOpponentMoveForced);
@@ -381,11 +476,12 @@ function buildStages(
   shapeResults: ShapeFormationResult[],
   intentResults: IntentDetectionResult[],
   wasLastOpponentMoveForced: boolean = false,
+  rule: IntentPickRule = DEFAULT_INTENT_PICK_RULE,
 ): StageResult[] {
   return [
     buildCurrentShapeStage(shapeResults),
-    buildOpponentIntentStage(intentResults, wasLastOpponentMoveForced),
-    buildOpponentNextAimStage(intentResults, wasLastOpponentMoveForced),
+    buildOpponentIntentStage(intentResults, wasLastOpponentMoveForced, rule),
+    buildOpponentNextAimStage(intentResults, wasLastOpponentMoveForced, rule),
   ].filter((stage): stage is StageResult => stage !== null);
 }
 
@@ -398,8 +494,9 @@ export function generateExplanations(
   shapeResults: ShapeFormationResult[],
   intentResults: IntentDetectionResult[],
   wasLastOpponentMoveForced: boolean = false,
+  rule: IntentPickRule = DEFAULT_INTENT_PICK_RULE,
 ): Explanation[] {
-  return buildStages(shapeResults, intentResults, wasLastOpponentMoveForced).map((s) => s.explanation);
+  return buildStages(shapeResults, intentResults, wasLastOpponentMoveForced, rule).map((s) => s.explanation);
 }
 
 /** generateExplanationsのExplanationに、Web API/UI向けの生の判定状態(status)を添えたもの。 */
@@ -419,15 +516,19 @@ export function generateCoachExplanations(
   shapeResults: ShapeFormationResult[],
   intentResults: IntentDetectionResult[],
   wasLastOpponentMoveForced: boolean = false,
+  rule: IntentPickRule = DEFAULT_INTENT_PICK_RULE,
 ): CoachExplanation[] {
-  return buildStages(shapeResults, intentResults, wasLastOpponentMoveForced).map((s) => ({
+  return buildStages(shapeResults, intentResults, wasLastOpponentMoveForced, rule).map((s) => ({
     ...s.explanation,
     status: s.status,
     evidenceSquares: s.evidenceSquares,
   }));
 }
 
-export interface ExplainPositionOptions extends DetectIntentsOptions, AnalyzeShapeFormationOptions {}
+export interface ExplainPositionOptions extends DetectIntentsOptions, AnalyzeShapeFormationOptions {
+  /** STEP U6-I2a: [2][3] に出す狙いの選び方。省略時は DEFAULT_INTENT_PICK_RULE(既定 "current")。 */
+  intentPickRule?: IntentPickRule;
+}
 
 /**
  * SFEN + 指し手履歴から、Unit5(analyzeShapeFormation)/Unit2(detectIntents)を
@@ -461,5 +562,5 @@ export function explainPositionWithStatus(
 ): CoachExplanation[] {
   const shapeResults = analyzeShapeFormation(sfen, moveHistory, options);
   const intentResults = detectIntents(sfen, moveHistory, options);
-  return generateCoachExplanations(shapeResults, intentResults, wasLastOpponentMoveForced);
+  return generateCoachExplanations(shapeResults, intentResults, wasLastOpponentMoveForced, options.intentPickRule);
 }

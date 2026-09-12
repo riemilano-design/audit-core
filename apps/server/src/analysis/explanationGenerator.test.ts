@@ -572,3 +572,120 @@ describe("explainPosition (Unit1/Unit2との統合)", () => {
     expect(() => explainPosition("not-a-valid-sfen", [])).toThrow();
   });
 });
+
+// ---------------------------------------------------------------------------
+// STEP U6-I2a(狙いの選び方の規則)。docs/STEP_U6-I_PLAN_2026-09-12.md 6.
+//
+// 実データ(data/intents/*.json)には依存させず、その場で組んだ判定結果だけを使う
+// (既知事項 P-20: 実データに依存したテストは、知識を足すたびに壊れる)。
+// ---------------------------------------------------------------------------
+describe("STEP U6-I2a: 狙いの選び方の規則(IntentPickRule)", () => {
+  /** 判定結果を1件組む。matchScore は matched/unmatched の本数から機械的に決める。 */
+  function intentResult(
+    intentId: string,
+    matchedCount: number,
+    totalCount: number,
+    reviewStatus: "draft" | "human_reviewed",
+  ): IntentDetectionResult {
+    const matchedSignatures = Array.from({ length: matchedCount }, (_, i) => ({
+      piece: "歩",
+      to: `8${"defgh"[i] ?? "d"}`,
+      evidence: { ply: 10 + i * 2, moveUsi: "8c8d" },
+    }));
+    const unmatched = Array.from({ length: totalCount - matchedCount }, () => ({ piece: "歩", to: "9d" }));
+    return {
+      intentId,
+      name: `テスト${intentId}`,
+      openingId: "ibisha",
+      dataConfidenceLevel: "medium",
+      reviewStatus,
+      matchStatus: matchedCount === 0 ? "none" : unmatched.length === 0 ? "matched" : "forming",
+      matchScore: totalCount === 0 ? 0 : matchedCount / totalCount,
+      matchedSignatures,
+      unmatchedSignatures: unmatched,
+      currentAimExplanation: `${intentId}の今の狙い`,
+      nextAimExplanation: `${intentId}の次の狙い`,
+    };
+  }
+
+  /** detectIntentsと同じ並び(matchScore降順→intentId昇順)に整える。 */
+  const sorted = (results: IntentDetectionResult[]) =>
+    [...results].sort((a, b) => b.matchScore - a.matchScore || a.intentId.localeCompare(b.intentId));
+
+  // 1局目 20〜30手目で実際に起きた組み合わせ(docs/STEP_U6-I_PLAN_2026-09-12.md 5.5 (b))。
+  // draftが全一致(1.00)で、審査済みが一部一致(0.67)。現行はdraftを選び、[2]が
+  // 露出制御で「分かりません」に落ちる。
+  const REGRESSION_CASE = sorted([
+    intentResult("a_draft_matched", 3, 3, "draft"),
+    intentResult("b_reviewed_forming", 2, 3, "human_reviewed"),
+  ]);
+
+  const intentStage = (rule: Parameters<typeof generateCoachExplanations>[3]) =>
+    generateCoachExplanations(NO_SHAPE_RESULTS, REGRESSION_CASE, false, rule).find(
+      (c) => c.stage === "opponent_intent",
+    )!;
+
+  it("current(既定): 一致度だけで選ぶため、draftが全一致だと[2]が「分かりません」に落ちる", () => {
+    const stage = intentStage("current");
+    expect(stage.template_id).toBe("opponent_intent_unclassified");
+    expect(stage.refers_to_intent_id).toBeNull();
+  });
+
+  it("案1 speakable_first: [2]に文が出せる審査済みの方を選ぶ", () => {
+    const stage = intentStage("speakable_first");
+    expect(stage.refers_to_intent_id).toBe("b_reviewed_forming");
+    expect(stage.status).toBe("forming");
+  });
+
+  it("案2 speakable_then_reviewed: 案1と同じく、文が出せる方を選ぶ", () => {
+    expect(intentStage("speakable_then_reviewed").refers_to_intent_id).toBe("b_reviewed_forming");
+  });
+
+  it("案2: 一致度が並んだときだけ審査済みを採る(一致度より上には置かない)", () => {
+    const tie = sorted([
+      intentResult("a_draft", 1, 3, "draft"),
+      intentResult("z_reviewed", 1, 3, "human_reviewed"),
+    ]);
+    const pick = (rule: Parameters<typeof generateCoachExplanations>[3]) =>
+      generateCoachExplanations(NO_SHAPE_RESULTS, tie, false, rule).find((c) => c.stage === "opponent_intent")!
+        .refers_to_intent_id;
+    // 案1は同点をintentId昇順で決めるためdraftを採る。案2は審査済みを採る。
+    expect(pick("speakable_first")).toBe("a_draft");
+    expect(pick("speakable_then_reviewed")).toBe("z_reviewed");
+
+    // 一致度が違えば、案2でも一致度が勝つ(審査済みを一致度より上に置かない)。
+    const betterDraft = sorted([
+      intentResult("a_draft", 2, 3, "draft"),
+      intentResult("z_reviewed", 1, 3, "human_reviewed"),
+    ]);
+    expect(
+      generateCoachExplanations(NO_SHAPE_RESULTS, betterDraft, false, "speakable_then_reviewed").find(
+        (c) => c.stage === "opponent_intent",
+      )!.refers_to_intent_id,
+    ).toBe("a_draft");
+  });
+
+  it("案3 reviewed_first: 候補が全部draftのときは空振りする(2局目で直らなかった理由)", () => {
+    const allDraft = sorted([
+      intentResult("a_draft_matched", 3, 3, "draft"),
+      intentResult("b_draft_forming", 1, 2, "draft"),
+    ]);
+    const stage = generateCoachExplanations(NO_SHAPE_RESULTS, allDraft, false, "reviewed_first").find(
+      (c) => c.stage === "opponent_intent",
+    )!;
+    expect(stage.template_id).toBe("opponent_intent_unclassified");
+  });
+
+  it("どの規則も候補を捨てない(matchScore>0が1件でもあれば[3]はnoneにならない)", () => {
+    // 捨てる規則にすると「認識あり」が消え、沈黙が増える(計画書 6.2)。
+    const cases = [REGRESSION_CASE, [intentResult("only_draft_matched", 2, 2, "draft")]];
+    for (const rule of ["current", "speakable_first", "speakable_then_reviewed", "reviewed_first"] as const) {
+      for (const results of cases) {
+        const nextAim = generateCoachExplanations(NO_SHAPE_RESULTS, sorted(results), false, rule).find(
+          (c) => c.stage === "opponent_next_aim",
+        )!;
+        expect(nextAim.status, `rule=${rule}`).not.toBe("none");
+      }
+    }
+  });
+});
