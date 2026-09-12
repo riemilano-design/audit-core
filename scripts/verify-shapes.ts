@@ -15,6 +15,8 @@
 //   npx tsx scripts/verify-shapes.ts              # data/shapes/ の全件
 //   npx tsx scripts/verify-shapes.ts --draft-only # review_status が draft のものだけ
 //
+// 型検査: npm run typecheck:scripts(scripts/tsconfig.json と scripts/playtest/tsconfig.json の両方)
+//
 // スキーマ準拠そのものは node scripts/validate-data.mjs の役割であり、ここでは重ねて行わない。
 
 import { readdirSync, readFileSync } from "node:fs";
