@@ -306,6 +306,10 @@
 
 **3 つを同時に読む。** 方向が出れば I-9 は増えうる(黙っていれば検出されない)。**I-9 が増えたことだけを理由に案を落とさない。**
 
+**あわせて、案ごとに `check.ts` の 6 列の表(全手数・認識あり・道のりあり・候補手あり・候補手が全件除外・沈黙)をそのまま出す**(2026-09-12 の人間の指示)。**理由**: 予-F3(沈黙率は方向が出た分だけ下がる)が外れたとき、**方向は増えたが道のりが増えていないのか、道のりは増えたが候補手が全件除外なのか**を見分けるため。**それが分からないと「別の場所で止まっている」で終わってしまう。** 6 列は `check.ts` が既に出しているものをそのまま貼る(新しい集計を作らない)。
+
+**I-9 = 0 を「誤認が無い」と読まない**(2026-09-12 の人間の指示)。**I-9 の条件は「証拠 1 件以下、かつ欠け 2 件以上」なので、証拠 2 件で間違った形が勝った場合は検出されない。** つまり **I-9 は誤認の下限であって全部ではない**。**報告では「I-9 が n 件」と書き、「誤認が n 件」とは書かない。**
+
 ### 10.2 計測のやり方
 
 - **退避した 4 件を一時的に `data/shapes/` へ戻して測り、測り終えたら戻す**(コミットしない)。案の比較には**複数系統が forming になる状況が要る**ため、3 件のままでは `ambiguous` が一度も起きない
@@ -353,6 +357,8 @@
 
 **実測での正確な範囲(この筋を狭めないための補足)**: 形 8 件のとき、沈黙(認識・道のり・候補手のいずれも無し)は 3 局目で 16 手中 8 手だった。**帯と①は出続ける**が、**④の組み上がりと⑤の道のり・候補手は消える**。つまり「まるごと黙る」のは**形にぶら下がっている部分**であり、人間の指摘の通り、**形を必要としない帯・②・③が出ていても、④⑤が消えると画面は助けにならない**。
 
+**この事実は、④⑤を形から切り離すという筋の直接の根拠になる**(2026-09-12 の人間の判断)。**消えるのが形にぶら下がっている部分だけ**である以上、帯・②・③と同じように**④⑤も形の認識を必須にしない作りにできるはずだ**、という筋である。なお人間は自身の「まるごと黙る」を不正確と認め、上の実測の範囲を正とした。
+
 **したがって U6-F の結論は 3 つありうる**。(a) ある案が予-F2 を外して I-9 をあまり増やさずに方向を増やす → **その案を採る**。(b) 3 案ともシーソーだった → **規則を選ばず、④⑤の構造を見る STEP を立てる**。(c) どの案も方向が増えない → **原因の見立て(9.4)が違うので、そこから調べ直す**。**(b) を「案を選べなかった失敗」として扱わない。**
 
 ### 10.6 やらないこと
@@ -360,6 +366,75 @@
 - **forming の閾値は変えない**(H-3 の (iv) は据え置き。**規則と閾値を同時に変えると効果を分離できない**)
 - `reachableShapes` の上限 3 件も**この STEP では変えない**(別の論点。ただし 9.4 のとおり銀冠が押し出される事実は記録済み)
 - 失敗している既存テスト 5 件は、**下書きを戻したときだけ失敗する**。恒久的にどう扱うか(実データ非依存にするか、期待値を更新するか)は、下書きを本当に入れると決めたときに判断する
+
+### 10.7 実装の計画(**Tier A。2026-09-12 の計画レビュー(1 回目 REVISE)を受けて書き直した**)
+
+**変更するファイル**: `apps/server/src/api/stateResponse.ts`(+ `stateResponse.test.ts`)、`scripts/playtest/lib/recorder.ts`、`scripts/playtest/replay.ts`。**`apps/web` は変えない。`data/` も変えない。**
+
+**別セッターとの調整(2026-09-12 の人間の決定)**: **`apps/server/src/api/stateResponse.ts` は U6-F が先に取る。** 5-F はこのファイルの配線を待たせ、新規ファイルの部分だけ並行させる。**着手の直前に `git status --short -- apps/server/src/api/stateResponse.ts` を実行し、相手の未コミット差分が無いことをその時点で確かめてから編集を始める**(計画を書いた時点では差分は無かったが、時間が経てば変わる)。
+
+#### A. `resolveRecognizedDirection` に規則の選択肢を足す。**既定は現行のまま**
+
+- `export type DirectionRule = "current" | "rankedHeadUnique" | "rankedHeadAlways" | "familyCollapse"`
+- 署名: `resolveRecognizedDirection(shapes, everCompletedShapeIds = new Set(), rule: DirectionRule = "current", ranked: readonly { shapeId: string; matchScore: number; adjustment: ... }[] = [])`
+- **既定 `"current"` のときは今と挙動を変えない。** 既存テストが 1 件も落ちないことで確かめる
+
+#### B. `ambiguous` を返すのは **3 箇所**。差し替えるのは **2 箇所だけ**
+
+計画レビューの指摘により、実際のコードを数え直した(`grep -n 'reason: "ambiguous"'`)。
+
+| 行 | どこ | 今回の扱い |
+|---|---|---|
+| 556 | `everCompletedShapeIds` が空のときの従来規則。forming が 2 件以上で `pickRootMostAncestor` が決まらない | **差し替える** |
+| 567 | `rootMostCompleted.length !== 1`。**これまで completed になった形から「最も発展した完了形 M」を一意に決められない** | **触らない。常に `ambiguous` のまま** |
+| 585 | M の子孫に絞った `candidates` で `pickRootMostAncestor` が決まらない | **差し替える** |
+
+**567 を触らない理由**: これは「forming の中から一つ選ぶ」問題ではなく「**completed の履歴から系統の根を決める**」問題である。**`rankReachableShapes` は completed を除外する**ので、`ranked` の並びをこの分岐に当てる根拠が無い。**別の論点として残す**(この STEP では扱わない)。
+
+#### C. 3 つの規則の中身
+
+- **`"rankedHeadUnique"`**: 候補(556 なら `forming`、585 なら `candidates`)のうち、`ranked` の並びで先頭のものを採る。**先頭が別の候補と `(adjustment, matchScore)` で同点なら `ambiguous` のまま**
+- **`"rankedHeadAlways"`**: 候補のうち `ranked` の並びで先頭のものを常に採る(`ranked` は最後に `shapeId` 昇順で並ぶので必ず一つに決まる)
+- **`"familyCollapse"`**: 候補を**祖先の根**(`parentShapeId` を `ancestorIdsOf` でたどった先。**新しいフィールドは足さない**)でグループ分けし、各グループ内で現行の `pickRootMostAncestor` を当てる。**残ったグループが 1 つならその結果、2 つ以上なら `ambiguous`**
+- **候補が `ranked` に 1 件も無いときは `ambiguous` を返す**(`rankReachableShapes` は `side === "opponent"` と completed を除外するため、候補と `ranked` の集合はずれうる。計画レビューの指摘)。**既定と一致するとは限らない**(`"current"` は `ranked` を参照せず候補に直接 `pickRootMostAncestor` を当てるため、`side: "opponent"` の forming が祖先関係にあれば決まりうる)。**現行 3 件と退避中の下書きはすべて `side: "self"` なので、今回の実測でこの分岐は踏まれない見込み**である
+
+#### D. 配線(**計画レビューで抜けが見つかった箇所**)
+
+`resolveRecognizedDirection` を呼ぶのは `computeRankedPlanContext` の 1 箇所だけだが、そこへ `directionRule` を届けるには**中継の型も広げる**必要がある。
+
+1. `export interface StateResponseOptions extends ExplainPositionOptions { directionRule?: DirectionRule }` を `stateResponse.ts` に定義する
+2. **`stateResponse.ts` の中で `options: ExplainPositionOptions` と書かれている箇所を、すべて `StateResponseOptions` へ置き換える。** **関数名を列挙せず、`grep -n "options: ExplainPositionOptions" apps/server/src/api/stateResponse.ts` で出た全箇所を対象にする**(2026-09-12 時点で **17 箇所**)。**列挙すると漏れる**: 1 回目の計画レビューで挙げた一覧からは `computeReachablePlan`・`safeComputeReachablePlan` が漏れており、2 回目の計画レビューで見つかった(下記 D-4 の欠陥の原因)。**`StateResponseOptions` は `ExplainPositionOptions` の上位互換なので、既存の呼び出し側は書き換え不要**
+3. `computeRankedPlanContext` の中で `resolveRecognizedDirection(shapeResults, everCompletedShapeIds, options.directionRule ?? "current", ranked)` と渡す(`ranked` は同じ関数内で既に計算済み)
+4. **`scripts/playtest/lib/recorder.ts`**: `buildImmediateRecord`・`buildReadyRecord` に `options: StateResponseOptions = {}` を引数として足し、**その関数の中の `{}` の直書きを漏れなく置き換える**(既定 `{}` なので `explore.ts` は無変更で動く)。**対象は 3 箇所**:
+   - `buildImmediateRecord` の `buildStateResponseWithPlan(..., {}, ...)`
+   - `buildReadyRecord` の `buildStateResponseWithPlan(..., {}, ...)`
+   - **`buildReadyRecord` の `safeComputeReachablePlan(state, engine, {}, undefined)`(149 行)**
+   - **3 つ目を落とすと測定そのものが壊れる**(2 回目の計画レビューの指摘)。`buildStateResponseWithPlan` は `cachedPlan.targetShapeId === resolvedTargetShapeId` のときだけ `candidateMoveState` を `"ready"` にする。バックグラウンド側だけ `"current"` のままだと、**規則が効いた局面(=まさに測りたい局面)で必ず食い違い、`candidateMoveState` が `"pending"` に落ちる**。`denominators.ts` の「候補手あり」は `candidateMoveState === "ready"` を条件にしているので、**6 列の表の「候補手あり」列が恒常的に 0 になる**
+5. **`scripts/playtest/replay.ts`**: `--direction-rule <名前>` を足し、(a) `recorder` の 2 関数へ、(b) **replay.ts が直接呼んでいる `safeComputePlanChangeAfterMove`・`safeComputePlanChangeReasonAfterMove`・`safeComputeMoveOutcomeAfterMove` の `{}` へも**同じ options を渡す。**同じ 1 行の中で規則が混ざらないようにするため**(`safeComputeBoardEventsAfterMove` は options を取らないので対象外)。`meta` 行に `directionRule` を記録する
+6. **ハーネスは規則を実装しない。** 名前を本番関数へ渡すだけ(`scripts/playtest/README.md` の「位置づけ」)
+
+#### E. この STEP がしないこと
+
+- **`ambiguous` のときの文言を変えない**(10.6)
+- **既定を変えない。** どれを本番にするかは測ったあとに人間が決める
+- **567 行の分岐を変えない**(B のとおり)
+- **`apps/web` を変えない**
+- **`scripts/playtest/explore.ts` は変えない。** 同じ `{}` の直書きがあるが、**探索モードは今回の測定経路に入らない**(10.2 のとおり測るのは固定棋譜 4 局 = `replay.ts`)。**漏れではなく、意図して対象外にしている**
+
+#### F. 完了条件
+
+- **既存テストが全件そのまま通る**(既定を変えていないことの確認。`apps/server` と `apps/web` の両方)
+- 新しい 3 規則の単体テストがある。観点は次の 6 つ:
+  1. 決まる場合(候補が 1 件)は 3 規則とも既定と同じ
+  2. 同点の場合(`adjustment`・`matchScore` が同じ 2 件)― `rankedHeadUnique` は `ambiguous`、`rankedHeadAlways` は決まる
+  3. 系統が 2 つ以上の場合 ― `familyCollapse` は `ambiguous`、`rankedHead*` は決まる
+  4. **`everCompletedShapeIds` が空のブランチ(556)と非空のブランチ(585)の両方**で規則が効く
+  5. **567 の ambiguity は、どの規則でも変わらない**
+  6. **候補が `ranked` に 1 件も無いときは `ambiguous`**
+- **配線が通っていることを実測で確かめる**: `"current"` と違う解決を出す局面で、**`candidateMoveState` が `"pending"` に落ちず `"ready"` に達すること**(= バックグラウンド側の `cachedPlan.targetShapeId` と表示側の `resolvedTargetShapeId` が一致すること)。**6 列の表の「候補手あり」列が 0 のままなら、規則ではなく配線を疑う**
+- `npm run typecheck:scripts` と `apps/server`・`apps/web` の typecheck が通る
+- **4 局 × 3 規則を測り、案ごとに 10.1 の三つの数字と 6 列の表を出す**(退避した 4 件を一時的に戻す。測り終えたら戻す)
+- 成果監査 GO → 人間のコミット承認
 
 ## 11. U6-G 本文フィールドの露出制御(H-4 の範囲を広げる)。**認識の作業のあと**
 
