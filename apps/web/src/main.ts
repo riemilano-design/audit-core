@@ -590,10 +590,13 @@ function renderMyAim(coach: CoachExplanation[] | undefined, plan: ReachablePlanB
  * firstSentenceを変えない)。shapeWeaknessはどちらの場合も既存のまま出す(H-7で
  * 「別の話なので残す」と決まっている)。
  *
- * 【STEP 5-F(9.14.2)】focusTextは1文で要約行と同じ内容になるため、展開した本文
- * には出さない(展開しても増える情報が無いため)。本文にはweaknessのみ出す。
- * focusTextがあってweaknessが無い場合、本文は何も追加しない(hasBody=falseとなり、
- * renderExpandableBlockの既存の空表示の扱いにより開閉の印は出ない)。
+ * 【STEP 5-F(9.14.2、修正)】focusTextは1文で要約行と同じ内容になるため、展開した
+ * 本文にはfocusText自体の段落を足さない(展開しても増える情報が無いため)。ただし
+ * itemsは既存どおりfocusTextの有無にかかわらず本文に出す ― 急ぐものを1つも
+ * 名指さないこと(focusTextが「急がない」の文になること)と、相手の狙いを言わない
+ * ことは別だから。itemsにはopponent_next_aimの説明文が入っており、これを落とすと
+ * 画面から相手の狙いの説明が消える一方、サーバーのcoach配列を数える指標の上では
+ * 「認識あり」のままになってしまう(人間の指摘、2026-09-12)。
  */
 function renderWhy(coach: CoachExplanation[] | undefined, plan: ReachablePlanBody | undefined): void {
   const items = (coach ?? []).filter((item) => WHY_STAGES.includes(item.stage));
@@ -609,17 +612,15 @@ function renderWhy(coach: CoachExplanation[] | undefined, plan: ReachablePlanBod
           : "";
 
   renderExpandableBlock(whyEl, "why-body", summaryText, readColumnOpen.why, toggleWhy, (body) => {
-    const hasBodyContent = focusText != null ? weakness != null : items.length > 0 || !!weakness;
+    const hasBodyContent = items.length > 0 || !!weakness;
     if (!hasBodyContent) return;
 
     const heading = document.createElement("h3");
     heading.textContent = "なぜそれが重要か";
     body.appendChild(heading);
 
-    if (focusText == null) {
-      for (const item of items) {
-        appendCoachItem(body, item);
-      }
+    for (const item of items) {
+      appendCoachItem(body, item);
     }
 
     if (weakness) {
