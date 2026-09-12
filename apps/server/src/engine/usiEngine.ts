@@ -70,6 +70,10 @@ export interface MultiPvLine {
   multipv: number;
   score: UsiScore | undefined;
   pv: string[];
+  /** STEP U6-L: 採用したinfo行に`lowerbound`/`upperbound`が付いていたか
+   * (usiInfoParser.tsのUsiInfoLineからそのまま写す。必須にする理由は同ファイル参照)。 */
+  lowerbound: boolean;
+  upperbound: boolean;
 }
 
 export interface MultiPvGoResult {
@@ -223,7 +227,13 @@ export class UsiEngine {
     for (const line of collected) {
       const parsed = parseInfoLine(line);
       if (!parsed) continue;
-      linesByMultipv.set(parsed.multipv, { multipv: parsed.multipv, score: parsed.score, pv: parsed.pv });
+      linesByMultipv.set(parsed.multipv, {
+        multipv: parsed.multipv,
+        score: parsed.score,
+        pv: parsed.pv,
+        lowerbound: parsed.lowerbound,
+        upperbound: parsed.upperbound,
+      });
     }
     const lines = [...linesByMultipv.values()].sort((a, b) => a.multipv - b.multipv);
 

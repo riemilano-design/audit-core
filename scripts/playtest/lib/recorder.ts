@@ -24,6 +24,7 @@ import {
 } from "../../../apps/server/src/api/stateResponse.js";
 import type { GameState } from "../../../apps/server/src/game/gameSession.js";
 import type { LowPriorityEngine } from "../../../apps/server/src/engine/prioritizedEngine.js";
+import type { SearchPvObservation } from "../../../apps/server/src/analysis/searchPv.js";
 import { measureEngineReference, type EngineReference } from "./engineReference.js";
 
 /** server.tsのrunBackgroundPlanAnalysisと同じ組み立てでCachedReachablePlanを作る。
@@ -47,6 +48,13 @@ export function toCachedPlan(
       // 2026-09-12 の A-4 で実際に踏んだ ― 引数を渡す側だけを直して、
       // 受け取った結果を詰め替える側を数えていなかった(計画書 14.13)。
       focusText: result.focusText,
+      // 【searchPvs は**意図的に写さない**(STEP U6-L。忘れたのではない)】
+      // CachedReachablePlan は**本番の型**であり、本番が持つキャッシュの形そのもの
+      // である。ここへ読み筋を入れると、**本番が読み筋を保持することになり、
+      // 「本番の挙動を変えない」という U6-L の前提が崩れる。**
+      // 記録へ運ぶ経路は buildReadyRecord → buildRecordLine の searchPvs だけで、
+      // この器は通さない(docs/STEP_U6-L_PLAN_2026-09-13.md 1.3)。
+      // **良かれと思って写さないこと。**
     },
   };
 }
@@ -57,18 +65,54 @@ export interface RecordLineResult {
   response: StateResponseBodyWithPlan;
 }
 
-function buildRecordLine(params: {
-  ply: number;
-  sfen: string;
-  senteMove: string | null;
-  goteMove: string | null;
-  phase: "immediate" | "ready";
-  elapsedMs: number;
-  response: StateResponseBodyWithPlan;
-  /** STEP T-7(A-2)。ready行のみ渡す(immediate行はundefinedのまま渡し、
-   * JSON.stringifyがキー自体を出力しない挙動を利用する)。 */
-  engineReference?: EngineReference | null;
-}): string {
+/** 記録1行ぶんの組み立てに要る値。
+ *
+ * 【STEP U6-L(計画書 1.3 決定3): phaseで判別する直和型にした理由】
+ * 以前は engineReference が optional だった。immediate行には無い欄だからだが、
+ * そのせいで**ready行で渡し忘れても型検査が通る**状態になっていた。省略可能な欄は、
+ * 渡し忘れても呼び出しが成立し、型エラーにもテストの失敗にもならず、
+ * **記録だけが本番と違う姿になる**(2026-09-12に同じ型を4回踏んでいる)。
+ * phaseで判別することで、ready行では engineReference と searchPvs の**両方が必須**に
+ * なり、増やした人がtscで止まる。JSONLの形は変えていない
+ * (immediate行はキー自体を出力しない既存の挙動をそのまま使う)。 */
+type RecordLineParams =
+  | {
+      phase: "immediate";
+      ply: number;
+      sfen: string;
+      senteMove: string | null;
+      goteMove: string | null;
+      elapsedMs: number;
+      response: StateResponseBodyWithPlan;
+    }
+  | {
+      phase: "ready";
+      ply: number;
+      sfen: string;
+      senteMove: string | null;
+      goteMove: string | null;
+      elapsedMs: number;
+      response: StateResponseBodyWithPlan;
+      /** STEP T-7(A-2)。**ハーネスが自分で別に測った**参考評価。
+       * ③が使ったものとは別の探索である(だから読み筋は入っていない。
+       * apps/server/src/analysis/engineReference.ts の EngineReferenceMeasurement 参照)。 */
+      engineReference: EngineReference | null;
+      /** STEP U6-L。**本番が③⑤を作るのに実際に使った探索**の読み筋。
+       *
+       * 【3つの状態を3つの値で表す(2026-09-13 の独立監査の指摘、必須3)】
+       * - **欄が無い** … U6-L より前に取った古い記録(ready行では必ず出力するので、
+       *   このハーネスが書いた記録には起きない)
+       * - **null** … 本番の解析そのものが失敗した(safeComputeReachablePlanが
+       *   undefinedを返した)。**測れなかったのであって、0本だったのではない**
+       * - **[]** … 測ったが読み筋が1本も取れなかった
+       *
+       * 当初は失敗も `[]` にしていた。**「失敗した」と「測って0本」が同じ値になり、
+       * 一つの値に二つの意味を持たせていた**(既知事項 P-23 と同じ型)。実データでは
+       * 起きていなかったが、**起きていないことは設計が正しいことの根拠にならない。** */
+      searchPvs: SearchPvObservation[] | null;
+    };
+
+function buildRecordLine(params: RecordLineParams): string {
   return JSON.stringify({
     kind: "record",
     ply: params.ply,
@@ -78,7 +122,8 @@ function buildRecordLine(params: {
     phase: params.phase,
     elapsedMs: params.elapsedMs,
     response: params.response,
-    engineReference: params.engineReference,
+    engineReference: params.phase === "ready" ? params.engineReference : undefined,
+    searchPvs: params.phase === "ready" ? params.searchPvs : undefined,
   });
 }
 
@@ -198,8 +243,15 @@ export async function buildReadyRecord(
     moveOutcome,
     boardEvents,
   );
+  // STEP U6-L: measureEngineReference は読み筋も返すようになったが、**ここでは捨てる。**
+  // これはハーネスが自分で別に測った探索であり、③が見た読み筋ではない。
+  // 記録へ入れると「読み筋がある」という事実だけが残り、それが③の見たものかどうかを
+  // 後から誰も区別できなくなる(2026-09-12に engineReference 自体で3行やられている)。
+  // 記録へ載せる読み筋は、下の result.searchPvs(本番が③⑤を作った探索)だけである。
   const engineReference =
-    referenceNodes > 0 ? await measureEngineReference(state.sfen, referenceEngine, referenceNodes) : null;
+    referenceNodes > 0
+      ? (await measureEngineReference(state.sfen, referenceEngine, referenceNodes)).reference
+      : null;
   const elapsedMs = Date.now() - t0;
   const line = buildRecordLine({
     ply,
@@ -210,6 +262,12 @@ export async function buildReadyRecord(
     elapsedMs,
     response,
     engineReference,
+    // STEP U6-L: 本番(safeComputeReachablePlan)が実際に行った探索の読み筋を、
+    // 同じ戻り値からそのまま写す(再探索しない。計画書 1.1 決定1)。
+    // **解析が失敗した(result === undefined)ときは null。**空配列にしない ―
+    // 空配列は「測ったが1本も取れなかった」の意味であり、**測れなかったことと
+    // 混ぜない**(2026-09-13 の独立監査の指摘、必須3)。
+    searchPvs: result ? result.searchPvs : null,
   });
   return { line, response, elapsedMs, cachedPlan };
 }

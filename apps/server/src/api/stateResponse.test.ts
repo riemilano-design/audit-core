@@ -510,8 +510,8 @@ describe("buildStateResponseWithPlan", () => {
     const state = customGameState(sfen);
     // checkCandidateMovesSafetyはbaseline局面+各候補手の1:baseline, 2:候補 の順でgoMultiPvを呼ぶ。
     const engine = makeMockLowPriorityEngine([
-      multiPvResult([{ multipv: 1, score: { type: "cp", value: 5 }, pv: [] }]), // baseline
-      multiPvResult([{ multipv: 1, score: { type: "cp", value: 10 }, pv: [] }]), // 候補7i8h
+      multiPvResult([{ multipv: 1, score: { type: "cp", value: 5 }, pv: [], lowerbound: false, upperbound: false }]), // baseline
+      multiPvResult([{ multipv: 1, score: { type: "cp", value: 10 }, pv: [], lowerbound: false, upperbound: false }]), // 候補7i8h
     ]);
 
     // Phase 7 Unit 0: 目標形は自動選択されない(明示的に選択してから検証する)。
@@ -663,7 +663,7 @@ describe("buildStateResponseWithPlan", () => {
     const sfen = honminoMultipleCandidatesSfen();
     const state = customGameState(sfen);
     const engine = makeMockLowPriorityEngine(() =>
-      multiPvResult([{ multipv: 1, score: { type: "cp", value: 0 }, pv: [] }], "4g3h"),
+      multiPvResult([{ multipv: 1, score: { type: "cp", value: 0 }, pv: [], lowerbound: false, upperbound: false }], "4g3h"),
     );
 
     const computed = await computeReachablePlan(state, engine, { initialSfen: sfen }, "mino_honmino");
@@ -796,8 +796,8 @@ describe("buildStateResponseWithPlan", () => {
       const sfen = honminoOneMoveFromCompleteSfen();
       const state = customGameState(sfen);
       const engine = makeMockLowPriorityEngine([
-        multiPvResult([{ multipv: 1, score: { type: "cp", value: 5 }, pv: [] }]),
-        multiPvResult([{ multipv: 1, score: { type: "cp", value: 10 }, pv: [] }]),
+        multiPvResult([{ multipv: 1, score: { type: "cp", value: 5 }, pv: [], lowerbound: false, upperbound: false }]),
+        multiPvResult([{ multipv: 1, score: { type: "cp", value: 10 }, pv: [], lowerbound: false, upperbound: false }]),
       ]);
       const computed = await computeReachablePlan(state, engine, { initialSfen: sfen }, "mino_honmino");
       const cachedPlan: CachedReachablePlan = { sfen, targetShapeId: computed.targetShapeId, plan: computed };
@@ -879,7 +879,7 @@ describe("目標形選択(selectedTargetShapeId)", () => {
     // ここで検証したいのは「どのshapeが対象に採用されたか」なので、回数に依存しない
     // 関数形式のモックを使う。
     const engine = makeMockLowPriorityEngine(() =>
-      multiPvResult([{ multipv: 1, score: { type: "cp", value: 10 }, pv: [] }]),
+      multiPvResult([{ multipv: 1, score: { type: "cp", value: 10 }, pv: [], lowerbound: false, upperbound: false }]),
     );
 
     const computed = await computeReachablePlan(state, engine, { initialSfen: sfen }, "mino_takamino");
@@ -926,8 +926,8 @@ describe("目標形選択(selectedTargetShapeId)", () => {
     const sfen = honminoOneMoveFromCompleteSfen();
     const state = customGameState(sfen);
     const engine = makeMockLowPriorityEngine([
-      multiPvResult([{ multipv: 1, score: { type: "cp", value: 5 }, pv: [] }]), // baseline
-      multiPvResult([{ multipv: 1, score: { type: "cp", value: 10 }, pv: [] }]), // 候補7i8h
+      multiPvResult([{ multipv: 1, score: { type: "cp", value: 5 }, pv: [], lowerbound: false, upperbound: false }]), // baseline
+      multiPvResult([{ multipv: 1, score: { type: "cp", value: 10 }, pv: [], lowerbound: false, upperbound: false }]), // 候補7i8h
     ]);
 
     // mino_honminoを明示的に選択して計算し、それをキャッシュとする
@@ -962,8 +962,8 @@ describe("computeReachablePlan / safeComputeReachablePlan", () => {
     const sfen = honminoOneMoveFromCompleteSfen();
     const state = customGameState(sfen);
     const engine = makeMockLowPriorityEngine([
-      multiPvResult([{ multipv: 1, score: { type: "cp", value: 5 }, pv: [] }]), // baseline
-      multiPvResult([{ multipv: 1, score: { type: "cp", value: 25 }, pv: [] }]), // 候補7i8h
+      multiPvResult([{ multipv: 1, score: { type: "cp", value: 5 }, pv: [], lowerbound: false, upperbound: false }]), // baseline
+      multiPvResult([{ multipv: 1, score: { type: "cp", value: 25 }, pv: [], lowerbound: false, upperbound: false }]), // 候補7i8h
     ]);
 
     // Phase 7 Unit 0: 目標形は自動選択されない(明示的に選択してから検証する)。
@@ -996,7 +996,7 @@ describe("computeReachablePlan / safeComputeReachablePlan", () => {
     // scoreを含まないMultiPV結果(=評価データが得られなかった、という想定)。
     // baseline自体は何でもよく、候補手側(2件目)をscore無しにする。
     const engine = makeMockLowPriorityEngine([
-      multiPvResult([{ multipv: 1, score: { type: "cp", value: 5 }, pv: [] }]),
+      multiPvResult([{ multipv: 1, score: { type: "cp", value: 5 }, pv: [], lowerbound: false, upperbound: false }]),
       multiPvResult([]),
     ]);
 
@@ -1042,8 +1042,8 @@ describe("computeReachablePlan / safeComputeReachablePlan", () => {
       const engine = makeMockLowPriorityEngine([]);
       // ③専用のfocusEngine(baseline→afterPassの順で2回呼ばれる)。
       const focusEngine = makeMockLowPriorityEngine([
-        multiPvResult([{ multipv: 1, score: { type: "cp", value: 0 }, pv: [] }]), // baseline
-        multiPvResult([{ multipv: 1, score: { type: "cp", value: 400 }, pv: [] }], "8h2h"), // afterPass(dropCp=400、bestmoveの移動先2hに自分の飛がいる)
+        multiPvResult([{ multipv: 1, score: { type: "cp", value: 0 }, pv: [], lowerbound: false, upperbound: false }]), // baseline
+        multiPvResult([{ multipv: 1, score: { type: "cp", value: 400 }, pv: [], lowerbound: false, upperbound: false }], "8h2h"), // afterPass(dropCp=400、bestmoveの移動先2hに自分の飛がいる)
       ]);
 
       const result = await computeReachablePlan(state, engine, { initialSfen: sfen }, undefined, focusEngine);
@@ -1060,8 +1060,8 @@ describe("computeReachablePlan / safeComputeReachablePlan", () => {
     const state = customGameState(sfen);
     const makeEngine = () =>
       makeMockLowPriorityEngine([
-        multiPvResult([{ multipv: 1, score: { type: "cp", value: 1 }, pv: [] }]), // baseline
-        multiPvResult([{ multipv: 1, score: { type: "cp", value: 1 }, pv: [] }]), // 候補7i8h
+        multiPvResult([{ multipv: 1, score: { type: "cp", value: 1 }, pv: [], lowerbound: false, upperbound: false }]), // baseline
+        multiPvResult([{ multipv: 1, score: { type: "cp", value: 1 }, pv: [], lowerbound: false, upperbound: false }]), // 候補7i8h
       ]);
 
     const first = await computeReachablePlan(state, makeEngine(), { initialSfen: sfen });

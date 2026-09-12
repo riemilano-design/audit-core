@@ -19,7 +19,10 @@ import { detectIntents } from "../analysis/intentDetector.js";
 import { selectTargetPurpose } from "../analysis/targetPurposeSelector.js";
 import { rankReachableShapes, type RankedReachableShape } from "../analysis/shapeGraphRanking.js";
 import { planRoutesToShape, type ShapeRoutePlanResult } from "../analysis/routePlanner.js";
-import { checkCandidateMovesSafety } from "../analysis/candidateMoveSafetyCheck.js";
+import {
+  checkCandidateMovesSafety,
+  type CandidateMoveSafetyCheckResult,
+} from "../analysis/candidateMoveSafetyCheck.js";
 import {
   explainRouteCandidateMoves,
   type CandidateMoveExplanationResult,
@@ -50,6 +53,7 @@ import { detectPieceThreats } from "../analysis/pieceThreatDetector.js";
 import { explainPieceThreats, type PieceThreatMessage } from "../analysis/pieceThreatExplanation.js";
 import { detectEscapeSquareThreats, summarizeEscapeSquareThreatsForSquare } from "../analysis/escapeSquareThreat.js";
 import { measureEngineReference } from "../analysis/engineReference.js";
+import { toSearchPvObservations, type SearchPvObservation } from "../analysis/searchPv.js";
 import { explainPieceThreatFocus } from "../analysis/pieceThreatFocusExplanation.js";
 import {
   explainCaptureSummary,
@@ -1756,6 +1760,14 @@ export function buildStateResponseWithPlan(
  * より、engine(候補手の安全確認用)とは独立した別ハンドルを渡すこと
  * (asLowPriority()を呼ぶたびに独立したクロージャが返るため、MultiPVの設定が
  * 安全確認側へ持ち越されない。計画書9.6)。
+ *
+ * 【searchPvs(STEP U6-L、docs/STEP_U6-L_PLAN_2026-09-13.md)】
+ * ③と⑤を作るために**この関数の中で実際に行った探索**の読み筋を、観測として
+ * そのまま返す。再探索はしない ―「同じ設定で呼べば同じ結果」を前提にせず、
+ * **同じオブジェクトから値をコピーする**ことで同一性を構造的に保証する(決定1)。
+ * この欄はHTTPの応答(ReachablePlanBody)にもCachedReachablePlanにも入らない。
+ * 運ぶ先は記録(JSONL)だけであり、server.tsは**意図的に写さない**
+ * (本番は読み筋を保持しない。これが「本番の挙動を変えない」の中身である)。
  */
 export async function computeReachablePlan(
   current: GameState,
@@ -1768,6 +1780,9 @@ export async function computeReachablePlan(
   candidateMove: CandidateMoveExplanationResult | undefined;
   targetShapeId: string | undefined;
   focusText?: string | null;
+  /** STEP U6-L。**必須**(optionalにしない)。省略できると、returnを増やした人が
+   * 黙って落とせて、記録だけが本番と違う姿になる(2026-09-12に4回踏んだ型)。 */
+  searchPvs: SearchPvObservation[];
 }> {
   const context = computeRankedPlanContext(current, options, selectedTargetShapeId);
   const routePlanResult = context.routePlanResult;
@@ -1776,7 +1791,7 @@ export async function computeReachablePlan(
   // checkCandidateMovesSafetyが呼ばれない下の早期returnより前に計算する。
   // 使い回さずに独立して計算することで、候補手が0件の局面(H-9で観測された
   // 「15手中0件」の局面)でも③が黙らないようにする。
-  const focusText = await computeFocusText(current, focusEngine);
+  const { text: focusText, searchPvs: focusSearchPvs } = await computeFocusText(current, focusEngine);
 
   // STEP 4-5(X-1、人間承認済み): 終局または王手中は、候補手のMultiPV参考評価
   // (checkCandidateMovesSafety)を一切起動しない。判定はrules/gameStatus.tsの
@@ -1789,6 +1804,8 @@ export async function computeReachablePlan(
       candidateMove: undefined,
       targetShapeId: context.resolvedTargetShapeId,
       focusText,
+      // 候補手の安全確認は走っていないので、③の2本だけ。
+      searchPvs: focusSearchPvs,
     };
   }
 
@@ -1799,7 +1816,34 @@ export async function computeReachablePlan(
     candidateMove,
     targetShapeId: context.resolvedTargetShapeId,
     focusText,
+    // STEP U6-L: ⑤を作ったのと**同じsafetyCheck**から読み筋を写す(再探索しない)。
+    searchPvs: [...focusSearchPvs, ...toCandidateSearchPvs(safetyCheck)],
   };
+}
+
+/**
+ * STEP U6-L。checkCandidateMovesSafetyの結果(⑤を作るのに使ったもの)から、
+ * 読み筋の観測を組み立てる。新しい探索は行わない(引数のsafetyCheckが既に
+ * 持っている値を写すだけ)。
+ */
+function toCandidateSearchPvs(safetyCheck: CandidateMoveSafetyCheckResult): SearchPvObservation[] {
+  const observations: SearchPvObservation[] = toSearchPvObservations(
+    "candidate_baseline",
+    safetyCheck.baselineSfen,
+    null,
+    safetyCheck.baselineMultiPv,
+  );
+  for (const evaluation of safetyCheck.evaluations) {
+    observations.push(
+      ...toSearchPvObservations(
+        "candidate_after_move",
+        evaluation.resultingSfen,
+        evaluation.moveUsi,
+        evaluation.multiPv,
+      ),
+    );
+  }
+  return observations;
 }
 
 /**
@@ -1812,17 +1856,29 @@ export async function computeReachablePlan(
 async function computeFocusText(
   current: GameState,
   focusEngine: LowPriorityEngine | undefined,
-): Promise<string | null | undefined> {
-  if (!focusEngine) return undefined;
+): Promise<{ text: string | null | undefined; searchPvs: SearchPvObservation[] }> {
+  if (!focusEngine) return { text: undefined, searchPvs: [] };
+  let searchPvs: SearchPvObservation[] = [];
   try {
-    const engineReference = await measureEngineReference(current.sfen, focusEngine);
+    // STEP U6-L: ③の文を作るのに使うのと**同一の測定**から読み筋を受け取る。
+    const measurement = await measureEngineReference(current.sfen, focusEngine);
+    searchPvs = measurement.searchPvs;
     const bandSquares = toPieceThreatMessages(current, isGameOver(current.sfen))
       .filter((message) => message.kind === "piece_attacked")
       .map((message) => message.square);
-    return explainPieceThreatFocus({ engineReference, bandSquares, sfen: current.sfen });
+    return {
+      text: explainPieceThreatFocus({
+        engineReference: measurement.reference,
+        bandSquares,
+        sfen: current.sfen,
+      }),
+      searchPvs,
+    };
   } catch (err) {
     console.error("③(相手の次の狙い、STEP 5-F)の計算でエラーが発生しました:", err);
-    return null;
+    // 測れた分の読み筋は捨てない(測っていないことと、測ったが言うことが無いことを
+    // 分けるのと同じ理由。STEP 5-F の focusTextState)。
+    return { text: null, searchPvs };
   }
 }
 
@@ -1843,6 +1899,8 @@ export async function safeComputeReachablePlan(
       candidateMove: CandidateMoveExplanationResult | undefined;
       targetShapeId: string | undefined;
       focusText?: string | null;
+      /** STEP U6-L。computeReachablePlanと同じく**必須**。 */
+      searchPvs: SearchPvObservation[];
     }
   | undefined
 > {

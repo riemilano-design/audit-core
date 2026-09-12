@@ -114,20 +114,20 @@ describe("measureEngineReference", () => {
       {
         bestmove: "6i7h",
         ponder: undefined,
-        lines: [{ multipv: 1, score: { type: "cp", value: -324 }, pv: ["6i7h"] }],
+        lines: [{ multipv: 1, score: { type: "cp", value: -324 }, pv: ["6i7h"], lowerbound: false, upperbound: false }],
         infoLines: [],
       },
       {
         bestmove: "2b8h",
         ponder: undefined,
-        lines: [{ multipv: 1, score: { type: "cp", value: 1410 }, pv: ["2b8h"] }],
+        lines: [{ multipv: 1, score: { type: "cp", value: 1410 }, pv: ["2b8h"], lowerbound: false, upperbound: false }],
         infoLines: [],
       },
     ]);
 
     const result = await measureEngineReference(INITIAL_SFEN, engine, 4_000_000);
 
-    expect(result).toEqual({
+    expect(result.reference).toEqual({
       baseline: { scoreCp: -324, mate: null, bestmove: "6i7h" },
       afterPass: { scoreCp: 1410, mate: null, bestmove: "2b8h", captureSquare: "8h" },
       dropCp: -324 - -1410,
@@ -139,25 +139,25 @@ describe("measureEngineReference", () => {
 
   it("mateのときはscoreCpをnullにし、dropCpもnullにする", async () => {
     const { engine } = makeFakeEngine([
-      { bestmove: "6i7h", ponder: undefined, lines: [{ multipv: 1, score: { type: "mate", value: 3 }, pv: [] }], infoLines: [] },
-      { bestmove: "8h2b", ponder: undefined, lines: [{ multipv: 1, score: { type: "cp", value: 1410 }, pv: [] }], infoLines: [] },
+      { bestmove: "6i7h", ponder: undefined, lines: [{ multipv: 1, score: { type: "mate", value: 3 }, pv: [], lowerbound: false, upperbound: false }], infoLines: [] },
+      { bestmove: "8h2b", ponder: undefined, lines: [{ multipv: 1, score: { type: "cp", value: 1410 }, pv: [], lowerbound: false, upperbound: false }], infoLines: [] },
     ]);
 
     const result = await measureEngineReference(INITIAL_SFEN, engine, 4_000_000);
 
-    expect(result?.baseline).toEqual({ scoreCp: null, mate: 3, bestmove: "6i7h" });
-    expect(result?.dropCp).toBeNull();
+    expect(result.reference?.baseline).toEqual({ scoreCp: null, mate: 3, bestmove: "6i7h" });
+    expect(result.reference?.dropCp).toBeNull();
   });
 
   it("afterPass.bestmoveの移動先に先手の駒が無ければcaptureSquareはnull", async () => {
     const { engine } = makeFakeEngine([
-      { bestmove: "6i7h", ponder: undefined, lines: [{ multipv: 1, score: { type: "cp", value: 0 }, pv: [] }], infoLines: [] },
-      { bestmove: "3c3d", ponder: undefined, lines: [{ multipv: 1, score: { type: "cp", value: 0 }, pv: [] }], infoLines: [] },
+      { bestmove: "6i7h", ponder: undefined, lines: [{ multipv: 1, score: { type: "cp", value: 0 }, pv: [], lowerbound: false, upperbound: false }], infoLines: [] },
+      { bestmove: "3c3d", ponder: undefined, lines: [{ multipv: 1, score: { type: "cp", value: 0 }, pv: [], lowerbound: false, upperbound: false }], infoLines: [] },
     ]);
 
     const result = await measureEngineReference(INITIAL_SFEN, engine, 4_000_000);
 
-    expect(result?.afterPass.captureSquare).toBeNull();
+    expect(result.reference?.afterPass.captureSquare).toBeNull();
   });
 
   it("終局していれば測らずnullを返す", async () => {
@@ -165,7 +165,8 @@ describe("measureEngineReference", () => {
 
     const result = await measureEngineReference(selfCheckmateSfen(), engine, 4_000_000);
 
-    expect(result).toBeNull();
+    expect(result.reference).toBeNull();
+    expect(result.searchPvs).toEqual([]);
     expect(goOptions).toEqual([]);
   });
 
@@ -174,7 +175,8 @@ describe("measureEngineReference", () => {
 
     const result = await measureEngineReference(SENTE_IN_CHECK_SFEN, engine, 4_000_000);
 
-    expect(result).toBeNull();
+    expect(result.reference).toBeNull();
+    expect(result.searchPvs).toEqual([]);
     expect(goOptions).toEqual([]);
   });
 
@@ -189,6 +191,93 @@ describe("measureEngineReference", () => {
 
     const result = await measureEngineReference(INITIAL_SFEN, engine, 4_000_000);
 
-    expect(result).toBeNull();
+    expect(result.reference).toBeNull();
+    // 1本目から例外なので、測れた読み筋も無い。
+    expect(result.searchPvs).toEqual([]);
+  });
+
+  // --- STEP U6-L(docs/STEP_U6-L_PLAN_2026-09-13.md)。読み筋の持ち回り。 ---
+
+  it("STEP U6-L: ③が使うのと同じ探索結果から、読み筋を2本ぶん返す", async () => {
+    const { engine } = makeFakeEngine([
+      {
+        bestmove: "6i7h",
+        ponder: undefined,
+        lines: [
+          { multipv: 1, score: { type: "cp", value: -324 }, pv: ["6i7h", "3c3d"], lowerbound: false, upperbound: false },
+        ],
+        infoLines: [],
+      },
+      {
+        bestmove: "2b8h",
+        ponder: undefined,
+        lines: [{ multipv: 1, score: { type: "cp", value: 1410 }, pv: ["2b8h"], lowerbound: true, upperbound: false }],
+        infoLines: [],
+      },
+    ]);
+
+    const result = await measureEngineReference(INITIAL_SFEN, engine, 4_000_000);
+
+    expect(result.searchPvs).toEqual([
+      {
+        source: "focus_baseline",
+        sfen: INITIAL_SFEN,
+        moveUsi: null,
+        multipv: 1,
+        scoreCp: -324,
+        mate: null,
+        pv: ["6i7h", "3c3d"],
+        lowerbound: false,
+        upperbound: false,
+      },
+      {
+        source: "focus_after_pass",
+        sfen: passSfen(INITIAL_SFEN),
+        moveUsi: null,
+        multipv: 1,
+        scoreCp: 1410,
+        mate: null,
+        pv: ["2b8h"],
+        lowerbound: true,
+        upperbound: false,
+      },
+    ]);
+  });
+
+  it("STEP U6-L: 長さ0・長さ1の読み筋も捨てずに記録する(記録側で長さの門番を持たない)", async () => {
+    const { engine } = makeFakeEngine([
+      { bestmove: "6i7h", ponder: undefined, lines: [{ multipv: 1, score: { type: "cp", value: 0 }, pv: [], lowerbound: false, upperbound: false }], infoLines: [] },
+      { bestmove: "3c3d", ponder: undefined, lines: [{ multipv: 1, score: { type: "cp", value: 0 }, pv: ["3c3d"], lowerbound: false, upperbound: false }], infoLines: [] },
+    ]);
+
+    const result = await measureEngineReference(INITIAL_SFEN, engine, 4_000_000);
+
+    expect(result.searchPvs.map((o) => o.pv)).toEqual([[], ["3c3d"]]);
+  });
+
+  it("STEP U6-L: 2本目で例外になっても、測れた1本目の読み筋は返す", async () => {
+    let calls = 0;
+    const engine: LowPriorityEngine = {
+      position: () => {},
+      setMultiPv: () => {},
+      goMultiPv: async () => {
+        calls += 1;
+        if (calls === 1) {
+          return {
+            bestmove: "6i7h",
+            ponder: undefined,
+            lines: [{ multipv: 1, score: { type: "cp", value: 12 }, pv: ["6i7h"], lowerbound: false, upperbound: false }],
+            infoLines: [],
+          };
+        }
+        throw new Error("engine timeout");
+      },
+    };
+
+    const result = await measureEngineReference(INITIAL_SFEN, engine, 4_000_000);
+
+    expect(result.reference).toBeNull();
+    expect(result.searchPvs).toHaveLength(1);
+    expect(result.searchPvs[0]?.source).toBe("focus_baseline");
   });
 });

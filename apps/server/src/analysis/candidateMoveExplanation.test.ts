@@ -69,7 +69,7 @@ function makeSafetyCheckResult(
   const {
     available = true,
     multiPvPerEval,
-    baselineMultiPv = [{ multipv: 1, score: { type: "cp", value: 0 }, pv: [] }],
+    baselineMultiPv = [{ multipv: 1, score: { type: "cp", value: 0 }, pv: [], lowerbound: false, upperbound: false }],
   } = options;
   return {
     baselineSfen: "startpos",
@@ -147,8 +147,8 @@ describe("explainCandidateMoves", () => {
     const safetyCheck = makeSafetyCheckResult(2, {
       available: true,
       multiPvPerEval: [
-        [{ multipv: 1, score: { type: "cp", value: 10 }, pv: [] }],
-        [{ multipv: 1, score: { type: "cp", value: -5 }, pv: [] }],
+        [{ multipv: 1, score: { type: "cp", value: 10 }, pv: [], lowerbound: false, upperbound: false }],
+        [{ multipv: 1, score: { type: "cp", value: -5 }, pv: [], lowerbound: false, upperbound: false }],
       ],
     });
 
@@ -168,7 +168,7 @@ describe("explainCandidateMoves", () => {
     const safetyCheck = makeSafetyCheckResult(2, {
       available: true,
       multiPvPerEval: [
-        [{ multipv: 1, score: { type: "cp", value: 10 }, pv: [] }],
+        [{ multipv: 1, score: { type: "cp", value: 10 }, pv: [], lowerbound: false, upperbound: false }],
         [], // stopによる早期終了等でscoreが得られなかった想定
       ],
     });
@@ -199,7 +199,7 @@ describe("explainCandidateMoves", () => {
     const pathPlanResult = makePathPlanResult({ shapeId: "mino_honmino" });
     const shapeResults = [makeShapeResult({ shapeId: "mino_honmino" })];
     const safetyCheck = makeSafetyCheckResult(1, {
-      multiPvPerEval: [[{ multipv: 1, score: { type: "cp", value: 1 }, pv: [] }]],
+      multiPvPerEval: [[{ multipv: 1, score: { type: "cp", value: 1 }, pv: [], lowerbound: false, upperbound: false }]],
     });
 
     expect(explainCandidateMoves(pathPlanResult, shapeResults, safetyCheck)).toEqual(
@@ -398,7 +398,7 @@ describe("buildRouteCandidateMoveExplanation / explainRouteCandidateMoves", () =
       makeRouteCandidate({ moveUsi: "7i7h", targetSquare: "7h", routeSquares: ["7i", "7h"], remainingStepsAfter: 0 }),
     ];
     const safetyCheck = makeSafetyCheckResult(2, {
-      multiPvPerEval: [[{ multipv: 1, score: { type: "cp", value: 10 }, pv: [] }], []],
+      multiPvPerEval: [[{ multipv: 1, score: { type: "cp", value: 10 }, pv: [], lowerbound: false, upperbound: false }], []],
     });
 
     const result = explainRouteCandidateMoves(makeRoutePlanResult(candidates), [shapeResult], safetyCheck);
@@ -414,12 +414,12 @@ describe("buildRouteCandidateMoveExplanation / explainRouteCandidateMoves", () =
       makeRouteCandidate({ moveUsi: "7i7h", targetSquare: "7h", routeSquares: ["7i", "7h"], remainingStepsAfter: 0 }),
     ];
     const safetyCheck = makeSafetyCheckResult(2, {
-      baselineMultiPv: [{ multipv: 1, score: { type: "cp", value: 0 }, pv: [] }],
+      baselineMultiPv: [{ multipv: 1, score: { type: "cp", value: 0 }, pv: [], lowerbound: false, upperbound: false }],
       multiPvPerEval: [
         // 低下0(安全側)。B(0) + C(0) = 0 < 300のため残る。
-        [{ multipv: 1, score: { type: "cp", value: 0 }, pv: [] }],
+        [{ multipv: 1, score: { type: "cp", value: 0 }, pv: [], lowerbound: false, upperbound: false }],
         // 低下300(閾値ちょうど)。B(0) + C(300) = 300 >= 300のため除外される。
-        [{ multipv: 1, score: { type: "cp", value: 300 }, pv: [] }],
+        [{ multipv: 1, score: { type: "cp", value: 300 }, pv: [], lowerbound: false, upperbound: false }],
       ],
     });
 
@@ -435,10 +435,10 @@ describe("buildRouteCandidateMoveExplanation / explainRouteCandidateMoves", () =
       makeRouteCandidate({ moveUsi: "7i7h", targetSquare: "7h", routeSquares: ["7i", "7h"], remainingStepsAfter: 0 }),
     ];
     const safetyCheck = makeSafetyCheckResult(2, {
-      baselineMultiPv: [{ multipv: 1, score: { type: "cp", value: 0 }, pv: [] }],
+      baselineMultiPv: [{ multipv: 1, score: { type: "cp", value: 0 }, pv: [], lowerbound: false, upperbound: false }],
       multiPvPerEval: [
-        [{ multipv: 1, score: { type: "cp", value: 300 }, pv: [] }],
-        [{ multipv: 1, score: { type: "mate", value: 3 }, pv: [] }],
+        [{ multipv: 1, score: { type: "cp", value: 300 }, pv: [], lowerbound: false, upperbound: false }],
+        [{ multipv: 1, score: { type: "mate", value: 3 }, pv: [], lowerbound: false, upperbound: false }],
       ],
     });
 
@@ -452,7 +452,7 @@ describe("buildRouteCandidateMoveExplanation / explainRouteCandidateMoves", () =
   it("同一入力に対して常に同じ結果を返す(決定的)", () => {
     const routePlan = makeRoutePlanResult([makeRouteCandidate()]);
     const safetyCheck = makeSafetyCheckResult(1, {
-      multiPvPerEval: [[{ multipv: 1, score: { type: "cp", value: 0 }, pv: [] }]],
+      multiPvPerEval: [[{ multipv: 1, score: { type: "cp", value: 0 }, pv: [], lowerbound: false, upperbound: false }]],
     });
 
     expect(explainRouteCandidateMoves(routePlan, [shapeResult], safetyCheck)).toEqual(

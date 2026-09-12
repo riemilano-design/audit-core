@@ -23,6 +23,13 @@ import path from "node:path";
 import { invariants } from "./invariants/index.js";
 import type { Finding, InvariantType, MetaLine, RecordLine } from "./invariants/types.js";
 import { buildDenominatorReport, type DenominatorInput, type DenominatorReport, type DenominatorRow } from "./lib/denominators.js";
+import {
+  PV_LENGTH_BUCKETS,
+  buildSearchPvStatsReport,
+  type SearchPvStatsInput,
+  type SearchPvStatsReport,
+  type SearchPvStatsRow,
+} from "./lib/searchPvStats.js";
 
 const ALL_TYPES: InvariantType[] = ["沈黙", "矛盾", "断定", "未説明用語", "盤との不一致", "陳腐化", "結果"];
 
@@ -162,11 +169,37 @@ function renderDenominatorTable(rows: DenominatorRow[]): string[] {
   return lines;
 }
 
+/** STEP U6-L(計画書 3.5)。読み筋の観測を数えた表(判断はしない)。 */
+function renderSearchPvTable(rows: SearchPvStatsRow[]): string[] {
+  const lines: string[] = [];
+  lines.push(
+    `| 対象 | 欄あり行 | 欄なし行 | 測れなかった行 | 空配列の行 | 探索本数 | ③baseline | ③afterPass | ⑤baseline | ⑤候補手 | ${PV_LENGTH_BUCKETS.map((b) => `長さ${b}`).join(" | ")} | lowerbound | upperbound | pvが空 | multipv≥2 |`,
+  );
+  lines.push(`|---|---|---|---|---|---|---|---|---|---|${"---|".repeat(PV_LENGTH_BUCKETS.length)}---|---|---|---|`);
+  for (const row of rows) {
+    const s = row.stats;
+    lines.push(
+      `| ${row.label} | ${s.rowsWithField} | ${s.rowsWithoutField} | ${s.rowsFailed} | ${s.rowsWithEmptyField} | ${s.observations} | ` +
+        `${s.bySource.focus_baseline} | ${s.bySource.focus_after_pass} | ${s.bySource.candidate_baseline} | ${s.bySource.candidate_after_move} | ` +
+        `${PV_LENGTH_BUCKETS.map((b) => s.byLength[b]).join(" | ")} | ` +
+        `${s.lowerbound} | ${s.upperbound} | ${s.emptyPv} | ${s.multipvAtLeast2} |`,
+    );
+  }
+  return lines;
+}
+
+const SEARCH_PV_NOTE =
+  "本番が③⑤を作るのに実際に行った探索の読み筋を数えたもの(STEP U6-L)。**観測であり、判断ではない。**" +
+  "「何手未満を読み筋として使わないか」の門番はここでは持たない。" +
+  "**3つの状態を分けて数える**: 「欄なし行」= U6-L より前に取った記録、「測れなかった行」= 本番の解析が失敗した(null)、「空配列の行」= 測ったが1本も取れなかった。" +
+  "**multipv≥2 が 0 でない場合は、本番が MultiPV=1 で探索しているという読み(計画書 2.1)が誤っている。**";
+
 function renderMarkdown(
   inputs: InputFileResult[],
   allFindings: Finding[],
   groups: Group[],
   denominatorReport: DenominatorReport,
+  searchPvReport: SearchPvStatsReport,
 ): string {
   const lines: string[] = [];
 
@@ -197,6 +230,13 @@ function renderMarkdown(
   lines.push(DENOMINATOR_NOTE);
   lines.push("");
   lines.push(...renderDenominatorTable(denominatorReport.perInput));
+  lines.push("");
+
+  lines.push("## 読み筋の観測(STEP U6-L)");
+  lines.push("");
+  lines.push(SEARCH_PV_NOTE);
+  lines.push("");
+  lines.push(...renderSearchPvTable([...searchPvReport.perInput, { label: "合計", stats: searchPvReport.total }]));
   lines.push("");
   if (denominatorReport.perProfile) {
     lines.push("### プロファイルごとの小計(探索モードのみ)");
@@ -268,7 +308,11 @@ function main(): void {
   }));
   const denominatorReport = buildDenominatorReport(denominatorInputs);
 
-  console.log(renderMarkdown(inputs, allFindings, groups, denominatorReport));
+  // STEP U6-L(計画書 3.5)。読み筋の分布。
+  const searchPvInputs: SearchPvStatsInput[] = inputs.map((i) => ({ kifuId: i.kifuId, records: i.records }));
+  const searchPvReport = buildSearchPvStatsReport(searchPvInputs);
+
+  console.log(renderMarkdown(inputs, allFindings, groups, denominatorReport, searchPvReport));
 
   if (jsonOut) {
     const json = {
@@ -277,6 +321,7 @@ function main(): void {
       findings: allFindings,
       groups: groups.map((g) => ({ ...g, examples: g.examples })),
       denominators: denominatorReport,
+      searchPvs: searchPvReport,
     };
     writeFileSync(path.resolve(jsonOut), `${JSON.stringify(json, null, 2)}\n`, "utf-8");
   }

@@ -18,7 +18,10 @@
 // (CachedReachablePlan)に入っているかどうかだけを見る。
 
 import { describe, expect, it } from "vitest";
-import { toCachedPlan } from "./recorder.js";
+import { buildReadyRecord, toCachedPlan } from "./recorder.js";
+import type { GameState } from "../../../apps/server/src/game/gameSession.js";
+import type { LowPriorityEngine } from "../../../apps/server/src/engine/prioritizedEngine.js";
+import type { MultiPvGoResult } from "../../../apps/server/src/engine/usiEngine.js";
 
 const SFEN = "lnsgkgsnl/1r5b1/ppppppppp/9/9/9/PPPPPPPPP/1B5R1/LNSGKGSNL b - 1";
 
@@ -28,6 +31,7 @@ function planResult(overrides: Record<string, unknown> = {}) {
     reachableShapes: [],
     candidateMove: undefined,
     targetShapeId: undefined,
+    searchPvs: [],
     ...overrides,
   } as Awaited<ReturnType<typeof import("../../../apps/server/src/api/stateResponse.js").safeComputeReachablePlan>>;
 }
@@ -69,4 +73,117 @@ describe("toCachedPlan", () => {
   it("本番関数が失敗(undefined)を返したら undefined のまま", () => {
     expect(toCachedPlan(SFEN, undefined)).toBeUndefined();
   });
+});
+
+// --- STEP U6-L(docs/STEP_U6-L_PLAN_2026-09-13.md 5. B-1)。読み筋の「出口」の見張り。 ---
+//
+// 【なぜ要るか】
+// searchPvs は本番の戻り値では必須欄なので、**本番側で埋め忘れれば tsc が止める。**
+// しかし**ハーネスが受け取った結果を記録行へ詰め替える 1 行**を消しても、tsc は
+// 通ってしまう(buildRecordLine へ渡す値が減るだけ)。A-4 で踏んだのはまさにここで、
+// 入口だけ直して出口を数えなかった。だから出口にテストを置く。
+//
+// 本番関数(safeComputeReachablePlan)は実際に呼ぶ。エンジンだけを差し替える
+// (将棋の判断・探索の中身は本番のまま。ここでは複製しない)。
+
+const STARTPOS_SFEN = "lnsgkgsnl/1r5b1/ppppppppp/9/9/9/PPPPPPPPP/1B5R1/LNSGKGSNL b - 1";
+
+/** goMultiPv が常に同じ1本を返すだけのエンジン。実際のプロセスは起動しない。 */
+function stubEngine(pv: string[], opts: { lowerbound?: boolean } = {}): LowPriorityEngine {
+  const result: MultiPvGoResult = {
+    bestmove: pv[0],
+    ponder: undefined,
+    lines: [
+      {
+        multipv: 1,
+        score: { type: "cp", value: 42 },
+        pv,
+        lowerbound: opts.lowerbound ?? false,
+        upperbound: false,
+      },
+    ],
+    infoLines: [],
+  };
+  return {
+    position: () => {},
+    setMultiPv: () => {},
+    goMultiPv: async () => result,
+  };
+}
+
+function startState(): GameState {
+  return { sfen: STARTPOS_SFEN, moveHistory: [], forcedPliesUsed: 0 };
+}
+
+describe("buildReadyRecord の searchPvs(STEP U6-L)", () => {
+  it("本番が③を作るのに使った探索の読み筋が、ready 行の JSON に載る", async () => {
+    const { line } = await buildReadyRecord(
+      startState(),
+      2,
+      "7g7f",
+      "3c3d",
+      stubEngine(["7g7f"]),
+      false,
+      null,
+      null,
+      [],
+      stubEngine(["7g7f"]),
+      0, // referenceNodes=0: ハーネス側の engineReference は測らない
+      stubEngine(["8h2b", "3a2b", "2g2f"]), // focusEngine
+    );
+
+    const parsed = JSON.parse(line) as { searchPvs?: Array<Record<string, unknown>> };
+    expect(parsed.searchPvs).toBeDefined();
+    // ③は baseline と afterPass の2本を探索する。
+    expect(parsed.searchPvs?.map((o) => o.source)).toEqual(["focus_baseline", "focus_after_pass"]);
+    expect(parsed.searchPvs?.[0]?.pv).toEqual(["8h2b", "3a2b", "2g2f"]);
+    expect(parsed.searchPvs?.[0]?.multipv).toBe(1);
+  });
+
+  it("lowerbound が立った読み筋も、立ったまま記録へ運ぶ", async () => {
+    const { line } = await buildReadyRecord(
+      startState(),
+      2,
+      "7g7f",
+      "3c3d",
+      stubEngine(["7g7f"]),
+      false,
+      null,
+      null,
+      [],
+      stubEngine(["7g7f"]),
+      0,
+      stubEngine(["8h2b"], { lowerbound: true }),
+    );
+
+    const parsed = JSON.parse(line) as { searchPvs?: Array<Record<string, unknown>> };
+    expect(parsed.searchPvs?.every((o) => o.lowerbound === true)).toBe(true);
+  });
+
+  it("長さ1の読み筋も捨てずに記録する(記録側に長さの門番を置かない)", async () => {
+    const { line } = await buildReadyRecord(
+      startState(),
+      2,
+      "7g7f",
+      "3c3d",
+      stubEngine(["7g7f"]),
+      false,
+      null,
+      null,
+      [],
+      stubEngine(["7g7f"]),
+      0,
+      stubEngine(["8h2b"]),
+    );
+
+    const parsed = JSON.parse(line) as { searchPvs?: Array<Record<string, unknown>> };
+    expect(parsed.searchPvs?.map((o) => (o.pv as string[]).length)).toEqual([1, 1]);
+  });
+
+  it("immediate 行には searchPvs のキー自体が出ない(既存のJSONLの形を変えない)", async () => {
+    const { buildImmediateRecord } = await import("./recorder.js");
+    const { line } = buildImmediateRecord(startState(), 1, "7g7f", null, false, null, null, []);
+    expect(Object.keys(JSON.parse(line) as object)).not.toContain("searchPvs");
+  });
+
 });

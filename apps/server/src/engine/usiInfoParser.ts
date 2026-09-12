@@ -44,6 +44,20 @@ export interface UsiInfoLine {
   score: UsiScore | undefined;
   /** pv(読み筋)のUSI形式指し手列。含まれていない場合は空配列。 */
   pv: string[];
+  /**
+   * STEP U6-L(docs/STEP_U6-L_PLAN_2026-09-13.md 3.2)。info行に`lowerbound`/
+   * `upperbound`が付いていたか。USIプロトコル(UCI由来)で「この評価値は下限/上限で
+   * あって確定値ではない」ことを表す標識であり、このパーサーは**付いていたという
+   * 事実だけ**を保持する(値をどう扱うかの判断はここではしない)。
+   *
+   * 【なぜ必須(optional にしない)か】
+   * optionalにすると、次にUsiInfoLine/MultiPvLineを作る人が黙って落とせる。
+   * 落ちても型検査もテストも通り、**記録の分布だけが本番と違う姿になる**
+   * (2026-09-12に同じ型を4回踏んでいる。docs/STEP_5-F_PLAN_2026-09-12.md 14.12)。
+   * 必須にして、作る場所が増えたときにtscで止まるようにする。
+   */
+  lowerbound: boolean;
+  upperbound: boolean;
   /** 元のinfo行全文(デバッグ・トレーサビリティ用)。 */
   raw: string;
 }
@@ -51,11 +65,15 @@ export interface UsiInfoLine {
 const MULTIPV_PATTERN = /\bmultipv\s+(\d+)\b/;
 const SCORE_PATTERN = /\bscore\s+(cp|mate)\s+(-?\d+)\b/;
 const PV_PATTERN = /\bpv\s+(.+)$/;
+// STEP U6-L: `score cp 123 lowerbound` のように、scoreの直後に付く標識。
+const LOWERBOUND_PATTERN = /\blowerbound\b/;
+const UPPERBOUND_PATTERN = /\bupperbound\b/;
 
 /**
  * 1行のUSI出力を解析する。"info"で始まらない行(bestmove行・usiok等)はinfo行では
  * ないためundefinedを返す。"info"で始まるが個々のフィールド(multipv/score/pv)を
- * 解析できない場合は、そのフィールドだけ既定値(multipv:1 / score:undefined / pv:[])
+ * 解析できない場合は、そのフィールドだけ既定値(multipv:1 / score:undefined / pv:[] /
+ * lowerbound:false / upperbound:false)
  * にフォールバックし、例外は投げない(想定外のエンジン出力で対局・解析全体を
  * 止めないため)。
  *
@@ -76,5 +94,12 @@ export function parseInfoLine(line: string): UsiInfoLine | undefined {
   const pvMatch = trimmed.match(PV_PATTERN);
   const pv = pvMatch ? pvMatch[1]!.trim().split(/\s+/).filter((s) => s.length > 0) : [];
 
-  return { multipv, score, pv, raw: line };
+  return {
+    multipv,
+    score,
+    pv,
+    lowerbound: LOWERBOUND_PATTERN.test(trimmed),
+    upperbound: UPPERBOUND_PATTERN.test(trimmed),
+    raw: line,
+  };
 }

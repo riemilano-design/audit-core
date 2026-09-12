@@ -13,6 +13,7 @@
 
 import type { StateResponseBodyWithPlan } from "../../../apps/server/src/api/stateResponse.js";
 import type { EngineReference } from "../lib/engineReference.js";
+import type { SearchPvObservation } from "../../../apps/server/src/analysis/searchPv.js";
 
 /** docs/PLAYTEST_LOOP_PROPOSAL.md 4.4 の6型。
  * STEP T-6(B-1、人間承認済み。docs/COVERAGE_AND_OUTCOME_PROPOSAL.md 7.1)で
@@ -40,8 +41,36 @@ export interface RecordLine {
   elapsedMs: number;
   response: StateResponseBodyWithPlan;
   /** STEP T-7(A-2)。ready行のみに付く、エンジンの参考評価(ハーネスの観測)。
-   * immediate行には付けない(optional)。測っていない・測れない場合はnull。 */
+   * immediate行には付けない(optional)。測っていない・測れない場合はnull。
+   * **これは③が使った探索ではない**(ハーネスが別に測ったもの。2026-09-12に
+   * 両者を同一視して3行を誤読した)。 */
   engineReference?: EngineReference | null;
+  /**
+   * STEP U6-L。本番が③⑤を作るのに実際に使った探索の読み筋(1探索1本につき1件)。
+   *
+   * 【3つの状態を3つの値で表す。一つの値に二つの意味を持たせない】
+   * - `undefined`(欄が無い) … **U6-L より前に取った記録**。ここが optional なのは
+   *   書き手が忘れうるからではなく、過去のファイルにこの欄が無いからである
+   *   (書き出す側 lib/recorder.ts では **ready行の必須欄**で、忘れればtscが止める)
+   * - `null` … **本番の解析そのものが失敗した**(safeComputeReachablePlan が
+   *   undefined を返した)。**測れなかったのであって、0本だったのではない**
+   * - `[]` … **本番は解析を完了したが、読み筋が1本も載らなかった**
+   *
+   * 当初は解析の失敗も `[]` にしており、**「失敗した」と「測って0本」が同じ値だった**
+   * (2026-09-13 の独立監査の指摘、必須3。既知事項 P-23 と同じ型)。
+   * STEP 5-F の focusTextState と同じ理由で分けている。
+   *
+   * 【`[]` はまだ二つの意味を持っている(直していない。事実として書く)】
+   * 解析が完了しても、`[]` になる経路が2つある。**記録からは区別できない。**
+   * - **終局・王手中の行** … measureEngineReference が探索を1本も行わないと決めて
+   *   いる局面(**測らないと決めた**)
+   * - **③の探索が例外を投げた行** … computeFocusText が自前の try/catch で
+   *   握りつぶし、集まった分(0本)を返す(**測れなかった**)
+   * 前者は `response.status.isEnd` 等から推し量れるが、**推し量るのは区別ではない。**
+   * 直すとしたら本番側(computeFocusText)であり、U6-L のスコープ外なので
+   * **ここでは事実を書くにとどめる**(docs/STEP_U6-L_PLAN_2026-09-13.md 12.3)。
+   */
+  searchPvs?: SearchPvObservation[] | null;
 }
 
 /** T-1のJSONLの"kind":"meta"行(先頭行)。 */

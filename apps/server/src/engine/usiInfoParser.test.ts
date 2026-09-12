@@ -8,6 +8,8 @@ describe("parseInfoLine", () => {
       multipv: 1,
       score: { type: "cp", value: 55 },
       pv: ["7g7f", "3c3d"],
+      lowerbound: false,
+      upperbound: false,
       raw: "info depth 10 seldepth 12 multipv 1 score cp 55 nodes 12345 pv 7g7f 3c3d",
     });
   });
@@ -48,12 +50,16 @@ describe("parseInfoLine", () => {
       multipv: 1,
       score: undefined,
       pv: [],
+      lowerbound: false,
+      upperbound: false,
       raw: "info depth 3 nodes 100",
     });
     expect(parseInfoLine("info multipv abc score cp xyz pv")).toEqual({
       multipv: 1,
       score: undefined,
       pv: [],
+      lowerbound: false,
+      upperbound: false,
       raw: "info multipv abc score cp xyz pv",
     });
   });
@@ -65,5 +71,28 @@ describe("parseInfoLine", () => {
   it("10. 同一入力に対して常に同じ結果を返す(決定的)", () => {
     const line = "info depth 8 multipv 2 score cp 42 pv 2g2f 8c8d";
     expect(parseInfoLine(line)).toEqual(parseInfoLine(line));
+  });
+
+  // --- STEP U6-L(docs/STEP_U6-L_PLAN_2026-09-13.md 3.2)。lowerbound/upperbound。 ---
+
+  it("STEP U6-L: score に lowerbound が付いた info 行で lowerbound を立てる", () => {
+    const result = parseInfoLine("info depth 5 multipv 2 score cp 30 lowerbound pv 3c3d");
+    expect(result?.lowerbound).toBe(true);
+    expect(result?.upperbound).toBe(false);
+    // 値そのものは加工しない(標識が付いていたという事実だけを保持する)。
+    expect(result?.score).toEqual({ type: "cp", value: 30 });
+    expect(result?.pv).toEqual(["3c3d"]);
+  });
+
+  it("STEP U6-L: upperbound も同じように立てる", () => {
+    const result = parseInfoLine("info depth 5 multipv 1 score cp -20 upperbound pv 7g7f");
+    expect(result?.upperbound).toBe(true);
+    expect(result?.lowerbound).toBe(false);
+  });
+
+  it("STEP U6-L: 標識が無い info 行では両方 false", () => {
+    const result = parseInfoLine("info depth 5 multipv 1 score cp 55 pv 7g7f");
+    expect(result?.lowerbound).toBe(false);
+    expect(result?.upperbound).toBe(false);
   });
 });

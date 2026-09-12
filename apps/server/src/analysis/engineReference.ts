@@ -24,6 +24,7 @@ import { isGameOver, isInCheck } from "../rules/gameStatus.js";
 import { parsePosition } from "../rules/sfenPosition.js";
 import type { LowPriorityEngine } from "../engine/prioritizedEngine.js";
 import type { GoOptions, MultiPvGoResult } from "../engine/usiEngine.js";
+import { toSearchPvObservations, type SearchPvObservation } from "./searchPv.js";
 
 /** USI形式の指し手(ドロップではない)から移動先マスを取り出す(成り"+"は無視)。
  * scripts/playtest/lib/players.tsのtoSquareOfと同じ実装(移設に伴い、共有
@@ -99,12 +100,34 @@ function sideFromMultiPv(result: MultiPvGoResult): EngineReferenceSide {
 }
 
 /**
+ * STEP U6-L(計画書 1.1 決定1・3.3)。measureEngineReferenceの戻り値。
+ *
+ * 【なぜ EngineReference に読み筋を足さないのか(重要)】
+ * EngineReference は、ハーネス(scripts/playtest/lib/recorder.ts)が**自分で別に
+ * 測った参考評価**として記録(JSONL)の行頭 `engineReference` 欄へそのまま書き出す
+ * 型である。ここへ読み筋を足すと、記録には「読み筋がある」という事実だけが残り、
+ * **それが③が見た読み筋なのか、ハーネスが別に測った読み筋なのかを、後から誰も
+ * 区別できなくなる。** 2026-09-12 に実際にこれで 3 行やられている(記録の
+ * engineReference と③が使った engineReference が別々の探索で、`claude-3` ply 22
+ * では afterPass の最善手そのものが別の手だった)。
+ * そこで EngineReference の形は一切変えず、**読み筋は別の欄で返す。**
+ * ハーネスは reference だけを記録へ書き、searchPvs は捨てる(決定1)。
+ */
+export interface EngineReferenceMeasurement {
+  /** 従来どおりの参考評価。測らない場合(終局・王手中・例外)はnull。 */
+  reference: EngineReference | null;
+  /** この測定で実際に行った探索の読み筋(観測専用)。測らなかった場合は空配列。
+   * 2本目で例外になった場合は、1本目までの観測が入る(測った分は残す)。 */
+  searchPvs: SearchPvObservation[];
+}
+
+/**
  * sfen(先手番の局面)について、(1) 現局面をMultiPV1で読んだ結果
  * (baseline、先手視点)、(2) 手番を入れ替えた局面(passSfen)を同条件で読んだ結果
  * (afterPass、後手視点)、(3) afterPass.bestmoveの移動先に先手の駒があるか
  * (captureSquare)、(4) 両方cpのときのdropCpを組み立てて返す。
  *
- * 測らない場合(null を返す): 終局(isGameOver)、先手が王手中
+ * 測らない場合(reference が null): 終局(isGameOver)、先手が王手中
  * (isInCheck(sfen, "sente")。パスが成立しない)、エンジンの例外・タイムアウト
  * (try/catchで握りつぶす。原因を推測しない)。
  *
@@ -119,21 +142,28 @@ export async function measureEngineReference(
   sfen: string,
   engine: LowPriorityEngine,
   nodes?: number,
-): Promise<EngineReference | null> {
+): Promise<EngineReferenceMeasurement> {
+  // STEP U6-L: 測った探索の読み筋をためる。例外で途中終了しても、測った分は返す。
+  const searchPvs: SearchPvObservation[] = [];
   try {
-    if (isGameOver(sfen)) return null;
-    if (isInCheck(sfen, "sente")) return null;
+    if (isGameOver(sfen)) return { reference: null, searchPvs };
+    if (isInCheck(sfen, "sente")) return { reference: null, searchPvs };
 
     const goOptions: GoOptions = nodes !== undefined ? { nodes } : {};
 
     engine.setMultiPv(1);
     engine.position(sfen);
-    const baseline = sideFromMultiPv(await engine.goMultiPv(goOptions));
+    const baselineResult = await engine.goMultiPv(goOptions);
+    // STEP U6-L: ③が使うのと**同一の探索結果**から読み筋を写す(再探索しない)。
+    searchPvs.push(...toSearchPvObservations("focus_baseline", sfen, null, baselineResult.lines));
+    const baseline = sideFromMultiPv(baselineResult);
 
     const passedSfen = passSfen(sfen);
     engine.setMultiPv(1);
     engine.position(passedSfen);
-    const afterPassSide = sideFromMultiPv(await engine.goMultiPv(goOptions));
+    const afterPassResult = await engine.goMultiPv(goOptions);
+    searchPvs.push(...toSearchPvObservations("focus_after_pass", passedSfen, null, afterPassResult.lines));
+    const afterPassSide = sideFromMultiPv(afterPassResult);
 
     const captureSquare = captureSquareOf(sfen, afterPassSide.bestmove);
     const dropCp =
@@ -142,14 +172,17 @@ export async function measureEngineReference(
         : null;
 
     return {
-      baseline,
-      afterPass: { ...afterPassSide, captureSquare },
-      dropCp,
-      // nodesを省略した場合(movetime探索)はnull =「ノード数で制限していない」。
-      // 0にしない(型定義のコメント参照。2026-09-12 人間の指示)。
-      nodes: nodes ?? null,
+      reference: {
+        baseline,
+        afterPass: { ...afterPassSide, captureSquare },
+        dropCp,
+        // nodesを省略した場合(movetime探索)はnull =「ノード数で制限していない」。
+        // 0にしない(型定義のコメント参照。2026-09-12 人間の指示)。
+        nodes: nodes ?? null,
+      },
+      searchPvs,
     };
   } catch {
-    return null;
+    return { reference: null, searchPvs };
   }
 }

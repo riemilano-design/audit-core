@@ -188,6 +188,12 @@ async function runBackgroundPlanAnalysis(
         reachableShapes: result.reachableShapes,
         candidateMove: result.candidateMove,
         focusText: result.focusText,
+        // 【result.searchPvs は**意図的に写さない**(STEP U6-L。忘れたのではない)】
+        // 本番は読み筋を保持しない。ここへ入れるとキャッシュにもHTTPの応答にも
+        // 読み筋が乗り、**「本番の挙動を変えない」という U6-L の前提が崩れる。**
+        // 読み筋を運ぶ先は記録(JSONL)だけで、経路はハーネス
+        // (scripts/playtest/lib/recorder.ts の buildReadyRecord)だけである
+        // (docs/STEP_U6-L_PLAN_2026-09-13.md 1.3)。**良かれと思って写さないこと。**
       },
     };
     // STEP P-26((i)): 書けたので、このキーについての失敗の記憶は解く。

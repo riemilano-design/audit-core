@@ -141,8 +141,20 @@ describe("UsiEngine.goMultiPv", () => {
 
     const result = await goPromise;
     expect(result.lines.map((l) => l.multipv)).toEqual([1, 2]);
-    expect(result.lines[0]).toEqual({ multipv: 1, score: { type: "cp", value: 50 }, pv: ["7g7f"] });
-    expect(result.lines[1]).toEqual({ multipv: 2, score: { type: "cp", value: 30 }, pv: ["3c3d"] });
+    expect(result.lines[0]).toEqual({
+      multipv: 1,
+      score: { type: "cp", value: 50 },
+      pv: ["7g7f"],
+      lowerbound: false,
+      upperbound: false,
+    });
+    expect(result.lines[1]).toEqual({
+      multipv: 2,
+      score: { type: "cp", value: 30 },
+      pv: ["3c3d"],
+      lowerbound: false,
+      upperbound: false,
+    });
   });
 
   it("同じmultipv番号のinfo行が複数回来た場合、最後に観測された内容を採用する", async () => {
@@ -155,7 +167,9 @@ describe("UsiEngine.goMultiPv", () => {
     dispatchLine(engine, "bestmove 7g7f");
 
     const result = await goPromise;
-    expect(result.lines).toEqual([{ multipv: 1, score: { type: "cp", value: 55 }, pv: ["7g7f", "8c8d"] }]);
+    expect(result.lines).toEqual([
+      { multipv: 1, score: { type: "cp", value: 55 }, pv: ["7g7f", "8c8d"], lowerbound: false, upperbound: false },
+    ]);
   });
 
   it("bestmove/ponderを返す(単一bestmove APIと同じ解析)", async () => {
@@ -182,7 +196,40 @@ describe("UsiEngine.goMultiPv", () => {
 
     const result = await goPromise;
     expect(result.bestmove).toBe("7g7f");
-    expect(result.lines).toEqual([{ multipv: 1, score: { type: "cp", value: 10 }, pv: ["7g7f"] }]);
+    expect(result.lines).toEqual([
+      { multipv: 1, score: { type: "cp", value: 10 }, pv: ["7g7f"], lowerbound: false, upperbound: false },
+    ]);
+  });
+
+  // STEP U6-L(docs/STEP_U6-L_PLAN_2026-09-13.md 2.2)。**挙動の観測であり、要求ではない。**
+  // goMultiPvは「同じmultipv番号のinfo行は最後に観測されたものを採用する」規則で
+  // 組み立てる(上のテストが定める既存の挙動)。この規則は、scoreもpvも持たない
+  // info行(`info string ...`等)が**後に**来た場合、それまでの読み筋と評価値を
+  // 空で上書きする。上の「malformedなinfo行が混ざっていても〜」は`info string`を
+  // **先に**流しているため、この上書きは起きない。順序が逆のときに何が起きるかを
+  // 固定しておく。
+  //
+  // 【本STEPでは直さない(人間・司令塔の判断を経た決定)】
+  // 直すとscoreの採用規則も変わり、candidateMoveReferenceFilter.ts:104が読む
+  // multiPv[0].scoreが変わって、除外される候補手が変わる = 本番の挙動が変わる。
+  // U6-Lは「本番の挙動を変えない」STEPなので、ここでは**起きることを記録するだけ**に
+  // とどめ、実際に対局記録で起きるかどうかを測る(計画書 予測P6)。
+  it("STEP U6-L(観測): pvを持たないinfo行が後に来ると、読み筋も評価値も空で上書きされる", async () => {
+    const engine = new UsiEngine("dummy-path");
+    vi.spyOn(engine, "send").mockImplementation(() => {});
+
+    const goPromise = engine.goMultiPv({ movetimeMs: 10 });
+    dispatchLine(engine, "info multipv 1 score cp 10 pv 7g7f");
+    dispatchLine(engine, "info string this is a debug message with no score");
+    dispatchLine(engine, "bestmove 7g7f");
+
+    const result = await goPromise;
+    // `info string`はmultipv未指定なので1として扱われ、同じ番号を上書きする。
+    expect(result.lines).toEqual([
+      { multipv: 1, score: undefined, pv: [], lowerbound: false, upperbound: false },
+    ]);
+    // bestmoveの解析には影響しない(bestmove行から別に読むため)。
+    expect(result.bestmove).toBe("7g7f");
   });
 
   it("10. 同一の観測入力に対して常に同じ結果になる(決定的)", async () => {

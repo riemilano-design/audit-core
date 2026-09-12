@@ -35,18 +35,18 @@ describe("checkCandidateMovesSafety", () => {
   it("baseline局面と各候補手の遷移後局面を、それぞれエンジンに解析させて対応付ける", async () => {
     const candidateMoves: PathPlanCandidateMove[] = [{ moveUsi: "7g7f" }, { moveUsi: "2g2f" }];
     const engine = makeMockEngine([
-      multiPvResult([{ multipv: 1, score: { type: "cp", value: 20 }, pv: ["3c3d"] }]),
-      multiPvResult([{ multipv: 1, score: { type: "cp", value: -400 }, pv: ["8c8d"] }]),
-      multiPvResult([{ multipv: 1, score: { type: "cp", value: 15 }, pv: ["3c3d"] }]),
+      multiPvResult([{ multipv: 1, score: { type: "cp", value: 20 }, pv: ["3c3d"], lowerbound: false, upperbound: false }]),
+      multiPvResult([{ multipv: 1, score: { type: "cp", value: -400 }, pv: ["8c8d"], lowerbound: false, upperbound: false }]),
+      multiPvResult([{ multipv: 1, score: { type: "cp", value: 15 }, pv: ["3c3d"], lowerbound: false, upperbound: false }]),
     ]);
 
     const result = await checkCandidateMovesSafety(INITIAL_SFEN, candidateMoves, engine);
 
     expect(result.baselineSfen).toBe(INITIAL_SFEN);
-    expect(result.baselineMultiPv).toEqual([{ multipv: 1, score: { type: "cp", value: 20 }, pv: ["3c3d"] }]);
+    expect(result.baselineMultiPv).toEqual([{ multipv: 1, score: { type: "cp", value: 20 }, pv: ["3c3d"], lowerbound: false, upperbound: false }]);
     expect(result.evaluations).toHaveLength(2);
     expect(result.evaluations[0]!.moveUsi).toBe("7g7f");
-    expect(result.evaluations[0]!.multiPv).toEqual([{ multipv: 1, score: { type: "cp", value: -400 }, pv: ["8c8d"] }]);
+    expect(result.evaluations[0]!.multiPv).toEqual([{ multipv: 1, score: { type: "cp", value: -400 }, pv: ["8c8d"], lowerbound: false, upperbound: false }]);
     expect(result.evaluations[1]!.moveUsi).toBe("2g2f");
     expect(result.evaluations[0]!.resultingSfen).not.toBe(INITIAL_SFEN);
     expect(engine.positions).toEqual([
@@ -61,8 +61,8 @@ describe("checkCandidateMovesSafety", () => {
     // わざと「明らかに悪そうな」評価値(大きなマイナス)を返しても、結果からは除外されない
     // ことを確認する(このモジュールが閾値判定を一切行わないことの直接的な検証)。
     const engine = makeMockEngine([
-      multiPvResult([{ multipv: 1, score: { type: "cp", value: 0 }, pv: [] }]),
-      multiPvResult([{ multipv: 1, score: { type: "mate", value: -1 }, pv: [] }]),
+      multiPvResult([{ multipv: 1, score: { type: "cp", value: 0 }, pv: [], lowerbound: false, upperbound: false }]),
+      multiPvResult([{ multipv: 1, score: { type: "mate", value: -1 }, pv: [], lowerbound: false, upperbound: false }]),
     ]);
 
     const result = await checkCandidateMovesSafety(INITIAL_SFEN, candidateMoves, engine);
@@ -86,11 +86,11 @@ describe("checkCandidateMovesSafety", () => {
   });
 
   it("candidateMovesが空配列の場合、baselineのみ解析し安全にevaluations: []を返す", async () => {
-    const engine = makeMockEngine([multiPvResult([{ multipv: 1, score: { type: "cp", value: 5 }, pv: [] }])]);
+    const engine = makeMockEngine([multiPvResult([{ multipv: 1, score: { type: "cp", value: 5 }, pv: [], lowerbound: false, upperbound: false }])]);
     const result = await checkCandidateMovesSafety(INITIAL_SFEN, [], engine);
 
     expect(result.evaluations).toEqual([]);
-    expect(result.baselineMultiPv).toEqual([{ multipv: 1, score: { type: "cp", value: 5 }, pv: [] }]);
+    expect(result.baselineMultiPv).toEqual([{ multipv: 1, score: { type: "cp", value: 5 }, pv: [], lowerbound: false, upperbound: false }]);
   });
 
   it("非合法な候補手が渡された場合、独自エラーに置き換えずIllegalMoveErrorを伝播する", async () => {
@@ -119,8 +119,8 @@ describe("checkCandidateMovesSafety", () => {
   it("10. 同一入力に対して常に同じ結果になる(決定的)", async () => {
     const candidateMoves: PathPlanCandidateMove[] = [{ moveUsi: "7g7f" }];
     const makeResponses = () => [
-      multiPvResult([{ multipv: 1, score: { type: "cp", value: 20 }, pv: [] }]),
-      multiPvResult([{ multipv: 1, score: { type: "cp", value: -10 }, pv: [] }]),
+      multiPvResult([{ multipv: 1, score: { type: "cp", value: 20 }, pv: [], lowerbound: false, upperbound: false }]),
+      multiPvResult([{ multipv: 1, score: { type: "cp", value: -10 }, pv: [], lowerbound: false, upperbound: false }]),
     ];
 
     const resultA = await checkCandidateMovesSafety(INITIAL_SFEN, candidateMoves, makeMockEngine(makeResponses()));
