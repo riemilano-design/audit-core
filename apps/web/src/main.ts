@@ -31,6 +31,7 @@ import {
   summarizeOpponentAim,
   summarizeWhy,
   FOCUS_TEXT_PENDING_TEXT,
+  focusSummaryOverride,
   summarizeMyAim,
   startNewGame,
   submitMove,
@@ -612,9 +613,12 @@ function renderWhy(coach: CoachExplanation[] | undefined, plan: ReachablePlanBod
   // "ready"でfocusTextがnullのとき(計算した結果、言うことが無い)は、要約行を
   // 従来の内容 ―― itemsの最後の一文(summarizeWhyはlastSentence)―― に戻す。
   // 本文(items)は最初から出す(9.16の決定。ここは変えない)。
+  // STEP P-26((a)): 待つのをやめたかどうかで「確かめています」と「まだ分かりません」を
+  // 分ける。判定はgameApi.tsの純粋関数に置いてある(DOMに依存しない)。
+  const override = plan !== undefined ? focusSummaryOverride(plan, focusTextGaveUp) : null;
   const summaryText =
-    plan?.focusTextState === "pending"
-      ? FOCUS_TEXT_PENDING_TEXT
+    override != null
+      ? override
       : focusText != null
         ? focusText
         : items.length > 0
@@ -1707,6 +1711,10 @@ let lastRenderedFocusText: string | null = null;
 // 従来の一文へ描き直す必要があるため、focusTextの値だけでは足りない。
 let lastRenderedFocusTextState: FocusTextState | undefined;
 let lastRenderedCandidateMoveState: CandidateMoveState | undefined;
+// STEP P-26((a)): ③の到着を待つのをやめたか。上限(FOCUS_TEXT_REFRESH_MAX_ATTEMPTS)
+// に達した時点でtrueにし、③の要約行を「まだ分かりません」へ差し替える。
+// 局面が変わったらfalseへ戻す(render()内。emphasizedCandidateUsi等と同じ条件)。
+let focusTextGaveUp = false;
 // P-17対応: #saveKifuStatus(保存を依頼した旨の一行+折りたたみ)を表示したときの
 // state.moveHistory.lengthを覚えておく。undefinedは「何も表示していない」を表す。
 // currentStateが無い状態で表示したとき(手数が分からない)は-1という実在しない値を
@@ -1749,6 +1757,8 @@ function render(state: GameStateResponse): void {
   // ユーザーが成り・不成を選んでいる最中に選択のまとまりが黙って消えてしまう
   // (P-16と同種の見えにくい欠陥になる)。emphasizedCandidateUsiと同じ条件を使う。
   if (state.sfen !== lastRenderedSfen) pendingPromotion = null;
+  // STEP P-26((a)): 新しい局面では③を待ち直すので、諦めの記憶を解く。
+  if (state.sfen !== lastRenderedSfen) focusTextGaveUp = false;
   // P-17対応: #saveKifuStatusは「次に指したとき・新しい対局を始めたとき」に消す
   // (人間承認済み)。render()はバックグラウンド解析の再取得でも同じ局面のまま
   // 何度も呼ばれる(手数は変わらない)ため、手数(state.moveHistory.length)が
@@ -1825,6 +1835,13 @@ function schedulePlanRefresh(sfenAtSubmit: string, attempt = 1): void {
         applyPlanRefresh(state);
         if (shouldRetryPlanRefresh(state.plan, attempt, state.status.isEnd)) {
           schedulePlanRefresh(sfenAtSubmit, attempt + 1);
+        } else if (state.plan.focusTextState === "pending" && !state.status.isEnd) {
+          // STEP P-26((a)): 待つのをやめたが③はまだ載っていない。
+          // ここで描き直さないと「急ぐことがないか、いま確かめています。」が
+          // 残り続ける(2026-09-13の実機で30秒後も残っていた)。
+          // 盤・選択状態には触らない(applyPlanRefreshと同じく③のブロックだけ)。
+          focusTextGaveUp = true;
+          renderWhy(state.coach, state.plan);
         }
       })
       .catch(() => {

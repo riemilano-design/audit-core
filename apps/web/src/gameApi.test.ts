@@ -9,6 +9,9 @@ import {
   groupCandidateExplanationsByReason,
   shouldRetryPlanRefresh,
   FOCUS_TEXT_REFRESH_MAX_ATTEMPTS,
+  FOCUS_TEXT_PENDING_TEXT,
+  FOCUS_TEXT_UNKNOWN_TEXT,
+  focusSummaryOverride,
   shouldShowNextConsiderations,
   shouldShowPlanChangedNotice,
   splitCoachByStage,
@@ -927,5 +930,36 @@ describe("promotionNoteForRole", () => {
 
   it("空文字が渡された場合、空文字を返す", () => {
     expect(promotionNoteForRole("")).toBe("");
+  });
+});
+
+// STEP P-26((a)、司令塔承認済み): ③を待つのをやめたときの要約行。
+//
+// これはサーバー側の歯止め((i))と対になっている。(i)は一度失敗した局面で解析を
+// 再起動しないため、ここが働かないと「黙ったまま固まる」に化ける(計画書4.2)。
+describe("focusSummaryOverride", () => {
+  it('"pending"で、まだ待っている間は「確かめています」', () => {
+    expect(focusSummaryOverride({ focusTextState: "pending" }, false)).toBe(FOCUS_TEXT_PENDING_TEXT);
+  });
+
+  // ここがP-26の(a)の本体。
+  it('"pending"のまま待つのをやめたら「まだ分かりません」に差し替える', () => {
+    expect(focusSummaryOverride({ focusTextState: "pending" }, true)).toBe(FOCUS_TEXT_UNKNOWN_TEXT);
+  });
+
+  it('"ready"なら差し替えない(既存の挙動へ任せる)', () => {
+    expect(focusSummaryOverride({ focusTextState: "ready" }, false)).toBeNull();
+    expect(focusSummaryOverride({ focusTextState: "ready" }, true)).toBeNull();
+  });
+
+  it("差し替える文は「急がない」と読めない(測っていないのに断定しない)", () => {
+    // CLAUDE.md「絶対に守るルール」6番。文言そのものを固定する意図ではなく、
+    // 「急がない」と読める文へ戻すときに必ず気づくための見張り。
+    expect(FOCUS_TEXT_UNKNOWN_TEXT).toContain("分かりません");
+    expect(FOCUS_TEXT_UNKNOWN_TEXT).not.toContain("ありません");
+  });
+
+  it("「確かめています」と「まだ分かりません」は別の文である", () => {
+    expect(FOCUS_TEXT_UNKNOWN_TEXT).not.toBe(FOCUS_TEXT_PENDING_TEXT);
   });
 });

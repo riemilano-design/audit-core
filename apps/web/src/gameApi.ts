@@ -596,6 +596,20 @@ export function boardMarksFromState(
  */
 export const FOCUS_TEXT_PENDING_TEXT = "急ぐことがないか、いま確かめています。";
 
+/**
+ * STEP P-26(2026-09-13、司令塔承認済み): ③を待つのをやめたときの要約行。
+ *
+ * **「急がない」とは読めない文にすること。** 測っていないのに「急がない」と言うのは、
+ * 断定できないことを断定することになる(CLAUDE.md「絶対に守るルール」6番)。
+ * 確かめられなかったことだけを言う。
+ *
+ * 文言の確定は司令塔の承認による(ユーザーに見せる文言の仕様)。案A〜Cのうち
+ * Aを採った。現在の「急ぐことがないか、いま確かめています。」と主語が揃うため、
+ * 読み替えの負担が小さい(3局45手のうち44手で③の文が読んでいる間に入れ替わって
+ * いたという実測に基づく。docs/OBSERVATION_BEGINNER_CLAUDE_2026-09-12_2.md 3.)。
+ */
+export const FOCUS_TEXT_UNKNOWN_TEXT = "急ぐことがあるかどうか、まだ分かりません。";
+
 export const PLAN_REFRESH_MAX_ATTEMPTS = 30;
 
 /**
@@ -652,6 +666,32 @@ export function shouldRetryPlanRefresh(
   // 画面に「確かめています」が残り続ける(既知事項。人間決定H-17)。
   if (plan.focusTextState !== "pending") return false;
   return attempt < FOCUS_TEXT_REFRESH_MAX_ATTEMPTS;
+}
+
+/**
+ * STEP P-26((a)、司令塔承認済み): ③の要約行を、待っている状態に応じて差し替える。
+ *
+ * 返り値が null のときは既存の挙動(focusTextがあればそれ、無ければitems等)へ任せる。
+ *
+ * 【なぜ「待つのをやめた」を別に持つか】
+ * focusTextStateは"pending"と"ready"の2つしか無く、**「まだ計算中」と「起動すら
+ * されていない/失敗した」を区別できない**(P-23)。画面側は待った回数でしか
+ * 区別できないため、上限に達したかどうかを引数で受け取る。
+ *
+ * 【これが無いと何が起きるか】
+ * 上限に達しても画面を描き直さないため、FOCUS_TEXT_PENDING_TEXTが残り続ける。
+ * 2026-09-13の実機で、30秒経っても「急ぐことがないか、いま確かめています。」の
+ * ままだった(docs/STEP_P-26_PLAN_2026-09-13.md 3.)。
+ *
+ * **サーバー側の歯止め((i))と対になっている。**(i)は一度失敗した局面で解析を
+ * 再起動しないため、この関数が働かないと「黙ったまま固まる」に化ける(計画書4.2)。
+ */
+export function focusSummaryOverride(
+  plan: Pick<ReachablePlanBody, "focusTextState">,
+  gaveUpWaiting: boolean,
+): string | null {
+  if (plan.focusTextState !== "pending") return null; // 既存の挙動へ任せる
+  return gaveUpWaiting ? FOCUS_TEXT_UNKNOWN_TEXT : FOCUS_TEXT_PENDING_TEXT;
 }
 
 export interface GameStateResponse {

@@ -29,6 +29,8 @@ import {
   type MoveOutcome,
   type PlanChangeReason,
 } from "./api/stateResponse.js";
+// STEP P-26: GET /api/game の起動条件(純粋関数)。
+import { shouldStartBackgroundAnalysisOnGet } from "./api/backgroundAnalysisTrigger.js";
 import { resolveEnginePath } from "./engine/enginePath.js";
 import { PrioritizedEngine } from "./engine/prioritizedEngine.js";
 import { isDevScenarioEnabled, isScenarioId } from "./engine/scenarioOpponentOpening.js";
@@ -62,6 +64,17 @@ let backgroundPlan: CachedReachablePlan | undefined;
 // 現在バックグラウンド解析が進行中の(局面, 選択中の目標形)の組み合わせ。
 // 同一局面かつ同一選択への二重起動を防ぐ(sfenだけでなく選択も変わったら別扱いにする)。
 let backgroundPlanKey: string | undefined;
+// STEP P-26((i)、司令塔承認済み): バックグラウンド解析が**失敗した**(キャッシュを
+// 書けなかった)キー。同じキーでGETから起動し直さないために1つだけ覚える。
+// runBackgroundPlanAnalysisはキャッシュを成功経路でしか書かないため、失敗すると
+// focusTextStateが"pending"のまま固定される。この歯止めが無いと、GETのたびに
+// 解析が起動し直し、失敗し続ける局面で再試行が止まらない(エンジンを掴む処理
+// なので、対局そのものの応答に影響しうる)。
+// **この歯止めはP-23を偶発的から確定的に変える**(一度失敗したらその局面では
+// 二度と③が出ない)。**web側が「まだ分かりません」を必ず出すことが前提である**
+// (docs/STEP_P-26_PLAN_2026-09-13.md 4.2)。
+// POST経路には掛けない(ユーザーの操作を黙って止めない)。
+let failedPlanKey: string | undefined;
 
 // Phase3 Unit1(計画崩れの検知のみ、人間承認済み)。直近のPOST /api/game/moveで
 // safeComputePlanChangeAfterMoveが判定した結果をここに保持し、以後のGET /api/game
@@ -151,7 +164,15 @@ async function runBackgroundPlanAnalysis(
       targetShapeIdAtTrigger,
       engine.asLowPriority(),
     );
-    if (!result) return; // 計算失敗(safeComputeReachablePlan側でconsole.error済み)
+    if (!result) {
+      // STEP P-26((i)): 失敗はキャッシュを書かないため、focusTextStateが
+      // "pending"のまま残る。同じキーでGETから起動し直さないよう覚える。
+      failedPlanKey = key;
+      console.error(
+        `バックグラウンド候補手解析が結果を返しませんでした(key=${key})。同じ局面・同じ選択では再起動しません(STEP P-26)。`,
+      );
+      return; // 計算失敗(safeComputeReachablePlan側でconsole.error済み)
+    }
 
     // 世代チェック: 解析完了時点で現在の対局状態が進んでいたら、この結果は
     // 古い局面に対するものなので破棄する(ユーザーが解析完了前に次の手を指した場合)。
@@ -169,11 +190,19 @@ async function runBackgroundPlanAnalysis(
         focusText: result.focusText,
       },
     };
+    // STEP P-26((i)): 書けたので、このキーについての失敗の記憶は解く。
+    if (failedPlanKey === key) failedPlanKey = undefined;
   } catch (err) {
     // getPrioritizedEngine()の失敗(エンジン起動・ハンドシェイク失敗等)を含め、
     // バックグラウンド解析のあらゆる失敗が未処理のPromise rejectionとして
     // 外へ漏れないようにする(対局そのものには影響させない)。
-    console.error("バックグラウンド候補手解析(runBackgroundPlanAnalysis)でエラーが発生しました:", err);
+    // STEP P-26((i)): 例外で落ちた場合もキャッシュは書けていないので、
+    // !resultの経路と同じく覚える。
+    failedPlanKey = key;
+    console.error(
+      `バックグラウンド候補手解析(runBackgroundPlanAnalysis)でエラーが発生しました(key=${key})。同じ局面・同じ選択では再起動しません(STEP P-26):`,
+      err,
+    );
   } finally {
     if (backgroundPlanKey === key) backgroundPlanKey = undefined;
   }
@@ -396,7 +425,14 @@ const server = createServer((req, res) => {
     // backgroundPlanKeyによるガードがPOST側と同様に防ぐ。
     const body = buildStateResponseWithPlan(state, backgroundPlan, {}, selectedTargetShapeId, lastPlanChanged, lastPlanChangeReason, lastMoveOutcome, lastBoardEvents);
 
-    if (body.plan.candidateMoveState === "pending") {
+    // STEP P-26(2026-09-13、司令塔承認済み): 起動条件にfocusTextStateを足した。
+    // 候補手が0件の局面ではcandidateMoveStateがキャッシュ無しで"unavailable"に
+    // 確定するため、従来の条件では誰も解析を始めず、③が「急ぐことがないか、
+    // いま確かめています。」のまま止まっていた(実機で再現。30秒経っても変わらず、
+    // エンジンは0本だった。docs/STEP_P-26_PLAN_2026-09-13.md 3.)。
+    // 判定はbackgroundAnalysisTrigger.tsの純粋関数へ切り出してある
+    // (server.tsには直接のテストが無いため)。
+    if (shouldStartBackgroundAnalysisOnGet(body.plan, planKey(state.sfen, selectedTargetShapeId), failedPlanKey)) {
       void runBackgroundPlanAnalysis(state, selectedTargetShapeId);
     }
 
@@ -419,6 +455,8 @@ const server = createServer((req, res) => {
     // POST /api/game/new自体はMultiPVを実行しない(従来どおり軽量なレスポンス)。
     backgroundPlan = undefined;
     backgroundPlanKey = undefined;
+    // STEP P-26((i)): 前の対局で覚えた失敗は、新しい対局へ持ち越さない。
+    failedPlanKey = undefined;
     selectedTargetShapeId = undefined;
     // Phase3 Unit1/Unit2(承認事項D): 新規対局開始時は計画崩れ状態・理由も
     // リセットする(両者は必ずペアで更新・リセットする)。
