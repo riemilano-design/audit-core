@@ -690,3 +690,31 @@ I-9 の局ごとの内訳: 現行・案3 = `10moves` 2 / 他 0。案1・案2 = `
 | 3 | **盤の緑と破線**(`square-shape-matched`・`board-mark-missing`) | 同じ `targetShapeProgress` | **消したくない** |
 
 **一つのフィールドに 3 つがぶら下がっているから、`null` にすると全部消える。この切り分けが、次の STEP の中身になる。測定はその前段である。**
+
+### 13.11 計測は `git worktree` の中で行う(**2026-09-12 に実測して確かめた**)
+
+**人間の問い**: **U6-H の測定そのものを worktree でやれないか。** 共有ツリーで 7 件にすると 5 件が赤くなり、他セッションは自分の変更のせいか確かめ直すことになる(**P-20 の実害そのもの**)。worktree なら隔離され、**共有ツリーは 3 件のまま一度も赤くならず、連絡も要らない**。
+
+**確かめた 3 点(実測。できた)**:
+
+| # | 確かめたこと | 結果 |
+|---|---|---|
+| (i) | **`node_modules` が要るか** | **要る。共有できる。** worktree には入らない(`.gitignore` の 1 行目)ので、**共有ツリーの 3 つをシンボリックリンクで貸す**(ルート・`apps/server`・`apps/web`)。`npm install` のやり直しは不要 |
+| (ii) | **将棋エンジンのパスが解決できるか** | **そのままでは解決できない。環境変数で解ける。** `apps/server/engine/` は Git 管理外なので worktree には出てこない。`resolveEnginePath()` は `SHOGI_ENGINE_PATH` を先に見る(`apps/server/src/engine/enginePath.ts`)ので、**共有ツリーのバイナリを指す**。実際に再生でき、`meta` 行の `enginePath` にも共有ツリーのパスが残った |
+| (iii) | **JSONL の出力先が共有ツリーを指さないか** | **指さない。** `replay.ts` は `--out` を省略すると `import.meta.url` から解いた**自分のツリーの `scripts/playtest/out/`** に書く。実測でも worktree の中に書かれ、**共有ツリーの `out/` には 1 ファイルも増えなかった** |
+
+**実測でやったこと**: `git worktree add --detach <path> HEAD` → `node_modules` を 3 つリンク → `u6a-drafts/` の 4 件を `data/shapes/` へ複製(7 件)→ `SHOGI_ENGINE_PATH` を渡して `replay.ts` を 1 局(`--nodes 20000`)→ **ready 行 11 件・`candidateMoveState` が `ready` 4 件 / `unavailable` 7 件**でエンジンが実際に動いたことを確認 → worktree で `vitest run` → **落ちるのは 13.8 の 5 件だけ** → `git worktree remove --force` → **共有ツリーの `data/shapes/` は 3 件のまま、`git status` に自分の差分なし**。
+
+**注意(実測で分かったこと)**: **worktree で `vitest` を回すときも `SHOGI_ENGINE_PATH` を渡す。** 渡さないと `usiEngine.smoke.test.ts` がバイナリを見つけられず `describe.skipIf` で**静かにスキップされる**(渡した場合 639 件、渡さない場合 638 件 + スキップ 1)。**スキップは赤にならないので気づきにくい。**
+
+**したがって 13.8 の手順を差し替える**(**共有ツリーを一度も赤くしない**):
+
+1. **着手のタイミング**は 13.8 の 1 と同じ(別セッションの A-2b のコミットを待つ)
+2. `git worktree add --detach <scratchpad>/wt-u6h HEAD`
+3. `node_modules` を 3 つシンボリックリンクで貸す(ルート・`apps/server`・`apps/web`)
+4. `u6a-drafts/` の 4 件を worktree の `data/shapes/` へ複製(7 件。**原始棒銀は入れない**)
+5. **worktree の中だけ**で `apps/server/src/api/stateResponse.ts` を変更し、`SHOGI_ENGINE_PATH` を渡して測る
+6. `git worktree remove --force` する前に、**worktree の差分をパッチとして取り出すか、共有ツリーへ同じ変更を書き直す**(**コミットは共有ツリーで、人間の承認を得てから**)
+7. **13.8 の 3(別セッションへの連絡)は不要になる。** 共有ツリーは 3 件のままで、一度も赤くならない
+
+**この結果の使い道**: **できたので、今後の標準手順にする**(人間の指示)。**`data/` を一時的に増やして測る作業は、共有ツリーではなく worktree で行う。** これは **P-20 の処遇を決めるときの材料**にもなる ― **テストを直さなくても、測るときに共有ツリーを赤くしない方法がある**(ただし **P-20 そのもの(実データに依存したテスト)は残る**。worktree は摩擦を隔離するだけで、依存を消すわけではない)。
