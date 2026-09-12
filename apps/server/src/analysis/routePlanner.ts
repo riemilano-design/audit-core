@@ -41,6 +41,9 @@ import type { Color, Role, Square } from "shogiops/types";
 import { isDrop, makeSquareName, opposite, parseSquareName, parseUsi } from "shogiops/util";
 import { getLegalMoves } from "../rules/legalMoves.js";
 import { parsePosition } from "../rules/sfenPosition.js";
+// STEP U6-S: 盤の81マス。以前はこのファイルに同じ集合を持っていたが、
+// analysis/pvMaterials.ts にも同じものがあり、片方だけ直る状態になっていた。
+import { BOARD_SQUARES } from "../rules/boardSquares.js";
 import { japaneseToRole, UnknownPieceNameError } from "./pieceMapping.js";
 import type { ShapeFormationResult } from "./shapeFormationAnalyzer.js";
 import { getShapes, type ShapeDefinition } from "./shapeRepository.js";
@@ -184,30 +187,6 @@ export interface ShapeRoutePlanResult {
 export interface PlanRoutesOptions {
   shapes?: ShapeDefinition[];
 }
-
-/**
- * 実際に盤上に存在する81マスの集合。
- *
- * shogiopsのattacks()は、盤の内部表現(1段=16マス幅)の都合上、盤の外にあたるマスを
- * 含んだ利きを返すことがある(例: 5iの銀の「後ろ斜め」として、九段目より下の6j・4jが
- * 返る)。Positionの合法手生成は内部でこれを盤の範囲に絞っているが、本モジュールは
- * attacks()を直接使うため、自分で盤の外を除外する必要がある
- * (除外しないと「３九→４八→５九→6j→７九→７八」のように、存在しないマスを
- * 通り抜ける経路が作られ、手数も実際より短く出てしまう)。
- *
- * 盤の範囲は docs/DATA_MODEL.md の座標表記の規約(筋1〜9・段a〜i)そのままで、
- * 段の内部的な幅などの実装詳細には依存しない形で組み立てる。
- */
-const BOARD_SQUARES: SquareSet = (() => {
-  let squares = SquareSet.empty();
-  for (const file of "123456789") {
-    for (const rank of "abcdefghi") {
-      const square = parseSquareName(`${file}${rank}`);
-      if (square !== undefined) squares = squares.with(square);
-    }
-  }
-  return squares;
-})();
 
 function emptyResult(shapeId: string, unresolvedReason: RouteUnresolvedReason): ShapeRoutePlanResult {
   return { shapeId, routes: [], candidateMoves: [], unresolvedReason };

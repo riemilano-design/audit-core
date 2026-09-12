@@ -35,6 +35,10 @@ import { isLegalMove } from "../rules/legalMoves.js";
 import { listAttackedPieces } from "../rules/attackedPieces.js";
 import { isInCheck } from "../rules/gameStatus.js";
 import { parsePosition } from "../rules/sfenPosition.js";
+// STEP U6-S: 盤の81マス。このファイルが自前で持っていた同じ集合を、
+// analysis/routePlanner.ts と共有する1か所へ移した(冒頭コメントが
+// 「共通化は既存ファイルに触るので別STEPの判断とする」としていた件)。
+import { BOARD_SQUARES } from "../rules/boardSquares.js";
 import { normalizeRole } from "./pieceThreatDetector.js";
 
 export { InvalidSfenError } from "../rules/sfenPosition.js";
@@ -66,39 +70,6 @@ export interface PvMaterialRules {
 
 /** 材料12で数える「線で利く駒」。成香・成銀等は金と同じ動きなので含めない。 */
 const SLIDING_ROLES: Role[] = ["rook", "bishop", "lance", "dragon", "horse"];
-
-/**
- * 実際に盤上に存在する81マスの集合。
- *
- * shogiopsのattacks()は、盤の内部表現(1段=16マス幅)の都合上、盤の外にあたるマスを
- * 含んだ利きを返す。本モジュールで実測した例(空の盤・先手):
- * - 9九の角 → size() は 29 を返す(実際の利きは8マス)。10j・16b・2p 等を含む
- * - 5五の飛 → size() は 23 を返す(実際は16マス)。16e 等を含む
- *
- * **線で利く駒だけの問題ではない。** 玉も隅では盤外を返す(9九の玉は素の size() が 8、
- * 交差後は 3)。ただし countKingNeighbors は最後に「自分の駒」と交差させており、
- * **盤外の升には駒が置けない**ため数には出ない(あちらの交差は現状では冗長である)。
- * **将来 空き升を数える形に変えるなら、あちらの交差が効き始める。**
- * いま実際に数が狂うのは材料12(利きの升数をそのまま数える)であり、
- * **素の size() を信じると線で利く駒だけが静かに過大になる。**
- *
- * **同じ集合が analysis/routePlanner.ts にもある**(あちらは経路探索で同じ罠を踏むため)。
- * あちらは module-local で export されておらず、本STEPは既存ファイルを変更しない方針の
- * ため、ここでは同じ作り方で持つ。**共通化は既存ファイルに触るので別STEPの判断とする。**
- *
- * 盤の範囲は docs/DATA_MODEL.md の座標表記の規約(筋1〜9・段a〜i)そのままで、
- * 段の内部的な幅などの実装詳細には依存しない形で組み立てる(routePlanner.ts と同じ)。
- */
-const BOARD_SQUARES: SquareSet = (() => {
-  let squares = SquareSet.empty();
-  for (const file of "123456789") {
-    for (const rank of "abcdefghi") {
-      const square = parseSquareName(`${file}${rank}`);
-      if (square !== undefined) squares = squares.with(square);
-    }
-  }
-  return squares;
-})();
 
 /** 起きた手の位置と、どちらが指したか。`byUs` は root 局面の手番から見た「こちら」。 */
 export interface PvEventRef {
