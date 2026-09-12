@@ -49,6 +49,8 @@ import { listAttackedPieces } from "../rules/attackedPieces.js";
 import { detectPieceThreats } from "../analysis/pieceThreatDetector.js";
 import { explainPieceThreats, type PieceThreatMessage } from "../analysis/pieceThreatExplanation.js";
 import { detectEscapeSquareThreats, summarizeEscapeSquareThreatsForSquare } from "../analysis/escapeSquareThreat.js";
+import { measureEngineReference } from "../analysis/engineReference.js";
+import { explainPieceThreatFocus } from "../analysis/pieceThreatFocusExplanation.js";
 import {
   explainCaptureSummary,
   type CaptureSummaryMessage,
@@ -337,6 +339,18 @@ export interface ReachablePlanBody {
   resolvedTargetShapeId: string | null;
   /** [3]「なぜそれが重要か」に出す、完成した自分の形の弱点。該当が無ければnull。 */
   shapeWeakness: ShapeWeaknessBody | null;
+  /**
+   * STEP 5-F(A-2b): ③(相手の次の狙い)の文
+   * (analysis/pieceThreatFocusExplanation.tsのexplainPieceThreatFocusの結果)。
+   * candidateMoveState/candidateMoveの有無とは独立に計算・反映する
+   * (H-9: 候補手が0件の局面でも③は黙らない)。
+   * optionalにしているのは、この項目を知らない既存の呼び出し側(型定義のみを
+   * 満たす手書きのテスト用オブジェクト等)を壊さないため。undefined/nullのどちらも
+   * 「このAPIのこの仕組みからは何も足さない(既存の表示のまま)」を意味する
+   * (バックグラウンド解析が未完了の場合・focusEngineを使わなかった場合・
+   * explainPieceThreatFocusがnullを返した場合(H-2のmate、H-3bの(A))のいずれも同じ扱い)。
+   */
+  focusText?: string | null;
   /** [0]「今すぐ対処が必要なこと」に出すメッセージ。該当が無ければ空配列
    * (partitionUrgentMessages参照。文言はすべて既存のもの)。 */
   urgentMessages: { kind: string; text: string }[];
@@ -383,6 +397,15 @@ export interface CachedReachablePlan {
   plan: {
     reachableShapes: RankedReachableShape[];
     candidateMove: CandidateMoveExplanationResult | undefined;
+    /**
+     * STEP 5-F(A-2b): ③(相手の次の狙い)の文
+     * (analysis/pieceThreatFocusExplanation.tsのexplainPieceThreatFocusの結果)。
+     * computeReachablePlanにfocusEngineを渡さなかった場合はundefined
+     * (③のこの仕組みからは何も計算していない)。nullは「出さない」と決めた場合
+     * (H-2のmate、H-3bの(A))。undefined/nullのどちらも「既存の表示のまま」を意味する
+     * (計画書9.10のH-7、実装時の合意)。
+     */
+    focusText?: string | null;
   };
 }
 
@@ -1562,6 +1585,14 @@ export function buildStateResponseWithPlan(
     candidateMove = undefined;
   }
 
+  // STEP 5-F(A-2b、H-9): ③(相手の次の狙い)はcandidateMoveState/hasCandidateMovesとは
+  // 独立に、現在の局面(sfen)に対するcachedPlanから読む。候補手が0件の局面
+  // (routePlanner.tsが対象を返せない・目標形未選択等)でも③は黙らないようにするため、
+  // hasCandidateMovesによる分岐(上記if/else if/else)には入れない。sfenが一致しない
+  // (stale)場合・cachedPlanが無い場合はnull(既存の表示のまま)。
+  const focusText: string | null =
+    cachedPlan && cachedPlan.sfen === current.sfen ? (cachedPlan.plan.focusText ?? null) : null;
+
   // STEP 5-1(A-1、人間承認済み): 候補手が安全確認(candidateMoveReferenceFilter.ts)で
   // 全件除外された、という機械的な事実。新しい将棋知識・閾値・エンジン呼び出しは
   // 使わず、既に確定した判定結果(candidateMoveState/candidateMove.notReadyReason)を
@@ -1657,6 +1688,7 @@ export function buildStateResponseWithPlan(
       shapeWeakness: base.status.isEnd ? null : toShapeWeakness(context?.shapeResults),
       planChanged,
       planChangeReason,
+      focusText,
     },
   };
 }
@@ -1674,19 +1706,33 @@ export function buildStateResponseWithPlan(
  * shapeId(選択されていなければundefined。Phase 7 Unit 0でranked[0]への
  * 自動フォールバックを廃止した。目標形は選ぶまで存在しない)であり、
  * 呼び出し元(server.ts)がCachedReachablePlanの世代識別子として保持する。
+ *
+ * focusEngine(STEP 5-F、A-2b)は③(相手の次の狙い)の計算専用のエンジンハンドル。
+ * 省略した場合は③を計算しない(戻り値のfocusTextはundefined)。人間決定(H-9)に
+ * より、engine(候補手の安全確認用)とは独立した別ハンドルを渡すこと
+ * (asLowPriority()を呼ぶたびに独立したクロージャが返るため、MultiPVの設定が
+ * 安全確認側へ持ち越されない。計画書9.6)。
  */
 export async function computeReachablePlan(
   current: GameState,
   engine: LowPriorityEngine,
   options: StateResponseOptions = {},
   selectedTargetShapeId?: string,
+  focusEngine?: LowPriorityEngine,
 ): Promise<{
   reachableShapes: RankedReachableShape[];
   candidateMove: CandidateMoveExplanationResult | undefined;
   targetShapeId: string | undefined;
+  focusText?: string | null;
 }> {
   const context = computeRankedPlanContext(current, options, selectedTargetShapeId);
   const routePlanResult = context.routePlanResult;
+
+  // STEP 5-F(A-2b、H-9、人間決定): ③は、候補手が1件も無い局面で
+  // checkCandidateMovesSafetyが呼ばれない下の早期returnより前に計算する。
+  // 使い回さずに独立して計算することで、候補手が0件の局面(H-9で観測された
+  // 「15手中0件」の局面)でも③が黙らないようにする。
+  const focusText = await computeFocusText(current, focusEngine);
 
   // STEP 4-5(X-1、人間承認済み): 終局または王手中は、候補手のMultiPV参考評価
   // (checkCandidateMovesSafety)を一切起動しない。判定はrules/gameStatus.tsの
@@ -1698,12 +1744,42 @@ export async function computeReachablePlan(
       reachableShapes: context.reachableShapes,
       candidateMove: undefined,
       targetShapeId: context.resolvedTargetShapeId,
+      focusText,
     };
   }
 
   const safetyCheck = await checkCandidateMovesSafety(current.sfen, routePlanResult.candidateMoves, engine);
   const candidateMove = explainRouteCandidateMoves(routePlanResult, context.shapeResults, safetyCheck);
-  return { reachableShapes: context.reachableShapes, candidateMove, targetShapeId: context.resolvedTargetShapeId };
+  return {
+    reachableShapes: context.reachableShapes,
+    candidateMove,
+    targetShapeId: context.resolvedTargetShapeId,
+    focusText,
+  };
+}
+
+/**
+ * STEP 5-F(A-2b): ③(相手の次の狙い)の文を計算する。focusEngineが無ければ
+ * 計算しない(undefined)。帯(urgentMessagesのkind==="piece_attacked")の一覧は
+ * toPieceThreatMessagesの結果をそのまま使う(帯の判定を複製しない)。
+ * エンジン呼び出し・帯の計算いずれの失敗も対局を止めない
+ * (safeComputeReachablePlanと同じ「失敗時はconsole.errorのみ」という既存方針)。
+ */
+async function computeFocusText(
+  current: GameState,
+  focusEngine: LowPriorityEngine | undefined,
+): Promise<string | null | undefined> {
+  if (!focusEngine) return undefined;
+  try {
+    const engineReference = await measureEngineReference(current.sfen, focusEngine);
+    const bandSquares = toPieceThreatMessages(current, isGameOver(current.sfen))
+      .filter((message) => message.kind === "piece_attacked")
+      .map((message) => message.square);
+    return explainPieceThreatFocus({ engineReference, bandSquares, sfen: current.sfen });
+  } catch (err) {
+    console.error("③(相手の次の狙い、STEP 5-F)の計算でエラーが発生しました:", err);
+    return null;
+  }
 }
 
 /**
@@ -1716,12 +1792,18 @@ export async function safeComputeReachablePlan(
   engine: LowPriorityEngine,
   options: StateResponseOptions = {},
   selectedTargetShapeId?: string,
+  focusEngine?: LowPriorityEngine,
 ): Promise<
-  | { reachableShapes: RankedReachableShape[]; candidateMove: CandidateMoveExplanationResult | undefined; targetShapeId: string | undefined }
+  | {
+      reachableShapes: RankedReachableShape[];
+      candidateMove: CandidateMoveExplanationResult | undefined;
+      targetShapeId: string | undefined;
+      focusText?: string | null;
+    }
   | undefined
 > {
   try {
-    return await computeReachablePlan(current, engine, options, selectedTargetShapeId);
+    return await computeReachablePlan(current, engine, options, selectedTargetShapeId, focusEngine);
   } catch (err) {
     console.error("候補手プラン計算(⑧, candidateMoveSafetyCheck/candidateMoveExplanation)でエラーが発生しました:", err);
     return undefined;

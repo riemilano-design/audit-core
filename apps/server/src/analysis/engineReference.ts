@@ -2,8 +2,11 @@
 // 関数として実装された(scripts/playtest/lib/engineReference.ts)。
 // STEP 5-F(docs/STEP_5-F_PLAN_2026-09-12.md 4. A-1)で、本番の③(何が重要か)を
 // 作るために本番側(apps/server/src/analysis/)へ移設した(算法を二重に持たない
-// ため。2026-09-12人間の確認)。関数のシグネチャ・返り値の形・計算の中身は
-// 移設前から変えていない。
+// ため。2026-09-12人間の確認)。移設時点では関数のシグネチャ・返り値の形・
+// 計算の中身は変えていない(A-1)。その後A-2b(9.3)で、measureEngineReferenceの
+// 第3引数(nodes)を必須からoptionalへ変えた(本番はmovetime既定で呼ぶため。
+// 「nodesで固定しない」という人間決定に従う)。EngineReferenceの返り値の形
+// (nodesフィールドの型・存在)は変えていない。
 // 本番関数(rules/gameStatus.ts の isGameOver/isInCheck、rules/sfenPosition.ts の
 // parsePosition)は import して呼ぶだけで、複製・改変はしない。
 // 将棋の判断(良し悪し)・新しい閾値はここでは一切行わない。
@@ -13,13 +16,13 @@
 // 行わない(そちらはSTEP 5-Fの他のファイルの管轄)。
 // 本番側の別の閾値(analysis/candidateMoveReferenceFilter.tsの300cp)とは無関係。
 // ハーネス側では、I-7(draft、scripts/playtest/invariants/i7-urgent-but-other-talk.ts)
-// の判定材料としても引き続き使われる。
+// の判定材料としても引き続き使われる(nodesを指定して呼ぶため、挙動は変わらない)。
 
 import { parseSquareName } from "shogiops/util";
 import { isGameOver, isInCheck } from "../rules/gameStatus.js";
 import { parsePosition } from "../rules/sfenPosition.js";
 import type { LowPriorityEngine } from "../engine/prioritizedEngine.js";
-import type { MultiPvGoResult } from "../engine/usiEngine.js";
+import type { GoOptions, MultiPvGoResult } from "../engine/usiEngine.js";
 
 /** USI形式の指し手(ドロップではない)から移動先マスを取り出す(成り"+"は無視)。
  * scripts/playtest/lib/players.tsのtoSquareOfと同じ実装(移設に伴い、共有
@@ -88,7 +91,7 @@ function sideFromMultiPv(result: MultiPvGoResult): EngineReferenceSide {
 }
 
 /**
- * sfen(先手番の局面)について、(1) 現局面をMultiPV1・固定nodesで読んだ結果
+ * sfen(先手番の局面)について、(1) 現局面をMultiPV1で読んだ結果
  * (baseline、先手視点)、(2) 手番を入れ替えた局面(passSfen)を同条件で読んだ結果
  * (afterPass、後手視点)、(3) afterPass.bestmoveの移動先に先手の駒があるか
  * (captureSquare)、(4) 両方cpのときのdropCpを組み立てて返す。
@@ -96,24 +99,33 @@ function sideFromMultiPv(result: MultiPvGoResult): EngineReferenceSide {
  * 測らない場合(null を返す): 終局(isGameOver)、先手が王手中
  * (isInCheck(sfen, "sente")。パスが成立しない)、エンジンの例外・タイムアウト
  * (try/catchで握りつぶす。原因を推測しない)。
+ *
+ * 【探索条件について(STEP 5-F 9.3、人間決定)】
+ * nodesを省略した場合はgo movetime(engine.goMultiPvの既定、2000ms)で探索する。
+ * これが本番(analysis/pieceThreatFocusExplanation.tsが使う③)の呼び方であり、
+ * 「nodesで固定しない」という人間決定に従う。nodesを指定した場合は`go nodes N`で
+ * 固定する(ハーネス、scripts/playtest/lib/recorder.tsのreferenceEngineが使う。
+ * 回帰用の再現性のため既存どおりnodesを渡す)。
  */
 export async function measureEngineReference(
   sfen: string,
   engine: LowPriorityEngine,
-  nodes: number,
+  nodes?: number,
 ): Promise<EngineReference | null> {
   try {
     if (isGameOver(sfen)) return null;
     if (isInCheck(sfen, "sente")) return null;
 
+    const goOptions: GoOptions = nodes !== undefined ? { nodes } : {};
+
     engine.setMultiPv(1);
     engine.position(sfen);
-    const baseline = sideFromMultiPv(await engine.goMultiPv({ nodes }));
+    const baseline = sideFromMultiPv(await engine.goMultiPv(goOptions));
 
     const passedSfen = passSfen(sfen);
     engine.setMultiPv(1);
     engine.position(passedSfen);
-    const afterPassSide = sideFromMultiPv(await engine.goMultiPv({ nodes }));
+    const afterPassSide = sideFromMultiPv(await engine.goMultiPv(goOptions));
 
     const captureSquare = captureSquareOf(sfen, afterPassSide.bestmove);
     const dropCp =
@@ -125,7 +137,10 @@ export async function measureEngineReference(
       baseline,
       afterPass: { ...afterPassSide, captureSquare },
       dropCp,
-      nodes,
+      // nodesを省略した場合(movetime探索)は0にする。EngineReference.nodesの型・
+      // 存在は変えない(STEP 5-F 9.3の制約)。このフィールドを読むのはハーネスの
+      // 記録用途(scripts/playtest)のみで、本番(③)はこの値を読まない。
+      nodes: nodes ?? 0,
     };
   } catch {
     return null;

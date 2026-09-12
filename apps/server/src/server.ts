@@ -139,7 +139,18 @@ async function runBackgroundPlanAnalysis(
   backgroundPlanKey = key;
   try {
     const engine = await getPrioritizedEngine();
-    const result = await safeComputeReachablePlan(current, engine.asLowPriority(), {}, targetShapeIdAtTrigger);
+    // STEP 5-F(A-2b、H-9・9.6、人間決定): ③(相手の次の狙い)用に、候補手の安全確認
+    // (checkCandidateMovesSafety)とは別のLowPriorityEngineハンドルを渡す。
+    // asLowPriority()は呼び出しごとに独立したクロージャ(pendingMultiPv等)を返すため、
+    // 別ハンドルにすることで③のMultiPV設定が安全確認側へ持ち越されない
+    // (engine/prioritizedEngine.ts参照)。
+    const result = await safeComputeReachablePlan(
+      current,
+      engine.asLowPriority(),
+      {},
+      targetShapeIdAtTrigger,
+      engine.asLowPriority(),
+    );
     if (!result) return; // 計算失敗(safeComputeReachablePlan側でconsole.error済み)
 
     // 世代チェック: 解析完了時点で現在の対局状態が進んでいたら、この結果は
@@ -152,7 +163,11 @@ async function runBackgroundPlanAnalysis(
     backgroundPlan = {
       sfen: current.sfen,
       targetShapeId: result.targetShapeId,
-      plan: { reachableShapes: result.reachableShapes, candidateMove: result.candidateMove },
+      plan: {
+        reachableShapes: result.reachableShapes,
+        candidateMove: result.candidateMove,
+        focusText: result.focusText,
+      },
     };
   } catch (err) {
     // getPrioritizedEngine()の失敗(エンジン起動・ハンドシェイク失敗等)を含め、

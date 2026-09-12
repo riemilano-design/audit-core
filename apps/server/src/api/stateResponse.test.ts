@@ -525,6 +525,43 @@ describe("buildStateResponseWithPlan", () => {
     expect(response.plan.candidateMove?.explanations.map((e) => e.move)).toEqual(["3i2h"]);
   });
 
+  it("cachedPlanにfocusTextがある場合、候補手がunavailable(未選択)でもresponse.plan.focusTextに反映される(STEP 5-F, H-9)", () => {
+    const sfen = honminoOneMoveFromCompleteSfen();
+    const state = customGameState(sfen);
+    const cachedPlan: CachedReachablePlan = {
+      sfen,
+      targetShapeId: undefined,
+      plan: {
+        reachableShapes: [],
+        candidateMove: undefined,
+        focusText: "このまま何もしないと、あなたの２八の飛が取られる可能性があります。",
+      },
+    };
+
+    // 目標形を選択しないため候補手はunavailableになるが、③(focusText)は
+    // candidateMoveの有無とは独立に反映されること(H-9の核心)。
+    const response = buildStateResponseWithPlan(state, cachedPlan, { initialSfen: sfen });
+
+    expect(response.plan.candidateMoveState).toBe("unavailable");
+    expect(response.plan.focusText).toBe("このまま何もしないと、あなたの２八の飛が取られる可能性があります。");
+  });
+
+  it("cachedPlanが無い場合・sfenが一致しない(stale)場合、response.plan.focusTextはnullになる", () => {
+    const sfen = honminoOneMoveFromCompleteSfen();
+    const state = customGameState(sfen);
+
+    const withoutCache = buildStateResponseWithPlan(state, undefined, { initialSfen: sfen });
+    expect(withoutCache.plan.focusText).toBeNull();
+
+    const staleCachedPlan: CachedReachablePlan = {
+      sfen: DEFAULT_INITIAL_SFEN,
+      targetShapeId: undefined,
+      plan: { reachableShapes: [], candidateMove: undefined, focusText: "古い局面の文言" },
+    };
+    const withStale = buildStateResponseWithPlan(state, staleCachedPlan, { initialSfen: sfen });
+    expect(withStale.plan.focusText).toBeNull();
+  });
+
   it("cachedPlanのsfenが現在の局面と一致しない(stale)場合は無視し、pending/unavailableとして扱う", () => {
     const sfen = honminoOneMoveFromCompleteSfen();
     const state = customGameState(sfen);
@@ -903,6 +940,43 @@ describe("computeReachablePlan / safeComputeReachablePlan", () => {
 
     expect(result.candidateMove).toBeUndefined();
     expect(engine.goMultiPv).not.toHaveBeenCalled();
+  });
+
+  // STEP 5-F(A-2b)。③(相手の次の狙い)の配線テスト。
+  describe("focusText(STEP 5-F, A-2b)", () => {
+    it("focusEngineを渡さない場合、focusTextはundefinedになる(engineには一切問い合わせない)", async () => {
+      const state = gameStateAfter(["7g7f"]);
+      const engine = makeMockLowPriorityEngine([]);
+
+      const result = await computeReachablePlan(state, engine);
+
+      expect(result.focusText).toBeUndefined();
+    });
+
+    it("候補手が0件の局面でも、focusEngineを渡せば③(focusText)が計算される(H-9の核心)", async () => {
+      // 玉(5i)・飛(2h)のみのsente、玉(5a)のみのgote。目標形を選択していないため
+      // (selectedTargetShapeId省略)、候補手は計算されない(既存のunavailableと同じ経路)。
+      const sfen = customSfen([
+        { square: "5i", color: "sente", role: "king" },
+        { square: "2h", color: "sente", role: "rook" },
+        { square: "5a", color: "gote", role: "king" },
+      ]);
+      const state = customGameState(sfen);
+      // 安全確認(candidateMoveSafetyCheck)側のengineには一切問い合わせが行かないこと。
+      const engine = makeMockLowPriorityEngine([]);
+      // ③専用のfocusEngine(baseline→afterPassの順で2回呼ばれる)。
+      const focusEngine = makeMockLowPriorityEngine([
+        multiPvResult([{ multipv: 1, score: { type: "cp", value: 0 }, pv: [] }]), // baseline
+        multiPvResult([{ multipv: 1, score: { type: "cp", value: 400 }, pv: [] }], "8h2h"), // afterPass(dropCp=400、bestmoveの移動先2hに自分の飛がいる)
+      ]);
+
+      const result = await computeReachablePlan(state, engine, { initialSfen: sfen }, undefined, focusEngine);
+
+      expect(result.candidateMove).toBeUndefined(); // 候補手は依然として0件のまま
+      expect(engine.goMultiPv).not.toHaveBeenCalled(); // 安全確認側は呼ばれない
+      expect(focusEngine.goMultiPv).toHaveBeenCalledTimes(2); // baseline + afterPassの2回
+      expect(result.focusText).toBe("このまま何もしないと、あなたの２八の飛が取られる可能性があります。");
+    });
   });
 
   it("同一入力に対して常に同じ結果を返す(決定的)", async () => {
