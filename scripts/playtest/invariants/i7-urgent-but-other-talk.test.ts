@@ -13,6 +13,9 @@ function basePlan(): ReachablePlanBody {
     lastMoveOutcome: null,
     nextConsiderations: [],
     candidateMoveState: "unavailable",
+    // STEP 5-F(A-3): ③の背景解析の状態。この土台は③について何も言わないため
+    // "pending"(まだ計算していない)を既定にする。
+    focusTextState: "pending",
     candidateMove: undefined,
     pendingReviewNote: null,
     resolvedTargetShapeId: null,

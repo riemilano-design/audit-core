@@ -562,6 +562,82 @@ describe("buildStateResponseWithPlan", () => {
     expect(withStale.plan.focusText).toBeNull();
   });
 
+  // STEP 5-F(A-3、人間承認済み。H-15): focusTextのnullは「まだ計算していない」と
+  // 「計算した結果、言うことが無い」の2つを兼ねていた。focusTextStateはこれを分ける。
+  // 人間の指示により、cachedPlanの3通り(無し / 古いsfen / 一致)を数えて確かめる。
+  describe("focusTextState(STEP 5-F, A-3)", () => {
+    it("cachedPlanが無いときは\"pending\"(まだ計算していない)", () => {
+      const sfen = honminoOneMoveFromCompleteSfen();
+      const response = buildStateResponseWithPlan(customGameState(sfen), undefined, {
+        initialSfen: sfen,
+      });
+      expect(response.plan.focusTextState).toBe("pending");
+    });
+
+    it("cachedPlanのsfenが古いときも\"pending\"(前の局面の解析は答えになっていない)", () => {
+      const sfen = honminoOneMoveFromCompleteSfen();
+      const staleCachedPlan: CachedReachablePlan = {
+        sfen: DEFAULT_INITIAL_SFEN,
+        targetShapeId: undefined,
+        plan: { reachableShapes: [], candidateMove: undefined, focusText: "古い局面の文言" },
+      };
+      const response = buildStateResponseWithPlan(customGameState(sfen), staleCachedPlan, {
+        initialSfen: sfen,
+      });
+      expect(response.plan.focusTextState).toBe("pending");
+      expect(response.plan.focusText).toBeNull();
+    });
+
+    it("cachedPlanのsfenが一致すれば\"ready\"", () => {
+      const sfen = honminoOneMoveFromCompleteSfen();
+      const cachedPlan: CachedReachablePlan = {
+        sfen,
+        targetShapeId: undefined,
+        plan: {
+          reachableShapes: [],
+          candidateMove: undefined,
+          focusText: "このまま何もしないと、あなたの２八の飛が取られる可能性があります。",
+        },
+      };
+      const response = buildStateResponseWithPlan(customGameState(sfen), cachedPlan, {
+        initialSfen: sfen,
+      });
+      expect(response.plan.focusTextState).toBe("ready");
+    });
+
+    // ここが新しい欄の存在理由そのもの。解析は終わっているが、言うことが無い
+    // (王手中・終局・詰み・帯1件と同じマスの重複)。画面はこのとき「計算中」の文を
+    // 出してはいけない ―― 確かめていないのに確かめていると言うことになるため。
+    it("sfenが一致していればfocusTextがnullでも\"ready\"(計算した結果、言うことが無い)", () => {
+      const sfen = honminoOneMoveFromCompleteSfen();
+      const cachedPlan: CachedReachablePlan = {
+        sfen,
+        targetShapeId: undefined,
+        plan: { reachableShapes: [], candidateMove: undefined, focusText: null },
+      };
+      const response = buildStateResponseWithPlan(customGameState(sfen), cachedPlan, {
+        initialSfen: sfen,
+      });
+      expect(response.plan.focusTextState).toBe("ready");
+      expect(response.plan.focusText).toBeNull();
+    });
+
+    it("focusTextとfocusTextStateは同じ判定から決まる(readyなのに文だけ落ちる、が起きない)", () => {
+      const sfen = honminoOneMoveFromCompleteSfen();
+      const text = "このまま何もしないと、あなたの２八の飛が取られる可能性があります。";
+      const cachedPlan: CachedReachablePlan = {
+        sfen,
+        targetShapeId: undefined,
+        plan: { reachableShapes: [], candidateMove: undefined, focusText: text },
+      };
+      const response = buildStateResponseWithPlan(customGameState(sfen), cachedPlan, {
+        initialSfen: sfen,
+      });
+      expect(response.plan.focusTextState).toBe("ready");
+      expect(response.plan.focusText).toBe(text);
+    });
+  });
+
   it("cachedPlanのsfenが現在の局面と一致しない(stale)場合は無視し、pending/unavailableとして扱う", () => {
     const sfen = honminoOneMoveFromCompleteSfen();
     const state = customGameState(sfen);
@@ -2756,6 +2832,23 @@ describe("STEP 4-5: 終局・王手中の表示", () => {
     expect(response.plan.directionNote).toBeNull();
     // 成果監査REVISE(W-1の漏れ): 終局時は[3](shapeWeakness)も出さない。
     expect(response.plan.shapeWeakness).toBeNull();
+  });
+
+  // STEP 5-F(A-3): 終局時はfocusTextStateを"ready"(言うことが無い)に倒す。
+  // 素通しにすると、最終手の応答は必ず"pending"になり(cachedPlanが最終局面に
+  // 追いつく前)、③に「急ぐことがないか、いま確かめています。」が出たまま残る。
+  // 終局後は再取得しない(web側のshouldRetryPlanRefreshがisEndで止まる)ため、
+  // その文は消えない。coach・shapeWeaknessと同じガードをここにも置く。
+  it('A-3: 終局時はfocusTextStateが"ready"になり、③に「計算中」の文が残らない', () => {
+    const sfen = selfCheckmateSfen();
+    const state: GameState = { sfen, moveHistory: [], forcedPliesUsed: 0 };
+
+    // cachedPlanが無い(＝素通しなら"pending"になる)状況でも"ready"であること。
+    const response = buildStateResponseWithPlan(state, undefined, { initialSfen: sfen });
+
+    expect(response.status.isEnd).toBe(true);
+    expect(response.plan.focusTextState).toBe("ready");
+    expect(response.plan.focusText).toBeNull();
   });
 
   it("2: 相手を詰ませた局面では、urgentMessagesに詰みの文(相手側)だけが入る", () => {

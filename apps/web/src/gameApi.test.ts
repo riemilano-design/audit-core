@@ -176,52 +176,61 @@ describe("shouldShowNextConsiderations", () => {
 // 将棋の判断は一切持たない。
 describe("shouldRetryPlanRefresh", () => {
   it('"pending"の間はリトライする', () => {
-    expect(shouldRetryPlanRefresh({ candidateMoveState: "pending" }, 1)).toBe(true);
-  });
-
-  it('"ready"になり、③(focusText)も載っていればリトライしない', () => {
-    expect(shouldRetryPlanRefresh({ candidateMoveState: "ready", focusText: "…" }, 1)).toBe(false);
-  });
-
-  it('"unavailable"(そもそも候補手が無い)でも、③が載っていればリトライしない', () => {
-    expect(shouldRetryPlanRefresh({ candidateMoveState: "unavailable", focusText: "…" }, 1)).toBe(
-      false,
-    );
-  });
-
-  // STEP 5-F(A-2c): ここが今回足した条件。固定棋譜4局59行のうち47行が
-  // 「候補手0件＝最初から"unavailable"」で、⑧の条件だけでは再取得が一度も走らず、
-  // 背景解析で後から載るfocusTextが画面に届かなかった。
-  it('"unavailable"でも、③がまだ載っていなければリトライする', () => {
-    expect(shouldRetryPlanRefresh({ candidateMoveState: "unavailable", focusText: null }, 1)).toBe(
+    expect(shouldRetryPlanRefresh({ candidateMoveState: "pending", focusTextState: "pending" }, 1)).toBe(
       true,
     );
   });
 
-  it("欄そのものが無い(古いサーバー)場合も、まだ載っていないものとして扱う", () => {
-    expect(shouldRetryPlanRefresh({ candidateMoveState: "unavailable" }, 1)).toBe(true);
+  it('"ready"になり、③も計算済みならリトライしない', () => {
+    expect(shouldRetryPlanRefresh({ candidateMoveState: "ready", focusTextState: "ready" }, 1)).toBe(
+      false,
+    );
+  });
+
+  // STEP 5-F(A-2c): 固定棋譜4局59行のうち47行が「候補手0件＝最初から"unavailable"」で、
+  // ⑧の条件だけでは再取得が一度も走らず、背景解析で後から載るfocusTextが画面に
+  // 届かなかった。
+  it('"unavailable"でも、③がまだ計算されていなければリトライする', () => {
+    expect(
+      shouldRetryPlanRefresh({ candidateMoveState: "unavailable", focusTextState: "pending" }, 1),
+    ).toBe(true);
+  });
+
+  // STEP 5-F(A-3): ここが今回変わった判定。A-2cではfocusTextがnullかどうかで
+  // 見ていたため、「計算した結果、言うことが無い」行(王手中・終局・詰み)でも
+  // 上限まで回り続けていた。focusTextStateを主たる判定にしたので1回で止まる。
+  it('"ready"なら、③の文が無くてもリトライしない(計算した結果、言うことが無い)', () => {
+    expect(
+      shouldRetryPlanRefresh({ candidateMoveState: "unavailable", focusTextState: "ready" }, 1),
+    ).toBe(false);
   });
 
   it("③だけを待つときの上限は⑧より小さい(待つ対象が1回の探索だけのため)", () => {
     expect(FOCUS_TEXT_REFRESH_MAX_ATTEMPTS).toBeLessThan(PLAN_REFRESH_MAX_ATTEMPTS);
     expect(
       shouldRetryPlanRefresh(
-        { candidateMoveState: "unavailable", focusText: null },
+        { candidateMoveState: "unavailable", focusTextState: "pending" },
         FOCUS_TEXT_REFRESH_MAX_ATTEMPTS - 1,
       ),
     ).toBe(true);
+  });
+
+  // 上限は保険である(人間決定H-17)。背景解析が失敗した局面はキャッシュが書かれず
+  // (server.ts:163は成功経路にしかない)、focusTextStateが"pending"のまま固定される。
+  // 時間で打ち切らないと「急ぐことがないか、いま確かめています。」が残り続ける。
+  it("保険として、③を待つのも有限回で必ず止まる", () => {
     expect(
       shouldRetryPlanRefresh(
-        { candidateMoveState: "unavailable", focusText: null },
+        { candidateMoveState: "unavailable", focusTextState: "pending" },
         FOCUS_TEXT_REFRESH_MAX_ATTEMPTS,
       ),
     ).toBe(false);
   });
 
-  it("⑧がまだ\"pending\"なら、③の上限ではなく⑧の上限まで待つ", () => {
+  it('⑧がまだ"pending"なら、③の上限ではなく⑧の上限まで待つ', () => {
     expect(
       shouldRetryPlanRefresh(
-        { candidateMoveState: "pending", focusText: null },
+        { candidateMoveState: "pending", focusTextState: "pending" },
         FOCUS_TEXT_REFRESH_MAX_ATTEMPTS + 1,
       ),
     ).toBe(true);
@@ -229,23 +238,22 @@ describe("shouldRetryPlanRefresh", () => {
 
   it("終局後は何も待たない(新しい解析が載ることはない)", () => {
     expect(
-      shouldRetryPlanRefresh({ candidateMoveState: "pending", focusText: null }, 1, true),
+      shouldRetryPlanRefresh({ candidateMoveState: "pending", focusTextState: "pending" }, 1, true),
     ).toBe(false);
     expect(
-      shouldRetryPlanRefresh({ candidateMoveState: "unavailable", focusText: null }, 1, true),
+      shouldRetryPlanRefresh(
+        { candidateMoveState: "unavailable", focusTextState: "pending" },
+        1,
+        true,
+      ),
     ).toBe(false);
   });
 
   it("上限回数に達したら、まだpendingでもリトライしない(無限に回さない)", () => {
-    expect(
-      shouldRetryPlanRefresh({ candidateMoveState: "pending" }, PLAN_REFRESH_MAX_ATTEMPTS - 1),
-    ).toBe(true);
-    expect(shouldRetryPlanRefresh({ candidateMoveState: "pending" }, PLAN_REFRESH_MAX_ATTEMPTS)).toBe(
-      false,
-    );
-    expect(
-      shouldRetryPlanRefresh({ candidateMoveState: "pending" }, PLAN_REFRESH_MAX_ATTEMPTS + 1),
-    ).toBe(false);
+    const pending = { candidateMoveState: "pending", focusTextState: "pending" } as const;
+    expect(shouldRetryPlanRefresh(pending, PLAN_REFRESH_MAX_ATTEMPTS - 1)).toBe(true);
+    expect(shouldRetryPlanRefresh(pending, PLAN_REFRESH_MAX_ATTEMPTS)).toBe(false);
+    expect(shouldRetryPlanRefresh(pending, PLAN_REFRESH_MAX_ATTEMPTS + 1)).toBe(false);
   });
 
   it("上限は有限で、実測の解析時間(18〜19秒)を1.5秒間隔でカバーできる", () => {

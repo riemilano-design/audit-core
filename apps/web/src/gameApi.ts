@@ -116,6 +116,9 @@ export interface CandidateMoveExplanationResult {
 // (エンジンの参考評価が取れても、評価データが不十分だった場合等)。
 export type CandidateMoveState = "unavailable" | "pending" | "ready";
 
+/** STEP 5-F(A-3、H-15): ③の背景解析が終わっているか(サーバーのFocusTextStateに対応)。 */
+export type FocusTextState = "pending" | "ready";
+
 // apps/server/src/api/stateResponse.ts の TargetShapeProgress に対応する型
 // (Phase6 Unit1: 選択中の形が今どこまで出来ているか)。
 // マス目は既にサーバー側(notation/japaneseSquare.ts)で日本語表記に変換済み。
@@ -273,6 +276,14 @@ export interface ReachablePlanBody {
    * 「このAPIのこの仕組みからは何も足さない(既存の表示のまま)」を意味する。
    */
   focusText?: string | null;
+  /**
+   * STEP 5-F(A-3、人間承認済み。H-15): ③の背景解析が終わっているか。
+   * "pending"のときだけ③の要約行に「急ぐことがないか、いま確かめています。」を出す。
+   * "ready"でfocusTextがnullなら「計算した結果、言うことが無い」であり、
+   * 要約行は従来どおりitemsの最後の一文に戻す(確かめていないのに確かめていると
+   * 言わないため)。
+   */
+  focusTextState: FocusTextState;
   /** Phase6 Unit4: 今の局面で分かっていること(直前の一手による差分ではない)。
    * 事実の抽出も文言生成もサーバー側(nextConsiderationDetector.ts /
    * nextConsiderationExplanation.ts)で完了しており、ここでは表示するだけ。
@@ -577,6 +588,14 @@ export function boardMarksFromState(
  * まま止まる状態が起きていた。上限を45秒相当(1.5秒×30回)にしているのは、実測18〜19秒に
  * 対して余裕を持たせるため。上限を設けて有限回で必ず止める方針自体は変えていない。
  */
+/**
+ * STEP 5-F(A-3、H-14): ③の背景解析を待っている間に要約行へ出す文。
+ * **人間承認済みの文言。一字も変えない。**「急ぎの確認中です。」より何を確かめて
+ * いるかが分かる、という理由で人間が選んだ。⑤の「候補手を計算中です(しばらくすると
+ * 表示されます)。」と役割が並ぶ。
+ */
+export const FOCUS_TEXT_PENDING_TEXT = "急ぐことがないか、いま確かめています。";
+
 export const PLAN_REFRESH_MAX_ATTEMPTS = 30;
 
 /**
@@ -617,14 +636,21 @@ export const FOCUS_TEXT_REFRESH_MAX_ATTEMPTS = 8;
  * 判定材料はサーバーが返した状態と試行回数だけで、将棋の判断は一切行わない。
  */
 export function shouldRetryPlanRefresh(
-  plan: Pick<ReachablePlanBody, "candidateMoveState" | "focusText">,
+  plan: Pick<ReachablePlanBody, "candidateMoveState" | "focusTextState">,
   attempt: number,
   isEnd = false,
 ): boolean {
   if (isEnd) return false;
   if (plan.candidateMoveState === "pending") return attempt < PLAN_REFRESH_MAX_ATTEMPTS;
-  // ⑧は待たなくてよい状態。③がまだ載っていなければ、そのぶんだけ待つ。
-  if ((plan.focusText ?? null) !== null) return false;
+  // ⑧は待たなくてよい状態。③がまだ計算されていなければ、そのぶんだけ待つ。
+  // 【STEP 5-F(A-3)で変わった点】A-2cではfocusTextがnullかどうかで判定していたが、
+  // それでは「計算した結果、言うことが無い」行でも上限まで回り続けていた。
+  // 主たる判定をfocusTextStateにしたので、その行は1回で止まる。
+  // 上限(FOCUS_TEXT_REFRESH_MAX_ATTEMPTS)は**保険**として残す ―― 背景解析が
+  // 失敗した局面はキャッシュが書かれず(server.ts:163は成功経路にしかない)、
+  // focusTextStateが"pending"のまま固定されるため、時間で打ち切らないと
+  // 画面に「確かめています」が残り続ける(既知事項。人間決定H-17)。
+  if (plan.focusTextState !== "pending") return false;
   return attempt < FOCUS_TEXT_REFRESH_MAX_ATTEMPTS;
 }
 

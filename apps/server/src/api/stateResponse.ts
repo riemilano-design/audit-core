@@ -148,6 +148,9 @@ export interface StateResponseBody extends PublicGameState {
  */
 export type CandidateMoveState = "unavailable" | "pending" | "ready";
 
+/** STEP 5-F(A-3、H-15): ③の背景解析が終わっているか。語彙はCandidateMoveStateにそろえる。 */
+export type FocusTextState = "pending" | "ready";
+
 /**
  * Phase6 Unit1: 選択中の形について「今どこまで出来ているか」をUIが表示するための情報。
  * shapeFormationAnalyzer.tsの判定結果(matchedSquares/missingSquares)をそのまま
@@ -351,6 +354,31 @@ export interface ReachablePlanBody {
    * explainPieceThreatFocusがnullを返した場合(H-2のmate、H-3bの(A))のいずれも同じ扱い)。
    */
   focusText?: string | null;
+  /**
+   * STEP 5-F(A-3、人間承認済み。H-15): ③について、この局面の背景解析が
+   * 終わっているかどうか。
+   *
+   * - "pending": まだ計算していない(この局面に対するcachedPlanが無い・古い)
+   * - "ready":   この局面の解析は終わっている。**focusTextがnullなら
+   *              「計算した結果、言うことが無い」**(王手中・終局・詰み・
+   *              帯1件と同じマスの重複(H-3bの(A)))
+   *
+   * 【なぜ足したか】focusTextはstring | nullで、**「まだ計算していない」と
+   * 「計算した結果なにも言うことが無い」がどちらもnull**になっていた。画面が
+   * この2つを区別できないため、③に「急ぐことがないか、いま確かめています。」を
+   * 出すと、**王手中・詰みの局面でその文が消えずに残る**(確かめていないのに
+   * 確かめていると言うことになる)。一つの値に二つの意味を持たせない
+   * (movetimeのときEngineReference.nodesを0ではなくnullにしたのと同じ方針)。
+   *
+   * 【optionalにしていない理由】focusTextと違いこの欄は必須にした。
+   * ReachablePlanBodyを手書きで組み立てている箇所を実測したところ
+   * (型を必須にしてtscを回した。grepでは数えない)、**工場関数basePlan()を
+   * 通らない手書きは0件**で、直すのは工場13個と本番1箇所だけだった。必須に
+   * しておけば、今後この欄を埋め忘れた人がapps/のtscで止まる。
+   * (ただしscripts/playtest/**は型検査の対象に入っていないため、そこでは
+   * 止まらない。includeを広げる件は別セッションへ振られている。)
+   */
+  focusTextState: FocusTextState;
   /** [0]「今すぐ対処が必要なこと」に出すメッセージ。該当が無ければ空配列
    * (partitionUrgentMessages参照。文言はすべて既存のもの)。 */
   urgentMessages: { kind: string; text: string }[];
@@ -1593,8 +1621,11 @@ export function buildStateResponseWithPlan(
   // (routePlanner.tsが対象を返せない・目標形未選択等)でも③は黙らないようにするため、
   // hasCandidateMovesによる分岐(上記if/else if/else)には入れない。sfenが一致しない
   // (stale)場合・cachedPlanが無い場合はnull(既存の表示のまま)。
-  const focusText: string | null =
-    cachedPlan && cachedPlan.sfen === current.sfen ? (cachedPlan.plan.focusText ?? null) : null;
+  // STEP 5-F(A-3): focusTextとfocusTextStateは**同じ真偽値から決める**。
+  // 別々の条件で書くと、片方だけを直したときに「readyなのにfocusTextはnull固定」の
+  // ような食い違いが静かに入る(人間の指示)。
+  const focusTextReady = cachedPlan !== undefined && cachedPlan.sfen === current.sfen;
+  const focusText: string | null = focusTextReady ? (cachedPlan.plan.focusText ?? null) : null;
 
   // STEP 5-1(A-1、人間承認済み): 候補手が安全確認(candidateMoveReferenceFilter.ts)で
   // 全件除外された、という機械的な事実。新しい将棋知識・閾値・エンジン呼び出しは
@@ -1696,6 +1727,12 @@ export function buildStateResponseWithPlan(
       planChanged,
       planChangeReason,
       focusText,
+      // STEP 4-5(W-1)のcoach・shapeWeaknessと同じガード: 終局時は③を出さない。
+      // ここを素通しにすると、最終手の応答は必ず"pending"になり(cachedPlanが
+      // 最終局面に追いつく前)、③に「急ぐことがないか、いま確かめています。」が
+      // 出たまま残る(終局後は再取得しないため消えない)。終局は「解析が終わって
+      // 言うことが無い」と同じ扱いにする。
+      focusTextState: base.status.isEnd ? "ready" : focusTextReady ? "ready" : "pending",
     },
   };
 }

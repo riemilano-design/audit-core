@@ -30,12 +30,14 @@ import {
   summarizeHappened,
   summarizeOpponentAim,
   summarizeWhy,
+  FOCUS_TEXT_PENDING_TEXT,
   summarizeMyAim,
   startNewGame,
   submitMove,
   splitPromotionCandidates,
   promotionNoteForRole,
   type CandidateMoveState,
+  type FocusTextState,
   type CoachExplanation,
   type CoachStage,
   type CoachStatus,
@@ -603,14 +605,23 @@ function renderWhy(coach: CoachExplanation[] | undefined, plan: ReachablePlanBod
   const items = (coach ?? []).filter((item) => WHY_STAGES.includes(item.stage));
   const weakness = plan?.shapeWeakness ?? null;
   const focusText = plan?.focusText ?? null;
+  // STEP 5-F(A-3、人間承認済み。H-13・H-14): 要約行はfocusTextの位置のまま。
+  // 到着前(="pending")は「計算中」の文を出し、到着後は答えに入れ替わる。
+  // **入れ替わるのは「計算中 → 答え」だけ**で、意味のある文どうしが黙って
+  // 入れ替わることは起きない(⑤が既にやっている形と同じで、ユーザーが予期できる)。
+  // "ready"でfocusTextがnullのとき(計算した結果、言うことが無い)は、要約行を
+  // 従来の内容 ―― itemsの最後の一文(summarizeWhyはlastSentence)―― に戻す。
+  // 本文(items)は最初から出す(9.16の決定。ここは変えない)。
   const summaryText =
-    focusText != null
-      ? focusText
-      : items.length > 0
-        ? summarizeWhy(items[0]!)
-        : weakness
-          ? firstSentence(weakness.text)
-          : "";
+    plan?.focusTextState === "pending"
+      ? FOCUS_TEXT_PENDING_TEXT
+      : focusText != null
+        ? focusText
+        : items.length > 0
+          ? summarizeWhy(items[0]!)
+          : weakness
+            ? firstSentence(weakness.text)
+            : "";
 
   renderExpandableBlock(whyEl, "why-body", summaryText, readColumnOpen.why, toggleWhy, (body) => {
     const hasBodyContent = items.length > 0 || !!weakness;
@@ -1691,6 +1702,10 @@ let lastRenderedSfen: string | undefined;
 // render()以外がこれらを書き換えるのは、③だけを部分更新したとき(schedulePlanRefresh)
 // に限る。
 let lastRenderedFocusText: string | null = null;
+// STEP 5-F(A-3): focusTextがnullのまま"pending"→"ready"へ変わる行がある
+// (計算した結果、言うことが無い場合)。そのときも③は「計算中」の文から
+// 従来の一文へ描き直す必要があるため、focusTextの値だけでは足りない。
+let lastRenderedFocusTextState: FocusTextState | undefined;
 let lastRenderedCandidateMoveState: CandidateMoveState | undefined;
 // P-17対応: #saveKifuStatus(保存を依頼した旨の一行+折りたたみ)を表示したときの
 // state.moveHistory.lengthを覚えておく。undefinedは「何も表示していない」を表す。
@@ -1749,6 +1764,7 @@ function render(state: GameStateResponse): void {
   updateLastOpponentMoveHighlight(state.moveHistory);
   lastRenderedSfen = state.sfen;
   lastRenderedFocusText = state.plan.focusText ?? null;
+  lastRenderedFocusTextState = state.plan.focusTextState;
   lastRenderedCandidateMoveState = state.plan.candidateMoveState;
   renderBoard(state);
   renderHands(state);
@@ -1844,12 +1860,18 @@ function applyPlanRefresh(state: GameStateResponse): void {
   }
 
   const focusText = state.plan.focusText ?? null;
-  if (focusText === lastRenderedFocusText) return; // 変わっていない(無駄な描き直しをしない)
+  const focusTextState = state.plan.focusTextState;
+  // 【STEP 5-F(A-3)】文だけでなく状態も見る。「計算中」から「言うことが無い」へ
+  // 変わる行ではfocusTextはnullのまま動かないため、文の比較だけでは描き直されない。
+  if (focusText === lastRenderedFocusText && focusTextState === lastRenderedFocusTextState) {
+    return; // 変わっていない(無駄な描き直しをしない)
+  }
 
   // 局面は同じなので、盤面・手番・操作状態は触らない。currentStateだけは
   // サーバーが最後に返したものへそろえておく(sfenもlegalMovesも同じ)。
   currentState = state;
   lastRenderedFocusText = focusText;
+  lastRenderedFocusTextState = focusTextState;
   lastRenderedCandidateMoveState = state.plan.candidateMoveState;
   renderWhy(state.coach, state.plan);
 }
