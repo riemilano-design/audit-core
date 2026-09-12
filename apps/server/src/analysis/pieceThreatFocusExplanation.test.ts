@@ -1,10 +1,11 @@
-// pieceThreatFocusExplanation.ts(STEP 5-F、docs/STEP_5-F_PLAN_2026-09-12.md A-2a)のテスト。
+// pieceThreatFocusExplanation.ts(STEP 5-F、docs/STEP_5-F_PLAN_2026-09-12.md A-2a、9.10)のテスト。
 //
 // 【校正について】
-// 実装前に、固定棋譜4局の記録(scripts/playtest/out/baseline-2026-09-12/*.jsonl。
-// .gitignore配下のためテストからは参照しない)にこの関数を実際に掛け、計画書2.1の
-// 実測(A=10件・B=8件・C=2件、engineReferenceのあるready行59件)と一致することを
-// 確かめた(2026-09-12。手元で1回実行して確認する方式=計画書「測り方(i)」)。
+// 固定棋譜4局の記録(scripts/playtest/out/baseline-2026-09-12/*.jsonl。
+// .gitignore配下のためテストからは参照しない)にこの関数を実際に掛け、計画書9.10の
+// 実測(A=10件・B=8件・C=2件・「いまのところ、急いで対応することはありません。」=39件、
+// engineReferenceのあるready行59件)と一致することを確かめた(2026-09-12。手元で1回
+// 実行して確認する方式=計画書「測り方(i)」)。
 // 以下のテストのSFEN・マス・駒名は、その校正で実際に出た組み合わせをそのまま
 // 使っている(初期局面の9i=香・7i=銀・6i=金・8i=桂は標準の初期配置そのもの)。
 
@@ -24,18 +25,20 @@ function reference(overrides: Partial<EngineReference> = {}): EngineReference {
   };
 }
 
+const NO_RUSH_TEXT = "いまのところ、急いで対応することはありません。";
+
 describe("explainPieceThreatFocus", () => {
-  it("EngineReferenceがnullなら出さない", () => {
+  it("EngineReferenceがnullなら「いまのところ、急いで対応することはありません。」", () => {
     expect(
       explainPieceThreatFocus({ engineReference: null, bandSquares: [], sfen: INITIAL_SFEN }),
-    ).toBeNull();
+    ).toBe(NO_RUSH_TEXT);
   });
 
-  it("閾値(300cp)未満なら出さない", () => {
+  it("閾値(300cp)未満なら「いまのところ、急いで対応することはありません。」", () => {
     const engineReference = reference({ dropCp: 299 });
     expect(
       explainPieceThreatFocus({ engineReference, bandSquares: [], sfen: INITIAL_SFEN }),
-    ).toBeNull();
+    ).toBe(NO_RUSH_TEXT);
   });
 
   it("mateが絡む(H-2)なら出さない", () => {
@@ -48,13 +51,13 @@ describe("explainPieceThreatFocus", () => {
     ).toBeNull();
   });
 
-  it("captureSquareが無ければ出さない", () => {
+  it("captureSquareが無ければ「いまのところ、急いで対応することはありません。」", () => {
     const engineReference = reference({
       afterPass: { scoreCp: -300, mate: null, bestmove: "9i9h", captureSquare: null },
     });
     expect(
       explainPieceThreatFocus({ engineReference, bandSquares: [], sfen: INITIAL_SFEN }),
-    ).toBeNull();
+    ).toBe(NO_RUSH_TEXT);
   });
 
   it("(A) 帯が1件だけで、その1件がcaptureSquareと同じマスなら出さない", () => {
@@ -80,13 +83,13 @@ describe("explainPieceThreatFocus", () => {
     ).toBe("このまま何もしないと、あなたの７九の銀が取られる可能性があります。");
   });
 
-  it("駒名が解決できない(captureSquareに駒が無い)場合は出さない", () => {
+  it("駒名が解決できない(captureSquareに駒が無い)場合は「いまのところ、急いで対応することはありません。」", () => {
     const engineReference = reference({
       afterPass: { scoreCp: -300, mate: null, bestmove: "5f5e", captureSquare: "5e" },
     });
     // 初期局面の5eは空マス(pieceThreatFocusExplanationは推測して名前を付けない)。
     expect(
       explainPieceThreatFocus({ engineReference, bandSquares: [], sfen: INITIAL_SFEN }),
-    ).toBeNull();
+    ).toBe(NO_RUSH_TEXT);
   });
 });

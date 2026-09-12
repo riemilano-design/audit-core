@@ -1,21 +1,35 @@
-// STEP 5-F(docs/STEP_5-F_PLAN_2026-09-12.md 4. A-2)。③(相手の次の狙い)を
+// STEP 5-F(docs/STEP_5-F_PLAN_2026-09-12.md 4. A-2、9.10)。③(相手の次の狙い)を
 // エンジンの参考評価(analysis/engineReference.ts の EngineReference)から作る、
 // 決定的な純粋関数。エンジンもLLMもここでは呼ばない(EngineReferenceは引数で受け取る)。
 //
-// 【規則(人間承認済み。計画書 9.6 まで含めて1つも変えないこと)】
-// 1. EngineReferenceがnull → 出さない
-// 2. mateが絡む → 出さない(H-2)。dropCpは両方がcpのときだけ算出されるため、
+// 【規則(人間承認済み。2026-09-12の9.10改定を反映。計画書 9.10 まで1つも変えないこと)】
+// 「出さない」(null)は次の2つだけ。それ以外はすべて文を返す。
+// 1. mateが絡む → 出さない(H-2)。dropCpは両方がcpのときだけ算出されるため、
 //    mateが絡む局面はdropCp===nullになる。「出さないと決めた」ことは計画書6.の
 //    宿題として記録済み(mateが出る局面を含む記録が取れた時点で再提示する)。
-// 3. dropCp===null、またはdropCp<300 → 出さない
-// 4. afterPass.captureSquare===null → 出さない
-// 5. (A) 帯が1件だけで、その1件がcaptureSquareと同じマス → 出さない
-//    (同じ画面に同じ事実が二度出るのを避ける。STEP 4-6で消した型)
-// 6. (B) captureSquareが帯に含まれ、帯が2件以上 →
-//    「いま注意する駒のうち、このまま何もしないと、あなたの{マス}の{駒名}が
-//    取られる可能性があります。」
-// 7. (C) captureSquareが帯に含まれない →
-//    「このまま何もしないと、あなたの{マス}の{駒名}が取られる可能性があります。」
+// 2. (A) 帯が1件だけで、その1件がcaptureSquareと同じマス → 出さない
+//    (同じ画面に同じ事実が二度出るのを避ける。STEP 4-6で消した型)。
+//    ただし(A)の判定は、dropCpが閾値以上でcaptureSquareが解決している
+//    「③が出る局面」の中でだけ行う(計画書2.1の実測A=10・B=8・C=2は、この
+//    母集団の中で数えた値のため、母集団をそろえないと10件からずれる)。
+//
+// 上記の2つに当てはまらない場合は、すべて次のいずれかの文を返す(nullにしない)。
+// - (B) captureSquareが帯に含まれ、帯が2件以上 →
+//   「いま注意する駒のうち、このまま何もしないと、あなたの{マス}の{駒名}が
+//   取られる可能性があります。」
+// - (C) captureSquareが帯に含まれない →
+//   「このまま何もしないと、あなたの{マス}の{駒名}が取られる可能性があります。」
+// - それ以外すべて(EngineReferenceが無い・dropCpがnullまたは閾値未満・
+//   captureSquareが無い・駒名が解決できない)→
+//   「いまのところ、急いで対応することはありません。」
+//
+// 【9.10の理由(人間の言葉)】
+// 枝を刈って焦点を渡すのがこのアプリの中心だとすれば、「いま急ぐことは無い」は
+// 省略できるおまけではなく、焦点を渡すことの半分。攻めたがる初心者は、まさに
+// 急ぐ必要が無い局面で急いで間違えている。閾値未満・駒名不明などで③が消えると、
+// 「何も言われなかった」のか「急がなくてよいと判定された」のかが初心者には
+// 区別できない。「いまのところ、急いで対応することはありません。」を出すことで、
+// 後者であることを明示する。
 //
 // 【文言について】
 // 一字も変えないこと。「なかでも」「上に挙げた」は人間が明示的に避けた表現
@@ -78,43 +92,51 @@ function pieceNameAt(sfen: string, usiSquare: string): string | null {
 }
 
 /**
- * ③(相手の次の狙い)の文を組み立てる。上記の規則1〜7に従い、条件を満たさない
- * 場合はnull(「出さない」)を返す。
+ * 閾値未満・captureSquareが無い・駒名が解決できないなど、③を「出さない」の
+ * ではなく「急ぐ話が無い」ことを伝える既定文(9.10。人間承認済み。一字も
+ * 変えないこと)。
+ */
+const NO_RUSH_TEXT = "いまのところ、急いで対応することはありません。";
+
+/**
+ * ③(相手の次の狙い)の文を組み立てる。上記の規則に従い、null(「出さない」)を
+ * 返すのはmateが絡む場合と(A)の場合のみ。それ以外はすべて文を返す。
  */
 export function explainPieceThreatFocus(input: PieceThreatFocusInput): string | null {
   const { engineReference, bandSquares, sfen } = input;
 
-  // 1. EngineReferenceが無い → 出さない
-  if (engineReference === null) return null;
+  // EngineReferenceが無い → 急ぐ話にならない
+  if (engineReference === null) return NO_RUSH_TEXT;
 
-  // 2. mateが絡む → 出さない(H-2)。baseline/afterPassのどちらかにmateが
-  //    立っている場合は明示的にここで止める(dropCpがnullになるため3.でも
-  //    落ちるが、mateの扱いであることを規則どおり独立した判定として残す)。
+  // 1. mateが絡む → 出さない(H-2)。baseline/afterPassのどちらかにmateが
+  //    立っている場合はここで止める。
   if (engineReference.baseline.mate !== null || engineReference.afterPass.mate !== null) return null;
 
-  // 3. dropCpが無い、または閾値未満 → 出さない
+  // dropCpが無い、または閾値未満 → 急ぐ話にならない
   const { dropCp } = engineReference;
-  if (dropCp === null || dropCp < DROP_THRESHOLD_CP) return null;
+  if (dropCp === null || dropCp < DROP_THRESHOLD_CP) return NO_RUSH_TEXT;
 
-  // 4. captureSquareが無い → 出さない
+  // captureSquareが無い → 急ぐ話にならない
   const captureSquare = engineReference.afterPass.captureSquare;
-  if (captureSquare === null) return null;
+  if (captureSquare === null) return NO_RUSH_TEXT;
 
   const inBand = bandSquares.includes(captureSquare);
 
-  // 5. (A) 帯が1件だけで、その1件がcaptureSquareと同じマス → 出さない
+  // 2. (A) 帯が1件だけで、その1件がcaptureSquareと同じマス → 出さない
+  //    (閾値を超え、captureSquareも解決している「③が出る局面」の中でだけ判定する。
+  //    計画書2.1の実測がこの母集団の中でA/B/Cを数えているため、母集団をそろえる)
   if (inBand && bandSquares.length === 1) return null;
 
   const name = pieceNameAt(sfen, captureSquare);
-  if (name === null) return null; // 駒名が解決できない → 出さない
+  if (name === null) return NO_RUSH_TEXT; // 駒名が解決できない → 急ぐ話にならない
 
   const squareText = toJapaneseSquare(captureSquare);
 
-  // 6. (B) captureSquareが帯に含まれ、帯が2件以上
+  // (B) captureSquareが帯に含まれ、帯が2件以上
   if (inBand) {
     return `いま注意する駒のうち、このまま何もしないと、あなたの${squareText}の${name}が取られる可能性があります。`;
   }
 
-  // 7. (C) captureSquareが帯に含まれない
+  // (C) captureSquareが帯に含まれない
   return `このまま何もしないと、あなたの${squareText}の${name}が取られる可能性があります。`;
 }
