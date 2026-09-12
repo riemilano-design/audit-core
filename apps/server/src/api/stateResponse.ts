@@ -493,6 +493,9 @@ export type DirectionRule =
  */
 export interface StateResponseOptions extends ExplainPositionOptions {
   directionRule?: DirectionRule;
+  /** STEP U6-H(計測用)。true のとき targetShapeProgress を null にする。
+   * resolvedTargetShapeId・道のり・候補手は変えない。既定は false(本番の挙動)。 */
+  suppressTargetShapeProgress?: boolean;
 }
 
 /** shapeId から parent_shape_id をたどった祖先の一覧。循環していても止まる(安全側)。 */
@@ -1655,7 +1658,11 @@ export function buildStateResponseWithPlan(
       // targetShapeProgressは「目標の説明」として残すため、suppressPlanのみで判定する
       // (candidatesExcludedでは変えない)。
       routes: suppressRoutesAndLabels ? [] : toRouteSummaries(context?.routePlanResult, current.sfen),
-      targetShapeProgress: suppressPlan ? null : toTargetShapeProgress(context, current.sfen),
+      // STEP U6-H(計測用): suppressTargetShapeProgressがtrueのときもnullにする。
+      // suppressPlanの既存の判定は変えない(resolvedTargetShapeId・routes・
+      // candidateMoveLabels・candidateMoveStateには影響させない)。
+      targetShapeProgress:
+        suppressPlan || options.suppressTargetShapeProgress ? null : toTargetShapeProgress(context, current.sfen),
       candidateMoveLabels: suppressRoutesAndLabels ? {} : toCandidateMoveLabels(context?.routePlanResult, current.sfen),
       referenceShapes: toReferenceShapes(context),
       directionNote:

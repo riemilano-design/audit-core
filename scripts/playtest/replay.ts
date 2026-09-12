@@ -107,7 +107,7 @@ async function main(): Promise<void> {
   const kifuArg = args[0];
   if (!kifuArg || kifuArg.startsWith("--")) {
     console.error(
-      "使い方: npx tsx scripts/playtest/replay.ts <kifu.json> [--out <file.jsonl>] [--nodes <N>] [--threads <N>] [--reference-nodes <N>] [--direction-rule <名前>]",
+      "使い方: npx tsx scripts/playtest/replay.ts <kifu.json> [--out <file.jsonl>] [--nodes <N>] [--threads <N>] [--reference-nodes <N>] [--direction-rule <名前>] [--suppress-target-shape-progress]",
     );
     process.exit(1);
   }
@@ -141,7 +141,12 @@ async function main(): Promise<void> {
     process.exit(1);
   }
   const directionRule: DirectionRule = (directionRuleArg as DirectionRule | undefined) ?? DEFAULT_DIRECTION_RULE;
-  const stateResponseOptions: StateResponseOptions = { directionRule };
+
+  // STEP U6-H: --suppress-target-shape-progress(引数なしのフラグ)。未指定なら
+  // 既定false(本番の既定と同じ)。--direction-ruleと同じ経路(stateResponseOptions)で
+  // 本番関数(buildStateResponseWithPlan等)へそのまま渡すだけで、ここに判定ロジックは無い。
+  const suppressTargetShapeProgress = args.includes("--suppress-target-shape-progress");
+  const stateResponseOptions: StateResponseOptions = { directionRule, suppressTargetShapeProgress };
 
   const kifu = JSON.parse(readFileSync(path.resolve(kifuArg), "utf-8")) as FixedKifu;
   const kifuId = kifu.id;
@@ -170,6 +175,7 @@ async function main(): Promise<void> {
       threads,
       referenceNodes,
       directionRule,
+      suppressTargetShapeProgress,
     }),
   );
 

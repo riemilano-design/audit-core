@@ -3100,3 +3100,45 @@ describe("STEP 4-6: filterNextConsiderationsForDisplay(D)", () => {
     expect(filterNextConsiderationsForDisplay([noPlayable, inCheck])).toEqual([noPlayable, inCheck]);
   });
 });
+
+// STEP U6-H(計測用): suppressTargetShapeProgressオプション。
+// targetShapeProgressだけをnullにし、resolvedTargetShapeId・道のり(candidateMoveLabels)・
+// candidateMoveStateは変えない(docs/STEP_UNIT6_PLAN_2026-09-12.md 13.2)。
+describe("STEP U6-H: StateResponseOptions.suppressTargetShapeProgress", () => {
+  it("既定(オプションを渡さない)ではtargetShapeProgressが今までどおり出る", () => {
+    const state = gameStateAfter([]);
+    const response = buildStateResponseWithPlan(state, undefined, {}, "mino_honmino");
+
+    expect(response.plan.targetShapeProgress).not.toBeNull();
+    expect(response.plan.targetShapeProgress?.shapeId).toBe(response.plan.resolvedTargetShapeId);
+  });
+
+  it("suppressTargetShapeProgress: trueのときtargetShapeProgressがnullになり、resolvedTargetShapeIdは変わらない", () => {
+    const state = gameStateAfter([]);
+    const withoutSuppress = buildStateResponseWithPlan(state, undefined, {}, "mino_honmino");
+    const withSuppress = buildStateResponseWithPlan(
+      state,
+      undefined,
+      { suppressTargetShapeProgress: true },
+      "mino_honmino",
+    );
+
+    expect(withSuppress.plan.targetShapeProgress).toBeNull();
+    expect(withSuppress.plan.resolvedTargetShapeId).toBe(withoutSuppress.plan.resolvedTargetShapeId);
+    expect(withSuppress.plan.resolvedTargetShapeId).not.toBeNull();
+  });
+
+  it("suppressTargetShapeProgress: trueでもcandidateMoveLabels(道のり)とcandidateMoveStateが変わらない", () => {
+    const state = gameStateAfter([]);
+    const withoutSuppress = buildStateResponseWithPlan(state, undefined, {}, "mino_honmino");
+    const withSuppress = buildStateResponseWithPlan(
+      state,
+      undefined,
+      { suppressTargetShapeProgress: true },
+      "mino_honmino",
+    );
+
+    expect(withSuppress.plan.candidateMoveLabels).toEqual(withoutSuppress.plan.candidateMoveLabels);
+    expect(withSuppress.plan.candidateMoveState).toBe(withoutSuppress.plan.candidateMoveState);
+  });
+});
