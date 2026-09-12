@@ -67,8 +67,11 @@ const PROMOTED_ROLE_TO_JAPANESE: Partial<Record<Role, string>> = {
 /**
  * 役職を日本語の駒名へ変換する。基本駒8種はroleToJapanese、成駒6種はPROMOTED_ROLE_TO_JAPANESE。
  * どちらにも無い役職はnull(呼び出し側はその事実を表示しない)。
+ *
+ * STEP 5-F(docs/STEP_5-F_PLAN_2026-09-12.md)でanalysis/pieceThreatFocusExplanation.ts
+ * が同じ対応表を必要としたため、同じ表を2つ作らないようexportした(挙動は変えていない)。
  */
-function pieceName(role: Role): string | null {
+export function pieceName(role: Role): string | null {
   return roleToJapanese(role) ?? PROMOTED_ROLE_TO_JAPANESE[role] ?? null;
 }
 
