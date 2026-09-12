@@ -8,6 +8,7 @@ import {
   isCandidateMovesExcluded,
   groupCandidateExplanationsByReason,
   shouldRetryPlanRefresh,
+  FOCUS_TEXT_REFRESH_MAX_ATTEMPTS,
   shouldShowNextConsiderations,
   shouldShowPlanChangedNotice,
   splitCoachByStage,
@@ -178,12 +179,61 @@ describe("shouldRetryPlanRefresh", () => {
     expect(shouldRetryPlanRefresh({ candidateMoveState: "pending" }, 1)).toBe(true);
   });
 
-  it('"ready"になったらリトライしない', () => {
-    expect(shouldRetryPlanRefresh({ candidateMoveState: "ready" }, 1)).toBe(false);
+  it('"ready"になり、③(focusText)も載っていればリトライしない', () => {
+    expect(shouldRetryPlanRefresh({ candidateMoveState: "ready", focusText: "…" }, 1)).toBe(false);
   });
 
-  it('"unavailable"(そもそも候補手が無い)ならリトライしない', () => {
-    expect(shouldRetryPlanRefresh({ candidateMoveState: "unavailable" }, 1)).toBe(false);
+  it('"unavailable"(そもそも候補手が無い)でも、③が載っていればリトライしない', () => {
+    expect(shouldRetryPlanRefresh({ candidateMoveState: "unavailable", focusText: "…" }, 1)).toBe(
+      false,
+    );
+  });
+
+  // STEP 5-F(A-2c): ここが今回足した条件。固定棋譜4局59行のうち47行が
+  // 「候補手0件＝最初から"unavailable"」で、⑧の条件だけでは再取得が一度も走らず、
+  // 背景解析で後から載るfocusTextが画面に届かなかった。
+  it('"unavailable"でも、③がまだ載っていなければリトライする', () => {
+    expect(shouldRetryPlanRefresh({ candidateMoveState: "unavailable", focusText: null }, 1)).toBe(
+      true,
+    );
+  });
+
+  it("欄そのものが無い(古いサーバー)場合も、まだ載っていないものとして扱う", () => {
+    expect(shouldRetryPlanRefresh({ candidateMoveState: "unavailable" }, 1)).toBe(true);
+  });
+
+  it("③だけを待つときの上限は⑧より小さい(待つ対象が1回の探索だけのため)", () => {
+    expect(FOCUS_TEXT_REFRESH_MAX_ATTEMPTS).toBeLessThan(PLAN_REFRESH_MAX_ATTEMPTS);
+    expect(
+      shouldRetryPlanRefresh(
+        { candidateMoveState: "unavailable", focusText: null },
+        FOCUS_TEXT_REFRESH_MAX_ATTEMPTS - 1,
+      ),
+    ).toBe(true);
+    expect(
+      shouldRetryPlanRefresh(
+        { candidateMoveState: "unavailable", focusText: null },
+        FOCUS_TEXT_REFRESH_MAX_ATTEMPTS,
+      ),
+    ).toBe(false);
+  });
+
+  it("⑧がまだ\"pending\"なら、③の上限ではなく⑧の上限まで待つ", () => {
+    expect(
+      shouldRetryPlanRefresh(
+        { candidateMoveState: "pending", focusText: null },
+        FOCUS_TEXT_REFRESH_MAX_ATTEMPTS + 1,
+      ),
+    ).toBe(true);
+  });
+
+  it("終局後は何も待たない(新しい解析が載ることはない)", () => {
+    expect(
+      shouldRetryPlanRefresh({ candidateMoveState: "pending", focusText: null }, 1, true),
+    ).toBe(false);
+    expect(
+      shouldRetryPlanRefresh({ candidateMoveState: "unavailable", focusText: null }, 1, true),
+    ).toBe(false);
   });
 
   it("上限回数に達したら、まだpendingでもリトライしない(無限に回さない)", () => {

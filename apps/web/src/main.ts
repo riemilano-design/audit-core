@@ -35,6 +35,7 @@ import {
   submitMove,
   splitPromotionCandidates,
   promotionNoteForRole,
+  type CandidateMoveState,
   type CoachExplanation,
   type CoachStage,
   type CoachStatus,
@@ -1685,6 +1686,12 @@ function renderHistory(moveHistory: string[], moveHistoryJapanese: (string | nul
 // 直近にrender()した局面のsfen。バックグラウンド解析の再取得結果を反映してよいか
 // (=ユーザーが間にもう一手指していないか)を判定するために使う。
 let lastRenderedSfen: string | undefined;
+// STEP 5-F(A-2c、人間承認済み): ③だけを描き直してよいかを判定するために、
+// 「いま画面に出ている」focusTextとcandidateMoveStateを覚えておく。
+// render()以外がこれらを書き換えるのは、③だけを部分更新したとき(schedulePlanRefresh)
+// に限る。
+let lastRenderedFocusText: string | null = null;
+let lastRenderedCandidateMoveState: CandidateMoveState | undefined;
 // P-17対応: #saveKifuStatus(保存を依頼した旨の一行+折りたたみ)を表示したときの
 // state.moveHistory.lengthを覚えておく。undefinedは「何も表示していない」を表す。
 // currentStateが無い状態で表示したとき(手数が分からない)は-1という実在しない値を
@@ -1741,6 +1748,8 @@ function render(state: GameStateResponse): void {
   clearSelection();
   updateLastOpponentMoveHighlight(state.moveHistory);
   lastRenderedSfen = state.sfen;
+  lastRenderedFocusText = state.plan.focusText ?? null;
+  lastRenderedCandidateMoveState = state.plan.candidateMoveState;
   renderBoard(state);
   renderHands(state);
   renderPromotionChoice();
@@ -1780,6 +1789,11 @@ function setError(message: string): void {
 // 駒を選択中のユーザーの選択が繰り返し解除されてしまう。再取得中は局面が進んでいない
 // (lastRenderedSfenで保証)ので、まだ"pending"の間は画面の内容が変わらない。
 // そのため、状態が"pending"でなくなったときだけ再描画する。
+// 【STEP 5-F(A-2c)で変わった点】再取得の対象に③(focusText)が加わり、候補手が
+// 0件の行では"pending"を一度も通らない。上の「"pending"でなくなったとき」という
+// 条件はその行では使えないため、反映の判断はapplyPlanRefreshへ移した。
+// ③だけが届いたときは③のブロックだけを描き直し、render()を呼ばない
+// (＝選択を解除しない)。
 // 【STEP 5-C】この再描画は局面が変わらないまま(同じsfenのまま)render(state)を呼ぶ
 // ため、render()側でpendingPromotion(成り・不成の保留)を無条件に解除すると、
 // ユーザーが選んでいる最中に選択のまとまりが黙って消えてしまう。render()は
@@ -1792,8 +1806,8 @@ function schedulePlanRefresh(sfenAtSubmit: string, attempt = 1): void {
     fetchGameState()
       .then((state) => {
         if (lastRenderedSfen !== sfenAtSubmit) return; // 取得中にさらに進んでいた
-        if (state.plan.candidateMoveState !== "pending") render(state);
-        if (shouldRetryPlanRefresh(state.plan, attempt)) {
+        applyPlanRefresh(state);
+        if (shouldRetryPlanRefresh(state.plan, attempt, state.status.isEnd)) {
           schedulePlanRefresh(sfenAtSubmit, attempt + 1);
         }
       })
@@ -1801,6 +1815,43 @@ function schedulePlanRefresh(sfenAtSubmit: string, attempt = 1): void {
         // 再取得の失敗は対局そのものに影響させない(静かに諦める)。
       });
   }, PLAN_REFRESH_INTERVAL_MS);
+}
+
+/**
+ * STEP 5-F(A-2c、人間承認済み): 再取得で届いた状態を画面へ反映する。
+ * 局面(sfen)は呼び出し元で一致を確認済みで、ここでは変わらない。
+ *
+ * 【なぜ全体の描き直しと③だけの描き直しを分けるか】
+ * render()はclearSelection()を呼ぶため、駒を選択中のユーザーの選択が消える。
+ * 従来はこれを「"pending"のうちは再描画しない」で避けていたが、この条件は
+ * **候補手が0件の行では使えない**。その行のcandidateMoveStateは最初から
+ * "unavailable"であり、"pending"を通らないまま値が変わらないためである
+ * (固定棋譜4局59行のうち47行。STEP 5-F 11.1の実測)。再取得の条件をfocusTextへ
+ * 広げた以上、同じ局面のままrender()が繰り返し呼ばれることになり、
+ * STEP 5-Cで一度踏んだ「選択が黙って消える」経路へ戻ってしまう。
+ *
+ * そこで、届いた差分が③(focusText)だけのときは**③のブロックだけ**を描き直す。
+ * renderWhyはcoachとplanだけを引数に取り、他のブロック・盤面・選択状態に触らない
+ * 独立した関数なので、新しい描画ロジックを作らずに呼び分けられる。
+ */
+function applyPlanRefresh(state: GameStateResponse): void {
+  // ⑧が「計算中」から抜けたときは、候補手・その手の目的・道のりがまとめて
+  // 入れ替わるため、従来どおり全体を描き直す(このときは局面が変わっていなくても
+  // 画面の内容が大きく変わるので、選択が解除されることは受け入れる ―― 従来の挙動)。
+  if (lastRenderedCandidateMoveState === "pending" && state.plan.candidateMoveState !== "pending") {
+    render(state);
+    return;
+  }
+
+  const focusText = state.plan.focusText ?? null;
+  if (focusText === lastRenderedFocusText) return; // 変わっていない(無駄な描き直しをしない)
+
+  // 局面は同じなので、盤面・手番・操作状態は触らない。currentStateだけは
+  // サーバーが最後に返したものへそろえておく(sfenもlegalMovesも同じ)。
+  currentState = state;
+  lastRenderedFocusText = focusText;
+  lastRenderedCandidateMoveState = state.plan.candidateMoveState;
+  renderWhy(state.coach, state.plan);
 }
 
 // 盤面クリックからの着手が使う共通処理(STEP 5-Bで入力欄からの着手は廃止した)。
@@ -1826,7 +1877,9 @@ async function playMove(moveUsi: string): Promise<boolean> {
       return false;
     }
     render(result);
-    if (result.plan.candidateMoveState === "pending") {
+    // STEP 5-F(A-2c): ⑧が"pending"のときだけでなく、③(focusText)がまだ載って
+    // いないときも再取得する(候補手が0件の行は"pending"を通らないため)。
+    if (shouldRetryPlanRefresh(result.plan, 0, result.status.isEnd)) {
       schedulePlanRefresh(result.sfen);
     }
     return true;
@@ -1872,7 +1925,8 @@ async function handleBoardMoveClick(candidates: string[]): Promise<void> {
 // 両方をこのヘルパー経由にそろえる。
 function renderAndScheduleRefresh(state: GameStateResponse): void {
   render(state);
-  if (state.plan.candidateMoveState === "pending") {
+  // STEP 5-F(A-2c): playMoveと同じ条件にそろえる(③がまだ載っていなければ待つ)。
+  if (shouldRetryPlanRefresh(state.plan, 0, state.status.isEnd)) {
     schedulePlanRefresh(state.sfen);
   }
 }

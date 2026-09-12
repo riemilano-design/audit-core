@@ -580,20 +580,52 @@ export function boardMarksFromState(
 export const PLAN_REFRESH_MAX_ATTEMPTS = 30;
 
 /**
- * ⑧の再取得をもう一度予約してよいかを返す純粋関数
+ * STEP 5-F(A-2c、人間承認済み): ③(focusText)だけを待つ場合の再取得の上限。
+ *
+ * ⑧とは待つ対象が違うため、上限も別にする。⑧は「基準局面1回＋候補手ごとに1回」の
+ * 直列探索で実測18〜19秒かかるが、③だけを待つのは候補手が0件の行であり、
+ * サーバー側は computeFocusText の1回の探索(movetime既定＝実測2.00秒)を終えると
+ * 候補手の安全確認へ進まずに早期returnする(apps/server/src/api/stateResponse.ts の
+ * `routePlanResult.candidateMoves.length === 0` の分岐)。したがって数秒で載る。
+ *
+ * 8回(1.5秒×8＝12秒)は実測2.00秒に対して6倍の余裕である。上限を⑧と同じ30回に
+ * しないのは、focusTextがnullのまま確定する行(王手中・終局・詰み。
+ * pieceThreatFocusExplanation.tsがnullを返す)では、画面はサーバーが「まだ計算して
+ * いない」のか「計算した結果なにも言うことが無い」のかを区別できず、必ず上限まで
+ * 回り切るためである。GETはエンジンを起動しない(server.tsのGET /api/gameは
+ * candidateMoveStateが"pending"のときだけrunBackgroundPlanAnalysisを呼ぶ)が、
+ * 状態の組み立ては毎回走るので、無駄打ちの回数は小さく抑える。
+ *
+ * **この8という値はI-7の300cpと同様に「下書きの初期値」であり、実機の計測で
+ * 見直してよい。** 一般的な正解として扱わないこと。
+ */
+export const FOCUS_TEXT_REFRESH_MAX_ATTEMPTS = 8;
+
+/**
+ * 再取得をもう一度予約してよいかを返す純粋関数
  * (DOM非依存、テスト容易性のためgameApi.ts側に置く)。
  *
- * - "ready"(解析完了)・"unavailable"(そもそも候補手が無い)になったら止める
- * - まだ"pending"でも、上限回数に達したら止める(無限にポーリングしない)
+ * 待つ対象は2つある。
+ * - ⑧(候補手の参考評価): "pending"の間だけ待つ。"ready"・"unavailable"になったら止める
+ * - ③(focusText): まだ載っていない間だけ待つ。**候補手が0件の行では
+ *   candidateMoveStateが最初から"unavailable"で"pending"を通らないため、
+ *   ⑧の条件だけでは一度も再取得が走らない**(STEP 5-F A-2c。固定棋譜4局59行のうち
+ *   47行がこれに当たる)
+ *
+ * 終局後は何も待たない(新しい解析が載ることはない)。
  *
  * 判定材料はサーバーが返した状態と試行回数だけで、将棋の判断は一切行わない。
  */
 export function shouldRetryPlanRefresh(
-  plan: Pick<ReachablePlanBody, "candidateMoveState">,
+  plan: Pick<ReachablePlanBody, "candidateMoveState" | "focusText">,
   attempt: number,
+  isEnd = false,
 ): boolean {
-  if (plan.candidateMoveState !== "pending") return false;
-  return attempt < PLAN_REFRESH_MAX_ATTEMPTS;
+  if (isEnd) return false;
+  if (plan.candidateMoveState === "pending") return attempt < PLAN_REFRESH_MAX_ATTEMPTS;
+  // ⑧は待たなくてよい状態。③がまだ載っていなければ、そのぶんだけ待つ。
+  if ((plan.focusText ?? null) !== null) return false;
+  return attempt < FOCUS_TEXT_REFRESH_MAX_ATTEMPTS;
 }
 
 export interface GameStateResponse {
