@@ -1,4 +1,8 @@
-// STEP T-7(A-1)のテスト。docs/STEP_T-7_PLAN_2026-09-11.md 2. A-1 に従う。
+// 元はSTEP T-7(A-1)のテスト(scripts/playtest/lib/engineReference.test.ts)。
+// STEP 5-F(docs/STEP_5-F_PLAN_2026-09-12.md 4. A-1)で本番へ移設した
+// engineReference.tsのテストとして、本番側(apps/server/src/analysis/)へ移す。
+// テストの内容・件数は変えていない(import元だけをこのファイルからの相対パスに
+// 変更した)。
 
 import { Board } from "shogiops/board";
 import { Hands } from "shogiops/hands";
@@ -7,8 +11,8 @@ import { Shogi } from "shogiops/variant/shogi";
 import { parseSquareName } from "shogiops/util";
 import type { Role } from "shogiops/types";
 import { describe, expect, it } from "vitest";
-import type { LowPriorityEngine } from "../../../apps/server/src/engine/prioritizedEngine.js";
-import type { GoOptions, MultiPvGoResult } from "../../../apps/server/src/engine/usiEngine.js";
+import type { LowPriorityEngine } from "../engine/prioritizedEngine.js";
+import type { GoOptions, MultiPvGoResult } from "../engine/usiEngine.js";
 import { captureSquareOf, measureEngineReference, passSfen } from "./engineReference.js";
 
 const INITIAL_SFEN = "lnsgkgsnl/1r5b1/ppppppppp/9/9/9/PPPPPPPPP/1B5R1/LNSGKGSNL b - 1";
