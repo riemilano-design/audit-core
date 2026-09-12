@@ -38,7 +38,16 @@ export function toCachedPlan(
   return {
     sfen,
     targetShapeId: result.targetShapeId,
-    plan: { reachableShapes: result.reachableShapes, candidateMove: result.candidateMove },
+    plan: {
+      reachableShapes: result.reachableShapes,
+      candidateMove: result.candidateMove,
+      // STEP 5-F(A-4): ③(focusText)を詰め替える。ここを写し忘れると、
+      // safeComputeReachablePlanが計算していても記録には null で載る
+      // (buildStateResponseWithPlan が cachedPlan.plan.focusText を読むため)。
+      // 2026-09-12 の A-4 で実際に踏んだ ― 引数を渡す側だけを直して、
+      // 受け取った結果を詰め替える側を数えていなかった(計画書 14.13)。
+      focusText: result.focusText,
+    },
   };
 }
 
@@ -148,6 +157,27 @@ export async function buildReadyRecord(
   // null。referenceEngineは呼ばれない)。
   referenceEngine: LowPriorityEngine,
   referenceNodes: number,
+  // STEP 5-F(A-4、人間承認済み): ③(相手の次の狙い)を記録へ載せるためのengine。
+  // これを渡さないと computeFocusText が undefined を返し(stateResponse.ts の
+  // `if (!focusEngine) return undefined;`)、記録の plan.focusText は**欄ごと消える**。
+  // 2026-09-12 の実測では、記録44ファイル・ready 589行のすべてでこの欄が無かった。
+  //
+  // 【optionalにしない】省略可能な位置引数は、渡し忘れても呼び出しが成立し、
+  // 型エラーにもテストの失敗にもならず、**記録だけが本番と違う姿になる**
+  // (2026-09-12 に同じことが3回起きている。既知事項。docs/STEP_5-F_PLAN 14.12)。
+  // 必須にして、次に呼び出しを増やす人が tsc で止まるようにする。
+  //
+  // 【呼び出し側は withFixedSearch で包むこと】computeFocusText は
+  // measureEngineReference を nodes 無しで呼ぶため、素のハンドルを渡すと
+  // movetime(時間で打ち切る探索)になり、compare.ts の3回一致が壊れる。
+  // 本番は movetime・ハーネスは固定ノードで**同じものを測っていない**が、これは
+  // engineReference(referenceNodes)と候補手(withFixedSearch)が既に受け入れて
+  // いる取り引きと同じである(人間決定H-19)。
+  //
+  // 【engineとは別ハンドルにすること】asLowPriority()は呼ぶたびに独立した
+  // クロージャを返すため、別ハンドルにすると③のMultiPV設定が候補手側へ
+  // 持ち越されない(H-9・計画書9.6)。
+  focusEngine: LowPriorityEngine,
   // STEP U6-F(docs/STEP_UNIT6_PLAN_2026-09-12.md 10.7 D-4)。既定{}なので、
   // これを渡さない既存の呼び出し(explore.ts)は無変更で動く。
   // safeComputeReachablePlanとbuildStateResponseWithPlanの両方へ同じoptionsを渡すこと
@@ -156,7 +186,7 @@ export async function buildReadyRecord(
   options: StateResponseOptions = {},
 ): Promise<ReadyRecordLineResult> {
   const t0 = Date.now();
-  const result = await safeComputeReachablePlan(state, engine, options, undefined);
+  const result = await safeComputeReachablePlan(state, engine, options, undefined, focusEngine);
   const cachedPlan = toCachedPlan(state.sfen, result);
   const response = buildStateResponseWithPlan(
     state,

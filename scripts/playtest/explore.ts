@@ -184,6 +184,11 @@ async function runOneGame(params: {
     [],
     engine.asLowPriority(),
     DEFAULT_REFERENCE_NODES,
+    // STEP 5-F(A-4): ③用の別ハンドル(H-9。asLowPriority()は呼ぶたびに独立した
+    // クロージャを返すので、MultiPVの設定が候補手側へ持ち越されない)。
+    // explore.tsは探索であって回帰ではなく、compare.tsの3回一致の対象ではない。
+    // そのためreplay.tsと違いwithFixedSearchで包まず、本番と同じmovetimeで測る。
+    engine.asLowPriority(),
   );
   readyMsPerPly.push(latestReady.elapsedMs);
   lines.push(latestReady.line);
@@ -285,6 +290,11 @@ async function runOneGame(params: {
         boardEvents,
         engine.asLowPriority(),
         DEFAULT_REFERENCE_NODES,
+        // STEP 5-F(A-4): ③用の別ハンドル(H-9。asLowPriority()は呼ぶたびに独立した
+        // クロージャを返すので、MultiPVの設定が候補手側へ持ち越されない)。
+        // explore.tsは探索であって回帰ではなく、compare.tsの3回一致の対象ではない。
+        // そのためreplay.tsと違いwithFixedSearchで包まず、本番と同じmovetimeで測る。
+        engine.asLowPriority(),
       );
       readyMsPerPly.push(latestReady.elapsedMs);
       lines.push(latestReady.line);

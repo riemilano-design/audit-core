@@ -87,7 +87,11 @@ import type { EngineReference } from "./engineReference.js";
  * 300cp閾値の出どころ(H-2): I-7と同じdraftの初期値であり、将棋一般の閾値
  * ではない。候補手除外の300cp(candidateMoveReferenceFilter.ts)とも別物。
  */
-const DROP_THRESHOLD_CP = 300;
+// STEP 5-F(A-4、人間承認済み。H-18): 不変条件 I-11 が同じ値を見るために export する。
+// 写経すると、本番の閾値を変えたときに I-11 だけ古い値のまま残り、
+// 「本番が黙ると決めた行」で鳴く。算法を二重に持たない(A-1 で engineReference を
+// 本番へ移したときと同じ原則)。
+export const DROP_THRESHOLD_CP = 300;
 
 export interface PieceThreatFocusInput {
   /** パス局面の探索結果(analysis/engineReference.ts)。無ければnull。 */

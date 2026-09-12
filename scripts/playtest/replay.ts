@@ -218,6 +218,10 @@ async function main(): Promise<void> {
         [],
         engine.asLowPriority(),
         referenceNodes,
+        // STEP 5-F(A-4、H-19): ③用のengine。withFixedSearchで包んで固定ノードにする
+        // (包まないとcomputeFocusTextがmovetimeになり、compare.tsの3回一致が壊れる)。
+        // 候補手側と同じ包み方で、別ハンドルにする(H-9)。
+        withFixedSearch(engine.asLowPriority(), nodes),
         stateResponseOptions,
       );
       readyMsPerPly.push(elapsedMs);
@@ -323,6 +327,10 @@ async function main(): Promise<void> {
           boardEvents,
           engine.asLowPriority(),
           referenceNodes,
+          // STEP 5-F(A-4、H-19): ③用のengine。withFixedSearchで包んで固定ノードにする
+          // (包まないとcomputeFocusTextがmovetimeになり、compare.tsの3回一致が壊れる)。
+          // 候補手側と同じ包み方で、別ハンドルにする(H-9)。
+          withFixedSearch(engine.asLowPriority(), nodes),
           stateResponseOptions,
         );
         readyMsPerPly.push(elapsedMs);
