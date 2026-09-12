@@ -444,6 +444,34 @@ export interface RecognizedDirection {
   formingCount: number;
 }
 
+/**
+ * STEP U6-F(docs/STEP_UNIT6_PLAN_2026-09-12.md 10.7)。`resolveRecognizedDirection` が
+ * 一意に決まらない(ambiguous)ときの規則の選択肢。**既定は "current"** であり、
+ * 挙動は一切変えない。他の3規則はハーネス(scripts/playtest/)から切り替えて測るための
+ * ものであり、どれを本番にするかは人間が測定結果を見てから決める(未確定)。
+ *
+ * - "current": 従来の規則(pickRootMostAncestorのみ)。
+ * - "rankedHeadUnique": rankReachableShapesの並びの先頭を採るが、先頭が別候補と
+ *   (adjustment, matchScore)で同点なら ambiguous のまま。
+ * - "rankedHeadAlways": 同じ並びの先頭を常に採る(同点でもshapeId昇順で必ず決まる)。
+ * - "familyCollapse": 候補を祖先の根でグループ分けし、1系統に絞れたときだけ
+ *   pickRootMostAncestorを当てる。2系統以上残れば ambiguous のまま。
+ */
+export type DirectionRule =
+  | "current"
+  | "rankedHeadUnique"
+  | "rankedHeadAlways"
+  | "familyCollapse";
+
+/**
+ * STEP U6-F: StateResponseBodyWithPlanの計算に使うオプション。ExplainPositionOptionsに
+ * directionRule(任意)を足しただけで、それ以外のフィールドの意味は変えない。
+ * 省略時(directionRuleがundefined)は"current"として扱う(既定を変えないため)。
+ */
+export interface StateResponseOptions extends ExplainPositionOptions {
+  directionRule?: DirectionRule;
+}
+
 /** shapeId から parent_shape_id をたどった祖先の一覧。循環していても止まる(安全側)。 */
 function ancestorIdsOf(
   shapeId: string,
@@ -533,10 +561,19 @@ function pickRootMostAncestor(
  * "ambiguous" を返す。ここで順位付けを発明しない
  * ([../../../../CLAUDE.md](../../../../CLAUDE.md)「絶対に守るルール」4番)。
  * この状態は人間へ報告する対象である。
+ *
+ * 【STEP U6-F で追加した rule・ranked 引数(docs/STEP_UNIT6_PLAN_2026-09-12.md 10.7)】
+ * 既定 rule="current" のときは、上記の規則(pickRootMostAncestorのみ)から一切変えない。
+ * rule に他の値を渡した場合だけ、下記の resolveAmbiguousCandidates が
+ * pickRootMostAncestor の代わりに使われる(下の2箇所のみ。rootMostCompleted の
+ * 一意性判定(everCompletedShapeIdsの分岐)には手を加えない)。ranked は
+ * rankReachableShapes の戻り値であり、"current" では参照しない(既定を変えないため)。
  */
 export function resolveRecognizedDirection(
   shapes: Pick<ShapeFormationResult, "shapeId" | "status" | "parentShapeId">[],
   everCompletedShapeIds: ReadonlySet<string> = new Set(),
+  rule: DirectionRule = "current",
+  ranked: readonly Pick<RankedReachableShape, "shapeId" | "matchScore" | "adjustment">[] = [],
 ): RecognizedDirection {
   const forming = shapes.filter((shape) => shape.status === "forming");
   const formingCount = forming.length;
@@ -550,7 +587,7 @@ export function resolveRecognizedDirection(
     if (forming.length === 1) {
       return { shapeId: forming[0]!.shapeId, reason: "single", formingCount: 1 };
     }
-    const resolved = pickRootMostAncestor(forming, parentById);
+    const resolved = resolveAmbiguousCandidates(forming, parentById, rule, ranked);
     return resolved !== undefined
       ? { shapeId: resolved, reason: "single", formingCount }
       : { shapeId: undefined, reason: "ambiguous", formingCount };
@@ -564,6 +601,9 @@ export function resolveRecognizedDirection(
   );
   if (rootMostCompleted.length !== 1) {
     // 0件(循環など)・2件以上(別系統に分岐した完了履歴)はどちらも一意に決まらない。
+    // STEP U6-F: このambiguityはruleにかかわらず変えない(docs/STEP_UNIT6_PLAN_2026-09-12.md
+    // 10.7 B。「forming の中から一つ選ぶ」問題ではなく「completed の履歴から系統の根を
+    // 決める」問題であり、rankedはcompletedを除外するため根拠が無い)。
     return { shapeId: undefined, reason: "ambiguous", formingCount };
   }
   const mostDevelopedCompletedId = rootMostCompleted[0]!;
@@ -579,10 +619,77 @@ export function resolveRecognizedDirection(
   if (candidates.length === 1) {
     return { shapeId: candidates[0]!.shapeId, reason: "single", formingCount };
   }
-  const resolved = pickRootMostAncestor(candidates, parentById);
+  const resolved = resolveAmbiguousCandidates(candidates, parentById, rule, ranked);
   return resolved !== undefined
     ? { shapeId: resolved, reason: "single", formingCount }
     : { shapeId: undefined, reason: "ambiguous", formingCount };
+}
+
+/**
+ * STEP U6-F(docs/STEP_UNIT6_PLAN_2026-09-12.md 10.7 C)。resolveRecognizedDirection の
+ * 2箇所(everCompletedShapeIdsが空のときのforming、非空のときのcandidates)で共有する、
+ * 「候補が複数あるときに1件へ絞る規則」の切り替え。rule="current" のときは
+ * pickRootMostAncestor だけを使い、挙動を一切変えない。
+ *
+ * 他の3規則は、rankedReachableShapes の戻り値(ranked。tier→matchScore降順→shapeId昇順で
+ * 既に並んでいる)の並び順をそのまま使う。tierの数値を再計算せず、同点判定は
+ * (adjustment, matchScore)の値そのものの一致だけで見る(既存のtier計算を書き直さない)。
+ *
+ * 候補(candidates)のうち ranked に1件も含まれないもの(side="opponent"のformingなど、
+ * rankReachableShapesが除外する側)しか無い場合は、rule="current"以外では ambiguous を
+ * 返す(判定材料が無いため)。
+ */
+function resolveAmbiguousCandidates(
+  candidates: Pick<ShapeFormationResult, "shapeId" | "parentShapeId">[],
+  parentById: Map<string, string | null>,
+  rule: DirectionRule,
+  ranked: readonly Pick<RankedReachableShape, "shapeId" | "matchScore" | "adjustment">[],
+): string | undefined {
+  if (rule === "current") {
+    return pickRootMostAncestor(candidates, parentById);
+  }
+
+  const candidateIds = new Set(candidates.map((candidate) => candidate.shapeId));
+  const rankedRestricted = ranked.filter((entry) => candidateIds.has(entry.shapeId));
+  if (rankedRestricted.length === 0) {
+    return undefined;
+  }
+
+  if (rule === "rankedHeadAlways") {
+    return rankedRestricted[0]!.shapeId;
+  }
+
+  if (rule === "rankedHeadUnique") {
+    const head = rankedRestricted[0]!;
+    const second = rankedRestricted[1];
+    if (second !== undefined && second.adjustment === head.adjustment && second.matchScore === head.matchScore) {
+      return undefined;
+    }
+    return head.shapeId;
+  }
+
+  // rule === "familyCollapse": 候補を祖先の根(ancestorIdsOfでたどった先。無ければ自分自身)
+  // でグループ分けし、系統が1つに畳めたときだけ、そのグループ内でpickRootMostAncestorを
+  // 当てる。2系統以上残れば ambiguous のまま(新しいフィールドは足さない)。
+  const rootOf = (shapeId: string): string => {
+    const ancestors = ancestorIdsOf(shapeId, parentById);
+    return ancestors.length > 0 ? ancestors[ancestors.length - 1]! : shapeId;
+  };
+  const groups = new Map<string, Pick<ShapeFormationResult, "shapeId" | "parentShapeId">[]>();
+  for (const candidate of candidates) {
+    const root = rootOf(candidate.shapeId);
+    const group = groups.get(root);
+    if (group) {
+      group.push(candidate);
+    } else {
+      groups.set(root, [candidate]);
+    }
+  }
+  if (groups.size !== 1) {
+    return undefined;
+  }
+  const onlyGroup = [...groups.values()][0]!;
+  return pickRootMostAncestor(onlyGroup, parentById);
 }
 
 /** 方向が1つに定まらないときに [4] へ出す一文(人間が指定した文言)。 */
@@ -601,7 +708,7 @@ export const CANDIDATE_MOVES_EXCLUDED_TEXT =
 
 function computeRankedPlanContext(
   current: GameState,
-  options: ExplainPositionOptions = {},
+  options: StateResponseOptions = {},
   selectedTargetShapeId?: string,
 ): RankedPlanContext {
   const shapeResults = analyzeShapeFormation(current.sfen, current.moveHistory, options);
@@ -641,7 +748,12 @@ function computeRankedPlanContext(
   for (const shape of shapeResults) {
     if (shape.status === "completed") everCompletedShapeIds.add(shape.shapeId);
   }
-  const direction = resolveRecognizedDirection(shapeResults, everCompletedShapeIds);
+  const direction = resolveRecognizedDirection(
+    shapeResults,
+    everCompletedShapeIds,
+    options.directionRule ?? "current",
+    ranked,
+  );
   const explicit =
     selectedTargetShapeId !== undefined
       ? reachableShapes.find((s) => s.shapeId === selectedTargetShapeId)
@@ -941,7 +1053,7 @@ function toPieceThreatMessages(current: GameState, isGameEnd: boolean): PieceThr
  * Phase1のcoachやPhase6の各Unitと同様、ここでの失敗を対局本体へ波及させない
  * (失敗時は空配列=表示しないに落とす)。
  */
-function toCaptureSummaryMessages(current: GameState, options: ExplainPositionOptions): CaptureSummaryMessage[] {
+function toCaptureSummaryMessages(current: GameState, options: StateResponseOptions): CaptureSummaryMessage[] {
   try {
     return explainCaptureSummary(current.moveHistory, options.initialSfen);
   } catch (err) {
@@ -1011,7 +1123,7 @@ function filterLastMoveMessagesForGameEnd(
  * その手を指す前の局面で自玉に王手がかかっていた(isInCheck、rules/の既存関数)。
  * 玉の判定はrules/経由のshogiops読み取りのみで、自作の判定は行わない。
  */
-function shouldSuppressSquareLost(current: GameState, options: ExplainPositionOptions, lastMoveOutcome: MoveOutcome): boolean {
+function shouldSuppressSquareLost(current: GameState, options: StateResponseOptions, lastMoveOutcome: MoveOutcome): boolean {
   try {
     const { moveHistory } = current;
     const k = lastMoveOutcome.opponentMoveUsi !== null ? 2 : 1;
@@ -1047,7 +1159,7 @@ function shouldSuppressSquareLost(current: GameState, options: ExplainPositionOp
 function filterSquareLostIfSuppressed(
   messages: (BoardEventMessage | MoveOutcomeMessage | CaptureSummaryMessage)[],
   current: GameState,
-  options: ExplainPositionOptions,
+  options: StateResponseOptions,
   lastMoveOutcome: MoveOutcome,
 ): (BoardEventMessage | MoveOutcomeMessage | CaptureSummaryMessage)[] {
   if (!shouldSuppressSquareLost(current, options, lastMoveOutcome)) return messages;
@@ -1186,7 +1298,7 @@ function toReachableShapeBodies(reachableShapes: RankedReachableShape[]): Reacha
 // 障害からも守るための最後の防御線)。
 export function safeExplainPosition(
   current: GameState,
-  options: ExplainPositionOptions = {},
+  options: StateResponseOptions = {},
 ): CoachExplanation[] | undefined {
   try {
     // Phase4: current.wasLastOpponentMoveForced(gameSession.tsが確定させた事実)を
@@ -1238,7 +1350,7 @@ function safeEscapeSquareThreats(sfen: string): string[] {
   }
 }
 
-export function buildStateResponse(current: GameState, options: ExplainPositionOptions = {}): StateResponseBody {
+export function buildStateResponse(current: GameState, options: StateResponseOptions = {}): StateResponseBody {
   return {
     ...toPublicGameState(current),
     status: getStatus(current),
@@ -1252,7 +1364,7 @@ export function buildStateResponse(current: GameState, options: ExplainPositionO
 /** ⑤⑥⑦の計算(エンジン不要)も、Phase1のcoach同様に失敗を対局本体へ波及させない。 */
 function safeComputeRankedPlanContext(
   current: GameState,
-  options: ExplainPositionOptions = {},
+  options: StateResponseOptions = {},
   selectedTargetShapeId?: string,
 ): RankedPlanContext | undefined {
   try {
@@ -1403,7 +1515,7 @@ export function filterContradictoryConsiderations(
 export function buildStateResponseWithPlan(
   current: GameState,
   cachedPlan: CachedReachablePlan | undefined,
-  options: ExplainPositionOptions = {},
+  options: StateResponseOptions = {},
   selectedTargetShapeId?: string,
   planChanged = false,
   planChangeReason: PlanChangeReason | null = null,
@@ -1566,7 +1678,7 @@ export function buildStateResponseWithPlan(
 export async function computeReachablePlan(
   current: GameState,
   engine: LowPriorityEngine,
-  options: ExplainPositionOptions = {},
+  options: StateResponseOptions = {},
   selectedTargetShapeId?: string,
 ): Promise<{
   reachableShapes: RankedReachableShape[];
@@ -1602,7 +1714,7 @@ export async function computeReachablePlan(
 export async function safeComputeReachablePlan(
   current: GameState,
   engine: LowPriorityEngine,
-  options: ExplainPositionOptions = {},
+  options: StateResponseOptions = {},
   selectedTargetShapeId?: string,
 ): Promise<
   | { reachableShapes: RankedReachableShape[]; candidateMove: CandidateMoveExplanationResult | undefined; targetShapeId: string | undefined }
@@ -1626,7 +1738,7 @@ export async function safeComputeReachablePlan(
  */
 function buildPlanSnapshotBeforeMove(
   stateBeforeMove: GameState,
-  options: ExplainPositionOptions,
+  options: StateResponseOptions,
   selectedTargetShapeId: string | undefined,
 ): PlanSnapshot | undefined {
   const beforeContext = computeRankedPlanContext(stateBeforeMove, options, selectedTargetShapeId);
@@ -1660,7 +1772,7 @@ export function computePlanChangeAfterMove(
   stateBeforeMove: GameState,
   stateAfterMove: GameState,
   playedMoveUsi: string,
-  options: ExplainPositionOptions = {},
+  options: StateResponseOptions = {},
   selectedTargetShapeId?: string,
 ): boolean {
   const previousSnapshot = buildPlanSnapshotBeforeMove(stateBeforeMove, options, selectedTargetShapeId);
@@ -1680,7 +1792,7 @@ export function safeComputePlanChangeAfterMove(
   stateBeforeMove: GameState,
   stateAfterMove: GameState,
   playedMoveUsi: string,
-  options: ExplainPositionOptions = {},
+  options: StateResponseOptions = {},
   selectedTargetShapeId?: string,
 ): boolean {
   try {
@@ -1708,7 +1820,7 @@ export function computePlanChangeReasonAfterMove(
   stateBeforeMove: GameState,
   stateAfterMove: GameState,
   playedMoveUsi: string,
-  options: ExplainPositionOptions = {},
+  options: StateResponseOptions = {},
   selectedTargetShapeId?: string,
 ): PlanChangeReason | null {
   const previousSnapshot = buildPlanSnapshotBeforeMove(stateBeforeMove, options, selectedTargetShapeId);
@@ -1766,7 +1878,7 @@ export function computeMoveOutcomeAfterMove(
   stateAfterMove: GameState,
   playedMoveUsi: string,
   opponentMoveUsi: string | null,
-  options: ExplainPositionOptions = {},
+  options: StateResponseOptions = {},
   selectedTargetShapeId?: string,
   planChangeReason: PlanChangeReason | null = null,
   displayedPlan: CachedReachablePlan | null | undefined = undefined,
@@ -1864,7 +1976,7 @@ export function safeComputeMoveOutcomeAfterMove(
   stateAfterMove: GameState,
   playedMoveUsi: string,
   opponentMoveUsi: string | null,
-  options: ExplainPositionOptions = {},
+  options: StateResponseOptions = {},
   selectedTargetShapeId?: string,
   planChangeReason: PlanChangeReason | null = null,
   displayedPlan: CachedReachablePlan | null | undefined = undefined,
@@ -1895,7 +2007,7 @@ export function safeComputePlanChangeReasonAfterMove(
   stateBeforeMove: GameState,
   stateAfterMove: GameState,
   playedMoveUsi: string,
-  options: ExplainPositionOptions = {},
+  options: StateResponseOptions = {},
   selectedTargetShapeId?: string,
 ): PlanChangeReason | null {
   try {

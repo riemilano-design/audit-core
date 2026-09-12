@@ -1775,6 +1775,120 @@ describe("STEP 4-1: resolveRecognizedDirection(everCompletedShapeIdsで方向の
   });
 });
 
+// STEP U6-F(docs/STEP_UNIT6_PLAN_2026-09-12.md 10.7): resolveRecognizedDirection に
+// 追加した rule・ranked 引数の単体テスト。既定 rule="current" は上記の既存テストで
+// 一切変えていないことが確認済みのため、ここでは他の3規則(rankedHeadUnique /
+// rankedHeadAlways / familyCollapse)だけを対象にする。ranked は
+// rankReachableShapes の戻り値を模した最小の値({shapeId, matchScore, adjustment})を
+// 手で組み立てる(実際のランキング計算はここでは呼ばない)。
+describe("STEP U6-F: resolveRecognizedDirection(directionRuleの規則)", () => {
+  type Shape = Pick<ShapeFormationResult, "shapeId" | "status" | "parentShapeId">;
+  const shape = (
+    shapeId: string,
+    status: "none" | "forming" | "completed",
+    parentShapeId: string | null,
+  ): Shape => ({ shapeId, status, parentShapeId });
+
+  const honmino = (status: "none" | "forming" | "completed") => shape("mino_honmino", status, null);
+  const takamino = (status: "none" | "forming" | "completed") =>
+    shape("mino_takamino", status, "mino_honmino");
+  const ginkanmuri = (status: "none" | "forming" | "completed") =>
+    shape("mino_ginkanmuri", status, "mino_takamino");
+
+  type RankedEntry = { shapeId: string; matchScore: number; adjustment: "prioritize" | "deprioritize" | null };
+  const ranked = (shapeId: string, matchScore: number, adjustment: RankedEntry["adjustment"] = null): RankedEntry => ({
+    shapeId,
+    matchScore,
+    adjustment,
+  });
+
+  it("観点1: 候補が1件(祖先鎖)に決まる場合は、3規則とも既定(current)と同じ結果になる", () => {
+    const shapes = [honmino("forming"), takamino("forming"), ginkanmuri("forming")];
+    const rankedList = [ranked("mino_honmino", 0.75), ranked("mino_takamino", 0.5), ranked("mino_ginkanmuri", 0.25)];
+
+    const current = resolveRecognizedDirection(shapes);
+    expect(current).toEqual({ shapeId: "mino_honmino", reason: "single", formingCount: 3 });
+
+    for (const rule of ["rankedHeadUnique", "rankedHeadAlways", "familyCollapse"] as const) {
+      const result = resolveRecognizedDirection(shapes, undefined, rule, rankedList);
+      expect(result).toEqual({ shapeId: "mino_honmino", reason: "single", formingCount: 3 });
+    }
+  });
+
+  it("観点2: 同点(adjustment・matchScoreとも同じ2件)のとき、rankedHeadUniqueはambiguous、rankedHeadAlwaysは決まる", () => {
+    const shapes = [shape("family_a_root", "forming", null), shape("family_b_root", "forming", null)];
+    const rankedList = [ranked("family_a_root", 0.5), ranked("family_b_root", 0.5)];
+
+    const uniqueResult = resolveRecognizedDirection(shapes, undefined, "rankedHeadUnique", rankedList);
+    expect(uniqueResult).toEqual({ shapeId: undefined, reason: "ambiguous", formingCount: 2 });
+
+    const alwaysResult = resolveRecognizedDirection(shapes, undefined, "rankedHeadAlways", rankedList);
+    expect(alwaysResult).toEqual({ shapeId: "family_a_root", reason: "single", formingCount: 2 });
+  });
+
+  it("観点3: 系統が2つ以上のとき、familyCollapseはambiguous、rankedHead*(同点でない)は決まる", () => {
+    const shapes = [shape("family_a_root", "forming", null), shape("family_b_root", "forming", null)];
+    const rankedList = [ranked("family_a_root", 0.7), ranked("family_b_root", 0.3)];
+
+    const collapseResult = resolveRecognizedDirection(shapes, undefined, "familyCollapse", rankedList);
+    expect(collapseResult).toEqual({ shapeId: undefined, reason: "ambiguous", formingCount: 2 });
+
+    const uniqueResult = resolveRecognizedDirection(shapes, undefined, "rankedHeadUnique", rankedList);
+    expect(uniqueResult).toEqual({ shapeId: "family_a_root", reason: "single", formingCount: 2 });
+
+    const alwaysResult = resolveRecognizedDirection(shapes, undefined, "rankedHeadAlways", rankedList);
+    expect(alwaysResult).toEqual({ shapeId: "family_a_root", reason: "single", formingCount: 2 });
+  });
+
+  it("観点4: everCompletedShapeIdsが空のブランチでも規則が効く(観点2・3で確認済み。ここでは対照としてcurrentがambiguousのままであることを確かめる)", () => {
+    const shapes = [shape("family_a_root", "forming", null), shape("family_b_root", "forming", null)];
+    const current = resolveRecognizedDirection(shapes);
+    expect(current).toEqual({ shapeId: undefined, reason: "ambiguous", formingCount: 2 });
+  });
+
+  it("観点4: everCompletedShapeIdsが非空のブランチでも規則が効く(STEP 4-1の兄弟ambiguousケースにrankedHeadAlwaysを適用すると決まる)", () => {
+    const shapes = [
+      shape("family_a_child", "forming", "mino_honmino"),
+      shape("family_b_child", "forming", "mino_honmino"),
+    ];
+    const everCompleted = new Set(["mino_honmino"]);
+    const rankedList = [ranked("family_a_child", 0.6), ranked("family_b_child", 0.4)];
+
+    const current = resolveRecognizedDirection(shapes, everCompleted);
+    expect(current).toEqual({ shapeId: undefined, reason: "ambiguous", formingCount: 2 });
+
+    const alwaysResult = resolveRecognizedDirection(shapes, everCompleted, "rankedHeadAlways", rankedList);
+    expect(alwaysResult).toEqual({ shapeId: "family_a_child", reason: "single", formingCount: 2 });
+  });
+
+  it("観点5: rootMostCompleted.length !== 1(567)のambiguityは、どの規則でも変わらない", () => {
+    const shapes = [
+      shape("family_a_root", "completed", null),
+      shape("family_b_root", "completed", null),
+      shape("family_a_root_child", "forming", "family_a_root"),
+    ];
+    const everCompleted = new Set(["family_a_root", "family_b_root"]);
+    const rankedList = [ranked("family_a_root_child", 0.9)];
+
+    for (const rule of ["current", "rankedHeadUnique", "rankedHeadAlways", "familyCollapse"] as const) {
+      const result = resolveRecognizedDirection(shapes, everCompleted, rule, rankedList);
+      expect(result).toEqual({ shapeId: undefined, reason: "ambiguous", formingCount: 1 });
+    }
+  });
+
+  it("観点6: 候補がrankedに1件も無いとき(既定の空配列)は、非currentの3規則ともambiguousになる", () => {
+    const shapes = [honmino("forming"), takamino("forming"), ginkanmuri("forming")];
+
+    const current = resolveRecognizedDirection(shapes);
+    expect(current).toEqual({ shapeId: "mino_honmino", reason: "single", formingCount: 3 });
+
+    for (const rule of ["rankedHeadUnique", "rankedHeadAlways", "familyCollapse"] as const) {
+      const result = resolveRecognizedDirection(shapes, undefined, rule);
+      expect(result).toEqual({ shapeId: undefined, reason: "ambiguous", formingCount: 3 });
+    }
+  });
+});
+
 // STEP 4-1 の配線(computeRankedPlanContext内でbuildRecognitionTimelineの出力と
 // 現在completedのidを集合として組み立てる部分)を担保する統合テスト。
 // 単体テスト(直前のdescribe)は組み立て済みの集合を渡すため、配線のバグを検出できない。

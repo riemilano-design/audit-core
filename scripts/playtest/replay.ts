@@ -24,6 +24,8 @@ import {
   safeComputeMoveOutcomeAfterMove,
   safeComputeBoardEventsAfterMove,
   type CachedReachablePlan,
+  type DirectionRule,
+  type StateResponseOptions,
 } from "../../apps/server/src/api/stateResponse.js";
 import { resolveEnginePath } from "../../apps/server/src/engine/enginePath.js";
 import { PrioritizedEngine } from "../../apps/server/src/engine/prioritizedEngine.js";
@@ -57,6 +59,18 @@ const REPO_ROOT = path.join(__dirname, "..", "..");
 // (README参照)。
 const DEFAULT_NODES = 4_000_000;
 const DEFAULT_THREADS = 1;
+
+// STEP U6-F(docs/STEP_UNIT6_PLAN_2026-09-12.md 10.7)。resolveRecognizedDirection
+// (apps/server/src/api/stateResponse.ts)の規則を切り替えて測るための引数。
+// 既定は"current"(本番の既定と同じ。挙動を変えない)。ここに判定ロジックは無く、
+// 名前を本番関数へ渡すだけ(規則そのものはstateResponse.tsが持つ)。
+const DEFAULT_DIRECTION_RULE: DirectionRule = "current";
+const DIRECTION_RULES: readonly DirectionRule[] = [
+  "current",
+  "rankedHeadUnique",
+  "rankedHeadAlways",
+  "familyCollapse",
+];
 
 interface FixedKifu {
   id: string;
@@ -93,7 +107,7 @@ async function main(): Promise<void> {
   const kifuArg = args[0];
   if (!kifuArg || kifuArg.startsWith("--")) {
     console.error(
-      "使い方: npx tsx scripts/playtest/replay.ts <kifu.json> [--out <file.jsonl>] [--nodes <N>] [--threads <N>] [--reference-nodes <N>]",
+      "使い方: npx tsx scripts/playtest/replay.ts <kifu.json> [--out <file.jsonl>] [--nodes <N>] [--threads <N>] [--reference-nodes <N>] [--direction-rule <名前>]",
     );
     process.exit(1);
   }
@@ -116,6 +130,18 @@ async function main(): Promise<void> {
   const referenceNodesIndex = args.indexOf("--reference-nodes");
   const referenceNodes =
     referenceNodesIndex !== -1 ? Number(args[referenceNodesIndex + 1]) : nodes > 0 ? nodes : DEFAULT_NODES;
+
+  // STEP U6-F: --direction-rule <名前>。未指定なら既定("current"。本番の既定と同じ)。
+  const directionRuleIndex = args.indexOf("--direction-rule");
+  const directionRuleArg = directionRuleIndex !== -1 ? args[directionRuleIndex + 1] : undefined;
+  if (directionRuleArg !== undefined && !DIRECTION_RULES.includes(directionRuleArg as DirectionRule)) {
+    console.error(
+      `--direction-rule には ${DIRECTION_RULES.join(" / ")} のいずれかを指定してください(指定値: ${directionRuleArg})`,
+    );
+    process.exit(1);
+  }
+  const directionRule: DirectionRule = (directionRuleArg as DirectionRule | undefined) ?? DEFAULT_DIRECTION_RULE;
+  const stateResponseOptions: StateResponseOptions = { directionRule };
 
   const kifu = JSON.parse(readFileSync(path.resolve(kifuArg), "utf-8")) as FixedKifu;
   const kifuId = kifu.id;
@@ -143,6 +169,7 @@ async function main(): Promise<void> {
       nodes,
       threads,
       referenceNodes,
+      directionRule,
     }),
   );
 
@@ -169,7 +196,7 @@ async function main(): Promise<void> {
 
     // 初期局面(POST /api/game/new相当)。
     {
-      const { line } = buildImmediateRecord(state, 0, null, null, false, null, null, []);
+      const { line } = buildImmediateRecord(state, 0, null, null, false, null, null, [], stateResponseOptions);
       lines.push(line);
     }
     {
@@ -185,6 +212,7 @@ async function main(): Promise<void> {
         [],
         engine.asLowPriority(),
         referenceNodes,
+        stateResponseOptions,
       );
       readyMsPerPly.push(elapsedMs);
       lines.push(line);
@@ -238,9 +266,9 @@ async function main(): Promise<void> {
         throw new ReplayHaltError();
       }
 
-      const planChanged = safeComputePlanChangeAfterMove(stateBeforeMove, state, m, {}, undefined);
+      const planChanged = safeComputePlanChangeAfterMove(stateBeforeMove, state, m, stateResponseOptions, undefined);
       const planChangeReason = planChanged
-        ? safeComputePlanChangeReasonAfterMove(stateBeforeMove, state, m, {}, undefined)
+        ? safeComputePlanChangeReasonAfterMove(stateBeforeMove, state, m, stateResponseOptions, undefined)
         : null;
       const opponentMoveUsi =
         state.moveHistory.length === stateBeforeMove.moveHistory.length + 2
@@ -252,7 +280,7 @@ async function main(): Promise<void> {
         state,
         m,
         opponentMoveUsi,
-        {},
+        stateResponseOptions,
         undefined,
         planChangeReason,
         // STEP 5-1(B-3、人間承認済み。LP-2): server.tsと同じ呼び出し順を保つため、
@@ -263,7 +291,17 @@ async function main(): Promise<void> {
       const ply = state.moveHistory.length;
 
       {
-        const { line } = buildImmediateRecord(state, ply, m, g, planChanged, planChangeReason, moveOutcome, boardEvents);
+        const { line } = buildImmediateRecord(
+          state,
+          ply,
+          m,
+          g,
+          planChanged,
+          planChangeReason,
+          moveOutcome,
+          boardEvents,
+          stateResponseOptions,
+        );
         lines.push(line);
       }
       {
@@ -279,6 +317,7 @@ async function main(): Promise<void> {
           boardEvents,
           engine.asLowPriority(),
           referenceNodes,
+          stateResponseOptions,
         );
         readyMsPerPly.push(elapsedMs);
         lines.push(line);

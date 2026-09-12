@@ -20,6 +20,7 @@ import {
   type MoveOutcome,
   type PlanChangeReason,
   type StateResponseBodyWithPlan,
+  type StateResponseOptions,
 } from "../../../apps/server/src/api/stateResponse.js";
 import type { GameState } from "../../../apps/server/src/game/gameSession.js";
 import type { LowPriorityEngine } from "../../../apps/server/src/engine/prioritizedEngine.js";
@@ -85,12 +86,15 @@ export function buildImmediateRecord(
   planChangeReason: PlanChangeReason | null,
   moveOutcome: MoveOutcome | null,
   boardEvents: BoardEvent[],
+  // STEP U6-F(docs/STEP_UNIT6_PLAN_2026-09-12.md 10.7 D-4)。既定{}なので、
+  // これを渡さない既存の呼び出し(explore.ts)は無変更で動く。
+  options: StateResponseOptions = {},
 ): RecordLineResult {
   const t0 = Date.now();
   const response = buildStateResponseWithPlan(
     state,
     undefined,
-    {},
+    options,
     undefined,
     planChanged,
     planChangeReason,
@@ -144,14 +148,20 @@ export async function buildReadyRecord(
   // null。referenceEngineは呼ばれない)。
   referenceEngine: LowPriorityEngine,
   referenceNodes: number,
+  // STEP U6-F(docs/STEP_UNIT6_PLAN_2026-09-12.md 10.7 D-4)。既定{}なので、
+  // これを渡さない既存の呼び出し(explore.ts)は無変更で動く。
+  // safeComputeReachablePlanとbuildStateResponseWithPlanの両方へ同じoptionsを渡すこと
+  // (片方だけ"current"のままだと、規則が効いた局面でcandidateMoveStateが
+  // 必ずpendingへ落ちる。計画10.7 D-4の指摘)。
+  options: StateResponseOptions = {},
 ): Promise<ReadyRecordLineResult> {
   const t0 = Date.now();
-  const result = await safeComputeReachablePlan(state, engine, {}, undefined);
+  const result = await safeComputeReachablePlan(state, engine, options, undefined);
   const cachedPlan = toCachedPlan(state.sfen, result);
   const response = buildStateResponseWithPlan(
     state,
     cachedPlan,
-    {},
+    options,
     undefined,
     planChanged,
     planChangeReason,
