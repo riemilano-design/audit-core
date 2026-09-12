@@ -1,0 +1,15 @@
+{
+  "id": "gyokuto_gin_semari",
+  "name": "玉頭へ銀が迫る",
+  "opening_id": "ibisha",
+  "side": "opponent",
+  "recognition_pattern": [
+    { "piece": "銀", "to": "3e", "order_hint": 1 },
+    { "piece": "銀", "to": "2f", "order_hint": 2 }
+  ],
+  "current_aim_explanation": "相手は銀を3五→2六と、あなたの陣地の右側へ深く進めています。銀は前と斜め前、斜め後ろに動ける攻めの駒で、ここまで入ってこられると近くの駒が狙われやすくなります。",
+  "next_aim_explanation": "このあと相手の銀がさらに前へ出て、あなたの守りの駒や玉に近づいてくる可能性があります。銀が近づく前に、当たっている駒を逃がしておくか、その銀を攻め返せる駒を用意しておくと安心です。",
+  "source": "本アプリ自身の実測記録から起こした下書き。docs/PHASES.md 1903行が、Unit 6 の入力(「認識できない場面」)として『玉頭攻め(３五銀・２六銀)』を明記している。recognition_pattern の 3e・2f はこの３五銀・２六銀(後手の絶対座標、USI)をそのまま採ったもの。【注意して読むこと】この場面が観測されたのは相手が中飛車だった局(docs/PLAYTEST_RANKED_2026-09-10.md のC局)であり、opening_id を ibisha としているのは、data/openings/ に居飛車と四間飛車の2件しか無く、かつ data/intents/ 全体が opponent=居飛車=後手という既存の前提で作られている(apps/server/src/analysis/intentDetector.ts 冒頭コメント)ためである。中飛車のレコードを data/openings/ に足すかどうかは人間の承認事項のため、本下書きでは足していない。銀が3五・2六へ出る進出点そのものは居飛車の急戦でも現れるが、この対応づけは確認を経ていない。有段者・一次資料による確認も経ていない。",
+  "confidence_level": "low",
+  "review_status": "draft"
+}

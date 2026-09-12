@@ -128,7 +128,14 @@ describe("detectIntents", () => {
   });
 
   it("どのintentのrecognition_patternにも該当しない局面 -> 全intentがmatchStatus: none", () => {
-    const goteMoves = ["3c3d", "8c8d"];
+    // 【このgoteMovesを変えるとき / data/intents/ を増やすとき必ず読むこと】
+    // ここは「署名が1つも観測されない局面では全intentがnoneになる」ことを、実データ
+    // (data/intents/*.json)に対して確かめるテストである。そのため、この2手は
+    // 既存の全intentのrecognition_patternのどの (駒種, 移動先) にも当たらない手で
+    // なければならない。狙いを1件足すたびにこの前提は狭くなる(既知事項 P-20 と
+    // 同じ壊れ方)。実際、元の "8c8d"(歩8四)は STEP U6-I1 で足した
+    // hishasaki_fugokan の署名(歩8d)に当たるようになったため、1筋の歩へ差し替えた。
+    const goteMoves = ["3c3d", "1c1d"];
     const moveHistory = interleaveWithSenteFillers(goteMoves);
     const sfen = sfenAfter(moveHistory);
     const results = detectIntents(sfen, moveHistory);
