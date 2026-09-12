@@ -1,0 +1,12 @@
+{
+  "id": "nakabisha",
+  "name": "中飛車",
+  "name_kana": "なかびしゃ",
+  "side": "opponent",
+  "family": "振り飛車系",
+  "leads_to_shape_ids": [],
+  "scenario": null,
+  "source": "本アプリ自身の実測記録から起こした下書き。docs/PLAYTEST_RANKED_2026-09-10.md 65行・67行が、相手AIが中飛車(５二飛)・５五歩・４五歩の位取りで指してきた局を記録しており、同 115行が『中飛車・相振りなどデータにない戦法に対して名前を捏造しなかった』として、このアプリに中飛車のデータが無いことを明記している。docs/PHASES.md 1968行は、Unit 6 の入力(「認識できない場面」)として『５二飛・５五歩・４五歩の中飛車の位取り』を挙げている。名称・分類は一般的な定義(飛車を5筋=中央に振る振り飛車の一種)に拠るが、有段者・一次資料による確認は経ていない。leads_to_shape_ids は、相手側の陣形(shapes)を作成対象にしていないため ibisha と同じく空のままとした。【追加の経緯】opening_id は data/openings/ に実在する id しか使えず(scripts/validate-data.mjs の REFERENCE_FIELDS)、中飛車の狙いを data/intents/ に足すにはこのレコードが先に要る。戦型追加は人間の承認事項のため、2026-09-12 に人間の承認を得て追加した(『openings は参照先のレコードであって、戦型を事前に決める仕組みではない。本番が初期局面から始まりシステムが何も決めない、という原則は変わらない』)。",
+  "confidence_level": "medium",
+  "review_status": "draft"
+}
