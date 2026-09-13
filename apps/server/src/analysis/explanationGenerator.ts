@@ -139,7 +139,7 @@ const DEFAULT_INTENT_PICK_RULE: IntentPickRule = "speakable_then_reviewed";
  * はっきりとは分かりません。」)へ落ちる。draft かどうかの判断は exposeName に委ね、
  * ここで review_status を直接読まない(判断を2箇所に散らさないため)。
  */
-function canSpeakAtIntentStage(result: IntentDetectionResult): boolean {
+export function canSpeakAtIntentStage(result: IntentDetectionResult): boolean {
   if (result.matchStatus !== "matched") return true;
   return exposeName(result.name, result.reviewStatus, "shape").pendingNote === null;
 }
@@ -526,7 +526,7 @@ export function generateCoachExplanations(
 }
 
 export interface ExplainPositionOptions extends DetectIntentsOptions, AnalyzeShapeFormationOptions {
-  /** STEP U6-I2a: [2][3] に出す狙いの選び方。省略時は DEFAULT_INTENT_PICK_RULE(既定 "current")。 */
+  /** STEP U6-I2a: [2][3] に出す狙いの選び方。省略時は DEFAULT_INTENT_PICK_RULE(既定 "speakable_then_reviewed"。2026-09-12 に "current" から変更)。 */
   intentPickRule?: IntentPickRule;
 }
 
