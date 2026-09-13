@@ -26,6 +26,7 @@ import type { GameState } from "../../../apps/server/src/game/gameSession.js";
 import type { LowPriorityEngine } from "../../../apps/server/src/engine/prioritizedEngine.js";
 import type { SearchPvObservation } from "../../../apps/server/src/analysis/searchPv.js";
 import { measureEngineReference, type EngineReference } from "./engineReference.js";
+import { readGitState, type GitRunner } from "./gitState.js";
 
 /** server.tsのrunBackgroundPlanAnalysisと同じ組み立てでCachedReachablePlanを作る。
  * safeComputeReachablePlanが失敗(undefined)を返した場合はundefinedのまま
@@ -303,4 +304,62 @@ export function buildSummaryLine(fields: {
     totalMs: fields.totalMs,
     readyMsPerPly: fields.readyMsPerPly,
   });
+}
+
+/**
+ * STEP U6-R。JSONL の先頭の `meta` 行を組み立てる。**replay.ts と explore.ts の両方がこれを使う。**
+ *
+ * 【経緯(2026-09-13 の独立監査 2 回)】
+ * - 1 回目: `meta` 行を replay.ts と explore.ts がそれぞれ手で組み立てており、
+ *   **`dirty` 等を落としても 161 件の試験が 1 件も落ちなかった。** そこでこの関数へ集めた。
+ * - 2 回目: 集めたあとも、呼び出し側が `{ ...readGitState(REPO_ROOT), dirty: false }` や
+ *   手で作った値を渡せば、**欄は揃ったまま値だけ偽れた**(変異 X03・X04・X10 が沈黙)。
+ *   **見張っていたのは「どの関数を呼ぶか」で、「何を渡すか」ではなかった。**
+ *
+ * 【この形で何が止まるか】
+ * **git の状態は呼び出し側から受け取らない。`repoRoot` を受け取り、ここで `readGitState` を呼ぶ。**
+ * 呼び出し側が値を偽るには `repoRoot` か `runGit` を変えるしかなく、それはソース照合で
+ * 見張る(recorder.test.ts)。**照合は片側にしか壊れない** ― 整形を変えると緑でも落ち、
+ * 照合する文字列を残したまま意味を変える書き換えは捕まらない。
+ *
+ * `runGit` は試験のためだけにある。**replay.ts / explore.ts は渡さない**(照合で見張る)。
+ *
+ * 【固定の欄が必ず勝つ(非必須 c)】
+ * `extra` の型は固定の欄を `never` にしてあるが、`Record<string, unknown>` 型の変数で
+ * 渡すと tsc を通って上書きできた。**そこで固定の欄を `extra` の後にもう一度展開する。**
+ * 並びは最初の展開で決まるので、出力の欄の順は変わらない。
+ *
+ * 前半 8 欄の並び(kind / kifuId / startedAt / gitHead / dirty / dirtyPaths /
+ * dirtyCount / enginePath)は両モードで同じであり、ここで固定する。
+ */
+export function buildMetaLine(fields: {
+  kifuId: string;
+  startedAt: string;
+  repoRoot: string;
+  enginePath: string;
+  extra: Record<string, unknown> & {
+    kind?: never;
+    kifuId?: never;
+    startedAt?: never;
+    gitHead?: never;
+    dirty?: never;
+    dirtyPaths?: never;
+    dirtyCount?: never;
+    enginePath?: never;
+  };
+  /** 試験専用。本番の呼び出し側は渡さない。 */
+  runGit?: GitRunner;
+}): string {
+  const gitState = readGitState(fields.repoRoot, fields.runGit);
+  const fixed = {
+    kind: "meta",
+    kifuId: fields.kifuId,
+    startedAt: fields.startedAt,
+    gitHead: gitState.gitHead,
+    dirty: gitState.dirty,
+    dirtyPaths: gitState.dirtyPaths,
+    dirtyCount: gitState.dirtyCount,
+    enginePath: fields.enginePath,
+  };
+  return JSON.stringify({ ...fixed, ...fields.extra, ...fixed });
 }

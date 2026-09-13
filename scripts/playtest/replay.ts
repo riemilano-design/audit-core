@@ -14,7 +14,6 @@
 // 位置づけの詳細は scripts/playtest/README.md を参照。開発補助であり本番導線には
 // 含めない(apps/・data/・docs/・.claude/ は変更しない)。
 
-import { execSync } from "node:child_process";
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -44,6 +43,7 @@ import {
   buildImmediateRecord,
   buildReadyRecord,
   buildSummaryLine,
+  buildMetaLine,
 } from "./lib/recorder.js";
 import { withFixedSearch } from "./lib/fixedSearchEngine.js";
 
@@ -155,27 +155,23 @@ async function main(): Promise<void> {
   const lines: string[] = [];
   const startedAt = new Date().toISOString();
 
-  let gitHead: string | null;
-  try {
-    gitHead = execSync("git rev-parse HEAD", { cwd: REPO_ROOT }).toString().trim();
-  } catch {
-    gitHead = null;
-  }
 
   const enginePath = resolveEnginePath();
   lines.push(
-    JSON.stringify({
-      kind: "meta",
+    buildMetaLine({
       kifuId,
       startedAt,
-      gitHead,
+      // STEP U6-R: git の状態は渡さない。buildMetaLine が repoRoot から自分で読む(値を偽れないように)。
+      repoRoot: REPO_ROOT,
       enginePath,
-      searchMode,
-      nodes,
-      threads,
-      referenceNodes,
-      directionRule,
-      suppressTargetShapeProgress,
+      extra: {
+        searchMode,
+        nodes,
+        threads,
+        referenceNodes,
+        directionRule,
+        suppressTargetShapeProgress,
+      },
     }),
   );
 

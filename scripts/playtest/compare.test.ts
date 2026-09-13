@@ -154,4 +154,18 @@ describe("compareNormalizedLines", () => {
     expect(result.matches).toBe(false);
     expect(result.diffs[0]?.paths).toContain("searchMode");
   });
+
+  // STEP U6-R(2026-09-13 の再監査。必須 4 の決定): meta 行の dirty / dirtyPaths / dirtyCount は
+  // 除外一覧に含めない(条件として比べる)。compare.ts が除いているのは「実行のたびに変わる値」で、
+  // 汚れはそうではない ― gitHead が同じでも結果を変える条件である(U6-R 計画書 8.3 で沈黙率が
+  // 64% → 100% に動いた)。汚れた 1 本ときれいな 1 本を「完全一致」と並べないこと。
+  it("汚れの 3 欄だけが違う 2 本は一致しない", () => {
+    const baseline = normalizeJsonl(`${JSON.stringify(metaLine({ dirty: false, dirtyPaths: [], dirtyCount: 0 }))}\n`);
+    const target = normalizeJsonl(
+      `${JSON.stringify(metaLine({ dirty: true, dirtyPaths: ["data/shapes/u6r-probe.json"], dirtyCount: 1 }))}\n`,
+    );
+    const result = compareNormalizedLines(baseline, target, "b.jsonl");
+    expect(result.matches).toBe(false);
+    expect(result.diffs[0]?.paths).toEqual(expect.arrayContaining(["dirty", "dirtyCount"]));
+  });
 });

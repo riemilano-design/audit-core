@@ -41,7 +41,7 @@ import {
   type GameState,
 } from "../../apps/server/src/game/gameSession.js";
 import { isGameOver } from "../../apps/server/src/rules/gameStatus.js";
-import { buildErrorLine, buildImmediateRecord, buildReadyRecord, buildSummaryLine } from "./lib/recorder.js";
+import { buildErrorLine, buildImmediateRecord, buildReadyRecord, buildSummaryLine, buildMetaLine } from "./lib/recorder.js";
 import {
   DEFAULT_PROFILE_ORDER,
   DEFAULT_RANDOM_RATE,
@@ -134,27 +134,23 @@ async function runOneGame(params: {
   const s3: S3ScriptState = { cursor: 0 };
   const randomRate = profile === "R" ? DEFAULT_RANDOM_RATE : 0;
 
-  let gitHead: string | null;
-  try {
-    gitHead = execFileSync("git", ["rev-parse", "HEAD"], { cwd: REPO_ROOT }).toString().trim();
-  } catch {
-    gitHead = null;
-  }
 
   const enginePath = resolveEnginePath();
   lines.push(
-    JSON.stringify({
-      kind: "meta",
+    buildMetaLine({
       kifuId,
       startedAt: gameStartedAt,
-      gitHead,
+      // STEP U6-R: git の状態は渡さない。buildMetaLine が repoRoot から自分で読む(値を偽れないように)。
+      repoRoot: REPO_ROOT,
       enginePath,
-      mode: "explore",
-      profile,
-      seed,
-      randomRate,
-      pliesCap,
-      referenceNodes: DEFAULT_REFERENCE_NODES,
+      extra: {
+        mode: "explore",
+        profile,
+        seed,
+        randomRate,
+        pliesCap,
+        referenceNodes: DEFAULT_REFERENCE_NODES,
+      },
     }),
   );
 

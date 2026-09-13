@@ -18,7 +18,9 @@
 // (CachedReachablePlan)に入っているかどうかだけを見る。
 
 import { describe, expect, it } from "vitest";
-import { buildReadyRecord, toCachedPlan } from "./recorder.js";
+import { readFileSync } from "node:fs";
+import type { GitRunner } from "./gitState.js";
+import { buildMetaLine, buildReadyRecord, toCachedPlan } from "./recorder.js";
 import type { GameState } from "../../../apps/server/src/game/gameSession.js";
 import type { LowPriorityEngine } from "../../../apps/server/src/engine/prioritizedEngine.js";
 import type { MultiPvGoResult } from "../../../apps/server/src/engine/usiEngine.js";
@@ -186,4 +188,99 @@ describe("buildReadyRecord の searchPvs(STEP U6-L)", () => {
     expect(Object.keys(JSON.parse(line) as object)).not.toContain("searchPvs");
   });
 
+});
+
+// STEP U6-R。meta 行の組み立て。
+//
+// 1 回目の監査: replay.ts と explore.ts が meta 行を手で組み立てており、dirty 等を落としても
+// 試験が 1 件も落ちなかった。2 回目の監査: buildMetaLine へ集めたあとも、呼び出し側が
+// `{ ...readGitState(REPO_ROOT), dirty: false }` を渡せば値だけ偽れた(X03・X04・X10 が沈黙)。
+// **いまは buildMetaLine が repoRoot から自分で git を読む。** ここでは git を呼ばず、
+// 差し替えの runner で確かめる(本物の git は gitState.test.ts)。
+describe("buildMetaLine: meta 行が汚れの 3 欄を必ず持ち、値を偽れない", () => {
+  /**
+   * rev-parse には HEAD を、status には -z 形式の出力を返す。**受け取った cwd は `seenCwds` に残す。**
+   *
+   * 【cwd を runner の中で expect しない理由】readGitState は git の呼び出しの例外を
+   * すべて握りつぶして「測れなかった」に落とす。runner の中で expect が落ちても、その
+   * 例外も同じく飲み込まれ、試験は別の理由で落ちるか、落ちない。**だから記録して、外で比べる。**
+   */
+  let seenCwds: string[] = [];
+  const runner = (status: string | Error, head = "abc123\n"): GitRunner => (args, cwd) => {
+    seenCwds.push(cwd);
+    if (args[0] === "rev-parse") return head;
+    if (status instanceof Error) throw status;
+    return status;
+  };
+  const base = { kifuId: "k", startedAt: "t", repoRoot: "/repo", enginePath: "e" };
+
+  // 3 回目の再監査(必須 1。変異 Y01): readGitState に repoRoot ではなく process.cwd() を
+  // 渡しても 176 件が緑だった ― runner が cwd を捨てていたため。**「何を渡すか」は一段内側にも
+  // 残っていた。** 実害は、リポジトリの外から replay・explore を起動したとき、別のツリーの汚れを
+  // 記録すること。
+  it("buildMetaLine は受け取った repoRoot を、そのまま git に渡す(rev-parse と status の両方)", () => {
+    seenCwds = [];
+    buildMetaLine({ ...base, repoRoot: "/some/other/repo", runGit: runner(""), extra: {} });
+    expect(seenCwds).toEqual(["/some/other/repo", "/some/other/repo"]);
+  });
+
+  it("前半 8 欄が決まった順で並ぶ(両モード共通)", () => {
+    const line = buildMetaLine({ ...base, runGit: runner("?? data/a.json\0"), extra: { mode: "explore" } });
+    expect(Object.keys(JSON.parse(line) as object)).toEqual([
+      "kind",
+      "kifuId",
+      "startedAt",
+      "gitHead",
+      "dirty",
+      "dirtyPaths",
+      "dirtyCount",
+      "enginePath",
+      "mode",
+    ]);
+  });
+
+  it("git から読んだ状態をそのまま運ぶ", () => {
+    const many = Array.from({ length: 25 }, (_, i) => ` M data/f${String(i).padStart(2, "0")}.json\0`).join("");
+    const meta = JSON.parse(buildMetaLine({ ...base, runGit: runner(many), extra: {} })) as Record<string, unknown>;
+    expect(meta.gitHead).toBe("abc123");
+    expect(meta.dirty).toBe(true);
+    expect(meta.dirtyPaths).toHaveLength(20);
+    expect(meta.dirtyCount).toBe(25);
+  });
+
+  // null は「測れなかった」。JSON.stringify は undefined の欄を黙って消すので、
+  // null が undefined に化けると「記録していない」に読まれる(11.6)。
+  it("git status が取れないとき、dirty は欄ごと消えずに null のまま載る", () => {
+    const meta = JSON.parse(buildMetaLine({ ...base, runGit: runner(new Error("失敗")), extra: {} })) as Record<string, unknown>;
+    expect(Object.keys(meta)).toContain("dirty");
+    expect(meta.dirty).toBeNull();
+  });
+
+  // 非必須 c: extra を Record<string, unknown> 型の変数で渡すと tsc を通って上書きできた。
+  it("extra に固定の欄が入っていても、固定の欄が勝ち、並びも変わらない", () => {
+    const extra: Record<string, unknown> = { kind: "x", dirty: false, dirtyCount: 0, gitHead: "偽", mode: "explore" };
+    const line = buildMetaLine({ ...base, runGit: runner("?? data/a.json\0"), extra });
+    const meta = JSON.parse(line) as Record<string, unknown>;
+    expect(meta.kind).toBe("meta");
+    expect(meta.dirty).toBe(true);
+    expect(meta.dirtyCount).toBe(1);
+    expect(meta.gitHead).toBe("abc123");
+    expect(Object.keys(meta).slice(0, 8)).toEqual(["kind", "kifuId", "startedAt", "gitHead", "dirty", "dirtyPaths", "dirtyCount", "enginePath"]);
+  });
+
+  // 呼び出し側の照合。**どの関数を呼ぶかだけでなく、何を渡すかを見る**(2 回目の監査)。
+  // 照合は片側にしか壊れない(整形を変えると緑でも落ちる。文字列を残して意味を変える
+  // 書き換えは捕まらない)。
+  it("replay.ts と explore.ts は buildMetaLine に REPO_ROOT だけを渡し、git の値を自分で作らない", () => {
+    for (const name of ["../replay.ts", "../explore.ts"]) {
+      const source = readFileSync(new URL(name, import.meta.url), "utf8");
+      expect(source, name).toContain("buildMetaLine(");
+      expect(source, name).toContain("      repoRoot: REPO_ROOT,\n");
+      expect(source, name).toContain('const REPO_ROOT = path.join(__dirname, "..", "..");');
+      expect(source, name).not.toMatch(/kind:\s*["']meta["']/);
+      expect(source, name).not.toContain("readGitState");
+      expect(source, name).not.toContain("runGit");
+      expect(source, name).not.toMatch(/\bdirty\s*:/);
+    }
+  });
 });

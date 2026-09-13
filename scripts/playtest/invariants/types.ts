@@ -73,6 +73,24 @@ export interface RecordLine {
   searchPvs?: SearchPvObservation[] | null;
 }
 
+/**
+ * **このファイルに 2 か所ある「3 値の欄」は、同じ規約である**(2026-09-13、STEP U6-R)。
+ *
+ * 別々の STEP(U6-L の `searchPvs` と U6-R の `dirty`)が独立に同じ形へたどり着いた。
+ * **3 値目の位置が違うのではなく、「測って無かった」を表す値の型が違うだけである。**
+ *
+ * | 「無い」の種類 | `searchPvs`(record 行) | `dirty`(meta 行) |
+ * |---|---|---|
+ * | **測っていない**(欄が無い。その STEP より前の記録) | `undefined` | `undefined` |
+ * | **測れなかった**(取ろうとして失敗した) | `null` | `null` |
+ * | **測って無かった**(取れて、中身が空だった) | `[]` | `false` |
+ *
+ * **読むときは 3 つに分ける。`?? []` や `?? false` と書かない**(欄が無い記録が
+ * 「測って無かった」に化ける)。[AGENT_PROTOCOL.md](../../../docs/AGENT_PROTOCOL.md) 3. の 11.6。
+ *
+ * **新しく 3 値の欄を足すときは、この表に行を足す。** 表に載らない 3 値を作らない。
+ */
+
 /** T-1のJSONLの"kind":"meta"行(先頭行)。 */
 export interface MetaLine {
   kind: "meta";
@@ -92,6 +110,26 @@ export interface MetaLine {
   searchMode?: "nodes" | "movetime";
   nodes?: number;
   threads?: number;
+  /**
+   * STEP U6-R。**測ったとき作業ツリーが汚れていたか**(コミットされていない編集が
+   * あったか)。`gitHead` はコミットされた状態しか指さないため、共有ツリーで測ると
+   * 「そのコミット + 誰かの未コミットの編集」が動く。
+   *
+   * **値は 4 つある ―`true` と、上の表の規約に従う 3 種類の「無い」である。**
+   * 読む側の `DirtyState`(lib/gitState.ts)も、この 4 つに 1 対 1 で対応する 4 つの状態を持つ。
+   * - `true` … **測って、汚れていた**(→ `"dirty"`)
+   * - `false` … **測って、汚れていなかった**(→ `"clean"`)
+   * - `null` … `git status` が取れなかった。**測れなかったのであって、きれいだったのではない**(→ `"unmeasured"`)
+   * - `undefined`(欄が無い) … **U6-R より前に取った記録**。汚れを記録していない(→ `"unrecorded"`)
+   *
+   * **`meta.dirty ?? false` と書いてはならない。** 読むときは `=== true` / `=== false` /
+   * `=== null` / それ以外、の 4 つに分ける(lib/gitState.ts の `readDirtyState`)。
+   */
+  dirty?: boolean | null;
+  /** 汚れていたパス(最大 20 件)。`docs/` と `node_modules` は数えない。 */
+  dirtyPaths?: string[];
+  /** 汚れていたパスの総数(`dirtyPaths` が 20 件で切れていても本当の件数)。 */
+  dirtyCount?: number;
 }
 
 /** 不変条件1件が検出した1件分。束ねる単位は(invariantId, condition)。 */

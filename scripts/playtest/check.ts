@@ -30,6 +30,13 @@ import {
   type SearchPvStatsReport,
   type SearchPvStatsRow,
 } from "./lib/searchPvStats.js";
+import {
+  displayDirty,
+  readDirtyState,
+  renderDirtyPathsLine,
+  renderDirtyWarnings,
+  type DirtyState,
+} from "./lib/gitState.js";
 
 const ALL_TYPES: InvariantType[] = ["沈黙", "矛盾", "断定", "未説明用語", "盤との不一致", "陳腐化", "結果"];
 
@@ -47,6 +54,10 @@ interface InputFileResult {
   searchMode: "nodes" | "movetime" | undefined;
   nodes: number | undefined;
   threads: number | undefined;
+  /** STEP U6-R。測ったときの作業ツリーの汚れ。4 つの状態(dirty / clean / unrecorded / unmeasured。lib/gitState.ts の DirtyState)。 */
+  dirtyState: DirtyState;
+  dirtyPaths: string[] | undefined;
+  dirtyCount: number | undefined;
   records: RecordLine[];
   findings: Finding[];
 }
@@ -83,6 +94,9 @@ function readInputFile(filePath: string): InputFileResult {
   const searchMode = meta?.searchMode;
   const nodes = meta?.nodes;
   const threads = meta?.threads;
+  const dirtyState = readDirtyState(meta);
+  const dirtyPaths = meta?.dirtyPaths;
+  const dirtyCount = meta?.dirtyCount;
 
   const records = lines.filter((l): l is RecordLine => l.kind === "record");
 
@@ -93,7 +107,21 @@ function readInputFile(filePath: string): InputFileResult {
     }
   }
 
-  return { filePath, kifuId, gitHead, mode, profile, searchMode, nodes, threads, records, findings };
+  return {
+    filePath,
+    kifuId,
+    gitHead,
+    mode,
+    profile,
+    searchMode,
+    nodes,
+    threads,
+    dirtyState,
+    dirtyPaths,
+    dirtyCount,
+    records,
+    findings,
+  };
 }
 
 /** 入力行に出す表示用のプロファイル(A-4)。meta.profileがあればそれ、
@@ -208,9 +236,14 @@ function renderMarkdown(
   lines.push("## 入力");
   for (const input of inputs) {
     lines.push(
-      `- ${input.filePath}(kifuId: ${input.kifuId}, gitHead: ${input.gitHead ?? "不明"}, profile: ${displayProfile(input)}, 検出 ${input.findings.length} 件)`,
+      `- ${input.filePath}(kifuId: ${input.kifuId}, gitHead: ${input.gitHead ?? "不明"}, ${displayDirty(input.dirtyState, input.dirtyCount ?? input.dirtyPaths?.length)}, profile: ${displayProfile(input)}, 検出 ${input.findings.length} 件)`,
     );
+    const dirtyPathsLine = renderDirtyPathsLine(input);
+    if (dirtyPathsLine !== null) lines.push(dirtyPathsLine);
   }
+  // STEP U6-R。汚れ・記録していない・測れなかった、の注意(組み立ては lib/gitState.ts。
+  // check.ts は import すると main() が走るため、ここに置くと試験を置けない)。
+  lines.push(...renderDirtyWarnings(inputs));
   const distinctGitHeads = new Set(inputs.map((input) => input.gitHead ?? "不明"));
   if (distinctGitHeads.size >= 2) {
     lines.push(
