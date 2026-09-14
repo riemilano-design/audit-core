@@ -5,6 +5,8 @@
 //
 // 【このファイルは薄くしてある】判定・集計・表の組み立てはすべて lib/failureEvent.ts(合計は lib/diagnosisTotals.ts)にあり、そちらに試験がある。
 // ここでやるのは、記録を読む・lib を呼ぶ・書き出す、だけである。
+// `--events` の 1 行は lib/failureEventSchema.ts の toEventLine で、版の欄 schemaVersion を先頭に付けて書く
+// (STEP JSON v0。スキーマは scripts/playtest/schemas/failure-event.v0.1.schema.json)。
 //
 // 【exit code】lib の例外は外へ出さず「数えられなかった」行にして exit 0。**入力が読めないとき(ENOENT・壊れた JSONL)は
 // 例外がこのファイルから外へ出て 0 でない**(check.ts と同じ。計画 D-1 の読み替え ― 2026-09-15、監査 B の非必須 d)。
@@ -19,6 +21,7 @@ import path from "node:path";
 import type { MetaLine, RecordLine } from "./invariants/types.js";
 import { renderDiagnosisTotals } from "./lib/diagnosisTotals.js";
 import { buildDiagnosisReport, DRAFT_RULE_1, renderDiagnosisReport, type DiagnosisInput } from "./lib/failureEvent.js";
+import { toEventLine } from "./lib/failureEventSchema.js";
 
 function parseArgs(argv: string[]): { files: string[]; eventsOut: string | undefined } {
   const eventsIndex = argv.indexOf("--events");
@@ -52,7 +55,7 @@ function main(): void {
   console.log([...renderDiagnosisReport(report), ...renderDiagnosisTotals(report)].join("\n"));
 
   if (eventsOut) {
-    const eventLines = report.flatMap((row) => (row.result.kind === "counted" ? row.result.events.map((event) => JSON.stringify(event)) : []));
+    const eventLines = report.flatMap((row) => (row.result.kind === "counted" ? row.result.events.map((event) => JSON.stringify(toEventLine(event))) : []));
     writeFileSync(path.resolve(eventsOut), eventLines.length > 0 ? `${eventLines.join("\n")}\n` : "", "utf-8");
   }
 

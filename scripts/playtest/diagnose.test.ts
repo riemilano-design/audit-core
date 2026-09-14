@@ -4,6 +4,8 @@
 // - 子プロセス … diagnose.ts を実際に走らせ、標準出力が、同じ記録をこの試験のプロセスで lib に掛けて
 //   描いたものと全文一致すること、--events の JSONL が同じ Failure Event を持つことを確かめる。
 //   期待値は data から切り離してある(同じ lib で描き直して比べる。件数を固定しない ― P-20)。
+// - T-6(STEP JSON v0 計画 6.2)… 子プロセスの --events の各行が、版の欄 schemaVersion "0.1" を先頭に持ち、
+//   この版のスキーマを通ることを、同じ子プロセスの試験で確かめる。
 //
 // 【静かにスキップしない】npx・tsx・git が無ければ execFileSync が例外を投げて赤になる。
 // 【一時ディレクトリ以外に書かない】走らせる前と後で git status(無視されるファイルも 1 本ずつ。
@@ -19,6 +21,7 @@ import type { MetaLine } from "./invariants/types.js";
 import { renderDiagnosisTotals } from "./lib/diagnosisTotals.js";
 import { buildDiagnosisReport, DRAFT_RULE_1, renderDiagnosisReport, type DiagnosisInput } from "./lib/failureEvent.js";
 import { engineRef, GAME01_MOVES, plantedRecords } from "./lib/failureEventFixtures.js";
+import { loadFailureEventSchema, toEventLine, validateFailureEventLine } from "./lib/failureEventSchema.js";
 
 const PLAYTEST_DIR = dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = join(PLAYTEST_DIR, "..", "..");
@@ -48,11 +51,11 @@ describe("diagnose.ts(計画 5.2)", () => {
     expect(source).toContain("  const report = buildDiagnosisReport(inputs, DRAFT_RULE_1);");
     // STEP D3(計画 Q-5): 入力ごとの表の後に群の合計の節を足した。合計の呼び出しもこの 1 行で見張る。
     expect(source).toContain('  console.log([...renderDiagnosisReport(report), ...renderDiagnosisTotals(report)].join("\\n"));');
-    expect(source).toContain("row.result.events.map((event) => JSON.stringify(event))");
+    expect(source).toContain("row.result.events.map((event) => JSON.stringify(toEventLine(event)))");
   });
 
   it(
-    "子プロセス: 2 入力の JSONL に diagnose.ts を掛けると exit 0 で、出力と --events が、同じ記録を lib に掛けた結果と一致する",
+    "子プロセス: 2 入力の JSONL に diagnose.ts を掛けると exit 0 で、出力と --events が、同じ記録を lib に掛けた結果と一致する(T-6: 各行は版の欄を先頭に持ち、スキーマを通る)",
     () => {
       const inputs: DiagnosisInput[] = [
         {
@@ -91,8 +94,15 @@ describe("diagnose.ts(計画 5.2)", () => {
 
         const expectedEvents = report.flatMap((row) => (row.result.kind === "counted" ? row.result.events : []));
         expect(expectedEvents.length).toBeGreaterThan(0);
-        const writtenEvents = readFileSync(eventsPath, "utf-8").trim().split("\n").map((line) => JSON.parse(line));
-        expect(writtenEvents).toEqual(JSON.parse(JSON.stringify(expectedEvents)));
+        const writtenEvents = readFileSync(eventsPath, "utf-8").trim().split("\n").map((line) => JSON.parse(line) as Record<string, unknown>);
+        expect(writtenEvents).toEqual(JSON.parse(JSON.stringify(expectedEvents.map(toEventLine))));
+        // T-6(STEP JSON v0 計画 6.2): toEqual は欄の順を見ないので、先頭であることは別に見る。版は定数でなく値で見る
+        const schema = loadFailureEventSchema();
+        for (const line of writtenEvents) {
+          expect(Object.keys(line)[0]).toBe("schemaVersion");
+          expect(line.schemaVersion).toBe("0.1");
+          expect(validateFailureEventLine(line, schema)).toEqual([]);
+        }
       } finally {
         rmSync(dir, { recursive: true, force: true });
       }

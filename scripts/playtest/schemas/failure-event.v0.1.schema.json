@@ -1,0 +1,150 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "failure-event.v0.1.schema.json",
+  "title": "Failure Event v0.1",
+  "description": "diagnose.ts --events の 1 行。docs/STEP_JSON-V0_PLAN_2026-09-15.md 2. の表を写した。「無い」は 3 種: キーが無い = その変種にその欄が無い / null = 欄はあるが値が無い / [] = 見た範囲で 0 件(consequences.windowShort と読む)。検証は scripts/playtest/lib/eventSchema.ts(外部ライブラリ無し。oneOf はちょうど 1 つ)。",
+  "type": "object",
+  "required": ["schemaVersion", "kifuId", "branchPly", "fromReadyPly", "toReadyPly", "trigger", "action", "branch", "consequences", "candidateModes"],
+  "additionalProperties": false,
+  "properties": {
+    "schemaVersion": { "const": "0.1" },
+    "kifuId": { "type": "string", "description": "評価関数・再生をまたいで一意ではない(計画 E-8)" },
+    "branchPly": { "type": "integer", "minimum": 1, "description": "分岐点の手(先手の手)の ply" },
+    "fromReadyPly": { "type": "integer", "minimum": 0 },
+    "toReadyPly": { "type": "integer", "minimum": 0 },
+    "trigger": {
+      "type": "object",
+      "required": ["evaluationBefore", "opponentIntent", "shape", "focus"],
+      "additionalProperties": false,
+      "properties": {
+        "evaluationBefore": {
+          "description": "直前の行の評価。値の 6 欄は measured にだけある",
+          "oneOf": [
+            {
+              "type": "object",
+              "required": ["state", "scoreCp", "mate", "bestmove", "afterPassScoreCp", "afterPassMate", "dropCp"],
+              "additionalProperties": false,
+              "properties": {
+                "state": { "const": "measured" },
+                "scoreCp": { "type": ["integer", "null"], "minimum": -29999, "maximum": 29999, "description": "先手視点 cp。null = mate で返った" },
+                "mate": {
+                  "description": "先手視点の詰みの手数。null = cp で返った",
+                  "oneOf": [{ "type": "null" }, { "type": "integer", "minimum": 1 }, { "type": "integer", "maximum": -1 }]
+                },
+                "bestmove": { "type": ["string", "null"], "pattern": "^([1-9][a-i][1-9][a-i]\\+?|[PLNSGBR]\\*[1-9][a-i])$" },
+                "afterPassScoreCp": { "type": ["integer", "null"], "minimum": -29999, "maximum": 29999, "description": "後手視点 cp" },
+                "afterPassMate": {
+                  "description": "後手視点の詰みの手数。正 = 先手がパスすると後手が詰ませる",
+                  "oneOf": [{ "type": "null" }, { "type": "integer", "minimum": 1 }, { "type": "integer", "maximum": -1 }]
+                },
+                "dropCp": { "type": ["integer", "null"], "description": "先手視点。null = 両方 cp ではなかった" }
+              }
+            },
+            { "type": "object", "required": ["state"], "additionalProperties": false, "properties": { "state": { "const": "notMeasuredGameEnd" } } },
+            { "type": "object", "required": ["state"], "additionalProperties": false, "properties": { "state": { "const": "notMeasuredInCheck" } } },
+            { "type": "object", "required": ["state"], "additionalProperties": false, "properties": { "state": { "const": "notMeasurable" } } },
+            { "type": "object", "required": ["state"], "additionalProperties": false, "properties": { "state": { "const": "unrecorded" } } },
+            { "type": "object", "required": ["state"], "additionalProperties": false, "properties": { "state": { "const": "notEvaluation" } } }
+          ]
+        },
+        "opponentIntent": {
+          "type": "object",
+          "required": ["classification", "refersToIntentId"],
+          "additionalProperties": false,
+          "properties": {
+            "classification": {
+              "oneOf": [
+                { "type": "object", "required": ["column"], "additionalProperties": false, "properties": { "column": { "const": "noCandidate" } } },
+                { "type": "object", "required": ["column"], "additionalProperties": false, "properties": { "column": { "const": "muted" } } },
+                { "type": "object", "required": ["column"], "additionalProperties": false, "properties": { "column": { "const": "spokeLatest" } } },
+                { "type": "object", "required": ["column"], "additionalProperties": false, "properties": { "column": { "const": "spokeOlder" } } },
+                {
+                  "type": "object",
+                  "required": ["column", "reason"],
+                  "additionalProperties": false,
+                  "properties": {
+                    "column": { "const": "undetermined" },
+                    "reason": { "enum": ["U-1", "U-2", "U-3", "U-4", "U-5", "U-6", "U-7", "U-8"] }
+                  }
+                }
+              ]
+            },
+            "refersToIntentId": { "type": ["string", "null"] }
+          }
+        },
+        "shape": {
+          "oneOf": [
+            {
+              "type": "object",
+              "required": ["state", "status", "refersToShapeId"],
+              "additionalProperties": false,
+              "properties": {
+                "state": { "const": "recorded" },
+                "status": { "type": "string", "description": "本番の値をそのまま写す。列挙で固定しない(計画 J-6)" },
+                "refersToShapeId": { "type": ["string", "null"] }
+              }
+            },
+            { "type": "object", "required": ["state"], "additionalProperties": false, "properties": { "state": { "const": "unrecorded" } } }
+          ]
+        },
+        "focus": {
+          "oneOf": [
+            {
+              "type": "object",
+              "required": ["state", "text"],
+              "additionalProperties": false,
+              "properties": { "state": { "const": "stated" }, "text": { "type": "string" } }
+            },
+            { "type": "object", "required": ["state"], "additionalProperties": false, "properties": { "state": { "const": "nothingToSay" } } },
+            { "type": "object", "required": ["state"], "additionalProperties": false, "properties": { "state": { "const": "pending" } } },
+            { "type": "object", "required": ["state"], "additionalProperties": false, "properties": { "state": { "const": "unrecorded" } } }
+          ]
+        }
+      }
+    },
+    "action": {
+      "type": "object",
+      "required": ["playedMove", "bestmoveAtBefore"],
+      "additionalProperties": false,
+      "properties": {
+        "playedMove": { "type": ["string", "null"], "pattern": "^([1-9][a-i][1-9][a-i]\\+?|[PLNSGBR]\\*[1-9][a-i])$" },
+        "bestmoveAtBefore": { "type": ["string", "null"], "pattern": "^([1-9][a-i][1-9][a-i]\\+?|[PLNSGBR]\\*[1-9][a-i])$" }
+      }
+    },
+    "branch": {
+      "type": "object",
+      "required": ["kinds", "diffCp", "mateAfter", "matedIfPassAfter"],
+      "additionalProperties": false,
+      "properties": {
+        "kinds": { "type": "array", "minItems": 1, "items": { "enum": ["cpDrop", "mateDrop", "matedIfPass"] } },
+        "diffCp": { "type": ["integer", "null"], "description": "直後 − 直前(先手視点 cp、2 手分)" },
+        "mateAfter": { "oneOf": [{ "type": "null" }, { "type": "integer", "minimum": 1 }, { "type": "integer", "maximum": -1 }] },
+        "matedIfPassAfter": { "type": "boolean" }
+      }
+    },
+    "consequences": {
+      "type": "object",
+      "required": ["checks", "mate", "windowPlies", "windowShort"],
+      "additionalProperties": false,
+      "properties": {
+        "checks": { "type": "array", "items": { "type": "integer", "minimum": 2 } },
+        "mate": { "type": ["integer", "null"], "minimum": 2 },
+        "windowPlies": { "type": "integer", "minimum": 0 },
+        "windowShort": { "type": "boolean" }
+      }
+    },
+    "candidateModes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["mode", "status", "matchedBy"],
+        "additionalProperties": false,
+        "properties": {
+          "mode": { "const": "mate_threat" },
+          "status": { "const": "draft" },
+          "matchedBy": { "type": "array", "minItems": 1, "items": { "enum": ["cpDrop", "mateDrop", "matedIfPass"] } }
+        }
+      }
+    }
+  }
+}

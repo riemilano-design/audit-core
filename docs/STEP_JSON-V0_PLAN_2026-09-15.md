@@ -213,6 +213,7 @@ JSON には `undefined` が無いので、TypeScript の 3 種は JSON では次
 ### 7.3 既知事項の候補(**番号は司令塔がコミットのときに採る**)
 
 - **`kifuId` は評価関数(と再生)をまたいで一意ではない**(E-8)。MATERIAL 版の `out/obs2/obs2-claude-2.jsonl` と NNUE 版の `records/d0-nnue/2026-09-12-live-30moves-claude-2-round2.jsonl` は、どちらも `kifuId` が `2026-09-12-live-30moves-claude-2-round2` で、分岐点 19 の Failure Event が両方に出る(値は違う: 直前 −3388 / −3517、差 −916 / −410)。**Failure Event を記録をまたいで集めるときは、記録のファイル(と評価関数の識別)と組にしないと取り違える。**v0.2 の `provenance` の候補(3.3)
+- **`scripts/validate-data.mjs` の検証器も、プロトタイプの名前の欄を通す形になっている**(JSON v0 の監査 B の必須 1 の参考。**この STEP の範囲外なので直していない** ― 司令塔の決定、2026-09-15)。`:83` の `key in instance`(必須の欄)・`:88` の `key in props`(知らない欄)・`:92` の `props[key]` が Object.prototype を辿るので、`data/` の JSON に `constructor`・`toString` などの名前の知らない欄があっても赤にならず、必須の欄の名前がそれらなら無くても通る、と読める。**読みで同じ形と判断しただけで、実行して確かめていない。**直し方は `eventSchema.ts` と同じ `Object.hasOwn`(10.6)
 
 ---
 
@@ -259,3 +260,119 @@ JSON には `undefined` が無いので、TypeScript の 3 種は JSON では次
 | (c) | L-3(`bestmoveAtBefore` の `null` が 2 つの理由を畳む)を v0.2 の候補に入れる(3.3) |
 | 担当 | 実装 A、監査 B(D-COST の実装の後) |
 | 次 | この計画書のコミットの後、A が実装する: スキーマ・検証器・試験 T-1〜T-6・変異、`diagnose.ts` に `schemaVersion` を足す最小の変更 |
+
+---
+
+## 10. 実装の記録(2026-09-15、実装担当 A。**予測の節 5. は書き換えていない**)
+
+### 10.1 足したもの・変えたもの
+
+| ファイル | 中身 |
+|---|---|
+| `scripts/playtest/schemas/failure-event.v0.1.schema.json`(新規) | 2.2 の表を写したスキーマ。判別ユニオン(`evaluationBefore` 6 変種・`classification` 5 変種・`shape` 2 変種・`focus` 4 変種)は `oneOf` + `const`。**すべての入れ物で `additionalProperties: false`**(J-8)。USI の手の欄に手の形の `pattern`(実記録 24 本の `bestmove` 424 欄と `moveHistory` はすべてこの形に合った ― `resign`・`win` は無かった) |
+| `scripts/playtest/lib/eventSchema.ts`(新規) | 検証器(J-7)。`validate-data.mjs` と同じキーワードに `oneOf`(**ちょうど 1 つ**)と `const` だけを足した。**知らないキーワード・扱わない形(`additionalProperties: true` など)は `SchemaKeywordError` を投げる**(綴り違いが黙って「何も見ない」にならないように) |
+| `scripts/playtest/lib/eventSchema.test.ts`(新規) | T-1(9 件。10.6 で 1 件足した) |
+| `scripts/playtest/lib/failureEventSchema.ts`(新規) | `FAILURE_EVENT_SCHEMA_VERSION = "0.1"`・`toEventLine`(版の欄を先頭に足すだけ)・スキーマの読み込み・1 行の検証 |
+| `scripts/playtest/lib/failureEventSchema.test.ts`(新規) | T-2〜T-5(16 件。10.6 で 1 件足した) |
+| `scripts/playtest/diagnose.ts` | `--events` の 1 行を `JSON.stringify(toEventLine(event))` にした(import 1 行・冒頭の説明 2 行)。**標準出力の表は変えていない。**D3 のコミット `258f374` の後に載せた(司令塔の注意。10.5) |
+| `scripts/playtest/diagnose.test.ts` | T-6。既存の子プロセスの試験を広げ、ソース照合の文字列を差し替えた(10.5) |
+
+**計画 6.1 との差(司令塔の承認、2026-09-15)**: 版の定数と `toEventLine` を、計画では `lib/failureEvent.ts` に置く予定だった。**D3 が同じファイルを触って監査中なので、衝突を避けて `lib/failureEventSchema.ts` に分けた。**
+
+### 10.2 試験
+
+- **T-3 は「試した変種」を突き合わせる**: T-2・T-3・T-4 の Failure Event と、lib から出ない変種を手で書き換えた 2 行(`evaluationBefore` の `notMeasuredGameEnd`・`action.playedMove` の `null`)から、変種と「無い」の形の札を集め、**一覧の札がすべて現れる**ことを見る(札の数はここに書かない。1 回目に「38 個」と書いたのは数え誤りで、実物は 41 個だった ― 監査 B の任意 a。10.6 で値の枝の札を足した)(5.2 の P-3 の穴を塞いだことを、試験が覚えている)
+- 変種を埋める固定例: 直前が王手中(GAME01 の 40 手目 → 42 に `afterPass.mate`)・測れなかった(`null`)・評価値でない(afterPass 35281)・欄なし の 4 つは `matedIfPass` だけで当たる Failure Event、`shape.unrecorded` と `undetermined`(U-1)は直前の行の coach から `current_shape` と `opponent_next_aim` を消した記録、`consequences.mate` の数は F-1 を `windowPlies` 7 で数えたもの(`[52, 54, 56]`・詰み 56)
+- **T-4 は `records/d0-nnue` の 7 本**(`out/` は gitignore の対象で使えない)。件数は固定しない(実測 22)
+- **T-5**: F-1 の分岐点 49 の 1 行(候補の型が 1 件入る)から、**41 個のキーを 1 つずつ消すとすべて落ちる**・各入れ物に知らない欄を足すとすべて落ちる・版が違えば落ちる
+- 件数: HEAD `9f6db06` の worktree で、型検査 exit 0・vitest **31 ファイル 329 件**すべて通過(JSON v0 の 2 本を除くと 29 ファイル 306 件。+23)。`258f374` に載せ直した後の件数は 10.5
+
+### 10.3 既存の揺れ: `intentStatement.test.ts` の T-1 の時間切れ(**原因は負荷。JSON v0 の中身ではない**)
+
+| 回 | 回し方 | 結果 |
+|---|---|---|
+| 1 | 全体(JSON v0 の 2 本を含む) | 落ちた(8.8 秒。`Test timed out in 5000ms`) |
+| 2 | 同上 | 落ちた(8.2 秒) |
+| 3 | T-1 のファイルだけ | 通った |
+| 4 | 全体(JSON v0 の 2 本を除く) | 通った(306 件) |
+| 5 | T-1 のファイルだけ | 落ちた(7.7 秒) |
+| 6 | 全体(JSON v0 の 2 本を除く) | 落ちた(10.6 秒) |
+| 7 | 全体(JSON v0 の 2 本を含む) | 落ちた(10.4 秒) |
+
+- **負荷**(5〜7 回目の直後): load average **16.6**(8 CPU)。並行していたもの: 別セッションの vitest(`lib/scanCompare.test.ts`・`scan-compare.test.ts`)、Chrome のレンダラー、macOS の更新サービス。エンジンは 0 本
+- **最初は「JSON v0 の試験の負荷が既存の試験を押し出した」と読んだが、誤りだった**(4 回目だけを見て決めた。6 回目で 2 本を除いても落ちた)
+- **直し(司令塔の決定、2026-09-15。JSON v0 とは別コミット)**: T-1 に明示の時間切れ `60_000`(`diagnose.test.ts` の子プロセスと同じ)。**差分は `}, 60_000);` の 1 行だけ**(理由はコードに書かず、この節に残す ― 司令塔の指示)。直した後、load average **18.4** のもとで全体 329 件すべて通過
+- **変異の条件**: 道具の vitest に `--testTimeout=60000` を付けた(司令塔の決定 (2) a。リポジトリの設定は変えない)
+
+### 10.4 変異(**予測は当てる前に道具 `json-v0-mutate.py` に試験名で書いた**。vitest に `--testTimeout=60000` ― 10.3)
+
+**適用 14 / 鳴った 14 / 適用できなかった 0。予測(鳴るはず・鳴らないはずの両方)13 / 14。**全ファイルが元のバイト列に戻った。**別の理由の赤(ファイルごとの失敗・読み込みの失敗)は 0 件。**`diagnose.ts` の変異(S-3: 版の欄を書かない)は、D3 のコミットの後に T-6 と一緒に当てる。
+
+| # | 壊し方 | 鳴った試験 |
+|---|---|---|
+| V-1 | `oneOf` を「1 つ以上に合えばよい」にする | T-1 の `oneOf` |
+| V-2 | `const` を見ない | T-1 の `const`・`oneOf`・入れ子、T-2 の全固定例、T-3、T-4、T-5 の前提(14 件)。**予測は外れた**(下) |
+| V-3 | `additionalProperties: false` を見ない | T-1 の required/additionalProperties・`oneOf`、T-5 の「知らない欄を足す」 |
+| V-4 | `required` を見ない | T-1 の required/additionalProperties・`oneOf`、T-5 の「欄を 1 つ消す」 |
+| V-5 | `minItems` を見ない | T-1 の minItems/items |
+| V-6 | `items` の要素を見ない | T-1 の minItems/items、T-5 の「消す」「足す」 |
+| V-7 | `integer` に小数も通す | T-1 の type |
+| V-8 | 知らないキーワードを例外にせず飛ばす | T-1 の知らないキーワード |
+| S-1 | スキーマの `consequences.required` から `windowShort` を消す | T-5 の「欄を 1 つ消す」だけ |
+| S-2 | lib が `evaluationBefore`(measured)に欄 `nodes` を足す(スキーマは直さない) | T-2 の全固定例・T-3・T-4・T-5(12 件) |
+| S-4 | `focus` の `nothingToSay` に空文字の `text` を足す(「無い」を空文字にする) | D1 の F-7(③の 4 つの状態)・T-2・T-3・T-4・T-5(13 件) |
+| S-5 | `toEventLine` が版 `"0.2"` を書く | T-2・T-3・T-4・T-5 の前提(11 件) |
+| S-6 | 版の欄を先頭でなく末尾に置く | T-2 の全固定例(「版の欄が先頭」)だけ |
+| S-7 | スキーマの measured の変種から `additionalProperties: false` を消す | T-5 の「知らない欄を足す」だけ |
+
+**V-2 の予測の外れ(道具の誤りではなく、読みの誤り)**: 「版が違えば落ちる」(T-5)も鳴ると予測したが、鳴らなかった。`const` を見ないと、`focus` の `nothingToSay`・`pending`・`unrecorded` の 3 変種が同じ形(`state` だけ)になって `oneOf` が 3 つに合い、**元の 1 行そのものが通らなくなる**。版を `"0.2"` にした 1 行も同じ理由で落ちるので、「落ちる」を期待する試験は緑のままだった。**版の `const` そのものは S-5 で見張られている**(`toEventLine` が `"0.2"` を書くと T-2・T-4 が鳴る)ので、見張りの穴ではない。
+
+### 10.5 D3 のコミット(`258f374`)の上に載せ直した後(**2 回目の変異と件数**)
+
+- **載せ直し**: HEAD `258f374` の新しい worktree に、1 回目の新規 5 本・計画書・T-1 の 1 行を写し、`diagnose.ts`・`diagnose.test.ts` を変えた。D3 が変えた `lib/failureEvent.ts` は `dropCountCell` の export だけで、**JSON v0 の新規 5 本は写したまま変えずに通った**
+- **T-6**: 既存の子プロセスの試験を広げた。書き出した行が `expectedEvents.map(toEventLine)` と一致し、**各行の先頭の欄が `schemaVersion`・値が `"0.1"`・この版のスキーマを通る**。`toEqual` は欄の順を見ないので、先頭であることは別に見る。版は定数でなく値 `"0.1"` で見る(定数ごと変わる壊し方でも鳴るように)
+- **件数**: `typecheck:scripts` exit 0、vitest **35 ファイル 386 件すべて通過**(JSON v0 の 2 本を除くと 33 ファイル 363 件 = 司令塔の D3 の測り直しと同じ。+23)。`--testTimeout=60000`、load average 5.8〜14.0
+- **変異**(道具 `json-v0-mutate2.py`。sha256 `67e374dd…` を、当てる前に同じ逐次コマンドで記録): **1 回目の 14 件の予測は変えずに残し**、`diagnose.ts` の変更で増えた見張り(子プロセスの試験・ソース照合)の予測だけを足した。V-2・S-4 は、子プロセスの固定例にどの変種が出るかしだいで読みで決められないので、子プロセスの予測を書かなかった。S-3 を足した
+
+**適用 15 / 鳴った 15 / 沈黙 0 / 適用できなかった 0。予測(鳴るはず・鳴らないはずの両方)14 / 15。**外れは 1 回目と同じ V-2 の T-5「版が違えば落ちる」(理由は 10.4)。全ファイルが元のバイト列に戻った。**別の理由の赤は 0 件。**
+
+| # | 鳴った試験(1 回目との違い) |
+|---|---|
+| V-1・V-3〜V-8・S-1・S-7 | 1 回目と同じ。**子プロセス・ソース照合は鳴らない**(予測どおり: 正しい行は正しいまま) |
+| V-2 | 1 回目の 14 件 + 子プロセス(15 件。子プロセスは予測なし) |
+| S-2 | 1 回目の 12 件 + 子プロセス(13 件。予測どおり: 欄が増えた行がスキーマを通らない) |
+| S-4 | 1 回目の 13 件 + 子プロセス(14 件。子プロセスは予測なし) |
+| S-5 | 1 回目の 11 件 + 子プロセス(12 件。予測どおり: 版が `"0.1"` でない) |
+| S-6 | 1 回目の 7 件 + 子プロセス(8 件。予測どおり: 先頭が `schemaVersion` でない) |
+| **S-3(新)** | `diagnose.ts` が版の欄を書かない → **ソース照合・子プロセスの 2 件だけ**(予測どおり。lib の試験 T-2〜T-5 は鳴らない) |
+
+### 10.6 監査 B の REVISE(必須 2・任意 5)の後(**3 回目の変異と件数**。司令塔の決定: 7 件すべて直す)
+
+- **必須 1(検証器がプロトタイプを辿る)**: `properties[key]` と `key in instance` が Object.prototype を辿り、`constructor`・`toString`・`hasOwnProperty`・`__proto__` の名前の**知らない欄を通し**、必須の欄 `"toString"` が**無くても通した**(J-8 の「知らない欄が出たら赤」が破れる)。**`Object.hasOwn` に直し、T-1 に固定例を足した**(4 つの名前の欄はファイルと同じく `JSON.parse` で作る。`__proto__` はオブジェクトのリテラルで書くと欄にならない)
+- **必須 2(スキーマの値域の枝が試されていない)**: 直前の評価の `mate` の正・負、`scoreCp` の null、`afterPassMate` の負、`branch.mateAfter` の正、`scoreCp` の ±29999 の境目の 6 つを、どの試験も通っていなかった。**実記録(records と out の 99 本。監査 B の数え)に `baseline.mate` は 0 件、`afterPass.mate` は正の 2 件だけ**で、固定例も直後の行にしか mate を植えていなかった
+  - lib から出せる 4 つは **T-3 の固定例に足した**: 直前の行に `engineRef(null, { mate: 5 })`・`{ mate: -5 }`、直前の `afterPassMate` −3、直後の行に `mate` 3 と `afterPassMate` 5。どれも直後の行の `afterPass.mate` で matedIfPass として当てる
+  - ±30000 は lib が notEvaluation にするので出せない → **手で書いた 1 行**で、`scoreCp`・`afterPassScoreCp` の ±29999 は通り ±30000 は落ちる、`mate`・`afterPassMate`・`mateAfter` の 0 は落ちる、を見る(T-3 に 1 件)
+  - T-3 の札に、`scoreCp`・`afterPassScoreCp` の null / 数、`mate`・`afterPassMate`・`mateAfter` の null / 正 / 負、`dropCp` の null を足した。**これらの枝は実記録に無く、固定例と手で書いた 1 行でだけ試している**
+- **任意 a**: 10.2 の札の数(上)
+- **任意 b(限界)**: 2.2 の「奇数・≥ 1」(`branchPly`)、「偶数」(`fromReadyPly`・`toReadyPly`・`checks` の要素・`consequences.mate`)、「昇順」(`checks`)は**スキーマで表していない**(検証器に `multipleOf` と並びの見張りが無い ― J-7)。スキーマを通っても、これらは確かめていない
+- **任意 c(限界)**: `mate` の「0 以外の整数」について、USI の解析(`apps/server/src/engine/usiInfoParser.ts:66` の `(-?\d+)`)は `mate 0` も通す。`engineReference` は王手中・終局の局面を測らないので出ない、と読める(**実行して確かめていない**)。出たらスキーマで赤になる(意図どおり。上の境目の試験が見張る)
+- **任意 d**: 検証器が、数でない `minimum`・`maximum`・`minItems`、文字列でない `pattern`、文字列の配列でない `required`、オブジェクトでない `properties`・`items` を `SchemaKeywordError` にする(以前は黙って飛ばす・1 文字ずつ見る、だった)。T-1 に 7 つ足した
+- **任意 e**: `failureEventSchema.ts` の冒頭のコメントが、書いた先を「計画書 §10.1」と指す
+- **件数**: `typecheck:scripts` exit 0、vitest **35 ファイル 388 件すべて通過**(2 回目の 386 + T-1 の 1 + T-3 の 1)。`--testTimeout=60000`、load average 7.5〜11.9
+
+**A の変異**(道具 `json-v0-mutate3.py`、sha256 `22446aa3…` を当てる前に同じ逐次コマンドで記録): 2 回目の 15 件の予測は変えずに残し、足した試験(プロトタイプの名前の欄・値域の境目)の予測だけを足した。V-4 はアンカーの文字列だけ直した(`key in instance` が `Object.hasOwn` になったため。壊し方は同じ)。
+
+**適用 30 / 鳴った 30 / 沈黙 0 / 適用できなかった 0。予測 29 / 30。**外れは 1・2 回目と同じ V-2 の T-5「版が違えば落ちる」(10.4。足した予測の「値域の境目」は V-2 で鳴った)。全ファイルが元のバイト列に戻った。**別の理由の赤は 0 件。**
+
+| # | 壊し方 | 鳴った試験 |
+|---|---|---|
+| V-9 | (必須 1 の直しを戻す)`properties` を `properties[key]` で引く | プロトタイプの名前の欄 |
+| V-10 | (同)`required` を `key in instance` で見る | プロトタイプの名前の欄 |
+| V-11〜V-15 | (任意 d)数でない `minimum` など・文字列の `required`・配列の `properties`・文字列でない `pattern`・配列の `items` を黙って受ける | 知らないキーワード・扱わない形(各 1 件) |
+| S-8〜S-12 | (必須 2)直前の `mate` の負・正、`scoreCp` の null、`afterPassMate` の負、`mateAfter` の正の枝を消す | T-3 の lib から出る変種(各 1 件) |
+| S-13・S-14 | (必須 2)`scoreCp`・`afterPassScoreCp` の上下限を ±99999 に広げる | 値域の境目(各 1 件) |
+| S-15 | (必須 2 の v)直前の `mate` に 0 を許す | 値域の境目 |
+| V-3・V-4 | (2 回目との違い) | + プロトタイプの名前の欄 |
+| V-2・S-2・S-4・S-5 | (2 回目との違い) | + 値域の境目 |
+
+**監査 B の 20 件の当て直し**(B の `json-audit-mutate.py` の写し `json-audit-mutate-btool.py`、sha256 `6c40f709…`。WT だけを替え、B が沈黙と予測した 6 件の予測を、当てる前に「鳴る」に書き換えた。変異の中身は変えていない): **適用 20 / 鳴った 20 / 沈黙 0 / 適用できなかった 0、予測 20 / 20、中心 18 / 18。**B の実行で沈黙した B-1・B-2・B-3・B-5・B-7 は T-3 の足した固定例で、B-8 は値域の境目で、それぞれ 1 件鳴った
