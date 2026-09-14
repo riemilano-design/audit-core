@@ -175,3 +175,134 @@ export function summarizeIntentStatements(records: RecordLine[]): IntentStatemen
 
   return counts;
 }
+
+// ---- check.ts の表(STEP U6-I4 の 2 つ目の変更。docs/STEP_U6-I4_CHECK_TABLE_PLAN_2026-09-13.md) ----
+
+/** 表 1 行分の入力(check.ts の入力 1 本)。 */
+export interface IntentStatementInput {
+  kifuId: string;
+  records: RecordLine[];
+}
+
+/**
+ * 表 1 行分の結果。**数えられなかった入力も行として残す**(計画書 3. の D-1 (a))。
+ * - counted … 数えられた
+ * - notCounted … 数える途中で例外が出た。**例外の種類と message をそのまま持つ**(種類を問わず隠さない)
+ * - withheld … 合計の行だけ。数えられなかった入力が 1 件でもあれば、合計の数字を出さない
+ *   (一部を除いた合計を、全体の合計と並べて読ませない)
+ */
+export type IntentStatementResult =
+  | { kind: "counted"; counts: IntentStatementCounts }
+  | { kind: "notCounted"; errorName: string; message: string }
+  | { kind: "withheld"; notCountedInputs: number };
+
+export interface IntentStatementRow {
+  label: string;
+  result: IntentStatementResult;
+}
+
+export interface IntentStatementReport {
+  perInput: IntentStatementRow[];
+  total: IntentStatementRow;
+}
+
+type Summarize = (records: RecordLine[]) => IntentStatementCounts;
+
+function countWithoutThrowing(records: RecordLine[], summarize: Summarize): IntentStatementResult {
+  try {
+    return { kind: "counted", counts: summarize(records) };
+  } catch (error) {
+    // check.ts の exit code は常に 0(人間承認事項。check.ts:15-16)。例外を外へ出さず、行として見せる。
+    return {
+      kind: "notCounted",
+      errorName: error instanceof Error ? error.constructor.name : typeof error,
+      message: error instanceof Error ? error.message : String(error),
+    };
+  }
+}
+
+/**
+ * check.ts の入力ごとと合計の②の件数を組み立てる。**例外を外へ出さない**(D-1 (a))。
+ * 合計は全入力の records を連結して数え直す(入力ごとの数を足し合わせない。lib/searchPvStats.ts と同じ)。
+ * `summarize` は試験専用(例外の経路を作るため)。**本番の check.ts は渡さない。**
+ */
+export function buildIntentStatementReport(
+  inputs: IntentStatementInput[],
+  summarize: Summarize = summarizeIntentStatements,
+): IntentStatementReport {
+  const perInput: IntentStatementRow[] = inputs.map((input) => ({
+    label: input.kifuId,
+    result: countWithoutThrowing(input.records, summarize),
+  }));
+  const notCountedInputs = perInput.filter((row) => row.result.kind !== "counted").length;
+  const total: IntentStatementRow = {
+    label: "合計",
+    result:
+      notCountedInputs > 0
+        ? { kind: "withheld", notCountedInputs }
+        : countWithoutThrowing(
+            inputs.flatMap((input) => input.records),
+            summarize,
+          ),
+  };
+  return { perInput, total };
+}
+
+const INTENT_STATEMENT_NOTES = [
+  "- 観測の集計であり、異常とは呼ばない。**「根拠が新しい」は「正しい」ではない**(将棋の判断はしない)。",
+  "- **件数は照合時の `data/intents/` に依存する**(記録を取った後に `data/intents/` が変わると、同じ記録でも件数が変わる)。",
+  "- **「候補が 1 件も無い」「候補があるのに黙った」は記録を取ったときの ②③ で決まり、「最も新しい根拠」「より古い根拠」は照合時に呼び直した結果で決まる**(記録の後に `data/intents/` が増えると、「記録では候補なし、今なら候補あり」の行も候補なしに数えられる)。",
+];
+
+/** check.ts の「## ②の名指し」の節を、行の配列で返す。**check.ts はこれを積むだけにする**(試験を置くため)。 */
+export function renderIntentStatementTables(report: IntentStatementReport): string[] {
+  const rows = [...report.perInput, report.total];
+  const reasons = Object.keys(UNDETERMINED_REASONS) as UndeterminedReason[];
+  const lines: string[] = [];
+
+  lines.push("## ②の名指し(STEP U6-I4)");
+  lines.push("");
+  lines.push(...INTENT_STATEMENT_NOTES);
+  lines.push("");
+  lines.push(
+    "| 対象 | 全手数 | 候補が 1 件も無い | 候補があるのに黙った | 喋った(判定できた分) | └ 最も新しい根拠 | └ より古い根拠 | 判定できない |",
+  );
+  lines.push("|---|---|---|---|---|---|---|---|");
+  for (const row of rows) {
+    const result = row.result;
+    if (result.kind === "counted") {
+      const c = result.counts;
+      lines.push(
+        `| ${row.label} | ${c.totalPlies} | ${c.noCandidate} | ${c.muted} | ${c.spokeLatest + c.spokeOlder} | ${c.spokeLatest} | ${c.spokeOlder} | ${countUndetermined(c)} |`,
+      );
+    } else if (result.kind === "notCounted") {
+      lines.push(`| ${row.label} | 数えられなかった | - | - | - | - | - | - |`);
+    } else {
+      lines.push(`| ${row.label} | 出さない(数えられなかった入力が ${result.notCountedInputs} 件) | - | - | - | - | - | - |`);
+    }
+  }
+  // 例外の種類と message は、表の外に 1 行ずつ出す(message に | が入っても表が崩れないように)。
+  for (const row of rows) {
+    if (row.result.kind === "notCounted") {
+      lines.push(`- 数えられなかった入力: ${row.label}(${row.result.errorName}: ${row.result.message})`);
+    }
+  }
+  lines.push("");
+
+  lines.push("### 判定できない行の理由(0 件の理由も出す)");
+  lines.push("");
+  lines.push(`| 対象 | ${reasons.join(" | ")} |`);
+  lines.push(`|---|${"---|".repeat(reasons.length)}`);
+  for (const row of rows) {
+    const result = row.result;
+    const cells = result.kind === "counted" ? reasons.map((reason) => result.counts.undetermined[reason]) : reasons.map(() => "-");
+    lines.push(`| ${row.label} | ${cells.join(" | ")} |`);
+  }
+  lines.push("");
+  for (const reason of reasons) {
+    lines.push(`- ${reason}: ${UNDETERMINED_REASONS[reason]}`);
+  }
+  lines.push("");
+
+  return lines;
+}

@@ -21,7 +21,9 @@ import { DEFAULT_INITIAL_SFEN, replayMoveHistory } from "../../../apps/server/sr
 import type { ReachablePlanBody, StateResponseBodyWithPlan } from "../../../apps/server/src/api/stateResponse.js";
 import type { RecordLine } from "../invariants/types.js";
 import {
+  buildIntentStatementReport,
   classifyIntentStatementRow,
+  renderIntentStatementTables,
   summarizeIntentStatements,
   UNDETERMINED_REASONS,
   type IntentDetection,
@@ -285,5 +287,79 @@ describe("summarizeIntentStatements(薄い呼び出し。19.4.3)", () => {
     expect(counts.undetermined).toEqual(ZERO_UNDETERMINED);
     // ply 0 は後手が 1 手も指していないので、どの data でも候補は 0 件。
     expect(counts.noCandidate).toBeGreaterThanOrEqual(1);
+  });
+});
+
+// ---- check.ts の表(STEP U6-I4 の 2 つ目の変更。docs/STEP_U6-I4_CHECK_TABLE_PLAN_2026-09-13.md 5.1) ----
+
+describe("buildIntentStatementReport / renderIntentStatementTables(計画書 5.1)", () => {
+  const noCandidateRecord = () =>
+    makeRecord(DEFAULT_INITIAL_SFEN, [], [
+      stage("opponent_intent", "none", "opponent_intent_unclassified", null),
+      stage("opponent_next_aim", "none", "opponent_next_aim_unclassified", null),
+    ]);
+  const unmatchedRecord = () =>
+    makeRecord(DEFAULT_INITIAL_SFEN, [], [
+      stage("opponent_intent", "forming", "opponent_intent_forming", null),
+      stage("opponent_next_aim", "forming", "opponent_next_aim_unclassified", null),
+    ]);
+
+  // R-1 は「連結して数え直している」ことの見張りにはならない(どちらも数えられる場合、
+  // 連結して数え直した合計と入力ごとの和は同じになる)。見分けるのは R-2 だけ。
+  it("R-1: 入力ごとの行と合計の行を作り、合計は正しい値になる", () => {
+    const report = buildIntentStatementReport([
+      { kifuId: "a", records: [noCandidateRecord(), noCandidateRecord()] },
+      { kifuId: "b", records: [unmatchedRecord()] },
+    ]);
+    expect(report.perInput.map((row) => row.label)).toEqual(["a", "b"]);
+    expect(report.perInput[0]?.result).toMatchObject({ kind: "counted", counts: { totalPlies: 2, noCandidate: 2 } });
+    expect(report.perInput[1]?.result).toMatchObject({ kind: "counted", counts: { totalPlies: 1, undetermined: { "U-4": 1 } } });
+    expect(report.total).toMatchObject({
+      label: "合計",
+      result: { kind: "counted", counts: { totalPlies: 3, noCandidate: 2, undetermined: { "U-4": 1 } } },
+    });
+  });
+
+  it("R-2: 例外(種類を問わない)を外へ出さず、その入力を行として残し、合計の数字を出さない", () => {
+    const bad = [noCandidateRecord()];
+    const summarize = (records: RecordLine[]) => {
+      if (records === bad) throw new TypeError("数える途中で壊れた");
+      return summarizeIntentStatements(records);
+    };
+    const report = buildIntentStatementReport(
+      [
+        { kifuId: "good", records: [noCandidateRecord()] },
+        { kifuId: "bad", records: bad },
+      ],
+      summarize,
+    );
+    expect(report.perInput.map((row) => row.label)).toEqual(["good", "bad"]);
+    expect(report.perInput[0]?.result.kind).toBe("counted");
+    expect(report.perInput[1]?.result).toEqual({ kind: "notCounted", errorName: "TypeError", message: "数える途中で壊れた" });
+    expect(report.total.result).toEqual({ kind: "withheld", notCountedInputs: 1 });
+  });
+
+  it("R-3: 理由別の表は、0 件の理由も 8 つとも列に出す", () => {
+    const lines = renderIntentStatementTables(buildIntentStatementReport([{ kifuId: "a", records: [noCandidateRecord()] }]));
+    expect(lines).toContain("| 対象 | U-1 | U-2 | U-3 | U-4 | U-5 | U-6 | U-7 | U-8 |");
+    expect(lines).toContain("| a | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |");
+    expect(lines).toContain("| 合計 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |");
+  });
+
+  it("R-4: 注記の 3 つ(異常と呼ばない・data への依存・記録時と照合時の混在)を出す", () => {
+    const text = renderIntentStatementTables(buildIntentStatementReport([{ kifuId: "a", records: [noCandidateRecord()] }])).join("\n");
+    expect(text).toContain("「根拠が新しい」は「正しい」ではない");
+    expect(text).toContain("件数は照合時の `data/intents/` に依存する");
+    expect(text).toContain("記録を取ったときの ②③ で決まり");
+  });
+
+  it("R-5: 数えられなかった入力は、表の行・例外の種類と message の行・合計の「出さない」行に出る", () => {
+    const report = buildIntentStatementReport([{ kifuId: "bad", records: [noCandidateRecord()] }], () => {
+      throw new RangeError("範囲外");
+    });
+    const lines = renderIntentStatementTables(report);
+    expect(lines).toContain("| bad | 数えられなかった | - | - | - | - | - | - |");
+    expect(lines).toContain("- 数えられなかった入力: bad(RangeError: 範囲外)");
+    expect(lines).toContain("| 合計 | 出さない(数えられなかった入力が 1 件) | - | - | - | - | - | - |");
   });
 });

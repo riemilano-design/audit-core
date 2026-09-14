@@ -37,6 +37,11 @@ import {
   renderDirtyWarnings,
   type DirtyState,
 } from "./lib/gitState.js";
+import {
+  buildIntentStatementReport,
+  renderIntentStatementTables,
+  type IntentStatementReport,
+} from "./lib/intentStatement.js";
 
 const ALL_TYPES: InvariantType[] = ["沈黙", "矛盾", "断定", "未説明用語", "盤との不一致", "陳腐化", "結果"];
 
@@ -228,6 +233,7 @@ function renderMarkdown(
   groups: Group[],
   denominatorReport: DenominatorReport,
   searchPvReport: SearchPvStatsReport,
+  intentStatementReport: IntentStatementReport,
 ): string {
   const lines: string[] = [];
 
@@ -264,6 +270,9 @@ function renderMarkdown(
   lines.push("");
   lines.push(...renderDenominatorTable(denominatorReport.perInput));
   lines.push("");
+  // STEP U6-I4。②の名指し(組み立ても描画も lib/intentStatement.ts。6 列の表と並べて読むためにここに置く。
+  // 6 列は③が喋れば「認識あり」になり、②の沈黙を数えない ― 既知事項 P-36)。
+  lines.push(...renderIntentStatementTables(intentStatementReport));
 
   lines.push("## 読み筋の観測(STEP U6-L)");
   lines.push("");
@@ -345,7 +354,10 @@ function main(): void {
   const searchPvInputs: SearchPvStatsInput[] = inputs.map((i) => ({ kifuId: i.kifuId, records: i.records }));
   const searchPvReport = buildSearchPvStatsReport(searchPvInputs);
 
-  console.log(renderMarkdown(inputs, allFindings, groups, denominatorReport, searchPvReport));
+  // STEP U6-I4。②の名指し。**他の表と同じ records を渡す**(例外は lib が受け止めて行に出す。exit code は変えない)。
+  const intentStatementReport = buildIntentStatementReport(inputs.map((i) => ({ kifuId: i.kifuId, records: i.records })));
+
+  console.log(renderMarkdown(inputs, allFindings, groups, denominatorReport, searchPvReport, intentStatementReport));
 
   if (jsonOut) {
     const json = {
