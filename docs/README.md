@@ -5,6 +5,7 @@
 | ファイル | 何が書いてあるか | 主な読者 |
 |---|---|---|
 | [PROJECT_VISION.md](PROJECT_VISION.md) | このアプリが最終的に何を実現しようとしているのか(核心的な強み・完成イメージ・完成の判定基準)。**正本** | 全員 |
+| [DIAGNOSIS_CONCEPT_2026-09-14.md](DIAGNOSIS_CONCEPT_2026-09-14.md) | 上位構想(2026-09-14 の人間の決定): 同じ解析基盤から「対局中コーチ」と「対局後の負け方診断」の 2 つの出口を出す。主役を対局後診断へ移し、(お)(か) を保留。転換の可否を決める 2 つの確認(棋譜の入口・NNUE)と「面白い」の基準、A(観測の記録)・B(Failure Event)の定義、ロードマップ D0〜D5。**CLAUDE.md・PROJECT_VISION.md はまだ書き換えていない(改定案は 9.)** | 全員 |
 | [LONG_TERM_VISION.md](LONG_TERM_VISION.md) | 長期構想(7層構造・Intentの宣言方式)。**MVPの完成条件ではない** | 全員 |
 | [ARCHITECTURE.md](ARCHITECTURE.md) | 全体構造とモジュールの責務境界、Unit間の境界、変えない構造上の約束。**正本** | 実装する人・エージェント全員 |
 | [AGENT_PROTOCOL.md](AGENT_PROTOCOL.md) | 3役(司令塔・実装担当・承認/監査担当)と専門エージェントの協働ルール、GO/REVISE/HUMANの運用。**正本** | AIエージェントを使う人全員 |
