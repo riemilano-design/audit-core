@@ -26,7 +26,7 @@
 | E-1 | 相手の手は `explore.ts:240` の `playOpponentMove(state, engine.asHighPriority(), getApprovedScenarioVariants())` で、`gameSession.ts:242` が `engine.go({ movetimeMs: 1000 })` を呼ぶ | ソース |
 | E-2 | `asHighPriority()` は**呼ぶたびに独立したハンドル**を返し、`go(options)` の options を**そのまま** `UsiEngine.go` へ渡す | `apps/server/src/engine/prioritizedEngine.ts:112-128` |
 | E-3 | 先手の E 読み(S1〜S3・R の後ろ盾)は**別の** `asHighPriority()` ハンドル(`explore.ts:211`)。候補手・③・`engineReference` は `asLowPriority().goMultiPv`(`explore.ts:180-191・287-298`)で、`go` を通らない | ソース |
-| E-4 | `buildGoCommand` は `nodes > 0` なら `go nodes N`(movetime は送らない)、タイムアウトは固定 60,000 ms | `apps/server/src/engine/usiEngine.ts:26-58` |
+| E-4 | `buildGoCommand` は `nodes > 0` なら `go nodes N`(movetime は送らない)、タイムアウトは固定 60,000 ms | `apps/server/src/engine/usiEngine.ts:43`(定数)・`:51-58`(`buildGoCommand`) |
 | E-5 | `HighPriorityEngine = Pick<UsiEngine, "position" \| "go">`。`gameSession.ts` はこの形を受け取る | `prioritizedEngine.ts:97` |
 | E-6 | `explore.ts` は `setThreads` を送らない。**相手の探索はエンジンの既定 `Threads` 4**(駒得版の `usi` 応答の既定値) | `explore.ts` を grep、`option name Threads type spin default 4`(D0-NNUE で保存した `usi` 応答。駒得版の同じ行は T-6 F-1) |
 | E-7 | 既存の `withFixedSearch`(`lib/fixedSearchEngine.ts`)は `LowPriorityEngine` の `goMultiPv` に `nodes` を足す包みで、相手の `go` には効かない | ソース |
@@ -49,12 +49,12 @@
 
 | # | 数字 | 条件 | 出どころ |
 |---|---|---|---|
-| N-1 | `go movetime 2000` で **Threads 4 → 約 890 万ノード(depth 21)、Threads 1 → 約 380 万ノード(depth 20)** | 駒得版(MaterialLv1)、1 局面、2026-09-11、「到達ノード数は機械の負荷で変わる」 | [STEP_T-6_PLAN_2026-09-11.md](STEP_T-6_PLAN_2026-09-11.md) F-2 |
-| N-2 | `go nodes 20000` を Threads 1 で 3 回与えると、bestmove・score・pv・nodes(20057)が 3 回とも一致 | 駒得版、1 局面 | 同 F-1 |
-| N-3 | **いまの相手(movetime 1000ms・Threads 4)は、N-1 を時間で比例させると約 450 万ノード**と見積もれる。**ただし `MinimumThinkingTime` の既定は 2000 で、movetime 1000 がそのとおり 1 秒で返っているかは確かめていない** | 見積もり | N-1 と E-6 |
+| N-1 | `go movetime 2000` で **Threads 4 → 約 890 万ノード(depth 21)、Threads 1 → 約 380 万ノード(depth 20)** | 駒得版(MaterialLv1)、1 局面、2026-09-11、「到達ノード数は機械の負荷で変わる」 | [STEP_T-6_PLAN_2026-09-11.md](STEP_T-6_PLAN_2026-09-11.md) F-2(`docs/STEP_T-6_PLAN_2026-09-11.md:15`) |
+| N-2 | `go nodes 20000` を Threads 1 で 3 回与えると、bestmove・score・pv・nodes(20057)が 3 回とも一致 | 駒得版、1 局面 | 同 F-1(`docs/STEP_T-6_PLAN_2026-09-11.md:14`) |
+| N-3 | **いまの相手(movetime 1000ms・Threads 4)は、N-1 を時間で比例させると約 450 万ノード**と見積もれる。**ただし `MinimumThinkingTime` の既定は 2000 で、movetime 1000 がそのとおり 1 秒で返っているかは確かめていない** | 見積もり | N-1 と E-6(`apps/server/src/game/gameSession.ts:242` の `movetimeMs: 1000`。Threads の既定 4 は `docs/STEP_T-6_PLAN_2026-09-11.md:14`(駒得版)と、担当が D0-NNUE で保存した `usi` 応答 `scratchpad/d0-b1.log:4`(NNUE 版、リポジトリの外)) |
 | N-4 | 先手の E 読み(movetime 100ms・Threads 4)は、同じ比例で約 45 万ノード | 見積もり(E は B・B′ では使わない) | N-1 |
-| N-5 | 1 手詰の局面で NNUE 版は **677 ノード(depth 8)**で `mate 1` を返した | NNUE 版、1 局面 | [STEP_D0-NNUE_PLAN_2026-09-14.md](STEP_D0-NNUE_PLAN_2026-09-14.md) 6.9 |
-| N-6 | D3 の 20 局で優勢の行は **409 行中 5 行**(B 4・B′ 1)、どれも ply 4〜14。「直前が優勢」の急落候補は 1 件 | NNUE 版の評価、相手はいまの本番どおり | D3 §9.4 |
+| N-5 | 1 手詰の局面で NNUE 版は **677 ノード(depth 8)**で `mate 1` を返した | NNUE 版、1 局面 | [STEP_D0-NNUE_PLAN_2026-09-14.md](STEP_D0-NNUE_PLAN_2026-09-14.md) 6.9(`docs/STEP_D0-NNUE_PLAN_2026-09-14.md:220`。nps 約 58〜59 万は同 `:250`) |
+| N-6 | D3 の 20 局で優勢の行は **409 行中 5 行**(B 4・B′ 1)、どれも ply 4〜14。「直前が優勢」の急落候補は 1 件 | NNUE 版の評価、相手はいまの本番どおり | D3 §9.4(`docs/STEP_D3_PLAN_2026-09-14.md:528-529`) |
 
 ### 3.2 候補
 
@@ -131,7 +131,7 @@ diagnose.ts out/d3b-nnue/b2-game-*.jsonl --events …
 ```
 
 - **エンジンの宣言**: explore は 1 本(相手・候補手・③・`engineReference` が 1 本のエンジンを共有するため、並行しない)。**replay は宣言に「本数 3」と書き、別の局を別プロセスで同時に回す**([AGENT_PROTOCOL.md](AGENT_PROTOCOL.md) 10 番の注記、`38755c2`)。**宣言の前に、機械全体の YaneuraOu 系のプロセスを数え、他のセッション(いまは B の D-COST)が解放していることを確かめる**
-- **最初の 1 局で確かめること**(D3 の L-11 と同じ形): B の game-01 の `meta.extra.opponentNodes` が N であること、kifu JSON の tiers。**確かめてから残りを回す**
+- **最初の 1 局で確かめること**(D3 の L-11 と同じ形): B の game-01 の `meta.extra.opponentNodes` が N であること、kifu JSON の tiers、**そして局の終わりの出力「相手の go(nodes 付き)=K」の K が 1 以上であること**(相手の go に実際に nodes が届いた ― 司令塔の決定、10.4)。**3 つとも確かめてから残りを回す**
 - **3 本並行の所要**: 20 局の replay の壁時計の所要と、1 局ごとの所要・load を記録する(**根拠にしない**)。**見込み 50 分前後と比べて報告に添える**。D3 の 1 本ずつの replay は合計 7,987 秒(約 133 分、load 3.6〜4.3)で、3 本で割ると約 44 分。**ただし予-E3 のとおり局が長くなれば、その分だけ延びる**
 - **失敗で止める**: exit が 0 でない・出力が空・`UsiEngineTimeoutError` やエラー行。**並行している他の 2 本は、その局が終わるまで待ってから止める**(途中で切った記録を残さない)
 - **N-a(20,000)を回すかの条件(司令塔の決定、2026-09-15。N-b を回す前に書いた。「結果を見て条件を選ぶ」形にしないため)**: N-b の 20 局で、**どちらかの群で先手の勝ちが 10 局中 8 局以上**、または **どちらかの群で上限(200 手)で止まる局が 3 局以上**なら、**相手が弱すぎた側に振れた**として N-a を回す。**どちらにも当たらなければ N-a は回さない**(回すかは司令塔が改めて決める)。「どちらかの群で」は担当の読み(司令塔の文は群を指定していない ― 報告で確かめる)
@@ -165,5 +165,88 @@ diagnose.ts out/d3b-nnue/b2-game-*.jsonl --events …
 - **L-D3b-3 いまの相手の実際の思考時間を確かめていない**(`MinimumThinkingTime` の既定 2000 と movetime 1000 の関係)。3.1 の N-3 の「約 1/200」「約 1/2,000」は見積もりの比である
 - **L-D3b-4 相手を弱くした 20 局は、アプリの利用者が指す相手の記録ではない。** D3 の Q-2(「利用者が実際に指す相手がこれ」)の意味は失われる。**死因①の規則が、弱い相手の記録で当たる・当たらないことは、本番の相手の記録で当たるかを示さない**
 - **L-D3b-5 並行した replay の所要**は、3 本が同じ機械の CPU を取り合う値で、1 本ずつの D3 の値と比べられない。**枠の見積もりにだけ使う**
-- **L-D3b-6 F-O6 のソース照合は一方向**(P-32)。`explore.ts` の配線は、実行の最初の 1 局の `meta.extra.opponentNodes` で確かめるまで、**相手のハンドルに実際に `nodes` が渡ったかは記録から直接は見えない**(記録に相手の探索のノード数は残らない)。見えるのは `meta` の値と、F-O3 の試験までである
+- **L-D3b-6 F-O6 のソース照合は一方向**(P-32)。`explore.ts` の配線は、実行の最初の 1 局の `meta.extra.opponentNodes` で確かめるまで、**相手のハンドルに実際に `nodes` が渡ったかは記録から直接は見えない**(記録に相手の探索のノード数は残らない)。見えるのは `meta` の値と、F-O3 の試験までである。**相手の go(nodes 付き)の回数 K は JSONL には残らず、実行の出力に出る**(§6 の最初の 1 局で K ≥ 1 を確かめる。監査 f2 の指摘で司令塔がコミット時に足した)
 - D3 の L-1(演じた癖と本物の初心者の差)・L-5(千日手を判定しない)・L-6(評価の揺れ)・L-7(群の差は局の揺れと混ざる)・L-9(記録に評価関数の種類が残らない、P-43)はそのまま
+
+---
+
+## 10. 実装の記録(実装担当 C が書く)
+
+### 10.1 実装(2026-09-15。基準 HEAD `b18007d`、worktree `scratchpad/wt-d3b`)
+
+- **新規 `lib/opponentEngine.ts`**: `withOpponentNodes`(nodes が undefined なら同じエンジンを返す。そうでなければ go の options に nodes を足し、position はそのまま通す)・`parseOpponentNodesOption`(先頭が 0 でない数字だけを受け付け、それ以外と値なしはエラー)・`buildHighPriorityHandles`(`asHighPriority()` を 2 回呼び、相手のハンドルだけを包む)
+- **新規 `lib/opponentEngine.test.ts`**: F-O1〜F-O7(7 件)。偽のエンジンは go の options と position の引数を記録するだけ。**F-O3 は、どちらのハンドルが先に作られたかに頼らず、届いた options の中身で相手と先手を見分ける**
+- **`explore.ts`**: 冒頭の文を 2.2 のとおり書き直し(使い方に `[--opponent-nodes <N>]`)、T-7 の「条件を一切変えない」に「--opponent-nodes を付けたときだけ相手の探索量が変わる」を足した。`CliOptions`・`parseArgs` に `opponentNodes`、`runOneGame` の引数に `opponentNodes`、局ごとに `buildHighPriorityHandles(engine, opponentNodes)` を作って `pickMoveWithTier` に `handles.sente`・`playOpponentMove` に `handles.opponent` を渡す。`meta.extra` に `opponentNodes`(指定なしは null)。局の開始の出力に `opponentNodes` を足した。**`engine.asHighPriority()` を直接使う箇所は 0、`engine.asLowPriority()` の 6 か所は変えていない**
+- **ハンドルの作り方の違い(監査で見てほしい点)**: これまで先手の E 読みと相手は、**手番ごとに** `engine.asHighPriority()` を作っていた。いまは**局ごとに 1 回**作ったハンドルを使い回す。`asHighPriority()` のハンドルは position を覚えておき、go のたびにそのときの position を送る(`prioritizedEngine.ts:112-128`)ので、使い回しても送る内容は変わらないと読む。**B・B2 は E 読みを使わない**ので、D3b の実行にはこの違いは効かない
+- `npx vitest run --dir scripts/playtest`: 36 ファイル・**395 件すべて通過**(基準 388 件 + F-O1〜F-O7 の 7 件)。`npm run typecheck:scripts` rc=0。変えたファイルは `explore.ts`(+22 / −10)と新規 2 ファイルだけ
+
+### 10.2 変異の予測(**実装して試験が通った後、変異を 1 つも当てる前に書いた**。当て方は D3 の 8.9 と同じ ― 試験の全体を回して基準との差で数え、型検査を別に数える。最初に型検査を校正する)
+
+| # | 当て方 | 落ちると予測する試験 | 型検査 |
+|---|---|---|---|
+| **V-O1** | `buildHighPriorityHandles` で nodes を先手のハンドルに渡し、相手には渡さない | F-O3 | rc=0 |
+| **V-O2** | `withOpponentNodes` の go が nodes を捨てる(`engine.go(options)`) | F-O1・F-O3 | rc=0 |
+| V-O3 | nodes が undefined でも包み、`nodes: nodes ?? 0` を足す | F-O2・F-O4 | rc=0 |
+| V-O4 | `asHighPriority()` を 1 回だけ呼び、相手と先手に同じハンドルを使う | F-O3(**F-O4 は落ちない**: nodes が無ければ同じハンドルでも options は変わらず、見分けがつかない) | rc=0 |
+| V-O5 | `parseOpponentNodesOption` が 0・負・小数を通す | F-O5 | rc=0 |
+| V-O6 | `explore.ts` で `playOpponentMove` に `engine.asHighPriority()` を戻す | F-O6 | rc=0 |
+| V-O7 | `explore.ts` の `meta.extra` から `opponentNodes` を消す | F-O6 | rc=0 |
+| V-O8 | `explore.ts` の `parseArgs` が `--opponent-nodes` を読まない(`opponentNodes: undefined`) | F-O6 | rc=0 |
+
+- **V-O6〜V-O8 を捕まえるのは F-O6(ソース照合)だけで、一方向の見張り**(P-32)。書き方を変えれば通り抜ける。**実行の最初の 1 局で `meta.extra.opponentNodes` が N であることを確かめる**(6.)まで、配線は実物で確かめていない
+
+### 10.3 変異を当てた結果・1 回目(2026-09-15。10.2 の予測と突き合わせた。**実装の 1 版目**に対して)
+
+`scratchpad/d3b_mutate.py`。基準は 395 件・失敗 0・tsc rc=0。**型検査の校正 C-0**(わざと型の誤りを 1 行入れる)で tsc rc=1。
+
+**適用 8 / 鳴った(試験で)8 / 型検査だけ 0 / 沈黙 0 / 適用できなかった 0**。**8 件とも、落ちた試験の集合と型検査の rc が予測どおり**(V-O4 で F-O4 が落ちなかったことも予測どおり)。2 ファイルとも元のバイト列に戻ったことを sha256 で確かめた。
+
+**このあと f2 の事前読みの指摘(10.4)を取り込んでコードを変えたので、変異は 10.5 で全部当て直す。**
+
+### 10.4 f2 の事前読みと司令塔の決定を取り込んだ(2026-09-15。**取り込んだコードに対する変異の予測を、当て直す前に書いた**)
+
+**f2 の事前読み**: §2.1 の E-1〜E-7 は HEAD のソースで全部一致(写しの食い違い 0)。鳴らなくなる恐れ 1 つと勧め 3 つ。**司令塔が 4 つとも取り込むと決めた**(2 は任意ではなく入れる)。§3.1 の数字に出典の file:line を添えた(f2 は突き合わせていないため)。
+
+| # | 指摘 | 取り込み方 |
+|---|---|---|
+| 1 | F-O6 のソース照合がコメントに当たる(否定の文字列がコメントに残ると赤、肯定の文字列をコメントに書くと沈黙) | **照合の前にコメントを除く**(`stripComments`。行コメントとブロックコメント)。**除く関数を先に校正する試験**を足した(コメントの中の照合文字列は消え、コードの行は残る)。F-O6 に「`playOpponentMove(state, handles.sente` を含まない」を足した。変異 V-O9(相手に `handles.sente` を渡し、コメントに正しい行を書く)と、**緑のままであるべき校正 C-1**(コメントに旧い否定の文字列を書く)を足した |
+| 2 | 最初の 1 局の確かめを強くする(`meta` の値は「読んだ値」だけ) | `withOpponentNodes` に数える入れ物を渡し、**相手の go に nodes を付けて渡した回数**を数える。`buildHighPriorityHandles` が `opponentNodesGoCalls()` を返し、`explore.ts` は局の終わりの出力に「相手の go(nodes 付き)=K」を出す(**JSONL の形は変えない**)。固定例 F-O8(相手の go だけを数える、先手は数えない、未指定なら 0)。§6 の最初の 1 局の確かめに K ≥ 1 を足した。変異 V-O10(数えない)・V-O11(explore が 0 を報告)・V-O12(出力から消す) |
+| 3 | 「正の整数」の判定 | 実装は最初から `/^[1-9][0-9]*$/`。**F-O5 の赤の例に `"2e3"`・`"+2000"`・`" 2000"`・`"2000 "` を足して、通さないことを試験で見る** |
+| 4 | V-O3 の分類 | **V-O3 は「形の変異」**: 未指定で `nodes: 0` を足しても、`buildGoCommand` は 0 を movetime として扱うので本番の挙動は変わらない。F-O2・F-O4(と数える入れ物を入れた後は F-O8)は options の形と回数を見るので鳴る |
+
+**取り込んだ後の試験**: 36 ファイル・**397 件すべて通過**(F-O6 の校正と F-O8 の 2 件を足した)、`npm run typecheck:scripts` rc=0。`explore.ts` は +26 / −11。
+
+**当て直す変異の予測**(10.2 の V-O1〜V-O8 は数える入れ物を入れたので書き方と予測が変わるものがある。**当て方は 10.3 と同じ**)
+
+| # | 当て方 | 分類 | 落ちると予測する試験 | 型検査 |
+|---|---|---|---|---|
+| **V-O1** | nodes を先手のハンドルに渡し、相手には渡さない | 中心 | F-O3・**F-O8**(数える入れ物も先手の側に付くので、相手の go の回数が 0 になる) | rc=0 |
+| **V-O2** | 包みの go が nodes を捨てる(`engine.go(options)`。数えるのは残る) | 中心 | F-O1・F-O3(**F-O8 は落ちない**: 回数は数えている) | rc=0 |
+| V-O3 | nodes が undefined でも包み、`nodes: nodes ?? 0` を足す | **形の変異** | F-O2・F-O4・**F-O8**(未指定でも数える) | rc=0 |
+| V-O4 | `asHighPriority()` を 1 回だけ呼び、相手と先手に同じハンドルを使う | 配線 | F-O3(F-O4・F-O8 は落ちない: 包みは相手の側だけで、先手の go は包みを通らないので数えない) | rc=0 |
+| V-O5 | `parseOpponentNodesOption` が 0・負・小数を通す | 入口 | F-O5 | rc=0 |
+| V-O6 | `explore.ts` で `playOpponentMove` に `engine.asHighPriority()` を戻す | 配線 | F-O6 | rc=0 |
+| V-O7 | `meta.extra` から `opponentNodes` を消す | 記録 | F-O6 | rc=0 |
+| V-O8 | `parseArgs` が `--opponent-nodes` を読まない | 入口 | F-O6 | rc=0 |
+| **V-O9** | 相手に `handles.sente` を渡し、**すぐ上のコメントに正しい行を書く**(f2 の穴) | 配線 | F-O6 | rc=0 |
+| **C-1** | 相手の呼び出しの上に、**旧い否定の文字列をコメントで書く**(コードは正しいまま) | 校正(**緑のままが正しい**) | **無し** | rc=0 |
+| V-O10 | 数える入れ物を増やさない | 記録 | F-O8 | rc=0 |
+| V-O11 | `explore.ts` が回数を 0 と報告する(`opponentNodesGoCalls: 0`) | 記録 | F-O6 | rc=0 |
+| V-O12 | `explore.ts` の局の終わりの出力から回数を消す | 記録 | F-O6 | rc=0 |
+
+- **F-O6(と V-O6〜V-O9・V-O11・V-O12 を捕まえる照合)は一方向の見張り**(P-32)。コメントを除いたので「コメントで通る・コメントで赤になる」は塞いだが、**書き方を変えたコード**(変数を経由して渡す等)は通り抜ける。**実行の最初の 1 局の「相手の go(nodes 付き)=K」(K ≥ 1)で、配線を実物で確かめる**(§6)
+
+### 10.5 取り込んだ後に当て直した結果(2026-09-15。10.4 の予測と突き合わせた)
+
+`scratchpad/d3b_mutate_r2.py`(当て方は 10.3 と同じ。変異ごとに試験の全体を回し、基準との差で数え、型検査を別に数える)。基準は 397 件・失敗 0・tsc rc=0。**型検査の校正 C-0 で tsc rc=1。**
+
+**適用 13 / 鳴った(試験で)12 / 型検査だけ 0 / 沈黙 1 / 適用できなかった 0。沈黙の 1 件は校正 C-1 で、緑のままであることが予測どおり**(コメントに旧い否定の文字列を書いても、コメントを除いた照合は赤にならない)。
+
+**13 件すべて、落ちた試験の集合と型検査の rc が 10.4 の予測と一致した**:
+
+- V-O1 → F-O3・F-O8 / V-O2 → F-O1・F-O3(F-O8 は落ちない)/ V-O3(形の変異)→ F-O2・F-O4・F-O8 / V-O4 → F-O3 / V-O5 → F-O5
+- V-O6・V-O7・V-O8・**V-O9(f2 の穴: 相手に `handles.sente`、コメントに正しい行)**・V-O11・V-O12 → F-O6
+- V-O10 → F-O8
+- **C-1 → 落ちた試験なし**(予測どおり)
+
+2 ファイルとも元のバイト列に戻ったことを sha256 で確かめた。**限り**: F-O6 は一方向の見張り(10.4 の最後)。配線は実行の最初の 1 局の「相手の go(nodes 付き)=K」(K ≥ 1)で実物で確かめる

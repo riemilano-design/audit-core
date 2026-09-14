@@ -14,11 +14,13 @@
 // 一切行わない(人間の判断)。
 //
 // 本番関数(apps/server/src配下)はimportして呼ぶだけで、複製・改変はしない。
-// 将棋の判断・評価・閾値・文言はここでは一切書かない。相手AIの手加減・強さ調整も
-// しない(相手は本番と同一: playOpponentMove(state, engine.asHighPriority(),
-// getApprovedScenarioVariants())、movetime 1000ms)。
+// 将棋の判断・評価・閾値・文言はここでは一切書かない。
+// **既定では相手は本番と同一**(playOpponentMove(state, 相手のハンドル, getApprovedScenarioVariants())、movetime 1000ms)。
+// **--opponent-nodes N は開発・検証専用の設定**で、相手の go にだけ nodes を渡して相手を弱くする
+// (STEP D3b。本番の gameSession.ts は変えない。先手の E 読み・候補手・③・engineReference には渡らない。
+// 包みとハンドルの作り方は lib/opponentEngine.ts にあり、そちらに試験がある)。
 //
-// 使い方: npx tsx scripts/playtest/explore.ts --games 10 --seed 1 [--plies 60] [--out-dir <dir>] [--profile <S1|S2|S3|E|R|B|B2>]
+// 使い方: npx tsx scripts/playtest/explore.ts --games 10 --seed 1 [--plies 60] [--out-dir <dir>] [--profile <S1|S2|S3|E|R|B|B2>] [--opponent-nodes <N>]
 //
 // STEP D3: --profile を付けると全局をそのプロファイルで指す(無ければ既定の10局構成。分からない値はエラー)。
 // B・B2 の局は、棋譜 JSON に tiers(先手の手ごとに、どの段で決めたか)を足す。振り分けと棋譜 JSON の組み立ては
@@ -47,6 +49,7 @@ import {
 } from "../../apps/server/src/game/gameSession.js";
 import { isGameOver } from "../../apps/server/src/rules/gameStatus.js";
 import { buildErrorLine, buildImmediateRecord, buildReadyRecord, buildSummaryLine, buildMetaLine } from "./lib/recorder.js";
+import { buildHighPriorityHandles, parseOpponentNodesOption } from "./lib/opponentEngine.js";
 import type { BeginnerTier } from "./lib/beginnerProfile.js";
 import {
   buildKifuJsonText,
@@ -69,7 +72,7 @@ const DEFAULT_SEED = 1;
 const DEFAULT_PLIES_CAP = 60;
 
 // STEP T-7(A-2)。docs/STEP_T-7_PLAN_2026-09-11.md 2. A-2に従う。探索モードは
-// 相手の手・自分側プロファイルの条件を一切変えない(既存のとおり)。engineReference
+// 相手の手・自分側プロファイルの条件を一切変えない(既存のとおり。STEP D3b の --opponent-nodes を付けたときだけ相手の探索量が変わる)。engineReference
 // (参考評価。ハーネスの観測)だけは固定ノード数で測る(replay.tsの既定と同じ値)。
 const DEFAULT_REFERENCE_NODES = 4_000_000;
 
@@ -83,6 +86,8 @@ interface CliOptions {
   outDir: string;
   /** STEP D3: --profile。undefined なら既定の10局構成。 */
   profile: PlayerProfileId | undefined;
+  /** STEP D3b: --opponent-nodes。undefined なら相手は本番どおり(movetime 1000ms)。 */
+  opponentNodes: number | undefined;
 }
 
 function parseArgs(argv: string[], runStartedAt: string): CliOptions {
@@ -99,7 +104,7 @@ function parseArgs(argv: string[], runStartedAt: string): CliOptions {
     ? path.resolve(outDirArg)
     : path.join(SCRIPT_DIR, "out", `explore-${runStartedAt.replace(/[:.]/g, "-")}`);
 
-  return { games, seed, pliesCap, outDir, profile: parseProfileOption(argv) };
+  return { games, seed, pliesCap, outDir, profile: parseProfileOption(argv), opponentNodes: parseOpponentNodesOption(argv) };
 }
 
 interface GameRunResult {
@@ -113,6 +118,8 @@ interface GameRunResult {
   moves: string[];
   jsonlPath: string;
   kifuJsonPath: string;
+  /** STEP D3b: 相手の go に nodes を付けて渡した回数(--opponent-nodes が無ければ 0)。 */
+  opponentNodesGoCalls: number;
 }
 
 async function runOneGame(params: {
@@ -123,8 +130,10 @@ async function runOneGame(params: {
   runStartedAt: string;
   outDir: string;
   engine: PrioritizedEngine;
+  /** STEP D3b: 相手の go に渡す nodes。undefined なら本番どおり。 */
+  opponentNodes: number | undefined;
 }): Promise<GameRunResult> {
-  const { gameNumber, profile, seed, pliesCap, runStartedAt, outDir, engine } = params;
+  const { gameNumber, profile, seed, pliesCap, runStartedAt, outDir, engine, opponentNodes } = params;
   const nn = String(gameNumber).padStart(2, "0");
   const kifuId = `explore-${runStartedAt}-${nn}-${profile}`;
   const gameStartedAt = new Date().toISOString();
@@ -137,6 +146,8 @@ async function runOneGame(params: {
   const prng = new Prng(seed);
   const s3: S3ScriptState = { cursor: 0 };
   const randomRate = profile === "R" ? DEFAULT_RANDOM_RATE : 0;
+  // STEP D3b: 相手と先手(E 読み)のハンドルを別々に作り、相手のハンドルだけに --opponent-nodes を渡す。
+  const handles = buildHighPriorityHandles(engine, opponentNodes);
 
 
   const enginePath = resolveEnginePath();
@@ -154,6 +165,8 @@ async function runOneGame(params: {
         randomRate,
         pliesCap,
         referenceNodes: DEFAULT_REFERENCE_NODES,
+        // STEP D3b: 相手の探索量(指定なしは null = 本番どおり movetime 1000ms)。記録から対局の条件を読めるようにする。
+        opponentNodes: opponentNodes ?? null,
       },
     }),
   );
@@ -208,7 +221,7 @@ async function runOneGame(params: {
       const { move: senteMove, tier } = await pickMoveWithTier(profile, state.sfen, latestReady.response, {
         prng,
         randomRate,
-        engine: engine.asHighPriority(),
+        engine: handles.sente,
         s3,
       });
 
@@ -237,7 +250,7 @@ async function runOneGame(params: {
       moves.push(senteMove);
       tiers.push(tier);
 
-      state = await playOpponentMove(state, engine.asHighPriority(), getApprovedScenarioVariants());
+      state = await playOpponentMove(state, handles.opponent, getApprovedScenarioVariants());
 
       const goteMove =
         state.moveHistory.length === stateBeforeMove.moveHistory.length + 2
@@ -335,6 +348,7 @@ async function runOneGame(params: {
     moves,
     jsonlPath,
     kifuJsonPath,
+    opponentNodesGoCalls: handles.opponentNodesGoCalls(),
   };
 }
 
@@ -356,7 +370,7 @@ async function main(): Promise<void> {
     for (let gameNumber = 1; gameNumber <= options.games; gameNumber++) {
       const profile = profileForGame(gameNumber, options.profile);
       const gameSeed = options.seed + gameNumber;
-      console.log(`[explore] 局 ${gameNumber}/${options.games}(profile: ${profile}, seed: ${gameSeed}) 開始`);
+      console.log(`[explore] 局 ${gameNumber}/${options.games}(profile: ${profile}, seed: ${gameSeed}, opponentNodes: ${options.opponentNodes ?? "本番どおり"}) 開始`);
       const result = await runOneGame({
         gameNumber,
         profile,
@@ -365,10 +379,11 @@ async function main(): Promise<void> {
         runStartedAt,
         outDir: options.outDir,
         engine,
+        opponentNodes: options.opponentNodes,
       });
       results.push(result);
       console.log(
-        `[explore] 局 ${gameNumber}/${options.games} 終了: 手数=${result.plies}, 理由=${result.endReason}, ${result.totalMs}ms`,
+        `[explore] 局 ${gameNumber}/${options.games} 終了: 手数=${result.plies}, 理由=${result.endReason}, ${result.totalMs}ms, 相手の go(nodes 付き)=${result.opponentNodesGoCalls}`,
       );
     }
   } finally {
