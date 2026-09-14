@@ -572,11 +572,11 @@ describe("段 A の校正の対照を選ぶ(controlRowsOf)", () => {
 // コメントだけでは、取り直しを忘れた日に誰も止めない(規則 11.2 の型)。
 describe("段 A の校正の出どころ(calibrationGate)", () => {
   const baseline = { marked: 28, total: 56, maxBoundedPvLength: 2, minPlies: 3 };
-  const source = { recordsDir: "out/d0-nnue", gitHead: "abc123", evaluator: "sha256:0f" };
+  const source = { recordsDir: "scripts/playtest/records/x", gitHead: "abc123", recordsCommit: "def456", evaluator: "sha256:0f" };
 
   it("source が null か欄が空なら始めない。3 つとも書けば既知の値を組み立てる", () => {
     expect(calibrationGate({ ...baseline, source: null }, 0.15)).toMatchObject({ kind: "missing_source" });
-    for (const empty of [{ recordsDir: "" }, { gitHead: "" }, { evaluator: "" }]) {
+    for (const empty of [{ recordsDir: "" }, { gitHead: "" }, { recordsCommit: "" }, { evaluator: "" }]) {
       expect(calibrationGate({ ...baseline, source: { ...source, ...empty } }, 0.15).kind).toBe("missing_source");
     }
     expect(calibrationGate({ ...baseline, source }, 0.15)).toEqual({
@@ -589,7 +589,7 @@ describe("段 A の校正の出どころ(calibrationGate)", () => {
   // 呼び出し側の照合。**エンジンを起動する前に、実際の CALIBRATION_BASELINE で門を通し、止まったら非 0 で返す。**
   // 子プロセスで CLI を走らせる試験にはしない(門を外す変異が入ると、共有ツリーではエンジンが起動する ― P-29)。
   // 照合は片側にしか壊れない(文字列を残して意味を変える書き換えは捕まらない)。
-  it("CLI は段 A でエンジンより先に門を通し、止まったら非 0 で返す。source は今は null", () => {
+  it("CLI は段 A でエンジンより先に門を通し、止まったら非 0 で返す。既知の値は lib から読み、CLI で書き換えない", () => {
     const cli = readFileSync(new URL("../multipv-survey.ts", import.meta.url), "utf8");
     const gateCall = "    const gate = calibrationGate(CALIBRATION_BASELINE, CALIBRATION_BOUND_RATE_TOLERANCE);\n";
     const stop = '    if (gate.kind === "missing_source") {\n      console.error(gate.reason);\n      return 3;\n    }\n';
@@ -598,8 +598,11 @@ describe("段 A の校正の出どころ(calibrationGate)", () => {
     expect(cli.split("calibrationGate(").length - 1).toBe(1);
     expect(cli.indexOf(gateCall)).toBeLessThan(cli.indexOf("resolveEnginePath()"));
     expect(cli.indexOf(gateCall)).toBeLessThan(cli.indexOf("new UsiEngine("));
-    // 取り直すまでは埋まっていないこと(埋まっていたら、この試験を書き換えて出どころを確かめる)
-    expect(cli).toContain("  source: null,\n");
+    // U6-T2: 既知の値は lib/calibrationBaseline.ts から読むだけ。CLI に定数を置かず、後から代入もしない
+    // (A の G-5: `CALIBRATION_BASELINE.source = …` を後から書くと、門も照合もすり抜けた)
+    expect(cli).toContain('import { CALIBRATION_BASELINE, CALIBRATION_BOUND_RATE_TOLERANCE } from "./lib/calibrationBaseline.js";\n');
+    expect(cli.split("CALIBRATION_BASELINE").length - 1).toBe(2); // import と門の呼び出しの 2 か所だけ
+    expect(cli).not.toMatch(/const CALIBRATION_/);
   });
 });
 

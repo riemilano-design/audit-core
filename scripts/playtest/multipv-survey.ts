@@ -21,6 +21,7 @@ import { fileURLToPath } from "node:url";
 import { resolveEnginePath } from "../../apps/server/src/engine/enginePath.js";
 import { PrioritizedEngine } from "../../apps/server/src/engine/prioritizedEngine.js";
 import { UsiEngine } from "../../apps/server/src/engine/usiEngine.js";
+import { CALIBRATION_BASELINE, CALIBRATION_BOUND_RATE_TOLERANCE } from "./lib/calibrationBaseline.js";
 import { buildMetaLine } from "./lib/recorder.js";
 import {
   buildSurveyReport,
@@ -30,7 +31,6 @@ import {
   controlRowsOf,
   dedupeRoots,
   runSurvey,
-  type CalibrationBaseline,
   type CalibrationExpectation,
   type SurveyCondition,
 } from "./lib/multiPvSurvey.js";
@@ -46,20 +46,8 @@ const REPORT_PARAMS = {
   lossThresholds: [2, 3, 4, 5, 6], // S-4: 控えの候補
 } as const;
 
-// 段 A の校正に使う既知の値(計画 §1.7・§4・E-12)。**記録を観測した数と、その出どころ。**
-// **いまの値(28/56・2 手・3)は MATERIAL 版の評価関数で取った U6-L の記録の値で、「参考」である。**
-// 段 A の前に、D0-NNUE の記録(固定棋譜 7 局・nodes 4,000,000・Threads 1・MultiPV 1)から 3 つとも
-// 取り直し、source を埋める(2026-09-14 の司令塔の決定。計画 §4)。**source が null の間、段 A は始まらない。**
-const CALIBRATION_BASELINE: CalibrationBaseline = {
-  marked: 28,
-  total: 56,
-  maxBoundedPvLength: 2,
-  minPlies: 3,
-  source: null,
-};
-
-// 標識付きの割合の幅。**観測ではなく選んだ許容であり、測って決めた値ではない**(計画 §4)。取り直さない。
-const CALIBRATION_BOUND_RATE_TOLERANCE = 0.15;
+// 段 A の校正に使う既知の値と幅は lib/calibrationBaseline.ts にある(U6-T2)。**ここで書き換えない**
+// (値は凍結してあり、記録から数え直した値との一致を lib/calibrationBaseline.test.ts が見る)。
 
 const STAGES = {
   A: {

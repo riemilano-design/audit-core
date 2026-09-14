@@ -562,11 +562,13 @@ export interface CalibrationExpectation {
  * 評価関数が違えば記録の対象が違う(規則 11.1)ので、どの記録・どのコード・どの評価関数から取った値かを持つ。
  */
 export interface CalibrationSource {
-  /** 値を数えた記録のフォルダ(例: out/d0-nnue) */
+  /** 値を数えた記録のフォルダ(リポジトリの根からの相対パス。例: scripts/playtest/records/d0-nnue) */
   recordsDir: string;
-  /** その記録の meta 行の gitHead */
+  /** その記録の meta 行の gitHead(記録を取ったときのコード) */
   gitHead: string;
-  /** 評価関数の識別(D0-NNUE で記録したエンジンの id name、または nn.bin の sha256) */
+  /** その記録をリポジトリにコミットしたコミット(記録そのものの版。U6-T2 で足した) */
+  recordsCommit: string;
+  /** 評価関数の識別(nn.bin の sha256 など。どこで確かめたかも書く) */
   evaluator: string;
 }
 
@@ -596,11 +598,11 @@ export type CalibrationGate =
  */
 export function calibrationGate(baseline: CalibrationBaseline, boundRateTolerance: number): CalibrationGate {
   const { source } = baseline;
-  if (source === null || source.recordsDir === "" || source.gitHead === "" || source.evaluator === "") {
+  if (source === null || source.recordsDir === "" || source.gitHead === "" || source.recordsCommit === "" || source.evaluator === "") {
     return {
       kind: "missing_source",
       reason:
-        "校正の値の出どころ(source: recordsDir・gitHead・evaluator)が書かれていません。" +
+        "校正の値の出どころ(source: recordsDir・gitHead・recordsCommit・evaluator)が書かれていません。" +
         "段 A は始めません。D0-NNUE の記録から 56 局面に畳んだ値を取り直し、出どころを埋めてください(計画 §4)",
     };
   }
@@ -613,6 +615,68 @@ export function calibrationGate(baseline: CalibrationBaseline, boundRateToleranc
       maxBoundedPvLength: baseline.maxBoundedPvLength,
       minPlies: baseline.minPlies,
     },
+  };
+}
+
+/** 校正の値を記録から数えるときの入力(ready 行 1 行ぶん。記録の JSONL をそのまま渡す) */
+export interface CalibrationRecordRow {
+  kifuId: string;
+  ply: number;
+  sfen: string;
+  /** その行の searchPvs(U6-L)。欄が無ければ undefined */
+  searchPvs:
+    | ReadonlyArray<Pick<SearchPvObservation, "source" | "multipv" | "scoreCp" | "mate" | "pv" | "lowerbound" | "upperbound">>
+    | undefined;
+}
+
+export interface ObservedCalibration {
+  /** 畳んだ局面のうち、代表の行の focus_baseline の読み筋に標識が付いていた数 */
+  marked: number;
+  /** 畳んだ局面のうち、代表の行に focus_baseline の読み筋があった数(分母) */
+  total: number;
+  /** 標識付きの本の pv.length の最大。標識付きが無ければ null */
+  maxBoundedPvLength: number | null;
+  /** D-2 の式の結果(値が出たかどうかも含めて返す) */
+  minPlies: MinPliesDecision;
+  /** 代表の行に focus_baseline の読み筋が無かった局面の数(分母に入れない。0 に化けさせない) */
+  withoutFocusBaseline: number;
+}
+
+/**
+ * 校正の値を記録から数える(U6-T2。計画 §1.7 と同じ定義)。
+ * 局面は `dedupeRoots` で畳み(代表は最初に現れた行)、代表の行の **focus_baseline**(MultiPV 1 の探索)の
+ * 読み筋 1 本を見る。**定数を手で書き写すのではなく、この関数で記録から出した値と定数を試験で突き合わせる。**
+ */
+export function observeCalibrationBaseline(rows: readonly CalibrationRecordRow[], tolerance: number): ObservedCalibration {
+  const byOrigin = new Map(rows.map((row) => [`${row.kifuId}#${row.ply}`, row]));
+  const lines: SurveyLine[] = [];
+  let withoutFocusBaseline = 0;
+  for (const root of dedupeRoots(rows)) {
+    const first = root.origins[0]!;
+    const row = byOrigin.get(`${first.kifuId}#${first.ply}`)!;
+    const observation = row.searchPvs?.find((pv) => pv.source === "focus_baseline");
+    if (observation === undefined) {
+      withoutFocusBaseline += 1;
+      continue;
+    }
+    // 評価値は校正に使わない(標識と長さだけを見る)。型を満たすために写すだけ
+    const score = observation.mate !== null ? { type: "mate" as const, value: observation.mate } : { type: "cp" as const, value: observation.scoreCp ?? 0 };
+    lines.push(
+      ...toSurveyLines(row.sfen, {
+        bestmove: observation.pv[0],
+        ponder: undefined,
+        infoLines: [],
+        lines: [{ multipv: observation.multipv, score, pv: [...observation.pv], lowerbound: observation.lowerbound, upperbound: observation.upperbound }],
+      }),
+    );
+  }
+  const bounded = lines.filter((line) => isBounded(line));
+  return {
+    marked: bounded.length,
+    total: lines.length,
+    maxBoundedPvLength: bounded.length === 0 ? null : Math.max(...bounded.map((line) => line.pv.length)),
+    minPlies: decideMinPlies(lines, tolerance),
+    withoutFocusBaseline,
   };
 }
 
