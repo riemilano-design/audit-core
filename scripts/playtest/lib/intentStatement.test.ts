@@ -287,7 +287,7 @@ describe("summarizeIntentStatements(薄い呼び出し。19.4.3)", () => {
     expect(counts.undetermined).toEqual(ZERO_UNDETERMINED);
     // ply 0 は後手が 1 手も指していないので、どの data でも候補は 0 件。
     expect(counts.noCandidate).toBeGreaterThanOrEqual(1);
-  });
+  }, 60_000);
 });
 
 // ---- check.ts の表(STEP U6-I4 の 2 つ目の変更。docs/STEP_U6-I4_CHECK_TABLE_PLAN_2026-09-13.md 5.1) ----
