@@ -15,8 +15,8 @@
 // - ③の文を読んで「急ぐと言った / 言わなかった」に分けること(計画 9.2)
 // - 例外を外へ出すこと(diagnose.ts の exit code は常に 0。計画 D-1)
 //
-// 【この件数は診断に使わない】今ある記録は駒得だけの評価(MATERIAL)で取られており、評価関数の種類は
-// 記録に残っていない(計画 0.・E-f)。NNUE の記録が出たら同じ道具で測り直す。
+// 【この件数は診断に使わない】評価関数の種類は記録に残っていない(計画 0.・E-f)。今の記録は入力の行の enginePath で
+// 見分けられる(engine/ と engine/nnue/。nn.bin だけ差し替えると見分けられない ― P-43)。
 
 import { detectBoardEvents } from "../../../apps/server/src/analysis/boardEventDetector.js";
 import { detectIntents } from "../../../apps/server/src/analysis/intentDetector.js";
@@ -506,7 +506,7 @@ function intentCell(intent: Trigger["opponentIntent"]): string {
 }
 
 const NOTES = [
-  "- **この件数は診断に使わない。** 評価関数の種類は記録に残っていない(MATERIAL と NNUE で `meta.enginePath` は同じになりうる)。今ある記録は駒得だけの評価で取られている",
+  "- **この件数は診断に使わない。** 評価関数の種類は記録に残っていない(MATERIAL と NNUE で `meta.enginePath` は同じになりうる)。今の記録は入力の行の `enginePath` で見分けられる(`engine/` と `engine/nnue/`。`nn.bin` だけ差し替えると見分けられない ― P-43)",
   "- **死因①のタグは draft。** 閾値(直前 +300 / 差 −400 / 窓 5 手 / 直前の dropCp 300)は判断的知識の仮置きである",
   "- 発症条件の②と形は、照合時の `data/intents/`・`data/shapes/` に依存する(記録時の ②③ と混ざる)",
   "- **「測っていない」「測れなかった」は「急落なし」ではない。** 窓が棋譜の終わりを越えたものは「窓が足りない」であり、「起きなかった」ではない",

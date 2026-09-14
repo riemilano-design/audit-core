@@ -215,6 +215,14 @@ describe("報告(計画 3.2・D-1)", () => {
     expect(text).toContain("| g | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |");
   });
 
+  it("注記(評価関数の見分け方・cp の絶対値が 30000 以上は評価値ではない)を出す(STEP D1-FIX。D1 計画 §10.10 の宿題 2 件)", () => {
+    const records = plantedRecords(GAME01_MOVES, {});
+    const text = renderDiagnosisReport(buildDiagnosisReport([{ kifuId: "g", meta: undefined, records }], DRAFT_RULE_1)).join("\n");
+    expect(text).toContain("今の記録は入力の行の `enginePath` で見分けられる(`engine/` と `engine/nnue/`。`nn.bin` だけ差し替えると見分けられない ― P-43)");
+    expect(text).not.toContain("今ある記録は駒得だけの評価で取られている");
+    expect(text).toContain("cp の絶対値が 30000 以上の値は評価値ではない。");
+  });
+
   it("比べた組が 1 つも無い記録(全行 engineReference の欄なし。game-01 と同じ形)は、急落候補とその内訳を 0 ではなく「比べる組が無い」と出す", () => {
     const records = plantedRecords(GAME01_MOVES.slice(0, 4), { 0: "absent", 2: "absent", 4: "absent" });
     const report = buildDiagnosisReport([{ kifuId: "u0", meta: undefined, records }], DRAFT_RULE_1);

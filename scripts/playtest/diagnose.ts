@@ -13,7 +13,7 @@
 //
 // 【このファイルが絶対にやらないこと】
 // - 死因のタグを approved にすること・閾値を確定すること
-// - **この件数を診断に使うこと**(今の記録は駒得だけの評価。計画 0.)
+// - **この件数を診断に使うこと**(評価関数の種類は記録に残っていない。今の記録は入力の行の enginePath で見分けられる ― P-43。計画 0.)
 
 import { readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
