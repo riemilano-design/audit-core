@@ -3,7 +3,8 @@
 //
 // 固定棋譜モード(replay.ts、T-1)は「回帰」用(一度記録した局面列を再生し、
 // 変更前後の検出数を比べる)。本モジュールは「発見」用であり、相手を本番と同じ
-// (素のエンジン)に戻し、自分側は5プロファイル(lib/players.ts)で指させることで
+// (素のエンジン)に戻し、自分側はプロファイル(lib/players.ts の S1〜R の 5 つと、STEP D3 の B・B2 =
+// lib/beginnerProfile.ts)で指させることで
 // 未知の局面列を作る。
 //
 // 【探索の出力は"観測"であることについて(4.5の境界)】
@@ -17,7 +18,11 @@
 // しない(相手は本番と同一: playOpponentMove(state, engine.asHighPriority(),
 // getApprovedScenarioVariants())、movetime 1000ms)。
 //
-// 使い方: npx tsx scripts/playtest/explore.ts --games 10 --seed 1 [--plies 60] [--out-dir <dir>]
+// 使い方: npx tsx scripts/playtest/explore.ts --games 10 --seed 1 [--plies 60] [--out-dir <dir>] [--profile <S1|S2|S3|E|R|B|B2>]
+//
+// STEP D3: --profile を付けると全局をそのプロファイルで指す(無ければ既定の10局構成。分からない値はエラー)。
+// B・B2 の局は、棋譜 JSON に tiers(先手の手ごとに、どの段で決めたか)を足す。振り分けと棋譜 JSON の組み立ては
+// lib/players.ts の関数にあり、そちらに試験がある(ここに判断を残さない)。
 
 import { execFileSync } from "node:child_process";
 import { mkdirSync, writeFileSync } from "node:fs";
@@ -42,10 +47,13 @@ import {
 } from "../../apps/server/src/game/gameSession.js";
 import { isGameOver } from "../../apps/server/src/rules/gameStatus.js";
 import { buildErrorLine, buildImmediateRecord, buildReadyRecord, buildSummaryLine, buildMetaLine } from "./lib/recorder.js";
+import type { BeginnerTier } from "./lib/beginnerProfile.js";
 import {
-  DEFAULT_PROFILE_ORDER,
+  buildKifuJsonText,
   DEFAULT_RANDOM_RATE,
-  pickMove,
+  parseProfileOption,
+  pickMoveWithTier,
+  profileForGame,
   type PlayerProfileId,
   type S3ScriptState,
 } from "./lib/players.js";
@@ -73,6 +81,8 @@ interface CliOptions {
   seed: number;
   pliesCap: number;
   outDir: string;
+  /** STEP D3: --profile。undefined なら既定の10局構成。 */
+  profile: PlayerProfileId | undefined;
 }
 
 function parseArgs(argv: string[], runStartedAt: string): CliOptions {
@@ -89,15 +99,7 @@ function parseArgs(argv: string[], runStartedAt: string): CliOptions {
     ? path.resolve(outDirArg)
     : path.join(SCRIPT_DIR, "out", `explore-${runStartedAt.replace(/[:.]/g, "-")}`);
 
-  return { games, seed, pliesCap, outDir };
-}
-
-/** --games に対して既定の10局構成(S1×2、S2×2、S3×2、E×2、R×2)を繰り返し割り当てる。 */
-function profileForGameIndex(gameIndex1Based: number): PlayerProfileId {
-  const order = DEFAULT_PROFILE_ORDER;
-  const zeroBased = (gameIndex1Based - 1) % order.length;
-  // order.length > 0 であることは定数配列から自明。
-  return order[zeroBased] as PlayerProfileId;
+  return { games, seed, pliesCap, outDir, profile: parseProfileOption(argv) };
 }
 
 interface GameRunResult {
@@ -129,6 +131,8 @@ async function runOneGame(params: {
 
   const lines: string[] = [];
   const moves: string[] = [];
+  // STEP D3: 先手の手ごとの段(B・B2 だけ。S1〜R は null が並ぶが棋譜 JSON には書かない)。
+  const tiers: (BeginnerTier | null)[] = [];
   const readyMsPerPly: number[] = [];
   const prng = new Prng(seed);
   const s3: S3ScriptState = { cursor: 0 };
@@ -201,7 +205,7 @@ async function runOneGame(params: {
       }
 
       const stateBeforeMove = state;
-      const senteMove = await pickMove(profile, state.sfen, latestReady.response, {
+      const { move: senteMove, tier } = await pickMoveWithTier(profile, state.sfen, latestReady.response, {
         prng,
         randomRate,
         engine: engine.asHighPriority(),
@@ -231,6 +235,7 @@ async function runOneGame(params: {
         throw err;
       }
       moves.push(senteMove);
+      tiers.push(tier);
 
       state = await playOpponentMove(state, engine.asHighPriority(), getApprovedScenarioVariants());
 
@@ -314,7 +319,7 @@ async function runOneGame(params: {
     writeFileSync(jsonlPath, `${lines.join("\n")}\n`, "utf-8");
     writeFileSync(
       kifuJsonPath,
-      `${JSON.stringify({ id: kifuId, source: "explore", profile, seed, moves }, null, 2)}\n`,
+      buildKifuJsonText({ id: kifuId, profile, seed, moves, tiers }),
       "utf-8",
     );
   }
@@ -349,7 +354,7 @@ async function main(): Promise<void> {
   const results: GameRunResult[] = [];
   try {
     for (let gameNumber = 1; gameNumber <= options.games; gameNumber++) {
-      const profile = profileForGameIndex(gameNumber);
+      const profile = profileForGame(gameNumber, options.profile);
       const gameSeed = options.seed + gameNumber;
       console.log(`[explore] 局 ${gameNumber}/${options.games}(profile: ${profile}, seed: ${gameSeed}) 開始`);
       const result = await runOneGame({

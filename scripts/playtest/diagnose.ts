@@ -3,7 +3,7 @@
 //
 // 使い方: npx tsx scripts/playtest/diagnose.ts <a.jsonl> [<b.jsonl> ...] [--events <out.jsonl>]
 //
-// 【このファイルは薄くしてある】判定・集計・表の組み立てはすべて lib/failureEvent.ts にあり、そちらに試験がある。
+// 【このファイルは薄くしてある】判定・集計・表の組み立てはすべて lib/failureEvent.ts(合計は lib/diagnosisTotals.ts)にあり、そちらに試験がある。
 // ここでやるのは、記録を読む・lib を呼ぶ・書き出す、だけである。
 //
 // 【exit code】lib の例外は外へ出さず「数えられなかった」行にして exit 0。**入力が読めないとき(ENOENT・壊れた JSONL)は
@@ -17,6 +17,7 @@ import { readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
 
 import type { MetaLine, RecordLine } from "./invariants/types.js";
+import { renderDiagnosisTotals } from "./lib/diagnosisTotals.js";
 import { buildDiagnosisReport, DRAFT_RULE_1, renderDiagnosisReport, type DiagnosisInput } from "./lib/failureEvent.js";
 
 function parseArgs(argv: string[]): { files: string[]; eventsOut: string | undefined } {
@@ -47,7 +48,8 @@ function main(): void {
 
   const inputs = files.map(readInput);
   const report = buildDiagnosisReport(inputs, DRAFT_RULE_1);
-  console.log(renderDiagnosisReport(report).join("\n"));
+  // STEP D3(計画 Q-5): 入力が 2 本以上なら、入力ごとの表の後に群の合計の節を足す(1 本なら何も足さない)。
+  console.log([...renderDiagnosisReport(report), ...renderDiagnosisTotals(report)].join("\n"));
 
   if (eventsOut) {
     const eventLines = report.flatMap((row) => (row.result.kind === "counted" ? row.result.events.map((event) => JSON.stringify(event)) : []));

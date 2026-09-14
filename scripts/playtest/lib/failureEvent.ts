@@ -518,8 +518,9 @@ const NOTES = [
  * 急落候補とその内訳の欄。比べた組(差を取った組・直後が mate の組)が 1 つも無ければ、0 ではなく「比べる組が無い」と出す
  * (計画 4.2・規則 11.6。「無い」を「急落なし」にしない)。**表示の分岐はここだけ。**
  * 組が無い理由(測れなかった・測っていない・評価値でない・行が 1 つ)は畳んでいるので、区別は隣の「評価の状態と組」の表が担う。
+ * STEP D3: lib/diagnosisTotals.ts の合計の表も同じ分岐を使うため export した(分岐を 2 か所に持たない)。
  */
-function dropCountCell(counts: DiagnosisCounts, value: number): string {
+export function dropCountCell(counts: DiagnosisCounts, value: number): string {
   return counts.comparedPairs + counts.mateAfterPairs === 0 ? "比べる組が無い" : String(value);
 }
 

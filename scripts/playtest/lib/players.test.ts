@@ -5,12 +5,16 @@ import type { ReachablePlanBody, StateResponseBodyWithPlan } from "../../../apps
 import { applyMove } from "../../../apps/server/src/rules/applyMove.js";
 import { Prng } from "./prng.js";
 import {
+  buildKifuJsonText,
+  parseProfileOption,
   pickByEProfile,
   pickByRProfile,
   pickByS1Rule,
   pickByS2Rule,
   pickByS3Rule,
   pickMove,
+  pickMoveWithTier,
+  profileForGame,
 } from "./players.js";
 
 const INITIAL_SFEN = makeSfen(parseSfen("standard", "startpos").unwrap());
@@ -237,5 +241,87 @@ describe("pickMove(プロファイルの分岐)", () => {
     });
     expect(move).toBe("1g1f");
     expect(s3.cursor).toBe(8);
+  });
+});
+
+// ---- STEP D3(docs/STEP_D3_PLAN_2026-09-14.md 4.1・8.1)。期待値は試験を回す前に手で書いた ----
+
+/** 呼ばれたら落ちるエンジン。B・B2 と、S1 の規則②で決まる局面では呼ばれないはず。 */
+function throwingEngine(): HighPriorityEngine {
+  return {
+    position: () => {
+      throw new Error("エンジンを呼んだ");
+    },
+    go: async () => {
+      throw new Error("エンジンを呼んだ");
+    },
+  };
+}
+
+const F_B6_SFEN = "8k/9/9/9/9/9/4G3P/9/4K4 b - 1";
+
+describe("F-B13 parseProfileOption・profileForGame(--profile の選び方)", () => {
+  it("--profile B なら 1〜12 局目がすべて B、B2 なら全部 B2", () => {
+    for (let game = 1; game <= 12; game++) {
+      expect(profileForGame(game, parseProfileOption(["--games", "12", "--profile", "B"]))).toBe("B");
+      expect(profileForGame(game, parseProfileOption(["--profile", "B2", "--games", "12"]))).toBe("B2");
+    }
+  });
+
+  it("無指定なら既定の10局構成を繰り返す(1 局目 S1・3 局目 S2・7 局目 E・10 局目 R・11 局目 S1)", () => {
+    const profile = parseProfileOption(["--games", "12"]);
+    expect(profile).toBeUndefined();
+    expect(profileForGame(1, profile)).toBe("S1");
+    expect(profileForGame(3, profile)).toBe("S2");
+    expect(profileForGame(7, profile)).toBe("E");
+    expect(profileForGame(10, profile)).toBe("R");
+    expect(profileForGame(11, profile)).toBe("S1");
+  });
+
+  it("分からない値・値の無い --profile はエラーで止める(黙って既定の並びにしない)", () => {
+    expect(() => parseProfileOption(["--profile", "X"])).toThrow(/--profile の値が分からない/);
+    expect(() => parseProfileOption(["--games", "3", "--profile"])).toThrow(/--profile の値が分からない/);
+  });
+});
+
+describe("F-B14 pickMoveWithTier(プロファイル → 決め方の振り分け)", () => {
+  const context = () => ({ prng: new Prng(1), randomRate: 0.3, engine: throwingEngine(), s3: { cursor: 0 } });
+
+  it("B は F-B6 の局面で 5g5h・5-iii、B2 は 1g1f・5-iv-b(エンジンを呼ばない)", async () => {
+    expect(await pickMoveWithTier("B", F_B6_SFEN, baseResponse(F_B6_SFEN), context())).toEqual({ move: "5g5h", tier: "5-iii" });
+    expect(await pickMoveWithTier("B2", F_B6_SFEN, baseResponse(F_B6_SFEN), context())).toEqual({ move: "1g1f", tier: "5-iv-b" });
+  });
+
+  it("S1 は既存の pickMove のまま(規則②で 3i3h)で、段を持たない", async () => {
+    const response = baseResponse(INITIAL_SFEN, {
+      candidateMoveState: "pending",
+      candidateMove: undefined,
+      candidateMoveLabels: { "3i3h": "銀を３八へ", "2h6h": "飛車を６八へ" },
+    });
+    expect(await pickMoveWithTier("S1", INITIAL_SFEN, response, context())).toEqual({ move: "3i3h", tier: null });
+  });
+});
+
+describe("F-B14b pickMove は B・B2 を扱わない(計画 8.8 の A8)", () => {
+  it("F-B14b pickMove に B・B2 を渡すと例外で止まる(振り分けは pickMoveWithTier の 1 か所だけ)", async () => {
+    const context = { prng: new Prng(1), randomRate: 0.3, engine: throwingEngine(), s3: { cursor: 0 } };
+    await expect(pickMove("B", F_B6_SFEN, baseResponse(F_B6_SFEN), context)).rejects.toThrow(/pickMoveWithTier を使う/);
+    await expect(pickMove("B2", F_B6_SFEN, baseResponse(F_B6_SFEN), context)).rejects.toThrow(/pickMoveWithTier を使う/);
+  });
+});
+
+describe("F-B15 buildKifuJsonText(棋譜 JSON の組み立て)", () => {
+  it("B・B2 は tiers を持ち、欄の並びは id・source・profile・seed・moves・tiers", () => {
+    const text = buildKifuJsonText({ id: "k1", profile: "B", seed: 3, moves: ["5g5h", "3c3d"], tiers: ["5-iii"] });
+    expect(text.endsWith("}\n")).toBe(true);
+    const parsed = JSON.parse(text);
+    expect(parsed).toEqual({ id: "k1", source: "explore", profile: "B", seed: 3, moves: ["5g5h", "3c3d"], tiers: ["5-iii"] });
+    expect(Object.keys(parsed)).toEqual(["id", "source", "profile", "seed", "moves", "tiers"]);
+    expect(JSON.parse(buildKifuJsonText({ id: "k2", profile: "B2", seed: 4, moves: ["1g1f"], tiers: ["5-iv-b"] })).tiers).toEqual(["5-iv-b"]);
+  });
+
+  it("S1〜R は tiers の欄を持たない(既存の形のまま)", () => {
+    const parsed = JSON.parse(buildKifuJsonText({ id: "k3", profile: "S1", seed: 2, moves: ["7g7f"], tiers: [null] }));
+    expect(Object.keys(parsed)).toEqual(["id", "source", "profile", "seed", "moves"]);
   });
 });

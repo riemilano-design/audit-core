@@ -16,6 +16,7 @@ import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 import type { MetaLine } from "./invariants/types.js";
+import { renderDiagnosisTotals } from "./lib/diagnosisTotals.js";
 import { buildDiagnosisReport, DRAFT_RULE_1, renderDiagnosisReport, type DiagnosisInput } from "./lib/failureEvent.js";
 import { engineRef, GAME01_MOVES, plantedRecords } from "./lib/failureEventFixtures.js";
 
@@ -45,7 +46,8 @@ describe("diagnose.ts(計画 5.2)", () => {
     const source = readFileSync(DIAGNOSE_TS, "utf8");
     expect(source).toContain("  const inputs = files.map(readInput);");
     expect(source).toContain("  const report = buildDiagnosisReport(inputs, DRAFT_RULE_1);");
-    expect(source).toContain('  console.log(renderDiagnosisReport(report).join("\\n"));');
+    // STEP D3(計画 Q-5): 入力ごとの表の後に群の合計の節を足した。合計の呼び出しもこの 1 行で見張る。
+    expect(source).toContain('  console.log([...renderDiagnosisReport(report), ...renderDiagnosisTotals(report)].join("\\n"));');
     expect(source).toContain("row.result.events.map((event) => JSON.stringify(event))");
   });
 
@@ -83,7 +85,9 @@ describe("diagnose.ts(計画 5.2)", () => {
         // 同じ記録を、ファイルを経由した形(JSON に書いて読み直した形)でこのプロセスの lib に掛ける
         const reread = inputs.map((input) => JSON.parse(JSON.stringify(input)) as DiagnosisInput);
         const report = buildDiagnosisReport(reread, DRAFT_RULE_1);
-        expect(stdout).toBe(`${renderDiagnosisReport(report).join("\n")}\n`);
+        // STEP D3(計画 Q-5): 2 入力なので合計の節が付く。節が空なら、この比べは合計の配線を見ていないことになる。
+        expect(renderDiagnosisTotals(report).length).toBeGreaterThan(0);
+        expect(stdout).toBe(`${[...renderDiagnosisReport(report), ...renderDiagnosisTotals(report)].join("\n")}\n`);
 
         const expectedEvents = report.flatMap((row) => (row.result.kind === "counted" ? row.result.events : []));
         expect(expectedEvents.length).toBeGreaterThan(0);

@@ -7,6 +7,9 @@
 // 同じ乱数状態なら同じ手を返す(決定的)。
 //
 // 本番関数(apps/server/src配下)はimportして呼ぶだけで、複製・改変はしない。
+//
+// STEP D3: プロファイル B・B2(縛った初心者の決め方)は lib/beginnerProfile.ts にあり、ここからは薄く呼ぶだけ
+// (engine も応答も渡さない。docs/STEP_D3_PLAN_2026-09-14.md 8.4 の決定 12・13)。
 
 import type { StateResponseBodyWithPlan } from "../../../apps/server/src/api/stateResponse.js";
 import type { HighPriorityEngine } from "../../../apps/server/src/engine/prioritizedEngine.js";
@@ -14,9 +17,13 @@ import { applyMove } from "../../../apps/server/src/rules/applyMove.js";
 import { listAttackedPieces } from "../../../apps/server/src/rules/attackedPieces.js";
 import { getLegalMoves, isLegalMove } from "../../../apps/server/src/rules/legalMoves.js";
 import { detectPieceThreats } from "../../../apps/server/src/analysis/pieceThreatDetector.js";
+import { pickByBeginnerProfile, type BeginnerTier } from "./beginnerProfile.js";
 import type { Prng } from "./prng.js";
 
-export type PlayerProfileId = "S1" | "S2" | "S3" | "E" | "R";
+export type PlayerProfileId = "S1" | "S2" | "S3" | "E" | "R" | "B" | "B2";
+
+/** --profile に渡せる値(STEP D3 で B・B2 を足した)。 */
+export const PLAYER_PROFILE_IDS: readonly PlayerProfileId[] = ["S1", "S2", "S3", "E", "R", "B", "B2"];
 
 /** 10局の既定の内訳(計画書表): S1×2、S2×2、S3×2、E×2、R×2。 */
 export const DEFAULT_PROFILE_ORDER: readonly PlayerProfileId[] = [
@@ -31,6 +38,30 @@ export const DEFAULT_PROFILE_ORDER: readonly PlayerProfileId[] = [
   "R",
   "R",
 ];
+
+/**
+ * STEP D3(計画 Q-1・F-B13)。explore.ts の --profile を読む。無ければ undefined(既定の並び)。
+ * **値が分からないとき・値が無いときはエラーで止める**(黙って既定の並びにしない。計画 8.3 の 2)。
+ */
+export function parseProfileOption(argv: readonly string[]): PlayerProfileId | undefined {
+  const index = argv.indexOf("--profile");
+  if (index === -1) return undefined;
+  const value = argv[index + 1];
+  const found = PLAYER_PROFILE_IDS.find((id) => id === value);
+  if (found === undefined) {
+    throw new Error(`--profile の値が分からない: ${value === undefined ? "(値が無い)" : `"${value}"`}(使えるのは ${PLAYER_PROFILE_IDS.join(" / ")})`);
+  }
+  return found;
+}
+
+/** 何局目をどのプロファイルで指すか。--profile があれば全局それ、無ければ既定の10局構成を繰り返す(F-B13)。 */
+export function profileForGame(gameIndex1Based: number, fixedProfile: PlayerProfileId | undefined): PlayerProfileId {
+  if (fixedProfile !== undefined) return fixedProfile;
+  const order = DEFAULT_PROFILE_ORDER;
+  const zeroBased = (gameIndex1Based - 1) % order.length;
+  // order.length > 0 であることは定数配列から自明。
+  return order[zeroBased] as PlayerProfileId;
+}
 
 /** R(乱択混合)の既定のrandomRate(人間承認済み)。S1〜S3・Eは0。 */
 export const DEFAULT_RANDOM_RATE = 0.3;
@@ -211,7 +242,51 @@ export async function pickMove(
       return pickByEProfile(sfen, context.engine);
     case "R":
       return pickByRProfile(sfen, context.prng, context.randomRate, context.engine);
+    case "B":
+    case "B2":
+      // STEP D3(計画 8.8 の A8): B・B2 の振り分けは pickMoveWithTier の 1 か所だけ。ここへ来たら配線の誤りなので止める
+      // (黙って undefined を返すと、呼び出し側で「自分側の手なし=終局」に化ける)。
+      throw new Error(`プロファイル ${profile} は pickMove では扱わない(pickMoveWithTier を使う)`);
     default:
       return undefined;
   }
+}
+
+/** pickMoveWithTier の戻り値。tier は B・B2 のときだけ段の名前、S1〜R は null(段を持たない)。 */
+export interface PickedMove {
+  move: string | undefined;
+  tier: BeginnerTier | null;
+}
+
+/**
+ * STEP D3(計画 8.4 の決定 11・F-B14)。プロファイル → 決め方の振り分け。B・B2 は beginnerProfile の { move, tier }、
+ * S1〜R は既存の pickMove(戻り値は変えない)で tier は null。explore.ts はこれだけを呼ぶ。
+ */
+export async function pickMoveWithTier(
+  profile: PlayerProfileId,
+  sfen: string,
+  response: StateResponseBodyWithPlan,
+  context: PickMoveContext,
+): Promise<PickedMove> {
+  if (profile === "B" || profile === "B2") {
+    const picked = pickByBeginnerProfile(sfen, profile);
+    return { move: picked?.move, tier: picked?.tier ?? null };
+  }
+  return { move: await pickMove(profile, sfen, response, context), tier: null };
+}
+
+/**
+ * STEP D3(計画 Q-4・F-B15)。探索の棋譜 JSON の本文。欄の並びは既存のまま(id・source・profile・seed・moves)で、
+ * **B・B2 のときだけ tiers(先手の手ごとの段の名前)を足す。** replay.ts は id と moves しか読まないので再生は変わらない。
+ */
+export function buildKifuJsonText(kifu: {
+  id: string;
+  profile: PlayerProfileId;
+  seed: number;
+  moves: readonly string[];
+  tiers: readonly (BeginnerTier | null)[];
+}): string {
+  const base = { id: kifu.id, source: "explore", profile: kifu.profile, seed: kifu.seed, moves: kifu.moves };
+  const body = kifu.profile === "B" || kifu.profile === "B2" ? { ...base, tiers: kifu.tiers } : base;
+  return `${JSON.stringify(body, null, 2)}\n`;
 }
