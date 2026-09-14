@@ -271,8 +271,9 @@ describe("buildMetaLine: meta 行が汚れの 3 欄を必ず持ち、値を偽�
   // 呼び出し側の照合。**どの関数を呼ぶかだけでなく、何を渡すかを見る**(2 回目の監査)。
   // 照合は片側にしか壊れない(整形を変えると緑でも落ちる。文字列を残して意味を変える
   // 書き換えは捕まらない)。
-  it("replay.ts と explore.ts は buildMetaLine に REPO_ROOT だけを渡し、git の値を自分で作らない", () => {
-    for (const name of ["../replay.ts", "../explore.ts"]) {
+  // STEP U6-T: multipv-survey.ts も meta 行を書くので、同じ照合に入れる(照合の規則を 2 か所に持たない)。
+  it("replay.ts・explore.ts・multipv-survey.ts は buildMetaLine に REPO_ROOT だけを渡し、git の値を自分で作らない", () => {
+    for (const name of ["../replay.ts", "../explore.ts", "../multipv-survey.ts"]) {
       const source = readFileSync(new URL(name, import.meta.url), "utf8");
       expect(source, name).toContain("buildMetaLine(");
       expect(source, name).toContain("      repoRoot: REPO_ROOT,\n");
