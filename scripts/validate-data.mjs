@@ -79,17 +79,19 @@ function validateAgainstSchema(instance, schema, pathLabel, errors) {
 
   if (typeOf(instance) === "object") {
     const props = schema.properties || {};
+    // プロトタイプを辿らない(STEP P-47): `key in instance`・`key in props`・`props[key]` だと、constructor・toString・
+    // hasOwnProperty・__proto__ の名前が Object.prototype に当たり、知らない欄・無い必須の欄を黙って通す。
     for (const key of schema.required || []) {
-      if (!(key in instance)) {
+      if (!Object.hasOwn(instance, key)) {
         errors.push(`${pathLabel}: missing required field "${key}"`);
       }
     }
     for (const [key, value] of Object.entries(instance)) {
-      if (schema.additionalProperties === false && !(key in props)) {
+      if (schema.additionalProperties === false && !Object.hasOwn(props, key)) {
         errors.push(`${pathLabel}: unexpected field "${key}" (additionalProperties: false)`);
         continue;
       }
-      if (props[key]) {
+      if (Object.hasOwn(props, key)) {
         validateAgainstSchema(value, props[key], `${pathLabel}.${key}`, errors);
       }
     }
