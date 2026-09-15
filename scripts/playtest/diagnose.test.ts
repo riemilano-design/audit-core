@@ -56,6 +56,9 @@ describe("diagnose.ts(計画 5.2)", () => {
     const source = readFileSync(DIAGNOSE_TS, "utf8");
     expect(source).toContain("  const entries = files.map(readInput);");
     expect(source).toContain("  const inputs = entries.map((entry) => entry.input);");
+    // STEP D0-SIDE 段 1(R-9): error 行を集めて lib に渡している
+    expect(source).toContain('  const errorLines = lines.filter((line) => line.kind === "error").map((line) => ({ reason: String((line as { reason?: unknown }).reason) }));');
+    expect(source).toContain("meta, records, errorLines },");
     expect(source).toContain("  const report = buildDiagnosisReport(inputs, DRAFT_RULE_1);");
     // STEP D3(計画 Q-5): 入力ごとの表の後に群の合計の節を足した。合計の呼び出しもこの 1 行で見張る。
     expect(source).toContain('  console.log([...renderDiagnosisReport(report), ...renderDiagnosisTotals(report)].join("\\n"));');
@@ -71,18 +74,28 @@ describe("diagnose.ts(計画 5.2)", () => {
           kifuId: "d1-planted",
           meta: { kind: "meta", kifuId: "d1-planted", startedAt: "t", gitHead: null, enginePath: ENGINE_PATH } as MetaLine,
           records: plantedRecords(GAME01_MOVES, { 48: engineRef(500, { afterPassMate: 3, dropCp: 350 }), 50: engineRef(-300) }),
+          errorLines: [],
         },
         {
           kifuId: "d1-quiet",
           meta: { kind: "meta", kifuId: "d1-quiet", startedAt: "t", gitHead: null, enginePath: ENGINE_PATH } as MetaLine,
           records: plantedRecords(GAME01_MOVES.slice(0, 20), { 10: engineRef(100), 12: engineRef(-600) }),
+          errorLines: [],
+        },
+        // STEP D0-SIDE 段 1(R-9): error 行を持つ記録。数えずに「error 行のため使わない」行になり、Failure Event を書き出さない
+        {
+          kifuId: "d1-halted",
+          meta: { kind: "meta", kifuId: "d1-halted", startedAt: "t", gitHead: null, enginePath: ENGINE_PATH } as MetaLine,
+          records: plantedRecords(GAME01_MOVES, { 48: engineRef(500, { afterPassMate: 3, dropCp: 350 }), 50: engineRef(-300) }),
+          errorLines: [{ reason: "odd_move_count" }],
         },
       ];
       const dir = mkdtempSync(join(tmpdir(), "d1-diagnose-"));
       try {
         const paths = inputs.map((input) => {
           const filePath = join(dir, `${input.kifuId}.jsonl`);
-          writeFileSync(filePath, `${[input.meta, ...input.records].map((line) => JSON.stringify(line)).join("\n")}\n`, "utf-8");
+          const errorLines = input.errorLines.map((line) => ({ kind: "error", reason: line.reason, message: "試験の error 行" }));
+          writeFileSync(filePath, `${[input.meta, ...input.records, ...errorLines].map((line) => JSON.stringify(line)).join("\n")}\n`, "utf-8");
           return filePath;
         });
         const eventsPath = join(dir, "events.jsonl");
@@ -93,11 +106,13 @@ describe("diagnose.ts(計画 5.2)", () => {
         const stdout = execFileSync("npx", ["tsx", DIAGNOSE_TS, ...paths, "--events", eventsPath, "--evaluator", evaluator], { cwd: REPO_ROOT, encoding: "utf-8" });
         const after = gitStatus();
         expect(after).toBe(before);
-        expect(readdirSync(dir).sort()).toEqual(["d1-planted.jsonl", "d1-quiet.jsonl", "events.jsonl"]);
+        expect(readdirSync(dir).sort()).toEqual(["d1-halted.jsonl", "d1-planted.jsonl", "d1-quiet.jsonl", "events.jsonl"]);
 
         // 同じ記録を、ファイルを経由した形(JSON に書いて読み直した形)でこのプロセスの lib に掛ける
         const reread = inputs.map((input) => JSON.parse(JSON.stringify(input)) as DiagnosisInput);
         const report = buildDiagnosisReport(reread, DRAFT_RULE_1);
+        // R-9: 3 本目は数えない。植えた死因①は 1 本目と同じなので、数えていれば Failure Event が出るはずの記録である
+        expect(report.map((row) => row.result.kind)).toEqual(["counted", "counted", "excluded"]);
         // STEP D3(計画 Q-5): 2 入力なので合計の節が付く。節が空なら、この比べは合計の配線を見ていないことになる。
         expect(renderDiagnosisTotals(report).length).toBeGreaterThan(0);
         expect(stdout).toBe(`${[...renderDiagnosisReport(report), ...renderDiagnosisTotals(report)].join("\n")}\n`);

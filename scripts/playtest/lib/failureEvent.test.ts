@@ -207,16 +207,34 @@ describe("F-7: 発症条件の写し(②・形・③。計画 3.1・9.2)", () =>
 
 describe("報告(計画 3.2・D-1)", () => {
   it("例外は外へ出さず、種類と message を持った「数えられなかった」行にする", () => {
-    const report = buildDiagnosisReport([{ kifuId: "bad", meta: undefined, records: [] }], DRAFT_RULE_1, () => {
+    const report = buildDiagnosisReport([{ kifuId: "bad", meta: undefined, records: [], errorLines: [] }], DRAFT_RULE_1, () => {
       throw new RangeError("壊れた");
     });
     expect(report[0]?.result).toEqual({ kind: "notCounted", errorName: "RangeError", message: "壊れた" });
     expect(renderDiagnosisReport(report)).toContain("- 数えられなかった入力: bad(RangeError: 壊れた)");
   });
 
+  it("R-9(STEP D0-SIDE 段 1): error 行を持つ記録は数えない。診断の関数を呼ばず「error 行のため使わない」行にする(部分の局を黙って 1 局と数えない)", () => {
+    let called = 0;
+    const records = plantedRecords(GAME01_MOVES.slice(0, 4), {});
+    const report = buildDiagnosisReport(
+      [{ kifuId: "halted", meta: undefined, records, errorLines: [{ reason: "odd_move_count" }] }],
+      DRAFT_RULE_1,
+      (kifuId, recs, rule) => {
+        called += 1;
+        return diagnoseRecords(kifuId, recs, rule);
+      },
+    );
+    expect(called).toBe(0);
+    expect(report[0]?.result).toEqual({ kind: "excluded", errorReasons: ["odd_move_count"] });
+    const lines = renderDiagnosisReport(report);
+    expect(lines).toContain("- error 行のため使わなかった入力: halted(error 行の理由: odd_move_count)");
+    expect(lines).toContain("| halted | error 行のため使わない | - | - | - | - | - | - | - | - | - |");
+  });
+
   it("注記(診断に使わない・draft・「測っていない」は「急落なし」ではない)を出し、0 件の列も出す", () => {
     const records = plantedRecords(GAME01_MOVES, {});
-    const text = renderDiagnosisReport(buildDiagnosisReport([{ kifuId: "g", meta: undefined, records }], DRAFT_RULE_1)).join("\n");
+    const text = renderDiagnosisReport(buildDiagnosisReport([{ kifuId: "g", meta: undefined, records, errorLines: [] }], DRAFT_RULE_1)).join("\n");
     expect(text).toContain("この件数は診断に使わない。");
     expect(text).toContain("死因①のタグは draft。");
     expect(text).toContain("「測っていない」「測れなかった」は「急落なし」ではない。");
@@ -225,7 +243,7 @@ describe("報告(計画 3.2・D-1)", () => {
 
   it("注記(評価関数の見分け方・cp の絶対値が 30000 以上は評価値ではない)を出す(STEP D1-FIX。D1 計画 §10.10 の宿題 2 件)", () => {
     const records = plantedRecords(GAME01_MOVES, {});
-    const text = renderDiagnosisReport(buildDiagnosisReport([{ kifuId: "g", meta: undefined, records }], DRAFT_RULE_1)).join("\n");
+    const text = renderDiagnosisReport(buildDiagnosisReport([{ kifuId: "g", meta: undefined, records, errorLines: [] }], DRAFT_RULE_1)).join("\n");
     expect(text).toContain("今の記録は入力の行の `enginePath` で見分けられる(`engine/` と `engine/nnue/`。`nn.bin` だけ差し替えると見分けられない ― P-43)");
     expect(text).not.toContain("今ある記録は駒得だけの評価で取られている");
     expect(text).toContain("cp の絶対値が 30000 以上の値は評価値ではない。");
@@ -233,7 +251,7 @@ describe("報告(計画 3.2・D-1)", () => {
 
   it("比べた組が 1 つも無い記録(全行 engineReference の欄なし。game-01 と同じ形)は、急落候補とその内訳を 0 ではなく「比べる組が無い」と出す", () => {
     const records = plantedRecords(GAME01_MOVES.slice(0, 4), { 0: "absent", 2: "absent", 4: "absent" });
-    const report = buildDiagnosisReport([{ kifuId: "u0", meta: undefined, records }], DRAFT_RULE_1);
+    const report = buildDiagnosisReport([{ kifuId: "u0", meta: undefined, records, errorLines: [] }], DRAFT_RULE_1);
     expect(report[0]?.result).toMatchObject({
       kind: "counted",
       counts: { readyRows: 3, unrecorded: 3, comparedPairs: 0, mateAfterPairs: 0, dropCandidates: 0 },
@@ -267,7 +285,7 @@ describe("規則は呼び出し側が渡す(windowPlies を 5 に決め打ちし
   });
 
   it("buildDiagnosisReport も渡された規則で数える", () => {
-    const [row] = buildDiagnosisReport([{ kifuId: "w3", meta: undefined, records }], rule3);
+    const [row] = buildDiagnosisReport([{ kifuId: "w3", meta: undefined, records, errorLines: [] }], rule3);
     expect(row?.result.kind === "counted" ? eventAt(row.result.events, 49)?.consequences.checks : "数えられなかった").toEqual([52]);
   });
 });
@@ -299,7 +317,7 @@ describe("境目(計画の「以上」「以下」。監査 B の非必須 b)", 
 describe("比べた組が 0 でも直後が mate の組がある記録(監査 B の非必須 c)", () => {
   it("急落候補は数で出す(「比べる組が無い」にしない)", () => {
     const records = plantedRecords(GAME01_MOVES.slice(0, 4), { 0: "absent", 2: engineRef(500), 4: engineRef(null, { mate: -3 }) });
-    const report = buildDiagnosisReport([{ kifuId: "m1", meta: undefined, records }], DRAFT_RULE_1);
+    const report = buildDiagnosisReport([{ kifuId: "m1", meta: undefined, records, errorLines: [] }], DRAFT_RULE_1);
     expect(report[0]?.result).toMatchObject({ kind: "counted", counts: { comparedPairs: 0, mateAfterPairs: 1, dropCandidates: 1 } });
     expect(renderDiagnosisReport(report).join("\n")).toContain("| m1 | 1 | 1 | ");
   });
@@ -326,7 +344,7 @@ describe("評価値でない特別値(cp の絶対値 ≥ 30000。P-45・計画 
   });
 
   it("状態の表に「評価値でない」の欄を別に出す", () => {
-    const text = renderDiagnosisReport(buildDiagnosisReport([{ kifuId: "special", meta: undefined, records }], DRAFT_RULE_1)).join("\n");
+    const text = renderDiagnosisReport(buildDiagnosisReport([{ kifuId: "special", meta: undefined, records, errorLines: [] }], DRAFT_RULE_1)).join("\n");
     expect(text).toContain("| 測っていない | 評価値でない(cp の絶対値 ≥ 30000) | 比べた組 |");
     expect(text).toContain("| special | 29 | 20 | 1 | 6 | 0 | 0 | 2 | ");
   });
@@ -345,9 +363,9 @@ describe("入力の行(評価関数の取り違えを防ぐ。P-43)", () => {
       dirtyPaths: [],
       dirtyCount: 0,
     } as MetaLine;
-    const text = renderDiagnosisReport(buildDiagnosisReport([{ kifuId: "m", meta, records: plantedRecords([], { 0: engineRef(0) }) }], DRAFT_RULE_1)).join("\n");
+    const text = renderDiagnosisReport(buildDiagnosisReport([{ kifuId: "m", meta, records: plantedRecords([], { 0: engineRef(0) }), errorLines: [] }], DRAFT_RULE_1)).join("\n");
     expect(text).toMatch(/^- m\(gitHead: abc123, .+, enginePath: \/e\/nnue\/YaneuraOu-by-gcc, nodes: 4000000\)$/m);
-    const noNodes = renderDiagnosisReport(buildDiagnosisReport([{ kifuId: "m", meta: { ...meta, nodes: undefined }, records: plantedRecords([], { 0: engineRef(0) }) }], DRAFT_RULE_1)).join("\n");
+    const noNodes = renderDiagnosisReport(buildDiagnosisReport([{ kifuId: "m", meta: { ...meta, nodes: undefined }, records: plantedRecords([], { 0: engineRef(0) }), errorLines: [] }], DRAFT_RULE_1)).join("\n");
     expect(noNodes).toContain("nodes: 記録していない)");
   });
 });

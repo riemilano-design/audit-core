@@ -79,11 +79,15 @@ export interface RecordLine {
  * 別々の STEP(U6-L の `searchPvs` と U6-R の `dirty`)が独立に同じ形へたどり着いた。
  * **3 値目の位置が違うのではなく、「測って無かった」を表す値の型が違うだけである。**
  *
- * | 「無い」の種類 | `searchPvs`(record 行) | `dirty`(meta 行) |
- * |---|---|---|
- * | **測っていない**(欄が無い。その STEP より前の記録) | `undefined` | `undefined` |
- * | **測れなかった**(取ろうとして失敗した) | `null` | `null` |
- * | **測って無かった**(取れて、中身が空だった) | `[]` | `false` |
+ * | 「無い」の種類 | `searchPvs`(record 行) | `dirty`(meta 行) | `trailingMoveTruncated`(meta 行) |
+ * |---|---|---|---|
+ * | **測っていない**(欄が無い。その STEP より前の記録) | `undefined` | `undefined` | `undefined` |
+ * | **測れなかった**(取ろうとして失敗した) | `null` | `null` | **無い**(落とすかどうかは手数だけで決まり、失敗しない) |
+ * | **測って無かった**(取れて、中身が空だった) | `[]` | `false` | `false`(落とす手が無かった) |
+ *
+ * `trailingMoveTruncated` は `dirty` と同じ形である(`true` / `false` / 欄が無い)。**`null` の例外は作らない**(STEP D0-SIDE 段 1。
+ * 最初は「落とさない局は `null`」で実装したが、この表の `null`(測れなかった)とぶつかるので、司令塔の決定で直した)。
+ * 落とした手 `truncatedTrailingMove` は `true` のときだけ書く欄で、3 値の欄ではない。
  *
  * **読むときは 3 つに分ける。`?? []` や `?? false` と書かない**(欄が無い記録が
  * 「測って無かった」に化ける)。[AGENT_PROTOCOL.md](../../../docs/AGENT_PROTOCOL.md) 3. の 11.6。
@@ -130,6 +134,15 @@ export interface MetaLine {
   dirtyPaths?: string[];
   /** 汚れていたパスの総数(`dirtyPaths` が 20 件で切れていても本当の件数)。 */
   dirtyCount?: number;
+  /**
+   * STEP D0-SIDE 段 1(R-8。replay.ts)。再生のために最後の先手の手を落としたか。**値は 3 つ**(上の表。`dirty` と同じ形):
+   * - `true` … 手数が奇数で、最後の手を落として再生した(落とした手は `truncatedTrailingMove`)
+   * - `false` … 落とす手が無かった(手数が偶数)
+   * - `undefined`(欄が無い) … **R-8 より前の記録**。落としたかどうかを記録していない
+   */
+  trailingMoveTruncated?: boolean;
+  /** STEP D0-SIDE 段 1(R-8)。落とした最後の先手の手(USI)。**`trailingMoveTruncated` が `true` のときだけ書く**(false のときは欄が無い。null は使わない)。 */
+  truncatedTrailingMove?: string;
 }
 
 /** 不変条件1件が検出した1件分。束ねる単位は(invariantId, condition)。 */

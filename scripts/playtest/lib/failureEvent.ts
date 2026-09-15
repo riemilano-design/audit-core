@@ -487,11 +487,18 @@ export interface DiagnosisInput {
   kifuId: string;
   meta: MetaLine | undefined;
   records: RecordLine[];
+  /**
+   * STEP D0-SIDE 段 1(R-9)。記録の error 行(replay.ts が途中で止まった印)の理由。**1 つでもあれば、その記録は数えない**
+   * (最後の組を欠いた局を黙って 1 局と数えない)。**必須にしてある**(渡し忘れを型検査で止める)。
+   */
+  errorLines: readonly { reason: string }[];
 }
 
 export type DiagnosisResult =
   | { kind: "counted"; counts: DiagnosisCounts; events: FailureEvent[] }
-  | { kind: "notCounted"; errorName: string; message: string };
+  | { kind: "notCounted"; errorName: string; message: string }
+  /** STEP D0-SIDE 段 1(R-9)。error 行を持つ記録なので数えなかった(例外で数えられなかった notCounted とは別) */
+  | { kind: "excluded"; errorReasons: string[] };
 
 export interface DiagnosisRow {
   kifuId: string;
@@ -508,6 +515,10 @@ export function buildDiagnosisReport(
   diagnose: Diagnose = diagnoseRecords,
 ): DiagnosisRow[] {
   return inputs.map((input) => {
+    // STEP D0-SIDE 段 1(R-9): error 行を持つ記録は、診断の関数を呼ばずに外す
+    if (input.errorLines.length > 0) {
+      return { kifuId: input.kifuId, meta: input.meta, result: { kind: "excluded", errorReasons: input.errorLines.map((line) => line.reason) } };
+    }
     try {
       const { counts, events } = diagnose(input.kifuId, input.records, rule);
       return { kifuId: input.kifuId, meta: input.meta, result: { kind: "counted", counts, events } };
@@ -572,6 +583,11 @@ const NOTES = [
  * 組が無い理由(測れなかった・測っていない・評価値でない・行が 1 つ)は畳んでいるので、区別は隣の「評価の状態と組」の表が担う。
  * STEP D3: lib/diagnosisTotals.ts の合計の表も同じ分岐を使うため export した(分岐を 2 か所に持たない)。
  */
+/** 数えなかった入力の欄の文。error 行のため使わなかった記録と、例外で数えられなかった記録を分ける(STEP D0-SIDE 段 1。R-9) */
+function uncountedCell(result: Exclude<DiagnosisResult, { kind: "counted" }>): string {
+  return result.kind === "excluded" ? "error 行のため使わない" : "数えられなかった";
+}
+
 export function dropCountCell(counts: DiagnosisCounts, value: number): string {
   return counts.comparedPairs + counts.mateAfterPairs === 0 ? "比べる組が無い" : String(value);
 }
@@ -593,6 +609,8 @@ export function renderDiagnosisReport(rows: readonly DiagnosisRow[]): string[] {
   for (const row of rows) {
     if (row.result.kind === "notCounted") {
       lines.push(`- 数えられなかった入力: ${row.kifuId}(${row.result.errorName}: ${row.result.message})`);
+    } else if (row.result.kind === "excluded") {
+      lines.push(`- error 行のため使わなかった入力: ${row.kifuId}(error 行の理由: ${row.result.errorReasons.join("、")})`);
     }
   }
   lines.push("");
@@ -603,7 +621,7 @@ export function renderDiagnosisReport(rows: readonly DiagnosisRow[]): string[] {
   lines.push("|---|---|---|---|---|---|---|---|---|---|---|");
   for (const row of rows) {
     if (row.result.kind !== "counted") {
-      lines.push(`| ${row.kifuId} | 数えられなかった | - | - | - | - | - | - | - | - | - |`);
+      lines.push(`| ${row.kifuId} | ${uncountedCell(row.result)} | - | - | - | - | - | - | - | - | - |`);
       continue;
     }
     const c = row.result.counts;
@@ -621,7 +639,7 @@ export function renderDiagnosisReport(rows: readonly DiagnosisRow[]): string[] {
   lines.push("|---|---|---|---|---|---|---|---|---|---|---|");
   for (const row of rows) {
     if (row.result.kind !== "counted") {
-      lines.push(`| ${row.kifuId} | 数えられなかった | - | - | - | - | - | - | - | - | - |`);
+      lines.push(`| ${row.kifuId} | ${uncountedCell(row.result)} | - | - | - | - | - | - | - | - | - |`);
       continue;
     }
     const c = row.result.counts;

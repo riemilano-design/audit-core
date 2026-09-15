@@ -63,7 +63,9 @@ function readInput(filePath: string): InputEntry {
     .map((line) => JSON.parse(line) as { kind: string });
   const meta = lines.find((line) => line.kind === "meta") as MetaLine | undefined;
   const records = lines.filter((line): line is RecordLine => line.kind === "record");
-  return { input: { kifuId: meta?.kifuId ?? path.basename(filePath), meta, records }, filePath, sha256: recordSha256(bytes) };
+  // STEP D0-SIDE 段 1(R-9): error 行(replay.ts が途中で止まった印)を集めて渡す。1 つでもあれば lib がその記録を数えない。
+  const errorLines = lines.filter((line) => line.kind === "error").map((line) => ({ reason: String((line as { reason?: unknown }).reason) }));
+  return { input: { kifuId: meta?.kifuId ?? path.basename(filePath), meta, records, errorLines }, filePath, sha256: recordSha256(bytes) };
 }
 
 function main(): void {

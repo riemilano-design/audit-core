@@ -11,6 +11,11 @@
 // 使い方: npx tsx scripts/playtest/replay.ts <kifu.json> [--out <file.jsonl>]
 //         [--nodes <N>] [--threads <N>] [--reference-nodes <N>]
 //
+// STEP D0-SIDE 段 1(docs/STEP_D0-SIDE_PLAN_2026-09-15.md の R-8・Q-9): 手数が奇数の棋譜は、最後の先手の手を落として
+// 再生し、meta に trailingMoveTruncated(常に)と、落としたときだけ truncatedTrailingMove(落とした手)を残す(null は使わない)。
+// 再生する手が無い局は、エンジンを
+// 起こさずに理由の error 行を書いて exit 1 で止める(判定は lib/replayPlan.ts)。
+//
 // 位置づけの詳細は scripts/playtest/README.md を参照。開発補助であり本番導線には
 // 含めない(apps/・data/・docs/・.claude/ は変更しない)。
 
@@ -46,6 +51,7 @@ import {
   buildMetaLine,
 } from "./lib/recorder.js";
 import { withFixedSearch } from "./lib/fixedSearchEngine.js";
+import { planReplayMoves, truncationMetaFields } from "./lib/replayPlan.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const SCRIPT_DIR = __dirname;
@@ -78,6 +84,9 @@ interface FixedKifu {
   moves: string[];
 }
 
+/** STEP D0-SIDE 段 1(Q-9)。再生する手が無いときの error 行の文。 */
+const NO_MOVES_TO_REPLAY_MESSAGE = "再生する手が無い(手数 0、または手数が奇数で最後の手を落とした後に 0 手)";
+
 /** ある特定の手(記録済みのUSI)をそのまま返す偽エンジン。
  * gameSession.ts の OpponentEngine(Pick<UsiEngine, "position" | "go">)を満たす。
  * 経路1(承認済みvariant)・経路2(scenario)を構造的に通さず、経路3(エンジン)で
@@ -101,6 +110,17 @@ function makeFixedOpponentEngine(moveUsi: string): OpponentEngine {
  * 呼び出し元がJSONLへ"kind":"error"行を書いた直後にthrowし、外側のtry/finallyで
  * エンジンのquit/closeを確実に行ってからexit 1する。 */
 class ReplayHaltError extends Error {}
+
+/** 記録の行をファイルへ書く(--out が無ければ scripts/playtest/out/ の下)。STEP D0-SIDE 段 1 で、エンジンを起こさずに
+ * 止める経路と共有するため関数に出した(書き方は変えていない)。 */
+function writeRecordLines(outArg: string | undefined, kifuId: string, startedAt: string, lines: readonly string[]): void {
+  const outPath = outArg
+    ? path.resolve(outArg)
+    : path.join(SCRIPT_DIR, "out", `${kifuId}-${startedAt.replace(/[:.]/g, "-")}.jsonl`);
+  mkdirSync(path.dirname(outPath), { recursive: true });
+  writeFileSync(outPath, `${lines.join("\n")}\n`, "utf-8");
+  console.log(`書き込み: ${outPath}`);
+}
 
 async function main(): Promise<void> {
   const args = process.argv.slice(2);
@@ -150,7 +170,8 @@ async function main(): Promise<void> {
 
   const kifu = JSON.parse(readFileSync(path.resolve(kifuArg), "utf-8")) as FixedKifu;
   const kifuId = kifu.id;
-  const moves = kifu.moves;
+  // STEP D0-SIDE 段 1(R-8): 手数が奇数なら最後の先手の手を落として再生する(lib/replayPlan.ts)。落とした手は meta に残す。
+  const replayPlan = planReplayMoves(kifu.moves);
 
   const lines: string[] = [];
   const startedAt = new Date().toISOString();
@@ -171,9 +192,18 @@ async function main(): Promise<void> {
         referenceNodes,
         directionRule,
         suppressTargetShapeProgress,
+        ...truncationMetaFields(replayPlan),
       },
     }),
   );
+
+  // STEP D0-SIDE 段 1(Q-9): 再生する手が無い局は、エンジンを起こさずに理由の error 行を書いて止める(黙って捨てない)。
+  if (replayPlan.kind === "noMovesToReplay") {
+    lines.push(buildErrorLine({ reason: replayPlan.reason, message: NO_MOVES_TO_REPLAY_MESSAGE }));
+    writeRecordLines(outArg, kifuId, startedAt, lines);
+    process.exit(1);
+  }
+  const moves = replayPlan.moves;
 
   const rawEngine = new UsiEngine(enginePath);
   rawEngine.start();
@@ -350,12 +380,7 @@ async function main(): Promise<void> {
     rawEngine.close();
   }
 
-  const outPath = outArg
-    ? path.resolve(outArg)
-    : path.join(SCRIPT_DIR, "out", `${kifuId}-${startedAt.replace(/[:.]/g, "-")}.jsonl`);
-  mkdirSync(path.dirname(outPath), { recursive: true });
-  writeFileSync(outPath, `${lines.join("\n")}\n`, "utf-8");
-  console.log(`書き込み: ${outPath}`);
+  writeRecordLines(outArg, kifuId, startedAt, lines);
 
   process.exit(exitCode);
 }

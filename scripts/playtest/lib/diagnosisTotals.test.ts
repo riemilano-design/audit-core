@@ -107,24 +107,28 @@ function notCounted(kifuId: string): DiagnosisRow {
   return { kifuId, meta: undefined, result: { kind: "notCounted", errorName: "Error", message: "壊れた記録" } };
 }
 
+function excluded(kifuId: string): DiagnosisRow {
+  return { kifuId, meta: undefined, result: { kind: "excluded", errorReasons: ["odd_move_count"] } };
+}
+
 describe("totalDiagnosisCounts・renderDiagnosisTotals(計画 Q-5)", () => {
   it("F-Q1 数えた 2 本の件数を、20 の欄すべてについて足す(入力の件数は書き換えない)", () => {
     const totals = totalDiagnosisCounts([counted("a", A), counted("b", B)]);
-    expect(totals).toEqual({ counted: ["a", "b"], notCounted: [], counts: A_PLUS_B });
+    expect(totals).toEqual({ counted: ["a", "b"], notCounted: [], excluded: [], counts: A_PLUS_B });
     expect(A.readyRows).toBe(1);
 
     const lines = renderDiagnosisTotals([counted("a", A), counted("b", B)]);
-    expect(lines[0]).toBe("## 合計(入力 2 本。数えた 2 本・数えられなかった 0 本)");
+    expect(lines[0]).toBe("## 合計(入力 2 本。数えた 2 本・数えられなかった 0 本・error 行のため使わなかった 0 本)");
     expect(lines).toContain("| 11 | 22 | 33 | 44 | 55 | 66 | 77 | 88 | 99 | 110 |");
     expect(lines).toContain("| 121 | 154 | 165 | 176 | 187 | 198 | 209 | 132 | 143 | 220 |");
   });
 
   it("F-Q2 数えられなかった入力は合計に混ぜず、名前で並べる", () => {
     const rows = [notCounted("x"), counted("a", A)];
-    expect(totalDiagnosisCounts(rows)).toEqual({ counted: ["a"], notCounted: ["x"], counts: A });
+    expect(totalDiagnosisCounts(rows)).toEqual({ counted: ["a"], notCounted: ["x"], excluded: [], counts: A });
 
     const lines = renderDiagnosisTotals(rows);
-    expect(lines[0]).toBe("## 合計(入力 2 本。数えた 1 本・数えられなかった 1 本)");
+    expect(lines[0]).toBe("## 合計(入力 2 本。数えた 1 本・数えられなかった 1 本・error 行のため使わなかった 0 本)");
     expect(lines).toContain("- 合計に入れなかった入力(数えられなかった): x");
   });
 
@@ -140,7 +144,16 @@ describe("totalDiagnosisCounts・renderDiagnosisTotals(計画 Q-5)", () => {
     expect(renderDiagnosisTotals([counted("a", A)])).toEqual([]);
 
     const rows = [notCounted("x"), notCounted("y")];
-    expect(totalDiagnosisCounts(rows)).toEqual({ counted: [], notCounted: ["x", "y"], counts: null });
+    expect(totalDiagnosisCounts(rows)).toEqual({ counted: [], notCounted: ["x", "y"], excluded: [], counts: null });
     expect(renderDiagnosisTotals(rows)).toContain("- 数えた入力が無い");
+  });
+
+  it("F-Q5 error 行のため使わなかった入力は、数えられなかった入力と分けて並べ、合計に混ぜない(STEP D0-SIDE 段 1。R-9)", () => {
+    const rows = [excluded("h"), counted("a", A)];
+    expect(totalDiagnosisCounts(rows)).toEqual({ counted: ["a"], notCounted: [], excluded: ["h"], counts: A });
+    const lines = renderDiagnosisTotals(rows);
+    expect(lines[0]).toBe("## 合計(入力 2 本。数えた 1 本・数えられなかった 0 本・error 行のため使わなかった 1 本)");
+    expect(lines).toContain("- 合計に入れなかった入力(error 行のため使わない): h");
+    expect(lines).not.toContain("- 合計に入れなかった入力(数えられなかった): h");
   });
 });

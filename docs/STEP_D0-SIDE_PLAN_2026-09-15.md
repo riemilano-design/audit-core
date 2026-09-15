@@ -7,7 +7,7 @@
 - R-5〜R-7 は D1 の lib に触るので、固定例「開始局面を渡すと、渡さないときと違う結果になる」と変異「`meta` の `startSfen` を読まない」を必ず入れる
 - 段 R(エンジン)は、実装の GO の後に司令塔の合図で 1 本
 - `~/Desktop/kifu-samples/` にファイルが来たら、**実装より先に読み込み検査**(案 3 の先手の局を先に流すため。10.)
-- **追加(2026-09-15、`a011c05` の後)**: 司令塔の追加の決定 2 点(名前の `@` の規則・奇数手数の最後の手を落とす R-8)と、監査 A の事前読み(下書き `0af796d6` に対する必須 3・推奨 5)を本文に取り込んだ。取り込み先の対応は 11.。その後の A の追加の事前読み(`@` の突き合わせ・R-8)と、それへの司令塔の決定も取り込んだ(11.3)。**Q-6〜Q-8 は司令塔が決めた。残る決定は Q-9 と、R-8 の `truncatedTrailingMove` を 1 つの欄にまとめた形の確認**
+- **追加(2026-09-15、`a011c05` の後)**: 司令塔の追加の決定 2 点(名前の `@` の規則・奇数手数の最後の手を落とす R-8)と、監査 A の事前読み(下書き `0af796d6` に対する必須 3・推奨 5)を本文に取り込んだ。取り込み先の対応は 11.。その後の A の追加の事前読み(`@` の突き合わせ・R-8)と、それへの司令塔の決定も取り込んだ(11.3)。**Q-6〜Q-8 は司令塔が決めた。残る決定は Q-9 と、R-8 の `truncatedTrailingMove` を 1 つの欄にまとめた形の確認**(その後、`null` はやめて `trailingMoveTruncated` を常に書く形に決まった。12.6)
 **基点**: HEAD `4f5964d`(読んだ実物はこの版)。
 **きっかけ**: 司令塔の依頼。人間が実棋譜を集めた。本人が後手の局が半分近くあると見込まれる。
 **置き場所**: `docs/STEP_D0-SIDE_PLAN_2026-09-15.md`(司令塔がコミットする。計画は文書なので監査不要)。
@@ -84,12 +84,12 @@
 |---|---|---|---|
 | R-1 | `scripts/playtest/replay.ts:193` | `createInitialGameState(…)` の局面(平手・先手番)から始める | 棋譜 JSON に `startSfen` があれば、その局面から始める |
 | R-2 | `replay.ts` の `stateResponseOptions`(`{ directionRule, suppressTargetShapeProgress }`) | `initialSfen` を持たない | `initialSfen: startSfen` を足す(S-2・S-3 でそのまま各所へ届く) |
-| R-3 | `replay.ts` の `buildMetaLine` の `extra` | 開始局面を記録しない | `startSfen`・`plyOffset`・`mirrored`・`originalUserSide`・`truncatedTrailingMove` を記録する(P-43 と同じく、記録から出どころを辿れるように)。**回さない局にも `mirrored: false`・`originalUserSide: "sente"`・`plyOffset: 0`・`startSfen: null` を、落とさない局にも `truncatedTrailingMove: null` を書く**(欄が無い = D0-SIDE より前、と区別する。司令塔の決定。Q-7) |
+| R-3 | `replay.ts` の `buildMetaLine` の `extra` | 開始局面を記録しない | `startSfen`・`plyOffset`・`mirrored`・`originalUserSide`・`trailingMoveTruncated`(と、落としたときだけ `truncatedTrailingMove`)を記録する(P-43 と同じく、記録から出どころを辿れるように)。**回さない局にも `mirrored: false`・`originalUserSide: "sente"`・`plyOffset: 0`・`startSfen: null` を、`trailingMoveTruncated` はどの局にも書く(落とさない局は `false` で、`truncatedTrailingMove` の欄は書かない)**(**null は使わない。司令塔の決定、12.6**)。**`startSfen: null` は段 2 の欄で、同じ理由で形を決め直す必要がある(12.6)**(欄が無い = D0-SIDE より前、と区別する。司令塔の決定。Q-7) |
 | R-4 | 固定棋譜の型 `FixedKifu`(`replay.ts:151-153` で `id`・`moves` だけ読む) | 開始局面の欄が無い | 省略可能な `startSfen` を足す(無ければ今と同じ) |
 | **R-5** | **`scripts/playtest/lib/failureEvent.ts:303`**(`detectIntents(record.sfen, record.response.moveHistory)`)・**`:415`**(`actualContinuation(moves, branchPly, rule.windowPlies)`) | `initialSfen` を渡さないので、既定の平手から並べ直す | **`meta` の `startSfen` を読んで渡す**。渡さないと、開始局面が違う記録で、狙いの判定と実戦の続きが別の局面を見る(非合法手で例外になるか、黙って違う値になる)。**D1 の lib の変更なので、監査の対象** |
 | R-6 | `scripts/playtest/lib/intentStatement.ts:155`(`check.ts` の②の表) | 同上 | 同上 |
 | R-7 | `scripts/playtest/invariants/i9-shape-claim-without-evidence.ts:70`(`analyzeShapeFormation(record.sfen, record.response.moveHistory)`) | 同上 | 同上 |
-| **R-8** | `replay.ts` の 2 手ずつ読む前(`:228`) | 手数が奇数なら、最後の組を欠いた記録と error 行を残して exit 1(E-1) | **司令塔の決定(2026-09-15)**: **再生に渡す手順(案 1 では畳んだ後)の手数が奇数なら、最後の先手の手を落として再生し、`meta` の `truncatedTrailingMove` に落とした手(USI)を残す**。落とさない局は `null`(**司令塔の決定「`truncatedTrailingMove: true` と落とした手」と「落とさない局にも null」を、1 つの欄にまとめた形。司令塔の確認待ち**)。**奇数かどうかは畳んだ後の手数で判定し、畳む → 落とす の順に行う**(F-S9a (iii)・V-S22)。落とす先手の手は、案 1 で回した局でも本人の手になる。**負け方の診断に最後の 1 手は要らず、落としたことは記録から辿れる。本人が先手の局にも効くので、案 3 の前に要る**(見本 1 局が 37 手) |
+| **R-8** | `replay.ts` の 2 手ずつ読む前(`:228`) | 手数が奇数なら、最後の組を欠いた記録と error 行を残して exit 1(E-1) | **司令塔の決定(2026-09-15)**: **再生に渡す手順(案 1 では畳んだ後)の手数が奇数なら、最後の先手の手を落として再生し、`meta` に `trailingMoveTruncated: true` と `truncatedTrailingMove`(落とした手の USI)を残す**。落とさない局は `trailingMoveTruncated: false` だけを書き、`truncatedTrailingMove` の欄は書かない(**null は使わない。司令塔の決定、12.6**)。**奇数かどうかは畳んだ後の手数で判定し、畳む → 落とす の順に行う**(F-S9a (iii)・V-S22)。落とす先手の手は、案 1 で回した局でも本人の手になる。**負け方の診断に最後の 1 手は要らず、落としたことは記録から辿れる。本人が先手の局にも効くので、案 3 の前に要る**(見本 1 局が 37 手) |
 | **R-9** | `diagnose.ts` の入力の読み込み(`readInput`) | `kind: "record"` の行だけを読み、error 行があっても 1 局として数える(A の読み) | **司令塔の決定(2026-09-15)**: **error 行を持つ記録は入力に使わず、「error 行のため使わない」として件数と理由を出す**(Q-6)。**部分の局を黙って 1 局と数えない**ことを R-8 の見張りに含める。**D1 の lib / CLI の変更なので監査の対象**。固定例: error 行を 1 行含む記録 → 局として数えられず、理由が出る。変異 V-S23 |
 
 - **`explore.ts` は変えない**(本人が指す探索であって、外の棋譜を読まない)
@@ -104,7 +104,7 @@
   - **`replay.ts` で `GameState.sfen` に入れる `startSfen` と、`options.initialSfen` に入れる文字列は同じ文字列にする**。`detectIntents` は手数の欄まで含めて文字列で比べるため、正規化の違い(手数 1 と 2、持ち駒の並び)があると全行が黙って U-2 になる。**`startSfen` は手で書かず、`applyMove` の出力をそのまま使い**、固定例 1 件で文字列の一致を見る(F-S8・V-S16)
   - `failureEventFixtures.ts:57`(`plantedRecords`)は既定の平手から並べるので、畳んだ形の固定例を作るなら開始局面の引数を足す(推奨 3)
 - **段 R の確かめ**: 記録を `diagnose.ts`・`check.ts` にかけて、**例外と「数えられなかった」行が 0、U-2 が 0、i9 の `catch` に入った行が 0** であること。i9 に数える口が無ければ足すか、限界と書く(必須 1 (d))
-- **限界(R-8。司令塔の決定で、この計画と記録の README の両方に書く)**: **落とした手が本人の詰ませた手だった局は、Event の行では「窓が足りない」に見える。** `actualContinuation` は `windowShort: !ended && reachedPly < lastPly`(A の読み: `failureEvent.ts:221`)で、元の棋譜では終局した局面が、落とした記録では終局していない。**行からは、窓が足りない理由(記録の終わり / 落とした手)を見分けられない**(`meta` の `truncatedTrailingMove` を辿れば分かる)。**落とす局は、最後の手を指したのが先手の局(本人が先手なら、本人の手で終わる局)に偏る。** その件数を 9. の表に出す
+- **限界(R-8。司令塔の決定で、この計画と記録の README の両方に書く)**: **落とした手が本人の詰ませた手だった局は、Event の行では「窓が足りない」に見える。** `actualContinuation` は `windowShort: !ended && reachedPly < lastPly`(A の読み: `failureEvent.ts:221`)で、元の棋譜では終局した局面が、落とした記録では終局していない。**行からは、窓が足りない理由(記録の終わり / 落とした手)を見分けられない**(`meta` の `trailingMoveTruncated`・`truncatedTrailingMove` を辿れば分かる)。**落とす局は、最後の手を指したのが先手の局(本人が先手なら、本人の手で終わる局)に偏る。** その件数を 9. の表に出す
 
 ## 4. 変換の定義(純粋関数。案 1・案 3 のどちらでも回す関数は同じ)
 
@@ -126,11 +126,11 @@
 | F-S6 | 既存の固定棋譜 `2026-09-10-claude-10moves` の 20 手を回す | (a) 平手・**後手番**の初期局面から `applyMove` で全手合法 (b) 最後の局面が、元の最後の局面を 4. の「盤全体」で回した SFEN と一致(盤・持ち駒・手番) | **手の変換と局面の変換という別の経路が一致すること**を正解に置く(変換器と検算が同じ誤りを持つのを避ける) |
 | F-S7 | ヘッダの名前(**名前はすべて架空**) | `--me` が先手の名前だけに一致 → 回さない / 後手の名前だけ → 回す / どちらにも一致しない・両方に一致 → `user_side_unknown`。**`@` の規則(司令塔の決定)**: ヘッダ `ミサカ@▲4八銀` は `--me ミサカ` に**一致**し、取り込みの記録には**本人の側の**生の文字列 `ミサカ@▲4八銀` だけが残る(相手の側の名前は残らない)。ヘッダ `ミサカ2` は**不一致**。**赤の例(監査 A の推奨 2)**: (i) 前方一致・部分一致(`--me abc` とヘッダ `abc2`)は不一致 (ii) 名前の後ろの空白・CR(CRLF のファイル)は Q-8 で決めた扱いで 1 例 (iii) 先手・後手の行そのものが無いときは、名前が違うときと理由を分ける(Q-8)(iv) 先手の行が 2 本ある (v) 大文字小文字だけ違う → 不一致 (vi) `--me` と `--as` が食い違う → 取り込まない (vii) KIF と CSA で 1 例ずつ。**`@` の赤の例(監査 A の追加。司令塔が採用。KIF・CSA の両方で)**: (a) `@abc` は落とすと空の文字列で、どの `--me` とも一致しない。`--me ""` と空白だけの `--me` は止める (b) `@` の無い `abc` は文字列全体と完全一致 (c) 両方の名前の `@` より前が同じ(`abc@▲…` と `abc@△…`)→ 一致 2 で `user_side_unknown` (d) 片方だけに `@` があり、落とすと同じになる(`abc` と `abc@x`)→ 一致 2 で `user_side_unknown`((c) と経路が違うので別の例)(e) `@` が 2 つ(`a@b@c`)→ 最初の `@` で切って `a` (f) `--me` 自身に `@` がある → **止める** (g) 全角の `＠` は `@` として扱わない (h) `@` の前の空白(`abc @x`)と行末の CR → Q-8 で決めた扱いで 1 例 | 手で書いた KIF・CSA の最小ヘッダで |
 | F-S8(案 1 のとき) | F-S6 の回した手順 | `startSfen` = **`lnsgkgsnl/1r5b1/pppppp1pp/6p2/9/9/PPPPPPPPP/1B5R1/LNSGKGSNL b - 2`**(平手・後手番の初期局面に、回した 1 手目 `3c3d` を当てた局面。**手数の欄は `2`**)、`moves` = 回した 2 手目以降(19 手)、`plyOffset: 1`。**`GameState.sfen` と `options.initialSfen` がこの文字列と一致する** | 回した 1 手目は、元の 1 手目 `7g7f` を回したもの。期待の SFEN は、監査 A が手で導き、後手番の平手から `replayMoveHistory` で並べた結果と文字列まで一致することを確かめた値(必須 1・推奨 5)。**1e も手で導き、一致を確かめた(11.5)**。**1 手を開始局面に畳むので、元の手数が偶数なら残りは奇数になる**(この例は残り 19 手)。**残りが奇数なら R-8 で最後の先手の手を落とす**(F-S9) |
-| **F-S9(R-8)** | 手数が奇数の固定棋譜(手で書く。n 手) | **error 行が無く、ready 行は (n−1)/2 + 1 本**(開始局面の 1 本と組ごと。E-1)、`meta` の `truncatedTrailingMove` が落とした手(USI)。手数が偶数なら `truncatedTrailingMove: null` で、ready 行は n/2 + 1 本 | 司令塔の決定(2026-09-15)。**依頼の文の「(n−1)/2 本」は、ply 0 の ready 行(`replay.ts:205`)を足すと (n−1)/2 + 1 本になる**(D0-NNUE の 20 手の局で ready 11 本 = 20/2 + 1)。**`replay.ts` を通すとエンジンを使う**ので、推奨: 落とす手順を lib の純粋関数に出してエンジン無しで試験し、`replay.ts` の配線(`meta` の欄と ready 行の本数)は段 R の記録で確かめる |
-| F-S9a〜e(R-8。監査 A の追加。司令塔が採用) | (i) 手数が偶数 (ii) 手数が奇数 (iii) **畳む(1 手目)と落とす(最後)を重ねる局**: 元の手数が偶数の後手の局(`claude-10moves` を回すと 20 手 → 畳んで 19 手 → 落として 18 手)(iv) 元が 1 手だけの局 (v) 落とした手が本人の詰ませた手の局 | (i) 落とさず `truncatedTrailingMove: null` (ii) 最後の 1 手だけを落とし、落とした手の文字列が `meta` と一致 (iii) `plyOffset: 1` と、落とした手(**回した座標**)が両方残る。奇数かどうかは**畳んだ後の手数**で判定する (iv) Q-9 の決定どおり (v) 元の棋譜では終局だった局面で、`actualContinuation` が `windowShort: true` を返す(**限界を固定例で見る**。3.1) | (iii) を元の手数で判定すると、元 20 手は偶数なので落とさず、畳んだ 19 手が `odd_move_count` で止まる(V-S22) |
+| **F-S9(R-8)** | 手数が奇数の固定棋譜(手で書く。n 手) | **error 行が無く、ready 行は (n−1)/2 + 1 本**(開始局面の 1 本と組ごと。E-1)、`meta` に `trailingMoveTruncated: true` と `truncatedTrailingMove`(落とした手の USI)。手数が偶数なら `trailingMoveTruncated: false` だけで(`truncatedTrailingMove` の欄は無い)、ready 行は n/2 + 1 本 | 司令塔の決定(2026-09-15)。**依頼の文の「(n−1)/2 本」は、ply 0 の ready 行(`replay.ts:205`)を足すと (n−1)/2 + 1 本になる**(D0-NNUE の 20 手の局で ready 11 本 = 20/2 + 1)。**`replay.ts` を通すとエンジンを使う**ので、推奨: 落とす手順を lib の純粋関数に出してエンジン無しで試験し、`replay.ts` の配線(`meta` の欄と ready 行の本数)は段 R の記録で確かめる |
+| F-S9a〜e(R-8。監査 A の追加。司令塔が採用) | (i) 手数が偶数 (ii) 手数が奇数 (iii) **畳む(1 手目)と落とす(最後)を重ねる局**: 元の手数が偶数の後手の局(`claude-10moves` を回すと 20 手 → 畳んで 19 手 → 落として 18 手)(iv) 再生に渡す手順が 0 手になる局 3 通り: (a) 本人が先手・元 1 手 (b) 本人が後手・元 2 手 (c) 本人が後手・元 1 手 (v) 落とした手が本人の詰ませた手の局 | (i) 落とさず `trailingMoveTruncated: false`(`truncatedTrailingMove` の欄は無い)(ii) 最後の 1 手だけを落とし、落とした手の文字列が `meta` と一致 (iii) `plyOffset: 1` と、落とした手(**回した座標**)が両方残る。奇数かどうかは**畳んだ後の手数**で判定する (iv) 3 通りとも再生せず、理由 `no_moves_to_replay`(Q-9)。**段 1 は (a) だけ**((b)(c) は畳む処理が要るので段 2。変異の候補「0 手の判定を落とした後だけで行う」は (c) で鳴る)(v) 元の棋譜では終局だった局面で、`actualContinuation` が `windowShort: true` を返す(**限界を固定例で見る**。3.1) | (iii) を元の手数で判定すると、元 20 手は偶数なので落とさず、畳んだ 19 手が `odd_move_count` で止まる(V-S22) |
 | F-S10 | 手で導いた期待値(変換器も検算も通さない正解。監査 A の推奨 1 (d)) | `2026-09-10-claude-10moves` の最後の局面を回したもの = `ln1g2s1+B/1ks1gr3/p1pppp1pp/1p7/9/1GP6/PP1PPPPPP/7R1/LNS1KGSNL w NLPb 21`(成り駒と、両方の持ち駒を含む) | 監査 A が手で回し、後手番の平手から `replayMoveHistory` で並べた結果と文字列まで一致することを確かめた値。**1e も手で導き、一致を確かめた(11.5)** |
 | F-S11 | 元の最後の局面と、回した最後の局面 | **一致しない** | 初期局面のように対称な局面だと回転の誤りが見えないので、前提として 1 行置く(推奨 1 (e)) |
-| 段 R(エンジンを使う。後で) | 実際の 1 局(本人が後手)を案 1 の形で `replay.ts` に通す | エラー行が無く、ready 行の局面が「元の棋譜の本人の手番の局面を回したもの」と一致する。`meta` に `truncatedTrailingMove` がある。`diagnose.ts`・`check.ts` で例外・「数えられなかった」・U-2・i9 の `catch` が 0(3.1) | エンジンを持つセッションが行う。**この計画書の範囲では回さない**。**元の手数の奇数・偶数は選ばなくてよい**(R-8 で最後の手を落とす) |
+| 段 R(エンジンを使う。後で) | 実際の 1 局(本人が後手)を案 1 の形で `replay.ts` に通す | エラー行が無く、ready 行の局面が「元の棋譜の本人の手番の局面を回したもの」と一致する。`meta` に `trailingMoveTruncated` がある(落とした局は `truncatedTrailingMove` も)。`diagnose.ts`・`check.ts` で例外・「数えられなかった」・U-2・i9 の `catch` が 0(3.1) | エンジンを持つセッションが行う。**この計画書の範囲では回さない**。**元の手数の奇数・偶数は選ばなくてよい**(R-8 で最後の手を落とす) |
 
 ## 6. 決定が要る点
 
@@ -140,11 +140,11 @@
 | Q-2 | 本人の選び方 | `--me <名前>` を主にし、`--as sente\|gote` で明示もできる。**比べ方は、ヘッダの値から最初の `@` 以降を落とした部分との完全一致(司令塔の決定、2026-09-15)**。一致 0・2 は取り込まない。生の文字列は記録に残す |
 | Q-3 | マスの回転を `usi-coordinates.mjs` から使うか、TS の lib に書くか | **TS の lib に書き、`rotateSquare180` と 81 マスで結果が同じことを vitest の試験で突き合わせる**(`.mjs` の試験は vitest で走っていない。P-27) |
 | Q-4 | 元の棋譜の手数との対応をどこに残すか | 固定棋譜 JSON の `plyOffset` と、元の手順(回す前)をそのまま残す。レポートでは元の手数に戻して書く |
-| Q-5 | 手数が奇数の局の扱い | **決定(司令塔、2026-09-15)**: **R-8 ― 最後の先手の手を落として再生し、`meta` の `truncatedTrailingMove` に落とした手を残す(落とさない局は `null`)**。本人が先手の局にも効くので、案 3 の前に要る(下書きの「変えずに `odd_move_count` の件数として数える」は取り下げ) |
+| Q-5 | 手数が奇数の局の扱い | **決定(司令塔、2026-09-15)**: **R-8 ― 最後の先手の手を落として再生し、`meta` に `trailingMoveTruncated`(常に)と、落としたときだけ `truncatedTrailingMove`(落とした手)を残す(**null は使わない。司令塔の決定、12.6**)**。本人が先手の局にも効くので、案 3 の前に要る(下書きの「変えずに `odd_move_count` の件数として数える」は取り下げ) |
 | **Q-6** | `replay.ts` が error 行を書いて exit 1 した記録(R-8 の後も、非合法手などで起きうる)を `diagnose.ts` に掛けるか | **決定(司令塔、2026-09-15)**: **error 行を持つ記録は `diagnose.ts` の入力に使わない**(R-9)。件数と理由は報告に残す。**部分の局を黙って 1 局と数えない**ことを R-8 の見張りに含める(監査 A の必須 2) |
-| **Q-7** | Event の 1 行から座標系が分かるようにするか(監査 A の必須 3) | **決定(司令塔、2026-09-15)**: **この STEP では `meta` に書く(R-3。回さない局・落とさない局にも値を書く)。v0.3 は D4 の前(11.4)。** 以下は決定の前に書いた推奨の記録: **いまは `meta` に書き、記録を辿る**(`provenance.record.path`・sha256 から記録の `meta` に届く)。**Evidence として人に見せる前(D4 の出力の前)に、JSON v0.3(MINOR)で `provenance.record.meta` に `mirrored`・`originalUserSide`・`plyOffset`・`startSfen`・`truncatedTrailingMove` を足す**。いまの v0.2 の `provenance.record.meta` は 6 欄固定で `additionalProperties: false`(A の読み: `failureEventSchema.ts` の `PROVENANCE_META_KEYS`)なので、足さない限り Event の行には写らない。`replay.ts` は回さない局にも `mirrored: false`・`plyOffset: 0`・`truncatedTrailingMove` を書く(欄が無い = D0-SIDE より前、と区別できる)。**時期を決めるのは司令塔** |
+| **Q-7** | Event の 1 行から座標系が分かるようにするか(監査 A の必須 3) | **決定(司令塔、2026-09-15)**: **この STEP では `meta` に書く(R-3。回さない局・落とさない局にも値を書く)。v0.3 は D4 の前(11.4)。** 以下は決定の前に書いた推奨の記録: **いまは `meta` に書き、記録を辿る**(`provenance.record.path`・sha256 から記録の `meta` に届く)。**Evidence として人に見せる前(D4 の出力の前)に、JSON v0.3(MINOR)で `provenance.record.meta` に `mirrored`・`originalUserSide`・`plyOffset`・`startSfen`・`trailingMoveTruncated`(と `truncatedTrailingMove`) を足す**。いまの v0.2 の `provenance.record.meta` は 6 欄固定で `additionalProperties: false`(A の読み: `failureEventSchema.ts` の `PROVENANCE_META_KEYS`)なので、足さない限り Event の行には写らない。`replay.ts` は回さない局にも `mirrored: false`・`plyOffset: 0`・`trailingMoveTruncated`(と `truncatedTrailingMove`) を書く(欄が無い = D0-SIDE より前、と区別できる)。**時期を決めるのは司令塔** |
 | **Q-8** | `--me` の細部(監査 A の推奨 2 と、追加の事前読み) | **決定(司令塔、2026-09-15)**: 赤の例 (i)〜(vii)・(a)〜(h) を採る。**`--me` 自身に `@` があれば止める**(推測しない)。**全角の `＠` は `@` として扱わない**。**`--me ""` と空白だけの `--me` は止める**。**生の文字列を記録に残すのは本人の側だけ**(相手の名前は残さない。8.)。**大文字小文字などの表記ゆれは吸収しない**。**推奨(未決。実装の前に司令塔が決める)**: (ii)(h) `@` 以降を落とした後、前後の空白と CR を落としてから比べる(**ファイルの形式の揺れであって、名前の表記ゆれの吸収ではない**)/ (iii) 先手・後手の行が無いときは、`user_side_unknown` と別の理由 `user_side_no_header` にする / (vi) `--me` と `--as` が食い違ったら `user_side_conflict` で取り込まない。**決定(司令塔、2026-09-15、コミット時): 残る推奨(空白と CR を落としてから比べる・`user_side_no_header`・`user_side_conflict`)もそのまま採る** |
-| **Q-9** | 元が 1 手だけの局(R-8 で落とすと 0 手になる)の扱い(監査 A の追加 (iv)) | **決定(司令塔、2026-09-15、コミット時): 推奨どおり。再生しない。理由 `no_moves_after_truncation` として数える**(0 手の記録からは比べる組が作れず、診断の材料にならない。黙って捨てずに件数を出す)。**決めるのは司令塔** |
+| **Q-9** | 再生に渡す手順が 0 手になる局の扱い(監査 A の追加 (iv) と再指摘) | **決定(司令塔、2026-09-15)**: 再生しない。**条件は「畳む・落とすの後に、再生に渡す手順が 0 手」(経路を問わない)、理由の名前は `no_moves_to_replay`**(0 手の記録からは比べる組が作れず、診断の材料にならない。黙って捨てずに件数を出す)。経路は 3 通り: (a) 本人が先手で元が 1 手(落として 0)(b) 本人が後手で元が 2 手(畳んで 1 → 落として 0)(c) 本人が後手で元が 1 手(畳んで 0。奇数でないので落とさない)。**コミット時(`e1ef22b`)の決定は「元が 1 手だけの局」・理由 `no_moves_after_truncation` だったが、(c) は落とした後ではないので、A の再指摘を受けて変えた(12.2)** |
 
 ## 7. 変異(**中心を壊す変異を必ず入れる ― 規則 11.8**。予測は実装の後、当てる前に書く)
 
@@ -215,7 +215,7 @@
 
 ## 11. 追加の決定と、監査 A の事前読みの取り込み(2026-09-15、`a011c05` の後)
 
-**司令塔の確認(コミット時)**: `truncatedTrailingMove` は 1 欄(落とした手の USI、落とさない局は `null`)でよい。Q-8・Q-9 は推奨どおりに決めた。
+**司令塔の確認(コミット時)**: `truncatedTrailingMove` は 1 欄(落とした手の USI、落とさない局は `null`)でよい。Q-8・Q-9 は推奨どおりに決めた。**(その後、`truncatedTrailingMove` の `null` はやめた。12.6)**
 
 ### 11.1 見本 1 局(人間の実棋譜。**scratchpad の外へ出さない・コミットしない・相手の名前を書かない**)
 
@@ -253,7 +253,8 @@
 
 ### 11.4 後で(この STEP ではやらない)
 
-- **JSON v0.3(MINOR): `provenance.record.meta` に `mirrored`・`originalUserSide`・`plyOffset`・`startSfen`・`truncatedTrailingMove` を足す(回さない局・落とさない局にも値を書く)。人に見せる出力(D4)の前に行う。** 司令塔が PHASES.md に候補として持つ
+- **JSON v0.3(MINOR): `provenance.record.meta` に `mirrored`・`originalUserSide`・`plyOffset`・`startSfen`・`trailingMoveTruncated`(と、落としたときだけ `truncatedTrailingMove`)を足す(回さない局・落とさない局にも `trailingMoveTruncated` を書く)。人に見せる出力(D4)の前に行う。** 司令塔が PHASES.md に候補として持つ
+- **`scan-compare` にも R-9 と同じ扱いを入れる**(error 行のある記録を突き合わせに使わない。いまは黙って比べる ― 12.4)
 
 ### 11.5 監査 A の期待値 2 つを、1e も手で導いた(推奨 1 (d)。写すだけにしない)
 
@@ -271,3 +272,107 @@
   - 持ち駒: 先手の `B` → 後手の `b`、後手の `n`・`l`・`p` → 先手の `N`・`L`・`P` → `NLPb`(並びは A の値と同じ、先手の駒が先)。手番 `b` → `w`。手数の欄 21 はそのまま
   - → `ln1g2s1+B/1ks1gr3/p1pppp1pp/1p7/9/1GP6/PP1PPPPPP/7R1/LNS1KGSNL w NLPb 21`。**A の値と一致した**
 - **限界**: どちらも手の作業で、道具では確かめていない。**道具で確かめるのは実装の試験**(F-S6 の 2 つの経路と、この手で導いた値の 3 つが一致することを見る)
+
+## 12. 実装の記録(`e1ef22b` の後)
+
+### 12.1 段 1 / 段 2 の分け方(司令塔の決定、2026-09-15)
+
+- **理由**: 実棋譜 10 局の読み込み検査で、**本人が先手の 6 局はすべて手数が奇数**だった(本人の手で終わる局)。**案 3(先手の局をいまの道具にそのまま流す)も、R-8 が無いと `replay.ts` の `odd_move_count` で止まる**。R-8 を先に通して、C が先手の 6 局を評価できるようにし、その間に回転の部分を作る
+- **段 1(先)**: R-8、R-9、Q-9 の (a)、R-3 のうち `trailingMoveTruncated`・`truncatedTrailingMove` の欄だけ。固定例 F-S9・F-S9a の (i)(ii)(iv-a)(v)。変異 V-S13・V-S14・V-S20・V-S21・V-S23
+- **段 2(後)**: 回転・畳み・`--me`・R-1〜R-7・F-S1〜S8・S10・S11・Q-9 の (b)(c)・残りの変異
+
+### 12.2 `e1ef22b` の後に変えた計画書の文言
+
+- **Q-9**: 条件を「元が 1 手だけの局」から「**畳む・落とすの後に、再生に渡す手順が 0 手**」に、理由の名前を `no_moves_after_truncation` から **`no_moves_to_replay`** に変えた(監査 A の再指摘: 本人が後手で元が 1 手の局は、畳んで 0 手になり、落とした後ではない。司令塔の決定)。6. の Q-9 と、5. の F-S9a の (iv) を直した
+
+### 12.3 段 1 で作ったもの
+
+| 対象 | 変更 |
+|---|---|
+| `scripts/playtest/lib/replayPlan.ts`(新規) | `planReplayMoves(moves)`: 手数が奇数なら最後の 1 手を落とし(`trailingMoveTruncated: true` と、`truncatedTrailingMove` にその USI)、偶数なら何も落とさない(`trailingMoveTruncated: false`)。meta に書く欄は `truncationMetaFields` が返す(落とさないときは `truncatedTrailingMove` の欄を持たない)。落とした後に 0 手なら `noMovesToReplay`(理由 `no_moves_to_replay`)。**手数 0 の棋譜も同じ印になる**(Q-9 の 3 通りのほかの経路。`kifuImport` は指し手の無い棋譜を `no_move_lines` にするので、取り込みからは作られない) |
+| `scripts/playtest/replay.ts` | 棋譜の手順を `planReplayMoves` に通してから 2 手ずつ読む。`meta` の `extra` に `truncationMetaFields` の欄を書く。**再生する手が無い局は、エンジンを起こす前に理由の error 行を書いて exit 1**。記録を書く処理を `writeRecordLines` に出して 2 つの経路で共有した(書き方は変えていない)。`odd_move_count` の分岐は残した(もう通らないはずの守り) |
+| `scripts/playtest/invariants/types.ts` | `MetaLine.trailingMoveTruncated?: boolean`・`truncatedTrailingMove?: string` と、3 値の欄の表に列(`trailingMoveTruncated`。`dirty` と同じ形)を足した |
+| `scripts/playtest/lib/failureEvent.ts` | `DiagnosisInput.errorLines`(**必須**)。1 つでもあれば診断の関数を呼ばず、結果 `excluded`(理由の一覧)にする。入力の一覧に「error 行のため使わなかった入力」、表の欄に「error 行のため使わない」(例外で数えられなかった入力と分ける) |
+| `scripts/playtest/lib/diagnosisTotals.ts` | 合計の見出しに「error 行のため使わなかった N 本」を足し、合計に入れない入力として名前で並べる |
+| `scripts/playtest/diagnose.ts` | 記録の `kind: "error"` の行を集めて `errorLines` として渡す |
+| 試験 | `lib/replayPlan.test.ts`(新規)・`replay.test.ts`(新規。ソース照合)・`lib/failureEvent.test.ts`(R-9)・`lib/diagnosisTotals.test.ts`(F-Q5)・`diagnose.test.ts`(ソース照合と、error 行を持つ 3 本目の入力を子プロセスに足した) |
+
+- **3 値の欄の規約とのずれ(直した)**: 最初は「落とさない局は `null`」で実装したが、`invariants/types.ts` の表の `null`(測れなかった)とぶつかり、v0.3 で `provenance` に写すと `null` が「欄が無い」の意味にもなるので、司令塔の決定で `trailingMoveTruncated: boolean` を常に書き、落とした手は `true` のときだけ書く形に直した(12.6)
+- **F-S9a の (v)(限界の固定例)**: 手で作った 1 手詰の局面(`4k3p/9/4P4/9/9/9/9/9/K8 b G 1` から `9i9h`・`1a1b`・`G*5b`)で、元の手順では `windowShort: false`、落とした手順では `windowShort: true` になることを見る。**実棋譜は試験に使っていない**
+
+### 12.4 段 1 の限界
+
+- **`replay.ts` の配線はソース照合だけ**(エンジンを起こすので試験の中で走らせない)。書き出した記録の ready 行の本数((n−1)/2 + 1)と `meta` の値は、エンジンを使う再生(C の先手 6 局)の記録で確かめる
+- R-9 は、コミット済みの記録(error 行 0 本。A の数え)の結果を変えない、と読める。**本監査の全件で確かめる**(A の予測)
+- **R-9 は `scan-compare` に効かない**(監査 A の指摘、司令塔の決定で範囲外): `scan-compare.ts:41` は `kind: "record"` の行だけを読み、`scanCompare.ts:52` が `diagnoseRecords` を直接呼ぶ。**D-COST の突き合わせでは、error 行のある記録(途中で止まった局)を黙って比べる**
+
+- **監査 A の任意の指摘 2 件(GO のまま。司令塔の決定: 直さず限界として書く、2026-09-15)**: (1) `diagnose.ts` が集める error 行の種類は、ソース照合でしか見張られていない(子プロセスの固定例は `odd_move_count` だけ)。(2) `truncationMetaFields` が `moves` などを `meta` に漏らす誤りは、lib の試験でしか捕まらない(子プロセスは沈黙)。どちらも振る舞いは変わらない。段 2 で子プロセスの固定例を足すときに合わせて見る
+
+### 12.5 段 1 の実測(worktree `wt-d0-side`、基点 `e1ef22b`)
+
+- **予測**: 変異を当てる前に、同じ逐次コマンドの中で `scratchpad/d0-side/stage1-predictions.md`(sha1 `2b1a211f`)に書いた。**変異 10 件の予測は、鳴る試験の名前と件数まで 10/10 的中**
+- **足した試験(12 件。`git diff e1ef22b` と新規ファイルの `it(` の行で数えた)**:
+  - scripts/playtest/lib/replayPlan.test.ts(新規): 7
+  - scripts/playtest/replay.test.ts(新規): 3
+  - scripts/playtest/lib/failureEvent.test.ts: 1
+  - scripts/playtest/lib/diagnosisTotals.test.ts: 1
+  - scripts/playtest/diagnose.test.ts: 0
+  - `diagnose.test.ts` は既存の試験の中に、ソース照合の 2 行と、error 行を持つ 3 本目の入力を足した(試験の件数は変わらない)
+- **変えた 5 本の試験だけ**: 5 ファイル・55 件すべて通過
+- **型検査**(`node scripts/typecheck-scripts.mjs`、2 つの tsconfig): rc=0・出力 0 行
+- **変異(`scratchpad/d0-side/stage1-mutate.py`。試験は変えた 5 本、tsc は `scripts/playtest/tsconfig.json`。試験の失敗と tsc の失敗を分けて数える)**: **適用 10 / 鳴った 10(うち試験 10・tsc だけ 0)/ 沈黙 0 / 適用できなかった 0**。変異の前後で 11 ファイルの sha256 が一致した
+
+| # | 壊し方 | 鳴った試験(失敗件数 / 55) | tsc |
+|---|---|---|---|
+| V-S13 | 手数が奇数でも落とさない | F-S9・(ii)・(iv-a)・(v)(3) | 0 |
+| V-S14 | 落とした手を `meta` に書かない | replay.test の `meta`(1) | 0 |
+| V-S20 | 偶数でも落とす | (i)(1) | 0 |
+| V-S21 | 最初の手を落とす | (ii)・(v)(2)。(iv-a) は 1 手なので同じ結果(予測どおり) | 0 |
+| V-S23a | lib が error 行を見ない | failureEvent の R-9・diagnose の子プロセス(2) | 0 |
+| V-S23b | `diagnose.ts` が error 行を集めない | diagnose のソース照合・子プロセス(2) | 0 |
+| W-1 | `replay.ts` が落とす前の手順を読む | replay.test の手順(1) | 0 |
+| W-2 | 再生する手が無い局の分岐を消す | replay.test の分岐(1) | **1**(`replayPlan.reason` の型が絞れない) |
+| T-1 | 合計で error 行の入力を「数えられなかった」に畳む | F-Q5(1) | 0 |
+| T-2 | 表の欄を「数えられなかった」に畳む | failureEvent の R-9(1)。diagnose の子プロセスは両側が同じ lib なので沈黙(予測どおり) | 0 |
+
+- **vitest の全件(変異の後に 1 回、`--testTimeout=60000`)**: **Test Files 3 failed | 92 passed | 1 skipped (96)、Tests 1270 passed | 1 skipped (1271)**。落ちた 3 ファイルは既存の node:test 形式(`scripts/lib/usi-coordinates.test.mjs`・`prototypes/shape-matcher` の 2 本。P-27)で、予測どおり。**段 1 の前の全件の件数は測っていない**(足した件数は上の静的な数え)
+
+### 12.6 直し版(司令塔の決定と監査 A の事前の指摘、2026-09-15)
+
+**何を変えたか**
+- **`truncatedTrailingMove` の `null` をやめた**(司令塔の決定): `invariants/types.ts` の 3 値の表では `null` = 測れなかった で、「落とさなかった」を `null` で表すと規約とぶつかる。**v0.3 で `provenance` に写すと、`null` は「欄が無い(D0-SIDE より前の記録)」の意味にもなり、区別できない**
+  - **形**: `meta` に **`trailingMoveTruncated: boolean` を常に書く**(落とした = `true`、落とさない = `false`)。**`truncatedTrailingMove: string`(落とした手の USI)は `true` のときだけ書く**(`false` のときは欄そのものを書かない)。`null` はどこにも使わない。古い記録は `trailingMoveTruncated` の欄が無いことで見分ける
+  - `lib/replayPlan.ts`: `TrailingTruncation` 型と、meta に書く欄だけを返す `truncationMetaFields` を足した。`replay.ts` は `...truncationMetaFields(replayPlan)` で書く
+  - `invariants/types.ts`: 表の列を `trailingMoveTruncated`(`dirty` と同じ形)に直し、`null` の例外の注記を消した
+- **Q-9 の分岐を子プロセスで試す**(監査 A の推奨、司令塔の決定): `replay.test.ts` に、`SHOGI_ENGINE_PATH` に存在しないパスを渡して 1 手の棋譜・0 手の棋譜で `replay.ts` を回す試験を 2 件足した。**exit 1・`meta`・error 行の理由・record 行 0 本・リポジトリに書かないこと**を見る。分岐がエンジンの起動より前で止まらなければ、存在しないエンジンの起動で落ちて記録が書かれない(P-30)ので赤になる
+- **偶数の局は `Object.hasOwn` で「`truncatedTrailingMove` の欄が無い」ことを見る**(監査 A、司令塔の決定): lib の試験と、0 手の棋譜の子プロセスの試験で見る(`null` や `undefined` を書く誤りを捕まえる。値だけ比べると `JSON` を通した `null` が沈黙しうる)
+- **R-9 は `scan-compare` に効かない**(監査 A、司令塔の決定で範囲外)を 12.4 の限界と 11.4 の「後で」に書いた
+- **段 2 への申し送り**: R-3 の `startSfen: null`(回さない局)も、同じ理由で形を決め直す必要がある
+
+**実測(worktree `wt-d0-side`、基点 `e1ef22b`)**
+- **予測**: 変異を当てる前に、同じ逐次コマンドの中で `scratchpad/d0-side/stage1c-predictions.md`(sha1 `2d985118`)に書いた。**変異 16 件は、鳴る試験の名前と件数まで 16/16 的中**
+- **足した試験(16 件。`git diff e1ef22b` と新規ファイルの `it(` の行で数えた)**: lib/replayPlan.test.ts(新規) 9・replay.test.ts(新規) 5・lib/failureEvent.test.ts 1・lib/diagnosisTotals.test.ts 1・diagnose.test.ts 0。**予測の「14 件増える」は外れ**(`truncationMetaFields` の 2 件を数え忘れた。試験の中身ではなく、予測の書き方の誤り)
+- **変えた 5 本の試験だけ**: 5 ファイル・59 件すべて通過。**型検査** rc=0・出力 0 行
+- **変異(`scratchpad/d0-side/stage1c-mutate.py`)**: **適用 16 / 鳴った 16(うち試験 16・tsc だけ 0)/ 沈黙 0 / 適用できなかった 0**。変異の前後で 11 ファイルの sha256 が一致した
+
+| # | 壊し方 | 鳴った試験(失敗件数 / 59) | tsc |
+|---|---|---|---|
+| V-S13 | 奇数でも落とさない | (ii)・(iv-a)・(v)・「落としたとき」の meta・子プロセス 1 手(5) | 0 |
+| V-S14 | meta に書かない(`...truncationMetaFields` を消す) | ソース照合の meta・子プロセス 1 手・0 手(3) | 0 |
+| V-S20 | 偶数でも落とす | (i)・「落とさなかった」の meta(2) | 0 |
+| V-S21 | 最初の手を落とす | (ii)・(v)(2) | 0 |
+| V-S23a | lib が error 行を見ない | failureEvent の R-9・diagnose の子プロセス(2) | 0 |
+| V-S23b | `diagnose.ts` が error 行を集めない | diagnose のソース照合・子プロセス(2) | 0 |
+| W-1 | `replay.ts` が落とす前の手順を読む | ソース照合の手順(1)。子プロセスは分岐で先に止まるので変わらない(予測どおり) | 0 |
+| W-2 | 0 手の分岐を消す | ソース照合の分岐・子プロセス 1 手・0 手(3) | **1** |
+| T-1 | 合計で error 行の入力を「数えられなかった」に畳む | F-Q5(1) | 0 |
+| T-2 | 表の欄を「数えられなかった」に畳む | failureEvent の R-9(1) | 0 |
+| **N-1** | **偶数でも `truncatedTrailingMove: null` を書く** | 「落とさなかった」の meta・子プロセス 0 手の `Object.hasOwn`(2) | 0 |
+| N-2 | 落としたとき `trailingMoveTruncated` を書かない | 「落としたとき」の meta・子プロセス 1 手(2) | 0 |
+| N-2b | 落とさなかったとき `trailingMoveTruncated` を書かない | 「落とさなかった」の meta・子プロセス 0 手(2) | 0 |
+| N-3 | `true` なのに落とした手を書かない | 「落としたとき」の meta・子プロセス 1 手(2) | 0 |
+| **N-4** | **0 手の分岐の exit を 0 にする** | 子プロセス 1 手・0 手(2) | 0 |
+| **N-5** | **0 手の分岐で記録を書かない** | 子プロセス 1 手・0 手(2) | 0 |
+
+- **vitest の全件(変異の後に 1 回、`--testTimeout=60000`)**: **Test Files 3 failed | 92 passed | 1 skipped (96)、Tests 1274 passed | 1 skipped (1275)**。落ちた 3 ファイルは既存の node:test 形式(P-27)で、予測どおり
+

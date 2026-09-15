@@ -42,6 +42,8 @@ export interface DiagnosisTotals {
   counted: string[];
   /** 数えられなかったので合計に入れなかった入力の kifuId(入力の順)。 */
   notCounted: string[];
+  /** STEP D0-SIDE 段 1(R-9)。error 行を持つので合計に入れなかった入力の kifuId(入力の順)。 */
+  excluded: string[];
   /** 数えた入力が 1 つも無ければ null(0 の合計と区別する)。 */
   counts: DiagnosisCounts | null;
 }
@@ -49,8 +51,13 @@ export interface DiagnosisTotals {
 export function totalDiagnosisCounts(rows: readonly DiagnosisRow[]): DiagnosisTotals {
   const counted: string[] = [];
   const notCounted: string[] = [];
+  const excluded: string[] = [];
   let counts: DiagnosisCounts | null = null;
   for (const row of rows) {
+    if (row.result.kind === "excluded") {
+      excluded.push(row.kifuId);
+      continue;
+    }
     if (row.result.kind !== "counted") {
       notCounted.push(row.kifuId);
       continue;
@@ -65,7 +72,7 @@ export function totalDiagnosisCounts(rows: readonly DiagnosisRow[]): DiagnosisTo
       counts[key] += rowCounts[key];
     }
   }
-  return { counted, notCounted, counts };
+  return { counted, notCounted, excluded, counts };
 }
 
 /**
@@ -76,11 +83,14 @@ export function renderDiagnosisTotals(rows: readonly DiagnosisRow[]): string[] {
   if (rows.length < 2) return [];
   const totals = totalDiagnosisCounts(rows);
   const lines: string[] = [];
-  lines.push(`## 合計(入力 ${rows.length} 本。数えた ${totals.counted.length} 本・数えられなかった ${totals.notCounted.length} 本)`);
+  lines.push(`## 合計(入力 ${rows.length} 本。数えた ${totals.counted.length} 本・数えられなかった ${totals.notCounted.length} 本・error 行のため使わなかった ${totals.excluded.length} 本)`);
   lines.push("");
   lines.push("- 数えた入力の件数を欄ごとに足したもの。**群の差として読まない**(局どうしの揺れと分けられない)");
   for (const kifuId of totals.notCounted) {
     lines.push(`- 合計に入れなかった入力(数えられなかった): ${kifuId}`);
+  }
+  for (const kifuId of totals.excluded) {
+    lines.push(`- 合計に入れなかった入力(error 行のため使わない): ${kifuId}`);
   }
   lines.push("");
   const c = totals.counts;
