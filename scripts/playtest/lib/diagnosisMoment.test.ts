@@ -1,5 +1,5 @@
 // STEP D1b(docs/STEP_D1b_PLAN_2026-09-15.md 3.)。上がり(rise)と最大の下がり(maxDrop)の固定例 G-1〜G-15(G-9・G-16 は diagnose.test.ts)、
-// 不変条件(S-1)、契約 diagnosis-moment v0.1 のスキーマ。**エンジンは起動しない。**
+// 不変条件(S-1)、契約 diagnosis-moment の今の版のスキーマ(v0.1 で作り、STEP D-SCREEN-2 から版は lib/schemaVersions.ts の定数)。**エンジンは起動しない。**
 //
 // 【正解の置き方】G-1〜G-14 の期待は計画書 3. の表のまま手で書いた(実装の出力から写さない)。G-15 の trigger・consequences は、
 // Failure Event と同じ関数(triggerOf・actualContinuation)の値と等しいことを見る(計画 2. の「そのまま」)。
@@ -24,6 +24,7 @@ import { validate } from "./eventSchema.js";
 import { actualContinuation, diagnoseRecords, DRAFT_RULE_1, NOT_EVALUATION_CP, readEvaluations, STANDING_BOUNDS, triggerOf, type FailureEvent } from "./failureEvent.js";
 import { engineRef, GAME01_MOVES, plantedRecords, type PlantedEvaluation } from "./failureEventFixtures.js";
 import { buildProvenance, loadFailureEventSchema, toEventLine } from "./failureEventSchema.js";
+import { DIAGNOSIS_MOMENT_SCHEMA_VERSION } from "./schemaVersions.js";
 import { initialSfenOf } from "./sideAlignment.js";
 
 type Json = Record<string, unknown>;
@@ -196,13 +197,13 @@ describe("STEP D1b の行の全体(計画 G-15)", () => {
   const { moments, events } = momentsOf(records);
   const rowAt = (ply: number) => readEvaluations(records).find((row) => row.ply === ply)!;
 
-  it("rise の 1 行(20→22、+500)を全部の欄で書き、v0.2 のスキーマを通る", () => {
+  it("rise の 1 行(20→22、+500)を全部の欄で書き、今の版のスキーマを通る", () => {
     expect(moments.rises).toHaveLength(1);
     const line = lineOf(moments.rises[0]!);
     expect(line).toEqual(
       clone({
         contract: "diagnosis-moment",
-        schemaVersion: "0.2",
+        schemaVersion: DIAGNOSIS_MOMENT_SCHEMA_VERSION,
         eventClass: "rise",
         kifuId: "g",
         branchPly: 21,
@@ -225,13 +226,13 @@ describe("STEP D1b の行の全体(計画 G-15)", () => {
     expect(validate(line, schema)).toEqual([]);
   });
 
-  it("maxDrop の組の行(22→24、−600、Failure Event 23)を excludedPairs を含めて全部の欄で書き、v0.2 のスキーマを通る", () => {
+  it("maxDrop の組の行(22→24、−600、Failure Event 23)を excludedPairs を含めて全部の欄で書き、今の版のスキーマを通る", () => {
     expect(events.map((event) => [event.branchPly, event.branch.kinds])).toEqual([[23, ["cpDrop"]]]);
     const line = lineOf(moments.maxDrop);
     expect(line).toEqual(
       clone({
         contract: "diagnosis-moment",
-        schemaVersion: "0.2",
+        schemaVersion: DIAGNOSIS_MOMENT_SCHEMA_VERSION,
         eventClass: "maxDrop",
         kifuId: "g",
         branchPly: 23,
@@ -334,7 +335,7 @@ describe("STEP D1b の不変条件とスキーマ(計画 3.・S-1・Q-1)", () =>
     expect(applied).toBe(2); // G-4・G-15
   });
 
-  it("不変条件とスキーマ(コミット済みの記録。real-02 は読まない): 上がりと最大の下がりの行はすべて v0.2 を通り、cpDrop のある局では maxDrop がその Event を指す", () => {
+  it("不変条件とスキーマ(コミット済みの記録。real-02 は読まない): 上がりと最大の下がりの行はすべて今の版を通り、cpDrop のある局では maxDrop がその Event を指す", () => {
     const records = committed();
     expect(records.length).toBeGreaterThan(0);
     let lines = 0;
@@ -364,8 +365,8 @@ describe("STEP D1b の不変条件とスキーマ(計画 3.・S-1・Q-1)", () =>
     expect([...seen].sort()).toEqual(["maxDrop.cp", "maxDrop.noComparedPair", "maxDrop.noDrop", "rise.cp", "rise.mateAfter"]);
   });
 
-  it("共通部(kifuId・branchPly・fromReadyPly・toReadyPly・trigger・consequences・provenance・evaluationAfter・standingPair)は Failure Event v0.5 のスキーマと同じ定義で、counterfactual は説明の文のほかは同じ", () => {
-    const fe = loadFailureEventSchema("0.5") as unknown as { properties: Record<string, Json> };
+  it("共通部(kifuId・branchPly・fromReadyPly・toReadyPly・trigger・consequences・provenance・evaluationAfter・standingPair)は今の版の Failure Event のスキーマと同じ定義で、counterfactual は説明の文のほかは同じ", () => {
+    const fe = loadFailureEventSchema() as unknown as { properties: Record<string, Json> };
     const variants = (schema as unknown as { oneOf: Array<{ properties: Record<string, Json> }> }).oneOf;
     expect(variants).toHaveLength(5);
     for (const variant of variants) {
@@ -381,7 +382,7 @@ describe("STEP D1b の不変条件とスキーマ(計画 3.・S-1・Q-1)", () =>
     }
   });
 
-  it("契約と版(Y-17): contract が無い・版が Failure Event の 0.5・eventClass が無い行は落ち、Failure Event の行はこの契約の今の版を通らず、この契約の行は Failure Event v0.5 を通らない", () => {
+  it("契約と版(Y-17): contract が無い・版が Failure Event の 0.5・eventClass が無い行は落ち、Failure Event の行はこの契約の今の版を通らず、この契約の行は Failure Event の今の版を通らない", () => {
     const records = FIXTURES.find(([label]) => label === "G-15")![1];
     const { moments, events } = momentsOf(records);
     const line = lineOf(moments.rises[0]!);
@@ -395,7 +396,7 @@ describe("STEP D1b の不変条件とスキーマ(計画 3.・S-1・Q-1)", () =>
     expect(validate({ ...line, schemaVersion: "0.5" }, schema)).not.toEqual([]);
     expect(validate({ ...line, contract: "failure-event" }, schema)).not.toEqual([]);
     expect(validate(clone(toEventLine(events[0]!, PROVENANCE)), schema)).not.toEqual([]);
-    expect(validate(line, loadFailureEventSchema("0.5"))).not.toEqual([]);
+    expect(validate(line, loadFailureEventSchema())).not.toEqual([]);
   });
 
   it("境目(手で書き換えた 1 行): 上がりの差 0・最大の下がりの組の差 0・noDrop の minDiffCp −1・opponentBestmove に手・状態の行に branchPly・組の行に excludedPairs が無い・上がりの行に excludedPairs は落ちる", () => {

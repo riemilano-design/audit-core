@@ -33,11 +33,13 @@ import {
 } from "./failureEvent.js";
 import type { Provenance } from "./failureEventSchema.js";
 import { standingPairOf, type StandingPair } from "./standing.js";
+import type { ScreenMeta } from "./rescreen.js";
+// 版の文字列は lib/schemaVersions.ts の 1 か所に置く(STEP D-SCREEN-2)
+import { DIAGNOSIS_MOMENT_SCHEMA_VERSION, KNOWN_DIAGNOSIS_MOMENT_SCHEMA_VERSIONS } from "./schemaVersions.js";
+import { choosePairSources, withPvSource, type EvaluationSource } from "./screenDiagnosis.js";
 
 export const DIAGNOSIS_MOMENT_CONTRACT = "diagnosis-moment" as const;
-export const DIAGNOSIS_MOMENT_SCHEMA_VERSION = "0.2" as const;
-/** スキーマのファイルがある版(古い版のファイルは消さない) */
-export const KNOWN_DIAGNOSIS_MOMENT_SCHEMA_VERSIONS = ["0.1", "0.2"] as const;
+export { DIAGNOSIS_MOMENT_SCHEMA_VERSION, KNOWN_DIAGNOSIS_MOMENT_SCHEMA_VERSIONS };
 export type DiagnosisMomentSchemaVersion = (typeof KNOWN_DIAGNOSIS_MOMENT_SCHEMA_VERSIONS)[number];
 
 /** 組の行(`rise` と、`maxDrop` の組の行)が持つ欄(計画 2.) */
@@ -58,6 +60,8 @@ export interface MomentPairFields {
   evaluationAfter: Evaluation;
   /** STEP D2.5: 直前の行と直後の行の評価の形勢の状態(Failure Event の branch.standingPair と同じ形) */
   standingPair: StandingPair;
+  /** STEP D-SCREEN-2(計画 §3)。組の評価の出どころ。meta に screen のある記録だけに書く */
+  evaluationSource?: EvaluationSource;
   /** 同じ組の Failure Event があればその branchPly、無ければ null(計画 E-8・Q-5) */
   failureEventBranchPly: number | null;
   /** `actualContinuation` をそのまま */
@@ -102,15 +106,22 @@ export function diagnosisMomentsOf(
   rule: DiagnosisRule,
   initialSfen: string,
   events: readonly FailureEvent[],
+  /** STEP D-SCREEN-2。不変条件を確かめた段 2 の記録の screen。無ければ今のまま */
+  screen?: ScreenMeta,
 ): DiagnosisMoments {
   const rows = readEvaluations(records);
-  const pairs = pairEvaluations(rows);
+  // STEP D-SCREEN-2(計画 §3): 段 2 の記録は、組ごとに 2 行とも深い値か 2 行とも軽い値かを選ぶ(Failure Event と同じ決め方)
+  const chosen = screen === undefined ? undefined : choosePairSources(rows);
+  const pairs = chosen === undefined ? pairEvaluations(rows) : chosen.map((pair) => pair.pair);
   const moves = fullMovesOf(rows);
   const eventPlies = new Set(events.map((event) => event.branchPly));
 
-  const pairFields = (index: number): MomentPairFields => {
-    const from = rows[index]!;
-    const to = rows[index + 1]!;
+  // `lightOnly`: 最大の下がりで出どころが混ざる局は、全部の組を軽い値で作る(S-13)
+  const pairFields = (index: number, lightOnly = false): MomentPairFields => {
+    const pick = chosen === undefined || lightOnly ? undefined : chosen[index]!;
+    const from = pick === undefined ? rows[index]! : pick.from;
+    const to = pick === undefined ? rows[index + 1]! : pick.to;
+    const source: EvaluationSource | undefined = chosen === undefined ? undefined : lightOnly ? "light" : pick!.source;
     const branchPly = from.ply + 1;
     const userMove = moves[branchPly - 1];
     const opponentMove = moves[branchPly];
@@ -128,9 +139,13 @@ export function diagnosisMomentsOf(
       opponentBestmove: { state: "notInRecord" },
       evaluationAfter: to.evaluation,
       standingPair: standingPairOf(from.evaluation, to.evaluation, STANDING_BOUNDS),
+      ...(source === undefined ? {} : { evaluationSource: source }),
       failureEventBranchPly: eventPlies.has(branchPly) ? branchPly : null,
       consequences: actualContinuation(moves, branchPly, rule.windowPlies, initialSfen),
-      counterfactual: counterfactualOf({ record: from.record, moves, branchPly, windowPlies: rule.windowPlies, initialSfen, bestmoveAtBefore: userBestmoveAtBefore }),
+      counterfactual: (() => {
+        const counterfactual = counterfactualOf({ record: from.record, moves, branchPly, windowPlies: rule.windowPlies, initialSfen, bestmoveAtBefore: userBestmoveAtBefore });
+        return source === undefined ? counterfactual : withPvSource(counterfactual, source);
+      })(),
     };
   };
 
@@ -146,14 +161,17 @@ export function diagnosisMomentsOf(
   });
 
   // 最大の下がり: compared の組だけから選ぶ。同じ値なら早い組(`<` で置き換える)
+  // STEP D-SCREEN-2(計画 §3・S-13): 比べた組の出どころが混ざる局は、全部の組を軽い値で作り直して選ぶ(局の中の比べでもノード数を混ぜない)
+  const lightOnly = new Set((chosen ?? []).filter((pair) => pair.pair.kind === "compared").map((pair) => pair.source)).size > 1;
+  const dropPairs = lightOnly ? pairEvaluations(rows) : pairs;
   const excludedPairs: ExcludedPairs = {
-    mateDrop: pairs.filter((pair) => pair.kind === "mateAfter" && pair.mateAfter < 0).length,
-    mateRise: pairs.filter((pair) => pair.kind === "mateAfter" && pair.mateAfter > 0).length,
-    notCompared: pairs.filter((pair) => pair.kind === "notCompared").length,
+    mateDrop: dropPairs.filter((pair) => pair.kind === "mateAfter" && pair.mateAfter < 0).length,
+    mateRise: dropPairs.filter((pair) => pair.kind === "mateAfter" && pair.mateAfter > 0).length,
+    notCompared: dropPairs.filter((pair) => pair.kind === "notCompared").length,
   };
   let minIndex: number | undefined;
   let minDiffCp = 0;
-  pairs.forEach((pair, index) => {
+  dropPairs.forEach((pair, index) => {
     if (pair.kind !== "compared") return;
     if (minIndex === undefined || pair.diffCp < minDiffCp) {
       minIndex = index;
@@ -166,7 +184,7 @@ export function diagnosisMomentsOf(
   } else if (minDiffCp >= 0) {
     maxDrop = { eventClass: "maxDrop", kifuId, state: "noDrop", minDiffCp, excludedPairs };
   } else {
-    maxDrop = { ...momentOrder("maxDrop", kifuId, pairFields(minIndex), { kind: "cp", diffCp: minDiffCp }), excludedPairs };
+    maxDrop = { ...momentOrder("maxDrop", kifuId, pairFields(minIndex, lightOnly), { kind: "cp", diffCp: minDiffCp }), excludedPairs };
   }
   return { rises, maxDrop };
 }
@@ -186,6 +204,7 @@ function momentOrder<C extends "rise" | "maxDrop", Change>(eventClass: C, kifuId
     opponentBestmove: fields.opponentBestmove,
     evaluationAfter: fields.evaluationAfter,
     standingPair: fields.standingPair,
+    ...(fields.evaluationSource === undefined ? {} : { evaluationSource: fields.evaluationSource }),
     failureEventBranchPly: fields.failureEventBranchPly,
     consequences: fields.consequences,
     counterfactual: fields.counterfactual,

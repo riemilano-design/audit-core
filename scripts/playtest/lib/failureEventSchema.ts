@@ -23,10 +23,11 @@ import type { DiagnosisRule, FailureEvent } from "./failureEvent.js";
 import type { PositionFactsRules } from "./positionFacts.js";
 import type { StandingBounds } from "./standing.js";
 import { readDirtyState, type DirtyState, type GitState } from "./gitState.js";
+import type { ScreenMeta } from "./rescreen.js";
+// 版の文字列とスキーマのファイルがある版の並びは lib/schemaVersions.ts の 1 か所に置く(STEP D-SCREEN-2。司令塔 e3 の決定)
+import { FAILURE_EVENT_SCHEMA_VERSION, KNOWN_SCHEMA_VERSIONS } from "./schemaVersions.js";
 
-export const FAILURE_EVENT_SCHEMA_VERSION = "0.5" as const;
-/** スキーマのファイルがある版(古い版のファイルは消さない) */
-export const KNOWN_SCHEMA_VERSIONS = ["0.1", "0.2", "0.3", "0.4", "0.5"] as const;
+export { FAILURE_EVENT_SCHEMA_VERSION, KNOWN_SCHEMA_VERSIONS };
 export type SchemaVersion = (typeof KNOWN_SCHEMA_VERSIONS)[number];
 
 /** 出どころに写す meta の欄(v0.2)。meta に無かった欄は `null` にし、`unrecordedKeys` に名前を並べる(v0.2 計画 K-3) */
@@ -65,7 +66,18 @@ export type ProvenanceTruncationFields =
   | { trailingMoveTruncated?: never; truncatedTrailingMove?: never }
   | { trailingMoveTruncated: false; truncatedTrailingMove?: never }
   | { trailingMoveTruncated: true; truncatedTrailingMove: string };
-export type ProvenanceMeta = ProvenanceMetaBase & ProvenanceSideFields & ProvenanceTruncationFields & { unrecordedKeys: string[] };
+/**
+ * STEP D-SCREEN-2(計画 §3)。段 2 の記録の meta の screen の写し(deepPlies・measuredOrder は写さない)。**screen の無い記録はキーを出さない**
+ * (unrecordedKeys にも入れない。screen が無いのは「記録していない」ではなく「段 2 の記録でない」)。deepRun.enginePath は根からの相対、dirty は DirtyState の 4 値
+ */
+export interface ProvenanceScreen {
+  lightNodes: number;
+  deepNodes: number;
+  rule: { dropCp: number; advantageCp: number; advantageDropCp: number; before: number; after: number };
+  sourceSha256: string;
+  deepRun: { gitHead: string | null; dirty: DirtyState; enginePath: string; threads: number; startedAt: string; order: "plyAscending" };
+}
+export type ProvenanceMeta = ProvenanceMetaBase & ProvenanceSideFields & ProvenanceTruncationFields & { screen?: ProvenanceScreen } & { unrecordedKeys: string[] };
 
 /** 記録の meta が、出どころに写せる形(STEP JSON V0.3-META 計画 2.3 の 7 変種)に合わない(計画 K-3)。文に記録の kifuId と、食い違った欄の名前(`欄 <名前>:`)を書く */
 export class InvalidProvenanceMetaError extends Error {
@@ -172,6 +184,28 @@ function sideAndTruncationOf(raw: Record<string, unknown>): { fields: Provenance
   return { fields: Object.assign({}, side, truncation) as ProvenanceSideFields & ProvenanceTruncationFields, unrecorded };
 }
 
+/** STEP D-SCREEN-2。screen の写し(形は diagnose の不変条件 lib/screenDiagnosis.ts の screenOfRecord で確かめ済み)。無ければキーを出さない */
+function screenProvenanceOf(raw: Record<string, unknown>, repoRoot: string): { screen?: ProvenanceScreen } {
+  const screen = raw.screen as ScreenMeta | undefined;
+  if (screen === undefined) return {};
+  return {
+    screen: {
+      lightNodes: screen.lightNodes,
+      deepNodes: screen.deepNodes,
+      rule: { dropCp: screen.rule.dropCp, advantageCp: screen.rule.advantageCp, advantageDropCp: screen.rule.advantageDropCp, before: screen.rule.before, after: screen.rule.after },
+      sourceSha256: screen.sourceSha256,
+      deepRun: {
+        gitHead: screen.deepRun.gitHead,
+        dirty: readDirtyState({ dirty: screen.deepRun.dirty }),
+        enginePath: pathForProvenance(screen.deepRun.enginePath, repoRoot),
+        threads: screen.deepRun.threads,
+        startedAt: screen.deepRun.startedAt,
+        order: screen.deepRun.order,
+      },
+    },
+  };
+}
+
 export function provenanceMetaOf(meta: MetaLine | undefined, repoRoot: string): ProvenanceMeta | null {
   if (meta === undefined) return null;
   const raw = meta as unknown as Record<string, unknown>;
@@ -188,6 +222,7 @@ export function provenanceMetaOf(meta: MetaLine | undefined, repoRoot: string): 
     nodes: integerOf("nodes"),
     threads: integerOf("threads"),
     ...fields,
+    ...screenProvenanceOf(raw, repoRoot),
     unrecordedKeys: [...PROVENANCE_META_KEYS.filter((key) => !Object.hasOwn(raw, key)), ...SIDE_AND_TRUNCATION_META_KEYS.filter((key) => unrecorded.has(key))],
   } as ProvenanceMeta;
 }

@@ -1,7 +1,8 @@
 // STEP D-SCREEN-1(docs/STEP_D-SCREEN_PLAN_2026-09-15.md §1)。段 1 の記録(全行を軽いノード数で測った replay.ts の JSONL)を読み、
 // 急落の候補の前後の ready 行だけを深いノード数で測り直した段 2 の記録を書く。
 //
-// 使い方: npx tsx scripts/playtest/rescreen.ts <段1.jsonl> --out <段2.jsonl> --deep-nodes <N>
+// 使い方: npx tsx scripts/playtest/rescreen.ts <段1.jsonl> --out <段2.jsonl> --deep-nodes <N> [--all-plies]
+//   --all-plies(STEP D-SCREEN-2)は校正の床(計画 §5 の 0.)だけで使う: 候補を選ばず、全 ready 行を読み直す
 //
 // 【このファイルは薄くしてある】候補の選び方・読み直す行・記録の組み立ては lib/rescreen.ts にあり、そちらに試験がある。
 // ここでやるのは、記録を読む・書く前の確かめ(エンジンを起こす前)・エンジンを 1 本(Threads 1)起こして
@@ -23,7 +24,7 @@ import { DRAFT_SCREEN_RULE_1, planRescreen, rescreenRecords } from "./lib/rescre
 const REPO_ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), "..", "..");
 // 深い回は 1 プロセス・Threads 1(計画 §1)
 const DEEP_THREADS = 1;
-const USAGE = "使い方: npx tsx scripts/playtest/rescreen.ts <段1.jsonl> --out <段2.jsonl> --deep-nodes <N>";
+const USAGE = "使い方: npx tsx scripts/playtest/rescreen.ts <段1.jsonl> --out <段2.jsonl> --deep-nodes <N> [--all-plies]";
 
 function argValue(args: readonly string[], name: string): string | undefined {
   const index = args.indexOf(name);
@@ -35,6 +36,7 @@ async function main(): Promise<void> {
   const inputArg = args[0];
   const outArg = argValue(args, "--out");
   const deepNodes = Number(argValue(args, "--deep-nodes"));
+  const options = { allPlies: args.includes("--all-plies") };
   if (inputArg === undefined || inputArg.startsWith("--") || outArg === undefined || !Number.isInteger(deepNodes) || deepNodes <= 0) {
     console.error(USAGE);
     process.exitCode = 1;
@@ -46,7 +48,7 @@ async function main(): Promise<void> {
 
   const source = readFileSync(inputPath);
   // エンジンを起こす前に、段 1 として受け付けるかを確かめる
-  const { deepPlies } = planRescreen(source, DRAFT_SCREEN_RULE_1);
+  const { deepPlies } = planRescreen(source, DRAFT_SCREEN_RULE_1, options);
   console.error(`読み直す行: ${deepPlies.length}`);
 
   const enginePath = resolveEnginePath();
@@ -64,7 +66,7 @@ async function main(): Promise<void> {
       threads: DEEP_THREADS,
       startedAt,
       repoRoot: REPO_ROOT,
-    });
+    }, options);
     writeFileSync(outPath, text, "utf-8");
     console.error(`書き込み: ${outPath}`);
   } finally {

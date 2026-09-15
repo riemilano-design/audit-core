@@ -96,6 +96,8 @@ export interface CounterfactualDiff {
 
 export type CounterfactualComparison = {
   state: "compared";
+  /** STEP D-SCREEN-2(計画 §11)。比べた読み筋の出どころ(light = ③の探索 / deep = 読み直しの探索)。meta に screen のある記録だけに書く */
+  pvSource?: "light" | "deep";
   /** N */
   comparedPlies: number;
   windowPlies: number;
@@ -136,7 +138,7 @@ export type CounterfactualUnavailableState =
   /** 読み筋の 1 手目が根で非合法 */
   | "pvUnplayable";
 
-export type Counterfactual = CounterfactualComparison | { state: CounterfactualUnavailableState };
+export type Counterfactual = CounterfactualComparison | { state: CounterfactualUnavailableState; pvSource?: "light" | "deep" };
 
 /** 盤・手番・持ち駒(SFEN の先頭 3 欄)。手数の欄は比べない。 */
 function positionPart(sfen: string): string {
@@ -354,10 +356,18 @@ const UNAVAILABLE_LABELS: Record<CounterfactualUnavailableState, string> = {
   pvUnplayable: "読み筋の 1 手目が直前の行の局面で指せない(比べない)",
 };
 
+/** STEP D-SCREEN-2: 深い組の読み筋は③の探索ではない(noFocusBaseline の文から「③の」を外す) */
+const DEEP_UNAVAILABLE_LABELS: Record<CounterfactualUnavailableState, string> = { ...UNAVAILABLE_LABELS, noFocusBaseline: "現局面の読み筋が無い" };
+/** STEP D-SCREEN-2(計画 §11・S-22): 深い組の読み筋の出どころの文 */
+const DEEP_PV_LABEL = "読み直しの探索(評価値と同じ探索)";
+
 /** Event 1 件の行。`compared` なら 2 行(実戦の続き・読み筋)、それ以外は状態の 1 行。 */
 export function counterfactualLines(kifuId: string, branchPly: number, counterfactual: Counterfactual): string[] {
   const head = `- ${kifuId} 分岐点 ${branchPly}`;
-  if (counterfactual.state !== "compared") return [`${head} 読み筋: ${UNAVAILABLE_LABELS[counterfactual.state]}`];
+  const deep = counterfactual.pvSource === "deep";
+  if (counterfactual.state !== "compared") {
+    return [deep ? `${head} 読み筋(${DEEP_PV_LABEL}): ${DEEP_UNAVAILABLE_LABELS[counterfactual.state]}` : `${head} 読み筋: ${UNAVAILABLE_LABELS[counterfactual.state]}`];
+  }
   const { comparedPlies, windowPlies } = counterfactual;
   const plies =
     comparedPlies === windowPlies + 1
@@ -368,6 +378,6 @@ export function counterfactualLines(kifuId: string, branchPly: number, counterfa
   const firstMove = `1 手目は直前の bestmove と${counterfactual.pvFirstMoveIsBestmoveAtBefore ? "同じ" : "違う"}`;
   return [
     `${head} 実戦の続き(${plies}): ${factsText(counterfactual.actual)}`,
-    `${head} 読み筋(③の探索・${plies}・${boundedText}・${firstMove}): ${factsText(counterfactual.pv)}`,
+    `${head} 読み筋(${deep ? DEEP_PV_LABEL : "③の探索"}・${plies}・${boundedText}・${firstMove}): ${factsText(counterfactual.pv)}`,
   ];
 }

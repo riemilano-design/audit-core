@@ -14,6 +14,10 @@
 // (scripts/playtest/schemas/diagnosis-moment.v0.2.schema.json)の行で書く。組み立ては lib/diagnosisMoment.ts。**`--events` の行と表は変えない**。
 // **3 つのファイルは、すべての行を作ってから書く**(出どころの例外で一部のファイルだけが書かれる形を避ける ― 計画 S-8)。
 //
+// STEP D-SCREEN-2(docs/STEP_D-SCREEN_PLAN_2026-09-15.md §3・§11)。meta に screen のある段 2 の記録(rescreen.ts)は、組ごとに深い値か軽い値かを選ぶ
+// (判断は lib/screenDiagnosis.ts)。**段 2 の記録とその段 1 を一緒に渡したら、表を書く前に名前を並べて exit 1**(二重に数えない ― S-14)。
+// screen の無い記録の表と行は変えない(--events の版の欄のほか)。
+//
 // 【exit code】lib の例外は外へ出さず「数えられなかった」行にして exit 0。**入力が読めないとき(ENOENT・壊れた JSONL)・引数が誤りのときは exit 1**
 // (計画 D-1 の読み替え ― 2026-09-15、監査 B の非必須 d)。**記録の meta が出どころに写せる形でない(STEP JSON V0.3-META 計画 K-3)ときも、--events を書かずに exit 1**
 // (表は標準出力に書き終えてから止まる。前の回に同じパスへ書いた --events のファイルは消さない ― 計画 L-4)。
@@ -36,6 +40,7 @@ import { renderDiagnosisTotals } from "./lib/diagnosisTotals.js";
 import { buildDiagnosisReport, DRAFT_RULE_1, NOT_EVALUATION_CP, renderDiagnosisReport, STANDING_BOUNDS, type DiagnosisInput } from "./lib/failureEvent.js";
 import { buildProvenance, recordSha256, toEventLine } from "./lib/failureEventSchema.js";
 import { readGitState } from "./lib/gitState.js";
+import { screenInputConflicts, ScreenInputConflictError, screenOfRecord } from "./lib/screenDiagnosis.js";
 import { initialSfenOf } from "./lib/sideAlignment.js";
 
 /** このファイルがあるリポジトリ(作業ツリー)の根。出どころのパスはここからの相対にする */
@@ -90,6 +95,9 @@ function main(): void {
   }
 
   const entries = files.map(readInput);
+  // STEP D-SCREEN-2(計画 §3・S-14): 段 2 の記録とその段 1 を一緒に渡したら、表を書く前に止める
+  const conflicts = screenInputConflicts(entries.map((entry) => ({ name: entry.filePath, kifuId: entry.input.kifuId, sha256: entry.sha256, meta: entry.input.meta })));
+  if (conflicts.length > 0) throw new ScreenInputConflictError(conflicts.join(" / "));
   const inputs = entries.map((entry) => entry.input);
   const report = buildDiagnosisReport(inputs, DRAFT_RULE_1);
   // STEP D3(計画 Q-5): 入力が 2 本以上なら、入力ごとの表の後に群の合計の節を足す(1 本なら何も足さない)。
@@ -113,7 +121,9 @@ function main(): void {
       });
       // STEP D1b: 上がりと最大の下がり(同じ記録・同じ規則・同じ開始局面・同じ出どころ)。頼まれたときだけ組み立てる
       if (eventsRiseOut || eventsMaxDropOut) {
-        const moments = diagnosisMomentsOf(entry.input.kifuId, entry.input.records, DRAFT_RULE_1, initialSfenOf(entry.input.meta), row.result.events);
+        // STEP D-SCREEN-2: 段 2 の記録は Failure Event と同じ screen を渡す(数えた記録なので不変条件は確かめ済み)
+        const screen = screenOfRecord(entry.input.kifuId, entry.input.meta, entry.input.records);
+        const moments = diagnosisMomentsOf(entry.input.kifuId, entry.input.records, DRAFT_RULE_1, initialSfenOf(entry.input.meta), row.result.events, screen);
         riseLines.push(...moments.rises.map((moment) => JSON.stringify(toMomentLine(moment, provenance))));
         maxDropLines.push(JSON.stringify(toMomentLine(moments.maxDrop, provenance)));
       }

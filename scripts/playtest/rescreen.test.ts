@@ -41,7 +41,10 @@ const META = { kind: "meta", kifuId: "rescreen-cli", startedAt: "t", gitHead: nu
 describe("rescreen.ts(計画 §1)", () => {
   it("ソース照合: エンジンを起こす前に段 1 を確かめ、measureEngineReference を深いノード数で measure にし、Threads 1 で、lib の全文を書く", () => {
     const source = readFileSync(RESCREEN_TS, "utf8");
-    expect(source).toContain("  const { deepPlies } = planRescreen(source, DRAFT_SCREEN_RULE_1);\n");
+    expect(source).toContain("  const { deepPlies } = planRescreen(source, DRAFT_SCREEN_RULE_1, options);\n");
+    // STEP D-SCREEN-2: --all-plies は確かめと測りの両方に同じ options で渡す
+    expect(source).toContain('  const options = { allPlies: args.includes("--all-plies") };\n');
+    expect(source).toContain("    }, options);\n");
     expect(source).toContain(
       "    const text = await rescreenRecords(source, DRAFT_SCREEN_RULE_1, (sfen) => measureEngineReference(sfen, engine, deepNodes), {\n",
     );
@@ -50,7 +53,7 @@ describe("rescreen.ts(計画 §1)", () => {
     expect(source).toContain("const DEEP_THREADS = 1;\n");
     expect(source).toContain('    writeFileSync(outPath, text, "utf-8");\n');
     expect(source).toContain("  if (inputPath === outPath) throw new Error(");
-    expect(source.indexOf("planRescreen(source, DRAFT_SCREEN_RULE_1)")).toBeLessThan(source.indexOf("rawEngine.start();"));
+    expect(source.indexOf("planRescreen(source, DRAFT_SCREEN_RULE_1, options)")).toBeLessThan(source.indexOf("rawEngine.start();"));
   });
 
   it(
@@ -62,7 +65,7 @@ describe("rescreen.ts(計画 §1)", () => {
 
         const noArgs = runRescreen([]);
         expect(noArgs.status).toBe(1);
-        expect(noArgs.stderr).toContain("使い方: npx tsx scripts/playtest/rescreen.ts <段1.jsonl> --out <段2.jsonl> --deep-nodes <N>");
+        expect(noArgs.stderr).toContain("使い方: npx tsx scripts/playtest/rescreen.ts <段1.jsonl> --out <段2.jsonl> --deep-nodes <N> [--all-plies]");
 
         const noNodes = runRescreen([join(dir, "a.jsonl"), "--out", join(dir, "b.jsonl")]);
         expect(noNodes.status).toBe(1);

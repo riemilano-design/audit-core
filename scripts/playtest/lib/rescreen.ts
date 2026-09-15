@@ -110,6 +110,8 @@ export interface ScreenMeta {
   lightNodes: number;
   deepNodes: number;
   rule: ScreenRule;
+  /** 校正の床(`allPlies`)だけ true。候補を選ばず全 ready 行を読み直した(rule は写すが、選び方には使っていない)。本番の段 2 はキーを出さない(監査 N-6)。出どころには写さない */
+  allPlies?: true;
   /** 読み直した ready 行の ply(昇順) */
   deepPlies: number[];
   /** 段 1 のファイルのバイト列の sha256 */
@@ -161,19 +163,37 @@ function parseSource(source: Uint8Array): ParsedSource {
   return { rawLines, parsed, metaIndex, meta, records, lightNodes };
 }
 
+/**
+ * 読み直す行の選び方(STEP D-SCREEN-2)。`allPlies` は**校正の床(計画 §5 の 0.)だけ**で使う: 候補を選ばず、全 ready 行を読み直す。
+ * `rule` はそのまま写し、`deepPlies` が全 ready 行になる。選び方が meta から読めるように、screen の `rule` の直後に `allPlies: true` を書く(監査 N-6)。
+ */
+export interface RescreenOptions {
+  allPlies?: boolean;
+}
+
+function chooseDeepPlies(records: readonly RecordLine[], rule: ScreenRule, options: RescreenOptions): number[] {
+  return options.allPlies ? readEvaluations(records).map((row) => row.ply) : deepPliesOf(records, rule);
+}
+
 /** 書く前の確かめ(CLI がエンジンを起こす前に呼ぶ)。読み直す行を返す */
-export function planRescreen(source: Uint8Array, rule: ScreenRule): { deepPlies: number[]; lightNodes: number } {
+export function planRescreen(source: Uint8Array, rule: ScreenRule, options: RescreenOptions = {}): { deepPlies: number[]; lightNodes: number } {
   const { records, lightNodes } = parseSource(source);
-  return { deepPlies: deepPliesOf(records, rule), lightNodes };
+  return { deepPlies: chooseDeepPlies(records, rule, options), lightNodes };
 }
 
 /**
  * 段 2 の記録の全文を返す(改行の並びは段 1 のまま)。`measure` は読み直す行ごとに 1 回、ply の昇順で呼ぶ。
  * 読み直した行には `engineReferenceDeep`(= 戻り値の reference。測らない・測れなかったは null)と `searchPvsDeep`(= **同じ呼び出しの** searchPvs)を足す。
  */
-export async function rescreenRecords(source: Uint8Array, rule: ScreenRule, measure: ScreenMeasure, run: DeepRunInput): Promise<string> {
+export async function rescreenRecords(
+  source: Uint8Array,
+  rule: ScreenRule,
+  measure: ScreenMeasure,
+  run: DeepRunInput,
+  options: RescreenOptions = {},
+): Promise<string> {
   const { rawLines, parsed, metaIndex, meta, records, lightNodes } = parseSource(source);
-  const deepPlies = deepPliesOf(records, rule);
+  const deepPlies = chooseDeepPlies(records, rule, options);
   const readyByPly = new Map(records.filter((record) => record.phase === "ready").map((record) => [record.ply, record]));
 
   const measuredOrder: number[] = [];
@@ -189,6 +209,7 @@ export async function rescreenRecords(source: Uint8Array, rule: ScreenRule, meas
     lightNodes,
     deepNodes: run.deepNodes,
     rule,
+    ...(options.allPlies ? { allPlies: true as const } : {}),
     deepPlies,
     sourceSha256: recordSha256(source),
     deepRun: {

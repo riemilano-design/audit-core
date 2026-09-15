@@ -24,7 +24,7 @@ import {
 import { actualContinuation, buildDiagnosisReport, diagnoseRecords, DRAFT_RULE_1, NOT_EVALUATION_CP, renderDiagnosisReport, STANDING_BOUNDS } from "./failureEvent.js";
 import { positionFactsDiff, positionFactsOf } from "./positionFacts.js";
 import { engineRef, GAME01_MOVES, plantedRecords } from "./failureEventFixtures.js";
-import { buildProvenance, loadFailureEventSchema, toEventLine, validateFailureEventLine } from "./failureEventSchema.js";
+import { buildProvenance, FAILURE_EVENT_SCHEMA_VERSION, loadFailureEventSchema, toEventLine, validateFailureEventLine } from "./failureEventSchema.js";
 import { alignMovesToSente } from "./sideAlignment.js";
 
 const INIT = "lnsgkgsnl/1r5b1/ppppppppp/9/9/9/PPPPPPPPP/1B5R1/LNSGKGSNL b - 1";
@@ -324,7 +324,7 @@ describe("STEP D2 の固定例(記録から。計画 3.)", () => {
     expect(() => diagnoseRecords("f-10", records, DRAFT_RULE_1, DEFAULT_INITIAL_SFEN)).toThrow(IllegalMoveError);
   });
 
-  it("F-11 端から端まで: GAME01 の分岐点 49 に counterfactual が付き、N = 6 で実戦の byOpponent は D1 の consequences.checks と一致し、1 行は v0.5 のスキーマを通り、Markdown に 2 行", () => {
+  it("F-11 端から端まで: GAME01 の分岐点 49 に counterfactual が付き、N = 6 で実戦の byOpponent は D1 の consequences.checks と一致し、1 行は今の版のスキーマを通り、Markdown に 2 行", () => {
     const records = plantedRecords(GAME01_MOVES, {
       48: engineRef(500, { afterPassMate: 3, dropCp: 350, bestmove: "2h2g" }),
       50: engineRef(-300),
@@ -338,7 +338,7 @@ describe("STEP D2 の固定例(記録から。計画 3.)", () => {
     expect(c.actual.checks.byOpponent).toEqual(event.consequences.checks);
     expect(event.consequences.checks).toEqual([52, 54]);
 
-    // F-11 の v0.4(STEP D2.5 で版は 0.5): toEventLine の 1 行(ファイルと同じ形)は counterfactual を consequences の後に持ち、今の版のスキーマを通る
+    // F-11 の v0.4(STEP D2.5 で版は 0.5、STEP D-SCREEN-2 から版は定数で見る): toEventLine の 1 行(ファイルと同じ形)は counterfactual を consequences の後に持ち、今の版のスキーマを通る
     const provenance = buildProvenance({
       recordPath: "game-01.jsonl",
       recordSha256: "0".repeat(64),
@@ -352,10 +352,10 @@ describe("STEP D2 の固定例(記録から。計画 3.)", () => {
       repoRoot: "/nonexistent-repo-root",
     });
     const line = JSON.parse(JSON.stringify(toEventLine(event, provenance))) as Record<string, unknown>;
-    expect(line.schemaVersion).toBe("0.5");
+    expect(line.schemaVersion).toBe(FAILURE_EVENT_SCHEMA_VERSION);
     expect(Object.keys(line).indexOf("counterfactual")).toBe(Object.keys(line).indexOf("consequences") + 1);
     expect(line.counterfactual).toEqual(JSON.parse(JSON.stringify(event.counterfactual)));
-    expect(validateFailureEventLine(line, loadFailureEventSchema("0.5"))).toEqual([]);
+    expect(validateFailureEventLine(line, loadFailureEventSchema())).toEqual([]);
 
     const report = renderDiagnosisReport(buildDiagnosisReport([{ kifuId: "game-01", meta: undefined, records, errorLines: [] }], DRAFT_RULE_1));
     const lines = report.filter((line) => line.startsWith("- game-01 分岐点 49 "));

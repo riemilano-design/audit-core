@@ -14,6 +14,7 @@
 // - STEP D2(監査 1e の任意 N-1)… 表の後に K-3 で止まる入力を置いても、パイプで表の末尾まで届いてから exit 1 で止まること(捕まえない例外で止まると切れる)。
 // - STEP D1b … --events-rise・--events-maxdrop を付けても --events と表が変わらないこと(G-9)、K-3 で 3 つのファイルのどれも書き換えないこと(G-16)、
 //   旗を 1 つだけ渡しても、そのファイルは 2 つを一緒に渡した回と同じこと(監査 A の S-1)。
+// - STEP D-SCREEN-2 … 段 2 の記録とその段 1 を一緒に渡すと表を書かずに exit 1(S-14)、段 2 の記録だけなら行に出どころの欄が出ること。
 //
 // 【静かにスキップしない】npx・tsx・git が無ければ execFileSync が例外を投げて赤になる。
 // 【一時ディレクトリ以外に書かない】走らせる前と後で git status(無視されるファイルも 1 本ずつ。
@@ -33,7 +34,7 @@ import { diagnosisMomentsOf, loadDiagnosisMomentSchema, toMomentLine } from "./l
 import { validate } from "./lib/eventSchema.js";
 import { buildDiagnosisReport, DRAFT_RULE_1, NOT_EVALUATION_CP, renderDiagnosisReport, STANDING_BOUNDS, type DiagnosisInput } from "./lib/failureEvent.js";
 import { engineRef, FOLD_MOVES, FOLD_START, GAME01_MOVES, plantedRecords } from "./lib/failureEventFixtures.js";
-import { buildProvenance, loadFailureEventSchema, toEventLine, validateFailureEventLine } from "./lib/failureEventSchema.js";
+import { buildProvenance, FAILURE_EVENT_SCHEMA_VERSION, loadFailureEventSchema, toEventLine, validateFailureEventLine } from "./lib/failureEventSchema.js";
 import { readGitState } from "./lib/gitState.js";
 import { initialSfenOf } from "./lib/sideAlignment.js";
 
@@ -77,7 +78,12 @@ describe("diagnose.ts(計画 5.2)", () => {
     // STEP D2(監査 1e の R-1): 終わるときに process.exit を呼ばない(パイプの標準出力が書き終わる前に切れる。子プロセスの試験 R-1 でも見る)
     expect(source).not.toContain("process.exit(");
     // STEP D1b: 上がりと最大の下がりを同じ記録・規則・開始局面・出どころで組み立て、3 つのファイルは全部の行を作ってから書く
-    expect(source).toContain("        const moments = diagnosisMomentsOf(entry.input.kifuId, entry.input.records, DRAFT_RULE_1, initialSfenOf(entry.input.meta), row.result.events);");
+    expect(source).toContain("        const moments = diagnosisMomentsOf(entry.input.kifuId, entry.input.records, DRAFT_RULE_1, initialSfenOf(entry.input.meta), row.result.events, screen);");
+    // STEP D-SCREEN-2(計画 §3・S-14): 表を書く前に段 2 とその段 1 の組を確かめ、moment にも Failure Event と同じ screen を渡す
+    expect(source).toContain("  const conflicts = screenInputConflicts(entries.map((entry) => ({ name: entry.filePath, kifuId: entry.input.kifuId, sha256: entry.sha256, meta: entry.input.meta })));\n");
+    expect(source).toContain('  if (conflicts.length > 0) throw new ScreenInputConflictError(conflicts.join(" / "));\n');
+    expect(source.indexOf("screenInputConflicts(entries")).toBeLessThan(source.indexOf("buildDiagnosisReport(inputs"));
+    expect(source).toContain("        const screen = screenOfRecord(entry.input.kifuId, entry.input.meta, entry.input.records);\n");
   });
 
   it(
@@ -178,11 +184,12 @@ describe("diagnose.ts(計画 5.2)", () => {
             positionFacts: { zone: "king_and_eight_neighbors", reach: "non_king_pieces", control: "squares" },
           });
         }
-        // T-6(STEP JSON v0 計画 6.2): toEqual は欄の順を見ないので、先頭であることは別に見る。版は定数でなく値で見る
+        // T-6(STEP JSON v0 計画 6.2): toEqual は欄の順を見ないので、先頭であることは別に見る。
+        // 版は 1 か所の定数(lib/schemaVersions.ts。STEP D-SCREEN-2)で見る。定数の値の誤りは、今の版のスキーマの schemaVersion の const で落ちる
         const schema = loadFailureEventSchema();
         for (const line of writtenEvents) {
           expect(Object.keys(line)[0]).toBe("schemaVersion");
-          expect(line.schemaVersion).toBe("0.5");
+          expect(line.schemaVersion).toBe(FAILURE_EVENT_SCHEMA_VERSION);
           expect(validateFailureEventLine(line, schema)).toEqual([]);
         }
       } finally {
@@ -539,7 +546,7 @@ describe("diagnose.ts(計画 5.2)", () => {
           const meta = metaOf(line);
           expect(seven.filter((key) => Object.hasOwn(meta, key))).toEqual([]);
           expect(meta.unrecordedKeys).toEqual(["dirty", "searchMode", "nodes", "threads", ...seven]);
-          expect(line.schemaVersion).toBe("0.5");
+          expect(line.schemaVersion).toBe(FAILURE_EVENT_SCHEMA_VERSION);
           expect(validateFailureEventLine(line, schema)).toEqual([]);
         }
         for (const line of foldLines) {
@@ -554,7 +561,7 @@ describe("diagnose.ts(計画 5.2)", () => {
             truncatedTrailingMove: "2g2f",
           });
           expect(meta.unrecordedKeys).toEqual(["dirty", "searchMode", "nodes", "threads"]);
-          expect(line.schemaVersion).toBe("0.5");
+          expect(line.schemaVersion).toBe(FAILURE_EVENT_SCHEMA_VERSION);
           expect(validateFailureEventLine(line, schema)).toEqual([]);
         }
       } finally {
@@ -604,5 +611,59 @@ describe("diagnose.ts(計画 5.2)", () => {
       }
     },
     60_000,
+  );
+  // STEP D-SCREEN-2(計画 §3・S-14)。段 2 の記録とその段 1 を一緒に渡したら、表を書かずに名前を並べて止める。段 2 の記録だけなら通り、行に出どころの欄が出る
+  it(
+    "子プロセス(D-SCREEN-2 の S-14): 段 2 の記録とその段 1 を一緒に渡すと、表も --events も書かずに名前を並べて exit 1。段 2 の記録だけなら exit 0 で、Event の行に evaluationSource・pvSource・出どころの screen がある",
+    () => {
+      const dir = mkdtempSync(join(tmpdir(), "d-screen-2-s14-"));
+      try {
+        const records = plantedRecords(GAME01_MOVES, { 20: engineRef(0), 22: engineRef(-500) }).map((record) =>
+          record.engineReference ? { ...record, engineReference: { ...record.engineReference, nodes: 400_000 } } : record,
+        );
+        const meta1 = { kind: "meta", kifuId: "d-screen-2", startedAt: "t", gitHead: null, enginePath: ENGINE_PATH, searchMode: "nodes", nodes: 400_000, threads: 1, referenceNodes: 400_000 };
+        const stage1 = join(dir, "stage1.jsonl");
+        writeFileSync(stage1, `${[meta1, ...records].map((line) => JSON.stringify(line)).join("\n")}\n`, "utf-8");
+        const sha1 = createHash("sha256").update(readFileSync(stage1)).digest("hex");
+        const screen = {
+          lightNodes: 400_000,
+          deepNodes: 4_000_000,
+          rule: { dropCp: -300, advantageCp: 300, advantageDropCp: -200, before: 1, after: 2 },
+          deepPlies: [],
+          sourceSha256: sha1,
+          deepRun: { gitHead: null, dirty: null, enginePath: ENGINE_PATH, threads: 1, startedAt: "t2", order: "plyAscending", measuredOrder: [] },
+        };
+        const stage2 = join(dir, "stage2.jsonl");
+        writeFileSync(stage2, `${[{ ...meta1, screen }, ...records].map((line) => JSON.stringify(line)).join("\n")}\n`, "utf-8");
+        const eventsOut = join(dir, "events.jsonl");
+        const before = gitStatus();
+
+        let failure: { status: number | null; stdout: string; stderr: string } | undefined;
+        try {
+          execFileSync("npx", ["tsx", DIAGNOSE_TS, stage1, stage2, "--events", eventsOut], { cwd: REPO_ROOT, encoding: "utf-8", stdio: ["ignore", "pipe", "pipe"] });
+        } catch (error) {
+          failure = error as { status: number | null; stdout: string; stderr: string };
+        }
+        expect(failure?.status).toBe(1);
+        expect(String(failure!.stderr)).toContain(`ScreenInputConflictError: 段 2 の記録 ${stage2} と、その段 1 の記録 ${stage1} を一緒に渡している(screen.sourceSha256 が一致)`);
+        expect(String(failure!.stderr)).toContain(`同じ kifuId d-screen-2 に、screen のある記録(${stage2})と無い記録(${stage1})を一緒に渡している`);
+        expect(String(failure!.stdout)).toBe("");
+        expect(existsSync(eventsOut)).toBe(false);
+
+        const stdout = execFileSync("npx", ["tsx", DIAGNOSE_TS, stage2, "--events", eventsOut], { cwd: REPO_ROOT, encoding: "utf-8" });
+        expect(stdout).toContain("## 読み直し(STEP D-SCREEN。meta に screen のある記録だけ)");
+        const lines = readFileSync(eventsOut, "utf-8")
+          .trim()
+          .split("\n")
+          .map((line) => JSON.parse(line) as { branchPly: number; branch: { evaluationSource?: string }; counterfactual: { pvSource?: string }; provenance: { record: { meta: { screen?: { sourceSha256: string } } } } });
+        expect(lines.map((line) => [line.branchPly, line.branch.evaluationSource, line.counterfactual.pvSource])).toEqual([[21, "light", "light"]]);
+        expect(lines[0]!.provenance.record.meta.screen?.sourceSha256).toBe(sha1);
+        expect(validateFailureEventLine(lines[0], loadFailureEventSchema())).toEqual([]);
+        expect(gitStatus()).toBe(before);
+      } finally {
+        rmSync(dir, { recursive: true, force: true });
+      }
+    },
+    120_000,
   );
 });

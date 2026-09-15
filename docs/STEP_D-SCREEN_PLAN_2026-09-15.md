@@ -324,3 +324,321 @@ T₂段 = t_boot + R × t_row(400k) + D × t_ref(4M)。R = ready 行、D = 読�
 
   - 予測 4/4。校正は 2 回とも exit 0・20 件。
   - 当てた後、`lib/rescreen.ts` は `f99363d9` に戻った。
+
+## 13. 実装の記録(D-SCREEN-2。worktree `wt-dscreen2`、基点 `f39fd21`。**エンジンは使っていない**。書いたのは B)
+
+**範囲**(司令塔 e3 の合図と確認、2026-09-15):
+- この STEP でやったこと: `diagnose.ts` の規則(§3)、`pvSource`・`evaluationSource`、校正の道具、固定例 S-6〜S-10・S-13〜S-18・S-20〜S-23(S-11 は D-SCREEN-1 で入れ済み)
+- **版**: Failure Event v0.6・diagnosis-moment v0.3 として書いた。D2.5(1e)が先に v0.5・v0.2 のスキーマをコミットする前提(D2.5 計画 Q-3「先にスキーマをコミットした方が取る」)
+  - 版の文字列と、スキーマのファイルがある版の並びは `lib/schemaVersions.ts` の 1 か所に置いた
+  - 載せ替えの前(`wt-dscreen2`、13.2〜13.4)の v0.6 は「v0.4 + D-SCREEN の欄」で、並びの 0.5 が抜けていた。**コミットでは連番にする**(司令塔 e3)
+  - D2.5 が `e9e7bf2` で先に v0.5・v0.2 を入れたので、B が `wt-dscreen2r` に載せ替え、同じ道具を基の版 0.5・0.2 に当てて作り直した(13.6)
+
+### 13.1 設計の決め(計画の文だけでは決まらない点。実装の前に `scratchpad/dscreen2-predictions.md` に書いたとおり)
+
+- **X-1 深い値を使う組**
+  - 組の 2 行とも `engineReferenceDeep` のキーがあり、その値を `evaluationOf` に掛けた状態が measured のときだけ、2 行とも深い値にする。ほかは 2 行とも軽い値
+  - 深い組は、行の `engineReference`・`searchPvs` を深い欄に差し替えた行として渡す(評価も読み筋も同じ読み直しの探索から取る ― §11)
+- **X-2 deepUnavailable**
+  - 読み直したのに(キーがある)、深い状態が notMeasurable か notEvaluation の行を含む組を数える
+  - 王手中・終局で測らなかった行(notMeasuredInCheck・notMeasuredGameEnd)は数えない
+- **X-3 件数の数え方**
+  - 表「評価の状態と組」の行の件数(ready 行・測った…)は、段 1 の値のまま
+  - 組の件数と Failure Event は、組ごとに選んだ出どころで数える
+- **X-4 規則の置き場所**
+  - 新しい `lib/screenDiagnosis.ts` に置いたもの: 組の出どころ・不変条件・段 2 とその段 1 の組・Markdown の節
+  - `failureEvent.ts`・`diagnosisMoment.ts`・`counterfactual.ts`・`failureEventSchema.ts`・`diagnose.ts` には「出どころを受けて渡す」だけを足した
+- **X-5 数えない記録(S-8・S-23)**
+  - 対象:
+    - screen の形が違う
+    - ready 行の `engineReference.nodes` ≠ lightNodes、`engineReferenceDeep.nodes` ≠ deepNodes
+    - 深い欄を持つ ready 行の集合・deepPlies・measuredOrder が一致しない
+    - `searchPvsDeep` と `engineReferenceDeep` のキーの有無が食い違う
+    - ready でない行に深い欄がある
+    - screen が無いのに深い欄がある
+  - 扱い: `InvalidScreenRecordError` を投げ、`buildDiagnosisReport` が「数えられなかった」の行にする
+- **X-6 段 2 とその段 1(S-14)**
+  - `diagnose.ts` が表を書く前に確かめ、名前を並べて `ScreenInputConflictError` で exit 1 にする(判定は lib の純粋関数)
+  - 止める組: (i) screen のある入力の `sourceSha256` が、別の入力の sha256 と同じ (ii) 同じ kifuId に、screen のある入力と無い入力がある
+  - 同じ kifuId の screen の無い入力どうし・screen のある入力どうしは、今のまま通す
+- **X-7 最大の下がり(S-13・S-20)**
+  - 組ごとの出どころで compared になった組の出どころが 2 種類なら、全部の組を軽い値で作り直して選ぶ(excludedPairs も選んだほうの組で数える)
+  - rise は組ごとの出どころのまま(S-21)
+- **X-8 欄の置き場所**
+  - `evaluationSource` は Event の `branch` の最後、moment の組の行では `evaluationAfter` の後ろ
+  - `pvSource` は counterfactual の `state` の直後
+  - どちらも screen のある記録だけに書く
+  - 出どころの meta の `screen`: deepPlies・measuredOrder を除き、deepRun.enginePath は根からの相対、dirty は DirtyState の 4 値。置き場所はそろえ・打ち切りの欄の後ろ・unrecordedKeys の前
+  - screen の無い記録はキーを出さない
+- **X-9 Markdown(K-8 の決め)**
+  - screen のある入力があるときだけ、読み筋の節の見出しを §11 の文にする
+    - light・deep は、screen のある記録の Event だけを数える
+    - screen の無い記録の Event があれば「・screen の無い記録 k 件」を足す
+  - 新しい節「## 読み直し(STEP D-SCREEN。meta に screen のある記録だけ)」を足す
+  - 深い組の行頭は「読み筋(読み直しの探索(評価値と同じ探索)・…)」
+  - compared でない深い行は「読み筋(読み直しの探索(評価値と同じ探索)): …」で、noFocusBaseline の文から「③の」を外す
+- **X-10 スキーマ**
+  - 道具 `scratchpad/dscreen2-schema-gen.py`(基の版を引数に取る)で、基の版に任意の欄を足して作った。古い版のファイルは変えていない
+  - 今の版が「基の版 + D-SCREEN の欄」であることを試験で見る(`FAILURE_EVENT_SCREEN_BASE_VERSION`・`DIAGNOSIS_MOMENT_SCREEN_BASE_VERSION`)
+- **X-11 校正の道具**
+  - `lib/screenCalibration.ts`(純粋関数)に置いたもの:
+    - Event の集合の一致・相手にだけある・段 2 にだけある
+    - counterfactual の状態の一致(pvSource ごとの分子・分母)
+    - 深い組の 1 手目(標識の有無で分ける)
+    - 床の行 (i)・(vi)
+    - 2 回の rescreen (iii)・(iv)(meta は deepRun の startedAt・gitHead・dirty を除く)
+    - 同じ局面の 2 回の測定 (v)
+    - measure-twice の測る行の決め方
+  - CLI は 2 本: `screen-calibrate.ts`(記録を読むだけ)・`measure-twice.ts`(エンジンを起こす。試験はソース照合と、起こさずに止まる経路だけ)
+  - 床は全 ready 行を読み直す必要があるので、`rescreen.ts` に `--all-plies`(lib の `allPlies`)を足した。D-SCREEN-1 のファイルに触った
+- **X-12 校正の lib の置き場所**(監査 N-7): §5 の「`scan-compare.ts` の lib を Event の単位に広げる」とは違い、新しい `lib/screenCalibration.ts` に置いた(`scan-compare.ts` とその lib は変えていない)
+- **K-8(§11 の既知事項の候補)** は X-9 で決めて、固定例を置いた
+- **K-7**(`apps/` の「ハーネスは読み筋を捨てる」の注記)は、`apps/` に触らないので古いまま
+
+### 13.2 変えたファイル(sha256。worktree の `scripts/playtest/` から)
+
+| ファイル | sha256 | 行 |
+|---|---|---|
+| `lib/schemaVersions.ts`(新規) | `a1f06e760842f9699f764e477bfe4a8a333efefe34e1f3886bded040c0dacdf6` | 21 |
+| `lib/screenDiagnosis.ts`(新規) | `106d8d5d1844967445944188b8e11611cb39877a0e6f4435a59a34779a6bd3b8` | 272 |
+| `lib/screenDiagnosis.test.ts`(新規) | `1879c4110fe5c8c5af65921361d85289ecc1282e2ab28beb4824ac6560b782f9` | 530 |
+| `lib/screenCalibration.ts`(新規) | `96a89222b5e8dc5e8ca9c55a8b1dba82fdf841c42ff16473ada5007357b90992` | 344 |
+| `lib/screenCalibration.test.ts`(新規) | `52770fc3d7d4a9ca5343ca11fb8a9d141ade9289aff621f4d5016dc364497091` | 182 |
+| `screen-calibrate.ts`(新規) | `a7b298dc792fbd5f22dc510e8a5ee109b19c5f3b0c4a18d8cb3704001c3041c7` | 88 |
+| `screen-calibrate.test.ts`(新規。measure-twice.ts の見張りも持つ) | `e8a25e0ad9d1374d44a5f6ff09481235c3b10273946e4a5a205d2379d034e043` | 160 |
+| `measure-twice.ts`(新規) | `dc3725aa8d51606a6c8adfc4dd69b5bc3e27c6bf7484e96a42d4356a8ab8fcda` | 114 |
+| `schemas/failure-event.v0.6.schema.json`(新規) | `9c163f527d496b91c09daaab7f5bfd38b141dc5b9c43446f748f64d00365cd31` | 3132 |
+| `schemas/diagnosis-moment.v0.3.schema.json`(新規) | `036e81ce01c0d64a0f87aff78a3a4795d022f0072f2a63d94224e48b5cda8e09` | 12500 |
+| `lib/failureEvent.ts` | `0d5f693a02e0cafa80118b1095e4ff831991feee09fa1e2b94b05916dfc7936d` | 685 |
+| `lib/diagnosisMoment.ts` | `49a2a8b92534d32ce1845b721fd023f67d3c779a54330923f0a909b7badacd7f` | 220 |
+| `lib/counterfactual.ts` | `085c1b55d369dfc54d5bfd00848808aef2a66c8a5b4818f9449646aa3bb7c341` | 365 |
+| `lib/failureEventSchema.ts` | `eb1f221c3ca23aacaecef245fe898b8654d4569548a7c28877fb4615c46a104e` | 275 |
+| `diagnose.ts` | `254d9d055ec8b4769a9a1b452e784f1edf62f93cc4501a504c01a27e35ec5f12` | 153 |
+| `lib/rescreen.ts`(D-SCREEN-1 のファイル。`allPlies`) | `ad7af055e23a28ad5ca4265fc32f96fd4081f69f7d2e08d1fc17f97951fcf5ea` | 234 |
+| `rescreen.ts`(D-SCREEN-1 のファイル。`--all-plies`) | `bfbd87ce612801733c41b98cb0681deb0ad74916b2d376d90bd69780722b2f27` | 81 |
+| `diagnose.test.ts` | `9608ceb56c875137c1bd84cda35f9601e040d5b49dfbb6f4fc019738e182d66c` | 656 |
+| `lib/counterfactual.test.ts` | `c8c37784905bb227c206a31f05be8013c33bee700c020087c234326dd2bcc5b7` | 386 |
+| `lib/diagnosisMoment.test.ts` | `2b5b9ab35a7e82ea8e6e7ced944b0b075bbef4f5d86e6f6243daa842011ce98e` | 419 |
+| `lib/failureEventSchema.test.ts` | `b587be1acc8c839e2564ca07143319026996875c5dda9fc3b97bf09dbb9490e4` | 1031 |
+| `lib/rescreen.test.ts` | `4415fc589db7bf4cd17c1b6a9ed3a139ff99b25de1ffa0117cb44b9d567b7a66` | 313 |
+| `rescreen.test.ts` | `35087cf9287f28e4cd65ec470c81f93abb65cdbb9e0c0b05b8adefe91d4bb4a1` | 98 |
+
+- 変更した 13 本の差分: `scratchpad/dscreen2-diff.out`(`84f7a165…`、+269 / −65)。新規 10 本は差分に入らない
+- スキーマの道具: `scratchpad/dscreen2-schema-gen.py`(`9c93ea89…`)を `<worktree> 0.4 0.6 0.1 0.3` で回した。古い版の 5 ファイルは sha が変わらないことを道具の中で確かめた
+- 既存の試験で直したのは、今の版の文字列を見ていたところだけ(値 → `lib/schemaVersions.ts` の定数)と、source 照合の 1 行。v0.4 の構造の試験は v0.4 のファイルを読むようにした。0.6 → 0.4 → 0.3 → 0.2 → 0.1 の鎖に 0.4 の段を足した
+
+### 13.3 試験・型検査と予測(worktree の根から)
+
+- **予測は実装の前に書いた**: `scratchpad/dscreen2-predictions.md`(`24e563d3ee7a54bd67f3699e27d90eca865f911f6f6729e8aff0dff3aa28b227`、14:21:38Z)
+
+| # | 予測 | 実測 | 判定 |
+|---|---|---|---|
+| Q-1 | 基点の scripts/playtest は 643 件 | 643 件(司令塔のコミットの記録。この worktree の全件 691 − 足した 48) | 的中 |
+| Q-2 | 足す試験は 45〜80 件 | **48 件**(screenDiagnosis 33・screenCalibration 9・CLI 4・rescreen 1・diagnose の S-14 1) | 的中 |
+| Q-3 | typecheck:scripts は rc 0 | rc 0 | 的中 |
+| Q-4 | screen の無い記録でバイト一致 | 下の表のとおり全部一致 | 的中 |
+| Q-5 | 変異は全部鳴る | 27/27 | 的中 |
+| Q-6 | 変えるファイルは 14〜22 本 | **23 本**(新規 10・変更 13)+ 計画書 | **外れ**(rescreen の `--all-plies` と、版の定数に移した既存の試験 4 本が、見立てより多かった) |
+
+- **全件**: 49 ファイル・**691 件通過**
+- **screen の無い記録のバイト一致(S-9・Q-4)**
+  - 手順: f39fd21 の worktree(`wt-dscreen2-base`)と新しい worktree で、同じ記録に `diagnose.ts … --events --events-rise --events-maxdrop` を掛けて比べた
+  - 道具: `scratchpad/dscreen2-g9-base.py`・`dscreen2-g9-base-real.py`(基点)、`dscreen2-g9-compare.py`(`83f56d01…`)
+  - 出力: `dscreen2-g9-compare.out`(`b38404b5…`)
+  - 比べた記録: コミット済みの 9 か所・94 本。**real-03 の kifu-01・04・07・09(1 人目の後手 4 局)は、D3 の定義承認まで開かないので掛けていない**
+  - **Markdown 9/9 がバイト一致**
+  - **--events・--events-rise・--events-maxdrop の 559/559 行が、`schemaVersion` と `provenance.analysis` を除いて一致**(欄の並びも比べた)
+  - **新しい欄の文字列(evaluationSource・pvSource・screen)の漏れ 0**
+
+### 13.4 変異(規則 11.3・11.8)
+
+- **道具**: `scratchpad/dscreen2-mutate.py`(`76c66f9c2bde71350d4037959ced6719712a4be3dc1df7a2990e85700b292d1a`)。予測は、実装と試験の後・当てる前に、道具の中に試験の単位で書いた
+- **出力**: `scratchpad/dscreen2-mutate.out`(`70d081f7fabdadcbea55e446b31106c9e3541913c4f95bda213e7f20b23825b5`)。道具と予測のファイルの sha を、同じ逐次コマンドで記録した
+- **試験の範囲**: 新しい試験 5 ファイル(67 件)で当てた。全件は変異なしで回した
+- 校正は exit 0・67 件。当てた後、9 ファイルとも元の sha に戻った
+- **適用 27 / 鳴った 27 / 沈黙 0 / 適用できなかった 0。中心 12/12。予測 27/27**
+- エンジンを起こす経路に届く変異は入れていない
+
+| # | 変異 | 中心 / 周辺 | 鳴った試験 |
+|---|---|---|---|
+| Z-3 | 混ざった組で、深く測れた行だけ深い値 | 中心 | S-6・S-16・X-3 |
+| Z-4 | 深く測れなかった行を含む組を数えない | 中心 | S-7 |
+| Z-5a | ノード数の不変条件を外す | 中心 | S-8(lightNodes・deepNodes) |
+| Z-5b | deepPlies・measuredOrder の不変条件を外す | 中心 | S-8(deepPlies・measuredOrder) |
+| Z-7 | screen の無い記録にも evaluationSource | 中心 | S-9 の行 |
+| Z-11 | 最大の下がりで出どころを混ぜる | 中心 | S-13・S-20 |
+| Z-13a | 段 2 とその段 1(sha の一致)を通す | 周辺 | S-14 (i) |
+| Z-13b | screen の無い同じ kifuId も止める | 周辺 | S-14 (iii) |
+| Z-14 | 深い組でも searchPvs を使う | 中心 | S-15・S-15b・S-17・S-18・S-21・S-22・校正の Event |
+| Z-15 | pvSource をいつも light | 中心 | S-15・S-15b・S-17・S-18・S-21・S-22・段 2 の行 |
+| Z-16 | 深い読み筋が短い・無いとき軽いほうへ戻る | 中心 | S-17・S-18 |
+| Z-19 | screen の無い記録にも pvSource | 周辺 | S-9 の行 |
+| Z-20 | moment で行に searchPvsDeep があれば使う | 中心 | S-20 |
+| Z-21 | 深い Event の行頭を「③の探索」のまま | 中心 | S-22 |
+| Z-22 | searchPvsDeep ⇔ engineReferenceDeep の不変条件を外す | 周辺 | S-23 の 2 件 |
+| Z-23 | 深い組で pvFirstMoveIsBestmoveAtBefore を比べずに true | 中心 | S-15b・校正の Event |
+| P-1 | 王手中で測らなかった行も深く測れなかった数に入れる | 周辺 | S-7 |
+| P-2 | 見出しの light に screen の無い記録の Event を入れる | 周辺 | K-8 |
+| P-3 | 出どころの screen に deepPlies も写す | 周辺 | 段 2 の行・スキーマの境目 |
+| P-4 | 今の版の文字列を基の版にする(1 か所の定数) | 周辺 | 段 2 の行・moment の構造・スキーマの境目 |
+| P-5 | Event の集合のキーから当たり方を落とす | 周辺 | 校正の Event・キー |
+| P-6 | 状態の一致の分母に相手の無い Event を入れる | 周辺 | 校正の Event |
+| P-7 | 2 回の rescreen の meta で startedAt も比べる | 周辺 | 2 回の rescreen |
+| P-8 | rescreen の allPlies を無視する | 周辺 | allPlies |
+| P-9 | measure-twice が 1 回だけ測って使い回す | 周辺 | measure-twice のソース照合 |
+| P-10 | 深い組の noFocusBaseline の文に「③の」を残す | 周辺 | 深い組の compared でない状態 |
+| P-11 | 読み直しの節を描かない | 周辺 | S-22・K-8 |
+
+- **P-4 の限界**: 今の版の文字列を基の版にしても、「今の版の Failure Event のスキーマは基の版 + D-SCREEN の欄」の試験そのものは通る(比べる 2 つが同じファイルになる)。鳴らしているのは、段 2 の行・moment の構造・境目の試験である
+
+### 13.5 残っていること・限界
+
+- **載せ替え**: 済み(13.6)。コミットするのは `wt-dscreen2r` の版
+- **校正の実行**(§5・§11 の床)
+  - 回すのは C(エンジン)
+  - 床の手順: `rescreen.ts --all-plies --deep-nodes 4000000` を d3-nnue に 2 回 → `screen-calibrate.ts --base <d3-nnue> --stage2 <1 回目> --stage2-repeat <2 回目>` → `measure-twice.ts` を急落の根に
+  - 本番の形の手順: 段 1(400k)→ `rescreen.ts` → `screen-calibrate.ts --base <4M 一律>`
+- **試験で見ていないこと**: `screen-calibrate.ts` の数は記録を読むだけで試験で見ているが、`measure-twice.ts` と `rescreen.ts` のエンジンを起こす経路は試験で見ていない(エンジンが要る)
+- **既知事項の候補(登録と番号は司令塔)**: 床の (iii) は、2 回の rescreen の meta を deepRun の startedAt・gitHead・dirty を除いて比べる。2 回が同じコードで回ったかは、報告を読む人が gitHead で見る
+- **既知事項の候補(登録と番号は司令塔)**: 床の段 2 の `allPlies: true`(13.7 の N-6)は出どころ(provenance)に写さない。床の出力を `diagnose.ts` に掛けると、Failure Event と moment の行からは本番の段 2 と区別できない(記録の meta では読める)
+
+### 13.6 載せ替えの記録(D2.5 `e9e7bf2` の上へ。worktree `wt-dscreen2r`。**エンジンは使っていない**。書いたのは B)
+
+- **手順**(司令塔 e3 の合図): 監査中の `wt-dscreen2`(`f39fd21`)は変えず、`e9e7bf2` の新しい worktree に取り込んだ
+- **衝突の解き方**: D2.5 は欄を足しただけなので、両方を残した
+  - `branch` は `standingPair` の後に `evaluationSource`(X-8 の「branch の最後」は変わらない)。moment の組の行も `standingPair` の後
+  - D2.5 が書いていた版の文字列は `lib/schemaVersions.ts` の定数にした
+  - `buildProvenance` の引数(D2.5 の `standingBounds`・`positionFactsRules`)を D-SCREEN の試験にも渡した
+- **版**: `KNOWN_SCHEMA_VERSIONS` = 0.1〜0.6、`KNOWN_DIAGNOSIS_MOMENT_SCHEMA_VERSIONS` = 0.1〜0.3(連番)。`FAILURE_EVENT_SCREEN_BASE_VERSION` = 0.5、`DIAGNOSIS_MOMENT_SCREEN_BASE_VERSION` = 0.2
+- **スキーマ**: `scratchpad/dscreen2r-schema-gen.py`(`ba4694c0…`)を `<worktree> 0.5 0.6 0.2 0.3` で回した。古い版のファイル(FE 0.1〜0.5・moment 0.1〜0.2)は変えていない
+  - 基の版からの差分: `scratchpad/dscreen2r-failure-event.v0.6-from-base.diff`(`058989eb…`)・`dscreen2r-diagnosis-moment.v0.3-from-base.diff`(`cff927c1…`)
+- **試験で直したところ**: 版の鎖を 0.6 → 0.5 → 0.4 → … にし(D2.5 の欄を剥がす段は 1e の道具のまま)、D2.5 の v0.5 の構造の試験は v0.5 のファイルを読むようにした
+
+#### 13.6.1 変えたファイル(sha256。worktree の `scripts/playtest/` から。13.2 と違うものに ◆)
+
+| ファイル | sha256 |
+|---|---|
+| `lib/schemaVersions.ts`(新規)◆ | `24157012633892b1…` |
+| `lib/screenDiagnosis.ts`(新規) | `106d8d5d18449674…` |
+| `lib/screenDiagnosis.test.ts`(新規)◆ | `e2c0c1e1…` |
+| `lib/screenCalibration.ts`(新規) | `96a89222b5e8dc5e…` |
+| `lib/screenCalibration.test.ts`(新規) | `52770fc3…` |
+| `screen-calibrate.ts`(新規) | `a7b298dc…` |
+| `screen-calibrate.test.ts`(新規) | `e8a25e0a…` |
+| `measure-twice.ts`(新規) | `dc3725aa8d51606a…` |
+| `schemas/failure-event.v0.6.schema.json`(新規)◆ | `637a6814…` |
+| `schemas/diagnosis-moment.v0.3.schema.json`(新規)◆ | `97e4c45c…` |
+| `lib/failureEvent.ts` ◆ | `2f7571cf02de84c8…` |
+| `lib/diagnosisMoment.ts` ◆ | `5c8c6e4c1772495e…` |
+| `lib/counterfactual.ts` ◆ | `f78ba2a0da341b50…` |
+| `lib/failureEventSchema.ts` ◆ | `32534f4c060bb473…` |
+| `diagnose.ts` ◆ | `0166310b…` |
+| `lib/rescreen.ts` | `ad7af055e23a28ad…` |
+| `rescreen.ts` | `bfbd87ce…` |
+| `diagnose.test.ts` ◆ | `3ee5bc88…` |
+| `lib/counterfactual.test.ts` ◆ | `58b8dea9…` |
+| `lib/diagnosisMoment.test.ts` ◆ | `a85515f0…` |
+| `lib/failureEventSchema.test.ts` ◆ | `f4d9e6b2…` |
+| `lib/rescreen.test.ts` | `4415fc58…` |
+| `rescreen.test.ts` | `35087cf9…` |
+
+- 載せ替えの前後の差分(スキーマの 2 本を除く 21 本): `scratchpad/dscreen2r-vs-dscreen2.diff`(`8f17be57…`)。違うのは 11 本、同じは 10 本
+
+#### 13.6.2 測り直し(worktree の根から)
+
+- **typecheck:scripts**: rc 0(`scratchpad/dscreen2r-typecheck.out`)
+- **全件**: 51 ファイル・**712 件通過**(= `e9e7bf2` の 664 + D-SCREEN-2 の 48。`scratchpad/dscreen2r-suite.out`、`e826d0ea…`)
+- **screen の無い記録のバイト一致(S-9)**: 今度は `e9e7bf2` の worktree(`wt-dscreen2r-base`)の出力と比べた
+  - 道具: `scratchpad/dscreen2r-g9-compare.py`(`535a57e6…`)。出力: `dscreen2r-g9-compare.out`(`d037814c…`)
+  - 比べた記録は 13.3 と同じ 9 か所・94 本(real-03 の kifu-01・04・07・09 は開いていない)
+  - **Markdown 9/9 がバイト一致。--events・--events-rise・--events-maxdrop の 559/559 行が `schemaVersion` と `provenance.analysis` を除いて一致。新しい欄の漏れ 0**
+- **変異**: `scratchpad/dscreen2r-mutate.py`(`def4e98b…`)。13.4 と同じ 27 本・同じ予測(`dscreen2-predictions.md` `24e563d3…`)。P-4 だけ置き換える値を基の版 "0.5" にした
+  - 出力: `dscreen2r-mutate.out`(`cd02b31a…`)。道具と予測の sha を同じ逐次コマンドで記録した
+  - 校正は exit 0・67 件。**適用 27 / 鳴った 27 / 沈黙 0。中心 12/12。予測 27/27**。当てた後、9 ファイルとも元の sha に戻った
+
+### 13.7 監査 f2 の REVISE(R-1)と気づき N-1〜N-7 の直し(司令塔 e3 の決定。worktree `wt-dscreen2r`。**エンジンは使っていない**。書いたのは B)
+
+- **R-1(必須)**: 校正の道具が、もう片方の同じ組が比べられなかった Event と組が無い Event を「相手にだけある = 取りこぼし」に入れていた(§5 の 1.・D-COST §2.2 と違う)
+- **決定(e3)と実装**
+  - 突き合わせは組 (fromReadyPly, toReadyPly) で行う
+    - 同じ組に両方の Event があり、kinds(並べ替えて比べる)が同じなら一致
+    - kinds だけ違えば「当たり方だけ違う」。取りこぼし・余計に入れず、別に数える
+  - **取りこぼし**: 相手にだけあり、段 2 の同じ組は比べられた(compared か mateAfter。2 行とも measured)
+  - **比べられない**: 段 2 の同じ組が notCompared(理由はその reason。mateBefore を含む)か、組が無い(noPair。記録が途中で終わった等)。件数と理由を並べ、率の分母に入れない
+  - **取りこぼし率** = 取りこぼし ÷(取りこぼし + 一致 + 当たり方だけ違う)
+  - **余計の側も同じに分けた(B の判断。e3 の決定の文より細かい)**
+    - 段 2 にだけあり、相手の同じ組が比べられない・組が無い Event は、余計に入れず別に数える(D-COST §2.2 の「逆向きも同じ 4 つに分け」)
+    - 余計率 = 余計 ÷(余計 + 一致 + 当たり方だけ違う)
+  - 表の列: 一致・当たり方だけ違う・取りこぼし・取りこぼし率・比べられない(相手にだけある)・余計・余計率・比べられない(段 2 にだけある)。合計の行は、比べられないを理由ごとの件数で書く
+- **予-1 の判定(e3)**: §7 の予-1 の外れ「取りこぼし 3 件以上」は、**この「取りこぼし」の件数で判定する**(比べられない・当たり方だけ違うは入れない)
+- **N の扱い(e3)**
+  - N-1〜N-5: 試験を足した
+    - N-1: X-7 の excludedPairs
+    - N-2: ready でない行の深い欄
+    - N-3: deepUnavailable の notEvaluation
+    - N-4: 軽い組の compared の行頭
+    - N-5: evaluationSource の位置
+    - f2 の変異で沈黙したもの(M-1・M-3・M-4・M-11)と同じ変異(N1〜N4)と、M-6 に当たる変異(N5a・N5b)が鳴ることを確かめた(13.7.2)
+  - N-5 の並び: 載せ替えの後、Event の branch は evaluationSource が最後、moment の組の行は standingPair の直後(行の並びは `momentOrder` が決める)。X-8 の「moment の組の行では evaluationAfter の後ろ」は、載せ替えで間に standingPair が入った
+  - N-6: rescreen の allPlies のときだけ、meta の screen の `rule` の直後に `allPlies: true` を書く
+    - screen の形の確かめは「キーが無いか true」だけを通す
+    - **出どころ(provenance)には写さない**(スキーマ v0.6 を変えない。13.5 の既知事項の候補)
+  - N-7: 13.1 に X-12 を足した
+
+#### 13.7.1 変えたファイル(sha256。worktree の `scripts/playtest/` から。ほかの 16 本は 13.6.1 のまま)
+
+| ファイル | 直す前(13.6.1) | 直した後 | 差 |
+|---|---|---|---|
+| `lib/screenCalibration.ts` | `96a89222…` | `ca47f9dd16880a63dec7d012de2df2ba61e659c0928e1491376f3f8f5d42ae4b` | +115 −25 |
+| `lib/screenCalibration.test.ts` | `52770fc3…` | `0208a2ab832912572931ca4a7a174c3e1971305504721c47fb3fcb9e5f5e6c94` | +70 −12 |
+| `screen-calibrate.test.ts` | `e8a25e0a…` | `ba3975d171202dd97e542b51d6b74d978f2654bbc47a0ad9462555a4c10b02f6` | +1 −1 |
+| `lib/screenDiagnosis.ts` | `106d8d5d…` | `e1b4c8a4646496bc863b2f6fd53df1d270280e6825643265299471afa5df7ed0` | +2 −0 |
+| `lib/screenDiagnosis.test.ts` | `e2c0c1e1…` | `646c94e158e25b3cccf92d392ab77dde4f2fb3e215bf4e44bba0dbbc6af209fc` | +58 −0 |
+| `lib/rescreen.ts` | `ad7af055…` | `a4466b55a675ddbe2b7f3f02c4cfbc0095e06fde41062bad7bb3143ddc2c626d` | +4 −1 |
+| `lib/rescreen.test.ts` | `4415fc58…` | `b93824480d876e682a6147a67c22130872ef5a0ac1b84648bffe32600c4c4a6e` | +6 −3 |
+
+- 7 本の差分: `scratchpad/dscreen2r-r1.diff`(`50d0c151…`)。当て方: `scratchpad/dscreen2r-r1-patch.py`(`98c37eb0…`。当てる前の 7 本の sha を道具の中で確かめた)と、N-5 の試験の期待の 1 行の手直し(下の予測の外れ)
+- `scan-compare.ts` とその lib は変わっていない(`git status`)
+
+#### 13.7.2 測り直し(worktree の根から)
+
+- **予測は実装の前に書いた**: `scratchpad/dscreen2r-r1-predictions.md`(`69216909368cab52b6df3cd9c402d792a5d21f9456a3621cba970605391efb7c`、15:22:10Z)
+- **追記の予測**(実装と試験の後・変異の前): `scratchpad/dscreen2r-r1-predictions-add.md`(`aca8c8bf…`)。道具・予測・追記の sha は、変異と同じ逐次コマンドの先頭で記録した
+
+| # | 予測 | 実測 | 判定 |
+|---|---|---|---|
+| R-Q1 | typecheck:scripts は rc 0 | rc 0(`dscreen2r-r1-typecheck2.out`) | 的中 |
+| R-Q2 | 全件 51 ファイル・720 件(幅 718〜724) | **51 ファイル・720 件通過**(`dscreen2r-r1-suite.out` `9c5bf271…`) | 的中 |
+| R-Q3 | 変える本は 7 本(幅 6〜9)+ 計画書 | 7 本 + 計画書 | 的中 |
+| R-Q4 | screen の無い記録のバイト一致は変わらない | Markdown 9/9・行 559/559・新しい欄の漏れ 0(`e9e7bf2` の出力と。`dscreen2r-r1-g9-compare.out` `bc4fa16b…`) | 的中 |
+| R-Q5 | 変異で使う 5 試験ファイルの校正は 75 件 | 75 件 | 的中 |
+| R-Q6 | 足した変異は全部鳴り、鳴る試験は表どおり。既存 27 本は P-5′ のほか同じ集合 | 足した 15 本と P-5′ は 16/16 表どおり。**既存の Z-4・Z-11 は集合が増えた** | **外れ 2**(追記の予測では 2/2 当たり) |
+
+- **N-5 の試験の最初の版の外れ**: 上がりを deep 1 件と書いたが、植えた記録には軽い上がりがもう 1 件あった。試験の期待の誤りで、実装は変えていない(["deep", "light"] に直した)
+
+- **変異**: `scratchpad/dscreen2r-r1-mutate.py`(`c3bc2969…`。13.6.2 の道具から `dscreen2r-r1-mutate-gen.py` で作った)→ `dscreen2r-r1-mutate.out`(`336250f7…`)
+  - 校正は exit 0・75 件。当てた後、9 ファイルとも元の sha に戻った
+  - **適用 42 / 鳴った 42 / 沈黙 0。中心 12/12。記録した予測の的中 40/42、追記の予測を入れて 42/42**
+
+| # | 変異 | 鳴った試験 |
+|---|---|---|
+| Z-4(既存) | 深く測れなかった行を含む組を数えない | S-7・**S-7b**(追記の予測) |
+| Z-11(既存) | 最大の下がりで出どころを混ぜて選ぶ | S-13・S-20・**N-1**(追記の予測) |
+| P-5′(P-5 を置き換え) | Event の突き合わせで kinds を並べ替えない | compareEventSets の試験 |
+| R1-a | 比べられない(notCompared)を取りこぼしに入れる | compareEventSets の試験・R-1 |
+| R1-b | 組が無い(noPair)を取りこぼしに入れる | compareEventSets の試験・R-1 |
+| R1-c | 当たり方だけ違うを分けず、取りこぼしと余計に入れる | compareEventSets の試験 |
+| R1-d | 取りこぼし率の分母から当たり方だけ違うを外す | compareEventSets の試験 |
+| R1-e | mateAfter の組を比べられないにする | compareEventSets の試験 |
+| R1-f | 逆向きを分けない(相手の組が比べられない Event も余計) | compareEventSets の試験 |
+| R1-g | 比べられないの理由を表に書かない | R-1 |
+| N1(f2 の M-1) | 混ざる局の excludedPairs を組ごとの出どころの組で数える | N-1 |
+| N2(f2 の M-3) | ready でない行の深い欄の不変条件を外す | S-8(ready でない行) |
+| N3(f2 の M-4) | deepUnavailable から notEvaluation を外す | S-7b |
+| N4(f2 の M-11) | 軽い組の compared の行頭も読み直しの探索 | N-4 |
+| N5a(f2 の M-6 に当たる) | Event の branch で evaluationSource を evaluationAfter の前に置く | N-5 |
+| N5b | moment の組の行で evaluationSource を前に置く(`momentOrder`) | N-5 |
+| N6a | rescreen が allPlies を meta に書かない | allPlies の試験 |
+| N6b | screen の形の確かめが allPlies の値を見ない | S-8(allPlies が true でない) |
+
+- ほかの既存 25 本は 13.6.2 と同じ試験で鳴った

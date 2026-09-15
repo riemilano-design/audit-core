@@ -31,6 +31,8 @@ import { counterfactualLines, counterfactualOf, POSITION_FACTS_RULES, type Count
 import { classifyIntentStatementRow, type IntentDetection, type IntentStatementClass } from "./intentStatement.js";
 import { kingSurroundingsOf, type KingSurroundings } from "./kingSurroundings.js";
 import { positionFactsOf, type PositionFacts } from "./positionFacts.js";
+import type { ScreenMeta } from "./rescreen.js";
+import { choosePairSources, renderScreenSection, screenCounterfactualHeading, screenCountsOf, screenOfRecord, withPvSource, type ScreenCounts } from "./screenDiagnosis.js";
 import { initialSfenOf } from "./sideAlignment.js";
 import { standingPairOf, type StandingBounds, type StandingPair } from "./standing.js";
 
@@ -301,6 +303,9 @@ export function triggerOf(row: EvaluatedRow, initialSfen: string): Trigger {
 /** 分岐点で何に当たったか。**matedIfPass は「急落」と呼ばない**(計画 D-3 の司令塔の条件) */
 export type BranchKind = "cpDrop" | "mateDrop" | "matedIfPass";
 
+/** STEP D-SCREEN-2(計画 §3)。組の 2 行の評価をどちらの探索から取ったか。**meta に screen のある記録だけに書く**(lib/screenDiagnosis.ts が決める) */
+export type EvaluationSource = "light" | "deep";
+
 export interface FailureEvent {
   kifuId: string;
   /** 分岐点の手(先手の手)の ply */
@@ -319,6 +324,8 @@ export interface FailureEvent {
     evaluationAfter: Evaluation;
     /** 直前の行と直後の行の評価の形勢の状態を並べただけ(STEP D2.5。判定語は持たない) */
     standingPair: StandingPair;
+    /** STEP D-SCREEN-2。組の評価の出どころ(light = 段 1 の値 / deep = 読み直しの値)。screen の無い記録はキーを出さない */
+    evaluationSource?: EvaluationSource;
   };
   consequences: Continuation;
   /**
@@ -371,17 +378,22 @@ export function diagnoseRecords(
   records: readonly RecordLine[],
   rule: DiagnosisRule,
   initialSfen: string,
-): { counts: DiagnosisCounts; events: FailureEvent[] } {
+  /** STEP D-SCREEN-2。不変条件を確かめた段 2 の記録の screen(lib/screenDiagnosis.ts の screenOfRecord)。無ければ今のまま */
+  screen?: ScreenMeta,
+): { counts: DiagnosisCounts; events: FailureEvent[]; screen?: ScreenCounts } {
   const rows = readEvaluations(records);
-  const pairs = pairEvaluations(rows);
+  // STEP D-SCREEN-2(計画 §3): 段 2 の記録は、組ごとに 2 行とも深い値か 2 行とも軽い値かを選ぶ。行の状態の件数(下の stateCount)は段 1 の値のまま
+  const chosen = screen === undefined ? undefined : choosePairSources(rows);
+  const pairs = chosen === undefined ? pairEvaluations(rows) : chosen.map((pair) => pair.pair);
   const moves = fullMovesOf(rows);
   const events: FailureEvent[] = [];
   let dropCandidates = 0;
   let matedIfPassPairs = 0;
 
   pairs.forEach((pair, index) => {
-    const from = rows[index]!;
-    const to = rows[index + 1]!;
+    const from = chosen === undefined ? rows[index]! : chosen[index]!.from;
+    const to = chosen === undefined ? rows[index + 1]! : chosen[index]!.to;
+    const source = chosen?.[index]?.source;
     const kinds: BranchKind[] = [];
     if (pair.kind === "compared" && pair.diffCp <= rule.dropCp) kinds.push("cpDrop");
     if (pair.kind === "mateAfter" && pair.mateAfter < 0) kinds.push("mateDrop");
@@ -419,9 +431,10 @@ export function diagnoseRecords(
         matedIfPassAfter,
         evaluationAfter: to.evaluation,
         standingPair: standingPairOf(from.evaluation, to.evaluation, STANDING_BOUNDS),
+        ...(source === undefined ? {} : { evaluationSource: source }),
       },
       consequences,
-      counterfactual,
+      counterfactual: source === undefined ? counterfactual : withPvSource(counterfactual, source),
       candidateModes: advantage && danger ? [{ mode: "mate_threat", status: "draft", matchedBy: kinds }] : [],
     });
   });
@@ -435,6 +448,7 @@ export function diagnoseRecords(
 
   return {
     events,
+    ...(screen === undefined || chosen === undefined ? {} : { screen: screenCountsOf(screen, chosen) }),
     counts: {
       readyRows: rows.length,
       measured: stateCount("measured"),
@@ -483,7 +497,8 @@ export interface DiagnosisInput {
 }
 
 export type DiagnosisResult =
-  | { kind: "counted"; counts: DiagnosisCounts; events: FailureEvent[] }
+  /** `screen` は STEP D-SCREEN-2。meta に screen のある記録だけ */
+  | { kind: "counted"; counts: DiagnosisCounts; events: FailureEvent[]; screen?: ScreenCounts }
   | { kind: "notCounted"; errorName: string; message: string }
   /** STEP D0-SIDE 段 1(R-9)。error 行を持つ記録なので数えなかった(例外で数えられなかった notCounted とは別) */
   | { kind: "excluded"; errorReasons: string[] };
@@ -494,7 +509,13 @@ export interface DiagnosisRow {
   result: DiagnosisResult;
 }
 
-type Diagnose = (kifuId: string, records: readonly RecordLine[], rule: DiagnosisRule, initialSfen: string) => { counts: DiagnosisCounts; events: FailureEvent[] };
+type Diagnose = (
+  kifuId: string,
+  records: readonly RecordLine[],
+  rule: DiagnosisRule,
+  initialSfen: string,
+  screen?: ScreenMeta,
+) => { counts: DiagnosisCounts; events: FailureEvent[]; screen?: ScreenCounts };
 
 /** 入力ごとに診断する。**例外を外へ出さない**(計画 D-1)。`diagnose` は試験専用。 */
 export function buildDiagnosisReport(
@@ -509,8 +530,10 @@ export function buildDiagnosisReport(
     }
     try {
       // STEP D0-SIDE 段 2(R-5): 開始局面は meta から読む(形の食い違う meta は例外になり、下の catch で「数えられなかった」になる)
-      const { counts, events } = diagnose(input.kifuId, input.records, rule, initialSfenOf(input.meta));
-      return { kifuId: input.kifuId, meta: input.meta, result: { kind: "counted", counts, events } };
+      // STEP D-SCREEN-2(計画 §2・§11): 段 2 の記録は不変条件を確かめてから screen を渡す(破れていれば下の catch で「数えられなかった」― S-8・S-23)
+      const screen = screenOfRecord(input.kifuId, input.meta, input.records);
+      const { counts, events, screen: screenCounts } = diagnose(input.kifuId, input.records, rule, initialSfenOf(input.meta), screen);
+      return { kifuId: input.kifuId, meta: input.meta, result: { kind: "counted", counts, events, ...(screenCounts === undefined ? {} : { screen: screenCounts }) } };
     } catch (error) {
       return {
         kifuId: input.kifuId,
@@ -658,7 +681,8 @@ export function renderDiagnosisReport(rows: readonly DiagnosisRow[]): string[] {
   lines.push("");
 
   // STEP D2(計画 2.5): Event 1 件につき、実戦の続きと読み筋の 2 行(比べない状態は 1 行)。表の中に行を挟まないよう、表の後に置く
-  lines.push("## 実戦の続きと読み筋(STEP D2。事実の並びだけ。読み筋は③の探索で、急落を見つけた評価とは別の探索)");
+  // STEP D-SCREEN-2(計画 §11・K-8): screen のある入力があるときだけ見出しの文を変える(無ければ今の見出しのまま)
+  lines.push(screenCounterfactualHeading(rows) ?? "## 実戦の続きと読み筋(STEP D2。事実の並びだけ。読み筋は③の探索で、急落を見つけた評価とは別の探索)");
   lines.push("");
   let counterfactualCount = 0;
   for (const row of rows) {
@@ -670,5 +694,7 @@ export function renderDiagnosisReport(rows: readonly DiagnosisRow[]): string[] {
   }
   if (counterfactualCount === 0) lines.push("- Failure Event が無い");
   lines.push("");
+  // STEP D-SCREEN-2(計画 §3): 読み直しの節。screen のある入力が無ければ何も足さない
+  lines.push(...renderScreenSection(rows));
   return lines;
 }

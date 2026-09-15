@@ -48,6 +48,7 @@ const schemaV01 = loadFailureEventSchema("0.1");
 const schemaV02 = loadFailureEventSchema("0.2");
 const schemaV03 = loadFailureEventSchema("0.3");
 const schemaV04 = loadFailureEventSchema("0.4");
+const schemaV05 = loadFailureEventSchema("0.5");
 type Json = Record<string, unknown>;
 const REPO_ROOT = fileURLToPath(new URL("../../../", import.meta.url));
 
@@ -782,11 +783,16 @@ describe("STEP JSON v0.2 の約束(計画 5. の P-2〜P-5・P-7)", () => {
     for (const line of lines) {
       const label = `${String(line.kifuId)}#${String(line.branchPly)}`;
       expect(validate(line, schema), label).toEqual([]);
+      expect(validate(line, schemaV05), label).not.toEqual([]);
       expect(validate(line, schemaV04), label).not.toEqual([]);
       expect(validate(line, schemaV03), label).not.toEqual([]);
       expect(validate(line, schemaV02), label).not.toEqual([]);
       expect(validate(line, schemaV01), label).not.toEqual([]);
-      const v04 = clone(line);
+      // STEP D-SCREEN-2: 今の版の行(screen の無い記録なので D-SCREEN の欄を持たない)は、版を 0.5 にすれば v0.5 を通る
+      const v05 = clone(line);
+      v05.schemaVersion = "0.5";
+      expect(validate(v05, schemaV05), label).toEqual([]);
+      const v04 = clone(v05);
       v04.schemaVersion = "0.4";
       delete (v04.trigger as Json).positionFacts;
       delete (v04.branch as Json).standingPair;
@@ -1107,7 +1113,7 @@ describe("STEP D2 の v0.4(counterfactual)", () => {
 // ---- STEP D2.5 の v0.5(docs/STEP_D2.5_PLAN_2026-09-15.md §2・§3)----
 describe("STEP D2.5 の v0.5(玉の区域の数・形勢の状態)", () => {
   it("v0.5 のスキーマは、v0.4 に 6 つの欄(trigger.positionFacts・branch.standingPair・compared の actual と pv の positionFactsEnd・pvMinusActual.positionFacts・provenance の rule の standing と positionFacts)を足しただけ(版の値・$id・title・description のほかは v0.4 と同じ)", () => {
-    const v05 = clone(schema) as unknown as Json;
+    const v05 = clone(schemaV05) as unknown as Json;
     const v04 = schemaV04 as unknown as Json;
     const walk = (root: Json, ...keys: Array<string | number>): Json => keys.reduce<Json>((node, key) => (node as Record<string | number, unknown>)[key] as Json, root);
     const removeAfter = (holder: Json, key: string, after: string): void => {

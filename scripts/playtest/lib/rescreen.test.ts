@@ -299,4 +299,18 @@ describe("STEP D-SCREEN-1 の入力の確かめ(書く前に止める)", () => {
   it("planRescreen は読み直す行と lightNodes を返す", () => {
     expect(planRescreen(stage1Source(records), rule)).toEqual({ deepPlies: [6, 8, 10, 12], lightNodes: LIGHT });
   });
+
+  // STEP D-SCREEN-2(計画 §5 の 0. の床)
+  it("allPlies: 候補を選ばず全 ready 行を ply の昇順に読み直し、measure は ready 行の数だけ呼ぶ(screen の rule はそのまま写し、rule の直後に allPlies: true を書く。床でなければキーを出さない)", async () => {
+    const allPlies = [0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20];
+    expect(planRescreen(stage1Source(records), rule, { allPlies: true })).toEqual({ deepPlies: allPlies, lightNodes: LIGHT });
+    const { calls, measure } = fakeMeasure();
+    const text = await rescreenRecords(stage1Source(records), rule, measure, run(), { allPlies: true });
+    expect(calls).toHaveLength(allPlies.length);
+    const screen = (JSON.parse(text.split("\n")[0]!) as { screen: { deepPlies: number[]; rule: unknown; allPlies?: boolean; deepRun: { measuredOrder: number[] } } }).screen;
+    expect([screen.deepPlies, screen.deepRun.measuredOrder, screen.rule, screen.allPlies]).toEqual([allPlies, allPlies, DRAFT_SCREEN_RULE_1, true]);
+    expect(Object.keys(screen).slice(0, 4)).toEqual(["lightNodes", "deepNodes", "rule", "allPlies"]);
+    const plain = await rescreenRecords(stage1Source(records), rule, fakeMeasure().measure, run());
+    expect(Object.hasOwn((JSON.parse(plain.split("\n")[0]!) as { screen: object }).screen, "allPlies")).toBe(false);
+  });
 });
