@@ -6,6 +6,8 @@
 // - 1 手ずつ apps/server の rules/applyMove で適用する(非合法ならそこで止めて not_imported)
 // - 往復の確認を返す: shogiops の Position.play で進めた終局局面との一致、指し手表記の作り直しとの一致
 // - **行を 3 つに分けて全部返す**(規則 11.6): 採った / 読んだが使わない(種類つき) / 読めなかった
+// - KIF の指し手の行の 1 文字の成り駒(竜・全・圭・杏)は、駒の欄だけ 龍・成銀・成桂・成香 に揃えて読み、
+//   **揃えたことを手ごとに残す**(STEP D0-KIFU2。docs/STEP_D0-KIFU2_PLAN_2026-09-15.md。記録の text は元の行のまま)
 //
 // 【このファイルが絶対にやらないこと】
 // - 平手以外の開始局面の変換(unsupported_start として返す。本番の対局は初期局面から始まる)
@@ -37,9 +39,20 @@ export interface SourceLine {
   text: string;
 }
 
+/** KIF の 1 文字の成り駒の書き方 → shogiops の kifMoveRegex が読む書き方(kif.js:258 の駒の欄に 1 文字の形が無い。P-51)。 */
+const KIF_PIECE_NAME_ALIGNMENTS = { 竜: "龍", 全: "成銀", 圭: "成桂", 杏: "成香" } as const;
+
+type WrittenPieceName = keyof typeof KIF_PIECE_NAME_ALIGNMENTS;
+
+/** 指し手の行の駒の欄を揃えて読んだこと(棋譜に書かれていた字と、読んだ字)。 */
+export interface PieceNameAlignment {
+  written: WrittenPieceName;
+  readAs: (typeof KIF_PIECE_NAME_ALIGNMENTS)[WrittenPieceName];
+}
+
 export interface ClassifiedLines {
   /** 指し手として採った行 */
-  moves: Array<SourceLine & { ply: number; usi: string; timeDropped: boolean }>;
+  moves: Array<SourceLine & { ply: number; usi: string; timeDropped: boolean; pieceNameAligned: PieceNameAlignment | null }>;
   /** 読んだが使わない行 */
   unused: Array<SourceLine & { kind: UnusedKind }>;
   /** 読めなかった行(知らない形・終局の後の指し手)。黙って捨てない */
@@ -51,7 +64,7 @@ export interface RoundTrip {
   libraryFinalSfen: string;
   /** applyMove で進めた終局局面と、盤・手番・持ち駒が一致したか */
   finalPositionMatches: boolean;
-  /** 指し手表記を作り直して、元の表記と一致しなかった手 */
+  /** 指し手表記を作り直して、元の表記と一致しなかった手(KIF で 1 文字の成り駒を揃えた手は、揃えた後の表記と比べて original にもそれを入れる。揃えたことは lines.moves[].pieceNameAligned) */
   notationMismatches: Array<{ ply: number; original: string; remade: string | null }>;
 }
 
@@ -99,6 +112,20 @@ const KIF_ENDINGS = ["投了", "中断", "千日手", "持将棋", "詰み", "�
 const KIF_TIME = /\s*\(\s*\d+[:：]\d+\s*\/\s*\d+[:：]\d+[:：]\d+\s*\)\s*$/;
 const KIF_MOVE_LINE = /^(\d+)\s+(\S.*)$/;
 const KIF_BOARD_PREFIXES = ["|", "+---", "先手の持駒", "後手の持駒", "下手の持駒", "上手の持駒", "先手番", "後手番", "上手番", "下手番"];
+
+// 移動先(「同」の後の空白は正規化で半角になっている)の直後の駒が 1 文字の成り駒で、その直後が移動元の括弧のときだけ揃える。
+// 成り駒には 成・不成・打 が付かないので、揃えた後に kifMoveRegex で読める行は必ずこの形に合う。行頭に固定するので、
+// 移動先の前に記号(▲ など)が付く書き方は揃わず、unparsable_move で止まる(計画書 2.1 の限界)。
+const KIF_SHORT_PROMOTED_PIECE = /^([１２３４５６７８９][一二三四五六七八九]|同\s?)([竜全圭杏])(?=\([1-9][1-9]\))/;
+
+/** 指し手の部分(消費時間を外したもの)の駒の欄だけを揃える。揃えるものが無ければ、そのまま返して aligned は null。 */
+export function alignKifPieceName(moveText: string): { text: string; aligned: PieceNameAlignment | null } {
+  const m = moveText.match(KIF_SHORT_PROMOTED_PIECE);
+  if (!m) return { text: moveText, aligned: null };
+  const written = m[2] as WrittenPieceName;
+  const readAs = KIF_PIECE_NAME_ALIGNMENTS[written];
+  return { text: `${m[1]}${readAs}${moveText.slice(m[0].length)}`, aligned: { written, readAs } };
+}
 
 /** shogiops の normalizedKifLines と同じ正規化を 1 行ずつ行う(行番号を保つため)。 */
 function normalizeKifLine(line: string): string {
@@ -180,11 +207,13 @@ export function importKif(raw: string): KifuImportResult {
         lines.unread.push({ ...src, why: `手数が続いていない(期待 ${expected})` });
         return { kind: "not_imported", format: "kif", reason: "unparsable_move", detail: `手数 ${plyNo}(期待 ${expected})`, lineNo, lines };
       }
-      if (!kifMoveRegex.test(moveText) && !kifDropRegex.test(moveText)) {
+      // 読むのは揃えた文字列。記録(src.text・detail)は元の表記のまま。
+      const { text: readText, aligned } = alignKifPieceName(moveText);
+      if (!kifMoveRegex.test(readText) && !kifDropRegex.test(readText)) {
         lines.unread.push({ ...src, why: "指し手の表記として読めない" });
         return { kind: "not_imported", format: "kif", reason: "unparsable_move", detail: moveText, lineNo, lines };
       }
-      const md = parseKifMoveOrDrop(moveText, lastDest);
+      const md = parseKifMoveOrDrop(readText, lastDest);
       if (md === undefined) {
         lines.unread.push({ ...src, why: "指し手の表記として読めない" });
         return { kind: "not_imported", format: "kif", reason: "unparsable_move", detail: moveText, lineNo, lines };
@@ -197,7 +226,7 @@ export function importKif(raw: string): KifuImportResult {
         lines.unread.push({ ...src, why: "非合法な指し手" });
         return { kind: "not_imported", format: "kif", reason: "illegal_move", detail: `${expected} 手目 ${moveText}(${usi})`, lineNo, lines };
       }
-      lines.moves.push({ ...src, ply: expected, usi, timeDropped });
+      lines.moves.push({ ...src, ply: expected, usi, timeDropped, pieceNameAligned: aligned });
       lastDest = md.to;
       continue;
     }
@@ -214,10 +243,12 @@ export function importKif(raw: string): KifuImportResult {
   }
 
   // 往復: 同じ表記を shogiops だけで進め、指し手表記も作り直す。
+  // 揃えた手は揃えた文字列と比べる(揃えたことは pieceNameAligned に別に残るので、ここは本当の書き方の違いだけを数える。
+  // 計画書 6. の Q-1)。original も比べた文字列を入れる。
   const notationMismatches: RoundTrip["notationMismatches"] = [];
   let dest: Square | undefined;
   for (const m of lines.moves) {
-    const moveText = normalizeKifLine(m.text).match(KIF_MOVE_LINE)?.[2]?.replace(KIF_TIME, "").trim() ?? "";
+    const moveText = alignKifPieceName(normalizeKifLine(m.text).match(KIF_MOVE_LINE)?.[2]?.replace(KIF_TIME, "").trim() ?? "").text;
     const md = parseKifMoveOrDrop(moveText, dest);
     if (md === undefined) {
       notationMismatches.push({ ply: m.ply, original: moveText, remade: null });
@@ -339,7 +370,7 @@ export function importCsa(raw: string): KifuImportResult {
         notationMismatches.push({ ply, original: text, remade: remade ?? null });
       }
       libPos.play(md);
-      lines.moves.push({ ...src, ply, usi, timeDropped: false });
+      lines.moves.push({ ...src, ply, usi, timeDropped: false, pieceNameAligned: null });
       continue;
     }
     lines.unread.push({ ...src, why: "知らない形の行" });

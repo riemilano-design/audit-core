@@ -10,11 +10,19 @@
 // - kifu-import-check.ts(確認スクリプト。試験は無い)
 
 import { readFileSync } from "node:fs";
-import { parseKifMoveOrDrop } from "shogiops/notation/kif";
+import { kifMoveRegex, parseKifMoveOrDrop } from "shogiops/notation/kif";
 import { describe, expect, it } from "vitest";
 
 import { applyMove } from "../../../apps/server/src/rules/applyMove.js";
-import { decodeKifuBytes, importCsa, importKif, STANDARD_START_SFEN, toFixedKifu, type KifuImportResult } from "./kifuImport.js";
+import {
+  decodeKifuBytes,
+  importCsa,
+  importKif,
+  STANDARD_START_SFEN,
+  toFixedKifu,
+  type KifuImportResult,
+  type PieceNameAlignment,
+} from "./kifuImport.js";
 
 const FIXED = JSON.parse(readFileSync(new URL("../kifu/2026-09-10-claude-10moves.json", import.meta.url), "utf-8")) as {
   id: string;
@@ -181,6 +189,7 @@ describe("importCsa ― 既知の正解と突き合わせる", () => {
     expect(r.roundTrip.notationMismatches).toEqual([]);
     expect(r.ending?.text).toBe("%TORYO");
     expect(r.lines.unread).toEqual([]);
+    expect(r.lines.moves.every((m) => m.pieceNameAligned === null)).toBe(true); // CSA は揃えの対象外(STEP D0-KIFU2 の T-6(d))
   });
 
   it("カンマ区切り(+7776FU,T1)でも同じ手順になり、消費時間は「読んだが使わない」に入る", () => {
@@ -320,5 +329,136 @@ describe("decodeKifuBytes ― 文字コードを読み分け、どちらで読�
       { text: "手合割：平手", encoding: "utf-8" },
       { text: "手合割：平手", encoding: "utf-8" },
     ]);
+  });
+});
+
+// ---------------------------------------------------------------- STEP D0-KIFU2
+// 1 文字の成り駒(竜・全・圭・杏)を、指し手の行の駒の欄だけ 龍・成銀・成桂・成香 に揃えて読む(docs/STEP_D0-KIFU2_PLAN_2026-09-15.md)。
+//
+// 【正解の置き方】棋譜は架空の最小のもの。期待する USI と揃えは、計画書 3. に試験を回す前に手で書いた表のまま(変換器の出力から写さない)。
+// 【この試験が確かめないこと】実物の棋譜(1e が実棋譜 20 局で測る。計画書 5. の予-A5)。kifu-import-check.ts の「揃えた手」の列(試験なし)。
+
+type Fixture = Array<[kif: string, usi: string, aligned: PieceNameAlignment | null]>;
+
+const RYU: PieceNameAlignment = { written: "竜", readAs: "龍" };
+const ZEN: PieceNameAlignment = { written: "全", readAs: "成銀" };
+const KEI: PieceNameAlignment = { written: "圭", readAs: "成桂" };
+const KYO: PieceNameAlignment = { written: "杏", readAs: "成香" };
+
+// T-2 竜(と の対照を含む)
+const T2: Fixture = [
+  ["２六歩(27)", "2g2f", null], ["８四歩(83)", "8c8d", null], ["２五歩(26)", "2f2e", null], ["８五歩(84)", "8d8e", null],
+  ["２四歩(25)", "2e2d", null], ["同　歩(23)", "2c2d", null], ["同　飛(28)", "2h2d", null], ["８六歩(85)", "8e8f", null],
+  ["２三飛成(24)", "2d2c+", null], ["８七歩成(86)", "8f8g+", null], ["２二竜(23)", "2c2b", RYU], ["８八と(87)", "8g8h", null],
+];
+// T-3 杏
+const T3: Fixture = [
+  ["１六歩(17)", "1g1f", null], ["１四歩(13)", "1c1d", null], ["１五歩(16)", "1f1e", null], ["同　歩(14)", "1d1e", null],
+  ["同　香(19)", "1i1e", null], ["８四歩(83)", "8c8d", null], ["１三香成(15)", "1e1c+", null], ["８五歩(84)", "8d8e", null],
+  ["１二杏(13)", "1c1b", KYO],
+];
+// T-4 圭
+const T4: Fixture = [
+  ["３六歩(37)", "3g3f", null], ["８四歩(83)", "8c8d", null], ["３七桂(29)", "2i3g", null], ["８五歩(84)", "8d8e", null],
+  ["４五桂(37)", "3g4e", null], ["８六歩(85)", "8e8f", null], ["３三桂成(45)", "4e3c+", null], ["８七歩成(86)", "8f8g+", null],
+  ["３二圭(33)", "3c3b", KEI],
+];
+// T-5 全(「同　全」を含む)
+const T5: Fixture = [
+  ["２六歩(27)", "2g2f", null], ["８四歩(83)", "8c8d", null], ["２五歩(26)", "2f2e", null], ["８五歩(84)", "8d8e", null],
+  ["３八銀(39)", "3i3h", null], ["９四歩(93)", "9c9d", null], ["２七銀(38)", "3h2g", null], ["９五歩(94)", "9d9e", null],
+  ["２六銀(27)", "2g2f", null], ["１四歩(13)", "1c1d", null], ["２四歩(25)", "2e2d", null], ["同　歩(23)", "2c2d", null],
+  ["２五銀(26)", "2f2e", null], ["７四歩(73)", "7c7d", null], ["２四銀(25)", "2e2d", null], ["７五歩(74)", "7d7e", null],
+  ["２三銀成(24)", "2d2c+", null], ["３二銀(31)", "3a3b", null], ["同　全(23)", "2c3b", ZEN], ["７六歩(75)", "7e7f", null],
+  ["２二全(32)", "3b2b", ZEN],
+];
+
+/** 1 文字の成り駒の手を長い書き方で書いた棋譜(揃えは要らない)。 */
+function longForm(f: Fixture): Fixture {
+  return f.map(([kif, usi, aligned]) => [aligned === null ? kif : kif.replace(aligned.written, aligned.readAs), usi, null]);
+}
+
+/** 取り込めて、手順・往復・揃えがすべて表のとおりであること。 */
+function expectFixture(f: Fixture, opts: Parameters<typeof kifText>[0] = {}): Extract<KifuImportResult, { kind: "imported" }> {
+  const r = imported(importKif(kifText({ ...opts, moves: f.map(([kif]) => kif) })));
+  expect(r.moves).toEqual(f.map(([, usi]) => usi));
+  expect(r.finalSfen).toBe(finalSfenOf(f.map(([, usi]) => usi)));
+  expect(r.roundTrip.finalPositionMatches).toBe(true);
+  expect(r.roundTrip.notationMismatches).toEqual([]);
+  expect(r.lines.moves.map((m) => m.pieceNameAligned)).toEqual(f.map(([, , aligned]) => aligned));
+  return r;
+}
+
+describe("importKif ― 1 文字の成り駒(竜・全・圭・杏)を揃えて読む(STEP D0-KIFU2)", () => {
+  it("前提(T-1): shogiops の kifMoveRegex は 1 文字の成り駒を読まず、長い書き方と と・馬 は読む", () => {
+    // この前提が崩れたら(shogiops が 1 文字の形を読むようになったら)、揃えが要るかを見直す。
+    expect(["２二竜(23)", "同 全(23)", "３二圭(33)", "１二杏(13)"].map((t) => kifMoveRegex.test(t))).toEqual([false, false, false, false]);
+    expect(["２二龍(23)", "同 成銀(23)", "３二成桂(33)", "１二成香(13)", "８八と(87)", "７六馬(54)"].map((t) => kifMoveRegex.test(t))).toEqual([
+      true, true, true, true, true, true,
+    ]);
+  });
+
+  it("T-2 竜: ２二竜(23) を 龍 に揃えて読み、手の行の text は元の行のまま(「竜」)", () => {
+    const r = expectFixture(T2);
+    const input = kifText({ moves: T2.map(([kif]) => kif) }).split("\r\n");
+    expect(r.lines.moves[10]?.lineNo).toBe(17);
+    expect(r.lines.moves[10]?.text).toBe(input[16]);
+    expect(r.lines.moves[10]?.text).toContain("２二竜(23)");
+  });
+
+  it("T-3 杏: １二杏(13) を 成香 に揃えて読む", () => {
+    expectFixture(T3);
+  });
+
+  it("T-4 圭: ３二圭(33) を 成桂 に揃えて読む", () => {
+    expectFixture(T4);
+  });
+
+  it("T-5 全: 「同　全(23)」と「２二全(32)」を 成銀 に揃えて読み、作り直した表記(同　成銀・２二成銀)と食い違わない", () => {
+    expectFixture(T5);
+  });
+
+  it("T-6 対照: 長い書き方(龍・成銀・成桂・成香)と既存の固定棋譜の KIF は、同じ手順のまま何も揃えない", () => {
+    for (const f of [T2, T3, T4, T5]) expectFixture(longForm(f));
+    const r = imported(importKif(kifText()));
+    expect(r.moves).toEqual(FIXED.moves);
+    expect(r.lines.moves.map((m) => m.pieceNameAligned)).toEqual(Array(20).fill(null));
+  });
+
+  it("T-7 ヘッダ・コメント・変化・まとめの行の 竜・全・圭・杏 は書き換えない(text は入力の行とバイト一致)", () => {
+    const opts = {
+      extraHeader: ["棋戦：竜王戦・全日本"],
+      tail: ["*圭と杏と竜と全", "  22 投了", "まで21手で先手の勝ち", "", "変化：21手", "  21 ２二竜(23)", "  22 同　全(31)"],
+    };
+    const r = expectFixture(T5, opts);
+    const input = kifText({ ...opts, moves: T5.map(([kif]) => kif) }).split("\r\n");
+    expect(r.lines.unused.map((l) => l.text)).toEqual(r.lines.unused.map((l) => input[l.lineNo - 1]));
+    expect(r.lines.unused.map((l) => [l.kind, l.text]).filter(([, t]) => /[竜全圭杏]/.test(t ?? ""))).toEqual([
+      ["header", "棋戦：竜王戦・全日本"],
+      ["comment", "*圭と杏と竜と全"],
+      ["variation", "  21 ２二竜(23)"],
+      ["variation", "  22 同　全(31)"],
+    ]);
+    expect(r.lines.unread).toEqual([]);
+  });
+
+  // 監査 f2 の変異 A-3(食い違いの original を揃える前の文字列に戻す)が沈黙した枝の試験(計画書 10.8・10.9)。
+  it("T-9 揃えた手に本当の書き方の違いがあれば、食い違いの original は揃えた後の表記(「３二全(23)」→ 同　成銀 と比べた ３二成銀(23))", () => {
+    const moves = T5.map(([kif]) => kif);
+    moves[18] = "３二全(23)"; // 直前の手の移動先が 3 二なので、作り直すと「同」になる(手は同じ 2c3b)
+    const r = imported(importKif(kifText({ moves })));
+    expect(r.moves).toEqual(T5.map(([, usi]) => usi));
+    expect(r.lines.moves.map((m) => m.pieceNameAligned)).toEqual(T5.map(([, , aligned]) => aligned));
+    expect(r.roundTrip.finalPositionMatches).toBe(true);
+    expect(r.roundTrip.notationMismatches).toEqual([{ ply: 19, original: "３二成銀(23)", remade: "同　成銀(23)" }]);
+  });
+
+  it("T-8 揃えた手が非合法なら illegal_move で止め、detail には元の表記(竜)を出す", () => {
+    const r = importKif(kifText({ moves: ["２二竜(23)"] }));
+    expect(r.kind).toBe("not_imported");
+    if (r.kind === "not_imported") {
+      expect([r.reason, r.lineNo, r.detail]).toEqual(["illegal_move", 7, "1 手目 ２二竜(23)(2c2b)"]);
+      expect(r.lines.unread.map((l) => [l.lineNo, l.why])).toEqual([[7, "非合法な指し手"]]);
+    }
   });
 });

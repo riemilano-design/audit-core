@@ -6,7 +6,7 @@
 //   npx tsx scripts/playtest/kifu-import-check.ts <ファイル> [--format kif|csa] [--fixed <out.json> --id <id> --source <text>]
 //
 // 【このファイルがやること】ファイルのバイト列を読み(UTF-8 か Shift_JIS か、どちらで読んだかを出す)、
-// 取り込みの結果・往復の確認・行の 3 分類(採った / 読んだが使わない / 読めなかった)を標準出力へ書く。
+// 取り込みの結果・往復の確認・揃えた手(1 文字の成り駒。STEP D0-KIFU2)・行の 3 分類(採った / 読んだが使わない / 読めなかった)を標準出力へ書く。
 // 【やらないこと】ネットワークへのアクセス。棋譜の取得。ファイルの書き換え(--fixed の出力先を除く)。
 
 import { readdirSync, readFileSync, statSync, writeFileSync } from "node:fs";
@@ -48,22 +48,26 @@ function cell(s: string): string {
 function row(c: Checked): string {
   const name = path.basename(c.file);
   const r = c.result;
-  if (r === null) return `| ${cell(name)} | ${c.bytes} | ${c.encoding} | ki2 | 読めなかった | KI2 形式は非対応 | - | - | - | - | - |`;
+  if (r === null) return `| ${cell(name)} | ${c.bytes} | ${c.encoding} | ki2 | 読めなかった | KI2 形式は非対応 | - | - | - | - | - | - |`;
   const kinds = new Map<string, number>();
   for (const l of r.lines.unused) kinds.set(l.kind, (kinds.get(l.kind) ?? 0) + 1);
   const unused = [...kinds].map(([k, n]) => `${k} ${n}`).join("、") || "0";
+  const aligned = r.lines.moves.filter((m) => m.pieceNameAligned !== null).length;
   if (r.kind === "not_imported") {
-    return `| ${cell(name)} | ${c.bytes} | ${c.encoding} | ${c.format} | 読めなかった | ${r.reason}(行 ${r.lineNo ?? "-"}): ${cell(r.detail)} | ${r.lines.moves.length}(途中まで) | - | - | ${unused} | ${r.lines.unread.length} |`;
+    return `| ${cell(name)} | ${c.bytes} | ${c.encoding} | ${c.format} | 読めなかった | ${r.reason}(行 ${r.lineNo ?? "-"}): ${cell(r.detail)} | ${r.lines.moves.length}(途中まで) | - | - | ${aligned}(途中まで) | ${unused} | ${r.lines.unread.length} |`;
   }
   const ending = r.ending ? cell(r.ending.text.trim()) : "無し";
   const rt = `局面 ${r.roundTrip.finalPositionMatches ? "一致" : "不一致"} / 表記の食い違い ${r.roundTrip.notationMismatches.length}`;
-  return `| ${cell(name)} | ${c.bytes} | ${c.encoding} | ${c.format} | 読めた | - | ${r.moves.length} | ${ending} | ${rt} | ${unused} | ${r.lines.unread.length} |`;
+  return `| ${cell(name)} | ${c.bytes} | ${c.encoding} | ${c.format} | 読めた | - | ${r.moves.length} | ${ending} | ${rt} | ${aligned} | ${unused} | ${r.lines.unread.length} |`;
 }
 
 function details(c: Checked): string[] {
   const out: string[] = [];
   const r = c.result;
   if (r === null) return out;
+  for (const m of r.lines.moves) {
+    if (m.pieceNameAligned !== null) out.push(`- ${path.basename(c.file)} ${m.ply} 手目 揃えて読んだ: ${m.pieceNameAligned.written}→${m.pieceNameAligned.readAs}`);
+  }
   for (const l of r.lines.unread) out.push(`- ${path.basename(c.file)} ${l.lineNo} 行目 読めなかった(${l.why}): \`${cell(l.text.trim())}\``);
   if (r.kind === "imported") {
     for (const m of r.roundTrip.notationMismatches.slice(0, 10)) {
@@ -93,13 +97,13 @@ console.log(`# 棋譜の取り込み確認(${isDir ? `フォルダ ${target}` : 
 console.log("");
 console.log(`対象 ${checked.length} ファイル${skipped.length > 0 ? ` / 拡張子が対象外で読まなかったもの ${skipped.length}: ${skipped.join(", ")}` : ""}`);
 console.log("");
-console.log("| ファイル | バイト | 文字コード | 形式 | 結果 | 読めなかった理由 | 手数 | 終局の行 | 往復 | 読んだが使わない行 | 読めなかった行 |");
-console.log("|---|---|---|---|---|---|---|---|---|---|---|");
+console.log("| ファイル | バイト | 文字コード | 形式 | 結果 | 読めなかった理由 | 手数 | 終局の行 | 往復 | 揃えた手 | 読んだが使わない行 | 読めなかった行 |");
+console.log("|---|---|---|---|---|---|---|---|---|---|---|---|");
 for (const c of checked) console.log(row(c));
 const notes = checked.flatMap(details);
 if (notes.length > 0) {
   console.log("");
-  console.log("## 読めなかった行・表記の食い違い");
+  console.log("## 揃えて読んだ手・読めなかった行・表記の食い違い");
   for (const n of notes) console.log(n);
 }
 
