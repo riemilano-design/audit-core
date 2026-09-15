@@ -1,6 +1,10 @@
 {
   "id": "kifu2-15",
   "source": "kifu-samples の 2 つ目のファイルから分割した局 15",
+  "ending": {
+    "kind": "timeUp",
+    "ply": 128
+  },
   "moves": [
     "7g7f",
     "3c3d",

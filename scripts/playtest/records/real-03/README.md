@@ -7,7 +7,7 @@
 | 項目 | 値 |
 |---|---|
 | ファイル | JSONL 15 本(NNUE 版の replay の記録)。`SHA256SUMS` に 15 本の sha256。**群は置き場を分けず、この一覧と下の表で示す** |
-| 固定棋譜 | `kifu/<id>.fixed.json`(欄は `id`・`source`・`mirrored`・`originalUserSide`・`plyOffset`・`startSfen`・`moves`・`originalMoves`。STEP D0-SIDE 段 2(`e3b0a17`)の道具で**本人が後手の棋譜を 180 度回し、元の相手の 1 手目を開始局面に畳んだ版**。sha256 は作った側の一覧と一致)。`kifu/SHA256SUMS` に 15 本の sha256。**`SHA256SUMS`(記録)とは別の一覧** |
+| 固定棋譜 | `kifu/<id>.fixed.json`(欄は `id`・`source`・`mirrored`・`originalUserSide`・`plyOffset`・`startSfen`・`ending`・`moves`・`originalMoves`。STEP D0-SIDE 段 2(`e3b0a17`)の道具で**本人が後手の棋譜を 180 度回し、元の相手の 1 手目を開始局面に畳んだ版**)。**STEP D0-KIFU3(`9d838ad`)の `kifu-import-check.ts --fixed --as gote` で元の棋譜から作り直し、棋譜に書かれた終局の種類と手数 `ending` を足した**(2026-09-15。`ending` を除くと作り直す前のファイルとバイト一致。`ply` は**回す前の手順**の手数 + 1。形は `scripts/playtest/README.md`)。**記録の JSONL は作り直す前の固定棋譜から回したもので、評価はし直していない**(再生は `ending` を読まない)。`kifu/SHA256SUMS` に 15 本の sha256(並びは下の表の群の順のまま、作り直した後の値)。**`SHA256SUMS`(記録)とは別の一覧** |
 | 対象と群 | **G1 2 人目・負け 7 局**(`kifu2-02`・`03`・`05`・`06`・`07`・`08`・`10`、畳んだ後の手数 64・52・86・72・94・98・150、**すべて偶数**)/ **G2 2 人目・勝ち 4 局**(`kifu2-12`・`13`・`14`・`19`、67・57・43・93、**すべて奇数**)/ **G3 1 人目・勝ち 4 局**(`kifu-01`・`04`・`07`・`09`、51・49・89・25、**すべて奇数**)。**勝ち負けは固定棋譜に入っておらず、棋譜を用意した側の一覧による**。これで 2 人目は 20 局すべて(先手 9 局 = records/real-02)、1 人目は 10 局すべて(先手 6 局 = records/real-01) |
 | コード | HEAD `e3b0a17`(STEP D0-SIDE 段 2)の worktree。汚れ 0(`node_modules` のリンクと `scripts/playtest/out/` だけ)。出力は `scripts/playtest/out/real-03/<群>/<id>.jsonl`(群 = `g1-p2-lose`・`g2-p2-win`・`g3-p1-win`) |
 | 評価(replay) | `SHOGI_ENGINE_PATH=<共有ツリー>/apps/server/engine/nnue/YaneuraOu-by-gcc npx tsx scripts/playtest/replay.ts <固定棋譜 JSON> --nodes 4000000 --threads 1 --out <この記録>`。**NNUE 版**、実行ファイル sha256 `53999a5abdf6e4a29872fa5e0416aa9b592560ed2a464ef50f8f75fd74674351`、`eval/nn.bin`(水匠 5)sha256 `768068f0d534a0603a5d38bcd143de6bbca820d5f1c95a14d40863e5b7892d76`、`eval/eval_options.txt` = `FV_SCALE 24`(records/real-01・real-02 と同じ条件) |
@@ -44,4 +44,4 @@
 | `kifu-07.jsonl` | `kifu-07` | `kifu/kifu-07.fixed.json` | G3 | 勝ち |
 | `kifu-09.jsonl` | `kifu-09` | `kifu/kifu-09.fixed.json` | G3 | 勝ち |
 
-**読み方**: 2 人・15 局の記録であり、件数を人の癖として一般化しない。回した記録の評価は先手 = 本人から見た値。**元の相手の 1 手目の直前の局面は評価していない**。`kifu2-10`(負け)は最後の ready 行の評価が本人側に大きく良い(records/real-02 の `kifu2-04` と同じく、**負けの形は手順の記録からは見えない**)。死因①の規則と閾値は draft のまま。評価は 1 回の探索の値で、同じ局面でも別の探索では揺れる(P-33)。
+**読み方**: 2 人・15 局の記録であり、件数を人の癖として一般化しない。回した記録の評価は先手 = 本人から見た値。**元の相手の 1 手目の直前の局面は評価していない**。`kifu2-10`(負け)は最後の ready 行の評価が本人側に大きく良い(records/real-02 の `kifu2-04` と同じく、**負けの形は手順の記録からは見えない**。終局の種類は固定棋譜の `ending` にある)。死因①の規則と閾値は draft のまま。評価は 1 回の探索の値で、同じ局面でも別の探索では揺れる(P-33)。

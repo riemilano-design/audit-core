@@ -1,6 +1,10 @@
 {
   "id": "kifu-06",
   "source": "kifu-samples から分割した局 06",
+  "ending": {
+    "kind": "resign",
+    "ply": 108
+  },
   "moves": [
     "3i4h",
     "1c1d",

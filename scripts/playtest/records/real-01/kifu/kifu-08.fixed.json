@@ -1,6 +1,10 @@
 {
   "id": "kifu-08",
   "source": "kifu-samples から分割した局 08",
+  "ending": {
+    "kind": "mate",
+    "ply": 44
+  },
   "moves": [
     "3i4h",
     "3c3d",

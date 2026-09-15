@@ -244,6 +244,7 @@
 |---|---|
 | `SHA256SUMS` | `0f78393525b5dd5d9dbdc9c9aea2e9de103030f5f0fd890bd23468afb63564f8` |
 | `kifu/SHA256SUMS` | `8e442661f416c7a08600c0efe31b6baa08150cf33c2222616a91f718c2b87751` |
+| `kifu/SHA256SUMS`(**D0-KIFU3 の後に作り直した版**。固定棋譜に `ending` を足し、それ以外はバイト一致。監査 f2 GO。上の行は当時の値として残す) | `3f6b91b9bf55b44adc5100c7f6ebe217ec46982b489af63e84038c01f559f59a` |
 | `kifu2-02.jsonl` | `e21164db568fc8c1a79f121f709a7bcd88d3f224ea2a9641f6c10d1d6d2377f4` |
 | `kifu2-03.jsonl` | `956280de2944df4d7ccf7229682a48622dc84327f9a6dcab5f235021693916dc` |
 | `kifu2-05.jsonl` | `68b687cd590b75cf09b6175e5838b8c9bd5d027d974cbc28e3e3a881009b8223` |

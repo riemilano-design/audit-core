@@ -5,6 +5,10 @@
   "originalUserSide": "gote",
   "plyOffset": 1,
   "startSfen": "lnsg1gsnl/1r3k1b1/ppppppppp/9/9/9/PPPPPPPPP/1B5R1/LNSGKGSNL b - 2",
+  "ending": {
+    "kind": "timeUp",
+    "ply": 152
+  },
   "moves": [
     "7g7f",
     "4b3b",

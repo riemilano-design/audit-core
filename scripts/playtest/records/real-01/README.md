@@ -5,7 +5,7 @@
 | 項目 | 値 |
 |---|---|
 | ファイル | `kifu-02.jsonl`・`kifu-03.jsonl`・`kifu-05.jsonl`・`kifu-06.jsonl`・`kifu-08.jsonl`・`kifu-10.jsonl`(NNUE 版の replay の記録)。`SHA256SUMS` に 6 本の sha256 |
-| 固定棋譜 | `kifu/kifu-NN.fixed.json`(手順だけ。欄は `id`・`moves`・`source`。STEP D0-KIFU の道具で作られた版で、sha256 は作った側の一覧と一致)。`kifu/SHA256SUMS` に 6 本の sha256。**`SHA256SUMS`(記録)とは別の一覧** |
+| 固定棋譜 | `kifu/kifu-NN.fixed.json`(欄は `id`・`source`・`ending`・`moves`)。手順は STEP D0-KIFU の道具で作られた版のまま。**STEP D0-KIFU3(`9d838ad`)の `kifu-import-check.ts --fixed` で元の棋譜から作り直し、棋譜に書かれた終局の種類と手数 `ending` を足した**(2026-09-15。`ending` を除くと作り直す前のファイルとバイト一致。形は `scripts/playtest/README.md`)。**記録の JSONL は作り直す前の固定棋譜から回したもので、評価はし直していない**(再生は `ending` を読まない)。`kifu/SHA256SUMS` に 6 本の sha256(作り直した後の値)。**`SHA256SUMS`(記録)とは別の一覧** |
 | 対象 | 1 人目の 10 局のうち、**本人が先手の 6 局**。**6 局とも本人の勝ち**。手数 37・69・107・107・43・75(**6 局とも奇数**)。`kifu-05`・`kifu-08` は詰みで終わった局 |
 | コード | HEAD `5a2dc84`(STEP D0-SIDE 段 1)の worktree。汚れ 0(`node_modules` のリンクと `scripts/playtest/out/` だけ)。`scripts/playtest/replay.ts` sha256 `77ecff61…`・`scripts/playtest/lib/replayPlan.ts` sha256 `072aea1f…` |
 | 評価(replay) | `SHOGI_ENGINE_PATH=<共有ツリー>/apps/server/engine/nnue/YaneuraOu-by-gcc npx tsx scripts/playtest/replay.ts <固定棋譜 JSON> --nodes 4000000 --threads 1 --out <この記録>`。**NNUE 版**、実行ファイル sha256 `53999a5abdf6e4a29872fa5e0416aa9b592560ed2a464ef50f8f75fd74674351`、`eval/nn.bin`(水匠 5)sha256 `768068f0d534a0603a5d38bcd143de6bbca820d5f1c95a14d40863e5b7892d76`、`eval/eval_options.txt` = `FV_SCALE 24`(records/d0-nnue・d3-nnue・d3b-nnue-n2000 と同じ条件) |

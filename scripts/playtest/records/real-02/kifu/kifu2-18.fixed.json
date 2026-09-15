@@ -1,6 +1,10 @@
 {
   "id": "kifu2-18",
   "source": "kifu-samples の 2 つ目のファイルから分割した局 18",
+  "ending": {
+    "kind": "resign",
+    "ply": 40
+  },
   "moves": [
     "7g7f",
     "3c3d",

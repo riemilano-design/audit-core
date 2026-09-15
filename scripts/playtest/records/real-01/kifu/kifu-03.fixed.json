@@ -1,6 +1,10 @@
 {
   "id": "kifu-03",
   "source": "kifu-samples から分割した局 03",
+  "ending": {
+    "kind": "timeUp",
+    "ply": 70
+  },
   "moves": [
     "3i4h",
     "8c8d",

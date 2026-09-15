@@ -1,6 +1,10 @@
 {
   "id": "kifu2-04",
   "source": "kifu-samples の 2 つ目のファイルから分割した局 04",
+  "ending": {
+    "kind": "timeUp",
+    "ply": 127
+  },
   "moves": [
     "7g7f",
     "3c3d",

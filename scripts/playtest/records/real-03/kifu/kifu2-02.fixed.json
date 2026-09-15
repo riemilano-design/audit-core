@@ -5,6 +5,10 @@
   "originalUserSide": "gote",
   "plyOffset": 1,
   "startSfen": "lnsgkgsnl/1r5b1/pppppp1pp/6p2/9/9/PPPPPPPPP/1B5R1/LNSGKGSNL b - 2",
+  "ending": {
+    "kind": "resign",
+    "ply": 66
+  },
   "moves": [
     "7g7f",
     "9c9d",
