@@ -31,6 +31,36 @@ const KIF = [
   "",
 ].join("\n");
 
+/**
+ * 1 文字の成り駒「圭」を含む架空の最小 KIF(D0-KIFU2 の計画 3. の T-4 と同じ手順。9 手目 ３二圭(33) を 成桂 に揃えて読む)。
+ * STEP D0-SIDE 段 2 の後の小さな追加(監査 A の段 2 の任意 1): kifu-import-check.ts の表の「揃えた手」の列と詳細行を見張る。
+ */
+const KEI_KIF = [
+  "手合割：平手",
+  "手数----指手---------消費時間--",
+  "   1 ３六歩(37)",
+  "   2 ８四歩(83)",
+  "   3 ３七桂(29)",
+  "   4 ８五歩(84)",
+  "   5 ４五桂(37)",
+  "   6 ８六歩(85)",
+  "   7 ３三桂成(45)",
+  "   8 ８七歩成(86)",
+  "   9 ３二圭(33)",
+  "  10 投了",
+  "まで9手で先手の勝ち",
+  "",
+].join("\n");
+
+/** 表の見出しの行と、指定したファイルの行を突き合わせ、列の名前 → 欄の値 にする(列が消えれば値がずれる)。 */
+function tableCells(stdout: string, fileName: string): Record<string, string> {
+  const lines = stdout.split("\n");
+  const split = (line: string | undefined) => (line ?? "").replace(/^\||\|$/g, "").split("|").map((cell) => cell.trim());
+  const header = split(lines.find((line) => line.startsWith("| ファイル |")));
+  const row = split(lines.find((line) => line.startsWith(`| ${fileName} |`)));
+  return Object.fromEntries(header.map((name, index) => [name, row[index] ?? "(欄が無い)"]));
+}
+
 const gitStatus = (): string =>
   execFileSync(
     "git",
@@ -39,12 +69,12 @@ const gitStatus = (): string =>
   ).toString();
 
 /** 一時ディレクトリに KIF を書き、kifu-import-check.ts を --fixed 付きで回す。書いた固定棋譜(書かれなければ null)を返す。 */
-function runCheck(extraArgs: string[], options: { directory?: boolean } = {}): { status: number | null; stdout: string; stderr: string; fixed: Record<string, unknown> | null } {
+function runCheck(extraArgs: string[], options: { directory?: boolean; kif?: string } = {}): { status: number | null; stdout: string; stderr: string; fixed: Record<string, unknown> | null } {
   const dir = mkdtempSync(join(tmpdir(), "d0side-kifu-check-"));
   try {
     const kifPath = join(dir, "game.kif");
     const fixedPath = join(dir, "fixed.json");
-    writeFileSync(kifPath, KIF, "utf-8");
+    writeFileSync(kifPath, options.kif ?? KIF, "utf-8");
     const target = options.directory ? dir : kifPath;
     let status: number | null = 0;
     let stdout = "";
@@ -158,5 +188,21 @@ describe("kifu-import-check.ts の --me / --as(子プロセス)", () => {
       expect(onDirectory.status).toBe(2);
     },
     120_000,
+  );
+
+  it(
+    "D0-KIFU2 の表: 1 文字の成り駒を含む KIF は、表の「揃えた手」の欄が 1 で、詳細行「揃えて読んだ: 圭→成桂」を出す。含まない KIF は 0 で詳細行を出さない(監査 A の段 2 の任意 1)",
+    () => {
+      const kei = runCheck([], { kif: KEI_KIF });
+      expect(kei.status, kei.stderr).toBe(0);
+      expect(tableCells(kei.stdout, "game.kif")).toMatchObject({ 結果: "読めた", 手数: "9", 往復: "局面 一致 / 表記の食い違い 0", 揃えた手: "1", 読めなかった行: "0" });
+      expect(kei.stdout).toContain("- game.kif 9 手目 揃えて読んだ: 圭→成桂");
+
+      const plain = runCheck([]);
+      expect(plain.status, plain.stderr).toBe(0);
+      expect(tableCells(plain.stdout, "game.kif")).toMatchObject({ 結果: "読めた", 手数: "3", 揃えた手: "0" });
+      expect(plain.stdout).not.toContain("揃えて読んだ:");
+    },
+    60_000,
   );
 });

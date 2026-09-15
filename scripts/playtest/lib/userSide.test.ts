@@ -58,6 +58,11 @@ describe.each(["kif", "csa"] as const)("decideUserSide ― %s のヘッダ(F-S7)
     expect(decideUserSide(format, headers, { me: "abc" })).toStrictEqual(unknown);
   });
 
+  it("(iv) 後手の行が 2 本ある → user_side_unknown(重なりを先手の側だけ見ない。監査 A の段 2 の任意 2)", () => {
+    const headers = [...headerOf(format, "相手役", "abc"), ...headerOf(format, null, "abc")];
+    expect(decideUserSide(format, headers, { me: "abc" })).toStrictEqual(unknown);
+  });
+
   it("(v) 大文字小文字だけ違う → 不一致", () => {
     expect(decide(format, "ABC", "相手役", "abc")).toStrictEqual(unknown);
   });
