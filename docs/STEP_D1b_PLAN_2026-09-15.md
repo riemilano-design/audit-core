@@ -174,3 +174,119 @@
 | **再読み(版 `787157c3`)の条件 1** 不変条件の「⇐」は `matedIfPass` だけの Event で破れうる | 3. の不変条件を「⇒」と「指す Event が `cpDrop`」に・5. の予-3 の注 |
 | **再読みの条件 2** Q-5 の決定を状態の行に | 冒頭の司令塔の追加の決定・6. の決定の注 |
 | 再読みの推奨: 盲検の注に V0.3-META の監査で events を表示したか | 5. の冒頭 |
+
+## 9. 実装の記録(worktree `wt-d1b`、基点 `8ee0839` = STEP D2。実装 B。**エンジンは使っていない**)
+
+司令塔の指示で、D2 のコミットの後に着手した。盲検: **`records/real-02` は読んでいない**(試験・道具が読む記録のフォルダは d-cost の 3 つ・d0-nnue・d3-nnue・d3b-nnue-n2000・real-01 だけ)。**予測は A のもの**で、B は足していない(B は real-01 の評価値を D2 の計画で見ている)。B は予測の件数を数えただけ。
+
+### 9.1 変えたファイル(sha256)
+
+| ファイル | sha256 | 中身 |
+|---|---|---|
+| `scripts/playtest/lib/diagnosisMoment.ts`(新規) | `b46cc619b9b0151649b4921094a33a895de48f7f873817218460414fd78d3fa5` | `diagnosisMomentsOf`(上がりと最大の下がりの行)・`toMomentLine`・スキーマの読み込みと検証 |
+| `scripts/playtest/lib/diagnosisMoment.test.ts`(新規) | `292c68a2df675191d74d12e54679065f09c059500bf85515eca80b284a814255` | 22 件(9.3) |
+| `scripts/playtest/schemas/diagnosis-moment.v0.1.schema.json`(新規) | `023a63c5a63e6eb948316b50dde9019763cf60b0e203ca5cb874cb37c7368db2` | 道具 `scratchpad/d1b-schema-gen.py`(`3c4f3f86…`)で Failure Event v0.4 から写した。v0.4 のファイルは変えていない(道具が前後の sha を比べた) |
+| `scripts/playtest/diagnose.ts` | `ac2336d38379a296d8abb0d7c2b5126157d0fee6a450c6aabf260f50ea2d50e7` | `--events-rise`・`--events-maxdrop`。3 つのファイルは全部の行を作ってから書く(S-8)。使い方の文と注記 |
+| `scripts/playtest/diagnose.test.ts` | `e07101c7227c39af8eaa5483d3c0ea0a303f7e4779f9a103d42b42dac2d1f0c3` | G-9・G-16 の子プロセス 2 件・ソース照合 1 行 |
+| `scripts/playtest/lib/failureEvent.ts` | `eb147cb965536378f3874af09d751f361851a82fa2a2755bbd8f9447c90b4404` | `fullMovesOf` を export しただけ(注記 1 行) |
+| `scripts/playtest/lib/failureEventFixtures.ts` | `b10932b58da002d91161c1d56a0e2fa9701e4695af6c4a95b8ab655ddd8e7632` | `engineRef` に `afterPassBestmove`(既定 null。E-9・G-11) |
+
+既存の 4 本の `8ee0839` との差の全文: `scratchpad/d1b-diff.out`(`05d8e58805faf86fcf0fb3aaaab4ea6396acaba89466b6ee688e86714e4c7bc4`)。
+
+### 9.2 計画に書いていない細部で、実装で決めたこと
+
+- **行の欄の順**: `contract`・`schemaVersion`・`eventClass`・`kifuId`・(状態の行は `state`・`minDiffCp`)・`branchPly`・`fromReadyPly`・`toReadyPly`・`trigger`・`change`・`moves`・`userBestmoveAtBefore`・`opponentBestmove`・`evaluationAfter`・`failureEventBranchPly`・`consequences`・`counterfactual`・(`maxDrop` の組の行・状態の行は `excludedPairs`)・`provenance`。スキーマの `properties` も同じ順
+- **`diagnosisMomentsOf(kifuId, records, rule, initialSfen, events)`** は、同じ記録の `diagnoseRecords` の Event を受け取り、`failureEventBranchPly` を引くためだけに読む(値は変えない ― G-4 で見る)。窓の事実は Failure Event と同じ関数(`triggerOf`・`actualContinuation`・`counterfactualOf`)を同じ引数で当てる
+- **窓の 2 手が棋譜に無い組は例外**(黙って埋めない)。`diagnose.ts` では N-1 と同じく exit 1 で、3 つのファイルを書かない
+- **スキーマに置いた値の境目は、定義から決まるものだけ**: 上がりの `diffCp` ≥ 1・上がりの `mateAfter` ≥ 1・最大の下がりの組の `diffCp` ≤ −1・`noDrop` の `minDiffCp` ≥ 0・`excludedPairs` の数 ≥ 0。**上がりの閾値(400)はスキーマに置いていない**(Q-2。規則を変えたときにスキーマを変えなくてよいように)
+- **`excludedPairs` は、組の行・状態の行とも、局のすべての組から数える**(組の行でも、最小を選ばなかった mate の組と比べなかった組の数を残す ― G-14・G-15)
+- 上がりと最大の下がりは、**`--events-rise` か `--events-maxdrop` を渡したときだけ組み立てる**(`--events` だけの回し方は `8ee0839` と同じ計算)
+- G-8: G-1 の既定は afterPass.scoreCp が既に null なので、**全行に afterPass.scoreCp 50 を植えた記録と、2 行目だけ null の記録**を比べる形にした
+- G-9 は 2 つの形で見る: 子プロセス(同じ入力で旗ありと旗なしの表と `--events` がバイト一致・2 つのファイルは lib の行と一致しスキーマを通る)と、コミット済みの記録 74 本の比べ(9.4)
+- 不変条件(S-1)は、固定例(当たるのは G-4・G-15 の 2 局)とコミット済みの記録(real-02 を除く 74 本)で見る。同じ試験で、74 本の上がりと最大の下がりの行がすべて v0.1 を通ることも見る
+
+### 9.3 試験・型検査(worktree の根から)
+
+- typecheck rc 0(`scratchpad/d1b-typecheck2.out`)
+- **全件 608 passed**(`8ee0839` の 584 + 24。`scratchpad/d1b-suite.out`、`81b061ab…`)
+- `diagnosisMoment.test.ts` 22 件: G-1〜G-8・G-10〜G-14(13 件)・G-15 の 2 件・不変条件(固定例・コミット済みの記録)・5 変種・共通部は v0.4 と同じ定義・契約と版(Y-17)・境目
+- `diagnose.test.ts` +2: G-9・G-16
+- **最初の回で、コミット済みの記録の試験が vitest の既定の 5 秒で時間切れ**になった(値の誤りではない。ほかの 21 件は通った)。この試験だけ 120 秒にした
+
+### 9.4 G-9・予-4(既存の出力が変わらない)と、real-01 の予-1・予-2
+
+- 基点: `8ee0839` の worktree(汚れは node_modules の symlink だけ)で、コミット済みの記録を フォルダごとに `diagnose.ts … --events` に掛けた(`scratchpad/d1b-g9-base/`、要約 `summary.txt` `10a8e3eb…`)。**real-02 は掛けていない**
+- 比べ: 実装の worktree で同じフォルダに `--events`・`--events-rise`・`--events-maxdrop` を付けて掛け、表はバイト列、`--events` は各行の `provenance.analysis` だけを除いて比べた。**上がりと最大の下がりは件数だけを出し、値は表示していない**(道具 `scratchpad/d1b-g9-compare.py` `f60e89ba…`、出力 `d1b-g9-compare.out` `82fc0c96…`)
+
+| 記録 | 本数 | 表 | `--events` | `rise`(cp・mateAfter) | `maxDrop` の行 |
+|---|---|---|---|---|---|
+| d-cost/c4m | 7 | バイト一致 | 22 / 22 一致 | 0 | 組の行 7 |
+| d-cost/l100k | 7 | バイト一致 | 23 / 23 一致 | 1(cp 1) | 組の行 7 |
+| d-cost/l400k | 7 | バイト一致 | 21 / 21 一致 | 1(cp 1) | 組の行 7 |
+| d0-nnue | 7 | バイト一致 | 22 / 22 一致 | 0 | 組の行 7 |
+| d3-nnue | 20 | バイト一致 | 109 / 109 一致 | 2(cp 2) | 組の行 20 |
+| d3b-nnue-n2000 | 20 | バイト一致 | 133 / 133 一致 | 4(cp 4) | 組の行 20 |
+| real-01 | 6 | バイト一致 | 5 / 5 一致 | **26(cp 22・mateAfter 4)** | 組の行 6 |
+
+| # | 予測(A、5.) | 実測 | 判定 |
+|---|---|---|---|
+| 予-1 | real-01 の 6 局で `rise` は 3〜12 件 | **26 件**(cp 22・mateAfter 4) | **外れ** |
+| 予-2 | `maxDrop` は 6 局とも組の行 | 6 局とも組の行 | 的中 |
+| 予-4 | 既存の `--events`(real-01 5 行・74 本 335 行)と表は D2 のコミット後の出力とバイト一致(`provenance.analysis` を除く) | 表 7 / 7 の呼び出しでバイト一致・`--events` 335 / 335 行一致 | 的中 |
+
+- 予-1 の外れの読み方(件数が多い理由)は、B は書き足さない(値を見て理由を足すと、予測を後から書き換えるのと同じになる)。A と司令塔が決める
+
+### 9.5 変異(規則 11.3・11.8。計画 4. の Y-1〜Y-18)
+
+道具 `scratchpad/d1b-mutate.py`(sha256 `295bac1e384a9ee6ee05c5368be70e01fe591fc8fc5af731e41f65dee5492836`)。**予測は実装と試験を書いた後・当てる前に、計画 4. の「見張る」を試験の単位まで詰めて道具の中に書き、道具の sha を回すのと同じ逐次コマンドで記録した**(`scratchpad/d1b-shas.out`)。試験は `lib/diagnosisMoment.test.ts` と `diagnose.test.ts` を根から回した。× の行の名前は最後の「 > 」の後ろで照合した(D2 §12.6.4 の分類の誤りを直した形)。校正(変異なし): exit 0・31 件・落ちた試験なし。1 件ごとにバイト一致で戻し、終わりに 2 本の sha が前と同じことを確かめた。出力 `scratchpad/d1b-mutate.out`(`165bc094e8f3df9251cb733b4cd9ebf342ea431b4d6fb173bb1979308f42ba73`)。
+
+**適用 18 / 鳴った 18 / 沈黙 0 / 適用できなかった 0。中心 14 / 14。予測(鳴る試験の集合)的中 18 / 18。**
+
+| # | 変異 | 中心 / 周辺 | 鳴った試験 |
+|---|---|---|---|
+| Y-1 | 上がりの符号を変えない(`diffCp ≤ dropCp`) | 中心 | G-1・G-4・G-8・G-10・G-11・G-12・G-15 の rise・5 変種・コミット済みの記録・子プロセス G-9 |
+| Y-2 | 上がりの境目を `>` | 中心 | G-1・G-8・G-11・G-12 |
+| Y-3 | `opponentBestmove` に `afterPass.bestmove` を写す | 中心 | G-11・コミット済みの記録 |
+| Y-4 | 最大の下がりに `diffCp` の最大を選ぶ | 中心 | G-1・G-3・G-4・G-8・G-11・G-12・G-15 の maxDrop・不変条件(固定例)・コミット済みの記録・境目・G-9 |
+| Y-5 | 最大の下がりを急落だけから選ぶ | 中心 | G-1・G-3・G-5・G-6・G-8・G-10・G-11・G-13・G-14・5 変種・G-9 |
+| Y-6 | `failureEventBranchPly` を常に null | 中心 | G-4・G-10・G-15 の maxDrop・不変条件(固定例)・コミット済みの記録 |
+| Y-7 | 状態の行を書かない | 中心 | G-9 |
+| Y-8 | 上がりの行を `--events` にも書く | 中心 | G-9 |
+| Y-9 | 同じ最小値で遅い組 | 周辺 | G-5 |
+| Y-10 | `mateAfter > 0` を上がりにしない | 周辺 | G-2・5 変種 |
+| Y-11 | `rise` の `failureEventBranchPly` を常に null | 中心 | G-10 |
+| Y-12 | `userMove` と `opponentMove` を入れ替える | 中心 | G-15 の rise・maxDrop |
+| Y-13 | `counterfactual` に相手の手の手数(`branchPly + 1`)を渡す | 中心 | G-12・G-15 の rise・maxDrop |
+| Y-14 | 最大の下がりを mateAfter・notCompared の組からも選ぶ | 中心 | G-2・G-2′・G-7・5 変種 |
+| Y-15 | `excludedPairs.mateDrop` に mateRise を畳む | 周辺 | G-2 |
+| Y-16 | `noDrop` の境目を `> 0` | 周辺 | G-13 |
+| Y-17 | `contract` を書かず、`schemaVersion` を Failure Event の版に | 中心 | G-15 の rise・maxDrop・5 変種・コミット済みの記録・境目・G-9 |
+| Y-18 | 上がりのファイルを行を作りながら書く | 中心 | G-16 |
+
+- **計画 4. と当て方が違うもの**: Y-7 は、lib の `diagnosisMomentsOf` がどの局にも `maxDrop` を 1 つ返す形(型で必須)なので、状態の行を落とすのは `diagnose.ts` の書き出しで当てた(計画の見張り G-6・G-7 ではなく、子プロセス G-9 の 2 本目の `noDrop` の行が鳴る)。Y-13 は「相手の手を playedMove として渡す」を、`counterfactualOf` に相手の手の手数を渡す形で当てた(D2 の関数は `playedMove` を引数に持たず、手数から手を引くため)
+- Y-3・Y-6・Y-17 は、固定例に加えて、コミット済みの記録の試験(本物の `afterPass.bestmove` が文字列の行・cpDrop の Event がある局)でも鳴った
+
+### 9.6 残っていること
+
+- 監査(A)
+- 20 局版の記録(real-02・real-03)に D1b を掛けるのは、司令塔の合図の後
+
+### 9.7 監査 A の REVISE(必須 R-1・推奨 S-1)の取り込み(**試験だけを足した。lib・diagnose.ts・スキーマは変えていない**)
+
+- **R-1(必須)**: A の変異 M-A4(`consequences` の窓を `branchPly + 2` にずらす)が沈黙した。G-12(下がりの組 0→2)と G-15(21・23)は GAME01 の王手の無い区間で、窓がずれても `actualContinuation` の値が同じだったため(A の探り: b=1 と 3、21 と 23 は同じ値、b=29・31・33 は checks [34]・[34, 36]・[34, 36, 38])。
+  → `diagnosisMoment.test.ts` に固定例 R-1 を足した。GAME01 の ply 28 → 30 に +500 を植えると、`rise`(branchPly 29)の `consequences` は手で書いた checks [34]、`maxDrop`(branchPly 31、−500、同じ組に cpDrop の Event)の `consequences` は手で書いた checks [34, 36] で、Event の `consequences` とも等しい。`trigger` は直前の行の `triggerOf`・Event の `trigger` と等しい(A の M-A3 の見張りを G-15 だけでなくした)
+- **S-1(推奨)**: 旗を 1 つだけ渡す試験が無く、A の変異 M-A5(組み立ての条件を `--events-rise` だけにする)が沈黙した。
+  → `diagnose.test.ts` に子プロセス S-1 を足した。同じ記録に、2 つの旗を一緒に渡した回・`--events-rise` だけ・`--events-maxdrop` だけの 3 回を掛け、1 つだけの回のファイルが一緒の回とバイト一致すること(空のファイル同士で通らないよう、行の数を先に見る)と、渡していないファイルを作らないこと
+
+- **変異の予測は、試験を足した後・当てる前に `d1b-revise-mutate.py`(sha256 e9378238)へ書き、同じ逐次コマンドで当てた**(出力 `d1b-revise.out` 236c43a3 の差分行を除く全体)。校正(変異なし): exit 0・33 件通過・落ちた試験なし
+
+| 変異 | 中心/周辺 | 変えた所 | 予測 | 結果 |
+|---|---|---|---|---|
+| M-A3 | 中心 | `trigger: triggerOf(to, …)` | G-15 rise・G-15 maxDrop・R-1 | 鳴った(同じ 3 件)・予測どおり |
+| M-A4 | 中心 | `actualContinuation(moves, branchPly + 2, …)` | R-1 | 鳴った(R-1 だけ)・予測どおり |
+| M-A5 | 周辺 | `if (eventsRiseOut) {`(diagnose.ts) | S-1 | 鳴った(S-1 だけ)・予測どおり |
+
+  適用 3 / 鳴った 3 / 沈黙 0 / 適用できなかった 0 / 予測的中 3/3。どれもバイト一致で戻した(lib・diagnose.ts の sha は前後で b46cc619・ac2336d3 のまま)
+- **2 つの試験ファイル** 33 件通過(diagnosisMoment.test.ts 23・diagnose.test.ts の該当分を含む)、`npm run typecheck:scripts` rc 0、**全体 44 ファイル 610 件通過**(608 + R-1 の 1 + S-1 の 1)
+- **sha256(差し替え後)**: `diagnosisMoment.test.ts` 292c68a2 → **78eb6889**、`diagnose.test.ts` e07101c7 → **453adfa5**。ほかの 5 つは提出時のまま(`diagnosisMoment.ts` b46cc619・`diagnose.ts` ac2336d3・スキーマ 023a63c5・`failureEvent.ts` eb147cb9・`failureEventFixtures.ts` b10932b5)
+- 差分(提出版 → 直した版): `d1b-revise-diff.out` 236c43a3(+55 行 / −1 行。消えた 1 行は diagnose.test.ts の見出しの箇条を 2 行に分けたもの)

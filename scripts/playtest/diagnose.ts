@@ -1,7 +1,7 @@
 // STEP D1(docs/STEP_D1_PLAN_2026-09-14.md 3.2)。replay.ts の JSONL を読み、Failure Event を
 // Markdown の表で標準出力へ書く。**エンジンは回さない**(check.ts と同じ形)。
 //
-// 使い方: npx tsx scripts/playtest/diagnose.ts <a.jsonl> [<b.jsonl> ...] [--events <out.jsonl>] [--evaluator "<評価関数の識別>"]
+// 使い方: npx tsx scripts/playtest/diagnose.ts <a.jsonl> [<b.jsonl> ...] [--events <out.jsonl>] [--events-rise <out.jsonl>] [--events-maxdrop <out.jsonl>] [--evaluator "<評価関数の識別>"]
 //
 // 【このファイルは薄くしてある】判定・集計・表の組み立てはすべて lib/failureEvent.ts(合計は lib/diagnosisTotals.ts)にあり、そちらに試験がある。
 // ここでやるのは、記録を読む・lib を呼ぶ・書き出す、だけである。
@@ -9,6 +9,10 @@
 // (STEP JSON v0.2・V0.3-META・STEP D2 の v0.4。スキーマは scripts/playtest/schemas/failure-event.v0.4.schema.json)。行の末尾に出どころ(provenance)を付ける:
 // 記録のファイル(根からの相対)と sha256・記録の meta の写し・`--evaluator` の文(**確かめていない自己申告**。渡されなければ null。
 // enginePath から推測しない ― P-43)・このコマンドを回したときの gitHead と汚れ・規則の値(docs/STEP_JSON-V0.2_PLAN_2026-09-15.md 2.1)。
+//
+// `--events-rise`・`--events-maxdrop`(STEP D1b。docs/STEP_D1b_PLAN_2026-09-15.md)は、上がりの組と局ごとの最大の下がりを、別の契約 diagnosis-moment v0.1
+// (scripts/playtest/schemas/diagnosis-moment.v0.1.schema.json)の行で書く。組み立ては lib/diagnosisMoment.ts。**`--events` の行と表は変えない**。
+// **3 つのファイルは、すべての行を作ってから書く**(出どころの例外で一部のファイルだけが書かれる形を避ける ― 計画 S-8)。
 //
 // 【exit code】lib の例外は外へ出さず「数えられなかった」行にして exit 0。**入力が読めないとき(ENOENT・壊れた JSONL)・引数が誤りのときは exit 1**
 // (計画 D-1 の読み替え ― 2026-09-15、監査 B の非必須 d)。**記録の meta が出どころに写せる形でない(STEP JSON V0.3-META 計画 K-3)ときも、--events を書かずに exit 1**
@@ -26,15 +30,17 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 import type { MetaLine, RecordLine } from "./invariants/types.js";
+import { diagnosisMomentsOf, toMomentLine } from "./lib/diagnosisMoment.js";
 import { renderDiagnosisTotals } from "./lib/diagnosisTotals.js";
 import { buildDiagnosisReport, DRAFT_RULE_1, NOT_EVALUATION_CP, renderDiagnosisReport, type DiagnosisInput } from "./lib/failureEvent.js";
 import { buildProvenance, recordSha256, toEventLine } from "./lib/failureEventSchema.js";
 import { readGitState } from "./lib/gitState.js";
+import { initialSfenOf } from "./lib/sideAlignment.js";
 
 /** このファイルがあるリポジトリ(作業ツリー)の根。出どころのパスはここからの相対にする */
 const REPO_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..", "..");
 
-function parseArgs(argv: string[]): { files: string[]; eventsOut: string | undefined; evaluator: string | null } {
+function parseArgs(argv: string[]): { files: string[]; eventsOut: string | undefined; eventsRiseOut: string | undefined; eventsMaxDropOut: string | undefined; evaluator: string | null } {
   const taken = new Set<number>();
   const valueOf = (flag: string): string | undefined => {
     const index = argv.indexOf(flag);
@@ -44,11 +50,13 @@ function parseArgs(argv: string[]): { files: string[]; eventsOut: string | undef
     return argv[index + 1];
   };
   const eventsOut = valueOf("--events");
+  const eventsRiseOut = valueOf("--events-rise");
+  const eventsMaxDropOut = valueOf("--events-maxdrop");
   const evaluator = valueOf("--evaluator");
   // 自己申告の文を空で埋めない(「無い」は null = --evaluator を渡さないこと。渡したのに値が無い・空・次の旗なら誤りとして止める)
   if (argv.includes("--evaluator") && (evaluator === undefined || evaluator.trim().length === 0 || evaluator.startsWith("--"))) throw new Error("--evaluator に評価関数の識別の文を渡してください(空は受け付けない)");
   const files = argv.filter((arg, index) => !taken.has(index) && arg.length > 0);
-  return { files, eventsOut, evaluator: evaluator ?? null };
+  return { files, eventsOut, eventsRiseOut, eventsMaxDropOut, evaluator: evaluator ?? null };
 }
 
 interface InputEntry {
@@ -73,9 +81,9 @@ function readInput(filePath: string): InputEntry {
 }
 
 function main(): void {
-  const { files, eventsOut, evaluator } = parseArgs(process.argv.slice(2));
+  const { files, eventsOut, eventsRiseOut, eventsMaxDropOut, evaluator } = parseArgs(process.argv.slice(2));
   if (files.length === 0) {
-    console.error("使い方: npx tsx scripts/playtest/diagnose.ts <a.jsonl> [<b.jsonl> ...] [--events <out.jsonl>] [--evaluator \"<評価関数の識別>\"]");
+    console.error("使い方: npx tsx scripts/playtest/diagnose.ts <a.jsonl> [<b.jsonl> ...] [--events <out.jsonl>] [--events-rise <out.jsonl>] [--events-maxdrop <out.jsonl>] [--evaluator \"<評価関数の識別>\"]");
     process.exitCode = 0;
     return;
   }
@@ -86,8 +94,10 @@ function main(): void {
   // STEP D3(計画 Q-5): 入力が 2 本以上なら、入力ごとの表の後に群の合計の節を足す(1 本なら何も足さない)。
   console.log([...renderDiagnosisReport(report), ...renderDiagnosisTotals(report)].join("\n"));
 
-  if (eventsOut) {
+  if (eventsOut || eventsRiseOut || eventsMaxDropOut) {
     const analysisGit = readGitState(REPO_ROOT);
+    const riseLines: string[] = [];
+    const maxDropLines: string[] = [];
     // buildDiagnosisReport は入力 1 本につき 1 行を同じ順で返す(lib/failureEvent.ts)
     const eventLines = report.flatMap((row, index) => {
       if (row.result.kind !== "counted") return [];
@@ -100,9 +110,19 @@ function main(): void {
         analysisGit,
         rule: DRAFT_RULE_1, notEvaluationCp: NOT_EVALUATION_CP, repoRoot: REPO_ROOT,
       });
+      // STEP D1b: 上がりと最大の下がり(同じ記録・同じ規則・同じ開始局面・同じ出どころ)。頼まれたときだけ組み立てる
+      if (eventsRiseOut || eventsMaxDropOut) {
+        const moments = diagnosisMomentsOf(entry.input.kifuId, entry.input.records, DRAFT_RULE_1, initialSfenOf(entry.input.meta), row.result.events);
+        riseLines.push(...moments.rises.map((moment) => JSON.stringify(toMomentLine(moment, provenance))));
+        maxDropLines.push(JSON.stringify(toMomentLine(moments.maxDrop, provenance)));
+      }
       return row.result.events.map((event) => JSON.stringify(toEventLine(event, provenance)));
     });
-    writeFileSync(path.resolve(eventsOut), eventLines.length > 0 ? `${eventLines.join("\n")}\n` : "", "utf-8");
+    // STEP D1b(計画 S-8): 3 つのファイルは、すべての行を作ってから書く
+    const jsonl = (lines: string[]): string => (lines.length > 0 ? `${lines.join("\n")}\n` : "");
+    if (eventsOut) writeFileSync(path.resolve(eventsOut), jsonl(eventLines), "utf-8");
+    if (eventsRiseOut) writeFileSync(path.resolve(eventsRiseOut), jsonl(riseLines), "utf-8");
+    if (eventsMaxDropOut) writeFileSync(path.resolve(eventsMaxDropOut), jsonl(maxDropLines), "utf-8");
   }
 
   process.exitCode = 0;

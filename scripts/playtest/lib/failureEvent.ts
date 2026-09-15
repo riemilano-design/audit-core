@@ -343,8 +343,8 @@ export interface DiagnosisCounts {
   cause1Draft: number;
 }
 
-/** 最も長い moveHistory(最後の ready 行は棋譜の全手を持つ。計画 E-d) */
-function fullMovesOf(rows: readonly EvaluatedRow[]): string[] {
+/** 最も長い moveHistory(最後の ready 行は棋譜の全手を持つ。計画 E-d)。STEP D1b の lib/diagnosisMoment.ts も同じ手順を使う */
+export function fullMovesOf(rows: readonly EvaluatedRow[]): string[] {
   return rows.reduce<string[]>(
     (longest, row) => (row.record.response.moveHistory.length > longest.length ? row.record.response.moveHistory : longest),
     [],

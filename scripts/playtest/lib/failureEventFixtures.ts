@@ -27,11 +27,19 @@ export const GAME01_MOVES: readonly string[] = [
 
 export function engineRef(
   scoreCp: number | null,
-  options: { mate?: number | null; bestmove?: string | null; afterPassScoreCp?: number | null; afterPassMate?: number | null; dropCp?: number | null } = {},
+  options: {
+    mate?: number | null;
+    bestmove?: string | null;
+    afterPassScoreCp?: number | null;
+    afterPassMate?: number | null;
+    /** STEP D1b(計画 E-9・G-11): afterPass の最善手。既定は null(本番の記録は文字列を持つことが多い) */
+    afterPassBestmove?: string | null;
+    dropCp?: number | null;
+  } = {},
 ): EngineReference {
   return {
     baseline: { scoreCp, mate: options.mate ?? null, bestmove: options.bestmove ?? null },
-    afterPass: { scoreCp: options.afterPassScoreCp ?? null, mate: options.afterPassMate ?? null, bestmove: null, captureSquare: null },
+    afterPass: { scoreCp: options.afterPassScoreCp ?? null, mate: options.afterPassMate ?? null, bestmove: options.afterPassBestmove ?? null, captureSquare: null },
     dropCp: options.dropCp ?? null,
     nodes: 4_000_000,
   };

@@ -12,6 +12,8 @@
 //   写せない meta(K-3)では --events を書かずに 0 でなく止まり、前の回のファイルが残ることを、組み立ての関数を通さずに見る。
 // - STEP D2(監査 1e の R-1)… 64KB を超える Markdown を子プロセスからパイプで受けても末尾まで届くこと(process.exit で終わると黙って切れる)。
 // - STEP D2(監査 1e の任意 N-1)… 表の後に K-3 で止まる入力を置いても、パイプで表の末尾まで届いてから exit 1 で止まること(捕まえない例外で止まると切れる)。
+// - STEP D1b … --events-rise・--events-maxdrop を付けても --events と表が変わらないこと(G-9)、K-3 で 3 つのファイルのどれも書き換えないこと(G-16)、
+//   旗を 1 つだけ渡しても、そのファイルは 2 つを一緒に渡した回と同じこと(監査 A の S-1)。
 //
 // 【静かにスキップしない】npx・tsx・git が無ければ execFileSync が例外を投げて赤になる。
 // 【一時ディレクトリ以外に書かない】走らせる前と後で git status(無視されるファイルも 1 本ずつ。
@@ -26,10 +28,13 @@ import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 import type { MetaLine } from "./invariants/types.js";
 import { renderDiagnosisTotals } from "./lib/diagnosisTotals.js";
+import { diagnosisMomentsOf, loadDiagnosisMomentSchema, toMomentLine } from "./lib/diagnosisMoment.js";
+import { validate } from "./lib/eventSchema.js";
 import { buildDiagnosisReport, DRAFT_RULE_1, NOT_EVALUATION_CP, renderDiagnosisReport, type DiagnosisInput } from "./lib/failureEvent.js";
 import { engineRef, FOLD_MOVES, FOLD_START, GAME01_MOVES, plantedRecords } from "./lib/failureEventFixtures.js";
 import { buildProvenance, loadFailureEventSchema, toEventLine, validateFailureEventLine } from "./lib/failureEventSchema.js";
 import { readGitState } from "./lib/gitState.js";
+import { initialSfenOf } from "./lib/sideAlignment.js";
 
 const PLAYTEST_DIR = dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = join(PLAYTEST_DIR, "..", "..");
@@ -70,6 +75,8 @@ describe("diagnose.ts(計画 5.2)", () => {
     expect(source).toContain("rule: DRAFT_RULE_1, notEvaluationCp: NOT_EVALUATION_CP, repoRoot: REPO_ROOT,");
     // STEP D2(監査 1e の R-1): 終わるときに process.exit を呼ばない(パイプの標準出力が書き終わる前に切れる。子プロセスの試験 R-1 でも見る)
     expect(source).not.toContain("process.exit(");
+    // STEP D1b: 上がりと最大の下がりを同じ記録・規則・開始局面・出どころで組み立て、3 つのファイルは全部の行を作ってから書く
+    expect(source).toContain("        const moments = diagnosisMomentsOf(entry.input.kifuId, entry.input.records, DRAFT_RULE_1, initialSfenOf(entry.input.meta), row.result.events);");
   });
 
   it(
@@ -273,6 +280,166 @@ describe("diagnose.ts(計画 5.2)", () => {
       }
     },
     120_000,
+  );
+
+  // STEP D1b(docs/STEP_D1b_PLAN_2026-09-15.md G-9)。--events-rise・--events-maxdrop を付けても、--events の行と標準出力の表は旗なしと同じ。
+  // 上がりと最大の下がりの行は、同じ記録を lib に掛けて組み立てた行と一致し、契約 diagnosis-moment v0.1 のスキーマを通る
+  it(
+    "子プロセス(D1b の G-9): 上がり・最大の下がりの旗を付けても --events と表は旗なしとバイト一致で、2 つのファイルは lib の行と一致しスキーマを通る",
+    () => {
+      const dir = mkdtempSync(join(tmpdir(), "d1b-diagnose-"));
+      try {
+        const inputs: DiagnosisInput[] = [
+          {
+            kifuId: "d1b-rise",
+            meta: { kind: "meta", kifuId: "d1b-rise", startedAt: "t", gitHead: null, enginePath: ENGINE_PATH } as MetaLine,
+            records: plantedRecords(GAME01_MOVES, { 20: engineRef(100, { bestmove: "3g2h" }), 22: engineRef(600) }),
+            errorLines: [],
+          },
+          {
+            kifuId: "d1b-quiet",
+            meta: { kind: "meta", kifuId: "d1b-quiet", startedAt: "t", gitHead: null, enginePath: ENGINE_PATH } as MetaLine,
+            records: plantedRecords(GAME01_MOVES.slice(0, 6), { 0: engineRef(0), 2: engineRef(10), 4: engineRef(20), 6: engineRef(30) }),
+            errorLines: [],
+          },
+        ];
+        const paths = inputs.map((input) => {
+          const filePath = join(dir, `${input.kifuId}.jsonl`);
+          writeFileSync(filePath, `${[input.meta, ...input.records].map((line) => JSON.stringify(line)).join("\n")}\n`, "utf-8");
+          return filePath;
+        });
+        const plainEvents = join(dir, "plain-events.jsonl");
+        const events = join(dir, "events.jsonl");
+        const rise = join(dir, "rise.jsonl");
+        const maxDrop = join(dir, "maxdrop.jsonl");
+        const before = gitStatus();
+        const plainStdout = execFileSync("npx", ["tsx", DIAGNOSE_TS, ...paths, "--events", plainEvents], { cwd: REPO_ROOT, encoding: "utf-8" });
+        const stdout = execFileSync("npx", ["tsx", DIAGNOSE_TS, ...paths, "--events", events, "--events-rise", rise, "--events-maxdrop", maxDrop], { cwd: REPO_ROOT, encoding: "utf-8" });
+        expect(gitStatus()).toBe(before);
+        expect(stdout).toBe(plainStdout);
+        expect(readFileSync(events)).toEqual(readFileSync(plainEvents));
+
+        const reread = inputs.map((input) => JSON.parse(JSON.stringify(input)) as DiagnosisInput);
+        const report = buildDiagnosisReport(reread, DRAFT_RULE_1);
+        const analysisGit = readGitState(REPO_ROOT);
+        const expectedRise: unknown[] = [];
+        const expectedMaxDrop: unknown[] = [];
+        report.forEach((row, index) => {
+          if (row.result.kind !== "counted") throw new Error(`${row.kifuId} が数えられなかった`);
+          const provenance = buildProvenance({
+            recordPath: paths[index]!,
+            recordSha256: createHash("sha256").update(readFileSync(paths[index]!)).digest("hex"),
+            meta: reread[index]!.meta,
+            evaluator: null,
+            analysisGit,
+            rule: DRAFT_RULE_1,
+            notEvaluationCp: NOT_EVALUATION_CP,
+            repoRoot: REPO_ROOT,
+          });
+          const moments = diagnosisMomentsOf(reread[index]!.kifuId, reread[index]!.records, DRAFT_RULE_1, initialSfenOf(reread[index]!.meta), row.result.events);
+          expectedRise.push(...moments.rises.map((moment) => toMomentLine(moment, provenance)));
+          expectedMaxDrop.push(toMomentLine(moments.maxDrop, provenance));
+        });
+        const readLines = (file: string) => readFileSync(file, "utf-8").split("\n").filter((line) => line.length > 0).map((line) => JSON.parse(line) as Record<string, unknown>);
+        const riseLines = readLines(rise);
+        const maxDropLines = readLines(maxDrop);
+        // 1 本目は上がり 1 件、2 本目は 0 件。最大の下がりは入力 1 本につき 1 行(1 本目は組の行、2 本目は noDrop)
+        expect(riseLines.map((line) => [line.kifuId, line.branchPly])).toEqual([["d1b-rise", 21]]);
+        expect(maxDropLines.map((line) => [line.kifuId, line.state ?? line.branchPly])).toEqual([
+          ["d1b-rise", 23],
+          ["d1b-quiet", "noDrop"],
+        ]);
+        expect(riseLines).toEqual(JSON.parse(JSON.stringify(expectedRise)));
+        expect(maxDropLines).toEqual(JSON.parse(JSON.stringify(expectedMaxDrop)));
+        const momentSchema = loadDiagnosisMomentSchema();
+        for (const line of [...riseLines, ...maxDropLines]) expect(validate(line, momentSchema)).toEqual([]);
+      } finally {
+        rmSync(dir, { recursive: true, force: true });
+      }
+    },
+    120_000,
+  );
+
+  // STEP D1b(監査 A の推奨 S-1)。新しい旗を 1 つだけ渡した回でも、そのファイルは 2 つを一緒に渡した回とバイト一致し、渡していないファイルは作らない
+  it(
+    "子プロセス(D1b の S-1): --events-rise だけ・--events-maxdrop だけを渡しても、それぞれのファイルは 2 つを一緒に渡した回とバイト一致し、渡していないファイルは作らない",
+    () => {
+      const dir = mkdtempSync(join(tmpdir(), "d1b-diagnose-single-"));
+      try {
+        const meta = { kind: "meta", kifuId: "d1b-single", startedAt: "t", gitHead: null, enginePath: ENGINE_PATH };
+        const records = plantedRecords(GAME01_MOVES, { 20: engineRef(100), 22: engineRef(600) });
+        const recordPath = join(dir, "d1b-single.jsonl");
+        writeFileSync(recordPath, `${[meta, ...records].map((line) => JSON.stringify(line)).join("\n")}\n`, "utf-8");
+        const out = (name: string) => join(dir, name);
+        const run = (args: string[]) => execFileSync("npx", ["tsx", DIAGNOSE_TS, recordPath, ...args], { cwd: REPO_ROOT, encoding: "utf-8" });
+        const before = gitStatus();
+        run(["--events-rise", out("both-rise.jsonl"), "--events-maxdrop", out("both-maxdrop.jsonl")]);
+        run(["--events-rise", out("rise-only.jsonl")]);
+        run(["--events-maxdrop", out("maxdrop-only.jsonl")]);
+        expect(gitStatus()).toBe(before);
+        expect(readdirSync(dir).sort()).toEqual(["both-maxdrop.jsonl", "both-rise.jsonl", "d1b-single.jsonl", "maxdrop-only.jsonl", "rise-only.jsonl"]);
+        // 上がり 1 件(20→22)・最大の下がり 1 行(22→24)。空のファイル同士の一致で通らないよう、行の数を先に見る
+        expect(readFileSync(out("both-rise.jsonl"), "utf-8").trim().split("\n")).toHaveLength(1);
+        expect(readFileSync(out("both-maxdrop.jsonl"), "utf-8").trim().split("\n")).toHaveLength(1);
+        expect(readFileSync(out("rise-only.jsonl"))).toEqual(readFileSync(out("both-rise.jsonl")));
+        expect(readFileSync(out("maxdrop-only.jsonl"))).toEqual(readFileSync(out("both-maxdrop.jsonl")));
+      } finally {
+        rmSync(dir, { recursive: true, force: true });
+      }
+    },
+    120_000,
+  );
+
+  // STEP D1b(計画 G-16・S-8)。2 本目の記録の meta が K-3 に当たると、3 つのファイルのどれも書かず、前もって置いたファイルのバイト列が変わらない
+  it(
+    "子プロセス(D1b の G-16): 2 本目の meta が K-3 に当たると exit 1 で、--events・--events-rise・--events-maxdrop のどれも書き換えない",
+    () => {
+      const dir = mkdtempSync(join(tmpdir(), "d1b-diagnose-k3-"));
+      try {
+        const good = { kind: "meta", kifuId: "d1b-good", startedAt: "t", gitHead: null, enginePath: ENGINE_PATH };
+        const broken = {
+          kind: "meta",
+          kifuId: "d1b-broken",
+          startedAt: "t",
+          gitHead: null,
+          enginePath: ENGINE_PATH,
+          mirrored: true,
+          originalUserSide: "gote",
+          startSfen: FOLD_START,
+          sideAlignmentChecked: true,
+          trailingMoveTruncated: false,
+        };
+        const files: Array<[string, object, unknown[]]> = [
+          ["d1b-good", good, plantedRecords(GAME01_MOVES, { 20: engineRef(100), 22: engineRef(600) })],
+          ["d1b-broken", broken, plantedRecords(FOLD_MOVES, { 0: engineRef(500), 2: engineRef(-500) }, {}, FOLD_START)],
+        ];
+        const paths = files.map(([name, meta, records]) => {
+          const filePath = join(dir, `${name}.jsonl`);
+          writeFileSync(filePath, `${[meta, ...records].map((line) => JSON.stringify(line)).join("\n")}\n`, "utf-8");
+          return filePath;
+        });
+        const outputs = ["events", "rise", "maxdrop"].map((name) => join(dir, `${name}.jsonl`));
+        outputs.forEach((file, index) => writeFileSync(file, `前の回の行 ${index}\n`, "utf-8"));
+        const previous = outputs.map((file) => readFileSync(file));
+        let failure: { status: number | null; stderr: string } | undefined;
+        try {
+          execFileSync("npx", ["tsx", DIAGNOSE_TS, ...paths, "--events", outputs[0]!, "--events-rise", outputs[1]!, "--events-maxdrop", outputs[2]!], {
+            cwd: REPO_ROOT,
+            encoding: "utf-8",
+            stdio: "pipe",
+          });
+        } catch (error) {
+          failure = error as { status: number | null; stderr: string };
+        }
+        expect(failure, "止まらなかった").toBeDefined();
+        expect(failure!.status).toBe(1);
+        expect(String(failure!.stderr)).toContain("InvalidProvenanceMetaError: 記録 d1b-broken の meta が");
+        outputs.forEach((file, index) => expect(readFileSync(file), file).toEqual(previous[index]));
+      } finally {
+        rmSync(dir, { recursive: true, force: true });
+      }
+    },
+    60_000,
   );
 
   it(
