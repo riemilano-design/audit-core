@@ -15,6 +15,8 @@
 // - STEP D1b … --events-rise・--events-maxdrop を付けても --events と表が変わらないこと(G-9)、K-3 で 3 つのファイルのどれも書き換えないこと(G-16)、
 //   旗を 1 つだけ渡しても、そのファイルは 2 つを一緒に渡した回と同じこと(監査 A の S-1)。
 // - STEP D-SCREEN-2 … 段 2 の記録とその段 1 を一緒に渡すと表を書かずに exit 1(S-14)、段 2 の記録だけなら行に出どころの欄が出ること。
+// - STEP D3-COND … --conditions・--person などを渡すと、表の後に条件式の節が付き、--events-cond・--cond-summary が同じ記録を lib に掛けた結果と一致し、
+//   各行が契約 diagnosis-condition v0.1 のスキーマを通ること。旗の組み合わせの誤りでは表も書かずに exit 1。
 //
 // 【静かにスキップしない】npx・tsx・git が無ければ execFileSync が例外を投げて赤になる。
 // 【一時ディレクトリ以外に書かない】走らせる前と後で git status(無視されるファイルも 1 本ずつ。
@@ -22,25 +24,41 @@
 
 import { execFileSync } from "node:child_process";
 import { createHash } from "node:crypto";
-import { existsSync, mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 import type { MetaLine } from "./invariants/types.js";
+import { conditionTallyOf, type ConditionGameInput } from "./lib/condition.js";
+import {
+  conditionGameOf,
+  conditionInputsOf,
+  conditionLinesOf,
+  conditionSummaryOf,
+  loadConditionsFromDir,
+  loadDiagnosisConditionSchema,
+  readKifuEndings,
+  readListedResults,
+  renderConditionSection,
+  type DiagnosisConditionLine,
+} from "./lib/conditionReport.js";
 import { POSITION_FACTS_RULES } from "./lib/counterfactual.js";
 import { renderDiagnosisTotals } from "./lib/diagnosisTotals.js";
 import { diagnosisMomentsOf, loadDiagnosisMomentSchema, toMomentLine } from "./lib/diagnosisMoment.js";
 import { validate } from "./lib/eventSchema.js";
 import { buildDiagnosisReport, DRAFT_RULE_1, NOT_EVALUATION_CP, renderDiagnosisReport, STANDING_BOUNDS, type DiagnosisInput } from "./lib/failureEvent.js";
 import { engineRef, FOLD_MOVES, FOLD_START, GAME01_MOVES, plantedRecords } from "./lib/failureEventFixtures.js";
-import { buildProvenance, FAILURE_EVENT_SCHEMA_VERSION, loadFailureEventSchema, toEventLine, validateFailureEventLine } from "./lib/failureEventSchema.js";
+import { buildProvenance, FAILURE_EVENT_SCHEMA_VERSION, loadFailureEventSchema, pathForProvenance, toEventLine, validateFailureEventLine } from "./lib/failureEventSchema.js";
 import { readGitState } from "./lib/gitState.js";
+import { screenOfRecord } from "./lib/screenDiagnosis.js";
 import { initialSfenOf } from "./lib/sideAlignment.js";
 
 const PLAYTEST_DIR = dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = join(PLAYTEST_DIR, "..", "..");
 const DIAGNOSE_TS = join(PLAYTEST_DIR, "diagnose.ts");
+/** STEP D3-COND: 試験だけの架空の定義のディレクトリ(本番の置き場 lib/conditions/ ではない) */
+const CONDITION_FIXTURES = join(PLAYTEST_DIR, "lib", "conditionFixtures");
 // 固定例の meta の enginePath。相対の文字列だと、試験のプロセスと子プロセスで cwd を基準に違うパスへ直るので、根からの絶対パスにする
 // (scripts/playtest から回しても根から回しても同じ結果。出どころには根からの相対 apps/server/engine/YaneuraOu-by-gcc が書かれる)
 const ENGINE_PATH = join(REPO_ROOT, "apps", "server", "engine", "YaneuraOu-by-gcc");
@@ -84,6 +102,12 @@ describe("diagnose.ts(計画 5.2)", () => {
     expect(source).toContain('  if (conflicts.length > 0) throw new ScreenInputConflictError(conflicts.join(" / "));\n');
     expect(source.indexOf("screenInputConflicts(entries")).toBeLessThan(source.indexOf("buildDiagnosisReport(inputs"));
     expect(source).toContain("        const screen = screenOfRecord(entry.input.kifuId, entry.input.meta, entry.input.records);\n");
+    // STEP D3-COND: 定義と §7.2 の材料を表の前に読み、同じ Failure Event と moment の行に条件式を当て、同じ入力で集計する
+    expect(source).toContain("  const conditions = conditionsDir === undefined ? undefined : await loadConditionsFromDir(conditionsDir);\n");
+    expect(source.indexOf("await loadConditionsFromDir(conditionsDir)")).toBeLessThan(source.indexOf("buildDiagnosisReport(inputs"));
+    expect(source).toContain("conditionLinesOf(conditionInputsOf(row.result.events, moments), conditions, provenance)");
+    expect(source).toContain("conditionGameOf({ kifuId: entry.input.kifuId, meta: entry.input.meta, events: row.result.events, moments, endings, listedResults })");
+    expect(source).toContain("      const tallies = conditions.map((loaded) => conditionTallyOf(person, conditionGames, loaded));\n");
   });
 
   it(
@@ -665,5 +689,140 @@ describe("diagnose.ts(計画 5.2)", () => {
       }
     },
     120_000,
+  );
+  // STEP D3-COND(計画 §3・§6)。条件式の旗を渡すと、表の後に条件式の節が付き、2 つのファイルは同じ記録を lib に掛けた結果と一致する
+  it(
+    "子プロセス(D3-COND §6): --conditions・--person・--events-cond・--cond-summary・--kifu-dir・--listed-results で exit 0。標準出力は表の後に条件式の節(status と(仮))、--events-cond の各行は契約 diagnosis-condition v0.1 のスキーマを通り、--cond-summary は契約の欄を先頭に持つ",
+    async () => {
+      const dir = mkdtempSync(join(tmpdir(), "d3-cond-diagnose-"));
+      try {
+        const inputs: DiagnosisInput[] = [
+          {
+            kifuId: "d1-planted",
+            meta: { kind: "meta", kifuId: "d1-planted", startedAt: "t", gitHead: null, enginePath: ENGINE_PATH } as MetaLine,
+            records: plantedRecords(GAME01_MOVES, { 48: engineRef(500, { afterPassMate: 3, dropCp: 350 }), 50: engineRef(-300) }),
+            errorLines: [],
+          },
+          {
+            kifuId: "d1-quiet",
+            meta: { kind: "meta", kifuId: "d1-quiet", startedAt: "t", gitHead: null, enginePath: ENGINE_PATH } as MetaLine,
+            records: plantedRecords(GAME01_MOVES.slice(0, 20), { 10: engineRef(100), 12: engineRef(-600) }),
+            errorLines: [],
+          },
+        ];
+        const paths = inputs.map((input) => {
+          const filePath = join(dir, `${input.kifuId}.jsonl`);
+          writeFileSync(filePath, `${[input.meta, ...input.records].map((line) => JSON.stringify(line)).join("\n")}\n`, "utf-8");
+          return filePath;
+        });
+        // §7.2 の材料: d1-planted は 51 手目(先手の番)で投了・README の表は負け / d1-quiet は ending のキーが無く、表に載っていない
+        const kifuDir = join(dir, "kifu");
+        mkdirSync(kifuDir);
+        writeFileSync(join(kifuDir, "a.json"), JSON.stringify({ id: "d1-planted", source: "試験", ending: { kind: "resign", ply: 51 }, moves: [] }), "utf-8");
+        writeFileSync(join(kifuDir, "b.json"), JSON.stringify({ id: "d1-quiet", source: "試験", moves: [] }), "utf-8");
+        const listedPath = join(dir, "listed.json");
+        writeFileSync(listedPath, JSON.stringify({ "d1-planted": "loss" }), "utf-8");
+        const condOut = join(dir, "cond.jsonl");
+        const summaryOut = join(dir, "summary.json");
+
+        const before = gitStatus();
+        const stdout = execFileSync(
+          "npx",
+          ["tsx", DIAGNOSE_TS, ...paths, "--conditions", CONDITION_FIXTURES, "--person", "p9", "--events-cond", condOut, "--cond-summary", summaryOut, "--kifu-dir", kifuDir, "--listed-results", listedPath],
+          { cwd: REPO_ROOT, encoding: "utf-8" },
+        );
+        expect(gitStatus()).toBe(before);
+
+        // 同じ記録を、ファイルを経由した形でこのプロセスの lib に掛ける
+        const reread = inputs.map((input) => JSON.parse(JSON.stringify(input)) as DiagnosisInput);
+        const report = buildDiagnosisReport(reread, DRAFT_RULE_1);
+        const conditions = await loadConditionsFromDir(CONDITION_FIXTURES);
+        const endings = readKifuEndings(kifuDir);
+        const listedResults = readListedResults(listedPath);
+        const analysisGit = readGitState(REPO_ROOT);
+        const expectedLines: DiagnosisConditionLine[] = [];
+        const games: ConditionGameInput[] = [];
+        report.forEach((row, index) => {
+          if (row.result.kind !== "counted") return;
+          const input = reread[index]!;
+          const provenance = buildProvenance({
+            recordPath: paths[index]!,
+            recordSha256: createHash("sha256").update(readFileSync(paths[index]!)).digest("hex"),
+            meta: input.meta,
+            evaluator: null,
+            analysisGit,
+            rule: DRAFT_RULE_1,
+            notEvaluationCp: NOT_EVALUATION_CP,
+            standingBounds: STANDING_BOUNDS,
+            positionFactsRules: POSITION_FACTS_RULES,
+            repoRoot: REPO_ROOT,
+          });
+          const moments = diagnosisMomentsOf(input.kifuId, input.records, DRAFT_RULE_1, initialSfenOf(input.meta), row.result.events, screenOfRecord(input.kifuId, input.meta, input.records));
+          expectedLines.push(...conditionLinesOf(conditionInputsOf(row.result.events, moments), conditions, provenance));
+          games.push(conditionGameOf({ kifuId: input.kifuId, meta: input.meta, events: row.result.events, moments, endings, listedResults }));
+        });
+        const tallies = conditions.map((loaded) => conditionTallyOf("p9", games, loaded));
+        const sources = { kifuDir: pathForProvenance(kifuDir, REPO_ROOT), listedResults: pathForProvenance(listedPath, REPO_ROOT) };
+        expect(stdout).toBe(`${[...renderDiagnosisReport(report), ...renderDiagnosisTotals(report)].join("\n")}\n${renderConditionSection("p9", tallies, sources).join("\n")}\n`);
+
+        // lib を通さずに見る: 条件式ごとに label(仮)と status、§7.2 の材料が kifuId で引かれていること
+        for (const id of ["test_only_always", "test_only_focus_stated", "test_only_loadable"]) expect(stdout.split("\n").some((line) => line.startsWith("### ") && line.includes(`(仮)(id: ${id}・status: draft・`)), id).toBe(true);
+        expect(stdout).toMatch(/\| d1-planted \| 49 \| cpDrop \| [^|]+ \| 落とした \| 負け \| 一致 \|/);
+        expect(stdout).toMatch(/\| d1-quiet \| 11 \| cpDrop \| [^|]+ \| 記録に無い \| 載っていない \| 比べない \|/);
+
+        const written = readFileSync(condOut, "utf-8").trim().split("\n").map((line) => JSON.parse(line) as Record<string, unknown>);
+        expect(written.length).toBeGreaterThan(0);
+        expect(written).toEqual(JSON.parse(JSON.stringify(expectedLines)));
+        const schema = loadDiagnosisConditionSchema();
+        for (const line of written) {
+          expect(Object.keys(line)[0]).toBe("contract");
+          expect(validate(line, schema)).toEqual([]);
+        }
+        const summary = JSON.parse(readFileSync(summaryOut, "utf-8")) as Record<string, unknown>;
+        const summaryInputs = paths.map((filePath, index) => ({ path: pathForProvenance(filePath, REPO_ROOT), sha256: createHash("sha256").update(readFileSync(filePath)).digest("hex"), kifuId: inputs[index]!.kifuId, counted: true }));
+        expect(summary).toEqual(JSON.parse(JSON.stringify(conditionSummaryOf({ person: "p9", inputs: summaryInputs, sources, analysisGit, tallies }))));
+        expect([Object.keys(summary)[0], summary.contract, summary.schemaVersion, (summary.inputs as unknown[]).length]).toEqual(["contract", "diagnosis-condition-summary", "0.1", 2]);
+      } finally {
+        rmSync(dir, { recursive: true, force: true });
+      }
+    },
+    120_000,
+  );
+
+  it(
+    "子プロセス(D3-COND): 条件式の旗の組み合わせの誤り(--events-cond だけ・--person 無し・名前の形の --person・値の無い --conditions)は、表も 2 つのファイルも書かずに exit 1",
+    () => {
+      const dir = mkdtempSync(join(tmpdir(), "d3-cond-args-"));
+      try {
+        const recordPath = join(dir, "d1-quiet.jsonl");
+        const meta = { kind: "meta", kifuId: "d1-quiet", startedAt: "t", gitHead: null, enginePath: ENGINE_PATH };
+        const records = plantedRecords(GAME01_MOVES.slice(0, 20), { 10: engineRef(100), 12: engineRef(-600) });
+        writeFileSync(recordPath, `${[meta, ...records].map((line) => JSON.stringify(line)).join("\n")}\n`, "utf-8");
+        const condOut = join(dir, "cond.jsonl");
+        const summaryOut = join(dir, "summary.json");
+        const cases: [string, string[], string][] = [
+          ["--events-cond だけ", [recordPath, "--events-cond", condOut], "Error: --person・--events-cond・--cond-summary・--kifu-dir・--listed-results は --conditions と一緒に渡してください"],
+          ["--person 無し", [recordPath, "--conditions", CONDITION_FIXTURES, "--events-cond", condOut, "--cond-summary", summaryOut], "Error: --conditions には --person(名前でない記号)が要ります"],
+          ["名前の形の --person", [recordPath, "--conditions", CONDITION_FIXTURES, "--person", "yamada", "--events-cond", condOut], "Error: --person は名前でない記号(p1・p2 の形)にしてください"],
+          ["値の無い --conditions", [recordPath, "--events-cond", condOut, "--conditions"], "Error: --conditions に値を渡してください"],
+        ];
+        for (const [name, args, message] of cases) {
+          let failure: { status: number | null; stdout: string; stderr: string } | undefined;
+          try {
+            execFileSync("npx", ["tsx", DIAGNOSE_TS, ...args], { cwd: REPO_ROOT, encoding: "utf-8", stdio: "pipe" });
+          } catch (error) {
+            failure = error as { status: number | null; stdout: string; stderr: string };
+          }
+          expect(failure, `${name}: 止まらなかった`).toBeDefined();
+          expect(failure!.status, name).toBe(1);
+          expect(String(failure!.stderr), name).toContain(message);
+          expect(String(failure!.stdout), name).toBe("");
+          expect([existsSync(condOut), existsSync(summaryOut)], name).toEqual([false, false]);
+        }
+      } finally {
+        rmSync(dir, { recursive: true, force: true });
+      }
+    },
+    60_000,
   );
 });

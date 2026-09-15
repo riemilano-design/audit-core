@@ -570,7 +570,7 @@ export function conditionTallyOf(person: string, games: readonly ConditionGameIn
       if (judgement.state === "undecidable") {
         overall.undecidable += 1;
         for (const { path, reason } of judgement.missing) {
-          const key = `${path} ${reasonKey(reason)}`;
+          const key = `${path}\u0000${reasonKey(reason)}`;
           const entry = reasonRows.get(key) ?? { path, reason: reasonKey(reason), rows: 0 };
           entry.rows += 1;
           reasonRows.set(key, entry);

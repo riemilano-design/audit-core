@@ -201,3 +201,32 @@
 - 取り込みの確かめ: C の変異 C-01〜C-07(C の道具 `mutate_c.py` の、S と W の 2 行だけを替えた写し)が 7 本とも鳴った。落ちた試験は予測どおり(C-01・C-02 → C-1、C-03・C-04 → C-2 の null の意味、C-05〜C-07 → C-2 の門)。`condition.test.ts` 38 件・全体 702/702・型検査 rc 0
 - **定義を起こすときに人間へ伝えること**: 実戦の側で `counterfactual.pv.*` を読む定義は、読み筋の側の判定(D4 の G-3)が常に当てられない(notEvaluable)
 - 12.4 の候補のうち、`notNullable` の例外の経路は司令塔が P-60 に登録する(JSONL から読んだ行では型が効かず、古い版の Event で当たる)。「落ちる試験が 1 本だけの変異」は登録しない
+
+### 12.6 実装の記録(diagnose.ts 側。実装担当 1e、2026-09-16)
+
+**範囲**: §6 の出力の契約と `diagnose.ts` の口。基点は `ae74ec1`(lib 側のコミット。D-SCREEN-2 `90ea1f1` の後)。lib/condition.ts は変えていない。**エンジンは使っていない。**条件式の中身は 0 本(試験だけの架空の定義を 2 本足した)。
+
+| ファイル | 中身 |
+|---|---|
+| `scripts/playtest/diagnose.ts`(足しただけ) | 旗 `--conditions <dir>`・`--person <p1 の形>`・`--events-cond <out.jsonl>`・`--cond-summary <out.json>`・`--kifu-dir <dir>`・`--listed-results <file.json>`。定義は表を書く前に読み、表の後に条件式の節を書く。main は非同期(末尾は `main().catch`) |
+| `scripts/playtest/lib/conditionReport.ts`(新) | `--events-cond` の行(`conditionLinesOf`)・集計の JSON(`conditionSummaryOf`)・条件式の節(`renderConditionSection`)・定義のディレクトリ・§7.2 の材料・`--person` の確かめ・スキーマの読み込み |
+| `scripts/playtest/schemas/diagnosis-condition.v0.1.schema.json`(新) | 契約 diagnosis-condition v0.1。`provenance` は Failure Event v0.6 のスキーマから値のまま写した(試験で一致を見る) |
+| `scripts/playtest/lib/schemaVersions.ts`(足しただけ) | `DIAGNOSIS_CONDITION_SCHEMA_VERSION`・`KNOWN_DIAGNOSIS_CONDITION_SCHEMA_VERSIONS`・`DIAGNOSIS_CONDITION_SUMMARY_SCHEMA_VERSION` |
+| `scripts/playtest/lib/conditionFixtures/test_only_always.ts`・`test_only_focus_stated.ts`(新) | 試験だけの架空の定義(いつも真 / ③の状態の門で判定不能になる) |
+| `scripts/playtest/lib/conditionReport.test.ts`(新)・`scripts/playtest/diagnose.test.ts`(足しただけ) | 11 件 / 2 件(子プロセス: 旗をそろえた回・旗の組み合わせの誤り)とソース照合の 5 行 |
+
+**計画に書いていなかった判断**(計画と違えた点は無い):
+- **J-12 旗**: `--conditions` は `*.ts`(`*.test.ts`・`*.d.ts` を除く)をファイル名の順に読み、1 つも無い・同じ id が 2 つなら止める。`--person` は `--conditions` に必須で、**`p` と数字の記号だけ**を受ける(D4 の S-8。人の名前を出力に書かない)。ほかの条件式の旗は `--conditions` と一緒でなければ止め、値の無い旗も止める(どれも表を書く前)
+- **J-13 §7.2 の材料**(N-4): `--kifu-dir` は固定棋譜 JSON の `id` → `ending` だけを読む(手は読まない)。`--listed-results` は README の表を人が写した `{ kifuId: "win" | "loss" }`(README の文は読まない)。渡さなければ「記録に無い」「載っていない」
+- **J-14** `--conditions` を渡すと、`--events*` が無くても moment と出どころを組み立てる(記録の meta が出どころに写せない形なら、表の後に exit 1 ― K-3 と同じ)
+- **J-15** 条件式の節は `--conditions` を渡したときだけ、表(と合計の節)の後に書く。渡さなければ標準出力と 3 つのファイルは変えない
+- **J-16 行の並び**: 記録 → 入力(Failure Event → 上がり → 最大の下がり。ファイルの順)→ 定義(ファイル名の順)。判定しない行は書かない。種類をまたいで同じ組の行は、それぞれの入力の行として書く(1 回だけ数えるのは集計)
+- **J-17 出どころの選び方**: 行と集計は `--events`・`--events-rise`・`--events-maxdrop` と同じ行に当てる(D-SCREEN-2 の組ごとの深い / 軽いの選び方のまま)。D4 の「軽い値だけ」は gate.ts の決まりで、ここには当てない
+- **J-18 集計の JSON**: `contract`・`schemaVersion`・`person`・`inputs`(根からの相対のパス・sha256・kifuId・数えたか)・`sources`・`analysis`(gitHead・dirty)・`conditions`(条件ごとの集計)。**スキーマのファイルは置いていない**(欄の並びと契約の欄は試験で見る)。「数えた局」は error 行の記録・数えられなかった記録を入れない
+- **J-19 スキーマ**: `condition.label` は「(仮)」を含む・`id` は `^[a-z][a-z0-9_]*$`・`definitionSha256` は 64 桁・`missing` は 1 件以上・理由は 3 つの形の oneOf・`usedValues` は object だけ(中身の形は定義ごとに違うので見ない)
+
+**測った結果**(予測は実装・実行の前に書いた。`scratchpad/d3cond2/predict-diag.txt`): 基点 `ae74ec1` で型検査 rc 0・全体 53 本 771/771(lib 側のコミットは 758。足したのは conditionReport 11・diagnose 2)・check-docs rc 0。予測の外れは 2 つ: 基点 90ea1f1 に写した直後の「手で書いた行に型エラーが出る」(D-SCREEN-2 の欄は任意だったので 0)と、1 回目の全体で子プロセスの試験 1 件が落ちた(見出しを確かめる `new RegExp` の文字列が正規表現として例外。試験の書き方の誤りで、行の確かめに直して 771/771)。変異 18 本(conditionReport.ts 10・diagnose.ts 5・スキーマ 3。判定しない行を書く・並び・eventClass・終局を引かない・キーの無い ending・README の値・--person の記号・見出しの status・契約の欄の位置・同じ id・endings を渡さない・行を書かない・--person 無し・定義を表の後に読む・値の無い旗・label の(仮)・出どころ・missing の件数)は **予測どおり 18/18、鳴った 18/18**、戻り一致
+
+**監査の観点 S-2(notNullable の例外が届く経路)への材料**: `diagnose.ts` は JSONL の Failure Event を読み直さず、同じプロセスで lib が組み立てた行(型どおり)に判定を当てる。JSONL の行を読んで判定する口は、この差分には無い。
+
+**載せ替えと NUL の直し(監査 f2 の GO の後、司令塔 e3 の指示)**: 基点を `ae74ec1` から `1fc4f67`(D6 計画 `67fdd89` と D4 の実装)に替えた。`ae74ec1..1fc4f67` で重なったのは `lib/schemaVersions.ts` だけで、1e の 3 定数は D4 の 2 定数の後ろ(末尾)へ文をそのまま移した。ほかの 8 本は載せ替えの前とバイト一致(写しと照合してから checkout)。あわせて、f2 の気づきのとおり `lib/condition.ts` 573 行目(集計の判定不能の理由の表のキーの区切り)に**生の NUL が 1 バイト**入っていたので、エスケープの 6 文字に替えた(この 1 行だけ。値は同じ。原因は実装担当が書いたときにエスケープが実バイトになったこと。ほかの 11 本に制御文字は無い)。測った結果(予測は回す前に書いた): 型検査 rc 0・`condition.test` 38/38・全体 57 本 831/831(基点 818 + conditionReport 11 + diagnose 2)・check-docs rc 0。予測は 3 つとも当たり

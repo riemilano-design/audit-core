@@ -23,3 +23,10 @@ export const DIAGNOSIS_MOMENT_SCREEN_BASE_VERSION = "0.2" as const;
 /** STEP D4(docs/STEP_D4_PLAN_2026-09-15.md §7)。契約 diagnosis-gate の今の版と、スキーマのファイルがある版(ほかの契約の定数とは独立に末尾に置く) */
 export const DIAGNOSIS_GATE_SCHEMA_VERSION = "0.1" as const;
 export const KNOWN_DIAGNOSIS_GATE_SCHEMA_VERSIONS = ["0.1"] as const;
+
+/** STEP D3-COND(docs/STEP_D3-COND_PLAN_2026-09-15.md §6)。--events-cond の行の契約 diagnosis-condition の版 */
+export const DIAGNOSIS_CONDITION_SCHEMA_VERSION = "0.1" as const;
+/** diagnosis-condition のスキーマのファイルがある版 */
+export const KNOWN_DIAGNOSIS_CONDITION_SCHEMA_VERSIONS = ["0.1"] as const;
+/** --cond-summary の契約 diagnosis-condition-summary の版(スキーマのファイルは置いていない。試験が欄を見る) */
+export const DIAGNOSIS_CONDITION_SUMMARY_SCHEMA_VERSION = "0.1" as const;

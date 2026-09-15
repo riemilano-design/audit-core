@@ -1,0 +1,1748 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "diagnosis-condition.v0.1.schema.json",
+  "title": "Diagnosis Condition v0.1",
+  "description": "diagnose.ts --events-cond の 1 行(契約 diagnosis-condition の版 0.1。docs/STEP_D3-COND_PLAN_2026-09-15.md §6)。1 行 =(入力 1 件 × 条件式の定義 1 件)の判定。入力は Failure Event・上がり・最大の下がりの組(全ての手の組と、判定しない行 = appliesTo の外・最大の下がりの状態の行は書かない)。result は「該当(match)/ 非該当(noMatch)/ 判定不能(undecidable)」だけで、評価語・判定語は持たない。usedValues は定義の uses のパスだけを持つ写し。condition.label は必ず「(仮)」を含み、status が draft の定義は人間の承認の前の仮置き(CLAUDE.md ルール 4)。provenance は Failure Event v0.6 のスキーマから値のまま写した。検証は scripts/playtest/lib/eventSchema.ts(oneOf はちょうど 1 つ)",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "contract",
+    "schemaVersion",
+    "kifuId",
+    "eventClass",
+    "branchPly",
+    "condition",
+    "result",
+    "provenance"
+  ],
+  "properties": {
+    "contract": {
+      "const": "diagnosis-condition"
+    },
+    "schemaVersion": {
+      "const": "0.1",
+      "description": "この契約の版(Failure Event・diagnosis-moment の schemaVersion とは別)"
+    },
+    "kifuId": {
+      "type": "string"
+    },
+    "eventClass": {
+      "enum": [
+        "failureEvent",
+        "rise",
+        "maxDrop"
+      ],
+      "description": "判定した入力の種類(maxDrop は最大の下がりの組の行)"
+    },
+    "branchPly": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "組の本人の手の ply(Failure Event の branchPly と同じ数え方)"
+    },
+    "condition": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "label",
+        "status",
+        "definitionSha256"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9_]*$"
+        },
+        "label": {
+          "type": "string",
+          "pattern": "(仮)"
+        },
+        "status": {
+          "enum": [
+            "draft",
+            "approved"
+          ]
+        },
+        "definitionSha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$",
+          "description": "定義のファイルのバイト列の sha256"
+        }
+      }
+    },
+    "result": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "state",
+            "missing"
+          ],
+          "properties": {
+            "state": {
+              "const": "undecidable"
+            },
+            "missing": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "path",
+                  "reason"
+                ],
+                "properties": {
+                  "path": {
+                    "type": "string",
+                    "pattern": "^[A-Za-z]+(\\.[A-Za-z]+)*$",
+                    "description": "定義の uses のパス(読み筋の側でも元のパス)"
+                  },
+                  "reason": {
+                    "description": "判定不能の理由。gate = 値を読む前の門を満たさない(actual は門の実際の値)/ null = null が判定不能の欄で null / undetermined = 形勢の状態が未定",
+                    "oneOf": [
+                      {
+                        "type": "object",
+                        "additionalProperties": false,
+                        "required": [
+                          "kind",
+                          "gatePath",
+                          "actual"
+                        ],
+                        "properties": {
+                          "kind": {
+                            "const": "gate"
+                          },
+                          "gatePath": {
+                            "type": "string",
+                            "pattern": "^[A-Za-z]+(\\.[A-Za-z]+)*$"
+                          },
+                          "actual": {
+                            "type": [
+                              "string",
+                              "boolean"
+                            ]
+                          }
+                        }
+                      },
+                      {
+                        "type": "object",
+                        "additionalProperties": false,
+                        "required": [
+                          "kind"
+                        ],
+                        "properties": {
+                          "kind": {
+                            "const": "null"
+                          }
+                        }
+                      },
+                      {
+                        "type": "object",
+                        "additionalProperties": false,
+                        "required": [
+                          "kind",
+                          "undetermined"
+                        ],
+                        "properties": {
+                          "kind": {
+                            "const": "undetermined"
+                          },
+                          "undetermined": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "state",
+            "usedValues"
+          ],
+          "properties": {
+            "state": {
+              "enum": [
+                "match",
+                "noMatch"
+              ]
+            },
+            "usedValues": {
+              "type": "object",
+              "description": "uses のパスだけを持つ写し(外の欄は無い)"
+            }
+          }
+        }
+      ]
+    },
+    "provenance": {
+      "type": "object",
+      "description": "この行の出どころ(計画 2.1)。各行に置く(K-1)。パスは根からの相対で、絶対パスは書かない(K-2)",
+      "required": [
+        "record",
+        "evaluator",
+        "analysis"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "record": {
+          "type": "object",
+          "required": [
+            "path",
+            "sha256",
+            "meta"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "path": {
+              "type": "string",
+              "pattern": "^(?!/)",
+              "description": "記録のファイル。根からの相対(外ならファイル名だけ)"
+            },
+            "sha256": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$",
+              "description": "記録のファイルのバイト列の sha256"
+            },
+            "meta": {
+              "description": "記録の meta の写し。null = meta 行が無い。object は、そろえの組(無い・回していない・回した)と打ち切りの組(無い・落としていない・落とした)の組み合わせの 7 変種(計画 2.3・K-7。そろえの組があって打ち切りの組が無い形は、どの replay.ts も書かないので置かない)",
+              "oneOf": [
+                {
+                  "type": "null"
+                },
+                {
+                  "description": "そろえの組: 無い(D0-SIDE 段 2 より前の記録) / 打ち切りの組: 無い(D0-SIDE 段 1 より前の記録)",
+                  "type": "object",
+                  "required": [
+                    "gitHead",
+                    "dirty",
+                    "enginePath",
+                    "searchMode",
+                    "nodes",
+                    "threads",
+                    "unrecordedKeys"
+                  ],
+                  "additionalProperties": false,
+                  "properties": {
+                    "gitHead": {
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "description": "null = 記録時に取れなかった、または meta に欄が無い(unrecordedKeys で分かる)"
+                    },
+                    "dirty": {
+                      "enum": [
+                        "dirty",
+                        "clean",
+                        "unrecorded",
+                        "unmeasured"
+                      ]
+                    },
+                    "enginePath": {
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "pattern": "^(?!/)",
+                      "description": "評価(再生)に使ったエンジン。対局の相手のエンジンではない。null = meta に欄が無い"
+                    },
+                    "searchMode": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "nodes": {
+                      "type": [
+                        "integer",
+                        "null"
+                      ],
+                      "minimum": 0,
+                      "description": "0 = 時間で打ち切る探索(searchMode が \"movetime\"。replay.ts --nodes 0)。searchMode と組で読む。null = meta に欄が無い(unrecordedKeys で分かる)"
+                    },
+                    "threads": {
+                      "type": [
+                        "integer",
+                        "null"
+                      ],
+                      "minimum": 1
+                    },
+                    "screen": {
+                      "description": "STEP D-SCREEN(docs/STEP_D-SCREEN_PLAN_2026-09-15.md §3)。段 2 の記録(rescreen.ts)の meta の screen の写し(deepPlies・measuredOrder は写さない)。screen の無い記録はキーを出さない(unrecordedKeys にも入れない)",
+                      "type": "object",
+                      "required": [
+                        "lightNodes",
+                        "deepNodes",
+                        "rule",
+                        "sourceSha256",
+                        "deepRun"
+                      ],
+                      "additionalProperties": false,
+                      "properties": {
+                        "lightNodes": {
+                          "type": "integer",
+                          "minimum": 1
+                        },
+                        "deepNodes": {
+                          "type": "integer",
+                          "minimum": 1
+                        },
+                        "rule": {
+                          "description": "候補の組と読み直す行の規則(draft の値をそのまま写す)",
+                          "type": "object",
+                          "required": [
+                            "dropCp",
+                            "advantageCp",
+                            "advantageDropCp",
+                            "before",
+                            "after"
+                          ],
+                          "additionalProperties": false,
+                          "properties": {
+                            "dropCp": {
+                              "type": "integer"
+                            },
+                            "advantageCp": {
+                              "type": "integer"
+                            },
+                            "advantageDropCp": {
+                              "type": "integer"
+                            },
+                            "before": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "after": {
+                              "type": "integer",
+                              "minimum": 0
+                            }
+                          }
+                        },
+                        "sourceSha256": {
+                          "type": "string",
+                          "pattern": "^[0-9a-f]{64}$"
+                        },
+                        "deepRun": {
+                          "description": "読み直し(深い回)の出どころ。gitHead・dirty は rescreen.ts が自分で読んだ値、enginePath は根からの相対",
+                          "type": "object",
+                          "required": [
+                            "gitHead",
+                            "dirty",
+                            "enginePath",
+                            "threads",
+                            "startedAt",
+                            "order"
+                          ],
+                          "additionalProperties": false,
+                          "properties": {
+                            "gitHead": {
+                              "type": [
+                                "string",
+                                "null"
+                              ],
+                              "description": "null = 記録時に取れなかった、または meta に欄が無い(unrecordedKeys で分かる)"
+                            },
+                            "dirty": {
+                              "enum": [
+                                "dirty",
+                                "clean",
+                                "unrecorded",
+                                "unmeasured"
+                              ]
+                            },
+                            "enginePath": {
+                              "type": "string",
+                              "pattern": "^(?!/)",
+                              "description": "評価(再生)に使ったエンジン。対局の相手のエンジンではない。null = meta に欄が無い"
+                            },
+                            "threads": {
+                              "type": "integer",
+                              "minimum": 1
+                            },
+                            "startedAt": {
+                              "type": "string"
+                            },
+                            "order": {
+                              "const": "plyAscending"
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "unrecordedKeys": {
+                      "type": "array",
+                      "items": {
+                        "enum": [
+                          "gitHead",
+                          "dirty",
+                          "enginePath",
+                          "searchMode",
+                          "nodes",
+                          "threads",
+                          "mirrored",
+                          "originalUserSide",
+                          "plyOffset",
+                          "startSfen",
+                          "sideAlignmentChecked",
+                          "trailingMoveTruncated",
+                          "truncatedTrailingMove"
+                        ]
+                      },
+                      "description": "記録していない欄の名前。v0.2 の 6 欄(gitHead・dirty・enginePath・searchMode・nodes・threads)は、meta に無い欄(値は null)。v0.3 の 7 欄は、meta に無く、門の欄が false でない欄(キーを出さない。門は mirrored と trailingMoveTruncated。門が false のときの従う欄は、その変種に無いので並べない。sideAlignmentChecked は門を持たない ― 計画 2.1・K-1)。[] = 欠けなし。中身と欄の有無の対応は、このスキーマでは縛れない(計画 L-1)"
+                    }
+                  }
+                },
+                {
+                  "description": "そろえの組: 無い(D0-SIDE 段 2 より前の記録) / 打ち切りの組: 落としていない",
+                  "type": "object",
+                  "required": [
+                    "gitHead",
+                    "dirty",
+                    "enginePath",
+                    "searchMode",
+                    "nodes",
+                    "threads",
+                    "trailingMoveTruncated",
+                    "unrecordedKeys"
+                  ],
+                  "additionalProperties": false,
+                  "properties": {
+                    "gitHead": {
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "description": "null = 記録時に取れなかった、または meta に欄が無い(unrecordedKeys で分かる)"
+                    },
+                    "dirty": {
+                      "enum": [
+                        "dirty",
+                        "clean",
+                        "unrecorded",
+                        "unmeasured"
+                      ]
+                    },
+                    "enginePath": {
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "pattern": "^(?!/)",
+                      "description": "評価(再生)に使ったエンジン。対局の相手のエンジンではない。null = meta に欄が無い"
+                    },
+                    "searchMode": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "nodes": {
+                      "type": [
+                        "integer",
+                        "null"
+                      ],
+                      "minimum": 0,
+                      "description": "0 = 時間で打ち切る探索(searchMode が \"movetime\"。replay.ts --nodes 0)。searchMode と組で読む。null = meta に欄が無い(unrecordedKeys で分かる)"
+                    },
+                    "threads": {
+                      "type": [
+                        "integer",
+                        "null"
+                      ],
+                      "minimum": 1
+                    },
+                    "trailingMoveTruncated": {
+                      "const": false,
+                      "description": "手数が偶数で、落とす手が無かった"
+                    },
+                    "screen": {
+                      "description": "STEP D-SCREEN(docs/STEP_D-SCREEN_PLAN_2026-09-15.md §3)。段 2 の記録(rescreen.ts)の meta の screen の写し(deepPlies・measuredOrder は写さない)。screen の無い記録はキーを出さない(unrecordedKeys にも入れない)",
+                      "type": "object",
+                      "required": [
+                        "lightNodes",
+                        "deepNodes",
+                        "rule",
+                        "sourceSha256",
+                        "deepRun"
+                      ],
+                      "additionalProperties": false,
+                      "properties": {
+                        "lightNodes": {
+                          "type": "integer",
+                          "minimum": 1
+                        },
+                        "deepNodes": {
+                          "type": "integer",
+                          "minimum": 1
+                        },
+                        "rule": {
+                          "description": "候補の組と読み直す行の規則(draft の値をそのまま写す)",
+                          "type": "object",
+                          "required": [
+                            "dropCp",
+                            "advantageCp",
+                            "advantageDropCp",
+                            "before",
+                            "after"
+                          ],
+                          "additionalProperties": false,
+                          "properties": {
+                            "dropCp": {
+                              "type": "integer"
+                            },
+                            "advantageCp": {
+                              "type": "integer"
+                            },
+                            "advantageDropCp": {
+                              "type": "integer"
+                            },
+                            "before": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "after": {
+                              "type": "integer",
+                              "minimum": 0
+                            }
+                          }
+                        },
+                        "sourceSha256": {
+                          "type": "string",
+                          "pattern": "^[0-9a-f]{64}$"
+                        },
+                        "deepRun": {
+                          "description": "読み直し(深い回)の出どころ。gitHead・dirty は rescreen.ts が自分で読んだ値、enginePath は根からの相対",
+                          "type": "object",
+                          "required": [
+                            "gitHead",
+                            "dirty",
+                            "enginePath",
+                            "threads",
+                            "startedAt",
+                            "order"
+                          ],
+                          "additionalProperties": false,
+                          "properties": {
+                            "gitHead": {
+                              "type": [
+                                "string",
+                                "null"
+                              ],
+                              "description": "null = 記録時に取れなかった、または meta に欄が無い(unrecordedKeys で分かる)"
+                            },
+                            "dirty": {
+                              "enum": [
+                                "dirty",
+                                "clean",
+                                "unrecorded",
+                                "unmeasured"
+                              ]
+                            },
+                            "enginePath": {
+                              "type": "string",
+                              "pattern": "^(?!/)",
+                              "description": "評価(再生)に使ったエンジン。対局の相手のエンジンではない。null = meta に欄が無い"
+                            },
+                            "threads": {
+                              "type": "integer",
+                              "minimum": 1
+                            },
+                            "startedAt": {
+                              "type": "string"
+                            },
+                            "order": {
+                              "const": "plyAscending"
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "unrecordedKeys": {
+                      "type": "array",
+                      "items": {
+                        "enum": [
+                          "gitHead",
+                          "dirty",
+                          "enginePath",
+                          "searchMode",
+                          "nodes",
+                          "threads",
+                          "mirrored",
+                          "originalUserSide",
+                          "plyOffset",
+                          "startSfen",
+                          "sideAlignmentChecked",
+                          "trailingMoveTruncated",
+                          "truncatedTrailingMove"
+                        ]
+                      },
+                      "description": "記録していない欄の名前。v0.2 の 6 欄(gitHead・dirty・enginePath・searchMode・nodes・threads)は、meta に無い欄(値は null)。v0.3 の 7 欄は、meta に無く、門の欄が false でない欄(キーを出さない。門は mirrored と trailingMoveTruncated。門が false のときの従う欄は、その変種に無いので並べない。sideAlignmentChecked は門を持たない ― 計画 2.1・K-1)。[] = 欠けなし。中身と欄の有無の対応は、このスキーマでは縛れない(計画 L-1)"
+                    }
+                  }
+                },
+                {
+                  "description": "そろえの組: 無い(D0-SIDE 段 2 より前の記録) / 打ち切りの組: 落とした",
+                  "type": "object",
+                  "required": [
+                    "gitHead",
+                    "dirty",
+                    "enginePath",
+                    "searchMode",
+                    "nodes",
+                    "threads",
+                    "trailingMoveTruncated",
+                    "truncatedTrailingMove",
+                    "unrecordedKeys"
+                  ],
+                  "additionalProperties": false,
+                  "properties": {
+                    "gitHead": {
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "description": "null = 記録時に取れなかった、または meta に欄が無い(unrecordedKeys で分かる)"
+                    },
+                    "dirty": {
+                      "enum": [
+                        "dirty",
+                        "clean",
+                        "unrecorded",
+                        "unmeasured"
+                      ]
+                    },
+                    "enginePath": {
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "pattern": "^(?!/)",
+                      "description": "評価(再生)に使ったエンジン。対局の相手のエンジンではない。null = meta に欄が無い"
+                    },
+                    "searchMode": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "nodes": {
+                      "type": [
+                        "integer",
+                        "null"
+                      ],
+                      "minimum": 0,
+                      "description": "0 = 時間で打ち切る探索(searchMode が \"movetime\"。replay.ts --nodes 0)。searchMode と組で読む。null = meta に欄が無い(unrecordedKeys で分かる)"
+                    },
+                    "threads": {
+                      "type": [
+                        "integer",
+                        "null"
+                      ],
+                      "minimum": 1
+                    },
+                    "trailingMoveTruncated": {
+                      "const": true,
+                      "description": "手数が奇数で、最後の先手の手を落として再生した"
+                    },
+                    "truncatedTrailingMove": {
+                      "type": "string",
+                      "pattern": "^([1-9][a-i][1-9][a-i]\\+?|[PLNSGBR]\\*[1-9][a-i])$",
+                      "description": "落とした手(USI。回した局では、そろえた後の座標)"
+                    },
+                    "screen": {
+                      "description": "STEP D-SCREEN(docs/STEP_D-SCREEN_PLAN_2026-09-15.md §3)。段 2 の記録(rescreen.ts)の meta の screen の写し(deepPlies・measuredOrder は写さない)。screen の無い記録はキーを出さない(unrecordedKeys にも入れない)",
+                      "type": "object",
+                      "required": [
+                        "lightNodes",
+                        "deepNodes",
+                        "rule",
+                        "sourceSha256",
+                        "deepRun"
+                      ],
+                      "additionalProperties": false,
+                      "properties": {
+                        "lightNodes": {
+                          "type": "integer",
+                          "minimum": 1
+                        },
+                        "deepNodes": {
+                          "type": "integer",
+                          "minimum": 1
+                        },
+                        "rule": {
+                          "description": "候補の組と読み直す行の規則(draft の値をそのまま写す)",
+                          "type": "object",
+                          "required": [
+                            "dropCp",
+                            "advantageCp",
+                            "advantageDropCp",
+                            "before",
+                            "after"
+                          ],
+                          "additionalProperties": false,
+                          "properties": {
+                            "dropCp": {
+                              "type": "integer"
+                            },
+                            "advantageCp": {
+                              "type": "integer"
+                            },
+                            "advantageDropCp": {
+                              "type": "integer"
+                            },
+                            "before": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "after": {
+                              "type": "integer",
+                              "minimum": 0
+                            }
+                          }
+                        },
+                        "sourceSha256": {
+                          "type": "string",
+                          "pattern": "^[0-9a-f]{64}$"
+                        },
+                        "deepRun": {
+                          "description": "読み直し(深い回)の出どころ。gitHead・dirty は rescreen.ts が自分で読んだ値、enginePath は根からの相対",
+                          "type": "object",
+                          "required": [
+                            "gitHead",
+                            "dirty",
+                            "enginePath",
+                            "threads",
+                            "startedAt",
+                            "order"
+                          ],
+                          "additionalProperties": false,
+                          "properties": {
+                            "gitHead": {
+                              "type": [
+                                "string",
+                                "null"
+                              ],
+                              "description": "null = 記録時に取れなかった、または meta に欄が無い(unrecordedKeys で分かる)"
+                            },
+                            "dirty": {
+                              "enum": [
+                                "dirty",
+                                "clean",
+                                "unrecorded",
+                                "unmeasured"
+                              ]
+                            },
+                            "enginePath": {
+                              "type": "string",
+                              "pattern": "^(?!/)",
+                              "description": "評価(再生)に使ったエンジン。対局の相手のエンジンではない。null = meta に欄が無い"
+                            },
+                            "threads": {
+                              "type": "integer",
+                              "minimum": 1
+                            },
+                            "startedAt": {
+                              "type": "string"
+                            },
+                            "order": {
+                              "const": "plyAscending"
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "unrecordedKeys": {
+                      "type": "array",
+                      "items": {
+                        "enum": [
+                          "gitHead",
+                          "dirty",
+                          "enginePath",
+                          "searchMode",
+                          "nodes",
+                          "threads",
+                          "mirrored",
+                          "originalUserSide",
+                          "plyOffset",
+                          "startSfen",
+                          "sideAlignmentChecked",
+                          "trailingMoveTruncated",
+                          "truncatedTrailingMove"
+                        ]
+                      },
+                      "description": "記録していない欄の名前。v0.2 の 6 欄(gitHead・dirty・enginePath・searchMode・nodes・threads)は、meta に無い欄(値は null)。v0.3 の 7 欄は、meta に無く、門の欄が false でない欄(キーを出さない。門は mirrored と trailingMoveTruncated。門が false のときの従う欄は、その変種に無いので並べない。sideAlignmentChecked は門を持たない ― 計画 2.1・K-1)。[] = 欠けなし。中身と欄の有無の対応は、このスキーマでは縛れない(計画 L-1)"
+                    }
+                  }
+                },
+                {
+                  "description": "そろえの組: 回していない / 打ち切りの組: 落としていない",
+                  "type": "object",
+                  "required": [
+                    "gitHead",
+                    "dirty",
+                    "enginePath",
+                    "searchMode",
+                    "nodes",
+                    "threads",
+                    "mirrored",
+                    "sideAlignmentChecked",
+                    "trailingMoveTruncated",
+                    "unrecordedKeys"
+                  ],
+                  "additionalProperties": false,
+                  "properties": {
+                    "gitHead": {
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "description": "null = 記録時に取れなかった、または meta に欄が無い(unrecordedKeys で分かる)"
+                    },
+                    "dirty": {
+                      "enum": [
+                        "dirty",
+                        "clean",
+                        "unrecorded",
+                        "unmeasured"
+                      ]
+                    },
+                    "enginePath": {
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "pattern": "^(?!/)",
+                      "description": "評価(再生)に使ったエンジン。対局の相手のエンジンではない。null = meta に欄が無い"
+                    },
+                    "searchMode": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "nodes": {
+                      "type": [
+                        "integer",
+                        "null"
+                      ],
+                      "minimum": 0,
+                      "description": "0 = 時間で打ち切る探索(searchMode が \"movetime\"。replay.ts --nodes 0)。searchMode と組で読む。null = meta に欄が無い(unrecordedKeys で分かる)"
+                    },
+                    "threads": {
+                      "type": [
+                        "integer",
+                        "null"
+                      ],
+                      "minimum": 1
+                    },
+                    "mirrored": {
+                      "const": false,
+                      "description": "回していない(本人が先手の局)"
+                    },
+                    "sideAlignmentChecked": {
+                      "const": false,
+                      "description": "回していない局は照合しない(常に false)"
+                    },
+                    "trailingMoveTruncated": {
+                      "const": false,
+                      "description": "手数が偶数で、落とす手が無かった"
+                    },
+                    "screen": {
+                      "description": "STEP D-SCREEN(docs/STEP_D-SCREEN_PLAN_2026-09-15.md §3)。段 2 の記録(rescreen.ts)の meta の screen の写し(deepPlies・measuredOrder は写さない)。screen の無い記録はキーを出さない(unrecordedKeys にも入れない)",
+                      "type": "object",
+                      "required": [
+                        "lightNodes",
+                        "deepNodes",
+                        "rule",
+                        "sourceSha256",
+                        "deepRun"
+                      ],
+                      "additionalProperties": false,
+                      "properties": {
+                        "lightNodes": {
+                          "type": "integer",
+                          "minimum": 1
+                        },
+                        "deepNodes": {
+                          "type": "integer",
+                          "minimum": 1
+                        },
+                        "rule": {
+                          "description": "候補の組と読み直す行の規則(draft の値をそのまま写す)",
+                          "type": "object",
+                          "required": [
+                            "dropCp",
+                            "advantageCp",
+                            "advantageDropCp",
+                            "before",
+                            "after"
+                          ],
+                          "additionalProperties": false,
+                          "properties": {
+                            "dropCp": {
+                              "type": "integer"
+                            },
+                            "advantageCp": {
+                              "type": "integer"
+                            },
+                            "advantageDropCp": {
+                              "type": "integer"
+                            },
+                            "before": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "after": {
+                              "type": "integer",
+                              "minimum": 0
+                            }
+                          }
+                        },
+                        "sourceSha256": {
+                          "type": "string",
+                          "pattern": "^[0-9a-f]{64}$"
+                        },
+                        "deepRun": {
+                          "description": "読み直し(深い回)の出どころ。gitHead・dirty は rescreen.ts が自分で読んだ値、enginePath は根からの相対",
+                          "type": "object",
+                          "required": [
+                            "gitHead",
+                            "dirty",
+                            "enginePath",
+                            "threads",
+                            "startedAt",
+                            "order"
+                          ],
+                          "additionalProperties": false,
+                          "properties": {
+                            "gitHead": {
+                              "type": [
+                                "string",
+                                "null"
+                              ],
+                              "description": "null = 記録時に取れなかった、または meta に欄が無い(unrecordedKeys で分かる)"
+                            },
+                            "dirty": {
+                              "enum": [
+                                "dirty",
+                                "clean",
+                                "unrecorded",
+                                "unmeasured"
+                              ]
+                            },
+                            "enginePath": {
+                              "type": "string",
+                              "pattern": "^(?!/)",
+                              "description": "評価(再生)に使ったエンジン。対局の相手のエンジンではない。null = meta に欄が無い"
+                            },
+                            "threads": {
+                              "type": "integer",
+                              "minimum": 1
+                            },
+                            "startedAt": {
+                              "type": "string"
+                            },
+                            "order": {
+                              "const": "plyAscending"
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "unrecordedKeys": {
+                      "type": "array",
+                      "items": {
+                        "enum": [
+                          "gitHead",
+                          "dirty",
+                          "enginePath",
+                          "searchMode",
+                          "nodes",
+                          "threads",
+                          "mirrored",
+                          "originalUserSide",
+                          "plyOffset",
+                          "startSfen",
+                          "sideAlignmentChecked",
+                          "trailingMoveTruncated",
+                          "truncatedTrailingMove"
+                        ]
+                      },
+                      "description": "記録していない欄の名前。v0.2 の 6 欄(gitHead・dirty・enginePath・searchMode・nodes・threads)は、meta に無い欄(値は null)。v0.3 の 7 欄は、meta に無く、門の欄が false でない欄(キーを出さない。門は mirrored と trailingMoveTruncated。門が false のときの従う欄は、その変種に無いので並べない。sideAlignmentChecked は門を持たない ― 計画 2.1・K-1)。[] = 欠けなし。中身と欄の有無の対応は、このスキーマでは縛れない(計画 L-1)"
+                    }
+                  }
+                },
+                {
+                  "description": "そろえの組: 回していない / 打ち切りの組: 落とした",
+                  "type": "object",
+                  "required": [
+                    "gitHead",
+                    "dirty",
+                    "enginePath",
+                    "searchMode",
+                    "nodes",
+                    "threads",
+                    "mirrored",
+                    "sideAlignmentChecked",
+                    "trailingMoveTruncated",
+                    "truncatedTrailingMove",
+                    "unrecordedKeys"
+                  ],
+                  "additionalProperties": false,
+                  "properties": {
+                    "gitHead": {
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "description": "null = 記録時に取れなかった、または meta に欄が無い(unrecordedKeys で分かる)"
+                    },
+                    "dirty": {
+                      "enum": [
+                        "dirty",
+                        "clean",
+                        "unrecorded",
+                        "unmeasured"
+                      ]
+                    },
+                    "enginePath": {
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "pattern": "^(?!/)",
+                      "description": "評価(再生)に使ったエンジン。対局の相手のエンジンではない。null = meta に欄が無い"
+                    },
+                    "searchMode": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "nodes": {
+                      "type": [
+                        "integer",
+                        "null"
+                      ],
+                      "minimum": 0,
+                      "description": "0 = 時間で打ち切る探索(searchMode が \"movetime\"。replay.ts --nodes 0)。searchMode と組で読む。null = meta に欄が無い(unrecordedKeys で分かる)"
+                    },
+                    "threads": {
+                      "type": [
+                        "integer",
+                        "null"
+                      ],
+                      "minimum": 1
+                    },
+                    "mirrored": {
+                      "const": false,
+                      "description": "回していない(本人が先手の局)"
+                    },
+                    "sideAlignmentChecked": {
+                      "const": false,
+                      "description": "回していない局は照合しない(常に false)"
+                    },
+                    "trailingMoveTruncated": {
+                      "const": true,
+                      "description": "手数が奇数で、最後の先手の手を落として再生した"
+                    },
+                    "truncatedTrailingMove": {
+                      "type": "string",
+                      "pattern": "^([1-9][a-i][1-9][a-i]\\+?|[PLNSGBR]\\*[1-9][a-i])$",
+                      "description": "落とした手(USI。回した局では、そろえた後の座標)"
+                    },
+                    "screen": {
+                      "description": "STEP D-SCREEN(docs/STEP_D-SCREEN_PLAN_2026-09-15.md §3)。段 2 の記録(rescreen.ts)の meta の screen の写し(deepPlies・measuredOrder は写さない)。screen の無い記録はキーを出さない(unrecordedKeys にも入れない)",
+                      "type": "object",
+                      "required": [
+                        "lightNodes",
+                        "deepNodes",
+                        "rule",
+                        "sourceSha256",
+                        "deepRun"
+                      ],
+                      "additionalProperties": false,
+                      "properties": {
+                        "lightNodes": {
+                          "type": "integer",
+                          "minimum": 1
+                        },
+                        "deepNodes": {
+                          "type": "integer",
+                          "minimum": 1
+                        },
+                        "rule": {
+                          "description": "候補の組と読み直す行の規則(draft の値をそのまま写す)",
+                          "type": "object",
+                          "required": [
+                            "dropCp",
+                            "advantageCp",
+                            "advantageDropCp",
+                            "before",
+                            "after"
+                          ],
+                          "additionalProperties": false,
+                          "properties": {
+                            "dropCp": {
+                              "type": "integer"
+                            },
+                            "advantageCp": {
+                              "type": "integer"
+                            },
+                            "advantageDropCp": {
+                              "type": "integer"
+                            },
+                            "before": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "after": {
+                              "type": "integer",
+                              "minimum": 0
+                            }
+                          }
+                        },
+                        "sourceSha256": {
+                          "type": "string",
+                          "pattern": "^[0-9a-f]{64}$"
+                        },
+                        "deepRun": {
+                          "description": "読み直し(深い回)の出どころ。gitHead・dirty は rescreen.ts が自分で読んだ値、enginePath は根からの相対",
+                          "type": "object",
+                          "required": [
+                            "gitHead",
+                            "dirty",
+                            "enginePath",
+                            "threads",
+                            "startedAt",
+                            "order"
+                          ],
+                          "additionalProperties": false,
+                          "properties": {
+                            "gitHead": {
+                              "type": [
+                                "string",
+                                "null"
+                              ],
+                              "description": "null = 記録時に取れなかった、または meta に欄が無い(unrecordedKeys で分かる)"
+                            },
+                            "dirty": {
+                              "enum": [
+                                "dirty",
+                                "clean",
+                                "unrecorded",
+                                "unmeasured"
+                              ]
+                            },
+                            "enginePath": {
+                              "type": "string",
+                              "pattern": "^(?!/)",
+                              "description": "評価(再生)に使ったエンジン。対局の相手のエンジンではない。null = meta に欄が無い"
+                            },
+                            "threads": {
+                              "type": "integer",
+                              "minimum": 1
+                            },
+                            "startedAt": {
+                              "type": "string"
+                            },
+                            "order": {
+                              "const": "plyAscending"
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "unrecordedKeys": {
+                      "type": "array",
+                      "items": {
+                        "enum": [
+                          "gitHead",
+                          "dirty",
+                          "enginePath",
+                          "searchMode",
+                          "nodes",
+                          "threads",
+                          "mirrored",
+                          "originalUserSide",
+                          "plyOffset",
+                          "startSfen",
+                          "sideAlignmentChecked",
+                          "trailingMoveTruncated",
+                          "truncatedTrailingMove"
+                        ]
+                      },
+                      "description": "記録していない欄の名前。v0.2 の 6 欄(gitHead・dirty・enginePath・searchMode・nodes・threads)は、meta に無い欄(値は null)。v0.3 の 7 欄は、meta に無く、門の欄が false でない欄(キーを出さない。門は mirrored と trailingMoveTruncated。門が false のときの従う欄は、その変種に無いので並べない。sideAlignmentChecked は門を持たない ― 計画 2.1・K-1)。[] = 欠けなし。中身と欄の有無の対応は、このスキーマでは縛れない(計画 L-1)"
+                    }
+                  }
+                },
+                {
+                  "description": "そろえの組: 回した / 打ち切りの組: 落としていない",
+                  "type": "object",
+                  "required": [
+                    "gitHead",
+                    "dirty",
+                    "enginePath",
+                    "searchMode",
+                    "nodes",
+                    "threads",
+                    "mirrored",
+                    "originalUserSide",
+                    "plyOffset",
+                    "startSfen",
+                    "sideAlignmentChecked",
+                    "trailingMoveTruncated",
+                    "unrecordedKeys"
+                  ],
+                  "additionalProperties": false,
+                  "properties": {
+                    "gitHead": {
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "description": "null = 記録時に取れなかった、または meta に欄が無い(unrecordedKeys で分かる)"
+                    },
+                    "dirty": {
+                      "enum": [
+                        "dirty",
+                        "clean",
+                        "unrecorded",
+                        "unmeasured"
+                      ]
+                    },
+                    "enginePath": {
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "pattern": "^(?!/)",
+                      "description": "評価(再生)に使ったエンジン。対局の相手のエンジンではない。null = meta に欄が無い"
+                    },
+                    "searchMode": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "nodes": {
+                      "type": [
+                        "integer",
+                        "null"
+                      ],
+                      "minimum": 0,
+                      "description": "0 = 時間で打ち切る探索(searchMode が \"movetime\"。replay.ts --nodes 0)。searchMode と組で読む。null = meta に欄が無い(unrecordedKeys で分かる)"
+                    },
+                    "threads": {
+                      "type": [
+                        "integer",
+                        "null"
+                      ],
+                      "minimum": 1
+                    },
+                    "mirrored": {
+                      "const": true,
+                      "description": "本人が後手の棋譜を 180 度回して先手にそろえ、1 手目を開始局面に畳んだ。この行の手の座標は、そろえた後のもの(D0-SIDE Q-7)"
+                    },
+                    "originalUserSide": {
+                      "const": "gote",
+                      "description": "元の棋譜で本人は後手"
+                    },
+                    "plyOffset": {
+                      "const": 1,
+                      "description": "元の棋譜の ply = 記録の ply + 1"
+                    },
+                    "startSfen": {
+                      "type": "string",
+                      "pattern": "^\\S+ [bw] \\S+ [1-9][0-9]*$",
+                      "description": "再生を始めた局面(平手・後手番の初期局面に、回した 1 手目を当てた局面)。盤の正しさはこのスキーマでは見ない(計画 K-5)"
+                    },
+                    "sideAlignmentChecked": {
+                      "type": "boolean",
+                      "description": "true = 固定棋譜の originalMoves から作り直して照合し、一致した / false = originalMoves が無く照合していない(mirrored と組で読む ― 計画 L-3)"
+                    },
+                    "trailingMoveTruncated": {
+                      "const": false,
+                      "description": "手数が偶数で、落とす手が無かった"
+                    },
+                    "screen": {
+                      "description": "STEP D-SCREEN(docs/STEP_D-SCREEN_PLAN_2026-09-15.md §3)。段 2 の記録(rescreen.ts)の meta の screen の写し(deepPlies・measuredOrder は写さない)。screen の無い記録はキーを出さない(unrecordedKeys にも入れない)",
+                      "type": "object",
+                      "required": [
+                        "lightNodes",
+                        "deepNodes",
+                        "rule",
+                        "sourceSha256",
+                        "deepRun"
+                      ],
+                      "additionalProperties": false,
+                      "properties": {
+                        "lightNodes": {
+                          "type": "integer",
+                          "minimum": 1
+                        },
+                        "deepNodes": {
+                          "type": "integer",
+                          "minimum": 1
+                        },
+                        "rule": {
+                          "description": "候補の組と読み直す行の規則(draft の値をそのまま写す)",
+                          "type": "object",
+                          "required": [
+                            "dropCp",
+                            "advantageCp",
+                            "advantageDropCp",
+                            "before",
+                            "after"
+                          ],
+                          "additionalProperties": false,
+                          "properties": {
+                            "dropCp": {
+                              "type": "integer"
+                            },
+                            "advantageCp": {
+                              "type": "integer"
+                            },
+                            "advantageDropCp": {
+                              "type": "integer"
+                            },
+                            "before": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "after": {
+                              "type": "integer",
+                              "minimum": 0
+                            }
+                          }
+                        },
+                        "sourceSha256": {
+                          "type": "string",
+                          "pattern": "^[0-9a-f]{64}$"
+                        },
+                        "deepRun": {
+                          "description": "読み直し(深い回)の出どころ。gitHead・dirty は rescreen.ts が自分で読んだ値、enginePath は根からの相対",
+                          "type": "object",
+                          "required": [
+                            "gitHead",
+                            "dirty",
+                            "enginePath",
+                            "threads",
+                            "startedAt",
+                            "order"
+                          ],
+                          "additionalProperties": false,
+                          "properties": {
+                            "gitHead": {
+                              "type": [
+                                "string",
+                                "null"
+                              ],
+                              "description": "null = 記録時に取れなかった、または meta に欄が無い(unrecordedKeys で分かる)"
+                            },
+                            "dirty": {
+                              "enum": [
+                                "dirty",
+                                "clean",
+                                "unrecorded",
+                                "unmeasured"
+                              ]
+                            },
+                            "enginePath": {
+                              "type": "string",
+                              "pattern": "^(?!/)",
+                              "description": "評価(再生)に使ったエンジン。対局の相手のエンジンではない。null = meta に欄が無い"
+                            },
+                            "threads": {
+                              "type": "integer",
+                              "minimum": 1
+                            },
+                            "startedAt": {
+                              "type": "string"
+                            },
+                            "order": {
+                              "const": "plyAscending"
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "unrecordedKeys": {
+                      "type": "array",
+                      "items": {
+                        "enum": [
+                          "gitHead",
+                          "dirty",
+                          "enginePath",
+                          "searchMode",
+                          "nodes",
+                          "threads",
+                          "mirrored",
+                          "originalUserSide",
+                          "plyOffset",
+                          "startSfen",
+                          "sideAlignmentChecked",
+                          "trailingMoveTruncated",
+                          "truncatedTrailingMove"
+                        ]
+                      },
+                      "description": "記録していない欄の名前。v0.2 の 6 欄(gitHead・dirty・enginePath・searchMode・nodes・threads)は、meta に無い欄(値は null)。v0.3 の 7 欄は、meta に無く、門の欄が false でない欄(キーを出さない。門は mirrored と trailingMoveTruncated。門が false のときの従う欄は、その変種に無いので並べない。sideAlignmentChecked は門を持たない ― 計画 2.1・K-1)。[] = 欠けなし。中身と欄の有無の対応は、このスキーマでは縛れない(計画 L-1)"
+                    }
+                  }
+                },
+                {
+                  "description": "そろえの組: 回した / 打ち切りの組: 落とした",
+                  "type": "object",
+                  "required": [
+                    "gitHead",
+                    "dirty",
+                    "enginePath",
+                    "searchMode",
+                    "nodes",
+                    "threads",
+                    "mirrored",
+                    "originalUserSide",
+                    "plyOffset",
+                    "startSfen",
+                    "sideAlignmentChecked",
+                    "trailingMoveTruncated",
+                    "truncatedTrailingMove",
+                    "unrecordedKeys"
+                  ],
+                  "additionalProperties": false,
+                  "properties": {
+                    "gitHead": {
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "description": "null = 記録時に取れなかった、または meta に欄が無い(unrecordedKeys で分かる)"
+                    },
+                    "dirty": {
+                      "enum": [
+                        "dirty",
+                        "clean",
+                        "unrecorded",
+                        "unmeasured"
+                      ]
+                    },
+                    "enginePath": {
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "pattern": "^(?!/)",
+                      "description": "評価(再生)に使ったエンジン。対局の相手のエンジンではない。null = meta に欄が無い"
+                    },
+                    "searchMode": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "nodes": {
+                      "type": [
+                        "integer",
+                        "null"
+                      ],
+                      "minimum": 0,
+                      "description": "0 = 時間で打ち切る探索(searchMode が \"movetime\"。replay.ts --nodes 0)。searchMode と組で読む。null = meta に欄が無い(unrecordedKeys で分かる)"
+                    },
+                    "threads": {
+                      "type": [
+                        "integer",
+                        "null"
+                      ],
+                      "minimum": 1
+                    },
+                    "mirrored": {
+                      "const": true,
+                      "description": "本人が後手の棋譜を 180 度回して先手にそろえ、1 手目を開始局面に畳んだ。この行の手の座標は、そろえた後のもの(D0-SIDE Q-7)"
+                    },
+                    "originalUserSide": {
+                      "const": "gote",
+                      "description": "元の棋譜で本人は後手"
+                    },
+                    "plyOffset": {
+                      "const": 1,
+                      "description": "元の棋譜の ply = 記録の ply + 1"
+                    },
+                    "startSfen": {
+                      "type": "string",
+                      "pattern": "^\\S+ [bw] \\S+ [1-9][0-9]*$",
+                      "description": "再生を始めた局面(平手・後手番の初期局面に、回した 1 手目を当てた局面)。盤の正しさはこのスキーマでは見ない(計画 K-5)"
+                    },
+                    "sideAlignmentChecked": {
+                      "type": "boolean",
+                      "description": "true = 固定棋譜の originalMoves から作り直して照合し、一致した / false = originalMoves が無く照合していない(mirrored と組で読む ― 計画 L-3)"
+                    },
+                    "trailingMoveTruncated": {
+                      "const": true,
+                      "description": "手数が奇数で、最後の先手の手を落として再生した"
+                    },
+                    "truncatedTrailingMove": {
+                      "type": "string",
+                      "pattern": "^([1-9][a-i][1-9][a-i]\\+?|[PLNSGBR]\\*[1-9][a-i])$",
+                      "description": "落とした手(USI。回した局では、そろえた後の座標)"
+                    },
+                    "screen": {
+                      "description": "STEP D-SCREEN(docs/STEP_D-SCREEN_PLAN_2026-09-15.md §3)。段 2 の記録(rescreen.ts)の meta の screen の写し(deepPlies・measuredOrder は写さない)。screen の無い記録はキーを出さない(unrecordedKeys にも入れない)",
+                      "type": "object",
+                      "required": [
+                        "lightNodes",
+                        "deepNodes",
+                        "rule",
+                        "sourceSha256",
+                        "deepRun"
+                      ],
+                      "additionalProperties": false,
+                      "properties": {
+                        "lightNodes": {
+                          "type": "integer",
+                          "minimum": 1
+                        },
+                        "deepNodes": {
+                          "type": "integer",
+                          "minimum": 1
+                        },
+                        "rule": {
+                          "description": "候補の組と読み直す行の規則(draft の値をそのまま写す)",
+                          "type": "object",
+                          "required": [
+                            "dropCp",
+                            "advantageCp",
+                            "advantageDropCp",
+                            "before",
+                            "after"
+                          ],
+                          "additionalProperties": false,
+                          "properties": {
+                            "dropCp": {
+                              "type": "integer"
+                            },
+                            "advantageCp": {
+                              "type": "integer"
+                            },
+                            "advantageDropCp": {
+                              "type": "integer"
+                            },
+                            "before": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "after": {
+                              "type": "integer",
+                              "minimum": 0
+                            }
+                          }
+                        },
+                        "sourceSha256": {
+                          "type": "string",
+                          "pattern": "^[0-9a-f]{64}$"
+                        },
+                        "deepRun": {
+                          "description": "読み直し(深い回)の出どころ。gitHead・dirty は rescreen.ts が自分で読んだ値、enginePath は根からの相対",
+                          "type": "object",
+                          "required": [
+                            "gitHead",
+                            "dirty",
+                            "enginePath",
+                            "threads",
+                            "startedAt",
+                            "order"
+                          ],
+                          "additionalProperties": false,
+                          "properties": {
+                            "gitHead": {
+                              "type": [
+                                "string",
+                                "null"
+                              ],
+                              "description": "null = 記録時に取れなかった、または meta に欄が無い(unrecordedKeys で分かる)"
+                            },
+                            "dirty": {
+                              "enum": [
+                                "dirty",
+                                "clean",
+                                "unrecorded",
+                                "unmeasured"
+                              ]
+                            },
+                            "enginePath": {
+                              "type": "string",
+                              "pattern": "^(?!/)",
+                              "description": "評価(再生)に使ったエンジン。対局の相手のエンジンではない。null = meta に欄が無い"
+                            },
+                            "threads": {
+                              "type": "integer",
+                              "minimum": 1
+                            },
+                            "startedAt": {
+                              "type": "string"
+                            },
+                            "order": {
+                              "const": "plyAscending"
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "unrecordedKeys": {
+                      "type": "array",
+                      "items": {
+                        "enum": [
+                          "gitHead",
+                          "dirty",
+                          "enginePath",
+                          "searchMode",
+                          "nodes",
+                          "threads",
+                          "mirrored",
+                          "originalUserSide",
+                          "plyOffset",
+                          "startSfen",
+                          "sideAlignmentChecked",
+                          "trailingMoveTruncated",
+                          "truncatedTrailingMove"
+                        ]
+                      },
+                      "description": "記録していない欄の名前。v0.2 の 6 欄(gitHead・dirty・enginePath・searchMode・nodes・threads)は、meta に無い欄(値は null)。v0.3 の 7 欄は、meta に無く、門の欄が false でない欄(キーを出さない。門は mirrored と trailingMoveTruncated。門が false のときの従う欄は、その変種に無いので並べない。sideAlignmentChecked は門を持たない ― 計画 2.1・K-1)。[] = 欠けなし。中身と欄の有無の対応は、このスキーマでは縛れない(計画 L-1)"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        },
+        "evaluator": {
+          "type": "object",
+          "required": [
+            "declared"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "declared": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "pattern": "\\S",
+              "description": "人が diagnose.ts --evaluator で渡した評価関数の識別。**確かめていない自己申告**。null = 渡されていない。enginePath から推測しない(P-43)"
+            }
+          }
+        },
+        "analysis": {
+          "type": "object",
+          "required": [
+            "gitHead",
+            "dirty",
+            "rule"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "gitHead": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "description": "diagnose.ts を回したときのコード。null = 取れなかった"
+            },
+            "dirty": {
+              "enum": [
+                "dirty",
+                "clean",
+                "unmeasured"
+              ]
+            },
+            "rule": {
+              "type": "object",
+              "description": "規則の値(判断的知識の仮置き)。閾値を変えても版は上げず、ここに写す(v0.1 計画 3.2・K-8)",
+              "required": [
+                "advantageCp",
+                "dropCp",
+                "windowPlies",
+                "focusDropCp",
+                "notEvaluationCp",
+                "standing",
+                "positionFacts"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "advantageCp": {
+                  "type": "integer"
+                },
+                "dropCp": {
+                  "type": "integer"
+                },
+                "windowPlies": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "focusDropCp": {
+                  "type": "integer"
+                },
+                "notEvaluationCp": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "standing": {
+                  "type": "object",
+                  "description": "STEP D2.5 の形勢の状態の境(判断的知識。人間の承認済み 2026-09-15。境を含む)",
+                  "required": [
+                    "aheadCp",
+                    "behindCp"
+                  ],
+                  "additionalProperties": false,
+                  "properties": {
+                    "aheadCp": {
+                      "type": "integer"
+                    },
+                    "behindCp": {
+                      "type": "integer"
+                    }
+                  }
+                },
+                "positionFacts": {
+                  "type": "object",
+                  "description": "STEP D2.5 の玉の区域の数え方(選べる値は今 1 つずつ。既定値を置かず、使った値を写す)",
+                  "required": [
+                    "zone",
+                    "reach",
+                    "control"
+                  ],
+                  "additionalProperties": false,
+                  "properties": {
+                    "zone": {
+                      "enum": [
+                        "king_and_eight_neighbors"
+                      ]
+                    },
+                    "reach": {
+                      "enum": [
+                        "non_king_pieces"
+                      ]
+                    },
+                    "control": {
+                      "enum": [
+                        "squares"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
