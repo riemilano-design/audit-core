@@ -6,14 +6,16 @@
 // 【このファイルは薄くしてある】判定・集計・表の組み立てはすべて lib/failureEvent.ts(合計は lib/diagnosisTotals.ts)にあり、そちらに試験がある。
 // ここでやるのは、記録を読む・lib を呼ぶ・書き出す、だけである。
 // `--events` の 1 行は lib/failureEventSchema.ts の toEventLine で、版の欄 schemaVersion を先頭に付けて書く
-// (STEP JSON v0.2・V0.3-META。スキーマは scripts/playtest/schemas/failure-event.v0.3.schema.json)。行の末尾に出どころ(provenance)を付ける:
+// (STEP JSON v0.2・V0.3-META・STEP D2 の v0.4。スキーマは scripts/playtest/schemas/failure-event.v0.4.schema.json)。行の末尾に出どころ(provenance)を付ける:
 // 記録のファイル(根からの相対)と sha256・記録の meta の写し・`--evaluator` の文(**確かめていない自己申告**。渡されなければ null。
 // enginePath から推測しない ― P-43)・このコマンドを回したときの gitHead と汚れ・規則の値(docs/STEP_JSON-V0.2_PLAN_2026-09-15.md 2.1)。
 //
-// 【exit code】lib の例外は外へ出さず「数えられなかった」行にして exit 0。**入力が読めないとき(ENOENT・壊れた JSONL)は
-// 例外がこのファイルから外へ出て 0 でない**(check.ts と同じ。計画 D-1 の読み替え ― 2026-09-15、監査 B の非必須 d)。
-// **記録の meta が出どころに写せる形でない(STEP JSON V0.3-META 計画 K-3)ときも、lib/failureEventSchema.ts の例外が外へ出て、--events を書かずに 0 でない**
-// (表は書き終えている。前の回に同じパスへ書いた --events のファイルは消さない ― 計画 L-4)。
+// 【exit code】lib の例外は外へ出さず「数えられなかった」行にして exit 0。**入力が読めないとき(ENOENT・壊れた JSONL)・引数が誤りのときは exit 1**
+// (計画 D-1 の読み替え ― 2026-09-15、監査 B の非必須 d)。**記録の meta が出どころに写せる形でない(STEP JSON V0.3-META 計画 K-3)ときも、--events を書かずに exit 1**
+// (表は標準出力に書き終えてから止まる。前の回に同じパスへ書いた --events のファイルは消さない ― 計画 L-4)。
+// **終わるときに process.exit を呼ばず、例外も外へ投げない**(STEP D2 の監査 1e の R-1・任意 N-1、司令塔の決定 (b))。標準出力がパイプだと書き込みは非同期で、
+// exit も捕まえない例外もその完了を待たずにプロセスを止めるので、64KB を超える表が、exit 0 のまま黙って(例外なら 0 でない終了のまま)切れる。
+// 例外はファイルの末尾の main の呼び出しで捕まえて、名前と文を標準エラーに書き、終了コードは process.exitCode に置いて、書き終わるのを待って自然に終わる。
 //
 // 【このファイルが絶対にやらないこと】
 // - 死因のタグを approved にすること・閾値を確定すること
@@ -74,7 +76,7 @@ function main(): void {
   const { files, eventsOut, evaluator } = parseArgs(process.argv.slice(2));
   if (files.length === 0) {
     console.error("使い方: npx tsx scripts/playtest/diagnose.ts <a.jsonl> [<b.jsonl> ...] [--events <out.jsonl>] [--evaluator \"<評価関数の識別>\"]");
-    process.exit(0);
+    process.exitCode = 0;
     return;
   }
 
@@ -103,7 +105,19 @@ function main(): void {
     writeFileSync(path.resolve(eventsOut), eventLines.length > 0 ? `${eventLines.join("\n")}\n` : "", "utf-8");
   }
 
-  process.exit(0);
+  process.exitCode = 0;
 }
 
-main();
+try {
+  main();
+} catch (error) {
+  // 名前と文を先に 1 行で書く(試験は `<名前>: <文>` で止めた理由を見る)。続けてスタックの残りを書く
+  if (error instanceof Error) {
+    console.error(`${error.name}: ${error.message}`);
+    const frames = (error.stack ?? "").split("\n").slice(1).join("\n");
+    if (frames.length > 0) console.error(frames);
+  } else {
+    console.error(String(error));
+  }
+  process.exitCode = 1;
+}

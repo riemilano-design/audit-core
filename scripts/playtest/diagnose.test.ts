@@ -10,6 +10,8 @@
 //   --evaluator の文・このリポジトリの HEAD・規則の値を持つことを、lib の組み立ての関数を通さずに見る(組み立ての誤りを両側で揃えないため)。
 // - STEP JSON V0.3-META … 平手の記録と回した記録を並べ、各行の provenance.record.meta に自分の記録の meta の 7 欄が写ることと、
 //   写せない meta(K-3)では --events を書かずに 0 でなく止まり、前の回のファイルが残ることを、組み立ての関数を通さずに見る。
+// - STEP D2(監査 1e の R-1)… 64KB を超える Markdown を子プロセスからパイプで受けても末尾まで届くこと(process.exit で終わると黙って切れる)。
+// - STEP D2(監査 1e の任意 N-1)… 表の後に K-3 で止まる入力を置いても、パイプで表の末尾まで届いてから exit 1 で止まること(捕まえない例外で止まると切れる)。
 //
 // 【静かにスキップしない】npx・tsx・git が無ければ execFileSync が例外を投げて赤になる。
 // 【一時ディレクトリ以外に書かない】走らせる前と後で git status(無視されるファイルも 1 本ずつ。
@@ -66,6 +68,8 @@ describe("diagnose.ts(計画 5.2)", () => {
     expect(source).toContain('  console.log([...renderDiagnosisReport(report), ...renderDiagnosisTotals(report)].join("\\n"));');
     expect(source).toContain("row.result.events.map((event) => JSON.stringify(toEventLine(event, provenance)))");
     expect(source).toContain("rule: DRAFT_RULE_1, notEvaluationCp: NOT_EVALUATION_CP, repoRoot: REPO_ROOT,");
+    // STEP D2(監査 1e の R-1): 終わるときに process.exit を呼ばない(パイプの標準出力が書き終わる前に切れる。子プロセスの試験 R-1 でも見る)
+    expect(source).not.toContain("process.exit(");
   });
 
   it(
@@ -160,7 +164,7 @@ describe("diagnose.ts(計画 5.2)", () => {
         const schema = loadFailureEventSchema();
         for (const line of writtenEvents) {
           expect(Object.keys(line)[0]).toBe("schemaVersion");
-          expect(line.schemaVersion).toBe("0.3");
+          expect(line.schemaVersion).toBe("0.4");
           expect(validateFailureEventLine(line, schema)).toEqual([]);
         }
       } finally {
@@ -168,6 +172,107 @@ describe("diagnose.ts(計画 5.2)", () => {
       }
     },
     60_000,
+  );
+
+  // STEP D2(監査 1e の R-1)。D2 の節で Markdown が 64KB を超えるようになった(records/d3-nnue で約 112KB)。process.exit で終わると、
+  // パイプで受けた標準出力が書き終わる前にプロセスが止まり、exit 0 のまま末尾が消える。execFileSync の標準出力はパイプである
+  it(
+    "子プロセス(R-1): 64KB を超える Markdown をパイプで受けても末尾まで届き、同じ記録を lib に掛けて描いたものと全文一致する(exit 0)",
+    () => {
+      const dir = mkdtempSync(join(tmpdir(), "d2-diagnose-pipe-"));
+      try {
+        const records = plantedRecords(GAME01_MOVES, { 48: engineRef(500, { afterPassMate: 3, dropCp: 350 }), 50: engineRef(-300) });
+        // 1 本あたり約 760 バイト(B が数えた)。200 本で 64KB の 2 倍を超える(下で確かめる)
+        const inputs: DiagnosisInput[] = Array.from({ length: 200 }, (_, index) => {
+          const kifuId = `d2-pipe-${String(index).padStart(3, "0")}`;
+          return { kifuId, meta: { kind: "meta", kifuId, startedAt: "t", gitHead: null, enginePath: ENGINE_PATH } as MetaLine, records, errorLines: [] };
+        });
+        const paths = inputs.map((input) => {
+          const filePath = join(dir, `${input.kifuId}.jsonl`);
+          writeFileSync(filePath, `${[input.meta, ...input.records].map((line) => JSON.stringify(line)).join("\n")}\n`, "utf-8");
+          return filePath;
+        });
+        const before = gitStatus();
+        const stdout = execFileSync("npx", ["tsx", DIAGNOSE_TS, ...paths], { cwd: REPO_ROOT, encoding: "utf-8", maxBuffer: 64 * 1024 * 1024 });
+        expect(gitStatus()).toBe(before);
+        const report = buildDiagnosisReport(inputs.map((input) => JSON.parse(JSON.stringify(input)) as DiagnosisInput), DRAFT_RULE_1);
+        const expected = `${[...renderDiagnosisReport(report), ...renderDiagnosisTotals(report)].join("\n")}\n`;
+        expect(Buffer.byteLength(expected, "utf-8")).toBeGreaterThan(2 * 65536);
+        // 切れたときに何バイト・何行届いたかが読めるよう、全文の比べの前にバイト数と行数を見る
+        expect(Buffer.byteLength(stdout, "utf-8")).toBe(Buffer.byteLength(expected, "utf-8"));
+        expect(stdout.split("\n").length).toBe(expected.split("\n").length);
+        expect(stdout).toBe(expected);
+      } finally {
+        rmSync(dir, { recursive: true, force: true });
+      }
+    },
+    120_000,
+  );
+
+  // STEP D2(監査 1e の任意 N-1、司令塔の決定 (b))。R-1 と同じ原因で、例外で止まる経路(K-3 の meta)も、捕まえない例外で止まると
+  // パイプの標準出力が 64KB で切れた(0 でない終了のまま)。表の後に K-3 で止まる入力を置き、表の末尾まで届いてから exit 1 で止まることを見る
+  it(
+    "子プロセス(N-1): 64KB を超える表の後に K-3 で止まる入力を置いても、パイプで表の末尾まで届き、exit 1 で名前つきの文を標準エラーに書き、--events を書かない",
+    () => {
+      const dir = mkdtempSync(join(tmpdir(), "d2-diagnose-pipe-k3-"));
+      try {
+        const records = plantedRecords(GAME01_MOVES, { 48: engineRef(500, { afterPassMate: 3, dropCp: 350 }), 50: engineRef(-300) });
+        const inputs: DiagnosisInput[] = Array.from({ length: 200 }, (_, index) => {
+          const kifuId = `d2-pipe-k3-${String(index).padStart(3, "0")}`;
+          return { kifuId, meta: { kind: "meta", kifuId, startedAt: "t", gitHead: null, enginePath: ENGINE_PATH } as MetaLine, records, errorLines: [] };
+        });
+        // 最後の 1 本は K-3(回した局に plyOffset が無い)。表には並ぶが、--events の出どころを組み立てるところで止まる
+        const brokenMeta = {
+          kind: "meta",
+          kifuId: "d2-pipe-k3-broken",
+          startedAt: "t",
+          gitHead: null,
+          enginePath: ENGINE_PATH,
+          mirrored: true,
+          originalUserSide: "gote",
+          startSfen: FOLD_START,
+          sideAlignmentChecked: true,
+          trailingMoveTruncated: false,
+        };
+        inputs.push({
+          kifuId: "d2-pipe-k3-broken",
+          meta: brokenMeta as unknown as MetaLine,
+          records: plantedRecords(FOLD_MOVES, { 0: engineRef(500), 2: engineRef(-500) }, {}, FOLD_START),
+          errorLines: [],
+        });
+        const paths = inputs.map((input) => {
+          const filePath = join(dir, `${input.kifuId}.jsonl`);
+          writeFileSync(filePath, `${[input.meta, ...input.records].map((line) => JSON.stringify(line)).join("\n")}\n`, "utf-8");
+          return filePath;
+        });
+        const eventsPath = join(dir, "events.jsonl");
+        const before = gitStatus();
+        let failure: { status: number | null; stdout: string; stderr: string } | undefined;
+        try {
+          execFileSync("npx", ["tsx", DIAGNOSE_TS, ...paths, "--events", eventsPath], { cwd: REPO_ROOT, encoding: "utf-8", stdio: "pipe", maxBuffer: 64 * 1024 * 1024 });
+        } catch (error) {
+          failure = error as { status: number | null; stdout: string; stderr: string };
+        }
+        expect(gitStatus()).toBe(before);
+        expect(failure, "止まらなかった").toBeDefined();
+        expect(failure!.status).toBe(1);
+        const report = buildDiagnosisReport(inputs.map((input) => JSON.parse(JSON.stringify(input)) as DiagnosisInput), DRAFT_RULE_1);
+        const expected = `${[...renderDiagnosisReport(report), ...renderDiagnosisTotals(report)].join("\n")}\n`;
+        expect(Buffer.byteLength(expected, "utf-8")).toBeGreaterThan(2 * 65536);
+        // 切れたときに何バイト・何行届いたかが読めるよう、全文の比べの前にバイト数と行数を見る
+        const stdout = String(failure!.stdout);
+        expect(Buffer.byteLength(stdout, "utf-8")).toBe(Buffer.byteLength(expected, "utf-8"));
+        expect(stdout.split("\n").length).toBe(expected.split("\n").length);
+        expect(stdout).toBe(expected);
+        // 止めた文は、例外の名前と実行時の値(記録の kifuId・食い違った欄の名前)で見る
+        expect(String(failure!.stderr)).toContain("InvalidProvenanceMetaError: 記録 d2-pipe-k3-broken の meta が");
+        expect(String(failure!.stderr)).toContain("欄 plyOffset:");
+        expect(existsSync(eventsPath)).toBe(false);
+      } finally {
+        rmSync(dir, { recursive: true, force: true });
+      }
+    },
+    120_000,
   );
 
   it(
@@ -254,7 +359,7 @@ describe("diagnose.ts(計画 5.2)", () => {
           const meta = metaOf(line);
           expect(seven.filter((key) => Object.hasOwn(meta, key))).toEqual([]);
           expect(meta.unrecordedKeys).toEqual(["dirty", "searchMode", "nodes", "threads", ...seven]);
-          expect(line.schemaVersion).toBe("0.3");
+          expect(line.schemaVersion).toBe("0.4");
           expect(validateFailureEventLine(line, schema)).toEqual([]);
         }
         for (const line of foldLines) {
@@ -269,7 +374,7 @@ describe("diagnose.ts(計画 5.2)", () => {
             truncatedTrailingMove: "2g2f",
           });
           expect(meta.unrecordedKeys).toEqual(["dirty", "searchMode", "nodes", "threads"]);
-          expect(line.schemaVersion).toBe("0.3");
+          expect(line.schemaVersion).toBe("0.4");
           expect(validateFailureEventLine(line, schema)).toEqual([]);
         }
       } finally {

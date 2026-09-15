@@ -18,7 +18,6 @@
 // 【この件数は診断に使わない】評価関数の種類は記録に残っていない(計画 0.・E-f)。今の記録は入力の行の enginePath で
 // 見分けられる(engine/ と engine/nnue/。nn.bin だけ差し替えると見分けられない ― P-43)。
 
-import { parseSquareName } from "shogiops/util";
 import { detectBoardEvents } from "../../../apps/server/src/analysis/boardEventDetector.js";
 import { detectIntents } from "../../../apps/server/src/analysis/intentDetector.js";
 import { DEFAULT_INITIAL_SFEN } from "../../../apps/server/src/analysis/moveHistory.js";
@@ -27,7 +26,9 @@ import { getGameOutcome, isGameOver, isInCheck } from "../../../apps/server/src/
 import { parsePosition } from "../../../apps/server/src/rules/sfenPosition.js";
 import type { MetaLine, RecordLine } from "../invariants/types.js";
 import { displayDirty, readDirtyState } from "./gitState.js";
+import { counterfactualLines, counterfactualOf, type Counterfactual } from "./counterfactual.js";
 import { classifyIntentStatementRow, type IntentDetection, type IntentStatementClass } from "./intentStatement.js";
+import { kingSurroundingsOf, type KingSurroundings } from "./kingSurroundings.js";
 import { initialSfenOf } from "./sideAlignment.js";
 
 // ---- 仮の規則(判断的知識。1 か所にまとめる)----
@@ -240,49 +241,8 @@ export function focusStateOf(record: RecordLine): FocusState {
 
 export type ShapeState = { state: "recorded"; status: string; refersToShapeId: string | null } | { state: "unrecorded" };
 
-/**
- * STEP JSON v0.2(docs/STEP_JSON-V0.2_PLAN_2026-09-15.md 2.4・K-7)。局面の先手玉の 8 近傍のうち盤の中にあるマスの数(`squares`。
- * 中央 8・端 5・隅 3)と、そこにある先手の駒の数(`own`。駒の種類を問わず、成り駒も含む)。
- * **数えるだけ(A 層の数)。閾値も名前も置かず、死因の規則・candidateModes・画面には使わない。**先手玉が盤上に無ければ null。
- */
-export interface KingSurroundings {
-  squares: number;
-  own: number;
-}
-
-const BOARD_RANKS = "abcdefghi";
-
-export function kingSurroundingsOf(sfen: string): KingSurroundings | null {
-  const board = parsePosition(sfen).board;
-  const pieceAt = (file: number, rank: number) => {
-    const square = parseSquareName(`${file}${BOARD_RANKS[rank]}`);
-    return square === undefined ? undefined : board.get(square);
-  };
-  let king: { file: number; rank: number } | undefined;
-  for (let file = 1; file <= 9 && !king; file++) {
-    for (let rank = 0; rank < 9; rank++) {
-      const piece = pieceAt(file, rank);
-      if (piece?.color === "sente" && piece.role === "king") {
-        king = { file, rank };
-        break;
-      }
-    }
-  }
-  if (!king) return null;
-  let squares = 0;
-  let own = 0;
-  for (let df = -1; df <= 1; df++) {
-    for (let dr = -1; dr <= 1; dr++) {
-      if (df === 0 && dr === 0) continue;
-      const file = king.file + df;
-      const rank = king.rank + dr;
-      if (file < 1 || file > 9 || rank < 0 || rank > 8) continue;
-      squares += 1;
-      if (pieceAt(file, rank)?.color === "sente") own += 1;
-    }
-  }
-  return { squares, own };
-}
+// STEP D2: 先手玉の周りを数える関数は lib/kingSurroundings.ts へ移した(lib/counterfactual.ts からも使うため。中身は変えていない)。
+export { kingSurroundingsOf, type KingSurroundings } from "./kingSurroundings.js";
 
 export interface Trigger {
   /** 直前の行の評価(状態 + 値。afterPass.mate と dropCp を含む ― 計画 9.1) */
@@ -324,7 +284,7 @@ export function triggerOf(row: EvaluatedRow, initialSfen: string): Trigger {
   };
 }
 
-// ---- Failure Event(計画 3.1。正本 5.2 の形。counterfactual は D2)----
+// ---- Failure Event(計画 3.1。正本 5.2 の形。counterfactual は STEP D2)----
 
 /** 分岐点で何に当たったか。**matedIfPass は「急落」と呼ばない**(計画 D-3 の司令塔の条件) */
 export type BranchKind = "cpDrop" | "mateDrop" | "matedIfPass";
@@ -347,6 +307,11 @@ export interface FailureEvent {
     evaluationAfter: Evaluation;
   };
   consequences: Continuation;
+  /**
+   * STEP D2(docs/STEP_D2_PLAN_2026-09-15.md)。分岐点の局面から、実戦の続きとエンジンの読み筋(直前の行の focus_baseline)を
+   * 同じ手数だけ並べた事実。**死因の規則(candidateModes)には使わない。**Failure Event JSON にはスキーマ v0.4 で出す(consequences の後)
+   */
+  counterfactual: Counterfactual;
   candidateModes: Array<{ mode: "mate_threat"; status: "draft"; matchedBy: BranchKind[] }>;
 }
 
@@ -420,6 +385,9 @@ export function diagnoseRecords(
     const advantage =
       from.evaluation.state === "measured" && from.evaluation.scoreCp !== null && from.evaluation.scoreCp >= rule.advantageCp;
     const danger = consequences.checks.length > 0 || consequences.mate !== null;
+    const bestmoveAtBefore = from.evaluation.state === "measured" ? from.evaluation.bestmove : null;
+    // STEP D2: D1 の実戦の続き(consequences)の後に数える。D1 の経路と値は変えない(計画 4. の限界・予-D2)
+    const counterfactual = counterfactualOf({ record: from.record, moves, branchPly, windowPlies: rule.windowPlies, initialSfen, bestmoveAtBefore });
     events.push({
       kifuId,
       branchPly,
@@ -428,7 +396,7 @@ export function diagnoseRecords(
       trigger: triggerOf(from, initialSfen),
       action: {
         playedMove: moves[branchPly - 1] ?? null,
-        bestmoveAtBefore: from.evaluation.state === "measured" ? from.evaluation.bestmove : null,
+        bestmoveAtBefore,
       },
       branch: {
         kinds,
@@ -438,6 +406,7 @@ export function diagnoseRecords(
         evaluationAfter: to.evaluation,
       },
       consequences,
+      counterfactual,
       candidateModes: advantage && danger ? [{ mode: "mate_threat", status: "draft", matchedBy: kinds }] : [],
     });
   });
@@ -671,6 +640,20 @@ export function renderDiagnosisReport(rows: readonly DiagnosisRow[]): string[] {
       );
     }
   }
+  lines.push("");
+
+  // STEP D2(計画 2.5): Event 1 件につき、実戦の続きと読み筋の 2 行(比べない状態は 1 行)。表の中に行を挟まないよう、表の後に置く
+  lines.push("## 実戦の続きと読み筋(STEP D2。事実の並びだけ。読み筋は③の探索で、急落を見つけた評価とは別の探索)");
+  lines.push("");
+  let counterfactualCount = 0;
+  for (const row of rows) {
+    if (row.result.kind !== "counted") continue;
+    for (const event of row.result.events) {
+      lines.push(...counterfactualLines(event.kifuId, event.branchPly, event.counterfactual));
+      counterfactualCount += 1;
+    }
+  }
+  if (counterfactualCount === 0) lines.push("- Failure Event が無い");
   lines.push("");
   return lines;
 }
