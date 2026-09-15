@@ -11,6 +11,8 @@
 // 無い欄はキーを出さず、記録していなければ unrecordedKeys に名前を並べる(false を書かない ― 計画 D-1・K-1)。どの変種にも合わない meta は写さずに例外(K-3)。
 // 【実戦の続きと読み筋】STEP D2(docs/STEP_D2_PLAN_2026-09-15.md)。スキーマ v0.4 で、FailureEvent の `counterfactual` をそのまま行に入れる
 // (consequences の後。v0.3 に欄を足しただけ = MINOR。スキーマのファイルは v0.3 から道具で作り、v0.1〜v0.3 のファイルは変えていない)。
+// 【玉の区域の数と形勢の状態】STEP D2.5(docs/STEP_D2.5_PLAN_2026-09-15.md)。スキーマ v0.5 で trigger.positionFacts・branch.standingPair・counterfactual の positionFactsEnd と差・
+// 出どころの規則(standing・positionFacts)を足した(欄を足しただけ = MINOR。スキーマのファイルは v0.4 から道具で作り、v0.1〜v0.4 のファイルは変えていない)。
 
 import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
@@ -18,11 +20,13 @@ import path from "node:path";
 import type { MetaLine } from "../invariants/types.js";
 import { validate, type JsonSchema } from "./eventSchema.js";
 import type { DiagnosisRule, FailureEvent } from "./failureEvent.js";
+import type { PositionFactsRules } from "./positionFacts.js";
+import type { StandingBounds } from "./standing.js";
 import { readDirtyState, type DirtyState, type GitState } from "./gitState.js";
 
-export const FAILURE_EVENT_SCHEMA_VERSION = "0.4" as const;
+export const FAILURE_EVENT_SCHEMA_VERSION = "0.5" as const;
 /** スキーマのファイルがある版(古い版のファイルは消さない) */
-export const KNOWN_SCHEMA_VERSIONS = ["0.1", "0.2", "0.3", "0.4"] as const;
+export const KNOWN_SCHEMA_VERSIONS = ["0.1", "0.2", "0.3", "0.4", "0.5"] as const;
 export type SchemaVersion = (typeof KNOWN_SCHEMA_VERSIONS)[number];
 
 /** 出どころに写す meta の欄(v0.2)。meta に無かった欄は `null` にし、`unrecordedKeys` に名前を並べる(v0.2 計画 K-3) */
@@ -76,7 +80,7 @@ export interface Provenance {
   analysis: {
     gitHead: string | null;
     dirty: DirtyState;
-    rule: { advantageCp: number; dropCp: number; windowPlies: number; focusDropCp: number; notEvaluationCp: number };
+    rule: { advantageCp: number; dropCp: number; windowPlies: number; focusDropCp: number; notEvaluationCp: number; standing: StandingBounds; positionFacts: PositionFactsRules };
   };
 }
 
@@ -197,6 +201,10 @@ export interface ProvenanceInput {
   analysisGit: Pick<GitState, "gitHead" | "dirty">;
   rule: DiagnosisRule;
   notEvaluationCp: number;
+  /** STEP D2.5: 形勢の状態の境(lib/failureEvent.ts の STANDING_BOUNDS) */
+  standingBounds: StandingBounds;
+  /** STEP D2.5: 玉の区域の数え方(lib/counterfactual.ts の POSITION_FACTS_RULES) */
+  positionFactsRules: PositionFactsRules;
   repoRoot: string;
 }
 
@@ -217,6 +225,8 @@ export function buildProvenance(input: ProvenanceInput): Provenance {
         windowPlies: input.rule.windowPlies,
         focusDropCp: input.rule.focusDropCp,
         notEvaluationCp: input.notEvaluationCp,
+        standing: { aheadCp: input.standingBounds.aheadCp, behindCp: input.standingBounds.behindCp },
+        positionFacts: { zone: input.positionFactsRules.zone, reach: input.positionFactsRules.reach, control: input.positionFactsRules.control },
       },
     },
   };

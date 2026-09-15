@@ -7,6 +7,7 @@
 // - 急落の候補の後、実戦の手を窓の分だけ進め、後手の手による自玉への王手と自玉の詰みを集める
 // - 発症条件(直前の行の評価・②の分類・形・③の状態)を A 層の値のまま写す(計画 3.1・9.1・9.2)
 // - 死因①のタグを draft で付ける
+// - STEP D2.5(docs/STEP_D2.5_PLAN_2026-09-15.md): 直前の行の局面の玉の区域に届く駒と升の数(trigger.positionFacts)と、組の前後の形勢の状態(branch.standingPair)を足す
 //
 // 【このファイルが絶対にやらないこと】
 // - エンジンを回すこと。記録を読むだけ(check.ts と同じ形)
@@ -26,10 +27,12 @@ import { getGameOutcome, isGameOver, isInCheck } from "../../../apps/server/src/
 import { parsePosition } from "../../../apps/server/src/rules/sfenPosition.js";
 import type { MetaLine, RecordLine } from "../invariants/types.js";
 import { displayDirty, readDirtyState } from "./gitState.js";
-import { counterfactualLines, counterfactualOf, type Counterfactual } from "./counterfactual.js";
+import { counterfactualLines, counterfactualOf, POSITION_FACTS_RULES, type Counterfactual } from "./counterfactual.js";
 import { classifyIntentStatementRow, type IntentDetection, type IntentStatementClass } from "./intentStatement.js";
 import { kingSurroundingsOf, type KingSurroundings } from "./kingSurroundings.js";
+import { positionFactsOf, type PositionFacts } from "./positionFacts.js";
 import { initialSfenOf } from "./sideAlignment.js";
+import { standingPairOf, type StandingBounds, type StandingPair } from "./standing.js";
 
 // ---- 仮の規則(判断的知識。1 か所にまとめる)----
 
@@ -49,6 +52,12 @@ export interface DiagnosisRule {
  * ③の承認済みの 300cp の借用。窓は ply で 5 手(後手の手が 3 回入る。計画 D-2)。
  */
 export const DRAFT_RULE_1: DiagnosisRule = { advantageCp: 300, dropCp: -400, windowPlies: 5, focusDropCp: 300 };
+
+/**
+ * **【判断的知識・人間の承認済み(2026-09-15、2fe81c3)】** STEP D2.5 の形勢の状態の境(docs/STEP_D2.5_PLAN_2026-09-15.md §1 の M-5・Q-5)。
+ * +300 は正本 5.3(advantageCp)の借用、−300 は新しい値。境を含む。Failure Event の branch.standingPair と diagnosis-moment の standingPair に使い、出どころに写す。
+ */
+export const STANDING_BOUNDS: StandingBounds = { aheadCp: 300, behindCp: -300 };
 
 /**
  * これ以上の |scoreCp| は評価値として扱わない(P-45。NNUE 版の記録で afterPass.scoreCp が 35281 = VALUE_MAX_EVAL を cp に直した値になり、
@@ -255,6 +264,8 @@ export interface Trigger {
   focus: FocusState;
   /** 直前の行の局面の、先手玉の周り(STEP JSON v0.2。数えるだけ) */
   kingSurroundings: KingSurroundings | null;
+  /** 直前の行の局面の、両方の玉の区域に利きが届く駒と升の数(STEP D2.5。数えるだけ) */
+  positionFacts: PositionFacts;
 }
 
 /** `initialSfen` は記録の開始局面(STEP D0-SIDE 段 2 の R-5。回して畳んだ記録は平手から並べ直せない)。 */
@@ -281,6 +292,7 @@ export function triggerOf(row: EvaluatedRow, initialSfen: string): Trigger {
         : { state: "recorded", status: shapeStage.status, refersToShapeId: shapeStage.refers_to_shape_id },
     focus: focusStateOf(record),
     kingSurroundings: kingSurroundingsOf(record.sfen),
+    positionFacts: positionFactsOf(record.sfen, POSITION_FACTS_RULES),
   };
 }
 
@@ -305,6 +317,8 @@ export interface FailureEvent {
     matedIfPassAfter: boolean;
     /** 直後の行の評価(状態 + 値。evaluationBefore と同じ形 ― STEP JSON v0.2 の 2.2・K-5) */
     evaluationAfter: Evaluation;
+    /** 直前の行と直後の行の評価の形勢の状態を並べただけ(STEP D2.5。判定語は持たない) */
+    standingPair: StandingPair;
   };
   consequences: Continuation;
   /**
@@ -404,6 +418,7 @@ export function diagnoseRecords(
         mateAfter: pair.kind === "mateAfter" ? pair.mateAfter : null,
         matedIfPassAfter,
         evaluationAfter: to.evaluation,
+        standingPair: standingPairOf(from.evaluation, to.evaluation, STANDING_BOUNDS),
       },
       consequences,
       counterfactual,

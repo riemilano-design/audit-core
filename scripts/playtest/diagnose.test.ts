@@ -27,10 +27,11 @@ import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 import type { MetaLine } from "./invariants/types.js";
+import { POSITION_FACTS_RULES } from "./lib/counterfactual.js";
 import { renderDiagnosisTotals } from "./lib/diagnosisTotals.js";
 import { diagnosisMomentsOf, loadDiagnosisMomentSchema, toMomentLine } from "./lib/diagnosisMoment.js";
 import { validate } from "./lib/eventSchema.js";
-import { buildDiagnosisReport, DRAFT_RULE_1, NOT_EVALUATION_CP, renderDiagnosisReport, type DiagnosisInput } from "./lib/failureEvent.js";
+import { buildDiagnosisReport, DRAFT_RULE_1, NOT_EVALUATION_CP, renderDiagnosisReport, STANDING_BOUNDS, type DiagnosisInput } from "./lib/failureEvent.js";
 import { engineRef, FOLD_MOVES, FOLD_START, GAME01_MOVES, plantedRecords } from "./lib/failureEventFixtures.js";
 import { buildProvenance, loadFailureEventSchema, toEventLine, validateFailureEventLine } from "./lib/failureEventSchema.js";
 import { readGitState } from "./lib/gitState.js";
@@ -72,7 +73,7 @@ describe("diagnose.ts(計画 5.2)", () => {
     // STEP D3(計画 Q-5): 入力ごとの表の後に群の合計の節を足した。合計の呼び出しもこの 1 行で見張る。
     expect(source).toContain('  console.log([...renderDiagnosisReport(report), ...renderDiagnosisTotals(report)].join("\\n"));');
     expect(source).toContain("row.result.events.map((event) => JSON.stringify(toEventLine(event, provenance)))");
-    expect(source).toContain("rule: DRAFT_RULE_1, notEvaluationCp: NOT_EVALUATION_CP, repoRoot: REPO_ROOT,");
+    expect(source).toContain("rule: DRAFT_RULE_1, notEvaluationCp: NOT_EVALUATION_CP, standingBounds: STANDING_BOUNDS, positionFactsRules: POSITION_FACTS_RULES, repoRoot: REPO_ROOT,");
     // STEP D2(監査 1e の R-1): 終わるときに process.exit を呼ばない(パイプの標準出力が書き終わる前に切れる。子プロセスの試験 R-1 でも見る)
     expect(source).not.toContain("process.exit(");
     // STEP D1b: 上がりと最大の下がりを同じ記録・規則・開始局面・出どころで組み立て、3 つのファイルは全部の行を作ってから書く
@@ -149,6 +150,8 @@ describe("diagnose.ts(計画 5.2)", () => {
                     analysisGit,
                     rule: DRAFT_RULE_1,
                     notEvaluationCp: NOT_EVALUATION_CP,
+                    standingBounds: STANDING_BOUNDS,
+                    positionFactsRules: POSITION_FACTS_RULES,
                     repoRoot: REPO_ROOT,
                   }),
                 ),
@@ -165,13 +168,21 @@ describe("diagnose.ts(計画 5.2)", () => {
           expect(provenance.record.sha256).toBe(createHash("sha256").update(readFileSync(join(dir, fileName))).digest("hex"));
           expect(provenance.evaluator.declared).toBe(evaluator);
           expect(provenance.analysis.gitHead).toBe(head);
-          expect(provenance.analysis.rule).toEqual({ advantageCp: 300, dropCp: -400, windowPlies: 5, focusDropCp: 300, notEvaluationCp: 30000 });
+          expect(provenance.analysis.rule).toEqual({
+            advantageCp: 300,
+            dropCp: -400,
+            windowPlies: 5,
+            focusDropCp: 300,
+            notEvaluationCp: 30000,
+            standing: { aheadCp: 300, behindCp: -300 },
+            positionFacts: { zone: "king_and_eight_neighbors", reach: "non_king_pieces", control: "squares" },
+          });
         }
         // T-6(STEP JSON v0 計画 6.2): toEqual は欄の順を見ないので、先頭であることは別に見る。版は定数でなく値で見る
         const schema = loadFailureEventSchema();
         for (const line of writtenEvents) {
           expect(Object.keys(line)[0]).toBe("schemaVersion");
-          expect(line.schemaVersion).toBe("0.4");
+          expect(line.schemaVersion).toBe("0.5");
           expect(validateFailureEventLine(line, schema)).toEqual([]);
         }
       } finally {
@@ -283,7 +294,7 @@ describe("diagnose.ts(計画 5.2)", () => {
   );
 
   // STEP D1b(docs/STEP_D1b_PLAN_2026-09-15.md G-9)。--events-rise・--events-maxdrop を付けても、--events の行と標準出力の表は旗なしと同じ。
-  // 上がりと最大の下がりの行は、同じ記録を lib に掛けて組み立てた行と一致し、契約 diagnosis-moment v0.1 のスキーマを通る
+  // 上がりと最大の下がりの行は、同じ記録を lib に掛けて組み立てた行と一致し、契約 diagnosis-moment v0.2 のスキーマを通る
   it(
     "子プロセス(D1b の G-9): 上がり・最大の下がりの旗を付けても --events と表は旗なしとバイト一致で、2 つのファイルは lib の行と一致しスキーマを通る",
     () => {
@@ -334,6 +345,8 @@ describe("diagnose.ts(計画 5.2)", () => {
             analysisGit,
             rule: DRAFT_RULE_1,
             notEvaluationCp: NOT_EVALUATION_CP,
+            standingBounds: STANDING_BOUNDS,
+            positionFactsRules: POSITION_FACTS_RULES,
             repoRoot: REPO_ROOT,
           });
           const moments = diagnosisMomentsOf(reread[index]!.kifuId, reread[index]!.records, DRAFT_RULE_1, initialSfenOf(reread[index]!.meta), row.result.events);
@@ -526,7 +539,7 @@ describe("diagnose.ts(計画 5.2)", () => {
           const meta = metaOf(line);
           expect(seven.filter((key) => Object.hasOwn(meta, key))).toEqual([]);
           expect(meta.unrecordedKeys).toEqual(["dirty", "searchMode", "nodes", "threads", ...seven]);
-          expect(line.schemaVersion).toBe("0.4");
+          expect(line.schemaVersion).toBe("0.5");
           expect(validateFailureEventLine(line, schema)).toEqual([]);
         }
         for (const line of foldLines) {
@@ -541,7 +554,7 @@ describe("diagnose.ts(計画 5.2)", () => {
             truncatedTrailingMove: "2g2f",
           });
           expect(meta.unrecordedKeys).toEqual(["dirty", "searchMode", "nodes", "threads"]);
-          expect(line.schemaVersion).toBe("0.4");
+          expect(line.schemaVersion).toBe("0.5");
           expect(validateFailureEventLine(line, schema)).toEqual([]);
         }
       } finally {

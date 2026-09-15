@@ -57,7 +57,7 @@
 |---|---|---|
 | P-1 | 平手の初期局面 | 区域の升数 6 と 6。M-1 両側 0。**M-2 先手 5**(金 4i・6i、銀 3i・7i、飛 2h)・後手 5。**M-3 `ownKingZone.bySente` 4**(4h・5h・6h・5i)・`byGote` 0、`opponentKingZone.byGote` 4・`bySente` 0 |
 | P-2 | 先手玉 9i・後手玉 5e だけ | 区域の升数 4 と 9。M-1〜M-3 すべて 0(玉の利きは数えない) |
-| P-3 | 先手玉 9i・後手玉 5a・先手飛 5e・後手金 5b だけ(先手番) | 飛は 5d・5c・5b で止まる(5b を含む)。M-1 `onOpponentKingZone` 1。M-3 `opponentKingZone.bySente` 1(5b)・`byGote` 3(金の利き 4b・6b・5a)。M-2 `opponentKingZone` 1。先手の区域は 0 |
+| P-3 | 先手玉 9i・後手玉 5a・先手飛 5e・後手金 5b だけ(先手番) | 飛は 5d・5c・5b で止まる(5b を含む)。M-1 `zonePieces.opponentKingZone` 1。M-3 `opponentKingZone.bySente` 1(5b)・`byGote` 3(金の利き 4b・6b・5a)。M-2 `opponentKingZone` 1。先手の区域は 0 |
 | P-4 | P-3 の後手金を 5c に | 飛は 5d・5c で止まる。`opponentKingZone.bySente` 0・`byGote` 1(5b)・M-1 0・M-2 `opponentKingZone` 1 |
 | P-5 | 先手玉が盤に無い | 先手玉の側は null、差も null |
 | P-6 | P-3 に先手の持ち駒の金を足す | P-3 と同じ(持ち駒は数えない) |
@@ -121,3 +121,210 @@
 **事前読み B(版 `8b5b00f2` の REVISE)の取り込み**: R-1 → E-5・5. の書き直しの記録と予-1〜予-4・入力・K-2 を消す / R-2 → E-1・§1 の「利きが届く升」・M-3 の【承認】・Q-7・P-2・P-3・P-4(升の名前)・W-3・W-4 / S-1 → 題・M-4 の見出し・Q-8 / S-2 → M-5 の `mate` 0・P-10・M-4 の作り方・§2 の後手番 / S-3 → 3. の版・Q-3 / S-4 → P-1 の M-2・M-3、P-8・P-9、W-1a・W-1b・W-5・W-7・W-8 / S-5 → 5. の書き直しの記録 / S-6 → E-8・Q-2
 
 **実装者 1e の下見(版 `8b5b00f2`)の取り込み**: D-1 → E-5(B の R-1 と同じ)/ D-2 → §1 の定義・Q-7(B の R-2 と同じ)/ D-3 → E-8 / D-4 → K-3 / S-1 → §1 の「利きが届く升」/ S-2 → E-1・E-2 の場所 / S-3 → §1 の `zoneSquares` / S-4 → M-5・P-10 / S-5 → §2 の Failure Event・W-12
+
+## 8. 実装の記録(1e、2026-09-15。監査 C の前)
+
+基点 `9271301`、worktree `scratchpad/wt-d25`。エンジンは使っていない(偽の局面と固定例、コミット済みの記録だけ)。人間の承認(`2fe81c3`): 区域の形・玉自身の利きを数えない・境 ±300(mate は符号、mate 0 は undetermined)。
+
+### 8.1 変えた本(sha256 は提出の文に書く)
+
+- 新規: `scripts/playtest/lib/positionFacts.ts`(M-1〜M-3)・`lib/standing.ts`(M-5・M-6)・`lib/positionFacts.test.ts`・`lib/standing.test.ts`・`schemas/failure-event.v0.5.schema.json`・`schemas/diagnosis-moment.v0.2.schema.json`
+- 足しただけ: `lib/failureEvent.ts`(`STANDING_BOUNDS`・`Trigger.positionFacts`・`branch.standingPair`)・`lib/counterfactual.ts`(`POSITION_FACTS_RULES`・`SequenceFacts.positionFactsEnd`・`CounterfactualDiff.positionFacts`)・`lib/diagnosisMoment.ts`(`MomentPairFields.standingPair`)・`lib/failureEventSchema.ts`(規則の 2 欄・`ProvenanceInput` の 2 欄)・`diagnose.ts`(出どころに 2 つの値を渡す 1 行)
+- 試験の期待を変えた既存の試験: `lib/failureEvent.test.ts`・`lib/counterfactual.test.ts`・`lib/failureEventSchema.test.ts`・`lib/diagnosisMoment.test.ts`・`diagnose.test.ts`
+- スキーマの生成: 道具 `scratchpad/d25/gen-schemas.py`。v0.4・moment v0.1 が `json.dumps(…, ensure_ascii=False, indent=2) + "\n"` でバイト一致に再現することを確かめてから欄を足し、足した欄を外すと元のファイルとバイト一致に戻ることを道具の中で確かめた。v0.1〜v0.4・moment v0.1 のファイルは変えていない(前後の sha256 で確かめた)
+
+### 8.2 計画に書いていなかった決め(実装者の判断。違えた点は無い)
+
+- **J-1 定数の置き場**: 境は `STANDING_BOUNDS`(承認済みなので DRAFT を付けない)を `lib/failureEvent.ts` の `DRAFT_RULE_1` の隣に置いた。区域の規則は `POSITION_FACTS_RULES` を `lib/counterfactual.ts` の `PV_MATERIAL_RULES` の隣に置いた(`failureEvent.ts` は既に `counterfactual.ts` を import しているので、逆向きの import を作らない)。どちらも `notEvaluationCp` と同じく `ProvenanceInput` の必須の欄(`standingBounds`・`positionFactsRules`)で出どころへ明示して渡す
+- **J-2 mate 0**: lib の undetermined の理由は `mateZero`。スキーマの列挙には入れない(スキーマは mate 0 を通さないので、行には出ない)
+- **J-3 null の揃え方**: `positionFacts`(と差)のスキーマは「後手玉・先手玉がある / 無い」の 4 変種の `oneOf`。玉の無い側は `zoneSquares`・`zonePieces`・`zoneControl` が揃って null。値域は駒 0〜38(玉以外の全部)・升 0〜9、差は ±38・±9
+- **J-4 Markdown**: 変えない(3. の「D2.5 の列を足した分だけ」は 0 列)。D2.5 の欄は JSON の行だけ
+- **J-5 moment の欄の位置**: 組の行の `standingPair` は `evaluationAfter` の後(Event の `branch.standingPair` と同じ定義・同じ説明文)
+- **J-6** `loadDiagnosisMomentSchema` に版の引数(省略時は今の版)を足した(0.2 → 0.1 の鎖の試験のため。呼び出しの形は変わらない)
+- **J-7 P-11 の N = 2**: 読み筋のほうが長い局面(先手の金 5h・玉 5i・後手玉 5a、実戦 2 手・読み筋 3 手)を使った。読み筋の 3 手目の後と 2 手目の後で値が違うことを前提として試験に書いた(同じだと W-12 が黙る)
+- **J-8 変異の当て方**: W-3 を 2 つ(3a 遮りを見ない / 3b 駒のいる升を含めない)に分けた。W-13 は「持ち駒の種類ごとに、空いた升すべてへ届く」、W-15 は「v0.4 のスキーマのファイルにも `trigger.positionFacts` を書く」で当てた。W-1a・W-1b・W-2 はスキーマの値域から外れて行の検証まで落ちるので、「必ず落ちる試験の集合」で判定した(上限なし)
+
+### 8.3 D-SCREEN-2(B)の載せ替えのための場所(司令塔 e3 の頼み)
+
+- 版の文字列は 4 行だけ: `lib/failureEventSchema.ts:27`(`FAILURE_EVENT_SCHEMA_VERSION = "0.5"`)・`:29`(`KNOWN_SCHEMA_VERSIONS` に `"0.5"`)、`lib/diagnosisMoment.ts:38`(`DIAGNOSIS_MOMENT_SCHEMA_VERSION = "0.2"`)・`:40`(`KNOWN_DIAGNOSIS_MOMENT_SCHEMA_VERSIONS` を新設)
+- 既存の欄の並び・関数の引数は変えていない。変えた既存の行は、注記・import・`Provenance.analysis.rule` の型の 1 行(`failureEventSchema.ts:83`)・`loadDiagnosisMomentSchema` の宣言(`diagnosisMoment.ts:202`、省略できる引数を足した)・`diagnose.ts:112`(`buildProvenance` に 2 つの値を渡す)だけ
+- `ProvenanceInput` に必須の欄が 2 つ増えた(`failureEventSchema.ts:205`・`:207`)。`buildProvenance` を呼ぶ所は 2 つの値を渡す必要がある
+- 試験の版の値: `diagnose.test.ts`(`"0.5"` 3 か所)・`lib/counterfactual.test.ts`(F-11 の `"0.5"` 2 か所)・`lib/diagnosisMoment.test.ts`(G-15 の `"0.2"` 2 か所・`loadFailureEventSchema("0.5")` 2 か所・`schemaVersion: "0.5"` 1 か所)。`lib/failureEventSchema.test.ts` は `FAILURE_EVENT_SCHEMA_VERSION` と `schemaV04` を使う
+
+### 8.4 測った結果
+
+- **試験を変える前の予測**(読んで立てた): 読み込みで落ちるファイル 2・個別に落ちる試験 14・型エラー 5 か所 → **的中**
+- **新しい試験**: 1 回目・2 回目は外れ(`counterfactual.test.ts` の P-11 で `applyMove` の import 漏れ。2 回目は「applyMove.js の import がある」を見ただけで、import していたのは `IllegalMoveError` だけだった)。3 回目で **playtest 46 本・644 試験すべて通る・typecheck 0**(基点 623 + 新 21)
+- **P-12**(旧版 `9271301` と新版に同じ入力 = records/d0-nnue 7 本 + GAME01 に急落・上がり・読み筋を植えた 1 本): Markdown バイト一致(29,462 バイト)。`--events` 25 行・rise 2 行・maxdrop 8 行とも、D2.5 の欄と `schemaVersion`・`provenance.analysis` を外すと全行一致。版は 0.4 → 0.5・0.1 → 0.2。分岐点 49 は compared → **的中**
+- **変異**(道具 `scratchpad/d25/mutate.py` b02c7bd8、予測 sha1 583eb144。予測は実装と試験の後・当てる前に道具の中へ書いた。7 本の試験 160 件): **17 本とも予測どおり・17 本とも鳴った・元のバイト列に戻った**。W-1a 40 件・W-1b 41 件・W-2 14 件(上限なしの判定。必ず落ちる試験はすべて落ちた)/ W-3a 3・W-3b 4・W-4 10・W-5 9・W-6 10・W-7 1・W-8 2・W-9 2・W-12 1・W-13 1・W-14 1・W-15 3(落ちた集合が予測と一致)/ W-10 1・W-11 3(記録次第で落ちるとした「変種の一覧」の試験は、W-10 では落ちず W-11 では落ちた。どちらも予測の範囲)
+- **P-1〜P-11**: 固定例として試験に入れた(下の図)。§5 の予測(予-1〜予-4・物差しごとの差)は、この STEP では測っていない(2 人目 20 局の events に当てるのは合図の後)
+
+### 8.5 既知事項の候補(登録と番号は司令塔)
+
+- `standingPair` と `evaluationBefore`・`evaluationAfter` の対応、`positionFacts` の玉の無い側と `kingSurroundings` の null の対応は、スキーマで縛れない(条件の語が無い ― V0.3-META の L-1 と同じ)。lib の試験だけが見張る
+- 盤上に同じ色の玉が 2 枚ある局面では、区域は最初の 1 枚だけで作る(本番の局面では起きない)
+### 盤の図(固定例 P-1〜P-9。図は SFEN を機械的に描いたもの。区域と届く升は手で数えた)
+
+**P-1** `lnsgkgsnl/1r5b1/ppppppppp/9/9/9/PPPPPPPPP/1B5R1/LNSGKGSNL b - 1`
+
+```
+     9  8  7  6  5  4  3  2  1
+  a v香v桂v銀v金v玉v金v銀v桂v香
+  b  ・v飛 ・ ・ ・ ・ ・v角 ・
+  c v歩v歩v歩v歩v歩v歩v歩v歩v歩
+  d  ・ ・ ・ ・ ・ ・ ・ ・ ・
+  e  ・ ・ ・ ・ ・ ・ ・ ・ ・
+  f  ・ ・ ・ ・ ・ ・ ・ ・ ・
+  g  歩 歩 歩 歩 歩 歩 歩 歩 歩
+  h  ・ 角 ・ ・ ・ ・ ・ 飛 ・
+  i  香 桂 銀 金 玉 金 銀 桂 香
+  持ち駒: なし(大文字 = 先手)
+```
+
+- 先手玉 5i の区域 = 5i・4i・6i・4h・5h・6h(6)。届く先手の駒 = 金 4i(4h・5h・5i)・金 6i(5h・6h・5i)・銀 3i(4h)・銀 7i(6h)・飛 2h(4h・5h・6h。8h の角で止まる)の 5、升 = 4h・5h・6h・5i の 4。後手の駒は届かない。後手玉の区域は同じ形で後手 5・升 4(4b・5b・6b・5a)
+
+**P-2** `9/9/9/9/4k4/9/9/9/K8 b - 1`
+
+```
+     9  8  7  6  5  4  3  2  1
+  a  ・ ・ ・ ・ ・ ・ ・ ・ ・
+  b  ・ ・ ・ ・ ・ ・ ・ ・ ・
+  c  ・ ・ ・ ・ ・ ・ ・ ・ ・
+  d  ・ ・ ・ ・ ・ ・ ・ ・ ・
+  e  ・ ・ ・ ・v玉 ・ ・ ・ ・
+  f  ・ ・ ・ ・ ・ ・ ・ ・ ・
+  g  ・ ・ ・ ・ ・ ・ ・ ・ ・
+  h  ・ ・ ・ ・ ・ ・ ・ ・ ・
+  i  玉 ・ ・ ・ ・ ・ ・ ・ ・
+  持ち駒: なし(大文字 = 先手)
+```
+
+- 区域 = 先手玉 9i の 4(9i・8i・9h・8h)、後手玉 5e の 9。玉のほかに駒が無いので、駒も升も 0
+
+**P-3** `4k4/4g4/9/9/4R4/9/9/9/K8 b - 1`
+
+```
+     9  8  7  6  5  4  3  2  1
+  a  ・ ・ ・ ・v玉 ・ ・ ・ ・
+  b  ・ ・ ・ ・v金 ・ ・ ・ ・
+  c  ・ ・ ・ ・ ・ ・ ・ ・ ・
+  d  ・ ・ ・ ・ ・ ・ ・ ・ ・
+  e  ・ ・ ・ ・ 飛 ・ ・ ・ ・
+  f  ・ ・ ・ ・ ・ ・ ・ ・ ・
+  g  ・ ・ ・ ・ ・ ・ ・ ・ ・
+  h  ・ ・ ・ ・ ・ ・ ・ ・ ・
+  i  玉 ・ ・ ・ ・ ・ ・ ・ ・
+  持ち駒: なし(大文字 = 先手)
+```
+
+- 後手玉 5a の区域 = 5a・4a・6a・4b・5b・6b(6)。先手の飛 5e は 5d・5c・5b(後手の金で止まる。5b を含む)→ 区域の升 5b の 1。後手の金 5b は 4c・5c・6c・4b・6b・5a → 区域の升 4b・6b・5a の 3
+
+**P-4** `4k4/9/4g4/9/4R4/9/9/9/K8 b - 1`
+
+```
+     9  8  7  6  5  4  3  2  1
+  a  ・ ・ ・ ・v玉 ・ ・ ・ ・
+  b  ・ ・ ・ ・ ・ ・ ・ ・ ・
+  c  ・ ・ ・ ・v金 ・ ・ ・ ・
+  d  ・ ・ ・ ・ ・ ・ ・ ・ ・
+  e  ・ ・ ・ ・ 飛 ・ ・ ・ ・
+  f  ・ ・ ・ ・ ・ ・ ・ ・ ・
+  g  ・ ・ ・ ・ ・ ・ ・ ・ ・
+  h  ・ ・ ・ ・ ・ ・ ・ ・ ・
+  i  玉 ・ ・ ・ ・ ・ ・ ・ ・
+  持ち駒: なし(大文字 = 先手)
+```
+
+- 飛は 5d・5c(金で止まる)→ 区域に届かない。金 5c は 4d・5d・6d・4c・6c・5b → 区域の升 5b の 1
+
+**P-5** `4k4/9/9/9/9/9/9/9/9 b - 1`
+
+```
+     9  8  7  6  5  4  3  2  1
+  a  ・ ・ ・ ・v玉 ・ ・ ・ ・
+  b  ・ ・ ・ ・ ・ ・ ・ ・ ・
+  c  ・ ・ ・ ・ ・ ・ ・ ・ ・
+  d  ・ ・ ・ ・ ・ ・ ・ ・ ・
+  e  ・ ・ ・ ・ ・ ・ ・ ・ ・
+  f  ・ ・ ・ ・ ・ ・ ・ ・ ・
+  g  ・ ・ ・ ・ ・ ・ ・ ・ ・
+  h  ・ ・ ・ ・ ・ ・ ・ ・ ・
+  i  ・ ・ ・ ・ ・ ・ ・ ・ ・
+  持ち駒: なし(大文字 = 先手)
+```
+
+- 先手玉が無い → 先手玉の側は 3 つの欄とも null。後手玉 5a の区域 6、駒 0
+
+**P-6** `4k4/4g4/9/9/4R4/9/9/9/K8 b G 1`
+
+```
+     9  8  7  6  5  4  3  2  1
+  a  ・ ・ ・ ・v玉 ・ ・ ・ ・
+  b  ・ ・ ・ ・v金 ・ ・ ・ ・
+  c  ・ ・ ・ ・ ・ ・ ・ ・ ・
+  d  ・ ・ ・ ・ ・ ・ ・ ・ ・
+  e  ・ ・ ・ ・ 飛 ・ ・ ・ ・
+  f  ・ ・ ・ ・ ・ ・ ・ ・ ・
+  g  ・ ・ ・ ・ ・ ・ ・ ・ ・
+  h  ・ ・ ・ ・ ・ ・ ・ ・ ・
+  i  玉 ・ ・ ・ ・ ・ ・ ・ ・
+  持ち駒: G(大文字 = 先手)
+```
+
+- P-3 に先手の持ち駒の金。持ち駒は数えないので P-3 と同じ
+
+**P-7** `4k4/9/3+P1+P3/9/9/9/9/9/K8 b - 1`
+
+```
+     9  8  7  6  5  4  3  2  1
+  a  ・ ・ ・ ・v玉 ・ ・ ・ ・
+  b  ・ ・ ・ ・ ・ ・ ・ ・ ・
+  c  ・ ・ ・ と ・ と ・ ・ ・
+  d  ・ ・ ・ ・ ・ ・ ・ ・ ・
+  e  ・ ・ ・ ・ ・ ・ ・ ・ ・
+  f  ・ ・ ・ ・ ・ ・ ・ ・ ・
+  g  ・ ・ ・ ・ ・ ・ ・ ・ ・
+  h  ・ ・ ・ ・ ・ ・ ・ ・ ・
+  i  玉 ・ ・ ・ ・ ・ ・ ・ ・
+  持ち駒: なし(大文字 = 先手)
+```
+
+- と 4c は 3b・4b・5b・3c・5c・4d、と 6c は 5b・6b・7b・5c・7c・6d。区域に入るのは 4b・5b・6b の 3(5b に 2 枚届くが 1 升。延べ数なら 4)、駒 2
+
+**P-8** `4k4/9/3+B5/9/9/9/9/9/K8 b - 1`
+
+```
+     9  8  7  6  5  4  3  2  1
+  a  ・ ・ ・ ・v玉 ・ ・ ・ ・
+  b  ・ ・ ・ ・ ・ ・ ・ ・ ・
+  c  ・ ・ ・ 馬 ・ ・ ・ ・ ・
+  d  ・ ・ ・ ・ ・ ・ ・ ・ ・
+  e  ・ ・ ・ ・ ・ ・ ・ ・ ・
+  f  ・ ・ ・ ・ ・ ・ ・ ・ ・
+  g  ・ ・ ・ ・ ・ ・ ・ ・ ・
+  h  ・ ・ ・ ・ ・ ・ ・ ・ ・
+  i  玉 ・ ・ ・ ・ ・ ・ ・ ・
+  持ち駒: なし(大文字 = 先手)
+```
+
+- 馬 6c: 線 5b・4a(と 7b・8a・5d…・7d…)、玉の形 6b・6d・5c・7c。区域に入るのは 6b・5b・4a の 3(線だけと取り違えると 2)
+
+**P-9** `4k4/9/5+P3/9/9/9/9/9/K8 b - 1`
+
+```
+     9  8  7  6  5  4  3  2  1
+  a  ・ ・ ・ ・v玉 ・ ・ ・ ・
+  b  ・ ・ ・ ・ ・ ・ ・ ・ ・
+  c  ・ ・ ・ ・ ・ と ・ ・ ・
+  d  ・ ・ ・ ・ ・ ・ ・ ・ ・
+  e  ・ ・ ・ ・ ・ ・ ・ ・ ・
+  f  ・ ・ ・ ・ ・ ・ ・ ・ ・
+  g  ・ ・ ・ ・ ・ ・ ・ ・ ・
+  h  ・ ・ ・ ・ ・ ・ ・ ・ ・
+  i  玉 ・ ・ ・ ・ ・ ・ ・ ・
+  持ち駒: なし(大文字 = 先手)
+```
+
+- と金 4c は金の形 3b・4b・5b・3c・5c・4d。区域に入るのは 4b・5b の 2(歩の形と取り違えると 4b の 1)
+
+**載せ替えの記録(司令塔 e3、2026-09-15)**: 実装は基点 `9271301` の worktree で行い、監査 C の GO の後に司令塔が `f39fd21`(D-SCREEN-1)の上へ写した(重なるファイルは無し)。計画書は人間承認の書き換え(`2fe81c3`)の版に §8 を足した。C の K-1(§4 の P-3 の行に Q-8 前の名前が残る)は載せ替えのときに司令塔が名前だけ直した(1 か所)。

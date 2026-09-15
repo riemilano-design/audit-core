@@ -26,11 +26,13 @@ import {
 import { baseRowsOf, engineRef, GAME01_MOVES, plantedRecords } from "./failureEventFixtures.js";
 import { classifyIntentStatementRow } from "./intentStatement.js";
 import { GOTE_TO_MOVE_INITIAL_SFEN, InvalidSideAlignmentError } from "./sideAlignment.js";
+import { POSITION_FACTS_RULES } from "./counterfactual.js";
+import { positionFactsOf } from "./positionFacts.js";
 
-/** STEP JSON v0.2 で branch に evaluationAfter を足した。D1 の期待値は v0.1 までの 4 欄のまま比べ、evaluationAfter は別の試験で見る */
+/** STEP JSON v0.2 で branch に evaluationAfter を足した。D1 の期待値は v0.1 までの 4 欄のまま比べ、evaluationAfter は別の試験で見る(STEP D2.5 の standingPair も同じ) */
 const branchOf = (event: FailureEvent | undefined) => {
   if (event === undefined) return undefined;
-  const { evaluationAfter: _after, ...rest } = event.branch;
+  const { evaluationAfter: _after, standingPair: _standing, ...rest } = event.branch;
   return rest;
 };
 const eventAt = (events: ReturnType<typeof diagnoseRecords>["events"], branchPly: number) => events.find((e) => e.branchPly === branchPly);
@@ -460,5 +462,23 @@ describe("R-5: 開始局面の違う記録(STEP D0-SIDE 段 2)", () => {
     expect(folded[0]!.sfen).toBe(FOLD_START);
     expect(plainAgain[0]!.sfen).toBe(DEFAULT_INITIAL_SFEN);
     expect(plain[3]!.sfen).not.toBe(folded[3]!.sfen);
+  });
+});
+
+// ---- STEP D2.5(docs/STEP_D2.5_PLAN_2026-09-15.md §4 の P-11)。期待は計画書の表のまま手で書いた ----
+describe("STEP D2.5: Failure Event の branch.standingPair と trigger.positionFacts", () => {
+  it("P-11: 直前 +700・直後 +200 の組は ahead → level、直前 +100・直後 −350 の組は level → behind(判定語は持たない)", () => {
+    const { events } = diagnoseDraft("p11", plantedRecords(GAME01_MOVES, { 20: engineRef(700), 22: engineRef(200), 30: engineRef(100), 32: engineRef(-350) }));
+    expect(events.map((event) => [event.branchPly, event.branch.kinds, event.branch.standingPair])).toEqual([
+      [21, ["cpDrop"], { before: "ahead", after: "level" }],
+      [31, ["cpDrop"], { before: "level", after: "behind" }],
+    ]);
+  });
+
+  it("trigger.positionFacts は直前の行(fromReadyPly)の局面に positionFactsOf を当てた値", () => {
+    const records = plantedRecords(GAME01_MOVES, { 20: engineRef(700), 22: engineRef(200) });
+    const event = eventAt(diagnoseDraft("p11-trigger", records).events, 21)!;
+    expect(event.fromReadyPly).toBe(20);
+    expect(event.trigger.positionFacts).toEqual(positionFactsOf(records.find((record) => record.ply === 20)!.sfen, POSITION_FACTS_RULES));
   });
 });

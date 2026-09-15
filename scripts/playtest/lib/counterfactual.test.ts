@@ -8,7 +8,7 @@ import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import type { SearchPvObservation } from "../../../apps/server/src/analysis/searchPv.js";
 import { DEFAULT_INITIAL_SFEN } from "../../../apps/server/src/analysis/moveHistory.js";
-import { IllegalMoveError } from "../../../apps/server/src/rules/applyMove.js";
+import { applyMove, IllegalMoveError } from "../../../apps/server/src/rules/applyMove.js";
 import type { RecordLine } from "../invariants/types.js";
 import {
   counterfactualLines,
@@ -17,8 +17,12 @@ import {
   type Counterfactual,
   type CounterfactualComparison,
   type CounterfactualInput,
+  POSITION_FACTS_RULES,
+  type CounterfactualDiff,
+  type SequenceFacts,
 } from "./counterfactual.js";
-import { actualContinuation, buildDiagnosisReport, diagnoseRecords, DRAFT_RULE_1, NOT_EVALUATION_CP, renderDiagnosisReport } from "./failureEvent.js";
+import { actualContinuation, buildDiagnosisReport, diagnoseRecords, DRAFT_RULE_1, NOT_EVALUATION_CP, renderDiagnosisReport, STANDING_BOUNDS } from "./failureEvent.js";
+import { positionFactsDiff, positionFactsOf } from "./positionFacts.js";
 import { engineRef, GAME01_MOVES, plantedRecords } from "./failureEventFixtures.js";
 import { buildProvenance, loadFailureEventSchema, toEventLine, validateFailureEventLine } from "./failureEventSchema.js";
 import { alignMovesToSente } from "./sideAlignment.js";
@@ -72,6 +76,16 @@ function compared(counterfactual: Counterfactual): CounterfactualComparison {
 
 const NO_CHECKS = { byUs: [], byOpponent: [] };
 
+/** STEP D2.5 の欄(positionFactsEnd・pvMinusActual.positionFacts)は D2 の期待に入れず、別の試験(このファイルの末尾・lib/positionFacts.test.ts)で見る */
+const d2Facts = (facts: SequenceFacts) => {
+  const { positionFactsEnd: _positionFactsEnd, ...rest } = facts;
+  return rest;
+};
+const d2Diff = (diff: CounterfactualDiff) => {
+  const { positionFacts: _positionFacts, ...rest } = diff;
+  return rest;
+};
+
 describe("前提", () => {
   it("INIT は本番の平手の初期局面と同じ文字列", () => {
     expect(DEFAULT_INITIAL_SFEN).toBe(INIT);
@@ -82,7 +96,7 @@ describe("STEP D2 の固定例(計画 3.)", () => {
   it("F-1 取った駒が違う: N = 5、実戦 us 角 1 / opponent 角 1、読み筋 空、差 us 角 −1・opponent 角 −1、玉の周り 5 / 2、逃げ道 3", () => {
     const c = compared(counterfactualOf(input(INIT, F1_ACTUAL, F1_PV)));
     expect([c.comparedPlies, c.actualPlies, c.pvLength, c.pvUsablePlies, c.pvTruncatedAtPly]).toEqual([5, 5, 5, 5, null]);
-    expect(c.actual).toEqual({
+    expect(d2Facts(c.actual)).toEqual({
       capturedRoles: { us: { bishop: 1 }, opponent: { bishop: 1 } },
       checks: NO_CHECKS,
       mate: null,
@@ -90,7 +104,7 @@ describe("STEP D2 の固定例(計画 3.)", () => {
       kingSurroundingsEnd: { squares: 5, own: 2 },
       kingEscapesEnd: { state: "counted", count: 3 },
     });
-    expect(c.pv).toEqual({
+    expect(d2Facts(c.pv)).toEqual({
       capturedRoles: { us: {}, opponent: {} },
       checks: NO_CHECKS,
       mate: null,
@@ -98,7 +112,7 @@ describe("STEP D2 の固定例(計画 3.)", () => {
       kingSurroundingsEnd: { squares: 5, own: 2 },
       kingEscapesEnd: { state: "counted", count: 3 },
     });
-    expect(c.pvMinusActual).toEqual({ capturedRoles: { us: { bishop: -1 }, opponent: { bishop: -1 } }, kingSurroundingsOwn: 0, kingEscapes: 0 });
+    expect(d2Diff(c.pvMinusActual)).toEqual({ capturedRoles: { us: { bishop: -1 }, opponent: { bishop: -1 } }, kingSurroundingsOwn: 0, kingEscapes: 0 });
     expect(c.kingEscapesRoot).toEqual({ state: "counted", count: 3 });
     expect(c.kingEscapesChangeFromRoot).toEqual({ actual: 0, pv: 0 });
   });
@@ -113,7 +127,7 @@ describe("STEP D2 の固定例(計画 3.)", () => {
     expect(c.pv.checks).toEqual(NO_CHECKS);
     expect(c.pv.capturedRoles).toEqual({ us: {}, opponent: {} });
     expect(c.pv.kingEscapesEnd).toEqual({ state: "counted", count: 3 });
-    expect(c.pvMinusActual).toEqual({ capturedRoles: { us: { gold: -1 }, opponent: {} }, kingSurroundingsOwn: 0, kingEscapes: null });
+    expect(d2Diff(c.pvMinusActual)).toEqual({ capturedRoles: { us: { gold: -1 }, opponent: {} }, kingSurroundingsOwn: 0, kingEscapes: null });
     expect(c.kingEscapesChangeFromRoot).toEqual({ actual: null, pv: 0 });
   });
 
@@ -181,7 +195,7 @@ describe("STEP D2 の固定例(計画 3.)", () => {
     expect(differs.pvFirstMoveIsBestmoveAtBefore).toBe(false);
     const same = compared(counterfactualOf(input(INIT, F1_ACTUAL, [...F1_ACTUAL], { bestmoveAtBefore: "7g7f" })));
     expect([same.pvFirstMove, same.pvFirstMoveIsBestmoveAtBefore, same.pvFirstMoveIsPlayedMove]).toEqual(["7g7f", true, true]);
-    expect(same.pvMinusActual).toEqual({ capturedRoles: { us: {}, opponent: {} }, kingSurroundingsOwn: 0, kingEscapes: 0 });
+    expect(d2Diff(same.pvMinusActual)).toEqual({ capturedRoles: { us: {}, opponent: {} }, kingSurroundingsOwn: 0, kingEscapes: 0 });
   });
 
   it("F-9 読み筋に非合法手: 打ち切り 4・並べられた 3・N = 3", () => {
@@ -224,7 +238,7 @@ describe("STEP D2 の固定例(計画 3.)", () => {
   it("S-2(監査 1e の任意): 後手の手で窓の中に詰む: N = 2、実戦 詰み 2 手目(後手の勝ち)・後手の手による王手 [2]・逃げ道 0、読み筋 詰みなし・逃げ道 2(差 +2)、根の逃げ道 4。D1 の consequences も同じ詰み", () => {
     const c = compared(counterfactualOf(input(GOTE_MATE_ROOT, ["1g1f", "G*5h"], ["5i4i", "G*5h"])));
     expect([c.comparedPlies, c.actualPlies, c.pvUsablePlies]).toEqual([2, 2, 2]);
-    expect(c.actual).toEqual({
+    expect(d2Facts(c.actual)).toEqual({
       capturedRoles: { us: {}, opponent: {} },
       checks: { byUs: [], byOpponent: [2] },
       mate: { ply: 2, winner: "gote" },
@@ -232,7 +246,7 @@ describe("STEP D2 の固定例(計画 3.)", () => {
       kingSurroundingsEnd: { squares: 5, own: 0 },
       kingEscapesEnd: { state: "counted", count: 0 },
     });
-    expect(c.pv).toEqual({
+    expect(d2Facts(c.pv)).toEqual({
       capturedRoles: { us: {}, opponent: {} },
       checks: { byUs: [], byOpponent: [2] },
       mate: null,
@@ -240,7 +254,7 @@ describe("STEP D2 の固定例(計画 3.)", () => {
       kingSurroundingsEnd: { squares: 5, own: 0 },
       kingEscapesEnd: { state: "counted", count: 2 },
     });
-    expect(c.pvMinusActual).toEqual({ capturedRoles: { us: {}, opponent: {} }, kingSurroundingsOwn: 0, kingEscapes: 2 });
+    expect(d2Diff(c.pvMinusActual)).toEqual({ capturedRoles: { us: {}, opponent: {} }, kingSurroundingsOwn: 0, kingEscapes: 2 });
     expect(c.kingEscapesRoot).toEqual({ state: "counted", count: 4 });
     expect(c.kingEscapesChangeFromRoot).toEqual({ actual: -4, pv: -2 });
     expect(actualContinuation(["1g1f", "G*5h"], 1, WINDOW, GOTE_MATE_ROOT)).toMatchObject({ checks: [2], mate: 2 });
@@ -257,7 +271,7 @@ describe("STEP D2 の固定例(計画 3.)", () => {
       { state: "counted", count: 5 },
       { state: "counted", count: 4 },
     ]);
-    expect(c.pvMinusActual).toEqual({ capturedRoles: { us: {}, opponent: {} }, kingSurroundingsOwn: 1, kingEscapes: -1 });
+    expect(d2Diff(c.pvMinusActual)).toEqual({ capturedRoles: { us: {}, opponent: {} }, kingSurroundingsOwn: 1, kingEscapes: -1 });
     expect(c.kingEscapesRoot).toEqual({ state: "counted", count: 4 });
     expect(c.pvFirstMoveIsPlayedMove).toBe(false);
   });
@@ -310,7 +324,7 @@ describe("STEP D2 の固定例(記録から。計画 3.)", () => {
     expect(() => diagnoseRecords("f-10", records, DRAFT_RULE_1, DEFAULT_INITIAL_SFEN)).toThrow(IllegalMoveError);
   });
 
-  it("F-11 端から端まで: GAME01 の分岐点 49 に counterfactual が付き、N = 6 で実戦の byOpponent は D1 の consequences.checks と一致し、1 行は v0.4 のスキーマを通り、Markdown に 2 行", () => {
+  it("F-11 端から端まで: GAME01 の分岐点 49 に counterfactual が付き、N = 6 で実戦の byOpponent は D1 の consequences.checks と一致し、1 行は v0.5 のスキーマを通り、Markdown に 2 行", () => {
     const records = plantedRecords(GAME01_MOVES, {
       48: engineRef(500, { afterPassMate: 3, dropCp: 350, bestmove: "2h2g" }),
       50: engineRef(-300),
@@ -324,7 +338,7 @@ describe("STEP D2 の固定例(記録から。計画 3.)", () => {
     expect(c.actual.checks.byOpponent).toEqual(event.consequences.checks);
     expect(event.consequences.checks).toEqual([52, 54]);
 
-    // F-11 の v0.4: toEventLine の 1 行(ファイルと同じ形)は counterfactual を consequences の後に持ち、v0.4 のスキーマを通る
+    // F-11 の v0.4(STEP D2.5 で版は 0.5): toEventLine の 1 行(ファイルと同じ形)は counterfactual を consequences の後に持ち、今の版のスキーマを通る
     const provenance = buildProvenance({
       recordPath: "game-01.jsonl",
       recordSha256: "0".repeat(64),
@@ -333,13 +347,15 @@ describe("STEP D2 の固定例(記録から。計画 3.)", () => {
       analysisGit: { gitHead: null, dirty: null },
       rule: DRAFT_RULE_1,
       notEvaluationCp: NOT_EVALUATION_CP,
+      standingBounds: STANDING_BOUNDS,
+      positionFactsRules: POSITION_FACTS_RULES,
       repoRoot: "/nonexistent-repo-root",
     });
     const line = JSON.parse(JSON.stringify(toEventLine(event, provenance))) as Record<string, unknown>;
-    expect(line.schemaVersion).toBe("0.4");
+    expect(line.schemaVersion).toBe("0.5");
     expect(Object.keys(line).indexOf("counterfactual")).toBe(Object.keys(line).indexOf("consequences") + 1);
     expect(line.counterfactual).toEqual(JSON.parse(JSON.stringify(event.counterfactual)));
-    expect(validateFailureEventLine(line, loadFailureEventSchema("0.4"))).toEqual([]);
+    expect(validateFailureEventLine(line, loadFailureEventSchema("0.5"))).toEqual([]);
 
     const report = renderDiagnosisReport(buildDiagnosisReport([{ kifuId: "game-01", meta: undefined, records, errorLines: [] }], DRAFT_RULE_1));
     const lines = report.filter((line) => line.startsWith("- game-01 分岐点 49 "));
@@ -382,5 +398,28 @@ describe("STEP D2 の Markdown(計画 2.5)", () => {
     for (const word of ["正解", "悪手", "最善", "損", "得", "有利", "不利", "攻め急ぎ"]) {
       expect(lines.join("\n")).not.toContain(word);
     }
+  });
+});
+
+// ---- STEP D2.5(docs/STEP_D2.5_PLAN_2026-09-15.md §2・§4 の P-11・W-12)----
+describe("STEP D2.5 の positionFactsEnd", () => {
+  it("P-11: 実戦が 2 手で終わる記録(N = 2、読み筋は 3 手)では、actual・pv の positionFactsEnd は根から 2 手目の後の局面の値で、読み筋の最後(3 手目の後)ではない。差は手で数えた値", () => {
+    // 根は先手の金 5h・先手玉 5i・後手玉 5a。実戦 5h4g 5a4a、読み筋 5h4h 5a4a 4h3g
+    const c = compared(counterfactualOf(input(GOLD_ROOT, ["5h4g", "5a4a"], ["5h4h", "5a4a", "4h3g"])));
+    expect([c.comparedPlies, c.actualPlies, c.pvUsablePlies]).toEqual([2, 2, 3]);
+    const after = (moves: string[]) => moves.reduce((sfen, move) => applyMove(sfen, move), GOLD_ROOT);
+    // 前提: 読み筋の 3 手目の後(金 3g)は、2 手目の後(金 4h)と値が違う(同じだと、切り損ねを見分けられない)
+    expect(positionFactsOf(after(["5h4h", "5a4a", "4h3g"]), POSITION_FACTS_RULES)).not.toEqual(positionFactsOf(after(["5h4h", "5a4a"]), POSITION_FACTS_RULES));
+    expect(c.actual.positionFactsEnd).toEqual(positionFactsOf(after(["5h4g", "5a4a"]), POSITION_FACTS_RULES));
+    expect(c.pv.positionFactsEnd).toEqual(positionFactsOf(after(["5h4h", "5a4a"]), POSITION_FACTS_RULES));
+    // 手で数えた値: 先手玉 5i の区域(4h・5h・6h・4i・5i・6i)に、実戦の金 4g は 4h だけ(駒 1・升 1)、読み筋の金 4h は 5h・4i(駒 1・升 2)。
+    // 後手玉 4a の区域には、どちらの金も届かない。後手の駒は玉だけ
+    expect(c.actual.positionFactsEnd.zoneControl.ownKingZone).toEqual({ bySente: 1, byGote: 0 });
+    expect(c.pv.positionFactsEnd.zoneControl.ownKingZone).toEqual({ bySente: 2, byGote: 0 });
+    expect(c.pvMinusActual.positionFacts).toEqual({
+      zonePieces: { ownKingZone: { bySente: 0, byGote: 0 }, opponentKingZone: { bySente: 0, byGote: 0 } },
+      zoneControl: { ownKingZone: { bySente: 1, byGote: 0 }, opponentKingZone: { bySente: 0, byGote: 0 } },
+    });
+    expect(c.pvMinusActual.positionFacts).toEqual(positionFactsDiff(c.pv.positionFactsEnd, c.actual.positionFactsEnd));
   });
 });

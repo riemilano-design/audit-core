@@ -2,7 +2,8 @@
 // - 上がり(`rise`): 急落と同じ窓(本人の手 → 相手の手)で、本人視点の評価が `−dropCp` 以上上がった組、または直後に本人が詰ませる読み(`mateAfter > 0`)の組
 // - 最大の下がり(`maxDrop`): 局ごとに、差を取れた組(`compared`)のうち `diffCp` が最も小さい 1 件(閾値未満でも出す。同じ値なら早い組)。
 //   出せない局も黙って落とさず、状態の行(`noDrop`・`noComparedPair`)にする(規則 11.6)
-// 行の契約は `diagnosis-moment` v0.1(Failure Event とは別。計画 Q-1)。スキーマは scripts/playtest/schemas/diagnosis-moment.v0.1.schema.json。
+// 行の契約は `diagnosis-moment` v0.2(Failure Event とは別。計画 Q-1)。スキーマは scripts/playtest/schemas/diagnosis-moment.v0.2.schema.json。
+// STEP D2.5(docs/STEP_D2.5_PLAN_2026-09-15.md §2)で、組の行に standingPair を足し、trigger・counterfactual に玉の区域の数が入った(v0.1 のファイルは変えていない)。
 //
 // 【このファイルがやること】`readEvaluations`・`pairEvaluations` の結果を読み、行を組み立てる純粋関数。窓の中の事実は Failure Event と同じ関数
 // (`triggerOf`・`actualContinuation`・D2 の `counterfactualOf`)に同じ根で当てる(計画 2.・E-7・Q-4)。
@@ -22,6 +23,7 @@ import {
   fullMovesOf,
   pairEvaluations,
   readEvaluations,
+  STANDING_BOUNDS,
   triggerOf,
   type Continuation,
   type DiagnosisRule,
@@ -30,9 +32,13 @@ import {
   type Trigger,
 } from "./failureEvent.js";
 import type { Provenance } from "./failureEventSchema.js";
+import { standingPairOf, type StandingPair } from "./standing.js";
 
 export const DIAGNOSIS_MOMENT_CONTRACT = "diagnosis-moment" as const;
-export const DIAGNOSIS_MOMENT_SCHEMA_VERSION = "0.1" as const;
+export const DIAGNOSIS_MOMENT_SCHEMA_VERSION = "0.2" as const;
+/** スキーマのファイルがある版(古い版のファイルは消さない) */
+export const KNOWN_DIAGNOSIS_MOMENT_SCHEMA_VERSIONS = ["0.1", "0.2"] as const;
+export type DiagnosisMomentSchemaVersion = (typeof KNOWN_DIAGNOSIS_MOMENT_SCHEMA_VERSIONS)[number];
 
 /** 組の行(`rise` と、`maxDrop` の組の行)が持つ欄(計画 2.) */
 export interface MomentPairFields {
@@ -50,6 +56,8 @@ export interface MomentPairFields {
   opponentBestmove: { state: "notInRecord" };
   /** 直後の行の評価(Failure Event の branch.evaluationAfter と同じ形) */
   evaluationAfter: Evaluation;
+  /** STEP D2.5: 直前の行と直後の行の評価の形勢の状態(Failure Event の branch.standingPair と同じ形) */
+  standingPair: StandingPair;
   /** 同じ組の Failure Event があればその branchPly、無ければ null(計画 E-8・Q-5) */
   failureEventBranchPly: number | null;
   /** `actualContinuation` をそのまま */
@@ -119,6 +127,7 @@ export function diagnosisMomentsOf(
       userBestmoveAtBefore,
       opponentBestmove: { state: "notInRecord" },
       evaluationAfter: to.evaluation,
+      standingPair: standingPairOf(from.evaluation, to.evaluation, STANDING_BOUNDS),
       failureEventBranchPly: eventPlies.has(branchPly) ? branchPly : null,
       consequences: actualContinuation(moves, branchPly, rule.windowPlies, initialSfen),
       counterfactual: counterfactualOf({ record: from.record, moves, branchPly, windowPlies: rule.windowPlies, initialSfen, bestmoveAtBefore: userBestmoveAtBefore }),
@@ -176,6 +185,7 @@ function momentOrder<C extends "rise" | "maxDrop", Change>(eventClass: C, kifuId
     userBestmoveAtBefore: fields.userBestmoveAtBefore,
     opponentBestmove: fields.opponentBestmove,
     evaluationAfter: fields.evaluationAfter,
+    standingPair: fields.standingPair,
     failureEventBranchPly: fields.failureEventBranchPly,
     consequences: fields.consequences,
     counterfactual: fields.counterfactual,
@@ -189,8 +199,8 @@ export function toMomentLine(moment: DiagnosisMoment, provenance: Provenance): D
   return { contract: DIAGNOSIS_MOMENT_CONTRACT, schemaVersion: DIAGNOSIS_MOMENT_SCHEMA_VERSION, ...moment, provenance };
 }
 
-export function loadDiagnosisMomentSchema(): JsonSchema {
-  return JSON.parse(readFileSync(new URL(`../schemas/diagnosis-moment.v${DIAGNOSIS_MOMENT_SCHEMA_VERSION}.schema.json`, import.meta.url), "utf-8")) as JsonSchema;
+export function loadDiagnosisMomentSchema(version: DiagnosisMomentSchemaVersion = DIAGNOSIS_MOMENT_SCHEMA_VERSION): JsonSchema {
+  return JSON.parse(readFileSync(new URL(`../schemas/diagnosis-moment.v${version}.schema.json`, import.meta.url), "utf-8")) as JsonSchema;
 }
 
 /** 1 行(JSON.parse した値)を契約のスキーマに照らす。誤りを 1 件 1 行で返す(空なら通った) */

@@ -6,6 +6,7 @@
 //   → rootMismatch → pvUnplayable → compared。最初に当たった 1 つだけ)
 // - 2 本を N = min(windowPlies + 1, 実戦, 読み筋) 手で切り、取った駒の駒種ごとの枚数・王手・詰み・詰みでない終局・
 //   先手玉の周り・先手玉の逃げ道を数える(計画 2.1・2.3。上限は D1 の actualContinuation の窓と同じ)
+// - STEP D2.5(docs/STEP_D2.5_PLAN_2026-09-15.md §2): N 手目の後の局面の、両方の玉の区域に利きが届く駒と升の数(positionFactsEnd)と、その差
 // - 数の欄だけ「読み筋 − 実戦」の差を取る(計画 2.4)。どちらかが数えられなければ差は null
 //
 // 【このファイルが絶対にやらないこと】
@@ -29,6 +30,7 @@ import { getLegalMoves } from "../../../apps/server/src/rules/legalMoves.js";
 import { parsePosition } from "../../../apps/server/src/rules/sfenPosition.js";
 import type { RecordLine } from "../invariants/types.js";
 import { kingSurroundingsOf, type KingSurroundings } from "./kingSurroundings.js";
+import { positionFactsDiff, positionFactsOf, type PositionFacts, type PositionFactsDiff, type PositionFactsRules } from "./positionFacts.js";
 
 /**
  * computePvMaterials に渡す規則。**D2 が読むのは `capturedRoles` だけ**で、ほかの材料の規則は結果に使わないが、
@@ -39,6 +41,16 @@ const PV_MATERIAL_RULES: PvMaterialRules = {
   kingNeighborhood: "eight_neighbors",
   advance: "rank_delta",
   reach: "sliding_attack_count",
+};
+
+/**
+ * STEP D2.5 の positionFactsOf に渡す規則(計画 §2。選べる値は今 1 つずつ。lib は既定値を置かないので、使う側がここで選ぶ)。
+ * Failure Event の trigger(lib/failureEvent.ts)も同じ値を使い、出どころ(provenance.analysis.rule.positionFacts)にも写す。
+ */
+export const POSITION_FACTS_RULES: PositionFactsRules = {
+  zone: "king_and_eight_neighbors",
+  reach: "non_king_pieces",
+  control: "squares",
 };
 
 /** 駒種ごとの枚数(成駒は元の駒種。0 の駒種は持たない) */
@@ -66,6 +78,8 @@ export interface SequenceFacts {
   gameEnd: { ply: number; result: string } | null;
   /** N 手目の後の局面の先手玉の周り。先手玉が無ければ null */
   kingSurroundingsEnd: KingSurroundings | null;
+  /** STEP D2.5: N 手目の後の局面の、両方の玉の区域に利きが届く駒と升の数(玉が無い側は null) */
+  positionFactsEnd: PositionFacts;
   /** N 手目の後の局面の先手玉の逃げ道 */
   kingEscapesEnd: KingEscapes;
 }
@@ -74,6 +88,8 @@ export interface CounterfactualDiff {
   capturedRoles: { us: RoleCounts; opponent: RoleCounts };
   /** `kingSurroundingsEnd.own` の差。どちらかが null なら null */
   kingSurroundingsOwn: number | null;
+  /** STEP D2.5: `positionFactsEnd` の zonePieces・zoneControl の差。玉がどちらかの局面で無い側は null */
+  positionFacts: PositionFactsDiff;
   /** `kingEscapesEnd` の差(`count` 同士)。どちらかが数えられなければ null */
   kingEscapes: number | null;
 }
@@ -187,6 +203,7 @@ export function sequenceFacts(rootSfen: string, moves: readonly string[], branch
     mate,
     gameEnd,
     kingSurroundingsEnd: kingSurroundingsOf(sfen),
+    positionFactsEnd: positionFactsOf(sfen, POSITION_FACTS_RULES),
     kingEscapesEnd: kingEscapesOf(sfen),
   };
 }
@@ -278,6 +295,7 @@ export function counterfactualOf(input: CounterfactualInput): Counterfactual {
       },
       kingSurroundingsOwn:
         pv.kingSurroundingsEnd !== null && actual.kingSurroundingsEnd !== null ? pv.kingSurroundingsEnd.own - actual.kingSurroundingsEnd.own : null,
+      positionFacts: positionFactsDiff(pv.positionFactsEnd, actual.positionFactsEnd),
       kingEscapes: escapesDiff(pv.kingEscapesEnd, actual.kingEscapesEnd),
     },
     kingEscapesChangeFromRoot: {

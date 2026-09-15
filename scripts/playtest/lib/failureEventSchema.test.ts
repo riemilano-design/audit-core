@@ -12,15 +12,18 @@
 // 元の meta を基準にした対応の試験(門の分類はこのファイルの中で書く)・K-3 の食い違い(値の形まで)・スキーマの境目。
 // 【STEP D2 の v0.4】counterfactual(docs/STEP_D2_PLAN_2026-09-15.md 2.2〜2.4): 状態 8 つと compared の中の変種を lib(counterfactualOf)で作って 1 行に差し込み、
 // 手で書いた noKing の 1 行と合わせて変種の一覧に入れる。v0.4 = v0.3 + counterfactual・0.4 → 0.3 → 0.2 → 0.1 の鎖・境目・T-5 を見る。
+// 【STEP D2.5 の v0.5】trigger.positionFacts・branch.standingPair・counterfactual の positionFactsEnd と差・規則の standing と positionFacts(docs/STEP_D2.5_PLAN_2026-09-15.md §2・§3):
+// 玉が盤上に無い側の 3 変種は手で書き換えた 1 行、形勢の状態は lib の固定例と手で書き換えた 1 行で埋める。v0.5 = v0.4 + 6 欄・0.5 → 0.4 の鎖・境目・T-5 の数を見る
+// (値の期待は lib/positionFacts.test.ts・lib/standing.test.ts)。
 
 import { readdirSync, readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 import { DEFAULT_INITIAL_SFEN } from "../../../apps/server/src/analysis/moveHistory.js";
 import type { MetaLine, RecordLine } from "../invariants/types.js";
-import { counterfactualOf, type Counterfactual } from "./counterfactual.js";
+import { counterfactualOf, POSITION_FACTS_RULES, type Counterfactual } from "./counterfactual.js";
 import { validate } from "./eventSchema.js";
-import { diagnoseRecords, DRAFT_RULE_1, NOT_EVALUATION_CP, readEvaluations, type DiagnosisRule, type FailureEvent } from "./failureEvent.js";
+import { diagnoseRecords, DRAFT_RULE_1, NOT_EVALUATION_CP, readEvaluations, STANDING_BOUNDS, type DiagnosisRule, type FailureEvent } from "./failureEvent.js";
 import { engineRef, FOLD_START, GAME01_MOVES, plantedRecords } from "./failureEventFixtures.js";
 import {
   buildProvenance,
@@ -44,6 +47,7 @@ const schema = loadFailureEventSchema();
 const schemaV01 = loadFailureEventSchema("0.1");
 const schemaV02 = loadFailureEventSchema("0.2");
 const schemaV03 = loadFailureEventSchema("0.3");
+const schemaV04 = loadFailureEventSchema("0.4");
 type Json = Record<string, unknown>;
 const REPO_ROOT = fileURLToPath(new URL("../../../", import.meta.url));
 
@@ -66,6 +70,8 @@ const provenanceInput = (overrides: Partial<ProvenanceInput> = {}): ProvenanceIn
   analysisGit: { gitHead: "1dfbaa7", dirty: false },
   rule: DRAFT_RULE_1,
   notEvaluationCp: NOT_EVALUATION_CP,
+  standingBounds: STANDING_BOUNDS,
+  positionFactsRules: POSITION_FACTS_RULES,
   repoRoot: REPO_ROOT,
   ...overrides,
 });
@@ -182,6 +188,11 @@ const provenanceOfCommitted = (record: CommittedRecord): Provenance =>
 const RECORD_LINES: Json[] = COMMITTED.flatMap((record) => record.events.map((event) => lineOf(event, provenanceOfCommitted(record))));
 const RECORD_EVENTS: FailureEvent[] = COMMITTED.flatMap((record) => record.events);
 
+/** STEP D2.5: 玉の区域の数の、玉が盤上に無い側を null にする(positionFacts は 3 欄、差は 2 欄のどちらにも使う) */
+const withoutKing = (facts: Json, sides: string[]): void => {
+  for (const key of Object.keys(facts)) for (const side of sides) (facts[key] as Json)[side] = null;
+};
+
 /** lib から出ない変種(手で書き換えた 1 行) */
 const HAND_MADE: Record<string, Json> = (() => {
   const base = lineOf(at(T2_EVENTS[0]![1], 49));
@@ -191,12 +202,22 @@ const HAND_MADE: Record<string, Json> = (() => {
     return line;
   };
   const lines: Record<string, Json> = {
-    beforeGameEnd: withChange((line) => ((line.trigger as Json).evaluationBefore = { state: "notMeasuredGameEnd" })),
+    beforeGameEnd: withChange((line) => {
+      (line.trigger as Json).evaluationBefore = { state: "notMeasuredGameEnd" };
+      ((line.branch as Json).standingPair as Json).before = { undetermined: "notMeasuredGameEnd" };
+    }),
     playedMoveNull: withChange((line) => ((line.action as Json).playedMove = null)),
     kingSurroundingsNull: withChange((line) => ((line.trigger as Json).kingSurroundings = null)),
+    // STEP D2.5: 玉が盤上に無い側(lib の固定例は両方の玉がある局面だけ)
+    positionFactsOwnKingMissing: withChange((line) => withoutKing((line.trigger as Json).positionFacts as Json, ["ownKingZone"])),
+    positionFactsOpponentKingMissing: withChange((line) => withoutKing((line.trigger as Json).positionFacts as Json, ["opponentKingZone"])),
+    positionFactsNoKings: withChange((line) => withoutKing((line.trigger as Json).positionFacts as Json, ["ownKingZone", "opponentKingZone"])),
   };
   for (const state of ["notMeasuredGameEnd", "notMeasuredInCheck", "notMeasurable", "unrecorded", "notEvaluation"]) {
-    lines[`after_${state}`] = withChange((line) => ((line.branch as Json).evaluationAfter = { state }));
+    lines[`after_${state}`] = withChange((line) => {
+      (line.branch as Json).evaluationAfter = { state };
+      ((line.branch as Json).standingPair as Json).after = { undetermined: state };
+    });
   }
   return lines;
 })();
@@ -290,6 +311,8 @@ const CF_VARIANTS: Record<string, Counterfactual> = {
   mateByGote: cfOf(CF_GOTE_MATE_ROOT, ["1g1f", "G*5h"], [focusBaselineOf(CF_GOTE_MATE_ROOT, ["5i4i", "G*5h"])]),
   gameEndNotMate: cfOf(CF_STALEMATE_ROOT, ["5i4h"], [focusBaselineOf(CF_STALEMATE_ROOT, ["8d8c"])]),
   surroundingsDiff: cfOf(CF_GOLD_ROOT, ["5h4g"], [focusBaselineOf(CF_GOLD_ROOT, ["5h4h"])]),
+  // STEP D2.5: 読み筋 = 実戦(区域の数の差がすべて 0 の変種)
+  samePv: cfOf(DEFAULT_INITIAL_SFEN, CF_F1_PV, [focusBaselineOf(DEFAULT_INITIAL_SFEN, CF_F1_PV)], { bestmoveAtBefore: "7g7f" }),
 };
 /** F-1 の分岐点 49 の 1 行の counterfactual を差し替える(キーの位置は consequences の後のまま) */
 const withCounterfactual = (counterfactual: unknown): Json => {
@@ -305,7 +328,20 @@ const CF_HAND_MADE: Record<string, Json> = (() => {
   for (const key of ["actual", "pv"]) Object.assign(noKing[key] as Json, { kingSurroundingsEnd: null, kingEscapesEnd: { state: "noKing" } });
   Object.assign(noKing.pvMinusActual as Json, { kingSurroundingsOwn: null, kingEscapes: null });
   noKing.kingEscapesChangeFromRoot = { actual: null, pv: null };
-  return { noKing: withCounterfactual(noKing) };
+  for (const key of ["actual", "pv"]) withoutKing((noKing[key] as Json).positionFactsEnd as Json, ["ownKingZone"]);
+  withoutKing((noKing.pvMinusActual as Json).positionFacts as Json, ["ownKingZone"]);
+  // STEP D2.5: 後手玉が盤上に無い・どちらの玉も無い(区域の数だけを書き換える)
+  const withoutKings = (base: Json, sides: string[]): Json => {
+    const counterfactual = clone(base);
+    for (const key of ["actual", "pv"]) withoutKing((counterfactual[key] as Json).positionFactsEnd as Json, sides);
+    withoutKing((counterfactual.pvMinusActual as Json).positionFacts as Json, sides);
+    return withCounterfactual(counterfactual);
+  };
+  return {
+    noKing: withCounterfactual(noKing),
+    positionFactsOpponentKingMissing: withoutKings(clone(CF_VARIANTS.surroundingsDiff!) as unknown as Json, ["opponentKingZone"]),
+    positionFactsNoKings: withoutKings(noKing, ["ownKingZone", "opponentKingZone"]),
+  };
 })();
 
 describe("T-2: D1 の固定例から作った Failure Event は、版つきで今の版のスキーマを通る", () => {
@@ -423,6 +459,9 @@ describe("T-3: 変種ごとの固定例(実記録に出ない変種を埋める)
     const seen = new Set<string>();
     const sign = (value: number | null): string => (value === null ? "null" : value > 0 ? "pos" : "neg");
     const nullOr = (value: unknown, kind: string): string => (value === null ? "null" : kind);
+    const standingTag = (standing: unknown): string => (typeof standing === "string" ? standing : `undetermined.${(standing as { undetermined: string }).undetermined}`);
+    const kingsTag = (sides: { ownKingZone: unknown; opponentKingZone: unknown }): string =>
+      sides.ownKingZone === null ? (sides.opponentKingZone === null ? "noKings" : "ownKingMissing") : sides.opponentKingZone === null ? "opponentKingMissing" : "both";
     for (const line of lines) {
       const event = line as unknown as FailureEvent & { provenance: Provenance };
       seen.add(`evaluationBefore.${event.trigger.evaluationBefore.state}`);
@@ -469,6 +508,10 @@ describe("T-3: 変種ごとの固定例(実記録に出ない変種を埋める)
       seen.add(`provenance.evaluator.${nullOr(provenance.evaluator.declared, "string")}`);
       seen.add(`provenance.analysis.gitHead.${nullOr(provenance.analysis.gitHead, "string")}`);
       seen.add(`provenance.analysis.dirty.${provenance.analysis.dirty}`);
+      // STEP D2.5 の v0.5: 形勢の状態と、玉の区域の数の変種(玉が無い側)
+      seen.add(`standingPair.before.${standingTag(event.branch.standingPair.before)}`);
+      seen.add(`standingPair.after.${standingTag(event.branch.standingPair.after)}`);
+      seen.add(`positionFacts.trigger.${kingsTag(event.trigger.positionFacts.zonePieces)}`);
       // STEP D2 の v0.4: counterfactual の状態と、compared の中の変種(計画 2.2〜2.4)
       const counterfactual = event.counterfactual;
       seen.add(`counterfactual.state.${counterfactual.state}`);
@@ -489,11 +532,16 @@ describe("T-3: 変種ごとの固定例(実記録に出ない変種を埋める)
           seen.add(`counterfactual.facts.gameEnd.${nullOr(facts.gameEnd, "object")}`);
           seen.add(`counterfactual.facts.kingSurroundingsEnd.${nullOr(facts.kingSurroundingsEnd, "object")}`);
           seen.add(`counterfactual.facts.kingEscapesEnd.${facts.kingEscapesEnd.state}`);
+          seen.add(`counterfactual.facts.positionFactsEnd.${kingsTag(facts.positionFactsEnd.zonePieces)}`);
         }
         const diff = counterfactual.pvMinusActual;
         seen.add(`counterfactual.diff.capturedRoles.${someOrEmpty({ ...diff.capturedRoles.us, ...diff.capturedRoles.opponent })}`);
         seen.add(`counterfactual.diff.kingSurroundingsOwn.${zeroOr(diff.kingSurroundingsOwn)}`);
         seen.add(`counterfactual.diff.kingEscapes.${zeroOr(diff.kingEscapes)}`);
+        seen.add(`counterfactual.diff.positionFacts.${kingsTag(diff.positionFacts.zonePieces)}`);
+        const diffValues = [diff.positionFacts.zonePieces.ownKingZone, diff.positionFacts.zonePieces.opponentKingZone, diff.positionFacts.zoneControl.ownKingZone, diff.positionFacts.zoneControl.opponentKingZone]
+          .flatMap((counts) => (counts === null ? [] : [counts.bySente, counts.byGote]));
+        seen.add(`counterfactual.diff.positionFacts.values.${diffValues.every((value) => value === 0) ? "zero" : "nonzero"}`);
         for (const change of [counterfactual.kingEscapesChangeFromRoot.actual, counterfactual.kingEscapesChangeFromRoot.pv]) {
           seen.add(`counterfactual.changeFromRoot.${nullOr(change, "number")}`);
         }
@@ -583,12 +631,21 @@ describe("T-3: 変種ごとの固定例(実記録に出ない変種を埋める)
       ...["kingSurroundingsOwn", "kingEscapes"].flatMap((key) => ["null", "zero", "nonzero"].map((s) => `counterfactual.diff.${key}.${s}`)),
       "counterfactual.changeFromRoot.null",
       "counterfactual.changeFromRoot.number",
+      // STEP D2.5 の v0.5
+      ...["before", "after"].flatMap((side) =>
+        ["ahead", "level", "behind", ...["notMeasuredGameEnd", "notMeasuredInCheck", "notMeasurable", "unrecorded", "notEvaluation"].map((s) => `undetermined.${s}`)].map((tag) => `standingPair.${side}.${tag}`),
+      ),
+      ...["both", "ownKingMissing", "opponentKingMissing", "noKings"].flatMap((tag) => [`positionFacts.trigger.${tag}`, `counterfactual.facts.positionFactsEnd.${tag}`, `counterfactual.diff.positionFacts.${tag}`]),
+      "counterfactual.diff.positionFacts.values.zero",
+      "counterfactual.diff.positionFacts.values.nonzero",
     ];
     expect([...expected].filter((tag) => !seen.has(tag))).toEqual([]);
     // V0.3-META: 7 変種の外の形(K-7 で置かない組など)が固定例から出ていない
     expect([...seen].filter((tag) => tag.startsWith("provenance.meta.variant.") && !expected.includes(tag))).toEqual([]);
     // STEP D2: 一覧に無い counterfactual の変種(根の逃げ道の opponentInCheck など、置かない形)が出ていない
     expect([...seen].filter((tag) => tag.startsWith("counterfactual.") && !expected.includes(tag))).toEqual([]);
+    // STEP D2.5: 一覧に無い形勢の状態(mateZero など、行に出さない形)が出ていない
+    expect([...seen].filter((tag) => (tag.startsWith("standingPair.") || tag.startsWith("positionFacts.")) && !expected.includes(tag))).toEqual([]);
   });
 });
 
@@ -630,7 +687,8 @@ describe("T-5: 型とスキーマのずれ(欄を消す・知らない欄を足�
     // 元の 1 行が持つキーの数(数えた: 最上位 12(STEP D2 の counterfactual を含む)・counterfactual 1(unrecorded の state)・trigger 5・evaluationBefore 7・opponentIntent 2・classification 1・shape 3・
     // focus 1・kingSurroundings 2・action 2・branch 5・evaluationAfter 7・consequences 4・candidateModes[0] 3・
     // provenance 3・record 3・meta 7・evaluator 1・analysis 3・rule 5)。道筋の辿り損ねで、消す試しが減っていないことを見る
-    expect(tried).toBe(77);
+    // STEP D2.5 の v0.5 で +28(trigger の positionFacts 1 と中身 17・branch の standingPair 1 と before・after 2・rule の standing 1 と中身 2・positionFacts 1 と中身 3)
+    expect(tried).toBe(105);
   });
 
   it("どの入れ物に知らない欄を足しても落ちる", () => {
@@ -659,7 +717,8 @@ describe("T-5: 型とスキーマのずれ(欄を消す・知らない欄を足�
     }
     // 上の 1 行の 77 のうち counterfactual の state 1 を、compared の 55 に置き換えた数(数えた: compared 16・pvBounded 2・kingEscapesRoot 2・
     // actual 14・pv 14(それぞれ 6・capturedRoles 2・checks 2・kingSurroundingsEnd 2・kingEscapesEnd 2)・pvMinusActual 5(3・capturedRoles 2)・kingEscapesChangeFromRoot 2)
-    expect(tried).toBe(131);
+    // STEP D2.5 の v0.5 で +79(上の 28 と、actual・pv の positionFactsEnd 各 1 と中身 17・pvMinusActual の positionFacts 1 と中身 14)
+    expect(tried).toBe(210);
   });
 
   it("版が違えば落ちる", () => {
@@ -712,7 +771,7 @@ describe("STEP JSON v0.2 の約束(計画 5. の P-2〜P-5・P-7)", () => {
     }
   });
 
-  it("P-7(V0.3-META の P-6・P-7、STEP D2 の v0.4): 0.4 の行は v0.4 を通り v0.3・v0.2・v0.1 では落ちる。counterfactual を外して版を 0.3 にした行は v0.3 を通り、0.3 で足した 7 欄と名前を外して版を 0.2 にした行は v0.2 を通り、さらに 0.2 で足した欄を外して版を 0.1 にした行は v0.1 を通る", () => {
+  it("P-7(V0.3-META の P-6・P-7、STEP D2 の v0.4・STEP D2.5 の v0.5): 0.5 の行は v0.5 を通り v0.4・v0.3・v0.2・v0.1 では落ちる。D2.5 の欄を外して版を 0.4 にした行は v0.4 を通り、counterfactual を外して版を 0.3 にした行は v0.3 を通り、0.3 で足した 7 欄と名前を外して版を 0.2 にした行は v0.2 を通り、さらに 0.2 で足した欄を外して版を 0.1 にした行は v0.1 を通る", () => {
     const lines = [
       ...T2_EVENTS.flatMap(([, events]) => events).map((event) => lineOf(event)),
       ...RECORD_LINES,
@@ -723,10 +782,24 @@ describe("STEP JSON v0.2 の約束(計画 5. の P-2〜P-5・P-7)", () => {
     for (const line of lines) {
       const label = `${String(line.kifuId)}#${String(line.branchPly)}`;
       expect(validate(line, schema), label).toEqual([]);
+      expect(validate(line, schemaV04), label).not.toEqual([]);
       expect(validate(line, schemaV03), label).not.toEqual([]);
       expect(validate(line, schemaV02), label).not.toEqual([]);
       expect(validate(line, schemaV01), label).not.toEqual([]);
-      const v03 = clone(line);
+      const v04 = clone(line);
+      v04.schemaVersion = "0.4";
+      delete (v04.trigger as Json).positionFacts;
+      delete (v04.branch as Json).standingPair;
+      const counterfactual = v04.counterfactual as Json;
+      if (counterfactual.state === "compared") {
+        for (const key of ["actual", "pv"]) delete (counterfactual[key] as Json).positionFactsEnd;
+        delete (counterfactual.pvMinusActual as Json).positionFacts;
+      }
+      const analysisRule = ((v04.provenance as Json).analysis as Json).rule as Json;
+      delete analysisRule.standing;
+      delete analysisRule.positionFacts;
+      expect(validate(v04, schemaV04), label).toEqual([]);
+      const v03 = clone(v04);
       v03.schemaVersion = "0.3";
       delete v03.counterfactual;
       expect(validate(v03, schemaV03), label).toEqual([]);
@@ -758,7 +831,13 @@ describe("STEP JSON v0.2 の約束(計画 5. の P-2〜P-5・P-7)", () => {
 
   it("規則の値は、渡した規則をそのまま写す(固定の値にしない)", () => {
     const rule = { advantageCp: 123, dropCp: -456, windowPlies: 7, focusDropCp: 89 };
-    expect(buildProvenance(provenanceInput({ rule, notEvaluationCp: 31000 })).analysis.rule).toEqual({ ...rule, notEvaluationCp: 31000 });
+    // STEP D2.5: 形勢の状態の境も渡した値を写す。区域の数え方は選べる値が 1 つずつなので、その値
+    expect(buildProvenance(provenanceInput({ rule, notEvaluationCp: 31000, standingBounds: { aheadCp: 222, behindCp: -333 } })).analysis.rule).toEqual({
+      ...rule,
+      notEvaluationCp: 31000,
+      standing: { aheadCp: 222, behindCp: -333 },
+      positionFacts: { zone: "king_and_eight_neighbors", reach: "non_king_pieces", control: "squares" },
+    });
   });
 });
 
@@ -955,7 +1034,7 @@ describe("STEP JSON V0.3-META の約束(記録の meta の 7 欄)", () => {
 // ---- STEP D2 の v0.4(docs/STEP_D2_PLAN_2026-09-15.md 2.2〜2.4)----
 describe("STEP D2 の v0.4(counterfactual)", () => {
   it("v0.4 のスキーマは、v0.3 に counterfactual を consequences の後に足しただけ(版の値・$id・title・description のほかは v0.3 と同じ)", () => {
-    const v04 = clone(schema) as unknown as Json;
+    const v04 = clone(schemaV04) as unknown as Json;
     const v03 = schemaV03 as unknown as Json;
     const required = v04.required as string[];
     const properties = v04.properties as Json;
@@ -985,6 +1064,7 @@ describe("STEP D2 の v0.4(counterfactual)", () => {
       mateByGote: "compared",
       gameEndNotMate: "compared",
       surroundingsDiff: "compared",
+      samePv: "compared",
     });
     for (const [name, line] of Object.entries({ ...CF_LINES, ...CF_HAND_MADE })) expect(validate(line, schema), name).toEqual([]);
     const f11 = at(T2_EVENTS.find(([name]) => name === "F-11(D2)")![1], 49);
@@ -1021,5 +1101,66 @@ describe("STEP D2 の v0.4(counterfactual)", () => {
     for (const [name, line] of failing) expect(validate(line, schema), name).not.toEqual([]);
     expect(validate(broken("surroundingsDiff", (c) => (part(c, "pvMinusActual", "capturedRoles", "us").pawn = -2)), schema), "差 −2").toEqual([]);
     expect(validate(broken("surroundingsDiff", (c) => (c.pvFirstMove = "G*5b")), schema), "打つ手の 1 手目").toEqual([]);
+  });
+});
+
+// ---- STEP D2.5 の v0.5(docs/STEP_D2.5_PLAN_2026-09-15.md §2・§3)----
+describe("STEP D2.5 の v0.5(玉の区域の数・形勢の状態)", () => {
+  it("v0.5 のスキーマは、v0.4 に 6 つの欄(trigger.positionFacts・branch.standingPair・compared の actual と pv の positionFactsEnd・pvMinusActual.positionFacts・provenance の rule の standing と positionFacts)を足しただけ(版の値・$id・title・description のほかは v0.4 と同じ)", () => {
+    const v05 = clone(schema) as unknown as Json;
+    const v04 = schemaV04 as unknown as Json;
+    const walk = (root: Json, ...keys: Array<string | number>): Json => keys.reduce<Json>((node, key) => (node as Record<string | number, unknown>)[key] as Json, root);
+    const removeAfter = (holder: Json, key: string, after: string): void => {
+      const properties = holder.properties as Json;
+      const required = holder.required as string[];
+      expect(Object.keys(properties).indexOf(key), key).toBe(Object.keys(properties).indexOf(after) + 1);
+      expect(required.indexOf(key), key).toBe(required.indexOf(after) + 1);
+      delete properties[key];
+      holder.required = required.filter((name) => name !== key);
+    };
+    const properties = v05.properties as Json;
+    expect(properties.schemaVersion).toEqual({ const: "0.5" });
+    removeAfter(walk(properties, "trigger"), "positionFacts", "kingSurroundings");
+    removeAfter(walk(properties, "branch"), "standingPair", "evaluationAfter");
+    const compared = walk(properties, "counterfactual", "oneOf", 1);
+    for (const side of ["actual", "pv"]) removeAfter(walk(compared, "properties", side), "positionFactsEnd", "kingSurroundingsEnd");
+    removeAfter(walk(compared, "properties", "pvMinusActual"), "positionFacts", "kingSurroundingsOwn");
+    const rule = walk(properties, "provenance", "properties", "analysis", "properties", "rule");
+    removeAfter(rule, "positionFacts", "standing");
+    removeAfter(rule, "standing", "notEvaluationCp");
+    properties.schemaVersion = { const: "0.4" };
+    for (const key of ["$id", "title", "description"]) v05[key] = v04[key];
+    expect(v05).toEqual(v04);
+  });
+
+  it("v0.5 の欄の境目(手で書き換えた 1 行): 区域の升 5・駒 39・升 10・負の駒・片側だけの null・知らない状態・undetermined に measured や mateZero・状態の欄に理由の文字列・差の升 −10・規則の区域に知らない値・境が小数は落ち、差の −9・駒 38 は通る", () => {
+    const base = lineOf(at(T2_EVENTS[0]![1], 49));
+    const changed = (from: Json, change: (line: Json) => void): Json => {
+      const line = clone(from);
+      change(line);
+      return line;
+    };
+    const facts = (line: Json, key: string): Json => ((line.trigger as Json).positionFacts as Json)[key] as Json;
+    const pair = (line: Json): Json => (line.branch as Json).standingPair as Json;
+    const diff = (line: Json, key: string): Json => (((line.counterfactual as Json).pvMinusActual as Json).positionFacts as Json)[key] as Json;
+    const rule = (line: Json): Json => ((line.provenance as Json).analysis as Json).rule as Json;
+    const compared = CF_LINES.surroundingsDiff!;
+    const failing: Array<[string, Json]> = [
+      ["区域の升 5", changed(base, (l) => (facts(l, "zoneSquares").opponentKingZone = 5))],
+      ["区域に届く駒 39", changed(base, (l) => (facts(l, "zonePieces").opponentKingZone = { bySente: 39, byGote: 0 }))],
+      ["区域の升に届く利き 10", changed(base, (l) => (facts(l, "zoneControl").opponentKingZone = { bySente: 10, byGote: 0 }))],
+      ["負の駒", changed(base, (l) => (facts(l, "zonePieces").ownKingZone = { bySente: -1, byGote: 0 }))],
+      ["升は数えたのに駒だけ null", changed(base, (l) => (facts(l, "zonePieces").ownKingZone = null))],
+      ["知らない状態の名前", changed(base, (l) => (pair(l).before = "winning"))],
+      ["undetermined に measured", changed(base, (l) => (pair(l).before = { undetermined: "measured" }))],
+      ["undetermined に mateZero(mate 0 は行に出ない)", changed(base, (l) => (pair(l).after = { undetermined: "mateZero" }))],
+      ["状態の欄に理由の文字列", changed(base, (l) => (pair(l).after = "undetermined"))],
+      ["差の升 −10", changed(compared, (l) => (diff(l, "zoneControl").ownKingZone = { bySente: -10, byGote: 0 }))],
+      ["規則の区域に知らない値", changed(base, (l) => ((rule(l).positionFacts as Json).zone = "king_only"))],
+      ["境が小数", changed(base, (l) => ((rule(l).standing as Json).aheadCp = 300.5))],
+    ];
+    for (const [name, line] of failing) expect(validate(line, schema), name).not.toEqual([]);
+    expect(validate(changed(compared, (l) => (diff(l, "zoneControl").ownKingZone = { bySente: -9, byGote: 9 })), schema), "差の升 −9・+9").toEqual([]);
+    expect(validate(changed(base, (l) => (facts(l, "zonePieces").opponentKingZone = { bySente: 38, byGote: 0 })), schema), "駒 38").toEqual([]);
   });
 });

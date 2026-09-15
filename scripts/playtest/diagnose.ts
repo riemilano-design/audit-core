@@ -6,12 +6,12 @@
 // 【このファイルは薄くしてある】判定・集計・表の組み立てはすべて lib/failureEvent.ts(合計は lib/diagnosisTotals.ts)にあり、そちらに試験がある。
 // ここでやるのは、記録を読む・lib を呼ぶ・書き出す、だけである。
 // `--events` の 1 行は lib/failureEventSchema.ts の toEventLine で、版の欄 schemaVersion を先頭に付けて書く
-// (STEP JSON v0.2・V0.3-META・STEP D2 の v0.4。スキーマは scripts/playtest/schemas/failure-event.v0.4.schema.json)。行の末尾に出どころ(provenance)を付ける:
+// (STEP JSON v0.2・V0.3-META・STEP D2 の v0.4・STEP D2.5 の v0.5。スキーマは scripts/playtest/schemas/failure-event.v0.5.schema.json)。行の末尾に出どころ(provenance)を付ける:
 // 記録のファイル(根からの相対)と sha256・記録の meta の写し・`--evaluator` の文(**確かめていない自己申告**。渡されなければ null。
 // enginePath から推測しない ― P-43)・このコマンドを回したときの gitHead と汚れ・規則の値(docs/STEP_JSON-V0.2_PLAN_2026-09-15.md 2.1)。
 //
-// `--events-rise`・`--events-maxdrop`(STEP D1b。docs/STEP_D1b_PLAN_2026-09-15.md)は、上がりの組と局ごとの最大の下がりを、別の契約 diagnosis-moment v0.1
-// (scripts/playtest/schemas/diagnosis-moment.v0.1.schema.json)の行で書く。組み立ては lib/diagnosisMoment.ts。**`--events` の行と表は変えない**。
+// `--events-rise`・`--events-maxdrop`(STEP D1b。docs/STEP_D1b_PLAN_2026-09-15.md)は、上がりの組と局ごとの最大の下がりを、別の契約 diagnosis-moment v0.2
+// (scripts/playtest/schemas/diagnosis-moment.v0.2.schema.json)の行で書く。組み立ては lib/diagnosisMoment.ts。**`--events` の行と表は変えない**。
 // **3 つのファイルは、すべての行を作ってから書く**(出どころの例外で一部のファイルだけが書かれる形を避ける ― 計画 S-8)。
 //
 // 【exit code】lib の例外は外へ出さず「数えられなかった」行にして exit 0。**入力が読めないとき(ENOENT・壊れた JSONL)・引数が誤りのときは exit 1**
@@ -30,9 +30,10 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 import type { MetaLine, RecordLine } from "./invariants/types.js";
+import { POSITION_FACTS_RULES } from "./lib/counterfactual.js";
 import { diagnosisMomentsOf, toMomentLine } from "./lib/diagnosisMoment.js";
 import { renderDiagnosisTotals } from "./lib/diagnosisTotals.js";
-import { buildDiagnosisReport, DRAFT_RULE_1, NOT_EVALUATION_CP, renderDiagnosisReport, type DiagnosisInput } from "./lib/failureEvent.js";
+import { buildDiagnosisReport, DRAFT_RULE_1, NOT_EVALUATION_CP, renderDiagnosisReport, STANDING_BOUNDS, type DiagnosisInput } from "./lib/failureEvent.js";
 import { buildProvenance, recordSha256, toEventLine } from "./lib/failureEventSchema.js";
 import { readGitState } from "./lib/gitState.js";
 import { initialSfenOf } from "./lib/sideAlignment.js";
@@ -108,7 +109,7 @@ function main(): void {
         meta: entry.input.meta,
         evaluator,
         analysisGit,
-        rule: DRAFT_RULE_1, notEvaluationCp: NOT_EVALUATION_CP, repoRoot: REPO_ROOT,
+        rule: DRAFT_RULE_1, notEvaluationCp: NOT_EVALUATION_CP, standingBounds: STANDING_BOUNDS, positionFactsRules: POSITION_FACTS_RULES, repoRoot: REPO_ROOT,
       });
       // STEP D1b: 上がりと最大の下がり(同じ記録・同じ規則・同じ開始局面・同じ出どころ)。頼まれたときだけ組み立てる
       if (eventsRiseOut || eventsMaxDropOut) {

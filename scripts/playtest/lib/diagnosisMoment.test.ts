@@ -11,6 +11,7 @@ import { describe, expect, it } from "vitest";
 import { DEFAULT_INITIAL_SFEN } from "../../../apps/server/src/analysis/moveHistory.js";
 import type { SearchPvObservation } from "../../../apps/server/src/analysis/searchPv.js";
 import type { MetaLine, RecordLine } from "../invariants/types.js";
+import { POSITION_FACTS_RULES } from "./counterfactual.js";
 import {
   diagnosisMomentsOf,
   loadDiagnosisMomentSchema,
@@ -20,7 +21,7 @@ import {
   type MaxDropMoment,
 } from "./diagnosisMoment.js";
 import { validate } from "./eventSchema.js";
-import { actualContinuation, diagnoseRecords, DRAFT_RULE_1, NOT_EVALUATION_CP, readEvaluations, triggerOf, type FailureEvent } from "./failureEvent.js";
+import { actualContinuation, diagnoseRecords, DRAFT_RULE_1, NOT_EVALUATION_CP, readEvaluations, STANDING_BOUNDS, triggerOf, type FailureEvent } from "./failureEvent.js";
 import { engineRef, GAME01_MOVES, plantedRecords, type PlantedEvaluation } from "./failureEventFixtures.js";
 import { buildProvenance, loadFailureEventSchema, toEventLine } from "./failureEventSchema.js";
 import { initialSfenOf } from "./sideAlignment.js";
@@ -35,6 +36,8 @@ const PROVENANCE = buildProvenance({
   analysisGit: { gitHead: null, dirty: null },
   rule: DRAFT_RULE_1,
   notEvaluationCp: NOT_EVALUATION_CP,
+  standingBounds: STANDING_BOUNDS,
+  positionFactsRules: POSITION_FACTS_RULES,
   repoRoot: "/nonexistent-repo-root",
 });
 const clone = <T>(value: T): T => JSON.parse(JSON.stringify(value)) as T;
@@ -193,13 +196,13 @@ describe("STEP D1b の行の全体(計画 G-15)", () => {
   const { moments, events } = momentsOf(records);
   const rowAt = (ply: number) => readEvaluations(records).find((row) => row.ply === ply)!;
 
-  it("rise の 1 行(20→22、+500)を全部の欄で書き、v0.1 のスキーマを通る", () => {
+  it("rise の 1 行(20→22、+500)を全部の欄で書き、v0.2 のスキーマを通る", () => {
     expect(moments.rises).toHaveLength(1);
     const line = lineOf(moments.rises[0]!);
     expect(line).toEqual(
       clone({
         contract: "diagnosis-moment",
-        schemaVersion: "0.1",
+        schemaVersion: "0.2",
         eventClass: "rise",
         kifuId: "g",
         branchPly: 21,
@@ -211,6 +214,7 @@ describe("STEP D1b の行の全体(計画 G-15)", () => {
         userBestmoveAtBefore: "3g2h",
         opponentBestmove: { state: "notInRecord" },
         evaluationAfter: { state: "measured", scoreCp: 600, mate: null, bestmove: null, afterPassScoreCp: null, afterPassMate: null, dropCp: null },
+        standingPair: { before: "level", after: "ahead" },
         failureEventBranchPly: null,
         consequences: actualContinuation(GAME01_MOVES, 21, DRAFT_RULE_1.windowPlies, DEFAULT_INITIAL_SFEN),
         counterfactual: { state: "unrecorded" },
@@ -221,13 +225,13 @@ describe("STEP D1b の行の全体(計画 G-15)", () => {
     expect(validate(line, schema)).toEqual([]);
   });
 
-  it("maxDrop の組の行(22→24、−600、Failure Event 23)を excludedPairs を含めて全部の欄で書き、v0.1 のスキーマを通る", () => {
+  it("maxDrop の組の行(22→24、−600、Failure Event 23)を excludedPairs を含めて全部の欄で書き、v0.2 のスキーマを通る", () => {
     expect(events.map((event) => [event.branchPly, event.branch.kinds])).toEqual([[23, ["cpDrop"]]]);
     const line = lineOf(moments.maxDrop);
     expect(line).toEqual(
       clone({
         contract: "diagnosis-moment",
-        schemaVersion: "0.1",
+        schemaVersion: "0.2",
         eventClass: "maxDrop",
         kifuId: "g",
         branchPly: 23,
@@ -239,6 +243,7 @@ describe("STEP D1b の行の全体(計画 G-15)", () => {
         userBestmoveAtBefore: null,
         opponentBestmove: { state: "notInRecord" },
         evaluationAfter: { state: "measured", scoreCp: 0, mate: null, bestmove: null, afterPassScoreCp: null, afterPassMate: null, dropCp: null },
+        standingPair: { before: "ahead", after: "level" },
         failureEventBranchPly: 23,
         consequences: actualContinuation(GAME01_MOVES, 23, DRAFT_RULE_1.windowPlies, DEFAULT_INITIAL_SFEN),
         counterfactual: { state: "unrecorded" },
@@ -329,7 +334,7 @@ describe("STEP D1b の不変条件とスキーマ(計画 3.・S-1・Q-1)", () =>
     expect(applied).toBe(2); // G-4・G-15
   });
 
-  it("不変条件とスキーマ(コミット済みの記録。real-02 は読まない): 上がりと最大の下がりの行はすべて v0.1 を通り、cpDrop のある局では maxDrop がその Event を指す", () => {
+  it("不変条件とスキーマ(コミット済みの記録。real-02 は読まない): 上がりと最大の下がりの行はすべて v0.2 を通り、cpDrop のある局では maxDrop がその Event を指す", () => {
     const records = committed();
     expect(records.length).toBeGreaterThan(0);
     let lines = 0;
@@ -359,8 +364,8 @@ describe("STEP D1b の不変条件とスキーマ(計画 3.・S-1・Q-1)", () =>
     expect([...seen].sort()).toEqual(["maxDrop.cp", "maxDrop.noComparedPair", "maxDrop.noDrop", "rise.cp", "rise.mateAfter"]);
   });
 
-  it("共通部(kifuId・branchPly・fromReadyPly・toReadyPly・trigger・consequences・provenance・evaluationAfter)は Failure Event v0.4 のスキーマと同じ定義で、counterfactual は説明の文のほかは同じ", () => {
-    const fe = loadFailureEventSchema("0.4") as unknown as { properties: Record<string, Json> };
+  it("共通部(kifuId・branchPly・fromReadyPly・toReadyPly・trigger・consequences・provenance・evaluationAfter・standingPair)は Failure Event v0.5 のスキーマと同じ定義で、counterfactual は説明の文のほかは同じ", () => {
+    const fe = loadFailureEventSchema("0.5") as unknown as { properties: Record<string, Json> };
     const variants = (schema as unknown as { oneOf: Array<{ properties: Record<string, Json> }> }).oneOf;
     expect(variants).toHaveLength(5);
     for (const variant of variants) {
@@ -369,13 +374,14 @@ describe("STEP D1b の不変条件とスキーマ(計画 3.・S-1・Q-1)", () =>
       if (variant.properties.trigger === undefined) continue;
       for (const key of ["fromReadyPly", "toReadyPly", "trigger", "consequences"]) expect(variant.properties[key], key).toEqual(fe.properties[key]);
       expect(variant.properties.evaluationAfter).toEqual((fe.properties.branch!.properties as Record<string, Json>).evaluationAfter);
+      expect(variant.properties.standingPair).toEqual((fe.properties.branch!.properties as Record<string, Json>).standingPair);
       const { description: _a, ...counterfactual } = variant.properties.counterfactual!;
       const { description: _b, ...feCounterfactual } = fe.properties.counterfactual!;
       expect(counterfactual).toEqual(feCounterfactual);
     }
   });
 
-  it("契約と版(Y-17): contract が無い・版が Failure Event の 0.4・eventClass が無い行は落ち、Failure Event の行は v0.1 を通らず、この契約の行は Failure Event v0.4 を通らない", () => {
+  it("契約と版(Y-17): contract が無い・版が Failure Event の 0.5・eventClass が無い行は落ち、Failure Event の行はこの契約の今の版を通らず、この契約の行は Failure Event v0.5 を通らない", () => {
     const records = FIXTURES.find(([label]) => label === "G-15")![1];
     const { moments, events } = momentsOf(records);
     const line = lineOf(moments.rises[0]!);
@@ -386,10 +392,10 @@ describe("STEP D1b の不変条件とスキーマ(計画 3.・S-1・Q-1)", () =>
     };
     expect(validate(without("contract"), schema)).not.toEqual([]);
     expect(validate(without("eventClass"), schema)).not.toEqual([]);
-    expect(validate({ ...line, schemaVersion: "0.4" }, schema)).not.toEqual([]);
+    expect(validate({ ...line, schemaVersion: "0.5" }, schema)).not.toEqual([]);
     expect(validate({ ...line, contract: "failure-event" }, schema)).not.toEqual([]);
     expect(validate(clone(toEventLine(events[0]!, PROVENANCE)), schema)).not.toEqual([]);
-    expect(validate(line, loadFailureEventSchema("0.4"))).not.toEqual([]);
+    expect(validate(line, loadFailureEventSchema("0.5"))).not.toEqual([]);
   });
 
   it("境目(手で書き換えた 1 行): 上がりの差 0・最大の下がりの組の差 0・noDrop の minDiffCp −1・opponentBestmove に手・状態の行に branchPly・組の行に excludedPairs が無い・上がりの行に excludedPairs は落ちる", () => {
@@ -414,5 +420,49 @@ describe("STEP D1b の不変条件とスキーマ(計画 3.・S-1・Q-1)", () =>
     ];
     for (const [name, line] of failing) expect(validate(line, schema), name).not.toEqual([]);
     expect(validate(changed(rise, (c) => (c.change = { kind: "mateAfter", mateAfter: 3 })), schema), "上がりの詰み").toEqual([]);
+  });
+});
+
+// ---- STEP D2.5(docs/STEP_D2.5_PLAN_2026-09-15.md §2・§3)。期待は手で書いた ----
+describe("STEP D2.5: 組の行の standingPair と、契約の版 0.2", () => {
+  it("組の行は直前と直後の評価の形勢の状態を持つ(G-1 の上がり +399 → +799 は ahead → ahead、G-4 の最大の下がり +300 → −300 は ahead → behind、G-3 の最大の下がり +50 → −100 は level → level)。状態の行(noDrop・noComparedPair)は持たない", () => {
+    expect(momentsOf(game([cp(0), cp(399), cp(799)])).moments.rises.map((rise) => [rise.branchPly, rise.standingPair])).toEqual([[3, { before: "ahead", after: "ahead" }]]);
+    expect(pairRow(momentsOf(game([cp(300), cp(-300), cp(-250)])).moments.maxDrop).standingPair).toEqual({ before: "ahead", after: "behind" });
+    expect(pairRow(momentsOf(game([cp(100), cp(50), cp(-100), cp(-30)])).moments.maxDrop).standingPair).toEqual({ before: "level", after: "level" });
+    for (const values of [[cp(0), cp(10), cp(20)], [null, cp(0)]]) {
+      const maxDrop = momentsOf(game(values)).moments.maxDrop;
+      expect("state" in maxDrop).toBe(true);
+      expect(Object.hasOwn(maxDrop, "standingPair")).toBe(false);
+    }
+  });
+
+  it("0.2 の行は v0.2 を通り v0.1 では落ちる。組の行から standingPair と D2.5 の欄を外し、出どころの規則の 2 欄を外して版を 0.1 にした行は v0.1 を通る(5 つの変種)", () => {
+    const schemaV01 = loadDiagnosisMomentSchema("0.1");
+    let checked = 0;
+    for (const [label, records] of FIXTURES) {
+      const { moments } = momentsOf(records);
+      for (const moment of [...moments.rises, moments.maxDrop]) {
+        const line = lineOf(moment);
+        expect(validate(line, schema), label).toEqual([]);
+        expect(validate(line, schemaV01), label).not.toEqual([]);
+        const old = clone(line);
+        old.schemaVersion = "0.1";
+        if (Object.hasOwn(old, "trigger")) {
+          delete old.standingPair;
+          delete (old.trigger as Json).positionFacts;
+          const counterfactual = old.counterfactual as Json;
+          if (counterfactual.state === "compared") {
+            for (const key of ["actual", "pv"]) delete (counterfactual[key] as Json).positionFactsEnd;
+            delete (counterfactual.pvMinusActual as Json).positionFacts;
+          }
+        }
+        const rule = ((old.provenance as Json).analysis as Json).rule as Json;
+        delete rule.standing;
+        delete rule.positionFacts;
+        expect(validate(old, schemaV01), label).toEqual([]);
+        checked += 1;
+      }
+    }
+    expect(checked).toBeGreaterThan(FIXTURES.length);
   });
 });
