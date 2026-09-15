@@ -153,3 +153,51 @@
 | 日付 | 定義 id | definitionSha256 | 書いた人 | その人が見たもの | 先手 6 局の予測(該当・分母・判定不能) | 後手 4 局の予測 | 状態(有効 / 捨てた) |
 |---|---|---|---|---|---|---|---|
 | (承認後に足す) | | | | | | | |
+
+## 12. 実装の記録(骨組みの lib 側。実装担当 1e、2026-09-16)
+
+**範囲(司令塔 e3 と確認)**: この計画の §2・§3 と、D4 計画(`7d6529d`)の §3「D3-COND への改訂」を lib 側だけ実装した。**入れていないもの**: D4 本体(`allPairsOf`・`gateTallyOf`・Gate。K-11 と G-F*)、§6 の出力の契約 `diagnosis-condition` v0.1 のスキーマと `diagnose.ts` の `--events-cond`・`--cond-summary`(B の D-SCREEN-2 のコミットの後に、その HEAD へ載せ替えてから足す)、条件式の中身(1 本も書いていない)。基点 `7d6529d`。**エンジンは使っていない。**
+
+### 12.1 足したファイル(既存のファイルは 1 本も変えていない)
+
+| ファイル | 中身 |
+|---|---|
+| `scripts/playtest/lib/condition.ts` | 行と定義の型(`ConditionRowKind` に `pair`、`PairRow` は型だけ)・`READABLE_FIELDS`・`checkCondition` / `loadCondition`・`judgeCondition` / `judgeConditionPvSide`・`conditionTallyOf` / `testSideTallyOf`・`userSideOf`・`lostByEndingOf` |
+| `scripts/playtest/lib/condition.test.ts` | 固定例 35 件(K-1〜K-10、K-12a・K-12b・K-13・K-14、表の種類の列と印) |
+| `scripts/playtest/lib/conditionFixtures/test_only_loadable.ts` | `loadCondition` を当てる試験だけの架空の定義(本番の置き場 `lib/conditions/` には置かない) |
+
+### 12.2 計画に書いていなかった判断(計画と違えた点は無い)
+
+- **J-1 定義のファイル**: TypeScript のモジュールの `export default`。`loadCondition(path)` はバイト列を読んでから動的 import し、確かめは純粋関数 `checkCondition(value, bytes)` に分けた(K-8 はバイト列で当てる)
+- **J-2 読み込みの確かめ**: 形の崩れ(`malformed`: 欄の型・`evaluate` が関数か)を先に見て、崩れていればそれだけを出す。そうでなければ §2 の R-4 と D4 §3 の問題を**全部並べて**止める(最初の 1 つで止めない)。コードは `approvedWithoutApproval`・`draftWithApproval`・`labelWithoutProvisional`・`emptyAppliesTo`・`unknownPath`・`pathNotInKind`・`afterRowFieldWithPair`・`actualKeptFieldWithPair`
+- **J-3 表の行**: 群(`*`)ではなく葉のパスを 1 本ずつ並べた(`uses` は表のパスと完全に一致するときだけ通る)。§2 の表の群に加え、**D4 §3 が表にあることを前提にしている欄**を足した: `action.*`・`branch.matedIfPassAfter`・`branch.evaluationAfter.*`・`branch.standingPair.{before,after}`・`evaluationAfter.*`・`standingPair.{before,after}`・`change.*`・`moves.*`・`userBestmoveAtBefore`・`counterfactual.state`・`counterfactual.{windowPlies,actualPlies,pvLength,pvUsablePlies}`。§2 の「null の意味 ―」の欄は `notNullable`(型が null を持たない。来たら例外)
+- **J-4 途中の null**: パスの途中が null なら値は null とし、その欄の null の意味を当てる(`trigger.kingSurroundings.own` は値の null、`trigger.positionFacts.zonePieces.ownKingZone.bySente` は判定不能)
+- **J-5 判定しない順**: `appliesTo` に無い種類を先に見て、次に最大の下がりの状態の行(`maxDropPair` を含まない定義では状態の行も `kindNotApplied`)
+- **J-6 読み筋の側**: 当てられない理由は 2 つとも並べる(`noActualPath`・`pathNotReplaceable`)。そのまま読む欄は D4 §3 の列挙どおり(`trigger.*`・`standingPair.before`・`moves.*`・`userBestmoveAtBefore`・`counterfactual.state`・`counterfactual.comparedPlies`・`counterfactual.kingEscapesRoot.count`)。**`counterfactual` の外の欄(`branch.*`・`consequences.*` など)も置き換えの表に無いので当てられない**(pair を含む定義では読み込みで先に止まる)。門も読み筋の側のパスで見て、欠けた欄の名前は元のパスで出す
+- **J-7 同じ組**: 局の中で Failure Event → 最大の下がりの組 → 上がりの順に見て、先に判定した組を数える。同じ組で判定が食い違えば例外(共通の欄は同じ関数の値なので食い違わないはず)
+- **J-8 判定不能の内訳**: (欄, 理由) ごとの行の数。1 行が複数の欄で判定不能なら、それぞれに数える。理由の文は `門のパス=実際の値`・`null`・`undetermined:理由`
+- **J-9 §7.2 の 5 手以内**: 王手か詰みが 1 つでもあれば、窓が足りなくても「あり」(起きたことは起きた)。無くて窓が足りなければ「窓が足りない」、無ければ「なし」
+- **J-10 落としたか**: 入力は局ごとに `{ kifuId, userSide, ending, listedResult }` を呼び出し側が渡す(N-4。ファイルからの集め方は `diagnose.ts` 側)。`ending` のキーが無い・`null` はどちらも「記録に無い」、`unreadable` は「決まらない」。ply は固定棋譜 JSON の元の手数のまま読む(回した局でも `ending` は写すだけ)。README の列は `win` / `loss` / 載っていない、「食い違い」は両方が決まったときだけ
+- **J-11 本人の側**: `userSideOf(meta)` は `mirrored` と `originalUserSide` が食い違えば例外。試す側の 2 列(`testSideTallyOf`)は、列と本人の側が食い違う局・両方の列にある kifuId で止める。後手の列は空でよい(g3 は開かない)
+
+### 12.3 測った結果(予測は実装・実行の前に書いた。`scratchpad/d3cond/predict-impl.txt`)
+
+- 型検査 `typecheck:scripts` rc 0。`condition.test.ts` 35/35。全体 49 本 699/699(基点は 664)
+- 予測は、ファイルの本数だけ外れた(予測 47 本・実際 49 本。基点の本数の読み違え)。ほかは当たり
+- 変異 32 本(計画 §7 の骨組みの変異・D4 §3 の 3 つ・実装担当が足した分): **予測どおり 32/32、鳴った 32/32**、戻り一致。予測の表は実行の 1 行目(`predictions sha1 af79c35e`)
+- `loadCondition` を tsx でも当てた(試験の外の確認。既知の正解 = id とファイルの sha256 で校正して一致、形の崩れた定義は `ConditionLoadError`)
+
+### 12.4 既知事項の候補(登録と番号は司令塔)
+
+- 9. の N-2(`comparedPlies` が窓より短い)・N-3(`opponentIntent.classification` の undetermined に門が無い)は計画のまま残る
+- 落ちる試験が 1 本だけの変異が多い(M-2・M-5・M-7a〜d・M-9〜M-13・M-14b・M-17・M-20・M-22・M-24〜M-27)
+- `notNullable` の欄に null が来たときの例外は試験していない(型が null を持たないので、今の行では起きない)
+- 実戦の側では `counterfactual.pv.*` を読めるが、読み筋の側では置き換えの表に無いので当てられない。読み筋を読む定義の読み筋の側の意味は計画に無い
+
+### 12.5 監査 C の GO の条件 C-1・C-2 の取り込み(試験を足しただけ。`condition.ts` は変えていない)
+
+- **C-1** `appliesTo` が 2 種類以上の定義の固定例を 2 つ足した: `["failureEvent","pair"]` + `branch.standingPair.before` → `pathNotInKind` は pair の分だけ / `["rise","pair"]` + `evaluationAfter.scoreCp` → `afterRowFieldWithPair`
+- **C-2** `READABLE_FIELDS` の null の意味と門を、印の列挙の試験と同じ形で固定した(null の意味ごとのパスの一覧・門の並びごとのパスの一覧。期待は §2 の表と 12.2 の J-3 から手で書いた)
+- 取り込みの確かめ: C の変異 C-01〜C-07(C の道具 `mutate_c.py` の、S と W の 2 行だけを替えた写し)が 7 本とも鳴った。落ちた試験は予測どおり(C-01・C-02 → C-1、C-03・C-04 → C-2 の null の意味、C-05〜C-07 → C-2 の門)。`condition.test.ts` 38 件・全体 702/702・型検査 rc 0
+- **定義を起こすときに人間へ伝えること**: 実戦の側で `counterfactual.pv.*` を読む定義は、読み筋の側の判定(D4 の G-3)が常に当てられない(notEvaluable)
+- 12.4 の候補のうち、`notNullable` の例外の経路は司令塔が P-60 に登録する(JSONL から読んだ行では型が効かず、古い版の Event で当たる)。「落ちる試験が 1 本だけの変異」は登録しない
