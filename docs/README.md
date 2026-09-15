@@ -5,7 +5,7 @@
 | ファイル | 何が書いてあるか | 主な読者 |
 |---|---|---|
 | [PROJECT_VISION.md](PROJECT_VISION.md) | このアプリが最終的に何を実現しようとしているのか(核心的な強み・完成イメージ・完成の判定基準)。**正本** | 全員 |
-| [DIAGNOSIS_CONCEPT_2026-09-14.md](DIAGNOSIS_CONCEPT_2026-09-14.md) | 上位構想(2026-09-14 の人間の決定): 同じ解析基盤から「対局中コーチ」と「対局後の負け方診断」の 2 つの出口を出す。主役を対局後診断へ移し、(お)(か) を保留。転換の可否を決める 2 つの確認(棋譜の入口・NNUE)と「面白い」の基準、A(観測の記録)・B(Failure Event)の定義、ロードマップ D0〜D5。**CLAUDE.md・PROJECT_VISION.md はまだ書き換えていない(改定案は 9.)** | 全員 |
+| [DIAGNOSIS_CONCEPT_2026-09-14.md](DIAGNOSIS_CONCEPT_2026-09-14.md) | 上位構想(2026-09-14 の人間の決定): 同じ解析基盤から「対局中コーチ」と「対局後の負け方診断」の 2 つの出口を出す。主役を対局後診断へ移し、(お)(か) を保留。転換の可否を決める 2 つの確認(棋譜の入口・NNUE)と「面白い」の基準、A(観測の記録)・B(Failure Event)の定義、ロードマップ D0〜D5・D-COST・JSON v0(8. に現在地。2026-09-15、`a7fe6e9` 時点)。**CLAUDE.md・PROJECT_VISION.md はまだ書き換えていない(改定案は 9.)** | 全員 |
 | [BUSINESS_CONCEPT_2026-09-15.md](BUSINESS_CONCEPT_2026-09-15.md) | 事業構想(2026-09-15 の人間の提示と決定): 売り物は Web アプリでなく「繰り返す失敗パターン」を発見する解析エンジン(API/OEM/ライセンス)。階層 Observation〜Prescription と既存 3 層の対応、企業に突かれる 3 つの問題(コスト・戦型ノイズ・内製)への対応、Gate 0〜6、売る相手の順(教育側 → プラットフォーム)、やらないこと。**CLAUDE.md・PROJECT_VISION は Gate 3 まで書き換えない** | 全員 |
 | [LONG_TERM_VISION.md](LONG_TERM_VISION.md) | 長期構想(7層構造・Intentの宣言方式)。**MVPの完成条件ではない** | 全員 |
 | [ARCHITECTURE.md](ARCHITECTURE.md) | 全体構造とモジュールの責務境界、Unit間の境界、変えない構造上の約束。**正本** | 実装する人・エージェント全員 |
