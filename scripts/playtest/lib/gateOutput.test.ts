@@ -34,6 +34,8 @@ const definition = (patch: Partial<ConditionDefinition> = {}): ConditionDefiniti
   appliesTo: ["pair"],
   approval: null,
   evaluate: () => true,
+  // STEP D6 §8: approved の定義は readableText が必須(D6 の載せ替えで足した)
+  ...(patch.status === "approved" ? { readableText: "試験だけの条件の文" } : {}),
   ...patch,
 });
 const loaded = (d: ConditionDefinition, bytes = d.id): LoadedCondition => checkCondition(d, new TextEncoder().encode(bytes));

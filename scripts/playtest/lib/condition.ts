@@ -56,6 +56,11 @@ export interface ConditionDefinition {
   label: string;
   status: "draft" | "approved";
   definitionText: string;
+  /**
+   * STEP D6(docs/STEP_D6_PLAN_2026-09-16.md §8)。本人に向けた「この条件は何を見ているか」の 1 文(事実の記述だけ)。
+   * draft は任意(書くなら空でない文字列)、approved は必須。「(仮)」を含めない。禁止語はここでは確かめない(D6 の出力の側で見る)
+   */
+  readableText?: string;
   /** 読む欄のパス(`READABLE_FIELDS` の `path`) */
   uses: readonly string[];
   thresholds: Readonly<Record<string, number>>;
@@ -212,6 +217,8 @@ export type ConditionLoadProblem =
   | { code: "approvedWithoutApproval" }
   | { code: "draftWithApproval" }
   | { code: "labelWithoutProvisional" }
+  | { code: "approvedWithoutReadableText" }
+  | { code: "readableTextWithProvisional" }
   | { code: "emptyAppliesTo" }
   | { code: "unknownPath"; path: string }
   | { code: "pathNotInKind"; path: string; kind: ConditionRowKind }
@@ -236,6 +243,7 @@ function malformedProblems(value: unknown): ConditionLoadProblem[] {
   }
   const d = value as Record<string, unknown>;
   for (const key of ["id", "label", "definitionText"]) if (typeof d[key] !== "string" || d[key] === "") bad(`${key} が空でない文字列でない`);
+  if (Object.hasOwn(d, "readableText") && (typeof d.readableText !== "string" || d.readableText === "")) bad("readableText が空でない文字列でない");
   if (d.status !== "draft" && d.status !== "approved") bad("status が draft・approved でない");
   if (!Array.isArray(d.uses) || !d.uses.every((path) => typeof path === "string")) bad("uses が文字列の配列でない");
   if (typeof d.thresholds !== "object" || d.thresholds === null || !Object.values(d.thresholds).every((v) => typeof v === "number")) bad("thresholds が数の表でない");
@@ -255,6 +263,9 @@ export function checkCondition(value: unknown, fileBytes: Uint8Array): LoadedCon
   if (definition.status === "approved" && definition.approval === null) problems.push({ code: "approvedWithoutApproval" });
   if (definition.status === "draft" && definition.approval !== null) problems.push({ code: "draftWithApproval" });
   if (!definition.label.includes(PROVISIONAL)) problems.push({ code: "labelWithoutProvisional" });
+  // STEP D6 §8: 文は定義と一緒に承認する。approved で文が無いのは承認の漏れ
+  if (definition.status === "approved" && definition.readableText === undefined) problems.push({ code: "approvedWithoutReadableText" });
+  if (definition.readableText !== undefined && definition.readableText.includes(PROVISIONAL)) problems.push({ code: "readableTextWithProvisional" });
   if (definition.appliesTo.length === 0) problems.push({ code: "emptyAppliesTo" });
   const withPair = definition.appliesTo.includes("pair");
   for (const path of definition.uses) {

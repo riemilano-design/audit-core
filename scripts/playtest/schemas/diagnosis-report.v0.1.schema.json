@@ -1,0 +1,1037 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "diagnosis-report.v0.1.schema.json",
+  "title": "diagnosis-report v0.1",
+  "description": "STEP D6(docs/STEP_D6_PLAN_2026-09-16.md §6)。report.ts の 1 行 = 条件式 1 本 × audience 1 つ(lineKind condition)か、報告の末尾の注記(lineKind summary)。person の行は dev の欄を持たない。文の各部分の出どころは sources(差し込み口ごとに固定の欄 ― §3.0)",
+  "oneOf": [
+    {
+      "type": "object",
+      "required": [
+        "contract",
+        "schemaVersion",
+        "audience",
+        "lineKind",
+        "condition",
+        "verdict",
+        "test",
+        "sentences",
+        "input",
+        "contractRules",
+        "provenance",
+        "dev"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "contract": {
+          "const": "diagnosis-report"
+        },
+        "schemaVersion": {
+          "const": "0.1"
+        },
+        "audience": {
+          "const": "dev"
+        },
+        "lineKind": {
+          "const": "condition"
+        },
+        "condition": {
+          "type": "object",
+          "required": [
+            "id",
+            "status",
+            "definitionSha256"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "status": {
+              "enum": [
+                "draft",
+                "approved"
+              ]
+            },
+            "definitionSha256": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            }
+          }
+        },
+        "verdict": {
+          "enum": [
+            "meets",
+            "insufficient",
+            "notJudged"
+          ]
+        },
+        "notJudged": {
+          "enum": [
+            "draft",
+            "pairNotApplied"
+          ]
+        },
+        "test": {
+          "type": "object",
+          "required": [
+            "set"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "set": {
+              "enum": [
+                "sente6",
+                "sente6+gote4"
+              ]
+            }
+          }
+        },
+        "sentences": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": [
+              "kind",
+              "template",
+              "text",
+              "sources"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "kind": {
+                "enum": [
+                  "heading",
+                  "F-1",
+                  "F-2",
+                  "F-2b",
+                  "F-3",
+                  "F-4",
+                  "F-5",
+                  "F-6",
+                  "verdict",
+                  "none",
+                  "N-1",
+                  "N-2",
+                  "N-3"
+                ]
+              },
+              "template": {
+                "enum": [
+                  "headingWithText",
+                  "headingIdOnly",
+                  "F-1",
+                  "F-2",
+                  "F-2b",
+                  "F-3",
+                  "F-3-notEvaluable",
+                  "F-4",
+                  "F-5",
+                  "F-6",
+                  "meets",
+                  "insufficient",
+                  "draft",
+                  "pairNotApplied",
+                  "none",
+                  "N-1",
+                  "N-2",
+                  "terms"
+                ]
+              },
+              "text": {
+                "type": "string"
+              },
+              "sources": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": [
+                    "slot",
+                    "field",
+                    "value"
+                  ],
+                  "additionalProperties": false,
+                  "properties": {
+                    "slot": {
+                      "enum": [
+                        "id",
+                        "readableText",
+                        "tn",
+                        "tc",
+                        "fn",
+                        "fc",
+                        "tnGames",
+                        "tcPct",
+                        "fcPct",
+                        "n",
+                        "a",
+                        "p",
+                        "testGames",
+                        "testTn",
+                        "direction",
+                        "games",
+                        "conditionsInRun",
+                        "aheadCp",
+                        "behindCp",
+                        "approvedOn"
+                      ]
+                    },
+                    "field": {
+                      "type": "string"
+                    },
+                    "value": {
+                      "type": [
+                        "string",
+                        "number"
+                      ]
+                    },
+                    "derivedBy": {
+                      "enum": [
+                        "pct",
+                        "sign",
+                        "count",
+                        "signedCp"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "input": {
+          "type": "object",
+          "required": [
+            "path",
+            "sha256",
+            "line"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "path": {
+              "type": "string",
+              "pattern": "^[^/]"
+            },
+            "sha256": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            },
+            "line": {
+              "type": "integer",
+              "minimum": 1
+            }
+          }
+        },
+        "contractRules": {
+          "type": "object",
+          "required": [
+            "templatesSha256",
+            "forbiddenWordsSha256"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "templatesSha256": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            },
+            "forbiddenWordsSha256": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            }
+          }
+        },
+        "provenance": {
+          "type": "object",
+          "required": [
+            "gitHead",
+            "dirty"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "gitHead": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "dirty": {
+              "type": [
+                "boolean",
+                "null"
+              ]
+            }
+          }
+        },
+        "dev": {
+          "type": "object",
+          "required": [
+            "label",
+            "items",
+            "rowsNotTaken",
+            "omittedForPerson",
+            "testDirection"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "label": {
+              "type": "string"
+            },
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "item",
+                  "values",
+                  "threshold",
+                  "result",
+                  "reasons",
+                  "description"
+                ],
+                "additionalProperties": false,
+                "properties": {
+                  "item": {
+                    "enum": [
+                      "G-1",
+                      "G-2",
+                      "G-3",
+                      "G-4"
+                    ]
+                  },
+                  "values": {
+                    "type": "object"
+                  },
+                  "threshold": {
+                    "type": "object"
+                  },
+                  "result": {
+                    "enum": [
+                      "met",
+                      "notMet",
+                      "notEvaluable"
+                    ]
+                  },
+                  "reasons": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "description": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "rowsNotTaken": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "omittedForPerson": {
+              "enum": [
+                "insufficient",
+                "draft",
+                "pairNotApplied",
+                null
+              ]
+            },
+            "testDirection": {
+              "enum": [
+                "shown",
+                "noDifference",
+                "notComparable",
+                "notApplicable"
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "object",
+      "required": [
+        "contract",
+        "schemaVersion",
+        "audience",
+        "lineKind",
+        "condition",
+        "verdict",
+        "test",
+        "sentences",
+        "input",
+        "contractRules",
+        "provenance"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "contract": {
+          "const": "diagnosis-report"
+        },
+        "schemaVersion": {
+          "const": "0.1"
+        },
+        "audience": {
+          "const": "person"
+        },
+        "lineKind": {
+          "const": "condition"
+        },
+        "condition": {
+          "type": "object",
+          "required": [
+            "id",
+            "status",
+            "definitionSha256"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "status": {
+              "enum": [
+                "draft",
+                "approved"
+              ]
+            },
+            "definitionSha256": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            }
+          }
+        },
+        "verdict": {
+          "enum": [
+            "meets",
+            "insufficient",
+            "notJudged"
+          ]
+        },
+        "notJudged": {
+          "enum": [
+            "draft",
+            "pairNotApplied"
+          ]
+        },
+        "test": {
+          "type": "object",
+          "required": [
+            "set"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "set": {
+              "enum": [
+                "sente6",
+                "sente6+gote4"
+              ]
+            }
+          }
+        },
+        "sentences": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": [
+              "kind",
+              "template",
+              "text",
+              "sources"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "kind": {
+                "enum": [
+                  "heading",
+                  "F-1",
+                  "F-2",
+                  "F-2b",
+                  "F-3",
+                  "F-4",
+                  "F-5",
+                  "F-6",
+                  "verdict",
+                  "none",
+                  "N-1",
+                  "N-2",
+                  "N-3"
+                ]
+              },
+              "template": {
+                "enum": [
+                  "headingWithText",
+                  "headingIdOnly",
+                  "F-1",
+                  "F-2",
+                  "F-2b",
+                  "F-3",
+                  "F-3-notEvaluable",
+                  "F-4",
+                  "F-5",
+                  "F-6",
+                  "meets",
+                  "insufficient",
+                  "draft",
+                  "pairNotApplied",
+                  "none",
+                  "N-1",
+                  "N-2",
+                  "terms"
+                ]
+              },
+              "text": {
+                "type": "string"
+              },
+              "sources": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": [
+                    "slot",
+                    "field",
+                    "value"
+                  ],
+                  "additionalProperties": false,
+                  "properties": {
+                    "slot": {
+                      "enum": [
+                        "id",
+                        "readableText",
+                        "tn",
+                        "tc",
+                        "fn",
+                        "fc",
+                        "tnGames",
+                        "tcPct",
+                        "fcPct",
+                        "n",
+                        "a",
+                        "p",
+                        "testGames",
+                        "testTn",
+                        "direction",
+                        "games",
+                        "conditionsInRun",
+                        "aheadCp",
+                        "behindCp",
+                        "approvedOn"
+                      ]
+                    },
+                    "field": {
+                      "type": "string"
+                    },
+                    "value": {
+                      "type": [
+                        "string",
+                        "number"
+                      ]
+                    },
+                    "derivedBy": {
+                      "enum": [
+                        "pct",
+                        "sign",
+                        "count",
+                        "signedCp"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "input": {
+          "type": "object",
+          "required": [
+            "path",
+            "sha256",
+            "line"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "path": {
+              "type": "string",
+              "pattern": "^[^/]"
+            },
+            "sha256": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            },
+            "line": {
+              "type": "integer",
+              "minimum": 1
+            }
+          }
+        },
+        "contractRules": {
+          "type": "object",
+          "required": [
+            "templatesSha256",
+            "forbiddenWordsSha256"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "templatesSha256": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            },
+            "forbiddenWordsSha256": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            }
+          }
+        },
+        "provenance": {
+          "type": "object",
+          "required": [
+            "gitHead",
+            "dirty"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "gitHead": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "dirty": {
+              "type": [
+                "boolean",
+                "null"
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "object",
+      "required": [
+        "contract",
+        "schemaVersion",
+        "audience",
+        "lineKind",
+        "sentences",
+        "input",
+        "contractRules",
+        "provenance",
+        "dev"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "contract": {
+          "const": "diagnosis-report"
+        },
+        "schemaVersion": {
+          "const": "0.1"
+        },
+        "audience": {
+          "const": "dev"
+        },
+        "lineKind": {
+          "const": "summary"
+        },
+        "sentences": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": [
+              "kind",
+              "template",
+              "text",
+              "sources"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "kind": {
+                "enum": [
+                  "heading",
+                  "F-1",
+                  "F-2",
+                  "F-2b",
+                  "F-3",
+                  "F-4",
+                  "F-5",
+                  "F-6",
+                  "verdict",
+                  "none",
+                  "N-1",
+                  "N-2",
+                  "N-3"
+                ]
+              },
+              "template": {
+                "enum": [
+                  "headingWithText",
+                  "headingIdOnly",
+                  "F-1",
+                  "F-2",
+                  "F-2b",
+                  "F-3",
+                  "F-3-notEvaluable",
+                  "F-4",
+                  "F-5",
+                  "F-6",
+                  "meets",
+                  "insufficient",
+                  "draft",
+                  "pairNotApplied",
+                  "none",
+                  "N-1",
+                  "N-2",
+                  "terms"
+                ]
+              },
+              "text": {
+                "type": "string"
+              },
+              "sources": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": [
+                    "slot",
+                    "field",
+                    "value"
+                  ],
+                  "additionalProperties": false,
+                  "properties": {
+                    "slot": {
+                      "enum": [
+                        "id",
+                        "readableText",
+                        "tn",
+                        "tc",
+                        "fn",
+                        "fc",
+                        "tnGames",
+                        "tcPct",
+                        "fcPct",
+                        "n",
+                        "a",
+                        "p",
+                        "testGames",
+                        "testTn",
+                        "direction",
+                        "games",
+                        "conditionsInRun",
+                        "aheadCp",
+                        "behindCp",
+                        "approvedOn"
+                      ]
+                    },
+                    "field": {
+                      "type": "string"
+                    },
+                    "value": {
+                      "type": [
+                        "string",
+                        "number"
+                      ]
+                    },
+                    "derivedBy": {
+                      "enum": [
+                        "pct",
+                        "sign",
+                        "count",
+                        "signedCp"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "input": {
+          "type": "object",
+          "required": [
+            "path",
+            "sha256"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "path": {
+              "type": "string",
+              "pattern": "^[^/]"
+            },
+            "sha256": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            }
+          }
+        },
+        "contractRules": {
+          "type": "object",
+          "required": [
+            "templatesSha256",
+            "forbiddenWordsSha256"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "templatesSha256": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            },
+            "forbiddenWordsSha256": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            }
+          }
+        },
+        "provenance": {
+          "type": "object",
+          "required": [
+            "gitHead",
+            "dirty"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "gitHead": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "dirty": {
+              "type": [
+                "boolean",
+                "null"
+              ]
+            }
+          }
+        },
+        "dev": {
+          "type": "object",
+          "required": [
+            "conditions",
+            "shownForPerson",
+            "omittedForPerson",
+            "rowsNotTaken"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "conditions": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "shownForPerson": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "omittedForPerson": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "rowsNotTaken": {
+              "type": "integer",
+              "minimum": 0
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "object",
+      "required": [
+        "contract",
+        "schemaVersion",
+        "audience",
+        "lineKind",
+        "sentences",
+        "input",
+        "contractRules",
+        "provenance"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "contract": {
+          "const": "diagnosis-report"
+        },
+        "schemaVersion": {
+          "const": "0.1"
+        },
+        "audience": {
+          "const": "person"
+        },
+        "lineKind": {
+          "const": "summary"
+        },
+        "sentences": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": [
+              "kind",
+              "template",
+              "text",
+              "sources"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "kind": {
+                "enum": [
+                  "heading",
+                  "F-1",
+                  "F-2",
+                  "F-2b",
+                  "F-3",
+                  "F-4",
+                  "F-5",
+                  "F-6",
+                  "verdict",
+                  "none",
+                  "N-1",
+                  "N-2",
+                  "N-3"
+                ]
+              },
+              "template": {
+                "enum": [
+                  "headingWithText",
+                  "headingIdOnly",
+                  "F-1",
+                  "F-2",
+                  "F-2b",
+                  "F-3",
+                  "F-3-notEvaluable",
+                  "F-4",
+                  "F-5",
+                  "F-6",
+                  "meets",
+                  "insufficient",
+                  "draft",
+                  "pairNotApplied",
+                  "none",
+                  "N-1",
+                  "N-2",
+                  "terms"
+                ]
+              },
+              "text": {
+                "type": "string"
+              },
+              "sources": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": [
+                    "slot",
+                    "field",
+                    "value"
+                  ],
+                  "additionalProperties": false,
+                  "properties": {
+                    "slot": {
+                      "enum": [
+                        "id",
+                        "readableText",
+                        "tn",
+                        "tc",
+                        "fn",
+                        "fc",
+                        "tnGames",
+                        "tcPct",
+                        "fcPct",
+                        "n",
+                        "a",
+                        "p",
+                        "testGames",
+                        "testTn",
+                        "direction",
+                        "games",
+                        "conditionsInRun",
+                        "aheadCp",
+                        "behindCp",
+                        "approvedOn"
+                      ]
+                    },
+                    "field": {
+                      "type": "string"
+                    },
+                    "value": {
+                      "type": [
+                        "string",
+                        "number"
+                      ]
+                    },
+                    "derivedBy": {
+                      "enum": [
+                        "pct",
+                        "sign",
+                        "count",
+                        "signedCp"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "input": {
+          "type": "object",
+          "required": [
+            "path",
+            "sha256"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "path": {
+              "type": "string",
+              "pattern": "^[^/]"
+            },
+            "sha256": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            }
+          }
+        },
+        "contractRules": {
+          "type": "object",
+          "required": [
+            "templatesSha256",
+            "forbiddenWordsSha256"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "templatesSha256": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            },
+            "forbiddenWordsSha256": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            }
+          }
+        },
+        "provenance": {
+          "type": "object",
+          "required": [
+            "gitHead",
+            "dirty"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "gitHead": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "dirty": {
+              "type": [
+                "boolean",
+                "null"
+              ]
+            }
+          }
+        }
+      }
+    }
+  ]
+}

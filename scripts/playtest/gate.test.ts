@@ -30,7 +30,7 @@ const DEFINITION = (id: string, appliesTo: string, uses: string, status = "draft
   label: "試験だけの定義(仮)",
   status: ${JSON.stringify(status)},
   definitionText: "試験だけ",
-  uses: [${JSON.stringify(uses)}],
+${status === "approved" ? '  readableText: "試験だけの条件の文",\n' : ""}  uses: [${JSON.stringify(uses)}],
   thresholds: {},
   appliesTo: [${JSON.stringify(appliesTo)}],
   approval: ${status === "approved" ? '{ approvedBy: "test", date: "2026-09-16", record: "test" }' : "null"},

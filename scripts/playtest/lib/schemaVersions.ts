@@ -30,3 +30,7 @@ export const DIAGNOSIS_CONDITION_SCHEMA_VERSION = "0.1" as const;
 export const KNOWN_DIAGNOSIS_CONDITION_SCHEMA_VERSIONS = ["0.1"] as const;
 /** --cond-summary の契約 diagnosis-condition-summary の版(スキーマのファイルは置いていない。試験が欄を見る) */
 export const DIAGNOSIS_CONDITION_SUMMARY_SCHEMA_VERSION = "0.1" as const;
+
+/** STEP D6(docs/STEP_D6_PLAN_2026-09-16.md §6)。契約 diagnosis-report の今の版と、スキーマのファイルがある版(ほかの契約の定数とは独立に末尾に置く) */
+export const DIAGNOSIS_REPORT_SCHEMA_VERSION = "0.1" as const;
+export const KNOWN_DIAGNOSIS_REPORT_SCHEMA_VERSIONS = ["0.1"] as const;

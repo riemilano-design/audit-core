@@ -501,12 +501,22 @@ describe("judgeCondition(計画 §2)", () => {
 describe("checkCondition・loadCondition(計画 §2 の R-4・D4 §3)", () => {
   it("K-5 読み込みで止める: approved で approval null / draft で approval あり / label に(仮)が無い / uses が表に無い / appliesTo が空", () => {
     const approval = { approvedBy: "試験", date: "2026-09-16", record: "試験" };
-    expect(problemsOf(definition({ status: "approved", approval: null }))).toStrictEqual([{ code: "approvedWithoutApproval" }]);
+    expect(problemsOf(definition({ status: "approved", approval: null, readableText: "試験だけの文" }))).toStrictEqual([{ code: "approvedWithoutApproval" }]);
     expect(problemsOf(definition({ status: "draft", approval }))).toStrictEqual([{ code: "draftWithApproval" }]);
     expect(problemsOf(definition({ label: "試験だけの定義" }))).toStrictEqual([{ code: "labelWithoutProvisional" }]);
     expect(problemsOf(definition({ uses: ["trigger.evaluationBefore.state"] }))).toStrictEqual([{ code: "unknownPath", path: "trigger.evaluationBefore.state" }]);
     expect(problemsOf(definition({ appliesTo: [] }))).toStrictEqual([{ code: "emptyAppliesTo" }]);
-    expect(problemsOf(definition({ status: "approved", approval, uses: ["trigger.evaluationBefore.scoreCp"] }))).toStrictEqual([]);
+    expect(problemsOf(definition({ status: "approved", approval, readableText: "試験だけの文", uses: ["trigger.evaluationBefore.scoreCp"] }))).toStrictEqual([]);
+  });
+
+  it("STEP D6 §8 readableText: draft は任意(書くなら空でない文字列)/ approved は必須 /「(仮)」を含めば止める / 禁止語は lib では止めない", () => {
+    const approval = { approvedBy: "試験", date: "2026-09-16", record: "試験" };
+    expect(problemsOf(definition({ status: "approved", approval }))).toStrictEqual([{ code: "approvedWithoutReadableText" }]);
+    expect(problemsOf(definition({ status: "approved", approval, readableText: "試験だけの文(仮)" }))).toStrictEqual([{ code: "readableTextWithProvisional" }]);
+    expect(problemsOf(definition({ readableText: "" }))).toStrictEqual([{ code: "malformed", detail: "readableText が空でない文字列でない" }]);
+    expect(problemsOf(definition({ readableText: "弱点を見る文" }))).toStrictEqual([]);
+    expect(problemsOf(definition({}))).toStrictEqual([]);
+    expect(problemsOf(definition({ status: "approved", approval, readableText: "試験だけの文" }))).toStrictEqual([]);
   });
 
   it("K-5 形の崩れた定義(evaluate が無い)は malformed だけを出して止める", () => {
