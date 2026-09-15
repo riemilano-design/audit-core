@@ -127,3 +127,11 @@ export function plantedRecords(
     return record;
   });
 }
+
+/**
+ * STEP JSON V0.3-META。回して畳んだ記録の固定例(D0-SIDE 段 2 の R-5 と同じ手順): 平手・後手番の初期局面に 3c3d を当てた開始局面から 6 手。
+ * `plantedRecords(FOLD_MOVES, { 0: engineRef(500), 2: engineRef(-500) }, {}, FOLD_START)` で分岐点 1 に Failure Event が出る(lib/failureEvent.test.ts の R-5)。
+ * lib/failureEvent.test.ts ほか 5 か所にある手書きの写しは、この STEP では置き換えない(計画 F-11・7.1)。
+ */
+export const FOLD_START = "lnsgkgsnl/1r5b1/pppppp1pp/6p2/9/9/PPPPPPPPP/1B5R1/LNSGKGSNL b - 2";
+export const FOLD_MOVES: readonly string[] = ["7g7f", "4c4d", "5i6h", "9c9d", "6h7g", "4d4e"];

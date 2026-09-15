@@ -7,6 +7,8 @@
 // 【版を上げるとき】スキーマのファイルを版ごとに 1 つ増やし、古い版のファイルは消さない(v0 計画 3.2)。
 // 【出どころは推測しない】評価関数の識別は人が渡した文(`--evaluator`)をそのまま写す。`enginePath` から推測しない(P-43・K-4)。
 // 【絶対パスは書かない】パスはリポジトリの根からの相対にする(v0.2 計画 K-2)。ホームディレクトリのユーザー名を行に出さない。
+// 【記録の meta の 7 欄】STEP JSON V0.3-META(docs/STEP_JSON-V0.3-META_PLAN_2026-09-15.md)。そろえの組・打ち切りの組を、スキーマ v0.3 の 7 変種と同じ規則で読んで写す。
+// 無い欄はキーを出さず、記録していなければ unrecordedKeys に名前を並べる(false を書かない ― 計画 D-1・K-1)。どの変種にも合わない meta は写さずに例外(K-3)。
 
 import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
@@ -16,15 +18,25 @@ import { validate, type JsonSchema } from "./eventSchema.js";
 import type { DiagnosisRule, FailureEvent } from "./failureEvent.js";
 import { readDirtyState, type DirtyState, type GitState } from "./gitState.js";
 
-export const FAILURE_EVENT_SCHEMA_VERSION = "0.2" as const;
+export const FAILURE_EVENT_SCHEMA_VERSION = "0.3" as const;
 /** スキーマのファイルがある版(古い版のファイルは消さない) */
-export const KNOWN_SCHEMA_VERSIONS = ["0.1", "0.2"] as const;
+export const KNOWN_SCHEMA_VERSIONS = ["0.1", "0.2", "0.3"] as const;
 export type SchemaVersion = (typeof KNOWN_SCHEMA_VERSIONS)[number];
 
-/** 出どころに写す meta の欄。meta に無かった欄は `unrecordedKeys` に名前を並べる(v0.2 計画 K-3) */
+/** 出どころに写す meta の欄(v0.2)。meta に無かった欄は `null` にし、`unrecordedKeys` に名前を並べる(v0.2 計画 K-3) */
 export const PROVENANCE_META_KEYS = ["gitHead", "dirty", "enginePath", "searchMode", "nodes", "threads"] as const;
+/**
+ * STEP JSON V0.3-META で足した、記録の meta の 7 欄(計画 2.1。並びは K-4)。**無い欄はキーを出さない(`null` も `false` も書かない ― D-1)**。
+ * 名前を `unrecordedKeys` に並べるのは「meta に無く、門の欄が `false` でない」とき(K-1)。門は `mirrored`(従う欄は `originalUserSide`・`plyOffset`・`startSfen`)と
+ * `trailingMoveTruncated`(従う欄は `truncatedTrailingMove`)。`sideAlignmentChecked` は門を持たない。
+ */
+export const SIDE_AND_TRUNCATION_META_KEYS = ["mirrored", "originalUserSide", "plyOffset", "startSfen", "sideAlignmentChecked", "trailingMoveTruncated", "truncatedTrailingMove"] as const;
+/** スキーマ v0.3 の `startSfen` の pattern と同じ文字列(計画 K-5: 空白で区切った 4 つの部分。盤の正しさは見ない)。試験でスキーマと突き合わせる */
+export const START_SFEN_PATTERN = "^\\S+ [bw] \\S+ [1-9][0-9]*$";
+/** スキーマ v0.3 の `truncatedTrailingMove` の pattern と同じ文字列(計画 K-5: 盤上の手か打つ手。lib/usiRotation.ts と同じ形)。試験でスキーマと突き合わせる */
+export const USI_MOVE_PATTERN = "^([1-9][a-i][1-9][a-i]\\+?|[PLNSGBR]\\*[1-9][a-i])$";
 
-export interface ProvenanceMeta {
+export interface ProvenanceMetaBase {
   /** 記録を取ったときのコード。null = 取れなかった、または meta に欄が無い(`unrecordedKeys` で分かる) */
   gitHead: string | null;
   /** 記録を取ったときの汚れ(DirtyState の 4 値) */
@@ -35,7 +47,23 @@ export interface ProvenanceMeta {
   /** 0 = 時間で打ち切る探索(`searchMode` が `"movetime"`。replay.ts `--nodes 0`)。null にしない ― `searchMode` と組で読む */
   nodes: number | null;
   threads: number | null;
-  unrecordedKeys: string[];
+}
+
+/** そろえの組(計画 2.3): 無い / 回していない / 回した */
+export type ProvenanceSideFields =
+  | { mirrored?: never; originalUserSide?: never; plyOffset?: never; startSfen?: never; sideAlignmentChecked?: never }
+  | { mirrored: false; sideAlignmentChecked: false; originalUserSide?: never; plyOffset?: never; startSfen?: never }
+  | { mirrored: true; originalUserSide: "gote"; plyOffset: 1; startSfen: string; sideAlignmentChecked: boolean };
+/** 打ち切りの組(計画 2.3): 無い / 落としていない / 落とした。**そろえの組があるなら、打ち切りの組が無いことは無い**(K-7。lib が止める) */
+export type ProvenanceTruncationFields =
+  | { trailingMoveTruncated?: never; truncatedTrailingMove?: never }
+  | { trailingMoveTruncated: false; truncatedTrailingMove?: never }
+  | { trailingMoveTruncated: true; truncatedTrailingMove: string };
+export type ProvenanceMeta = ProvenanceMetaBase & ProvenanceSideFields & ProvenanceTruncationFields & { unrecordedKeys: string[] };
+
+/** 記録の meta が、出どころに写せる形(STEP JSON V0.3-META 計画 2.3 の 7 変種)に合わない(計画 K-3)。文に記録の kifuId と、食い違った欄の名前(`欄 <名前>:`)を書く */
+export class InvalidProvenanceMetaError extends Error {
+  override name = "InvalidProvenanceMetaError";
 }
 
 export interface Provenance {
@@ -78,12 +106,74 @@ export function pathForProvenance(filePath: string, repoRoot: string): string {
   return path.basename(absolute);
 }
 
+const START_SFEN = new RegExp(START_SFEN_PATTERN);
+const USI_MOVE = new RegExp(USI_MOVE_PATTERN);
+const SIDE_FOLLOWERS = ["originalUserSide", "plyOffset", "startSfen"] as const;
+
+/**
+ * STEP JSON V0.3-META。meta のそろえの組と打ち切りの組を、スキーマ v0.3 の 7 変種と同じ規則で読む(計画 2.1〜2.3・K-1・K-3・K-5・K-7)。
+ * 合わない形は写さず、食い違いを全部集めてから InvalidProvenanceMetaError を投げる(黙って写すと、スキーマを通らない行を書く)。
+ */
+function sideAndTruncationOf(raw: Record<string, unknown>): { fields: ProvenanceSideFields & ProvenanceTruncationFields; unrecorded: ReadonlySet<string> } {
+  const has = (key: string): boolean => Object.hasOwn(raw, key);
+  const problems: string[] = [];
+  const problem = (key: string, text: string): void => {
+    problems.push(`欄 ${key}: ${text}`);
+  };
+  const unrecorded = new Set<string>();
+
+  let side: ProvenanceSideFields = {};
+  if (!has("mirrored") && !has("sideAlignmentChecked")) {
+    for (const key of SIDE_FOLLOWERS) if (has(key)) problem(key, "mirrored が無いのにある");
+    for (const key of ["mirrored", ...SIDE_FOLLOWERS, "sideAlignmentChecked"]) unrecorded.add(key);
+  } else if (!has("mirrored")) {
+    problem("mirrored", "sideAlignmentChecked があるのに無い");
+  } else if (!has("sideAlignmentChecked")) {
+    problem("sideAlignmentChecked", "mirrored があるのに無い");
+  } else if (raw.mirrored === false) {
+    for (const key of SIDE_FOLLOWERS) if (has(key)) problem(key, "mirrored が false なのにある");
+    if (raw.sideAlignmentChecked !== false) problem("sideAlignmentChecked", "mirrored が false なのに false でない");
+    side = { mirrored: false, sideAlignmentChecked: false };
+  } else if (raw.mirrored === true) {
+    if (raw.originalUserSide !== "gote") problem("originalUserSide", `"gote" でない(${JSON.stringify(raw.originalUserSide)})`);
+    if (raw.plyOffset !== 1) problem("plyOffset", `1 でない(${JSON.stringify(raw.plyOffset)})`);
+    if (typeof raw.startSfen !== "string" || !START_SFEN.test(raw.startSfen)) problem("startSfen", "空白で区切った 4 つの部分の SFEN でない");
+    if (typeof raw.sideAlignmentChecked !== "boolean") problem("sideAlignmentChecked", "boolean でない");
+    side = { mirrored: true, originalUserSide: "gote", plyOffset: 1, startSfen: String(raw.startSfen), sideAlignmentChecked: raw.sideAlignmentChecked === true };
+  } else {
+    problem("mirrored", "boolean でない");
+  }
+
+  let truncation: ProvenanceTruncationFields = {};
+  if (!has("trailingMoveTruncated")) {
+    if (has("truncatedTrailingMove")) problem("truncatedTrailingMove", "trailingMoveTruncated が無いのにある");
+    if (has("mirrored") || has("sideAlignmentChecked")) problem("trailingMoveTruncated", "そろえの組があるのに無い(どの replay.ts も書かない形 ― K-7)");
+    unrecorded.add("trailingMoveTruncated");
+    unrecorded.add("truncatedTrailingMove");
+  } else if (raw.trailingMoveTruncated === false) {
+    if (has("truncatedTrailingMove")) problem("truncatedTrailingMove", "trailingMoveTruncated が false なのにある");
+    truncation = { trailingMoveTruncated: false };
+  } else if (raw.trailingMoveTruncated === true) {
+    if (typeof raw.truncatedTrailingMove !== "string" || !USI_MOVE.test(raw.truncatedTrailingMove)) problem("truncatedTrailingMove", "USI の手でない");
+    truncation = { trailingMoveTruncated: true, truncatedTrailingMove: String(raw.truncatedTrailingMove) };
+  } else {
+    problem("trailingMoveTruncated", "boolean でない");
+  }
+
+  if (problems.length > 0) {
+    throw new InvalidProvenanceMetaError(`記録 ${String(raw.kifuId)} の meta が、出どころに写せる形(STEP JSON V0.3-META 計画 2.3 の 7 変種)に合いません: ${problems.join(" / ")}`);
+  }
+  return { fields: Object.assign({}, side, truncation) as ProvenanceSideFields & ProvenanceTruncationFields, unrecorded };
+}
+
 export function provenanceMetaOf(meta: MetaLine | undefined, repoRoot: string): ProvenanceMeta | null {
   if (meta === undefined) return null;
   const raw = meta as unknown as Record<string, unknown>;
   const stringOf = (key: string): string | null => (typeof raw[key] === "string" ? (raw[key] as string) : null);
   const integerOf = (key: string): number | null => (typeof raw[key] === "number" ? (raw[key] as number) : null);
   const enginePath = stringOf("enginePath");
+  // STEP JSON V0.3-META: 7 欄が出どころに写せる形でなければ、ここで例外(K-3)
+  const { fields, unrecorded } = sideAndTruncationOf(raw);
   return {
     gitHead: stringOf("gitHead"),
     dirty: readDirtyState(meta),
@@ -91,8 +181,9 @@ export function provenanceMetaOf(meta: MetaLine | undefined, repoRoot: string): 
     searchMode: stringOf("searchMode"),
     nodes: integerOf("nodes"),
     threads: integerOf("threads"),
-    unrecordedKeys: PROVENANCE_META_KEYS.filter((key) => !Object.hasOwn(raw, key)),
-  };
+    ...fields,
+    unrecordedKeys: [...PROVENANCE_META_KEYS.filter((key) => !Object.hasOwn(raw, key)), ...SIDE_AND_TRUNCATION_META_KEYS.filter((key) => unrecorded.has(key))],
+  } as ProvenanceMeta;
 }
 
 export interface ProvenanceInput {

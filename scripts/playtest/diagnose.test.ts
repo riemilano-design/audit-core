@@ -8,6 +8,8 @@
 //   今の版のスキーマを通ることを、同じ子プロセスの試験で確かめる。
 // - STEP JSON v0.2 … 各行の末尾の provenance が、渡した記録のファイル(根の外なのでファイル名だけ)・そのバイトの sha256・
 //   --evaluator の文・このリポジトリの HEAD・規則の値を持つことを、lib の組み立ての関数を通さずに見る(組み立ての誤りを両側で揃えないため)。
+// - STEP JSON V0.3-META … 平手の記録と回した記録を並べ、各行の provenance.record.meta に自分の記録の meta の 7 欄が写ることと、
+//   写せない meta(K-3)では --events を書かずに 0 でなく止まり、前の回のファイルが残ることを、組み立ての関数を通さずに見る。
 //
 // 【静かにスキップしない】npx・tsx・git が無ければ execFileSync が例外を投げて赤になる。
 // 【一時ディレクトリ以外に書かない】走らせる前と後で git status(無視されるファイルも 1 本ずつ。
@@ -23,7 +25,7 @@ import { describe, expect, it } from "vitest";
 import type { MetaLine } from "./invariants/types.js";
 import { renderDiagnosisTotals } from "./lib/diagnosisTotals.js";
 import { buildDiagnosisReport, DRAFT_RULE_1, NOT_EVALUATION_CP, renderDiagnosisReport, type DiagnosisInput } from "./lib/failureEvent.js";
-import { engineRef, GAME01_MOVES, plantedRecords } from "./lib/failureEventFixtures.js";
+import { engineRef, FOLD_MOVES, FOLD_START, GAME01_MOVES, plantedRecords } from "./lib/failureEventFixtures.js";
 import { buildProvenance, loadFailureEventSchema, toEventLine, validateFailureEventLine } from "./lib/failureEventSchema.js";
 import { readGitState } from "./lib/gitState.js";
 
@@ -158,7 +160,7 @@ describe("diagnose.ts(計画 5.2)", () => {
         const schema = loadFailureEventSchema();
         for (const line of writtenEvents) {
           expect(Object.keys(line)[0]).toBe("schemaVersion");
-          expect(line.schemaVersion).toBe("0.2");
+          expect(line.schemaVersion).toBe("0.3");
           expect(validateFailureEventLine(line, schema)).toEqual([]);
         }
       } finally {
@@ -198,6 +200,120 @@ describe("diagnose.ts(計画 5.2)", () => {
           expect(String(failure!.stderr), name).toContain("Error: --evaluator に評価関数の識別の文を渡してください");
           expect(existsSync(eventsPath), name).toBe(false);
         }
+      } finally {
+        rmSync(dir, { recursive: true, force: true });
+      }
+    },
+    60_000,
+  );
+
+  // STEP JSON V0.3-META(計画 6.2)。1 本目は平手の記録、2 本目は回した記録(1 本目の meta を全部の行に付ける誤り M-13 を捕まえる)
+  it(
+    "V0.3-META 子プロセス: 平手の記録と回した記録を並べて --events を書くと、各行の provenance.record.meta に自分の記録の meta の 7 欄が写る(組み立ての関数を通さずに見る)",
+    () => {
+      const dir = mkdtempSync(join(tmpdir(), "json03-diagnose-"));
+      try {
+        const plainMeta = { kind: "meta", kifuId: "json03-plain", startedAt: "t", gitHead: null, enginePath: ENGINE_PATH };
+        const foldMeta = {
+          kind: "meta",
+          kifuId: "json03-fold",
+          startedAt: "t",
+          gitHead: null,
+          enginePath: ENGINE_PATH,
+          mirrored: true,
+          originalUserSide: "gote",
+          plyOffset: 1,
+          startSfen: FOLD_START,
+          sideAlignmentChecked: true,
+          trailingMoveTruncated: true,
+          truncatedTrailingMove: "2g2f",
+        };
+        const inputs: Array<[string, object, unknown[]]> = [
+          ["json03-plain", plainMeta, plantedRecords(GAME01_MOVES, { 48: engineRef(500, { afterPassMate: 3, dropCp: 350 }), 50: engineRef(-300) })],
+          ["json03-fold", foldMeta, plantedRecords(FOLD_MOVES, { 0: engineRef(500), 2: engineRef(-500) }, {}, FOLD_START)],
+        ];
+        const paths = inputs.map(([name, meta, records]) => {
+          const filePath = join(dir, `${name}.jsonl`);
+          writeFileSync(filePath, `${[meta, ...records].map((line) => JSON.stringify(line)).join("\n")}\n`, "utf-8");
+          return filePath;
+        });
+        const eventsPath = join(dir, "events.jsonl");
+        const before = gitStatus();
+        execFileSync("npx", ["tsx", DIAGNOSE_TS, ...paths, "--events", eventsPath], { cwd: REPO_ROOT, encoding: "utf-8" });
+        expect(gitStatus()).toBe(before);
+
+        const lines = readFileSync(eventsPath, "utf-8").trim().split("\n").map((line) => JSON.parse(line) as Record<string, unknown>);
+        const metaOf = (line: Record<string, unknown>): Record<string, unknown> => (line.provenance as { record: { meta: Record<string, unknown> } }).record.meta;
+        const seven = ["mirrored", "originalUserSide", "plyOffset", "startSfen", "sideAlignmentChecked", "trailingMoveTruncated", "truncatedTrailingMove"];
+        const plainLines = lines.filter((line) => line.kifuId === "json03-plain");
+        const foldLines = lines.filter((line) => line.kifuId === "json03-fold");
+        expect(plainLines.length).toBeGreaterThan(0);
+        expect(foldLines.length).toBeGreaterThan(0);
+        const schema = loadFailureEventSchema();
+        for (const line of plainLines) {
+          const meta = metaOf(line);
+          expect(seven.filter((key) => Object.hasOwn(meta, key))).toEqual([]);
+          expect(meta.unrecordedKeys).toEqual(["dirty", "searchMode", "nodes", "threads", ...seven]);
+          expect(line.schemaVersion).toBe("0.3");
+          expect(validateFailureEventLine(line, schema)).toEqual([]);
+        }
+        for (const line of foldLines) {
+          const meta = metaOf(line);
+          expect(Object.fromEntries(seven.filter((key) => Object.hasOwn(meta, key)).map((key) => [key, meta[key]]))).toEqual({
+            mirrored: true,
+            originalUserSide: "gote",
+            plyOffset: 1,
+            startSfen: "lnsgkgsnl/1r5b1/pppppp1pp/6p2/9/9/PPPPPPPPP/1B5R1/LNSGKGSNL b - 2",
+            sideAlignmentChecked: true,
+            trailingMoveTruncated: true,
+            truncatedTrailingMove: "2g2f",
+          });
+          expect(meta.unrecordedKeys).toEqual(["dirty", "searchMode", "nodes", "threads"]);
+          expect(line.schemaVersion).toBe("0.3");
+          expect(validateFailureEventLine(line, schema)).toEqual([]);
+        }
+      } finally {
+        rmSync(dir, { recursive: true, force: true });
+      }
+    },
+    60_000,
+  );
+
+  it(
+    "V0.3-META 子プロセス(K-3): 出どころに写せない meta(回した局に plyOffset が無い)の記録では、exit 0 以外で止まり、--events を書かない(前の回のファイルはそのまま残る)",
+    () => {
+      const dir = mkdtempSync(join(tmpdir(), "json03-diagnose-k3-"));
+      try {
+        const meta = {
+          kind: "meta",
+          kifuId: "json03-broken",
+          startedAt: "t",
+          gitHead: null,
+          enginePath: ENGINE_PATH,
+          mirrored: true,
+          originalUserSide: "gote",
+          startSfen: FOLD_START,
+          sideAlignmentChecked: true,
+          trailingMoveTruncated: false,
+        };
+        const records = plantedRecords(FOLD_MOVES, { 0: engineRef(500), 2: engineRef(-500) }, {}, FOLD_START);
+        const recordPath = join(dir, "json03-broken.jsonl");
+        writeFileSync(recordPath, `${[meta, ...records].map((line) => JSON.stringify(line)).join("\n")}\n`, "utf-8");
+        const eventsPath = join(dir, "events.jsonl");
+        const previous = "前の回の行\n";
+        writeFileSync(eventsPath, previous, "utf-8");
+        let failure: { status: number | null; stderr: string } | undefined;
+        try {
+          execFileSync("npx", ["tsx", DIAGNOSE_TS, recordPath, "--events", eventsPath], { cwd: REPO_ROOT, encoding: "utf-8", stdio: "pipe" });
+        } catch (error) {
+          failure = error as { status: number | null; stderr: string };
+        }
+        expect(failure, "止まらなかった").toBeDefined();
+        expect(failure!.status).not.toBe(0);
+        // 止めた文は、実行時の値(記録の kifuId と、食い違った欄の名前)で見る。ソースの code frame にはこの 2 つが値の形で出ない(v0.2 の Z-1 の教訓)
+        expect(String(failure!.stderr)).toContain("記録 json03-broken の meta が");
+        expect(String(failure!.stderr)).toContain("欄 plyOffset:");
+        expect(readFileSync(eventsPath, "utf-8")).toBe(previous);
       } finally {
         rmSync(dir, { recursive: true, force: true });
       }

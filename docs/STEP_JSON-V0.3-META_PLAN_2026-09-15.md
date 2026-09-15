@@ -211,3 +211,73 @@
 - **L-5 1. の数は使い捨ての道具で数えた**。校正は 3 つ: v0.2 の P-1 の 131 件(d0 + d3)・REAL-01 計画 6. の 5 件・**D3b 計画 §11.5 の B 60 + B′ 73 = 133 件**(d3b)。`d-cost` 66 件は照らす先の数を持たない。**f2 が事前読みで `e020b33` の worktree から独立に再現した**(meta 74 行・7 欄なし 68・Event 335 件、5 群とも exit 0、`d-cost` は群に分けて 22 + 23 + 21 = 66)。実装の STEP の試験と実測で数え直す
 - **L-6 P-6 が頼る道具の出力**(`scratchpad/json03-probe/`。HEAD `e020b33` の `diagnose.ts --events`。**`provenance.analysis` は回したときの値**): `d0-nnue.events.jsonl` 22 行 `e57553b2198283b9e745f736581cb9172b45530a5e6cb3f19c6f7ee0c6f07b76`・`d3-nnue.events.jsonl` 109 行 `dd10b9a9ed07c6d483a4e28ca33f41e52a784a5866fb06e8d9a6f9c7bc10c300`・`d3b-nnue-n2000.events.jsonl` 133 行 `751e2223167ba9e7f243ad1d6917c9fa6d1e06c9438a51cf15d085428b610a6f`・`d-cost.events.jsonl` 66 行 `6920237fb429683b52e59dbf3121c9a5ec9bc73e3d72a769ecb877a4d1f6bf75`・`real-01.events.jsonl` 5 行 `9e6d1cc8418ea36c92d22da17b77151f82736ff3256a411bc613ec8e446f4bf1`。**作り直す手順**: `e020b33` の worktree の根で、群ごとに `npx tsx scripts/playtest/diagnose.ts <その群の .jsonl をパスの昇順で。d-cost は下のフォルダまで> --events <出力>`。scratchpad が消えていても、この手順で作り直せる(`analysis` 以外は同じになるはず)
 - **L-7 P-52 の処遇は V0.3-META の後に決める**(`a84689b` で登録。回した記録の手順を `startSfen` を使わずに平手から並べると、D1 の `actualContinuation` が `IllegalMoveError` で止まり「数えられなかった」になる。K-3 と同じ向きの限界 ― 司令塔、2026-09-15)
+
+---
+
+## 8. 実装の記録(2026-09-15、実装担当 1e。**予測の節 5. は書き換えていない**)
+
+**基点 `0fa9e2c`(この計画書のコミット)、worktree `wt-json03`。エンジンは使っていない。**
+
+### 8.1 変えたもの
+
+| ファイル | 中身 |
+|---|---|
+| `scripts/playtest/lib/failureEventSchema.ts` | 版 `"0.3"`・`KNOWN_SCHEMA_VERSIONS` に `"0.3"`。`SIDE_AND_TRUNCATION_META_KEYS`(K-4 の順)・`START_SFEN_PATTERN`・`USI_MOVE_PATTERN`(K-5。スキーマと同じ文字列)。`ProvenanceMeta` を v0.2 の 6 欄 + そろえの組 3 形 + 打ち切りの組 3 形の型に。`sideAndTruncationOf`(2.3 の 7 変種と同じ規則で読み、食い違いを全部集めて `InvalidProvenanceMetaError` ― 文に記録の `kifuId` と `欄 <名前>:`)。`provenanceMetaOf` が 7 欄を K-1・K-4 のとおり写す |
+| `scripts/playtest/schemas/failure-event.v0.3.schema.json`(新規) | v0.2 のファイルから道具(`scratchpad/json03/gen-schema.py`)で生成。`record.meta` は `oneOf: [null, 変種 7]`、`unrecordedKeys` の `enum` は 13 の名前。**v0.1・v0.2 のファイルは 1 バイトも変えていない**(v0.2 の sha256 `731c6434…` を生成の前後で確かめた) |
+| `scripts/playtest/lib/failureEventFixtures.ts` | `FOLD_START`・`FOLD_MOVES` を export(6.2 で「実装で決める」とした分。既存の 5 か所の手書きは置き換えていない) |
+| `scripts/playtest/diagnose.ts` | 冒頭の注記だけ(版とスキーマのファイル名、K-3 で止まることと前の回のファイルが残ること)。**動きは変えていない**(6.1 の見込みどおり、lib の例外がそのまま外へ出る) |
+| `scripts/playtest/lib/failureEventSchema.test.ts` | 既存: `RECORD_DIRS` に `real-01`、出どころの変種に 7 変種、札に `provenance.meta.side.*`・`truncation.*`・`variant.*`(7 変種の外の札が無いことも)、旧 P-5 は「v0.2 の 6 欄の名前が無い」に、P-7 は 0.3 → 0.2 → 0.1 の 3 段に(P-6)。**足した試験 6**: 7 変種の固定例(本番の関数で作り、手で書いた値と比べる)・P-5(元の meta を基準の 3 つの ⇔。門の分類は試験の中で書く)・P-2/P-3・K-3(20 の食い違いの形。値の形まで)・K-5/K-7(スキーマの変種の数と pattern の文字列)・スキーマの境目 |
+| `scripts/playtest/diagnose.test.ts` | 版の文字列を `"0.3"` に。**足した子プロセスの試験 2**: 平手の記録と回した記録を並べ、行ごとに自分の meta の 7 欄が写る(手で書いた値と比べる)/ K-3 の meta で exit 0 以外・止めた文(実行時の `kifuId` と `欄 plyOffset:`)・前もって置いた `--events` のファイルがバイトで変わらない |
+
+### 8.2 件数
+
+- `tsc --noEmit -p scripts/playtest/tsconfig.json` exit 0・`typecheck:scripts`(2 つの config)exit 0
+- vitest の全件(`--root scripts/playtest`)は 1 回: **Test Files  42 passed (42)・Tests  550 passed (550)**。回す前の見込み(`scratchpad/json03/full/full-prediction.md`、sha1 `d48bce44`): e020b33 の 542 + 8 = **550 件すべて通過**
+
+### 8.3 予測との照合(5. を書き換えていない。実測は worktree の `diagnose.ts --events` を 74 本に掛けた出力 `scratchpad/json03/measure/`)
+
+| # | 予測 | 実測 | 判定 |
+|---|---|---|---|
+| P-1 | 335 件(22・109・133・66・5) | 22・109・133・66・5 = 335。5 群とも exit 0 | 的中 |
+| P-2 | 68 本(330 件)の `unrecordedKeys` は 7 つの名前、7 欄のキーは出ない | 330 行とも名前 7 つ・7 欄のキー 0 | 的中 |
+| P-3 | real-01 の 5 件は名前 5 つ、打ち切りの値は meta と同じ | 5 行とも名前 5 つ(K-4 の順)、`8c8b+`・`7a8b` ×2・`S*7a`・`4c5b` | 的中 |
+| P-4 | そろえの欄のある行 0・`trailingMoveTruncated: false` の行 0 | 0・0 | 的中 |
+| P-5 | 7 欄ごとに元の meta を基準の 3 つの ⇔ | 335 行で食い違い 0(v0.2 の 6 欄の名前 ⇔ meta に無い、も 0) | 的中 |
+| P-6 | 7 欄と名前を外して版を 0.2 にすると、道具の v0.2 の出力と `analysis` 以外一致 | 5 群とも一致 | 的中 |
+| P-7 | 0.3 の行は v0.3 を通り v0.2 で落ちる | 335 行とも(使い捨ての照合で数え、試験でも全固定例・実記録 3 群で見る) | 的中 |
+
+### 8.4 変異(道具 `scratchpad/json03/mutate.py`。**予測は当てる前に道具に試験の見出しで書き、`mut-out/predictions.md`(sha1 `00b802f6`)へ同じ逐次コマンドで書き出した**。4 ファイルと型検査だけを回した)
+
+**適用 22 / 鳴った 22 / 沈黙 0 / 適用できなかった 0。予測: 集合 22/22・tsc 20/22・中心 12/12 鳴った。**変異の前後で 7 ファイルの sha256 が一致した。
+
+| # | 壊し方 | ファイル | 鳴る試験(予測) | 結果 | 予測 |
+|---|---|---|---|---|---|
+| M-1a [中心] | 古い記録(そろえの組が無い)で mirrored に false を書く(名前は並べたまま) | failureEventSchema.ts | T2, T2m, T3a, T3b, T3c, T3d, T3e, T4, T5a, Q7, T3f, T5b, V1, V2, V3, D1, D3 | 鳴った(試験 22 / 88) | 的中 |
+| M-1b [中心] | 古い記録で sideAlignmentChecked に false を書く(名前は並べたまま) | failureEventSchema.ts | T2, T2m, T3a, T3b, T3c, T3d, T3e, T4, T5a, Q7, T5b, V1, V2, V3, D1, D3 | 鳴った(試験 21 / 88) | 的中 |
+| M-1c [中心] | 古い記録(打ち切りの組が無い)で trailingMoveTruncated に false を書く(名前は並べたまま。スキーマは通る) | failureEventSchema.ts | T3c, T3f, T5b, V1, V2, V3, D3 | 鳴った(試験 7 / 88) | 的中 |
+| M-2 [中心] | 新しい 7 欄の名前を unrecordedKeys に並べない | failureEventSchema.ts | T3c, V1, V2, V3, D3 | 鳴った(試験 5 / 88) | 的中 |
+| M-3a [中心] | 従う欄を無条件に写す(mirrored が false でも startSfen のキーを出す) | failureEventSchema.ts | T3c, Q7, V1, V2 | 鳴った(試験 4 / 88) | 外れ |
+| M-3b | 従う欄を無条件に写す(trailingMoveTruncated が false でも truncatedTrailingMove のキーを出す) | failureEventSchema.ts | T3c, Q7, V1, V2 | 鳴った(試験 4 / 88) | 外れ |
+| M-4 [中心] | 門が false のときも従う欄の名前を unrecordedKeys に並べる | failureEventSchema.ts | V1, V2 | 鳴った(試験 2 / 88) | 的中 |
+| M-5 | 門が無いとき従う欄の名前を並べない(K-1 を (a) にする) | failureEventSchema.ts | T3c, V1, V2, V3, D3 | 鳴った(試験 5 / 88) | 的中 |
+| M-6 [中心] | K-3 の食い違いを例外にせず写す | failureEventSchema.ts | V4, D4 | 鳴った(試験 2 / 88) | 的中 |
+| M-7a | スキーマの plyOffset の const を外す | failure-event.v0.3.schema.json | V6 | 鳴った(試験 1 / 88) | 的中 |
+| M-7b | スキーマの originalUserSide の const を外す | failure-event.v0.3.schema.json | V6 | 鳴った(試験 1 / 88) | 的中 |
+| M-8 | スキーマで回していない局の sideAlignmentChecked を boolean にする(K-2 を (b) 寄りにする) | failure-event.v0.3.schema.json | V6 | 鳴った(試験 1 / 88) | 的中 |
+| M-9 | 古い記録のそろえの組を null で出す(名前は並べたまま) | failureEventSchema.ts | T2, T2m, T3a, T3b, T3c, T3d, T3e, T4, T5a, Q7, T3f, T5b, V1, V2, V3, D1, D3 | 鳴った(試験 22 / 88) | 的中 |
+| M-10 [中心] | toEventLine が版 0.2 を書く | failureEventSchema.ts | T2, T2m, T3a, T3b, T3c, T3d, T3e, T4, T5a, Q7, V6, D1, D3 | 鳴った(試験 18 / 88) | 的中 |
+| M-11 | truncatedTrailingMove に meta の手でなく trailingMoveTruncated の文字列を写す | failureEventSchema.ts | T3c, T4, Q7, V1, V2, V3, D3 | 鳴った(試験 7 / 88) | 的中 |
+| M-12 | v0.2 の 6 欄の書き方を変える(meta に無い searchMode のキーを出さない) | failureEventSchema.ts | T3c, Q7, D1, D3 | 鳴った(試験 4 / 88) | 的中 |
+| M-13 | diagnose.ts がすべての行に 1 本目の記録の meta を付ける | diagnose.ts | D3 | 鳴った(試験 1 / 88) | 的中 |
+| M-14 | スキーマの変種を 1 つ消す(回した × 落とした) | failure-event.v0.3.schema.json | T3c, Q7, V5, V6, D3 | 鳴った(試験 5 / 88) | 的中 |
+| M-15a [中心] | lib が truncatedTrailingMove の USI の形を見ない | failureEventSchema.ts | V4 | 鳴った(試験 1 / 88) | 的中 |
+| M-15b [中心] | lib が startSfen の 4 つの部分の形を見ない | failureEventSchema.ts | V4 | 鳴った(試験 1 / 88) | 的中 |
+| M-16a [中心] | スキーマに「そろえの組あり × 打ち切りの組なし」の変種を足す(K-7 を外す) | failure-event.v0.3.schema.json | V5, V6 | 鳴った(試験 2 / 88) | 的中 |
+| M-16b [中心] | lib が「そろえの組あり × 打ち切りの組なし」を止めない(K-7 を外す) | failureEventSchema.ts | V4 | 鳴った(試験 1 / 88) | 的中 |
+
+- **tsc の予測の外れ 2 件(M-3a・M-3b。読みの誤りで、見張りの穴ではない)**: 「型の変換で通る」と予測したが、`ProvenanceSideFields`・`ProvenanceTruncationFields` は変種に無い欄を `?: never` にしてあるので、`startSfen` を持つ `mirrored: false` の値・`truncatedTrailingMove` を持つ `trailingMoveTruncated: false` の値への `as` が TS2352 で赤になった。**試験の集合は 2 件とも予測どおり鳴った**(型が 1 つ目の見張りになっている)
+- 試験の見出しの記号は `mut-out/predictions.md` の末尾。**M-1c(打ち切りの組が無い記録に `false` を書く)はスキーマを通る**(`absent × notTruncated` の変種に合う)ので、鳴ったのは 7 欄の対応の試験だけ ― L-1 のとおり、この形の見張りは試験だけにある
+
+### 8.5 計画との違い
+
+- **無い**(6.1 の表のとおり。`failureEventFixtures.ts` の export は 6.2 で実装に任された分)

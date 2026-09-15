@@ -6,12 +6,14 @@
 // 【このファイルは薄くしてある】判定・集計・表の組み立てはすべて lib/failureEvent.ts(合計は lib/diagnosisTotals.ts)にあり、そちらに試験がある。
 // ここでやるのは、記録を読む・lib を呼ぶ・書き出す、だけである。
 // `--events` の 1 行は lib/failureEventSchema.ts の toEventLine で、版の欄 schemaVersion を先頭に付けて書く
-// (STEP JSON v0.2。スキーマは scripts/playtest/schemas/failure-event.v0.2.schema.json)。行の末尾に出どころ(provenance)を付ける:
+// (STEP JSON v0.2・V0.3-META。スキーマは scripts/playtest/schemas/failure-event.v0.3.schema.json)。行の末尾に出どころ(provenance)を付ける:
 // 記録のファイル(根からの相対)と sha256・記録の meta の写し・`--evaluator` の文(**確かめていない自己申告**。渡されなければ null。
 // enginePath から推測しない ― P-43)・このコマンドを回したときの gitHead と汚れ・規則の値(docs/STEP_JSON-V0.2_PLAN_2026-09-15.md 2.1)。
 //
 // 【exit code】lib の例外は外へ出さず「数えられなかった」行にして exit 0。**入力が読めないとき(ENOENT・壊れた JSONL)は
 // 例外がこのファイルから外へ出て 0 でない**(check.ts と同じ。計画 D-1 の読み替え ― 2026-09-15、監査 B の非必須 d)。
+// **記録の meta が出どころに写せる形でない(STEP JSON V0.3-META 計画 K-3)ときも、lib/failureEventSchema.ts の例外が外へ出て、--events を書かずに 0 でない**
+// (表は書き終えている。前の回に同じパスへ書いた --events のファイルは消さない ― 計画 L-4)。
 //
 // 【このファイルが絶対にやらないこと】
 // - 死因のタグを approved にすること・閾値を確定すること
