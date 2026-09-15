@@ -19,3 +19,7 @@ export const KNOWN_DIAGNOSIS_MOMENT_SCHEMA_VERSIONS = ["0.1", "0.2", "0.3"] as c
  */
 export const FAILURE_EVENT_SCREEN_BASE_VERSION = "0.5" as const;
 export const DIAGNOSIS_MOMENT_SCREEN_BASE_VERSION = "0.2" as const;
+
+/** STEP D4(docs/STEP_D4_PLAN_2026-09-15.md §7)。契約 diagnosis-gate の今の版と、スキーマのファイルがある版(ほかの契約の定数とは独立に末尾に置く) */
+export const DIAGNOSIS_GATE_SCHEMA_VERSION = "0.1" as const;
+export const KNOWN_DIAGNOSIS_GATE_SCHEMA_VERSIONS = ["0.1"] as const;

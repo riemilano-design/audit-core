@@ -27,12 +27,14 @@ import {
   triggerOf,
   type Continuation,
   type DiagnosisRule,
+  type EvaluatedRow,
   type Evaluation,
   type FailureEvent,
   type Trigger,
 } from "./failureEvent.js";
 import type { Provenance } from "./failureEventSchema.js";
-import { standingPairOf, type StandingPair } from "./standing.js";
+import { standingOf, standingPairOf, type Standing, type StandingPair } from "./standing.js";
+import type { PairRow } from "./condition.js";
 import type { ScreenMeta } from "./rescreen.js";
 // 版の文字列は lib/schemaVersions.ts の 1 か所に置く(STEP D-SCREEN-2)
 import { DIAGNOSIS_MOMENT_SCHEMA_VERSION, KNOWN_DIAGNOSIS_MOMENT_SCHEMA_VERSIONS } from "./schemaVersions.js";
@@ -113,8 +115,7 @@ export function diagnosisMomentsOf(
   // STEP D-SCREEN-2(計画 §3): 段 2 の記録は、組ごとに 2 行とも深い値か 2 行とも軽い値かを選ぶ(Failure Event と同じ決め方)
   const chosen = screen === undefined ? undefined : choosePairSources(rows);
   const pairs = chosen === undefined ? pairEvaluations(rows) : chosen.map((pair) => pair.pair);
-  const moves = fullMovesOf(rows);
-  const eventPlies = new Set(events.map((event) => event.branchPly));
+  const context: PairFieldsContext = { kifuId, moves: fullMovesOf(rows), eventPlies: new Set(events.map((event) => event.branchPly)), rule, initialSfen };
 
   // `lightOnly`: 最大の下がりで出どころが混ざる局は、全部の組を軽い値で作る(S-13)
   const pairFields = (index: number, lightOnly = false): MomentPairFields => {
@@ -122,31 +123,7 @@ export function diagnosisMomentsOf(
     const from = pick === undefined ? rows[index]! : pick.from;
     const to = pick === undefined ? rows[index + 1]! : pick.to;
     const source: EvaluationSource | undefined = chosen === undefined ? undefined : lightOnly ? "light" : pick!.source;
-    const branchPly = from.ply + 1;
-    const userMove = moves[branchPly - 1];
-    const opponentMove = moves[branchPly];
-    if (userMove === undefined || opponentMove === undefined) {
-      throw new Error(`記録 ${kifuId} の組 ${from.ply}→${to.ply} の窓の 2 手が棋譜に無い(手数 ${moves.length})`);
-    }
-    const userBestmoveAtBefore = from.evaluation.state === "measured" ? from.evaluation.bestmove : null;
-    return {
-      branchPly,
-      fromReadyPly: from.ply,
-      toReadyPly: to.ply,
-      trigger: triggerOf(from, initialSfen),
-      moves: { userMove, opponentMove },
-      userBestmoveAtBefore,
-      opponentBestmove: { state: "notInRecord" },
-      evaluationAfter: to.evaluation,
-      standingPair: standingPairOf(from.evaluation, to.evaluation, STANDING_BOUNDS),
-      ...(source === undefined ? {} : { evaluationSource: source }),
-      failureEventBranchPly: eventPlies.has(branchPly) ? branchPly : null,
-      consequences: actualContinuation(moves, branchPly, rule.windowPlies, initialSfen),
-      counterfactual: (() => {
-        const counterfactual = counterfactualOf({ record: from.record, moves, branchPly, windowPlies: rule.windowPlies, initialSfen, bestmoveAtBefore: userBestmoveAtBefore });
-        return source === undefined ? counterfactual : withPvSource(counterfactual, source);
-      })(),
-    };
+    return pairFieldsOf(context, from, to, source);
   };
 
   // 上がり: 急落の閾値の符号を変える(計画 Q-2。新しい定数を置かない)
@@ -187,6 +164,95 @@ export function diagnosisMomentsOf(
     maxDrop = { ...momentOrder("maxDrop", kifuId, pairFields(minIndex, lightOnly), { kind: "cp", diffCp: minDiffCp }), excludedPairs };
   }
   return { rises, maxDrop };
+}
+
+/** 組の行の欄を作る材料(1 局ぶん)。`diagnosisMomentsOf` と `allPairsOf` が同じ関数で作る(STEP D4 計画 §2) */
+interface PairFieldsContext {
+  kifuId: string;
+  moves: string[];
+  eventPlies: ReadonlySet<number>;
+  rule: DiagnosisRule;
+  initialSfen: string;
+}
+
+/** 窓の 2 手(記録の手数 `branchPly`・`branchPly + 1`)。棋譜に無ければ null */
+function windowMovesOf(moves: readonly string[], from: EvaluatedRow): { userMove: string; opponentMove: string } | null {
+  const userMove = moves[from.ply];
+  const opponentMove = moves[from.ply + 1];
+  return userMove === undefined || opponentMove === undefined ? null : { userMove, opponentMove };
+}
+
+/** 組 1 つの欄。`source` は D-SCREEN-2 の出どころ(screen の無い記録と allPairsOf は undefined でキーを出さない)。窓の 2 手が棋譜に無ければ例外 */
+function pairFieldsOf(context: PairFieldsContext, from: EvaluatedRow, to: EvaluatedRow, source: EvaluationSource | undefined): MomentPairFields {
+  const { kifuId, moves, eventPlies, rule, initialSfen } = context;
+  const branchPly = from.ply + 1;
+  const window = windowMovesOf(moves, from);
+  if (window === null) {
+    throw new Error(`記録 ${kifuId} の組 ${from.ply}→${to.ply} の窓の 2 手が棋譜に無い(手数 ${moves.length})`);
+  }
+  const { userMove, opponentMove } = window;
+  const userBestmoveAtBefore = from.evaluation.state === "measured" ? from.evaluation.bestmove : null;
+  return {
+    branchPly,
+    fromReadyPly: from.ply,
+    toReadyPly: to.ply,
+    trigger: triggerOf(from, initialSfen),
+    moves: { userMove, opponentMove },
+    userBestmoveAtBefore,
+    opponentBestmove: { state: "notInRecord" },
+    evaluationAfter: to.evaluation,
+    standingPair: standingPairOf(from.evaluation, to.evaluation, STANDING_BOUNDS),
+    ...(source === undefined ? {} : { evaluationSource: source }),
+    failureEventBranchPly: eventPlies.has(branchPly) ? branchPly : null,
+    consequences: actualContinuation(moves, branchPly, rule.windowPlies, initialSfen),
+    counterfactual: (() => {
+      const counterfactual = counterfactualOf({ record: from.record, moves, branchPly, windowPlies: rule.windowPlies, initialSfen, bestmoveAtBefore: userBestmoveAtBefore });
+      return source === undefined ? counterfactual : withPvSource(counterfactual, source);
+    })(),
+  };
+}
+
+/** STEP D4(計画 §2)。1 局の全ての手の組 */
+export interface AllPairs {
+  /** 窓の 2 手が棋譜にある組だけ(ply の昇順) */
+  pairs: PairRow[];
+  /** 窓の 2 手が棋譜に無く、`pairs` に入れなかった組の数(分母に入れない) */
+  movesMissing: number;
+  /**
+   * ready 行すべての形勢の状態(軽い値、ply の昇順)。5 手以内(参考)が読む。
+   * **計画 §2 の型に無い欄**(司令塔の決定 T-1、計画 §13 に記録)。movesMissing の組の行も含む
+   */
+  rowStandings: Array<{ ply: number; standing: Standing }>;
+}
+
+/**
+ * STEP D4(計画 §2)。1 局の全ての手の組を、`diagnosisMomentsOf` と同じ欄の作り方で並べる。
+ * **出どころは軽い値だけ**(Q-2・R-6): 記録に `engineReferenceDeep`・`searchPvsDeep` があっても `engineReference`・`searchPvs` を読み、
+ * 組の行に `evaluationSource`・`counterfactual.pvSource` を書かない(出どころは集計に 1 回だけ ― 司令塔の決定 T-2)。
+ * `events` は `failureEventBranchPly` を引くためだけに読む。軽い値にそろえるため、screen を渡さない `diagnoseRecords` の Event を渡す。
+ */
+export function allPairsOf(
+  kifuId: string,
+  records: readonly RecordLine[],
+  rule: DiagnosisRule,
+  initialSfen: string,
+  events: readonly FailureEvent[],
+  options: { source: "light" },
+): AllPairs {
+  if (options.source !== "light") throw new Error(`allPairsOf の出どころは light だけ(${String(options.source)})`);
+  const rows = readEvaluations(records);
+  const context: PairFieldsContext = { kifuId, moves: fullMovesOf(rows), eventPlies: new Set(events.map((event) => event.branchPly)), rule, initialSfen };
+  const pairs: PairRow[] = [];
+  let movesMissing = 0;
+  pairEvaluations(rows).forEach((pair, index) => {
+    const from = rows[index]!;
+    if (windowMovesOf(context.moves, from) === null) {
+      movesMissing += 1;
+      return;
+    }
+    pairs.push({ kifuId, pairKind: pair.kind, ...pairFieldsOf(context, from, rows[index + 1]!, undefined) });
+  });
+  return { pairs, movesMissing, rowStandings: rows.map((row) => ({ ply: row.ply, standing: standingOf(row.evaluation, STANDING_BOUNDS) })) };
 }
 
 /** 行の欄の順(スキーマの properties と同じ順) */

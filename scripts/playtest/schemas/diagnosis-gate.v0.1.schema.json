@@ -1,0 +1,2926 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "diagnosis-gate.v0.1.schema.json",
+  "title": "Diagnosis Gate v0.1",
+  "description": "gate.ts --out の 1 行(契約 diagnosis-gate の版 0.1)。条件式 1 本 × 1 回の判定。1 つ目の変種は Gate に当てた定義(集計つき。verdict は meets・insufficient、draft の定義は notJudged draft)、2 つ目は appliesTo に pair を含まない定義(集計なし、notJudged pairNotApplied。司令塔の決定 T-3)。gateValues は人間の確定値の const、G-3 は読み筋の側を当てられないとき values が空・当てたとき n・actualTrue・pvTrue が必須(監査 93 の S-2)。docs/STEP_D4_PLAN_2026-09-15.md §7・§13",
+  "oneOf": [
+    {
+      "type": "object",
+      "properties": {
+        "contract": {
+          "const": "diagnosis-gate"
+        },
+        "schemaVersion": {
+          "const": "0.1"
+        },
+        "person": {
+          "type": "string",
+          "pattern": "^p[0-9]+$"
+        },
+        "testPerson": {
+          "type": "string",
+          "pattern": "^p[0-9]+$"
+        },
+        "condition": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "label": {
+              "type": "string"
+            },
+            "status": {
+              "enum": [
+                "draft",
+                "approved"
+              ]
+            },
+            "definitionSha256": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            }
+          },
+          "required": [
+            "id",
+            "label",
+            "status",
+            "definitionSha256"
+          ],
+          "additionalProperties": false
+        },
+        "source": {
+          "type": "object",
+          "properties": {
+            "referenceNodes": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "evaluation": {
+              "const": "light"
+            }
+          },
+          "required": [
+            "referenceNodes",
+            "evaluation"
+          ],
+          "additionalProperties": false
+        },
+        "material": {
+          "type": "object",
+          "properties": {
+            "inputs": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "path": {
+                    "type": "string"
+                  },
+                  "sha256": {
+                    "type": "string",
+                    "pattern": "^[0-9a-f]{64}$"
+                  }
+                },
+                "required": [
+                  "path",
+                  "sha256"
+                ],
+                "additionalProperties": false
+              },
+              "minItems": 1
+            },
+            "tally": {
+              "type": "object",
+              "properties": {
+                "games": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "judgements": {
+                  "type": "object",
+                  "properties": {
+                    "match": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "noMatch": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "undecidable": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "undecidableReasons": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "path": {
+                            "type": "string"
+                          },
+                          "reason": {
+                            "type": "string"
+                          },
+                          "rows": {
+                            "type": "integer",
+                            "minimum": 0
+                          }
+                        },
+                        "required": [
+                          "path",
+                          "reason",
+                          "rows"
+                        ],
+                        "additionalProperties": false
+                      }
+                    },
+                    "movesMissing": {
+                      "type": "integer",
+                      "minimum": 0
+                    }
+                  },
+                  "required": [
+                    "match",
+                    "noMatch",
+                    "undecidable",
+                    "undecidableReasons",
+                    "movesMissing"
+                  ],
+                  "additionalProperties": false
+                },
+                "all": {
+                  "type": "object",
+                  "properties": {
+                    "pairs": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "collapsed": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "denominator": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "excluded": {
+                      "type": "object",
+                      "properties": {
+                        "beforeUndetermined": {
+                          "type": "integer",
+                          "minimum": 0
+                        },
+                        "afterUndetermined": {
+                          "type": "integer",
+                          "minimum": 0
+                        },
+                        "cannotFall": {
+                          "type": "integer",
+                          "minimum": 0
+                        }
+                      },
+                      "required": [
+                        "beforeUndetermined",
+                        "afterUndetermined",
+                        "cannotFall"
+                      ],
+                      "additionalProperties": false
+                    },
+                    "transitions": {
+                      "type": "object",
+                      "properties": {
+                        "aheadToLevel": {
+                          "type": "integer",
+                          "minimum": 0
+                        },
+                        "levelToBehind": {
+                          "type": "integer",
+                          "minimum": 0
+                        },
+                        "aheadToBehind": {
+                          "type": "integer",
+                          "minimum": 0
+                        }
+                      },
+                      "required": [
+                        "aheadToLevel",
+                        "levelToBehind",
+                        "aheadToBehind"
+                      ],
+                      "additionalProperties": false
+                    },
+                    "byBefore": {
+                      "type": "object",
+                      "properties": {
+                        "ahead": {
+                          "type": "object",
+                          "properties": {
+                            "collapsed": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "denominator": {
+                              "type": "integer",
+                              "minimum": 0
+                            }
+                          },
+                          "required": [
+                            "collapsed",
+                            "denominator"
+                          ],
+                          "additionalProperties": false
+                        },
+                        "level": {
+                          "type": "object",
+                          "properties": {
+                            "collapsed": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "denominator": {
+                              "type": "integer",
+                              "minimum": 0
+                            }
+                          },
+                          "required": [
+                            "collapsed",
+                            "denominator"
+                          ],
+                          "additionalProperties": false
+                        }
+                      },
+                      "required": [
+                        "ahead",
+                        "level"
+                      ],
+                      "additionalProperties": false
+                    },
+                    "gamesWithDenominator": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "denominatorByGame": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "kifuId": {
+                            "type": "string"
+                          },
+                          "pairs": {
+                            "type": "integer",
+                            "minimum": 0
+                          }
+                        },
+                        "required": [
+                          "kifuId",
+                          "pairs"
+                        ],
+                        "additionalProperties": false
+                      }
+                    },
+                    "gamesWithPairs": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "gamesWithCollapse": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "within5": {
+                      "type": "object",
+                      "properties": {
+                        "dropped": {
+                          "type": "integer",
+                          "minimum": 0
+                        },
+                        "denominator": {
+                          "type": "integer",
+                          "minimum": 0
+                        },
+                        "excluded": {
+                          "type": "object",
+                          "properties": {
+                            "beforeUndetermined": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "cannotFall": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "windowShort": {
+                              "type": "integer",
+                              "minimum": 0
+                            }
+                          },
+                          "required": [
+                            "beforeUndetermined",
+                            "cannotFall",
+                            "windowShort"
+                          ],
+                          "additionalProperties": false
+                        },
+                        "distinctDrops": {
+                          "type": "integer",
+                          "minimum": 0
+                        },
+                        "distinctDropsByGame": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "kifuId": {
+                                "type": "string"
+                              },
+                              "drops": {
+                                "type": "integer",
+                                "minimum": 0
+                              }
+                            },
+                            "required": [
+                              "kifuId",
+                              "drops"
+                            ],
+                            "additionalProperties": false
+                          }
+                        }
+                      },
+                      "required": [
+                        "dropped",
+                        "denominator",
+                        "excluded",
+                        "distinctDrops",
+                        "distinctDropsByGame"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "required": [
+                    "pairs",
+                    "collapsed",
+                    "denominator",
+                    "excluded",
+                    "transitions",
+                    "byBefore",
+                    "gamesWithDenominator",
+                    "denominatorByGame",
+                    "gamesWithPairs",
+                    "gamesWithCollapse",
+                    "within5"
+                  ],
+                  "additionalProperties": false
+                },
+                "truePairs": {
+                  "type": "object",
+                  "properties": {
+                    "pairs": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "collapsed": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "denominator": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "excluded": {
+                      "type": "object",
+                      "properties": {
+                        "beforeUndetermined": {
+                          "type": "integer",
+                          "minimum": 0
+                        },
+                        "afterUndetermined": {
+                          "type": "integer",
+                          "minimum": 0
+                        },
+                        "cannotFall": {
+                          "type": "integer",
+                          "minimum": 0
+                        }
+                      },
+                      "required": [
+                        "beforeUndetermined",
+                        "afterUndetermined",
+                        "cannotFall"
+                      ],
+                      "additionalProperties": false
+                    },
+                    "transitions": {
+                      "type": "object",
+                      "properties": {
+                        "aheadToLevel": {
+                          "type": "integer",
+                          "minimum": 0
+                        },
+                        "levelToBehind": {
+                          "type": "integer",
+                          "minimum": 0
+                        },
+                        "aheadToBehind": {
+                          "type": "integer",
+                          "minimum": 0
+                        }
+                      },
+                      "required": [
+                        "aheadToLevel",
+                        "levelToBehind",
+                        "aheadToBehind"
+                      ],
+                      "additionalProperties": false
+                    },
+                    "byBefore": {
+                      "type": "object",
+                      "properties": {
+                        "ahead": {
+                          "type": "object",
+                          "properties": {
+                            "collapsed": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "denominator": {
+                              "type": "integer",
+                              "minimum": 0
+                            }
+                          },
+                          "required": [
+                            "collapsed",
+                            "denominator"
+                          ],
+                          "additionalProperties": false
+                        },
+                        "level": {
+                          "type": "object",
+                          "properties": {
+                            "collapsed": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "denominator": {
+                              "type": "integer",
+                              "minimum": 0
+                            }
+                          },
+                          "required": [
+                            "collapsed",
+                            "denominator"
+                          ],
+                          "additionalProperties": false
+                        }
+                      },
+                      "required": [
+                        "ahead",
+                        "level"
+                      ],
+                      "additionalProperties": false
+                    },
+                    "gamesWithDenominator": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "denominatorByGame": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "kifuId": {
+                            "type": "string"
+                          },
+                          "pairs": {
+                            "type": "integer",
+                            "minimum": 0
+                          }
+                        },
+                        "required": [
+                          "kifuId",
+                          "pairs"
+                        ],
+                        "additionalProperties": false
+                      }
+                    },
+                    "gamesWithPairs": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "gamesWithCollapse": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "within5": {
+                      "type": "object",
+                      "properties": {
+                        "dropped": {
+                          "type": "integer",
+                          "minimum": 0
+                        },
+                        "denominator": {
+                          "type": "integer",
+                          "minimum": 0
+                        },
+                        "excluded": {
+                          "type": "object",
+                          "properties": {
+                            "beforeUndetermined": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "cannotFall": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "windowShort": {
+                              "type": "integer",
+                              "minimum": 0
+                            }
+                          },
+                          "required": [
+                            "beforeUndetermined",
+                            "cannotFall",
+                            "windowShort"
+                          ],
+                          "additionalProperties": false
+                        },
+                        "distinctDrops": {
+                          "type": "integer",
+                          "minimum": 0
+                        },
+                        "distinctDropsByGame": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "kifuId": {
+                                "type": "string"
+                              },
+                              "drops": {
+                                "type": "integer",
+                                "minimum": 0
+                              }
+                            },
+                            "required": [
+                              "kifuId",
+                              "drops"
+                            ],
+                            "additionalProperties": false
+                          }
+                        }
+                      },
+                      "required": [
+                        "dropped",
+                        "denominator",
+                        "excluded",
+                        "distinctDrops",
+                        "distinctDropsByGame"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "required": [
+                    "pairs",
+                    "collapsed",
+                    "denominator",
+                    "excluded",
+                    "transitions",
+                    "byBefore",
+                    "gamesWithDenominator",
+                    "denominatorByGame",
+                    "gamesWithPairs",
+                    "gamesWithCollapse",
+                    "within5"
+                  ],
+                  "additionalProperties": false
+                },
+                "falsePairs": {
+                  "type": "object",
+                  "properties": {
+                    "pairs": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "collapsed": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "denominator": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "excluded": {
+                      "type": "object",
+                      "properties": {
+                        "beforeUndetermined": {
+                          "type": "integer",
+                          "minimum": 0
+                        },
+                        "afterUndetermined": {
+                          "type": "integer",
+                          "minimum": 0
+                        },
+                        "cannotFall": {
+                          "type": "integer",
+                          "minimum": 0
+                        }
+                      },
+                      "required": [
+                        "beforeUndetermined",
+                        "afterUndetermined",
+                        "cannotFall"
+                      ],
+                      "additionalProperties": false
+                    },
+                    "transitions": {
+                      "type": "object",
+                      "properties": {
+                        "aheadToLevel": {
+                          "type": "integer",
+                          "minimum": 0
+                        },
+                        "levelToBehind": {
+                          "type": "integer",
+                          "minimum": 0
+                        },
+                        "aheadToBehind": {
+                          "type": "integer",
+                          "minimum": 0
+                        }
+                      },
+                      "required": [
+                        "aheadToLevel",
+                        "levelToBehind",
+                        "aheadToBehind"
+                      ],
+                      "additionalProperties": false
+                    },
+                    "byBefore": {
+                      "type": "object",
+                      "properties": {
+                        "ahead": {
+                          "type": "object",
+                          "properties": {
+                            "collapsed": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "denominator": {
+                              "type": "integer",
+                              "minimum": 0
+                            }
+                          },
+                          "required": [
+                            "collapsed",
+                            "denominator"
+                          ],
+                          "additionalProperties": false
+                        },
+                        "level": {
+                          "type": "object",
+                          "properties": {
+                            "collapsed": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "denominator": {
+                              "type": "integer",
+                              "minimum": 0
+                            }
+                          },
+                          "required": [
+                            "collapsed",
+                            "denominator"
+                          ],
+                          "additionalProperties": false
+                        }
+                      },
+                      "required": [
+                        "ahead",
+                        "level"
+                      ],
+                      "additionalProperties": false
+                    },
+                    "gamesWithDenominator": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "denominatorByGame": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "kifuId": {
+                            "type": "string"
+                          },
+                          "pairs": {
+                            "type": "integer",
+                            "minimum": 0
+                          }
+                        },
+                        "required": [
+                          "kifuId",
+                          "pairs"
+                        ],
+                        "additionalProperties": false
+                      }
+                    },
+                    "gamesWithPairs": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "gamesWithCollapse": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "within5": {
+                      "type": "object",
+                      "properties": {
+                        "dropped": {
+                          "type": "integer",
+                          "minimum": 0
+                        },
+                        "denominator": {
+                          "type": "integer",
+                          "minimum": 0
+                        },
+                        "excluded": {
+                          "type": "object",
+                          "properties": {
+                            "beforeUndetermined": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "cannotFall": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "windowShort": {
+                              "type": "integer",
+                              "minimum": 0
+                            }
+                          },
+                          "required": [
+                            "beforeUndetermined",
+                            "cannotFall",
+                            "windowShort"
+                          ],
+                          "additionalProperties": false
+                        },
+                        "distinctDrops": {
+                          "type": "integer",
+                          "minimum": 0
+                        },
+                        "distinctDropsByGame": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "kifuId": {
+                                "type": "string"
+                              },
+                              "drops": {
+                                "type": "integer",
+                                "minimum": 0
+                              }
+                            },
+                            "required": [
+                              "kifuId",
+                              "drops"
+                            ],
+                            "additionalProperties": false
+                          }
+                        }
+                      },
+                      "required": [
+                        "dropped",
+                        "denominator",
+                        "excluded",
+                        "distinctDrops",
+                        "distinctDropsByGame"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "required": [
+                    "pairs",
+                    "collapsed",
+                    "denominator",
+                    "excluded",
+                    "transitions",
+                    "byBefore",
+                    "gamesWithDenominator",
+                    "denominatorByGame",
+                    "gamesWithPairs",
+                    "gamesWithCollapse",
+                    "within5"
+                  ],
+                  "additionalProperties": false
+                },
+                "rates": {
+                  "type": "object",
+                  "properties": {
+                    "truePercent": {
+                      "type": [
+                        "number",
+                        "null"
+                      ]
+                    },
+                    "falsePercent": {
+                      "type": [
+                        "number",
+                        "null"
+                      ]
+                    },
+                    "ratio": {
+                      "type": [
+                        "number",
+                        "null"
+                      ]
+                    },
+                    "diffPoints": {
+                      "type": [
+                        "number",
+                        "null"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "truePercent",
+                    "falsePercent",
+                    "ratio",
+                    "diffPoints"
+                  ],
+                  "additionalProperties": false
+                },
+                "pvSide": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "state": {
+                          "const": "applicable"
+                        },
+                        "n": {
+                          "type": "integer",
+                          "minimum": 0
+                        },
+                        "actualTrue": {
+                          "type": "integer",
+                          "minimum": 0
+                        },
+                        "pvTrue": {
+                          "type": "integer",
+                          "minimum": 0
+                        }
+                      },
+                      "required": [
+                        "state",
+                        "n",
+                        "actualTrue",
+                        "pvTrue"
+                      ],
+                      "additionalProperties": false
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "state": {
+                          "const": "notApplicable"
+                        },
+                        "reasons": {
+                          "type": "array",
+                          "items": {
+                            "oneOf": [
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "reason": {
+                                    "const": "noActualPath"
+                                  }
+                                },
+                                "required": [
+                                  "reason"
+                                ],
+                                "additionalProperties": false
+                              },
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "reason": {
+                                    "const": "pathNotReplaceable"
+                                  },
+                                  "paths": {
+                                    "type": "array",
+                                    "items": {
+                                      "type": "string"
+                                    },
+                                    "minItems": 1
+                                  }
+                                },
+                                "required": [
+                                  "reason",
+                                  "paths"
+                                ],
+                                "additionalProperties": false
+                              }
+                            ]
+                          },
+                          "minItems": 1
+                        }
+                      },
+                      "required": [
+                        "state",
+                        "reasons"
+                      ],
+                      "additionalProperties": false
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "games",
+                "judgements",
+                "all",
+                "truePairs",
+                "falsePairs",
+                "rates",
+                "pvSide"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "inputs",
+            "tally"
+          ],
+          "additionalProperties": false
+        },
+        "test": {
+          "type": "object",
+          "properties": {
+            "set": {
+              "type": "string",
+              "pattern": "^sente[0-9]+(\\+gote[0-9]+)?$"
+            },
+            "provisional": {
+              "type": "boolean"
+            },
+            "inputs": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "path": {
+                    "type": "string"
+                  },
+                  "sha256": {
+                    "type": "string",
+                    "pattern": "^[0-9a-f]{64}$"
+                  }
+                },
+                "required": [
+                  "path",
+                  "sha256"
+                ],
+                "additionalProperties": false
+              },
+              "minItems": 1
+            },
+            "tally": {
+              "type": "object",
+              "properties": {
+                "games": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "judgements": {
+                  "type": "object",
+                  "properties": {
+                    "match": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "noMatch": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "undecidable": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "undecidableReasons": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "path": {
+                            "type": "string"
+                          },
+                          "reason": {
+                            "type": "string"
+                          },
+                          "rows": {
+                            "type": "integer",
+                            "minimum": 0
+                          }
+                        },
+                        "required": [
+                          "path",
+                          "reason",
+                          "rows"
+                        ],
+                        "additionalProperties": false
+                      }
+                    },
+                    "movesMissing": {
+                      "type": "integer",
+                      "minimum": 0
+                    }
+                  },
+                  "required": [
+                    "match",
+                    "noMatch",
+                    "undecidable",
+                    "undecidableReasons",
+                    "movesMissing"
+                  ],
+                  "additionalProperties": false
+                },
+                "all": {
+                  "type": "object",
+                  "properties": {
+                    "pairs": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "collapsed": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "denominator": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "excluded": {
+                      "type": "object",
+                      "properties": {
+                        "beforeUndetermined": {
+                          "type": "integer",
+                          "minimum": 0
+                        },
+                        "afterUndetermined": {
+                          "type": "integer",
+                          "minimum": 0
+                        },
+                        "cannotFall": {
+                          "type": "integer",
+                          "minimum": 0
+                        }
+                      },
+                      "required": [
+                        "beforeUndetermined",
+                        "afterUndetermined",
+                        "cannotFall"
+                      ],
+                      "additionalProperties": false
+                    },
+                    "transitions": {
+                      "type": "object",
+                      "properties": {
+                        "aheadToLevel": {
+                          "type": "integer",
+                          "minimum": 0
+                        },
+                        "levelToBehind": {
+                          "type": "integer",
+                          "minimum": 0
+                        },
+                        "aheadToBehind": {
+                          "type": "integer",
+                          "minimum": 0
+                        }
+                      },
+                      "required": [
+                        "aheadToLevel",
+                        "levelToBehind",
+                        "aheadToBehind"
+                      ],
+                      "additionalProperties": false
+                    },
+                    "byBefore": {
+                      "type": "object",
+                      "properties": {
+                        "ahead": {
+                          "type": "object",
+                          "properties": {
+                            "collapsed": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "denominator": {
+                              "type": "integer",
+                              "minimum": 0
+                            }
+                          },
+                          "required": [
+                            "collapsed",
+                            "denominator"
+                          ],
+                          "additionalProperties": false
+                        },
+                        "level": {
+                          "type": "object",
+                          "properties": {
+                            "collapsed": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "denominator": {
+                              "type": "integer",
+                              "minimum": 0
+                            }
+                          },
+                          "required": [
+                            "collapsed",
+                            "denominator"
+                          ],
+                          "additionalProperties": false
+                        }
+                      },
+                      "required": [
+                        "ahead",
+                        "level"
+                      ],
+                      "additionalProperties": false
+                    },
+                    "gamesWithDenominator": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "denominatorByGame": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "kifuId": {
+                            "type": "string"
+                          },
+                          "pairs": {
+                            "type": "integer",
+                            "minimum": 0
+                          }
+                        },
+                        "required": [
+                          "kifuId",
+                          "pairs"
+                        ],
+                        "additionalProperties": false
+                      }
+                    },
+                    "gamesWithPairs": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "gamesWithCollapse": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "within5": {
+                      "type": "object",
+                      "properties": {
+                        "dropped": {
+                          "type": "integer",
+                          "minimum": 0
+                        },
+                        "denominator": {
+                          "type": "integer",
+                          "minimum": 0
+                        },
+                        "excluded": {
+                          "type": "object",
+                          "properties": {
+                            "beforeUndetermined": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "cannotFall": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "windowShort": {
+                              "type": "integer",
+                              "minimum": 0
+                            }
+                          },
+                          "required": [
+                            "beforeUndetermined",
+                            "cannotFall",
+                            "windowShort"
+                          ],
+                          "additionalProperties": false
+                        },
+                        "distinctDrops": {
+                          "type": "integer",
+                          "minimum": 0
+                        },
+                        "distinctDropsByGame": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "kifuId": {
+                                "type": "string"
+                              },
+                              "drops": {
+                                "type": "integer",
+                                "minimum": 0
+                              }
+                            },
+                            "required": [
+                              "kifuId",
+                              "drops"
+                            ],
+                            "additionalProperties": false
+                          }
+                        }
+                      },
+                      "required": [
+                        "dropped",
+                        "denominator",
+                        "excluded",
+                        "distinctDrops",
+                        "distinctDropsByGame"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "required": [
+                    "pairs",
+                    "collapsed",
+                    "denominator",
+                    "excluded",
+                    "transitions",
+                    "byBefore",
+                    "gamesWithDenominator",
+                    "denominatorByGame",
+                    "gamesWithPairs",
+                    "gamesWithCollapse",
+                    "within5"
+                  ],
+                  "additionalProperties": false
+                },
+                "truePairs": {
+                  "type": "object",
+                  "properties": {
+                    "pairs": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "collapsed": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "denominator": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "excluded": {
+                      "type": "object",
+                      "properties": {
+                        "beforeUndetermined": {
+                          "type": "integer",
+                          "minimum": 0
+                        },
+                        "afterUndetermined": {
+                          "type": "integer",
+                          "minimum": 0
+                        },
+                        "cannotFall": {
+                          "type": "integer",
+                          "minimum": 0
+                        }
+                      },
+                      "required": [
+                        "beforeUndetermined",
+                        "afterUndetermined",
+                        "cannotFall"
+                      ],
+                      "additionalProperties": false
+                    },
+                    "transitions": {
+                      "type": "object",
+                      "properties": {
+                        "aheadToLevel": {
+                          "type": "integer",
+                          "minimum": 0
+                        },
+                        "levelToBehind": {
+                          "type": "integer",
+                          "minimum": 0
+                        },
+                        "aheadToBehind": {
+                          "type": "integer",
+                          "minimum": 0
+                        }
+                      },
+                      "required": [
+                        "aheadToLevel",
+                        "levelToBehind",
+                        "aheadToBehind"
+                      ],
+                      "additionalProperties": false
+                    },
+                    "byBefore": {
+                      "type": "object",
+                      "properties": {
+                        "ahead": {
+                          "type": "object",
+                          "properties": {
+                            "collapsed": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "denominator": {
+                              "type": "integer",
+                              "minimum": 0
+                            }
+                          },
+                          "required": [
+                            "collapsed",
+                            "denominator"
+                          ],
+                          "additionalProperties": false
+                        },
+                        "level": {
+                          "type": "object",
+                          "properties": {
+                            "collapsed": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "denominator": {
+                              "type": "integer",
+                              "minimum": 0
+                            }
+                          },
+                          "required": [
+                            "collapsed",
+                            "denominator"
+                          ],
+                          "additionalProperties": false
+                        }
+                      },
+                      "required": [
+                        "ahead",
+                        "level"
+                      ],
+                      "additionalProperties": false
+                    },
+                    "gamesWithDenominator": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "denominatorByGame": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "kifuId": {
+                            "type": "string"
+                          },
+                          "pairs": {
+                            "type": "integer",
+                            "minimum": 0
+                          }
+                        },
+                        "required": [
+                          "kifuId",
+                          "pairs"
+                        ],
+                        "additionalProperties": false
+                      }
+                    },
+                    "gamesWithPairs": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "gamesWithCollapse": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "within5": {
+                      "type": "object",
+                      "properties": {
+                        "dropped": {
+                          "type": "integer",
+                          "minimum": 0
+                        },
+                        "denominator": {
+                          "type": "integer",
+                          "minimum": 0
+                        },
+                        "excluded": {
+                          "type": "object",
+                          "properties": {
+                            "beforeUndetermined": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "cannotFall": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "windowShort": {
+                              "type": "integer",
+                              "minimum": 0
+                            }
+                          },
+                          "required": [
+                            "beforeUndetermined",
+                            "cannotFall",
+                            "windowShort"
+                          ],
+                          "additionalProperties": false
+                        },
+                        "distinctDrops": {
+                          "type": "integer",
+                          "minimum": 0
+                        },
+                        "distinctDropsByGame": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "kifuId": {
+                                "type": "string"
+                              },
+                              "drops": {
+                                "type": "integer",
+                                "minimum": 0
+                              }
+                            },
+                            "required": [
+                              "kifuId",
+                              "drops"
+                            ],
+                            "additionalProperties": false
+                          }
+                        }
+                      },
+                      "required": [
+                        "dropped",
+                        "denominator",
+                        "excluded",
+                        "distinctDrops",
+                        "distinctDropsByGame"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "required": [
+                    "pairs",
+                    "collapsed",
+                    "denominator",
+                    "excluded",
+                    "transitions",
+                    "byBefore",
+                    "gamesWithDenominator",
+                    "denominatorByGame",
+                    "gamesWithPairs",
+                    "gamesWithCollapse",
+                    "within5"
+                  ],
+                  "additionalProperties": false
+                },
+                "falsePairs": {
+                  "type": "object",
+                  "properties": {
+                    "pairs": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "collapsed": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "denominator": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "excluded": {
+                      "type": "object",
+                      "properties": {
+                        "beforeUndetermined": {
+                          "type": "integer",
+                          "minimum": 0
+                        },
+                        "afterUndetermined": {
+                          "type": "integer",
+                          "minimum": 0
+                        },
+                        "cannotFall": {
+                          "type": "integer",
+                          "minimum": 0
+                        }
+                      },
+                      "required": [
+                        "beforeUndetermined",
+                        "afterUndetermined",
+                        "cannotFall"
+                      ],
+                      "additionalProperties": false
+                    },
+                    "transitions": {
+                      "type": "object",
+                      "properties": {
+                        "aheadToLevel": {
+                          "type": "integer",
+                          "minimum": 0
+                        },
+                        "levelToBehind": {
+                          "type": "integer",
+                          "minimum": 0
+                        },
+                        "aheadToBehind": {
+                          "type": "integer",
+                          "minimum": 0
+                        }
+                      },
+                      "required": [
+                        "aheadToLevel",
+                        "levelToBehind",
+                        "aheadToBehind"
+                      ],
+                      "additionalProperties": false
+                    },
+                    "byBefore": {
+                      "type": "object",
+                      "properties": {
+                        "ahead": {
+                          "type": "object",
+                          "properties": {
+                            "collapsed": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "denominator": {
+                              "type": "integer",
+                              "minimum": 0
+                            }
+                          },
+                          "required": [
+                            "collapsed",
+                            "denominator"
+                          ],
+                          "additionalProperties": false
+                        },
+                        "level": {
+                          "type": "object",
+                          "properties": {
+                            "collapsed": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "denominator": {
+                              "type": "integer",
+                              "minimum": 0
+                            }
+                          },
+                          "required": [
+                            "collapsed",
+                            "denominator"
+                          ],
+                          "additionalProperties": false
+                        }
+                      },
+                      "required": [
+                        "ahead",
+                        "level"
+                      ],
+                      "additionalProperties": false
+                    },
+                    "gamesWithDenominator": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "denominatorByGame": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "kifuId": {
+                            "type": "string"
+                          },
+                          "pairs": {
+                            "type": "integer",
+                            "minimum": 0
+                          }
+                        },
+                        "required": [
+                          "kifuId",
+                          "pairs"
+                        ],
+                        "additionalProperties": false
+                      }
+                    },
+                    "gamesWithPairs": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "gamesWithCollapse": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "within5": {
+                      "type": "object",
+                      "properties": {
+                        "dropped": {
+                          "type": "integer",
+                          "minimum": 0
+                        },
+                        "denominator": {
+                          "type": "integer",
+                          "minimum": 0
+                        },
+                        "excluded": {
+                          "type": "object",
+                          "properties": {
+                            "beforeUndetermined": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "cannotFall": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "windowShort": {
+                              "type": "integer",
+                              "minimum": 0
+                            }
+                          },
+                          "required": [
+                            "beforeUndetermined",
+                            "cannotFall",
+                            "windowShort"
+                          ],
+                          "additionalProperties": false
+                        },
+                        "distinctDrops": {
+                          "type": "integer",
+                          "minimum": 0
+                        },
+                        "distinctDropsByGame": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "kifuId": {
+                                "type": "string"
+                              },
+                              "drops": {
+                                "type": "integer",
+                                "minimum": 0
+                              }
+                            },
+                            "required": [
+                              "kifuId",
+                              "drops"
+                            ],
+                            "additionalProperties": false
+                          }
+                        }
+                      },
+                      "required": [
+                        "dropped",
+                        "denominator",
+                        "excluded",
+                        "distinctDrops",
+                        "distinctDropsByGame"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "required": [
+                    "pairs",
+                    "collapsed",
+                    "denominator",
+                    "excluded",
+                    "transitions",
+                    "byBefore",
+                    "gamesWithDenominator",
+                    "denominatorByGame",
+                    "gamesWithPairs",
+                    "gamesWithCollapse",
+                    "within5"
+                  ],
+                  "additionalProperties": false
+                },
+                "rates": {
+                  "type": "object",
+                  "properties": {
+                    "truePercent": {
+                      "type": [
+                        "number",
+                        "null"
+                      ]
+                    },
+                    "falsePercent": {
+                      "type": [
+                        "number",
+                        "null"
+                      ]
+                    },
+                    "ratio": {
+                      "type": [
+                        "number",
+                        "null"
+                      ]
+                    },
+                    "diffPoints": {
+                      "type": [
+                        "number",
+                        "null"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "truePercent",
+                    "falsePercent",
+                    "ratio",
+                    "diffPoints"
+                  ],
+                  "additionalProperties": false
+                },
+                "pvSide": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "state": {
+                          "const": "applicable"
+                        },
+                        "n": {
+                          "type": "integer",
+                          "minimum": 0
+                        },
+                        "actualTrue": {
+                          "type": "integer",
+                          "minimum": 0
+                        },
+                        "pvTrue": {
+                          "type": "integer",
+                          "minimum": 0
+                        }
+                      },
+                      "required": [
+                        "state",
+                        "n",
+                        "actualTrue",
+                        "pvTrue"
+                      ],
+                      "additionalProperties": false
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "state": {
+                          "const": "notApplicable"
+                        },
+                        "reasons": {
+                          "type": "array",
+                          "items": {
+                            "oneOf": [
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "reason": {
+                                    "const": "noActualPath"
+                                  }
+                                },
+                                "required": [
+                                  "reason"
+                                ],
+                                "additionalProperties": false
+                              },
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "reason": {
+                                    "const": "pathNotReplaceable"
+                                  },
+                                  "paths": {
+                                    "type": "array",
+                                    "items": {
+                                      "type": "string"
+                                    },
+                                    "minItems": 1
+                                  }
+                                },
+                                "required": [
+                                  "reason",
+                                  "paths"
+                                ],
+                                "additionalProperties": false
+                              }
+                            ]
+                          },
+                          "minItems": 1
+                        }
+                      },
+                      "required": [
+                        "state",
+                        "reasons"
+                      ],
+                      "additionalProperties": false
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "games",
+                "judgements",
+                "all",
+                "truePairs",
+                "falsePairs",
+                "rates",
+                "pvSide"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "set",
+            "provisional",
+            "inputs",
+            "tally"
+          ],
+          "additionalProperties": false
+        },
+        "gate": {
+          "oneOf": [
+            {
+              "type": "object",
+              "properties": {
+                "items": {
+                  "type": "array",
+                  "items": {
+                    "oneOf": [
+                      {
+                        "type": "object",
+                        "properties": {
+                          "item": {
+                            "const": "G-1"
+                          },
+                          "values": {
+                            "type": "object",
+                            "properties": {
+                              "truePairsDenominator": {
+                                "type": "integer",
+                                "minimum": 0
+                              },
+                              "gamesWithTrueDenominator": {
+                                "type": "integer",
+                                "minimum": 0
+                              },
+                              "truePairsTotal": {
+                                "type": "integer",
+                                "minimum": 0
+                              },
+                              "gamesWithTruePairs": {
+                                "type": "integer",
+                                "minimum": 0
+                              }
+                            },
+                            "required": [
+                              "truePairsDenominator",
+                              "gamesWithTrueDenominator",
+                              "truePairsTotal",
+                              "gamesWithTruePairs"
+                            ],
+                            "additionalProperties": false
+                          },
+                          "threshold": {
+                            "type": "object",
+                            "properties": {
+                              "minTruePairs": {
+                                "type": "number"
+                              },
+                              "minGames": {
+                                "type": "number"
+                              }
+                            },
+                            "required": [
+                              "minTruePairs",
+                              "minGames"
+                            ],
+                            "additionalProperties": false
+                          },
+                          "result": {
+                            "enum": [
+                              "met",
+                              "notMet",
+                              "notEvaluable"
+                            ]
+                          },
+                          "reasons": {
+                            "type": "array",
+                            "items": {
+                              "enum": [
+                                "truePairsBelowMin",
+                                "gamesBelowMin"
+                              ]
+                            }
+                          }
+                        },
+                        "required": [
+                          "item",
+                          "values",
+                          "threshold",
+                          "result",
+                          "reasons"
+                        ],
+                        "additionalProperties": false
+                      },
+                      {
+                        "type": "object",
+                        "properties": {
+                          "item": {
+                            "const": "G-2"
+                          },
+                          "values": {
+                            "type": "object",
+                            "properties": {
+                              "trueCollapsed": {
+                                "type": "integer",
+                                "minimum": 0
+                              },
+                              "trueDenominator": {
+                                "type": "integer",
+                                "minimum": 0
+                              },
+                              "falseCollapsed": {
+                                "type": "integer",
+                                "minimum": 0
+                              },
+                              "falseDenominator": {
+                                "type": "integer",
+                                "minimum": 0
+                              }
+                            },
+                            "required": [
+                              "trueCollapsed",
+                              "trueDenominator",
+                              "falseCollapsed",
+                              "falseDenominator"
+                            ],
+                            "additionalProperties": false
+                          },
+                          "threshold": {
+                            "type": "object",
+                            "properties": {
+                              "minRateRatio": {
+                                "type": "number"
+                              },
+                              "minRateDiffPoints": {
+                                "type": "number"
+                              }
+                            },
+                            "required": [
+                              "minRateRatio",
+                              "minRateDiffPoints"
+                            ],
+                            "additionalProperties": false
+                          },
+                          "result": {
+                            "enum": [
+                              "met",
+                              "notMet",
+                              "notEvaluable"
+                            ]
+                          },
+                          "reasons": {
+                            "type": "array",
+                            "items": {
+                              "enum": [
+                                "trueDenominatorZero",
+                                "falseDenominatorZero",
+                                "ratioNotMet",
+                                "diffNotMet"
+                              ]
+                            }
+                          }
+                        },
+                        "required": [
+                          "item",
+                          "values",
+                          "threshold",
+                          "result",
+                          "reasons"
+                        ],
+                        "additionalProperties": false
+                      },
+                      {
+                        "type": "object",
+                        "properties": {
+                          "item": {
+                            "const": "G-3"
+                          },
+                          "values": {
+                            "type": "object",
+                            "properties": {},
+                            "required": [],
+                            "additionalProperties": false
+                          },
+                          "threshold": {
+                            "type": "object",
+                            "properties": {
+                              "maxPvToActualRatio": {
+                                "type": "number"
+                              }
+                            },
+                            "required": [
+                              "maxPvToActualRatio"
+                            ],
+                            "additionalProperties": false
+                          },
+                          "result": {
+                            "const": "notEvaluable"
+                          },
+                          "reasons": {
+                            "type": "array",
+                            "items": {
+                              "enum": [
+                                "pvSideNotApplicable"
+                              ]
+                            },
+                            "minItems": 1
+                          }
+                        },
+                        "required": [
+                          "item",
+                          "values",
+                          "threshold",
+                          "result",
+                          "reasons"
+                        ],
+                        "additionalProperties": false
+                      },
+                      {
+                        "type": "object",
+                        "properties": {
+                          "item": {
+                            "const": "G-3"
+                          },
+                          "values": {
+                            "type": "object",
+                            "properties": {
+                              "n": {
+                                "type": "integer",
+                                "minimum": 0
+                              },
+                              "actualTrue": {
+                                "type": "integer",
+                                "minimum": 0
+                              },
+                              "pvTrue": {
+                                "type": "integer",
+                                "minimum": 0
+                              }
+                            },
+                            "required": [
+                              "n",
+                              "actualTrue",
+                              "pvTrue"
+                            ],
+                            "additionalProperties": false
+                          },
+                          "threshold": {
+                            "type": "object",
+                            "properties": {
+                              "maxPvToActualRatio": {
+                                "type": "number"
+                              }
+                            },
+                            "required": [
+                              "maxPvToActualRatio"
+                            ],
+                            "additionalProperties": false
+                          },
+                          "result": {
+                            "enum": [
+                              "met",
+                              "notMet",
+                              "notEvaluable"
+                            ]
+                          },
+                          "reasons": {
+                            "type": "array",
+                            "items": {
+                              "enum": [
+                                "pvSetEmpty",
+                                "pvTooHigh"
+                              ]
+                            }
+                          }
+                        },
+                        "required": [
+                          "item",
+                          "values",
+                          "threshold",
+                          "result",
+                          "reasons"
+                        ],
+                        "additionalProperties": false
+                      },
+                      {
+                        "type": "object",
+                        "properties": {
+                          "item": {
+                            "const": "G-4"
+                          },
+                          "values": {
+                            "type": "object",
+                            "properties": {
+                              "testTruePairsDenominator": {
+                                "type": "integer",
+                                "minimum": 0
+                              },
+                              "testTrueCollapsed": {
+                                "type": "integer",
+                                "minimum": 0
+                              },
+                              "testFalseCollapsed": {
+                                "type": "integer",
+                                "minimum": 0
+                              },
+                              "testFalseDenominator": {
+                                "type": "integer",
+                                "minimum": 0
+                              },
+                              "testCrossDiff": {
+                                "type": "integer"
+                              },
+                              "materialCrossDiff": {
+                                "type": "integer"
+                              }
+                            },
+                            "required": [
+                              "testTruePairsDenominator",
+                              "testTrueCollapsed",
+                              "testFalseCollapsed",
+                              "testFalseDenominator",
+                              "testCrossDiff",
+                              "materialCrossDiff"
+                            ],
+                            "additionalProperties": false
+                          },
+                          "threshold": {
+                            "type": "object",
+                            "properties": {
+                              "minTestTruePairs": {
+                                "type": "number"
+                              }
+                            },
+                            "required": [
+                              "minTestTruePairs"
+                            ],
+                            "additionalProperties": false
+                          },
+                          "result": {
+                            "enum": [
+                              "met",
+                              "notMet",
+                              "notEvaluable"
+                            ]
+                          },
+                          "reasons": {
+                            "type": "array",
+                            "items": {
+                              "enum": [
+                                "testTrueDenominatorZero",
+                                "testFalseDenominatorZero",
+                                "materialDenominatorZero",
+                                "testTruePairsBelowMin",
+                                "testSignZero",
+                                "materialSignZero",
+                                "signDiffers"
+                              ]
+                            }
+                          }
+                        },
+                        "required": [
+                          "item",
+                          "values",
+                          "threshold",
+                          "result",
+                          "reasons"
+                        ],
+                        "additionalProperties": false
+                      }
+                    ]
+                  },
+                  "minItems": 4
+                },
+                "verdict": {
+                  "const": "meets"
+                },
+                "text": {
+                  "const": "追加検証する価値のある個人パターン候補"
+                }
+              },
+              "required": [
+                "items",
+                "verdict",
+                "text"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "items": {
+                  "type": "array",
+                  "items": {
+                    "oneOf": [
+                      {
+                        "type": "object",
+                        "properties": {
+                          "item": {
+                            "const": "G-1"
+                          },
+                          "values": {
+                            "type": "object",
+                            "properties": {
+                              "truePairsDenominator": {
+                                "type": "integer",
+                                "minimum": 0
+                              },
+                              "gamesWithTrueDenominator": {
+                                "type": "integer",
+                                "minimum": 0
+                              },
+                              "truePairsTotal": {
+                                "type": "integer",
+                                "minimum": 0
+                              },
+                              "gamesWithTruePairs": {
+                                "type": "integer",
+                                "minimum": 0
+                              }
+                            },
+                            "required": [
+                              "truePairsDenominator",
+                              "gamesWithTrueDenominator",
+                              "truePairsTotal",
+                              "gamesWithTruePairs"
+                            ],
+                            "additionalProperties": false
+                          },
+                          "threshold": {
+                            "type": "object",
+                            "properties": {
+                              "minTruePairs": {
+                                "type": "number"
+                              },
+                              "minGames": {
+                                "type": "number"
+                              }
+                            },
+                            "required": [
+                              "minTruePairs",
+                              "minGames"
+                            ],
+                            "additionalProperties": false
+                          },
+                          "result": {
+                            "enum": [
+                              "met",
+                              "notMet",
+                              "notEvaluable"
+                            ]
+                          },
+                          "reasons": {
+                            "type": "array",
+                            "items": {
+                              "enum": [
+                                "truePairsBelowMin",
+                                "gamesBelowMin"
+                              ]
+                            }
+                          }
+                        },
+                        "required": [
+                          "item",
+                          "values",
+                          "threshold",
+                          "result",
+                          "reasons"
+                        ],
+                        "additionalProperties": false
+                      },
+                      {
+                        "type": "object",
+                        "properties": {
+                          "item": {
+                            "const": "G-2"
+                          },
+                          "values": {
+                            "type": "object",
+                            "properties": {
+                              "trueCollapsed": {
+                                "type": "integer",
+                                "minimum": 0
+                              },
+                              "trueDenominator": {
+                                "type": "integer",
+                                "minimum": 0
+                              },
+                              "falseCollapsed": {
+                                "type": "integer",
+                                "minimum": 0
+                              },
+                              "falseDenominator": {
+                                "type": "integer",
+                                "minimum": 0
+                              }
+                            },
+                            "required": [
+                              "trueCollapsed",
+                              "trueDenominator",
+                              "falseCollapsed",
+                              "falseDenominator"
+                            ],
+                            "additionalProperties": false
+                          },
+                          "threshold": {
+                            "type": "object",
+                            "properties": {
+                              "minRateRatio": {
+                                "type": "number"
+                              },
+                              "minRateDiffPoints": {
+                                "type": "number"
+                              }
+                            },
+                            "required": [
+                              "minRateRatio",
+                              "minRateDiffPoints"
+                            ],
+                            "additionalProperties": false
+                          },
+                          "result": {
+                            "enum": [
+                              "met",
+                              "notMet",
+                              "notEvaluable"
+                            ]
+                          },
+                          "reasons": {
+                            "type": "array",
+                            "items": {
+                              "enum": [
+                                "trueDenominatorZero",
+                                "falseDenominatorZero",
+                                "ratioNotMet",
+                                "diffNotMet"
+                              ]
+                            }
+                          }
+                        },
+                        "required": [
+                          "item",
+                          "values",
+                          "threshold",
+                          "result",
+                          "reasons"
+                        ],
+                        "additionalProperties": false
+                      },
+                      {
+                        "type": "object",
+                        "properties": {
+                          "item": {
+                            "const": "G-3"
+                          },
+                          "values": {
+                            "type": "object",
+                            "properties": {},
+                            "required": [],
+                            "additionalProperties": false
+                          },
+                          "threshold": {
+                            "type": "object",
+                            "properties": {
+                              "maxPvToActualRatio": {
+                                "type": "number"
+                              }
+                            },
+                            "required": [
+                              "maxPvToActualRatio"
+                            ],
+                            "additionalProperties": false
+                          },
+                          "result": {
+                            "const": "notEvaluable"
+                          },
+                          "reasons": {
+                            "type": "array",
+                            "items": {
+                              "enum": [
+                                "pvSideNotApplicable"
+                              ]
+                            },
+                            "minItems": 1
+                          }
+                        },
+                        "required": [
+                          "item",
+                          "values",
+                          "threshold",
+                          "result",
+                          "reasons"
+                        ],
+                        "additionalProperties": false
+                      },
+                      {
+                        "type": "object",
+                        "properties": {
+                          "item": {
+                            "const": "G-3"
+                          },
+                          "values": {
+                            "type": "object",
+                            "properties": {
+                              "n": {
+                                "type": "integer",
+                                "minimum": 0
+                              },
+                              "actualTrue": {
+                                "type": "integer",
+                                "minimum": 0
+                              },
+                              "pvTrue": {
+                                "type": "integer",
+                                "minimum": 0
+                              }
+                            },
+                            "required": [
+                              "n",
+                              "actualTrue",
+                              "pvTrue"
+                            ],
+                            "additionalProperties": false
+                          },
+                          "threshold": {
+                            "type": "object",
+                            "properties": {
+                              "maxPvToActualRatio": {
+                                "type": "number"
+                              }
+                            },
+                            "required": [
+                              "maxPvToActualRatio"
+                            ],
+                            "additionalProperties": false
+                          },
+                          "result": {
+                            "enum": [
+                              "met",
+                              "notMet",
+                              "notEvaluable"
+                            ]
+                          },
+                          "reasons": {
+                            "type": "array",
+                            "items": {
+                              "enum": [
+                                "pvSetEmpty",
+                                "pvTooHigh"
+                              ]
+                            }
+                          }
+                        },
+                        "required": [
+                          "item",
+                          "values",
+                          "threshold",
+                          "result",
+                          "reasons"
+                        ],
+                        "additionalProperties": false
+                      },
+                      {
+                        "type": "object",
+                        "properties": {
+                          "item": {
+                            "const": "G-4"
+                          },
+                          "values": {
+                            "type": "object",
+                            "properties": {
+                              "testTruePairsDenominator": {
+                                "type": "integer",
+                                "minimum": 0
+                              },
+                              "testTrueCollapsed": {
+                                "type": "integer",
+                                "minimum": 0
+                              },
+                              "testFalseCollapsed": {
+                                "type": "integer",
+                                "minimum": 0
+                              },
+                              "testFalseDenominator": {
+                                "type": "integer",
+                                "minimum": 0
+                              },
+                              "testCrossDiff": {
+                                "type": "integer"
+                              },
+                              "materialCrossDiff": {
+                                "type": "integer"
+                              }
+                            },
+                            "required": [
+                              "testTruePairsDenominator",
+                              "testTrueCollapsed",
+                              "testFalseCollapsed",
+                              "testFalseDenominator",
+                              "testCrossDiff",
+                              "materialCrossDiff"
+                            ],
+                            "additionalProperties": false
+                          },
+                          "threshold": {
+                            "type": "object",
+                            "properties": {
+                              "minTestTruePairs": {
+                                "type": "number"
+                              }
+                            },
+                            "required": [
+                              "minTestTruePairs"
+                            ],
+                            "additionalProperties": false
+                          },
+                          "result": {
+                            "enum": [
+                              "met",
+                              "notMet",
+                              "notEvaluable"
+                            ]
+                          },
+                          "reasons": {
+                            "type": "array",
+                            "items": {
+                              "enum": [
+                                "testTrueDenominatorZero",
+                                "testFalseDenominatorZero",
+                                "materialDenominatorZero",
+                                "testTruePairsBelowMin",
+                                "testSignZero",
+                                "materialSignZero",
+                                "signDiffers"
+                              ]
+                            }
+                          }
+                        },
+                        "required": [
+                          "item",
+                          "values",
+                          "threshold",
+                          "result",
+                          "reasons"
+                        ],
+                        "additionalProperties": false
+                      }
+                    ]
+                  },
+                  "minItems": 4
+                },
+                "verdict": {
+                  "const": "insufficient"
+                },
+                "text": {
+                  "const": "現データでは個人パターンとして採用する根拠が不足"
+                }
+              },
+              "required": [
+                "items",
+                "verdict",
+                "text"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "notJudged": {
+                  "const": "draft"
+                }
+              },
+              "required": [
+                "notJudged"
+              ],
+              "additionalProperties": false
+            }
+          ]
+        },
+        "gateValues": {
+          "type": "object",
+          "properties": {
+            "minTruePairs": {
+              "const": 10
+            },
+            "minGames": {
+              "const": 3
+            },
+            "minRateRatio": {
+              "const": 2
+            },
+            "minRateDiffPoints": {
+              "const": 10
+            },
+            "maxPvToActualRatio": {
+              "const": 0.5
+            },
+            "minTestTruePairs": {
+              "const": 3
+            }
+          },
+          "required": [
+            "minTruePairs",
+            "minGames",
+            "minRateRatio",
+            "minRateDiffPoints",
+            "maxPvToActualRatio",
+            "minTestTruePairs"
+          ],
+          "additionalProperties": false
+        },
+        "conditionsInRun": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "provenance": {
+          "type": "object",
+          "properties": {
+            "gitHead": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "dirty": {
+              "type": [
+                "boolean",
+                "null"
+              ]
+            }
+          },
+          "required": [
+            "gitHead",
+            "dirty"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "contract",
+        "schemaVersion",
+        "person",
+        "testPerson",
+        "condition",
+        "source",
+        "material",
+        "test",
+        "gate",
+        "gateValues",
+        "conditionsInRun",
+        "provenance"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "contract": {
+          "const": "diagnosis-gate"
+        },
+        "schemaVersion": {
+          "const": "0.1"
+        },
+        "person": {
+          "type": "string",
+          "pattern": "^p[0-9]+$"
+        },
+        "testPerson": {
+          "type": "string",
+          "pattern": "^p[0-9]+$"
+        },
+        "condition": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "label": {
+              "type": "string"
+            },
+            "status": {
+              "enum": [
+                "draft",
+                "approved"
+              ]
+            },
+            "definitionSha256": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            }
+          },
+          "required": [
+            "id",
+            "label",
+            "status",
+            "definitionSha256"
+          ],
+          "additionalProperties": false
+        },
+        "source": {
+          "type": "object",
+          "properties": {
+            "referenceNodes": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "evaluation": {
+              "const": "light"
+            }
+          },
+          "required": [
+            "referenceNodes",
+            "evaluation"
+          ],
+          "additionalProperties": false
+        },
+        "material": {
+          "type": "object",
+          "properties": {
+            "inputs": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "path": {
+                    "type": "string"
+                  },
+                  "sha256": {
+                    "type": "string",
+                    "pattern": "^[0-9a-f]{64}$"
+                  }
+                },
+                "required": [
+                  "path",
+                  "sha256"
+                ],
+                "additionalProperties": false
+              },
+              "minItems": 1
+            }
+          },
+          "required": [
+            "inputs"
+          ],
+          "additionalProperties": false
+        },
+        "test": {
+          "type": "object",
+          "properties": {
+            "set": {
+              "type": "string",
+              "pattern": "^sente[0-9]+(\\+gote[0-9]+)?$"
+            },
+            "provisional": {
+              "type": "boolean"
+            },
+            "inputs": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "path": {
+                    "type": "string"
+                  },
+                  "sha256": {
+                    "type": "string",
+                    "pattern": "^[0-9a-f]{64}$"
+                  }
+                },
+                "required": [
+                  "path",
+                  "sha256"
+                ],
+                "additionalProperties": false
+              },
+              "minItems": 1
+            }
+          },
+          "required": [
+            "set",
+            "provisional",
+            "inputs"
+          ],
+          "additionalProperties": false
+        },
+        "gate": {
+          "type": "object",
+          "properties": {
+            "notJudged": {
+              "const": "pairNotApplied"
+            }
+          },
+          "required": [
+            "notJudged"
+          ],
+          "additionalProperties": false
+        },
+        "gateValues": {
+          "type": "object",
+          "properties": {
+            "minTruePairs": {
+              "const": 10
+            },
+            "minGames": {
+              "const": 3
+            },
+            "minRateRatio": {
+              "const": 2
+            },
+            "minRateDiffPoints": {
+              "const": 10
+            },
+            "maxPvToActualRatio": {
+              "const": 0.5
+            },
+            "minTestTruePairs": {
+              "const": 3
+            }
+          },
+          "required": [
+            "minTruePairs",
+            "minGames",
+            "minRateRatio",
+            "minRateDiffPoints",
+            "maxPvToActualRatio",
+            "minTestTruePairs"
+          ],
+          "additionalProperties": false
+        },
+        "conditionsInRun": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "provenance": {
+          "type": "object",
+          "properties": {
+            "gitHead": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "dirty": {
+              "type": [
+                "boolean",
+                "null"
+              ]
+            }
+          },
+          "required": [
+            "gitHead",
+            "dirty"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "contract",
+        "schemaVersion",
+        "person",
+        "testPerson",
+        "condition",
+        "source",
+        "material",
+        "test",
+        "gate",
+        "gateValues",
+        "conditionsInRun",
+        "provenance"
+      ],
+      "additionalProperties": false
+    }
+  ]
+}
