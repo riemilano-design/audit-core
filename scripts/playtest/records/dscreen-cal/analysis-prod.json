@@ -1,0 +1,2073 @@
+{
+ "d3->stage2": {
+  "files": 20,
+  "common": 93,
+  "byCls": {
+   "extra": 4,
+   "missed": 11,
+   "kindsDiffer": 4,
+   "extraUncomparable": 2,
+   "missedUncomparable": 1
+  },
+  "bucketTable": {
+   "境から 50 以内": {
+    "extra": 3,
+    "missed": 10,
+    "kindsDiffer": 1
+   },
+   "51〜150": {
+    "extra": 1
+   },
+   "cp の差が無い(詰み・比べられない)": {
+    "kindsDiffer": 1,
+    "missedUncomparable": 1
+   },
+   "300 超": {
+    "extraUncomparable": 1,
+    "missed": 1,
+    "kindsDiffer": 1
+   },
+   "151〜300": {
+    "extraUncomparable": 1,
+    "kindsDiffer": 1
+   }
+  },
+  "rowStates": {
+   "light=measured deep=noDeepKey": 126,
+   "light=measured deep=measured": 218,
+   "light=notMeasuredGameEnd deep=notMeasuredGameEnd": 12,
+   "light=notMeasuredInCheck deep=notMeasuredInCheck": 24,
+   "light=notMeasuredGameEnd deep=noDeepKey": 8,
+   "light=notMeasuredInCheck deep=noDeepKey": 18,
+   "light=notEvaluation deep=measured": 3
+  },
+  "lightPairReasons": {
+   "from=noDeepKey to=noDeepKey": 120,
+   "from=noDeepKey to=measured": 22,
+   "from=measured to=notMeasuredGameEnd": 12,
+   "from=measured to=notMeasuredInCheck": 17,
+   "from=notMeasuredInCheck to=notMeasuredInCheck": 5,
+   "from=notMeasuredInCheck to=measured": 12,
+   "from=notMeasuredInCheck to=noDeepKey": 7,
+   "from=measured to=noDeepKey": 5,
+   "from=noDeepKey to=notMeasuredInCheck": 2
+  },
+  "cases": [
+   {
+    "kifuId": "b-game-01",
+    "key": "24-26",
+    "branchPly": 25,
+    "cls": "extra",
+    "kindsA": null,
+    "kindsB": "cpDrop",
+    "bucket": "境から 50 以内",
+    "a": {
+     "source": "4M",
+     "kind": "compared",
+     "diffCp": -342,
+     "mateAfter": null,
+     "reason": null,
+     "from": {
+      "cp": -2126,
+      "mate": null,
+      "apMate": null
+     },
+     "to": {
+      "cp": -2468,
+      "mate": null,
+      "apMate": null
+     }
+    },
+    "b": {
+     "source": "deep",
+     "kind": "compared",
+     "diffCp": -412,
+     "mateAfter": null,
+     "reason": null,
+     "from": {
+      "cp": -1983,
+      "mate": null,
+      "apMate": null
+     },
+     "to": {
+      "cp": -2395,
+      "mate": null,
+      "apMate": null
+     }
+    },
+    "bDeepUnavailable": false
+   },
+   {
+    "kifuId": "b-game-01",
+    "key": "30-32",
+    "branchPly": 31,
+    "cls": "extra",
+    "kindsA": null,
+    "kindsB": "cpDrop",
+    "bucket": "境から 50 以内",
+    "a": {
+     "source": "4M",
+     "kind": "compared",
+     "diffCp": -327,
+     "mateAfter": null,
+     "reason": null,
+     "from": {
+      "cp": -3478,
+      "mate": null,
+      "apMate": null
+     },
+     "to": {
+      "cp": -3805,
+      "mate": null,
+      "apMate": null
+     }
+    },
+    "b": {
+     "source": "deep",
+     "kind": "compared",
+     "diffCp": -403,
+     "mateAfter": null,
+     "reason": null,
+     "from": {
+      "cp": -3244,
+      "mate": null,
+      "apMate": null
+     },
+     "to": {
+      "cp": -3647,
+      "mate": null,
+      "apMate": null
+     }
+    },
+    "bDeepUnavailable": false
+   },
+   {
+    "kifuId": "b-game-03",
+    "key": "12-14",
+    "branchPly": 13,
+    "cls": "missed",
+    "kindsA": "cpDrop",
+    "kindsB": null,
+    "bucket": "境から 50 以内",
+    "a": {
+     "source": "4M",
+     "kind": "compared",
+     "diffCp": -430,
+     "mateAfter": null,
+     "reason": null,
+     "from": {
+      "cp": -1675,
+      "mate": null,
+      "apMate": null
+     },
+     "to": {
+      "cp": -2105,
+      "mate": null,
+      "apMate": null
+     }
+    },
+    "b": {
+     "source": "deep",
+     "kind": "compared",
+     "diffCp": -288,
+     "mateAfter": null,
+     "reason": null,
+     "from": {
+      "cp": -1637,
+      "mate": null,
+      "apMate": null
+     },
+     "to": {
+      "cp": -1925,
+      "mate": null,
+      "apMate": null
+     }
+    },
+    "bDeepUnavailable": false
+   },
+   {
+    "kifuId": "b-game-04",
+    "key": "20-22",
+    "branchPly": 21,
+    "cls": "missed",
+    "kindsA": "cpDrop",
+    "kindsB": null,
+    "bucket": "境から 50 以内",
+    "a": {
+     "source": "4M",
+     "kind": "compared",
+     "diffCp": -527,
+     "mateAfter": null,
+     "reason": null,
+     "from": {
+      "cp": -1640,
+      "mate": null,
+      "apMate": null
+     },
+     "to": {
+      "cp": -2167,
+      "mate": null,
+      "apMate": null
+     }
+    },
+    "b": {
+     "source": "deep",
+     "kind": "compared",
+     "diffCp": -380,
+     "mateAfter": null,
+     "reason": null,
+     "from": {
+      "cp": -1647,
+      "mate": null,
+      "apMate": null
+     },
+     "to": {
+      "cp": -2027,
+      "mate": null,
+      "apMate": null
+     }
+    },
+    "bDeepUnavailable": false
+   },
+   {
+    "kifuId": "b-game-04",
+    "key": "28-30",
+    "branchPly": 29,
+    "cls": "missed",
+    "kindsA": "cpDrop",
+    "kindsB": null,
+    "bucket": "境から 50 以内",
+    "a": {
+     "source": "4M",
+     "kind": "compared",
+     "diffCp": -480,
+     "mateAfter": null,
+     "reason": null,
+     "from": {
+      "cp": -4150,
+      "mate": null,
+      "apMate": null
+     },
+     "to": {
+      "cp": -4630,
+      "mate": null,
+      "apMate": null
+     }
+    },
+    "b": {
+     "source": "deep",
+     "kind": "compared",
+     "diffCp": -355,
+     "mateAfter": null,
+     "reason": null,
+     "from": {
+      "cp": -4146,
+      "mate": null,
+      "apMate": null
+     },
+     "to": {
+      "cp": -4501,
+      "mate": null,
+      "apMate": null
+     }
+    },
+    "bDeepUnavailable": false
+   },
+   {
+    "kifuId": "b-game-04",
+    "key": "18-20",
+    "branchPly": 19,
+    "cls": "extra",
+    "kindsA": null,
+    "kindsB": "cpDrop",
+    "bucket": "境から 50 以内",
+    "a": {
+     "source": "4M",
+     "kind": "compared",
+     "diffCp": -359,
+     "mateAfter": null,
+     "reason": null,
+     "from": {
+      "cp": -1281,
+      "mate": null,
+      "apMate": null
+     },
+     "to": {
+      "cp": -1640,
+      "mate": null,
+      "apMate": null
+     }
+    },
+    "b": {
+     "source": "deep",
+     "kind": "compared",
+     "diffCp": -477,
+     "mateAfter": null,
+     "reason": null,
+     "from": {
+      "cp": -1170,
+      "mate": null,
+      "apMate": null
+     },
+     "to": {
+      "cp": -1647,
+      "mate": null,
+      "apMate": null
+     }
+    },
+    "bDeepUnavailable": false
+   },
+   {
+    "kifuId": "b-game-07",
+    "key": "26-28",
+    "branchPly": 27,
+    "cls": "missed",
+    "kindsA": "cpDrop",
+    "kindsB": null,
+    "bucket": "境から 50 以内",
+    "a": {
+     "source": "4M",
+     "kind": "compared",
+     "diffCp": -430,
+     "mateAfter": null,
+     "reason": null,
+     "from": {
+      "cp": -3370,
+      "mate": null,
+      "apMate": null
+     },
+     "to": {
+      "cp": -3800,
+      "mate": null,
+      "apMate": null
+     }
+    },
+    "b": {
+     "source": "deep",
+     "kind": "compared",
+     "diffCp": -352,
+     "mateAfter": null,
+     "reason": null,
+     "from": {
+      "cp": -3194,
+      "mate": null,
+      "apMate": null
+     },
+     "to": {
+      "cp": -3546,
+      "mate": null,
+      "apMate": null
+     }
+    },
+    "bDeepUnavailable": false
+   },
+   {
+    "kifuId": "b-game-09",
+    "key": "24-26",
+    "branchPly": 25,
+    "cls": "missed",
+    "kindsA": "cpDrop",
+    "kindsB": null,
+    "bucket": "境から 50 以内",
+    "a": {
+     "source": "4M",
+     "kind": "compared",
+     "diffCp": -404,
+     "mateAfter": null,
+     "reason": null,
+     "from": {
+      "cp": -2238,
+      "mate": null,
+      "apMate": null
+     },
+     "to": {
+      "cp": -2642,
+      "mate": null,
+      "apMate": null
+     }
+    },
+    "b": {
+     "source": "deep",
+     "kind": "compared",
+     "diffCp": -350,
+     "mateAfter": null,
+     "reason": null,
+     "from": {
+      "cp": -2142,
+      "mate": null,
+      "apMate": null
+     },
+     "to": {
+      "cp": -2492,
+      "mate": null,
+      "apMate": null
+     }
+    },
+    "bDeepUnavailable": false
+   },
+   {
+    "kifuId": "b-game-10",
+    "key": "38-40",
+    "branchPly": 39,
+    "cls": "missed",
+    "kindsA": "cpDrop",
+    "kindsB": null,
+    "bucket": "境から 50 以内",
+    "a": {
+     "source": "4M",
+     "kind": "compared",
+     "diffCp": -414,
+     "mateAfter": null,
+     "reason": null,
+     "from": {
+      "cp": -3577,
+      "mate": null,
+      "apMate": null
+     },
+     "to": {
+      "cp": -3991,
+      "mate": null,
+      "apMate": null
+     }
+    },
+    "b": {
+     "source": "deep",
+     "kind": "compared",
+     "diffCp": -301,
+     "mateAfter": null,
+     "reason": null,
+     "from": {
+      "cp": -3440,
+      "mate": null,
+      "apMate": null
+     },
+     "to": {
+      "cp": -3741,
+      "mate": null,
+      "apMate": null
+     }
+    },
+    "bDeepUnavailable": false
+   },
+   {
+    "kifuId": "b-game-10",
+    "key": "50-52",
+    "branchPly": 51,
+    "cls": "kindsDiffer",
+    "kindsA": "cpDrop+matedIfPass",
+    "kindsB": "matedIfPass",
+    "bucket": "境から 50 以内",
+    "a": {
+     "source": "4M",
+     "kind": "compared",
+     "diffCp": -819,
+     "mateAfter": null,
+     "reason": null,
+     "from": {
+      "cp": -4748,
+      "mate": null,
+      "apMate": null
+     },
+     "to": {
+      "cp": -5567,
+      "mate": null,
+      "apMate": 17
+     }
+    },
+    "b": {
+     "source": "deep",
+     "kind": "compared",
+     "diffCp": -382,
+     "mateAfter": null,
+     "reason": null,
+     "from": {
+      "cp": -4715,
+      "mate": null,
+      "apMate": null
+     },
+     "to": {
+      "cp": -5097,
+      "mate": null,
+      "apMate": 17
+     }
+    },
+    "bDeepUnavailable": false
+   },
+   {
+    "kifuId": "b2-game-01",
+    "key": "32-34",
+    "branchPly": 33,
+    "cls": "extra",
+    "kindsA": null,
+    "kindsB": "cpDrop",
+    "bucket": "51〜150",
+    "a": {
+     "source": "4M",
+     "kind": "compared",
+     "diffCp": -295,
+     "mateAfter": null,
+     "reason": null,
+     "from": {
+      "cp": -4428,
+      "mate": null,
+      "apMate": null
+     },
+     "to": {
+      "cp": -4723,
+      "mate": null,
+      "apMate": null
+     }
+    },
+    "b": {
+     "source": "deep",
+     "kind": "compared",
+     "diffCp": -472,
+     "mateAfter": null,
+     "reason": null,
+     "from": {
+      "cp": -4285,
+      "mate": null,
+      "apMate": null
+     },
+     "to": {
+      "cp": -4757,
+      "mate": null,
+      "apMate": null
+     }
+    },
+    "bDeepUnavailable": false
+   },
+   {
+    "kifuId": "b2-game-04",
+    "key": "34-36",
+    "branchPly": 35,
+    "cls": "kindsDiffer",
+    "kindsA": "matedIfPass",
+    "kindsB": "mateDrop+matedIfPass",
+    "bucket": "cp の差が無い(詰み・比べられない)",
+    "a": {
+     "source": "4M",
+     "kind": "notCompared",
+     "diffCp": null,
+     "mateAfter": null,
+     "reason": "notEvaluation",
+     "from": {
+      "state": "notEvaluation"
+     },
+     "to": {
+      "cp": null,
+      "mate": -8,
+      "apMate": 1
+     }
+    },
+    "b": {
+     "source": "deep",
+     "kind": "mateAfter",
+     "diffCp": null,
+     "mateAfter": -8,
+     "reason": null,
+     "from": {
+      "cp": -5682,
+      "mate": null,
+      "apMate": 15
+     },
+     "to": {
+      "cp": null,
+      "mate": -8,
+      "apMate": 1
+     }
+    },
+    "bDeepUnavailable": false
+   },
+   {
+    "kifuId": "b2-game-04",
+    "key": "32-34",
+    "branchPly": 33,
+    "cls": "extraUncomparable",
+    "kindsA": null,
+    "kindsB": "matedIfPass",
+    "bucket": "300 超",
+    "a": {
+     "source": "4M",
+     "kind": "notCompared",
+     "diffCp": null,
+     "mateAfter": null,
+     "reason": "notEvaluation",
+     "from": {
+      "cp": -5681,
+      "mate": null,
+      "apMate": 15
+     },
+     "to": {
+      "state": "notEvaluation"
+     }
+    },
+    "b": {
+     "source": "deep",
+     "kind": "compared",
+     "diffCp": 22556,
+     "mateAfter": null,
+     "reason": null,
+     "from": {
+      "cp": -28238,
+      "mate": null,
+      "apMate": 15
+     },
+     "to": {
+      "cp": -5682,
+      "mate": null,
+      "apMate": 15
+     }
+    },
+    "bDeepUnavailable": false
+   },
+   {
+    "kifuId": "b2-game-05",
+    "key": "14-16",
+    "branchPly": 15,
+    "cls": "missed",
+    "kindsA": "cpDrop",
+    "kindsB": null,
+    "bucket": "境から 50 以内",
+    "a": {
+     "source": "4M",
+     "kind": "compared",
+     "diffCp": -435,
+     "mateAfter": null,
+     "reason": null,
+     "from": {
+      "cp": -211,
+      "mate": null,
+      "apMate": null
+     },
+     "to": {
+      "cp": -646,
+      "mate": null,
+      "apMate": null
+     }
+    },
+    "b": {
+     "source": "deep",
+     "kind": "compared",
+     "diffCp": -261,
+     "mateAfter": null,
+     "reason": null,
+     "from": {
+      "cp": -246,
+      "mate": null,
+      "apMate": null
+     },
+     "to": {
+      "cp": -507,
+      "mate": null,
+      "apMate": null
+     }
+    },
+    "bDeepUnavailable": false
+   },
+   {
+    "kifuId": "b2-game-05",
+    "key": "22-24",
+    "branchPly": 23,
+    "cls": "missed",
+    "kindsA": "cpDrop",
+    "kindsB": null,
+    "bucket": "境から 50 以内",
+    "a": {
+     "source": "4M",
+     "kind": "compared",
+     "diffCp": -443,
+     "mateAfter": null,
+     "reason": null,
+     "from": {
+      "cp": -3583,
+      "mate": null,
+      "apMate": null
+     },
+     "to": {
+      "cp": -4026,
+      "mate": null,
+      "apMate": null
+     }
+    },
+    "b": {
+     "source": "deep",
+     "kind": "compared",
+     "diffCp": -365,
+     "mateAfter": null,
+     "reason": null,
+     "from": {
+      "cp": -3462,
+      "mate": null,
+      "apMate": null
+     },
+     "to": {
+      "cp": -3827,
+      "mate": null,
+      "apMate": null
+     }
+    },
+    "bDeepUnavailable": false
+   },
+   {
+    "kifuId": "b2-game-07",
+    "key": "20-22",
+    "branchPly": 21,
+    "cls": "missed",
+    "kindsA": "cpDrop",
+    "kindsB": null,
+    "bucket": "境から 50 以内",
+    "a": {
+     "source": "4M",
+     "kind": "compared",
+     "diffCp": -428,
+     "mateAfter": null,
+     "reason": null,
+     "from": {
+      "cp": -3366,
+      "mate": null,
+      "apMate": null
+     },
+     "to": {
+      "cp": -3794,
+      "mate": null,
+      "apMate": null
+     }
+    },
+    "b": {
+     "source": "deep",
+     "kind": "compared",
+     "diffCp": -322,
+     "mateAfter": null,
+     "reason": null,
+     "from": {
+      "cp": -3131,
+      "mate": null,
+      "apMate": null
+     },
+     "to": {
+      "cp": -3453,
+      "mate": null,
+      "apMate": null
+     }
+    },
+    "bDeepUnavailable": false
+   },
+   {
+    "kifuId": "b2-game-07",
+    "key": "28-30",
+    "branchPly": 29,
+    "cls": "missed",
+    "kindsA": "matedIfPass",
+    "kindsB": null,
+    "bucket": "300 超",
+    "a": {
+     "source": "4M",
+     "kind": "compared",
+     "diffCp": -96,
+     "mateAfter": null,
+     "reason": null,
+     "from": {
+      "cp": -4726,
+      "mate": null,
+      "apMate": null
+     },
+     "to": {
+      "cp": -4822,
+      "mate": null,
+      "apMate": 21
+     }
+    },
+    "b": {
+     "source": "light",
+     "kind": "compared",
+     "diffCp": -11,
+     "mateAfter": null,
+     "reason": null,
+     "from": {
+      "cp": -4524,
+      "mate": null,
+      "apMate": null
+     },
+     "to": {
+      "cp": -4535,
+      "mate": null,
+      "apMate": null
+     }
+    },
+    "bDeepUnavailable": false
+   },
+   {
+    "kifuId": "b2-game-07",
+    "key": "34-36",
+    "branchPly": 35,
+    "cls": "kindsDiffer",
+    "kindsA": "matedIfPass",
+    "kindsB": "mateDrop+matedIfPass",
+    "bucket": "300 超",
+    "a": {
+     "source": "4M",
+     "kind": "compared",
+     "diffCp": 3429,
+     "mateAfter": null,
+     "reason": null,
+     "from": {
+      "cp": -8367,
+      "mate": null,
+      "apMate": 15
+     },
+     "to": {
+      "cp": -4938,
+      "mate": null,
+      "apMate": 1
+     }
+    },
+    "b": {
+     "source": "deep",
+     "kind": "mateAfter",
+     "diffCp": null,
+     "mateAfter": -16,
+     "reason": null,
+     "from": {
+      "cp": -7521,
+      "mate": null,
+      "apMate": 21
+     },
+     "to": {
+      "cp": null,
+      "mate": -16,
+      "apMate": 1
+     }
+    },
+    "bDeepUnavailable": false
+   },
+   {
+    "kifuId": "b2-game-08",
+    "key": "26-28",
+    "branchPly": 27,
+    "cls": "missedUncomparable",
+    "kindsA": "matedIfPass",
+    "kindsB": null,
+    "bucket": "cp の差が無い(詰み・比べられない)",
+    "a": {
+     "source": "4M",
+     "kind": "notCompared",
+     "diffCp": null,
+     "mateAfter": null,
+     "reason": "notMeasuredInCheck",
+     "from": {
+      "state": "notMeasuredInCheck"
+     },
+     "to": {
+      "cp": -5057,
+      "mate": null,
+      "apMate": 27
+     }
+    },
+    "b": {
+     "source": "light",
+     "kind": "notCompared",
+     "diffCp": null,
+     "mateAfter": null,
+     "reason": "notMeasuredInCheck",
+     "from": {
+      "state": "notMeasuredInCheck"
+     },
+     "to": {
+      "state": "notEvaluation"
+     }
+    },
+    "bDeepUnavailable": false
+   },
+   {
+    "kifuId": "b2-game-08",
+    "key": "30-32",
+    "branchPly": 31,
+    "cls": "extraUncomparable",
+    "kindsA": null,
+    "kindsB": "cpDrop+matedIfPass",
+    "bucket": "151〜300",
+    "a": {
+     "source": "4M",
+     "kind": "notCompared",
+     "diffCp": null,
+     "mateAfter": null,
+     "reason": "notEvaluation",
+     "from": {
+      "cp": -4751,
+      "mate": null,
+      "apMate": 25
+     },
+     "to": {
+      "state": "notEvaluation"
+     }
+    },
+    "b": {
+     "source": "deep",
+     "kind": "compared",
+     "diffCp": -653,
+     "mateAfter": null,
+     "reason": null,
+     "from": {
+      "cp": -4657,
+      "mate": null,
+      "apMate": 25
+     },
+     "to": {
+      "cp": -5310,
+      "mate": null,
+      "apMate": 19
+     }
+    },
+    "bDeepUnavailable": false
+   },
+   {
+    "kifuId": "b2-game-09",
+    "key": "22-24",
+    "branchPly": 23,
+    "cls": "missed",
+    "kindsA": "matedIfPass",
+    "kindsB": null,
+    "bucket": "境から 50 以内",
+    "a": {
+     "source": "4M",
+     "kind": "compared",
+     "diffCp": -176,
+     "mateAfter": null,
+     "reason": null,
+     "from": {
+      "cp": -4586,
+      "mate": null,
+      "apMate": null
+     },
+     "to": {
+      "cp": -4762,
+      "mate": null,
+      "apMate": 25
+     }
+    },
+    "b": {
+     "source": "deep",
+     "kind": "compared",
+     "diffCp": -392,
+     "mateAfter": null,
+     "reason": null,
+     "from": {
+      "cp": -4380,
+      "mate": null,
+      "apMate": null
+     },
+     "to": {
+      "cp": -4772,
+      "mate": null,
+      "apMate": null
+     }
+    },
+    "bDeepUnavailable": false
+   },
+   {
+    "kifuId": "b2-game-09",
+    "key": "26-28",
+    "branchPly": 27,
+    "cls": "kindsDiffer",
+    "kindsA": "mateDrop+matedIfPass",
+    "kindsB": "matedIfPass",
+    "bucket": "151〜300",
+    "a": {
+     "source": "4M",
+     "kind": "mateAfter",
+     "diffCp": null,
+     "mateAfter": -18,
+     "reason": null,
+     "from": {
+      "cp": -4818,
+      "mate": null,
+      "apMate": 15
+     },
+     "to": {
+      "cp": null,
+      "mate": -18,
+      "apMate": 1
+     }
+    },
+    "b": {
+     "source": "deep",
+     "kind": "compared",
+     "diffCp": -189,
+     "mateAfter": null,
+     "reason": null,
+     "from": {
+      "cp": -4905,
+      "mate": null,
+      "apMate": 15
+     },
+     "to": {
+      "cp": -5094,
+      "mate": null,
+      "apMate": 1
+     }
+    },
+    "bDeepUnavailable": false
+   }
+  ]
+ },
+ "floor1->stage2": {
+  "files": 20,
+  "common": 92,
+  "byCls": {
+   "missed": 11,
+   "extra": 5,
+   "kindsDiffer": 5,
+   "missedUncomparable": 1,
+   "extraUncomparable": 1
+  },
+  "bucketTable": {
+   "境から 50 以内": {
+    "missed": 9,
+    "extra": 4,
+    "kindsDiffer": 1
+   },
+   "51〜150": {
+    "missed": 1,
+    "extra": 1,
+    "kindsDiffer": 3
+   },
+   "300 超": {
+    "kindsDiffer": 1,
+    "missed": 1
+   },
+   "cp の差が無い(詰み・比べられない)": {
+    "missedUncomparable": 1
+   },
+   "151〜300": {
+    "extraUncomparable": 1
+   }
+  },
+  "rowStates": {
+   "light=measured deep=noDeepKey": 126,
+   "light=measured deep=measured": 218,
+   "light=notMeasuredGameEnd deep=notMeasuredGameEnd": 12,
+   "light=notMeasuredInCheck deep=notMeasuredInCheck": 24,
+   "light=notMeasuredGameEnd deep=noDeepKey": 8,
+   "light=notMeasuredInCheck deep=noDeepKey": 18,
+   "light=notEvaluation deep=measured": 3
+  },
+  "lightPairReasons": {
+   "from=noDeepKey to=noDeepKey": 120,
+   "from=noDeepKey to=measured": 22,
+   "from=measured to=notMeasuredGameEnd": 12,
+   "from=measured to=notMeasuredInCheck": 17,
+   "from=notMeasuredInCheck to=notMeasuredInCheck": 5,
+   "from=notMeasuredInCheck to=measured": 12,
+   "from=notMeasuredInCheck to=noDeepKey": 7,
+   "from=measured to=noDeepKey": 5,
+   "from=noDeepKey to=notMeasuredInCheck": 2
+  },
+  "cases": [
+   {
+    "kifuId": "b-game-01",
+    "key": "28-30",
+    "branchPly": 29,
+    "cls": "missed",
+    "kindsA": "cpDrop",
+    "kindsB": null,
+    "bucket": "境から 50 以内",
+    "a": {
+     "source": "deep",
+     "kind": "compared",
+     "diffCp": -405,
+     "mateAfter": null,
+     "reason": null,
+     "from": {
+      "cp": -2960,
+      "mate": null,
+      "apMate": null
+     },
+     "to": {
+      "cp": -3365,
+      "mate": null,
+      "apMate": null
+     }
+    },
+    "b": {
+     "source": "deep",
+     "kind": "compared",
+     "diffCp": -194,
+     "mateAfter": null,
+     "reason": null,
+     "from": {
+      "cp": -3050,
+      "mate": null,
+      "apMate": null
+     },
+     "to": {
+      "cp": -3244,
+      "mate": null,
+      "apMate": null
+     }
+    },
+    "bDeepUnavailable": false
+   },
+   {
+    "kifuId": "b-game-01",
+    "key": "30-32",
+    "branchPly": 31,
+    "cls": "extra",
+    "kindsA": null,
+    "kindsB": "cpDrop",
+    "bucket": "境から 50 以内",
+    "a": {
+     "source": "deep",
+     "kind": "compared",
+     "diffCp": -321,
+     "mateAfter": null,
+     "reason": null,
+     "from": {
+      "cp": -3365,
+      "mate": null,
+      "apMate": null
+     },
+     "to": {
+      "cp": -3686,
+      "mate": null,
+      "apMate": null
+     }
+    },
+    "b": {
+     "source": "deep",
+     "kind": "compared",
+     "diffCp": -403,
+     "mateAfter": null,
+     "reason": null,
+     "from": {
+      "cp": -3244,
+      "mate": null,
+      "apMate": null
+     },
+     "to": {
+      "cp": -3647,
+      "mate": null,
+      "apMate": null
+     }
+    },
+    "bDeepUnavailable": false
+   },
+   {
+    "kifuId": "b-game-03",
+    "key": "12-14",
+    "branchPly": 13,
+    "cls": "missed",
+    "kindsA": "cpDrop",
+    "kindsB": null,
+    "bucket": "51〜150",
+    "a": {
+     "source": "deep",
+     "kind": "compared",
+     "diffCp": -467,
+     "mateAfter": null,
+     "reason": null,
+     "from": {
+      "cp": -1585,
+      "mate": null,
+      "apMate": null
+     },
+     "to": {
+      "cp": -2052,
+      "mate": null,
+      "apMate": null
+     }
+    },
+    "b": {
+     "source": "deep",
+     "kind": "compared",
+     "diffCp": -288,
+     "mateAfter": null,
+     "reason": null,
+     "from": {
+      "cp": -1637,
+      "mate": null,
+      "apMate": null
+     },
+     "to": {
+      "cp": -1925,
+      "mate": null,
+      "apMate": null
+     }
+    },
+    "bDeepUnavailable": false
+   },
+   {
+    "kifuId": "b-game-03",
+    "key": "14-16",
+    "branchPly": 15,
+    "cls": "extra",
+    "kindsA": null,
+    "kindsB": "cpDrop",
+    "bucket": "51〜150",
+    "a": {
+     "source": "deep",
+     "kind": "compared",
+     "diffCp": -240,
+     "mateAfter": null,
+     "reason": null,
+     "from": {
+      "cp": -2052,
+      "mate": null,
+      "apMate": null
+     },
+     "to": {
+      "cp": -2292,
+      "mate": null,
+      "apMate": null
+     }
+    },
+    "b": {
+     "source": "deep",
+     "kind": "compared",
+     "diffCp": -469,
+     "mateAfter": null,
+     "reason": null,
+     "from": {
+      "cp": -1925,
+      "mate": null,
+      "apMate": null
+     },
+     "to": {
+      "cp": -2394,
+      "mate": null,
+      "apMate": null
+     }
+    },
+    "bDeepUnavailable": false
+   },
+   {
+    "kifuId": "b-game-04",
+    "key": "28-30",
+    "branchPly": 29,
+    "cls": "missed",
+    "kindsA": "cpDrop",
+    "kindsB": null,
+    "bucket": "境から 50 以内",
+    "a": {
+     "source": "deep",
+     "kind": "compared",
+     "diffCp": -437,
+     "mateAfter": null,
+     "reason": null,
+     "from": {
+      "cp": -3956,
+      "mate": null,
+      "apMate": null
+     },
+     "to": {
+      "cp": -4393,
+      "mate": null,
+      "apMate": null
+     }
+    },
+    "b": {
+     "source": "deep",
+     "kind": "compared",
+     "diffCp": -355,
+     "mateAfter": null,
+     "reason": null,
+     "from": {
+      "cp": -4146,
+      "mate": null,
+      "apMate": null
+     },
+     "to": {
+      "cp": -4501,
+      "mate": null,
+      "apMate": null
+     }
+    },
+    "bDeepUnavailable": false
+   },
+   {
+    "kifuId": "b-game-06",
+    "key": "22-24",
+    "branchPly": 23,
+    "cls": "extra",
+    "kindsA": null,
+    "kindsB": "cpDrop",
+    "bucket": "境から 50 以内",
+    "a": {
+     "source": "deep",
+     "kind": "compared",
+     "diffCp": -371,
+     "mateAfter": null,
+     "reason": null,
+     "from": {
+      "cp": -3360,
+      "mate": null,
+      "apMate": null
+     },
+     "to": {
+      "cp": -3731,
+      "mate": null,
+      "apMate": null
+     }
+    },
+    "b": {
+     "source": "deep",
+     "kind": "compared",
+     "diffCp": -404,
+     "mateAfter": null,
+     "reason": null,
+     "from": {
+      "cp": -3356,
+      "mate": null,
+      "apMate": null
+     },
+     "to": {
+      "cp": -3760,
+      "mate": null,
+      "apMate": null
+     }
+    },
+    "bDeepUnavailable": false
+   },
+   {
+    "kifuId": "b-game-07",
+    "key": "26-28",
+    "branchPly": 27,
+    "cls": "missed",
+    "kindsA": "cpDrop",
+    "kindsB": null,
+    "bucket": "境から 50 以内",
+    "a": {
+     "source": "deep",
+     "kind": "compared",
+     "diffCp": -479,
+     "mateAfter": null,
+     "reason": null,
+     "from": {
+      "cp": -3387,
+      "mate": null,
+      "apMate": null
+     },
+     "to": {
+      "cp": -3866,
+      "mate": null,
+      "apMate": null
+     }
+    },
+    "b": {
+     "source": "deep",
+     "kind": "compared",
+     "diffCp": -352,
+     "mateAfter": null,
+     "reason": null,
+     "from": {
+      "cp": -3194,
+      "mate": null,
+      "apMate": null
+     },
+     "to": {
+      "cp": -3546,
+      "mate": null,
+      "apMate": null
+     }
+    },
+    "bDeepUnavailable": false
+   },
+   {
+    "kifuId": "b-game-09",
+    "key": "24-26",
+    "branchPly": 25,
+    "cls": "missed",
+    "kindsA": "cpDrop",
+    "kindsB": null,
+    "bucket": "境から 50 以内",
+    "a": {
+     "source": "deep",
+     "kind": "compared",
+     "diffCp": -485,
+     "mateAfter": null,
+     "reason": null,
+     "from": {
+      "cp": -2091,
+      "mate": null,
+      "apMate": null
+     },
+     "to": {
+      "cp": -2576,
+      "mate": null,
+      "apMate": null
+     }
+    },
+    "b": {
+     "source": "deep",
+     "kind": "compared",
+     "diffCp": -350,
+     "mateAfter": null,
+     "reason": null,
+     "from": {
+      "cp": -2142,
+      "mate": null,
+      "apMate": null
+     },
+     "to": {
+      "cp": -2492,
+      "mate": null,
+      "apMate": null
+     }
+    },
+    "bDeepUnavailable": false
+   },
+   {
+    "kifuId": "b-game-10",
+    "key": "44-46",
+    "branchPly": 45,
+    "cls": "missed",
+    "kindsA": "cpDrop",
+    "kindsB": null,
+    "bucket": "境から 50 以内",
+    "a": {
+     "source": "deep",
+     "kind": "compared",
+     "diffCp": -436,
+     "mateAfter": null,
+     "reason": null,
+     "from": {
+      "cp": -3897,
+      "mate": null,
+      "apMate": null
+     },
+     "to": {
+      "cp": -4333,
+      "mate": null,
+      "apMate": null
+     }
+    },
+    "b": {
+     "source": "deep",
+     "kind": "compared",
+     "diffCp": -396,
+     "mateAfter": null,
+     "reason": null,
+     "from": {
+      "cp": -3857,
+      "mate": null,
+      "apMate": null
+     },
+     "to": {
+      "cp": -4253,
+      "mate": null,
+      "apMate": null
+     }
+    },
+    "bDeepUnavailable": false
+   },
+   {
+    "kifuId": "b2-game-03",
+    "key": "38-40",
+    "branchPly": 39,
+    "cls": "kindsDiffer",
+    "kindsA": "cpDrop+matedIfPass",
+    "kindsB": "mateDrop+matedIfPass",
+    "bucket": "境から 50 以内",
+    "a": {
+     "source": "deep",
+     "kind": "compared",
+     "diffCp": -448,
+     "mateAfter": null,
+     "reason": null,
+     "from": {
+      "cp": -5300,
+      "mate": null,
+      "apMate": 15
+     },
+     "to": {
+      "cp": -5748,
+      "mate": null,
+      "apMate": 1
+     }
+    },
+    "b": {
+     "source": "deep",
+     "kind": "mateAfter",
+     "diffCp": null,
+     "mateAfter": -26,
+     "reason": null,
+     "from": {
+      "cp": -5226,
+      "mate": null,
+      "apMate": 13
+     },
+     "to": {
+      "cp": null,
+      "mate": -26,
+      "apMate": 1
+     }
+    },
+    "bDeepUnavailable": false
+   },
+   {
+    "kifuId": "b2-game-04",
+    "key": "32-34",
+    "branchPly": 33,
+    "cls": "kindsDiffer",
+    "kindsA": "cpDrop+matedIfPass",
+    "kindsB": "matedIfPass",
+    "bucket": "300 超",
+    "a": {
+     "source": "deep",
+     "kind": "compared",
+     "diffCp": -23771,
+     "mateAfter": null,
+     "reason": null,
+     "from": {
+      "cp": -5726,
+      "mate": null,
+      "apMate": 15
+     },
+     "to": {
+      "cp": -29497,
+      "mate": null,
+      "apMate": 13
+     }
+    },
+    "b": {
+     "source": "deep",
+     "kind": "compared",
+     "diffCp": 22556,
+     "mateAfter": null,
+     "reason": null,
+     "from": {
+      "cp": -28238,
+      "mate": null,
+      "apMate": 15
+     },
+     "to": {
+      "cp": -5682,
+      "mate": null,
+      "apMate": 15
+     }
+    },
+    "bDeepUnavailable": false
+   },
+   {
+    "kifuId": "b2-game-04",
+    "key": "14-16",
+    "branchPly": 15,
+    "cls": "extra",
+    "kindsA": null,
+    "kindsB": "cpDrop",
+    "bucket": "境から 50 以内",
+    "a": {
+     "source": "deep",
+     "kind": "compared",
+     "diffCp": -390,
+     "mateAfter": null,
+     "reason": null,
+     "from": {
+      "cp": -2538,
+      "mate": null,
+      "apMate": null
+     },
+     "to": {
+      "cp": -2928,
+      "mate": null,
+      "apMate": null
+     }
+    },
+    "b": {
+     "source": "deep",
+     "kind": "compared",
+     "diffCp": -573,
+     "mateAfter": null,
+     "reason": null,
+     "from": {
+      "cp": -2374,
+      "mate": null,
+      "apMate": null
+     },
+     "to": {
+      "cp": -2947,
+      "mate": null,
+      "apMate": null
+     }
+    },
+    "bDeepUnavailable": false
+   },
+   {
+    "kifuId": "b2-game-05",
+    "key": "22-24",
+    "branchPly": 23,
+    "cls": "missed",
+    "kindsA": "cpDrop",
+    "kindsB": null,
+    "bucket": "境から 50 以内",
+    "a": {
+     "source": "deep",
+     "kind": "compared",
+     "diffCp": -697,
+     "mateAfter": null,
+     "reason": null,
+     "from": {
+      "cp": -3364,
+      "mate": null,
+      "apMate": null
+     },
+     "to": {
+      "cp": -4061,
+      "mate": null,
+      "apMate": null
+     }
+    },
+    "b": {
+     "source": "deep",
+     "kind": "compared",
+     "diffCp": -365,
+     "mateAfter": null,
+     "reason": null,
+     "from": {
+      "cp": -3462,
+      "mate": null,
+      "apMate": null
+     },
+     "to": {
+      "cp": -3827,
+      "mate": null,
+      "apMate": null
+     }
+    },
+    "bDeepUnavailable": false
+   },
+   {
+    "kifuId": "b2-game-05",
+    "key": "28-30",
+    "branchPly": 29,
+    "cls": "missed",
+    "kindsA": "cpDrop",
+    "kindsB": null,
+    "bucket": "境から 50 以内",
+    "a": {
+     "source": "deep",
+     "kind": "compared",
+     "diffCp": -416,
+     "mateAfter": null,
+     "reason": null,
+     "from": {
+      "cp": -3862,
+      "mate": null,
+      "apMate": null
+     },
+     "to": {
+      "cp": -4278,
+      "mate": null,
+      "apMate": null
+     }
+    },
+    "b": {
+     "source": "deep",
+     "kind": "compared",
+     "diffCp": -330,
+     "mateAfter": null,
+     "reason": null,
+     "from": {
+      "cp": -3832,
+      "mate": null,
+      "apMate": null
+     },
+     "to": {
+      "cp": -4162,
+      "mate": null,
+      "apMate": null
+     }
+    },
+    "bDeepUnavailable": false
+   },
+   {
+    "kifuId": "b2-game-05",
+    "key": "36-38",
+    "branchPly": 37,
+    "cls": "kindsDiffer",
+    "kindsA": "matedIfPass",
+    "kindsB": "cpDrop+matedIfPass",
+    "bucket": "51〜150",
+    "a": {
+     "source": "deep",
+     "kind": "compared",
+     "diffCp": -240,
+     "mateAfter": null,
+     "reason": null,
+     "from": {
+      "cp": -4771,
+      "mate": null,
+      "apMate": 17
+     },
+     "to": {
+      "cp": -5011,
+      "mate": null,
+      "apMate": 9
+     }
+    },
+    "b": {
+     "source": "deep",
+     "kind": "compared",
+     "diffCp": -494,
+     "mateAfter": null,
+     "reason": null,
+     "from": {
+      "cp": -4704,
+      "mate": null,
+      "apMate": 17
+     },
+     "to": {
+      "cp": -5198,
+      "mate": null,
+      "apMate": 9
+     }
+    },
+    "bDeepUnavailable": false
+   },
+   {
+    "kifuId": "b2-game-05",
+    "key": "30-32",
+    "branchPly": 31,
+    "cls": "extra",
+    "kindsA": null,
+    "kindsB": "cpDrop",
+    "bucket": "境から 50 以内",
+    "a": {
+     "source": "deep",
+     "kind": "compared",
+     "diffCp": -283,
+     "mateAfter": null,
+     "reason": null,
+     "from": {
+      "cp": -4278,
+      "mate": null,
+      "apMate": null
+     },
+     "to": {
+      "cp": -4561,
+      "mate": null,
+      "apMate": null
+     }
+    },
+    "b": {
+     "source": "deep",
+     "kind": "compared",
+     "diffCp": -424,
+     "mateAfter": null,
+     "reason": null,
+     "from": {
+      "cp": -4162,
+      "mate": null,
+      "apMate": null
+     },
+     "to": {
+      "cp": -4586,
+      "mate": null,
+      "apMate": null
+     }
+    },
+    "bDeepUnavailable": false
+   },
+   {
+    "kifuId": "b2-game-07",
+    "key": "28-30",
+    "branchPly": 29,
+    "cls": "missed",
+    "kindsA": "matedIfPass",
+    "kindsB": null,
+    "bucket": "300 超",
+    "a": {
+     "source": "light",
+     "kind": "compared",
+     "diffCp": -96,
+     "mateAfter": null,
+     "reason": null,
+     "from": {
+      "cp": -4726,
+      "mate": null,
+      "apMate": null
+     },
+     "to": {
+      "cp": -4822,
+      "mate": null,
+      "apMate": 21
+     }
+    },
+    "b": {
+     "source": "light",
+     "kind": "compared",
+     "diffCp": -11,
+     "mateAfter": null,
+     "reason": null,
+     "from": {
+      "cp": -4524,
+      "mate": null,
+      "apMate": null
+     },
+     "to": {
+      "cp": -4535,
+      "mate": null,
+      "apMate": null
+     }
+    },
+    "bDeepUnavailable": false
+   },
+   {
+    "kifuId": "b2-game-07",
+    "key": "32-34",
+    "branchPly": 33,
+    "cls": "kindsDiffer",
+    "kindsA": "matedIfPass",
+    "kindsB": "cpDrop+matedIfPass",
+    "bucket": "51〜150",
+    "a": {
+     "source": "deep",
+     "kind": "compared",
+     "diffCp": -273,
+     "mateAfter": null,
+     "reason": null,
+     "from": {
+      "cp": -4787,
+      "mate": null,
+      "apMate": null
+     },
+     "to": {
+      "cp": -5060,
+      "mate": null,
+      "apMate": 15
+     }
+    },
+    "b": {
+     "source": "deep",
+     "kind": "compared",
+     "diffCp": -2773,
+     "mateAfter": null,
+     "reason": null,
+     "from": {
+      "cp": -4748,
+      "mate": null,
+      "apMate": null
+     },
+     "to": {
+      "cp": -7521,
+      "mate": null,
+      "apMate": 21
+     }
+    },
+    "bDeepUnavailable": false
+   },
+   {
+    "kifuId": "b2-game-08",
+    "key": "26-28",
+    "branchPly": 27,
+    "cls": "missedUncomparable",
+    "kindsA": "matedIfPass",
+    "kindsB": null,
+    "bucket": "cp の差が無い(詰み・比べられない)",
+    "a": {
+     "source": "light",
+     "kind": "notCompared",
+     "diffCp": null,
+     "mateAfter": null,
+     "reason": "notMeasuredInCheck",
+     "from": {
+      "state": "notMeasuredInCheck"
+     },
+     "to": {
+      "cp": -5057,
+      "mate": null,
+      "apMate": 27
+     }
+    },
+    "b": {
+     "source": "light",
+     "kind": "notCompared",
+     "diffCp": null,
+     "mateAfter": null,
+     "reason": "notMeasuredInCheck",
+     "from": {
+      "state": "notMeasuredInCheck"
+     },
+     "to": {
+      "state": "notEvaluation"
+     }
+    },
+    "bDeepUnavailable": false
+   },
+   {
+    "kifuId": "b2-game-08",
+    "key": "34-36",
+    "branchPly": 35,
+    "cls": "kindsDiffer",
+    "kindsA": "matedIfPass",
+    "kindsB": "mateDrop+matedIfPass",
+    "bucket": "51〜150",
+    "a": {
+     "source": "deep",
+     "kind": "compared",
+     "diffCp": -309,
+     "mateAfter": null,
+     "reason": null,
+     "from": {
+      "cp": -5244,
+      "mate": null,
+      "apMate": 21
+     },
+     "to": {
+      "cp": -5553,
+      "mate": null,
+      "apMate": 1
+     }
+    },
+    "b": {
+     "source": "deep",
+     "kind": "mateAfter",
+     "diffCp": null,
+     "mateAfter": -12,
+     "reason": null,
+     "from": {
+      "cp": -5656,
+      "mate": null,
+      "apMate": 13
+     },
+     "to": {
+      "cp": null,
+      "mate": -12,
+      "apMate": 1
+     }
+    },
+    "bDeepUnavailable": false
+   },
+   {
+    "kifuId": "b2-game-08",
+    "key": "30-32",
+    "branchPly": 31,
+    "cls": "extraUncomparable",
+    "kindsA": null,
+    "kindsB": "cpDrop+matedIfPass",
+    "bucket": "151〜300",
+    "a": {
+     "source": "light",
+     "kind": "notCompared",
+     "diffCp": null,
+     "mateAfter": null,
+     "reason": "notEvaluation",
+     "from": {
+      "cp": -4751,
+      "mate": null,
+      "apMate": 25
+     },
+     "to": {
+      "state": "notEvaluation"
+     }
+    },
+    "b": {
+     "source": "deep",
+     "kind": "compared",
+     "diffCp": -653,
+     "mateAfter": null,
+     "reason": null,
+     "from": {
+      "cp": -4657,
+      "mate": null,
+      "apMate": 25
+     },
+     "to": {
+      "cp": -5310,
+      "mate": null,
+      "apMate": 19
+     }
+    },
+    "bDeepUnavailable": false
+   },
+   {
+    "kifuId": "b2-game-09",
+    "key": "18-20",
+    "branchPly": 19,
+    "cls": "missed",
+    "kindsA": "cpDrop",
+    "kindsB": null,
+    "bucket": "境から 50 以内",
+    "a": {
+     "source": "deep",
+     "kind": "compared",
+     "diffCp": -510,
+     "mateAfter": null,
+     "reason": null,
+     "from": {
+      "cp": -3886,
+      "mate": null,
+      "apMate": null
+     },
+     "to": {
+      "cp": -4396,
+      "mate": null,
+      "apMate": null
+     }
+    },
+    "b": {
+     "source": "deep",
+     "kind": "compared",
+     "diffCp": -367,
+     "mateAfter": null,
+     "reason": null,
+     "from": {
+      "cp": -3856,
+      "mate": null,
+      "apMate": null
+     },
+     "to": {
+      "cp": -4223,
+      "mate": null,
+      "apMate": null
+     }
+    },
+    "bDeepUnavailable": false
+   },
+   {
+    "kifuId": "b2-game-09",
+    "key": "22-24",
+    "branchPly": 23,
+    "cls": "missed",
+    "kindsA": "matedIfPass",
+    "kindsB": null,
+    "bucket": "境から 50 以内",
+    "a": {
+     "source": "deep",
+     "kind": "compared",
+     "diffCp": -351,
+     "mateAfter": null,
+     "reason": null,
+     "from": {
+      "cp": -4430,
+      "mate": null,
+      "apMate": null
+     },
+     "to": {
+      "cp": -4781,
+      "mate": null,
+      "apMate": 25
+     }
+    },
+    "b": {
+     "source": "deep",
+     "kind": "compared",
+     "diffCp": -392,
+     "mateAfter": null,
+     "reason": null,
+     "from": {
+      "cp": -4380,
+      "mate": null,
+      "apMate": null
+     },
+     "to": {
+      "cp": -4772,
+      "mate": null,
+      "apMate": null
+     }
+    },
+    "bDeepUnavailable": false
+   }
+  ]
+ }
+}

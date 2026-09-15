@@ -1,0 +1,35 @@
+{
+ "readyRows": 409,
+ "deepRows": 257,
+ "deepShare": 0.628361858190709,
+ "missed": {
+  "order": [
+   "b-game-04@21:cpDrop",
+   "b-game-10@39:cpDrop",
+   "b2-game-05@15:cpDrop",
+   "b2-game-07@21:cpDrop"
+  ],
+  "nodes": [
+   "b-game-03@13:cpDrop",
+   "b-game-04@29:cpDrop",
+   "b-game-07@27:cpDrop",
+   "b-game-09@25:cpDrop",
+   "b2-game-05@23:cpDrop",
+   "b2-game-09@23:matedIfPass"
+  ],
+  "selection": [
+   "b2-game-07@29:matedIfPass"
+  ]
+ },
+ "extra": {
+  "order": [
+   "b-game-01@25:cpDrop",
+   "b-game-04@19:cpDrop",
+   "b2-game-01@33:cpDrop"
+  ],
+  "nodes": [
+   "b-game-01@31:cpDrop"
+  ],
+  "selection": []
+ }
+}
