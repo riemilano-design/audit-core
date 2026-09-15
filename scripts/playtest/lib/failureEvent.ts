@@ -18,11 +18,13 @@
 // 【この件数は診断に使わない】評価関数の種類は記録に残っていない(計画 0.・E-f)。今の記録は入力の行の enginePath で
 // 見分けられる(engine/ と engine/nnue/。nn.bin だけ差し替えると見分けられない ― P-43)。
 
+import { parseSquareName } from "shogiops/util";
 import { detectBoardEvents } from "../../../apps/server/src/analysis/boardEventDetector.js";
 import { detectIntents } from "../../../apps/server/src/analysis/intentDetector.js";
 import { DEFAULT_INITIAL_SFEN } from "../../../apps/server/src/analysis/moveHistory.js";
 import { applyMove } from "../../../apps/server/src/rules/applyMove.js";
 import { getGameOutcome, isGameOver, isInCheck } from "../../../apps/server/src/rules/gameStatus.js";
+import { parsePosition } from "../../../apps/server/src/rules/sfenPosition.js";
 import type { MetaLine, RecordLine } from "../invariants/types.js";
 import { displayDirty, readDirtyState } from "./gitState.js";
 import { classifyIntentStatementRow, type IntentDetection, type IntentStatementClass } from "./intentStatement.js";
@@ -237,6 +239,50 @@ export function focusStateOf(record: RecordLine): FocusState {
 
 export type ShapeState = { state: "recorded"; status: string; refersToShapeId: string | null } | { state: "unrecorded" };
 
+/**
+ * STEP JSON v0.2(docs/STEP_JSON-V0.2_PLAN_2026-09-15.md 2.4・K-7)。局面の先手玉の 8 近傍のうち盤の中にあるマスの数(`squares`。
+ * 中央 8・端 5・隅 3)と、そこにある先手の駒の数(`own`。駒の種類を問わず、成り駒も含む)。
+ * **数えるだけ(A 層の数)。閾値も名前も置かず、死因の規則・candidateModes・画面には使わない。**先手玉が盤上に無ければ null。
+ */
+export interface KingSurroundings {
+  squares: number;
+  own: number;
+}
+
+const BOARD_RANKS = "abcdefghi";
+
+export function kingSurroundingsOf(sfen: string): KingSurroundings | null {
+  const board = parsePosition(sfen).board;
+  const pieceAt = (file: number, rank: number) => {
+    const square = parseSquareName(`${file}${BOARD_RANKS[rank]}`);
+    return square === undefined ? undefined : board.get(square);
+  };
+  let king: { file: number; rank: number } | undefined;
+  for (let file = 1; file <= 9 && !king; file++) {
+    for (let rank = 0; rank < 9; rank++) {
+      const piece = pieceAt(file, rank);
+      if (piece?.color === "sente" && piece.role === "king") {
+        king = { file, rank };
+        break;
+      }
+    }
+  }
+  if (!king) return null;
+  let squares = 0;
+  let own = 0;
+  for (let df = -1; df <= 1; df++) {
+    for (let dr = -1; dr <= 1; dr++) {
+      if (df === 0 && dr === 0) continue;
+      const file = king.file + df;
+      const rank = king.rank + dr;
+      if (file < 1 || file > 9 || rank < 0 || rank > 8) continue;
+      squares += 1;
+      if (pieceAt(file, rank)?.color === "sente") own += 1;
+    }
+  }
+  return { squares, own };
+}
+
 export interface Trigger {
   /** 直前の行の評価(状態 + 値。afterPass.mate と dropCp を含む ― 計画 9.1) */
   evaluationBefore: Evaluation;
@@ -246,6 +292,8 @@ export interface Trigger {
   shape: ShapeState;
   /** 直前の行の③ */
   focus: FocusState;
+  /** 直前の行の局面の、先手玉の周り(STEP JSON v0.2。数えるだけ) */
+  kingSurroundings: KingSurroundings | null;
 }
 
 export function triggerOf(row: EvaluatedRow): Trigger {
@@ -270,6 +318,7 @@ export function triggerOf(row: EvaluatedRow): Trigger {
         ? { state: "unrecorded" }
         : { state: "recorded", status: shapeStage.status, refersToShapeId: shapeStage.refers_to_shape_id },
     focus: focusStateOf(record),
+    kingSurroundings: kingSurroundingsOf(record.sfen),
   };
 }
 
@@ -292,6 +341,8 @@ export interface FailureEvent {
     mateAfter: number | null;
     /** 直後の行で、パスすると詰まされる読み(詰めろ相当)があった */
     matedIfPassAfter: boolean;
+    /** 直後の行の評価(状態 + 値。evaluationBefore と同じ形 ― STEP JSON v0.2 の 2.2・K-5) */
+    evaluationAfter: Evaluation;
   };
   consequences: Continuation;
   candidateModes: Array<{ mode: "mate_threat"; status: "draft"; matchedBy: BranchKind[] }>;
@@ -380,6 +431,7 @@ export function diagnoseRecords(
         diffCp: pair.kind === "compared" ? pair.diffCp : null,
         mateAfter: pair.kind === "mateAfter" ? pair.mateAfter : null,
         matedIfPassAfter,
+        evaluationAfter: to.evaluation,
       },
       consequences,
       candidateModes: advantage && danger ? [{ mode: "mate_threat", status: "draft", matchedBy: kinds }] : [],

@@ -11,9 +11,11 @@ import {
   actualContinuation,
   buildDiagnosisReport,
   diagnoseRecords,
+  type FailureEvent,
   DRAFT_RULE_1,
   evaluationOf,
   focusStateOf,
+  kingSurroundingsOf,
   pairEvaluations,
   readEvaluations,
   renderDiagnosisReport,
@@ -21,6 +23,12 @@ import {
 import { baseRowsOf, engineRef, GAME01_MOVES, plantedRecords } from "./failureEventFixtures.js";
 import { classifyIntentStatementRow } from "./intentStatement.js";
 
+/** STEP JSON v0.2 で branch に evaluationAfter を足した。D1 の期待値は v0.1 までの 4 欄のまま比べ、evaluationAfter は別の試験で見る */
+const branchOf = (event: FailureEvent | undefined) => {
+  if (event === undefined) return undefined;
+  const { evaluationAfter: _after, ...rest } = event.branch;
+  return rest;
+};
 const eventAt = (events: ReturnType<typeof diagnoseRecords>["events"], branchPly: number) => events.find((e) => e.branchPly === branchPly);
 /** 仮置きの規則(DRAFT_RULE_1)で数える。**規則は呼び出し側が渡す**(lib に既定値を置かない。監査 B の必須 2) */
 const diagnoseDraft = (kifuId: string, records: readonly RecordLine[]) => diagnoseRecords(kifuId, records, DRAFT_RULE_1);
@@ -36,7 +44,7 @@ describe("F-1: 植えた死因①(優勢 → 急落 → 窓の中に自玉への
   it("分岐点 49 に死因①が 1 件、draft で出る。窓(50〜54)の王手は 52・54、詰み(56)は窓の外", () => {
     const event = eventAt(events, 49);
     expect(event).toBeDefined();
-    expect(event!.branch).toEqual({ kinds: ["cpDrop"], diffCp: -800, mateAfter: null, matedIfPassAfter: false });
+    expect(branchOf(event!)).toEqual({ kinds: ["cpDrop"], diffCp: -800, mateAfter: null, matedIfPassAfter: false });
     expect(event!.consequences).toEqual({ checks: [52, 54], mate: null, windowPlies: 5, windowShort: false });
     expect(event!.candidateModes).toEqual([{ mode: "mate_threat", status: "draft", matchedBy: ["cpDrop"] }]);
     expect(counts.cause1Draft).toBe(1);
@@ -58,7 +66,7 @@ describe("F-1: 植えた死因①(優勢 → 急落 → 窓の中に自玉への
 
   it("直前の行の afterPass.mate は、1 つ前の組(46→48)から見ると「直後にパスすると詰まされる読み」であり、急落とは別に数える", () => {
     const event = eventAt(events, 47);
-    expect(event?.branch).toEqual({ kinds: ["matedIfPass"], diffCp: 500, mateAfter: null, matedIfPassAfter: true });
+    expect(branchOf(event)).toEqual({ kinds: ["matedIfPass"], diffCp: 500, mateAfter: null, matedIfPassAfter: true });
     expect(event?.candidateModes).toEqual([]); // 直前(46)は 0 で優勢ではない
     // 分岐点 47 の窓(48〜52)にも、後手の 52 手目の王手が入る(期待値を最初 1 と書いた読み違い。窓の中身を辿っていなかった)
     expect(event?.consequences).toEqual({ checks: [52], mate: null, windowPlies: 5, windowShort: false });
@@ -148,13 +156,13 @@ describe("F-5: 評価の状態(計画 2.)", () => {
 describe("F-6: mate が絡む組(計画 D-3)", () => {
   it("(i) 直前 +500・直後 baseline.mate = −3 は mateDrop(差は取らない)", () => {
     const { events } = diagnoseDraft("f6i", plantedRecords(GAME01_MOVES, { 20: engineRef(500), 22: engineRef(null, { mate: -3 }) }));
-    expect(eventAt(events, 21)?.branch).toEqual({ kinds: ["mateDrop"], diffCp: null, mateAfter: -3, matedIfPassAfter: false });
+    expect(branchOf(eventAt(events, 21))).toEqual({ kinds: ["mateDrop"], diffCp: null, mateAfter: -3, matedIfPassAfter: false });
   });
 
   it("(ii) 直後の行の afterPass.mate > 0 は「パスすると詰まされる読み」(急落とは呼ばない)。< 0 は当たらない", () => {
     // 22 は 350: 植え方の既定で次の行(24)は 0 なので、400 にすると 22→24 の差が −400 で急落に当たってしまう(最初の読み違い)
     const hit = diagnoseDraft("f6ii", plantedRecords(GAME01_MOVES, { 20: engineRef(500), 22: engineRef(350, { afterPassMate: 5 }) }));
-    expect(eventAt(hit.events, 21)?.branch).toEqual({ kinds: ["matedIfPass"], diffCp: -150, mateAfter: null, matedIfPassAfter: true });
+    expect(branchOf(eventAt(hit.events, 21))).toEqual({ kinds: ["matedIfPass"], diffCp: -150, mateAfter: null, matedIfPassAfter: true });
     // 直前(20)は +500 だが、急落候補ではないので「うち直前が優勢」に入れない(計画 9.1・D-3)
     expect(hit.counts).toMatchObject({ dropCandidates: 0, matedIfPassPairs: 1, events: 1, fromAdvantage: 0 });
 
@@ -341,5 +349,31 @@ describe("入力の行(評価関数の取り違えを防ぐ。P-43)", () => {
     expect(text).toMatch(/^- m\(gitHead: abc123, .+, enginePath: \/e\/nnue\/YaneuraOu-by-gcc, nodes: 4000000\)$/m);
     const noNodes = renderDiagnosisReport(buildDiagnosisReport([{ kifuId: "m", meta: { ...meta, nodes: undefined }, records: plantedRecords([], { 0: engineRef(0) }) }], DRAFT_RULE_1)).join("\n");
     expect(noNodes).toContain("nodes: 記録していない)");
+  });
+});
+
+describe("STEP JSON v0.2 の欄(docs/STEP_JSON-V0.2_PLAN_2026-09-15.md 2.2・2.4)", () => {
+  it("evaluationAfter は直後の行(toReadyPly)の評価そのもの(直前の行ではない)", () => {
+    const records = plantedRecords(GAME01_MOVES, { 20: engineRef(100), 22: engineRef(-500, { afterPassScoreCp: 700, bestmove: "7g7f" }) });
+    const event = eventAt(diagnoseDraft("a1", records).events, 21);
+    expect(event?.branch.evaluationAfter).toEqual({ state: "measured", scoreCp: -500, mate: null, bestmove: "7g7f", afterPassScoreCp: 700, afterPassMate: null, dropCp: null });
+    expect(event?.branch.evaluationAfter).toEqual(evaluationOf(records.find((record) => record.ply === 22)!));
+    expect(event?.trigger.evaluationBefore).toMatchObject({ state: "measured", scoreCp: 100 });
+  });
+
+  it("kingSurroundingsOf: 先手玉の 8 近傍の盤の中のマスの数と、そこにある先手の駒を種類を問わず数える(後手の駒・玉自身は数えない)", () => {
+    // 初期局面: 玉は 5i(端)。近傍 5 マス(4h・5h・6h・4i・6i)に 4i・6i の金
+    expect(kingSurroundingsOf(DEFAULT_INITIAL_SFEN)).toEqual({ squares: 5, own: 2 });
+    // 中央の玉 5e、6d に先手の金、4e に後手の歩
+    expect(kingSurroundingsOf("4k4/9/9/3G5/4Kp3/9/9/9/9 b - 1")).toEqual({ squares: 8, own: 1 });
+    // 隅の玉 1i、2h に先手のと金(成り駒も数える)。斜め(2h)を数えるので 4 近傍ではない
+    expect(kingSurroundingsOf("4k4/9/9/9/9/9/9/7+P1/8K b - 1")).toEqual({ squares: 3, own: 1 });
+  });
+
+  it("Failure Event の kingSurroundings は、直前の行(fromReadyPly)の局面から数える", () => {
+    const records = plantedRecords(GAME01_MOVES, { 20: engineRef(100), 22: engineRef(-500) });
+    const event = eventAt(diagnoseDraft("k1", records).events, 21);
+    expect(event?.trigger.kingSurroundings).toEqual(kingSurroundingsOf(records.find((record) => record.ply === 20)!.sfen));
+    expect(event?.trigger.kingSurroundings).not.toBeNull();
   });
 });

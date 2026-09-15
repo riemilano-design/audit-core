@@ -1,12 +1,14 @@
 // STEP D1(docs/STEP_D1_PLAN_2026-09-14.md 3.2)。replay.ts の JSONL を読み、Failure Event を
 // Markdown の表で標準出力へ書く。**エンジンは回さない**(check.ts と同じ形)。
 //
-// 使い方: npx tsx scripts/playtest/diagnose.ts <a.jsonl> [<b.jsonl> ...] [--events <out.jsonl>]
+// 使い方: npx tsx scripts/playtest/diagnose.ts <a.jsonl> [<b.jsonl> ...] [--events <out.jsonl>] [--evaluator "<評価関数の識別>"]
 //
 // 【このファイルは薄くしてある】判定・集計・表の組み立てはすべて lib/failureEvent.ts(合計は lib/diagnosisTotals.ts)にあり、そちらに試験がある。
 // ここでやるのは、記録を読む・lib を呼ぶ・書き出す、だけである。
 // `--events` の 1 行は lib/failureEventSchema.ts の toEventLine で、版の欄 schemaVersion を先頭に付けて書く
-// (STEP JSON v0。スキーマは scripts/playtest/schemas/failure-event.v0.1.schema.json)。
+// (STEP JSON v0.2。スキーマは scripts/playtest/schemas/failure-event.v0.2.schema.json)。行の末尾に出どころ(provenance)を付ける:
+// 記録のファイル(根からの相対)と sha256・記録の meta の写し・`--evaluator` の文(**確かめていない自己申告**。渡されなければ null。
+// enginePath から推測しない ― P-43)・このコマンドを回したときの gitHead と汚れ・規則の値(docs/STEP_JSON-V0.2_PLAN_2026-09-15.md 2.1)。
 //
 // 【exit code】lib の例外は外へ出さず「数えられなかった」行にして exit 0。**入力が読めないとき(ENOENT・壊れた JSONL)は
 // 例外がこのファイルから外へ出て 0 でない**(check.ts と同じ。計画 D-1 の読み替え ― 2026-09-15、監査 B の非必須 d)。
@@ -17,45 +19,83 @@
 
 import { readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
+import { fileURLToPath } from "node:url";
 
 import type { MetaLine, RecordLine } from "./invariants/types.js";
 import { renderDiagnosisTotals } from "./lib/diagnosisTotals.js";
-import { buildDiagnosisReport, DRAFT_RULE_1, renderDiagnosisReport, type DiagnosisInput } from "./lib/failureEvent.js";
-import { toEventLine } from "./lib/failureEventSchema.js";
+import { buildDiagnosisReport, DRAFT_RULE_1, NOT_EVALUATION_CP, renderDiagnosisReport, type DiagnosisInput } from "./lib/failureEvent.js";
+import { buildProvenance, recordSha256, toEventLine } from "./lib/failureEventSchema.js";
+import { readGitState } from "./lib/gitState.js";
 
-function parseArgs(argv: string[]): { files: string[]; eventsOut: string | undefined } {
-  const eventsIndex = argv.indexOf("--events");
-  const eventsOut = eventsIndex !== -1 ? argv[eventsIndex + 1] : undefined;
-  const files = argv.filter((arg, index) => eventsIndex === -1 || (index !== eventsIndex && index !== eventsIndex + 1));
-  return { files: files.filter((file) => file.length > 0), eventsOut };
+/** このファイルがあるリポジトリ(作業ツリー)の根。出どころのパスはここからの相対にする */
+const REPO_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..", "..");
+
+function parseArgs(argv: string[]): { files: string[]; eventsOut: string | undefined; evaluator: string | null } {
+  const taken = new Set<number>();
+  const valueOf = (flag: string): string | undefined => {
+    const index = argv.indexOf(flag);
+    if (index === -1) return undefined;
+    taken.add(index);
+    taken.add(index + 1);
+    return argv[index + 1];
+  };
+  const eventsOut = valueOf("--events");
+  const evaluator = valueOf("--evaluator");
+  // 自己申告の文を空で埋めない(「無い」は null = --evaluator を渡さないこと。渡したのに値が無い・空・次の旗なら誤りとして止める)
+  if (argv.includes("--evaluator") && (evaluator === undefined || evaluator.trim().length === 0 || evaluator.startsWith("--"))) throw new Error("--evaluator に評価関数の識別の文を渡してください(空は受け付けない)");
+  const files = argv.filter((arg, index) => !taken.has(index) && arg.length > 0);
+  return { files, eventsOut, evaluator: evaluator ?? null };
 }
 
-function readInput(filePath: string): DiagnosisInput {
-  const lines = readFileSync(path.resolve(filePath), "utf-8")
+interface InputEntry {
+  input: DiagnosisInput;
+  filePath: string;
+  sha256: string;
+}
+
+function readInput(filePath: string): InputEntry {
+  const bytes = readFileSync(path.resolve(filePath));
+  const lines = bytes
+    .toString("utf-8")
     .split("\n")
     .map((line) => line.trim())
     .filter((line) => line.length > 0)
     .map((line) => JSON.parse(line) as { kind: string });
   const meta = lines.find((line) => line.kind === "meta") as MetaLine | undefined;
   const records = lines.filter((line): line is RecordLine => line.kind === "record");
-  return { kifuId: meta?.kifuId ?? path.basename(filePath), meta, records };
+  return { input: { kifuId: meta?.kifuId ?? path.basename(filePath), meta, records }, filePath, sha256: recordSha256(bytes) };
 }
 
 function main(): void {
-  const { files, eventsOut } = parseArgs(process.argv.slice(2));
+  const { files, eventsOut, evaluator } = parseArgs(process.argv.slice(2));
   if (files.length === 0) {
-    console.error("使い方: npx tsx scripts/playtest/diagnose.ts <a.jsonl> [<b.jsonl> ...] [--events <out.jsonl>]");
+    console.error("使い方: npx tsx scripts/playtest/diagnose.ts <a.jsonl> [<b.jsonl> ...] [--events <out.jsonl>] [--evaluator \"<評価関数の識別>\"]");
     process.exit(0);
     return;
   }
 
-  const inputs = files.map(readInput);
+  const entries = files.map(readInput);
+  const inputs = entries.map((entry) => entry.input);
   const report = buildDiagnosisReport(inputs, DRAFT_RULE_1);
   // STEP D3(計画 Q-5): 入力が 2 本以上なら、入力ごとの表の後に群の合計の節を足す(1 本なら何も足さない)。
   console.log([...renderDiagnosisReport(report), ...renderDiagnosisTotals(report)].join("\n"));
 
   if (eventsOut) {
-    const eventLines = report.flatMap((row) => (row.result.kind === "counted" ? row.result.events.map((event) => JSON.stringify(toEventLine(event))) : []));
+    const analysisGit = readGitState(REPO_ROOT);
+    // buildDiagnosisReport は入力 1 本につき 1 行を同じ順で返す(lib/failureEvent.ts)
+    const eventLines = report.flatMap((row, index) => {
+      if (row.result.kind !== "counted") return [];
+      const entry = entries[index]!;
+      const provenance = buildProvenance({
+        recordPath: entry.filePath,
+        recordSha256: entry.sha256,
+        meta: entry.input.meta,
+        evaluator,
+        analysisGit,
+        rule: DRAFT_RULE_1, notEvaluationCp: NOT_EVALUATION_CP, repoRoot: REPO_ROOT,
+      });
+      return row.result.events.map((event) => JSON.stringify(toEventLine(event, provenance)));
+    });
     writeFileSync(path.resolve(eventsOut), eventLines.length > 0 ? `${eventLines.join("\n")}\n` : "", "utf-8");
   }
 
