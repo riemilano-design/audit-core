@@ -48,6 +48,7 @@
 | [STEP_REAL-01_PLAN_2026-09-15.md](STEP_REAL-01_PLAN_2026-09-15.md) | 実在の 1 人目の実棋譜(本人が先手の 6 局、すべて勝ち局)を NNUE 版で評価し診断にかけた記録(2026-09-15)。急落候補 5・優勢からの急落 5・窓の中に王手 0・死因① 0。記録は `scripts/playtest/records/real-01/`(相手の名前は入れない。人間の承認) | 全員 |
 | [STEP_D2_PLAN_2026-09-15.md](STEP_D2_PLAN_2026-09-15.md) | 急落 1 件ごとに実戦の続きとエンジンの読み筋(③の探索、MultiPV 1)を同じ手数で並べ、観測できる事実(取った駒の駒種ごとの枚数・王手・詰み・先手玉の周りの味方・先手玉を動かす合法手の数)の差だけを Failure Event JSON(v0.4)と Markdown に書く計画(2026-09-15、B)。DIAGNOSIS_CONCEPT §7.3 の 3. の実装。評価語・意図・死因は書かない。事前読み A(REVISE 2 回 → GO)。実装は 20 局版レポートの後 |
 | [STEP_JSON-V0.3-META_PLAN_2026-09-15.md](STEP_JSON-V0.3-META_PLAN_2026-09-15.md) | Failure Event JSON v0.2 → v0.3(MINOR)。replay.ts の meta にある先後の揃え・打ち切りの 7 欄(mirrored・originalUserSide・plyOffset・startSfen・sideAlignmentChecked・trailingMoveTruncated・truncatedTrailingMove)を provenance.record.meta に写す計画(2026-09-15、1e)。古い記録は欄を出さず unrecordedKeys に並べ false は書かない。条件つきの欄は oneOf と const の変種 7。合わない meta は名前つき例外で止める。事前読み f2(REVISE → GO)。D2 の counterfactual(v0.4)の前提 |
+| [STEP_D1b_PLAN_2026-09-15.md](STEP_D1b_PLAN_2026-09-15.md) | 診断に「上がり側」(本人の手 → 相手の手の 2 手で本人視点の評価が閾値以上上がった場面。相手の手で上がったとは書かない)と「各局の最大の下がり」(閾値未満でも 1 件)を足す計画(2026-09-15、A)。別契約 diagnosis-moment.v0.1(contract と schemaVersion を必須、既存の Failure Event と列挙は変えない)。opponentBestmove は記録に無い。D2 の反事実を同じ根で当てる。人間の問い「落差なく負けた局と勝った局に何を書くか」への答え(理由は書かず事実だけ)。事前読み f2(REVISE → GO)。実装 B(D2 の後) |
 
 ## 用語メモ
 
