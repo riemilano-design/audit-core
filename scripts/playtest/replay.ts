@@ -16,6 +16,11 @@
 // 再生する手が無い局は、エンジンを
 // 起こさずに理由の error 行を書いて exit 1 で止める(判定は lib/replayPlan.ts)。
 //
+// STEP D0-SIDE 段 2(R-1〜R-4): 固定棋譜が mirrored: true(本人が後手の局を回して 1 手目を開始局面に畳んだもの)なら、
+// その startSfen から再生し、**同じ文字列**を解析の initialSfen にも渡す。meta に mirrored(常に)と、true のときだけ
+// startSfen・plyOffset・originalUserSide を残す(null は使わない)。originalMoves があれば回して畳み直した値と照合し、照合したかを
+// sideAlignmentChecked(常に)に残す。欄の形や照合が食い違う固定棋譜は、記録を書かずに止める(lib/sideAlignment.ts)。
+//
 // 位置づけの詳細は scripts/playtest/README.md を参照。開発補助であり本番導線には
 // 含めない(apps/・data/・docs/・.claude/ は変更しない)。
 
@@ -52,6 +57,7 @@ import {
 } from "./lib/recorder.js";
 import { withFixedSearch } from "./lib/fixedSearchEngine.js";
 import { planReplayMoves, truncationMetaFields } from "./lib/replayPlan.js";
+import { readSideAlignment, sideMetaFields } from "./lib/sideAlignment.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const SCRIPT_DIR = __dirname;
@@ -82,6 +88,8 @@ interface FixedKifu {
   id: string;
   source: string;
   moves: string[];
+  /** STEP D0-SIDE 段 2(R-4)。そろえの欄(mirrored・originalUserSide・plyOffset・startSfen。形は lib/sideAlignment.ts の readSideAlignment が確かめる)と、回す前の手順 originalMoves(再生には使わない) */
+  [field: string]: unknown;
 }
 
 /** STEP D0-SIDE 段 1(Q-9)。再生する手が無いときの error 行の文。 */
@@ -166,12 +174,18 @@ async function main(): Promise<void> {
   // 既定false(本番の既定と同じ)。--direction-ruleと同じ経路(stateResponseOptions)で
   // 本番関数(buildStateResponseWithPlan等)へそのまま渡すだけで、ここに判定ロジックは無い。
   const suppressTargetShapeProgress = args.includes("--suppress-target-shape-progress");
-  const stateResponseOptions: StateResponseOptions = { directionRule, suppressTargetShapeProgress };
-
   const kifu = JSON.parse(readFileSync(path.resolve(kifuArg), "utf-8")) as FixedKifu;
   const kifuId = kifu.id;
   // STEP D0-SIDE 段 1(R-8): 手数が奇数なら最後の先手の手を落として再生する(lib/replayPlan.ts)。落とした手は meta に残す。
   const replayPlan = planReplayMoves(kifu.moves);
+  // STEP D0-SIDE 段 2(R-1〜R-4): 回して畳んだ棋譜なら、その開始局面から再生する(形や originalMoves との照合が食い違えば例外で止まり、記録は書かない)。
+  const { alignment: sideAlignment, sideAlignmentChecked } = readSideAlignment(kifu);
+  // GameState.sfen と options.initialSfen には**同じ文字列**を渡す(detectIntents などは手数の欄まで文字列で比べる。計画 F-S8)
+  const replayStartSfen = sideAlignment.mirrored ? sideAlignment.startSfen : undefined;
+  const stateResponseOptions: StateResponseOptions =
+    replayStartSfen === undefined
+      ? { directionRule, suppressTargetShapeProgress }
+      : { directionRule, suppressTargetShapeProgress, initialSfen: replayStartSfen };
 
   const lines: string[] = [];
   const startedAt = new Date().toISOString();
@@ -192,6 +206,8 @@ async function main(): Promise<void> {
         referenceNodes,
         directionRule,
         suppressTargetShapeProgress,
+        ...sideMetaFields(sideAlignment),
+        sideAlignmentChecked,
         ...truncationMetaFields(replayPlan),
       },
     }),
@@ -220,7 +236,8 @@ async function main(): Promise<void> {
   const totalStart = Date.now();
 
   try {
-    let state: GameState = createInitialGameState(undefined, { variants: getApprovedScenarioVariants() });
+    const initialState = createInitialGameState(undefined, { variants: getApprovedScenarioVariants() });
+    let state: GameState = replayStartSfen === undefined ? initialState : { ...initialState, sfen: replayStartSfen };
     // STEP 5-1(B-3、人間承認済み。LP-2): server.tsのbackgroundPlanと同じ役割の変数。
     // stateBeforeMoveの局面で実際にキャッシュされていた計画(直前のready行のもの)を
     // safeComputeMoveOutcomeAfterMoveの新引数(displayedPlan)へ渡すために保持する。

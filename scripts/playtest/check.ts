@@ -42,6 +42,7 @@ import {
   renderIntentStatementTables,
   type IntentStatementReport,
 } from "./lib/intentStatement.js";
+import { initialSfenOf } from "./lib/sideAlignment.js";
 
 const ALL_TYPES: InvariantType[] = ["沈黙", "矛盾", "断定", "未説明用語", "盤との不一致", "陳腐化", "結果"];
 
@@ -64,6 +65,8 @@ interface InputFileResult {
   dirtyPaths: string[] | undefined;
   dirtyCount: number | undefined;
   records: RecordLine[];
+  /** STEP D0-SIDE 段 2(R-6・R-7)。meta から読んだ記録の開始局面(lib/sideAlignment.ts の initialSfenOf) */
+  initialSfen: string;
   findings: Finding[];
 }
 
@@ -104,10 +107,11 @@ function readInputFile(filePath: string): InputFileResult {
   const dirtyCount = meta?.dirtyCount;
 
   const records = lines.filter((l): l is RecordLine => l.kind === "record");
+  const initialSfen = initialSfenOf(meta);
 
   const findings: Finding[] = [];
   for (const invariant of invariants) {
-    for (const finding of invariant.check(records)) {
+    for (const finding of invariant.check(records, { initialSfen })) {
       findings.push({ ...finding, kifuId });
     }
   }
@@ -125,6 +129,7 @@ function readInputFile(filePath: string): InputFileResult {
     dirtyPaths,
     dirtyCount,
     records,
+    initialSfen,
     findings,
   };
 }
@@ -355,7 +360,7 @@ function main(): void {
   const searchPvReport = buildSearchPvStatsReport(searchPvInputs);
 
   // STEP U6-I4。②の名指し。**他の表と同じ records を渡す**(例外は lib が受け止めて行に出す。exit code は変えない)。
-  const intentStatementReport = buildIntentStatementReport(inputs.map((i) => ({ kifuId: i.kifuId, records: i.records })));
+  const intentStatementReport = buildIntentStatementReport(inputs.map((i) => ({ kifuId: i.kifuId, records: i.records, initialSfen: i.initialSfen })));
 
   console.log(renderMarkdown(inputs, allFindings, groups, denominatorReport, searchPvReport, intentStatementReport));
 

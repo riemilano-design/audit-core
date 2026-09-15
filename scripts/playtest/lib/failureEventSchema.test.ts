@@ -12,6 +12,7 @@
 import { readdirSync, readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
+import { DEFAULT_INITIAL_SFEN } from "../../../apps/server/src/analysis/moveHistory.js";
 import type { MetaLine, RecordLine } from "../invariants/types.js";
 import { validate } from "./eventSchema.js";
 import { diagnoseRecords, DRAFT_RULE_1, NOT_EVALUATION_CP, readEvaluations, type DiagnosisRule, type FailureEvent } from "./failureEvent.js";
@@ -59,7 +60,7 @@ const FIXTURE_PROVENANCE = buildProvenance(provenanceInput());
 
 const lineOf = (event: FailureEvent, provenance: Provenance = FIXTURE_PROVENANCE): Json =>
   JSON.parse(JSON.stringify(toEventLine(event, provenance))) as Json;
-const eventsOf = (kifuId: string, records: readonly RecordLine[], rule: DiagnosisRule = DRAFT_RULE_1) => diagnoseRecords(kifuId, records, rule).events;
+const eventsOf = (kifuId: string, records: readonly RecordLine[], rule: DiagnosisRule = DRAFT_RULE_1) => diagnoseRecords(kifuId, records, rule, DEFAULT_INITIAL_SFEN).events;
 const at = (events: FailureEvent[], branchPly: number): FailureEvent => {
   const event = events.find((e) => e.branchPly === branchPly);
   if (event === undefined) throw new Error(`分岐点 ${branchPly} の Failure Event が無い`);

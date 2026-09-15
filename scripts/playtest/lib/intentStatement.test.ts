@@ -28,6 +28,7 @@ import {
   UNDETERMINED_REASONS,
   type IntentDetection,
   type IntentStatementClass,
+  type IntentStatementGroup,
   type UndeterminedReason,
 } from "./intentStatement.js";
 
@@ -249,7 +250,7 @@ describe("summarizeIntentStatements(薄い呼び出し。19.4.3)", () => {
       stage("opponent_intent", "none", "opponent_intent_unclassified", null),
       stage("opponent_next_aim", "none", "opponent_next_aim_unclassified", null),
     ]);
-    const counts = summarizeIntentStatements([record]);
+    const counts = summarizeIntentStatements([{ records: [record], initialSfen: DEFAULT_INITIAL_SFEN }]);
     expect(counts.totalPlies).toBe(1);
     expect(counts.undetermined["U-2"]).toBe(1);
   });
@@ -261,7 +262,7 @@ describe("summarizeIntentStatements(薄い呼び出し。19.4.3)", () => {
       stage("opponent_intent", "forming", "opponent_intent_forming", null),
       stage("opponent_next_aim", "forming", "opponent_next_aim_unclassified", null),
     ]);
-    const counts = summarizeIntentStatements([record]);
+    const counts = summarizeIntentStatements([{ records: [record], initialSfen: DEFAULT_INITIAL_SFEN }]);
     expect(counts.totalPlies).toBe(1);
     expect(counts.undetermined["U-4"]).toBe(1);
   });
@@ -281,7 +282,7 @@ describe("summarizeIntentStatements(薄い呼び出し。19.4.3)", () => {
       }
     }
 
-    const counts = summarizeIntentStatements(records);
+    const counts = summarizeIntentStatements([{ records, initialSfen: DEFAULT_INITIAL_SFEN }]);
     // data に依存しない期待値だけを固定する(19.4.3)。
     expect(counts.totalPlies).toBe(107);
     expect(counts.undetermined).toEqual(ZERO_UNDETERMINED);
@@ -308,8 +309,8 @@ describe("buildIntentStatementReport / renderIntentStatementTables(計画書 5.1
   // 連結して数え直した合計と入力ごとの和は同じになる)。見分けるのは R-2 だけ。
   it("R-1: 入力ごとの行と合計の行を作り、合計は正しい値になる", () => {
     const report = buildIntentStatementReport([
-      { kifuId: "a", records: [noCandidateRecord(), noCandidateRecord()] },
-      { kifuId: "b", records: [unmatchedRecord()] },
+      { kifuId: "a", records: [noCandidateRecord(), noCandidateRecord()], initialSfen: DEFAULT_INITIAL_SFEN },
+      { kifuId: "b", records: [unmatchedRecord()], initialSfen: DEFAULT_INITIAL_SFEN },
     ]);
     expect(report.perInput.map((row) => row.label)).toEqual(["a", "b"]);
     expect(report.perInput[0]?.result).toMatchObject({ kind: "counted", counts: { totalPlies: 2, noCandidate: 2 } });
@@ -322,14 +323,14 @@ describe("buildIntentStatementReport / renderIntentStatementTables(計画書 5.1
 
   it("R-2: 例外(種類を問わない)を外へ出さず、その入力を行として残し、合計の数字を出さない", () => {
     const bad = [noCandidateRecord()];
-    const summarize = (records: RecordLine[]) => {
-      if (records === bad) throw new TypeError("数える途中で壊れた");
-      return summarizeIntentStatements(records);
+    const summarize = (groups: readonly IntentStatementGroup[]) => {
+      if (groups.some((group) => group.records === bad)) throw new TypeError("数える途中で壊れた");
+      return summarizeIntentStatements(groups);
     };
     const report = buildIntentStatementReport(
       [
-        { kifuId: "good", records: [noCandidateRecord()] },
-        { kifuId: "bad", records: bad },
+        { kifuId: "good", records: [noCandidateRecord()], initialSfen: DEFAULT_INITIAL_SFEN },
+        { kifuId: "bad", records: bad, initialSfen: DEFAULT_INITIAL_SFEN },
       ],
       summarize,
     );
@@ -340,26 +341,63 @@ describe("buildIntentStatementReport / renderIntentStatementTables(計画書 5.1
   });
 
   it("R-3: 理由別の表は、0 件の理由も 8 つとも列に出す", () => {
-    const lines = renderIntentStatementTables(buildIntentStatementReport([{ kifuId: "a", records: [noCandidateRecord()] }]));
+    const lines = renderIntentStatementTables(buildIntentStatementReport([{ kifuId: "a", records: [noCandidateRecord()], initialSfen: DEFAULT_INITIAL_SFEN }]));
     expect(lines).toContain("| 対象 | U-1 | U-2 | U-3 | U-4 | U-5 | U-6 | U-7 | U-8 |");
     expect(lines).toContain("| a | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |");
     expect(lines).toContain("| 合計 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |");
   });
 
   it("R-4: 注記の 3 つ(異常と呼ばない・data への依存・記録時と照合時の混在)を出す", () => {
-    const text = renderIntentStatementTables(buildIntentStatementReport([{ kifuId: "a", records: [noCandidateRecord()] }])).join("\n");
+    const text = renderIntentStatementTables(buildIntentStatementReport([{ kifuId: "a", records: [noCandidateRecord()], initialSfen: DEFAULT_INITIAL_SFEN }])).join("\n");
     expect(text).toContain("「根拠が新しい」は「正しい」ではない");
     expect(text).toContain("件数は照合時の `data/intents/` に依存する");
     expect(text).toContain("記録を取ったときの ②③ で決まり");
   });
 
   it("R-5: 数えられなかった入力は、表の行・例外の種類と message の行・合計の「出さない」行に出る", () => {
-    const report = buildIntentStatementReport([{ kifuId: "bad", records: [noCandidateRecord()] }], () => {
+    const report = buildIntentStatementReport([{ kifuId: "bad", records: [noCandidateRecord()], initialSfen: DEFAULT_INITIAL_SFEN }], () => {
       throw new RangeError("範囲外");
     });
     const lines = renderIntentStatementTables(report);
     expect(lines).toContain("| bad | 数えられなかった | - | - | - | - | - | - |");
     expect(lines).toContain("- 数えられなかった入力: bad(RangeError: 範囲外)");
     expect(lines).toContain("| 合計 | 出さない(数えられなかった入力が 1 件) | - | - | - | - | - | - |");
+  });
+});
+
+// ---- STEP D0-SIDE 段 2(R-6): 回して畳んだ記録は、その記録の開始局面から並べ直す ----
+// 手で組んだ固定例: 平手・後手番の初期局面に 3c3d を当てた開始局面 FOLD_START(計画 F-S8 と同じ局面)から、
+// 先手 7g7f・後手 4c4d・先手 5i6h・後手 9c9d・先手 6h7g・後手 4d4e。**既定の平手からも 6 手すべて合法に並ぶ**(claude-3 型。計画 3.1)。
+// 開始局面では 3c が空なので、後手の 4d4e で角筋 2b-3c-4d-5e-6f が通り、7g の先手玉が王手を受ける。平手から並べると 3c の歩が
+// 角筋を止めて王手にならない ― **開始局面を渡し忘れると、例外にならずに黙って違う値になる**。
+const FOLD_START = "lnsgkgsnl/1r5b1/pppppp1pp/6p2/9/9/PPPPPPPPP/1B5R1/LNSGKGSNL b - 2";
+const FOLD_MOVES = ["7g7f", "4c4d", "5i6h", "9c9d", "6h7g", "4d4e"];
+
+describe("R-6: 開始局面の違う記録(STEP D0-SIDE 段 2)", () => {
+  /** FOLD_START から、ply 0・2・4 の ready 行を作る(②③は本番の explainPositionWithStatus に開始局面を渡して作る) */
+  const foldedRecords = (): RecordLine[] =>
+    [0, 2, 4].map((ply) => {
+      const moveHistory = FOLD_MOVES.slice(0, ply);
+      const { finalSfen } = replayMoveHistory(moveHistory, FOLD_START);
+      return makeRecord(finalSfen, moveHistory, explainPositionWithStatus(finalSfen, moveHistory, { initialSfen: FOLD_START }));
+    });
+
+  it("summarizeIntentStatements: 開始局面を渡すと U-2 は 0。平手を渡すと 3 行とも U-2(行は消えない)", () => {
+    const records = foldedRecords();
+    expect(summarizeIntentStatements([{ records, initialSfen: FOLD_START }])).toMatchObject({ totalPlies: 3, undetermined: { "U-2": 0 } });
+    expect(summarizeIntentStatements([{ records, initialSfen: DEFAULT_INITIAL_SFEN }])).toMatchObject({ totalPlies: 3, undetermined: { "U-2": 3 } });
+  });
+
+  it("buildIntentStatementReport: 開始局面の違う入力を混ぜても、入力ごとと合計の両方で、それぞれの入力の開始局面から数える", () => {
+    const plain = makeRecord(DEFAULT_INITIAL_SFEN, [], [
+      stage("opponent_intent", "none", "opponent_intent_unclassified", null),
+      stage("opponent_next_aim", "none", "opponent_next_aim_unclassified", null),
+    ]);
+    const report = buildIntentStatementReport([
+      { kifuId: "plain", records: [plain], initialSfen: DEFAULT_INITIAL_SFEN },
+      { kifuId: "folded", records: foldedRecords(), initialSfen: FOLD_START },
+    ]);
+    expect(report.perInput[1]?.result).toMatchObject({ kind: "counted", counts: { totalPlies: 3, undetermined: { "U-2": 0 } } });
+    expect(report.total.result).toMatchObject({ kind: "counted", counts: { totalPlies: 4, undetermined: { "U-2": 0 } } });
   });
 });

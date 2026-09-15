@@ -143,25 +143,27 @@ export class IntentStatementCountMismatchError extends Error {}
  * 最新 + 古い」は、この実装では**数え方そのものが定義**になっている(別々の数を突き合わせる形に
  * していない)。どこにも数えられずに行が消えたとき(M-6・C-3)に鳴るのは 1 本目である。
  */
-export function summarizeIntentStatements(records: RecordLine[]): IntentStatementCounts {
+export function summarizeIntentStatements(groups: readonly IntentStatementGroup[]): IntentStatementCounts {
   const counts = emptyCounts();
 
-  for (const record of records) {
-    if (record.phase !== "ready") continue;
-    counts.totalPlies += 1;
+  for (const { records, initialSfen } of groups) {
+    for (const record of records) {
+      if (record.phase !== "ready") continue;
+      counts.totalPlies += 1;
 
-    let detection: IntentDetection;
-    try {
-      detection = { ok: true, results: detectIntents(record.sfen, record.response.moveHistory) };
-    } catch {
-      detection = { ok: false };
-    }
+      let detection: IntentDetection;
+      try {
+        detection = { ok: true, results: detectIntents(record.sfen, record.response.moveHistory, { initialSfen }) };
+      } catch {
+        detection = { ok: false };
+      }
 
-    const classified = classifyIntentStatementRow(record, detection);
-    if (classified.column === "undetermined") {
-      counts.undetermined[classified.reason] += 1;
-    } else {
-      counts[classified.column] += 1;
+      const classified = classifyIntentStatementRow(record, detection);
+      if (classified.column === "undetermined") {
+        counts.undetermined[classified.reason] += 1;
+      } else {
+        counts[classified.column] += 1;
+      }
     }
   }
 
@@ -179,9 +181,17 @@ export function summarizeIntentStatements(records: RecordLine[]): IntentStatemen
 // ---- check.ts の表(STEP U6-I4 の 2 つ目の変更。docs/STEP_U6-I4_CHECK_TABLE_PLAN_2026-09-13.md) ----
 
 /** 表 1 行分の入力(check.ts の入力 1 本)。 */
-export interface IntentStatementInput {
-  kifuId: string;
+/**
+ * STEP D0-SIDE 段 2(R-6)。数える記録と、その記録の開始局面(meta から読んだもの。lib/sideAlignment.ts の `initialSfenOf`)。
+ * 開始局面の違う記録(回して畳んだ局)を混ぜて数えられるように、記録のまとまりごとに持つ。
+ */
+export interface IntentStatementGroup {
   records: RecordLine[];
+  initialSfen: string;
+}
+
+export interface IntentStatementInput extends IntentStatementGroup {
+  kifuId: string;
 }
 
 /**
@@ -206,11 +216,11 @@ export interface IntentStatementReport {
   total: IntentStatementRow;
 }
 
-type Summarize = (records: RecordLine[]) => IntentStatementCounts;
+type Summarize = (groups: readonly IntentStatementGroup[]) => IntentStatementCounts;
 
-function countWithoutThrowing(records: RecordLine[], summarize: Summarize): IntentStatementResult {
+function countWithoutThrowing(groups: readonly IntentStatementGroup[], summarize: Summarize): IntentStatementResult {
   try {
-    return { kind: "counted", counts: summarize(records) };
+    return { kind: "counted", counts: summarize(groups) };
   } catch (error) {
     // check.ts の exit code は常に 0(人間承認事項。check.ts:15-16)。例外を外へ出さず、行として見せる。
     return {
@@ -232,7 +242,7 @@ export function buildIntentStatementReport(
 ): IntentStatementReport {
   const perInput: IntentStatementRow[] = inputs.map((input) => ({
     label: input.kifuId,
-    result: countWithoutThrowing(input.records, summarize),
+    result: countWithoutThrowing([input], summarize),
   }));
   const notCountedInputs = perInput.filter((row) => row.result.kind !== "counted").length;
   const total: IntentStatementRow = {
@@ -240,10 +250,7 @@ export function buildIntentStatementReport(
     result:
       notCountedInputs > 0
         ? { kind: "withheld", notCountedInputs }
-        : countWithoutThrowing(
-            inputs.flatMap((input) => input.records),
-            summarize,
-          ),
+        : countWithoutThrowing(inputs, summarize),
   };
   return { perInput, total };
 }

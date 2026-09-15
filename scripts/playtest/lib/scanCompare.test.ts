@@ -203,3 +203,27 @@ describe("見積もりの式(計画 5.・3.)", () => {
     expect(twoStageTargetPliesSeconds({ tBootSec: 2, readyRows: 16, tImmSec: 0.05, candidates: 3, tRowDeepSec: 25 })).toBeCloseTo(152.8, 10);
   });
 });
+
+// ---- STEP D0-SIDE 段 2(R-5 の scan-compare 側): 回して畳んだ記録は、それぞれの meta の開始局面で数える ----
+// 手で組んだ固定例: 平手・後手番の初期局面に 3c3d を当てた開始局面 FOLD_START(計画 F-S8 と同じ局面)から、
+// 先手 7g7f・後手 4c4d・先手 5i6h・後手 9c9d・先手 6h7g・後手 4d4e。**既定の平手からも 6 手すべて合法に並ぶ**(claude-3 型。計画 3.1)。
+// 開始局面では 3c が空なので、後手の 4d4e で角筋 2b-3c-4d-5e-6f が通り、7g の先手玉が王手を受ける。平手から並べると 3c の歩が
+// 角筋を止めて王手にならない ― **開始局面を渡し忘れると、例外にならずに黙って違う値になる**。
+const FOLD_START = "lnsgkgsnl/1r5b1/pppppp1pp/6p2/9/9/PPPPPPPPP/1B5R1/LNSGKGSNL b - 2";
+const FOLD_MOVES = ["7g7f", "4c4d", "5i6h", "9c9d", "6h7g", "4d4e"];
+
+describe("回して畳んだ記録(STEP D0-SIDE 段 2)", () => {
+  const foldScan = (nodes: number, meta: MetaLine): ScanInput => ({
+    records: plantedRecords(FOLD_MOVES, { 0: engineRef(500), 2: engineRef(-500) }, {}, FOLD_START).map((record): RecordLine =>
+      record.engineReference ? { ...record, engineReference: { ...record.engineReference, nodes } } : record,
+    ),
+    meta,
+    expectedNodes: nodes,
+  });
+  const foldedMeta = { ...META, mirrored: true, originalUserSide: "gote", plyOffset: 1, startSfen: FOLD_START } as MetaLine;
+
+  it("深い・軽いの meta が mirrored: true と startSfen を持てば、死因①の候補を両方で 1 と数える。平手の meta なら黙って 0 になる", () => {
+    expect(counted(compare(foldScan(DEEP, foldedMeta), foldScan(LIGHT, foldedMeta))).cause1).toStrictEqual({ deep: 1, light: 1 });
+    expect(counted(compare(foldScan(DEEP, META), foldScan(LIGHT, META))).cause1).toStrictEqual({ deep: 0, light: 0 });
+  });
+});

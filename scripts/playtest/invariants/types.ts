@@ -79,15 +79,17 @@ export interface RecordLine {
  * 別々の STEP(U6-L の `searchPvs` と U6-R の `dirty`)が独立に同じ形へたどり着いた。
  * **3 値目の位置が違うのではなく、「測って無かった」を表す値の型が違うだけである。**
  *
- * | 「無い」の種類 | `searchPvs`(record 行) | `dirty`(meta 行) | `trailingMoveTruncated`(meta 行) |
- * |---|---|---|---|
- * | **測っていない**(欄が無い。その STEP より前の記録) | `undefined` | `undefined` | `undefined` |
- * | **測れなかった**(取ろうとして失敗した) | `null` | `null` | **無い**(落とすかどうかは手数だけで決まり、失敗しない) |
- * | **測って無かった**(取れて、中身が空だった) | `[]` | `false` | `false`(落とす手が無かった) |
+ * | 「無い」の種類 | `searchPvs`(record 行) | `dirty`(meta 行) | `trailingMoveTruncated`(meta 行) | `mirrored`(meta 行) | `sideAlignmentChecked`(meta 行) |
+ * |---|---|---|---|---|---|
+ * | **測っていない**(欄が無い。その STEP より前の記録) | `undefined` | `undefined` | `undefined` | `undefined` | `undefined` |
+ * | **測れなかった**(取ろうとして失敗した) | `null` | `null` | **無い**(落とすかどうかは手数だけで決まり、失敗しない) | **無い**(回すかどうかは固定棋譜の欄だけで決まり、失敗しない) | **無い**(照合が食い違えば replay.ts は記録を書かずに止まる) |
+ * | **測って無かった**(取れて、中身が空だった) | `[]` | `false` | `false`(落とす手が無かった) | `false`(回していない) | `false`(照合していない。回していない局か、`originalMoves` の無い回した局) |
  *
  * `trailingMoveTruncated` は `dirty` と同じ形である(`true` / `false` / 欄が無い)。**`null` の例外は作らない**(STEP D0-SIDE 段 1。
  * 最初は「落とさない局は `null`」で実装したが、この表の `null`(測れなかった)とぶつかるので、司令塔の決定で直した)。
  * 落とした手 `truncatedTrailingMove` は `true` のときだけ書く欄で、3 値の欄ではない。
+ * `mirrored` も同じ形である(STEP D0-SIDE 段 2)。`startSfen`・`plyOffset`・`originalUserSide` は `mirrored` が `true` のときだけ書く欄で、3 値の欄ではない。
+ * `sideAlignmentChecked` も `true` / `false` / 欄が無い の形だが、**`false` は「照合していない」**である(「照合して何も無かった」ではない)。
  *
  * **読むときは 3 つに分ける。`?? []` や `?? false` と書かない**(欄が無い記録が
  * 「測って無かった」に化ける)。[AGENT_PROTOCOL.md](../../../docs/AGENT_PROTOCOL.md) 3. の 11.6。
@@ -143,6 +145,27 @@ export interface MetaLine {
   trailingMoveTruncated?: boolean;
   /** STEP D0-SIDE 段 1(R-8)。落とした最後の先手の手(USI)。**`trailingMoveTruncated` が `true` のときだけ書く**(false のときは欄が無い。null は使わない)。 */
   truncatedTrailingMove?: string;
+  /**
+   * STEP D0-SIDE 段 2(replay.ts。lib/sideAlignment.ts)。本人が後手の棋譜を回して、本人が先手の形にそろえたか。**値は 3 つ**(上の表。`dirty` と同じ形):
+   * - `true` … 回して 1 手目を開始局面に畳んだ(`startSfen`・`plyOffset`・`originalUserSide` がある)
+   * - `false` … 回していない(本人が先手の局)。`startSfen` などの欄は無い
+   * - `undefined`(欄が無い) … **D0-SIDE 段 2 より前の記録**。平手から再生している
+   * 解析が読む開始局面は lib/sideAlignment.ts の `initialSfenOf` で 3 つに分けて読む。
+   */
+  mirrored?: boolean;
+  /** STEP D0-SIDE 段 2。再生を始めた局面(回した 1 手目を平手・後手番の初期局面に当てた局面)。**`mirrored` が `true` のときだけ書く**。 */
+  startSfen?: string;
+  /** STEP D0-SIDE 段 2。元の棋譜の手数との差(元の ply = 記録の ply + plyOffset)。**`mirrored` が `true` のときだけ書く**(値は 1)。 */
+  plyOffset?: number;
+  /** STEP D0-SIDE 段 2。元の棋譜で本人がどちらだったか。**`mirrored` が `true` のときだけ書く**(値は "gote")。 */
+  originalUserSide?: "gote";
+  /**
+   * STEP D0-SIDE 段 2(司令塔の決定、2026-09-15)。回した局の固定棋譜の欄(startSfen・moves・plyOffset)を、`originalMoves` から作り直して照合したか。**常に書く**:
+   * - `true` … 照合して一致した(食い違えば replay.ts は記録を書かずに止まるので、`true` の記録は一致したものだけ)
+   * - `false` … 照合していない(回していない局、または `originalMoves` の無い回した局)
+   * - `undefined`(欄が無い) … この欄より前の記録
+   */
+  sideAlignmentChecked?: boolean;
 }
 
 /** 不変条件1件が検出した1件分。束ねる単位は(invariantId, condition)。 */
@@ -163,6 +186,15 @@ export interface Finding {
   goteMove: string | null;
 }
 
+/**
+ * STEP D0-SIDE 段 2(R-7)。check.ts が入力ごとに不変条件へ渡す文脈。
+ * - `initialSfen` … 記録の meta から読んだ開始局面(lib/sideAlignment.ts の `initialSfenOf`)。指し手履歴を並べ直す不変条件(I-9)が使う
+ * **check の第 2 引数を省略できるのは試験の呼び出しのため**(平手の記録だけを渡す既存の試験)。**check.ts は必ず渡す**(check.test.ts の子プロセスで見張る)。
+ */
+export interface InvariantContext {
+  initialSfen: string;
+}
+
 /** 不変条件(draft)1件。真偽を返す決定的な関数(check)を持つだけで、
  * LLM・エンジンの新規呼び出しは行わない(既存の本番関数のimportのみ許可)。 */
 export interface Invariant {
@@ -175,5 +207,5 @@ export interface Invariant {
   /** 1つのrun(1つのJSONLファイル由来のrecord行、ply昇順)に対して真偽判定を行い、
    * 検出をFinding[]で返す。kifuIdはcheck.ts側で確定させるため、ここでは
    * 空文字列を入れておく(check.ts が上書きする)。 */
-  check(records: RecordLine[]): Finding[];
+  check(records: RecordLine[], context?: InvariantContext): Finding[];
 }

@@ -124,7 +124,7 @@ describe("check.ts の「## ②の名指し」(計画書 5.2)", () => {
   it("ソース照合: 他の表と同じ records を渡して組み立て、描いた行を積み、renderMarkdown に渡している", () => {
     const source = readFileSync(CHECK_TS, "utf8");
     expect(source).toContain(
-      "  const intentStatementReport = buildIntentStatementReport(inputs.map((i) => ({ kifuId: i.kifuId, records: i.records })));",
+      "  const intentStatementReport = buildIntentStatementReport(inputs.map((i) => ({ kifuId: i.kifuId, records: i.records, initialSfen: i.initialSfen })));",
     );
     expect(source).toContain("  lines.push(...renderIntentStatementTables(intentStatementReport));");
     expect(source).toContain(
@@ -156,10 +156,83 @@ describe("check.ts の「## ②の名指し」(計画書 5.2)", () => {
         expect(after).toBe(before);
         expect(readdirSync(dir).sort()).toEqual(paths.map((p) => p.slice(dir.length + 1)).sort());
         for (const input of inputs) {
-          expect(rowsOf(stdout, input.kifuId), input.kifuId).toEqual(expectedRows(input.kifuId, summarizeIntentStatements(input.records)));
+          expect(rowsOf(stdout, input.kifuId), input.kifuId).toEqual(expectedRows(input.kifuId, summarizeIntentStatements([{ records: input.records, initialSfen: DEFAULT_INITIAL_SFEN }])));
         }
-        const total = summarizeIntentStatements(inputs.flatMap((input) => input.records));
+        const total = summarizeIntentStatements(inputs.map((input) => ({ records: input.records, initialSfen: DEFAULT_INITIAL_SFEN })));
         expect(rowsOf(stdout, "合計"), "合計").toEqual(expectedRows("合計", total));
+      } finally {
+        rmSync(dir, { recursive: true, force: true });
+      }
+    },
+    60_000,
+  );
+});
+
+// ---- STEP D0-SIDE 段 2(R-6・R-7): check.ts は meta から読んだ開始局面を、②の表と不変条件の両方へ渡す ----
+// 開始局面 FOLD_START は、平手・後手番の初期局面に 3c3d を当てた局面(計画 F-S8。手で導いた値)。
+const FOLD_START = "lnsgkgsnl/1r5b1/pppppp1pp/6p2/9/9/PPPPPPPPP/1B5R1/LNSGKGSNL b - 2";
+
+describe("check.ts と開始局面(STEP D0-SIDE 段 2)", () => {
+  it(
+    "子プロセス: 同じ記録を meta が mirrored: true の入力と平手の入力で渡すと、②の表の U-2 は前者だけ 0、I-9 の所見は前者だけに出る",
+    () => {
+      const moveHistory = ["6i5h"];
+      const { finalSfen } = replayMoveHistory(moveHistory, FOLD_START);
+      const response: StateResponseBodyWithPlan = {
+        sfen: finalSfen,
+        moveHistory,
+        status: { isEnd: false, outcome: undefined },
+        coach: explainPositionWithStatus(finalSfen, moveHistory, { initialSfen: FOLD_START }),
+        legalMoves: [],
+        escapeSquareThreats: [],
+        moveHistoryJapanese: [],
+        plan: {
+          ...basePlan(),
+          targetShapeProgress: {
+            shapeId: "mino_honmino",
+            name: "本美濃囲い",
+            description: "",
+            matchedSquareLabels: [],
+            matchedSquares: [],
+            matchedPieceLabels: [],
+            missingSquareLabels: [],
+            missingSquares: ["2h", "3h"],
+            pendingReviewNote: null,
+          },
+        },
+      };
+      const record: RecordLine = { kind: "record", ply: 2, sfen: finalSfen, senteMove: null, goteMove: null, phase: "ready", elapsedMs: 0, response };
+      const base = { kind: "meta", startedAt: "t", gitHead: null, enginePath: "-" };
+      const inputs = [
+        { kifuId: "d0side-folded", meta: { ...base, kifuId: "d0side-folded", mirrored: true, originalUserSide: "gote", plyOffset: 1, startSfen: FOLD_START }, initialSfen: FOLD_START },
+        { kifuId: "d0side-plain", meta: { ...base, kifuId: "d0side-plain" }, initialSfen: DEFAULT_INITIAL_SFEN },
+      ];
+      // 前提(このプロセスの lib で数えた値): 開始局面を渡せば U-2 は 0、平手なら 1
+      const foldedCounts = summarizeIntentStatements([{ records: [record], initialSfen: FOLD_START }]);
+      const plainCounts = summarizeIntentStatements([{ records: [record], initialSfen: DEFAULT_INITIAL_SFEN }]);
+      expect(foldedCounts.undetermined["U-2"]).toBe(0);
+      expect(plainCounts.undetermined["U-2"]).toBe(1);
+
+      const dir = mkdtempSync(join(tmpdir(), "d0side-check-"));
+      try {
+        const paths = inputs.map((input) => {
+          const filePath = join(dir, `${input.kifuId}.jsonl`);
+          writeFileSync(filePath, `${[input.meta, record].map((line) => JSON.stringify(line)).join("\n")}\n`, "utf-8");
+          return filePath;
+        });
+        const before = gitStatus();
+        const stdout = execFileSync("npx", ["tsx", CHECK_TS, ...paths], { cwd: REPO_ROOT, encoding: "utf-8" });
+        expect(gitStatus()).toBe(before);
+
+        expect(rowsOf(stdout, "d0side-folded")).toEqual(expectedRows("d0side-folded", foldedCounts));
+        expect(rowsOf(stdout, "d0side-plain")).toEqual(expectedRows("d0side-plain", plainCounts));
+        const total = summarizeIntentStatements(inputs.map((input) => ({ records: [record], initialSfen: input.initialSfen })));
+        expect(rowsOf(stdout, "合計")).toEqual(expectedRows("合計", total));
+
+        const i9Section = stdout.split("### I-9(")[1]?.split("\n### ")[0]?.split("\n---")[0] ?? "";
+        expect(i9Section, "I-9 の節が無い").not.toBe("");
+        expect(i9Section).toContain("- 発生箇所(kifuId#ply): d0side-folded#2");
+        expect(i9Section).not.toContain("d0side-plain#2");
       } finally {
         rmSync(dir, { recursive: true, force: true });
       }

@@ -47,15 +47,15 @@ interface BaseRow {
 const baseRowsCache = new Map<string, BaseRow[]>();
 
 /** ply 0, 2, 4, … の ready 行の土台(局面と②③)。同じ手順は 1 回だけ組み立てる。 */
-export function baseRowsOf(moves: readonly string[]): BaseRow[] {
-  const key = moves.join(" ");
+export function baseRowsOf(moves: readonly string[], initialSfen: string = DEFAULT_INITIAL_SFEN): BaseRow[] {
+  const key = `${initialSfen}|${moves.join(" ")}`;
   const cached = baseRowsCache.get(key);
   if (cached) return cached;
   const rows: BaseRow[] = [];
   for (let ply = 0; ply <= moves.length; ply += 2) {
     const moveHistory = moves.slice(0, ply);
-    const { finalSfen } = replayMoveHistory(moveHistory, DEFAULT_INITIAL_SFEN);
-    rows.push({ ply, sfen: finalSfen, moveHistory, coach: explainPositionWithStatus(finalSfen, moveHistory) });
+    const { finalSfen } = replayMoveHistory(moveHistory, initialSfen);
+    rows.push({ ply, sfen: finalSfen, moveHistory, coach: explainPositionWithStatus(finalSfen, moveHistory, { initialSfen }) });
   }
   baseRowsCache.set(key, rows);
   return rows;
@@ -91,14 +91,16 @@ function basePlan(focus: PlantedFocus): ReachablePlanBody {
 
 /**
  * 実際の手順の ready 行に、評価と③を植えた記録を作る。
+ * `initialSfen` は開始局面(STEP D0-SIDE 段 2。回して畳んだ記録の固定例を作るため。既定は平手)。
  * `plant` の既定: 指定の無い行は、終局・先手が王手中なら null(本番の measureEngineReference と同じ)、それ以外は 0。
  */
 export function plantedRecords(
   moves: readonly string[],
   plant: Record<number, PlantedEvaluation>,
   focus: Record<number, PlantedFocus> = {},
+  initialSfen: string = DEFAULT_INITIAL_SFEN,
 ): RecordLine[] {
-  return baseRowsOf(moves).map((row) => {
+  return baseRowsOf(moves, initialSfen).map((row) => {
     const planted: PlantedEvaluation =
       row.ply in plant ? plant[row.ply]! : isGameOver(row.sfen) || isInCheck(row.sfen, "sente") ? null : engineRef(0);
     const response: StateResponseBodyWithPlan = {

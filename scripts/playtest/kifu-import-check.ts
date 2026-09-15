@@ -3,7 +3,11 @@
 //
 // 使い方:
 //   npx tsx scripts/playtest/kifu-import-check.ts <フォルダ>            … 中の .kif / .kifu / .csa / .ki2 をすべて読み、表で出す
-//   npx tsx scripts/playtest/kifu-import-check.ts <ファイル> [--format kif|csa] [--fixed <out.json> --id <id> --source <text>]
+//   npx tsx scripts/playtest/kifu-import-check.ts <ファイル> [--format kif|csa] [--fixed <out.json> --id <id> --source <text>] [--me <本人の名前> | --as sente|gote]
+//
+// STEP D0-SIDE 段 2(docs/STEP_D0-SIDE_PLAN_2026-09-15.md の F-S7・Q-8): --me / --as を渡すと本人の側を決め(lib/userSide.ts)、
+// --fixed では本人が後手の局を回して 1 手目を開始局面に畳んだ形で書く(lib/sideAlignment.ts)。決まらなければ理由を出して書かない。
+// **標準出力に出す名前は本人の側の値だけ**(相手の名前は出さない)。
 //
 // 【このファイルがやること】ファイルのバイト列を読み(UTF-8 か Shift_JIS か、どちらで読んだかを出す)、
 // 取り込みの結果・往復の確認・揃えた手(1 文字の成り駒。STEP D0-KIFU2)・行の 3 分類(採った / 読んだが使わない / 読めなかった)を標準出力へ書く。
@@ -13,6 +17,8 @@ import { readdirSync, readFileSync, statSync, writeFileSync } from "node:fs";
 import path from "node:path";
 
 import { decodeKifuBytes, importCsa, importKif, toFixedKifu, type KifuFormat, type KifuImportResult } from "./lib/kifuImport.js";
+import { alignedFixedKifu } from "./lib/sideAlignment.js";
+import { decideUserSide, InvalidUserSideChoiceError, validateMeArgument, type UserSide, type UserSideDecision } from "./lib/userSide.js";
 
 const EXTENSIONS = [".kif", ".kifu", ".csa", ".ki2"];
 
@@ -79,7 +85,27 @@ function details(c: Checked): string[] {
 
 const target = process.argv[2];
 if (target === undefined || target.startsWith("--")) {
-  console.error("使い方: npx tsx scripts/playtest/kifu-import-check.ts <フォルダまたはファイル> [--format kif|csa] [--fixed <out.json> --id <id> --source <text>]");
+  console.error("使い方: npx tsx scripts/playtest/kifu-import-check.ts <フォルダまたはファイル> [--format kif|csa] [--fixed <out.json> --id <id> --source <text>] [--me <本人の名前> | --as sente|gote]");
+  process.exit(2);
+}
+
+// STEP D0-SIDE 段 2: --me / --as を先に確かめる(空・空白だけ・半角の @ を含む --me は止める。Q-8)
+const meGiven = process.argv.includes("--me");
+const asGiven = process.argv.includes("--as");
+const me = flag("--me");
+const asValue = flag("--as");
+if (meGiven) {
+  try {
+    if (me === undefined) throw new InvalidUserSideChoiceError("--me に本人の名前を渡してください");
+    validateMeArgument(me);
+  } catch (error) {
+    if (!(error instanceof InvalidUserSideChoiceError)) throw error;
+    console.error(error.message);
+    process.exit(2);
+  }
+}
+if (asGiven && asValue !== "sente" && asValue !== "gote") {
+  console.error("--as には sente か gote を渡してください");
   process.exit(2);
 }
 
@@ -100,6 +126,26 @@ console.log("");
 console.log("| ファイル | バイト | 文字コード | 形式 | 結果 | 読めなかった理由 | 手数 | 終局の行 | 往復 | 揃えた手 | 読んだが使わない行 | 読めなかった行 |");
 console.log("|---|---|---|---|---|---|---|---|---|---|---|---|");
 for (const c of checked) console.log(row(c));
+
+// STEP D0-SIDE 段 2: 本人の側(ファイル 1 つのときだけ)
+let sideDecision: UserSideDecision | undefined;
+if (meGiven || asGiven) {
+  if (isDir) {
+    console.error("--me / --as はファイル 1 つのときだけ使えます");
+    process.exit(2);
+  }
+  const r = checked[0]?.result;
+  if (r && r.kind === "imported") {
+    const headerTexts = r.lines.unused.filter((l) => l.kind === "header").map((l) => l.text);
+    sideDecision = decideUserSide(r.format, headerTexts, { me, as: asValue as UserSide | undefined });
+    console.log("");
+    console.log(
+      sideDecision.kind === "decided"
+        ? `本人の側: ${sideDecision.side === "sente" ? "先手" : "後手"}(${sideDecision.decidedBy === "me" ? `--me がヘッダの名前に一致。本人の側の値「${sideDecision.userHeaderRaw}」` : "--as で指定"})`
+        : `本人の側: 決めない(${sideDecision.reason})`,
+    );
+  }
+}
 const notes = checked.flatMap(details);
 if (notes.length > 0) {
   console.log("");
@@ -112,8 +158,13 @@ if (!isDir && fixedOut !== undefined) {
   const r = checked[0]?.result;
   if (!r || r.kind !== "imported") {
     console.log("\n--fixed: 取り込めなかったので書かない");
+  } else if (sideDecision !== undefined && sideDecision.kind === "notDecided") {
+    console.log(`\n--fixed: 本人の側が決まらない(${sideDecision.reason})ので書かない`);
   } else {
-    writeFileSync(fixedOut, `${JSON.stringify(toFixedKifu(r, flag("--id") ?? path.basename(target), flag("--source") ?? target), null, 2)}\n`, "utf-8");
+    const fixed = toFixedKifu(r, flag("--id") ?? path.basename(target), flag("--source") ?? target);
+    // STEP D0-SIDE 段 2: 本人の側を決めたときだけ、そろえた形で書く(決めていなければ今までと同じ形)
+    const written = sideDecision === undefined ? fixed : alignedFixedKifu(fixed, sideDecision.side);
+    writeFileSync(fixedOut, `${JSON.stringify(written, null, 2)}\n`, "utf-8");
     console.log(`\n--fixed: ${fixedOut} に書いた`);
   }
 }

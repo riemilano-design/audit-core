@@ -32,7 +32,7 @@
 - **目的**: 実棋譜のうち本人が後手の局を、既存の道具(`replay.ts` → `diagnose.ts`、先手視点の死因①・JSON v0 の奇数/偶数の ply)で読める形にする
 - **範囲**: `scripts/playtest/lib/` の純粋関数(手の変換・本人の側の判定)と、`kifuImport` の出力(固定棋譜 JSON)に足す欄。**`apps/` と `data/` には触れない**(3. の案 1 で `apps/` に触れる必要が出たら、そこで止めて司令塔に上げる)
 - **前提**: 開始局面は平手(`kifuImport` が平手以外を `unsupported_start` にする。変えない)
-- **固定棋譜 JSON に残すもの**(案): `mirrored: true`、`originalUserSide: "gote"`、`plyOffset`(3. の案 1 のとき 1)、`startSfen`(同)。**元の棋譜の手順は別に残す**(回した手順から戻せるが、戻す計算を報告の根拠にしない)
+- **固定棋譜 JSON に残すもの**(案): `mirrored: true`、`originalUserSide: "gote"`、`plyOffset`(3. の案 1 のとき 1)、`startSfen`(同)。**元の棋譜の手順は別に残す**(段 2 で `originalMoves` の欄にした。本人が先手の局は `mirrored: false` だけを書く。12.7)(回した手順から戻せるが、戻す計算を報告の根拠にしない)
 - **本人の選び方**(案、6. の Q-2): `--me <名前>` でヘッダの先手・後手の名前と突き合わせる。KIF は `先手：` / `後手：` の行、CSA は `N+` / `N-` の行(どちらも `kifuImport` が「読んだが使わない行」の header に入れている)。**一致が 0 か 2 なら取り込まず、理由 `user_side_unknown` を返す(推測しない)**。`--as sente|gote` で明示もできる。**本人の名前は人間が教える。報告・コミットに相手の名前を書かない**
 - **名前の比べ方(司令塔の決定、2026-09-15)**: この出どころの書き出しでは、ヘッダの名前の欄が `名前@▲4八銀` のように `@` の後ろに文字が付くことがある(11.1)。**ヘッダの値から最初の `@` 以降を落とした部分と、`--me` を完全一致で比べる**(表記ゆれの吸収はしない。**落とす前の生の文字列は、本人の側だけを取り込みの記録に残す。相手の名前は残さない**(8.。司令塔の決定))。KIF(`先手：` / `後手：`)と CSA(`N+` / `N-`)で同じ規則。**名前そのものに `@` が入っていると、そこで切れる**(決定的な規則の限界として受け入れる)
 
@@ -84,7 +84,7 @@
 |---|---|---|---|
 | R-1 | `scripts/playtest/replay.ts:193` | `createInitialGameState(…)` の局面(平手・先手番)から始める | 棋譜 JSON に `startSfen` があれば、その局面から始める |
 | R-2 | `replay.ts` の `stateResponseOptions`(`{ directionRule, suppressTargetShapeProgress }`) | `initialSfen` を持たない | `initialSfen: startSfen` を足す(S-2・S-3 でそのまま各所へ届く) |
-| R-3 | `replay.ts` の `buildMetaLine` の `extra` | 開始局面を記録しない | `startSfen`・`plyOffset`・`mirrored`・`originalUserSide`・`trailingMoveTruncated`(と、落としたときだけ `truncatedTrailingMove`)を記録する(P-43 と同じく、記録から出どころを辿れるように)。**回さない局にも `mirrored: false`・`originalUserSide: "sente"`・`plyOffset: 0`・`startSfen: null` を、`trailingMoveTruncated` はどの局にも書く(落とさない局は `false` で、`truncatedTrailingMove` の欄は書かない)**(**null は使わない。司令塔の決定、12.6**)。**`startSfen: null` は段 2 の欄で、同じ理由で形を決め直す必要がある(12.6)**(欄が無い = D0-SIDE より前、と区別する。司令塔の決定。Q-7) |
+| R-3 | `replay.ts` の `buildMetaLine` の `extra` | 開始局面を記録しない | `startSfen`・`plyOffset`・`mirrored`・`originalUserSide`・`trailingMoveTruncated`(と、落としたときだけ `truncatedTrailingMove`)を記録する(P-43 と同じく、記録から出どころを辿れるように)。**`mirrored: boolean` と `trailingMoveTruncated: boolean` はどの局にも書く。`startSfen`・`plyOffset`・`originalUserSide` は `mirrored` が `true` のときだけ、`truncatedTrailingMove` は `trailingMoveTruncated` が `true` のときだけ書く(false では欄そのものを書かない)**(**null は使わない。司令塔の決定、2026-09-15。12.6・12.7**)(欄が無い = D0-SIDE より前、と区別する。Q-7) |
 | R-4 | 固定棋譜の型 `FixedKifu`(`replay.ts:151-153` で `id`・`moves` だけ読む) | 開始局面の欄が無い | 省略可能な `startSfen` を足す(無ければ今と同じ) |
 | **R-5** | **`scripts/playtest/lib/failureEvent.ts:303`**(`detectIntents(record.sfen, record.response.moveHistory)`)・**`:415`**(`actualContinuation(moves, branchPly, rule.windowPlies)`) | `initialSfen` を渡さないので、既定の平手から並べ直す | **`meta` の `startSfen` を読んで渡す**。渡さないと、開始局面が違う記録で、狙いの判定と実戦の続きが別の局面を見る(非合法手で例外になるか、黙って違う値になる)。**D1 の lib の変更なので、監査の対象** |
 | R-6 | `scripts/playtest/lib/intentStatement.ts:155`(`check.ts` の②の表) | 同上 | 同上 |
@@ -142,7 +142,7 @@
 | Q-4 | 元の棋譜の手数との対応をどこに残すか | 固定棋譜 JSON の `plyOffset` と、元の手順(回す前)をそのまま残す。レポートでは元の手数に戻して書く |
 | Q-5 | 手数が奇数の局の扱い | **決定(司令塔、2026-09-15)**: **R-8 ― 最後の先手の手を落として再生し、`meta` に `trailingMoveTruncated`(常に)と、落としたときだけ `truncatedTrailingMove`(落とした手)を残す(**null は使わない。司令塔の決定、12.6**)**。本人が先手の局にも効くので、案 3 の前に要る(下書きの「変えずに `odd_move_count` の件数として数える」は取り下げ) |
 | **Q-6** | `replay.ts` が error 行を書いて exit 1 した記録(R-8 の後も、非合法手などで起きうる)を `diagnose.ts` に掛けるか | **決定(司令塔、2026-09-15)**: **error 行を持つ記録は `diagnose.ts` の入力に使わない**(R-9)。件数と理由は報告に残す。**部分の局を黙って 1 局と数えない**ことを R-8 の見張りに含める(監査 A の必須 2) |
-| **Q-7** | Event の 1 行から座標系が分かるようにするか(監査 A の必須 3) | **決定(司令塔、2026-09-15)**: **この STEP では `meta` に書く(R-3。回さない局・落とさない局にも値を書く)。v0.3 は D4 の前(11.4)。** 以下は決定の前に書いた推奨の記録: **いまは `meta` に書き、記録を辿る**(`provenance.record.path`・sha256 から記録の `meta` に届く)。**Evidence として人に見せる前(D4 の出力の前)に、JSON v0.3(MINOR)で `provenance.record.meta` に `mirrored`・`originalUserSide`・`plyOffset`・`startSfen`・`trailingMoveTruncated`(と `truncatedTrailingMove`) を足す**。いまの v0.2 の `provenance.record.meta` は 6 欄固定で `additionalProperties: false`(A の読み: `failureEventSchema.ts` の `PROVENANCE_META_KEYS`)なので、足さない限り Event の行には写らない。`replay.ts` は回さない局にも `mirrored: false`・`plyOffset: 0`・`trailingMoveTruncated`(と `truncatedTrailingMove`) を書く(欄が無い = D0-SIDE より前、と区別できる)。**時期を決めるのは司令塔** |
+| **Q-7** | Event の 1 行から座標系が分かるようにするか(監査 A の必須 3) | **決定(司令塔、2026-09-15)**: **この STEP では `meta` に書く(R-3。回さない局・落とさない局にも値を書く)。v0.3 は D4 の前(11.4)。** 以下は決定の前に書いた推奨の記録: **いまは `meta` に書き、記録を辿る**(`provenance.record.path`・sha256 から記録の `meta` に届く)。**Evidence として人に見せる前(D4 の出力の前)に、JSON v0.3(MINOR)で `provenance.record.meta` に `mirrored`・`originalUserSide`・`plyOffset`・`startSfen`・`trailingMoveTruncated`(と `truncatedTrailingMove`) を足す**。いまの v0.2 の `provenance.record.meta` は 6 欄固定で `additionalProperties: false`(A の読み: `failureEventSchema.ts` の `PROVENANCE_META_KEYS`)なので、足さない限り Event の行には写らない。`replay.ts` はどの局にも `mirrored`・`trailingMoveTruncated` を書き、`startSfen`・`plyOffset`・`originalUserSide` は回した局だけ、`truncatedTrailingMove` は落とした局だけに書く(欄が無い = D0-SIDE より前、と区別できる。12.7)。**時期を決めるのは司令塔** |
 | **Q-8** | `--me` の細部(監査 A の推奨 2 と、追加の事前読み) | **決定(司令塔、2026-09-15)**: 赤の例 (i)〜(vii)・(a)〜(h) を採る。**`--me` 自身に `@` があれば止める**(推測しない)。**全角の `＠` は `@` として扱わない**。**`--me ""` と空白だけの `--me` は止める**。**生の文字列を記録に残すのは本人の側だけ**(相手の名前は残さない。8.)。**大文字小文字などの表記ゆれは吸収しない**。**推奨(未決。実装の前に司令塔が決める)**: (ii)(h) `@` 以降を落とした後、前後の空白と CR を落としてから比べる(**ファイルの形式の揺れであって、名前の表記ゆれの吸収ではない**)/ (iii) 先手・後手の行が無いときは、`user_side_unknown` と別の理由 `user_side_no_header` にする / (vi) `--me` と `--as` が食い違ったら `user_side_conflict` で取り込まない。**決定(司令塔、2026-09-15、コミット時): 残る推奨(空白と CR を落としてから比べる・`user_side_no_header`・`user_side_conflict`)もそのまま採る** |
 | **Q-9** | 再生に渡す手順が 0 手になる局の扱い(監査 A の追加 (iv) と再指摘) | **決定(司令塔、2026-09-15)**: 再生しない。**条件は「畳む・落とすの後に、再生に渡す手順が 0 手」(経路を問わない)、理由の名前は `no_moves_to_replay`**(0 手の記録からは比べる組が作れず、診断の材料にならない。黙って捨てずに件数を出す)。経路は 3 通り: (a) 本人が先手で元が 1 手(落として 0)(b) 本人が後手で元が 2 手(畳んで 1 → 落として 0)(c) 本人が後手で元が 1 手(畳んで 0。奇数でないので落とさない)。**コミット時(`e1ef22b`)の決定は「元が 1 手だけの局」・理由 `no_moves_after_truncation` だったが、(c) は落とした後ではないので、A の再指摘を受けて変えた(12.2)** |
 
@@ -253,7 +253,7 @@
 
 ### 11.4 後で(この STEP ではやらない)
 
-- **JSON v0.3(MINOR): `provenance.record.meta` に `mirrored`・`originalUserSide`・`plyOffset`・`startSfen`・`trailingMoveTruncated`(と、落としたときだけ `truncatedTrailingMove`)を足す(回さない局・落とさない局にも `trailingMoveTruncated` を書く)。人に見せる出力(D4)の前に行う。** 司令塔が PHASES.md に候補として持つ
+- **JSON v0.3(MINOR): `provenance.record.meta` に `mirrored`・`originalUserSide`・`plyOffset`・`startSfen`・`trailingMoveTruncated`(と、落としたときだけ `truncatedTrailingMove`)を足す(`mirrored`・`trailingMoveTruncated` はどの局にも、`originalUserSide`・`plyOffset`・`startSfen` は `mirrored` が `true` のときだけ、`truncatedTrailingMove` は落としたときだけ写す。null は使わない)。人に見せる出力(D4)の前に行う。** 司令塔が PHASES.md に候補として持つ
 - **`scan-compare` にも R-9 と同じ扱いを入れる**(error 行のある記録を突き合わせに使わない。いまは黙って比べる ― 12.4)
 
 ### 11.5 監査 A の期待値 2 つを、1e も手で導いた(推奨 1 (d)。写すだけにしない)
@@ -376,3 +376,98 @@
 
 - **vitest の全件(変異の後に 1 回、`--testTimeout=60000`)**: **Test Files 3 failed | 92 passed | 1 skipped (96)、Tests 1274 passed | 1 skipped (1275)**。落ちた 3 ファイルは既存の node:test 形式(P-27)で、予測どおり
 
+### 12.7 段 2(worktree `wt-d0-side2`、基点 `5a2dc84`。2026-09-15)
+
+**作ったもの**
+
+| ファイル | 中身 |
+|---|---|
+| `scripts/playtest/lib/usiRotation.ts`(新規) | `rotateSquare`・`rotateUsiMove`(4.)。読めない手は例外。`usi-coordinates.mjs` の `rotateSquare180` と 81 マスで突き合わせる(Q-3) |
+| `scripts/playtest/lib/userSide.ts`(新規) | `decideUserSide`(1.・F-S7・Q-8)。KIF `先手：`/`後手：`(半角 `:` も)、CSA `N+`/`N-`。最初の半角 `@` 以降を落とし、前後の空白・タブ・CR・全角の空白を落として完全一致。`user_side_no_header`・`user_side_unknown`・`user_side_conflict`。`--me` が空・空白だけ・半角 `@` を含むなら止める。**返す名前は本人の側の生の値だけ** |
+| `scripts/playtest/lib/sideAlignment.ts`(新規) | `alignMovesToSente`(回して 1 手目を平手・後手番に当てた局面を `startSfen` に畳む。`applyMove` の出力をそのまま使う)・`readSideAlignment`(固定棋譜の欄の形を確かめる。食い違えば例外)・`sideMetaFields`・`initialSfenOf`(meta を 3 つに分けて読む)・`alignedFixedKifu`(Q-4: 回す前の手順を `originalMoves` に残す) |
+| `scripts/playtest/replay.ts` | R-1〜R-4。そろえの欄を meta より前に読み、**同じ文字列**を `GameState.sfen` と `options.initialSfen` に渡す。meta に `...sideMetaFields(sideAlignment)` |
+| `scripts/playtest/lib/failureEvent.ts` | R-5。`triggerOf`・`diagnoseRecords`・`actualContinuation` の `initialSfen` を**必須**にし(既定値を外した)、`buildDiagnosisReport` が `initialSfenOf(input.meta)` を渡す(形の食い違う meta は「数えられなかった」) |
+| `scripts/playtest/lib/intentStatement.ts` | R-6。`summarizeIntentStatements` は `{ records, initialSfen }` のまとまりを受ける(開始局面の違う入力を混ぜた合計も、それぞれの開始局面から数え直す) |
+| `scripts/playtest/invariants/i9-shape-claim-without-evidence.ts`・`invariants/types.ts`・`check.ts` | R-7。`Invariant.check(records, context?)` の文脈で開始局面を渡す(**省略は既存の試験のため。check.ts は必ず渡す**)。`check.ts` は meta から読んだ開始局面を②の表と不変条件の両方に渡す |
+| `scripts/playtest/lib/scanCompare.ts` | 計画の R-1〜R-7 の外。`diagnoseRecords` の引数を必須にしたため、深い・軽いそれぞれの meta の開始局面を渡す |
+| `scripts/playtest/kifu-import-check.ts` | `--me <名前>` / `--as sente\|gote`(ファイル 1 つのときだけ)。決まれば `--fixed` をそろえた形で書き、決まらなければ理由を出して書かない。**標準出力に出す名前は本人の側の値だけ** |
+| `scripts/playtest/lib/failureEventFixtures.ts` | `plantedRecords`・`baseRowsOf` に開始局面の引数(推奨 3。既定は平手) |
+| `invariants/types.ts` の `MetaLine` | `mirrored?: boolean`・`startSfen?`・`plyOffset?`・`originalUserSide?: "gote"`。3 値の表に `mirrored` の列を足した(`dirty` と同じ形。null の例外は作らない) |
+
+**実装で決めたこと(計画に書いていなかった細部。監査で見てほしい)**
+- 先手・後手の行の**どちらかが無い**局は `user_side_no_header`(両方無いときだけではない)。先手か後手の行が 2 本以上なら `user_side_unknown`
+- `--me` そのものは前後の空白を落とさない(空・空白だけなら止める)。`--me` で決まらなかった局を `--as` で決め直さない
+- 本人の側のヘッダの生の値は **`kifu-import-check.ts` の標準出力にだけ出し、固定棋譜 JSON には書かない**(records/ に置く JSON に名前を入れない、の人間の承認に合わせた)
+- 固定棋譜 JSON: 本人が先手 → `id`・`source`・`mirrored: false`・`moves`。後手 → `id`・`source`・`mirrored: true`・`originalUserSide`・`plyOffset`・`startSfen`・`moves`・`originalMoves`。`--me`/`--as` を渡さなければ今までと同じ 3 欄
+- そろえの欄の形が食い違う固定棋譜は、`replay.ts` が **meta を書く前に**例外で止まる(記録を書かない、exit 1)
+- 手数が奇数かどうか(R-8)は `replay.ts` が畳んだ後の `moves` で決める。**畳むのは固定棋譜を作るとき、落とすのは再生のとき**なので、V-S22 の形(元の手数で判定)は起きない。同じ種類の誤りは W-R3(`originalMoves` で判定する)で見た
+- F-S7 の名前は、計画の例の名前を使わず**すべて架空の名前**にした
+
+**固定例(期待値は回す前に手で書いた)**
+- F-S1〜S6・S10・S11 は `usiRotation.test.ts`。F-S6 の検算(盤全体の回転)は、マスの変換を使わず行と駒の単位の反転で書き、shogiops の正規化を通した盤・手番・持ち駒の 3 欄で比べる。**検算を壊す変異 V-S9 も当てた**
+- F-S7 は `userSide.test.ts`(赤の例 (i)〜(vii)・(a)〜(h) を KIF と CSA の両方で)と `kifu-import-check.test.ts`(子プロセス)
+- F-S8・F-S9a (iii)(iv-b)(iv-c)・Q-4 は `sideAlignment.test.ts`。Q-9 の (b)(c) は `replay.test.ts` の子プロセスでも見る(meta の欄と error 行)
+- **R-5 :415 の固定例は手で組んだ**: 3.1 の claude-3 を回して畳むと、平手からも 29 手合法に並ぶが、**どの分岐点でも王手・詰みが 0 で、渡し忘れても値が変わらない**(探りで確かめた。ほかの固定棋譜 6 本と game-01 も同じく値の変わる分岐点が 0)。そこで、平手・後手番に `3c3d` を当てた開始局面(F-S8 と同じ)から `7g7f 4c4d 5i6h 9c9d 6h7g 4d4e` を指す 6 手を作った。**平手からも合法に並び、開始局面の側だけ最後の `4d4e` で角筋 2b-3c-4d-5e-6f が通って 7g の先手玉が王手を受ける**(開始局面から `checks: [6]`、平手から黙って `[]`、畳まずに後手番の平手から並べると 1 手ずれて `[7]`)。R-5 :303・R-6・R-7(I-9 は `6i5h` の局面)・check.ts・scan-compare の固定例も同じ開始局面で作った
+- 監査 A の段 1 の任意 2 件: (1) `diagnose.test.ts` の error 行の理由を `human_move_error` にした (2) `replay.test.ts` の子プロセスで、meta に `moves`・`reason`・`originalMoves` の欄が無いことを見る
+
+**実測(worktree `wt-d0-side2`)**
+- 足した試験 96 件: `lib/usiRotation.test.ts`(新規)16・`lib/userSide.test.ts`(新規)40・`lib/sideAlignment.test.ts`(新規)19・`kifu-import-check.test.ts`(新規)6・`replay.test.ts` +4・`lib/failureEvent.test.ts` +5・`lib/intentStatement.test.ts` +2・`i9-shape-claim-without-evidence.test.ts` +2・`lib/scanCompare.test.ts` +1・`check.test.ts` +1・`diagnose.test.ts` 0(理由の値だけ変えた)
+- 既存の試験の呼び出しは、必須にした `initialSfen` に平手を渡す形に直した(`failureEvent.test.ts`・`failureEventSchema.test.ts`・`intentStatement.test.ts`・`check.test.ts`。見る値は変えていない)
+- **型検査**(`node scripts/typecheck-scripts.mjs`、2 つの tsconfig): rc=0
+- **scripts/playtest の vitest 全件**: **42 ファイル / 523 件すべて通過**。予測(`scratchpad/d0-side/stage2-full-prediction.md`、回す前に書いた)の 42 / 523 と一致
+- 途中の赤 1 回: `userSide.ts` の名前の行の正規表現 `(.*)$` は、`.` が CR に一致しないので、行末に CR が残った行を名前の行として読み落とした(手で書いた (ii) の固定例で見つかった)。`([\s\S]*)$` に直した
+- **変異**(`scratchpad/d0-side/stage2-mutate.py`。予測は道具の中に書き、当てる前に `stage2-mut-out/predictions.md`(sha1 `ce480f08`)へ書き出した。試験は変えた 13 本、tsc は `scripts/playtest/tsconfig.json`。変異の前に 13 本が通ることを確かめた): **適用 33 / 鳴った 33 / 沈黙 0 / 適用できなかった 0**。予測: 集合 33/33・tsc 33/33・中心 10/10 鳴った。沈黙: [] | 集合が外れた: [] | tsc が外れた: []。変異の前後で 24 ファイルの sha256 が一致した
+
+| # | 中心 | 壊し方 | 鳴った試験(予測の見出し) | 失敗件数 | tsc | 予測 |
+|---|---|---|---|---|---|---|
+| V-S1 | **中心** | 回さない(手をそのまま返す) | U1, U2, U4, U12, U13, U14, U15, A2, A3, A4, A6, A7, A8, A13, A19, K1, K4 | 17 | 0 | 的中 |
+| V-S2 | **中心** | 筋だけ回す | U1, U2, U4, U5, U7, U9, U12, U13, U14, U15, A2, A3, A4, A6, A7, A8, A13, A19, K1, K4 | 20 | 0 | 的中 |
+| V-S4 |  | 打つマスを回さない | U4, U12, U13, U14, U15, A3 | 6 | 0 | 的中 |
+| V-S5 |  | 打つ駒の文字を小文字にする | U3, U4, U8, U12, U13, U14, U15, A3 | 8 | 0 | 的中 |
+| V-S6 |  | 成りの + を落とす | U2, U8, U12, U13, U14, U15, A3 | 7 | 0 | 的中 |
+| V-S8a |  | startSfen の手番を後手のままにする | A2, A3, A7, A8, A13, A19, K1, K4 | 8 | 0 | 的中 |
+| V-S8b |  | plyOffset を 0 にする | A2, A6, A7, A8, A13, A19, K1 | 7 | 0 | 的中 |
+| V-S9 |  | 検算の側で持ち駒の先後を入れ替えない | U13 | 1 | 0 | 的中 |
+| V-S7 | **中心** | 本人の側を取り違える | S1, S2, S4, S7, S11, S13, S16, S17, S22, S23, K1, K2, K3 | 21 | 0 | 的中 |
+| V-S10 | **中心** | @ 以降を落とさない | S4, S7, S15, S16, S21, S22, K1, K3 | 12 | 0 | 的中 |
+| V-S11 |  | 完全一致を部分一致(includes)にする | S5, S17 | 4 | 0 | 的中 |
+| V-S19 |  | 完全一致を前方一致(startsWith)にする | S5, S6, S17 | 6 | 0 | 的中 |
+| V-S12 |  | 空白・CR を落とさない | S7, S21 | 3 | 0 | 的中 |
+| V-S17 |  | 最後の @ で切る | S16, S21 | 3 | 0 | 的中 |
+| V-S18 |  | 後手の名前だけ @ を落とさない | S7, S14, S15, S22, K1, K3 | 9 | 0 | 的中 |
+| V-S15a | **中心** | R-5 :415 diagnoseRecords が開始局面を actualContinuation に渡さない | F4, C1 | 2 | 0 | 的中 |
+| V-S15b |  | R-5 :303 triggerOf が開始局面を detectIntents に渡さない | F3, F4 | 2 | 0 | 的中 |
+| V-S15c | **中心** | R-5 buildDiagnosisReport が meta の startSfen を読まない | F4, F5 | 2 | 0 | 的中 |
+| V-S15d | **中心** | R-6 summarizeIntentStatements が開始局面を渡さない | I1, I2, H1 | 3 | 0 | 的中 |
+| V-S15e | **中心** | R-7 I-9 が文脈の開始局面を使わない | N1, H1 | 2 | 0 | 的中 |
+| W-C1 |  | check.ts が不変条件に文脈を渡さない | H1 | 1 | 0 | 的中 |
+| W-C2 |  | check.ts が meta の開始局面を読まない | H1 | 1 | 0 | 的中 |
+| W-S1 |  | scanCompare が軽い走査の meta を読まない | C1 | 1 | 0 | 的中 |
+| V-S16 |  | GameState.sfen に正規化の違う文字列を渡す(手数の欄を 1) | R4 | 1 | 0 | 的中 |
+| W-R1 | **中心** | replay.ts が meta にそろえの欄を書かない | R4, R5, R6, R7, R8 | 5 | 0 | 的中 |
+| W-R2 | **中心** | replay.ts が固定棋譜のそろえの欄を読まない | R4, R7, R8, R9 | 4 | 0 | 的中 |
+| W-R3 |  | replay.ts が畳む前の手順(originalMoves)で落とすかを決める(V-S22 の段 2 版) | R1, R7, R8 | 3 | 0 | 的中 |
+| A-2 |  | truncationMetaFields が受けた値をそのまま返す(監査 A の任意 2) | P1, P2, R5, R6, R7, R8 | 6 | 0 | 的中 |
+| A-9 |  | diagnose.ts が理由 odd_move_count の error 行だけを集める(監査 A の任意 1) | D0, D1 | 2 | 0 | 的中 |
+| W-K1 |  | kifu-import-check.ts が決まらない局も書く | K3 | 1 | **1** | 的中 |
+| W-K2 |  | kifu-import-check.ts が --me を先に確かめない | K6 | 1 | 0 | 的中 |
+| W-A1 |  | readSideAlignment が mirrored でない棋譜の余計な欄を見逃す | A11 | 1 | 0 | 的中 |
+| W-A2 |  | initialSfenOf が 3 つに分けず ?? で読む | A16, F5 | 2 | 0 | 的中 |
+
+**載せ直し(基点 `b87b2f2`。司令塔の指示、2026-09-15)**: 上の実測は基点 `5a2dc84` の worktree `wt-d0-side2` で取った。その後に D0-KIFU2(`b87b2f2`)が `kifu-import-check.ts` を変えた(1 文字の成り駒を揃え、表に「揃えた手」の列を足す)ので、**worktree `wt-d0-side3` を `b87b2f2` で作り直し**、段 2 の 25 本のうち `b87b2f2` までに変わっていない 24 本はそのまま写し、`kifu-import-check.ts` だけは `git merge-file`(自分の版・`5a2dc84` の版・`b87b2f2` の版)で 3 方向に合わせた(衝突 0。揃えた手の列・詳細行と、`--me` / `--as` の両方が入っていることを確かめた)。載せ直した版で: 型検査 rc=0・check-docs rc=0・**scripts/playtest の vitest 全件 42 ファイル / 532 件すべて通過**(回す前の見込み `stage2r-full-prediction.md`: `b87b2f2` の 436 件 + 段 2 の 96 件 = 532)。変異は、中心・`kifu-import-check.ts` に関わるもの・R-5〜R-7 の各 1 件の 15 件(V-S1・V-S2・V-S8a・V-S8b・V-S7・V-S10・V-S18・V-S15a・V-S15c・V-S15d・V-S15e・W-R1・W-R2・W-K1・W-K2)を当て直した(道具 `scratchpad/d0-side/stage2r-mutate.py`、予測は `5a2dc84` のときと同じで、当てる前に `stage2r-mut-out/predictions.md`(sha1 `cb960b69`)へ書き出した): **適用 15 / 鳴った 15 / 沈黙 0 / 適用できなかった 0**。予測: 集合 15/15・tsc 15/15・中心 10/10 鳴った。変異の前後で 25 ファイルの sha256 が一致した
+
+**監査 A の事前の読みを受けた追加(司令塔の決定、2026-09-15。載せ直し版に入れた)**:
+- **■1 回した固定棋譜の欄の照合**: `readSideAlignment` は、`mirrored: true` の固定棋譜に `originalMoves` があれば、`alignMovesToSente(originalMoves, "gote")` で `startSfen`・`moves`・`plyOffset` を作り直し、書かれている値と一致することを確かめる。食い違えば、食い違った欄の名前を理由にして `InvalidSideAlignmentError`(`replay.ts` は meta を書く前に止まり、記録を書かない)。`originalMoves` は**必須にしない**。代わりに **meta に `sideAlignmentChecked: boolean` を常に書く**(照合して一致した局だけ `true`。回していない局と、`originalMoves` の無い回した局は `false`)。**照合せずに通した回した局が、記録から見える**。`mirrored` でない固定棋譜に `originalMoves` があれば形の食い違いとして止める。`invariants/types.ts` の 3 値の表に列を足した(`false` は「照合していない」)
+- **■2 固定例の土台の cache**: 同じ手順を平手と開始局面で続けて `plantedRecords` し、ready 行の局面がそれぞれの開始局面から始まることを見る試験を 1 件足した(cache のキーから開始局面を外す誤りを捕まえる)
+- 固定例: 照合して一致 → `true` / `originalMoves` 無し → `false` / `moves` を 1 手変える → 止まる / `startSfen` を変える → 止まる / `originalMoves` が配列でない・空・読めない手・非合法な 1 手目 → 止まる / `mirrored` でない局に `originalMoves` → 止まる(lib)。`replay.ts` の子プロセスで、`originalMoves` の無い回した局の meta(`sideAlignmentChecked: false`)と、`moves` を変えた局が記録を書かずに止まることを見る。試験は 7 件増えた(sideAlignment +4・replay +2・failureEvent +1)
+- 実測: 型検査 rc=0・**全件 Test Files  42 passed (42)、      Tests  539 passed (539)**(回す前の見込み `stage2x-full-prediction.md`: 532 + 7 = 539)。変異は、足した分(照合を外す `X-1`・`true` を常に書く `X-2`/`X-2b`・cache のキーから開始局面を外す `X-3`)と、この変更で鳴る試験が変わる 4 件(V-S8a・V-S8b・W-R1・W-R2。予測を書き直した)の 8 件(道具 `scratchpad/d0-side/stage2x-mutate.py`、予測は当てる前に `stage2x-mut-out/predictions.md`(sha1 `82c55d8e`)へ書き出した): **適用 8 / 鳴った 8 / 沈黙 0 / 適用できなかった 0**。予測: 集合 8/8・tsc 8/8・中心 3/3 鳴った。変異の前後で 25 ファイルの sha256 が一致した
+
+### 12.8 段 2 の限界
+- **`replay.ts` の再生の経路(エンジンを起こす側)は、ソース照合と子プロセスの手前まで**。`GameState.sfen` と `options.initialSfen` が同じ文字列であること(V-S16)はソース照合でしか見ていない。回した局の ready 行の局面・本数は段 R(エンジン)の記録で確かめる
+- **開始局面を渡すのは R-5〜R-7 と scan-compare まで**。ほかに記録の指し手履歴を平手から並べ直す読み手が増えたら、同じ扱いが要る(`git grep DEFAULT_INITIAL_SFEN` で探す)
+- `check.ts` は、形の食い違う meta(`mirrored: true` で `startSfen` が無い)を読むと例外で止まる(exit 0 の約束から外れる)。`replay.ts` はその形を書かない。壊れた JSON 行で止まるのと同じ扱いにした
+- `Invariant.check` の文脈は省略できる(既存の試験の呼び出しを変えないため)。**check.ts が渡し忘れる誤りは型検査では止まらず、check.test.ts の子プロセスでだけ捕まる**(W-C1・W-C2)
+- R-9(error 行のある記録を使わない)は、段 1 のとおり scan-compare には効かない(12.4)
+- **`originalMoves` の無い回した固定棋譜は照合しない**(司令塔の決定で必須にしない)。その局の記録は `sideAlignmentChecked: false` になるので、使う側が数えて見分ける
+
+- **監査 A の任意の指摘 2 件(GO のまま。司令塔の決定: 段 2 のコミットには入れず、後の小さな追加で塞ぐ、2026-09-15)**: (1) `kifu-import-check.ts` の表の「揃えた手」の列は、どの試験も見ていない(D0-KIFU2 の限界「ソース照合のみ」と同じ。merge で消えても気づけない)。`kifu-import-check.test.ts` の子プロセスに 1 文字の成り駒を含む架空の最小 KIF を 1 件足せば見張れる。(2) 後手の名前の行が 2 本ある固定例が無い(`userSide.test.ts` の (iv) に 1 行)。担当 1e、監査 A。

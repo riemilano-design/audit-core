@@ -28,6 +28,7 @@ import { parsePosition } from "../../../apps/server/src/rules/sfenPosition.js";
 import type { MetaLine, RecordLine } from "../invariants/types.js";
 import { displayDirty, readDirtyState } from "./gitState.js";
 import { classifyIntentStatementRow, type IntentDetection, type IntentStatementClass } from "./intentStatement.js";
+import { initialSfenOf } from "./sideAlignment.js";
 
 // ---- 仮の規則(判断的知識。1 か所にまとめる)----
 
@@ -182,7 +183,7 @@ export function actualContinuation(
   moves: readonly string[],
   branchPly: number,
   windowPlies: number,
-  initialSfen: string = DEFAULT_INITIAL_SFEN,
+  initialSfen: string,
 ): Continuation {
   let sfen = initialSfen;
   for (let index = 0; index < branchPly - 1; index++) sfen = applyMove(sfen, moves[index]!);
@@ -296,11 +297,12 @@ export interface Trigger {
   kingSurroundings: KingSurroundings | null;
 }
 
-export function triggerOf(row: EvaluatedRow): Trigger {
+/** `initialSfen` は記録の開始局面(STEP D0-SIDE 段 2 の R-5。回して畳んだ記録は平手から並べ直せない)。 */
+export function triggerOf(row: EvaluatedRow, initialSfen: string): Trigger {
   const record = row.record;
   let detection: IntentDetection;
   try {
-    detection = { ok: true, results: detectIntents(record.sfen, record.response.moveHistory) };
+    detection = { ok: true, results: detectIntents(record.sfen, record.response.moveHistory, { initialSfen }) };
   } catch {
     detection = { ok: false };
   }
@@ -384,10 +386,12 @@ function fullMovesOf(rows: readonly EvaluatedRow[]): string[] {
   );
 }
 
+/** `initialSfen` は記録の開始局面(STEP D0-SIDE 段 2 の R-5。`buildDiagnosisReport` が meta から読んで渡す)。 */
 export function diagnoseRecords(
   kifuId: string,
   records: readonly RecordLine[],
   rule: DiagnosisRule,
+  initialSfen: string,
 ): { counts: DiagnosisCounts; events: FailureEvent[] } {
   const rows = readEvaluations(records);
   const pairs = pairEvaluations(rows);
@@ -412,7 +416,7 @@ export function diagnoseRecords(
     if (kinds.length === 0) return;
 
     const branchPly = from.ply + 1;
-    const consequences = actualContinuation(moves, branchPly, rule.windowPlies);
+    const consequences = actualContinuation(moves, branchPly, rule.windowPlies, initialSfen);
     const advantage =
       from.evaluation.state === "measured" && from.evaluation.scoreCp !== null && from.evaluation.scoreCp >= rule.advantageCp;
     const danger = consequences.checks.length > 0 || consequences.mate !== null;
@@ -421,7 +425,7 @@ export function diagnoseRecords(
       branchPly,
       fromReadyPly: from.ply,
       toReadyPly: to.ply,
-      trigger: triggerOf(from),
+      trigger: triggerOf(from, initialSfen),
       action: {
         playedMove: moves[branchPly - 1] ?? null,
         bestmoveAtBefore: from.evaluation.state === "measured" ? from.evaluation.bestmove : null,
@@ -506,7 +510,7 @@ export interface DiagnosisRow {
   result: DiagnosisResult;
 }
 
-type Diagnose = (kifuId: string, records: readonly RecordLine[], rule: DiagnosisRule) => { counts: DiagnosisCounts; events: FailureEvent[] };
+type Diagnose = (kifuId: string, records: readonly RecordLine[], rule: DiagnosisRule, initialSfen: string) => { counts: DiagnosisCounts; events: FailureEvent[] };
 
 /** 入力ごとに診断する。**例外を外へ出さない**(計画 D-1)。`diagnose` は試験専用。 */
 export function buildDiagnosisReport(
@@ -520,7 +524,8 @@ export function buildDiagnosisReport(
       return { kifuId: input.kifuId, meta: input.meta, result: { kind: "excluded", errorReasons: input.errorLines.map((line) => line.reason) } };
     }
     try {
-      const { counts, events } = diagnose(input.kifuId, input.records, rule);
+      // STEP D0-SIDE 段 2(R-5): 開始局面は meta から読む(形の食い違う meta は例外になり、下の catch で「数えられなかった」になる)
+      const { counts, events } = diagnose(input.kifuId, input.records, rule, initialSfenOf(input.meta));
       return { kifuId: input.kifuId, meta: input.meta, result: { kind: "counted", counts, events } };
     } catch (error) {
       return {

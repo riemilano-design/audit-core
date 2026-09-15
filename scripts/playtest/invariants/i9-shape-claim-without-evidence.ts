@@ -42,7 +42,7 @@
 // 「証拠がごくわずか(0件または1件)」という書き方にしている。
 
 import { analyzeShapeFormation } from "../../../apps/server/src/analysis/shapeFormationAnalyzer.js";
-import type { Finding, Invariant, RecordLine } from "./types.js";
+import type { Finding, Invariant, InvariantContext, RecordLine } from "./types.js";
 
 const ID = "I-9";
 
@@ -56,7 +56,7 @@ export const i9ShapeClaimWithoutEvidence: Invariant = {
   type: "盤との不一致",
   status: "draft",
   source: "docs/PHASES.md「Unit 6 の再定義と決定」H-5(2026-09-12 人間承認。閾値は draft の初期値)",
-  check(records: RecordLine[]): Finding[] {
+  check(records: RecordLine[], context?: InvariantContext): Finding[] {
     const findings: Finding[] = [];
 
     for (const record of records) {
@@ -67,7 +67,9 @@ export const i9ShapeClaimWithoutEvidence: Invariant = {
 
       let results;
       try {
-        results = analyzeShapeFormation(record.sfen, record.response.moveHistory);
+        // STEP D0-SIDE 段 2(R-7): 開始局面は check.ts が meta から読んで渡す(回して畳んだ記録は平手から並べ直せない。
+        // 渡さないと下の catch に飲まれて所見が黙って消える)。文脈の無い呼び出し(既存の試験)は analyzeShapeFormation の既定に任せる
+        results = analyzeShapeFormation(record.sfen, record.response.moveHistory, context === undefined ? {} : { initialSfen: context.initialSfen });
       } catch {
         continue;
       }

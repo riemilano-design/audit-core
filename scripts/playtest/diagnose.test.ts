@@ -87,7 +87,9 @@ describe("diagnose.ts(計画 5.2)", () => {
           kifuId: "d1-halted",
           meta: { kind: "meta", kifuId: "d1-halted", startedAt: "t", gitHead: null, enginePath: ENGINE_PATH } as MetaLine,
           records: plantedRecords(GAME01_MOVES, { 48: engineRef(500, { afterPassMate: 3, dropCp: 350 }), 50: engineRef(-300) }),
-          errorLines: [{ reason: "odd_move_count" }],
+          // STEP D0-SIDE 段 2(監査 A の任意 1): 理由を odd_move_count 以外にする。diagnose.ts が理由で error 行を絞る誤り(odd_move_count だけを集める等)を、
+          // ソース照合の文字列一致だけでなく、この子プロセスでも捕まえるため
+          errorLines: [{ reason: "human_move_error" }],
         },
       ];
       const dir = mkdtempSync(join(tmpdir(), "d1-diagnose-"));

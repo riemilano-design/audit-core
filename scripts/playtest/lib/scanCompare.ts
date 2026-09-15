@@ -23,6 +23,7 @@ import {
   type EvaluationState,
   type NotComparedReason,
 } from "./failureEvent.js";
+import { initialSfenOf } from "./sideAlignment.js";
 
 // ---- 1 つの記録の見え方 ----
 
@@ -47,9 +48,9 @@ interface ScanView {
 const pairKey = (fromPly: number, toPly: number): string => `${fromPly}->${toPly}`;
 const toPlyOf = (key: string): number => Number(key.split("->")[1]);
 
-function viewOf(kifuId: string, records: readonly RecordLine[], rule: DiagnosisRule): ScanView {
+function viewOf(kifuId: string, records: readonly RecordLine[], rule: DiagnosisRule, initialSfen: string): ScanView {
   const rows = readEvaluations(records);
-  const { events } = diagnoseRecords(kifuId, records, rule);
+  const { events } = diagnoseRecords(kifuId, records, rule, initialSfen);
   const eventByKey = new Map(events.map((event) => [pairKey(event.fromReadyPly, event.toReadyPly), event]));
   const pairs = new Map<string, PairState>();
   for (const pair of pairEvaluations(rows)) {
@@ -217,8 +218,8 @@ export function compareScans(
   const failed = guard(deep, light);
   if (failed) return { kind: "notCounted", kifuId, ...failed };
 
-  const deepView = viewOf(kifuId, deep.records, rule);
-  const lightView = viewOf(kifuId, light.records, rule);
+  const deepView = viewOf(kifuId, deep.records, rule, initialSfenOf(deep.meta));
+  const lightView = viewOf(kifuId, light.records, rule, initialSfenOf(light.meta));
   const deepToLight = compareDrops(deepView, lightView);
   const lightToDeep = compareDrops(lightView, deepView);
 

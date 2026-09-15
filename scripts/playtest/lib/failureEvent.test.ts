@@ -6,6 +6,8 @@
 import { describe, expect, it } from "vitest";
 import { detectIntents } from "../../../apps/server/src/analysis/intentDetector.js";
 import { DEFAULT_INITIAL_SFEN } from "../../../apps/server/src/analysis/moveHistory.js";
+import { applyMove } from "../../../apps/server/src/rules/applyMove.js";
+import { isInCheck } from "../../../apps/server/src/rules/gameStatus.js";
 import type { MetaLine, RecordLine } from "../invariants/types.js";
 import {
   actualContinuation,
@@ -19,9 +21,11 @@ import {
   pairEvaluations,
   readEvaluations,
   renderDiagnosisReport,
+  triggerOf,
 } from "./failureEvent.js";
 import { baseRowsOf, engineRef, GAME01_MOVES, plantedRecords } from "./failureEventFixtures.js";
 import { classifyIntentStatementRow } from "./intentStatement.js";
+import { GOTE_TO_MOVE_INITIAL_SFEN, InvalidSideAlignmentError } from "./sideAlignment.js";
 
 /** STEP JSON v0.2 で branch に evaluationAfter を足した。D1 の期待値は v0.1 までの 4 欄のまま比べ、evaluationAfter は別の試験で見る */
 const branchOf = (event: FailureEvent | undefined) => {
@@ -31,7 +35,7 @@ const branchOf = (event: FailureEvent | undefined) => {
 };
 const eventAt = (events: ReturnType<typeof diagnoseRecords>["events"], branchPly: number) => events.find((e) => e.branchPly === branchPly);
 /** 仮置きの規則(DRAFT_RULE_1)で数える。**規則は呼び出し側が渡す**(lib に既定値を置かない。監査 B の必須 2) */
-const diagnoseDraft = (kifuId: string, records: readonly RecordLine[]) => diagnoseRecords(kifuId, records, DRAFT_RULE_1);
+const diagnoseDraft = (kifuId: string, records: readonly RecordLine[]) => diagnoseRecords(kifuId, records, DRAFT_RULE_1, DEFAULT_INITIAL_SFEN);
 
 describe("F-1: 植えた死因①(優勢 → 急落 → 窓の中に自玉への王手)", () => {
   // ply 48: +500・afterPass.mate 3・dropCp 350 / ply 50: −300。後手の手の後に王手中なのは 52・54・56(56 で詰み)。
@@ -116,7 +120,7 @@ describe("F-4: 窓が足りない", () => {
   });
 
   it("終局で終わる棋譜は、終局の手で窓が閉じるので「足りない」にしない", () => {
-    const continuation = actualContinuation(GAME01_MOVES, 53, 5);
+    const continuation = actualContinuation(GAME01_MOVES, 53, 5, DEFAULT_INITIAL_SFEN);
     expect(continuation).toEqual({ checks: [54, 56], mate: 56, windowPlies: 5, windowShort: false });
   });
 });
@@ -220,9 +224,9 @@ describe("報告(計画 3.2・D-1)", () => {
     const report = buildDiagnosisReport(
       [{ kifuId: "halted", meta: undefined, records, errorLines: [{ reason: "odd_move_count" }] }],
       DRAFT_RULE_1,
-      (kifuId, recs, rule) => {
+      (kifuId, recs, rule, initialSfen) => {
         called += 1;
-        return diagnoseRecords(kifuId, recs, rule);
+        return diagnoseRecords(kifuId, recs, rule, initialSfen);
       },
     );
     expect(called).toBe(0);
@@ -275,13 +279,13 @@ describe("規則は呼び出し側が渡す(windowPlies を 5 に決め打ちし
   const rule3 = { ...DRAFT_RULE_1, windowPlies: 3 };
 
   it("windowPlies 3 なら分岐点 49 の窓(50〜52)の王手は [52]、5 なら [52, 54]", () => {
-    expect(eventAt(diagnoseRecords("w3", records, rule3).events, 49)?.consequences).toEqual({
+    expect(eventAt(diagnoseRecords("w3", records, rule3, DEFAULT_INITIAL_SFEN).events, 49)?.consequences).toEqual({
       checks: [52],
       mate: null,
       windowPlies: 3,
       windowShort: false,
     });
-    expect(eventAt(diagnoseRecords("w5", records, DRAFT_RULE_1).events, 49)?.consequences.checks).toEqual([52, 54]);
+    expect(eventAt(diagnoseRecords("w5", records, DRAFT_RULE_1, DEFAULT_INITIAL_SFEN).events, 49)?.consequences.checks).toEqual([52, 54]);
   });
 
   it("buildDiagnosisReport も渡された規則で数える", () => {
@@ -393,5 +397,68 @@ describe("STEP JSON v0.2 の欄(docs/STEP_JSON-V0.2_PLAN_2026-09-15.md 2.2・2.4
     const event = eventAt(diagnoseDraft("k1", records).events, 21);
     expect(event?.trigger.kingSurroundings).toEqual(kingSurroundingsOf(records.find((record) => record.ply === 20)!.sfen));
     expect(event?.trigger.kingSurroundings).not.toBeNull();
+  });
+});
+
+// ---- STEP D0-SIDE 段 2(R-5): 回して畳んだ記録は、meta の startSfen から並べ直す(docs/STEP_D0-SIDE_PLAN_2026-09-15.md 3.1)----
+// 手で組んだ固定例: 平手・後手番の初期局面に 3c3d を当てた開始局面 FOLD_START(計画 F-S8 と同じ局面)から、
+// 先手 7g7f・後手 4c4d・先手 5i6h・後手 9c9d・先手 6h7g・後手 4d4e。**既定の平手からも 6 手すべて合法に並ぶ**(claude-3 型。計画 3.1)。
+// 開始局面では 3c が空なので、後手の 4d4e で角筋 2b-3c-4d-5e-6f が通り、7g の先手玉が王手を受ける。平手から並べると 3c の歩が
+// 角筋を止めて王手にならない ― **開始局面を渡し忘れると、例外にならずに黙って違う値になる**。
+const FOLD_START = "lnsgkgsnl/1r5b1/pppppp1pp/6p2/9/9/PPPPPPPPP/1B5R1/LNSGKGSNL b - 2";
+const FOLD_MOVES = ["7g7f", "4c4d", "5i6h", "9c9d", "6h7g", "4d4e"];
+
+describe("R-5: 開始局面の違う記録(STEP D0-SIDE 段 2)", () => {
+  const records = plantedRecords(FOLD_MOVES, { 0: engineRef(500), 2: engineRef(-500) }, {}, FOLD_START);
+  const U2 = { column: "undetermined", reason: "U-2" };
+
+  it("前提: 6 手は開始局面からも平手からも合法に並び、開始局面の側だけ最後に先手玉が王手を受ける。開始局面は 3c3d を後手番の平手に当てた局面", () => {
+    expect(applyMove(GOTE_TO_MOVE_INITIAL_SFEN, "3c3d")).toBe(FOLD_START);
+    const fromStart = FOLD_MOVES.reduce((sfen, move) => applyMove(sfen, move), FOLD_START);
+    const fromDefault = FOLD_MOVES.reduce((sfen, move) => applyMove(sfen, move), DEFAULT_INITIAL_SFEN);
+    expect(isInCheck(fromStart, "sente")).toBe(true);
+    expect(isInCheck(fromDefault, "sente")).toBe(false);
+    expect(records.map((record) => record.ply)).toStrictEqual([0, 2, 4, 6]);
+  });
+
+  it(":415 actualContinuation: 開始局面からは王手 [6]、平手からは黙って [](例外にならない)。畳まずに後手番の平手から並べた値(1 手ずれ)と一致", () => {
+    expect(actualContinuation(FOLD_MOVES, 1, 5, FOLD_START)).toStrictEqual({ checks: [6], mate: null, windowPlies: 5, windowShort: false });
+    expect(actualContinuation(FOLD_MOVES, 1, 5, DEFAULT_INITIAL_SFEN)).toStrictEqual({ checks: [], mate: null, windowPlies: 5, windowShort: false });
+    expect(actualContinuation(["3c3d", ...FOLD_MOVES], 2, 5, GOTE_TO_MOVE_INITIAL_SFEN)).toStrictEqual({ checks: [7], mate: null, windowPlies: 5, windowShort: false });
+  });
+
+  it(":303 triggerOf: 開始局面を渡すと②の分類が U-2 にならず、平手を渡すと U-2(detectIntents が局面と履歴の食い違いで例外)", () => {
+    const [row] = readEvaluations(records);
+    expect(triggerOf(row!, FOLD_START).opponentIntent.classification).not.toStrictEqual(U2);
+    expect(triggerOf(row!, DEFAULT_INITIAL_SFEN).opponentIntent.classification).toStrictEqual(U2);
+  });
+
+  it("buildDiagnosisReport: meta の mirrored: true と startSfen を読み、分岐点 1 の窓に王手 [6] と死因①の候補を出す。meta が平手なら黙って王手 [] になる", () => {
+    const foldedMeta = { kind: "meta", kifuId: "fold", startedAt: "t", gitHead: null, enginePath: "-", mirrored: true, originalUserSide: "gote", plyOffset: 1, startSfen: FOLD_START } as MetaLine;
+    const [folded] = buildDiagnosisReport([{ kifuId: "fold", meta: foldedMeta, records, errorLines: [] }], DRAFT_RULE_1);
+    const [plain] = buildDiagnosisReport([{ kifuId: "fold", meta: undefined, records, errorLines: [] }], DRAFT_RULE_1);
+    if (folded?.result.kind !== "counted" || plain?.result.kind !== "counted") throw new Error("数えられなかった");
+    expect(eventAt(folded.result.events, 1)?.consequences).toStrictEqual({ checks: [6], mate: null, windowPlies: 5, windowShort: false });
+    expect(eventAt(folded.result.events, 1)?.candidateModes).toHaveLength(1);
+    expect(eventAt(folded.result.events, 1)?.trigger.opponentIntent.classification).not.toStrictEqual(U2);
+    expect(eventAt(plain.result.events, 1)?.consequences.checks).toStrictEqual([]);
+    expect(eventAt(plain.result.events, 1)?.candidateModes).toHaveLength(0);
+  });
+
+  it("meta が mirrored: true なのに startSfen が無ければ、平手として読まずに「数えられなかった」にする", () => {
+    const broken = { kind: "meta", kifuId: "fold", startedAt: "t", gitHead: null, enginePath: "-", mirrored: true } as MetaLine;
+    const [row] = buildDiagnosisReport([{ kifuId: "fold", meta: broken, records, errorLines: [] }], DRAFT_RULE_1);
+    expect(row?.result).toMatchObject({ kind: "notCounted", errorName: InvalidSideAlignmentError.name });
+  });
+
+  it("固定例の土台: 同じ手順を平手と開始局面で続けて組むと、ready 行の局面がそれぞれの開始局面から始まる(土台の cache が開始局面を取り違えない)", () => {
+    // この describe の records が、同じ手順を FOLD_START で先に組んでいる
+    const plain = plantedRecords(FOLD_MOVES, {});
+    const folded = plantedRecords(FOLD_MOVES, {}, {}, FOLD_START);
+    const plainAgain = plantedRecords(FOLD_MOVES, {});
+    expect(plain[0]!.sfen).toBe(DEFAULT_INITIAL_SFEN);
+    expect(folded[0]!.sfen).toBe(FOLD_START);
+    expect(plainAgain[0]!.sfen).toBe(DEFAULT_INITIAL_SFEN);
+    expect(plain[3]!.sfen).not.toBe(folded[3]!.sfen);
   });
 });
