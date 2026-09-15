@@ -52,6 +52,7 @@
 | [STEP_JSON-V0.3-META_PLAN_2026-09-15.md](STEP_JSON-V0.3-META_PLAN_2026-09-15.md) | Failure Event JSON v0.2 → v0.3(MINOR)。replay.ts の meta にある先後の揃え・打ち切りの 7 欄(mirrored・originalUserSide・plyOffset・startSfen・sideAlignmentChecked・trailingMoveTruncated・truncatedTrailingMove)を provenance.record.meta に写す計画(2026-09-15、1e)。古い記録は欄を出さず unrecordedKeys に並べ false は書かない。条件つきの欄は oneOf と const の変種 7。合わない meta は名前つき例外で止める。事前読み f2(REVISE → GO)。D2 の counterfactual(v0.4)の前提 |
 | [STEP_D1b_PLAN_2026-09-15.md](STEP_D1b_PLAN_2026-09-15.md) | 診断に「上がり側」(本人の手 → 相手の手の 2 手で本人視点の評価が閾値以上上がった場面。相手の手で上がったとは書かない)と「各局の最大の下がり」(閾値未満でも 1 件)を足す計画(2026-09-15、A)。別契約 diagnosis-moment.v0.1(contract と schemaVersion を必須、既存の Failure Event と列挙は変えない)。opponentBestmove は記録に無い。D2 の反事実を同じ根で当てる。人間の問い「落差なく負けた局と勝った局に何を書くか」への答え(理由は書かず事実だけ)。事前読み f2(REVISE → GO)。実装 B(D2 の後) |
 | [STEP_D-SCREEN_PLAN_2026-09-15.md](STEP_D-SCREEN_PLAN_2026-09-15.md) | 評価を 2 段階にして所要を減らす計画(2026-09-15、A)。段 1 は 40 万ノードで全行、段 2 は急落候補の前後だけ 400 万で読み直し(rescreen.ts、両方の値を記録に残す)。根拠は records/d-cost(L400k 取りこぼし 1/21・所要比 1/8.7)。校正の最初に「読み直しの床」を置く。400 万一律をやめる判断は校正後に人間。人間の指示「効率よく早く」への対応。事前読み 1e(REVISE → GO)。実装は 20 局版の後 |
+| [STEP_D3-COND_PLAN_2026-09-15.md](STEP_D3-COND_PLAN_2026-09-15.md) | 死因候補の条件式の骨組みの計画(2026-09-15、A)。条件式の中身は書かない(20 局版の D2 の表を人間に見せ、物差しの追加の要否と定義を人間が承認してから)。Event 1 件 → 条件式が 真/偽/判定不能、局をまたいだ集計を §7.2 の入力に。過学習の歯止め: 材料 = 2 人目 20 局、試す = 1 人目 10 局(先手 6 局は既に見た・後手 4 局は盲検)、盲検で満たすのは 3 人目。別契約 diagnosis-condition v0.1。事前読み f2(REVISE → GO)。人間「任せます」による |
 
 ## 用語メモ
 
