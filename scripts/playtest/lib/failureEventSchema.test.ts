@@ -593,7 +593,7 @@ describe("T-3: 変種ごとの固定例(実記録に出ない変種を埋める)
 });
 
 describe("T-4: コミット済みの記録 records/d0-nnue・records/d3-nnue・records/real-01 の Failure Event が、すべて今の版のスキーマを通る", () => {
-  it("27 本から作った Failure Event(件数は固定しない)", () => {
+  it("33 本(d0-nnue 7・d3-nnue 20・real-01 6)から作った Failure Event(件数は固定しない)", () => {
     expect(COMMITTED.map((record) => record.dir)).toEqual(expect.arrayContaining(RECORD_DIRS));
     expect(RECORD_LINES.length).toBeGreaterThan(0);
     for (const line of RECORD_LINES) expect(validate(line, schema), `${String(line.kifuId)}#${String(line.branchPly)}`).toEqual([]);
@@ -902,7 +902,7 @@ describe("STEP JSON V0.3-META の約束(記録の meta の 7 欄)", () => {
     expect(patternsOf("truncatedTrailingMove")).toEqual([USI_MOVE_PATTERN]);
   });
 
-  it("スキーマの境目(手で書き換えた 1 行): 変種に無い欄・欠けた欄・値の形・K-7 の組・null は落ち、打つ手・成る手は通る", () => {
+  it("スキーマの境目(手で書き換えた 1 行): 変種に無い欄・欠けた欄(従う欄が 1 つだけ無い・3 つとも無い回した局を含む)・値の形・K-7 の組・null は落ち、打つ手・成る手は通る", () => {
     const broken = (name: string, change: (meta: Json) => void): Json => {
       const line = clone(PROVENANCE_LINES[`v03_${name}`]!);
       change(((line.provenance as Json).record as Json).meta as Json);
@@ -911,6 +911,27 @@ describe("STEP JSON V0.3-META の約束(記録の meta の 7 欄)", () => {
     const failing: Array<[string, Json]> = [
       ["回していない局に startSfen", broken("notMirrored_notTruncated", (m) => (m.startSfen = FOLD_START))],
       ["回した局に plyOffset が無い", broken("mirrored_truncated", (m) => delete m.plyOffset)],
+      // V0.3-META の監査 A の任意 1(STEP D2 の後の小さな追加): 従う欄 3 つが全部無い回した局。1 つだけ欠けた行では、変種が
+      // 「3 つとも有るか、3 つとも無いか」を許す形に崩れても鳴らない。落としていない局・落とした局の 2 つの変種の両方で見る。
+      // sideAlignmentChecked は false にする(A の O-1): true のままだと、回していない変種の mirrored が boolean に崩れても、
+      // その変種の sideAlignmentChecked の const false で落ちて鳴らない
+      ...(["mirrored_notTruncated", "mirrored_truncated"] as const).map((name): [string, Json] => [
+        `回した局(${name})に従う欄 3 つが全部無い(sideAlignmentChecked は false)`,
+        broken(name, (m) => {
+          delete m.originalUserSide;
+          delete m.plyOffset;
+          delete m.startSfen;
+          m.sideAlignmentChecked = false;
+        }),
+      ]),
+      // 司令塔の決定(上の 2 行の限界を足す)と A の O-2: 従う欄が 1 つだけ無い行を、2 つの変種 × 3 欄それぞれ。3 つとも無い行だけでは、
+      // 変種が 1 欄だけを任意にする形に崩れても、残りの 2 欄で落ちるので鳴らない(落とした変種の plyOffset は上の既存の行と重なる)
+      ...(["mirrored_notTruncated", "mirrored_truncated"] as const).flatMap((name) =>
+        (["originalUserSide", "plyOffset", "startSfen"] as const).map((key): [string, Json] => [
+          `回した局(${name})に ${key} だけが無い`,
+          broken(name, (m) => delete m[key]),
+        ]),
+      ),
       ["plyOffset が 2", broken("mirrored_truncated", (m) => (m.plyOffset = 2))],
       ["originalUserSide が sente", broken("mirrored_truncated", (m) => (m.originalUserSide = "sente"))],
       ["回していない局の sideAlignmentChecked が true", broken("notMirrored_notTruncated", (m) => (m.sideAlignmentChecked = true))],
