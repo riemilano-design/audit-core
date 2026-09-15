@@ -191,3 +191,136 @@ T₂段 = t_boot + R × t_row(400k) + D × t_ref(4M)。R = ready 行、D = 読�
 - **K-7** `apps/server/src/analysis/engineReference.ts:103-115` と `recorder.ts:245-251` の「ハーネスは読み筋を捨てる」の注記は、段 2 が同じ戻り値の `searchPvs` を `searchPvsDeep` として記録に写すようになっても古いまま残る(D-SCREEN は `apps/` を変えない。注記を直すのは `apps/` に触る次の STEP)
 
 **事前読み f2(版 `cceba809` の REVISE)の取り込み**: R-1 → 状態の行・§1・§3・§5 の 1.・予-4・8. の Q-7 の行・「既存の決定との関係」/ R-2 → E-17・「深い組での意味」・Markdown・版(2 枝)・K-6(司令塔の同日の訂正で S-15b・Z-23・床 (vii) を足した)/ R-3 → S-20〜S-22・Z-20・Z-21 / S-1 → E-16 / S-2 → 段 2 の不変条件・`diagnose.ts` の入力・S-23・Z-22 / S-3 → Markdown / S-4 → 床 (iv) (v) / S-5 → 予-5〜予-7 / S-6 → E-14 / S-7 → K-7
+
+## 12. 実装の記録(D-SCREEN-1。worktree `wt-dscreen1`、基点 `d3cbdc9`。**エンジンは使っていない**。書いたのは B)
+
+**範囲**: 司令塔 e3 の確認(2026-09-15)で、Q-8 のとおり**記録の側だけ**。
+- この STEP でやったこと: 選び方・`rescreenRecords`・`rescreen.ts`・記録の形(`engineReferenceDeep`・`searchPvsDeep`・meta の `screen`)・見張り
+- D-SCREEN-2 に回すもの: `diagnose.ts` の規則(§3)・「数えない」不変条件の判定・`pvSource`・Failure Event と diagnosis-moment の版・Markdown・校正の道具
+  - 版の番号は、先にスキーマをコミットした方が v0.5・moment v0.2 を取る(D2.5 計画 Q-3)
+
+### 12.1 変えたファイル(sha256)
+
+| ファイル | sha256 | 行 |
+|---|---|---|
+| `scripts/playtest/lib/rescreen.ts`(新規) | `f99363d92698ec3d77e32e68094b7eb1eb6e5b262267395f55f020cdff44bbec` | 216 |
+| `scripts/playtest/lib/rescreen.test.ts`(新規) | `ee09901b229bd03ed9c0093d325f4c68b1453f5a13eda1a7ed0879e1ff0dbc35` | 290 |
+| `scripts/playtest/rescreen.ts`(新規) | `2452c27683856f0f2834eb7be9f927f9cc9a566312a565f98cdde2eee6675874` | 79 |
+| `scripts/playtest/rescreen.test.ts`(新規) | `398bf7298573a1dc92db4f7141e0a07d2e83d5b244cade475bd6711e44cd880f` | 95 |
+| `scripts/playtest/invariants/types.ts` | `885b02476f9b8a2a3e0118e38dcb8dc9c6a3bee9f4025615c4b83ec3abc7298d`(基点 `4e44301c…`。+24 / −5、差分 `scratchpad/dscreen1-types-diff.out`) | — |
+
+### 12.2 実装で決めた点(§2・§11 の文だけでは決まらなかったもの)
+
+- **I-1** (d) の「理由」は、`pairEvaluations` の reason をそのまま使う。
+  - 直前の行が王手中で直後が notMeasurable の組は、reason が直前の側(`notMeasuredInCheck`)になり、候補にしない。
+  - `unrecorded`・`mateBefore` も候補にしない。
+- **I-2** 読み直す 4 行に王手中・終局の行が入っても、`measure` を呼ぶ(`measureEngineReference` が null を返す)。
+  - `deepPlies` の数 = `measure` の回数 = `measuredOrder` の長さ。
+- **I-3** 候補の組と読み直す行は、ready 行の並びの位置で決める(i − `before` 〜 i + `after`、端は切る)。
+  - 規則は `DRAFT_SCREEN_RULE_1 = { dropCp −300, advantageCp 300, advantageDropCp −200, before 1, after 2 }` を lib の 1 か所に置いた(draft)。
+- **I-4** `screen.lightNodes` は、段 1 の meta の `referenceNodes` から取る。
+- **I-5** 段 1 として受け付けない入力は、`RescreenInputError` で止めて書かない。
+  - 対象: meta 行がちょうど 1 つでない・meta に `screen` がある(段 2 の記録)・`referenceNodes` が正の整数でない・同じ ply の ready 行が 2 つ以上。
+  - CLI は、**エンジンを起こす前に** `planRescreen` で確かめる。`--out` が入力と同じパスなら止める(段 1 のファイルは変えない)。
+- **I-6** 出力の組み立て。
+  - 読み直していない行(immediate 行・error 行を含む)と、改行の並びは、段 1 のバイト列のまま出す。
+  - 読み直した ready 行と meta 行だけを JSON に組み直し、新しい欄を**後ろに足す**。段 1 の欄の値と並びは変えない。
+- **I-7** 読み直した行の値。
+  - `engineReferenceDeep` = 戻り値の `reference`(null もキーを残す)。
+  - `searchPvsDeep` = **同じ呼び出し**の `searchPvs`(0 本なら `[]`。null にしない)。
+  - `engineReference`・`searchPvs`(段 1)は変えない。
+- **I-8** `screen.deepRun` の欄は `gitHead`・`dirty`・`enginePath`・`threads`・`startedAt`・`order: "plyAscending"`・`measuredOrder`。
+  - `gitHead`・`dirty` は、道具が `readGitState` で自分で読む。段 1 の meta も、渡された値も使わない。
+  - `dirtyPaths` は写さない(§2 の欄のとおり)。
+- **I-9** `invariants/types.ts` に足した欄。
+  - `RecordLine`: `engineReferenceDeep?`・`searchPvsDeep?`
+  - `MetaLine`: `referenceNodes?`(replay.ts が既に書いていた欄の型)・`screen?`
+  - 3 値の表に 2 列を足した。これらの「欄が無い」は、その STEP より前の記録ではなく、**段 2 で読み直していない行**である。
+- **I-10** §2 の不変条件で記録を「数えない」判定は、`diagnose.ts` が読む側なので D-SCREEN-2 に回した。
+  - 対象: `nodes`・`deepPlies` = 行の欄 = `measuredOrder`、`searchPvsDeep` ⇔ `engineReferenceDeep`。
+  - この STEP では、書く側がこの形で書くことを S-12・S-19 で見張る。
+- **I-11**(監査 f2 の N-3)`rescreenRecords` の引数は、計画 §1 の `(lines, screenRule, measure)` ではなく `(source のバイト列, rule, measure, run)` にした。
+  - バイト列で受けるのは、`screen.sourceSha256` を段 1 のバイト列から道具が自分で計算し、読み直していない行を段 1 のバイト列のまま出すため。
+  - `run` は深い回の出どころ(`deepNodes`・`enginePath`・`threads`・`startedAt`・git を読む場所)。
+- K-7(`engineReference.ts`・`recorder.ts` の「ハーネスは読み筋を捨てる」の注記)は、`apps/` に触らないので古いまま。
+
+### 12.3 試験・型検査(worktree の根から)
+
+- **予測は実装の前に書いた**: `scratchpad/dscreen1-predictions.md`(`09bfb83fd9495b55d64be565ae264e1b87013f14a30eff7d354a6a91ef06b412`、13:45:15Z)
+
+| # | 予測 | 実測 | 判定 |
+|---|---|---|---|
+| P-1 | 基点の scripts/playtest は 610 件通過 | 610 件 | 的中 |
+| P-2 | 足す試験は 18〜26 件 | 20 件(lib 18・CLI 2) | 的中 |
+| P-3 | typecheck:scripts は rc 0 | rc 0 | 的中 |
+| P-4 | 変えるのは 5〜6 本(計画書を含む) | コード 5 本 + 計画書 | 的中 |
+| P-5 | 変異は全部鳴る | 11/11 | 的中 |
+
+- **全件**: 46 ファイル・**630 件通過**(610 + 20)
+- **固定例(§6・§11 のうち D-SCREEN-1 の分)**
+  - S-1・S-2・S-3・S-4・S-5(王手中・終局の組を含む)・S-11・S-12・S-19
+  - 足したもの:
+    - (a) と (b) の両方の理由
+    - 端でない組の 4 行
+    - 候補が無いとき(読み直す行も measure の呼び出しも無い)
+    - 測れなかった行(null のキーを残す)
+    - 入力の誤り 5 通り
+    - `planRescreen` の戻り値
+    - CLI のソース照合
+    - CLI の子プロセス(エンジンを起こさずに exit 1 で止まる 4 通りと、git status 不変)
+  - 司令塔の範囲の文には S-11 が無いが、Z-10 の見張りなので入れた。
+
+### 12.4 変異(規則 11.3・11.8)
+
+- **道具**: `scratchpad/dscreen1-mutate.py`(`86601e42b8e3bc2a02c69b45cb2e001c9b7e87bc4680aaa6ee989a9da0f0bfaa`)。予測は、実装と試験の後・当てる前に、道具の中に試験の単位で書いた。
+- **出力**: `scratchpad/dscreen1-mutate.out`(`272c3603b1026394b516fb07b2a9944abb0481d4887455b7aa0b007965211f1f`)。道具の sha と当てた結果を、同じ逐次コマンドで記録した。
+- 校正は exit 0・20 件。当てた後、2 ファイルとも元のバイト列に戻ったことを sha で確かめた。
+- **適用 11 / 鳴った 11 / 沈黙 0 / 適用できなかった 0。中心 6/6。予測 11/11**
+- エンジンを起こす経路に届く CLI の変異(確かめを外す・同じパスの止めを外す)は入れていない。worktree にエンジンが無く、この STEP はエンジンを使わない。
+
+| # | 変異 | 中心 / 周辺 | 鳴った試験 | 予測 |
+|---|---|---|---|---|
+| Z-1 | 候補の閾値 (a) を −400 | 中心 | S-1・S-3・S-4・S-12・S-19・測れなかった行・planRescreen | 的中 |
+| Z-2 | 読み直す行を i・i+1 だけ | 中心 | S-3・S-4・S-12・S-19・測れなかった行・planRescreen | 的中 |
+| Z-6 | `engineReference` を深い値で上書き | 中心 | S-12 | 的中 |
+| Z-8 | 重なりを除かない | 周辺 | S-4・S-12・S-19 | 的中 |
+| Z-9 | 王手中の組を候補にする | 周辺 | S-5 | 的中 |
+| Z-10 | (c) を候補から外す | 中心 | S-11 | 的中 |
+| Z-12 | `deepRun.gitHead` に段 1 の meta を写す | 中心 | S-12 | 的中 |
+| Z-17 | `searchPvsDeep` を別の `measure` 呼び出しから取る | 中心 | S-12・S-19 | 的中 |
+| Z-18 | `searchPvs` を深い読み筋で上書き | 周辺 | S-12・S-19 | 的中 |
+| K-4 | (d) の notMeasurable を候補から外す(1e の再読み K-4) | 周辺 | S-5 | 的中 |
+| C-1 | 深い回の Threads を 2(CLI) | 周辺 | CLI のソース照合 | 的中 |
+
+### 12.5 残っていること
+
+- **D-SCREEN-2**: §3 の規則、`deepUnavailable`、記録を数えない不変条件(S-8・S-23)、`pvSource`、版、Markdown、S-6〜S-10・S-13〜S-18・S-20〜S-22、校正の道具(`scan-compare` の Event 単位・`measure-twice.ts`)
+- **校正**(§5・§11 の床): エンジンを持つセッションが本数を宣言して回す
+- **載せ替え**: 基点 `d3cbdc9` から最新の HEAD への載せ替えと測り直しは、司令塔が行う
+- **限界**(監査 f2 の N-4): 次の 2 つは試験で見ていない。
+  - CLI がエンジンを起こして深く測る経路(エンジンが要る。校正の実行で初めて通る)
+  - 読み直した行のうち段 1 の欄の部分が、段 1 とバイト一致すること(S-12 は欄の並びと値で見る。段 1 が `JSON.stringify` で書かれていれば一致する)
+
+### 12.6 監査 f2 の GO の後の気づき N-1〜N-4 の取り込み(司令塔 e3 の決定。**試験と文書だけで、lib と CLI は変えていない**)
+
+- **変えたのは `scripts/playtest/lib/rescreen.test.ts` だけ**(`ee09901b…` → **`ba322f2b035921f7212d71cf692afa2e135dfbe25159704b14a658da5bdbec62`**)。差分は `scratchpad/dscreen1-revise-diff.out`(`e02b6289…`、+13 / −1)。ほかの 4 本は 12.1 のまま(`rescreen.ts` `f99363d9`・`rescreen.ts`(CLI)`2452c276`・`rescreen.test.ts`(CLI)`398bf729`・`invariants/types.ts` `885b0247`)
+- **N-1**: 偽の git の `git status` が、数える対象のパス 1 つを返すようにした。
+  - 深い回は `dirty: true`、段 1 の META は `dirty: false` で、値が違う。
+  - S-12 に `git.dirty === true`・`inMeta.gitHead === "stage1head"`・`inMeta.dirty === false` を足した。
+- **N-2**: S-5 に終局の組を足した。
+  - GAME01 の直前の行 54 に測れた値を植え、組 54→56 を作る。reason は `notMeasuredGameEnd`、side は `to` で、`pairEvaluations` の値で確かめる。
+  - この組が候補にならないことを確かめる。題は変えていない。
+  - 本物の記録では王手中の行は null なので、この植え方は reason を作るためだけのもの。
+- **N-3** → 12.2 の I-11。**N-4** → 12.5 の限界。
+- 2 つの試験ファイルは 20 件、typecheck:scripts は rc 0、**全件は 630 件通過**(件数は変わらない。既存の 2 件に主張を足した)。
+- **変異 2 本**
+  - 道具: `scratchpad/dscreen1-revise-mutate.py`(`84caabb8…`)。予測は試験を直す前・当てる前に道具の中へ書き、道具と直しの道具 `dscreen1-revise-edit.py`(`ec8ff22d…`)の sha を、同じ逐次コマンドで記録した。
+  - 出力: `scratchpad/dscreen1-revise.out`
+
+| 変異 | 直す前(予測 → 結果) | 直した後(予測 → 結果) |
+|---|---|---|
+| N-1 `deepRun.dirty` を段 1 の meta から写す | 沈黙 → 沈黙(f2 の観測を再現) | S-12 → **S-12 だけ鳴った** |
+| N-2 (d) に `notMeasuredGameEnd` を足す | 沈黙 → 沈黙 | S-5 → **S-5 だけ鳴った** |
+
+  - 予測 4/4。校正は 2 回とも exit 0・20 件。
+  - 当てた後、`lib/rescreen.ts` は `f99363d9` に戻った。

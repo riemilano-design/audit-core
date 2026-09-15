@@ -14,6 +14,7 @@
 import type { StateResponseBodyWithPlan } from "../../../apps/server/src/api/stateResponse.js";
 import type { EngineReference } from "../lib/engineReference.js";
 import type { SearchPvObservation } from "../../../apps/server/src/analysis/searchPv.js";
+import type { ScreenMeta } from "../lib/rescreen.js";
 
 /** docs/PLAYTEST_LOOP_PROPOSAL.md 4.4 の6型。
  * STEP T-6(B-1、人間承認済み。docs/COVERAGE_AND_OUTCOME_PROPOSAL.md 7.1)で
@@ -71,6 +72,18 @@ export interface RecordLine {
    * **ここでは事実を書くにとどめる**(docs/STEP_U6-L_PLAN_2026-09-13.md 12.3)。
    */
   searchPvs?: SearchPvObservation[] | null;
+  /**
+   * STEP D-SCREEN-1(docs/STEP_D-SCREEN_PLAN_2026-09-15.md §2。lib/rescreen.ts)。段 2 の記録で、**読み直した ready 行にだけ**付く深いノード数の参考評価。
+   * `engineReference`(段 1 の軽い値)は変えずに残す。**欄が無い** = 読み直していない行(段 2 でない記録も)/ **null** = 測ろうとして測れなかった
+   * (測らないと決めた終局・王手中の行も null。`engineReference` と同じ)。値の使い方は D-SCREEN-2 の `diagnose.ts` が決める。
+   */
+  engineReferenceDeep?: EngineReference | null;
+  /**
+   * STEP D-SCREEN-1(計画 §11)。`engineReferenceDeep` と**同じ measure 呼び出し**の読み筋(`measureEngineReference` の `searchPvs` の写し。再探索しない)。
+   * **`searchPvs`(③の探索)とは別の探索**で、同じ欄に入れない(U6-L 決定 1)。欄が無い = 読み直していない行 / `[]` = 測ったが 0 本。
+   * 測れなかったことは `engineReferenceDeep` の null が表す(ここは null にしない)。欄がある ⇔ `engineReferenceDeep` の欄がある。
+   */
+  searchPvsDeep?: SearchPvObservation[];
 }
 
 /**
@@ -79,11 +92,11 @@ export interface RecordLine {
  * 別々の STEP(U6-L の `searchPvs` と U6-R の `dirty`)が独立に同じ形へたどり着いた。
  * **3 値目の位置が違うのではなく、「測って無かった」を表す値の型が違うだけである。**
  *
- * | 「無い」の種類 | `searchPvs`(record 行) | `dirty`(meta 行) | `trailingMoveTruncated`(meta 行) | `mirrored`(meta 行) | `sideAlignmentChecked`(meta 行) |
- * |---|---|---|---|---|---|
- * | **測っていない**(欄が無い。その STEP より前の記録) | `undefined` | `undefined` | `undefined` | `undefined` | `undefined` |
- * | **測れなかった**(取ろうとして失敗した) | `null` | `null` | **無い**(落とすかどうかは手数だけで決まり、失敗しない) | **無い**(回すかどうかは固定棋譜の欄だけで決まり、失敗しない) | **無い**(照合が食い違えば replay.ts は記録を書かずに止まる) |
- * | **測って無かった**(取れて、中身が空だった) | `[]` | `false` | `false`(落とす手が無かった) | `false`(回していない) | `false`(照合していない。回していない局か、`originalMoves` の無い回した局) |
+ * | 「無い」の種類 | `searchPvs`(record 行) | `dirty`(meta 行) | `trailingMoveTruncated`(meta 行) | `mirrored`(meta 行) | `sideAlignmentChecked`(meta 行) | `engineReferenceDeep`(record 行・段 2) | `searchPvsDeep`(record 行・段 2) |
+ * |---|---|---|---|---|---|---|---|
+ * | **測っていない**(欄が無い。その STEP より前の記録) | `undefined` | `undefined` | `undefined` | `undefined` | `undefined` | `undefined`(**読み直していない行**。段 2 でない記録も) | `undefined`(同じ) |
+ * | **測れなかった**(取ろうとして失敗した) | `null` | `null` | **無い**(落とすかどうかは手数だけで決まり、失敗しない) | **無い**(回すかどうかは固定棋譜の欄だけで決まり、失敗しない) | **無い**(照合が食い違えば replay.ts は記録を書かずに止まる) | `null`(測らないと決めた終局・王手中の行も null。`engineReference` と同じ) | **無い**(測れなかったことは `engineReferenceDeep` の null が表す) |
+ * | **測って無かった**(取れて、中身が空だった) | `[]` | `false` | `false`(落とす手が無かった) | `false`(回していない) | `false`(照合していない。回していない局か、`originalMoves` の無い回した局) | **無い**(測れば値か null) | `[]` |
  *
  * `trailingMoveTruncated` は `dirty` と同じ形である(`true` / `false` / 欄が無い)。**`null` の例外は作らない**(STEP D0-SIDE 段 1。
  * 最初は「落とさない局は `null`」で実装したが、この表の `null`(測れなかった)とぶつかるので、司令塔の決定で直した)。
@@ -93,6 +106,8 @@ export interface RecordLine {
  *
  * **読むときは 3 つに分ける。`?? []` や `?? false` と書かない**(欄が無い記録が
  * 「測って無かった」に化ける)。[AGENT_PROTOCOL.md](../../../docs/AGENT_PROTOCOL.md) 3. の 11.6。
+ *
+ * `engineReferenceDeep`・`searchPvsDeep`(STEP D-SCREEN-1)の「欄が無い」は、**その STEP より前の記録ではなく、段 2 で読み直していない行**である(同じ記録の中で行ごとに違う)。
  *
  * **新しく 3 値の欄を足すときは、この表に行を足す。** 表に載らない 3 値を作らない。
  */
@@ -166,6 +181,10 @@ export interface MetaLine {
    * - `undefined`(欄が無い) … この欄より前の記録
    */
   sideAlignmentChecked?: boolean;
+  /** STEP T-7(replay.ts)。`engineReference` を測ったノード数。STEP D-SCREEN-1 の rescreen が段 1 の軽いノード数(`screen.lightNodes`)として読む。 */
+  referenceNodes?: number;
+  /** STEP D-SCREEN-1(計画 §2。lib/rescreen.ts)。段 2 の記録にだけ付く、読み直しの条件と出どころ。段 1 の meta の欄はそのまま残し、後ろに足す。 */
+  screen?: ScreenMeta;
 }
 
 /** 不変条件1件が検出した1件分。束ねる単位は(invariantId, condition)。 */
