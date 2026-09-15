@@ -16,8 +16,10 @@ import { describe, expect, it } from "vitest";
 import { applyMove } from "../../../apps/server/src/rules/applyMove.js";
 import {
   decodeKifuBytes,
+  ENDING_KIF_WORDS,
   importCsa,
   importKif,
+  KIF_ENDINGS,
   STANDARD_START_SFEN,
   toFixedKifu,
   type KifuImportResult,
@@ -56,7 +58,7 @@ const CSA_MOVES = [
   "+8977KE", "-0027KA", "+3938GI", "-2754UM", "+4839OU", "-5476UM", "+3928OU", "-7677UM", "+6958KI", "-7799UM",
 ];
 
-function csaText(opts: { board?: string[]; moves?: string[]; commaTime?: boolean } = {}): string {
+function csaText(opts: { board?: string[]; moves?: string[]; commaTime?: boolean; ending?: string } = {}): string {
   const moves = opts.moves ?? CSA_MOVES;
   return [
     "V2.2",
@@ -65,7 +67,7 @@ function csaText(opts: { board?: string[]; moves?: string[]; commaTime?: boolean
     "$START_TIME:2026/09/10 10:00:00",
     ...(opts.board ?? ["PI", "+"]),
     ...moves.flatMap((m) => (opts.commaTime ? [`${m},T1`] : [m, "T1"])),
-    "%TORYO",
+    opts.ending ?? "%TORYO",
   ].join("\n");
 }
 
@@ -221,7 +223,7 @@ describe("形式をまたいで", () => {
 
   it("固定棋譜の JSON の形(replay.ts がそのまま読める形)にできる", () => {
     const fixed = toFixedKifu(imported(importKif(kifText())), "x", "自作の KIF");
-    expect(Object.keys(fixed)).toEqual(["id", "source", "moves"]);
+    expect(Object.keys(fixed)).toEqual(["id", "source", "ending", "moves"]);
     expect(fixed.moves).toEqual(FIXED.moves);
   });
 });
@@ -460,5 +462,95 @@ describe("importKif ― 1 文字の成り駒(竜・全・圭・杏)を揃えて�
       expect([r.reason, r.lineNo, r.detail]).toEqual(["illegal_move", 7, "1 手目 ２二竜(23)(2c2b)"]);
       expect(r.lines.unread.map((l) => [l.lineNo, l.why])).toEqual([[7, "非合法な指し手"]]);
     }
+  });
+});
+
+// ---------------------------------------------------------------- STEP D0-KIFU3
+// 終局の行を、固定棋譜 JSON の `ending`({ kind, ply })に残す(docs/STEP_D0-KIFU3_PLAN_2026-09-15.md)。
+//
+// 【正解の置き方】期待は計画書 3. の表のまま、試験を回す前に手で書いた(変換器の出力から写さない)。棋譜と文は架空。
+// CSA の語の表の期待は、コンピュータ将棋協会「CSA標準棋譜ファイル形式」第7版 V3.0(2024年5月14日)の語と意味から手で書いた。
+// 【この試験が確かめないこと】実物の棋譜(1e が手元の 30 局で測る。計画書 5. の P-1)。alignedFixedKifu の欄の並び(sideAlignment.test.ts の T-8・T-9)。
+
+/** 20 手の KIF の終局の行だけを替える(行頭の数は 21 が正しい。行は 27 行目) */
+const withEnding = (line: string): string => kifText({ tail: [line] });
+
+describe("importKif・importCsa ― 終局の種類と手数を ending に残す(STEP D0-KIFU3)", () => {
+  it("T-1: 既定の KIF(20 手 + 21 投了)は { kind: resign, ply: 21 }。固定棋譜は id・source・ending・moves", () => {
+    const r = imported(importKif(kifText()));
+    expect(r.endingFact).toStrictEqual({ kind: "resign", ply: 21 });
+    expect(toFixedKifu(r, "x", "自作の KIF")).toStrictEqual({ id: "x", source: "自作の KIF", ending: { kind: "resign", ply: 21 }, moves: FIXED.moves });
+  });
+
+  it("T-2: 終局の語を 切れ負け・詰み に替えると timeUp・mate(ply 21)", () => {
+    expect(imported(importKif(withEnding("  21 切れ負け   ( 0:01/00:00:30)"))).endingFact).toStrictEqual({ kind: "timeUp", ply: 21 });
+    expect(imported(importKif(withEnding("  21 詰み"))).endingFact).toStrictEqual({ kind: "mate", ply: 21 });
+  });
+
+  it("T-3: KIF の 12 語を 1 本ずつ読むと 12 の英名がすべて出て重ならない。語の表と判定の語は同じ集合", () => {
+    const table: Array<[word: string, kind: string]> = [
+      ["投了", "resign"], ["中断", "abort"], ["千日手", "repetition"], ["持将棋", "impasse"], ["詰み", "mate"], ["不詰", "noMate"],
+      ["切れ負け", "timeUp"], ["反則勝ち", "illegalWin"], ["反則負け", "illegalLoss"], ["入玉勝ち", "enteringKingWin"], ["不戦勝", "defaultWin"], ["不戦敗", "defaultLoss"],
+    ];
+    const read = table.map(([word]) => imported(importKif(withEnding(`  21 ${word}`))).endingFact);
+    expect(read).toStrictEqual(table.map(([, kind]) => ({ kind, ply: 21 })));
+    expect(new Set(read.map((ending) => ending?.kind)).size).toBe(12);
+    expect(Object.entries(ENDING_KIF_WORDS).map(([kind, word]) => [word, kind])).toStrictEqual(table);
+    expect(new Set(KIF_ENDINGS)).toStrictEqual(new Set(table.map(([word]) => word)));
+  });
+
+  it("T-4: 終局の行が無い KIF は endingFact が null。固定棋譜は ending: null のキーを持つ", () => {
+    const r = imported(importKif(kifText({ tail: [] })));
+    expect(r.endingFact).toBeNull();
+    const fixed = toFixedKifu(r, "x", "自作の KIF");
+    expect(Object.keys(fixed)).toStrictEqual(["id", "source", "ending", "moves"]);
+    expect(fixed.ending).toBeNull();
+  });
+
+  it("T-5(R-1): 20 手の後の終局の行の手数が 25 なら unreadable。行は読めなかった行だけに入り、結果の ending は null、取り込みは続く", () => {
+    const r = importKif(withEnding("  25 投了"));
+    expect(r.kind).toBe("imported");
+    const ok = imported(r);
+    expect(toFixedKifu(ok, "x", "自作の KIF")).toStrictEqual({
+      id: "x",
+      source: "自作の KIF",
+      ending: { kind: "unreadable", reason: "ply_mismatch", ply: null },
+      moves: FIXED.moves,
+    });
+    expect(ok.lines.unread.map((l) => [l.lineNo, l.why])).toStrictEqual([[27, "ending_ply_mismatch"]]);
+    expect(ok.ending).toBeNull();
+    expect(ok.lines.unused.filter((l) => l.kind === "ending")).toHaveLength(0);
+    // 食い違った行の後の指し手行は、今までどおり「終局の行の後」として読まない(手数の合う 21 投了 でも)
+    const after = imported(importKif(kifText({ tail: ["  25 投了", "  21 投了"] })));
+    expect(after.endingFact).toStrictEqual({ kind: "unreadable", reason: "ply_mismatch", ply: null });
+    expect(after.lines.unread.map((l) => l.why)).toStrictEqual(["ending_ply_mismatch", "終局の行の後にある指し手行"]);
+  });
+
+  it("T-6(R-4): 語の後に文が続く終局の行でも { kind: resign, ply: 21 } だけで、文は写らない", () => {
+    const fixed = toFixedKifu(imported(importKif(withEnding("  21 投了 〇〇〇〇"))), "x", "自作の KIF");
+    expect(fixed.ending).toStrictEqual({ kind: "resign", ply: 21 });
+    expect(JSON.stringify(fixed)).not.toContain("〇〇〇〇");
+  });
+
+  it("T-7(S-3): CSA の %TORYO は resign、表に無い語と符号つきの語は unlisted(語は写さない)。ply は指し手数 + 1", () => {
+    expect(imported(importCsa(csaText())).endingFact).toStrictEqual({ kind: "resign", ply: 21 });
+    expect(imported(importCsa(csaText({ ending: "%NANIKA_NO_OWARI" }))).endingFact).toStrictEqual({ kind: "unlisted", ply: 21 });
+    expect(imported(importCsa(csaText({ ending: "%+ILLEGAL_ACTION" }))).endingFact).toStrictEqual({ kind: "unlisted", ply: 21 });
+    expect(imported(importCsa(csaText({ moves: ["+7776FU"] }))).endingFact).toStrictEqual({ kind: "resign", ply: 2 });
+  });
+
+  it("T-7 の続き: CSA の語の表は、V3.0 の文書で意味が KIF の語と同じ 8 語だけ。文書にあって表に入れない語は unlisted", () => {
+    const table: Array<[word: string, kind: string]> = [
+      ["%TORYO", "resign"], ["%CHUDAN", "abort"], ["%SENNICHITE", "repetition"], ["%TIME_UP", "timeUp"],
+      ["%ILLEGAL_MOVE", "illegalLoss"], ["%JISHOGI", "impasse"], ["%TSUMI", "mate"], ["%FUZUMI", "noMate"],
+      ["%+ILLEGAL_ACTION", "unlisted"], ["%-ILLEGAL_ACTION", "unlisted"], ["%KACHI", "unlisted"], ["%HIKIWAKE", "unlisted"],
+      ["%MAX_MOVES", "unlisted"], ["%MATTA", "unlisted"], ["%ERROR", "unlisted"],
+    ];
+    expect(table.map(([word]) => imported(importCsa(csaText({ ending: word }))).endingFact)).toStrictEqual(table.map(([, kind]) => ({ kind, ply: 21 })));
+  });
+
+  it("T-12(S-1 の限界): KIF の表に無い語の終局の行は、今までどおり取り込み全体が unparsable_move で止まる", () => {
+    const r = importKif(withEnding("  21 勝ち宣言"));
+    expect(r.kind === "not_imported" ? [r.reason, r.lineNo] : r.kind).toStrictEqual(["unparsable_move", 27]);
   });
 });

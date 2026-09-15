@@ -9,6 +9,9 @@
 // --fixed では本人が後手の局を回して 1 手目を開始局面に畳んだ形で書く(lib/sideAlignment.ts)。決まらなければ理由を出して書かない。
 // **標準出力に出す名前は本人の側の値だけ**(相手の名前は出さない)。
 //
+// STEP D0-KIFU3(docs/STEP_D0-KIFU3_PLAN_2026-09-15.md): --fixed の固定棋譜に終局の種類と手数 `ending` を書く(lib/kifuImport.ts の語の表から)。
+// 行頭の手数が食い違う終局の行は読めなかった行に数え、詳しい行には理由(ending_ply_mismatch)と行番号だけを出す(元の文は出さない)。
+//
 // 【このファイルがやること】ファイルのバイト列を読み(UTF-8 か Shift_JIS か、どちらで読んだかを出す)、
 // 取り込みの結果・往復の確認・揃えた手(1 文字の成り駒。STEP D0-KIFU2)・行の 3 分類(採った / 読んだが使わない / 読めなかった)を標準出力へ書く。
 // 【やらないこと】ネットワークへのアクセス。棋譜の取得。ファイルの書き換え(--fixed の出力先を除く)。
@@ -16,7 +19,7 @@
 import { readdirSync, readFileSync, statSync, writeFileSync } from "node:fs";
 import path from "node:path";
 
-import { decodeKifuBytes, importCsa, importKif, toFixedKifu, type KifuFormat, type KifuImportResult } from "./lib/kifuImport.js";
+import { decodeKifuBytes, ENDING_PLY_MISMATCH_WHY, importCsa, importKif, toFixedKifu, type KifuFormat, type KifuImportResult } from "./lib/kifuImport.js";
 import { alignedFixedKifu } from "./lib/sideAlignment.js";
 import { decideUserSide, InvalidUserSideChoiceError, validateMeArgument, type UserSide, type UserSideDecision } from "./lib/userSide.js";
 
@@ -74,7 +77,13 @@ function details(c: Checked): string[] {
   for (const m of r.lines.moves) {
     if (m.pieceNameAligned !== null) out.push(`- ${path.basename(c.file)} ${m.ply} 手目 揃えて読んだ: ${m.pieceNameAligned.written}→${m.pieceNameAligned.readAs}`);
   }
-  for (const l of r.lines.unread) out.push(`- ${path.basename(c.file)} ${l.lineNo} 行目 読めなかった(${l.why}): \`${cell(l.text.trim())}\``);
+  for (const l of r.lines.unread) {
+    out.push(
+      l.why === ENDING_PLY_MISMATCH_WHY
+        ? `- ${path.basename(c.file)} ${l.lineNo} 行目 読めなかった(${l.why})`
+        : `- ${path.basename(c.file)} ${l.lineNo} 行目 読めなかった(${l.why}): \`${cell(l.text.trim())}\``,
+    );
+  }
   if (r.kind === "imported") {
     for (const m of r.roundTrip.notationMismatches.slice(0, 10)) {
       out.push(`- ${path.basename(c.file)} ${m.ply} 手目 表記の食い違い: 元「${m.original}」/ 作り直し「${m.remade ?? "作れない"}」`);

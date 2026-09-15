@@ -42,6 +42,12 @@ npx tsx scripts/playtest/replay.ts scripts/playtest/kifu/2026-09-10-claude-10mov
 
 先手(自分)から始まり交互。相手側の手は本物のエンジンに問い合わせず、記録済みの手をそのまま返す偽エンジンで適用する(`playOpponentMove` へは承認済みvariantを渡さず空配列 `[]` を渡す。将来variantが承認されても再生が変わらないための防御)。
 
+外部の棋譜から `kifu-import-check.ts --fixed` で作った固定棋譜は、次の欄も持つ(`replay.ts` はそろえの欄を `lib/sideAlignment.ts` の `readSideAlignment` で読み、`ending` は読まない):
+
+- `ending`(STEP D0-KIFU3、`docs/STEP_D0-KIFU3_PLAN_2026-09-15.md`): 棋譜に書かれていた終局の種類と手数。`{ "kind": "timeUp", "ply": 78 }` の形で、`kind` は `lib/kifuImport.ts` の語の表(KIF は `ENDING_KIF_WORDS` の 12 語、CSA は `CSA_ENDING_KINDS`)の英名。表に無い CSA の語は `"unlisted"`。`ply` は**元の手順**の指し手数 + 1(回した局でも `originalMoves` の手数 + 1)。KIF の行頭の手数が食い違えば `{ "kind": "unreadable", "reason": "ply_mismatch", "ply": null }`。終局の行が無ければ `null`。**キーが無い = 終局の行を見ていない**(この STEP より前に作った固定棋譜・探索の棋譜)。終局の行の文と「まで」の行は写さない
+- `mirrored`・`originalUserSide`・`plyOffset`・`startSfen`・`originalMoves`(STEP D0-SIDE 段 2、`docs/STEP_D0-SIDE_PLAN_2026-09-15.md`): `--me` か `--as` で本人の側を決めたときだけ書く。本人が先手なら `mirrored: false` だけ。本人が後手なら `mirrored: true`・`originalUserSide: "gote"`・`plyOffset: 1`・回した 1 手目を開始局面に畳んだ `startSfen`・畳んだ後の `moves`・回す前の手順 `originalMoves`
+- 欄の並び: 側を決めない `{ id, source, ending, moves }` / 本人が先手 `{ id, source, mirrored, ending, moves }` / 本人が後手 `{ id, source, mirrored, originalUserSide, plyOffset, startSfen, ending, moves, originalMoves }`
+
 ## JSONL の形式
 
 - 先頭行: `{"kind":"meta", "kifuId", "startedAt", "gitHead", "enginePath"}`(固定棋譜モードは STEP T-6 で `searchMode`・`nodes`・`threads`、STEP T-7 で `referenceNodes` を追加。探索モードは `mode: "explore"`・`profile` 等、STEP T-7 で `referenceNodes` を追加。上記参照)

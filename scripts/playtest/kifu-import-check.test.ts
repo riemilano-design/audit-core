@@ -1,6 +1,7 @@
 // STEP D0-SIDE 段 2(docs/STEP_D0-SIDE_PLAN_2026-09-15.md の F-S7・Q-4・Q-8)。kifu-import-check.ts の --me / --as の配線を子プロセスで見張る。
 // **期待値は試験を回す前に手で書いた**(規則 11.1)。**名前はすべて架空**。
 // 【静かにスキップしない】npx・tsx・git が無ければ execFileSync が例外を投げて赤になる(status が期待と違うので)。
+// STEP D0-KIFU3: 書いた固定棋譜は ending を含めて丸ごと比べる(計画書 3. の T-10)。
 // 【一時ディレクトリ以外に書かない】走らせる前と後で git status(node_modules だけを除く)が同じであることを確かめる。
 
 import { execFileSync } from "node:child_process";
@@ -51,6 +52,9 @@ const KEI_KIF = [
   "まで9手で先手の勝ち",
   "",
 ].join("\n");
+
+/** STEP D0-KIFU3 の T-10: 3 手の後の終局の行の手数が 25 で食い違い、架空の文が続く KIF(その行は 8 行目) */
+const MISMATCH_KIF = KIF.replace("   4 投了", "  25 投了 〇〇〇〇");
 
 /** 表の見出しの行と、指定したファイルの行を突き合わせ、列の名前 → 欄の値 にする(列が消えれば値がずれる)。 */
 function tableCells(stdout: string, fileName: string): Record<string, string> {
@@ -109,7 +113,7 @@ describe("kifu-import-check.ts の --me / --as(子プロセス)", () => {
       expect(result.stdout).toContain("本人の側: 後手(--me がヘッダの名前に一致。本人の側の値「テスト太郎@△3四歩」)");
       expect(result.stdout).not.toContain(OPPONENT);
       expect(result.fixed).not.toBeNull();
-      expect(Object.keys(result.fixed!)).toStrictEqual(["id", "source", "mirrored", "originalUserSide", "plyOffset", "startSfen", "moves", "originalMoves"]);
+      expect(Object.keys(result.fixed!)).toStrictEqual(["id", "source", "mirrored", "originalUserSide", "plyOffset", "startSfen", "ending", "moves", "originalMoves"]);
       // 元の手順 7g7f・3c3d・2g2f を回すと 3c3d・7g7f・8c8d。1 手目 3c3d を開始局面に畳む(手で回した)
       expect(result.fixed).toStrictEqual({
         id: "k1",
@@ -118,6 +122,7 @@ describe("kifu-import-check.ts の --me / --as(子プロセス)", () => {
         originalUserSide: "gote",
         plyOffset: 1,
         startSfen: FS8_START,
+        ending: { kind: "resign", ply: 4 },
         moves: ["7g7f", "8c8d"],
         originalMoves: ["7g7f", "3c3d", "2g2f"],
       });
@@ -132,7 +137,7 @@ describe("kifu-import-check.ts の --me / --as(子プロセス)", () => {
       const result = runCheck(["--me", OPPONENT]);
       expect(result.status, result.stderr).toBe(0);
       expect(result.stdout).toContain("本人の側: 先手");
-      expect(result.fixed).toStrictEqual({ id: "k1", source: "試験の KIF", mirrored: false, moves: ["7g7f", "3c3d", "2g2f"] });
+      expect(result.fixed).toStrictEqual({ id: "k1", source: "試験の KIF", mirrored: false, ending: { kind: "resign", ply: 4 }, moves: ["7g7f", "3c3d", "2g2f"] });
     },
     60_000,
   );
@@ -166,12 +171,12 @@ describe("kifu-import-check.ts の --me / --as(子プロセス)", () => {
   );
 
   it(
-    "--me も --as も無ければ、今までと同じ形(id・source・moves の 3 欄)で書き、本人の側の行を出さない",
+    "--me も --as も無ければ、側を決めない形(id・source・ending・moves の 4 欄)で書き、本人の側の行を出さない",
     () => {
       const result = runCheck([]);
       expect(result.status, result.stderr).toBe(0);
       expect(result.stdout).not.toContain("本人の側");
-      expect(result.fixed).toStrictEqual({ id: "k1", source: "試験の KIF", moves: ["7g7f", "3c3d", "2g2f"] });
+      expect(result.fixed).toStrictEqual({ id: "k1", source: "試験の KIF", ending: { kind: "resign", ply: 4 }, moves: ["7g7f", "3c3d", "2g2f"] });
     },
     60_000,
   );
@@ -202,6 +207,24 @@ describe("kifu-import-check.ts の --me / --as(子プロセス)", () => {
       expect(plain.status, plain.stderr).toBe(0);
       expect(tableCells(plain.stdout, "game.kif")).toMatchObject({ 結果: "読めた", 手数: "3", 揃えた手: "0" });
       expect(plain.stdout).not.toContain("揃えて読んだ:");
+    },
+    60_000,
+  );
+
+  it(
+    "D0-KIFU3 の T-10: 終局の行の手数が食い違う KIF は、固定棋譜の ending が unreadable・表の読めなかった行が 1・詳しい行は理由と行番号だけで、元の文を出さない",
+    () => {
+      const result = runCheck([], { kif: MISMATCH_KIF });
+      expect(result.status, result.stderr).toBe(0);
+      expect(result.fixed).toStrictEqual({
+        id: "k1",
+        source: "試験の KIF",
+        ending: { kind: "unreadable", reason: "ply_mismatch", ply: null },
+        moves: ["7g7f", "3c3d", "2g2f"],
+      });
+      expect(tableCells(result.stdout, "game.kif")).toMatchObject({ 結果: "読めた", 手数: "3", 終局の行: "無し", 読めなかった行: "1" });
+      expect(result.stdout.split("\n").filter((line) => line.includes("ending_ply_mismatch"))).toStrictEqual(["- game.kif 8 行目 読めなかった(ending_ply_mismatch)"]);
+      expect(result.stdout).not.toContain("〇〇〇〇");
     },
     60_000,
   );

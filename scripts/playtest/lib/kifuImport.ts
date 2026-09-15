@@ -1,4 +1,4 @@
-// 外部の棋譜(KIF / CSA)を、固定棋譜の JSON({ id, source, moves: [USI...] })へ変換する試作。
+// 外部の棋譜(KIF / CSA)を、固定棋譜の JSON({ id, source, ending, moves: [USI...] })へ変換する試作。
 // STEP D0-KIFU(仮番号。docs/STEP_D0-KIFU_PLAN_2026-09-14.md)。
 //
 // 【このファイルがやること】
@@ -8,12 +8,15 @@
 // - **行を 3 つに分けて全部返す**(規則 11.6): 採った / 読んだが使わない(種類つき) / 読めなかった
 // - KIF の指し手の行の 1 文字の成り駒(竜・全・圭・杏)は、駒の欄だけ 龍・成銀・成桂・成香 に揃えて読み、
 //   **揃えたことを手ごとに残す**(STEP D0-KIFU2。docs/STEP_D0-KIFU2_PLAN_2026-09-15.md。記録の text は元の行のまま)
+// - 終局の行を、決まった語の表からだけ `{ kind, ply }` に読む(STEP D0-KIFU3。docs/STEP_D0-KIFU3_PLAN_2026-09-15.md)。
+//   終局の行の文は写さない。KIF の行頭の手数が「指し手数 + 1」と食い違えば unreadable にし、その行は読めなかった行に入れて取り込みは続ける
 //
 // 【このファイルが絶対にやらないこと】
 // - 平手以外の開始局面の変換(unsupported_start として返す。本番の対局は初期局面から始まる)
 // - 変化(分岐)の取り込み(本譜だけを読む。変化の行は「読んだが使わない」に数える)
 // - 読めない行を黙って捨てること
 // - 将棋の判断・評価(形式の変換だけを行う)
+// - 表に無い語から終局の種類を推し量ること(CSA は unlisted。KIF の表に無い語の行は今までどおり指し手として読めずに止まる)
 
 import { makeCsaMoveOrDrop, parseCsaHeader, parseCsaMoveOrDrop } from "shogiops/notation/csa";
 import { kifDropRegex, kifMoveRegex, makeKifMoveOrDrop, parseKifHeader, parseKifMoveOrDrop } from "shogiops/notation/kif";
@@ -38,6 +41,36 @@ export interface SourceLine {
   /** 元の行(CSA のカンマ区切りでは、その片) */
   text: string;
 }
+
+/**
+ * 終局の種類の英名 → KIF の終局の語(STEP D0-KIFU3 の 2.)。**語の表はこの 1 つ**で、KIF の判定の `KIF_ENDINGS` もここから作る。
+ * 並びは判定の順(前から startsWith で探す)。
+ */
+export const ENDING_KIF_WORDS = {
+  resign: "投了",
+  abort: "中断",
+  repetition: "千日手",
+  impasse: "持将棋",
+  mate: "詰み",
+  noMate: "不詰",
+  timeUp: "切れ負け",
+  illegalWin: "反則勝ち",
+  illegalLoss: "反則負け",
+  enteringKingWin: "入玉勝ち",
+  defaultWin: "不戦勝",
+  defaultLoss: "不戦敗",
+} as const;
+
+export type EndingKind = keyof typeof ENDING_KIF_WORDS;
+
+/**
+ * 固定棋譜 JSON の `ending`(STEP D0-KIFU3 の 2.)。棋譜に書かれていた終局の種類と、手数(元の手順の指し手数 + 1)。
+ * 表に無い CSA の語は `unlisted`(語は写さない)。KIF の行頭の手数が食い違えば `unreadable`(語も文も写さない)。
+ */
+export type FixedKifuEnding = { kind: EndingKind | "unlisted"; ply: number } | { kind: "unreadable"; reason: "ply_mismatch"; ply: null };
+
+/** 手数の食い違う終局の行を読めなかった行に入れるときの理由(kifu-import-check.ts は、この理由の行には元の文を出さない) */
+export const ENDING_PLY_MISMATCH_WHY = "ending_ply_mismatch";
 
 /** KIF の 1 文字の成り駒の書き方 → shogiops の kifMoveRegex が読む書き方(kif.js:258 の駒の欄に 1 文字の形が無い。P-51)。 */
 const KIF_PIECE_NAME_ALIGNMENTS = { 竜: "龍", 全: "成銀", 圭: "成桂", 杏: "成香" } as const;
@@ -81,8 +114,10 @@ export type KifuImportResult =
       format: KifuFormat;
       moves: string[];
       finalSfen: string;
-      /** 終局の行(投了・千日手・%TORYO など)。無ければ null(棋譜に書かれていなかった) */
+      /** 終局の行(投了・千日手・%TORYO など)。無ければ null(棋譜に書かれていなかった)。KIF で行頭の手数が食い違った行も null(その行は lines.unread) */
       ending: SourceLine | null;
+      /** 終局の行を語の表で読んだ事実(STEP D0-KIFU3)。終局の行が無ければ null、KIF で行頭の手数が食い違えば unreadable */
+      endingFact: FixedKifuEnding | null;
       lines: ClassifiedLines;
       roundTrip: RoundTrip;
     }
@@ -107,7 +142,14 @@ function emptyLines(): ClassifiedLines {
 
 // ---------------------------------------------------------------- KIF
 
-const KIF_ENDINGS = ["投了", "中断", "千日手", "持将棋", "詰み", "不詰", "切れ負け", "反則勝ち", "反則負け", "入玉勝ち", "不戦勝", "不戦敗"];
+/** KIF の終局の語(判定の側)。語の表 `ENDING_KIF_WORDS` から作る(別に持たない) */
+export const KIF_ENDINGS: readonly string[] = Object.values(ENDING_KIF_WORDS);
+
+function kifEndingKind(word: string): EndingKind {
+  const kind = (Object.keys(ENDING_KIF_WORDS) as EndingKind[]).find((key) => ENDING_KIF_WORDS[key] === word);
+  if (kind === undefined) throw new Error(`終局の語の表に無い語です: ${word}`);
+  return kind;
+}
 // 行の正規化で「:」は全角の「：」に置き換わる(shogiops の normalizedKifLines と同じ)。消費時間はその後の形で探す。
 const KIF_TIME = /\s*\(\s*\d+[:：]\d+\s*\/\s*\d+[:：]\d+[:：]\d+\s*\)\s*$/;
 const KIF_MOVE_LINE = /^(\d+)\s+(\S.*)$/;
@@ -156,6 +198,7 @@ export function importKif(raw: string): KifuImportResult {
   let sfen = STANDARD_START_SFEN;
   let lastDest: Square | undefined;
   let ending: SourceLine | null = null;
+  let endingFact: FixedKifuEnding | null = null;
   let inVariation = false;
 
   for (const [index, original] of rawLines.entries()) {
@@ -193,12 +236,21 @@ export function importKif(raw: string): KifuImportResult {
       const moveText = rest.replace(KIF_TIME, "").trim();
       const timeDropped = moveText !== rest.trim();
 
-      if (ending !== null) {
+      if (endingFact !== null) {
         lines.unread.push({ ...src, why: "終局の行の後にある指し手行" });
         continue;
       }
-      if (KIF_ENDINGS.some((w) => moveText.startsWith(w))) {
+      const endingWord = KIF_ENDINGS.find((w) => moveText.startsWith(w));
+      if (endingWord !== undefined) {
+        const endingPly = lines.moves.length + 1;
+        if (plyNo !== endingPly) {
+          // STEP D0-KIFU3(R-1): 行頭の手数が「指し手数 + 1」と食い違う。語も文も写さず、行は読めなかった行だけに入れて取り込みは続ける
+          endingFact = { kind: "unreadable", reason: "ply_mismatch", ply: null };
+          lines.unread.push({ ...src, why: ENDING_PLY_MISMATCH_WHY });
+          continue;
+        }
         ending = src;
+        endingFact = { kind: kifEndingKind(endingWord), ply: endingPly };
         lines.unused.push({ ...src, kind: "ending" });
         continue;
       }
@@ -269,6 +321,7 @@ export function importKif(raw: string): KifuImportResult {
     moves: lines.moves.map((m) => m.usi),
     finalSfen: sfen,
     ending,
+    endingFact,
     lines,
     roundTrip: {
       libraryFinalSfen,
@@ -281,6 +334,23 @@ export function importKif(raw: string): KifuImportResult {
 // ---------------------------------------------------------------- CSA
 
 const CSA_MOVE = /^[+-]\d{4}[A-Z]{2}$/;
+
+/**
+ * CSA の終局の語 → 英名(STEP D0-KIFU3 の S-3)。照らした文書: コンピュータ将棋協会「CSA標準棋譜ファイル形式」第7版 V3.0(2024年5月14日。
+ * http://www2.computer-shogi.org/protocol/record_v3.html。V2.2 の版とも語と意味が同じ)。**文書の意味が KIF の語と同じ語だけ**を入れる。
+ * 入れていない語(%KACHI は「勝ちの宣言」で入玉勝ちと同じとは言えない・%HIKIWAKE・%MAX_MOVES・%ERROR・%MATTA・
+ * 符号つきの %+ILLEGAL_ACTION / %-ILLEGAL_ACTION など)と文書に無い語は `unlisted`。
+ */
+export const CSA_ENDING_KINDS: ReadonlyMap<string, EndingKind> = new Map<string, EndingKind>([
+  ["%TORYO", "resign"],
+  ["%CHUDAN", "abort"],
+  ["%SENNICHITE", "repetition"],
+  ["%TIME_UP", "timeUp"],
+  ["%ILLEGAL_MOVE", "illegalLoss"],
+  ["%JISHOGI", "impasse"],
+  ["%TSUMI", "mate"],
+  ["%FUZUMI", "noMate"],
+]);
 
 export function importCsa(raw: string): KifuImportResult {
   const lines = emptyLines();
@@ -312,6 +382,7 @@ export function importCsa(raw: string): KifuImportResult {
 
   let sfen = STANDARD_START_SFEN;
   let ending: SourceLine | null = null;
+  let endingFact: FixedKifuEnding | null = null;
   const notationMismatches: RoundTrip["notationMismatches"] = [];
 
   for (const src of pieces) {
@@ -335,6 +406,7 @@ export function importCsa(raw: string): KifuImportResult {
     if (text.startsWith("%")) {
       if (ending === null) {
         ending = src;
+        endingFact = { kind: CSA_ENDING_KINDS.get(text) ?? "unlisted", ply: lines.moves.length + 1 };
         lines.unused.push({ ...src, kind: "ending" });
       } else {
         lines.unread.push({ ...src, why: "2 つ目の終局の行" });
@@ -386,6 +458,7 @@ export function importCsa(raw: string): KifuImportResult {
     moves: lines.moves.map((m) => m.usi),
     finalSfen: sfen,
     ending,
+    endingFact,
     lines,
     roundTrip: {
       libraryFinalSfen,
@@ -402,8 +475,9 @@ export function toFixedKifu(
   result: Extract<KifuImportResult, { kind: "imported" }>,
   id: string,
   source: string,
-): { id: string; source: string; moves: string[] } {
-  return { id, source, moves: [...result.moves] };
+): { id: string; source: string; ending: FixedKifuEnding | null; moves: string[] } {
+  // STEP D0-KIFU3: ending は moves の前(計画 2. の欄の位置 (i))。終局の行が無ければ null でキーは書く
+  return { id, source, ending: result.endingFact === null ? null : { ...result.endingFact }, moves: [...result.moves] };
 }
 
 /**

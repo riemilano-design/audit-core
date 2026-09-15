@@ -10,6 +10,7 @@ import { describe, expect, it } from "vitest";
 
 import { DEFAULT_INITIAL_SFEN } from "../../../apps/server/src/analysis/moveHistory.js";
 import { applyMove } from "../../../apps/server/src/rules/applyMove.js";
+import type { FixedKifuEnding } from "./kifuImport.js";
 import { planReplayMoves } from "./replayPlan.js";
 import {
   alignedFixedKifu,
@@ -26,6 +27,9 @@ const KIFU_10MOVES: string[] = JSON.parse(readFileSync(join(LIB_DIR, "..", "kifu
 
 /** F-S8 の開始局面(平手・後手番の初期局面に、回した 1 手目 3c3d を当てた局面。手数の欄は 2) */
 const FS8_START = "lnsgkgsnl/1r5b1/pppppp1pp/6p2/9/9/PPPPPPPPP/1B5R1/LNSGKGSNL b - 2";
+
+/** STEP D0-KIFU3: 20 手の棋譜の後の投了(ply は元の手順の指し手数 + 1) */
+const ENDING: FixedKifuEnding = { kind: "resign", ply: 21 };
 
 describe("alignMovesToSente(案 1: 回して 1 手目を開始局面に畳む)", () => {
   it("本人が先手なら何も変えず、mirrored: false だけ", () => {
@@ -179,23 +183,56 @@ describe("initialSfenOf(R-5〜R-7 に渡す開始局面。3 つに分けて読�
 });
 
 describe("alignedFixedKifu(kifu-import-check.ts の --fixed。Q-4)", () => {
-  const fixed = { id: "k", source: "試験の固定棋譜", moves: KIFU_10MOVES };
+  const fixed = { id: "k", source: "試験の固定棋譜", ending: ENDING, moves: KIFU_10MOVES };
 
-  it("本人が先手: id・source・mirrored: false・moves の 4 欄(手順はそのまま)", () => {
+  it("本人が先手: id・source・mirrored: false・ending・moves の 5 欄(手順はそのまま。D0-KIFU3 の欄の位置 (ii))", () => {
     const written = alignedFixedKifu(fixed, "sente");
-    expect(Object.keys(written)).toStrictEqual(["id", "source", "mirrored", "moves"]);
-    expect(written).toStrictEqual({ id: "k", source: "試験の固定棋譜", mirrored: false, moves: KIFU_10MOVES });
+    expect(Object.keys(written)).toStrictEqual(["id", "source", "mirrored", "ending", "moves"]);
+    expect(written).toStrictEqual({ id: "k", source: "試験の固定棋譜", mirrored: false, ending: { kind: "resign", ply: 21 }, moves: KIFU_10MOVES });
   });
 
   it("本人が後手: そろえの 4 欄・畳んだ moves と、回す前の手順 originalMoves を残す。replay.ts の readSideAlignment がそのまま読める", () => {
     const written = alignedFixedKifu(fixed, "gote");
-    expect(Object.keys(written)).toStrictEqual(["id", "source", "mirrored", "originalUserSide", "plyOffset", "startSfen", "moves", "originalMoves"]);
+    expect(Object.keys(written)).toStrictEqual(["id", "source", "mirrored", "originalUserSide", "plyOffset", "startSfen", "ending", "moves", "originalMoves"]);
     expect(written.startSfen).toBe(FS8_START);
     expect(written.originalMoves).toStrictEqual(KIFU_10MOVES);
     expect((written.moves as string[]).length).toBe(19);
     expect(readSideAlignment(JSON.parse(JSON.stringify(written)) as Record<string, unknown>)).toStrictEqual({
       alignment: { mirrored: true, originalUserSide: "gote", plyOffset: 1, startSfen: FS8_START },
       sideAlignmentChecked: true,
+    });
+  });
+
+  it("T-8(S-C): 入力に ending のキーが無ければ出力にも無い(キーが無い = 終局の行を見ていない)。null なら null のまま写す", () => {
+    const withoutEnding = { id: fixed.id, source: fixed.source, moves: fixed.moves };
+    const written = alignedFixedKifu(withoutEnding, "sente");
+    expect(written).toStrictEqual({ id: "k", source: "試験の固定棋譜", mirrored: false, moves: KIFU_10MOVES });
+    expect(Object.hasOwn(written, "ending")).toBe(false);
+    expect(Object.hasOwn(alignedFixedKifu(withoutEnding, "gote"), "ending")).toBe(false);
+    expect(alignedFixedKifu({ ...withoutEnding, ending: null }, "sente")).toStrictEqual({ id: "k", source: "試験の固定棋譜", mirrored: false, ending: null, moves: KIFU_10MOVES });
+  });
+
+  it("T-9: 本人が後手でも ending は元の手順で数えたまま: ply = originalMoves の手数 + 1、ply − plyOffset = moves の手数 + 1", () => {
+    const written = alignedFixedKifu(fixed, "gote");
+    expect(written.ending).toStrictEqual({ kind: "resign", ply: 21 });
+    const ply = (written.ending as { ply: number }).ply;
+    expect(ply).toBe((written.originalMoves as string[]).length + 1);
+    expect(ply - (written.plyOffset as number)).toBe((written.moves as string[]).length + 1);
+  });
+
+  it("T-11(P-3): ending を持つ固定棋譜も readSideAlignment・planReplayMoves は止めず、ending の無いときと同じ結果", () => {
+    const withoutEnding = { id: fixed.id, source: fixed.source, moves: fixed.moves };
+    for (const side of ["sente", "gote"] as const) {
+      const withIt = JSON.parse(JSON.stringify(alignedFixedKifu(fixed, side))) as Record<string, unknown>;
+      const without = JSON.parse(JSON.stringify(alignedFixedKifu(withoutEnding, side))) as Record<string, unknown>;
+      expect(Object.hasOwn(withIt, "ending")).toBe(true);
+      expect(readSideAlignment(withIt)).toStrictEqual(readSideAlignment(without));
+      expect(planReplayMoves(withIt.moves as string[])).toStrictEqual(planReplayMoves(without.moves as string[]));
+    }
+    // 側を決めない形 (i)(mirrored の欄が無い)も
+    expect(readSideAlignment({ id: "k", source: "試験の固定棋譜", ending: ENDING, moves: KIFU_10MOVES })).toStrictEqual({
+      alignment: { mirrored: false },
+      sideAlignmentChecked: false,
     });
   });
 });

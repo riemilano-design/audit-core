@@ -19,6 +19,7 @@
 import { DEFAULT_INITIAL_SFEN } from "../../../apps/server/src/analysis/moveHistory.js";
 import { applyMove } from "../../../apps/server/src/rules/applyMove.js";
 import type { MetaLine } from "../invariants/types.js";
+import type { FixedKifuEnding } from "./kifuImport.js";
 import { rotateUsiMove } from "./usiRotation.js";
 import type { UserSide } from "./userSide.js";
 
@@ -136,13 +137,15 @@ export function initialSfenOf(meta: Pick<MetaLine, "mirrored" | "startSfen"> | u
  * - 本人が先手 … `mirrored: false` を書き、手順はそのまま
  * - 本人が後手 … `mirrored: true`・`originalUserSide`・`plyOffset`・`startSfen` を書き、`moves` は回して畳んだ手順、
  *   **回す前の手順を `originalMoves` に残す**(戻す計算を報告の根拠にしない。計画 Q-4)
+ * STEP D0-KIFU3: 入力に `ending` のキーがあれば同じ値を moves の直前に写し、無ければ出さない(キーが無い = 終局の行を見ていない)。
  * **本人の名前は書かない**(ヘッダの値は kifu-import-check.ts の標準出力にだけ出す)。
  */
 export function alignedFixedKifu(
-  fixed: { id: string; source: string; moves: readonly string[] },
+  fixed: { id: string; source: string; ending?: FixedKifuEnding | null; moves: readonly string[] },
   userSide: UserSide,
 ): Record<string, unknown> {
   const { alignment, moves } = alignMovesToSente(fixed.moves, userSide);
-  if (!alignment.mirrored) return { id: fixed.id, source: fixed.source, mirrored: false, moves };
-  return { id: fixed.id, source: fixed.source, ...sideMetaFields(alignment), moves, originalMoves: [...fixed.moves] };
+  const ending = Object.hasOwn(fixed, "ending") ? { ending: fixed.ending } : {};
+  if (!alignment.mirrored) return { id: fixed.id, source: fixed.source, mirrored: false, ...ending, moves };
+  return { id: fixed.id, source: fixed.source, ...sideMetaFields(alignment), ...ending, moves, originalMoves: [...fixed.moves] };
 }
