@@ -5,13 +5,13 @@
 // 載せ替えで番号が変わるときは、このファイルと、スキーマを作る道具の引数だけを替える。**コミットのときは並びを連番にする**(抜けたままコミットしない)。
 // 【古い版】スキーマのファイルは版ごとに 1 つ増やし、古い版のファイルは消さない(JSON v0 計画 3.2)。
 
-export const FAILURE_EVENT_SCHEMA_VERSION = "0.6" as const;
+export const FAILURE_EVENT_SCHEMA_VERSION = "0.7" as const;
 /** Failure Event のスキーマのファイルがある版(古い版のファイルは消さない) */
-export const KNOWN_SCHEMA_VERSIONS = ["0.1", "0.2", "0.3", "0.4", "0.5", "0.6"] as const;
+export const KNOWN_SCHEMA_VERSIONS = ["0.1", "0.2", "0.3", "0.4", "0.5", "0.6", "0.7"] as const;
 
-export const DIAGNOSIS_MOMENT_SCHEMA_VERSION = "0.3" as const;
+export const DIAGNOSIS_MOMENT_SCHEMA_VERSION = "0.4" as const;
 /** diagnosis-moment のスキーマのファイルがある版 */
-export const KNOWN_DIAGNOSIS_MOMENT_SCHEMA_VERSIONS = ["0.1", "0.2", "0.3"] as const;
+export const KNOWN_DIAGNOSIS_MOMENT_SCHEMA_VERSIONS = ["0.1", "0.2", "0.3", "0.4"] as const;
 
 /**
  * STEP D-SCREEN-2 の欄(branch.evaluationSource・counterfactual.pvSource・provenance.record.meta.screen)を足す前の版。
@@ -19,6 +19,13 @@ export const KNOWN_DIAGNOSIS_MOMENT_SCHEMA_VERSIONS = ["0.1", "0.2", "0.3"] as c
  */
 export const FAILURE_EVENT_SCREEN_BASE_VERSION = "0.5" as const;
 export const DIAGNOSIS_MOMENT_SCREEN_BASE_VERSION = "0.2" as const;
+
+/**
+ * STEP D2.6(docs/STEP_D2.6_PLAN_2026-09-17.md §4)。D-SCREEN の欄が入った版(= D2.6 の userMoveFacts を足す前の版)。
+ * 今の版が「この版 + counterfactual.{actual,pv}.userMoveFacts」であることを試験が見る。D-SCREEN の欄の試験もこの版を読む
+ */
+export const FAILURE_EVENT_MOVE_FACTS_BASE_VERSION = "0.6" as const;
+export const DIAGNOSIS_MOMENT_MOVE_FACTS_BASE_VERSION = "0.3" as const;
 
 /** STEP D4(docs/STEP_D4_PLAN_2026-09-15.md §7)。契約 diagnosis-gate の今の版と、スキーマのファイルがある版(ほかの契約の定数とは独立に末尾に置く) */
 export const DIAGNOSIS_GATE_SCHEMA_VERSION = "0.1" as const;

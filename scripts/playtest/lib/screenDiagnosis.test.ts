@@ -27,7 +27,13 @@ import {
 import { engineRef, GAME01_MOVES, plantedRecords, type PlantedEvaluation } from "./failureEventFixtures.js";
 import { buildProvenance, loadFailureEventSchema, toEventLine } from "./failureEventSchema.js";
 import { DRAFT_SCREEN_RULE_1, type ScreenMeta } from "./rescreen.js";
-import { DIAGNOSIS_MOMENT_SCREEN_BASE_VERSION, FAILURE_EVENT_SCHEMA_VERSION, FAILURE_EVENT_SCREEN_BASE_VERSION } from "./schemaVersions.js";
+import {
+  DIAGNOSIS_MOMENT_MOVE_FACTS_BASE_VERSION,
+  DIAGNOSIS_MOMENT_SCREEN_BASE_VERSION,
+  FAILURE_EVENT_MOVE_FACTS_BASE_VERSION,
+  FAILURE_EVENT_SCHEMA_VERSION,
+  FAILURE_EVENT_SCREEN_BASE_VERSION,
+} from "./schemaVersions.js";
 import { choosePairSources, screenInputConflicts } from "./screenDiagnosis.js";
 
 const REPO_ROOT = fileURLToPath(new URL("../../../", import.meta.url));
@@ -491,8 +497,9 @@ describe("STEP D-SCREEN-2 の行とスキーマ(Failure Event v0.6・diagnosis-m
     }
   });
 
-  it("今の版の Failure Event のスキーマは、基の版に D-SCREEN の任意の欄を足しただけ(版の値・$id・title・description のほかは同じ)", () => {
-    const current = clone(feSchema);
+  // STEP D2.6(監査 f2 の W-1): D-SCREEN の欄を足した版(0.6・0.3)をファイルの名前で読んで比べる。今の版(0.7・0.4)= その版 + userMoveFacts は lib/moveFacts.test.ts が見る
+  it("D-SCREEN の版(0.6)の Failure Event のスキーマは、基の版に D-SCREEN の任意の欄を足しただけ(版の値・$id・title・description のほかは同じ)", () => {
+    const current = clone(loadFailureEventSchema(FAILURE_EVENT_MOVE_FACTS_BASE_VERSION));
     const baseSchema = clone(loadFailureEventSchema(FAILURE_EVENT_SCREEN_BASE_VERSION));
     const properties = current.properties as Json;
     delete ((properties.branch as Json).properties as Json).evaluationSource;
@@ -500,17 +507,17 @@ describe("STEP D-SCREEN-2 の行とスキーマ(Failure Event v0.6・diagnosis-m
     for (const variant of (((((properties.provenance as Json).properties as Json).record as Json).properties as Json).meta as { oneOf: Json[] }).oneOf) {
       if (variant.properties) delete (variant.properties as Json).screen;
     }
-    expect(properties.schemaVersion).toEqual({ const: FAILURE_EVENT_SCHEMA_VERSION });
+    expect(properties.schemaVersion).toEqual({ const: FAILURE_EVENT_MOVE_FACTS_BASE_VERSION });
     properties.schemaVersion = { const: FAILURE_EVENT_SCREEN_BASE_VERSION };
     for (const key of ["$id", "title", "description"]) current[key] = baseSchema[key];
     expect(current).toEqual(baseSchema);
   });
 
-  it("今の版の diagnosis-moment のスキーマは、基の版の組の行に evaluationSource と pvSource を足し、provenance を今の版の Failure Event から写しただけ", () => {
-    const current = clone(momentSchema);
+  it("D-SCREEN の版(0.3)の diagnosis-moment のスキーマは、基の版の組の行に evaluationSource と pvSource を足し、provenance を D-SCREEN の版(0.6)の Failure Event から写しただけ", () => {
+    const current = clone(loadDiagnosisMomentSchema(DIAGNOSIS_MOMENT_MOVE_FACTS_BASE_VERSION));
     const baseSchema = clone(loadDiagnosisMomentSchema(DIAGNOSIS_MOMENT_SCREEN_BASE_VERSION));
     const baseProvenance = (clone(loadFailureEventSchema(FAILURE_EVENT_SCREEN_BASE_VERSION)).properties as Json).provenance;
-    const currentProvenance = (clone(feSchema).properties as Json).provenance;
+    const currentProvenance = (clone(loadFailureEventSchema(FAILURE_EVENT_MOVE_FACTS_BASE_VERSION)).properties as Json).provenance;
     for (const variant of current.oneOf as Json[]) {
       const properties = variant.properties as Json;
       expect(properties.provenance).toEqual(currentProvenance);

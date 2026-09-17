@@ -78,7 +78,8 @@ const NO_CHECKS = { byUs: [], byOpponent: [] };
 
 /** STEP D2.5 の欄(positionFactsEnd・pvMinusActual.positionFacts)は D2 の期待に入れず、別の試験(このファイルの末尾・lib/positionFacts.test.ts)で見る */
 const d2Facts = (facts: SequenceFacts) => {
-  const { positionFactsEnd: _positionFactsEnd, ...rest } = facts;
+  // STEP D2.6 の userMoveFacts も D2 の固定例の外(lib/moveFacts.test.ts が見る)
+  const { positionFactsEnd: _positionFactsEnd, userMoveFacts: _userMoveFacts, ...rest } = facts;
   return rest;
 };
 const d2Diff = (diff: CounterfactualDiff) => {

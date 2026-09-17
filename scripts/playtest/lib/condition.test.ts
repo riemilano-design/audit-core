@@ -61,6 +61,7 @@ const sequence = (kingEscapes: number): SequenceFacts => ({
   kingSurroundingsEnd: { squares: 5, own: 3 },
   positionFactsEnd: positionFacts(),
   kingEscapesEnd: { state: "counted", count: kingEscapes },
+  userMoveFacts: { role: "pawn", drop: false, capturedRole: null, promotion: false, kingMove: false, fromInOwnKingZone: false, toInOwnKingZone: false, toInOpponentKingZone: false, ownKingZoneReachBeforeMinusAfter: 0 },
 });
 /** 実戦の逃げ道 1・読み筋の逃げ道 3・根 2 */
 const comparison = (): CounterfactualComparison => ({
@@ -246,6 +247,8 @@ describe("READABLE_FIELDS(計画 §2 の表・D4 §3 の種類の列)", () => {
         "consequences.mate",
         "counterfactual.pvTruncatedAtPly",
         ...bothSides(["mate", "gameEnd", "kingSurroundingsEnd.squares", "kingSurroundingsEnd.own"]),
+        // STEP D2.6(計画 §5)
+        ...bothSides(["userMoveFacts.capturedRole"]),
       ].sort(),
     );
     expect(byNullMeans("undecidable")).toStrictEqual(
@@ -261,6 +264,7 @@ describe("READABLE_FIELDS(計画 §2 の表・D4 §3 の種類の列)", () => {
         ...zoneLeaves("counterfactual.pvMinusActual.positionFacts", false),
         "counterfactual.kingEscapesChangeFromRoot.actual",
         "counterfactual.kingEscapesChangeFromRoot.pv",
+        ...bothSides(["userMoveFacts.fromInOwnKingZone", "userMoveFacts.toInOwnKingZone", "userMoveFacts.toInOpponentKingZone", "userMoveFacts.ownKingZoneReachBeforeMinusAfter"]),
       ].sort(),
     );
     expect(byNullMeans("notNullable")).toStrictEqual(
@@ -293,6 +297,7 @@ describe("READABLE_FIELDS(計画 §2 の表・D4 §3 の種類の列)", () => {
         "counterfactual.pvFirstMoveIsPlayedMove",
         "counterfactual.kingEscapesRoot.count",
         ...bothSides(["capturedRoles.us", "capturedRoles.opponent", "checks.byUs", "checks.byOpponent", "kingEscapesEnd.count"]),
+        ...bothSides(["userMoveFacts.role", "userMoveFacts.drop", "userMoveFacts.promotion", "userMoveFacts.kingMove"]),
       ].sort(),
     );
   });
@@ -304,7 +309,10 @@ describe("READABLE_FIELDS(計画 §2 の表・D4 §3 の種類の列)", () => {
       ...["zonePieces", "zoneControl"].flatMap((group) => ["ownKingZone", "opponentKingZone"].flatMap((zone) => ["bySente", "byGote"].map((side) => `${base}.${group}.${zone}.${side}`))),
     ];
     const sequenceLeaves = (side: string) =>
-      ["capturedRoles.us", "capturedRoles.opponent", "checks.byUs", "checks.byOpponent", "mate", "gameEnd", "kingSurroundingsEnd.squares", "kingSurroundingsEnd.own", ...zoneLeaves("positionFactsEnd", true)].map((leaf) => `counterfactual.${side}.${leaf}`);
+      ["capturedRoles.us", "capturedRoles.opponent", "checks.byUs", "checks.byOpponent", "mate", "gameEnd", "kingSurroundingsEnd.squares", "kingSurroundingsEnd.own", ...zoneLeaves("positionFactsEnd", true),
+        // STEP D2.6(計画 §5): 門が compared だけの葉
+        ...["role", "drop", "capturedRole", "promotion", "kingMove", "toInOwnKingZone", "toInOpponentKingZone"].map((name) => `userMoveFacts.${name}`),
+      ].map((leaf) => `counterfactual.${side}.${leaf}`);
     const grouped: Record<string, string[]> = {};
     for (const entry of READABLE_FIELDS) (grouped[entry.gates.map((gate) => `${gate.path}∈${gate.passes.join("|")}`).join(" → ")] ??= []).push(entry.path);
     for (const paths of Object.values(grouped)) paths.sort();
@@ -365,6 +373,11 @@ describe("READABLE_FIELDS(計画 §2 の表・D4 §3 の種類の列)", () => {
       [`${compared} → counterfactual.kingEscapesRoot.state∈counted`]: ["counterfactual.kingEscapesRoot.count"],
       [`${compared} → counterfactual.actual.kingEscapesEnd.state∈counted`]: ["counterfactual.actual.kingEscapesEnd.count"],
       [`${compared} → counterfactual.pv.kingEscapesEnd.state∈counted`]: ["counterfactual.pv.kingEscapesEnd.count"],
+      // STEP D2.6(計画 §5・R-2): 打つ手の fromInOwnKingZone と玉の手の U-9 は、行の null より先に門で落とす
+      [`${compared} → counterfactual.actual.userMoveFacts.drop∈false`]: ["counterfactual.actual.userMoveFacts.fromInOwnKingZone"],
+      [`${compared} → counterfactual.pv.userMoveFacts.drop∈false`]: ["counterfactual.pv.userMoveFacts.fromInOwnKingZone"],
+      [`${compared} → counterfactual.actual.userMoveFacts.kingMove∈false`]: ["counterfactual.actual.userMoveFacts.ownKingZoneReachBeforeMinusAfter"],
+      [`${compared} → counterfactual.pv.userMoveFacts.kingMove∈false`]: ["counterfactual.pv.userMoveFacts.ownKingZoneReachBeforeMinusAfter"],
     });
   });
 

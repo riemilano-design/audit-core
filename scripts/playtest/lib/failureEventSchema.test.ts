@@ -49,6 +49,7 @@ const schemaV02 = loadFailureEventSchema("0.2");
 const schemaV03 = loadFailureEventSchema("0.3");
 const schemaV04 = loadFailureEventSchema("0.4");
 const schemaV05 = loadFailureEventSchema("0.5");
+const schemaV06 = loadFailureEventSchema("0.6");
 type Json = Record<string, unknown>;
 const REPO_ROOT = fileURLToPath(new URL("../../../", import.meta.url));
 
@@ -719,7 +720,8 @@ describe("T-5: 型とスキーマのずれ(欄を消す・知らない欄を足�
     // 上の 1 行の 77 のうち counterfactual の state 1 を、compared の 55 に置き換えた数(数えた: compared 16・pvBounded 2・kingEscapesRoot 2・
     // actual 14・pv 14(それぞれ 6・capturedRoles 2・checks 2・kingSurroundingsEnd 2・kingEscapesEnd 2)・pvMinusActual 5(3・capturedRoles 2)・kingEscapesChangeFromRoot 2)
     // STEP D2.5 の v0.5 で +79(上の 28 と、actual・pv の positionFactsEnd 各 1 と中身 17・pvMinusActual の positionFacts 1 と中身 14)
-    expect(tried).toBe(210);
+    // STEP D2.6 の v0.7 で +20(actual・pv の userMoveFacts 各 1 と中身 9)
+    expect(tried).toBe(230);
   });
 
   it("版が違えば落ちる", () => {
@@ -783,13 +785,20 @@ describe("STEP JSON v0.2 の約束(計画 5. の P-2〜P-5・P-7)", () => {
     for (const line of lines) {
       const label = `${String(line.kifuId)}#${String(line.branchPly)}`;
       expect(validate(line, schema), label).toEqual([]);
+      expect(validate(line, schemaV06), label).not.toEqual([]);
       expect(validate(line, schemaV05), label).not.toEqual([]);
       expect(validate(line, schemaV04), label).not.toEqual([]);
       expect(validate(line, schemaV03), label).not.toEqual([]);
       expect(validate(line, schemaV02), label).not.toEqual([]);
       expect(validate(line, schemaV01), label).not.toEqual([]);
       // STEP D-SCREEN-2: 今の版の行(screen の無い記録なので D-SCREEN の欄を持たない)は、版を 0.5 にすれば v0.5 を通る
-      const v05 = clone(line);
+      // STEP D2.6: 今の版(0.7)の行から userMoveFacts を外して版を 0.6 にすると v0.6 を通る
+      const v06 = clone(line);
+      v06.schemaVersion = "0.6";
+      const counterfactual06 = v06.counterfactual as Json;
+      if (counterfactual06.state === "compared") for (const key of ["actual", "pv"]) delete (counterfactual06[key] as Json).userMoveFacts;
+      expect(validate(v06, schemaV06), label).toEqual([]);
+      const v05 = clone(v06);
       v05.schemaVersion = "0.5";
       expect(validate(v05, schemaV05), label).toEqual([]);
       const v04 = clone(v05);

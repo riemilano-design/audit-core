@@ -141,6 +141,13 @@ function sequenceFields(side: "actual" | "pv"): ReadableField[] {
     field(`${base}.kingSurroundingsEnd.own`, ALL_KINDS, [COMPARED], "value"),
     ...zoneLeaves(`${base}.positionFactsEnd`, true).map((path) => field(path, ALL_KINDS, [COMPARED], "undecidable")),
     field(`${base}.kingEscapesEnd.count`, ALL_KINDS, [COMPARED, COUNTED(`${base}.kingEscapesEnd`)], "notNullable"),
+    // STEP D2.6(計画 §5): 根の局面で指した 1 手目の事実。打つ手の fromInOwnKingZone・玉の手の U-9 は行に null が入り、門で先に落とす(R-2)
+    ...(["role", "drop", "promotion", "kingMove"] as const).map((name) => field(`${base}.userMoveFacts.${name}`, ALL_KINDS, [COMPARED], "notNullable")),
+    field(`${base}.userMoveFacts.capturedRole`, ALL_KINDS, [COMPARED], "value"),
+    field(`${base}.userMoveFacts.fromInOwnKingZone`, ALL_KINDS, [COMPARED, { path: `${base}.userMoveFacts.drop`, passes: [false] }], "undecidable"),
+    field(`${base}.userMoveFacts.toInOwnKingZone`, ALL_KINDS, [COMPARED], "undecidable"),
+    field(`${base}.userMoveFacts.toInOpponentKingZone`, ALL_KINDS, [COMPARED], "undecidable"),
+    field(`${base}.userMoveFacts.ownKingZoneReachBeforeMinusAfter`, ALL_KINDS, [COMPARED, { path: `${base}.userMoveFacts.kingMove`, passes: [false] }], "undecidable"),
   ];
 }
 

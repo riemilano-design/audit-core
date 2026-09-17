@@ -346,6 +346,7 @@ const sequence = (kingEscapes: number): SequenceFacts => ({
   kingSurroundingsEnd: { squares: 5, own: 3 },
   positionFactsEnd: positionFacts(),
   kingEscapesEnd: { state: "counted", count: kingEscapes },
+  userMoveFacts: { role: "pawn", drop: false, capturedRole: null, promotion: false, kingMove: false, fromInOwnKingZone: false, toInOwnKingZone: false, toInOpponentKingZone: false, ownKingZoneReachBeforeMinusAfter: 0 },
 });
 const comparison = (): CounterfactualComparison => ({
   state: "compared",

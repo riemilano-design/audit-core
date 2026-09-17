@@ -61,8 +61,8 @@ function assertNeverRule(value: never): never {
   throw new Error(`未知の規則です: ${JSON.stringify(value)}`);
 }
 
-/** その色の玉の区域。玉が盤上に無ければ null */
-function zoneOf(pos: Position, color: Color, rule: PositionFactsRules["zone"]): SquareSet | null {
+/** その色の玉の区域。玉が盤上に無ければ null(STEP D2.6 の lib/moveFacts.ts も同じ関数で区域を作る) */
+export function kingZoneOf(pos: Position, color: Color, rule: PositionFactsRules["zone"]): SquareSet | null {
   switch (rule) {
     case "king_and_eight_neighbors": {
       const king = pos.board.pieces(color, "king").first();
@@ -105,7 +105,7 @@ export function positionFactsOf(sfen: string, rules: PositionFactsRules): Positi
   const pos = parsePosition(sfen);
   const reaches = { sente: reachesOf(pos, "sente", rules.reach), gote: reachesOf(pos, "gote", rules.reach) };
   const sideOf = (color: Color) => {
-    const zone = zoneOf(pos, color, rules.zone);
+    const zone = kingZoneOf(pos, color, rules.zone);
     if (zone === null) return null;
     const pieces = (list: readonly SquareSet[]) => list.filter((reach) => reach.intersects(zone)).length;
     return {

@@ -102,8 +102,9 @@
 | F-12 | 条件式 `uses: ["counterfactual.actual.userMoveFacts.fromInOwnKingZone"]` を F-10 の組に当てる | 実戦の側は判定できる、読み筋の側は判定不能で、**理由の種類は gate**(`counterfactual.pv.userMoveFacts.drop` = true)。揃えた集合 n に入らない |
 | F-12b | 条件式 `uses: ["counterfactual.actual.userMoveFacts.ownKingZoneReachBeforeMinusAfter"]`、`appliesTo: ["pair"]` を、実戦の手が玉の手で読み筋の 1 手目が玉以外の手の組に当てる(R-4 (b)) | 実戦の側は判定不能で、**理由の種類は gate**(`counterfactual.actual.userMoveFacts.kingMove` = true)。読み筋の側は判定できる |
 | F-13 | 旧版と同じ入力(材料 20 局・1 人目の先手 6 局・GAME01) | §4 の比べ(新しい欄を外してバイト一致、`gate.ts` の基準値の Markdown はバイト一致) |
+| F-14 | F-8 の局面、`5e5g`(監査 f2 の N-1。実装の後に足した) | U-9 = **0**(前: 5e の飛は 5h・5i に届き 2。後: 5g の飛も 5h・5i に届き 2)。**指す前の利きを指した後の占有で数えると、5g の自分で止まって前が 0 になり −2** |
 
-**変異(中心)**: 区域の判定を外す(利きの升を全部数える → F-2・F-4・F-8)/ 前後を取り違える(後 − 前 → F-2・F-4・F-8)/ **読み筋の側に当てない**(`pv.userMoveFacts` を実戦の手で作る → F-10・F-11。F-10b は鳴らない)/ 指した後の占有を指す前のまま使う(F-9)/ 指した後の区域を指す前の盤で作る(**等価と読む**: 自玉は玉の手でしか動かず、玉の手の行き先は元の区域に入るので U-7 は変わらない。相手玉は本人の手では動かない。実装のときに等価を確かめ、既知事項の候補 K-1 にする)/ 相手玉の区域と取り違える(F-2・F-5)/ `role` を成った後の駒種にする(F-5)/ `capturedRole` を元の駒種にする(F-6)/ 打つ手の門を外す(F-12: 判定不能の理由の種類が gate から null に変わる)/ 玉の手の門を外す(F-12b: 同じく gate から null に)/ 門で落ちる欄に null でなく値を置く(F-3・F-4)/ 表に `pv` の葉を足さない(F-11 が読み筋の側を当てられなくなる)。**周辺**: `promotion` を駒種の変化で決める(F-7 の成らずは同じ)/ 玉が無い側を false にする(F-6)。**予測は実装の後、当てる前に試験の単位で書く。**
+**変異(中心)**: 区域の判定を外す(利きの升を全部数える → F-2・F-4・F-8)/ 前後を取り違える(後 − 前 → F-2・F-4・F-8)/ **読み筋の側に当てない**(`pv.userMoveFacts` を実戦の手で作る → F-10・F-11。F-10b は鳴らない)/ 指した後の占有を指す前のまま使う(F-9)/ 指す前の利きを指した後の占有で数える(F-14)/ 指した後の区域を指す前の盤で作る(**等価と読む**: 自玉は玉の手でしか動かず、玉の手の行き先は元の区域に入るので U-7 は変わらない。相手玉は本人の手では動かない。実装のときに等価を確かめ、既知事項の候補 K-1 にする)/ 相手玉の区域と取り違える(F-2・F-5)/ `role` を成った後の駒種にする(F-5)/ `capturedRole` を元の駒種にする(F-6)/ 打つ手の門を外す(F-12: 判定不能の理由の種類が gate から null に変わる)/ 玉の手の門を外す(F-12b: 同じく gate から null に)/ 門で落ちる欄に null でなく値を置く(F-3・F-4)/ 表に `pv` の葉を足さない(F-11 が読み筋の側を当てられなくなる)。**周辺**: `promotion` を駒種の変化で決める(F-7 の成らずは同じ)/ 玉が無い側を false にする(F-6)。**予測は実装の後、当てる前に試験の単位で書く。**
 
 ## 7. 予測(**測る前に書く。書いた人 A。記入 2026-09-17T10:57:50Z**)
 
@@ -155,9 +156,64 @@
 - **K-2** F-6 の「自玉が無い局面」を shogiops が指せない場合、U-6〜U-9 の null の経路は実データでも固定例でも通らない(型の上だけの null になる)
 - **K-3** 実戦の手が打つ手で読み筋の 1 手目が盤上の手の組(またはその逆)では、`fromInOwnKingZone` を使う条件式は片側だけ判定不能になり、揃えた集合 n から外れる(§5)
 
-## 10. 実装の記録(実装の後に足す)
+## 10. 実装の記録(実装担当 A、2026-09-17。監査 f2 の前)
 
-(空)
+**基点**: `b8d81eb`(この計画のコミット)。worktree で実装した。**エンジンは使っていない。g3 は開いていない**(旧版との比べと予測の測定は、材料 20 局と 1 人目の先手 6 局だけ)。
+
+### 10.1 変えた・足したファイル
+
+| ファイル | 中身 |
+|---|---|
+| `scripts/playtest/lib/moveFacts.ts`(新規) | `moveFactsOf(sfen, moveUsi, rules)`・`UserMoveFacts`・`STANDARD_ROLES`(14 種)・`MoveFactsError` |
+| `scripts/playtest/lib/moveFacts.test.ts`(新規) | 固定例 F-1〜F-12b、空の手順、例外、スキーマ 0.7 = 0.6 + userMoveFacts・0.4 = 0.3 + userMoveFacts |
+| `scripts/playtest/lib/positionFacts.ts` | 区域の関数を `kingZoneOf` として export(中身と `positionFactsOf` の出力は変えていない) |
+| `scripts/playtest/lib/counterfactual.ts` | `SequenceFacts.userMoveFacts` を足し、`sequenceFacts` の 1 手目に `moveFactsOf` を当てる。空の手順は例外 |
+| `scripts/playtest/lib/condition.ts` | `sequenceFields` に §5 の葉(門 `drop`・`kingMove` を含む)を足した |
+| `scripts/playtest/lib/schemaVersions.ts` | Failure Event 0.7・diagnosis-moment 0.4。基の版の定数 `FAILURE_EVENT_MOVE_FACTS_BASE_VERSION`(0.6)・`DIAGNOSIS_MOMENT_MOVE_FACTS_BASE_VERSION`(0.3) |
+| `scripts/playtest/schemas/failure-event.v0.7.schema.json`・`diagnosis-moment.v0.4.schema.json`(新規) | 道具 `scratchpad(7b19a5fe)/d26impl/gen-d26-schemas.py`(`15805520…`)で 0.6・0.3 から作った。足した欄を外すと基の版に戻ること、古い版のファイル 12 本の sha が前後で変わらないことを道具の中で確かめた |
+| 既存の試験 | `screenDiagnosis.test.ts`(下の J-5)・`condition.test.ts`(固定の行に userMoveFacts、C-2 の一覧に §5 の葉と門)・`gate.test.ts`・`conditions.test.ts`(固定の行に userMoveFacts)・`counterfactual.test.ts`(D2 の固定例の比べから userMoveFacts を外す)・`failureEventSchema.test.ts`(T-5 の数 210 → 230 = actual・pv の userMoveFacts 各 1 と中身 9、P-7 に 0.7 → 0.6 の段) |
+
+### 10.2 計画に書いていなかった判断
+
+- **J-1** `moveFactsOf` の「自玉」は手番の側の玉(根は本人 = 先手の手番なので、D2.5 の `ownKingZone` と同じ)
+- **J-2** `moveFactsOf` は `rules.reach = non_king_pieces`・`rules.control = squares` だけを受け、ほかは例外(数え方が食い違わないように)
+- **J-3** 合法かは `apps/server/src/rules/legalMoves.ts` の `isLegalMove` で見る。読めない手・合法でない手・本将棋でない駒種は `MoveFactsError`
+- **J-4** スキーマの駒種の列挙は `STANDARD_ROLES` の並び(盤上の駒種 8 → 成駒 6)。`capturedRole` はその列挙に null を足した
+- **J-5(監査 f2 の W-1)** `screenDiagnosis.test.ts` の「D-SCREEN の欄の版 = 基の版 + D-SCREEN の欄」の 2 本は、**今の版でなく 0.6・0.3 のファイルを名指しで読んで比べる**形にした(題も「D-SCREEN の版(0.6)」「(0.3)」に)。**0.7 = 0.6 + userMoveFacts・0.4 = 0.3 + userMoveFacts は `moveFacts.test.ts` の別の試験**が見る
+- **J-6** F-10・F-10b・F-12b の組は、`counterfactualOf` に持ち駒のある根(`4k4/9/9/9/9/9/4P4/9/4K4 b G 1`)を直接渡して作った(計画の「記録の 1 行に読み筋を植える」と同じ入力の形。`branchPly` 1)
+- **J-7** F-6(先手玉の無い局面)は shogiops で読め、指せた。計画の差し替え案は使っていない(K-2 は起きない)
+- **J-8** F-10b の比べは、判定の状態・判定不能の理由の種類・欄の名前(view 側)で行い、gatePath の文字列は比べない(事前読み B の N-1)
+
+### 10.3 測った結果
+
+- 型検査 `typecheck:scripts` rc 0。試験 `b8d81eb` の 891 → **912**(+21、61 ファイル)。`check-docs` rc 0。**監査 f2 の GO の後、F-14 を足して 913**(`moveFacts.test.ts` は 22)
+- **旧版との比べ(F-13)**: 材料 20 局 + 1 人目の先手 6 局で `diagnose.ts` の `--events`(44 行)・`--events-rise`(83 行)・`--events-maxdrop`(26 行)は、`schemaVersion`・`provenance.analysis`・`counterfactual.{actual,pv}.userMoveFacts` を外すと、キーの並びまで一致(差 0)。userMoveFacts を持つ行は 42・83・26(compared の行)。Markdown と `gate.ts` の基準値(条件式 0 本)の Markdown はバイト一致
+- **変異**: 17 本(計画 §6 の中心・周辺と、空の手順・合法でない手)。**当てた 17・鳴った 15・沈黙 2、予測と 17/17 一致**、毎回戻して sha 一致。沈黙は予測どおり等価の 2 本(V-05 指した後の自玉の区域を指す前の盤で作る = K-1、V-14 成りを駒種の変化で決める = Q-9)。予測 `scratchpad(7b19a5fe)/d26impl/mutation-predictions.txt`(`ca500e83…`、道具 `mutate_d26.py` `ba06212d…`、実行の前 2026-09-17T12:47:03Z に sha を取った)。結果の行に `applied` の欄を書いた。**F-14 を足した後に V-18「指す前の利きを指した後の占有で数える」を 1 本当てた**: 予測(`d26impl/mutation-v18-prediction.txt` `51c277b9…`、2026-09-17T13:03:04Z)は「F-14 だけで鳴る」、結果は F-14 の 1 本が落ちて鳴った(適用あり・戻して sha 一致)
+- **§7 の予測の測定**: 道具 `scripts/playtest/out/d26-measure/measure.ts`(gitignore。sha `c6109b7f…` を 2026-09-17T12:47:52Z に記録してから回した)。出力 `result.json` の sha `5a3a6f63…`。**手順の記録(監査 f2 の N-6)**: 測定はコミットの前に回ったが、lib のコードの最後の更新は測定より前で、`final-shas.txt` の版と同じ。測定に渡したファイルの一覧は記録していない(出力の局の数 20・組 734・compared 706 で代えた)。材料 20 局・組 734・compared 706(§13 の数と一致)。**単独の欄の下見は棄却の記録に入れていない**
+
+| # | 予測 | 実際 | |
+|---|---|---|---|
+| 予-1 | 歩 22〜38・銀 8〜16・金 6〜14・玉 4〜12・飛 5〜13・角 3〜10・桂 2〜8・香 1〜5・成駒 3〜12(%) | 歩 37.7・銀 13.6・金 7.5・玉 5.2・飛 10.3・**角 10.1**・**桂 9.5**・香 2.5・成駒 3.5 | 当たり(範囲外 2 つ。外れの条件は 3 つ以上) |
+| 予-2 | 打つ手 8〜20% | 12.6%(89) | 当たり |
+| 予-3 | 取った手 18〜32% | 20.7%(146) | 当たり |
+| 予-4 | 成った手 2〜8% | 5.8%(41) | 当たり |
+| 予-5 | 打つ手でない組 617 で fromInOwnKingZone 15〜35・toInOwnKingZone 15〜35・toInOpponentKingZone 3〜12(%) | 17.5・15.1・**1.1** | 当たり(範囲外 1 つ。外れの条件は 2 つ以上)。**分母の注(B の N-2)**: to の 2 欄は打つ手でも値が入る。706 を分母にすると 14.2・1.6 で範囲外 2 つ(外れ)になる。計画の分母(打つ手でない組)で判定した |
+| 予-6 | 玉の手でない組 669 で U-9 ≠ 0 が 15〜35%、そのうち正 40〜60% | 19.0%(127)・44.9%(57) | 当たり |
+| 予-7 | 同じ手の組 25〜45% | 35.6%(251) | 当たり |
+| 予-8 | 読み筋 − 実戦: 取った −3〜+8・打つ −6〜+4・玉 −6〜+2・成る −2〜+3(pt) | +0.6・−2.3・−1.3・+1.7 | 当たり |
+| 予-9 | 候補 23 個で G-3 を満たすもの 0〜3 | **2**(香 a 18・p 9 は境ちょうど、成香 a 0・p 0 は式の上だけ) | 当たり |
+
+- 予-9 の内訳(揃えた集合 n・実戦 a・読み筋 p): 玉 706・37・28 / 飛 73・58 / 角 71・72 / 金 53・56 / 銀 96・90 / 桂 67・70 / 香 18・9 / 歩 266・298 / 竜 9・9 / 馬 2・3 / 成銀 3・3 / 成桂 3・2 / 成香 0・0 / と 8・8 / 打つ 89・73 / 取る 146・150 / 成る 41・53 / 玉の手 37・28 / fromInOwnKingZone(n 593)106・100 / toInOwnKingZone 100・71 / toInOpponentKingZone 11・20 / U-9 > 0(n 650)57・70 / U-9 < 0(n 650)67・50。**見た欄の数は 23**(定義を起こすときに書く ― §9)
+
+### 10.4 既知事項の候補(登録と番号は司令塔)
+
+- **K-1**(確認) 変異 V-05 は等価だった(沈黙)。U-7・U-8 を区域の作り方で守る試験は置けない
+- **K-2**(閉じる候補) 自玉の無い局面は shogiops で読め、指せた(F-6)
+- **K-4** 変異 V-14(成りを駒種の変化で決める)は等価。成らずは USI にも駒種にも残らないので、「成れたのに成らなかった」は数えられない(Q-9)
+- **K-5** G-3 の式 `2·p ≤ a` は a = p = 0 でも満たす(予-9 の成香)。**G-1 が先に満たさないと言えるのは、真の組の数が a と同じときだけ**。K-3 の型(実戦の側で真でも読み筋の側が判定不能な組が n から外れる)の定義では、真の組 12(3 局)で a = p = 0 でも G-1・G-3 が met になりうる(監査 f2 の N-4、探りで確認)。下見で数えるときは式の上だけの候補を分けて書く
+- **K-6** 落ちる試験が 1 本だけの変異: V-04・V-08・V-11・V-12・V-15・V-16・V-17
+- **K-7** 予-5 の to の 2 欄は、分母の取り方(打つ手を含めるか)で予測の当たり外れが変わった(B の N-2)
+- **K-8**(監査 f2 の N-2、司令塔の決定でコードの見張りは入れない) `moveFactsOf` の自玉は「手番の側の玉」、`positionFactsOf` の自玉(`ownKingZone`)は「先手の玉」に固定。回した記録では根はすべて先手番で一致する(f2 が材料 20 局と real-01 の 6 局で確認)。根が後手番の行が来ると両者が食い違う
 
 ## 11. 事前読み B(版 `8c111855`、REVISE)の取り込み
 

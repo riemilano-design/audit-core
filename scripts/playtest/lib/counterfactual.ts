@@ -30,6 +30,7 @@ import { getLegalMoves } from "../../../apps/server/src/rules/legalMoves.js";
 import { parsePosition } from "../../../apps/server/src/rules/sfenPosition.js";
 import type { RecordLine } from "../invariants/types.js";
 import { kingSurroundingsOf, type KingSurroundings } from "./kingSurroundings.js";
+import { moveFactsOf, type UserMoveFacts } from "./moveFacts.js";
 import { positionFactsDiff, positionFactsOf, type PositionFacts, type PositionFactsDiff, type PositionFactsRules } from "./positionFacts.js";
 
 /**
@@ -82,6 +83,8 @@ export interface SequenceFacts {
   positionFactsEnd: PositionFacts;
   /** N 手目の後の局面の先手玉の逃げ道 */
   kingEscapesEnd: KingEscapes;
+  /** STEP D2.6: 根の局面で指した 1 手目(実戦の側は本人の手、読み筋の側は読み筋の 1 手目)についての事実。両側とも同じ関数 */
+  userMoveFacts: UserMoveFacts;
 }
 
 export interface CounterfactualDiff {
@@ -165,6 +168,8 @@ function roleCountsOf(counts: ReadonlyMap<Role, number>): RoleCounts {
 
 /** 根(先手番)から `moves` をすべて並べ、事実を数える。`branchPly` は 1 手目の記録の手数。 */
 export function sequenceFacts(rootSfen: string, moves: readonly string[], branchPly: number): SequenceFacts {
+  // STEP D2.6(計画 §2): 1 手目の事実を作るので、空の手順は受けない(compared の組では実戦・読み筋とも 1 手以上ある)
+  if (moves.length === 0) throw new Error("手順が空で、1 手目の事実を作れない");
   const materials = computePvMaterials(rootSfen, [...moves], PV_MATERIAL_RULES, 0);
   if (materials.kind !== "measured" || materials.usablePlies !== moves.length) {
     throw new Error(`手順を ${moves.length} 手とも並べられない(並べられたのは ${materials.usablePlies} 手)`);
@@ -207,6 +212,7 @@ export function sequenceFacts(rootSfen: string, moves: readonly string[], branch
     kingSurroundingsEnd: kingSurroundingsOf(sfen),
     positionFactsEnd: positionFactsOf(sfen, POSITION_FACTS_RULES),
     kingEscapesEnd: kingEscapesOf(sfen),
+    userMoveFacts: moveFactsOf(rootSfen, moves[0]!, POSITION_FACTS_RULES),
   };
 }
 
