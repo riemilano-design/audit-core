@@ -75,3 +75,14 @@
 - 攻め・守りを、局面の意味から判定すること。
 - 第 1 候補を「正解」として見せること。本人の手に点数を付けること(一致率を強さの数字として出すこと)。
 - 本番のアプリ(対局中のコーチ)に、この段を持ち込むこと。最重要コンセプト(最善手を教えるアプリではない)は対局中の話で、変えない。これは対局後の、本人の求めに応じた振り返りの材料である。
+
+## 6. 実装と監査の記録
+
+### 6.1 作業 1(測る段と拾う場面、2026-09-22)
+
+- **実装**(使い捨ての実装担当、worktree): 新規 `lib/whatif.ts`・`lib/whatif.test.ts`・`scripts/playtest/whatif.ts`(CLI)・`lib/pipelineWhatif.test.ts`。`lib/pipeline.ts`・`pipeline.ts` に任意の段 `--whatif`(diagnose の後、`<work>/<person>/whatif/<id>.jsonl`、timing に stage の欄)。`WHATIF_VALUES`(multiPv 5・nodes 1000000・startPly 17・minLossCp 600・narrowGapCp 400・riseCp 400・pvMoves 7・sideZoneRadius 2・sideNodes 1000000)は 1 か所に置き meta に写す。印は shogiops の距離で「玉から 2 マス以内」(`moveFacts.ts`・`POSITION_FACTS_RULES`・Gate・基準値の 1 マスは変えていない)。2 巡目は場面の局面だけ、側ごとの合法手を `go nodes N searchmoves …` で読ませる(素の `UsiEngine`。`apps/` は変えていない)。出力の行は meta(mirrored・plyOffset・startSfen を含む)・position・scene・summary。**`ply` は畳んだ後の記録の手数、人に見せるのは `displayPly`(= ply + plyOffset、`reportData.ts` の `displayPlyOf`)。**
+- **途中で計画を改めた(§2.5)**: 1 回目の実測で、候補 5 つの中に攻めの側と守りの側の両方が入る場面は 0/16・0/18。司令塔の下見で候補 12・決め方 3 通りでも最大 43/85。→ 側ごとに読ませる形へ。改めた後の実測(エンジン 1 本): t3-09 は場面 14 のうち両方 7(攻めの側に合法手なし 7)、tl-03 は 18 のうち 15(同 3)。合わせて 22/32。1 局の所要は 1 巡目 53〜61 秒・2 巡目 29〜45 秒。
+- **独立監査 1 回: REVISE(中 1 件)→ 直し → 司令塔が確かめてコミット。** 監査の実測: sha 一致、差分の範囲、後手の局の視点の取り違えなし、`--whatif` なしの試験 3 本が無変更、変異 2 本 red、短い局面での実機の smoke(meta に enginePath が無い・`--nodes` は候補の読みだけを上書き)。指摘: 出力の `ply` が畳んだ記録の手数で、後手の局では棋譜の手数と 1 ずれるのに、meta にも README にも無かった。→ meta に mirrored・plyOffset・startSfen、各行に displayPly を足し、README に明記。**実装側が最初に報告した tl-03 の biggestFork「79 手目」は生の ply で、棋譜の手数では 80 手目。**
+- 司令塔の確かめ: 直しの後の sha の照合、feature の先頭へ載せ替えた後に 型検査 rc=0・vitest 72 ファイル 1152 件・check-docs rc=0。
+- **既知の限界**: biggestFork が同点なら早い手数を採る。`--dry-run` に whatif の段は出ない。候補が 0 件の局面(理論上)は fork 扱いだが biggestFork の対象外。`--whatif` は `--until` と独立で、固定棋譜さえあれば回る。meta に enginePath は書かない(段 1・段 2 との非対称)。
+- **測っていないもの**: 24 局での両方の側が出る割合(§2.4-3 の本測定)、エンジン 5 本での所要、`sideZoneRadius` 3 以上との比べ。

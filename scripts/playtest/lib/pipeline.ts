@@ -61,6 +61,11 @@ export interface PipelineArgs {
    * 呼び出し元は 1 つも渡さないので、このキー自体が付かない ― `toStrictEqual` で見ている既存の試験の形を壊さないため)。
    */
   report?: ReportInfo;
+  /**
+   * STEP WHATIF 作業 1。`--whatif` を付けたときだけ `true`(**任意のキー**。`report` と同じ理由で、
+   * 付けなければキー自体が無い ― 既存の `toStrictEqual` の試験を壊さないため)。
+   */
+  whatif?: true;
 }
 
 const SINGLE_FLAGS = ["--person", "--kifu-dir", "--work", "--me", "--parallel", "--compare-person", "--until", "--evaluator", "--name", "--title", "--today"] as const;
@@ -82,11 +87,16 @@ export function parsePipelineArgs(argv: readonly string[]): PipelineArgs {
   const single = new Map<SingleFlag, string>();
   const compareDirs: string[] = [];
   let dryRun = false;
+  let whatif = false;
 
   for (let i = 0; i < argv.length; i += 1) {
     const flag = argv[i]!;
     if (flag === "--dry-run") {
       dryRun = true;
+      continue;
+    }
+    if (flag === "--whatif") {
+      whatif = true;
       continue;
     }
     if (flag === "--compare-dir") {
@@ -159,6 +169,8 @@ export function parsePipelineArgs(argv: readonly string[]): PipelineArgs {
     dryRun,
     // reportInfo が undefined のときはキー自体を付けない(既存の parsePipelineArgs の試験の toStrictEqual を壊さないため)
     ...(reportInfo !== undefined ? { report: reportInfo } : {}),
+    // --whatif を付けなければキー自体を付けない(同じ理由)
+    ...(whatif ? { whatif: true as const } : {}),
   };
 }
 
@@ -248,6 +260,11 @@ export function gateOutPath(personDir: string): string {
   return path.join(personDir, "gate.jsonl");
 }
 
+/** STEP WHATIF 作業 1。`--whatif` のときだけ書く出力先(局ごと)。 */
+export function whatifPath(personDir: string, id: string): string {
+  return path.join(personDir, "whatif", `${id}.jsonl`);
+}
+
 export function timingPath(work: string): string {
   return path.join(work, "timing.jsonl");
 }
@@ -302,7 +319,10 @@ export type ToolName =
   | "report-data"
   | "report-pdf-build"
   | "report-pdf-render-main"
-  | "report-pdf-check-fonts";
+  | "report-pdf-check-fonts"
+  // STEP WHATIF 作業 1(docs/STEP_WHATIF_PLAN_2026-09-22.md)。`--whatif` を付けたときだけ、
+  // diagnose の後に局ごとに呼ぶ(--until には加えない。任意の段)。
+  | "whatif";
 
 /** `--source` は `--kifu-dir` からの相対パス(ファイル名)。計画は自由記述としか書いておらず、値を新しく作らないための
  * 判断だが、絶対パス(`job.kifPath`)をそのまま使うと /Users/ を含むパスが固定棋譜に残るため、相対の名前にした
@@ -394,6 +414,14 @@ export function reportDataCommand(
     "--out-prose-request",
     proseRequestOut,
   ];
+}
+
+/**
+ * STEP WHATIF 作業 1(`whatif.ts`)。ノード数・MultiPV・Threads は渡さない(道具自身の既定 = `lib/whatif.ts` の
+ * `WHATIF_VALUES` に合わせた値のまま。表と違う値を渡す旗はここに作らない)。
+ */
+export function whatifCommand(fixedKifuPath: string, out: string): string[] {
+  return ["--kifu", fixedKifuPath, "--out", out];
 }
 
 // ---- 段ごとの「済み」の判定(Lishogi の run-game.sh と同じ判定) ----
@@ -530,6 +558,11 @@ export interface TimingEntry {
   startedAt: string;
   finishedAt: string;
   rc: number | "skip";
+  /**
+   * STEP WHATIF 作業 1。**任意のキー**(既存の呼び出し側は渡さないので欄自体が付かない ― 出力を 1 バイトも
+   * 変えないため)。`--whatif` の行にだけ `"whatif"` を渡す(段の名前つきで残す)。
+   */
+  stage?: string;
 }
 
 export function timingLineOf(entry: TimingEntry): string {
@@ -676,6 +709,42 @@ export async function runPipeline(args: PipelineArgs, games: readonly GameJob[],
         if (!diagnoseDone(fs.readText(dp.events), fs.readText(dp.rise), fs.readText(dp.maxdrop), fs.readText(dp.md))) {
           failures.push({ gameId: "*", stage: "diagnose", message: `diagnose.ts rc=${result.code}: 出力が揃っていない` });
         }
+      }
+    }
+  }
+
+  // ---- STEP WHATIF 作業 1。`--whatif` を付けたときだけ、diagnose の後に局ごとに whatif.ts を回す(--until には無関係)。
+  // `--whatif` を付けない実行はこのブロックに入らない(動き・出力・試験を 1 バイトも変えない)。
+  if (args.whatif === true) {
+    fs.ensureDir(path.join(personDir, "whatif"));
+
+    async function processWhatif(job: GameJob): Promise<void> {
+      const startedAt = clock();
+      const gp = gamePaths(personDir, job.id);
+      const wPath = whatifPath(personDir, job.id);
+      let rc: number | "skip" = "skip";
+
+      if (!fixedKifuDone(fs.readText(gp.fixedKifuPath), job.id)) {
+        failures.push({ gameId: job.id, stage: "whatif", message: "fixed 棋譜が無いので whatif を実行できない" });
+      } else if (!stage1Done(fs.readText(wPath))) {
+        // 済みの判定は他の段と同じ流儀(最後の行が summary であること。whatif.ts もその形で書く)。
+        const result = await run("whatif", whatifCommand(gp.fixedKifuPath, wPath));
+        rc = result.code;
+        if (!stage1Done(fs.readText(wPath))) {
+          failures.push({ gameId: job.id, stage: "whatif", message: `whatif.ts rc=${result.code}: whatif の記録が出来ていない` });
+        }
+      }
+
+      const finishedAt = clock();
+      const line = timingLineOf({ gameId: job.id, startedAt, finishedAt, rc, stage: "whatif" });
+      timingLines.push(line);
+      fs.appendText(tPath, line);
+    }
+
+    const whatifResults = await runWithLimit(games, args.parallel, processWhatif);
+    for (const result of whatifResults) {
+      if (!result.ok && result.error !== undefined) {
+        failures.push({ gameId: result.job.id, stage: "unexpected-whatif", message: result.error instanceof Error ? result.error.message : String(result.error) });
       }
     }
   }

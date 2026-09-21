@@ -244,6 +244,39 @@ npx tsx scripts/playtest/baselineTable.ts --person <pN> --material <段 2 の記
 
 候補はここでは出すだけで、本人向けの文にする前には docs/STEP_BASE_PLAN_2026-09-21.md §4 の確かめ(同じ人の次の棋譜で再現するか)を通す。
 
+## 重要な局面の分かれ道を測る(`whatif.ts`。STEP WHATIF 作業 1)
+
+`scripts/playtest/whatif.ts` は、docs/STEP_WHATIF_PLAN_2026-09-22.md の**測る段だけ**を行う道具(見せる段(PDF・Web、計画 §2.3)は別の作業)。固定棋譜(`kifu-import-check.ts --fixed` の JSON)だけを読み、段 2 の記録は読まない。
+
+```
+npx tsx scripts/playtest/whatif.ts --kifu <固定棋譜 JSON> --out <whatif.jsonl>
+  [--nodes <N>] [--multipv <K>] [--threads <N>]
+```
+
+- エンジン(`resolveEnginePath()` が解決する実行ファイル)を実際に起動する。**1 巡目**(本人の手番の局面ごとに候補 K 個を MultiPV で読む)は replay.ts・rescreen.ts と同じ `LowPriorityEngine`(`PrioritizedEngine.asLowPriority()`)を使う。**2 巡目**(下記)は素の `UsiEngine` を直に使う
+- 本人の手番の局面(そろえた記録は先手番。`lib/whatif.ts` の `WHATIF_VALUES.startPly` = 17 手目から)だけを MultiPV で読む。**王手中の局面も読む・終局の局面は読まない**(`lib/whatif.ts` の `evaluableTurns`)
+- 値(`WHATIF_VALUES`: `multiPv`・`nodes`・`startPly`・`minLossCp`・`narrowGapCp`・`riseCp`・`pvMoves`・`sideZoneRadius`・`sideNodes`)は `lib/whatif.ts` に 1 か所だけ置く**判断的知識の仮置き**(2026-09-22、計画 §2.1・§2.2・§2.5)。`--nodes`・`--multipv`・`--threads` はハーネスの探索条件(候補 K 個の読み)だけを上書きする(`startPly`・`sideZoneRadius` 等の閾値は CLI からは変えない)
+- 候補・実戦の手に付ける印(`oppKingZone`・`ownKingZone`・`givesCheck`・`kingMove`)は、**行き先だけ**で決める。王手か・玉を動かす手かは `lib/moveFacts.ts` の `moveFactsOf`(D2.6 で確定済み)・`isInCheck` をそのまま呼ぶ(二重に実装しない)。**玉のそば**(`oppKingZone`・`ownKingZone`)は、この段だけの決め方 ― 玉から `sideZoneRadius`(既定 2)マス以内(縦横斜めの大きいほう、shogiops の `squareDist`)。`moveFactsOf`・`POSITION_FACTS_RULES`(Gate・基準値(`baselineTable.ts` の軸 C)が使う「玉の升 + 8 近傍 = 1 マス以内」の決め方)は変えない ― **この段と Gate・基準値では「玉のそば」の広さが違う**(meta 行の `kingZoneRadius` 参照)。攻めの側 = `oppKingZone` または `givesCheck`、守りの側 = `ownKingZone`(玉自身の手を除く)または `kingMove`。両方に当たる手は `both`
+- **なぜ広げたか(計画 §2.5、2026-09-22)**: 候補 K 個の中から攻め・守りの最上位を拾うやり方は、8 マスの決め方では両方が見つかる局面が実測 4/85(5%)しか無く、成り立たないと分かった。そこで、場面の局面だけ・合法手を全部使い、側ごとに絞って読み直す形(下記 2 巡目)に変え、広さも 2 マスへ広げた
+- 拾う場面 3 種類(`fork`・`narrowHeld`・`chanceHeld`、計画 §2.2)と、1 局に 1 つのいちばん大きな分かれ道(`biggestFork`、§2.4-1)は `lib/whatif.ts` の `whatifPositionOf`・`whatifGameSummaryOf` が組む(エンジンは呼ばない純粋関数。試験は `lib/whatif.test.ts`)
+- **2 巡目(側ごとの読み。計画 §2.5)**: 1 巡目がすべて終わり `biggestFork` が決まってから、場面(`fork`・`narrowHeld`・`chanceHeld` のどれか、または `biggestFork`)の局面だけ(`lib/whatif.ts` の `sceneReadPlies`)、合法手をすべて出して攻め・守りの側に分け(`sideMovesOf`。候補 K 個に付ける印と同じ決め方)、**側ごとにその側の手だけを** `go nodes <sideNodes> searchmoves <その側の手…>`(MultiPV 1)で読む(`whatifSceneOf`)。**`LowPriorityEngine`(apps/server が公開する型)には searchmoves を渡す口が無いため、apps/ は変えず、CLI 側で素の `UsiEngine`(`send`・`waitForLine`)を直に使う**(lib/checkBaseline.ts と同じ「ハーネスの観測として足す」流儀)。その側に合法手が無ければ `noLegalMove`(呼ばない)。`sideGapCp` は両方 `found`・cp のときだけ
+- 出力(JSONL): 1 行目 `{"kind":"meta", kifuId, startedAt, gitHead, dirty, values, threads, kingZoneRadius: { thisStage, gateAndBaseline }, mirrored, plyOffset, startSfen}`(**名前・`/Users/` を含む絶対パスは書かない** ― `enginePath` はここに含めない。`mirrored`・`plyOffset`・`startSfen` は `lib/sideAlignment.ts` の `sideMetaFields`(`replay.ts` の段の meta と同じ形)。`startSfen` は `mirrored` のときだけ持つ)、局面ごとに `{"kind":"position", ...}`(`WhatifPosition` + `displayPly`。候補 K 個・実戦の手の順位・`loss`・拾った場面)、場面の局面だけ `{"kind":"scene", ...}`(`WhatifScene` + `displayPly`。攻め・守りそれぞれの `WhatifSideRead`(`found`/`noLegalMove`/`notMeasured`)と `sideGapCp`)、最後に `{"kind":"summary", ...}`(`WhatifGameSummary` + `sceneReads`(`WhatifSceneReadSummary`: 場面の数・側ごとに合法手が無かった数・両方 `found` の数)+ `timingMs: { pass1, pass2 }`。`biggestFork` も `displayPly` を持つ)
+- **`ply` は畳んだ後の記録の手数。人に見せる手数は `displayPly`(= `ply` + `plyOffset`)** ― mirrored の局(元の棋譜が後手番だった局。`plyOffset` = 1)では、この段の `ply` は元の棋譜の手数と 1 ずれる。`position`・`scene` の行と `summary.biggestFork` はどれも `lib/whatif.ts` の `withDisplayPly`(`lib/reportData.ts` の `displayPlyOf` をそのまま呼ぶ。二重に実装しない)で `displayPly` を持つ
+- 見せる段(PDF・Web)はここでは作らない。冊子に書ける文言の確定・LLM の言い換えも、この段の範囲外
+
+### 既知の限界(`whatif.ts`)
+
+- **`biggestFork` が同点のときは、早い手数(`ply` が小さいほう)のほうを採る**(`whatifGameSummaryOf` の比べは厳密な `>` のため、後から出た同点の局面には入れ替わらない)
+- **`--dry-run` のプレビューに whatif の段は出ない**(`pipeline.ts` の `--dry-run` は S1〜S4 までのプレビューのまま。上の「S5〜S7」の節と同じ既知の限界)
+
+### `pipeline.ts` の `--whatif`(任意の段)
+
+`pipeline.ts` に `--whatif` を付けると、**`--until` の進み具合とは関係なく**、diagnose の段の後に局ごとに `whatif.ts` を回し、`<work>/<person>/whatif/<id>.jsonl` を書く(`--parallel` に従う。済みの判定は他の段と同じ流儀 ― 最後の行が `summary` であること)。fixed 棋譜が無い局は、`whatif.ts` を呼ばずに失敗として記録する。所要は `timing.jsonl` に `stage: "whatif"` つきで残る(ほかの段の行には `stage` の欄自体が無い)。`--whatif` を**付けない**実行は、道具の呼び出し・出力・`timing.jsonl` の形が一切変わらない(試験は `lib/pipelineWhatif.test.ts`)。
+
+```
+npx tsx scripts/playtest/pipeline.ts --person <id> --kifu-dir <dir> --work <dir> --whatif
+```
+
 ## typecheck
 
 ```

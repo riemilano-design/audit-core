@@ -7,6 +7,7 @@
 //     [--compare-dir <段 2 の記録のフォルダ …> --compare-person <p記号>]
 //     [--name <表示名> --title <タイトル> --today <YYYY-MM-DD>]  … --until が report-data・prose・pdf のときだけ必須
 //     [--until import|evaluate|diagnose|gate|report-data|prose|pdf] [--evaluator "<評価関数の識別>"] [--dry-run]
+//     [--whatif]  … STEP WHATIF 作業 1。付けたときだけ、diagnose の後に局ごとに whatif.ts を回す(--until には無関係)
 //
 // S4(gate.ts)の向き: --person・--kifu-dir の局(このお客さん)が材料の側(gate.ts の --person・--material)、
 // --compare-dir の記録が試す側(gate.ts の --test-person・--test-sente/--test-gote)。2 人目 20 局(材料)を
@@ -57,6 +58,8 @@ const TSX_TOOL_PATHS: Record<Exclude<ToolName, "report-pdf-build" | "report-pdf-
   diagnose: path.join(SCRIPT_DIR, "diagnose.ts"),
   gate: path.join(SCRIPT_DIR, "gate.ts"),
   "report-data": path.join(SCRIPT_DIR, "reportData.ts"),
+  // STEP WHATIF 作業 1。`--whatif` のときだけ呼ぶ(lib/pipeline.ts の runPipeline 参照)。
+  whatif: path.join(SCRIPT_DIR, "whatif.ts"),
 };
 
 /** `cmd <args>` を起こし、標準出力・標準エラー・終了コードを集める(spawnTool の共通部分)。 */
