@@ -134,7 +134,8 @@ export interface GateTally {
   pvSide: PvSideTally;
 }
 
-type Entry = { kifuId: string; pair: PairRow; rows: ReadonlyMap<number, Standing> };
+/** STEP BASE(docs/STEP_BASE_PLAN_2026-09-21.md §1)。`collapseTallyOf`・`entriesOf` を枠ごとの崩れの再集計に再利用するための export(このファイルの数え方はそのまま)。 */
+export type Entry = { kifuId: string; pair: PairRow; rows: ReadonlyMap<number, Standing> };
 
 function emptyCollapseTally(): CollapseTally {
   return {
@@ -152,7 +153,7 @@ function emptyCollapseTally(): CollapseTally {
   };
 }
 
-function collapseTallyOf(entries: readonly Entry[]): CollapseTally {
+export function collapseTallyOf(entries: readonly Entry[]): CollapseTally {
   const tally = emptyCollapseTally();
   const denominatorByGame = new Map<string, number>();
   const gamesWithPairs = new Set<string>();
@@ -197,7 +198,7 @@ function collapseTallyOf(entries: readonly Entry[]): CollapseTally {
   return tally;
 }
 
-function entriesOf(games: readonly GatePairsGame[]): Entry[][] {
+export function entriesOf(games: readonly GatePairsGame[]): Entry[][] {
   const seen = new Set<string>();
   return games.map((game) => {
     if (seen.has(game.kifuId)) throw new Error(`同じ kifuId が 2 本ある: ${game.kifuId}`);

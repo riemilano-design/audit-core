@@ -197,6 +197,43 @@ npx tsx scripts/playtest/pipeline.ts --person <id> --kifu-dir <dir> --work <dir>
 
 段の一覧(`STAGES`・`UNTIL_STAGES`、`lib/pipeline.ts`)は配列なので、後で司令塔が足せる。
 
+## 全員に共通の基準値(`baselineTable.ts`。STEP BASE)
+
+`scripts/playtest/baselineTable.ts` は、1 人の段 2 の記録を「その人(`--person`)」、その人を除いた 1 人以上を「基準値の材料(`--pool`)」にして、あらかじめ決めた 24 の枠(docs/STEP_BASE_PLAN_2026-09-21.md §1.1)ごとに、その人の崩れ率が基準値からどれだけ外れているかを出す道具(下見。断定ではない)。
+
+```
+npx tsx scripts/playtest/baselineTable.ts --person <pN> --material <段 2 の記録 …>
+  --pool <pM>=<記録 …> [--pool <pK>=<…> …] --out <baseline.json>
+```
+
+- `--pool` は 1 人の pool を表す。最初のトークンは `<ラベル>=<1 本目の記録のパス>`(空でもよい)、続く(`--` で始まらない)トークンは同じ pool の記録を追加する。複数人を pool に入れるときは `--pool` を人の数だけ繰り返す
+- 標準出力に Markdown の表(枠ごとの その人 / 基準値 の崩れ・分母・率、candidate・lower)。`--out` に、名前・手・局面・SFEN を含まない JSON(枠ごとの内訳・pool の人ごとの内訳・GATE_VALUES)を書く。`records/` へは書かない・エンジンは使わない
+- 止める(exit 1): `--person`・`--pool` のラベルが `p1`・`p2` の形でない・`--pool` のラベルが `--person` と同じ・`--pool` 同士で同じラベル・記録が無い・referenceNodes がそろわない・error 行がある・同じ記録(name・sha256・kifuId のいずれか)が `--material` と `--pool` の間、または `--pool` 同士で重なる
+
+### 24 の枠と崩れの数え方
+
+- 崩れ・分母・分母から外す理由は `lib/gate.ts` の `collapseOf`(直前 ahead・level → 直後が 1 段以上下がったら崩れ)をそのまま使う。**この道具は新しい閾値・崩れの定義を作らない**
+- 軸 A(直前の形勢・2): `standingPair.before` が `ahead`/`level` のときだけ枠に入る。`behind`・未定はどちらの軸の枠にも入れず、`unclassified.A` に数える
+- 軸 B(時期・3): `lib/reportData.ts` の `phaseOf`(組の `branchPly` ÷ その局の総手数。1/3 未満が早い、2/3 未満が中、それ以外が遅い。境を含むのは `phaseOf` の実装のまま)をそのまま呼ぶ。**総手数は、この道具では記録の meta には無く、記録の指し手(`lib/failureEvent.ts` の `fullMovesOf`。最も長い `moveHistory`)から取る**(固定棋譜 JSON はこの CLI の入力に無いため使わない)。0 手以下・取れない局は `unclassified.B.subjectGames`/`poolGames`(局の数)と `subjectPairs`/`poolPairs`(組の数)に別に出す
+- 軸 C(手の種類・7、重なってよい): `counterfactual.actual.userMoveFacts` を、承認済みの条件式 `lib/conditions/ahead_move_into_own_king_zone_v1.ts` と同じ門(`counterfactual.state === "compared"`)で読む。打つ手(`drop`)・駒を取る手(`capturedRole ≠ null`)・成る手(`promotion`)・玉を動かす手(`kingMove`)・自玉のそばへ動かす手(`toInOwnKingZone`)・相手玉のそばへ動かす手(`toInOpponentKingZone`)。6 つとも偽なら「どれでもない手」。`counterfactual.state` が `compared` でない、または `toInOwnKingZone`/`toInOpponentKingZone` が null な組は、軸 C 全体(7 枠すべて)を判定できないものとして数えず、`unclassified.C` に数える(欄が null な組は「その軸では数えない」という計画の文どおり、7 枠のどれか 1 つだけを判定不能にはしない)
+- A×B(6)・優勢×C(6、「どれでもない」は含まない)は、両方の軸が判定できたときだけ枠に入る
+
+### 既知の限界
+
+- **軸 B の総手数は、固定棋譜 JSON の総手数より 1〜2 手少ない局がある**。上の「軸 B」のとおり、この道具は段 2 の記録(`fullMovesOf`)から総手数を取り、`reportData.ts` が使う固定棋譜 JSON の `originalMoves` は読まない。監査の実測(2 人目 20 局): 20 局のうち 14 局で両者が食い違い、839 組のうち 13 組(約 1.5%)で 早い/中/遅い の区分が変わった。したがって、この道具の軸 B・A×B・candidate/lower の判定は、`reportData.ts`(本人向けレポート)の時期の欄とこの分だけ合わないことがある。
+
+### 外れの印(candidate・lower)
+
+枠ごとに、次の 3 条件を**すべて**満たすときだけ `candidate: true`(値はすべて `GATE_VALUES` を読むだけで、ここに新しい数は置かない)。
+
+1. その人の分母 ≥ `minTruePairs` かつ 崩れのある局 ≥ `minGames`
+2. `lib/gate.ts` の `rateRatioMet`/`rateDiffMet`(G-2 と同じ整数の式)で、その人の率が基準値の率より 比 ≥ `minRateRatio`・差 ≥ `minRateDiffPoints` ポイント高い
+3. pool の人ごとの率(分母が 0 の人はこの比べから除く。比べる相手が 1 人もいなければ条件 3 は満たしたものとして扱う)と比べて、その人の率がどの人よりも真に高い
+
+`lower`(その人のほうが低い)は同じ 3 条件を向きだけ逆にする: 条件 2 は `rateRatioMet`/`rateDiffMet` の引数を入れ替えて呼ぶ(基準値の率 ÷ その人の率)、条件 3 は「pool のどの人よりも真に低い」。**その人の崩れが 0 のときの比の扱いは `rateRatioMet`/`rateDiffMet` の G-2 と同じ特別扱いをそのまま使う**(偽の側の崩れが 0 なら、真の側の崩れ ≥ 1 で比の条件を満たしたことにする。`lower` では「真の側」が基準値になるので、基準値の崩れが 1 以上あれば、その人の崩れが 0 でも比の条件を満たす)。満たさなかった条件は `reasonsCandidateNotMet`/`reasonsLowerNotMet` に理由の記号で出す(`subjectDenominatorBelowMin`・`subjectGamesWithCollapseBelowMin`・`ratioNotMet`・`diffNotMet`・`poolMemberEqualOrHigher`/`poolMemberEqualOrLower`)。
+
+候補はここでは出すだけで、本人向けの文にする前には docs/STEP_BASE_PLAN_2026-09-21.md §4 の確かめ(同じ人の次の棋譜で再現するか)を通す。
+
 ## typecheck
 
 ```

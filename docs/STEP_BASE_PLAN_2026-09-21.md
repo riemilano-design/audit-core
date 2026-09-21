@@ -65,3 +65,15 @@ npx tsx scripts/playtest/baselineTable.ts --person <pN> --material <その人の
 - 候補を、§4 を通さずに本人向けの文にすること。「癖」「傾向」「弱点」などの語は §4 を通っても使わない(レポートの語の規則のまま。書けるのは「この 20 局では、同じくらいの棋力の比較対象より、この場面で形勢が下がった割合が高かった」まで)。
 - 統計の検定を新しく持ち込むこと(いまは Gate と同じ、件数の下限・比・差だけ)。
 - Gate の値・承認済みの条件式・`gate.ts` を変えること。
+
+## 7. 実装と監査の記録(2026-09-22、司令塔 e3)
+
+- **実装**(使い捨ての実装担当、worktree): `scripts/playtest/lib/baselineTable.ts`・`lib/baselineTable.test.ts`(23 件)・`scripts/playtest/baselineTable.ts`・README の節。`lib/gate.ts` は `Entry`・`collapseTallyOf`・`entriesOf` に `export` を付けただけ(数え方は 1 行も変えていない)。外れの 3 条件の数は `GATE_VALUES` を読み、比と差は `rateRatioMet`・`rateDiffMet` を再利用。このファイルに新しい数は無い。
+- **軸 B の基準**: `reportData.ts` の `phaseOf` を呼ぶ。総手数は評価記録の最長 `moveHistory` から取る(固定棋譜 JSON はこの CLI の入力に無い)。
+- **軸 C の判定できない組**: `counterfactual.state` が `compared` でない組、zone の欄のどちらかが null の組は、軸 C の 7 枠すべてで数えず、件数を別に出す。
+- **独立監査 1 回: REVISE(軽微)→ 直し → 司令塔が確かめてコミット**(往復 1 回の規則)。
+  - 監査の実測: sha 一致、`gate.ts` の差分は export だけ、24 枠、3 条件、pool からその人を除くこと、出力に名前・手・局面・パスが無いこと。2 人目の前の 20 局で、軸 A の分母の合計 604 が `baselineTallyOf` と一致。「優勢 × 自玉のそば」の枠は 10 組のうち崩れ 4 で、C-5 の Gate の記録(D3-COND §15)と一致。**ほかの枠の中身は、§4 の予測の前なので、だれも報告に書いていない。**
+  - 指摘(中): zone の null 判定の片側(相手玉のそばだけ null)を見張る試験が無く、その側を弱める変異が green のままだった。→ 試験 1 件を足し、同じ変異が red になることを実装側が実測(本体は変えず、sha で原状を確認)。
+  - 司令塔の確かめ: 直しの後の sha の照合、`gate.ts` の差分の目視、feature の先頭(`fda7454`)へ載せ替えた後に 型検査 rc=0・vitest 65 ファイル 1046 件・check-docs rc=0。
+- **既知の限界(監査の実測)**: 軸 B の総手数は、固定棋譜 JSON の総手数より 1〜2 手少ない局がある(2 人目 20 局のうち 14 局)。839 組のうち 13 組(約 1.5%)で 早い / 中 / 遅い の区分が変わる。`reportData.ts` の時期の欄とは、この分だけ合わないことがある。README にも書いた。
+- **測っていないもの**: 公開棋譜の 90 局を pool に入れたときの所要。持ち時間別の基準値(§3)。
