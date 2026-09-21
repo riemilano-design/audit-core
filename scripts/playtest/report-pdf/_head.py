@@ -132,14 +132,23 @@ def game_facts(g):
     recover = next((p for p, v in pts if p > mnp and v > -300), None) if ever_behind else None
     def phase(p): return "序盤" if p / g["total"] < 1 / 3 else ("中盤" if p / g["total"] < 2 / 3 else "終盤")
     time_loss = g["result"] == "負け" and "切れ負け" in (g.get("ending") or "")
+    # STEP FILL 作業 Y(H4-2、独立監査 REVISE 2026-09-22 の直し)。「切れ負けでない」だけでは、詰み・反則負け・
+    # 終局の記録なしの負けも「投了で終わった」と断定してしまう(誤った断定)。実際の終局の語(ending)が
+    # 「投了」であることを見て判定する(g.get("ending") はレポート道具が持つ唯一の終局の事実。lib/kifuImport.ts
+    # の ENDING_KIF_WORDS の日本語語をそのまま比べる ― 新しい語を作らない)。
+    ending_word = g.get("ending") or ""
+    resigned_ahead = ending_word == "投了" and final >= 300
     if g["result"] == "負け":
         if time_loss and final >= 300: title = "盤上は優勢のまま、持ち時間切れで負けた将棋"
+        # 「持ち時間切れ」の次、「途中で崩れた」の前に置く。投了でない「切れ負けでない・+300 以上」の負け
+        # (詰み・反則負け・終局の記録なし等)は、この分岐に入れず、直しの前と同じ ever_ahead の分岐へ流す。
+        elif resigned_ahead: title = "盤上は優勢のまま、投了で終わった将棋"
         elif ever_ahead: title = f"一度は良くなったが、{phase(drop_after_max or mxp)}に崩れた将棋"
         else: title = "途中で良くなる場面がないまま負けた将棋"
     else:
         if ever_behind: title = f"一度は悪くなったが、{recover} 手目に戻して勝った将棋"
         else: title = "形勢を落とさずに勝った将棋"
-    return dict(off=off, pts=pts, trans=trans, mxp=mxp, mxv=mxv, mnp=mnp, mnv=mnv, ever_ahead=ever_ahead, ever_behind=ever_behind, final=final, drop=drop_after_max, recover=recover, phase=phase, time_loss=time_loss, title=title)
+    return dict(off=off, pts=pts, trans=trans, mxp=mxp, mxv=mxv, mnp=mnp, mnv=mnv, ever_ahead=ever_ahead, ever_behind=ever_behind, final=final, drop=drop_after_max, recover=recover, phase=phase, time_loss=time_loss, resigned_ahead=resigned_ahead, title=title)
 F = {g["no"]: game_facts(g) for g in m["games"]}
 n_never_ahead_loss = sum(1 for g in losses if not F[g["no"]]["ever_ahead"]); n_never_behind_win = sum(1 for g in wins if not F[g["no"]]["ever_behind"]); n_time = sum(1 for g in losses if F[g["no"]]["time_loss"])
 RANK_JP = {"ahead": "優勢", "level": "互角", "behind": "劣勢"}
@@ -165,13 +174,15 @@ def narrative(g, f):
     if extra: text += "、".join(extra) + "です。"
     return text
 def lesson(g, f, reps):
+    # STEP FILL 作業 Y(H4-3)。このファイル内では呼び出し元が無い(render_main.py・render_appendix.py のどちらの
+    # 連結先からも参照されない ― 出力に影響しない死んだコード)。固定の「20」だけ、ほかの箇所と揃えて s['games'] にした。
     if g["result"] == "負け":
-        if f["time_loss"] and f["final"] >= 300: t = f"この対局は盤上では{m['person']}が良い形勢のまま、持ち時間切れで負けています。20 局のうち、時間切れの負けは {n_time} 局です。"
-        elif f["ever_ahead"]: t = f"この対局は、最初から悪かったわけではありません。一度は優勢になっています。その後、{f['phase'](f['drop'] or f['mxp'])}に形勢が大きく動き、優勢を保てないまま負けています。20 局全体でも、同じように「良くなってから崩れた」負けが {len(la)} 局あります。"
-        else: t = f"この対局では、途中で優勢になる場面がありませんでした。20 局のうち、良くならないまま負けた局は {n_never_ahead_loss} 局で、多くはありません。"
+        if f["time_loss"] and f["final"] >= 300: t = f"この対局は盤上では{m['person']}が良い形勢のまま、持ち時間切れで負けています。{s['games']} 局のうち、時間切れの負けは {n_time} 局です。"
+        elif f["ever_ahead"]: t = f"この対局は、最初から悪かったわけではありません。一度は優勢になっています。その後、{f['phase'](f['drop'] or f['mxp'])}に形勢が大きく動き、優勢を保てないまま負けています。{s['games']} 局全体でも、同じように「良くなってから崩れた」負けが {len(la)} 局あります。"
+        else: t = f"この対局では、途中で優勢になる場面がありませんでした。{s['games']} 局のうち、良くならないまま負けた局は {n_never_ahead_loss} 局で、多くはありません。"
     else:
-        if f["ever_behind"]: t = f"この対局は、一度 {fmt(f['mnv'])} まで悪くなってから、{f['recover']} 手目に戻して勝っています。20 局のうち、同じように悪くなってから勝った局は {len(wb)} 局あります。"
-        else: t = f"この対局は、評価が −300 を下回る場面がないまま勝っています。20 局のうち、同じ勝ち方は {n_never_behind_win} 局です。"
+        if f["ever_behind"]: t = f"この対局は、一度 {fmt(f['mnv'])} まで悪くなってから、{f['recover']} 手目に戻して勝っています。{s['games']} 局のうち、同じように悪くなってから勝った局は {len(wb)} 局あります。"
+        else: t = f"この対局は、評価が −300 を下回る場面がないまま勝っています。{s['games']} 局のうち、同じ勝ち方は {n_never_behind_win} 局です。"
     t += f" この一局だけから「{m['person']}の決まった特徴」とは判断しません。"
     return t
 def esc_from_cf(cf, key):
@@ -183,4 +194,9 @@ def esc_from_cf(cf, key):
     return None
 
 
-n_la_collapsed = sum(1 for g in la if not F[g["no"]]["time_loss"])
+# STEP FILL 作業 Y(H4-2、独立監査 REVISE 2026-09-22 の直し)。la(途中まで優勢だった負け)を 3 つに分ける:
+# 持ち時間切れ(n_time_ahead、_mid.py で計算)、優勢のまま投了(n_la_resigned_ahead。上の title の resigned_ahead と
+# 同じ条件 ― ending が「投了」であることを見る)、それ以外の「崩れた」(n_la_collapsed。詰み・反則負け・
+# 終局の記録なしで +300 以上のまま負けた局や、投了だが最後の評価が +300 未満まで下がった局を含む)。
+n_la_resigned_ahead = sum(1 for g in la if F[g["no"]]["resigned_ahead"])
+n_la_collapsed = sum(1 for g in la if not F[g["no"]]["time_loss"] and not F[g["no"]]["resigned_ahead"])

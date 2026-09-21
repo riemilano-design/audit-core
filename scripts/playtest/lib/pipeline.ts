@@ -113,11 +113,16 @@ export function parsePipelineArgs(argv: readonly string[]): PipelineArgs {
   }
 
   const person = single.get("--person");
-  const kifuDir = single.get("--kifu-dir");
-  const work = single.get("--work");
-  if (person === undefined || kifuDir === undefined || work === undefined) {
+  const kifuDirRaw = single.get("--kifu-dir");
+  const workRaw = single.get("--work");
+  if (person === undefined || kifuDirRaw === undefined || workRaw === undefined) {
     throw new PipelineArgError("--person・--kifu-dir・--work は必須");
   }
+  // STEP FILL 作業 Y(H3、docs/STEP_FILL_PLAN_2026-09-22.md §3)。相対パスで --work を渡すと、
+  // S7(python・cwd = report-pdf/)へ REPORT_DATA_DIR として渡したときに正しく解決できない(report-pdf/ からの相対になってしまう)。
+  // 受け取った時点で絶対パスにする(path.resolve は process.cwd() を基準にする。すでに絶対パスなら値は変わらない)。
+  const kifuDir = path.resolve(kifuDirRaw);
+  const work = path.resolve(workRaw);
 
   const parallelRaw = single.get("--parallel") ?? String(DEFAULT_PARALLEL);
   const parallel = Number(parallelRaw);
@@ -146,7 +151,8 @@ export function parsePipelineArgs(argv: readonly string[]): PipelineArgs {
     work,
     me: single.get("--me"),
     parallel,
-    compareDirs,
+    // --compare-dir も同じ理由で絶対パスにする(gate.ts の --test-sente/--test-gote・段 2 の一覧読みに使う)。
+    compareDirs: compareDirs.map((d) => path.resolve(d)),
     comparePerson,
     until: untilRaw as UntilStage,
     evaluator: single.get("--evaluator"),

@@ -1,17 +1,43 @@
 # report-pdf/ ― 対局後診断レポートの PDF を作る道具(STEP PIPE 作業 B、S7)
 
-凍結した第 6 版テンプレート(`scripts/playtest/out/report-template-v6/`、gitignore・**読むだけ・変えない**)の python(reportlab)6 本を、
-**中身を変えずに**ここへ移したもの。docs/STEP_PIPE_PLAN_2026-09-21.md §2.2 の S7。
+凍結した第 6 版テンプレート(`scripts/playtest/out/report-template-v6/`、gitignore・読むだけ)の python(reportlab)6 本を、
+docs/STEP_PIPE_PLAN_2026-09-21.md §2.2 の S7 としてここへ移したもの。
 
-## 変えたところ(この 1 点だけ)
+**「凍結」の意味(STEP FILL 作業 Y、docs/STEP_FILL_PLAN_2026-09-22.md §3 で改めた)**: ソースの文字列を今後も一切変えない、という
+意味ではない。**2 人目の前の 20 局(第 6 版)の入力で通したとき、出力(`patient_report_data.json`・本編 PDF の本文)が
+変わらない**ことを指す。以前は局数などが「20」のように直接書かれていた箇所があり、ほかの局数の入力(14 局等)では
+1・2 ページ目や最後のページの文が実際の局数と食い違っていた(docs/STEP_PIPE_PLAN_2026-09-21.md §5.5 の 4)。この STEP で、
+局数が固定で入っていた文をデータ(`summary.games` 等)から出すように直した。20 局の入力なら直す前と同じ「20」が出るため、
+第 6 版の出力そのものは変わらない(直しの前後で `patient_report_data.json`・本編 PDF の本文の完全一致を確かめた)。
 
-`_head.py`・`_util.py`・`_mid.py` の 3 行だけ、`prose.json`・`sfens.json` の置き場を環境変数 `REPORT_DATA_DIR` で渡せるようにした
-(既定はこれまでどおり、道具と同じフォルダ)。中身のレイアウト・文言・判定・照合の規則(`_mid.py` の `allowed_numbers`・`BANNED` 語)は
-**1 バイトも変えていない**。
+## 変えたところ
 
-- `_head.py`: `_here` の後に `_data_dir = os.environ.get("REPORT_DATA_DIR", _here)` を足した
-- `_util.py`: `SF = json.load(open(os.path.join(_here, "sfens.json"), …))` → `os.path.join(_data_dir, "sfens.json")`
-- `_mid.py`: `PROSE = json.load(open(os.path.join(_here, "prose.json"), …))` → `os.path.join(_data_dir, "prose.json")`
+- `_head.py`・`_util.py`・`_mid.py` の 3 行だけ、`prose.json`・`sfens.json` の置き場を環境変数 `REPORT_DATA_DIR` で渡せるようにした
+  (既定はこれまでどおり、道具と同じフォルダ)。
+  - `_head.py`: `_here` の後に `_data_dir = os.environ.get("REPORT_DATA_DIR", _here)` を足した
+  - `_util.py`: `SF = json.load(open(os.path.join(_here, "sfens.json"), …))` → `os.path.join(_data_dir, "sfens.json")`
+  - `_mid.py`: `PROSE = json.load(open(os.path.join(_here, "prose.json"), …))` → `os.path.join(_data_dir, "prose.json")`
+- STEP FILL 作業 Y(H4、docs/STEP_FILL_PLAN_2026-09-22.md §3)。`_head.py`・`_mid.py`・`_app.py` の固定の「20 局」を、
+  データの局数(`m["summary"]["games"]`)から出すようにした(`_mid.py` の `allowed_numbers` の照合が許す数のリストも同じ)。
+  題の決め方に 1 つ足した(`_head.py` の `game_facts`): **負け・終局の語(`ending`)が「投了」・最後の評価が +300 以上** →
+  「盤上は優勢のまま、投了で終わった将棋」(「盤上は優勢のまま、持ち時間切れで負けた将棋」の次)。
+  - **独立監査 REVISE(2026-09-22)で直した点**: 当初は「切れ負けでない」だけで判定しており、詰み・反則負け・終局の記録なしの
+    負けまで「投了で終わった」と誤って断定していた。`g.get("ending")`(`lib/kifuImport.ts` の `ENDING_KIF_WORDS` の日本語語。
+    `reportData.ts` の `endingTextOf` がそのまま `patient_report_data.json` の `ending` に書く)が実際に「投了」であることを
+    見て判定するように直した。投了でない「終局の記録あり・切れ負けでない・+300 以上」の負け(詰み・反則負け等)と、
+    終局の記録が無い負けは、この分岐に入れず、直しの前と同じ `ever_ahead` の分岐(「一度は良くなったが…に崩れた将棋」)へ流す。
+  - これに伴い、1 ページ目・まとめの「n 局は優勢になった後に形勢が崩れ、n 局は優勢のまま持ち時間が切れています」を、該当局が
+    1 局以上あるときだけ「、n 局は優勢のまま投了しています」を足す形にし(`_mid.py` の `n_la_resigned_ahead`。`_head.py` の
+    `game_facts` が返す `resigned_ahead` と同じ条件)、
+    `assert n_la_collapsed + n_time_ahead + n_la_resigned_ahead == len(la)` に直した(該当局が 0 局のとき ― 第 6 版の
+    20 局を含む ― は元の文・assert と結果が変わらない)。
+  - **レイアウト・文言・照合の規則そのもの(`_mid.py` の `allowed_numbers` の作り・`BANNED` 語のリスト)は変えていない。**
+  - **データから取れない固定の数は変えていない(直さない)**: `_mid.py`(本編)の「比較対象は…対局 10 局です」等 ―
+    本人向けの `patient_report_data.json` には比較対象側(試す側)の局数が入っていないため、本編の側からは出せない
+    (`_app.py`(別冊)は `audit_metrics.json` に `candidate.test.games` があるので、そちらは直した)。`_app.py` の
+    判定のしきい値(「2 倍以上かつ 10 ポイント以上」等)も、局数ではなく判断的な基準値なので変えていない。
+  - **「次の {局数} 局で確かめます」の 2 か所も `summary.games`(今回と同じ局数)に置き換えたまま**(司令塔の判断、
+    2026-09-22。第 6 版の不変を優先。下の「既知の限界」参照)。
 
 フォント(`_here/fonts/…`)の探し方は変えていない(`_here` は道具のあるフォルダのまま)。
 
@@ -37,3 +63,14 @@
 別冊(`render_appendix.py`)は、`audit_metrics.json` の `candidate.reps` の欄(`side`・`transitionJp`・`capUsJp` ほか)と
 `engine`・`sideLabel`・`trajectories` などが `reportData.ts` で未実装のため、`reportData.ts` の出力からは作れず `KeyError` で止まる。
 凍結した `audit_metrics.json`(`scripts/playtest/out/report-template-v6/audit_metrics.json`)からは作れる。
+
+## 既知の限界(STEP FILL 作業 Y、独立監査 REVISE 2026-09-22 で明記)
+
+- **この `report-pdf/` の python の道具は vitest の対象外(このリポジトリに python の自動試験の基盤が無い)。**
+  この STEP での守りは「第 6 版 20 局の入力で、直しの前後で本文が変わらない」という実測だけである。
+  **該当が 0 件の分岐は、この確かめをすり抜ける** ― 独立監査が変異(新しい分岐の順序を入れ替える)で実証済み:
+  第 6 版の 20 局には新しい分岐(投了で終わった将棋)に当てはまる局が 0 局のため、分岐の中身をどう間違えても
+  20 局の本文は 1 文字も変わらなかった。**`_head.py`・`_mid.py`・`_app.py` に新しい分岐・新しい数を足す STEP では、
+  第 6 版 20 局の不変を見るだけでなく、その分岐に該当する局が 1 件以上出る入力(合成データでよい)でも本文を確かめること。**
+- 「次の {局数} 局で確かめます」(`_mid.py`・`_app.py` に計 2 か所)は、次の回の局数を今回と同じ数(`summary.games`)で
+  書く(次の回の局数を予測しているのではなく、今回と同じ規模を仮に置いているだけ)。

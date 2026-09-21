@@ -10,7 +10,8 @@ def fill(g, text, ply=None):
     return _re.sub(r"\{([mbo])(\d*)\}", rep, text)
 # ---- 言い換えた文の照合: 文に出る数は、その局の事実に無ければ止める ----
 def allowed_numbers(g):
-    f = F[g["no"]]; A = {g["total"], g["no"], 20, 300, len(la), len(wb), len(wins), len(losses), n_la_collapsed}
+    # STEP FILL 作業 Y(H4-1)。固定の 20 を、このお客さんの局数(s["games"])にした(allowed_numbers の照合は変えない)。
+    f = F[g["no"]]; A = {g["total"], g["no"], s["games"], 300, len(la), len(wb), len(wins), len(losses), n_la_collapsed, n_la_resigned_ahead}
     for p, sc in f["pts"]: A.add(p); A.add(abs(sc))
     for p, _, _ in f["trans"]: A.add(p)
     for e in m["events"]:
@@ -45,7 +46,8 @@ featured = [g for g in la] + [g for g in wb if str(g["no"]) in PROSE]
 assert all(str(g["no"]) in PROSE for g in featured), "言い換えの無い局がある"
 rest = [g for g in m["games"] if g not in featured]
 n_time_ahead = sum(1 for g in la if F[g["no"]]["time_loss"])
-assert n_la_collapsed + n_time_ahead == len(la)
+# STEP FILL 作業 Y(H4-2)。la は 3 つ(持ち時間切れ・優勢のまま投了・崩れた)に分かれる(_head.py の n_la_resigned_ahead)。
+assert n_la_collapsed + n_time_ahead + n_la_resigned_ahead == len(la)
 person = m["person"]
 S_BIG = st("big5", font=FONT_B, fontSize=22, leading=28, spaceAfter=1.5 * mm)
 S_L = st("l5", fontSize=11.5, leading=18)
@@ -54,19 +56,22 @@ S_LB = st("lb5", font=FONT_B, fontSize=12.5, leading=18, color=INK)
 mc = m["overview"]["moveCheck"]
 # ===== 1 ページ目 =====
 story.append(P(f"対局後診断・途中報告(第 6 版)", S_TAG))
-story.append(P(f"{person}の 20 局を調べました", S_BIG))
+story.append(P(f"{person}の {s['games']} 局を調べました", S_BIG))
 story.append(P(f"{len(wins)} 勝 {len(losses)} 敗の {s['games']} 局を、将棋エンジンで 1 手ずつ調べました。分かったことは 3 つです。", S_LEAD))
 def big_item(no, head, body):
     t = Table([[P(str(no), S_NUM2), [P(head, S_LB), P(body, S_B2)]]], colWidths=[12 * mm, W - 12 * mm])
     t.setStyle(TableStyle([("VALIGN", (0, 0), (-1, -1), "TOP"), ("BOX", (0, 0), (-1, -1), 0.6, LINE), ("BACKGROUND", (0, 0), (-1, -1), BG), ("LINEBEFORE", (0, 0), (0, -1), 2.6, ACCENT), ("TOPPADDING", (0, 0), (-1, -1), 2.5 * mm), ("BOTTOMPADDING", (0, 0), (-1, -1), 2.5 * mm), ("LEFTPADDING", (0, 0), (-1, -1), 3.5 * mm)]))
     return t
-story.append(big_item(1, f"負けた {len(losses)} 局のうち {len(la)} 局は、途中まで{person}が優勢でした。", f"{n_la_collapsed} 局は優勢になった後に形勢が崩れ、{n_time_ahead} 局は優勢のまま持ち時間が切れています。最初から押されて負けた将棋は {n_never_ahead_loss} 局だけです。"))
+# STEP FILL 作業 Y(H4-2)。n_la_resigned_ahead が 0 のとき(第 6 版の 20 局を含む)は元の文と 1 バイトも変わらない
+# (空の節を挟むだけ)。0 でないときだけ、承認済みの題の語(盤上・優勢のまま・投了)をそのまま使って件数を足す。
+resigned_ahead_clause = f"、{n_la_resigned_ahead} 局は優勢のまま投了しています" if n_la_resigned_ahead > 0 else ""
+story.append(big_item(1, f"負けた {len(losses)} 局のうち {len(la)} 局は、途中まで{person}が優勢でした。", f"{n_la_collapsed} 局は優勢になった後に形勢が崩れ、{n_time_ahead} 局は優勢のまま持ち時間が切れています{resigned_ahead_clause}。最初から押されて負けた将棋は {n_never_ahead_loss} 局だけです。"))
 story.append(Spacer(1, 2 * mm))
-story.append(big_item(2, f"勝った {len(wins)} 局のうち {len(wb)} 局は、一度劣勢になってから戻して勝っています。", "良くなってから崩れる将棋と、悪くなってから戻す将棋が、同じ 20 局の中に両方あります。"))
+story.append(big_item(2, f"勝った {len(wins)} 局のうち {len(wb)} 局は、一度劣勢になってから戻して勝っています。", f"良くなってから崩れる将棋と、悪くなってから戻す将棋が、同じ {s['games']} 局の中に両方あります。"))
 story.append(Spacer(1, 2 * mm))
-story.append(big_item(3, "形勢が動いたのは、ほとんどが中盤と終盤です。", f"形勢がはっきり崩れた場面は 20 局で {pr['fell']} か所。そのうち序盤は {ph.get('early','—')} か所だけでした。"))
+story.append(big_item(3, "形勢が動いたのは、ほとんどが中盤と終盤です。", f"形勢がはっきり崩れた場面は {s['games']} 局で {pr['fell']} か所。そのうち序盤は {ph.get('early','—')} か所だけでした。"))
 story.append(Spacer(1, 3.5 * mm))
-story.append(boxflow([P("まだ分かっていないこと", S_BOXH), P(f"崩れた場面に共通する条件は、まだ見つかっていません。「数手のうちに玉の逃げ場が減る」場面が {len(c['reps'])} か所ありましたが、エンジン同士の進め方でも同じことが起きるため、{person}だけに当てはまることとは言えませんでした。次に、{person}が選んだ手そのものも数えました。「優勢のときに、自分の玉のすぐそばへ駒を動かす手」は 20 局で {mc['n']} 回あり、そのうち {mc['fell']} 回で直後に形勢が崩れていました。ただ、比較対象の 10 局では同じ種類の手が {mc['otherN']} 回あって、崩れたのは {mc['otherFell']} 回でした。これも、{person}だけに当てはまることとは、まだ言えません。", S_B2)], colors.white))
+story.append(boxflow([P("まだ分かっていないこと", S_BOXH), P(f"崩れた場面に共通する条件は、まだ見つかっていません。「数手のうちに玉の逃げ場が減る」場面が {len(c['reps'])} か所ありましたが、エンジン同士の進め方でも同じことが起きるため、{person}だけに当てはまることとは言えませんでした。次に、{person}が選んだ手そのものも数えました。「優勢のときに、自分の玉のすぐそばへ駒を動かす手」は {s['games']} 局で {mc['n']} 回あり、そのうち {mc['fell']} 回で直後に形勢が崩れていました。ただ、比較対象の 10 局では同じ種類の手が {mc['otherN']} 回あって、崩れたのは {mc['otherFell']} 回でした。これも、{person}だけに当てはまることとは、まだ言えません。", S_B2)], colors.white))
 story.append(Spacer(1, 3.5 * mm))
 story.append(P("このレポートの読み方", S_K))
 story.append(notebox([
@@ -80,8 +85,8 @@ story.append(Spacer(1, 3 * mm))
 story.append(P(f"次のページから、形勢が大きく動いた {len(featured)} 局を 1 局ずつ見ていきます(負けた {len(la)} 局と、劣勢から勝った {len(featured) - len(la)} 局)。残りの {len(rest)} 局は、その後の一覧にまとめました。", S_BODY))
 story.append(PageBreak())
 
-# ===== 20 局の俯瞰 =====
-story.append(P("20 局の形勢の流れ", S_BIG))
+# ===== 局の俯瞰(STEP FILL 作業 Y、H4-1: 見出しは s["games"] を使う) =====
+story.append(P(f"{s['games']} 局の形勢の流れ", S_BIG))
 story.append(P("上に行くほど" + person + "が良く、下に行くほど相手が良いことを表します。色のついた枠は、次のページから 1 局ずつ見ていく局です。", S_LEAD))
 fset = {g["no"] for g in featured}; cells = []
 for g in m["games"]:
@@ -153,20 +158,20 @@ story.append(gt)
 story.append(PageBreak())
 
 # ===== まとめ =====
-story.append(P("20 局を通して見えたこと", S_BIG))
+story.append(P(f"{s['games']} 局を通して見えたこと", S_BIG))
 story.append(P(f"<b>勝ち負けは序盤で決まっておらず、形勢が良くなった後、そして悪くなった後の数手で動いています。</b>", S_LEAD))
 story.append(boxes([(len(la), f"負けた {len(losses)} 局のうち、<br/>途中で優勢だった局"), (len(wb), f"勝った {len(wins)} 局のうち、<br/>劣勢から戻して勝った局"), (pr["fell"], f"形勢がはっきり崩れた場面<br/>(序盤 {ph.get('early','—')}・中盤 {ph.get('mid','—')}・終盤 {ph.get('late','—')})"), (len(c["reps"]), "そのうち、直前に<br/>玉の逃げ場が減っていた場面")]))
 story.append(Spacer(1, 3 * mm))
 for items, bgc in ((
     [P("分かったこと", S_BOXH),
-     P(f"・負けた {len(losses)} 局のうち {len(la)} 局で、途中に優勢の場面がありました。{n_la_collapsed} 局はその後に崩れ、{n_time_ahead} 局は優勢のまま持ち時間切れです。", S_B2),
+     P(f"・負けた {len(losses)} 局のうち {len(la)} 局で、途中に優勢の場面がありました。{n_la_collapsed} 局はその後に崩れ、{n_time_ahead} 局は優勢のまま持ち時間切れです{resigned_ahead_clause}。", S_B2),
      P(f"・勝った {len(wins)} 局のうち {len(wb)} 局は、一度劣勢になってから戻しています。", S_B2),
      P(f"・形勢が崩れた {pr['fell']} か所のうち、優勢から崩れたのは {ph.get('fromAhead','—')} か所。そのうち {ph.get('fromAheadLoss','—')} か所が負けた局のものでした。", S_B2)], BG),
     ([P("まだ言えないこと", S_BOXH),
       P(f"・崩れた場面に共通する条件として「数手のうちに玉の逃げ場が減る」を調べましたが、エンジンの進め方でも同じくらい起き、比較対象の対局では確かめられませんでした。", S_B2),
       P(f"・{person}が選んだ手そのもの(動かした駒、打つ手、玉のそばへの手など)も数えました。「優勢のときに自分の玉のすぐそばへ駒を動かす手」は {mc['n']} 回のうち {mc['fell']} 回で直後に崩れていましたが、比較対象の 10 局では {mc['otherN']} 回のうち {mc['otherFell']} 回でした。どちらも、{person}に特有のこととは、まだ言えません(細かい数は別冊の技術資料にあります)。", S_B2)], colors.white),
     ([P("次に調べること", S_BOXH),
-      P(f"・{person}の次の 20 局で、今回見えたこと(優勢の後の崩れ、玉のそばへの手)がもう一度見えるかを確かめます。同じ人の新しい対局で確かめるのが、いちばん確かな方法です。", S_B2),
+      P(f"・{person}の次の {s['games']} 局で、今回見えたこと(優勢の後の崩れ、玉のそばへの手)がもう一度見えるかを確かめます。同じ人の新しい対局で確かめるのが、いちばん確かな方法です。", S_B2),
       P("・比べる相手の対局を増やします(今回の比較対象は 10 局だけでした)。", S_B2)], colors.white)):
     story.append(boxflow(items, bgc)); story.append(Spacer(1, 2 * mm))
 
