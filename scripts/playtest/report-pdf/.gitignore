@@ -1,0 +1,8 @@
+# build.sh が作る連結ファイル(_head.py 等 6 本を並べただけ。コミットは 6 本の側)。
+render_main.py
+render_appendix.py
+
+# 個人のデータ・PDF・言い換え(コミットしない)。
+*.json
+*.pdf
+prose-request.md

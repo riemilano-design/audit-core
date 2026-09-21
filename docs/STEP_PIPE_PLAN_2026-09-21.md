@@ -74,3 +74,18 @@ npx tsx scripts/playtest/pipeline.ts --person <id> --kifu-dir <dir> --work <dir>
 - **計画に無かった追加**: `--compare-person <id>`(`gate.ts` が求める「試す側の人」のラベルを渡す手段が計画に欠けていた)。`--work` は必須の引数として実装した(§2.1 の「既定は out/」は採らない。置き場を毎回はっきり書かせる)。
 - 独立監査(使い捨ての監査担当、A と B をまとめて 1 回): **作業 A は GO**。監査側の実測: typecheck:scripts rc 0、vitest 62 ファイル 969/969、check-docs rc 0。抜き取りの変異 2 本(段 2 のノード数を変える・`--records-append` を足す)はどちらも検出、sha256 で戻りを確認。引数は `replay.ts`・`rescreen.ts`・`kifu-import-check.ts`・`gate.ts` の使い方と 1 つずつ照合。`--records-append` は構造的に付かない。`records/` へ書かない。GATE_VALUES・`apps/`・`data/` に触れていない。
 - 司令塔の承認の根拠: 上の監査の GO、実装側の報告と監査側の実測の数の一致(969)、コミット前の sha256 の照合(実装側の報告と同じ)。エンジンを通した実測(§3 (b))は**まだ測っていない**。Lishogi の評価が終わった後に測る。
+
+### 5.2 作業 B(`reportData.ts`・`report-pdf/`、2026-09-21)
+
+- 実装: 使い捨ての実装担当(worktree)。`scripts/playtest/lib/reportData.ts`(sha256 `f7dadd29d088…`)・`lib/reportData.test.ts`(`42b8741699e8…`)・`scripts/playtest/reportData.ts`・`scripts/playtest/report-pdf/`(凍結した第 6 版の道具 6 本 + `build.sh`・`check_fonts_embedded.py`・`README.md`・`.gitignore`)。
+- **金の標本との一致**: 2 人目 20 局の記録から作った `patient_report_data.json` と `sfens.json` は、凍結した第 6 版のものと**完全一致**。本編の PDF は本文が完全一致(14 ページ)。凍結した側の不備は見つからなかった。
+- 凍結した道具から変えた行は 3 か所だけ(`REPORT_DATA_DIR` で材料の置き場を渡せるようにした。`_head.py`・`_util.py`・`_mid.py`)。照合の規則(使わない語・文に出る数)は変えていない。監査側が diff で確認。
+- **計画に無かった判断**: `--title`・`--today` の追加(本人向けデータの必須の欄)、勝敗の導出 `resultOf`、駒名の短い表(竜・全・圭・杏。D0-KIFU2 の慣行)、条件式 ID の既定値(`king_escapes_decrease_v1`・`ahead_move_into_own_king_zone_v1`。上書きできる)。
+- 独立監査: **REVISE 1 点 → 直し → GO**(往復 1 回)。指摘は「`resultOf` が終局の種類を見ず、手数の偶奇だけで勝敗を決めている」(反則・千日手・持将棋・中断・不戦では、確かめていない勝敗を断定しうる。ルール 6)。直し: 投了・詰み・切れ負けは従来の規則、反則勝ち・反則負けは終局の語の意味から、それ以外と終局の記載が無い局は**決めずに例外で止まる**。監査側の実測: typecheck rc 0、vitest 952/952、check-docs rc 0、sha256 の照合、差分が `resultOf` まわり・試験・README だけであること、反則の勝敗の向きを `kifuImport.ts`(`endingPly = moves.length + 1`)から独立に導き直して一致。
+- 司令塔の承認の根拠: 上の GO、A を取り込んだ状態で司令塔が回した実測(typecheck rc 0、vitest 63 ファイル **1003/1003** = 予測 969 + 34 と一致)、コミット前の sha256 の照合。
+- **既知の限界(持ち越し)**:
+  - 別冊(`render_appendix.py`)は、`reportData.ts` の出す `audit_metrics.json` からは作れない(`candidate.reps` の `side`・`transitionJp`・`capUsJp` ほか、`engine`・`sideLabel`・`trajectories` などが未実装。`KeyError` ではっきり止まる。静かに誤らない)。凍結した `audit_metrics.json` からは作れる。`report-pdf/README.md` に明記。
+  - 反則勝ち・反則負けの実例は手元の棋譜に無く、単体の試験でしか確かめていない。
+  - 詰みの表示用の値(±3000)の負の側は、実データに例が無い。
+  - 場面の時期(早い・中・遅い)の割り方が 2 つの欄で基準が違う(回す前の手数 ÷ 総手数 と、表示の手数 ÷ 総手数)。元の使い捨てスクリプトの癖をそのまま再現した。第 6 版との一致を優先し、いまは変えない。
+  - python(reportlab・pymupdf)と、埋め込める書体(Arial Unicode)に依存する。
