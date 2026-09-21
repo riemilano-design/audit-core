@@ -161,6 +161,32 @@ npx tsx scripts/playtest/compare.ts run-01.jsonl run-02.jsonl --json compare.jso
 
 `scripts/playtest/reports/` は追跡対象(`out/` と異なり `.gitignore` されない)。探索モードの集約報告(`report.md`・`report.json`)のうち、検証材料として保持すると人間が判断したものをコピーして置く。ここに置いた候補事象は仕分け(直す/受容/持ち越す)待ちであり、既知事項・仕様への登録を意味しない。
 
+## 一本の流れ(`pipeline.ts`。STEP PIPE 作業 A)
+
+`scripts/playtest/pipeline.ts` は、S1(読み込み)〜S4(判定)の 4 段を**既存の道具を子プロセスで呼ぶ順に並べるだけ**の道具である(docs/STEP_PIPE_PLAN_2026-09-21.md §2.1)。**S1〜S4 のどの道具の中身も複製・改変しない**。将棋の判断・閾値・文言はここでは一切書かない。
+
+```
+npx tsx scripts/playtest/pipeline.ts --person <id> --kifu-dir <dir> --work <dir>
+  [--me <名前>] [--parallel <N=5>]
+  [--compare-dir <段2の記録のフォルダ …> --compare-person <p記号>]
+  [--until import|evaluate|diagnose|gate] [--evaluator "<評価関数の識別>"] [--dry-run]
+```
+
+- **段**: S1 `kifu-import-check.ts`(読み込み)→ S2 `replay.ts`(軽い値。nodes/reference-nodes 400,000・threads 1・direction-rule current)→ `rescreen.ts`(深い値。deep-nodes 4,000,000)→ S3 `diagnose.ts`(1 人ぶんまとめて)→ S4 `gate.ts`(`--compare-dir` があるときだけ)。引数の値は固定(表と違う値を渡す旗は無い)
+- **先後**: `--me <名前>` を全局へ渡すか、`--me` を渡さなければ局ごとにファイル名の末尾 `-sente`/`-gote` を読む(id はそれを除いた部分)。どちらも無ければ**推測せずに止まる**
+- **途中から再開できる**: 段ごと・局ごとに、出力があって完結していれば(段 1 は最後の行が `summary`、段 2 は空でない、fixed 棋譜は `id`・`moves` がある、診断は 4 つの出力がすべてある、gate は出力がある)飛ばす
+- **並行**: `--parallel`(既定 5)を上限にした局ごとのジョブの列。1 局の失敗で他は止めず、最後に失敗の一覧と `exitCode ≠ 0`
+- **所要**: 局ごとの開始・終了・rc を `<work>/timing.jsonl` に書く
+- **`--source` は絶対パスにしない**: `kifu-import-check.ts --source` には `--kifu-dir` からの相対パス(ファイル名そのもの)を渡す(絶対パスを固定棋譜に残さないため)。第一引数(道具が実際に読む場所)は指定どおりのパスのまま
+- **S4(`gate.ts`)の向き(2026-09-21 の直し)**: **材料の側 = このお客さん**(`--person`・`--kifu-dir` の局。`gate.ts` の `--person`・`--material`)、**試す側 = `--compare-dir` の記録**(`gate.ts` の `--test-person`・`--test-sente`/`--test-gote`)。2 人目 20 局(材料)を 1 人目 10 局(試す側)で確かめた C-1・C-5 の正式な実行と同じ向き(docs/STEP_D3-COND_PLAN_2026-09-15.md §14・§15.2)。`--compare-dir` の記録の先後は**各記録の meta 行(`mirrored`・`originalUserSide`。`replay.ts` が書く。`lib/sideAlignment.ts` の `sideMetaFields`)から読む**。ファイル名には頼らない(比較対象のフォルダに命名の規約は無い)。meta から決められない記録が 1 件でもあれば、推測せずこの段を失敗にして理由(ファイル名)を出す
+- **`--compare-person`**: 計画の CLI には試す側の人のラベルを渡す旗が無かったため、`gate.ts` が要求する「試す側の人のラベル(p1・p2 の記号)」を渡すための `--compare-person` を新設した(`--compare-dir` と必ず一緒に渡す)。`--person`(材料)には `--person` の値をそのまま使う
+- **`--records-append` は決して付けない**。`records/` へは一切書かない(棄却の記録へ書くのは、予測を先にコミットした正式な実行だけで、司令塔が手で回す)
+- **試験はエンジンも子プロセスも起こさない**: fs・道具の実行(`ToolRunner`)を注入できる形にし、段の順序・済みの飛ばし・並行の上限・1 局の失敗が他を止めないこと・引数の固定・`--until`・`--dry-run`・gate の材料/試す側の向き・meta から本人の側が決められない記録の扱いを `scripts/playtest/lib/pipeline.test.ts` で見張る
+
+`--dry-run` は何も書かず・何も実行せず、段ごとの `run`/`skip` とその引数を表示するだけ(`diagnose`/`gate` のプレビューは、その時点ですでに段 2 まで済んでいる局だけを対象にする。これから実行して済むはずの局は、実行するまで成否が分からないため含めない)。
+
+S5(レポートの材料)以降は別 STEP(作業 B)で、`pipeline.ts` にはまだつながっていない。段の一覧(`STAGES`、`lib/pipeline.ts`)は配列なので、後で司令塔が足せる。
+
 ## typecheck
 
 ```

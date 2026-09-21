@@ -64,3 +64,13 @@ npx tsx scripts/playtest/pipeline.ts --person <id> --kifu-dir <dir> --work <dir>
 - 判定の値・条件式・文言の規則を変えない。新しい物差しを足さない。
 - 同意のない棋譜(Lishogi)から本人向けのレポートを外へ出さない(物差しと流れの検証だけ)。
 - python(reportlab)に依存したままである。別の環境で動かすときの手当て(依存の固定)は、この STEP では書き残すだけにする。
+
+## 5. 実装と監査の記録
+
+### 5.1 作業 A(`pipeline.ts`、2026-09-21)
+
+- 実装: 使い捨ての実装担当(worktree)。`scripts/playtest/lib/pipeline.ts`(sha256 `cb8ebffac415…`)・`scripts/playtest/pipeline.ts`(`2b9b7bcf7b77…`)・`scripts/playtest/lib/pipeline.test.ts`(`c9ba23415d8e…`、51 件)・`scripts/playtest/README.md`(`c9f887d44d79…`)。
+- 途中の直し 1 回: 判定の役割の向きが逆だった(原因はこの計画 §2.1 の書き方の曖昧さ)。**材料 = お客さん(`--person`)、試す側 = `--compare-dir`** に直した。D3-COND 計画 §14・§15.2 の正式な実行と同じ向き。
+- **計画に無かった追加**: `--compare-person <id>`(`gate.ts` が求める「試す側の人」のラベルを渡す手段が計画に欠けていた)。`--work` は必須の引数として実装した(§2.1 の「既定は out/」は採らない。置き場を毎回はっきり書かせる)。
+- 独立監査(使い捨ての監査担当、A と B をまとめて 1 回): **作業 A は GO**。監査側の実測: typecheck:scripts rc 0、vitest 62 ファイル 969/969、check-docs rc 0。抜き取りの変異 2 本(段 2 のノード数を変える・`--records-append` を足す)はどちらも検出、sha256 で戻りを確認。引数は `replay.ts`・`rescreen.ts`・`kifu-import-check.ts`・`gate.ts` の使い方と 1 つずつ照合。`--records-append` は構造的に付かない。`records/` へ書かない。GATE_VALUES・`apps/`・`data/` に触れていない。
+- 司令塔の承認の根拠: 上の監査の GO、実装側の報告と監査側の実測の数の一致(969)、コミット前の sha256 の照合(実装側の報告と同じ)。エンジンを通した実測(§3 (b))は**まだ測っていない**。Lishogi の評価が終わった後に測る。
