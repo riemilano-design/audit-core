@@ -161,15 +161,16 @@ npx tsx scripts/playtest/compare.ts run-01.jsonl run-02.jsonl --json compare.jso
 
 `scripts/playtest/reports/` は追跡対象(`out/` と異なり `.gitignore` されない)。探索モードの集約報告(`report.md`・`report.json`)のうち、検証材料として保持すると人間が判断したものをコピーして置く。ここに置いた候補事象は仕分け(直す/受容/持ち越す)待ちであり、既知事項・仕様への登録を意味しない。
 
-## 一本の流れ(`pipeline.ts`。STEP PIPE 作業 A)
+## 一本の流れ(`pipeline.ts`。STEP PIPE 作業 A・作業 C)
 
-`scripts/playtest/pipeline.ts` は、S1(読み込み)〜S4(判定)の 4 段を**既存の道具を子プロセスで呼ぶ順に並べるだけ**の道具である(docs/STEP_PIPE_PLAN_2026-09-21.md §2.1)。**S1〜S4 のどの道具の中身も複製・改変しない**。将棋の判断・閾値・文言はここでは一切書かない。
+`scripts/playtest/pipeline.ts` は、S1(読み込み)〜S7(PDF)の 7 段を**既存の道具を子プロセスで呼ぶ順に並べるだけ**の道具である(docs/STEP_PIPE_PLAN_2026-09-21.md §2.1・§2.2 の最後・§3 (a))。**S1〜S7 のどの道具の中身も複製・改変しない**。将棋の判断・閾値・文言はここでは一切書かない。
 
 ```
 npx tsx scripts/playtest/pipeline.ts --person <id> --kifu-dir <dir> --work <dir>
   [--me <名前>] [--parallel <N=5>]
   [--compare-dir <段2の記録のフォルダ …> --compare-person <p記号>]
-  [--until import|evaluate|diagnose|gate] [--evaluator "<評価関数の識別>"] [--dry-run]
+  [--name <表示名> --title <タイトル> --today <YYYY-MM-DD>]  … --until が report-data・prose・pdf のときだけ必須
+  [--until import|evaluate|diagnose|gate|report-data|prose|pdf] [--evaluator "<評価関数の識別>"] [--dry-run]
 ```
 
 - **段**: S1 `kifu-import-check.ts`(読み込み)→ S2 `replay.ts`(軽い値。nodes/reference-nodes 400,000・threads 1・direction-rule current)→ `rescreen.ts`(深い値。deep-nodes 4,000,000)→ S3 `diagnose.ts`(1 人ぶんまとめて)→ S4 `gate.ts`(`--compare-dir` があるときだけ)。引数の値は固定(表と違う値を渡す旗は無い)
@@ -183,9 +184,18 @@ npx tsx scripts/playtest/pipeline.ts --person <id> --kifu-dir <dir> --work <dir>
 - **`--records-append` は決して付けない**。`records/` へは一切書かない(棄却の記録へ書くのは、予測を先にコミットした正式な実行だけで、司令塔が手で回す)
 - **試験はエンジンも子プロセスも起こさない**: fs・道具の実行(`ToolRunner`)を注入できる形にし、段の順序・済みの飛ばし・並行の上限・1 局の失敗が他を止めないこと・引数の固定・`--until`・`--dry-run`・gate の材料/試す側の向き・meta から本人の側が決められない記録の扱いを `scripts/playtest/lib/pipeline.test.ts` で見張る
 
-`--dry-run` は何も書かず・何も実行せず、段ごとの `run`/`skip` とその引数を表示するだけ(`diagnose`/`gate` のプレビューは、その時点ですでに段 2 まで済んでいる局だけを対象にする。これから実行して済むはずの局は、実行するまで成否が分からないため含めない)。
+`--dry-run` は何も書かず・何も実行せず、段ごとの `run`/`skip` とその引数を表示するだけ(`diagnose`/`gate` のプレビューは、その時点ですでに段 2 まで済んでいる局だけを対象にする。これから実行して済むはずの局は、実行するまで成否が分からないため含めない)。**`--dry-run` は S1〜S4 までのプレビューのまま**(下の S5〜S7 のプレビューは作業 C では足していない。`--until` に `report-data`/`prose`/`pdf` を渡しても、表示は gate までで止まる)。
 
-S5(レポートの材料)以降は別 STEP(作業 B)で、`pipeline.ts` にはまだつながっていない。段の一覧(`STAGES`、`lib/pipeline.ts`)は配列なので、後で司令塔が足せる。
+### S5〜S7(本人向けの材料・言い換え・PDF。STEP PIPE 作業 C)
+
+作業 B で足された `reportData.ts`(S5)・`report-pdf/`(S7)を、`pipeline.ts` の続きの段としてつなぐ。出力は `<work>/report/` の下(局ごとではなく人ごと 1 か所)。
+
+- **S5**(`reportData.ts`。`--until report-data`): 材料 = **このお客さんの段 2**(`--person`・`--kifu-dir` の局。gate 段と同じ向き)。`--records`(段 2)・`--kifu`(固定棋譜)・`--gate`(`<work>/<person>/gate.jsonl`)を渡し、`patient_report_data.json`・`audit_metrics.json`・`sfens.json`・`prose-request.md` を書く。`--conditions`・`--king-escapes-condition`・`--move-check-condition` は渡さない(reportData.ts の既定 = 金の標本(第 6 版)に合わせた承認済みの定義のまま)。**`--gate` の出力(`gate.jsonl`)が無ければ(`--compare-dir` を渡さず gate 段が飛ばされた等)、reportData.ts を呼ばずに「判定の出力(gate.jsonl)が無い(--compare-dir が要る)」とはっきり失敗にする**。**済みの判定**: `patient_report_data.json`・`audit_metrics.json`・`sfens.json` の 3 つが揃っていれば飛ばす
+- **S6**(言い換え。`--until prose`): 自動化しない(LLM を呼ばない)。`<work>/report/prose.json` が無ければ、`prose-request.md` の場所を示して失敗にする(rc ≠ 0)。あれば次へ進む。照合(使わない語・文の数)はしない ― それは S7 の `_mid.py` の役目のまま
+- **S7**(PDF。`--until pdf`): `report-pdf/build.sh`(`render_main.py`・`render_appendix.py` を作る)→ `REPORT_DATA_DIR=<work>/report python3 -X utf8 render_main.py <patient_report_data.json> <出力 PDF>` → `python3 -X utf8 check_fonts_embedded.py <出力 PDF>` の順に呼ぶ(README は `scripts/playtest/report-pdf/README.md`。python の実行ファイルはそこに書かれた `python3` のまま)。**別冊(`render_appendix.py`)は作らない**(`report-pdf/README.md` に明記した既知の欠落。`reportData.ts` の `audit_metrics.json` からは作れない欄があるため)。**済みの判定**: PDF が `prose.json`・`patient_report_data.json` の両方より新しい(mtime)ときだけ飛ばす。`prose.json` が無い(S6 が失敗している)ときは S7 を一切起こさない
+- **試験はエンジンも python も起こさない**: S1〜S4 と同じ `ToolRunner` の注入で、道具の実行をすべて差し替える(`scripts/playtest/lib/pipelineReport.test.ts`)
+
+段の一覧(`STAGES`・`UNTIL_STAGES`、`lib/pipeline.ts`)は配列なので、後で司令塔が足せる。
 
 ## typecheck
 

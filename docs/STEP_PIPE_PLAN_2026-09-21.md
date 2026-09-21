@@ -89,3 +89,13 @@ npx tsx scripts/playtest/pipeline.ts --person <id> --kifu-dir <dir> --work <dir>
   - 詰みの表示用の値(±3000)の負の側は、実データに例が無い。
   - 場面の時期(早い・中・遅い)の割り方が 2 つの欄で基準が違う(回す前の手数 ÷ 総手数 と、表示の手数 ÷ 総手数)。元の使い捨てスクリプトの癖をそのまま再現した。第 6 版との一致を優先し、いまは変えない。
   - python(reportlab・pymupdf)と、埋め込める書体(Arial Unicode)に依存する。
+
+### 5.3 作業 C(S5〜S7 を `pipeline.ts` につなぐ、2026-09-21〜22)
+
+- 実装: 使い捨ての実装担当(worktree。1 回目は利用制限で何も残さず中断、出し直し)。`lib/pipeline.ts`(sha256 `118b89205bbe…`)・`pipeline.ts`(`bcf005a48229…`)・`README.md`(`4ec6b5c7843e…`)・新規 `lib/pipelineReport.test.ts`(`f230c2859de4…`、20 件)。
+- `--until` に `report-data`・`prose`・`pdf` を足した(**既定の終点は `gate` のまま**)。`--name`・`--title`・`--today` は report-data 以降で必須。判定の出力が無ければ `reportData.ts` を呼ばずに失敗。`prose.json` が無ければ `prose-request.md` の場所を示して rc ≠ 0(言い換えは自動化しない。LLM を呼ばない)。pdf 段は本編だけ(`build.sh` → `render_main.py` → `check_fonts_embedded.py`)。済みの判定は、PDF が `prose.json`・`patient_report_data.json` より新しいこと。出力は `<work>/report/`(PDF は `main.pdf`)。
+- **完了条件 (a) を満たした**: 2 人目 20 局を work フォルダの形に写し、`pipeline.ts --until pdf` の 1 コマンドで、`patient_report_data.json` は第 6 版と完全一致、本編 PDF(14 ページ)の本文は第 6 版と完全一致。再実行では何も作り直さない。**監査側も独立に再現した**(名前を変えて回し、差は名前の行だけ)。
+- 独立監査: **GO**(直す点なし)。監査側の実測: typecheck rc 0、vitest 64 ファイル 1023/1023、check-docs rc 0、抜き取りの変異 2 本を検出、既存の `lib/pipeline.test.ts` は 1 文字も変わっていない、`reportData.ts` への引数を `parseArgs` と 1 つずつ照合。
+- 司令塔の承認の根拠: 上の GO、sha256 の照合、docs だけの 3 コミットを取り込んだ後の typecheck と pipeline の試験 2 ファイルの再実行。
+- **既知の限界(持ち越し)**: `--dry-run` は S1〜S4 だけを出す(S5〜S7 のプレビューは無い)。pdf の済み判定は `sfens.json` の時刻を見ない(いまは `reportData.ts` が同時に書くので実害なし)。別冊は作らない(§5.2)。
+- **完了条件 (b)(人の手が入らない通しと所要)は、2 人目の新しい棋譜 24 局で実測中。** 結果は §5.4 に足す。

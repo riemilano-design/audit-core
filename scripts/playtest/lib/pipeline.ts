@@ -23,9 +23,27 @@ import { userSideOf, type UserSide } from "./condition.js";
 export type Stage = "import" | "evaluate" | "diagnose" | "gate";
 export const STAGES: readonly Stage[] = ["import", "evaluate", "diagnose", "gate"];
 
+/**
+ * STEP PIPE 作業 C(docs/STEP_PIPE_PLAN_2026-09-21.md §2.2 の最後・§3 (a))。S5〜S7(本人向けの材料・言い換え・PDF)を
+ * `--until` の値として足す。**`STAGES`(S1〜S4、上の 4 段)はここでは変えない**(`STAGES` を直に見張る既存の試験を壊さないため)。
+ * `--until` が取り得る値の全体は `UNTIL_STAGES`(`STAGES` の後ろに続ける。並びの先頭 4 つは `STAGES` と同じ index になるので、
+ * `STAGES.indexOf("evaluate")` 等の既存の比較はそのまま使い回せる)。
+ */
+export type ReportStage = "report-data" | "prose" | "pdf";
+export const REPORT_STAGES: readonly ReportStage[] = ["report-data", "prose", "pdf"];
+export type UntilStage = Stage | ReportStage;
+export const UNTIL_STAGES: readonly UntilStage[] = [...STAGES, ...REPORT_STAGES];
+
 // ---- 引数の解釈 ----
 
 export class PipelineArgError extends Error {}
+
+/** S5(reportData.ts)へ渡す表示名・題・日付。`--until` が report-data 以降のときだけ必須(推測・既定で補わない)。 */
+export interface ReportInfo {
+  name: string;
+  title: string;
+  today: string;
+}
 
 export interface PipelineArgs {
   person: string;
@@ -35,12 +53,17 @@ export interface PipelineArgs {
   parallel: number;
   compareDirs: string[];
   comparePerson: string | undefined;
-  until: Stage;
+  until: UntilStage;
   evaluator: string | undefined;
   dryRun: boolean;
+  /**
+   * `--name`・`--title`・`--today` が 3 つとも渡されたときだけ存在する(**任意のキー**。既存の `parsePipelineArgs` の
+   * 呼び出し元は 1 つも渡さないので、このキー自体が付かない ― `toStrictEqual` で見ている既存の試験の形を壊さないため)。
+   */
+  report?: ReportInfo;
 }
 
-const SINGLE_FLAGS = ["--person", "--kifu-dir", "--work", "--me", "--parallel", "--compare-person", "--until", "--evaluator"] as const;
+const SINGLE_FLAGS = ["--person", "--kifu-dir", "--work", "--me", "--parallel", "--compare-person", "--until", "--evaluator", "--name", "--title", "--today"] as const;
 type SingleFlag = (typeof SINGLE_FLAGS)[number];
 
 const DEFAULT_PARALLEL = 5;
@@ -100,12 +123,22 @@ export function parsePipelineArgs(argv: readonly string[]): PipelineArgs {
   const parallel = Number(parallelRaw);
   if (!Number.isInteger(parallel) || parallel <= 0) throw new PipelineArgError(`--parallel は正の整数: ${parallelRaw}`);
 
+  // 既定は変わらない(STAGES の最後 = "gate"。STAGES 自体は STEP PIPE 作業 C で増やしていない)
   const untilRaw = single.get("--until") ?? STAGES[STAGES.length - 1]!;
-  if (!(STAGES as readonly string[]).includes(untilRaw)) throw new PipelineArgError(`--until は ${STAGES.join("|")} のいずれか: ${untilRaw}`);
+  if (!(UNTIL_STAGES as readonly string[]).includes(untilRaw)) throw new PipelineArgError(`--until は ${UNTIL_STAGES.join("|")} のいずれか: ${untilRaw}`);
 
   const comparePerson = single.get("--compare-person");
   if (compareDirs.length > 0 && comparePerson === undefined) throw new PipelineArgError("--compare-dir を渡すときは --compare-person も渡す");
   if (compareDirs.length === 0 && comparePerson !== undefined) throw new PipelineArgError("--compare-person は --compare-dir と一緒に渡す");
+
+  // S5(reportData.ts)へ渡す表示名・題・日付。--until が report-data 以降のときだけ必須(推測・既定で補わない)。
+  const name = single.get("--name");
+  const title = single.get("--title");
+  const today = single.get("--today");
+  const reportInfo: ReportInfo | undefined = name !== undefined && title !== undefined && today !== undefined ? { name, title, today } : undefined;
+  if ((REPORT_STAGES as readonly string[]).includes(untilRaw) && reportInfo === undefined) {
+    throw new PipelineArgError("--until が report-data・prose・pdf のときは --name・--title・--today がすべて必須(推測しない)");
+  }
 
   return {
     person,
@@ -115,9 +148,11 @@ export function parsePipelineArgs(argv: readonly string[]): PipelineArgs {
     parallel,
     compareDirs,
     comparePerson,
-    until: untilRaw as Stage,
+    until: untilRaw as UntilStage,
     evaluator: single.get("--evaluator"),
     dryRun,
+    // reportInfo が undefined のときはキー自体を付けない(既存の parsePipelineArgs の試験の toStrictEqual を壊さないため)
+    ...(reportInfo !== undefined ? { report: reportInfo } : {}),
   };
 }
 
@@ -211,6 +246,33 @@ export function timingPath(work: string): string {
   return path.join(work, "timing.jsonl");
 }
 
+/**
+ * STEP PIPE 作業 C。S5〜S7 の置き場は `--work` の下(計画 §2.2「出力は --work の下(例: <work>/report/)」)。
+ * 局ごとではなく人ごと 1 か所(このお客さん 1 人分のレポート)。
+ */
+export interface ReportPaths {
+  dir: string;
+  patient: string;
+  audit: string;
+  sfens: string;
+  proseRequest: string;
+  prose: string;
+  mainPdf: string;
+}
+
+export function reportPaths(work: string): ReportPaths {
+  const dir = path.join(work, "report");
+  return {
+    dir,
+    patient: path.join(dir, "patient_report_data.json"),
+    audit: path.join(dir, "audit_metrics.json"),
+    sfens: path.join(dir, "sfens.json"),
+    proseRequest: path.join(dir, "prose-request.md"),
+    prose: path.join(dir, "prose.json"),
+    mainPdf: path.join(dir, "main.pdf"),
+  };
+}
+
 /** `--conditions`(表の値 `lib/conditions`)。このファイルからの相対で固定する(scripts/playtest/lib/conditions)。 */
 const LIB_DIR = path.dirname(fileURLToPath(import.meta.url));
 export const CONDITIONS_DIR = path.join(LIB_DIR, "conditions");
@@ -223,7 +285,18 @@ export const STAGE1_THREADS = 1;
 export const STAGE1_DIRECTION_RULE = "current";
 export const STAGE2_DEEP_NODES = 4_000_000;
 
-export type ToolName = "kifu-import-check" | "replay" | "rescreen" | "diagnose" | "gate";
+export type ToolName =
+  | "kifu-import-check"
+  | "replay"
+  | "rescreen"
+  | "diagnose"
+  | "gate"
+  // STEP PIPE 作業 C(S5・S7)。S5 は既存の道具と同じ「npx tsx <道具>.ts」の流儀(reportData.ts)。
+  // S7 は python(reportlab・pymupdf)なので流儀が違う。呼び出し側(pipeline.ts)が tool 名で分けて起こす。
+  | "report-data"
+  | "report-pdf-build"
+  | "report-pdf-render-main"
+  | "report-pdf-check-fonts";
 
 /** `--source` は `--kifu-dir` からの相対パス(ファイル名)。計画は自由記述としか書いておらず、値を新しく作らないための
  * 判断だが、絶対パス(`job.kifPath`)をそのまま使うと /Users/ を含むパスが固定棋譜に残るため、相対の名前にした
@@ -275,6 +348,48 @@ export function gateCommand(
   return args;
 }
 
+/**
+ * S5(`reportData.ts`。docs/STEP_PIPE_PLAN_2026-09-21.md §2.2)。引数の並びは reportData.ts 自身の使い方どおり。
+ * `--conditions`・`--king-escapes-condition`・`--move-check-condition` は渡さない(reportData.ts の既定 = 金の標本(第 6 版)
+ * に合わせた承認済みの定義。新しい値を作らない)。
+ */
+export function reportDataCommand(
+  person: string,
+  report: ReportInfo,
+  materialFiles: readonly string[],
+  kifuFiles: readonly string[],
+  gatePath: string,
+  patientOut: string,
+  auditOut: string,
+  sfensOut: string,
+  proseRequestOut: string,
+): string[] {
+  return [
+    "--person",
+    person,
+    "--name",
+    report.name,
+    "--title",
+    report.title,
+    "--today",
+    report.today,
+    "--records",
+    ...materialFiles,
+    "--kifu",
+    ...kifuFiles,
+    "--gate",
+    gatePath,
+    "--out-patient",
+    patientOut,
+    "--out-audit",
+    auditOut,
+    "--out-sfens",
+    sfensOut,
+    "--out-prose-request",
+    proseRequestOut,
+  ];
+}
+
 // ---- 段ごとの「済み」の判定(Lishogi の run-game.sh と同じ判定) ----
 
 export function fixedKifuDone(content: string | undefined, expectedId: string): boolean {
@@ -320,6 +435,28 @@ export function diagnoseDone(events: string | undefined, rise: string | undefine
 /** S4: gate.jsonl がある(0 本の定義でも空のファイルとして書かれるため、存在だけを見る)。 */
 export function gateDone(exists: boolean): boolean {
   return exists;
+}
+
+/** S5: 本人向け・技術資料・SFEN の 3 つが揃っていること(reportData.ts は 3 つとも always 書く)。 */
+export function reportDataDone(patient: string | undefined, audit: string | undefined, sfens: string | undefined): boolean {
+  return [patient, audit, sfens].every((content) => content !== undefined && content.trim().length > 0);
+}
+
+/** S6: `prose.json` があること(空でなければ良い。中身の照合は `_mid.py` が S7 の中でする ― ここでは複製しない)。 */
+export function proseDone(prose: string | undefined): boolean {
+  return prose !== undefined && prose.trim().length > 0;
+}
+
+/**
+ * S7: PDF が `prose.json`・`patient_report_data.json` より新しいこと(依頼の指示のとおり)。
+ * `mtimeMs` のどれかが読めなければ(ファイルが無い等)false ― 再実行して確かめる側にする。
+ */
+export function pdfDone(mtimeMs: (filePath: string) => number | undefined, pdfPath: string, prosePath: string, patientPath: string): boolean {
+  const pdfM = mtimeMs(pdfPath);
+  const proseM = mtimeMs(prosePath);
+  const patientM = mtimeMs(patientPath);
+  if (pdfM === undefined || proseM === undefined || patientM === undefined) return false;
+  return pdfM > proseM && pdfM > patientM;
 }
 
 // ---- meta 行を読む(段 1・段 2 の JSONL の 1 行目。gate の先手 / 後手の振り分けに使う) ----
@@ -403,6 +540,11 @@ export interface PipelineFs {
   ensureDir(dirPath: string): void;
   /** ディレクトリ直下のファイル名の一覧(非再帰)。無ければ空配列。 */
   listFiles(dirPath: string): string[];
+  /**
+   * ファイルの更新時刻(ミリ秒)。無ければ undefined。**任意のメソッド**(STEP PIPE 作業 C で足した。既存の偽の fs は
+   * これを持たないので `PipelineFs` を満たし続ける ― pdf 段の「済み」判定(`pdfDone`)だけがこれを使う)。
+   */
+  mtimeMs?(filePath: string): number | undefined;
 }
 
 export interface ToolResult {
@@ -439,7 +581,10 @@ export async function runPipeline(args: PipelineArgs, games: readonly GameJob[],
   const personDir = personWorkDir(args.work, args.person);
   fs.ensureDir(args.work);
   fs.ensureDir(path.join(personDir, "kifu"));
-  const untilRank = STAGES.indexOf(args.until);
+  // UNTIL_STAGES は STAGES の後ろに report-data・prose・pdf を続けただけなので、先頭 4 つ(import・evaluate・
+  // diagnose・gate)の index は STAGES.indexOf(...) と変わらない(既存の比較はここより下で書き換えていない)。
+  const untilRank = UNTIL_STAGES.indexOf(args.until);
+  const gOut = gateOutPath(personDir);
 
   const failures: PipelineFailure[] = [];
   const timingLines: string[] = [];
@@ -530,7 +675,6 @@ export async function runPipeline(args: PipelineArgs, games: readonly GameJob[],
   }
 
   if (untilRank >= STAGES.indexOf("gate") && args.compareDirs.length > 0) {
-    const gOut = gateOutPath(personDir);
     const already = gateDone(fs.readText(gOut) !== undefined);
     if (!already) {
       // 材料の側 = このお客さん(--person・--kifu-dir)の段 2(先手・後手を分けない、gate.ts の --material はそのまま渡す)
@@ -568,6 +712,72 @@ export async function runPipeline(args: PipelineArgs, games: readonly GameJob[],
     }
   }
 
+  // ---- STEP PIPE 作業 C(S5〜S7)。§2.2 の最後・§3 (a)。将棋の判断・閾値・文言はここでも一切書かない ----
+
+  if (untilRank >= UNTIL_STAGES.indexOf("report-data")) {
+    const rp = reportPaths(args.work);
+    const already = reportDataDone(fs.readText(rp.patient), fs.readText(rp.audit), fs.readText(rp.sfens));
+    if (!already) {
+      const gateContent = fs.readText(gOut);
+      const successGames = games.filter((job) => outcomes.get(job.id)?.ok === true);
+      const report = args.report;
+      if (gateContent === undefined) {
+        // gate 段が --compare-dir 無しで飛ばされている、または gate.ts がまだ出力していない場合。
+        // reportData.ts 自身に投げると ENOENT で分かりにくく落ちるので、ここではっきり失敗にする(依頼の指示どおり)。
+        failures.push({ gameId: "*", stage: "report-data", message: "判定の出力(gate.jsonl)が無い(--compare-dir が要る)" });
+      } else if (successGames.length === 0) {
+        failures.push({ gameId: "*", stage: "report-data", message: "段 2 まで済んだ局が 0 なので本人向けの材料を作れない" });
+      } else if (report === undefined) {
+        // parsePipelineArgs は --until が report-data 以降なら必須にしているので、通常はここへ来ない(念のための二重の見張り)。
+        failures.push({ gameId: "*", stage: "report-data", message: "--name・--title・--today が無い(--until が report-data 以降のときは必須)" });
+      } else {
+        fs.ensureDir(rp.dir);
+        const materialFiles = successGames.map((job) => outcomes.get(job.id)!.stage2Path);
+        const kifuFiles = successGames.map((job) => gamePaths(personDir, job.id).fixedKifuPath);
+        const result = await run(
+          "report-data",
+          reportDataCommand(args.person, report, materialFiles, kifuFiles, gOut, rp.patient, rp.audit, rp.sfens, rp.proseRequest),
+        );
+        if (!reportDataDone(fs.readText(rp.patient), fs.readText(rp.audit), fs.readText(rp.sfens))) {
+          failures.push({ gameId: "*", stage: "report-data", message: `reportData.ts rc=${result.code}: 出力が揃っていない` });
+        }
+      }
+    }
+  }
+
+  // S6(言い換え)は自動化しない(計画 §4)。prose.json が無ければ、どこを見て書けばいいか(prose-request.md)を示して止まる。
+  let proseOk = false;
+  if (untilRank >= UNTIL_STAGES.indexOf("prose")) {
+    const rp = reportPaths(args.work);
+    if (proseDone(fs.readText(rp.prose))) {
+      proseOk = true;
+    } else {
+      failures.push({ gameId: "*", stage: "prose", message: `言い換えが要る: ${rp.proseRequest} を基に ${rp.prose} を書く` });
+    }
+  }
+
+  // S7(PDF)。prose.json が無ければ試みない(上で already failed)。本編だけを作る(別冊は既知の欠落。report-pdf/README.md)。
+  if (untilRank >= UNTIL_STAGES.indexOf("pdf") && proseOk) {
+    const rp = reportPaths(args.work);
+    const already = fs.mtimeMs !== undefined && pdfDone(fs.mtimeMs, rp.mainPdf, rp.prose, rp.patient);
+    if (!already) {
+      const buildResult = await run("report-pdf-build", []);
+      if (buildResult.code !== 0) {
+        failures.push({ gameId: "*", stage: "pdf", message: `report-pdf/build.sh rc=${buildResult.code}: render_main.py を作れない` });
+      } else {
+        const renderResult = await run("report-pdf-render-main", [rp.dir, rp.patient, rp.mainPdf]);
+        if (renderResult.code !== 0) {
+          failures.push({ gameId: "*", stage: "pdf", message: `render_main.py rc=${renderResult.code}: ${renderResult.stderr.trim().slice(0, 1000)}` });
+        } else {
+          const fontsResult = await run("report-pdf-check-fonts", [rp.mainPdf]);
+          if (fontsResult.code !== 0) {
+            failures.push({ gameId: "*", stage: "pdf", message: `check_fonts_embedded.py rc=${fontsResult.code}: 埋め込まれていない書体がある` });
+          }
+        }
+      }
+    }
+  }
+
   return { failures, timingLines, exitCode: failures.length > 0 ? 1 : 0 };
 }
 
@@ -588,7 +798,9 @@ export interface PlannedStep {
  */
 export function planPipeline(args: PipelineArgs, games: readonly GameJob[], fs: PipelineFs): PlannedStep[] {
   const personDir = personWorkDir(args.work, args.person);
-  const untilRank = STAGES.indexOf(args.until);
+  // UNTIL_STAGES.indexOf(...)(STAGES.indexOf と同じ index。上の runPipeline 参照)。STEP PIPE 作業 C は
+  // report-data・prose・pdf のプレビューまでは足していない(--until にそれらを渡しても、ここは gate までのプレビューのまま)。
+  const untilRank = UNTIL_STAGES.indexOf(args.until);
   const steps: PlannedStep[] = [];
   const doneStage2: string[] = [];
 
