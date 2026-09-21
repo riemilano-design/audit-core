@@ -51,7 +51,7 @@ npx tsx scripts/playtest/replay.ts scripts/playtest/kifu/2026-09-10-claude-10mov
 ## JSONL の形式
 
 - 先頭行: `{"kind":"meta", "kifuId", "startedAt", "gitHead", "enginePath"}`(固定棋譜モードは STEP T-6 で `searchMode`・`nodes`・`threads`、STEP T-7 で `referenceNodes` を追加。探索モードは `mode: "explore"`・`profile` 等、STEP T-7 で `referenceNodes` を追加。上記参照)
-- 各記録行: `{"kind":"record", "ply", "sfen", "senteMove", "goteMove", "phase":"immediate"|"ready", "elapsedMs", "response", "engineReference"}`(`response` は `buildStateResponseWithPlan` の戻り値そのまま。web が受け取るのと同じ形。`engineReference` は STEP T-7 で追加した ready 行のみのフィールド。下記「エンジンの参考評価(STEP T-7)」参照。immediate 行にはキー自体が無い)
+- 各記録行: `{"kind":"record", "ply", "sfen", "senteMove", "goteMove", "phase":"immediate"|"ready", "elapsedMs", "response", "engineReference"}`(`response` は `buildStateResponseWithPlan` の戻り値そのまま。web が受け取るのと同じ形。`engineReference` は STEP T-7 で追加した ready 行のみのフィールド。下記「エンジンの参考評価(STEP T-7)」参照。immediate 行にはキー自体が無い)。**STEP FILL 作業 X** で、`engineReference` が null・終局でなく本人(先手)が王手中の ready 行にだけ `checkBaseline`(現局面だけの参考評価。下記「王手中の局面の参考評価(STEP FILL)」参照)を追加した。それ以外の行にはキー自体が無い
 - 想定内エラー(非合法手・相手の手の不一致)の場合: `{"kind":"error", ...}` を書いて exit 1
 - 末尾行(正常終了時のみ): `{"kind":"summary", "plies", "totalMs", "readyMsPerPly"}`
 
@@ -87,6 +87,15 @@ npx tsx scripts/playtest/explore.ts --games 10 --seed 1 --plies 60 --out-dir /pa
 - 測らない場合(`null` を記録): 終局、先手が王手中(パスが成立しない)、エンジンの例外・タイムアウト(推測しない)
 - 探索量は `replay.ts` の `--reference-nodes <N>`(既定は `--nodes` の値。`--nodes 0` のときは 4,000,000)、`explore.ts` は常に 4,000,000 固定(候補手計算に使う自分側/相手側の条件は一切変えない)。実際に使った値は `meta.referenceNodes` に残る
 - 候補手計算用の探索量固定(`lib/fixedSearchEngine.ts`)とは独立の値として扱う(呼び出しには raw な `LowPriorityEngine` を使うため、`--nodes` と `--reference-nodes` に異なる値を指定しても、参考評価には `--reference-nodes` の値がそのまま使われる)
+
+## 王手中の局面の参考評価(STEP FILL 作業 X)
+
+`engineReference`(上記)は、本人(先手)が王手中の局面では「パスが成立しない」という理由で `null` のまま返る(本番の `measureEngineReference` はエンジンを一切呼ばない)。そのままでは王手中が続く局面に評価が一切付かず、優勢から自玉の詰みへ変わる過程が診断の組・グラフから抜ける。`scripts/playtest/lib/checkBaseline.ts` の `measureCheckBaseline` が、ハーネスの観測として**現局面だけ**(パスした局面は読まない。王手中はパスが成立しないため)を別に測り、`checkBaseline: { scoreCp, mate, bestmove, nodes } | null` を ready 行に足す。**`engineReference` 自体は変えず `null` のまま残る**(「パスの比べは測っていない」という意味を保つ)。
+
+- 記録する行(段 1、`replay.ts`・`lib/recorder.ts`): `engineReference` が `null`・終局でなく・本人が王手中・`--reference-nodes` が 0 でない ready 行にだけ、`--reference-nodes` と同じノード数で測る。それ以外の行(王手中でない・終局・`--reference-nodes 0`)には `checkBaseline` のキー自体が無い
+- 段 2(`rescreen.ts`): 読み直す行に選ばれた行が王手中なら、同じ形で `checkBaselineDeep`(深いノード数版)を足す。深く読み直す行の選び方(`DRAFT_SCREEN_RULE_1`)は変えない
+- 読み方(`lib/failureEvent.ts` の `evaluationOf`。深い側は `lib/screenDiagnosis.ts` の `deepRowOf` が `checkBaselineDeep` を `checkBaseline` に差し替えて同じ関数へ渡す): `checkBaseline` に値があれば `state: "measured"`(`afterPassScoreCp`・`afterPassMate`・`dropCp` は `null` ― パスが成立せず比べていないため)。`checkBaseline` が無い(古い記録・王手中でない・終局・`--reference-nodes 0`)・`null`(測ろうとして測れなかった)行は、これまでどおり `notMeasuredInCheck`。`|scoreCp| ≥ NOT_EVALUATION_CP` の扱い(`notEvaluation`)は `engineReference` と同じに当てる
+- `records/` の既存の記録(この STEP より前に取ったもの)は `checkBaseline` の欄を持たないため、読み方はこれまでどおり変わらない
 
 ## 不変条件チェック(STEP T-2・STEP T-5・STEP T-6・STEP T-7 で表記を更新)
 

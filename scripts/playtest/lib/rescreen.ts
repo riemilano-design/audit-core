@@ -14,7 +14,9 @@
 // - 深い値の使い方を決めること(`diagnose.ts` の規則・版は D-SCREEN-2)
 
 import type { EngineReferenceMeasurement } from "../../../apps/server/src/analysis/engineReference.js";
+import { isGameOver, isInCheck } from "../../../apps/server/src/rules/gameStatus.js";
 import type { MetaLine, RecordLine } from "../invariants/types.js";
+import type { CheckBaseline } from "./checkBaseline.js";
 import { pairEvaluations, readEvaluations } from "./failureEvent.js";
 import { recordSha256 } from "./failureEventSchema.js";
 import { readGitState, type GitRunner } from "./gitState.js";
@@ -94,6 +96,9 @@ export function deepPliesOf(records: readonly RecordLine[], rule: ScreenRule): n
 /** 1 行を深く測る関数。CLI は `measureEngineReference(sfen, engine, deepNodes)` を渡す */
 export type ScreenMeasure = (sfen: string) => Promise<EngineReferenceMeasurement>;
 
+/** STEP FILL 作業 X(計画 §2)。1 行(王手中)を深く測る関数。CLI は `measureCheckBaseline(sfen, engine, deepNodes)` を渡す */
+export type CheckBaselineMeasure = (sfen: string) => Promise<CheckBaseline | null>;
+
 export interface DeepRunInput {
   deepNodes: number;
   /** 深い回で使ったエンジン */
@@ -104,6 +109,9 @@ export interface DeepRunInput {
   repoRoot: string;
   /** 試験専用。本番の呼び出し側は渡さない */
   runGit?: GitRunner;
+  /** STEP FILL 作業 X(計画 §2)。渡すと、読み直す行のうち先手が王手中(終局でない)の行にだけ追加で呼び、`checkBaselineDeep` を足す。
+   * 渡さなければ(既存の呼び出し)今までどおり `checkBaselineDeep` は書かない。 */
+  checkMeasure?: CheckBaselineMeasure;
 }
 
 export interface ScreenMeta {
@@ -184,6 +192,11 @@ export function planRescreen(source: Uint8Array, rule: ScreenRule, options: Resc
 /**
  * 段 2 の記録の全文を返す(改行の並びは段 1 のまま)。`measure` は読み直す行ごとに 1 回、ply の昇順で呼ぶ。
  * 読み直した行には `engineReferenceDeep`(= 戻り値の reference。測らない・測れなかったは null)と `searchPvsDeep`(= **同じ呼び出しの** searchPvs)を足す。
+ *
+ * STEP FILL 作業 X(計画 §2): `run.checkMeasure` を渡すと、読み直す行のうち先手が王手中(終局でない)の行にだけ、同じ ply の順で追加に呼び、
+ * `checkBaselineDeep` を足す(`measure` は王手中の局面では呼び出し側の測る関数 = `measureEngineReference` が engine を呼ばずに null を返すため、
+ * `measuredOrder`(段 1 の軽いノード数と揃える主役の記録)には数えない)。`run.checkMeasure` を渡さない呼び出し(既存のテスト等)は今までどおり
+ * `checkBaselineDeep` を書かない。
  */
 export async function rescreenRecords(
   source: Uint8Array,
@@ -195,13 +208,19 @@ export async function rescreenRecords(
   const { rawLines, parsed, metaIndex, meta, records, lightNodes } = parseSource(source);
   const deepPlies = chooseDeepPlies(records, rule, options);
   const readyByPly = new Map(records.filter((record) => record.phase === "ready").map((record) => [record.ply, record]));
+  const measureCheck = run.checkMeasure;
 
   const measuredOrder: number[] = [];
   const measured = new Map<number, EngineReferenceMeasurement>();
+  const checkMeasured = new Map<number, CheckBaseline | null>();
   for (const ply of deepPlies) {
-    const measurement = await measure(readyByPly.get(ply)!.sfen);
+    const sfen = readyByPly.get(ply)!.sfen;
+    const measurement = await measure(sfen);
     measuredOrder.push(ply);
     measured.set(ply, measurement);
+    if (measureCheck !== undefined && !isGameOver(sfen) && isInCheck(sfen, "sente")) {
+      checkMeasured.set(ply, await measureCheck(sfen));
+    }
   }
 
   const gitState = readGitState(run.repoRoot, run.runGit);
@@ -231,7 +250,10 @@ export async function rescreenRecords(
       const record = line as RecordLine;
       const measurement = record.phase === "ready" ? measured.get(record.ply) : undefined;
       if (measurement === undefined) return rawLine;
-      return JSON.stringify({ ...record, engineReferenceDeep: measurement.reference, searchPvsDeep: measurement.searchPvs });
+      // STEP FILL 作業 X: checkMeasured に無い(王手中でない・measureCheck 無し)行は checkBaselineDeep の欄を出さない
+      return checkMeasured.has(record.ply)
+        ? JSON.stringify({ ...record, engineReferenceDeep: measurement.reference, searchPvsDeep: measurement.searchPvs, checkBaselineDeep: checkMeasured.get(record.ply) })
+        : JSON.stringify({ ...record, engineReferenceDeep: measurement.reference, searchPvsDeep: measurement.searchPvs });
     })
     .join("\n");
 }

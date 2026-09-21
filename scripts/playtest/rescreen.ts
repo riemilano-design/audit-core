@@ -18,6 +18,7 @@ import { fileURLToPath } from "node:url";
 import { resolveEnginePath } from "../../apps/server/src/engine/enginePath.js";
 import { PrioritizedEngine } from "../../apps/server/src/engine/prioritizedEngine.js";
 import { UsiEngine } from "../../apps/server/src/engine/usiEngine.js";
+import { measureCheckBaseline } from "./lib/checkBaseline.js";
 import { measureEngineReference } from "./lib/engineReference.js";
 import { DRAFT_SCREEN_RULE_1, planRescreen, rescreenRecords } from "./lib/rescreen.js";
 
@@ -66,6 +67,7 @@ async function main(): Promise<void> {
       threads: DEEP_THREADS,
       startedAt,
       repoRoot: REPO_ROOT,
+      checkMeasure: (sfen) => measureCheckBaseline(sfen, engine, deepNodes),
     }, options);
     writeFileSync(outPath, text, "utf-8");
     console.error(`書き込み: ${outPath}`);

@@ -48,3 +48,14 @@
 - 勝った局の最後の局面(相手の手番)の評価。要るとなれば別の STEP。
 - `records/` の 30 局を測り直して置き換えること(4M と 2 段階の不ぞろいは、別の判断)。
 - Gate の値・選び方の値・形勢の段の境を変えること。
+
+## 6. 実装と監査の記録
+
+### 6.1 作業 X(王手中の局面に現局面だけの評価、2026-09-22)
+
+- **実装**(使い捨ての実装担当、worktree): 新規 `lib/checkBaseline.ts`(`measureCheckBaseline`。MultiPV 1・nodes 固定、先手視点。`apps/` の `sideFromMultiPv` と同じ読み方)と試験 4 本(25 件)。`lib/recorder.ts`(ready の行で `engineReference` が null・終局でない・王手中・`referenceNodes` > 0 のとき `checkBaseline` を書く)、`lib/rescreen.ts`・`rescreen.ts`(読み直す行が王手中なら `checkBaselineDeep`。`DeepRunInput` の任意項目 `checkMeasure` 経由)、`lib/failureEvent.ts` の `evaluationOf`(王手中で `checkBaseline` に値があれば `measured`、afterPass の側と `dropCp` は null。両方 null は `notMeasurable`、|scoreCp| ≥ `NOT_EVALUATION_CP` は `notEvaluation`、欄なし・null は従来どおり `notMeasuredInCheck`)、`lib/screenDiagnosis.ts` の `deepRowOf`(深い側は `checkBaselineDeep` に差し替えて同じ `evaluationOf` へ)、`invariants/types.ts`、README。**`apps/`・`data/`・`records/`・値(`DRAFT_SCREEN_RULE_1`・`STANDING_BOUNDS`・`NOT_EVALUATION_CP`・GATE_VALUES)は変えていない。**
+- **実装側の実測**: 3 分の第 9 局 1 局をエンジン 1 本で診断まで通し、`checkBaseline` 8 行(全部 `measured`)、`checkBaselineDeep` 6 行、形勢の段が 優勢 → 劣勢 へ変わる組が 1 つできた(件数のみ)。`records/real-02`・`real-01` で diagnose・gate の Markdown の sha が直しの前後で一致。変異 4 本 red。
+- **独立監査 1 回: GO。** 監査の実測: sha 一致、差分の範囲、符号の向き(`measureEngineReference` の baseline と同じ先手視点)、`records/` の 157 ファイルに `checkBaseline` の欄が 0 件、王手中の行を含む `real-03` の 15 局で diagnose の出力が本体と worktree で一致(出どころの gitHead・dirty を除く)、JSON Schema は afterPass の側の null をもともと許す、下流に非 null の決めつけなし、段 2 の S-19(measure の回数 = deepPlies の数)と矛盾しない、抜き取りの変異 2 本 red。
+- **司令塔の確かめ**: 監査の後の sha の照合(監査が変異の復元で 1 度 `failureEvent.ts` を巻き戻し、sha で気づいて戻している。最終の sha は実装側の報告と一致)、feature の先頭へ載せ替えた後に 型検査 rc=0・vitest 69 ファイル 1071 件・check-docs rc=0。
+- **既知事項(監査)**: `checkBaseline: null`(測ろうとして測れなかった)と欄なし(測っていない)が、`evaluationOf` ではどちらも `notMeasuredInCheck` に丸められる。偽の `measured` は出ないが、集計の列がわずかに不正確になりうる。同じ形の欄を足すときは踏襲しない。
+- **測っていないもの**: `reportData.ts` の出力の不変(`records/` の入力で)。`real-01`・`02`・`03` 以外の `records/`。エンジン 5 本での所要の増え方。

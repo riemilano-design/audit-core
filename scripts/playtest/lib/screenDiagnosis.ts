@@ -131,10 +131,17 @@ export interface ChosenPair {
   deepUnavailable: boolean;
 }
 
-/** 行を深い値の行にする。読み直していない行(欄が無い)は null */
+/** 行を深い値の行にする。読み直していない行(欄が無い)は null。
+ * STEP FILL 作業 X: `checkBaseline` も `checkBaselineDeep` に差し替える(王手中でない行・欄の無い行は
+ * `checkBaselineDeep` が undefined なので、差し替え後も `checkBaseline` は undefined のまま ― evaluationOf の読みは変わらない)。 */
 function deepRowOf(row: EvaluatedRow): EvaluatedRow | null {
   if (!Object.hasOwn(row.record, "engineReferenceDeep")) return null;
-  const record: RecordLine = { ...row.record, engineReference: row.record.engineReferenceDeep, searchPvs: row.record.searchPvsDeep };
+  const record: RecordLine = {
+    ...row.record,
+    engineReference: row.record.engineReferenceDeep,
+    searchPvs: row.record.searchPvsDeep,
+    checkBaseline: row.record.checkBaselineDeep,
+  };
   return { ply: row.ply, record, evaluation: evaluationOf(record) };
 }
 

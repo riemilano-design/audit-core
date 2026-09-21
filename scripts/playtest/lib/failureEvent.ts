@@ -98,13 +98,32 @@ export type Evaluation =
 
 export type EvaluationState = Evaluation["state"];
 
-/** 1 行の評価の状態。`null` は行の sfen に本番の isGameOver / isInCheck を当て直して分ける(計画 E-b)。 */
+/** 1 行の評価の状態。`null` は行の sfen に本番の isGameOver / isInCheck を当て直して分ける(計画 E-b)。
+ * STEP FILL 作業 X(docs/STEP_FILL_PLAN_2026-09-22.md §2): 王手中で `checkBaseline` に値があれば `measured`
+ * (afterPass 側は null。パスが成立しないため比べていない)。`checkBaseline` は `deep` 側の読み取りにも使う
+ * (`lib/screenDiagnosis.ts` の `deepRowOf` が `checkBaselineDeep` を `checkBaseline` に差し替えて、この関数へ渡す)。 */
 export function evaluationOf(record: RecordLine): Evaluation {
   const reference = record.engineReference;
   if (reference === undefined) return { state: "unrecorded" };
   if (reference === null) {
     if (isGameOver(record.sfen)) return { state: "notMeasuredGameEnd" };
-    if (isInCheck(record.sfen, "sente")) return { state: "notMeasuredInCheck" };
+    if (isInCheck(record.sfen, "sente")) {
+      const checkBaseline = record.checkBaseline;
+      if (!checkBaseline) return { state: "notMeasuredInCheck" };
+      // standing.ts の standingOf は measured なのに scoreCp・mate が両方 null だと例外にする(M-3 と同じ落とし穴)。
+      // measureEngineReference の baseline と同じ扱いにする(計画 §3 の読み取りの規則)。
+      if (checkBaseline.scoreCp === null && checkBaseline.mate === null) return { state: "notMeasurable" };
+      if (isNotEvaluation(checkBaseline.scoreCp)) return { state: "notEvaluation" };
+      return {
+        state: "measured",
+        scoreCp: checkBaseline.scoreCp,
+        mate: checkBaseline.mate,
+        bestmove: checkBaseline.bestmove,
+        afterPassScoreCp: null,
+        afterPassMate: null,
+        dropCp: null,
+      };
+    }
     return { state: "notMeasurable" };
   }
   if (reference.baseline.scoreCp === null && reference.baseline.mate === null) return { state: "notMeasurable" };

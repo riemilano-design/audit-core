@@ -25,6 +25,8 @@ import {
 import type { GameState } from "../../../apps/server/src/game/gameSession.js";
 import type { LowPriorityEngine } from "../../../apps/server/src/engine/prioritizedEngine.js";
 import type { SearchPvObservation } from "../../../apps/server/src/analysis/searchPv.js";
+import { isGameOver, isInCheck } from "../../../apps/server/src/rules/gameStatus.js";
+import { measureCheckBaseline, type CheckBaseline } from "./checkBaseline.js";
 import { measureEngineReference, type EngineReference } from "./engineReference.js";
 import { readGitState, type GitRunner } from "./gitState.js";
 
@@ -111,6 +113,10 @@ type RecordLineParams =
        * 一つの値に二つの意味を持たせていた**(既知事項 P-23 と同じ型)。実データでは
        * 起きていなかったが、**起きていないことは設計が正しいことの根拠にならない。** */
       searchPvs: SearchPvObservation[] | null;
+      /** STEP FILL 作業 X(docs/STEP_FILL_PLAN_2026-09-22.md §2)。`engineReference` が null・終局でなく
+       * 本人(先手)が王手中のときだけ測った、現局面だけの参考評価。それ以外は undefined(欄を出さない。
+       * JSON.stringify が undefined の欄を落とす既存の挙動をそのまま使う ― engineReference/searchPvs と同じ)。 */
+      checkBaseline: CheckBaseline | null | undefined;
     };
 
 function buildRecordLine(params: RecordLineParams): string {
@@ -125,6 +131,8 @@ function buildRecordLine(params: RecordLineParams): string {
     response: params.response,
     engineReference: params.phase === "ready" ? params.engineReference : undefined,
     searchPvs: params.phase === "ready" ? params.searchPvs : undefined,
+    // STEP FILL 作業 X: 王手中でない行・古い呼び出しでは undefined のまま(欄を出さない)。
+    checkBaseline: params.phase === "ready" ? params.checkBaseline : undefined,
   });
 }
 
@@ -253,6 +261,14 @@ export async function buildReadyRecord(
     referenceNodes > 0
       ? (await measureEngineReference(state.sfen, referenceEngine, referenceNodes)).reference
       : null;
+  // STEP FILL 作業 X(計画 §2 の H1・H2): 本番の measureEngineReference は、本人(先手)が王手中の局面では
+  // 「パスが成立しない」という理由で reference を null のまま返す(engine を呼ばない)。そのままでは王手中が
+  // 続く局面に評価が一切付かないため、ハーネスの観測として**現局面だけ**を同じ referenceEngine・referenceNodes で
+  // 別に読む。engineReference が null でない(測れた、または終局・王手中でない理由で null)行には出さない。
+  const checkBaseline: CheckBaseline | null | undefined =
+    referenceNodes > 0 && engineReference === null && !isGameOver(state.sfen) && isInCheck(state.sfen, "sente")
+      ? await measureCheckBaseline(state.sfen, referenceEngine, referenceNodes)
+      : undefined;
   const elapsedMs = Date.now() - t0;
   const line = buildRecordLine({
     ply,
@@ -263,6 +279,7 @@ export async function buildReadyRecord(
     elapsedMs,
     response,
     engineReference,
+    checkBaseline,
     // STEP U6-L: 本番(safeComputeReachablePlan)が実際に行った探索の読み筋を、
     // 同じ戻り値からそのまま写す(再探索しない。計画書 1.1 決定1)。
     // **解析が失敗した(result === undefined)ときは null。**空配列にしない ―

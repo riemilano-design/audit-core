@@ -15,6 +15,7 @@ import type { StateResponseBodyWithPlan } from "../../../apps/server/src/api/sta
 import type { EngineReference } from "../lib/engineReference.js";
 import type { SearchPvObservation } from "../../../apps/server/src/analysis/searchPv.js";
 import type { ScreenMeta } from "../lib/rescreen.js";
+import type { CheckBaseline } from "../lib/checkBaseline.js";
 
 /** docs/PLAYTEST_LOOP_PROPOSAL.md 4.4 の6型。
  * STEP T-6(B-1、人間承認済み。docs/COVERAGE_AND_OUTCOME_PROPOSAL.md 7.1)で
@@ -84,6 +85,20 @@ export interface RecordLine {
    * 測れなかったことは `engineReferenceDeep` の null が表す(ここは null にしない)。欄がある ⇔ `engineReferenceDeep` の欄がある。
    */
   searchPvsDeep?: SearchPvObservation[];
+  /**
+   * STEP FILL 作業 X(docs/STEP_FILL_PLAN_2026-09-22.md §2。lib/recorder.ts・lib/checkBaseline.ts)。
+   * `engineReference` が null・終局でなく・本人(先手)が王手中の ready 行にだけ付く、**現局面だけ**(パスは読まない)の参考評価。
+   * **欄が無い** = 王手中でない行 / 終局の行 / `referenceNodes` が 0(測らない設定) / この STEP より前の記録(この 4 つは記録からは区別できない)。
+   * **null** = 王手中で測ろうとしたが測れなかった(エンジンの例外)。**値がある** = 測れた。`engineReference` は変えず null のまま残る
+   * (「パスの比べは測っていない」という意味を保つ)。読み方は `lib/failureEvent.ts` の `evaluationOf` を参照。
+   */
+  checkBaseline?: CheckBaseline | null;
+  /**
+   * STEP FILL 作業 X(計画 §2。lib/rescreen.ts)。段 2 の記録で、読み直した ready 行のうち王手中の行にだけ付く `checkBaseline` の深いノード数版。
+   * **欄が無い** = 読み直していない行 / 読み直したが王手中でない行(段 2 でない記録も)。**null** = 測ろうとして測れなかった。値の使い方は
+   * `lib/screenDiagnosis.ts` の `deepRowOf`(`checkBaseline` を `checkBaselineDeep` に差し替えて `evaluationOf` を当て直す)が決める。
+   */
+  checkBaselineDeep?: CheckBaseline | null;
 }
 
 /**
@@ -92,11 +107,11 @@ export interface RecordLine {
  * 別々の STEP(U6-L の `searchPvs` と U6-R の `dirty`)が独立に同じ形へたどり着いた。
  * **3 値目の位置が違うのではなく、「測って無かった」を表す値の型が違うだけである。**
  *
- * | 「無い」の種類 | `searchPvs`(record 行) | `dirty`(meta 行) | `trailingMoveTruncated`(meta 行) | `mirrored`(meta 行) | `sideAlignmentChecked`(meta 行) | `engineReferenceDeep`(record 行・段 2) | `searchPvsDeep`(record 行・段 2) |
- * |---|---|---|---|---|---|---|---|
- * | **測っていない**(欄が無い。その STEP より前の記録) | `undefined` | `undefined` | `undefined` | `undefined` | `undefined` | `undefined`(**読み直していない行**。段 2 でない記録も) | `undefined`(同じ) |
- * | **測れなかった**(取ろうとして失敗した) | `null` | `null` | **無い**(落とすかどうかは手数だけで決まり、失敗しない) | **無い**(回すかどうかは固定棋譜の欄だけで決まり、失敗しない) | **無い**(照合が食い違えば replay.ts は記録を書かずに止まる) | `null`(測らないと決めた終局・王手中の行も null。`engineReference` と同じ) | **無い**(測れなかったことは `engineReferenceDeep` の null が表す) |
- * | **測って無かった**(取れて、中身が空だった) | `[]` | `false` | `false`(落とす手が無かった) | `false`(回していない) | `false`(照合していない。回していない局か、`originalMoves` の無い回した局) | **無い**(測れば値か null) | `[]` |
+ * | 「無い」の種類 | `searchPvs`(record 行) | `dirty`(meta 行) | `trailingMoveTruncated`(meta 行) | `mirrored`(meta 行) | `sideAlignmentChecked`(meta 行) | `engineReferenceDeep`(record 行・段 2) | `searchPvsDeep`(record 行・段 2) | `checkBaseline`(record 行。STEP FILL) | `checkBaselineDeep`(record 行・段 2。STEP FILL) |
+ * |---|---|---|---|---|---|---|---|---|---|
+ * | **測っていない**(欄が無い。その STEP より前の記録) | `undefined` | `undefined` | `undefined` | `undefined` | `undefined` | `undefined`(**読み直していない行**。段 2 でない記録も) | `undefined`(同じ) | `undefined`(**王手中でない行・終局の行・`referenceNodes` が 0・この STEP より前の記録**。この 4 つは記録からは区別できない) | `undefined`(**読み直していない行、または読み直したが王手中でない行**。段 2 でない記録も) |
+ * | **測れなかった**(取ろうとして失敗した) | `null` | `null` | **無い**(落とすかどうかは手数だけで決まり、失敗しない) | **無い**(回すかどうかは固定棋譜の欄だけで決まり、失敗しない) | **無い**(照合が食い違えば replay.ts は記録を書かずに止まる) | `null`(測らないと決めた終局・王手中の行も null。`engineReference` と同じ) | **無い**(測れなかったことは `engineReferenceDeep` の null が表す) | `null`(王手中で測ろうとしたが、エンジンの例外で測れなかった) | `null`(同じ) |
+ * | **測って無かった**(取れて、中身が空だった) | `[]` | `false` | `false`(落とす手が無かった) | `false`(回していない) | `false`(照合していない。回していない局か、`originalMoves` の無い回した局) | **無い**(測れば値か null) | `[]` | **無い**(値があるか無いかの 2 値。「取れて中身が空」という状態は無い) | **無い**(同じ) |
  *
  * `trailingMoveTruncated` は `dirty` と同じ形である(`true` / `false` / 欄が無い)。**`null` の例外は作らない**(STEP D0-SIDE 段 1。
  * 最初は「落とさない局は `null`」で実装したが、この表の `null`(測れなかった)とぶつかるので、司令塔の決定で直した)。
