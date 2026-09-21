@@ -1,7 +1,10 @@
-// STEP D3-COND 計画 §5 の 5(§13 の選択肢 (a)。人間の承認 2026-09-17)。lib/conditions/ に置いた承認済みの条件式の定義を読み込み、形・文・固定例を確かめる。
+// STEP D3-COND 計画 §5 の 5(§13 の選択肢 (a)。人間の承認 2026-09-17。C-5 は 2026-09-21、人間が司令塔 e3 に判定するかどうかを任せ、司令塔が判定にかけると決めた)。
+// lib/conditions/ に置いた承認済みの条件式の定義を読み込み、形・文・固定例を確かめる。
 // **エンジンは起動しない。記録は読まない。**
 //
-// 【正解の置き方】C-1 の固定例は定義の文(「実戦と読み筋を比べられた手数(最大 6 手)の後の逃げ道の数が、自分の手の前より少ない」)から手で書いた。組の行は lib/condition.test.ts と同じ形で手で書いた架空の値。
+// 【正解の置き方】C-1 の固定例は定義の文(「実戦と読み筋を比べられた手数(最大 6 手)の後の逃げ道の数が、自分の手の前より少ない」)から手で書いた。
+// C-5(`ahead_move_into_own_king_zone_v1`)の固定例は定義の文(「自分の手の前の局面が優勢で、かつ指した後の局面で行き先が自玉のまわりに入っている」)から手で書いた。
+// 組の行は lib/condition.test.ts と同じ形で手で書いた架空の値。
 // 禁止語と label の照合は、D6 の出力の検査(lib/diagnosisReport.ts)と同じ normalizeForMatch でそろえる。
 // 【この試験が確かめないこと】材料の側・試す側での件数(§11 の予測と gate.ts の実行)。判定と読み込みの骨組み(lib/condition.test.ts)。
 
@@ -9,7 +12,7 @@ import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
-import { judgeCondition, type ConditionView, type PairRow } from "./condition.js";
+import { judgeCondition, judgeConditionPvSide, type ConditionView, type PairRow } from "./condition.js";
 import { loadConditionsFromDir } from "./conditionReport.js";
 import type { CounterfactualComparison, SequenceFacts } from "./counterfactual.js";
 import type { MomentPairFields } from "./diagnosisMoment.js";
@@ -17,17 +20,28 @@ import { normalizeForMatch } from "./diagnosisReport.js";
 import type { Evaluation, Trigger } from "./failureEvent.js";
 import type { PositionFacts } from "./positionFacts.js";
 import { FORBIDDEN_WORDS } from "./reportTemplates.js";
+import type { Standing } from "./standing.js";
 
 const CONDITIONS_DIR = fileURLToPath(new URL("./conditions/", import.meta.url));
 const C1_ID = "king_escapes_decrease_v1";
 const C1_FILE = fileURLToPath(new URL(`./conditions/${C1_ID}.ts`, import.meta.url));
 /** 承認のときのファイルのバイト列の sha256(§11 の予測と結びつける値。定義を変えるときは v2 の別ファイルにする) */
 const C1_SHA256 = "ec31899a5b67ae1d0e5642a40e623def04dd39374a197961e0e50f5511ae9e78";
+const AHEAD_ID = "ahead_move_into_own_king_zone_v1";
+const AHEAD_FILE = fileURLToPath(new URL(`./conditions/${AHEAD_ID}.ts`, import.meta.url));
+/** 承認のときのファイルのバイト列の sha256(C-5。§15 と結びつける値。定義を変えるときは v2 の別ファイルにする) */
+const AHEAD_SHA256 = "5fc70c242938ea6b0298d0a3f39603f806eac48aea35a26be7a63235effa9d84";
 const PROVISIONAL = "(仮)";
 
 async function c1() {
   const found = (await loadConditionsFromDir(CONDITIONS_DIR)).find((entry) => entry.definition.id === C1_ID);
   if (found === undefined) throw new Error(`${C1_ID} が lib/conditions/ に無い`);
+  return found;
+}
+
+async function ahead() {
+  const found = (await loadConditionsFromDir(CONDITIONS_DIR)).find((entry) => entry.definition.id === AHEAD_ID);
+  if (found === undefined) throw new Error(`${AHEAD_ID} が lib/conditions/ に無い`);
   return found;
 }
 
@@ -100,16 +114,45 @@ function pairRow(root: number, actualEnd: number): PairRow {
   return { kifuId: "k", pairKind: "compared", ...fields };
 }
 
+/** C-5(`ahead_move_into_own_king_zone_v1`)用。`standingBefore` と、実戦・読み筋それぞれの `userMoveFacts.toInOwnKingZone` だけを差し替えられる組の行 */
+function pairRow2(standingBefore: Standing, actualToInOwnKingZone: boolean | null, pvToInOwnKingZone: boolean): PairRow {
+  const base = comparison(2, 1);
+  const fields: MomentPairFields = {
+    branchPly: 21,
+    fromReadyPly: 20,
+    toReadyPly: 22,
+    trigger: trigger(),
+    moves: { userMove: "5g5f", opponentMove: "5c5d" },
+    userBestmoveAtBefore: "2g2f",
+    opponentBestmove: { state: "notInRecord" },
+    evaluationAfter: measured(0),
+    standingPair: { before: standingBefore, after: "level" },
+    failureEventBranchPly: null,
+    consequences: { checks: [], mate: null, windowPlies: 5, windowShort: false },
+    counterfactual: {
+      ...base,
+      actual: { ...base.actual, userMoveFacts: { ...base.actual.userMoveFacts, toInOwnKingZone: actualToInOwnKingZone } },
+      pv: { ...base.pv, userMoveFacts: { ...base.pv.userMoveFacts, toInOwnKingZone: pvToInOwnKingZone } },
+    },
+  };
+  return { kifuId: "k2", pairKind: "compared", ...fields };
+}
+
 describe("lib/conditions/ の承認済みの定義(D3-COND 計画 §5 の 5・§13)", () => {
-  it("(a) lib/conditions/ の定義はすべてエラーなく読め、id が重複しない。今あるのは C-1 の 1 本", async () => {
+  it("(a) lib/conditions/ の定義はすべてエラーなく読め、id が重複しない。今あるのは C-1・C-5 の 2 本(ファイル名の順)", async () => {
     const ids = (await loadConditionsFromDir(CONDITIONS_DIR)).map((entry) => entry.definition.id);
     expect(new Set(ids).size).toBe(ids.length);
-    expect(ids).toStrictEqual([C1_ID]);
+    expect(ids).toStrictEqual([AHEAD_ID, C1_ID]);
   });
 
   it("(a) C-1 のファイルは承認したバイト列のまま(definitionSha256 = 読み込んだファイルの sha256 = 承認のときの値)", async () => {
     const { definitionSha256, definition } = await c1();
     expect([definitionSha256, createHash("sha256").update(readFileSync(C1_FILE)).digest("hex"), definition.status]).toStrictEqual([C1_SHA256, C1_SHA256, "approved"]);
+  });
+
+  it("(a) C-5(ahead_move_into_own_king_zone_v1)のファイルは承認したバイト列のまま(definitionSha256 = 読み込んだファイルの sha256 = 承認のときの値)", async () => {
+    const { definitionSha256, definition } = await ahead();
+    expect([definitionSha256, createHash("sha256").update(readFileSync(AHEAD_FILE)).digest("hex"), definition.status]).toStrictEqual([AHEAD_SHA256, AHEAD_SHA256, "approved"]);
   });
 
   it("(b) approved の定義は approval があり、readableText が空でなく「(仮)」を含まない", async () => {
@@ -150,6 +193,52 @@ describe("lib/conditions/ の承認済みの定義(D3-COND 計画 §5 の 5・§
     expect(judgeCondition(definition, { kind: "pair", row: pairRow(2, 1) })).toStrictEqual({
       state: "match",
       usedValues: { counterfactual: { kingEscapesRoot: { count: 2 }, actual: { kingEscapesEnd: { count: 1 } } } },
+    });
+  });
+
+  it("(f) C-5 の appliesTo は standingPair.before を読める種(condition.ts の MOMENT_PAIR_KINDS)だけ", async () => {
+    const { definition } = await ahead();
+    expect(definition.appliesTo).toStrictEqual(["rise", "maxDropPair", "pair"]);
+    expect(definition.uses).toStrictEqual(["standingPair.before", "counterfactual.actual.userMoveFacts.toInOwnKingZone"]);
+  });
+
+  it("(g) C-5 の evaluate: 優勢・行き先が区域内 → 真 / 優勢・区域外 → 偽 / 優勢でない(互角)・区域内 → 偽", async () => {
+    const { definition } = await ahead();
+    const view = (before: string, toInOwnKingZone: boolean): ConditionView => ({ standingPair: { before }, counterfactual: { actual: { userMoveFacts: { toInOwnKingZone } } } });
+    expect([definition.evaluate(view("ahead", true)), definition.evaluate(view("ahead", false)), definition.evaluate(view("level", true))]).toStrictEqual([true, false, false]);
+  });
+
+  it("(h) C-5 を全ての手の組の行に当てる: 優勢・区域内 → 該当 / 優勢・区域外 → 非該当 / 行き先が区域内かどうか null → 判定不能(null の意味)/ standingPair.before が undetermined → 判定不能(undeterminedIsUndecidable)", async () => {
+    const { definition } = await ahead();
+    expect(judgeCondition(definition, { kind: "pair", row: pairRow2("ahead", true, false) })).toStrictEqual({
+      state: "match",
+      usedValues: { standingPair: { before: "ahead" }, counterfactual: { actual: { userMoveFacts: { toInOwnKingZone: true } } } },
+    });
+    expect(judgeCondition(definition, { kind: "pair", row: pairRow2("ahead", false, false) })).toStrictEqual({
+      state: "noMatch",
+      usedValues: { standingPair: { before: "ahead" }, counterfactual: { actual: { userMoveFacts: { toInOwnKingZone: false } } } },
+    });
+    expect(judgeCondition(definition, { kind: "pair", row: pairRow2("ahead", null, false) })).toStrictEqual({
+      state: "undecidable",
+      missing: [{ path: "counterfactual.actual.userMoveFacts.toInOwnKingZone", reason: { kind: "null" } }],
+    });
+    expect(judgeCondition(definition, { kind: "pair", row: pairRow2({ undetermined: "notMeasurable" }, true, false) })).toStrictEqual({
+      state: "undecidable",
+      missing: [{ path: "standingPair.before", reason: { kind: "undetermined", undetermined: "notMeasurable" } }],
+    });
+  });
+
+  it("(i) C-5 は読み筋の側にも当てられる(actual → pv の置き換え。standingPair.before は据え置き)", async () => {
+    const { definition } = await ahead();
+    // 実戦は区域外(偽)だが読み筋は区域内(真)の組。standingPair.before は同じ "ahead" のまま読まれる
+    const row = pairRow2("ahead", false, true);
+    expect(judgeCondition(definition, { kind: "pair", row })).toStrictEqual({
+      state: "noMatch",
+      usedValues: { standingPair: { before: "ahead" }, counterfactual: { actual: { userMoveFacts: { toInOwnKingZone: false } } } },
+    });
+    expect(judgeConditionPvSide(definition, { kind: "pair", row })).toStrictEqual({
+      state: "match",
+      usedValues: { standingPair: { before: "ahead" }, counterfactual: { actual: { userMoveFacts: { toInOwnKingZone: true } } } },
     });
   });
 });
