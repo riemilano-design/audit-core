@@ -244,6 +244,20 @@ npx tsx scripts/playtest/baselineTable.ts --person <pN> --material <段 2 の記
 
 候補はここでは出すだけで、本人向けの文にする前には docs/STEP_BASE_PLAN_2026-09-21.md §4 の確かめ(同じ人の次の棋譜で再現するか)を通す。
 
+### whatif(重要な局面の分かれ道)の率を足す(`--whatif-material`・`--whatif-pool`。STEP WHATIF 作業 3)
+
+`whatif.ts`(下記)の出力(jsonl)を材料に、5 つの率(第 1 候補と同じ・上位 5 つの中・fork・narrowHeld・chanceHeld。分母は `positionsRead` の合計)+ 攻めの側に合法手が無かった場面の率(分母は `scenesRead` の合計)の 6 行を、Markdown の表の下・`--out` の JSON の `whatif` に足す(docs/STEP_WHATIF_PLAN_2026-09-22.md §8.1-2)。どちらも任意で、**渡さなければ出力は 1 バイトも変わらない**(`--material`・`--pool` の 24 枠の集計・Markdown・JSON はこの機能を足す前と同じ)。
+
+```
+npx tsx scripts/playtest/baselineTable.ts --person <pN> --material <段 2 の記録 …> --pool <pM>=<記録 …> …
+  --whatif-material <whatif.jsonl …> --whatif-pool <pM>=<whatif.jsonl …> [--whatif-pool <pK>=<…> …] --out <baseline.json>
+```
+
+- `--whatif-material`・`--whatif-pool` は片方だけでは受け付けない(exit 1。行を組み立てられないため)。`--whatif-pool` の書き方は `--pool` と同じ(`<ラベル>=<1 本目のファイル>` + 続くファイル)
+- **candidate/lower の判定は付けない**(v1)。崩れ率の 3 条件(§8.1-2 参照)とは意味が違う新しい閾値を決めることになるため。出すのは、その人の率・pool 合計の率・**pool の人ごとの率の最小〜最大**だけ
+- 止める(exit 1): `--whatif-pool` のラベルの集合が `--pool` のラベルの集合と一致しない(片方にしか無いラベルがある)・記録の最後の行が `summary` でない・`values`(meta 行の `WHATIF_VALUES` の写し)が記録の間でそろわない・同じ記録(name・sha256・kifuId のいずれか)が `--whatif-material` と `--whatif-pool` の間、または `--whatif-pool` 同士で重なる
+- 純粋関数は `lib/whatifBaseline.ts`(`whatifInputProblems`・`whatifRateRowsOf`・`renderWhatifRateMarkdown`)。`lib/baselineTable.ts`(24 枠の集計)は変えていない
+
 ## 重要な局面の分かれ道を測る(`whatif.ts`。STEP WHATIF 作業 1)
 
 `scripts/playtest/whatif.ts` は、docs/STEP_WHATIF_PLAN_2026-09-22.md の**測る段だけ**を行う道具(見せる段(PDF・Web、計画 §2.3)は別の作業)。固定棋譜(`kifu-import-check.ts --fixed` の JSON)だけを読み、段 2 の記録は読まない。

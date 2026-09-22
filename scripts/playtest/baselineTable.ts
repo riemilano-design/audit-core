@@ -11,8 +11,16 @@
 // - 止める(exit 1): `--person`・`--pool` のラベルが p1・p2 の形でない・`--pool` のラベルが `--person` と同じ・
 //   `--pool` 同士で同じラベル・記録が無い・referenceNodes がそろわない・error 行がある・同じ記録が person・pool の間で重なる。
 //
+// - `--whatif-material`・`--whatif-pool`(STEP WHATIF 作業 3。docs/STEP_WHATIF_PLAN_2026-09-22.md §8.1-2。任意、渡すなら両方):
+//   `whatif.ts` の出力(jsonl)を読み、5 つの率(第 1 候補と同じ・上位 5 つ・fork・narrowHeld・chanceHeld。分母は
+//   positionsRead の合計)+ 攻めの側に合法手が無かった場面の率(分母は scenesRead の合計)の 6 行を Markdown・JSON に足す。
+//   **candidate/lower の判定は付けない**(pool 合計の率と pool の人ごとの最小〜最大を添えるだけ)。渡さなければ出力は
+//   1 バイトも変わらない。止める(exit 1): 片方だけ渡した・記録の最後の行が summary でない・values が記録の間でそろわない・
+//   `--whatif-pool` のラベルの集合が `--pool` のラベルの集合と一致しない・同じ記録が重なる。
+//
 // 【このファイルがやること】入力を読み、lib/diagnosisMoment.ts の allPairsOf(軽い値)で組を作り、lib/baselineTable.ts の
 // 集計(baselineReportOf)・入力の確かめ(baselineInputProblems)・Markdown(renderBaselineMarkdown)をつなぐ。
+// whatif の入力・集計・Markdown は lib/whatifBaseline.ts につなぐ(閾値・判定語はどちらのファイルにも新しく置かない)。
 // 【このファイルが絶対にやらないこと】エンジンを回すこと。records/ へ書くこと。閾値・判定語を新しく置くこと
 
 import { readFileSync, writeFileSync } from "node:fs";
@@ -33,9 +41,20 @@ import { recordSha256 } from "./lib/failureEventSchema.js";
 import { allPairsOf } from "./lib/diagnosisMoment.js";
 import { screenOfRecord } from "./lib/screenDiagnosis.js";
 import { initialSfenOf } from "./lib/sideAlignment.js";
+import {
+  renderWhatifRateMarkdown,
+  whatifInputProblems,
+  whatifRateRowsOf,
+  type WhatifFileEntry,
+  type WhatifInputGroup,
+  type WhatifRateRow,
+  type WhatifSummaryCounts,
+} from "./lib/whatifBaseline.js";
 
 const REPO_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..", "..");
-const USAGE = "使い方: npx tsx scripts/playtest/baselineTable.ts --person <pN> --material <a.jsonl …> --pool <pM>=<a.jsonl …> [--pool <pK>=<…> …] --out <baseline.json>";
+const USAGE =
+  "使い方: npx tsx scripts/playtest/baselineTable.ts --person <pN> --material <a.jsonl …> --pool <pM>=<a.jsonl …> [--pool <pK>=<…> …] --out <baseline.json>\n" +
+  "  [--whatif-material <whatif.jsonl …>] [--whatif-pool <pM>=<whatif.jsonl …> …](計画 §8.1-2。どちらも任意だが、渡すなら両方)";
 
 class BaselineInputError extends Error {
   constructor(readonly problems: readonly string[]) {
@@ -54,6 +73,9 @@ interface Args {
   material: string[];
   pools: PoolSpec[];
   out: string;
+  /** 計画 §8.1-2。渡さなければ 1 バイトも出力を変えない(whatif の行を出さない)。 */
+  whatifMaterial: string[];
+  whatifPools: PoolSpec[];
 }
 
 function parseArgs(argv: readonly string[]): Args {
@@ -61,6 +83,8 @@ function parseArgs(argv: readonly string[]): Args {
   let out: string | undefined;
   const material: string[] = [];
   const pools: PoolSpec[] = [];
+  const whatifMaterial: string[] = [];
+  const whatifPools: PoolSpec[] = [];
   let index = 0;
   while (index < argv.length) {
     const flag = argv[index]!;
@@ -75,18 +99,20 @@ function parseArgs(argv: readonly string[]): Args {
         out = value;
       }
       index += 2;
-    } else if (flag === "--material") {
+    } else if (flag === "--material" || flag === "--whatif-material") {
+      const list = flag === "--material" ? material : whatifMaterial;
       index += 1;
       while (index < argv.length && !argv[index]!.startsWith("--")) {
-        material.push(argv[index]!);
+        list.push(argv[index]!);
         index += 1;
       }
-    } else if (flag === "--pool") {
+    } else if (flag === "--pool" || flag === "--whatif-pool") {
+      const list = flag === "--pool" ? pools : whatifPools;
       index += 1;
       const first = argv[index];
-      if (first === undefined || first.startsWith("--")) throw new BaselineInputError(["--pool に値が無い"]);
+      if (first === undefined || first.startsWith("--")) throw new BaselineInputError([`${flag} に値が無い`]);
       const eq = first.indexOf("=");
-      if (eq < 0) throw new BaselineInputError([`--pool の値は <ラベル>=<記録> の形: ${first}`]);
+      if (eq < 0) throw new BaselineInputError([`${flag} の値は <ラベル>=<記録> の形: ${first}`]);
       const label = first.slice(0, eq);
       const firstFile = first.slice(eq + 1);
       const files = firstFile.length > 0 ? [firstFile] : [];
@@ -95,7 +121,7 @@ function parseArgs(argv: readonly string[]): Args {
         files.push(argv[index]!);
         index += 1;
       }
-      pools.push({ label, files });
+      list.push({ label, files });
     } else {
       throw new BaselineInputError([`知らない引数: ${flag}`]);
     }
@@ -104,7 +130,10 @@ function parseArgs(argv: readonly string[]): Args {
   if (missing.length > 0) throw new BaselineInputError([`${missing.join("・")} が無い`]);
   if (material.length === 0) throw new BaselineInputError(["--material の記録が無い"]);
   if (pools.length === 0) throw new BaselineInputError(["--pool が無い"]);
-  return { person: person!, material, pools, out: out! };
+  if ((whatifMaterial.length > 0) !== (whatifPools.length > 0)) {
+    throw new BaselineInputError(["--whatif-material と --whatif-pool は渡すなら両方(片方だけでは whatif の行を組み立てられない)"]);
+  }
+  return { person: person!, material, pools, out: out!, whatifMaterial, whatifPools };
 }
 
 interface ReadInput {
@@ -131,6 +160,44 @@ function readInput(filePath: string): ReadInput {
     meta,
     records,
   };
+}
+
+interface RawWhatifSummary {
+  positionsRead: number;
+  matchesTop1: number;
+  withinMultiPv: number;
+  scenes: { fork: number[]; narrowHeld: number[]; chanceHeld: number[] };
+  sceneReads: { attackNoLegalMoveCount: number; scenesRead: number };
+}
+
+/** whatif.ts の出力(jsonl)を読む(計画 §8.1-2)。段 2 の記録(readInput)とは形が違うので別に読む。 */
+function readWhatifInput(filePath: string): WhatifFileEntry {
+  const absolute = path.resolve(filePath);
+  const bytes = readFileSync(absolute);
+  const lines = bytes
+    .toString("utf-8")
+    .split("\n")
+    .map((line) => line.trim())
+    .filter((line) => line.length > 0)
+    .map((line) => JSON.parse(line) as { kind: string });
+  const meta = lines.find((line) => line.kind === "meta") as ({ kifuId: string; values: unknown } & Record<string, unknown>) | undefined;
+  const summaryLine = lines.filter((line) => line.kind === "summary").at(-1) as ({ kind: "summary" } & RawWhatifSummary) | undefined;
+  const summary: WhatifSummaryCounts | undefined =
+    summaryLine === undefined
+      ? undefined
+      : {
+          positionsRead: summaryLine.positionsRead,
+          matchesTop1: summaryLine.matchesTop1,
+          withinMultiPv: summaryLine.withinMultiPv,
+          forkCount: summaryLine.scenes.fork.length,
+          narrowHeldCount: summaryLine.scenes.narrowHeld.length,
+          chanceHeldCount: summaryLine.scenes.chanceHeld.length,
+          scenesRead: summaryLine.sceneReads.scenesRead,
+          attackNoLegalMoveCount: summaryLine.sceneReads.attackNoLegalMoveCount,
+        };
+  const sha256 = recordSha256(bytes);
+  const relative = path.relative(REPO_ROOT, absolute);
+  return { name: filePath, path: relative, kifuId: meta?.kifuId ?? path.basename(filePath), sha256, values: meta?.values, summary };
 }
 
 /** 段 2 の記録 1 本から 1 局ぶんの組(軽い値)と、軸 B が読む総手数を作る(gate.ts の pairsGameOf と同じ組の作り方)。 */
@@ -163,8 +230,30 @@ async function main(): Promise<void> {
   const pool: BaselinePerson[] = poolInputs.map((poolInput) => ({ label: poolInput.label, games: poolInput.inputs.map(baselineGameOf) }));
 
   const report = baselineReportOf(person, pool);
-  console.log(renderBaselineMarkdown(report).join("\n"));
-  writeFileSync(path.resolve(args.out), `${JSON.stringify(report, null, 2)}\n`, "utf-8");
+  const markdownLines = renderBaselineMarkdown(report);
+
+  // whatif の行(計画 §8.1-2)。--whatif-material/--whatif-pool を渡さなければ、ここには一切入らない
+  // (出力は 1 バイトも変わらない ― parseArgs が「渡すなら両方」を強制しているので、この分岐は両方揃っているときだけ真になる)。
+  let whatif: { material: { label: string; games: number }; pool: Array<{ label: string; games: number }>; rows: WhatifRateRow[] } | undefined;
+  if (args.whatifMaterial.length > 0 && args.whatifPools.length > 0) {
+    const whatifMaterialEntries = args.whatifMaterial.map(readWhatifInput);
+    const whatifPoolGroups: WhatifInputGroup[] = args.whatifPools.map((pool) => ({ label: pool.label, entries: pool.files.map(readWhatifInput) }));
+    const poolLabels = args.pools.map((pool) => pool.label);
+    const whatifProblems = whatifInputProblems(whatifMaterialEntries, whatifPoolGroups, poolLabels);
+    if (whatifProblems.length > 0) throw new BaselineInputError(whatifProblems);
+
+    const rows = whatifRateRowsOf(whatifMaterialEntries, whatifPoolGroups);
+    whatif = {
+      material: { label: args.person, games: whatifMaterialEntries.length },
+      pool: whatifPoolGroups.map((group) => ({ label: group.label, games: group.entries.length })),
+      rows,
+    };
+    markdownLines.push(...renderWhatifRateMarkdown(rows));
+  }
+
+  console.log(markdownLines.join("\n"));
+  const output = whatif === undefined ? report : { ...report, whatif };
+  writeFileSync(path.resolve(args.out), `${JSON.stringify(output, null, 2)}\n`, "utf-8");
 }
 
 main().catch((error: unknown) => {
