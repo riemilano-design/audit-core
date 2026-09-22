@@ -232,6 +232,7 @@ story.append(P("今回、数として出した名前と、今回の値です(次
 
 time_data = m["time"]
 overview = m["overview"]
+findings_by_kind = {f["kind"]: f for f in m["findings"]}
 
 
 def bucket_text(bucket):
@@ -248,8 +249,9 @@ if time_data.get("available"):
     rows.append(("持ち時間を使い切って負けた局", str(time_up_n) if time_up_n is not None else "—(比べられない)"))
 else:
     rows.append(("かけた時間・持ち時間を使い切って負けた局", "—(比べられない)"))
-rows.append(("優勢になった対局(延べ)", str(overview["fromAhead"])))
-rows.append(("優勢から負けた対局(延べ)", str(overview["fromAheadLoss"])))
+ahead_loss_numbers = findings_by_kind["aheadLoss"]["numbers"]
+rows.append(("優勢になった対局", str(ahead_loss_numbers["aheadGames"])))
+rows.append(("優勢から負けた対局", str(ahead_loss_numbers["aheadLossGames"])))
 rows.append(("崩れ(序盤)", str(overview["early"])))
 rows.append(("崩れ(中盤)", str(overview["mid"])))
 rows.append(("崩れ(終盤)", str(overview["late"])))
@@ -264,7 +266,7 @@ notes = [
     "「かけた時間」は、棋譜に書かれた秒をそのまま使います(切り捨ての整数)。0〜1 秒・2〜4 秒・5〜9 秒・10 秒以上の 4 段に分けます。",
     "「崩れ」は、直前の評価の区分(優勢・互角・劣勢)が優勢または互角だった局面から、直後に区分が 1 段以上下がったことです。+300 以上を優勢、−300 以下を劣勢、その間を互角とします。",
     "「持ち時間を使い切って負けた局」は、終局の種類が切れ負けで、かつ本人が負けた局です。",
-    "「優勢から負けた対局」の数は、評価の区分が優勢から下がった場面(崩れ)のうち、その対局が負けだったものを数えた延べ回数です(同じ対局で複数回数えることがあります)。",
+    "「優勢から負けた対局」は、対局中に一度でも評価が +300 以上になり、その対局の結果が負けだった局の数です。",
     "この報告の数は、棋力や手の良し悪しを表す数ではありません。",
 ]
 story.append(notebox([emit(n) for n in notes]))

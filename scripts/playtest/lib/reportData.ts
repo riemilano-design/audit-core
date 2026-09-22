@@ -839,12 +839,19 @@ function timeUpLossFinding(time: PatientTime): Finding {
   return { kind, shown: n >= 1, numbers: { n, m }, text };
 }
 
-function aheadLossFinding(overview: PatientOverview): Finding {
+/**
+ * 司令塔の指示(2026-09-23、監査の前の直し): 「対局が n 局」と書くので、数は組の延べ(`overview.fromAhead`・
+ * `fromAheadLoss`)ではなく**局の数**にする。凍結の `_head.py` の `game_facts` と同じ決め方(局ごとに本人から見た評価
+ * `scores` が一度でも `STANDING_BOUNDS.aheadCp` 以上になったか、その局の `result` が「負け」か)で数える。300 は
+ * 既存の段の境(`STANDING_BOUNDS.aheadCp`)をそのまま使い、新しい定数は増やさない。
+ */
+function aheadLossFinding(games: readonly PatientGame[]): Finding {
   const kind: FindingKind = "aheadLoss";
-  const n = overview.fromAheadLoss;
-  const k = overview.fromAhead;
+  const everAheadGames = games.filter((game) => game.scores.some((score) => score !== null && score >= STANDING_BOUNDS.aheadCp));
+  const k = everAheadGames.length;
+  const n = everAheadGames.filter((game) => game.result === "負け").length;
   const text = `一度は優勢(+300 以上)になった後に負けた対局が ${n} 局ありました(優勢になった対局は ${k} 局)`;
-  return { kind, shown: n >= 1, numbers: { n, k }, text };
+  return { kind, shown: n >= 1, numbers: { aheadGames: k, aheadLossGames: n }, text };
 }
 
 function phaseFinding(overview: PatientOverview): Finding {
@@ -862,12 +869,12 @@ function noneFinding(gamesCount: number, othersShown: boolean): Finding {
 }
 
 /** 発見の判定(本編 4 ページの材料)。種類の順は固定(上の表の順のまま)。 */
-export function buildFindings(overview: PatientOverview, time: PatientTime, gamesCount: number): Finding[] {
+export function buildFindings(overview: PatientOverview, time: PatientTime, games: readonly PatientGame[]): Finding[] {
   const timeSpent = timeSpentFinding(time);
   const timeUpLoss = timeUpLossFinding(time);
-  const aheadLoss = aheadLossFinding(overview);
+  const aheadLoss = aheadLossFinding(games);
   const phase = phaseFinding(overview);
-  const none = noneFinding(gamesCount, timeSpent.shown || timeUpLoss.shown || aheadLoss.shown);
+  const none = noneFinding(games.length, timeSpent.shown || timeUpLoss.shown || aheadLoss.shown);
   return [timeSpent, timeUpLoss, aheadLoss, phase, none];
 }
 
@@ -951,7 +958,7 @@ export function buildPatientReportData(
   const moveCheck = moveCheckFromGateLines(gateLines, options.moveCheckConditionId);
   const overview = buildOverview(games, patientGames, moveCheck);
   const time = buildPatientTime(games, patientGames, options.timeLimitSec);
-  const findings = buildFindings(overview, time, patientGames.length);
+  const findings = buildFindings(overview, time, patientGames);
   const previous = buildPrevious(options.previous ?? null, findings);
   const patient: PatientReportData = {
     title: options.title,

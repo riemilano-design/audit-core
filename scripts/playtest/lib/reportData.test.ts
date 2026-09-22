@@ -43,6 +43,7 @@ import {
   type Finding,
   type FixedKifu,
   type GameSource,
+  type PatientGame,
   type PatientOverview,
   type PatientReportData,
   type PatientTime,
@@ -560,29 +561,38 @@ function timeWithBySpent(le1: { n: number; collapsed: number }, ge10: { n: numbe
   return { ...EMPTY_TIME, available: true, bySpent: [le1, { n: 0, collapsed: 0 }, { n: 0, collapsed: 0 }, ge10] };
 }
 
+/** aheadLoss を発火させない(scores が 300 未満のまま)、局数だけが要る試験用のダミーの局。 */
+function emptyGames(n: number): PatientGame[] {
+  return Array.from({ length: n }, (_, i) => ({ no: i + 1, id: `g${i + 1}`, side: "先手" as const, total: 1, result: "勝ち" as const, ending: null, events: 0, scores: [0], plies: [1], marks: [] }));
+}
+
+function gameOf(no: number, result: "勝ち" | "負け", scores: Array<number | null>): PatientGame {
+  return { no, id: `g${no}`, side: "先手", total: scores.length, result, ending: null, events: 0, scores, plies: scores.map((_, i) => i + 1), marks: [] };
+}
+
 describe("buildFindings: timeSpent(minPairs・ratio の境界)", () => {
   it("minPairs 未満(19)なら、比率の条件を満たしていても出さない", () => {
     const time = timeWithBySpent({ n: 100, collapsed: 10 }, { n: 19, collapsed: 4 }); // 4/19 ≈ 21.05%(le1 の 10% の 2 倍以上)
-    const [timeSpent] = buildFindings(EMPTY_OVERVIEW, time, 20);
+    const [timeSpent] = buildFindings(EMPTY_OVERVIEW, time, emptyGames(20));
     expect(timeSpent).toMatchObject({ kind: "timeSpent", shown: false });
   });
   it("minPairs ちょうど(20)で比率もちょうど 2 倍なら出す", () => {
     const time = timeWithBySpent({ n: 100, collapsed: 10 }, { n: 20, collapsed: 4 }); // 4/20 = 20%、le1 は 10% ちょうど 2 倍
-    const [timeSpent] = buildFindings(EMPTY_OVERVIEW, time, 20);
+    const [timeSpent] = buildFindings(EMPTY_OVERVIEW, time, emptyGames(20));
     expect(timeSpent).toMatchObject({ kind: "timeSpent", shown: true, numbers: { a: 4, b: 20, p: 20, c: 10, d: 100, q: 10 } });
   });
   it("比率が 2 倍にわずかに届かなければ出さない(3/20 = 15% < 20%)", () => {
     const time = timeWithBySpent({ n: 100, collapsed: 10 }, { n: 20, collapsed: 3 });
-    const [timeSpent] = buildFindings(EMPTY_OVERVIEW, time, 20);
+    const [timeSpent] = buildFindings(EMPTY_OVERVIEW, time, emptyGames(20));
     expect(timeSpent).toMatchObject({ kind: "timeSpent", shown: false });
   });
   it("0〜1 秒の分母が 0 なら比べられないので出さない", () => {
     const time = timeWithBySpent({ n: 0, collapsed: 0 }, { n: 100, collapsed: 100 });
-    const [timeSpent] = buildFindings(EMPTY_OVERVIEW, time, 20);
+    const [timeSpent] = buildFindings(EMPTY_OVERVIEW, time, emptyGames(20));
     expect(timeSpent).toMatchObject({ kind: "timeSpent", shown: false });
   });
   it("time.available が false なら、数はすべて null で出さない", () => {
-    const [timeSpent] = buildFindings(EMPTY_OVERVIEW, EMPTY_TIME, 20);
+    const [timeSpent] = buildFindings(EMPTY_OVERVIEW, EMPTY_TIME, emptyGames(20));
     expect(timeSpent).toMatchObject({ kind: "timeSpent", shown: false, numbers: { a: null, b: null, p: null, c: null, d: null, q: null } });
   });
   it("FINDING_VALUES は計画の値(minPairs 20・ratio 2)のまま", () => {
@@ -608,37 +618,62 @@ describe("buildFindings: timeUpLoss(finalScore の詰みの扱い)", () => {
         { gameNo: 4, total: 10, usedSec: 100, finalScore: null }, // 読めていない(数えない)
       ],
     };
-    const [, timeUpLoss] = buildFindings(EMPTY_OVERVIEW, time, 20);
+    const [, timeUpLoss] = buildFindings(EMPTY_OVERVIEW, time, emptyGames(20));
     expect(timeUpLoss).toMatchObject({ kind: "timeUpLoss", shown: true, numbers: { n: 4, m: 2 } });
   });
   it("timeUpLosses が 0 局なら出さない", () => {
     const time: PatientTime = { ...EMPTY_TIME, available: true, bySpent: [{ n: 0, collapsed: 0 }, { n: 0, collapsed: 0 }, { n: 0, collapsed: 0 }, { n: 0, collapsed: 0 }], timeUpLosses: [] };
-    const [, timeUpLoss] = buildFindings(EMPTY_OVERVIEW, time, 20);
+    const [, timeUpLoss] = buildFindings(EMPTY_OVERVIEW, time, emptyGames(20));
     expect(timeUpLoss).toMatchObject({ kind: "timeUpLoss", shown: false, numbers: { n: 0, m: 0 } });
   });
 });
 
-describe("buildFindings: aheadLoss・phase・none", () => {
-  it("aheadLoss は overview.fromAheadLoss ≥ 1 で出す", () => {
-    const overview: PatientOverview = { ...EMPTY_OVERVIEW, fromAhead: 5, fromAheadLoss: 1 };
-    const [, , aheadLoss] = buildFindings(overview, EMPTY_TIME, 20);
-    expect(aheadLoss).toMatchObject({ kind: "aheadLoss", shown: true, numbers: { n: 1, k: 5 } });
+// 司令塔の直し(2026-09-23、監査の前): aheadLoss は overview.fromAhead・fromAheadLoss(組の延べ)ではなく、
+// 凍結の _head.py の game_facts と同じ決め方(局の scores が一度でも +300 以上・その局の result)で**局の数**を数える。
+describe("buildFindings: aheadLoss(局の数。scores が一度でも +300 以上になった局・その局の result)", () => {
+  it("+300 以上になり、かつ負けた局を aheadLossGames、+300 以上になった局を aheadGames に数える", () => {
+    const games = [
+      gameOf(1, "負け", [100, 300, 200]), // 300 以上になり、負け → aheadGames・aheadLossGames の両方
+      gameOf(2, "勝ち", [100, 400, 450]), // 300 以上になったが勝ち → aheadGames のみ
+      gameOf(3, "負け", [100, 200, 250]), // 300 未満のまま負け → どちらにも入らない
+    ];
+    const [, , aheadLoss] = buildFindings(EMPTY_OVERVIEW, EMPTY_TIME, games);
+    expect(aheadLoss).toMatchObject({ kind: "aheadLoss", shown: true, numbers: { aheadGames: 2, aheadLossGames: 1 } });
   });
-  it("aheadLoss は fromAheadLoss が 0 なら出さない", () => {
-    const [, , aheadLoss] = buildFindings(EMPTY_OVERVIEW, EMPTY_TIME, 20);
-    expect(aheadLoss).toMatchObject({ kind: "aheadLoss", shown: false });
+  it("境界: ちょうど 300 は優勢に入る(299 は入らない)", () => {
+    const games = [gameOf(1, "負け", [300]), gameOf(2, "負け", [299])];
+    const [, , aheadLoss] = buildFindings(EMPTY_OVERVIEW, EMPTY_TIME, games);
+    expect(aheadLoss).toMatchObject({ kind: "aheadLoss", shown: true, numbers: { aheadGames: 1, aheadLossGames: 1 } });
   });
+  it("優勢になった局が無ければ出さない(aheadGames 0)", () => {
+    const games = [gameOf(1, "負け", [100, 200])];
+    const [, , aheadLoss] = buildFindings(EMPTY_OVERVIEW, EMPTY_TIME, games);
+    expect(aheadLoss).toMatchObject({ kind: "aheadLoss", shown: false, numbers: { aheadGames: 0, aheadLossGames: 0 } });
+  });
+  it("優勢になった局がすべて勝ちなら出さない(aheadGames > 0・aheadLossGames 0)", () => {
+    const games = [gameOf(1, "勝ち", [400])];
+    const [, , aheadLoss] = buildFindings(EMPTY_OVERVIEW, EMPTY_TIME, games);
+    expect(aheadLoss).toMatchObject({ kind: "aheadLoss", shown: false, numbers: { aheadGames: 1, aheadLossGames: 0 } });
+  });
+  it("null の評価は無視する(未測定の手を優勢と数えない)", () => {
+    const games = [gameOf(1, "負け", [null, null])];
+    const [, , aheadLoss] = buildFindings(EMPTY_OVERVIEW, EMPTY_TIME, games);
+    expect(aheadLoss).toMatchObject({ kind: "aheadLoss", shown: false, numbers: { aheadGames: 0, aheadLossGames: 0 } });
+  });
+});
+
+describe("buildFindings: phase・none", () => {
   it("phase はつねに出す(崩れ 0 回でも判定なし)", () => {
-    const [, , , phase] = buildFindings(EMPTY_OVERVIEW, EMPTY_TIME, 20);
+    const [, , , phase] = buildFindings(EMPTY_OVERVIEW, EMPTY_TIME, emptyGames(20));
     expect(phase).toMatchObject({ kind: "phase", shown: true, numbers: { fell: 0, early: 0, mid: 0, late: 0 } });
   });
   it("none は timeSpent・timeUpLoss・aheadLoss が 1 つも出ないときだけ出す", () => {
-    const [, , , , none] = buildFindings(EMPTY_OVERVIEW, EMPTY_TIME, 20);
+    const [, , , , none] = buildFindings(EMPTY_OVERVIEW, EMPTY_TIME, emptyGames(20));
     expect(none).toMatchObject({ kind: "none", shown: true, numbers: { games: 20 } });
   });
   it("none は 3 つのどれか 1 つでも出ていれば出さない(aheadLoss だけが出る場合)", () => {
-    const overview: PatientOverview = { ...EMPTY_OVERVIEW, fromAhead: 1, fromAheadLoss: 1 };
-    const [, , , , none] = buildFindings(overview, EMPTY_TIME, 20);
+    const games = [gameOf(1, "負け", [300])];
+    const [, , , , none] = buildFindings(EMPTY_OVERVIEW, EMPTY_TIME, games);
     expect(none).toMatchObject({ kind: "none", shown: false });
   });
 });

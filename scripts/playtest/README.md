@@ -228,7 +228,11 @@ npx tsx scripts/playtest/pipeline.ts --person <id> --kifu-dir <dir> --work <dir>
 
 - **`patient_report_data.json` の `findings`**(`lib/reportData.ts` の `buildFindings`。判定的な値は `FINDING_VALUES` の
   1 か所): 種類は固定の一覧 `timeSpent`(T1: 10 秒以上かけた手の崩れ率が 0〜1 秒の 2 倍以上・10 秒以上の組が 20 組以上)・
-  `timeUpLoss`(T2: 持ち時間を使い切って負けた局が 1 局以上)・`aheadLoss`(優勢から負けた組が 1 組以上)・
+  `timeUpLoss`(T2: 持ち時間を使い切って負けた局が 1 局以上)・`aheadLoss`(**局の数**。凍結の `_head.py` の
+  `game_facts` と同じ決め方 ― その局の `scores`(表示の向き)が一度でも `STANDING_BOUNDS.aheadCp`(+300)以上になった局を
+  `numbers.aheadGames`、そのうち `result` が「負け」の局を `numbers.aheadLossGames`。`aheadLossGames` が 1 局以上で出す。
+  司令塔の直し、2026-09-23: 当初は `overview.fromAhead`/`fromAheadLoss`(組の延べ)を使っていたが、文が「対局が n 局」と
+  書くのに合わせて局の数へ直した)・
   `phase`(崩れの序中終。つねに出す・判定なし)・`none`(上の 3 つが 1 つも出ないとき)。`shown: false` の発見も JSON には
   書く(数つき。前回との比較に使う)。文の中の数はすべて `numbers` から作る
 - **`patient_report_data.json` の `previous`**(`lib/reportData.ts` の `buildPrevious`。CLI の `--previous <前回の
