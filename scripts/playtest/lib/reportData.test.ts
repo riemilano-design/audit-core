@@ -11,6 +11,7 @@ import type { MetaLine, RecordLine } from "../invariants/types.js";
 import { engineRef, GAME01_MOVES, plantedRecords } from "./failureEventFixtures.js";
 import type { GateLine } from "./gateOutput.js";
 import { loadConditionsFromDir } from "./conditionReport.js";
+import { FINDING_TEXTS } from "./findingTexts.js";
 import { alignMovesToSente } from "./sideAlignment.js";
 import { rotateUsiMove } from "./usiRotation.js";
 import kingEscapesDefinition from "./conditions/king_escapes_decrease_v1.js";
@@ -629,6 +630,60 @@ describe("buildFindings: timeUpLoss(finalScore の詰みの扱い)", () => {
   });
 });
 
+// STEP TIME 作業 4(§6.10 の 1・4)。「ひとことで」の 3 通り(m = n・0 < m < n・m = 0)の境界。
+// 文字列そのものは FINDING_TEXTS.timeUpLoss.oneLineVariants(docs との一致は findingTexts.test.ts が確かめる)。
+describe("buildFindings: timeUpLoss の oneLine(§5.5 の 3 通り。m = n / 0 < m < n / m = 0 の境界)", () => {
+  const variants = FINDING_TEXTS.timeUpLoss.oneLineVariants!;
+
+  it("m = n(0 = 0。timeUpLosses が 0 局で shown: false でも mEqualsN)", () => {
+    const time: PatientTime = { ...EMPTY_TIME, available: true, bySpent: [{ n: 0, collapsed: 0 }, { n: 0, collapsed: 0 }, { n: 0, collapsed: 0 }, { n: 0, collapsed: 0 }], timeUpLosses: [] };
+    const [, timeUpLoss] = buildFindings(EMPTY_OVERVIEW, time, emptyGames(20));
+    expect(timeUpLoss!.oneLine).toBe(variants["mEqualsN"]);
+  });
+
+  it("m = n(n > 0。2 局とも +300 以上)", () => {
+    const time: PatientTime = {
+      ...EMPTY_TIME,
+      available: true,
+      bySpent: [{ n: 0, collapsed: 0 }, { n: 0, collapsed: 0 }, { n: 0, collapsed: 0 }, { n: 0, collapsed: 0 }],
+      timeUpLosses: [
+        { gameNo: 1, total: 10, usedSec: 100, finalScore: 300 },
+        { gameNo: 2, total: 10, usedSec: 100, finalScore: 400 },
+      ],
+    };
+    const [, timeUpLoss] = buildFindings(EMPTY_OVERVIEW, time, emptyGames(20));
+    expect(timeUpLoss!.numbers).toStrictEqual({ n: 2, m: 2 });
+    expect(timeUpLoss!.oneLine).toBe(variants["mEqualsN"]);
+  });
+
+  it("0 < m < n(境界のすぐ内側。m = n - 1)", () => {
+    const time: PatientTime = {
+      ...EMPTY_TIME,
+      available: true,
+      bySpent: [{ n: 0, collapsed: 0 }, { n: 0, collapsed: 0 }, { n: 0, collapsed: 0 }, { n: 0, collapsed: 0 }],
+      timeUpLosses: [
+        { gameNo: 1, total: 10, usedSec: 100, finalScore: 300 },
+        { gameNo: 2, total: 10, usedSec: 100, finalScore: 100 },
+      ],
+    };
+    const [, timeUpLoss] = buildFindings(EMPTY_OVERVIEW, time, emptyGames(20));
+    expect(timeUpLoss!.numbers).toStrictEqual({ n: 2, m: 1 });
+    expect(timeUpLoss!.oneLine).toBe(variants["partial"]);
+  });
+
+  it("m = 0(n > 0。境界のすぐ内側)", () => {
+    const time: PatientTime = {
+      ...EMPTY_TIME,
+      available: true,
+      bySpent: [{ n: 0, collapsed: 0 }, { n: 0, collapsed: 0 }, { n: 0, collapsed: 0 }, { n: 0, collapsed: 0 }],
+      timeUpLosses: [{ gameNo: 1, total: 10, usedSec: 100, finalScore: 100 }],
+    };
+    const [, timeUpLoss] = buildFindings(EMPTY_OVERVIEW, time, emptyGames(20));
+    expect(timeUpLoss!.numbers).toStrictEqual({ n: 1, m: 0 });
+    expect(timeUpLoss!.oneLine).toBe(variants["mZero"]);
+  });
+});
+
 // 司令塔の直し(2026-09-23、監査の前): aheadLoss は overview.fromAhead・fromAheadLoss(組の延べ)ではなく、
 // 凍結の _head.py の game_facts と同じ決め方(局の scores が一度でも +300 以上・その局の result)で**局の数**を数える。
 describe("buildFindings: aheadLoss(局の数。scores が一度でも +300 以上になった局・その局の result)", () => {
@@ -679,6 +734,45 @@ describe("buildFindings: phase・none", () => {
   });
 });
 
+// STEP TIME 作業 4(§6.10 の 1・4)。「ひとことで」の phase(最大 1 つ・2 つ同数・3 つ同数・崩れ 0)の境界。
+// テンプレートの文字列(プレースホルダを含む)は FINDING_TEXTS.phase.oneLineVariants(docs との一致は
+// findingTexts.test.ts が確かめる)。ここでは「numbers からどれを選び、どう埋め込むか」の境界だけを見る。
+describe("buildFindings: phase の oneLine(§5.5。最大 1 つ・2 つ同数・3 つ同数・崩れ 0 の境界)", () => {
+  function phaseOverviewOf(early: number, mid: number, late: number): PatientOverview {
+    return { ...EMPTY_OVERVIEW, fell: early + mid + late, early, mid, late };
+  }
+
+  it("崩れ 0(early = mid = late = 0)", () => {
+    const [, , , phase] = buildFindings(EMPTY_OVERVIEW, EMPTY_TIME, emptyGames(20));
+    expect(phase!.oneLine).toBe("崩れは無かった");
+  });
+
+  it("最大が 1 つ(境界: 中盤だけが他より 1 多い)", () => {
+    const [, , , phase] = buildFindings(phaseOverviewOf(3, 4, 3), EMPTY_TIME, emptyGames(20));
+    expect(phase!.oneLine).toBe("崩れは中盤に多かった");
+  });
+
+  it("最大が 1 つ(序盤)", () => {
+    const [, , , phase] = buildFindings(phaseOverviewOf(5, 1, 1), EMPTY_TIME, emptyGames(20));
+    expect(phase!.oneLine).toBe("崩れは序盤に多かった");
+  });
+
+  it("最大が 1 つ(終盤)", () => {
+    const [, , , phase] = buildFindings(phaseOverviewOf(1, 1, 5), EMPTY_TIME, emptyGames(20));
+    expect(phase!.oneLine).toBe("崩れは終盤に多かった");
+  });
+
+  it("2 つ同数(境界: 序盤と中盤がちょうど同数で最大、終盤はその 1 少ない)", () => {
+    const [, , , phase] = buildFindings(phaseOverviewOf(4, 4, 3), EMPTY_TIME, emptyGames(20));
+    expect(phase!.oneLine).toBe("崩れの時期は、序盤と中盤で同じくらいだった");
+  });
+
+  it("3 つ同数(境界: 3 つとも同じ数)", () => {
+    const [, , , phase] = buildFindings(phaseOverviewOf(2, 2, 2), EMPTY_TIME, emptyGames(20));
+    expect(phase!.oneLine).toBe("崩れの時期は、序盤と中盤と終盤で同じくらいだった");
+  });
+});
+
 // 司令塔の指示(2026-09-23、監査 GO 後の見た目の直し): front.pdf 2 ページ目の「前回の数/今回の数」が英字のキーのまま
 // 表示されていたため、numbers のキーごとの日本語の名を labels に持たせた。判定・数は変えていない。
 describe("FINDING_NUMBER_LABELS: numbers のキーの集合と一致する", () => {
@@ -709,7 +803,7 @@ describe("FINDING_NUMBER_LABELS: numbers のキーの集合と一致する", () 
 
 describe("buildPrevious: 前回との比較(3 通り)", () => {
   function findingOf(kind: Finding["kind"], shown: boolean): Finding {
-    return { kind, shown, numbers: { x: shown ? 1 : 0 }, labels: { x: "テスト用の数" }, text: "t" };
+    return { kind, shown, numbers: { x: shown ? 1 : 0 }, labels: { x: "テスト用の数" }, text: "t", oneLine: "t" };
   }
   it("null を渡せば previous も null", () => {
     expect(buildPrevious(null, [findingOf("phase", true)])).toBeNull();

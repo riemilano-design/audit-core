@@ -281,6 +281,40 @@ npx tsx scripts/playtest/pipeline.ts --person <id> --kifu-dir <dir> --work <dir>
 - **感想票**(`out/concierge-prep/08-application-kit.md` の C。gitignore): 司令塔が手で直す(この STEP の実装
   担当は触らない。§6.7 の 4)
 
+## 伝わる形(STEP TIME 作業 4。`docs/STEP_TIME_PLAN_2026-09-22.md` §6.10)
+
+判定・数・設計思想は変えず、`front.pdf` を読んで分かる順と言葉にする。**文の正本は docs §5.5。コードは写しであり、
+試験が文字列一致を確かめる**(`lib/findingTexts.test.ts`)。
+
+- **`lib/findingTexts.ts`**: `FindingTextSet` に `oneLine`(1 通りの種類 `timeSpent`・`aheadLoss`・`none`)・
+  `oneLineVariants`(3 通りの種類 `timeUpLoss`・`phase`。docs のプレースホルダ `{序盤|中盤|終盤}`・`{X}と{Y}` を
+  含んだままの文字列で持ち、埋め込みは `reportData.ts` の役目)を足した。`READING_GUIDE`(読み方の枠)・
+  `TRYABLE_SUMMARY_HEADING`・`TRYABLE_SUMMARY_TAIL`(試せることのまとめ)・`GLOSSARY`(言葉の意味、4 項目)も
+  新規。`buildFindingTextsFile()` に `readingGuide`・`tryableSummaryHeading`・`tryableSummaryTail`・`glossary`
+  を足した(`findings[].oneLine` は個々の発見ごとに解決済みの値を `Finding.oneLine` が持つので、ここには含めない)
+- **`lib/findingTexts.test.ts`**: §5.5 の「ひとことで」(5 つの箇条書き行の中の「」をすべて `matchAll` で出現順に
+  取り出す)・「読み方」・「試せることのまとめ」(見出し・末尾の文)・「言葉の意味」(4 項目)の一致試験を足した。
+  禁止語 0 の対象にも新しい文をすべて足した
+- **`lib/reportData.ts`**: `Finding` に `oneLine: string` を足し、5 つの発見の作る関数すべてで設定する。
+  `timeUpLossOneLine(n, m)`(m = n / 0 < m < n / m = 0 の順で判定。`m === n` は `null === null` も真になるので、
+  `time.available: false` のとき(`shown: false` で画面に出ない)は保守的に `mEqualsN` 側へ落ちる)・
+  `phaseOneLine(fell, early, mid, late)`(`fell === 0` → 崩れ 0、最大の段が 1 つ → その段名を `{序盤|中盤|終盤}`
+  へ埋め込み、3 つ同数 → `{X}と{Y}で` を `tieAllPhases`(「序盤と中盤と終盤で」)へ丸ごと置き換え、2 つ同数 →
+  `{X}と{Y}` を実際の 2 つの段名へ置き換え)。`FINDING_NUMBER_LABELS.timeSpent` の名を「組」→「手」に直した
+  (§5.5「言い換え」。お客さん向けの文では「組」を使わない)
+- **`report-pdf/render_front.py`**: 1 ページ目の冒頭に読み方の枠(`fdata["readingGuide"]`)、発見ごとに
+  「ひとことで」(`findings[].oneLine`。太字、数の文の上)、末尾に「次の 20 局までに試せること(まとめ)」
+  (shown の発見の `tryable` を出た順に番号で再掲 + 末尾の 1 文。`tryable` が 1 つも無ければ何も出さない ―
+  実装担当の判断)。3 ページ目の表の名を「(崩れた手 / 手)」に。4 ページ目の頭に「言葉の意味」(`fdata["glossary"]`、
+  4 項目)。**すべて `fdata`(`finding_texts.json`)があるときだけ足す**(無ければ今の形のまま)。検査に
+  「お客さん向けの文に『組』が残っていれば rc=1」を足した(`emit()` に組み込み、テンプレの文・`finding_texts.json`
+  経由の文の両方が対象)。`GLOBAL_ALLOWED_NUMBERS` に `600`(「言葉の意味」の「分かれ道」の定義。
+  `lib/whatif.ts` の `WHATIF_VALUES.minLossCp` と同じ値)を追加
+- 実測(3 分 14 局・10 分 10 局・3 分 20 局の 3 組。`out/tatsunami3`・`out/tatsunami-long`・`out/tatsunami20`、
+  gitignore): `reportData.ts` の CLI を直接呼び(エンジン・pipeline は回さない)、`patient_report_data.json`・
+  `finding_texts.json` を作り直し、`render_front.py` で `front.pdf` を作り直した。ページ数は 5・4・5、「組」は
+  3 組とも 0 件、`main.pdf`(触っていない)は無変更のまま
+
 ## 全員に共通の基準値(`baselineTable.ts`。STEP BASE)
 
 `scripts/playtest/baselineTable.ts` は、1 人の段 2 の記録を「その人(`--person`)」、その人を除いた 1 人以上を「基準値の材料(`--pool`)」にして、あらかじめ決めた 24 の枠(docs/STEP_BASE_PLAN_2026-09-21.md §1.1)ごとに、その人の崩れ率が基準値からどれだけ外れているかを出す道具(下見。断定ではない)。

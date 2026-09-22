@@ -24,6 +24,7 @@ import { initialSfenOf } from "./sideAlignment.js";
 import { rotateUsiMove } from "./usiRotation.js";
 import { ENDING_KIF_WORDS, type EndingKind, type FixedKifuEnding, type MoveTime } from "./kifuImport.js";
 import { judgeCondition, type ConditionDefinition, type PairRow } from "./condition.js";
+import { FINDING_TEXTS } from "./findingTexts.js";
 import type { GateLine } from "./gateOutput.js";
 import { toJapaneseMove } from "../../../apps/server/src/notation/japaneseMove.js";
 import { toJapaneseMoveHistory } from "../../../apps/server/src/notation/japaneseMoveHistory.js";
@@ -794,6 +795,8 @@ export type FindingKind = "timeSpent" | "timeUpLoss" | "aheadLoss" | "phase" | "
 /**
  * 発見 1 件。`shown: false` の発見も JSON には書く(数つき。前回との比較に使う)。文の中の数はすべて `numbers` から作る。
  * `labels`(司令塔の指示、2026-09-23): `numbers` のキーごとの日本語の名。python はこれを表示に使い、キーの名を手写ししない。
+ * `oneLine`(STEP TIME 作業 4、§6.10 の 1): 「ひとことで」の固定文(docs §5.5。文字列そのものは `lib/findingTexts.ts`
+ * が正本)。`numbers` からどれを選ぶかは、ここ(判定できる TypeScript 側)で決める(python は選ばない)。
  */
 export interface Finding {
   kind: FindingKind;
@@ -801,6 +804,7 @@ export interface Finding {
   numbers: Record<string, number | null>;
   labels: Record<string, string>;
   text: string;
+  oneLine: string;
 }
 
 /** 判定的な値は 1 か所に(CLAUDE.md 4 番)。値は docs/STEP_TIME_PLAN_2026-09-22.md §6.4 の 1 の表のとおり。 */
@@ -815,14 +819,53 @@ export const FINDING_VALUES = {
  * `numbers` のキー → 日本語の名(司令塔の指示、2026-09-23。「見た目の直し」)。`Finding.numbers` のキーの集合と
  * 一致すること(lib/reportData.test.ts で確かめる)。`none` の `games` は指示に無かったため、他の名と同じ体裁
  * (短い名詞句)で実装担当が補った(実装担当の判断)。
+ * STEP TIME 作業 4(§6.10 の 1・§5.5「言い換え」): timeSpent の名を「組」→「手」に直した(お客さん向けの文では
+ * 「組」を使わない。docs §5.5 の数の名「10 秒以上で崩れた手」「10 秒以上の手」「0〜1 秒で崩れた手」「0〜1 秒の手」)。
  */
 export const FINDING_NUMBER_LABELS: Record<FindingKind, Record<string, string>> = {
-  timeSpent: { a: "10 秒以上で崩れた組", b: "10 秒以上の組", p: "その割合(%)", c: "0〜1 秒で崩れた組", d: "0〜1 秒の組", q: "その割合(%)" },
+  timeSpent: { a: "10 秒以上で崩れた手", b: "10 秒以上の手", p: "その割合(%)", c: "0〜1 秒で崩れた手", d: "0〜1 秒の手", q: "その割合(%)" },
   timeUpLoss: { n: "使い切って負けた局", m: "うち最後の評価が +300 以上" },
   aheadLoss: { aheadGames: "優勢になった局", aheadLossGames: "うち負けた局" },
   phase: { fell: "崩れ", early: "序盤", mid: "中盤", late: "終盤" },
   none: { games: "対局数" },
 };
+
+/**
+ * 「ひとことで」(§5.5・作業 4)の選び方。文字列そのものは `lib/findingTexts.ts`(正本 docs §5.5)。
+ * `timeUpLoss`・`phase` の `numbers` が null(データが無い)場合は `shown: false` になり画面には出ないが、
+ * `oneLine: string`(非 null)を返す必要があるため、保守的な既定として「m = n」「崩れ 0」寄りの分岐へ落ちる
+ * (JS の `null === null` が true になることを利用。計画に無い判断、実装担当。表示されない値なので実害は無い)。
+ */
+function timeUpLossOneLine(n: number | null, m: number | null): string {
+  const variants = FINDING_TEXTS.timeUpLoss.oneLineVariants;
+  if (variants === null) throw new ReportDataError("FINDING_TEXTS.timeUpLoss.oneLineVariants が無い");
+  if (m === n) return variants["mEqualsN"]!;
+  if (m !== null && n !== null && m > 0 && m < n) return variants["partial"]!;
+  return variants["mZero"]!;
+}
+
+function phaseOneLine(fell: number, early: number, mid: number, late: number): string {
+  const variants = FINDING_TEXTS.phase.oneLineVariants;
+  if (variants === null) throw new ReportDataError("FINDING_TEXTS.phase.oneLineVariants が無い");
+  if (fell === 0) return variants["zero"]!;
+  const byPhase: Array<[string, number]> = [
+    ["序盤", early],
+    ["中盤", mid],
+    ["終盤", late],
+  ];
+  const max = Math.max(early, mid, late);
+  const tied = byPhase.filter(([, count]) => count === max).map(([label]) => label);
+  if (tied.length === 1) return variants["single"]!.replace("{序盤|中盤|終盤}", tied[0]!);
+  if (tied.length === 3) return variants["tie"]!.replace("{X}と{Y}で", variants["tieAllPhases"]!);
+  return variants["tie"]!.replace("{X}と{Y}", `${tied[0]}と${tied[1]}`);
+}
+
+/** `oneLine` が 1 通りの種類(`timeSpent`・`aheadLoss`・`none`)の固定文を取る。 */
+function fixedOneLineOf(kind: "timeSpent" | "aheadLoss" | "none"): string {
+  const oneLine = FINDING_TEXTS[kind].oneLine;
+  if (oneLine === null) throw new ReportDataError(`FINDING_TEXTS.${kind}.oneLine が無い`);
+  return oneLine;
+}
 
 function timeSpentFinding(time: PatientTime): Finding {
   const kind: FindingKind = "timeSpent";
@@ -834,6 +877,7 @@ function timeSpentFinding(time: PatientTime): Finding {
       numbers: { a: null, b: null, p: null, c: null, d: null, q: null },
       labels,
       text: "10 秒以上かけた手は — / —(—%)が崩れ、0〜1 秒の手は — / —(—%)でした",
+      oneLine: fixedOneLineOf(kind),
     };
   }
   const ge10 = time.bySpent[3]!;
@@ -843,20 +887,27 @@ function timeSpentFinding(time: PatientTime): Finding {
   // 分数の比較は掛け算で行う(浮動小数点の丸め誤差を避ける)。0〜1 秒の分母が 0 なら比べる相手が無いので出さない。
   const shown = ge10.n >= FINDING_VALUES.minPairs && le1.n > 0 && ge10.collapsed * le1.n >= le1.collapsed * FINDING_VALUES.ratio * ge10.n;
   const text = `10 秒以上かけた手は ${ge10.collapsed} / ${ge10.n}(${p ?? "—"}%)が崩れ、0〜1 秒の手は ${le1.collapsed} / ${le1.n}(${q ?? "—"}%)でした`;
-  return { kind, shown, numbers: { a: ge10.collapsed, b: ge10.n, p, c: le1.collapsed, d: le1.n, q }, labels, text };
+  return { kind, shown, numbers: { a: ge10.collapsed, b: ge10.n, p, c: le1.collapsed, d: le1.n, q }, labels, text, oneLine: fixedOneLineOf(kind) };
 }
 
 function timeUpLossFinding(time: PatientTime): Finding {
   const kind: FindingKind = "timeUpLoss";
   const labels = FINDING_NUMBER_LABELS[kind];
   if (!time.available || time.timeUpLosses === null) {
-    return { kind, shown: false, numbers: { n: null, m: null }, labels, text: "持ち時間を使い切って負けた — 局のうち、最後の局面の評価が +300 以上だったのは — 局でした" };
+    return {
+      kind,
+      shown: false,
+      numbers: { n: null, m: null },
+      labels,
+      text: "持ち時間を使い切って負けた — 局のうち、最後の局面の評価が +300 以上だったのは — 局でした",
+      oneLine: timeUpLossOneLine(null, null),
+    };
   }
   const n = time.timeUpLosses.length;
   // m: 最後に読んだ局面の評価が +300 以上(displayScoreOf は詰みを ±3000 で表すので、本人側の詰みもここへ自動的に入る)。
   const m = time.timeUpLosses.filter((game) => game.finalScore !== null && game.finalScore >= 300).length;
   const text = `持ち時間を使い切って負けた ${n} 局のうち、最後の局面の評価が +300 以上だったのは ${m} 局でした`;
-  return { kind, shown: n >= 1, numbers: { n, m }, labels, text };
+  return { kind, shown: n >= 1, numbers: { n, m }, labels, text, oneLine: timeUpLossOneLine(n, m) };
 }
 
 /**
@@ -871,7 +922,7 @@ function aheadLossFinding(games: readonly PatientGame[]): Finding {
   const k = everAheadGames.length;
   const n = everAheadGames.filter((game) => game.result === "負け").length;
   const text = `一度は優勢(+300 以上)になった後に負けた対局が ${n} 局ありました(優勢になった対局は ${k} 局)`;
-  return { kind, shown: n >= 1, numbers: { aheadGames: k, aheadLossGames: n }, labels: FINDING_NUMBER_LABELS[kind], text };
+  return { kind, shown: n >= 1, numbers: { aheadGames: k, aheadLossGames: n }, labels: FINDING_NUMBER_LABELS[kind], text, oneLine: fixedOneLineOf(kind) };
 }
 
 function phaseFinding(overview: PatientOverview): Finding {
@@ -879,13 +930,13 @@ function phaseFinding(overview: PatientOverview): Finding {
   const { fell, early, mid, late } = overview;
   const text = `崩れ ${fell} 回のうち、序盤 ${early}・中盤 ${mid}・終盤 ${late} でした`;
   // 計画の文どおり「つねに出す。判定なし」(崩れ 0 回でも出す。docs/STEP_TIME_PLAN_2026-09-22.md §6.4 の 1 の表)。
-  return { kind, shown: true, numbers: { fell, early, mid, late }, labels: FINDING_NUMBER_LABELS[kind], text };
+  return { kind, shown: true, numbers: { fell, early, mid, late }, labels: FINDING_NUMBER_LABELS[kind], text, oneLine: phaseOneLine(fell, early, mid, late) };
 }
 
 function noneFinding(gamesCount: number, othersShown: boolean): Finding {
   const kind: FindingKind = "none";
   const text = `時間と形勢の動きについて、この ${gamesCount} 局では上に書ける数はありませんでした`;
-  return { kind, shown: !othersShown, numbers: { games: gamesCount }, labels: FINDING_NUMBER_LABELS[kind], text };
+  return { kind, shown: !othersShown, numbers: { games: gamesCount }, labels: FINDING_NUMBER_LABELS[kind], text, oneLine: fixedOneLineOf(kind) };
 }
 
 /** 発見の判定(本編 4 ページの材料)。種類の順は固定(上の表の順のまま)。 */

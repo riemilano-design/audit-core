@@ -1,17 +1,30 @@
 # -*- coding: utf-8 -*-
-# STEP TIME 作業 2・作業 3(docs/STEP_TIME_PLAN_2026-09-22.md §6.4・§6.7)。本編 4 節を描く道具。
+# STEP TIME 作業 2・作業 3・作業 4(docs/STEP_TIME_PLAN_2026-09-22.md §6.4・§6.7・§6.10)。本編を描く道具。
 #
 # 使い方: python3 -X utf8 render_front.py <patient_report_data.json> <出力 PDF> [<finding_texts.json>]
 #
 # 【発見の判定はここではしない】
-# 何を出すか(`findings[].shown`)・前回との比較(`previous`)は `lib/reportData.ts` の `buildFindings`・`buildPrevious`
-# (TypeScript・試験できる側)がすでに決めている。この道具は、その結果(数・文)を PDF に描くだけ。
+# 何を出すか(`findings[].shown`)・前回との比較(`previous`)・「ひとことで」(`findings[].oneLine`)は
+# `lib/reportData.ts` の `buildFindings`・`buildPrevious`(TypeScript・試験できる側)がすでに決めている。
+# この道具は、その結果(数・文)を PDF に描くだけ。
 #
 # 【STEP TIME 作業 3(§6.7)】第 3 引数 `finding_texts.json`(`reportData.ts` の CLI が `patient_report_data.json` の
 # 隣に常に書く。`lib/findingTexts.ts` の定数の写し)を渡すと、1 ページ目に「考えられること」「次の 20 局で見分けが
 # つくこと」「試せること」の 3 段(`phase` は無し)、2 ページ目に §5.3 の固定文、4 ページ目に評価の揺れの注記を足す。
 # **渡さなければ(第 3 引数が無い)、今の形(数の文だけ)のまま動く** ― 発見の判定・文言の正本はどちらも TypeScript 側
 # (`lib/reportData.ts`・`lib/findingTexts.ts`)で、この道具は写しを描くだけ(判定・新しい文言は作らない)。
+#
+# 【STEP TIME 作業 4「伝わる形」(§6.10)】判定・数・設計思想は変えず、読んで分かる順と言葉にする。
+# - 1 ページ目: 冒頭に読み方の枠(`fdata["readingGuide"]`。fdata が無ければ足さない)→ 発見ごとに
+#   題 → **ひとことで**(`findings[].oneLine`。太字)→ 数の文 → 考えられること(囲み)→ 見分け → 試せること →
+#   末尾に「次の 20 局までに試せること(まとめ)」(fdata があるときだけ。shown の発見の tryable を出た順に番号で
+#   再掲 + 末尾の 1 文)
+# - 3 ページ目: 表の名を「(崩れた手 / 手)」に(§5.5「言い換え」。お客さん向けの文では「組」を使わない)
+# - 4 ページ目: 頭に「言葉の意味」(fdata の `glossary`。4 項目)を足す
+# - ページ数は 4〜6(節ごとに改ページは変えていない。3 段・読み方・まとめ・言葉の意味を足すと 1・4 ページ目が
+#   2 ページ以上になり得るため、STEP TIME 作業 3 のときの緩め方をそのまま使う)
+# - 検査: 禁止語・数の照合に加えて、**お客さん向けの文に「組」が残っていれば rc=1**(§6.10 の 2。finding_texts.json
+#   経由の文・このファイルのテンプレートの文の両方が対象。`emit()` に組み込んだ)
 #
 # 【この新規ファイルが再利用する「流儀」(既存の 6 本(_head.py・_util.py・_mid.py・_app_head.py・_app.py・_tail.py)は
 # 変えない。_head.py は import せず、書体の探し方だけをこのファイルの中に書き写した)】
@@ -20,7 +33,8 @@
 #   と同じ考え方。実装はこのファイルで完結する。render_whatif.py の emit() と同じ作り)
 #
 # 【この道具が絶対にやらないこと】将棋の判断・断定的な戦法名の表示・助言・予測の文。数の再計算(判定は TypeScript 側)。
-# 新しい文言を作ること(3 段・前回比較・揺れの注記はすべて finding_texts.json の写しをそのまま描くだけ)。
+# 新しい文言を作ること(3 段・前回比較・揺れの注記・読み方・まとめ・言葉の意味はすべて finding_texts.json の写しを
+# そのまま描くだけ)。
 import json
 import os
 import re
@@ -75,6 +89,8 @@ S_BODY = st("fbody", fontSize=10.5, leading=15.5)
 S_SMALL = st("fsmall", fontSize=9, leading=12.5, color=MUTED)
 S_K = st("fk", fontSize=9.5, leading=13, color=MUTED)
 S_V = st("fv", fontSize=9.8, leading=13.5)
+# STEP TIME 作業 4(§6.10 の 2): 「ひとことで」(太字の 1 行。数の文の上)。
+S_ONELINE = st("foneline", font=FONT_B, fontSize=11.2, leading=15.5, spaceAfter=0.8 * mm)
 
 doc = SimpleDocTemplate(out, pagesize=A4, leftMargin=14 * mm, rightMargin=14 * mm, topMargin=16 * mm, bottomMargin=16 * mm, title=m["title"], author="将棋コーチ(試作)")
 W = A4[0] - 28 * mm
@@ -83,6 +99,25 @@ story = []
 
 def notebox(lines):
     t = Table([[P("・" + n, S_SMALL)] for n in lines], colWidths=[W])
+    t.setStyle(
+        TableStyle(
+            [
+                ("BOX", (0, 0), (-1, -1), 0.6, LINE),
+                ("BACKGROUND", (0, 0), (-1, -1), BG),
+                ("LEFTPADDING", (0, 0), (-1, -1), 3.5 * mm),
+                ("RIGHTPADDING", (0, 0), (-1, -1), 3.5 * mm),
+                ("TOPPADDING", (0, 0), (-1, -1), 1.2 * mm),
+                ("BOTTOMPADDING", (0, 0), (-1, -1), 1.2 * mm),
+            ]
+        )
+    )
+    return t
+
+
+def box(paragraphs):
+    """STEP TIME 作業 4(§6.10 の 2): notebox と同じ見た目の枠だが、先頭に「・」を付けない
+    (読み方の枠のような、1 つの続いた文を入れる場所で使う)。"""
+    t = Table([[p] for p in paragraphs], colWidths=[W])
     t.setStyle(
         TableStyle(
             [
@@ -132,8 +167,13 @@ BANNED = ["悪手", "弱点", "癖", "型", "傾向", "原因", "ミス", "見�
 # 手で合わせる ― 値がずれたら emit() が「データに無い数」として止める)。
 # STEP TIME 作業 3(§6.7 の 2): 固定文(finding_texts.json)に出る「10 秒」「60 秒」「4 秒」「5 局」「20 局」「40 局」
 # 「10 分 + 30 秒」の数は、finding_texts.json から来た文としてまとめて許す(10・60・4・5・20 は既存のまま、30・40 を追加)。
-GLOBAL_ALLOWED_NUMBERS = {0, 1, 2, 4, 5, 9, 10, 20, 30, 40, 60, 120, 300}
+# STEP TIME 作業 4(§6.10 の 2): 「言葉の意味」(GLOSSARY)の「第 1 候補より 600 以上低かった局面」(分かれ道の定義。
+# lib/whatif.ts の WHATIF_VALUES.minLossCp と同じ値)の 600 を追加。1・2・5・300 は既存のまま。
+GLOBAL_ALLOWED_NUMBERS = {0, 1, 2, 4, 5, 9, 10, 20, 30, 40, 60, 120, 300, 600}
 _problems = []
+# STEP TIME 作業 4(§6.10 の 2): お客さん向けの文に「組」が残っていたら rc=1(§5.5「言い換え」)。emit() を通る
+# すべての文と、テンプレートの数の照合を経ない文字列(見出し等)の両方をここで見張る。
+_KUMI = "組"
 
 
 def _numbers_of_findings(findings):
@@ -179,7 +219,8 @@ ALLOWED = allowed_numbers_of(m)
 
 
 def emit(text, extra_allowed=frozenset()):
-    """文に出てくる数字を、その場面で使ってよい数の集合と照合する(_mid.py の allowed_numbers と同じ考え方)。"""
+    """文に出てくる数字を、その場面で使ってよい数の集合と照合する(_mid.py の allowed_numbers と同じ考え方)。
+    STEP TIME 作業 4(§6.10 の 2): 「組」(お客さん向けの文では使わない。§5.5「言い換え」)もここで見張る。"""
     plain = re.sub(r"<[^>]*>", "", text)
     allowed_all = ALLOWED | set(extra_allowed)
     for token in re.findall(r"[0-9]+", plain):
@@ -189,13 +230,15 @@ def emit(text, extra_allowed=frozenset()):
     for w in BANNED:
         if w in text:
             _problems.append(f"使わない語「{w}」: {text[:80]}…")
+    if _KUMI in text:
+        _problems.append(f"お客さん向けの文に「{_KUMI}」が残っている(§5.5 言い換え): {text[:80]}…")
     return text
 
 
 def numbers_text(numbers, labels):
     """「名 数」を読点で並べる(司令塔の指示、2026-09-23: キーの英字のまま出さない。名は labels から引く)。"""
     parts = [f"{labels[k]} {v}" for k, v in numbers.items() if v is not None]
-    return "、".join(parts) if parts else "(数なし)"
+    return emit("、".join(parts) if parts else "(数なし)")
 
 
 # `findings[].kind` → その発見(numbers・labels を含む)。page2(前回との比較)・page3(次の n 局で見るもの)の両方で使う。
@@ -205,6 +248,11 @@ findings_by_kind = {f["kind"]: f for f in m["findings"]}
 games_n = m["summary"]["games"]
 story.append(P(f"今回の {games_n} 局で分かったこと", S_TITLE))
 story.append(P(f"{m['person']} の記録(作成 {m['today']})から、数だけを並べています。", S_LEAD))
+
+# STEP TIME 作業 4(§6.10 の 2): 読み方の枠(1 ページ目冒頭。fdata が無ければ足さない ― 今の形のまま動く)。
+if fdata is not None:
+    story.append(box([P(emit(fdata["readingGuide"]), S_SMALL)]))
+    story.append(Spacer(1, 2 * mm))
 
 shown = [f for f in m["findings"] if f["shown"]]
 if not shown:
@@ -230,9 +278,29 @@ def append_considerations_block(kind):
 
 
 for f in shown:
-    story.append(P(TITLE_JP.get(f["kind"], f["kind"]), S_H3))
+    story.append(P(emit(TITLE_JP.get(f["kind"], f["kind"])), S_H3))
+    # STEP TIME 作業 4(§6.10 の 2): 「ひとことで」(太字。数の文の上)。判定はしない ― Finding["oneLine"] は
+    # すでに reportData.ts(TypeScript)が numbers から選んだ文字列。
+    story.append(P(emit(f["oneLine"]), S_ONELINE))
     story.append(P(emit(f["text"]), S_BODY))
     append_considerations_block(f["kind"])
+
+# STEP TIME 作業 4(§6.10 の 2): 1 ページ目の末尾に「次の 20 局までに試せること(まとめ)」(fdata があるときだけ。
+# shown の発見の tryable を出た順に 1. 2. 3. と番号で再掲 + 末尾の 1 文。tryable が 1 つも無ければ何も出さない
+# ― 空のまとめを見せない。実装担当の判断、計画に無い判断)。
+if fdata is not None:
+    tryable_items = []
+    for f in shown:
+        text_set = fdata["findings"].get(f["kind"])
+        if text_set is not None and text_set.get("tryable"):
+            tryable_items.append(text_set["tryable"])
+    if tryable_items:
+        story.append(P(emit(fdata["tryableSummaryHeading"]), S_H3))
+        for i, item in enumerate(tryable_items, start=1):
+            # 番号(1. 2. 3.)は本文の数ではないので、その番号だけをこの行に限って許す(extra_allowed)。
+            story.append(P(emit(f"{i}. {item}", extra_allowed={i}), S_BODY))
+        story.append(P(emit(fdata["tryableSummaryTail"]), S_SMALL))
+
 story.append(PageBreak())
 
 # ==================== 2 ページ目: 前回のことは、今回も起きたか ====================
@@ -262,7 +330,7 @@ else:
         # labels は前回の JSON には無い(numbersBefore・numbersNow は数だけ)。名の集合は種類ごとに変わらないので、
         # 今回の同じ種類の発見(findings_by_kind)が持つ labels をそのまま使う(python 側に手写ししない)。
         comp_labels = findings_by_kind[comp["kind"]]["labels"]
-        story.append(P(TITLE_JP.get(comp["kind"], comp["kind"]), S_H3))
+        story.append(P(emit(TITLE_JP.get(comp["kind"], comp["kind"])), S_H3))
         story.append(P(emit(state, row_allowed), S_BODY))
         # STEP TIME 作業 3(§6.7 の 2): 種類ごとの 3 通りの文の下に §5.3 の固定文(fdata が無ければ足さない)。
         if fdata is not None:
@@ -290,7 +358,8 @@ if time_data.get("available"):
     by_spent = time_data["bySpent"]
     labels = ["0〜1 秒", "2〜4 秒", "5〜9 秒", "10 秒以上"]
     for label, bucket in zip(labels, by_spent):
-        rows.append((f"かけた時間 {label}(崩れ / 組)", bucket_text(bucket)))
+        # STEP TIME 作業 4(§6.10 の 3・§5.5「言い換え」): 表の名を「(崩れた手 / 手)」に(「組」を使わない)。
+        rows.append((f"かけた時間 {label}(崩れた手 / 手)", bucket_text(bucket)))
     time_up_n = len(time_data["timeUpLosses"]) if time_data.get("timeUpLosses") is not None else None
     rows.append(("持ち時間を使い切って負けた局", str(time_up_n) if time_up_n is not None else "—(比べられない)"))
 else:
@@ -302,11 +371,16 @@ rows.append(("崩れ(序盤)", str(overview["early"])))
 rows.append(("崩れ(中盤)", str(overview["mid"])))
 rows.append(("崩れ(終盤)", str(overview["late"])))
 
-story.append(kv_table([(k, emit(v)) for k, v in rows]))
+story.append(kv_table([(emit(k), emit(v)) for k, v in rows]))
 story.append(PageBreak())
 
-# ==================== 4 ページ目: 数え方 ====================
+# ==================== 4 ページ目: 言葉の意味 → 数え方 ====================
 story.append(P("数え方", S_TITLE))
+# STEP TIME 作業 4(§6.10 の 2): 「言葉の意味」を「数え方」の前に足す(fdata が無ければ足さない)。
+if fdata is not None:
+    story.append(P("言葉の意味", S_H3))
+    story.append(kv_table([(emit(item["term"]), emit(item["text"])) for item in fdata["glossary"]]))
+    story.append(Spacer(1, 2 * mm))
 story.append(P("この報告の数がどう決まっているかを書きます。", S_LEAD))
 notes = [
     "「かけた時間」は、棋譜に書かれた秒をそのまま使います(切り捨ての整数)。0〜1 秒・2〜4 秒・5〜9 秒・10 秒以上の 4 段に分けます。",
