@@ -277,6 +277,40 @@ npx tsx scripts/playtest/whatif.ts --kifu <固定棋譜 JSON> --out <whatif.json
 npx tsx scripts/playtest/pipeline.ts --person <id> --kifu-dir <dir> --work <dir> --whatif
 ```
 
+## 重要な局面の分かれ道を見せる(`whatifReport.ts`・`report-pdf/render_whatif.py`。STEP WHATIF 作業 2)
+
+`whatif.ts`(測る段、上記)の出力を、付録 2(分かれ道)の PDF にする**見せる段**。docs/STEP_WHATIF_PLAN_2026-09-22.md §2.3・§7.3。
+
+- **`scripts/playtest/lib/whatifReport.ts`**(純粋関数。試験は `lib/whatifReport.test.ts`): 局ごとの `whatif.jsonl` と `patient_report_data.json` の games の欄(id・side・total・result・ending・scores・plies)から、付録 2 の材料 `whatif_report_data.json` の中身を組む。
+  - **1 ページ目の集計**(§7.3): 読んだ局面・第 1 候補と同じ・上位 5 つの数、fork/narrowHeld/chanceHeld の延べ数(`scenes.rawTotal`)と重なりを除いた数(`scenes.distinctTotal`。局ごとに fork ∪ narrowHeld ∪ chanceHeld の手数の集合を取り、重なりを除いてから局をまたいで足す)、攻め・守り両方の手が出た場面の数(`sideCompare`)、負けた局のうち narrowHeld があった局の数(`lossesWithNarrowHeld`)。**消費時間の表はここでは作らない**(§7.3 末尾。入力に消費時間が無い。まとめの冊子の側で司令塔が別に扱う)
+  - **局ごとの代表の場面 1 つ**(`pickRepresentativePly`。4 つの分岐): 負けた局は `summary.biggestFork` の局面。勝った局は narrowHeld のうち `topGapCp` が最大の局面(同点は早い手数)。無ければ chanceHeld の最初(最も早い手数)。それも無ければ `biggestFork`(fork の最大)。それも無ければ `null`(「載せる局面なし」)
+  - **場面の材料**(`buildRepresentative`): displayPly・種類・候補 3 つ(手・評価・読み筋 5 手)・実戦の手と順位・attack/defense の読み(`scene`)・`sideGapCp`・「第 1 候補(実戦が第 1 候補なら第 2 候補)を 5 手進めた局面」(`afterCandidate`。apps/server の `applyMove` で実際に SFEN へ適用する ― 将棋のルールを python 側で二重に実装しない)
+  - **手は USI のまま出す**(日本語表記・盤面図は python 側の役目)。**mirrored(本人が後手)の局の sfen・USI は、測る段がそろえた解析用の向き(180 度回した、本人 = 先手の向き)のまま**(回し直さない。既出の `WhatifPositionRow`/`WhatifSceneRow` の `sfen`・`move`・`pv` は全部この向き)
+  - `WhatifReportData.values`(`sideZoneRadius`・`startPly`・`minLossCp`・`narrowGapCp`・`riseCp`。全局で同じはずの判断的知識の値。違えば止める)を出力に含める ― 冊子の文に出す数は python 側もここ経由でデータから読み、固定で書かない
+  - **名前・`/Users/` を含む絶対パスは出力へ含めない**
+- **`scripts/playtest/whatifReport.ts`**(CLI。上記の純粋関数への配線だけ): `--whatif <whatif.jsonl …> --patient <patient_report_data.json> --out <whatif_report_data.json>`。各 `whatif.jsonl` の先頭行(meta)の `kifuId` で `patient_report_data.json` の games と突き合わせる。
+- **`scripts/playtest/report-pdf/render_whatif.py`**(新規ファイル。**既存の 6 本(`_head.py`・`_util.py`・`_mid.py`・`_app_head.py`・`_app.py`・`_tail.py`)は変えない**): `whatif_report_data.json` と `sfens.json`(`REPORT_DATA_DIR` から読む。既存の `_head.py`・`_util.py` と同じ流儀)から、付録 2 の PDF を作る。1 ページ目(集計)+ 1 局 1 ページ(代表の場面が無い局は表にだけ出し、ページは作らない)。
+  - **書体・`REPORT_DATA_DIR`・盤面図(`Board`)・手の表記の考え方は、既存の `_head.py`・`_util.py` の流儀を再利用する**(このファイルの中で新しく書き直したもの。中身を import はしない ― `_head.py`・`_util.py` は `cat` で連結される前提の断片ファイルのため)
+  - **mirrored(本人が後手)の局の手の表記**(依頼の指示: 既存の付録 1(本編)・`reportData.ts` と同じ流儀に合わせる。回し方を新しく決めない): 盤面図・実戦の手は `sfens.json`(本人が指した実際の向き)を使う。エンジンの候補・読み筋・攻め/守りの手(実戦では指されていない、解析用の向きのままの手)は、`rotate_usi`(`lib/usiRotation.ts` の `rotateUsiMove` と同じマスの変換を python で書き直したもの)で本人が指した向きへ戻してから、`sfens.json` の実際の局面へ適用する(このファイル内の `apply_move`・`serialize_sfen`)
+  - **数の照合**: 文に出す数は、その場面で使ってよい数の集合(局の事実・§2.1 の値・「第 1 候補」等の方式そのものの語彙数)に無ければ `sys.exit(1)`。禁止語(`BANNED`)も同じく確かめる
+  - **人間の追加指示(2026-09-22)**: 各局のページで、5 手進めた局面の盤面の上に「エンジンの読み筋で 5 手進めた局面(実戦ではありません)」、実戦の局面の盤面の上に「実戦の局面(指す前)」の帯を置く。1 ページ目の攻め/守りの注記の末尾に「(決め方 v1: 玉から {sideZoneRadius} マス以内)」を足す(値は `values.sideZoneRadius` から。固定で書かない)。分かれ道 × その手にかけた時間の表は、この付録には入れない(まとめの冊子の側で司令塔が扱う)
+  - 使い方: `REPORT_DATA_DIR=<sfens.json のあるフォルダ> python3 -X utf8 render_whatif.py <whatif_report_data.json> <出力 PDF>`
+  - **この python の道具は vitest の対象外**(`report-pdf/` 全体と同じ。既存の README の「既知の限界」参照)。守りは、合成データ(先手の負け・後手の勝ち・載せる局面なし)と実データでの実行時の確かめ(rc・禁止語・数の照合・実測の件数)だけ
+
+### `pipeline.ts` の `--whatif` かつ `--until pdf`(本編の後に付録 2)
+
+`--whatif` を付けて `--until pdf` まで実行すると、本編の PDF(`main.pdf`)の後に、`<work>/report/whatif_report_data.json` と `<work>/report/whatif.pdf` を作る(`whatif-report-data` → `report-pdf-render-whatif` → `report-pdf-check-fonts` の順)。
+
+- **材料**: このお客さんの局のうち、段 2 まで済んだ局(`successGames`)それぞれの `<work>/<person>/whatif/<id>.jsonl`(**全部揃っていなければ**、道具を呼ばずに失敗として記録する ― 1 局でも `--whatif` の記録が無ければ付録は作らない)
+- **済みの判定**: `whatif_report_data.json` は空でなければ飛ばす。`whatif.pdf` は `whatif_report_data.json` より新しければ(mtime)飛ばす(本編の `pdfDone` と同じ考え方。依存は `whatif_report_data.json` だけ)
+- **本編 PDF が無ければ**(`main.pdf` が無い・pdf 段自体が失敗している)、付録 2 の道具を一切呼ばずに失敗として記録する
+- `--whatif` を**付けない**実行、または `--until` が `pdf` より前の実行は、この段に一切入らない(道具の呼び出し・出力が 1 バイトも変わらない。試験は `lib/pipelineWhatifReport.test.ts`)
+
+```
+npx tsx scripts/playtest/pipeline.ts --person <id> --kifu-dir <dir> --work <dir> \
+  --name <表示名> --title <タイトル> --today <YYYY-MM-DD> --until pdf --whatif
+```
+
 ## typecheck
 
 ```

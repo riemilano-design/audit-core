@@ -51,7 +51,7 @@ const REPO_ROOT = path.join(SCRIPT_DIR, "..", "..");
 const REPORT_PDF_DIR = path.join(SCRIPT_DIR, "report-pdf");
 
 // npx tsx <道具>.ts <引数> で起こす既存の道具(S1〜S5)。S7(report-pdf-*)はここに無く、下の spawnTool で別に分ける。
-const TSX_TOOL_PATHS: Record<Exclude<ToolName, "report-pdf-build" | "report-pdf-render-main" | "report-pdf-check-fonts">, string> = {
+const TSX_TOOL_PATHS: Record<Exclude<ToolName, "report-pdf-build" | "report-pdf-render-main" | "report-pdf-check-fonts" | "report-pdf-render-whatif">, string> = {
   "kifu-import-check": path.join(SCRIPT_DIR, "kifu-import-check.ts"),
   replay: path.join(SCRIPT_DIR, "replay.ts"),
   rescreen: path.join(SCRIPT_DIR, "rescreen.ts"),
@@ -60,6 +60,8 @@ const TSX_TOOL_PATHS: Record<Exclude<ToolName, "report-pdf-build" | "report-pdf-
   "report-data": path.join(SCRIPT_DIR, "reportData.ts"),
   // STEP WHATIF 作業 1。`--whatif` のときだけ呼ぶ(lib/pipeline.ts の runPipeline 参照)。
   whatif: path.join(SCRIPT_DIR, "whatif.ts"),
+  // STEP WHATIF 作業 2。`--whatif` かつ `--until pdf` のときだけ呼ぶ(付録 2「分かれ道」の材料)。
+  "whatif-report-data": path.join(SCRIPT_DIR, "whatifReport.ts"),
 };
 
 /** `cmd <args>` を起こし、標準出力・標準エラー・終了コードを集める(spawnTool の共通部分)。 */
@@ -87,12 +89,19 @@ function spawnProcess(cmd: string, args: readonly string[], cwd: string, env: No
  * - `report-pdf-render-main`(args = [REPORT_DATA_DIR, patient_report_data.json, 出力 PDF]):
  *   `REPORT_DATA_DIR=<args[0]> python3 -X utf8 render_main.py <args[1]> <args[2]>`
  * - `report-pdf-check-fonts`(args = [PDF …]): `python3 -X utf8 check_fonts_embedded.py <args…>`
+ * - `report-pdf-render-whatif`(STEP WHATIF 作業 2。args = [REPORT_DATA_DIR, whatif_report_data.json, 出力 PDF]):
+ *   `REPORT_DATA_DIR=<args[0]> python3 -X utf8 render_whatif.py <args[1]> <args[2]>`(新規ファイル。build.sh では作らない ―
+ *   既存の 6 本(_head/_util/_mid/_app_head/_app/_tail)の連結とは別の、単体の python ファイルのまま)
  */
 function spawnTool(tool: ToolName, args: readonly string[]): Promise<ToolResult> {
   if (tool === "report-pdf-build") return spawnProcess("sh", ["build.sh"], REPORT_PDF_DIR);
   if (tool === "report-pdf-render-main") {
     const [reportDataDir, patientPath, outPdfPath] = args;
     return spawnProcess("python3", ["-X", "utf8", "render_main.py", patientPath!, outPdfPath!], REPORT_PDF_DIR, { ...process.env, REPORT_DATA_DIR: reportDataDir });
+  }
+  if (tool === "report-pdf-render-whatif") {
+    const [reportDataDir, whatifDataPath, outPdfPath] = args;
+    return spawnProcess("python3", ["-X", "utf8", "render_whatif.py", whatifDataPath!, outPdfPath!], REPORT_PDF_DIR, { ...process.env, REPORT_DATA_DIR: reportDataDir });
   }
   if (tool === "report-pdf-check-fonts") {
     return spawnProcess("python3", ["-X", "utf8", "check_fonts_embedded.py", ...args], REPORT_PDF_DIR);

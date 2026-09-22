@@ -58,6 +58,16 @@ docs/STEP_PIPE_PLAN_2026-09-21.md §2.2 の S7 としてここへ移したもの
 
 作った PDF の全書体が埋め込みかどうかの確認は、いまは人(司令塔)が pymupdf で確かめる手作業(docs/STEP_PIPE_PLAN_2026-09-21.md §2.2 の指示どおり)。
 
+## 付録 2「分かれ道」(`render_whatif.py`。STEP WHATIF 作業 2、docs/STEP_WHATIF_PLAN_2026-09-22.md §2.3・§7.3)
+
+`render_whatif.py` は、上記の凍結した 6 本(`_head.py`・`_util.py`・`_mid.py`・`_app_head.py`・`_app.py`・`_tail.py`)とは**別の、単体の新規ファイル**である。`build.sh` では作らない(`_head.py`・`_util.py` を `cat` で連結する対象に含めていない ― これらは断片ファイルで import を前提にしていないため、書体・`REPORT_DATA_DIR`・盤面図(`Board`)の考え方だけを再利用し、コードはこのファイルの中に新しく書いた)。
+
+- 入力: `whatif_report_data.json`(`scripts/playtest/whatifReport.ts` の出力)と `sfens.json`(`REPORT_DATA_DIR`。既存の `reportData.ts --out-sfens` の出力をそのまま使う)
+- 使い方: `REPORT_DATA_DIR=<sfens.json のあるフォルダ> python3 -X utf8 render_whatif.py <whatif_report_data.json> <出力 PDF>`
+- 依存はこの README の「依存」節と同じ(`reportlab`・`pymupdf`)。新しい依存は足していない
+- 数の照合・禁止語(`BANNED`)の確かめは、この道具の中で完結する(`_mid.py` の `allowed_numbers`・`BANNED` とは別の実装だが、同じ考え方)
+- 詳しい設計は `scripts/playtest/README.md` の「重要な局面の分かれ道を見せる」節を参照
+
 ## 既知の欠落(2026-09-21 独立監査 REVISE で明記)
 
 別冊(`render_appendix.py`)は、`audit_metrics.json` の `candidate.reps` の欄(`side`・`transitionJp`・`capUsJp` ほか)と
@@ -74,3 +84,7 @@ docs/STEP_PIPE_PLAN_2026-09-21.md §2.2 の S7 としてここへ移したもの
   第 6 版 20 局の不変を見るだけでなく、その分岐に該当する局が 1 件以上出る入力(合成データでよい)でも本文を確かめること。**
 - 「次の {局数} 局で確かめます」(`_mid.py`・`_app.py` に計 2 か所)は、次の回の局数を今回と同じ数(`summary.games`)で
   書く(次の回の局数を予測しているのではなく、今回と同じ規模を仮に置いているだけ)。
+- **`render_whatif.py`(STEP WHATIF 作業 2)も同じ理由で vitest の対象外。** 守りは、合成データ(先手の負け・後手の勝ち・
+  代表の場面が無い局の 3 局程度)での rc=0・禁止語 0・数の照合の実行時確認と、実データ(24 局)での実行時確認
+  (1 ページ目の集計の件数が事前に測った値と一致すること)。「代表の場面が無い局」のような該当 0 件の分岐は、
+  実データだけでは確かめられないため、合成データ側に必ず 1 件以上含める。

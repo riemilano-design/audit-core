@@ -87,6 +87,16 @@
 - **既知の限界**: biggestFork が同点なら早い手数を採る。`--dry-run` に whatif の段は出ない。候補が 0 件の局面(理論上)は fork 扱いだが biggestFork の対象外。`--whatif` は `--until` と独立で、固定棋譜さえあれば回る。meta に enginePath は書かない(段 1・段 2 との非対称)。
 - **測っていないもの**: 24 局での両方の側が出る割合(§2.4-3 の本測定)、エンジン 5 本での所要、`sideZoneRadius` 3 以上との比べ。
 
+### 6.2 作業 2(見せる段、2026-09-22)
+
+- **実装**(使い捨ての実装担当、worktree、feature の先頭 `01d7911` の上): 新規 `lib/whatifReport.ts`(純粋関数: 1 ページ目の集計、代表の場面の選び方 4 分岐、場面の材料の組み立て)・`lib/whatifReport.test.ts`(31 件)・`scripts/playtest/whatifReport.ts`(CLI。計画に名は無かったが `reportData.ts`/`lib/reportData.ts` と同じ 2 層に合わせた)・`report-pdf/render_whatif.py`(新規の単体。既存 6 本と `build.sh` は変えていない)・`lib/pipelineWhatifReport.test.ts`(10 件)。`lib/pipeline.ts` は `--whatif` かつ `--until pdf` のときだけ、本編 PDF の後に `whatif_report_data.json` → `whatif.pdf` を作る。`pipeline.ts` に道具 2 つの配線。README 2 本に使い方と既知の限界。
+- 見せ方は §7.3(試作 4)のまま。1 ページ目は「局面 → 第 1 候補と同じ・上位 5 つ → 152/91/53」の流れ、分母つき、重なりの注記、攻めの側・守りの側を比べられた場面、注記「棋力や手の良し悪しを表す数ではない」。場面のページは「実戦の局面(指す前)」と「エンジンの読み筋で 5 手進めた局面(実戦ではありません)」の帯、攻めの側・守りの側の最上位、「決め方 v1: 玉から N マス以内」の N は meta の値から。閾値(600/400/400/17 手目/候補 5/1M ノード)は `whatif_report_data.json` の `values` から入れ、固定文への数の埋め込みは `render_whatif.py` が機械で調べて rc=1 で止まる(禁止語も同じ)。手数の見出しは `displayPly`。後手の局の手は `lib/usiRotation.ts` と同じ変換を python 側に写し、`sfens.json` の向きの局面を使う。
+- 実装側の実測: 型検査 rc=0、vitest 1193 件(基点 1152 + 41)、check-docs rc=0、変異 5 本 red(sha256 で復元)。24 局(gitignore の成果物を scratchpad に写して)で rc=0、50 ページ、1 ページ目の数は §7.1 と一致(814/338/684/152/91/53/270、両方の側 206/276、攻めの側なし 70、負け 9 局中 narrowHeld あり 8)。見本 `select.json` との手数の見出しの照合は 12/24 一致で、外れた 12 件はすべて後手の局・一律 +1。見本が生の `ply` を使っていたため(§6.1 の既知の 1 ずれ)で、道具の側が正しい。
+- **独立監査 1 回: GO。** 監査の実測: `--whatif` なしの経路が新しいブロックに入らないこと、既存の試験 4 本(`pipeline`・`pipelineReport`・`pipelineWhatif`・`pipelineAbsolutePath`)と `apps/`・`data/`・python 6 本の差分 0、型検査 rc=0、vitest 1193 件、check-docs rc=0、変異 2 本(`distinctTotal` の重なり除去を単純和に → red。python の禁止語検査を無効化 → 合成データで本来 rc=1 が rc=0 に。復元後 sha 一致)、python の回転と `usiRotation.ts` の読み比べ(筋 10−x・段 a↔i 逆順・打つ手・成りの `+` を保持、同一)、新規ファイルに `/Users/`・`@` なし、14 局の組で実行 rc=0・30 ページ・1 ページ目の数(492/188/405/103/41/28)一致・書体埋め込み rc=0・後手の局の場面ページを目視(本人が下、帯、見切れなし)。
+- 監査の参考(REVISE にしない): 1 ページ目の注記が §7.3 の「次の 20 局と並べて」でなく「次の対局と並べて」と局数を落としている。これは FILL 作業 Y(「20 局」固定を `summary.games` に直した)と同じ判断で、司令塔もこのままでよいとした。
+- 司令塔の確かめ: 監査後の worktree が未変更(`git status` の一覧が実装報告と一致)、docs 追記後の check-docs。**承認の根拠は上の実装側と監査側の実測。**
+- **測っていないもの**: python の回転の再実装と `usiRotation.ts` の往復一致は自動試験では確かめていない(python は vitest の対象外。実行 1 件の目視と、実装側の 24 局での実際の手との照合だけ)。10 局の組は監査では実行していない(実装側の 24 局実行に含まれる)。エンジン 5 本での所要。Web 版(盤を 1 手ずつ動かせるページ)は §2.3 のとおり未着手。
+
 ## 7. 2 人目の 24 局に当てた結果と、基準値を開く前の予測(2026-09-22、司令塔 e3)
 
 ### 7.1 24 局の件数(`--whatif`、エンジン 5 本、失敗 0 件、約 17 分)

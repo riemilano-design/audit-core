@@ -281,6 +281,9 @@ export interface ReportPaths {
   proseRequest: string;
   prose: string;
   mainPdf: string;
+  /** STEP WHATIF 作業 2。付録 2(分かれ道)の材料と PDF(`--whatif` かつ `--until pdf` のときだけ作る)。 */
+  whatifData: string;
+  whatifPdf: string;
 }
 
 export function reportPaths(work: string): ReportPaths {
@@ -293,6 +296,8 @@ export function reportPaths(work: string): ReportPaths {
     proseRequest: path.join(dir, "prose-request.md"),
     prose: path.join(dir, "prose.json"),
     mainPdf: path.join(dir, "main.pdf"),
+    whatifData: path.join(dir, "whatif_report_data.json"),
+    whatifPdf: path.join(dir, "whatif.pdf"),
   };
 }
 
@@ -322,7 +327,10 @@ export type ToolName =
   | "report-pdf-check-fonts"
   // STEP WHATIF 作業 1(docs/STEP_WHATIF_PLAN_2026-09-22.md)。`--whatif` を付けたときだけ、
   // diagnose の後に局ごとに呼ぶ(--until には加えない。任意の段)。
-  | "whatif";
+  | "whatif"
+  // STEP WHATIF 作業 2。`--whatif` かつ `--until pdf` のときだけ、本編 PDF の後に呼ぶ(付録 2「分かれ道」)。
+  | "whatif-report-data"
+  | "report-pdf-render-whatif";
 
 /** `--source` は `--kifu-dir` からの相対パス(ファイル名)。計画は自由記述としか書いておらず、値を新しく作らないための
  * 判断だが、絶対パス(`job.kifPath`)をそのまま使うと /Users/ を含むパスが固定棋譜に残るため、相対の名前にした
@@ -424,6 +432,11 @@ export function whatifCommand(fixedKifuPath: string, out: string): string[] {
   return ["--kifu", fixedKifuPath, "--out", out];
 }
 
+/** STEP WHATIF 作業 2(`whatifReport.ts`)。局ごとの whatif.jsonl 一覧と patient_report_data.json から材料を組む。 */
+export function whatifReportDataCommand(whatifFiles: readonly string[], patientPath: string, out: string): string[] {
+  return ["--whatif", ...whatifFiles, "--patient", patientPath, "--out", out];
+}
+
 // ---- 段ごとの「済み」の判定(Lishogi の run-game.sh と同じ判定) ----
 
 export function fixedKifuDone(content: string | undefined, expectedId: string): boolean {
@@ -491,6 +504,19 @@ export function pdfDone(mtimeMs: (filePath: string) => number | undefined, pdfPa
   const patientM = mtimeMs(patientPath);
   if (pdfM === undefined || proseM === undefined || patientM === undefined) return false;
   return pdfM > proseM && pdfM > patientM;
+}
+
+/** STEP WHATIF 作業 2。`whatif_report_data.json` があること(空でなければ良い)。 */
+export function whatifReportDataDone(content: string | undefined): boolean {
+  return content !== undefined && content.trim().length > 0;
+}
+
+/** STEP WHATIF 作業 2。`whatif.pdf` が `whatif_report_data.json` より新しいこと(pdfDone と同じ考え方、依存は 1 つだけ)。 */
+export function whatifPdfDone(mtimeMs: (filePath: string) => number | undefined, pdfPath: string, dataPath: string): boolean {
+  const pdfM = mtimeMs(pdfPath);
+  const dataM = mtimeMs(dataPath);
+  if (pdfM === undefined || dataM === undefined) return false;
+  return pdfM > dataM;
 }
 
 // ---- meta 行を読む(段 1・段 2 の JSONL の 1 行目。gate の先手 / 後手の振り分けに使う) ----
@@ -847,6 +873,58 @@ export async function runPipeline(args: PipelineArgs, games: readonly GameJob[],
           const fontsResult = await run("report-pdf-check-fonts", [rp.mainPdf]);
           if (fontsResult.code !== 0) {
             failures.push({ gameId: "*", stage: "pdf", message: `check_fonts_embedded.py rc=${fontsResult.code}: 埋め込まれていない書体がある` });
+          }
+        }
+      }
+    }
+  }
+
+  // ---- STEP WHATIF 作業 2。`--whatif` かつ `--until pdf` のときだけ、本編 PDF の後に付録 2(分かれ道)を作る。
+  // `--whatif` を付けない実行・`--until` が pdf より前の実行は、このブロックに一切入らない(動き・出力を変えない)。
+  if (untilRank >= UNTIL_STAGES.indexOf("pdf") && proseOk && args.whatif === true) {
+    const rp = reportPaths(args.work);
+    const mainPdfOk = fs.readText(rp.mainPdf) !== undefined && !failures.some((f) => f.stage === "pdf");
+    if (!mainPdfOk) {
+      failures.push({ gameId: "*", stage: "whatif-pdf", message: "本編 PDF(main.pdf)が無い(先に pdf 段を済ませる)" });
+    } else {
+      const personDir = personWorkDir(args.work, args.person);
+      const successGames = games.filter((job) => outcomes.get(job.id)?.ok === true);
+      const whatifFiles: string[] = [];
+      let missingWhatifId: string | null = null;
+      for (const job of successGames) {
+        const wPath = whatifPath(personDir, job.id);
+        if (!stage1Done(fs.readText(wPath))) {
+          missingWhatifId = job.id;
+          break;
+        }
+        whatifFiles.push(wPath);
+      }
+      if (missingWhatifId !== null || whatifFiles.length === 0) {
+        failures.push({
+          gameId: "*",
+          stage: "whatif-pdf",
+          message: `whatif の記録(--whatif)が揃っていないので付録 2 を作れない(${missingWhatifId ?? "対象の局が 0"})`,
+        });
+      } else {
+        const dataAlready = whatifReportDataDone(fs.readText(rp.whatifData));
+        if (!dataAlready) {
+          const result = await run("whatif-report-data", whatifReportDataCommand(whatifFiles, rp.patient, rp.whatifData));
+          if (!whatifReportDataDone(fs.readText(rp.whatifData))) {
+            failures.push({ gameId: "*", stage: "whatif-pdf", message: `whatifReport.ts rc=${result.code}: whatif_report_data.json が出来ていない` });
+          }
+        }
+        if (whatifReportDataDone(fs.readText(rp.whatifData))) {
+          const pdfAlready = fs.mtimeMs !== undefined && whatifPdfDone(fs.mtimeMs, rp.whatifPdf, rp.whatifData);
+          if (!pdfAlready) {
+            const renderResult = await run("report-pdf-render-whatif", [rp.dir, rp.whatifData, rp.whatifPdf]);
+            if (renderResult.code !== 0) {
+              failures.push({ gameId: "*", stage: "whatif-pdf", message: `render_whatif.py rc=${renderResult.code}: ${renderResult.stderr.trim().slice(0, 1000)}` });
+            } else {
+              const fontsResult = await run("report-pdf-check-fonts", [rp.whatifPdf]);
+              if (fontsResult.code !== 0) {
+                failures.push({ gameId: "*", stage: "whatif-pdf", message: `check_fonts_embedded.py rc=${fontsResult.code}: 埋め込まれていない書体がある(付録 2)` });
+              }
+            }
           }
         }
       }
