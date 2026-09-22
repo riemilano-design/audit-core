@@ -303,6 +303,11 @@ export interface ReportPaths {
   mainPdf: string;
   /** STEP TIME 作業 2(docs/STEP_TIME_PLAN_2026-09-22.md §6.4 の 3)。本編 4 ページ。prose.json に依存しない(patient のみ)。 */
   frontPdf: string;
+  /**
+   * STEP TIME 作業 3(docs/STEP_TIME_PLAN_2026-09-22.md §6.7 の 1)。`reportData.ts` が `patient` と同じフォルダに
+   * 常に書く固定文(3 段)。無い(古い work フォルダ等)ときは front の呼び出しから外す(§6.7 の 3)。
+   */
+  findingTexts: string;
   /** STEP WHATIF 作業 2。付録 2(分かれ道)の材料と PDF(`--whatif` かつ `--until pdf` のときだけ作る)。 */
   whatifData: string;
   whatifPdf: string;
@@ -319,6 +324,7 @@ export function reportPaths(work: string): ReportPaths {
     prose: path.join(dir, "prose.json"),
     mainPdf: path.join(dir, "main.pdf"),
     frontPdf: path.join(dir, "front.pdf"),
+    findingTexts: path.join(dir, "finding_texts.json"),
     whatifData: path.join(dir, "whatif_report_data.json"),
     whatifPdf: path.join(dir, "whatif.pdf"),
   };
@@ -910,7 +916,10 @@ export async function runPipeline(args: PipelineArgs, games: readonly GameJob[],
     // 独立(front.pdf が失敗しても main.pdf は変わらず作る。既存の main.pdf の動きを変えないため)。
     const frontAlready = fs.mtimeMs !== undefined && frontPdfDone(fs.mtimeMs, rp.frontPdf, rp.patient);
     if (!frontAlready) {
-      const frontRenderResult = await run("report-pdf-render-front", [rp.patient, rp.frontPdf]);
+      // STEP TIME 作業 3(§6.7 の 3): finding_texts.json があれば渡す(無ければ今の形の 2 引数のまま。
+      // `reportData.ts` が古い work フォルダには書いていないことがあるため、無い場合を黙って許す)。
+      const frontArgs = fs.readText(rp.findingTexts) !== undefined ? [rp.patient, rp.frontPdf, rp.findingTexts] : [rp.patient, rp.frontPdf];
+      const frontRenderResult = await run("report-pdf-render-front", frontArgs);
       if (frontRenderResult.code !== 0) {
         failures.push({ gameId: "*", stage: "front-pdf", message: `render_front.py rc=${frontRenderResult.code}: ${frontRenderResult.stderr.trim().slice(0, 1000)}` });
       } else {

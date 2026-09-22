@@ -68,26 +68,37 @@ docs/STEP_PIPE_PLAN_2026-09-21.md §2.2 の S7 としてここへ移したもの
 - 数の照合・禁止語(`BANNED`)の確かめは、この道具の中で完結する(`_mid.py` の `allowed_numbers`・`BANNED` とは別の実装だが、同じ考え方)
 - 詳しい設計は `scripts/playtest/README.md` の「重要な局面の分かれ道を見せる」節を参照
 
-## 本編 4 ページ(`render_front.py`。STEP TIME 作業 2、docs/STEP_TIME_PLAN_2026-09-22.md §6.4)
+## 本編(`render_front.py`。STEP TIME 作業 2・作業 3、docs/STEP_TIME_PLAN_2026-09-22.md §6.4・§6.7)
 
 `render_front.py` も、凍結した 6 本とは**別の、単体の新規ファイル**である(`render_whatif.py` と同じ位置づけ)。
 `build.sh` では作らない。今の本編(凍結した第 6 版、局ごとのページ。`render_main.py`)は**触らず、資料 1 になる**
-(2 回目以降の主役はこちらの 4 ページ)。
+(2 回目以降の主役はこちらの本編)。
 
 - 入力: `patient_report_data.json` の `findings`・`previous`・`time`・`overview`・`summary` だけ(`sfens.json`・`prose.json`
-  は読まない。`REPORT_DATA_DIR` は渡さない)
+  は読まない。`REPORT_DATA_DIR` は渡さない)。第 3 引数に `finding_texts.json`(STEP TIME 作業 3。任意)を渡せる
 - 発見の判定(何を出すか・前回との比較)は `lib/reportData.ts` の `buildFindings`・`buildPrevious`(TypeScript・試験できる側)が
-  すでに決めている。この道具は結果(`shown`・`text`・`numbers`)を **4 ページに描くだけ**(判定はしない)
-- 使い方: `python3 -X utf8 render_front.py <patient_report_data.json> <出力 PDF>`
-- ページ: 1 今回の n 局で分かったこと(`findings` のうち `shown` のものを、発見の種類の固定順で並べる) / 2 前回のことは、
-  今回も起きたか(`previous` が無ければ「初回のため、前回との比較はありません」の 1 文) / 3 次の n 局で見るもの(今回、数として
-  出した名前と今回の値の表。**予測や助言は書かない**) / 4 数え方(固定文)
+  すでに決めている。この道具は結果(`shown`・`text`・`numbers`)を PDF に描くだけ(判定はしない)。「考えられること」
+  「次の 20 局で見分けがつくこと」「試せること」「§5.3 の 3 通りの文」も、`lib/findingTexts.ts`(TypeScript)が正本
+  (docs §5.2・§5.3 の写し。試験 `lib/findingTexts.test.ts` が一致を確かめる)で、この道具は `finding_texts.json`
+  (`reportData.ts` の CLI が生成)を読んで描くだけ(新しい文言はここで作らない)
+- 使い方: `python3 -X utf8 render_front.py <patient_report_data.json> <出力 PDF> [<finding_texts.json>]`
+- ページ: 1 今回の n 局で分かったこと(`findings` のうち `shown` のものを、発見の種類の固定順で並べる。
+  `finding_texts.json` があれば、発見ごとに数の文の下へ「考えられること」(頭の 1 文 + (a)(b)(c))・「次の 20 局で
+  見分けがつくこと」・「試せること」の 3 段を足す。`phase` は数の文だけ ― §5.2 T5「考えられること・試せることは
+  付けない」) / 2 前回のことは、今回も起きたか(`previous` が無ければ「初回のため、前回との比較はありません」の
+  1 文。`finding_texts.json` があれば、種類ごとの 3 通りの文の下に §5.3 の固定文を足す) / 3 次の n 局で見るもの
+  (今回、数として出した名前と今回の値の表。**予測や助言は書かない**) / 4 数え方(固定文。`finding_texts.json` が
+  あれば評価の揺れの注記を足す)
+- **`finding_texts.json` を渡さなければ、今の形(数の文だけ)のまま動く**(STEP TIME 作業 2 の挙動と変わらない)
 - 発見の種類ごとの題(`TITLE_JP`)は、計画(§6.4)に文言の指定が無いため、この道具の実装で最小限の事実だけの題を決めた
-  (実装担当の判断。判断・助言の言葉は含まない)
+  (実装担当の判断。判断・助言の言葉は含まない。`finding_texts.json` の `title` 欄は `TITLE_JP` と同じ文字列の写しで、
+  見出しとしては使っていない)
 - 機械の検査: 禁止語(`BANNED`。悪手・弱点・癖・型・傾向・原因・ミス・見落とし・改善・練習・必ず・明らか・あなた・ご自身・
-  いつも・がち・クセ・パターンの 18 語)0、文に出る数がすべて `findings[].numbers`・`time`・`overview`・`previous` の値に
-  あること(`GLOBAL_ALLOWED_NUMBERS` は `TIME_VALUES`・`STANDING_BOUNDS` と同じ値を手で合わせたもの。ずれたら emit() が
-  「データに無い数」として rc=1 で止まる)、ページ数が 4(pymupdf が使える環境でだけ確認。使えない環境では確認をスキップし、
+  いつも・がち・クセ・パターンの 18 語)0(固定文も対象)、文に出る数がすべて `findings[].numbers`・`time`・`overview`・
+  `previous` の値にあること(`GLOBAL_ALLOWED_NUMBERS` は `TIME_VALUES`・`STANDING_BOUNDS` と同じ値を手で合わせたもの。
+  STEP TIME 作業 3 で固定文の数(30・40)を追加。ずれたら emit() が「データに無い数」として rc=1 で止まる)、
+  ページ数が 4〜6(3 段を足すと 1 ページ目が 2 ページ以上になり得るため、STEP TIME 作業 2 の「4 ページ固定」から
+  緩めた。4 節・節ごとに改ページは変えていない。pymupdf が使える環境でだけ確認。使えない環境では確認をスキップし、
   その旨を標準出力に書く)
 - 依存はこの README の「依存」節と同じ(`reportlab`・`pymupdf`)。新しい依存は足していない
 
@@ -111,8 +122,11 @@ docs/STEP_PIPE_PLAN_2026-09-21.md §2.2 の S7 としてここへ移したもの
   代表の場面が無い局の 3 局程度)での rc=0・禁止語 0・数の照合の実行時確認と、実データ(24 局)での実行時確認
   (1 ページ目の集計の件数が事前に測った値と一致すること)。「代表の場面が無い局」のような該当 0 件の分岐は、
   実データだけでは確かめられないため、合成データ側に必ず 1 件以上含める。
-- **`render_front.py`(STEP TIME 作業 2)も同じ理由で vitest の対象外。** 発見の判定そのもの(何を出すか)は
-  `lib/reportData.ts`(vitest の対象)がすでに決めているため、この道具の責務は「描くだけ」に絞ってある。守りは、
-  合成データ(5 種類の発見がすべて `shown: true` の組・すべて `shown: false`(none だけ)の組・`previous` の 3 通り
-  (前回出た/今回も出た・今回は出ない・前回出ない/今回出た)・`time.available: false` の組)での rc=0・禁止語 0・
-  数の照合・ページ数 4 の実行時確認と、実データ(14・10・20 局の 3 組)での実行時確認(§4 の校正の表と一致すること)。
+- **`render_front.py`(STEP TIME 作業 2・作業 3)も同じ理由で vitest の対象外。** 発見の判定そのもの(何を出すか)・
+  固定文そのもの(§5.2・§5.3)は `lib/reportData.ts`・`lib/findingTexts.ts`(どちらも vitest の対象)がすでに
+  決めているため、この道具の責務は「描くだけ」に絞ってある。守りは、合成データ(5 種類の発見がすべて `shown: true`
+  の組・すべて `shown: false`(none だけ)の組・`previous` の 3 通り(前回出た/今回も出た・今回は出ない・前回出ない/
+  今回出た)・`time.available: false` の組)での rc=0・禁止語 0・数の照合・ページ数 4〜6 の実行時確認と、実データ
+  (14・10・20 局の 3 組)での実行時確認(§4 の校正の表と一致すること)。作業 3 では、`finding_texts.json` を渡した
+  場合(3 段・§5.3 の固定文が入る)と渡さない場合(今の形のまま)の両方を実データで確認し、第 6 版 20 局の
+  `main.pdf` 本文の完全一致(既存の確かめ)も変わっていないことを確かめた。

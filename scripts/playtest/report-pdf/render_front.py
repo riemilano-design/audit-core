@@ -1,11 +1,17 @@
 # -*- coding: utf-8 -*-
-# STEP TIME 作業 2(docs/STEP_TIME_PLAN_2026-09-22.md §6.4)。本編 4 ページを描く道具。
+# STEP TIME 作業 2・作業 3(docs/STEP_TIME_PLAN_2026-09-22.md §6.4・§6.7)。本編 4 節を描く道具。
 #
-# 使い方: python3 -X utf8 render_front.py <patient_report_data.json> <出力 PDF>
+# 使い方: python3 -X utf8 render_front.py <patient_report_data.json> <出力 PDF> [<finding_texts.json>]
 #
 # 【発見の判定はここではしない】
 # 何を出すか(`findings[].shown`)・前回との比較(`previous`)は `lib/reportData.ts` の `buildFindings`・`buildPrevious`
-# (TypeScript・試験できる側)がすでに決めている。この道具は、その結果(数・文)を 4 ページの PDF に描くだけ。
+# (TypeScript・試験できる側)がすでに決めている。この道具は、その結果(数・文)を PDF に描くだけ。
+#
+# 【STEP TIME 作業 3(§6.7)】第 3 引数 `finding_texts.json`(`reportData.ts` の CLI が `patient_report_data.json` の
+# 隣に常に書く。`lib/findingTexts.ts` の定数の写し)を渡すと、1 ページ目に「考えられること」「次の 20 局で見分けが
+# つくこと」「試せること」の 3 段(`phase` は無し)、2 ページ目に §5.3 の固定文、4 ページ目に評価の揺れの注記を足す。
+# **渡さなければ(第 3 引数が無い)、今の形(数の文だけ)のまま動く** ― 発見の判定・文言の正本はどちらも TypeScript 側
+# (`lib/reportData.ts`・`lib/findingTexts.ts`)で、この道具は写しを描くだけ(判定・新しい文言は作らない)。
 #
 # 【この新規ファイルが再利用する「流儀」(既存の 6 本(_head.py・_util.py・_mid.py・_app_head.py・_app.py・_tail.py)は
 # 変えない。_head.py は import せず、書体の探し方だけをこのファイルの中に書き写した)】
@@ -14,6 +20,7 @@
 #   と同じ考え方。実装はこのファイルで完結する。render_whatif.py の emit() と同じ作り)
 #
 # 【この道具が絶対にやらないこと】将棋の判断・断定的な戦法名の表示・助言・予測の文。数の再計算(判定は TypeScript 側)。
+# 新しい文言を作ること(3 段・前回比較・揺れの注記はすべて finding_texts.json の写しをそのまま描くだけ)。
 import json
 import os
 import re
@@ -29,9 +36,11 @@ from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.platypus import PageBreak, Paragraph, SimpleDocTemplate, Spacer, Table, TableStyle
 
 if len(sys.argv) < 3:
-    sys.exit("使い方: python3 -X utf8 render_front.py <patient_report_data.json> <出力 PDF>")
+    sys.exit("使い方: python3 -X utf8 render_front.py <patient_report_data.json> <出力 PDF> [<finding_texts.json>]")
 src, out = sys.argv[1], sys.argv[2]
 m = json.load(open(src, encoding="utf-8"))
+# STEP TIME 作業 3(§6.7 の 3): 第 3 引数が無ければ fdata は None(今の形のまま。判定・新しい文言はここで作らない)。
+fdata = json.load(open(sys.argv[3], encoding="utf-8")) if len(sys.argv) >= 4 else None
 
 # ---- 書体(_head.py と同じ流儀。ヒラギノ系 CID → 無ければ埋め込みフォント) ----
 _here = os.path.dirname(os.path.abspath(__file__))
@@ -60,6 +69,8 @@ def P(text, style):
 S_TITLE = st("ftitle", font=FONT_B, fontSize=18, leading=23, spaceAfter=2 * mm)
 S_LEAD = st("flead", fontSize=10.2, leading=15, color=MUTED, spaceAfter=3 * mm)
 S_H3 = st("fh3", font=FONT_B, fontSize=11, leading=15, color=ACCENT, spaceBefore=3.5 * mm, spaceAfter=1.2 * mm)
+# STEP TIME 作業 3(§6.7 の 2): 3 段(考えられること・次の 20 局で見分けがつくこと・試せること)の見出し。
+S_H4 = st("fh4", font=FONT_B, fontSize=9.5, leading=13, color=MUTED, spaceBefore=2.2 * mm, spaceAfter=0.8 * mm)
 S_BODY = st("fbody", fontSize=10.5, leading=15.5)
 S_SMALL = st("fsmall", fontSize=9, leading=12.5, color=MUTED)
 S_K = st("fk", fontSize=9.5, leading=13, color=MUTED)
@@ -119,7 +130,9 @@ BANNED = ["悪手", "弱点", "癖", "型", "傾向", "原因", "ミス", "見�
 # 構造上いつも出てよい数(ページ割り・区分そのものを表す数。個々の局面の事実ではない)。
 # lib/reportData.ts の TIME_VALUES・FINDING_VALUES・STANDING_BOUNDS と同じ値を保つこと(この道具は TS を import できないので
 # 手で合わせる ― 値がずれたら emit() が「データに無い数」として止める)。
-GLOBAL_ALLOWED_NUMBERS = {0, 1, 2, 4, 5, 9, 10, 20, 60, 120, 300}
+# STEP TIME 作業 3(§6.7 の 2): 固定文(finding_texts.json)に出る「10 秒」「60 秒」「4 秒」「5 局」「20 局」「40 局」
+# 「10 分 + 30 秒」の数は、finding_texts.json から来た文としてまとめて許す(10・60・4・5・20 は既存のまま、30・40 を追加)。
+GLOBAL_ALLOWED_NUMBERS = {0, 1, 2, 4, 5, 9, 10, 20, 30, 40, 60, 120, 300}
 _problems = []
 
 
@@ -196,9 +209,30 @@ story.append(P(f"{m['person']} の記録(作成 {m['today']})から、数だけ�
 shown = [f for f in m["findings"] if f["shown"]]
 if not shown:
     story.append(P("今回は、上に書ける数がありませんでした。", S_BODY))
+
+
+def append_considerations_block(kind):
+    """STEP TIME 作業 3(§6.7 の 2): 発見の種類 kind の 3 段(考えられること・次の 20 局で見分けがつくこと・
+    試せること)を story に足す(fdata が無い、またはその種類の considerations が null(phase)なら何も足さない)。
+    """
+    if fdata is None:
+        return
+    text_set = fdata["findings"].get(kind)
+    if text_set is None or text_set["considerations"] is None:
+        return
+    lead = fdata["considerationsLead"]
+    story.append(P(emit(f"考えられること({lead})"), S_H4))
+    story.append(notebox([emit(item) for item in text_set["considerations"]]))
+    story.append(P("次の 20 局で見分けがつくこと", S_H4))
+    story.append(P(emit(text_set["distinguish"]), S_BODY))
+    story.append(P("試せること", S_H4))
+    story.append(P(emit(text_set["tryable"]), S_BODY))
+
+
 for f in shown:
     story.append(P(TITLE_JP.get(f["kind"], f["kind"]), S_H3))
     story.append(P(emit(f["text"]), S_BODY))
+    append_considerations_block(f["kind"])
 story.append(PageBreak())
 
 # ==================== 2 ページ目: 前回のことは、今回も起きたか ====================
@@ -213,10 +247,13 @@ else:
         sb, sn = comp["shownBefore"], comp["shownNow"]
         if sb and sn:
             state = "前回も今回も出ています。"
+            fixed_key = "both"
         elif sb and not sn:
             state = "前回は出ていましたが、今回は出ていません。"
+            fixed_key = "beforeOnly"
         elif (not sb) and sn:
             state = "前回は出ていませんでしたが、今回は出ています。"
+            fixed_key = "nowOnly"
         else:
             continue  # 前回も今回も出ていない種類は載せない(比べる材料が無い)
         any_row = True
@@ -227,6 +264,9 @@ else:
         comp_labels = findings_by_kind[comp["kind"]]["labels"]
         story.append(P(TITLE_JP.get(comp["kind"], comp["kind"]), S_H3))
         story.append(P(emit(state, row_allowed), S_BODY))
+        # STEP TIME 作業 3(§6.7 の 2): 種類ごとの 3 通りの文の下に §5.3 の固定文(fdata が無ければ足さない)。
+        if fdata is not None:
+            story.append(P(emit(fdata["previous"][fixed_key]), S_BODY))
         story.append(kv_table([("前回の数", numbers_text(comp["numbersBefore"], comp_labels)), ("今回の数", numbers_text(comp["numbersNow"], comp_labels))]))
         story.append(Spacer(1, 1.5 * mm))
     if not any_row:
@@ -275,6 +315,9 @@ notes = [
     "「優勢から負けた対局」は、対局中に一度でも評価が +300 以上になり、その対局の結果が負けだった局の数です。",
     "この報告の数は、棋力や手の良し悪しを表す数ではありません。",
 ]
+# STEP TIME 作業 3(§6.7 の 2): 評価の揺れの注記を足す(fdata が無ければ足さない)。
+if fdata is not None:
+    notes.append(fdata["evalJitterNote"])
 story.append(notebox([emit(n) for n in notes]))
 
 if _problems:
@@ -292,8 +335,10 @@ try:
 except ImportError:
     _pages = None
 
-if _pages is not None and _pages != 4:
-    print(f"ページ数が 4 ではない({_pages} ページ。はみ出した可能性がある)", file=sys.stderr)
+# STEP TIME 作業 3(§6.7 の 2): 4 節・節ごとに改ページ(3 回の PageBreak)。3 段を足すと 1 ページ目が
+# 2 ページ以上になり得るため、4 ページ固定はやめて 4〜6 ページの範囲に緩める(超えたら rc=1)。
+if _pages is not None and not (4 <= _pages <= 6):
+    print(f"ページ数が 4〜6 の範囲外({_pages} ページ。はみ出した可能性がある)", file=sys.stderr)
     sys.exit(1)
 
 print(f"wrote {out}({_pages if _pages is not None else '?'} ページ)")

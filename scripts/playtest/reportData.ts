@@ -15,6 +15,8 @@
 //   `time.byLeft`(残り時間)を出す。渡さなければ `byLeft` は `null`(欄そのものは出す)
 // - STEP TIME 作業 2(docs/STEP_TIME_PLAN_2026-09-22.md §6.4 の 2): `--previous <前回の patient_report_data.json>` を渡すと
 //   `patient_report_data.json` の `previous`(種類ごとの前回・今回の比較)を出す。渡さなければ `previous` は `null`
+// - STEP TIME 作業 3(docs/STEP_TIME_PLAN_2026-09-22.md §6.7 の 1): `--out-patient` と同じフォルダに、
+//   固定文(3 段)`finding_texts.json` を常に書く(フラグは無い。`lib/findingTexts.ts` の定数から生成)
 //
 // 【このファイルが絶対にやらないこと】エンジンを回すこと・records/ へ書くこと・judgment を新しく作ること
 
@@ -24,6 +26,7 @@ import { fileURLToPath } from "node:url";
 import type { MetaLine, RecordLine } from "./invariants/types.js";
 import { loadConditionsFromDir } from "./lib/conditionReport.js";
 import { readGitState } from "./lib/gitState.js";
+import { buildFindingTextsFile } from "./lib/findingTexts.js";
 import type { GateLine } from "./lib/gateOutput.js";
 import {
   auditSummaryFromTotals,
@@ -194,6 +197,11 @@ async function main(): Promise<void> {
   });
 
   writeFileSync(path.resolve(args.outPatient), `${JSON.stringify(patient, null, 2)}\n`, "utf-8");
+
+  // STEP TIME 作業 3(docs/STEP_TIME_PLAN_2026-09-22.md §6.7 の 1): 固定文(3 段)を patient_report_data.json の隣に
+  // 常に書く(TS の定数(lib/findingTexts.ts)から生成。python(report-pdf/render_front.py)は手写ししない)。
+  const findingTextsOut = path.join(path.dirname(path.resolve(args.outPatient)), "finding_texts.json");
+  writeFileSync(findingTextsOut, `${JSON.stringify(buildFindingTextsFile(), null, 2)}\n`, "utf-8");
 
   // ---- audit_metrics.json(技術資料の側。best effort。別冊の道具 _app.py・_tail.py が読む欄を満たす) ----
   const builtGames = buildGames(sources);

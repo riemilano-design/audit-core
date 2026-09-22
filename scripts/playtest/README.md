@@ -201,9 +201,9 @@ npx tsx scripts/playtest/pipeline.ts --person <id> --kifu-dir <dir> --work <dir>
 
 作業 B で足された `reportData.ts`(S5)・`report-pdf/`(S7)を、`pipeline.ts` の続きの段としてつなぐ。出力は `<work>/report/` の下(局ごとではなく人ごと 1 か所)。
 
-- **S5**(`reportData.ts`。`--until report-data`): 材料 = **このお客さんの段 2**(`--person`・`--kifu-dir` の局。gate 段と同じ向き)。`--records`(段 2)・`--kifu`(固定棋譜)・`--gate`(`<work>/<person>/gate.jsonl`)を渡し、`patient_report_data.json`・`audit_metrics.json`・`sfens.json`・`prose-request.md` を書く。`--conditions`・`--king-escapes-condition`・`--move-check-condition` は渡さない(reportData.ts の既定 = 金の標本(第 6 版)に合わせた承認済みの定義のまま)。**`--gate` の出力(`gate.jsonl`)が無ければ(`--compare-dir` を渡さず gate 段が飛ばされた等)、reportData.ts を呼ばずに「判定の出力(gate.jsonl)が無い(--compare-dir が要る)」とはっきり失敗にする**。**済みの判定**: `patient_report_data.json`・`audit_metrics.json`・`sfens.json` の 3 つが揃っていれば飛ばす。**STEP TIME**: `reportData.ts` に `--time-limit-sec <秒>` を渡すと、`patient_report_data.json` の `time.byLeft`(残り時間の 3 段)を出す(渡さなければ `byLeft` は `null`)。持ち時間は同じ人・同じ回の局ならすべて同じ前提(1 回の実行に 1 つの値)。**STEP TIME 作業 2**: `--previous <前回の patient_report_data.json>` を渡すと `patient_report_data.json` の `previous`(発見の種類ごとの前回・今回の比較)を出す(渡さなければ `null`)。`pipeline.ts` はこれらの旗をまだ中継しない(`--time-limit-sec`・`--previous` を付けて回すときは `reportData.ts` を直接呼ぶ)
+- **S5**(`reportData.ts`。`--until report-data`): 材料 = **このお客さんの段 2**(`--person`・`--kifu-dir` の局。gate 段と同じ向き)。`--records`(段 2)・`--kifu`(固定棋譜)・`--gate`(`<work>/<person>/gate.jsonl`)を渡し、`patient_report_data.json`・`audit_metrics.json`・`sfens.json`・`prose-request.md`・**`finding_texts.json`**(STEP TIME 作業 3。旗は無い。`patient_report_data.json` と同じフォルダに常に書く)を書く。`--conditions`・`--king-escapes-condition`・`--move-check-condition` は渡さない(reportData.ts の既定 = 金の標本(第 6 版)に合わせた承認済みの定義のまま)。**`--gate` の出力(`gate.jsonl`)が無ければ(`--compare-dir` を渡さず gate 段が飛ばされた等)、reportData.ts を呼ばずに「判定の出力(gate.jsonl)が無い(--compare-dir が要る)」とはっきり失敗にする**。**済みの判定**: `patient_report_data.json`・`audit_metrics.json`・`sfens.json` の 3 つが揃っていれば飛ばす(`finding_texts.json` の有無は済みの判定に使わない。古い work フォルダには無いことがある)。**STEP TIME**: `reportData.ts` に `--time-limit-sec <秒>` を渡すと、`patient_report_data.json` の `time.byLeft`(残り時間の 3 段)を出す(渡さなければ `byLeft` は `null`)。持ち時間は同じ人・同じ回の局ならすべて同じ前提(1 回の実行に 1 つの値)。**STEP TIME 作業 2**: `--previous <前回の patient_report_data.json>` を渡すと `patient_report_data.json` の `previous`(発見の種類ごとの前回・今回の比較)を出す(渡さなければ `null`)。`pipeline.ts` はこれらの旗をまだ中継しない(`--time-limit-sec`・`--previous` を付けて回すときは `reportData.ts` を直接呼ぶ)
 - **S6**(言い換え。`--until prose`): 自動化しない(LLM を呼ばない)。`<work>/report/prose.json` が無ければ、`prose-request.md` の場所を示して失敗にする(rc ≠ 0)。あれば次へ進む。照合(使わない語・文の数)はしない ― それは S7 の `_mid.py` の役目のまま
-- **S7**(PDF。`--until pdf`): まず本編 4 ページ(`front.pdf`。STEP TIME 作業 2): `python3 -X utf8 render_front.py <patient_report_data.json> <出力 PDF>` → `python3 -X utf8 check_fonts_embedded.py <出力 PDF>`(`prose.json` を読まないので `REPORT_DATA_DIR` は渡さない。失敗は `stage: "front-pdf"` で、**下の main.pdf の生成とは独立**(front.pdf が失敗しても main.pdf は作る))。次に `report-pdf/build.sh`(`render_main.py`・`render_appendix.py` を作る)→ `REPORT_DATA_DIR=<work>/report python3 -X utf8 render_main.py <patient_report_data.json> <出力 PDF>` → `python3 -X utf8 check_fonts_embedded.py <出力 PDF>` の順に呼ぶ(README は `scripts/playtest/report-pdf/README.md`。python の実行ファイルはそこに書かれた `python3` のまま)。**別冊(`render_appendix.py`)は作らない**(`report-pdf/README.md` に明記した既知の欠落。`reportData.ts` の `audit_metrics.json` からは作れない欄があるため)。**済みの判定**: `front.pdf` は `patient_report_data.json` より新しい(mtime)ときだけ飛ばす(`prose.json` は見ない)。`main.pdf` は `prose.json`・`patient_report_data.json` の両方より新しい(mtime)ときだけ飛ばす。`prose.json` が無い(S6 が失敗している)ときは S7 全体(front.pdf も)を一切起こさない
+- **S7**(PDF。`--until pdf`): まず本編 4 節(`front.pdf`。STEP TIME 作業 2・作業 3): `python3 -X utf8 render_front.py <patient_report_data.json> <出力 PDF> [<finding_texts.json>]` → `python3 -X utf8 check_fonts_embedded.py <出力 PDF>`(`prose.json` を読まないので `REPORT_DATA_DIR` は渡さない。失敗は `stage: "front-pdf"` で、**下の main.pdf の生成とは独立**(front.pdf が失敗しても main.pdf は作る))。**`finding_texts.json` は、`<work>/report/` にあれば第 3 引数として渡す(`pipeline.ts` が `fs.readText` で有無を確かめる。無ければ 2 引数のまま = 今の形(数の文だけ))**。次に `report-pdf/build.sh`(`render_main.py`・`render_appendix.py` を作る)→ `REPORT_DATA_DIR=<work>/report python3 -X utf8 render_main.py <patient_report_data.json> <出力 PDF>` → `python3 -X utf8 check_fonts_embedded.py <出力 PDF>` の順に呼ぶ(README は `scripts/playtest/report-pdf/README.md`。python の実行ファイルはそこに書かれた `python3` のまま)。**別冊(`render_appendix.py`)は作らない**(`report-pdf/README.md` に明記した既知の欠落。`reportData.ts` の `audit_metrics.json` からは作れない欄があるため)。**済みの判定**: `front.pdf` は `patient_report_data.json` より新しい(mtime)ときだけ飛ばす(`prose.json`・`finding_texts.json` は見ない)。`main.pdf` は `prose.json`・`patient_report_data.json` の両方より新しい(mtime)ときだけ飛ばす。`prose.json` が無い(S6 が失敗している)ときは S7 全体(front.pdf も)を一切起こさない
 - **試験はエンジンも python も起こさない**: S1〜S4 と同じ `ToolRunner` の注入で、道具の実行をすべて差し替える(`scripts/playtest/lib/pipelineReport.test.ts`)
 
 段の一覧(`STAGES`・`UNTIL_STAGES`、`lib/pipeline.ts`)は配列なので、後で司令塔が足せる。
@@ -244,6 +244,42 @@ npx tsx scripts/playtest/pipeline.ts --person <id> --kifu-dir <dir> --work <dir>
   こと / 2 前回のことは、今回も起きたか / 3 次の n 局で見るもの(名前と今回の値だけ。予測や助言は書かない) / 4 数え方)。
   詳しい設計は `report-pdf/README.md` の「本編 4 ページ」節を参照
 - `pipeline.ts` の S7 に `front.pdf` を足した(`main.pdf` の前に描く。上の「S5〜S7」節を参照)
+
+## 固定文の差し込み(STEP TIME 作業 3。`docs/STEP_TIME_PLAN_2026-09-22.md` §6.7)
+
+「じゃあどうしたらいい?」に人を介さずできる限り答える 3 段(考えられること・次の 20 局で見分けがつくこと・
+試せること)を `front.pdf` に足す。**文の正本は docs §5.2・§5.3。コードは写しであり、試験が両者の文字列一致を
+確かめる**(`lib/findingTexts.test.ts`)。局ごとに LLM が考える文ではない(発見の種類ごとに固定)。
+
+- **`lib/findingTexts.ts`**(新規、純粋データ): `FINDING_TEXTS`(発見の種類ごとの `title`・`considerations`・
+  `distinguish`・`tryable`。`phase` は 3 つとも `null` ― §5.2 T5「考えられること・試せることは付けない」)、
+  `CONSIDERATIONS_LEAD`(「考えられること」の頭に付ける 1 文)、`PREVIOUS_TEXTS`(§5.3 の 3 通り)、
+  `EVAL_JITTER_NOTE`(評価の揺れの注記)、`FORBIDDEN_FINDING_TEXT_WORDS`(§5.1 の禁止語 18 語 + 「すべき」
+  「した方がよい」)、`buildFindingTextsFile()`(`finding_texts.json` の形を作る)。
+  - **`title` について**: 型には `title: string` があるが、docs §5.2 の見出し行(「T1 \`timeSpent\`: …」)は
+    §5.1 の「答えの形」(3 段)には含まれず、1 ページ目の見出しはすでに `render_front.py` の `TITLE_JP`
+    (作業 2 で実装担当が決めた、事実だけの題)が担っている。この STEP はそれを変える指示を受けていないため、
+    `title` は **新しい文言を作らず、既存の `TITLE_JP` と同じ文字列をそのまま移した**(実装担当の判断。docs との
+    一致試験の対象にはしない ― 試験は §5.2・§5.3 の 3 段・3 通りの文だけを見る)
+- **`lib/findingTexts.test.ts`**: docs のファイルを実行時に読み、見出し行(`**T1 \`timeSpent\`: …**` 等)から
+  節を切り出して `- 考えられること(...): (a) … (b) … (c) …`・`- 次の 20 局で見分けがつくこと: …`・
+  `- 試せること: …` の行を正規表現で取り出し、`FINDING_TEXTS` と文字列として一致することを確かめる(切り方は
+  試験の中に書く。docs を書き換えたらこの試験が赤くなる)。§5.3 の 3 通り・評価の揺れの注記も同様。禁止語 0 の
+  試験も含む
+- **`reportData.ts`(CLI)**: `--out-patient` と同じフォルダに `finding_texts.json` を常に書く(旗は無い。
+  `buildFindingTextsFile()` の JSON 化。`patient_report_data.json` は数だけのまま ― `Finding` に `texts` は
+  入れない)
+- **`report-pdf/render_front.py`**: 第 3 引数(`finding_texts.json`)を渡すと、1 ページ目の shown の発見ごとに
+  3 段(`phase` は無し)、2 ページ目の種類ごとの 3 通りの文の下に §5.3 の固定文、4 ページ目に評価の揺れの注記を
+  足す。**渡さなければ今の形(数の文だけ)のまま動く**。3 段を足すと 1 ページ目が 2 ページ以上になり得るため、
+  ページ数の検査は「4 ページ固定」から「4 節・節ごとに改ページ・合計 4〜6 ページ」に緩めた(超えたら rc=1)。
+  検査(禁止語・数の照合)は固定文も対象(`GLOBAL_ALLOWED_NUMBERS` に固定文の数(30・40)を追加)
+- **`lib/pipeline.ts`**: `reportPaths()` に `findingTexts`(`<work>/report/finding_texts.json`)を足した。S7 の
+  front 呼び出しは `fs.readText(rp.findingTexts)` で有無を確かめ、あれば第 3 引数として渡す(無ければ既存どおり
+  2 引数)。**既存の試験は変えていない**(偽 fs に `rp.findingTexts` を置かなければ、そのまま今までどおりの
+  2 引数を試す試験になる)。有る場合の試験を 2 本追加した
+- **感想票**(`out/concierge-prep/08-application-kit.md` の C。gitignore): 司令塔が手で直す(この STEP の実装
+  担当は触らない。§6.7 の 4)
 
 ## 全員に共通の基準値(`baselineTable.ts`。STEP BASE)
 

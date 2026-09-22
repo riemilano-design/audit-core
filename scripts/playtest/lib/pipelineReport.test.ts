@@ -400,6 +400,22 @@ describe("runPipeline: front-pdf(main.pdf の前に描く。prose.json に依存
     expect(frontPdfDone((p) => (p === "/front.pdf" ? undefined : mtimes[p]), "/front.pdf", "/patient")).toBe(false);
   });
 
+  it("STEP TIME 作業 3: finding_texts.json があれば render_front.py の第 3 引数として渡す", async () => {
+    const rp = reportPaths("/w");
+    const fs = proseReadyFs({ [rp.findingTexts]: "{}" });
+    const calls: Array<{ tool: string; args: string[] }> = [];
+    await runPipeline(baseArgs({ until: "pdf", report }), [senteJob("g1")], fs, makeRunner({}, calls));
+    expect(calls[0]).toStrictEqual({ tool: "report-pdf-render-front", args: [rp.patient, rp.frontPdf, rp.findingTexts] });
+  });
+
+  it("STEP TIME 作業 3: finding_texts.json が無ければ、従来どおり 2 引数のまま(古い work フォルダ等)", async () => {
+    const rp = reportPaths("/w");
+    const fs = proseReadyFs(); // rp.findingTexts を置かない
+    const calls: Array<{ tool: string; args: string[] }> = [];
+    await runPipeline(baseArgs({ until: "pdf", report }), [senteJob("g1")], fs, makeRunner({}, calls));
+    expect(calls[0]).toStrictEqual({ tool: "report-pdf-render-front", args: [rp.patient, rp.frontPdf] });
+  });
+
   it("front.pdf が patient_report_data.json より新しければ(mtimeMs)、render-front・その check-fonts を一切呼ばない(main.pdf の判定とは独立)", async () => {
     const rp = reportPaths("/w");
     const fs = proseReadyFs() as PipelineFs;
