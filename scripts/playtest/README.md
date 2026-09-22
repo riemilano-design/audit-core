@@ -488,6 +488,27 @@ npx tsx scripts/playtest/read.ts --whatif <whatif-v2.jsonl> --kifu <固定棋譜
 - **`pipeline.ts` への配線はしない**(計画「作るもの」5.)。`--dry-run` のプレビューにも出ない(そもそも配線が無い)
 - **見せる段(数の一覧を文にする・PDF・Web)は無い**。24 局の合計は司令塔がまとめに手で入れる(計画§3)
 
+## 分かれ道の「タイプ」を数える(`type.ts`。STEP TYPE)
+
+`scripts/playtest/type.ts` は、docs/STEP_TYPE_PLAN_2026-09-23.md の**測る段だけ**を行う道具(冊子に出す形は別の作業)。`whatif.ts`(STEP WHATIF 作業 4。攻めの側の決め方 v2)・`read.ts`(STEP READ)の出力(jsonl)と、同じ局の固定棋譜 JSON の `moveSeconds` だけを読む。**エンジンは呼ばない**。
+
+タイプは **大きさ(A)× 側(B)× 性質(C)** の 3 軸の組(印の組み合わせ。名前は付けない)で定義する(計画 §3)。対象は `whatif.ts` の `scenes.fork` が true の分かれ道(`read.ts` と同じ集合)。
+
+- **軸 A(大きさ)**: `read.ts` の `firstVisibleNodes` から `none`(null = 100 万ノードでも 600 未満)/ `shallow`(2000・10000)/ `deep`(50000 以上)。`TYPE_VALUES.nodeShallowMaxNodes`(10000)・`nodeDeepMinNodes`(50000)の間(計画が定義していない区間)に落ちる値は、現在の `READ_VALUES.nodeLadder` では起こらないが、黙って寄せず例外にする(計画にない判断: 保守的側)
+- **軸 B(側)**: `whatif.ts` の第 1 候補(`candidates[0].side`)と実戦の手(`actualSide`)の side(`attack`/`defense`/`both`/`none`)から、`top1AttackActualDefense`(第 1 候補が攻め・実戦が守り)/ `top1DefenseActualAttack`(その逆)/ `same`(同じ側)/ `eitherNone`(どちらかが `none`)。**「両方(`both`)」の扱いは計画に無いため、司令塔の指示どおり「集合が交わるか」で判定する**(計画にない判断): `both` を「攻めでも守りでもある」集合として開き、第 1 候補・実戦の side の集合が 1 つでも重なれば `same`(片方が `both` でも、もう片方の側と重なれば同じ側)。重ならないときだけ `top1AttackActualDefense`/`top1DefenseActualAttack` になる
+- **軸 C(性質)**: `read.ts` の実戦の手の印(`actualTags`)と `actualMaterialLook` から、優先順 `retreat`(自陣の側へ動く)→ `materialGain`(`actualMaterialLook > 0` かつ `sacrifice` でない駒得の見た目)→ `drop`(打つ)→ `other`(それ以外)
+- **繰り返し**: 同じ (A, B, C) の組が `TYPE_VALUES.repeatMinGames`(= 3)局以上に出ること(1 局 1 回で数える)
+
+```
+生成(1 局ぶん): npx tsx scripts/playtest/type.ts --whatif <whatif-v2.jsonl> --read <read.jsonl> --kifu <固定棋譜 JSON> --out <type/<id>.jsonl>
+集計(複数局・複数 work をまとめる): npx tsx scripts/playtest/type.ts --summarize <type ディレクトリ …> --out <summary.json>
+```
+
+- **生成**: `--whatif`(`scenes.fork` が true の position 行)と `--read`(position 行)を `ply` で結合する(`whatif` の meta の `kifuId`・`read` の meta の `kifuId`・`--kifu` の `id` が食い違えば exit 1)。`read.ts` 側で候補 0 件のため除外された分かれ道(計画に無い理論上の状態。`read.ts` の `skippedForkCount` と同じ考え方)は `readByPly` に無いため同じく除外し、件数だけ `skippedForkCount` に数える(24 局の実行ではこの状態は 1 件も無かった ― `read.ts` の既知の限界と同じ)。その手にかけた秒は、固定棋譍の `moveSeconds`(`originalMoves` と同じ並び・長さ。KIF の手数 = 添字 + 1)を **`displayPly - 1`**(`lib/reportData.ts` の `buildBySpent` 等と同じ添字合わせ ― `whatif.ts`/`read.ts` の `displayPly` はすでに `plyOffset` を足した「本人が指した向きの手数」)で読む(`lib/type.ts` の `spentSecOfDisplayPly`)。**局の結果(勝敗)は、この STEP の集計(T1〜T5)のどれにも使わないため出力に含めない**(計画にない判断: `入力に「局の結果」` とあるが、`resultOf`(`lib/reportData.ts`)は一部の終局の種類で例外を投げるため、使わない値のために失敗しうる経路を増やさない保守的な選択)。出力(JSONL): 1 行目 `{"kind":"meta", kifuId, gitHead, dirty, values}`(**名前・`/Users/` を含む絶対パスは書かない**)、分かれ道ごとに `{"kind":"fork", ply, displayPly, size, side, nature, key, spentSec}`(**手・SFEN・評価値は書かない**)、最後に `{"kind":"summary", kifuId, forkCount, skippedForkCount}`
+- **集計**: `--summarize` に渡した各ディレクトリの `*.jsonl`(生成の出力。`summary.json` 自身は `.json` なので対象に含まれない)をすべて読み、`TypeGame` の列にしてから `lib/type.ts` の `typeGroupCountsOf`(組ごとの局数・回数)・`repeatedGroupsOf`(3 局以上の組)・`medianSecondsBySideOf`(T4 用: 側ごとの秒の中央値)・`retreatGameCountOf`(T5 用: 実戦が retreat の分かれ道が出る局数)を呼ぶ。**複数の work をまたいでまとめられる**(ディレクトリを複数渡すだけ。24 局 = `out/tatsunami3` の 14 局 + `out/tatsunami-long` の 10 局を合わせた集計は、両方の `type/` ディレクトリを渡して 1 回の `--summarize` で出す)。読み込んだファイルの `TYPE_VALUES`(meta の `values`)がそろわなければ exit 1。出力(JSON): `{"kind":"summary", gitHead, dirty, values, gamesCount, forksCount, counts, repeatMinGames, repeatedGroups, sideSecondsMedian, retreatGameCount}`
+- 純粋関数は `lib/type.ts`(`sizeBucketOf`・`sideBucketOf`・`natureBucketOf`・`typeForkOf`・`typeGroupCountsOf`・`repeatedGroupsOf`・`medianSecondsBySideOf`・`retreatGameCountOf`・`spentSecOfDisplayPly`)。試験は `lib/type.test.ts`(合成の局・秒の添字合わせ・「両方」の扱い・軸 C の優先順・3 局以上の判定を含む)
+- **`pipeline.ts` への配線はしない**(`read.ts` と同じ。この段だけ CLI 単体)。**タイプに名前は付けない**(組は `key`(`size|side|nature`)の文字列のまま。冊子に出すときの命名は別の判断)
+
 ## typecheck
 
 ```
