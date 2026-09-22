@@ -329,6 +329,34 @@ npx tsx scripts/playtest/pipeline.ts --person <id> --kifu-dir <dir> --work <dir>
   --name <表示名> --title <タイトル> --today <YYYY-MM-DD> --until pdf --whatif
 ```
 
+## 「読みの間違い」を人を介さずに分解する(`read.ts`。STEP READ)
+
+`scripts/playtest/read.ts` は、docs/STEP_READ_PLAN_2026-09-22.md の**測る段だけ**を行う道具(見せる段は今回作らない。計画 5.)。`whatif.ts`(STEP WHATIF 作業 4。攻めの側の決め方 v2)の出力(jsonl)と、同じ局の固定棋譜 JSON だけを読む。段 2 の記録・`pipeline.ts` への配線はしない(**この段だけ CLI 単体**。ほかの段のような `pipeline.ts` の任意の段は今回作っていない)。
+
+```
+npx tsx scripts/playtest/read.ts --whatif <whatif-v2.jsonl> --kifu <固定棋譜 JSON> --out <read.jsonl>
+  [--threads <N>]
+```
+
+- **対象は `scenes.fork` が true の position 行(分かれ道)だけ**(計画「作るもの」冒頭)。`whatif` の meta 行の `kifuId` と `--kifu` の `id` が一致しなければ止める(exit 1)
+- 値(`READ_VALUES`: `nodeLadder`・`minLossCp`・`pieceValues`)は `lib/read.ts` に 1 か所だけ置く**判断的知識の仮置き**(計画「作るもの」1.〜3.)。`minLossCp` は `WHATIF_VALUES.minLossCp` と同じ値を参照する(値の重複を避ける)。CLI からは変えない(`--threads` だけを受け付ける)
+- **2.1 浅い探索でも分かる崩れか**: 分かれ道の局面ごとに、`nodeLadder`(2 千・1 万・5 万・20 万・100 万)の各段で (a) `go nodes N`(MultiPV 1、searchmoves 無し)= 第 1 候補の評価と、(b) `go nodes N searchmoves <実戦の手>` = 実戦の手だけを読ませた評価を読み、差(`lib/whatif.ts` の `evalValueOf` で mate を数直線に乗せてから引く。二重に実装しない)が `minLossCp` 以上になる最小の段を `firstVisibleNodes` に記録(どの段でも出なければ `null`)。あわせて、いちばん深い段(100 万ノード)の (b) の読み筋の 2 手目(相手の返し)が、固定棋譍から読んだ次の相手の実際の手と同じかを `opponentReplyMatchesPv` に記録(比べられなければ `null`)
+- **2.2 手の性質**: 第 1 候補・実戦の手それぞれに `drop`(打つ)・`capture`(取る)・`retreat`(自陣の側へ動く。本人 = 先手にそろえた記録なので、段が大きくなる方向。打つ手は false)・`declinesPromotion`(成れるのに成らない)・`sacrifice`(捨て駒。動かした先が相手の利きにあり、取り返しの有無を問わず、その升での駒の損得(取った駒の価値 − 動かした駒の価値、成っていれば成った後の価値)が負)・`kingMove`・`givesCheck` を付ける(印は行き先と駒だけで決まる。`kingMove`・`givesCheck` は既存の `lib/moveFacts.ts` の `moveFactsOf`・`apps/server` の `isInCheck` をそのまま呼ぶ)
+- **2.3 見た目**: `materialLookOf`(指した直後の見た目の損得 = 取った駒の価値 −(動かした先が相手の利きにあるなら動かした駒の価値、なければ 0))を第 1 候補・実戦の手それぞれについて記録
+- **エンジンの呼び方**: `whatif.ts` の 2 巡目(側ごとの読み)と同じく、素の `UsiEngine` を直に使う(`LowPriorityEngine` には searchmoves を渡す口が無いため。lib/checkBaseline.ts と同じ「ハーネスの観測として足す」流儀)
+- 出力(JSONL): 1 行目 `{"kind":"meta", kifuId, startedAt, gitHead, dirty, values, threads}`(**名前・`/Users/` を含む絶対パスは書かない**。`enginePath` はここに含めない)、分かれ道ごとに `{"kind":"position", ply, displayPly, sfen, actualMove, top1Move, ladder, firstVisibleNodes, opponentReplyMatchesPv, top1Tags, actualTags, top1MaterialLook, actualMaterialLook}`、最後に `{"kind":"summary", forkPositionsRead, firstVisibleNodesBuckets, opponentReplyMatchesPv, tagCrossTable, materialLook, skippedForkCount, timingMs}`(**summary には手・評価値・SFEN を書かない**。局面ごとの行には書いてよい)
+  - `firstVisibleNodesBuckets`: `nodeLadder` の各段(キーはノード数の文字列)+ `"none"`(どの段でも出なかった件数)
+  - `opponentReplyMatchesPv`(summary 側): `{ matched, measured }`(`measured` は比べられた件数。対局の最後の手だった等で比べられなければ、その局面は数えない)
+  - `tagCrossTable`: 第 1 候補の種類(7)× 実戦の手の種類(7)の件数の表(`READ_TAG_NAMES` の順。複数の印に当たってよいので、1 局面が複数のセルへ数えられる ― 独立した集計であり、確率の合計が 100% になる分割ではない)
+  - `materialLook`(summary 側): `actualPositiveCount`(実戦の手が駒得に見える局面の数。対象は分かれ道 = 評価が下がった局面なので、これがそのまま「駒得に見える手を選んで下がった」件数になる)・`top1NegativeCount`(第 1 候補が駒損に見える局面の数)・`bothCount`(両方に当たる局面の数)
+
+### 既知の限界(`read.ts`)
+
+- **候補が 0 件の分かれ道(理論上)は、測れないので `skippedForkCount` に数えるだけで、`position` の行には出さない**(`whatif.ts` の既知の限界「候補が 0 件の局面は fork 扱いだが biggestFork の対象外」と同じ考え方)。24 局の実行ではこの状態は 1 件も無かった
+- **`scenes.fork` の判定自体は `whatif.ts`(MultiPV 5)のもの**であり、`read.ts` は「実戦の手が候補 5 つに入らなかった」ことを理由に fork とされた局面もそのまま読む。この段の node ラダーは「第 1 候補」対「実戦の手」だけを比べる(MultiPV 1)ので、`firstVisibleNodes` が `null`(100 万ノードでも 600 以上の差が付かない)になる分かれ道がありうる ― これは fork の定義の違いによるもので、道具の不具合ではない
+- **`pipeline.ts` への配線はしない**(計画「作るもの」5.)。`--dry-run` のプレビューにも出ない(そもそも配線が無い)
+- **見せる段(数の一覧を文にする・PDF・Web)は無い**。24 局の合計は司令塔がまとめに手で入れる(計画§3)
+
 ## typecheck
 
 ```
