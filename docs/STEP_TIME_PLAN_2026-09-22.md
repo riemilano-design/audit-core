@@ -62,3 +62,35 @@ B は 44 局の秒がすでに手元にあるので、**この表を書いた後
 ## 6. 実装の順序(未着手)
 
 作業 1: 秒を流れに入れる(fixed JSON・reportData)。作業 2: 本編 4 ページと資料の分離(python 側)。作業 3: 固定文の差し込みと感想票。それぞれ独立監査 1 回。先行版の 5 名分は道具ができるまで司令塔が手作りで足す(1 通 1〜2 時間、所要を記録)。
+
+### 6.1 作業 1 の設計(2026-09-23 未明、司令塔 e3。人間の「君に任せる」による)
+
+**目的**: まとめの冊子の時間の数(§4 の表、序盤・中盤・終盤の消費、使い切りの局)を、手作りの `collect.py` ではなく道具で出す。**新しい数は出さない**(既知の正解で校正する作業)。エンジンは回さない。
+
+**1. 取り込み(`lib/kifuImport.ts`・`kifu-import-check.ts`)**
+- KIF の指し手行の `(m:ss/h:mm:ss)` を捨てるだけだった `KIF_TIME` を読み、`moves[i]` に `time: { spentSec, totalSec } | null` を足す(切り捨ての整数。無い行は null、`timeDropped` はそのまま)。CSA は今回読まない(null)。
+- `toFixedKifu` が `moveSeconds: Array<{ spentSec; totalSec } | null>` を書く(`moves` と同じ長さ・同じ順。**KIF の手数 = 添字 + 1**)。`alignedFixedKifu` で本人が後手の局を回して 1 手目を畳んでも、`moveSeconds` は **元の手順の順のまま**(`originalMoves` と同じ並び)。読む側は既存の `plyOffsetOf` で合わせる(手作りの `collect.py` が `ply + (後手なら 1)` としたのと同じ)。
+- 既存の fixed JSON(44 局 + 90 局)に `moveSeconds` を**後から足す**小さな道具 `kifu-times.ts <fixed.json> <元の KIF>`: 元 KIF を読み直し、`moves`(または `originalMoves`)が一致しなければ書かない。**pipeline の済み判定は mtime なので、fixed JSON を書き換えてもエンジン段(S2〜)が再実行されないことを実測で確かめる**(`--until report` で S2〜S6 が skip と出ること)。再実行される作りなら、pipeline の S1 の済み判定を「moves が同じなら済み」に変えるのではなく、fixed JSON の mtime を元に戻す(`utimes`)。
+- 公開棋譜(Lishogi の KIF)は秒が無い、または形式が違うことがある。読めなければ全部 null で「比べられない」。
+
+**2. 数える(`lib/reportData.ts`。純粋関数)**
+- `TIME_VALUES` を 1 か所に: `spentBucketsSec = [1, 4, 9]`(0〜1 / 2〜4 / 5〜9 / 10 以上)、`leftBucketsSec = [60, 120]`、`longThinkSec = 10`、`quickSec = 4`(仮説 B の「0〜4 秒」)。値は §4 の表と同じ。
+- `PatientTime`(冊子に載せる形。手・値・SFEN は含めない):
+  - `available: boolean`(秒の無い局が 1 つでもあれば false、欄は空)
+  - `perMove`: 本人の手の秒の 件数・中央値・平均・10 秒以上の割合・30 秒以上・0〜1 秒(`collect.py` の `time` と同じ)
+  - `bySpent`: 4 段 × {組の数, 崩れ}(分母は既存の崩れの組 counted。§4 の表)
+  - `afterLongThink`: 「直前の自分の手が `longThinkSec` 以上で、この手は `quickSec` 以下」× {組の数, 崩れ}、と「直前の自分の手が 10 秒以上(この手は問わない)」の行(§4 の 4・5 行目)
+  - `byLeft`: 残り = 持ち時間 − それまでの本人の消費の合計(`totalSec` ではなく `spentSec` の和。秒読みの局は残りが負になり得るのでそのまま)。3 段 × {組, 崩れ}。持ち時間は CLI の `--time-limit-sec`(無ければ `byLeft` は null)
+  - `phaseSpent`: 序盤・中盤・終盤(既存 `phaseOf` の 1/3・2/3)ごとの本人の消費の合計を局ごとに出し、「時間で終わった局」と「それ以外」で中央値
+  - `timeUpGames`: 終局の種類が `timeUp` の局の 局番号・手数・本人の消費の合計・最後に読んだ局面の評価(既存の `displayScoreOf`。**手作りの `final_eval.json` と一致すること**)
+- `buildPatientReportData` に足し、`patient_report_data.json` に `time` として書く。禁止語の検査 `assertNoForbiddenWords` の対象に含める。
+- 見せる段(python 側)は作業 2。今回は JSON まで。
+
+**3. 校正(既知の正解。数を見る前に書く)**
+- 3 分 34 局(前回 20 + 今回 14): 全体 54 / 1134、10 秒以上 6 / 58、0〜1 秒 22 / 715、長考の次の速い手 3 / 30、直前 10 秒以上 4 / 49。10 分 10 局: 8 / 332、5 / 61、0 / 133、0 / 19、1 / 55(§4 の表)。
+- `perMove`・`byLeft`・`timeUpGames` の消費は `out/summary1/data.json`(collect.py の出力)と一致。序盤・中盤の中央値は「使い切った 6 局で序盤 16 秒・中盤 79 秒」(まとめ 7 ページ目)。
+- 1 つでも合わなければ、どちらが正しいかを KIF の行から手で確かめて報告(手作りの側が間違っていた可能性も書く)。
+
+**4. 試験**: 秒の読み(3 形式: あり・無し・切れ負けの行)、後手の局の添字合わせ(合成の 3 手の棋譜で手計算)、bySpent の境界(1 / 2、4 / 5、9 / 10)、afterLongThink の「直前の自分の手」が 2 手前であること、byLeft の負の残り。変異 2 本以上。vitest の基点 1249。
+
+**5. 触らないもの**: `WHATIF_VALUES`・`GATE_VALUES`・`READ_VALUES`、エンジン段、python 側、docs(記録は司令塔)。
