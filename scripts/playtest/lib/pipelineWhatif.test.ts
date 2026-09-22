@@ -15,6 +15,7 @@ import {
   listGames,
   parsePipelineArgs,
   personWorkDir,
+  PipelineArgError,
   runPipeline,
   timingPath,
   whatifCommand,
@@ -135,15 +136,47 @@ describe("parsePipelineArgs: --whatif", () => {
   });
 });
 
-// ---- whatifCommand・whatifPath(純粋関数) ----
-
-describe("whatifCommand・whatifPath", () => {
-  it("whatifCommand は --kifu と --out だけ(値を固定しない旗は渡さない)", () => {
-    expect(whatifCommand("/f/g1.fixed.json", "/w/p1/whatif/g1.jsonl")).toStrictEqual(["--kifu", "/f/g1.fixed.json", "--out", "/w/p1/whatif/g1.jsonl"]);
+describe("parsePipelineArgs: --side-version(STEP WHATIF 作業 4、計画 §9.3)", () => {
+  it("--side-version 1 を渡すと args.whatifSideVersion が 1", () => {
+    const args = parsePipelineArgs(["--person", "p1", "--kifu-dir", "/k", "--work", "/w", "--whatif", "--side-version", "1"]);
+    expect(args.whatifSideVersion).toBe(1);
   });
 
-  it("whatifPath は <person>/whatif/<id>.jsonl", () => {
-    expect(whatifPath("/w/p1", "g1")).toBe(path.join("/w/p1", "whatif", "g1.jsonl"));
+  it("--side-version 2 を渡すと args.whatifSideVersion が 2", () => {
+    const args = parsePipelineArgs(["--person", "p1", "--kifu-dir", "/k", "--work", "/w", "--whatif", "--side-version", "2"]);
+    expect(args.whatifSideVersion).toBe(2);
+  });
+
+  it("--side-version を渡さなければ、whatifSideVersion キー自体が無い(既存の toStrictEqual を壊さないため)", () => {
+    const args = parsePipelineArgs(["--person", "p1", "--kifu-dir", "/k", "--work", "/w"]);
+    expect(Object.hasOwn(args, "whatifSideVersion")).toBe(false);
+  });
+
+  it("1・2 以外は止める(推測しない)", () => {
+    expect(() => parsePipelineArgs(["--person", "p1", "--kifu-dir", "/k", "--work", "/w", "--side-version", "3"])).toThrow(PipelineArgError);
+  });
+});
+
+// ---- whatifCommand・whatifPath(純粋関数) ----
+
+// STEP WHATIF 作業 4(計画 §9.3): sideVersion の既定は 2(v2)。既定では --side-version を渡さない
+// (whatif.ts 自身の既定も v2 なので値を固定しない旗は渡さない)。フォルダも既定は whatif-v2/、
+// sideVersion: 1 のときだけ従来どおり whatif/(v1 のフォルダ名は変えない)。
+describe("whatifCommand・whatifPath", () => {
+  it("whatifCommand は既定(v2)で --kifu と --out だけ(値を固定しない旗は渡さない)", () => {
+    expect(whatifCommand("/f/g1.fixed.json", "/w/p1/whatif-v2/g1.jsonl")).toStrictEqual(["--kifu", "/f/g1.fixed.json", "--out", "/w/p1/whatif-v2/g1.jsonl"]);
+  });
+
+  it("whatifCommand は sideVersion: 1 のとき --side-version 1 を足す", () => {
+    expect(whatifCommand("/f/g1.fixed.json", "/w/p1/whatif/g1.jsonl", 1)).toStrictEqual(["--kifu", "/f/g1.fixed.json", "--out", "/w/p1/whatif/g1.jsonl", "--side-version", "1"]);
+  });
+
+  it("whatifPath は既定(v2)で <person>/whatif-v2/<id>.jsonl", () => {
+    expect(whatifPath("/w/p1", "g1")).toBe(path.join("/w/p1", "whatif-v2", "g1.jsonl"));
+  });
+
+  it("whatifPath は sideVersion: 1 のとき <person>/whatif/<id>.jsonl(v1 のフォルダ名は変えない)", () => {
+    expect(whatifPath("/w/p1", "g1", 1)).toBe(path.join("/w/p1", "whatif", "g1.jsonl"));
   });
 });
 
@@ -163,6 +196,28 @@ describe("runPipeline: --whatif(diagnose の後に局ごとに呼ぶ)", () => {
     expect(fs.readText(whatifPath(personDir, "g2"))).toBe(validWhatif());
     expect(result.failures).toStrictEqual([]);
     expect(result.exitCode).toBe(0);
+  });
+
+  it("STEP WHATIF 作業 4: 既定(whatifSideVersion 省略)は whatif-v2/ フォルダに書き、--side-version は渡さない", async () => {
+    const personDir = personWorkDir("/w", "p1");
+    const fs = readyFs(personDir, ["g1"]);
+    const calls: Array<{ tool: string; args: string[] }> = [];
+    await runPipeline(baseArgs({ whatif: true }), [senteJob("g1")], fs, runnerOf(fs, calls));
+    const whatifCall = calls.find((c) => c.tool === "whatif")!;
+    expect(whatifCall.args).toStrictEqual(["--kifu", gamePaths(personDir, "g1").fixedKifuPath, "--out", whatifPath(personDir, "g1", 2)]);
+    expect(fs.readText(whatifPath(personDir, "g1", 2))).toBe(validWhatif());
+    expect(fs.readText(whatifPath(personDir, "g1", 1))).toBeUndefined(); // v1 のフォルダには書かない
+  });
+
+  it("STEP WHATIF 作業 4: --side-version 1 は whatif/ フォルダに書き、whatif.ts へ --side-version 1 を渡す", async () => {
+    const personDir = personWorkDir("/w", "p1");
+    const fs = readyFs(personDir, ["g1"]);
+    const calls: Array<{ tool: string; args: string[] }> = [];
+    await runPipeline(baseArgs({ whatif: true, whatifSideVersion: 1 }), [senteJob("g1")], fs, runnerOf(fs, calls));
+    const whatifCall = calls.find((c) => c.tool === "whatif")!;
+    expect(whatifCall.args).toStrictEqual(["--kifu", gamePaths(personDir, "g1").fixedKifuPath, "--out", whatifPath(personDir, "g1", 1), "--side-version", "1"]);
+    expect(fs.readText(whatifPath(personDir, "g1", 1))).toBe(validWhatif());
+    expect(fs.readText(whatifPath(personDir, "g1", 2))).toBeUndefined(); // v2 のフォルダには書かない
   });
 
   it("すでに whatif の記録(最後の行が summary)があれば呼ばない(済みの飛ばし)", async () => {

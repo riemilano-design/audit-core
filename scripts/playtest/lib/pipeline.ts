@@ -66,9 +66,15 @@ export interface PipelineArgs {
    * 付けなければキー自体が無い ― 既存の `toStrictEqual` の試験を壊さないため)。
    */
   whatif?: true;
+  /**
+   * STEP WHATIF 作業 4(計画 §9.3)。`--side-version` を渡したときだけ 1 か 2(**任意のキー**。`whatif` と同じ理由)。
+   * `--whatif` の出力・付録 2 の材料の決め方(攻めの側の v1/v2)とフォルダ(`whatif/`・`whatif-v2/`)を切り替える。
+   * 渡さなければ既定(v2。`whatifPath`・`whatifCommand` の既定 2 と同じ)。
+   */
+  whatifSideVersion?: 1 | 2;
 }
 
-const SINGLE_FLAGS = ["--person", "--kifu-dir", "--work", "--me", "--parallel", "--compare-person", "--until", "--evaluator", "--name", "--title", "--today"] as const;
+const SINGLE_FLAGS = ["--person", "--kifu-dir", "--work", "--me", "--parallel", "--compare-person", "--until", "--evaluator", "--name", "--title", "--today", "--side-version"] as const;
 type SingleFlag = (typeof SINGLE_FLAGS)[number];
 
 const DEFAULT_PARALLEL = 5;
@@ -155,6 +161,14 @@ export function parsePipelineArgs(argv: readonly string[]): PipelineArgs {
     throw new PipelineArgError("--until が report-data・prose・pdf のときは --name・--title・--today がすべて必須(推測しない)");
   }
 
+  // STEP WHATIF 作業 4(計画 §9.3)。--side-version は 1 か 2 だけ(推測しない)。
+  const sideVersionRaw = single.get("--side-version");
+  let whatifSideVersion: 1 | 2 | undefined;
+  if (sideVersionRaw !== undefined) {
+    if (sideVersionRaw !== "1" && sideVersionRaw !== "2") throw new PipelineArgError(`--side-version は 1 か 2: ${sideVersionRaw}`);
+    whatifSideVersion = sideVersionRaw === "1" ? 1 : 2;
+  }
+
   return {
     person,
     kifuDir,
@@ -171,6 +185,8 @@ export function parsePipelineArgs(argv: readonly string[]): PipelineArgs {
     ...(reportInfo !== undefined ? { report: reportInfo } : {}),
     // --whatif を付けなければキー自体を付けない(同じ理由)
     ...(whatif ? { whatif: true as const } : {}),
+    // --side-version を付けなければキー自体を付けない(同じ理由)
+    ...(whatifSideVersion !== undefined ? { whatifSideVersion } : {}),
   };
 }
 
@@ -260,9 +276,13 @@ export function gateOutPath(personDir: string): string {
   return path.join(personDir, "gate.jsonl");
 }
 
-/** STEP WHATIF 作業 1。`--whatif` のときだけ書く出力先(局ごと)。 */
-export function whatifPath(personDir: string, id: string): string {
-  return path.join(personDir, "whatif", `${id}.jsonl`);
+/**
+ * STEP WHATIF 作業 1。`--whatif` のときだけ書く出力先(局ごと)。
+ * STEP WHATIF 作業 4(計画 §9.3): `sideVersion` の既定は 2(v2)。v2 は `whatif-v2/`、v1 は従来どおり `whatif/`
+ * (v1 のフォルダ名は変えない)。
+ */
+export function whatifPath(personDir: string, id: string, sideVersion: 1 | 2 = 2): string {
+  return path.join(personDir, sideVersion === 1 ? "whatif" : "whatif-v2", `${id}.jsonl`);
 }
 
 export function timingPath(work: string): string {
@@ -427,9 +447,12 @@ export function reportDataCommand(
 /**
  * STEP WHATIF 作業 1(`whatif.ts`)。ノード数・MultiPV・Threads は渡さない(道具自身の既定 = `lib/whatif.ts` の
  * `WHATIF_VALUES` に合わせた値のまま。表と違う値を渡す旗はここに作らない)。
+ * STEP WHATIF 作業 4(計画 §9.3): `sideVersion` の既定は 2(v2。`whatif.ts` 自身の既定と同じなので `--side-version`
+ * は渡さない)。`sideVersion: 1` のときだけ `--side-version 1` を足す。
  */
-export function whatifCommand(fixedKifuPath: string, out: string): string[] {
-  return ["--kifu", fixedKifuPath, "--out", out];
+export function whatifCommand(fixedKifuPath: string, out: string, sideVersion: 1 | 2 = 2): string[] {
+  const base = ["--kifu", fixedKifuPath, "--out", out];
+  return sideVersion === 1 ? [...base, "--side-version", "1"] : base;
 }
 
 /** STEP WHATIF 作業 2(`whatifReport.ts`)。局ごとの whatif.jsonl 一覧と patient_report_data.json から材料を組む。 */
@@ -741,20 +764,23 @@ export async function runPipeline(args: PipelineArgs, games: readonly GameJob[],
 
   // ---- STEP WHATIF 作業 1。`--whatif` を付けたときだけ、diagnose の後に局ごとに whatif.ts を回す(--until には無関係)。
   // `--whatif` を付けない実行はこのブロックに入らない(動き・出力・試験を 1 バイトも変えない)。
+  // STEP WHATIF 作業 4(計画 §9.3): `--side-version` の既定は 2(v2、`whatif-v2/`)。`--side-version 1` なら
+  // 従来どおり `whatif/`(v1)。
+  const whatifSideVersion = args.whatifSideVersion ?? 2;
   if (args.whatif === true) {
-    fs.ensureDir(path.join(personDir, "whatif"));
+    fs.ensureDir(path.join(personDir, whatifSideVersion === 1 ? "whatif" : "whatif-v2"));
 
     async function processWhatif(job: GameJob): Promise<void> {
       const startedAt = clock();
       const gp = gamePaths(personDir, job.id);
-      const wPath = whatifPath(personDir, job.id);
+      const wPath = whatifPath(personDir, job.id, whatifSideVersion);
       let rc: number | "skip" = "skip";
 
       if (!fixedKifuDone(fs.readText(gp.fixedKifuPath), job.id)) {
         failures.push({ gameId: job.id, stage: "whatif", message: "fixed 棋譜が無いので whatif を実行できない" });
       } else if (!stage1Done(fs.readText(wPath))) {
         // 済みの判定は他の段と同じ流儀(最後の行が summary であること。whatif.ts もその形で書く)。
-        const result = await run("whatif", whatifCommand(gp.fixedKifuPath, wPath));
+        const result = await run("whatif", whatifCommand(gp.fixedKifuPath, wPath, whatifSideVersion));
         rc = result.code;
         if (!stage1Done(fs.readText(wPath))) {
           failures.push({ gameId: job.id, stage: "whatif", message: `whatif.ts rc=${result.code}: whatif の記録が出来ていない` });
@@ -892,7 +918,8 @@ export async function runPipeline(args: PipelineArgs, games: readonly GameJob[],
       const whatifFiles: string[] = [];
       let missingWhatifId: string | null = null;
       for (const job of successGames) {
-        const wPath = whatifPath(personDir, job.id);
+        // 付録 2 の材料は、上の --whatif の段(このお客さんの局を書いた側)と同じ sideVersion のフォルダを読む。
+        const wPath = whatifPath(personDir, job.id, whatifSideVersion);
         if (!stage1Done(fs.readText(wPath))) {
           missingWhatifId = job.id;
           break;

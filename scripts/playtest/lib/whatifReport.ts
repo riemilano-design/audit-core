@@ -23,6 +23,10 @@
 // - ファイルの読み書き・エンジンの起動・子プロセスの起動(呼び出し側(scripts/playtest/whatifReport.ts)の役目)
 // - 手のねらい・わけ・良し悪しの文を作ること。第 1 候補を「正解」と呼ぶこと
 // - 名前・/Users/ を含む絶対パスを出力へ含めること
+//
+// 【追記(STEP WHATIF 作業 4、計画 §9.3)】meta の `values` に増えた `sideVersion`・`hitsDefenderRadius`・
+// `attackZoneRadius`(攻めの側の決め方 v1/v2)を `WhatifReportValues`・`REPORT_VALUE_KEYS` に足した。
+// python 側(`render_whatif.py`)は `values.sideVersion` で注記の文を切り替える。
 
 import { applyMove } from "../../../apps/server/src/rules/applyMove.js";
 import type { WhatifBiggestFork, WhatifCandidate, WhatifGameSummary, WhatifPosition, WhatifScene, WhatifSceneReadSummary, WhatifSideRead } from "./whatif.js";
@@ -347,7 +351,7 @@ export interface WhatifReportInput {
  * 違えば止める(`buildWhatifReportData` が確かめる)。
  */
 export interface WhatifReportValues {
-  /** 攻め・守りの「玉のそば」の広さ(玉から何マス以内か)。 */
+  /** 攻め・守りの「玉のそば」の広さ(玉から何マス以内か。v1 の決め方・守りの側は今も使う)。 */
   sideZoneRadius: number;
   /** この手数(1 手目から数えて)から読む。 */
   startPly: number;
@@ -357,9 +361,28 @@ export interface WhatifReportValues {
   narrowGapCp: number;
   /** 相手の手の後の機会を拾う閾値(評価の上がり)。 */
   riseCp: number;
+  /**
+   * STEP WHATIF 作業 4(計画 §9.3)。攻めの側の決め方のバージョン(1 = 従来、2 = 取る・守り駒に当てる・
+   * 3 マス以内を足す)。古い whatif.jsonl(この欄が無い)を混ぜると `undefined` になり、他の局と揃わなければ
+   * `reportValuesOf` が止める(推測しない)。
+   */
+  sideVersion: number;
+  /** v2: 「動かした駒が相手の駒に当たる」を数える半径。 */
+  hitsDefenderRadius: number;
+  /** v2: 行き先が相手玉から何マス以内なら攻めの側に入れるか。 */
+  attackZoneRadius: number;
 }
 
-const REPORT_VALUE_KEYS: readonly (keyof WhatifReportValues)[] = ["sideZoneRadius", "startPly", "minLossCp", "narrowGapCp", "riseCp"];
+const REPORT_VALUE_KEYS: readonly (keyof WhatifReportValues)[] = [
+  "sideZoneRadius",
+  "startPly",
+  "minLossCp",
+  "narrowGapCp",
+  "riseCp",
+  "sideVersion",
+  "hitsDefenderRadius",
+  "attackZoneRadius",
+];
 
 function reportValuesOf(metaList: readonly WhatifMetaRow[]): WhatifReportValues {
   const picked = REPORT_VALUE_KEYS.map((key) => {

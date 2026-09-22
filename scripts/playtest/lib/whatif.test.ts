@@ -43,7 +43,7 @@ const SENTE_CHECKMATED_SFEN = "KPs6/1g7/r8/9/9/9/9/9/9 b - 1";
 // ---- WHATIF_VALUES(判断的知識の仮置き。値そのものを直接確かめる) ----
 
 describe("WHATIF_VALUES", () => {
-  it("計画の仮置きの値(2026-09-22)", () => {
+  it("計画の仮置きの値(2026-09-22、STEP WHATIF 作業 4 で sideVersion・hitsDefenderRadius・attackZoneRadius を追記)", () => {
     expect(WHATIF_VALUES).toStrictEqual({
       multiPv: 5,
       nodes: 1_000_000,
@@ -54,15 +54,32 @@ describe("WHATIF_VALUES", () => {
       pvMoves: 7,
       sideZoneRadius: 2,
       sideNodes: 1_000_000,
+      sideVersion: 2,
+      hitsDefenderRadius: 2,
+      attackZoneRadius: 3,
     });
   });
 });
 
 // ---- 印(行き先だけで決まる。既存の moveFactsOf をそのまま呼ぶ) ----
-
-describe("tagsOf・sideOf(計画 §2.1)", () => {
+//
+// 【STEP WHATIF 作業 4(計画 §9.3)で足した 3 つの印(captures・hitsOppKingZonePiece・oppKingZone3)について】
+// `tagsOf` の戻り値の形が増えたので、既存の `toEqual`(完全一致)の期待値にも 3 つの欄を足す(盤の図から手で
+// 導いた値。実装の出力からは写さない)。この 5 件の局面はどれも駒を取らず・相手玉のそばの駒に当たらないので
+// captures・hitsOppKingZonePiece は常に false。oppKingZone3(相手玉から 3 マス以内)だけは、
+// 「attack(oppKingZone のみ)」の局面(4a は相手玉 5a から 1 マス)で true になる(距離 1 ≤ 3。oppKingZone
+// (距離 ≤ 2)がすでに true のこの局面では、side の結果(v1/v2 とも "attack")は変わらない)。
+describe("tagsOf・sideOf(計画 §2.1・§9.3)", () => {
   it("none: 平手 7g7f はどの印も立たない", () => {
-    expect(tagsOf(INIT, "7g7f")).toEqual({ oppKingZone: false, ownKingZone: false, givesCheck: false, kingMove: false });
+    expect(tagsOf(INIT, "7g7f")).toEqual({
+      oppKingZone: false,
+      ownKingZone: false,
+      givesCheck: false,
+      kingMove: false,
+      captures: false,
+      hitsOppKingZonePiece: false,
+      oppKingZone3: false,
+    });
     expect(sideOf(tagsOf(INIT, "7g7f"))).toBe("none");
   });
 
@@ -71,7 +88,15 @@ describe("tagsOf・sideOf(計画 §2.1)", () => {
     // 前提: moveFactsOf の toInOwnKingZone は true(玉の手なので新しい位置がそのまま自玉の区域に入る)
     expect(moveFactsOf(sfen, "5i4h", POSITION_FACTS_RULES).toInOwnKingZone).toBe(true);
     const tags = tagsOf(sfen, "5i4h");
-    expect(tags).toEqual({ oppKingZone: false, ownKingZone: false, givesCheck: false, kingMove: true });
+    expect(tags).toEqual({
+      oppKingZone: false,
+      ownKingZone: false,
+      givesCheck: false,
+      kingMove: true,
+      captures: false,
+      hitsOppKingZonePiece: false,
+      oppKingZone3: false,
+    });
     expect(sideOf(tags)).toBe("defense");
   });
 
@@ -79,7 +104,15 @@ describe("tagsOf・sideOf(計画 §2.1)", () => {
     const sfen = "4k4/9/9/9/9/9/4G4/9/4K4 b - 1";
     expect(moveFactsOf(sfen, "5g5h", POSITION_FACTS_RULES).toInOwnKingZone).toBe(true);
     const tags = tagsOf(sfen, "5g5h");
-    expect(tags).toEqual({ oppKingZone: false, ownKingZone: true, givesCheck: false, kingMove: false });
+    expect(tags).toEqual({
+      oppKingZone: false,
+      ownKingZone: true,
+      givesCheck: false,
+      kingMove: false,
+      captures: false,
+      hitsOppKingZonePiece: false,
+      oppKingZone3: false,
+    });
     expect(sideOf(tags)).toBe("defense");
   });
 
@@ -89,7 +122,17 @@ describe("tagsOf・sideOf(計画 §2.1)", () => {
     // 区域に入ることの前提確認(moveFactsOf で直接)
     expect(moveFactsOf(sfen, "3b4a", POSITION_FACTS_RULES).toInOpponentKingZone).toBe(true);
     const tags = tagsOf(sfen, "3b4a");
-    expect(tags).toEqual({ oppKingZone: true, ownKingZone: false, givesCheck: false, kingMove: false });
+    expect(tags).toEqual({
+      oppKingZone: true,
+      ownKingZone: false,
+      givesCheck: false,
+      kingMove: false,
+      captures: false,
+      hitsOppKingZonePiece: false,
+      // 4a は相手玉 5a から 1 マス(≤ attackZoneRadius(3))。oppKingZone(≤ 2)もすでに true なので、
+      // side の結果は v1/v2 とも "attack" のまま(下の sideOf の期待は変わらない)。
+      oppKingZone3: true,
+    });
     expect(sideOf(tags)).toBe("attack");
   });
 
@@ -101,14 +144,22 @@ describe("tagsOf・sideOf(計画 §2.1)", () => {
     expect(tagsOf(sfen, "5d5c", radius1).oppKingZone).toBe(false);
   });
 
-  it("attack(givesCheck のみ、区域の外): 飛が遠くから王手をかける(5e は相手玉 5a の区域の外)", () => {
+  it("attack(givesCheck のみ、区域の外): 飛が遠くから王手をかける(5e は相手玉 5a の区域の外。attackZoneRadius(3)の外でもある ― 距離 4)", () => {
     const sfen = "4k4/9/9/9/8R/9/9/9/4K4 b - 1";
     const after = applyMove(sfen, "1e5e");
     expect(isInCheck(after, "gote")).toBe(true);
     // 区域の外であることの前提確認(moveFactsOf で直接)
     expect(moveFactsOf(sfen, "1e5e", POSITION_FACTS_RULES).toInOpponentKingZone).toBe(false);
     const tags = tagsOf(sfen, "1e5e");
-    expect(tags).toEqual({ oppKingZone: false, ownKingZone: false, givesCheck: true, kingMove: false });
+    expect(tags).toEqual({
+      oppKingZone: false,
+      ownKingZone: false,
+      givesCheck: true,
+      kingMove: false,
+      captures: false,
+      hitsOppKingZonePiece: false,
+      oppKingZone3: false,
+    });
     expect(sideOf(tags)).toBe("attack");
   });
 
@@ -118,6 +169,81 @@ describe("tagsOf・sideOf(計画 §2.1)", () => {
     expect(tags.ownKingZone).toBe(true);
     expect(tags.oppKingZone).toBe(true);
     expect(sideOf(tags)).toBe("both");
+  });
+});
+
+// ---- v2 の印(captures・hitsOppKingZonePiece・oppKingZone3。計画 §9.3・§9.4) ----
+//
+// この一群は、v1 では none(攻めの側でない)だが v2 では attack になる局面を、3 つの印それぞれについて
+// 1 つずつ切り分ける(盤の図・区域の決め方から手で導いた正解。実装の出力からは写さない)。
+
+describe("v2 の印(計画 §9.3・§9.4)", () => {
+  it("captures: 相手玉から遠い手でも、相手の駒を取れば v2 は attack(v1 は none)", () => {
+    // 銀 5f が、相手玉 5a から 4 マス(区域の外)の 5e にいる相手の歩を取る。ほかに相手の駒は無い。
+    const sfen = "4k4/9/9/9/4p4/4S4/9/9/4K4 b - 1";
+    const tags = tagsOf(sfen, "5f5e");
+    expect(tags).toEqual({
+      oppKingZone: false,
+      ownKingZone: false,
+      givesCheck: false,
+      kingMove: false,
+      captures: true,
+      hitsOppKingZonePiece: false,
+      oppKingZone3: false,
+    });
+    expect(sideOf(tags, { ...WHATIF_VALUES, sideVersion: 1 })).toBe("none");
+    expect(sideOf(tags)).toBe("attack"); // 既定(v2)
+  });
+
+  it("hitsOppKingZonePiece: 行き先は相手玉から遠くても、動かした駒(飛)が相手玉のそば(2 マス以内)の相手の歩に当たれば v2 は attack(v1 は none)", () => {
+    // 飛 9f が 5f まで横に動く(捕る駒は無い)。5f から縦に利きが伸び、5c の相手の歩(相手玉 5a から 2 マス)に当たる
+    // (5c で止まるので、その先の 5b・5a には利かない ― 線の駒は止めた升を含む決め方)。
+    const sfen = "4k4/9/4p4/9/9/R8/9/9/4K4 b - 1";
+    const tags = tagsOf(sfen, "9f5f");
+    expect(tags).toEqual({
+      oppKingZone: false,
+      ownKingZone: false,
+      givesCheck: false,
+      kingMove: false,
+      captures: false,
+      hitsOppKingZonePiece: true,
+      oppKingZone3: false,
+    });
+    expect(sideOf(tags, { ...WHATIF_VALUES, sideVersion: 1 })).toBe("none");
+    expect(sideOf(tags)).toBe("attack"); // 既定(v2)
+  });
+
+  it("oppKingZone3: 相手玉からちょうど 3 マス(sideZoneRadius(2)の外・attackZoneRadius(3)の内)は v2 だけ attack", () => {
+    const sfen = "4k4/9/9/9/4S4/9/9/9/4K4 b - 1"; // 銀 5e が 5d(相手玉 5a から 3 マス)へ進む
+    const tags = tagsOf(sfen, "5e5d");
+    expect(tags).toEqual({
+      oppKingZone: false,
+      ownKingZone: false,
+      givesCheck: false,
+      kingMove: false,
+      captures: false,
+      hitsOppKingZonePiece: false,
+      oppKingZone3: true,
+    });
+    expect(sideOf(tags, { ...WHATIF_VALUES, sideVersion: 1 })).toBe("none");
+    expect(sideOf(tags)).toBe("attack"); // 既定(v2)
+  });
+
+  it("成りの有無: captures・oppKingZone3 は行き先だけで決まるので変わらないが、hitsOppKingZonePiece は駒の利きが変わるため変わりうる", () => {
+    // 銀 4c → 4b(どちらも敵陣。成り・不成りのどちらも合法)。行き先 4b のそばに相手の駒は無いが、
+    // 4b から見て真横(sideways)の 3b に相手の歩がいる(相手玉 5a から 2 マス)。
+    // 銀は真横に利かないので当たらない。成銀(金と同じ利き)は真横に利くので当たる。
+    const sfen = "4k4/6p2/5S3/9/9/9/9/9/4K4 b - 1";
+
+    const notPromoted = tagsOf(sfen, "4c4b");
+    expect(notPromoted.captures).toBe(false);
+    expect(notPromoted.oppKingZone3).toBe(true); // 4b は相手玉 5a から 1 マス
+    expect(notPromoted.hitsOppKingZonePiece).toBe(false); // 銀は真横に利かない
+
+    const promoted = tagsOf(sfen, "4c4b+");
+    expect(promoted.captures).toBe(false); // 変わらない(行き先は同じ・取っていない)
+    expect(promoted.oppKingZone3).toBe(true); // 変わらない(行き先は同じ)
+    expect(promoted.hitsOppKingZonePiece).toBe(true); // 変わる(成銀は金と同じ利きで真横にも利く)
   });
 });
 
@@ -368,10 +494,13 @@ describe("sideMovesOf(合法手を攻め・守りに分ける。sideOf と同じ
     expect(defense).toContain("6f5e");
   });
 
-  it("sideZoneRadius を変えると分け方が変わる(値を WHATIF_VALUES から読んでいることの確認): 王手にならない銀の手(3b4a)は、半径 0 では攻めから消える", () => {
+  it("sideZoneRadius を変えると分け方が変わる(値を WHATIF_VALUES から読んでいることの確認、v1 の決め方): 王手にならない銀の手(3b4a)は、半径 0 では攻めから消える", () => {
     const sfen = "4k4/6S2/9/9/9/9/9/9/4K4 b - 1";
-    expect(sideMovesOf(sfen).attack).toContain("3b4a"); // 既定(半径 2)では入る(tagsOf の attack(oppKingZone のみ)の試験と同じ局面)
-    const values: WhatifValues = { ...WHATIF_VALUES, sideZoneRadius: 0 };
+    expect(sideMovesOf(sfen).attack).toContain("3b4a"); // 既定(半径 2・v2)では入る(tagsOf の attack(oppKingZone のみ)の試験と同じ局面)
+    // STEP WHATIF 作業 4: sideZoneRadius だけを 0 にしても、既定(v2)では 3b4a は oppKingZone3(相手玉から 3
+    // マス以内。attackZoneRadius は固定 3 のまま変わらない)で依然 attack に入ってしまう。この試験は
+    // 「sideZoneRadius だけで攻めが決まる v1 の決め方」を確かめる試験なので、sideVersion: 1 を明示して読む。
+    const values: WhatifValues = { ...WHATIF_VALUES, sideZoneRadius: 0, sideVersion: 1 };
     expect(sideMovesOf(sfen, values).attack).not.toContain("3b4a");
   });
 

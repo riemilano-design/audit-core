@@ -264,14 +264,15 @@ npx tsx scripts/playtest/baselineTable.ts --person <pN> --material <段 2 の記
 
 ```
 npx tsx scripts/playtest/whatif.ts --kifu <固定棋譜 JSON> --out <whatif.jsonl>
-  [--nodes <N>] [--multipv <K>] [--threads <N>]
+  [--nodes <N>] [--multipv <K>] [--threads <N>] [--side-version 1|2]
 ```
 
 - エンジン(`resolveEnginePath()` が解決する実行ファイル)を実際に起動する。**1 巡目**(本人の手番の局面ごとに候補 K 個を MultiPV で読む)は replay.ts・rescreen.ts と同じ `LowPriorityEngine`(`PrioritizedEngine.asLowPriority()`)を使う。**2 巡目**(下記)は素の `UsiEngine` を直に使う
 - 本人の手番の局面(そろえた記録は先手番。`lib/whatif.ts` の `WHATIF_VALUES.startPly` = 17 手目から)だけを MultiPV で読む。**王手中の局面も読む・終局の局面は読まない**(`lib/whatif.ts` の `evaluableTurns`)
-- 値(`WHATIF_VALUES`: `multiPv`・`nodes`・`startPly`・`minLossCp`・`narrowGapCp`・`riseCp`・`pvMoves`・`sideZoneRadius`・`sideNodes`)は `lib/whatif.ts` に 1 か所だけ置く**判断的知識の仮置き**(2026-09-22、計画 §2.1・§2.2・§2.5)。`--nodes`・`--multipv`・`--threads` はハーネスの探索条件(候補 K 個の読み)だけを上書きする(`startPly`・`sideZoneRadius` 等の閾値は CLI からは変えない)
-- 候補・実戦の手に付ける印(`oppKingZone`・`ownKingZone`・`givesCheck`・`kingMove`)は、**行き先だけ**で決める。王手か・玉を動かす手かは `lib/moveFacts.ts` の `moveFactsOf`(D2.6 で確定済み)・`isInCheck` をそのまま呼ぶ(二重に実装しない)。**玉のそば**(`oppKingZone`・`ownKingZone`)は、この段だけの決め方 ― 玉から `sideZoneRadius`(既定 2)マス以内(縦横斜めの大きいほう、shogiops の `squareDist`)。`moveFactsOf`・`POSITION_FACTS_RULES`(Gate・基準値(`baselineTable.ts` の軸 C)が使う「玉の升 + 8 近傍 = 1 マス以内」の決め方)は変えない ― **この段と Gate・基準値では「玉のそば」の広さが違う**(meta 行の `kingZoneRadius` 参照)。攻めの側 = `oppKingZone` または `givesCheck`、守りの側 = `ownKingZone`(玉自身の手を除く)または `kingMove`。両方に当たる手は `both`
+- 値(`WHATIF_VALUES`: `multiPv`・`nodes`・`startPly`・`minLossCp`・`narrowGapCp`・`riseCp`・`pvMoves`・`sideZoneRadius`・`sideNodes`・`sideVersion`・`hitsDefenderRadius`・`attackZoneRadius`)は `lib/whatif.ts` に 1 か所だけ置く**判断的知識の仮置き**(2026-09-22、計画 §2.1・§2.2・§2.5・§9.3)。`--nodes`・`--multipv`・`--threads` はハーネスの探索条件(候補 K 個の読み)だけを、`--side-version` は攻めの側の決め方だけを上書きする(既定は `sideVersion: 2`。`startPly`・`sideZoneRadius` 等ほかの閾値は CLI からは変えない)
+- 候補・実戦の手に付ける印(`oppKingZone`・`ownKingZone`・`givesCheck`・`kingMove`・`captures`・`hitsOppKingZonePiece`・`oppKingZone3`)は、**行き先だけ**で決める。王手か・玉を動かす手かは `lib/moveFacts.ts` の `moveFactsOf`(D2.6 で確定済み)・`isInCheck` をそのまま呼ぶ(二重に実装しない)。**玉のそば**(`oppKingZone`・`ownKingZone`)は、この段だけの決め方 ― 玉から `sideZoneRadius`(既定 2)マス以内(縦横斜めの大きいほう、shogiops の `squareDist`)。`moveFactsOf`・`POSITION_FACTS_RULES`(Gate・基準値(`baselineTable.ts` の軸 C)が使う「玉の升 + 8 近傍 = 1 マス以内」の決め方)は変えない ― **この段と Gate・基準値では「玉のそば」の広さが違う**(meta 行の `kingZoneRadius` 参照)。**守りの側**(v1・v2 とも同じ)= `ownKingZone`(玉自身の手を除く)または `kingMove`。**攻めの側**は `sideVersion` で切り替える: v1 = `oppKingZone` または `givesCheck`、**v2(既定)** = v1 ∪ `captures`(相手の駒を取る)∪ `hitsOppKingZonePiece`(動かした駒が、相手玉から `hitsDefenderRadius`(既定 2)マス以内の相手の駒(玉以外)に当たる。shogiops の `attacks(piece, to, occupied)` で数える)∪ `oppKingZone3`(行き先が相手玉から `attackZoneRadius`(既定 3)マス以内)。両方に当たる手は `both`
 - **なぜ広げたか(計画 §2.5、2026-09-22)**: 候補 K 個の中から攻め・守りの最上位を拾うやり方は、8 マスの決め方では両方が見つかる局面が実測 4/85(5%)しか無く、成り立たないと分かった。そこで、場面の局面だけ・合法手を全部使い、側ごとに絞って読み直す形(下記 2 巡目)に変え、広さも 2 マスへ広げた
+- **攻めの側の決め方 v2(STEP WHATIF 作業 4、計画 §9.3、2026-09-22)**: 2 人目の本人から「玉を攻める前の段階の手(守りの駒を剥がす・陣形を崩す)も攻めだと思う」という感想が届き、24 局の下見で「第 1 候補の 53% が v1 では『なし』に分類される」ことを確かめた。v2 = v1 ∪ 取る ∪ 守り駒に当てる ∪ 3 マス以内(「相手の駒のどれかに当たる」「相手陣へ動く」は序盤の駒組みの手まで大量に拾うため採らなかった ― 計画 §9.3)。v2 が既定。`sideVersion: 1` を渡せば v1 と同じ結果になる
 - 拾う場面 3 種類(`fork`・`narrowHeld`・`chanceHeld`、計画 §2.2)と、1 局に 1 つのいちばん大きな分かれ道(`biggestFork`、§2.4-1)は `lib/whatif.ts` の `whatifPositionOf`・`whatifGameSummaryOf` が組む(エンジンは呼ばない純粋関数。試験は `lib/whatif.test.ts`)
 - **2 巡目(側ごとの読み。計画 §2.5)**: 1 巡目がすべて終わり `biggestFork` が決まってから、場面(`fork`・`narrowHeld`・`chanceHeld` のどれか、または `biggestFork`)の局面だけ(`lib/whatif.ts` の `sceneReadPlies`)、合法手をすべて出して攻め・守りの側に分け(`sideMovesOf`。候補 K 個に付ける印と同じ決め方)、**側ごとにその側の手だけを** `go nodes <sideNodes> searchmoves <その側の手…>`(MultiPV 1)で読む(`whatifSceneOf`)。**`LowPriorityEngine`(apps/server が公開する型)には searchmoves を渡す口が無いため、apps/ は変えず、CLI 側で素の `UsiEngine`(`send`・`waitForLine`)を直に使う**(lib/checkBaseline.ts と同じ「ハーネスの観測として足す」流儀)。その側に合法手が無ければ `noLegalMove`(呼ばない)。`sideGapCp` は両方 `found`・cp のときだけ
 - 出力(JSONL): 1 行目 `{"kind":"meta", kifuId, startedAt, gitHead, dirty, values, threads, kingZoneRadius: { thisStage, gateAndBaseline }, mirrored, plyOffset, startSfen}`(**名前・`/Users/` を含む絶対パスは書かない** ― `enginePath` はここに含めない。`mirrored`・`plyOffset`・`startSfen` は `lib/sideAlignment.ts` の `sideMetaFields`(`replay.ts` の段の meta と同じ形)。`startSfen` は `mirrored` のときだけ持つ)、局面ごとに `{"kind":"position", ...}`(`WhatifPosition` + `displayPly`。候補 K 個・実戦の手の順位・`loss`・拾った場面)、場面の局面だけ `{"kind":"scene", ...}`(`WhatifScene` + `displayPly`。攻め・守りそれぞれの `WhatifSideRead`(`found`/`noLegalMove`/`notMeasured`)と `sideGapCp`)、最後に `{"kind":"summary", ...}`(`WhatifGameSummary` + `sceneReads`(`WhatifSceneReadSummary`: 場面の数・側ごとに合法手が無かった数・両方 `found` の数)+ `timingMs: { pass1, pass2 }`。`biggestFork` も `displayPly` を持つ)
@@ -285,10 +286,12 @@ npx tsx scripts/playtest/whatif.ts --kifu <固定棋譜 JSON> --out <whatif.json
 
 ### `pipeline.ts` の `--whatif`(任意の段)
 
-`pipeline.ts` に `--whatif` を付けると、**`--until` の進み具合とは関係なく**、diagnose の段の後に局ごとに `whatif.ts` を回し、`<work>/<person>/whatif/<id>.jsonl` を書く(`--parallel` に従う。済みの判定は他の段と同じ流儀 ― 最後の行が `summary` であること)。fixed 棋譜が無い局は、`whatif.ts` を呼ばずに失敗として記録する。所要は `timing.jsonl` に `stage: "whatif"` つきで残る(ほかの段の行には `stage` の欄自体が無い)。`--whatif` を**付けない**実行は、道具の呼び出し・出力・`timing.jsonl` の形が一切変わらない(試験は `lib/pipelineWhatif.test.ts`)。
+`pipeline.ts` に `--whatif` を付けると、**`--until` の進み具合とは関係なく**、diagnose の段の後に局ごとに `whatif.ts` を回し、`<work>/<person>/whatif-v2/<id>.jsonl`(既定。攻めの側の決め方 v2)を書く(`--parallel` に従う。済みの判定は他の段と同じ流儀 ― 最後の行が `summary` であること)。fixed 棋譜が無い局は、`whatif.ts` を呼ばずに失敗として記録する。所要は `timing.jsonl` に `stage: "whatif"` つきで残る(ほかの段の行には `stage` の欄自体が無い)。`--whatif` を**付けない**実行は、道具の呼び出し・出力・`timing.jsonl` の形が一切変わらない(試験は `lib/pipelineWhatif.test.ts`)。
+
+- **`--side-version 1`(STEP WHATIF 作業 4、計画 §9.3)を付けると、v1(従来の決め方)で読み、`<work>/<person>/whatif/<id>.jsonl`(v1 のフォルダ名は変えない)に書く。**`whatif.ts` へも `--side-version 1` を渡す。`--until pdf` かつ `--whatif` のとき、付録 2 の材料もこの `--side-version` と同じフォルダを読む(v1/v2 を混ぜない)
 
 ```
-npx tsx scripts/playtest/pipeline.ts --person <id> --kifu-dir <dir> --work <dir> --whatif
+npx tsx scripts/playtest/pipeline.ts --person <id> --kifu-dir <dir> --work <dir> --whatif [--side-version 1]
 ```
 
 ## 重要な局面の分かれ道を見せる(`whatifReport.ts`・`report-pdf/render_whatif.py`。STEP WHATIF 作業 2)
@@ -300,7 +303,7 @@ npx tsx scripts/playtest/pipeline.ts --person <id> --kifu-dir <dir> --work <dir>
   - **局ごとの代表の場面 1 つ**(`pickRepresentativePly`。4 つの分岐): 負けた局は `summary.biggestFork` の局面。勝った局は narrowHeld のうち `topGapCp` が最大の局面(同点は早い手数)。無ければ chanceHeld の最初(最も早い手数)。それも無ければ `biggestFork`(fork の最大)。それも無ければ `null`(「載せる局面なし」)
   - **場面の材料**(`buildRepresentative`): displayPly・種類・候補 3 つ(手・評価・読み筋 5 手)・実戦の手と順位・attack/defense の読み(`scene`)・`sideGapCp`・「第 1 候補(実戦が第 1 候補なら第 2 候補)を 5 手進めた局面」(`afterCandidate`。apps/server の `applyMove` で実際に SFEN へ適用する ― 将棋のルールを python 側で二重に実装しない)
   - **手は USI のまま出す**(日本語表記・盤面図は python 側の役目)。**mirrored(本人が後手)の局の sfen・USI は、測る段がそろえた解析用の向き(180 度回した、本人 = 先手の向き)のまま**(回し直さない。既出の `WhatifPositionRow`/`WhatifSceneRow` の `sfen`・`move`・`pv` は全部この向き)
-  - `WhatifReportData.values`(`sideZoneRadius`・`startPly`・`minLossCp`・`narrowGapCp`・`riseCp`。全局で同じはずの判断的知識の値。違えば止める)を出力に含める ― 冊子の文に出す数は python 側もここ経由でデータから読み、固定で書かない
+  - `WhatifReportData.values`(`sideZoneRadius`・`startPly`・`minLossCp`・`narrowGapCp`・`riseCp`・`sideVersion`・`hitsDefenderRadius`・`attackZoneRadius`(STEP WHATIF 作業 4)。全局で同じはずの判断的知識の値。違えば止める)を出力に含める ― 冊子の文に出す数は python 側もここ経由でデータから読み、固定で書かない
   - **名前・`/Users/` を含む絶対パスは出力へ含めない**
 - **`scripts/playtest/whatifReport.ts`**(CLI。上記の純粋関数への配線だけ): `--whatif <whatif.jsonl …> --patient <patient_report_data.json> --out <whatif_report_data.json>`。各 `whatif.jsonl` の先頭行(meta)の `kifuId` で `patient_report_data.json` の games と突き合わせる。
 - **`scripts/playtest/report-pdf/render_whatif.py`**(新規ファイル。**既存の 6 本(`_head.py`・`_util.py`・`_mid.py`・`_app_head.py`・`_app.py`・`_tail.py`)は変えない**): `whatif_report_data.json` と `sfens.json`(`REPORT_DATA_DIR` から読む。既存の `_head.py`・`_util.py` と同じ流儀)から、付録 2 の PDF を作る。1 ページ目(集計)+ 1 局 1 ページ(代表の場面が無い局は表にだけ出し、ページは作らない)。
@@ -308,6 +311,7 @@ npx tsx scripts/playtest/pipeline.ts --person <id> --kifu-dir <dir> --work <dir>
   - **mirrored(本人が後手)の局の手の表記**(依頼の指示: 既存の付録 1(本編)・`reportData.ts` と同じ流儀に合わせる。回し方を新しく決めない): 盤面図・実戦の手は `sfens.json`(本人が指した実際の向き)を使う。エンジンの候補・読み筋・攻め/守りの手(実戦では指されていない、解析用の向きのままの手)は、`rotate_usi`(`lib/usiRotation.ts` の `rotateUsiMove` と同じマスの変換を python で書き直したもの)で本人が指した向きへ戻してから、`sfens.json` の実際の局面へ適用する(このファイル内の `apply_move`・`serialize_sfen`)
   - **数の照合**: 文に出す数は、その場面で使ってよい数の集合(局の事実・§2.1 の値・「第 1 候補」等の方式そのものの語彙数)に無ければ `sys.exit(1)`。禁止語(`BANNED`)も同じく確かめる
   - **人間の追加指示(2026-09-22)**: 各局のページで、5 手進めた局面の盤面の上に「エンジンの読み筋で 5 手進めた局面(実戦ではありません)」、実戦の局面の盤面の上に「実戦の局面(指す前)」の帯を置く。1 ページ目の攻め/守りの注記の末尾に「(決め方 v1: 玉から {sideZoneRadius} マス以内)」を足す(値は `values.sideZoneRadius` から。固定で書かない)。分かれ道 × その手にかけた時間の表は、この付録には入れない(まとめの冊子の側で司令塔が扱う)
+  - **攻めの側の決め方 v1/v2 の切り替え(STEP WHATIF 作業 4、計画 §9.3)**: 注記の文は `values.sideVersion` で切り替える(v1 = 上記の文、v2(既定)= 「行き先が相手の玉から {attackZoneRadius} マス以内・王手・取る・相手の玉のそばの駒に当てる、のどれか」)。値は `values.attackZoneRadius`・`values.hitsDefenderRadius` から(固定で書かない)。古い `whatif_report_data.json`(`sideVersion` を持たない)は v1 として扱う
   - 使い方: `REPORT_DATA_DIR=<sfens.json のあるフォルダ> python3 -X utf8 render_whatif.py <whatif_report_data.json> <出力 PDF>`
   - **この python の道具は vitest の対象外**(`report-pdf/` 全体と同じ。既存の README の「既知の限界」参照)。守りは、合成データ(先手の負け・後手の勝ち・載せる局面なし)と実データでの実行時の確かめ(rc・禁止語・数の照合・実測の件数)だけ
 
@@ -315,7 +319,7 @@ npx tsx scripts/playtest/pipeline.ts --person <id> --kifu-dir <dir> --work <dir>
 
 `--whatif` を付けて `--until pdf` まで実行すると、本編の PDF(`main.pdf`)の後に、`<work>/report/whatif_report_data.json` と `<work>/report/whatif.pdf` を作る(`whatif-report-data` → `report-pdf-render-whatif` → `report-pdf-check-fonts` の順)。
 
-- **材料**: このお客さんの局のうち、段 2 まで済んだ局(`successGames`)それぞれの `<work>/<person>/whatif/<id>.jsonl`(**全部揃っていなければ**、道具を呼ばずに失敗として記録する ― 1 局でも `--whatif` の記録が無ければ付録は作らない)
+- **材料**: このお客さんの局のうち、段 2 まで済んだ局(`successGames`)それぞれの `<work>/<person>/whatif-v2/<id>.jsonl`(既定。`--side-version 1` なら `<work>/<person>/whatif/<id>.jsonl`。**全部揃っていなければ**、道具を呼ばずに失敗として記録する ― 1 局でも `--whatif` の記録が無ければ付録は作らない)
 - **済みの判定**: `whatif_report_data.json` は空でなければ飛ばす。`whatif.pdf` は `whatif_report_data.json` より新しければ(mtime)飛ばす(本編の `pdfDone` と同じ考え方。依存は `whatif_report_data.json` だけ)
 - **本編 PDF が無ければ**(`main.pdf` が無い・pdf 段自体が失敗している)、付録 2 の道具を一切呼ばずに失敗として記録する
 - `--whatif` を**付けない**実行、または `--until` が `pdf` より前の実行は、この段に一切入らない(道具の呼び出し・出力が 1 バイトも変わらない。試験は `lib/pipelineWhatifReport.test.ts`)

@@ -484,6 +484,10 @@ values = m["values"]
 radius = values["sideZoneRadius"]
 start_ply = values["startPly"]
 narrow_gap_cp = values["narrowGapCp"]
+# STEP WHATIF 作業 4(計画 §9.3): 攻めの側の決め方 v1/v2。古い whatif_report_data.json(この欄が無い)は v1 として扱う。
+side_version = values.get("sideVersion", 1)
+attack_radius = values.get("attackZoneRadius")
+hits_radius = values.get("hitsDefenderRadius")
 
 
 def pct(a, b):
@@ -510,6 +514,11 @@ allowed_p1 = {
     start_ply,
     narrow_gap_cp,
 }
+if side_version == 2:
+    if attack_radius is not None:
+        allowed_p1.add(attack_radius)
+    if hits_radius is not None:
+        allowed_p1.add(hits_radius)
 for a, b in [(matches_top1, pos_read), (within_top5, pos_read), (side["bothFound"], side["scenesRead"])]:
     if b:
         allowed_p1.add(round(100 * a / b))
@@ -575,6 +584,21 @@ story.append(
 )
 story.append(Spacer(1, 2.5 * mm))
 
+# STEP WHATIF 作業 4(計画 §9.3)。攻めの側の決め方 v1/v2 で注記の文を切り替える(値は values から。固定で書かない)。
+if side_version == 2:
+    side_note_text = (
+        f"「攻めの側」は、王手になる手・相手の駒を取る手・行き先が相手の玉から {attack_radius} マス以内の手・"
+        f"動かした駒が相手の玉のそば({hits_radius} マス以内)の相手の駒に当たる手のどれか。"
+        f"「守りの側」は、行き先が自分の玉から {radius} マス以内の手か、玉を動かす手です"
+        f"(行き先だけで機械的に分けています。決め方 v2: 相手の玉から {attack_radius} マス以内・王手・取る・"
+        f"相手の玉のそばの駒に当てる、のどれか)。攻めの側の手が無い局面は、まだ相手の玉に手が届かない局面です。"
+    )
+else:
+    side_note_text = (
+        f"「攻めの側」は、王手になる手か、行き先が相手の玉から {radius} マス以内の手。「守りの側」は、行き先が自分の玉から {radius} マス以内の手か、"
+        f"玉を動かす手です(行き先だけで機械的に分けています。決め方 v1: 玉から {radius} マス以内)。攻めの側の手が無い局面は、まだ相手の玉に手が届かない局面です。"
+    )
+
 two_col = Table(
     [
         [
@@ -604,11 +628,7 @@ two_col = Table(
                     style=TableStyle([("LINEBELOW", (0, 0), (-1, -1), 0.4, LINE), ("TOPPADDING", (0, 0), (-1, -1), 1 * mm), ("BOTTOMPADDING", (0, 0), (-1, -1), 1 * mm)]),
                 ),
                 P(
-                    emit(
-                        f"「攻めの側」は、王手になる手か、行き先が相手の玉から {radius} マス以内の手。「守りの側」は、行き先が自分の玉から {radius} マス以内の手か、"
-                        f"玉を動かす手です(行き先だけで機械的に分けています。決め方 v1: 玉から {radius} マス以内)。攻めの側の手が無い局面は、まだ相手の玉に手が届かない局面です。",
-                        allowed_p1,
-                    ),
+                    emit(side_note_text, allowed_p1),
                     S_SMALL,
                 ),
             ],

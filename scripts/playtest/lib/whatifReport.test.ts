@@ -21,7 +21,9 @@ import {
 import type { WhatifCandidate, WhatifMoveTags } from "./whatif.js";
 
 const INIT = "lnsgkgsnl/1r5b1/ppppppppp/9/9/9/PPPPPPPPP/1B5R1/LNSGKGSNL b - 1";
-const NO_TAGS: WhatifMoveTags = { oppKingZone: false, ownKingZone: false, givesCheck: false, kingMove: false };
+// STEP WHATIF 作業 4(計画 §9.3): WhatifMoveTags に captures・hitsOppKingZonePiece・oppKingZone3 が増えたので、
+// この試験ファイルが使う「何も無い」印にも合わせて足す(このファイルは side/tags の中身を試験しない ― 形だけ揃える)。
+const NO_TAGS: WhatifMoveTags = { oppKingZone: false, ownKingZone: false, givesCheck: false, kingMove: false, captures: false, hitsOppKingZonePiece: false, oppKingZone3: false };
 
 function candidate(move: string, scoreCp: number | null, pv: readonly string[] = [move], mate: number | null = null): WhatifCandidate {
   return { move, scoreCp, mate, pv: [...pv], tags: NO_TAGS, side: "none" };
@@ -229,9 +231,30 @@ function buildGameReportForSummaryTest(result: "勝ち" | "負け") {
 
 // ---- parseWhatifJsonl・buildGameReport・buildWhatifReportData(結合、mirrored の手数・名前/パスなし) ----
 
-const DEFAULT_META_VALUES = { multiPv: 5, nodes: 1_000_000, sideZoneRadius: 2, startPly: 17, minLossCp: 600, narrowGapCp: 400, riseCp: 400 };
+// STEP WHATIF 作業 4(計画 §9.3): sideVersion・hitsDefenderRadius・attackZoneRadius を足した(WHATIF_VALUES の既定と同じ値)。
+const DEFAULT_META_VALUES = {
+  multiPv: 5,
+  nodes: 1_000_000,
+  sideZoneRadius: 2,
+  startPly: 17,
+  minLossCp: 600,
+  narrowGapCp: 400,
+  riseCp: 400,
+  sideVersion: 2,
+  hitsDefenderRadius: 2,
+  attackZoneRadius: 3,
+};
 /** buildWhatifReportData が出す values(WhatifReportValues)の欄だけ(DEFAULT_META_VALUES から multiPv・nodes を除いたもの)。 */
-const DEFAULT_META_VALUES_SUBSET = { sideZoneRadius: 2, startPly: 17, minLossCp: 600, narrowGapCp: 400, riseCp: 400 };
+const DEFAULT_META_VALUES_SUBSET = {
+  sideZoneRadius: 2,
+  startPly: 17,
+  minLossCp: 600,
+  narrowGapCp: 400,
+  riseCp: 400,
+  sideVersion: 2,
+  hitsDefenderRadius: 2,
+  attackZoneRadius: 3,
+};
 
 function metaLine(kifuId: string, valuesOverrides: Record<string, number> = {}, extra: Record<string, unknown> = {}): string {
   return JSON.stringify({ kind: "meta", kifuId, values: { ...DEFAULT_META_VALUES, ...valuesOverrides }, threads: 1, ...extra });

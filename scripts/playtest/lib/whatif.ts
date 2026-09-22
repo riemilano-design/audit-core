@@ -1,6 +1,12 @@
 // STEP WHATIF 作業 1(docs/STEP_WHATIF_PLAN_2026-09-22.md §2.1・§2.2・§2.4・§2.5)。
 // 「重要な局面の分かれ道」を測る段の純粋関数。**測る段だけ**(見せる段(PDF・Web、計画 §2.3)は別の作業。ここでは作らない)。
 //
+// 【追記(STEP WHATIF 作業 4、計画 §9)】攻めの側の決め方の v2(§9.3)を足した。v1(相手玉から sideZoneRadius
+// マス以内 または 王手)に加え、v2(既定の sideVersion)は「相手の駒を取る」「動かした駒が相手玉のそば
+// (hitsDefenderRadius マス以内)の相手の駒(玉以外)に当たる」「行き先が相手玉から attackZoneRadius マス以内」を
+// 足す(いずれか 1 つでも真なら攻めの側)。守りの側は変えない(本人の指摘は攻めの側だけ ― §9.1)。
+// `WHATIF_VALUES.sideVersion` の既定は 2(v2)。`sideVersion: 1` を渡せば v1 と同じ結果になる。
+//
 // 【このファイルがやること】
 // - 1 局面(本人の手番、根は先手番。記録は「本人 = 先手」にそろえてある ― lib/sideAlignment.ts)について、
 //   エンジンの MultiPV 結果(呼び出し側が渡す。ここではエンジンを呼ばない)と実戦の手から、候補・実戦の手の順位・
@@ -28,10 +34,14 @@
 // - ファイルの読み書き
 //
 // 【判断的知識】WHATIF_VALUES(multiPv・nodes・startPly・minLossCp・narrowGapCp・riseCp・pvMoves・
-// sideZoneRadius・sideNodes)は計画の仮置きの値であり、将棋一般の閾値ではない(2026-09-22、司令塔 e3。
-// 計画 §2.1・§2.2・§2.5)。承認前の draft 相当。`sideZoneRadius` = 2 は §2.4-3 の実測(候補 5 つの中に
-// 攻め・守りの両方が見つかった局面が 4/85)を受けて、8 マス(1 マス以内)から広げた値(§2.5)。
+// sideZoneRadius・sideNodes・sideVersion・hitsDefenderRadius・attackZoneRadius)は計画の仮置きの値であり、
+// 将棋一般の閾値ではない(2026-09-22、司令塔 e3。計画 §2.1・§2.2・§2.5・§9.3)。承認前の draft 相当。
+// `sideZoneRadius` = 2 は §2.4-3 の実測(候補 5 つの中に攻め・守りの両方が見つかった局面が 4/85)を受けて、
+// 8 マス(1 マス以内)から広げた値(§2.5)。`sideVersion` = 2(既定)・`hitsDefenderRadius` = 2・
+// `attackZoneRadius` = 3 は §9.2 の下見(第 1 候補の 53% が v1 で「なし」だった)を受けた決め方 v2(§9.3)。
 
+import { attacks } from "shogiops/attacks";
+import type { Color, Square } from "shogiops/types";
 import { opposite, parseUsi, squareDist } from "shogiops/util";
 import { applyMove } from "../../../apps/server/src/rules/applyMove.js";
 import { isGameOver, isInCheck } from "../../../apps/server/src/rules/gameStatus.js";
@@ -62,6 +72,12 @@ export const WHATIF_VALUES = {
   sideZoneRadius: 2,
   /** 場面ごとの側の読み(searchmoves で絞った読み)のノード数 */
   sideNodes: 1_000_000,
+  /** 攻め・守りの決め方のバージョン(1 = 従来、2 = 取る・守り駒に当てる・3 マス以内を足す。計画 §9.3)。既定は 2。 */
+  sideVersion: 2,
+  /** v2: 「動かした駒が相手の駒に当たる」を数える半径(相手玉から何マス以内の相手の駒か。玉自身は含まない)。 */
+  hitsDefenderRadius: 2,
+  /** v2: 行き先が相手玉から何マス以内なら攻めの側に入れるか(v1 の sideZoneRadius より広い)。 */
+  attackZoneRadius: 3,
 } as const;
 
 export type WhatifValues = { readonly [K in keyof typeof WHATIF_VALUES]: number };
@@ -84,13 +100,27 @@ export interface WhatifMoveTags {
   givesCheck: boolean;
   /** 玉を動かす手か */
   kingMove: boolean;
+  /** v2(§9.3): 相手の駒を取る手か */
+  captures: boolean;
+  /** v2: 指した後、動かした駒が相手玉から hitsDefenderRadius マス以内の相手の駒(玉以外)に当たるか
+   * (shogiops の `attacks(piece, to, occupied)` で数える)。 */
+  hitsOppKingZonePiece: boolean;
+  /** v2: 行き先が相手玉から attackZoneRadius マス以内か(v1 の oppKingZone より広い決め方)。 */
+  oppKingZone3: boolean;
 }
 
 export type WhatifSide = "attack" | "defense" | "both" | "none";
 
-/** 攻めの側 = oppKingZone または givesCheck、守りの側 = ownKingZone または kingMove(計画 §2.1・§2.5)。両方に当たれば both。 */
-export function sideOf(tags: WhatifMoveTags): WhatifSide {
-  const attack = tags.oppKingZone || tags.givesCheck;
+/**
+ * 攻めの側・守りの側(計画 §2.1・§2.5・§9.3)。守りの側は v1 のまま(ownKingZone または kingMove)。
+ * 攻めの側は `values.sideVersion` で切り替える:
+ * - v1: oppKingZone または givesCheck
+ * - v2(既定): v1 ∪ captures ∪ hitsOppKingZonePiece ∪ oppKingZone3
+ * 両方に当たれば both。
+ */
+export function sideOf(tags: WhatifMoveTags, values: WhatifValues = WHATIF_VALUES): WhatifSide {
+  const attackV1 = tags.oppKingZone || tags.givesCheck;
+  const attack = values.sideVersion === 2 ? attackV1 || tags.captures || tags.hitsOppKingZonePiece || tags.oppKingZone3 : attackV1;
   const defense = tags.ownKingZone || tags.kingMove;
   if (attack && defense) return "both";
   if (attack) return "attack";
@@ -99,12 +129,32 @@ export function sideOf(tags: WhatifMoveTags): WhatifSide {
 }
 
 /**
- * `sfen` の局面(本人の手番)で `moveUsi` を指したときの印(計画 §2.5 の 2.)。
+ * v2(§9.3): 指した後の盤で、動かした駒(`movedTo` の升の駒)が、相手玉(`oppKing`)から `radius` マス以内の
+ * 相手の駒(玉自身は含まない)のどれかに当たるか。shogiops の `attacks(piece, square, occupied)` で、動かした駒
+ * 1 枚の利きを求め、区域内の相手の駒と重なるかを見る(`lib/moveFacts.ts` の `reachInZone` と同じ考え方)。
+ */
+function hitsOppKingZonePieceOf(afterSfen: string, opp: Color, oppKing: Square, movedTo: Square, radius: number): boolean {
+  const after = parsePosition(afterSfen);
+  const movedPiece = after.board.get(movedTo);
+  if (movedPiece === undefined) return false; // 起こらない想定(指した後の升に駒が無いことはない)
+  const attacked = attacks(movedPiece, movedTo, after.board.occupied);
+  for (const square of after.board.color(opp)) {
+    if (square === oppKing) continue;
+    if (squareDist(square, oppKing) > radius) continue;
+    if (attacked.has(square)) return true;
+  }
+  return false;
+}
+
+/**
+ * `sfen` の局面(本人の手番)で `moveUsi` を指したときの印(計画 §2.5 の 2.・§9.3)。
  * - 玉を動かす手か・合法性の確認は `lib/moveFacts.ts` の `moveFactsOf`(D2.6 で確定済み)をそのまま呼ぶ
  *   (`kingMove` は区域の規則に依らない欄なので、8 マスの `POSITION_FACTS_RULES` を渡しても値は変わらない)
- * - 玉のそばかどうかは、この段だけの決め方(`squareDist` ≤ `values.sideZoneRadius`)。既存の 1 マスの関数
- *   (`moveFactsOf` の `toInOwnKingZone`/`toInOpponentKingZone`)には引数を足さず、ここで別に計算する
+ * - 玉のそばかどうかは、この段だけの決め方(`squareDist` ≤ `values.sideZoneRadius`/`values.attackZoneRadius`)。
+ *   既存の 1 マスの関数(`moveFactsOf` の `toInOwnKingZone`/`toInOpponentKingZone`)には引数を足さず、ここで別に計算する
  * - 王手になるかどうかは `isInCheck` を薄く重ねる(moveFactsOf は持たない欄)
+ * - v2 の印(captures・hitsOppKingZonePiece・oppKingZone3)は `sideVersion` に関わらず常に計算する(`sideOf` 側で
+ *   使うかどうかを分ける。値がずれていても印そのものは事実として一定にするため)
  * 合法でない手・読めない手は moveFactsOf / applyMove が例外を投げる。
  */
 export function tagsOf(sfen: string, moveUsi: string, values: WhatifValues = WHATIF_VALUES): WhatifMoveTags {
@@ -123,6 +173,9 @@ export function tagsOf(sfen: string, moveUsi: string, values: WhatifValues = WHA
     ownKingZone: ownNear && !facts.kingMove,
     givesCheck: isInCheck(after, opp),
     kingMove: facts.kingMove,
+    captures: facts.capturedRole !== null,
+    hitsOppKingZonePiece: oppKing !== undefined && hitsOppKingZonePieceOf(after, opp, oppKing, move.to, values.hitsDefenderRadius),
+    oppKingZone3: oppKing !== undefined && squareDist(move.to, oppKing) <= values.attackZoneRadius,
   };
 }
 
@@ -167,7 +220,7 @@ export function candidatesOf(sfen: string, lines: readonly WhatifEngineLine[], v
     const move = line.pv[0];
     if (move === undefined) continue;
     const tags = tagsOf(sfen, move, values);
-    candidates.push({ move, scoreCp: line.scoreCp, mate: line.mate, pv: line.pv.slice(0, values.pvMoves), tags, side: sideOf(tags) });
+    candidates.push({ move, scoreCp: line.scoreCp, mate: line.mate, pv: line.pv.slice(0, values.pvMoves), tags, side: sideOf(tags, values) });
   }
   return candidates;
 }
@@ -278,7 +331,7 @@ export interface WhatifPosition {
 export function whatifPositionOf(input: WhatifPositionInput, values: WhatifValues = WHATIF_VALUES): WhatifPosition {
   const candidates = candidatesOf(input.sfen, input.lines, values);
   const actualTags = tagsOf(input.sfen, input.actualMove, values);
-  const actualSide = sideOf(actualTags);
+  const actualSide = sideOf(actualTags, values);
   const actualRank = actualRankOf(candidates, input.actualMove);
   const loss = lossOf(candidates, actualRank);
   const topGapCp = topGapCpOf(candidates);
@@ -359,7 +412,7 @@ export function sideMovesOf(sfen: string, values: WhatifValues = WHATIF_VALUES):
   const attack: string[] = [];
   const defense: string[] = [];
   for (const move of getLegalMoves(sfen)) {
-    const side = sideOf(tagsOf(sfen, move, values));
+    const side = sideOf(tagsOf(sfen, move, values), values);
     if (side === "attack" || side === "both") attack.push(move);
     if (side === "defense" || side === "both") defense.push(move);
   }

@@ -2,7 +2,11 @@
 // **測る段だけ**(見せる段(PDF・Web)は別の作業。ここでは作らない)。
 //
 // 使い方: npx tsx scripts/playtest/whatif.ts --kifu <固定棋譜 JSON> --out <whatif.jsonl>
-//           [--nodes <N>] [--multipv <K>] [--threads <N>]
+//           [--nodes <N>] [--multipv <K>] [--threads <N>] [--side-version 1|2]
+//
+// 【追記(STEP WHATIF 作業 4、計画 §9)】`--side-version` は攻めの側の決め方(lib/whatif.ts の
+// `WHATIF_VALUES.sideVersion`)を上書きする。既定は 2(v2)。`--side-version 1` を渡すと v1(従来)の決め方になる
+// (出力先のフォルダの決め方は呼び出し側(pipeline.ts)の役目。このファイルは受け取った --out へそのまま書く)。
 //
 // 【この CLI は薄くしてある】場面の拾い方・候補の組み立て・側ごとの分け方は lib/whatif.ts にあり、
 // そちらに試験がある。ここでやるのは、固定棋譜を読む・エンジンを起こす(replay.ts・rescreen.ts と同じ
@@ -56,7 +60,8 @@ import {
 } from "./lib/whatif.js";
 
 const REPO_ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), "..", "..");
-const USAGE = "使い方: npx tsx scripts/playtest/whatif.ts --kifu <固定棋譜 JSON> --out <whatif.jsonl> [--nodes <N>] [--multipv <K>] [--threads <N>]";
+const USAGE =
+  "使い方: npx tsx scripts/playtest/whatif.ts --kifu <固定棋譜 JSON> --out <whatif.jsonl> [--nodes <N>] [--multipv <K>] [--threads <N>] [--side-version 1|2]";
 const DEFAULT_THREADS = 1;
 // go nodes の待ち(usiEngine.ts の NODES_GO_TIMEOUT_MS と同じ考え方。side の探索量も候補と同じ桁のため揃える)。
 const SIDE_READ_TIMEOUT_MS = 60_000;
@@ -134,9 +139,17 @@ async function main(): Promise<number> {
     console.error(`--nodes・--multipv・--threads は正の整数です(nodes=${nodesArg} multipv=${multiPvArg} threads=${threadsArg})`);
     return 1;
   }
-  // startPly・minLossCp・narrowGapCp・riseCp・pvMoves・sideZoneRadius・sideNodes は判断的知識の仮置きのまま
-  // (CLI からは変えない。--nodes/--multipv は候補 K 個の読みの探索量だけを上書きする)。
-  const values: WhatifValues = { ...WHATIF_VALUES, nodes, multiPv };
+  // STEP WHATIF 作業 4(計画 §9.3)。--side-version は 1 か 2 だけ受け付ける。渡さなければ既定(WHATIF_VALUES.sideVersion = 2)。
+  const sideVersionArg = argValue(args, "--side-version");
+  const sideVersion = sideVersionArg !== undefined ? Number(sideVersionArg) : WHATIF_VALUES.sideVersion;
+  if (sideVersion !== 1 && sideVersion !== 2) {
+    console.error(`--side-version は 1 か 2 です(side-version=${sideVersionArg})`);
+    return 1;
+  }
+  // startPly・minLossCp・narrowGapCp・riseCp・pvMoves・sideZoneRadius・sideNodes・hitsDefenderRadius・
+  // attackZoneRadius は判断的知識の仮置きのまま(CLI からは変えない。--nodes/--multipv は候補 K 個の読みの
+  // 探索量だけ、--side-version は攻めの側の決め方だけを上書きする)。
+  const values: WhatifValues = { ...WHATIF_VALUES, nodes, multiPv, sideVersion };
 
   const kifuPath = path.resolve(kifuArg);
   const kifu = JSON.parse(readFileSync(kifuPath, "utf-8")) as FixedKifu;
