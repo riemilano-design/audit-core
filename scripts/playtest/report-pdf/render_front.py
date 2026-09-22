@@ -179,10 +179,14 @@ def emit(text, extra_allowed=frozenset()):
     return text
 
 
-def numbers_text(numbers):
-    parts = [f"{k} {v}" for k, v in numbers.items() if v is not None]
+def numbers_text(numbers, labels):
+    """「名 数」を読点で並べる(司令塔の指示、2026-09-23: キーの英字のまま出さない。名は labels から引く)。"""
+    parts = [f"{labels[k]} {v}" for k, v in numbers.items() if v is not None]
     return "、".join(parts) if parts else "(数なし)"
 
+
+# `findings[].kind` → その発見(numbers・labels を含む)。page2(前回との比較)・page3(次の n 局で見るもの)の両方で使う。
+findings_by_kind = {f["kind"]: f for f in m["findings"]}
 
 # ==================== 1 ページ目: 今回の n 局で分かったこと ====================
 games_n = m["summary"]["games"]
@@ -218,9 +222,12 @@ else:
         any_row = True
         row_allowed = set(v for v in comp["numbersBefore"].values() if v is not None) | set(v for v in comp["numbersNow"].values() if v is not None)
         row_allowed = {abs(v) for v in row_allowed} | {previous["games"]}
+        # labels は前回の JSON には無い(numbersBefore・numbersNow は数だけ)。名の集合は種類ごとに変わらないので、
+        # 今回の同じ種類の発見(findings_by_kind)が持つ labels をそのまま使う(python 側に手写ししない)。
+        comp_labels = findings_by_kind[comp["kind"]]["labels"]
         story.append(P(TITLE_JP.get(comp["kind"], comp["kind"]), S_H3))
         story.append(P(emit(state, row_allowed), S_BODY))
-        story.append(kv_table([("前回の数", numbers_text(comp["numbersBefore"])), ("今回の数", numbers_text(comp["numbersNow"]))]))
+        story.append(kv_table([("前回の数", numbers_text(comp["numbersBefore"], comp_labels)), ("今回の数", numbers_text(comp["numbersNow"], comp_labels))]))
         story.append(Spacer(1, 1.5 * mm))
     if not any_row:
         story.append(P("前回・今回のどちらでも出ていない種類だけでした。", S_BODY))
@@ -232,7 +239,6 @@ story.append(P("今回、数として出した名前と、今回の値です(次
 
 time_data = m["time"]
 overview = m["overview"]
-findings_by_kind = {f["kind"]: f for f in m["findings"]}
 
 
 def bucket_text(bucket):

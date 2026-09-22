@@ -26,6 +26,7 @@ import {
   buildPrevious,
   displayScoreOf,
   endingTextOf,
+  FINDING_NUMBER_LABELS,
   FINDING_VALUES,
   formatPlayedMove,
   gameFactsOf,
@@ -678,9 +679,37 @@ describe("buildFindings: phase・none", () => {
   });
 });
 
+// 司令塔の指示(2026-09-23、監査 GO 後の見た目の直し): front.pdf 2 ページ目の「前回の数/今回の数」が英字のキーのまま
+// 表示されていたため、numbers のキーごとの日本語の名を labels に持たせた。判定・数は変えていない。
+describe("FINDING_NUMBER_LABELS: numbers のキーの集合と一致する", () => {
+  function sortedKeysOf(record: Record<string, unknown>): string[] {
+    return Object.keys(record).sort();
+  }
+
+  it("time.available: true・timeUpLosses あり・aheadLoss が出る組み合わせで、5 種類とも numbers のキー = labels のキー", () => {
+    const time = timeWithBySpent({ n: 100, collapsed: 10 }, { n: 20, collapsed: 4 });
+    const timeWithLosses: PatientTime = { ...time, timeUpLosses: [{ gameNo: 1, total: 10, usedSec: 10, finalScore: 300 }] };
+    const games = [gameOf(1, "負け", [300])];
+    const findings = buildFindings(EMPTY_OVERVIEW, timeWithLosses, games);
+    expect(findings).toHaveLength(5);
+    for (const finding of findings) {
+      expect(sortedKeysOf(finding.numbers)).toStrictEqual(sortedKeysOf(finding.labels));
+      expect(finding.labels).toStrictEqual(FINDING_NUMBER_LABELS[finding.kind]);
+    }
+  });
+
+  it("time.available: false(numbers が null だらけ)でも、キーの集合は変わらない", () => {
+    const findings = buildFindings(EMPTY_OVERVIEW, EMPTY_TIME, emptyGames(3));
+    expect(findings).toHaveLength(5);
+    for (const finding of findings) {
+      expect(sortedKeysOf(finding.numbers)).toStrictEqual(sortedKeysOf(finding.labels));
+    }
+  });
+});
+
 describe("buildPrevious: 前回との比較(3 通り)", () => {
   function findingOf(kind: Finding["kind"], shown: boolean): Finding {
-    return { kind, shown, numbers: { x: shown ? 1 : 0 }, text: "t" };
+    return { kind, shown, numbers: { x: shown ? 1 : 0 }, labels: { x: "テスト用の数" }, text: "t" };
   }
   it("null を渡せば previous も null", () => {
     expect(buildPrevious(null, [findingOf("phase", true)])).toBeNull();
