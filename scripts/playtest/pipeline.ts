@@ -51,7 +51,10 @@ const REPO_ROOT = path.join(SCRIPT_DIR, "..", "..");
 const REPORT_PDF_DIR = path.join(SCRIPT_DIR, "report-pdf");
 
 // npx tsx <道具>.ts <引数> で起こす既存の道具(S1〜S5)。S7(report-pdf-*)はここに無く、下の spawnTool で別に分ける。
-const TSX_TOOL_PATHS: Record<Exclude<ToolName, "report-pdf-build" | "report-pdf-render-main" | "report-pdf-check-fonts" | "report-pdf-render-whatif">, string> = {
+const TSX_TOOL_PATHS: Record<
+  Exclude<ToolName, "report-pdf-build" | "report-pdf-render-main" | "report-pdf-render-front" | "report-pdf-check-fonts" | "report-pdf-render-whatif">,
+  string
+> = {
   "kifu-import-check": path.join(SCRIPT_DIR, "kifu-import-check.ts"),
   replay: path.join(SCRIPT_DIR, "replay.ts"),
   rescreen: path.join(SCRIPT_DIR, "rescreen.ts"),
@@ -88,6 +91,8 @@ function spawnProcess(cmd: string, args: readonly string[], cwd: string, env: No
  * - `report-pdf-build`(args 無し): `sh build.sh` で render_main.py・render_appendix.py を作る
  * - `report-pdf-render-main`(args = [REPORT_DATA_DIR, patient_report_data.json, 出力 PDF]):
  *   `REPORT_DATA_DIR=<args[0]> python3 -X utf8 render_main.py <args[1]> <args[2]>`
+ * - `report-pdf-render-front`(STEP TIME 作業 2。args = [patient_report_data.json, 出力 PDF]。REPORT_DATA_DIR は渡さない ―
+ *   `render_front.py` は sfens.json・prose.json を読まない): `python3 -X utf8 render_front.py <args[0]> <args[1]>`
  * - `report-pdf-check-fonts`(args = [PDF …]): `python3 -X utf8 check_fonts_embedded.py <args…>`
  * - `report-pdf-render-whatif`(STEP WHATIF 作業 2。args = [REPORT_DATA_DIR, whatif_report_data.json, 出力 PDF]):
  *   `REPORT_DATA_DIR=<args[0]> python3 -X utf8 render_whatif.py <args[1]> <args[2]>`(新規ファイル。build.sh では作らない ―
@@ -98,6 +103,10 @@ function spawnTool(tool: ToolName, args: readonly string[]): Promise<ToolResult>
   if (tool === "report-pdf-render-main") {
     const [reportDataDir, patientPath, outPdfPath] = args;
     return spawnProcess("python3", ["-X", "utf8", "render_main.py", patientPath!, outPdfPath!], REPORT_PDF_DIR, { ...process.env, REPORT_DATA_DIR: reportDataDir });
+  }
+  if (tool === "report-pdf-render-front") {
+    const [patientPath, outPdfPath] = args;
+    return spawnProcess("python3", ["-X", "utf8", "render_front.py", patientPath!, outPdfPath!], REPORT_PDF_DIR);
   }
   if (tool === "report-pdf-render-whatif") {
     const [reportDataDir, whatifDataPath, outPdfPath] = args;

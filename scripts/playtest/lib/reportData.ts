@@ -784,6 +784,120 @@ export function buildPatientTime(games: readonly BuiltGame[], patientGames: read
   };
 }
 
+// ---- findings(STEP TIME 作業 2。docs/STEP_TIME_PLAN_2026-09-22.md §6.4 の 1)。
+// 発見の判定はここ(TypeScript・試験できる側)で行う。python(report-pdf/render_front.py)は描くだけ。
+// 「考えられること」「次の 20 局で見分けがつくこと」の固定文(§5)は作業 3(人間の承認の後)なので、ここでは数の文だけを作る。
+
+/** 種類は固定の一覧(数える前に書く。増やすのは計画 → 監査。docs/STEP_TIME_PLAN_2026-09-22.md §6.4 の 1 の表の順)。 */
+export type FindingKind = "timeSpent" | "timeUpLoss" | "aheadLoss" | "phase" | "none";
+
+/** 発見 1 件。`shown: false` の発見も JSON には書く(数つき。前回との比較に使う)。文の中の数はすべて `numbers` から作る。 */
+export interface Finding {
+  kind: FindingKind;
+  shown: boolean;
+  numbers: Record<string, number | null>;
+  text: string;
+}
+
+/** 判定的な値は 1 か所に(CLAUDE.md 4 番)。値は docs/STEP_TIME_PLAN_2026-09-22.md §6.4 の 1 の表のとおり。 */
+export const FINDING_VALUES = {
+  /** timeSpent(T1): 10 秒以上の組がこの数以上でなければ出さない。 */
+  minPairs: 20,
+  /** timeSpent(T1): 10 秒以上の崩れ率が、0〜1 秒の崩れ率のこの倍以上でなければ出さない。 */
+  ratio: 2,
+} as const;
+
+function timeSpentFinding(time: PatientTime): Finding {
+  const kind: FindingKind = "timeSpent";
+  if (!time.available || time.bySpent === null) {
+    return {
+      kind,
+      shown: false,
+      numbers: { a: null, b: null, p: null, c: null, d: null, q: null },
+      text: "10 秒以上かけた手は — / —(—%)が崩れ、0〜1 秒の手は — / —(—%)でした",
+    };
+  }
+  const ge10 = time.bySpent[3]!;
+  const le1 = time.bySpent[0]!;
+  const p = ge10.n === 0 ? null : percentOf(ge10.collapsed, ge10.n);
+  const q = le1.n === 0 ? null : percentOf(le1.collapsed, le1.n);
+  // 分数の比較は掛け算で行う(浮動小数点の丸め誤差を避ける)。0〜1 秒の分母が 0 なら比べる相手が無いので出さない。
+  const shown = ge10.n >= FINDING_VALUES.minPairs && le1.n > 0 && ge10.collapsed * le1.n >= le1.collapsed * FINDING_VALUES.ratio * ge10.n;
+  const text = `10 秒以上かけた手は ${ge10.collapsed} / ${ge10.n}(${p ?? "—"}%)が崩れ、0〜1 秒の手は ${le1.collapsed} / ${le1.n}(${q ?? "—"}%)でした`;
+  return { kind, shown, numbers: { a: ge10.collapsed, b: ge10.n, p, c: le1.collapsed, d: le1.n, q }, text };
+}
+
+function timeUpLossFinding(time: PatientTime): Finding {
+  const kind: FindingKind = "timeUpLoss";
+  if (!time.available || time.timeUpLosses === null) {
+    return { kind, shown: false, numbers: { n: null, m: null }, text: "持ち時間を使い切って負けた — 局のうち、最後の局面の評価が +300 以上だったのは — 局でした" };
+  }
+  const n = time.timeUpLosses.length;
+  // m: 最後に読んだ局面の評価が +300 以上(displayScoreOf は詰みを ±3000 で表すので、本人側の詰みもここへ自動的に入る)。
+  const m = time.timeUpLosses.filter((game) => game.finalScore !== null && game.finalScore >= 300).length;
+  const text = `持ち時間を使い切って負けた ${n} 局のうち、最後の局面の評価が +300 以上だったのは ${m} 局でした`;
+  return { kind, shown: n >= 1, numbers: { n, m }, text };
+}
+
+function aheadLossFinding(overview: PatientOverview): Finding {
+  const kind: FindingKind = "aheadLoss";
+  const n = overview.fromAheadLoss;
+  const k = overview.fromAhead;
+  const text = `一度は優勢(+300 以上)になった後に負けた対局が ${n} 局ありました(優勢になった対局は ${k} 局)`;
+  return { kind, shown: n >= 1, numbers: { n, k }, text };
+}
+
+function phaseFinding(overview: PatientOverview): Finding {
+  const kind: FindingKind = "phase";
+  const { fell, early, mid, late } = overview;
+  const text = `崩れ ${fell} 回のうち、序盤 ${early}・中盤 ${mid}・終盤 ${late} でした`;
+  // 計画の文どおり「つねに出す。判定なし」(崩れ 0 回でも出す。docs/STEP_TIME_PLAN_2026-09-22.md §6.4 の 1 の表)。
+  return { kind, shown: true, numbers: { fell, early, mid, late }, text };
+}
+
+function noneFinding(gamesCount: number, othersShown: boolean): Finding {
+  const kind: FindingKind = "none";
+  const text = `時間と形勢の動きについて、この ${gamesCount} 局では上に書ける数はありませんでした`;
+  return { kind, shown: !othersShown, numbers: { games: gamesCount }, text };
+}
+
+/** 発見の判定(本編 4 ページの材料)。種類の順は固定(上の表の順のまま)。 */
+export function buildFindings(overview: PatientOverview, time: PatientTime, gamesCount: number): Finding[] {
+  const timeSpent = timeSpentFinding(time);
+  const timeUpLoss = timeUpLossFinding(time);
+  const aheadLoss = aheadLossFinding(overview);
+  const phase = phaseFinding(overview);
+  const none = noneFinding(gamesCount, timeSpent.shown || timeUpLoss.shown || aheadLoss.shown);
+  return [timeSpent, timeUpLoss, aheadLoss, phase, none];
+}
+
+// ---- previous(前回との比較。docs/STEP_TIME_PLAN_2026-09-22.md §6.4 の 2。`--previous <前回の patient_report_data.json>`) ----
+
+export interface PreviousFindingComparison {
+  kind: FindingKind;
+  shownBefore: boolean;
+  shownNow: boolean;
+  numbersBefore: Record<string, number | null>;
+  numbersNow: Record<string, number | null>;
+}
+
+export interface PatientPrevious {
+  games: number;
+  findings: PreviousFindingComparison[];
+}
+
+/** `--previous` を渡したときだけ組む(無ければ null。python は「初回のため、前回との比較はありません」を出す)。 */
+export function buildPrevious(previous: Pick<PatientReportData, "summary" | "findings"> | null, currentFindings: readonly Finding[]): PatientPrevious | null {
+  if (previous === null) return null;
+  const byKind = new Map(previous.findings.map((finding) => [finding.kind, finding]));
+  const findings = currentFindings.map((now) => {
+    const before = byKind.get(now.kind);
+    if (before === undefined) throw new ReportDataError(`--previous の findings に ${now.kind} が無い(道具のバージョンが違う可能性がある)`);
+    return { kind: now.kind, shownBefore: before.shown, shownNow: now.shown, numbersBefore: before.numbers, numbersNow: now.numbers };
+  });
+  return { games: previous.summary.games, findings };
+}
+
 // ---- patient_report_data.json ----
 
 export interface PatientReportData {
@@ -796,6 +910,10 @@ export interface PatientReportData {
   overview: PatientOverview;
   escapeScenes: EscapeScene[];
   time: PatientTime;
+  /** STEP TIME 作業 2(§6.4 の 1)。 */
+  findings: Finding[];
+  /** STEP TIME 作業 2(§6.4 の 2)。`--previous` を渡さなければ null。 */
+  previous: PatientPrevious | null;
 }
 
 /** 本人向けの側に出してはならない開発用の語(split_data.py の見張りと同じ)。 */
@@ -816,6 +934,8 @@ export interface BuildPatientReportDataOptions {
   moveCheckConditionId: string;
   /** STEP TIME: `byLeft`(残り時間)を出すための持ち時間(秒)。渡さなければ `time.byLeft` は null。 */
   timeLimitSec?: number;
+  /** STEP TIME 作業 2(§6.4 の 2)。前回の `patient_report_data.json`(`summary`・`findings` だけ読む)。渡さなければ `previous` は null。 */
+  previous?: Pick<PatientReportData, "summary" | "findings"> | null;
 }
 
 export function buildPatientReportData(
@@ -831,6 +951,8 @@ export function buildPatientReportData(
   const moveCheck = moveCheckFromGateLines(gateLines, options.moveCheckConditionId);
   const overview = buildOverview(games, patientGames, moveCheck);
   const time = buildPatientTime(games, patientGames, options.timeLimitSec);
+  const findings = buildFindings(overview, time, patientGames.length);
+  const previous = buildPrevious(options.previous ?? null, findings);
   const patient: PatientReportData = {
     title: options.title,
     person: options.person,
@@ -841,6 +963,8 @@ export function buildPatientReportData(
     overview,
     escapeScenes,
     time,
+    findings,
+    previous,
   };
   assertNoForbiddenWords(patient);
   return patient;
@@ -970,8 +1094,12 @@ export interface AuditCandidate {
   phase: AuditCandidatePhase;
 }
 
-/** `_app.py` と同じ丸め方(四捨五入を整数演算で。負の数は使わない集計なのでこの式で足りる)。 */
-function percentOf(collapsed: number, denominator: number): number {
+/**
+ * `_app.py` と同じ丸め方(四捨五入を整数演算で。負の数は使わない集計なのでこの式で足りる)。
+ * STEP TIME 作業 2(§6.4)の `timeSpentFinding` も、新しい丸め方を作らずこれを使い回す(呼び出し側で `denominator === 0` は
+ * 別に判定して `null` にする ― ここでの `0` 返しは「分母 0 は 0%」という既存の意味のまま変えない)。
+ */
+export function percentOf(collapsed: number, denominator: number): number {
   if (denominator === 0) return 0;
   return Math.floor((200 * collapsed + denominator) / (2 * denominator));
 }

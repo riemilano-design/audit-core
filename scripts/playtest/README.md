@@ -201,9 +201,9 @@ npx tsx scripts/playtest/pipeline.ts --person <id> --kifu-dir <dir> --work <dir>
 
 作業 B で足された `reportData.ts`(S5)・`report-pdf/`(S7)を、`pipeline.ts` の続きの段としてつなぐ。出力は `<work>/report/` の下(局ごとではなく人ごと 1 か所)。
 
-- **S5**(`reportData.ts`。`--until report-data`): 材料 = **このお客さんの段 2**(`--person`・`--kifu-dir` の局。gate 段と同じ向き)。`--records`(段 2)・`--kifu`(固定棋譜)・`--gate`(`<work>/<person>/gate.jsonl`)を渡し、`patient_report_data.json`・`audit_metrics.json`・`sfens.json`・`prose-request.md` を書く。`--conditions`・`--king-escapes-condition`・`--move-check-condition` は渡さない(reportData.ts の既定 = 金の標本(第 6 版)に合わせた承認済みの定義のまま)。**`--gate` の出力(`gate.jsonl`)が無ければ(`--compare-dir` を渡さず gate 段が飛ばされた等)、reportData.ts を呼ばずに「判定の出力(gate.jsonl)が無い(--compare-dir が要る)」とはっきり失敗にする**。**済みの判定**: `patient_report_data.json`・`audit_metrics.json`・`sfens.json` の 3 つが揃っていれば飛ばす。**STEP TIME**: `reportData.ts` に `--time-limit-sec <秒>` を渡すと、`patient_report_data.json` の `time.byLeft`(残り時間の 3 段)を出す(渡さなければ `byLeft` は `null`)。持ち時間は同じ人・同じ回の局ならすべて同じ前提(1 回の実行に 1 つの値)。`pipeline.ts` はこの旗をまだ中継しない(`--time-limit-sec` を付けて回すときは `reportData.ts` を直接呼ぶ)
+- **S5**(`reportData.ts`。`--until report-data`): 材料 = **このお客さんの段 2**(`--person`・`--kifu-dir` の局。gate 段と同じ向き)。`--records`(段 2)・`--kifu`(固定棋譜)・`--gate`(`<work>/<person>/gate.jsonl`)を渡し、`patient_report_data.json`・`audit_metrics.json`・`sfens.json`・`prose-request.md` を書く。`--conditions`・`--king-escapes-condition`・`--move-check-condition` は渡さない(reportData.ts の既定 = 金の標本(第 6 版)に合わせた承認済みの定義のまま)。**`--gate` の出力(`gate.jsonl`)が無ければ(`--compare-dir` を渡さず gate 段が飛ばされた等)、reportData.ts を呼ばずに「判定の出力(gate.jsonl)が無い(--compare-dir が要る)」とはっきり失敗にする**。**済みの判定**: `patient_report_data.json`・`audit_metrics.json`・`sfens.json` の 3 つが揃っていれば飛ばす。**STEP TIME**: `reportData.ts` に `--time-limit-sec <秒>` を渡すと、`patient_report_data.json` の `time.byLeft`(残り時間の 3 段)を出す(渡さなければ `byLeft` は `null`)。持ち時間は同じ人・同じ回の局ならすべて同じ前提(1 回の実行に 1 つの値)。**STEP TIME 作業 2**: `--previous <前回の patient_report_data.json>` を渡すと `patient_report_data.json` の `previous`(発見の種類ごとの前回・今回の比較)を出す(渡さなければ `null`)。`pipeline.ts` はこれらの旗をまだ中継しない(`--time-limit-sec`・`--previous` を付けて回すときは `reportData.ts` を直接呼ぶ)
 - **S6**(言い換え。`--until prose`): 自動化しない(LLM を呼ばない)。`<work>/report/prose.json` が無ければ、`prose-request.md` の場所を示して失敗にする(rc ≠ 0)。あれば次へ進む。照合(使わない語・文の数)はしない ― それは S7 の `_mid.py` の役目のまま
-- **S7**(PDF。`--until pdf`): `report-pdf/build.sh`(`render_main.py`・`render_appendix.py` を作る)→ `REPORT_DATA_DIR=<work>/report python3 -X utf8 render_main.py <patient_report_data.json> <出力 PDF>` → `python3 -X utf8 check_fonts_embedded.py <出力 PDF>` の順に呼ぶ(README は `scripts/playtest/report-pdf/README.md`。python の実行ファイルはそこに書かれた `python3` のまま)。**別冊(`render_appendix.py`)は作らない**(`report-pdf/README.md` に明記した既知の欠落。`reportData.ts` の `audit_metrics.json` からは作れない欄があるため)。**済みの判定**: PDF が `prose.json`・`patient_report_data.json` の両方より新しい(mtime)ときだけ飛ばす。`prose.json` が無い(S6 が失敗している)ときは S7 を一切起こさない
+- **S7**(PDF。`--until pdf`): まず本編 4 ページ(`front.pdf`。STEP TIME 作業 2): `python3 -X utf8 render_front.py <patient_report_data.json> <出力 PDF>` → `python3 -X utf8 check_fonts_embedded.py <出力 PDF>`(`prose.json` を読まないので `REPORT_DATA_DIR` は渡さない。失敗は `stage: "front-pdf"` で、**下の main.pdf の生成とは独立**(front.pdf が失敗しても main.pdf は作る))。次に `report-pdf/build.sh`(`render_main.py`・`render_appendix.py` を作る)→ `REPORT_DATA_DIR=<work>/report python3 -X utf8 render_main.py <patient_report_data.json> <出力 PDF>` → `python3 -X utf8 check_fonts_embedded.py <出力 PDF>` の順に呼ぶ(README は `scripts/playtest/report-pdf/README.md`。python の実行ファイルはそこに書かれた `python3` のまま)。**別冊(`render_appendix.py`)は作らない**(`report-pdf/README.md` に明記した既知の欠落。`reportData.ts` の `audit_metrics.json` からは作れない欄があるため)。**済みの判定**: `front.pdf` は `patient_report_data.json` より新しい(mtime)ときだけ飛ばす(`prose.json` は見ない)。`main.pdf` は `prose.json`・`patient_report_data.json` の両方より新しい(mtime)ときだけ飛ばす。`prose.json` が無い(S6 が失敗している)ときは S7 全体(front.pdf も)を一切起こさない
 - **試験はエンジンも python も起こさない**: S1〜S4 と同じ `ToolRunner` の注入で、道具の実行をすべて差し替える(`scripts/playtest/lib/pipelineReport.test.ts`)
 
 段の一覧(`STAGES`・`UNTIL_STAGES`、`lib/pipeline.ts`)は配列なので、後で司令塔が足せる。
@@ -219,6 +219,27 @@ npx tsx scripts/playtest/pipeline.ts --person <id> --kifu-dir <dir> --work <dir>
   - `byLeft`: `--time-limit-sec` を渡したときだけ(渡さなければ `null`)。残り = 持ち時間 − それまでの本人の消費の合計(この手より前・`spentSec` の和)で 3 段(60 未満・60〜119・120 以上)に分ける。残りが負でも「60 未満」の段に入る
   - `phaseSpent`: 序盤・中盤・終盤(既存の `phaseOf`)ごとの本人の消費の合計を局ごとに出し、「`timeUpLoss`(本人が時間で負けた局。`ending.kind === "timeUp"` かつ本人の結果が「負け」。相手が切れ負けた勝ちの局は入らない)」と「`otherGames`(それ以外)」で中央値
   - `timeUpLosses`: 本人が時間で負けた局(`timeUpLoss` と同じ絞り込み)の局番号・手数・本人の消費の合計(その局で読めた最後の本人の手の `totalSec`)・最後に読んだ局面の評価(`displayScoreOf`)
+
+## 本編 4 ページ(STEP TIME 作業 2。`docs/STEP_TIME_PLAN_2026-09-22.md` §6.4)
+
+2 回目以降の主役になる本編 4 ページを道具で出す。今の本編(凍結した第 6 版、局ごとのページ。`main.pdf`)は**触らず、
+資料 1 になる**。発見の判定は `lib/reportData.ts`(TypeScript・試験できる側)で行い、`report-pdf/render_front.py` は
+描くだけ。
+
+- **`patient_report_data.json` の `findings`**(`lib/reportData.ts` の `buildFindings`。判定的な値は `FINDING_VALUES` の
+  1 か所): 種類は固定の一覧 `timeSpent`(T1: 10 秒以上かけた手の崩れ率が 0〜1 秒の 2 倍以上・10 秒以上の組が 20 組以上)・
+  `timeUpLoss`(T2: 持ち時間を使い切って負けた局が 1 局以上)・`aheadLoss`(優勢から負けた組が 1 組以上)・
+  `phase`(崩れの序中終。つねに出す・判定なし)・`none`(上の 3 つが 1 つも出ないとき)。`shown: false` の発見も JSON には
+  書く(数つき。前回との比較に使う)。文の中の数はすべて `numbers` から作る
+- **`patient_report_data.json` の `previous`**(`lib/reportData.ts` の `buildPrevious`。CLI の `--previous <前回の
+  patient_report_data.json>`): 種類ごとに「前回出た・今回も出た/前回出た・今回は出ない/前回出ない・今回出た」の
+  3 通り + 両方の数(`numbersBefore`・`numbersNow`)。渡さなければ `null`(python は「初回のため、前回との比較は
+  ありません」の 1 文を出す)
+- **`report-pdf/render_front.py`**(新規ファイル。既存の 6 本(`_head.py` 等)は変えない): `patient_report_data.json` の
+  `findings`・`previous`・`time`・`overview`・`summary` だけから、A4 縦 4 ページの PDF を作る(1 今回の n 局で分かった
+  こと / 2 前回のことは、今回も起きたか / 3 次の n 局で見るもの(名前と今回の値だけ。予測や助言は書かない) / 4 数え方)。
+  詳しい設計は `report-pdf/README.md` の「本編 4 ページ」節を参照
+- `pipeline.ts` の S7 に `front.pdf` を足した(`main.pdf` の前に描く。上の「S5〜S7」節を参照)
 
 ## 全員に共通の基準値(`baselineTable.ts`。STEP BASE)
 

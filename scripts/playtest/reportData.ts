@@ -5,7 +5,7 @@
 //     --records <段 2 の JSONL …> --kifu <固定棋譜 JSON …> --gate <gate.jsonl>
 //     --out-patient <patient_report_data.json> --out-audit <audit_metrics.json>
 //     [--conditions <dir>] [--king-escapes-condition <id>] [--move-check-condition <id>] [--out-prose-request <prose-request.md>]
-//     [--time-limit-sec <秒>]
+//     [--time-limit-sec <秒>] [--previous <前回の patient_report_data.json>]
 //
 // - `--conditions` の既定は `scripts/playtest/lib/conditions`。`--king-escapes-condition`/`--move-check-condition` の既定は
 //   金の標本(第 6 版)に合わせた `king_escapes_decrease_v1`・`ahead_move_into_own_king_zone_v1`(докs/STEP_D3-COND_PLAN 済みの承認済み定義)
@@ -13,6 +13,8 @@
 // - `--out-prose-request` を渡すと、1 局ずつ載せる局の事実の一覧(prose-request.md)も書く(S6 の材料。言い換えそのものはしない)
 // - STEP TIME(docs/STEP_TIME_PLAN_2026-09-22.md §6.1): `--time-limit-sec` を渡すと `patient_report_data.json` の
 //   `time.byLeft`(残り時間)を出す。渡さなければ `byLeft` は `null`(欄そのものは出す)
+// - STEP TIME 作業 2(docs/STEP_TIME_PLAN_2026-09-22.md §6.4 の 2): `--previous <前回の patient_report_data.json>` を渡すと
+//   `patient_report_data.json` の `previous`(種類ごとの前回・今回の比較)を出す。渡さなければ `previous` は `null`
 //
 // 【このファイルが絶対にやらないこと】エンジンを回すこと・records/ へ書くこと・judgment を新しく作ること
 
@@ -38,6 +40,7 @@ import {
   featuredGamesOf,
   gameFactsOf,
   totalDiagnosisCountsOf,
+  type BuildPatientReportDataOptions,
   type GameFacts,
   type GameSource,
 } from "./lib/reportData.js";
@@ -48,7 +51,7 @@ const DEFAULT_KING_ESCAPES_CONDITION = "king_escapes_decrease_v1";
 const DEFAULT_MOVE_CHECK_CONDITION = "ahead_move_into_own_king_zone_v1";
 
 const USAGE =
-  "使い方: npx tsx scripts/playtest/reportData.ts --person <id> --name <表示名> --title <タイトル> --today <YYYY-MM-DD> --records <段 2 の JSONL …> --kifu <固定棋譜 JSON …> --gate <gate.jsonl> --out-patient <patient_report_data.json> --out-audit <audit_metrics.json> [--conditions <dir>] [--king-escapes-condition <id>] [--move-check-condition <id>] [--out-prose-request <prose-request.md>] [--time-limit-sec <秒>]";
+  "使い方: npx tsx scripts/playtest/reportData.ts --person <id> --name <表示名> --title <タイトル> --today <YYYY-MM-DD> --records <段 2 の JSONL …> --kifu <固定棋譜 JSON …> --gate <gate.jsonl> --out-patient <patient_report_data.json> --out-audit <audit_metrics.json> [--conditions <dir>] [--king-escapes-condition <id>] [--move-check-condition <id>] [--out-prose-request <prose-request.md>] [--time-limit-sec <秒>] [--previous <前回の patient_report_data.json>]";
 
 export class ReportDataCliError extends Error {}
 
@@ -69,6 +72,8 @@ interface CliArgs {
   outSfens: string | undefined;
   /** STEP TIME: time.byLeft を出すための持ち時間(秒)。渡さなければ undefined(byLeft は null のまま出す)。 */
   timeLimitSec: number | undefined;
+  /** STEP TIME 作業 2: 前回の patient_report_data.json のパス。渡さなければ undefined(previous は null のまま出す)。 */
+  previous: string | undefined;
 }
 
 const SINGLE = [
@@ -85,6 +90,7 @@ const SINGLE = [
   "--out-prose-request",
   "--out-sfens",
   "--time-limit-sec",
+  "--previous",
 ] as const;
 const MULTI = ["--records", "--kifu"] as const;
 
@@ -134,6 +140,7 @@ export function parseArgs(argv: readonly string[]): CliArgs {
     outProseRequest: single.get("--out-prose-request"),
     outSfens: single.get("--out-sfens"),
     timeLimitSec,
+    previous: single.get("--previous"),
   };
 }
 
@@ -160,6 +167,14 @@ function readGateLines(gatePath: string): GateLine[] {
   return readJsonlLines(gatePath) as unknown as GateLine[];
 }
 
+/** STEP TIME 作業 2: --previous のファイルは summary・findings だけ読む(中身の型はそのまま信用する。壊れていれば例外で止まる)。 */
+function readPreviousPatient(previousPath: string | undefined): BuildPatientReportDataOptions["previous"] {
+  if (previousPath === undefined) return undefined;
+  const parsed = JSON.parse(readFileSync(path.resolve(previousPath), "utf-8")) as { summary: { games: number }; findings: unknown };
+  if (!Array.isArray(parsed.findings)) throw new ReportDataCliError(`${previousPath} に findings が無い(前回の道具のバージョンが違う可能性がある)`);
+  return parsed as BuildPatientReportDataOptions["previous"];
+}
+
 async function main(): Promise<void> {
   const args = parseArgs(process.argv.slice(2));
   const sources = args.records.map((recordsPath) => readGameSource(recordsPath, args.kifu));
@@ -175,6 +190,7 @@ async function main(): Promise<void> {
     kingEscapesConditionId: args.kingEscapesConditionId,
     moveCheckConditionId: args.moveCheckConditionId,
     timeLimitSec: args.timeLimitSec,
+    previous: readPreviousPatient(args.previous),
   });
 
   writeFileSync(path.resolve(args.outPatient), `${JSON.stringify(patient, null, 2)}\n`, "utf-8");

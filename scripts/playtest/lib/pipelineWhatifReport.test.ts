@@ -169,11 +169,12 @@ describe("runPipeline: --whatif かつ --until pdf(本編の後に付録 2)", ()
     );
     const result = await runPipeline(baseArgs({ whatif: true }), [senteJob("g1")], fs, runner);
     const whatifCalls = calls.filter((c) => c.tool === "whatif-report-data" || c.tool === "report-pdf-render-whatif" || c.tool === "report-pdf-check-fonts");
-    // report-pdf-check-fonts は本編(main.pdf)向けにも 1 回呼ばれるので、付録向け呼び出しは末尾の 1 回
-    expect(whatifCalls.map((c) => c.tool)).toStrictEqual(["report-pdf-check-fonts", "whatif-report-data", "report-pdf-render-whatif", "report-pdf-check-fonts"]);
-    expect(whatifCalls[1]!.args).toStrictEqual(["--whatif", whatifPath(personDir, "g1"), "--patient", rp.patient, "--out", rp.whatifData]);
-    expect(whatifCalls[2]!.args).toStrictEqual([rp.dir, rp.whatifData, rp.whatifPdf]);
-    expect(whatifCalls[3]!.args).toStrictEqual([rp.whatifPdf]);
+    // report-pdf-check-fonts は本編 4 ページ(front.pdf)・本編(main.pdf)向けにも 1 回ずつ呼ばれるので、付録向け呼び出しは末尾の 1 回
+    // (STEP TIME 作業 2 で front.pdf が S7 に増えた分、先頭の check-fonts が 1 回から 2 回になった)。
+    expect(whatifCalls.map((c) => c.tool)).toStrictEqual(["report-pdf-check-fonts", "report-pdf-check-fonts", "whatif-report-data", "report-pdf-render-whatif", "report-pdf-check-fonts"]);
+    expect(whatifCalls[2]!.args).toStrictEqual(["--whatif", whatifPath(personDir, "g1"), "--patient", rp.patient, "--out", rp.whatifData]);
+    expect(whatifCalls[3]!.args).toStrictEqual([rp.dir, rp.whatifData, rp.whatifPdf]);
+    expect(whatifCalls[4]!.args).toStrictEqual([rp.whatifPdf]);
     expect(result.failures).toStrictEqual([]);
     expect(result.exitCode).toBe(0);
   });
@@ -254,7 +255,8 @@ describe("runPipeline: --whatif かつ --until pdf(本編の後に付録 2)", ()
     );
     const result = await runPipeline(baseArgs({ whatif: true }), [senteJob("g1")], fs, runner);
     const whatifCalls = calls.filter((c) => c.tool === "whatif-report-data" || c.tool === "report-pdf-render-whatif" || c.tool === "report-pdf-check-fonts");
-    expect(whatifCalls.filter((c) => c.tool === "report-pdf-check-fonts")).toHaveLength(1); // 本編向けの 1 回だけ(付録向けは呼ばれない)
+    // front.pdf・main.pdf 向けの 2 回だけ(付録向けは呼ばれない。STEP TIME 作業 2 で front.pdf の分が増えた)
+    expect(whatifCalls.filter((c) => c.tool === "report-pdf-check-fonts")).toHaveLength(2);
     expect(result.failures.some((f) => f.stage === "whatif-pdf")).toBe(true);
     expect(result.exitCode).toBe(1);
   });

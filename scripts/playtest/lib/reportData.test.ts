@@ -18,12 +18,15 @@ import {
   assertNoForbiddenWords,
   buildAuditCandidatePhase,
   buildAuditPairs,
+  buildFindings,
   buildGames,
   buildPatientGames,
   buildPatientReportData,
   buildPatientTime,
+  buildPrevious,
   displayScoreOf,
   endingTextOf,
+  FINDING_VALUES,
   formatPlayedMove,
   gameFactsOf,
   featuredGamesOf,
@@ -37,9 +40,12 @@ import {
   sideOf,
   spentBucketIndexOf,
   testGamesCountOf,
+  type Finding,
   type FixedKifu,
   type GameSource,
+  type PatientOverview,
   type PatientReportData,
+  type PatientTime,
 } from "./reportData.js";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..", "..", "..");
@@ -148,6 +154,9 @@ describe("assertNoForbiddenWords", () => {
     escapeScenes: [],
     // STEP TIME: PatientReportData に time が必須になったので、この試験(禁止語の検査)には関係の無い空の形を足す。
     time: { available: false, perMove: null, bySpent: null, afterLongThink: null, byLeft: null, phaseSpent: null, timeUpLosses: null },
+    // STEP TIME 作業 2: findings・previous も必須になったので、同じく関係の無い空の形を足す。
+    findings: [],
+    previous: null,
   };
   it("開発用の語が無ければ通る", () => expect(() => assertNoForbiddenWords(base)).not.toThrow());
   it("開発用の語(例: sha)が入っていれば止まる", () => {
@@ -400,6 +409,23 @@ describe("buildPatientTime: afterLongThink は「直前の自分の手」= 2 手
     const time = buildPatientTime(games, buildPatientGames(games), undefined);
     expect(time.afterLongThink).toStrictEqual({ quickAfterLongThink: { n: 0, collapsed: 0 }, afterLongThinkAny: { n: 0, collapsed: 0 } });
   });
+
+  // STEP TIME §6.2 の監査の指摘(2026-09-23): 変異 `<` → `<=` が既存の単体試験を通過した。10 秒ちょうどの境界を確かめる。
+  it("正(境界。10 秒ちょうどは longThinkSec 以上に数える): 47 手目がちょうど 10 秒なら afterLongThinkAny に数える", () => {
+    const moveSeconds = timeArrayWith({ 47: { spentSec: 10, totalSec: 900 } });
+    const source: GameSource = { kifuId: "time-along", meta, records, fixed: { id: "time-along", ending: { kind: "mate", ply: 56 }, moves: GAME01_MOVES, moveSeconds } };
+    const games = buildGames([source]);
+    const time = buildPatientTime(games, buildPatientGames(games), undefined);
+    expect(time.afterLongThink!.afterLongThinkAny.n).toBe(1);
+  });
+
+  it("負(境界): 47 手目が 9 秒(10 秒未満)なら afterLongThinkAny に数えない", () => {
+    const moveSeconds = timeArrayWith({ 47: { spentSec: 9, totalSec: 900 } });
+    const source: GameSource = { kifuId: "time-along", meta, records, fixed: { id: "time-along", ending: { kind: "mate", ply: 56 }, moves: GAME01_MOVES, moveSeconds } };
+    const games = buildGames([source]);
+    const time = buildPatientTime(games, buildPatientGames(games), undefined);
+    expect(time.afterLongThink!.afterLongThinkAny.n).toBe(0);
+  });
 });
 
 describe("buildPatientTime: byLeft(負の残りも 60 未満の段に入る)", () => {
@@ -475,6 +501,174 @@ describe("buildPatientTime: timeUpLosses・phaseSpent.timeUpLoss は「本人が
     const time = buildPatientTime(games, buildPatientGames(games), undefined);
     expect(time.phaseSpent!.timeUpLoss.games).toBe(1);
     expect(time.phaseSpent!.otherGames.games).toBe(1);
+  });
+});
+
+// STEP TIME §6.2 の監査の指摘(2026-09-23): 変異(`phaseSpentOfGame` の `- game.plyOffset` を落とす)が既存の単体試験を
+// 通過した(後手の局の試験が無かった)。plyOffset を引いた recordPly を使うことを、手で計算した期待値で確かめる。
+describe("buildPatientTime: phaseSpent は後手の局で plyOffset を引いた recordPly を使う(監査の指摘、2026-09-23)", () => {
+  const originalMoves = GAME01_MOVES.slice(0, 6);
+  const aligned = alignMovesToSente(originalMoves, "gote");
+  const startSfen = aligned.alignment.mirrored ? aligned.alignment.startSfen : DEFAULT_INITIAL_SFEN;
+  const records: RecordLine[] = plantedRecords(aligned.moves, {}, {}, startSfen);
+  const meta = {
+    kind: "meta",
+    kifuId: "time-phase-gote",
+    startedAt: "",
+    gitHead: null,
+    enginePath: "",
+    mirrored: true,
+    startSfen,
+    plyOffset: 1,
+    originalUserSide: "gote",
+  } as unknown as MetaLine;
+  // 本人(後手・偶数手目)の秒: 2 手目 10 秒・4 手目 20 秒・6 手目 30 秒。total は 6。
+  // recordPly = kifPly − plyOffset(1) なので、2→1(1/6 < 1/3 → early)、4→3(3/6 < 2/3 → mid)、6→5(5/6 ≥ 2/3 → late)。
+  // plyOffset を引かずに kifPly をそのまま使うと、2→2(2/6 = 1/3 ちょうど → mid)、4→4(4/6 = 2/3 ちょうど → late)とずれる
+  // (手で計算した境界が変わる。off-by-one の見張り)。
+  const moveSeconds = [
+    { spentSec: 1, totalSec: 1 }, // 1 手目(相手)
+    { spentSec: 10, totalSec: 10 }, // 2 手目(本人)
+    { spentSec: 1, totalSec: 2 }, // 3 手目(相手)
+    { spentSec: 20, totalSec: 30 }, // 4 手目(本人)
+    { spentSec: 1, totalSec: 3 }, // 5 手目(相手)
+    { spentSec: 30, totalSec: 60 }, // 6 手目(本人)
+  ];
+  const source: GameSource = {
+    kifuId: "time-phase-gote",
+    meta,
+    records,
+    fixed: { id: "time-phase-gote", ending: { kind: "resign", ply: originalMoves.length + 1 }, moves: aligned.moves, originalMoves, mirrored: true, moveSeconds },
+  };
+
+  it("otherGames(投了。時間で負けた局ではない)が 1 局・序盤 10・中盤 20・終盤 30", () => {
+    const games = buildGames([source]);
+    const time = buildPatientTime(games, buildPatientGames(games), undefined);
+    expect(time.phaseSpent).toStrictEqual({
+      timeUpLoss: { games: 0, early: 0, mid: 0, late: 0 },
+      otherGames: { games: 1, early: 10, mid: 20, late: 30 },
+    });
+  });
+});
+
+// ---- STEP TIME 作業 2(docs/STEP_TIME_PLAN_2026-09-22.md §6.4)。findings の判定・previous の比較 ----
+
+const EMPTY_TIME: PatientTime = { available: false, perMove: null, bySpent: null, afterLongThink: null, byLeft: null, phaseSpent: null, timeUpLosses: null };
+const EMPTY_OVERVIEW: PatientOverview = { fell: 0, early: 0, mid: 0, late: 0, fromAhead: 0, fromAheadLoss: 0, moveCheck: null };
+
+function timeWithBySpent(le1: { n: number; collapsed: number }, ge10: { n: number; collapsed: number }): PatientTime {
+  return { ...EMPTY_TIME, available: true, bySpent: [le1, { n: 0, collapsed: 0 }, { n: 0, collapsed: 0 }, ge10] };
+}
+
+describe("buildFindings: timeSpent(minPairs・ratio の境界)", () => {
+  it("minPairs 未満(19)なら、比率の条件を満たしていても出さない", () => {
+    const time = timeWithBySpent({ n: 100, collapsed: 10 }, { n: 19, collapsed: 4 }); // 4/19 ≈ 21.05%(le1 の 10% の 2 倍以上)
+    const [timeSpent] = buildFindings(EMPTY_OVERVIEW, time, 20);
+    expect(timeSpent).toMatchObject({ kind: "timeSpent", shown: false });
+  });
+  it("minPairs ちょうど(20)で比率もちょうど 2 倍なら出す", () => {
+    const time = timeWithBySpent({ n: 100, collapsed: 10 }, { n: 20, collapsed: 4 }); // 4/20 = 20%、le1 は 10% ちょうど 2 倍
+    const [timeSpent] = buildFindings(EMPTY_OVERVIEW, time, 20);
+    expect(timeSpent).toMatchObject({ kind: "timeSpent", shown: true, numbers: { a: 4, b: 20, p: 20, c: 10, d: 100, q: 10 } });
+  });
+  it("比率が 2 倍にわずかに届かなければ出さない(3/20 = 15% < 20%)", () => {
+    const time = timeWithBySpent({ n: 100, collapsed: 10 }, { n: 20, collapsed: 3 });
+    const [timeSpent] = buildFindings(EMPTY_OVERVIEW, time, 20);
+    expect(timeSpent).toMatchObject({ kind: "timeSpent", shown: false });
+  });
+  it("0〜1 秒の分母が 0 なら比べられないので出さない", () => {
+    const time = timeWithBySpent({ n: 0, collapsed: 0 }, { n: 100, collapsed: 100 });
+    const [timeSpent] = buildFindings(EMPTY_OVERVIEW, time, 20);
+    expect(timeSpent).toMatchObject({ kind: "timeSpent", shown: false });
+  });
+  it("time.available が false なら、数はすべて null で出さない", () => {
+    const [timeSpent] = buildFindings(EMPTY_OVERVIEW, EMPTY_TIME, 20);
+    expect(timeSpent).toMatchObject({ kind: "timeSpent", shown: false, numbers: { a: null, b: null, p: null, c: null, d: null, q: null } });
+  });
+  it("FINDING_VALUES は計画の値(minPairs 20・ratio 2)のまま", () => {
+    expect(FINDING_VALUES).toStrictEqual({ minPairs: 20, ratio: 2 });
+  });
+});
+
+describe("buildFindings: timeUpLoss(finalScore の詰みの扱い)", () => {
+  it("finalScore が +300 以上・詰み(±3000 の正)は m に数え、null・300 未満は数えない", () => {
+    const time: PatientTime = {
+      ...EMPTY_TIME,
+      available: true,
+      bySpent: [
+        { n: 0, collapsed: 0 },
+        { n: 0, collapsed: 0 },
+        { n: 0, collapsed: 0 },
+        { n: 0, collapsed: 0 },
+      ],
+      timeUpLosses: [
+        { gameNo: 1, total: 10, usedSec: 100, finalScore: 300 }, // ちょうど 300(数える)
+        { gameNo: 2, total: 10, usedSec: 100, finalScore: 3000 }, // 詰み(数える)
+        { gameNo: 3, total: 10, usedSec: 100, finalScore: 299 }, // 300 未満(数えない)
+        { gameNo: 4, total: 10, usedSec: 100, finalScore: null }, // 読めていない(数えない)
+      ],
+    };
+    const [, timeUpLoss] = buildFindings(EMPTY_OVERVIEW, time, 20);
+    expect(timeUpLoss).toMatchObject({ kind: "timeUpLoss", shown: true, numbers: { n: 4, m: 2 } });
+  });
+  it("timeUpLosses が 0 局なら出さない", () => {
+    const time: PatientTime = { ...EMPTY_TIME, available: true, bySpent: [{ n: 0, collapsed: 0 }, { n: 0, collapsed: 0 }, { n: 0, collapsed: 0 }, { n: 0, collapsed: 0 }], timeUpLosses: [] };
+    const [, timeUpLoss] = buildFindings(EMPTY_OVERVIEW, time, 20);
+    expect(timeUpLoss).toMatchObject({ kind: "timeUpLoss", shown: false, numbers: { n: 0, m: 0 } });
+  });
+});
+
+describe("buildFindings: aheadLoss・phase・none", () => {
+  it("aheadLoss は overview.fromAheadLoss ≥ 1 で出す", () => {
+    const overview: PatientOverview = { ...EMPTY_OVERVIEW, fromAhead: 5, fromAheadLoss: 1 };
+    const [, , aheadLoss] = buildFindings(overview, EMPTY_TIME, 20);
+    expect(aheadLoss).toMatchObject({ kind: "aheadLoss", shown: true, numbers: { n: 1, k: 5 } });
+  });
+  it("aheadLoss は fromAheadLoss が 0 なら出さない", () => {
+    const [, , aheadLoss] = buildFindings(EMPTY_OVERVIEW, EMPTY_TIME, 20);
+    expect(aheadLoss).toMatchObject({ kind: "aheadLoss", shown: false });
+  });
+  it("phase はつねに出す(崩れ 0 回でも判定なし)", () => {
+    const [, , , phase] = buildFindings(EMPTY_OVERVIEW, EMPTY_TIME, 20);
+    expect(phase).toMatchObject({ kind: "phase", shown: true, numbers: { fell: 0, early: 0, mid: 0, late: 0 } });
+  });
+  it("none は timeSpent・timeUpLoss・aheadLoss が 1 つも出ないときだけ出す", () => {
+    const [, , , , none] = buildFindings(EMPTY_OVERVIEW, EMPTY_TIME, 20);
+    expect(none).toMatchObject({ kind: "none", shown: true, numbers: { games: 20 } });
+  });
+  it("none は 3 つのどれか 1 つでも出ていれば出さない(aheadLoss だけが出る場合)", () => {
+    const overview: PatientOverview = { ...EMPTY_OVERVIEW, fromAhead: 1, fromAheadLoss: 1 };
+    const [, , , , none] = buildFindings(overview, EMPTY_TIME, 20);
+    expect(none).toMatchObject({ kind: "none", shown: false });
+  });
+});
+
+describe("buildPrevious: 前回との比較(3 通り)", () => {
+  function findingOf(kind: Finding["kind"], shown: boolean): Finding {
+    return { kind, shown, numbers: { x: shown ? 1 : 0 }, text: "t" };
+  }
+  it("null を渡せば previous も null", () => {
+    expect(buildPrevious(null, [findingOf("phase", true)])).toBeNull();
+  });
+  it("前回出た・今回も出た / 前回出た・今回は出ない / 前回出ない・今回出た の 3 通り", () => {
+    const previous = {
+      summary: { games: 14 },
+      findings: [findingOf("timeSpent", true), findingOf("timeUpLoss", true), findingOf("aheadLoss", false)],
+    };
+    const current = [findingOf("timeSpent", true), findingOf("timeUpLoss", false), findingOf("aheadLoss", true)];
+    const result = buildPrevious(previous, current);
+    expect(result).toStrictEqual({
+      games: 14,
+      findings: [
+        { kind: "timeSpent", shownBefore: true, shownNow: true, numbersBefore: { x: 1 }, numbersNow: { x: 1 } },
+        { kind: "timeUpLoss", shownBefore: true, shownNow: false, numbersBefore: { x: 1 }, numbersNow: { x: 0 } },
+        { kind: "aheadLoss", shownBefore: false, shownNow: true, numbersBefore: { x: 0 }, numbersNow: { x: 1 } },
+      ],
+    });
+  });
+  it("前回の findings に今回の種類が無ければ例外(道具のバージョン違いを黙って無視しない)", () => {
+    const previous = { summary: { games: 14 }, findings: [findingOf("timeSpent", true)] };
+    expect(() => buildPrevious(previous, [findingOf("timeSpent", true), findingOf("phase", true)])).toThrow(ReportDataError);
   });
 });
 

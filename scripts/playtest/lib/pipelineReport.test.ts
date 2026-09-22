@@ -13,6 +13,7 @@ import path from "node:path";
 import { describe, expect, it } from "vitest";
 
 import {
+  frontPdfDone,
   PipelineArgError,
   REPORT_STAGES,
   UNTIL_STAGES,
@@ -300,25 +301,34 @@ describe("runPipeline: pdf 段", () => {
     return makeDoneThroughGateFs({ [rp.patient]: "{}", [rp.audit]: "{}", [rp.sfens]: "{}", [rp.prose]: "{}", ...extra });
   }
 
-  it("build → render-main → check-fonts の順に呼ぶ。render-main の引数は [REPORT_DATA_DIR, patient, 出力PDF]、check-fonts は [出力PDF]", async () => {
+  it("front(render-front → check-fonts)の後、build → render-main → check-fonts の順に呼ぶ。render-main の引数は [REPORT_DATA_DIR, patient, 出力PDF]、check-fonts は [出力PDF]", async () => {
     const fs = proseReadyFs();
     const rp = reportPaths("/w");
     const calls: Array<{ tool: string; args: string[] }> = [];
     const result = await runPipeline(baseArgs({ until: "pdf", report }), [senteJob("g1")], fs, makeRunner({}, calls));
-    expect(calls.map((c) => c.tool)).toStrictEqual(["report-pdf-build", "report-pdf-render-main", "report-pdf-check-fonts"]);
-    expect(calls[1]!.args).toStrictEqual([rp.dir, rp.patient, rp.mainPdf]);
-    expect(calls[2]!.args).toStrictEqual([rp.mainPdf]);
+    expect(calls.map((c) => c.tool)).toStrictEqual([
+      "report-pdf-render-front",
+      "report-pdf-check-fonts",
+      "report-pdf-build",
+      "report-pdf-render-main",
+      "report-pdf-check-fonts",
+    ]);
+    expect(calls[0]!.args).toStrictEqual([rp.patient, rp.frontPdf]);
+    expect(calls[1]!.args).toStrictEqual([rp.frontPdf]);
+    expect(calls[3]!.args).toStrictEqual([rp.dir, rp.patient, rp.mainPdf]);
+    expect(calls[4]!.args).toStrictEqual([rp.mainPdf]);
     expect(result.exitCode).toBe(0);
   });
 
-  it("render_main.py が失敗(rc≠0)すれば check_fonts_embedded.py を呼ばず、失敗にする", async () => {
+  it("render_main.py が失敗(rc≠0)すれば check_fonts_embedded.py を呼ばず、失敗にする(front.pdf は main.pdf と独立に作られる)", async () => {
     const fs = proseReadyFs();
     const calls: Array<{ tool: string; args: string[] }> = [];
     const runner = makeRunner({ "report-pdf-render-main": () => ({ code: 1, stdout: "", stderr: "KeyError" }) }, calls);
     const result = await runPipeline(baseArgs({ until: "pdf", report }), [senteJob("g1")], fs, runner);
-    expect(calls.map((c) => c.tool)).toStrictEqual(["report-pdf-build", "report-pdf-render-main"]);
+    expect(calls.map((c) => c.tool)).toStrictEqual(["report-pdf-render-front", "report-pdf-check-fonts", "report-pdf-build", "report-pdf-render-main"]);
     expect(result.exitCode).toBe(1);
     expect(result.failures.some((f) => f.stage === "pdf")).toBe(true);
+    expect(result.failures.some((f) => f.stage === "front-pdf")).toBe(false);
   });
 
   it("check_fonts_embedded.py が失敗(rc≠0)すれば失敗にする(埋め込まれていない書体)", async () => {
@@ -335,6 +345,7 @@ describe("runPipeline: pdf 段", () => {
     const fs = proseReadyFs() as PipelineFs;
     (fs as PipelineFs).mtimeMs = (filePath: string): number | undefined => {
       if (filePath === rp.mainPdf) return 300;
+      if (filePath === rp.frontPdf) return 300;
       if (filePath === rp.prose) return 100;
       if (filePath === rp.patient) return 200;
       return undefined;
@@ -342,6 +353,65 @@ describe("runPipeline: pdf 段", () => {
     const calls: Array<{ tool: string; args: string[] }> = [];
     const result = await runPipeline(baseArgs({ until: "pdf", report }), [senteJob("g1")], fs, makeRunner({}, calls));
     expect(calls.some((c) => c.tool.startsWith("report-pdf"))).toBe(false);
+    expect(result.exitCode).toBe(0);
+  });
+});
+
+// ---- runPipeline: front-pdf(本編 4 ページ。STEP TIME 作業 2、docs/STEP_TIME_PLAN_2026-09-22.md §6.4 の 3) ----
+
+describe("runPipeline: front-pdf(main.pdf の前に描く。prose.json に依存しない)", () => {
+  function proseReadyFs(extra: Record<string, string> = {}): ReturnType<typeof makeFakeFs> {
+    const rp = reportPaths("/w");
+    return makeDoneThroughGateFs({ [rp.patient]: "{}", [rp.audit]: "{}", [rp.sfens]: "{}", [rp.prose]: "{}", ...extra });
+  }
+
+  it("render_front.py の引数は [patient, 出力PDF]。render_front.py が失敗(rc≠0)すれば check-fonts を front.pdf には呼ばない(main.pdf の生成は続ける)", async () => {
+    const fs = proseReadyFs();
+    const rp = reportPaths("/w");
+    const calls: Array<{ tool: string; args: string[] }> = [];
+    const runner = makeRunner({ "report-pdf-render-front": () => ({ code: 1, stdout: "", stderr: "数の照合エラー" }) }, calls);
+    const result = await runPipeline(baseArgs({ until: "pdf", report }), [senteJob("g1")], fs, runner);
+    expect(calls[0]).toStrictEqual({ tool: "report-pdf-render-front", args: [rp.patient, rp.frontPdf] });
+    expect(calls.some((c) => c.tool === "report-pdf-build")).toBe(true); // main.pdf は front.pdf の失敗と独立に作られる
+    expect(result.failures.some((f) => f.stage === "front-pdf" && f.message.includes("render_front.py"))).toBe(true);
+    expect(result.exitCode).toBe(1);
+  });
+
+  it("front.pdf の check-fonts が失敗(rc≠0)すれば front-pdf 段の失敗にする", async () => {
+    const fs = proseReadyFs();
+    const rp = reportPaths("/w");
+    const calls: Array<{ tool: string; args: string[] }> = [];
+    const runner = makeRunner(
+      {
+        "report-pdf-check-fonts": (args) => (args[0] === rp.frontPdf ? { code: 1, stdout: "", stderr: "not embedded" } : { code: 0, stdout: "", stderr: "" }),
+      },
+      calls,
+    );
+    const result = await runPipeline(baseArgs({ until: "pdf", report }), [senteJob("g1")], fs, runner);
+    expect(result.failures.some((f) => f.stage === "front-pdf" && f.message.includes("埋め込まれていない"))).toBe(true);
+    expect(result.exitCode).toBe(1);
+  });
+
+  it("frontPdfDone: front.pdf が patient_report_data.json より新しいときだけ true(prose.json は見ない)", () => {
+    const mtimes: Record<string, number> = { "/front.pdf": 300, "/patient": 200 };
+    const mtimeMs = (p: string): number | undefined => mtimes[p];
+    expect(frontPdfDone(mtimeMs, "/front.pdf", "/patient")).toBe(true);
+    expect(frontPdfDone((p) => (p === "/front.pdf" ? 50 : mtimes[p]), "/front.pdf", "/patient")).toBe(false);
+    expect(frontPdfDone((p) => (p === "/front.pdf" ? undefined : mtimes[p]), "/front.pdf", "/patient")).toBe(false);
+  });
+
+  it("front.pdf が patient_report_data.json より新しければ(mtimeMs)、render-front・その check-fonts を一切呼ばない(main.pdf の判定とは独立)", async () => {
+    const rp = reportPaths("/w");
+    const fs = proseReadyFs() as PipelineFs;
+    (fs as PipelineFs).mtimeMs = (filePath: string): number | undefined => {
+      if (filePath === rp.frontPdf) return 300;
+      if (filePath === rp.patient) return 200;
+      return undefined; // mainPdf・prose は無い(mtime 不明)ので main.pdf 側は動く
+    };
+    const calls: Array<{ tool: string; args: string[] }> = [];
+    const result = await runPipeline(baseArgs({ until: "pdf", report }), [senteJob("g1")], fs, makeRunner({}, calls));
+    expect(calls.some((c) => c.tool === "report-pdf-render-front")).toBe(false);
+    expect(calls.some((c) => c.tool === "report-pdf-build")).toBe(true); // main.pdf は別判定で動く
     expect(result.exitCode).toBe(0);
   });
 });

@@ -301,6 +301,8 @@ export interface ReportPaths {
   proseRequest: string;
   prose: string;
   mainPdf: string;
+  /** STEP TIME 作業 2(docs/STEP_TIME_PLAN_2026-09-22.md §6.4 の 3)。本編 4 ページ。prose.json に依存しない(patient のみ)。 */
+  frontPdf: string;
   /** STEP WHATIF 作業 2。付録 2(分かれ道)の材料と PDF(`--whatif` かつ `--until pdf` のときだけ作る)。 */
   whatifData: string;
   whatifPdf: string;
@@ -316,6 +318,7 @@ export function reportPaths(work: string): ReportPaths {
     proseRequest: path.join(dir, "prose-request.md"),
     prose: path.join(dir, "prose.json"),
     mainPdf: path.join(dir, "main.pdf"),
+    frontPdf: path.join(dir, "front.pdf"),
     whatifData: path.join(dir, "whatif_report_data.json"),
     whatifPdf: path.join(dir, "whatif.pdf"),
   };
@@ -344,6 +347,9 @@ export type ToolName =
   | "report-data"
   | "report-pdf-build"
   | "report-pdf-render-main"
+  // STEP TIME 作業 2(docs/STEP_TIME_PLAN_2026-09-22.md §6.4 の 3)。本編 4 ページ(main.pdf の前に描く。build.sh は要らない
+  // ― render_whatif.py と同じ単体ファイル)。
+  | "report-pdf-render-front"
   | "report-pdf-check-fonts"
   // STEP WHATIF 作業 1(docs/STEP_WHATIF_PLAN_2026-09-22.md)。`--whatif` を付けたときだけ、
   // diagnose の後に局ごとに呼ぶ(--until には加えない。任意の段)。
@@ -527,6 +533,18 @@ export function pdfDone(mtimeMs: (filePath: string) => number | undefined, pdfPa
   const patientM = mtimeMs(patientPath);
   if (pdfM === undefined || proseM === undefined || patientM === undefined) return false;
   return pdfM > proseM && pdfM > patientM;
+}
+
+/**
+ * STEP TIME 作業 2(docs/STEP_TIME_PLAN_2026-09-22.md §6.4 の 3)。`front.pdf` が `patient_report_data.json` より新しいこと。
+ * `render_front.py` は `prose.json` を読まない(`findings`・`previous`・`time`・`overview` だけ)ので、依存は 1 つだけ
+ * (`whatifPdfDone` と同じ考え方)。
+ */
+export function frontPdfDone(mtimeMs: (filePath: string) => number | undefined, pdfPath: string, patientPath: string): boolean {
+  const pdfM = mtimeMs(pdfPath);
+  const patientM = mtimeMs(patientPath);
+  if (pdfM === undefined || patientM === undefined) return false;
+  return pdfM > patientM;
 }
 
 /** STEP WHATIF 作業 2。`whatif_report_data.json` があること(空でなければ良い)。 */
@@ -886,6 +904,23 @@ export async function runPipeline(args: PipelineArgs, games: readonly GameJob[],
   // S7(PDF)。prose.json が無ければ試みない(上で already failed)。本編だけを作る(別冊は既知の欠落。report-pdf/README.md)。
   if (untilRank >= UNTIL_STAGES.indexOf("pdf") && proseOk) {
     const rp = reportPaths(args.work);
+
+    // STEP TIME 作業 2(docs/STEP_TIME_PLAN_2026-09-22.md §6.4 の 3)。本編 4 ページ(main.pdf の前に描く)。
+    // `render_front.py` は `patient_report_data.json` だけを読む(prose.json に依存しない)。main.pdf の生成(下)とは
+    // 独立(front.pdf が失敗しても main.pdf は変わらず作る。既存の main.pdf の動きを変えないため)。
+    const frontAlready = fs.mtimeMs !== undefined && frontPdfDone(fs.mtimeMs, rp.frontPdf, rp.patient);
+    if (!frontAlready) {
+      const frontRenderResult = await run("report-pdf-render-front", [rp.patient, rp.frontPdf]);
+      if (frontRenderResult.code !== 0) {
+        failures.push({ gameId: "*", stage: "front-pdf", message: `render_front.py rc=${frontRenderResult.code}: ${frontRenderResult.stderr.trim().slice(0, 1000)}` });
+      } else {
+        const frontFontsResult = await run("report-pdf-check-fonts", [rp.frontPdf]);
+        if (frontFontsResult.code !== 0) {
+          failures.push({ gameId: "*", stage: "front-pdf", message: `check_fonts_embedded.py rc=${frontFontsResult.code}: 埋め込まれていない書体がある(本編 4 ページ)` });
+        }
+      }
+    }
+
     const already = fs.mtimeMs !== undefined && pdfDone(fs.mtimeMs, rp.mainPdf, rp.prose, rp.patient);
     if (!already) {
       const buildResult = await run("report-pdf-build", []);
