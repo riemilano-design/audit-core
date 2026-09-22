@@ -315,6 +315,29 @@ npx tsx scripts/playtest/pipeline.ts --person <id> --kifu-dir <dir> --work <dir>
   `finding_texts.json` を作り直し、`render_front.py` で `front.pdf` を作り直した。ページ数は 5・4・5、「組」は
   3 組とも 0 件、`main.pdf`(触っていない)は無変更のまま
 
+## 文だけの直し(STEP TIME 作業 4b。`docs/STEP_TIME_PLAN_2026-09-22.md` §6.12)
+
+判定・数は変えない。§5.2 の「試せること」3 本(T1・T4・T3)を、まとめ(1 ページ目末尾)で単独でも読める文に直し
+(「(c) が残るか」のような裸の参照をやめて内容を書き下す)、「同じ物差し」→「同じ数え方」に揃えた。§5.5 の
+読み方を 5 段に(「次の 20 局で見分けがつくこと」の説明を足し、「4 ページ目」→「最後のページ」)、`phase` の
+数の文の下に付ける 1 文(`PHASE_NOTE`)を新設、言葉の意味に「秒読み」を足して 5 項目にした。
+
+- **`lib/findingTexts.ts`**: `FINDING_TEXTS.timeSpent/aheadLoss/none` の `tryable` を docs §5.2 の新しい文字列に
+  更新。`READING_GUIDE` を 5 段の文字列に更新。`PHASE_NOTE`(新規 export)。`GLOSSARY` に 5 項目目「秒読み」を追加
+  (4 項目 → 5 項目)。`FindingTextsFile`・`buildFindingTextsFile()` に `phaseNote` を足した
+- **`lib/findingTexts.test.ts`**: 既存の docs 一致試験(tryable・READING_GUIDE・GLOSSARY)がそのまま新しい文字列を
+  検知する(切り出しの正規表現は変えていないが、`READING_GUIDE` の行末に docs 側の注記が付いたため、抽出の
+  正規表現だけ「」の直後に `(` が続く箇所までを取るように直した)。`PHASE_NOTE` の一致試験を新規に足した
+- **`report-pdf/render_front.py`**: `append_considerations_block` に、`phase`(considerations が null)のときだけ
+  `fdata["phaseNote"]` を数の文の下に足す分岐を追加。4 ページ目の「言葉の意味」は `fdata["glossary"]` をそのまま
+  並べるだけなのでコード側は無変更(5 項目になるのはデータ側の変更のみ)。検査を追加:
+  「次の 20 局までに試せること(まとめ)」の各項目に `(a)`/`(b)`/`(c)` の裸の参照、または「同じ物差し」が残って
+  いれば rc=1(`check_summary_item()`。`_BARE_LETTER_REF`・`_SAME_YARDSTICK`)
+- 実測(3 分 14 局・10 分 10 局・3 分 20 局の 3 組。作業 3・4 と同じ `out/tatsunami3`・`out/tatsunami-long`・
+  `out/tatsunami20`、gitignore): `reportData.ts` の CLI を直接呼び直して `finding_texts.json`・`front.pdf` を作り
+  直した。まとめの各項目に `(a)`〜`(c)` の裸の参照なし・「同じ物差し」0 件・「組」0 件、`phase` の下に 1 文、
+  言葉の意味 5 項目、ページ数 4〜6、`main.pdf`(触っていない)は無変更のまま
+
 ## 全員に共通の基準値(`baselineTable.ts`。STEP BASE)
 
 `scripts/playtest/baselineTable.ts` は、1 人の段 2 の記録を「その人(`--person`)」、その人を除いた 1 人以上を「基準値の材料(`--pool`)」にして、あらかじめ決めた 24 の枠(docs/STEP_BASE_PLAN_2026-09-21.md §1.1)ごとに、その人の崩れ率が基準値からどれだけ外れているかを出す道具(下見。断定ではない)。

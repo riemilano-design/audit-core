@@ -2,6 +2,8 @@
 // `lib/findingTexts.ts` の固定文が docs §5.2・§5.3 の文字列と一致することを確かめる(**文の正本は docs**。
 // 合わなければこの試験を赤のまま報告する ― docs は書き換えない)。
 // STEP TIME 作業 4(§6.10)。§5.5(読み方・ひとことで・試せることのまとめ・言葉の意味)の一致試験を足した。
+// STEP TIME 作業 4b(§6.12)。「試せること」3 本の直し(既存の一致試験がそのまま検知)・読み方の 5 段への直し
+// (既存の一致試験がそのまま検知)・`PHASE_NOTE`(新設)の一致試験・`GLOSSARY` 5 項目(秒読み追加)の一致試験を足した。
 //
 // 【切り方(このファイルの中だけの約束。docs の書式に依存する)】
 // - 発見ごとの節は、docs の見出し行(例:「**T1 `timeSpent`: 崩れは、時間をかけた手に多い**」)から始まる
@@ -14,10 +16,11 @@
 //   (`timeSpent`・`aheadLoss`・`none` は 1 個、`timeUpLoss`・`phase` は複数。`phase` のプレースホルダ
 //   `{序盤|中盤|終盤}`・`{X}と{Y}` はそのまま文字列に含まれる ― 埋め込みは reportData.ts 側の責務で、
 //   ここでは「docs の引用符の中の文字列そのもの」が一致することだけを見る)
-// - §5.5「読み方」「試せることのまとめ」は、それぞれの見出し行の `「(.*)」` を取る(見出しの後ろにコロン + quote が
-//   1 個の場合は greedy)。「試せることのまとめ」は 1 行に「見出し「…」」「末尾の 1 文「…」」の 2 か所あるため、
-//   ラベルの直後から次の `」` までを非 greedy で取る
-// - §5.5「言葉の意味」の 4 項目は `- {用語}: 「(.*)」` の形(既存の quotedTextAfter と同じ切り方)
+// - §5.5「読み方」「試せることのまとめ」「崩れの時期に付ける 1 文」は、それぞれの見出し行の `「(.*)」` を取る
+//   (見出しの後ろにコロン + quote が 1 個の場合は greedy)。「試せることのまとめ」は 1 行に「見出し「…」」
+//   「末尾の 1 文「…」」の 2 か所あるため、ラベルの直後から次の `」` までを非 greedy で取る
+// - §5.5「言葉の意味」の 5 項目(秒読みを含む)は `- {用語}: 「(.*)」` の形(既存の quotedTextAfter と同じ切り方。
+//   「秒読み」の行は `秒読み(2026-09-23 作業 4b で追加)` がラベルなので、その丸括弧を含めて渡す)
 
 import { readFileSync } from "node:fs";
 import path from "node:path";
@@ -29,6 +32,7 @@ import {
   FINDING_TEXTS,
   FORBIDDEN_FINDING_TEXT_WORDS,
   GLOSSARY,
+  PHASE_NOTE,
   PREVIOUS_TEXTS,
   READING_GUIDE,
   TRYABLE_SUMMARY_HEADING,
@@ -181,10 +185,13 @@ describe("「ひとことで」(§5.5)は docs と文字列として一致する
   });
 });
 
-// STEP TIME 作業 4(§6.10 の 1・§5.5)。読み方の枠・試せることのまとめ(見出し・末尾の文)・言葉の意味(4 項目)。
+// STEP TIME 作業 4(§6.10 の 1・§5.5)。読み方の枠・試せることのまとめ(見出し・末尾の文)・言葉の意味(5 項目)。
+// STEP TIME 作業 4b(§6.12)で「読み方」の行の末尾に注記(丸かっこ)が付いたため、READING_GUIDE の抽出は
+// 「」の直後に `(` が続く箇所(注記の開始)までを greedy に取る(本文中の「」はすべて対になっているので、
+// 最後に現れる「」( の直前までが本文、その後ろが注記)。
 describe("読み方・試せることのまとめ・言葉の意味(§5.5)は docs と文字列として一致する(STEP TIME 作業 4)", () => {
   it("READING_GUIDE(1 ページ目冒頭の枠)", () => {
-    const lineMatch = DOCS_TEXT.match(/^\*\*読み方\(1 ページ目の冒頭の枠\)\*\*: 「(.*)」$/m);
+    const lineMatch = DOCS_TEXT.match(/^\*\*読み方\(1 ページ目の冒頭の枠\)\*\*: 「(.*)」\(/m);
     if (!lineMatch) throw new Error("docs に読み方の行が無い");
     expect(READING_GUIDE).toBe(lineMatch[1]);
   });
@@ -200,13 +207,20 @@ describe("読み方・試せることのまとめ・言葉の意味(§5.5)は do
     expect(TRYABLE_SUMMARY_TAIL).toBe(tailMatch[1]);
   });
 
-  it("GLOSSARY(言葉の意味、4 項目。docs の順のまま)", () => {
+  it("GLOSSARY(言葉の意味、5 項目。docs の順のまま。2026-09-23 作業 4b で「秒読み」を追加)", () => {
     expect(GLOSSARY).toStrictEqual([
       { term: "崩れ", text: quotedTextAfter("崩れ") },
       { term: "第 1 候補", text: quotedTextAfter("第 1 候補") },
       { term: "分かれ道", text: quotedTextAfter("分かれ道") },
       { term: "評価", text: quotedTextAfter("評価") },
+      { term: "秒読み", text: quotedTextAfter("秒読み\\(2026-09-23 作業 4b で追加\\)") },
     ]);
+  });
+
+  it("PHASE_NOTE(崩れの時期に付ける 1 文。`phase` の数の文の下。2026-09-23 作業 4b で新設)", () => {
+    const lineMatch = DOCS_TEXT.match(/^\*\*崩れの時期に付ける 1 文\(`phase` の数の文の下。考えられること・試せることの代わり\)\*\*: 「(.*)」$/m);
+    if (!lineMatch) throw new Error("docs に崩れの時期に付ける 1 文の行が無い");
+    expect(PHASE_NOTE).toBe(lineMatch[1]);
   });
 });
 
@@ -228,6 +242,7 @@ describe("禁止語 0(§5.1: BANNED 18 語 + 「すべき」「した方がよ�
     READING_GUIDE,
     TRYABLE_SUMMARY_HEADING,
     TRYABLE_SUMMARY_TAIL,
+    PHASE_NOTE,
     ...GLOSSARY.flatMap((item) => [item.term, item.text]),
   ];
 

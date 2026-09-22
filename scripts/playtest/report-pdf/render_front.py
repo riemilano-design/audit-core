@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# STEP TIME 作業 2・作業 3・作業 4(docs/STEP_TIME_PLAN_2026-09-22.md §6.4・§6.7・§6.10)。本編を描く道具。
+# STEP TIME 作業 2・作業 3・作業 4・作業 4b(docs/STEP_TIME_PLAN_2026-09-22.md §6.4・§6.7・§6.10・§6.12)。本編を描く道具。
 #
 # 使い方: python3 -X utf8 render_front.py <patient_report_data.json> <出力 PDF> [<finding_texts.json>]
 #
@@ -20,11 +20,19 @@
 #   末尾に「次の 20 局までに試せること(まとめ)」(fdata があるときだけ。shown の発見の tryable を出た順に番号で
 #   再掲 + 末尾の 1 文)
 # - 3 ページ目: 表の名を「(崩れた手 / 手)」に(§5.5「言い換え」。お客さん向けの文では「組」を使わない)
-# - 4 ページ目: 頭に「言葉の意味」(fdata の `glossary`。4 項目)を足す
+# - 4 ページ目: 頭に「言葉の意味」(fdata の `glossary`。5 項目)を足す
 # - ページ数は 4〜6(節ごとに改ページは変えていない。3 段・読み方・まとめ・言葉の意味を足すと 1・4 ページ目が
 #   2 ページ以上になり得るため、STEP TIME 作業 3 のときの緩め方をそのまま使う)
 # - 検査: 禁止語・数の照合に加えて、**お客さん向けの文に「組」が残っていれば rc=1**(§6.10 の 2。finding_texts.json
 #   経由の文・このファイルのテンプレートの文の両方が対象。`emit()` に組み込んだ)
+#
+# 【STEP TIME 作業 4b「文だけの直し」(§6.12)】判定・数は変えない。文だけを直す。
+# - `phase` の数の文の下に `PHASE_NOTE`(fdata の `phaseNote`。考えられること・試せることの代わりの 1 文)を足す
+#   (`append_considerations_block` に組み込み)
+# - 4 ページ目の「言葉の意味」が 5 項目に(fdata の `glossary` をそのまま並べるだけなので、このファイルの描画コードは
+#   変えていない ― 増えたのは `lib/findingTexts.ts` 側の `GLOSSARY` の中身)
+# - 検査を追加: 「次の 20 局までに試せること(まとめ)」の各項目に `(a)`/`(b)`/`(c)` の裸の参照、または「同じ物差し」
+#   が残っていれば rc=1(`check_summary_item()`。まとめは発見の題を伴わずに再掲されるため、裸の参照は読者に伝わらない)
 #
 # 【この新規ファイルが再利用する「流儀」(既存の 6 本(_head.py・_util.py・_mid.py・_app_head.py・_app.py・_tail.py)は
 # 変えない。_head.py は import せず、書体の探し方だけをこのファイルの中に書き写した)】
@@ -235,6 +243,23 @@ def emit(text, extra_allowed=frozenset()):
     return text
 
 
+# STEP TIME 作業 4b(§6.12): 「次の 20 局までに試せること(まとめ)」の各項目が単独で読める文であることの検査。
+# まとめは発見の題(「考えられること」の (a)(b)(c) の説明)を伴わずに再掲されるため、(a)/(b)/(c) の裸の参照が
+# 残っていると読者に何を指すか伝わらない(§5.1 の答えの形。docs §5.2 で T1・T4・T3 の tryable から裸の参照を
+# 取り除いた)。「同じ物差し」→「同じ数え方」の言い換えも、まとめの項目で崩れていないかここで見張る。
+_BARE_LETTER_REF = re.compile(r"\([abc]\)")
+_SAME_YARDSTICK = "同じ物差し"
+
+
+def check_summary_item(text):
+    """まとめの 1 項目(§6.12 の検査)。emit() の禁止語・数の照合とは別に、この 2 つを見る。"""
+    if _BARE_LETTER_REF.search(text):
+        _problems.append(f"まとめの項目に (a)/(b)/(c) の裸の参照が残っている: {text[:80]}…")
+    if _SAME_YARDSTICK in text:
+        _problems.append(f"まとめの項目に「{_SAME_YARDSTICK}」が残っている(§6.12: 「同じ数え方」に統一): {text[:80]}…")
+    return text
+
+
 def numbers_text(numbers, labels):
     """「名 数」を読点で並べる(司令塔の指示、2026-09-23: キーの英字のまま出さない。名は labels から引く)。"""
     parts = [f"{labels[k]} {v}" for k, v in numbers.items() if v is not None]
@@ -262,11 +287,15 @@ if not shown:
 def append_considerations_block(kind):
     """STEP TIME 作業 3(§6.7 の 2): 発見の種類 kind の 3 段(考えられること・次の 20 局で見分けがつくこと・
     試せること)を story に足す(fdata が無い、またはその種類の considerations が null(phase)なら何も足さない)。
+    STEP TIME 作業 4b(§6.12): `phase` は 3 段の代わりに `PHASE_NOTE`(考えられること・試せることを付けない
+    理由の 1 文)を数の文の下に足す(fdata があるときだけ)。
     """
     if fdata is None:
         return
     text_set = fdata["findings"].get(kind)
     if text_set is None or text_set["considerations"] is None:
+        if kind == "phase":
+            story.append(P(emit(fdata["phaseNote"]), S_SMALL))
         return
     lead = fdata["considerationsLead"]
     story.append(P(emit(f"考えられること({lead})"), S_H4))
@@ -297,6 +326,7 @@ if fdata is not None:
     if tryable_items:
         story.append(P(emit(fdata["tryableSummaryHeading"]), S_H3))
         for i, item in enumerate(tryable_items, start=1):
+            check_summary_item(item)
             # 番号(1. 2. 3.)は本文の数ではないので、その番号だけをこの行に限って許す(extra_allowed)。
             story.append(P(emit(f"{i}. {item}", extra_allowed={i}), S_BODY))
         story.append(P(emit(fdata["tryableSummaryTail"]), S_SMALL))

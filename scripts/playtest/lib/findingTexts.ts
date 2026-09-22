@@ -2,12 +2,15 @@
 // 3 段(考えられること・次の 20 局で見分けがつくこと・試せること)の固定文。
 // STEP TIME 作業 4「伝わる形」(§6.10 の 1)。読んで分かる順と言葉にするための固定文(読み方・ひとことで・
 // 試せることのまとめ・言葉の意味)を足した。判定・数は変えない。
+// STEP TIME 作業 4b(§6.12。文だけの直し)。「試せること」3 本(T1・T4・T3)を単独で読める文に、「同じ物差し」→
+// 「同じ数え方」。読み方を 5 段に(「4 ページ目」→「最後のページ」)、`phase` の数の文の下に付ける 1 文
+// (`PHASE_NOTE`)を新設、言葉の意味に「秒読み」を足して 5 項目に。判定・数は変えない。
 //
 // 【このファイルがやること】
 // - docs/STEP_TIME_PLAN_2026-09-22.md §5.2・§5.3・§5.5 の固定文を、そのまま写しただけの純粋データとして持つ
 //   (発見の種類 `FindingKind` ごとの `title`・`considerations`・`distinguish`・`tryable`・`oneLine`・
-//   `oneLineVariants`、前回比較の 3 通りの文、評価の揺れの注記、読み方の枠、試せることのまとめの見出し・末尾の文、
-//   言葉の意味の 4 項目)
+//   `oneLineVariants`、前回比較の 3 通りの文、評価の揺れの注記、読み方の枠、`phase` の下の 1 文(`PHASE_NOTE`)、
+//   試せることのまとめの見出し・末尾の文、言葉の意味の 5 項目)
 // - **文の正本は docs §5**。ここは写しであり、試験(findingTexts.test.ts)が両者の文字列一致を確かめる。
 //   文を変えるときは docs → コードの順(§5.1)
 //
@@ -72,7 +75,7 @@ export const FINDING_TEXTS: Record<FindingKind, FindingTextSet> = {
       "(c) 残り時間を気にして、読み切る前に指した",
     ],
     distinguish: "(a) は 10 秒以上かけた手の局面で第 1 候補と第 2 候補の差が小さいか、(b) は時間をかけた手が上位 5 つの中の何番目か、(c) は残り 60 秒未満の手の崩れの割合",
-    tryable: "持ち時間の長い対局(10 分 + 30 秒など)を 5 局ほど混ぜて同じ物差しで数えると、(c) が残るかどうかが分かれます",
+    tryable: "持ち時間の長い対局(10 分 + 30 秒など)を 5 局ほど混ぜて同じ数え方で数えると、『残り時間を気にして指した』が残るかどうかが分かれます",
     oneLine: "長く考えた手のほうが、短く指した手より、崩れる割合が高い",
     oneLineVariants: null,
   },
@@ -96,7 +99,7 @@ export const FINDING_TEXTS: Record<FindingKind, FindingTextSet> = {
       "(c) 優勢の局面で 1 手の差が大きい手(分かれ道)が続いた",
     ],
     distinguish: "優勢の局面での第 1 候補と第 2 候補の差、優勢になった後の残り時間、優勢の局面での分かれ道の数",
-    tryable: "持ち時間の長い対局を混ぜると (b) が分かれます。(a)(c) は次の 20 局を同じ物差しで数えると分かれます",
+    tryable: "持ち時間の長い対局を混ぜると、『使える時間が残っていなかった』かどうかが分かれます。ほかの 2 つは、次の 20 局を同じ数え方で数えると分かれます",
     oneLine: "一度は優勢になった対局のうち、負けに終わった対局があった",
     oneLineVariants: null,
   },
@@ -117,7 +120,7 @@ export const FINDING_TEXTS: Record<FindingKind, FindingTextSet> = {
     title: "時間と形勢の動きについて",
     considerations: ["(a) 本当に無い", "(b) 20 局では少なすぎて見えない", "(c) 比較対象が同じ棋力帯・同じ持ち時間でない"],
     distinguish: "40 局を合わせて同じ枠を数える。(c) は比較対象を持ち時間でそろえてから",
-    tryable: "同じ持ち時間で次の 20 局を指すと、(b) が分かれます",
+    tryable: "同じ持ち時間で次の 20 局を指すと、『20 局では少なすぎて見えない』かどうかが分かれます",
     oneLine: "時間と形勢の動きに、目立った数は出なかった",
     oneLineVariants: null,
   },
@@ -144,9 +147,12 @@ export const EVAL_JITTER_NOTE = "同じ棋譜でもエンジンの評価は回�
 
 // ---- STEP TIME 作業 4「伝わる形」(§6.10。docs §5.5 の写し) ----
 
-/** 読み方(1 ページ目の冒頭の枠。docs §5.5)。 */
+/** 読み方(1 ページ目の冒頭の枠。docs §5.5。2026-09-23 作業 4b で 5 段に直し、「4 ページ目」→「最後のページ」に)。 */
 export const READING_GUIDE =
-  "この冊子の読み方: 太字の 1 行は、棋譜から数えた事実をひとことで言ったものです。その下に数があります。囲みの中は「考えられること」で、どれが当たっているかは分かりません。「試せること」は、次の 20 局までにできることです。言葉の意味と数え方は 4 ページ目にあります。";
+  "この冊子の読み方: 太字の 1 行は、棋譜から数えた事実をひとことで言ったものです。その下に数があります。囲みの中は「考えられること」で、どれが当たっているかは分かりません。「次の 20 局で見分けがつくこと」は、次の冊子でどの数を見るかです。「試せること」は、次の 20 局までにできることです。言葉の意味と数え方は最後のページにあります。";
+
+/** 崩れの時期(`phase`)の数の文の下に付ける 1 文(考えられること・試せることの代わり。docs §5.5。2026-09-23 作業 4b で新設)。 */
+export const PHASE_NOTE = "この項は、序盤・中盤・終盤で局面の数が違うため、回数だけを並べています。";
 
 /** 次の 20 局までに試せること(まとめ)の見出し(1 ページ目の末尾。docs §5.5)。 */
 export const TRYABLE_SUMMARY_HEADING = "次の 20 局までに試せること(まとめ)";
@@ -160,12 +166,13 @@ export interface GlossaryItem {
   text: string;
 }
 
-/** 言葉の意味(4 ページ目の頭。「数え方」の前。docs §5.5)。4 項目、docs の順のまま。 */
+/** 言葉の意味(最後のページの頭。「数え方」の前。docs §5.5)。5 項目、docs の順のまま(2026-09-23 作業 4b で「秒読み」を追加)。 */
 export const GLOSSARY: readonly GlossaryItem[] = [
   { term: "崩れ", text: "本人の 1 手で、形勢の段(優勢・互角・劣勢)が 1 段以上下がったこと。+300 以上を優勢、−300 以下を劣勢、その間を互角としています" },
   { term: "第 1 候補", text: "エンジンが最も良いとした手。第 2 候補はその次です。2 つの差が小さいほど、『候補が並ぶ』局面です" },
   { term: "分かれ道", text: "本人が指した手が、エンジンの候補 5 つに入らなかった、または第 1 候補より 600 以上低かった局面" },
   { term: "評価", text: "エンジンが計算した形勢の数。プラスは本人が良い側です" },
+  { term: "秒読み", text: "持ち時間を使い切った後も、1 手ごとに決まった秒(30 秒など)で指し続けられる決まり。『10 分 + 30 秒』は持ち時間 10 分、秒読み 30 秒の意味です" },
 ];
 
 /**
@@ -175,6 +182,7 @@ export const GLOSSARY: readonly GlossaryItem[] = [
  * STEP TIME 作業 4(§6.10 の 1): `readingGuide`・`tryableSummaryHeading`・`tryableSummaryTail`・`glossary` を足した
  * (`findings[].oneLine` は個々の発見ごとに解決済みの値を `reportData.ts` の `Finding.oneLine` が持つので、
  * ここ(種類に依らない固定文の置き場)には含めない)。
+ * STEP TIME 作業 4b(§6.12): `phaseNote`(`phase` の数の文の下に付ける 1 文)を足した。
  */
 export interface FindingTextsFile {
   considerationsLead: string;
@@ -185,6 +193,7 @@ export interface FindingTextsFile {
   tryableSummaryHeading: string;
   tryableSummaryTail: string;
   glossary: readonly GlossaryItem[];
+  phaseNote: string;
 }
 
 export function buildFindingTextsFile(): FindingTextsFile {
@@ -197,6 +206,7 @@ export function buildFindingTextsFile(): FindingTextsFile {
     tryableSummaryHeading: TRYABLE_SUMMARY_HEADING,
     tryableSummaryTail: TRYABLE_SUMMARY_TAIL,
     glossary: GLOSSARY,
+    phaseNote: PHASE_NOTE,
   };
 }
 
