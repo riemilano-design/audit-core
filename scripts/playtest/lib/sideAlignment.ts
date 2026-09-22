@@ -138,14 +138,23 @@ export function initialSfenOf(meta: Pick<MetaLine, "mirrored" | "startSfen"> | u
  * - 本人が後手 … `mirrored: true`・`originalUserSide`・`plyOffset`・`startSfen` を書き、`moves` は回して畳んだ手順、
  *   **回す前の手順を `originalMoves` に残す**(戻す計算を報告の根拠にしない。計画 Q-4)
  * STEP D0-KIFU3: 入力に `ending` のキーがあれば同じ値を moves の直前に写し、無ければ出さない(キーが無い = 終局の行を見ていない)。
+ * STEP TIME: 入力に `moveSeconds` のキーがあれば**そのまま**(回さず・詰めず)写す。`moveSeconds` は元の手順の順のまま
+ *   (`originalMoves` と同じ並び)なので、ここで手を加える必要が無い(欄が無ければ出さない)。
  * **本人の名前は書かない**(ヘッダの値は kifu-import-check.ts の標準出力にだけ出す)。
  */
 export function alignedFixedKifu(
-  fixed: { id: string; source: string; ending?: FixedKifuEnding | null; moves: readonly string[] },
+  fixed: {
+    id: string;
+    source: string;
+    ending?: FixedKifuEnding | null;
+    moves: readonly string[];
+    moveSeconds?: ReadonlyArray<{ spentSec: number; totalSec: number } | null>;
+  },
   userSide: UserSide,
 ): Record<string, unknown> {
   const { alignment, moves } = alignMovesToSente(fixed.moves, userSide);
   const ending = Object.hasOwn(fixed, "ending") ? { ending: fixed.ending } : {};
-  if (!alignment.mirrored) return { id: fixed.id, source: fixed.source, mirrored: false, ...ending, moves };
-  return { id: fixed.id, source: fixed.source, ...sideMetaFields(alignment), ...ending, moves, originalMoves: [...fixed.moves] };
+  const moveSeconds = Object.hasOwn(fixed, "moveSeconds") ? { moveSeconds: fixed.moveSeconds } : {};
+  if (!alignment.mirrored) return { id: fixed.id, source: fixed.source, mirrored: false, ...ending, ...moveSeconds, moves };
+  return { id: fixed.id, source: fixed.source, ...sideMetaFields(alignment), ...ending, ...moveSeconds, moves, originalMoves: [...fixed.moves] };
 }

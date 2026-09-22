@@ -5,11 +5,14 @@
 //     --records <段 2 の JSONL …> --kifu <固定棋譜 JSON …> --gate <gate.jsonl>
 //     --out-patient <patient_report_data.json> --out-audit <audit_metrics.json>
 //     [--conditions <dir>] [--king-escapes-condition <id>] [--move-check-condition <id>] [--out-prose-request <prose-request.md>]
+//     [--time-limit-sec <秒>]
 //
 // - `--conditions` の既定は `scripts/playtest/lib/conditions`。`--king-escapes-condition`/`--move-check-condition` の既定は
 //   金の標本(第 6 版)に合わせた `king_escapes_decrease_v1`・`ahead_move_into_own_king_zone_v1`(докs/STEP_D3-COND_PLAN 済みの承認済み定義)
 // - 組み立ては純粋関数(lib/reportData.ts)に任せ、ここは読み書きと配線だけ
 // - `--out-prose-request` を渡すと、1 局ずつ載せる局の事実の一覧(prose-request.md)も書く(S6 の材料。言い換えそのものはしない)
+// - STEP TIME(docs/STEP_TIME_PLAN_2026-09-22.md §6.1): `--time-limit-sec` を渡すと `patient_report_data.json` の
+//   `time.byLeft`(残り時間)を出す。渡さなければ `byLeft` は `null`(欄そのものは出す)
 //
 // 【このファイルが絶対にやらないこと】エンジンを回すこと・records/ へ書くこと・judgment を新しく作ること
 
@@ -45,7 +48,7 @@ const DEFAULT_KING_ESCAPES_CONDITION = "king_escapes_decrease_v1";
 const DEFAULT_MOVE_CHECK_CONDITION = "ahead_move_into_own_king_zone_v1";
 
 const USAGE =
-  "使い方: npx tsx scripts/playtest/reportData.ts --person <id> --name <表示名> --title <タイトル> --today <YYYY-MM-DD> --records <段 2 の JSONL …> --kifu <固定棋譜 JSON …> --gate <gate.jsonl> --out-patient <patient_report_data.json> --out-audit <audit_metrics.json> [--conditions <dir>] [--king-escapes-condition <id>] [--move-check-condition <id>] [--out-prose-request <prose-request.md>]";
+  "使い方: npx tsx scripts/playtest/reportData.ts --person <id> --name <表示名> --title <タイトル> --today <YYYY-MM-DD> --records <段 2 の JSONL …> --kifu <固定棋譜 JSON …> --gate <gate.jsonl> --out-patient <patient_report_data.json> --out-audit <audit_metrics.json> [--conditions <dir>] [--king-escapes-condition <id>] [--move-check-condition <id>] [--out-prose-request <prose-request.md>] [--time-limit-sec <秒>]";
 
 export class ReportDataCliError extends Error {}
 
@@ -64,6 +67,8 @@ interface CliArgs {
   moveCheckConditionId: string;
   outProseRequest: string | undefined;
   outSfens: string | undefined;
+  /** STEP TIME: time.byLeft を出すための持ち時間(秒)。渡さなければ undefined(byLeft は null のまま出す)。 */
+  timeLimitSec: number | undefined;
 }
 
 const SINGLE = [
@@ -79,6 +84,7 @@ const SINGLE = [
   "--move-check-condition",
   "--out-prose-request",
   "--out-sfens",
+  "--time-limit-sec",
 ] as const;
 const MULTI = ["--records", "--kifu"] as const;
 
@@ -107,6 +113,11 @@ export function parseArgs(argv: readonly string[]): CliArgs {
   if (missing.length > 0) throw new ReportDataCliError(`${missing.join("・")} が無い。${USAGE}`);
   if (multi.get("--records")!.length === 0) throw new ReportDataCliError(`--records が無い。${USAGE}`);
   if (multi.get("--kifu")!.length === 0) throw new ReportDataCliError(`--kifu が無い。${USAGE}`);
+  const timeLimitSecRaw = single.get("--time-limit-sec");
+  const timeLimitSec = timeLimitSecRaw === undefined ? undefined : Number(timeLimitSecRaw);
+  if (timeLimitSec !== undefined && (!Number.isFinite(timeLimitSec) || timeLimitSec <= 0)) {
+    throw new ReportDataCliError(`--time-limit-sec は正の数(秒): ${timeLimitSecRaw}`);
+  }
   return {
     person: single.get("--person")!,
     name: single.get("--name")!,
@@ -122,6 +133,7 @@ export function parseArgs(argv: readonly string[]): CliArgs {
     moveCheckConditionId: single.get("--move-check-condition") ?? DEFAULT_MOVE_CHECK_CONDITION,
     outProseRequest: single.get("--out-prose-request"),
     outSfens: single.get("--out-sfens"),
+    timeLimitSec,
   };
 }
 
@@ -162,6 +174,7 @@ async function main(): Promise<void> {
     today: args.today,
     kingEscapesConditionId: args.kingEscapesConditionId,
     moveCheckConditionId: args.moveCheckConditionId,
+    timeLimitSec: args.timeLimitSec,
   });
 
   writeFileSync(path.resolve(args.outPatient), `${JSON.stringify(patient, null, 2)}\n`, "utf-8");

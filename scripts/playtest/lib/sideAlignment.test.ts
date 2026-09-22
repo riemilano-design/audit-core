@@ -235,4 +235,25 @@ describe("alignedFixedKifu(kifu-import-check.ts の --fixed。Q-4)", () => {
       sideAlignmentChecked: false,
     });
   });
+
+  // STEP TIME(docs/STEP_TIME_PLAN_2026-09-22.md §6.1 の 1): moveSeconds は通すだけ(回さず・詰めず)。
+  const MOVE_SECONDS_10 = KIFU_10MOVES.map((_, i) => ({ spentSec: i + 1, totalSec: (i + 1) * 10 }));
+
+  it("STEP TIME: 本人が先手なら moveSeconds はそのまま(ending の後ろ・moves の前)", () => {
+    const written = alignedFixedKifu({ ...fixed, moveSeconds: MOVE_SECONDS_10 }, "sente");
+    expect(Object.keys(written)).toStrictEqual(["id", "source", "mirrored", "ending", "moveSeconds", "moves"]);
+    expect(written.moveSeconds).toStrictEqual(MOVE_SECONDS_10);
+  });
+
+  it("STEP TIME: 本人が後手でも moveSeconds は回さない・詰めない(10 件のまま。originalMoves と同じ並び・同じ長さ)", () => {
+    const written = alignedFixedKifu({ ...fixed, moveSeconds: MOVE_SECONDS_10 }, "gote");
+    expect(written.moveSeconds).toStrictEqual(MOVE_SECONDS_10); // moves は 19 件に畳まれるが moveSeconds は 10 件のまま
+    expect((written.moveSeconds as unknown[]).length).toBe((written.originalMoves as string[]).length);
+    expect((written.moves as string[]).length).not.toBe((written.moveSeconds as unknown[]).length);
+  });
+
+  it("STEP TIME: 入力に moveSeconds のキーが無ければ出力にも無い(先手・後手のどちらでも)", () => {
+    expect(Object.hasOwn(alignedFixedKifu(fixed, "sente"), "moveSeconds")).toBe(false);
+    expect(Object.hasOwn(alignedFixedKifu(fixed, "gote"), "moveSeconds")).toBe(false);
+  });
 });

@@ -10,6 +10,8 @@
 //   **揃えたことを手ごとに残す**(STEP D0-KIFU2。docs/STEP_D0-KIFU2_PLAN_2026-09-15.md。記録の text は元の行のまま)
 // - 終局の行を、決まった語の表からだけ `{ kind, ply }` に読む(STEP D0-KIFU3。docs/STEP_D0-KIFU3_PLAN_2026-09-15.md)。
 //   終局の行の文は写さない。KIF の行頭の手数が「指し手数 + 1」と食い違えば unreadable にし、その行は読めなかった行に入れて取り込みは続ける
+// - KIF の指し手の行の末尾 `(m:ss/h:mm:ss)` を読み、`moves[i].time`(切り捨ての整数秒)に残す(STEP TIME。
+//   docs/STEP_TIME_PLAN_2026-09-22.md §6.1)。CSA は今回読まない(null)。1 手でも読めれば `toFixedKifu` が `moveSeconds` を書く
 //
 // 【このファイルが絶対にやらないこと】
 // - 平手以外の開始局面の変換(unsupported_start として返す。本番の対局は初期局面から始まる)
@@ -83,9 +85,17 @@ export interface PieceNameAlignment {
   readAs: (typeof KIF_PIECE_NAME_ALIGNMENTS)[WrittenPieceName];
 }
 
+/** STEP TIME: 指し手 1 手の消費時間((m:ss/h:mm:ss) から読んだ整数秒)。KIF だけが持つ(CSA は今回読まない。null)。 */
+export interface MoveTime {
+  /** その手にかけた秒(m:ss) */
+  spentSec: number;
+  /** その時点までの消費の合計(h:mm:ss) */
+  totalSec: number;
+}
+
 export interface ClassifiedLines {
   /** 指し手として採った行 */
-  moves: Array<SourceLine & { ply: number; usi: string; timeDropped: boolean; pieceNameAligned: PieceNameAlignment | null }>;
+  moves: Array<SourceLine & { ply: number; usi: string; timeDropped: boolean; pieceNameAligned: PieceNameAlignment | null; time: MoveTime | null }>;
   /** 読んだが使わない行 */
   unused: Array<SourceLine & { kind: UnusedKind }>;
   /** 読めなかった行(知らない形・終局の後の指し手)。黙って捨てない */
@@ -151,7 +161,9 @@ function kifEndingKind(word: string): EndingKind {
   return kind;
 }
 // 行の正規化で「:」は全角の「：」に置き換わる(shogiops の normalizedKifLines と同じ)。消費時間はその後の形で探す。
-const KIF_TIME = /\s*\(\s*\d+[:：]\d+\s*\/\s*\d+[:：]\d+[:：]\d+\s*\)\s*$/;
+// STEP TIME: 捨てるだけだった数字を読むため、(m:ss/h:mm:ss) の 5 つの数字を捕まえる形に変える(捨てる・食い違いを見る側の
+// 挙動は変えない ― .replace(KIF_TIME, "") は今までどおり全体を消すだけ)。
+const KIF_TIME = /\s*\(\s*(\d+)[:：](\d+)\s*\/\s*(\d+)[:：](\d+)[:：](\d+)\s*\)\s*$/;
 const KIF_MOVE_LINE = /^(\d+)\s+(\S.*)$/;
 const KIF_BOARD_PREFIXES = ["|", "+---", "先手の持駒", "後手の持駒", "下手の持駒", "上手の持駒", "先手番", "後手番", "上手番", "下手番"];
 
@@ -159,6 +171,13 @@ const KIF_BOARD_PREFIXES = ["|", "+---", "先手の持駒", "後手の持駒", "
 // 成り駒には 成・不成・打 が付かないので、揃えた後に kifMoveRegex で読める行は必ずこの形に合う。行頭に固定するので、
 // 移動先の前に記号(▲ など)が付く書き方は揃わず、unparsable_move で止まる(計画書 2.1 の限界)。
 const KIF_SHORT_PROMOTED_PIECE = /^([１２３４５６７８９][一二三四五六七八九]|同\s?)([竜全圭杏])(?=\([1-9][1-9]\))/;
+
+/** STEP TIME: 指し手行の末尾の (m:ss/h:mm:ss) を読む。無ければ null(切り捨ての整数。KIF_TIME に合わなければ読まない)。 */
+export function parseKifTime(rest: string): MoveTime | null {
+  const m = rest.match(KIF_TIME);
+  if (!m) return null;
+  return { spentSec: Number(m[1]) * 60 + Number(m[2]), totalSec: Number(m[3]) * 3600 + Number(m[4]) * 60 + Number(m[5]) };
+}
 
 /** 指し手の部分(消費時間を外したもの)の駒の欄だけを揃える。揃えるものが無ければ、そのまま返して aligned は null。 */
 export function alignKifPieceName(moveText: string): { text: string; aligned: PieceNameAlignment | null } {
@@ -235,6 +254,7 @@ export function importKif(raw: string): KifuImportResult {
       const rest = moveLine[2] ?? "";
       const moveText = rest.replace(KIF_TIME, "").trim();
       const timeDropped = moveText !== rest.trim();
+      const time = parseKifTime(rest);
 
       if (endingFact !== null) {
         lines.unread.push({ ...src, why: "終局の行の後にある指し手行" });
@@ -278,7 +298,7 @@ export function importKif(raw: string): KifuImportResult {
         lines.unread.push({ ...src, why: "非合法な指し手" });
         return { kind: "not_imported", format: "kif", reason: "illegal_move", detail: `${expected} 手目 ${moveText}(${usi})`, lineNo, lines };
       }
-      lines.moves.push({ ...src, ply: expected, usi, timeDropped, pieceNameAligned: aligned });
+      lines.moves.push({ ...src, ply: expected, usi, timeDropped, pieceNameAligned: aligned, time });
       lastDest = md.to;
       continue;
     }
@@ -442,7 +462,7 @@ export function importCsa(raw: string): KifuImportResult {
         notationMismatches.push({ ply, original: text, remade: remade ?? null });
       }
       libPos.play(md);
-      lines.moves.push({ ...src, ply, usi, timeDropped: false, pieceNameAligned: null });
+      lines.moves.push({ ...src, ply, usi, timeDropped: false, pieceNameAligned: null, time: null }); // STEP TIME: CSA は今回読まない
       continue;
     }
     lines.unread.push({ ...src, why: "知らない形の行" });
@@ -470,14 +490,27 @@ export function importCsa(raw: string): KifuImportResult {
 
 // ---------------------------------------------------------------- 共通
 
-/** 取り込めた棋譜を、固定棋譜の JSON の形にする(replay.ts がそのまま読める形)。 */
+/**
+ * 取り込めた棋譜を、固定棋譜の JSON の形にする(replay.ts がそのまま読める形)。
+ * STEP TIME: `moveSeconds`(moves と同じ長さ・同じ順の `MoveTime | null` の配列)は、**1 手でも秒を読めていれば足す**
+ * (moves の後ろのキー)。1 手も読めていなければ(CSA・時間の無い KIF)、欄そのものを書かない ― 既存の固定棋譜・
+ * 既存の試験(id・source・ending・moves の 4 欄だけを見るもの)を、秒の無い棋譜については変えないため。
+ */
 export function toFixedKifu(
   result: Extract<KifuImportResult, { kind: "imported" }>,
   id: string,
   source: string,
-): { id: string; source: string; ending: FixedKifuEnding | null; moves: string[] } {
+): { id: string; source: string; ending: FixedKifuEnding | null; moves: string[]; moveSeconds?: Array<MoveTime | null> } {
   // STEP D0-KIFU3: ending は moves の前(計画 2. の欄の位置 (i))。終局の行が無ければ null でキーは書く
-  return { id, source, ending: result.endingFact === null ? null : { ...result.endingFact }, moves: [...result.moves] };
+  const moveSeconds = result.lines.moves.map((m) => m.time);
+  const hasTime = moveSeconds.some((t) => t !== null);
+  return {
+    id,
+    source,
+    ending: result.endingFact === null ? null : { ...result.endingFact },
+    moves: [...result.moves],
+    ...(hasTime ? { moveSeconds } : {}),
+  };
 }
 
 /**

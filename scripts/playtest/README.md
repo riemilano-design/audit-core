@@ -46,7 +46,8 @@ npx tsx scripts/playtest/replay.ts scripts/playtest/kifu/2026-09-10-claude-10mov
 
 - `ending`(STEP D0-KIFU3、`docs/STEP_D0-KIFU3_PLAN_2026-09-15.md`): 棋譜に書かれていた終局の種類と手数。`{ "kind": "timeUp", "ply": 78 }` の形で、`kind` は `lib/kifuImport.ts` の語の表(KIF は `ENDING_KIF_WORDS` の 12 語、CSA は `CSA_ENDING_KINDS`)の英名。表に無い CSA の語は `"unlisted"`。`ply` は**元の手順**の指し手数 + 1(回した局でも `originalMoves` の手数 + 1)。KIF の行頭の手数が食い違えば `{ "kind": "unreadable", "reason": "ply_mismatch", "ply": null }`。終局の行が無ければ `null`。**キーが無い = 終局の行を見ていない**(この STEP より前に作った固定棋譜・探索の棋譜)。終局の行の文と「まで」の行は写さない
 - `mirrored`・`originalUserSide`・`plyOffset`・`startSfen`・`originalMoves`(STEP D0-SIDE 段 2、`docs/STEP_D0-SIDE_PLAN_2026-09-15.md`): `--me` か `--as` で本人の側を決めたときだけ書く。本人が先手なら `mirrored: false` だけ。本人が後手なら `mirrored: true`・`originalUserSide: "gote"`・`plyOffset: 1`・回した 1 手目を開始局面に畳んだ `startSfen`・畳んだ後の `moves`・回す前の手順 `originalMoves`
-- 欄の並び: 側を決めない `{ id, source, ending, moves }` / 本人が先手 `{ id, source, mirrored, ending, moves }` / 本人が後手 `{ id, source, mirrored, originalUserSide, plyOffset, startSfen, ending, moves, originalMoves }`
+- `moveSeconds`(STEP TIME、`docs/STEP_TIME_PLAN_2026-09-22.md` §6.1): KIF の指し手行の末尾 `(m:ss/h:mm:ss)` から読んだ、**元の手順の順のまま**(`originalMoves` と同じ並び・同じ長さ。KIF の手数 = 添字 + 1)の消費時間の配列。各要素は `{ "spentSec": 1, "totalSec": 12 }`(切り捨ての整数)か、その手の秒を読めなければ `null`。回した局(`mirrored: true`)でも回さず・詰めない(`moves` ではなく `originalMoves` と対応する)。**1 手も読めていなければ欄そのものを書かない**(CSA・時間の無い KIF・この STEP より前に作った固定棋譜)。既存の固定棋譜に後から足す小さな道具は `kifu-times.ts <fixed.json> <元の KIF>`(下記)
+- 欄の並び: 側を決めない `{ id, source, ending, moves }` / 本人が先手 `{ id, source, mirrored, ending, moves }` / 本人が後手 `{ id, source, mirrored, originalUserSide, plyOffset, startSfen, ending, moves, originalMoves }`(`moveSeconds` を持つときは、いずれも `ending` の後ろ・`moves` の前)
 
 ## JSONL の形式
 
@@ -200,12 +201,24 @@ npx tsx scripts/playtest/pipeline.ts --person <id> --kifu-dir <dir> --work <dir>
 
 作業 B で足された `reportData.ts`(S5)・`report-pdf/`(S7)を、`pipeline.ts` の続きの段としてつなぐ。出力は `<work>/report/` の下(局ごとではなく人ごと 1 か所)。
 
-- **S5**(`reportData.ts`。`--until report-data`): 材料 = **このお客さんの段 2**(`--person`・`--kifu-dir` の局。gate 段と同じ向き)。`--records`(段 2)・`--kifu`(固定棋譜)・`--gate`(`<work>/<person>/gate.jsonl`)を渡し、`patient_report_data.json`・`audit_metrics.json`・`sfens.json`・`prose-request.md` を書く。`--conditions`・`--king-escapes-condition`・`--move-check-condition` は渡さない(reportData.ts の既定 = 金の標本(第 6 版)に合わせた承認済みの定義のまま)。**`--gate` の出力(`gate.jsonl`)が無ければ(`--compare-dir` を渡さず gate 段が飛ばされた等)、reportData.ts を呼ばずに「判定の出力(gate.jsonl)が無い(--compare-dir が要る)」とはっきり失敗にする**。**済みの判定**: `patient_report_data.json`・`audit_metrics.json`・`sfens.json` の 3 つが揃っていれば飛ばす
+- **S5**(`reportData.ts`。`--until report-data`): 材料 = **このお客さんの段 2**(`--person`・`--kifu-dir` の局。gate 段と同じ向き)。`--records`(段 2)・`--kifu`(固定棋譜)・`--gate`(`<work>/<person>/gate.jsonl`)を渡し、`patient_report_data.json`・`audit_metrics.json`・`sfens.json`・`prose-request.md` を書く。`--conditions`・`--king-escapes-condition`・`--move-check-condition` は渡さない(reportData.ts の既定 = 金の標本(第 6 版)に合わせた承認済みの定義のまま)。**`--gate` の出力(`gate.jsonl`)が無ければ(`--compare-dir` を渡さず gate 段が飛ばされた等)、reportData.ts を呼ばずに「判定の出力(gate.jsonl)が無い(--compare-dir が要る)」とはっきり失敗にする**。**済みの判定**: `patient_report_data.json`・`audit_metrics.json`・`sfens.json` の 3 つが揃っていれば飛ばす。**STEP TIME**: `reportData.ts` に `--time-limit-sec <秒>` を渡すと、`patient_report_data.json` の `time.byLeft`(残り時間の 3 段)を出す(渡さなければ `byLeft` は `null`)。持ち時間は同じ人・同じ回の局ならすべて同じ前提(1 回の実行に 1 つの値)。`pipeline.ts` はこの旗をまだ中継しない(`--time-limit-sec` を付けて回すときは `reportData.ts` を直接呼ぶ)
 - **S6**(言い換え。`--until prose`): 自動化しない(LLM を呼ばない)。`<work>/report/prose.json` が無ければ、`prose-request.md` の場所を示して失敗にする(rc ≠ 0)。あれば次へ進む。照合(使わない語・文の数)はしない ― それは S7 の `_mid.py` の役目のまま
 - **S7**(PDF。`--until pdf`): `report-pdf/build.sh`(`render_main.py`・`render_appendix.py` を作る)→ `REPORT_DATA_DIR=<work>/report python3 -X utf8 render_main.py <patient_report_data.json> <出力 PDF>` → `python3 -X utf8 check_fonts_embedded.py <出力 PDF>` の順に呼ぶ(README は `scripts/playtest/report-pdf/README.md`。python の実行ファイルはそこに書かれた `python3` のまま)。**別冊(`render_appendix.py`)は作らない**(`report-pdf/README.md` に明記した既知の欠落。`reportData.ts` の `audit_metrics.json` からは作れない欄があるため)。**済みの判定**: PDF が `prose.json`・`patient_report_data.json` の両方より新しい(mtime)ときだけ飛ばす。`prose.json` が無い(S6 が失敗している)ときは S7 を一切起こさない
 - **試験はエンジンも python も起こさない**: S1〜S4 と同じ `ToolRunner` の注入で、道具の実行をすべて差し替える(`scripts/playtest/lib/pipelineReport.test.ts`)
 
 段の一覧(`STAGES`・`UNTIL_STAGES`、`lib/pipeline.ts`)は配列なので、後で司令塔が足せる。
+
+## 消費時間(STEP TIME 作業 1。`docs/STEP_TIME_PLAN_2026-09-22.md` §6.1)
+
+- **取り込み**: `kifu-import-check.ts --fixed` は、KIF の指し手行の末尾 `(m:ss/h:mm:ss)` を読んで固定棋譜に `moveSeconds` を書く(形式は上記「固定棋譜(kifu.json)の形式」)。CSA は読まない(今回は対象外)。
+- **既存の固定棋譜に後から足す**: `npx tsx scripts/playtest/kifu-times.ts <fixed.json> <元の KIF>`。元の KIF を読み直し、固定棋譜の本人の手順(`originalMoves` があればそれ、無ければ `moves`)と 1 手でも食い違えば書かない(理由を標準エラーへ出して exit 1)。一致すれば `moveSeconds` を足して書き直す(**mtime は変えない**)。1 手も秒を読めなければ、欄を足さずに exit 0。開発補助であり本番導線には含めない。
+- **`patient_report_data.json` の `time`**(`lib/reportData.ts` の `buildPatientTime`。判定的な値は `TIME_VALUES` の 1 か所): 1 局でも `moveSeconds` が無ければ `available: false` で他の欄はすべて `null`(比較対象の棋譜など、一部だけ出して比べられるように見せない)。`available: true` のときの欄:
+  - `perMove`: 本人の手の秒の件数・中央値・平均・10 秒以上/30 秒以上/0〜1 秒の割合(%)・1 局あたりの消費の中央値
+  - `bySpent`: その手にかけた時間で 4 段(0〜1・2〜4・5〜9・10 秒以上)に分けた `{ n, collapsed }`(`n` は既存の崩れの組・`counted` と同じ分母)
+  - `afterLongThink`: `quickAfterLongThink`(直前の自分の手が 10 秒以上で、この手は 4 秒以下)・`afterLongThinkAny`(直前の自分の手が 10 秒以上。この手の時間は問わない)。**「直前の自分の手」は 2 手前**(1 手前は相手の手)
+  - `byLeft`: `--time-limit-sec` を渡したときだけ(渡さなければ `null`)。残り = 持ち時間 − それまでの本人の消費の合計(この手より前・`spentSec` の和)で 3 段(60 未満・60〜119・120 以上)に分ける。残りが負でも「60 未満」の段に入る
+  - `phaseSpent`: 序盤・中盤・終盤(既存の `phaseOf`)ごとの本人の消費の合計を局ごとに出し、「`timeUpLoss`(本人が時間で負けた局。`ending.kind === "timeUp"` かつ本人の結果が「負け」。相手が切れ負けた勝ちの局は入らない)」と「`otherGames`(それ以外)」で中央値
+  - `timeUpLosses`: 本人が時間で負けた局(`timeUpLoss` と同じ絞り込み)の局番号・手数・本人の消費の合計(その局で読めた最後の本人の手の `totalSec`)・最後に読んだ局面の評価(`displayScoreOf`)
 
 ## 全員に共通の基準値(`baselineTable.ts`。STEP BASE)
 

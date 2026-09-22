@@ -18,12 +18,16 @@ import {
   assertNoForbiddenWords,
   buildAuditCandidatePhase,
   buildAuditPairs,
+  buildGames,
+  buildPatientGames,
   buildPatientReportData,
+  buildPatientTime,
   displayScoreOf,
   endingTextOf,
   formatPlayedMove,
   gameFactsOf,
   featuredGamesOf,
+  leftBucketIndexOf,
   moveCheckFromGateLines,
   originalMovesOf,
   phaseOf,
@@ -31,6 +35,7 @@ import {
   ReportDataError,
   resultOf,
   sideOf,
+  spentBucketIndexOf,
   testGamesCountOf,
   type FixedKifu,
   type GameSource,
@@ -141,6 +146,8 @@ describe("assertNoForbiddenWords", () => {
     events: [],
     overview: { fell: 0, early: 0, mid: 0, late: 0, fromAhead: 0, fromAheadLoss: 0, moveCheck: null },
     escapeScenes: [],
+    // STEP TIME: PatientReportData に time が必須になったので、この試験(禁止語の検査)には関係の無い空の形を足す。
+    time: { available: false, perMove: null, bySpent: null, afterLongThink: null, byLeft: null, phaseSpent: null, timeUpLosses: null },
   };
   it("開発用の語が無ければ通る", () => expect(() => assertNoForbiddenWords(base)).not.toThrow());
   it("開発用の語(例: sha)が入っていれば止まる", () => {
@@ -276,6 +283,198 @@ describe("buildPatientReportData(後手の作り物。180 度回した組を本�
     expect(event!.playedUsi).toBe(originalMoves[1]);
     // bestmove は記録の向き(先手に回した)の "2h2g" を植えたので、本人が指した向きへ戻すと 180 度回した値になる
     expect(event!.bestUsi).toBe(rotateUsiMove("2h2g"));
+  });
+});
+
+// ---- STEP TIME(docs/STEP_TIME_PLAN_2026-09-22.md §6.1)。消費時間の事実(PatientTime) ----
+
+describe("spentBucketIndexOf・leftBucketIndexOf(4 段・3 段の境目)", () => {
+  it("spentBucketIndexOf: 1/2、4/5、9/10 の境目(0〜1・2〜4・5〜9・10 以上)", () => {
+    expect([1, 2, 4, 5, 9, 10].map(spentBucketIndexOf)).toEqual([0, 1, 1, 2, 2, 3]);
+  });
+  it("leftBucketIndexOf: 59/60、119/120 の境目(60 未満・60〜119・120 以上)。負の残りも 60 未満の段", () => {
+    expect([-10, 0, 59, 60, 119, 120, 1000].map(leftBucketIndexOf)).toEqual([0, 0, 0, 1, 1, 2, 2]);
+  });
+});
+
+describe("buildPatientTime: available(1 局でも moveSeconds が無ければ false)", () => {
+  const withTime = GAME01_MOVES.slice(0, 4);
+  const recordsWithTime: RecordLine[] = plantedRecords(withTime, {});
+  const meta = { kind: "meta", kifuId: "time-a", startedAt: "", gitHead: null, enginePath: "" } as unknown as MetaLine;
+  const sourceWithTime: GameSource = {
+    kifuId: "time-a",
+    meta,
+    records: recordsWithTime,
+    fixed: { id: "time-a", ending: { kind: "resign", ply: 5 }, moves: withTime, moveSeconds: withTime.map(() => ({ spentSec: 1, totalSec: 1 })) },
+  };
+  const meta2 = { kind: "meta", kifuId: "time-b", startedAt: "", gitHead: null, enginePath: "" } as unknown as MetaLine;
+  const sourceWithoutTime: GameSource = {
+    kifuId: "time-b",
+    meta: meta2,
+    records: plantedRecords(withTime, {}),
+    fixed: { id: "time-b", ending: { kind: "resign", ply: 5 }, moves: withTime }, // moveSeconds を持たない
+  };
+
+  it("全局が moveSeconds を持てば available: true", () => {
+    const games = buildGames([sourceWithTime]);
+    const time = buildPatientTime(games, buildPatientGames(games), undefined);
+    expect(time.available).toBe(true);
+  });
+
+  it("1 局でも moveSeconds が無ければ available: false で他の欄はすべて null(一部だけ出さない)", () => {
+    const games = buildGames([sourceWithTime, sourceWithoutTime]);
+    const time = buildPatientTime(games, buildPatientGames(games), undefined);
+    expect(time).toStrictEqual({ available: false, perMove: null, bySpent: null, afterLongThink: null, byLeft: null, phaseSpent: null, timeUpLosses: null });
+  });
+});
+
+describe("buildPatientTime: perMove(後手の局の添字合わせ。合成の 10 手・手で計算した期待値)", () => {
+  // originalMoves(元の手順)の偶数番目(2, 4, 6, 8, 10 手目)が本人(後手)の手。moveSeconds は元の手順の順のまま。
+  const originalMoves = GAME01_MOVES.slice(0, 10);
+  const aligned = alignMovesToSente(originalMoves, "gote");
+  const startSfen = aligned.alignment.mirrored ? aligned.alignment.startSfen : DEFAULT_INITIAL_SFEN;
+  const records: RecordLine[] = plantedRecords(aligned.moves, {}, {}, startSfen);
+  const meta = {
+    kind: "meta",
+    kifuId: "time-gote-10",
+    startedAt: "",
+    gitHead: null,
+    enginePath: "",
+    mirrored: true,
+    startSfen,
+    plyOffset: 1,
+    originalUserSide: "gote",
+  } as unknown as MetaLine;
+  // 本人(後手・偶数手目)の秒: 5, 12, 0, 30, 8(手で中央値・平均・割合を計算した。相手(奇数手目)の秒は集計に入らないので何でもよい)
+  const moveSeconds = [
+    { spentSec: 3, totalSec: 3 }, // 1 手目(相手)
+    { spentSec: 5, totalSec: 5 }, // 2 手目(本人)
+    { spentSec: 2, totalSec: 5 }, // 3 手目(相手)
+    { spentSec: 12, totalSec: 17 }, // 4 手目(本人)
+    { spentSec: 1, totalSec: 6 }, // 5 手目(相手)
+    { spentSec: 0, totalSec: 17 }, // 6 手目(本人)
+    { spentSec: 4, totalSec: 10 }, // 7 手目(相手)
+    { spentSec: 30, totalSec: 47 }, // 8 手目(本人)
+    { spentSec: 6, totalSec: 16 }, // 9 手目(相手)
+    { spentSec: 8, totalSec: 55 }, // 10 手目(本人)
+  ];
+  const source: GameSource = {
+    kifuId: "time-gote-10",
+    meta,
+    records,
+    fixed: { id: "time-gote-10", ending: { kind: "resign", ply: originalMoves.length + 1 }, moves: aligned.moves, originalMoves, mirrored: true, moveSeconds },
+  };
+
+  it("perMove: 本人(後手)の 5 手だけを数える([0,5,8,12,30] の中央値 8・平均 11・10 秒以上 40%・30 秒以上 20%・0〜1 秒 20%・1 局の合計 55)", () => {
+    const games = buildGames([source]);
+    const time = buildPatientTime(games, buildPatientGames(games), undefined);
+    expect(time.available).toBe(true);
+    expect(time.perMove).toStrictEqual({ moves: 5, median: 8, mean: 11, ge10: 40, ge30: 20, le1: 20, gameMedian: 55 });
+  });
+});
+
+describe("buildPatientTime: afterLongThink は「直前の自分の手」= 2 手前(1 手前の相手の手ではない)", () => {
+  // GAME01_MOVES(先手)。分岐点 49(ahead 500 → behind -300、崩れる 1 組)を使う(先手の作り物と同じ植え方)。
+  const records: RecordLine[] = plantedRecords(GAME01_MOVES, { 48: engineRef(500, { bestmove: "2h2g" }), 50: engineRef(-300) });
+  const meta = { kind: "meta", kifuId: "time-along", startedAt: "", gitHead: null, enginePath: "" } as unknown as MetaLine;
+
+  function timeArrayWith(overrides: Record<number, { spentSec: number; totalSec: number }>): Array<{ spentSec: number; totalSec: number } | null> {
+    return GAME01_MOVES.map((_, i) => overrides[i + 1] ?? null); // キーは KIF の手数(1 始まり)
+  }
+
+  it("正: 49 手目の 2 手前(47 手目、本人)が 10 秒以上なら afterLongThinkAny に数える(1 手前の 48 手目は無関係)", () => {
+    const moveSeconds = timeArrayWith({ 47: { spentSec: 15, totalSec: 900 }, 49: { spentSec: 3, totalSec: 5 } });
+    const source: GameSource = { kifuId: "time-along", meta, records, fixed: { id: "time-along", ending: { kind: "mate", ply: 56 }, moves: GAME01_MOVES, moveSeconds } };
+    const games = buildGames([source]);
+    const time = buildPatientTime(games, buildPatientGames(games), undefined);
+    expect(time.afterLongThink).toStrictEqual({
+      quickAfterLongThink: { n: 1, collapsed: 1 }, // 49 手目(この手)も 4 秒以下(3 秒)
+      afterLongThinkAny: { n: 1, collapsed: 1 },
+    });
+  });
+
+  it("負(off-by-one の見張り): 49 手目の 1 手前(48 手目、相手)だけが 10 秒以上でも数えない(47 手目は 10 秒未満)", () => {
+    const moveSeconds = timeArrayWith({ 47: { spentSec: 2, totalSec: 100 }, 48: { spentSec: 20, totalSec: 900 } });
+    const source: GameSource = { kifuId: "time-along", meta, records, fixed: { id: "time-along", ending: { kind: "mate", ply: 56 }, moves: GAME01_MOVES, moveSeconds } };
+    const games = buildGames([source]);
+    const time = buildPatientTime(games, buildPatientGames(games), undefined);
+    expect(time.afterLongThink).toStrictEqual({ quickAfterLongThink: { n: 0, collapsed: 0 }, afterLongThinkAny: { n: 0, collapsed: 0 } });
+  });
+});
+
+describe("buildPatientTime: byLeft(負の残りも 60 未満の段に入る)", () => {
+  const records: RecordLine[] = plantedRecords(GAME01_MOVES, { 48: engineRef(500, { bestmove: "2h2g" }), 50: engineRef(-300) });
+  const meta = { kind: "meta", kifuId: "time-left", startedAt: "", gitHead: null, enginePath: "" } as unknown as MetaLine;
+  // 本人(先手・奇数手目)の秒を 47 手目まで大きくし(累計がすぐ持ち時間を超える)、他は null。
+  const moveSeconds = GAME01_MOVES.map((_, i) => (i + 1 === 1 ? { spentSec: 500, totalSec: 500 } : null));
+  const source: GameSource = { kifuId: "time-left", meta, records, fixed: { id: "time-left", ending: { kind: "mate", ply: 56 }, moves: GAME01_MOVES, moveSeconds } };
+
+  it("持ち時間 180 秒に対し 1 手目で 500 秒使うと、49 手目の組(崩れた組)の残りは負で「60 未満」の段に入る", () => {
+    const games = buildGames([source]);
+    const time = buildPatientTime(games, buildPatientGames(games), 180);
+    // 1 手目そのものの組(branchPly 1)だけは「この手より前の消費」が 0 なので残り 180(120 以上の段)。
+    // それ以外の本人の組は、1 手目の 500 秒がずっと積まれたまま(他の手の秒は null で増えない)なので、残りは負のまま「60 未満」の段。
+    // 崩れる組は 49 手目の 1 件だけ(先手の作り物と同じ植え方)。
+    expect(time.byLeft).toStrictEqual([
+      { n: 19, collapsed: 1 },
+      { n: 0, collapsed: 0 },
+      { n: 1, collapsed: 0 },
+    ]);
+  });
+
+  it("--time-limit-sec を渡さなければ byLeft は null", () => {
+    const games = buildGames([source]);
+    const time = buildPatientTime(games, buildPatientGames(games), undefined);
+    expect(time.byLeft).toBeNull();
+  });
+});
+
+describe("buildPatientTime: timeUpLosses・phaseSpent.timeUpLoss は「本人が時間で負けた局」だけ(司令塔の指示、2026-09-23)", () => {
+  // 手数 4(偶数)・timeUp: 最後の手(4 手目)は後手が指した = 先手(本人)が指せずに時間切れ負け
+  const lossMoves = GAME01_MOVES.slice(0, 4);
+  const lossRecords: RecordLine[] = plantedRecords(lossMoves, {});
+  const lossMeta = { kind: "meta", kifuId: "time-loss", startedAt: "", gitHead: null, enginePath: "" } as unknown as MetaLine;
+  const lossMoveSeconds = lossMoves.map((_, i) => ({ spentSec: i + 1, totalSec: i + 1 })); // 1,2,3,4 秒(値そのものは検証しない)
+  const lossSource: GameSource = {
+    kifuId: "time-loss",
+    meta: lossMeta,
+    records: lossRecords,
+    fixed: { id: "time-loss", ending: { kind: "timeUp", ply: 5 }, moves: lossMoves, moveSeconds: lossMoveSeconds },
+  };
+
+  // 手数 3(奇数)・timeUp: 最後の手(3 手目)は先手(本人)が指した = 後手(相手)が指せずに時間切れ負け(本人の勝ち)
+  const winMoves = GAME01_MOVES.slice(0, 3);
+  const winRecords: RecordLine[] = plantedRecords(winMoves, {});
+  const winMeta = { kind: "meta", kifuId: "time-win", startedAt: "", gitHead: null, enginePath: "" } as unknown as MetaLine;
+  const winMoveSeconds = winMoves.map((_, i) => ({ spentSec: i + 1, totalSec: i + 1 }));
+  const winSource: GameSource = {
+    kifuId: "time-win",
+    meta: winMeta,
+    records: winRecords,
+    fixed: { id: "time-win", ending: { kind: "timeUp", ply: 4 }, moves: winMoves, moveSeconds: winMoveSeconds },
+  };
+
+  it("本人が時間で負けた局(lossSource)だけが result: 負け になる(前提の確認)", () => {
+    const games = buildGames([lossSource, winSource]);
+    const patientGames = buildPatientGames(games);
+    expect(patientGames.map((g) => [g.id, g.result])).toEqual([
+      ["time-loss", "負け"],
+      ["time-win", "勝ち"],
+    ]);
+  });
+
+  it("timeUpLosses には本人が負けた局だけが入り、相手が切れ負けた(本人が勝った)局は入らない", () => {
+    const games = buildGames([lossSource, winSource]);
+    const time = buildPatientTime(games, buildPatientGames(games), undefined);
+    expect(time.timeUpLosses).toHaveLength(1);
+    expect(time.timeUpLosses![0]!.gameNo).toBe(1); // kifuId 昇順で time-loss が 1 局目
+  });
+
+  it("phaseSpent.timeUpLoss は 1 局、otherGames は勝った局を含めて数える(0 局にはならない)", () => {
+    const games = buildGames([lossSource, winSource]);
+    const time = buildPatientTime(games, buildPatientGames(games), undefined);
+    expect(time.phaseSpent!.timeUpLoss.games).toBe(1);
+    expect(time.phaseSpent!.otherGames.games).toBe(1);
   });
 });
 

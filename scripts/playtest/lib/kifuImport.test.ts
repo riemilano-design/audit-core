@@ -20,6 +20,7 @@ import {
   importCsa,
   importKif,
   KIF_ENDINGS,
+  parseKifTime,
   STANDARD_START_SFEN,
   toFixedKifu,
   type KifuImportResult,
@@ -37,6 +38,10 @@ const KIF_MOVES = [
   "同　桂(89)", "２七角打", "３八銀(39)", "５四角成(27)", "３九玉(48)",
   "７六馬(54)", "２八玉(39)", "７七馬(76)", "５八金(69)", "９九馬(77)",
 ];
+
+// STEP TIME: kifText() は既定で全手に ( 0:01/00:00:pp ) を付ける(下の kifText 参照)ので、
+// KIF_MOVES(20 手)の期待する moveSeconds は spentSec 1・totalSec = 手数(1〜20)。
+const KIF_MOVES_SECONDS = Array.from({ length: 20 }, (_, i) => ({ spentSec: 1, totalSec: i + 1 }));
 
 function kifText(opts: { handicap?: string; extraHeader?: string[]; moves?: string[]; tail?: string[] } = {}): string {
   const moves = opts.moves ?? KIF_MOVES;
@@ -221,10 +226,11 @@ describe("形式をまたいで", () => {
     expect(imported(importKif(kifText())).moves).toEqual(imported(importCsa(csaText())).moves);
   });
 
-  it("固定棋譜の JSON の形(replay.ts がそのまま読める形)にできる", () => {
+  it("固定棋譜の JSON の形(replay.ts がそのまま読める形)にできる。STEP TIME: 秒を読めた手があれば moveSeconds も付く(moves の後ろ)", () => {
     const fixed = toFixedKifu(imported(importKif(kifText())), "x", "自作の KIF");
-    expect(Object.keys(fixed)).toEqual(["id", "source", "ending", "moves"]);
+    expect(Object.keys(fixed)).toEqual(["id", "source", "ending", "moves", "moveSeconds"]);
     expect(fixed.moves).toEqual(FIXED.moves);
+    expect(fixed.moveSeconds).toEqual(KIF_MOVES_SECONDS);
   });
 });
 
@@ -476,10 +482,16 @@ describe("importKif ― 1 文字の成り駒(竜・全・圭・杏)を揃えて�
 const withEnding = (line: string): string => kifText({ tail: [line] });
 
 describe("importKif・importCsa ― 終局の種類と手数を ending に残す(STEP D0-KIFU3)", () => {
-  it("T-1: 既定の KIF(20 手 + 21 投了)は { kind: resign, ply: 21 }。固定棋譜は id・source・ending・moves", () => {
+  it("T-1: 既定の KIF(20 手 + 21 投了)は { kind: resign, ply: 21 }。固定棋譜は id・source・ending・moves・moveSeconds(STEP TIME)", () => {
     const r = imported(importKif(kifText()));
     expect(r.endingFact).toStrictEqual({ kind: "resign", ply: 21 });
-    expect(toFixedKifu(r, "x", "自作の KIF")).toStrictEqual({ id: "x", source: "自作の KIF", ending: { kind: "resign", ply: 21 }, moves: FIXED.moves });
+    expect(toFixedKifu(r, "x", "自作の KIF")).toStrictEqual({
+      id: "x",
+      source: "自作の KIF",
+      ending: { kind: "resign", ply: 21 },
+      moves: FIXED.moves,
+      moveSeconds: KIF_MOVES_SECONDS,
+    });
   });
 
   it("T-2: 終局の語を 切れ負け・詰み に替えると timeUp・mate(ply 21)", () => {
@@ -499,12 +511,13 @@ describe("importKif・importCsa ― 終局の種類と手数を ending に残す
     expect(new Set(KIF_ENDINGS)).toStrictEqual(new Set(table.map(([word]) => word)));
   });
 
-  it("T-4: 終局の行が無い KIF は endingFact が null。固定棋譜は ending: null のキーを持つ", () => {
+  it("T-4: 終局の行が無い KIF は endingFact が null。固定棋譜は ending: null のキーを持つ(STEP TIME: moveSeconds も持つ)", () => {
     const r = imported(importKif(kifText({ tail: [] })));
     expect(r.endingFact).toBeNull();
     const fixed = toFixedKifu(r, "x", "自作の KIF");
-    expect(Object.keys(fixed)).toStrictEqual(["id", "source", "ending", "moves"]);
+    expect(Object.keys(fixed)).toStrictEqual(["id", "source", "ending", "moves", "moveSeconds"]);
     expect(fixed.ending).toBeNull();
+    expect(fixed.moveSeconds).toEqual(KIF_MOVES_SECONDS);
   });
 
   it("T-5(R-1): 20 手の後の終局の行の手数が 25 なら unreadable。行は読めなかった行だけに入り、結果の ending は null、取り込みは続く", () => {
@@ -516,6 +529,7 @@ describe("importKif・importCsa ― 終局の種類と手数を ending に残す
       source: "自作の KIF",
       ending: { kind: "unreadable", reason: "ply_mismatch", ply: null },
       moves: FIXED.moves,
+      moveSeconds: KIF_MOVES_SECONDS,
     });
     expect(ok.lines.unread.map((l) => [l.lineNo, l.why])).toStrictEqual([[27, "ending_ply_mismatch"]]);
     expect(ok.ending).toBeNull();
@@ -552,5 +566,74 @@ describe("importKif・importCsa ― 終局の種類と手数を ending に残す
   it("T-12(S-1 の限界): KIF の表に無い語の終局の行は、今までどおり取り込み全体が unparsable_move で止まる", () => {
     const r = importKif(withEnding("  21 勝ち宣言"));
     expect(r.kind === "not_imported" ? [r.reason, r.lineNo] : r.kind).toStrictEqual(["unparsable_move", 27]);
+  });
+});
+
+// ---------------------------------------------------------------- STEP TIME
+// 指し手行の末尾 (m:ss/h:mm:ss) を moves[i].time に残す(docs/STEP_TIME_PLAN_2026-09-22.md §6.1 の 1)。
+//
+// 【正解の置き方】期待は試験を回す前に手で計算した(変換器の出力から写さない)。
+// 【この試験が確かめないこと】実物の KIF(校正は司令塔が out/ の実データで行う。試験は無い)。
+
+describe("parseKifTime(m:ss/h:mm:ss を読む純粋関数)", () => {
+  it("時が 0 でなければ totalSec に 3600 × 時を足す(01:02:03 → 3723)", () => {
+    expect(parseKifTime("( 0:05/01:02:03)")).toStrictEqual({ spentSec: 5, totalSec: 3723 });
+  });
+  it("全角の「：」でも読む(normalizeKifLine が全角に揃えるのと同じ形)", () => {
+    expect(parseKifTime("(0：05／00：00：05)".replace("／", "/"))).toStrictEqual({ spentSec: 5, totalSec: 5 });
+  });
+  it("形に合わなければ null", () => {
+    expect(parseKifTime("")).toBeNull();
+    expect(parseKifTime("(不正な形)")).toBeNull();
+  });
+});
+
+describe("importKif ― 消費時間を moves[i].time に残す(STEP TIME)", () => {
+  it("秒あり: kifText() の既定(( 0:01/00:00:pp ))を読むと、20 手すべて spentSec 1・totalSec 手数", () => {
+    const r = imported(importKif(kifText()));
+    expect(r.lines.moves.map((m) => m.time)).toEqual(KIF_MOVES_SECONDS);
+    expect(r.lines.moves.every((m) => m.timeDropped)).toBe(true);
+  });
+
+  it("秒無し: 時間の欄が無い行は time が null。1 手も読めなければ toFixedKifu は moveSeconds の欄を書かない", () => {
+    const text = [
+      "手合割：平手",
+      "手数----指手---------消費時間--",
+      "   1 ７六歩(77)",
+      "   2 ３四歩(33)",
+      "   3 投了",
+    ].join("\n");
+    const r = imported(importKif(text));
+    expect(r.lines.moves.map((m) => [m.timeDropped, m.time])).toEqual([
+      [false, null],
+      [false, null],
+    ]);
+    const fixed = toFixedKifu(r, "x", "自作の KIF");
+    expect(Object.hasOwn(fixed, "moveSeconds")).toBe(false);
+  });
+
+  it("切れ負けの行(末尾に時間つき)は「読んだが使わない」ending 行のままで、moves には混ざらない(手数・moveSeconds の長さは 20 のまま)", () => {
+    const r = imported(importKif(withEnding("  21 切れ負け   ( 0:01/00:00:30)")));
+    expect(r.endingFact).toStrictEqual({ kind: "timeUp", ply: 21 });
+    expect(r.lines.moves).toHaveLength(20);
+    expect(r.lines.moves.map((m) => m.time)).toEqual(KIF_MOVES_SECONDS);
+    const fixed = toFixedKifu(r, "x", "自作の KIF");
+    expect(fixed.moveSeconds).toHaveLength(20);
+    expect(fixed.moveSeconds).toEqual(KIF_MOVES_SECONDS);
+  });
+
+  it("一部の手だけ秒があれば、その手だけ time が付き、他は null のまま(moveSeconds は書く)", () => {
+    // kifText は全手に時間を付けるので、3 手目の行だけ手で時間を外す(行頭の手数「   3 」で探す)
+    const lines = kifText().split("\r\n");
+    const index = lines.findIndex((line) => /^\s*3\s/.test(line));
+    lines[index] = lines[index]!.replace(/\s*\(\s*0:01\/00:00:03\s*\)\s*$/, "");
+    const r = imported(importKif(lines.join("\r\n")));
+    expect(r.moves).toEqual(FIXED.moves); // 手順そのものは変わらない(時間の有無だけの違い)
+    expect(r.lines.moves[2]?.time).toBeNull();
+    expect(r.lines.moves[2]?.timeDropped).toBe(false);
+    expect(r.lines.moves[0]?.time).toEqual({ spentSec: 1, totalSec: 1 });
+    const fixed = toFixedKifu(r, "x", "自作の KIF");
+    expect(fixed.moveSeconds?.[2]).toBeNull();
+    expect(fixed.moveSeconds).toHaveLength(20);
   });
 });

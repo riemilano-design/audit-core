@@ -22,7 +22,7 @@ import { DRAFT_RULE_1, diagnoseRecords, STANDING_BOUNDS, readEvaluations, type E
 import { totalDiagnosisCounts, type DiagnosisTotals } from "./diagnosisTotals.js";
 import { initialSfenOf } from "./sideAlignment.js";
 import { rotateUsiMove } from "./usiRotation.js";
-import { ENDING_KIF_WORDS, type EndingKind, type FixedKifuEnding } from "./kifuImport.js";
+import { ENDING_KIF_WORDS, type EndingKind, type FixedKifuEnding, type MoveTime } from "./kifuImport.js";
 import { judgeCondition, type ConditionDefinition, type PairRow } from "./condition.js";
 import type { GateLine } from "./gateOutput.js";
 import { toJapaneseMove } from "../../../apps/server/src/notation/japaneseMove.js";
@@ -43,6 +43,11 @@ export interface FixedKifu {
   moves: readonly string[];
   originalMoves?: readonly string[];
   mirrored?: boolean;
+  /**
+   * STEP TIME: 元の手順(`originalMovesOf` と同じ並び。KIF の手数 = 添字 + 1)の消費時間。
+   * 欄が無い固定棋譜もある(時間を読めなかった KIF・CSA・このステップより前の記録)。
+   */
+  moveSeconds?: readonly (MoveTime | null)[];
 }
 
 export interface GameSource {
@@ -451,6 +456,334 @@ export function moveCheckFromGateLines(gateLines: readonly GateLine[], condition
   };
 }
 
+// ---- time(STEP TIME 作業 1。docs/STEP_TIME_PLAN_2026-09-22.md §6.1 の 2。消費時間の事実だけを組む) ----
+//
+// - `fixed.moveSeconds`(元の手順の順。KIF の手数 = 添字 + 1)を、既存の `game.allPairs.pairs`(collapseOf で数える
+//   「組」と同じ分母)・`originalMovesOf` と突き合わせる。新しい判定的知識(閾値)は置かず、`TIME_VALUES` の 1 か所にまとめる
+//   (値は docs/STEP_TIME_PLAN_2026-09-22.md §4 の校正の表と同じ)。
+// - 1 局でも `moveSeconds` が無ければ(比較対象の棋譜など)、`available: false` にして他の欄を全部 null にする
+//   (一部だけ出して比べられるように見せない)。
+
+/** 判定的な値は 1 か所に(CLAUDE.md 4 番)。値は docs/STEP_TIME_PLAN_2026-09-22.md §4 の校正の表と同じ。 */
+export const TIME_VALUES = {
+  /** 0〜1 / 2〜4 / 5〜9 / 10 以上(4 段)の境目。 */
+  spentBucketsSec: [1, 4, 9] as const,
+  /** 60 未満 / 60〜119 / 120 以上(3 段)の境目。 */
+  leftBucketsSec: [60, 120] as const,
+  /** 「直前の自分の手」が長考だったとみなす下限(以上)。 */
+  longThinkSec: 10,
+  /** 長考の直後の手が「速い」とみなす上限(以下)。 */
+  quickSec: 4,
+} as const;
+
+export function spentBucketIndexOf(spentSec: number): number {
+  const [b0, b1, b2] = TIME_VALUES.spentBucketsSec;
+  if (spentSec <= b0) return 0;
+  if (spentSec <= b1) return 1;
+  if (spentSec <= b2) return 2;
+  return 3;
+}
+
+export function leftBucketIndexOf(leftSec: number): number {
+  const [b0, b1] = TIME_VALUES.leftBucketsSec;
+  if (leftSec < b0) return 0;
+  if (leftSec < b1) return 1;
+  return 2;
+}
+
+/** 小数第 1 位までの四捨五入(collect.py の round(x, 1) と同じ丸め方の意図。負の値は扱わない)。 */
+function round1(value: number): number {
+  return Math.round(value * 10) / 10;
+}
+
+/** 中央値(件数が偶数なら中央 2 件の平均。Python の statistics.median と同じ)。空配列は呼ばない。 */
+function medianOf(values: readonly number[]): number {
+  const sorted = [...values].sort((a, b) => a - b);
+  const mid = Math.floor(sorted.length / 2);
+  return sorted.length % 2 === 0 ? (sorted[mid - 1]! + sorted[mid]!) / 2 : sorted[mid]!;
+}
+
+/**
+ * `fixed.moveSeconds` を読む(無ければ null)。`originalMovesOf` と長さが違えば例外(黙って一部だけ読まない)。
+ */
+export function moveSecondsOf(fixed: FixedKifu): readonly (MoveTime | null)[] | null {
+  if (fixed.moveSeconds === undefined) return null;
+  const originalMoves = originalMovesOf(fixed);
+  if (fixed.moveSeconds.length !== originalMoves.length) {
+    throw new ReportDataError(`${fixed.id} の moveSeconds の長さ(${fixed.moveSeconds.length})が moves(${originalMoves.length})と違う`);
+  }
+  return fixed.moveSeconds;
+}
+
+/** 本人が指した側の手番(KIF の手数の偶奇。先手なら奇数、後手なら偶数)。 */
+function ownParityOf(side: "先手" | "後手"): 0 | 1 {
+  return side === "先手" ? 1 : 0;
+}
+
+/** 本人が指した手の消費時間だけを、KIF の手数の昇順で並べる(秒が無い手は含めない)。 */
+function ownMoveTimesOf(game: BuiltGame, seconds: readonly (MoveTime | null)[]): Array<{ kifPly: number; time: MoveTime }> {
+  const parity = ownParityOf(game.side);
+  const out: Array<{ kifPly: number; time: MoveTime }> = [];
+  seconds.forEach((time, index) => {
+    const kifPly = index + 1;
+    if (kifPly % 2 !== parity || time === null) return;
+    out.push({ kifPly, time });
+  });
+  return out;
+}
+
+export interface TimeBucket {
+  /** その段に当てはまる組の数(分母は既存の崩れの組 counted と同じ)。 */
+  n: number;
+  /** そのうち崩れた組の数。 */
+  collapsed: number;
+}
+
+function emptyBucket(): TimeBucket {
+  return { n: 0, collapsed: 0 };
+}
+
+/** `game.allPairs.pairs` のうち「組(counted)」だけを、崩れたかどうかと一緒に返す(fellPairsOf と同じ数え方)。 */
+function countedPairsOf(game: BuiltGame): Array<{ pair: PairRow; collapsed: boolean }> {
+  const out: Array<{ pair: PairRow; collapsed: boolean }> = [];
+  for (const pair of game.allPairs.pairs) {
+    const collapse = collapseOf(pair.standingPair);
+    if (collapse.counted) out.push({ pair, collapsed: collapse.transition !== null });
+  }
+  return out;
+}
+
+export interface PerMoveTimeStats {
+  /** 本人の手の総数(件数)。 */
+  moves: number;
+  median: number;
+  mean: number;
+  /** 10 秒以上の割合(%、小数第 1 位)。 */
+  ge10: number;
+  /** 30 秒以上の割合(%、小数第 1 位)。 */
+  ge30: number;
+  /** 0〜1 秒の割合(%、小数第 1 位)。 */
+  le1: number;
+  /** 1 局あたりの消費(本人の手の合計)の中央値。 */
+  gameMedian: number;
+}
+
+function buildPerMoveTimeStats(games: readonly BuiltGame[], secondsByGame: ReadonlyMap<string, readonly (MoveTime | null)[]>): PerMoveTimeStats {
+  const perGameTotals: number[] = [];
+  const allSpent: number[] = [];
+  for (const game of games) {
+    const own = ownMoveTimesOf(game, secondsByGame.get(game.source.kifuId)!);
+    perGameTotals.push(own.reduce((sum, m) => sum + m.time.spentSec, 0));
+    for (const m of own) allSpent.push(m.time.spentSec);
+  }
+  const n = allSpent.length;
+  return {
+    moves: n,
+    median: medianOf(allSpent),
+    mean: round1(allSpent.reduce((a, b) => a + b, 0) / n),
+    ge10: round1((100 * allSpent.filter((s) => s >= 10).length) / n),
+    ge30: round1((100 * allSpent.filter((s) => s >= 30).length) / n),
+    le1: round1((100 * allSpent.filter((s) => s <= 1).length) / n),
+    gameMedian: medianOf(perGameTotals),
+  };
+}
+
+/** 4 段(spentBucketIndexOf)× {組の数, 崩れ}。その手(組の branchPly)にかけた時間で振り分ける。 */
+function buildBySpent(games: readonly BuiltGame[], secondsByGame: ReadonlyMap<string, readonly (MoveTime | null)[]>): TimeBucket[] {
+  const buckets: TimeBucket[] = [emptyBucket(), emptyBucket(), emptyBucket(), emptyBucket()];
+  for (const game of games) {
+    const seconds = secondsByGame.get(game.source.kifuId)!;
+    for (const { pair, collapsed } of countedPairsOf(game)) {
+      const displayPly = displayPlyOf(pair.branchPly, game.plyOffset);
+      const time = seconds[displayPly - 1];
+      if (time === undefined || time === null) continue;
+      const bucket = buckets[spentBucketIndexOf(time.spentSec)]!;
+      bucket.n += 1;
+      if (collapsed) bucket.collapsed += 1;
+    }
+  }
+  return buckets;
+}
+
+export interface PatientAfterLongThink {
+  /** 「直前の自分の手が longThinkSec 秒以上で、この手は quickSec 秒以下」× {組の数, 崩れ}。 */
+  quickAfterLongThink: TimeBucket;
+  /** 「直前の自分の手が longThinkSec 秒以上」(この手の時間は問わない)× {組の数, 崩れ}。 */
+  afterLongThinkAny: TimeBucket;
+}
+
+/** 「直前の自分の手」= 2 手前(本人の前の手番。KIF の手数で displayPly − 2)。 */
+function buildAfterLongThink(games: readonly BuiltGame[], secondsByGame: ReadonlyMap<string, readonly (MoveTime | null)[]>): PatientAfterLongThink {
+  const quickAfterLongThink = emptyBucket();
+  const afterLongThinkAny = emptyBucket();
+  for (const game of games) {
+    const seconds = secondsByGame.get(game.source.kifuId)!;
+    for (const { pair, collapsed } of countedPairsOf(game)) {
+      const displayPly = displayPlyOf(pair.branchPly, game.plyOffset);
+      const prevOwnKifPly = displayPly - 2;
+      if (prevOwnKifPly < 1) continue; // 直前の自分の手が無い(本人の最初の手)
+      const prevOwn = seconds[prevOwnKifPly - 1];
+      if (prevOwn === undefined || prevOwn === null || prevOwn.spentSec < TIME_VALUES.longThinkSec) continue;
+      afterLongThinkAny.n += 1;
+      if (collapsed) afterLongThinkAny.collapsed += 1;
+      const thisTime = seconds[displayPly - 1];
+      if (thisTime === undefined || thisTime === null || thisTime.spentSec > TIME_VALUES.quickSec) continue;
+      quickAfterLongThink.n += 1;
+      if (collapsed) quickAfterLongThink.collapsed += 1;
+    }
+  }
+  return { quickAfterLongThink, afterLongThinkAny };
+}
+
+/** 3 段(leftBucketIndexOf)× {組の数, 崩れ}。残り = 持ち時間 − それまでの本人の消費の合計(この手より前、spentSec の和)。 */
+function buildByLeft(games: readonly BuiltGame[], secondsByGame: ReadonlyMap<string, readonly (MoveTime | null)[]>, timeLimitSec: number): TimeBucket[] {
+  const buckets: TimeBucket[] = [emptyBucket(), emptyBucket(), emptyBucket()];
+  for (const game of games) {
+    const seconds = secondsByGame.get(game.source.kifuId)!;
+    const parity = ownParityOf(game.side);
+    // KIF の手数 → それより前の本人の消費の合計(累積和。この手そのものは含めない)。
+    const usedBefore = new Map<number, number>();
+    let cumulative = 0;
+    for (let kifPly = parity === 1 ? 1 : 2; kifPly <= seconds.length; kifPly += 2) {
+      usedBefore.set(kifPly, cumulative);
+      const time = seconds[kifPly - 1];
+      if (time !== null && time !== undefined) cumulative += time.spentSec;
+    }
+    for (const { pair, collapsed } of countedPairsOf(game)) {
+      const displayPly = displayPlyOf(pair.branchPly, game.plyOffset);
+      const used = usedBefore.get(displayPly);
+      if (used === undefined) continue; // この組の手が本人の手でない(起きないはずだが念のため)
+      const left = timeLimitSec - used;
+      const bucket = buckets[leftBucketIndexOf(left)]!;
+      bucket.n += 1;
+      if (collapsed) bucket.collapsed += 1;
+    }
+  }
+  return buckets;
+}
+
+/** 序盤・中盤・終盤(phaseOf)ごとの、本人の消費(spentSec)の合計。 */
+function phaseSpentOfGame(game: BuiltGame, seconds: readonly (MoveTime | null)[], total: number): { early: number; mid: number; late: number } {
+  const parity = ownParityOf(game.side);
+  const sums = { early: 0, mid: 0, late: 0 };
+  for (let kifPly = parity === 1 ? 1 : 2; kifPly <= seconds.length; kifPly += 2) {
+    const time = seconds[kifPly - 1];
+    if (time === null || time === undefined) continue;
+    const recordPly = kifPly - game.plyOffset;
+    sums[phaseOf(recordPly, total)] += time.spentSec;
+  }
+  return sums;
+}
+
+export interface PhaseSpentGroup {
+  /** この組に入る局の数。0 局なら中央値は 0(局が無いという事実のまま。CLAUDE.md 4 番: 新しい閾値は置かない)。 */
+  games: number;
+  early: number;
+  mid: number;
+  late: number;
+}
+
+export interface PatientPhaseSpent {
+  /** 本人が時間で負けた局(ending.kind === "timeUp" かつ本人の結果が「負け」。相手が切れ負けた勝ちの局は otherGames)。 */
+  timeUpLoss: PhaseSpentGroup;
+  /** それ以外の局。 */
+  otherGames: PhaseSpentGroup;
+}
+
+function phaseSpentGroupOf(rows: ReadonlyArray<{ early: number; mid: number; late: number }>): PhaseSpentGroup {
+  if (rows.length === 0) return { games: 0, early: 0, mid: 0, late: 0 };
+  return {
+    games: rows.length,
+    early: medianOf(rows.map((r) => r.early)),
+    mid: medianOf(rows.map((r) => r.mid)),
+    late: medianOf(rows.map((r) => r.late)),
+  };
+}
+
+/**
+ * 本人が時間で負けた局か(ending.kind === "timeUp" かつ本人の結果が「負け」。既存の resultOf・buildPatientGames と
+ * 同じ判定を使い回す。司令塔の指示、2026-09-23: 「使い切った」は本人が負けた側の意味)。
+ * 相手が切れ負けた(本人が勝った)局は含めない。
+ */
+function isTimeUpLoss(fixedEnding: FixedKifuEnding | null | undefined, result: "勝ち" | "負け"): boolean {
+  return fixedEnding?.kind === "timeUp" && result === "負け";
+}
+
+function buildPhaseSpent(
+  games: readonly BuiltGame[],
+  patientGames: readonly PatientGame[],
+  secondsByGame: ReadonlyMap<string, readonly (MoveTime | null)[]>,
+): PatientPhaseSpent {
+  const timeUpLossRows: Array<{ early: number; mid: number; late: number }> = [];
+  const otherRows: Array<{ early: number; mid: number; late: number }> = [];
+  games.forEach((game, index) => {
+    const total = patientGames[index]!.total;
+    const sums = phaseSpentOfGame(game, secondsByGame.get(game.source.kifuId)!, total);
+    (isTimeUpLoss(game.source.fixed.ending, patientGames[index]!.result) ? timeUpLossRows : otherRows).push(sums);
+  });
+  return { timeUpLoss: phaseSpentGroupOf(timeUpLossRows), otherGames: phaseSpentGroupOf(otherRows) };
+}
+
+export interface TimeUpGame {
+  gameNo: number;
+  total: number;
+  /** 本人の消費の合計(その局で読めた最後の本人の手の totalSec。累積の時計の値であり、spentSec の和ではない)。 */
+  usedSec: number;
+  /** 最後に読んだ局面の評価(displayScoreOf。読めていなければ null)。 */
+  finalScore: number | null;
+}
+
+/** 本人が時間で負けた局(isTimeUpLoss)だけを対象にする(司令塔の指示、2026-09-23)。 */
+function buildTimeUpLosses(
+  games: readonly BuiltGame[],
+  patientGames: readonly PatientGame[],
+  secondsByGame: ReadonlyMap<string, readonly (MoveTime | null)[]>,
+): TimeUpGame[] {
+  const out: TimeUpGame[] = [];
+  games.forEach((game, index) => {
+    if (!isTimeUpLoss(game.source.fixed.ending, patientGames[index]!.result)) return;
+    const own = ownMoveTimesOf(game, secondsByGame.get(game.source.kifuId)!);
+    const usedSec = own.reduce((max, m) => Math.max(max, m.time.totalSec), 0);
+    const measured = readEvaluations(game.source.records).filter((row) => row.evaluation.state === "measured");
+    const last = measured[measured.length - 1];
+    out.push({ gameNo: patientGames[index]!.no, total: patientGames[index]!.total, usedSec, finalScore: last === undefined ? null : displayScoreOf(last.evaluation) });
+  });
+  return out;
+}
+
+export interface PatientTime {
+  /** 1 局でも消費時間を読めていなければ false(このときは他の欄を全部 null にする。比較対象の棋譜など)。 */
+  available: boolean;
+  perMove: PerMoveTimeStats | null;
+  bySpent: TimeBucket[] | null;
+  afterLongThink: PatientAfterLongThink | null;
+  /** `--time-limit-sec` が渡されなければ null(持ち時間が分からないと「残り」を出せない)。 */
+  byLeft: TimeBucket[] | null;
+  phaseSpent: PatientPhaseSpent | null;
+  /** 本人が時間で負けた局(ending.kind === "timeUp" かつ本人の結果が「負け」)だけ。相手が切れ負けた勝ちの局は入らない。 */
+  timeUpLosses: TimeUpGame[] | null;
+}
+
+const EMPTY_PATIENT_TIME: PatientTime = { available: false, perMove: null, bySpent: null, afterLongThink: null, byLeft: null, phaseSpent: null, timeUpLosses: null };
+
+export function buildPatientTime(games: readonly BuiltGame[], patientGames: readonly PatientGame[], timeLimitSec: number | undefined): PatientTime {
+  const secondsByGame = new Map<string, readonly (MoveTime | null)[]>();
+  for (const game of games) {
+    const seconds = moveSecondsOf(game.source.fixed);
+    if (seconds === null) return EMPTY_PATIENT_TIME;
+    secondsByGame.set(game.source.kifuId, seconds);
+  }
+  return {
+    available: true,
+    perMove: buildPerMoveTimeStats(games, secondsByGame),
+    bySpent: buildBySpent(games, secondsByGame),
+    afterLongThink: buildAfterLongThink(games, secondsByGame),
+    byLeft: timeLimitSec === undefined ? null : buildByLeft(games, secondsByGame, timeLimitSec),
+    phaseSpent: buildPhaseSpent(games, patientGames, secondsByGame),
+    timeUpLosses: buildTimeUpLosses(games, patientGames, secondsByGame),
+  };
+}
+
 // ---- patient_report_data.json ----
 
 export interface PatientReportData {
@@ -462,6 +795,7 @@ export interface PatientReportData {
   events: PatientEvent[];
   overview: PatientOverview;
   escapeScenes: EscapeScene[];
+  time: PatientTime;
 }
 
 /** 本人向けの側に出してはならない開発用の語(split_data.py の見張りと同じ)。 */
@@ -480,6 +814,8 @@ export interface BuildPatientReportDataOptions {
   today: string;
   kingEscapesConditionId: string;
   moveCheckConditionId: string;
+  /** STEP TIME: `byLeft`(残り時間)を出すための持ち時間(秒)。渡さなければ `time.byLeft` は null。 */
+  timeLimitSec?: number;
 }
 
 export function buildPatientReportData(
@@ -494,6 +830,7 @@ export function buildPatientReportData(
   const escapeScenes = buildEscapeScenes(games, kingEscapesDefinition);
   const moveCheck = moveCheckFromGateLines(gateLines, options.moveCheckConditionId);
   const overview = buildOverview(games, patientGames, moveCheck);
+  const time = buildPatientTime(games, patientGames, options.timeLimitSec);
   const patient: PatientReportData = {
     title: options.title,
     person: options.person,
@@ -503,6 +840,7 @@ export function buildPatientReportData(
     events,
     overview,
     escapeScenes,
+    time,
   };
   assertNoForbiddenWords(patient);
   return patient;
