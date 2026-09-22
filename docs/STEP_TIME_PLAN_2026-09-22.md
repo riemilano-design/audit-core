@@ -94,3 +94,18 @@ B は 44 局の秒がすでに手元にあるので、**この表を書いた後
 **4. 試験**: 秒の読み(3 形式: あり・無し・切れ負けの行)、後手の局の添字合わせ(合成の 3 手の棋譜で手計算)、bySpent の境界(1 / 2、4 / 5、9 / 10)、afterLongThink の「直前の自分の手」が 2 手前であること、byLeft の負の残り。変異 2 本以上。vitest の基点 1249。
 
 **5. 触らないもの**: `WHATIF_VALUES`・`GATE_VALUES`・`READ_VALUES`、エンジン段、python 側、docs(記録は司令塔)。
+
+### 6.2 作業 1 の実装・監査の記録(2026-09-23 未明、コミット `6b6b78d`)
+
+- 実装: `lib/kifuImport.ts`(`parseKifTime`・`MoveTime`、`toFixedKifu` が `moveSeconds` を書く。**1 手でも秒があれば書き、全部 null なら欄なし**)、`lib/sideAlignment.ts`(回さず通す)、`kifu-times.ts`(後から足す。moves 不一致は exit 1、mtime は変えない)、`lib/reportData.ts`(`TIME_VALUES`・`PatientTime`・`buildPatientTime`)、CLI `reportData.ts --time-limit-sec`(pipeline への中継は無し)。試験 1278(基点 1249 + 29)。
+- **仕様からの変更 1 つ(司令塔、監査の前)**: 「時間で終わった局」の組は `timeUp` かつ本人が負け(`isTimeUpLoss`、`timeUpLosses`・`phaseSpent.timeUpLoss`)。§6.1 の書き方では相手が切れ負けた勝ち局が混ざった。
+- **校正(§6.1 の 3)**: §4 の表 5 行 × 2 組、perMove 21 値、byLeft 9 セル、時間で負けた局の消費 3 件、すべて一致(実装側・監査側がそれぞれ独立に再現)。分母 1134・332 は既存の崩れの組と同じ。一致しなかったのは 2 つで、どちらも道具の問題ではない: (a) 使い切った局の最後の評価(cp 2 件)は手作りの側が別に 1 回だけ回した 4M ノードの値。道具は記録の最後の局面の値を使う(以後はこちら)。(b) まとめ 7 ページ目の「使い切った 6 局で序盤 16 秒・中盤 79 秒」の 6 局は、**手で決めた組**(3 分の負け局のうち消費 144 秒以上 = 切れ負け 3 + 投了 3)。道具の定義(時間で負けた局)では 3 局(序盤 25・中盤 84・終盤 42)。同じ 6 局を道具の計算に渡すと 4/6 局は局ごとの値が一致し、2 局は手作りの元データ(秒の割り当て)が違っていた(中央値 20.5・78.5)。**次の冊子からは道具の定義で書く**。「消費 144 秒以上」のような線を足すなら判断的知識として計画 → 監査。
+- pipeline の済み判定: `--dry-run --until gate` で 3 フォルダとも import・evaluate 段が全局 skip(エンジンは回っていない)。
+- 独立監査 1 回: GO。監査の実測: `parseKifTime` の手計算、後手 5 手の合成 KIF を `--fixed --as gote` で通して `moveSeconds` が `originalMoves` と同じ並び、`kifu-times.ts` の冪等とバイト一致・mtime 不変、44 局の校正を CLI から独立に再現して全一致、変異 4 本(`byLeft` を totalSec に・`afterLongThink` の境界・`isTimeUpLoss` の負け条件・`phaseSpentOfGame` の plyOffset)、既存試験の変更 4 か所はキー追加のみ、禁止語 0、値・エンジン段・apps・data 無変更、vitest 1278・typecheck・check-docs rc=0。
+- **監査の指摘(直さず記録。作業 2 の実装担当が最初に試験を足す)**: 変異 2 本が単体試験を通過した — (a) `afterLongThink` の 10 秒ちょうどの境界(実データでは 49 → 42 に変わる)、(b) `phaseSpentOfGame` の `plyOffset` 落とし(後手の局の試験が無い。実データでは中盤 84 → 81)。実装は校正で正しいことが分かっている。
+- 司令塔の承認の根拠: 上の監査の実測と、feature に ff で取り込んだ後の本体ツリーでの vitest・check-docs。
+- 測っていないもの: CSA の秒(null のみ)、`--time-limit-sec` の byLeft の厳密な正解表(3 段の合計の整合のみ)、90 局の fixed JSON(秒なし、触っていない)。
+
+### 6.3 次
+
+作業 2(本編 4 ページと資料の分離、python 側)。最初に 6.2 の試験 2 本を足す。「考えられること」の固定文(§5)の人間の承認は作業 3 の前まででよい。
