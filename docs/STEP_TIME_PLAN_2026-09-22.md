@@ -109,3 +109,46 @@ B は 44 局の秒がすでに手元にあるので、**この表を書いた後
 ### 6.3 次
 
 作業 2(本編 4 ページと資料の分離、python 側)。最初に 6.2 の試験 2 本を足す。「考えられること」の固定文(§5)の人間の承認は作業 3 の前まででよい。
+
+### 6.4 作業 2 の設計(2026-09-23 未明、司令塔 e3)
+
+**目的**: 2 回目以降の主役になる「本編 4 ページ」を道具で出す(§2 の 2)。今の本編(凍結した第 6 版、局ごとのページ)は**触らず、資料 1 になる**。発見の判定は TypeScript(試験できる側)で行い、python は描くだけ。「考えられること」「次の 20 局で見分けがつくこと」の固定文は作業 3(人間の承認の後)なので、今回は**枠を作らず、数の文だけ**を出す。
+
+**1. 発見の判定(`lib/reportData.ts`、純粋関数。値は `FINDING_VALUES` 1 か所)**
+
+`PatientReportData.findings: Finding[]`。`Finding = { kind, shown: boolean, numbers: Record<string, number | null>, text: string }`。**種類は固定の一覧**(数える前に書く。増やすのは計画 → 監査):
+
+| kind | 出す条件 | 文(数だけ。禁止語なし) |
+|---|---|---|
+| `timeSpent`(§5 の T1) | `time.available` かつ 10 秒以上の組が `minPairs` = 20 以上 かつ 10 秒以上の崩れ率 ≥ 0〜1 秒の崩れ率 × `ratio` = 2 | 「10 秒以上かけた手は a / b(p%)が崩れ、0〜1 秒の手は c / d(q%)でした」 |
+| `timeUpLoss`(T2) | `timeUpLosses` が 1 局以上 | 「持ち時間を使い切って負けた n 局のうち、最後の局面の評価が +300 以上だったのは m 局でした」(m は `finalScore` が cp ≥ 300 または本人側の詰み) |
+| `aheadLoss` | `overview.fromAheadLoss` ≥ 1 | 「一度は優勢(+300 以上)になった後に負けた対局が n 局ありました(優勢になった対局は k 局)」 |
+| `phase` | 崩れ(`overview.fell`)が 1 つ以上 | 「崩れ f 回のうち、序盤 e・中盤 m・終盤 l でした」(つねに出す。判定なし) |
+| `none` | 上の `timeSpent`・`timeUpLoss`・`aheadLoss` が 1 つも出ないとき | 「時間と形勢の動きについて、この n 局では上に書ける数はありませんでした」 |
+
+`shown: false` の発見も JSON には書く(数つき。前回との比較に使う)。文の中の数は `numbers` から作る(文に出る数はすべて `numbers` にあること。python の照合に使う)。
+
+**2. 前回との比較(`--previous <前回の patient_report_data.json>`)**
+
+`PatientReportData.previous: { games: number; findings: Array<{ kind, shownBefore, shownNow, numbersBefore, numbersNow }> } | null`。無ければ null(python は「初回のため、前回との比較はありません」)。比較は種類ごとに「前回出た・今回も出た/前回出た・今回は出ない/前回出ない・今回出た」の 3 通りの固定文 + 両方の数。**判断の文は書かない**。
+
+**3. 描く(`report-pdf/render_front.py`、新規。凍結の 6 本は触らない)**
+
+- 入力: `patient_report_data.json`(`findings`・`previous`・`time`・`overview`)。出力 `front.pdf`、A4 縦、**4 ページ固定**(はみ出したら rc=1)。書体は既存と同じ、`check_fonts_embedded.py` を通す。
+- 1 ページ目「今回の n 局で分かったこと」: `shown` の発見を上から並べる(順は上の表の順)。各発見は題(固定)+ 数の文。
+- 2 ページ目「前回のことは、今回も起きたか」: `previous` から。null なら固定の 1 文。
+- 3 ページ目「次の n 局で見るもの」: 今回の発見に使った数の名前と今回の値の表(かけた時間 4 段 × 崩れ、使い切って負けた局、優勢からの負け、崩れの序中終)。**「次はこう数える」の名前だけ。予測や助言は書かない**。
+- 4 ページ目「数え方」: 固定文(まとめの冊子の「この冊子の数え方」を土台に、`TIME_VALUES`・崩れの定義(±300 の段)・「棋力や手の良し悪しを表す数ではない」の注記)。値はデータから埋める。
+- 機械の検査(`render_whatif.py` と同じ流儀): 禁止語 0、文に出る数がすべて `findings[].numbers`・`time`・`overview` の値にあること、固定文の数が計画どおり。どれかが崩れたら rc=1。
+- 呼び方: `python3 render_front.py <patient_report_data.json> <out.pdf>`。pipeline の S7 に `front.pdf` を足す(`main.pdf` の前に描く。失敗は `stage: "front-pdf"`)。既存の `main.pdf`・`appendix.pdf`・`whatif.pdf` は変えない(第 6 版の 20 局で本文の完全一致を確かめる)。
+
+**4. 校正(先に書く)**
+
+- 3 分の今回 14 局(`tatsunami3`): `time` の bySpent から `timeSpent` の判定を手で出し、JSON の `shown` と一致すること。`timeUpLosses` = 1 局(t3 の 1 局、最後の評価 cp ≥ 300)→ `timeUpLoss` は shown。`fromAheadLoss` は `overview` の値。
+- 10 分の 10 局: `timeUpLosses` = 0 → `timeUpLoss` は shown: false。
+- 第 6 版の 20 局: `main.pdf` の本文が完全一致(凍結の確認)。`front.pdf` は 4 ページ。
+- `--previous` に前回 20 局の JSON を渡して今回 14 局を出し、3 通りの文が種類ごとに正しく選ばれること(手で表を作って照合)。
+
+**5. 試験**: 判定の境界(minPairs 19/20、ratio ちょうど 2)、`none` が出る条件、`previous` の 3 通り、`finalScore` の詰みの扱い。6.2 の 2 本(`afterLongThink` 10 秒ちょうど・後手の `plyOffset`)を最初に足す。変異 2 本以上。vitest 基点 1278。python 側は禁止語・数の照合を rc で確かめる。
+
+**6. 触らないもの**: `_head.py`〜`_tail.py`・`render_main.py`・`render_appendix.py`・`render_whatif.py`、`WHATIF_VALUES`・`GATE_VALUES`・`READ_VALUES`・`TIME_VALUES`、エンジン段、docs。
