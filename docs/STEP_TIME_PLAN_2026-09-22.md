@@ -152,3 +152,20 @@ B は 44 局の秒がすでに手元にあるので、**この表を書いた後
 **5. 試験**: 判定の境界(minPairs 19/20、ratio ちょうど 2)、`none` が出る条件、`previous` の 3 通り、`finalScore` の詰みの扱い。6.2 の 2 本(`afterLongThink` 10 秒ちょうど・後手の `plyOffset`)を最初に足す。変異 2 本以上。vitest 基点 1278。python 側は禁止語・数の照合を rc で確かめる。
 
 **6. 触らないもの**: `_head.py`〜`_tail.py`・`render_main.py`・`render_appendix.py`・`render_whatif.py`、`WHATIF_VALUES`・`GATE_VALUES`・`READ_VALUES`・`TIME_VALUES`、エンジン段、docs。
+
+### 6.5 作業 2 の実装・監査の記録(2026-09-23、コミット `060dd2b`・`db20485`・`0d4db68`)
+
+- 実装: `lib/reportData.ts`(`FINDING_VALUES` {minPairs 20, ratio 2}・`Finding`・`buildFindings`・`buildPrevious`・`FINDING_NUMBER_LABELS`)、CLI `--previous`、`report-pdf/render_front.py`(新規。A4 4 ページ固定、禁止語・数の照合・ページ数で rc=1)、`lib/pipeline.ts` S7 に `front.pdf`(stage `front-pdf`、main.pdf と独立)。最初に 6.2 の試験 2 本を足した(現在の実装で緑、変異で赤)。試験 1306(基点 1278 + 28)。
+- **仕様からの変更(司令塔、監査の前)**: `aheadLoss` は `overview` の組の延べではなく**局の数**(凍結 `_head.py` の `game_facts` と同じ: `scores` が一度でも +300 以上 → 優勢になった局、そのうち負け)。§6.4 の表が `overview.fromAheadLoss` と書いたのは誤りで、文の「対局が n 局」と合わなかった。
+- **司令塔が承認した実装側の判断**: `phase` はつねに shown / 0〜1 秒の分母が 0 なら `timeSpent` は出さない / front と main は独立 / python の許す数の定数は TS の手写し(README に同期の注記)/ 1 ページ目の題は実装側の文(「時間をかけた手と、崩れの割合」等)。
+- **監査 GO の後の見た目の直し 1 つ**(`0d4db68`): 2 ページ目の「前回の数 / 今回の数」が英字のキー(`a 3、aheadGames 18`)のままだった → `Finding.labels`(TS 1 か所)で日本語の名に。監査が差分だけ再確認して GO 維持(判定行に diff なし、3 組の `shown`・`numbers` 不変、`labels` の無い旧 JSON を `--previous` に渡しても壊れない)。
+- 校正: 発見の判定 5 種類 × 3 組(14・10・20 局)を実装側・監査側がそれぞれ手計算で再現し全一致。第 6 版の 20 局で `main.pdf` の本文(fitz)が完全一致(凍結は守られている)。`--previous` の 3 通りの文は試験と合成 JSON で確認。`front.pdf` は 3 組とも 4 ページ・書体埋め込み・禁止語 0・判断や助言の文なし(監査が全文を読んだ)。
+- **一致しなかった 1 つ(道具の問題ではない)**: 「優勢になった後に負けた局」が第 6 版の凍結データで 7、再生成した前回 20 局で 8。同じ 1 局の評価の最大が凍結 87・再生成 342(棋譜は同じ。エンジンの揺れ。他の 19 局は分類が同じ)。決め方は合わせるために変えていない。
+- 監査の観測(直さず記録): `render_front.py` の `person`・`title`・`today` は禁止語検査を通らない(凍結の本編と同じ扱い。`--name` で人が渡す運用データ)。**渡すときの名は「立浪さん」のように、まとめの冊子と同じ呼び方で渡す**(1 ページ目の「[person] の記録」に出る)。
+- 独立監査 1 回 + 差分確認 1 回: GO。監査の実測: 30 セルの独立再現、`_head.py` の決め方との突き合わせ、合成 JSON で禁止語・数の検査が rc=1 になること、変異 3 本(aheadCp 境界・none の条件・front 失敗で main を止める)、凍結 8 本と 5 つの値の無変更、`--dry-run --until pdf` で 43 段すべて skip、vitest 1304→1306・typecheck・check-docs・diff --check rc=0。
+- 司令塔の承認の根拠: 上の監査の実測と、ff 取り込み後の本体ツリーでの vitest・check-docs。
+- 測っていないもの: 本番の pipeline を S5〜S7 で通す実行(単体試験と CLI の再現で代替)、CSA・秒なしの実データ、90 局。
+
+### 6.6 次
+
+作業 3(「考えられること」と「次の 20 局で見分けがつくこと」の固定文の差し込み・感想票)。**その前に §5 の固定文の人間の承認が要る**。`kifu2-01` のような評価の揺れで「優勢になった局」の分類が変わることは、次の版の「前回との比較」を読むときの注意として 4 ページ目に 1 文足す候補(作業 3 で)。
