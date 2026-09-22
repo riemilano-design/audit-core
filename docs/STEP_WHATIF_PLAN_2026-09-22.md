@@ -136,3 +136,27 @@ W6 は基準値と無関係なので、24 局の出力と棋譜の消費時間�
   - 用語: 「選択肢が限られた局面(第 1 候補と第 2 候補の差が 400 以上)」「相手の手の後に生まれた機会で、第 1 候補と同じ手」「実戦の手で評価が下がった分かれ道」。
 - **人間の決定**: 比較対象(公開棋譜の 90 局)への当てはめは、今回の冊子には要らない。**次に棋譜を取り込むときからの標準装備にする**(pool の記録にも `--whatif` を回し、基準値の表に一致率・fork 率・narrowHeld 率を加える。そのときに §7.2 の W1〜W4 を照合する)。本人向けの冊子では、合計の率は「点数」にならないよう注記つきで出し、比べる先は「同じ人の次の 20 局」を主にする。
 - 消費時間の欄は棋譜(KIF)にあるので、作業 2 では `reportData.ts` が固定棋譜 JSON から読める形にするのではなく、**今回は見せる段が KIF の消費時間を読まない**(まとめの冊子と同じく、司令塔が別に集めた数を prose と同じ扱いで渡す)。流れに入れるのは別の STEP。
+
+## 8. 作業 3: 基準値の標準装備(2026-09-22、司令塔 e3。§7.3 の人間の決定を実装する)
+
+人間の指示「進めよう。別セッション立ち上げて進めて」(2026-09-22)。**予測 W1〜W4(§7.2)はコミット済み(`58fc33e`)で、90 局の結果はまだ誰も見ていない**(手回しで作った `p3-01.jsonl` 1 局だけがある。これも件数以外は見ていない)。
+
+### 8.1 作るもの
+
+1. **公開棋譜の 3 人・90 局に `whatif.ts` を当てる**(gitignore の `out/lishogi-run/<p3|p4|p5>/kifu/*.fixed.json` → `out/lishogi-run/<p>/whatif/<id>.jsonl`)。数え方・`WHATIF_VALUES` は変えない。`out/run-whatif-lishogi.sh` は 1 秒で終わって何も作らなかった(原因は未特定)。**直すか、`pipeline.ts --whatif` の再開の仕組みで回すか**は実装側が選ぶ(後者なら `--kifu-dir` の要件を確かめる。fixed 棋譜があれば S1 は飛ばす仕様)。エンジンは 5 本まで。
+2. **`baselineTable.ts` に whatif の率を足す**: `--whatif-material <jsonl …>`(その人)と `--whatif-pool <label>=<jsonl …>`(pool。`--pool` と同じ流儀でラベルは一致させる)を任意で受け、summary 行から 5 つの率を集めて表に 5 行を足す。分母は `positionsRead` の合計、分子は `matchesTop1`・`withinMultiPv`・`scenes.fork` の数・`scenes.narrowHeld` の数・`scenes.chanceHeld` の数。加えて `sceneReads.attackNoLegalMoveCount / scenesRead`(W4 用)を 1 行。
+   - **candidate / lower の判定は付けない**(v1)。「一致率が 2 倍」のような判定は崩れ率の規則と意味が違い、新しい閾値を決めることになる(判断的知識)。ここでは **pool の合計の率と、pool の 1 人ごとの最小〜最大**を添えて並べるだけ。表の見出しにその旨を書く。
+   - `--whatif-*` を**渡さない**ときの出力(標準出力の Markdown と `--out` の JSON)は 1 バイトも変わらない。`out/base/p2-material20.json` を同じ引数で作り直して diff 0 で確かめる。
+   - whatif の jsonl は `kifuId` と `values` を持つ。`values` が person と pool で違えば止める(exit 1)。名前・手・SFEN は書かない(既存と同じ)。
+3. 純粋関数は `lib/baselineTable.ts`(既存)か新しい `lib/whatifBaseline.ts` に置き、試験を足す。
+
+### 8.2 確かめ方
+
+- 型検査 rc=0、vitest(基点 1193 件)、check-docs rc=0。変異 2 本以上(分母の取り違え・pool のラベル不一致の見逃し等)。
+- 90 局の実行: 失敗 0 件、各 jsonl の最後の行が `summary`。所要を記録。
+- 実測の報告は **件数と率だけ**(3 人それぞれと合計。立浪さんの 24 局・20 局は §7.1 の数と `out/tatsunami3`・`out/tatsunami-long`・`out/tatsunami2?` の既存 jsonl を使う。20 局(前回)の whatif は無いので、比べる person は 24 局の p2)。手・値・局面は書かない。
+- 独立監査 1 回。GO の後に司令塔が §7.2 の W1〜W4 を照合して §8.3 に書く(盲検: 予測は先にコミット済み)。
+
+### 8.3 結果と照合(GO の後に司令塔が書く)
+
+(未記入)
