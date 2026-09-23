@@ -329,12 +329,16 @@ def bullet_8(m, name):
 
 def bullet_9(m, name):
     g3 = need(m["groups"].get("min3"), "3 分の組(min3)の patient")
-    return (
+    text = (
         f"- {g3.games} 局の崩れの数は、1 秒以内の手で {g3.by_spent[0]['collapsed']}、"
         f"10 秒以上の手で {g3.by_spent[3]['collapsed']}。"
         f"割合は長考の方が高いが、数では速い手の方がずっと多い。"
-        f"探索で残った組でも、崩れた手は「速く指した崩れ」が主でした。"
     )
+    # `--time-search` が無い(= 探索を回していない)ときは、探索の結果に触れる最後の 1 文を出さない
+    # (司令塔の指示書 BULLET9_BRIEF.md §1。前の 3 文は変えない)。
+    if m.get("hasTimeSearch"):
+        text += "探索で残った組でも、崩れた手は「速く指した崩れ」が主でした。"
+    return text
 
 
 def bullet_10(m, name):
@@ -412,7 +416,9 @@ def render(materials, name, has_time_search):
     """v7 と同じ見出し構造の md を組む。事実の箇条書き以外はすべて `<!-- TODO: 読み -->`。
     `has_time_search`(= `--time-search` が渡されたか)で、存在しない付録 4 の 8〜11 ページを
     案内しないように見出しを切り替える(指示書 1-A。初回の顧客は探索を回していないため
-    8〜11 ページが無い)。"""
+    8〜11 ページが無い)。`materials` に `hasTimeSearch` を足す(bullet_9 が同じ値を見るため。
+    指示書 BULLET9_BRIEF.md §1)。"""
+    materials["hasTimeSearch"] = has_time_search
     missing = []
     rendered_blocks = []
     for heading, builders in BLOCKS:
