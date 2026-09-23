@@ -903,6 +903,9 @@ npx tsx scripts/playtest/deliver.ts \
 **これ 1 本で新規顧客から納品まで通る**(2026-09-23 の人間の決定。それまでは `pipeline.ts --until gate` を
 先に手で回す必要があった)。手順は 1 本だけで、上のコマンド以外に覚えるものは無い。
 
+**止まる 2 か所(`prose-gate`・`answer-gate`)で何をどう書くかは [../../docs/DELIVER_GATES.md](../../docs/DELIVER_GATES.md)**
+(書く前の 4 原則・`_mid.py` と `check_answer.py` が機械で見る規則・行動のメニュー M1〜M9・PDF 目視の観点)。
+
 - `--compare-dir`/`--compare-person`: 段 `pipeline-gate` が `pipeline.ts --until gate` へ**中継するだけ**の引数
   (`--compare-dir` は値を連続していくつでも取れる。2 つは必ず一緒に渡す)。新しい work には判定の出力
   (`<work>/<person>/gate.jsonl`)が無いため、これが無いと段 `pipeline-data` が材料不足で止まる。
