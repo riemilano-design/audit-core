@@ -16,7 +16,8 @@ def allowed_numbers(g):
     for p, _, _ in f["trans"]: A.add(p)
     for e in m["events"]:
         if e["gameNo"] == g["no"]:
-            A |= {e["ply"], abs(e["before"]), abs(e["after"])}
+            A.add(e["ply"])
+            A |= {abs(v) for v in (e["before"], e["after"]) if v is not None}
             A |= {int(x) for x in _re.findall(r"\d+", e["after5"])}
     for r in c["reps"]:
         if r["gameNo"] == g["no"]: A |= {r["displayPly"], r["escRoot"], r["escEnd"], r["pvEscEnd"]}
