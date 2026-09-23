@@ -32,8 +32,12 @@ export class TimeCauseError extends Error {
   }
 }
 
-type Side = "先手" | "後手";
-type Phase = "early" | "mid" | "late";
+/**
+ * STEP TIME-CAUSE-2(docs/STEP_TIME_CAUSE_PLAN_2026-09-24.md §7.5)。`lib/timeFeatures.ts` が
+ * `ownMoveTimesOf`(局ごとの計算を手ごとに広げる元)を呼ぶため export した(最小の export 追加。値は変えていない)。
+ */
+export type Side = "先手" | "後手";
+export type Phase = "early" | "mid" | "late";
 
 // ---- 入力の形 ----
 
@@ -134,7 +138,8 @@ export interface GameTimeCause {
   midMoveSeconds: TimeCauseMidMoveSecond[];
 }
 
-interface OwnMoveTime {
+/** STEP TIME-CAUSE-2(計画 §7.5)。`lib/timeFeatures.ts` が使うため export した(最小の export 追加)。 */
+export interface OwnMoveTime {
   kifPly: number;
   sec: number;
   totalSec: number;
@@ -142,7 +147,8 @@ interface OwnMoveTime {
   phase: Phase;
 }
 
-function ownMoveTimesOf(side: Side, plyOffset: number, total: number, seconds: readonly (MoveTime | null)[]): OwnMoveTime[] {
+/** STEP TIME-CAUSE-2(計画 §7.5)。`lib/timeFeatures.ts` が「局ごとの計算を手ごとに広げる」元として呼ぶため export した(最小の export 追加。値は変えていない)。 */
+export function ownMoveTimesOf(side: Side, plyOffset: number, total: number, seconds: readonly (MoveTime | null)[]): OwnMoveTime[] {
   const parity = ownParityOf(side);
   const out: OwnMoveTime[] = [];
   for (let kifPly = parity === 1 ? 1 : 2; kifPly <= seconds.length; kifPly += 2) {

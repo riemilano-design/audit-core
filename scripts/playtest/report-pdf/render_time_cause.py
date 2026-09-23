@@ -26,10 +26,22 @@ from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.platypus import Flowable, PageBreak, Paragraph, SimpleDocTemplate, Spacer, Table, TableStyle
 
-if len(sys.argv) < 3:
-    sys.exit("使い方: python3 -X utf8 render_time_cause.py <time_cause.json> <出力 PDF>")
-src, out = sys.argv[1], sys.argv[2]
+# STEP TIME-CAUSE-2(docs/STEP_TIME_CAUSE_PLAN_2026-09-24.md §7.5)。--search <time_cause_search.json> は
+# 任意(渡さなければ「探索の結果」のページは作らない ― render_front.py の第 3 引数と同じ流儀)。
+_args = sys.argv[1:]
+SEARCH_PATH = None
+if "--search" in _args:
+    _idx = _args.index("--search")
+    if _idx + 1 >= len(_args):
+        sys.exit("--search には値が要る")
+    SEARCH_PATH = _args[_idx + 1]
+    del _args[_idx : _idx + 2]
+
+if len(_args) < 2:
+    sys.exit("使い方: python3 -X utf8 render_time_cause.py <time_cause.json> <出力 PDF> [--search <time_cause_search.json>]")
+src, out = _args[0], _args[1]
 TC = json.load(open(src, encoding="utf-8"))
+TS = json.load(open(SEARCH_PATH, encoding="utf-8")) if SEARCH_PATH is not None else None
 
 # ---- 書体(render_direct.py・render_front.py と同じ流儀) ----
 _here = os.path.dirname(os.path.abspath(__file__))
@@ -407,6 +419,126 @@ else:
             story.append(MidBars(g["midMoveSeconds"], width=W))
         story.append(Spacer(1, 4 * mm))
 
+# ==================== 探索の結果(STEP TIME-CAUSE-2。--search が渡されたときだけ) ====================
+# lib/timeSearch.ts が数えた条件の組(単独・2・3 条件)を、そのまま並べる(判定・集計はしない)。
+COLUMN_LABELS = {
+    "prevOwnSpentBucket": "直前の自分の手の秒",
+    "prev3SumBucket": "直前 3 手の合計秒",
+    "prev5SumBucket": "直前 5 手の合計秒",
+    "afterLongThink": "直前の自分の手が長考",
+    "remainingBucket": "残り時間",
+    "phase": "時期",
+    "evalBand": "形勢",
+    "evalChangePrev": "直前の自分の手番からの形勢の変化",
+    "inCheck": "王手を受けている",
+    "fork": "分かれ道",
+    "top1Side": "第 1 候補の側",
+    "actualSide": "実戦の手の側",
+    "lossBand": "損失の大きさ",
+    "inTop5": "実戦の手が候補内",
+    "actualCapture": "実戦の手が取る",
+    "actualDrop": "実戦の手が打つ",
+    "actualGivesCheck": "実戦の手が王手",
+    "actualSacrifice": "実戦の手が捨て駒",
+    "actualRetreat": "実戦の手が引く",
+    "top1Capture": "第 1 候補が取る",
+    "top1Drop": "第 1 候補が打つ",
+    "top1GivesCheck": "第 1 候補が王手",
+    "top1Sacrifice": "第 1 候補が捨て駒",
+    "top1Retreat": "第 1 候補が引く",
+    "oppPrevCapture": "相手の直前の手が取る",
+    "oppPrevDrop": "相手の直前の手が打つ",
+    "oppPrevGivesCheck": "相手の直前の手が王手",
+    "oppPrevPromotion": "相手の直前の手が成る",
+    "ownRookMoved": "本人の飛車が動いた",
+    "oppRookMoved": "相手の飛車が動いた",
+}
+VALUE_LABELS = {
+    "phase": {"early": "序盤", "mid": "中盤", "late": "終盤"},
+    "evalBand": {"ahead": "優勢", "level": "互角", "behind": "劣勢"},
+    "evalChangePrev": {"up": "上", "same": "同", "down": "下"},
+    "top1Side": {"attack": "攻め", "defense": "守り", "both": "両方", "none": "なし"},
+    "actualSide": {"attack": "攻め", "defense": "守り", "both": "両方", "none": "なし"},
+    "lossBand": {"over300": "300 以上", "under300": "300 未満", "outOfCandidates": "候補外"},
+    "remainingBucket": {"<60": "60 秒未満", "60-119": "60〜119 秒", ">=120": "120 秒以上"},
+}
+
+
+def value_text(column, value):
+    by_column = VALUE_LABELS.get(column)
+    if by_column is not None and value in by_column:
+        return by_column[value]
+    if isinstance(value, bool):
+        return yn(value)
+    return str(value)
+
+
+def condition_text(condition):
+    return "・".join(f"{COLUMN_LABELS.get(t['column'], t['column'])}: {value_text(t['column'], t['value'])}" for t in condition)
+
+
+def cond_stats_text(stats):
+    p_pct = round(stats["p"] * 100, 1)
+    return f"{stats['longThink']} / {stats['n']}({p_pct:g}%)"
+
+
+if TS is not None:
+    story.append(PageBreak())
+    story.append(P("時間と一緒に起きている条件(探索)", S_H2))
+    story.append(
+        P(
+            emit(
+                f"発見用(手 <b>{TS['discover']['moves']}</b>)で単独・2 条件・3 条件の組を機械に全部試させ、採用候補(手の数が十分に多く、長考の"
+                f"割合が全体よりはっきり高い組)を選びました。検証用(手 <b>{TS['validate']['moves']}</b>)でも同じ組を数え直し、当てはまる状態が"
+                f"保たれた組だけを「再現した」として下に並べます。長考と一緒に起きている条件を数えたものであり、何かを決めつけるものではありません。",
+                {TS["discover"]["moves"], TS["validate"]["moves"]},
+            ),
+            S_LEAD,
+        )
+    )
+
+    depth_rows = [[P(x, S_K) for x in ["深さ(条件の数)", "試した組の数", "採用候補の数", "再現の数"]]]
+    depth_allowed = set()
+    for d in TS["depths"]:
+        depth_allowed |= {d["depth"], d["tried"], d["adopted"], d["reproduced"]}
+        depth_rows.append(
+            [
+                P(emit(f"{d['depth']} 条件", depth_allowed), S_V),
+                P(emit(str(d["tried"]), depth_allowed), S_V),
+                P(emit(str(d["adopted"]), depth_allowed), S_V),
+                P(emit(str(d["reproduced"]), depth_allowed), S_V),
+            ]
+        )
+    depth_table = Table(depth_rows, colWidths=[35 * mm, (W - 35 * mm) / 3, (W - 35 * mm) / 3, (W - 35 * mm) / 3], repeatRows=1)
+    depth_table.setStyle(HEADER_STYLE)
+    story.append(depth_table)
+    story.append(Spacer(1, 2.5 * mm))
+
+    story.append(P("再現した組(条件・発見用の長考 / 手の数・検証用の長考 / 手の数)", S_K))
+    if len(TS["reproduced"]) == 0:
+        story.append(P("再現した組はありませんでした。", S_SMALL))
+    else:
+        rep_rows = [[P(x, S_K) for x in ["条件", "発見用", "検証用"]]]
+        for r in TS["reproduced"]:
+            cond_text = condition_text(r["condition"])
+            disc_text = cond_stats_text(r["discover"])
+            val_text = cond_stats_text(r["validate"])
+            row_allowed = digits_of(cond_text) | digits_of(disc_text) | digits_of(val_text)
+            rep_rows.append([P(emit(cond_text, row_allowed), S_V), P(emit(disc_text, row_allowed), S_V), P(emit(val_text, row_allowed), S_V)])
+        rep_table = Table(rep_rows, colWidths=[(W - 60 * mm), 30 * mm, 30 * mm], repeatRows=1)
+        rep_table.setStyle(HEADER_STYLE)
+        story.append(rep_table)
+    story.append(Spacer(1, 2.5 * mm))
+    story.append(
+        notebox(
+            [
+                "「再現した」は、発見用の組で見えた「長考の割合が高い」が、検証用の別の対局でも同じ基準で高いままだった、という意味です。",
+                "深さは組み合わせた条件の数です(1 = 単独の条件、2・3 = 条件を組み合わせたもの)。",
+                "この表は条件どうしの一緒の起き方を数えたものであり、どれが理由かを決めるものではありません。",
+            ]
+        )
+    )
+
 story.append(Spacer(1, 3 * mm))
 story.append(P("試作版につき、有段者による確認はまだ受けていません。数はすべて機械で数えたものです。", st("tfoot", fontSize=8, leading=11, color=MUTED)))
 
@@ -415,4 +547,5 @@ if _problems:
     sys.exit(1)
 
 doc.build(story)
-print(f"wrote {out}({len(games)} 局・{len(groups)} 組・{len(time_up_games)} 局の帯)")
+search_note = "" if TS is None else f"・探索の再現 {sum(d['reproduced'] for d in TS['depths'])} 組"
+print(f"wrote {out}({len(games)} 局・{len(groups)} 組・{len(time_up_games)} 局の帯{search_note})")

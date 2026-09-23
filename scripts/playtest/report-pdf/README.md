@@ -326,6 +326,25 @@ markdown を見出し(`#`・`##`・`###`)・箇条書き(`-`・`1.`)・表(`|...
   (`tatsunami20`・`tatsunami3`・`tatsunami-long` の 3 組、局 44)での実行時確認(rc=0・全書体埋め込み・fitz で
   PNG 化した目視確認。時間切れで負けた 3 局の帯 ― `whatif-v2` あり/なしの両方を含む ― も確認した)
 
+### 「探索の結果」のページ(STEP TIME-CAUSE-2、docs/STEP_TIME_CAUSE_PLAN_2026-09-24.md §7.5)
+
+`scripts/playtest/timeSearch.ts` が作る `time_cause_search.json` を、任意の `--search` 引数で受け取って
+最後に足す(渡さなければ従来どおり付録 4 は変わらない)。
+
+- 使い方: `python3 -X utf8 render_time_cause.py <time_cause.json> <出力 PDF> [--search <time_cause_search.json>]`
+- ページ: 見出し「時間と一緒に起きている条件(探索)」。深さ(1〜3 条件)ごとの試した組の数・採用候補の数・
+  再現の数の表 → 再現した組の一覧(条件を「列名: 値」の日本語で並べたもの・発見用の 長考/手の数(%)・検証用の
+  同じ形)。再現した組が 0 件なら「再現した組はありませんでした。」とだけ書く。
+- 列名・値の日本語(`COLUMN_LABELS`・`VALUE_LABELS`)は、この段が測った量をそのまま名付けたもの(`phase` の
+  早/中/終・`evalBand` の優勢/互角/劣勢〈`_head.py` の `RANK_JP` と同じ語〉・真偽値は既存の `yn()`)で、新しい
+  将棋の判断ではない。
+- 数の照合(`emit()`)は既存のページと同じ考え方。条件の文字列(`condition_text`)も `digits_of` で自分自身の
+  数を許す集合にしてから `emit()` へ通す(`c10_table` 等、既存の数値セルの流儀と同じ)
+- 禁止語チェックは既存と同じ(「原因」の語そのものを固定文に一切使わない ― 「原因ではなく」のような否定文でも
+  `emit()` は語の有無だけを見るため書けない。実装担当の判断)
+- 守りは、合成の `time_cause_search.json`(再現した組が有る場合・無い場合の両方)での rc=0 確認と、実データ
+  (`tatsunami20` = 発見用・`tatsunami3` = 検証用)での実行時確認(rc=0・ページ数・テキスト抽出での目視確認)
+
 ## 既知の欠落(2026-09-21 独立監査 REVISE で明記)
 
 別冊(`render_appendix.py`)は、`audit_metrics.json` の `candidate.reps` の欄(`side`・`transitionJp`・`capUsJp` ほか)と

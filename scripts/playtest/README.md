@@ -714,6 +714,88 @@ npx tsx scripts/playtest/timeCause.ts \
 
 `time_cause.json` から付録 4 を作る。詳しくは `report-pdf/README.md` を参照。
 
+## 時間を使った手に共通する条件を、機械に探索させる(`timeSearch.ts`・`lib/timeFeatures.ts`・`lib/timeSearch.ts`。STEP TIME-CAUSE-2、docs/STEP_TIME_CAUSE_PLAN_2026-09-24.md §7)
+
+人間の指摘(2026-09-24、「まさにここを知りたい」): 人が仮説を挙げる(C1〜C10、上の STEP TIME-CAUSE)のではなく、
+**仮説を大量生成できる探索空間を作り、機械に「長考した手に何が共通しているか」を探させる**。見つかったものは
+「一緒に起きている条件」(レベル 1)であって「原因」ではない(禁止語)。
+
+### `lib/timeFeatures.ts`(1 手ごとの特徴の表)
+
+`buildGameMoveFeatureRows` は、`lib/timeCause.ts` の局ごとの計算(`ownMoveTimesOf`・`rookOnInitialFileOf`・
+`sfenBeforeOriginalKifPly`)を、本人の手ごとの 1 行に広げる。値はすべて既存の道具の出力から作り、**新しい
+閾値は置かない**。1 行 = 本人の 1 手で、次の列を持つ(値はすべて離散。`null` は「この手では条件に使えない」
+という意味で、探索(`lib/timeSearch.ts`)はそのまま素通りする)。
+
+- **時間**: `spentBucket`(その手の秒の段。`≤1`/`≤4`/`≤9`/`>9`)、`prevOwnSpentBucket`・`prev3SumBucket`・
+  `prev5SumBucket`(直前 1・3・5 手の合計を同じ段で。3・5 手のどれか 1 つでも「2 手前・4 手前・…」の kifPly が
+  ずれていれば〈間に秒の読めない本人の手が挟まっている〉`null`)、`afterLongThink`(直前の自分の手が長考)、
+  `remainingBucket`(`TIME_VALUES.leftBucketsSec` の段。`--time-limit-sec` が無ければ `null`)。
+- **局面**: `phase`(`phaseOf`)、`evalBand`(この手を指す前の評価の段。`ahead`/`level`/`behind`。
+  `STANDING_BOUNDS` そのまま)、`evalChangePrev`(直前の自分の手番からの評価の向き。`up`/`same`/`down`。
+  「同」の境も `STANDING_BOUNDS` の使い回し)、`inCheck`(この手を指す前に王手を受けているか)。
+- **選択**(whatif-v2 の position 行がある手だけ): `fork`・`top1Side`・`actualSide`(攻め/守り/両方/なし、
+  whatif-v2 の生の値)、`lossBand`(`loss.cpValue` を `STANDING_BOUNDS.aheadCp`〈300〉で 2 値。`isLowerBound`
+  〈実戦の手が候補に無い〉は `outOfCandidates`)、`inTop5`(`actualRank` が `null` でない)、READ の印
+  (`lib/read.ts` の `moveMarksOf`。取る/打つ/王手/捨て駒/引く の 5 つを、実戦の手・第 1 候補それぞれに)。
+- **相手**: 直前の相手の手の印(取る/打つ/王手/成る。`moveMarksOf` + USI の末尾 `+`)。
+- **形**: `ownRookMoved`・`oppRookMoved`(局の C9〈`lib/timeCause.ts` と同じ求め方〉の印を全行に付ける。
+  `rookOnInitialFileOf` の否定 ― 「初期の筋のまま」ではなく「動いた」の向きにそろえた)。
+- **目的変数**: `longThink`(`spentSec` ≥ `TIME_VALUES.longThinkSec`。主)・`spentSec`(副)。
+
+段 2 の記録(replay.ts → rescreen.ts の JSONL)の ready 行は**すべて「本人の手番」の局面**であり(実データで
+確認: `ply` は常に偶数)、相手の手を指す前(相手の手番)の局面は記録に無い。そのため相手の直前の手の印は、
+1 つ前の ready 行の `sfen` に同じ行の `senteMove`(本人の直前の手)を `applyMove` で 1 手重ねて作る。
+
+whatif-v2 自身の `candidates[].tags`/`actualTags`(`WhatifMoveTags`)は攻め・守りの側の印であって、この段が
+要る「取る/打つ/王手/捨て駒/引く」とは別物なので、`lib/read.ts` の `moveMarksOf` を別に呼ぶ(実装担当の判断)。
+
+### `lib/timeSearch.ts`(探索)
+
+`SEARCH_COLUMNS`(30 列。`kifuId`・`group`・`gameNo`・`kifPly` の識別子と、`spentSec`・`spentBucket`・
+`longThink`〈目的変数そのもの、またはその生の形の離散化 ― `spentBucket` は `longThink` とほぼ同義になり、
+条件に使うとトートロジーになる〉を除いたすべて)から、単独 → 2 条件 → 3 条件の組を全列挙する
+(`enumerateCandidatesOf`。同じ列を 2 回使わない。**列の値域の直積ではなく、実際に手に出会った〈n ≥ 1 の〉
+値の組だけを数える** ― 実装担当の判断)。
+
+各組の該当する手の数 n と長考率 p を、全体の長考率 p0 と比べる。**採用候補**: n ≥ `FINDING_VALUES.minPairs`
+(20)かつ p ≥ p0 × `FINDING_VALUES.ratio`(2)(`isAdoptedOf`)。発見用で採用候補になった組を検証用でも数え直し、
+n ≥ `TIME_SEARCH_VALUES.validateMinN`(= 10。この計画で唯一の新しい値)かつ p ≥ p0(検証用) × 2 なら
+「再現した」(`isReproducedOf`)。
+
+```
+npx tsx scripts/playtest/timeSearch.ts \
+  --role discover --kifu-dir <固定棋譜のフォルダ> --records-dir <段 2 の JSONL のフォルダ> \
+    --time-limit-sec <秒> [--whatif-v2-dir <whatif-v2 jsonl のフォルダ>] \
+  [--role discover|validate --kifu-dir <フォルダ> --records-dir <フォルダ> --time-limit-sec <秒> [--whatif-v2-dir <フォルダ>] …] \
+  --out <time_cause_search.json>
+```
+
+- `--kifu-dir` で組が始まる(`timeCause.ts` と同じ形式)。`--role` はその組の役割で、`--kifu-dir` の前に要る。
+  `--patient` は取らない(`gameNo`・`timeUpLoss` を使わないため ― 実装担当の判断。`gameNo` はソート順の連番)。
+  `--records-dir` は必須(`<kifuId>.jsonl`)。
+- 出力(`time_cause_search.json`): `{"kind":"time_cause_search", gitHead, dirty, discover: {moves, longThinkRate},
+  validate: {...}, depths: [{depth, tried, adopted, reproduced}, …], reproduced: [{depth, condition, discover:
+  {n, longThink, p}, validate: {...}}, …], notReproduced: [...同じ形...]}`。
+- 実データ(2026-09-24、実装担当): 発見用 = `tatsunami20`(`whatif-v2` 無し → 選択の列は発見用側で条件に
+  出てこない。材料の事実であり、直していない)、検証用 = `tatsunami3`(`whatif-v2` あり)で rc=0。数そのもの
+  (試した数・採用候補・再現の数・p0・再現した条件)は司令塔が予測(F1〜F7)と照合するため、ここには書かない
+  (盲検)。
+
+### `report-pdf/render_time_cause.py` への追加(「探索の結果」のページ)
+
+`--search <time_cause_search.json>` を任意で受け取る(渡さなければ従来どおり)。見出しは「時間と一緒に
+起きている条件(探索)」。深さごとの試した組の数・採用候補の数・再現の数の表、再現した組の一覧(条件・
+発見用の長考/手の数・検証用の長考/手の数)を並べる。禁止語(「原因」「傾向」を含む)は固定文に使わない。
+
+### 試験
+
+- `lib/timeFeatures.test.ts`: 合成 1 局(先手・GAME01_MOVES の最初の 16 手)で、`moveSeconds`・植えた評価
+  (`plantedRecords`/`engineRef`)・whatif-v2 の入力から手で計算した列の値と突き合わせる。
+- `lib/timeSearch.test.ts`: 合成の表(60 行、列 4 つ: `phase`・`fork`・`inCheck`・`afterLongThink`)で、
+  列挙の数(深さ 1〜3 それぞれ組合せの数と合う)・`statsOf` の n/p・`isAdoptedOf`/`isReproducedOf` の判定・
+  `TIME_SEARCH_VALUES.validateMinN` の境界を確かめる。
+
 ## typecheck
 
 ```
