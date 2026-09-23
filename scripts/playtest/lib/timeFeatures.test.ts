@@ -266,3 +266,85 @@ describe("buildGameMoveFeatureRows: 形(C9。全行に同じ値)", () => {
     }
   });
 });
+
+// ==== 崩れの列(collapse。STEP TIME-CAUSE-3 §9.1 の 1.) ====
+//
+// `plantedRecords` は指定の無い行(ここでは ply16。MOVES_16 の 16 手ぶんの直後、17 手目の直前)に既定値
+// (終局・王手でなければ engineRef(0) = level)を植える。この局は ply16 で終局でも王手中でもない(既存の
+// 「inCheck: この合成局は王手を挟まない」と同じ前提)ので、ply16 は level(0)になる ― 実装担当が
+// `evaluationOf`/`plantedRecords` の既定値の規約から手で確かめた(正解をコードから写していない)。
+
+describe("buildGameMoveFeatureRows: 崩れの列(前が ahead/level で段が下がる/下がらない。既存の RECORDS・PLANT のまま)", () => {
+  it("kifPly1〜5・11・13: 次の ready 行で段が下がらない(同じか上がる)ので false", () => {
+    // kifPly1: level(50) → ahead(400、kifPly3 の直前)。kifPly3: ahead(400) → ahead(300、kifPly5 の直前)。
+    // kifPly5: ahead(300) → ahead(350、kifPly7 の直前)。kifPly11: level(0) → ahead(310、kifPly13 の直前)。
+    // kifPly13: ahead(310) → ahead(1000、kifPly15 の直前)。
+    expect(rowAt(1).collapse).toBe(false);
+    expect(rowAt(3).collapse).toBe(false);
+    expect(rowAt(5).collapse).toBe(false);
+    expect(rowAt(11).collapse).toBe(false);
+    expect(rowAt(13).collapse).toBe(false);
+  });
+
+  it("kifPly7: 前が ahead(350)、次の ready 行(kifPly9 の直前)が behind(−400)に下がるので true", () => {
+    expect(rowAt(7).collapse).toBe(true);
+  });
+
+  it("kifPly15: 前が ahead(1000)、次の ready 行(ply16、既定の level 0)に下がるので true", () => {
+    expect(rowAt(15).collapse).toBe(true);
+  });
+
+  it("kifPly9: 前が behind(−400)なので null(下がりようがない組は分母に入れない)", () => {
+    expect(rowAt(9).collapse).toBeNull();
+  });
+});
+
+// 未定(measured でない評価)の場合を確かめる別の合成局(既存の RECORDS・PLANT・ROWS は変えない)。
+const UNDETERMINED_PLANT = {
+  0: null, // kifPly1 の直前 → 未定(notMeasurable。王手も終局もしていない局面に null を明示的に植える)
+  2: engineRef(200), // kifPly3 の直前 → level(< 300)
+  4: null, // kifPly5 の直前 → 未定
+  6: engineRef(400), // kifPly7 の直前 → ahead
+  8: engineRef(-400), // kifPly9 の直前 → behind
+  10: engineRef(0), // kifPly11 の直前 → level
+  12: engineRef(0), // kifPly13 の直前 → level
+};
+const UNDETERMINED_RECORDS = plantedRecords(MOVES_16 as string[], UNDETERMINED_PLANT);
+const UNDETERMINED_ROWS = buildGameMoveFeatureRows(FIXED, 1, "discover", undefined, UNDETERMINED_RECORDS, null);
+const undeterminedRowAt = (kifPly: number) => UNDETERMINED_ROWS.find((r) => r.kifPly === kifPly)!;
+
+describe("buildGameMoveFeatureRows: 崩れの列(前・次のどちらかが未定なら null)", () => {
+  it("kifPly1: 直前の評価が未定(null を明示)なので null", () => {
+    expect(undeterminedRowAt(1).collapse).toBeNull();
+  });
+
+  it("kifPly3: 直前は level(200)で定まるが、次の ready 行(kifPly5 の直前)が未定なので null", () => {
+    expect(undeterminedRowAt(3).collapse).toBeNull();
+  });
+
+  it("kifPly5: 直前の評価が未定なので null", () => {
+    expect(undeterminedRowAt(5).collapse).toBeNull();
+  });
+
+  it("kifPly7・11・13: 前後とも定まる行は既存のとおり判定される(true/false)", () => {
+    expect(undeterminedRowAt(7).collapse).toBe(true); // ahead(400) → behind(−400、kifPly9 の直前)
+    expect(undeterminedRowAt(11).collapse).toBe(false); // level(0) → level(0、kifPly13 の直前)
+  });
+
+  it("kifPly9: 前が behind なので null", () => {
+    expect(undeterminedRowAt(9).collapse).toBeNull();
+  });
+});
+
+// 最後の本人の手(次の ready 行そのものが無い)を確かめる、15 手で終わる合成局。
+const MOVES_15: readonly string[] = GAME01_MOVES.slice(0, 15);
+const FIXED_15: TimeCauseFixedKifu = { id: "synthetic-features-15", mirrored: false, moves: MOVES_15, moveSeconds: MOVE_SECONDS.slice(0, 15) };
+const LAST_MOVE_RECORDS = plantedRecords(MOVES_15 as string[], { 14: engineRef(400) }); // kifPly15 の直前 → ahead
+const LAST_MOVE_ROWS = buildGameMoveFeatureRows(FIXED_15, 1, "discover", undefined, LAST_MOVE_RECORDS, null);
+
+describe("buildGameMoveFeatureRows: 崩れの列(最後の本人の手。次の ready 行が無い)", () => {
+  it("kifPly15(この局の最後の手): 次の ready 行が存在しない(局が 15 手で終わる)ので null", () => {
+    const row = LAST_MOVE_ROWS.find((r) => r.kifPly === 15)!;
+    expect(row.collapse).toBeNull();
+  });
+});

@@ -17,6 +17,8 @@
 // - whatif-v2(STEP WHATIF 作業 4)の position 行がある手だけ、`lib/read.ts` の `moveMarksOf`(既存)を
 //   実戦の手・第 1 候補の手に当てて印を作る(whatif-v2 自身の `actualTags`/`candidates[].tags` は
 //   側〈攻め・守り〉の印であって、この段が要る「取る/打つ/王手/捨て駒/引く」とは別物 ― 実装担当の判断)。
+// - STEP TIME-CAUSE-3(docs/STEP_TIME_CAUSE_PLAN_2026-09-24.md §9.1 の 1.)。`collapse` 列: この手の前の評価と
+//   次の本人の手番の前の評価(次の ready 行)から、既存の崩れの定義(`lib/gate.ts` の `collapseOf`)で求める。
 //
 // 【このファイルが絶対にやらないこと】
 // - ファイルの読み書き・エンジンを起動すること(CLI の役目)
@@ -27,8 +29,9 @@ import type { RecordLine } from "../invariants/types.js";
 import { applyMove } from "../../../apps/server/src/rules/applyMove.js";
 import { isInCheck } from "../../../apps/server/src/rules/gameStatus.js";
 import { pairEvaluations, readEvaluations, STANDING_BOUNDS, type Evaluation } from "./failureEvent.js";
+import { collapseOf } from "./gate.js";
 import { moveMarksOf } from "./read.js";
-import { standingOf } from "./standing.js";
+import { standingOf, standingPairOf } from "./standing.js";
 import { originalMovesOf, plyOffsetOf, leftBucketIndexOf, sideOf, spentBucketIndexOf, TIME_VALUES, moveSecondsOf } from "./reportData.js";
 import { ownMoveTimesOf, rookOnInitialFileOf, sfenBeforeOriginalKifPly, TimeCauseError, type OwnMoveTime, type Side, type TimeCauseFixedKifu } from "./timeCause.js";
 import type { WhatifSideRaw } from "./type.js";
@@ -64,6 +67,17 @@ function evalChangeOf(diffCp: number): FeatureEvalChange {
 function evalBandOf(evaluation: Evaluation): "ahead" | "level" | "behind" | null {
   const standing = standingOf(evaluation, STANDING_BOUNDS);
   return typeof standing === "string" ? standing : null;
+}
+
+/**
+ * STEP TIME-CAUSE-3(計画 §9.1 の 1.)。「崩れ」の列。この手の前の評価〈`beforeEvaluation`。evalBand の元〉と、
+ * 次の本人の手番の前の評価〈`afterEvaluation`。次の ready 行〉から、既存の崩れの定義(`lib/gate.ts` の
+ * `collapseOf`)で求める。`collapseOf` が `counted: false` を返す組(前が behind・どちらかが未定)は null。
+ */
+function collapseColumnOf(beforeEvaluation: Evaluation, afterEvaluation: Evaluation): boolean | null {
+  const collapse = collapseOf(standingPairOf(beforeEvaluation, afterEvaluation, STANDING_BOUNDS));
+  if (!collapse.counted) return null;
+  return collapse.transition !== null;
 }
 
 /**
@@ -127,6 +141,12 @@ export interface MoveFeatureRow {
   evalChangePrev: FeatureEvalChange | null;
   /** 王手を受けているか(この手を指す前)。評価行が無ければ null。 */
   inCheck: boolean | null;
+
+  /**
+   * STEP TIME-CAUSE-3(計画 §9.1 の 1.)。この手の前が ahead・level で、次の本人の手番の前(次の ready 行)に
+   * 段が下がっていれば true。前が behind・どちらかが未定・次の ready 行が無ければ(最後の手)null。
+   */
+  collapse: boolean | null;
 
   // 選択(whatif-v2 の position 行がある手だけ)
   fork: boolean | null;
@@ -234,9 +254,13 @@ export function buildGameMoveFeatureRows(
     const evalRow = evalRowIndex === undefined ? undefined : evalRows[evalRowIndex]!;
     const prevEvalRow = evalRowIndex === undefined || evalRowIndex === 0 ? undefined : evalRows[evalRowIndex - 1]!;
     const evalPair = evalRowIndex === undefined || evalRowIndex === 0 ? undefined : evalPairs[evalRowIndex - 1]!;
+    // 次の本人の手番の前の評価(次の ready 行。evalRows は本人の手番の局面だけを ply 昇順に並べたもの ―
+    // §7.2 の実測どおり 1 手ごとに 1 行)。無ければ(最後の手)undefined = collapse は null(計画 §9.1 の 1.)。
+    const nextEvalRow = evalRowIndex === undefined ? undefined : evalRows[evalRowIndex + 1];
 
     const evalBand = evalRow === undefined ? null : evalBandOf(evalRow.evaluation);
     const evalChangePrev = evalPair !== undefined && evalPair.kind === "compared" ? evalChangeOf(evalPair.diffCp) : null;
+    const collapse = evalRow === undefined || nextEvalRow === undefined ? null : collapseColumnOf(evalRow.evaluation, nextEvalRow.evaluation);
     const inCheck = evalRow === undefined ? null : isSenteInCheck(evalRow.record.sfen);
 
     // 相手の直前の手(この行の直前の評価行の goteMove)。評価行の sfen はどれも「本人〈= sente〉の手番」の
@@ -317,6 +341,7 @@ export function buildGameMoveFeatureRows(
       evalBand,
       evalChangePrev,
       inCheck,
+      collapse,
       fork,
       top1Side,
       actualSide,

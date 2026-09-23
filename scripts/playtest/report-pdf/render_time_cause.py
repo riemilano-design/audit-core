@@ -80,8 +80,29 @@ S_K = st("tk", fontSize=9.5, leading=13, color=MUTED)
 S_V = st("tv", fontSize=8.6, leading=12)
 S_EYEBROW = st("teyebrow", fontSize=8.2, leading=11, color=ACCENT)
 
-# render_whatif.py の BANNED と文字どおり同じ 15 語(このファイルの固定文にも使わない)。
-BANNED = ["悪手", "弱点", "癖", "傾向", "原因", "ミス", "見落とし", "改善", "練習", "必ず", "明らか", "あなた", "ご自身", "いつも", "がち"]
+# render_whatif.py の BANNED と同じ 15 語に、STEP TIME-CAUSE-3(docs/STEP_TIME_CAUSE_PLAN_2026-09-24.md §9.1
+# の 6.)の指示で「型」「クセ」「パターン」を足した(render_front.py の BANNED と同じ 18 語)。この付録は
+# A/B/C の分類結果を書くため、「型」を書いてしまう誤りを機械でも止める(実装担当の判断)。
+BANNED = [
+    "悪手",
+    "弱点",
+    "癖",
+    "型",
+    "傾向",
+    "原因",
+    "ミス",
+    "見落とし",
+    "改善",
+    "練習",
+    "必ず",
+    "明らか",
+    "あなた",
+    "ご自身",
+    "いつも",
+    "がち",
+    "クセ",
+    "パターン",
+]
 
 doc = SimpleDocTemplate(out, pagesize=A4, leftMargin=14 * mm, rightMargin=14 * mm, topMargin=16 * mm, bottomMargin=16 * mm, title="対局後診断・付録 4(時間の使い方)", author="将棋コーチ(試作)")
 W = A4[0] - 28 * mm
@@ -89,8 +110,9 @@ story = []
 
 # ==================== 数の照合・禁止語(render_direct.py の emit と同じ考え方) ====================
 # 3 は「3 分」、10 は「10 分」の固定の語彙として常に許可する(render_direct.py の GLOBAL_ALLOWED_NUMBERS と
-# 同じ考え方 ― 個々の事実ではなく、この付録の作り方そのものを表す数)。
-GLOBAL_ALLOWED_NUMBERS = {1, 2, 3, 4, 5, 9, 10}
+# 同じ考え方 ― 個々の事実ではなく、この付録の作り方そのものを表す数)。300 は「崩れ」の境(STANDING_BOUNDS.
+# aheadCp。render_front.py の GLOBAL_ALLOWED_NUMBERS と同じ)。
+GLOBAL_ALLOWED_NUMBERS = {1, 2, 3, 4, 5, 9, 10, 300}
 _problems = []
 
 
@@ -482,6 +504,31 @@ def cond_stats_text(stats):
     return f"{stats['longThink']} / {stats['n']}({p_pct:g}%)"
 
 
+# STEP TIME-CAUSE-3(計画 §9.1 の 6.)。崩れ(q)の分数。分母 0(collapseCounted=0)なら「—」。
+def cond_collapse_text(stats):
+    if stats["collapseCounted"] == 0:
+        return "—"
+    q_pct = round(stats["q"] * 100, 1)
+    return f"{stats['collapsed']} / {stats['collapseCounted']}({q_pct:g}%)"
+
+
+# 偶然でも残る数の目安(小数第 1 位まで)。
+def chance_text(x):
+    return f"{round(x, 1):g}"
+
+
+# 「関係」の欄は 3 語だけ(2026-09-25 の人間の修正。「強い」「弱い」「型」は使わない)。
+EXPLAIN_LABELS = {"single": "単独で再現", "combo": "組で再現", None: "―"}
+
+
+def explain_text(level):
+    return EXPLAIN_LABELS.get(level, "―")
+
+
+def factor_condition_text(f):
+    return condition_text([{"column": f["column"], "value": f["value"]}])
+
+
 if TS is not None:
     story.append(PageBreak())
     story.append(P("時間と一緒に起きている条件(探索)", S_H2))
@@ -490,51 +537,132 @@ if TS is not None:
             emit(
                 f"発見用(手 <b>{TS['discover']['moves']}</b>)で単独・2 条件・3 条件の組を機械に全部試させ、採用候補(手の数が十分に多く、長考の"
                 f"割合が全体よりはっきり高い組)を選びました。検証用(手 <b>{TS['validate']['moves']}</b>)でも同じ組を数え直し、当てはまる状態が"
-                f"保たれた組だけを「再現した」として下に並べます。長考と一緒に起きている条件を数えたものであり、何かを決めつけるものではありません。",
+                f"保たれた組だけを「再現した」とします。同じやり方を「崩れ」(このあと形勢の区分が下がること)にも当て、長考と崩れの両方を"
+                f"一緒に説明する条件・崩れだけを説明する条件を分けます。ここに並ぶのは長考・崩れと一緒に起きている条件を数えたものであり、"
+                f"何かを決めつけるものではありません。",
                 {TS["discover"]["moves"], TS["validate"]["moves"]},
             ),
             S_LEAD,
         )
     )
-
-    depth_rows = [[P(x, S_K) for x in ["深さ(条件の数)", "試した組の数", "採用候補の数", "再現の数"]]]
-    depth_allowed = set()
-    for d in TS["depths"]:
-        depth_allowed |= {d["depth"], d["tried"], d["adopted"], d["reproduced"]}
-        depth_rows.append(
-            [
-                P(emit(f"{d['depth']} 条件", depth_allowed), S_V),
-                P(emit(str(d["tried"]), depth_allowed), S_V),
-                P(emit(str(d["adopted"]), depth_allowed), S_V),
-                P(emit(str(d["reproduced"]), depth_allowed), S_V),
-            ]
-        )
-    depth_table = Table(depth_rows, colWidths=[35 * mm, (W - 35 * mm) / 3, (W - 35 * mm) / 3, (W - 35 * mm) / 3], repeatRows=1)
-    depth_table.setStyle(HEADER_STYLE)
-    story.append(depth_table)
-    story.append(Spacer(1, 2.5 * mm))
-
-    story.append(P("再現した組(条件・発見用の長考 / 手の数・検証用の長考 / 手の数)", S_K))
-    if len(TS["reproduced"]) == 0:
-        story.append(P("再現した組はありませんでした。", S_SMALL))
-    else:
-        rep_rows = [[P(x, S_K) for x in ["条件", "発見用", "検証用"]]]
-        for r in TS["reproduced"]:
-            cond_text = condition_text(r["condition"])
-            disc_text = cond_stats_text(r["discover"])
-            val_text = cond_stats_text(r["validate"])
-            row_allowed = digits_of(cond_text) | digits_of(disc_text) | digits_of(val_text)
-            rep_rows.append([P(emit(cond_text, row_allowed), S_V), P(emit(disc_text, row_allowed), S_V), P(emit(val_text, row_allowed), S_V)])
-        rep_table = Table(rep_rows, colWidths=[(W - 60 * mm), 30 * mm, 30 * mm], repeatRows=1)
-        rep_table.setStyle(HEADER_STYLE)
-        story.append(rep_table)
-    story.append(Spacer(1, 2.5 * mm))
     story.append(
         notebox(
             [
-                "「再現した」は、発見用の組で見えた「長考の割合が高い」が、検証用の別の対局でも同じ基準で高いままだった、という意味です。",
+                "「崩れ」は、直前の評価の区分(優勢・互角・劣勢)が優勢または互角だった局面から、次の自分の手番の直前に区分が 1 段以上"
+                "下がったことです。+300 以上を優勢、−300 以下を劣勢、その間を互角とします。",
+            ]
+        )
+    )
+    story.append(Spacer(1, 2 * mm))
+
+    def depth_table_of(depths):
+        rows = [[P(x, S_K) for x in ["深さ(条件の数)", "試した組の数", "採用候補の数", "再現の数", "偶然の目安"]]]
+        allowed = set()
+        for d in depths:
+            chance_str = chance_text(d["chanceReproduced"])
+            allowed |= {d["depth"], d["tried"], d["adopted"], d["reproduced"]} | digits_of(chance_str)
+            rows.append(
+                [
+                    P(emit(f"{d['depth']} 条件", allowed), S_V),
+                    P(emit(str(d["tried"]), allowed), S_V),
+                    P(emit(str(d["adopted"]), allowed), S_V),
+                    P(emit(str(d["reproduced"]), allowed), S_V),
+                    P(emit(chance_str, allowed), S_V),
+                ]
+            )
+        t = Table(rows, colWidths=[30 * mm, (W - 30 * mm) / 4, (W - 30 * mm) / 4, (W - 30 * mm) / 4, (W - 30 * mm) / 4], repeatRows=1)
+        t.setStyle(HEADER_STYLE)
+        return t
+
+    story.append(P("深さごとの表(長考と一緒に起きている条件)", S_K))
+    story.append(depth_table_of(TS["depths"]))
+    story.append(Spacer(1, 2.5 * mm))
+    story.append(P("深さごとの表(崩れと一緒に起きている条件)", S_K))
+    story.append(depth_table_of(TS["collapseSearch"]["depths"]))
+    story.append(Spacer(1, 2 * mm))
+    story.append(
+        notebox(
+            [
+                "偶然の目安は、長考(または崩れ)と関係の無い条件でも、この深さの採用候補と同じ数だけ試せば偶然で再現してしまう組の数です"
+                "(二項分布の裾から計算します)。再現の数がこの目安に近いほど、偶然と見分けにくいということです。",
                 "深さは組み合わせた条件の数です(1 = 単独の条件、2・3 = 条件を組み合わせたもの)。",
+            ]
+        )
+    )
+    story.append(Spacer(1, 2 * mm))
+
+    story.append(P("共通因子の表(部品ごとに、どのアウトカムを説明する部品かを分類。上位 15)", S_H3))
+    story.append(
+        P(
+            "「よく登場する部品」を答えにはしません。部品(単独の条件)ごとに、単独で線を越えるか、組み合わせでだけ再現した組に"
+            "入るかを分けます。「―」はどちらでもありません。",
+            S_BODY,
+        )
+    )
+    story.append(Spacer(1, 1.5 * mm))
+    factor_rows = [[P(x, S_K) for x in ["条件", "長考との関係", "時間と崩れとの関係", "速く指して崩れとの関係", "発見 → 検証(長考)"]]]
+    for f in TS["factors"][:15]:
+        cond_text = factor_condition_text(f)
+        disc_text = cond_stats_text(f["single"]["discover"])
+        val_text = cond_stats_text(f["single"]["validate"])
+        trans_text = f"{disc_text} → {val_text}"
+        row_allowed = digits_of(cond_text) | digits_of(trans_text)
+        factor_rows.append(
+            [
+                P(emit(cond_text, row_allowed), S_V),
+                P(explain_text(f["explains"]["longThink"]), S_V),
+                P(explain_text(f["explains"]["timeAndCollapse"]), S_V),
+                P(explain_text(f["explains"]["quickCollapse"]), S_V),
+                P(emit(trans_text, row_allowed), S_V),
+            ]
+        )
+    factor_col = (W - 55 * mm) / 4
+    factor_table = Table(factor_rows, colWidths=[55 * mm, factor_col, factor_col, factor_col, factor_col], repeatRows=1)
+    factor_table.setStyle(HEADER_STYLE)
+    story.append(factor_table)
+    story.append(Spacer(1, 2.5 * mm))
+
+    def kind_list_of(label, entries, cap=None):
+        story.append(P(label, S_H3))
+        shown = entries if cap is None else entries[:cap]
+        if len(shown) == 0:
+            story.append(P("0 件でした。", S_SMALL))
+            return
+        rows = [[P(x, S_K) for x in ["条件", "発見用の長考", "検証用の長考", "発見用の崩れ", "検証用の崩れ"]]]
+        for r in shown:
+            cond_text = condition_text(r["condition"])
+            disc_time = cond_stats_text(r["discover"])
+            val_time = cond_stats_text(r["validate"])
+            disc_collapse = cond_collapse_text(r["discover"])
+            val_collapse = cond_collapse_text(r["validate"])
+            row_allowed = digits_of(cond_text) | digits_of(disc_time) | digits_of(val_time) | digits_of(disc_collapse) | digits_of(val_collapse)
+            rows.append(
+                [
+                    P(emit(cond_text, row_allowed), S_V),
+                    P(emit(disc_time, row_allowed), S_V),
+                    P(emit(val_time, row_allowed), S_V),
+                    P(emit(disc_collapse, row_allowed), S_V),
+                    P(emit(val_collapse, row_allowed), S_V),
+                ]
+            )
+        col = (W - 55 * mm) / 4
+        t = Table(rows, colWidths=[55 * mm, col, col, col, col], repeatRows=1)
+        t.setStyle(HEADER_STYLE)
+        story.append(t)
+        story.append(Spacer(1, 2.5 * mm))
+
+    time_and_collapse = [r for r in TS["reproduced"] if r["kind"] == "B"]
+    kind_list_of("時間と崩れの両方を説明する条件(発見用・検証用とも再現)", time_and_collapse)
+
+    quick_collapse = [r for r in TS["collapseSearch"]["reproduced"] if r["kind"] == "C"]
+    kind_list_of("速く指した手が崩れと一緒に起きている条件(上位 10)", quick_collapse, cap=10)
+
+    story.append(
+        notebox(
+            [
                 "この表は条件どうしの一緒の起き方を数えたものであり、どれが理由かを決めるものではありません。",
+                "「時間と崩れの両方を説明する条件」は、長考の探索と崩れの探索の両方で再現した条件です。「速く指した手が崩れと一緒に"
+                "起きている条件」は、長考の採用候補にはならなかったが、崩れの探索では再現した条件です。",
             ]
         )
     )
