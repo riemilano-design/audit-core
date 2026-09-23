@@ -28,6 +28,9 @@
 #     [--direct <json>]…(複数可。付録 3(ANSWER-DIRECT)の `direct_answers.json`・`final_positions.json` の
 #       どちらも受け付ける ― 中身の `kind` で見分ける。docs/STEP_ANSWER_PLAN_2026-09-23.md §9.2「数の照合」。
 #       検査 1 の単独の数の材料に足すほか、下の「登録済みの組」に (i)〜(v) を足す)
+#     [--time-cause <json>]…(複数可。付録 4(STEP TIME-CAUSE)の `time_cause.json`(`lib/timeCause.ts` の
+#       `TimeCauseFile`)。中身の `kind`(`"time_cause"`)で確かめる。検査 1 の単独の数の材料に足すほか、
+#       下の「登録済みの組」に (i)〜(iv) を足す ― `--direct` と同じ流儀)
 #     --menu <answer_menu.json>
 #
 # 出力: rc=0 なら通過。rc=1 なら、落ちた文と理由の一覧(1 行 1 件)を標準エラーへ。
@@ -83,6 +86,7 @@ class CliArgs:
         self.type_summary_paths = []
         self.whatif_pdf_paths = []
         self.direct_paths = []
+        self.time_cause_paths = []
         self.menu_path = None
 
 
@@ -135,6 +139,10 @@ def parse_args(argv):
             continue
         if flag == "--direct":
             args.direct_paths.append(argv[i + 1])
+            i += 2
+            continue
+        if flag == "--time-cause":
+            args.time_cause_paths.append(argv[i + 1])
             i += 2
             continue
         if flag == "--menu":
@@ -452,6 +460,79 @@ def direct_materials_of(direct_paths):
     }
 
 
+# ==================== 付録 4(STEP TIME-CAUSE): time_cause.json(司令塔の指示。`--direct` と同じ流儀。
+#   `lib/timeCause.ts` の `TimeCauseFile`) ====================
+
+
+def fraction_or_zero(fraction):
+    """`TimeCauseFraction | null` を `{numerator, denominator}` にする(無ければ 0/0)。"""
+    if fraction is None:
+        return {"numerator": 0, "denominator": 0}
+    return {"numerator": fraction["numerator"], "denominator": fraction["denominator"]}
+
+
+def add_fractions(a, b):
+    return {"numerator": a["numerator"] + b["numerator"], "denominator": a["denominator"] + b["denominator"]}
+
+
+class TimeCauseCombinedGroup:
+    """同じ `group`(「3 分」「10 分」等)の time_cause グループ(1 つ以上の `--time-cause` ファイルの
+    `groups[]` の該当項目)をまとめたもの。`--time-cause` は複数可のため(`--direct` と同じ流儀)、C7・C8 は
+    `timeUpLoss`/`other` の分数を、ファイルをまたいでも分子・分母をすべて合算する(司令塔の指示 3(i)
+    「合算も」の実装担当の読み: 1 つのグループの中の 2 段〈timeUpLoss/other〉の合算と、複数ファイルの合算の
+    どちらも指す)。C9(`rookMarkBreakdown`)は (own, opponent) の組ごとに局数を合算する。"""
+
+    def __init__(self, tag, raw_groups):
+        self.tag = tag
+        self.games = sum(g["games"] for g in raw_groups)
+        self.time_up_loss_games = sum(g["timeUpLoss"]["games"] for g in raw_groups)
+        fork = {"numerator": 0, "denominator": 0}
+        opposite = {"numerator": 0, "denominator": 0}
+        rook_mark_games = {}
+        for g in raw_groups:
+            fork = add_fractions(fork, fraction_or_zero(g["timeUpLoss"].get("forkFraction")))
+            fork = add_fractions(fork, fraction_or_zero(g["other"].get("forkFraction")))
+            opposite = add_fractions(opposite, fraction_or_zero(g["timeUpLoss"].get("oppositeSideFraction")))
+            opposite = add_fractions(opposite, fraction_or_zero(g["other"].get("oppositeSideFraction")))
+            for cell in g["rookMarkBreakdown"]:
+                key = (cell["own"], cell["opponent"])
+                rook_mark_games[key] = rook_mark_games.get(key, 0) + cell["games"]
+        self.fork_fraction = fork  # C7: 長考のうち分かれ道 / 長考の総数
+        self.opposite_side_fraction = opposite  # C8: 側が逆 / 長考かつ分かれ道
+        self.rook_mark_games = rook_mark_games  # C9: (own, opponent) -> 局数
+
+
+def time_cause_materials_of(time_cause_paths):
+    """`--time-cause` で渡した `time_cause.json`(複数可)から、検査 1 の材料を作る(`direct_materials_of`
+    と同じ流儀)。1 つも無ければ None(既存の材料は増えない)。"""
+    if not time_cause_paths:
+        return None
+    raw_list = []
+    for path in time_cause_paths:
+        data = load_json(path)
+        if data.get("kind") != "time_cause":
+            raise CheckAnswerError(f"--time-cause に渡した JSON の kind が time_cause でない({path})")
+        raw_list.append(data)
+
+    order = []
+    by_tag = {}
+    for data in raw_list:
+        for g in data["groups"]:
+            tag = g["group"]
+            if tag not in by_tag:
+                by_tag[tag] = []
+                order.append(tag)
+            by_tag[tag].append(g)
+    groups = {tag: TimeCauseCombinedGroup(tag, by_tag[tag]) for tag in order}
+
+    return {
+        # 単独の数(検査 1)の材料に足すための元データ(collect_numbers の再帰走査にかける)。
+        "raw": raw_list,
+        # 登録済みの組(i)〜(iv)を作るための集計。
+        "groups": groups,
+    }
+
+
 # ==================== 行動のメニューの条件判定(`lib/answerMenu.ts` の menuConditionHoldsOf の写し。
 #   python は TS を import できないので手で合わせる ― render_front.py の GLOBAL_ALLOWED_NUMBERS と同じ流儀) ====================
 
@@ -691,6 +772,17 @@ def registered_pairs_of(patient_files, materials):
         for n in direct["groupCounts"].values():
             add(n, direct["totalCount"])  # (v) 組ごとの数 / 総数
 
+    # 付録 4(STEP TIME-CAUSE)。(i)〜(iv)。(v) 局ごとの「時期ごとの長考の回数 / 長考の総数」は登録しない
+    # (小さい数の偶然一致が増えるため。司令塔の指示)。
+    time_cause = materials.get("timeCause")
+    if time_cause is not None:
+        for g in time_cause["groups"].values():
+            add(g.fork_fraction["numerator"], g.fork_fraction["denominator"])  # (i) C7
+            add(g.opposite_side_fraction["numerator"], g.opposite_side_fraction["denominator"])  # (ii) C8
+            for cell_games in g.rook_mark_games.values():
+                add(cell_games, g.games)  # (iii) C9 の 2×2 の各局数 / 組の局数
+            add(g.time_up_loss_games, g.games)  # (iv) 時間負けの局数 / 組の局数
+
     return pairs
 
 
@@ -728,6 +820,7 @@ def build_materials(args, repo_root):
     read_combined = read_combined_of(args.read_dirs)
     side_match = side_match_of(args.whatif_v2_dirs)
     direct = direct_materials_of(args.direct_paths)
+    time_cause = time_cause_materials_of(args.time_cause_paths)
 
     allowed_numbers = set()
     for f in patient_files:
@@ -739,6 +832,22 @@ def build_materials(args, repo_root):
     if direct is not None:
         for raw in direct["raw"]:
             collect_numbers(raw, allowed_numbers)
+    if time_cause is not None:
+        for raw in time_cause["raw"]:
+            collect_numbers(raw, allowed_numbers)
+        # 組ごとに合算した数も、単独の数として許す(`--time-cause` を複数渡したときの合算値。
+        # patient の CombinedGroup と同じ考え方)。
+        for g in time_cause["groups"].values():
+            collect_numbers(
+                {
+                    "games": g.games,
+                    "timeUpLossGames": g.time_up_loss_games,
+                    "forkFraction": g.fork_fraction,
+                    "oppositeSideFraction": g.opposite_side_fraction,
+                    "rookMarkGames": list(g.rook_mark_games.values()),
+                },
+                allowed_numbers,
+            )
     # 組ごとに合算した数も、単独の数として許す(例: 「34 局」「1134」)。
     for g in groups.values():
         collect_numbers(
@@ -772,7 +881,7 @@ def build_materials(args, repo_root):
         allowed_numbers.add(item["minN"])
     allowed_numbers |= {1, 2, 3, 4, 5, 600, 300, 15, 40, 70}
 
-    materials = {"groups": groups, "readCombined": read_combined, "sideMatch": side_match, "direct": direct}
+    materials = {"groups": groups, "readCombined": read_combined, "sideMatch": side_match, "direct": direct, "timeCause": time_cause}
     pairs = registered_pairs_of(patient_files, materials)
     allowed_numbers |= percent_pool_of(pairs)
 

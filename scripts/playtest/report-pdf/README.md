@@ -137,6 +137,9 @@ python3 -X utf8 check_answer.py <B.md>
     `final_positions.json`(`finalPositions.ts` の出力)のどちらも受け付ける ― 中身の `kind`
     (`"direct_answers"`/`"final_positions"`)で見分ける。検査 1 の材料に足す ― 単独の数(渡した JSON の
     再帰走査)と、下の「登録済みの組」)
+  [--time-cause <json>]…(複数可。付録 4(STEP TIME-CAUSE)の `time_cause.json`(`scripts/playtest/timeCause.ts`
+    の出力、`lib/timeCause.ts` の `TimeCauseFile`)。中身の `kind`(`"time_cause"`)で見分ける ― `--direct` と
+    同じ流儀。検査 1 の材料に足す ― 単独の数(渡した JSON の再帰走査)と、下の「登録済みの組」)
   --menu <answer_menu.json>(`scripts/playtest/answerMenu.ts` の出力)
 ```
 
@@ -189,7 +192,16 @@ rc=0 なら通過(「通過(落ちた文なし)」を標準出力へ)。rc=1 な
 n / 総数、(iv) 第 1 候補の側(`counts.top1SideCounts` の攻め・守り・両方・なし)ごとの n / 総数、(v) 組
 (`answers[].group`。「3 分」「10 分」等)ごとの局面数 / 総数(例「3 分」21 / 30)。**(vi) 組ごとの「局数」
 (`counts.gamesCount` にあたる、組ごとに絞った局数)は登録しない**(`--patient` の `games`(対局の局数)と
-混ざるため)。`--direct` を複数渡した場合は、これらの分子・分母をそれぞれ合算する。
+混ざるため)。`--direct` を複数渡した場合は、これらの分子・分母をそれぞれ合算する。**付録 4(STEP TIME-CAUSE、
+`--time-cause` で渡した `time_cause.json` から)**: 同じ `group`(「3 分」「10 分」等)の `groups[]` を、
+ファイルをまたいでも(`--time-cause` は複数可)分子・分母を合算してまとめたうえで、(i) C7 = 長考のうち
+分かれ道に当たった数 / 長考の総数(`timeUpLoss.forkFraction` + `other.forkFraction` の合算。実例「3 分」の組で
+9 / 35)、(ii) C8 = 側が逆だった数 / 長考かつ分かれ道の総数(`timeUpLoss.oppositeSideFraction` +
+`other.oppositeSideFraction` の合算。実例「3 分」の組で 1 / 9)、(iii) C9 の 2×2(`rookMarkBreakdown`。
+本人/相手の飛車が初期の筋に居るかの 4 通り)の各局数 / 組の局数、(iv) 時間負けの局数(`timeUpLoss.games`)/
+組の局数(`games`)(`--patient` の `timeUpLosses` と同じ値になるはずだが、別材料として独立に登録する)を
+登録する。**(v) 局ごとの「時期ごとの長考の回数(`longThinkCountByPhase`)/ 長考の総数(`longThinkTotal`)」は
+登録しない**(小さい数の偶然一致が増えるため)。
 
 **既知の限界**: 検査 1 の単独の数(分数でない 1 つの数)は、渡された JSON のどこかに同じ値があれば通す(再帰的な
 数値走査。`render_front.py` の `allowed_numbers_of` のようなフィールドごとの明示的な一覧ではない)。値の意味
