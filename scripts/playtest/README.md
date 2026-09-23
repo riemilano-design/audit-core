@@ -895,10 +895,19 @@ npx tsx scripts/playtest/deliver.ts \
   --person <id> --kifu-dir <dir> --work <dir> --time-limit-sec <秒> \
   --name <表示名> --title <タイトル> --today <YYYY-MM-DD> --out <顧客フォルダ> \
   [--previous-work <前回の work>] [--parallel <N>] \
+  [--compare-dir <段 2 の記録のフォルダ …> --compare-person <p記号>] \
   [--group-work <work> --group-time-limit-sec <秒>]… \
   [--forbid <語>]… [--dry-run] [--from <段の名前>]
 ```
 
+**これ 1 本で新規顧客から納品まで通る**(2026-09-23 の人間の決定。それまでは `pipeline.ts --until gate` を
+先に手で回す必要があった)。手順は 1 本だけで、上のコマンド以外に覚えるものは無い。
+
+- `--compare-dir`/`--compare-person`: 段 `pipeline-gate` が `pipeline.ts --until gate` へ**中継するだけ**の引数
+  (`--compare-dir` は値を連続していくつでも取れる。2 つは必ず一緒に渡す)。新しい work には判定の出力
+  (`<work>/<person>/gate.jsonl`)が無いため、これが無いと段 `pipeline-data` が材料不足で止まる。
+  **`gate.jsonl` が既にあれば段 `pipeline-gate` は飛ぶ**(既存の work はこの 2 つを渡さなくてもそのまま通る)。
+  この 2 つは段 `pipeline-data`・`pipeline-pdf` には渡らない(既存の段の引数は変わらない)。
 - `--group-work`/`--group-time-limit-sec`: 付録 3・付録 4・B の検査で**組をまたいで合算する組の一覧を、
   順序つきで明示する**(対で同じ回数並べる)。組の順が、付録 3・付録 4・検査の引数の並びを決める。
   渡さないときの既定は `[--previous-work(あれば), --work]` の順。`--work` は一覧にちょうど 1 回含めること。
@@ -909,27 +918,29 @@ npx tsx scripts/playtest/deliver.ts \
 
 ### 工程ごとの表(入力 / 出力 / 所要 / 人間の操作 / 停止条件)
 
-所要は固定材料 44 局(3 組)での実測(`deliver_log.jsonl`。段 1〜4 は局ごとの材料が済みだったため、
-S1〜S4・whatif・READ は済みの判定で飛んでいる。**エンジンを実際に回したのは段 6 だけ**)。
+所要は固定材料 44 局(3 組)での実測(`deliver_log.jsonl`。局ごとの材料が済みだったため、
+S1〜S4・whatif・READ は済みの判定で飛んでいる。**エンジンを実際に回したのは段 7 だけ**)。
+段 1 の所要だけは別の実測(`gate.jsonl` を消した 14 局の複製で走らせたときの `deliver_log.jsonl`)。
 
 | # | 段 | 入力 | 出力 | 所要 | 人間の操作 | 停止条件 |
 |---|---|---|---|---|---|---|
-| 1 | `pipeline-data` | `--kifu-dir` の棋譜、前回の `patient_report_data.json` | `<work>/p2/…`(S1〜S4・whatif-v2・read)、`<work>/report/patient_report_data.json` 他 | 24.9 秒 | なし | `pipeline.ts` rc≠0 |
-| 2 | `prose-gate` | `<work>/report/prose.json` | — | 0.0 秒 | **言い換えを書く**(`prose-request.md` を基に) | `prose.json` が無ければ止まる(`humanGate`) |
-| 3 | `pipeline-pdf` | 同 1 + `prose.json` | `<work>/report/front.pdf`・`main.pdf`・`whatif.pdf`・`whatif_report_data.json` | 2.2 秒 | なし | `pipeline.ts` rc≠0 |
-| 4 | `deliverables-pdf` | 段 3 の 3 冊 | `<out>/1_まとめ.pdf`・`2_付録1_…`・`3_付録2_…` | 0.0 秒 | なし | 複製元が無い |
-| 5 | `appendix3-answers` | `read/` がある組の `whatif-v2/`・`read/` | `<out>/direct/direct_answers.json` | 0.5 秒 | なし | `directAnswers.ts` rc≠0 |
-| 6 | `appendix3-final` | 組ごとの固定棋譜・`patient_report_data.json` | `<out>/direct/final_positions_<i>.json` → 連結して `final_positions.json` | 1.4 秒(**エンジン 1 本**) | なし | `finalPositions.ts` rc≠0 / 全組 0 局 |
-| 7 | `appendix3-pdf` | 段 5・6 の JSON、`REPORT_DATA_DIR`(組の report を組の順) | `<out>/5_付録3_直接の答え.pdf` | 0.4 秒 | なし | `render_direct.py` rc≠0 |
-| 8 | `appendix4-cause` | 全組の固定棋譜・patient・(あれば)`whatif-v2/` | `<out>/direct/time_cause.json` | 0.6 秒 | なし | `timeCause.ts` rc≠0 |
-| 9 | `appendix4-search` | 前回の組(発見用)・今回の組(検証用)の固定棋譜・段 2 の記録 | `<out>/direct/time_cause_search.json` | 6.9 秒 | なし | `timeSearch.ts` rc≠0 |
-| 10 | `appendix4-pdf` | 段 8・9 の JSON | `<out>/6_付録4_時間の使い方.pdf` | 0.6 秒 | なし | `render_time_cause.py` rc≠0 |
-| 11 | `answer-menu` | `lib/answerMenu.ts` の表 | `<out>/direct/answer_menu.json` | 0.4 秒 | なし | `answerMenu.ts` rc≠0 |
-| 12 | `answer-draft` | 組ごとの patient、段 5・6・8・9 の JSON、`read/`・`whatif-v2/` | `<out>/8_B_どうしたら_下書き.md`(事実の箇条書きだけ) | 0.1 秒 | なし | `answer_facts.py` rc≠0 |
-| 13 | `answer-gate` | 段 12 の下書き | — | 0.0 秒 | **「読み」を書く**(`<!-- TODO: 読み -->` を埋める) | 印が残っていれば止まる(`humanGate`) |
-| 14 | `answer-check` | 下書き + 材料の旗 20 個 | — | 0.5 秒 | なし | `check_answer.py` rc≠0(落ちた文の一覧) |
-| 15 | `answer-pdf` | 同 14 | `<out>/8_B_どうしたら.pdf` | 0.8 秒 | なし | `render_answer.py` rc≠0 |
-| 16 | `check-delivery` | `<out>` の PDF 全冊と md | — | 0.2 秒 | **PDF の目視** | 禁止語・`@`・`/Users/`・「水匠」・`--forbid` の語があれば rc≠0 |
+| 1 | `pipeline-gate` | `--kifu-dir` の棋譜、`--compare-dir` の段 2 の記録 | `<work>/<person>/gate.jsonl`(判定の出力) | 47.7 秒(14 局 + 試す側 30 局。**`gate.jsonl` があれば 0.0 秒で飛ぶ**) | なし | `pipeline.ts --until gate` rc≠0 / `gate.jsonl` が無いのに `--compare-dir`・`--compare-person` が渡されていない |
+| 2 | `pipeline-data` | `--kifu-dir` の棋譜、段 1 の `gate.jsonl`、前回の `patient_report_data.json` | `<work>/p2/…`(S1〜S4・whatif-v2・read)、`<work>/report/patient_report_data.json` 他 | 24.9 秒 | なし | `pipeline.ts` rc≠0 |
+| 3 | `prose-gate` | `<work>/report/prose.json` | — | 0.0 秒 | **言い換えを書く**(`prose-request.md` を基に) | `prose.json` が無ければ止まる(`humanGate`) |
+| 4 | `pipeline-pdf` | 同 2 + `prose.json` | `<work>/report/front.pdf`・`main.pdf`・`whatif.pdf`・`whatif_report_data.json` | 2.2 秒 | なし | `pipeline.ts` rc≠0 |
+| 5 | `deliverables-pdf` | 段 4 の 3 冊 | `<out>/1_まとめ.pdf`・`2_付録1_…`・`3_付録2_…` | 0.0 秒 | なし | 複製元が無い |
+| 6 | `appendix3-answers` | `read/` がある組の `whatif-v2/`・`read/` | `<out>/direct/direct_answers.json` | 0.5 秒 | なし | `directAnswers.ts` rc≠0 |
+| 7 | `appendix3-final` | 組ごとの固定棋譜・`patient_report_data.json` | `<out>/direct/final_positions_<i>.json` → 連結して `final_positions.json` | 1.4 秒(**エンジン 1 本**) | なし | `finalPositions.ts` rc≠0 / 全組 0 局 |
+| 8 | `appendix3-pdf` | 段 6・7 の JSON、`REPORT_DATA_DIR`(組の report を組の順) | `<out>/5_付録3_直接の答え.pdf` | 0.4 秒 | なし | `render_direct.py` rc≠0 |
+| 9 | `appendix4-cause` | 全組の固定棋譜・patient・(あれば)`whatif-v2/` | `<out>/direct/time_cause.json` | 0.6 秒 | なし | `timeCause.ts` rc≠0 |
+| 10 | `appendix4-search` | 前回の組(発見用)・今回の組(検証用)の固定棋譜・段 2 の記録 | `<out>/direct/time_cause_search.json` | 6.9 秒 | なし | `timeSearch.ts` rc≠0 |
+| 11 | `appendix4-pdf` | 段 9・10 の JSON | `<out>/6_付録4_時間の使い方.pdf` | 0.6 秒 | なし | `render_time_cause.py` rc≠0 |
+| 12 | `answer-menu` | `lib/answerMenu.ts` の表 | `<out>/direct/answer_menu.json` | 0.4 秒 | なし | `answerMenu.ts` rc≠0 |
+| 13 | `answer-draft` | 組ごとの patient、段 6・7・9・10 の JSON、`read/`・`whatif-v2/` | `<out>/8_B_どうしたら_下書き.md`(事実の箇条書きだけ) | 0.1 秒 | なし | `answer_facts.py` rc≠0 |
+| 14 | `answer-gate` | 段 13 の下書き | — | 0.0 秒 | **「読み」を書く**(`<!-- TODO: 読み -->` を埋める) | 印が残っていれば止まる(`humanGate`) |
+| 15 | `answer-check` | 下書き + 材料の旗 20 個 | — | 0.5 秒 | なし | `check_answer.py` rc≠0(落ちた文の一覧) |
+| 16 | `answer-pdf` | 同 15 | `<out>/8_B_どうしたら.pdf` | 0.8 秒 | なし | `render_answer.py` rc≠0 |
+| 17 | `check-delivery` | `<out>` の PDF 全冊と md | — | 0.2 秒 | **PDF の目視** | 禁止語・`@`・`/Users/`・「水匠」・`--forbid` の語があれば rc≠0 |
 
 段の前後に `<out>/deliver_log.jsonl` へ 1 行追記する(`{stage, startedAt, finishedAt, rc, humanGate}`。
 `rc` は数か `"skip"`)。人間の確認点で止まった段は、**止まった時刻の行と、`--from` で再開したときの行の

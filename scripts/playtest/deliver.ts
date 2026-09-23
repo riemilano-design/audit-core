@@ -5,8 +5,12 @@
 //     --person <id> --kifu-dir <dir> --work <dir> --time-limit-sec <秒> \
 //     --name <表示名> --title <タイトル> --today <YYYY-MM-DD> --out <顧客フォルダ> \
 //     [--previous-work <前回の work>] [--parallel <N>] \
+//     [--compare-dir <段 2 の記録のフォルダ …> --compare-person <p記号>] \
 //     [--group-work <work> --group-time-limit-sec <秒>]… \
 //     [--forbid <語>]… [--dry-run] [--from <段の名前>]
+//
+// `--compare-dir`/`--compare-person` は段 `pipeline-gate` で `pipeline.ts --until gate` へ中継するだけ
+// (新しい work に `gate.jsonl` が無いときに要る。既にあればその段は飛ぶ)。
 //
 // 【この道具がやること】既存の道具を規定順に**子プロセスで呼ぶだけ**(pipeline.ts と同じ流儀)。
 // 引数の組み立て・段の順・済みの判定は lib/deliver.ts(純粋。vitest の試験つき)にあり、ここでやるのは
@@ -237,6 +241,10 @@ async function main(): Promise<number> {
 
     if (step.action === "skip") {
       console.log(`[${step.stage}] skip: ${step.reason}`);
+    } else if (step.action === "fail") {
+      // 引数が足りない段(段 pipeline-gate だけ)。人間の確認点ではないので humanGate は付けない。
+      rc = 1;
+      console.error(`[${step.stage}] ${step.reason}`);
     } else if (step.action === "gate") {
       const blocked = gateBlocked(step);
       if (blocked === null) {

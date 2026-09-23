@@ -24,6 +24,7 @@ import {
   mergeFinalPositions,
   parseDeliverArgs,
   pipelineCommand,
+  pipelineGateCommand,
   planDeliver,
   renderAnswerCommand,
   renderTimeCauseCommand,
@@ -117,6 +118,30 @@ describe("parseDeliverArgs", () => {
 
   it("--forbid は繰り返せる", () => {
     expect(argsOf(["--forbid", "甲", "--forbid", "乙"]).forbid).toEqual(["甲", "乙"]);
+  });
+
+  // 1 コマンド化(指示書 §3.1・§3.5 の 1)。`lib/pipeline.ts` と同じ流儀であることを見る。
+  describe("--compare-dir / --compare-person(段 pipeline-gate への中継)", () => {
+    it("渡さなければ compareDirs は空・comparePerson はキー自体が付かない", () => {
+      const args = argsOf();
+      expect(args.compareDirs).toEqual([]);
+      expect("comparePerson" in args).toBe(false);
+    });
+
+    it("--compare-dir は値を連続していくつでも取る(次の -- まで)", () => {
+      const args = argsOf(["--compare-dir", "/c/a", "/c/b", "/c/c", "--compare-person", "p5"]);
+      expect(args.compareDirs).toEqual(["/c/a", "/c/b", "/c/c"]);
+      expect(args.comparePerson).toBe("p5");
+    });
+
+    it("値が無ければ止まる", () => {
+      expect(() => argsOf(["--compare-dir", "--compare-person", "p5"])).toThrow(DeliverArgError);
+    });
+
+    it("片方だけでは止まる(必ず一緒に渡す)", () => {
+      expect(() => argsOf(["--compare-dir", "/c/a"])).toThrow(DeliverArgError);
+      expect(() => argsOf(["--compare-person", "p5"])).toThrow(DeliverArgError);
+    });
   });
 
   describe("組の一覧(--group-work / --group-time-limit-sec)", () => {
@@ -224,6 +249,39 @@ describe("pipelineCommand", () => {
     expect(flags).not.toContain("--parallel");
     expect(flags).not.toContain("--previous");
     expect(flags.slice(-2)).toEqual(["--time-limit-sec", "180"]);
+  });
+});
+
+describe("pipelineGateCommand", () => {
+  it("--until gate と compare だけを足す(--whatif・--name・--title・--today・--time-limit-sec・--previous は付けない)", () => {
+    const args = argsOf(["--previous-work", "/w/prev", "--parallel", "3", "--compare-dir", "/c/a", "/c/b", "--compare-person", "p5"]);
+    expect(pipelineGateCommand(args)).toEqual([
+      "--person",
+      "p2",
+      "--kifu-dir",
+      "/w/kifu",
+      "--work",
+      "/w/now",
+      "--parallel",
+      "3",
+      "--until",
+      "gate",
+      "--compare-dir",
+      "/c/a",
+      "/c/b",
+      "--compare-person",
+      "p5",
+    ]);
+  });
+
+  it("--parallel が無ければその旗を足さない", () => {
+    const flags = pipelineGateCommand(argsOf(["--compare-dir", "/c/a", "--compare-person", "p5"]));
+    expect(flags).not.toContain("--parallel");
+    expect(flags).toEqual(["--person", "p2", "--kifu-dir", "/w/kifu", "--work", "/w/now", "--until", "gate", "--compare-dir", "/c/a", "--compare-person", "p5"]);
+  });
+
+  it("compare が無ければ組めない(推測で補わない)", () => {
+    expect(() => pipelineGateCommand(argsOf())).toThrow(DeliverArgError);
   });
 });
 
@@ -513,6 +571,11 @@ describe("stagesFrom", () => {
     expect(stagesFrom(undefined)).toEqual([...DELIVER_STAGES]);
     expect(stagesFrom("answer-check")).toEqual(["answer-check", "answer-pdf", "check-delivery"]);
   });
+
+  it("--from pipeline-gate は最初の段(= 全段)", () => {
+    expect(stagesFrom("pipeline-gate")).toEqual([...DELIVER_STAGES]);
+    expect(stagesFrom("pipeline-gate")[0]).toBe("pipeline-gate");
+  });
 });
 
 // ---- 段の一覧(planDeliver) ----
@@ -542,8 +605,11 @@ describe("planDeliver", () => {
   });
   const steps = planDeliver(args, probe, (t) => `cmd:${t}`);
 
-  it("計画の順どおり 16 段", () => {
+  it("計画の順どおり 17 段(段 pipeline-gate が先頭)", () => {
     expect(steps.map((s) => s.stage)).toEqual([...DELIVER_STAGES]);
+    expect(steps[0]!.stage).toBe("pipeline-gate");
+    expect(steps[1]!.stage).toBe("pipeline-data");
+    expect(steps.map((s) => s.stage).indexOf("pipeline-gate")).toBeLessThan(steps.map((s) => s.stage).indexOf("pipeline-data"));
   });
 
   it("prose.json があれば prose-gate は skip、answer-gate は常に確認点", () => {
@@ -614,5 +680,78 @@ describe("planDeliver", () => {
     ] as const) {
       expect(byStage.get(stage), stage).toBe("skip");
     }
+  });
+
+  // 1 コマンド化(指示書 §3.2・§3.3・§3.5 の 2〜7)。
+  describe("段 pipeline-gate", () => {
+    const COMPARE = ["--compare-dir", "/c/a", "/c/b", "--compare-person", "p5"];
+    const gateFile = "/w/now/p2/gate.jsonl";
+    const gateStep = (extra: readonly string[], world: FakeWorld) =>
+      planDeliver(argsOf(extra), fakeProbe(world), (t) => `cmd:${t}`).find((s) => s.stage === "pipeline-gate")!;
+
+    it("gate.jsonl があれば skip(存在だけを見る)", () => {
+      const step = gateStep(COMPARE, { files: [gateFile] });
+      expect(step.action).toBe("skip");
+      expect(step.reason).toContain(gateFile);
+    });
+
+    it("gate.jsonl が無くて compare があれば run で、引数は --until gate + compare だけ", () => {
+      const step = gateStep(COMPARE, {});
+      expect(step.action).toBe("run");
+      expect(step.tool).toBe("pipeline");
+      expect(step.args).toEqual([
+        "--person",
+        "p2",
+        "--kifu-dir",
+        "/w/kifu",
+        "--work",
+        "/w/now",
+        "--until",
+        "gate",
+        "--compare-dir",
+        "/c/a",
+        "/c/b",
+        "--compare-person",
+        "p5",
+      ]);
+      for (const flag of ["--whatif", "--name", "--title", "--today", "--time-limit-sec", "--previous"]) {
+        expect(step.args, flag).not.toContain(flag);
+      }
+    });
+
+    it("gate.jsonl が無くて compare も無ければ fail(人間の確認点ではない)。何が要るかを書く", () => {
+      const step = gateStep([], {});
+      expect(step.action).toBe("fail");
+      expect(step.args).toEqual([]);
+      expect(step.reason).toContain(gateFile);
+      expect(step.reason).toContain("--compare-dir");
+      expect(step.reason).toContain("--compare-person");
+    });
+
+    it("compare は段 pipeline-data・pipeline-pdf へ渡らない(既存の段の引数は変わらない)", () => {
+      const plain = planDeliver(argsOf(), probe, (t) => t);
+      const withCompare = planDeliver(argsOf(COMPARE), probe, (t) => t);
+      for (const stage of ["pipeline-data", "pipeline-pdf"] as const) {
+        const before = plain.find((s) => s.stage === stage)!;
+        const after = withCompare.find((s) => s.stage === stage)!;
+        expect(after.args, stage).toEqual(before.args);
+        expect(after.args, stage).not.toContain("--compare-dir");
+        expect(after.args, stage).not.toContain("--compare-person");
+        expect(after.args, stage).not.toContain("/c/a");
+        expect(after.args, stage).not.toContain("p5");
+      }
+    });
+
+    it("gate.jsonl があるときも、段 pipeline-data・pipeline-pdf の引数は pipelineCommand のまま", () => {
+      const done = argsOf(COMPARE);
+      const steps2 = planDeliver(done, fakeProbe({ files: [gateFile] }), (t) => t);
+      expect(steps2.find((s) => s.stage === "pipeline-data")!.args).toEqual(pipelineCommand(done, "report-data"));
+      expect(steps2.find((s) => s.stage === "pipeline-pdf")!.args).toEqual(pipelineCommand(done, "pdf"));
+    });
+
+    it("--from pipeline-gate で最初から組める", () => {
+      const resumed = planDeliver(argsOf(["--from", "pipeline-gate", ...COMPARE]), probe, (t) => t);
+      expect(resumed.map((s) => s.stage)).toEqual([...DELIVER_STAGES]);
+    });
   });
 });

@@ -14,9 +14,14 @@
 
 import path from "node:path";
 
+// 段 `pipeline-gate` の「済み」の判定は **新しく作らない**。`lib/pipeline.ts` の gateOutPath・gateDone を
+// そのまま使う(1 コマンド化の指示書 §3.2。判定を二重に持たないため)。
+import { gateDone, gateOutPath } from "./pipeline.js";
+
 // ---- 段の一覧(計画 §3 の 3 の順。司令塔の指示書 §3.3 の表) ----
 
 export type DeliverStage =
+  | "pipeline-gate"
   | "pipeline-data"
   | "prose-gate"
   | "pipeline-pdf"
@@ -35,6 +40,7 @@ export type DeliverStage =
   | "check-delivery";
 
 export const DELIVER_STAGES: readonly DeliverStage[] = [
+  "pipeline-gate",
   "pipeline-data",
   "prose-gate",
   "pipeline-pdf",
@@ -181,13 +187,21 @@ export interface DeliverArgs {
   previousWork?: string;
   parallel?: number;
   from?: DeliverStage;
+  /**
+   * 段 `pipeline-gate` で `pipeline.ts` へ**そのまま中継するだけ**の引数(1 コマンド化の指示書 §3.1)。
+   * `--compare-dir` は繰り返し可(値を連続していくつでも取る)。`--compare-person` と必ず一緒に渡す。
+   * 渡さなければ `compareDirs` は空・`comparePerson` はキー自体が付かない。
+   * **この 2 つは段 `pipeline-data`・`pipeline-pdf` には渡さない**(指示書 §3.3。既存の段の引数を変えないため)。
+   */
+  compareDirs: string[];
+  comparePerson?: string;
   /** 組の一覧(順序つき。必ず 1 つ以上で、`work` をちょうど 1 回含む)。 */
   groups: DeliverGroup[];
   forbid: string[];
   dryRun: boolean;
 }
 
-const SINGLE_FLAGS = ["--person", "--kifu-dir", "--work", "--time-limit-sec", "--name", "--title", "--today", "--out", "--previous-work", "--parallel", "--from"] as const;
+const SINGLE_FLAGS = ["--person", "--kifu-dir", "--work", "--time-limit-sec", "--name", "--title", "--today", "--out", "--previous-work", "--parallel", "--from", "--compare-person"] as const;
 type SingleFlag = (typeof SINGLE_FLAGS)[number];
 
 function positiveIntOf(flag: string, raw: string): number {
@@ -206,12 +220,27 @@ export function parseDeliverArgs(argv: readonly string[]): DeliverArgs {
   const groupWorks: string[] = [];
   const groupSecs: string[] = [];
   const forbid: string[] = [];
+  const compareDirs: string[] = [];
   let dryRun = false;
 
   for (let i = 0; i < argv.length; i += 1) {
     const flag = argv[i]!;
     if (flag === "--dry-run") {
       dryRun = true;
+      continue;
+    }
+    // `--compare-dir` は `lib/pipeline.ts` の parsePipelineArgs と**同じ流儀**(次の `--` で始まる引数まで、
+    // 値を連続していくつでも取る)。中継するだけなので、値の形は確かめない(確かめるのは gate.ts 側)。
+    if (flag === "--compare-dir") {
+      i += 1;
+      let took = 0;
+      while (i < argv.length && !argv[i]!.startsWith("--")) {
+        compareDirs.push(argv[i]!);
+        took += 1;
+        i += 1;
+      }
+      if (took === 0) throw new DeliverArgError("--compare-dir に値が無い");
+      i -= 1;
       continue;
     }
     const value = argv[i + 1];
@@ -261,6 +290,11 @@ export function parseDeliverArgs(argv: readonly string[]): DeliverArgs {
   }
   const from = fromRaw as DeliverStage | undefined;
 
+  // `--compare-dir` と `--compare-person` は必ず一緒に渡す(`lib/pipeline.ts` と同じ規則・同じ趣旨)。
+  const comparePerson = single.get("--compare-person");
+  if (compareDirs.length > 0 && comparePerson === undefined) throw new DeliverArgError("--compare-dir を渡すときは --compare-person も渡す");
+  if (compareDirs.length === 0 && comparePerson !== undefined) throw new DeliverArgError("--compare-person は --compare-dir と一緒に渡す");
+
   if (groupWorks.length !== groupSecs.length) {
     throw new DeliverArgError(`--group-work(${groupWorks.length} 個)と --group-time-limit-sec(${groupSecs.length} 個)は対で同じ回数`);
   }
@@ -290,6 +324,9 @@ export function parseDeliverArgs(argv: readonly string[]): DeliverArgs {
     ...(previousWork !== undefined ? { previousWork } : {}),
     ...(parallel !== undefined ? { parallel } : {}),
     ...(from !== undefined ? { from } : {}),
+    // `--work` 等と同じ理由で絶対パスにする(指示書 §3.1)。
+    compareDirs: compareDirs.map((d) => path.resolve(d)),
+    ...(comparePerson !== undefined ? { comparePerson } : {}),
     groups,
     forbid,
     dryRun,
@@ -368,6 +405,22 @@ export function pipelineCommand(args: DeliverArgs, until: "report-data" | "pdf")
   if (args.previousWork !== undefined) {
     out.push("--previous", path.join(args.previousWork, "report", "patient_report_data.json"));
   }
+  return out;
+}
+
+/**
+ * 段 `pipeline-gate`(1 コマンド化の指示書 §3.2)。`gate.jsonl` が無い新しい work のために
+ * `pipeline.ts --until gate` を呼ぶ引数。**足すのは `--until gate` と compare の 2 つだけ**で、
+ * `--whatif`・`--name`/`--title`/`--today`・`--time-limit-sec`/`--previous` は付けない
+ * (whatif と READ は段 `pipeline-data` の仕事。`--until gate` では S5 へ行かないので要らない)。
+ */
+export function pipelineGateCommand(args: DeliverArgs): string[] {
+  if (args.compareDirs.length === 0 || args.comparePerson === undefined) {
+    throw new DeliverArgError("段 pipeline-gate には --compare-dir と --compare-person が要る");
+  }
+  const out = ["--person", args.person, "--kifu-dir", args.kifuDir, "--work", args.work];
+  if (args.parallel !== undefined) out.push("--parallel", String(args.parallel));
+  out.push("--until", "gate", "--compare-dir", ...args.compareDirs, "--compare-person", args.comparePerson);
   return out;
 }
 
@@ -560,7 +613,11 @@ export interface PlannedDeliverStep {
   tool: DeliverTool;
   cmd: string;
   args: string[];
-  action: "run" | "skip" | "gate";
+  /**
+   * `fail` は「引数が足りなくて進めない」段(段 `pipeline-gate` だけが使う。指示書 §3.2)。
+   * 人間の確認点(`gate`)ではないので `humanGate` は付かない ― 呼び出し側は理由を出して rc≠0 で止まる。
+   */
+  action: "run" | "skip" | "gate" | "fail";
   reason: string;
   /** `render_direct.py` の `REPORT_DATA_DIR` のように、環境変数で渡すもの(無ければキー自体を付けない)。 */
   env?: Record<string, string>;
@@ -589,6 +646,24 @@ export function planDeliver(args: DeliverArgs, probe: DeliverProbe, cmdOf: (tool
   const push = (step: PlannedDeliverStep): void => {
     if (wanted.has(step.stage)) steps.push(step);
   };
+
+  // 段 0(1 コマンド化。指示書 §3.2)。`gate.jsonl` が**無いときだけ** `pipeline.ts --until gate` を呼ぶ。
+  // 済みの判定は `lib/pipeline.ts` の gateDone(存在だけを見る)。引数が無いときは推測で補わず、その段で止まる。
+  const gatePath = gateOutPath(thisGroup.personDir);
+  const gateAlready = gateDone(probe.exists(gatePath));
+  const hasCompare = args.compareDirs.length > 0 && args.comparePerson !== undefined;
+  push({
+    stage: "pipeline-gate",
+    tool: "pipeline",
+    cmd: cmdOf("pipeline"),
+    args: hasCompare ? pipelineGateCommand(args) : [],
+    action: gateAlready ? "skip" : hasCompare ? "run" : "fail",
+    reason: gateAlready
+      ? `判定の出力がある: ${gatePath}`
+      : hasCompare
+        ? `判定の出力が無いので S1〜S4 を通して作る: ${gatePath}`
+        : `gate.jsonl が無い(${gatePath})。--compare-dir と --compare-person が要る`,
+  });
 
   push({
     stage: "pipeline-data",
