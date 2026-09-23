@@ -18,10 +18,10 @@
 //   数える(`AnswerMenuSideMatch`)。この TS 側は、その 2 分数を材料として受け取り、条件(両方とも 70% 未満。
 //   実装担当の判断 ― §3 は「両方同様」とだけ書き AND/OR を決めていないため、より条件の厳しい AND を選んだ)
 //   を判定するだけ(fitz・jsonl の読み書きは python 側)。
-// - M1(時間)は、minN が「中盤 4 秒超の局 5 かつ 時間で負けた局 2」に変わったが、「中盤 1 手あたり 4 秒超の局」
-//   (分母)は patient_report_data.json の `phaseSpent` が局ごとの値を持たない(局をまたいだ中央値だけ)ため
-//   出せない。**司令塔の指示により、M1 は今回 `needsData`(条件判定を「不成立」扱い)にする**(このファイルでは
-//   `menuConditionHoldsOf("M1", …)` が常に false・`answerMenuDenominatorOf("M1", …)` が常に null)。
+// - M1(時間)は、STEP ANSWER 追加作業 ANSWER-M1(docs/STEP_ANSWER_PLAN_2026-09-23.md §7)で `needsData` を解消した。
+//   `lib/reportData.ts` の `PatientPhaseSpent.midOver`(局ごとの中盤 1 手あたり秒が閾値(TIME_VALUES.quickSec)を
+//   超えた局の数)を `AnswerMenuPatientGroup` の `midOverGames`・`midOverOver`・`midOverOverAndTimeUpLoss` として
+//   受け取り、3 分の組(min3)で `timeUpLosses.n ≥ 2` かつ `midOverOver ≥ 5` を条件、`midOverOver` を分母にする(§7.2)。
 // - M6(捨て駒)は、司令塔が書いた B v3(2026-09-24)の校正材料で数え方が確認された(実例: 57 のうち 17)ため、
 //   `tagCrossTable.sacrifice` の行合計(実戦側の印が 0 個/複数個の局面で理論上は過不足がありうるが、v3 の実例で
 //   実際に使われた数え方)を分母、対角(`sacrifice`×`sacrifice`)を分子にして判定する(`AnswerMenuReadCombined`)。
@@ -66,7 +66,7 @@ export const ANSWER_MENU: readonly AnswerMenuItem[] = [
     evidenceName: "中盤 4 秒超の局のうち時間で負けた側の局",
     // 司令塔の指示(2026-09-23 REVISE 3): minN は「中盤 4 秒超の局 5 かつ 時間で負けた局 2」の 2 本。
     // この欄は number 型なので、大きい方(5)を代表として持たせる(実装担当の判断)。分母(中盤 1 手あたり
-    // 4 秒超の局)が今の JSON から出せないため、実際には needsData で常に不成立にする(下の menuConditionHoldsOf)。
+    // 4 秒超の局)は ANSWER-M1(§7.2)で `midOver.over` として出せるようになった。
     minN: 5,
     verifyName: "時間負けの局数、中盤 4 秒超の局数",
   },
@@ -175,6 +175,12 @@ export interface AnswerMenuPatientGroup {
   afterLongThinkAny: AnswerMenuRate | null;
   /** time.afterLongThink.quickAfterLongThink の分数(M5 の主語)。 */
   afterLongThinkQuick: AnswerMenuRate | null;
+  /** time.phaseSpent.midOver.games(ANSWER-M1、§7.2)。 */
+  midOverGames: number | null;
+  /** time.phaseSpent.midOver.over(M1 の分母)。 */
+  midOverOver: number | null;
+  /** time.phaseSpent.midOver.overAndTimeUpLoss。 */
+  midOverOverAndTimeUpLoss: number | null;
 }
 
 /**
@@ -228,13 +234,15 @@ function rateOf(rate: AnswerMenuRate | null): number | null {
   return rate.collapsed / rate.n;
 }
 
-// ---- M1: 時間。司令塔の指示(2026-09-23 REVISE 3): needsData ― 分母(中盤 1 手あたり 4 秒超の局)を
-// 出す測る段が無いため、材料に関わらず常に不成立にする。 ----
-function m1Holds(_materials: AnswerMenuMaterials): boolean {
-  return false;
+// ---- M1: 時間(ANSWER-M1、§7.2)。3 分の組(min3)で timeUpLosses.n ≥ 2 かつ midOverOver ≥ 5。 ----
+function m1Holds(materials: AnswerMenuMaterials): boolean {
+  const g = groupOf(materials, "min3");
+  if (g === null || g.timeUpLosses === null || g.timeUpLosses.n < 2) return false;
+  if (g.midOverOver === null) return false;
+  return g.midOverOver >= 5;
 }
-function m1Denominator(_materials: AnswerMenuMaterials): number | null {
-  return null;
+function m1Denominator(materials: AnswerMenuMaterials): number | null {
+  return groupOf(materials, "min3")?.midOverOver ?? null;
 }
 
 // ---- M2: 条件 ----

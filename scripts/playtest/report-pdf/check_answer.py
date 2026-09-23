@@ -211,6 +211,12 @@ class PatientFile:
         other_games = phase_spent.get("otherGames") or {}
         self.phase_spent_other_early = other_games.get("early")
         self.phase_spent_other_mid = other_games.get("mid")
+        # ANSWER-M1(docs/STEP_ANSWER_PLAN_2026-09-23.md §7.2)。古い patient(欄が無い)は 0 として扱う
+        # (M1 の条件は「≥」判定なので、0 なら不成立のまま。他の検査には影響しない)。
+        mid_over = phase_spent.get("midOver") or {}
+        self.mid_over_games = mid_over.get("games", 0)
+        self.mid_over_over = mid_over.get("over", 0)
+        self.mid_over_over_and_time_up_loss = mid_over.get("overAndTimeUpLoss", 0)
         self.ahead_loss = ahead_loss_numbers(self.raw.get("findings") or [])
 
 
@@ -251,6 +257,10 @@ class CombinedGroup:
         primary = min(files, key=lambda f: f.games)
         self.phase_spent_other_early = primary.phase_spent_other_early
         self.phase_spent_other_mid = primary.phase_spent_other_mid
+        # ANSWER-M1(§7.2)。分子・分母を別々に合算する(他の欄と同じ)。
+        self.mid_over_games = sum(f.mid_over_games for f in files)
+        self.mid_over_over = sum(f.mid_over_over for f in files)
+        self.mid_over_over_and_time_up_loss = sum(f.mid_over_over_and_time_up_loss for f in files)
 
 
 def combined_groups_of(patient_files):
@@ -361,12 +371,17 @@ def rate_of(bucket):
 
 
 def m1_holds(materials):
-    # needsData(司令塔の指示 2026-09-23 REVISE 3)。
-    return False
+    # ANSWER-M1(docs/STEP_ANSWER_PLAN_2026-09-23.md §7.2)。3 分の組(min3)で timeUpLosses.n ≥ 2 かつ
+    # 中盤 1 手あたり 4 秒超の局(midOverOver) ≥ 5。
+    min3 = materials["groups"].get("min3")
+    if min3 is None or min3.time_up_losses["n"] < 2:
+        return False
+    return min3.mid_over_over >= 5
 
 
 def m1_denominator(materials):
-    return None
+    min3 = materials["groups"].get("min3")
+    return min3.mid_over_over if min3 is not None else None
 
 
 def m2_holds(materials):
@@ -501,6 +516,9 @@ def registered_pairs_of(patient_files, materials):
         add(f.after_long_think["any"]["n"], f.after_long_think["any"]["collapsed"])
         add(f.after_long_think["quick"]["n"], f.after_long_think["quick"]["collapsed"])
         add(f.ahead_loss.get("aheadGames"), f.ahead_loss.get("aheadLossGames"))
+        # ANSWER-M1(§7.2)。
+        add(f.mid_over_over, f.mid_over_games)
+        add(f.mid_over_over_and_time_up_loss, f.mid_over_over)
 
     for g in materials["groups"].values():
         add(g.time_up_losses["n"], g.time_up_losses["m"])
@@ -509,6 +527,8 @@ def registered_pairs_of(patient_files, materials):
         add(g.by_spent_total["n"], g.by_spent_total["collapsed"])
         add(g.after_long_think_any["n"], g.after_long_think_any["collapsed"])
         add(g.after_long_think_quick["n"], g.after_long_think_quick["collapsed"])
+        add(g.mid_over_over, g.mid_over_games)
+        add(g.mid_over_over_and_time_up_loss, g.mid_over_over)
 
     r = materials["readCombined"]
     if r is not None:
@@ -577,6 +597,10 @@ def build_materials(args, repo_root):
                 "overviewEarly": g.overview_early,
                 "afterLongThinkAny": g.after_long_think_any,
                 "afterLongThinkQuick": g.after_long_think_quick,
+                # ANSWER-M1(§7.2)。
+                "midOverGames": g.mid_over_games,
+                "midOverOver": g.mid_over_over,
+                "midOverOverAndTimeUpLoss": g.mid_over_over_and_time_up_loss,
             },
             allowed_numbers,
         )

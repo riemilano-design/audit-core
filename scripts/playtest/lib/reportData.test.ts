@@ -547,10 +547,87 @@ describe("buildPatientTime: phaseSpent は後手の局で plyOffset を引いた
   it("otherGames(投了。時間で負けた局ではない)が 1 局・序盤 10・中盤 20・終盤 30", () => {
     const games = buildGames([source]);
     const time = buildPatientTime(games, buildPatientGames(games), undefined);
+    // ANSWER-M1(docs/STEP_ANSWER_PLAN_2026-09-23.md §7.1): perGame・midOver を PatientPhaseSpent に足したため、
+    // この既存の期待値にも新しい 2 欄を足す(値は上のコメントと同じ計算 ― 中盤の本人の手は 4 手目の 20 秒だけ)。
     expect(time.phaseSpent).toStrictEqual({
       timeUpLoss: { games: 0, early: 0, mid: 0, late: 0 },
       otherGames: { games: 1, early: 10, mid: 20, late: 30 },
+      perGame: [{ gameNo: 1, total: 6, midMoves: 1, midSec: 20, midSecPerMove: 20, timeUpLoss: false }],
+      midOver: { thresholdSec: 4, games: 1, over: 1, overAndTimeUpLoss: 0 },
     });
+  });
+});
+
+// STEP ANSWER 追加作業 ANSWER-M1(docs/STEP_ANSWER_PLAN_2026-09-23.md §7)。
+// PatientPhaseSpent.perGame・midOver(局ごとの中盤 1 手あたり秒)を、合成 2 局(先手・後手)で手で計算した期待値と比べる。
+describe("buildPatientTime: phaseSpent.perGame・midOver(ANSWER-M1、2026-09-24)", () => {
+  // 先手(mirror なし・plyOffset 0)。本人(奇数手目)の中盤の手は 3・5 手目(recordPly = kifPly)。
+  // total 9: phaseOf(1,9)=early、phaseOf(3,9)・phaseOf(5,9)=mid、phaseOf(7,9)・phaseOf(9,9)=late。
+  const senteMoves = GAME01_MOVES.slice(0, 9);
+  const senteRecords: RecordLine[] = plantedRecords(senteMoves, {});
+  const senteMeta = { kind: "meta", kifuId: "m1-a-sente", startedAt: "", gitHead: null, enginePath: "" } as unknown as MetaLine;
+  // 1(早)・1(相)・3(中)・1(相)・5(中)・1(相)・1(遅)・1(相)・1(遅)。中盤は 3・5 手目の合計 8 秒・2 手 → 4 秒(閾値ちょうど、超えない)。
+  const senteMoveSeconds = [1, 1, 3, 1, 5, 1, 1, 1, 1].map((spentSec, i) => ({ spentSec, totalSec: i + 1 }));
+  const senteSource: GameSource = {
+    kifuId: "m1-a-sente",
+    meta: senteMeta,
+    records: senteRecords,
+    fixed: { id: "m1-a-sente", ending: { kind: "resign", ply: senteMoves.length + 1 }, moves: senteMoves, moveSeconds: senteMoveSeconds },
+  };
+
+  // 後手(mirror・plyOffset 1)。本人(偶数手目)の中盤の手は 4 手目(recordPly = kifPly − 1 = 3)。total 5。
+  // 本人が時間切れで負ける(moverOf(5) = 先手 ≠ 後手 → 負け)ように ending.kind = "timeUp"。
+  const goteOriginalMoves = GAME01_MOVES.slice(0, 5);
+  const goteAligned = alignMovesToSente(goteOriginalMoves, "gote");
+  const goteStartSfen = goteAligned.alignment.mirrored ? goteAligned.alignment.startSfen : DEFAULT_INITIAL_SFEN;
+  const goteRecords: RecordLine[] = plantedRecords(goteAligned.moves, {}, {}, goteStartSfen);
+  const goteMeta = {
+    kind: "meta",
+    kifuId: "m1-b-gote",
+    startedAt: "",
+    gitHead: null,
+    enginePath: "",
+    mirrored: true,
+    startSfen: goteStartSfen,
+    plyOffset: 1,
+    originalUserSide: "gote",
+  } as unknown as MetaLine;
+  // 1(相)・2(早)・1(相)・20(中、4 秒超)・1(相)。中盤は 4 手目の 20 秒だけ → 20 秒(閾値超え)。
+  const goteMoveSeconds = [1, 2, 1, 20, 1].map((spentSec, i) => ({ spentSec, totalSec: i + 1 }));
+  const goteSource: GameSource = {
+    kifuId: "m1-b-gote",
+    meta: goteMeta,
+    records: goteRecords,
+    fixed: {
+      id: "m1-b-gote",
+      ending: { kind: "timeUp", ply: goteOriginalMoves.length + 1 },
+      moves: goteAligned.moves,
+      originalMoves: goteOriginalMoves,
+      mirrored: true,
+      moveSeconds: goteMoveSeconds,
+    },
+  };
+
+  const games = buildGames([senteSource, goteSource]);
+  const patientGames = buildPatientGames(games);
+  const time = buildPatientTime(games, patientGames, undefined);
+
+  it("gameNo は kifuId 昇順(先手が 1 局目・後手が 2 局目)、後手は本人が時間切れで負ける(前提の確認)", () => {
+    expect(patientGames.map((g) => [g.id, g.no, g.result])).toEqual([
+      ["m1-a-sente", 1, "勝ち"],
+      ["m1-b-gote", 2, "負け"],
+    ]);
+  });
+
+  it("perGame: 先手は中盤 2 手・8 秒(1 手 4 秒、閾値ちょうどで超えない)、後手は中盤 1 手・20 秒(閾値超え・時間負け)", () => {
+    expect(time.phaseSpent!.perGame).toStrictEqual([
+      { gameNo: 1, total: 9, midMoves: 2, midSec: 8, midSecPerMove: 4, timeUpLoss: false },
+      { gameNo: 2, total: 5, midMoves: 1, midSec: 20, midSecPerMove: 20, timeUpLoss: true },
+    ]);
+  });
+
+  it("midOver: 2 局とも midSecPerMove が取れ、閾値(4 秒)を超えるのは後手の 1 局・かつ時間負け", () => {
+    expect(time.phaseSpent!.midOver).toStrictEqual({ thresholdSec: 4, games: 2, over: 1, overAndTimeUpLoss: 1 });
   });
 });
 

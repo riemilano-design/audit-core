@@ -217,7 +217,7 @@ npx tsx scripts/playtest/pipeline.ts --person <id> --kifu-dir <dir> --work <dir>
   - `bySpent`: その手にかけた時間で 4 段(0〜1・2〜4・5〜9・10 秒以上)に分けた `{ n, collapsed }`(`n` は既存の崩れの組・`counted` と同じ分母)
   - `afterLongThink`: `quickAfterLongThink`(直前の自分の手が 10 秒以上で、この手は 4 秒以下)・`afterLongThinkAny`(直前の自分の手が 10 秒以上。この手の時間は問わない)。**「直前の自分の手」は 2 手前**(1 手前は相手の手)
   - `byLeft`: `--time-limit-sec` を渡したときだけ(渡さなければ `null`)。残り = 持ち時間 − それまでの本人の消費の合計(この手より前・`spentSec` の和)で 3 段(60 未満・60〜119・120 以上)に分ける。残りが負でも「60 未満」の段に入る
-  - `phaseSpent`: 序盤・中盤・終盤(既存の `phaseOf`)ごとの本人の消費の合計を局ごとに出し、「`timeUpLoss`(本人が時間で負けた局。`ending.kind === "timeUp"` かつ本人の結果が「負け」。相手が切れ負けた勝ちの局は入らない)」と「`otherGames`(それ以外)」で中央値
+  - `phaseSpent`: 序盤・中盤・終盤(既存の `phaseOf`)ごとの本人の消費の合計を局ごとに出し、「`timeUpLoss`(本人が時間で負けた局。`ending.kind === "timeUp"` かつ本人の結果が「負け」。相手が切れ負けた勝ちの局は入らない)」と「`otherGames`(それ以外)」で中央値。**ANSWER-M1(`docs/STEP_ANSWER_PLAN_2026-09-23.md` §7.1)**: `perGame`(局ごとの `{ gameNo, total, midMoves, midSec, midSecPerMove, timeUpLoss }`。`midSecPerMove` は `midSec / midMoves`、`midMoves` が 0 なら `null`)と `midOver`(`{ thresholdSec: TIME_VALUES.quickSec(4), games, over, overAndTimeUpLoss }`。`games` は `perGame` のうち `midSecPerMove` が取れた局の数、`over` はそのうち閾値を超えた局の数、`overAndTimeUpLoss` はそのうち本人が時間で負けた局の数)
   - `timeUpLosses`: 本人が時間で負けた局(`timeUpLoss` と同じ絞り込み)の局番号・手数・本人の消費の合計(その局で読めた最後の本人の手の `totalSec`)・最後に読んだ局面の評価(`displayScoreOf`)
 
 ## 本編 4 ページ(STEP TIME 作業 2。`docs/STEP_TIME_PLAN_2026-09-22.md` §6.4)
@@ -525,16 +525,19 @@ npx tsx scripts/playtest/answerMenu.ts --out <answer_menu.json>
   patient_report_data.json・READ の合算・whatif-v2 の側の一致から作る)で成り立つかを判定する純粋関数。
   `answerMenuDenominatorOf(id, materials)`: 検査 5 の「根拠の数の分母」。
 - **司令塔の事前監査 REVISE(2026-09-23・2026-09-24)を反映**(`lib/answerMenu.ts` 冒頭のコメントに詳細):
-  M1 は `needsData`(分母を出す測る段が無いため常に不成立)、M4 は whatif-v2 の `candidates[0].side`・`actualSide`
+  M4 は whatif-v2 の `candidates[0].side`・`actualSide`
   から非対称に数えた 2 分数(第 1 候補が「両方」の局面は分母に入れない)で AND 判定、M6 は
   `tagCrossTable.sacrifice` の行合計/対角(B v3 の実例「57 のうち 17」で確認)、M2/M8 は `--time-limit-sec` で
   タグ付けした patient を組ごとに合算(分子・分母を別々に足す)してから判定する。
+- **ANSWER-M1(2026-09-24、`docs/STEP_ANSWER_PLAN_2026-09-23.md` §7)**: M1 の分母(中盤 1 手あたり 4 秒超の局)を
+  `lib/reportData.ts` の `PatientPhaseSpent.midOver` として足し、`needsData` を解消した。3 分の組(min3)で
+  `timeUpLosses.n ≥ 2` かつ `midOverOver ≥ 5` が条件、分母は `midOverOver`(minN 5)。
 - **計画にない判断**: M3・M5 が使う「既定の組」は、渡された patient の中で `min3` タグがあればそれ、無ければ
   先頭の組(`primaryGroupOf`)。`min3`/`min10` のタグは `--time-limit-sec`(180 秒/600 秒)を渡す側
   (`report-pdf/check_answer.py`)が付ける。
 - 試験(`lib/answerMenu.test.ts`): docs §3 の表との一致(id・段階・minN。**行動の文の芯は今回は比べない**
-  ― docs §3 の表はこの REVISE に合わせて書き直す途中のため。M1・M8 の minN は docs 由来ではなく単独の試験
-  ― 「未照合」と明記してある)、`menuConditionHoldsOf`/`answerMenuDenominatorOf` の境界(各 id ごと)。
+  ― docs §3 の表はこの REVISE に合わせて書き直す途中のため。M8 の minN は docs 由来ではなく単独の試験
+  ― 「未照合」と明記してある。M1 は ANSWER-M1 で docs 一致試験に戻した)、`menuConditionHoldsOf`/`answerMenuDenominatorOf` の境界(各 id ごと)。
 
 ## typecheck
 

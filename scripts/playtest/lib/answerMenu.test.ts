@@ -5,9 +5,11 @@
 // 【司令塔の事前監査 REVISE(2026-09-23)による範囲の縮小】
 // docs §3 の表は司令塔がこの REVISE(M1・M8 の minN 変更ほか)に合わせて書き直す途中のため、
 // **この試験の docs 一致は id・段階・minN だけ**にした(行動の文の芯は比べない。司令塔の指示)。
-// さらに M1・M8 の minN は、書き直された docs にまだ合わせられないため docs から取らず、
+// さらに M8 の minN は、書き直された docs にまだ合わせられないため docs から取らず、
 // このファイル(実装)の値をそのまま確かめる単独の試験にしてある(**未照合**。docs 側の確定後に司令塔が
 // このテストを docs 由来へ戻すことを想定)。
+// 【ANSWER-M1(2026-09-24)】M1 は docs §3 の「この版では出さない」の記述を消したため、docs 一致試験に戻した
+// (docs §7.2)。
 //
 // `menuConditionHoldsOf` の境界(各 id の「出す条件」がちょうど成り立つ/成り立たない材料)も確かめる。
 
@@ -55,7 +57,7 @@ function docsMenuRows(): DocsMenuRow[] {
   });
 }
 
-const M1_M8_UNMATCHED_TO_DOCS: ReadonlySet<string> = new Set(["M1", "M8"]);
+const M8_UNMATCHED_TO_DOCS: ReadonlySet<string> = new Set(["M8"]);
 
 describe("ANSWER_MENU は docs §3 の表と一致する(id・段階・minN。行動の文の芯は今回は比べない)", () => {
   const rows = docsMenuRows();
@@ -65,23 +67,22 @@ describe("ANSWER_MENU は docs §3 の表と一致する(id・段階・minN。�
     expect(ANSWER_MENU).toHaveLength(8);
   });
 
-  it.each(rows.filter((row) => !M1_M8_UNMATCHED_TO_DOCS.has(row.id)))("$id(docs 由来)", (row) => {
+  it.each(rows.filter((row) => !M8_UNMATCHED_TO_DOCS.has(row.id)))("$id(docs 由来)", (row) => {
     const item = ANSWER_MENU.find((entry) => entry.id === row.id);
     expect(item, `ANSWER_MENU に ${row.id} が無い`).toBeDefined();
     expect(item!.stage).toBe(row.stage);
     expect(item!.minN).toBe(row.minN);
   });
 
-  it("M1・M8 の段階は docs と一致する(minN は未照合。docs が書き直され次第、司令塔が戻す)", () => {
-    for (const row of rows.filter((r) => M1_M8_UNMATCHED_TO_DOCS.has(r.id))) {
+  it("M8 の段階は docs と一致する(minN は未照合。docs が書き直され次第、司令塔が戻す)", () => {
+    for (const row of rows.filter((r) => M8_UNMATCHED_TO_DOCS.has(r.id))) {
       const item = ANSWER_MENU.find((entry) => entry.id === row.id);
       expect(item, `ANSWER_MENU に ${row.id} が無い`).toBeDefined();
       expect(item!.stage).toBe(row.stage);
     }
   });
 
-  it("M1・M8 の minN は、司令塔の指示(2026-09-23 REVISE 3)どおりの値(未照合。docs との一致は取っていない)", () => {
-    expect(ANSWER_MENU.find((entry) => entry.id === "M1")!.minN).toBe(5);
+  it("M8 の minN は、司令塔の指示(2026-09-23 REVISE 3)どおりの値(未照合。docs との一致は取っていない)", () => {
     expect(ANSWER_MENU.find((entry) => entry.id === "M8")!.minN).toBe(2);
   });
 });
@@ -101,6 +102,9 @@ function group(overrides: Partial<AnswerMenuPatientGroup> & { group: AnswerMenuP
     phaseSpentOtherMidMedian: overrides.phaseSpentOtherMidMedian ?? null,
     afterLongThinkAny: overrides.afterLongThinkAny ?? null,
     afterLongThinkQuick: overrides.afterLongThinkQuick ?? null,
+    midOverGames: overrides.midOverGames ?? null,
+    midOverOver: overrides.midOverOver ?? null,
+    midOverOverAndTimeUpLoss: overrides.midOverOverAndTimeUpLoss ?? null,
   };
 }
 
@@ -109,8 +113,24 @@ function materialsOf(...groups: AnswerMenuPatientGroup[]): AnswerMenuMaterials {
 }
 
 describe("menuConditionHoldsOf の境界", () => {
-  it("M1: needsData(司令塔の指示 2026-09-23 REVISE 3)。材料があっても常に不成立・分母 null", () => {
-    const materials = materialsOf(group({ group: "min3", timeUpLosses: { n: 3, allAtLeast300: true } }));
+  it("M1(ANSWER-M1、§7.2): 時間負け 2・4 秒超 5 → 成立、分母(4 秒超の局数)は 5", () => {
+    const materials = materialsOf(group({ group: "min3", timeUpLosses: { n: 2, allAtLeast300: true }, midOverOver: 5 }));
+    expect(menuConditionHoldsOf("M1", materials)).toBe(true);
+    expect(answerMenuDenominatorOf("M1", materials)).toBe(5);
+  });
+
+  it("M1: 時間負けが 1(2 未満)→ 4 秒超が 5 以上でも不成立", () => {
+    const materials = materialsOf(group({ group: "min3", timeUpLosses: { n: 1, allAtLeast300: true }, midOverOver: 5 }));
+    expect(menuConditionHoldsOf("M1", materials)).toBe(false);
+  });
+
+  it("M1: 4 秒超の局が 4(5 未満)→ 時間負けが 2 以上でも不成立", () => {
+    const materials = materialsOf(group({ group: "min3", timeUpLosses: { n: 2, allAtLeast300: true }, midOverOver: 4 }));
+    expect(menuConditionHoldsOf("M1", materials)).toBe(false);
+  });
+
+  it("M1: min3 の組が無い、または midOverOver が測れなければ不成立・分母 null", () => {
+    const materials = materialsOf(group({ group: "min10", timeUpLosses: { n: 2, allAtLeast300: true }, midOverOver: 5 }));
     expect(menuConditionHoldsOf("M1", materials)).toBe(false);
     expect(answerMenuDenominatorOf("M1", materials)).toBeNull();
   });

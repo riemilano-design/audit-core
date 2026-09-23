@@ -171,7 +171,8 @@ rc=0 なら通過(「通過(落ちた文なし)」を標準出力へ)。rc=1 な
 `afterLongThink`(`quickAfterLongThink`・`afterLongThinkAny`)の `n`/`collapsed`、READ 合算の
 `forkPositionsRead`/(`forkPositionsRead` − `firstVisibleNodesNoneCount`)、`tagCrossTable.sacrifice` の行合計/対角
 (B v3(2026-09-24)の実例「57 のうち 17」で確認)、`opponentReplyMatchesPv` の `matched`/`measured`、M4 の側の一致
-2 分数(`attack`/`defense` それぞれの `n`/`collapsed`)。
+2 分数(`attack`/`defense` それぞれの `n`/`collapsed`)、**ANSWER-M1(2026-09-24、§7.2)**: `midOver` の
+`over`/`games`、`overAndTimeUpLoss`/`over`(patient ごと・組ごとの合算の両方)。
 
 **既知の限界**: 検査 1 の単独の数(分数でない 1 つの数)は、渡された JSON のどこかに同じ値があれば通す(再帰的な
 数値走査。`render_front.py` の `allowed_numbers_of` のようなフィールドごとの明示的な一覧ではない)。値の意味

@@ -689,6 +689,35 @@ export interface PatientPhaseSpent {
   timeUpLoss: PhaseSpentGroup;
   /** それ以外の局。 */
   otherGames: PhaseSpentGroup;
+  /** 局ごとの中盤の消費(STEP ANSWER 追加作業 ANSWER-M1、docs/STEP_ANSWER_PLAN_2026-09-23.md §7.1)。 */
+  perGame: PatientPhaseSpentPerGame[];
+  /** 局ごとの中盤 1 手あたり秒が閾値(TIME_VALUES.quickSec)を超えた局の数(同 §7.1)。 */
+  midOver: PatientPhaseSpentMidOver;
+}
+
+/** `PatientPhaseSpent.perGame` の 1 局ぶん(docs §7.1)。 */
+export interface PatientPhaseSpentPerGame {
+  gameNo: number;
+  total: number;
+  /** 中盤(phaseOf が "mid")の本人の手のうち、秒が取れたものの数(phaseSpentOfGame と同じ数え方)。 */
+  midMoves: number;
+  /** その消費の合計(秒)。 */
+  midSec: number;
+  /** midSec / midMoves(midMoves が 0 なら null)。 */
+  midSecPerMove: number | null;
+  /** 本人が時間で負けた局か(isTimeUpLoss と同じ判定)。 */
+  timeUpLoss: boolean;
+}
+
+/** `PatientPhaseSpent.midOver`(docs §7.1)。新しい閾値は置かず TIME_VALUES.quickSec を使い回す(CLAUDE.md 4 番)。 */
+export interface PatientPhaseSpentMidOver {
+  thresholdSec: number;
+  /** perGame のうち midSecPerMove が取れた(null でない)局の数。 */
+  games: number;
+  /** そのうち midSecPerMove が thresholdSec を超えた局の数。 */
+  over: number;
+  /** そのうち本人が時間で負けた局の数。 */
+  overAndTimeUpLoss: number;
 }
 
 function phaseSpentGroupOf(rows: ReadonlyArray<{ early: number; mid: number; late: number }>): PhaseSpentGroup {
@@ -710,6 +739,49 @@ function isTimeUpLoss(fixedEnding: FixedKifuEnding | null | undefined, result: "
   return fixedEnding?.kind === "timeUp" && result === "負け";
 }
 
+/** 中盤(phaseOf が "mid")の本人の手の件数・消費の合計(phaseSpentOfGame と同じ数え方。ANSWER-M1)。 */
+function midSpentOfGame(game: BuiltGame, seconds: readonly (MoveTime | null)[], total: number): { midMoves: number; midSec: number } {
+  const parity = ownParityOf(game.side);
+  let midMoves = 0;
+  let midSec = 0;
+  for (let kifPly = parity === 1 ? 1 : 2; kifPly <= seconds.length; kifPly += 2) {
+    const time = seconds[kifPly - 1];
+    if (time === null || time === undefined) continue;
+    const recordPly = kifPly - game.plyOffset;
+    if (phaseOf(recordPly, total) === "mid") {
+      midMoves += 1;
+      midSec += time.spentSec;
+    }
+  }
+  return { midMoves, midSec };
+}
+
+function buildPhaseSpentPerGame(
+  games: readonly BuiltGame[],
+  patientGames: readonly PatientGame[],
+  secondsByGame: ReadonlyMap<string, readonly (MoveTime | null)[]>,
+): PatientPhaseSpentPerGame[] {
+  return games.map((game, index) => {
+    const patientGame = patientGames[index]!;
+    const { midMoves, midSec } = midSpentOfGame(game, secondsByGame.get(game.source.kifuId)!, patientGame.total);
+    return {
+      gameNo: patientGame.no,
+      total: patientGame.total,
+      midMoves,
+      midSec,
+      midSecPerMove: midMoves === 0 ? null : midSec / midMoves,
+      timeUpLoss: isTimeUpLoss(game.source.fixed.ending, patientGame.result),
+    };
+  });
+}
+
+function buildMidOver(perGame: readonly PatientPhaseSpentPerGame[]): PatientPhaseSpentMidOver {
+  const withRate = perGame.filter((g) => g.midSecPerMove !== null);
+  const over = withRate.filter((g) => g.midSecPerMove! > TIME_VALUES.quickSec);
+  const overAndTimeUpLoss = over.filter((g) => g.timeUpLoss);
+  return { thresholdSec: TIME_VALUES.quickSec, games: withRate.length, over: over.length, overAndTimeUpLoss: overAndTimeUpLoss.length };
+}
+
 function buildPhaseSpent(
   games: readonly BuiltGame[],
   patientGames: readonly PatientGame[],
@@ -722,7 +794,8 @@ function buildPhaseSpent(
     const sums = phaseSpentOfGame(game, secondsByGame.get(game.source.kifuId)!, total);
     (isTimeUpLoss(game.source.fixed.ending, patientGames[index]!.result) ? timeUpLossRows : otherRows).push(sums);
   });
-  return { timeUpLoss: phaseSpentGroupOf(timeUpLossRows), otherGames: phaseSpentGroupOf(otherRows) };
+  const perGame = buildPhaseSpentPerGame(games, patientGames, secondsByGame);
+  return { timeUpLoss: phaseSpentGroupOf(timeUpLossRows), otherGames: phaseSpentGroupOf(otherRows), perGame, midOver: buildMidOver(perGame) };
 }
 
 export interface TimeUpGame {
