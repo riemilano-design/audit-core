@@ -906,6 +906,18 @@ npx tsx scripts/playtest/deliver.ts \
 **止まる 2 か所(`prose-gate`・`answer-gate`)で何をどう書くかは [../../docs/DELIVER_GATES.md](../../docs/DELIVER_GATES.md)**
 (書く前の 4 原則・`_mid.py` と `check_answer.py` が機械で見る規則・行動のメニュー M1〜M9・PDF 目視の観点)。
 
+- **`--kifu-dir` のファイル名の規約(2026-09-23 に実測で分かった)**: ファイル名には**局番号以外の数字を
+  入れない**(`g01-sente.kif` … `g20-gote.kif` のように付ける)。理由は 2 つで、どちらも付録 4 に出る。
+  (1) 局の `kifuId` は**ファイル名から作られる**(`lib/pipeline.ts` ― 末尾の `-sente`/`-gote` を外した残り)。
+  付録 4 の見出し(`render_time_cause.py:437`)はその `kifuId` を**数の照合にかける**ので、許す数
+  (その局の `gameNo`・総手数と `{1,2,3,4,5,9,10,300}`)に無い数字 ― 日付や外部サービスの対局 ID ―
+  が入っていると必ず「データに無い数」で落ちる(数の取り出しは `[0-9]+` なので、`a0kABJIn` のような
+  ID からも `0` が出る)。(2) 付録 4 は `kifuId` を**冊子に印字する**(表の欄 `render_time_cause.py:234`
+  と上の見出し)。**`kifuId` を印字するのは付録 4 だけ**(ほかの `render_*.py` は印字しない ―
+  `render_direct.py` は `sfens.json` の鍵に使うだけ)。対局 ID や日付を冊子に出さない約束の顧客では、
+  ファイル名にそれが入っている限り検査を通しても不適合になる。**直すときはファイル名を付け替えて
+  段 2 から作り直す**(記録の中の ID だけ手で書き換えると、使われなかった ID の記録が残って
+  `meta.gitHead` が事実と食い違う)。
 - `--compare-dir`/`--compare-person`: 段 `pipeline-gate` が `pipeline.ts --until gate` へ**中継するだけ**の引数
   (`--compare-dir` は値を連続していくつでも取れる。2 つは必ず一緒に渡す)。新しい work には判定の出力
   (`<work>/<person>/gate.jsonl`)が無いため、これが無いと段 `pipeline-data` が材料不足で止まる。
