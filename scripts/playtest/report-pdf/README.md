@@ -140,6 +140,10 @@ python3 -X utf8 check_answer.py <B.md>
   [--time-cause <json>]…(複数可。付録 4(STEP TIME-CAUSE)の `time_cause.json`(`scripts/playtest/timeCause.ts`
     の出力、`lib/timeCause.ts` の `TimeCauseFile`)。中身の `kind`(`"time_cause"`)で見分ける ― `--direct` と
     同じ流儀。検査 1 の材料に足す ― 単独の数(渡した JSON の再帰走査)と、下の「登録済みの組」)
+  [--time-search <json>]…(複数可。付録 4 の探索(STEP TIME-CAUSE-2)の `time_cause_search.json`
+    (`scripts/playtest/timeSearch.ts` の出力、`lib/timeSearch.ts` の `SearchResult`)。中身の `kind`
+    (`"time_cause_search"`)で見分ける ― `--direct`・`--time-cause` と同じ流儀。検査 1 の材料に足す ―
+    単独の数(渡した JSON の再帰走査)と、下の「登録済みの組」)
   --menu <answer_menu.json>(`scripts/playtest/answerMenu.ts` の出力)
 ```
 
@@ -201,13 +205,24 @@ n / 総数、(iv) 第 1 候補の側(`counts.top1SideCounts` の攻め・守り�
 本人/相手の飛車が初期の筋に居るかの 4 通り)の各局数 / 組の局数、(iv) 時間負けの局数(`timeUpLoss.games`)/
 組の局数(`games`)(`--patient` の `timeUpLosses` と同じ値になるはずだが、別材料として独立に登録する)を
 登録する。**(v) 局ごとの「時期ごとの長考の回数(`longThinkCountByPhase`)/ 長考の総数(`longThinkTotal`)」は
-登録しない**(小さい数の偶然一致が増えるため)。
+登録しない**(小さい数の偶然一致が増えるため)。**付録 4 の探索(STEP TIME-CAUSE-2、`--time-search` で渡した
+`time_cause_search.json` から)**: (i) `reproduced[]`・`notReproduced[]` の各条件について discover.longThink /
+discover.n、validate.longThink / validate.n(実例: ある条件で 7 / 75〈発見用〉と 14 / 70〈検証用〉)、
+(ii) `depths[]` の深さごとの adopted / tried・reproduced / adopted・reproduced / tried(実データで深さ 3 は
+508 / 6209 など)、(iii) 発見用・検証用それぞれの「長考の数 / 手の数」(長考の数は JSON に無いため
+`round(moves × longThinkRate)` で作り、`moves × longThinkRate` 自身と 1e-6 以内で一致するときだけ登録する
+〈実データで 33 / 744、35 / 604〉)を登録する。`--time-search` を複数渡した場合は、ファイルごと(1 回の探索の
+実行ごと)に別々の集計として登録する(`--time-cause` の `group` のような合算先の鍵が無いため)。
 
 **既知の限界**: 検査 1 の単独の数(分数でない 1 つの数)は、渡された JSON のどこかに同じ値があれば通す(再帰的な
 数値走査。`render_front.py` の `allowed_numbers_of` のようなフィールドごとの明示的な一覧ではない)。値の意味
 (どのフィールド由来か)までは確認しないため、たとえば「16 秒・79 秒」のような、正規の集計と無関係な値が
 偶然どこかの JSON 値と一致すれば通ってしまう(実測: B v2 の校正で 1 件確認。落とせていない。強い検証が要るなら
-フィールドごとの明示的な許可リストへの置き換えが要る ― 測っていない・計画にない判断)。
+フィールドごとの明示的な許可リストへの置き換えが要る ― 測っていない・計画にない判断)。**付録 4 の探索の登録済みの
+組も同じ限界を持つ(実測): `reproduced[]`・`notReproduced[]` を合わせて数百件の条件を登録するため、無関係な
+条件どうしで同じ「a / b」が偶然一致することがある。立浪さんの実データで、上の実例の分子・分母(7 / 75)の分母
+だけを 76 に変えた「7 / 76」を試したところ、別の(意味の異なる)条件が偶然 discover.n=76・discover.longThink=7
+を持つため、これも登録済みの組として通ってしまった(落とせていない)。
 
 ### `render_answer.py`
 

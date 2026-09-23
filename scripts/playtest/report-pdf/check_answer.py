@@ -31,6 +31,10 @@
 #     [--time-cause <json>]…(複数可。付録 4(STEP TIME-CAUSE)の `time_cause.json`(`lib/timeCause.ts` の
 #       `TimeCauseFile`)。中身の `kind`(`"time_cause"`)で確かめる。検査 1 の単独の数の材料に足すほか、
 #       下の「登録済みの組」に (i)〜(iv) を足す ― `--direct` と同じ流儀)
+#     [--time-search <json>]…(複数可。付録 4 の探索(STEP TIME-CAUSE-2)の `time_cause_search.json`
+#       (`scripts/playtest/timeSearch.ts` の出力、`lib/timeSearch.ts` の `SearchResult`)。中身の `kind`
+#       (`"time_cause_search"`)で確かめる。検査 1 の単独の数の材料に足すほか、下の「登録済みの組」に
+#       (i)〜(iii) を足す ― `--direct`・`--time-cause` と同じ流儀)
 #     --menu <answer_menu.json>
 #
 # 出力: rc=0 なら通過。rc=1 なら、落ちた文と理由の一覧(1 行 1 件)を標準エラーへ。
@@ -87,6 +91,7 @@ class CliArgs:
         self.whatif_pdf_paths = []
         self.direct_paths = []
         self.time_cause_paths = []
+        self.time_search_paths = []
         self.menu_path = None
 
 
@@ -143,6 +148,10 @@ def parse_args(argv):
             continue
         if flag == "--time-cause":
             args.time_cause_paths.append(argv[i + 1])
+            i += 2
+            continue
+        if flag == "--time-search":
+            args.time_search_paths.append(argv[i + 1])
             i += 2
             continue
         if flag == "--menu":
@@ -533,6 +542,41 @@ def time_cause_materials_of(time_cause_paths):
     }
 
 
+# ==================== 付録 4 の探索(STEP TIME-CAUSE-2): time_cause_search.json(司令塔の指示。`--direct`・
+#   `--time-cause` と同じ流儀。`lib/timeSearch.ts` の `SearchResult`) ====================
+
+
+def rounded_count_of(moves, rate):
+    """`moves × rate`(浮動小数点)を四捨五入した整数を返す ― `round(moves × rate)` が `moves × rate` 自身と
+    1e-6 以内で一致するときだけ(司令塔の指示 3。一致しなければ None ― 呼び出し側は登録しない)。"""
+    raw = moves * rate
+    rounded = round(raw)
+    if abs(raw - rounded) > 1e-6:
+        return None
+    return rounded
+
+
+def time_search_materials_of(time_search_paths):
+    """`--time-search` で渡した `time_cause_search.json`(`timeSearch.ts` の出力。複数可)から、検査 1 の材料を
+    作る(`direct_materials_of`・`time_cause_materials_of` と同じ流儀)。1 つも無ければ None(既存の材料は
+    増えない)。"""
+    if not time_search_paths:
+        return None
+    raw_list = []
+    for path in time_search_paths:
+        data = load_json(path)
+        if data.get("kind") != "time_cause_search":
+            raise CheckAnswerError(f"--time-search に渡した JSON の kind が time_cause_search でない({path})")
+        raw_list.append(data)
+    return {
+        # 単独の数(検査 1)の材料に足すための元データ(collect_numbers の再帰走査にかける。p・longThinkRate は
+        # 小数なので round() で 0 になり、単独の数としては実質拾われない ― それでよい〈司令塔の指示 2〉)。
+        # 登録済みの組(i)〜(iii)は registered_pairs_of がこの raw を直接読んで作る(`--direct` と同じ流儀:
+        # ここでは集計を組まない)。
+        "raw": raw_list,
+    }
+
+
 # ==================== 行動のメニューの条件判定(`lib/answerMenu.ts` の menuConditionHoldsOf の写し。
 #   python は TS を import できないので手で合わせる ― render_front.py の GLOBAL_ALLOWED_NUMBERS と同じ流儀) ====================
 
@@ -783,6 +827,26 @@ def registered_pairs_of(patient_files, materials):
                 add(cell_games, g.games)  # (iii) C9 の 2×2 の各局数 / 組の局数
             add(g.time_up_loss_games, g.games)  # (iv) 時間負けの局数 / 組の局数
 
+    # 付録 4 の探索(STEP TIME-CAUSE-2)。(i)〜(iii)。`--time-search` を複数渡した場合は、ファイルごと(1 回の
+    # 探索の実行ごと)に別々の集計として登録する(`--time-cause` の `group` のような合算先の鍵が無いため)。
+    time_search = materials.get("timeSearch")
+    if time_search is not None:
+        for data in time_search["raw"]:
+            for cond in list(data["reproduced"]) + list(data["notReproduced"]):
+                # (i) 採用候補(再現した組・しなかった組)ごとの discover.longThink/discover.n、
+                # validate.longThink/validate.n。
+                add(cond["discover"]["longThink"], cond["discover"]["n"])
+                add(cond["validate"]["longThink"], cond["validate"]["n"])
+            for d in data["depths"]:
+                # (ii) 深さごとの adopted/tried・reproduced/adopted・reproduced/tried。
+                add(d["adopted"], d["tried"])
+                add(d["reproduced"], d["adopted"])
+                add(d["reproduced"], d["tried"])
+            # (iii) 発見用・検証用それぞれの「長考の数 / 手の数」(長考の数は round(moves × longThinkRate)。
+            # 一致しなければ登録しない)。
+            add(rounded_count_of(data["discover"]["moves"], data["discover"]["longThinkRate"]), data["discover"]["moves"])
+            add(rounded_count_of(data["validate"]["moves"], data["validate"]["longThinkRate"]), data["validate"]["moves"])
+
     return pairs
 
 
@@ -821,6 +885,7 @@ def build_materials(args, repo_root):
     side_match = side_match_of(args.whatif_v2_dirs)
     direct = direct_materials_of(args.direct_paths)
     time_cause = time_cause_materials_of(args.time_cause_paths)
+    time_search = time_search_materials_of(args.time_search_paths)
 
     allowed_numbers = set()
     for f in patient_files:
@@ -848,6 +913,9 @@ def build_materials(args, repo_root):
                 },
                 allowed_numbers,
             )
+    if time_search is not None:
+        for raw in time_search["raw"]:
+            collect_numbers(raw, allowed_numbers)
     # 組ごとに合算した数も、単独の数として許す(例: 「34 局」「1134」)。
     for g in groups.values():
         collect_numbers(
@@ -881,7 +949,7 @@ def build_materials(args, repo_root):
         allowed_numbers.add(item["minN"])
     allowed_numbers |= {1, 2, 3, 4, 5, 600, 300, 15, 40, 70}
 
-    materials = {"groups": groups, "readCombined": read_combined, "sideMatch": side_match, "direct": direct, "timeCause": time_cause}
+    materials = {"groups": groups, "readCombined": read_combined, "sideMatch": side_match, "direct": direct, "timeCause": time_cause, "timeSearch": time_search}
     pairs = registered_pairs_of(patient_files, materials)
     allowed_numbers |= percent_pool_of(pairs)
 
