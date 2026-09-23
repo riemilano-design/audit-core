@@ -2,6 +2,8 @@
 // 流儀は lib/pipeline.test.ts と同じ(偽の fs / probe を注入し、引数の並びと済みの判定だけを見る)。
 // **将棋の判断・数の集計はここにも無い**(引数の組み立てと段の順だけ)。
 
+import { existsSync, readdirSync, readFileSync } from "node:fs";
+
 import { describe, expect, it } from "vitest";
 
 import {
@@ -23,6 +25,7 @@ import {
   groupsWithRead,
   kifuNameProblems,
   materialPlanOf,
+  materialsPending,
   mergeFinalPositions,
   parseDeliverArgs,
   pipelineCommand,
@@ -685,6 +688,97 @@ describe("planDeliver", () => {
     }
   });
 
+  // 段ごとに計画を読み直す(REPLAN_BRIEF.md §2.1・§2.4)。
+  //
+  // 【断ってあること】これは `planDeliver` を複数回呼んだときの振る舞いだけを測る ― `deliver.ts`(CLI)の
+  // 輪の中で「段の直前に呼び直す」1 行そのものは、この試験では守れない(P-32 と同じ型)。
+  describe("段の直前に計画を読み直す(§2.4 の 1・2)", () => {
+    it("probe の答えが呼ばれるたびに変わる(1 回目=材料無し・2 回目以降=材料あり)と、§1 の表の 6 段すべてで欠けていた旗が入る", () => {
+      let ready = false;
+      const growingProbe: DeliverProbe = {
+        exists: (p) => ready && p === "/w/now/p2/type-summary.json",
+        hasJsonl: (d) => ready && (d === "/w/now/p2/read" || d === "/w/now/p2/whatif-v2"),
+        fixedKifuFiles: (d) => (ready && d === "/w/now/p2/kifu" ? ["/w/now/p2/kifu/a.fixed.json"] : []),
+        timeUpLossCount: () => 0,
+      };
+      const solo = argsOf();
+
+      const before = planDeliver(solo, growingProbe, (t) => t);
+      ready = true; // 「後の段が作った材料が見える」の模型(materialsPresent という 1 回目とは別の答えを返す)
+      const after = planDeliver(solo, growingProbe, (t) => t);
+
+      const find = (steps: typeof before, stage: string) => steps.find((s) => s.stage === stage)!;
+
+      // appendix3-answers(direct-answers): --whatif-v2-dir・--read-dir・--time-limit-sec
+      expect(find(before, "appendix3-answers").args).toEqual(["--out", "/w/out/direct/direct_answers.json"]);
+      expect(find(after, "appendix3-answers").args).toEqual(["--whatif-v2-dir", "/w/now/p2/whatif-v2", "--read-dir", "/w/now/p2/read", "--time-limit-sec", "180", "--out", "/w/out/direct/direct_answers.json"]);
+
+      // appendix3-final(final-positions): --kifu のファイル一覧が空でなくなる
+      const beforeFinal = find(before, "appendix3-final").args;
+      const afterFinal = find(after, "appendix3-final").args;
+      expect(beforeFinal[beforeFinal.indexOf("--kifu") + 1]).toBe("--patient"); // 空(次の旗が続く)
+      expect(afterFinal[afterFinal.indexOf("--kifu") + 1]).toBe("/w/now/p2/kifu/a.fixed.json");
+
+      // appendix4-cause(time-cause): --whatif-v2-dir
+      expect(find(before, "appendix4-cause").args).not.toContain("--whatif-v2-dir");
+      expect(find(after, "appendix4-cause").args).toContain("--whatif-v2-dir");
+
+      // answer-draft(answer-facts): --whatif-v2-dir・--read-dir
+      expect(find(before, "answer-draft").args).not.toContain("--read-dir");
+      expect(find(after, "answer-draft").args).toEqual(expect.arrayContaining(["--whatif-v2-dir", "/w/now/p2/whatif-v2", "--read-dir", "/w/now/p2/read"]));
+
+      // answer-check(check-answer): --whatif-v2-dir・--read-dir・--type-summary
+      expect(find(before, "answer-check").args).not.toContain("--type-summary");
+      expect(find(after, "answer-check").args).toEqual(
+        expect.arrayContaining(["--whatif-v2-dir", "/w/now/p2/whatif-v2", "--read-dir", "/w/now/p2/read", "--type-summary", "/w/now/p2/type-summary.json"]),
+      );
+
+      // answer-pdf(render-answer): --whatif-v2-dir・--read-dir・--type-summary(answer-check と同じ材料)
+      expect(find(before, "answer-pdf").args).not.toContain("--type-summary");
+      expect(find(after, "answer-pdf").args).toEqual(
+        expect.arrayContaining(["--whatif-v2-dir", "/w/now/p2/whatif-v2", "--read-dir", "/w/now/p2/read", "--type-summary", "/w/now/p2/type-summary.json"]),
+      );
+    });
+
+    it("材料が揃った probe では、planDeliver を何回呼んでも同じ計画が返る(冪等)", () => {
+      const first = planDeliver(args, probe, (t) => t);
+      for (let i = 0; i < 5; i += 1) {
+        expect(planDeliver(args, probe, (t) => t)).toStrictEqual(first);
+      }
+    });
+  });
+
+  describe("materialsPending(§2.2)", () => {
+    const readyProbe = fakeProbe({
+      jsonlDirs: ["/w/now/p2/read", "/w/now/p2/whatif-v2"],
+      fixed: { "/w/now/p2/kifu": ["/w/now/p2/kifu/a.fixed.json"] },
+    });
+
+    it("read/・whatif-v2/・固定棋譜がすべて揃っていれば false", () => {
+      expect(materialsPending(argsOf(), readyProbe)).toBe(false);
+    });
+
+    it("read/ が無ければ true", () => {
+      const probeNoRead = fakeProbe({ jsonlDirs: ["/w/now/p2/whatif-v2"], fixed: { "/w/now/p2/kifu": ["/w/now/p2/kifu/a.fixed.json"] } });
+      expect(materialsPending(argsOf(), probeNoRead)).toBe(true);
+    });
+
+    it("whatif-v2/ が無ければ true", () => {
+      const probeNoWhatif = fakeProbe({ jsonlDirs: ["/w/now/p2/read"], fixed: { "/w/now/p2/kifu": ["/w/now/p2/kifu/a.fixed.json"] } });
+      expect(materialsPending(argsOf(), probeNoWhatif)).toBe(true);
+    });
+
+    it("固定棋譜(*.fixed.json)が無ければ true", () => {
+      const probeNoFixed = fakeProbe({ jsonlDirs: ["/w/now/p2/read", "/w/now/p2/whatif-v2"] });
+      expect(materialsPending(argsOf(), probeNoFixed)).toBe(true);
+    });
+
+    it("段 pipeline-data が --from で外れているときは false(材料が無くても注記しない)", () => {
+      const probeNothing = fakeProbe({});
+      expect(materialsPending(argsOf(["--from", "answer-check"]), probeNothing)).toBe(false);
+    });
+  });
+
   // 1 コマンド化(指示書 §3.2・§3.3・§3.5 の 2〜7)。
   describe("段 pipeline-gate", () => {
     const COMPARE = ["--compare-dir", "/c/a", "/c/b", "--compare-person", "p5"];
@@ -868,5 +962,68 @@ describe("planDeliver", () => {
     it("--me が無く -sente/-gote も無い名前は PipelineConfigError をそのまま出す(判定を作り直さない)", () => {
       expect(() => kifuNameProblems("/kifu", ["no-suffix.kif"])).toThrow(PipelineConfigError);
     });
+  });
+});
+
+// REPLAN_BRIEF.md §3(C)。「既存の 44 局の納品の動きを変えていない」の根拠 ― 実際の材料の揃った work
+// (本体ツリー。書き込みはしない・読むだけ)を読む probe で `planDeliver` を 17 回呼び、17 回すべてが
+// 1 回目と `toStrictEqual` であることを見る(tsx の使い捨てではなく、この試験として置く)。
+// **この材料(scripts/playtest/out/ は gitignore)を持たない環境では skip する**(このファイルを他の
+// 開発環境・CI で壊さないため。実装担当の判断・報告に明記)。
+describe("planDeliver は実際の work でも冪等(§3(C)。材料が無い環境では skip)", () => {
+  const REPLAN_OUT_ROOT = "/Users/midoriko/Desktop/sgogi-coach/scripts/playtest/out";
+  const REAL_WORK = `${REPLAN_OUT_ROOT}/tatsunami3/pipe`;
+  const REAL_KIFU_DIR = `${REPLAN_OUT_ROOT}/tatsunami3/kifu`;
+  const REAL_PATIENT = `${REAL_WORK}/report/patient_report_data.json`;
+  const materialsReady = existsSync(REAL_WORK) && existsSync(REAL_KIFU_DIR) && existsSync(REAL_PATIENT);
+
+  const realProbe: DeliverProbe = {
+    exists: (p) => existsSync(p),
+    hasJsonl: (d) => existsSync(d) && readdirSync(d).some((name) => name.endsWith(".jsonl")),
+    fixedKifuFiles: (d) =>
+      existsSync(d)
+        ? readdirSync(d)
+            .filter((name) => name.endsWith(".fixed.json"))
+            .sort()
+            .map((name) => `${d}/${name}`)
+        : [],
+    timeUpLossCount: (patientPath) => {
+      if (!existsSync(patientPath)) return 0;
+      try {
+        const data = JSON.parse(readFileSync(patientPath, "utf-8")) as { time?: { timeUpLosses?: unknown[] | null } };
+        const losses = data.time?.timeUpLosses;
+        return Array.isArray(losses) ? losses.length : 0;
+      } catch {
+        return 0;
+      }
+    },
+  };
+
+  it.skipIf(!materialsReady)("実際の work(tatsunami3/pipe)で 17 回呼んでも 1 回目と一致する", () => {
+    // 表示名等は patient_report_data.json から読む(報告に書く値ではないので、コードにも literal で書かない)。
+    const patientData = JSON.parse(readFileSync(REAL_PATIENT, "utf-8")) as { person: string; title: string; today: string };
+    const realArgs = parseDeliverArgs([
+      "--person",
+      "p2",
+      "--kifu-dir",
+      REAL_KIFU_DIR,
+      "--work",
+      REAL_WORK,
+      "--time-limit-sec",
+      "180",
+      "--name",
+      patientData.person,
+      "--title",
+      patientData.title,
+      "--today",
+      patientData.today,
+      "--out",
+      `${REPLAN_OUT_ROOT}/_replan/out_dry_ready`,
+    ]);
+    const first = planDeliver(realArgs, realProbe, (t) => t);
+    expect(first).toHaveLength(17);
+    for (let i = 0; i < 16; i += 1) {
+      expect(planDeliver(realArgs, realProbe, (t) => t)).toStrictEqual(first);
+    }
   });
 });

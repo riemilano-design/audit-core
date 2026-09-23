@@ -34,6 +34,7 @@ import {
   finalPositionsCommand,
   groupListOf,
   kifuNameProblems,
+  materialsPending,
   mergeFinalPositions,
   parseDeliverArgs,
   planDeliver,
@@ -266,16 +267,30 @@ async function main(): Promise<number> {
     }
   }
 
-  const steps = planDeliver(args, probe, cmdOf);
+  // `--dry-run` は今と同じく一度だけ計画する。空の work では、後の段が作る材料(read/・whatif-v2/・
+  // 固定棋譜)がまだ無い段の引数は「その時点の見え方」でしかない ― 予測して書き換えるのではなく、
+  // その旨を最上位の鍵 1 つ(`note`)で注記する(指示書 §2.2)。材料が揃っているときは鍵自体を足さない
+  // (既存の `--dry-run` の出力が 1 バイトも変わらない)。
+  const initialSteps = planDeliver(args, probe, cmdOf);
 
   if (args.dryRun) {
-    console.log(JSON.stringify({ person: args.person, out: args.out, groups: args.groups, steps }, null, 2));
+    const note = materialsPending(args, probe)
+      ? {
+          note: "段 pipeline-data が作る材料(read/・whatif-v2/・固定棋譜)がまだ無いため、それを使う段の引数は実行時に読み直して決まる。下の引数は現時点の見え方である。",
+        }
+      : {};
+    console.log(JSON.stringify({ person: args.person, out: args.out, groups: args.groups, ...note, steps: initialSteps }, null, 2));
     return 0;
   }
 
   mkdirSync(out.directDir, { recursive: true });
 
-  for (const step of steps) {
+  // 段の一覧・順序は `initialSteps` のまま(DELIVER_STAGES と --from だけで決まり、読み直しでは変わらない)。
+  // **段を 1 つ実行する直前に `planDeliver` を呼び直し**、その段の PlannedDeliverStep を使う(指示書 §2.1)。
+  // これは「後の段が作る材料が、計画の時点ではまだ見えない」問題への対応 ― `timeUpLossCount` が既に
+  // 実行時に読み直しているのと同じ考え方を、段の引数の組み立て全体に広げるもの。
+  for (const stage of initialSteps.map((s) => s.stage)) {
+    const step = planDeliver(args, probe, cmdOf).find((s) => s.stage === stage)!;
     const startedAt = new Date().toISOString();
     let rc: number | "skip" = "skip";
     let humanGate = false;

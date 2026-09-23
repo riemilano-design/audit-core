@@ -683,6 +683,18 @@ export function stagesFrom(from: DeliverStage | undefined): DeliverStage[] {
 }
 
 /**
+ * `--dry-run` に注記を足すかどうかの判定(段ごとの読み直し指示書 §2.2)。段 `pipeline-data` が計画に
+ * 含まれていて(`--from` で外れていない)、かつ**今回の組**(`--work`)の `read/`・`whatif-v2/`・
+ * 固定棋譜(`*.fixed.json`)のどれかがまだ無いとき true。判定は新しく作らない ― 既に `probe` にある
+ * 読み取り(`hasJsonl`・`fixedKifuFiles`)をそのまま使う。
+ */
+export function materialsPending(args: DeliverArgs, probe: DeliverProbe): boolean {
+  if (!stagesFrom(args.from).includes("pipeline-data")) return false;
+  const thisGroup = groupPaths({ work: args.work, timeLimitSec: args.timeLimitSec }, args.person);
+  return !probe.hasJsonl(thisGroup.readDir) || !probe.hasJsonl(thisGroup.whatifV2Dir) || probe.fixedKifuFiles(thisGroup.fixedKifuDir).length === 0;
+}
+
+/**
  * 段ごとのコマンドと「済み」の判定を、**実行せずに**組み立てる。`deliver.ts`(CLI)は実行時もこの一覧を使い、
  * `--dry-run` のときは JSON にして出すだけ(引数の組み立てが 1 か所にしか無いようにするため)。
  * `cmdOf` は道具名を実際のコマンド名へ直す(呼び出し側が注入 ― このファイルはパスを知らない)。
