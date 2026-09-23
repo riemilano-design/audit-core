@@ -269,7 +269,7 @@
 
 ## 12. CAUSE-SEARCH-1 の記録(2026-09-25、司令塔 e3)
 
-- 実装(実装担当、`b2fad08`・`de87078` → 監査 GO → feature へ cherry-pick `dce9e8c`・`cb56b2a`): `OUTCOMES`(longThink・collapse・decisionGap)、`columnsOfOutcome`(アウトカムごとの同義列の除外)、`searches.*`、`factors[].byOutcome`・`singleDecisionGap`、崩れの内訳 `collapsedLong`・`collapsedQuick`、`--outcomes`、付録 4 の探索のページ(6 列)、`--time-search` の登録 (viii)〜(x)。試験 +12(1516)。**同一性**: 一般化の前後で既存の出力(whatif-v2 なしの入力)が JSON として同一 ― 実装担当と監査担当がそれぞれ独立に基点を復元して確認。監査の独立再計算: 検証用の `decisionGap` 13 / 492(whatif-v2 の生の行から、と特徴の表から、の 2 通りで一致)、`byOutcome` 先頭 3 部品一致、崩れの内訳 1 件一致、変異 2 つとも検出。承認の根拠: 監査の実測 + cherry-pick 後 vitest 1516。
+- 実装(実装担当、`b2fad08`・`de87078` → 監査 GO → feature へ cherry-pick `8433fc2`・`cb56b2a`): `OUTCOMES`(longThink・collapse・decisionGap)、`columnsOfOutcome`(アウトカムごとの同義列の除外)、`searches.*`、`factors[].byOutcome`・`singleDecisionGap`、崩れの内訳 `collapsedLong`・`collapsedQuick`、`--outcomes`、付録 4 の探索のページ(6 列)、`--time-search` の登録 (viii)〜(x)。試験 +12(1516)。**同一性**: 一般化の前後で既存の出力(whatif-v2 なしの入力)が JSON として同一 ― 実装担当と監査担当がそれぞれ独立に基点を復元して確認。監査の独立再計算: 検証用の `decisionGap` 13 / 492(whatif-v2 の生の行から、と特徴の表から、の 2 通りで一致)、`byOutcome` 先頭 3 部品一致、崩れの内訳 1 件一致、変異 2 つとも検出。承認の根拠: 監査の実測 + cherry-pick 後 vitest 1516。
 - 材料: 前回 20 局に whatif-v2 を生成(司令塔、`pipeline.ts --until diagnose --whatif`、5 本、20 / 20、失敗 0)。これで問題 2 の印(分かれ道・側・捨て駒・打つ・候補 5 つ)が発見用にも入った。探索は両組 whatif-v2 入りで実行(`direct/time_cause_search.json`。入りの前の出力は `time_cause_search.no-whatif20.json` に保存)。
 
 ### 12.1 予測の照合(H1〜H6: 3 当たり・2 半分・1 外れ)
