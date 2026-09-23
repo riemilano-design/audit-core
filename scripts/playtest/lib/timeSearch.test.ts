@@ -293,6 +293,13 @@ describe("searchOf: 発見用・検証用の 2 つの表から、深さごとの
     expect(forkFactor!.explains.longThink).toBe("single");
     expect(forkFactor!.singleOverLine).toEqual({ discover: true, validate: true });
   });
+
+  it("phase=mid は発見用だけで線を越え検証用では越えない(p=0.4 < 0.5)ので single ではない。組(fork=true 等)には入るので combo(§9.1 の 4: single は両組で越えたときだけ。監査 REVISE の直し)", () => {
+    const midFactor = result.factors.find((f) => f.column === "phase" && f.value === "mid");
+    expect(midFactor).toBeDefined();
+    expect(midFactor!.singleOverLine).toEqual({ discover: true, validate: false });
+    expect(midFactor!.explains.longThink).toBe("combo");
+  });
 });
 
 // ==== kindOf: 発見用・検証用の両方で「時間」「崩れ」を判定し、一致したときだけ A/B/C を付ける ====
