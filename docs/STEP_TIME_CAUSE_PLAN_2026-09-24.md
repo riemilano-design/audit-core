@@ -235,3 +235,34 @@
 - 「相手が打った直後」は事実(時間だけ)として。M5 は「取り下げたこと」に移す(数つき)。
 - 崩れの探索は「分離できませんでした」と書く(§9.3 の線引き)。
 - 言葉: 「終盤で互角だから長考する」ではなく「終盤で互角の局面では、長考も崩れも多く観測された」。
+
+## 11. CAUSE-SEARCH-1: 探索器を「アウトカムを 1 つ指定する道具」に一般化し、問題 2(考えた手で崩れる)へ完全適用する(2026-09-25、人間「このアルゴリズムは時間だけでなく普遍的なものにしたい」)
+
+**人間の整理(要旨)**: 問題 1 には TIME-CAUSE が深く使われたが、問題 2 は従来の「長考 vs 崩れ + 分かれ道の集計」が中心で、TIME-CAUSE-3 の崩れの探索は「44 局では分離できない」の確認に使われただけ。次段階は アウトカム = 崩れ → 1〜3 条件の総当たり → 発見 → 検証 → 共通因子 → 「長考した崩れ/速く指した崩れ/時間と独立した崩れ」の分離 → B の候補、まで同じ探索器で。
+
+**司令塔の見立て(測った事実つき)**: 同意。ただし問題 2 で「分離できなかった」最大の理由は探索器でなく**材料**: 発見用の前回 20 局に whatif-v2 が無く、問題 2 の印(分かれ道・攻め/守りの側・捨て駒・打つ・候補 5 つに入ったか)が発見用で全部 null だった(§8.1 F7、§10.1)。whatif-v2 は 1 局 2.3 分(今回 14 局で 34 分)なので、**前回 20 局にも回す**(5 本並行、司令塔が実行。エンジンを使うのはこれだけ)。そのうえで探索器を一般化する。一般化しても 44 局という大きさは変わらないので、「分離できない」が答えのままでもよい。
+
+### 11.1 作るもの
+1. **アウトカムの登録**(`lib/timeSearch.ts` → 名前は変えず、`Objective` を公開の `OUTCOMES` に): `longThink`(既存)・`collapse`(既存)・**`decisionGap`**(= 分かれ道で実戦の手の損が `STANDING_BOUNDS.aheadCp` 以上 = `fork && lossBand === "over300"`、whatif-v2 の無い手は null。人間の名付け DECISION-CAUSE の最初の形)。各アウトカムは **同義になる列を除外**する(`longThink` は `spentBucket`・`spentSec`(既存)、`collapse` と `decisionGap` は `fork`・`lossBand`・`inTop5`・`evalChangePrev`(実戦の手の評価差そのもの)。既存の除外と同じ考え方で、新しい閾値は置かない)。
+2. `searchOf` の出力に `searches: { [outcome]: { depths, reproduced, notReproduced } }` を足す(既存の鍵 `depths`・`reproduced`・`notReproduced`・`collapseSearch` はそのまま = `searches.longThink`・`searches.collapse` と同じ中身)。`kind` は既存の A/B/C のまま(時間と崩れの 2 軸)。
+3. `factors[].explains` を **アウトカムごと**に: 既存の 3 つ(`longThink`・`timeAndCollapse`・`quickCollapse`)はそのまま、`byOutcome: { [outcome]: "single" | "combo" | null }` を足す(`single` = 部品 1 つが両組でそのアウトカムの線を越える、`combo` = そのアウトカムの再現した組に入る)。
+4. **崩れの内訳**(人間の 3 分類): `collapse` の再現した組ごとに、崩れた手のうち `spentBucket` が `>9`(長考)・`≤1`(速い)の数を発見用・検証用で出す(`collapsedLong`・`collapsedQuick`。段は `TIME_VALUES.spentBucketsSec` の使い回し)。分類の語は PDF で「長考した崩れ」「速く指した崩れ」「どちらでもない」。型 A/B/C(時間の線との関係)はそのまま併記。
+5. CLI `--outcomes longThink,collapse,decisionGap`(既定は 3 つ全部)。付録 4 の探索のページを、アウトカムごとの深さの表 + 偶然の目安/共通因子の表(部品 × アウトカムの 5 列 = 既存の形に `decisionGap` の列を足す)/各アウトカムの再現した組の上位 10(条件・両組の数・崩れの内訳)にする。
+6. `check_answer.py --time-search` の登録を `searches.*` と `byOutcome` の数に広げる(別コミット)。
+7. **試験**: 一般化の前後で、既存の実データの入力(whatif-v2 なしの発見用)に対する `depths`・`reproduced`・`notReproduced`・`collapseSearch`・`factors[].explains` の 3 つが **JSON として同一**であること(リファクタの証拠。実装担当は取り込み前の `time_cause_search.json` をスクラッチに写して比べる)。合成の表で `decisionGap` の除外列・`byOutcome`・崩れの内訳を確かめる。
+
+### 11.2 予測(前回 20 局に whatif-v2 を足した後の探索。数は見ていない)
+| # | 何を | 予測 |
+|---|---|---|
+| H1 | 一般化の前後で既存の出力が同一 | 同一(差があれば実装の誤り) |
+| H2 | 発見用に whatif-v2 が入ると、崩れの探索の再現は偶然の目安を超えるか | 超える(目安の 1.5 倍以上。§10 では下回った) |
+| H3 | 崩れの共通因子(`byOutcome.collapse`)で `single` になる部品 | 0〜1。`combo` に「第 1 候補が捨て駒」「実戦の側 = 守り」が入る |
+| H4 | 崩れの内訳 | 再現した組の崩れは「速く指した崩れ」(≤1 秒)が「長考した崩れ」(>9 秒)より多い(1 秒以内の手が 715 と多いため)。型は C(時間でない)が B より多い |
+| H5 | `decisionGap` の探索 | 再現 ≥ 1。`single` は 0。`combo` に「相手の直前の手が打つ」は**入らない**(時間だけの条件は判断のずれと結びつかない) |
+| H6 | 分かれ道の印が発見用に入っても、時間 + 崩れ(B)の中心は「終盤 × 互角」のまま | そのまま(選択の印は B の組を増やすが、部品としては終盤・互角が残る) |
+
+### 11.3 やらないこと
+モデルは使わない。4 条件以上。「原因」。B v7 の行動は、`byOutcome.collapse` か `timeAndCollapse` で `single`/`combo` の部品からだけ(A 型・`decisionGap` だけの部品は事実として書く)。
+
+### 11.4 作り方
+司令塔: 前回 20 局に whatif-v2(`pipeline.ts --until diagnose --whatif`、5 本)。実装担当 1 人(worktree、基点 feature HEAD): 1〜5 + 試験(コミット 1)、6(コミット 2)。独立監査 1 回。GO 後に司令塔が whatif-v2 入りで探索を回し、H1〜H6 を §12 に、B v7 の問題 2 を書く。
