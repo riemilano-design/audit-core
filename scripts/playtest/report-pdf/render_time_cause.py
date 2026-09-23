@@ -529,17 +529,34 @@ def factor_condition_text(f):
     return condition_text([{"column": f["column"], "value": f["value"]}])
 
 
+# STEP CAUSE-SEARCH-1(docs/STEP_TIME_CAUSE_PLAN_2026-09-24.md §11.1 の 5.)。アウトカム(longThink・collapse・
+# decisionGap)の日本語名と、並び順。`TS["searches"]` に無いアウトカム(`--outcomes` で外したもの)は飛ばす。
+OUTCOME_LABELS = {"longThink": "長考", "collapse": "崩れ", "decisionGap": "判断のずれ"}
+OUTCOME_ORDER = ["longThink", "collapse", "decisionGap"]
+
+
+# `decisionGap`(OutcomeStats: n・matched・rate)の分数。分母 0 なら「—」。
+def cond_decision_gap_text(stats):
+    if stats["n"] == 0:
+        return "—"
+    pct = round(stats["rate"] * 100, 1)
+    return f"{stats['matched']} / {stats['n']}({pct:g}%)"
+
+
 if TS is not None:
+    searches = TS.get("searches", {})
+    present_outcomes = [k for k in OUTCOME_ORDER if k in searches]
+
     story.append(PageBreak())
-    story.append(P("時間と一緒に起きている条件(探索)", S_H2))
+    story.append(P("時間・崩れ・判断のずれと一緒に起きている条件(探索)", S_H2))
     story.append(
         P(
             emit(
-                f"発見用(手 <b>{TS['discover']['moves']}</b>)で単独・2 条件・3 条件の組を機械に全部試させ、採用候補(手の数が十分に多く、長考の"
+                f"発見用(手 <b>{TS['discover']['moves']}</b>)で単独・2 条件・3 条件の組を機械に全部試させ、採用候補(手の数が十分に多く、"
                 f"割合が全体よりはっきり高い組)を選びました。検証用(手 <b>{TS['validate']['moves']}</b>)でも同じ組を数え直し、当てはまる状態が"
-                f"保たれた組だけを「再現した」とします。同じやり方を「崩れ」(このあと形勢の区分が下がること)にも当て、長考と崩れの両方を"
-                f"一緒に説明する条件・崩れだけを説明する条件を分けます。ここに並ぶのは長考・崩れと一緒に起きている条件を数えたものであり、"
-                f"何かを決めつけるものではありません。",
+                f"保たれた組だけを「再現した」とします。同じやり方を長考(10 秒以上)・崩れ(このあと形勢の区分が下がること)・判断のずれ"
+                f"(分かれ道で実戦の手がエンジンの評価で大きく損していたこと)の 3 つのアウトカムに当て、それぞれと一緒に起きている条件を"
+                f"数えたものであり、何かを決めつけるものではありません。",
                 {TS["discover"]["moves"], TS["validate"]["moves"]},
             ),
             S_LEAD,
@@ -550,6 +567,8 @@ if TS is not None:
             [
                 "「崩れ」は、直前の評価の区分(優勢・互角・劣勢)が優勢または互角だった局面から、次の自分の手番の直前に区分が 1 段以上"
                 "下がったことです。+300 以上を優勢、−300 以下を劣勢、その間を互角とします。",
+                "「判断のずれ」は、分かれ道(第 1 候補と他の候補の差がはっきりある局面)で、実戦の手がエンジンの評価で 300 以上損して"
+                "いたことです(whatif の記録がある手だけ数えます)。",
             ]
         )
     )
@@ -574,16 +593,15 @@ if TS is not None:
         t.setStyle(HEADER_STYLE)
         return t
 
-    story.append(P("深さごとの表(長考と一緒に起きている条件)", S_K))
-    story.append(depth_table_of(TS["depths"]))
-    story.append(Spacer(1, 2.5 * mm))
-    story.append(P("深さごとの表(崩れと一緒に起きている条件)", S_K))
-    story.append(depth_table_of(TS["collapseSearch"]["depths"]))
-    story.append(Spacer(1, 2 * mm))
+    # STEP CAUSE-SEARCH-1(計画 §11.1 の 5.)。アウトカムごとの深さの表(渡された `--outcomes` の分だけ)。
+    for outcome in present_outcomes:
+        story.append(P(f"深さごとの表({OUTCOME_LABELS[outcome]}と一緒に起きている条件)", S_K))
+        story.append(depth_table_of(searches[outcome]["depths"]))
+        story.append(Spacer(1, 2.5 * mm))
     story.append(
         notebox(
             [
-                "偶然の目安は、長考(または崩れ)と関係の無い条件でも、この深さの採用候補と同じ数だけ試せば偶然で再現してしまう組の数です"
+                "偶然の目安は、そのアウトカムと関係の無い条件でも、この深さの採用候補と同じ数だけ試せば偶然で再現してしまう組の数です"
                 "(二項分布の裾から計算します)。再現の数がこの目安に近いほど、偶然と見分けにくいということです。",
                 "深さは組み合わせた条件の数です(1 = 単独の条件、2・3 = 条件を組み合わせたもの)。",
             ]
@@ -600,69 +618,85 @@ if TS is not None:
         )
     )
     story.append(Spacer(1, 1.5 * mm))
-    factor_rows = [[P(x, S_K) for x in ["条件", "長考との関係", "時間と崩れとの関係", "速く指して崩れとの関係", "発見 → 検証(長考)"]]]
+    # STEP CAUSE-SEARCH-1(計画 §11.1 の 5.)。既存の 5 列に「判断のずれとの関係」を足した 6 列。
+    factor_rows = [
+        [P(x, S_K) for x in ["条件", "長考との関係", "時間と崩れとの関係", "速く指して崩れとの関係", "判断のずれとの関係", "発見 → 検証(長考)"]]
+    ]
     for f in TS["factors"][:15]:
         cond_text = factor_condition_text(f)
         disc_text = cond_stats_text(f["single"]["discover"])
         val_text = cond_stats_text(f["single"]["validate"])
         trans_text = f"{disc_text} → {val_text}"
         row_allowed = digits_of(cond_text) | digits_of(trans_text)
+        by_outcome = f.get("byOutcome", {})
         factor_rows.append(
             [
                 P(emit(cond_text, row_allowed), S_V),
                 P(explain_text(f["explains"]["longThink"]), S_V),
                 P(explain_text(f["explains"]["timeAndCollapse"]), S_V),
                 P(explain_text(f["explains"]["quickCollapse"]), S_V),
+                P(explain_text(by_outcome.get("decisionGap")), S_V),
                 P(emit(trans_text, row_allowed), S_V),
             ]
         )
-    factor_col = (W - 55 * mm) / 4
-    factor_table = Table(factor_rows, colWidths=[55 * mm, factor_col, factor_col, factor_col, factor_col], repeatRows=1)
+    factor_col = (W - 55 * mm) / 5
+    factor_table = Table(factor_rows, colWidths=[55 * mm, factor_col, factor_col, factor_col, factor_col, factor_col], repeatRows=1)
     factor_table.setStyle(HEADER_STYLE)
     story.append(factor_table)
     story.append(Spacer(1, 2.5 * mm))
 
-    def kind_list_of(label, entries, cap=None):
-        story.append(P(label, S_H3))
-        shown = entries if cap is None else entries[:cap]
+    # STEP CAUSE-SEARCH-1(計画 §11.1 の 5.)。アウトカムごとの再現した組の上位 10(条件・両組の数。崩れは
+    # 内訳〈長考した崩れ・速く指した崩れ〉つき)。`searches[outcome]["reproduced"]` の並び順のまま先頭 10 件
+    # (既存の「速く指した手が崩れと一緒に起きている条件(上位 10)」と同じ「先頭 N 件」の流儀。並べ替えはしない)。
+    def searches_top10_table(outcome, entries):
+        story.append(P(f"{OUTCOME_LABELS[outcome]}と一緒に起きている条件(上位 10)", S_H3))
+        shown = entries[:10]
         if len(shown) == 0:
             story.append(P("0 件でした。", S_SMALL))
             return
-        rows = [[P(x, S_K) for x in ["条件", "発見用の長考", "検証用の長考", "発見用の崩れ", "検証用の崩れ"]]]
+        if outcome == "collapse":
+            header = ["条件", "発見用の崩れ", "検証用の崩れ", "発見用の内訳", "検証用の内訳"]
+        else:
+            header = ["条件", f"発見用の{OUTCOME_LABELS[outcome]}", f"検証用の{OUTCOME_LABELS[outcome]}"]
+        rows = [[P(x, S_K) for x in header]]
         for r in shown:
             cond_text = condition_text(r["condition"])
-            disc_time = cond_stats_text(r["discover"])
-            val_time = cond_stats_text(r["validate"])
-            disc_collapse = cond_collapse_text(r["discover"])
-            val_collapse = cond_collapse_text(r["validate"])
-            row_allowed = digits_of(cond_text) | digits_of(disc_time) | digits_of(val_time) | digits_of(disc_collapse) | digits_of(val_collapse)
-            rows.append(
-                [
-                    P(emit(cond_text, row_allowed), S_V),
-                    P(emit(disc_time, row_allowed), S_V),
-                    P(emit(val_time, row_allowed), S_V),
-                    P(emit(disc_collapse, row_allowed), S_V),
-                    P(emit(val_collapse, row_allowed), S_V),
-                ]
-            )
-        col = (W - 55 * mm) / 4
-        t = Table(rows, colWidths=[55 * mm, col, col, col, col], repeatRows=1)
+            if outcome == "longThink":
+                disc_text = cond_stats_text(r["discover"])
+                val_text = cond_stats_text(r["validate"])
+                cells = [cond_text, disc_text, val_text]
+            elif outcome == "collapse":
+                disc_text = cond_collapse_text(r["discover"])
+                val_text = cond_collapse_text(r["validate"])
+                disc_break = f"長考した崩れ {r['discover']['collapsedLong']}・速く指した崩れ {r['discover']['collapsedQuick']}"
+                val_break = f"長考した崩れ {r['validate']['collapsedLong']}・速く指した崩れ {r['validate']['collapsedQuick']}"
+                cells = [cond_text, disc_text, val_text, disc_break, val_break]
+            else:
+                disc_text = cond_decision_gap_text(r["discover"])
+                val_text = cond_decision_gap_text(r["validate"])
+                cells = [cond_text, disc_text, val_text]
+            row_allowed = set()
+            for c in cells:
+                row_allowed |= digits_of(c)
+            rows.append([P(emit(c, row_allowed), S_V) for c in cells])
+        ncols = len(header)
+        first_w = 55 * mm
+        col_w = (W - first_w) / (ncols - 1)
+        widths = [first_w] + [col_w] * (ncols - 1)
+        t = Table(rows, colWidths=widths, repeatRows=1)
         t.setStyle(HEADER_STYLE)
         story.append(t)
         story.append(Spacer(1, 2.5 * mm))
 
-    time_and_collapse = [r for r in TS["reproduced"] if r["kind"] == "B"]
-    kind_list_of("時間と崩れの両方を説明する条件(発見用・検証用とも再現)", time_and_collapse)
-
-    quick_collapse = [r for r in TS["collapseSearch"]["reproduced"] if r["kind"] == "C"]
-    kind_list_of("速く指した手が崩れと一緒に起きている条件(上位 10)", quick_collapse, cap=10)
+    for outcome in present_outcomes:
+        searches_top10_table(outcome, searches[outcome]["reproduced"])
 
     story.append(
         notebox(
             [
                 "この表は条件どうしの一緒の起き方を数えたものであり、どれが理由かを決めるものではありません。",
-                "「時間と崩れの両方を説明する条件」は、長考の探索と崩れの探索の両方で再現した条件です。「速く指した手が崩れと一緒に"
-                "起きている条件」は、長考の採用候補にはならなかったが、崩れの探索では再現した条件です。",
+                "崩れの「内訳」は、その崩れた手の消費秒が 10 秒以上(長考した崩れ)か 1 秒以下(速く指した崩れ)かの数です"
+                "(どちらでもない手もあります)。",
             ]
         )
     )

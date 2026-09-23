@@ -300,6 +300,34 @@ describe("searchOf: 発見用・検証用の 2 つの表から、深さごとの
     expect(midFactor!.singleOverLine).toEqual({ discover: true, validate: false });
     expect(midFactor!.explains.longThink).toBe("combo");
   });
+
+  // STEP CAUSE-SEARCH-1(計画 §11.1 の 7.「同一性の試験」)。`searches.longThink` は既存の時間の探索
+  // (`depths`・`reproduced`・`notReproduced`)と同じ中身であることを、この崩れの無いデータでも確かめる。
+  it("searches.longThink は depths・reproduced・notReproduced と同じ中身(計画 §11.1 の 2.)", () => {
+    expect(result.searches.longThink.depths).toEqual(result.depths);
+    expect(result.searches.longThink.reproduced).toEqual(result.reproduced);
+    expect(result.searches.longThink.notReproduced).toEqual(result.notReproduced);
+  });
+
+  it("byOutcome.longThink は explains.longThink と同じ判定(fork=true は single、phase=mid は combo)", () => {
+    for (const factor of result.factors) {
+      expect(factor.byOutcome.longThink).toBe(factor.explains.longThink);
+    }
+    const forkFactor = result.factors.find((f) => f.column === "fork" && f.value === true)!;
+    expect(forkFactor.byOutcome.longThink).toBe("single");
+  });
+
+  // このデータは collapse がすべて null(崩れの記録が無い)なので searches.collapse は空(採用候補 0)。
+  // fork は true/false(null ではない)だが lossBand が常に null なので decisionGap は「全行 false」
+  // (fork===null の手だけが null になる ― この表にはそれが無い)。byOutcome.collapse は null になる
+  // (崩れが無いため)。decisionGap は検証しない(この表の目的〈時間の探索〉に無関係な列のため)。
+  it("このデータには崩れの記録が無い(collapse がすべて null)ので、searches.collapse は空(採用候補 0)。byOutcome.collapse もすべて null", () => {
+    expect(result.searches.collapse.depths.every((d) => d.adopted === 0 && d.reproduced === 0)).toBe(true);
+    expect(result.searches.collapse.reproduced).toHaveLength(0);
+    for (const factor of result.factors) {
+      expect(factor.byOutcome.collapse).toBeNull();
+    }
+  });
 });
 
 // ==== kindOf: 発見用・検証用の両方で「時間」「崩れ」を判定し、一致したときだけ A/B/C を付ける ====
@@ -448,5 +476,204 @@ describe("searchOf: 崩れが動く合成の表(kind B・C、collapseSearch、fa
     const earlyIndex = result.factors.findIndex((f) => f.column === "phase" && f.value === "early");
     expect(midIndex).toBeGreaterThanOrEqual(0);
     expect(earlyIndex).toBeGreaterThan(midIndex);
+  });
+
+  // STEP CAUSE-SEARCH-1(計画 §11.1 の 4.)。row() の spentBucket の既定は "≤1" なので、この表の崩れた手は
+  // すべて「速く指した崩れ」(collapsedQuick)になり、collapsedLong は 0 になる。
+  it("searches.collapse の phase=mid は collapsedLong=0・collapsedQuick=24(discover)・12(validate)を持つ(既存の collapseSearch とは列が違うので中身も違ってよい)", () => {
+    const mid = result.searches.collapse.reproduced.find((c) => c.depth === 1 && c.condition[0]!.column === "phase" && c.condition[0]!.value === "mid");
+    expect(mid).toBeDefined();
+    expect(mid!.discover.collapsed).toBe(24);
+    expect(mid!.discover.collapsedLong).toBe(0);
+    expect(mid!.discover.collapsedQuick).toBe(24);
+    expect(mid!.validate.collapsed).toBe(12);
+    expect(mid!.validate.collapsedLong).toBe(0);
+    expect(mid!.validate.collapsedQuick).toBe(12);
+  });
+
+  it("byOutcome.collapse: phase=mid は single(時間の探索と同じ理由で崩れも両組で線を越える)", () => {
+    const midFactor = result.factors.find((f) => f.column === "phase" && f.value === "mid")!;
+    expect(midFactor.byOutcome.collapse).toBe("single");
+  });
+});
+
+// ==== CAUSE-SEARCH-1(計画 §11.1): decisionGap アウトカム・除外列(fork・lossBand・inTop5・evalChangePrev)・
+//   byOutcome の single/combo/null・searches.collapse の崩れの内訳、を 1 つの合成の表で確かめる ====
+//
+// グループ A(discover 48・validate 24): phase="mid"・fork=true・afterLongThink=true・lossBand="over300"
+//   (→ decisionGap は全行 true)・evalChangePrev="down"・inCheck は前半 true/後半 false。collapse は前半だけ
+//   true(discover 24〈長考 12・速い 12〉・validate 12〈長考 6・速い 6〉)。
+// グループ B(discover 48・validate 24): phase="mid"・fork=true・afterLongThink=false・lossBand="under300"
+//   (→ decisionGap は全行 false)・evalChangePrev="down"・inCheck は前半 true/後半 false・collapse は全行 false。
+// グループ C(discover 104・validate 52): phase="late"・fork=null(→ decisionGap は null=集計に入らない)・
+//   afterLongThink=null・lossBand=null・evalChangePrev="same"・inCheck=null・collapse は全行 false。
+//
+// 「phase=mid」「fork=true」「evalChangePrev=down」は A+B で同じ 96(discover)/48(validate)行を指す(同義)。
+// fork・evalChangePrev は collapse・decisionGap の除外列なので、探索の候補の列に出ないことを確かめる。
+describe("searchOf: decisionGap アウトカム・除外列・byOutcome・崩れの内訳(CAUSE-SEARCH-1)", () => {
+  const CS_GROUP_A_DISCOVER: MoveFeatureRow[] = Array.from({ length: 48 }, (_, i) =>
+    row({
+      phase: "mid",
+      fork: true,
+      afterLongThink: true,
+      lossBand: "over300",
+      evalChangePrev: "down",
+      inCheck: i < 24,
+      collapse: i < 24,
+      spentBucket: i < 24 ? (i < 12 ? ">9" : "≤1") : "≤4",
+      longThink: false,
+    }),
+  );
+  const CS_GROUP_B_DISCOVER: MoveFeatureRow[] = Array.from({ length: 48 }, (_, i) =>
+    row({
+      phase: "mid",
+      fork: true,
+      afterLongThink: false,
+      lossBand: "under300",
+      evalChangePrev: "down",
+      inCheck: i < 24,
+      collapse: false,
+      spentBucket: "≤4",
+      longThink: false,
+    }),
+  );
+  const CS_GROUP_C_DISCOVER: MoveFeatureRow[] = Array.from({ length: 104 }, () =>
+    row({
+      phase: "late",
+      fork: null,
+      afterLongThink: null,
+      lossBand: null,
+      evalChangePrev: "same",
+      inCheck: null,
+      collapse: false,
+      spentBucket: "≤4",
+      longThink: false,
+    }),
+  );
+  const CS_DISCOVER_ROWS: MoveFeatureRow[] = [...CS_GROUP_A_DISCOVER, ...CS_GROUP_B_DISCOVER, ...CS_GROUP_C_DISCOVER];
+
+  const CS_GROUP_A_VALIDATE: MoveFeatureRow[] = Array.from({ length: 24 }, (_, i) =>
+    row({
+      phase: "mid",
+      fork: true,
+      afterLongThink: true,
+      lossBand: "over300",
+      evalChangePrev: "down",
+      inCheck: i < 12,
+      collapse: i < 12,
+      spentBucket: i < 12 ? (i < 6 ? ">9" : "≤1") : "≤4",
+      longThink: false,
+    }),
+  );
+  const CS_GROUP_B_VALIDATE: MoveFeatureRow[] = Array.from({ length: 24 }, (_, i) =>
+    row({
+      phase: "mid",
+      fork: true,
+      afterLongThink: false,
+      lossBand: "under300",
+      evalChangePrev: "down",
+      inCheck: i < 12,
+      collapse: false,
+      spentBucket: "≤4",
+      longThink: false,
+    }),
+  );
+  const CS_GROUP_C_VALIDATE: MoveFeatureRow[] = Array.from({ length: 52 }, () =>
+    row({
+      phase: "late",
+      fork: null,
+      afterLongThink: null,
+      lossBand: null,
+      evalChangePrev: "same",
+      inCheck: null,
+      collapse: false,
+      spentBucket: "≤4",
+      longThink: false,
+    }),
+  );
+  const CS_VALIDATE_ROWS: MoveFeatureRow[] = [...CS_GROUP_A_VALIDATE, ...CS_GROUP_B_VALIDATE, ...CS_GROUP_C_VALIDATE];
+
+  const CS_RESULT = searchOf(CS_DISCOVER_ROWS, CS_VALIDATE_ROWS);
+
+  it("decisionGap は fork && lossBand===over300(afterLongThink=true は分かれ道=グループ A そのもの。発見用 48/48・検証用 24/24)", () => {
+    const afterLongThinkTrue = CS_RESULT.searches.decisionGap.reproduced.find(
+      (c) => c.depth === 1 && c.condition[0]!.column === "afterLongThink" && c.condition[0]!.value === true,
+    );
+    expect(afterLongThinkTrue).toBeDefined();
+    expect(afterLongThinkTrue!.discover).toEqual({ n: 48, matched: 48, rate: 1 });
+    expect(afterLongThinkTrue!.validate).toEqual({ n: 24, matched: 24, rate: 1 });
+  });
+
+  it("fork が null の手(グループ C)は decisionGap の集計に入らない(グループ C だけの条件は採用候補にならない)", () => {
+    const lateInDecisionGap = [...CS_RESULT.searches.decisionGap.reproduced, ...CS_RESULT.searches.decisionGap.notReproduced].find((c) =>
+      c.condition.some((t) => t.column === "phase" && t.value === "late"),
+    );
+    expect(lateInDecisionGap).toBeUndefined();
+  });
+
+  it("除外列(fork・lossBand・inTop5・evalChangePrev)は collapse・decisionGap の探索の候補の列に出ない(fork・evalChangePrev は phase=mid と同義になるよう作ったが、それでも出ない)", () => {
+    const excludedColumns = ["fork", "lossBand", "inTop5", "evalChangePrev"];
+    const allEntries = [
+      ...CS_RESULT.searches.collapse.reproduced,
+      ...CS_RESULT.searches.collapse.notReproduced,
+      ...CS_RESULT.searches.decisionGap.reproduced,
+      ...CS_RESULT.searches.decisionGap.notReproduced,
+    ];
+    expect(allEntries.length).toBeGreaterThan(0);
+    for (const entry of allEntries) {
+      for (const term of entry.condition) {
+        expect(excludedColumns).not.toContain(term.column);
+      }
+    }
+  });
+
+  it("崩れの内訳: searches.collapse の phase=mid は collapsedLong=12・collapsedQuick=12(発見用)、6/6(検証用)", () => {
+    const mid = CS_RESULT.searches.collapse.reproduced.find((c) => c.depth === 1 && c.condition[0]!.column === "phase" && c.condition[0]!.value === "mid");
+    expect(mid).toBeDefined();
+    expect(mid!.discover.collapsed).toBe(24);
+    expect(mid!.discover.collapsedLong).toBe(12);
+    expect(mid!.discover.collapsedQuick).toBe(12);
+    expect(mid!.validate.collapsed).toBe(12);
+    expect(mid!.validate.collapsedLong).toBe(6);
+    expect(mid!.validate.collapsedQuick).toBe(6);
+  });
+
+  it("byOutcome: afterLongThink=true は decisionGap で single、inCheck=true は単独では線を越えず depth2 の組(afterLongThink=true & inCheck=true)で再現するので combo、phase=late はどちらも null", () => {
+    const afterLongThinkFactor = CS_RESULT.factors.find((f) => f.column === "afterLongThink" && f.value === true)!;
+    expect(afterLongThinkFactor.byOutcome.decisionGap).toBe("single");
+
+    const inCheckFactor = CS_RESULT.factors.find((f) => f.column === "inCheck" && f.value === true)!;
+    expect(inCheckFactor.byOutcome.decisionGap).toBe("combo");
+    const comboEntry = CS_RESULT.searches.decisionGap.reproduced.find(
+      (c) => c.depth === 2 && c.condition.some((t) => t.column === "afterLongThink") && c.condition.some((t) => t.column === "inCheck"),
+    );
+    expect(comboEntry).toBeDefined();
+
+    const lateFactor = CS_RESULT.factors.find((f) => f.column === "phase" && f.value === "late")!;
+    expect(lateFactor.byOutcome.collapse).toBeNull();
+    expect(lateFactor.byOutcome.decisionGap).toBeNull();
+  });
+
+  it("byOutcome: 除外された列(lossBand・fork)でも、部品単独で線を越えれば single になる(探索の候補には出なくても single の判定は独立)", () => {
+    const lossBandFactor = CS_RESULT.factors.find((f) => f.column === "lossBand" && f.value === "over300")!;
+    expect(lossBandFactor.byOutcome.collapse).toBe("single");
+    expect(lossBandFactor.byOutcome.decisionGap).toBe("single");
+
+    const forkFactor = CS_RESULT.factors.find((f) => f.column === "fork" && f.value === true)!;
+    expect(forkFactor.byOutcome.collapse).toBe("single");
+  });
+
+  it("singleDecisionGap は byOutcome.decisionGap の判定に使った発見用・検証用の分数(afterLongThink=true は 48/48・24/24、inCheck=true は base と同じ 24/48・12/24 で線を越えない)", () => {
+    const afterLongThinkFactor = CS_RESULT.factors.find((f) => f.column === "afterLongThink" && f.value === true)!;
+    expect(afterLongThinkFactor.singleDecisionGap).toEqual({
+      discover: { n: 48, matched: 48, rate: 1 },
+      validate: { n: 24, matched: 24, rate: 1 },
+    });
+
+    const inCheckFactor = CS_RESULT.factors.find((f) => f.column === "inCheck" && f.value === true)!;
+    expect(inCheckFactor.singleDecisionGap).toEqual({
+      discover: { n: 48, matched: 24, rate: 0.5 },
+      validate: { n: 24, matched: 12, rate: 0.5 },
+    });
   });
 });

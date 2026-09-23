@@ -8,10 +8,15 @@
 //     --role discover --kifu-dir <固定棋譜のフォルダ> --records-dir <段 2 の JSONL のフォルダ> \
 //       --time-limit-sec <秒> [--whatif-v2-dir <whatif-v2 jsonl のフォルダ>] \
 //     [--role discover|validate --kifu-dir <フォルダ> --records-dir <フォルダ> --time-limit-sec <秒> [--whatif-v2-dir <フォルダ>] …] \
+//     [--outcomes longThink,collapse,decisionGap] \
 //     --out <time_cause_search.json>
 //
 // 【この CLI は薄くしてある】特徴の表は lib/timeFeatures.ts、探索は lib/timeSearch.ts にあり、そちらに試験がある。
 // ここでやるのは、引数の解釈・ファイルを読む・局ごとに呼ぶ・書く、だけ。
+//
+// 【STEP CAUSE-SEARCH-1(docs/STEP_TIME_CAUSE_PLAN_2026-09-24.md §11.1 の 5.)が足したこと】`--outcomes`
+// (既定は 3 つ全部)。`lib/timeSearch.ts` の `searchOf` は常に 3 つのアウトカムを計算するが、この CLI は
+// `--outcomes` で指定した鍵だけを出力 JSON の `searches` に残す(指定外の鍵は `searches` に入れない)。
 //
 // 【組(--kifu-dir で始まるブロック)の決め方】scripts/playtest/timeCause.ts と同じ形式
 // (「--kifu-dir が出るたびに新しい組を始め、次の --kifu-dir〈または --out〉までの間のフラグをその組のものとして
@@ -31,14 +36,14 @@ import { fileURLToPath } from "node:url";
 
 import { readGitState } from "./lib/gitState.js";
 import { buildGameMoveFeatureRows, type MoveFeatureRow, type MoveFeatureWhatifPosition } from "./lib/timeFeatures.js";
-import { searchOf } from "./lib/timeSearch.js";
+import { OUTCOMES, searchOf, type OutcomeKey } from "./lib/timeSearch.js";
 import type { RecordLine } from "./invariants/types.js";
 import type { TimeCauseFixedKifu } from "./lib/timeCause.js";
 import type { WhatifSideRaw } from "./lib/type.js";
 
 const REPO_ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), "..", "..");
 const USAGE =
-  "使い方: npx tsx scripts/playtest/timeSearch.ts --role <discover|validate> --kifu-dir <フォルダ> --records-dir <フォルダ> --time-limit-sec <秒> [--whatif-v2-dir <フォルダ>] [--role … …] --out <time_cause_search.json>";
+  "使い方: npx tsx scripts/playtest/timeSearch.ts --role <discover|validate> --kifu-dir <フォルダ> --records-dir <フォルダ> --time-limit-sec <秒> [--whatif-v2-dir <フォルダ>] [--role … …] [--outcomes longThink,collapse,decisionGap] --out <time_cause_search.json>";
 
 // ---- 引数の解釈(--kifu-dir で組が始まる。--role はその組の役割) ----
 
@@ -52,11 +57,12 @@ interface GroupArgs {
   whatifV2Dir?: string;
 }
 
-function parseArgs(args: readonly string[]): { groups: GroupArgs[]; out?: string } {
+function parseArgs(args: readonly string[]): { groups: GroupArgs[]; out?: string; outcomes?: string } {
   const groups: GroupArgs[] = [];
   let current: GroupArgs | null = null;
   let pendingRole: Role | undefined;
   let out: string | undefined;
+  let outcomes: string | undefined;
   let i = 0;
   while (i < args.length) {
     const flag = args[i];
@@ -102,9 +108,29 @@ function parseArgs(args: readonly string[]): { groups: GroupArgs[]; out?: string
       i += 2;
       continue;
     }
+    if (flag === "--outcomes") {
+      if (value === undefined) throw new Error("--outcomes に値が無い");
+      outcomes = value;
+      i += 2;
+      continue;
+    }
     throw new Error(`知らない引数: ${flag}`);
   }
-  return { groups, out };
+  return { groups, out, outcomes };
+}
+
+/** STEP CAUSE-SEARCH-1(計画 §11.1 の 5.)。`--outcomes` をアウトカムの鍵の配列にする(既定は 3 つ全部)。 */
+function parseOutcomes(raw: string | undefined): OutcomeKey[] {
+  if (raw === undefined) return [...OUTCOMES];
+  const parts = raw
+    .split(",")
+    .map((s) => s.trim())
+    .filter((s) => s.length > 0);
+  if (parts.length === 0) throw new Error("--outcomes に値が無い");
+  for (const part of parts) {
+    if (!(OUTCOMES as readonly string[]).includes(part)) throw new Error(`--outcomes に知らないアウトカム: ${part}(${OUTCOMES.join("|")} のどれか)`);
+  }
+  return parts as OutcomeKey[];
 }
 
 // ---- 段 2 の記録(meta 行 + record 行) ----
@@ -203,9 +229,11 @@ function processGroup(groupArgs: GroupArgs): MoveFeatureRow[] {
 
 function main(): number {
   const args = process.argv.slice(2);
-  let parsed: { groups: GroupArgs[]; out?: string };
+  let parsed: { groups: GroupArgs[]; out?: string; outcomes?: string };
+  let outcomes: OutcomeKey[];
   try {
     parsed = parseArgs(args);
+    outcomes = parseOutcomes(parsed.outcomes);
   } catch (err) {
     console.error(err instanceof Error ? err.message : String(err));
     console.error(USAGE);
@@ -226,14 +254,19 @@ function main(): number {
   if (validateRows.length === 0) throw new Error("--role validate の組が無い(検証用の手が 0 件)");
 
   const result = searchOf(discoverRows, validateRows);
+  // STEP CAUSE-SEARCH-1(計画 §11.1 の 5.)。`--outcomes` で指定した鍵だけを出力の `searches` に残す
+  // (`searchOf` 自体は常に 3 つとも計算する ― lib の役目を増やさない)。
+  const searches: Partial<Record<OutcomeKey, unknown>> = {};
+  for (const key of outcomes) searches[key] = result.searches[key];
+
   const gitState = readGitState(REPO_ROOT);
-  const out = { kind: "time_cause_search", gitHead: gitState.gitHead, dirty: gitState.dirty, ...result };
+  const out = { kind: "time_cause_search", gitHead: gitState.gitHead, dirty: gitState.dirty, ...result, searches };
 
   const outPath = path.resolve(parsed.out);
   mkdirSync(path.dirname(outPath), { recursive: true });
   writeFileSync(outPath, `${JSON.stringify(out, null, 2)}\n`, "utf-8");
   console.log(
-    `書き込み: ${outPath}(発見用 ${discoverRows.length} 手・検証用 ${validateRows.length} 手・深さごとの再現: ${result.depths.map((d) => `${d.depth}=${d.reproduced}/${d.adopted}`).join(" ")})`,
+    `書き込み: ${outPath}(発見用 ${discoverRows.length} 手・検証用 ${validateRows.length} 手・深さごとの再現: ${result.depths.map((d) => `${d.depth}=${d.reproduced}/${d.adopted}`).join(" ")}・アウトカム: ${outcomes.join(",")})`,
   );
   return 0;
 }

@@ -29,6 +29,22 @@
 // 【判断的知識】`TIME_SEARCH_VALUES.validateMinN`(= 10)は計画 §7.3 で確定した、この計画で唯一の新しい値
 // (「14 局では 20 に届かないため」。計画の文言そのまま)。それ以外は `FINDING_VALUES`(minPairs・ratio)の使い回し。
 // 崩れの採用候補・再現の線(`isCollapseAdoptedOf`・`isCollapseReproducedOf`)も同じ値を使い回す(計画 §9.1 の 3.)。
+//
+// 【STEP CAUSE-SEARCH-1(docs/STEP_TIME_CAUSE_PLAN_2026-09-24.md §11.1)が足したこと】探索器を「アウトカムを
+// 1 つ指定する道具」に一般化する。**既存の鍵(`depths`・`reproduced`・`notReproduced`・`collapseSearch`・
+// `factors[].explains`・`kind`)は中身も変えない**(同一性の試験 §11.1 の 7.)。そのために、既存の
+// `ConditionStats`・`statsOf`・`enumerateCandidatesOf`・`runSearchOf` の挙動そのものは変えず(新しい任意引数
+// `columns` を足しただけ。既定値は `SEARCH_COLUMNS` で、呼び出し側が省略すれば以前と同じ)、新しい `searches`
+// フィールドをそこに足す形にした。
+// - `OUTCOMES`(`longThink`・`collapse`・`decisionGap`)と、アウトカムごとに除外する列(`columnsOfOutcome`)。
+// - `searches.longThink` は既存の時間の探索(`time`)をそのまま再利用する(同じ列・同じオブジェクト)。
+// - `searches.collapse` は崩れの探索を**新しい除外列**(`fork`・`lossBand`・`inTop5`・`evalChangePrev`)で
+//   取り直したもの(既存の `collapseSearch` とは列が違うので中身も違う。計画の指示どおり既存は変えない)。
+//   条件ごとに崩れの内訳(`collapsedLong`・`collapsedQuick`)も足す。
+// - `searches.decisionGap` は新しいアウトカム(`fork && lossBand === "over300"`。`fork` が null の手は null)の
+//   探索。`ConditionStats` を広げると同一性の試験が壊れるため、専用の `OutcomeStats`(`n`・`matched`・`rate`)を
+//   別に作った(実装担当の判断)。
+// - `factors[].byOutcome`(3 つのアウトカムそれぞれの `single`/`combo`/`null`)。
 
 import { FINDING_VALUES } from "./reportData.js";
 import type { MoveFeatureRow } from "./timeFeatures.js";
@@ -79,6 +95,29 @@ export const SEARCH_COLUMNS = [
 
 export type SearchColumn = (typeof SEARCH_COLUMNS)[number];
 export type ConditionValue = Exclude<MoveFeatureRow[SearchColumn], null>;
+
+// ---- STEP CAUSE-SEARCH-1(計画 §11.1 の 1.): アウトカムの登録・アウトカムごとの除外列 ----
+
+/** 探索器が指定できるアウトカム(計画 §11.1 の 1.)。 */
+export const OUTCOMES = ["longThink", "collapse", "decisionGap"] as const;
+export type OutcomeKey = (typeof OUTCOMES)[number];
+
+/**
+ * アウトカムごとに除外する「同義になる列」(計画 §11.1 の 1.)。`longThink` の除外(`spentBucket`・`spentSec`)は
+ * もともと `SEARCH_COLUMNS` に無い列なので、集合としては空(ファイル冒頭のコメントと同じ既存の除外)。
+ * `collapse`・`decisionGap` は `fork`・`lossBand`・`inTop5`・`evalChangePrev`(実戦の手の評価差そのもの)を除く。
+ */
+const OUTCOME_EXCLUDED_COLUMNS: Record<OutcomeKey, readonly SearchColumn[]> = {
+  longThink: [],
+  collapse: ["fork", "lossBand", "inTop5", "evalChangePrev"],
+  decisionGap: ["fork", "lossBand", "inTop5", "evalChangePrev"],
+};
+
+/** アウトカムの列の集合(`SEARCH_COLUMNS` から `OUTCOME_EXCLUDED_COLUMNS` を引いたもの)。 */
+function columnsOfOutcome(outcome: OutcomeKey): SearchColumn[] {
+  const excluded = new Set<SearchColumn>(OUTCOME_EXCLUDED_COLUMNS[outcome]);
+  return SEARCH_COLUMNS.filter((column) => !excluded.has(column));
+}
 
 export interface ConditionTerm {
   column: SearchColumn;
@@ -176,6 +215,19 @@ export interface FactorEntry {
    * そのアウトカムの再現した組に組み合わせとして 1 つ以上入る」(combo)/どちらでもない(null)。
    */
   explains: { longThink: ExplainLevel; timeAndCollapse: ExplainLevel; quickCollapse: ExplainLevel };
+  /**
+   * STEP CAUSE-SEARCH-1(計画 §11.1 の 3.)。`explains` のアウトカム一般化版。3 つのアウトカム(`longThink`・
+   * `collapse`・`decisionGap`)それぞれについて、この部品が単独で線を越えるか(`single`)、単独では越えないが
+   * そのアウトカムの再現した組(`searches.<outcome>.reproduced`)に組み合わせとして入るか(`combo`)、
+   * どちらでもないか(`null`)。`byOutcome.longThink` は `explains.longThink` と同じ判定(同じ列・同じ再現した組)。
+   */
+  byOutcome: Record<OutcomeKey, ExplainLevel>;
+  /**
+   * STEP CAUSE-SEARCH-1(計画 §11.1 の 3.・6.)。`byOutcome.decisionGap` の判定に使った、部品単独の
+   * `decisionGap` の発見用・検証用の分数(`single` の decisionGap 版。`longThink`・`collapse` は既存の
+   * `single`〈`ConditionStats`〉に入っている ― `check_answer.py --time-search` が照合できるよう JSON に出す)。
+   */
+  singleDecisionGap: { discover: OutcomeStats; validate: OutcomeStats };
 }
 
 export interface SearchResult {
@@ -193,6 +245,209 @@ export interface SearchResult {
   collapseSearch: { depths: DepthSummary[]; reproduced: ReproducedCandidate[]; notReproduced: ReproducedCandidate[] };
   /** STEP TIME-CAUSE-3(計画 §9.1 の 4.)。部品ごとの共通因子の表(並びは `factorSummaryOf` を見る)。 */
   factors: FactorEntry[];
+  /**
+   * STEP CAUSE-SEARCH-1(計画 §11.1 の 2.)。アウトカムごとの探索(`longThink`・`collapse`・`decisionGap`)。
+   * `searches.longThink` は上の `depths`・`reproduced`・`notReproduced` と同じ中身(同じ列・同じオブジェクト)。
+   * `searches.collapse` は上の `collapseSearch` とは**列が違う**(`fork`・`lossBand`・`inTop5`・`evalChangePrev`
+   * を除いた列で取り直す)ため、中身(条件・数)も違う ― 計画 §11.1 の 2. の指示どおり、既存の `collapseSearch`
+   * は変えず、こちらだけ新しい除外で出す。
+   */
+  searches: SearchesResult;
+}
+
+// ---- STEP CAUSE-SEARCH-1(計画 §11.1 の 1.〜4.): decisionGap アウトカム・崩れの内訳・searches ----
+
+/**
+ * `decisionGap` アウトカムの値(計画 §11.1 の 1.)。分かれ道(`fork`)で実戦の手の損が `STANDING_BOUNDS.aheadCp`
+ * 以上(`fork && lossBand === "over300"`)。whatif-v2 の無い手(`fork` が null)は null(集計に入らない)。
+ */
+function decisionGapOf(row: MoveFeatureRow): boolean | null {
+  if (row.fork === null) return null;
+  return row.fork && row.lossBand === "over300";
+}
+
+/**
+ * アウトカム 1 つぶんの分母(`n`)・そのうち true だった数(`matched`)・割合(`rate`。`n` が 0 なら null)。
+ * `decisionGap` はこの形で数える(既存の `ConditionStats` を広げると、既存の鍵の JSON が変わってしまうため
+ * ― 実装担当の判断。ファイル冒頭のコメントを参照)。
+ */
+export interface OutcomeStats {
+  n: number;
+  matched: number;
+  rate: number | null;
+}
+
+function decisionGapStatsOf(rows: readonly MoveFeatureRow[], condition: Condition): OutcomeStats {
+  let n = 0;
+  let matched = 0;
+  for (const row of rows) {
+    let matches = true;
+    for (const term of condition) {
+      if (valueOfColumn(row, term.column) !== term.value) {
+        matches = false;
+        break;
+      }
+    }
+    if (!matches) continue;
+    const value = decisionGapOf(row);
+    if (value === null) continue;
+    n += 1;
+    if (value) matched += 1;
+  }
+  return { n, matched, rate: n === 0 ? null : matched / n };
+}
+
+function decisionGapBaseOf(rows: readonly MoveFeatureRow[]): { n: number; matched: number } {
+  let n = 0;
+  let matched = 0;
+  for (const row of rows) {
+    const value = decisionGapOf(row);
+    if (value === null) continue;
+    n += 1;
+    if (value) matched += 1;
+  }
+  return { n, matched };
+}
+
+/** `isAdoptedOf`/`isReproducedOf` の `OutcomeStats` 版(同じ値の使い回し、同じ掛け算で比べる考え方)。 */
+function isOutcomeAdoptedOf(stats: OutcomeStats, baseN: number, baseMatched: number): boolean {
+  if (baseN === 0) return false;
+  return stats.n >= FINDING_VALUES.minPairs && stats.matched * baseN >= baseMatched * FINDING_VALUES.ratio * stats.n;
+}
+
+function isOutcomeReproducedOf(stats: OutcomeStats, baseN: number, baseMatched: number): boolean {
+  if (baseN === 0) return false;
+  return stats.n >= TIME_SEARCH_VALUES.validateMinN && stats.matched * baseN >= baseMatched * FINDING_VALUES.ratio * stats.n;
+}
+
+export interface DecisionGapCandidate {
+  depth: 1 | 2 | 3;
+  condition: Condition;
+  discover: OutcomeStats;
+}
+
+export interface DecisionGapReproducedCandidate extends DecisionGapCandidate {
+  validate: OutcomeStats;
+}
+
+export interface DecisionGapSearchResult {
+  depths: DepthSummary[];
+  reproduced: DecisionGapReproducedCandidate[];
+  notReproduced: DecisionGapReproducedCandidate[];
+}
+
+/** `decisionGap` アウトカムの探索(計画 §11.1 の 2.。`runSearchOf` の `decisionGap` 版)。 */
+function runDecisionGapSearchOf(
+  discoverRows: readonly MoveFeatureRow[],
+  validateRows: readonly MoveFeatureRow[],
+  columns: readonly SearchColumn[],
+): DecisionGapSearchResult {
+  const discoverBase = decisionGapBaseOf(discoverRows);
+  const validateBase = decisionGapBaseOf(validateRows);
+  const validateRate0 = validateBase.n === 0 ? 0 : validateBase.matched / validateBase.n;
+  const chanceProbability = chanceLineProbabilityOf(validateRate0, TIME_SEARCH_VALUES.validateMinN, FINDING_VALUES.ratio);
+
+  const depths: DepthSummary[] = [];
+  const reproduced: DecisionGapReproducedCandidate[] = [];
+  const notReproduced: DecisionGapReproducedCandidate[] = [];
+
+  for (const depth of [1, 2, 3] as const) {
+    const shapes = enumerateCandidatesOf(discoverRows, depth, columns);
+    const candidates: DecisionGapCandidate[] = shapes.map((c) => ({
+      depth: c.depth,
+      condition: c.condition,
+      discover: decisionGapStatsOf(discoverRows, c.condition),
+    }));
+    const adopted = candidates.filter((c) => isOutcomeAdoptedOf(c.discover, discoverBase.n, discoverBase.matched));
+    let reproducedCount = 0;
+    for (const candidate of adopted) {
+      const validate = decisionGapStatsOf(validateRows, candidate.condition);
+      const entry: DecisionGapReproducedCandidate = { ...candidate, validate };
+      if (isOutcomeReproducedOf(validate, validateBase.n, validateBase.matched)) {
+        reproducedCount += 1;
+        reproduced.push(entry);
+      } else {
+        notReproduced.push(entry);
+      }
+    }
+    depths.push({ depth, tried: shapes.length, adopted: adopted.length, reproduced: reproducedCount, chanceReproduced: adopted.length * chanceProbability });
+  }
+
+  return { depths, reproduced, notReproduced };
+}
+
+/**
+ * STEP CAUSE-SEARCH-1(計画 §11.1 の 4.)。`collapse` アウトカムの `ConditionStats` に、崩れの内訳
+ * (`collapsedLong`・`collapsedQuick`)を足したもの。
+ */
+export interface CollapseConditionStats extends ConditionStats {
+  /** 崩れた手(`collapse === true`)のうち `spentBucket === ">9"`(長考した崩れ)。 */
+  collapsedLong: number;
+  /** 崩れた手のうち `spentBucket === "≤1"`(速く指した崩れ)。 */
+  collapsedQuick: number;
+}
+
+function collapseBreakdownStatsOf(rows: readonly MoveFeatureRow[], condition: Condition): CollapseConditionStats {
+  const base = statsOf(rows, condition);
+  let collapsedLong = 0;
+  let collapsedQuick = 0;
+  for (const row of rows) {
+    let matches = true;
+    for (const term of condition) {
+      if (valueOfColumn(row, term.column) !== term.value) {
+        matches = false;
+        break;
+      }
+    }
+    if (!matches) continue;
+    if (row.collapse !== true) continue;
+    if (row.spentBucket === ">9") collapsedLong += 1;
+    else if (row.spentBucket === "≤1") collapsedQuick += 1;
+  }
+  return { ...base, collapsedLong, collapsedQuick };
+}
+
+export interface CollapseReproducedCandidate {
+  depth: 1 | 2 | 3;
+  condition: Condition;
+  discover: CollapseConditionStats;
+  validate: CollapseConditionStats;
+}
+
+export interface CollapseOutcomeSearchResult {
+  depths: DepthSummary[];
+  reproduced: CollapseReproducedCandidate[];
+  notReproduced: CollapseReproducedCandidate[];
+}
+
+/**
+ * `collapse` アウトカムの探索(計画 §11.1 の 2.)。既存の `runSearchOf`(`COLLAPSE_OBJECTIVE`)を、新しい除外列
+ * (`columnsOfOutcome("collapse")`)で取り直し、各条件に崩れの内訳を足す。既存の `collapseSearch`(全列)は
+ * 呼び出し側で別に計算するので、ここでは触らない。
+ */
+function runOutcomeCollapseSearchOf(
+  discoverRows: readonly MoveFeatureRow[],
+  validateRows: readonly MoveFeatureRow[],
+  discoverBase: RoleBase,
+  validateBase: RoleBase,
+  columns: readonly SearchColumn[],
+): CollapseOutcomeSearchResult {
+  const base = runSearchOf(discoverRows, validateRows, discoverBase, validateBase, COLLAPSE_OBJECTIVE, columns);
+  const withBreakdown = (list: readonly ReproducedCandidate[]): CollapseReproducedCandidate[] =>
+    list.map((c) => ({
+      depth: c.depth,
+      condition: c.condition,
+      discover: collapseBreakdownStatsOf(discoverRows, c.condition),
+      validate: collapseBreakdownStatsOf(validateRows, c.condition),
+    }));
+  return { depths: base.depths, reproduced: withBreakdown(base.reproduced), notReproduced: withBreakdown(base.notReproduced) };
+}
+
+/** STEP CAUSE-SEARCH-1(計画 §11.1 の 2.)。アウトカムごとの探索(`SearchResult.searches` の中身)。 */
+export interface SearchesResult {
+  longThink: RunSearchResult;
+  collapse: CollapseOutcomeSearchResult;
+  decisionGap: DecisionGapSearchResult;
 }
 
 function valueOfColumn(row: MoveFeatureRow, column: SearchColumn): ConditionValue | null {
@@ -247,14 +502,14 @@ function combinationsOf<T>(items: readonly T[], k: number): T[][] {
  * (実装担当の判断: 列の値域どうしの直積〈n = 0 の組も含む〉ではなく、実際に手に出会った組だけを数える
  * ― 「試した組」を「実際に起きた条件の組」として扱う。組み合わせ爆発も避けられる)。
  */
-export function enumerateCandidatesOf(rows: readonly MoveFeatureRow[], depth: 1 | 2 | 3): SearchCandidate[] {
+export function enumerateCandidatesOf(rows: readonly MoveFeatureRow[], depth: 1 | 2 | 3, columns: readonly SearchColumn[] = SEARCH_COLUMNS): SearchCandidate[] {
   const candidates: SearchCandidate[] = [];
-  for (const columns of combinationsOf(SEARCH_COLUMNS, depth)) {
+  for (const columnSet of combinationsOf(columns, depth)) {
     const groups = new Map<string, { condition: ConditionTerm[]; n: number; longThink: number; collapseCounted: number; collapsed: number }>();
     for (const row of rows) {
       const terms: ConditionTerm[] = [];
       let ok = true;
-      for (const column of columns) {
+      for (const column of columnSet) {
         const value = valueOfColumn(row, column);
         if (value === null) {
           ok = false;
@@ -427,7 +682,8 @@ const COLLAPSE_OBJECTIVE: Objective = {
   rateOf: (base) => (base.collapseCounted === 0 ? 0 : base.collapsed / base.collapseCounted),
 };
 
-interface RunSearchResult {
+/** STEP CAUSE-SEARCH-1(計画 §11.1 の 2.)。`export` した(`SearchesResult.longThink` の型に使う)。 */
+export interface RunSearchResult {
   depths: DepthSummary[];
   reproduced: ReproducedCandidate[];
   notReproduced: ReproducedCandidate[];
@@ -436,6 +692,8 @@ interface RunSearchResult {
 /**
  * 深さ 1〜3 の探索を 1 回ぶん(目的変数 `objective` で採用候補・再現を判定する。`kind` は目的変数によらず
  * 常に「時間」「崩れ」の両方で計算する ― STEP TIME-CAUSE-3 §9.1 の 3.「同じ関数で目的変数を替えて一般化」)。
+ * `columns` は STEP CAUSE-SEARCH-1(計画 §11.1 の 1.)で足した任意引数(既定は `SEARCH_COLUMNS`。省略すれば
+ * 以前と同じ列を使うので、既存の呼び出し(`time`・`collapse`)の挙動は変わらない ― 同一性の試験 §11.1 の 7.)。
  */
 function runSearchOf(
   discoverRows: readonly MoveFeatureRow[],
@@ -443,6 +701,7 @@ function runSearchOf(
   discoverBase: RoleBase,
   validateBase: RoleBase,
   objective: Objective,
+  columns: readonly SearchColumn[] = SEARCH_COLUMNS,
 ): RunSearchResult {
   const depths: DepthSummary[] = [];
   const reproduced: ReproducedCandidate[] = [];
@@ -450,7 +709,7 @@ function runSearchOf(
   const chanceProbability = chanceLineProbabilityOf(objective.rateOf(validateBase), TIME_SEARCH_VALUES.validateMinN, FINDING_VALUES.ratio);
 
   for (const depth of [1, 2, 3] as const) {
-    const candidates = enumerateCandidatesOf(discoverRows, depth);
+    const candidates = enumerateCandidatesOf(discoverRows, depth, columns);
     const adopted = candidates.filter((candidate) => objective.isAdopted(candidate.discover, discoverBase));
     let reproducedCount = 0;
     for (const candidate of adopted) {
@@ -498,8 +757,13 @@ export function factorSummaryOf(
   validateBase: RoleBase,
   timeReproduced: readonly ReproducedCandidate[],
   collapseReproduced: readonly ReproducedCandidate[],
+  searches: SearchesResult,
 ): FactorEntry[] {
   const singles = enumerateCandidatesOf(discoverRows, 1);
+  // STEP CAUSE-SEARCH-1(計画 §11.1 の 3.)。`decisionGap` の全体の分母・matched(発見用・検証用)。
+  const decisionGapDiscoverBase = decisionGapBaseOf(discoverRows);
+  const decisionGapValidateBase = decisionGapBaseOf(validateRows);
+
   const entries: FactorEntry[] = singles.map((single) => {
     const term = single.condition[0]!;
     const validateStats = statsOf(validateRows, single.condition);
@@ -519,6 +783,26 @@ export function factorSummaryOf(
       quickCollapse: singleKind === "C" ? "single" : inKindC > 0 ? "combo" : null,
     };
 
+    // STEP CAUSE-SEARCH-1(計画 §11.1 の 3.)。`collapse`(除外列に関わらず、部品単独の崩れ率で判定)。
+    const singleCollapseCrosses =
+      isCollapseAdoptedOf(single.discover, discoverBase.collapseCounted, discoverBase.collapsed) &&
+      isCollapseReproducedOf(validateStats, validateBase.collapseCounted, validateBase.collapsed);
+    const inSearchesCollapse = searches.collapse.reproduced.some((c) => containsTerm(c.condition, term));
+
+    // `decisionGap`(部品単独の decisionGap 率で判定。除外列でも single にはなりうる ― 計画どおり)。
+    const singleDecisionGapDiscover = decisionGapStatsOf(discoverRows, single.condition);
+    const singleDecisionGapValidate = decisionGapStatsOf(validateRows, single.condition);
+    const singleDecisionGapCrosses =
+      isOutcomeAdoptedOf(singleDecisionGapDiscover, decisionGapDiscoverBase.n, decisionGapDiscoverBase.matched) &&
+      isOutcomeReproducedOf(singleDecisionGapValidate, decisionGapValidateBase.n, decisionGapValidateBase.matched);
+    const inSearchesDecisionGap = searches.decisionGap.reproduced.some((c) => containsTerm(c.condition, term));
+
+    const byOutcome: FactorEntry["byOutcome"] = {
+      longThink: explains.longThink,
+      collapse: singleCollapseCrosses ? "single" : inSearchesCollapse ? "combo" : null,
+      decisionGap: singleDecisionGapCrosses ? "single" : inSearchesDecisionGap ? "combo" : null,
+    };
+
     return {
       column: term.column,
       value: term.value,
@@ -529,6 +813,8 @@ export function factorSummaryOf(
       inCollapseReproduced,
       inKindC,
       explains,
+      byOutcome,
+      singleDecisionGap: { discover: singleDecisionGapDiscover, validate: singleDecisionGapValidate },
     };
   });
 
@@ -549,9 +835,19 @@ export function searchOf(discoverRows: readonly MoveFeatureRow[], validateRows: 
   const discoverBase = roleBaseOf(discoverRows);
   const validateBase = roleBaseOf(validateRows);
 
+  // 既存の 2 つの探索(時間・崩れ)。**列・引数はそのまま**(同一性の試験 §11.1 の 7.)。
   const time = runSearchOf(discoverRows, validateRows, discoverBase, validateBase, TIME_OBJECTIVE);
   const collapse = runSearchOf(discoverRows, validateRows, discoverBase, validateBase, COLLAPSE_OBJECTIVE);
-  const factors = factorSummaryOf(discoverRows, validateRows, discoverBase, validateBase, time.reproduced, collapse.reproduced);
+
+  // STEP CAUSE-SEARCH-1(計画 §11.1 の 2.)。アウトカムごとの探索。`searches.longThink` は `time` をそのまま
+  // 再利用する(同じ列〈exclusion 無し〉・同じオブジェクト ― 既存と同じ中身)。
+  const searches: SearchesResult = {
+    longThink: time,
+    collapse: runOutcomeCollapseSearchOf(discoverRows, validateRows, discoverBase, validateBase, columnsOfOutcome("collapse")),
+    decisionGap: runDecisionGapSearchOf(discoverRows, validateRows, columnsOfOutcome("decisionGap")),
+  };
+
+  const factors = factorSummaryOf(discoverRows, validateRows, discoverBase, validateBase, time.reproduced, collapse.reproduced, searches);
 
   return {
     discover: roleSummaryOf(discoverBase),
@@ -561,5 +857,6 @@ export function searchOf(discoverRows: readonly MoveFeatureRow[], validateRows: 
     notReproduced: time.notReproduced,
     collapseSearch: collapse,
     factors,
+    searches,
   };
 }
