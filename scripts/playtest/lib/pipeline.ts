@@ -72,9 +72,21 @@ export interface PipelineArgs {
    * 渡さなければ既定(v2。`whatifPath`・`whatifCommand` の既定 2 と同じ)。
    */
   whatifSideVersion?: 1 | 2;
+  /**
+   * STEP DELIVER-1(docs/STEP_DELIVER1_PLAN_2026-09-25.md §3 の 1)。S5(`reportData.ts`)へ**中継するだけ**の値。
+   * `--time-limit-sec` を渡したときだけ存在する(**任意のキー**。`report` と同じ理由で、渡さなければキー自体が
+   * 付かない ― 既存の `toStrictEqual` の試験の形を壊さないため)。渡さなければ今までと同じ = `reportData.ts` の
+   * 既定(`byLeft` は null)。新しい既定値はここに作らない。
+   */
+  timeLimitSec?: number;
+  /**
+   * STEP DELIVER-1(計画 §3 の 1)。S5 へ中継するだけ。`--previous` を渡したときだけ存在する(**任意のキー**)。
+   * `--work` と同じ理由で絶対パスにする(S5 は cwd がリポジトリの根で起きるが、呼び出し側の cwd に依らせない)。
+   */
+  previous?: string;
 }
 
-const SINGLE_FLAGS = ["--person", "--kifu-dir", "--work", "--me", "--parallel", "--compare-person", "--until", "--evaluator", "--name", "--title", "--today", "--side-version"] as const;
+const SINGLE_FLAGS = ["--person", "--kifu-dir", "--work", "--me", "--parallel", "--compare-person", "--until", "--evaluator", "--name", "--title", "--today", "--side-version", "--time-limit-sec", "--previous"] as const;
 type SingleFlag = (typeof SINGLE_FLAGS)[number];
 
 const DEFAULT_PARALLEL = 5;
@@ -161,6 +173,18 @@ export function parsePipelineArgs(argv: readonly string[]): PipelineArgs {
     throw new PipelineArgError("--until が report-data・prose・pdf のときは --name・--title・--today がすべて必須(推測しない)");
   }
 
+  // STEP DELIVER-1(計画 §3 の 1)。中継するだけなので、値の検証は「正の整数か」にとどめる(新しい既定値は作らない)。
+  const timeLimitSecRaw = single.get("--time-limit-sec");
+  let timeLimitSec: number | undefined;
+  if (timeLimitSecRaw !== undefined) {
+    const parsed = Number(timeLimitSecRaw);
+    if (!Number.isInteger(parsed) || parsed <= 0) throw new PipelineArgError(`--time-limit-sec は正の整数(秒): ${timeLimitSecRaw}`);
+    timeLimitSec = parsed;
+  }
+  // STEP DELIVER-1(計画 §3 の 1)。--previous は前回の patient_report_data.json のパス(中身は見ない ― 見るのは reportData.ts)。
+  const previousRaw = single.get("--previous");
+  const previous = previousRaw === undefined ? undefined : path.resolve(previousRaw);
+
   // STEP WHATIF 作業 4(計画 §9.3)。--side-version は 1 か 2 だけ(推測しない)。
   const sideVersionRaw = single.get("--side-version");
   let whatifSideVersion: 1 | 2 | undefined;
@@ -187,6 +211,9 @@ export function parsePipelineArgs(argv: readonly string[]): PipelineArgs {
     ...(whatif ? { whatif: true as const } : {}),
     // --side-version を付けなければキー自体を付けない(同じ理由)
     ...(whatifSideVersion !== undefined ? { whatifSideVersion } : {}),
+    // STEP DELIVER-1。--time-limit-sec・--previous を付けなければキー自体を付けない(同じ理由)
+    ...(timeLimitSec !== undefined ? { timeLimitSec } : {}),
+    ...(previous !== undefined ? { previous } : {}),
   };
 }
 
@@ -285,6 +312,22 @@ export function whatifPath(personDir: string, id: string, sideVersion: 1 | 2 = 2
   return path.join(personDir, sideVersion === 1 ? "whatif" : "whatif-v2", `${id}.jsonl`);
 }
 
+/**
+ * STEP DELIVER-1(計画 §3 の 2)。READ 工程(`read.ts`)の出力先(局ごと)。`whatif-v2/` と対になる `read/`
+ * (v1 には対応する `read/` が無い ― `read.ts` の入力は whatif-v2 だけ。`--side-version 1` のときは READ を回さない)。
+ */
+export function readPath(personDir: string, id: string): string {
+  return path.join(personDir, "read", `${id}.jsonl`);
+}
+
+/**
+ * STEP DELIVER-1(計画 §3 の 2)。`read.ts` へ渡す引数。`--threads` は渡さない(道具自身の既定 = 1 のまま。
+ * 表と違う値を渡す旗はここに作らない ― `whatifCommand` と同じ流儀)。
+ */
+export function readCommand(whatifV2Path: string, fixedKifuPath: string, out: string): string[] {
+  return ["--whatif", whatifV2Path, "--kifu", fixedKifuPath, "--out", out];
+}
+
 export function timingPath(work: string): string {
   return path.join(work, "timing.jsonl");
 }
@@ -360,6 +403,8 @@ export type ToolName =
   // STEP WHATIF 作業 1(docs/STEP_WHATIF_PLAN_2026-09-22.md)。`--whatif` を付けたときだけ、
   // diagnose の後に局ごとに呼ぶ(--until には加えない。任意の段)。
   | "whatif"
+  // STEP DELIVER-1(計画 §3 の 2)。`--whatif`(v2)のときだけ、whatif の段の後ろに局ごとに呼ぶ。
+  | "read"
   // STEP WHATIF 作業 2。`--whatif` かつ `--until pdf` のときだけ、本編 PDF の後に呼ぶ(付録 2「分かれ道」)。
   | "whatif-report-data"
   | "report-pdf-render-whatif";
@@ -429,7 +474,15 @@ export function reportDataCommand(
   auditOut: string,
   sfensOut: string,
   proseRequestOut: string,
+  /**
+   * STEP DELIVER-1(計画 §3 の 1)。**渡されたときだけ**末尾に `--time-limit-sec <秒>`・`--previous <path>` を足す
+   * (既定 = 渡さない = 今までの出力のまま)。値は中継するだけで、ここでは何も決めない。
+   */
+  relay: { timeLimitSec?: number; previous?: string } = {},
 ): string[] {
+  const tail: string[] = [];
+  if (relay.timeLimitSec !== undefined) tail.push("--time-limit-sec", String(relay.timeLimitSec));
+  if (relay.previous !== undefined) tail.push("--previous", relay.previous);
   return [
     "--person",
     person,
@@ -453,6 +506,7 @@ export function reportDataCommand(
     sfensOut,
     "--out-prose-request",
     proseRequestOut,
+    ...tail,
   ];
 }
 
@@ -823,6 +877,46 @@ export async function runPipeline(args: PipelineArgs, games: readonly GameJob[],
         failures.push({ gameId: result.job.id, stage: "unexpected-whatif", message: result.error instanceof Error ? result.error.message : String(result.error) });
       }
     }
+
+    // ---- STEP DELIVER-1(計画 §3 の 2)。whatif の段の**後ろ**に、局ごとに read.ts を回す。
+    // `read.ts` の入力は whatif-v2 なので、**v2 のときだけ**回す(`--side-version 1` では whatif-v2 が無い)。
+    // 済みの判定は他の段と同じ流儀(最後の行が `"kind":"summary"` ― `read.ts` の summary 行もその形)。
+    // `--whatif` を付けない実行はこのブロックに一切入らない(上の `args.whatif === true` の中)。
+    if (whatifSideVersion === 2) {
+      fs.ensureDir(path.join(personDir, "read"));
+
+      async function processRead(job: GameJob): Promise<void> {
+        const startedAt = clock();
+        const gp = gamePaths(personDir, job.id);
+        const wPath = whatifPath(personDir, job.id, whatifSideVersion);
+        const rPath = readPath(personDir, job.id);
+        let rc: number | "skip" = "skip";
+
+        if (!stage1Done(fs.readText(wPath))) {
+          failures.push({ gameId: job.id, stage: "read", message: "whatif-v2 の記録が無いので read を実行できない" });
+        } else if (!fixedKifuDone(fs.readText(gp.fixedKifuPath), job.id)) {
+          failures.push({ gameId: job.id, stage: "read", message: "fixed 棋譜が無いので read を実行できない" });
+        } else if (!stage1Done(fs.readText(rPath))) {
+          const result = await run("read", readCommand(wPath, gp.fixedKifuPath, rPath));
+          rc = result.code;
+          if (!stage1Done(fs.readText(rPath))) {
+            failures.push({ gameId: job.id, stage: "read", message: `read.ts rc=${result.code}: read の記録が出来ていない` });
+          }
+        }
+
+        const finishedAt = clock();
+        const line = timingLineOf({ gameId: job.id, startedAt, finishedAt, rc, stage: "read" });
+        timingLines.push(line);
+        fs.appendText(tPath, line);
+      }
+
+      const readResults = await runWithLimit(games, args.parallel, processRead);
+      for (const result of readResults) {
+        if (!result.ok && result.error !== undefined) {
+          failures.push({ gameId: result.job.id, stage: "unexpected-read", message: result.error instanceof Error ? result.error.message : String(result.error) });
+        }
+      }
+    }
   }
 
   if (untilRank >= STAGES.indexOf("gate") && args.compareDirs.length > 0) {
@@ -887,7 +981,12 @@ export async function runPipeline(args: PipelineArgs, games: readonly GameJob[],
         const kifuFiles = successGames.map((job) => gamePaths(personDir, job.id).fixedKifuPath);
         const result = await run(
           "report-data",
-          reportDataCommand(args.person, report, materialFiles, kifuFiles, gOut, rp.patient, rp.audit, rp.sfens, rp.proseRequest),
+          // STEP DELIVER-1(計画 §3 の 1)。`--time-limit-sec`・`--previous` は**中継するだけ**
+          // (渡されていなければ `reportDataCommand` は末尾に何も足さない = 今までと同じ引数)。
+          reportDataCommand(args.person, report, materialFiles, kifuFiles, gOut, rp.patient, rp.audit, rp.sfens, rp.proseRequest, {
+            ...(args.timeLimitSec !== undefined ? { timeLimitSec: args.timeLimitSec } : {}),
+            ...(args.previous !== undefined ? { previous: args.previous } : {}),
+          }),
         );
         if (!reportDataDone(fs.readText(rp.patient), fs.readText(rp.audit), fs.readText(rp.sfens))) {
           failures.push({ gameId: "*", stage: "report-data", message: `reportData.ts rc=${result.code}: 出力が揃っていない` });

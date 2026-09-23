@@ -118,6 +118,13 @@ function runnerOf(fs: ReturnType<typeof makeFakeFs>, calls: Array<{ tool: string
       fs.writeText(outPath, validWhatif());
       return { code: 0, stdout: "", stderr: "" };
     }
+    // STEP DELIVER-1(計画 §3 の 2)。whatif の後ろに READ 工程が繋がったので、偽の道具も
+    // read.ts の出力を書く(この試験が見張るのは whatif の段なので、read は「素直に済む」ものとして扱う)。
+    if (tool === "read") {
+      const outIndex = args.indexOf("--out");
+      fs.writeText(args[outIndex + 1]!, validWhatif());
+      return { code: 0, stdout: "", stderr: "" };
+    }
     return { code: 0, stdout: "", stderr: "" };
   };
 }
@@ -246,7 +253,12 @@ describe("runPipeline: --whatif(diagnose の後に局ごとに呼ぶ)", () => {
     const result = await runPipeline(baseArgs({ whatif: true }), [senteJob("g1"), senteJob("g2")], fs, runnerOf(fs, calls, { failWhatifFor: "g1" }));
     expect(calls.filter((c) => c.tool === "whatif")).toHaveLength(2);
     expect(fs.readText(whatifPath(personDir, "g2"))).toBe(validWhatif());
-    expect(result.failures).toEqual([{ gameId: "g1", stage: "whatif", message: expect.stringContaining("whatif.ts rc=1") }]);
+    // STEP DELIVER-1(計画 §3 の 2)。whatif が書けなかった局は READ も回せないので、read の段でも失敗が 1 件増える
+    // (whatif の失敗が他の局を止めないことを見張るのがこの試験の趣旨。g2 は whatif も read も済む)。
+    expect(result.failures).toEqual([
+      { gameId: "g1", stage: "whatif", message: expect.stringContaining("whatif.ts rc=1") },
+      { gameId: "g1", stage: "read", message: expect.stringContaining("whatif-v2 の記録が無い") },
+    ]);
     expect(result.exitCode).toBe(1);
   });
 
@@ -289,7 +301,9 @@ describe("runPipeline: --whatif を付けない実行は変わらない", () => 
     for (const line of lines) expect(Object.hasOwn(line, "stage")).toBe(false);
   });
 
-  it("2 つの実行(--whatif あり・無し)で、道具の呼び出し(whatif 以外)・gate.jsonl の有無・exitCode が同じ", async () => {
+  // STEP DELIVER-1(計画 §3 の 2)。READ は `--whatif` の中だけで動くので、比べる側から `read` も外す
+  // (見張る趣旨は「`--whatif` を付けない実行が 1 バイトも変わらないこと」で、そこは変わっていない)。
+  it("2 つの実行(--whatif あり・無し)で、道具の呼び出し(whatif・read 以外)・gate.jsonl の有無・exitCode が同じ", async () => {
     const personDir = personWorkDir("/w", "p1");
     const fsA = readyFs(personDir, ["g1"]);
     const fsB = readyFs(personDir, ["g1"]);
@@ -297,7 +311,9 @@ describe("runPipeline: --whatif を付けない実行は変わらない", () => 
     const callsB: Array<{ tool: string; args: string[] }> = [];
     const resultA = await runPipeline(baseArgs({ whatif: true }), [senteJob("g1")], fsA, runnerOf(fsA, callsA));
     const resultB = await runPipeline(baseArgs(), [senteJob("g1")], fsB, runnerOf(fsB, callsB));
-    expect(callsA.filter((c) => c.tool !== "whatif").map((c) => c.tool)).toStrictEqual(callsB.map((c) => c.tool));
+    expect(callsA.filter((c) => c.tool !== "whatif" && c.tool !== "read").map((c) => c.tool)).toStrictEqual(callsB.map((c) => c.tool));
+    // --whatif 無しの側では read は 1 度も呼ばれない
+    expect(callsB.filter((c) => c.tool === "read")).toStrictEqual([]);
     expect(fsA.readText(gateOutPath(personDir))).toBe(fsB.readText(gateOutPath(personDir)));
     expect(resultA.exitCode).toBe(resultB.exitCode);
   });

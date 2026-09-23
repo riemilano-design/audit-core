@@ -389,6 +389,55 @@ markdown を見出し(`#`・`##`・`###`)・箇条書き(`-`・`1.`)・表(`|...
   場合の両方)での rc=0 確認と、実データ(`tatsunami20` = 発見用・`tatsunami3` = 検証用)での実行時確認
   (rc=0・ページ数〈10 ページ〉・禁止語 0・テキスト抽出での目視確認)
 
+## B の「分かっている事実」を機械で組む(`answer_facts.py`。STEP DELIVER-1、docs/STEP_DELIVER1_PLAN_2026-09-25.md §3 の 4)
+
+```
+python3 -X utf8 answer_facts.py --name <表示名> \
+  --patient <patient_report_data.json> --time-limit-sec <秒> [--patient … --time-limit-sec … …] \
+  [--whatif-v2-dir <dir>]… [--read-dir <dir>]… \
+  --direct <direct_answers.json> --direct <final_positions.json> \
+  --time-cause <time_cause.json> [--time-search <time_cause_search.json>] \
+  --out <md>
+```
+
+**数を自分で計算しない。** `check_answer.py` を import して、その `PatientFile`・`combined_groups_of`
+(`CombinedGroup`)・`read_combined_of`・`side_match_of`・`direct_materials_of`・`time_cause_materials_of`・
+`tag_of_time_limit_sec` が既に作っている材料から数を**引くだけ**である。**`check_answer.py` は 1 バイトも
+変えていない。** 新しい集計・新しい中央値・新しい分数はここに無い。
+
+- 出力は基準版(v7)と**同じ見出し構造**の md。機械で組むのは「分かっている事実」の 4 ブロック(14 個の
+  箇条書き)だけで、文の形は基準版のまま・差し替えるのは数だけ。それ以外は `<!-- TODO: 読み -->` で空ける
+  (「この冊子の約束」だけは数を含まないので固定文)。
+- 数が引けない箇条書きは、その 1 行だけ `<!-- TODO: 読み -->` に落とし、標準エラーへ
+  「どの数が出せなかったか」を出す(黙って省かない)。
+- **組の見分け**: 「3 分の組」は `check_answer.py` と同じ `min3`/`min10` のタグ。「今回の組」は、その
+  タグの `--patient` のうち**最後に渡されたもの**(`deliver.ts` は組を前回 → 今回の順に渡す。実装担当の判断)。
+- **中盤の長考の回数**は `longThinkCountByPhase.mid` を使う(局ぜんたいの `longThinkTotal` ではない。
+  基準版の「中盤 N 秒の中身…長考が M 回ずつ」は中盤の回数と一致する)。
+- **READ を回した局の数**は `--read-dir` の `*.jsonl` の**ファイル数**(局ごとに 1 本)。数の集計ではなく
+  入力の数え上げ(実装担当の判断)。
+- 実測(固定材料 44 局、基準版と同じ材料): 14 / 14 を生成。基準版の同じ 4 ブロックと数の一覧が
+  **順序つきで完全一致(118 個)**、かつ**文字まで同一**。生成物は `check_answer.py` rc=0
+  (校正: 1 つの数を故意に変えた版は rc=1 で「データに無い数」として落ちる)。
+
+## 納品フォルダの伏せ字・個人情報の検査(`check_delivery.py`。STEP DELIVER-1、計画 §3 の 6)
+
+```
+python3 -X utf8 check_delivery.py <顧客フォルダ> [--forbid <語>]…
+```
+
+`<顧客フォルダ>` 直下の `*.pdf`(`fitz` でテキスト抽出)と `*.md` に、次が無いことを確かめる。あれば
+**rc=1** で、どのファイルの何ページ・何行に何があったかを標準エラーへ出す。`direct/` の JSON は対象外。
+
+- `--forbid <語>`(繰り返し可)、`@`、`/Users/`、「水匠」
+- 禁止語 18 語(悪手・弱点・癖・型・傾向・原因・ミス・見落とし・改善・練習・必ず・明らか・あなた・
+  ご自身・いつも・がち・クセ・パターン)。**この 18 語は書き写さず、`check_answer.py` の `BANNED_WORDS` の
+  先頭 18 語を import して使う**(語のリストを二重に持たない。司令塔の指示)
+- 実測(固定材料の納品フォルダ 7 本 = PDF 5 冊 + md 2 本): 禁止語 18 語・`@`・`/Users/`・「水匠」は
+  **0 件**(rc=0)。校正: 「原因」と `@` を含む md を置くと 2 件を挙げて rc=1。
+- **注意**: `--forbid` に**お客さま自身の表示名**を渡すと必ず落ちる(本人の冊子に本人の名前が出るのは
+  正しい)。実測では 42 件(本編・付録 1・B の本文)。`--forbid` は「出てはいけない語」に使う。
+
 ## 既知の欠落(2026-09-21 独立監査 REVISE で明記)
 
 別冊(`render_appendix.py`)は、`audit_metrics.json` の `candidate.reps` の欄(`side`・`transitionJp`・`capUsJp` ほか)と

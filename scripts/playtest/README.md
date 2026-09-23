@@ -884,6 +884,84 @@ npx tsx scripts/playtest/timeSearch.ts \
 - `check_answer.py --time-search` の登録に `searches.*`(viii〜ix)・`singleDecisionGap`(x)を足した(別コミット)。
   詳しくは `report-pdf/README.md` の同じ見出しを参照。
 
+## 納品までを 1 コマンドで通す(`deliver.ts`・`lib/deliver.ts`。STEP DELIVER-1、docs/STEP_DELIVER1_PLAN_2026-09-25.md)
+
+**分析ロジックは 1 バイトも変えていない。** この道具は既存の道具を規定順に**子プロセスで呼ぶだけ**で、
+判断・値・文言を持たない(`pipeline.ts` と同じ流儀)。引数の組み立て・段の順・済みの判定は
+`lib/deliver.ts`(純粋。`lib/deliver.test.ts` に試験)にあり、`deliver.ts` は子プロセスの起動と fs だけ。
+
+```
+npx tsx scripts/playtest/deliver.ts \
+  --person <id> --kifu-dir <dir> --work <dir> --time-limit-sec <秒> \
+  --name <表示名> --title <タイトル> --today <YYYY-MM-DD> --out <顧客フォルダ> \
+  [--previous-work <前回の work>] [--parallel <N>] \
+  [--group-work <work> --group-time-limit-sec <秒>]… \
+  [--forbid <語>]… [--dry-run] [--from <段の名前>]
+```
+
+- `--group-work`/`--group-time-limit-sec`: 付録 3・付録 4・B の検査で**組をまたいで合算する組の一覧を、
+  順序つきで明示する**(対で同じ回数並べる)。組の順が、付録 3・付録 4・検査の引数の並びを決める。
+  渡さないときの既定は `[--previous-work(あれば), --work]` の順。`--work` は一覧にちょうど 1 回含めること。
+- `--from <段の名前>`: 人間の確認点で止まった後、その段から再開する。各段に済みの判定があるので、
+  既定(最初から)でも再実行は無駄にならない。
+- `--dry-run`: 何も実行・書き込みせず、段ごとの `{stage, tool, cmd, args, action, reason}` を JSON で出す。
+- `--out` の安全装置: `--out` に `deliver.ts` 自身が書く名前以外のファイルがあれば、何もせず止まる。
+
+### 工程ごとの表(入力 / 出力 / 所要 / 人間の操作 / 停止条件)
+
+所要は固定材料 44 局(3 組)での実測(`deliver_log.jsonl`。段 1〜4 は局ごとの材料が済みだったため、
+S1〜S4・whatif・READ は済みの判定で飛んでいる。**エンジンを実際に回したのは段 6 だけ**)。
+
+| # | 段 | 入力 | 出力 | 所要 | 人間の操作 | 停止条件 |
+|---|---|---|---|---|---|---|
+| 1 | `pipeline-data` | `--kifu-dir` の棋譜、前回の `patient_report_data.json` | `<work>/p2/…`(S1〜S4・whatif-v2・read)、`<work>/report/patient_report_data.json` 他 | 24.9 秒 | なし | `pipeline.ts` rc≠0 |
+| 2 | `prose-gate` | `<work>/report/prose.json` | — | 0.0 秒 | **言い換えを書く**(`prose-request.md` を基に) | `prose.json` が無ければ止まる(`humanGate`) |
+| 3 | `pipeline-pdf` | 同 1 + `prose.json` | `<work>/report/front.pdf`・`main.pdf`・`whatif.pdf`・`whatif_report_data.json` | 2.2 秒 | なし | `pipeline.ts` rc≠0 |
+| 4 | `deliverables-pdf` | 段 3 の 3 冊 | `<out>/1_まとめ.pdf`・`2_付録1_…`・`3_付録2_…` | 0.0 秒 | なし | 複製元が無い |
+| 5 | `appendix3-answers` | `read/` がある組の `whatif-v2/`・`read/` | `<out>/direct/direct_answers.json` | 0.5 秒 | なし | `directAnswers.ts` rc≠0 |
+| 6 | `appendix3-final` | 組ごとの固定棋譜・`patient_report_data.json` | `<out>/direct/final_positions_<i>.json` → 連結して `final_positions.json` | 1.4 秒(**エンジン 1 本**) | なし | `finalPositions.ts` rc≠0 / 全組 0 局 |
+| 7 | `appendix3-pdf` | 段 5・6 の JSON、`REPORT_DATA_DIR`(組の report を組の順) | `<out>/5_付録3_直接の答え.pdf` | 0.4 秒 | なし | `render_direct.py` rc≠0 |
+| 8 | `appendix4-cause` | 全組の固定棋譜・patient・(あれば)`whatif-v2/` | `<out>/direct/time_cause.json` | 0.6 秒 | なし | `timeCause.ts` rc≠0 |
+| 9 | `appendix4-search` | 前回の組(発見用)・今回の組(検証用)の固定棋譜・段 2 の記録 | `<out>/direct/time_cause_search.json` | 6.9 秒 | なし | `timeSearch.ts` rc≠0 |
+| 10 | `appendix4-pdf` | 段 8・9 の JSON | `<out>/6_付録4_時間の使い方.pdf` | 0.6 秒 | なし | `render_time_cause.py` rc≠0 |
+| 11 | `answer-menu` | `lib/answerMenu.ts` の表 | `<out>/direct/answer_menu.json` | 0.4 秒 | なし | `answerMenu.ts` rc≠0 |
+| 12 | `answer-draft` | 組ごとの patient、段 5・6・8・9 の JSON、`read/`・`whatif-v2/` | `<out>/8_B_どうしたら_下書き.md`(事実の箇条書きだけ) | 0.1 秒 | なし | `answer_facts.py` rc≠0 |
+| 13 | `answer-gate` | 段 12 の下書き | — | 0.0 秒 | **「読み」を書く**(`<!-- TODO: 読み -->` を埋める) | 印が残っていれば止まる(`humanGate`) |
+| 14 | `answer-check` | 下書き + 材料の旗 20 個 | — | 0.5 秒 | なし | `check_answer.py` rc≠0(落ちた文の一覧) |
+| 15 | `answer-pdf` | 同 14 | `<out>/8_B_どうしたら.pdf` | 0.8 秒 | なし | `render_answer.py` rc≠0 |
+| 16 | `check-delivery` | `<out>` の PDF 全冊と md | — | 0.2 秒 | **PDF の目視** | 禁止語・`@`・`/Users/`・「水匠」・`--forbid` の語があれば rc≠0 |
+
+段の前後に `<out>/deliver_log.jsonl` へ 1 行追記する(`{stage, startedAt, finishedAt, rc, humanGate}`。
+`rc` は数か `"skip"`)。人間の確認点で止まった段は、**止まった時刻の行と、`--from` で再開したときの行の
+2 行**が残る(原価③の測り方)。段が rc≠0 ならそこで止まり、以降の段は実行しない。
+
+### B の「分かっている事実」を機械で組む(`report-pdf/answer_facts.py`)
+
+**数を自分で計算しない。** 同じフォルダの `check_answer.py` を import して、その `PatientFile`・
+`combined_groups_of`・`read_combined_of`・`side_match_of`・`direct_materials_of`・
+`time_cause_materials_of`・`tag_of_time_limit_sec` が既に作っている材料から数を**引くだけ**である
+(`check_answer.py` は 1 バイトも変えていない)。文の形は基準版(v7)の箇条書きをテンプレートにし、
+差し替えるのは数だけ。数が引けない箇条書きはその行だけ `<!-- TODO: 読み -->` に落とし、
+**どの数が出せなかったかを標準エラーへ出す**(黙って省かない)。
+
+- 表示名は `--name` で受け取る(この道具は名前を自分の中に持たない)。
+- 「読み」の文・「こうしてみては」の行・「例」の節・「取り下げたこと」・「やらなくていいこと」・
+  「次の 20 局」の表は `<!-- TODO: 読み -->` のプレースホルダで空ける(人と LLM の仕事)。
+  「この冊子の約束」は数を含まないので固定文。
+- 実測(固定材料 44 局、基準版と同じ材料): 事実の箇条書き **14 / 14** を生成し、基準版の同じ 4 ブロックと
+  **数の一覧が順序つきで完全一致**(118 個)、かつ**文字まで同一**。生成物は `check_answer.py` rc=0。
+
+### 伏せ字・個人情報の検査(`report-pdf/check_delivery.py`)
+
+`<out>` 直下の `*.pdf`(`fitz` でテキスト抽出)と `*.md` に、`--forbid` の語・`@`・`/Users/`・「水匠」・
+禁止語 18 語が無いことを確かめる。**18 語は書き写さず `check_answer.py` の `BANNED_WORDS` の先頭 18 語を
+import する**(語のリストを二重に持たない)。`direct/` の JSON は対象外。
+
+- 実測(固定材料の納品フォルダ 7 本 = PDF 5 冊 + md 2 本): 禁止語 18 語・`@`・`/Users/`・「水匠」は **0 件**(rc=0)。
+- **注意**: `--forbid` に**お客さま自身の表示名**を渡すと必ず落ちる(本人の冊子には本人の名前が出るのが正しい)。
+  実測では `--forbid <表示名>` で 42 件(本編・付録 1・B の本文)。`--forbid` は「出てはいけない語」
+  (相手の名前など)に使う。
+
 ## typecheck
 
 ```

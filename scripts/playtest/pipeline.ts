@@ -7,7 +7,10 @@
 //     [--compare-dir <段 2 の記録のフォルダ …> --compare-person <p記号>]
 //     [--name <表示名> --title <タイトル> --today <YYYY-MM-DD>]  … --until が report-data・prose・pdf のときだけ必須
 //     [--until import|evaluate|diagnose|gate|report-data|prose|pdf] [--evaluator "<評価関数の識別>"] [--dry-run]
-//     [--whatif]  … STEP WHATIF 作業 1。付けたときだけ、diagnose の後に局ごとに whatif.ts を回す(--until には無関係)
+//     [--whatif]  … STEP WHATIF 作業 1。付けたときだけ、diagnose の後に局ごとに whatif.ts を回す(--until には無関係)。
+//                    STEP DELIVER-1(計画 §3 の 2): その後ろで局ごとに read.ts も回す(v2 のときだけ)
+//     [--time-limit-sec <秒>] [--previous <前回の patient_report_data.json>]  … STEP DELIVER-1(計画 §3 の 1)。
+//                    S5(reportData.ts)へ**中継するだけ**(渡さなければ今までと同じ引数)
 //
 // S4(gate.ts)の向き: --person・--kifu-dir の局(このお客さん)が材料の側(gate.ts の --person・--material)、
 // --compare-dir の記録が試す側(gate.ts の --test-person・--test-sente/--test-gote)。2 人目 20 局(材料)を
@@ -63,6 +66,9 @@ const TSX_TOOL_PATHS: Record<
   "report-data": path.join(SCRIPT_DIR, "reportData.ts"),
   // STEP WHATIF 作業 1。`--whatif` のときだけ呼ぶ(lib/pipeline.ts の runPipeline 参照)。
   whatif: path.join(SCRIPT_DIR, "whatif.ts"),
+  // STEP DELIVER-1(docs/STEP_DELIVER1_PLAN_2026-09-25.md §3 の 2)。`--whatif`(v2)のときだけ、
+  // whatif の段の後ろに局ごとに呼ぶ(READ 工程。lib/pipeline.ts の runPipeline 参照)。
+  read: path.join(SCRIPT_DIR, "read.ts"),
   // STEP WHATIF 作業 2。`--whatif` かつ `--until pdf` のときだけ呼ぶ(付録 2「分かれ道」の材料)。
   "whatif-report-data": path.join(SCRIPT_DIR, "whatifReport.ts"),
 };

@@ -19,6 +19,7 @@ import {
   personWorkDir,
   reportPaths,
   runPipeline,
+  readPath,
   whatifPath,
   whatifPdfDone,
   whatifReportDataCommand,
@@ -101,6 +102,9 @@ function makeDoneThroughMainPdfFs(extra: Record<string, string> = {}): ReturnTyp
     [rp.prose]: "{}",
     [rp.mainPdf]: "%PDF-1.4 main",
     [whatifPath(personDir, "g1")]: validWhatifJsonl(),
+    // STEP DELIVER-1(計画 §3 の 2)。READ 工程が whatif の後ろに繋がったので、済みの状態を置いて飛ばす
+    // (この試験が見張るのは付録 2 の段。summary で終わる jsonl なら「済み」と判定される)。
+    [readPath(personDir, "g1")]: validWhatifJsonl(),
     ...extra,
   });
 }
