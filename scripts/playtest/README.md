@@ -519,11 +519,14 @@ npx tsx scripts/playtest/read.ts --whatif <whatif-v2.jsonl> --kifu <固定棋譜
 npx tsx scripts/playtest/answerMenu.ts --out <answer_menu.json>
 ```
 
-- `ANSWER_MENU` の 1 件: `id`(M1〜M8)・`stage`(段階)・`actionCore`(行動の文の芯)・`evidenceName`(根拠の数の名)・
-  `minN`(検査 5 で見る下限)・`verifyName`(答え合わせの数の名)。
-- `menuConditionHoldsOf(id, materials)`: id の「出す条件」(§3)が、道具が計算した事実(`AnswerMenuMaterials`。
+- `ANSWER_MENU` の 1 件: `id`(M1〜M9)・`stage`(段階)・`actionCore`(行動の文の芯)・`evidenceName`(根拠の数の名)・
+  `minN`(検査 5 で見る下限)・`verifyName`(答え合わせの数の名)・`verifyGate`(答え合わせの下限。null または
+  `{ fraction, min }`)・`foundInSameData`(今回の対局から見つけた読みか)。
+- `menuConditionHoldsOf(id, materials)`: id の「出す条件」(§3・§8.2)が、道具が計算した事実(`AnswerMenuMaterials`。
   patient_report_data.json・READ の合算・whatif-v2 の側の一致から作る)で成り立つかを判定する純粋関数。
   `answerMenuDenominatorOf(id, materials)`: 検査 5 の「根拠の数の分母」。
+  `menuVerifyGateHoldsOf(id, materials)`: id の答え合わせの下限(`verifyGate`。§8.1)が成り立つかを判定する
+  純粋関数。`verifyGate` が null の項目(M1 以外)は常に true。
 - **司令塔の事前監査 REVISE(2026-09-23・2026-09-24)を反映**(`lib/answerMenu.ts` 冒頭のコメントに詳細):
   M4 は whatif-v2 の `candidates[0].side`・`actualSide`
   から非対称に数えた 2 分数(第 1 候補が「両方」の局面は分母に入れない)で AND 判定、M6 は
@@ -532,12 +535,26 @@ npx tsx scripts/playtest/answerMenu.ts --out <answer_menu.json>
 - **ANSWER-M1(2026-09-24、`docs/STEP_ANSWER_PLAN_2026-09-23.md` §7)**: M1 の分母(中盤 1 手あたり 4 秒超の局)を
   `lib/reportData.ts` の `PatientPhaseSpent.midOver` として足し、`needsData` を解消した。3 分の組(min3)で
   `timeUpLosses.n ≥ 2` かつ `midOverOver ≥ 5` が条件、分母は `midOverOver`(minN 5)。
+- **ANSWER-MENU2(2026-09-24、`docs/STEP_ANSWER_PLAN_2026-09-23.md` §8)**: 答え合わせの下限(`verifyGate`。§8.1)を
+  M1 に足した(`midOver.overAndTimeUpLoss / midOver.over ≥ 1/2`。§7.6 で司令塔が手で下した「条件が成立しても、
+  答え合わせの数が処方の向きを支えないので出さない」判断を機械が再現する)。M9(§8.2、時間・「中盤の消費が
+  自分のふだんの中央値を超えたら、次の手の前に残り時間を見る」)を足した: 3 分の組(min3)で
+  `timeUpLosses.n ≥ 2` かつ、時間負けの局の `phaseSpent.perGame[i].midSec` が**すべて**`phaseSpent.otherGames.mid`
+  を超える(`AnswerMenuPatientGroup` に足した `timeUpLossMidSecs`(時間負けの局の midSec の配列)・
+  `otherGamesMidMedian`(比較相手)から判定)。minN は「時間負け 2」。M9 は `foundInSameData: true`(今回の
+  対局から見つけた読み。§7.6)なので、B の印の行に「今回の対局から見つけた読みです」の句が要る(検査は
+  `report-pdf/check_answer.py`)。**§8 が決めていない点(実装担当の判断)**: 同じタグ(min3)の patient が
+  複数(前回 20 局 + 今回 14 局)あるときの中央値の扱い。`otherGamesMidMedian` は既存の
+  `phaseSpentOtherMidMedian`(`primaryGroupOf`。games が最小のファイルの中央値)と同じ代表値を使い、
+  `timeUpLossMidSecs`(連結した配列)の**全部**がその代表値を超えるかで見る(詳細は `lib/answerMenu.ts` 冒頭の
+  コメント)。
 - **計画にない判断**: M3・M5 が使う「既定の組」は、渡された patient の中で `min3` タグがあればそれ、無ければ
   先頭の組(`primaryGroupOf`)。`min3`/`min10` のタグは `--time-limit-sec`(180 秒/600 秒)を渡す側
   (`report-pdf/check_answer.py`)が付ける。
-- 試験(`lib/answerMenu.test.ts`): docs §3 の表との一致(id・段階・minN。**行動の文の芯は今回は比べない**
+- 試験(`lib/answerMenu.test.ts`): docs §3・§8.2 の表との一致(id・段階・minN。**行動の文の芯は今回は比べない**
   ― docs §3 の表はこの REVISE に合わせて書き直す途中のため。M8 の minN は docs 由来ではなく単独の試験
-  ― 「未照合」と明記してある。M1 は ANSWER-M1 で docs 一致試験に戻した)、`menuConditionHoldsOf`/`answerMenuDenominatorOf` の境界(各 id ごと)。
+  ― 「未照合」と明記してある。M1 は ANSWER-M1 で docs 一致試験に戻した)、`menuConditionHoldsOf`/
+  `answerMenuDenominatorOf`/`menuVerifyGateHoldsOf` の境界(各 id ごと。M1 の gate 3 ケース、M9 の条件 3 ケースを含む)。
 
 ## typecheck
 

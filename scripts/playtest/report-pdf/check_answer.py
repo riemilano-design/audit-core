@@ -2,6 +2,20 @@
 # STEP ANSWER 作業(docs/STEP_ANSWER_PLAN_2026-09-23.md §2.1)。B(「どうしたら」の冊子)の markdown を検査する道具。
 # 司令塔の事前監査 REVISE(2026-09-23・2026-09-24)の指示を反映済み(下の各節のコメントを参照)。
 #
+# 【追加作業 ANSWER-MENU2(2026-09-24、docs §8)を反映した点】
+# - 検査 4 に、メニューの答え合わせの下限(`verifyGate`。§8.1)の判定を足した。`<!-- menu: Mx -->` の行は、
+#   条件(menuConditionHoldsOf 相当)・minN(検査 5)に加えて、`answer_menu.json` の該当項目に `verifyGate` が
+#   あれば、その下限も満たさなければ落とす(理由「答え合わせの数が下限に届かない(検査 4)」)。M1 だけが持つ
+#   (`midOver.overAndTimeUpLoss / midOver.over ≥ 1/2`)。
+# - `answer_menu.json` の項目に `foundInSameData: true`(M9 だけ)があれば、その印の行に
+#   「今回の対局から見つけた読みです」の句が無ければ落とす(理由「今回の対局から見つけた読みの句が無い
+#   (検査 4)」)。
+# - M9(中盤の消費の合計。§8.2)の材料を patient の `time.phaseSpent.perGame`・`otherGames.mid` から作る
+#   (`lib/answerMenu.ts` 冒頭のコメントと同じ実装担当の判断: 同じタグの patient が複数あるときは
+#   `timeUpLossMidSecs` を連結、`otherGamesMidMedian` は代表ファイル(primary。既存の `phase_spent_other_mid` と
+#   同じ)の中央値)。古い patient(`perGame` が無い)は `timeUpLossMidSecs` が空になるため M9 は不成立。
+# - 検査 1 の登録済みの組に「時間負けのうち中央値超え / 時間負け」を足した(両方向)。
+#
 # 使い方:
 #   python3 -X utf8 check_answer.py <B.md>
 #     [--patient <patient_report_data.json> --time-limit-sec <秒>]…(組ごとに 1 対。180 秒 = 3 分の組、
@@ -218,6 +232,9 @@ class PatientFile:
         self.mid_over_over = mid_over.get("over", 0)
         self.mid_over_over_and_time_up_loss = mid_over.get("overAndTimeUpLoss", 0)
         self.ahead_loss = ahead_loss_numbers(self.raw.get("findings") or [])
+        # M9(docs §8.2、ANSWER-MENU2)。`perGame` が無い古い patient は空のまま(M9 は不成立になる)。
+        per_game = phase_spent.get("perGame") or []
+        self.time_up_loss_mid_secs = [g["midSec"] for g in per_game if g.get("timeUpLoss") and g.get("midSec") is not None]
 
 
 def by_spent_total(by_spent):
@@ -261,6 +278,11 @@ class CombinedGroup:
         self.mid_over_games = sum(f.mid_over_games for f in files)
         self.mid_over_over = sum(f.mid_over_over for f in files)
         self.mid_over_over_and_time_up_loss = sum(f.mid_over_over_and_time_up_loss for f in files)
+        # M9(docs §8.2、ANSWER-MENU2)。`lib/answerMenu.ts` 冒頭のコメントと同じ実装担当の判断:
+        # `time_up_loss_mid_secs` はファイルの順に連結、`other_games_mid_median` は代表ファイル(primary。
+        # 上の phase_spent_other_mid と同じファイル)の中央値を使う。
+        self.time_up_loss_mid_secs = [sec for f in files for sec in f.time_up_loss_mid_secs]
+        self.other_games_mid_median = primary.phase_spent_other_mid
 
 
 def combined_groups_of(patient_files):
@@ -491,8 +513,48 @@ def m8_denominator(materials):
     return g.time_up_losses["n"] if g is not None else None
 
 
-MENU_HOLDS = {"M1": m1_holds, "M2": m2_holds, "M3": m3_holds, "M4": m4_holds, "M5": m5_holds, "M6": m6_holds, "M7": m7_holds, "M8": m8_holds}
-MENU_DENOMINATOR = {"M1": m1_denominator, "M2": m2_denominator, "M3": m3_denominator, "M4": m4_denominator, "M5": m5_denominator, "M6": m6_denominator, "M7": m7_denominator, "M8": m8_denominator}
+def m9_holds(materials):
+    # M9(docs §8.2、ANSWER-MENU2)。3 分の組(min3)で timeUpLosses.n ≥ 2 かつ、時間で負けた局のすべての
+    # midSec が otherGamesMidMedian を超える(lib/answerMenu.ts の m9Holds と同じ実装担当の判断)。
+    g = materials["groups"].get("min3")
+    if g is None or g.time_up_losses["n"] < 2:
+        return False
+    if g.other_games_mid_median is None or not g.time_up_loss_mid_secs:
+        return False
+    return all(sec > g.other_games_mid_median for sec in g.time_up_loss_mid_secs)
+
+
+def m9_denominator(materials):
+    g = materials["groups"].get("min3")
+    return g.time_up_losses["n"] if g is not None else None
+
+
+MENU_HOLDS = {"M1": m1_holds, "M2": m2_holds, "M3": m3_holds, "M4": m4_holds, "M5": m5_holds, "M6": m6_holds, "M7": m7_holds, "M8": m8_holds, "M9": m9_holds}
+MENU_DENOMINATOR = {"M1": m1_denominator, "M2": m2_denominator, "M3": m3_denominator, "M4": m4_denominator, "M5": m5_denominator, "M6": m6_denominator, "M7": m7_denominator, "M8": m8_denominator, "M9": m9_denominator}
+
+
+# ==================== 答え合わせの下限(verifyGate。docs §8.1、ANSWER-MENU2) ====================
+
+
+def m1_verify_gate_holds(materials):
+    min3 = materials["groups"].get("min3")
+    if min3 is None or not min3.mid_over_over:
+        return False
+    return min3.mid_over_over_and_time_up_loss / min3.mid_over_over >= 0.5
+
+
+MENU_VERIFY_GATE_HOLDS = {"M1": m1_verify_gate_holds}
+
+
+def menu_verify_gate_holds(item_id, materials, menu_items_by_id):
+    """`answer_menu.json` の該当項目に `verifyGate` が無ければ true(§8.4 の指示どおり)。"""
+    item = menu_items_by_id[item_id]
+    if item.get("verifyGate") is None:
+        return True
+    fn = MENU_VERIFY_GATE_HOLDS.get(item_id)
+    if fn is None:
+        raise CheckAnswerError(f"verifyGate はあるが判定関数が無い: {item_id}")
+    return fn(materials)
 
 
 # ==================== 検査 1: 数の照合(登録済みの組。司令塔の指示 2026-09-23 REVISE 6) ====================
@@ -529,6 +591,10 @@ def registered_pairs_of(patient_files, materials):
         add(g.after_long_think_quick["n"], g.after_long_think_quick["collapsed"])
         add(g.mid_over_over, g.mid_over_games)
         add(g.mid_over_over_and_time_up_loss, g.mid_over_over)
+        # M9(docs §8.2、ANSWER-MENU2)。「時間負けのうち中央値超え / 時間負け」。
+        if g.other_games_mid_median is not None:
+            exceed_count = sum(1 for sec in g.time_up_loss_mid_secs if sec > g.other_games_mid_median)
+            add(exceed_count, g.time_up_losses["n"])
 
     r = materials["readCombined"]
     if r is not None:
@@ -601,6 +667,9 @@ def build_materials(args, repo_root):
                 "midOverGames": g.mid_over_games,
                 "midOverOver": g.mid_over_over,
                 "midOverOverAndTimeUpLoss": g.mid_over_over_and_time_up_loss,
+                # M9(§8.2、ANSWER-MENU2)。
+                "timeUpLossMidSecs": g.time_up_loss_mid_secs,
+                "otherGamesMidMedian": g.other_games_mid_median,
             },
             allowed_numbers,
         )
@@ -621,6 +690,7 @@ def build_materials(args, repo_root):
 
     menu_ids = {item["id"] for item in menu["items"]}
     menu_minn = {item["id"]: item["minN"] for item in menu["items"]}
+    menu_items_by_id = {item["id"]: item for item in menu["items"]}
 
     whatif_pdf_text = ""
     if args.whatif_pdf_paths:
@@ -642,6 +712,7 @@ def build_materials(args, repo_root):
         "pairs": pairs,
         "menuIds": menu_ids,
         "menuMinN": menu_minn,
+        "menuItemsById": menu_items_by_id,
         "reviewedNames": reviewed_shape_names(repo_root),
         "whatifPdfText": whatif_pdf_text,
     }
@@ -756,8 +827,13 @@ def menu_tags_of(line):
     return MENU_TAG_RE.findall(line) + PRIORITY_TAG_RE.findall(line)
 
 
+# ANSWER-MENU2(docs §8.2)。foundInSameData の項目の印の行に必須の句。
+FOUND_IN_SAME_DATA_PHRASE = "今回の対局から見つけた読みです"
+
+
 def check_menu_tags(line, ctx, problems, line_no):
-    """検査 4(メニューの印)・検査 5(数が足りなければ言わない)。印が成立しているかを返す(検査 4 の除外判定用)。"""
+    """検査 4(メニューの印・答え合わせの下限・foundInSameData の句)・検査 5(数が足りなければ言わない)。
+    印が成立しているかを返す(検査 4 の除外判定用)。"""
     tags = menu_tags_of(line)
     if not tags:
         return False
@@ -776,6 +852,17 @@ def check_menu_tags(line, ctx, problems, line_no):
         min_n = ctx["menuMinN"][tag_id]
         if denominator is None or denominator < min_n:
             problems.append((line_no, f"メニュー {tag_id} の根拠の数が minN({min_n})未満(検査 5。今の分母: {denominator})", line))
+            all_hold = False
+            continue
+        # ANSWER-MENU2(§8.1)。条件・minN に加えて答え合わせの下限(verifyGate)も満たさなければ落とす。
+        if not menu_verify_gate_holds(tag_id, ctx["materials"], ctx["menuItemsById"]):
+            problems.append((line_no, f"メニュー {tag_id} の答え合わせの数が下限に届かない(検査 4)", line))
+            all_hold = False
+            continue
+        # ANSWER-MENU2(§8.2)。foundInSameData の項目は、印の行に句が必須。
+        item = ctx["menuItemsById"][tag_id]
+        if item.get("foundInSameData") and FOUND_IN_SAME_DATA_PHRASE not in line:
+            problems.append((line_no, f"メニュー {tag_id} は今回の対局から見つけた読みの句が無い(検査 4)", line))
             all_hold = False
     return all_hold
 

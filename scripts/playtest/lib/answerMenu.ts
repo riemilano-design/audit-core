@@ -34,12 +34,29 @@
 //   (実装担当の判断。他の秒数はタグ無し = 条件判定に使えない)。**同じタグの patient が複数渡されたら
 //   (前回 20 局 + 今回 14 局 = 3 分の組)、python 側が合算(分子・分母を別々に)してから 1 つの
 //   `AnswerMenuPatientGroup` にする**(司令塔の指示 1。TS 側はすでに合算された 1 組ずつを受け取るだけ)。
+//
+// 【追加作業 ANSWER-MENU2(2026-09-24、docs §8)を反映した点】
+// - `AnswerMenuItem.verifyGate`(答え合わせの下限。§8.1): M1 だけが持つ(`midOver.overAndTimeUpLoss / midOver.over
+//   ≥ 1/2`)。`menuVerifyGateHoldsOf(id, materials)` は、`verifyGate` が null の項目(M1 以外)は常に true を返す
+//   (§8.4 の指示どおり)。
+// - M9(§8.2): `AnswerMenuPatientGroup` に `timeUpLossMidSecs`(min3 の組の、時間負けの局の
+//   `perGame[i].midSec` を連結した配列)と `otherGamesMidMedian`(`phaseSpent.otherGames.mid`)を足した。
+//   **§8 が決めていない点(実装担当の判断、報告に明記)**: 「同じタグ(min3)の patient が複数(前回 20 局 +
+//   今回 14 局)あるとき、中央値をどう扱うか」を §8 は決めていない。この実装では、`otherGamesMidMedian` は
+//   既存の `phaseSpentOtherMidMedian` と同じ「合算した組の中で games が最も少ないファイル(primary)の中央値」
+//   を代表値として使う(`primaryGroupOf`・`CombinedGroup` の既存の考え方の延長。§8 の「組ごとに自分の組の
+//   中央値と比べ、判定は組ごとの結果の AND」は、この代表値 1 つに対して `timeUpLossMidSecs`(連結した配列。
+//   複数ファイルにまたがる時間負け局をすべて含む)の**全部**が上回るかを見ることで実現する ― 個々のファイルを
+//   それぞれ独立に判定して真偽値を AND するのではなく、代表の中央値 1 つに対する「すべて」判定 1 回に
+//   まとめている。今回の実データでは時間負けの局数が少ない(3 局)ため、この近似による違いは実測では出ない
+//   と考えるが、複数ファイルの中央値が大きく食い違う入力では厳密な意味論とは一致しない可能性がある)。
+//   `foundInSameData: true`(今回の対局から見つけた読みのため、B の文に句を必須にする。検査は python 側)。
 // - docs §3 の表は司令塔がこの REVISE の内容(M1・M8 の minN 等)に合わせて書き直す途中のため、
 //   `answerMenu.test.ts` の docs 一致試験は **id・段階・minN だけ**にした(行動の文の芯は今回は比べない。
 //   司令塔の指示)。M1・M8 の minN は、書き直された docs にまだ合わせられないため、docs 由来ではなく
 //   このファイルの値をそのまま確かめる単独の試験にしてある(試験内に「未照合」と明記)。
 
-export type AnswerMenuId = "M1" | "M2" | "M3" | "M4" | "M5" | "M6" | "M7" | "M8";
+export type AnswerMenuId = "M1" | "M2" | "M3" | "M4" | "M5" | "M6" | "M7" | "M8" | "M9";
 
 export type AnswerMenuStage = "時間" | "条件" | "否定" | "手順";
 
@@ -51,13 +68,24 @@ export interface AnswerMenuItem {
   actionCore: string;
   /** 根拠の数(docs §3 の該当列そのまま)。 */
   evidenceName: string;
-  /** 検査 5(数が足りなければ言わない)で見る下限。docs §3 の minN 列に書かれた数だけを取り出したもの。 */
+  /** 検査 5(数が足りなければ言わない)で見る下限。docs §3・§8.2 の minN 列に書かれた数だけを取り出したもの。 */
   minN: number;
-  /** 答え合わせの数(docs §3 の該当列そのまま)。 */
+  /** 答え合わせの数(docs §3・§8.2 の該当列そのまま)。 */
   verifyName: string;
+  /**
+   * 答え合わせの下限(docs §8.1)。null の項目は条件だけで出す(今までどおり)。M1 だけが持つ
+   * (`{ fraction: "midOver.overAndTimeUpLoss / midOver.over", min: 0.5 }`)。`fraction` は表示・説明用の文字列
+   * (正本は docs §8.1)、実際の判定は `menuVerifyGateHoldsOf` の中の id ごとの関数で行う。
+   */
+  verifyGate: { fraction: string; min: number } | null;
+  /**
+   * この行動が、今回の対局(patient に渡したデータ)から見つけた読みか(docs §8.2)。true の項目(M9)は、
+   * B の印の行に「今回の対局から見つけた読みです」の句を含めなければならない(検査は check_answer.py)。
+   */
+  foundInSameData: boolean;
 }
 
-/** docs/STEP_ANSWER_PLAN_2026-09-23.md §3 の表 8 行(id の順のまま)。文言の正本は docs §3。 */
+/** docs/STEP_ANSWER_PLAN_2026-09-23.md §3(M1〜M8)・§8.2(M9)の表 9 行(id の順のまま)。文言の正本は docs。 */
 export const ANSWER_MENU: readonly AnswerMenuItem[] = [
   {
     id: "M1",
@@ -69,6 +97,9 @@ export const ANSWER_MENU: readonly AnswerMenuItem[] = [
     // 4 秒超の局)は ANSWER-M1(§7.2)で `midOver.over` として出せるようになった。
     minN: 5,
     verifyName: "時間負けの局数、中盤 4 秒超の局数",
+    // ANSWER-MENU2(§8.1): 4 秒超の局の半分以上が時間負けでなければ、「1 手 4 秒」は時間負けの処方にならない。
+    verifyGate: { fraction: "midOver.overAndTimeUpLoss / midOver.over", min: 0.5 },
+    foundInSameData: false,
   },
   {
     id: "M2",
@@ -77,6 +108,8 @@ export const ANSWER_MENU: readonly AnswerMenuItem[] = [
     evidenceName: "両組の崩れ率、時間負け 0",
     minN: 5,
     verifyName: "次の組での時間負け・崩れ率",
+    verifyGate: null,
+    foundInSameData: false,
   },
   {
     id: "M3",
@@ -85,6 +118,8 @@ export const ANSWER_MENU: readonly AnswerMenuItem[] = [
     evidenceName: "序盤の崩れ回数、序中の消費中央値",
     minN: 10,
     verifyName: "",
+    verifyGate: null,
+    foundInSameData: false,
   },
   {
     id: "M4",
@@ -93,6 +128,8 @@ export const ANSWER_MENU: readonly AnswerMenuItem[] = [
     evidenceName: "一致の分数 2 つ",
     minN: 30,
     verifyName: "側の一致率",
+    verifyGate: null,
+    foundInSameData: false,
   },
   {
     id: "M5",
@@ -101,6 +138,8 @@ export const ANSWER_MENU: readonly AnswerMenuItem[] = [
     evidenceName: "afterLongThink の分数",
     minN: 30,
     verifyName: "同じ分数",
+    verifyGate: null,
+    foundInSameData: false,
   },
   {
     id: "M6",
@@ -109,6 +148,8 @@ export const ANSWER_MENU: readonly AnswerMenuItem[] = [
     evidenceName: "READ の sacrifice の分数",
     minN: 20,
     verifyName: "同じ分数",
+    verifyGate: null,
+    foundInSameData: false,
   },
   {
     id: "M7",
@@ -117,6 +158,8 @@ export const ANSWER_MENU: readonly AnswerMenuItem[] = [
     evidenceName: "READ の firstVisibleNodes の内訳",
     minN: 30,
     verifyName: "",
+    verifyGate: null,
+    foundInSameData: false,
   },
   {
     id: "M8",
@@ -126,6 +169,21 @@ export const ANSWER_MENU: readonly AnswerMenuItem[] = [
     // 司令塔の指示(2026-09-23 REVISE 3): minN は「時間で負けた局 2」(旧: 1)。
     minN: 2,
     verifyName: "",
+    verifyGate: null,
+    foundInSameData: false,
+  },
+  {
+    id: "M9",
+    stage: "時間",
+    actionCore: "中盤の消費が自分のふだんの中央値を超えたら、次の手の前に残り時間を見る",
+    evidenceName: "時間負けの局の中盤の消費と、他の局の中央値",
+    // docs §8.2: minN は「時間負け 2」。
+    minN: 2,
+    verifyName: "時間負けの局のうち中央値超え / 時間負けの局",
+    // docs §8.2: 条件そのものが答え合わせなので null。
+    verifyGate: null,
+    // docs §8.2: 今回の 44 局から見つけた読み(§7.6)。B に出すときは句が必須(検査は check_answer.py)。
+    foundInSameData: true,
   },
 ] as const;
 
@@ -181,6 +239,17 @@ export interface AnswerMenuPatientGroup {
   midOverOver: number | null;
   /** time.phaseSpent.midOver.overAndTimeUpLoss。 */
   midOverOverAndTimeUpLoss: number | null;
+  /**
+   * M9(docs §8.2、ANSWER-MENU2)。この組(タグ)に属する時間負けの局の `phaseSpent.perGame[i].midSec` を
+   * 連結した配列(同じタグの patient が複数あれば python 側がファイルの順に連結する)。
+   */
+  timeUpLossMidSecs: readonly number[];
+  /**
+   * M9 の比較相手(`phaseSpent.otherGames.mid`、中央値)。同じタグの patient が複数あるときの扱いは
+   * §8 が決めていない(実装担当の判断、ファイル冒頭のコメントを参照): `phaseSpentOtherMidMedian` と同じ
+   * 代表値(games が最小のファイルの中央値)を使う。
+   */
+  otherGamesMidMedian: number | null;
 }
 
 /**
@@ -333,6 +402,19 @@ function m8Denominator(materials: AnswerMenuMaterials): number | null {
   return g?.timeUpLosses?.n ?? null;
 }
 
+// ---- M9: 時間(中盤の消費の合計。docs §8.2、ANSWER-MENU2)。3 分の組(min3)で timeUpLosses.n ≥ 2 かつ、
+// 時間で負けた局のすべての midSec が otherGamesMidMedian を超える(ファイル冒頭のコメントの実装担当の判断)。 ----
+function m9Holds(materials: AnswerMenuMaterials): boolean {
+  const g = groupOf(materials, "min3");
+  if (g === null || g.timeUpLosses === null || g.timeUpLosses.n < 2) return false;
+  if (g.otherGamesMidMedian === null) return false;
+  if (g.timeUpLossMidSecs.length === 0) return false;
+  return g.timeUpLossMidSecs.every((sec) => sec > g.otherGamesMidMedian!);
+}
+function m9Denominator(materials: AnswerMenuMaterials): number | null {
+  return groupOf(materials, "min3")?.timeUpLosses?.n ?? null;
+}
+
 const HOLDS: Record<AnswerMenuId, (materials: AnswerMenuMaterials) => boolean> = {
   M1: m1Holds,
   M2: m2Holds,
@@ -342,6 +424,7 @@ const HOLDS: Record<AnswerMenuId, (materials: AnswerMenuMaterials) => boolean> =
   M6: m6Holds,
   M7: m7Holds,
   M8: m8Holds,
+  M9: m9Holds,
 };
 
 const DENOMINATORS: Record<AnswerMenuId, (materials: AnswerMenuMaterials) => number | null> = {
@@ -353,6 +436,21 @@ const DENOMINATORS: Record<AnswerMenuId, (materials: AnswerMenuMaterials) => num
   M6: m6Denominator,
   M7: m7Denominator,
   M8: m8Denominator,
+  M9: m9Denominator,
+};
+
+// ==================== 答え合わせの下限(verifyGate。docs §8.1) ====================
+
+// id ごとの verifyGate 判定関数(verifyGate を持つ id だけ)。M1 以外は ANSWER_MENU 側で verifyGate が null
+// なので menuVerifyGateHoldsOf が呼ぶ前に true を返す(この Record には登場しない)。
+function m1VerifyGateHolds(materials: AnswerMenuMaterials): boolean {
+  const g = groupOf(materials, "min3");
+  if (g === null || g.midOverOver === null || g.midOverOver === 0 || g.midOverOverAndTimeUpLoss === null) return false;
+  return g.midOverOverAndTimeUpLoss / g.midOverOver >= 0.5;
+}
+
+const VERIFY_GATE_HOLDS: Partial<Record<AnswerMenuId, (materials: AnswerMenuMaterials) => boolean>> = {
+  M1: m1VerifyGateHolds,
 };
 
 export class AnswerMenuError extends Error {
@@ -373,5 +471,18 @@ export function menuConditionHoldsOf(id: AnswerMenuId, materials: AnswerMenuMate
 export function answerMenuDenominatorOf(id: AnswerMenuId, materials: AnswerMenuMaterials): number | null {
   const fn = DENOMINATORS[id];
   if (fn === undefined) throw new AnswerMenuError(`知らない id: ${id}`);
+  return fn(materials);
+}
+
+/**
+ * id の答え合わせの下限(docs §8.1)が、渡された材料で成り立つか。`verifyGate` が null の項目は常に true
+ * (docs §8.4 の指示どおり)。
+ */
+export function menuVerifyGateHoldsOf(id: AnswerMenuId, materials: AnswerMenuMaterials): boolean {
+  const item = ANSWER_MENU.find((entry) => entry.id === id);
+  if (item === undefined) throw new AnswerMenuError(`知らない id: ${id}`);
+  if (item.verifyGate === null) return true;
+  const fn = VERIFY_GATE_HOLDS[id];
+  if (fn === undefined) throw new AnswerMenuError(`verifyGate はあるが判定関数が無い: ${id}`);
   return fn(materials);
 }

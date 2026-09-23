@@ -11,7 +11,11 @@
 // 【ANSWER-M1(2026-09-24)】M1 は docs §3 の「この版では出さない」の記述を消したため、docs 一致試験に戻した
 // (docs §7.2)。
 //
-// `menuConditionHoldsOf` の境界(各 id の「出す条件」がちょうど成り立つ/成り立たない材料)も確かめる。
+// 【ANSWER-MENU2(2026-09-24、docs §8)】答え合わせの下限(verifyGate。§8.1)と M9(§8.2)を追加。
+// docs §3 の表には M9 が無く(§8.2 の表にある)、docs 一致試験は §3・§8.2 の両方の表から読む。
+//
+// `menuConditionHoldsOf`・`menuVerifyGateHoldsOf` の境界(各 id の「出す条件」・「答え合わせの下限」が
+// ちょうど成り立つ/成り立たない材料)も確かめる。
 
 import { readFileSync } from "node:fs";
 import path from "node:path";
@@ -21,6 +25,7 @@ import {
   ANSWER_MENU,
   answerMenuDenominatorOf,
   menuConditionHoldsOf,
+  menuVerifyGateHoldsOf,
   type AnswerMenuId,
   type AnswerMenuMaterials,
   type AnswerMenuPatientGroup,
@@ -36,7 +41,11 @@ interface DocsMenuRow {
   minN: number;
 }
 
-/** §3 の表(パイプテーブル)を 1 行ずつ読む。先頭列が `M` で始まる行だけ拾う(見出し・区切り行は無視)。 */
+/**
+ * §3(M1〜M8)・§8.2(M9)の表(パイプテーブル)を 1 行ずつ読む。先頭列が `M` で始まる行だけ拾う
+ * (見出し・区切り行は無視)。§3・§8.2 とも id・段階・minN の列位置(0・1・5)は同じ形なので、
+ * どちらの表の行かを区別せずにまとめて読める。
+ */
 function docsMenuRows(): DocsMenuRow[] {
   const lines = DOCS_TEXT.split("\n").filter((line) => /^\|\s*M\d/.test(line));
   return lines.map((line) => {
@@ -59,12 +68,12 @@ function docsMenuRows(): DocsMenuRow[] {
 
 const M8_UNMATCHED_TO_DOCS: ReadonlySet<string> = new Set(["M8"]);
 
-describe("ANSWER_MENU は docs §3 の表と一致する(id・段階・minN。行動の文の芯は今回は比べない)", () => {
+describe("ANSWER_MENU は docs §3・§8.2 の表と一致する(id・段階・minN。行動の文の芯は今回は比べない)", () => {
   const rows = docsMenuRows();
 
-  it("docs の行数と ANSWER_MENU の件数が一致する(8 件)", () => {
-    expect(rows).toHaveLength(8);
-    expect(ANSWER_MENU).toHaveLength(8);
+  it("docs の行数と ANSWER_MENU の件数が一致する(§3 の 8 件 + §8.2 の M9 = 9 件)", () => {
+    expect(rows).toHaveLength(9);
+    expect(ANSWER_MENU).toHaveLength(9);
   });
 
   it.each(rows.filter((row) => !M8_UNMATCHED_TO_DOCS.has(row.id)))("$id(docs 由来)", (row) => {
@@ -105,6 +114,8 @@ function group(overrides: Partial<AnswerMenuPatientGroup> & { group: AnswerMenuP
     midOverGames: overrides.midOverGames ?? null,
     midOverOver: overrides.midOverOver ?? null,
     midOverOverAndTimeUpLoss: overrides.midOverOverAndTimeUpLoss ?? null,
+    timeUpLossMidSecs: overrides.timeUpLossMidSecs ?? [],
+    otherGamesMidMedian: overrides.otherGamesMidMedian ?? null,
   };
 }
 
@@ -244,7 +255,63 @@ describe("menuConditionHoldsOf の境界", () => {
     expect(answerMenuDenominatorOf("M8", allOk)).toBe(3);
   });
 
-  it("知らない id は例外", () => {
-    expect(() => menuConditionHoldsOf("M9" as AnswerMenuId, materialsOf())).toThrow();
+  it("M9(docs §8.2、ANSWER-MENU2): 時間負け 2・両方とも中央値超え → 成立", () => {
+    const materials = materialsOf(
+      group({ group: "min3", timeUpLosses: { n: 2, allAtLeast300: true }, timeUpLossMidSecs: [84, 77], otherGamesMidMedian: 40 }),
+    );
+    expect(menuConditionHoldsOf("M9", materials)).toBe(true);
+    expect(answerMenuDenominatorOf("M9", materials)).toBe(2);
+  });
+
+  it("M9: 時間負け 2 局のうち 1 局だけ中央値を下回る → 不成立(すべてが条件、実装担当の判断)", () => {
+    const materials = materialsOf(
+      group({ group: "min3", timeUpLosses: { n: 2, allAtLeast300: true }, timeUpLossMidSecs: [84, 30], otherGamesMidMedian: 40 }),
+    );
+    expect(menuConditionHoldsOf("M9", materials)).toBe(false);
+  });
+
+  it("M9: 時間負けが 1(2 未満)→ 中央値をすべて超えていても不成立", () => {
+    const materials = materialsOf(
+      group({ group: "min3", timeUpLosses: { n: 1, allAtLeast300: true }, timeUpLossMidSecs: [84], otherGamesMidMedian: 40 }),
+    );
+    expect(menuConditionHoldsOf("M9", materials)).toBe(false);
+  });
+
+  it("M9: min3 の組が無い、または otherGamesMidMedian・timeUpLossMidSecs が測れなければ不成立・分母 null", () => {
+    const materials = materialsOf(group({ group: "min10", timeUpLosses: { n: 2, allAtLeast300: true }, timeUpLossMidSecs: [84, 77], otherGamesMidMedian: 40 }));
+    expect(menuConditionHoldsOf("M9", materials)).toBe(false);
+    expect(answerMenuDenominatorOf("M9", materials)).toBeNull();
+  });
+
+  it("知らない id は例外(M9 は ANSWER-MENU2 で追加済みのため、知らない id は M10 で確かめる)", () => {
+    expect(() => menuConditionHoldsOf("M10" as AnswerMenuId, materialsOf())).toThrow();
+    expect(() => menuVerifyGateHoldsOf("M10" as AnswerMenuId, materialsOf())).toThrow();
+  });
+});
+
+// ==================== menuVerifyGateHoldsOf の境界(docs §8.1、ANSWER-MENU2) ====================
+
+describe("menuVerifyGateHoldsOf の境界", () => {
+  it("M1: overAndTimeUpLoss / over がちょうど 1/2 → 成立、わずかに下回る → 不成立", () => {
+    const exact = materialsOf(group({ group: "min3", midOverOver: 8, midOverOverAndTimeUpLoss: 4 })); // 4/8 = 0.5
+    const under = materialsOf(group({ group: "min3", midOverOver: 8, midOverOverAndTimeUpLoss: 3 })); // 3/8 < 0.5
+    expect(menuVerifyGateHoldsOf("M1", exact)).toBe(true);
+    expect(menuVerifyGateHoldsOf("M1", under)).toBe(false);
+  });
+
+  it("M1: 実データに近い比率(1/7)→ 不成立(§7.6 の司令塔の判断を機械が再現する)", () => {
+    const materials = materialsOf(group({ group: "min3", midOverOver: 7, midOverOverAndTimeUpLoss: 1 }));
+    expect(menuVerifyGateHoldsOf("M1", materials)).toBe(false);
+  });
+
+  it("M1: min3 の組が無い、または over・overAndTimeUpLoss が測れなければ不成立", () => {
+    const materials = materialsOf(group({ group: "min10", midOverOver: 8, midOverOverAndTimeUpLoss: 4 }));
+    expect(menuVerifyGateHoldsOf("M1", materials)).toBe(false);
+  });
+
+  it("verifyGate が null の項目は常に true(M2〜M9。M9 で確認)", () => {
+    expect(menuVerifyGateHoldsOf("M9", materialsOf())).toBe(true);
+    expect(menuVerifyGateHoldsOf("M2", materialsOf())).toBe(true);
+    expect(menuVerifyGateHoldsOf("M8", materialsOf())).toBe(true);
   });
 });

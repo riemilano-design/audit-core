@@ -158,7 +158,11 @@ rc=0 なら通過(「通過(落ちた文なし)」を標準出力へ)。rc=1 な
    「選ぶなら」「1つだけ」「先に」「で指す」「を混ぜる」「候補に入れ」の 9 語)を含む行は落とす**(司令塔の指示
    2026-09-23 REVISE 4・2026-09-24 の再監査 3。「を選ぶ」は実装の監査 REVISE で欠落が見つかり追加: 印の外の
    「いちばん評価の高い手を選ぶと良いでしょう」が通っていた)。例外は `<!-- priority: Mx -->` の印がある行(その id が成り立っていれば除外)。
-   太字だけの見出し行(例: 「**こうしてみては**」)は対象外(実装担当の判断)。
+   太字だけの見出し行(例: 「**こうしてみては**」)は対象外(実装担当の判断)。**ANSWER-MENU2(2026-09-24、
+   docs §8)**: 条件・minN に加えて、`answer_menu.json` の該当項目に `verifyGate`(答え合わせの下限。§8.1)が
+   あれば、それも満たさなければ落とす(理由「答え合わせの数が下限に届かない」。M1 だけが持つ:
+   `midOver.overAndTimeUpLoss / midOver.over ≥ 1/2`)。`foundInSameData: true` の項目(M9 だけ)は、印の行に
+   「今回の対局から見つけた読みです」の句が無ければ落とす(理由「今回の対局から見つけた読みの句が無い」)。
 5. **数が足りなければ言わない**: `<!-- menu: Mx -->`(条件が成り立った)行は、`answerMenuDenominatorOf` が返す
    分母が `answer_menu.json` の `minN` 未満なら落とす。
 6. **戦法・陣形の名前**: `data/shapes`・`data/openings`・`data/intents` の `review_status` が `human_reviewed` または
@@ -172,7 +176,9 @@ rc=0 なら通過(「通過(落ちた文なし)」を標準出力へ)。rc=1 な
 `forkPositionsRead`/(`forkPositionsRead` − `firstVisibleNodesNoneCount`)、`tagCrossTable.sacrifice` の行合計/対角
 (B v3(2026-09-24)の実例「57 のうち 17」で確認)、`opponentReplyMatchesPv` の `matched`/`measured`、M4 の側の一致
 2 分数(`attack`/`defense` それぞれの `n`/`collapsed`)、**ANSWER-M1(2026-09-24、§7.2)**: `midOver` の
-`over`/`games`、`overAndTimeUpLoss`/`over`(patient ごと・組ごとの合算の両方)。
+`over`/`games`、`overAndTimeUpLoss`/`over`(patient ごと・組ごとの合算の両方)、**ANSWER-MENU2(2026-09-24、
+§8.2)**: 「時間負けのうち中央値超え(`timeUpLossMidSecs` のうち `otherGamesMidMedian` を超えた数)/ 時間負け
+(`timeUpLosses.n`)」(組ごとの合算)。
 
 **既知の限界**: 検査 1 の単独の数(分数でない 1 つの数)は、渡された JSON のどこかに同じ値があれば通す(再帰的な
 数値走査。`render_front.py` の `allowed_numbers_of` のようなフィールドごとの明示的な一覧ではない)。値の意味
