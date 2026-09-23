@@ -87,3 +87,35 @@
 
 ### 6.5 再読みの結果
 GO(監査担当、往復 2 回目で閉じた)。独立に再現: 差分は 2 ファイルだけ(+5 −4)、`ACTION_PHRASES` 9 語が §2.1 と一致、B v3 rc=0(誤検知なし)、自作の変異(別ファイル)で rc=1 検査 4、前回の変異 5 本は直し後も rc=1(退行なし)、vitest 1391・typecheck・check-docs・`diff --check` rc=0、apps・data・凍結 8 本に差分なし。測っていない 3 点(priority の行単位・`primaryGroupOf`・「1 つだけ」の空白)は過剰検知側で、§6.3 の記録で足りると判断。
+
+## 7. 追加作業 ANSWER-M1(2026-09-24、司令塔 e3): M1 の分母「中盤 1 手あたり 4 秒超の局」を patient JSON に足す
+
+**目的**: B の最有力の処方「3 分切れ負けの中盤は 1 手 4 秒を目安に」(M1)は、分母(中盤の 1 手あたり秒が 4 秒を超えた局の数)が JSON に無いため v3 で出せなかった。局ごとの中盤の消費を出し、M1 を `needsData` から判定可能にする。
+
+### 7.1 足す欄(`lib/reportData.ts`、`PatientTime.phaseSpent` に隣接)
+- `time.phaseSpent.perGame`: 局ごとの配列 `{ gameNo, total, midMoves, midSec, midSecPerMove, timeUpLoss }`。`midMoves` = 本人の手のうち `phaseOf` が中盤の手で秒が取れたものの数、`midSec` = その消費の合計(`phaseSpentOfGame` と同じ数え方)、`midSecPerMove` = `midSec / midMoves`(`midMoves` が 0 なら null)、`timeUpLoss` = `isTimeUpLoss`。
+- `time.phaseSpent.midOver`: `{ thresholdSec: TIME_VALUES.quickSec(4), games: perGame のうち midSecPerMove が取れた局の数, over: midSecPerMove > 4 の局の数, overAndTimeUpLoss: そのうち timeUpLoss の局の数 }`。**新しい閾値は置かず、`quickSec` を使い回す**(CLAUDE.md 4 番)。
+- 秒の無い局(`time.available` が false)は `perGame` を空、`midOver` を games 0 にする。
+
+### 7.2 M1 の判定(`lib/answerMenu.ts`)
+- `AnswerMenuPatientGroup` に `midOverGames`・`midOverOver`・`midOverOverAndTimeUpLoss` を足し、`check_answer.py` が `--patient` ごとに読み、同じタグの組は合算する(§2.1 の他の欄と同じ)。
+- `menuConditionHoldsOf("M1")`: 3 分の組で `timeUpLosses.n ≥ 2` かつ `midOver.over ≥ 5`。`answerMenuDenominatorOf("M1")` = `midOver.over`(minN 5)。`needsData` の分岐は消す。
+- 検査 1 の登録済みの組に `midOver.over / midOver.games` と `midOver.overAndTimeUpLoss / midOver.over` を足す(「n のうち m」の両方向)。
+- docs §3 の M1 行の「この版では出さない」を消し、試験の docs 一致(id・段階・minN)に M1 を戻す。
+
+### 7.3 触らないもの
+`render_front.py`(本編は `phaseSpent` の中央値だけを使う。`allowed_numbers_of` は欄の一覧なので、新しい欄は本編に出ない)、`findingTexts.ts`、`TIME_VALUES` の値、凍結 8 本、apps・data。pipeline の配線は変えない(S5 の出力に欄が増えるだけ)。
+
+### 7.4 予測(数を見る前に固定。3 組の patient は `pipeline.ts --until report` で作り直す)
+| # | 何を | 予測 |
+|---|---|---|
+| A1 | 3 分の組(20 + 14 = 34 局)で `midOver.over` | 12〜22(時間で負けた 3 局の中盤 84 秒が目安。中盤はおよそ 20〜30 手で 1 手 3〜4 秒) |
+| A2 | 3 分の組で `overAndTimeUpLoss` | 3 / 3(時間で負けた 3 局はすべて 4 秒超) |
+| A3 | 10 分の組(10 局)で `midOver.over` | 9〜10 / 10 |
+| A4 | M1 が 3 分の組で成立するか | 成立(時間負け 3 ≥ 2、4 秒超 ≥ 5) |
+
+### 7.5 作り方
+実装担当 1 人(worktree、基点 `083457f` 以降)。試験: 合成 2 局(先手・後手、中盤の手の秒を手で置いて `midSecPerMove` と `over` を確かめる。後手は plyOffset の添字)、`answerMenu.test.ts` の M1 の条件 3 ケース(成立・時間負け不足・4 秒超不足)。`check_answer.py` は `--patient` の読み取りに 3 欄を足す(python の試験は実データ + 変異「midOver.over を 4 に書き換えた patient で M1 の行が落ちる」)。独立監査 1 回。GO 後に司令塔が 3 組を作り直し、A1〜A4 を照合して §7.6 に書き、B v4(M1 の項目を足す)を道具に通す。
+
+### 7.6 記録
+(未着手)
