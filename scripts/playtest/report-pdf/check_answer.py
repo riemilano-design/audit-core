@@ -25,6 +25,9 @@
 #     [--read-dir <read.ts の jsonl のフォルダ>]…(複数可。summary 行を合算する。組をまたいで合算する)
 #     [--type-summary <summary.json>]…(複数可。数の照合の材料)
 #     [--whatif-pdf <whatif.pdf>]…(複数可。fitz で印字を読み、指し手の答え合わせに使う)
+#     [--direct <json>]…(複数可。付録 3(ANSWER-DIRECT)の `direct_answers.json`・`final_positions.json` の
+#       どちらも受け付ける ― 中身の `kind` で見分ける。docs/STEP_ANSWER_PLAN_2026-09-23.md §9.2「数の照合」。
+#       検査 1 の単独の数の材料に足すほか、下の「登録済みの組」に (i)〜(v) を足す)
 #     --menu <answer_menu.json>
 #
 # 出力: rc=0 なら通過。rc=1 なら、落ちた文と理由の一覧(1 行 1 件)を標準エラーへ。
@@ -79,6 +82,7 @@ class CliArgs:
         self.read_dirs = []
         self.type_summary_paths = []
         self.whatif_pdf_paths = []
+        self.direct_paths = []
         self.menu_path = None
 
 
@@ -127,6 +131,10 @@ def parse_args(argv):
             continue
         if flag == "--whatif-pdf":
             args.whatif_pdf_paths.append(argv[i + 1])
+            i += 2
+            continue
+        if flag == "--direct":
+            args.direct_paths.append(argv[i + 1])
             i += 2
             continue
         if flag == "--menu":
@@ -382,6 +390,68 @@ def read_combined_of(read_dirs):
     }
 
 
+# ==================== 付録 3(ANSWER-DIRECT): direct_answers.json・final_positions.json(司令塔の指示。
+#   docs/STEP_ANSWER_PLAN_2026-09-23.md §9.2「数の照合」) ====================
+
+
+def direct_answers_group_counts(answers):
+    """`direct_answers.json` の `answers` 配列(局面ごと 1 件)から、組(`group`。「3 分」「10 分」等)ごとの
+    件数を数える(検査 1 の登録済みの組 (v))。"""
+    counts = {}
+    for a in answers:
+        g = a.get("group")
+        counts[g] = counts.get(g, 0) + 1
+    return counts
+
+
+def direct_materials_of(direct_paths):
+    """`--direct` で渡した JSON(`direct_answers.json`・`final_positions.json`、どちらも可。複数可)から、
+    検査 1 の材料を作る。渡された JSON の中身の `kind`(`directAnswers.ts`/`finalPositions.ts` の出力そのまま:
+    `"direct_answers"`/`"final_positions"`)で見分ける。1 つも無ければ None(既存の材料は増えない)。"""
+    direct_answers_list = []
+    final_positions_list = []
+    for path in direct_paths:
+        data = load_json(path)
+        kind = data.get("kind")
+        if kind == "direct_answers":
+            direct_answers_list.append(data)
+        elif kind == "final_positions":
+            final_positions_list.append(data)
+        else:
+            raise CheckAnswerError(f"--direct に渡した JSON の kind が分からない({path})")
+    if not direct_answers_list and not final_positions_list:
+        return None
+
+    total_count = sum(d["counts"]["totalCount"] for d in direct_answers_list)
+    total_fork_count = sum(d["counts"]["totalForkCount"] for d in direct_answers_list)
+    top1_tag_counts = {}
+    actual_tag_counts = {}
+    top1_side_counts = {}
+    group_counts = {}
+    for d in direct_answers_list:
+        for k, v in d["counts"]["top1TagCounts"].items():
+            top1_tag_counts[k] = top1_tag_counts.get(k, 0) + v
+        for k, v in d["counts"]["actualTagCounts"].items():
+            actual_tag_counts[k] = actual_tag_counts.get(k, 0) + v
+        for k, v in d["counts"]["top1SideCounts"].items():
+            top1_side_counts[k] = top1_side_counts.get(k, 0) + v
+        for g, n in direct_answers_group_counts(d["answers"]).items():
+            group_counts[g] = group_counts.get(g, 0) + n
+
+    return {
+        # 単独の数(検査 1)の材料に足すための元データ(collect_numbers の再帰走査にかける)。
+        "raw": direct_answers_list + final_positions_list,
+        # 登録済みの組(i)〜(v)を作るための集計(直接ここで組む ― materials["direct"] としてそのまま使う)。
+        "totalCount": total_count,
+        "totalForkCount": total_fork_count,
+        "top1TagCounts": top1_tag_counts,
+        "actualTagCounts": actual_tag_counts,
+        "top1SideCounts": top1_side_counts,
+        # (v) 組ごとの数。(vi) 組ごとの「局数」はここに置かない(patient の games と混ざるため。登録しない)。
+        "groupCounts": group_counts,
+    }
+
+
 # ==================== 行動のメニューの条件判定(`lib/answerMenu.ts` の menuConditionHoldsOf の写し。
 #   python は TS を import できないので手で合わせる ― render_front.py の GLOBAL_ALLOWED_NUMBERS と同じ流儀) ====================
 
@@ -607,6 +677,20 @@ def registered_pairs_of(patient_files, materials):
         add(sm["attack"]["n"], sm["attack"]["collapsed"])
         add(sm["defense"]["n"], sm["defense"]["collapsed"])
 
+    # 付録 3(ANSWER-DIRECT。§9.2「数の照合」)。(i)〜(v)。(vi) 組ごとの局数は登録しない(patient の games と
+    # 混ざるため ― `direct_materials_of` の docstring と同じ判断)。
+    direct = materials.get("direct")
+    if direct is not None:
+        add(direct["totalCount"], direct["totalForkCount"])  # (i) 浅い読みで見えた分かれ道 / 分かれ道
+        for n in direct["top1TagCounts"].values():
+            add(n, direct["totalCount"])  # (ii) 第 1 候補の印ごとの n / 総数
+        for n in direct["actualTagCounts"].values():
+            add(n, direct["totalCount"])  # (iii) 実戦の印ごとの n / 総数
+        for n in direct["top1SideCounts"].values():
+            add(n, direct["totalCount"])  # (iv) 第 1 候補の側ごとの n / 総数
+        for n in direct["groupCounts"].values():
+            add(n, direct["totalCount"])  # (v) 組ごとの数 / 総数
+
     return pairs
 
 
@@ -643,6 +727,7 @@ def build_materials(args, repo_root):
     groups = combined_groups_of(patient_files)
     read_combined = read_combined_of(args.read_dirs)
     side_match = side_match_of(args.whatif_v2_dirs)
+    direct = direct_materials_of(args.direct_paths)
 
     allowed_numbers = set()
     for f in patient_files:
@@ -651,6 +736,9 @@ def build_materials(args, repo_root):
         collect_numbers(load_json(path), allowed_numbers)
     for path in args.type_summary_paths:
         collect_numbers(load_json(path), allowed_numbers)
+    if direct is not None:
+        for raw in direct["raw"]:
+            collect_numbers(raw, allowed_numbers)
     # 組ごとに合算した数も、単独の数として許す(例: 「34 局」「1134」)。
     for g in groups.values():
         collect_numbers(
@@ -684,7 +772,7 @@ def build_materials(args, repo_root):
         allowed_numbers.add(item["minN"])
     allowed_numbers |= {1, 2, 3, 4, 5, 600, 300, 15, 40, 70}
 
-    materials = {"groups": groups, "readCombined": read_combined, "sideMatch": side_match}
+    materials = {"groups": groups, "readCombined": read_combined, "sideMatch": side_match, "direct": direct}
     pairs = registered_pairs_of(patient_files, materials)
     allowed_numbers |= percent_pool_of(pairs)
 

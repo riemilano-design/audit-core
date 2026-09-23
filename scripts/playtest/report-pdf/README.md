@@ -133,6 +133,10 @@ python3 -X utf8 check_answer.py <B.md>
   [--read-dir <read.ts の jsonl のフォルダ>]…(複数可。組をまたいで合算。summary 行を合算する)
   [--type-summary <summary.json>]…(複数可。検査 1 の数の材料)
   [--whatif-pdf <whatif.pdf>]…(複数可。fitz で印字を読み、指し手の答え合わせに使う)
+  [--direct <json>]…(複数可。付録 3(ANSWER-DIRECT)の `direct_answers.json`(`directAnswers.ts` の出力)・
+    `final_positions.json`(`finalPositions.ts` の出力)のどちらも受け付ける ― 中身の `kind`
+    (`"direct_answers"`/`"final_positions"`)で見分ける。検査 1 の材料に足す ― 単独の数(渡した JSON の
+    再帰走査)と、下の「登録済みの組」)
   --menu <answer_menu.json>(`scripts/playtest/answerMenu.ts` の出力)
 ```
 
@@ -178,7 +182,14 @@ rc=0 なら通過(「通過(落ちた文なし)」を標準出力へ)。rc=1 な
 2 分数(`attack`/`defense` それぞれの `n`/`collapsed`)、**ANSWER-M1(2026-09-24、§7.2)**: `midOver` の
 `over`/`games`、`overAndTimeUpLoss`/`over`(patient ごと・組ごとの合算の両方)、**ANSWER-MENU2(2026-09-24、
 §8.2)**: 「時間負けのうち中央値超え(`timeUpLossMidSecs` のうち `otherGamesMidMedian` を超えた数)/ 時間負け
-(`timeUpLosses.n`)」(組ごとの合算)。
+(`timeUpLosses.n`)」(組ごとの合算)、**ANSWER-DIRECT(2026-09-24、§9.2。`--direct` で渡した JSON から)**:
+(i) 浅い読みで見えた分かれ道の総数(`counts.totalCount`)/ 分かれ道の総数(`counts.totalForkCount`)(例
+30 / 152)、(ii) 第 1 候補の印(`counts.top1TagCounts` の取る・打つ・王手・捨て駒・引く・玉の動き・不成)
+ごとの n / 総数(`counts.totalCount`。例「打つ」16 / 30)、(iii) 実戦の印(`counts.actualTagCounts`)ごとの
+n / 総数、(iv) 第 1 候補の側(`counts.top1SideCounts` の攻め・守り・両方・なし)ごとの n / 総数、(v) 組
+(`answers[].group`。「3 分」「10 分」等)ごとの局面数 / 総数(例「3 分」21 / 30)。**(vi) 組ごとの「局数」
+(`counts.gamesCount` にあたる、組ごとに絞った局数)は登録しない**(`--patient` の `games`(対局の局数)と
+混ざるため)。`--direct` を複数渡した場合は、これらの分子・分母をそれぞれ合算する。
 
 **既知の限界**: 検査 1 の単独の数(分数でない 1 つの数)は、渡された JSON のどこかに同じ値があれば通す(再帰的な
 数値走査。`render_front.py` の `allowed_numbers_of` のようなフィールドごとの明示的な一覧ではない)。値の意味
