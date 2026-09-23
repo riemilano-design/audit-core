@@ -646,6 +646,74 @@ npx tsx scripts/playtest/finalPositions.ts --kifu <固定棋譜 JSON …> --pati
 
 上の 2 つの JSON(+ `sfens.json`)から付録 3 を作る。詳しくは `report-pdf/README.md` を参照。
 
+## 時間負けの要因を、機械で測れる候補に分解する(`timeCause.ts`・`lib/timeCause.ts`。STEP TIME-CAUSE、docs/STEP_TIME_CAUSE_PLAN_2026-09-24.md §2・§3)
+
+人間の指摘(2026-09-24): 「時間が無い → 10 分で指す」は条件変更であって対策ではない。「なぜ無いのかを機械的に
+分解する」。原因候補(C1〜C10)を最初から処方にせず、**全部を候補として測り、数字が出たものだけを B に上げる**。
+
+`lib/timeCause.ts`(純粋関数)は、固定棋譜の `moveSeconds`・whatif-v2 の position 行(`ply`・`scenes.fork`・
+`candidates[0].side`・`actualSide`)・patient の局の対応(`gameNo`↔`kifuId`・`timeUpLoss`)から、局ごとに
+C1〜C9・`remainingSec`(C10 の材料)・`midMoveSeconds`(付録 4 の帯用)を組み、組ごとに時間切れで負けた局と
+それ以外の局を分けて集計する(`buildGroupTimeCause`)。**新しい閾値は置かない**(`lib/reportData.ts` の
+`TIME_VALUES`・`phaseOf`・`ownParityOf`・`spentBucketIndexOf` と `lib/type.ts` の `sideBucketOf` を import
+して使い回すだけ)。
+
+```
+npx tsx scripts/playtest/timeCause.ts \
+  --kifu-dir <固定棋譜〈*.fixed.json〉のフォルダ> --patient <patient_report_data.json> --time-limit-sec <秒> \
+    [--whatif-v2-dir <whatif-v2 jsonl のフォルダ>] \
+  [--kifu-dir <フォルダ> --patient <path> --time-limit-sec <秒> [--whatif-v2-dir <フォルダ>] …]（組をまたいで合算） \
+  --out <time_cause.json>
+```
+
+- **組(`--kifu-dir` で始まるブロック)の決め方(実装担当の判断)**: `directAnswers.ts`・`finalPositions.ts` は
+  フラグの「対」を同じ回数だけ並べる形式だが、`--whatif-v2-dir` は組ごとに有る・無いの両方が起こる(実データ:
+  `tatsunami20` に `whatif-v2` が無い)。そのため「`--kifu-dir` が出るたびに新しい組を始め、次の
+  `--kifu-dir`(または `--out`)までの間のフラグをその組のものとして読む」形式にした。`--time-limit-sec` は必須
+  (C10 の「終局時の残り秒」に持ち時間の秒が要る)。組のラベルは `directAnswers.ts` と同じ対応(180 → 3 分、
+  600 → 10 分)。
+- **局の選び方**: `--kifu-dir` の `*.fixed.json` のうち、`--patient` の `games[].id` に対応があるものだけを
+  対象にする。`timeUpLoss` は `time.timeUpLosses[*].gameNo` の集合に、対応する `games[].no` が含まれるかで
+  決める(`finalPositions.ts` と同じ考え方)。**`--time-limit-sec` が同じ複数の `--kifu-dir` を 1 つの組に
+  合算すると、局番号(`gameNo`)は元の `--patient` ごとに 1 から始まるため、同じ組・同じ局番号が別の対局を
+  指すことがある**(実データで実際に起きる。`tatsunami20` の 1〜14 局目と `tatsunami3` の 1〜14 局目が両方
+  「3 分」組に入る)。`kifuId` で一意に見分けられる(JSON の各局の行に必ず入る。付録 4 の PDF にも列を足した)。
+- **C1〜C9 の測り方(`lib/timeCause.ts` の `buildGameTimeCause`)**:
+  - C1・C2(+ 終盤): `phaseOf`(既存)で本人の手を早・中・遅に分け、消費秒(`spentSec`)を合計する。
+  - C3・C4・C5: 長考(`TIME_VALUES.longThinkSec` 以上)の時期ごとの回数、最長の 1 手とその手目、本人の連続する
+    2 手(間に他の手を挟まない)がともに長考だった回数。
+  - C6: 中考(`spentBucketIndexOf` が 2、= 4 超〜9 秒)の時期ごとの回数・合計秒。
+  - C7・C8: 長考の手を whatif-v2 の position 行と `recordPly`(= `kifPly − plyOffset`。whatif-v2 の `ply` と
+    同じ数え方 ― 実データで確認済み)で結合し、結合できたものの中で分かれ道(`scenes.fork`)に当たる数 /
+    結合できた長考の総数(C7)、そのうち側が逆(`lib/type.ts` の `sideBucketOf` が
+    `top1AttackActualDefense`/`top1DefenseActualAttack`。「両方」「なし」は逆に数えない)だった数 / 長考かつ
+    分かれ道の総数(C8)。whatif-v2 が無い組はどちらも null。
+  - C9: 序盤の終わり(`phaseOf` が mid になる最初の本人の手の直前の局面)で、本人・相手の飛車が初期の筋
+    (先手 2 筋・後手 8 筋)に居るか(`rookOnInitialFileOf`)。局面は本人が指した向き(`originalMoves`・
+    `DEFAULT_INITIAL_SFEN`・`applyMove`)で作る(`lib/finalPosition.ts` は mirrored な局を「本人 = 先手」に
+    そろえた向きへ進めるため、絶対筋を見るこの用途にはそのまま使えない ― 実装担当の判断。ファイル冒頭コメント
+    参照)。
+  - C10 の材料(`remainingSec`): `timeLimitSec` − 最後に読めた本人の手の累積消費(`totalSec`)。
+- 組ごとの集計(`buildGroupTimeCause`): 時間切れで負けた局とそれ以外の局に分け、C1〜C6 の中央値、C7・C8 の
+  分数(局をまたいで合算)、C9 の 2×2(own×opponent)ごとの局数・序/中の消費の中央値、C10 の表(局ごとの
+  early・mid・remaining。**相関の値は出さない。並べるだけ**)を組む。
+- 出力(`time_cause.json`): `{"kind":"time_cause", gitHead, dirty, games, groups}`。`games` は局ごとの行(上の
+  C1〜C10 の生の値 + `midMoveSeconds`)、`groups` は組ごとの集計。
+- 試験(`lib/timeCause.test.ts`): 合成 2 局(先手・mirrored: false と後手・mirrored: true。実在の 30 手の対局の
+  最初の 24 手を使い、7 手目の飛車の動きで C9 の両方の分岐を作る)で C1〜C9・`remainingSec`・`midMoveSeconds`
+  を手で計算した値と突き合わせる。`phaseOf` の境界(early/mid・mid/late)が `lib/reportData.ts` の
+  `phaseSpentOfGame`(同じ既存関数。試験のため export した)と同じ側に落ちることも確かめる。組ごとの集計は
+  合成の `GameTimeCause`(盤面を伴わない)で `medianOf`・分数の合算・2×2 の内訳を確かめる。
+- 実データでの確認(2026-09-24、実装担当): `tatsunami20`(3 分・`whatif-v2` 無し)・`tatsunami3`(3 分・
+  `whatif-v2` あり)・`tatsunami-long`(10 分・`whatif-v2` あり)の 3 組(局 44)で rc=0。局ごとの `mid`
+  (中盤の消費)が `patient_report_data.json` の `time.phaseSpent.perGame.midSec` と 44 局全部で一致(3 分の組
+  34 局・10 分の組 10 局とも)。付録 4 の PDF も rc=0・全書体埋め込み・fitz で PNG 化して目視確認(3 分の組の
+  時間切れ 3 局の帯を含む)。
+
+### `report-pdf/render_time_cause.py`(付録 4「時間の使い方」の PDF)
+
+`time_cause.json` から付録 4 を作る。詳しくは `report-pdf/README.md` を参照。
+
 ## typecheck
 
 ```

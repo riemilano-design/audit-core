@@ -285,6 +285,35 @@ markdown を見出し(`#`・`##`・`###`)・箇条書き(`-`・`1.`)・表(`|...
   `tatsunami-long`・`tatsunami20` の 3 組)での実行時確認(rc=0・ページ数・fitz で PNG化した目視確認。mirrored
   〈本人が後手〉の局・mirrored でない局の両方を含む)
 
+## 付録 4「時間の使い方」(`render_time_cause.py`。STEP TIME-CAUSE、docs/STEP_TIME_CAUSE_PLAN_2026-09-24.md §2・§3)
+
+`render_direct.py`・`render_front.py` と同じ位置づけの**単体の新規ファイル**(`build.sh` では作らない)。
+`scripts/playtest/timeCause.ts` が作る `time_cause.json` を描くだけで、判定・集計は TypeScript 側
+(`lib/timeCause.ts`)がすでに済ませている。
+
+- 入力: `time_cause.json` のみ(`REPORT_DATA_DIR`・`sfens.json` は使わない ― 盤面は描かない)
+- 使い方: `python3 -X utf8 render_time_cause.py <time_cause.json> <出力 PDF>`
+- ページ: 1 ページ目(局ごとの表 ― 組・局・`kifuId`・手数・序/中/終の秒・長考の回数・最長の 1 手・連続・
+  中考の回数・本人/相手の飛車の筋の印・時間切れか) / 2 ページ目以降(組ごとに「要因の候補」― C1〜C6 の中央値の
+  表〈時間切れの局・他の局〉・C7/C8 の分数・C9 の 2×2 の内訳・C10 の局ごとの表) / 最後(時間切れで負けた対局
+  ごとに、中盤の手ごとの秒を縦棒で描く帯〈`MidBars` Flowable。手目を横軸、秒を棒の高さ、10 秒の参考線
+  〈`TIME_VALUES.longThinkSec` と同じ値。新しい閾値ではない〉、分かれ道の手は棒の色を変えて丸い印を添える〉)
+- **`kifuId` 列(実装担当の判断)**: `--time-limit-sec` が同じ複数の `--kifu-dir` を 1 つの組に合算すると
+  (実データ: `tatsunami20`・`tatsunami3` はどちらも 180 秒 = 「3 分」)、局番号(`gameNo`)は元の `--patient`
+  ごとに 1 から始まるため、同じ組・同じ局番号が別の対局を指すことがある(実データで実際に起きた)。1 ページ目の
+  表と帯の見出しに `kifuId` を足して一意に見分けられるようにした。
+- 数の照合・禁止語・書体の埋め込みの確認は `render_direct.py`(`emit()`)・`render_front.py` と同じ考え方。
+  禁止語は `render_whatif.py` の `BANNED` と文字どおり同じ 15 語(「原因」「傾向」を含む ― 見出しは
+  「時間の使い方」「要因の候補」にした)。中央値の小数(例: `11.5 秒`)は `[0-9]+` の正規表現で `11`・`5` に
+  割れるため、表示に使う文字列そのものから許す数を作る(`digits_of`。実装担当の判断)
+- この文書は「考えられること」「試せること」のような解釈・助言の文を持たない(B の役目ではなく、道具が確かめた
+  数を並べる付録。`render_direct.py`・`render_whatif.py` と同じ位置づけ)
+- 依存はこの README の「依存」節と同じ(`reportlab`・`pymupdf`)。新しい依存は足していない
+- この python の道具も vitest の対象外(`report-pdf/` の他の道具と同じ理由)。守りは、合成データ(局 2 つ・
+  長考の手が分かれ道に当たる/当たらない・fork が null の組を含む)での rc=0・書体埋め込み確認と、実データ
+  (`tatsunami20`・`tatsunami3`・`tatsunami-long` の 3 組、局 44)での実行時確認(rc=0・全書体埋め込み・fitz で
+  PNG 化した目視確認。時間切れで負けた 3 局の帯 ― `whatif-v2` あり/なしの両方を含む ― も確認した)
+
 ## 既知の欠落(2026-09-21 独立監査 REVISE で明記)
 
 別冊(`render_appendix.py`)は、`audit_metrics.json` の `candidate.reps` の欄(`side`・`transitionJp`・`capUsJp` ほか)と

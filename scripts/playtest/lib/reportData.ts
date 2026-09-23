@@ -516,8 +516,12 @@ export function moveSecondsOf(fixed: FixedKifu): readonly (MoveTime | null)[] | 
   return fixed.moveSeconds;
 }
 
-/** 本人が指した側の手番(KIF の手数の偶奇。先手なら奇数、後手なら偶数)。 */
-function ownParityOf(side: "先手" | "後手"): 0 | 1 {
+/**
+ * 本人が指した側の手番(KIF の手数の偶奇。先手なら奇数、後手なら偶数)。
+ * STEP TIME-CAUSE(docs/STEP_TIME_CAUSE_PLAN_2026-09-24.md §2)が lib/timeCause.ts から使うため export した
+ * (最小の export 追加。値は変えていない)。
+ */
+export function ownParityOf(side: "先手" | "後手"): 0 | 1 {
   return side === "先手" ? 1 : 0;
 }
 
@@ -663,8 +667,13 @@ function buildByLeft(games: readonly BuiltGame[], secondsByGame: ReadonlyMap<str
   return buckets;
 }
 
-/** 序盤・中盤・終盤(phaseOf)ごとの、本人の消費(spentSec)の合計。 */
-function phaseSpentOfGame(game: BuiltGame, seconds: readonly (MoveTime | null)[], total: number): { early: number; mid: number; late: number } {
+/**
+ * 序盤・中盤・終盤(phaseOf)ごとの、本人の消費(spentSec)の合計。
+ * STEP TIME-CAUSE(docs/STEP_TIME_CAUSE_PLAN_2026-09-24.md §3。試験の突き合わせ用)が
+ * lib/timeCause.test.ts から使うため export した(最小の export 追加。値は変えていない。
+ * `game` が持つ `BuiltGame`〈unexported〉は `.side`・`.plyOffset` しか読まない)。
+ */
+export function phaseSpentOfGame(game: BuiltGame, seconds: readonly (MoveTime | null)[], total: number): { early: number; mid: number; late: number } {
   const parity = ownParityOf(game.side);
   const sums = { early: 0, mid: 0, late: 0 };
   for (let kifPly = parity === 1 ? 1 : 2; kifPly <= seconds.length; kifPly += 2) {
