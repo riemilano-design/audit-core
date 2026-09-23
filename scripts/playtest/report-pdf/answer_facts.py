@@ -296,8 +296,17 @@ def bullet_6(m, name):
 def bullet_7(m, name):
     g3 = need(m["groups"].get("min3"), "3 分の組(min3)の patient")
     tc3 = need(raw_time_cause_group(m, 180), "time_cause.json の 3 分の組(組の名前)")
-    cur = need(current_patient(m, "min3"), "今回の組(min3 の最後の patient)")
     ge10_g, le1_g = g3.by_spent[3], g3.by_spent[0]
+    # min3 の --patient が 1 つだけ(= 前回の組が無い初回の顧客)なら、「今回の…局だけなら」を
+    # 重ねて書かない(cur と g3 が必ず同じ組になり、同じ分数が 2 回並ぶため)。数が偶然一致したかで
+    # 判定しない(材料の形=min3 の patient の本数で判定する。実装担当の判断。指示書 1-B)。
+    min3_patient_count = len([f for f in m["patientFiles"] if f.tag == "min3"])
+    if min3_patient_count == 1:
+        return (
+            f"- 10 秒以上考えた手の崩れ: {tc3['group']} {g3.games} 局で {ge10_g['collapsed']} / {ge10_g['n']}。"
+            f"1 秒以内の手は {le1_g['collapsed']} / {le1_g['n']}({g3.games} 局)。"
+        )
+    cur = need(current_patient(m, "min3"), "今回の組(min3 の最後の patient)")
     ge10_c, le1_c = cur.by_spent[3], cur.by_spent[0]
     return (
         f"- 10 秒以上考えた手の崩れ: {tc3['group']} {g3.games} 局で {ge10_g['collapsed']} / {ge10_g['n']}、"
@@ -399,8 +408,11 @@ PROMISE = """1. ここに出る秒数・回数・評価は、すべて事実の�
 4. 「やらなくていいこと」も書きます。事実から効果を予測できない処方は、今回の優先候補には入れません(将来も効かない、という意味ではありません)。"""
 
 
-def render(materials, name):
-    """v7 と同じ見出し構造の md を組む。事実の箇条書き以外はすべて `<!-- TODO: 読み -->`。"""
+def render(materials, name, has_time_search):
+    """v7 と同じ見出し構造の md を組む。事実の箇条書き以外はすべて `<!-- TODO: 読み -->`。
+    `has_time_search`(= `--time-search` が渡されたか)で、存在しない付録 4 の 8〜11 ページを
+    案内しないように見出しを切り替える(指示書 1-A。初回の顧客は探索を回していないため
+    8〜11 ページが無い)。"""
     missing = []
     rendered_blocks = []
     for heading, builders in BLOCKS:
@@ -416,6 +428,13 @@ def render(materials, name):
     def block(index):
         heading, lines = rendered_blocks[index]
         return heading + "\n" + "\n".join(lines)
+
+    if has_time_search:
+        time_search_heading_1 = "**何がその局を遅くするのか ― 機械に探させた結果(付録 4 の 8〜11 ページ)**"
+        time_search_heading_2 = "**機械に探させた結果(問題 2 にも同じ探索を当てました。付録 4 の 8〜11 ページ)**"
+    else:
+        time_search_heading_1 = "**何がその局を遅くするのか ― 今回は機械に探させていません(発見用と検証用の 2 組が要るため、2 回目の納品から出ます)**"
+        time_search_heading_2 = "**今回は機械に探させていません(問題 2 も同じです。2 回目の納品から出ます)**"
 
     md = f"""# 「どうしたら」への答え
 
@@ -437,7 +456,7 @@ def render(materials, name):
 
 {block(0)}
 
-**何がその局を遅くするのか ― 機械に探させた結果(付録 4 の 8〜11 ページ)**
+{time_search_heading_1}
 
 {TODO}
 
@@ -457,7 +476,7 @@ def render(materials, name):
 
 {block(3)}
 
-**機械に探させた結果(問題 2 にも同じ探索を当てました。付録 4 の 8〜11 ページ)**
+{time_search_heading_2}
 
 {TODO}
 
@@ -493,7 +512,7 @@ def render(materials, name):
 def main(argv):
     args, name, out = parse_args(argv)
     materials = build(args)
-    md, missing = render(materials, name)
+    md, missing = render(materials, name, bool(args.time_search_paths))
     os.makedirs(os.path.dirname(os.path.abspath(out)), exist_ok=True)
     with open(out, "w", encoding="utf-8") as f:
         f.write(md)
