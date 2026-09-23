@@ -944,6 +944,13 @@ npx tsx scripts/playtest/deliver.ts \
 S1〜S4・whatif・READ は済みの判定で飛んでいる。**エンジンを実際に回したのは段 7 だけ**)。
 段 1 の所要だけは別の実測(`gate.jsonl` を消した 14 局の複製で走らせたときの `deliver_log.jsonl`)。
 
+**表の所要は「材料が済みだったとき」の数字である。初めての顧客(空の work)の実測は別にある**
+(2026-09-23、別セッションの 20 局 + 比べの 30 局。`deliver_log.jsonl`):
+**機械の時間の合計 5781 秒 = 96.4 分**で、うち段 `pipeline-gate` が 3816 秒・段 `pipeline-data` が
+1954 秒、**残る 16 段の合計は 11 秒**。ほぼ全部がエンジンの評価と READ である。局数・比べの材料が違うので
+表の数字と直接は比べられないが、**初めての顧客では 1 時間半ほどかかる**ことの目安になる。
+人の確認点で止まっていた時間は含まない(それは原価③。docs/STEP_DELIVER1_PLAN_2026-09-25.md §11.5.5)。
+
 | # | 段 | 入力 | 出力 | 所要 | 人間の操作 | 停止条件 |
 |---|---|---|---|---|---|---|
 | 1 | `pipeline-gate` | `--kifu-dir` の棋譜、`--compare-dir` の段 2 の記録 | `<work>/<person>/gate.jsonl`(判定の出力) | 47.7 秒(14 局 + 試す側 30 局。**`gate.jsonl` があれば 0.0 秒で飛ぶ**) | なし | `pipeline.ts --until gate` rc≠0 / `gate.jsonl` が無いのに `--compare-dir`・`--compare-person` が渡されていない |
