@@ -31,11 +31,12 @@
 #     [--time-cause <json>]…(複数可。付録 4(STEP TIME-CAUSE)の `time_cause.json`(`lib/timeCause.ts` の
 #       `TimeCauseFile`)。中身の `kind`(`"time_cause"`)で確かめる。検査 1 の単独の数の材料に足すほか、
 #       下の「登録済みの組」に (i)〜(iv) を足す ― `--direct` と同じ流儀)
-#     [--time-search <json>]…(複数可。付録 4 の探索(STEP TIME-CAUSE-2・STEP TIME-CAUSE-3)の
+#     [--time-search <json>]…(複数可。付録 4 の探索(STEP TIME-CAUSE-2・STEP TIME-CAUSE-3・CAUSE-SEARCH-1)の
 #       `time_cause_search.json`(`scripts/playtest/timeSearch.ts` の出力、`lib/timeSearch.ts` の
 #       `SearchResult`)。中身の `kind`(`"time_cause_search"`)で確かめる。検査 1 の単独の数の材料に足すほか、
-#       下の「登録済みの組」に (i)〜(vii) を足す ― `--direct`・`--time-cause` と同じ流儀。(iv)〜(vii) は
-#       STEP TIME-CAUSE-3(崩れ q・共通因子・偶然の目安)で足した)
+#       下の「登録済みの組」に (i)〜(x) を足す ― `--direct`・`--time-cause` と同じ流儀。(iv)〜(vii) は
+#       STEP TIME-CAUSE-3(崩れ q・共通因子・偶然の目安)、(viii)〜(x) は CAUSE-SEARCH-1(`searches.*`・
+#       `byOutcome.decisionGap` の単独の分数)で足した)
 #     --menu <answer_menu.json>
 #
 # 出力: rc=0 なら通過。rc=1 なら、落ちた文と理由の一覧(1 行 1 件)を標準エラーへ。
@@ -868,6 +869,37 @@ def registered_pairs_of(patient_files, materials):
                 # (vii) inReproduced.depthN / depths[N].reproduced(N = 1・2・3。長考の探索の再現の数)。
                 for depth_index, key in ((0, "depth1"), (1, "depth2"), (2, "depth3")):
                     add(f["inReproduced"][key], data["depths"][depth_index]["reproduced"])
+
+            # STEP CAUSE-SEARCH-1(docs/STEP_TIME_CAUSE_PLAN_2026-09-24.md §11.1 の 6.)。`searches.*`
+            # (アウトカムごとの探索。`--outcomes` で絞った場合は渡された鍵だけ)。無ければ(古い形式の
+            # JSON)スキップする ― `--time-cause` と同じ「無ければ増えない」流儀。
+            searches = data.get("searches", {})
+            for outcome, outcome_result in searches.items():
+                for cond in list(outcome_result["reproduced"]) + list(outcome_result["notReproduced"]):
+                    # (viii) `searches.<outcome>` の各条件の分数(longThink/n・collapsed/collapseCounted・
+                    # decisionGap の matched/n)。
+                    if outcome == "longThink":
+                        add(cond["discover"]["longThink"], cond["discover"]["n"])
+                        add(cond["validate"]["longThink"], cond["validate"]["n"])
+                    elif outcome == "collapse":
+                        add(cond["discover"]["collapsed"], cond["discover"]["collapseCounted"])
+                        add(cond["validate"]["collapsed"], cond["validate"]["collapseCounted"])
+                    elif outcome == "decisionGap":
+                        add(cond["discover"]["matched"], cond["discover"]["n"])
+                        add(cond["validate"]["matched"], cond["validate"]["n"])
+                for d in outcome_result["depths"]:
+                    # (ix) `searches.<outcome>` の深さごとの adopted/tried・reproduced/adopted。
+                    add(d["adopted"], d["tried"])
+                    add(d["reproduced"], d["adopted"])
+
+            if "decisionGap" in searches:
+                for f in data["factors"]:
+                    # (x) `byOutcome.decisionGap` の判定に使った、部品単独の decisionGap の分数
+                    # (`singleDecisionGap`。発見用・検証用とも)。`longThink`・`collapse` の単独の分数は
+                    # 既存の (vi)(`f["single"]`)で登録済み。
+                    sdg = f["singleDecisionGap"]
+                    add(sdg["discover"]["matched"], sdg["discover"]["n"])
+                    add(sdg["validate"]["matched"], sdg["validate"]["n"])
 
     return pairs
 

@@ -846,6 +846,44 @@ npx tsx scripts/playtest/timeSearch.ts \
   候補 0 になるよう設計)で `kind` が B/C になること・`collapseSearch`・`factors`(`explains`・`inReproduced`・
   `inCollapseReproduced`・`inKindB`・`inKindC`・並び順)を確かめる。
 
+### CAUSE-SEARCH-1(2026-09-25、docs/STEP_TIME_CAUSE_PLAN_2026-09-24.md §11)。探索器を「アウトカムを 1 つ指定する道具」に一般化
+
+人間の整理: このアルゴリズムを時間だけでなく普遍的なものにしたい。`lib/timeSearch.ts` に `OUTCOMES`
+(`"longThink" | "collapse" | "decisionGap"`)を公開し、アウトカムごとに探索を 1 回ぶん取り直せるようにした。
+
+- **`decisionGap`(新しいアウトカム)**: 分かれ道で実戦の手がエンジンの評価で `STANDING_BOUNDS.aheadCp`(300)
+  以上損していたこと(`fork && lossBand === "over300"`)。`fork` が `null`(whatif-v2 の無い手)は `null`
+  (集計に入らない)。
+- **アウトカムごとの除外列**: `longThink` は `spentBucket`・`spentSec`(もともと `SEARCH_COLUMNS` に無い、
+  既存の除外)。`collapse`・`decisionGap` は `fork`・`lossBand`・`inTop5`・`evalChangePrev`(実戦の手の評価差
+  そのもの)を新しく除く。除外は `enumerateCandidatesOf`・`runSearchOf` に足した任意の `columns` 引数
+  (既定は `SEARCH_COLUMNS`。省略すれば以前と同じ)で行う。
+- **`SearchResult.searches: { longThink, collapse, decisionGap }`**(渡す `columns` が違うだけの各 1 探索)。
+  `searches.longThink` は既存の `depths`・`reproduced`・`notReproduced`(トップレベル)と同じ中身(同じ
+  オブジェクト)。`searches.collapse` は既存の `collapseSearch` とは**列が違う**(新しい除外)ため中身も違う
+  ― 既存の `collapseSearch` は変えていない(同一性の試験を優先)。`searches.collapse` の各条件には崩れの
+  内訳(`collapsedLong`: `spentBucket === ">9"` の崩れ、`collapsedQuick`: `"≤1"` の崩れ)を足した。
+  `decisionGap` は `ConditionStats` を広げず、専用の `OutcomeStats`(`n`・`matched`・`rate`)で持つ
+  (`ConditionStats` を広げると既存の鍵の JSON が変わってしまうため)。
+- **`FactorEntry.byOutcome: { longThink, collapse, decisionGap }`**(`"single" | "combo" | null`。`single` =
+  部品 1 つが両組でそのアウトカムの線を越える、`combo` = そのアウトカムの再現した組〈`searches.<outcome>.
+  reproduced`〉に入る)。`byOutcome.longThink` は既存の `explains.longThink` と同じ判定(そのまま複製)。
+  `byOutcome.decisionGap` の判定に使った部品単独の分数は `FactorEntry.singleDecisionGap`(発見用・検証用の
+  `OutcomeStats`)として新しく JSON に出す(`longThink`・`collapse` の単独の分数は既存の `single` に入っている)。
+- **同一性の試験(§11.1 の 7.)**: 一般化の前(feature HEAD `ac1c35c`)と後で、実データ(発見 = `tatsunami20`
+  〈whatif-v2 なし〉・検証 = `tatsunami3`〈whatif-v2 あり〉、ともに 180 秒)に対し `depths`・`reproduced`・
+  `notReproduced`・`collapseSearch`・`factors[].explains`・`factors[].inReproduced` が JSON として完全に一致
+  することを確かめた(実装担当、スクラッチで python 比較)。
+- CLI(`timeSearch.ts`)に `--outcomes longThink,collapse,decisionGap`(既定 3 つ全部。指定した鍵だけを出力の
+  `searches` に残す。`searchOf` 自体は常に 3 つとも計算する)。
+- `report-pdf/render_time_cause.py` の「探索の結果」ページを `TS["searches"]` を使って書き直した(渡された
+  `--outcomes` の分だけアウトカムごとの深さの表・上位 10 の一覧を出す)。共通因子の表は既存の 5 列に
+  「判断のずれとの関係」(`byOutcome.decisionGap`)を足した 6 列。旧来の「時間と崩れの両方を説明する条件」
+  「速く指した手が崩れと一緒に起きている条件」(kind A/B/C の一覧)は、アウトカムごとの上位 10 の一覧に
+  置き換えた。実データ(実装担当、発見用に whatif-v2 が無いため `decisionGap` は 0 件): rc=0・10 ページ。
+- `check_answer.py --time-search` の登録に `searches.*`(viii〜ix)・`singleDecisionGap`(x)を足した(別コミット)。
+  詳しくは `report-pdf/README.md` の同じ見出しを参照。
+
 ## typecheck
 
 ```

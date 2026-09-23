@@ -221,7 +221,17 @@ validate.collapsed / validate.collapseCounted の 4 つ)、(vii) `factors[]` の
 `inReproduced.depth1`/`depth2`/`depth3` と、対応する `depths[0]`/`depths[1]`/`depths[2]` の `reproduced`
 (長考の探索の再現の数)を登録する。**局ごとの時期別の分数のような小さい数は登録しない**(§8.5 と同じ判断)。
 `--time-search` を複数渡した場合は、ファイルごと(1 回の探索の実行ごと)に別々の集計として登録する
-(`--time-cause` の `group` のような合算先の鍵が無いため)。
+(`--time-cause` の `group` のような合算先の鍵が無いため)。**CAUSE-SEARCH-1(2026-09-25、§11.1)で足した
+`searches.*`(アウトカムごとの探索。JSON に `searches` が無い〈一般化の前に作った古い形式の〉ファイルは
+スキップする)**: `searches` に入っている各アウトカム(`longThink`・`collapse`・`decisionGap`。`--outcomes`
+で絞った場合は渡された分だけ)について、(viii) `searches.<outcome>.reproduced[]`・`notReproduced[]` の各条件の
+分数(`longThink` は discover.longThink / discover.n・validate.longThink / validate.n、`collapse` は
+discover.collapsed / discover.collapseCounted・validate.collapsed / validate.collapseCounted、`decisionGap` は
+discover.matched / discover.n・validate.matched / validate.n)、(ix) `searches.<outcome>.depths[]` の深さごとの
+adopted / tried・reproduced / adopted、(x) `searches.decisionGap` があるときだけ、`factors[]` の各部品の
+`singleDecisionGap`(`byOutcome.decisionGap` の判定に使った部品単独の分数)の discover.matched / discover.n・
+validate.matched / validate.n を登録する(`longThink`・`collapse` の単独の分数は既存の (vi)〈`factors[].single`〉
+で登録済みのため重複させない)。
 
 **既知の限界**: 検査 1 の単独の数(分数でない 1 つの数)は、渡された JSON のどこかに同じ値があれば通す(再帰的な
 数値走査。`render_front.py` の `allowed_numbers_of` のようなフィールドごとの明示的な一覧ではない)。値の意味
