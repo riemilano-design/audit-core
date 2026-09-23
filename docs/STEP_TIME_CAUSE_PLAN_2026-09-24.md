@@ -158,6 +158,11 @@
 - 問題 1 の「分かっている事実」に 8.2 の 1・2 を、探索の数つきで書く(`check_answer.py --time-search` の配線が要る → §8.5)。行動は既存の M9(中盤 30 秒超えで残り時間を見る)で覆い、**新しい行動(例: 「相手が駒を打った直後の手は、指す前に残り時間を見る」= M10 候補)は次の版で docs §3 の表 → 監査を経てから**。レベル 2(その条件を変えたら時間が減るか)は次の 20 局で。
 - 「原因」「傾向」は使わない。「一緒に起きている」「長考になりやすい」まで。
 
-### 8.5 `check_answer.py --time-search` の配線(依頼中)
+### 8.5 `check_answer.py --time-search` の配線(2026-09-24、`4425f1e` → feature へ cherry-pick `d5d8c85`)
 
-`--time-cause` と同じ流儀で、`time_cause_search.json` の単独の数と、各条件の `longThink / n`(発見用・検証用)、深さごとの `adopted / tried`・`reproduced / adopted`・`reproduced / tried`、全体の「長考の数 / 手の数」を登録する。記録は取り込み後に足す。
+- 実装(実装担当、`--time-cause` と同じ流儀): `--time-search <time_cause_search.json>`(複数可、合算せず各ファイル独立)。`raw` を単独の数の走査へ。登録済みの組: (i) `reproduced[]`・`notReproduced[]` の各条件の `discover.longThink / n`・`validate.longThink / n`、(ii) 深さごとの `adopted / tried`・`reproduced / adopted`・`reproduced / tried`、(iii) 発見用・検証用の「長考の数 / 手の数」(`round(moves × longThinkRate)`、1e-6 以内で一致した時だけ。実データ 33 / 744・35 / 604)。`%` は既存の `percent_pool_of` に任せる。差分は `check_answer.py`・README の 2 ファイル。
+- 独立監査 1 回: GO。監査担当の実測: B v5 の写しで `--time-search` を外すと落ちる 8 組(7/75・14/70・33/744・35/604・9/73・6/36・10/97・8/54)が、付けるとすべて通る。**衝突の広さ**: v5 が書いた分数 6 つの分母 ±1・分子 ±1 の変異 20 本のうち、**全条件(566 件)を登録すると 8 本(40%)が通ってしまう**(別の条件の n・長考数と偶然一致。例: 7 / 74 は別の 2 条件の組の発見用と一致)。`reproduced[]` だけ(226 件)に絞った写しでは 5 本(25%)。vitest 1468・typecheck-scripts・check-docs・`diff --check` rc=0。承認の根拠: 監査の実測 + cherry-pick 後 vitest 1468 + 司令塔の `run_check.sh`(`--time-search` 込み)で B v5 が rc=0。
+- **司令塔の判断(登録の範囲)**: 実装のまま(全条件)を採る。B が「再現しなかった条件」を再現せずと書く使い方を許すため。25% と 40% の差は、この検査を信用に足るものにはしない。**この材料に対する組の照合は弱い**(566 件の小さい分数を登録すれば ±1 の数が別の条件と偶然重なる)と明記する。B v5 の探索の数は、司令塔が JSON から直接写した(§8.2 の 8 組)。
+- 次の版の候補(docs → 監査): 探索の数を B に書くときは、`<!-- menu: -->` と同じく **`<!-- cond: inCheck=False,oppPrevDrop=True -->` の印で条件を名指し**し、その行の分数を「その条件の発見用・検証用の数」とだけ照合する(superset でなく 1 対 1)。これで衝突は消える。同じ考えを `--time-cause`(C7・C8)・`--direct` にも広げられる(STEP ANSWER §9.5 の「欄の一覧への superset 化」と同じ方向)。
+- B v5 の書き方: 「2 倍」は検査 1 の「倍」「割」に当たるので、「長考の出方が全体より目立って多かった組」と書き、線の引き方は付録 4 の 8 ページ(手の数が十分に多く、長考の割合が全体よりはっきり高い組)に任せた。
+
