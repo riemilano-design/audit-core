@@ -763,6 +763,40 @@ whatif-v2 自身の `candidates[].tags`/`actualTags`(`WhatifMoveTags`)は攻め�
 n ≥ `TIME_SEARCH_VALUES.validateMinN`(= 10。この計画で唯一の新しい値)かつ p ≥ p0(検証用) × 2 なら
 「再現した」(`isReproducedOf`)。
 
+#### STEP TIME-CAUSE-3(2026-09-25、docs/STEP_TIME_CAUSE_PLAN_2026-09-24.md §9)。探索の結果を圧縮し、時間 × 崩れで照合する
+
+- **崩れの列**(`lib/timeFeatures.ts` の `MoveFeatureRow.collapse: boolean | null`): この手の前の評価(`evalBand`
+  の元)と、次の本人の手番の前の評価(次の ready 行)から、既存の崩れの定義(`lib/gate.ts` の `collapseOf`)で
+  求める。前が behind・どちらかが未定・次の ready 行が無ければ(最後の手)`null`(分母に入らない)。`collapse`
+  自身は `SEARCH_COLUMNS` から除く(目的変数そのものなので、条件に使うとトートロジーになる ― `longThink` と
+  同じ理由)。
+- **`ConditionStats` に崩れの 2 つ目の数**(`lib/timeSearch.ts`): `collapseCounted`(`collapse` が `null` でない
+  手の数)・`collapsed`(そのうち `true` の数)・`q`(= `collapsed / collapseCounted`。分母 0 なら `null`。`p` は
+  既定が `0` なのに対し `q` は `null` にした ― 計画どおり)。`SearchResult.discover`/`validate` にも全体の
+  `collapseCounted`・`collapsed`・`collapseRate` を足した。
+- **`kind`**(`ReproducedCandidate.kind: "A" | "B" | "C" | null`。`kindOf`): 発見用・検証用の**両方**で「時間」
+  (`isAdoptedOf`/`isReproducedOf`)・「崩れ」(`isCollapseAdoptedOf`/`isCollapseReproducedOf`。同じ値の使い回し)
+  を判定し、両方が一致したときだけ付く(一致しなければ `null`)。**A** = 時間だけ/**B** = 時間 + 崩れ/
+  **C** = 時間でない + 崩れ。
+- **崩れを目的変数にした 2 回目の探索**(`SearchResult.collapseSearch: {depths, reproduced, notReproduced}`):
+  `runSearchOf` を目的変数(`TIME_OBJECTIVE`/`COLLAPSE_OBJECTIVE`)で一般化し、同じ列挙(`enumerateCandidatesOf`)
+  を崩れの採用候補(`collapseCounted` ≥ minPairs かつ q ≥ q0 × ratio)・再現(同じ線、`validateMinN`)で回す。
+  **C はこの探索からしか出ない**(長考の探索は時間で候補を選ぶため、時間を満たさない条件〈C の前提〉は
+  `adopted` に入らない)。
+- **偶然の目安**(`DepthSummary.chanceReproduced`・`chanceLineProbabilityOf`): 深さごとに、採用候補の数 ×
+  二項分布の裾(検証用の基準率〈p0 または q0〉のもとで、n = `validateMinN` の手が線〈基準率 × ratio〉を
+  越える確率)。長考の探索・崩れの探索のどちらの `depths[]` にも付く。
+- **共通因子の表**(`FactorEntry[]`・`factorSummaryOf`): 部品(単独条件)ごとに、(a) 長考の探索で再現した組に
+  入る数(深さ別・合計。`inReproduced`)、(b) 部品 1 つだけの条件の `ConditionStats`(発見用・検証用。採用候補
+  でなくても出す。`single`)、(c) 部品 1 つで時間の線を越えるか(`singleOverLine`)、(d) その部品を含む長考の
+  再現した組のうち B 型の数(`inKindB`)、(e) 崩れの探索で再現した組に入る数(`inCollapseReproduced`)とその
+  うち C 型の数(`inKindC`)を出す。**(2026-09-25 の人間の修正、最重要)**: 「よく登場する部品」を答えにしない。
+  3 つのアウトカム(長考・時間 + 崩れ・速く指して崩れ)それぞれに `explains.longThink`・
+  `explains.timeAndCollapse`・`explains.quickCollapse`(`"single" | "combo" | null`)を付ける。`single` = 部品
+  1 つの条件が発見用・検証用の両方でそのアウトカムの線を越える/`combo` = 単独では越えないが、そのアウトカムの
+  再現した組(型が一致するもの)に 1 つ以上入る/どちらでもなければ `null`。並びは `single` の数 → `combo` の数
+  → `inReproduced.total` の多い順。
+
 ```
 npx tsx scripts/playtest/timeSearch.ts \
   --role discover --kifu-dir <固定棋譜のフォルダ> --records-dir <段 2 の JSONL のフォルダ> \
@@ -774,9 +808,13 @@ npx tsx scripts/playtest/timeSearch.ts \
 - `--kifu-dir` で組が始まる(`timeCause.ts` と同じ形式)。`--role` はその組の役割で、`--kifu-dir` の前に要る。
   `--patient` は取らない(`gameNo`・`timeUpLoss` を使わないため ― 実装担当の判断。`gameNo` はソート順の連番)。
   `--records-dir` は必須(`<kifuId>.jsonl`)。
-- 出力(`time_cause_search.json`): `{"kind":"time_cause_search", gitHead, dirty, discover: {moves, longThinkRate},
-  validate: {...}, depths: [{depth, tried, adopted, reproduced}, …], reproduced: [{depth, condition, discover:
-  {n, longThink, p}, validate: {...}}, …], notReproduced: [...同じ形...]}`。
+- 出力(`time_cause_search.json`): `{"kind":"time_cause_search", gitHead, dirty, discover: {moves, longThinkRate,
+  collapseCounted, collapsed, collapseRate}, validate: {...}, depths: [{depth, tried, adopted, reproduced,
+  chanceReproduced}, …], reproduced: [{depth, condition, discover: {n, longThink, p, collapseCounted, collapsed,
+  q}, validate: {...}, kind}, …], notReproduced: [...同じ形...], collapseSearch: {depths, reproduced,
+  notReproduced}(崩れを目的変数にした 2 回目の探索。同じ形), factors: [{column, value, inReproduced,
+  single, singleOverLine, inKindB, inCollapseReproduced, inKindC, explains}, …]}`(`collapseSearch`・`factors`・
+  `kind`・`chanceReproduced`・崩れの数は STEP TIME-CAUSE-3 で足した。既存の鍵は変えていない)。
 - 実データ(2026-09-24、実装担当): 発見用 = `tatsunami20`(`whatif-v2` 無し → 選択の列は発見用側で条件に
   出てこない。材料の事実であり、直していない)、検証用 = `tatsunami3`(`whatif-v2` あり)で rc=0。数そのもの
   (試した数・採用候補・再現の数・p0・再現した条件)は司令塔が予測(F1〜F7)と照合するため、ここには書かない
@@ -785,16 +823,28 @@ npx tsx scripts/playtest/timeSearch.ts \
 ### `report-pdf/render_time_cause.py` への追加(「探索の結果」のページ)
 
 `--search <time_cause_search.json>` を任意で受け取る(渡さなければ従来どおり)。見出しは「時間と一緒に
-起きている条件(探索)」。深さごとの試した組の数・採用候補の数・再現の数の表、再現した組の一覧(条件・
-発見用の長考/手の数・検証用の長考/手の数)を並べる。禁止語(「原因」「傾向」を含む)は固定文に使わない。
+起きている条件(探索)」。**STEP TIME-CAUSE-3 で差し替え**(226 組の一覧はやめた): 深さごとの表を 2 つ
+(長考・崩れ、それぞれ試した組の数・採用候補の数・再現の数・偶然の目安)→ 共通因子の表(上位 15。部品ごとに
+3 つのアウトカムを「単独で再現」「組で再現」「―」で分類)→ 時間と崩れの両方を説明する条件の一覧 →
+速く指して崩れの条件の一覧(上位 10)。A/B/C は文中で「型」と呼ばず「時間だけ」「時間と崩れ」「速く指して
+崩れ」と書く。禁止語(「原因」「傾向」「型」「クセ」「パターン」を含む 18 語。`render_front.py` と同じ)は
+固定文に使わない。詳しくは `report-pdf/README.md` の同じ見出しを参照。
 
 ### 試験
 
 - `lib/timeFeatures.test.ts`: 合成 1 局(先手・GAME01_MOVES の最初の 16 手)で、`moveSeconds`・植えた評価
-  (`plantedRecords`/`engineRef`)・whatif-v2 の入力から手で計算した列の値と突き合わせる。
+  (`plantedRecords`/`engineRef`)・whatif-v2 の入力から手で計算した列の値と突き合わせる。`collapse` 列は、
+  同じ合成局の評価から「前が ahead/level で段が下がる(true)」「下がらない(false)」「前が behind(null)」を
+  確かめ、別の合成局(評価を `null`〈未定〉にした行を含む)で「前・次のどちらかが未定なら null」を、
+  15 手で終わる合成局で「最後の本人の手(次の ready 行が無い)は null」を確かめる(STEP TIME-CAUSE-3)。
 - `lib/timeSearch.test.ts`: 合成の表(60 行、列 4 つ: `phase`・`fork`・`inCheck`・`afterLongThink`)で、
   列挙の数(深さ 1〜3 それぞれ組合せの数と合う)・`statsOf` の n/p・`isAdoptedOf`/`isReproducedOf` の判定・
-  `TIME_SEARCH_VALUES.validateMinN` の境界を確かめる。
+  `TIME_SEARCH_VALUES.validateMinN` の境界を確かめる。STEP TIME-CAUSE-3 で足した試験: `statsOf` の
+  `collapseCounted`/`collapsed`/`q`、`isCollapseAdoptedOf`/`isCollapseReproducedOf`、`kindOf`(A/B/C/null の
+  4 通りと、発見用・検証用が不一致なら `null` になること)、`chanceLineProbabilityOf`(既知の値 `p0=0.058,
+  n=10, ratio=2 → 約 0.111` と、境界の 2 例)、崩れが実際に動く合成の表(`phase` だけを動かし、深さ 2・3 は
+  候補 0 になるよう設計)で `kind` が B/C になること・`collapseSearch`・`factors`(`explains`・`inReproduced`・
+  `inCollapseReproduced`・`inKindB`・`inKindC`・並び順)を確かめる。
 
 ## typecheck
 

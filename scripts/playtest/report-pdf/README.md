@@ -140,10 +140,10 @@ python3 -X utf8 check_answer.py <B.md>
   [--time-cause <json>]…(複数可。付録 4(STEP TIME-CAUSE)の `time_cause.json`(`scripts/playtest/timeCause.ts`
     の出力、`lib/timeCause.ts` の `TimeCauseFile`)。中身の `kind`(`"time_cause"`)で見分ける ― `--direct` と
     同じ流儀。検査 1 の材料に足す ― 単独の数(渡した JSON の再帰走査)と、下の「登録済みの組」)
-  [--time-search <json>]…(複数可。付録 4 の探索(STEP TIME-CAUSE-2)の `time_cause_search.json`
-    (`scripts/playtest/timeSearch.ts` の出力、`lib/timeSearch.ts` の `SearchResult`)。中身の `kind`
-    (`"time_cause_search"`)で見分ける ― `--direct`・`--time-cause` と同じ流儀。検査 1 の材料に足す ―
-    単独の数(渡した JSON の再帰走査)と、下の「登録済みの組」)
+  [--time-search <json>]…(複数可。付録 4 の探索(STEP TIME-CAUSE-2・STEP TIME-CAUSE-3)の
+    `time_cause_search.json`(`scripts/playtest/timeSearch.ts` の出力、`lib/timeSearch.ts` の `SearchResult`)。
+    中身の `kind`(`"time_cause_search"`)で見分ける ― `--direct`・`--time-cause` と同じ流儀。検査 1 の材料に
+    足す ― 単独の数(渡した JSON の再帰走査)と、下の「登録済みの組」)
   --menu <answer_menu.json>(`scripts/playtest/answerMenu.ts` の出力)
 ```
 
@@ -211,8 +211,17 @@ discover.n、validate.longThink / validate.n(実例: ある条件で 7 / 75〈�
 (ii) `depths[]` の深さごとの adopted / tried・reproduced / adopted・reproduced / tried(実データで深さ 3 は
 508 / 6209 など)、(iii) 発見用・検証用それぞれの「長考の数 / 手の数」(長考の数は JSON に無いため
 `round(moves × longThinkRate)` で作り、`moves × longThinkRate` 自身と 1e-6 以内で一致するときだけ登録する
-〈実データで 33 / 744、35 / 604〉)を登録する。`--time-search` を複数渡した場合は、ファイルごと(1 回の探索の
-実行ごと)に別々の集計として登録する(`--time-cause` の `group` のような合算先の鍵が無いため)。
+〈実データで 33 / 744、35 / 604〉)を登録する。**STEP TIME-CAUSE-3(2026-09-25、§9.1)で足した崩れ
+(collapse)の数**: (iv) `reproduced[]`・`notReproduced[]`(長考の探索)と `collapseSearch.reproduced[]`・
+`collapseSearch.notReproduced[]`(崩れの探索)の各条件について discover.collapsed / discover.collapseCounted、
+validate.collapsed / validate.collapseCounted、(v) 全体の崩れ discover.collapsed / discover.collapseCounted、
+validate.collapsed / validate.collapseCounted、(vi) `factors[]`(共通因子)の各部品の `single` の分数
+(discover.longThink / discover.n・validate.longThink / validate.n・discover.collapsed / discover.collapseCounted・
+validate.collapsed / validate.collapseCounted の 4 つ)、(vii) `factors[]` の各部品の
+`inReproduced.depth1`/`depth2`/`depth3` と、対応する `depths[0]`/`depths[1]`/`depths[2]` の `reproduced`
+(長考の探索の再現の数)を登録する。**局ごとの時期別の分数のような小さい数は登録しない**(§8.5 と同じ判断)。
+`--time-search` を複数渡した場合は、ファイルごと(1 回の探索の実行ごと)に別々の集計として登録する
+(`--time-cause` の `group` のような合算先の鍵が無いため)。
 
 **既知の限界**: 検査 1 の単独の数(分数でない 1 つの数)は、渡された JSON のどこかに同じ値があれば通す(再帰的な
 数値走査。`render_front.py` の `allowed_numbers_of` のようなフィールドごとの明示的な一覧ではない)。値の意味
@@ -341,24 +350,34 @@ markdown を見出し(`#`・`##`・`###`)・箇条書き(`-`・`1.`)・表(`|...
   (`tatsunami20`・`tatsunami3`・`tatsunami-long` の 3 組、局 44)での実行時確認(rc=0・全書体埋め込み・fitz で
   PNG 化した目視確認。時間切れで負けた 3 局の帯 ― `whatif-v2` あり/なしの両方を含む ― も確認した)
 
-### 「探索の結果」のページ(STEP TIME-CAUSE-2、docs/STEP_TIME_CAUSE_PLAN_2026-09-24.md §7.5)
+### 「探索の結果」のページ(STEP TIME-CAUSE-2・STEP TIME-CAUSE-3、docs/STEP_TIME_CAUSE_PLAN_2026-09-24.md §7.5・§9.4)
 
 `scripts/playtest/timeSearch.ts` が作る `time_cause_search.json` を、任意の `--search` 引数で受け取って
 最後に足す(渡さなければ従来どおり付録 4 は変わらない)。
 
 - 使い方: `python3 -X utf8 render_time_cause.py <time_cause.json> <出力 PDF> [--search <time_cause_search.json>]`
-- ページ: 見出し「時間と一緒に起きている条件(探索)」。深さ(1〜3 条件)ごとの試した組の数・採用候補の数・
-  再現の数の表 → 再現した組の一覧(条件を「列名: 値」の日本語で並べたもの・発見用の 長考/手の数(%)・検証用の
-  同じ形)。再現した組が 0 件なら「再現した組はありませんでした。」とだけ書く。
+- ページ(STEP TIME-CAUSE-3 で差し替え。226 組の一覧はやめた): 見出し「時間と一緒に起きている条件(探索)」。
+  「崩れ」の定義のノートボックス → (i) 深さ(1〜3 条件)ごとの表を 2 つ(長考と一緒に起きている条件・崩れと
+  一緒に起きている条件。どちらも試した組の数・採用候補の数・再現の数・偶然でも残る数の目安〈二項分布の裾 ×
+  採用候補の数〉) → (ii) 共通因子の表(上位 15。部品〈単独の条件〉ごとに、長考・時間と崩れ・速く指して崩れの
+  3 つのアウトカムを「単独で再現」「組で再現」「―」の 3 語で分類) → (iii) 時間と崩れの両方を説明する条件の
+  一覧(長考の探索で再現し、かつ崩れの線も両組で越えた条件。0 件なら「0 件でした。」とだけ書く) →
+  (iv) 速く指して崩れの条件の一覧(崩れを目的変数にした探索で再現し、時間の線は越えなかった条件。上位 10)。
+  一覧の全量(226 組)は `time_cause_search.json` に残る(PDF には出さない)。
 - 列名・値の日本語(`COLUMN_LABELS`・`VALUE_LABELS`)は、この段が測った量をそのまま名付けたもの(`phase` の
   早/中/終・`evalBand` の優勢/互角/劣勢〈`_head.py` の `RANK_JP` と同じ語〉・真偽値は既存の `yn()`)で、新しい
   将棋の判断ではない。
-- 数の照合(`emit()`)は既存のページと同じ考え方。条件の文字列(`condition_text`)も `digits_of` で自分自身の
-  数を許す集合にしてから `emit()` へ通す(`c10_table` 等、既存の数値セルの流儀と同じ)
+- A/B/C(`lib/timeSearch.ts` の `Kind`)は PDF では「時間だけ」「時間と崩れ」「速く指して崩れ」と書き、
+  「A 型」のような語は使わない(「型」は禁止語 ― 2026-09-25 の指示)。`BANNED` に `render_front.py` と同じ
+  「型」「クセ」「パターン」を足した(18 語)。`GLOBAL_ALLOWED_NUMBERS` に 300(崩れの境。`STANDING_BOUNDS.aheadCp`)
+  を足した。
+- 数の照合(`emit()`)は既存のページと同じ考え方。条件の文字列(`condition_text`・`factor_condition_text`)も
+  `digits_of` で自分自身の数を許す集合にしてから `emit()` へ通す(`c10_table` 等、既存の数値セルの流儀と同じ)
 - 禁止語チェックは既存と同じ(「原因」の語そのものを固定文に一切使わない ― 「原因ではなく」のような否定文でも
   `emit()` は語の有無だけを見るため書けない。実装担当の判断)
-- 守りは、合成の `time_cause_search.json`(再現した組が有る場合・無い場合の両方)での rc=0 確認と、実データ
-  (`tatsunami20` = 発見用・`tatsunami3` = 検証用)での実行時確認(rc=0・ページ数・テキスト抽出での目視確認)
+- 守りは、合成の `time_cause_search.json`(再現した組が有る場合・無い場合の両方。B/C 型の条件が有る場合・無い
+  場合の両方)での rc=0 確認と、実データ(`tatsunami20` = 発見用・`tatsunami3` = 検証用)での実行時確認
+  (rc=0・ページ数〈10 ページ〉・禁止語 0・テキスト抽出での目視確認)
 
 ## 既知の欠落(2026-09-21 独立監査 REVISE で明記)
 

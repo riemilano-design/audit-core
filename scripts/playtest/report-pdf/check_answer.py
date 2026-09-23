@@ -31,10 +31,11 @@
 #     [--time-cause <json>]…(複数可。付録 4(STEP TIME-CAUSE)の `time_cause.json`(`lib/timeCause.ts` の
 #       `TimeCauseFile`)。中身の `kind`(`"time_cause"`)で確かめる。検査 1 の単独の数の材料に足すほか、
 #       下の「登録済みの組」に (i)〜(iv) を足す ― `--direct` と同じ流儀)
-#     [--time-search <json>]…(複数可。付録 4 の探索(STEP TIME-CAUSE-2)の `time_cause_search.json`
-#       (`scripts/playtest/timeSearch.ts` の出力、`lib/timeSearch.ts` の `SearchResult`)。中身の `kind`
-#       (`"time_cause_search"`)で確かめる。検査 1 の単独の数の材料に足すほか、下の「登録済みの組」に
-#       (i)〜(iii) を足す ― `--direct`・`--time-cause` と同じ流儀)
+#     [--time-search <json>]…(複数可。付録 4 の探索(STEP TIME-CAUSE-2・STEP TIME-CAUSE-3)の
+#       `time_cause_search.json`(`scripts/playtest/timeSearch.ts` の出力、`lib/timeSearch.ts` の
+#       `SearchResult`)。中身の `kind`(`"time_cause_search"`)で確かめる。検査 1 の単独の数の材料に足すほか、
+#       下の「登録済みの組」に (i)〜(vii) を足す ― `--direct`・`--time-cause` と同じ流儀。(iv)〜(vii) は
+#       STEP TIME-CAUSE-3(崩れ q・共通因子・偶然の目安)で足した)
 #     --menu <answer_menu.json>
 #
 # 出力: rc=0 なら通過。rc=1 なら、落ちた文と理由の一覧(1 行 1 件)を標準エラーへ。
@@ -846,6 +847,27 @@ def registered_pairs_of(patient_files, materials):
             # 一致しなければ登録しない)。
             add(rounded_count_of(data["discover"]["moves"], data["discover"]["longThinkRate"]), data["discover"]["moves"])
             add(rounded_count_of(data["validate"]["moves"], data["validate"]["longThinkRate"]), data["validate"]["moves"])
+
+            # STEP TIME-CAUSE-3(docs/STEP_TIME_CAUSE_PLAN_2026-09-24.md §9.1)。崩れ(collapse)の数。
+            # 司令塔の指示どおり 4 種類だけを登録する(局ごとの分数のような小さい数は登録しない)。
+            all_conditions = list(data["reproduced"]) + list(data["notReproduced"]) + list(data["collapseSearch"]["reproduced"]) + list(data["collapseSearch"]["notReproduced"])
+            for cond in all_conditions:
+                # (iv) 各条件(長考の探索・崩れの探索の両方)の discover.collapsed/discover.collapseCounted、
+                # validate.collapsed/validate.collapseCounted。
+                add(cond["discover"]["collapsed"], cond["discover"]["collapseCounted"])
+                add(cond["validate"]["collapsed"], cond["validate"]["collapseCounted"])
+            # (v) 全体の崩れ discover.collapsed/discover.collapseCounted、validate.collapsed/validate.collapseCounted。
+            add(data["discover"]["collapsed"], data["discover"]["collapseCounted"])
+            add(data["validate"]["collapsed"], data["validate"]["collapseCounted"])
+            for f in data["factors"]:
+                # (vi) 共通因子(部品)ごとの single の分数(発見用・検証用とも。長考の p・崩れの q の両方)。
+                add(f["single"]["discover"]["longThink"], f["single"]["discover"]["n"])
+                add(f["single"]["validate"]["longThink"], f["single"]["validate"]["n"])
+                add(f["single"]["discover"]["collapsed"], f["single"]["discover"]["collapseCounted"])
+                add(f["single"]["validate"]["collapsed"], f["single"]["validate"]["collapseCounted"])
+                # (vii) inReproduced.depthN / depths[N].reproduced(N = 1・2・3。長考の探索の再現の数)。
+                for depth_index, key in ((0, "depth1"), (1, "depth2"), (2, "depth3")):
+                    add(f["inReproduced"][key], data["depths"][depth_index]["reproduced"])
 
     return pairs
 
