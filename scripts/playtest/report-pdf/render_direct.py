@@ -374,7 +374,10 @@ LEGEND_TEXT = "盤面の色つきの実線が実戦の手、破線が第 1 候�
 
 
 # ==================== 数の照合・禁止語(render_whatif.py の emit と同じ考え方) ====================
-GLOBAL_ALLOWED_NUMBERS = {1, 2, 3, 5}
+# 10 は「10 分」(組のラベル。report-pdf/check_answer.py の tag_of_time_limit_sec と同じ 600 秒 = 10 分の組)の
+# 固定の語彙として常に許可する(render_whatif.py の GLOBAL_ALLOWED_NUMBERS の考え方と同じ ― 個々の局面の事実
+# ではなく、この付録の作り方そのものを表す数)。3 は「3 分」の語彙と、方式そのものの数(候補の順位等)を兼ねる。
+GLOBAL_ALLOWED_NUMBERS = {1, 2, 3, 5, 10}
 _problems = []
 
 
@@ -450,15 +453,16 @@ story.append(
             f"エンジンで答え合わせした指し手を、局面つきで示します。まず、時間切れで負けた対局の最後の局面から"
             f"エンジンで読んだ手順(「盤上はこう勝てた」)。次に、長く読まなくても第 1 候補と実戦の手の評価差が"
             f"見えた分かれ道 <b>{counts['totalCount']}</b> 局面(全 <b>{counts['totalForkCount']}</b> 分かれ道のうち)を、"
-            f"評価の差が大きい順に並べます。",
+            f"実戦の手が第 1 候補からどれだけ下がったか(実戦との差)が大きい順に並べます。",
             allowed_p1,
         ),
         S_LEAD,
     )
 )
 
-rows = [[P(x, S_K) for x in ["局", "手数", "実戦の手", "第 1 候補", "第 1 候補の性質", "評価の差"]]]
+rows = [[P(x, S_K) for x in ["組", "局", "手数", "実戦の手", "第 1 候補", "第 1 候補の性質", "実戦との差"]]]
 for a in answers:
+    group = a["group"]
     kifu_id = a["kifuId"]
     game_no = a["gameNo"]
     dply = a["displayPly"]
@@ -475,12 +479,13 @@ for a in answers:
     actual_text = mark(turn0, user_is_sente) + move_kanji(cells0, genuine_actual, None)
     top1_text = mark(turn0, user_is_sente) + move_kanji(cells0, genuine_top1, None)
     tag_text = tags_text_of(a["top1Tags"]) + f"({SIDE_JP[a['top1Side']]})"
-    gap_text = f"{a['topGapCp']:+d}".replace("-", "−") if a["topGapCp"] is not None else "—"
+    gap_text = f"{a['actualGapCp']:+d}".replace("-", "−") if a["actualGapCp"] is not None else "—"
     row_allowed = {game_no, dply}
-    if a["topGapCp"] is not None:
-        row_allowed.add(abs(a["topGapCp"]))
+    if a["actualGapCp"] is not None:
+        row_allowed.add(abs(a["actualGapCp"]))
     rows.append(
         [
+            P(group, S_V),
             P(emit(str(game_no), row_allowed), S_V),
             P(emit(str(dply), row_allowed), S_V),
             P(actual_text, S_V),
@@ -489,7 +494,7 @@ for a in answers:
             P(emit(gap_text, row_allowed), S_V),
         ]
     )
-table1 = Table(rows, colWidths=[12 * mm, 16 * mm, 26 * mm, 26 * mm, W - 12 * mm - 16 * mm - 26 * mm - 26 * mm - 22 * mm, 22 * mm], repeatRows=1)
+table1 = Table(rows, colWidths=[13 * mm, 10 * mm, 15 * mm, 25 * mm, 25 * mm, W - 13 * mm - 10 * mm - 15 * mm - 25 * mm - 25 * mm - 22 * mm, 22 * mm], repeatRows=1)
 table1.setStyle(CAND_HEADER_STYLE)
 story.append(table1)
 story.append(Spacer(1, 2.5 * mm))
@@ -540,7 +545,7 @@ for e in FP["entries"]:
     board = Board(final_sfen, user_is_sente, arrows=arrows, person="本人", size=50 * mm)
 
     allowed_g = {e["gameNo"], e["moves"]}
-    lines = [P(f"{e['gameNo']} 局目 ・ {e['moves']} 手で時間切れ", S_EYEBROW), P("最後の局面から、エンジンの読み", S_H3)]
+    lines = [P(f"{e['group']} の {e['gameNo']} 局目 ・ {e['moves']} 手で時間切れ", S_EYEBROW), P("最後の局面から、エンジンの読み", S_H3)]
     if e.get("mate") is not None:
         n = abs(e["mate"])
         allowed_g.add(n)
@@ -574,7 +579,7 @@ story.append(
     P(
         emit(
             f"長く読まなくても、実戦の手と第 1 候補の評価差が見えた局面(全 {counts['totalForkCount']} 分かれ道のうち "
-            f"{counts['totalCount']} 局面)を、評価の差が大きい順に並べます。",
+            f"{counts['totalCount']} 局面)を、実戦との差が大きい順に並べます。",
             allowed_p1,
         ),
         S_BODY,
@@ -583,6 +588,7 @@ story.append(
 story.append(Spacer(1, 2 * mm))
 
 for a in answers:
+    group = a["group"]
     kifu_id = a["kifuId"]
     game_no = a["gameNo"]
     dply = a["displayPly"]
@@ -600,24 +606,24 @@ for a in answers:
     board = Board(before_sfen, user_is_sente, arrows=arrows, person="本人", size=46 * mm)
 
     allowed_g = {game_no, dply}
-    if a["topGapCp"] is not None:
-        allowed_g.add(abs(a["topGapCp"]))
+    if a["actualGapCp"] is not None:
+        allowed_g.add(abs(a["actualGapCp"]))
     allowed_g.add(a["firstVisibleNodes"])
 
     actual_text = mark(turn0, user_is_sente) + move_kanji(cells0, genuine_actual, None)
     top1_text = mark(turn0, user_is_sente) + move_kanji(cells0, genuine_top1, None)
     pv_genuine = [genuine_move(u, mirrored) for u in a["pv"]]
     pv_text = line_of(cells0, turn0, hands0, pv_genuine, user_is_sente, 5)
-    gap_text = f"{a['topGapCp']:+d}".replace("-", "−") if a["topGapCp"] is not None else "—"
+    gap_text = f"{a['actualGapCp']:+d}".replace("-", "−") if a["actualGapCp"] is not None else "—"
 
     lines = [
-        P(emit(f"{game_no} 局目 {dply} 手目", allowed_g), S_EYEBROW),
+        P(emit(f"{group} の {game_no} 局目 {dply} 手目", allowed_g), S_EYEBROW),
         P(f"実戦の手(茶の実線): <b>{actual_text}</b>", S_BODY),
         P(f"第 1 候補(青緑の破線): <b>{top1_text}</b>", S_BODY),
         P(emit(pv_text, allowed_g), S_SMALL),
         P(emit(f"第 1 候補の性質: {tags_text_of(a['top1Tags'])}({SIDE_JP[a['top1Side']]})", allowed_g), S_SMALL),
         P(emit(f"実戦の手の性質: {tags_text_of(a['actualTags'])}({SIDE_JP[a['actualSide']]})", allowed_g), S_SMALL),
-        P(emit(f"評価の差: {gap_text}(浅い読みで見えたノード数: {a['firstVisibleNodes']})", allowed_g), S_SMALL),
+        P(emit(f"実戦との差: {gap_text}(浅い読みで見えたノード数: {a['firstVisibleNodes']})", allowed_g), S_SMALL),
     ]
     row = Table([[board, lines]], colWidths=[58 * mm, W - 58 * mm])
     row.setStyle(TableStyle([("VALIGN", (0, 0), (-1, -1), "TOP"), ("BOTTOMPADDING", (0, 0), (-1, -1), 2 * mm)]))

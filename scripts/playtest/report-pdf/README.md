@@ -235,11 +235,20 @@ markdown を見出し(`#`・`##`・`###`)・箇条書き(`-`・`1.`)・表(`|...
   <direct_answers.json> <final_positions.json> <出力 PDF>`(`REPORT_DATA_DIR` はカンマ区切りで複数渡せる ―
   `direct_answers.json`・`final_positions.json` は組をまたいで作れるため、対応する `sfens.json` も複数の組に
   またがることがある〈実装担当の判断〉。同じ kifuId が複数の `sfens.json` に出た場合は最初に読んだものを使う)
-- ページ: 1 ページ目(表〈局・手数・実戦の手・第 1 候補・第 1 候補の性質・評価の差〉と印の数) / 「盤上はこう
-  勝てた」(`final_positions.json` の局ごとに 1 ブロック。終局の局面 + 第 1 候補の読み筋。詰みなら
+- ページ: 1 ページ目(表〈組・局・手数・実戦の手・第 1 候補・第 1 候補の性質・実戦との差〉と印の数) / 「盤上は
+  こう勝てた」(`final_positions.json` の局ごとに 1 ブロック。終局の局面 + 第 1 候補の読み筋。詰みなら
   「n 手で詰み」、詰みでなければ評価だけを中立に書く ― 判断的な「勝ちに届く」のような閾値は置いていない
   〈実装担当の判断。docs §9.1 の例文はこの版では使っていない〉) / 「浅い読みで見えた分かれ道」
-  (`direct_answers.json` の `answers` の順〈評価の差の大きい順〉に、局面ごとのブロック)
+  (`direct_answers.json` の `answers` の順〈実戦との差の大きい順〉に、局面ごとのブロック)
+- **組・実戦との差(司令塔の仕様追記 2 点、2026-09-24)**: 「局」の番号が組(3 分の組・10 分の組)をまたいで
+  重なる(1〜10 が両方にある)ため、表の先頭に「組」の列(`answers[].group`・`entries[].group`。「3 分」
+  「10 分」等)を足し、盤面のページの見出し(「n 局目 m 手目」「n 局目 ・ m 手で時間切れ」)にも
+  「{group} の n 局目 …」の形で組を前に付けた。「評価の差」の列は `topGapCp`(第 1 候補と第 2 候補の差)から、
+  実戦の手が第 1 候補からどれだけ下がったか(`answers[].actualGapCp`。whatif-v2 の `loss`)に替え、列名も
+  「実戦との差」にした。実戦の手が候補 5 つに無いとき(`loss.isLowerBound`)は下限の値であり実戦の手の正確な
+  差ではないため「—」(`lib/directAnswers.ts` の `actualGapCpOf`)。`topGapCp` は `direct_answers.json` には
+  残るが表には出さない。並び順も `actualGapCp` の大きい順(null は最後)に変えた。数の照合の固定の語彙
+  (`GLOBAL_ALLOWED_NUMBERS`)に、組のラベルの数字(3 分・10 分の「10」)を足した。
 - **盤面図・手の表記は `render_whatif.py` と同じ考え方**(`REPORT_DATA_DIR`・書体・`parse_sfen`・`move_kanji`・
   `mark` などのコードをこのファイルの中に持つ ― `render_whatif.py` も import せず同じ考え方をコードとして
   持つ書き方をしているため、同じ流儀)。**mirrored(本人が後手)の局は、`sfens.json` の `side`(`"gote"` なら

@@ -1,13 +1,23 @@
 // STEP ANSWER 追加作業 ANSWER-DIRECT(docs/STEP_ANSWER_PLAN_2026-09-23.md §9.2)。「浅い読みで見えた分かれ道」
 // (§9.1 の 2.)を測る段の純粋関数。**測る段だけ**(PDF は report-pdf/render_direct.py)。
 //
+// 【追記(司令塔 e3、監査前の仕様追記 2 点。docs §9 にも同じ内容)】
+// 1. 「局」の番号が組(3 分の組・10 分の組)をまたいで重なる(1〜10 が両方にある)ため、`group`(組のラベル。
+//    CLI が `--group`/`--patient`+`--time-limit-sec` から決める。無ければ組の順の番号)を 1 局ぶんの結合の
+//    引数・出力の両方に足した。
+// 2. 「評価の差」を `topGapCp`(第 1 候補と第 2 候補の差)から、**実戦の手が第 1 候補からどれだけ下がったか**
+//    (whatif-v2 の `loss`。第 1 候補の評価 − 実戦の手の評価)に変えた(`actualGapCp`)。実戦の手が候補 5 つに
+//    無いとき(`loss.isLowerBound`)は「少なくともこれだけ」という下限の値であり、実戦の手そのものの正確な
+//    差ではないため、`actualGapCp` は null にする(表には「—」)。並び順もこれの大きい順(null は最後)に
+//    変えた。`topGapCp` は出力の JSON には残す(表には出さない)。
+//
 // 【このファイルがやること】
 // - whatif-v2 の position 行(`scenes.fork` が true のもの)と、read.ts の分かれ道の行を `ply` で結合する
 //   (`lib/type.ts` の生成モードと**同じやり方**。type.ts と同じく、read 側の行は fork 行だけが渡される
 //   前提 ― read.ts の出力そのもの)
 // - `firstVisibleNodes` が null でなく `TYPE_VALUES.nodeShallowMaxNodes`(1 万)以下の分かれ道だけを選ぶ
 //   (1 万ちょうどは含む)
-// - 局をまたいだ一覧(評価の差=`topGapCp` の大きい順。null は最後)と、印の数(第 1 候補の tags(READ の印:
+// - 局をまたいだ一覧(実戦との差=`actualGapCp` の大きい順。null は最後)と、印の数(第 1 候補の tags(READ の印:
 //   取る/打つ/王手/捨て駒/引く 等)ごとの n・第 1 候補の side ごとの n・実戦の tags ごとの n・局数・総数・
 //   分かれ道の総数)を組む
 //
@@ -37,6 +47,14 @@ export class DirectAnswersError extends Error {
 
 // ---- 1 局ぶんの結合の入力 ----
 
+/** whatif-v2 の `loss`(第 1 候補の評価 − 実戦の手の評価)のうち、この段が使う分だけ。 */
+export interface DirectAnswersLossInput {
+  /** cp 同士のときだけの実際の cp 差(詰みが絡めば null)。 */
+  cpValue: number | null;
+  /** 実戦の手が候補(K 個)に無く、最後の候補との差を下限として使ったか。 */
+  isLowerBound: boolean;
+}
+
 /** whatif-v2 の position 行から、この段が使う分だけ(計画「作るもの」1.)。 */
 export interface DirectAnswersWhatifPositionInput {
   ply: number;
@@ -48,8 +66,21 @@ export interface DirectAnswersWhatifPositionInput {
   actualMove: string;
   actualSide: WhatifSideRaw;
   topGapCp: number | null;
+  /** 実戦の手が第 1 候補からどれだけ下がったか(whatif-v2 の `loss`)。候補が無い等で測れなければ null。 */
+  loss: DirectAnswersLossInput | null;
   /** whatif-v2 の `scenes.fork`。 */
   fork: boolean;
+}
+
+/**
+ * 表に出す「実戦との差」(司令塔の仕様追記 2.)。実戦の手が候補 5 つに無いとき(`isLowerBound`)は
+ * 「少なくともこれだけ」という下限の値であり、実戦の手そのものの正確な差ではないため null にする。
+ * 詰みが絡む等で `cpValue` が無いときも null。
+ */
+export function actualGapCpOf(loss: DirectAnswersLossInput | null): number | null {
+  if (loss === null) return null;
+  if (loss.isLowerBound) return null;
+  return loss.cpValue;
 }
 
 /** read.ts の分かれ道の行から、この段が使う分だけ。read.ts の出力は fork 行だけなので、渡された行はすべて
@@ -64,6 +95,8 @@ export interface DirectAnswersReadPositionInput {
 // ---- 1 件の「直接の答え」 ----
 
 export interface DirectAnswer {
+  /** 組のラベル(「3 分」「10 分」等。CLI が決める。司令塔の仕様追記 1.)。 */
+  group: string;
   kifuId: string;
   gameNo: number;
   displayPly: number;
@@ -75,7 +108,10 @@ export interface DirectAnswer {
   top1Side: WhatifSideRaw;
   actualTags: ReadMoveMarks;
   actualSide: WhatifSideRaw;
+  /** 第 1 候補と第 2 候補の差(表には出さない。JSON には残す ― 司令塔の仕様追記 2.)。 */
   topGapCp: number | null;
+  /** 表に出す「実戦との差」(`actualGapCpOf` で `loss` から作る)。 */
+  actualGapCp: number | null;
   firstVisibleNodes: number;
 }
 
@@ -87,13 +123,15 @@ export interface DirectAnswersGameJoinResult {
 
 /**
  * 1 局ぶんの whatif-v2・read の行を `ply` で結合し、浅い読み(`firstVisibleNodes` が null でなく
- * `values.nodeShallowMaxNodes` 以下)の分かれ道だけを選ぶ(計画 §9.2)。
+ * `values.nodeShallowMaxNodes` 以下)の分かれ道だけを選ぶ(計画 §9.2)。`group` は組のラベル(CLI が決める。
+ * 司令塔の仕様追記 1.)。
  * `lib/type.ts` の生成モードと同じやり方: read 側に無い行(read.ts 側で候補 0 件等の理由で除外された、
  * 計画に無い理論上の状態)は数えずに読み飛ばす。
  */
 export function joinDirectAnswersGame(
   kifuId: string,
   gameNo: number,
+  group: string,
   whatifPositions: readonly DirectAnswersWhatifPositionInput[],
   readPositions: readonly DirectAnswersReadPositionInput[],
   values: TypeValues = TYPE_VALUES,
@@ -111,6 +149,7 @@ export function joinDirectAnswersGame(
     if (readPosition.firstVisibleNodes === null) continue;
     if (readPosition.firstVisibleNodes > values.nodeShallowMaxNodes) continue;
     answers.push({
+      group,
       kifuId,
       gameNo,
       displayPly: position.displayPly,
@@ -123,6 +162,7 @@ export function joinDirectAnswersGame(
       actualTags: readPosition.actualTags,
       actualSide: position.actualSide,
       topGapCp: position.topGapCp,
+      actualGapCp: actualGapCpOf(position.loss),
       firstVisibleNodes: readPosition.firstVisibleNodes,
     });
   }
@@ -131,13 +171,13 @@ export function joinDirectAnswersGame(
 
 // ---- 局をまたいだ並び順 ----
 
-/** 評価の差(`topGapCp`)の大きい順(計画「出力」)。null(第 1・第 2 候補のどちらかが詰み等)は最後に置く。 */
+/** 実戦との差(`actualGapCp`)の大きい順(司令塔の仕様追記 2.)。null(実戦の手が候補 5 つに無い・詰みが絡む等)は最後に置く。 */
 export function sortDirectAnswers(answers: readonly DirectAnswer[]): DirectAnswer[] {
   return [...answers].sort((a, b) => {
-    if (a.topGapCp === null && b.topGapCp === null) return 0;
-    if (a.topGapCp === null) return 1;
-    if (b.topGapCp === null) return -1;
-    return b.topGapCp - a.topGapCp;
+    if (a.actualGapCp === null && b.actualGapCp === null) return 0;
+    if (a.actualGapCp === null) return 1;
+    if (b.actualGapCp === null) return -1;
+    return b.actualGapCp - a.actualGapCp;
   });
 }
 

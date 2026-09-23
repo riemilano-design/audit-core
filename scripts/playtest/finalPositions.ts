@@ -2,8 +2,8 @@
 // (§9.1 の 1.)のための、終局の局面をエンジンで読む CLI。
 //
 // 使い方(2 通り。どちらか一方):
-//   npx tsx scripts/playtest/finalPositions.ts --kifu <固定棋譜 JSON …> --game-nos <n,n,…> --out <final_positions.json>
-//   npx tsx scripts/playtest/finalPositions.ts --kifu <固定棋譜 JSON …> --patient <patient_report_data.json> --out <final_positions.json>
+//   npx tsx scripts/playtest/finalPositions.ts --kifu <固定棋譜 JSON …> --game-nos <n,n,…> [--group <ラベル>|--time-limit-sec <秒>] --out <final_positions.json>
+//   npx tsx scripts/playtest/finalPositions.ts --kifu <固定棋譜 JSON …> --patient <patient_report_data.json> [--group <ラベル>|--time-limit-sec <秒>] --out <final_positions.json>
 //
 // 【入力】`--kifu` に渡した固定棋譜(`*.fixed.json`)のうち、
 //   - `--game-nos`(カンマ区切り)を渡したときは、`--kifu` に渡した順とその番号を対応させる(数が食い違えば止める)
@@ -14,8 +14,19 @@
 // 最後の局面まで進め、その SFEN をエンジン 1 本(素の UsiEngine。read.ts の `readEval` と同じ形)で
 // `go nodes <READ_VALUES.nodeLadder の最大値> `(MultiPV 1)読む。
 //
+// 【group(組のラベル)の決め方(司令塔の仕様追記 1、2026-09-24。実装担当の判断)】「局」の番号が組(3 分の組・
+// 10 分の組)をまたいで重なるため、直接 `directAnswers.ts` と同じ考え方でラベルを持たせる。**この CLI は
+// 1 回の実行で 1 つの組しか扱わない**ため(`--patient` は 1 本、`--game-nos` も 1 組ぶん)、`--group`/
+// `--time-limit-sec` は 1 個だけ渡す(`directAnswers.ts` のような「ペアの数だけ渡す」繰り返しではない):
+// - `--group <ラベル>` を渡せば、そのままラベルにする。
+// - `--time-limit-sec <秒>` を渡せば、`report-pdf/check_answer.py` の `tag_of_time_limit_sec` と同じ対応
+//   (180 → 3 分の組、600 → 10 分の組)でラベルにする。
+// - どちらも渡さなければ、`"1"`(1 回の実行に 1 つの組しか無いため、複数回の実行にまたがる「順の番号」は
+//   この CLI 単体では決められない。`directAnswers.ts` の「組の順の番号」に相当する既定値として固定した)。
+//
 // 【このファイルが絶対にやらないこと】将棋の判断・評価・閾値・文言。新しい値を置くこと(ノード数は
-// READ_VALUES.nodeLadder の最大値をそのまま使う)。名前・/Users/ を含む絶対パスを出力へ書くこと。
+// READ_VALUES.nodeLadder の最大値をそのまま使う。180/600 は check_answer.py と同じ値の再利用)。
+// 名前・/Users/ を含む絶対パスを出力へ書くこと。
 
 import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
 import path from "node:path";
@@ -53,6 +64,25 @@ function collectUntilFlag(args: readonly string[], startIndex: number): string[]
 function argValue(args: readonly string[], name: string): string | undefined {
   const index = args.indexOf(name);
   return index === -1 ? undefined : args[index + 1];
+}
+
+/** `report-pdf/check_answer.py` の `tag_of_time_limit_sec` と同じ対応(司令塔の仕様追記 1)。 */
+function groupLabelOfTimeLimitSec(sec: number): string {
+  if (sec === 180) return "3 分";
+  if (sec === 600) return "10 分";
+  throw new Error(`--time-limit-sec は 180 か 600 です(${sec})`);
+}
+
+/** この CLI は 1 回の実行で 1 つの組しか扱わないので、`--group`/`--time-limit-sec` は 1 個だけ(ファイル冒頭コメント参照)。 */
+function groupLabelOf(args: readonly string[]): string {
+  const groupArg = argValue(args, "--group");
+  const timeLimitArg = argValue(args, "--time-limit-sec");
+  if (groupArg !== undefined && timeLimitArg !== undefined) {
+    throw new Error("--group と --time-limit-sec は同時に指定できません");
+  }
+  if (groupArg !== undefined) return groupArg;
+  if (timeLimitArg !== undefined) return groupLabelOfTimeLimitSec(Number(timeLimitArg));
+  return "1";
 }
 
 interface FixedKifuFile extends FinalPositionKifu {
@@ -150,6 +180,7 @@ async function main(): Promise<number> {
     console.error("対象の局が 0 件です(--kifu と --game-nos / --patient を確かめてください)");
     return 1;
   }
+  const group = groupLabelOf(args);
 
   const enginePath = resolveEnginePath();
   const engine = new UsiEngine(enginePath);
@@ -163,6 +194,7 @@ async function main(): Promise<number> {
     const gitState = readGitState(REPO_ROOT);
 
     const entries: {
+      group: string;
       kifuId: string;
       gameNo: number;
       moves: number;
@@ -179,6 +211,7 @@ async function main(): Promise<number> {
       const mirrored = target.kifu.mirrored === true;
       const top1 = await readTop1(engine, final.sfen, NODES);
       entries.push({
+        group,
         kifuId: target.kifu.id,
         gameNo: target.gameNo,
         moves: final.moves,

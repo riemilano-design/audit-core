@@ -6,6 +6,8 @@
 //   npx tsx scripts/playtest/directAnswers.ts \
 //     --whatif-v2-dir <whatif-v2 jsonl のフォルダ> --read-dir <read.ts の jsonl のフォルダ> \
 //     [--whatif-v2-dir <フォルダ> --read-dir <フォルダ> …](組をまたいで合算。複数可) \
+//     [--group <ラベル> …|--time-limit-sec <秒> …](--whatif-v2-dir・--read-dir のペアと同じ順・同じ数。
+//       どちらか一方だけ。省略時は「組の順の番号」) \
 //     --out <direct_answers.json>
 //
 // 【この CLI は薄くしてある】結合・選別・並び順・印の数は lib/directAnswers.ts にあり、そちらに試験がある。
@@ -16,8 +18,18 @@
 // kifuId でソートしてから index + 1)。組をまたいで gameNo を通し番号にはしない(patient_report_data.json の
 // games[].no は組ごとに 1 から始まる番号であり、この CLI の gameNo もそれに合わせる)。
 //
+// 【group(組のラベル)の決め方(司令塔の仕様追記 1、2026-09-24。実装担当の判断)】「局」の番号が組をまたいで
+// 重なる(3 分の組・10 分の組の両方に 1〜10 がある)ため、表で区別できるよう組のラベルを持たせる。
+// - `--group <ラベル>`(--whatif-v2-dir・--read-dir のペアと同じ順・同じ数)を渡せば、そのままラベルにする。
+// - `--time-limit-sec <秒>`(同じ順・同じ数)を渡せば、`report-pdf/check_answer.py` の `tag_of_time_limit_sec`
+//   と同じ対応(180 → 3 分の組、600 → 10 分の組)でラベルにする。この CLI は `--patient` の中身を読まなくても
+//   ラベルを決められるため、`--patient <path>` そのものは受け付けない(`--time-limit-sec` だけで足りる ―
+//   計画に無い簡略化)。
+// - どちらも渡さなければ、組の順の番号(1, 2, 3, …)をラベルにする(「組の順の番号」)。
+// - 両方渡す・数が合わない・`--time-limit-sec` が 180/600 以外は exit 1。
+//
 // 【このファイルが絶対にやらないこと】将棋の判断・評価・閾値・文言。名前・/Users/ を含む絶対パスを出力へ書くこと。
-// 新しい閾値を置くこと(TYPE_VALUES を import して使うだけ)。
+// 新しい閾値を置くこと(TYPE_VALUES を import して使うだけ。180/600 は check_answer.py と同じ値の再利用)。
 
 import { readFileSync, readdirSync, writeFileSync, mkdirSync } from "node:fs";
 import path from "node:path";
@@ -71,6 +83,11 @@ interface WhatifCandidateRow {
   side: WhatifSideRaw;
 }
 
+interface WhatifLossRow {
+  cpValue: number | null;
+  isLowerBound: boolean;
+}
+
 interface WhatifPositionRow {
   kind: "position";
   ply: number;
@@ -80,6 +97,7 @@ interface WhatifPositionRow {
   actualMove: string;
   actualSide: WhatifSideRaw;
   topGapCp: number | null;
+  loss: WhatifLossRow | null;
   scenes: { fork: boolean };
 }
 
@@ -107,6 +125,7 @@ function readWhatifPositions(whatifPath: string): { kifuId: string; positions: D
       actualMove: row.actualMove,
       actualSide: row.actualSide,
       topGapCp: row.topGapCp,
+      loss: row.loss === null ? null : { cpValue: row.loss.cpValue, isLowerBound: row.loss.isLowerBound },
       fork: row.scenes.fork,
     });
   }
@@ -150,7 +169,14 @@ function jsonlFilesOf(dirPath: string): string[] {
     .sort();
 }
 
-function processGroup(whatifDir: string, readDir: string): DirectAnswersGameJoinResult[] {
+/** `report-pdf/check_answer.py` の `tag_of_time_limit_sec` と同じ対応(司令塔の仕様追記 1)。 */
+function groupLabelOfTimeLimitSec(sec: number): string {
+  if (sec === 180) return "3 分";
+  if (sec === 600) return "10 分";
+  throw new Error(`--time-limit-sec は 180 か 600 です(${sec})`);
+}
+
+function processGroup(whatifDir: string, readDir: string, group: string): DirectAnswersGameJoinResult[] {
   const whatifDirPath = path.resolve(whatifDir);
   const readDirPath = path.resolve(readDir);
   const files = jsonlFilesOf(whatifDirPath);
@@ -166,9 +192,29 @@ function processGroup(whatifDir: string, readDir: string): DirectAnswersGameJoin
     if (whatifKifuId !== readKifuId) {
       throw new Error(`--whatif-v2-dir(kifuId=${whatifKifuId})・--read-dir(kifuId=${readKifuId})が対応していません(${name})`);
     }
-    results.push(joinDirectAnswersGame(whatifKifuId, gameNo, whatifPositions, readPositions));
+    results.push(joinDirectAnswersGame(whatifKifuId, gameNo, group, whatifPositions, readPositions));
   });
   return results;
+}
+
+/** ペアの数に合わせて組のラベルを決める(司令塔の仕様追記 1。ファイル冒頭コメント参照)。 */
+function groupLabelsOf(args: readonly string[], pairCount: number): string[] {
+  const groupArgs = collectAllValues(args, "--group");
+  const timeLimitArgs = collectAllValues(args, "--time-limit-sec");
+  if (groupArgs.length > 0 && timeLimitArgs.length > 0) {
+    throw new Error("--group と --time-limit-sec は同時に指定できません");
+  }
+  if (groupArgs.length > 0) {
+    if (groupArgs.length !== pairCount) throw new Error(`--group(${groupArgs.length} 個)と --whatif-v2-dir(${pairCount} 個)の数が対応していません`);
+    return groupArgs;
+  }
+  if (timeLimitArgs.length > 0) {
+    if (timeLimitArgs.length !== pairCount) {
+      throw new Error(`--time-limit-sec(${timeLimitArgs.length} 個)と --whatif-v2-dir(${pairCount} 個)の数が対応していません`);
+    }
+    return timeLimitArgs.map((sec) => groupLabelOfTimeLimitSec(Number(sec)));
+  }
+  return Array.from({ length: pairCount }, (_, index) => String(index + 1)); // 組の順の番号
 }
 
 function main(): number {
@@ -184,10 +230,11 @@ function main(): number {
     console.error(`--whatif-v2-dir(${whatifDirs.length} 個)と --read-dir(${readDirs.length} 個)の数が対応していません`);
     return 1;
   }
+  const groupLabels = groupLabelsOf(args, whatifDirs.length);
 
   const games: DirectAnswersGameJoinResult[] = [];
   for (let i = 0; i < whatifDirs.length; i++) {
-    games.push(...processGroup(whatifDirs[i]!, readDirs[i]!));
+    games.push(...processGroup(whatifDirs[i]!, readDirs[i]!, groupLabels[i]!));
   }
 
   const file = buildDirectAnswersFile(games);

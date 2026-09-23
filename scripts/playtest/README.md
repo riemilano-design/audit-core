@@ -573,13 +573,14 @@ docs/STEP_ANSWER_PLAN_2026-09-23.md §9 の道具。CLAUDE.md ルール 5 の拡
 npx tsx scripts/playtest/directAnswers.ts \
   --whatif-v2-dir <whatif-v2 jsonl のフォルダ> --read-dir <read.ts の jsonl のフォルダ> \
   --whatif-v2-dir <フォルダ> --read-dir <フォルダ> …(組をまたいで合算。複数可) \
+  --group <ラベル> …または --time-limit-sec <秒> …(ペアと同じ順・同じ数。省略時は組の順の番号) \
   --out <direct_answers.json>
 ```
 
 - 局ごとの結合は `lib/directAnswers.ts` の `joinDirectAnswersGame`(read 側に無い行 ― read.ts 側で候補 0 件等の
   理由で除外された分かれ道 ― は `forkCount` に数えず読み飛ばす。`lib/type.ts` の既知の限界と同じ)。局をまたいだ
-  並び順(`sortDirectAnswers`。評価の差 = `topGapCp` の大きい順、null は最後)と印の数(`directAnswersCountsOf`)は
-  `buildDirectAnswersFile` がまとめる。
+  並び順(`sortDirectAnswers`。実戦との差 = `actualGapCp` の大きい順、null は最後)と印の数
+  (`directAnswersCountsOf`)は `buildDirectAnswersFile` がまとめる。
 - **「性質(tags)」の出どころ(実装担当の判断)**: docs §9.1 の「第 1 候補の性質(READ の印: 取る/打つ/王手/
   捨て駒/引く、と whatif-v2 の側)」という書き分けに合わせ、出力の `top1Tags`/`actualTags` は **read.ts の
   `ReadMoveMarks`**(whatif-v2 自身の `WhatifMoveTags` には打つ・捨て駒・引くに当たる印が無いため)、
@@ -587,13 +588,27 @@ npx tsx scripts/playtest/directAnswers.ts \
 - **gameNo の決め方(実装担当の判断)**: 1 対の `--whatif-v2-dir`・`--read-dir` を「1 つの組」とし、その組の中で
   kifuId の昇順に 1, 2, 3, … を振る(`lib/reportData.ts` の `buildGames` と同じ考え方)。組をまたいで通し番号には
   しない(patient_report_data.json の `games[].no` と同じ、組ごとに 1 から始まる番号にそろえるため)。
+- **group(組のラベル)の決め方(司令塔の仕様追記 1、2026-09-24。実装担当の判断)**: 「局」の番号が組(3 分の組・
+  10 分の組)をまたいで重なる(1〜10 が両方にある)ため、表で区別できるよう `group` を持たせた。
+  `--group <ラベル>`(ペアと同じ順・同じ数)をそのままラベルにするか、`--time-limit-sec <秒>`(同じ順・同じ数。
+  `report-pdf/check_answer.py` の `tag_of_time_limit_sec` と同じ対応 ― 180 → 3 分、600 → 10 分)でラベルにする。
+  どちらも渡さなければ組の順の番号(1, 2, 3, …)。`--patient` そのものは受け付けない(ラベルを決めるのに中身を
+  読む必要が無いため。詳しくは `directAnswers.ts` 冒頭のコメント)。
+- **「実戦との差」(`actualGapCp`)の決め方(司令塔の仕様追記 2、2026-09-24)**: 実戦の手が第 1 候補からどれだけ
+  下がったか(whatif-v2 の `loss`。第 1 候補の評価 − 実戦の手の評価)。実戦の手が候補 5 つに無いとき
+  (`loss.isLowerBound`)は「少なくともこれだけ」という下限の値であり実戦の手そのものの正確な差ではないため、
+  `actualGapCp` は null にする(`lib/directAnswers.ts` の `actualGapCpOf`)。並び順もこれの大きい順(null は最後)
+  にした。`topGapCp`(第 1 候補と第 2 候補の差)は出力の JSON には残すが、表には出さない。
 - 出力(JSON): `{"kind":"direct_answers", gitHead, dirty, values, answers, counts}`。`answers` の 1 件:
-  `kifuId`・`gameNo`・`displayPly`・`sfen`・`actualMove`・`top1Move`・`pv`・`top1Tags`・`top1Side`・`actualTags`・
-  `actualSide`・`topGapCp`・`firstVisibleNodes`(sfen・USI は測る段〈whatif-v2〉の「本人 = 先手」にそろえた向きの
-  まま)。`counts`: `top1TagCounts`・`top1SideCounts`・`actualTagCounts`(印ごとの n)・`gamesCount`・`totalCount`
-  (= `answers.length`)・`totalForkCount`(局をまたいだ分かれ道の総数。選別をする前)。
+  `group`・`kifuId`・`gameNo`・`displayPly`・`sfen`・`actualMove`・`top1Move`・`pv`・`top1Tags`・`top1Side`・
+  `actualTags`・`actualSide`・`topGapCp`・`actualGapCp`・`firstVisibleNodes`(sfen・USI は測る段〈whatif-v2〉の
+  「本人 = 先手」にそろえた向きのまま)。`counts`: `top1TagCounts`・`top1SideCounts`・`actualTagCounts`
+  (印ごとの n)・`gamesCount`・`totalCount`(= `answers.length`)・`totalForkCount`(局をまたいだ分かれ道の総数。
+  選別をする前)。
 - 試験(`lib/directAnswers.test.ts`): 合成の whatif-v2 3 行 + read 3 行での結合・選別(1 万ちょうどは含む、null は
-  除く、read に無い行は forkCount に数えない)・並び順(null は最後)・印の数(局をまたいだ合算)。
+  除く、read に無い行は forkCount に数えない、group を通す)・並び順(`actualGapCp` の大きい順、null は最後、
+  `topGapCp` は並び順に使わない)・印の数(局をまたいだ合算)・`actualGapCpOf`(`loss` が null・`isLowerBound`・
+  `cpValue` が null の境界)。
 
 ### `finalPositions.ts`(問題 1「盤上はこう勝てた」の材料)
 
@@ -602,8 +617,8 @@ npx tsx scripts/playtest/directAnswers.ts \
 最大値(100 万)、MultiPV 1、Threads は既存の既定(1)。**新しい値は置かない**。
 
 ```
-npx tsx scripts/playtest/finalPositions.ts --kifu <固定棋譜 JSON …> --game-nos <n,n,…> --out <final_positions.json>
-npx tsx scripts/playtest/finalPositions.ts --kifu <固定棋譜 JSON …> --patient <patient_report_data.json> --out <final_positions.json>
+npx tsx scripts/playtest/finalPositions.ts --kifu <固定棋譜 JSON …> --game-nos <n,n,…> [--group <ラベル>|--time-limit-sec <秒>] --out <final_positions.json>
+npx tsx scripts/playtest/finalPositions.ts --kifu <固定棋譜 JSON …> --patient <patient_report_data.json> [--group <ラベル>|--time-limit-sec <秒>] --out <final_positions.json>
 ```
 
 - `lib/finalPosition.ts` の `finalPositionOf` は、`lib/sideAlignment.ts` の `readSideAlignment`(既存・確定済み。
@@ -614,9 +629,14 @@ npx tsx scripts/playtest/finalPositions.ts --kifu <固定棋譜 JSON …> --pati
 - `--game-nos`(カンマ区切り。`--kifu` に渡した順と対応)か `--patient`(`time.timeUpLosses[*].gameNo` の集合と
   `games[].no`/`games[].id` から対象の kifuId を決め、`--kifu` の中からその id を持つファイルだけを選ぶ)の
   どちらか一方を渡す。
+- **group(組のラベル)の決め方(司令塔の仕様追記 1、2026-09-24。実装担当の判断)**: `directAnswers.ts` と同じ
+  考え方だが、**この CLI は 1 回の実行で 1 つの組しか扱わない**ため、`--group`/`--time-limit-sec` は 1 個だけ
+  渡す(`--time-limit-sec` は 180 → 3 分・600 → 10 分。`directAnswers.ts` と同じ対応)。どちらも渡さなければ
+  `"1"`(1 回の実行に 1 つの組しか無いため、複数回の実行にまたがる「組の順の番号」はこの CLI 単体では決められ
+  ない。詳しくは `finalPositions.ts` 冒頭のコメント)。
 - 出力(JSON): `{"kind":"final_positions", startedAt, gitHead, dirty, nodes, threads, entries}`。`entries` の 1 件:
-  `kifuId`・`gameNo`・`moves`(= 固定棋譜の `moves.length`)・`sfen`(最後の局面。mirrored の局は「本人 = 先手」に
-  そろえた向きのまま)・`mirrored`・`top1Move`・`pv`・`scoreCp`・`mate`。
+  `group`・`kifuId`・`gameNo`・`moves`(= 固定棋譜の `moves.length`)・`sfen`(最後の局面。mirrored の局は
+  「本人 = 先手」にそろえた向きのまま)・`mirrored`・`top1Move`・`pv`・`scoreCp`・`mate`。
 - 試験(`lib/finalPosition.test.ts`): 合成の局(mirrored: false・mirrored が無い古い記録・mirrored: true ―
   `lib/sideAlignment.ts` の `alignMovesToSente` で畳んで作る・moves が 0 手)で、`applyMove` を直接呼んだ結果との
   一致を確かめる。**エンジンを使う CLI 自体は vitest の対象外**(`report-pdf/` の python の道具と同じ理由。
