@@ -27,7 +27,7 @@ v7 を基準版として、「**同じ分析結果を、より少ない手作業
 
 ## 5. 手で組んでいた引数一式(新セッションが読む。gitignore の `out/` に写しを置いた)
 
-`scripts/playtest/out/_deliver1_handoff/` に、司令塔 e3 が 44 局で使ったスクリプトの写し: `run_check.sh`(`check_answer.py` の引数 20 個: patient ×3 と `--time-limit-sec`、whatif-data ×2、whatif-v2-dir ×2、read-dir ×2、type-summary ×2、whatif-pdf ×3(付録 2 ×2 + 付録 3)、direct ×2、time-cause、time-search、menu)、`run_render.sh`(同じ引数で `render_answer.py`)、`rerun_s5_direct.sh`(S5 を旗つきで呼び直した形)、`make_direct.sh`(付録 3 の 3 コマンド)。`answer_menu.json` は `lib/answerMenu.ts` の表から `npx tsx scripts/playtest/answerMenuJson.ts`(あれば)か、写しをそのまま使う(`_deliver1_handoff/answer_menu.json`)。**`--whatif-pdf` に付録 3 の PDF を渡す**のは、B の読み筋の手(付録 3 の印字)を検査 2 で照合するため(STEP TIME-CAUSE §6.3・§8.5)。
+`scripts/playtest/out/_deliver1_handoff/` に、司令塔 e3 が 44 局で使ったスクリプトの写し: `run_check.sh`(`check_answer.py` の引数 20 個: patient ×3 と `--time-limit-sec`、whatif-data ×2、whatif-v2-dir ×2、read-dir ×2、type-summary ×2、whatif-pdf ×3(付録 2 ×2 + 付録 3)、direct ×2、time-cause、time-search、menu)、`run_render.sh`(同じ引数で `render_answer.py`)、`rerun_s5_direct.sh`(S5 を旗つきで呼び直した形)、`make_direct.sh`(付録 3 の 3 コマンド)。`answer_menu.json` は `lib/answerMenu.ts` の表から `npx tsx scripts/playtest/answerMenu.ts`(README の「行動のメニュー」の節)で作るか、写しをそのまま使う(`_deliver1_handoff/answer_menu.json`)。**`--whatif-pdf` に付録 3 の PDF を渡す**のは、B の読み筋の手(付録 3 の印字)を検査 2 で照合するため(STEP TIME-CAUSE §6.3・§8.5)。
 
 ## 6. 完了条件(人間の指定)
 
