@@ -917,7 +917,9 @@ npx tsx scripts/playtest/deliver.ts \
   `render_direct.py` は `sfens.json` の鍵に使うだけ)。対局 ID や日付を冊子に出さない約束の顧客では、
   ファイル名にそれが入っている限り検査を通しても不適合になる。**直すときはファイル名を付け替えて
   段 2 から作り直す**(記録の中の ID だけ手で書き換えると、使われなかった ID の記録が残って
-  `meta.gitHead` が事実と食い違う)。
+  `meta.gitHead` が事実と食い違う)。**`deliver.ts` はこの規約を入口で機械に見る**(引数を読んだ直後・
+  `--out` の安全装置より前。`--dry-run` でも `--from …` でも同じように止まる ― 飛ばせない)。
+  問題があれば何も実行・書き込みせずに rc=1 で止まり、どのファイル名のどの数字が悪いかを出す。
 - `--compare-dir`/`--compare-person`: 段 `pipeline-gate` が `pipeline.ts --until gate` へ**中継するだけ**の引数
   (`--compare-dir` は値を連続していくつでも取れる。2 つは必ず一緒に渡す)。新しい work には判定の出力
   (`<work>/<person>/gate.jsonl`)が無いため、これが無いと段 `pipeline-data` が材料不足で止まる。

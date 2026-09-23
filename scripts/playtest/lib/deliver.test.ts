@@ -7,6 +7,7 @@ import { describe, expect, it } from "vitest";
 import {
   DELIVER_STAGES,
   DeliverArgError,
+  KIFU_NAME_FIXED_ALLOWED_NUMBERS,
   TODO_MARK,
   answerFactsCommand,
   answerMaterialFlags,
@@ -20,6 +21,7 @@ import {
   groupListOf,
   groupPaths,
   groupsWithRead,
+  kifuNameProblems,
   materialPlanOf,
   mergeFinalPositions,
   parseDeliverArgs,
@@ -36,6 +38,7 @@ import {
   type DeliverArgs,
   type DeliverProbe,
 } from "./deliver.js";
+import { PipelineConfigError } from "./pipeline.js";
 
 // ---- 偽の probe(見えているものを表で与える) ----
 
@@ -752,6 +755,118 @@ describe("planDeliver", () => {
     it("--from pipeline-gate で最初から組める", () => {
       const resumed = planDeliver(argsOf(["--from", "pipeline-gate", ...COMPARE]), probe, (t) => t);
       expect(resumed.map((s) => s.stage)).toEqual([...DELIVER_STAGES]);
+    });
+  });
+
+  // 2026-09-23。指示書(KIFUNAME_BRIEF.md)§2.5。付録 4(report-pdf/render_time_cause.py)が
+  // kifuId を数の照合にかけ、冊子に印字する不具合を入口で機械に見る検査。
+  describe("kifuNameProblems", () => {
+    it("固定の 8 個の値を固定する(report-pdf/render_time_cause.py:115 の GLOBAL_ALLOWED_NUMBERS の写し)", () => {
+      expect(new Set(KIFU_NAME_FIXED_ALLOWED_NUMBERS)).toEqual(new Set([1, 2, 3, 4, 5, 9, 10, 300]));
+    });
+
+    it("tatsunami20 の実物の名前(20 件)は問題 0 件", () => {
+      const files = [
+        "kifu2-01-sente.kif",
+        "kifu2-02-gote.kif",
+        "kifu2-03-gote.kif",
+        "kifu2-04-sente.kif",
+        "kifu2-05-gote.kif",
+        "kifu2-06-gote.kif",
+        "kifu2-07-gote.kif",
+        "kifu2-08-gote.kif",
+        "kifu2-09-sente.kif",
+        "kifu2-10-gote.kif",
+        "kifu2-11-sente.kif",
+        "kifu2-12-gote.kif",
+        "kifu2-13-gote.kif",
+        "kifu2-14-gote.kif",
+        "kifu2-15-sente.kif",
+        "kifu2-16-sente.kif",
+        "kifu2-17-sente.kif",
+        "kifu2-18-sente.kif",
+        "kifu2-19-gote.kif",
+        "kifu2-20-sente.kif",
+      ];
+      expect(kifuNameProblems("/kifu", files)).toEqual([]);
+    });
+
+    it("tatsunami3 の実物の名前(14 件)は問題 0 件", () => {
+      const files = [
+        "t3-01-sente.kif",
+        "t3-02-sente.kif",
+        "t3-03-sente.kif",
+        "t3-04-gote.kif",
+        "t3-05-gote.kif",
+        "t3-06-gote.kif",
+        "t3-07-sente.kif",
+        "t3-08-gote.kif",
+        "t3-09-sente.kif",
+        "t3-10-gote.kif",
+        "t3-11-sente.kif",
+        "t3-12-sente.kif",
+        "t3-13-sente.kif",
+        "t3-14-gote.kif",
+      ];
+      expect(kifuNameProblems("/kifu", files)).toEqual([]);
+    });
+
+    it("tatsunami-long の実物の名前(10 件)は問題 0 件", () => {
+      const files = [
+        "tl-01-sente.kif",
+        "tl-02-sente.kif",
+        "tl-03-gote.kif",
+        "tl-04-gote.kif",
+        "tl-05-gote.kif",
+        "tl-06-sente.kif",
+        "tl-07-gote.kif",
+        "tl-08-gote.kif",
+        "tl-09-gote.kif",
+        "tl-10-sente.kif",
+      ];
+      expect(kifuNameProblems("/kifu", files)).toEqual([]);
+    });
+
+    it("g01-sente.kif〜g20-gote.kif は通る", () => {
+      const files: string[] = [];
+      for (let i = 1; i <= 20; i += 1) {
+        const n = String(i).padStart(2, "0");
+        files.push(`g${n}-${i % 2 === 1 ? "sente" : "gote"}.kif`);
+      }
+      expect(kifuNameProblems("/kifu", files)).toEqual([]);
+    });
+
+    it("日付と対局 ID を含む名前は止まり、badNumber が 20260503 と 0 の 2 件になる(全部返る・打ち切らない)", () => {
+      const files = ["01_x-sente.kif", "02_y-sente.kif", "03_20260503_a0kABJIn-sente.kif"];
+      const problems = kifuNameProblems("/kifu", files);
+      expect(problems).toEqual([
+        { fileName: "03_20260503_a0kABJIn-sente.kif", kifuId: "03_20260503_a0kABJIn", gameNo: 3, badNumber: 20260503 },
+        { fileName: "03_20260503_a0kABJIn-sente.kif", kifuId: "03_20260503_a0kABJIn", gameNo: 3, badNumber: 0 },
+      ]);
+    });
+
+    it("1 つの名前に悪い数字が 3 つあれば全部(3 件)返る(最初の 1 つで打ち切らない)", () => {
+      const files = ["99_2026_5000-sente.kif"];
+      const problems = kifuNameProblems("/kifu", files);
+      expect(problems.map((p) => p.badNumber)).toEqual([99, 2026, 5000]);
+    });
+
+    it("局番号が合っていない名前で止まる(gameNo は並び順から決まることを示す)", () => {
+      // 1 件だけなので listGames の並び順で gameNo = 1 になる。id の「07」は 7 なので許されない。
+      const problems = kifuNameProblems("/kifu", ["g07-sente.kif"]);
+      expect(problems).toEqual([{ fileName: "g07-sente.kif", kifuId: "g07", gameNo: 1, badNumber: 7 }]);
+    });
+
+    it(".kif 等が 0 件なら空配列", () => {
+      expect(kifuNameProblems("/kifu", ["readme.txt", "notes.md"])).toEqual([]);
+    });
+
+    it("数字を含まない名前は通る(この検査は数字しか見ない)", () => {
+      expect(kifuNameProblems("/kifu", ["lishogi-abcdefgh-sente.kif"])).toEqual([]);
+    });
+
+    it("--me が無く -sente/-gote も無い名前は PipelineConfigError をそのまま出す(判定を作り直さない)", () => {
+      expect(() => kifuNameProblems("/kifu", ["no-suffix.kif"])).toThrow(PipelineConfigError);
     });
   });
 });

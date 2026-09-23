@@ -16,7 +16,8 @@ import path from "node:path";
 
 // 段 `pipeline-gate` の「済み」の判定は **新しく作らない**。`lib/pipeline.ts` の gateOutPath・gateDone を
 // そのまま使う(1 コマンド化の指示書 §3.2。判定を二重に持たないため)。
-import { gateDone, gateOutPath } from "./pipeline.js";
+// 局の順序(gameNo)の判定も **新しく作らない**。`listGames` をそのまま使う(kifuNameProblems。指示書 §2.1)。
+import { gateDone, gateOutPath, listGames } from "./pipeline.js";
 
 // ---- 段の一覧(計画 §3 の 3 の順。司令塔の指示書 §3.3 の表) ----
 
@@ -162,6 +163,57 @@ export function unexpectedOutFiles(outNames: readonly string[], directNames: rea
     unexpected.push(path.join(DELIVER_OUT_NAMES.directDir, name));
   }
   return unexpected;
+}
+
+// ---- --kifu-dir のファイル名の検査(2026-09-23。scripts/playtest/README.md の --kifu-dir の項) ----
+//
+// 別セッションが実際に踏んだ不具合(付録 4 が 45 分の工程の最後で「データに無い数」で落ちる)を、
+// 入口で機械に見て先に止める。分析ロジック・出力内容は 1 バイトも変えない(判定を作り直さない)。
+
+/**
+ * 付録 4 の見出し(report-pdf/render_time_cause.py:437 の emit 呼び出し)が許す数の固定部分の写し
+ * (同ファイル 115 行の `GLOBAL_ALLOWED_NUMBERS = {1, 2, 3, 4, 5, 9, 10, 300}`)。
+ * **python が変わったらこちらも直す**(値を固定する試験が deliver.test.ts にある)。
+ */
+export const KIFU_NAME_FIXED_ALLOWED_NUMBERS: readonly number[] = [1, 2, 3, 4, 5, 9, 10, 300];
+
+export interface KifuNameProblem {
+  fileName: string;
+  kifuId: string;
+  gameNo: number;
+  badNumber: number;
+}
+
+/**
+ * `--kifu-dir` のファイル名に、付録 4 が数の照合にかける `kifuId`(ファイル名から末尾の `-sente`/`-gote` を
+ * 外した残り)が使えない数字を含んでいないかを、道具(python)を起こす前に先読みする(指示書 §2.1)。
+ *
+ * こちらが許す集合は `{gameNo} ∪ KIFU_NAME_FIXED_ALLOWED_NUMBERS`。道具(付録 4)が許す集合は
+ * `{gameNo, total} ∪ 同じ 8 個`(`total` = 総手数)。**`total` を入れないこちらの集合は道具の集合の部分集合**
+ * なので、こちらが通した名前は道具も必ず通す(見逃しが無い)。逆に、総手数と偶然一致する数字を持つ名前は
+ * 道具が通すのにこちらが止めることがある(安全側 ― 規約でも禁じている書き方なので、直してもらってよい)。
+ *
+ * `gameNo` の決め方(順序)は **新しく作らない** ― `listGames`(先後は問わないので `me` は渡さず `undefined`
+ * 固定。`-sente`/`-gote` が無い名前があれば `PipelineConfigError` を投げるので、呼び出し側がそのまま捕まえる)
+ * が id の昇順に並べた結果の `index + 1` を使う(`lib/reportData.ts` の `no: index + 1` と同じ)。
+ * `.kif` 等が 0 件なら `listGames` が空配列を返すので、この関数も空配列を返す。
+ *
+ * 1 つの `kifuId` に悪い数字が複数(同じ数字の繰り返しを含む)あれば、**全部**返す(最初の 1 つで打ち切らない)。
+ */
+export function kifuNameProblems(kifuDir: string, fileNames: readonly string[]): KifuNameProblem[] {
+  const jobs = listGames(kifuDir, fileNames, undefined);
+  const fixedAllowed = new Set<number>(KIFU_NAME_FIXED_ALLOWED_NUMBERS);
+  const problems: KifuNameProblem[] = [];
+  jobs.forEach((job, index) => {
+    const gameNo = index + 1;
+    const numbers = job.id.match(/[0-9]+/g) ?? [];
+    for (const raw of numbers) {
+      const badNumber = Number(raw);
+      if (badNumber === gameNo || fixedAllowed.has(badNumber)) continue;
+      problems.push({ fileName: job.kifName, kifuId: job.id, gameNo, badNumber });
+    }
+  });
+  return problems;
 }
 
 // ---- 引数の解釈 ----

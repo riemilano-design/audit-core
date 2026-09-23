@@ -33,6 +33,7 @@ import {
   finalPositionsPartPath,
   finalPositionsCommand,
   groupListOf,
+  kifuNameProblems,
   mergeFinalPositions,
   parseDeliverArgs,
   planDeliver,
@@ -40,8 +41,10 @@ import {
   type DeliverArgs,
   type DeliverProbe,
   type DeliverTool,
+  type KifuNameProblem,
   type PlannedDeliverStep,
 } from "./lib/deliver.js";
+import { PipelineConfigError } from "./lib/pipeline.js";
 
 const SCRIPT_DIR = path.dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = path.join(SCRIPT_DIR, "..", "..");
@@ -188,6 +191,26 @@ async function runFinalPositions(args: DeliverArgs): Promise<number> {
   return 0;
 }
 
+/**
+ * `--kifu-dir` のファイル名の問題を人へ伝える文言(2026-09-23。指示書 §2.3。ここで言い換えない)。
+ * 同じファイル・同じ kifuId・同じ局番号の 2 件目以降は「同上」にする(例と同じ形)。
+ */
+function kifuNameProblemsMessage(problems: readonly KifuNameProblem[]): string {
+  const lines = ["棋譜のファイル名に使えない数字があります(付録 4 が kifuId を数の照合にかけ、冊子に印字します):"];
+  let prevKey = "";
+  for (const p of problems) {
+    const key = `${p.fileName} ${p.kifuId} ${p.gameNo}`;
+    const detail = key === prevKey ? "同上" : `${p.gameNo} 局目。許すのは局番号と 1,2,3,4,5,9,10,300`;
+    lines.push(`- ${p.fileName}: kifuId「${p.kifuId}」の ${p.badNumber}(${detail})`);
+    prevKey = key;
+  }
+  lines.push("ファイル名は局番号以外の数字を入れないでください(例: g01-sente.kif … g20-gote.kif)。");
+  lines.push("日付や外部サービスの対局 ID は、(1) この照合で必ず落ち (2) 冊子に印字されて個人が特定できます。");
+  lines.push("名前を付け替えたら段 2 から作り直してください(記録の中の ID だけ手で書き換えると meta.gitHead が事実と食い違います)。");
+  lines.push("詳しくは scripts/playtest/README.md の --kifu-dir の項。");
+  return lines.join("\n");
+}
+
 /** 人間の確認点。止まるべきかを見て、止まるなら理由を出す。 */
 function gateBlocked(step: PlannedDeliverStep): string | null {
   const target = step.args[0]!;
@@ -210,6 +233,24 @@ async function main(): Promise<number> {
       return 2;
     }
     throw error;
+  }
+
+  // `--kifu-dir` の名前の検査(引数を読んだ直後・--out の安全装置より前。指示書 §2.3)。
+  // `--dry-run` でも `--from …` でも同じように止まる(飛ばせない)。何も実行・書き込みしない。
+  let problems: KifuNameProblem[];
+  try {
+    const kifuNames = readdirSync(args.kifuDir);
+    problems = kifuNameProblems(args.kifuDir, kifuNames);
+  } catch (error) {
+    if (error instanceof PipelineConfigError) {
+      console.error(error.message);
+      return 1;
+    }
+    throw error;
+  }
+  if (problems.length > 0) {
+    console.error(kifuNameProblemsMessage(problems));
+    return 1;
   }
 
   const out = deliverOutPaths(args.out);
