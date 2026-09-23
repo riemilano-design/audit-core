@@ -115,6 +115,84 @@ docs/STEP_PIPE_PLAN_2026-09-21.md §2.2 の S7 としてここへ移したもの
   が残っていれば rc=1(`check_summary_item()`。まとめは発見の題を伴わずに再掲されるため、裸の参照は読者に伝わらない)
 - 依存はこの README の「依存」節と同じ(`reportlab`・`pymupdf`)。新しい依存は足していない
 
+## B(「どうしたら」の冊子)の検査と PDF(`check_answer.py`・`render_answer.py`。STEP ANSWER)
+
+docs/STEP_ANSWER_PLAN_2026-09-23.md §2.1・§2.2 の道具。B(LLM が書いた「どうしたら」の markdown)を検査し、
+通った文だけを PDF にする。CLAUDE.md ルール 5 の拡張((1) 数・手・読み筋の機械照合、(2) 行動は承認済みの表から、
+(3) 断定しない)を機械で守らせる仕組み。**生成(B を書くこと)はしない ― 検査するだけ。**
+
+### `check_answer.py`
+
+```
+python3 -X utf8 check_answer.py <B.md>
+  [--patient <patient_report_data.json> --time-limit-sec <秒>]…(組ごとに 1 対。直後に --time-limit-sec を置く。
+    180 秒 = 3 分の組、600 秒 = 10 分の組、他の秒数はタグ無し。同じタグが複数あれば分子・分母を別々に合算する
+    ― 司令塔の指示 2026-09-23 REVISE 1。前回 20 局 + 今回 14 局 = 3 分の組、のように)
+  [--whatif-data <whatif_report_data.json>]…(複数可。検査 1 の数の材料)
+  [--whatif-v2-dir <whatif-v2 jsonl のフォルダ>]…(複数可。組をまたいで合算。M4「側の一致」の材料)
+  [--read-dir <read.ts の jsonl のフォルダ>]…(複数可。組をまたいで合算。summary 行を合算する)
+  [--type-summary <summary.json>]…(複数可。検査 1 の数の材料)
+  [--whatif-pdf <whatif.pdf>]…(複数可。fitz で印字を読み、指し手の答え合わせに使う)
+  --menu <answer_menu.json>(`scripts/playtest/answerMenu.ts` の出力)
+```
+
+rc=0 なら通過(「通過(落ちた文なし)」を標準出力へ)。rc=1 なら、落ちた文と理由の一覧を標準エラーへ(1 行 1 件、
+`<行番号>: <理由>: <文の先頭 100 字>`)。「書いた側の記録(顧客には見せない)」の見出しから末尾までは、検査の対象
+から外す(顧客向けの文ではないため)。
+
+**検査(§2.1 のとおり。すべて機械)**:
+1. **数の照合**: 単位つきの数は、下の「登録済みの組」または許す集合(渡した JSON の値の再帰的な走査 + 組ごとに
+   合算した数 + 登録済みの組から計算した四捨五入の整数 %)に無ければ落とす。単位の無い小さな数(9 以下)は対象外
+   (実装担当の判断: 「小さな数」を 9 以下で近似 ― §2.1 は「2 つ」「3 段」を例に挙げるだけで、しきい値までは
+   決めていない)。日付(YYYY-MM-DD)は数の主張として扱わない(見出し・作成日の表記のため。実装担当の判断)。
+   「〜倍」「〜割」は常に落とす。**「a / b」「n のうち m」「n 局のうち m 局」の形は、下の「登録済みの組」の
+   どちらかの並びに一致しなければ落とす**(単独の数がどこかにあるだけでは通さない)。
+2. **手の答え合わせ**: `▲`/`△` で始まる指し手の表記(`report-pdf/render_whatif.py` の `move_kanji` と同じ形)が、
+   `--whatif-pdf` の印字(空白を取り除いた連結テキスト)に無ければ落とす。「第 1 候補は」の形は、同じ段落
+   (空行区切り)に「n 局目 m 手目」の形が無ければ落とす。
+3. **禁止語と断定**: 18 語(悪手・弱点・癖・型・傾向・原因・ミス・見落とし・改善・練習・必ず・明らか・あなた・
+   ご自身・いつも・がち・クセ・パターン)+「すべき」「した方がよい」「すれば直る」「間違いなく」「危ない」
+   「確実」「絶対」「安い」(司令塔の指示 2026-09-23 REVISE 5・2026-09-24 の再監査 1)。
+4. **行動のメニュー**: `<!-- menu: Mx -->` の行は、id が `answer_menu.json` にあり、`menuConditionHoldsOf` が
+   その材料で成り立たなければ落とす。**印の外で、行動・優先順位の表現(「してみては」「を目安に」「選ぶなら」
+   「1つだけ」「先に」「で指す」「を混ぜる」「候補に入れ」)を含む行は落とす**(司令塔の指示 2026-09-23 REVISE 4・
+   2026-09-24 の再監査 3)。例外は `<!-- priority: Mx -->` の印がある行(その id が成り立っていれば除外)。
+   太字だけの見出し行(例: 「**こうしてみては**」)は対象外(実装担当の判断)。
+5. **数が足りなければ言わない**: `<!-- menu: Mx -->`(条件が成り立った)行は、`answerMenuDenominatorOf` が返す
+   分母が `answer_menu.json` の `minN` 未満なら落とす。
+6. **戦法・陣形の名前**: `data/shapes`・`data/openings`・`data/intents` の `review_status` が `human_reviewed` または
+   `expert_verified`(「レビュー済み」。`reviewed` という値は無い ― 司令塔の指示 2026-09-23 REVISE 7)の `name` に
+   無い、「〜戦法」「〜囲い」「〜飛車」「〜銀」の語(指し手の表記は先に除いてから探す)は、「〜のような形」の
+   後ろに付いていなければ落とす。
+
+**登録済みの組(検査 1 の「a / b」「n のうち m」。両方向を許す)**: `timeUpLosses` の `n`/`m`、`aheadGames`/
+`aheadLossGames`、`bySpent` の各段の `n`/`collapsed`(組ごとの合算も)、`bySpentTotal` の `n`/`collapsed`、
+`afterLongThink`(`quickAfterLongThink`・`afterLongThinkAny`)の `n`/`collapsed`、READ 合算の
+`forkPositionsRead`/(`forkPositionsRead` − `firstVisibleNodesNoneCount`)、`tagCrossTable.sacrifice` の行合計/対角
+(B v3(2026-09-24)の実例「57 のうち 17」で確認)、`opponentReplyMatchesPv` の `matched`/`measured`、M4 の側の一致
+2 分数(`attack`/`defense` それぞれの `n`/`collapsed`)。
+
+**既知の限界**: 検査 1 の単独の数(分数でない 1 つの数)は、渡された JSON のどこかに同じ値があれば通す(再帰的な
+数値走査。`render_front.py` の `allowed_numbers_of` のようなフィールドごとの明示的な一覧ではない)。値の意味
+(どのフィールド由来か)までは確認しないため、たとえば「16 秒・79 秒」のような、正規の集計と無関係な値が
+偶然どこかの JSON 値と一致すれば通ってしまう(実測: B v2 の校正で 1 件確認。落とせていない。強い検証が要るなら
+フィールドごとの明示的な許可リストへの置き換えが要る ― 測っていない・計画にない判断)。
+
+### `render_answer.py`
+
+```
+python3 -X utf8 render_answer.py <B.md> <出力 PDF>  [check_answer.py と同じ引数…]
+```
+
+先に `check_answer.check_answer()` を呼び、落ちた文があれば描かずに理由を標準エラーへ出して exit 1。通れば、
+markdown を見出し(`#`・`##`)・箇条書き(`-`・`1.`)・表(`|...|`)・太字(`**...**`)の A4 縦 PDF にする
+(書体・埋め込みの確認は `render_front.py` と同じ流儀。`check_fonts_embedded.py` の `unembedded_fonts` をそのまま
+呼ぶ)。`<!-- menu: … -->`・`<!-- priority: … -->` の印は描かない。ページ数の上限 8(超えたら exit 1)。
+
+**この python の道具も vitest の対象外**(`report-pdf/` の他の道具と同じ理由)。守りは、実データ(立浪さんの
+14 局・20 局・10 局)での実行時確認(B v2・B v3 の 2 本)と、変異 5 本(数を 1 つ変える・「すべき」を足す・
+付録 2 に無い手を足す・`<!-- menu: -->` を消す・条件を満たさない id へ材料を絞る)。
+
 ## 既知の欠落(2026-09-21 独立監査 REVISE で明記)
 
 別冊(`render_appendix.py`)は、`audit_metrics.json` の `candidate.reps` の欄(`side`・`transitionJp`・`capUsJp` ほか)と

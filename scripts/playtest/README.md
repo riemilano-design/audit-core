@@ -509,6 +509,33 @@ npx tsx scripts/playtest/read.ts --whatif <whatif-v2.jsonl> --kifu <固定棋譜
 - 純粋関数は `lib/type.ts`(`sizeBucketOf`・`sideBucketOf`・`natureBucketOf`・`typeForkOf`・`typeGroupCountsOf`・`repeatedGroupsOf`・`medianSecondsBySideOf`・`retreatGameCountOf`・`spentSecOfDisplayPly`)。試験は `lib/type.test.ts`(合成の局・秒の添字合わせ・「両方」の扱い・軸 C の優先順・3 局以上の判定を含む)
 - **`pipeline.ts` への配線はしない**(`read.ts` と同じ。この段だけ CLI 単体)。**タイプに名前は付けない**(組は `key`(`size|side|nature`)の文字列のまま。冊子に出すときの命名は別の判断)
 
+## 「どうしたら」の冊子の行動のメニュー(`answerMenu.ts`。STEP ANSWER)
+
+`scripts/playtest/answerMenu.ts`(CLI)+ `lib/answerMenu.ts`(純粋関数)は、docs/STEP_ANSWER_PLAN_2026-09-23.md §3 の
+「行動のメニュー(条件 → 行動)」を TS の定数 `ANSWER_MENU` にし、`answer_menu.json` へ書き出す道具(判断的知識。
+文言の正本は docs §3)。B(「どうしたら」の冊子)の検査(`report-pdf/check_answer.py`)がこの JSON を読む。
+
+```
+npx tsx scripts/playtest/answerMenu.ts --out <answer_menu.json>
+```
+
+- `ANSWER_MENU` の 1 件: `id`(M1〜M8)・`stage`(段階)・`actionCore`(行動の文の芯)・`evidenceName`(根拠の数の名)・
+  `minN`(検査 5 で見る下限)・`verifyName`(答え合わせの数の名)。
+- `menuConditionHoldsOf(id, materials)`: id の「出す条件」(§3)が、道具が計算した事実(`AnswerMenuMaterials`。
+  patient_report_data.json・READ の合算・whatif-v2 の側の一致から作る)で成り立つかを判定する純粋関数。
+  `answerMenuDenominatorOf(id, materials)`: 検査 5 の「根拠の数の分母」。
+- **司令塔の事前監査 REVISE(2026-09-23・2026-09-24)を反映**(`lib/answerMenu.ts` 冒頭のコメントに詳細):
+  M1 は `needsData`(分母を出す測る段が無いため常に不成立)、M4 は whatif-v2 の `candidates[0].side`・`actualSide`
+  から非対称に数えた 2 分数(第 1 候補が「両方」の局面は分母に入れない)で AND 判定、M6 は
+  `tagCrossTable.sacrifice` の行合計/対角(B v3 の実例「57 のうち 17」で確認)、M2/M8 は `--time-limit-sec` で
+  タグ付けした patient を組ごとに合算(分子・分母を別々に足す)してから判定する。
+- **計画にない判断**: M3・M5 が使う「既定の組」は、渡された patient の中で `min3` タグがあればそれ、無ければ
+  先頭の組(`primaryGroupOf`)。`min3`/`min10` のタグは `--time-limit-sec`(180 秒/600 秒)を渡す側
+  (`report-pdf/check_answer.py`)が付ける。
+- 試験(`lib/answerMenu.test.ts`): docs §3 の表との一致(id・段階・minN。**行動の文の芯は今回は比べない**
+  ― docs §3 の表はこの REVISE に合わせて書き直す途中のため。M1・M8 の minN は docs 由来ではなく単独の試験
+  ― 「未照合」と明記してある)、`menuConditionHoldsOf`/`answerMenuDenominatorOf` の境界(各 id ごと)。
+
 ## typecheck
 
 ```
