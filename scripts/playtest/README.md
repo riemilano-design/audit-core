@@ -556,6 +556,76 @@ npx tsx scripts/playtest/answerMenu.ts --out <answer_menu.json>
   ― 「未照合」と明記してある。M1 は ANSWER-M1 で docs 一致試験に戻した)、`menuConditionHoldsOf`/
   `answerMenuDenominatorOf`/`menuVerifyGateHoldsOf` の境界(各 id ごと。M1 の gate 3 ケース、M9 の条件 3 ケースを含む)。
 
+## 局面つきの「この局面では、この手」(`directAnswers.ts`・`finalPositions.ts`。STEP ANSWER 追加作業 ANSWER-DIRECT)
+
+docs/STEP_ANSWER_PLAN_2026-09-23.md §9 の道具。CLAUDE.md ルール 5 の拡張 (4)(2026-09-23 の人間の決定 ― エンジンで
+答え合わせした指し手を局面つきで示してよい)の実物。B の手順のメニュー(`answerMenu.ts`)とは別に、**道具が局面と
+手を選び**、付録 3(`report-pdf/render_direct.py`)として PDF にする。
+
+### `directAnswers.ts`(問題 2「浅い読みで見えた分かれ道」の材料)
+
+`scripts/playtest/directAnswers.ts`(CLI)+ `lib/directAnswers.ts`(純粋関数)は、`whatif.ts`(STEP WHATIF 作業 4)の
+`scenes.fork` が true の position 行と、`read.ts` の分かれ道の行を `ply` で結合し(`lib/type.ts` の生成モードと
+同じやり方)、`firstVisibleNodes` が null でなく `TYPE_VALUES.nodeShallowMaxNodes`(1 万。1 万ちょうどは含む)以下の
+分かれ道だけを選ぶ。**新しい閾値は置かない**(`TYPE_VALUES` を import するだけ)。
+
+```
+npx tsx scripts/playtest/directAnswers.ts \
+  --whatif-v2-dir <whatif-v2 jsonl のフォルダ> --read-dir <read.ts の jsonl のフォルダ> \
+  --whatif-v2-dir <フォルダ> --read-dir <フォルダ> …(組をまたいで合算。複数可) \
+  --out <direct_answers.json>
+```
+
+- 局ごとの結合は `lib/directAnswers.ts` の `joinDirectAnswersGame`(read 側に無い行 ― read.ts 側で候補 0 件等の
+  理由で除外された分かれ道 ― は `forkCount` に数えず読み飛ばす。`lib/type.ts` の既知の限界と同じ)。局をまたいだ
+  並び順(`sortDirectAnswers`。評価の差 = `topGapCp` の大きい順、null は最後)と印の数(`directAnswersCountsOf`)は
+  `buildDirectAnswersFile` がまとめる。
+- **「性質(tags)」の出どころ(実装担当の判断)**: docs §9.1 の「第 1 候補の性質(READ の印: 取る/打つ/王手/
+  捨て駒/引く、と whatif-v2 の側)」という書き分けに合わせ、出力の `top1Tags`/`actualTags` は **read.ts の
+  `ReadMoveMarks`**(whatif-v2 自身の `WhatifMoveTags` には打つ・捨て駒・引くに当たる印が無いため)、
+  `top1Side`/`actualSide` は **whatif-v2 の side** とした。理由は `lib/directAnswers.ts` 冒頭のコメントに書いた。
+- **gameNo の決め方(実装担当の判断)**: 1 対の `--whatif-v2-dir`・`--read-dir` を「1 つの組」とし、その組の中で
+  kifuId の昇順に 1, 2, 3, … を振る(`lib/reportData.ts` の `buildGames` と同じ考え方)。組をまたいで通し番号には
+  しない(patient_report_data.json の `games[].no` と同じ、組ごとに 1 から始まる番号にそろえるため)。
+- 出力(JSON): `{"kind":"direct_answers", gitHead, dirty, values, answers, counts}`。`answers` の 1 件:
+  `kifuId`・`gameNo`・`displayPly`・`sfen`・`actualMove`・`top1Move`・`pv`・`top1Tags`・`top1Side`・`actualTags`・
+  `actualSide`・`topGapCp`・`firstVisibleNodes`(sfen・USI は測る段〈whatif-v2〉の「本人 = 先手」にそろえた向きの
+  まま)。`counts`: `top1TagCounts`・`top1SideCounts`・`actualTagCounts`(印ごとの n)・`gamesCount`・`totalCount`
+  (= `answers.length`)・`totalForkCount`(局をまたいだ分かれ道の総数。選別をする前)。
+- 試験(`lib/directAnswers.test.ts`): 合成の whatif-v2 3 行 + read 3 行での結合・選別(1 万ちょうどは含む、null は
+  除く、read に無い行は forkCount に数えない)・並び順(null は最後)・印の数(局をまたいだ合算)。
+
+### `finalPositions.ts`(問題 1「盤上はこう勝てた」の材料)
+
+`scripts/playtest/finalPositions.ts`(CLI)+ `lib/finalPosition.ts`(純粋関数)は、固定棋譜 JSON の**最後の局面**を
+エンジン 1 本(素の `UsiEngine`。`read.ts` の `readEval` と同じ形)で読む。ノードは `READ_VALUES.nodeLadder` の
+最大値(100 万)、MultiPV 1、Threads は既存の既定(1)。**新しい値は置かない**。
+
+```
+npx tsx scripts/playtest/finalPositions.ts --kifu <固定棋譜 JSON …> --game-nos <n,n,…> --out <final_positions.json>
+npx tsx scripts/playtest/finalPositions.ts --kifu <固定棋譜 JSON …> --patient <patient_report_data.json> --out <final_positions.json>
+```
+
+- `lib/finalPosition.ts` の `finalPositionOf` は、`lib/sideAlignment.ts` の `readSideAlignment`(既存・確定済み。
+  D0-SIDE 段 2)で固定棋譜が mirrored(本人が後手の局を回して畳んだもの)かどうかを読み、mirrored なら
+  `startSfen` から、そうでなければ `lib/kifuImport.ts` の `STANDARD_START_SFEN` から `moves` を `applyMove`
+  (apps/server の既存の道具)で最後まで進める(手数が奇数でも最後の手を落とさない ― `lib/replayPlan.ts` の
+  2 手ずつの診断ループのための決め事はここには要らない。ファイル冒頭コメント参照)。
+- `--game-nos`(カンマ区切り。`--kifu` に渡した順と対応)か `--patient`(`time.timeUpLosses[*].gameNo` の集合と
+  `games[].no`/`games[].id` から対象の kifuId を決め、`--kifu` の中からその id を持つファイルだけを選ぶ)の
+  どちらか一方を渡す。
+- 出力(JSON): `{"kind":"final_positions", startedAt, gitHead, dirty, nodes, threads, entries}`。`entries` の 1 件:
+  `kifuId`・`gameNo`・`moves`(= 固定棋譜の `moves.length`)・`sfen`(最後の局面。mirrored の局は「本人 = 先手」に
+  そろえた向きのまま)・`mirrored`・`top1Move`・`pv`・`scoreCp`・`mate`。
+- 試験(`lib/finalPosition.test.ts`): 合成の局(mirrored: false・mirrored が無い古い記録・mirrored: true ―
+  `lib/sideAlignment.ts` の `alignMovesToSente` で畳んで作る・moves が 0 手)で、`applyMove` を直接呼んだ結果との
+  一致を確かめる。**エンジンを使う CLI 自体は vitest の対象外**(`report-pdf/` の python の道具と同じ理由。
+  守りは実データでの実行時確認)。
+
+### `report-pdf/render_direct.py`(付録 3「直接の答え」の PDF)
+
+上の 2 つの JSON(+ `sfens.json`)から付録 3 を作る。詳しくは `report-pdf/README.md` を参照。
+
 ## typecheck
 
 ```

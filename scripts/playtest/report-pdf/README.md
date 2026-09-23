@@ -222,6 +222,49 @@ markdown を見出し(`#`・`##`・`###`)・箇条書き(`-`・`1.`)・表(`|...
 実データで PNG 確認した)と、変異 5 本(数を 1 つ変える・「すべき」を足す・付録 2 に無い手を足す・
 `<!-- menu: -->` を消す・条件を満たさない id へ材料を絞る)。
 
+## 付録 3「直接の答え」(`render_direct.py`。STEP ANSWER 追加作業 ANSWER-DIRECT、docs/STEP_ANSWER_PLAN_2026-09-23.md §9)
+
+`render_direct.py` も、凍結した 6 本とは**別の、単体の新規ファイル**である(`render_whatif.py`・`render_front.py`
+と同じ位置づけ。`build.sh` では作らない)。CLAUDE.md ルール 5 の拡張 (4)(2026-09-23 の人間の決定)― エンジンで
+答え合わせした指し手を局面つきで示してよい ― の実物。**道具が局面と手を選ぶ**(LLM は使わない)。
+
+- 入力: `direct_answers.json`(`scripts/playtest/directAnswers.ts` の出力)・`final_positions.json`
+  (`scripts/playtest/finalPositions.ts` の出力)・`sfens.json`(`REPORT_DATA_DIR`。既存の `reportData.ts
+  --out-sfens` の出力をそのまま使う)
+- 使い方: `REPORT_DATA_DIR=<sfens.json のあるフォルダ>[,<フォルダ>…] python3 -X utf8 render_direct.py
+  <direct_answers.json> <final_positions.json> <出力 PDF>`(`REPORT_DATA_DIR` はカンマ区切りで複数渡せる ―
+  `direct_answers.json`・`final_positions.json` は組をまたいで作れるため、対応する `sfens.json` も複数の組に
+  またがることがある〈実装担当の判断〉。同じ kifuId が複数の `sfens.json` に出た場合は最初に読んだものを使う)
+- ページ: 1 ページ目(表〈局・手数・実戦の手・第 1 候補・第 1 候補の性質・評価の差〉と印の数) / 「盤上はこう
+  勝てた」(`final_positions.json` の局ごとに 1 ブロック。終局の局面 + 第 1 候補の読み筋。詰みなら
+  「n 手で詰み」、詰みでなければ評価だけを中立に書く ― 判断的な「勝ちに届く」のような閾値は置いていない
+  〈実装担当の判断。docs §9.1 の例文はこの版では使っていない〉) / 「浅い読みで見えた分かれ道」
+  (`direct_answers.json` の `answers` の順〈評価の差の大きい順〉に、局面ごとのブロック)
+- **盤面図・手の表記は `render_whatif.py` と同じ考え方**(`REPORT_DATA_DIR`・書体・`parse_sfen`・`move_kanji`・
+  `mark` などのコードをこのファイルの中に持つ ― `render_whatif.py` も import せず同じ考え方をコードとして
+  持つ書き方をしているため、同じ流儀)。**mirrored(本人が後手)の局は、`sfens.json` の `side`(`"gote"` なら
+  mirrored。二重に判定ロジックを作らない)を見て、盤面は本人が指した実際の向き(`sfens.json`)、候補・実戦の
+  手は `rotate_usi` で本人が指した向きへ戻してから当てる**(`render_whatif.py` と同じ考え方)
+- **矢印・丸(このファイルの新規部分)**: `render_whatif.py` の `Board` は升の色づけだけで矢印は描いていなかった
+  ため、`render_direct.py` の `Board` は実戦の手(茶の実線)・第 1 候補(青緑の破線)の矢印(線 + 三角の矢じるし)
+  を描く機能を新しく足した。打つ手(元の升が無い)は行き先に丸(実線/破線は実戦・候補と同じ塗り分け)
+- `check_answer.py` の `--whatif-pdf` にこの PDF のパスも渡せば、検査 2(手の答え合わせ)がこの PDF の印字でも
+  通る(`move_kanji`・`mark` のコードは `render_whatif.py` と文字どおり同じ)。配線(`--direct` 等)は司令塔が
+  別に行う(触らないもの)
+- **第 1 候補の性質・side の出どころ**: `directAnswers.ts` が作る通り、`top1Tags`/`actualTags` は read.ts の印
+  (取る/打つ/王手/捨て駒/引く 他)、`top1Side`/`actualSide` は whatif-v2 の側(攻め/守り/両方/なし)
+- 数の照合・禁止語・書体の埋め込みの確認は `render_front.py`・`render_whatif.py` と同じ考え方
+  (`emit`/`BANNED`/`check_fonts_embedded.py`)
+- **既知の限界(実装担当が実データで確認)**: 持ち駒の種類が多い局面(4 種類以上)で、「本人の持ち駒」/
+  「相手の持ち駒」のラベルと駒の数の表記が重なることがある。`render_whatif.py` の `Board`(升の色づけ・持ち駒の
+  帯)をそのまま流用したコードで起きるため、この付録固有の新しい不具合ではなく、既存の描き方が抱える限界と
+  見られる(今回は直さない ― 人間・司令塔の判断)
+- 依存はこの README の「依存」節と同じ(`reportlab`・`pymupdf`)。新しい依存は足していない
+- この python の道具も vitest の対象外(`report-pdf/` の他の道具と同じ理由)。守りは、合成データ(短い実戦の手数
+  で分かれ道 3 つ・詰みの終局局面 1 つを含む)での rc=0・書体埋め込み確認と、実データ(`tatsunami3`・
+  `tatsunami-long`・`tatsunami20` の 3 組)での実行時確認(rc=0・ページ数・fitz で PNG化した目視確認。mirrored
+  〈本人が後手〉の局・mirrored でない局の両方を含む)
+
 ## 既知の欠落(2026-09-21 独立監査 REVISE で明記)
 
 別冊(`render_appendix.py`)は、`audit_metrics.json` の `candidate.reps` の欄(`side`・`transitionJp`・`capUsJp` ほか)と
