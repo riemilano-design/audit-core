@@ -494,11 +494,11 @@ describe("answerMaterialFlags", () => {
   });
   const flags = answerMaterialFlags(groups, probe, out, materialPlanOf(args));
 
-  it("旗の並びと回数が run_check.sh と同じ(patient×3・prose×3・whatif-data×2・whatif-v2-dir×2・read-dir×2・type-summary×2・whatif-pdf×3・direct×2・time-cause・time-search・menu)", () => {
+  it("旗の並びと回数が run_check.sh と同じ(patient×3・prose×1・whatif-data×2・whatif-v2-dir×2・read-dir×2・type-summary×2・whatif-pdf×3・direct×2・time-cause・time-search・menu)", () => {
     const counts = (flag: string): number => flags.filter((t) => t === flag).length;
     expect(counts("--patient")).toBe(3);
     expect(counts("--time-limit-sec")).toBe(3);
-    expect(counts("--prose")).toBe(3);
+    expect(counts("--prose")).toBe(1);
     expect(counts("--whatif-data")).toBe(2);
     expect(counts("--whatif-v2-dir")).toBe(2);
     expect(counts("--read-dir")).toBe(2);
@@ -510,9 +510,9 @@ describe("answerMaterialFlags", () => {
     expect(counts("--menu")).toBe(1);
   });
 
-  it("prose は組の順に、patient と同じフォルダ(<work>/report/prose.json)を渡す", () => {
+  it("prose は今回の組(--work)の 1 本だけ、patient と同じフォルダ(<work>/report/prose.json)を渡す(局番号は組ごとに 1 から振られ、納品される付録 1 は今回の組の本編だけのため)", () => {
     const proses = flags.map((t, i) => (flags[i - 1] === "--prose" ? t : null)).filter((t): t is string => t !== null);
-    expect(proses).toEqual(["/w/prev/report/prose.json", "/w/now/report/prose.json", "/w/long/report/prose.json"]);
+    expect(proses).toEqual(["/w/now/report/prose.json"]);
   });
 
   it("read/ が無い組には --whatif-v2-dir も --read-dir も渡さない(M4 の数が変わるため)", () => {

@@ -133,11 +133,67 @@ class ProsePositionsOfTest(unittest.TestCase):
     def test_no_prose_paths_returns_none(self):
         self.assertIsNone(CA.prose_positions_of([]))
 
-    def test_multiple_prose_paths_union(self):
+    def test_two_prose_paths_rejected_by_parse_args(self):
+        """局番号は組ごとに 1 から振られる(組をまたいで衝突しうる)ため、`--prose` は今回の組の 1 本だけ
+        (2026-09-25 の直し。以前は組ごとに渡し、複数渡すと衝突する局面まで検査 7 を通してしまっていた)。
+        `parse_args` が 2 本以上を `CheckAnswerError` で拒むことを確かめる。"""
         path1 = self.write_prose("a.json", {"1": {"scenes": [{"type": "move", "ply": 10, "text": "x"}]}})
         path2 = self.write_prose("b.json", {"3": {"scenes": [{"type": "move", "ply": 30, "text": "y"}]}})
-        positions = CA.prose_positions_of([path1, path2])
-        self.assertEqual(positions, {(1, 10), (3, 30)})
+        argv = ["b.md", "--prose", path1, "--prose", path2, "--menu", "menu.json"]
+        with self.assertRaises(CA.CheckAnswerError) as ctx:
+            CA.parse_args(argv)
+        self.assertIn("--prose", str(ctx.exception))
+
+    def test_missing_prose_file_raises_check_answer_error(self):
+        """`prose.json` が無いとき(前の組の材料が今回の納品に無い等)、traceback ではなく
+        `CheckAnswerError` で「--prose のファイルが無い」と落ちる(2026-09-25 の直し)。"""
+        missing_path = os.path.join(self._tmp.name, "does-not-exist.json")
+        with self.assertRaises(CA.CheckAnswerError) as ctx:
+            CA.prose_positions_of([missing_path])
+        self.assertIn("--prose のファイルが無い", str(ctx.exception))
+        self.assertIn(missing_path, str(ctx.exception))
+
+    def test_group_boundary_no_leak_from_other_group_prose(self):
+        """指示系統からの固定試験(2026-09-25、納品レーンが 4 人目の実物で数えた衝突)。局番号は組ごとに
+        1 から振られるため、3 分の組の第 2 局と 10 分の組の第 2 局は別の局面である。今回の組(3 分)の
+        1 本だけを渡すと、3 分の組の第 2 局の場面(43・75・81 手目)は通り、10 分の組の第 2 局の場面
+        (60・64・68 手目。今回は渡さない ― 納品されるのは今回の組の付録 1 だけ)は材料に無いので落ちる。"""
+        min3_path = self.write_prose(
+            "min3.json",
+            {
+                "2": {
+                    "scenes": [
+                        {"type": "move", "ply": 43, "text": "x"},
+                        {"type": "move", "ply": 75, "text": "y"},
+                        {"type": "move", "ply": 81, "text": "z"},
+                    ]
+                }
+            },
+        )
+        # 10 分の組の prose.json(今回は渡さない。局番号が組ごとに 1 から振られることを示すためだけに作る)。
+        self.write_prose(
+            "min10.json",
+            {
+                "2": {
+                    "scenes": [
+                        {"type": "move", "ply": 60, "text": "x"},
+                        {"type": "move", "ply": 64, "text": "y"},
+                        {"type": "move", "ply": 68, "text": "z"},
+                    ]
+                }
+            },
+        )
+        positions = CA.prose_positions_of([min3_path])
+        ctx = make_ctx({1: positions, 2: set(), 3: set()})
+        for ply in (43, 75, 81):
+            problems = []
+            CA.check_pos_tags(f"<!-- pos: 2/{ply} 付録1 -->", ctx, problems, 1)
+            self.assertEqual(problems, [], f"ply={ply} は 3 分の組の材料にあるので通るはず")
+        for ply in (60, 64, 68):
+            problems = []
+            CA.check_pos_tags(f"<!-- pos: 2/{ply} 付録1 -->", ctx, problems, 1)
+            self.assertEqual(len(problems), 1, f"ply={ply} は 10 分の組の材料なので落ちるはず")
+            self.assertIn("検査 7", problems[0][1])
 
     def test_string_key_converted_to_int(self):
         path = self.write_prose("c.json", {"7": {"scenes": [{"type": "move", "ply": 70, "text": "z"}]}})

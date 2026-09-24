@@ -37,8 +37,10 @@
 #       下の「登録済みの組」に (i)〜(x) を足す ― `--direct`・`--time-cause` と同じ流儀。(iv)〜(vii) は
 #       STEP TIME-CAUSE-3(崩れ q・共通因子・偶然の目安)、(viii)〜(x) は CAUSE-SEARCH-1(`searches.*`・
 #       `byOutcome.decisionGap` の単独の分数)で足した)
-#     [--prose <prose.json>]…(複数可。組ごとに 1 本。付録 1(検査 7)の材料。`render_main.py`〈`_mid.py`〉が
-#       `prose.json` の `scenes[]` から盤を描く局面。中身の形は `{"<局番号>": {"scenes": [{"ply": …}, …], …}, …}`)
+#     [--prose <prose.json>](0 本または 1 本だけ ― 2 本以上は落ちる。付録 1(検査 7)の材料。局番号は組ごとに
+#       1 から振られ、納品される付録 1 は今回の組の本編だけなので、材料も今回の組の 1 本に限る〈2026-09-25〉。
+#       `render_main.py`〈`_mid.py`〉が `prose.json` の `scenes[]` から盤を描く局面。中身の形は
+#       `{"<局番号>": {"scenes": [{"ply": …}, …], …}, …}`)
 #     --menu <answer_menu.json>
 #
 # 出力: rc=0 なら通過。rc=1 なら、落ちた文と理由の一覧(1 行 1 件)を標準エラーへ。
@@ -198,6 +200,11 @@ def parse_args(argv):
     args.markdown_path = positionals[0]
     if args.menu_path is None:
         raise CheckAnswerError("--menu が無い")
+    # 局番号は組ごとに 1 から振られる(組をまたいで衝突しうる)ため、`--prose` は今回の組の 1 本だけ
+    # (付録 1 は今回の組の本編だけが納品される)。2 本以上渡すと衝突する局面まで検査 7 を通してしまう
+    # (2026-09-25 の直し)。
+    if len(args.prose_paths) > 1:
+        raise CheckAnswerError("--prose は今回の組の 1 本だけ(付録 1 は今回の組の本編だけが納品される)")
     return args
 
 
@@ -617,8 +624,11 @@ def time_search_materials_of(time_search_paths):
 
 def prose_positions_of(prose_paths):
     """付録 1(`--prose` の `prose.json`。納品される「2_付録1_形勢が動いた対局」= `render_main.py`
-    〈`_head.py + _util.py + _mid.py` の連結、`report-pdf/build.sh` 参照〉が作る)。`prose.json` の形は
-    `{"<局番号>": {"scenes": [{"type", "ply", "text"}, …], …}, …}`(鍵は文字列 → int に直す)。
+    〈`_head.py + _util.py + _mid.py` の連結、`report-pdf/build.sh` 参照〉が作る)。`--prose` は今回の組の
+    1 本だけ(`parse_args` が 2 本以上を拒む)― 局番号は組ごとに 1 から振られ、納品される付録 1 は今回の組の
+    本編だけなので、材料も今回の組の 1 本に限る(2026-09-25 の直し。前の組の `prose.json` は今回の納品には
+    書かれないため、複数渡す設計だと存在しないファイルを読みに行って落ちる・かつ局番号が衝突していた)。
+    `prose.json` の形は `{"<局番号>": {"scenes": [{"type", "ply", "text"}, …], …}, …}`(鍵は文字列 → int に直す)。
     `_mid.py` 133〜143 行は `scenes[]` の各要素を `type == "move"` かそれ以外かで場合分けするが、どちらでも
     盤(`Board(...)`)を描く(133 行 `for s_ in pz["scenes"]:` 以下、135 行 `if s_["type"] == "move":` の
     分岐と、else 側の 141〜142 行の両方に `Board(...)` がある)ため、`type` を問わず `scenes[]` の全件を
@@ -628,7 +638,10 @@ def prose_positions_of(prose_paths):
         return None
     positions = set()
     for path in prose_paths:
-        data = load_json(path)
+        try:
+            data = load_json(path)
+        except FileNotFoundError:
+            raise CheckAnswerError(f"--prose のファイルが無い: {path}")
         for key, pz in data.items():
             game_no = int(key)
             for s in pz.get("scenes") or []:
