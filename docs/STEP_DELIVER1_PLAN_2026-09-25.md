@@ -637,3 +637,15 @@ F-3(§11.9.9)の直し。統括が承認し、納品レーンが実装(worktree 
 **載せ替え**: `6c01c7c..HEAD` で `check_delivery.py` を触ったコミットは 0 件なので、worktree の 2 ファイルをそのまま本体へ複製(差分 2 行 / 新規 104 行)。本体で python 試験 3 本 rc=0。パス指定でコミット `a329d46`、worktree と `cmp` 同一、worktree 消去。**以後 `check-delivery` は 22 語**(§11.9.13 の「今の 21 語では None を見ない」はこのコミットで解消)。
 
 **説明の追従**(監査の追い課題): `scripts/playtest/README.md` 1003・1027 行と `scripts/playtest/report-pdf/README.md` 443 行の「機械が見るもの」に `None` を足した(このコミット)。`docs/DELIVER_GATES.md` 204 行は開発・診断レーンの持ち物なので相手へ出す。報告 §5(D) の「21 語」の列挙は 557・573 だけでなく 581・585・587・609 もある(監査の指摘。いずれも過去の実測記録で直さない)。
+
+### 11.9.19 凍結の例外 10 件目のコミット `968d427`(複製・付録 3・付録 4 の済みの判定を mtime 比較に)(2026-09-25)
+
+**実装**は 2 人の実装担当が分担(前半は利用上限で中断、後半 opus が §5 の fixture・回帰・変異・(E)・報告を仕上げた)。**独立監査 GO**(opus、判定書 scratchpad `PDF_DONE3_AUDIT.md`)。根拠(監査が自分で回した数): worktree で vitest 1638/1638、本体(無変更)で 1620 → 差 18 = 追加試験 18 本(`+ it(` 18、`-` 0)、`deliver.test.ts` 105、例外 9 の 5 本は通過(`answerPdfDone` は共通関数に寄せていない)、typecheck rc=0、変異 1(`copyDone` を `probe.exists` に戻す)は予測どおり (b) の 1 本だけ落ちて復元は `shasum` 一致、(A) の diff は `reason` 3 ハンクだけで 16 段の `action` は不変、(B) は当該段だけ skip → run、保存 JSON の `reason` 6 種は最終コードに 1 バイト違わず存在。§5 の fixture の hunk は `+` 行のみで期待値に変更行なし。範囲外(他の段・`DELIVER_STAGES`・`--from`/`--out`・`answerMaterialFlags`・`pipeline.ts`・`report-pdf/`)は無変更。
+
+**監査の懸念とその解消**: 4 人目の納品フォルダで 07:05〜07:06 に 19 件の mtime が動き、`deliverables-pdf` が rc=0 で実行されている ― 「HEAD のコードなら skip のはずで、未コミットの変更が実物に走ったのでは」。**これは §11.9.16 の私の作り直し**(HEAD のコード。`deliver1/` の付録 1 を退避して消したので、存在だけの判定でも run になる)。未コミットの変更は実物の納品フォルダには走っていない。送付用 2 冊の作り直しも同じ §11.9.16 の手順で、統括が実物で確かめて本人へ渡した(§11.9.17)。
+
+**載せ替え**: 基点 `a3d7316..HEAD` で `deliver.ts`/`deliver.test.ts` を触ったコミットは 0 件なので、worktree の 2 ファイルをそのまま本体へ複製(266/6)。**本体の `typecheck-scripts` は赤**だが、エラーはすべて gitignore の `scripts/playtest/out/` 配下の下書き `.ts`(`cond-draft/`・`report-template-v6/`・`report5/`)で `deliver` 関連は 0 件(worktree には `out/` が無いので rc=0 だった)。パス指定でコミット `968d427`、worktree 消去(私の worktree は 0)。手順の綻び 1 つ: 最初のコマンド列で typecheck の rc≠0 により `&&` 連鎖が止まり、コミットが走らないまま後続の行(別の文)で worktree を消した。ファイルは `cmp` 同一を確かめた後だったので中身は失われず、本体の未コミット差分をそのままコミットした。**消す手は照合の rc に直接つなぎ、コミットの成否も同じ連鎖に入れる**(既知の型)。
+
+**残る同じ型の穴**(実装・監査とも 8 段で一致。直さない): `pipeline-gate`・`prose-gate`・`appendix3-answers`・`appendix3-final`・`appendix4-cause`・`appendix4-search`・`answer-menu`・`answer-draft` は `probe.exists(<出力>)` だけ(`answer-menu` は入力ファイル無し、`answer-draft` の「上書きしない」は意図的)。既知事項の候補として §11.9.17 の「コードの変更を見ない」と併せて開発・診断レーンへ(番号は向こう)。
+
+**7c の合図**: 10 が入ったので開発・診断レーンが `answerMaterialFlags` の中だけで 7c を載せる。
