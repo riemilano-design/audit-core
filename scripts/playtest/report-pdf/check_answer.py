@@ -37,6 +37,8 @@
 #       下の「登録済みの組」に (i)〜(x) を足す ― `--direct`・`--time-cause` と同じ流儀。(iv)〜(vii) は
 #       STEP TIME-CAUSE-3(崩れ q・共通因子・偶然の目安)、(viii)〜(x) は CAUSE-SEARCH-1(`searches.*`・
 #       `byOutcome.decisionGap` の単独の分数)で足した)
+#     [--prose <prose.json>]…(複数可。組ごとに 1 本。付録 1(検査 7)の材料。`render_main.py`〈`_mid.py`〉が
+#       `prose.json` の `scenes[]` から盤を描く局面。中身の形は `{"<局番号>": {"scenes": [{"ply": …}, …], …}, …}`)
 #     --menu <answer_menu.json>
 #
 # 出力: rc=0 なら通過。rc=1 なら、落ちた文と理由の一覧(1 行 1 件)を標準エラーへ。
@@ -44,13 +46,16 @@
 # 【検査 7(局面の参照。docs/STEP_DELIVER1_PLAN_2026-09-25.md §11.7、2026-09-24 の人間の委任)】
 # 書き手が `<!-- pos: G/P 付録N -->`(G = 局番号、P = 手目、N = 1〜4)を局面を指す行に置くと、宣言された
 # (G, P) が付録 N の材料に実在するかを確かめる(本文は解析しない。宣言の無い参照は検査しない ― 既知の限界)。
-# 付録ごとの材料: 付録 1 = `--patient` の `patient_report_data.json` の `events[]`(kind が "drop" の
-# 行だけ。gameNo・ply)・`escapeScenes[]`(gameNo・displayPly)。付録 2 = `--whatif-data` の
-# `whatif_report_data.json` の
-# `games[].representative`(gameNo・displayPly)。付録 3 = `--direct` の `direct_answers.json` の
-# `answers[]`(gameNo・displayPly)と `final_positions.json` の `entries[]`(gameNo・moves)。付録 4 =
-# `--time-cause` の `time_cause.json` の `games[].longestMove`(gameNo・kifPly。表に印字される。帯グラフの
-# 軸ラベルにも手数は出るが間引かれるため材料にしない ― `time_cause_positions_of` のコメント参照)。
+# 付録ごとの材料: 付録 1(納品される「2_付録1_形勢が動いた対局」= `render_main.py`〈`_head.py + _util.py +
+# _mid.py` の連結〉が作る)= `--prose` の `prose.json` の `scenes[]`(gameNo は局番号のキー〈文字列 → int〉、
+# ply = `scenes[].ply`。`_mid.py` 133〜143 行が `scenes[]` の各要素〈`type` が "move" でもそれ以外でも〉から
+# 盤を描く)。付録 2(「3_付録2_分かれ道」= `render_whatif.py`)= `--whatif-data` の `whatif_report_data.json` の
+# `games[].representative`(gameNo・displayPly。`render_whatif.py` 687〜743 行が盤を描く)。付録 3
+# (「5_付録3_直接の答え」= `render_direct.py`)= `--direct` の `direct_answers.json` の `answers[]`
+# (gameNo・displayPly。`render_direct.py` 464〜606 行が盤を描く)と `final_positions.json` の `entries[]`
+# (gameNo・moves。同ファイル 531〜545 行が盤を描く)。付録 4(「6_付録4_時間の使い方」= `render_time_cause.py`)
+# には盤が 1 枚も無い(表と帯グラフだけ。`Board(` も sfen も出てこない)ため、`<!-- pos: G/P 付録4 -->` は
+# 材料の有無にかかわらず常に「付録 4 には盤が無い(検査 7)」で落とす(司令塔の指示、2026-09-24)。
 # 材料が渡されていない付録・形の崩れ・1〜4 以外の N も落とす(黙って通さない)。印の中の数字は検査 1 の
 # 対象から外す(`menu` の印と同じ扱い)。
 #
@@ -113,6 +118,7 @@ class CliArgs:
         self.direct_paths = []
         self.time_cause_paths = []
         self.time_search_paths = []
+        self.prose_paths = []
         self.menu_path = None
 
 
@@ -173,6 +179,10 @@ def parse_args(argv):
             continue
         if flag == "--time-search":
             args.time_search_paths.append(argv[i + 1])
+            i += 2
+            continue
+        if flag == "--prose":
+            args.prose_paths.append(argv[i + 1])
             i += 2
             continue
         if flag == "--menu":
@@ -598,29 +608,31 @@ def time_search_materials_of(time_search_paths):
     }
 
 
-# ==================== 検査 7 の材料: 局面の参照(付録 1〜4。司令塔の指示。docs/STEP_DELIVER1_PLAN_2026-09-25.md
-#   §11.7、2026-09-24 の人間の委任) ====================
+# ==================== 検査 7 の材料: 局面の参照(付録 1〜3。司令塔の指示。docs/STEP_DELIVER1_PLAN_2026-09-25.md
+#   §11.7、2026-09-24 の人間の委任。付録 4 は盤が無いため材料を持たない ― 下の `check_pos_tags` を参照) ====================
 #   各 `*_positions_of` は、渡されたパスが 1 つも無ければ None を返す(=「材料が渡されていない」。
 #   `direct_materials_of`・`time_cause_materials_of` と同じ流儀)。渡されていれば `{(gameNo, ply/手目), …}` の
-#   集合を返す(空集合もありうる ― 特に付録 4 は `longestMove` が無い局だけの材料だと空になる)。
+#   集合を返す(空集合もありうる)。
 
 
-def patient_positions_of(patient_files):
-    """付録 1(`--patient` の `patient_report_data.json`)。`events[]` は `kind == "drop"` の行だけを材料にする
-    (`_tail.py`〈`render_appendix.py` を作る連結元の断片〉の付録 6 が `[e for e in m["events"] if
-    e.get("kind") == "drop"]` で絞ってから印字するため。`kind == "matedIfPass"` の行は印字されない
-    ― 司令塔の監査 REVISE、実データで events の 8〜25% を占める)。`escapeScenes[]`(gameNo・displayPly)は
-    絞り込みが無いので全件を材料にする。"""
-    if not patient_files:
+def prose_positions_of(prose_paths):
+    """付録 1(`--prose` の `prose.json`。納品される「2_付録1_形勢が動いた対局」= `render_main.py`
+    〈`_head.py + _util.py + _mid.py` の連結、`report-pdf/build.sh` 参照〉が作る)。`prose.json` の形は
+    `{"<局番号>": {"scenes": [{"type", "ply", "text"}, …], …}, …}`(鍵は文字列 → int に直す)。
+    `_mid.py` 133〜143 行は `scenes[]` の各要素を `type == "move"` かそれ以外かで場合分けするが、どちらでも
+    盤(`Board(...)`)を描く(133 行 `for s_ in pz["scenes"]:` 以下、135 行 `if s_["type"] == "move":` の
+    分岐と、else 側の 141〜142 行の両方に `Board(...)` がある)ため、`type` を問わず `scenes[]` の全件を
+    材料にする(`events[]`・`escapeScenes[]` からは作らない ― どちらも `_mid.py` では局面つきで印字されない。
+    `escapeScenes` は `allowed_numbers`〈言い換えの数の照合〉でしか読まれない)。"""
+    if not prose_paths:
         return None
     positions = set()
-    for f in patient_files:
-        for e in f.raw.get("events") or []:
-            if e.get("kind") != "drop":
-                continue
-            positions.add((e["gameNo"], e["ply"]))
-        for s in f.raw.get("escapeScenes") or []:
-            positions.add((s["gameNo"], s["displayPly"]))
+    for path in prose_paths:
+        data = load_json(path)
+        for key, pz in data.items():
+            game_no = int(key)
+            for s in pz.get("scenes") or []:
+                positions.add((game_no, s["ply"]))
     return positions
 
 
@@ -658,24 +670,9 @@ def direct_positions_of(direct):
     return positions
 
 
-def time_cause_positions_of(time_cause):
-    """付録 4(`--time-cause` の `time_cause.json`)。表に印字される `games[].longestMove.kifPly`
-    (`render_time_cause.py` が「{sec}秒({kifPly}手目)」と印字する)だけを材料にする(司令塔の監査
-    REVISE)。中盤の手ごとの帯グラフ(`render_time_cause.py` 408〜418 行)の軸ラベルにも
-    `midMoveSeconds[].kifPly` が印字されるが、間引かれて出る(`i % max(1, n // 12) == 0` の手だけ)ため、
-    材料には入れない(安全側 ― 設計は `longestMove.kifPly` に絞ったまま)。`longestMove` が無い局はスキップ
-    する(その局にはこの付録から確かめられる局面が無い、という意味で ― 検査は「渡された `time_cause`
-    全体に 1 つも印字が無い」場合だけ特別扱いする〈呼び出し側の `check_pos_tags` を参照〉)。`time_cause` が
-    None(`--time-cause` が 1 つも無い)なら None。"""
-    if time_cause is None:
-        return None
-    positions = set()
-    for raw in time_cause["raw"]:
-        for g in raw.get("games") or []:
-            longest = g.get("longestMove")
-            if longest is not None:
-                positions.add((g["gameNo"], longest["kifPly"]))
-    return positions
+# 付録 4(`render_time_cause.py`)は盤が 1 枚も無い(表と帯グラフだけ ― `Board(` も sfen も出てこない)ため、
+# `*_positions_of` を持たない。`<!-- pos: G/P 付録4 -->` は `check_pos_tags` が常に「付録 4 には盤が無い
+# (検査 7)」で落とす(司令塔の指示、2026-09-24)。
 
 
 # ==================== 行動のメニューの条件判定(`lib/answerMenu.ts` の menuConditionHoldsOf の写し。
@@ -1107,12 +1104,11 @@ def build_materials(args, repo_root):
     allowed_numbers |= percent_pool_of(pairs)
 
     # 検査 7(局面の参照)の材料。渡されなかった付録は鍵が無い(= None。`positions.get(N)` で「材料が渡されて
-    # いない」を見分ける)。
+    # いない」を見分ける)。付録 4 は盤が無いので鍵を持たない(`check_pos_tags` が N==4 を先に特別扱いする)。
     positions = {
-        1: patient_positions_of(patient_files),
+        1: prose_positions_of(args.prose_paths),
         2: whatif_positions_of(args.whatif_data_paths),
         3: direct_positions_of(direct),
-        4: time_cause_positions_of(time_cause),
     }
 
     menu_ids = {item["id"] for item in menu["items"]}
@@ -1308,18 +1304,17 @@ def check_pos_tags(line, ctx, problems, line_no):
             problems.append((line_no, f"局面の参照の形が崩れている({inner}。検査 7)", line))
             continue
         g, p, n = int(inner_m.group(1)), int(inner_m.group(2)), int(inner_m.group(3))
-        if n not in (1, 2, 3, 4):
+        # 付録 4(render_time_cause.py)には盤が 1 枚も無い(表と帯グラフだけ)ため、材料の有無にかかわらず
+        # 常に落とす(司令塔の指示、2026-09-24。形の崩れ・知らない付録番号とは別のメッセージにする)。
+        if n == 4:
+            problems.append((line_no, "付録 4 には盤が無い(検査 7)", line))
+            continue
+        if n not in (1, 2, 3):
             problems.append((line_no, f"局面 {g}/{p} は知らない付録 {n} を指している(検査 7)", line))
             continue
         positions = ctx["positions"].get(n)
         if positions is None:
             problems.append((line_no, f"付録 {n} の材料が渡されていない(検査 7)", line))
-            continue
-        # 付録 4 は局面の印字が `longestMove` の 1 種類だけで、渡された `--time-cause` に 1 件も無ければ
-        # (材料は渡されているが局面を持たない)、個別の (g, p) 不一致とは別の理由として報告する
-        # (司令塔の指示。docs/STEP_DELIVER1_PLAN_2026-09-25.md §11.7)。
-        if n == 4 and len(positions) == 0:
-            problems.append((line_no, "付録 4 は局面の材料を持たない(検査 7)", line))
             continue
         if (g, p) not in positions:
             problems.append((line_no, f"局面 {g}/{p} は付録 {n} の材料に無い(検査 7)", line))

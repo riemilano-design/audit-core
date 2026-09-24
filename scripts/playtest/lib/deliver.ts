@@ -583,13 +583,18 @@ function willHaveWhatif(group: GroupPaths, probe: DeliverProbe, plan: MaterialPl
 
 /**
  * `check_answer.py`・`render_answer.py` に共通の材料の旗(指示書 §2 の「引数 20 個の内訳」= `run_check.sh` の並び)。
- * 並びは `run_check.sh` のとおり: patient(組の順)→ whatif-data → whatif-v2-dir → read-dir → type-summary →
- * whatif-pdf(各組 + 付録 3)→ direct ×2 → time-cause → time-search → menu。
+ * 並びは `run_check.sh` のとおり: patient(組の順)→ prose(組の順)→ whatif-data → whatif-v2-dir → read-dir →
+ * type-summary → whatif-pdf(各組 + 付録 3)→ direct ×2 → time-cause → time-search → menu。
+ *
+ * `--prose` は付録 1(検査 7)の材料(検査 7 の追加、2026-09-24)。`patient` と同じ場所(`<work>/report/`)から
+ * 組ごとに 1 本渡す。`prose.json` は段 `prose-gate` が `pipeline-pdf` より前に存在を確かめているため
+ * (無ければそこで止まる)、`patient` と同じく `probe.exists` では絞らずに常に渡す。
  */
 export function answerMaterialFlags(groups: readonly GroupPaths[], probe: DeliverProbe, out: DeliverOutPaths, plan: MaterialPlan): string[] {
   const withRead = groupsWithRead(groups, probe);
   const flags: string[] = [];
   for (const g of groups) flags.push("--patient", g.patient, "--time-limit-sec", String(g.timeLimitSec));
+  for (const g of groups) flags.push("--prose", g.prose);
   for (const g of groups) {
     if (willHaveWhatif(g, probe, plan, "data")) flags.push("--whatif-data", g.whatifData);
   }

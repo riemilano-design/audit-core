@@ -2,15 +2,17 @@
 # check_answer.py の検査 7(局面の参照)の試験。2026-09-24 の人間の委任(docs/STEP_DELIVER1_PLAN_2026-09-25.md
 # §11.7)。「本文が指した局面が、指した付録に実在するか」を確かめる `<!-- pos: G/P 付録N -->` の印を検査する。
 #
-# answer_facts_test.py と同じ流儀: pytest 等の外部ライブラリは使わない(標準ライブラリ unittest)。材料は
-# 本物の JSON ファイル・gitignore の実データを読まず、この試験の中に持つ小さな合成 `ctx`(`check_pos_tags`・
-# `check_line_numbers` が読む欄だけを持つ辞書)。
+# answer_facts_test.py と同じ流儀: pytest 等の外部ライブラリは使わない(標準ライブラリ unittest)。gitignore の
+# 実データは読まない。材料は、この試験の中に持つ小さな合成 `ctx`(`check_pos_tags`・`check_line_numbers` が
+# 読む欄だけを持つ辞書)か、`prose_positions_of` が読む合成の `prose.json`(`tempfile` で一時フォルダに書く。
+# `answer_facts_test.py` と同じ流儀)。
 #
 # 実行: `python3 -X utf8 scripts/playtest/report-pdf/check_answer_test.py`
+import json
 import os
 import sys
+import tempfile
 import unittest
-from types import SimpleNamespace
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
@@ -28,13 +30,12 @@ def make_ctx(positions, pairs=None, allowed_numbers=None):
 
 class CheckPosTagsTest(unittest.TestCase):
     def setUp(self):
-        # 付録 1〜3 は局面あり、付録 4 は「材料はあるが局面が無い」場合を既定にする(検査 3 の試験用)。
-        # 個々の試験で必要に応じて作り直す。
+        # 付録 1〜3 は局面あり(付録 4 は render_time_cause.py に盤が無いため、材料の鍵を持たない ―
+        # `check_pos_tags` は N==4 を材料の有無より前に特別扱いする)。
         self.positions = {
-            1: {(1, 10), (2, 20)},  # 付録 1: patient の events[]・escapeScenes[]
+            1: {(1, 10), (2, 20)},  # 付録 1: prose.json の scenes[]
             2: {(3, 33)},  # 付録 2: whatif の representative
             3: {(5, 59), (9, 77)},  # 付録 3: direct_answers の局面と final_positions の最終局面
-            4: None,  # 付録 4: --time-cause が渡されていない(試験ごとに上書きする)
         }
 
     def check(self, line, positions=None):
@@ -59,24 +60,19 @@ class CheckPosTagsTest(unittest.TestCase):
         self.assertIn("9/99", reason)
         self.assertIn("付録 1", reason)
 
-    # 3. 材料が渡されていない付録の宣言は落ちる(付録 4。--time-cause が無い = positions[4] is None)。
-    def test_material_not_provided_fails(self):
-        problems = self.check("参考: <!-- pos: 5/59 付録4 -->")
-        self.assertEqual(len(problems), 1)
-        _, reason, _ = problems[0]
-        self.assertIn("検査 7", reason)
-        self.assertIn("材料が渡されていない", reason)
-
-    # 3b. 付録 4 は材料が渡されているが局面の印字が 1 つも無い(--time-cause はあるが longestMove が無い)場合、
-    # 「材料が渡されていない」とは別の理由(「局面の材料を持たない」)で落ちる。
-    def test_appendix4_empty_positions_fails_with_distinct_message(self):
-        positions = dict(self.positions)
-        positions[4] = set()  # --time-cause は渡されたが longestMove が 1 件も無い
-        problems = self.check("参考: <!-- pos: 5/59 付録4 -->", positions=positions)
-        self.assertEqual(len(problems), 1)
-        _, reason, _ = problems[0]
-        self.assertIn("検査 7", reason)
-        self.assertIn("局面の材料を持たない", reason)
+    # 3. 付録 4(render_time_cause.py)には盤が 1 枚も無いため、`<!-- pos: … 付録4 -->` は材料の有無に
+    # かかわらず常に「付録 4 には盤が無い」で落ちる(司令塔の指示、2026-09-24)。
+    def test_appendix4_always_fails_no_board_message(self):
+        for positions in (
+            self.positions,  # 付録 4 の鍵自体が無い(--time-cause の材料は付録 4 の検査 7 には使わない)
+            {**self.positions, 4: set()},  # 鍵があっても局面が無くても
+            {**self.positions, 4: {(5, 59)}},  # 局面があっても関係ない
+        ):
+            problems = self.check("参考: <!-- pos: 5/59 付録4 -->", positions=positions)
+            self.assertEqual(len(problems), 1, positions)
+            _, reason, _ = problems[0]
+            self.assertIn("検査 7", reason)
+            self.assertIn("付録 4 には盤が無い", reason)
 
     # 4. 形の崩れ(スラッシュが無い、知らない付録番号)は落ちる。
     def test_malformed_tag_fails(self):
@@ -97,43 +93,69 @@ class CheckPosTagsTest(unittest.TestCase):
         self.assertIn("9/99", problems[0][1])
 
 
-class PatientPositionsOfTest(unittest.TestCase):
-    """司令塔の監査 REVISE(付録 1 の材料が過大許可だった件)。`patient_positions_of`(材料構築関数そのもの)を
-    直接呼び、`kind == "matedIfPass"` の events は材料から除かれることを確かめる(`kind == "drop"` の行だけが
-    `render_appendix.py`〈`_tail.py` の付録 6〉で印字されるため)。`escapeScenes` は絞り込みが無いので
-    全件材料になる。`PatientFile.__init__` は `summary`・`time` 等の全欄を要求するため、ここでは
-    `patient_positions_of` が読む `.raw` 欄だけを持つ `SimpleNamespace`(`answer_facts_test.py` と同じ流儀)を使う。"""
+class ProsePositionsOfTest(unittest.TestCase):
+    """司令塔の指示(付録 1 の材料が、納品されない別冊〈`_tail.py`〉の `events[]`/`escapeScenes[]` から
+    作られていた件。2026-09-24)。納品される付録 1(`render_main.py`〈`_head.py + _util.py + _mid.py`〉)が
+    実際に盤を描くのは `prose.json` の `scenes[]` だけ(`_mid.py` 133〜143 行、`type` を問わない)なので、
+    `prose_positions_of` を直接呼んで確かめる。実ファイルを一時フォルダに書き、パスを渡す
+    (`prose_positions_of` は `--prose` のパスから `load_json` で読むため。`answer_facts_test.py` と同じ流儀)。"""
 
-    def make_patient_file(self, events, escape_scenes):
-        return SimpleNamespace(raw={"events": events, "escapeScenes": escape_scenes})
+    def setUp(self):
+        self._tmp = tempfile.TemporaryDirectory()
 
-    def test_mated_if_pass_events_excluded_from_positions(self):
-        events = [
-            {"gameNo": 1, "ply": 10, "kind": "drop"},
-            {"gameNo": 2, "ply": 20, "kind": "matedIfPass"},
-        ]
-        positions = CA.patient_positions_of([self.make_patient_file(events, [])])
+    def tearDown(self):
+        self._tmp.cleanup()
+
+    def write_prose(self, name, data):
+        path = os.path.join(self._tmp.name, name)
+        with open(path, "w", encoding="utf-8") as f:
+            json.dump(data, f)
+        return path
+
+    def test_scene_position_included(self):
+        path = self.write_prose(
+            "prose1.json",
+            {"1": {"summary": "s", "takeaway": "t", "scenes": [{"type": "move", "ply": 10, "text": "x"}]}},
+        )
+        positions = CA.prose_positions_of([path])
         self.assertIn((1, 10), positions)
-        self.assertNotIn((2, 20), positions)
 
-    def test_escape_scenes_not_filtered_by_kind(self):
-        escape_scenes = [{"gameNo": 3, "displayPly": 30}]
-        positions = CA.patient_positions_of([self.make_patient_file([], escape_scenes)])
-        self.assertIn((3, 30), positions)
+    def test_non_move_type_scene_included(self):
+        # `_mid.py` の 133〜143 行は `type == "move"` の分岐(135〜140 行)でも、それ以外の分岐(141〜143 行)
+        # でも盤(`Board(...)`)を描く。
+        path = self.write_prose(
+            "prose2.json",
+            {"2": {"summary": "s", "takeaway": "t", "scenes": [{"type": "opponent", "ply": 20, "text": "x"}]}},
+        )
+        positions = CA.prose_positions_of([path])
+        self.assertIn((2, 20), positions)
 
-    def test_no_patient_files_returns_none(self):
-        self.assertIsNone(CA.patient_positions_of([]))
+    def test_no_prose_paths_returns_none(self):
+        self.assertIsNone(CA.prose_positions_of([]))
 
-    def test_matedIfPass_position_fails_check_pos_tags_as_not_in_material(self):
-        """材料構築関数(`patient_positions_of`)を通した結果を `check_pos_tags` に渡し、`matedIfPass` の
+    def test_multiple_prose_paths_union(self):
+        path1 = self.write_prose("a.json", {"1": {"scenes": [{"type": "move", "ply": 10, "text": "x"}]}})
+        path2 = self.write_prose("b.json", {"3": {"scenes": [{"type": "move", "ply": 30, "text": "y"}]}})
+        positions = CA.prose_positions_of([path1, path2])
+        self.assertEqual(positions, {(1, 10), (3, 30)})
+
+    def test_string_key_converted_to_int(self):
+        path = self.write_prose("c.json", {"7": {"scenes": [{"type": "move", "ply": 70, "text": "z"}]}})
+        positions = CA.prose_positions_of([path])
+        self.assertIn((7, 70), positions)
+        for game_no, _ in positions:
+            self.assertIsInstance(game_no, int)
+
+    def test_position_not_in_prose_scenes_fails_check_pos_tags(self):
+        """材料構築関数(`prose_positions_of`)を通した結果を `check_pos_tags` に渡し、`scenes[]` に無い
         (gameNo, ply) を指す `<!-- pos: 2/20 付録1 -->` が「材料に無い(検査 7)」で落ちることを確かめる
-        (今までの試験は合成 ctx だけで材料構築関数を一度も通していなかった、という監査指摘への対応)。"""
-        events = [
-            {"gameNo": 1, "ply": 10, "kind": "drop"},
-            {"gameNo": 2, "ply": 20, "kind": "matedIfPass"},
-        ]
-        positions_1 = CA.patient_positions_of([self.make_patient_file(events, [])])
-        ctx = make_ctx({1: positions_1, 2: set(), 3: set(), 4: set()})
+        (合成 ctx だけで材料構築関数を一度も通さない、という過去の監査指摘と同じ形を避ける)。"""
+        path = self.write_prose(
+            "d.json",
+            {"1": {"scenes": [{"type": "move", "ply": 10, "text": "x"}]}, "2": {"scenes": []}},
+        )
+        positions_1 = CA.prose_positions_of([path])
+        ctx = make_ctx({1: positions_1, 2: set(), 3: set()})
         problems = []
         CA.check_pos_tags("<!-- pos: 2/20 付録1 -->", ctx, problems, 1)
         self.assertEqual(len(problems), 1)
@@ -141,7 +163,7 @@ class PatientPositionsOfTest(unittest.TestCase):
         self.assertIn("検査 7", reason)
         self.assertIn("材料に無い", reason)
         self.assertIn("2/20", reason)
-        # 対照: drop の方(材料にある)は通る。
+        # 対照: scenes[] にある方(材料にある)は通る。
         problems2 = []
         CA.check_pos_tags("<!-- pos: 1/10 付録1 -->", ctx, problems2, 1)
         self.assertEqual(problems2, [])
