@@ -202,7 +202,14 @@ def bullet_1(m, name):
         prefix = "今回の " if e.get("kifuId") in cur_ids else ""
         head = f"{prefix}{e['gameNo']} 局目({e['moves']} 手で時間切れ)は"
         if e.get("mate") is not None:
-            parts.append(f"{head}**ここから {e['mate']} 手で{name}の勝ちの詰み**")
+            mate = e["mate"]
+            if mate > 0:
+                parts.append(f"{head}**ここから {mate} 手で{name}の勝ちの詰み**")
+            elif mate < 0:
+                n = abs(mate)
+                parts.append(f"{head}**ここから {n} 手で{name}の玉に詰み**")
+            else:
+                raise Missing(f"final_positions の {e.get('kifuId')} の mate が 0(符号が無く勝ち負けを判定できない)")
         elif e.get("scoreCp") is not None:
             # 正のときだけ + を付ける(負なら「+-」にならないよう、符号は数字自身に任せる)。
             score = e["scoreCp"]

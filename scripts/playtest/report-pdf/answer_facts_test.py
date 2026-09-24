@@ -173,6 +173,35 @@ class AnswerFactsRenderTest(unittest.TestCase):
         self.assertIn("+82", md)
         self.assertIn(" -50", md)
 
+    def test_mate_negative_means_own_king_is_mated(self):
+        # 4 人目の B の md で見つかった事故の再発防止: mate が負のとき(本人が詰まされる側)、
+        # 「本人の勝ちの詰み」と逆に書かず、負の符号のままの数も出さない。
+        materials = build_materials(self._tmp.name)
+        materials["direct"] = {"raw": [{"kind": "final_positions", "entries": [
+            {"kifuId": "k1", "gameNo": 11, "moves": 68, "mate": -4},
+        ]}]}
+        text = AF.bullet_1(materials, "テスト名")
+        self.assertIn("4 手でテスト名の玉に詰み", text)
+        self.assertNotIn("勝ちの詰み", text)
+        self.assertNotIn("-4", text)
+
+    def test_mate_positive_means_own_win(self):
+        materials = build_materials(self._tmp.name)
+        materials["direct"] = {"raw": [{"kind": "final_positions", "entries": [
+            {"kifuId": "k1", "gameNo": 11, "moves": 68, "mate": 3},
+        ]}]}
+        text = AF.bullet_1(materials, "テスト名")
+        self.assertIn("3 手でテスト名の勝ちの詰み", text)
+        self.assertNotIn("玉に詰み", text)
+
+    def test_mate_zero_is_missing(self):
+        materials = build_materials(self._tmp.name)
+        materials["direct"] = {"raw": [{"kind": "final_positions", "entries": [
+            {"kifuId": "k1", "gameNo": 11, "moves": 68, "mate": 0},
+        ]}]}
+        with self.assertRaises(AF.Missing):
+            AF.bullet_1(materials, "テスト名")
+
 
 if __name__ == "__main__":
     unittest.main()
