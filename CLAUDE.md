@@ -70,6 +70,8 @@
 
 上の 4 番・7 番が言う「人間の承認」のうち、**設計判断と、`feature/` ブランチ上のコミット承認は、司令塔セッションへ委任された。** 委任の条件と手順は [docs/AGENT_PROTOCOL.md](docs/AGENT_PROTOCOL.md) の「承認の委任」に定める。
 
+**いま誰がこの席にいるか**(司令塔・各レーンの長・担当の割り当て)は [docs/COMMAND_STRUCTURE.md](docs/COMMAND_STRUCTURE.md) を正本とする(2026-09-24)。**席は動くが、この節の権限は動かない。**
+
 **委任されないもの(引き続き人間が決める)**
 
 - `main` ブランチへのマージ(7 番はこの点で変わらない)
@@ -104,6 +106,7 @@
 | [docs/LONG_TERM_VISION.md](docs/LONG_TERM_VISION.md) | 長期構想(このアプリが最終的に何になろうとしているか)。MVPの完成条件ではない |
 | [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | 全体構造とモジュール・Unitの責務境界 |
 | [docs/AGENT_PROTOCOL.md](docs/AGENT_PROTOCOL.md) | 3役(司令塔・実装担当・承認/監査担当)と専門エージェントの協働ルール |
+| [docs/COMMAND_STRUCTURE.md](docs/COMMAND_STRUCTURE.md) | **指示系統(誰が誰に指示し、誰に報告するか)。いま誰がどの席にいるかの正本** |
 | [docs/DATA_MODEL.md](docs/DATA_MODEL.md) | 教育用データパイプラインとスキーマ設計の詳細 |
 | [docs/SCENARIOS.md](docs/SCENARIOS.md) | 対局シナリオ(AI序盤制御)。**開発・検証専用の機構であり、本番の基本体験には使わない** |
 | [docs/KIND3_VERIFICATION.md](docs/KIND3_VERIFICATION.md) | Kind 3(相手AI制御データ)の多段階検証プロトコル(有段者レビューの代替) |
