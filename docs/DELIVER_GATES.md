@@ -201,7 +201,7 @@ npx tsx scripts/playtest/deliver.ts <同じ引数> --from answer-check
 
 ## 3. 段 `check-delivery` のあと ― PDF の目視
 
-`check_delivery.py` が機械で見るので、**目で探さなくてよいもの**: 禁止語 18 語・`@`・`/Users/`・「水匠」・`--forbid` で渡した語。
+`check_delivery.py` が機械で見るので、**目で探さなくてよいもの**: 禁止語 18 語・`@`・`/Users/`・「水匠」・**`None`**(道具が値の無い印字をした跡。例外 12 件目 `a329d46`)・`--forbid` で渡した語。
 
 **目で見るもの**:
 
