@@ -20,6 +20,9 @@
 # し、差し替えるのは数だけ(文の形は変えない)。数が材料から引けない箇条書きは、その 1 行だけを
 # `<!-- TODO: 読み -->` に落とし、標準エラーへ「どの数が出せなかったか」を出す(黙って省かない)。
 #
+# 事実の箇条書きは数だけ。比較・解釈・因果・程度(「多い」「ずっと」「〜と言えません」「〜ことが多い」)は
+# 書き手が数を見て書く(2026-09-24 の人間の決定)。
+#
 # 【この道具が絶対にやらないこと】将棋の判断・評価・閾値。数の再計算・中央値の計算・分数の合算。
 # 「読み」の文(考えられること)・「こうしてみては」の行・「例」の節を書くこと(= 人と LLM の仕事。
 # プレースホルダで空ける)。名前を自分の中に持つこと(表示名は `--name` で受け取る)。
@@ -201,12 +204,15 @@ def bullet_1(m, name):
         if e.get("mate") is not None:
             parts.append(f"{head}**ここから {e['mate']} 手で{name}の勝ちの詰み**")
         elif e.get("scoreCp") is not None:
-            parts.append(f"{head} +{e['scoreCp']}")
+            # 正のときだけ + を付ける(負なら「+-」にならないよう、符号は数字自身に任せる)。
+            score = e["scoreCp"]
+            sign = "+" if score > 0 else ""
+            parts.append(f"{head} {sign}{score}")
         else:
             raise Missing(f"final_positions の {e.get('kifuId')} の評価(scoreCp も mate も無い)")
     return (
-        f"- 盤の上では勝っていました(付録 3 の 3 ページ「盤上はこう勝てた」)。"
-        f"時間で負けた {g3.time_up_losses['n']} 局の最後の局面をエンジンで読むと、{'、'.join(parts)}。"
+        f"- 時間で負けた {g3.time_up_losses['n']} 局の最後の局面をエンジンで読むと(付録 3 の 3 ページ)、"
+        f"{'、'.join(parts)}。"
         f"10 分 + 30 秒の {g10.games} 局では、時間で負けた局は {g10.time_up_losses['n']} 局。"
     )
 
@@ -222,7 +228,7 @@ def bullet_2(m, name):
     if any(r is None for r in remains):
         raise Missing("time_cause.json の remainingSec")
     return (
-        f"- 時間は中盤で消えています(付録 4 の 4 ページ)。"
+        f"- 中盤の消費(付録 4 の 4 ページ): "
         f"時間で負けた {g3.time_up_losses['n']} 局の中盤の消費は {joined(mids)} 秒。"
         f"他の {tc3['other']['games']} 局の中央値は {tc3['other']['medianMidSec']} 秒。"
         f"中盤が終わった時点の残り時間は {joined(remains)} 秒でした。"
@@ -249,7 +255,6 @@ def bullet_3(m, name):
         f"(最長は {joined(longests)} 秒。長考が 2 手続いた局はありません)と、"
         f"5〜9 秒の中考の積み重なり(合計 {joined(mid_thinks)} 秒。"
         f"他の局の中央値は {tc3['other']['medianMidThinkSec']} 秒)です。"
-        f"1 回の長い長考でも、長考の連続でもなく、**中盤の手が全体にゆっくり**でした。"
     )
 
 
@@ -262,11 +267,10 @@ def bullet_4(m, name):
     if fork["denominator"] == 0 or opposite["denominator"] == 0:
         raise Missing("C7・C8 の分母が 0")
     return (
-        f"- 長考は、分かれ道(エンジンの第 1 候補と差が開く局面)に当たらないことが多い。"
+        f"- 分かれ道(エンジンの第 1 候補と差が開く局面)との重なり: "
         f"{tc3['group']}の組では、長考 {fork['denominator']} 回のうち分かれ道に当たったのは {fork['numerator']} 回"
         f"({fork['numerator']} / {fork['denominator']})。"
         f"そのうち攻め・守りの側が逆だったのは {opposite['numerator']} 回({opposite['numerator']} / {opposite['denominator']})。"
-        f"= 「選択肢が多い局面で長考している」とは、分かれ道の印からは言えません。"
     )
 
 
@@ -278,19 +282,17 @@ def bullet_5(m, name):
         raise Missing("time_cause.json の 3 分の組の時間切れ負けの局")
     earlies = [g["phaseSpentSec"]["early"] for g in tul]
     return (
-        f"- **序盤から遅い局は、中盤も遅い**。"
-        f"時間で負けた {g3.time_up_losses['n']} 局の序盤の消費は {joined(earlies)} 秒で、"
-        f"他の局の中央値 {tc3['other']['medianEarlySec']} 秒より多い。"
-        f"序盤が速かった局が中盤で使っている、のではなく、**局そのものが最初からゆっくり進んでいます**。"
-        f"ただし削れる大きさは、序盤の {tc3['timeUpLoss']['medianEarlySec']} 秒より"
-        f"中盤の {tc3['timeUpLoss']['medianMidSec']} 秒の方がずっと大きい。"
+        f"- 序盤の消費: 時間で負けた {g3.time_up_losses['n']} 局は {joined(earlies)} 秒、"
+        f"他の局の中央値は {tc3['other']['medianEarlySec']} 秒。"
+        f"時間で負けた局の中央値は序盤 {tc3['timeUpLoss']['medianEarlySec']} 秒・"
+        f"中盤 {tc3['timeUpLoss']['medianMidSec']} 秒。"
     )
 
 
 def bullet_6(m, name):
-    g3 = need(m["groups"].get("min3"), "3 分の組(min3)の patient")
+    need(m["groups"].get("min3"), "3 分の組(min3)の patient")
     need(raw_time_cause_group(m, 180), "time_cause.json の 3 分の組(C9 の表)")
-    return f"- 飛車の筋(振り飛車か居飛車のような形か)では、時間で負けた {g3.time_up_losses['n']} 局は共通しません(付録 4 の 4 ページの表)。"
+    return "- 飛車の筋(振り飛車か居飛車のような形か)は付録 4 の 4 ページの表。"
 
 
 def bullet_7(m, name):
@@ -329,16 +331,10 @@ def bullet_8(m, name):
 
 def bullet_9(m, name):
     g3 = need(m["groups"].get("min3"), "3 分の組(min3)の patient")
-    text = (
+    return (
         f"- {g3.games} 局の崩れの数は、1 秒以内の手で {g3.by_spent[0]['collapsed']}、"
         f"10 秒以上の手で {g3.by_spent[3]['collapsed']}。"
-        f"割合は長考の方が高いが、数では速い手の方がずっと多い。"
     )
-    # `--time-search` が無い(= 探索を回していない)ときは、探索の結果に触れる最後の 1 文を出さない
-    # (司令塔の指示書 BULLET9_BRIEF.md §1。前の 3 文は変えない)。
-    if m.get("hasTimeSearch"):
-        text += "探索で残った組でも、崩れた手は「速く指した崩れ」が主でした。"
-    return text
 
 
 def bullet_10(m, name):
@@ -391,17 +387,14 @@ def bullet_14(m, name):
     reply = r["opponentReplyMatchesPv"]
     if reply["measured"] == 0:
         raise Missing("相手の返しの分母が 0")
-    return (
-        f"- 相手の実際の返しが、エンジンの読み筋と同じだったのは {reply['matched']} / {reply['measured']}。"
-        f"相手はエンジンどおりには返してきません。"
-    )
+    return f"- 相手の実際の返しが、エンジンの読み筋と同じだったのは {reply['matched']} / {reply['measured']}。"
 
 
 # ブロックごとの箇条書き(v7 の 29〜34 行・62〜63 行・66 行・69〜73 行の計 14 個)。
 BLOCKS = [
     ("**分かっている事実**", [bullet_1, bullet_2, bullet_3, bullet_4, bullet_5, bullet_6]),
-    ("**分かっている事実 (a): 長く考えた手は、崩れる割合が高い**", [bullet_7, bullet_8]),
-    ("**分かっている事実 (b): 崩れの数の多くは、速く指した手で起きている**", [bullet_9]),
+    ("**分かっている事実 (a): 長く考えた手の崩れ**", [bullet_7, bullet_8]),
+    ("**分かっている事実 (b): 速く指した手の崩れ**", [bullet_9]),
     ("**分かっている事実 (c): 分かれ道で何が起きているか**", [bullet_10, bullet_11, bullet_12, bullet_13, bullet_14]),
 ]
 
@@ -416,8 +409,9 @@ def render(materials, name, has_time_search):
     """v7 と同じ見出し構造の md を組む。事実の箇条書き以外はすべて `<!-- TODO: 読み -->`。
     `has_time_search`(= `--time-search` が渡されたか)で、存在しない付録 4 の 8〜11 ページを
     案内しないように見出しを切り替える(指示書 1-A。初回の顧客は探索を回していないため
-    8〜11 ページが無い)。`materials` に `hasTimeSearch` を足す(bullet_9 が同じ値を見るため。
-    指示書 BULLET9_BRIEF.md §1)。"""
+    8〜11 ページが無い)。`materials` に `hasTimeSearch` を足す(将来の箇条書きが同じ値を見られるように、
+    見出しの切り替えと同じ場所に置いておく。2026-09-24 時点では bullet_9 はこの値を読まない ―
+    探索の有無に触れる読みの文を落としたため)。"""
     materials["hasTimeSearch"] = has_time_search
     missing = []
     rendered_blocks = []
