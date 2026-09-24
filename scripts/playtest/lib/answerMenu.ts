@@ -124,7 +124,7 @@ export const ANSWER_MENU: readonly AnswerMenuItem[] = [
   {
     id: "M4",
     stage: "手順",
-    actionCore: "10 秒以上考える局面では、攻めの手と守りの手を 1 つずつ思い浮かべてから比べる",
+    actionCore: "10 秒以上考える局面では、攻めの候補と自玉側の候補を 1 つずつ思い浮かべてから比べる",
     evidenceName: "一致の分数 2 つ",
     minN: 30,
     verifyName: "側の一致率",
