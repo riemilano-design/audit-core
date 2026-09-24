@@ -459,5 +459,48 @@ vitest 1612 / 0。変異 2 本(存在判定を常に真 → 2 本落ちる。付
 生成して読んだことで見つかった** ― 実装担当は `render_appendix.py` の行番号で確かめていたが、付録 6 の
 絞り込みは `_tail.py` にあった。
 
-**運用**: 書き手は局面を指す行に必ず `<!-- pos: G/P 付録N -->` を置く(`DELIVER_GATES.md` §2.3 検査 7・§4)。
-再編集の試作 `build.py`(gitignore)で組む本編も `check_answer.py` を通すので同じ印が使える。
+**運用**: 書き手は「付録で盤つきで確かめられる」と指す行に必ず `<!-- pos: G/P 付録N -->` を置く
+(`DELIVER_GATES.md` §2.3 検査 7・§4)。再編集の試作 `build.py`(gitignore)で組む本編も `check_answer.py` を
+通すので同じ印が使える。
+
+#### 11.7.1 付録 1 の材料が、納品されない別冊から作られていた(同日。DELIVER-1 担当が実データで発見)
+
+`5a06132` の付録 1 の材料(`events[]` の kind=drop + `escapeScenes[]`)は **`render_appendix.py`(= `_tail.py` の
+付録 6 の表)から取った鍵**だが、`build.sh` は 2 冊を作り、**納品される付録 1(`DELIVER_OUT_NAMES.main`
+「2_付録1_形勢が動いた対局」)は `render_main.py`(`_head + _util + _mid`)**で、`render_appendix.py` は
+納品されない別冊「技術資料」だった。納品される付録 1 で**盤が出る局面は `_mid.py` が `prose.json` の
+`scenes[]` から描く場面 ①②③ だけ**(3 分の組 14 局で 13 件。旧材料 25 件のうち 12 件は個別に印字されない
+= 通るが読者が探せない)。逆に本文が「N 手目」と印字する手数(優勢になった手目など 62 件)は材料に無く、
+§4 の旧い規則「『n 局目 m 手目』と書いた行には pos」に従うと必ず落ちた(規則と材料の食い違い)。
+
+**実装担当も監査も、名前が合う `render_appendix.py` を読んで「印字を裏取りした」と報告した**(監査は
+`build.sh` で連結まで生成して読んだ)。**納品ファイル名(`DELIVER_OUT_NAMES`)から render へ逆にたどる**
+手順が抜けていた。同じ型: 名前が合う所を見て裏取りにする([[measure-dont-grep-impact-scope]] の型)。
+
+**司令塔の決定**: (1) 付録 1 の材料 = `prose.json` の `scenes[]`(盤が出る局面)。`check_answer.py` に
+`--prose` を足し、`deliver.ts` の `answerMaterialFlags` が組ごとに `report/prose.json` を渡す
+(`deliver.ts` は呼び方だけ)。`events`・`escapeScenes`・手数の言及(trans 系)からは作らない。
+(2) 規則を「付録で盤つきで確かめられる、と本文が指す行」に狭める。手数の言及だけの行は検査 1 の数の照合で
+見る(pos は要らない)。(3) 付録 2〜4 も納品ファイル名から render を逆にたどって裏取りし直す。(4) **付録 4 には盤が 1 枚も無い**
+(`render_time_cause.py` に `Board(` が無い。DELIVER-1 担当の指摘、司令塔が grep で確認)ので、`--time-cause`
+から材料を作るのをやめ、付録 4 を指す宣言は常に「付録 4 には盤が無い」で落とす ― 印字された**数**から材料を
+作ると盤の無い参照も通る、という付録 1 と同じ型を、付録 4 でも踏んでいた。
+
+**実装(コミット `41f7991`)**: `check_answer.py` に `--prose`(複数可、和集合)。付録 1 = `prose.json` の
+`scenes[]` 全件(`_mid.py` 133〜143 行は move も else も盤を描く)。`patient_positions_of`・
+`time_cause_positions_of` を消し、付録 4 の宣言は材料の有無に関わらず「付録 4 には盤が無い(検査 7)」。
+`lib/deliver.ts` の `answerMaterialFlags` が組ごとに `report/prose.json` を渡す(`GroupPaths.prose` は既存。
+`answerFactsCommand` には渡さない)。`deliver.test.ts` に個数・並び・answerFacts に無いことの試験。
+付録 2(`render_whatif.py` 738 行 Board)・付録 3(`render_direct.py` 545・606 行 Board)は納品ファイル名 →
+render → Board の行で、実装担当と監査が別々に裏取り。
+
+**測定**: `check_answer_test.py` 14 本、vitest 1613 / 0、`typecheck:scripts` rc=0。実材料(検証材料の 1 組)で
+`--prose` の有無で出力が一致(宣言の無い md では何もしない)。**穴の実証**: `events` に kind=drop で
+あるが場面に無い局面の宣言を足すと、新版は「付録 1 の材料に無い」で落ち、旧版 `5a06132` は通った。
+場面に実在する宣言は通る。変異(局番号の `int` 変換を外す)で 4 本落ちる。
+
+**監査(独立)**: GO。今回は監査に「納品ファイル名から render へ逆にたどる」ことを明示して、
+`render_appendix.py` を見ないで裏取りさせた。
+
+**規則の直し**: `DELIVER_GATES.md` §2.3 検査 7・§4 を「付録で盤つきで確かめられる、と本文が指す行」に狭め、
+付録 4 は常に落ちる旨と、手数の言及だけの行は検査 1 が見る旨を書いた。
