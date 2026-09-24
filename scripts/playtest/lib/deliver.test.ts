@@ -496,7 +496,7 @@ describe("answerMaterialFlags", () => {
   });
   const flags = answerMaterialFlags(groups, probe, out, materialPlanOf(args));
 
-  it("旗の並びと回数が run_check.sh と同じ(patient×3・prose×1・whatif-data×2・whatif-v2-dir×2・read-dir×2・type-summary×2・whatif-pdf×3・direct×2・time-cause・time-search・menu)", () => {
+  it("旗の並びと回数が run_check.sh と同じ(patient×3・prose×1・whatif-data×2・whatif-v2-dir×2・read-dir×2・type-summary×2・whatif-pdf×2・direct×2・time-cause・time-search・menu)", () => {
     const counts = (flag: string): number => flags.filter((t) => t === flag).length;
     expect(counts("--patient")).toBe(3);
     expect(counts("--time-limit-sec")).toBe(3);
@@ -505,7 +505,7 @@ describe("answerMaterialFlags", () => {
     expect(counts("--whatif-v2-dir")).toBe(2);
     expect(counts("--read-dir")).toBe(2);
     expect(counts("--type-summary")).toBe(2);
-    expect(counts("--whatif-pdf")).toBe(3);
+    expect(counts("--whatif-pdf")).toBe(2);
     expect(counts("--direct")).toBe(2);
     expect(counts("--time-cause")).toBe(1);
     expect(counts("--time-search")).toBe(1);
@@ -544,6 +544,14 @@ describe("answerMaterialFlags", () => {
 
   it("付録 3 の PDF も --whatif-pdf に渡す(検査 2 の照合)", () => {
     expect(flags).toContain(out.appendix3);
+  });
+
+  it("--whatif-pdf は今回の組の whatifPdf と付録 3 の 2 本だけで、他の組の whatifPdf は含まない(納品される付録 2 は今回の組のデータだけのため、2026-09-25 の直し・凍結の例外 7c)", () => {
+    expect(flags.filter((t) => t === "--whatif-pdf").length).toBe(2);
+    const whatifPdfs = flags.map((t, i) => (flags[i - 1] === "--whatif-pdf" ? t : null)).filter((t): t is string => t !== null);
+    expect(whatifPdfs).toEqual(["/w/now/report/whatif.pdf", out.appendix3]);
+    expect(flags).not.toContain("/w/prev/report/whatif.pdf");
+    expect(flags).not.toContain("/w/long/report/whatif.pdf");
   });
 
   it("--time-search は --previous-work があるときだけ", () => {

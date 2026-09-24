@@ -605,7 +605,7 @@ function willHaveWhatif(group: GroupPaths, probe: DeliverProbe, plan: MaterialPl
 /**
  * `check_answer.py`・`render_answer.py` に共通の材料の旗(指示書 §2 の「引数 20 個の内訳」= `run_check.sh` の並び)。
  * 並びは `run_check.sh` のとおり: patient(組の順)→ prose(今回の組の 1 本)→ whatif-data → whatif-v2-dir → read-dir →
- * type-summary → whatif-pdf(各組 + 付録 3)→ direct ×2 → time-cause → time-search → menu。
+ * type-summary → whatif-pdf(今回の組 + 付録 3)→ direct ×2 → time-cause → time-search → menu。
  *
  * `--prose` は付録 1(検査 7)の材料(検査 7 の追加、2026-09-24)。**納品される付録 1(`DELIVER_OUT_NAMES.main`)は
  * 今回の組の本編だけ**(局番号は組ごとに 1 から振られ、組をまたいで衝突しうる)なので、`--prose` も**今回の組
@@ -645,9 +645,10 @@ export function answerMaterialFlags(groups: readonly GroupPaths[], probe: Delive
   for (const g of groups) {
     if (probe.exists(g.typeSummary)) flags.push("--type-summary", g.typeSummary);
   }
-  for (const g of groups) {
-    if (willHaveWhatif(g, probe, plan, "pdf")) flags.push("--whatif-pdf", g.whatifPdf);
-  }
+  // 検査 2(B の本文の指し手が付録に印字されているか)の材料は、今回の組の付録 2 と付録 3 の PDF だけ
+  // (2026-09-25 の直し、凍結の例外 7c)。納品されるのは今回の組の 1 冊であり、他の組の `whatifPdf` が
+  // ディスクに残っていても(前回の納品の名残り)、それは今回の付録 2 には印字されていない。
+  flags.push("--whatif-pdf", thisGroup.whatifPdf);
   // 付録 3 の PDF も `--whatif-pdf` に渡す(B の読み筋の手を検査 2 で照合するため。計画 §5)。
   flags.push("--whatif-pdf", out.appendix3);
   flags.push("--direct", out.directAnswers, "--direct", out.finalPositions);
