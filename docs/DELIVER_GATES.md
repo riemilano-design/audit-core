@@ -280,7 +280,7 @@ npx tsx scripts/playtest/deliver.ts <同じ引数> --from answer-check
 
 ### 3a.4 検査(手作業でも省かない)
 
-- 本編の md を `check_answer.py` に通す(`--whatif-pdf` に付録 1〜3 の PDF、検査 7 の付録 1 の材料として `--prose` に**今回の組の `report/prose.json` 1 本だけ** ― 2 本以上渡すと `check_answer.py` が落とす。納品される付録 1 は今回の組の本編だけで、局番号は組ごとに 1 から振られるため。2026-09-25、`3ff3bbc`)。
+- 本編の md を `check_answer.py` に通す(`--whatif-pdf` に付録 1〜3 の PDF、検査 7 の付録 1 の材料として `--prose` に**今回の組の `report/prose.json` 1 本だけ**、付録 2 の材料として `--whatif-data-now` に**今回の組の `report/whatif_report_data.json` 1 本だけ** ― どちらも 2 本以上渡すと `check_answer.py` が落とす。`--whatif-data` は今までどおり全組(数の照合の材料)。納品される付録 1・付録 2 は今回の組のものだけで、局番号は組ごとに 1 から振られるため。2026-09-25、`3ff3bbc`・7a)。
 - 2 冊とも `check_delivery.py` に通す。§3 の目視も同じようにやる(表のはみ出し・盤の向き・表示名)。
 
 ### 3a.5 道具は試作のまま
