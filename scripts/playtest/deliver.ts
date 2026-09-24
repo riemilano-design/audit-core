@@ -21,7 +21,7 @@
 // 人間の確認点(S6 の言い換え・B の「読み」)を自動で埋めること。
 
 import { spawn } from "node:child_process";
-import { appendFileSync, copyFileSync, existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
+import { appendFileSync, copyFileSync, existsSync, mkdirSync, readdirSync, readFileSync, statSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -129,6 +129,7 @@ const probe: DeliverProbe = {
       return 0;
     }
   },
+  mtimeMs: (filePath) => (existsSync(filePath) ? statSync(filePath).mtimeMs : undefined),
 };
 
 /** 段 4(複製)。`args` は [src, dst, src, dst, …]。 */

@@ -445,6 +445,12 @@ export interface DeliverProbe {
    * `finalPositions.ts` は対象 0 件で rc=1 になるため、0 件の組はこの段を飛ばす(実装担当の判断。報告に明記)。
    */
   timeUpLossCount(patientPath: string): number;
+  /**
+   * そのファイルの mtime(ミリ秒。読めなければ `undefined`)。凍結の例外 9 件目 ―
+   * `pipeline.ts` の `pdfDone` と同じ考え方(存在だけでは「書き直し」を見落とすため)。
+   * 任意にしない ― 任意だと「無ければ存在扱い」の黙った経路ができる(今回の穴と同じ型)。
+   */
+  mtimeMs(filePath: string): number | undefined;
 }
 
 // ---- 段ごとのコマンドの組み立て ----
@@ -918,14 +924,18 @@ export function planDeliver(args: DeliverArgs, probe: DeliverProbe, cmdOf: (tool
     reason: "B の検査(禁止語・数・指し手の照合)",
   });
 
-  const answerPdfDone = probe.exists(out.answerPdf);
+  // 凍結の例外 9 件目: 存在だけでなく、`pipeline.ts` の `pdfDone` と同じ mtime 比較(PDF が
+  // B の md(`out.answerDraft`)より新しいか)。どちらかの mtime が読めなければ false(作る側に倒す)。
+  const answerDraftMtime = probe.mtimeMs(out.answerDraft);
+  const answerPdfMtime = probe.mtimeMs(out.answerPdf);
+  const answerPdfDone = answerDraftMtime !== undefined && answerPdfMtime !== undefined && answerPdfMtime > answerDraftMtime;
   push({
     stage: "answer-pdf",
     tool: "render-answer",
     cmd: cmdOf("render-answer"),
     args: renderAnswerCommand(groups, probe, out, plan),
     action: answerPdfDone ? "skip" : "run",
-    reason: answerPdfDone ? "B の PDF がある" : "B の PDF を作る",
+    reason: answerPdfDone ? "B の PDF が md より新しい" : "B の PDF を作る(md より古いか無い)",
   });
 
   push({

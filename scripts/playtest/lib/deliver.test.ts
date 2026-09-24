@@ -2,7 +2,7 @@
 // 流儀は lib/pipeline.test.ts と同じ(偽の fs / probe を注入し、引数の並びと済みの判定だけを見る)。
 // **将棋の判断・数の集計はここにも無い**(引数の組み立てと段の順だけ)。
 
-import { existsSync, readdirSync, readFileSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
 
 import { describe, expect, it } from "vitest";
 
@@ -50,6 +50,7 @@ interface FakeWorld {
   jsonlDirs?: string[];
   fixed?: Record<string, string[]>;
   losses?: Record<string, number>;
+  mtimes?: Record<string, number>;
 }
 
 function fakeProbe(world: FakeWorld): DeliverProbe {
@@ -58,6 +59,7 @@ function fakeProbe(world: FakeWorld): DeliverProbe {
     hasJsonl: (d) => (world.jsonlDirs ?? []).includes(d),
     fixedKifuFiles: (d) => world.fixed?.[d] ?? [],
     timeUpLossCount: (p) => world.losses?.[p] ?? 0,
+    mtimeMs: (p) => world.mtimes?.[p],
   };
 }
 
@@ -706,6 +708,57 @@ describe("planDeliver", () => {
     }
   });
 
+  // answer-pdf の済みの判定(凍結の例外 9 件目。ANSWERPDF_DONE_BRIEF.md §2)。
+  // 存在だけでなく、B の PDF が B の md(`out.answerDraft`)より新しいかを見る(`pipeline.ts` の `pdfDone` と同じ考え方)。
+  describe("answer-pdf の済みの判定(mtime 比較)", () => {
+    const solo = argsOf();
+    const out = deliverOutPaths("/w/out");
+
+    it("md の mtime > PDF の mtime(md を後から直した)→ run(§2 の 1)", () => {
+      const step = planDeliver(
+        solo,
+        fakeProbe({ files: [out.answerDraft, out.answerPdf], mtimes: { [out.answerDraft]: 200, [out.answerPdf]: 100 } }),
+        (t) => t,
+      ).find((s) => s.stage === "answer-pdf")!;
+      expect(step.action).toBe("run");
+    });
+
+    it("PDF の mtime > md の mtime → skip(§2 の 2)", () => {
+      const step = planDeliver(
+        solo,
+        fakeProbe({ files: [out.answerDraft, out.answerPdf], mtimes: { [out.answerDraft]: 100, [out.answerPdf]: 200 } }),
+        (t) => t,
+      ).find((s) => s.stage === "answer-pdf")!;
+      expect(step.action).toBe("skip");
+    });
+
+    it("PDF が無い → run(§2 の 3)", () => {
+      const step = planDeliver(solo, fakeProbe({ files: [out.answerDraft], mtimes: { [out.answerDraft]: 100 } }), (t) => t).find(
+        (s) => s.stage === "answer-pdf",
+      )!;
+      expect(step.action).toBe("run");
+    });
+
+    it("md の mtime が読めない(無い)→ run(作る側に倒す。§2 の 3)", () => {
+      const step = planDeliver(
+        solo,
+        fakeProbe({ files: [out.answerPdf], mtimes: { [out.answerPdf]: 200 } }),
+        (t) => t,
+      ).find((s) => s.stage === "answer-pdf")!;
+      expect(step.action).toBe("run");
+    });
+
+    // 変異 2(§3(D)の 2。`>=` にする変異を落とすために追加。同時刻は「済み」ではなく作る側に倒す)。
+    it("PDF の mtime と md の mtime が同じ → run(同時刻は済みにしない)", () => {
+      const step = planDeliver(
+        solo,
+        fakeProbe({ files: [out.answerDraft, out.answerPdf], mtimes: { [out.answerDraft]: 100, [out.answerPdf]: 100 } }),
+        (t) => t,
+      ).find((s) => s.stage === "answer-pdf")!;
+      expect(step.action).toBe("run");
+    });
+  });
+
   // 段ごとに計画を読み直す(REPLAN_BRIEF.md §2.1・§2.4)。
   //
   // 【断ってあること】これは `planDeliver` を複数回呼んだときの振る舞いだけを測る ― `deliver.ts`(CLI)の
@@ -718,6 +771,7 @@ describe("planDeliver", () => {
         hasJsonl: (d) => ready && (d === "/w/now/p2/read" || d === "/w/now/p2/whatif-v2"),
         fixedKifuFiles: (d) => (ready && d === "/w/now/p2/kifu" ? ["/w/now/p2/kifu/a.fixed.json"] : []),
         timeUpLossCount: () => 0,
+        mtimeMs: () => undefined,
       };
       const solo = argsOf();
 
@@ -1015,6 +1069,7 @@ describe("planDeliver は実際の work でも冪等(§3(C)。材料が無い環
         return 0;
       }
     },
+    mtimeMs: (p) => (existsSync(p) ? statSync(p).mtimeMs : undefined),
   };
 
   it.skipIf(!materialsReady)("実際の work(tatsunami3/pipe)で 17 回呼んでも 1 回目と一致する", () => {
