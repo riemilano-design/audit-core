@@ -656,4 +656,4 @@ F-3(§11.9.9)の直し。統括が承認し、納品レーンが実装(worktree 
 
 **§11.9.17・§11.9.19 の既知事項の採番(開発・診断レーン、`411586a`)**: P-82 = 済みの判定が道具の変更を見ない、P-83 = `probe.exists` だけの済みの判定が 8 段。§11.9.20 の「`out/` 配下の下書き `.ts` が本体の typecheck を汚す」は未採番(相手へ出した)。7c は `968d427` の上で着手(予測 `e6660a8`)。
 
-**P-84**(開発・診断レーンが本体で実測して採番、hash は後送): `scripts/playtest/out/` 配下の下書き `.ts`(`cond-draft/`・`report-template-v6/`・`report5/`)で本体の `typecheck:scripts` が赤(tsconfig の include が `out/` を除外していない)。**worktree で取った typecheck の緑は本体のツリーの状態を保証しない** ― 今日の例外 7b・10・11・12・13 の typecheck 緑はすべて worktree の緑。
+**P-84**(開発・診断レーンが本体で実測して採番、`74ff561`): `scripts/playtest/out/` 配下の下書き `.ts`(`cond-draft/`・`report-template-v6/`・`report5/`)で本体の `typecheck:scripts` が赤(tsconfig の include が `out/` を除外していない)。**worktree で取った typecheck の緑は本体のツリーの状態を保証しない** ― 今日の例外 7b・10・11・12・13 の typecheck 緑はすべて worktree の緑。
