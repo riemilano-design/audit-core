@@ -7,7 +7,7 @@
 # あれば rc=1 で、どのファイルの何ページ・何行に何があったかを標準エラーへ出す。
 #
 # - `--forbid <語>` で渡した語(名前など。繰り返し可)
-# - `@`、`/Users/`、`水匠`
+# - `@`、`/Users/`、`水匠`、`None`(python の None がそのまま印字された跡。凍結の例外 12 件目)
 # - 禁止語 18 語(悪手・弱点・癖・型・傾向・原因・ミス・見落とし・改善・練習・必ず・明らか・あなた・
 #   ご自身・いつも・がち・クセ・パターン)。**この 18 語は書き写さず、`check_answer.py` の `BANNED_WORDS` の
 #   先頭 18 語を import して使う**(語のリストを二重に持たない。司令塔の指示)。
@@ -27,7 +27,7 @@ from check_answer import BANNED_WORDS
 BANNED_18 = BANNED_WORDS[:18]
 
 # 語以外の、常に伏せるもの(計画 §3 の 6)。
-ALWAYS_FORBIDDEN = ["@", "/Users/", "水匠"]
+ALWAYS_FORBIDDEN = ["@", "/Users/", "水匠", "None"]
 
 USAGE = "使い方: python3 -X utf8 check_delivery.py <顧客フォルダ> [--forbid <語>]…"
 
