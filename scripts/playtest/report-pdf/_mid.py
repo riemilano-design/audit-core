@@ -68,7 +68,7 @@ def big_item(no, head, body):
 resigned_ahead_clause = f"、{n_la_resigned_ahead} 局は優勢のまま投了しています" if n_la_resigned_ahead > 0 else ""
 story.append(big_item(1, f"負けた {len(losses)} 局のうち {len(la)} 局は、途中まで{person}が優勢でした。", f"{n_la_collapsed} 局は優勢になった後に形勢が崩れ、{n_time_ahead} 局は優勢のまま持ち時間が切れています{resigned_ahead_clause}。最初から押されて負けた将棋は {n_never_ahead_loss} 局だけです。"))
 story.append(Spacer(1, 2 * mm))
-story.append(big_item(2, f"勝った {len(wins)} 局のうち {len(wb)} 局は、一度劣勢になってから戻して勝っています。", f"良くなってから崩れる将棋と、悪くなってから戻す将棋が、同じ {s['games']} 局の中に両方あります。"))
+story.append(big_item(2, f"勝った {len(wins)} 局のうち {len(wb)} 局は、一度劣勢になってから勝っています。", f"良くなってから崩れる将棋と、悪くなってから勝つ将棋が、同じ {s['games']} 局の中に両方あります。"))
 story.append(Spacer(1, 2 * mm))
 story.append(big_item(3, "形勢が動いたのは、ほとんどが中盤と終盤です。", f"形勢がはっきり崩れた場面は {s['games']} 局で {pr['fell']} か所。そのうち序盤は {ph.get('early','—')} か所だけでした。"))
 story.append(Spacer(1, 3.5 * mm))
@@ -161,12 +161,12 @@ story.append(PageBreak())
 # ===== まとめ =====
 story.append(P(f"{s['games']} 局を通して見えたこと", S_BIG))
 story.append(P(f"<b>勝ち負けは序盤で決まっておらず、形勢が良くなった後、そして悪くなった後の数手で動いています。</b>", S_LEAD))
-story.append(boxes([(len(la), f"負けた {len(losses)} 局のうち、<br/>途中で優勢だった局"), (len(wb), f"勝った {len(wins)} 局のうち、<br/>劣勢から戻して勝った局"), (pr["fell"], f"形勢がはっきり崩れた場面<br/>(序盤 {ph.get('early','—')}・中盤 {ph.get('mid','—')}・終盤 {ph.get('late','—')})"), (len(c["reps"]), "そのうち、直前に<br/>玉の逃げ場が減っていた場面")]))
+story.append(boxes([(len(la), f"負けた {len(losses)} 局のうち、<br/>途中で優勢だった局"), (len(wb), f"勝った {len(wins)} 局のうち、<br/>劣勢になってから勝った局"), (pr["fell"], f"形勢がはっきり崩れた場面<br/>(序盤 {ph.get('early','—')}・中盤 {ph.get('mid','—')}・終盤 {ph.get('late','—')})"), (len(c["reps"]), "そのうち、直前に<br/>玉の逃げ場が減っていた場面")]))
 story.append(Spacer(1, 3 * mm))
 for items, bgc in ((
     [P("分かったこと", S_BOXH),
      P(f"・負けた {len(losses)} 局のうち {len(la)} 局で、途中に優勢の場面がありました。{n_la_collapsed} 局はその後に崩れ、{n_time_ahead} 局は優勢のまま持ち時間切れです{resigned_ahead_clause}。", S_B2),
-     P(f"・勝った {len(wins)} 局のうち {len(wb)} 局は、一度劣勢になってから戻しています。", S_B2),
+     P(f"・勝った {len(wins)} 局のうち {len(wb)} 局は、一度劣勢になっています。", S_B2),
      P(f"・形勢が崩れた {pr['fell']} か所のうち、優勢から崩れたのは {ph.get('fromAhead','—')} か所。そのうち {ph.get('fromAheadLoss','—')} か所が負けた局のものでした。", S_B2)], BG),
     ([P("まだ言えないこと", S_BOXH),
       P(f"・崩れた場面に共通する条件として「数手のうちに玉の逃げ場が減る」を調べましたが、エンジンの進め方でも同じくらい起き、比較対象の対局では確かめられませんでした。", S_B2),
