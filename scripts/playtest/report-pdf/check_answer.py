@@ -20,7 +20,11 @@
 #   python3 -X utf8 check_answer.py <B.md>
 #     [--patient <patient_report_data.json> --time-limit-sec <秒>]…(組ごとに 1 対。180 秒 = 3 分の組、
 #       600 秒 = 10 分の組、他の秒数/省略はタグ無し ― タグ無しは M1/M2/M8 の組の判定には使わない)
-#     [--whatif-data <whatif_report_data.json>]…(複数可。数の照合の材料)
+#     [--whatif-data <whatif_report_data.json>]…(複数可。**数の照合(検査 1)だけ**の材料。全組を渡す)
+#     [--whatif-data-now <whatif_report_data.json>](0 本または 1 本だけ ― 2 本以上は落ちる。付録 2(検査 7)の
+#       材料は**これだけ**から作る。局番号は組ごとに 1 から振られ、納品される付録 2〈`DELIVER_OUT_NAMES.whatif`〉
+#       は今回の組のデータだけなので、材料も今回の組の 1 本に限る〈2026-09-25〉。`--whatif-data` に他の組を
+#       混ぜても、検査 7 は `--whatif-data-now` の 1 本しか見ない)
 #     [--whatif-v2-dir <whatif-v2 jsonl のフォルダ>]…(複数可。M4「側の一致」の材料。組をまたいで合算する)
 #     [--read-dir <read.ts の jsonl のフォルダ>]…(複数可。summary 行を合算する。組をまたいで合算する)
 #     [--type-summary <summary.json>]…(複数可。数の照合の材料)
@@ -51,8 +55,12 @@
 # 付録ごとの材料: 付録 1(納品される「2_付録1_形勢が動いた対局」= `render_main.py`〈`_head.py + _util.py +
 # _mid.py` の連結〉が作る)= `--prose` の `prose.json` の `scenes[]`(gameNo は局番号のキー〈文字列 → int〉、
 # ply = `scenes[].ply`。`_mid.py` 133〜143 行が `scenes[]` の各要素〈`type` が "move" でもそれ以外でも〉から
-# 盤を描く)。付録 2(「3_付録2_分かれ道」= `render_whatif.py`)= `--whatif-data` の `whatif_report_data.json` の
-# `games[].representative`(gameNo・displayPly。`render_whatif.py` 687〜743 行が盤を描く)。付録 3
+# 盤を描く)。付録 2(「3_付録2_分かれ道」= `render_whatif.py`)= `--whatif-data-now` の `whatif_report_data.json`
+# の `games[].representative`(gameNo・displayPly。`render_whatif.py` 687〜743 行が盤を描く)。**`--whatif-data`
+# ではない** ― `--whatif-data` は検査 1(数の照合)のために全組を受け取るが、納品される付録 2
+# (`DELIVER_OUT_NAMES.whatif`。`lib/deliver.ts` が `thisGroup.whatifPdf` の 1 本だけを `out.whatif` に
+# コピーする)は今回の組のデータだけであり、局番号は組ごとに 1 から振られるため、`--whatif-data` を材料に
+# すると他の組の局面が「付録 2 にある」と誤って通ってしまう(2026-09-25 の直し)。付録 3
 # (「5_付録3_直接の答え」= `render_direct.py`)= `--direct` の `direct_answers.json` の `answers[]`
 # (gameNo・displayPly。`render_direct.py` 464〜606 行が盤を描く)と `final_positions.json` の `entries[]`
 # (gameNo・moves。同ファイル 531〜545 行が盤を描く)。付録 4(「6_付録4_時間の使い方」= `render_time_cause.py`)
@@ -113,6 +121,7 @@ class CliArgs:
         self.markdown_path = None
         self.patients = []  # list of (path, tag)
         self.whatif_data_paths = []
+        self.whatif_data_now_paths = []
         self.whatif_v2_dirs = []
         self.read_dirs = []
         self.type_summary_paths = []
@@ -153,6 +162,10 @@ def parse_args(argv):
             continue
         if flag == "--whatif-data":
             args.whatif_data_paths.append(argv[i + 1])
+            i += 2
+            continue
+        if flag == "--whatif-data-now":
+            args.whatif_data_now_paths.append(argv[i + 1])
             i += 2
             continue
         if flag == "--whatif-v2-dir":
@@ -205,6 +218,11 @@ def parse_args(argv):
     # (2026-09-25 の直し)。
     if len(args.prose_paths) > 1:
         raise CheckAnswerError("--prose は今回の組の 1 本だけ(付録 1 は今回の組の本編だけが納品される)")
+    # 局番号は組ごとに 1 から振られる(組をまたいで衝突しうる)ため、`--whatif-data-now`(検査 7・付録 2 の
+    # 材料)は今回の組の 1 本だけ(付録 2 は今回の組のデータだけが納品される)。`--prose` と同じ流儀
+    # (2026-09-25、凍結の例外 7a)。
+    if len(args.whatif_data_now_paths) > 1:
+        raise CheckAnswerError("--whatif-data-now は今回の組の 1 本だけ(付録 2 は今回の組のデータだけが納品される)")
     return args
 
 
@@ -649,15 +667,21 @@ def prose_positions_of(prose_paths):
     return positions
 
 
-def whatif_positions_of(whatif_data_paths):
-    """付録 2(`--whatif-data` の `whatif_report_data.json`)。`games[].representative.displayPly`
+def whatif_positions_of(whatif_data_now_paths):
+    """付録 2(`--whatif-data-now` の `whatif_report_data.json`)。`games[].representative.displayPly`
     (`render_whatif.py` が `rep["displayPly"]`・`g["gameNo"]` として印字する局面。`representative` が
-    無い局〈読み筋が無い等〉はスキップ)。"""
-    if not whatif_data_paths:
+    無い局〈読み筋が無い等〉はスキップ)。`--whatif-data-now` は今回の組の 1 本だけ(`parse_args` が 2 本以上を
+    拒む)― 局番号は組ごとに 1 から振られ、納品される付録 2 は今回の組のデータだけなので、材料も今回の組の
+    1 本に限る(2026-09-25 の直し、凍結の例外 7a。全組を受け取る `--whatif-data` は検査 1〈数の照合〉専用で、
+    ここでは使わない)。"""
+    if not whatif_data_now_paths:
         return None
     positions = set()
-    for path in whatif_data_paths:
-        data = load_json(path)
+    for path in whatif_data_now_paths:
+        try:
+            data = load_json(path)
+        except FileNotFoundError:
+            raise CheckAnswerError(f"--whatif-data-now のファイルが無い: {path}")
         for g in data.get("games") or []:
             rep = g.get("representative")
             if rep is not None:
@@ -1120,7 +1144,7 @@ def build_materials(args, repo_root):
     # いない」を見分ける)。付録 4 は盤が無いので鍵を持たない(`check_pos_tags` が N==4 を先に特別扱いする)。
     positions = {
         1: prose_positions_of(args.prose_paths),
-        2: whatif_positions_of(args.whatif_data_paths),
+        2: whatif_positions_of(args.whatif_data_now_paths),
         3: direct_positions_of(direct),
     }
 

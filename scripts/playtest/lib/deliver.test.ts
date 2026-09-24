@@ -515,6 +515,12 @@ describe("answerMaterialFlags", () => {
     expect(proses).toEqual(["/w/now/report/prose.json"]);
   });
 
+  it("whatif-data-now は今回の組(--work)の 1 本だけ(検査 7・付録 2 の材料。納品される付録 2 は今回の組のデータだけのため、2026-09-25 の直し・凍結の例外 7a)、whatif-data の本数は変わらない(全組・検査 1 の数の材料)", () => {
+    const whatifDataNows = flags.map((t, i) => (flags[i - 1] === "--whatif-data-now" ? t : null)).filter((t): t is string => t !== null);
+    expect(whatifDataNows).toEqual(["/w/now/report/whatif_report_data.json"]);
+    expect(flags.filter((t) => t === "--whatif-data").length).toBe(2);
+  });
+
   it("read/ が無い組には --whatif-v2-dir も --read-dir も渡さない(M4 の数が変わるため)", () => {
     expect(flags).not.toContain("/w/prev/p2/whatif-v2");
     expect(flags).not.toContain("/w/prev/p2/read");
@@ -559,6 +565,11 @@ describe("answerMaterialFlags", () => {
     expect(facts).not.toContain("--prose");
     expect(facts).not.toContain("--whatif-pdf");
     expect(facts.slice(-2)).toEqual(["--out", out.answerDraft]);
+  });
+
+  it("answer_facts は --whatif-data-now も渡さない(answer_facts.py は知らない。検査 7 は check_answer.py/render_answer.py だけの機能)", () => {
+    const facts = answerFactsCommand(groups, probe, out, "お客さま", materialPlanOf(args));
+    expect(facts).not.toContain("--whatif-data-now");
   });
 });
 

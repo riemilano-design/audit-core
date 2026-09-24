@@ -593,6 +593,17 @@ function willHaveWhatif(group: GroupPaths, probe: DeliverProbe, plan: MaterialPl
  * `prose-gate` が `pipeline-pdf` より前に、**今回の組**について存在を確かめているため(無ければそこで止まる)、
  * `patient` と同じく `probe.exists` では絞らずに常に渡す。今回の組は `groups` に必ずちょうど 1 つ含まれる
  * (`parseDeliverArgs` の不変条件)。
+ *
+ * `--whatif-data`(全組)は検査 1(数の照合)だけの材料としてそのまま渡す(この旗のループ・絞りは不変)。
+ * 加えて、`--prose` と同じ場所で **`--whatif-data-now` に `thisGroup.whatifData` を 1 本だけ**渡す ―
+ * 検査 7(付録 2)の材料をこれだけに限るため(2026-09-25 の直し、凍結の例外 7a)。**納品される付録 2
+ * (`DELIVER_OUT_NAMES.whatif`。`planDeliver` の段 `deliverables-pdf` が `thisGroup.whatifPdf` の 1 本だけを
+ * `out.whatif` にコピーする)は今回の組のデータだけ**であり、局番号は組ごとに 1 から振られるため、
+ * `--whatif-data`(全組)を検査 7 の材料にすると他の組の局面が「付録 2 にある」と誤って通ってしまう
+ * (44 局の基準〈3 組〉で実測)。`thisGroup.whatifData` は今回の組(`plan.currentWork`)では段 3
+ * (`pipeline --until pdf`)が作るため、`--whatif-data` の今回の組ぶん(`willHaveWhatif` で常に true)と
+ * 同じく `probe.exists` では絞らずに渡す。`answerFactsCommand`(`answer_facts.py`)には渡さない
+ * (`answer_facts.py` は `--whatif-data-now` を知らない)。
  */
 export function answerMaterialFlags(groups: readonly GroupPaths[], probe: DeliverProbe, out: DeliverOutPaths, plan: MaterialPlan): string[] {
   const withRead = groupsWithRead(groups, probe);
@@ -600,6 +611,9 @@ export function answerMaterialFlags(groups: readonly GroupPaths[], probe: Delive
   const flags: string[] = [];
   for (const g of groups) flags.push("--patient", g.patient, "--time-limit-sec", String(g.timeLimitSec));
   flags.push("--prose", thisGroup.prose);
+  // 検査 7(付録 2)の材料は今回の組だけ(2026-09-25 の直し、凍結の例外 7a)。`--whatif-data`(下のループ・
+  // 検査 1 の数の材料)とは別に渡す。
+  flags.push("--whatif-data-now", thisGroup.whatifData);
   for (const g of groups) {
     if (willHaveWhatif(g, probe, plan, "data")) flags.push("--whatif-data", g.whatifData);
   }

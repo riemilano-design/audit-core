@@ -225,6 +225,156 @@ class ProsePositionsOfTest(unittest.TestCase):
         self.assertEqual(problems2, [])
 
 
+class WhatifPositionsOfTest(unittest.TestCase):
+    """`whatif_positions_of`(検査 7・付録 2 の材料)。2026-09-25 の直し(凍結の例外 7a): 付録 2 の材料は
+    `--whatif-data-now`(今回の組の 1 本)だけから作る。`--whatif-data`(全組。検査 1 の数の照合の材料)とは
+    別で、`ProsePositionsOfTest` と同じ流儀(実ファイルを一時フォルダに書き、パスを渡す)。"""
+
+    def setUp(self):
+        self._tmp = tempfile.TemporaryDirectory()
+
+    def tearDown(self):
+        self._tmp.cleanup()
+
+    def write_whatif_data(self, name, games):
+        path = os.path.join(self._tmp.name, name)
+        with open(path, "w", encoding="utf-8") as f:
+            json.dump({"games": games}, f)
+        return path
+
+    def test_representative_position_included(self):
+        path = self.write_whatif_data("w1.json", [{"gameNo": 1, "representative": {"displayPly": 10}}])
+        positions = CA.whatif_positions_of([path])
+        self.assertEqual(positions, {(1, 10)})
+
+    def test_game_without_representative_skipped(self):
+        path = self.write_whatif_data("w2.json", [{"gameNo": 1, "representative": None}, {"gameNo": 2, "representative": {"displayPly": 20}}])
+        positions = CA.whatif_positions_of([path])
+        self.assertEqual(positions, {(2, 20)})
+
+    def test_no_paths_returns_none(self):
+        self.assertIsNone(CA.whatif_positions_of([]))
+
+    def test_two_whatif_data_now_paths_rejected_by_parse_args(self):
+        """局番号は組ごとに 1 から振られる(組をまたいで衝突しうる)ため、`--whatif-data-now` は今回の組の
+        1 本だけ(`--prose` と同じ流儀)。`parse_args` が 2 本以上を `CheckAnswerError` で拒むことを確かめる。"""
+        path1 = self.write_whatif_data("a.json", [{"gameNo": 1, "representative": {"displayPly": 10}}])
+        path2 = self.write_whatif_data("b.json", [{"gameNo": 1, "representative": {"displayPly": 30}}])
+        argv = ["b.md", "--whatif-data-now", path1, "--whatif-data-now", path2, "--menu", "menu.json"]
+        with self.assertRaises(CA.CheckAnswerError) as ctx:
+            CA.parse_args(argv)
+        self.assertIn("--whatif-data-now", str(ctx.exception))
+
+    def test_missing_whatif_data_now_file_raises_check_answer_error(self):
+        """ファイルが無いとき、traceback ではなく `CheckAnswerError` で理由を出す(`--prose` と同じ流儀)。"""
+        missing_path = os.path.join(self._tmp.name, "does-not-exist.json")
+        with self.assertRaises(CA.CheckAnswerError) as ctx:
+            CA.whatif_positions_of([missing_path])
+        self.assertIn("--whatif-data-now のファイルが無い", str(ctx.exception))
+        self.assertIn(missing_path, str(ctx.exception))
+
+    def test_position_not_in_whatif_data_now_fails_check_pos_tags(self):
+        path = self.write_whatif_data("d.json", [{"gameNo": 1, "representative": {"displayPly": 10}}])
+        positions_2 = CA.whatif_positions_of([path])
+        ctx = make_ctx({1: set(), 2: positions_2, 3: set()})
+        problems = []
+        CA.check_pos_tags("<!-- pos: 2/20 付録2 -->", ctx, problems, 1)
+        self.assertEqual(len(problems), 1)
+        _, reason, _ = problems[0]
+        self.assertIn("検査 7", reason)
+        self.assertIn("材料に無い", reason)
+        self.assertIn("2/20", reason)
+        # 対照: 材料にある方は通る。
+        problems2 = []
+        CA.check_pos_tags("<!-- pos: 1/10 付録2 -->", ctx, problems2, 1)
+        self.assertEqual(problems2, [])
+
+
+class WhatifDataNowExcludesOtherGroupsTest(unittest.TestCase):
+    """`--whatif-data`(全組。検査 1 の数の照合だけの材料)に他の組の `whatif_report_data.json` を渡しても、
+    検査 7(付録 2)の材料には入らない ― `build_materials` の配線(`positions[2]` は `whatif_positions_of` に
+    `args.whatif_data_now_paths` だけを渡す)を、実際に `parse_args` → `build_materials` を通して確かめる。
+    2026-09-25 の直し(凍結の例外 7a。以前は `positions[2]` に `args.whatif_data_paths`〈全組の和集合〉を渡して
+    いたため、他の組の局面が「付録 2 にある」と誤って通っていた)。"""
+
+    def setUp(self):
+        self._tmp = tempfile.TemporaryDirectory()
+        # `build_materials` は `data/{shapes,openings,intents}` を glob するだけ(検査 6 の材料)なので、
+        # 実際のリポジトリルート(このファイルの 3 つ上)を渡す ― 読むだけで書き込みはしない。
+        self._repo_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", ".."))
+
+    def tearDown(self):
+        self._tmp.cleanup()
+
+    def write_json(self, name, data):
+        path = os.path.join(self._tmp.name, name)
+        with open(path, "w", encoding="utf-8") as f:
+            json.dump(data, f)
+        return path
+
+    def test_leak_excluded_but_number_still_allowed(self):
+        now_path = self.write_json("now.json", {"games": [{"gameNo": 1, "representative": {"displayPly": 10}}]})
+        # 「もう一方の組」の材料(`--whatif-data` の一部としてのみ渡す。`--whatif-data-now` には渡さない)。
+        other_path = self.write_json("other.json", {"games": [{"gameNo": 2, "representative": {"displayPly": 20}}]})
+        menu_path = self.write_json("menu.json", {"items": []})
+        argv = [
+            "b.md",
+            "--whatif-data", now_path,
+            "--whatif-data", other_path,  # 検査 1(数の照合)の材料には両方入る
+            "--whatif-data-now", now_path,  # 検査 7(付録 2)の材料はこれだけ
+            "--menu", menu_path,
+        ]
+        args = CA.parse_args(argv)
+        ctx = CA.build_materials(args, self._repo_root)
+        # 検査 7: 「もう一方の組」の局面(2, 20)は付録 2 の材料に無い。今回の組の局面(1, 10)はある。
+        self.assertEqual(ctx["positions"][2], {(1, 10)})
+        self.assertNotIn((2, 20), ctx["positions"][2])
+        # 検査 1: 数の照合の材料(allowedNumbers)は `--whatif-data` の全部から作るので、「もう一方の組」だけに
+        # ある数(20 = other.json の displayPly)も引き続き許される(この直しで検査 1 の材料は変えていない)。
+        self.assertIn(20, ctx["allowedNumbers"])
+
+
+class RealBaselineWhatifGroupBoundaryTest(unittest.TestCase):
+    """指示系統からの固定試験(2026-09-25、凍結の例外 7a。実装担当が 44 局の基準〈3 組〉の実物から読み取った
+    値をここに書き写す ― ファイルは読まない〈gitignore の実データには依存させない〉)。
+
+    今回の組(`scripts/playtest/out/tatsunami3/pipe/report/whatif_report_data.json`。`docs/STEP_DELIVER1_PLAN_
+    2026-09-25.md` §3.7(a) の「今回の 14 局」)の `games[].representative`(gameNo, displayPly):
+    (1, 93)・(2, 71)・(3, 77)(実装担当が読み取り済み)。
+
+    もう一方の組(`scripts/playtest/out/tatsunami-long/pipe/report/whatif_report_data.json`。同じ §3.7(a) の
+    「10 分の組」)の `games[].representative`: (2, 97)・(3, 82)・(4, 106)(実装担当が読み取り済み ― いずれも
+    今回の組の gameNo 2〜4 の displayPly とは値が異なるため衝突しない)。
+
+    `docs/STEP_DELIVER1_PLAN_2026-09-25.md` §11.7 は、この 2 組(44 局・3 組の基準)で「もう一方の組の 10 件の
+    うち 9 件が、今回の組の材料に無いのに検査 7 を通る」と記録している ― この試験は、直した後は通らない
+    (材料に無いので落ちる)ことを、今回の組の材料(上の 3 件)だけを `positions[2]` として合成して確かめる。"""
+
+    def setUp(self):
+        # `whatif_positions_of(["…/tatsunami3/pipe/report/whatif_report_data.json"])` を実際に読んだ結果と
+        # 同じ集合(実装担当が実物を読んで書き写した。gameNo 1〜3 分。他の局は省略)。
+        self.now_group_positions = {(1, 93), (2, 71), (3, 77)}
+
+    def check(self, tag):
+        ctx = make_ctx({1: set(), 2: self.now_group_positions, 3: set()})
+        problems = []
+        CA.check_pos_tags(f"<!-- pos: {tag} 付録2 -->", ctx, problems, 1)
+        return problems
+
+    def test_now_group_positions_pass(self):
+        for g, p in ((1, 93), (2, 71), (3, 77)):
+            self.assertEqual(self.check(f"{g}/{p}"), [], f"({g},{p}) は今回の組(tatsunami3)の材料にあるので通るはず")
+
+    def test_other_group_only_positions_fail(self):
+        # tatsunami-long(もう一方の組)にしかない局面。旧版(`--whatif-data` の和集合)なら通ってしまっていた。
+        for g, p in ((2, 97), (3, 82), (4, 106)):
+            problems = self.check(f"{g}/{p}")
+            self.assertEqual(len(problems), 1, f"({g},{p}) はもう一方の組(tatsunami-long)にしか無いので落ちるはず")
+            _, reason, _ = problems[0]
+            self.assertIn("検査 7", reason)
+            self.assertIn("材料に無い", reason)
+
+
 class CheckLineNumbersPosMaskTest(unittest.TestCase):
     """5. 印の中の数字が検査 1 で落ちない(宣言の数が「登録済みの組」に無くても、`pos` の印だけの行は
     数の照合で落ちない)。"""
