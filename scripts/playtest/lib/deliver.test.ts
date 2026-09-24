@@ -674,10 +674,17 @@ describe("planDeliver", () => {
     expect(resumed.map((s) => s.stage)).toEqual(["answer-check", "answer-pdf", "check-delivery"]);
   });
 
+  // 【fixture だけの追記(凍結の例外 10 件目。PDF_DONE3_BRIEF.md §5)】期待値(9 段すべて skip)は変えない。
+  // deliverables-pdf・appendix3-pdf・appendix4-pdf が mtime を見るようになったため、
+  // 入力(work の 3 冊・direct の 4 つの JSON)を 100、出力(顧客フォルダの 3 冊・付録 3・付録 4 の PDF)を 200 にする。
+  // work の 3 冊は `files` にも足す(`probe.exists` は見ないが、実物に近づけるため)。
   it("出力が既にあれば skip(済みの判定)", () => {
     const done = fakeProbe({
       files: [
         "/w/now/report/prose.json",
+        "/w/now/report/front.pdf",
+        "/w/now/report/main.pdf",
+        "/w/now/report/whatif.pdf",
         "/w/out/1_まとめ.pdf",
         "/w/out/2_付録1_形勢が動いた対局.pdf",
         "/w/out/3_付録2_分かれ道.pdf",
@@ -691,6 +698,22 @@ describe("planDeliver", () => {
         "/w/out/8_B_どうしたら_下書き.md",
         "/w/out/8_B_どうしたら.pdf",
       ],
+      mtimes: {
+        // 入力
+        "/w/now/report/front.pdf": 100,
+        "/w/now/report/main.pdf": 100,
+        "/w/now/report/whatif.pdf": 100,
+        "/w/out/direct/direct_answers.json": 100,
+        "/w/out/direct/final_positions.json": 100,
+        "/w/out/direct/time_cause.json": 100,
+        "/w/out/direct/time_cause_search.json": 100,
+        // 出力
+        "/w/out/1_まとめ.pdf": 200,
+        "/w/out/2_付録1_形勢が動いた対局.pdf": 200,
+        "/w/out/3_付録2_分かれ道.pdf": 200,
+        "/w/out/5_付録3_直接の答え.pdf": 200,
+        "/w/out/6_付録4_時間の使い方.pdf": 200,
+      },
     });
     const byStage = new Map(planDeliver(args, done, (t) => t).map((s) => [s.stage, s.action]));
     for (const stage of [
@@ -755,6 +778,222 @@ describe("planDeliver", () => {
         fakeProbe({ files: [out.answerDraft, out.answerPdf], mtimes: { [out.answerDraft]: 100, [out.answerPdf]: 100 } }),
         (t) => t,
       ).find((s) => s.stage === "answer-pdf")!;
+      expect(step.action).toBe("run");
+    });
+  });
+
+  // deliverables-pdf(copyDone)・appendix3-pdf(a3PdfDone)・appendix4-pdf(a4PdfDone)の済みの判定
+  // (凍結の例外 10 件目。PDF_DONE3_BRIEF.md §2)。answer-pdf(例外 9 件目)と同じ考え方 ―
+  // 出力とすべての入力の mtime が読めて、出力がすべての入力より新しいときだけ済み。
+  describe("deliverables-pdf の済みの判定(mtime 比較。凍結の例外 10 件目)", () => {
+    const solo = argsOf();
+    const out = deliverOutPaths("/w/out");
+    const work = groupPaths({ work: "/w/now", timeLimitSec: 180 }, "p2");
+
+    it("3 冊とも work の版が複製先より新しい → run(§2 の a)", () => {
+      const step = planDeliver(
+        solo,
+        fakeProbe({
+          mtimes: {
+            [work.frontPdf]: 200,
+            [out.front]: 100,
+            [work.mainPdf]: 200,
+            [out.main]: 100,
+            [work.whatifPdf]: 200,
+            [out.whatif]: 100,
+          },
+        }),
+        (t) => t,
+      ).find((s) => s.stage === "deliverables-pdf")!;
+      expect(step.action).toBe("run");
+    });
+
+    it("3 冊とも複製先が work の版より新しい → skip(§2 の b)", () => {
+      const step = planDeliver(
+        solo,
+        fakeProbe({
+          mtimes: {
+            [work.frontPdf]: 100,
+            [out.front]: 200,
+            [work.mainPdf]: 100,
+            [out.main]: 200,
+            [work.whatifPdf]: 100,
+            [out.whatif]: 200,
+          },
+        }),
+        (t) => t,
+      ).find((s) => s.stage === "deliverables-pdf")!;
+      expect(step.action).toBe("skip");
+    });
+
+    it("複製先の mtime が読めない(無い)→ run(§2 の c)", () => {
+      const step = planDeliver(
+        solo,
+        fakeProbe({
+          mtimes: { [work.frontPdf]: 100, [work.mainPdf]: 100, [work.whatifPdf]: 100 },
+        }),
+        (t) => t,
+      ).find((s) => s.stage === "deliverables-pdf")!;
+      expect(step.action).toBe("run");
+    });
+
+    it("work 側の 1 冊の mtime が読めない → run(§2 の d)", () => {
+      const step = planDeliver(
+        solo,
+        fakeProbe({
+          mtimes: {
+            [out.front]: 200,
+            [out.main]: 200,
+            [out.whatif]: 200,
+            [work.mainPdf]: 100,
+            [work.whatifPdf]: 100,
+            // work.frontPdf は与えない(読めない)
+          },
+        }),
+        (t) => t,
+      ).find((s) => s.stage === "deliverables-pdf")!;
+      expect(step.action).toBe("run");
+    });
+
+    it("3 組のうち 1 組だけ src(work の版)が新しい → run(§2 の g)", () => {
+      const step = planDeliver(
+        solo,
+        fakeProbe({
+          mtimes: {
+            [work.frontPdf]: 200,
+            [out.front]: 100, // この組だけ work の版が新しい
+            [work.mainPdf]: 100,
+            [out.main]: 200,
+            [work.whatifPdf]: 100,
+            [out.whatif]: 200,
+          },
+        }),
+        (t) => t,
+      ).find((s) => s.stage === "deliverables-pdf")!;
+      expect(step.action).toBe("run");
+    });
+
+    // 変異 3(§3(D)の 3。`>=` にする変異を落とすために追加。同時刻は「済み」ではなく作る側に倒す)。
+    it("複製先と work の版が同時刻 → run(同時刻は済みにしない)", () => {
+      const step = planDeliver(
+        solo,
+        fakeProbe({
+          mtimes: {
+            [work.frontPdf]: 100,
+            [out.front]: 100,
+            [work.mainPdf]: 100,
+            [out.main]: 100,
+            [work.whatifPdf]: 100,
+            [out.whatif]: 100,
+          },
+        }),
+        (t) => t,
+      ).find((s) => s.stage === "deliverables-pdf")!;
+      expect(step.action).toBe("run");
+    });
+  });
+
+  describe("appendix3-pdf の済みの判定(mtime 比較。凍結の例外 10 件目)", () => {
+    const solo = argsOf();
+    const out = deliverOutPaths("/w/out");
+
+    it("入力(direct_answers・final_positions)が付録 3 の PDF より新しい → run(§2 の a)", () => {
+      const step = planDeliver(
+        solo,
+        fakeProbe({ mtimes: { [out.appendix3]: 100, [out.directAnswers]: 200, [out.finalPositions]: 50 } }),
+        (t) => t,
+      ).find((s) => s.stage === "appendix3-pdf")!;
+      expect(step.action).toBe("run");
+    });
+
+    it("付録 3 の PDF が両方の入力より新しい → skip(§2 の b)", () => {
+      const step = planDeliver(
+        solo,
+        fakeProbe({ mtimes: { [out.appendix3]: 300, [out.directAnswers]: 100, [out.finalPositions]: 200 } }),
+        (t) => t,
+      ).find((s) => s.stage === "appendix3-pdf")!;
+      expect(step.action).toBe("skip");
+    });
+
+    it("付録 3 の PDF の mtime が読めない(無い)→ run(§2 の c)", () => {
+      const step = planDeliver(
+        solo,
+        fakeProbe({ mtimes: { [out.directAnswers]: 100, [out.finalPositions]: 100 } }),
+        (t) => t,
+      ).find((s) => s.stage === "appendix3-pdf")!;
+      expect(step.action).toBe("run");
+    });
+
+    it("入力の 1 つ(final_positions)の mtime が読めない → run(§2 の d)", () => {
+      const step = planDeliver(solo, fakeProbe({ mtimes: { [out.appendix3]: 300, [out.directAnswers]: 100 } }), (t) => t).find(
+        (s) => s.stage === "appendix3-pdf",
+      )!;
+      expect(step.action).toBe("run");
+    });
+
+    // 変異 3(§3(D)の 3。`>=` にする変異を落とすために追加。同時刻は「済み」ではなく作る側に倒す)。
+    it("付録 3 の PDF と入力が同時刻 → run(同時刻は済みにしない)", () => {
+      const step = planDeliver(
+        solo,
+        fakeProbe({ mtimes: { [out.appendix3]: 100, [out.directAnswers]: 100, [out.finalPositions]: 100 } }),
+        (t) => t,
+      ).find((s) => s.stage === "appendix3-pdf")!;
+      expect(step.action).toBe("run");
+    });
+  });
+
+  describe("appendix4-pdf の済みの判定(mtime 比較。凍結の例外 10 件目)", () => {
+    const solo = argsOf();
+    const withPrev = argsOf(["--previous-work", "/w/prev"]);
+    const out = deliverOutPaths("/w/out");
+
+    it("入力(time_cause)が付録 4 の PDF より新しい → run(§2 の a)", () => {
+      const step = planDeliver(solo, fakeProbe({ mtimes: { [out.appendix4]: 100, [out.timeCause]: 200 } }), (t) => t).find(
+        (s) => s.stage === "appendix4-pdf",
+      )!;
+      expect(step.action).toBe("run");
+    });
+
+    it("付録 4 の PDF が time_cause より新しい → skip(§2 の b)", () => {
+      const step = planDeliver(solo, fakeProbe({ mtimes: { [out.appendix4]: 200, [out.timeCause]: 100 } }), (t) => t).find(
+        (s) => s.stage === "appendix4-pdf",
+      )!;
+      expect(step.action).toBe("skip");
+    });
+
+    it("付録 4 の PDF の mtime が読めない(無い)→ run(§2 の c)", () => {
+      const step = planDeliver(solo, fakeProbe({ mtimes: { [out.timeCause]: 100 } }), (t) => t).find((s) => s.stage === "appendix4-pdf")!;
+      expect(step.action).toBe("run");
+    });
+
+    it("time_cause の mtime が読めない → run(§2 の d)", () => {
+      const step = planDeliver(solo, fakeProbe({ mtimes: { [out.appendix4]: 200 } }), (t) => t).find((s) => s.stage === "appendix4-pdf")!;
+      expect(step.action).toBe("run");
+    });
+
+    it("hasSearch でなく time_cause_search が無く、出力が time_cause より新しい → skip(見てはいけない入力を見ていないことの証明。§2 の e)", () => {
+      const step = planDeliver(
+        solo,
+        fakeProbe({ mtimes: { [out.appendix4]: 250, [out.timeCause]: 120 } }), // out.timeSearch は与えない
+        (t) => t,
+      ).find((s) => s.stage === "appendix4-pdf")!;
+      expect(step.action).toBe("skip");
+    });
+
+    it("hasSearch で time_cause_search が付録 4 の PDF より新しい → run(§2 の f)", () => {
+      const step = planDeliver(
+        withPrev,
+        fakeProbe({ mtimes: { [out.appendix4]: 200, [out.timeCause]: 100, [out.timeSearch]: 300 } }),
+        (t) => t,
+      ).find((s) => s.stage === "appendix4-pdf")!;
+      expect(step.action).toBe("run");
+    });
+
+    // 変異 3(§3(D)の 3。`>=` にする変異を落とすために追加。同時刻は「済み」ではなく作る側に倒す)。
+    it("付録 4 の PDF と time_cause が同時刻 → run(同時刻は済みにしない)", () => {
+      const step = planDeliver(solo, fakeProbe({ mtimes: { [out.appendix4]: 100, [out.timeCause]: 100 } }), (t) => t).find(
+        (s) => s.stage === "appendix4-pdf",
+      )!;
       expect(step.action).toBe("run");
     });
   });

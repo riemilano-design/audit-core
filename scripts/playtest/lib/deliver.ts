@@ -453,6 +453,21 @@ export interface DeliverProbe {
   mtimeMs(filePath: string): number | undefined;
 }
 
+/**
+ * 済みの判定の共通形(凍結の例外 9 件目の `answerPdfDone` と同じ考え方。10 件目でここへ切り出す)。
+ * 出力と**すべての**入力の mtime が読めて、出力がすべての入力より新しいときだけ true。
+ * どれか 1 つでも読めなければ false(作る側に倒す)。同時刻は false。
+ */
+export function newerThanAll(probe: DeliverProbe, output: string, inputs: readonly string[]): boolean {
+  const outputMtime = probe.mtimeMs(output);
+  if (outputMtime === undefined) return false;
+  for (const input of inputs) {
+    const inputMtime = probe.mtimeMs(input);
+    if (inputMtime === undefined || !(outputMtime > inputMtime)) return false;
+  }
+  return true;
+}
+
 // ---- 段ごとのコマンドの組み立て ----
 
 /** `pipeline.ts` へ渡す引数(段 1・段 3。`--until` だけが違う)。 */
@@ -792,14 +807,16 @@ export function planDeliver(args: DeliverArgs, probe: DeliverProbe, cmdOf: (tool
     [thisGroup.mainPdf, out.main],
     [thisGroup.whatifPdf, out.whatif],
   ];
-  const copyDone = copies.every(([, dst]) => probe.exists(dst));
+  // 凍結の例外 10 件目: 存在だけでなく、複製先が work の 3 冊より新しいか(3 組すべてで)。
+  // work の PDF を作り直しても古い複製が「済み」で通り、顧客に古い冊子が渡るのを防ぐ。
+  const copyDone = copies.every(([src, dst]) => newerThanAll(probe, dst, [src]));
   push({
     stage: "deliverables-pdf",
     tool: "copy",
     cmd: cmdOf("copy"),
     args: copies.flat(),
     action: copyDone ? "skip" : "run",
-    reason: copyDone ? "3 冊とも複製済み" : "本編・付録 1・付録 2 を顧客フォルダへ複製する",
+    reason: copyDone ? "3 冊とも work の版より新しい" : "本編・付録 1・付録 2 を顧客フォルダへ複製する(work の版より古いか無い)",
   });
 
   const withRead = groupsWithRead(groups, probe);
@@ -832,14 +849,15 @@ export function planDeliver(args: DeliverArgs, probe: DeliverProbe, cmdOf: (tool
       : `${groups.length} 組を組の順に(エンジン 1 本。時間切れ負けが 0 局の組は実行時に飛ばす ― 道具が対象 0 件で rc=1 になるため)`,
   });
 
-  const a3PdfDone = probe.exists(out.appendix3);
+  // 凍結の例外 10 件目: 存在だけでなく、付録 3 の PDF が入力(direct_answers.json・final_positions.json)より新しいか。
+  const a3PdfDone = newerThanAll(probe, out.appendix3, [out.directAnswers, out.finalPositions]);
   push({
     stage: "appendix3-pdf",
     tool: "render-direct",
     cmd: cmdOf("render-direct"),
     args: renderDirectCommand(out.directAnswers, out.finalPositions, out.appendix3),
     action: a3PdfDone ? "skip" : "run",
-    reason: a3PdfDone ? "付録 3 の PDF がある" : "付録 3 の PDF を作る",
+    reason: a3PdfDone ? "付録 3 の PDF が入力より新しい" : "付録 3 の PDF を作る(入力より古いか無い)",
     env: { REPORT_DATA_DIR: reportDataDirEnv(groups) },
   });
 
@@ -876,14 +894,17 @@ export function planDeliver(args: DeliverArgs, probe: DeliverProbe, cmdOf: (tool
     });
   }
 
-  const a4PdfDone = probe.exists(out.appendix4);
+  // 凍結の例外 10 件目: 存在だけでなく、付録 4 の PDF が time_cause.json より新しいか
+  // (`plan.hasSearch` のときは time_cause_search.json より新しいことも要る ― 無いときは見ない。見ると常に run になる)。
+  const a4Inputs = plan.hasSearch ? [out.timeCause, out.timeSearch] : [out.timeCause];
+  const a4PdfDone = newerThanAll(probe, out.appendix4, a4Inputs);
   push({
     stage: "appendix4-pdf",
     tool: "render-time-cause",
     cmd: cmdOf("render-time-cause"),
     args: renderTimeCauseCommand(out.timeCause, out.appendix4, plan.hasSearch ? out.timeSearch : undefined),
     action: a4PdfDone ? "skip" : "run",
-    reason: a4PdfDone ? "付録 4 の PDF がある" : "付録 4 の PDF を作る",
+    reason: a4PdfDone ? "付録 4 の PDF が入力より新しい" : "付録 4 の PDF を作る(入力より古いか無い)",
   });
 
   const menuDone = probe.exists(out.answerMenu);
