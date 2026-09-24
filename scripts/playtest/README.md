@@ -1000,7 +1000,7 @@ done
 | 14 | `answer-gate` | 段 13 の下書き | — | 0.0 秒 | **「読み」を書く**(`<!-- TODO: 読み -->` を埋める) | 印が残っていれば止まる(`humanGate`) |
 | 15 | `answer-check` | 下書き + 材料の旗 20 個 | — | 0.5 秒 | なし | `check_answer.py` rc≠0(落ちた文の一覧) |
 | 16 | `answer-pdf` | 同 15 | `<out>/8_B_どうしたら.pdf` | 0.8 秒 | なし | `render_answer.py` rc≠0 |
-| 17 | `check-delivery` | `<out>` の PDF 全冊と md | — | 0.2 秒 | **PDF の目視** | 禁止語・`@`・`/Users/`・「水匠」・`--forbid` の語があれば rc≠0 |
+| 17 | `check-delivery` | `<out>` の PDF 全冊と md | — | 0.2 秒 | **PDF の目視** | 禁止語・`@`・`/Users/`・「水匠」・`None`・`--forbid` の語があれば rc≠0 |
 
 段の前後に `<out>/deliver_log.jsonl` へ 1 行追記する(`{stage, startedAt, finishedAt, rc, humanGate}`。
 `rc` は数か `"skip"`)。人間の確認点で止まった段は、**止まった時刻の行と、`--from` で再開したときの行の
@@ -1024,7 +1024,7 @@ done
 
 ### 伏せ字・個人情報の検査(`report-pdf/check_delivery.py`)
 
-`<out>` 直下の `*.pdf`(`fitz` でテキスト抽出)と `*.md` に、`--forbid` の語・`@`・`/Users/`・「水匠」・
+`<out>` 直下の `*.pdf`(`fitz` でテキスト抽出)と `*.md` に、`--forbid` の語・`@`・`/Users/`・「水匠」・`None`(python の None が印字された跡。凍結の例外 12 件目)・
 禁止語 18 語が無いことを確かめる。**18 語は書き写さず `check_answer.py` の `BANNED_WORDS` の先頭 18 語を
 import する**(語のリストを二重に持たない)。`direct/` の JSON は対象外。
 
