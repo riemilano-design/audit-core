@@ -146,7 +146,14 @@ def game_facts(g):
         elif ever_ahead: title = f"一度は良くなったが、{phase(drop_after_max or mxp)}に崩れた将棋"
         else: title = "途中で良くなる場面がないまま負けた将棋"
     else:
-        if ever_behind: title = f"一度は悪くなったが、{recover} 手目に戻して勝った将棋"
+        # 劣勢(−300 以下)になってから一度も −300 より上に戻らないまま勝った局は recover が None で、戻した手目が無い。
+        # recover が None なら最後の評価は必ず −300 以下(最小の後の点がすべて −300 以下)なので「盤上は劣勢のまま」は事実。
+        # 言い方は負け側(「盤上は優勢のまま、持ち時間切れで負けた将棋」「盤上は優勢のまま、投了で終わった将棋」)の鏡写し。
+        if ever_behind and recover is None:
+            if "切れ負け" in ending_word: title = "盤上は劣勢のまま、持ち時間切れで勝った将棋"
+            elif ending_word == "投了": title = "盤上は劣勢のまま、投了で終わった将棋"
+            else: title = "一度は悪くなったが、戻せないまま勝った将棋"
+        elif ever_behind: title = f"一度は悪くなったが、{recover} 手目に戻して勝った将棋"
         else: title = "形勢を落とさずに勝った将棋"
     return dict(off=off, pts=pts, trans=trans, mxp=mxp, mxv=mxv, mnp=mnp, mnv=mnv, ever_ahead=ever_ahead, ever_behind=ever_behind, final=final, drop=drop_after_max, recover=recover, phase=phase, time_loss=time_loss, resigned_ahead=resigned_ahead, title=title)
 F = {g["no"]: game_facts(g) for g in m["games"]}
