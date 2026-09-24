@@ -276,17 +276,17 @@ python 25 本、vitest 1615 / 0、typecheck rc=0。**監査 GO。**
 **何が起きたか**(納品レーンが 4 人目の納品で発見、私が実物で再現): `_head.py` の `game_facts` は、劣勢(−300 以下)に
 なった後で一度も −300 より上に戻らなければ `recover = None`(132 行)。ところが勝ち側の題の分岐(149 行)は
 `recover` が None でも `f"一度は悪くなったが、{recover} 手目に戻して勝った将棋"` に入れる。4 人目の 3 分の組
-(`out/kori/pipe-3min/report`)を `render_main.py` に通すと rc=0・14 ページで「None 手目」が **6 行**: p2 の局一覧
+(`out/<4 人目>/pipe-3min/report`)を `render_main.py` に通すと rc=0・14 ページで「None 手目」が **6 行**: p2 の局一覧
 (`_mid.py` 95・155 行が同じ `title` を表に載せる)に 3 行、局ページ p9・p11・p12 に 3 行。該当は第 4・17・18 局
 (最終評価 −3000/−1323/−1997、終局の語は 切れ負け・投了・切れ負け)= **5 勝のうち 3 局が「盤の上では劣勢のまま、
-相手の時計か投了で勝った局」**。`out/` 配下の他の `patient_report_data.json` 10 本では該当局 0 ― **ただしこれはメインの作業ツリーだけの走査で、3 人目の材料は別の作業ツリー(`honeymint-p2`)にあり走査の外だった(下の訂正)**。
+相手の時計か投了で勝った局」**。`out/` 配下の他の `patient_report_data.json` 10 本では該当局 0 ― **ただしこれはメインの作業ツリーだけの走査で、3 人目の材料は別の作業ツリー(3 人目のツリー)にあり走査の外だった(下の訂正)**。
 
 **なぜ今まで出なかったか**(統括の言葉で記録): 1〜3 人目にこの形の局が無かった。**1〜3 人目に無かった形の顧客が
 来て、初めて `recover` の None 経路が印字まで届いた。「1〜3 人目で通った = すべての顧客で通る」ではない**の実例。
 数の照合・禁止語の検査はどれも `None` を見ていない(`check-delivery` の禁止語 21 個に無い)。
 
 **訂正(同日。納品レーンが `--forbid None` で 3 人目の送付用フォルダを測って発見、私が JSON で確認)**: **3 人目(送付済み `deliver3_送付用`)の付録 1 にも None が 4 行**(p2 の一覧に 2、第 7 局・第 10 局の題)。
-`honeymint/work3/report`(work・work2 も同値)で第 7 局 129 手・切れ負け・最終 −5127、第 10 局 108 手・切れ負け・
+`<3 人目>/work3/report`(work・work2 も同値)で第 7 局 129 手・切れ負け・最終 −5127、第 10 局 108 手・切れ負け・
 最終 −3306、どちらも `recover=None`。したがって上の「1〜3 人目に無かった型」は**誤り**。正しくは「1・2 人目に無く、
 3 人目で既に印字されて送られていたが、誰も見ていなかった(禁止語の検査に `None` が無い)」。11 の直しは両局を覆う
 (どちらも切れ負け → 「盤上は劣勢のまま、持ち時間切れで勝った将棋」)。監査の材料に足した(予測: None 4 → 0、
@@ -308,7 +308,7 @@ python 25 本、vitest 1615 / 0、typecheck rc=0。**監査 GO。**
 
 **測定の予測(実測の前に書く。2026-09-25)**: 直前の版(`git show HEAD:…/_head.py` + `_util.py` + `_mid.py` を連結)と
 直した版で、`out/` 配下の `patient_report_data.json` **11 本すべて**(それぞれの報告フォルダを `REPORT_DATA_DIR` に)を
-描き、文字を抜いて行ごとに diff する。予測: **10 本は diff 0 行**。**`kori/pipe-3min` はちょうど 6 行**が変わり
+描き、文字を抜いて行ごとに diff する。予測: **10 本は diff 0 行**。**`<4 人目>/pipe-3min` はちょうど 6 行**が変わり
 (p2 ×3、p9・p11・p12)、変わった後の文は第 4・18 局が「盤上は劣勢のまま、持ち時間切れで勝った将棋」、第 17 局が
 「盤上は劣勢のまま、投了で終わった将棋」、他の行は不変。直した版の全出力に `None` を含む行は **0**。`sfens.json` が
 無くて描けない入力があれば、両版とも同じ rc で落ちる(描けないものは描けないと書く)。実装担当への指示に「回した
@@ -329,15 +329,15 @@ python 25 本、vitest 1615 / 0、typecheck rc=0。**監査 GO。**
 
 **実測の結果(実装担当と監査が別々に測った。監査 GO、独立)**: 描けたのは 11 本のうち 9 本(2 本は `prose.json` が無く
 両版とも同じ rc=1・同じ例外 ― 予測は「`sfens.json` が無い」だったので**原因の予測は外れ**、両版同じ失敗という点は一致)。
-kori 以外の 8 本は diff 0 行。kori は「None 手目」の行 **6 → 0**、行単位では −9/+9(p2 の表で題が 2 行に折り返されるため。
+4 人目 以外の 8 本は diff 0 行。4 人目 は「None 手目」の行 **6 → 0**、行単位では −9/+9(p2 の表で題が 2 行に折り返されるため。
 「ちょうど 6 行」は None の行の数としては一致、行単位の diff としては外れ)。題は第 4・18 局「盤上は劣勢のまま、持ち時間切れで
 勝った将棋」、第 17 局「盤上は劣勢のまま、投了で終わった将棋」、他の行は不変、ページ数・総行数不変。**3 人目**(上の訂正。
-別ツリーの `honeymint/work3/report`)は None **4 → 0**、両局とも「持ち時間切れで勝った」、21 ページ 1836 行で不変(予測どおり)。
-変異(None の枝を削る)は kori・3 人目とも **before と文字が完全一致**(この枝だけが効いている証拠)。第 3 の枝(切れ負けでも
+別ツリーの `<3 人目>/work3/report`)は None **4 → 0**、両局とも「持ち時間切れで勝った」、21 ページ 1836 行で不変(予測どおり)。
+変異(None の枝を削る)は 4 人目・3 人目とも **before と文字が完全一致**(この枝だけが効いている証拠)。第 3 の枝(切れ負けでも
 投了でもない終局)は実データに 0 件で、**人工入力**(第 4 局の `ending` を「詰み」に)でだけ「一度は悪くなったが、戻せないまま
 勝った将棋」を確かめた。`wb` の件数(p1「3 局」・p14 の箱)は不変。vitest 26/26・python 31 本・typecheck rc=0 だが、
 **どれも `game_facts` を 1 行も通らない無関係の緑**(監査が grep で確認)。付録側(`render_appendix.py`)は `title` を使わず、
-kori では両版とも別件の `KeyError`(`_app.py` の `c['label']`、前からある)で描けない。監査の文言の機械照合: 3 本とも実装と
+4 人目 では両版とも別件の `KeyError`(`_app.py` の `c['label']`、前からある)で描けない。監査の文言の機械照合: 3 本とも実装と
 この記録で 1 字も違わない。コミットの順は 7b → 11: **11 = `6794107`**(7b = `4e6a910`)。実装・監査の worktree は片づけ済み。
 
 **監査の所見(1) → 例外 13 件目へ(下の §11.7.6)**: 同じ `wb` の件数に付く本編の文「一度劣勢になってから**戻して**勝っています」
@@ -358,16 +358,16 @@ kori では両版とも別件の `KeyError`(`_app.py` の `c['label']`、前か�
 別に数えて出すのは新しい数 = 設計で、凍結の範囲を超える。順番は 7b → 11 → 13、4 人目の作り直しは 13 の後。
 
 **測定の予測(実測の前に書く)**: 直前の版(`git show HEAD:…/_mid.py` を連結)と直した版で、メインのツリーの 11 本 +
-別ツリーの `honeymint/work3/report` を描いて文字を diff。描ける 10 本すべてで**変わるのは 3 か所の文だけ**(行単位は折り返しで
+別ツリーの `<3 人目>/work3/report` を描いて文字を diff。描ける 10 本すべてで**変わるのは 3 か所の文だけ**(行単位は折り返しで
 前後する)、数字・ページ数・他の行は不変、`None` の行は前後とも同じ(この直しは None に触らない)。変わった行に含まれる数字の
-集合は前後で同じ。kori は「勝った 4 局のうち 3 局は、一度劣勢になってから勝っています。」、3 人目は「勝った 9 局のうち 7 局は、
+集合は前後で同じ。4 人目 は「勝った 4 局のうち 3 局は、一度劣勢になってから勝っています。」、3 人目は「勝った 9 局のうち 7 局は、
 一度劣勢になってから勝っています。」。`grep 戻し|戻す` は `_mid.py` で 0 件。独立監査 1 回。
 
 **実測の結果(コミット `520ffc9`)**: 実装担当(opus)は 3 文の置換まで終えたところで**セッションの利用上限(429)で止まった**
 (納品レーンの担当 2 本も同時刻に同じ)。置換は指示と 1 字も違わず `戻し/戻す` 0 件だったので、**二本立ての測定は決まった手順の
 機械作業として私が回した**(判断は含まない): 描けた 10 本 + 3 人目の 1 本すべてで diff **−4/+4**(p1 の大見出し 2 文・まとめの箱・
-箇条書き)、変わった行の数字の集合は前後で同じ、ページ数・総行数不変、**`None` の行は前後で不変**(kori 6/6、3 人目 4/4 = この直しは
-None に触らない。None は 11 が消す)、描けない 2 本は両版とも同じ `prose.json` の欠落。kori は「勝った 4 局のうち 3 局は、一度劣勢に
+箇条書き)、変わった行の数字の集合は前後で同じ、ページ数・総行数不変、**`None` の行は前後で不変**(4 人目 6/6、3 人目 4/4 = この直しは
+None に触らない。None は 11 が消す)、描けない 2 本は両版とも同じ `prose.json` の欠落。4 人目 は「勝った 4 局のうち 3 局は、一度劣勢に
 なってから勝っています。」、3 人目は「勝った 9 局のうち 7 局は…」― 予測と全部一致。**独立監査 GO**(opus 以外。3 本で再現、
 変異 1 本で 3 か所が独立に効くことを確認、`pipelineReport.test.ts` 26/26 は `_mid.py` を通らない無関係の緑と明記)。監査の所見:
 死んだ関数 `lesson`(`_head.py` 184 行)の「同じように悪くなってから勝った局は {wb} 局」も同じ誤読の型(呼び出し 0 なので出ない)。
@@ -454,4 +454,47 @@ typecheck rc=0(worktree の緑。P-84)。所見: `willHaveWhatif` の `"pdf"` �
 
 **見直す合図**: 2 組以上ある顧客で時間の処方が 0 本になったとき(構造ではなく数の問題なので、そのとき初めて
 表を見直す価値がある)。それまでは開けない。
+
+---
+
+## 12. 観測レイヤー(設計 GO の後の段取り。[DESIGN_OBSERVATION_LAYER_2026-09.md](DESIGN_OBSERVATION_LAYER_2026-09.md) §14)
+
+設計案は `41f200e`(REVISE 1 回目反映)で人間の GO(設計思想として。実装の GO は統括の指示「§14 の段取りを順番どおり STEP で」、2026-09-25。LLM 3 役は API ではなくセッション/サブエージェント。正本の書き換え(規則 8・`expired`)は案を統括へ)。
+
+### 12.1 STEP OBS-1: 観測項目の正本(`ad4e56b`、文書だけ)
+
+`docs/OBSERVATION_ITEMS.md`。existing 108(欄名と 1 対 1、108/108)、契約あり 16、設計案 §2 の未実装 20 行(copy 7・new 9・vocab 3・置かない 1)、対応が取れなかった数 0。設計案 §1・§7 との食い違い 2 件(`TIME_VALUES` は `reportData.ts:469`/§7 の例のパス名)は、統括の指示で STEP OBS-2 のコミットで設計案の側を直す。統括の照合: 一致(行 78 + 列 30 + side 2 − 束ねた 1 = 108、抜き取り 4 か所一致)。
+
+### 12.2 STEP OBS-2: 仮説の契約 `hypothesis.v0.1` と機械検査 H-1〜H-8(2026-09-25。着手。予測を実測の前に書く)
+
+**何を**: (1) `scripts/playtest/schemas/hypothesis.v0.1.schema.json`(`eventSchema.ts` が扱うキーワードだけ: type・enum・const・pattern・minimum・maximum・properties・required・additionalProperties false・minItems・items・oneOf)。(2) `scripts/playtest/lib/hypothesis.ts`: 型 `HypothesisLine`、`loadHypothesisSchema()`、`validateHypothesisLine(line, {today, registry, schema})` = スキーマ照合 + H-1〜H-8(結果は `{check: "schema"|"H-1"…, ok, messages[]}` の配列。**全部回して全部返す**、最初で止めない)、`loadObsRegistry(mdPath)` = `docs/OBSERVATION_ITEMS.md` の §1(`## 1.` から `## 2.` の手前)の表の先頭欄の `obs.*` + `obs.timeSearch.col.` × `SEARCH_COLUMNS`(`lib/timeSearch.ts`)。(3) `scripts/playtest/lib/hypothesis.test.ts`(vitest)。(4) CLI `scripts/playtest/hypothesisCheck.ts <hypothesis.json>… --today YYYY-MM-DD [--obs-items docs/OBSERVATION_ITEMS.md]`(既定は docs のパス、`--today` は必須 = 照合の日付を機械に決めさせない)。1 本でも落ちれば `process.exitCode = 1`(`gate.ts` の流儀)。(5) `lib/schemaVersions.ts` に `HYPOTHESIS_SCHEMA_VERSION = "0.1"`・`KNOWN_HYPOTHESIS_SCHEMA_VERSIONS = ["0.1"]`(末尾に独立して)。(6) 同じコミットで設計案 §1 の `TIME_VALUES` の置き場と §7 の例の JSON(実在するパス・欄名に)を直し、§15 に 1 行。**触らないもの**: `failure-event.v0.7` ほか既存のスキーマ、`check_answer.py`、`deliver.ts`、`apps/`。
+
+**なぜ**: §14 の 2。契約が無いと STEP OBS-3(4 人目で 1 周)の仮説を機械で落とせない(設計案 §7「人が読む前に機械が落とす」)。
+
+**設計の決定(レーン長)**:
+- **言語は TS**。理由: python に `jsonschema` が無く、この repo の契約の検証器は `lib/eventSchema.ts`(外部ライブラリ無し)に統一されている。統括の「`check_answer.py` の検査 1・3 の関数を再利用」は言語をまたげないので、**検査 3 = `BANNED_WORDS`(26 語)は `check_answer.py` の実物を試験が読んで TS の一覧と一致することを見る**(パリティ試験。`ANSWER_MENU` の docs 一致試験と同じ流儀。ずれたら試験が落ちる)。**検査 1 = 数の照合は TS で書き直す**(`collect_numbers` と同じ規則: 整数化・絶対値・bool 除外)。
+- **`counterfactual` の穴(cf 7)は埋めない。H-2 は ID の登録だけを見るので TS 型で照合する。** v0.7 の `properties` を埋めるのはスキーマ変更 = 構造的知識 = 別 STEP(埋めるなら既存の JSONL が全部通る試験つき)。この STEP では触らない。
+- 契約の欄(v0.1、全階層 `additionalProperties: false`): `schemaVersion` const "0.1"/`hypothesisId` pattern `^H-p[0-9]+-[a-z0-9]+-[0-9]{3}$`/`subject {customer ^p[0-9]+$, groups[] minItems 1, gamesCount integer ≥ 1}`/`scope` enum `this_user | beginners_general`/`lane` enum `time | side | shape | prior | alternative`(`alternative` = 反証レーンが出した別の説明)/`statement` string/`observations[]` minItems 1、各 `{obsId, path, value, unit?}`(`value` は number・string・boolean・null・object・array のどれか = oneOf)/`counterEvidence {attempted boolean, items[] {kind enum counterexample|denominator|alternative, text, observations[]}, result enum stands|weakened|refuted|none_found, provenance {inputs[]}}`/`prediction {writtenAt ^\d{4}-\d{2}-\d{2}$, window, metric, comparator enum <= < >= > == , value number, alsoRequires[] {metric, comparator, value}}`/`status` enum `proposed | stands_after_refutation | weak | refuted | verified | missed | partial | unmeasured | expired`/`knowledge {kind enum shogi|discovered|coaching, reviewStatus enum draft|human_reviewed|expert_verified, origin {kifu, lane}, range enum this_user|beginners_general}`/`provenance {gitHead, inputs[], excludedInputs[]}`。
+- **H-1〜H-8 の機械の定義**(設計案 §7.2 を実装の言葉に):
+  - H-1 数の実在: `statement` と `counterEvidence.items[].text` の中の数(半角・全角の数字列。小数は `63.5` のまま比べ、整数は絶対値)は、`observations[].value` と `items[].observations[].value` を再帰的に集めた数の集合に**すべて**ある。**割合の語**(`%`・`割`・`倍`)の直前の数は、`observations[]` の要素で `derived: {kind: percent|share10|ratio, numerator: {obsId, value}, denominator: {obsId, value}}` を持つものから `round(100·n/d)`・`round(10·n/d)`・`round(n/d, 1)` で再計算した値に一致しなければ落ちる(単独の数がどこかにあるだけでは通らない = 「組」)。
+  - H-2 ID の登録: すべての `obsId`(`observations[]`・`items[].observations[]`・`derived` の分子分母)が `loadObsRegistry` の集合にある。`prediction.metric`・`alsoRequires[].metric` の中の `obs.[\w.]+` も同じ。
+  - H-3: `counterEvidence.attempted === true`。`items` が空なら `result === "none_found"`、空でないなら `result !== "none_found"`。
+  - H-4: `prediction.writtenAt <= today`(`--today`、文字列比較で足りる形式に固定)。`metric`・`comparator`・`value`・`window`・`writtenAt` が全部ある(スキーマ)+ `alsoRequires` の各要素も同じ。
+  - H-5: `statement`・`items[].text` に `BANNED_WORDS` 26 語が無い。`statement` に「という読みです」または「可能性があります」がある。
+  - H-6 盲検: `counterEvidence.provenance.inputs` ⊆ `provenance.inputs`(反証が見た材料は仮説が見た観測の材料の部分集合)、かつどの `inputs` にも `本人の言葉`・`hypothes`・`統合`・`integrat` を含むパスが無い。`provenance.excludedInputs` に `本人の言葉` を含むパスがあるとき、それが `inputs` に無い。
+  - H-7 昇格: `scope === "beginners_general"` なら `knowledge.reviewStatus ∈ {human_reviewed, expert_verified}`。`knowledge.range === scope`。
+  - H-8 名前と絶対パス: `hypothesisId`・`subject.customer`・`provenance.*`・`knowledge.origin.*`・`counterEvidence.provenance.inputs` のどの文字列にも、`/` で始まるパス(絶対パス。ホームの下のパスを含む)・メールの記号・`~` が無い(検査は絶対パスの先頭 `/`、記号、`~` の 3 つを見る)。`subject.customer` は `^p[0-9]+$`(スキーマ)。
+
+**測定の予測(実測の前に書く。2026-09-25)**:
+- vitest: 直前 **1639** → 新規 **24 本**(H-1〜H-8 × 通る 1・落ちる 1 = 16、スキーマ 4〈通る・知らない欄・版違い・`value` の oneOf〉、登録簿 2〈108 本・`obs.timeSearch.col.*` 30 本〉、パリティ 1、CLI 1)= **1663**、落ちる 0。本数がずれたら実装担当が理由を書く。
+- **落ちる入力(H ごとに 1 つ、試験に固定)**: H-1 = `statement` に「崩れ 31 回」で観測は 30/H-1 の組 = 「56%」で `derived` 無し/H-2 = `obsId: "obs.time.phaseSpentMedian"`(未登録)/H-3 = `attempted: true, items: [], result: "weakened"`/H-4 = `writtenAt: "2026-09-26"`、`today: "2026-09-25"`/H-5 = `statement` に「原因」/H-6 = `counterEvidence.provenance.inputs` に `00-本人の言葉.md`/H-7 = `scope: beginners_general` + `reviewStatus: draft`/H-8 = `provenance.inputs[0]` が絶対パス(`/` で始まり、ホームの下を指す)。
+- 設計案 §7 の例(実物のパス名に直したもの)は `today: 2026-09-25` で **8/8 通る**。同じ例の `writtenAt` を `2026-09-26` にすると **H-4 だけ落ちる**(他 7 は通る)。
+- 登録簿: `loadObsRegistry("docs/OBSERVATION_ITEMS.md")` の大きさ = **108**(STEP OBS-1 の数と一致)。
+- `typecheck:scripts` は worktree で緑(本体のツリーは `out/` の下書きで赤 = P-84。測るのは worktree)。
+- 既存の JSONL・既存のスキーマ・`check_answer.py` は無変更(`git diff --stat` にこれらが無い)。
+- 設計案の diff は §1 の 1 セル・§7 の JSON 例・§15 の 1 行だけ(3 か所)。
+
+**手順**: 実装担当(worktree、`model` 指定なし)→ 独立監査 1 回(二本立て不要。契約は新規なので、監査は「落ちる入力 8 つが本当に落ちるか」を**変異**で = 各 H の判定を 1 か所ずつ壊して該当試験だけが落ちることを scratchpad のコピーで見る)→ パス指定コミット → 実測をここに追記 → 統括へ hash と予測/実測の突き合わせ。
+
+**実測の結果**: (実装担当の報告と監査の後に追記する。予測と違ったら、その違いをここに書く。)
 
