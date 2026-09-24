@@ -545,3 +545,17 @@ rc=1  FileNotFoundError
 - **予測どおり、出力は変わらなかった。**
 
 **同型の残り(開発・診断レーンの監査が見つけた。7c、潜在、着手前)**: 検査 2(手の答え合わせ)の `--whatif-pdf` は**今も全組の `whatif.pdf`** を材料にする。納品されるのは今回の組の付録 2 の 1 冊だけなので、もう一方の組の冊子にしか印字されていない手が検査 2 を通りうる。**4 人目では起きない**(10 分の組の付録 2 の PDF が無い)。`DELIVER_GATES.md` §3.1 に記載。
+
+#### 11.9.11 凍結の例外 9 件目: `answer-pdf` の済みの判定を mtime 比較に(`c7dd004`、2026-09-25)
+
+F-3(§11.9.9)の直し。統括が承認し、納品レーンが実装(worktree のサブエージェント)・独立監査 1 回・パス指定コミット。
+
+**直したもの**: `DeliverProbe` に `mtimeMs(filePath): number | undefined` を**必須**で追加(任意にしない ― 任意だと「無ければ存在扱い」の黙った経路ができ、今回の穴と同じ型)。`answerPdfDone` = 両方の mtime が読めて、PDF が B の md より新しいとき。読めなければ false(作る側に倒す)。`reason` を「B の PDF が md より新しい」/「B の PDF を作る(md より古いか無い)」に。CLI の probe に `statSync`。試験 5 本(md が新しい → run / PDF が新しい → skip / PDF 無し → run / md の mtime が読めない → run / 同時刻 → run)。`growingProbe`・`realProbe` には型を通すための `mtimeMs` だけ。既存の試験の本文・期待値は 1 行も変えていない。**7a(`ca1fea6`)の上に rebase、衝突なし。7a の試験は無傷。**
+
+**測った数**: 44 局の基準の `--dry-run` は `answer-pdf` の `reason` 1 行だけが差(`action` は両方 run。`out_ref` に PDF が無いため)。4 人目の実物を複製して md を `touch` すると、**直す前は skip・直した後は run**(実装担当と監査が別の複製先で独立に再現)。vitest 1615 → **1620**(+5)、0 failed。typecheck rc=0、check-docs rc=0。変異: 実装側 2 本 ― **1 本は予測が外れた**(1 本落ちる予測が 3 本落ちた。「PDF が存在すること」と「mtime が読めること」を予測で混同。記録済み)、もう 1 本は等価変異にならないよう試験を 1 本足して落とした。監査側 1 本(「読めなければ false」を反転 → 予測どおり 2 本落ちた)。**独立監査 GO。**
+
+**4 人目を `c7dd004` の本番のコマンドで通し直した**: `answer-check` rc=0、**`answer-pdf` は `skip: B の PDF が md より新しい`**(新しい判定が mtime を読んで正しく飛んだ。md を変えていないので skip が正しい)、`check-delivery` 通過(7 本・21 語)、B 5 ページ(「玉に詰み」あり・「勝ちの詰み」なし・「18 局で 30」あり)。**この版が送付用の候補**(統括の指示: §3a に進む前に一度上げる)。
+
+**範囲外で数えた同じ形 3 つ(直していない。統括の判断)**: `a3PdfDone`(付録 3 の PDF、入力 = `direct_answers.json`・`final_positions.json`)・`a4PdfDone`(付録 4 の PDF、入力 = `time_cause.json`・`time_cause_search.json`)・**`deliverables-pdf` の `copyDone`**(まとめ・付録 1・付録 2 を顧客フォルダへ複製する段。3 本とも存在だけ。**指示書に無く、実装担当が見つけた**)。付録 3・4 は `direct/*.json` を作り直した後、複製は work の PDF を作り直した後に、それぞれ古いものが通る。4 人目では起きていない。
+
+**手順の事故 1 つ(害なし)**: 共有ツリーへ patch を当てるとき `$F`(空白区切りの 3 パス)を zsh が分割せず、patch が空で `&&` の連鎖が止まった([[zsh-word-split-and-glob]] の既知の穴)。何も変わらず、配列でやり直して通った。
