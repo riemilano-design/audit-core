@@ -1,0 +1,45 @@
+{
+  "id": "kinmusou",
+  "name": "金無双",
+  "name_kana": "きんむそう",
+  "side": "self",
+  "family": "金無双系",
+  "parent_shape_id": null,
+  "required_pieces": [
+    {
+      "piece": "玉",
+      "square": "3h",
+      "optional": false
+    },
+    {
+      "piece": "金",
+      "square": "4h",
+      "optional": false
+    },
+    {
+      "piece": "金",
+      "square": "5h",
+      "optional": false
+    },
+    {
+      "piece": "銀",
+      "square": "2h",
+      "optional": true
+    }
+  ],
+  "typical_build_order": [
+    "3h",
+    "5h",
+    "4h",
+    "2h"
+  ],
+  "characteristics": "金を2枚横に並べる囲いで、自分も相手も振り飛車(飛車を左側へ動かす指し方)にする対局(相振り飛車と呼びます)でよく使われます。玉を3八へ寄せ、左の金を5八、右の金を4八へ動かして、玉の横に金が2枚並びます。上からの攻めを2枚の金で受け止める形で、美濃囲いより上に厚いのが特徴です。",
+  "beginner_friendliness": {
+    "score": 4,
+    "reason": "動かす駒が少なく形も覚えやすいですが、どの対局でも使える囲いではなく、相手も振り飛車のときに向いた囲いです(暫定評価。将棋知識としての最終確認は人間のレビューが必要)。"
+  },
+  "weak_against": "上からの攻めには厚い一方、横から(玉の横の段を通って)攻められることには弱さが残りやすいです。金が2枚とも玉のそばにあるため、金を攻められて動かされると玉の守りが薄くなります。",
+  "source": "【AI起草 / 出典は下記。座標の一次資料確認は行っていない(docs/ROLES.md の保留事項)】先手基準の座標(3八玉・5八金・4八金)は、Wikipedia『金無双』の文『玉を3八に、左金を5八に、右金を4八に動かして作られる』(https://ja.wikipedia.org/wiki/金無双、2026-09-25 取得)をそのまま写した。2八銀は同記事の図から読み取ったもので本文の座標記述ではないため optional: true とした(推測)。typical_build_order は出典の文の順(玉→左金→右金)に optional の銀を最後に足したもの。追加の経緯: 2026-09-25 の知識レーン(docs/KNOWLEDGE_LANE_BRIEF_2026-09-25.md)。3 人目の実棋譜に、自分も相手も振り飛車で玉を 3八・4八へ寄せた局が複数あった。",
+  "confidence_level": "medium",
+  "review_status": "draft"
+}

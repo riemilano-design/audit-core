@@ -1,0 +1,15 @@
+{
+  "id": "ibisha_self",
+  "name": "居飛車",
+  "name_kana": "いびしゃ",
+  "side": "self",
+  "family": "居飛車系",
+  "leads_to_shape_ids": [
+    "yagura_kinyagura",
+    "funagakoi"
+  ],
+  "scenario": null,
+  "source": "【AI起草 / 出典は下記】自分側(先手)の戦型としての居飛車。定義は Wikipedia『居飛車』の文『序盤において、初形で右翼にある飛車を定位置(先手は2筋、後手は8筋)のまま据えて戦うこと』(https://ja.wikipedia.org/wiki/居飛車、2026-09-25 取得)による。leads_to_shape_ids は同記事の『矢倉戦や角換わりでは、銀将金将を縦に並べて相手の飛車先をしっかり受け止める矢倉囲い系統の囲いを左翼に構築』『急戦ならば固くはないが短手数で囲える舟囲い系統の囲い』『持久戦ならば手数はかかるが固い穴熊系統の囲いが選択されることが多い』のうち、data/shapes に存在する矢倉・舟囲いだけを書いた(穴熊は data/shapes に無いので書いていない)。id を ibisha_self としたのは、既存の ibisha(side: opponent)と id が衝突するため(openings スキーマの side の設計どおり。2026-09-25 司令塔の確認)。recognition_pattern は書いていない(『飛車を動かさない』という否定の条件は現在のスキーマの表現では書けない。openings.schema.json の recognition_pattern の説明)。戦型を認識するコードは apps/server/src/analysis/ に無いため、このレコードを足しても認識の数は動かない(2026-09-25 司令塔の訂正、KNOWLEDGE_LANE_BRIEF §5.1)。追加の経緯: 2026-09-25 の知識レーン。4 人分の実棋譜 70 局のうち 40 手目時点で自分の飛車が 2 筋にある局が 21 局で最多だった。",
+  "confidence_level": "high",
+  "review_status": "draft"
+}
