@@ -63,9 +63,19 @@
 # すると他の組の局面が「付録 2 にある」と誤って通ってしまう(2026-09-25 の直し)。付録 3
 # (「5_付録3_直接の答え」= `render_direct.py`)= `--direct` の `direct_answers.json` の `answers[]`
 # (gameNo・displayPly。`render_direct.py` 464〜606 行が盤を描く)と `final_positions.json` の `entries[]`
-# (gameNo・moves。同ファイル 531〜545 行が盤を描く)。付録 4(「6_付録4_時間の使い方」= `render_time_cause.py`)
-# には盤が 1 枚も無い(表と帯グラフだけ。`Board(` も sfen も出てこない)ため、`<!-- pos: G/P 付録4 -->` は
-# 材料の有無にかかわらず常に「付録 4 には盤が無い(検査 7)」で落とす(司令塔の指示、2026-09-24)。
+# (gameNo・moves。同ファイル 531〜545 行が盤を描く)。**付録 3 だけは 1 冊に全組(3 分の組・10 分の組…)を
+# 載せる設計であり、局番号は組ごとに 1 から振られるため、(G, P) だけでは組の取り違えを検査できない
+# (基準 44 局で 3 分 21 件・10 分 9 件、重なりは 0 件だが潜在。2026-09-25 の直し、凍結の例外 7b)。このため
+# 付録 3 の印だけ `<!-- pos: G/P 付録3 <組> -->` の形で組(`answers[].group`/`entries[].group` と同じ値。
+# 例: 「3 分」「10 分」)を持たせられる。材料の組の種類が 2 つ以上なら、組の無い宣言は「付録 3 の宣言に組が
+# 無い」で落とす(使える組の値をメッセージに並べる)。組がある宣言は (組, G, P) で照合し、無ければ
+# (未知の組を含む)「局面 {G}/{P} は付録 3 の組 {組} の材料に無い」で落とす。材料の組が 1 種類だけなら、
+# 組の無い宣言は従来どおり (G, P) だけで照合し、組がある宣言はその 1 種類と一致しなければ同じ理由で落とす。
+# 付録 1・2・4 の印に組を書くと「付録 {N} の宣言に組は書かない」で落とす(その 3 つは付録ごとに閉じており、
+# 組は意味を持たない)。付録 4(「6_付録4_時間の使い方」= `render_time_cause.py`)には盤が 1 枚も無い
+# (表と帯グラフだけ。`Board(` も sfen も出てこない)ため、`<!-- pos: G/P 付録4 -->` は組の有無にかかわらず
+# 常に「付録 4 には盤が無い(検査 7)」で落とす(司令塔の指示、2026-09-24。ただし組が書かれていれば
+# 「組は書かない」を先に返す)。
 # 材料が渡されていない付録・形の崩れ・1〜4 以外の N も落とす(黙って通さない)。印の中の数字は検査 1 の
 # 対象から外す(`menu` の印と同じ扱い)。
 #
@@ -94,10 +104,13 @@ MENU_TAG_RE = re.compile(r"<!--\s*menu:\s*(M\d+)\s*-->")
 PRIORITY_TAG_RE = re.compile(r"<!--\s*priority:\s*(M\d+)\s*-->")
 
 # 検査 7(局面の参照)。`<!-- pos: G/P 付録N -->` の印。POS_TAG_RE は印全体(中身を素通りで拾う)、
-# POS_INNER_RE は中身が「G/P 付録N」の形かどうかを見る(空白は MENU_TAG_RE と同程度に寛容: `/` の前後・
-# 「付録」の前後の空白を許す)。中身が POS_INNER_RE に合わなければ「形が崩れている」として落とす。
+# POS_INNER_RE は中身が「G/P 付録N」(または付録 3 だけの「G/P 付録N <組>」。2026-09-25、凍結の例外 7b)の
+# 形かどうかを見る(空白は MENU_TAG_RE と同程度に寛容: `/` の前後・「付録」の前後の空白を許す)。第 4 群
+# (`<組>`)は「付録N」の後に 1 個以上の空白を挟んだ残り全部(組のラベル自体に空白を含みうる ― 「3 分」
+# 「10 分」等。前後の空白は POS_TAG_RE 側の `\s*` と `\s+` の消費で既に落ちているが、`check_pos_tags` 側でも
+# 念のため strip する)で、無ければ None。中身が POS_INNER_RE に合わなければ「形が崩れている」として落とす。
 POS_TAG_RE = re.compile(r"<!--\s*pos:\s*(.*?)\s*-->")
-POS_INNER_RE = re.compile(r"^(\d+)\s*/\s*(\d+)\s*付録\s*(\d+)$")
+POS_INNER_RE = re.compile(r"^(\d+)\s*/\s*(\d+)\s*付録\s*(\d+)(?:\s+(.+))?$")
 
 # 指し手の表記(report-pdf/render_whatif.py の move_kanji と同じ形)。▲/△ + (同 or マス) + 駒 + (成/打)?
 PIECE_CHARS = "歩香桂銀金角飛玉と杏圭全馬竜"
@@ -693,18 +706,25 @@ def direct_positions_of(direct):
     """付録 3(`--direct` の `direct_answers.json`・`final_positions.json`)。`direct_materials_of` が既に
     読み込んだ `raw`(渡された JSON そのもの)から、`answers[].gameNo`/`displayPly`(浅い読みの局面)と
     `entries[].gameNo`/`moves`(`render_direct.py` が「{moves} 手で時間切れ」と印字する最終局面)を拾う。
-    `direct` が None(`--direct` が 1 つも無い)なら None。"""
+    `direct` が None(`--direct` が 1 つも無い)なら None。
+
+    2026-09-25 の直し(凍結の例外 7b)。付録 3 は 1 冊に全組(3 分の組・10 分の組…)を載せる設計であり、
+    「局」の番号は組ごとに 1 から振られるため、単一の `{(gameNo, ply), …}` 集合では組の取り違えを検査できない
+    (基準 44 局で 3 分 21 件・10 分 9 件、重なりは 0 件だが潜在)。`answers[].group`/`entries[].group`
+    (`lib/directAnswers.ts` の `DirectAnswer.group`・`finalPositions.ts` の生成する `entries[].group`。
+    どちらも CLI が決めた組のラベル、例: 「3 分」「10 分」)をキーにした
+    `{"<組のラベル>": {(gameNo, ply), …}, …}` を返す。`check_pos_tags` はこの辞書で組の有無・一致を見る。"""
     if direct is None:
         return None
-    positions = set()
+    positions_by_group = {}
     for raw in direct["raw"]:
         if raw.get("kind") == "direct_answers":
             for a in raw.get("answers") or []:
-                positions.add((a["gameNo"], a["displayPly"]))
+                positions_by_group.setdefault(a["group"], set()).add((a["gameNo"], a["displayPly"]))
         elif raw.get("kind") == "final_positions":
             for e in raw.get("entries") or []:
-                positions.add((e["gameNo"], e["moves"]))
-    return positions
+                positions_by_group.setdefault(e["group"], set()).add((e["gameNo"], e["moves"]))
+    return positions_by_group
 
 
 # 付録 4(`render_time_cause.py`)は盤が 1 枚も無い(表と帯グラフだけ ― `Board(` も sfen も出てこない)ため、
@@ -1331,9 +1351,29 @@ def check_menu_tags(line, ctx, problems, line_no):
     return all_hold
 
 
+def check_appendix3_position(g, p, group, positions_by_group, problems, line_no, line):
+    """検査 7・付録 3 だけの判定(2026-09-25、凍結の例外 7b)。`positions_by_group` は `direct_positions_of`
+    が返す `{"<組>": {(gameNo, ply), …}, …}`(材料が渡されていなければ呼び出し側で None を弾く)。
+    材料の組が 2 種類以上なら組の宣言を必須にし(無ければ使える組を並べて落とす)、組ありは (組, G, P) で
+    照合する(知らない組の値もここで落ちる)。材料の組が 1 種類(または 0 種類)なら、組の無い宣言は従来どおり
+    (G, P) だけで照合し、組がある宣言はその組と一致しなければ同じ理由で落とす。"""
+    known_groups = list(positions_by_group.keys())
+    if group is None:
+        if len(known_groups) >= 2:
+            groups_str = " / ".join(known_groups)
+            problems.append((line_no, f"付録 3 の宣言に組が無い。材料の組: {groups_str}(検査 7)", line))
+            return
+        if not any((g, p) in positions for positions in positions_by_group.values()):
+            problems.append((line_no, f"局面 {g}/{p} は付録 3 の材料に無い(検査 7)", line))
+        return
+    if group not in positions_by_group or (g, p) not in positions_by_group[group]:
+        problems.append((line_no, f"局面 {g}/{p} は付録 3 の組 {group} の材料に無い(検査 7)", line))
+
+
 def check_pos_tags(line, ctx, problems, line_no):
-    """検査 7(局面の参照)。`<!-- pos: G/P 付録N -->` の印(1 行に複数あってよい)ごとに、宣言された
-    (G, P) が付録 N の材料に実在するかを確かめる。本文は解析しない(印だけを見る)。"""
+    """検査 7(局面の参照)。`<!-- pos: G/P 付録N -->`(付録 3 だけは `<!-- pos: G/P 付録3 <組> -->` も可。
+    2026-09-25、凍結の例外 7b)の印(1 行に複数あってよい)ごとに、宣言された (G, P)(・付録 3 は組も)が
+    付録 N の材料に実在するかを確かめる。本文は解析しない(印だけを見る)。"""
     for m in POS_TAG_RE.finditer(line):
         inner = m.group(1)
         inner_m = POS_INNER_RE.match(inner)
@@ -1341,20 +1381,38 @@ def check_pos_tags(line, ctx, problems, line_no):
             problems.append((line_no, f"局面の参照の形が崩れている({inner}。検査 7)", line))
             continue
         g, p, n = int(inner_m.group(1)), int(inner_m.group(2)), int(inner_m.group(3))
+        group = inner_m.group(4)
+        if group is not None:
+            group = group.strip()  # 前後の空白を除いて比べる(実装担当の判断。POS_TAG_RE 側で既に落ちているはずだが念のため)
         # 付録 4(render_time_cause.py)には盤が 1 枚も無い(表と帯グラフだけ)ため、材料の有無にかかわらず
-        # 常に落とす(司令塔の指示、2026-09-24。形の崩れ・知らない付録番号とは別のメッセージにする)。
+        # 常に落とす(司令塔の指示、2026-09-24。形の崩れ・知らない付録番号とは別のメッセージにする)。組が
+        # 書かれていれば「組は書かない」を先に返す(付録 1・2・4 は組を持たない。2026-09-25、凍結の例外 7b)。
         if n == 4:
-            problems.append((line_no, "付録 4 には盤が無い(検査 7)", line))
+            if group is not None:
+                problems.append((line_no, "付録 4 の宣言に組は書かない(検査 7)", line))
+            else:
+                problems.append((line_no, "付録 4 には盤が無い(検査 7)", line))
             continue
         if n not in (1, 2, 3):
             problems.append((line_no, f"局面 {g}/{p} は知らない付録 {n} を指している(検査 7)", line))
             continue
-        positions = ctx["positions"].get(n)
-        if positions is None:
-            problems.append((line_no, f"付録 {n} の材料が渡されていない(検査 7)", line))
+        if n in (1, 2):
+            if group is not None:
+                problems.append((line_no, f"付録 {n} の宣言に組は書かない(検査 7)", line))
+                continue
+            positions = ctx["positions"].get(n)
+            if positions is None:
+                problems.append((line_no, f"付録 {n} の材料が渡されていない(検査 7)", line))
+                continue
+            if (g, p) not in positions:
+                problems.append((line_no, f"局面 {g}/{p} は付録 {n} の材料に無い(検査 7)", line))
             continue
-        if (g, p) not in positions:
-            problems.append((line_no, f"局面 {g}/{p} は付録 {n} の材料に無い(検査 7)", line))
+        # n == 3(付録 3。2026-09-25 の直し、凍結の例外 7b)。
+        positions_by_group = ctx["positions"].get(3)
+        if positions_by_group is None:
+            problems.append((line_no, "付録 3 の材料が渡されていない(検査 7)", line))
+            continue
+        check_appendix3_position(g, p, group, positions_by_group, problems, line_no, line)
 
 
 def check_answer(markdown_text, ctx):

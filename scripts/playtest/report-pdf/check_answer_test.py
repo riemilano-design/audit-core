@@ -32,10 +32,14 @@ class CheckPosTagsTest(unittest.TestCase):
     def setUp(self):
         # 付録 1〜3 は局面あり(付録 4 は render_time_cause.py に盤が無いため、材料の鍵を持たない ―
         # `check_pos_tags` は N==4 を材料の有無より前に特別扱いする)。
+        # 付録 3(positions[3])は 2026-09-25(凍結の例外 7b)から `direct_positions_of` が
+        # `{"<組>": {(gameNo, ply), …}, …}` を返すため、ここも組の辞書にする(材料が 1 組だけのときの
+        # 従来の動作 ― 組の宣言が無ければ (G, P) だけで照合 ― は変わらない。既存のテスト本体・期待値は
+        # 1 つも変えていない)。
         self.positions = {
             1: {(1, 10), (2, 20)},  # 付録 1: prose.json の scenes[]
             2: {(3, 33)},  # 付録 2: whatif の representative
-            3: {(5, 59), (9, 77)},  # 付録 3: direct_answers の局面と final_positions の最終局面
+            3: {"組": {(5, 59), (9, 77)}},  # 付録 3: direct_answers の局面と final_positions の最終局面(1 組)
         }
 
     def check(self, line, positions=None):
@@ -373,6 +377,199 @@ class RealBaselineWhatifGroupBoundaryTest(unittest.TestCase):
             _, reason, _ = problems[0]
             self.assertIn("検査 7", reason)
             self.assertIn("材料に無い", reason)
+
+
+class DirectPositionsOfGroupTest(unittest.TestCase):
+    """`direct_positions_of`(検査 7・付録 3 の材料。2026-09-25 の直し、凍結の例外 7b)を、合成 ctx だけでなく
+    `direct_materials_of` を実際に通した結果に対して確かめる(合成 ctx だけで材料構築関数を一度も通さない、
+    という過去の監査指摘と同じ形を避ける。`ProsePositionsOfTest` と同じ流儀)。"""
+
+    def setUp(self):
+        self._tmp = tempfile.TemporaryDirectory()
+
+    def tearDown(self):
+        self._tmp.cleanup()
+
+    def write_json(self, name, data):
+        path = os.path.join(self._tmp.name, name)
+        with open(path, "w", encoding="utf-8") as f:
+            json.dump(data, f)
+        return path
+
+    def test_groups_from_direct_answers_and_final_positions_combined(self):
+        answers_path = self.write_json(
+            "direct_answers.json",
+            {
+                "kind": "direct_answers",
+                "counts": {
+                    "totalCount": 0,
+                    "totalForkCount": 0,
+                    "top1TagCounts": {},
+                    "actualTagCounts": {},
+                    "top1SideCounts": {},
+                },
+                "answers": [
+                    {"group": "3 分", "gameNo": 1, "displayPly": 10},
+                    {"group": "10 分", "gameNo": 1, "displayPly": 10},
+                ],
+            },
+        )
+        final_path = self.write_json(
+            "final_positions.json",
+            {"kind": "final_positions", "entries": [{"group": "3 分", "gameNo": 5, "moves": 59}]},
+        )
+        direct = CA.direct_materials_of([answers_path, final_path])
+        positions = CA.direct_positions_of(direct)
+        # 「局」の番号は組ごとに 1 から振られる(gameNo=1・ply=10 が 2 組それぞれにある)ので、組ごとに
+        # 別の集合になっていることを確かめる(単一の集合に混ぜていない)。
+        self.assertEqual(positions["3 分"], {(1, 10), (5, 59)})
+        self.assertEqual(positions["10 分"], {(1, 10)})
+
+    def test_no_direct_paths_returns_none(self):
+        self.assertIsNone(CA.direct_positions_of(None))
+
+
+class CheckPosTagsAppendix3GroupTest(unittest.TestCase):
+    """検査 7・付録 3 の組の照合(2026-09-25、凍結の例外 7b)。`direct_positions_of` が返す
+    `{"<組>": {(gameNo, ply), …}, …}` の形の合成材料を `check_pos_tags` に渡して確かめる(`CheckPosTagsTest`
+    と同じ流儀)。"""
+
+    def check(self, line, positions3):
+        ctx = make_ctx({1: set(), 2: set(), 3: positions3})
+        problems = []
+        CA.check_pos_tags(line, ctx, problems, 1)
+        return problems
+
+    def two_group_positions(self):
+        return {"3 分": {(1, 10)}, "10 分": {(2, 20)}}
+
+    # 材料の組が 2 種類以上のとき。
+
+    def test_two_groups_no_group_declared_fails_and_lists_usable_groups(self):
+        problems = self.check("<!-- pos: 1/10 付録3 -->", self.two_group_positions())
+        self.assertEqual(len(problems), 1)
+        _, reason, _ = problems[0]
+        self.assertIn("検査 7", reason)
+        self.assertIn("組が無い", reason)
+        self.assertIn("3 分", reason)
+        self.assertIn("10 分", reason)
+
+    def test_two_groups_correct_group_passes(self):
+        self.assertEqual(self.check("<!-- pos: 1/10 付録3 3 分 -->", self.two_group_positions()), [])
+        self.assertEqual(self.check("<!-- pos: 2/20 付録3 10 分 -->", self.two_group_positions()), [])
+
+    def test_two_groups_wrong_group_for_same_gp_fails(self):
+        # (1, 10) は「3 分」の組の材料。「10 分」と書く(4 人目で実際に起きた組の取り違えと同じ型)と落ちる。
+        problems = self.check("<!-- pos: 1/10 付録3 10 分 -->", self.two_group_positions())
+        self.assertEqual(len(problems), 1)
+        _, reason, _ = problems[0]
+        self.assertIn("検査 7", reason)
+        self.assertIn("組 10 分 の材料に無い", reason)
+
+    def test_two_groups_unknown_group_fails(self):
+        problems = self.check("<!-- pos: 1/10 付録3 30 分 -->", self.two_group_positions())
+        self.assertEqual(len(problems), 1)
+        _, reason, _ = problems[0]
+        self.assertIn("検査 7", reason)
+        self.assertIn("組 30 分 の材料に無い", reason)
+
+    # 材料の組が 1 種類だけのとき(従来の顧客の形。組が 1 つなら宣言に組を書かなくてよい)。
+
+    def one_group_positions(self):
+        return {"3 分": {(1, 10)}}
+
+    def test_one_group_no_group_declared_passes_as_before(self):
+        self.assertEqual(self.check("<!-- pos: 1/10 付録3 -->", self.one_group_positions()), [])
+
+    def test_one_group_no_group_declared_missing_position_fails(self):
+        problems = self.check("<!-- pos: 9/99 付録3 -->", self.one_group_positions())
+        self.assertEqual(len(problems), 1)
+        _, reason, _ = problems[0]
+        self.assertIn("検査 7", reason)
+        self.assertIn("材料に無い", reason)
+
+    def test_one_group_wrong_group_declared_fails(self):
+        problems = self.check("<!-- pos: 1/10 付録3 10 分 -->", self.one_group_positions())
+        self.assertEqual(len(problems), 1)
+        _, reason, _ = problems[0]
+        self.assertIn("検査 7", reason)
+        self.assertIn("組 10 分 の材料に無い", reason)
+
+    def test_one_group_correct_group_declared_passes(self):
+        self.assertEqual(self.check("<!-- pos: 1/10 付録3 3 分 -->", self.one_group_positions()), [])
+
+    # 付録 1・2・4 の宣言に組を書くと落ちる(付録 3 だけが組を持つ)。
+
+    def test_appendix1_with_group_fails(self):
+        ctx = make_ctx({1: {(1, 10)}, 2: set(), 3: {}})
+        problems = []
+        CA.check_pos_tags("<!-- pos: 1/10 付録1 3 分 -->", ctx, problems, 1)
+        self.assertEqual(len(problems), 1)
+        _, reason, _ = problems[0]
+        self.assertIn("検査 7", reason)
+        self.assertIn("組は書かない", reason)
+
+    def test_appendix2_with_group_fails(self):
+        ctx = make_ctx({1: set(), 2: {(1, 10)}, 3: {}})
+        problems = []
+        CA.check_pos_tags("<!-- pos: 1/10 付録2 3 分 -->", ctx, problems, 1)
+        self.assertEqual(len(problems), 1)
+        _, reason, _ = problems[0]
+        self.assertIn("検査 7", reason)
+        self.assertIn("組は書かない", reason)
+
+    def test_appendix4_with_group_fails_with_group_message_not_no_board_message(self):
+        ctx = make_ctx({1: set(), 2: set(), 3: {}})
+        problems = []
+        CA.check_pos_tags("<!-- pos: 1/10 付録4 3 分 -->", ctx, problems, 1)
+        self.assertEqual(len(problems), 1)
+        _, reason, _ = problems[0]
+        self.assertIn("検査 7", reason)
+        self.assertIn("組は書かない", reason)
+        self.assertNotIn("盤が無い", reason)  # 組が書かれているときは「組は書かない」を先に返す
+
+
+class RealBaselineDirectGroupTest(unittest.TestCase):
+    """指示系統からの固定試験(2026-09-25、凍結の例外 7b。実装担当が 44 局の基準〈3 組〉の実物から読み取った
+    値をここに書き写す ― ファイルは読まない〈gitignore の実データには依存させない〉)。
+
+    出どころ: `scripts/playtest/out/_deliver1_verify/deliver1/direct/direct_answers.json`(gitignore)を
+    `json.load` し、`answers[]` の各要素の `group`・`gameNo`・`displayPly` を読んだ(実装担当が読み取り済み)。
+    3 分の組(`answers[].group == "3 分"`、21 件のうち先頭 2 件): (10, 50)・(10, 94)。
+    10 分の組(`answers[].group == "10 分"`、9 件のうち先頭 2 件): (4, 72)・(2, 83)。
+    この基準は §11.7 の背景が記録する「3 分 21 件・10 分 9 件、重なりは 0 件」と一致する(実装担当が同じ
+    ファイルの `answers[].group` の内訳を数えて確認済み)。"""
+
+    def setUp(self):
+        self.positions3 = {
+            "3 分": {(10, 50), (10, 94)},
+            "10 分": {(4, 72), (2, 83)},
+        }
+
+    def check(self, tag):
+        ctx = make_ctx({1: set(), 2: set(), 3: self.positions3})
+        problems = []
+        CA.check_pos_tags(f"<!-- pos: {tag} -->", ctx, problems, 1)
+        return problems
+
+    def test_correct_group_passes(self):
+        for g, p, group in ((10, 50, "3 分"), (10, 94, "3 分"), (4, 72, "10 分"), (2, 83, "10 分")):
+            self.assertEqual(self.check(f"{g}/{p} 付録3 {group}"), [], f"({g},{p},{group}) は基準の材料にあるので通るはず")
+
+    def test_no_group_fails_with_two_groups(self):
+        problems = self.check("10/50 付録3")
+        self.assertEqual(len(problems), 1)
+        _, reason, _ = problems[0]
+        self.assertIn("検査 7", reason)
+        self.assertIn("組が無い", reason)
+
+    def test_swapped_group_fails(self):
+        # (10, 50) は 3 分の組の材料。10 分と書く(4 人目で実際に起きた組の取り違えと同じ型)と落ちる。
+        problems = self.check("10/50 付録3 10 分")
+        self.assertEqual(len(problems), 1)
+        _, reason, _ = problems[0]
+        self.assertIn("検査 7", reason)
+        self.assertIn("組 10 分 の材料に無い", reason)
 
 
 class CheckLineNumbersPosMaskTest(unittest.TestCase):
