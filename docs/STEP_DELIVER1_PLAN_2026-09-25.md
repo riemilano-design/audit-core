@@ -734,4 +734,6 @@ rc=1  FileNotFoundError
 
 **F-3(道具の欠陥。納品レーンの `lib/deliver.ts`。直すには承認が要る)**: F-1 を直して `--from answer-gate` で通したところ、**`[answer-pdf] skip: B の PDF がある`** で PDF が作り直されず、`check-delivery` も通った。**古い PDF に古い文が残っていることを実物で確かめた**(PDF の文字を抜き、「3 しかありません」あり・「18 局で 30」なし)。原因: `lib/deliver.ts:907` `answerPdfDone = probe.exists(out.answerPdf)` ― **存在だけ**を見る。`pipeline.ts:590` の `pdfDone` は PDF と `prose.json`・`patient` の **mtime を比べる**ので、同じ道具の中で判定の強さが違う。**書き手が md を直して通し直す、という §2 の工程そのものが、この判定では古い PDF を納品する。**古い PDF を消して通し直した(5 ページ、新しい文あり・古い文なし、`check-delivery` 通過)。**直すなら凍結の例外(mtime 比較に揃える)。統括の判断。**
 
+**F-3 に付随して分かった事実(直さず記録する。統括の指示。番号は開発・診断レーンが採る)**: 古い PDF のまま **`check-delivery` が通った**。`check-delivery` の「検査したファイル 7 本・語 21 個」は**禁止語が無いか**を見ており、**PDF が md と同じ版かは見ていない**。つまり「`check-delivery` が通った」の意味は**禁止語 0 まで**である。F-3 を直せば古い PDF は作られなくなるが、検査の範囲そのものは変わらない(広げるかは別の判断)。
+
 **今の納品の数**(F-1 と F-3 を直した後、本番のコマンド): `answer-check` rc=0「通過」、`answer-pdf` 5 ページ(作り直し)、`check-delivery` 通過(ファイル 7 本・語 21 個)。**F-2 の行が直るまで送付用にはしない。**
