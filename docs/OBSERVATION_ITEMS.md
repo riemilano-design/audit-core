@@ -230,7 +230,7 @@
 | `obs.vocab.shapeStatus` | `byGroup[group].statusCounts.shape.{self,opponent}.{none,forming,completed,matched}` | `StatusCountsBySide` `lib/recognitionMeasure.ts` | 形の認識の状態(`none`/`forming`/`completed`。`matched` は使わない)の件数(延べ = 局面 × レコードの行。`none` を捨てない)。種類 × 自分側/相手側 | 無 |
 | `obs.vocab.intentStatus` | `byGroup[group].statusCounts.intent.{self,opponent}.{none,forming,completed,matched}` | 同上 | 狙いの認識の状態(`none`/`forming`/`matched`。狙いは常に相手側にしか数えない = `self` は 0 のまま)の件数(延べ) | 無 |
 | `obs.vocab.openingStatus` | `byGroup[group].statusCounts.opening.{self,opponent}.{none,forming,completed,matched}` | 同上 | 戦型の認識の状態(`none`/`forming`/`completed`)の件数(延べ) | 無 |
-| `obs.vocab.exposure` | `byGroup[group].exposure["D''"].{shape,intent,opening}.{self,opponent}.{named,hedged,hidden}` | `ExposureCounts`(`named`・`hedged`・`hidden` の 3 つだけを写す) `lib/recognitionMeasure.ts` | 露出の値の組 `D''`(STEP EXPO-1b の中間案)を当てたときの `named`/`hedged`/`hidden` の件数(延べ)。種類 × 自分側/相手側。`hiddenCompletedNoEvidence`・`weakClaims`・`weakClaimsShown`・`pickedByR5p`・`droppedByR6`・`droppedByR6ById`(id → 数の対)は写さない(統括の追加指示、2026-09-25。**§2 に予約が無かった新規 ID** ― `obs.vocab.shapeStatus/intentStatus/openingStatus` と違い、設計案 §2 の元の表には無い) | 無 |
+| `obs.vocab.exposure` | `byGroup[group].exposure["D''"].{shape,intent,opening}.{self,opponent}.{named,hedged,hidden}` | `ExposureCounts`(`named`・`hedged`・`hidden` の 3 つだけを写す) `lib/recognitionMeasure.ts` | **【顧客の文に使わない】**(既知事項 P-99。この数は**道具の振る舞い**〈名前を出すか控えるか隠すかの規則がどう働いたか〉であって、顧客の指し方ではない。内部の読みには使ってよい) 露出の値の組 `D''`(STEP EXPO-1b の中間案)を当てたときの `named`/`hedged`/`hidden` の件数(延べ)。種類 × 自分側/相手側。`hiddenCompletedNoEvidence`・`weakClaims`・`weakClaimsShown`・`pickedByR5p`・`droppedByR6`・`droppedByR6ById`(id → 数の対)は写さない(統括の追加指示、2026-09-25。**§2 に予約が無かった新規 ID** ― `obs.vocab.shapeStatus/intentStatus/openingStatus` と違い、設計案 §2 の元の表には無い) | 無 |
 | `obs.vocab.shapeMissingSummary` | `byGroup[group].{shapeMissingTotal,selfClosestOneAwayGames}` | `GroupTotals` `lib/recognitionMeasure.ts` | 「あと 1 枚」の中身(STEP OBS-5e。docs/LANE_DIAG_LOG_2026-09.md §12.10 (A4))。欠けたマス・駒の延べ件数(forming だった局面だけ)と、自分側の「最も近づいた形」の欠けがちょうど 1 枚だった局の数。**件数だけ**(形 id ごとの内訳〈`shapeMissingCounts`。id → 数の対〉、局ごとの「最も近づいた形」の中身〈`rows[].closestSelfShape`。id・マス・駒の文字列〉は写さない ― §2 に予約が無かった新規 ID) | 無 |
 | `obs.vocab.shapeMovedRequiredSummary` | `byGroup[group].shapeMovedRequiredCompleteTotal`、`movedRequiredZeroShapeCounts.{self,opponent}` | 同上、`RecognitionMeasureResult` `lib/recognitionMeasure.ts` | 到達率を「初期位置でない必要駒」だけで数え直した版(STEP OBS-5e)。数え直した到達率が 1.0 に達した局数の延べ(id をまたいだ合計)と、「初期位置でない必要駒」が 0 の形(数え直せない形)の件数(自分側・相手側)。**件数だけ**(形 id ごとの内訳〈`shapeMovedRequiredBest`・`gamesMovedRequiredComplete`〉、id の一覧〈`movedRequiredZeroShapeIds`〉は写さない ― §2 に予約が無かった新規 ID) | 無 |
 | `obs.vocab.shapeOneAwayDetail` | `rows[].closestSelfShape`(`missing` がちょうど 1 件の行)→ `{gameNo,shapeId,square,piece}` | `ClosestSelfShape`・`MissingPiece` `lib/recognitionMeasure.ts` | 「止まる場所」(STEP OBS-5f。docs/LANE_DIAG_LOG_2026-09.md §12.10 (A5))。欠けがちょうど 1 枚だった局それぞれの、欠けていた駒の種類・マスと局番号。局番号は固定棋譜の `id` ではなく、`--patient` の `games[].id`↔`no` で数に変換したもの。**白いリスト(`numbersOnly`)に初めて開けた文字列の穴**(形の id・マス・駒の 2 種類だけ) | 無 |
@@ -243,6 +243,16 @@
 **`obs.vocab.shapeMovedRequiredSummary` の読み方(既知事項 P-90。2026-09-26 の実測で分かった)**: 数え直しは平手の初期配置にある必要駒を分母から外すので、**外した駒がその後に動いてしまった局でも 1.0 になる**。`shapeMovedRequiredCompleteTotal` は **「形が完成した局の数」ではない**(実例: `<p4>` の 3 分の 18 局で、自分側 `mutekigakoi` は生の完成 0 局なのにこの数には 1 局入る)。**この数を「囲いが完成した」と言い換えないこと。** 生の完成は `obs.recog.*` 側の `gamesCompleted`(写していない)ではなく、写しでは `obs.vocab.shapeStatus` の `completed` の件数で見る。
 
 ---
+
+### 1.x 顧客の文に使わない観測(**名指しの一覧**。既知事項 P-99。2026-09-26)
+
+**ここに挙げた観測は、数が実在し分母が書かれ禁止語が 0 件でも、顧客が読む文には入れない。** 理由は**その数の主語が顧客の指し手ではなく道具だから**である(「こちらの仕組みがどう働いたか」は顧客が使えない)。**内部の読み・仮説・整合には使ってよい。**
+
+| 観測 | なぜ顧客の文に使わないか |
+|---|---|
+| `obs.vocab.exposure` | 名前を**出すか・控えるか・隠すか**の規則がどう働いたかの件数。顧客の指し方ではない。実例(2026-09-26、言い換え役 B の初回): 「控えめに言った形が 657 件、出さなかったものが 4703 件」が顧客の表に入り、**機械の検査も語の検査も全部通った** |
+
+**この一覧の使い方**: 役の指示文と監査の観点に「**この一覧の観測を顧客の文に入れない**」を置く。**語の一覧(仕組みの語)とは別の歯止め** ― 語は機械で見られるが、**主語が顧客か道具かは語では見られない**(P-99 の本体)。**新しい観測を §1 に足すときは、顧客の文に使ってよいかを 1 行で決める。**
 
 ## 2. `copy` / `new` / `vocab` ― 設計案 §2 の項目(**まだ値は無い**。H-2 では引けない)
 
