@@ -1,0 +1,22 @@
+{
+  "id": "yokofudori",
+  "name": "横歩取り",
+  "name_kana": "よこふどり",
+  "side": "self",
+  "family": "居飛車系",
+  "leads_to_shape_ids": [
+    "nakazumai",
+    "nakaharagakoi"
+  ],
+  "scenario": null,
+  "recognition_pattern": [
+    {
+      "piece": "飛",
+      "to": "3d",
+      "order_hint": 1
+    }
+  ],
+  "source": "【AI起草】自分側(先手)の横歩取り。定義は Wikipedia『横歩取り』(https://ja.wikipedia.org/wiki/横歩取り (参照日 2026-09-25)) の本文(15 手目に先手が △3四歩 を飛車で取ってからの一連の変化)による。recognition_pattern は **3四 への飛車** 1 手だけ。この 1 手が戦型そのものを決めるため、ほかの手がかりを足していない。leads_to_shape_ids は同記事が挙げる囲い(中住まい・中原囲い)。ただし同記事はこの 2 つを**後手の**囲いとして説明しており、この参照は自分側のレコードに付けたものなので**出典の述べ方とはずれている**(書いた側の判断)。 戦型を認識するコードは apps/server/src/analysis/ に無いため、このレコードを足しても認識の数は動かない(**測れない**)。 追加の経緯: 2026-09-25 の知識レーン第 6 組(docs/LANE_KNOWLEDGE_LOG_2026-09.md §8)。相居飛車の 4 系統(4 人の棋譜で自分の飛車が 2 筋だった 21 局・相手が 8 筋だった 31 局が当たる)と、その中の代表的な指し方。",
+  "confidence_level": "high",
+  "review_status": "draft"
+}

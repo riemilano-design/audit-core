@@ -1,0 +1,39 @@
+{
+  "id": "mino_katamino_opponent",
+  "name": "片美濃囲い",
+  "name_kana": "かたみのがこい",
+  "side": "opponent",
+  "family": "美濃系",
+  "parent_shape_id": null,
+  "required_pieces": [
+    {
+      "piece": "玉",
+      "square": "8b",
+      "optional": false
+    },
+    {
+      "piece": "銀",
+      "square": "7b",
+      "optional": false
+    },
+    {
+      "piece": "金",
+      "square": "6a",
+      "optional": false
+    }
+  ],
+  "typical_build_order": [
+    "8b",
+    "7b",
+    "6a"
+  ],
+  "characteristics": "相手がこの形に組んでいるかを読むためのレコードです。形そのものの意味は自分側の同じ名前の形(mino_katamino)と同じで、盤の上では 180 度回った位置に現れます。本美濃囲いから金を1枚(5八の金)省いた、玉2八・銀3八・金4九だけの小さな美濃囲いです。振り飛車で最も早くできる囲いの一つで、あと1手(5八金)で本美濃囲いになります。",
+  "beginner_friendliness": {
+    "score": 5,
+    "reason": "**相手の陣形を読むためのレコードで、自分が組むための評価ではありません。** 点は自分側の同じ形(mino_katamino)から写しただけの値です。"
+  },
+  "weak_against": "相手がこの形のとき、attackable な方向の目安です(断定ではありません)。金が1枚少ないぶん本美濃囲いより薄く、横から(玉の横の段を通って)攻められることと、玉の頭上(2七・3七)からの攻めの両方に対して守りの枚数が足りません。",
+  "source": "【AI起草。座標の一次資料確認は行っていない(docs/ROLES.md の保留事項)】**自分側の同じ形 mino_katamino の座標を、盤ごと 180 度回して写したもの**(筋 f → 10−f、段 r → 10−r の両方を反転。写像: 玉8b・銀7b・金6a)。**出典そのものが後手の座標を述べているわけではない**(出典は自分側のレコードの source を参照)。過去に「段だけを反転させて左右が入れ替わる」取り違えが起きているため(docs/PHASES.md の P-12、docs/STEP_UNIT6_PLAN_2026-09-12.md §9.5 の決定 3)、**この 10 件は写像の式を source に書き、4 人 70 局の実棋譜で相手の陣形として実際に当たるか(完成した局の数)を測ってから記録した**。判定は後手視点で行われる(apps/server/src/analysis/shapeDetector.ts の perspectiveColorsForSide が side: opponent を gote に固定する)。 追加の経緯: 2026-09-25 の知識レーン第 7 組(docs/LANE_KNOWLEDGE_LOG_2026-09.md §9)。data/ に相手側の陣形(side: opponent)が 1 件も無く、4 人 70 局の 40 手目で相手玉が 8二(11 局)・3二(8 局)・7二(7 局)に多かったため。",
+  "confidence_level": "medium",
+  "review_status": "draft"
+}

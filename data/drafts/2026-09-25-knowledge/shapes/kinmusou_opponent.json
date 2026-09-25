@@ -1,0 +1,45 @@
+{
+  "id": "kinmusou_opponent",
+  "name": "金無双",
+  "name_kana": "きんむそう",
+  "side": "opponent",
+  "family": "金無双系",
+  "parent_shape_id": null,
+  "required_pieces": [
+    {
+      "piece": "玉",
+      "square": "7b",
+      "optional": false
+    },
+    {
+      "piece": "金",
+      "square": "6b",
+      "optional": false
+    },
+    {
+      "piece": "金",
+      "square": "5b",
+      "optional": false
+    },
+    {
+      "piece": "銀",
+      "square": "8b",
+      "optional": true
+    }
+  ],
+  "typical_build_order": [
+    "7b",
+    "5b",
+    "6b",
+    "8b"
+  ],
+  "characteristics": "相手がこの形に組んでいるかを読むためのレコードです。形そのものの意味は自分側の同じ名前の形(kinmusou)と同じで、盤の上では 180 度回った位置に現れます。金を2枚横に並べる囲いで、自分も相手も振り飛車(飛車を左側へ動かす指し方)にする対局(相振り飛車と呼びます)でよく使われます。玉を3八へ寄せ、左の金を5八、右の金を4八へ動かして、玉の横に金が2枚並びます。上からの攻めを2枚の金で受け止める形で、美濃囲いより上に厚いのが特徴です。",
+  "beginner_friendliness": {
+    "score": 4,
+    "reason": "**相手の陣形を読むためのレコードで、自分が組むための評価ではありません。** 点は自分側の同じ形(kinmusou)から写しただけの値です。"
+  },
+  "weak_against": "相手がこの形のとき、attackable な方向の目安です(断定ではありません)。上からの攻めには厚い一方、横から(玉の横の段を通って)攻められることには弱さが残りやすいです。金が2枚とも玉のそばにあるため、金を攻められて動かされると玉の守りが薄くなります。",
+  "source": "【AI起草。座標の一次資料確認は行っていない(docs/ROLES.md の保留事項)】**自分側の同じ形 kinmusou の座標を、盤ごと 180 度回して写したもの**(筋 f → 10−f、段 r → 10−r の両方を反転。写像: 玉7b・金6b・金5b・銀8b)。**出典そのものが後手の座標を述べているわけではない**(出典は自分側のレコードの source を参照)。過去に「段だけを反転させて左右が入れ替わる」取り違えが起きているため(docs/PHASES.md の P-12、docs/STEP_UNIT6_PLAN_2026-09-12.md §9.5 の決定 3)、**この 10 件は写像の式を source に書き、4 人 70 局の実棋譜で相手の陣形として実際に当たるか(完成した局の数)を測ってから記録した**。判定は後手視点で行われる(apps/server/src/analysis/shapeDetector.ts の perspectiveColorsForSide が side: opponent を gote に固定する)。 追加の経緯: 2026-09-25 の知識レーン第 7 組(docs/LANE_KNOWLEDGE_LOG_2026-09.md §9)。data/ に相手側の陣形(side: opponent)が 1 件も無く、4 人 70 局の 40 手目で相手玉が 8二(11 局)・3二(8 局)・7二(7 局)に多かったため。",
+  "confidence_level": "medium",
+  "review_status": "draft"
+}

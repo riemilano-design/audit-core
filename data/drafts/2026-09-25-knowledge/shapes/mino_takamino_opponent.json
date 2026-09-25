@@ -1,0 +1,51 @@
+{
+  "id": "mino_takamino_opponent",
+  "name": "高美濃囲い",
+  "name_kana": "たかみのがこい",
+  "side": "opponent",
+  "family": "美濃系",
+  "parent_shape_id": "mino_honmino_opponent",
+  "required_pieces": [
+    {
+      "piece": "玉",
+      "square": "8b",
+      "optional": false
+    },
+    {
+      "piece": "銀",
+      "square": "7b",
+      "optional": false
+    },
+    {
+      "piece": "金",
+      "square": "6a",
+      "optional": false
+    },
+    {
+      "piece": "金",
+      "square": "6c",
+      "optional": false
+    },
+    {
+      "piece": "桂",
+      "square": "7c",
+      "optional": false
+    }
+  ],
+  "typical_build_order": [
+    "8b",
+    "7b",
+    "6a",
+    "6c",
+    "7c"
+  ],
+  "characteristics": "相手がこの形に組んでいるかを読むためのレコードです。形そのものの意味は自分側の同じ名前の形(mino_takamino)と同じで、盤の上では 180 度回った位置に現れます。本美濃囲いで5八にあった金を4七へ進め、さらに桂馬を3七へ跳ねて発展させた形。玉自体や銀の位置は本美濃囲いから変わらないが、金と桂馬で上部(玉の頭上)を補強するため、上から攻められたときの粘りが増す。",
+  "beginner_friendliness": {
+    "score": 4,
+    "reason": "**相手の陣形を読むためのレコードで、自分が組むための評価ではありません。** 点は自分側の同じ形(mino_takamino)から写しただけの値です。"
+  },
+  "weak_against": "相手がこの形のとき、attackable な方向の目安です(断定ではありません)。本美濃囲いより上部からの攻めには強くなるが、横からの攻めや、金・桂馬が動いている途中の速い攻め(棒銀・斜め棒銀・早仕掛けなど)には、本美濃囲いと同様に弱さが残ることが多いです。",
+  "source": "【AI起草。座標の一次資料確認は行っていない(docs/ROLES.md の保留事項)】**自分側の同じ形 mino_takamino の座標を、盤ごと 180 度回して写したもの**(筋 f → 10−f、段 r → 10−r の両方を反転。写像: 玉8b・銀7b・金6a・金6c・桂7c)。**出典そのものが後手の座標を述べているわけではない**(出典は自分側のレコードの source を参照)。過去に「段だけを反転させて左右が入れ替わる」取り違えが起きているため(docs/PHASES.md の P-12、docs/STEP_UNIT6_PLAN_2026-09-12.md §9.5 の決定 3)、**この 10 件は写像の式を source に書き、4 人 70 局の実棋譜で相手の陣形として実際に当たるか(完成した局の数)を測ってから記録した**。判定は後手視点で行われる(apps/server/src/analysis/shapeDetector.ts の perspectiveColorsForSide が side: opponent を gote に固定する)。 追加の経緯: 2026-09-25 の知識レーン第 7 組(docs/LANE_KNOWLEDGE_LOG_2026-09.md §9)。data/ に相手側の陣形(side: opponent)が 1 件も無く、4 人 70 局の 40 手目で相手玉が 8二(11 局)・3二(8 局)・7二(7 局)に多かったため。",
+  "confidence_level": "medium",
+  "review_status": "draft"
+}

@@ -1,0 +1,51 @@
+{
+  "id": "anaguma_ibisha_opponent",
+  "name": "居飛車穴熊",
+  "name_kana": "いびしゃあなぐま",
+  "side": "opponent",
+  "family": "穴熊系",
+  "parent_shape_id": null,
+  "required_pieces": [
+    {
+      "piece": "玉",
+      "square": "1a",
+      "optional": false
+    },
+    {
+      "piece": "香",
+      "square": "1b",
+      "optional": false
+    },
+    {
+      "piece": "銀",
+      "square": "2b",
+      "optional": false
+    },
+    {
+      "piece": "金",
+      "square": "3b",
+      "optional": false
+    },
+    {
+      "piece": "金",
+      "square": "4b",
+      "optional": false
+    }
+  ],
+  "typical_build_order": [
+    "1b",
+    "1a",
+    "2b",
+    "3b",
+    "4b"
+  ],
+  "characteristics": "相手がこの形に組んでいるかを読むためのレコードです。形そのものの意味は自分側の同じ名前の形(anaguma_ibisha)と同じで、盤の上では 180 度回った位置に現れます。居飛車(飛車を右に置いたまま戦う指し方)で、玉を盤の左隅(9九)まで潜らせ、香を9八に上げて空けた穴に玉を入れ、8八の銀と7八・6八の金でふたをする囲いです。玉が盤の隅にいるので王手がかかりにくく、将棋の囲いの中でもとても固い形として知られています。",
+  "beginner_friendliness": {
+    "score": 2,
+    "reason": "**相手の陣形を読むためのレコードで、自分が組むための評価ではありません。** 点は自分側の同じ形(anaguma_ibisha)から写しただけの値です。"
+  },
+  "weak_against": "相手がこの形のとき、attackable な方向の目安です(断定ではありません)。玉が隅に固定されるため、逃げ道がほとんどありません。端(9筋)を攻められると玉に直接響き、囲いの駒をはがされると一気に薄くなります。組み上がる前の速い攻めにも弱いです。",
+  "source": "【AI起草。座標の一次資料確認は行っていない(docs/ROLES.md の保留事項)】**自分側の同じ形 anaguma_ibisha の座標を、盤ごと 180 度回して写したもの**(筋 f → 10−f、段 r → 10−r の両方を反転。写像: 玉1a・香1b・銀2b・金3b・金4b)。**出典そのものが後手の座標を述べているわけではない**(出典は自分側のレコードの source を参照)。過去に「段だけを反転させて左右が入れ替わる」取り違えが起きているため(docs/PHASES.md の P-12、docs/STEP_UNIT6_PLAN_2026-09-12.md §9.5 の決定 3)、**この 10 件は写像の式を source に書き、4 人 70 局の実棋譜で相手の陣形として実際に当たるか(完成した局の数)を測ってから記録した**。判定は後手視点で行われる(apps/server/src/analysis/shapeDetector.ts の perspectiveColorsForSide が side: opponent を gote に固定する)。 追加の経緯: 2026-09-25 の知識レーン第 7 組(docs/LANE_KNOWLEDGE_LOG_2026-09.md §9)。data/ に相手側の陣形(side: opponent)が 1 件も無く、4 人 70 局の 40 手目で相手玉が 8二(11 局)・3二(8 局)・7二(7 局)に多かったため。",
+  "confidence_level": "low",
+  "review_status": "draft"
+}

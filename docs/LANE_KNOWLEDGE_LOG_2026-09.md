@@ -210,10 +210,10 @@
 | 1 | 居飛車 |  | 居飛車(総称) | <https://ja.wikipedia.org/wiki/%E5%B1%85%E9%A3%9B%E8%BB%8A> | <https://ja.wikipedia.org/wiki/Category%3A%E5%B1%85%E9%A3%9B%E8%BB%8A> | 下書き済み(ibisha_self、自分側)。相手側は既存 ibisha |
 | 2 | 相居飛車 |  | 居飛車(総称) | <https://ja.wikipedia.org/wiki/%E7%9B%B8%E5%B1%85%E9%A3%9B%E8%BB%8A> | <https://ja.wikipedia.org/wiki/Category%3A%E5%B1%85%E9%A3%9B%E8%BB%8A> | 保留(対局の組み合わせの名前で side に当てはまらない。§7) |
 | 3 | 対抗型 |  | 居飛車(総称) | <https://ja.wikipedia.org/wiki/%E5%AF%BE%E6%8A%97%E5%9E%8B> | <https://ja.wikipedia.org/wiki/Category%3A%E5%B1%85%E9%A3%9B%E8%BB%8A> | 保留(対局の組み合わせの名前で side に当てはまらない。§7) |
-| 4 | 矢倉 |  | 相居飛車 | <https://ja.wikipedia.org/wiki/%E7%9F%A2%E5%80%89%E5%9B%B2%E3%81%84> | <https://ja.wikipedia.org/wiki/Category%3A%E5%B1%85%E9%A3%9B%E8%BB%8A> | 未 |
-| 5 | 角換わり |  | 相居飛車 | <https://ja.wikipedia.org/wiki/%E8%A7%92%E6%8F%9B%E3%82%8F%E3%82%8A> | <https://ja.wikipedia.org/wiki/Category%3A%E5%B1%85%E9%A3%9B%E8%BB%8A> | 未 |
-| 6 | 相掛かり |  | 相居飛車 | <https://ja.wikipedia.org/wiki/%E7%9B%B8%E6%8E%9B%E3%81%8B%E3%82%8A> | <https://ja.wikipedia.org/wiki/Category%3A%E5%B1%85%E9%A3%9B%E8%BB%8A> | 未 |
-| 7 | 横歩取り |  | 相居飛車 | <https://ja.wikipedia.org/wiki/%E6%A8%AA%E6%AD%A9%E5%8F%96%E3%82%8A> | <https://ja.wikipedia.org/wiki/Category%3A%E5%B1%85%E9%A3%9B%E8%BB%8A> | 未 |
+| 4 | 矢倉 |  | 相居飛車 | <https://ja.wikipedia.org/wiki/%E7%9F%A2%E5%80%89%E5%9B%B2%E3%81%84> | <https://ja.wikipedia.org/wiki/Category%3A%E5%B1%85%E9%A3%9B%E8%BB%8A> | 下書き済み(yagura_senpo 自分) |
+| 5 | 角換わり |  | 相居飛車 | <https://ja.wikipedia.org/wiki/%E8%A7%92%E6%8F%9B%E3%82%8F%E3%82%8A> | <https://ja.wikipedia.org/wiki/Category%3A%E5%B1%85%E9%A3%9B%E8%BB%8A> | 下書き済み(kakugawari 自分) |
+| 6 | 相掛かり |  | 相居飛車 | <https://ja.wikipedia.org/wiki/%E7%9B%B8%E6%8E%9B%E3%81%8B%E3%82%8A> | <https://ja.wikipedia.org/wiki/Category%3A%E5%B1%85%E9%A3%9B%E8%BB%8A> | 下書き済み(aigakari 自分) |
+| 7 | 横歩取り |  | 相居飛車 | <https://ja.wikipedia.org/wiki/%E6%A8%AA%E6%AD%A9%E5%8F%96%E3%82%8A> | <https://ja.wikipedia.org/wiki/Category%3A%E5%B1%85%E9%A3%9B%E8%BB%8A> | 下書き済み(yokofudori 自分) |
 | 8 | 雁木戦法 | 雁木 | 相居飛車 | <https://ja.wikipedia.org/wiki/%E9%9B%81%E6%9C%A8%E6%88%A6%E6%B3%95> | <https://ja.wikipedia.org/wiki/Category%3A%E5%B1%85%E9%A3%9B%E8%BB%8A> | 未 |
 | 9 | 矢倉棒銀 |  | 矢倉の指し方 | <https://ja.wikipedia.org/wiki/%E7%9F%A2%E5%80%89%E6%A3%92%E9%8A%80> | <https://ja.wikipedia.org/wiki/Category%3A%E7%9F%A2%E5%80%89> | 未 |
 | 10 | 雀刺し |  | 矢倉の指し方 | <https://ja.wikipedia.org/wiki/%E9%9B%80%E5%88%BA%E3%81%97> | <https://ja.wikipedia.org/wiki/Category%3A%E7%9F%A2%E5%80%89> | 未 |
@@ -266,8 +266,8 @@
 | 57 | 空中戦法(内藤流) |  | 横歩取り | **出典なし** | <https://ja.wikipedia.org/wiki/%E5%B0%86%E6%A3%8B%E3%81%AE%E6%88%A6%E6%B3%95%E4%B8%80%E8%A6%A7> | 未 |
 | 58 | 中座飛車 |  | 横歩取り | **出典なし** | <https://ja.wikipedia.org/wiki/%E5%B0%86%E6%A3%8B%E3%81%AE%E6%88%A6%E6%B3%95%E4%B8%80%E8%A6%A7> | 未 |
 | 59 | 3三飛成戦法 |  | 横歩取り | **出典なし** | <https://ja.wikipedia.org/wiki/%E5%B0%86%E6%A3%8B%E3%81%AE%E6%88%A6%E6%B3%95%E4%B8%80%E8%A6%A7> | 未 |
-| 60 | 棒銀 |  | 居飛車一般 | <https://ja.wikipedia.org/wiki/%E6%A3%92%E9%8A%80> | <https://ja.wikipedia.org/wiki/Category%3A%E5%B1%85%E9%A3%9B%E8%BB%8A> | 未 |
-| 61 | 腰掛け銀 |  | 居飛車一般 | <https://ja.wikipedia.org/wiki/%E8%85%B0%E6%8E%9B%E3%81%91%E9%8A%80> | <https://ja.wikipedia.org/wiki/Category%3A%E5%B1%85%E9%A3%9B%E8%BB%8A> | 未 |
+| 60 | 棒銀 |  | 居飛車一般 | <https://ja.wikipedia.org/wiki/%E6%A3%92%E9%8A%80> | <https://ja.wikipedia.org/wiki/Category%3A%E5%B1%85%E9%A3%9B%E8%BB%8A> | 下書き済み(boh_gin_self 自分。相手側は intent boh_gin) |
+| 61 | 腰掛け銀 |  | 居飛車一般 | <https://ja.wikipedia.org/wiki/%E8%85%B0%E6%8E%9B%E3%81%91%E9%8A%80> | <https://ja.wikipedia.org/wiki/Category%3A%E5%B1%85%E9%A3%9B%E8%BB%8A> | 下書き済み(koshikakegin 自分) |
 | 62 | 右四間飛車 |  | 居飛車一般 | <https://ja.wikipedia.org/wiki/%E5%8F%B3%E5%9B%9B%E9%96%93%E9%A3%9B%E8%BB%8A> | <https://ja.wikipedia.org/wiki/Category%3A%E5%B1%85%E9%A3%9B%E8%BB%8A> | 下書き済み(migi_shikenbisha 自分 / migi_shikenbisha_opponent 相手) |
 | 63 | 袖飛車 |  | 居飛車一般 | <https://ja.wikipedia.org/wiki/%E8%A2%96%E9%A3%9B%E8%BB%8A> | <https://ja.wikipedia.org/wiki/Category%3A%E5%B1%85%E9%A3%9B%E8%BB%8A> | 未 |
 | 64 | 一間飛車 |  | 居飛車一般 | <https://ja.wikipedia.org/wiki/%E4%B8%80%E9%96%93%E9%A3%9B%E8%BB%8A> | <https://ja.wikipedia.org/wiki/Category%3A%E5%B1%85%E9%A3%9B%E8%BB%8A> | 未 |
@@ -353,7 +353,7 @@
 | 144 | 筋違い角四間飛車 |  | 四間飛車 | **出典なし** | <https://ja.wikipedia.org/wiki/%E5%B0%86%E6%A3%8B%E3%81%AE%E6%88%A6%E6%B3%95%E4%B8%80%E8%A6%A7> | 未 |
 | 145 | 三間飛車 |  | 三間飛車 | <https://ja.wikipedia.org/wiki/%E4%B8%89%E9%96%93%E9%A3%9B%E8%BB%8A> | <https://ja.wikipedia.org/wiki/Category%3A%E4%B8%89%E9%96%93%E9%A3%9B%E8%BB%8A> | 下書き済み(sankenbisha 自分 / sankenbisha_opponent 相手) |
 | 146 | 石田流 |  | 三間飛車 | <https://ja.wikipedia.org/wiki/%E7%9F%B3%E7%94%B0%E6%B5%81> | <https://ja.wikipedia.org/wiki/Category%3A%E4%B8%89%E9%96%93%E9%A3%9B%E8%BB%8A> | 下書き済み(ishidaryu 自分) |
-| 147 | 早石田 |  | 三間飛車 | <https://ja.wikipedia.org/wiki/%E6%97%A9%E7%9F%B3%E7%94%B0> | <https://ja.wikipedia.org/wiki/Category%3A%E4%B8%89%E9%96%93%E9%A3%9B%E8%BB%8A> | 未 |
+| 147 | 早石田 |  | 三間飛車 | <https://ja.wikipedia.org/wiki/%E6%97%A9%E7%9F%B3%E7%94%B0> | <https://ja.wikipedia.org/wiki/Category%3A%E4%B8%89%E9%96%93%E9%A3%9B%E8%BB%8A> | 下書き済み(hayaishida 自分) |
 | 148 | 升田式石田流 |  | 三間飛車 | <https://ja.wikipedia.org/wiki/%E5%8D%87%E7%94%B0%E5%BC%8F%E7%9F%B3%E7%94%B0%E6%B5%81> | <https://ja.wikipedia.org/wiki/Category%3A%E4%B8%89%E9%96%93%E9%A3%9B%E8%BB%8A> | 未 |
 | 149 | 新石田流 |  | 三間飛車 | <https://ja.wikipedia.org/wiki/%E6%96%B0%E7%9F%B3%E7%94%B0%E6%B5%81> | <https://ja.wikipedia.org/wiki/Category%3A%E4%B8%89%E9%96%93%E9%A3%9B%E8%BB%8A> | 未 |
 | 150 | 楠本式石田流 |  | 三間飛車 | <https://ja.wikipedia.org/wiki/%E6%A5%A0%E6%9C%AC%E5%BC%8F%E7%9F%B3%E7%94%B0%E6%B5%81> | <https://ja.wikipedia.org/wiki/Category%3A%E4%B8%89%E9%96%93%E9%A3%9B%E8%BB%8A> | 未 |
@@ -563,6 +563,60 @@
 **埋まった数 ÷ 目録の数: 囲い 35 / 62、戦法 12 / 184。** 数えているのは**目録の行(名前)**で、レコードの数とは違う(戦法のレコードは 15 件 = 既存 3 + 下書き 12。同じ名前が自分側・相手側の 2 件になるため行より多い)。囲いは 1 行 1 レコードなので 35 で一致する。
 
 **目録の側で分かったこと**: 相振り飛車・対抗型・相居飛車は**対局の組み合わせを表す名前**で、`openings.schema.json` の `side`(self / opponent)のどちらにも当てはまらない。埋めずに目録で保留にした(スキーマを変えるのは構造的知識 = 人間の承認事項)。
+
+## 8. 第 6 組(2026-09-25): 戦型 7 件 ― **測れない(認識のコードが無い)**
+
+**足した ID(すべて `draft`・`side: self`)**: `yagura_senpo`(矢倉)・`kakugawari`(角換わり)・`aigakari`(相掛かり)・`yokofudori`(横歩取り)・`boh_gin_self`(棒銀)・`hayaishida`(早石田)・`koshikakegin`(腰掛け銀)。相居飛車の 4 系統(4 人の棋譜で自分の飛車が 2 筋だった 21 局・相手が 8 筋だった 31 局が当たる)と、その中の指し方 3 つ。出典は各 `source`(Wikipedia の当該記事、URL + 参照日 2026-09-25)。スキーマ検証 OK。
+**測れない**(認識のコードが無い)。前後の測定はしていない。
+
+**書けなかった条件(`source` に明記)**:
+
+- `kakugawari`: **角の交換そのもの**(相手の駒を取る・持ち駒になる)は駒種 + 移動先では書けないので、7七 に角が上がり、のちに銀が 7七 へ来た跡で代用した。
+- `koshikakegin`: 「5七に歩がある」という**初期位置の駒を条件にすること**ができない(歩は最初から 5七 にいるので、そこへ動く手が存在しない)。
+- `boh_gin_self`: 銀の進路が戦型ごとに違う(出典は相掛かり 3八→2七→2六、角換わりは 1 筋絡み、対振りは相手の角の頭)。**相掛かりの形だけ**を書いた。
+- `yagura_senpo`: 7六歩・6八銀は他の戦型でも指される手なので、3 手がそろって初めて手がかりになる。**1 手の一致で forming が立つ作り**では序盤に他の戦型へも当たる。
+
+**埋まった数(目録の行): 囲い 35 / 62、戦法 19 / 184。**
+
+## 9. 第 7 組(2026-09-25): **相手側の陣形 10 件** ― ここは測れる
+
+**足した ID(すべて `draft`・`side: opponent`)**: `mino_honmino_opponent`・`mino_takamino_opponent`・`mino_ginkanmuri_opponent`・`mino_katamino_opponent`・`funagakoi_opponent`・`yagura_kinyagura_opponent`・`kinmusou_opponent`・`anaguma_furibisha_opponent`・`anaguma_ibisha_opponent`・`elmogakoi_opponent`。
+
+**作り方**: 自分側の同じ形の座標を**盤ごと 180 度回した**(筋 f → 10−f、段 r → 10−r の**両方**)。例: 本美濃 2八玉・3八銀・4九金・5八金 → 8二玉・7二銀・6一金・5二金。写像の式と写した組は各レコードの `source` に書いた。**出典そのものが後手の座標を述べているわけではない**(出典は自分側のレコードの `source`)。
+**なぜ念を押すか**: 過去に「段だけを反転させて左右が入れ替わる」取り違えが起きている([PHASES.md](PHASES.md) の P-12、[STEP_UNIT6_PLAN_2026-09-12.md](STEP_UNIT6_PLAN_2026-09-12.md) §9.5 の決定 3「実際の盤と突き合わせて確かめる。理屈だけで直さない」)。そこで**実棋譜で当たるかを測ってから記録した**(下記)。判定は後手視点で行われる(`apps/server/src/analysis/shapeDetector.ts` の `perspectiveColorsForSide` が `side: opponent` を gote に固定する)。
+
+**測った数**(4 人 70 局。**自分側と相手側を分けて**数えた。証拠 2 件以上か完成の形が 1 件以上ある局面の数):
+
+| 対象 | 局面数(30 手まで / 全手) | 自分側 前→後 | **相手側 前→後** |
+|---|---|---|---|
+| 1 人目(10 局) | 157 / 331 | 29→29 / 121→121 | **0→33 / 0→130** |
+| 2 人目(20 局) | 312 / 754 | 103→103 / 437→437 | **0→128 / 0→406** |
+| 3 人目(20 局) | 320 / 998 | 111→111 / 705→705 | **0→142 / 0→556** |
+| 4 人目(20 局) | 307 / 652 | 75→75 / 236→236 | **0→62 / 0→205** |
+| **4 人合計(70 局)** | 1096 / 2735 | 318→318 / 1499→1499 | **0→365(33% の局面) / 0→1297(47%)** |
+
+**自分側の数は 1 も動いていない**(29/103/111/75 のまま)。相手側の形を足しても自分側の判定に触っていないことの確かめになる。
+
+**形ごとの当たり方**(4 人 70 局。完成した局 / 必須マスの 3/4 以上が一致した局):
+
+| 相手側の形 | 完成した局 | 3/4 以上 |
+|---|---|---|
+| 片美濃 | 11 | 11 |
+| 本美濃 | 5 | 11 |
+| 舟囲い | 3 | 10 |
+| 金無双 | 1 | 1 |
+| 矢倉 | 0 | 8 |
+| Elmo囲い | 0 | 1 |
+| 居飛車穴熊 | 0 | 1 |
+| 振り飛車穴熊 | 0 | 0 |
+| 高美濃 | 0 | 0 |
+| 銀冠 | 0 | 0 |
+
+**読み方**: 相手の片美濃が 11 局・本美濃が 5 局・舟囲いが 3 局・金無双が 1 局で**完成まで**当たった。**段だけを反転していたらこれらは 1 局も完成しない**ので、180 度回転が正しく効いていることの実測の裏づけになる(それでも、個々の形の名前が将棋として正しいかは別の話で、確かめていない)。
+
+**本体の挙動への影響(測っていないが、コードの作りから言えること)**: 目標形の経路(`rankReachableShapes`)は `side === "opponent"` を除くので、相手側の形は④「自分の目的」の候補には入らない。ただし**`data/shapes/` に置けば `detectShapes` は全件を判定する**ので、認識の一覧には現れる。本体へ移すかは司令塔の判断(このレーンは移さない)。
+
+**埋まった数**: 目録の行は**名前**で数えているので、相手側を足しても行は増えない(囲い 35 / 62 のまま)。**レコードの数は 45 件**(自分側 35 + 相手側 10)。
 
 ## 付録 A. 局ごとの一覧(4 人 70 局。40 手目と終局時の自玉・自飛の筋・相手玉・相手飛の筋、形の認識の前後)
 

@@ -1,0 +1,32 @@
+{
+  "id": "aigakari",
+  "name": "相掛かり",
+  "name_kana": "あいがかり",
+  "side": "self",
+  "family": "居飛車系",
+  "leads_to_shape_ids": [
+    "nakazumai",
+    "ichigogakoi"
+  ],
+  "scenario": null,
+  "recognition_pattern": [
+    {
+      "piece": "歩",
+      "to": "2e",
+      "order_hint": 1
+    },
+    {
+      "piece": "金",
+      "to": "7h",
+      "order_hint": 2
+    },
+    {
+      "piece": "飛",
+      "to": "2d",
+      "order_hint": 3
+    }
+  ],
+  "source": "【AI起草】自分側(先手)の相掛かり。お互いに飛車の前の歩を伸ばし合う相居飛車の戦型。定義と手順は Wikipedia『相掛かり』(https://ja.wikipedia.org/wiki/相掛かり (参照日 2026-09-25)) の本文(▲2六歩△8四歩▲2五歩△8五歩、▲7八金△3二金と角の頭を守ってから ▲2四歩△同歩▲同飛 と飛車先を交換するのが標準)による。recognition_pattern は先手の ▲2五歩・▲7八金・▲2四飛 を写した 3 手。**2六歩・2五歩は居飛車一般の手**なので、決め手になるのは 2四 への飛車(飛車先の交換)である。leads_to_shape_ids は目録で相掛かりの囲いとされるもの(中住まい・いちご囲い)。 戦型を認識するコードは apps/server/src/analysis/ に無いため、このレコードを足しても認識の数は動かない(**測れない**)。 追加の経緯: 2026-09-25 の知識レーン第 6 組(docs/LANE_KNOWLEDGE_LOG_2026-09.md §8)。相居飛車の 4 系統(4 人の棋譜で自分の飛車が 2 筋だった 21 局・相手が 8 筋だった 31 局が当たる)と、その中の代表的な指し方。",
+  "confidence_level": "high",
+  "review_status": "draft"
+}

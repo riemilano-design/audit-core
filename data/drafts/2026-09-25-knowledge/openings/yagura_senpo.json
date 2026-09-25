@@ -1,0 +1,33 @@
+{
+  "id": "yagura_senpo",
+  "name": "矢倉",
+  "name_kana": "やぐら",
+  "side": "self",
+  "family": "居飛車系",
+  "leads_to_shape_ids": [
+    "yagura_kinyagura",
+    "yagura_souyagura",
+    "yagura_katayagura"
+  ],
+  "scenario": null,
+  "recognition_pattern": [
+    {
+      "piece": "歩",
+      "to": "7f",
+      "order_hint": 1
+    },
+    {
+      "piece": "銀",
+      "to": "6h",
+      "order_hint": 2
+    },
+    {
+      "piece": "銀",
+      "to": "7g",
+      "order_hint": 3
+    }
+  ],
+  "source": "【AI起草】自分側(先手)の矢倉戦法。相居飛車で、先に角道を止めて玉を金銀で囲う戦型。定義と出だしは Wikipedia『矢倉囲い』(https://ja.wikipedia.org/wiki/矢倉囲い (参照日 2026-09-25)) の本文(相居飛車の最も一般的な出だしは ▲7六歩 △8四歩 ▲6八銀 △3四歩 で、5 手目に ▲6六歩 か ▲7七銀 で分かれる)による。recognition_pattern は出典が挙げる先手の 3 手(7六歩・6八銀・7七銀)を先手の絶対座標に写したもの。**7六歩と6八銀は矢倉以外の戦型でも指されるので、この 3 手がそろって初めて矢倉らしいと言える程度の手がかり**である(1 手ごとの一致で forming が立つ作りなので、序盤で他の戦型にも当たる)。leads_to_shape_ids は同記事が述べる完成形(金矢倉)とその派生。 戦型を認識するコードは apps/server/src/analysis/ に無いため、このレコードを足しても認識の数は動かない(**測れない**)。 追加の経緯: 2026-09-25 の知識レーン第 6 組(docs/LANE_KNOWLEDGE_LOG_2026-09.md §8)。相居飛車の 4 系統(4 人の棋譜で自分の飛車が 2 筋だった 21 局・相手が 8 筋だった 31 局が当たる)と、その中の代表的な指し方。",
+  "confidence_level": "high",
+  "review_status": "draft"
+}
