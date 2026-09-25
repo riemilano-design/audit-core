@@ -1,0 +1,29 @@
+{
+  "id": "tonari_ryu",
+  "name": "都成流",
+  "name_kana": "となりりゅう",
+  "side": "opponent",
+  "family": "対振り持久戦",
+  "leads_to_shape_ids": [],
+  "scenario": null,
+  "recognition_pattern": [
+    {
+      "piece": "銀",
+      "to": "3b",
+      "order_hint": 1
+    },
+    {
+      "piece": "飛",
+      "to": "2d",
+      "order_hint": 2
+    },
+    {
+      "piece": "金",
+      "to": "3a",
+      "order_hint": 3
+    }
+  ],
+  "source": "【AI起草 / 出典は下記】Wikipedia『都成流』(https://ja.wikipedia.org/wiki/都成流 (参照日 2026-09-25))による。**後手番が誘導する戦術**で、別名は強引向飛車。▲2六歩 △3四歩 ▲2五歩 の進行で後手が敢えて △3二銀 と上がり、△2四歩 ▲同歩 △同飛 と進めて最後に △3一金 と寄る形。2筋 からの逆襲を狙う。 座標は後手の絶対座標(docs/DATA_MODEL.md の規約)。戦型を認識するコードは apps/server/src/analysis/ に無いため、このレコードを足しても認識の数は動かない(2026-09-25 司令塔の訂正、docs/KNOWLEDGE_LANE_BRIEF_2026-09-25.md §5.1)。追加の経緯: 2026-09-25 の知識レーン第 21 組(docs/LANE_KNOWLEDGE_LOG_2026-09.md §24)。人間の決定(2026-09-25、網羅)による目録の埋め。",
+  "confidence_level": "medium",
+  "review_status": "draft"
+}

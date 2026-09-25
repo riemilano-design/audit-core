@@ -1,0 +1,19 @@
+{
+  "id": "rokusuji_kuraidori",
+  "name": "6筋位取り",
+  "name_kana": "ろくすじくらいどり",
+  "side": "opponent",
+  "family": "対振り持久戦",
+  "leads_to_shape_ids": [],
+  "scenario": null,
+  "recognition_pattern": [
+    {
+      "piece": "歩",
+      "to": "4d",
+      "order_hint": 1
+    }
+  ],
+  "source": "【AI起草 / 出典は下記】Wikipedia『6筋位取り』(https://ja.wikipedia.org/wiki/6筋位取り (参照日 2026-09-25))による。居飛車が振り飛車に対して 6筋(後手陣なら 4筋)の位を取る持久戦策で、出典は ▲6六歩 と突いて位を確保することを述べている。**後手の座標へ盤ごと 180 度回して写した**(筋 f → 10−f、段 r → 10−r。6六 → 4四)。**この 1 手は区別にならない**: 4人分の実棋譜 70 局で相手の 4四歩 は 40 局に現れる普通の手である(docs/LANE_KNOWLEDGE_LOG_2026-09.md §15.1)。そのため第 14 組では狙い(`data/intents`)としての追加を見送った(§17 の保留)。戦型は認識に使われないのでレコードとしては残すが、**将来コードを付けるときにこの 1 件だけで判定してはいけない**。位のマスが 4五 か 4四 かも出典から読めない。 座標は後手の絶対座標(docs/DATA_MODEL.md の規約)。戦型を認識するコードは apps/server/src/analysis/ に無いため、このレコードを足しても認識の数は動かない(2026-09-25 司令塔の訂正、docs/KNOWLEDGE_LANE_BRIEF_2026-09-25.md §5.1)。追加の経緯: 2026-09-25 の知識レーン第 21 組(docs/LANE_KNOWLEDGE_LOG_2026-09.md §24)。人間の決定(2026-09-25、網羅)による目録の埋め。",
+  "confidence_level": "low",
+  "review_status": "draft"
+}

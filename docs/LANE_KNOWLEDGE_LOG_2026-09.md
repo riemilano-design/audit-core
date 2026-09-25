@@ -306,13 +306,13 @@
 | 97 | 5七金戦法(対玉頭銀) |  | 対振り急戦 | **出典なし** | <https://ja.wikipedia.org/wiki/%E5%B0%86%E6%A3%8B%E3%81%AE%E6%88%A6%E6%B3%95%E4%B8%80%E8%A6%A7> | 未 |
 | 98 | 二枚銀3八飛型 |  | 対振り急戦 | **出典なし** | <https://ja.wikipedia.org/wiki/%E5%B0%86%E6%A3%8B%E3%81%AE%E6%88%A6%E6%B3%95%E4%B8%80%E8%A6%A7> | 未 |
 | 99 | きmきm金 |  | 対振り急戦 | **出典なし** | <https://ja.wikipedia.org/wiki/%E5%B0%86%E6%A3%8B%E3%81%AE%E6%88%A6%E6%B3%95%E4%B8%80%E8%A6%A7> | 未 |
-| 100 | 居飛車穴熊(戦法) |  | 対振り持久戦 | <https://ja.wikipedia.org/wiki/%E5%B1%85%E9%A3%9B%E8%BB%8A%E7%A9%B4%E7%86%8A> | <https://ja.wikipedia.org/wiki/Category%3A%E5%AF%BE%E6%8C%AF%E3%82%8A%E9%A3%9B%E8%BB%8A> | 未 |
-| 101 | 左美濃(戦法) |  | 対振り持久戦 | <https://ja.wikipedia.org/wiki/%E5%B7%A6%E7%BE%8E%E6%BF%83> | <https://ja.wikipedia.org/wiki/Category%3A%E5%AF%BE%E6%8C%AF%E3%82%8A%E9%A3%9B%E8%BB%8A> | 未 |
+| 100 | 居飛車穴熊(戦法) |  | 対振り持久戦 | <https://ja.wikipedia.org/wiki/%E5%B1%85%E9%A3%9B%E8%BB%8A%E7%A9%B4%E7%86%8A> | <https://ja.wikipedia.org/wiki/Category%3A%E5%AF%BE%E6%8C%AF%E3%82%8A%E9%A3%9B%E8%BB%8A> | 下書き済み(ibisha_anaguma_senpo 自分。第 21 組) |
+| 101 | 左美濃(戦法) |  | 対振り持久戦 | <https://ja.wikipedia.org/wiki/%E5%B7%A6%E7%BE%8E%E6%BF%83> | <https://ja.wikipedia.org/wiki/Category%3A%E5%AF%BE%E6%8C%AF%E3%82%8A%E9%A3%9B%E8%BB%8A> | 下書き済み(hidarimino_senpo 自分。第 21 組) |
 | 102 | 玉頭位取り |  | 対振り持久戦 | <https://ja.wikipedia.org/wiki/%E7%8E%89%E9%A0%AD%E4%BD%8D%E5%8F%96%E3%82%8A> | <https://ja.wikipedia.org/wiki/Category%3A%E5%AF%BE%E6%8C%AF%E3%82%8A%E9%A3%9B%E8%BB%8A> | 下書き済み(狙い gyokuto_kuraidori 相手側。第 14 組) |
 | 103 | 5筋位取り |  | 対振り持久戦 | <https://ja.wikipedia.org/wiki/5%E7%AD%8B%E4%BD%8D%E5%8F%96%E3%82%8A> | <https://ja.wikipedia.org/wiki/Category%3A%E5%AF%BE%E6%8C%AF%E3%82%8A%E9%A3%9B%E8%BB%8A> | 下書き済み(狙い gosuji_kuraidori_opponent 相手側。第 14 組) |
-| 104 | 6筋位取り |  | 対振り持久戦 | <https://ja.wikipedia.org/wiki/6%E7%AD%8B%E4%BD%8D%E5%8F%96%E3%82%8A> | <https://ja.wikipedia.org/wiki/Category%3A%E5%AF%BE%E6%8C%AF%E3%82%8A%E9%A3%9B%E8%BB%8A> | 未 |
-| 105 | 飯島流引き角戦法 |  | 対振り持久戦 | <https://ja.wikipedia.org/wiki/%E9%A3%AF%E5%B3%B6%E6%B5%81%E5%BC%95%E3%81%8D%E8%A7%92%E6%88%A6%E6%B3%95> | <https://ja.wikipedia.org/wiki/Category%3A%E5%AF%BE%E6%8C%AF%E3%82%8A%E9%A3%9B%E8%BB%8A> | 未 |
-| 106 | 都成流 |  | 対振り持久戦 | <https://ja.wikipedia.org/wiki/%E9%83%BD%E6%88%90%E6%B5%81> | <https://ja.wikipedia.org/wiki/Category%3A%E5%AF%BE%E6%8C%AF%E3%82%8A%E9%A3%9B%E8%BB%8A> | 未 |
+| 104 | 6筋位取り |  | 対振り持久戦 | <https://ja.wikipedia.org/wiki/6%E7%AD%8B%E4%BD%8D%E5%8F%96%E3%82%8A> | <https://ja.wikipedia.org/wiki/Category%3A%E5%AF%BE%E6%8C%AF%E3%82%8A%E9%A3%9B%E8%BB%8A> | 下書き済み(rokusuji_kuraidori 相手側、low。第 21 組。1 手では区別にならないことを source に明記) |
+| 105 | 飯島流引き角戦法 |  | 対振り持久戦 | <https://ja.wikipedia.org/wiki/%E9%A3%AF%E5%B3%B6%E6%B5%81%E5%BC%95%E3%81%8D%E8%A7%92%E6%88%A6%E6%B3%95> | <https://ja.wikipedia.org/wiki/Category%3A%E5%AF%BE%E6%8C%AF%E3%82%8A%E9%A3%9B%E8%BB%8A> | 下書き済み(iijima_hikikaku 自分。第 21 組) |
+| 106 | 都成流 |  | 対振り持久戦 | <https://ja.wikipedia.org/wiki/%E9%83%BD%E6%88%90%E6%B5%81> | <https://ja.wikipedia.org/wiki/Category%3A%E5%AF%BE%E6%8C%AF%E3%82%8A%E9%A3%9B%E8%BB%8A> | 下書き済み(tonari_ryu 相手側。第 21 組) |
 | 107 | 位取り戦法 |  | 対振り持久戦 | **出典なし** | <https://ja.wikipedia.org/wiki/%E5%B0%86%E6%A3%8B%E3%81%AE%E6%88%A6%E6%B3%95%E4%B8%80%E8%A6%A7> | 未 |
 | 108 | 糸谷流右玉 |  | 対振り持久戦 | **出典なし** | <https://ja.wikipedia.org/wiki/%E5%B0%86%E6%A3%8B%E3%81%AE%E6%88%A6%E6%B3%95%E4%B8%80%E8%A6%A7> | 未 |
 | 109 | ホラ囲い |  | 対振り持久戦 | **出典なし** | <https://ja.wikipedia.org/wiki/%E5%B0%86%E6%A3%8B%E3%81%AE%E6%88%A6%E6%B3%95%E4%B8%80%E8%A6%A7> | 未 |
@@ -320,11 +320,11 @@
 | 111 | トーチカ戦法 |  | 対振り持久戦 | **出典なし** | <https://ja.wikipedia.org/wiki/%E5%B0%86%E6%A3%8B%E3%81%AE%E6%88%A6%E6%B3%95%E4%B8%80%E8%A6%A7> | 未 |
 | 112 | 振り飛車 |  | 振り飛車(総称) | <https://ja.wikipedia.org/wiki/%E6%8C%AF%E3%82%8A%E9%A3%9B%E8%BB%8A> | <https://ja.wikipedia.org/wiki/Category%3A%E6%8C%AF%E3%82%8A%E9%A3%9B%E8%BB%8A> | 未 |
 | 113 | 相振り飛車 |  | 振り飛車一般 | <https://ja.wikipedia.org/wiki/%E7%9B%B8%E6%8C%AF%E3%82%8A%E9%A3%9B%E8%BB%8A> | <https://ja.wikipedia.org/wiki/Category%3A%E6%8C%AF%E3%82%8A%E9%A3%9B%E8%BB%8A> | 保留(対局の組み合わせの名前で side に当てはまらない。§7) |
-| 114 | 角交換振り飛車 |  | 振り飛車一般 | <https://ja.wikipedia.org/wiki/%E8%A7%92%E4%BA%A4%E6%8F%9B%E6%8C%AF%E3%82%8A%E9%A3%9B%E8%BB%8A> | <https://ja.wikipedia.org/wiki/Category%3A%E6%8C%AF%E3%82%8A%E9%A3%9B%E8%BB%8A> | 未 |
+| 114 | 角交換振り飛車 |  | 振り飛車一般 | <https://ja.wikipedia.org/wiki/%E8%A7%92%E4%BA%A4%E6%8F%9B%E6%8C%AF%E3%82%8A%E9%A3%9B%E8%BB%8A> | <https://ja.wikipedia.org/wiki/Category%3A%E6%8C%AF%E3%82%8A%E9%A3%9B%E8%BB%8A> | 保留(定義の核が角交換 = 盤上から駒が消えることで、recognition_pattern は「この駒がここに来た」しか書けない。第 21 組) |
 | 115 | 角交換相振り飛車 |  | 振り飛車一般 | <https://ja.wikipedia.org/wiki/%E8%A7%92%E4%BA%A4%E6%8F%9B%E7%9B%B8%E6%8C%AF%E3%82%8A%E9%A3%9B%E8%BB%8A> | <https://ja.wikipedia.org/wiki/Category%3A%E6%8C%AF%E3%82%8A%E9%A3%9B%E8%BB%8A> | 未 |
-| 116 | 陽動振り飛車 |  | 振り飛車一般 | <https://ja.wikipedia.org/wiki/%E9%99%BD%E5%8B%95%E6%8C%AF%E3%82%8A%E9%A3%9B%E8%BB%8A> | <https://ja.wikipedia.org/wiki/Category%3A%E6%8C%AF%E3%82%8A%E9%A3%9B%E8%BB%8A> | 未 |
-| 117 | 玉頭銀 |  | 振り飛車一般 | <https://ja.wikipedia.org/wiki/%E7%8E%89%E9%A0%AD%E9%8A%80> | <https://ja.wikipedia.org/wiki/Category%3A%E6%8C%AF%E3%82%8A%E9%A3%9B%E8%BB%8A> | 未 |
-| 118 | 左玉 |  | 振り飛車一般 | <https://ja.wikipedia.org/wiki/%E5%B7%A6%E7%8E%89> | <https://ja.wikipedia.org/wiki/Category%3A%E6%8C%AF%E3%82%8A%E9%A3%9B%E8%BB%8A> | 未 |
+| 116 | 陽動振り飛車 |  | 振り飛車一般 | <https://ja.wikipedia.org/wiki/%E9%99%BD%E5%8B%95%E6%8C%AF%E3%82%8A%E9%A3%9B%E8%BB%8A> | <https://ja.wikipedia.org/wiki/Category%3A%E6%8C%AF%E3%82%8A%E9%A3%9B%E8%BB%8A> | 保留(定義が「いつ飛車を振るか」というタイミングで、スキーマは手順の前後を表せない。第 21 組) |
+| 117 | 玉頭銀 |  | 振り飛車一般 | <https://ja.wikipedia.org/wiki/%E7%8E%89%E9%A0%AD%E9%8A%80> | <https://ja.wikipedia.org/wiki/Category%3A%E6%8C%AF%E3%82%8A%E9%A3%9B%E8%BB%8A> | 下書き済み(gyokutogin_senpo 自分。第 21 組。相手側の狙いは intents の gyokutogin) |
+| 118 | 左玉 |  | 振り飛車一般 | <https://ja.wikipedia.org/wiki/%E5%B7%A6%E7%8E%89> | <https://ja.wikipedia.org/wiki/Category%3A%E6%8C%AF%E3%82%8A%E9%A3%9B%E8%BB%8A> | 下書き済み(hidarigyoku 自分、low。第 21 組) |
 | 119 | 高田流左玉 |  | 振り飛車一般 | <https://ja.wikipedia.org/wiki/%E9%AB%98%E7%94%B0%E6%B5%81%E5%B7%A6%E7%8E%89> | <https://ja.wikipedia.org/wiki/Category%3A%E6%8C%AF%E3%82%8A%E9%A3%9B%E8%BB%8A> | 未 |
 | 120 | 中飛車 |  | 中飛車 | <https://ja.wikipedia.org/wiki/%E4%B8%AD%E9%A3%9B%E8%BB%8A> | <https://ja.wikipedia.org/wiki/Category%3A%E4%B8%AD%E9%A3%9B%E8%BB%8A> | 既存 nakabisha(相手)+ 下書き済み nakabisha_self(自分)、intent nakabisha_kuraidori |
 | 121 | ゴキゲン中飛車 |  | 中飛車 | <https://ja.wikipedia.org/wiki/%E3%82%B4%E3%82%AD%E3%82%B2%E3%83%B3%E4%B8%AD%E9%A3%9B%E8%BB%8A> | <https://ja.wikipedia.org/wiki/Category%3A%E4%B8%AD%E9%A3%9B%E8%BB%8A> | 下書き済み(gokigen_nakabisha 相手) |
@@ -1030,6 +1030,25 @@
 **重なりの追記**: `ureshino` の 7九角 は `hikikaku`・`yontekaku` と同じマスで、初手の 6八銀 で区別する。`yokofudori_33kei` の 3三 は `yokofudori_33kaku` と同じマスで、駒種(桂と角)で区別する。
 
 **埋まった数**: 戦法 **94 / 184**(うち保留 7 件)・囲い 自分側 35 / 62・相手側 35 / 35・狙い 18 / 67。**戦法は目録の半分を越えた。**
+
+## 24. 第 21 組(2026-09-25): 戦法 7 件 + 保留 2 件 ― **測れない(認識のコードが無い)**
+
+**足した ID**: `ibisha_anaguma_senpo`(居飛車穴熊)・`hidarimino_senpo`(左美濃)・`rokusuji_kuraidori`(6筋位取り、相手側・low)・`iijima_hikikaku`(飯島流引き角戦法)・`tonari_ryu`(都成流、相手側)・`gyokutogin_senpo`(玉頭銀)・`hidarigyoku`(左玉、low)。出典は Wikipedia の個別ページ(参照日 2026-09-25)。左美濃だけは将棋ジムの囲いページも併用した。**スキーマ検証 96 件 OK**・**Kind 3 の口で例外なし・承認済み変化 0 件**。
+
+**保留 2 件 ― どちらも「スキーマで表せない」の新しい型**:
+
+| 名前 | 保留の理由 |
+|---|---|
+| 角交換振り飛車 | **定義の核が角交換、つまり盤上から駒が消えること。** `recognition_pattern` は「この駒がここに来た」しか書けない(取る・打つ・成るを区別できない、は §5 の 13 件でも出た型) |
+| 陽動振り飛車 | **定義が「いつ飛車を振るか」というタイミング。** 相居飛車の形から途中で振り飛車へ転じることが本体で、スキーマは手順の前後(どちらが先か)を表せない |
+
+**第 14 組で見送った 6筋位取りを、戦型としては書いた。** 狙い(`data/intents`)としては「出典の ▲6六歩 を写した 4四歩 が 70 局中 40 局に出る普通の手で区別にならない」ため見送ったが、**戦型は認識に使われないので、区別にならないことを `source` に明記したうえでレコードにした**。同じ名前が、狙いとしては書けず戦型としては書ける例である。
+
+**同じ名前が別の種類にもある例が 2 件目**: 玉頭銀は、自分側(先手)の戦型として 5六-4五-3四(この組)、相手側(後手)の狙いとして 5四-6五-7六(`data/intents` の `gyokutogin`、第 13 組)の 2 つのレコードになった。**同じ将棋用語が、どちら側から見るかで別のレコードになる**ことを記録に残す。
+
+**左美濃の出典から囲いの座標も 3 つ取れた**(玉8八・銀7八 = 左美濃、玉8七 = 天守閣美濃、銀8七・金7八 = 居飛車銀冠)。**囲いの目録の「居飛車銀冠」の行(未)はこれで埋められる**が、囲いは測れる側なので、次に囲いをまとめて足すときに測定つきで入れる。
+
+**埋まった数**: 戦法 **103 / 184**(うち保留 9 件)・囲い 自分側 35 / 62・相手側 35 / 35・狙い 18 / 67。
 
 ## 付録 A. 局ごとの一覧(4 人 70 局。40 手目と終局時の自玉・自飛の筋・相手玉・相手飛の筋、形の認識の前後)
 

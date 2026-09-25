@@ -1,0 +1,24 @@
+{
+  "id": "hidarimino_senpo",
+  "name": "左美濃",
+  "name_kana": "ひだりみの",
+  "side": "self",
+  "family": "対振り持久戦",
+  "leads_to_shape_ids": [],
+  "scenario": null,
+  "recognition_pattern": [
+    {
+      "piece": "玉",
+      "to": "8h",
+      "order_hint": 1
+    },
+    {
+      "piece": "銀",
+      "to": "7h",
+      "order_hint": 2
+    }
+  ],
+  "source": "【AI起草 / 出典は下記】Wikipedia『左美濃』(https://ja.wikipedia.org/wiki/左美濃 (参照日 2026-09-25))と将棋ジム『左美濃』(https://shogi-gym.com/kakoi/mino/hidarimino/ (参照日 2026-09-25))による。居飛車が美濃囲いの形を玉の側(8筋)に作る指し方で、**基本は玉8八・銀7八**、金は初期位置の 6八 のまま。**玉を 8七 の三段目に上げた形は天守閣美濃と呼ばれる別の名前**で、玉頭(8六)とコビン(7六)が薄くなる。銀を 8七 に進めた形が居飛車銀冠(銀8七・金7八)。recognition_pattern は基本形の 2 件だけを置いた(天守閣美濃・居飛車銀冠は別のレコードにするべきもので、囲いの目録の側に行がある)。 座標は先手の絶対座標(docs/DATA_MODEL.md の規約)。戦型を認識するコードは apps/server/src/analysis/ に無いため、このレコードを足しても認識の数は動かない(2026-09-25 司令塔の訂正、docs/KNOWLEDGE_LANE_BRIEF_2026-09-25.md §5.1)。追加の経緯: 2026-09-25 の知識レーン第 21 組(docs/LANE_KNOWLEDGE_LOG_2026-09.md §24)。人間の決定(2026-09-25、網羅)による目録の埋め。",
+  "confidence_level": "medium",
+  "review_status": "draft"
+}
