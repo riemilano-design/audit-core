@@ -669,3 +669,5 @@ F-3(§11.9.9)の直し。統括が承認し、納品レーンが実装(worktree 
 **計画(予測を先に)**: `check_answer.py` の `BANNED_WORDS = []`(`check_line_banned` と検査 3 の枠は残す。語が無ければ何も落とさない)。`check_delivery.py` はコードを変えず(`BANNED_18 = BANNED_WORDS[:18]` が空になり、語は `@`・`/Users/`・「水匠」・`None` の 4 つ)コメントだけ。試験は `check_delivery_test.py` の個数 22 → 4、`check_answer_test.py` に「禁止語を含む行が落ちない」1 本。**二本立て**: 44 局の基準(3 組、`_deliver1_onecmd/deliver_after` の複製に `--from answer-check`)と 4 人目(`deliver1` の複製)で、前後の `answer-check`・`check-delivery` の出力が「語 22 個 → 4 個」以外は同一(予測)。直した後だけ、「癖」「傾向」「あなた」を足した B md が rc=0(直す前は 3 件落ちる)。変異 2 本。vitest は `lib/hypothesis.test.ts` のパリティ 1 本だけ落ちる(想定内 ― 開発・診断レーンが `HYPOTHESIS_BANNED_WORDS` を同時に直す)。指示書 scratchpad `BANNED_EMPTY14_BRIEF.md`、実装担当(opus)を worktree で起動。
 
 **分担**: `docs/DELIVER_GATES.md` §2 検査 5・§3 検査 3 の記述(「禁止語なし。断定しないは残り、機械では見ない → 監査が読む」)と `lib/hypothesis.ts`・パリティ試験は開発・診断レーン(1 ファイル 1 席)。コミットの同期: 直前に「今コミットする」、直後に hash を両方へ送る。
+
+**司令塔の追記(2026-09-25 夜)**: 範囲と同期の手順で可。`DELIVER_GATES.md` は節単位で開発・診断レーン長の節(§2 検査 5・§3 検査 3)なので文面を出す形で正しい。人間の原則(`63f8888`)「事実は正確に、読みは間違ってもいいから伝わる答えを」により、冊子の文は今後「〜の癖がありそうです」のような言い切りに近い形が増える。**検査 1・2・7(数・手・局面の照合)はこれまでどおり 1 つも通さない ― そこは緩めない。**
