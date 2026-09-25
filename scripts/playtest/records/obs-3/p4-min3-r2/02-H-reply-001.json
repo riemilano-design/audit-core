@@ -1,6 +1,6 @@
 {
-  "schemaVersion": "0.2",
-  "hypothesisId": "H-p4-min3-r2-reply-001",
+  "schemaVersion": "0.3",
+  "hypothesisId": "H-p4-min3r2reply-001",
   "subject": {
     "customer": "p4",
     "groups": ["3 分"],

@@ -1,6 +1,6 @@
 {
-  "schemaVersion": "0.2",
-  "hypothesisId": "H-p4-min3-r2-fork-003",
+  "schemaVersion": "0.3",
+  "hypothesisId": "H-p4-min3r2fork-003",
   "subject": {
     "customer": "p4",
     "groups": [
