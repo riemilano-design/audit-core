@@ -595,7 +595,15 @@ typecheck rc=0(worktree の緑。P-84)。所見: `willHaveWhatif` の `"pdf"` �
 
 **手順**: 実装担当(worktree。指示の冒頭に「`<p4>` とだけ書く・`person` の値を写さない・未追跡は `git diff --no-index`・add/reset/checkout/stash 禁止」)→ 独立監査 1 回(変異: 適合器の `optional` を `true` にする → `completed`/`forming` の試験が落ちる/`side` の色を取り違える → self/opponent の試験が落ちる/証拠なしを `forming` にする → `none` の試験が落ちる)→ パス指定コミット → 実測をここに追記。
 
-**実測の結果**: (後で追記。)
+**実測の結果**(2026-09-25。コミット `09cf6ff`〈worktree 側 `8543a50` の cherry-pick〉。新規 2 ファイルだけ、既存の変更 0):
+- vitest `apps/server` 732 → **741**(予測どおり、+9)。`scripts/playtest` **1682** 不変。`npm run typecheck --prefix apps/server` exit 0。監査担当の実行: `npm test --prefix apps/server` 740 passed + 1 skipped、`npx vitest run --root scripts/playtest` 1682。
+- **独立監査 1 回: GO**(変異 3/3 が予測した試験で落ちた: `optional: true` → 7 本/`side` 反転 → 同じ 7 本/証拠 0 の `none` を `forming` に書き換え → 2 本。沈黙 0、復元後 shasum 一致)。差分の読み: 委譲だけ(自前の判定・閾値・並び替え・status 書き換えなし)、`order_hint`・`leads_to_shape_ids`・`scenario` 参照 0、既定ディレクトリ定数・キャッシュ 0、`openingDetector` を import する既存ファイル 0、`data/`・`data/schemas/`・`recognitionTimeline.ts`・`stateResponse.ts`・`apps/web` 差分 0。名前・パスの混入 0(ファイル)。**実装担当の報告文には顧客フォルダ名が 1 回出た**(ファイルには無し。記録には写していない)。
+- **基準の入力(`<p4>` 3 分の組 18 局の固定棋譜を 30 手目まで再生。`readSideAlignment` で `mirrored` の局は `startSfen` から。エンジン 0 本、`out/` に書かず出力は scratchpad。実装担当は出力 1944 行を Python で独立に数え直して不一致 0、監査担当も同じ JSON を数え直して一致)**: 候補 **108**/111(予測どおり)/`completed` が 1 件以上ある局 **18/18**(予測「10 局以上」を満たすが全局。対 1 の候補 35 件は 1 手で立つ)/`forming` かつ証拠 1 件 延べ **196**、1 局あたり 10.9(予測「5 件以上」を満たす)/`forming` の証拠 2 件以上は **6** 件だけ(3 件以上なし)/全体 `completed` **56**・`forming` **202**・`none` **1686**。
+- **対の数ごと(延べ = 18 局 × 候補)**: self ― 対 1: 候補 18・completed 18・forming 0/対 2: 34・3・77(証拠 1)/対 3: 24・1・75+3(証拠 2+)/対 4: 6・0・16/対 5: 2・0・12+3。opponent ― 対 1: 17・33・0/対 2: 3・1・6/対 3: 4・0・10。**I-9 相当(証拠 ≤ 1 かつ欠け ≥ 2)**: 式をそのまま全行に当てると 1219(self 1100 / opponent 119)だが、うち **1106 は一致 0 の `none` の行**(何も申告していない)。**申告している行(`forming`)に限ると 113(self 103 / opponent 10)で、すべて対 3 以上**。= 計画の「対 2 以下では起きえない」は `forming` に限れば当たり、式の適用範囲を書いていなかったのは計画の不備(**I-9 の物差しは「申告している行」に当てる**、と次から明記)。対 2 の I-9 相当 0 件 = §12.3 の 6 の盲点(2 枚の形)と同型。
+- **`completed` 56 のうち 15 件は証拠 0**(すべて同じ 1 件: 相手の 2三の歩、対 1、初期配置のまま)。`resolveStatus` の既存定義(欠け 0 なら証拠を問わず `completed`)どおり。**P-86 として登録**(`docs/PHASES.md`、一意 97 → 98)。STEP 3(控えめな露出)の対象。
+- **レーン長の判断(監査の「決めていない点」5 つ)**: (1) 第 1 引数は「判定する局面の SFEN」で `sfen`(委譲先と同じ)。計画の `startSfen` は私の書き誤り。(2) `initialSfen` の渡り口は委譲先が読まないので**レーン長が監査後に外した**(動きは変わらない: 741/741・typecheck 緑で再確認。コミットに含む)。(3) 証拠 0 の `completed` = P-86、露出は STEP 3 で「見える側」に倒して扱う。(4) `characteristics` の写しは常に空(スキーマが許さない)= 死枝だが害なし、そのまま。(5) 111 件の試験は `data/drafts/…/openings/` の実ファイル数に結合(知識レーンが 1 件足すと落ちる)→ **OPEN-2 で固定 fixture か性質の assert に変える**(知識レーンへ「戦型の下書きを足すと apps/server の試験 1 本が落ちる」と知らせる)。
+- **予測が外れた点**: completed が 1 件以上ある局は 10 以上でなく 18/18(下限は満たすが幅が緩すぎた)。I-9 相当の式の適用範囲(上)。
+- 次: OPEN-2(測る道具のコミット + 111 件の試験の結合を外す)→ STEP 3(控えめな露出 + `expired`)。
 
 ### 12.6b 統括への案 3 件(2026-09-25。正本は書き換えない。人間へそのまま出せる形: 何を・どこに・なぜ・何が変わらないか)
 
