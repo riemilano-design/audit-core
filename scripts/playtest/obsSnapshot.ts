@@ -7,6 +7,7 @@
 //     --patient <patient_report_data.json> --time-cause <time_cause.json> \
 //     [--whatif-data <whatif_report_data.json>] [--direct <direct_answers.json>] \
 //     [--final-positions <final_positions.json>] [--menu <answer_menu.json>] \
+//     [--extra <obs_extra.json>(STEP OBS-5'。scripts/playtest/obsExtra.ts の出力)] \
 //     [--obs-items <OBSERVATION_ITEMS.md>(既定は docs/OBSERVATION_ITEMS.md)] \
 //     --out <obs_snapshot.json>
 //
@@ -35,6 +36,7 @@ const USAGE = [
   "    --patient <patient_report_data.json> --time-cause <time_cause.json> \\",
   "    [--whatif-data <whatif_report_data.json>] [--direct <direct_answers.json>] \\",
   "    [--final-positions <final_positions.json>] [--menu <answer_menu.json>] \\",
+  "    [--extra <obs_extra.json>] \\",
   "    [--obs-items <OBSERVATION_ITEMS.md>] --out <obs_snapshot.json>",
 ].join("\n");
 
@@ -65,6 +67,7 @@ function main(): number {
   const directPath = argValue(args, "--direct");
   const finalPositionsPath = argValue(args, "--final-positions");
   const menuPath = argValue(args, "--menu");
+  const extraPath = argValue(args, "--extra");
   const obsItemsPath = argValue(args, "--obs-items") ?? DEFAULT_OBS_ITEMS_PATH;
 
   const registry = loadObsRegistry(obsItemsPath);
@@ -77,6 +80,7 @@ function main(): number {
     direct: directPath === undefined ? undefined : readInputFile(directPath),
     finalPositions: finalPositionsPath === undefined ? undefined : readInputFile(finalPositionsPath),
     menu: menuPath === undefined ? undefined : readInputFile(menuPath),
+    extra: extraPath === undefined ? undefined : readInputFile(extraPath),
   };
 
   const snapshot = buildObsSnapshot(inputs, { customer, group, registry, gitHead: gitState.gitHead, dirty: gitState.dirty });

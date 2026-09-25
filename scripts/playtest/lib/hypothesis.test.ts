@@ -2,7 +2,7 @@
 // (lib/hypothesis.ts)を見る。**エンジンは起動しない。**
 //
 // 【構成】H-1〜H-8 × 通る 1・落ちる 1(16)+ スキーマ 4(通る・知らない欄・版違い・value の oneOf)+
-// 登録簿 2(108 本・obs.timeSearch.col.* 30 本)+ パリティ 1(report-pdf/check_answer.py の BANNED_WORDS と一致)+
+// 登録簿 2(111 本・obs.timeSearch.col.* 30 本)+ パリティ 1(report-pdf/check_answer.py の BANNED_WORDS と一致)+
 // CLI 1(hypothesisCheck.ts を子プロセスで回し exit code を見る)= 24 本。
 // 【落ちる入力】§12.2「落ちる入力(H ごとに 1 つ、試験に固定)」をそのまま使う。
 // 【基準の例】§12.2 の設計案 §7.1 の例を実物のパス・欄名に直した fixture
@@ -194,8 +194,9 @@ describe("スキーマ(契約の欄)", () => {
 });
 
 describe("登録簿(docs/OBSERVATION_ITEMS.md §1)", () => {
-  it("existing の大きさは 108", () => {
-    expect(registry.size).toBe(108);
+  // STEP OBS-5'(docs/LANE_DIAG_LOG_2026-09.md §12.6): obs_extra.json の 3 本を §1.6 に足したので 108→111。
+  it("existing の大きさは 111", () => {
+    expect(registry.size).toBe(111);
   });
 
   it("obs.timeSearch.col.* は 30 本", () => {

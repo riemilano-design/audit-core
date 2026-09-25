@@ -109,6 +109,14 @@
 | `obs.time.phaseSpentPatient` | `time.phaseSpent` | `PatientPhaseSpent` `lib/reportData.ts:696`(`PhaseSpentGroup` `:688`・`PerGame` `:708`・`MidOver` `:722`) | 本編用の段ごとの消費(組ごと・局ごと・中盤の超え) | 無 |
 | `obs.time.timeUpLosses` | `time.timeUpLosses[]`(本人が時間で負けた局だけ。相手の切れ負けは入らない) | `TimeUpGame` `lib/reportData.ts:810` | 時間負けの局の一覧 | 無 |
 
+`obs_extra.json`(STEP OBS-5'。docs/LANE_DIAG_LOG_2026-09.md §12.6。1 周で不足した観測項目 2 つ「組と局・手の対応」「段ごとの手数あたり」を、既存の材料の写しで作った。`kind:"obs_extra"`):
+
+| obs ID | パス | 型(file:line) | 中身 | 契約 |
+|---|---|---|---|---|
+| `obs.time.pairSpent` | `pairs[].{gameNo, branchPly, displayPly, phase, spentSec, spentBucket, collapsed}` | `ObsExtraPair` `lib/obsExtra.ts` | 「組」(`countedPairsOf`)1 つずつに局・手数・段・消費・段ごとの区分・崩れたかを付けた写し。`spentSec`/`spentBucket` は取れない組は `null`(落とさない) | 無 |
+| `obs.time.phaseMoves` | `phaseMoves[].{gameNo, timeUpLoss, early, mid, late}.{moves, sec}` | `ObsExtraPhaseMoves` `lib/obsExtra.ts` | 局ごとの段別の手数と消費の合計(`phaseSpentOfGame` と同じ数え方に手数を添えた) | 無 |
+| `obs.time.phaseSecPerMoveMedians` | `phaseSecPerMoveMedians.{timeUpLoss,other}.{games, early, mid, late}` | `ObsExtraPhaseSecPerMoveMedians` `lib/obsExtra.ts` | 段ごとの手数あたり秒(`sec/moves`)の中央値。**existing(計算あり: 中央値。閾値ではない)**。`moves` が 0 の局はその段の中央値の分母に入れない(段の列からだけ除く。`games` は組の局の総数で段によらない = レーン長の判断、§12.6 の実測に記録)。`moveSeconds` が無い局は `{moves: 0, sec: 0}` になり「秒が無い」と「その段で 0 手」を区別しない(既知。基準の組では発生なし) | 無 |
+
 ### 1.7 `obs.timeSearch.*`(探索。出どころ `time_cause_search.json`(`kind:"time_cause_search"`)。契約 無)
 
 30 列は `SEARCH_COLUMNS` `lib/timeSearch.ts:63` の並びをそのまま ID にする(`obs.timeSearch.col.<列名>`)。値域は `MoveFeatureRow` の各欄(`null` = その手では測れない):
@@ -228,19 +236,19 @@
 
 | 数えるもの | 数 |
 |---|---|
-| `existing` の ID(§1) | **108** = eval 3 + fe 8 + moment 3 + cf 7 + cond 4 + time 20(局 11・組 3・本編 6)+ timeSearch 35(列 30 + 5)+ fork 7 + side 4(`top1`・`actual` を 2 と数える)+ read 6 + direct 3 + menu 1 + recog 2 + report 5(列 30 以外の 78 本は表の行を機械で数えた。列 30 は `SEARCH_COLUMNS` の要素数) |
-| うち既存の欄名と 1 対 1 で対応した ID | **108**(すべて。ID の名前 = 欄名または型名) |
-| うち JSON スキーマ(契約)のある ID | **16** = eval 1(`standing`)+ fe 8 + moment 3 + cond 4。cf 7 は「穴」(スキーマの `properties` が空)で契約あり扱いにしない。recog 2 は型のみ。残り 85 は契約 無 |
+| `existing` の ID(§1) | **111** = eval 3 + fe 8 + moment 3 + cf 7 + cond 4 + time 23(局 11・組 3・本編 6・obs_extra 3〈STEP OBS-5'〉)+ timeSearch 35(列 30 + 5)+ fork 7 + side 4(`top1`・`actual` を 2 と数える)+ read 6 + direct 3 + menu 1 + recog 2 + report 5(列 30 以外の 81 本は表の行を機械で数えた。列 30 は `SEARCH_COLUMNS` の要素数) |
+| うち既存の欄名と 1 対 1 で対応した ID | **111**(すべて。ID の名前 = 欄名または型名) |
+| うち JSON スキーマ(契約)のある ID | **16** = eval 1(`standing`)+ fe 8 + moment 3 + cond 4。cf 7 は「穴」(スキーマの `properties` が空)で契約あり扱いにしない。recog 2 は型のみ。残り 88 は契約 無(OBS-5' の 3 本も契約 無) |
 | 設計案 §2 の項目(§2 の表) | **20 行**(`copy` 7・`new` 9・`vocab` 3・置かない 1)。数え方: 行の状態の欄。「`copy` の一部 + `new`」「`copy`(半径 1)/`new`(半径 2・3)」の行はそれぞれ `new`・`copy` に数えた |
 | 設計案 §1 の表と欄名が食い違っていたもの(この一覧で直した) | **2**: (1) `TIME_VALUES` の置き場は `lib/timeCause.ts` ではなく `lib/reportData.ts:469`。(2) 設計案 §7 の例のパス `groups[min3].other.phaseSpentMedian.mid` は実在せず、正しくは `groups[].other.medianMidSec`(§7 は案の JSON なので、契約の実装で直す) |
 | 対応が取れなかった ID | **0**(取れなかったものは `new` として §2 に置いた) |
 
-**幾何/語彙の内訳**(§1 の `existing` のうち、設計案 §2 の線で「幾何(知識なし)」に当たるもの): `obs.fe.kingSurroundings`・`obs.fe.positionFacts`・`obs.cf.kingEscapesRoot/End`・`obs.cf.userMoveFacts`・`obs.cf.pvMinusActual`・`obs.side.tags`・`obs.side.of`・`obs.read.marks`・`obs.time.rookMark`・探索の列のうち手の性質 14 本(`actual*` 5・`top1*` 5・`oppPrev*` 4) = **24**。「語彙(認識)」に当たるもの: `obs.fe.shape`・`obs.fe.opponentIntent`・`obs.recog.shape`・`obs.recog.intent` = **4**。残り 80 は評価・時間・探索の集計・冊子の数(どちらの列でもない = 数)。
+**幾何/語彙の内訳**(§1 の `existing` のうち、設計案 §2 の線で「幾何(知識なし)」に当たるもの): `obs.fe.kingSurroundings`・`obs.fe.positionFacts`・`obs.cf.kingEscapesRoot/End`・`obs.cf.userMoveFacts`・`obs.cf.pvMinusActual`・`obs.side.tags`・`obs.side.of`・`obs.read.marks`・`obs.time.rookMark`・探索の列のうち手の性質 14 本(`actual*` 5・`top1*` 5・`oppPrev*` 4) = **24**。「語彙(認識)」に当たるもの: `obs.fe.shape`・`obs.fe.opponentIntent`・`obs.recog.shape`・`obs.recog.intent` = **4**。残り 83 は評価・時間・探索の集計・冊子の数(どちらの列でもない = 数。OBS-5' の 3 本もここ)。
 
 ---
 
 ## 4. 設計案との対応
 
-- 設計案 §1 の表の ID は、この一覧で **`obs.fe.*` を 8 本に、`obs.cf.*` を 7 本に、`obs.time.*` を 20 本に、`obs.timeSearch.*` を 35 本に分解**した(§1 の表は列の粗さで書いていた)。`obs.report.*` は §1 に無かった列(冊子の本編の数)。
+- 設計案 §1 の表の ID は、この一覧で **`obs.fe.*` を 8 本に、`obs.cf.*` を 7 本に、`obs.time.*` を 23 本(OBS-5' の 3 本を含む)に、`obs.timeSearch.*` を 35 本に分解**した(§1 の表は列の粗さで書いていた)。`obs.report.*` は §1 に無かった列(冊子の本編の数)。
 - 設計案 §7 の H-2 は、この一覧の **§1(`existing`)だけ**を登録済みとする。§2 の ID を引いた仮説は落ちる(値が無いので)。
 - 設計案 §10.3 の実例が引いた数の実体: 崩れの内訳 = `obs.report.overview`、消費の段ごと = `obs.time.bySpent`、中央値 = `obs.time.groupMedians`、長考の分母 = `obs.time.longThinkTotal`、時計で終わった局の最後の評価 = `obs.direct.finalPosition`。**5 つとも `existing`。**

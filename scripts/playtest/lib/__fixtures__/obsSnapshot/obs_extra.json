@@ -1,0 +1,19 @@
+{
+  "kind": "obs_extra",
+  "schemaVersion": "0.1",
+  "gitHead": "abc123",
+  "dirty": false,
+  "pairs": [
+    { "gameNo": 1, "branchPly": 9, "displayPly": 9, "phase": "early", "spentSec": 3, "spentBucket": 1, "collapsed": false },
+    { "gameNo": 1, "branchPly": 21, "displayPly": 21, "phase": "mid", "spentSec": null, "spentBucket": null, "collapsed": true },
+    { "gameNo": 2, "branchPly": 15, "displayPly": 15, "phase": "late", "spentSec": 12, "spentBucket": 3, "collapsed": true }
+  ],
+  "phaseMoves": [
+    { "gameNo": 1, "timeUpLoss": false, "early": { "moves": 2, "sec": 6 }, "mid": { "moves": 1, "sec": 8 }, "late": { "moves": 0, "sec": 0 } },
+    { "gameNo": 2, "timeUpLoss": true, "early": { "moves": 1, "sec": 2 }, "mid": { "moves": 0, "sec": 0 }, "late": { "moves": 3, "sec": 36 } }
+  ],
+  "phaseSecPerMoveMedians": {
+    "timeUpLoss": { "games": 1, "early": 2, "mid": null, "late": 12 },
+    "other": { "games": 1, "early": 3, "mid": 8, "late": null }
+  }
+}

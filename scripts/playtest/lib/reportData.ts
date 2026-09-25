@@ -525,8 +525,12 @@ export function ownParityOf(side: "先手" | "後手"): 0 | 1 {
   return side === "先手" ? 1 : 0;
 }
 
-/** 本人が指した手の消費時間だけを、KIF の手数の昇順で並べる(秒が無い手は含めない)。 */
-function ownMoveTimesOf(game: BuiltGame, seconds: readonly (MoveTime | null)[]): Array<{ kifPly: number; time: MoveTime }> {
+/**
+ * 本人が指した手の消費時間だけを、KIF の手数の昇順で並べる(秒が無い手は含めない)。
+ * STEP OBS-5'(docs/LANE_DIAG_LOG_2026-09.md §12.6)が `lib/obsExtra.ts` から使うため export した
+ * (最小の export 追加。値は変えていない)。
+ */
+export function ownMoveTimesOf(game: BuiltGame, seconds: readonly (MoveTime | null)[]): Array<{ kifPly: number; time: MoveTime }> {
   const parity = ownParityOf(game.side);
   const out: Array<{ kifPly: number; time: MoveTime }> = [];
   seconds.forEach((time, index) => {
@@ -548,8 +552,12 @@ function emptyBucket(): TimeBucket {
   return { n: 0, collapsed: 0 };
 }
 
-/** `game.allPairs.pairs` のうち「組(counted)」だけを、崩れたかどうかと一緒に返す(fellPairsOf と同じ数え方)。 */
-function countedPairsOf(game: BuiltGame): Array<{ pair: PairRow; collapsed: boolean }> {
+/**
+ * `game.allPairs.pairs` のうち「組(counted)」だけを、崩れたかどうかと一緒に返す(fellPairsOf と同じ数え方)。
+ * STEP OBS-5'(docs/LANE_DIAG_LOG_2026-09.md §12.6)が `lib/obsExtra.ts` から使うため export した
+ * (最小の export 追加。値は変えていない)。
+ */
+export function countedPairsOf(game: BuiltGame): Array<{ pair: PairRow; collapsed: boolean }> {
   const out: Array<{ pair: PairRow; collapsed: boolean }> = [];
   for (const pair of game.allPairs.pairs) {
     const collapse = collapseOf(pair.standingPair);
@@ -743,8 +751,10 @@ function phaseSpentGroupOf(rows: ReadonlyArray<{ early: number; mid: number; lat
  * 本人が時間で負けた局か(ending.kind === "timeUp" かつ本人の結果が「負け」。既存の resultOf・buildPatientGames と
  * 同じ判定を使い回す。司令塔の指示、2026-09-23: 「使い切った」は本人が負けた側の意味)。
  * 相手が切れ負けた(本人が勝った)局は含めない。
+ * STEP OBS-5'(docs/LANE_DIAG_LOG_2026-09.md §12.6)が `lib/obsExtra.ts` から使うため export した
+ * (最小の export 追加。値は変えていない)。
  */
-function isTimeUpLoss(fixedEnding: FixedKifuEnding | null | undefined, result: "勝ち" | "負け"): boolean {
+export function isTimeUpLoss(fixedEnding: FixedKifuEnding | null | undefined, result: "勝ち" | "負け"): boolean {
   return fixedEnding?.kind === "timeUp" && result === "負け";
 }
 

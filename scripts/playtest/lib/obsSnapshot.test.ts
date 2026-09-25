@@ -51,6 +51,10 @@ function fullInputs(): ObsSnapshotInputs {
     direct: loadInputFile("direct_answers.json"),
     finalPositions: loadInputFile("final_positions.json"),
     menu: loadInputFile("answer_menu.json"),
+    // STEP OBS-5'(docs/LANE_DIAG_LOG_2026-09.md §12.6)。obs_extra.json も任意入力の 1 つとして fullInputs に足した
+    // (足さないと「材料が揃った fixture では items.length === SNAPSHOT_ITEMS.length」〈8.〉が壊れる。
+    // 既存の他の任意入力〈whatifData・direct・finalPositions・menu〉と同じ扱い)。
+    extra: loadInputFile("obs_extra.json"),
   };
 }
 
@@ -195,7 +199,7 @@ describe("入力の kind", () => {
 
 // 6. 無い任意入力の obsId が出ない(空で埋めない)
 describe("任意入力が無いとき", () => {
-  it("fork.*・direct.*・menu.item の obsId は出ない", () => {
+  it("fork.*・direct.*・menu.item・(STEP OBS-5')time.pairSpent 等の obsId は出ない", () => {
     const inputs = fullInputs();
     const minimal: ObsSnapshotInputs = { patient: inputs.patient, timeCause: inputs.timeCause };
     const snapshot = buildObsSnapshot(minimal, optionsOf("3 分"));
@@ -210,6 +214,10 @@ describe("任意入力が無いとき", () => {
       "obs.direct.counts",
       "obs.direct.finalPosition",
       "obs.menu.item",
+      // STEP OBS-5'(docs/LANE_DIAG_LOG_2026-09.md §12.6)。--extra を渡さなければこの 3 本も出ない。
+      "obs.time.pairSpent",
+      "obs.time.phaseMoves",
+      "obs.time.phaseSecPerMoveMedians",
     ];
     for (const id of optionalOnly) expect(obsIds, id).not.toContain(id);
     expect(snapshot.items.length).toBe(SNAPSHOT_ITEMS.length - optionalOnly.length);
@@ -222,9 +230,9 @@ describe("inputs[]", () => {
     const inputs = fullInputs();
     const snapshot = buildObsSnapshot(inputs, optionsOf("3 分"));
     expect(snapshot.inputs.map((i) => i.name).sort()).toEqual(
-      ["answer_menu.json", "direct_answers.json", "final_positions.json", "patient.json", "time_cause.json", "whatif_report_data.json"].sort(),
+      ["answer_menu.json", "direct_answers.json", "final_positions.json", "obs_extra.json", "patient.json", "time_cause.json", "whatif_report_data.json"].sort(),
     );
-    for (const name of ["patient.json", "time_cause.json", "whatif_report_data.json", "direct_answers.json", "final_positions.json", "answer_menu.json"]) {
+    for (const name of ["patient.json", "time_cause.json", "whatif_report_data.json", "direct_answers.json", "final_positions.json", "answer_menu.json", "obs_extra.json"]) {
       const expected = recordSha256(readFileSync(join(FIXTURES_DIR, name)));
       const found = snapshot.inputs.find((i) => i.name === name);
       expect(found?.sha256, name).toBe(expected);
@@ -269,6 +277,10 @@ describe("CLI(obsSnapshot.ts)", () => {
             join(FIXTURES_DIR, "final_positions.json"),
             "--menu",
             join(FIXTURES_DIR, "answer_menu.json"),
+            // STEP OBS-5'(docs/LANE_DIAG_LOG_2026-09.md §12.6)。--extra を足さないと items.length が
+            // SNAPSHOT_ITEMS.length と合わなくなる(他の任意入力と同じ理由)。
+            "--extra",
+            join(FIXTURES_DIR, "obs_extra.json"),
             "--out",
             outPath,
           ],
@@ -299,7 +311,7 @@ describe("新しい数を作っていない", () => {
   it("出力の数の集合は、入力ファイルの数の集合の部分集合(合計・割合を新しく作っていない)", () => {
     const inputs = fullInputs();
     const fixtureNumbers = new Set<number>();
-    for (const file of [inputs.patient, inputs.timeCause, inputs.whatifData!, inputs.direct!, inputs.finalPositions!, inputs.menu!]) {
+    for (const file of [inputs.patient, inputs.timeCause, inputs.whatifData!, inputs.direct!, inputs.finalPositions!, inputs.menu!, inputs.extra!]) {
       collectNumbers(file.data, fixtureNumbers);
     }
     const snapshot = buildObsSnapshot(inputs, optionsOf("3 分"));
@@ -326,5 +338,38 @@ describe("obs.menu.item の id", () => {
     const nonMenuId = patient.games[0]!.id; // "kifu-a"(M パターンでない)
     const stripped = numbersOnly({ id: nonMenuId }, allowedForMenu) as Record<string, unknown>;
     expect(Object.hasOwn(stripped, "id"), "M パターンでない id が残ってしまった").toBe(false);
+  });
+});
+
+// 12. STEP OBS-5'(docs/LANE_DIAG_LOG_2026-09.md §12.6)。--extra(obs_extra.json)の 3 項目。
+describe("--extra(obs_extra.json。STEP OBS-5')", () => {
+  it("渡せば obs.time.pairSpent・phaseMoves・phaseSecPerMoveMedians の 3 項目が載る(fixture の値をそのまま写す)", () => {
+    const snapshot = buildObsSnapshot(fullInputs(), optionsOf("3 分"));
+    const pairSpent = snapshot.items.find((i) => i.obsId === "obs.time.pairSpent");
+    const phaseMoves = snapshot.items.find((i) => i.obsId === "obs.time.phaseMoves");
+    const medians = snapshot.items.find((i) => i.obsId === "obs.time.phaseSecPerMoveMedians");
+    expect(pairSpent, "obs.time.pairSpent が出ていない").toBeDefined();
+    expect(phaseMoves, "obs.time.phaseMoves が出ていない").toBeDefined();
+    expect(medians, "obs.time.phaseSecPerMoveMedians が出ていない").toBeDefined();
+
+    const extraFixture = JSON.parse(readFileSync(join(FIXTURES_DIR, "obs_extra.json"), "utf-8")) as {
+      pairs: unknown[];
+      phaseMoves: unknown[];
+      phaseSecPerMoveMedians: unknown;
+    };
+    // numbersOnly は phase(early/mid/late)を extraEnumKeys で残すので、pairs はそのまま一致する。
+    expect(pairSpent!.value).toEqual(extraFixture.pairs);
+    expect(phaseMoves!.value).toEqual(extraFixture.phaseMoves);
+    expect(medians!.value).toEqual(extraFixture.phaseSecPerMoveMedians);
+  });
+
+  it("渡さなければ 3 項目とも出ない(空で埋めない。任意入力が無いときの一般規則と同じ)", () => {
+    const inputs = fullInputs();
+    const minimal: ObsSnapshotInputs = { patient: inputs.patient, timeCause: inputs.timeCause };
+    const snapshot = buildObsSnapshot(minimal, optionsOf("3 分"));
+    const obsIds = snapshot.items.map((i) => i.obsId);
+    expect(obsIds).not.toContain("obs.time.pairSpent");
+    expect(obsIds).not.toContain("obs.time.phaseMoves");
+    expect(obsIds).not.toContain("obs.time.phaseSecPerMoveMedians");
   });
 });

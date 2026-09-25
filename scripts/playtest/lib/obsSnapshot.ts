@@ -84,6 +84,8 @@ export interface ObsSnapshotInputs {
   finalPositions?: ObsSnapshotInputFile;
   /** answer_menu.json(任意)。 */
   menu?: ObsSnapshotInputFile;
+  /** obs_extra.json(任意。STEP OBS-5'。渡せば `kind: "obs_extra"` を確かめる)。 */
+  extra?: ObsSnapshotInputFile;
 }
 
 export interface ObsSnapshotOptions {
@@ -224,6 +226,32 @@ interface AnswerMenuItemLike {
 
 interface AnswerMenuFileLike {
   items: AnswerMenuItemLike[];
+}
+
+// STEP OBS-5'(docs/LANE_DIAG_LOG_2026-09.md §12.6)。obs_extra.json(この段が読む欄だけ)。
+interface ObsExtraPairLike {
+  gameNo: number;
+  branchPly: number;
+  displayPly: number;
+  phase: string;
+  spentSec: number | null;
+  spentBucket: number | null;
+  collapsed: boolean;
+}
+
+interface ObsExtraPhaseMovesLike {
+  gameNo: number;
+  timeUpLoss: boolean;
+  early: unknown;
+  mid: unknown;
+  late: unknown;
+}
+
+interface ObsExtraFileLike {
+  kind?: unknown;
+  pairs: ObsExtraPairLike[];
+  phaseMoves: ObsExtraPhaseMovesLike[];
+  phaseSecPerMoveMedians: unknown;
 }
 
 function patientOf(inputs: ObsSnapshotInputs): PatientLike {
@@ -466,6 +494,25 @@ export const SNAPSHOT_ITEMS: readonly SnapshotItemDefinition[] = [
     // 効かないので、今までどおり落ちる。
     extraEnumKeys: [{ key: "id", pattern: MENU_ITEM_ID_PATTERN }],
   },
+
+  // ---- obs_extra.json(任意。STEP OBS-5'。--group では絞らない ― 既に 1 組ぶんのファイル) ----
+  {
+    obsId: "obs.time.pairSpent",
+    path: "obs_extra pairs[]",
+    pick: (inputs) => (inputs.extra === undefined ? SKIP : (inputs.extra.data as ObsExtraFileLike).pairs),
+    // `phase`(early/mid/late)は列挙のキーとして残す(計画 §12.6: 「組と局・手の対応」に段が要る)。
+    extraEnumKeys: ["phase"],
+  },
+  {
+    obsId: "obs.time.phaseMoves",
+    path: "obs_extra phaseMoves[]",
+    pick: (inputs) => (inputs.extra === undefined ? SKIP : (inputs.extra.data as ObsExtraFileLike).phaseMoves),
+  },
+  {
+    obsId: "obs.time.phaseSecPerMoveMedians",
+    path: "obs_extra phaseSecPerMoveMedians",
+    pick: (inputs) => (inputs.extra === undefined ? SKIP : (inputs.extra.data as ObsExtraFileLike).phaseSecPerMoveMedians),
+  },
 ];
 
 // ---- 組み立て ----
@@ -485,8 +532,14 @@ export function buildObsSnapshotFromItems(items: readonly SnapshotItemDefinition
       throw new ObsSnapshotError(`--final-positions の kind が "final_positions" でない(${JSON.stringify(finalPositions.kind)})`);
     }
   }
+  if (inputs.extra !== undefined) {
+    const extra = inputs.extra.data as ObsExtraFileLike;
+    if (extra.kind !== "obs_extra") {
+      throw new ObsSnapshotError(`--extra の kind が "obs_extra" でない(${JSON.stringify(extra.kind)})`);
+    }
+  }
 
-  const inputFiles: ObsSnapshotInputFile[] = [inputs.patient, inputs.timeCause, inputs.whatifData, inputs.direct, inputs.finalPositions, inputs.menu].filter(
+  const inputFiles: ObsSnapshotInputFile[] = [inputs.patient, inputs.timeCause, inputs.whatifData, inputs.direct, inputs.finalPositions, inputs.menu, inputs.extra].filter(
     (f): f is ObsSnapshotInputFile => f !== undefined,
   );
 
