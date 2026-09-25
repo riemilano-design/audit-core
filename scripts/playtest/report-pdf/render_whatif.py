@@ -80,7 +80,8 @@ S_CARDH = st("wcardh", font=FONT_B, fontSize=10.2, leading=13.5)
 S_EYEBROW = st("weyebrow", fontSize=8.2, leading=11, color=ACCENT)
 S_LABEL = st("wlabel", font=FONT_B, fontSize=8.4, leading=11, color=INK)
 
-BANNED = ["悪手", "弱点", "癖", "傾向", "原因", "ミス", "見落とし", "改善", "練習", "必ず", "明らか", "あなた", "ご自身", "いつも", "がち"]
+# 2026-09-25 の人間の決定で空にした(凍結の例外 14 件目 ― 冊子の禁止語はすべて使ってよい)。ループと _problems の枠は残す。
+BANNED = []
 
 doc = SimpleDocTemplate(out, pagesize=A4, leftMargin=14 * mm, rightMargin=14 * mm, topMargin=16 * mm, bottomMargin=16 * mm, title="対局後診断・付録 2(分かれ道)", author="将棋コーチ(試作)")
 W = A4[0] - 28 * mm

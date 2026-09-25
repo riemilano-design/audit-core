@@ -595,5 +595,16 @@ class CheckLineNumbersPosMaskTest(unittest.TestCase):
         self.assertIn("12345", problems[0][1])
 
 
+class CheckLineBannedEmptyTest(unittest.TestCase):
+    """禁止語が無いことの固定(2026-09-25 の人間の決定、凍結の例外 14 件目)。`check_line_banned` と
+    検査 3 の枠は残っているが、`BANNED_WORDS` が空なので 1 行も落とさない。"""
+
+    def test_line_with_former_banned_words_passes(self):
+        line = "悪手や癖について、あなたの将棋を書きます。"
+        problems = []
+        CA.check_line_banned(line, problems, 1)
+        self.assertEqual(problems, [])
+
+
 if __name__ == "__main__":
     unittest.main()

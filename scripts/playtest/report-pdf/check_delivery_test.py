@@ -16,16 +16,17 @@ import check_delivery as CD  # noqa: E402
 
 
 class WordsOfTest(unittest.TestCase):
-    # (a) `words_of([])` に `"None"` が入り、個数が 22(`--forbid` なし)。
-    def test_none_included_and_count_is_22(self):
+    # (a) `words_of([])` に `"None"` が入り、個数が 4(`--forbid` なし。2026-09-25 の人間の決定で禁止語が
+    # 空になったため、`ALWAYS_FORBIDDEN` の 4 個だけ)。
+    def test_none_included_and_count_is_4(self):
         words = CD.words_of([])
         self.assertIn("None", words)
-        self.assertEqual(len(words), 22)
+        self.assertEqual(len(words), 4)
 
-    # (e) `--forbid None` を渡しても語の個数は 22 のまま(重複は 1 つ)。
+    # (e) `--forbid None` を渡しても語の個数は 4 のまま(重複は 1 つ)。
     def test_forbid_none_does_not_duplicate(self):
         words = CD.words_of(["None"])
-        self.assertEqual(len(words), 22)
+        self.assertEqual(len(words), 4)
         self.assertEqual(words.count("None"), 1)
 
 

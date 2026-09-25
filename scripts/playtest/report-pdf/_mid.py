@@ -35,7 +35,8 @@ for key, pz in PROSE.items():
     if g in la and "優勢" not in pz["summary"]: problems.append(f"第 {key} 局: 優勢から負けた局なのに概要に「優勢」が無い")
     for s_ in pz["scenes"]:
         if s_["type"] == "move" and (g["no"], s_["ply"]) not in EV: problems.append(f"第 {key} 局: {s_['ply']} 手目の場面が記録に無い")
-BANNED = ["悪手", "弱点", "癖", "傾向", "原因", "ミス", "見落とし", "改善", "練習", "必ず", "明らか", "あなた", "ご自身", "いつも", "がち"]
+# 2026-09-25 の人間の決定で空にした(凍結の例外 14 件目 ― 冊子の禁止語はすべて使ってよい)。下のループは残す。
+BANNED = []
 for key, pz in PROSE.items():
     for t in [pz["summary"], pz["takeaway"]] + [s_["text"] for s_ in pz["scenes"]]:
         for w in BANNED:

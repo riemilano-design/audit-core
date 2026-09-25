@@ -80,29 +80,8 @@ S_K = st("tk", fontSize=9.5, leading=13, color=MUTED)
 S_V = st("tv", fontSize=8.6, leading=12)
 S_EYEBROW = st("teyebrow", fontSize=8.2, leading=11, color=ACCENT)
 
-# render_whatif.py の BANNED と同じ 15 語に、STEP TIME-CAUSE-3(docs/STEP_TIME_CAUSE_PLAN_2026-09-24.md §9.1
-# の 6.)の指示で「型」「クセ」「パターン」を足した(render_front.py の BANNED と同じ 18 語)。この付録は
-# A/B/C の分類結果を書くため、「型」を書いてしまう誤りを機械でも止める(実装担当の判断)。
-BANNED = [
-    "悪手",
-    "弱点",
-    "癖",
-    "型",
-    "傾向",
-    "原因",
-    "ミス",
-    "見落とし",
-    "改善",
-    "練習",
-    "必ず",
-    "明らか",
-    "あなた",
-    "ご自身",
-    "いつも",
-    "がち",
-    "クセ",
-    "パターン",
-]
+# 2026-09-25 の人間の決定で空にした(凍結の例外 14 件目 ― 冊子の禁止語はすべて使ってよい)。ループと _problems の枠は残す。
+BANNED = []
 
 doc = SimpleDocTemplate(out, pagesize=A4, leftMargin=14 * mm, rightMargin=14 * mm, topMargin=16 * mm, bottomMargin=16 * mm, title="対局後診断・付録 4(時間の使い方)", author="将棋コーチ(試作)")
 W = A4[0] - 28 * mm
