@@ -1,0 +1,39 @@
+{
+  "id": "nakazumai",
+  "name": "中住まい",
+  "name_kana": "なかずまい",
+  "side": "self",
+  "family": "その他(相居飛車)",
+  "parent_shape_id": null,
+  "required_pieces": [
+    {
+      "piece": "玉",
+      "square": "5h",
+      "optional": false
+    },
+    {
+      "piece": "金",
+      "square": "7h",
+      "optional": false
+    },
+    {
+      "piece": "銀",
+      "square": "3h",
+      "optional": false
+    }
+  ],
+  "typical_build_order": [
+    "7h",
+    "3h",
+    "5h"
+  ],
+  "characteristics": "玉を5八に上げ、左右に金銀を振り分けて構える囲いです。玉が盤の中央にいるので左右どちらにも逃げやすく、横歩取り(相居飛車の激しい指し方)など、囲う手数をかけずに早く戦う対局で使われます。金・銀の位置は対局によって変わり、ここでは基本の3手(金7八・銀3八・玉5八)を形としています。",
+  "beginner_friendliness": {
+    "score": 3,
+    "reason": "3手で形になりますが、囲いというより「玉を中央に置いて薄く構える」形なので、初心者が固い囲いのつもりで使うと攻めを受け止めきれません。"
+  },
+  "weak_against": "玉のまわりの駒が少なく、上からの攻めにも横からの攻めにも薄いです。中央にいるぶん相手の飛車や角が玉に直接向きやすく、受けの手が続きにくいです。",
+  "source": "【AI起草。座標の一次資料確認は行っていない(docs/ROLES.md の保留事項)】先手基準の座標(5八玉・7八金・3八銀)は https://shogi-gym.com/kakoi/nakazumai/ (参照日 2026-09-25) の本文の基本形(3手: 玉5八・左の金7八・右の銀3八)から起こした。同ページの金銀4枚型(玉5八・金7八・銀4八・金3八)は右の銀の位置が基本形と食い違うため、この形には入れていない。Wikipedia『中住まい』は玉5八のみ本文に明記し、金銀の位置は定まっていないと述べている(https://ja.wikipedia.org/wiki/中住まい、同日)。 追加の経緯: 2026-09-25 の知識レーン第 3 組(docs/LANE_KNOWLEDGE_LOG_2026-09.md §4)。typical_build_order の並びは出典に無く、書いた側が一般的な組み方として置いた推測。beginner_friendliness の点も暫定評価で、将棋知識としての最終確認は人間のレビューが要る。",
+  "confidence_level": "low",
+  "review_status": "draft"
+}

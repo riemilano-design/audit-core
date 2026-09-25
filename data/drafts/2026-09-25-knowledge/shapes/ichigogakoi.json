@@ -1,0 +1,44 @@
+{
+  "id": "ichigogakoi",
+  "name": "いちご囲い",
+  "name_kana": "いちごがこい",
+  "side": "self",
+  "family": "その他(相掛かり)",
+  "parent_shape_id": null,
+  "required_pieces": [
+    {
+      "piece": "玉",
+      "square": "6h",
+      "optional": false
+    },
+    {
+      "piece": "金",
+      "square": "7h",
+      "optional": false
+    },
+    {
+      "piece": "金",
+      "square": "5h",
+      "optional": false
+    },
+    {
+      "piece": "銀",
+      "square": "7i",
+      "optional": false
+    }
+  ],
+  "typical_build_order": [
+    "7h",
+    "5h",
+    "6h"
+  ],
+  "characteristics": "金を7八と5八に上げ、その間の6八に玉を置く、4手ほどでできる小さな囲いです。左の銀(7九)はそのまま残します。相掛かり(お互いに飛車先の歩を伸ばし合う指し方)など、早く戦いが始まる対局で最低限の守りとして使われます。",
+  "beginner_friendliness": {
+    "score": 4,
+    "reason": "手数が短く形も覚えやすいです。ただし固さは控えめなので、余裕があれば矢倉などに発展させる前提の仮の形として考えるとよいです。"
+  },
+  "weak_against": "玉が6八の中段に近い位置にいるため、上からの攻めが直接玉に届きやすく、金2枚を狙われると受けが続きにくいです。横からの攻めに対しても逃げ道が少なめです。",
+  "source": "【AI起草。座標の一次資料確認は行っていない(docs/ROLES.md の保留事項)】先手基準の座標(6八玉・7八金・5八金・7九銀)は https://shogi-gym.com/kakoi/ichigo/ (参照日 2026-09-25) の本文の組み方の手順(▲7八金・▲5八金・▲6八玉)から起こした。7九銀は初期位置のまま。Wikipedia の Category:相掛かりにいちご囲いの記事がある(https://ja.wikipedia.org/wiki/いちご囲い、同日。本文の座標は未確認)。 追加の経緯: 2026-09-25 の知識レーン第 3 組(docs/LANE_KNOWLEDGE_LOG_2026-09.md §4)。typical_build_order の並びは出典に無く、書いた側が一般的な組み方として置いた推測。beginner_friendliness の点も暫定評価で、将棋知識としての最終確認は人間のレビューが要る。",
+  "confidence_level": "medium",
+  "review_status": "draft"
+}

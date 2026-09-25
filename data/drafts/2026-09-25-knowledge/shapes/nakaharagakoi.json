@@ -1,0 +1,51 @@
+{
+  "id": "nakaharagakoi",
+  "name": "中原囲い",
+  "name_kana": "なかはらがこい",
+  "side": "self",
+  "family": "その他(相居飛車)",
+  "parent_shape_id": null,
+  "required_pieces": [
+    {
+      "piece": "玉",
+      "square": "6i",
+      "optional": false
+    },
+    {
+      "piece": "金",
+      "square": "5i",
+      "optional": false
+    },
+    {
+      "piece": "金",
+      "square": "7h",
+      "optional": false
+    },
+    {
+      "piece": "銀",
+      "square": "8h",
+      "optional": false
+    },
+    {
+      "piece": "銀",
+      "square": "4h",
+      "optional": false
+    }
+  ],
+  "typical_build_order": [
+    "7h",
+    "5i",
+    "8h",
+    "4h",
+    "6i"
+  ],
+  "characteristics": "玉を6九に置き、金を5九と7八、銀を8八と4八に置いた囲いです。玉のまわりを低く広く固めた形で、横歩取り(相居飛車の激しい指し方)で使われることで知られています。中原誠十六世名人の名前がついた囲いです。",
+  "beginner_friendliness": {
+    "score": 2,
+    "reason": "金銀4枚を動かすため手数がかかり、玉が6九に残る低い形なので、どこまで組めば完成かが初心者には分かりにくいです。"
+  },
+  "weak_against": "玉が下段の中央寄りにいるため、駒を打ち込まれる余地が多く、上からの攻めが直接玉に届きやすいです。8八の銀と4八の銀が離れているため、片方を攻められるともう片方が守りに参加しにくいです。",
+  "source": "【AI起草。座標の一次資料確認は行っていない(docs/ROLES.md の保留事項)】先手基準の座標(6九玉・5九金・7八金・8八銀・4八銀)は https://shogi-gym.com/kakoi/nakahara/ (参照日 2026-09-25) の本文の定義(玉を6九に置き、金を5九と7八、銀を8八と4八に置く)から起こした。Wikipedia『中原囲い』(https://ja.wikipedia.org/wiki/中原囲い、同日)は本文の座標を未確認。 追加の経緯: 2026-09-25 の知識レーン第 3 組(docs/LANE_KNOWLEDGE_LOG_2026-09.md §4)。typical_build_order の並びは出典に無く、書いた側が一般的な組み方として置いた推測。beginner_friendliness の点も暫定評価で、将棋知識としての最終確認は人間のレビューが要る。",
+  "confidence_level": "medium",
+  "review_status": "draft"
+}

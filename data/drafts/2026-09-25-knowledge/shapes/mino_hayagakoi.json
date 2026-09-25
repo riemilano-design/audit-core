@@ -1,0 +1,38 @@
+{
+  "id": "mino_hayagakoi",
+  "name": "振り飛車早囲い",
+  "name_kana": "ふりびしゃはやがこい",
+  "side": "self",
+  "family": "美濃系",
+  "parent_shape_id": null,
+  "required_pieces": [
+    {
+      "piece": "玉",
+      "square": "3h",
+      "optional": false
+    },
+    {
+      "piece": "銀",
+      "square": "4h",
+      "optional": false
+    },
+    {
+      "piece": "金",
+      "square": "4i",
+      "optional": false
+    }
+  ],
+  "typical_build_order": [
+    "4h",
+    "3h"
+  ],
+  "characteristics": "振り飛車で、玉を3八、銀を4八に置き、金4九はそのまま残した、数手でできる小さな囲いです。美濃囲いを組む手数が無いときの仮の形で、玉のとなりに銀がいるので横からの攻めを少しだけ受けられます。",
+  "beginner_friendliness": {
+    "score": 4,
+    "reason": "動かす駒が玉と銀だけで手数が短く、美濃囲いへ発展させる途中の形として覚えやすいです。"
+  },
+  "weak_against": "駒が少なく玉が3八にいるため、上からの攻め(3七・2七)にも横からの攻めにも薄いです。長く戦うなら美濃囲いへ組み直す必要があります。",
+  "source": "【AI起草。座標の一次資料確認は行っていない(docs/ROLES.md の保留事項)】先手基準の座標(3八玉・4八銀・4九金)は https://shogi-gym.com/kakoi/furibisha-hayagakoi/ (参照日 2026-09-25) の本文の説明(玉を3八、銀を4八に置き、4九の金をそのまま残す)から起こした。4九金は初期位置のままなので、指し手による証拠は玉と銀の2マスからしか生じない。 追加の経緯: 2026-09-25 の知識レーン第 3 組(docs/LANE_KNOWLEDGE_LOG_2026-09.md §4)。typical_build_order の並びは出典に無く、書いた側が一般的な組み方として置いた推測。beginner_friendliness の点も暫定評価で、将棋知識としての最終確認は人間のレビューが要る。",
+  "confidence_level": "medium",
+  "review_status": "draft"
+}

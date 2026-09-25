@@ -1,0 +1,51 @@
+{
+  "id": "ahirugakoi",
+  "name": "アヒル囲い",
+  "name_kana": "あひるがこい",
+  "side": "self",
+  "family": "その他(奇襲)",
+  "parent_shape_id": null,
+  "required_pieces": [
+    {
+      "piece": "玉",
+      "square": "5h",
+      "optional": false
+    },
+    {
+      "piece": "銀",
+      "square": "6h",
+      "optional": false
+    },
+    {
+      "piece": "銀",
+      "square": "4h",
+      "optional": false
+    },
+    {
+      "piece": "金",
+      "square": "7i",
+      "optional": false
+    },
+    {
+      "piece": "金",
+      "square": "3i",
+      "optional": false
+    }
+  ],
+  "typical_build_order": [
+    "5h",
+    "6h",
+    "4h",
+    "7i",
+    "3i"
+  ],
+  "characteristics": "玉を5八に上げ、その両脇に銀を6八・4八に上げ、いちばん下の段で金2枚を7九・3九に寄せた形です。金が下段の左右に離れているため一見すると薄く見えますが、相手の攻め駒を下段で受け止めて反撃に転じる、奇襲戦法(相手の意表を突く作戦)で使われる構えです。",
+  "beginner_friendliness": {
+    "score": 2,
+    "reason": "手数は短いですが、金銀の使い方が普通の囲いと違うため、狙いを理解していないと守りの意味が分かりにくい形です。初心者のうちは普通の囲いを先に覚える方が向いています。"
+  },
+  "weak_against": "玉のまわり(5八の左右)に金がいないため横からの攻めに薄く、金2枚が下段の端寄りにあるので上から玉を狙われると受けにくいです。",
+  "source": "【AI起草。座標の一次資料確認は行っていない(docs/ROLES.md の保留事項)】先手基準の座標(5八玉・6八銀・4八銀・7九金・3九金)は https://shogi-gym.com/kakoi/ahiru/ (参照日 2026-09-25) の本文の説明と手順(▲5八玉・▲6八銀・▲4八銀・▲7九金・▲3九金)から起こした。Wikipedia『アヒル囲い』(https://ja.wikipedia.org/wiki/アヒル囲い、同日)は別名として大阪囲いを挙げる(本文の座標は未確認)。 追加の経緯: 2026-09-25 の知識レーン第 3 組(docs/LANE_KNOWLEDGE_LOG_2026-09.md §4)。typical_build_order の並びは出典に無く、書いた側が一般的な組み方として置いた推測。beginner_friendliness の点も暫定評価で、将棋知識としての最終確認は人間のレビューが要る。",
+  "confidence_level": "medium",
+  "review_status": "draft"
+}

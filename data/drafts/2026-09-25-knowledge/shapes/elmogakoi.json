@@ -1,0 +1,45 @@
+{
+  "id": "elmogakoi",
+  "name": "Elmo囲い",
+  "name_kana": "えるもがこい",
+  "side": "self",
+  "family": "舟囲い系",
+  "parent_shape_id": null,
+  "required_pieces": [
+    {
+      "piece": "玉",
+      "square": "7h",
+      "optional": false
+    },
+    {
+      "piece": "金",
+      "square": "7i",
+      "optional": false
+    },
+    {
+      "piece": "銀",
+      "square": "6h",
+      "optional": false
+    },
+    {
+      "piece": "金",
+      "square": "5i",
+      "optional": false
+    }
+  ],
+  "typical_build_order": [
+    "7h",
+    "6h",
+    "7i",
+    "5i"
+  ],
+  "characteristics": "玉を7八に置き、左の金を7九、左の銀を6八に寄せ、右の金を5九に置いた囲いです。舟囲いと似た短い手数の囲いですが、金が玉の真下(7九)にいるため下段からの攻めに強く、コンピュータ将棋(elmo)の指し方から広まった形です。相手が振り飛車のときの急戦向きの囲いです。",
+  "beginner_friendliness": {
+    "score": 4,
+    "reason": "舟囲いと同じくらいの手数で組め、金銀の配置が覚えやすいです。舟囲いとの違い(金が7九・5九)だけ意識すれば十分です。"
+  },
+  "weak_against": "上からの攻め(7七・6七)に対しては金銀が下段寄りのため受けが薄く、玉の頭上を角や桂で狙われると受けにくいです。長い戦いでは穴熊などの固い囲いに比べて頼りない場面が出ます。",
+  "source": "【AI起草。座標の一次資料確認は行っていない(docs/ROLES.md の保留事項)】先手基準の座標(7八玉・7九金・6八銀・5九金)は https://shogi-gym.com/kakoi/elmo/ (参照日 2026-09-25) の本文の説明(玉を7八へ運び、左の銀と金を寄せ、右の金を5九へ置く)から起こした。Wikipedia『Elmo囲い』(https://ja.wikipedia.org/wiki/Elmo囲い、同日)は本文の座標を未確認。 追加の経緯: 2026-09-25 の知識レーン第 3 組(docs/LANE_KNOWLEDGE_LOG_2026-09.md §4)。typical_build_order の並びは出典に無く、書いた側が一般的な組み方として置いた推測。beginner_friendliness の点も暫定評価で、将棋知識としての最終確認は人間のレビューが要る。",
+  "confidence_level": "medium",
+  "review_status": "draft"
+}

@@ -1,0 +1,57 @@
+{
+  "id": "anaguma_matsuo",
+  "name": "松尾流穴熊",
+  "name_kana": "まつおりゅうあなぐま",
+  "side": "self",
+  "family": "穴熊系",
+  "parent_shape_id": "anaguma_ibisha",
+  "required_pieces": [
+    {
+      "piece": "玉",
+      "square": "9i",
+      "optional": false
+    },
+    {
+      "piece": "香",
+      "square": "9h",
+      "optional": false
+    },
+    {
+      "piece": "銀",
+      "square": "8h",
+      "optional": false
+    },
+    {
+      "piece": "銀",
+      "square": "7i",
+      "optional": false
+    },
+    {
+      "piece": "金",
+      "square": "7h",
+      "optional": false
+    },
+    {
+      "piece": "金",
+      "square": "6g",
+      "optional": false
+    }
+  ],
+  "typical_build_order": [
+    "9h",
+    "9i",
+    "8h",
+    "7h",
+    "6g",
+    "7i"
+  ],
+  "characteristics": "居飛車穴熊に右の銀を7九へ足し、金を7八・6七に置いた形です。玉のふたが銀2枚と金2枚の4枚になるので、居飛車穴熊よりさらに固く、金が6七まで上がっているぶん上からの攻めにも厚くなります。",
+  "beginner_friendliness": {
+    "score": 1,
+    "reason": "居飛車穴熊より手数がかかり、右の銀を守りに使うため攻めの駒が減ります。居飛車穴熊を組めるようになってからの発展形です。"
+  },
+  "weak_against": "玉が隅に固定される穴熊共通の弱さ(逃げ道が無い・端攻めが直接響く)に加え、組み上がるまでの手数が長いので、その間に速く攻められると間に合いません。",
+  "source": "【AI起草。座標の一次資料確認は行っていない(docs/ROLES.md の保留事項)】先手基準の座標(9九玉・9八香・8八銀・7九銀・7八金・6七金)は https://shogi-gym.com/kakoi/anaguma/matsuo-anaguma/ (参照日 2026-09-25) の本文の説明(9九の玉を9八の香・8八の銀・7九の銀・7八の金・6七の金でふさぐ)から起こした。parent は居飛車穴熊(anaguma_ibisha)。 追加の経緯: 2026-09-25 の知識レーン第 3 組(docs/LANE_KNOWLEDGE_LOG_2026-09.md §4)。typical_build_order の並びは出典に無く、書いた側が一般的な組み方として置いた推測。beginner_friendliness の点も暫定評価で、将棋知識としての最終確認は人間のレビューが要る。",
+  "confidence_level": "medium",
+  "review_status": "draft"
+}

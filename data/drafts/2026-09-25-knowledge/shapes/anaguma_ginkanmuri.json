@@ -1,0 +1,51 @@
+{
+  "id": "anaguma_ginkanmuri",
+  "name": "銀冠穴熊",
+  "name_kana": "ぎんかんむりあなぐま",
+  "side": "self",
+  "family": "穴熊系",
+  "parent_shape_id": "anaguma_ibisha",
+  "required_pieces": [
+    {
+      "piece": "玉",
+      "square": "9i",
+      "optional": false
+    },
+    {
+      "piece": "香",
+      "square": "9h",
+      "optional": false
+    },
+    {
+      "piece": "銀",
+      "square": "8g",
+      "optional": false
+    },
+    {
+      "piece": "金",
+      "square": "7h",
+      "optional": false
+    },
+    {
+      "piece": "金",
+      "square": "6h",
+      "optional": false
+    }
+  ],
+  "typical_build_order": [
+    "9h",
+    "9i",
+    "8g",
+    "7h",
+    "6h"
+  ],
+  "characteristics": "居飛車穴熊の銀を8七へ上げ、8八を空けた形です。銀が一段高い位置にいるので上からの攻めに強く、居飛車穴熊と銀冠の両方の性質を持ちます。",
+  "beginner_friendliness": {
+    "score": 1,
+    "reason": "居飛車穴熊を組んだあとに銀を1つ上げる形なので、居飛車穴熊が組めることが前提です。"
+  },
+  "weak_against": "玉が隅に固定される穴熊共通の弱さは残ります。8八が空いているぶん、そこへ駒を打ち込まれたり、横から(8八の段)攻められたりすると受けにくくなります。",
+  "source": "【AI起草。座標の一次資料確認は行っていない(docs/ROLES.md の保留事項)】先手基準の座標(9九玉・9八香・8七銀・7八金・6八金)は https://shogi-gym.com/kakoi/anaguma/ginkan-anaguma/ (参照日 2026-09-25) の本文の説明(9九の玉を9八の香・7八の金・6八の金・8七の銀でふさぐ。8八は空きマス)から起こした。parent は居飛車穴熊(anaguma_ibisha)。 追加の経緯: 2026-09-25 の知識レーン第 3 組(docs/LANE_KNOWLEDGE_LOG_2026-09.md §4)。typical_build_order の並びは出典に無く、書いた側が一般的な組み方として置いた推測。beginner_friendliness の点も暫定評価で、将棋知識としての最終確認は人間のレビューが要る。",
+  "confidence_level": "medium",
+  "review_status": "draft"
+}

@@ -1,0 +1,57 @@
+{
+  "id": "anaguma_big4",
+  "name": "ビッグ4",
+  "name_kana": "びっぐふぉー",
+  "side": "self",
+  "family": "穴熊系",
+  "parent_shape_id": "anaguma_ibisha",
+  "required_pieces": [
+    {
+      "piece": "玉",
+      "square": "9i",
+      "optional": false
+    },
+    {
+      "piece": "香",
+      "square": "9h",
+      "optional": false
+    },
+    {
+      "piece": "金",
+      "square": "8h",
+      "optional": false
+    },
+    {
+      "piece": "金",
+      "square": "7h",
+      "optional": false
+    },
+    {
+      "piece": "銀",
+      "square": "8g",
+      "optional": false
+    },
+    {
+      "piece": "銀",
+      "square": "7g",
+      "optional": false
+    }
+  ],
+  "typical_build_order": [
+    "9h",
+    "9i",
+    "8h",
+    "7h",
+    "8g",
+    "7g"
+  ],
+  "characteristics": "居飛車穴熊の上に銀2枚(8七・7七)を並べ、玉のふたを金2枚(8八・7八)にした、金銀4枚の穴熊です。穴熊の中でも最も固い形の一つとして知られ、上からの攻めにも横からの攻めにもとても厚い形です。",
+  "beginner_friendliness": {
+    "score": 1,
+    "reason": "完成までの手数がとても長く、金銀4枚をすべて守りに使うため、初心者のうちは組み切る前に戦いが始まることが多いです。"
+  },
+  "weak_against": "玉が隅に固定される穴熊共通の弱さは残り、9筋の端を攻められると玉に直接響きます。組み上がる前の速い攻めに弱く、守りに使った駒が多いぶん攻めが細くなりやすいです。",
+  "source": "【AI起草。座標の一次資料確認は行っていない(docs/ROLES.md の保留事項)】先手基準の座標(9九玉・9八香・8八金・7八金・8七銀・7七銀)は https://shogi-gym.com/kakoi/anaguma/big4/ (参照日 2026-09-25) の本文の説明(9九の玉を9八の香・8八の金・7八の金・8七の銀・7七の銀でふさぐ)から起こした。parent は居飛車穴熊(anaguma_ibisha)。 追加の経緯: 2026-09-25 の知識レーン第 3 組(docs/LANE_KNOWLEDGE_LOG_2026-09.md §4)。typical_build_order の並びは出典に無く、書いた側が一般的な組み方として置いた推測。beginner_friendliness の点も暫定評価で、将棋知識としての最終確認は人間のレビューが要る。",
+  "confidence_level": "medium",
+  "review_status": "draft"
+}
