@@ -238,6 +238,9 @@ describe("任意入力が無いとき", () => {
       // STEP OBS-5d(docs/LANE_DIAG_LOG_2026-09.md §12.10 (A3))。--geo を渡さなければこの 1 本も出ない
       // (出どころは obs_geo.json。obs.geo.* と同じファイルだが obsId の列は fork)。
       "obs.fork.sideCrossTable",
+      // STEP OBS-5f(docs/LANE_DIAG_LOG_2026-09.md §12.10 (A5))。同じ --recognition が無ければこの 2 本も出ない。
+      "obs.vocab.shapeOneAwayDetail",
+      "obs.vocab.shapeClosestPerGame",
     ];
     for (const id of optionalOnly) expect(obsIds, id).not.toContain(id);
     expect(snapshot.items.length).toBe(SNAPSHOT_ITEMS.length - optionalOnly.length);
@@ -597,5 +600,112 @@ describe("--geo(obs_geo.json。STEP OBS-5d)", () => {
     const snapshot = buildObsSnapshot(minimal, optionsOf("3 分"));
     const obsIds = snapshot.items.map((i) => i.obsId);
     expect(obsIds).not.toContain("obs.fork.sideCrossTable");
+  });
+});
+
+// 17. STEP OBS-5f(docs/LANE_DIAG_LOG_2026-09.md §12.10 (A5))。「止まる場所」(局ごとの「あと 1 枚」の
+// 内訳・「最も近づいた形」)。この STEP で初めて `numbersOnly` に文字列の穴(形の id・マス + 駒)を開けた
+// ので、そこを直接確かめる試験を含む(通す文字列は「形の id」と「マス + 駒」だけ。局番号は
+// `--patient` の `games[].id`↔`no` で数に変換してから使うので、固定棋譜の id 文字列そのものは出ない)。
+describe("--recognition(recognition_measure.json。STEP OBS-5f)", () => {
+  it("渡せば obs.vocab.shapeOneAwayDetail が載り、欠けがちょうど 1 枚だった局だけ(局番号・形 id・マス・駒)を写す", () => {
+    const snapshot = buildObsSnapshot(fullInputs(), optionsOf("3 分"));
+    const detail = snapshot.items.find((i) => i.obsId === "obs.vocab.shapeOneAwayDetail");
+    expect(detail, "obs.vocab.shapeOneAwayDetail が出ていない").toBeDefined();
+    // fixture: kifu-a(patient no=1)は欠け 1 件(s1・6h・銀)、kifu-b は closestSelfShape が null、
+    // kifu-c(no=3)は欠け 2 件 ― 出るのは kifu-a の 1 件だけ。
+    expect(detail!.value).toEqual([{ gameNo: 1, shapeId: "s1", square: "6h", piece: "銀" }]);
+  });
+
+  it("渡せば obs.vocab.shapeClosestPerGame が載り、局ごとの最も近づいた形(id・生の到達率・数え直した到達率)を写す(数え直せない形は null)", () => {
+    const snapshot = buildObsSnapshot(fullInputs(), optionsOf("3 分"));
+    const closest = snapshot.items.find((i) => i.obsId === "obs.vocab.shapeClosestPerGame");
+    expect(closest, "obs.vocab.shapeClosestPerGame が出ていない").toBeDefined();
+    // kifu-a(no=1): shapeBest.s1=0.8、shapeMovedRequiredBest に s1 が無い(分母 0)→ null。
+    // kifu-b: closestSelfShape が null → 出ない。kifu-c(no=3): shapeBest.s2=0.6、shapeMovedRequiredBest.s2=0.3。
+    expect(closest!.value).toEqual([
+      { gameNo: 1, shapeId: "s1", rawBest: 0.8, movedRequiredBest: null },
+      { gameNo: 3, shapeId: "s2", rawBest: 0.6, movedRequiredBest: 0.3 },
+    ]);
+  });
+
+  it("渡さなければ 2 項目とも出ない(空で埋めない)", () => {
+    const inputs = fullInputs();
+    const minimal: ObsSnapshotInputs = { patient: inputs.patient, timeCause: inputs.timeCause };
+    const snapshot = buildObsSnapshot(minimal, optionsOf("3 分"));
+    const obsIds = snapshot.items.map((i) => i.obsId);
+    expect(obsIds).not.toContain("obs.vocab.shapeOneAwayDetail");
+    expect(obsIds).not.toContain("obs.vocab.shapeClosestPerGame");
+  });
+
+  // 独立監査の指摘(2026-09-26): `--patient` の games[].id に無い局番号の突き合わせに失敗した行が、
+  // 「無視される」のではなく `?? -1` や `?? 1`(実在する別の局の番号)へ黙ってフォールバックしていないか
+  // を直接確かめる。fixture の "3 分" 組に `id: "kifu-unmatched"`(`--patient` の games[] に無い id、
+  // closestSelfShape は非 null・欠け 1 件・shapeId "s3")を 1 行足してある。
+  it("局番号の突き合わせに失敗した行(--patient の games[] に無い id)は、0・-1・他局の番号に化けず、単に出力から落ちる", () => {
+    const snapshot = buildObsSnapshot(fullInputs(), optionsOf("3 分"));
+    const detail = snapshot.items.find((i) => i.obsId === "obs.vocab.shapeOneAwayDetail")!;
+    const closest = snapshot.items.find((i) => i.obsId === "obs.vocab.shapeClosestPerGame")!;
+
+    // fixture の "kifu-unmatched" 行の shapeId "s3" は、突き合わせに失敗して落ちるならどこにも出ない。
+    expect(JSON.stringify(detail.value)).not.toContain("s3");
+    expect(JSON.stringify(closest.value)).not.toContain("s3");
+
+    // gameNo は必ず --patient の games[].no(1・2・3)のどれかで、0・-1・未定義は出ない。
+    const gameNosOf = (value: unknown) => (value as Array<{ gameNo: unknown }>).map((r) => r.gameNo);
+    for (const gameNo of [...gameNosOf(detail.value), ...gameNosOf(closest.value)]) {
+      expect(typeof gameNo === "number" && Number.isInteger(gameNo) && gameNo > 0, `不正な gameNo: ${String(gameNo)}`).toBe(true);
+      expect([0, -1].includes(gameNo as number), `gameNo が 0 か -1: ${String(gameNo)}`).toBe(false);
+    }
+
+    // 件数も「無視して 1 行減る」ことをそのまま確認(化けて増えてもいない・減りすぎてもいない)。
+    expect(detail.value).toHaveLength(1); // kifu-a の 1 件だけ(kifu-unmatched は落ちる)
+    expect(closest.value).toHaveLength(2); // kifu-a・kifu-c の 2 件だけ(kifu-unmatched は落ちる)
+  });
+
+  it("白いリストの穴: 形の id(shapeId)とマス + 駒(square・piece)は通る", () => {
+    const detailDef = SNAPSHOT_ITEMS.find((d) => d.obsId === "obs.vocab.shapeOneAwayDetail")!;
+    const closestDef = SNAPSHOT_ITEMS.find((d) => d.obsId === "obs.vocab.shapeClosestPerGame")!;
+    const allowedForDetail = [...OBS_SNAPSHOT_ENUM_KEYS, ...(detailDef.extraEnumKeys ?? [])];
+    const allowedForClosest = [...OBS_SNAPSHOT_ENUM_KEYS, ...(closestDef.extraEnumKeys ?? [])];
+    const strippedDetail = numbersOnly({ gameNo: 1, shapeId: "mutekigakoi", square: "6h", piece: "銀" }, allowedForDetail) as Record<string, unknown>;
+    expect(strippedDetail).toEqual({ gameNo: 1, shapeId: "mutekigakoi", square: "6h", piece: "銀" });
+    const strippedClosest = numbersOnly({ gameNo: 1, shapeId: "mutekigakoi", rawBest: 0.5, movedRequiredBest: null }, allowedForClosest) as Record<string, unknown>;
+    expect(strippedClosest).toEqual({ gameNo: 1, shapeId: "mutekigakoi", rawBest: 0.5, movedRequiredBest: null });
+  });
+
+  it("白いリストの穴: それ以外の文字列(person・盤の SFEN・固定棋譜の id・手の符号)は今までどおり落ちる", () => {
+    const detailDef = SNAPSHOT_ITEMS.find((d) => d.obsId === "obs.vocab.shapeOneAwayDetail")!;
+    const allowedForDetail = [...OBS_SNAPSHOT_ENUM_KEYS, ...(detailDef.extraEnumKeys ?? [])];
+    const input = {
+      gameNo: 1,
+      shapeId: "mutekigakoi",
+      square: "6h",
+      piece: "銀",
+      // shapeId・square・piece 以外の文字列(この obsId の extraEnumKeys に無いキー)。
+      person: "本人の名前",
+      sfen: "lnsgkgsnl/…",
+      id: "g01", // 固定棋譜の id そのもの(局番号は gameNo に変換済みなので、id はどのみち出力に無い)
+      played: "７六歩(77)",
+    };
+    const stripped = numbersOnly(input, allowedForDetail) as Record<string, unknown>;
+    expect(Object.hasOwn(stripped, "person")).toBe(false);
+    expect(Object.hasOwn(stripped, "sfen")).toBe(false);
+    expect(Object.hasOwn(stripped, "id")).toBe(false);
+    expect(Object.hasOwn(stripped, "played")).toBe(false);
+    // shapeId・square・piece は今までどおり残る(通す文字列はこの 2 種類だけ、という限定の確認)。
+    expect(stripped.shapeId).toBe("mutekigakoi");
+    expect(stripped.square).toBe("6h");
+    expect(stripped.piece).toBe("銀");
+  });
+
+  it("盤(SFEN)・棋譜・手の符号・固定棋譜の id は実際の出力にも入らない(fixture を走査)", () => {
+    const snapshot = buildObsSnapshot(fullInputs(), optionsOf("3 分"));
+    const detail = snapshot.items.find((i) => i.obsId === "obs.vocab.shapeOneAwayDetail")!;
+    const closest = snapshot.items.find((i) => i.obsId === "obs.vocab.shapeClosestPerGame")!;
+    // fixture の固定棋譜の id("kifu-a"・"kifu-c")・局面の符号は、出力のどこにも文字列として現れない
+    // (局番号は数の gameNo に変換済み)。
+    expect(JSON.stringify(detail.value)).not.toContain("kifu-");
+    expect(JSON.stringify(closest.value)).not.toContain("kifu-");
   });
 });

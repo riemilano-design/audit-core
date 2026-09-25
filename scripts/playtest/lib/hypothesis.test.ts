@@ -363,8 +363,10 @@ describe("登録簿(docs/OBSERVATION_ITEMS.md §1)", () => {
   // STEP OBS-5e(§12.10 (A4))で obs.vocab.shapeMissingSummary・shapeMovedRequiredSummary を
   // 同じ §1.16 に足したので 119→121。
   // STEP OBS-5d(§12.10 (A3))で obs.fork.sideCrossTable を §1.8 に足したので 121→122。
-  it("existing の大きさは 122", () => {
-    expect(registry.size).toBe(122);
+  // STEP OBS-5f(§12.10 (A5))で obs.vocab.shapeOneAwayDetail・shapeClosestPerGame を
+  // 同じ §1.16 に足したので 122→124。
+  it("existing の大きさは 124", () => {
+    expect(registry.size).toBe(124);
   });
 
   it("obs.timeSearch.col.* は 30 本", () => {

@@ -111,7 +111,50 @@
       "shapeMovedRequiredCompleteTotal": 1
     }
   },
-  "rows": [],
+  "rows": [
+    {
+      "group": "3 分",
+      "id": "kifu-a",
+      "closestSelfShape": { "shapeId": "s1", "matchScore": 0.8, "missing": [{ "square": "6h", "piece": "銀" }] },
+      "shapeBest": { "s1": 0.8, "s2": 0.5 },
+      "shapeMovedRequiredBest": { "s2": 0.5 }
+    },
+    {
+      "group": "3 分",
+      "id": "kifu-b",
+      "closestSelfShape": null,
+      "shapeBest": {},
+      "shapeMovedRequiredBest": {}
+    },
+    {
+      "group": "3 分",
+      "id": "kifu-c",
+      "closestSelfShape": {
+        "shapeId": "s2",
+        "matchScore": 0.6,
+        "missing": [
+          { "square": "4h", "piece": "銀" },
+          { "square": "5h", "piece": "玉" }
+        ]
+      },
+      "shapeBest": { "s2": 0.6 },
+      "shapeMovedRequiredBest": { "s2": 0.3 }
+    },
+    {
+      "group": "10 分",
+      "id": "kifu-z",
+      "closestSelfShape": { "shapeId": "s1", "matchScore": 0.8, "missing": [{ "square": "4h", "piece": "銀" }] },
+      "shapeBest": { "s1": 0.8 },
+      "shapeMovedRequiredBest": {}
+    },
+    {
+      "group": "3 分",
+      "id": "kifu-unmatched",
+      "closestSelfShape": { "shapeId": "s3", "matchScore": 0.99, "missing": [{ "square": "2h", "piece": "歩" }] },
+      "shapeBest": { "s3": 0.99 },
+      "shapeMovedRequiredBest": { "s3": 0.99 }
+    }
+  ],
   "movedRequiredZeroShapeIds": { "self": ["s1"], "opponent": [] },
   "movedRequiredZeroShapeCounts": { "self": 1, "opponent": 0 }
 }

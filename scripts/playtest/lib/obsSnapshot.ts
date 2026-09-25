@@ -15,6 +15,9 @@
 // - `person`・`title`・`id`・`kifuId`・`sfen`・`moves`・`pv`・`actualMove`・`played`・`best`・`text`・`labels`・
 //   `oneLine`・`actionCore`・`evidenceName`・`verifyName` の値を出力へ残すこと(`numbersOnly` が、許された
 //   列挙のキー以外の文字列をすべて落とすことで防ぐ ― 個々のキー名を特別扱いしない一般規則)。
+// - STEP OBS-5f(§12.10 (A5))で `shapeId`(`data/` の形の id)・`square`・`piece`(幾何の事実。欠けていた
+//   マスとそこに要る駒)の 2 種類だけ、`extraEnumKeys` で例外的に文字列を通す。**固定棋譜の id(`g01` 等)は
+//   直接は通さず**、`--patient` の `games[].id`↔`no` で局番号(数)に変換してから使う(2 種類のまま保つため)。
 
 // ---- numbersOnly(値の中の文字列を落とす) ----
 
@@ -124,7 +127,7 @@ export interface ObsSnapshot {
 // ---- 道具の出力の形(この段が読む欄だけ。`unknown` として受け取った JSON をここでだけ型づける) ----
 
 interface PatientLike {
-  games: Array<{ no: number; total: number; result: string; ending: string | null; events: number; scores: Array<number | null>; plies: number[] }>;
+  games: Array<{ no: number; id: string; total: number; result: string; ending: string | null; events: number; scores: Array<number | null>; plies: number[] }>;
   overview: unknown;
   findings: Array<{ kind: string; shown: boolean; numbers: Record<string, number | null> }>;
   events: unknown[];
@@ -356,11 +359,38 @@ interface RecognitionGroupTotalsLike {
   shapeMovedRequiredCompleteTotal: number;
 }
 
+// STEP OBS-5f(docs/LANE_DIAG_LOG_2026-09.md §12.10 (A5))。「止まる場所」(局ごとの「あと 1 枚」の
+// 内訳・「最も近づいた形」)。材料は rows[].closestSelfShape・rows[].shapeBest・rows[].shapeMovedRequiredBest
+// (recognitionMeasure.ts の既存の出力。新しい計算は足していない)。
+interface RecognitionMissingPieceLike {
+  square: string;
+  piece: string;
+}
+
+interface RecognitionClosestSelfShapeLike {
+  shapeId: string;
+  matchScore: number;
+  missing: RecognitionMissingPieceLike[];
+}
+
+interface RecognitionRowLike {
+  group: string;
+  /** 固定棋譜の id(`lib/recognitionMeasure.ts` の `GameRow.id`)。ファイル名・人の名前ではない
+   * (設計の時点でそう決められている)が、ここでは直接は写さず、`--patient` の `games[].id` と
+   * 突き合わせて数の `no`(局番号)に変換してから使う(§12.10 (A5) の「文字列の穴」を 2 種類だけに限るため)。 */
+  id: string;
+  closestSelfShape: RecognitionClosestSelfShapeLike | null;
+  shapeBest: Record<string, number>;
+  shapeMovedRequiredBest: Record<string, number>;
+}
+
 interface RecognitionMeasureFileLike {
   kind?: unknown;
   byGroup: Record<string, RecognitionGroupTotalsLike>;
   /** STEP OBS-5e。「初期位置でない必要駒」が 0 の形の件数(自分側・相手側。id の一覧は読まない)。 */
   movedRequiredZeroShapeCounts: { self: number; opponent: number };
+  /** STEP OBS-5f。局ごとの数(§1.16 参照)。 */
+  rows: RecognitionRowLike[];
 }
 
 /** `obs.vocab.exposure` が読む値の組。統括の追加指示(2026-09-25)で D'' に決まっている。 */
@@ -402,6 +432,18 @@ function exposureBySideOf(bySide: RecognitionExposureBySideLike): {
 
 function patientOf(inputs: ObsSnapshotInputs): PatientLike {
   return inputs.patient.data as PatientLike;
+}
+
+// STEP OBS-5f。固定棋譜の id(`recognition rows[].id`)→ 局番号(`patient games[].no`)。
+// `--patient` は必須入力で組ごとのファイルなので、同じ組の局なら id は揃っているはず。
+// 揃わない行(--patient の games に無い id)は、その組の対象外として無視する
+// (`scripts/playtest/finalPositions.ts` の `selectTargets` と同じ考え方)。
+function patientGameNoById(inputs: ObsSnapshotInputs): Map<string, number> {
+  return new Map(patientOf(inputs).games.map((g) => [g.id, g.no]));
+}
+
+function recognitionRowsForGroup(inputs: ObsSnapshotInputs, group: string): RecognitionRowLike[] {
+  return recognitionOf(inputs).rows.filter((r) => r.group === group);
 }
 
 function timeCauseOf(inputs: ObsSnapshotInputs): TimeCauseFileLike {
@@ -759,6 +801,56 @@ export const SNAPSHOT_ITEMS: readonly SnapshotItemDefinition[] = [
       const zero = recognitionOf(inputs).movedRequiredZeroShapeCounts;
       return { completeTotal: group.shapeMovedRequiredCompleteTotal, zeroCount: { self: zero.self, opponent: zero.opponent } };
     },
+  },
+
+  // ---- recognition_measure.json(STEP OBS-5f〈docs/LANE_DIAG_LOG_2026-09.md §12.10 (A5)〉。
+  //      「止まる場所」。局ごとの内訳(id ではなく patient から引いた局番号 `gameNo` で示す)。
+  //      **ここで初めて「形の id」と「マス + 駒」の文字列を通す**(白いリストの穴。他の文字列は
+  //      いままでどおり `numbersOnly` が落とす)。--patient の games に無い id(組の対象外)は無視する。 ----
+  {
+    obsId: "obs.vocab.shapeOneAwayDetail",
+    path: "recognition rows[].closestSelfShape(missing が 1 件の行) → {gameNo,shapeId,square,piece}",
+    pick: (inputs, opts) => {
+      if (inputs.recognition === undefined) return SKIP;
+      const gameNoById = patientGameNoById(inputs);
+      const out: Array<{ gameNo: number; shapeId: string; square: string; piece: string }> = [];
+      for (const row of recognitionRowsForGroup(inputs, opts.group)) {
+        const closest = row.closestSelfShape;
+        if (closest === null || closest.missing.length !== 1) continue;
+        const gameNo = gameNoById.get(row.id);
+        if (gameNo === undefined) continue; // --patient の games に無い局(組の対象外)。無視する
+        const missing = closest.missing[0]!;
+        out.push({ gameNo, shapeId: closest.shapeId, square: missing.square, piece: missing.piece });
+      }
+      return out;
+    },
+    // `shapeId` は `data/` の形の認識(review_status を経たもの)。`square`・`piece` は幾何の事実
+    // (欠けていたマスとそこに要る駒)。この 2 種類だけを通す(§12.10 (A5) の条件)。
+    extraEnumKeys: ["shapeId", "square", "piece"],
+  },
+  {
+    obsId: "obs.vocab.shapeClosestPerGame",
+    path: "recognition rows[].{closestSelfShape.shapeId,shapeBest,shapeMovedRequiredBest} → {gameNo,shapeId,rawBest,movedRequiredBest}",
+    pick: (inputs, opts) => {
+      if (inputs.recognition === undefined) return SKIP;
+      const gameNoById = patientGameNoById(inputs);
+      const out: Array<{ gameNo: number; shapeId: string; rawBest: number | null; movedRequiredBest: number | null }> = [];
+      for (const row of recognitionRowsForGroup(inputs, opts.group)) {
+        const closest = row.closestSelfShape;
+        if (closest === null) continue;
+        const gameNo = gameNoById.get(row.id);
+        if (gameNo === undefined) continue; // --patient の games に無い局(組の対象外)。無視する
+        out.push({
+          gameNo,
+          shapeId: closest.shapeId,
+          rawBest: row.shapeBest[closest.shapeId] ?? null,
+          // 分母 0(初期位置でない必要駒が 0)の形は shapeMovedRequiredBest に入らない = 数え直せない → null
+          movedRequiredBest: row.shapeMovedRequiredBest[closest.shapeId] ?? null,
+        });
+      }
+      return out;
+    },
+    extraEnumKeys: ["shapeId"],
   },
 ];
 
