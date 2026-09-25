@@ -230,6 +230,8 @@
 
 `statusCounts`(`lib/recognitionMeasure.ts`)は `countExposure` と違い `status`(または `matchStatus`)が `"none"` の行も捨てずに数える(STEP OBS-5c の直し。docs/LANE_DIAG_LOG_2026-09.md §12.10 (A2) の「計画の直し」)。`exposure["D''"]` は既存(STEP EXPO-1b)。
 
+**`obs.vocab.shapeMovedRequiredSummary` の読み方(既知事項 P-90。2026-09-26 の実測で分かった)**: 数え直しは平手の初期配置にある必要駒を分母から外すので、**外した駒がその後に動いてしまった局でも 1.0 になる**。`shapeMovedRequiredCompleteTotal` は **「形が完成した局の数」ではない**(実例: `<p4>` の 3 分の 18 局で、自分側 `mutekigakoi` は生の完成 0 局なのにこの数には 1 局入る)。**この数を「囲いが完成した」と言い換えないこと。** 生の完成は `obs.recog.*` 側の `gamesCompleted`(写していない)ではなく、写しでは `obs.vocab.shapeStatus` の `completed` の件数で見る。
+
 ---
 
 ## 2. `copy` / `new` / `vocab` ― 設計案 §2 の項目(**まだ値は無い**。H-2 では引けない)
