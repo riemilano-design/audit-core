@@ -46,6 +46,8 @@ export const KNOWN_DIAGNOSIS_REPORT_SCHEMA_VERSIONS = ["0.1"] as const;
  * STEP OBS-2(docs/LANE_DIAG_LOG_2026-09.md §12.2)。契約 hypothesis(仮説台帳の 1 行)の今の版と、スキーマのファイルがある版(末尾に独立して置く)。
  * **`HYPOTHESIS_SCHEMA_VERSION` は据え置き**(STEP EXPO-1 §12.9)。0.2 は `knowledge.reviewStatus` に `expired` を足した版で、
  * 書く側の既定は変えない ― 既存の記録はすべて 0.1 であり、検査は `KNOWN_HYPOTHESIS_SCHEMA_VERSIONS` の両方を受ける(行の `schemaVersion` で選ぶ)。
+ * 0.3 は `lane` の enum に `reply`・`fork` を足した版(STEP 契約の仮説 v0.3、2026-09-26。司令塔の設計判断)。
+ * こちらも書く側の既定は変えない ― 行の `schemaVersion` が版を選ぶ仕組みはそのまま。
  */
 export const HYPOTHESIS_SCHEMA_VERSION = "0.1" as const;
-export const KNOWN_HYPOTHESIS_SCHEMA_VERSIONS = ["0.1", "0.2"] as const;
+export const KNOWN_HYPOTHESIS_SCHEMA_VERSIONS = ["0.1", "0.2", "0.3"] as const;

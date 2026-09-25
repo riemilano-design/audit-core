@@ -5,6 +5,7 @@
 // 登録簿 2(111 本・obs.timeSearch.col.* 30 本)+ パリティ 1(lib が読んだ一覧 = report-pdf/check_answer.py の BANNED_WORDS)+
 // CLI 1(hypothesisCheck.ts を子プロセスで回し exit code を見る)= 24 本。
 // STEP EXPO-1(§12.9)で版 0.2(expired)の 3 本を足して 27 本。
+// STEP 契約の仮説 v0.3(2026-09-26)で版 0.3(lane に reply・fork)の 4 本を足して 31 本。
 // 【落ちる入力】§12.2「落ちる入力(H ごとに 1 つ、試験に固定)」をそのまま使う。
 // 【基準の例】§12.2 の設計案 §7.1 の例を実物のパス・欄名に直した fixture
 // (__fixtures__/hypothesis.v0.1.example.json)。today 2026-09-25 で 9/9 通る。writtenAt を 2026-09-26 にすると
@@ -281,6 +282,75 @@ describe("版 0.2(expired)", () => {
     const promoted = clone(line);
     (promoted.knowledge as Json).reviewStatus = "human_reviewed";
     expect(checksByVersion(promoted).find((r) => r.check === "H-7")!.ok).toBe(true);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// STEP 契約の仮説 v0.3(2026-09-26、司令塔の設計判断): lane の enum に reply・fork を足した版。
+// v0.1・v0.2 の既存の記録が今までどおり通ることを確かめたうえで、v0.3 で reply・fork が通ることを見る。
+// ---------------------------------------------------------------------------
+
+/** v0.1 の既存の記録 3 本(obs-3/p4-min3、02 段階)。読むだけで使う(書き換えない)。 */
+const V01_EXISTING_RECORDS_DIR = fileURLToPath(new URL("../records/obs-3/p4-min3/", import.meta.url));
+const V01_EXISTING_FILES = ["02-H-p4-min3-001.json", "02-H-p4-min3-002.json", "02-H-p4-min3-003.json"];
+
+/** v0.2 の既存の記録 6 本(obs-3/p4-min3-r2、lane side・time、既に v0.2 の enum にある側)。読むだけで使う。 */
+const V02_EXISTING_RECORDS_DIR = fileURLToPath(new URL("../records/obs-3/p4-min3-r2/", import.meta.url));
+const V02_EXISTING_FILES = [
+  "02-H-side-001.json",
+  "02-H-side-002.json",
+  "02-H-side-003.json",
+  "02-H-time-001.json",
+  "02-H-time-002.json",
+  "02-H-time-003.json",
+];
+
+describe("版 0.3(lane に reply・fork)", () => {
+  it("通る: v0.1 の既存の記録 3 本(obs-3/p4-min3)は v0.3 を足しても schema ok のまま", () => {
+    for (const file of V01_EXISTING_FILES) {
+      const line = JSON.parse(readFileSync(join(V01_EXISTING_RECORDS_DIR, file), "utf-8")) as Json;
+      expect(line.schemaVersion, file).toBe("0.1");
+      const schemaResult = checksByVersion(line).find((r) => r.check === "schema")!;
+      expect(schemaResult.ok, `${file}: ${schemaResult.messages.join(" / ")}`).toBe(true);
+    }
+    expect(V01_EXISTING_FILES).toHaveLength(3);
+  });
+
+  it("通る: v0.2 の既存の記録 6 本(obs-3/p4-min3-r2、lane side・time)は v0.3 を足しても schema ok のまま", () => {
+    for (const file of V02_EXISTING_FILES) {
+      const line = JSON.parse(readFileSync(join(V02_EXISTING_RECORDS_DIR, file), "utf-8")) as Json;
+      expect(line.schemaVersion, file).toBe("0.2");
+      const schemaResult = checksByVersion(line).find((r) => r.check === "schema")!;
+      expect(schemaResult.ok, `${file}: ${schemaResult.messages.join(" / ")}`).toBe(true);
+    }
+    expect(V02_EXISTING_FILES).toHaveLength(6);
+  });
+
+  it("通る: v0.3 で lane reply・fork が通る(同じ行を v0.2 のまま照合すると enum に無く落ちる)", () => {
+    const replyLine = clone(V02_LINE);
+    replyLine.lane = "reply";
+    const asV02Reply = checksByVersion(replyLine).find((r) => r.check === "schema")!;
+    expect(asV02Reply.ok, "lane reply は v0.2 の enum に無いので落ちるはず").toBe(false);
+
+    replyLine.schemaVersion = "0.3";
+    const asV03Reply = checksByVersion(replyLine).find((r) => r.check === "schema")!;
+    expect(asV03Reply.ok, asV03Reply.messages.join(" / ")).toBe(true);
+
+    const forkLine = clone(V02_LINE);
+    forkLine.schemaVersion = "0.3";
+    forkLine.lane = "fork";
+    const asV03Fork = checksByVersion(forkLine).find((r) => r.check === "schema")!;
+    expect(asV03Fork.ok, asV03Fork.messages.join(" / ")).toBe(true);
+  });
+
+  it("落ちる: v0.3 でも知らない lane(例 unknown)は落ちる", () => {
+    const line = clone(V02_LINE);
+    line.schemaVersion = "0.3";
+    line.lane = "unknown";
+    const result = checksByVersion(line).find((r) => r.check === "schema")!;
+    expect(result.ok).toBe(false);
+    expect(result.messages.join(" ")).toContain("lane");
+    expect(result.messages.join(" ")).toContain("unknown");
   });
 });
 

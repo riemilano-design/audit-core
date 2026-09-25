@@ -1,7 +1,8 @@
 // STEP OBS-2(docs/LANE_DIAG_LOG_2026-09.md §12.2、設計案 docs/DESIGN_OBSERVATION_LAYER_2026-09.md §7・§7.2)。
 // 仮説の記録形式(契約 hypothesis)のスキーマ読み込みと、機械検査 H-1〜H-8。
-// 版は v0.1 と v0.2 の 2 つ(STEP EXPO-1 §12.9。v0.2 は `knowledge.reviewStatus` に `expired` を足しただけ)。
-// **照合に使う版は行の `schemaVersion` が決める**(古い記録は v0.1 のまま今までどおり通る)。
+// 版は v0.1・v0.2・v0.3 の 3 つ(STEP EXPO-1 §12.9。v0.2 は `knowledge.reviewStatus` に `expired` を足しただけ。
+// v0.3 は `lane` の enum に `reply`・`fork` を足しただけ ― 契約の仮説 v0.3、2026-09-26)。
+// **照合に使う版は行の `schemaVersion` が決める**(古い記録は v0.1・v0.2 のまま今までどおり通る)。
 //
 // 【このファイルがやること】
 // - `loadHypothesisSchema()`: スキーマのファイル(../schemas/hypothesis.v<version>.schema.json)を読む。
@@ -34,12 +35,13 @@ export function isKnownHypothesisSchemaVersion(value: unknown): value is Hypothe
 
 /** 契約 hypothesis の 1 行(観測 → 仮説 → 反証 → 予測)。設計案 §7.1。値の中身は検査 H-1〜H-8 が見る。 */
 export interface HypothesisLine {
-  /** 0.1 か 0.2。0.2 は `knowledge.reviewStatus` に `expired` を足した版(STEP EXPO-1) */
+  /** 0.1・0.2・0.3。0.2 は `knowledge.reviewStatus` に `expired` を足した版(STEP EXPO-1)。0.3 は `lane` に `reply`・`fork` を足した版 */
   schemaVersion: HypothesisSchemaVersion;
   hypothesisId: string;
   subject: { customer: string; groups: string[]; gamesCount: number };
   scope: "this_user" | "beginners_general";
-  lane: "time" | "side" | "shape" | "prior" | "alternative";
+  /** `reply`・`fork` は版 0.3 から(それ以前の版の行では出ない) */
+  lane: "time" | "side" | "shape" | "prior" | "alternative" | "reply" | "fork";
   statement: string;
   observations: HypothesisObservation[];
   counterEvidence: {

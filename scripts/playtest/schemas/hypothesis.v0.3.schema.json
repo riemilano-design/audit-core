@@ -1,0 +1,436 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "hypothesis.v0.2.schema.json",
+  "title": "Hypothesis v0.3",
+  "description": "STEP EXPO-1(docs/LANE_DIAG_LOG_2026-09.md §12.9)。仮説台帳の 1 行(契約 hypothesis の版 0.2)。v0.1 の複製で、変えたのは 2 か所だけ: schemaVersion の const が \"0.2\"、knowledge.reviewStatus の enum に \"expired\"(失効。露出は draft と同じ。docs/DATA_MODEL.md の運用区分、2026-09-25 の人間の決定)を足した。v0.1 の行はそのまま v0.1 として通る(古い版のファイルは消さない)。機械検査 H-1〜H-8 は版によらず同じで lib/hypothesis.ts が持つ。H-7(scope が beginners_general なら human_reviewed 以上)は変えていないので、expired は beginners_general に上げられない。",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "const": "0.3"
+    },
+    "hypothesisId": {
+      "type": "string",
+      "pattern": "^H-p[0-9]+-[a-z0-9]+-[0-9]{3}$"
+    },
+    "subject": {
+      "type": "object",
+      "properties": {
+        "customer": {
+          "type": "string",
+          "pattern": "^p[0-9]+$"
+        },
+        "groups": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1
+        },
+        "gamesCount": {
+          "type": "integer",
+          "minimum": 1
+        }
+      },
+      "required": [
+        "customer",
+        "groups",
+        "gamesCount"
+      ],
+      "additionalProperties": false
+    },
+    "scope": {
+      "enum": [
+        "this_user",
+        "beginners_general"
+      ]
+    },
+    "lane": {
+      "enum": [
+        "time",
+        "side",
+        "shape",
+        "prior",
+        "alternative",
+        "reply",
+        "fork"
+      ]
+    },
+    "statement": {
+      "type": "string"
+    },
+    "observations": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "properties": {
+          "obsId": {
+            "type": "string"
+          },
+          "path": {
+            "type": "string"
+          },
+          "value": {
+            "oneOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              },
+              {
+                "type": "object"
+              },
+              {
+                "type": "array"
+              }
+            ]
+          },
+          "unit": {
+            "type": "string"
+          },
+          "derived": {
+            "type": "object",
+            "properties": {
+              "kind": {
+                "enum": [
+                  "percent",
+                  "share10",
+                  "ratio"
+                ]
+              },
+              "numerator": {
+                "type": "object",
+                "properties": {
+                  "obsId": {
+                    "type": "string"
+                  },
+                  "value": {
+                    "type": "number"
+                  }
+                },
+                "required": [
+                  "obsId",
+                  "value"
+                ],
+                "additionalProperties": false
+              },
+              "denominator": {
+                "type": "object",
+                "properties": {
+                  "obsId": {
+                    "type": "string"
+                  },
+                  "value": {
+                    "type": "number"
+                  }
+                },
+                "required": [
+                  "obsId",
+                  "value"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "kind",
+              "numerator",
+              "denominator"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "obsId",
+          "path",
+          "value"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "counterEvidence": {
+      "type": "object",
+      "properties": {
+        "attempted": {
+          "type": "boolean"
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "kind": {
+                "enum": [
+                  "counterexample",
+                  "denominator",
+                  "alternative"
+                ]
+              },
+              "text": {
+                "type": "string"
+              },
+              "observations": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "obsId": {
+                      "type": "string"
+                    },
+                    "path": {
+                      "type": "string"
+                    },
+                    "value": {
+                      "oneOf": [
+                        {
+                          "type": "number"
+                        },
+                        {
+                          "type": "string"
+                        },
+                        {
+                          "type": "boolean"
+                        },
+                        {
+                          "type": "null"
+                        },
+                        {
+                          "type": "object"
+                        },
+                        {
+                          "type": "array"
+                        }
+                      ]
+                    },
+                    "unit": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "obsId",
+                    "value"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            },
+            "required": [
+              "kind",
+              "text",
+              "observations"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "result": {
+          "enum": [
+            "stands",
+            "weakened",
+            "refuted",
+            "none_found"
+          ]
+        },
+        "provenance": {
+          "type": "object",
+          "properties": {
+            "inputs": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "required": [
+            "inputs"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "attempted",
+        "items",
+        "result",
+        "provenance"
+      ],
+      "additionalProperties": false
+    },
+    "prediction": {
+      "type": "object",
+      "properties": {
+        "writtenAt": {
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+        },
+        "window": {
+          "type": "string"
+        },
+        "metric": {
+          "type": "string"
+        },
+        "comparator": {
+          "enum": [
+            "<=",
+            "<",
+            ">=",
+            ">",
+            "=="
+          ]
+        },
+        "value": {
+          "type": "number"
+        },
+        "alsoRequires": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "metric": {
+                "type": "string"
+              },
+              "comparator": {
+                "enum": [
+                  "<=",
+                  "<",
+                  ">=",
+                  ">",
+                  "=="
+                ]
+              },
+              "value": {
+                "type": "number"
+              }
+            },
+            "required": [
+              "metric",
+              "comparator",
+              "value"
+            ],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": [
+        "writtenAt",
+        "window",
+        "metric",
+        "comparator",
+        "value",
+        "alsoRequires"
+      ],
+      "additionalProperties": false
+    },
+    "status": {
+      "enum": [
+        "proposed",
+        "stands_after_refutation",
+        "weak",
+        "refuted",
+        "verified",
+        "missed",
+        "partial",
+        "unmeasured",
+        "expired"
+      ]
+    },
+    "knowledge": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "enum": [
+            "shogi",
+            "discovered",
+            "coaching"
+          ]
+        },
+        "reviewStatus": {
+          "enum": [
+            "draft",
+            "human_reviewed",
+            "expert_verified",
+            "expired"
+          ]
+        },
+        "origin": {
+          "type": "object",
+          "properties": {
+            "kifu": {
+              "type": "string"
+            },
+            "lane": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "kifu",
+            "lane"
+          ],
+          "additionalProperties": false
+        },
+        "range": {
+          "enum": [
+            "this_user",
+            "beginners_general"
+          ]
+        }
+      },
+      "required": [
+        "kind",
+        "reviewStatus",
+        "origin",
+        "range"
+      ],
+      "additionalProperties": false
+    },
+    "provenance": {
+      "type": "object",
+      "properties": {
+        "gitHead": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "inputs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1
+        },
+        "excludedInputs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "gitHead",
+        "inputs",
+        "excludedInputs"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "hypothesisId",
+    "subject",
+    "scope",
+    "lane",
+    "statement",
+    "observations",
+    "counterEvidence",
+    "prediction",
+    "status",
+    "knowledge",
+    "provenance"
+  ],
+  "additionalProperties": false
+}
