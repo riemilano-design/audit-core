@@ -1,0 +1,51 @@
+{
+  "id": "gangi_tsunogin_opponent",
+  "name": "ツノ銀雁木",
+  "name_kana": "つのぎんがんぎ",
+  "side": "opponent",
+  "family": "雁木系",
+  "parent_shape_id": "gangi_nimaigin_opponent",
+  "required_pieces": [
+    {
+      "piece": "玉",
+      "square": "4a",
+      "optional": false
+    },
+    {
+      "piece": "銀",
+      "square": "4c",
+      "optional": false
+    },
+    {
+      "piece": "銀",
+      "square": "6c",
+      "optional": false
+    },
+    {
+      "piece": "金",
+      "square": "3b",
+      "optional": false
+    },
+    {
+      "piece": "金",
+      "square": "5b",
+      "optional": false
+    }
+  ],
+  "typical_build_order": [
+    "3b",
+    "5b",
+    "4a",
+    "4c",
+    "6c"
+  ],
+  "characteristics": "相手がこの形に組んでいるかを読むためのレコードです。形そのものの意味は自分側の同じ名前の形(gangi_tsunogin)と同じで、盤の上では 180 度回った位置に現れます。雁木囲いの右の銀を5七ではなく4七に置いた形です。2枚の銀が6七と4七に離れて上がるので、間の5筋から相手の駒が入りにくくなり、玉を左右どちらに置いても形が崩れにくくなります。",
+  "beginner_friendliness": {
+    "score": 3,
+    "reason": "**相手の陣形を読むためのレコードで、自分が組むための評価ではありません。** 点は自分側の同じ形(gangi_tsunogin)から写しただけの値です。"
+  },
+  "weak_against": "相手がこの形のとき、attackable な方向の目安です(断定ではありません)。玉が6九のままなので横からの攻めに近く、囲いの左側(8筋・9筋)が薄いままです。銀が2枚とも前に出ているため、その後ろの段を狙われると受けにくいです。",
+  "source": "【AI起草。座標の一次資料確認は行っていない(docs/ROLES.md の保留事項)】**自分側の同じ形 gangi_tsunogin の座標を、盤ごと 180 度回して写したもの**(筋 f → 10−f、段 r → 10−r の両方を反転。写像: 玉4a・銀4c・銀6c・金3b・金5b)。**出典そのものが後手の座標を述べているわけではない**(出典は自分側のレコードの source を参照)。過去に「段だけを反転させて左右が入れ替わる」取り違えが起きているため(docs/PHASES.md の P-12、docs/STEP_UNIT6_PLAN_2026-09-12.md §9.5 の決定 3)、**写像の式をこの source に書き、4 人 70 局の実棋譜で相手の陣形として当たるかを測ってから記録した**。判定は後手視点で行われる(apps/server/src/analysis/shapeDetector.ts の perspectiveColorsForSide が side: opponent を gote に固定する)。 追加の経緯: 2026-09-25 の知識レーン第 16 組(docs/LANE_KNOWLEDGE_LOG_2026-09.md §19)。**相手側を目録の 35 件すべてまで写し切り、床(沈黙が動かなくなる点)を確かめるための最後の組**。人間の決定(2026-09-25、網羅)に沿って当たりにくい形も含めて写した。",
+  "confidence_level": "medium",
+  "review_status": "draft"
+}

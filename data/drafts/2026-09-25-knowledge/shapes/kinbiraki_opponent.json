@@ -1,0 +1,39 @@
+{
+  "id": "kinbiraki_opponent",
+  "name": "金開き",
+  "name_kana": "きんびらき",
+  "side": "opponent",
+  "family": "その他(居飛車)",
+  "parent_shape_id": null,
+  "required_pieces": [
+    {
+      "piece": "玉",
+      "square": "5b",
+      "optional": false
+    },
+    {
+      "piece": "金",
+      "square": "3b",
+      "optional": false
+    },
+    {
+      "piece": "金",
+      "square": "7b",
+      "optional": false
+    }
+  ],
+  "typical_build_order": [
+    "3b",
+    "7b",
+    "5b"
+  ],
+  "characteristics": "相手がこの形に組んでいるかを読むためのレコードです。形そのものの意味は自分側の同じ名前の形(kinbiraki)と同じで、盤の上では 180 度回った位置に現れます。玉を5八に上げ、その左右に金を1枚ずつ(7八と3八)離して置く形です。玉の両側に金が開いて構えるのでこの名前で呼ばれます。手数が短く、玉を中央に置いたまま左右どちらへも動けるようにした構えです。",
+  "beginner_friendliness": {
+    "score": 3,
+    "reason": "**相手の陣形を読むためのレコードで、自分が組むための評価ではありません。** 点は自分側の同じ形(kinbiraki)から写しただけの値です。"
+  },
+  "weak_against": "相手がこの形のとき、attackable な方向の目安です(断定ではありません)。玉のすぐ隣に駒がなく、上からの攻めが玉に直接届きやすいです。金が左右に離れているので、片方を攻められてももう片方が助けに行きにくいです。",
+  "source": "【AI起草。座標の一次資料確認は行っていない(docs/ROLES.md の保留事項)】**自分側の同じ形 kinbiraki の座標を、盤ごと 180 度回して写したもの**(筋 f → 10−f、段 r → 10−r の両方を反転。写像: 玉5b・金3b・金7b)。**出典そのものが後手の座標を述べているわけではない**(出典は自分側のレコードの source を参照)。過去に「段だけを反転させて左右が入れ替わる」取り違えが起きているため(docs/PHASES.md の P-12、docs/STEP_UNIT6_PLAN_2026-09-12.md §9.5 の決定 3)、**写像の式をこの source に書き、4 人 70 局の実棋譜で相手の陣形として当たるかを測ってから記録した**。判定は後手視点で行われる(apps/server/src/analysis/shapeDetector.ts の perspectiveColorsForSide が side: opponent を gote に固定する)。 追加の経緯: 2026-09-25 の知識レーン第 16 組(docs/LANE_KNOWLEDGE_LOG_2026-09.md §19)。**相手側を目録の 35 件すべてまで写し切り、床(沈黙が動かなくなる点)を確かめるための最後の組**。人間の決定(2026-09-25、網羅)に沿って当たりにくい形も含めて写した。",
+  "confidence_level": "low",
+  "review_status": "draft"
+}
