@@ -1,0 +1,63 @@
+{
+  "schemaVersion": "0.1",
+  "hypothesisId": "H-p4-min3-003",
+  "subject": {
+    "customer": "p4",
+    "groups": ["3 分"],
+    "gamesCount": 18
+  },
+  "scope": "this_user",
+  "lane": "time",
+  "statement": "時間で負けた 5 局は、長考の回数の中央値が 4 回・最も長い手の中央値が 18 秒・長考の連続の回数の中央値が 1 回で、それ以外の 13 局(2 回・10 秒・0 回)よりどれも大きいという読みです。次の同じ持ち時間の局でも、時間で負けた局は長考の回数の中央値がそれ以外の局より大きい側に出る可能性があります。",
+  "observations": [
+    { "obsId": "obs.time.groupMedians", "path": "groups[0].timeUpLoss.games", "value": 5, "unit": "局" },
+    { "obsId": "obs.time.groupMedians", "path": "groups[0].timeUpLoss.medianLongThinkTotal", "value": 4, "unit": "回" },
+    { "obsId": "obs.time.groupMedians", "path": "groups[0].timeUpLoss.medianLongestMoveSec", "value": 18, "unit": "秒" },
+    { "obsId": "obs.time.groupMedians", "path": "groups[0].timeUpLoss.medianStreakCount", "value": 1, "unit": "回" },
+    { "obsId": "obs.time.groupMedians", "path": "groups[0].other.games", "value": 13, "unit": "局" },
+    { "obsId": "obs.time.groupMedians", "path": "groups[0].other.medianLongThinkTotal", "value": 2, "unit": "回" },
+    { "obsId": "obs.time.groupMedians", "path": "groups[0].other.medianLongestMoveSec", "value": 10, "unit": "秒" },
+    { "obsId": "obs.time.groupMedians", "path": "groups[0].other.medianStreakCount", "value": 0, "unit": "回" },
+    { "obsId": "obs.time.longThinkTotal", "path": "games[gameNo=1].longThinkTotal", "value": 7, "unit": "回" },
+    { "obsId": "obs.time.longThinkTotal", "path": "games[gameNo=2].longThinkTotal", "value": 4, "unit": "回" },
+    { "obsId": "obs.time.longThinkTotal", "path": "games[gameNo=11].longThinkTotal", "value": 5, "unit": "回" },
+    { "obsId": "obs.time.longThinkTotal", "path": "games[gameNo=14].longThinkTotal", "value": 3, "unit": "回" },
+    { "obsId": "obs.time.longThinkTotal", "path": "games[gameNo=16].longThinkTotal", "value": 3, "unit": "回" },
+    { "obsId": "obs.time.longestMove", "path": "games[gameNo=1].longestMove.sec", "value": 19, "unit": "秒" },
+    { "obsId": "obs.time.longestMove", "path": "games[gameNo=2].longestMove.sec", "value": 18, "unit": "秒" },
+    { "obsId": "obs.time.longestMove", "path": "games[gameNo=11].longestMove.sec", "value": 18, "unit": "秒" },
+    { "obsId": "obs.time.longestMove", "path": "games[gameNo=14].longestMove.sec", "value": 13, "unit": "秒" },
+    { "obsId": "obs.time.longestMove", "path": "games[gameNo=16].longestMove.sec", "value": 17, "unit": "秒" },
+    { "obsId": "obs.time.perMove", "path": "time.perMove.ge10", "value": 7.2, "unit": "%" },
+    { "obsId": "obs.time.afterLongThink", "path": "time.afterLongThink.afterLongThinkAny", "value": { "n": 8, "collapsed": 1 } }
+  ],
+  "counterEvidence": {
+    "attempted": false,
+    "items": [],
+    "result": "none_found",
+    "provenance": { "inputs": [] }
+  },
+  "prediction": {
+    "writtenAt": "2026-09-25",
+    "window": "next_20_games_same_time_limit",
+    "metric": "obs.time.groupMedians[group='3 分'].timeUpLoss.medianLongThinkTotal - obs.time.groupMedians[group='3 分'].other.medianLongThinkTotal",
+    "comparator": ">",
+    "value": 0,
+    "alsoRequires": [
+      { "metric": "obs.time.groupMedians[group='3 分'].timeUpLoss.games", "comparator": ">=", "value": 3 },
+      { "metric": "obs.time.groupMedians[group='3 分'].other.games", "comparator": ">=", "value": 5 }
+    ]
+  },
+  "status": "proposed",
+  "knowledge": {
+    "kind": "discovered",
+    "reviewStatus": "draft",
+    "origin": { "kifu": "p4/min3", "lane": "time" },
+    "range": "this_user"
+  },
+  "provenance": {
+    "gitHead": "c59fa4f",
+    "inputs": ["records/obs-3/p4-min3/00-obs_snapshot.p4.min3.json"],
+    "excludedInputs": []
+  }
+}

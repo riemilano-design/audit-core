@@ -1,0 +1,54 @@
+{
+  "schemaVersion": "0.1",
+  "hypothesisId": "H-p4-min3-001",
+  "subject": {
+    "customer": "p4",
+    "groups": ["3 分"],
+    "gamesCount": 18
+  },
+  "scope": "this_user",
+  "lane": "time",
+  "statement": "時間で負けた 5 局は、序盤の消費の中央値が 37 秒・中盤が 68 秒・終盤が 57 秒で、それ以外の 13 局(序盤 26 秒・中盤 51 秒・終盤 40 秒)よりどの段でも多いという読みです。次の同じ持ち時間の局でも、時間で負けた局は中盤の消費の中央値がそれ以外の局より大きい側に出る可能性があります。",
+  "observations": [
+    { "obsId": "obs.time.groupMedians", "path": "groups[0].timeUpLoss.games", "value": 5, "unit": "局" },
+    { "obsId": "obs.time.groupMedians", "path": "groups[0].timeUpLoss.medianEarlySec", "value": 37, "unit": "秒" },
+    { "obsId": "obs.time.groupMedians", "path": "groups[0].timeUpLoss.medianMidSec", "value": 68, "unit": "秒" },
+    { "obsId": "obs.time.groupMedians", "path": "groups[0].timeUpLoss.medianLateSec", "value": 57, "unit": "秒" },
+    { "obsId": "obs.time.groupMedians", "path": "groups[0].other.games", "value": 13, "unit": "局" },
+    { "obsId": "obs.time.groupMedians", "path": "groups[0].other.medianEarlySec", "value": 26, "unit": "秒" },
+    { "obsId": "obs.time.groupMedians", "path": "groups[0].other.medianMidSec", "value": 51, "unit": "秒" },
+    { "obsId": "obs.time.groupMedians", "path": "groups[0].other.medianLateSec", "value": 40, "unit": "秒" },
+    { "obsId": "obs.time.phaseSpentPatient", "path": "time.phaseSpent.timeUpLoss", "value": { "games": 5, "early": 37, "mid": 68, "late": 57 } },
+    { "obsId": "obs.time.phaseSpentPatient", "path": "time.phaseSpent.otherGames", "value": { "games": 13, "early": 26, "mid": 51, "late": 40 } },
+    { "obsId": "obs.time.remainingSec", "path": "games[].timeLimitSec", "value": 180, "unit": "秒" }
+  ],
+  "counterEvidence": {
+    "attempted": false,
+    "items": [],
+    "result": "none_found",
+    "provenance": { "inputs": [] }
+  },
+  "prediction": {
+    "writtenAt": "2026-09-25",
+    "window": "next_20_games_same_time_limit",
+    "metric": "obs.time.groupMedians[group='3 分'].timeUpLoss.medianMidSec - obs.time.groupMedians[group='3 分'].other.medianMidSec",
+    "comparator": ">",
+    "value": 0,
+    "alsoRequires": [
+      { "metric": "obs.time.groupMedians[group='3 分'].timeUpLoss.games", "comparator": ">=", "value": 3 },
+      { "metric": "obs.time.groupMedians[group='3 分'].other.games", "comparator": ">=", "value": 5 }
+    ]
+  },
+  "status": "proposed",
+  "knowledge": {
+    "kind": "discovered",
+    "reviewStatus": "draft",
+    "origin": { "kifu": "p4/min3", "lane": "time" },
+    "range": "this_user"
+  },
+  "provenance": {
+    "gitHead": "c59fa4f",
+    "inputs": ["records/obs-3/p4-min3/00-obs_snapshot.p4.min3.json"],
+    "excludedInputs": []
+  }
+}
