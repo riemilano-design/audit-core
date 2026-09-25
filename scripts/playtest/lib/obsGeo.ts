@@ -1,14 +1,19 @@
 // STEP OBS-5(docs/LANE_DIAG_LOG_2026-09.md §12.10 (A))。幾何の写し `obs_geo.json` を組む純粋関数。
 // 作りは STEP OBS-5'(§12.6、lib/obsExtra.ts)に揃える。
+// STEP OBS-5d(§12.10 (A3))で `sideCrossTable`(側の一致の交差表)を追加した(下記)。
 //
 // 【このファイルがやること】
 // - `buildObsGeo(sources, whatifPositionsByKifuId, gitHead, dirty)`: 段 2 の記録・固定棋譜から、
 //   本人の手 1 つごとの幾何の事実・側・組み合わせの名前(`moves[]`)と、5〜9 秒(`spentBucket "≤9"`)・
 //   10 秒以上(`spentBucket ">9"`。今までの `longThink === true` と同じ集合)の帯に絞った
-//   決断の文脈(`decisionContext[]`)を組む(統括経由の追加指示、2026-09-25。**判定はしない ― 写すだけ**)。
+//   決断の文脈(`decisionContext[]`)、`whatif-v2` の `kind:"position"` かつ `scenes.fork` が真の行を
+//   第 1 候補の側 × 実戦の側で数えた交差表(`sideCrossTable[]`。STEP OBS-5d、§12.10 (A3))を組む
+//   (統括経由の追加指示、2026-09-25/2026-09-26。**判定はしない ― 写す・数えるだけ**)。
 //   **新しい盤の計算はしない**(`lib/moveFacts.ts` の
 //   `moveFactsOf`・`lib/read.ts` の `moveMarksOf`・`lib/whatif.ts` の `tagsOf`/`sideOf`・
-//   `lib/timeFeatures.ts` の `buildGameMoveFeatureRows` を呼ぶだけ)。
+//   `lib/timeFeatures.ts` の `buildGameMoveFeatureRows` を呼ぶだけ)。`sideCrossTable` は
+//   `whatifPositionsByKifuId`(既に `top1Side`/`actualSide`/`fork` を持つ `MoveFeatureWhatifPosition[]`)を
+//   数えるだけで、新しい判定は一切しない。
 // - 局面の再生は `apps/server/src/analysis/moveHistory.ts` の `DEFAULT_INITIAL_SFEN`・`replayMoveHistory`
 //   をそのまま使う(`applyMove` は `replayMoveHistory` の内部が呼ぶ)。**`lib/sideAlignment.ts` の
 //   「本人 = 先手にそろえる」変換は使わない** ― `moveFactsOf`・`moveMarksOf`・`tagsOf` はどれも
@@ -30,6 +35,8 @@
 //   「既存の道具を呼ぶだけ」という制約を越えるため)。
 // - 新しい判定的知識(閾値)を置くこと。5〜9 秒・10 秒以上の帯は既存の `TIME_VALUES.spentBucketsSec [1,4,9]`
 //   (`lib/reportData.ts`)の区切りを `buildGameMoveFeatureRows` 経由でそのまま使う(新しい閾値は置かない)。
+// - `sideCrossTable` で「一致」「不一致」という合計を作ること(統括の決定、2026-09-26)。`both` を
+//   他のマスへ足し込まない。16 マスの件数をそのまま出すだけで、読む側が必要な足し算をする。
 
 import { DEFAULT_INITIAL_SFEN, replayMoveHistory } from "../../../apps/server/src/analysis/moveHistory.js";
 import { POSITION_FACTS_RULES } from "./counterfactual.js";
@@ -94,6 +101,52 @@ export interface ObsGeoDecisionContext {
   evalBand: "ahead" | "level" | "behind" | null;
 }
 
+// ---- sideCrossTable(STEP OBS-5d、§12.10 (A3))。fork が真の行を第 1 候補の側 × 実戦の側で数えた交差表 ----
+
+/** 側の 4 値(`lib/whatif.ts` の `WhatifSide` と同じ集合)。表の行・列の並びを固定する順。 */
+const SIDE_VALUES: readonly WhatifSide[] = ["attack", "defense", "both", "none"];
+
+export interface ObsGeoSideCrossCell {
+  /** 第 1 候補(`candidates[0]`)の側。 */
+  top1Side: WhatifSide;
+  /** 実戦の手の側。 */
+  actualSide: WhatifSide;
+  /** この組み合わせだった、`kind:"position"` かつ `scenes.fork` が真の行の件数。 */
+  count: number;
+}
+
+/**
+ * `whatifPositionsByKifuId` の全局・全行(`--whatif-v2-dir` を渡した分すべて。§12.10 (A3) は「組ごとに」
+ * 求めると書いているが、この関数自身は組を知らない ― `obsGeo.ts` の 1 回の呼び出しが 1 組ぶんの
+ * `--records`/`--kifu`/`--whatif-v2-dir` を受け取る既存の作り〈`obs_geo.json` は既に「1 組ぶんのファイル」、
+ * `docs/OBSERVATION_ITEMS.md` の `obs.geo.*`・`obs.time.decisionContext` と同じ〉のまま「組ごとに」を満たす。
+ * 実装担当の判断)のうち、`fork` が真の行だけを、第 1 候補の側 × 実戦の側で数える(決-A3)。
+ * **新しい盤の計算はしない**(`MoveFeatureWhatifPosition.top1Side`/`actualSide`/`fork` を数えるだけ)。
+ * 16 マス(4×4)を常に返す(件数 0 のマスも省かない ― 合計が fork の行数と一致することを機械で確かめやすくする)。
+ * `both` は他のマスへ足し込まない(統括の決定、2026-09-26。「一致」「不一致」という合計はこの関数が作らない)。
+ * `whatifPositionsByKifuId` が `null`(`--whatif-v2-dir` 無し)なら全マス 0。
+ */
+function sideCrossTableOf(whatifPositionsByKifuId: ReadonlyMap<string, readonly MoveFeatureWhatifPosition[]> | null): ObsGeoSideCrossCell[] {
+  const counts = new Map<string, number>();
+  for (const top1Side of SIDE_VALUES) {
+    for (const actualSide of SIDE_VALUES) counts.set(`${top1Side}|${actualSide}`, 0);
+  }
+  if (whatifPositionsByKifuId !== null) {
+    for (const positions of whatifPositionsByKifuId.values()) {
+      for (const position of positions) {
+        if (!position.fork) continue;
+        const key = `${position.top1Side}|${position.actualSide}`;
+        counts.set(key, (counts.get(key) ?? 0) + 1);
+      }
+    }
+  }
+  const out: ObsGeoSideCrossCell[] = [];
+  for (const top1Side of SIDE_VALUES) {
+    for (const actualSide of SIDE_VALUES) out.push({ top1Side, actualSide, count: counts.get(`${top1Side}|${actualSide}`)! });
+  }
+  return out;
+}
+
 export interface ObsGeo {
   kind: "obs_geo";
   schemaVersion: "0.1";
@@ -101,6 +154,7 @@ export interface ObsGeo {
   dirty: boolean | null;
   moves: ObsGeoMove[];
   decisionContext: ObsGeoDecisionContext[];
+  sideCrossTable: ObsGeoSideCrossCell[];
 }
 
 // ---- 名前の表(幾何だけ。将棋の語彙を含まない。§12.10 (A) の 1.) ----
@@ -269,5 +323,6 @@ export function buildObsGeo(
     dirty,
     moves: movesOf(games, patientGames),
     decisionContext: decisionContextOf(games, patientGames, whatifPositionsByKifuId),
+    sideCrossTable: sideCrossTableOf(whatifPositionsByKifuId),
   };
 }

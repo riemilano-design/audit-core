@@ -17,6 +17,7 @@ import type { MetaLine, RecordLine } from "../invariants/types.js";
 import { GAME01_MOVES, plantedRecords } from "./failureEventFixtures.js";
 import { buildObsGeo, GEO_VOCABULARY_WORDS, replyToCheckOf, type ObsGeoMoveFacts } from "./obsGeo.js";
 import type { GameSource } from "./reportData.js";
+import type { MoveFeatureWhatifPosition } from "./timeFeatures.js";
 
 const REPO_ROOT = fileURLToPath(new URL("../../../", import.meta.url));
 const OBS_GEO_TS = fileURLToPath(new URL("../obsGeo.ts", import.meta.url));
@@ -106,6 +107,64 @@ describe("buildObsGeo: decisionContext(--whatif-v2-dir 無し)", () => {
     const geo = buildObsGeo([source], null, null, null);
     expect(geo.decisionContext.length).toBeGreaterThan(0);
     expect(geo.decisionContext.every((r) => r.fork === null)).toBe(true);
+  });
+});
+
+// (h) sideCrossTable(STEP OBS-5d、§12.10 (A3))。側の一致の交差表。
+function whatifPosition(overrides: Partial<MoveFeatureWhatifPosition>): MoveFeatureWhatifPosition {
+  return {
+    ply: 1,
+    sfen: "startpos",
+    fork: false,
+    top1Side: "none",
+    actualSide: "none",
+    top1Move: "7g7f",
+    actualMove: "7g7f",
+    actualRank: 1,
+    lossCpValue: null,
+    lossIsLowerBound: false,
+    ...overrides,
+  };
+}
+
+// 2 局ぶんの作り物: fork===true が 5 行(attack-attack 1・attack-defense 1・both-attack 1・defense-both 1・
+// none-none 1)、fork===false が 1 行(数えない)。
+const CROSS_TABLE_POSITIONS = new Map<string, MoveFeatureWhatifPosition[]>([
+  [
+    "g1",
+    [
+      whatifPosition({ fork: true, top1Side: "attack", actualSide: "attack" }),
+      whatifPosition({ fork: true, top1Side: "attack", actualSide: "defense" }),
+      whatifPosition({ fork: false, top1Side: "attack", actualSide: "attack" }), // fork でないので数えない
+      whatifPosition({ fork: true, top1Side: "both", actualSide: "attack" }),
+    ],
+  ],
+  ["g2", [whatifPosition({ fork: true, top1Side: "defense", actualSide: "both" }), whatifPosition({ fork: true, top1Side: "none", actualSide: "none" })]],
+]);
+
+describe("buildObsGeo: sideCrossTable(側の一致の交差表)", () => {
+  it("16 マス(4×4)を常に返し、合計は fork===true の行数(5)と一致する", () => {
+    const geo = buildObsGeo([source], CROSS_TABLE_POSITIONS, null, null);
+    expect(geo.sideCrossTable).toHaveLength(16);
+    const total = geo.sideCrossTable.reduce((sum, cell) => sum + cell.count, 0);
+    expect(total).toBe(5);
+  });
+
+  it("both は「同じ側」の分子に混ざらない(both-attack は attack-attack とは別マスに 1、defense-both は defense-defense に足されない)", () => {
+    const geo = buildObsGeo([source], CROSS_TABLE_POSITIONS, null, null);
+    const cellOf = (top1Side: string, actualSide: string) => geo.sideCrossTable.find((c) => c.top1Side === top1Side && c.actualSide === actualSide)!.count;
+    expect(cellOf("attack", "attack")).toBe(1); // both-attack が足し込まれていない
+    expect(cellOf("both", "attack")).toBe(1); // both は別マスとして独立に数えられている
+    expect(cellOf("defense", "both")).toBe(1);
+    expect(cellOf("defense", "defense")).toBe(0); // both が defense-defense へ紛れ込んでいない
+    expect(cellOf("attack", "defense")).toBe(1);
+    expect(cellOf("none", "none")).toBe(1);
+  });
+
+  it("--whatif-v2-dir 無し(null)なら 16 マスすべて 0(合計 0)", () => {
+    const geo = buildObsGeo([source], null, null, null);
+    expect(geo.sideCrossTable).toHaveLength(16);
+    expect(geo.sideCrossTable.every((cell) => cell.count === 0)).toBe(true);
   });
 });
 

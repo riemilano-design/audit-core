@@ -235,6 +235,9 @@ describe("任意入力が無いとき", () => {
       // STEP OBS-5e(docs/LANE_DIAG_LOG_2026-09.md §12.10 (A4))。同じ --recognition が無ければこの 2 本も出ない。
       "obs.vocab.shapeMissingSummary",
       "obs.vocab.shapeMovedRequiredSummary",
+      // STEP OBS-5d(docs/LANE_DIAG_LOG_2026-09.md §12.10 (A3))。--geo を渡さなければこの 1 本も出ない
+      // (出どころは obs_geo.json。obs.geo.* と同じファイルだが obsId の列は fork)。
+      "obs.fork.sideCrossTable",
     ];
     for (const id of optionalOnly) expect(obsIds, id).not.toContain(id);
     expect(snapshot.items.length).toBe(SNAPSHOT_ITEMS.length - optionalOnly.length);
@@ -569,5 +572,30 @@ describe("--recognition(recognition_measure.json。STEP OBS-5e)", () => {
     const obsIds = snapshot.items.map((i) => i.obsId);
     expect(obsIds).not.toContain("obs.vocab.shapeMissingSummary");
     expect(obsIds).not.toContain("obs.vocab.shapeMovedRequiredSummary");
+  });
+});
+
+// 16. STEP OBS-5d(docs/LANE_DIAG_LOG_2026-09.md §12.10 (A3))。側の一致の交差表(obs.fork.sideCrossTable)。
+// 数え方そのもの(合計 = fork の行数・both を足し込まない)は lib/obsGeo.test.ts が見る。ここは「写しはそのまま
+// 写すだけ」の一般規則(numbersOnly が top1Side・actualSide を落とさない、渡さなければ出ない)だけを見る。
+describe("--geo(obs_geo.json。STEP OBS-5d)", () => {
+  it("渡せば obs.fork.sideCrossTable が載り、16 マス(fixture の値そのまま)を写す", () => {
+    const snapshot = buildObsSnapshot(fullInputs(), optionsOf("3 分"));
+    const crossTable = snapshot.items.find((i) => i.obsId === "obs.fork.sideCrossTable");
+    expect(crossTable, "obs.fork.sideCrossTable が出ていない").toBeDefined();
+
+    const geoFixture = JSON.parse(readFileSync(join(FIXTURES_DIR, "obs_geo.json"), "utf-8")) as {
+      sideCrossTable: Array<{ top1Side: string; actualSide: string; count: number }>;
+    };
+    expect(geoFixture.sideCrossTable).toHaveLength(16); // fixture 自身が 4×4 を持つことの確認(値の出どころ)
+    expect(crossTable!.value).toEqual(geoFixture.sideCrossTable);
+  });
+
+  it("渡さなければ出ない(空で埋めない)", () => {
+    const inputs = fullInputs();
+    const minimal: ObsSnapshotInputs = { patient: inputs.patient, timeCause: inputs.timeCause };
+    const snapshot = buildObsSnapshot(minimal, optionsOf("3 分"));
+    const obsIds = snapshot.items.map((i) => i.obsId);
+    expect(obsIds).not.toContain("obs.fork.sideCrossTable");
   });
 });

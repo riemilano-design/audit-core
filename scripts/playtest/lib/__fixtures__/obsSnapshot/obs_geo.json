@@ -38,5 +38,23 @@
       "phase": "mid",
       "evalBand": "ahead"
     }
+  ],
+  "sideCrossTable": [
+    { "top1Side": "attack", "actualSide": "attack", "count": 3 },
+    { "top1Side": "attack", "actualSide": "defense", "count": 1 },
+    { "top1Side": "attack", "actualSide": "both", "count": 0 },
+    { "top1Side": "attack", "actualSide": "none", "count": 2 },
+    { "top1Side": "defense", "actualSide": "attack", "count": 1 },
+    { "top1Side": "defense", "actualSide": "defense", "count": 2 },
+    { "top1Side": "defense", "actualSide": "both", "count": 0 },
+    { "top1Side": "defense", "actualSide": "none", "count": 1 },
+    { "top1Side": "both", "actualSide": "attack", "count": 0 },
+    { "top1Side": "both", "actualSide": "defense", "count": 0 },
+    { "top1Side": "both", "actualSide": "both", "count": 1 },
+    { "top1Side": "both", "actualSide": "none", "count": 0 },
+    { "top1Side": "none", "actualSide": "attack", "count": 1 },
+    { "top1Side": "none", "actualSide": "defense", "count": 0 },
+    { "top1Side": "none", "actualSide": "both", "count": 0 },
+    { "top1Side": "none", "actualSide": "none", "count": 2 }
   ]
 }

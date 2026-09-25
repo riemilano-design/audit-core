@@ -362,8 +362,9 @@ describe("登録簿(docs/OBSERVATION_ITEMS.md §1)", () => {
   // (obs.vocab.shapeStatus・intentStatus・openingStatus・exposure)を §1.16 に足したので 115→119。
   // STEP OBS-5e(§12.10 (A4))で obs.vocab.shapeMissingSummary・shapeMovedRequiredSummary を
   // 同じ §1.16 に足したので 119→121。
-  it("existing の大きさは 121", () => {
-    expect(registry.size).toBe(121);
+  // STEP OBS-5d(§12.10 (A3))で obs.fork.sideCrossTable を §1.8 に足したので 121→122。
+  it("existing の大きさは 122", () => {
+    expect(registry.size).toBe(122);
   });
 
   it("obs.timeSearch.col.* は 30 本", () => {

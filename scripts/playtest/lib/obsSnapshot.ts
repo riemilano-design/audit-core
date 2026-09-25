@@ -287,10 +287,18 @@ interface ObsGeoDecisionContextLike {
   evalBand: string | null;
 }
 
+// STEP OBS-5d(docs/LANE_DIAG_LOG_2026-09.md §12.10 (A3))。obs_geo.json の `sideCrossTable[]`(この段が読む欄だけ)。
+interface ObsGeoSideCrossCellLike {
+  top1Side: string;
+  actualSide: string;
+  count: number;
+}
+
 interface ObsGeoFileLike {
   kind?: unknown;
   moves: ObsGeoMoveLike[];
   decisionContext: ObsGeoDecisionContextLike[];
+  sideCrossTable: ObsGeoSideCrossCellLike[];
 }
 
 // STEP OBS-5c(docs/LANE_DIAG_LOG_2026-09.md §12.10 (A2))。recognition_measure.json(この段が読む欄だけ)。
@@ -690,6 +698,14 @@ export const SNAPSHOT_ITEMS: readonly SnapshotItemDefinition[] = [
     pick: (inputs) => (inputs.geo === undefined ? SKIP : (inputs.geo.data as ObsGeoFileLike).decisionContext),
     // `spentBucket`("≤9"/">9")・`phase`・`evalBand` は列挙のキーとして残す(統括経由の追加指示、2026-09-25)。
     extraEnumKeys: ["spentBucket", "phase", "evalBand"],
+  },
+  // STEP OBS-5d(docs/LANE_DIAG_LOG_2026-09.md §12.10 (A3))。出どころは obs_geo.json だが、側の一致の
+  // 交差表という中身にならい obsId の列は `fork` にした(実装担当の判断。理由は報告に書く)。
+  // `top1Side`・`actualSide` は既に `OBS_SNAPSHOT_ENUM_KEYS` にあるので extraEnumKeys は不要。
+  {
+    obsId: "obs.fork.sideCrossTable",
+    path: "obs_geo sideCrossTable[]",
+    pick: (inputs) => (inputs.geo === undefined ? SKIP : (inputs.geo.data as ObsGeoFileLike).sideCrossTable),
   },
 
   // ---- recognition_measure.json(任意。STEP OBS-5c〈docs/LANE_DIAG_LOG_2026-09.md §12.10 (A2)〉。
