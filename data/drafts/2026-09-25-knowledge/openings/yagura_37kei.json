@@ -1,0 +1,26 @@
+{
+  "id": "yagura_37kei",
+  "name": "矢倉3七桂",
+  "name_kana": "やぐらさんななけい",
+  "side": "self",
+  "family": "矢倉の指し方",
+  "leads_to_shape_ids": [
+    "yagura_kinyagura"
+  ],
+  "scenario": null,
+  "recognition_pattern": [
+    {
+      "piece": "桂",
+      "to": "3g",
+      "order_hint": 1
+    },
+    {
+      "piece": "銀",
+      "to": "4h",
+      "order_hint": 2
+    }
+  ],
+  "source": "【AI起草 / 出典は下記】Wikipedia『矢倉3七桂』(https://ja.wikipedia.org/wiki/矢倉3七桂 (参照日 2026-09-25))による。相矢倉の序盤で桂を 3七 に跳ね、銀を 4八 に置く『3七桂-4八銀の陣』。2010 年代から多く、土居矢倉や雁木囲いへ移ることもできる。 座標は先手の絶対座標(docs/DATA_MODEL.md の規約)。戦型を認識するコードは apps/server/src/analysis/ に無いため、このレコードを足しても認識の数は動かない(2026-09-25 司令塔の訂正、docs/KNOWLEDGE_LANE_BRIEF_2026-09-25.md §5.1)。追加の経緯: 2026-09-25 の知識レーン第 19 組(docs/LANE_KNOWLEDGE_LOG_2026-09.md §22)。人間の決定(2026-09-25、網羅)による目録の埋め。",
+  "confidence_level": "medium",
+  "review_status": "draft"
+}

@@ -1,0 +1,37 @@
+{
+  "id": "yontekaku",
+  "name": "四手角",
+  "name_kana": "よんてかく",
+  "side": "self",
+  "family": "相居飛車",
+  "leads_to_shape_ids": [
+    "yagura_kinyagura",
+    "gangi_nimaigin"
+  ],
+  "scenario": null,
+  "recognition_pattern": [
+    {
+      "piece": "角",
+      "to": "7i",
+      "order_hint": 1
+    },
+    {
+      "piece": "角",
+      "to": "4f",
+      "order_hint": 2
+    },
+    {
+      "piece": "角",
+      "to": "3g",
+      "order_hint": 3
+    },
+    {
+      "piece": "角",
+      "to": "2f",
+      "order_hint": 4
+    }
+  ],
+  "source": "【AI起草 / 出典は下記】Wikipedia『四手角』(https://ja.wikipedia.org/wiki/四手角 (参照日 2026-09-25))による。角交換をせずに、先手なら 2六(後手なら 8四)へ四手かけて角を動かす形。経路は ▲7九→4六→3七→2六 と ▲6八→5九→2六 の 2 通りが挙げられており、recognition_pattern には前者を置いた。**途中の 7九 は既存の hikikaku(引き角)と同じマス**なので、四手角は 2六 まで進む点で区別する。 座標は先手の絶対座標(docs/DATA_MODEL.md の規約)。戦型を認識するコードは apps/server/src/analysis/ に無いため、このレコードを足しても認識の数は動かない(2026-09-25 司令塔の訂正、docs/KNOWLEDGE_LANE_BRIEF_2026-09-25.md §5.1)。追加の経緯: 2026-09-25 の知識レーン第 19 組(docs/LANE_KNOWLEDGE_LOG_2026-09.md §22)。人間の決定(2026-09-25、網羅)による目録の埋め。",
+  "confidence_level": "medium",
+  "review_status": "draft"
+}

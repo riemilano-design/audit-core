@@ -219,20 +219,20 @@
 | 10 | 雀刺し |  | 矢倉の指し方 | <https://ja.wikipedia.org/wiki/%E9%9B%80%E5%88%BA%E3%81%97> | <https://ja.wikipedia.org/wiki/Category%3A%E7%9F%A2%E5%80%89> | 下書き済み(suzumesashi 自分) |
 | 11 | 森下システム |  | 矢倉の指し方 | <https://ja.wikipedia.org/wiki/%E6%A3%AE%E4%B8%8B%E3%82%B7%E3%82%B9%E3%83%86%E3%83%A0> | <https://ja.wikipedia.org/wiki/Category%3A%E7%9F%A2%E5%80%89> | 下書き済み(morishita_system 自分。recognition_pattern 無し) |
 | 12 | 脇システム |  | 矢倉の指し方 | <https://ja.wikipedia.org/wiki/%E8%84%87%E3%82%B7%E3%82%B9%E3%83%86%E3%83%A0> | <https://ja.wikipedia.org/wiki/Category%3A%E7%9F%A2%E5%80%89> | 下書き済み(wakisystem 自分) |
-| 13 | 矢倉3七桂 |  | 矢倉の指し方 | <https://ja.wikipedia.org/wiki/%E7%9F%A2%E5%80%893%E4%B8%83%E6%A1%82> | <https://ja.wikipedia.org/wiki/Category%3A%E7%9F%A2%E5%80%89> | 未 |
+| 13 | 矢倉3七桂 |  | 矢倉の指し方 | <https://ja.wikipedia.org/wiki/%E7%9F%A2%E5%80%893%E4%B8%83%E6%A1%82> | <https://ja.wikipedia.org/wiki/Category%3A%E7%9F%A2%E5%80%89> | 下書き済み(yagura_37kei 自分。第 19 組) |
 | 14 | 矢倉3七銀 |  | 矢倉の指し方 | <https://ja.wikipedia.org/wiki/%E7%9F%A2%E5%80%893%E4%B8%83%E9%8A%80> | <https://ja.wikipedia.org/wiki/Category%3A%E7%9F%A2%E5%80%89> | 下書き済み(yagura_37gin 自分) |
-| 15 | 四手角 |  | 矢倉の指し方 | <https://ja.wikipedia.org/wiki/%E5%9B%9B%E6%89%8B%E8%A7%92> | <https://ja.wikipedia.org/wiki/Category%3A%E7%9F%A2%E5%80%89> | 未 |
+| 15 | 四手角 |  | 矢倉の指し方 | <https://ja.wikipedia.org/wiki/%E5%9B%9B%E6%89%8B%E8%A7%92> | <https://ja.wikipedia.org/wiki/Category%3A%E7%9F%A2%E5%80%89> | 下書き済み(yontekaku 自分。第 19 組。目録に 2 行あるが同じもの) |
 | 16 | 米長流急戦矢倉 |  | 矢倉の指し方 | <https://ja.wikipedia.org/wiki/%E7%B1%B3%E9%95%B7%E6%B5%81%E6%80%A5%E6%88%A6%E7%9F%A2%E5%80%89> | <https://ja.wikipedia.org/wiki/Category%3A%E7%9F%A2%E5%80%89> | 下書き済み(yonenaga_kyusen_yagura 相手) |
-| 17 | 阿久津流急戦矢倉 |  | 矢倉の指し方 | <https://ja.wikipedia.org/wiki/%E9%98%BF%E4%B9%85%E6%B4%A5%E6%B5%81%E6%80%A5%E6%88%A6%E7%9F%A2%E5%80%89> | <https://ja.wikipedia.org/wiki/Category%3A%E7%9F%A2%E5%80%89> | 未 |
-| 18 | 中原流急戦矢倉 |  | 矢倉の指し方 | <https://ja.wikipedia.org/wiki/%E4%B8%AD%E5%8E%9F%E6%B5%81%E6%80%A5%E6%88%A6%E7%9F%A2%E5%80%89> | <https://ja.wikipedia.org/wiki/Category%3A%E7%9F%A2%E5%80%89> | 未 |
+| 17 | 阿久津流急戦矢倉 |  | 矢倉の指し方 | <https://ja.wikipedia.org/wiki/%E9%98%BF%E4%B9%85%E6%B4%A5%E6%B5%81%E6%80%A5%E6%88%A6%E7%9F%A2%E5%80%89> | <https://ja.wikipedia.org/wiki/Category%3A%E7%9F%A2%E5%80%89> | 下書き済み(akutsu_kyusen_yagura 相手側。第 19 組) |
+| 18 | 中原流急戦矢倉 |  | 矢倉の指し方 | <https://ja.wikipedia.org/wiki/%E4%B8%AD%E5%8E%9F%E6%B5%81%E6%80%A5%E6%88%A6%E7%9F%A2%E5%80%89> | <https://ja.wikipedia.org/wiki/Category%3A%E7%9F%A2%E5%80%89> | 保留(出典 URL が矢倉囲いの一般説明に転送され、固有の駒組みが読めない。第 19 組) |
 | 19 | 矢倉中飛車 |  | 矢倉の指し方 | <https://ja.wikipedia.org/wiki/%E7%9F%A2%E5%80%89%E4%B8%AD%E9%A3%9B%E8%BB%8A> | <https://ja.wikipedia.org/wiki/Category%3A%E7%9F%A2%E5%80%89> | 下書き済み(yagura_nakabisha 自分。第 17 組) |
-| 20 | 6二飛戦法 |  | 矢倉の指し方 | <https://ja.wikipedia.org/wiki/6%E4%BA%8C%E9%A3%9B%E6%88%A6%E6%B3%95> | <https://ja.wikipedia.org/wiki/Category%3A%E7%9F%A2%E5%80%89> | 未 |
+| 20 | 6二飛戦法 |  | 矢倉の指し方 | <https://ja.wikipedia.org/wiki/6%E4%BA%8C%E9%A3%9B%E6%88%A6%E6%B3%95> | <https://ja.wikipedia.org/wiki/Category%3A%E7%9F%A2%E5%80%89> | 保留(出典 URL が戦法の一般説明に転送され、固有の駒組みが読めない。第 19 組) |
 | 21 | カニカニ銀 |  | 矢倉の指し方 | <https://ja.wikipedia.org/wiki/%E3%82%AB%E3%83%8B%E3%82%AB%E3%83%8B%E9%8A%80> | <https://ja.wikipedia.org/wiki/Category%3A%E7%9F%A2%E5%80%89> | 下書き済み(kanikanigin 自分) |
-| 22 | 矢倉3五歩早仕掛け |  | 矢倉の指し方 | <https://ja.wikipedia.org/wiki/%E7%9F%A2%E5%80%893%E4%BA%94%E6%AD%A9%E6%97%A9%E4%BB%95%E6%8E%9B%E3%81%91> | <https://ja.wikipedia.org/wiki/Category%3A%E7%9F%A2%E5%80%89> | 未 |
-| 23 | 無理矢理矢倉 |  | 矢倉の指し方 | <https://ja.wikipedia.org/wiki/%E7%84%A1%E7%90%86%E7%9F%A2%E7%90%86%E7%9F%A2%E5%80%89> | <https://ja.wikipedia.org/wiki/Category%3A%E7%9F%A2%E5%80%89> | 未 |
-| 24 | ウソ矢倉 |  | 矢倉の指し方 | <https://ja.wikipedia.org/wiki/%E3%82%A6%E3%82%BD%E7%9F%A2%E5%80%89> | <https://ja.wikipedia.org/wiki/Category%3A%E7%9F%A2%E5%80%89> | 未 |
+| 22 | 矢倉3五歩早仕掛け |  | 矢倉の指し方 | <https://ja.wikipedia.org/wiki/%E7%9F%A2%E5%80%893%E4%BA%94%E6%AD%A9%E6%97%A9%E4%BB%95%E6%8E%9B%E3%81%91> | <https://ja.wikipedia.org/wiki/Category%3A%E7%9F%A2%E5%80%89> | 下書き済み(yagura_35fu_hayajikake 自分。第 19 組) |
+| 23 | 無理矢理矢倉 |  | 矢倉の指し方 | <https://ja.wikipedia.org/wiki/%E7%84%A1%E7%90%86%E7%9F%A2%E7%90%86%E7%9F%A2%E5%80%89> | <https://ja.wikipedia.org/wiki/Category%3A%E7%9F%A2%E5%80%89> | 下書き済み(muriyari_yagura 自分。第 19 組) |
+| 24 | ウソ矢倉 |  | 矢倉の指し方 | <https://ja.wikipedia.org/wiki/%E3%82%A6%E3%82%BD%E7%9F%A2%E5%80%89> | <https://ja.wikipedia.org/wiki/Category%3A%E7%9F%A2%E5%80%89> | 下書き済み(muriyari_yagura の別名。第 19 組。同じ記事) |
 | 25 | 同型矢倉 |  | 矢倉の指し方 | <https://ja.wikipedia.org/wiki/%E5%90%8C%E5%9E%8B%E7%9F%A2%E5%80%89> | <https://ja.wikipedia.org/wiki/Category%3A%E7%9F%A2%E5%80%89> | 下書き済み(douke_yagura 自分) |
-| 26 | 飛車先不突矢倉 |  | 矢倉の指し方 | <https://ja.wikipedia.org/wiki/%E9%A3%9B%E8%BB%8A%E5%85%88%E4%B8%8D%E7%AA%81%E7%9F%A2%E5%80%89> | <https://ja.wikipedia.org/wiki/Category%3A%E7%9F%A2%E5%80%89> | 未 |
+| 26 | 飛車先不突矢倉 |  | 矢倉の指し方 | <https://ja.wikipedia.org/wiki/%E9%A3%9B%E8%BB%8A%E5%85%88%E4%B8%8D%E7%AA%81%E7%9F%A2%E5%80%89> | <https://ja.wikipedia.org/wiki/Category%3A%E7%9F%A2%E5%80%89> | 保留(定義が「2六歩を突かない」という否定で、スキーマで表せない。第 19 組) |
 | 27 | 金立ち戦法 |  | 矢倉の指し方 | <https://ja.wikipedia.org/wiki/%E9%87%91%E7%AB%8B%E3%81%A1%E6%88%A6%E6%B3%95> | <https://ja.wikipedia.org/wiki/Category%3A%E7%9F%A2%E5%80%89> | 下書き済み(kintachi 自分。第 17 組) |
 | 28 | 忍者銀 |  | 矢倉の指し方 | <https://ja.wikipedia.org/wiki/%E5%BF%8D%E8%80%85%E9%8A%80> | <https://ja.wikipedia.org/wiki/Category%3A%E7%9F%A2%E5%80%89> | 下書き済み(ninja_gin 自分。第 17 組) |
 | 29 | 加藤流(矢倉) |  | 矢倉の指し方 | **出典なし** | <https://ja.wikipedia.org/wiki/%E5%B0%86%E6%A3%8B%E3%81%AE%E6%88%A6%E6%B3%95%E4%B8%80%E8%A6%A7> | 未 |
@@ -300,7 +300,7 @@
 | 91 | へなちょこ急戦 |  | 対振り急戦 | <https://ja.wikipedia.org/wiki/%E3%81%B8%E3%81%AA%E3%81%A1%E3%82%87%E3%81%93%E6%80%A5%E6%88%A6> | <https://ja.wikipedia.org/wiki/Category%3A%E5%AF%BE%E6%8C%AF%E3%82%8A%E9%A3%9B%E8%BB%8A> | 未 |
 | 92 | 居飛車舟囲い急戦 |  | 対振り急戦 | <https://ja.wikipedia.org/wiki/%E5%B1%85%E9%A3%9B%E8%BB%8A%E8%88%9F%E5%9B%B2%E3%81%84%E6%80%A5%E6%88%A6> | <https://ja.wikipedia.org/wiki/Category%3A%E5%AF%BE%E6%8C%AF%E3%82%8A%E9%A3%9B%E8%BB%8A> | 未 |
 | 93 | 地下鉄飛車 |  | 対振り急戦 | <https://ja.wikipedia.org/wiki/%E5%9C%B0%E4%B8%8B%E9%89%84%E9%A3%9B%E8%BB%8A> | <https://ja.wikipedia.org/wiki/Category%3A%E5%AF%BE%E6%8C%AF%E3%82%8A%E9%A3%9B%E8%BB%8A> | 下書き済み(狙い chikatetsu_bisha 相手側。第 14 組) |
-| 94 | 四手角 |  | 対振り急戦 | <https://ja.wikipedia.org/wiki/%E5%9B%9B%E6%89%8B%E8%A7%92> | <https://ja.wikipedia.org/wiki/Category%3A%E5%AF%BE%E6%8C%AF%E3%82%8A%E9%A3%9B%E8%BB%8A> | 未 |
+| 94 | 四手角 |  | 対振り急戦 | <https://ja.wikipedia.org/wiki/%E5%9B%9B%E6%89%8B%E8%A7%92> | <https://ja.wikipedia.org/wiki/Category%3A%E5%AF%BE%E6%8C%AF%E3%82%8A%E9%A3%9B%E8%BB%8A> | 下書き済み(yontekaku 自分。第 19 組。目録に 2 行あるが同じもの) |
 | 95 | 5八金右超急戦 |  | 対振り急戦 | **出典なし** | <https://ja.wikipedia.org/wiki/%E5%B0%86%E6%A3%8B%E3%81%AE%E6%88%A6%E6%B3%95%E4%B8%80%E8%A6%A7> | 未 |
 | 96 | 英春流右四間 |  | 対振り急戦 | **出典なし** | <https://ja.wikipedia.org/wiki/%E5%B0%86%E6%A3%8B%E3%81%AE%E6%88%A6%E6%B3%95%E4%B8%80%E8%A6%A7> | 未 |
 | 97 | 5七金戦法(対玉頭銀) |  | 対振り急戦 | **出典なし** | <https://ja.wikipedia.org/wiki/%E5%B0%86%E6%A3%8B%E3%81%AE%E6%88%A6%E6%B3%95%E4%B8%80%E8%A6%A7> | 未 |
@@ -998,6 +998,24 @@
 **目録の更新**: 上の 8 行を「未」→「下書き済み」に。あわせて、**第 14 組で狙いとして書いた 3 件(玉頭位取り・5筋位取り・地下鉄飛車)も戦法の目録に行があった**ので、「下書き済み(狙い側、相手側)」に更新した(戦法としてのレコードは作っていない。同じ名前が形・戦型・狙いのどこに置かれるかは 1 つに決まらない、という例として残す)。
 
 **埋まった数**: 戦法 **75 / 184**・囲い 自分側 35 / 62・相手側 35 / 35・狙い 18 / 67。
+
+## 22. 第 19 組(2026-09-25): 戦法 5 件 + 保留 3 件 ― **測れない(認識のコードが無い)**
+
+**足した ID**: `yagura_37kei`(矢倉3七桂)・`yontekaku`(四手角)・`muriyari_yagura`(無理矢理矢倉。**ウソ矢倉は同じ記事の別名**)・`akutsu_kyusen_yagura`(阿久津流急戦矢倉。**出典が「後手の急戦戦法」と述べているので `side: opponent`**)・`yagura_35fu_hayajikake`(矢倉3五歩早仕掛け)。出典はすべて Wikipedia の個別ページ(参照日 2026-09-25)。**スキーマ検証 81 件 OK**・**Kind 3 の口で例外なし・承認済み変化 0 件**。
+
+**保留 3 件(理由つきで目録に残した)**:
+
+| 名前 | 保留の理由 |
+|---|---|
+| 飛車先不突矢倉 | **定義が「2六歩を突かない」という否定で、スキーマで表せない。** `recognition_pattern` は「この駒がここに来た」しか書けない。出典が代わりに挙げる ▲4八銀・▲5六歩 を置くと、それを指しただけの局に当たってしまう |
+| 中原流急戦矢倉 | 出典 URL が矢倉囲いの一般説明に転送され、この戦法固有の駒組みが読めない |
+| 6二飛戦法 | 出典 URL が戦法の一般説明に転送され、固有の駒組みが読めない |
+
+**重なりの追記(第 18 組の表の続き)**: `yontekaku` の途中の 7九 は `hikikaku`(引き角)と同じマスで、四手角は 2六 まで進む点で区別する。`yagura_35fu_hayajikake` の 3六銀 は `ufo_gin` と同じマスで、こちらは 3五歩 を伴う。
+
+**目録の更新**: 9 行(下書き 6・保留 3)。**目録に「四手角」の行が 2 つある**(矢倉の指し方と対振り急戦)が、出典は同じ記事なので 1 レコードにした。
+
+**埋まった数**: 戦法 **84 / 184**(うち保留は 6 件)・囲い 自分側 35 / 62・相手側 35 / 35・狙い 18 / 67。
 
 ## 付録 A. 局ごとの一覧(4 人 70 局。40 手目と終局時の自玉・自飛の筋・相手玉・相手飛の筋、形の認識の前後)
 
