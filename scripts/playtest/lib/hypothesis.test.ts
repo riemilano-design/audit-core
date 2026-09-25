@@ -2,7 +2,7 @@
 // (lib/hypothesis.ts)を見る。**エンジンは起動しない。**
 //
 // 【構成】H-1〜H-8 × 通る 1・落ちる 1(16)+ スキーマ 4(通る・知らない欄・版違い・value の oneOf)+
-// 登録簿 2(111 本・obs.timeSearch.col.* 30 本)+ パリティ 1(report-pdf/check_answer.py の BANNED_WORDS と一致)+
+// 登録簿 2(111 本・obs.timeSearch.col.* 30 本)+ パリティ 1(lib が読んだ一覧 = report-pdf/check_answer.py の BANNED_WORDS)+
 // CLI 1(hypothesisCheck.ts を子プロセスで回し exit code を見る)= 24 本。
 // STEP EXPO-1(§12.9)で版 0.2(expired)の 3 本を足して 27 本。
 // 【落ちる入力】§12.2「落ちる入力(H ごとに 1 つ、試験に固定)」をそのまま使う。
@@ -17,7 +17,7 @@ import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 import { validate } from "./eventSchema.js";
-import { HYPOTHESIS_BANNED_WORDS, loadHypothesisSchema, loadObsRegistry, validateHypothesisLine, type CheckResult, type HypothesisCheckName } from "./hypothesis.js";
+import { loadHypothesisBannedWords, loadHypothesisSchema, loadObsRegistry, validateHypothesisLine, type CheckResult, type HypothesisCheckName } from "./hypothesis.js";
 
 type Json = Record<string, unknown>;
 
@@ -113,12 +113,29 @@ describe("H-5 禁止語・断定しない形", () => {
     expect(resultOf(BASE_LINE, "H-5").ok).toBe(true);
   });
 
-  it("落ちる: statement に「原因」", () => {
+  it("落ちる: 渡した一覧の語を含む statement(一覧は差し替え口から渡す)", () => {
+    // STEP H5-SYNC(§12.9): 一覧は check_answer.py が持つ(空になりうる)ので、
+    // 「語があれば落ちる」ことは自前の一覧を渡して見る(python 側の増減で壊れない)。
     const line = clone(BASE_LINE);
     line.statement = "崩れの原因を調べています。という読みです。";
-    const result = resultOf(line, "H-5");
+    const bannedWords = ["原因"];
+    const result = validateHypothesisLine(line, { today: TODAY, registry, schema, bannedWords }).find(
+      (r) => r.check === "H-5",
+    )!;
     expect(result.ok).toBe(false);
     expect(result.messages.join(" ")).toContain("原因");
+    // 一覧が空でも H-5 は消えない ―「という読みです / 可能性があります」の形は残る。
+    const empty = validateHypothesisLine(line, { today: TODAY, registry, schema, bannedWords: [] }).find(
+      (r) => r.check === "H-5",
+    )!;
+    expect(empty.ok).toBe(true);
+    const assertive = clone(BASE_LINE);
+    assertive.statement = "崩れは 30 回でした。";
+    const assertiveResult = validateHypothesisLine(assertive, { today: TODAY, registry, schema, bannedWords: [] }).find(
+      (r) => r.check === "H-5",
+    )!;
+    expect(assertiveResult.ok).toBe(false);
+    expect(assertiveResult.messages.join(" ")).toContain("という読みです");
   });
 });
 
@@ -280,12 +297,16 @@ describe("登録簿(docs/OBSERVATION_ITEMS.md §1)", () => {
 });
 
 describe("パリティ(検査 3・禁止語)", () => {
-  it("HYPOTHESIS_BANNED_WORDS は report-pdf/check_answer.py の BANNED_WORDS と並びまで一致する", () => {
+  it("lib が読んだ一覧は report-pdf/check_answer.py の BANNED_WORDS と並びまで一致する(空でも通る)", () => {
+    // STEP H5-SYNC(§12.9): lib は一覧の写しを持たず、python の実物を読む。
+    // 人間の決定(f715da2)で語が空になっても、この試験は通る(一致を見るだけ)。
     const source = readFileSync(CHECK_ANSWER_PY, "utf-8");
     const match = /BANNED_WORDS\s*=\s*\[([\s\S]*?)\]/.exec(source);
     expect(match, "check_answer.py に BANNED_WORDS が見つからない").not.toBeNull();
     const words = Array.from(match![1]!.matchAll(/"([^"]*)"/g)).map((m) => m[1]!);
-    expect([...HYPOTHESIS_BANNED_WORDS]).toEqual(words);
+    expect([...loadHypothesisBannedWords()]).toEqual(words);
+    // 読めないときは黙って空にせず例外(「0 件だった」と「検査していない」を混ぜない)。
+    expect(() => loadHypothesisBannedWords(join(REPO_ROOT, "この名前のファイルは無い.py"))).toThrow();
   });
 });
 

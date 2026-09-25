@@ -3,6 +3,7 @@
 // (1)〜(5) は数え方そのもの(小さな作り物の形・狙い・戦型で、1 局面ずつ数を突き合わせる)。
 // (6) は CLI(scripts/playtest/recognitionMeasure.ts)を実際に spawn する。
 // (7)(8) は局数の欄(STEP OPEN-2b)。(9)〜(11) は露出の欄(STEP EXPO-1、§12.9)。
+// (12)(13) は中間案の値の組 D・D'・D''(STEP EXPO-1b。R5' と R6 の内訳の欄)。
 // **一時ディレクトリ以外に書かない**(他の CLI 試験と同じ理由。作業ツリーへは書かない)。
 //
 // 【作り物の形・戦型・狙いについて】
@@ -754,5 +755,130 @@ describe("(11) 露出の合計と「証拠の少ない主張」の分母・分�
       expect(e.shape.self.weakClaims).toBe(totals.exposure.A.shape.self.weakClaims);
       expect(e.opening.self.weakClaims).toBe(totals.exposure.A.opening.self.weakClaims);
     }
+  });
+});
+
+// ---- (12)(13) 中間案の値の組 D・D'・D''(STEP EXPO-1b、§12.9 の追記) ----
+// ここでも判定は apps/server の decideNameExposure が行う。見るのは「新しい内訳の欄が
+// 数えられること」と「行数は値の組によらないこと」だけ。
+
+/** 作り物の形 4 件(将棋知識ではない)。R5' と R6 の当たり方を 1 局の中に作り分けるためのもの。 */
+function makeR5pR6Shapes(): ShapeDefinition[] {
+  return [
+    // ply 2 = forming(証拠 1・欠け 1 → R5' が拾う)、ply 4 = completed(証拠 2・必要 2)。
+    makeShape("s_r5p", "self", [
+      { piece: "歩", square: "7f" },
+      { piece: "銀", square: "3h" },
+    ]),
+    // 4i の金は初期配置のまま = ply 2・4 は completed だが証拠は 1 件(7f の歩)だけ。
+    makeShape("s_r6", "self", [
+      { piece: "金", square: "4i" },
+      { piece: "歩", square: "7f" },
+    ]),
+    // 必要 3(うち 1 つは初期配置の 4i)。ply 4 は completed・証拠 2。
+    makeShape("s_three", "self", [
+      { piece: "歩", square: "7f" },
+      { piece: "銀", square: "3h" },
+      { piece: "金", square: "4i" },
+    ]),
+    // ply 2 は forming(証拠 1・欠け 2 → R5' は拾わない)、ply 4 は forming(証拠 2)。
+    makeShape("s_miss2", "self", [
+      { piece: "歩", square: "7f" },
+      { piece: "銀", square: "3h" },
+      { piece: "金", square: "5h" },
+    ]),
+  ];
+}
+
+describe("(12) D の pickedByR5p・droppedByR6・droppedByR6ById", () => {
+  it("R5' と R6 の行が数えられ、named + hedged + hidden は A/B/C/D/D'/D'' で同じ", () => {
+    const row = measureOne(MOVES_4, { maxPly: 0, shapes: makeR5pR6Shapes() });
+
+    // 立った行は 8(4 件 × ply 2・4。ply 0 はどれも none)。値の組によらず同じ行を数える。
+    for (const set of ["A", "B", "C", "D", "D'", "D''"] as const) {
+      expect(levelSumOf(row.exposure[set].shape.self), `${set} の行数`).toBe(8);
+    }
+
+    // A・B・C は EXPO-1 の決定のまま(新しい 2 つの規則は当たらない)。
+    for (const set of ["A", "B", "C"] as const) {
+      expect(row.exposure[set].shape.self.pickedByR5p, `${set} の pickedByR5p`).toBe(0);
+      expect(row.exposure[set].shape.self.droppedByR6, `${set} の droppedByR6`).toBe(0);
+      expect(row.exposure[set].shape.self.droppedByR6ById, `${set} の droppedByR6ById`).toEqual({});
+    }
+
+    // D: R5' が 2 行(s_r5p・s_three の ply 2)、R6 が 3 行(s_r6 の 2 行 + s_three の ply 4)。
+    const d = row.exposure.D.shape.self;
+    expect(d.pickedByR5p).toBe(2);
+    expect(d.droppedByR6).toBe(3);
+    expect(d.droppedByR6ById).toEqual({ s_r6: 2, s_three: 1 });
+    expect(d.named).toBe(0); // 作り物は全部 draft(R1 で hedged 止まり)
+    expect(d.hedged).toBe(4);
+    expect(d.hidden).toBe(3 + 1); // R6 の 3 行 + 証拠 1・欠け 2 の forming(R5)
+
+    // D'(下限 2): s_three の ply 4(証拠 2)は落ちない。落ちるのは s_r6 の 2 行だけ。
+    const dPrime = row.exposure["D'"].shape.self;
+    expect(dPrime.pickedByR5p).toBe(2);
+    expect(dPrime.droppedByR6).toBe(2);
+    expect(dPrime.droppedByR6ById).toEqual({ s_r6: 2 });
+
+    // D''(下限 = 初期位置と違う必要な駒の数): s_r6 は動くべき駒が 1 つ(7f)なので落ちない。
+    const dPrime2 = row.exposure["D''"].shape.self;
+    expect(dPrime2.pickedByR5p).toBe(2);
+    expect(dPrime2.droppedByR6).toBe(0);
+    expect(dPrime2.droppedByR6ById).toEqual({});
+    expect(dPrime2.hedged).toBe(7);
+    expect(dPrime2.hidden).toBe(1);
+
+    // 固定棋譜 4 局 + 本体の形・狙いでも、行数は値の組によらない(延べの行数と一致する)。
+    const shapes = loadShapes(join(REPO_ROOT, "data", "shapes"));
+    const intents = loadIntents(join(REPO_ROOT, "data", "intents"));
+    const { byGroup } = measureRecognition(readFixed4(), { shapes, intents, openings: [], maxPly: 0 });
+    const totals = byGroup["fixed4"]!;
+    const sumOf = (counter: Record<string, number>): number =>
+      Object.values(counter).reduce((acc, n) => acc + n, 0);
+    for (const set of ["A", "B", "C", "D", "D'", "D''"] as const) {
+      const e = totals.exposure[set];
+      expect(levelSumOf(e.shape.self) + levelSumOf(e.shape.opponent), `${set} の形の行数`).toBe(
+        sumOf(totals.shapeHits),
+      );
+      expect(levelSumOf(e.intent.self) + levelSumOf(e.intent.opponent), `${set} の狙いの行数`).toBe(
+        sumOf(totals.intentHits),
+      );
+    }
+  });
+});
+
+describe("(13) D' の named + hedged は D 以上", () => {
+  it("作り物でも固定棋譜 4 局でも、D' が D を下回らない(D の下限は必要な数なので D' 以上)", () => {
+    const shownOf = (counts: { named: number; hedged: number }): number => counts.named + counts.hedged;
+
+    const row = measureOne(MOVES_4, { maxPly: 0, shapes: makeR5pR6Shapes() });
+    // 作り物では差がつく(s_three の ply 4 は D で落ち、D' では落ちない)。
+    expect(shownOf(row.exposure["D'"].shape.self)).toBe(5);
+    expect(shownOf(row.exposure.D.shape.self)).toBe(4);
+    expect(shownOf(row.exposure["D'"].shape.self)).toBeGreaterThan(shownOf(row.exposure.D.shape.self));
+
+    // 固定棋譜 4 局 + 本体の形・狙い + 作り物の戦型でも、向きは変わらない。
+    const shapes = loadShapes(join(REPO_ROOT, "data", "shapes"));
+    const intents = loadIntents(join(REPO_ROOT, "data", "intents"));
+    const openings = [
+      makeOpening("o_d_comp", "self", [
+        { piece: "歩", to: "7f" },
+        { piece: "銀", to: "3h" },
+        { piece: "金", to: "4i" },
+      ]),
+    ];
+    const { byGroup } = measureRecognition(readFixed4(), { shapes, intents, openings, maxPly: 0 });
+    const totals = byGroup["fixed4"]!;
+    for (const kind of ["shape", "intent", "opening"] as const) {
+      for (const side of ["self", "opponent"] as const) {
+        expect(
+          shownOf(totals.exposure["D'"][kind][side]),
+          `${kind} ${side} の D' の named+hedged`,
+        ).toBeGreaterThanOrEqual(shownOf(totals.exposure.D[kind][side]));
+      }
+    }
+    // 「どちらも 0 だから等しい」ではないことを示す(見せる行が実在する)。
+    expect(shownOf(totals.exposure["D'"].shape.self)).toBeGreaterThan(0);
   });
 });

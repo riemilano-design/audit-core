@@ -10,8 +10,8 @@
 //    expert_verified)はnull。
 // 2. decideNameExposure(): STEP EXPO-1(docs/LANE_DIAG_LOG_2026-09.md §12.9)。
 //    「名前を出す経路はすべて1つの関数を通す」(docs/DATA_MODEL.md)の実装として、
-//    認識の状態(none/forming/completed/matched)・証拠の数・必要な駒の数・review_status
-//    から hidden / hedged / named の3段階を返す純粋関数。
+//    認識の状態(none/forming/completed/matched)・証拠の数・欠けの数・必要な駒の数・
+//    review_status から hidden / hedged / named の3段階を返す純粋関数。
 //    **この STEP では、この関数はまだ本体(explanationGenerator.ts・stateResponse.ts・
 //    apps/web)から呼ばれていない。** 呼ぶのは測る道具(scripts/playtest)だけで、
 //    画面の見え方は変わらない。閾値の値(NAME_EXPOSURE_VALUES)は統括の承認待ちの案であり、
@@ -93,20 +93,32 @@ export interface NameExposureInput {
   evidenceCount: number;
   /**
    * 欠けの数(形・戦型 = missingSquares、狙い = unmatchedSignatures)。
-   * **今の規則 R0〜R5 はこの値を読まない。** 呼び出し側が必ず持っている量なので入力に置き、
-   * 将来この値を使う規則を足すときに入口を増やさなくて済むようにしてある。
+   * 規則 R5'(hedgeOneEvidenceIfMissingLe1)だけがこの値を読む(STEP EXPO-1b)。
    */
   missingCount: number;
   /** 必要な数(形 = optional でない required_pieces、戦型・狙い = recognition_pattern の長さ) */
   requiredCount: number;
+  /**
+   * 必要な数のうち「平手の初期位置と違うマスにある駒」の数(STEP EXPO-1b の R6 の
+   * `minEvidenceForCompleted: "movedRequired"` だけが読む)。
+   *
+   * **この値を作るのは呼び出し側の責務である。** この関数は data/ の定義も盤も読まないため、
+   * 「どの駒が初期位置か」を自分で決められない(規則はここ、定義の読み取りは呼び出し側、
+   * という線。docs/LANE_DIAG_LOG_2026-09.md §12.9)。渡されないまま "movedRequired" を
+   * 指定した場合は**黙って 0 や requiredCount で代用せず例外**にする。
+   */
+  movedRequiredCount?: number;
   reviewStatus: ReviewStatus;
 }
 
 /** 名前の見せ方の3段階。hidden=出さない / hedged=控えめに言う / named=名前を言う。 */
 export type NameExposureLevel = "hidden" | "hedged" | "named";
 
-/** どの規則で決まったか(下の decideNameExposure の R0〜R5)。測る側が内訳を数えるために返す。 */
-export type NameExposureRule = "R0" | "R1" | "R2" | "R3" | "R4" | "R5";
+/**
+ * どの規則で決まったか(下の decideNameExposure の R0〜R6)。測る側が内訳を数えるために返す。
+ * "R5p" は R5' (STEP EXPO-1b)、"R6" も同 STEP で足した規則。
+ */
+export type NameExposureRule = "R0" | "R1" | "R2" | "R3" | "R4" | "R5" | "R5p" | "R6";
 
 export interface NameExposureDecision {
   level: NameExposureLevel;
@@ -115,7 +127,7 @@ export interface NameExposureDecision {
   rule: NameExposureRule;
 }
 
-/** 規則 R3・R5・R2 が使う値。**この3つ以外の閾値を作らない。** */
+/** 規則 R2・R3・R5・R5'・R6 が使う値。**この5つ以外の閾値を作らない。** */
 export interface NameExposureValues {
   /** 必要な数がこの値以下の認識は名前を出さない(R3)。「対1の形」を名前にしないための下限 */
   minRequiredForName: number;
@@ -123,6 +135,20 @@ export interface NameExposureValues {
   minEvidenceForHedged: number;
   /** 証拠0件の completed / matched を hidden にするか(R2) */
   hideCompletedWithoutEvidence: boolean;
+  /**
+   * 証拠1件の forming でも「あと1つで完成(欠け ≤ 1)」なら hedged にするか(R5'。STEP EXPO-1b)。
+   * false のときは R5' を当てない(= EXPO-1 までと同じ決定)。
+   */
+  hedgeOneEvidenceIfMissingLe1: boolean;
+  /**
+   * completed / matched に要求する証拠の下限(R6。STEP EXPO-1b)。
+   * - 数 … その数をそのまま下限にする(`0` = 何も落とさない。EXPO-1 までと同じ決定)
+   * - `"all"` … `requiredCount`(必要な駒が全部、動いた証拠を持つこと)
+   * - `"movedRequired"` … `movedRequiredCount`(必要な駒のうち初期位置と違うマスにある駒の数)。
+   *   **`movedRequiredCount` が 0 のレコードは名前を出さない**(必要な駒が全部初期位置 = 証拠を
+   *   持ちようがない。P-85 の型)。
+   */
+  minEvidenceForCompleted: number | "all" | "movedRequired";
 }
 
 /**
@@ -131,12 +157,19 @@ export interface NameExposureValues {
  * **この値は案であり、統括の承認を経ていない。** そのため本体(explanationGenerator.ts・
  * stateResponse.ts・apps/web)はまだ decideNameExposure を呼んでいない。
  * 値を決めるための測定は scripts/playtest/lib/recognitionMeasure.ts が
- * A(今日の規則)・B(この案)・C(minEvidenceForHedged だけ 2)の3組で行う。
+ * A(今日の規則)・B(この案)・C(minEvidenceForHedged だけ 2)・D / D' / D''(STEP EXPO-1b の
+ * 中間案)の6組で行う。
+ *
+ * **STEP EXPO-1b で欄が2つ増えたが、既定の値は決定を変えない**
+ * (`hedgeOneEvidenceIfMissingLe1: false` = R5' を当てない、`minEvidenceForCompleted: 0` =
+ * R6 が何も落とさない)。
  */
 export const NAME_EXPOSURE_VALUES: NameExposureValues = {
   minRequiredForName: 1,
   minEvidenceForHedged: 1,
   hideCompletedWithoutEvidence: true,
+  hedgeOneEvidenceIfMissingLe1: false,
+  minEvidenceForCompleted: 0,
 };
 
 /**
@@ -148,14 +181,19 @@ export const NAME_EXPOSURE_VALUES: NameExposureValues = {
  *   下の R4 で named になるはずだったところを hedged に落とし、`rule` は "R1" と記録する。
  * - **R2** `hideCompletedWithoutEvidence` かつ completed / matched かつ証拠0件 → hidden
  *   (盤に偶然その形があるだけで、その形へ向かった手が1つも観測されていない場合)。
+ * - **R6** completed / matched かつ `evidenceCount` が `minEvidenceForCompleted` で決まる下限に
+ *   満たない → hidden(STEP EXPO-1b。既定の `0` では何も落ちない)。
  * - **R3** `requiredCount <= minRequiredForName` → hidden(必要な数が少なすぎる認識は名前にしない)。
  * - **R4** completed / matched → reviewed なら named、draft / expired なら hedged(R1)。
+ * - **R5'** forming かつ証拠1件かつ欠け ≤ 1 かつ `hedgeOneEvidenceIfMissingLe1` → hedged
+ *   (STEP EXPO-1b。既定の false では当たらない)。
  * - **R5** forming → 証拠が `minEvidenceForHedged` 以上なら hedged、足りなければ hidden。
  *
  * **「今日の規則」も同じ関数で表せる**(測る側が前後を比べるため):
  * `values = { minRequiredForName: 0, minEvidenceForHedged: Number.POSITIVE_INFINITY,
- * hideCompletedWithoutEvidence: false }` を渡すと、R2 は無効・R3 は `requiredCount <= 0` で
- * 当たらない・R5 は証拠がいくつあっても hedged にならないので、
+ * hideCompletedWithoutEvidence: false, hedgeOneEvidenceIfMissingLe1: false,
+ * minEvidenceForCompleted: 0 }` を渡すと、R2・R6 は無効・R3 は `requiredCount <= 0` で
+ * 当たらない・R5' は無効・R5 は証拠がいくつあっても hedged にならないので、
  * 「completed / matched は reviewed なら named・draft なら hedged、forming は hidden」= 今日と同じになる。
  *
  * この関数は将棋の判断をしない。渡された数と区分だけを見る。
@@ -178,6 +216,9 @@ export function decideNameExposure(
   if (values.hideCompletedWithoutEvidence && isComplete && input.evidenceCount === 0) {
     return decide("hidden", "R2");
   }
+  if (isComplete && input.evidenceCount < minEvidenceForCompletedOf(input, values)) {
+    return decide("hidden", "R6");
+  }
   if (input.requiredCount <= values.minRequiredForName) {
     return decide("hidden", "R3");
   }
@@ -185,6 +226,30 @@ export function decideNameExposure(
     // R1: draft / expired は named にしない(最大で hedged)。
     return isPending(input.reviewStatus) ? decide("hedged", "R1") : decide("named", "R4");
   }
-  // 残るのは forming だけ。
+  // 残るのは forming だけ。R5' は R5 より先に当てる。
+  if (values.hedgeOneEvidenceIfMissingLe1 && input.evidenceCount === 1 && input.missingCount <= 1) {
+    return decide("hedged", "R5p");
+  }
   return decide(input.evidenceCount >= values.minEvidenceForHedged ? "hedged" : "hidden", "R5");
+}
+
+/**
+ * R6 が completed / matched に要求する証拠の下限を、値の指定から決める(STEP EXPO-1b)。
+ *
+ * `"movedRequired"` のときに `movedRequiredCount` が 0 なら
+ * `Number.POSITIVE_INFINITY` を返す = 証拠がいくつあっても落ちる。
+ * (「必要な駒が全部初期位置」のレコードは、動いた証拠を持ちようがないため名前を出さない。)
+ */
+function minEvidenceForCompletedOf(input: NameExposureInput, values: NameExposureValues): number {
+  const min = values.minEvidenceForCompleted;
+  if (min === "all") return input.requiredCount;
+  if (min === "movedRequired") {
+    if (input.movedRequiredCount === undefined) {
+      throw new Error(
+        'minEvidenceForCompleted が "movedRequired" のときは movedRequiredCount を渡してください(この関数は定義を読まない)',
+      );
+    }
+    return input.movedRequiredCount === 0 ? Number.POSITIVE_INFINITY : input.movedRequiredCount;
+  }
+  return min;
 }

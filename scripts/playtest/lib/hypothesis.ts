@@ -14,8 +14,11 @@
 // 【このファイルが絶対にやらないこと】
 // - 将棋の判断・仮説の妥当性の判断(機械で検査できる「形式」だけを見る。F-1 の型 ― 設計案 §7.2 の注記)。
 // - ファイルの書き換え。エンジンの起動。
-// - 検査 3(禁止語)の一覧を書き写して 2 か所で持つこと(`HYPOTHESIS_BANNED_WORDS` は
-//   `report-pdf/check_answer.py` の `BANNED_WORDS` とパリティ試験で一致を見る。lib/hypothesis.test.ts)。
+// - 検査 3(禁止語)の一覧を書き写して 2 か所で持つこと。**一覧は `report-pdf/check_answer.py` の
+//   `BANNED_WORDS` だけが持ち**、この lib は `loadHypothesisBannedWords()` でそれを読む
+//   (STEP H5-SYNC、§12.9。人間の決定 `f715da2` で語を外すときも、直す場所は 1 か所)。
+//   **読めないときは黙って空にせず例外を投げる**(「検査したが 0 件」と「検査していない」を
+//   同じ結果にしない。docs/AGENT_PROTOCOL.md 11.6)。
 
 import { readFileSync } from "node:fs";
 import { validate, type JsonSchema } from "./eventSchema.js";
@@ -83,35 +86,46 @@ export interface HypothesisItemObservation {
   unit?: string;
 }
 
-/** 検査 3(禁止語・表現)。`report-pdf/check_answer.py` の `BANNED_WORDS`(26 語)と並びまで同じ(パリティ試験で見る)。 */
-export const HYPOTHESIS_BANNED_WORDS: readonly string[] = [
-  "悪手",
-  "弱点",
-  "癖",
-  "型",
-  "傾向",
-  "原因",
-  "ミス",
-  "見落とし",
-  "改善",
-  "練習",
-  "必ず",
-  "明らか",
-  "あなた",
-  "ご自身",
-  "いつも",
-  "がち",
-  "クセ",
-  "パターン",
-  "すべき",
-  "した方がよい",
-  "すれば直る",
-  "間違いなく",
-  "危ない",
-  "確実",
-  "絶対",
-  "安い",
-];
+/** 禁止語の一覧の出どころ(`report-pdf/check_answer.py`)。写しを持たないための 1 か所。 */
+const CHECK_ANSWER_PY = new URL("../report-pdf/check_answer.py", import.meta.url);
+
+const BANNED_WORDS_RE = /BANNED_WORDS\s*=\s*\[([\s\S]*?)\]/;
+
+/** 禁止語の一覧を読めなかったとき(ファイルが無い・`BANNED_WORDS` が見つからない)。 */
+export class HypothesisBannedWordsError extends Error {}
+
+/** 1 回読んだら覚えておく(同じ実行の中でファイルを何度も読まない)。 */
+let bannedWordsCache: readonly string[] | undefined;
+
+/**
+ * 検査 H-5(禁止語)の一覧を `report-pdf/check_answer.py` の `BANNED_WORDS` から読む(STEP H5-SYNC)。
+ *
+ * **一覧の写しをこのファイルに持たない。** 2026-09-25 の人間の決定(`f715da2`)で語を外すときも、
+ * 直すのは python 側 1 か所で、この lib は読むだけになる。
+ * **一覧が空になっても H-5 は消えない** ― 「という読みです / 可能性があります の形」の検査は残る。
+ *
+ * 読めないとき(ファイルが無い・`BANNED_WORDS` が見つからない)は**例外**にする。
+ * 黙って空の一覧にすると「語が 0 件だった」と「検査していない」が見分けられなくなるため。
+ */
+export function loadHypothesisBannedWords(pyPath: URL | string = CHECK_ANSWER_PY): readonly string[] {
+  let source: string;
+  try {
+    source = readFileSync(pyPath, "utf-8");
+  } catch (err) {
+    throw new HypothesisBannedWordsError(`禁止語の一覧を読めません: ${String(pyPath)}(${(err as Error).message})`);
+  }
+  const match = BANNED_WORDS_RE.exec(source);
+  if (match === null || match[1] === undefined) {
+    throw new HypothesisBannedWordsError(`禁止語の一覧(BANNED_WORDS)が見つかりません: ${String(pyPath)}`);
+  }
+  return Array.from(match[1].matchAll(/"([^"]*)"/g)).map((m) => m[1]!);
+}
+
+/** 既定の一覧(1 回だけ読む)。`opts.bannedWords` が渡されたときはそちらを使う。 */
+function defaultBannedWords(): readonly string[] {
+  bannedWordsCache ??= loadHypothesisBannedWords();
+  return bannedWordsCache;
+}
 
 export function loadHypothesisSchema(version: HypothesisSchemaVersion = HYPOTHESIS_SCHEMA_VERSION): JsonSchema {
   return JSON.parse(readFileSync(new URL(`../schemas/hypothesis.v${version}.schema.json`, import.meta.url), "utf-8")) as JsonSchema;
@@ -373,7 +387,7 @@ function checkH4(line: unknown, today: string): CheckResult {
 
 // ---- H-5: 禁止語・断定しない形 ----
 
-function checkH5(line: unknown): CheckResult {
+function checkH5(line: unknown, bannedWords: readonly string[]): CheckResult {
   const messages: string[] = [];
   const statement = asString(get(line, ["statement"])) ?? "";
   const texts: Array<{ source: string; text: string }> = [{ source: "statement", text: statement }];
@@ -382,7 +396,7 @@ function checkH5(line: unknown): CheckResult {
     if (text !== undefined) texts.push({ source: `counterEvidence.items[${index}].text`, text });
   });
   for (const { source, text } of texts) {
-    for (const word of HYPOTHESIS_BANNED_WORDS) {
+    for (const word of bannedWords) {
       if (text.includes(word)) messages.push(`${source}: 禁止語「${word}」を含む`);
     }
   }
@@ -488,8 +502,16 @@ function resolveSchema(line: unknown, override?: JsonSchema): { schema: JsonSche
   return { schema: loadHypothesisSchema(version) };
 }
 
-/** スキーマ照合 + H-1〜H-8 を全部回して全部返す(最初で止めない)。スキーマが落ちても H は回す。 */
-export function validateHypothesisLine(line: unknown, opts: { today: string; registry: Set<string>; schema?: JsonSchema }): CheckResult[] {
+/**
+ * スキーマ照合 + H-1〜H-8 を全部回して全部返す(最初で止めない)。スキーマが落ちても H は回す。
+ *
+ * `opts.bannedWords` は H-5 の一覧の差し替え口(試験用)。渡されなければ
+ * `report-pdf/check_answer.py` の `BANNED_WORDS` を読む(STEP H5-SYNC)。
+ */
+export function validateHypothesisLine(
+  line: unknown,
+  opts: { today: string; registry: Set<string>; schema?: JsonSchema; bannedWords?: readonly string[] },
+): CheckResult[] {
   const resolved = resolveSchema(line, opts.schema);
   const schemaErrors = "error" in resolved ? [resolved.error] : validate(line, resolved.schema);
   return [
@@ -498,7 +520,7 @@ export function validateHypothesisLine(line: unknown, opts: { today: string; reg
     checkH2(line, opts.registry),
     checkH3(line),
     checkH4(line, opts.today),
-    checkH5(line),
+    checkH5(line, opts.bannedWords ?? defaultBannedWords()),
     checkH6(line),
     checkH7(line),
     checkH8(line),
