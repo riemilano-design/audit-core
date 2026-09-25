@@ -1,0 +1,337 @@
+{
+  "attempted": true,
+  "items": [
+    {
+      "kind": "counterexample",
+      "text": "最も長い段は 8 組のうち崩れが 0 組で、そのひとつ手前の段(32 組のうち崩れ 10 組)より崩れが少ない側に出ています。消費が長いほど崩れが多いという向きは、最も長い段では逆になっています。仮説は比べる段を「最も長い段のひとつ手前」と「最も短い段」に限っているので、この反例は主張を直接には否定しませんが、段を選んで比べている点は残ります。",
+      "observations": [
+        {
+          "obsId": "obs.time.bySpent",
+          "path": "time.bySpent[3].n",
+          "value": 8,
+          "unit": "組"
+        },
+        {
+          "obsId": "obs.time.bySpent",
+          "path": "time.bySpent[3].collapsed",
+          "value": 0,
+          "unit": "組"
+        },
+        {
+          "obsId": "obs.time.bySpent",
+          "path": "time.bySpent[2]",
+          "value": {
+            "n": 32,
+            "collapsed": 10
+          }
+        }
+      ]
+    },
+    {
+      "kind": "denominator",
+      "text": "比べている段の分母は 32 組と 88 組で同じではなく、最も短い段の崩れは 3 組です。ひとつ手前の段の 32 組は、隣の段の 97 組や最も短い段の 88 組より小さい分母です。写しには段ごとの局の内訳が無いので、崩れ 10 組が何局に分かれているかは確かめられません。",
+      "observations": [
+        {
+          "obsId": "obs.time.bySpent",
+          "path": "time.bySpent[0]",
+          "value": {
+            "n": 88,
+            "collapsed": 3
+          }
+        },
+        {
+          "obsId": "obs.time.bySpent",
+          "path": "time.bySpent[1]",
+          "value": {
+            "n": 97,
+            "collapsed": 17
+          }
+        },
+        {
+          "obsId": "obs.time.bySpent",
+          "path": "time.bySpent[2]",
+          "value": {
+            "n": 32,
+            "collapsed": 10
+          }
+        }
+      ]
+    },
+    {
+      "kind": "denominator",
+      "text": "消費の段の組の数は、手の数 580 手のうちの一部に限られています。局ごとの長考の回数は局 1 で 7 回、局 11 で 5 回ですが、最も長い段の組は全体で 8 組です。中くらいの考慮の回数も局 8 で 13 回、局 9 で 12 回ですが、ひとつ手前の段の組は全体で 32 組です。どの手が組として数えられたかは写しから追えないので、段ごとの崩れの割合は、数えられた部分の中の数として読むことになります。また冊子の本編の timeSpent の発見は shown が false です。",
+      "observations": [
+        {
+          "obsId": "obs.time.perMove",
+          "path": "time.perMove.moves",
+          "value": 580,
+          "unit": "手"
+        },
+        {
+          "obsId": "obs.time.longThinkTotal",
+          "path": "time_cause games[gameNo=1].longThinkTotal",
+          "value": {
+            "gameNo": 1,
+            "longThinkTotal": 7
+          }
+        },
+        {
+          "obsId": "obs.time.longThinkTotal",
+          "path": "time_cause games[gameNo=11].longThinkTotal",
+          "value": {
+            "gameNo": 11,
+            "longThinkTotal": 5
+          }
+        },
+        {
+          "obsId": "obs.time.midThinkByPhase",
+          "path": "time_cause games[gameNo=8].midThinkTotal",
+          "value": {
+            "gameNo": 8,
+            "midThinkTotal": {
+              "count": 13,
+              "sec": 80
+            }
+          }
+        },
+        {
+          "obsId": "obs.time.midThinkByPhase",
+          "path": "time_cause games[gameNo=9].midThinkTotal",
+          "value": {
+            "gameNo": 9,
+            "midThinkTotal": {
+              "count": 12,
+              "sec": 76
+            }
+          }
+        },
+        {
+          "obsId": "obs.time.bySpent",
+          "path": "time.bySpent[3].n",
+          "value": 8,
+          "unit": "組"
+        },
+        {
+          "obsId": "obs.time.bySpent",
+          "path": "time.bySpent[2].n",
+          "value": 32,
+          "unit": "組"
+        },
+        {
+          "obsId": "obs.report.finding",
+          "path": "findings[kind='timeSpent'].shown",
+          "value": false
+        }
+      ]
+    },
+    {
+      "kind": "alternative",
+      "text": "同じ観測は、消費の秒数ではなく段(序・中・終)の側で説明がつく可能性があります。崩れ 30 組の内訳は序 11・中 15・終 4 で中が最も多く、中くらいの考慮の回数も局 2 では中 5 回、局 9 では中 6 回、局 14 では中 6 回、局 15 では中 6 回と、中に多い局があります。ひとつ手前の段の崩れが多いのは、その段の手が中盤に多いことの現れという読みも残ります。ただし局 1 では序 4・中 1・終 3、局 8 では序 4・中 4・終 5 と、中に偏らない局もあります。",
+      "observations": [
+        {
+          "obsId": "obs.report.overview",
+          "path": "overview",
+          "value": {
+            "fell": 30,
+            "early": 11,
+            "mid": 15,
+            "late": 4,
+            "fromAhead": 5,
+            "fromAheadLoss": 5,
+            "moveCheck": {
+              "n": 1,
+              "fell": 0,
+              "games": 1,
+              "otherN": 17,
+              "otherFell": 1
+            }
+          }
+        },
+        {
+          "obsId": "obs.time.midThinkByPhase",
+          "path": "time_cause games[gameNo=2].midThinkByPhase",
+          "value": {
+            "gameNo": 2,
+            "midThinkByPhase": {
+              "early": {
+                "count": 0,
+                "sec": 0
+              },
+              "mid": {
+                "count": 5,
+                "sec": 37
+              },
+              "late": {
+                "count": 1,
+                "sec": 6
+              }
+            }
+          }
+        },
+        {
+          "obsId": "obs.time.midThinkByPhase",
+          "path": "time_cause games[gameNo=9].midThinkByPhase",
+          "value": {
+            "gameNo": 9,
+            "midThinkByPhase": {
+              "early": {
+                "count": 1,
+                "sec": 7
+              },
+              "mid": {
+                "count": 6,
+                "sec": 34
+              },
+              "late": {
+                "count": 5,
+                "sec": 35
+              }
+            }
+          }
+        },
+        {
+          "obsId": "obs.time.midThinkByPhase",
+          "path": "time_cause games[gameNo=14].midThinkByPhase",
+          "value": {
+            "gameNo": 14,
+            "midThinkByPhase": {
+              "early": {
+                "count": 1,
+                "sec": 9
+              },
+              "mid": {
+                "count": 6,
+                "sec": 39
+              },
+              "late": {
+                "count": 2,
+                "sec": 14
+              }
+            }
+          }
+        },
+        {
+          "obsId": "obs.time.midThinkByPhase",
+          "path": "time_cause games[gameNo=15].midThinkByPhase",
+          "value": {
+            "gameNo": 15,
+            "midThinkByPhase": {
+              "early": {
+                "count": 0,
+                "sec": 0
+              },
+              "mid": {
+                "count": 6,
+                "sec": 36
+              },
+              "late": {
+                "count": 5,
+                "sec": 32
+              }
+            }
+          }
+        },
+        {
+          "obsId": "obs.time.midThinkByPhase",
+          "path": "time_cause games[gameNo=1].midThinkByPhase",
+          "value": {
+            "gameNo": 1,
+            "midThinkByPhase": {
+              "early": {
+                "count": 4,
+                "sec": 22
+              },
+              "mid": {
+                "count": 1,
+                "sec": 9
+              },
+              "late": {
+                "count": 3,
+                "sec": 24
+              }
+            }
+          }
+        },
+        {
+          "obsId": "obs.time.midThinkByPhase",
+          "path": "time_cause games[gameNo=8].midThinkByPhase",
+          "value": {
+            "gameNo": 8,
+            "midThinkByPhase": {
+              "early": {
+                "count": 4,
+                "sec": 22
+              },
+              "mid": {
+                "count": 4,
+                "sec": 28
+              },
+              "late": {
+                "count": 5,
+                "sec": 30
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "kind": "alternative",
+      "text": "消費の秒数は、その局面に分かれ道の印があることの現れである可能性があります。長考した手のうち分かれ道だった割合は、時間で負けた局で 21 手のうち 13 手、それ以外の局で 18 手のうち 14 手です。中盤の手でも、局 2 の 31 手目は 9 秒で分かれ道、局 4 の 42 手目は 9 秒で分かれ道、局 12 の 30 手目は 9 秒で分かれ道です。分かれ道であることが時間と崩れの両方に現れているなら、消費の段の差は分かれ道の多さの差という読みでも説明がつきます。",
+      "observations": [
+        {
+          "obsId": "obs.time.groupMedians",
+          "path": "time_cause groups[0].timeUpLoss.forkFraction",
+          "value": {
+            "numerator": 13,
+            "denominator": 21
+          }
+        },
+        {
+          "obsId": "obs.time.groupMedians",
+          "path": "time_cause groups[0].other.forkFraction",
+          "value": {
+            "numerator": 14,
+            "denominator": 18
+          }
+        },
+        {
+          "obsId": "obs.time.midMoveSeconds",
+          "path": "time_cause games[gameNo=2].midMoveSeconds[kifPly=31]",
+          "value": {
+            "gameNo": 2,
+            "kifPly": 31,
+            "sec": 9,
+            "fork": true
+          }
+        },
+        {
+          "obsId": "obs.time.midMoveSeconds",
+          "path": "time_cause games[gameNo=4].midMoveSeconds[kifPly=42]",
+          "value": {
+            "gameNo": 4,
+            "kifPly": 42,
+            "sec": 9,
+            "fork": true
+          }
+        },
+        {
+          "obsId": "obs.time.midMoveSeconds",
+          "path": "time_cause games[gameNo=12].midMoveSeconds[kifPly=30]",
+          "value": {
+            "gameNo": 12,
+            "kifPly": 30,
+            "sec": 9,
+            "fork": true
+          }
+        }
+      ]
+    }
+  ],
+  "result": "weakened",
+  "provenance": {
+    "inputs": [
+      "records/obs-3/p4-min3/00-obs_snapshot.p4.min3.json"
+    ]
+  }
+}

@@ -1,0 +1,98 @@
+{
+  "attempted": true,
+  "items": [
+    {
+      "kind": "counterexample",
+      "text": "最も長い手について、時間で負けていない局 3(25 秒)と局 7(26 秒)は、時間で負けた 5 局のどの最も長い手(19 秒・18 秒・18 秒・13 秒・17 秒)よりも大きい値です。局 7 の残り時間は 90 秒、局 3 は 25 秒でした。局ごとに見ると、最も長い手が大きい局が時間で負けるとは限らない、という向きの観測が実在します。",
+      "observations": [
+        { "obsId": "obs.time.longestMove", "path": "games[gameNo=3].longestMove.sec", "value": 25, "unit": "秒" },
+        { "obsId": "obs.time.longestMove", "path": "games[gameNo=7].longestMove.sec", "value": 26, "unit": "秒" },
+        { "obsId": "obs.time.remainingSec", "path": "games[gameNo=3].timeUpLoss", "value": false },
+        { "obsId": "obs.time.remainingSec", "path": "games[gameNo=7].timeUpLoss", "value": false },
+        { "obsId": "obs.time.remainingSec", "path": "games[gameNo=3].remainingSec", "value": 25, "unit": "秒" },
+        { "obsId": "obs.time.remainingSec", "path": "games[gameNo=7].remainingSec", "value": 90, "unit": "秒" }
+      ]
+    },
+    {
+      "kind": "counterexample",
+      "text": "長考の回数について、時間で負けた局 14 と局 16 は 3 回で、時間で負けていない局 3・局 8・局 10 の 3 回と同じ値です。時間で負けた 5 局のうち、それ以外の 13 局のどの局よりも大きい値なのは局 1(7 回)・局 11(5 回)・局 2(4 回)で、局 14・局 16 は重なっています。",
+      "observations": [
+        { "obsId": "obs.time.longThinkTotal", "path": "games[gameNo=3].longThinkTotal", "value": 3, "unit": "回" },
+        { "obsId": "obs.time.longThinkTotal", "path": "games[gameNo=8].longThinkTotal", "value": 3, "unit": "回" },
+        { "obsId": "obs.time.longThinkTotal", "path": "games[gameNo=10].longThinkTotal", "value": 3, "unit": "回" },
+        { "obsId": "obs.time.longThinkTotal", "path": "games[gameNo=14].longThinkTotal", "value": 3, "unit": "回" },
+        { "obsId": "obs.time.longThinkTotal", "path": "games[gameNo=16].longThinkTotal", "value": 3, "unit": "回" },
+        { "obsId": "obs.time.remainingSec", "path": "games[gameNo=8].timeUpLoss", "value": false },
+        { "obsId": "obs.time.remainingSec", "path": "games[gameNo=10].timeUpLoss", "value": false },
+        { "obsId": "obs.time.remainingSec", "path": "games[gameNo=8].gameNo", "value": 8 },
+        { "obsId": "obs.time.remainingSec", "path": "games[gameNo=11].gameNo", "value": 11 },
+        { "obsId": "obs.time.remainingSec", "path": "games[gameNo=14].gameNo", "value": 14 },
+        { "obsId": "obs.time.remainingSec", "path": "games[gameNo=16].gameNo", "value": 16 }
+      ]
+    },
+    {
+      "kind": "counterexample",
+      "text": "長考の連続の回数について、時間で負けた局 14 と局 16 は 0 回で、それ以外の 13 局の中央値 0 回と同じ値です。時間で負けていない局 4 と局 8 は 1 回で、局 14・局 16 より大きい値です。時間で負けた 5 局の中で 1 回を超えるのは局 1(3 回)だけです。",
+      "observations": [
+        { "obsId": "obs.time.longThinkStreakCount", "path": "games[gameNo=14].longThinkStreakCount", "value": 0, "unit": "回" },
+        { "obsId": "obs.time.longThinkStreakCount", "path": "games[gameNo=16].longThinkStreakCount", "value": 0, "unit": "回" },
+        { "obsId": "obs.time.longThinkStreakCount", "path": "games[gameNo=4].longThinkStreakCount", "value": 1, "unit": "回" },
+        { "obsId": "obs.time.longThinkStreakCount", "path": "games[gameNo=8].longThinkStreakCount", "value": 1, "unit": "回" },
+        { "obsId": "obs.time.longThinkStreakCount", "path": "games[gameNo=1].longThinkStreakCount", "value": 3, "unit": "回" },
+        { "obsId": "obs.time.longThinkStreakCount", "path": "games[gameNo=2].longThinkStreakCount", "value": 1, "unit": "回" },
+        { "obsId": "obs.time.longThinkStreakCount", "path": "games[gameNo=11].longThinkStreakCount", "value": 1, "unit": "回" },
+        { "obsId": "obs.time.remainingSec", "path": "games[gameNo=4].timeUpLoss", "value": false },
+        { "obsId": "obs.time.remainingSec", "path": "games[gameNo=14].gameNo", "value": 14 },
+        { "obsId": "obs.time.remainingSec", "path": "games[gameNo=16].gameNo", "value": 16 }
+      ]
+    },
+    {
+      "kind": "denominator",
+      "text": "比べている分母は、時間で負けた 5 局と、それ以外の 13 局です。3 つの中央値(4 回・18 秒・1 回)はいずれも 5 局から出た中央値で、5 局のうち局 14(3 回・13 秒・0 回)と局 16(3 回・17 秒・0 回)は、それ以外の 13 局の中央値(2 回・10 秒・0 回)に近い側にあります。予測の条件は時間で負けた局が 3 局以上あれば成り立つため、次の組では中央値が 3 局だけで決まる可能性があります。",
+      "observations": [
+        { "obsId": "obs.time.groupMedians", "path": "groups[0].timeUpLoss.games", "value": 5, "unit": "局" },
+        { "obsId": "obs.time.groupMedians", "path": "groups[0].other.games", "value": 13, "unit": "局" },
+        { "obsId": "obs.time.longestMove", "path": "games[gameNo=14].longestMove.sec", "value": 13, "unit": "秒" },
+        { "obsId": "obs.time.longestMove", "path": "games[gameNo=16].longestMove.sec", "value": 17, "unit": "秒" },
+        { "obsId": "obs.time.groupMedians", "path": "groups[0].other.medianLongestMoveSec", "value": 10, "unit": "秒" },
+        { "obsId": "obs.time.groupMedians", "path": "groups[0].other.medianStreakCount", "value": 0, "unit": "回" },
+        { "obsId": "obs.time.remainingSec", "path": "games[gameNo=14].gameNo", "value": 14 },
+        { "obsId": "obs.time.remainingSec", "path": "games[gameNo=16].gameNo", "value": 16 }
+      ]
+    },
+    {
+      "kind": "alternative",
+      "text": "3 つの数は同じ 10 秒以上の手を 3 通りに数えたものです(長考の回数はその手の数、最も長い手はその最大、連続の回数はそれが続いた回数)。長考の回数が 0 回の局 9・局 15・局 18 は、最も長い手が 9 秒で、連続の回数も 0 回です。長考の回数 1 つの差が、3 つの差として現れているだけ、という読みが残ります。",
+      "observations": [
+        { "obsId": "obs.time.longThinkTotal", "path": "games[gameNo=9].longThinkTotal", "value": 0, "unit": "回" },
+        { "obsId": "obs.time.longThinkTotal", "path": "games[gameNo=15].longThinkTotal", "value": 0, "unit": "回" },
+        { "obsId": "obs.time.longThinkTotal", "path": "games[gameNo=18].longThinkTotal", "value": 0, "unit": "回" },
+        { "obsId": "obs.time.longestMove", "path": "games[gameNo=9].longestMove.sec", "value": 9, "unit": "秒" },
+        { "obsId": "obs.time.longestMove", "path": "games[gameNo=15].longestMove.sec", "value": 9, "unit": "秒" },
+        { "obsId": "obs.time.longestMove", "path": "games[gameNo=18].longestMove.sec", "value": 9, "unit": "秒" },
+        { "obsId": "obs.time.longThinkStreakCount", "path": "games[gameNo=9].longThinkStreakCount", "value": 0, "unit": "回" },
+        { "obsId": "obs.time.longThinkStreakCount", "path": "games[gameNo=15].longThinkStreakCount", "value": 0, "unit": "回" },
+        { "obsId": "obs.time.longThinkStreakCount", "path": "games[gameNo=18].longThinkStreakCount", "value": 0, "unit": "回" },
+        { "obsId": "obs.time.remainingSec", "path": "games[gameNo=15].gameNo", "value": 15 }
+      ]
+    },
+    {
+      "kind": "alternative",
+      "text": "時間で負けた 5 局は、使った時間が 169 秒・159 秒・162 秒・158 秒・158 秒で、持ち時間 180 秒に近い局です。残り時間が 139 秒の局 17 と 134 秒の局 18 は、長考の回数が 1 回と 0 回です。使った時間の合計が多い局ほど 10 秒以上の手が入る余地があるため、長考の回数の差は「使った時間の合計」の側だけで説明がつく、という読みが残ります。",
+      "observations": [
+        { "obsId": "obs.time.timeUpLosses", "path": "time.timeUpLosses[gameNo=1].usedSec", "value": 169, "unit": "秒" },
+        { "obsId": "obs.time.timeUpLosses", "path": "time.timeUpLosses[gameNo=2].usedSec", "value": 159, "unit": "秒" },
+        { "obsId": "obs.time.timeUpLosses", "path": "time.timeUpLosses[gameNo=11].usedSec", "value": 162, "unit": "秒" },
+        { "obsId": "obs.time.timeUpLosses", "path": "time.timeUpLosses[gameNo=14].usedSec", "value": 158, "unit": "秒" },
+        { "obsId": "obs.time.timeUpLosses", "path": "time.timeUpLosses[gameNo=16].usedSec", "value": 158, "unit": "秒" },
+        { "obsId": "obs.time.remainingSec", "path": "games[gameNo=1].timeLimitSec", "value": 180, "unit": "秒" },
+        { "obsId": "obs.time.remainingSec", "path": "games[gameNo=17].remainingSec", "value": 139, "unit": "秒" },
+        { "obsId": "obs.time.remainingSec", "path": "games[gameNo=18].remainingSec", "value": 134, "unit": "秒" },
+        { "obsId": "obs.time.longThinkTotal", "path": "games[gameNo=17].longThinkTotal", "value": 1, "unit": "回" },
+        { "obsId": "obs.time.longThinkTotal", "path": "games[gameNo=18].longThinkTotal", "value": 0, "unit": "回" }
+      ]
+    }
+  ],
+  "result": "weakened",
+  "provenance": { "inputs": ["records/obs-3/p4-min3/00-obs_snapshot.p4.min3.json"] }
+}
