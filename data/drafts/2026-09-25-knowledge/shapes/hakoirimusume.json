@@ -1,0 +1,45 @@
+{
+  "id": "hakoirimusume",
+  "name": "箱入り娘",
+  "name_kana": "はこいりむすめ",
+  "side": "self",
+  "family": "舟囲い系",
+  "parent_shape_id": null,
+  "required_pieces": [
+    {
+      "piece": "玉",
+      "square": "7h",
+      "optional": false
+    },
+    {
+      "piece": "金",
+      "square": "6h",
+      "optional": false
+    },
+    {
+      "piece": "金",
+      "square": "6i",
+      "optional": false
+    },
+    {
+      "piece": "銀",
+      "square": "7i",
+      "optional": false
+    }
+  ],
+  "typical_build_order": [
+    "7h",
+    "6h",
+    "7i",
+    "6i"
+  ],
+  "characteristics": "舟囲いから右の金を6八へ上げて、玉7八の右側を金2枚(6八・6九)で固めた囲いです。7九の銀と合わせて玉が箱の中に入ったように見えることからこの名前で呼ばれます。相手が振り飛車のときに、舟囲いより少し手をかけて固くした形です。",
+  "beginner_friendliness": {
+    "score": 4,
+    "reason": "舟囲いに1手足すだけで組めるので手数が短く、覚えやすいです。舟囲いとの違い(金が5八か6八か)だけ意識すれば十分です。"
+  },
+  "weak_against": "上からの攻め(7筋・6筋の歩の上)には金2枚で受けられますが、玉の頭上(7七)を狙う角や桂の攻めと、8筋・9筋の端の攻めには弱さが残ります。金2枚が玉の右に寄っているため、左側(8八)への逃げ道も限られます。",
+  "source": "【AI起草。座標の一次資料確認は行っていない(docs/ROLES.md の保留事項)】先手基準の座標(7八玉・6八金・6九金・7九銀)は https://shogi-gym.com/kakoi/hakoiri-musume/ (参照日 2026-09-25) の本文の説明(玉7八、金6八・6九、銀7九)から起こした。Wikipedia『舟囲い』は箱入り娘を舟囲いの派生形として挙げている(https://ja.wikipedia.org/wiki/舟囲い、同日。本文に座標は無い)。6九金・7九銀は初期位置のままなので、指し手による証拠は玉と6八金の2マスからしか生じない。 追加の経緯: 2026-09-25 の知識レーン第 2 組(docs/LANE_KNOWLEDGE_LOG_2026-09.md §3)。typical_build_order の並びは出典に無く、書いた側が一般的な組み方として置いた推測。beginner_friendliness の点も暫定評価で、将棋知識としての最終確認は人間のレビューが要る。",
+  "confidence_level": "medium",
+  "review_status": "draft"
+}

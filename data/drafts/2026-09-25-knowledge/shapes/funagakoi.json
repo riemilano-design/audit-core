@@ -45,7 +45,7 @@
     "reason": "動かす駒が玉・金・銀の3枚だけで手数が短く、序盤の早い段階で形になります。固さより速さを優先した囲いで、急戦(早く戦いを起こす作戦)と組み合わせて使われます(暫定評価。将棋知識としての最終確認は人間のレビューが必要)。"
   },
   "weak_against": "手数が短いぶん固さは控えめで、玉のまわりの守りの駒が少ないため、相手の攻めが玉の近くまで届くと受けにくくなりやすいです。長い戦いになると、より固い囲い(矢倉・穴熊など)に比べて頼りない場面が出やすいです。",
-  "source": "【AI起草 / 出典は下記。座標の一次資料確認は行っていない(docs/ROLES.md の保留事項)】先手基準の完成形座標(7八玉・7九銀・6九金・5八金・4八銀)は、Wikipedia『舟囲い』の『名称の由来』の文『囲いの形は、8八角、7八玉、7九銀、6九金、5八金、4八銀型であり』(https://ja.wikipedia.org/wiki/舟囲い、2026-09-25 取得)をそのまま写した(8八角は囲いの駒ではなく初期位置の角なので required_pieces に入れていない)。7九銀・6九金は初期位置と同じマスであるため、指し手による証拠(formationEvidence)は玉・5八金・4八銀の 3 マスからしか生じない(apps/server/src/analysis/shapeFormationAnalyzer.ts の仕組み上の注記)。typical_build_order の並びは出典に無く、書いた側が置いたもの(推測)。追加の経緯: 2026-09-25 の知識レーン(docs/KNOWLEDGE_LANE_BRIEF_2026-09-25.md)。",
+  "source": "【AI起草。座標の一次資料確認は行っていない(docs/ROLES.md の保留事項)】先手基準の座標(7八玉・7九銀・6九金・5八金・4八銀)は Wikipedia『舟囲い』(https://ja.wikipedia.org/wiki/舟囲い (参照日 2026-09-25))の名称の由来の節の本文(8八角・7八玉・7九銀・6九金・5八金・4八銀の型)から起こした。8八角は囲いの駒ではなく初期位置の角なので required_pieces に入れていない。7九銀・6九金は初期位置と同じマスなので、指し手による証拠(formationEvidence)は玉・5八金・4八銀の 3 マスからしか生じない(apps/server/src/analysis/shapeFormationAnalyzer.ts の仕組み上の注記)。 追加の経緯: 2026-09-25 の知識レーン第 1 組(docs/LANE_KNOWLEDGE_LOG_2026-09.md §1)。typical_build_order の並びは出典に無く、書いた側が一般的な組み方として置いた推測。beginner_friendliness の点も暫定評価で、将棋知識としての最終確認は人間のレビューが要る。",
   "confidence_level": "medium",
   "review_status": "draft"
 }

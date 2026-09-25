@@ -1,0 +1,45 @@
+{
+  "id": "yagura_katayagura",
+  "name": "片矢倉",
+  "name_kana": "かたやぐら",
+  "side": "self",
+  "family": "矢倉系",
+  "parent_shape_id": null,
+  "required_pieces": [
+    {
+      "piece": "玉",
+      "square": "7h",
+      "optional": false
+    },
+    {
+      "piece": "金",
+      "square": "6h",
+      "optional": false
+    },
+    {
+      "piece": "金",
+      "square": "6g",
+      "optional": false
+    },
+    {
+      "piece": "銀",
+      "square": "7g",
+      "optional": false
+    }
+  ],
+  "typical_build_order": [
+    "7g",
+    "6g",
+    "6h",
+    "7h"
+  ],
+  "characteristics": "金矢倉より玉が1つ右(7八)にいて、金が6八・6七に縦に並ぶ矢倉です。玉が8八まで行かないぶん短い手数で形になり、角換わり(序盤で角を交換しあう指し方)などで使われます。",
+  "beginner_friendliness": {
+    "score": 3,
+    "reason": "金矢倉より玉の移動が1手少ないです。金矢倉との違い(玉と金の位置)を意識すると覚えやすいです。"
+  },
+  "weak_against": "玉が中央寄りにいるため、8筋・7筋の端の方からの攻めには金矢倉ほど遠くありません。上からの攻めには金2枚と銀で受けられますが、横からの攻めに対しては玉の逃げ場が少なめです。",
+  "source": "【AI起草。座標の一次資料確認は行っていない(docs/ROLES.md の保留事項)】先手基準の座標(7八玉・6八金・6七金・7七銀)は https://shogi-gym.com/kakoi/yagura/katayagura/ (参照日 2026-09-25) の本文の説明(7八の玉を7七の銀・6七の金・6八の金で囲う)から起こした。Wikipedia『矢倉囲い』の片矢倉の説明(7八の金を6八に変え、玉を7八に置く)とも一致する(https://ja.wikipedia.org/wiki/矢倉囲い、同日)。 追加の経緯: 2026-09-25 の知識レーン第 2 組(docs/LANE_KNOWLEDGE_LOG_2026-09.md §3)。typical_build_order の並びは出典に無く、書いた側が一般的な組み方として置いた推測。beginner_friendliness の点も暫定評価で、将棋知識としての最終確認は人間のレビューが要る。",
+  "confidence_level": "medium",
+  "review_status": "draft"
+}

@@ -1,0 +1,51 @@
+{
+  "id": "yagura_souyagura",
+  "name": "総矢倉",
+  "name_kana": "そうやぐら",
+  "side": "self",
+  "family": "矢倉系",
+  "parent_shape_id": "yagura_kinyagura",
+  "required_pieces": [
+    {
+      "piece": "玉",
+      "square": "8h",
+      "optional": false
+    },
+    {
+      "piece": "金",
+      "square": "7h",
+      "optional": false
+    },
+    {
+      "piece": "金",
+      "square": "6g",
+      "optional": false
+    },
+    {
+      "piece": "銀",
+      "square": "7g",
+      "optional": false
+    },
+    {
+      "piece": "銀",
+      "square": "5g",
+      "optional": false
+    }
+  ],
+  "typical_build_order": [
+    "7g",
+    "7h",
+    "8h",
+    "6g",
+    "5g"
+  ],
+  "characteristics": "金矢倉に右の銀を5七へ足した、金2枚・銀2枚の矢倉です。玉の前に金銀が4枚並ぶので上からの攻めにとても厚く、囲いの駒がそのまま盤の中央にも利きます。",
+  "beginner_friendliness": {
+    "score": 2,
+    "reason": "金矢倉より1枚多く動かすので手数が長く、組んでいる途中に攻められると間に合わないことがあります。金矢倉の発展形として覚えるとよいです。"
+  },
+  "weak_against": "右の銀まで守りに使うため、自分の攻めの駒が少なくなりやすいです。横からの攻めと、9筋・8筋の端からの攻めには金矢倉と同じ弱さが残ります。",
+  "source": "【AI起草。座標の一次資料確認は行っていない(docs/ROLES.md の保留事項)】先手基準の座標(8八玉・7八金・6七金・7七銀・5七銀)は https://shogi-gym.com/kakoi/yagura/souyagura/ (参照日 2026-09-25) の本文の説明(8八の玉を7八の金・6七の金・7七の銀・5七の銀で囲う)から起こした。Wikipedia『矢倉囲い』も総矢倉を金矢倉に右銀を5七に加えたものと説明している(https://ja.wikipedia.org/wiki/矢倉囲い、同日)。parent_shape_id は金矢倉(yagura_kinyagura)。 追加の経緯: 2026-09-25 の知識レーン第 2 組(docs/LANE_KNOWLEDGE_LOG_2026-09.md §3)。typical_build_order の並びは出典に無く、書いた側が一般的な組み方として置いた推測。beginner_friendliness の点も暫定評価で、将棋知識としての最終確認は人間のレビューが要る。",
+  "confidence_level": "medium",
+  "review_status": "draft"
+}

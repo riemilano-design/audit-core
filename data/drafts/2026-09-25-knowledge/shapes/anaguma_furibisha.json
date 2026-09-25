@@ -1,0 +1,51 @@
+{
+  "id": "anaguma_furibisha",
+  "name": "振り飛車穴熊",
+  "name_kana": "ふりびしゃあなぐま",
+  "side": "self",
+  "family": "穴熊系",
+  "parent_shape_id": null,
+  "required_pieces": [
+    {
+      "piece": "玉",
+      "square": "1i",
+      "optional": false
+    },
+    {
+      "piece": "香",
+      "square": "1h",
+      "optional": false
+    },
+    {
+      "piece": "銀",
+      "square": "2h",
+      "optional": false
+    },
+    {
+      "piece": "金",
+      "square": "3i",
+      "optional": false
+    },
+    {
+      "piece": "金",
+      "square": "3h",
+      "optional": false
+    }
+  ],
+  "typical_build_order": [
+    "1h",
+    "1i",
+    "2h",
+    "3i",
+    "3h"
+  ],
+  "characteristics": "振り飛車(飛車を左へ動かす指し方)で、玉を盤の右隅(1九)まで潜らせ、香を1八に上げて空けた穴に玉を入れ、2八の銀と3九・3八の金でふたをする囲いです。居飛車穴熊の左右を入れ替えた形で、王手がかかりにくく固いのが特徴です。",
+  "beginner_friendliness": {
+    "score": 2,
+    "reason": "完成までの手数が長く、美濃囲いより多くの手を守りに使います。振り飛車で長い戦いにしたいときに向いています。"
+  },
+  "weak_against": "玉が隅に固定されるため逃げ道がほとんど無く、端(1筋)からの攻めが玉に直接響きます。囲いの駒をはがされると一気に薄くなり、組み上がる前の速い攻めにも弱いです。",
+  "source": "【AI起草。座標の一次資料確認は行っていない(docs/ROLES.md の保留事項)】先手基準の座標(1九玉・1八香・2八銀・3九金・3八金)は https://shogi-gym.com/kakoi/anaguma/furibisha-anaguma/ (参照日 2026-09-25) の本文の説明(1九の玉を1八の香・2八の銀・3九の金・3八の金でふさぐ)から起こした。 追加の経緯: 2026-09-25 の知識レーン第 2 組(docs/LANE_KNOWLEDGE_LOG_2026-09.md §3)。typical_build_order の並びは出典に無く、書いた側が一般的な組み方として置いた推測。beginner_friendliness の点も暫定評価で、将棋知識としての最終確認は人間のレビューが要る。",
+  "confidence_level": "medium",
+  "review_status": "draft"
+}

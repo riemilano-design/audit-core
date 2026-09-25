@@ -1,0 +1,39 @@
+{
+  "id": "mino_kinmino",
+  "name": "金美濃",
+  "name_kana": "きんみの",
+  "side": "self",
+  "family": "美濃系",
+  "parent_shape_id": null,
+  "required_pieces": [
+    {
+      "piece": "玉",
+      "square": "2h",
+      "optional": false
+    },
+    {
+      "piece": "金",
+      "square": "3h",
+      "optional": false
+    },
+    {
+      "piece": "銀",
+      "square": "4h",
+      "optional": false
+    }
+  ],
+  "typical_build_order": [
+    "4h",
+    "2h",
+    "3h"
+  ],
+  "characteristics": "本美濃囲いの銀と金の位置を入れ替えたような形で、玉2八のとなり(3八)に金、その左(4八)に銀を置く振り飛車の囲いです。金が玉のすぐそばにいるので横からの攻めを受けやすく、短い手数で形になります。",
+  "beginner_friendliness": {
+    "score": 4,
+    "reason": "玉・金・銀の3枚を動かすだけで形になります。本美濃囲いとの違い(3八が銀か金か)を意識すると覚えやすいです。"
+  },
+  "weak_against": "銀が4八にいるため玉の頭上(2七・3七)の守りが薄く、上からの攻めに弱さが残ります。本美濃囲いに比べて発展(高美濃・銀冠)につながりにくい形です。",
+  "source": "【AI起草。座標の一次資料確認は行っていない(docs/ROLES.md の保留事項)】先手基準の座標(2八玉・3八金・4八銀)は https://shogi-gym.com/kakoi/kinmino/ (参照日 2026-09-25) の本文の説明(玉を2八、金を3八、銀を4八に置いた振り飛車の囲い)と組み方の手順(▲4八玉・▲3八玉・▲4八銀・▲2八玉・▲3八金)から起こした。 追加の経緯: 2026-09-25 の知識レーン第 2 組(docs/LANE_KNOWLEDGE_LOG_2026-09.md §3)。typical_build_order の並びは出典に無く、書いた側が一般的な組み方として置いた推測。beginner_friendliness の点も暫定評価で、将棋知識としての最終確認は人間のレビューが要る。",
+  "confidence_level": "medium",
+  "review_status": "draft"
+}

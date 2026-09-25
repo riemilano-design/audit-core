@@ -1,0 +1,51 @@
+{
+  "id": "gangi_nimaigin",
+  "name": "雁木囲い(二枚銀雁木)",
+  "name_kana": "がんぎがこい(にまいぎんがんぎ)",
+  "side": "self",
+  "family": "雁木系",
+  "parent_shape_id": null,
+  "required_pieces": [
+    {
+      "piece": "玉",
+      "square": "6i",
+      "optional": false
+    },
+    {
+      "piece": "銀",
+      "square": "6g",
+      "optional": false
+    },
+    {
+      "piece": "銀",
+      "square": "5g",
+      "optional": false
+    },
+    {
+      "piece": "金",
+      "square": "7h",
+      "optional": false
+    },
+    {
+      "piece": "金",
+      "square": "5h",
+      "optional": false
+    }
+  ],
+  "typical_build_order": [
+    "7h",
+    "5h",
+    "6i",
+    "6g",
+    "5g"
+  ],
+  "characteristics": "玉を6九に置いたまま、銀2枚を6七・5七に横に並べ、金2枚を7八・5八に置く囲いです。矢倉と違って角を動かさずに組めるので手数が短く、銀2枚が前に出ているため上からの攻めに厚いのが特徴です。相居飛車(お互いが飛車を右に置いたまま戦う対局)で使われます。",
+  "beginner_friendliness": {
+    "score": 3,
+    "reason": "矢倉より少ない手数で組めますが、玉が中央寄り(6九)に残るので、どこまで囲えば完成なのかが初心者には分かりにくい形です。"
+  },
+  "weak_against": "玉が6九のままなので横からの攻めに近く、囲いの左側(8筋・9筋)が薄いままになりやすいです。銀2枚が前に出ているぶん、その後ろ(6八・5八の段)を狙われることもあります。",
+  "source": "【AI起草。座標の一次資料確認は行っていない(docs/ROLES.md の保留事項)】先手基準の座標(6九玉・6七銀・5七銀・7八金・5八金)は https://shogi-gym.com/kakoi/gangi/ (参照日 2026-09-25) の本文の説明(玉を6九に置き、銀2枚を6七と5七、金2枚を7八と5八に並べる)から起こした。Wikipedia『雁木囲い』も二枚銀雁木を先手番で6七銀・5七銀・7八金・5八金、玉は6九と説明している(https://ja.wikipedia.org/wiki/雁木囲い、同日)。右銀を4七に置くツノ銀雁木は別の形として扱い、ここには入れていない。 追加の経緯: 2026-09-25 の知識レーン第 2 組(docs/LANE_KNOWLEDGE_LOG_2026-09.md §3)。typical_build_order の並びは出典に無く、書いた側が一般的な組み方として置いた推測。beginner_friendliness の点も暫定評価で、将棋知識としての最終確認は人間のレビューが要る。",
+  "confidence_level": "medium",
+  "review_status": "draft"
+}

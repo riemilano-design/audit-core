@@ -1,0 +1,51 @@
+{
+  "id": "anaguma_ibisha",
+  "name": "居飛車穴熊",
+  "name_kana": "いびしゃあなぐま",
+  "side": "self",
+  "family": "穴熊系",
+  "parent_shape_id": null,
+  "required_pieces": [
+    {
+      "piece": "玉",
+      "square": "9i",
+      "optional": false
+    },
+    {
+      "piece": "香",
+      "square": "9h",
+      "optional": false
+    },
+    {
+      "piece": "銀",
+      "square": "8h",
+      "optional": false
+    },
+    {
+      "piece": "金",
+      "square": "7h",
+      "optional": false
+    },
+    {
+      "piece": "金",
+      "square": "6h",
+      "optional": false
+    }
+  ],
+  "typical_build_order": [
+    "9h",
+    "9i",
+    "8h",
+    "7h",
+    "6h"
+  ],
+  "characteristics": "居飛車(飛車を右に置いたまま戦う指し方)で、玉を盤の左隅(9九)まで潜らせ、香を9八に上げて空けた穴に玉を入れ、8八の銀と7八・6八の金でふたをする囲いです。玉が盤の隅にいるので王手がかかりにくく、将棋の囲いの中でもとても固い形として知られています。",
+  "beginner_friendliness": {
+    "score": 2,
+    "reason": "完成までに15手ほどかかり、組んでいる途中に攻められると玉が隅で動けないまま戦うことになります。相手が振り飛車(飛車を左へ動かす指し方)で、ゆっくり組める対局向きです。"
+  },
+  "weak_against": "玉が隅に固定されるため、逃げ道がほとんどありません。端(9筋)を攻められると玉に直接響き、囲いの駒をはがされると一気に薄くなります。組み上がる前の速い攻めにも弱いです。",
+  "source": "【AI起草。座標の一次資料確認は行っていない(docs/ROLES.md の保留事項)】先手基準の座標(9九玉・9八香・8八銀・7八金・6八金)は、将棋のいろは「居飛車穴熊の特徴や組み方」(https://shoginoiroha.com/column12.php (参照日 2026-09-25))の本文の組み方の手順(▲8八玉・▲9八香・▲9九玉・▲8八銀・▲7九金・▲6八金寄・▲7八金寄)を初期配置から追って起こしたもの(本文に完成形の座標そのものの記述は無く、手順から導いた)。Wikipedia『穴熊囲い』は図のみで本文に座標が無い(https://ja.wikipedia.org/wiki/穴熊囲い、同日)。 追加の経緯: 2026-09-25 の知識レーン第 2 組(docs/LANE_KNOWLEDGE_LOG_2026-09.md §3)。typical_build_order の並びは出典に無く、書いた側が一般的な組み方として置いた推測。beginner_friendliness の点も暫定評価で、将棋知識としての最終確認は人間のレビューが要る。",
+  "confidence_level": "low",
+  "review_status": "draft"
+}

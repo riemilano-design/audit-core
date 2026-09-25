@@ -1,0 +1,39 @@
+{
+  "id": "mino_katamino",
+  "name": "片美濃囲い",
+  "name_kana": "かたみのがこい",
+  "side": "self",
+  "family": "美濃系",
+  "parent_shape_id": null,
+  "required_pieces": [
+    {
+      "piece": "玉",
+      "square": "2h",
+      "optional": false
+    },
+    {
+      "piece": "銀",
+      "square": "3h",
+      "optional": false
+    },
+    {
+      "piece": "金",
+      "square": "4i",
+      "optional": false
+    }
+  ],
+  "typical_build_order": [
+    "2h",
+    "3h",
+    "4i"
+  ],
+  "characteristics": "本美濃囲いから金を1枚(5八の金)省いた、玉2八・銀3八・金4九だけの小さな美濃囲いです。振り飛車で最も早くできる囲いの一つで、あと1手(5八金)で本美濃囲いになります。",
+  "beginner_friendliness": {
+    "score": 5,
+    "reason": "動かす駒が玉と銀の2枚だけ(金4九は初期位置のまま)で、数手で形になります。本美濃囲いへの通り道として覚えるとよいです。"
+  },
+  "weak_against": "金が1枚少ないぶん本美濃囲いより薄く、横から(玉の横の段を通って)攻められることと、玉の頭上(2七・3七)からの攻めの両方に対して守りの枚数が足りません。",
+  "source": "【AI起草。座標の一次資料確認は行っていない(docs/ROLES.md の保留事項)】先手基準の座標(2八玉・3八銀・4九金)は、Wikipedia『美濃囲い』(https://ja.wikipedia.org/wiki/美濃囲い (参照日 2026-09-25))の本文の説明(金銀が1つ少ない美濃囲いを片美濃と呼ぶ。玉2八・右銀3八で右金はそのまま)から起こした。shogi-gym.com の片美濃のページ(https://shogi-gym.com/kakoi/mino/katamino/、同日)は図のみで本文に座標が無い。4九金は初期位置のままなので、指し手による証拠(formationEvidence)は玉と銀の2マスからしか生じない。既存の mino_honmino の parent は変えていない(既存レコードの変更は司令塔の判断)。 追加の経緯: 2026-09-25 の知識レーン第 2 組(docs/LANE_KNOWLEDGE_LOG_2026-09.md §3)。typical_build_order の並びは出典に無く、書いた側が一般的な組み方として置いた推測。beginner_friendliness の点も暫定評価で、将棋知識としての最終確認は人間のレビューが要る。",
+  "confidence_level": "medium",
+  "review_status": "draft"
+}

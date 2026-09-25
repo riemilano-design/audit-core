@@ -132,16 +132,16 @@
 **出どころ**: Wikipedia「Category:将棋の囲い」(49 記事 + 下位「矢倉」32 記事)・「Category:将棋の戦法」の下位(居飛車 26 + 相掛かり 11・角換わり 6・対振り飛車 33・矢倉 32・横歩取り 10 / 振り飛車 11 + 中飛車 15・四間飛車 7・三間飛車 12・向かい飛車 10 / 奇襲戦法 20)・「将棋の戦法一覧」、解説サイト shogi-gym.com(囲い 37 種)・shougi.jp(囲い一覧)。**日本将棋連盟の公開ページは一覧・個別とも取得できなかった(HTTP 404。検索経由で個別コラムの URL は分かるが本文を読めない)ので、目録の出典には使っていない**(参照日 2026-09-25)。
 **列の意味**: 「個別ページ」= 座標・手順を起こせる解説ページの URL。無いものは**出典なし**(一覧に名前があるだけ)で、**埋めない**。「状態」= 未 / 下書き済み(id) / 既存(id) / 対象外。別名は 1 行にまとめる。
 
-**数**: 囲い N = 62(うち出典なし 10、埋まった 6)/ 戦法 M = 184(うち出典なし 41、埋まった 7。駒落ちは対象外で数に入れない)。狙い(intents)の目録は戦法の目録から起こす(順は 囲い → 戦法 → 狙い)。
+**数**: 囲い N = 62(うち出典なし 10、埋まった 6 → 第 2 組の後 16)/ 戦法 M = 184(うち出典なし 41、埋まった 7。駒落ちは対象外で数に入れない)。狙い(intents)の目録は戦法の目録から起こす(順は 囲い → 戦法 → 狙い)。
 
 ### 2.1 囲いの目録
 
 | # | 名前 | 別名 | 系統 | 個別ページ | 一覧の出典 | 状態 |
 |---|---|---|---|---|---|---|
 | 1 | 矢倉囲い(金矢倉) | 矢倉 | 矢倉系 | <https://ja.wikipedia.org/wiki/%E7%9F%A2%E5%80%89%E5%9B%B2%E3%81%84> | <https://ja.wikipedia.org/wiki/Category%3A%E5%B0%86%E6%A3%8B%E3%81%AE%E5%9B%B2%E3%81%84> | 下書き済み(yagura_kinyagura) |
-| 2 | 銀矢倉 |  | 矢倉系 | <https://ja.wikipedia.org/wiki/%E9%8A%80%E7%9F%A2%E5%80%89> | <https://ja.wikipedia.org/wiki/Category%3A%E5%B0%86%E6%A3%8B%E3%81%AE%E5%9B%B2%E3%81%84> | 未 |
-| 3 | 片矢倉 |  | 矢倉系 | <https://ja.wikipedia.org/wiki/%E7%89%87%E7%9F%A2%E5%80%89> | <https://ja.wikipedia.org/wiki/Category%3A%E5%B0%86%E6%A3%8B%E3%81%AE%E5%9B%B2%E3%81%84> | 未 |
-| 4 | 総矢倉 |  | 矢倉系 | <https://ja.wikipedia.org/wiki/%E7%B7%8F%E7%9F%A2%E5%80%89> | <https://ja.wikipedia.org/wiki/Category%3A%E5%B0%86%E6%A3%8B%E3%81%AE%E5%9B%B2%E3%81%84> | 未 |
+| 2 | 銀矢倉 |  | 矢倉系 | <https://ja.wikipedia.org/wiki/%E9%8A%80%E7%9F%A2%E5%80%89> | <https://ja.wikipedia.org/wiki/Category%3A%E5%B0%86%E6%A3%8B%E3%81%AE%E5%9B%B2%E3%81%84> | 下書き済み(yagura_ginyagura) |
+| 3 | 片矢倉 |  | 矢倉系 | <https://ja.wikipedia.org/wiki/%E7%89%87%E7%9F%A2%E5%80%89> | <https://ja.wikipedia.org/wiki/Category%3A%E5%B0%86%E6%A3%8B%E3%81%AE%E5%9B%B2%E3%81%84> | 下書き済み(yagura_katayagura) |
+| 4 | 総矢倉 |  | 矢倉系 | <https://ja.wikipedia.org/wiki/%E7%B7%8F%E7%9F%A2%E5%80%89> | <https://ja.wikipedia.org/wiki/Category%3A%E5%B0%86%E6%A3%8B%E3%81%AE%E5%9B%B2%E3%81%84> | 下書き済み(yagura_souyagura) |
 | 5 | 銀立ち矢倉 |  | 矢倉系 | <https://ja.wikipedia.org/wiki/%E9%8A%80%E7%AB%8B%E3%81%A1%E7%9F%A2%E5%80%89> | <https://ja.wikipedia.org/wiki/Category%3A%E5%B0%86%E6%A3%8B%E3%81%AE%E5%9B%B2%E3%81%84> | 未 |
 | 6 | 菱矢倉 |  | 矢倉系 | <https://ja.wikipedia.org/wiki/%E8%8F%B1%E7%9F%A2%E5%80%89> | <https://ja.wikipedia.org/wiki/Category%3A%E5%B0%86%E6%A3%8B%E3%81%AE%E5%9B%B2%E3%81%84> | 未 |
 | 7 | 土居矢倉 |  | 矢倉系 | <https://ja.wikipedia.org/wiki/%E5%9C%9F%E5%B1%85%E7%9F%A2%E5%80%89> | <https://ja.wikipedia.org/wiki/Category%3A%E5%B0%86%E6%A3%8B%E3%81%AE%E5%9B%B2%E3%81%84> | 未 |
@@ -149,7 +149,7 @@
 | 9 | 矢倉早囲い |  | 矢倉系 | <https://ja.wikipedia.org/wiki/%E7%9F%A2%E5%80%89%E6%97%A9%E5%9B%B2%E3%81%84> | <https://ja.wikipedia.org/wiki/Category%3A%E5%B0%86%E6%A3%8B%E3%81%AE%E5%9B%B2%E3%81%84> | 未 |
 | 10 | 矢倉穴熊 |  | 矢倉系 | <https://ja.wikipedia.org/wiki/%E7%9F%A2%E5%80%89%E7%A9%B4%E7%86%8A> | <https://ja.wikipedia.org/wiki/Category%3A%E5%B0%86%E6%A3%8B%E3%81%AE%E5%9B%B2%E3%81%84> | 未 |
 | 11 | 右矢倉 |  | 矢倉系 | <https://ja.wikipedia.org/wiki/%E5%8F%B3%E7%9F%A2%E5%80%89> | <https://ja.wikipedia.org/wiki/Category%3A%E5%B0%86%E6%A3%8B%E3%81%AE%E5%9B%B2%E3%81%84> | 未 |
-| 12 | カニ囲い |  | 矢倉系 | <https://ja.wikipedia.org/wiki/%E3%82%AB%E3%83%8B%E5%9B%B2%E3%81%84> | <https://ja.wikipedia.org/wiki/Category%3A%E5%B0%86%E6%A3%8B%E3%81%AE%E5%9B%B2%E3%81%84> | 未 |
+| 12 | カニ囲い |  | 矢倉系 | <https://ja.wikipedia.org/wiki/%E3%82%AB%E3%83%8B%E5%9B%B2%E3%81%84> | <https://ja.wikipedia.org/wiki/Category%3A%E5%B0%86%E6%A3%8B%E3%81%AE%E5%9B%B2%E3%81%84> | 下書き済み(kanigakoi) |
 | 13 | 菊水矢倉 |  | 矢倉系 | <https://shogi-gym.com/kakoi/yagura/kikusui-yagura/> | <https://shogi-gym.com/kakoi/> | 未 |
 | 14 | 富士見矢倉 |  | 矢倉系 | **出典なし** | <https://www.shougi.jp/kakoi/> | 未 |
 | 15 | へこみ矢倉 |  | 矢倉系 | **出典なし** | <https://www.shougi.jp/kakoi/> | 未 |
@@ -159,10 +159,10 @@
 | 19 | 本美濃囲い | 美濃囲い | 美濃系 | <https://ja.wikipedia.org/wiki/%E6%9C%AC%E7%BE%8E%E6%BF%83%E5%9B%B2%E3%81%84> | <https://ja.wikipedia.org/wiki/Category%3A%E5%B0%86%E6%A3%8B%E3%81%AE%E5%9B%B2%E3%81%84> | 既存(mino_honmino) |
 | 20 | 高美濃囲い |  | 美濃系 | <https://ja.wikipedia.org/wiki/%E9%AB%98%E7%BE%8E%E6%BF%83%E5%9B%B2%E3%81%84> | <https://ja.wikipedia.org/wiki/Category%3A%E5%B0%86%E6%A3%8B%E3%81%AE%E5%9B%B2%E3%81%84> | 既存(mino_takamino) |
 | 21 | 銀冠 |  | 美濃系 | <https://ja.wikipedia.org/wiki/%E7%BE%8E%E6%BF%83%E5%9B%B2%E3%81%84> | <https://ja.wikipedia.org/wiki/Category%3A%E5%B0%86%E6%A3%8B%E3%81%AE%E5%9B%B2%E3%81%84> | 既存(mino_ginkanmuri) |
-| 22 | 片美濃囲い |  | 美濃系 | <https://ja.wikipedia.org/wiki/%E7%89%87%E7%BE%8E%E6%BF%83%E5%9B%B2%E3%81%84> | <https://ja.wikipedia.org/wiki/Category%3A%E5%B0%86%E6%A3%8B%E3%81%AE%E5%9B%B2%E3%81%84> | 未 |
+| 22 | 片美濃囲い |  | 美濃系 | <https://ja.wikipedia.org/wiki/%E7%89%87%E7%BE%8E%E6%BF%83%E5%9B%B2%E3%81%84> | <https://ja.wikipedia.org/wiki/Category%3A%E5%B0%86%E6%A3%8B%E3%81%AE%E5%9B%B2%E3%81%84> | 下書き済み(mino_katamino) |
 | 23 | 木村美濃 |  | 美濃系 | <https://ja.wikipedia.org/wiki/%E6%9C%A8%E6%9D%91%E7%BE%8E%E6%BF%83> | <https://ja.wikipedia.org/wiki/Category%3A%E5%B0%86%E6%A3%8B%E3%81%AE%E5%9B%B2%E3%81%84> | 未 |
 | 24 | ダイヤモンド美濃 |  | 美濃系 | <https://ja.wikipedia.org/wiki/%E3%83%80%E3%82%A4%E3%83%A4%E3%83%A2%E3%83%B3%E3%83%89%E7%BE%8E%E6%BF%83> | <https://ja.wikipedia.org/wiki/Category%3A%E5%B0%86%E6%A3%8B%E3%81%AE%E5%9B%B2%E3%81%84> | 未 |
-| 25 | 金美濃 |  | 美濃系 | <https://ja.wikipedia.org/wiki/%E9%87%91%E7%BE%8E%E6%BF%83> | <https://ja.wikipedia.org/wiki/Category%3A%E5%B0%86%E6%A3%8B%E3%81%AE%E5%9B%B2%E3%81%84> | 未 |
+| 25 | 金美濃 |  | 美濃系 | <https://ja.wikipedia.org/wiki/%E9%87%91%E7%BE%8E%E6%BF%83> | <https://ja.wikipedia.org/wiki/Category%3A%E5%B0%86%E6%A3%8B%E3%81%AE%E5%9B%B2%E3%81%84> | 下書き済み(mino_kinmino) |
 | 26 | 銀美濃 |  | 美濃系 | <https://ja.wikipedia.org/wiki/%E9%8A%80%E7%BE%8E%E6%BF%83> | <https://ja.wikipedia.org/wiki/Category%3A%E5%B0%86%E6%A3%8B%E3%81%AE%E5%9B%B2%E3%81%84> | 未 |
 | 27 | ちょんまげ美濃 |  | 美濃系 | <https://ja.wikipedia.org/wiki/%E3%81%A1%E3%82%87%E3%82%93%E3%81%BE%E3%81%92%E7%BE%8E%E6%BF%83> | <https://ja.wikipedia.org/wiki/Category%3A%E5%B0%86%E6%A3%8B%E3%81%AE%E5%9B%B2%E3%81%84> | 未 |
 | 28 | 坊主美濃 |  | 美濃系 | <https://ja.wikipedia.org/wiki/%E5%9D%8A%E4%B8%BB%E7%BE%8E%E6%BF%83> | <https://ja.wikipedia.org/wiki/Category%3A%E5%B0%86%E6%A3%8B%E3%81%AE%E5%9B%B2%E3%81%84> | 未 |
@@ -173,20 +173,20 @@
 | 33 | 振り飛車早囲い | 早囲い | 美濃系 | <https://shogi-gym.com/kakoi/furibisha-hayagakoi/> | <https://shogi-gym.com/kakoi/> | 未 |
 | 34 | 三手囲い |  | その他(振り飛車) | <https://www.shogi.or.jp/column/2019/04/kakoi_65.html> | <https://www.shougi.jp/kakoi/> | 未 |
 | 35 | 穴熊囲い |  | 穴熊系 | <https://ja.wikipedia.org/wiki/%E7%A9%B4%E7%86%8A%E5%9B%B2%E3%81%84> | <https://ja.wikipedia.org/wiki/Category%3A%E5%B0%86%E6%A3%8B%E3%81%AE%E5%9B%B2%E3%81%84> | 未 |
-| 36 | 居飛車穴熊 |  | 穴熊系 | <https://ja.wikipedia.org/wiki/%E5%B1%85%E9%A3%9B%E8%BB%8A%E7%A9%B4%E7%86%8A> | <https://ja.wikipedia.org/wiki/Category%3A%E5%B0%86%E6%A3%8B%E3%81%AE%E5%9B%B2%E3%81%84> | 未 |
-| 37 | 振り飛車穴熊 |  | 穴熊系 | <https://ja.wikipedia.org/wiki/%E6%8C%AF%E3%82%8A%E9%A3%9B%E8%BB%8A%E7%A9%B4%E7%86%8A> | <https://ja.wikipedia.org/wiki/Category%3A%E5%B0%86%E6%A3%8B%E3%81%AE%E5%9B%B2%E3%81%84> | 未 |
+| 36 | 居飛車穴熊 |  | 穴熊系 | <https://ja.wikipedia.org/wiki/%E5%B1%85%E9%A3%9B%E8%BB%8A%E7%A9%B4%E7%86%8A> | <https://ja.wikipedia.org/wiki/Category%3A%E5%B0%86%E6%A3%8B%E3%81%AE%E5%9B%B2%E3%81%84> | 下書き済み(anaguma_ibisha) |
+| 37 | 振り飛車穴熊 |  | 穴熊系 | <https://ja.wikipedia.org/wiki/%E6%8C%AF%E3%82%8A%E9%A3%9B%E8%BB%8A%E7%A9%B4%E7%86%8A> | <https://ja.wikipedia.org/wiki/Category%3A%E5%B0%86%E6%A3%8B%E3%81%AE%E5%9B%B2%E3%81%84> | 下書き済み(anaguma_furibisha) |
 | 38 | 松尾流穴熊 |  | 穴熊系 | <https://ja.wikipedia.org/wiki/%E6%9D%BE%E5%B0%BE%E6%B5%81%E7%A9%B4%E7%86%8A> | <https://ja.wikipedia.org/wiki/Category%3A%E5%B0%86%E6%A3%8B%E3%81%AE%E5%9B%B2%E3%81%84> | 未 |
 | 39 | 一直線穴熊 |  | 穴熊系 | <https://ja.wikipedia.org/wiki/%E4%B8%80%E7%9B%B4%E7%B7%9A%E7%A9%B4%E7%86%8A> | <https://ja.wikipedia.org/wiki/Category%3A%E5%B0%86%E6%A3%8B%E3%81%AE%E5%9B%B2%E3%81%84> | 未 |
 | 40 | ビッグ4 |  | 穴熊系 | <https://ja.wikipedia.org/wiki/%E3%83%93%E3%83%83%E3%82%B04%20%28%E5%B0%86%E6%A3%8B%29> | <https://ja.wikipedia.org/wiki/Category%3A%E5%B0%86%E6%A3%8B%E3%81%AE%E5%9B%B2%E3%81%84> | 未 |
 | 41 | 銀冠穴熊 |  | 穴熊系 | <https://shogi-gym.com/kakoi/anaguma/ginkan-anaguma/> | <https://shogi-gym.com/kakoi/> | 未 |
 | 42 | 舟囲い |  | 舟囲い系 | <https://ja.wikipedia.org/wiki/%E8%88%9F%E5%9B%B2%E3%81%84> | <https://ja.wikipedia.org/wiki/Category%3A%E5%B0%86%E6%A3%8B%E3%81%AE%E5%9B%B2%E3%81%84> | 下書き済み(funagakoi) |
-| 43 | 箱入り娘 |  | 舟囲い系 | <https://ja.wikipedia.org/wiki/%E7%AE%B1%E5%85%A5%E3%82%8A%E5%A8%98%20%28%E5%B0%86%E6%A3%8B%29> | <https://ja.wikipedia.org/wiki/Category%3A%E5%B0%86%E6%A3%8B%E3%81%AE%E5%9B%B2%E3%81%84> | 未 |
+| 43 | 箱入り娘 |  | 舟囲い系 | <https://ja.wikipedia.org/wiki/%E7%AE%B1%E5%85%A5%E3%82%8A%E5%A8%98%20%28%E5%B0%86%E6%A3%8B%29> | <https://ja.wikipedia.org/wiki/Category%3A%E5%B0%86%E6%A3%8B%E3%81%AE%E5%9B%B2%E3%81%84> | 下書き済み(hakoirimusume) |
 | 44 | Elmo囲い | エルモ囲い | 舟囲い系 | <https://ja.wikipedia.org/wiki/Elmo%E5%9B%B2%E3%81%84> | <https://ja.wikipedia.org/wiki/Category%3A%E5%B0%86%E6%A3%8B%E3%81%AE%E5%9B%B2%E3%81%84> | 未 |
 | 45 | 串カツ囲い |  | 対振り持久戦 | <https://ja.wikipedia.org/wiki/%E4%B8%B2%E3%82%AB%E3%83%84%E5%9B%B2%E3%81%84> | <https://ja.wikipedia.org/wiki/Category%3A%E5%B0%86%E6%A3%8B%E3%81%AE%E5%9B%B2%E3%81%84> | 未 |
 | 46 | ミレニアム囲い | トーチカ | 対振り持久戦 | <https://ja.wikipedia.org/wiki/%E3%83%9F%E3%83%AC%E3%83%8B%E3%82%A2%E3%83%A0%E5%9B%B2%E3%81%84> | <https://ja.wikipedia.org/wiki/Category%3A%E5%B0%86%E6%A3%8B%E3%81%AE%E5%9B%B2%E3%81%84> | 未 |
 | 47 | 振り飛車ミレニアム |  | その他(振り飛車) | **出典なし** | <https://ja.wikipedia.org/wiki/%E5%B0%86%E6%A3%8B%E3%81%AE%E6%88%A6%E6%B3%95%E4%B8%80%E8%A6%A7> | 未 |
 | 48 | 金無双 | 二枚金 | 相振り | <https://ja.wikipedia.org/wiki/%E9%87%91%E7%84%A1%E5%8F%8C> | <https://ja.wikipedia.org/wiki/Category%3A%E5%B0%86%E6%A3%8B%E3%81%AE%E5%9B%B2%E3%81%84> | 下書き済み(kinmusou) |
-| 49 | 雁木囲い |  | その他 | <https://ja.wikipedia.org/wiki/%E9%9B%81%E6%9C%A8%E5%9B%B2%E3%81%84> | <https://ja.wikipedia.org/wiki/Category%3A%E5%B0%86%E6%A3%8B%E3%81%AE%E5%9B%B2%E3%81%84> | 未 |
+| 49 | 雁木囲い |  | その他 | <https://ja.wikipedia.org/wiki/%E9%9B%81%E6%9C%A8%E5%9B%B2%E3%81%84> | <https://ja.wikipedia.org/wiki/Category%3A%E5%B0%86%E6%A3%8B%E3%81%AE%E5%9B%B2%E3%81%84> | 下書き済み(gangi_nimaigin) |
 | 50 | 中住まい |  | その他 | <https://ja.wikipedia.org/wiki/%E4%B8%AD%E4%BD%8F%E3%81%BE%E3%81%84> | <https://ja.wikipedia.org/wiki/Category%3A%E5%B0%86%E6%A3%8B%E3%81%AE%E5%9B%B2%E3%81%84> | 未 |
 | 51 | 中原囲い |  | その他 | <https://ja.wikipedia.org/wiki/%E4%B8%AD%E5%8E%9F%E5%9B%B2%E3%81%84> | <https://ja.wikipedia.org/wiki/Category%3A%E5%B0%86%E6%A3%8B%E3%81%AE%E5%9B%B2%E3%81%84> | 未 |
 | 52 | ボナンザ囲い |  | その他 | <https://ja.wikipedia.org/wiki/%E3%83%9C%E3%83%8A%E3%83%B3%E3%82%B6%E5%9B%B2%E3%81%84> | <https://ja.wikipedia.org/wiki/Category%3A%E5%B0%86%E6%A3%8B%E3%81%AE%E5%9B%B2%E3%81%84> | 未 |
@@ -391,6 +391,41 @@
 | 183 | 英春流 |  | 奇襲戦法 | <https://ja.wikipedia.org/wiki/%E8%8B%B1%E6%98%A5%E6%B5%81> | <https://ja.wikipedia.org/wiki/Category%3A%E5%A5%87%E8%A5%B2%E6%88%A6%E6%B3%95> | 未 |
 | 184 | アヒル戦法 |  | 奇襲戦法 | <https://ja.wikipedia.org/wiki/%E3%82%A2%E3%83%92%E3%83%AB%E5%9B%B2%E3%81%84> | <https://ja.wikipedia.org/wiki/Category%3A%E5%A5%87%E8%A5%B2%E6%88%A6%E6%B3%95> | 未 |
 | 185 | 駒落ちの戦法(下手棒銀・銀多伝ほか 30 余) |  | 駒落ち(対象外) | **出典なし** | <https://ja.wikipedia.org/wiki/%E5%B0%86%E6%A3%8B%E3%81%AE%E6%88%A6%E6%B3%95%E4%B8%80%E8%A6%A7> | 対象外(駒落ち。本アプリは平手) |
+
+## 3. 第 2 組(2026-09-25): 囲い 10 件
+
+**足した ID(すべて `review_status: draft`、`side: self`、置き場 `data/drafts/2026-09-25-knowledge/shapes/`)**: `yagura_ginyagura`(銀矢倉)・`yagura_katayagura`(片矢倉)・`yagura_souyagura`(総矢倉、parent 金矢倉)・`gangi_nimaigin`(雁木、二枚銀)・`anaguma_ibisha`(居飛車穴熊、confidence low: 本文の手順から起こした)・`anaguma_furibisha`(振り飛車穴熊)・`mino_katamino`(片美濃)・`mino_kinmino`(金美濃)・`kanigakoi`(カニ囲い)・`hakoirimusume`(箱入り娘)。出典は各レコードの `source`(URL + 参照日 2026-09-25。shogi-gym.com の各囲いのページと Wikipedia の本文。文は写さず座標だけ起こした)。**予告と違う点**: ダイヤモンド美濃は shogi-gym の本文に座標が無く次の組へ回し、代わりに本文に座標のある金美濃・カニ囲い・箱入り娘を入れた。
+**あわせて直したもの**: 第 1 組の 5 件の `source` を「自分の言葉 + URL + 参照日」に書き直し、出典の文の引用(『 』)を残していない(司令塔の決まり 2026-09-25)。
+**スキーマ検証**: 使い捨て worktree の `data/shapes|openings/` に既存 + 下書き 15 件を置いて `node scripts/validate-data.mjs` → 検証OK(既存 23 + 15 = 38 件)。共有ツリーの本体には入れていない(本体の挙動は変わらない)。
+
+**前後の数**(前 = 既存 3 + 第 1 組 3 の 6 件、後 = 16 件。同じ棋譜・同じ道具。本体に入れたらどうなるかの測定で、本体の今の挙動ではない):
+
+**30 手まで**
+
+| 対象 | 局面数 | **形の沈黙(証拠 2 件以上か完成が無い) 前→後** | 形だけ沈黙(forming 含む) 前→後 | 狙いだけ沈黙 前→後 | どちらも無し 前→後 | I-9 型 前→後 |
+|---|---|---|---|---|---|---|
+| 固定棋譜 4 局 | 59 | **43 → 39(73% → 66%)** | 25 → 25 | 29 → 29 | 17 → 17 | 97 → 166 |
+| round2 3 局(参考) | 48 | **46 → 46(96% → 96%)** | 20 → 12 | 9 → 9 | 8 → 6 | 26 → 98 |
+| 1 人目(10 局) | 157 | **154 → 136(98% → 87%)** | 60 → 38 | 40 → 40 | 21 → 19 | 104 → 379 |
+| 2 人目(20 局) | 312 | **237 → 221(76% → 71%)** | 104 → 92 | 75 → 75 | 54 → 50 | 492 → 1063 |
+| 3 人目(20 局) | 320 | **256 → 209(80% → 65%)** | 160 → 103 | 111 → 111 | 92 → 74 | 341 → 889 |
+| 4 人目(20 局) | 307 | **302 → 246(98% → 80%)** | 147 → 104 | 53 → 53 | 42 → 40 | 355 → 711 |
+| **4 人合計(70 局)** | 1096 | **949 → 812(87% → 74%)** | 471 → 337 | 279 → 279 | 209 → 183 | 1292 → 3042 |
+
+**全手**
+
+| 対象 | 局面数 | **形の沈黙(証拠 2 件以上か完成が無い) 前→後** | 形だけ沈黙(forming 含む) 前→後 | 狙いだけ沈黙 前→後 | どちらも無し 前→後 | I-9 型 前→後 |
+|---|---|---|---|---|---|---|
+| 固定棋譜 4 局 | 59 | **43 → 39(73% → 66%)** | 25 → 25 | 29 → 29 | 17 → 17 | 97 → 166 |
+| round2 3 局(参考) | 48 | **46 → 46(96% → 96%)** | 20 → 12 | 9 → 9 | 8 → 6 | 26 → 98 |
+| 1 人目(10 局) | 331 | **262 → 233(79% → 70%)** | 112 → 87 | 47 → 47 | 22 → 20 | 344 → 1100 |
+| 2 人目(20 局) | 754 | **483 → 346(64% → 46%)** | 135 → 103 | 75 → 75 | 54 → 50 | 1827 → 3848 |
+| 3 人目(20 局) | 998 | **476 → 335(48% → 34%)** | 192 → 116 | 111 → 111 | 92 → 74 | 1729 → 4087 |
+| 4 人目(20 局) | 652 | **594 → 460(91% → 71%)** | 257 → 166 | 53 → 53 | 42 → 40 | 841 → 1976 |
+| **4 人合計(70 局)** | 2735 | **1815 → 1374(66% → 50%)** | 696 → 472 | 286 → 286 | 210 → 184 | 4741 → 11011 |
+
+**足した 10 件が 4 人 70 局で完成した局 / 3/4 以上一致した局**: yagura_ginyagura 0/3、yagura_katayagura 0/1、yagura_souyagura 0/0、gangi_nimaigin 0/1、anaguma_ibisha 0/0、anaguma_furibisha 0/2、mino_katamino 6/6、mino_kinmino 5/5、kanigakoi 0/3、hakoirimusume 0/4。
+**読み方**: 証拠 2 件以上か完成に限った形の沈黙は 30 手までで 949 → 812(87% → 74%)、全手で 1815 → 1374(66% → 50%)。動いたのは主に 3 人目(振り飛車穴熊・金美濃・片美濃)と 4 人目(カニ囲い・片美濃・箱入り娘の証拠)。I-9 型(証拠 1 件以下の forming の主張)は 30 手までで 1292 → 3208 と増え、これは誤認の側の数として扱う(形が増えるほど 1 手で複数の形が forming になる。判定の話であり、この席は触らない)。**埋まった数 ÷ 目録の数: 囲い 16 / 62**(既存 3 + 第 1 組 3 + 第 2 組 10)、戦法 7 / 184(変わらず)。
 
 ## 付録 A. 局ごとの一覧(4 人 70 局。40 手目と終局時の自玉・自飛の筋・相手玉・相手飛の筋、形の認識の前後)
 
