@@ -661,3 +661,11 @@ F-3(§11.9.9)の直し。統括が承認し、納品レーンが実装(worktree 
 ### 11.9.21 7c のコミット `9e3238e`(開発・診断レーン)で 12 → 10 → 7c が閉じた(2026-09-25)
 
 7c = `answerMaterialFlags` の中 + `deliver.test.ts`(`968d427` の上、hunk は重ならない): `--whatif-pdf` は今回の組の付録 2 の PDF 1 本 + 付録 3 の PDF(×3 → ×2)、vitest 1639、独立監査 GO(基準と送付済み v7 は直前・直後で一致、前の組にしか無い手を足すと直後だけ検査 2 で落ちる)。**納品レーンへの影響**: 今後の顧客で「前の組の付録 2 にしか印字されていない手」を B に書くと検査 2 で落ちる(今回の組の冊子に無い手は書けない、が正しい動き)。4 人目の B md を 7c 後の HEAD で `answer-check` に通し直して **rc=0**(`--whatif-pdf` 2 本)。`willHaveWhatif` の `"pdf"` 分岐は呼び出し元が無くなったが残す(消すのは動きを変えないが別の判断。今日は触らない)。
+
+### 11.9.22 凍結の例外 14 件目の着手: 冊子の禁止語をすべて使ってよくする(2026-09-25 夜)
+
+**司令塔からの申し送り(人間の決定、`f715da2` で git に記録あり)**: 「禁止用語はすべて使っていいようにしよう」。変わらないもの: 「断定しない」(CLAUDE.md 規則 5 (3)・規則 6 ― 機械では見ず監査が読む)、数・手・局面の照合(検査 1・2・7)、承認済みの行動の表。
+
+**計画(予測を先に)**: `check_answer.py` の `BANNED_WORDS = []`(`check_line_banned` と検査 3 の枠は残す。語が無ければ何も落とさない)。`check_delivery.py` はコードを変えず(`BANNED_18 = BANNED_WORDS[:18]` が空になり、語は `@`・`/Users/`・「水匠」・`None` の 4 つ)コメントだけ。試験は `check_delivery_test.py` の個数 22 → 4、`check_answer_test.py` に「禁止語を含む行が落ちない」1 本。**二本立て**: 44 局の基準(3 組、`_deliver1_onecmd/deliver_after` の複製に `--from answer-check`)と 4 人目(`deliver1` の複製)で、前後の `answer-check`・`check-delivery` の出力が「語 22 個 → 4 個」以外は同一(予測)。直した後だけ、「癖」「傾向」「あなた」を足した B md が rc=0(直す前は 3 件落ちる)。変異 2 本。vitest は `lib/hypothesis.test.ts` のパリティ 1 本だけ落ちる(想定内 ― 開発・診断レーンが `HYPOTHESIS_BANNED_WORDS` を同時に直す)。指示書 scratchpad `BANNED_EMPTY14_BRIEF.md`、実装担当(opus)を worktree で起動。
+
+**分担**: `docs/DELIVER_GATES.md` §2 検査 5・§3 検査 3 の記述(「禁止語なし。断定しないは残り、機械では見ない → 監査が読む」)と `lib/hypothesis.ts`・パリティ試験は開発・診断レーン(1 ファイル 1 席)。コミットの同期: 直前に「今コミットする」、直後に hash を両方へ送る。
