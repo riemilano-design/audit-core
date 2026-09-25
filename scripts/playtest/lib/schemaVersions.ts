@@ -41,3 +41,7 @@ export const DIAGNOSIS_CONDITION_SUMMARY_SCHEMA_VERSION = "0.1" as const;
 /** STEP D6(docs/STEP_D6_PLAN_2026-09-16.md §6)。契約 diagnosis-report の今の版と、スキーマのファイルがある版(ほかの契約の定数とは独立に末尾に置く) */
 export const DIAGNOSIS_REPORT_SCHEMA_VERSION = "0.1" as const;
 export const KNOWN_DIAGNOSIS_REPORT_SCHEMA_VERSIONS = ["0.1"] as const;
+
+/** STEP OBS-2(docs/LANE_DIAG_LOG_2026-09.md §12.2)。契約 hypothesis(仮説台帳の 1 行)の今の版と、スキーマのファイルがある版(末尾に独立して置く) */
+export const HYPOTHESIS_SCHEMA_VERSION = "0.1" as const;
+export const KNOWN_HYPOTHESIS_SCHEMA_VERSIONS = ["0.1"] as const;

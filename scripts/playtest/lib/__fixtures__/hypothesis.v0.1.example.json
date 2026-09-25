@@ -1,0 +1,54 @@
+{
+  "schemaVersion": "0.1",
+  "hypothesisId": "H-p4-min3-001",
+  "subject": { "customer": "p4", "groups": ["min3"], "gamesCount": 18 },
+  "scope": "this_user",
+  "lane": "time",
+  "statement": "中盤の消費の中央値は 63.5 秒で、崩れは 30 回起きています。そのうち中盤の崩れは 15 回で、50%を占めています。という読みです。",
+  "observations": [
+    { "obsId": "obs.time.groupMedians", "path": "groups[].other.medianMidSec", "value": 63.5, "unit": "sec" },
+    { "obsId": "obs.report.overview", "path": "overview.fell", "value": 30 },
+    {
+      "obsId": "obs.report.overview",
+      "path": "overview.mid",
+      "value": 15,
+      "derived": {
+        "kind": "percent",
+        "numerator": { "obsId": "obs.report.overview", "value": 15 },
+        "denominator": { "obsId": "obs.report.overview", "value": 30 }
+      }
+    }
+  ],
+  "counterEvidence": {
+    "attempted": true,
+    "items": [
+      {
+        "kind": "denominator",
+        "text": "長考した手そのものが 0 回しか無い",
+        "observations": [{ "obsId": "obs.time.longThinkTotal", "value": 0 }]
+      }
+    ],
+    "result": "weakened",
+    "provenance": { "inputs": ["out/p4/pipe-3min/report/time_cause.json"] }
+  },
+  "prediction": {
+    "writtenAt": "2026-09-25",
+    "window": "next_20_games_same_time_limit",
+    "metric": "obs.time.longThinkTotal",
+    "comparator": "<=",
+    "value": 0.1,
+    "alsoRequires": [{ "metric": "obs.time.longThinkTotal", "comparator": ">=", "value": 5 }]
+  },
+  "status": "weak",
+  "knowledge": {
+    "kind": "discovered",
+    "reviewStatus": "draft",
+    "origin": { "kifu": "p4/min3", "lane": "time" },
+    "range": "this_user"
+  },
+  "provenance": {
+    "gitHead": "0000000000000000000000000000000000000000",
+    "inputs": ["out/p4/pipe-3min/report/time_cause.json", "out/p4/pipe-3min/report/patient_report_data.json"],
+    "excludedInputs": []
+  }
+}

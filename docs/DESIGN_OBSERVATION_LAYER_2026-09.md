@@ -44,7 +44,7 @@
 | `obs.moment.rise` / `obs.moment.maxDrop` | diagnosis-moment v0.4(`diagnosisMoment.ts`) | 上がり(`−dropCp` 以上)・局ごとの最大の下がり。出せない局も状態行(`noDrop`/`noComparedPair`) | **有** | 有 |
 | `obs.cf.*` | `counterfactual`(`lib/counterfactual.ts`。`kingEscapesRoot.count`・`actual.kingEscapesEnd.count`・`userMoveFacts.toInOwnKingZone` 等) | 実戦の続きと読み筋の続きを同じ尺度で比べた差 | **穴**: v0.7 スキーマの `counterfactual` は `properties` が空(TS 型が実質の正本) | 部分 |
 | `obs.cond.*` | `lib/conditions/*.ts`(C-1 `king_escapes_decrease_v1`、C-5)+ `condition.ts` `READABLE_FIELDS` | 条件式の真偽と**判定不能**(分母に入れない) | diagnosis-condition スキーマ | `gate.ts` G-1〜G-4(`GATE_VALUES`) |
-| `obs.time.*` | `time_cause.json`(`timeCause.ts`: `phaseSpentSec`・`longThinkCountByPhase`・`longestMove`・`midThinkByPhase`・C7〜C10・`remainingSec`・`midMoveSeconds`)、`TIME_VALUES = {spentBucketsSec:[1,4,9], leftBucketsSec:[60,120], longThinkSec:10, quickSec:4}` | 段ごとの消費・長考・残り時間 | **無**(`kind:"time_cause"` の自己申告と TS 型だけ) | 無 |
+| `obs.time.*` | `time_cause.json`(`timeCause.ts`: `phaseSpentSec`・`longThinkCountByPhase`・`longestMove`・`midThinkByPhase`・C7〜C10・`remainingSec`・`midMoveSeconds`)、`TIME_VALUES = {spentBucketsSec:[1,4,9], leftBucketsSec:[60,120], longThinkSec:10, quickSec:4}`(`lib/reportData.ts:469`。`timeCause.ts` 側ではない) | 段ごとの消費・長考・残り時間 | **無**(`kind:"time_cause"` の自己申告と TS 型だけ) | 無 |
 | `obs.timeSearch.*` | `time_cause_search.json`(`timeSearch.ts`、30 列、`OUTCOMES = longThink/collapse/decisionGap`、A/B/C の型) | 「アウトカムと一緒に現れる条件」の探索結果(発見用・検証用の同じ向き) | 無 | `validateMinN: 10` |
 | `obs.fork.*` | `whatif_report_data.json`(`whatifReport.ts`: `representative.displayPly/actualRank/topGapCp/candidates(先頭 3)/scene`、`WHATIF_VALUES minLossCp: 600`) | 分かれ道(第 1 候補と 600cp 以上離れた実戦の手)と代表局面 | 無 | 局面の参照(検査 7、付録 2) |
 | `obs.side.*` | `whatif.ts` `sideOf`(守り = 自玉から `sideZoneRadius: 2` 以内 or 玉を動かす手/攻め v2 = 相手玉から `attackZoneRadius: 3` 以内 ∪ 駒を取る ∪ 守り駒に当たる ∪ 王手) | 第 1 候補と実戦の側(`attack/defense/both/none`) | 無 | 無(§10 の交差表は手で数えた) |
@@ -183,8 +183,8 @@
   "lane": "time",                               // どのレーンが出したか。"prior" = 事前仮説(ヒアリング)
   "statement": "中盤の 1 手の消費が序盤・終盤より長く、崩れは 2〜9 秒の手に集中している。長く考える手と崩れる手が分かれている、という読みです。",
   "observations": [                             // 引いた数は全部ここに。文に出る数はここに無ければ落ちる
-    { "obsId": "obs.time.phaseSpentMedianSec", "path": "groups[min3].other.phaseSpentMedian.mid", "value": 63.5, "unit": "sec" },
-    { "obsId": "obs.time.collapseBySpentBucket", "path": "…", "value": { "1": 3, "2-4": 17, "5-9": 10, "10+": 0 } }
+    { "obsId": "obs.time.groupMedians", "path": "groups[].other.medianMidSec", "value": 63.5, "unit": "sec" },
+    { "obsId": "obs.time.bySpent", "path": "time.bySpent[]", "value": { "1": 3, "2-4": 17, "5-9": 10, "10+": 0 } }
   ],
   "counterEvidence": {                          // 反証レーンの出力。空で埋めない
     "attempted": true,
@@ -196,7 +196,7 @@
   "prediction": {                               // 数で、測る前に。無ければ落ちる
     "writtenAt": "2026-09-25",
     "window": "next_20_games_same_time_limit",
-    "metric": "obs.time.collapseBySpentBucket['10+'] / obs.time.collapseTotal",
+    "metric": "obs.time.bySpent['10+'].collapsed / obs.report.overview.fell",
     "comparator": "<=",
     "value": 0.1,
     "alsoRequires": [ { "metric": "obs.time.longThinkTotal", "comparator": ">=", "value": 5 } ]   // 分母の下限。満たさなければ「測れず」
@@ -393,3 +393,4 @@
 | (3) 最小の 1 周が今の材料で回る具体性 | §10.1 材料・10.2 手順・10.3 実例(4 人目の実在する数で紙の上で 1 周)・10.4 回らないもの |
 | 書き方: 測れないものは測れないと書く | §12、§10.4、§7 の限界(F-1 の型) |
 | **REVISE 1 回目(2026-09-25)の反映** | 決-A・B・C 決定済み = §4.2・§13、§2「手の目的候補」の行、§4.1 (c)、§12 #1/決-G 変更 = §0、§2 足す順番 (2)、§3 供給の規則 5(知識レーンからの ID の経路)、§13、§14 の 7/§10.4「語彙の列は 1 周目に入れない」は**そのまま**(依存しない、は変わらない) |
+| **STEP OBS-2(契約の実装)の反映** | §1・§7.1 を実物に合わせた(`docs/LANE_DIAG_LOG_2026-09.md` §12.2、2026-09-25) |
