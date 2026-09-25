@@ -1,0 +1,19 @@
+{
+  "id": "yokofudori_33kaku",
+  "name": "横歩取り3三角",
+  "name_kana": "よこふどりさんさんかく",
+  "side": "opponent",
+  "family": "横歩取り",
+  "leads_to_shape_ids": [],
+  "scenario": null,
+  "recognition_pattern": [
+    {
+      "piece": "角",
+      "to": "3c",
+      "order_hint": 1
+    }
+  ],
+  "source": "【AI起草 / 出典は下記】**横歩取りは後手がとる指し方が名前になっているものが多く、この 6 件はすべて `side: opponent`(後手)である。** Wikipedia『横歩取り3三角』(https://ja.wikipedia.org/wiki/横歩取り3三角 (参照日 2026-09-25))による。後手が △3三角 と上がる指し方で、▲3四飛 に対し ▲2二角成 などを防ぐ意味がある。**出典は『横歩取り空中戦法』『内藤流』とも呼ばれると述べている**(1969 年に内藤国雄が採用)。目録の「空中戦法(内藤流)」の行はこのレコードの別名にあたる。 座標は後手の絶対座標(docs/DATA_MODEL.md の規約)。戦型を認識するコードは apps/server/src/analysis/ に無いため、このレコードを足しても認識の数は動かない(2026-09-25 司令塔の訂正、docs/KNOWLEDGE_LANE_BRIEF_2026-09-25.md §5.1)。追加の経緯: 2026-09-25 の知識レーン第 20 組(docs/LANE_KNOWLEDGE_LOG_2026-09.md §23)。人間の決定(2026-09-25、網羅)による目録の埋め。",
+  "confidence_level": "medium",
+  "review_status": "draft"
+}
