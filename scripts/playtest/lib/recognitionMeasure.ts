@@ -24,6 +24,8 @@
 // - I-9 相当 = 立った行のうち 証拠 ≤ I9_MAX_EVIDENCE かつ 欠け ≥ I9_MIN_MISSING。
 //   形は forming/completed の両方に当て、戦型は forming の行だけに当てる
 //   (開発・診断レーン §12.7 の訂正。openmeasure.ts と同じ)。
+// - **局数の欄(STEP OPEN-2b)は「延べ局面」ではなく「局の数」**。1 局の中で同じ id が
+//   何局面で立っても 1 と数える(rows に id の集合を持ち、byGroup でその集合を足し上げる)。
 
 import { makeSquareName } from "shogiops/util";
 
@@ -111,6 +113,21 @@ export interface GameRow {
   /** 狙い id ごとの「立った局面」の件数 */
   intentHits: Record<string, number>;
 
+  // --- この局で立った / 完成した id の集合(STEP OPEN-2b。byGroup の局数のもと) ---
+  // 局面の数ではなく「この局に 1 局面でもあったか」だけを持つ。並びは id の昇順。
+  /** この局で 1 局面でも forming か completed だった形の id */
+  shapeOnIds: string[];
+  /** この局で 1 局面でも completed だった形の id */
+  shapeCompIds: string[];
+  /** この局で 1 局面でも forming か matched だった狙いの id */
+  intentOnIds: string[];
+  /** この局で 1 局面でも matched だった狙いの id */
+  intentCompIds: string[];
+  /** この局で 1 局面でも forming か completed だった戦型の id */
+  openOnIds: string[];
+  /** この局で 1 局面でも completed だった戦型の id */
+  openCompIds: string[];
+
   // --- 戦型(openings) ---
   /** 強い戦型が自分側に無かった局面 */
   openSilentSelf: number;
@@ -132,7 +149,10 @@ export interface GameRow {
   openCompNoEvidById: Record<string, number>;
 }
 
-/** 組ごとの合計。rows の数をそのまま足したものと、局数で数える 2 欄からなる。 */
+/**
+ * 組ごとの合計。rows の数をそのまま足した欄と、**局数**で数える欄(`gamesCompleted`・
+ * `gamesBest75` と、STEP OPEN-2b で足した `*OnGames`・`*CompGames` の 6 欄)からなる。
+ */
 export interface GroupTotals {
   games: number;
   plies: number;
@@ -155,6 +175,22 @@ export interface GroupTotals {
   /** 形 id ごとの「matchScore の最大が 0.75 以上だった局数」 */
   gamesBest75: Record<string, number>;
   intentHits: Record<string, number>;
+
+  // --- レコード 1 件ごとの局数(STEP OPEN-2b)。id → その組で「立った / 完成した」局の数 ---
+  // 延べ局面ではない(同じ局の何局面で立っても 1)。`shapeCompGames` は `gamesCompleted` と同じ値になる。
+  /** 形 id ごとの「forming か completed が 1 局面でもあった局数」 */
+  shapeOnGames: Record<string, number>;
+  /** 形 id ごとの「completed が 1 局面でもあった局数」 */
+  shapeCompGames: Record<string, number>;
+  /** 狙い id ごとの「forming か matched が 1 局面でもあった局数」 */
+  intentOnGames: Record<string, number>;
+  /** 狙い id ごとの「matched が 1 局面でもあった局数」 */
+  intentCompGames: Record<string, number>;
+  /** 戦型 id ごとの「forming か completed が 1 局面でもあった局数」 */
+  openOnGames: Record<string, number>;
+  /** 戦型 id ごとの「completed が 1 局面でもあった局数」 */
+  openCompGames: Record<string, number>;
+
   openSilentSelf: number;
   openSilentOpp: number;
   openSilentAny: number;
@@ -199,6 +235,12 @@ function emptyRow(group: string, id: string, plies: number): GameRow {
     shapeCompleted: {},
     shapeBest: {},
     intentHits: {},
+    shapeOnIds: [],
+    shapeCompIds: [],
+    intentOnIds: [],
+    intentCompIds: [],
+    openOnIds: [],
+    openCompIds: [],
     openSilentSelf: 0,
     openSilentOpp: 0,
     openSilentAny: 0,
@@ -232,6 +274,12 @@ function emptyTotals(): GroupTotals {
     gamesCompleted: {},
     gamesBest75: {},
     intentHits: {},
+    shapeOnGames: {},
+    shapeCompGames: {},
+    intentOnGames: {},
+    intentCompGames: {},
+    openOnGames: {},
+    openCompGames: {},
     openSilentSelf: 0,
     openSilentOpp: 0,
     openSilentAny: 0,
@@ -285,6 +333,13 @@ export function measureRecognition(
   for (const game of games) {
     const { events, sfens } = replayMoveHistory(game.moves, game.startSfen);
     const row = emptyRow(game.group, game.id, game.moves.length);
+    // 局数の欄のもと。局面ごとに足すのではなく、この局に 1 度でも出た id を集合で持つ。
+    const shapeOnSet = new Set<string>();
+    const shapeCompSet = new Set<string>();
+    const intentOnSet = new Set<string>();
+    const intentCompSet = new Set<string>();
+    const openOnSet = new Set<string>();
+    const openCompSet = new Set<string>();
 
     for (const ply of plyStepsOf(game.moves.length, maxPly)) {
       const sfen = sfens[ply];
@@ -312,10 +367,14 @@ export function measureRecognition(
 
       for (const r of shapeResults) {
         if (r.matchScore > (row.shapeBest[r.shapeId] ?? 0)) row.shapeBest[r.shapeId] = r.matchScore;
-        if (r.status === "completed") bump(row.shapeCompleted, r.shapeId);
+        if (r.status === "completed") {
+          bump(row.shapeCompleted, r.shapeId);
+          shapeCompSet.add(r.shapeId);
+        }
       }
       for (const r of shapeOn) {
         bump(row.shapeHits, r.shapeId);
+        shapeOnSet.add(r.shapeId);
         if (r.formationEvidence.length <= I9_MAX_EVIDENCE && r.missingSquares.length >= I9_MIN_MISSING) {
           row.i9type += 1;
           if (r.side === "opponent") row.i9Opp += 1;
@@ -330,7 +389,11 @@ export function measureRecognition(
       if (intentOn.some((r) => r.matchStatus === "matched" || r.matchedSignatures.length >= 2)) {
         row.recIntent2 += 1;
       }
-      for (const r of intentOn) bump(row.intentHits, r.intentId);
+      for (const r of intentOn) {
+        bump(row.intentHits, r.intentId);
+        intentOnSet.add(r.intentId);
+        if (r.matchStatus === "matched") intentCompSet.add(r.intentId);
+      }
       if (intentOn.length > 0) row.recIntent += 1;
 
       if (shapeOn.length > 0 || intentOn.length > 0) row.recAny += 1;
@@ -349,7 +412,9 @@ export function measureRecognition(
       if (!openingOn.some(openingStrong)) row.openSilentAny += 1;
 
       for (const r of openingOn) {
+        openOnSet.add(r.openingId);
         if (r.status === "completed") {
+          openCompSet.add(r.openingId);
           row.openCompleted += 1;
           if (r.formationEvidence.length === 0) {
             row.openCompletedNoEvidence += 1;
@@ -365,6 +430,14 @@ export function measureRecognition(
         }
       }
     }
+
+    const sorted = (ids: Set<string>): string[] => [...ids].sort();
+    row.shapeOnIds = sorted(shapeOnSet);
+    row.shapeCompIds = sorted(shapeCompSet);
+    row.intentOnIds = sorted(intentOnSet);
+    row.intentCompIds = sorted(intentCompSet);
+    row.openOnIds = sorted(openOnSet);
+    row.openCompIds = sorted(openCompSet);
 
     rows.push(row);
   }
@@ -405,11 +478,17 @@ export function measureRecognition(
     for (const [id, count] of Object.entries(row.openCompNoEvidById)) {
       totals.openCompNoEvidById[id] = (totals.openCompNoEvidById[id] ?? 0) + count;
     }
-    // ここだけ「局数」で数える(局面の数ではない)。
+    // ここから下は「局数」で数える(局面の数ではない)。1 局につき 1 しか足さない。
     for (const id of Object.keys(row.shapeCompleted)) bump(totals.gamesCompleted, id);
     for (const [id, best] of Object.entries(row.shapeBest)) {
       if (best >= BEST_SCORE_THRESHOLD) bump(totals.gamesBest75, id);
     }
+    for (const id of row.shapeOnIds) bump(totals.shapeOnGames, id);
+    for (const id of row.shapeCompIds) bump(totals.shapeCompGames, id);
+    for (const id of row.intentOnIds) bump(totals.intentOnGames, id);
+    for (const id of row.intentCompIds) bump(totals.intentCompGames, id);
+    for (const id of row.openOnIds) bump(totals.openOnGames, id);
+    for (const id of row.openCompIds) bump(totals.openCompGames, id);
   }
 
   return { byGroup, rows };

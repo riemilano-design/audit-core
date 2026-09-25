@@ -448,3 +448,140 @@ describe("(6) CLI(scripts/playtest/recognitionMeasure.ts)", () => {
     expect(missing.stderr).toContain("--games");
   }, 60_000);
 });
+
+// ---- (7) 局数は延べでない(STEP OPEN-2b) ----
+
+describe("(7) レコード 1 件ごとの局数は延べ局面ではない", () => {
+  it("同じ局の 2 局面以上で立っても 1、2 局で立てば 2", () => {
+    // 形・戦型は ply 2・4 の 2 局面で forming(完成はしない)。
+    const shape = makeShape("t_on", "self", [
+      { piece: "歩", square: "7f" },
+      { piece: "銀", square: "3h" },
+      { piece: "金", square: "5h" },
+    ]);
+    // 狙いは ply 2・4 の 2 局面で matched。
+    const intent = makeIntent("t_on_intent", [{ piece: "歩", to: "3d" }]);
+    const openForming = makeOpening("o_on", "self", [
+      { piece: "歩", to: "7f" },
+      { piece: "銀", to: "3h" },
+      { piece: "金", to: "5h" },
+    ]);
+    // 4i の金は初期配置のまま = ply 0・2・4 の 3 局面で completed。
+    const openCompleted = makeOpening("o_comp", "self", [{ piece: "金", to: "4i" }]);
+    const options: MeasureRecognitionOptions = {
+      shapes: [shape],
+      intents: [intent],
+      openings: [openForming, openCompleted],
+      maxPly: 0,
+    };
+
+    const one = measureRecognition([{ group: "g", id: "a", moves: MOVES_4 }], options);
+    const row = one.rows[0]!;
+    // 延べ(局面の数)は 2・2・3 だが、rows が持つのは「この局に出た id」の集合。
+    expect(row.shapeHits["t_on"]).toBe(2);
+    expect(row.intentHits["t_on_intent"]).toBe(2);
+    expect(row.openCompleted).toBe(3);
+    expect(row.shapeOnIds).toEqual(["t_on"]);
+    expect(row.shapeCompIds).toEqual([]);
+    expect(row.intentOnIds).toEqual(["t_on_intent"]);
+    expect(row.intentCompIds).toEqual(["t_on_intent"]);
+    expect(row.openOnIds).toEqual(["o_comp", "o_on"]);
+    expect(row.openCompIds).toEqual(["o_comp"]);
+
+    const oneTotals = one.byGroup["g"]!;
+    expect(oneTotals.games).toBe(1);
+    expect(oneTotals.shapeOnGames).toEqual({ t_on: 1 });
+    expect(oneTotals.shapeCompGames).toEqual({});
+    expect(oneTotals.intentOnGames).toEqual({ t_on_intent: 1 });
+    expect(oneTotals.intentCompGames).toEqual({ t_on_intent: 1 });
+    expect(oneTotals.openOnGames).toEqual({ o_comp: 1, o_on: 1 });
+    expect(oneTotals.openCompGames).toEqual({ o_comp: 1 });
+
+    // 同じ並びを 2 局に分けると、局数だけが 2 になる(延べは 2 倍)。
+    const two = measureRecognition(
+      [
+        { group: "g", id: "a", moves: MOVES_4 },
+        { group: "g", id: "b", moves: MOVES_4 },
+      ],
+      options,
+    );
+    const twoTotals = two.byGroup["g"]!;
+    expect(twoTotals.games).toBe(2);
+    expect(twoTotals.shapeHits["t_on"]).toBe(4);
+    expect(twoTotals.openCompleted).toBe(6);
+    expect(twoTotals.shapeOnGames).toEqual({ t_on: 2 });
+    expect(twoTotals.shapeCompGames).toEqual({});
+    expect(twoTotals.intentOnGames).toEqual({ t_on_intent: 2 });
+    expect(twoTotals.intentCompGames).toEqual({ t_on_intent: 2 });
+    expect(twoTotals.openOnGames).toEqual({ o_comp: 2, o_on: 2 });
+    expect(twoTotals.openCompGames).toEqual({ o_comp: 2 });
+
+    // 1 局でしか立たない id は 1 のまま。2 局目を「1 手も指していない局」にすると、
+    // 指し手で作られる形・狙い・戦型は立たず、初期配置のままで完成する戦型だけが立つ。
+    const onlyFirst = measureRecognition(
+      [
+        { group: "g", id: "a", moves: MOVES_4 },
+        { group: "g", id: "b", moves: [] },
+      ],
+      options,
+    );
+    expect(onlyFirst.byGroup["g"]?.games).toBe(2);
+    expect(onlyFirst.byGroup["g"]?.shapeOnGames).toEqual({ t_on: 1 });
+    expect(onlyFirst.byGroup["g"]?.intentOnGames).toEqual({ t_on_intent: 1 });
+    expect(onlyFirst.byGroup["g"]?.openOnGames).toEqual({ o_comp: 2, o_on: 1 });
+    expect(onlyFirst.byGroup["g"]?.openCompGames).toEqual({ o_comp: 2 });
+  });
+});
+
+// ---- (8) 局数の欄どうしの整合(STEP OPEN-2b) ----
+
+describe("(8) gamesCompleted と shapeCompGames は同じ値・局数は分母を超えない", () => {
+  it("固定棋譜 4 局 + 本体の形・狙いで、全 id が *CompGames ≤ *OnGames ≤ games を満たす", () => {
+    const shapes = loadShapes(join(REPO_ROOT, "data", "shapes"));
+    const intents = loadIntents(join(REPO_ROOT, "data", "intents"));
+    // 戦型は作り物(将棋知識ではない)。completed になるもの・forming どまりのものを 1 件ずつ。
+    const openings = [
+      makeOpening("o_check_comp", "self", [{ piece: "金", to: "4i" }]),
+      makeOpening("o_check_forming", "self", [
+        { piece: "歩", to: "7f" },
+        { piece: "銀", to: "3h" },
+        { piece: "金", to: "5h" },
+      ]),
+    ];
+    const { byGroup } = measureRecognition(readFixed4(), { shapes, intents, openings, maxPly: 0 });
+    const totals = byGroup["fixed4"]!;
+    expect(totals.games).toBe(4);
+
+    // 既存の欄(形の完成した局数)と、新しい欄が同じ値になる。
+    expect(totals.shapeCompGames).toEqual(totals.gamesCompleted);
+
+    const pairs: Array<[string, Record<string, number>, Record<string, number>]> = [
+      ["形", totals.shapeOnGames, totals.shapeCompGames],
+      ["狙い", totals.intentOnGames, totals.intentCompGames],
+      ["戦型", totals.openOnGames, totals.openCompGames],
+    ];
+    for (const [what, onGames, compGames] of pairs) {
+      for (const [id, count] of Object.entries(onGames)) {
+        expect(count, `${what} ${id} の立った局数`).toBeGreaterThan(0);
+        expect(count, `${what} ${id} の立った局数`).toBeLessThanOrEqual(totals.games);
+      }
+      for (const [id, count] of Object.entries(compGames)) {
+        expect(count, `${what} ${id} の完成した局数`).toBeGreaterThan(0);
+        expect(count, `${what} ${id} の完成した局数`).toBeLessThanOrEqual(onGames[id] ?? 0);
+      }
+    }
+
+    // 空でないことを確かめる(全部 0 件でも上のループは通ってしまうため)。
+    expect(Object.keys(totals.shapeOnGames).length).toBeGreaterThan(0);
+    expect(Object.keys(totals.intentOnGames).length).toBeGreaterThan(0);
+    expect(totals.openCompGames["o_check_comp"]).toBeGreaterThan(0);
+    expect(Object.keys(totals.openOnGames)).toContain("o_check_forming");
+
+    // 局ごとの集合と、組の局数が食い違わない(rows から数え直しても同じになる)。
+    const recounted: Record<string, number> = {};
+    for (const row of measureRecognition(readFixed4(), { shapes, intents, openings, maxPly: 0 }).rows) {
+      for (const id of row.shapeOnIds) recounted[id] = (recounted[id] ?? 0) + 1;
+    }
+    expect(recounted).toEqual(totals.shapeOnGames);
+  });
+});
