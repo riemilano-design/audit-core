@@ -1,0 +1,31 @@
+{
+  "id": "nimaigin",
+  "name": "二枚銀",
+  "name_kana": "にまいぎん",
+  "side": "self",
+  "family": "対振り急戦",
+  "leads_to_shape_ids": [
+    "funagakoi"
+  ],
+  "scenario": null,
+  "recognition_pattern": [
+    {
+      "piece": "玉",
+      "to": "7h",
+      "order_hint": 1
+    },
+    {
+      "piece": "銀",
+      "to": "6g",
+      "order_hint": 2
+    },
+    {
+      "piece": "銀",
+      "to": "5g",
+      "order_hint": 3
+    }
+  ],
+  "source": "【AI起草 / 出典は下記】Wikipedia『二枚銀』(https://ja.wikipedia.org/wiki/二枚銀 (参照日 2026-09-25))による。居飛車舟囲い急戦の一種で、左銀を繰り出して銀を 5七・6七 に並べる(横に 2 枚並ぶことが名前の由来)。3七 に銀が利かないのが弱点。玉 7八 は出典の『舟囲い急戦』から置いた。**既存の gangi_senpou(雁木戦法)と銀 2 枚の位置が同じ**で、違いは飛車と玉の側にある。 戦型を認識するコードは apps/server/src/analysis/ に無いため、このレコードを足しても認識の数は動かない(2026-09-25 司令塔の訂正、docs/KNOWLEDGE_LANE_BRIEF_2026-09-25.md §5.1)。座標は先手の絶対座標(docs/DATA_MODEL.md の規約)。追加の経緯: 2026-09-25 の知識レーン第 18 組(docs/LANE_KNOWLEDGE_LOG_2026-09.md §21)。人間の決定(2026-09-25、網羅)による目録の埋め。",
+  "confidence_level": "medium",
+  "review_status": "draft"
+}

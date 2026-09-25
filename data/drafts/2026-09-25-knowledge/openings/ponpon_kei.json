@@ -1,0 +1,26 @@
+{
+  "id": "ponpon_kei",
+  "name": "ポンポン桂",
+  "name_kana": "ポンポンけい",
+  "side": "self",
+  "family": "対振り急戦",
+  "leads_to_shape_ids": [
+    "funagakoi"
+  ],
+  "scenario": null,
+  "recognition_pattern": [
+    {
+      "piece": "桂",
+      "to": "3g",
+      "order_hint": 1
+    },
+    {
+      "piece": "桂",
+      "to": "4e",
+      "order_hint": 2
+    }
+  ],
+  "source": "【AI起草 / 出典は下記】Wikipedia『ポンポン桂』(https://ja.wikipedia.org/wiki/ポンポン桂 (参照日 2026-09-25))による。四間飛車に対する居飛車の急戦で、▲4五桂 と歩の頭に桂を捨て、桂損の代償に飛車先を突破する(△4五同歩 ▲3三角成 △同桂 ▲2四歩)。recognition_pattern は 3七桂 → 4五桂 の 2 件(3七 は出典が述べていないが、2九 の桂が 4五 へ行く経路として置いた。推測)。 戦型を認識するコードは apps/server/src/analysis/ に無いため、このレコードを足しても認識の数は動かない(2026-09-25 司令塔の訂正、docs/KNOWLEDGE_LANE_BRIEF_2026-09-25.md §5.1)。座標は先手の絶対座標(docs/DATA_MODEL.md の規約)。追加の経緯: 2026-09-25 の知識レーン第 18 組(docs/LANE_KNOWLEDGE_LOG_2026-09.md §21)。人間の決定(2026-09-25、網羅)による目録の埋め。",
+  "confidence_level": "low",
+  "review_status": "draft"
+}

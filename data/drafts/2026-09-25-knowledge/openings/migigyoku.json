@@ -1,0 +1,19 @@
+{
+  "id": "migigyoku",
+  "name": "右玉",
+  "name_kana": "みぎぎょく",
+  "side": "self",
+  "family": "居飛車一般",
+  "leads_to_shape_ids": [],
+  "scenario": null,
+  "recognition_pattern": [
+    {
+      "piece": "玉",
+      "to": "4h",
+      "order_hint": 1
+    }
+  ],
+  "source": "【AI起草 / 出典は下記】Wikipedia『右玉』(https://ja.wikipedia.org/wiki/右玉 (参照日 2026-09-25))による。居飛車のまま玉も右側に置く指し方で、相手が居飛車のとき玉が相手の攻めから遠くなる。出典が具体的なマスを挙げているのは糸谷流右玉の 4八玉 だけなので、それを置いた(recognition_pattern 1 件・low)。leads_to_shape_ids は空(右玉は既存の囲いの名前に当てはまらない)。 戦型を認識するコードは apps/server/src/analysis/ に無いため、このレコードを足しても認識の数は動かない(2026-09-25 司令塔の訂正、docs/KNOWLEDGE_LANE_BRIEF_2026-09-25.md §5.1)。座標は先手の絶対座標(docs/DATA_MODEL.md の規約)。追加の経緯: 2026-09-25 の知識レーン第 18 組(docs/LANE_KNOWLEDGE_LOG_2026-09.md §21)。人間の決定(2026-09-25、網羅)による目録の埋め。",
+  "confidence_level": "low",
+  "review_status": "draft"
+}
