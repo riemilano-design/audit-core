@@ -1,0 +1,22 @@
+{
+  "id": "sankenbisha",
+  "name": "三間飛車",
+  "name_kana": "さんけんびしゃ",
+  "side": "self",
+  "family": "振り飛車系",
+  "leads_to_shape_ids": [
+    "mino_honmino",
+    "anaguma_furibisha"
+  ],
+  "scenario": null,
+  "recognition_pattern": [
+    {
+      "piece": "飛",
+      "to": "7h",
+      "order_hint": 1
+    }
+  ],
+  "source": "【AI起草】自分側(先手)の三間飛車。定義は Wikipedia『三間飛車』(https://ja.wikipedia.org/wiki/三間飛車 (参照日 2026-09-25)) の冒頭(飛車を先手なら7筋、後手なら3筋に振る)による。recognition_pattern の 7h(７八飛)は、先手の飛車が初期位置 2八 から同じ段を横に動いて 7 筋へ回る手を先手の絶対座標に写したもの(段は出典に無く、書いた側が初期位置の段から置いた推測)。leads_to_shape_ids は同記事が囲いとして美濃囲い・穴熊を挙げていることによる。 戦型を認識するコードは apps/server/src/analysis/ に無いため、このレコードを足しても認識の数は動かない(**測れない**。2026-09-25 司令塔の訂正、KNOWLEDGE_LANE_BRIEF §5.1)。 追加の経緯: 2026-09-25 の知識レーン第 5 組(docs/LANE_KNOWLEDGE_LOG_2026-09.md §7)。4 人分の実棋譜 70 局の 40 手目で、この筋に飛車があった局を数えて選んだ。",
+  "confidence_level": "high",
+  "review_status": "draft"
+}

@@ -1,0 +1,12 @@
+{
+  "id": "fujii_system",
+  "name": "藤井システム",
+  "name_kana": "ふじいしすてむ",
+  "side": "self",
+  "family": "振り飛車系",
+  "leads_to_shape_ids": [],
+  "scenario": null,
+  "source": "【AI起草】自分側(先手)の藤井システム。定義は Wikipedia『藤井システム』(https://ja.wikipedia.org/wiki/藤井システム (参照日 2026-09-25))(四間飛車の一種で、特定の手ではなく自陣全体の駒組みに特徴があり、玉を囲わずに戦う)による。**recognition_pattern は書いていない**: 出典が述べる特徴が「玉を囲わない」「相手に美濃囲いを組ませない駒組み」という、**駒が動かないこと・全体の配置**であり、現在のスキーマ(駒種 + 移動先の並び)では表せないため(openings.schema.json の recognition_pattern の説明と同じ理由)。この欄を持たない戦型は認識の候補にならない。 戦型を認識するコードは apps/server/src/analysis/ に無いため、このレコードを足しても認識の数は動かない(**測れない**。2026-09-25 司令塔の訂正、KNOWLEDGE_LANE_BRIEF §5.1)。 追加の経緯: 2026-09-25 の知識レーン第 5 組(docs/LANE_KNOWLEDGE_LOG_2026-09.md §7)。4 人分の実棋譜 70 局の 40 手目で、この筋に飛車があった局を数えて選んだ。",
+  "confidence_level": "medium",
+  "review_status": "draft"
+}

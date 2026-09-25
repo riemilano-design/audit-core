@@ -1,0 +1,19 @@
+{
+  "id": "mukaibisha_opponent",
+  "name": "向かい飛車",
+  "name_kana": "むかいびしゃ",
+  "side": "opponent",
+  "family": "振り飛車系",
+  "leads_to_shape_ids": [],
+  "scenario": null,
+  "recognition_pattern": [
+    {
+      "piece": "飛",
+      "to": "2b",
+      "order_hint": 1
+    }
+  ],
+  "source": "【AI起草】相手側(後手)の向かい飛車。定義は Wikipedia『向かい飛車』(https://ja.wikipedia.org/wiki/向かい飛車 (参照日 2026-09-25)) の冒頭(先手なら8筋、後手なら2筋に振る)による。recognition_pattern の 2b(２二飛)は後手の絶対座標。自分側は mukaibisha(第 1 組)。 戦型を認識するコードは apps/server/src/analysis/ に無いため、このレコードを足しても認識の数は動かない(**測れない**。2026-09-25 司令塔の訂正、KNOWLEDGE_LANE_BRIEF §5.1)。 追加の経緯: 2026-09-25 の知識レーン第 5 組(docs/LANE_KNOWLEDGE_LOG_2026-09.md §7)。4 人分の実棋譜 70 局の 40 手目で、この筋に飛車があった局を数えて選んだ。",
+  "confidence_level": "high",
+  "review_status": "draft"
+}

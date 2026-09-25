@@ -1,0 +1,19 @@
+{
+  "id": "migi_shikenbisha",
+  "name": "右四間飛車",
+  "name_kana": "みぎしけんびしゃ",
+  "side": "self",
+  "family": "居飛車系",
+  "leads_to_shape_ids": [],
+  "scenario": null,
+  "recognition_pattern": [
+    {
+      "piece": "飛",
+      "to": "4h",
+      "order_hint": 1
+    }
+  ],
+  "source": "【AI起草】自分側(先手)の右四間飛車。定義は Wikipedia『右四間飛車』(https://ja.wikipedia.org/wiki/右四間飛車 (参照日 2026-09-25))(先手は飛車を4筋、後手は6筋へ。飛車を初期位置から動かすが振り飛車には含めず居飛車に分類する)による。recognition_pattern の 4h(４八飛)は、飛車が初期位置の段を横に動いて 4 筋へ回る手を先手の絶対座標に写したもの(段は出典に無い推測)。同記事は相手の四間飛車や矢倉への対抗に使い、4 筋の歩と桂で攻める狙いがあると述べている。 戦型を認識するコードは apps/server/src/analysis/ に無いため、このレコードを足しても認識の数は動かない(**測れない**。2026-09-25 司令塔の訂正、KNOWLEDGE_LANE_BRIEF §5.1)。 追加の経緯: 2026-09-25 の知識レーン第 5 組(docs/LANE_KNOWLEDGE_LOG_2026-09.md §7)。4 人分の実棋譜 70 局の 40 手目で、この筋に飛車があった局を数えて選んだ。",
+  "confidence_level": "high",
+  "review_status": "draft"
+}
