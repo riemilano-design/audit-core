@@ -46,9 +46,12 @@ import type { Finding, Invariant, InvariantContext, RecordLine } from "./types.j
 
 const ID = "I-9";
 
-/** draftの初期値(docs/PHASES.md「Unit 6の再定義と決定」H-5)。将棋一般の閾値ではない。 */
-const I9_MAX_EVIDENCE = 1;
-const I9_MIN_MISSING = 2;
+/** draftの初期値(docs/PHASES.md「Unit 6の再定義と決定」H-5)。将棋一般の閾値ではない。
+ *
+ * **export している理由**(STEP OPEN-2、docs/LANE_DIAG_LOG_2026-09.md §12.8): 同じ「I-9 相当」を
+ * 数える lib/recognitionMeasure.ts が、数を自分で書かずにここから読むため。値も判定も変えていない。 */
+export const I9_MAX_EVIDENCE = 1;
+export const I9_MIN_MISSING = 2;
 
 export const i9ShapeClaimWithoutEvidence: Invariant = {
   id: ID,

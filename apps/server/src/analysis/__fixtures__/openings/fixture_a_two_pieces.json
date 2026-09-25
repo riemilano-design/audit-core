@@ -1,0 +1,15 @@
+{
+  "id": "fixture_a_two_pieces",
+  "name": "試験用の架空戦型A",
+  "name_kana": "しけんようのかくうせんけいえー",
+  "side": "self",
+  "family": "試験用",
+  "leads_to_shape_ids": [],
+  "recognition_pattern": [
+    { "piece": "歩", "to": "5e" },
+    { "piece": "桂", "to": "7g" }
+  ],
+  "source": "openingDetector.test.ts 専用の架空データ。将棋知識ではない(実在の戦型・定跡とは無関係で、駒とマスの対は読み込みの試験のために置いただけのもの)。",
+  "confidence_level": "low",
+  "review_status": "draft"
+}

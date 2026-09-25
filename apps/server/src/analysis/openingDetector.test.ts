@@ -12,18 +12,17 @@ import {
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-// apps/server/src/analysis -> apps/server/src -> apps/server -> apps -> リポジトリルート
-const DRAFT_OPENINGS_DIR = path.join(
-  __dirname,
-  "..",
-  "..",
-  "..",
-  "..",
-  "data",
-  "drafts",
-  "2026-09-25-knowledge",
-  "openings",
-);
+/**
+ * 読み込みの試験に使う固定の fixture(3 本: recognition_pattern あり 2・なし 1)。
+ *
+ * **下書き(`data/drafts/`)の実ファイルは読まない**(STEP OPEN-2、docs/LANE_DIAG_LOG_2026-09.md §12.8)。
+ * 以前はそこを読んで「111 件中 108 件が候補」と件数を固定していたため、知識レーンが
+ * レコードを足す・`recognition_pattern` を外すたびに、この試験が落ちていた
+ * (試験が下書きの件数と結合していた)。ここで確かめたいのは「pattern を持つものだけが
+ * 候補になり、最後まで例外なく判定できる」ことであって、下書きが今いくつあるかではない。
+ * 下書きの件数を測るのは `scripts/playtest/recognitionMeasure.ts` の役目。
+ */
+const FIXTURE_OPENINGS_DIR = path.join(__dirname, "__fixtures__", "openings");
 
 /** テスト用の opening(data/ の実データではない。将棋知識を足さないよう、駒とマスは既存の初期配置・定跡と無関係な素の対だけを使う)。 */
 function makeOpening(
@@ -211,9 +210,9 @@ describe("analyzeOpeningFormationFromEvents", () => {
     expect(results.map((r) => r.matchScore)).toEqual([1, 1, 0.5]);
   });
 
-  it("下書きの openings(実ファイル)を読み込むと、recognition_pattern を持つものだけが候補になる", () => {
-    const openings = loadOpeningsFromDir(DRAFT_OPENINGS_DIR);
-    expect(openings).toHaveLength(111);
+  it("openings のファイルを読み込むと、recognition_pattern を持つものだけが候補になる", () => {
+    const openings = loadOpeningsFromDir(FIXTURE_OPENINGS_DIR);
+    expect(openings).toHaveLength(3);
 
     let candidates = 0;
     let skipped = 0;
@@ -223,11 +222,11 @@ describe("analyzeOpeningFormationFromEvents", () => {
       if (shape === null) skipped += 1;
       else candidates += 1;
     }
-    expect(candidates).toBe(108);
-    expect(skipped).toBe(3);
+    expect(candidates).toBe(2);
+    expect(skipped).toBe(1);
 
     // 例外なく最後まで判定できる(駒名・マス表記が既存の変換で扱える)。
     const results = analyzeOpeningFormationFromEvents(DEFAULT_INITIAL_SFEN, [], openings);
-    expect(results).toHaveLength(108);
+    expect(results).toHaveLength(2);
   });
 });

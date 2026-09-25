@@ -1,0 +1,11 @@
+{
+  "id": "fixture_c_no_pattern",
+  "name": "試験用の架空戦型C",
+  "name_kana": "しけんようのかくうせんけいしー",
+  "side": "self",
+  "family": "試験用",
+  "leads_to_shape_ids": [],
+  "source": "openingDetector.test.ts 専用の架空データ。将棋知識ではない(recognition_pattern を持たない = 認識の候補にならない側を試すためだけに置いたもの)。",
+  "confidence_level": "low",
+  "review_status": "draft"
+}
