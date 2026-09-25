@@ -699,3 +699,5 @@ F-3(§11.9.9)の直し。統括が承認し、納品レーンが実装(worktree 
 **`lib/reportTemplates.ts` の `FORBIDDEN_WORDS`**: 承認済みの判断的知識なので**人間の決定待ち**。統括の勧めは「今は触らない」(`findingTexts.ts` の 20 語と同じ扱い。固定文は道具の文で、顧客の読みは B の経路。固定文に「癖」「傾向」を使うかは #7 で文を書き直すときに一緒に判断)。**人間が「解く」と言うまで着手しない。**
 
 **この席の割り当ては終わり。次は再納品の段(#7)まで待機。**
+
+**`reportTemplates.ts` の `FORBIDDEN_WORDS` の範囲(2026-09-25 夜、開発・診断レーンの調べを私も git grep で確かめた)**: この一覧を読むのは `lib/diagnosisReport.ts:532` と `lib/conditions.test.ts` の 2 か所だけで、入口は `scripts/playtest/report.ts`(条件式の読める文・診断レポート)。`lib/deliver.ts`・`lib/pipeline.ts` は `diagnosisReport` を import していない(grep 0 件)。**つまり冊子の経路と、言い換え役 B の md の経路(`check_answer.py`)は、この一覧を通らない。** 残る影響は「条件式の読める文に『癖』『傾向』『原因』を今も使えない」という範囲だけ。人間へ上げるときはこの範囲の違いを添える(統括へ送った)。`DELIVER_GATES.md` の 204・220 行は開発・診断レーンが `941d1ab` で追従。
