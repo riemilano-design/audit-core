@@ -1,0 +1,29 @@
+{
+  "id": "tsunogin_nakabisha",
+  "name": "ツノ銀中飛車",
+  "name_kana": "つのぎんなかびしゃ",
+  "side": "self",
+  "family": "振り飛車系",
+  "leads_to_shape_ids": [],
+  "scenario": null,
+  "recognition_pattern": [
+    {
+      "piece": "飛",
+      "to": "5h",
+      "order_hint": 1
+    },
+    {
+      "piece": "銀",
+      "to": "6g",
+      "order_hint": 2
+    },
+    {
+      "piece": "銀",
+      "to": "4g",
+      "order_hint": 3
+    }
+  ],
+  "source": "【AI起草】自分側(先手)のツノ銀中飛車。飛車を 5 筋に振り、銀 2 枚を 6七 と 4七 に置く形。定義は Wikipedia『ツノ銀中飛車』(https://ja.wikipedia.org/wiki/ツノ銀中飛車 (参照日 2026-09-25)) の本文(飛車を5筋に振り、左銀を6七に置く構え。持久戦では右銀を4七に置き、2 本の角のように見えることが名前の由来)による。recognition_pattern は 5八飛・6七銀・4七銀 の 3 手。飛車の 5八 は自分側の中飛車(`nakabisha_self`)と同じなので、分かれ目は銀 2 枚の位置である。 戦型を認識するコードは apps/server/src/analysis/ に無いため、このレコードを足しても認識の数は動かない(**測れない**)。 追加の経緯: 2026-09-25 の知識レーン第 8 組(docs/LANE_KNOWLEDGE_LOG_2026-09.md §10)。",
+  "confidence_level": "medium",
+  "review_status": "draft"
+}

@@ -1,0 +1,36 @@
+{
+  "id": "sagimiya_joseki",
+  "name": "鷺宮定跡",
+  "name_kana": "さぎのみやじょうせき",
+  "side": "self",
+  "family": "居飛車系",
+  "leads_to_shape_ids": [
+    "funagakoi"
+  ],
+  "scenario": null,
+  "recognition_pattern": [
+    {
+      "piece": "銀",
+      "to": "5g",
+      "order_hint": 1
+    },
+    {
+      "piece": "飛",
+      "to": "3h",
+      "order_hint": 2
+    },
+    {
+      "piece": "歩",
+      "to": "3e",
+      "order_hint": 3
+    },
+    {
+      "piece": "銀",
+      "to": "4f",
+      "order_hint": 4
+    }
+  ],
+  "source": "【AI起草】自分側(先手)の鷺宮定跡。相手の四間飛車に対する舟囲い急戦の一つで、飛車を 3八 へ寄せてから 3五歩 と突き捨て、銀を 4六 へ出して相手の角の頭を攻める。定義と手順は Wikipedia『鷺宮定跡』(https://ja.wikipedia.org/wiki/鷺宮定跡 (参照日 2026-09-25)) の本文(左銀を 5七 に構える 5七銀左型。▲3八飛 と寄ってから ▲3五歩△同歩▲4六銀 が主流。先手・後手どちらの四間飛車にも使える)による。recognition_pattern は先手の 4 手(5七銀・3八飛・3五歩・4六銀)。**3八飛が山田定跡との分かれ目**である。 戦型を認識するコードは apps/server/src/analysis/ に無いため、このレコードを足しても認識の数は動かない(**測れない**)。 追加の経緯: 2026-09-25 の知識レーン第 8 組(docs/LANE_KNOWLEDGE_LOG_2026-09.md §10)。相手が振り飛車のときの急戦(4 人の棋譜で相手の飛車が 8 筋以外だった 24 局が当たる)。",
+  "confidence_level": "medium",
+  "review_status": "draft"
+}

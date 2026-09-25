@@ -1,0 +1,24 @@
+{
+  "id": "chousoku_37gin",
+  "name": "超速3七銀",
+  "name_kana": "ちょうそくさんしちぎん",
+  "side": "self",
+  "family": "居飛車系",
+  "leads_to_shape_ids": [],
+  "scenario": null,
+  "recognition_pattern": [
+    {
+      "piece": "銀",
+      "to": "3g",
+      "order_hint": 1
+    },
+    {
+      "piece": "銀",
+      "to": "4f",
+      "order_hint": 2
+    }
+  ],
+  "source": "【AI起草】自分側(先手)のゴキゲン中飛車に対する超速3七銀。定義は Wikipedia『超速3七銀』(https://ja.wikipedia.org/wiki/超速3七銀 (参照日 2026-09-25)) の本文(ゴキゲン中飛車に対して居飛車が行う急戦。右の銀を 3七 から 4六 へ繰り上げて攻める)による。recognition_pattern はその 2 手(3七銀・4六銀)。**4六銀は山田定跡・鷺宮定跡にも出る**ので、分かれ目は 3七 を通ることと、相手が中飛車であること(相手の戦型は別のレコードで、いまの仕組みでは組み合わせを条件にできない)。 戦型を認識するコードは apps/server/src/analysis/ に無いため、このレコードを足しても認識の数は動かない(**測れない**)。 追加の経緯: 2026-09-25 の知識レーン第 8 組(docs/LANE_KNOWLEDGE_LOG_2026-09.md §10)。相手が振り飛車のときの急戦(4 人の棋譜で相手の飛車が 8 筋以外だった 24 局が当たる)。",
+  "confidence_level": "medium",
+  "review_status": "draft"
+}

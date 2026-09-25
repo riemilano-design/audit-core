@@ -1,0 +1,29 @@
+{
+  "id": "boukin",
+  "name": "棒金",
+  "name_kana": "ぼうきん",
+  "side": "self",
+  "family": "居飛車系",
+  "leads_to_shape_ids": [],
+  "scenario": null,
+  "recognition_pattern": [
+    {
+      "piece": "金",
+      "to": "3h",
+      "order_hint": 1
+    },
+    {
+      "piece": "金",
+      "to": "2g",
+      "order_hint": 2
+    },
+    {
+      "piece": "金",
+      "to": "2f",
+      "order_hint": 3
+    }
+  ],
+  "source": "【AI起草】自分側(先手)の棒金。相手の石田流に対して、金をまっすぐ前へ進めて相手の飛車と角の動ける範囲を狭める指し方。定義は Wikipedia『棒金』(https://ja.wikipedia.org/wiki/棒金 (参照日 2026-09-25)) の本文(居飛車が石田流に対して ▲3八金〜▲2七金〜▲2六金 と金を前線へ進める。ひねり飛車に対しても使える)による。recognition_pattern はその 3 手(3八金・2七金・2六金)。金がこの順に 3 マス動くのは他の戦型ではあまり無いので、手がかりとしては強い方である。 戦型を認識するコードは apps/server/src/analysis/ に無いため、このレコードを足しても認識の数は動かない(**測れない**)。 追加の経緯: 2026-09-25 の知識レーン第 8 組(docs/LANE_KNOWLEDGE_LOG_2026-09.md §10)。相手が振り飛車のときの急戦(4 人の棋譜で相手の飛車が 8 筋以外だった 24 局が当たる)。",
+  "confidence_level": "medium",
+  "review_status": "draft"
+}
