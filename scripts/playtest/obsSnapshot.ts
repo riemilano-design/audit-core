@@ -8,6 +8,7 @@
 //     [--whatif-data <whatif_report_data.json>] [--direct <direct_answers.json>] \
 //     [--final-positions <final_positions.json>] [--menu <answer_menu.json>] \
 //     [--extra <obs_extra.json>(STEP OBS-5'。scripts/playtest/obsExtra.ts の出力)] \
+//     [--geo <obs_geo.json>(STEP OBS-5。scripts/playtest/obsGeo.ts の出力)] \
 //     [--obs-items <OBSERVATION_ITEMS.md>(既定は docs/OBSERVATION_ITEMS.md)] \
 //     --out <obs_snapshot.json>
 //
@@ -37,6 +38,7 @@ const USAGE = [
   "    [--whatif-data <whatif_report_data.json>] [--direct <direct_answers.json>] \\",
   "    [--final-positions <final_positions.json>] [--menu <answer_menu.json>] \\",
   "    [--extra <obs_extra.json>] \\",
+  "    [--geo <obs_geo.json>] \\",
   "    [--obs-items <OBSERVATION_ITEMS.md>] --out <obs_snapshot.json>",
 ].join("\n");
 
@@ -68,6 +70,7 @@ function main(): number {
   const finalPositionsPath = argValue(args, "--final-positions");
   const menuPath = argValue(args, "--menu");
   const extraPath = argValue(args, "--extra");
+  const geoPath = argValue(args, "--geo");
   const obsItemsPath = argValue(args, "--obs-items") ?? DEFAULT_OBS_ITEMS_PATH;
 
   const registry = loadObsRegistry(obsItemsPath);
@@ -81,6 +84,7 @@ function main(): number {
     finalPositions: finalPositionsPath === undefined ? undefined : readInputFile(finalPositionsPath),
     menu: menuPath === undefined ? undefined : readInputFile(menuPath),
     extra: extraPath === undefined ? undefined : readInputFile(extraPath),
+    geo: geoPath === undefined ? undefined : readInputFile(geoPath),
   };
 
   const snapshot = buildObsSnapshot(inputs, { customer, group, registry, gitHead: gitState.gitHead, dirty: gitState.dirty });

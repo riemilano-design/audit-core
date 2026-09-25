@@ -117,6 +117,12 @@
 | `obs.time.phaseMoves` | `phaseMoves[].{gameNo, timeUpLoss, early, mid, late}.{moves, sec}` | `ObsExtraPhaseMoves` `lib/obsExtra.ts` | 局ごとの段別の手数と消費の合計(`phaseSpentOfGame` と同じ数え方に手数を添えた) | 無 |
 | `obs.time.phaseSecPerMoveMedians` | `phaseSecPerMoveMedians.{timeUpLoss,other}.{games, early, mid, late}` | `ObsExtraPhaseSecPerMoveMedians` `lib/obsExtra.ts` | 段ごとの手数あたり秒(`sec/moves`)の中央値。**existing(計算あり: 中央値。閾値ではない)**。`moves` が 0 の局はその段の中央値の分母に入れない(段の列からだけ除く。`games` は組の局の総数で段によらない = レーン長の判断、§12.6 の実測に記録)。`moveSeconds` が無い局は `{moves: 0, sec: 0}` になり「秒が無い」と「その段で 0 手」を区別しない(既知。基準の組では発生なし) | 無 |
 
+`obs_geo.json`(STEP OBS-5。docs/LANE_DIAG_LOG_2026-09.md §12.10 (A)。`kind:"obs_geo"`。`moves[]` の 3 本は §1.15 の `obs.geo.*` を参照):
+
+| obs ID | パス | 型(file:line) | 中身 | 契約 |
+|---|---|---|---|---|
+| `obs.time.decisionContext` | `decisionContext[].{gameNo, kifPly, spentBucket, collapse, fork, inCheck, oppPrevCapture, oppPrevDrop, oppPrevGivesCheck, oppPrevPromotion, phase, evalBand}` | `ObsGeoDecisionContext` `lib/obsGeo.ts` | `obs.timeSearch.col.*` のうち `fork inCheck oppPrevCapture oppPrevDrop oppPrevGivesCheck oppPrevPromotion phase evalBand` の 8 本を、5〜9 秒・10 秒以上の帯(`MoveFeatureRow.spentBucket` が `"≤9"`/`">9"`。新しい閾値は置かない)の手だけに絞って写した行。`spentBucket`(どちらの帯か)と、既存の崩れの旗 `collapse` を添える(統括経由の人間の決定、2026-09-25。当初計画の「長考〈10 秒以上〉だけ」から範囲を広げた) | 無 |
+
 ### 1.7 `obs.timeSearch.*`(探索。出どころ `time_cause_search.json`(`kind:"time_cause_search"`)。契約 無)
 
 30 列は `SEARCH_COLUMNS` `lib/timeSearch.ts:63` の並びをそのまま ID にする(`obs.timeSearch.col.<列名>`)。値域は `MoveFeatureRow` の各欄(`null` = その手では測れない):
@@ -203,6 +209,14 @@
 | `obs.report.finding` | `findings[].{kind: timeSpent/timeUpLoss/aheadLoss/phase/none, shown, numbers, labels, text, oneLine}`(`FINDING_VALUES {minPairs: 20, ratio: 2}` `:893`) | `Finding` `lib/reportData.ts:883` | 「ひとことで」の発見。文の数はすべて `numbers` から | 無 |
 | `obs.report.previous` | `previous` | `PatientPrevious` `lib/reportData.ts:1044`、`PreviousFindingComparison` `:1036` | 前回の冊子との比較(2 回目以降) | 無 |
 
+### 1.15 `obs.geo.*`(幾何の組み合わせの名前。出どころ `obs_geo.json`(`kind:"obs_geo"`)の `moves[]`。STEP OBS-5、docs/LANE_DIAG_LOG_2026-09.md §12.10 (A)。契約 無)
+
+| obs ID | パス | 型(file:line) | 中身 | 契約 |
+|---|---|---|---|---|
+| `obs.geo.moveCombination` | `moves[].{gameNo, kifPly, side, facts, combination}` | `ObsGeoMove` `lib/obsGeo.ts` | 本人の手 1 つの、幾何の事実 4 本(取る・打つ・王手・玉を動かす。`obs.cf.userMoveFacts`・`obs.read.marks` と同じ元を `moveFactsOf`/`moveMarksOf` で取り直したもの)× 側(`obs.side.of` と同じ `sideOf(tagsOf(...))`)から作った組み合わせの名前(決-B)。名前の表(将棋の語彙を 1 語も含まない)は `lib/obsGeo.ts` に 1 か所 | 無 |
+| `obs.geo.replyToCapture` | `moves[].{gameNo, kifPly, replyToCapture}` | 同上 | 相手の直前の手が取る手だったかどうか × 本人の手が取る手かどうかの組み合わせの名前(「取り返し」「取らない」「相手は取っていない」の 3 値) | 無 |
+| `obs.geo.replyToCheck` | `moves[].{gameNo, kifPly, replyToCheck}` | 同上 | 相手の直前の手が王手だったかどうか × 本人の手の印の組み合わせの名前(「玉を動かす」「取る」「それ以外」「王手ではない」の 4 値)。**設計案 §2 の元の案にあった「合駒」は入れていない**(利きの線を新しく計算することになるため。この段の「既存の道具を呼ぶだけ」という制約を越える ― 決-B の元の案からの逸脱) | 無 |
+
 ---
 
 ## 2. `copy` / `new` / `vocab` ― 設計案 §2 の項目(**まだ値は無い**。H-2 では引けない)
@@ -219,11 +233,11 @@
 | `obs.geo.rookSquare` / `obs.geo.kingRookDistance` | `new` | ― | |
 | `obs.geo.developedCount` / `obs.geo.piecesInOppHalf` / `obs.geo.handCount` | `new` | ― | |
 | `obs.geo.attackersNearOppKing` / `obs.geo.defendersNearOwnKing` | `copy`(半径は既存の値) | `obs.fe.positionFacts.zonePieces`(区域 = 玉 + 8 近傍 = 半径 1)。半径 2・3 の数は `obs.side.tags`(真偽だけ)に元があるが枚数は無い | 半径 1 なら `copy`、半径 2・3 の枚数は `new` |
-| `obs.geo.replyToCapture` / `obs.geo.replyToCheck` | `copy` の一部 + `new` | `obs.timeSearch.col.oppPrevCapture/oppPrevGivesCheck`(相手の直前の手の種類)+ `obs.read.marks`(本人の手の種類)。「取り返し/逃げ/無関係」「玉を動かす/合駒/取る」の**組み合わせの名前**は `new` | 決-B の「幾何の組み合わせの名前」の形 |
+| `obs.geo.replyToCapture` / `obs.geo.replyToCheck` | **→ §1.15(実体化済み)** | `obs.timeSearch.col.oppPrevCapture/oppPrevGivesCheck`(相手の直前の手の種類)+ `obs.read.marks`(本人の手の種類)。「取り返し/逃げ/無関係」「玉を動かす/合駒/取る」の**組み合わせの名前**は `new` だった | **OBS-5(§12.10 (A))で実体を作った**。値は「取り返し/取らない/相手は取っていない」「玉を動かす/取る/それ以外/王手ではない」の**確定した 3・4 値**(「合駒」は入れていない。§1.15 参照) |
 | `obs.geo.moveFacts` | `copy` | `obs.cf.userMoveFacts`(U-1〜U-9)、`obs.read.marks`、`obs.side.tags` | **3 つの既存の型に散っている**。1 つに寄せるのは実装の判断 |
 | `obs.geo.moveSide` | `copy` | `obs.side.of` | |
-| `obs.geo.moveCombination`(決-B) | `new` | `obs.cf.userMoveFacts` × `obs.side.of` の組み合わせ(例: 「取る・相手玉側」) | 目的候補の列挙の代わり。名前の表は実装で決める(語彙ではなく幾何) |
-| `obs.time.decisionContext` | `copy` | `obs.timeSearch.col.*` のうち `fork inCheck oppPrevCapture oppPrevDrop oppPrevGivesCheck oppPrevPromotion phase evalBand` を、長考した手(`obs.time.longThinkCountByPhase` の手)に限って写す | 30 列は既に全手で出ている。「長考した手だけの写し」は絞り込み |
+| `obs.geo.moveCombination`(決-B) | **→ §1.15(実体化済み)** | `obs.cf.userMoveFacts` × `obs.side.of` の組み合わせ(例: 「取る・相手玉側」) | **OBS-5(§12.10 (A))で実体を作った**。目的候補の列挙の代わり。名前の表は `lib/obsGeo.ts` に 1 か所(語彙ではなく幾何) |
+| `obs.time.decisionContext` | **→ §1.6(実体化済み)** | `obs.timeSearch.col.*` のうち `fork inCheck oppPrevCapture oppPrevDrop oppPrevGivesCheck oppPrevPromotion phase evalBand` を、長考した手(`obs.time.longThinkCountByPhase` の手)に限って写す予定だった | **OBS-5(§12.10 (A))で実体を作った**。30 列は既に全手で出ている。統括経由の人間の決定(2026-09-25)で、対象は当初の「長考(10 秒以上)だけ」から「5〜9 秒・10 秒以上の帯」に広げ、`spentBucket`・`collapse` を添えた(§1.6 の `obs_geo.json` 参照) |
 | `obs.geo.moveNumberOfFirstContact` / `obs.geo.promotionCount` | `new` | ― | |
 | `obs.vocab.shapeStatus` | `vocab` | `obs.fe.shape`(急落の手前だけ)、`obs.recog.shape`(対局中、メモリ上) | 値域 = `data/shapes/*.json` の `id` × `none/forming/completed`。ID は知識レーンが供給(§3 規則 5)。今 3 件(`human_reviewed` 2) |
 | `obs.vocab.intentStatus` | `vocab` | `obs.fe.opponentIntent`、`obs.recog.intent` | 値域 = `data/intents/*.json` の `id`。今 8 件 |
@@ -236,19 +250,19 @@
 
 | 数えるもの | 数 |
 |---|---|
-| `existing` の ID(§1) | **111** = eval 3 + fe 8 + moment 3 + cf 7 + cond 4 + time 23(局 11・組 3・本編 6・obs_extra 3〈STEP OBS-5'〉)+ timeSearch 35(列 30 + 5)+ fork 7 + side 4(`top1`・`actual` を 2 と数える)+ read 6 + direct 3 + menu 1 + recog 2 + report 5(列 30 以外の 81 本は表の行を機械で数えた。列 30 は `SEARCH_COLUMNS` の要素数) |
-| うち既存の欄名と 1 対 1 で対応した ID | **111**(すべて。ID の名前 = 欄名または型名) |
-| うち JSON スキーマ(契約)のある ID | **16** = eval 1(`standing`)+ fe 8 + moment 3 + cond 4。cf 7 は「穴」(スキーマの `properties` が空)で契約あり扱いにしない。recog 2 は型のみ。残り 88 は契約 無(OBS-5' の 3 本も契約 無) |
-| 設計案 §2 の項目(§2 の表) | **20 行**(`copy` 7・`new` 9・`vocab` 3・置かない 1)。数え方: 行の状態の欄。「`copy` の一部 + `new`」「`copy`(半径 1)/`new`(半径 2・3)」の行はそれぞれ `new`・`copy` に数えた |
+| `existing` の ID(§1) | **115** = eval 3 + fe 8 + moment 3 + cf 7 + cond 4 + time 24(局 11・組 3・本編 6・obs_extra 3〈STEP OBS-5'〉・obs_geo の `decisionContext` 1〈STEP OBS-5〉)+ timeSearch 35(列 30 + 5)+ fork 7 + side 4(`top1`・`actual` を 2 と数える)+ read 6 + direct 3 + menu 1 + recog 2 + report 5 + geo 3(obs_geo の `moveCombination`・`replyToCapture`・`replyToCheck`〈STEP OBS-5〉)(列 30 以外の 85 本は表の行を機械で数えた。列 30 は `SEARCH_COLUMNS` の要素数) |
+| うち既存の欄名と 1 対 1 で対応した ID | **115**(すべて。ID の名前 = 欄名または型名) |
+| うち JSON スキーマ(契約)のある ID | **16** = eval 1(`standing`)+ fe 8 + moment 3 + cond 4。cf 7 は「穴」(スキーマの `properties` が空)で契約あり扱いにしない。recog 2 は型のみ。残り 92 は契約 無(OBS-5' の 3 本・OBS-5 の 4 本も契約 無) |
+| 設計案 §2 の項目(§2 の表) | **20 行**(`copy` 6・`new` 7・`vocab` 3・置かない 1・**→ §1(実体化済み)3**〈STEP OBS-5〉)。数え方: 行の状態の欄。「`copy` の一部 + `new`」「`copy`(半径 1)/`new`(半径 2・3)」の行はそれぞれ `new`・`copy` に数えた(→ §1 の 3 行は元 `new` 2〈`moveCombination`・`replyToCapture`/`replyToCheck` の対〉+ `copy` 1〈`decisionContext`〉) |
 | 設計案 §1 の表と欄名が食い違っていたもの(この一覧で直した) | **2**: (1) `TIME_VALUES` の置き場は `lib/timeCause.ts` ではなく `lib/reportData.ts:469`。(2) 設計案 §7 の例のパス `groups[min3].other.phaseSpentMedian.mid` は実在せず、正しくは `groups[].other.medianMidSec`(§7 は案の JSON なので、契約の実装で直す) |
 | 対応が取れなかった ID | **0**(取れなかったものは `new` として §2 に置いた) |
 
-**幾何/語彙の内訳**(§1 の `existing` のうち、設計案 §2 の線で「幾何(知識なし)」に当たるもの): `obs.fe.kingSurroundings`・`obs.fe.positionFacts`・`obs.cf.kingEscapesRoot/End`・`obs.cf.userMoveFacts`・`obs.cf.pvMinusActual`・`obs.side.tags`・`obs.side.of`・`obs.read.marks`・`obs.time.rookMark`・探索の列のうち手の性質 14 本(`actual*` 5・`top1*` 5・`oppPrev*` 4) = **24**。「語彙(認識)」に当たるもの: `obs.fe.shape`・`obs.fe.opponentIntent`・`obs.recog.shape`・`obs.recog.intent` = **4**。残り 83 は評価・時間・探索の集計・冊子の数(どちらの列でもない = 数。OBS-5' の 3 本もここ)。
+**幾何/語彙の内訳**(§1 の `existing` のうち、設計案 §2 の線で「幾何(知識なし)」に当たるもの): `obs.fe.kingSurroundings`・`obs.fe.positionFacts`・`obs.cf.kingEscapesRoot/End`・`obs.cf.userMoveFacts`・`obs.cf.pvMinusActual`・`obs.side.tags`・`obs.side.of`・`obs.read.marks`・`obs.time.rookMark`・探索の列のうち手の性質 14 本(`actual*` 5・`top1*` 5・`oppPrev*` 4)・`obs.geo.moveCombination`・`obs.geo.replyToCapture`・`obs.geo.replyToCheck`(STEP OBS-5 の 3 本) = **27**。「語彙(認識)」に当たるもの: `obs.fe.shape`・`obs.fe.opponentIntent`・`obs.recog.shape`・`obs.recog.intent` = **4**。残り 84 は評価・時間・探索の集計・冊子の数(どちらの列でもない = 数。OBS-5' の 3 本・OBS-5 の `obs.time.decisionContext` もここ)。
 
 ---
 
 ## 4. 設計案との対応
 
-- 設計案 §1 の表の ID は、この一覧で **`obs.fe.*` を 8 本に、`obs.cf.*` を 7 本に、`obs.time.*` を 23 本(OBS-5' の 3 本を含む)に、`obs.timeSearch.*` を 35 本に分解**した(§1 の表は列の粗さで書いていた)。`obs.report.*` は §1 に無かった列(冊子の本編の数)。
+- 設計案 §1 の表の ID は、この一覧で **`obs.fe.*` を 8 本に、`obs.cf.*` を 7 本に、`obs.time.*` を 24 本(OBS-5' の 3 本・OBS-5 の `decisionContext` 1 本を含む)に、`obs.timeSearch.*` を 35 本に分解**した(§1 の表は列の粗さで書いていた)。`obs.report.*` は §1 に無かった列(冊子の本編の数)。`obs.geo.*` は STEP OBS-5 でこの一覧に初めて `existing` が付いた列(3 本)。
 - 設計案 §7 の H-2 は、この一覧の **§1(`existing`)だけ**を登録済みとする。§2 の ID を引いた仮説は落ちる(値が無いので)。
 - 設計案 §10.3 の実例が引いた数の実体: 崩れの内訳 = `obs.report.overview`、消費の段ごと = `obs.time.bySpent`、中央値 = `obs.time.groupMedians`、長考の分母 = `obs.time.longThinkTotal`、時計で終わった局の最後の評価 = `obs.direct.finalPosition`。**5 つとも `existing`。**

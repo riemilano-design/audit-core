@@ -55,6 +55,8 @@ function fullInputs(): ObsSnapshotInputs {
     // (足さないと「材料が揃った fixture では items.length === SNAPSHOT_ITEMS.length」〈8.〉が壊れる。
     // 既存の他の任意入力〈whatifData・direct・finalPositions・menu〉と同じ扱い)。
     extra: loadInputFile("obs_extra.json"),
+    // STEP OBS-5(docs/LANE_DIAG_LOG_2026-09.md §12.10 (A))。obs_geo.json も同じ理由で足した。
+    geo: loadInputFile("obs_geo.json"),
   };
 }
 
@@ -218,6 +220,11 @@ describe("任意入力が無いとき", () => {
       "obs.time.pairSpent",
       "obs.time.phaseMoves",
       "obs.time.phaseSecPerMoveMedians",
+      // STEP OBS-5(docs/LANE_DIAG_LOG_2026-09.md §12.10 (A))。--geo を渡さなければこの 4 本も出ない。
+      "obs.geo.moveCombination",
+      "obs.geo.replyToCapture",
+      "obs.geo.replyToCheck",
+      "obs.time.decisionContext",
     ];
     for (const id of optionalOnly) expect(obsIds, id).not.toContain(id);
     expect(snapshot.items.length).toBe(SNAPSHOT_ITEMS.length - optionalOnly.length);
@@ -230,9 +237,18 @@ describe("inputs[]", () => {
     const inputs = fullInputs();
     const snapshot = buildObsSnapshot(inputs, optionsOf("3 分"));
     expect(snapshot.inputs.map((i) => i.name).sort()).toEqual(
-      ["answer_menu.json", "direct_answers.json", "final_positions.json", "obs_extra.json", "patient.json", "time_cause.json", "whatif_report_data.json"].sort(),
+      ["answer_menu.json", "direct_answers.json", "final_positions.json", "obs_extra.json", "obs_geo.json", "patient.json", "time_cause.json", "whatif_report_data.json"].sort(),
     );
-    for (const name of ["patient.json", "time_cause.json", "whatif_report_data.json", "direct_answers.json", "final_positions.json", "answer_menu.json", "obs_extra.json"]) {
+    for (const name of [
+      "patient.json",
+      "time_cause.json",
+      "whatif_report_data.json",
+      "direct_answers.json",
+      "final_positions.json",
+      "answer_menu.json",
+      "obs_extra.json",
+      "obs_geo.json",
+    ]) {
       const expected = recordSha256(readFileSync(join(FIXTURES_DIR, name)));
       const found = snapshot.inputs.find((i) => i.name === name);
       expect(found?.sha256, name).toBe(expected);
@@ -281,6 +297,9 @@ describe("CLI(obsSnapshot.ts)", () => {
             // SNAPSHOT_ITEMS.length と合わなくなる(他の任意入力と同じ理由)。
             "--extra",
             join(FIXTURES_DIR, "obs_extra.json"),
+            // STEP OBS-5(docs/LANE_DIAG_LOG_2026-09.md §12.10 (A))。同じ理由で --geo も足す。
+            "--geo",
+            join(FIXTURES_DIR, "obs_geo.json"),
             "--out",
             outPath,
           ],
@@ -311,7 +330,7 @@ describe("新しい数を作っていない", () => {
   it("出力の数の集合は、入力ファイルの数の集合の部分集合(合計・割合を新しく作っていない)", () => {
     const inputs = fullInputs();
     const fixtureNumbers = new Set<number>();
-    for (const file of [inputs.patient, inputs.timeCause, inputs.whatifData!, inputs.direct!, inputs.finalPositions!, inputs.menu!, inputs.extra!]) {
+    for (const file of [inputs.patient, inputs.timeCause, inputs.whatifData!, inputs.direct!, inputs.finalPositions!, inputs.menu!, inputs.extra!, inputs.geo!]) {
       collectNumbers(file.data, fixtureNumbers);
     }
     const snapshot = buildObsSnapshot(inputs, optionsOf("3 分"));
@@ -371,5 +390,43 @@ describe("--extra(obs_extra.json。STEP OBS-5')", () => {
     expect(obsIds).not.toContain("obs.time.pairSpent");
     expect(obsIds).not.toContain("obs.time.phaseMoves");
     expect(obsIds).not.toContain("obs.time.phaseSecPerMoveMedians");
+  });
+});
+
+// 13. STEP OBS-5(docs/LANE_DIAG_LOG_2026-09.md §12.10 (A))。--geo(obs_geo.json)の 4 項目。
+describe("--geo(obs_geo.json。STEP OBS-5)", () => {
+  it("渡せば obs.geo.moveCombination・replyToCapture・replyToCheck・obs.time.decisionContext の 4 項目が載る(fixture の値をそのまま写す)", () => {
+    const snapshot = buildObsSnapshot(fullInputs(), optionsOf("3 分"));
+    const moveCombination = snapshot.items.find((i) => i.obsId === "obs.geo.moveCombination");
+    const replyToCapture = snapshot.items.find((i) => i.obsId === "obs.geo.replyToCapture");
+    const replyToCheck = snapshot.items.find((i) => i.obsId === "obs.geo.replyToCheck");
+    const decisionContext = snapshot.items.find((i) => i.obsId === "obs.time.decisionContext");
+    expect(moveCombination, "obs.geo.moveCombination が出ていない").toBeDefined();
+    expect(replyToCapture, "obs.geo.replyToCapture が出ていない").toBeDefined();
+    expect(replyToCheck, "obs.geo.replyToCheck が出ていない").toBeDefined();
+    expect(decisionContext, "obs.time.decisionContext が出ていない").toBeDefined();
+
+    const geoFixture = JSON.parse(readFileSync(join(FIXTURES_DIR, "obs_geo.json"), "utf-8")) as {
+      moves: Array<{ gameNo: number; kifPly: number; side: string; facts: unknown; combination: string; replyToCapture: string; replyToCheck: string }>;
+      decisionContext: unknown[];
+    };
+    expect(moveCombination!.value).toEqual(
+      geoFixture.moves.map((m) => ({ gameNo: m.gameNo, kifPly: m.kifPly, side: m.side, facts: m.facts, combination: m.combination })),
+    );
+    expect(replyToCapture!.value).toEqual(geoFixture.moves.map((m) => ({ gameNo: m.gameNo, kifPly: m.kifPly, replyToCapture: m.replyToCapture })));
+    expect(replyToCheck!.value).toEqual(geoFixture.moves.map((m) => ({ gameNo: m.gameNo, kifPly: m.kifPly, replyToCheck: m.replyToCheck })));
+    // numbersOnly は spentBucket・phase・evalBand を extraEnumKeys で残すので、decisionContext はそのまま一致する。
+    expect(decisionContext!.value).toEqual(geoFixture.decisionContext);
+  });
+
+  it("渡さなければ 4 項目とも出ない(空で埋めない。任意入力が無いときの一般規則と同じ)", () => {
+    const inputs = fullInputs();
+    const minimal: ObsSnapshotInputs = { patient: inputs.patient, timeCause: inputs.timeCause };
+    const snapshot = buildObsSnapshot(minimal, optionsOf("3 分"));
+    const obsIds = snapshot.items.map((i) => i.obsId);
+    expect(obsIds).not.toContain("obs.geo.moveCombination");
+    expect(obsIds).not.toContain("obs.geo.replyToCapture");
+    expect(obsIds).not.toContain("obs.geo.replyToCheck");
+    expect(obsIds).not.toContain("obs.time.decisionContext");
   });
 });

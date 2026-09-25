@@ -1,0 +1,42 @@
+{
+  "kind": "obs_geo",
+  "schemaVersion": "0.1",
+  "gitHead": "abc123",
+  "dirty": false,
+  "moves": [
+    {
+      "gameNo": 1,
+      "kifPly": 1,
+      "side": "attack",
+      "facts": { "capture": false, "drop": false, "givesCheck": false, "kingMove": false },
+      "combination": "特になし・相手玉側",
+      "replyToCapture": "相手は取っていない",
+      "replyToCheck": "王手ではない"
+    },
+    {
+      "gameNo": 1,
+      "kifPly": 3,
+      "side": "defense",
+      "facts": { "capture": true, "drop": false, "givesCheck": false, "kingMove": false },
+      "combination": "取る・自玉側",
+      "replyToCapture": "取り返し",
+      "replyToCheck": "それ以外"
+    }
+  ],
+  "decisionContext": [
+    {
+      "gameNo": 1,
+      "kifPly": 15,
+      "spentBucket": ">9",
+      "collapse": true,
+      "fork": null,
+      "inCheck": false,
+      "oppPrevCapture": true,
+      "oppPrevDrop": false,
+      "oppPrevGivesCheck": false,
+      "oppPrevPromotion": false,
+      "phase": "mid",
+      "evalBand": "ahead"
+    }
+  ]
+}

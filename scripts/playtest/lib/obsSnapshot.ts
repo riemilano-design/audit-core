@@ -86,6 +86,8 @@ export interface ObsSnapshotInputs {
   menu?: ObsSnapshotInputFile;
   /** obs_extra.json(任意。STEP OBS-5'。渡せば `kind: "obs_extra"` を確かめる)。 */
   extra?: ObsSnapshotInputFile;
+  /** obs_geo.json(任意。STEP OBS-5〈docs/LANE_DIAG_LOG_2026-09.md §12.10 (A)〉。渡せば `kind: "obs_geo"` を確かめる)。 */
+  geo?: ObsSnapshotInputFile;
 }
 
 export interface ObsSnapshotOptions {
@@ -252,6 +254,38 @@ interface ObsExtraFileLike {
   pairs: ObsExtraPairLike[];
   phaseMoves: ObsExtraPhaseMovesLike[];
   phaseSecPerMoveMedians: unknown;
+}
+
+// STEP OBS-5(docs/LANE_DIAG_LOG_2026-09.md §12.10 (A))。obs_geo.json(この段が読む欄だけ)。
+interface ObsGeoMoveLike {
+  gameNo: number;
+  kifPly: number;
+  side: string;
+  facts: unknown;
+  combination: string;
+  replyToCapture: string;
+  replyToCheck: string;
+}
+
+interface ObsGeoDecisionContextLike {
+  gameNo: number;
+  kifPly: number;
+  spentBucket: string;
+  collapse: boolean | null;
+  fork: boolean | null;
+  inCheck: boolean | null;
+  oppPrevCapture: boolean | null;
+  oppPrevDrop: boolean | null;
+  oppPrevGivesCheck: boolean | null;
+  oppPrevPromotion: boolean | null;
+  phase: string;
+  evalBand: string | null;
+}
+
+interface ObsGeoFileLike {
+  kind?: unknown;
+  moves: ObsGeoMoveLike[];
+  decisionContext: ObsGeoDecisionContextLike[];
 }
 
 function patientOf(inputs: ObsSnapshotInputs): PatientLike {
@@ -513,6 +547,46 @@ export const SNAPSHOT_ITEMS: readonly SnapshotItemDefinition[] = [
     path: "obs_extra phaseSecPerMoveMedians",
     pick: (inputs) => (inputs.extra === undefined ? SKIP : (inputs.extra.data as ObsExtraFileLike).phaseSecPerMoveMedians),
   },
+
+  // ---- obs_geo.json(任意。STEP OBS-5〈docs/LANE_DIAG_LOG_2026-09.md §12.10 (A)〉。--group では絞らない) ----
+  {
+    obsId: "obs.geo.moveCombination",
+    path: "obs_geo moves[].{gameNo,kifPly,side,facts,combination}",
+    pick: (inputs) => {
+      if (inputs.geo === undefined) return SKIP;
+      const geo = inputs.geo.data as ObsGeoFileLike;
+      return geo.moves.map((m) => ({ gameNo: m.gameNo, kifPly: m.kifPly, side: m.side, facts: m.facts, combination: m.combination }));
+    },
+    // `combination` は幾何の組み合わせの名前(将棋の語彙を含まない。lib/obsGeo.ts 参照)。`side` は既に base の許可に含まれる。
+    extraEnumKeys: ["combination"],
+  },
+  {
+    obsId: "obs.geo.replyToCapture",
+    path: "obs_geo moves[].{gameNo,kifPly,replyToCapture}",
+    pick: (inputs) => {
+      if (inputs.geo === undefined) return SKIP;
+      const geo = inputs.geo.data as ObsGeoFileLike;
+      return geo.moves.map((m) => ({ gameNo: m.gameNo, kifPly: m.kifPly, replyToCapture: m.replyToCapture }));
+    },
+    extraEnumKeys: ["replyToCapture"],
+  },
+  {
+    obsId: "obs.geo.replyToCheck",
+    path: "obs_geo moves[].{gameNo,kifPly,replyToCheck}",
+    pick: (inputs) => {
+      if (inputs.geo === undefined) return SKIP;
+      const geo = inputs.geo.data as ObsGeoFileLike;
+      return geo.moves.map((m) => ({ gameNo: m.gameNo, kifPly: m.kifPly, replyToCheck: m.replyToCheck }));
+    },
+    extraEnumKeys: ["replyToCheck"],
+  },
+  {
+    obsId: "obs.time.decisionContext",
+    path: "obs_geo decisionContext[]",
+    pick: (inputs) => (inputs.geo === undefined ? SKIP : (inputs.geo.data as ObsGeoFileLike).decisionContext),
+    // `spentBucket`("≤9"/">9")・`phase`・`evalBand` は列挙のキーとして残す(統括経由の追加指示、2026-09-25)。
+    extraEnumKeys: ["spentBucket", "phase", "evalBand"],
+  },
 ];
 
 // ---- 組み立て ----
@@ -538,10 +612,23 @@ export function buildObsSnapshotFromItems(items: readonly SnapshotItemDefinition
       throw new ObsSnapshotError(`--extra の kind が "obs_extra" でない(${JSON.stringify(extra.kind)})`);
     }
   }
+  if (inputs.geo !== undefined) {
+    const geo = inputs.geo.data as ObsGeoFileLike;
+    if (geo.kind !== "obs_geo") {
+      throw new ObsSnapshotError(`--geo の kind が "obs_geo" でない(${JSON.stringify(geo.kind)})`);
+    }
+  }
 
-  const inputFiles: ObsSnapshotInputFile[] = [inputs.patient, inputs.timeCause, inputs.whatifData, inputs.direct, inputs.finalPositions, inputs.menu, inputs.extra].filter(
-    (f): f is ObsSnapshotInputFile => f !== undefined,
-  );
+  const inputFiles: ObsSnapshotInputFile[] = [
+    inputs.patient,
+    inputs.timeCause,
+    inputs.whatifData,
+    inputs.direct,
+    inputs.finalPositions,
+    inputs.menu,
+    inputs.extra,
+    inputs.geo,
+  ].filter((f): f is ObsSnapshotInputFile => f !== undefined);
 
   const items_: ObsSnapshotItem[] = [];
   for (const def of items) {
