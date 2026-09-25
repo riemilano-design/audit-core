@@ -271,15 +271,15 @@
 | 62 | 右四間飛車 |  | 居飛車一般 | <https://ja.wikipedia.org/wiki/%E5%8F%B3%E5%9B%9B%E9%96%93%E9%A3%9B%E8%BB%8A> | <https://ja.wikipedia.org/wiki/Category%3A%E5%B1%85%E9%A3%9B%E8%BB%8A> | 下書き済み(migi_shikenbisha 自分 / migi_shikenbisha_opponent 相手) |
 | 63 | 袖飛車 |  | 居飛車一般 | <https://ja.wikipedia.org/wiki/%E8%A2%96%E9%A3%9B%E8%BB%8A> | <https://ja.wikipedia.org/wiki/Category%3A%E5%B1%85%E9%A3%9B%E8%BB%8A> | 下書き済み(sodebisha 自分。第 18 組) |
 | 64 | 一間飛車 |  | 居飛車一般 | <https://ja.wikipedia.org/wiki/%E4%B8%80%E9%96%93%E9%A3%9B%E8%BB%8A> | <https://ja.wikipedia.org/wiki/Category%3A%E5%B1%85%E9%A3%9B%E8%BB%8A> | 下書き済み(ikken_bisha 自分。第 20 組) |
-| 65 | 一間飛車穴熊 |  | 居飛車一般 | <https://ja.wikipedia.org/wiki/%E4%B8%80%E9%96%93%E9%A3%9B%E8%BB%8A%E7%A9%B4%E7%86%8A> | <https://ja.wikipedia.org/wiki/Category%3A%E5%B1%85%E9%A3%9B%E8%BB%8A> | 未 |
+| 65 | 一間飛車穴熊 |  | 居飛車一般 | <https://ja.wikipedia.org/wiki/%E4%B8%80%E9%96%93%E9%A3%9B%E8%BB%8A%E7%A9%B4%E7%86%8A> | <https://ja.wikipedia.org/wiki/Category%3A%E5%B1%85%E9%A3%9B%E8%BB%8A> | 下書き済み(ikken_bisha_anaguma 自分。第 22 組) |
 | 66 | 引き角 |  | 居飛車一般 | <https://ja.wikipedia.org/wiki/%E5%BC%95%E3%81%8D%E8%A7%92> | <https://ja.wikipedia.org/wiki/Category%3A%E5%B1%85%E9%A3%9B%E8%BB%8A> | 下書き済み(hikikaku 自分。第 18 組) |
 | 67 | 右玉 |  | 居飛車一般 | <https://ja.wikipedia.org/wiki/%E5%8F%B3%E7%8E%89> | <https://ja.wikipedia.org/wiki/Category%3A%E5%B1%85%E9%A3%9B%E8%BB%8A> | 下書き済み(migigyoku 自分。第 18 組) |
 | 68 | 嬉野流 |  | 居飛車一般 | <https://ja.wikipedia.org/wiki/%E5%AC%89%E9%87%8E%E6%B5%81> | <https://ja.wikipedia.org/wiki/Category%3A%E5%B1%85%E9%A3%9B%E8%BB%8A> | 下書き済み(ureshino 自分。第 20 組) |
 | 69 | 村田システム |  | 居飛車一般 | <https://ja.wikipedia.org/wiki/%E6%9D%91%E7%94%B0%E3%82%B7%E3%82%B9%E3%83%86%E3%83%A0> | <https://ja.wikipedia.org/wiki/Category%3A%E5%B1%85%E9%A3%9B%E8%BB%8A> | 未 |
 | 70 | 二枚銀 |  | 居飛車一般 | <https://ja.wikipedia.org/wiki/%E4%BA%8C%E6%9E%9A%E9%8A%80> | <https://ja.wikipedia.org/wiki/Category%3A%E5%B1%85%E9%A3%9B%E8%BB%8A> | 下書き済み(nimaigin 自分。第 18 組) |
-| 71 | 3八飛戦法 |  | 居飛車一般 | <https://ja.wikipedia.org/wiki/3%E5%85%AB%E9%A3%9B%E6%88%A6%E6%B3%95> | <https://ja.wikipedia.org/wiki/Category%3A%E5%B1%85%E9%A3%9B%E8%BB%8A> | 未 |
-| 72 | 4七銀型 |  | 居飛車一般 | <https://ja.wikipedia.org/wiki/4%E4%B8%83%E9%8A%80%E5%9E%8B> | <https://ja.wikipedia.org/wiki/Category%3A%E5%B1%85%E9%A3%9B%E8%BB%8A> | 未 |
-| 73 | 3三角戦法 |  | 居飛車一般 | <https://ja.wikipedia.org/wiki/3%E4%B8%89%E8%A7%92%E6%88%A6%E6%B3%95> | <https://ja.wikipedia.org/wiki/Category%3A%E5%B1%85%E9%A3%9B%E8%BB%8A> | 未 |
+| 71 | 3八飛戦法 |  | 居飛車一般 | <https://ja.wikipedia.org/wiki/3%E5%85%AB%E9%A3%9B%E6%88%A6%E6%B3%95> | <https://ja.wikipedia.org/wiki/Category%3A%E5%B1%85%E9%A3%9B%E8%BB%8A> | 下書き済み(sanhachi_bisha 自分。第 22 組) |
+| 72 | 4七銀型 |  | 居飛車一般 | <https://ja.wikipedia.org/wiki/4%E4%B8%83%E9%8A%80%E5%9E%8B> | <https://ja.wikipedia.org/wiki/Category%3A%E5%B1%85%E9%A3%9B%E8%BB%8A> | 保留(出典 URL がゴキゲン中飛車の記事に転送され、この型固有の駒組みが読めない。第 22 組) |
+| 73 | 3三角戦法 |  | 居飛車一般 | <https://ja.wikipedia.org/wiki/3%E4%B8%89%E8%A7%92%E6%88%A6%E6%B3%95> | <https://ja.wikipedia.org/wiki/Category%3A%E5%B1%85%E9%A3%9B%E8%BB%8A> | 下書き済み(sansan_kaku_senpo 相手側、low。第 22 組。横歩取り3三角と機械では区別できない) |
 | 74 | 原始棒銀 |  | 居飛車一般 | <https://ja.wikipedia.org/wiki/%E5%8E%9F%E5%A7%8B%E6%A3%92%E9%8A%80> | <https://ja.wikipedia.org/wiki/Category%3A%E5%B1%85%E9%A3%9B%E8%BB%8A> | 下書き済み(genshi_bogin 自分。第 18 組) |
 | 75 | 4六銀左戦法 | 斜め棒銀 | 対振り急戦 | <https://ja.wikipedia.org/wiki/4%E5%85%AD%E9%8A%80%E5%B7%A6%E6%88%A6%E6%B3%95> | <https://ja.wikipedia.org/wiki/Category%3A%E5%AF%BE%E6%8C%AF%E3%82%8A%E9%A3%9B%E8%BB%8A> | 下書き済み(naname_bogin_self 自分) |
 | 76 | 4五歩早仕掛け |  | 対振り急戦 | <https://ja.wikipedia.org/wiki/4%E4%BA%94%E6%AD%A9%E6%97%A9%E4%BB%95%E6%8E%9B%E3%81%91> | <https://ja.wikipedia.org/wiki/Category%3A%E5%AF%BE%E6%8C%AF%E3%82%8A%E9%A3%9B%E8%BB%8A> | 既存 intent hayajikake(相手側) |
@@ -290,15 +290,15 @@
 | 81 | 鳥刺し (将棋) |  | 対振り急戦 | <https://ja.wikipedia.org/wiki/%E9%B3%A5%E5%88%BA%E3%81%97%20%28%E5%B0%86%E6%A3%8B%29> | <https://ja.wikipedia.org/wiki/Category%3A%E5%AF%BE%E6%8C%AF%E3%82%8A%E9%A3%9B%E8%BB%8A> | 下書き済み(torisashi 自分) |
 | 82 | ポンポン桂 |  | 対振り急戦 | <https://ja.wikipedia.org/wiki/%E3%83%9D%E3%83%B3%E3%83%9D%E3%83%B3%E6%A1%82> | <https://ja.wikipedia.org/wiki/Category%3A%E5%AF%BE%E6%8C%AF%E3%82%8A%E9%A3%9B%E8%BB%8A> | 下書き済み(ponpon_kei 自分。第 18 組) |
 | 83 | 4六金戦法 |  | 対振り急戦 | <https://ja.wikipedia.org/wiki/4%E5%85%AD%E9%87%91%E6%88%A6%E6%B3%95> | <https://ja.wikipedia.org/wiki/Category%3A%E5%AF%BE%E6%8C%AF%E3%82%8A%E9%A3%9B%E8%BB%8A> | 下書き済み(shiroku_kin 自分。第 18 組) |
-| 84 | 加藤流袖飛車 |  | 対振り急戦 | <https://ja.wikipedia.org/wiki/%E5%8A%A0%E8%97%A4%E6%B5%81%E8%A2%96%E9%A3%9B%E8%BB%8A> | <https://ja.wikipedia.org/wiki/Category%3A%E5%AF%BE%E6%8C%AF%E3%82%8A%E9%A3%9B%E8%BB%8A> | 未 |
-| 85 | 三歩突き捨て急戦 |  | 対振り急戦 | <https://ja.wikipedia.org/wiki/%E4%B8%89%E6%AD%A9%E7%AA%81%E3%81%8D%E6%8D%A8%E3%81%A6%E6%80%A5%E6%88%A6> | <https://ja.wikipedia.org/wiki/Category%3A%E5%AF%BE%E6%8C%AF%E3%82%8A%E9%A3%9B%E8%BB%8A> | 未 |
-| 86 | 三間飛車破り |  | 対振り急戦 | <https://ja.wikipedia.org/wiki/%E4%B8%89%E9%96%93%E9%A3%9B%E8%BB%8A%E7%A0%B4%E3%82%8A> | <https://ja.wikipedia.org/wiki/Category%3A%E5%AF%BE%E6%8C%AF%E3%82%8A%E9%A3%9B%E8%BB%8A> | 未 |
+| 84 | 加藤流袖飛車 |  | 対振り急戦 | <https://ja.wikipedia.org/wiki/%E5%8A%A0%E8%97%A4%E6%B5%81%E8%A2%96%E9%A3%9B%E8%BB%8A> | <https://ja.wikipedia.org/wiki/Category%3A%E5%AF%BE%E6%8C%AF%E3%82%8A%E9%A3%9B%E8%BB%8A> | 下書き済み(kato_sodebisha 自分。第 22 組。個別ページは袖飛車の記事に転送) |
+| 85 | 三歩突き捨て急戦 |  | 対振り急戦 | <https://ja.wikipedia.org/wiki/%E4%B8%89%E6%AD%A9%E7%AA%81%E3%81%8D%E6%8D%A8%E3%81%A6%E6%80%A5%E6%88%A6> | <https://ja.wikipedia.org/wiki/Category%3A%E5%AF%BE%E6%8C%AF%E3%82%8A%E9%A3%9B%E8%BB%8A> | 下書き済み(sanpo_tsukisute 相手側。第 22 組) |
+| 86 | 三間飛車破り |  | 対振り急戦 | <https://ja.wikipedia.org/wiki/%E4%B8%89%E9%96%93%E9%A3%9B%E8%BB%8A%E7%A0%B4%E3%82%8A> | <https://ja.wikipedia.org/wiki/Category%3A%E5%AF%BE%E6%8C%AF%E3%82%8A%E9%A3%9B%E8%BB%8A> | 保留(出典が複数の指し方の総称で、固有の配置が無い。第 22 組) |
 | 87 | 棒金 |  | 対振り急戦 | <https://ja.wikipedia.org/wiki/%E6%A3%92%E9%87%91> | <https://ja.wikipedia.org/wiki/Category%3A%E5%AF%BE%E6%8C%AF%E3%82%8A%E9%A3%9B%E8%BB%8A> | 下書き済み(boukin 自分) |
 | 88 | 超速3七銀 |  | 対振り急戦 | <https://ja.wikipedia.org/wiki/%E8%B6%85%E9%80%9F3%E4%B8%83%E9%8A%80> | <https://ja.wikipedia.org/wiki/Category%3A%E5%AF%BE%E6%8C%AF%E3%82%8A%E9%A3%9B%E8%BB%8A> | 下書き済み(chousoku_37gin 自分) |
-| 89 | 丸山ワクチン (将棋) |  | 対振り急戦 | <https://ja.wikipedia.org/wiki/%E4%B8%B8%E5%B1%B1%E3%83%AF%E3%82%AF%E3%83%81%E3%83%B3%20%28%E5%B0%86%E6%A3%8B%29> | <https://ja.wikipedia.org/wiki/Category%3A%E5%AF%BE%E6%8C%AF%E3%82%8A%E9%A3%9B%E8%BB%8A> | 未 |
+| 89 | 丸山ワクチン (将棋) |  | 対振り急戦 | <https://ja.wikipedia.org/wiki/%E4%B8%B8%E5%B1%B1%E3%83%AF%E3%82%AF%E3%83%81%E3%83%B3%20%28%E5%B0%86%E6%A3%8B%29> | <https://ja.wikipedia.org/wiki/Category%3A%E5%AF%BE%E6%8C%AF%E3%82%8A%E9%A3%9B%E8%BB%8A> | 保留(出典が曖昧さ回避ページで、固有の定義も座標も無い。第 22 組) |
 | 90 | 横歩取り (対中飛車) |  | 対振り急戦 | <https://ja.wikipedia.org/wiki/%E6%A8%AA%E6%AD%A9%E5%8F%96%E3%82%8A%20%28%E5%AF%BE%E4%B8%AD%E9%A3%9B%E8%BB%8A%29> | <https://ja.wikipedia.org/wiki/Category%3A%E5%AF%BE%E6%8C%AF%E3%82%8A%E9%A3%9B%E8%BB%8A> | 未 |
-| 91 | へなちょこ急戦 |  | 対振り急戦 | <https://ja.wikipedia.org/wiki/%E3%81%B8%E3%81%AA%E3%81%A1%E3%82%87%E3%81%93%E6%80%A5%E6%88%A6> | <https://ja.wikipedia.org/wiki/Category%3A%E5%AF%BE%E6%8C%AF%E3%82%8A%E9%A3%9B%E8%BB%8A> | 未 |
-| 92 | 居飛車舟囲い急戦 |  | 対振り急戦 | <https://ja.wikipedia.org/wiki/%E5%B1%85%E9%A3%9B%E8%BB%8A%E8%88%9F%E5%9B%B2%E3%81%84%E6%80%A5%E6%88%A6> | <https://ja.wikipedia.org/wiki/Category%3A%E5%AF%BE%E6%8C%AF%E3%82%8A%E9%A3%9B%E8%BB%8A> | 未 |
+| 91 | へなちょこ急戦 |  | 対振り急戦 | <https://ja.wikipedia.org/wiki/%E3%81%B8%E3%81%AA%E3%81%A1%E3%82%87%E3%81%93%E6%80%A5%E6%88%A6> | <https://ja.wikipedia.org/wiki/Category%3A%E5%AF%BE%E6%8C%AF%E3%82%8A%E9%A3%9B%E8%BB%8A> | 下書き済み(henachoko_kyusen 自分。第 22 組) |
+| 92 | 居飛車舟囲い急戦 |  | 対振り急戦 | <https://ja.wikipedia.org/wiki/%E5%B1%85%E9%A3%9B%E8%BB%8A%E8%88%9F%E5%9B%B2%E3%81%84%E6%80%A5%E6%88%A6> | <https://ja.wikipedia.org/wiki/Category%3A%E5%AF%BE%E6%8C%AF%E3%82%8A%E9%A3%9B%E8%BB%8A> | 保留(総称。下位の 4六銀右戦法・4六金戦法・二枚銀・三歩突き捨て急戦は下書き済み。第 22 組) |
 | 93 | 地下鉄飛車 |  | 対振り急戦 | <https://ja.wikipedia.org/wiki/%E5%9C%B0%E4%B8%8B%E9%89%84%E9%A3%9B%E8%BB%8A> | <https://ja.wikipedia.org/wiki/Category%3A%E5%AF%BE%E6%8C%AF%E3%82%8A%E9%A3%9B%E8%BB%8A> | 下書き済み(狙い chikatetsu_bisha 相手側。第 14 組) |
 | 94 | 四手角 |  | 対振り急戦 | <https://ja.wikipedia.org/wiki/%E5%9B%9B%E6%89%8B%E8%A7%92> | <https://ja.wikipedia.org/wiki/Category%3A%E5%AF%BE%E6%8C%AF%E3%82%8A%E9%A3%9B%E8%BB%8A> | 下書き済み(yontekaku 自分。第 19 組。目録に 2 行あるが同じもの) |
 | 95 | 5八金右超急戦 |  | 対振り急戦 | **出典なし** | <https://ja.wikipedia.org/wiki/%E5%B0%86%E6%A3%8B%E3%81%AE%E6%88%A6%E6%B3%95%E4%B8%80%E8%A6%A7> | 未 |
@@ -1049,6 +1049,25 @@
 **左美濃の出典から囲いの座標も 3 つ取れた**(玉8八・銀7八 = 左美濃、玉8七 = 天守閣美濃、銀8七・金7八 = 居飛車銀冠)。**囲いの目録の「居飛車銀冠」の行(未)はこれで埋められる**が、囲いは測れる側なので、次に囲いをまとめて足すときに測定つきで入れる。
 
 **埋まった数**: 戦法 **103 / 184**(うち保留 9 件)・囲い 自分側 35 / 62・相手側 35 / 35・狙い 18 / 67。
+
+## 25. 第 22 組(2026-09-25): 戦法 6 件 + 保留 4 件 ― **測れない(認識のコードが無い)**
+
+**足した ID**: `henachoko_kyusen`(へなちょこ急戦)・`kato_sodebisha`(加藤流袖飛車)・`sanhachi_bisha`(3八飛戦法)・`sanpo_tsukisute`(三歩突き捨て急戦、相手側)・`sansan_kaku_senpo`(3三角戦法、相手側・low)・`ikken_bisha_anaguma`(一間飛車穴熊)。出典は Wikipedia の個別ページ(参照日 2026-09-25)。**スキーマ検証 102 件 OK**・**Kind 3 の口で例外なし・承認済み変化 0 件**。
+
+**保留 4 件 ― ここから先は「出典の側の問題」が増える**:
+
+| 名前 | 保留の理由 |
+|---|---|
+| 丸山ワクチン | 出典が曖昧さ回避ページで、固有の定義も座標も無い |
+| 三間飛車破り | 出典が複数の指し方の総称で、固有の配置が無い |
+| 居飛車舟囲い急戦 | 同じく総称。**下位にあたる 4六銀右戦法・4六金戦法・二枚銀・三歩突き捨て急戦はすべて下書き済み**なので、親の行としては埋めない |
+| 4七銀型 | 出典 URL がゴキゲン中飛車の記事に転送され、この型固有の駒組みが読めない |
+
+**同じマスの重なりが 3 件に増えた例**: `sodebisha`(袖飛車)・`kato_sodebisha`(加藤流袖飛車)・`sanhachi_bisha`(3八飛戦法)は**3 件とも飛車が 3八**である。区別は加藤流が 5七銀 + 3五歩、3八飛戦法が 4七銀。**名前が 3 つあっても、盤の上の違いは銀 1 枚の位置しかない。**
+
+**機械では区別できない 2 件を、区別できないと書いた**: `sansan_kaku_senpo`(3三角戦法)と `yokofudori_33kaku`(横歩取り3三角)は、どちらも後手の 3三角 である。違いは「横歩取りの局面かどうか」で、**いまのスキーマは『どの局面でその手が出たか』を書けない**(手順の前後を表せない、と同じ型)。片方を消すのではなく、両方の `source` に「機械では区別できない」と書いた。
+
+**埋まった数**: 戦法 **113 / 184**(うち保留 13 件)・囲い 自分側 35 / 62・相手側 35 / 35・狙い 18 / 67。
 
 ## 付録 A. 局ごとの一覧(4 人 70 局。40 手目と終局時の自玉・自飛の筋・相手玉・相手飛の筋、形の認識の前後)
 

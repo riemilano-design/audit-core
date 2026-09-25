@@ -1,0 +1,31 @@
+{
+  "id": "ikken_bisha_anaguma",
+  "name": "一間飛車穴熊",
+  "name_kana": "いっけんびしゃあなぐま",
+  "side": "self",
+  "family": "居飛車一般",
+  "leads_to_shape_ids": [
+    "anaguma_ibisha"
+  ],
+  "scenario": null,
+  "recognition_pattern": [
+    {
+      "piece": "歩",
+      "to": "1e",
+      "order_hint": 1
+    },
+    {
+      "piece": "飛",
+      "to": "1f",
+      "order_hint": 2
+    },
+    {
+      "piece": "玉",
+      "to": "9i",
+      "order_hint": 3
+    }
+  ],
+  "source": "【AI起草 / 出典は下記】Wikipedia『一間飛車穴熊』(https://ja.wikipedia.org/wiki/一間飛車穴熊 (参照日 2026-09-25)。一間飛車の記事に転送される)による。▲1六歩 △3四歩 ▲1五歩 と端の歩を伸ばしてから飛車を 1筋 の中段(1六)へ浮かせ、そのうえで穴熊(玉 9九)に囲う。**既存の ikken_bisha(一間飛車)に穴熊を足した形**で、区別は玉の 9九。 座標は先手の絶対座標(docs/DATA_MODEL.md の規約)。戦型を認識するコードは apps/server/src/analysis/ に無いため、このレコードを足しても認識の数は動かない(2026-09-25 司令塔の訂正、docs/KNOWLEDGE_LANE_BRIEF_2026-09-25.md §5.1)。追加の経緯: 2026-09-25 の知識レーン第 22 組(docs/LANE_KNOWLEDGE_LOG_2026-09.md §25)。人間の決定(2026-09-25、網羅)による目録の埋め。",
+  "confidence_level": "medium",
+  "review_status": "draft"
+}
