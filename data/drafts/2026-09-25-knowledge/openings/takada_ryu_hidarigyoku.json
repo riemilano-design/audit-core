@@ -1,0 +1,34 @@
+{
+  "id": "takada_ryu_hidarigyoku",
+  "name": "高田流左玉",
+  "name_kana": "たかだりゅうひだりぎょく",
+  "side": "self",
+  "family": "振り飛車一般",
+  "leads_to_shape_ids": [],
+  "scenario": null,
+  "recognition_pattern": [
+    {
+      "piece": "飛",
+      "to": "8i",
+      "order_hint": 1
+    },
+    {
+      "piece": "玉",
+      "to": "7h",
+      "order_hint": 2
+    },
+    {
+      "piece": "銀",
+      "to": "6g",
+      "order_hint": 3
+    },
+    {
+      "piece": "銀",
+      "to": "5g",
+      "order_hint": 4
+    }
+  ],
+  "source": "【AI起草 / 出典は下記】Wikipedia『高田流左玉』(https://ja.wikipedia.org/wiki/高田流左玉 (参照日 2026-09-25)。**左玉の記事に転送される**)による。玉を左側(7八)に置き、飛車を 8九 へ回し、銀を 6七・5七 に並べて中央を押さえる形。**既存の hidarigyoku(左玉)は同じ記事の一般の説明**で、こちらは飛車 8九・銀 2 枚まで含む型として分けた。 座標は先手の絶対座標(docs/DATA_MODEL.md の規約)。戦型を認識するコードは apps/server/src/analysis/ に無いため、このレコードを足しても認識の数は動かない(2026-09-25 司令塔の訂正、docs/KNOWLEDGE_LANE_BRIEF_2026-09-25.md §5.1)。追加の経緯: 2026-09-25 の知識レーン第 23 組(docs/LANE_KNOWLEDGE_LOG_2026-09.md §26)。人間の決定(2026-09-25、網羅)による目録の埋め。",
+  "confidence_level": "medium",
+  "review_status": "draft"
+}

@@ -1,0 +1,41 @@
+{
+  "id": "hirame",
+  "name": "平目",
+  "name_kana": "ひらめ",
+  "side": "self",
+  "family": "中飛車",
+  "leads_to_shape_ids": [
+    "mino_kinmino"
+  ],
+  "scenario": null,
+  "recognition_pattern": [
+    {
+      "piece": "飛",
+      "to": "5h",
+      "order_hint": 1
+    },
+    {
+      "piece": "銀",
+      "to": "6h",
+      "order_hint": 2
+    },
+    {
+      "piece": "玉",
+      "to": "2h",
+      "order_hint": 3
+    },
+    {
+      "piece": "銀",
+      "to": "3h",
+      "order_hint": 4
+    },
+    {
+      "piece": "金",
+      "to": "5i",
+      "order_hint": 5
+    }
+  ],
+  "source": "【AI起草 / 出典は下記】Wikipedia『平目 (将棋)』(https://ja.wikipedia.org/wiki/平目_(将棋) (参照日 2026-09-25))による。中飛車の一種で蟹指(かにざし)とも呼ばれる。右銀を 3八、玉を 2八、左金を 5九、左銀を 6八 に置く。この並びが平らな魚(ヒラメ)に見えることが名前の由来。囲いが出来たあと 5筋 の歩を交換して攻めに使う。 座標は先手の絶対座標(docs/DATA_MODEL.md の規約)。戦型を認識するコードは apps/server/src/analysis/ に無いため、このレコードを足しても認識の数は動かない(2026-09-25 司令塔の訂正、docs/KNOWLEDGE_LANE_BRIEF_2026-09-25.md §5.1)。追加の経緯: 2026-09-25 の知識レーン第 23 組(docs/LANE_KNOWLEDGE_LOG_2026-09.md §26)。人間の決定(2026-09-25、網羅)による目録の埋め。",
+  "confidence_level": "medium",
+  "review_status": "draft"
+}
