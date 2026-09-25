@@ -124,7 +124,7 @@ MVPでは、**role=self(自分)を color=sente(先手)に固定し、role=oppone
 - `characteristics` / `beginner_friendliness` / `weak_against`: 初心者向けの特徴説明、初心者向き度(1〜5)とその理由、弱点
 - `source`: 参考にした出典
 - `confidence_level`: 内容にどれだけ自信があるか(`high`/`medium`/`low`)
-- `review_status`: 追加してよいかと見せてよいかを分離する運用区分(`draft`/`human_reviewed`/`expert_verified`)。定義は下記「運用区分 `review_status`」節を参照
+- `review_status`: 追加してよいかと見せてよいかを分離する運用区分(`draft`/`human_reviewed`/`expert_verified`/`expired`)。定義は下記「運用区分 `review_status`」節を参照
 
 ### openings(戦型)
 
@@ -137,7 +137,7 @@ MVPでは、**role=self(自分)を color=sente(先手)に固定し、role=oppone
 - `recognition_pattern`: この戦型を指し手の並びから認識するための手がかり(任意フィールド)。値を持たない戦型は認識の候補にならない。「飛車を初期位置から動かさない」のような否定的な条件は現在の表現では書けない(その表現方法は未確定であり、必要になった時点で人間の承認を経て決める)
 - `scenario`: 対局シナリオ(AI序盤制御)の制御用データ(任意フィールド)。制御方式は「序盤の数手を `moves` の手順で強制進行させ、以降はエンジンに任せる」(人間承認済み)。`variants` に相手AIが毎局1つを選ぶ候補を持ち、各 variant は `target_intent_id` / `moves` / `verification_method` / `verification_status` / `verification_record` を持つ。**実データへの値の投入は、[KIND3_VERIFICATION.md](KIND3_VERIFICATION.md) の検証と Phase F の人間による最終採用判断を経てから行う(現時点では `null`)。** 詳細は [SCENARIOS.md](SCENARIOS.md)・[KIND3_VERIFICATION.md](KIND3_VERIFICATION.md)
 - `source` / `confidence_level`
-- `review_status`: 追加してよいかと見せてよいかを分離する運用区分(`draft`/`human_reviewed`/`expert_verified`)。定義は下記「運用区分 `review_status`」節を参照
+- `review_status`: 追加してよいかと見せてよいかを分離する運用区分(`draft`/`human_reviewed`/`expert_verified`/`expired`)。定義は下記「運用区分 `review_status`」節を参照
 
 ### intents(相手の意図)
 
@@ -151,7 +151,7 @@ MVPでは、**role=self(自分)を color=sente(先手)に固定し、role=oppone
 - `next_aim_explanation`: 「次に何をしてきそうか」の説明
 - `affects_target_shapes`: この意図がある場合、自分が目指す形の優先度をどう調整すべきか(例: 急戦相手には軽い形を優先)
 - `confidence_level`: 判定の確からしさ。UI側の言い回し(断定 or 「〜かもしれません」)を左右する
-- `review_status`: 追加してよいかと見せてよいかを分離する運用区分(`draft`/`human_reviewed`/`expert_verified`)。定義は下記「運用区分 `review_status`」節を参照
+- `review_status`: 追加してよいかと見せてよいかを分離する運用区分(`draft`/`human_reviewed`/`expert_verified`/`expired`)。定義は下記「運用区分 `review_status`」節を参照
 
 ### explanations(説明)
 
@@ -186,19 +186,20 @@ Phase1では、explanationsは単発の候補手説明(1レコード=1手)のみ
 
 **Kind 3 の検証方法**: 相手AI制御データ(`openings.scenario`)については、有段者レビューが得られない場合、[KIND3_VERIFICATION.md](KIND3_VERIFICATION.md) の多段階検証プロトコル + 人間による最終採用判断で代替できる。**これは検証方法の拡張であって、Kind 3 の定義および人間承認要件の緩和ではない。** AI検証は有段者レビューと同等の知識的保証を持つものではない。
 
-**`review_status` との関係**: `review_status` は**ユーザーへの知識露出**を制御する。Kind 3 制御データの**検証・採用状態**はこれと**完全に分離して管理**し、一方の値から他方を導出しない。**AI検証済みを `human_reviewed` として扱わない。** `review_status` の3値は変更・追加しない。
+**`review_status` との関係**: `review_status` は**ユーザーへの知識露出**を制御する。Kind 3 制御データの**検証・採用状態**はこれと**完全に分離して管理**し、一方の値から他方を導出しない。**AI検証済みを `human_reviewed` として扱わない。** `review_status` の値は 4 つ(`expired` は 2026-09-25 の人間の決定で追加)。これ以上の変更・追加はしない。
 
 **独立監査の指摘(併記)**: 現行スキーマでは shapes / openings のレコードに `affects_target_shapes` フィールドが無いため、新規の shape / opening は機械的にすべて Kind 1 と判定される。したがって、実際の安全網は下記の露出制御が単独で担っている。
 
 ## 運用区分 `review_status`(「追加の自由」と「ユーザーへの露出」を分ける)
 
-知識を**追加してよいか**と、その知識を**ユーザーへ見せてよいか**を分離する。値は3種で、この3値の構成は STEP δ で司令塔が提案し、人間が追認した解釈である。
+知識を**追加してよいか**と、その知識を**ユーザーへ見せてよいか**を分離する。値は 4 種。最初の 3 値の構成は STEP δ で司令塔が提案し、人間が追認した解釈である。4 つ目の `expired` は 2026-09-25 の人間の決定で追加した(経緯は [DESIGN_OBSERVATION_LAYER_2026-09.md](DESIGN_OBSERVATION_LAYER_2026-09.md) §8・§11.4、案の文は LANE_DIAG_LOG_2026-09.md §12.6b 案 2)。
 
 | 値 | 意味 | 現時点で該当するもの | ユーザーへの露出 |
 |---|---|---|---|
 | `draft` | AIが追加した未レビューの知識 | openings 2件・shapes 1件(`mino_ginkanmuri`) | **戦法・陣形・狙いの名前を断定的に見せる経路では使わない**(断定しない言い回しに留めるか、表示対象から外す) |
 | `human_reviewed` | 人間のレビューを経たもの | shapes 2件(`mino_honmino`・`mino_takamino`)・intents 3件(STEP δ の確定記録に基づく) | 従来どおり |
 | `expert_verified` | 有段者・一次資料による確認を経たもの | **0件**(人間の判断により保留中) | 従来どおり |
+| `expired` | **失効**。次の 20 局の予測が外れ続けた知識、または効かなかった処方。**消さず、状態だけ変える**(過去の仮説と確定知識を混ぜないため)。失効までの回数は判断的知識として別に人間が決める | **0件** | `draft` と同じ(名前を断定的に見せない) |
 
 `mino_ginkanmuri` は `confidence_level: "low"` で一次資料未検証のため `draft` とする(STEP ε-2)。
 
