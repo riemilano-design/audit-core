@@ -1,0 +1,24 @@
+{
+  "id": "gosuji_kuraidori_nakabisha",
+  "name": "5筋位取り中飛車",
+  "name_kana": "ごすじくらいどりなかびしゃ",
+  "side": "self",
+  "family": "振り飛車系",
+  "leads_to_shape_ids": [],
+  "scenario": null,
+  "recognition_pattern": [
+    {
+      "piece": "飛",
+      "to": "5h",
+      "order_hint": 1
+    },
+    {
+      "piece": "歩",
+      "to": "5e",
+      "order_hint": 2
+    }
+  ],
+  "source": "【AI起草】自分側(先手)の5筋位取り中飛車。飛車を 5筋 に振り、駒組みの早い段階で 5筋 の歩を 5五 まで進めて中央の位を取る指し方。定義は Wikipedia『5筋位取り中飛車』(https://ja.wikipedia.org/wiki/5筋位取り中飛車 (参照日 2026-09-25)) の本文(名前のとおり駒組みの早い段階で5筋の歩を5五まで進める戦法。中央の位を取ると駒の動ける範囲が広がる)による。recognition_pattern は 2 手(5八飛・5五歩)。**5五 への歩**が分かれ目で、既存の相手側の狙い `nakabisha_kuraidori`(data/intents/。後手の 5二飛・5五歩・4五歩)と同じ考えの自分側の版である。 戦型を認識するコードは apps/server/src/analysis/ に無いため、このレコードを足しても認識の数は動かない(**測れない**)。 追加の経緯: 2026-09-25 の知識レーン第 10 組(docs/LANE_KNOWLEDGE_LOG_2026-09.md §12)。三間飛車と中飛車の系統。",
+  "confidence_level": "medium",
+  "review_status": "draft"
+}

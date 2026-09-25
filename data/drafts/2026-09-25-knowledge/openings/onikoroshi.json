@@ -1,0 +1,24 @@
+{
+  "id": "onikoroshi",
+  "name": "鬼殺し",
+  "name_kana": "おにごろし",
+  "side": "self",
+  "family": "振り飛車系",
+  "leads_to_shape_ids": [],
+  "scenario": null,
+  "recognition_pattern": [
+    {
+      "piece": "歩",
+      "to": "7f",
+      "order_hint": 1
+    },
+    {
+      "piece": "桂",
+      "to": "7g",
+      "order_hint": 2
+    }
+  ],
+  "source": "【AI起草】自分側(先手)の鬼殺し。序盤に桂を 7七 へ跳ねて速い攻めを狙う奇襲。定義は Wikipedia『鬼殺し』(https://ja.wikipedia.org/wiki/鬼殺し_(将棋) (参照日 2026-09-25)) の本文(▲7六歩△3四歩 に ▲7七桂 と跳ねる。桂の高跳びと早石田の攻め筋を合わせ、飛車と駒の両取りや 7三 の地点の突破を狙う。分かりやすさから縁台将棋で広まった)による。recognition_pattern は 2 手(7六歩・7七桂)。**7七 への桂は序盤ではほとんど現れない**ので、1 手で決まる手がかりである。 戦型を認識するコードは apps/server/src/analysis/ に無いため、このレコードを足しても認識の数は動かない(**測れない**)。 追加の経緯: 2026-09-25 の知識レーン第 10 組(docs/LANE_KNOWLEDGE_LOG_2026-09.md §12)。三間飛車と中飛車の系統。",
+  "confidence_level": "medium",
+  "review_status": "draft"
+}
