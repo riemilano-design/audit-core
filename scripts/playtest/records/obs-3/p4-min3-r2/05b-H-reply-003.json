@@ -1,0 +1,434 @@
+{
+  "schemaVersion": "0.3",
+  "hypothesisId": "H-p4-min3r2reply-003",
+  "subject": {
+    "customer": "p4",
+    "groups": [
+      "3 分"
+    ],
+    "gamesCount": 18
+  },
+  "scope": "this_user",
+  "lane": "reply",
+  "statement": "相手が王手をかけた直後の手 58 のうち 46(79%)が「玉を動かす」で、「取る」は 8、「それ以外」は 4 でした。ただしこの 58 手のうち、崩れを数える組に入ったのは 1 手だけなので、王手への応じ方の偏りが崩れとつながっているかは、この 18 局の材料では測れていないという読みです。",
+  "observations": [
+    {
+      "obsId": "obs.geo.replyToCheck",
+      "path": "obs_geo moves[].replyToCheck が「王手ではない」以外の行の数",
+      "value": 58,
+      "unit": "手"
+    },
+    {
+      "obsId": "obs.geo.replyToCheck",
+      "path": "obs_geo moves[].replyToCheck が「玉を動かす」の行の数",
+      "value": 46,
+      "unit": "手",
+      "derived": {
+        "kind": "percent",
+        "numerator": {
+          "obsId": "obs.geo.replyToCheck",
+          "value": 46
+        },
+        "denominator": {
+          "obsId": "obs.geo.replyToCheck",
+          "value": 58
+        }
+      }
+    },
+    {
+      "obsId": "obs.geo.replyToCheck",
+      "path": "obs_geo moves[].replyToCheck が「取る」の行の数",
+      "value": 8,
+      "unit": "手"
+    },
+    {
+      "obsId": "obs.geo.replyToCheck",
+      "path": "obs_geo moves[].replyToCheck が「それ以外」の行の数",
+      "value": 4,
+      "unit": "手"
+    },
+    {
+      "obsId": "obs.geo.replyToCheck",
+      "path": "obs_geo moves[].replyToCheck が「王手ではない」の行の数",
+      "value": 522,
+      "unit": "手"
+    },
+    {
+      "obsId": "obs.time.pairSpent",
+      "path": "obs_extra pairs[] の行の数(崩れを数える組)",
+      "value": 225,
+      "unit": "組"
+    },
+    {
+      "obsId": "obs.time.pairSpent",
+      "path": "obs_extra pairs[] のうち、同じ gameNo・displayPly の obs_geo moves[].replyToCheck が「王手ではない」以外である行の数",
+      "value": 1,
+      "unit": "組"
+    },
+    {
+      "obsId": "obs.direct.answer",
+      "path": "answers[] のうち、同じ gameNo・displayPly の obs_geo moves[].replyToCheck が「王手ではない」以外である行の数",
+      "value": 11,
+      "unit": "件"
+    },
+    {
+      "obsId": "obs.direct.answer",
+      "path": "answers[] の行の数",
+      "value": 161,
+      "unit": "件"
+    },
+    {
+      "obsId": "obs.report.event",
+      "path": "events[] のうち、同じ gameNo・ply の obs_geo moves[].replyToCheck が「王手ではない」以外である行の数",
+      "value": 17,
+      "unit": "行"
+    },
+    {
+      "obsId": "obs.eval.game",
+      "path": "games[] の行の数(この組の局数)",
+      "value": 18,
+      "unit": "局"
+    }
+  ],
+  "counterEvidence": {
+    "attempted": true,
+    "items": [
+      {
+        "kind": "counterexample",
+        "text": "「玉を動かす」と逆の向きの局が実在します。局 10 では「王手ではない」以外の行が「取る」2・「それ以外」1 で、「玉を動かす」は 0 行です。局 7 は「取る」3 に対して「玉を動かす」1、局 9 は「それ以外」1 で「玉を動かす」0 です。58 手をひとまとめに数えると、この向きの違いは見えなくなるという読みです。",
+        "observations": [
+          {
+            "obsId": "obs.eval.game",
+            "path": "games[].no(この局の番号)",
+            "value": 10,
+            "unit": "局番号"
+          },
+          {
+            "obsId": "obs.geo.replyToCheck",
+            "path": "gameNo が 10 の moves[].replyToCheck が「取る」の行の数",
+            "value": 2,
+            "unit": "手"
+          },
+          {
+            "obsId": "obs.geo.replyToCheck",
+            "path": "gameNo が 10 の moves[].replyToCheck が「それ以外」の行の数",
+            "value": 1,
+            "unit": "手"
+          },
+          {
+            "obsId": "obs.geo.replyToCheck",
+            "path": "gameNo が 10 の moves[].replyToCheck が「玉を動かす」の行の数",
+            "value": 0,
+            "unit": "手"
+          },
+          {
+            "obsId": "obs.eval.game",
+            "path": "games[].no(この局の番号)",
+            "value": 7,
+            "unit": "局番号"
+          },
+          {
+            "obsId": "obs.geo.replyToCheck",
+            "path": "gameNo が 7 の moves[].replyToCheck が「取る」の行の数",
+            "value": 3,
+            "unit": "手"
+          },
+          {
+            "obsId": "obs.geo.replyToCheck",
+            "path": "gameNo が 7 の moves[].replyToCheck が「玉を動かす」の行の数",
+            "value": 1,
+            "unit": "手"
+          },
+          {
+            "obsId": "obs.eval.game",
+            "path": "games[].no(この局の番号)",
+            "value": 9,
+            "unit": "局番号"
+          },
+          {
+            "obsId": "obs.geo.replyToCheck",
+            "path": "gameNo が 9 の moves[].replyToCheck が「それ以外」の行の数",
+            "value": 1,
+            "unit": "手"
+          },
+          {
+            "obsId": "obs.geo.replyToCheck",
+            "path": "gameNo が 9 の moves[].replyToCheck が「玉を動かす」の行の数",
+            "value": 0,
+            "unit": "手"
+          }
+        ]
+      },
+      {
+        "kind": "denominator",
+        "text": "58 という数は手の延べで、局の数ではありません。18 局のうち「王手ではない」以外の行が 1 行以上ある局は 14、1 行も無い局が 4 あります。さらに局 6 が 13 行、局 3 が 9 行、局 12 が 7 行と、少数の局に寄っています。手の延べの分母と局の分母は別なので、18 局ぜんたいの偏りとして読むには分母が小さいという読みです。",
+        "observations": [
+          {
+            "obsId": "obs.geo.replyToCheck",
+            "path": "moves[].replyToCheck が「王手ではない」以外の行の数",
+            "value": 58,
+            "unit": "手"
+          },
+          {
+            "obsId": "obs.eval.game",
+            "path": "games[] の行の数(この組の局数)",
+            "value": 18,
+            "unit": "局"
+          },
+          {
+            "obsId": "obs.geo.replyToCheck",
+            "path": "moves[].replyToCheck が「王手ではない」以外の行が 1 行以上ある gameNo の数",
+            "value": 14,
+            "unit": "局"
+          },
+          {
+            "obsId": "obs.geo.replyToCheck",
+            "path": "moves[].replyToCheck が「王手ではない」以外の行が 1 行も無い gameNo の数",
+            "value": 4,
+            "unit": "局"
+          },
+          {
+            "obsId": "obs.eval.game",
+            "path": "games[].no(この局の番号)",
+            "value": 6,
+            "unit": "局番号"
+          },
+          {
+            "obsId": "obs.geo.replyToCheck",
+            "path": "gameNo が 6 の moves[].replyToCheck が「王手ではない」以外の行の数",
+            "value": 13,
+            "unit": "手"
+          },
+          {
+            "obsId": "obs.eval.game",
+            "path": "games[].no(この局の番号)",
+            "value": 3,
+            "unit": "局番号"
+          },
+          {
+            "obsId": "obs.geo.replyToCheck",
+            "path": "gameNo が 3 の moves[].replyToCheck が「王手ではない」以外の行の数",
+            "value": 9,
+            "unit": "手"
+          },
+          {
+            "obsId": "obs.eval.game",
+            "path": "games[].no(この局の番号)",
+            "value": 12,
+            "unit": "局番号"
+          },
+          {
+            "obsId": "obs.geo.replyToCheck",
+            "path": "gameNo が 12 の moves[].replyToCheck が「王手ではない」以外の行の数",
+            "value": 7,
+            "unit": "手"
+          }
+        ]
+      },
+      {
+        "kind": "denominator",
+        "text": "後半の「1 だけ」は、重ねる先の列によって数が変わります。同じ王手の直後の手に重なる行は、崩れを数える組 225 のうち 1 ですが、answers[] は 161 のうち 11、events[] は 185 のうち 17 です。どれも行の選び方も分母も別なので、225 に対する 1 だけを根拠に「材料が無い」と読むのは、分母の取り違えになりうるという読みです。",
+        "observations": [
+          {
+            "obsId": "obs.time.pairSpent",
+            "path": "pairs[] の行の数(崩れを数える組)",
+            "value": 225,
+            "unit": "組"
+          },
+          {
+            "obsId": "obs.time.pairSpent",
+            "path": "pairs[] のうち、同じ gameNo・displayPly の moves[].replyToCheck が「王手ではない」以外である行の数",
+            "value": 1,
+            "unit": "組"
+          },
+          {
+            "obsId": "obs.direct.answer",
+            "path": "answers[] の行の数",
+            "value": 161,
+            "unit": "件"
+          },
+          {
+            "obsId": "obs.direct.answer",
+            "path": "answers[] のうち、同じ gameNo・displayPly の moves[].replyToCheck が「王手ではない」以外である行の数",
+            "value": 11,
+            "unit": "件"
+          },
+          {
+            "obsId": "obs.report.event",
+            "path": "events[] の行の数",
+            "value": 185,
+            "unit": "行"
+          },
+          {
+            "obsId": "obs.report.event",
+            "path": "events[] のうち、同じ gameNo・ply の moves[].replyToCheck が「王手ではない」以外である行の数",
+            "value": 17,
+            "unit": "行"
+          }
+        ]
+      },
+      {
+        "kind": "alternative",
+        "text": "重なりが 1 であることは、段の偏りだけで説明がつく可能性があります。崩れを数える組 225 行のうち 159 行が early で、mid は 39、late は 27 です。一方 decisionContext[] の inCheck が真の 16 行は late 8・mid 7・early 1 で、段の寄り方が逆向きです。重なった 1 組も early の行でした。王手への応じ方の性質ではなく、それぞれの列が見ている段が違うために重ならない、という別の読みです。",
+        "observations": [
+          {
+            "obsId": "obs.time.pairSpent",
+            "path": "pairs[] の行の数(崩れを数える組)",
+            "value": 225,
+            "unit": "組"
+          },
+          {
+            "obsId": "obs.time.pairSpent",
+            "path": "pairs[].phase が early の行の数",
+            "value": 159,
+            "unit": "組"
+          },
+          {
+            "obsId": "obs.time.pairSpent",
+            "path": "pairs[].phase が mid の行の数",
+            "value": 39,
+            "unit": "組"
+          },
+          {
+            "obsId": "obs.time.pairSpent",
+            "path": "pairs[].phase が late の行の数",
+            "value": 27,
+            "unit": "組"
+          },
+          {
+            "obsId": "obs.time.decisionContext",
+            "path": "decisionContext[].inCheck が true の行の数",
+            "value": 16,
+            "unit": "手"
+          },
+          {
+            "obsId": "obs.time.decisionContext",
+            "path": "decisionContext[].inCheck が true かつ phase が late の行の数",
+            "value": 8,
+            "unit": "手"
+          },
+          {
+            "obsId": "obs.time.decisionContext",
+            "path": "decisionContext[].inCheck が true かつ phase が mid の行の数",
+            "value": 7,
+            "unit": "手"
+          },
+          {
+            "obsId": "obs.time.decisionContext",
+            "path": "decisionContext[].inCheck が true かつ phase が early の行の数",
+            "value": 1,
+            "unit": "手"
+          },
+          {
+            "obsId": "obs.time.pairSpent",
+            "path": "pairs[] のうち王手の直後の手に重なる行で phase が early である行の数",
+            "value": 1,
+            "unit": "組"
+          }
+        ]
+      },
+      {
+        "kind": "denominator",
+        "text": "崩れを数える組 225 のうち 90 行は、「王手ではない」以外の行が 1 行も無い 4 局から出ています。この 4 局はどう数えても王手の直後の手と重なりようがないので、225 という分母は、王手への応じ方と崩れを突き合わせる分母としてはそのまま使えないという読みです。",
+        "observations": [
+          {
+            "obsId": "obs.time.pairSpent",
+            "path": "pairs[] の行の数(崩れを数える組)",
+            "value": 225,
+            "unit": "組"
+          },
+          {
+            "obsId": "obs.time.pairSpent",
+            "path": "pairs[] のうち、moves[].replyToCheck が「王手ではない」以外の行が 1 行も無い gameNo の行の数",
+            "value": 90,
+            "unit": "組"
+          },
+          {
+            "obsId": "obs.geo.replyToCheck",
+            "path": "moves[].replyToCheck が「王手ではない」以外の行が 1 行も無い gameNo の数",
+            "value": 4,
+            "unit": "局"
+          }
+        ]
+      },
+      {
+        "kind": "alternative",
+        "text": "「測れていない」のは王手の場面が少ないからではなく、崩れの旗が付く行が限られているためという別の読みもできます。decisionContext[] の inCheck が真の 16 行のうち、collapse が null なのは 15 行、false は 1 行、true は 0 行です。null は「崩れなかった」ではなく測れていない行なので、15 行を崩れなかった側に数えないという読みです。",
+        "observations": [
+          {
+            "obsId": "obs.time.decisionContext",
+            "path": "decisionContext[].inCheck が true の行の数",
+            "value": 16,
+            "unit": "手"
+          },
+          {
+            "obsId": "obs.time.decisionContext",
+            "path": "decisionContext[].inCheck が true かつ collapse が null の行の数",
+            "value": 15,
+            "unit": "手"
+          },
+          {
+            "obsId": "obs.time.decisionContext",
+            "path": "decisionContext[].inCheck が true かつ collapse が false の行の数",
+            "value": 1,
+            "unit": "手"
+          },
+          {
+            "obsId": "obs.time.decisionContext",
+            "path": "decisionContext[].inCheck が true かつ collapse が true の行の数",
+            "value": 0,
+            "unit": "手"
+          }
+        ]
+      }
+    ],
+    "result": "weakened",
+    "provenance": {
+      "inputs": [
+        "records/obs-3/p4-min3-r2/00-obs_snapshot.p4.min3.r2b.json"
+      ]
+    }
+  },
+  "prediction": {
+    "writtenAt": "2026-09-26",
+    "window": "next_20_games_same_time_limit",
+    "metric": "obs.geo.replyToCheck が「王手ではない」以外の行のうち、「玉を動かす」である行の割合(百分率)",
+    "comparator": ">=",
+    "value": 60,
+    "alsoRequires": [
+      {
+        "metric": "obs.geo.replyToCheck が「王手ではない」以外の行の数",
+        "comparator": ">=",
+        "value": 40
+      },
+      {
+        "metric": "obs.time.pairSpent のうち、同じ gameNo・displayPly の obs.geo.replyToCheck が「王手ではない」以外である行の数",
+        "comparator": ">=",
+        "value": 10
+      },
+      {
+        "metric": "obs.geo.replyToCheck の行の数(本人の手)",
+        "comparator": ">=",
+        "value": 400
+      }
+    ]
+  },
+  "status": "weak",
+  "knowledge": {
+    "kind": "discovered",
+    "reviewStatus": "draft",
+    "origin": {
+      "kifu": "p4/min3",
+      "lane": "reply"
+    },
+    "range": "this_user"
+  },
+  "provenance": {
+    "gitHead": "a4a5929",
+    "inputs": [
+      "records/obs-3/p4-min3-r2/00-obs_snapshot.p4.min3.r2.json",
+      "records/obs-3/p4-min3-r2/00-obs_snapshot.p4.min3.r2b.json"
+    ],
+    "excludedInputs": []
+  }
+}

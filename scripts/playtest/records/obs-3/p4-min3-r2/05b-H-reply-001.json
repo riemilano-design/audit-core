@@ -1,0 +1,318 @@
+{
+  "schemaVersion": "0.3",
+  "hypothesisId": "H-p4-min3r2reply-001",
+  "subject": {
+    "customer": "p4",
+    "groups": [
+      "3 分"
+    ],
+    "gamesCount": 18
+  },
+  "scope": "this_user",
+  "lane": "reply",
+  "statement": "本人の手 580 のうち、相手が駒を取った直後の手は 196(34%)ですが、相手に手番を渡すと詰む型の行 48 のうち 36(75%)、急落の行 185 のうち 101(55%)が、その 196 の側に寄っています。相手が駒を取った直後の一手が、この人にとって崩れの生まれやすい場面になっている可能性があります。",
+  "observations": [
+    {
+      "obsId": "obs.geo.replyToCapture",
+      "path": "obs_geo moves[] の行の数(本人の手)",
+      "value": 580,
+      "unit": "手"
+    },
+    {
+      "obsId": "obs.geo.replyToCapture",
+      "path": "obs_geo moves[].replyToCapture が「相手は取っていない」以外の行の数",
+      "value": 196,
+      "unit": "手",
+      "derived": {
+        "kind": "percent",
+        "numerator": {
+          "obsId": "obs.geo.replyToCapture",
+          "value": 196
+        },
+        "denominator": {
+          "obsId": "obs.geo.replyToCapture",
+          "value": 580
+        }
+      }
+    },
+    {
+      "obsId": "obs.geo.replyToCapture",
+      "path": "obs_geo moves[].replyToCapture が「取らない」の行の数",
+      "value": 132,
+      "unit": "手"
+    },
+    {
+      "obsId": "obs.geo.replyToCapture",
+      "path": "obs_geo moves[].replyToCapture が「取り返し」の行の数",
+      "value": 64,
+      "unit": "手"
+    },
+    {
+      "obsId": "obs.report.event",
+      "path": "events[] の行の数",
+      "value": 185,
+      "unit": "行"
+    },
+    {
+      "obsId": "obs.report.event",
+      "path": "events[] のうち、同じ gameNo・ply の obs_geo moves[].replyToCapture が「相手は取っていない」以外である行の数",
+      "value": 101,
+      "unit": "行",
+      "derived": {
+        "kind": "percent",
+        "numerator": {
+          "obsId": "obs.report.event",
+          "value": 101
+        },
+        "denominator": {
+          "obsId": "obs.report.event",
+          "value": 185
+        }
+      }
+    },
+    {
+      "obsId": "obs.report.event",
+      "path": "events[].kind が matedIfPass の行の数",
+      "value": 48,
+      "unit": "行"
+    },
+    {
+      "obsId": "obs.report.event",
+      "path": "events[].kind が matedIfPass の行のうち、同じ gameNo・ply の obs_geo moves[].replyToCapture が「相手は取っていない」以外である行の数",
+      "value": 36,
+      "unit": "行",
+      "derived": {
+        "kind": "percent",
+        "numerator": {
+          "obsId": "obs.report.event",
+          "value": 36
+        },
+        "denominator": {
+          "obsId": "obs.report.event",
+          "value": 48
+        }
+      }
+    },
+    {
+      "obsId": "obs.report.event",
+      "path": "events[].kind が matedIfPass の行のうち、同じ gameNo・ply の obs_geo moves[].replyToCapture が「取らない」である行の数",
+      "value": 24,
+      "unit": "行",
+      "derived": {
+        "kind": "percent",
+        "numerator": {
+          "obsId": "obs.report.event",
+          "value": 24
+        },
+        "denominator": {
+          "obsId": "obs.report.event",
+          "value": 48
+        }
+      }
+    },
+    {
+      "obsId": "obs.report.overview",
+      "path": "overview.fell",
+      "value": 30,
+      "unit": "組"
+    }
+  ],
+  "counterEvidence": {
+    "attempted": true,
+    "items": [
+      {
+        "kind": "denominator",
+        "text": "『本人の手 580 のうち 196』という全体の数と、『matedIfPass の 48 行のうち 36』は、数えている範囲が同じでない可能性があります。matedIfPass の行が各局で最初に現れる手数は 14 から 94 で、その局・その手数以降の本人の手だけに絞ると 110 手、うち相手が取った直後は 57 でした。同じ範囲どうしで並べると、差は小さくなるように見えます。",
+        "observations": [
+          {
+            "obsId": "obs.report.event",
+            "path": "events[].kind が matedIfPass の行を局ごとにまとめ、各局の最初の手数以降の obs_geo moves[] を数えた組",
+            "value": {
+              "gamesWithMatedIfPass": 10,
+              "minFirstKifPly": 14,
+              "maxFirstKifPly": 94,
+              "rowsInRange": 110,
+              "captureSideInRange": 57
+            },
+            "unit": "手"
+          }
+        ]
+      },
+      {
+        "kind": "alternative",
+        "text": "同じ観測は、『手数が進むほど、相手が取った直後の手そのものが増える』という別の読みでも説明がつく可能性があります。本人の手を手数で切ると、17 手目以降は 436 のうち 177、31 手目以降は 313 のうち 143、41 手目以降は 235 のうち 114 でした。matedIfPass の行が終盤側(最も遅い局で 100 手目)に寄っていること自体が、この寄りを作っている可能性があります。これは正しさの判定ではなく、別の読みの提示です。",
+        "observations": [
+          {
+            "obsId": "obs.geo.replyToCapture",
+            "path": "obs_geo moves[] を kifPly で切ったときの行数と、replyToCapture が「相手は取っていない」以外の行数",
+            "value": [
+              {
+                "minKifPly": 17,
+                "rows": 436,
+                "captureSide": 177
+              },
+              {
+                "minKifPly": 31,
+                "rows": 313,
+                "captureSide": 143
+              },
+              {
+                "minKifPly": 41,
+                "rows": 235,
+                "captureSide": 114
+              }
+            ],
+            "unit": "手"
+          },
+          {
+            "obsId": "obs.report.event",
+            "path": "events[].kind が matedIfPass の行の ply の最小と最大",
+            "value": {
+              "minPly": 14,
+              "maxPly": 100
+            },
+            "unit": "手"
+          }
+        ]
+      },
+      {
+        "kind": "denominator",
+        "text": "『急落の行 185 のうち 101』の 185 は、kind が drop の 137 行と matedIfPass の 48 行を混ぜた分母です。drop の 137 行だけで見ると、相手が取った直後は 65、そうでない側が 72 で、多いのは後者でした。また matedIfPass の 36 行の内訳は「取らない」24・「取り返し」12 で、ひとまとめにした側の中でも寄り方が違います。",
+        "observations": [
+          {
+            "obsId": "obs.report.event",
+            "path": "events[].kind が drop の行の数と、同じ gameNo・ply の obs_geo moves[].replyToCapture の側ごとの数",
+            "value": {
+              "kind": "drop",
+              "rows": 137,
+              "captureSide": 65,
+              "nonCaptureSide": 72
+            },
+            "unit": "行"
+          },
+          {
+            "obsId": "obs.report.event",
+            "path": "events[].kind が matedIfPass の行の replyToCapture の内訳",
+            "value": {
+              "相手は取っていない": 12,
+              "取らない": 24,
+              "取り返し": 12
+            },
+            "unit": "行"
+          }
+        ]
+      },
+      {
+        "kind": "denominator",
+        "text": "matedIfPass の 48 行は、写しの 18 局のうち 10 局からしか出ておらず、19 行が 1 つの局(局 6)、9 行が別の 1 つの局(局 12)に寄っています。局の数としての分母は小さい可能性があります。",
+        "observations": [
+          {
+            "obsId": "obs.report.event",
+            "path": "events[].kind が matedIfPass の行の gameNo ごとの数",
+            "value": {
+              "totalRows": 48,
+              "gamesInSnapshot": 18,
+              "gamesWithRows": 10,
+              "concentrated": [
+                {
+                  "gameNo": 6,
+                  "rows": 19
+                },
+                {
+                  "gameNo": 12,
+                  "rows": 9
+                }
+              ]
+            },
+            "unit": "行"
+          }
+        ]
+      },
+      {
+        "kind": "counterexample",
+        "text": "逆の向きの局も実在します。局 1 は急落の行 9 のうち相手が取った直後が 2、そうでない側が 7。局 16 は 11 のうち 4 と 7。局 5 と局 18 はそれぞれ 2 行のうち 0 が相手が取った直後でした。",
+        "observations": [
+          {
+            "obsId": "obs.report.event",
+            "path": "events[] の gameNo ごとの行数と、同じ gameNo・ply の obs_geo moves[].replyToCapture の側ごとの数",
+            "value": [
+              {
+                "gameNo": 1,
+                "events": 9,
+                "captureSide": 2,
+                "nonCaptureSide": 7
+              },
+              {
+                "gameNo": 16,
+                "events": 11,
+                "captureSide": 4,
+                "nonCaptureSide": 7
+              },
+              {
+                "gameNo": 5,
+                "events": 2,
+                "captureSide": 0,
+                "nonCaptureSide": 2
+              },
+              {
+                "gameNo": 18,
+                "events": 2,
+                "captureSide": 0,
+                "nonCaptureSide": 2
+              }
+            ],
+            "unit": "行"
+          }
+        ]
+      }
+    ],
+    "result": "weakened",
+    "provenance": {
+      "inputs": [
+        "records/obs-3/p4-min3-r2/00-obs_snapshot.p4.min3.r2b.json"
+      ]
+    }
+  },
+  "prediction": {
+    "writtenAt": "2026-09-26",
+    "window": "next_20_games_same_time_limit",
+    "metric": "obs.report.event のうち kind が matedIfPass の行で、同じ gameNo・ply の obs.geo.replyToCapture が「相手は取っていない」以外である行の割合(百分率)",
+    "comparator": ">=",
+    "value": 50,
+    "alsoRequires": [
+      {
+        "metric": "obs.report.event のうち kind が matedIfPass の行の数",
+        "comparator": ">=",
+        "value": 20
+      },
+      {
+        "metric": "obs.geo.replyToCapture の行の数(本人の手)",
+        "comparator": ">=",
+        "value": 400
+      },
+      {
+        "metric": "obs.geo.replyToCapture が「相手は取っていない」以外の行の数",
+        "comparator": ">=",
+        "value": 120
+      }
+    ]
+  },
+  "status": "weak",
+  "knowledge": {
+    "kind": "discovered",
+    "reviewStatus": "draft",
+    "origin": {
+      "kifu": "p4/min3",
+      "lane": "reply"
+    },
+    "range": "this_user"
+  },
+  "provenance": {
+    "gitHead": "a4a5929",
+    "inputs": [
+      "records/obs-3/p4-min3-r2/00-obs_snapshot.p4.min3.r2.json",
+      "records/obs-3/p4-min3-r2/00-obs_snapshot.p4.min3.r2b.json"
+    ],
+    "excludedInputs": []
+  }
+}

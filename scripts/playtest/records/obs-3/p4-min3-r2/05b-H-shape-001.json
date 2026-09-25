@@ -1,0 +1,256 @@
+{
+  "schemaVersion": "0.3",
+  "subject": {
+    "customer": "p4",
+    "groups": [
+      "3 分"
+    ],
+    "gamesCount": 18
+  },
+  "scope": "this_user",
+  "lane": "shape",
+  "counterEvidence": {
+    "attempted": true,
+    "items": [
+      {
+        "kind": "denominator",
+        "text": "自分側と相手側の延べの分母がそろっていない可能性があります。同じ写しの同じ欄で、自分側は none が 22558・forming が 5360、相手側は none が 15549・forming が 5208 で、側ごとに数えられている行の量が違います。completed の 0 と 33 は、この違う量の上に乗った数として読む必要があります。さらに形の露出の欄では自分側が hedged 657・hidden 4703、相手側が hedged 1109・hidden 4132 で、こちらは none の行を落とす別の数え方のため、状態の件数とそのまま並べられません。",
+        "observations": [
+          {
+            "obsId": "obs.vocab.shapeStatus",
+            "path": "recognition byGroup[group].statusCounts.shape.{self,opponent}.{none,forming,completed,matched}",
+            "value": {
+              "self": {
+                "none": 22558,
+                "forming": 5360,
+                "completed": 0,
+                "matched": 0
+              },
+              "opponent": {
+                "none": 15549,
+                "forming": 5208,
+                "completed": 33,
+                "matched": 0
+              }
+            }
+          },
+          {
+            "obsId": "obs.vocab.exposure",
+            "path": "recognition byGroup[group].exposure[\"D''\"].{shape,intent,opening}.{self,opponent}.{named,hedged,hidden}",
+            "value": {
+              "shape": {
+                "self": {
+                  "named": 0,
+                  "hedged": 657,
+                  "hidden": 4703
+                },
+                "opponent": {
+                  "named": 0,
+                  "hedged": 1109,
+                  "hidden": 4132
+                }
+              },
+              "intent": {
+                "self": {
+                  "named": 0,
+                  "hedged": 0,
+                  "hidden": 0
+                },
+                "opponent": {
+                  "named": 95,
+                  "hedged": 1255,
+                  "hidden": 837
+                }
+              },
+              "opening": {
+                "self": {
+                  "named": 0,
+                  "hedged": 2238,
+                  "hidden": 3124
+                },
+                "opponent": {
+                  "named": 0,
+                  "hedged": 233,
+                  "hidden": 866
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "kind": "counterexample",
+        "text": "「最後の段に届いた延べが自分側だけ出ていない」という向きは、同じ組の別の語彙の欄では逆に出ています。戦型の欄では自分側の completed が 607、相手側が 601 で、自分側にも最後の段の延べが出ています。形の欄の自分側 0・相手側 33 という向きは、この組の自分側すべてに共通して見られるものではない、という読みができます。",
+        "observations": [
+          {
+            "obsId": "obs.vocab.openingStatus",
+            "path": "recognition byGroup[group].statusCounts.opening.{self,opponent}.{none,forming,completed,matched}",
+            "value": {
+              "self": {
+                "none": 44534,
+                "forming": 4755,
+                "completed": 607,
+                "matched": 0
+              },
+              "opponent": {
+                "none": 12563,
+                "forming": 498,
+                "completed": 601,
+                "matched": 0
+              }
+            }
+          },
+          {
+            "obsId": "obs.vocab.shapeStatus",
+            "path": "recognition byGroup[group].statusCounts.shape.{self,opponent}.{none,forming,completed,matched}",
+            "value": {
+              "self": {
+                "none": 22558,
+                "forming": 5360,
+                "completed": 0,
+                "matched": 0
+              },
+              "opponent": {
+                "none": 15549,
+                "forming": 5208,
+                "completed": 33,
+                "matched": 0
+              }
+            }
+          }
+        ]
+      },
+      {
+        "kind": "alternative",
+        "text": "側の差が、指し方ではなく欄の数え方から出ている、という別の読みがあります。同じ写しの狙いの欄では自分側が none 0・forming 0・completed 0・matched 0 で、相手側だけが none 8505・forming 1482・matched 705 を持ちます。つまりこの写しの語彙の欄には、側によって行がそもそも立たないものが実在します。形の欄の自分側 0 についても、自分側にどのレコードが当てられているかで決まっている可能性が残ります。",
+        "observations": [
+          {
+            "obsId": "obs.vocab.intentStatus",
+            "path": "recognition byGroup[group].statusCounts.intent.{self,opponent}.{none,forming,completed,matched}",
+            "value": {
+              "self": {
+                "none": 0,
+                "forming": 0,
+                "completed": 0,
+                "matched": 0
+              },
+              "opponent": {
+                "none": 8505,
+                "forming": 1482,
+                "completed": 0,
+                "matched": 705
+              }
+            }
+          },
+          {
+            "obsId": "obs.vocab.shapeStatus",
+            "path": "recognition byGroup[group].statusCounts.shape.{self,opponent}.{none,forming,completed,matched}",
+            "value": {
+              "self": {
+                "none": 22558,
+                "forming": 5360,
+                "completed": 0,
+                "matched": 0
+              },
+              "opponent": {
+                "none": 15549,
+                "forming": 5208,
+                "completed": 33,
+                "matched": 0
+              }
+            }
+          }
+        ]
+      },
+      {
+        "kind": "alternative",
+        "text": "0 という数が、必要駒の取り方という定義の側から出ている、という別の読みがあります。同じ組を別の数え方で数え直した欄には 9 という数が出ています(この 9 は形が完成した局の数ではありません。数え直しは初期配置にある必要駒を分母から外すため、外した駒が動いた局でも入ります)。また欠けの欄では、自分側の最も近づいた形の欠けがちょうど一枚だった局が 13 あります。どちらの段で切るかで数が変わる欄だという読みができます。",
+        "observations": [
+          {
+            "obsId": "obs.vocab.shapeMovedRequiredSummary",
+            "path": "recognition byGroup[group].shapeMovedRequiredCompleteTotal, recognition movedRequiredZeroShapeCounts.{self,opponent}",
+            "value": {
+              "completeTotal": 9,
+              "zeroCount": {
+                "self": 0,
+                "opponent": 0
+              }
+            }
+          },
+          {
+            "obsId": "obs.vocab.shapeMissingSummary",
+            "path": "recognition byGroup[group].{shapeMissingTotal,selfClosestOneAwayGames}",
+            "value": {
+              "shapeMissingTotal": 31804,
+              "selfClosestOneAwayGames": 13
+            }
+          }
+        ]
+      }
+    ],
+    "result": "weakened",
+    "provenance": {
+      "inputs": [
+        "records/obs-3/p4-min3-r2/00-obs_snapshot.p4.min3.r2b.json"
+      ]
+    }
+  },
+  "status": "stands_after_refutation",
+  "knowledge": {
+    "kind": "discovered",
+    "reviewStatus": "draft",
+    "origin": {
+      "kifu": "p4/min3",
+      "lane": "shape"
+    },
+    "range": "this_user"
+  },
+  "provenance": {
+    "gitHead": "a54eae9",
+    "inputs": [
+      "records/obs-3/p4-min3-r2/00-obs_snapshot.p4.min3.r2b.json"
+    ],
+    "excludedInputs": []
+  },
+  "hypothesisId": "H-p4-min3r2bshape-001",
+  "statement": "この組の写しでは、自分側の形の状態の延べ件数は none が 22558・forming が 5360 で、completed は 0 でした(局面 × 形のレコードを数えた延べであり、局数ではありません)。相手側には completed が 33 あります。陣形づくりは途中の段までは繰り返し数えられているのに、最後の段に届いた延べが自分側だけ出ていない、という読みです。",
+  "observations": [
+    {
+      "obsId": "obs.vocab.shapeStatus",
+      "path": "recognition byGroup[group].statusCounts.shape.{self,opponent}.{none,forming,completed,matched}",
+      "value": {
+        "self": {
+          "none": 22558,
+          "forming": 5360,
+          "completed": 0,
+          "matched": 0
+        },
+        "opponent": {
+          "none": 15549,
+          "forming": 5208,
+          "completed": 33,
+          "matched": 0
+        }
+      }
+    }
+  ],
+  "prediction": {
+    "writtenAt": "2026-09-26",
+    "window": "next_20_games_same_time_limit",
+    "metric": "obs.vocab.shapeStatus の self.completed(3 分の次の 20 局・延べ件数)",
+    "comparator": "==",
+    "value": 0,
+    "alsoRequires": [
+      {
+        "metric": "obs.eval.game の局数(3 分の次の組)",
+        "comparator": ">=",
+        "value": 20
+      },
+      {
+        "metric": "obs.vocab.shapeStatus の self.forming(同じ組の延べ件数)",
+        "comparator": ">=",
+        "value": 1000
+      }
+    ]
+  }
+}

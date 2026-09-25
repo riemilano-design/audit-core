@@ -1,0 +1,564 @@
+{
+  "schemaVersion": "0.3",
+  "hypothesisId": "H-p4-min3r2bside-002",
+  "subject": {
+    "customer": "p4",
+    "groups": [
+      "3 分"
+    ],
+    "gamesCount": 18
+  },
+  "scope": "this_user",
+  "lane": "side",
+  "statement": "段と評価の帯が写しに残っている手 182 回を段で分けると、相手玉側の手は序盤 33 回中 11 回(33%)、中盤 89 回中 37 回(42%)、終盤 60 回中 35 回(58%)でした。自玉側の手は同じ順に 9 回・23 回・11 回で、段が進むほど手が相手玉側へ寄っていくという読みです。",
+  "observations": [
+    {
+      "obsId": "obs.time.decisionContext",
+      "path": "obs_geo decisionContext[] の行数(消費が 5〜9 秒・10 秒以上の帯の手だけが載る。全 580 手の部分集合)",
+      "value": 182,
+      "unit": "行"
+    },
+    {
+      "obsId": "obs.time.decisionContext",
+      "path": "obs_geo decisionContext[] のうち phase == \"early\" の行数",
+      "value": 33,
+      "unit": "行"
+    },
+    {
+      "obsId": "obs.geo.moveCombination",
+      "path": "obs_geo decisionContext[] を obs_geo moves[] と (gameNo, kifPly) で突き合わせた行(182 行すべて突き合った) のうち phase == \"early\" かつ side == \"attack\" の行数",
+      "value": 11,
+      "unit": "行",
+      "derived": {
+        "kind": "percent",
+        "numerator": {
+          "obsId": "obs.geo.moveCombination",
+          "value": 11
+        },
+        "denominator": {
+          "obsId": "obs.time.decisionContext",
+          "value": 33
+        }
+      }
+    },
+    {
+      "obsId": "obs.geo.moveCombination",
+      "path": "obs_geo decisionContext[] を obs_geo moves[] と (gameNo, kifPly) で突き合わせた行(182 行すべて突き合った) のうち phase == \"early\" かつ side == \"defense\" の行数",
+      "value": 9,
+      "unit": "行"
+    },
+    {
+      "obsId": "obs.time.decisionContext",
+      "path": "obs_geo decisionContext[] のうち phase == \"mid\" の行数",
+      "value": 89,
+      "unit": "行"
+    },
+    {
+      "obsId": "obs.geo.moveCombination",
+      "path": "obs_geo decisionContext[] を obs_geo moves[] と (gameNo, kifPly) で突き合わせた行(182 行すべて突き合った) のうち phase == \"mid\" かつ side == \"attack\" の行数",
+      "value": 37,
+      "unit": "行",
+      "derived": {
+        "kind": "percent",
+        "numerator": {
+          "obsId": "obs.geo.moveCombination",
+          "value": 37
+        },
+        "denominator": {
+          "obsId": "obs.time.decisionContext",
+          "value": 89
+        }
+      }
+    },
+    {
+      "obsId": "obs.geo.moveCombination",
+      "path": "obs_geo decisionContext[] を obs_geo moves[] と (gameNo, kifPly) で突き合わせた行(182 行すべて突き合った) のうち phase == \"mid\" かつ side == \"defense\" の行数",
+      "value": 23,
+      "unit": "行"
+    },
+    {
+      "obsId": "obs.time.decisionContext",
+      "path": "obs_geo decisionContext[] のうち phase == \"late\" の行数",
+      "value": 60,
+      "unit": "行"
+    },
+    {
+      "obsId": "obs.geo.moveCombination",
+      "path": "obs_geo decisionContext[] を obs_geo moves[] と (gameNo, kifPly) で突き合わせた行(182 行すべて突き合った) のうち phase == \"late\" かつ side == \"attack\" の行数",
+      "value": 35,
+      "unit": "行",
+      "derived": {
+        "kind": "percent",
+        "numerator": {
+          "obsId": "obs.geo.moveCombination",
+          "value": 35
+        },
+        "denominator": {
+          "obsId": "obs.time.decisionContext",
+          "value": 60
+        }
+      }
+    },
+    {
+      "obsId": "obs.geo.moveCombination",
+      "path": "obs_geo decisionContext[] を obs_geo moves[] と (gameNo, kifPly) で突き合わせた行(182 行すべて突き合った) のうち phase == \"late\" かつ side == \"defense\" の行数",
+      "value": 11,
+      "unit": "行"
+    },
+    {
+      "obsId": "obs.geo.moveCombination",
+      "path": "obs_geo moves[] の行数(本人の手だけ、18 局)",
+      "value": 580,
+      "unit": "行"
+    },
+    {
+      "obsId": "obs.geo.moveCombination",
+      "path": "obs_geo moves[] のうち side == \"attack\" の行数(全 580 手)",
+      "value": 207,
+      "unit": "行"
+    },
+    {
+      "obsId": "obs.geo.moveCombination",
+      "path": "obs_geo moves[] のうち side == \"defense\" の行数(全 580 手)",
+      "value": 163,
+      "unit": "行"
+    },
+    {
+      "obsId": "obs.geo.moveCombination",
+      "path": "obs_geo moves[] のうち side == \"both\" の行数(側の分母に入れない値)",
+      "value": 44,
+      "unit": "行"
+    },
+    {
+      "obsId": "obs.geo.moveCombination",
+      "path": "obs_geo moves[] のうち side == \"none\" の行数(側の分母に入れない値)",
+      "value": 166,
+      "unit": "行"
+    },
+    {
+      "obsId": "obs.time.decisionContext",
+      "path": "obs_geo decisionContext[] のうち fork == true かつ phase == \"late\" の行数",
+      "value": 37,
+      "unit": "行"
+    },
+    {
+      "obsId": "obs.geo.moveCombination",
+      "path": "obs_geo decisionContext[] を obs_geo moves[] と (gameNo, kifPly) で突き合わせた行(182 行すべて突き合った) のうち fork == true かつ phase == \"late\" かつ side == \"attack\" の行数",
+      "value": 22,
+      "unit": "行"
+    },
+    {
+      "obsId": "obs.geo.moveCombination",
+      "path": "obs_geo decisionContext[] を obs_geo moves[] と (gameNo, kifPly) で突き合わせた行(182 行すべて突き合った) のうち fork == true かつ phase == \"late\" かつ side == \"defense\" の行数",
+      "value": 4,
+      "unit": "行"
+    },
+    {
+      "obsId": "obs.time.decisionContext",
+      "path": "obs_geo decisionContext[] のうち fork == true かつ phase == \"early\" の行数",
+      "value": 11,
+      "unit": "行"
+    },
+    {
+      "obsId": "obs.geo.moveCombination",
+      "path": "obs_geo decisionContext[] を obs_geo moves[] と (gameNo, kifPly) で突き合わせた行(182 行すべて突き合った) のうち fork == true かつ phase == \"early\" かつ side == \"attack\" の行数",
+      "value": 3,
+      "unit": "行"
+    },
+    {
+      "obsId": "obs.geo.moveCombination",
+      "path": "obs_geo decisionContext[] を obs_geo moves[] と (gameNo, kifPly) で突き合わせた行(182 行すべて突き合った) のうち fork == true かつ phase == \"early\" かつ side == \"defense\" の行数",
+      "value": 4,
+      "unit": "行"
+    },
+    {
+      "obsId": "obs.geo.moveCombination",
+      "path": "obs_geo moves[] のうち obs_geo decisionContext[] に行が無い手(消費が 5 秒未満など)の行数",
+      "value": 398,
+      "unit": "行"
+    },
+    {
+      "obsId": "obs.geo.moveCombination",
+      "path": "obs_geo moves[] のうち obs_geo decisionContext[] に行が無い手で side == \"attack\" の行数",
+      "value": 124,
+      "unit": "行"
+    },
+    {
+      "obsId": "obs.geo.moveCombination",
+      "path": "obs_geo moves[] のうち obs_geo decisionContext[] に行が無い手で side == \"defense\" の行数",
+      "value": 120,
+      "unit": "行"
+    }
+  ],
+  "counterEvidence": {
+    "attempted": true,
+    "items": [
+      {
+        "kind": "denominator",
+        "text": "段ごとの分母 33・89・60 には、側が none・both の行がそのまま入っています。観測項目の一覧の obs.side.of の行は、both と none は側の分母に入らないと書いています。写しでは none が序盤 12 行・中盤 26 行・終盤 9 行、both が序盤 1 行・中盤 3 行・終盤 5 行で、側の付かない行の出方が段でそろっていません。仮説の三つの並びは、相手玉側と自玉側の比ではなく、側の付かない行がどれだけ混ざっているかにも動かされている可能性があります。",
+        "observations": [
+          {
+            "obsId": "obs.geo.moveCombination",
+            "path": "obs_geo decisionContext[] を obs_geo moves[] と (gameNo, kifPly) で突き合わせた行のうち phase == \"early\" かつ side == \"none\" の行数",
+            "value": 12,
+            "unit": "行"
+          },
+          {
+            "obsId": "obs.geo.moveCombination",
+            "path": "同上のうち phase == \"mid\" かつ side == \"none\" の行数",
+            "value": 26,
+            "unit": "行"
+          },
+          {
+            "obsId": "obs.geo.moveCombination",
+            "path": "同上のうち phase == \"late\" かつ side == \"none\" の行数",
+            "value": 9,
+            "unit": "行"
+          },
+          {
+            "obsId": "obs.geo.moveCombination",
+            "path": "同上のうち phase == \"early\" かつ side == \"both\" の行数",
+            "value": 1,
+            "unit": "行"
+          },
+          {
+            "obsId": "obs.geo.moveCombination",
+            "path": "同上のうち phase == \"mid\" かつ side == \"both\" の行数",
+            "value": 3,
+            "unit": "行"
+          },
+          {
+            "obsId": "obs.geo.moveCombination",
+            "path": "同上のうち phase == \"late\" かつ side == \"both\" の行数",
+            "value": 5,
+            "unit": "行"
+          }
+        ]
+      },
+      {
+        "kind": "denominator",
+        "text": "写しの 182 行は全 580 手の部分集合で、行に入るかは消費の帯(spentBucket)で決まります。obs.time.phaseMoves を見ると、局の中では段ごとの本人の手数はそろっており(gameNo 1 は序盤 8 手・中盤 7 手・終盤 8 手、gameNo 2 は序盤 14 手・中盤 13 手・終盤 14 手)、それでも写しの行数は段で 33・89・60 と違います。さらに、序盤の行がある局は 12 局、中盤の行がある局は 17 局、終盤の行がある局も 17 局で、三つの並びは同じ局の集まりから出ていません。序盤で側の付いた行がある局は 11 局です。段ごとの数を同じ土台として並べられるかは、この写しからは確かめられません。",
+        "observations": [
+          {
+            "obsId": "obs.time.phaseMoves",
+            "path": "obs_extra phaseMoves[] の gameNo",
+            "value": 1,
+            "unit": "局番号"
+          },
+          {
+            "obsId": "obs.time.phaseMoves",
+            "path": "obs_extra phaseMoves[] の gameNo が 1 の行の early.moves",
+            "value": 8,
+            "unit": "手"
+          },
+          {
+            "obsId": "obs.time.phaseMoves",
+            "path": "obs_extra phaseMoves[] の gameNo が 1 の行の mid.moves",
+            "value": 7,
+            "unit": "手"
+          },
+          {
+            "obsId": "obs.time.phaseMoves",
+            "path": "obs_extra phaseMoves[] の gameNo が 1 の行の late.moves",
+            "value": 8,
+            "unit": "手"
+          },
+          {
+            "obsId": "obs.time.phaseMoves",
+            "path": "obs_extra phaseMoves[] の gameNo",
+            "value": 2,
+            "unit": "局番号"
+          },
+          {
+            "obsId": "obs.time.phaseMoves",
+            "path": "obs_extra phaseMoves[] の gameNo が 2 の行の early.moves",
+            "value": 14,
+            "unit": "手"
+          },
+          {
+            "obsId": "obs.time.phaseMoves",
+            "path": "obs_extra phaseMoves[] の gameNo が 2 の行の mid.moves",
+            "value": 13,
+            "unit": "手"
+          },
+          {
+            "obsId": "obs.time.phaseMoves",
+            "path": "obs_extra phaseMoves[] の gameNo が 2 の行の late.moves",
+            "value": 14,
+            "unit": "手"
+          },
+          {
+            "obsId": "obs.time.decisionContext",
+            "path": "obs_geo decisionContext[] のうち phase == \"early\" の行がある局の数",
+            "value": 12,
+            "unit": "局"
+          },
+          {
+            "obsId": "obs.time.decisionContext",
+            "path": "obs_geo decisionContext[] のうち phase == \"mid\" の行がある局の数",
+            "value": 17,
+            "unit": "局"
+          },
+          {
+            "obsId": "obs.time.decisionContext",
+            "path": "obs_geo decisionContext[] のうち phase == \"late\" の行がある局の数",
+            "value": 17,
+            "unit": "局"
+          },
+          {
+            "obsId": "obs.geo.moveCombination",
+            "path": "obs_geo decisionContext[] を obs_geo moves[] と (gameNo, kifPly) で突き合わせた行のうち phase == \"early\" かつ side が attack または defense の行がある局の数",
+            "value": 11,
+            "unit": "局"
+          }
+        ]
+      },
+      {
+        "kind": "counterexample",
+        "text": "段が進むほど相手玉側へ寄る、と逆の向きの局が写しにあります。gameNo 3 は、序盤が相手玉側 1 行・自玉側 0 行、中盤が相手玉側 2 行・自玉側 0 行なのに、終盤は相手玉側 0 行・自玉側 2 行です。gameNo 7 は中盤も終盤も相手玉側 0 行・自玉側 1 行です。gameNo 4 は序盤が相手玉側 1 行・自玉側 2 行、中盤が相手玉側 1 行・自玉側 2 行、終盤が相手玉側 1 行・自玉側 1 行で、段が進んでも相手玉側へ寄っていません。gameNo 6 には終盤の行が 0 行です。局ごとに見ると向きがそろっていない可能性があります。",
+        "observations": [
+          {
+            "obsId": "obs.geo.moveCombination",
+            "path": "obs_geo decisionContext[] を obs_geo moves[] と (gameNo, kifPly) で突き合わせた行の gameNo",
+            "value": 3,
+            "unit": "局番号"
+          },
+          {
+            "obsId": "obs.geo.moveCombination",
+            "path": "gameNo 3 の行のうち phase == \"early\" かつ side == \"attack\" の行数",
+            "value": 1,
+            "unit": "行"
+          },
+          {
+            "obsId": "obs.geo.moveCombination",
+            "path": "gameNo 3 の行のうち phase == \"early\" かつ side == \"defense\" の行数",
+            "value": 0,
+            "unit": "行"
+          },
+          {
+            "obsId": "obs.geo.moveCombination",
+            "path": "gameNo 3 の行のうち phase == \"mid\" かつ side == \"attack\" の行数",
+            "value": 2,
+            "unit": "行"
+          },
+          {
+            "obsId": "obs.geo.moveCombination",
+            "path": "gameNo 3 の行のうち phase == \"mid\" かつ side == \"defense\" の行数",
+            "value": 0,
+            "unit": "行"
+          },
+          {
+            "obsId": "obs.geo.moveCombination",
+            "path": "gameNo 3 の行のうち phase == \"late\" かつ side == \"attack\" の行数",
+            "value": 0,
+            "unit": "行"
+          },
+          {
+            "obsId": "obs.geo.moveCombination",
+            "path": "gameNo 3 の行のうち phase == \"late\" かつ side == \"defense\" の行数",
+            "value": 2,
+            "unit": "行"
+          },
+          {
+            "obsId": "obs.geo.moveCombination",
+            "path": "obs_geo decisionContext[] を obs_geo moves[] と (gameNo, kifPly) で突き合わせた行の gameNo",
+            "value": 7,
+            "unit": "局番号"
+          },
+          {
+            "obsId": "obs.geo.moveCombination",
+            "path": "gameNo 7 の行のうち phase == \"mid\" かつ side == \"attack\" の行数",
+            "value": 0,
+            "unit": "行"
+          },
+          {
+            "obsId": "obs.geo.moveCombination",
+            "path": "gameNo 7 の行のうち phase == \"mid\" かつ side == \"defense\" の行数",
+            "value": 1,
+            "unit": "行"
+          },
+          {
+            "obsId": "obs.geo.moveCombination",
+            "path": "gameNo 7 の行のうち phase == \"late\" かつ side == \"attack\" の行数",
+            "value": 0,
+            "unit": "行"
+          },
+          {
+            "obsId": "obs.geo.moveCombination",
+            "path": "gameNo 7 の行のうち phase == \"late\" かつ side == \"defense\" の行数",
+            "value": 1,
+            "unit": "行"
+          },
+          {
+            "obsId": "obs.geo.moveCombination",
+            "path": "obs_geo decisionContext[] を obs_geo moves[] と (gameNo, kifPly) で突き合わせた行の gameNo",
+            "value": 4,
+            "unit": "局番号"
+          },
+          {
+            "obsId": "obs.geo.moveCombination",
+            "path": "gameNo 4 の行のうち phase == \"early\" かつ side == \"attack\" の行数",
+            "value": 1,
+            "unit": "行"
+          },
+          {
+            "obsId": "obs.geo.moveCombination",
+            "path": "gameNo 4 の行のうち phase == \"early\" かつ side == \"defense\" の行数",
+            "value": 2,
+            "unit": "行"
+          },
+          {
+            "obsId": "obs.geo.moveCombination",
+            "path": "gameNo 4 の行のうち phase == \"mid\" かつ side == \"attack\" の行数",
+            "value": 1,
+            "unit": "行"
+          },
+          {
+            "obsId": "obs.geo.moveCombination",
+            "path": "gameNo 4 の行のうち phase == \"mid\" かつ side == \"defense\" の行数",
+            "value": 2,
+            "unit": "行"
+          },
+          {
+            "obsId": "obs.geo.moveCombination",
+            "path": "gameNo 4 の行のうち phase == \"late\" かつ side == \"attack\" の行数",
+            "value": 1,
+            "unit": "行"
+          },
+          {
+            "obsId": "obs.geo.moveCombination",
+            "path": "gameNo 4 の行のうち phase == \"late\" かつ side == \"defense\" の行数",
+            "value": 1,
+            "unit": "行"
+          },
+          {
+            "obsId": "obs.time.decisionContext",
+            "path": "obs_geo decisionContext[] の gameNo",
+            "value": 6,
+            "unit": "局番号"
+          },
+          {
+            "obsId": "obs.time.decisionContext",
+            "path": "obs_geo decisionContext[] のうち gameNo 6 かつ phase == \"late\" の行数",
+            "value": 0,
+            "unit": "行"
+          }
+        ]
+      },
+      {
+        "kind": "denominator",
+        "text": "仮説は fork が真の行も段ごとに並べていますが、序盤の行 33 のうち fork が真は 11、偽は 6、null は 16 です。null は測れていないという意味で、分かれ道ではないという意味ではありません。終盤の行 60 では真が 37、偽が 23、null は 0 です。測れた行の出方が序盤と終盤でそろっていないので、分かれ道での段ごとの並べ方は序盤側で弱い可能性があります。序盤の fork が真の行のうち側が付いたのは相手玉側 3 行・自玉側 4 行です。",
+        "observations": [
+          {
+            "obsId": "obs.time.decisionContext",
+            "path": "obs_geo decisionContext[] のうち phase == \"early\" かつ fork == false の行数",
+            "value": 6,
+            "unit": "行"
+          },
+          {
+            "obsId": "obs.time.decisionContext",
+            "path": "obs_geo decisionContext[] のうち phase == \"early\" かつ fork == null の行数",
+            "value": 16,
+            "unit": "行"
+          },
+          {
+            "obsId": "obs.time.decisionContext",
+            "path": "obs_geo decisionContext[] のうち phase == \"late\" かつ fork == false の行数",
+            "value": 23,
+            "unit": "行"
+          },
+          {
+            "obsId": "obs.time.decisionContext",
+            "path": "obs_geo decisionContext[] のうち phase == \"late\" かつ fork == null の行数",
+            "value": 0,
+            "unit": "行"
+          }
+        ]
+      },
+      {
+        "kind": "alternative",
+        "text": "同じ観測を説明する別の読みが残ります。段(phase)は局の総手数から機械で切られるので、終盤の行は各局の終わりに近い手です。側は手の幾何の印から機械で決まります。写しでは、相手玉側の行のうち『打つ』の印が付いた行が序盤 3 行・中盤 13 行・終盤 17 行で、印の出方そのものが段で違います。『段が進むほどこの人が相手玉側を選ぶようになる』ではなく『終わりに近い手ほど印が相手玉側に当たりやすい』という読みでも同じ数になる可能性があります。写しには 182 行の外の 398 手の段が入っておらず(その 398 手は相手玉側 124 行・自玉側 120 行)、この写しだけではどちらの読みかを確かめられません。これは新しい仮説の候補であって、正しさの判定ではありません。",
+        "observations": [
+          {
+            "obsId": "obs.geo.moveCombination",
+            "path": "obs_geo decisionContext[] を obs_geo moves[] と (gameNo, kifPly) で突き合わせた行のうち phase == \"early\" かつ side == \"attack\" かつ facts.drop == true の行数",
+            "value": 3,
+            "unit": "行"
+          },
+          {
+            "obsId": "obs.geo.moveCombination",
+            "path": "同上のうち phase == \"mid\" かつ side == \"attack\" かつ facts.drop == true の行数",
+            "value": 13,
+            "unit": "行"
+          },
+          {
+            "obsId": "obs.geo.moveCombination",
+            "path": "同上のうち phase == \"late\" かつ side == \"attack\" かつ facts.drop == true の行数",
+            "value": 17,
+            "unit": "行"
+          },
+          {
+            "obsId": "obs.geo.moveCombination",
+            "path": "obs_geo moves[] のうち obs_geo decisionContext[] に行が無い手の行数",
+            "value": 398,
+            "unit": "行"
+          },
+          {
+            "obsId": "obs.geo.moveCombination",
+            "path": "obs_geo moves[] のうち obs_geo decisionContext[] に行が無い手で side == \"attack\" の行数",
+            "value": 124,
+            "unit": "行"
+          },
+          {
+            "obsId": "obs.geo.moveCombination",
+            "path": "obs_geo moves[] のうち obs_geo decisionContext[] に行が無い手で side == \"defense\" の行数",
+            "value": 120,
+            "unit": "行"
+          }
+        ]
+      }
+    ],
+    "result": "weakened",
+    "provenance": {
+      "inputs": [
+        "records/obs-3/p4-min3-r2/00-obs_snapshot.p4.min3.r2b.json"
+      ]
+    }
+  },
+  "prediction": {
+    "writtenAt": "2026-09-26",
+    "window": "next_20_games_same_time_limit",
+    "metric": "obs.time.decisionContext の phase が late の行に突き合った obs.geo.moveCombination の side が attack の割合から、phase が early の行の同じ割合を引いた差",
+    "comparator": ">=",
+    "value": 0.1,
+    "alsoRequires": [
+      {
+        "metric": "obs.time.decisionContext の phase が late の行数(終盤側の分母)",
+        "comparator": ">=",
+        "value": 40
+      },
+      {
+        "metric": "obs.time.decisionContext の phase が early の行数(序盤側の分母)",
+        "comparator": ">=",
+        "value": 20
+      }
+    ]
+  },
+  "status": "weak",
+  "knowledge": {
+    "kind": "discovered",
+    "reviewStatus": "draft",
+    "origin": {
+      "kifu": "p4/min3",
+      "lane": "side"
+    },
+    "range": "this_user"
+  },
+  "provenance": {
+    "gitHead": "302bc37",
+    "inputs": [
+      "records/obs-3/p4-min3-r2/00-obs_snapshot.p4.min3.r2b.json"
+    ],
+    "excludedInputs": []
+  }
+}

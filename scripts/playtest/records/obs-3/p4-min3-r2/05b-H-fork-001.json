@@ -1,0 +1,465 @@
+{
+  "schemaVersion": "0.3",
+  "hypothesisId": "H-p4-min3r2bfork-001",
+  "subject": {
+    "customer": "p4",
+    "groups": [
+      "3 分"
+    ],
+    "gamesCount": 18
+  },
+  "scope": "this_user",
+  "lane": "fork",
+  "statement": "分かれ道と数えられた手のうち、攻め側の手は 51、守り側の手は 23 で、攻め側に寄っているという読みです。エンジンの第 1 候補が守り側だった分かれ道でも、実戦の手は攻め側が 21、守り側が 17 でした。崩れの旗が真だった分かれ道 8 行のうち、攻め側の手は 6、守り側の手は 0 で、攻め側へ寄る選び方が崩れと重なっている可能性があります。",
+  "observations": [
+    {
+      "obsId": "obs.fork.values",
+      "path": "values(分かれ道と側の定義に使われた値。minLossCp・sideZoneRadius・attackZoneRadius・startPly)",
+      "value": {
+        "sideZoneRadius": 2,
+        "startPly": 17,
+        "minLossCp": 600,
+        "narrowGapCp": 400,
+        "riseCp": 400,
+        "sideVersion": 2,
+        "hitsDefenderRadius": 2,
+        "attackZoneRadius": 3
+      }
+    },
+    {
+      "obsId": "obs.time.decisionContext",
+      "path": "decisionContext[] の行数(3 分の組・5〜9 秒と 10 秒以上の帯の手)",
+      "value": 182
+    },
+    {
+      "obsId": "obs.time.decisionContext",
+      "path": "decisionContext[] のうち fork === true の行数",
+      "value": 107
+    },
+    {
+      "obsId": "obs.time.decisionContext",
+      "path": "decisionContext[] のうち fork === false の行数",
+      "value": 56
+    },
+    {
+      "obsId": "obs.time.decisionContext",
+      "path": "decisionContext[] のうち fork === null(測れていない)の行数",
+      "value": 19
+    },
+    {
+      "obsId": "obs.geo.moveCombination",
+      "path": "moves[] を (gameNo, kifPly) で decisionContext[] に突き合わせ、fork === true かつ side === \"attack\" の行数",
+      "value": 51
+    },
+    {
+      "obsId": "obs.geo.moveCombination",
+      "path": "moves[] を (gameNo, kifPly) で decisionContext[] に突き合わせ、fork === true かつ side === \"defense\" の行数",
+      "value": 23
+    },
+    {
+      "obsId": "obs.geo.moveCombination",
+      "path": "moves[] を (gameNo, kifPly) で decisionContext[] に突き合わせ、fork === true かつ side === \"none\" の行数(側の分母に入らない)",
+      "value": 29
+    },
+    {
+      "obsId": "obs.geo.moveCombination",
+      "path": "moves[] を (gameNo, kifPly) で decisionContext[] に突き合わせ、fork === true かつ side === \"both\" の行数(側の分母に入らない)",
+      "value": 4
+    },
+    {
+      "obsId": "obs.geo.moveCombination",
+      "path": "moves[] を (gameNo, kifPly) で decisionContext[] に突き合わせ、fork === false かつ side === \"attack\" の行数",
+      "value": 25
+    },
+    {
+      "obsId": "obs.geo.moveCombination",
+      "path": "moves[] を (gameNo, kifPly) で decisionContext[] に突き合わせ、fork === false かつ side === \"defense\" の行数",
+      "value": 17
+    },
+    {
+      "obsId": "obs.direct.answer",
+      "path": "answers[] の行数(3 分の組で絞った行。P-89 のとおり obs.direct.counts の集計とは分母が違う)",
+      "value": 161
+    },
+    {
+      "obsId": "obs.direct.answer",
+      "path": "answers[](3 分の組)のうち top1Side === \"attack\" かつ actualSide === \"attack\" の行数",
+      "value": 38
+    },
+    {
+      "obsId": "obs.direct.answer",
+      "path": "answers[](3 分の組)のうち top1Side === \"attack\" かつ actualSide === \"defense\" の行数",
+      "value": 11
+    },
+    {
+      "obsId": "obs.direct.answer",
+      "path": "answers[](3 分の組)のうち top1Side === \"defense\" かつ actualSide === \"attack\" の行数",
+      "value": 21
+    },
+    {
+      "obsId": "obs.direct.answer",
+      "path": "answers[](3 分の組)のうち top1Side === \"defense\" かつ actualSide === \"defense\" の行数",
+      "value": 17
+    },
+    {
+      "obsId": "obs.geo.moveCombination",
+      "path": "moves[] を (gameNo, kifPly) で decisionContext[] に突き合わせ、fork === true かつ collapse === true の行数",
+      "value": 8
+    },
+    {
+      "obsId": "obs.geo.moveCombination",
+      "path": "moves[] を (gameNo, kifPly) で decisionContext[] に突き合わせ、fork === true かつ collapse === true かつ side === \"attack\" の行数",
+      "value": 6
+    },
+    {
+      "obsId": "obs.geo.moveCombination",
+      "path": "moves[] を (gameNo, kifPly) で decisionContext[] に突き合わせ、fork === true かつ collapse === true かつ side === \"defense\" の行数",
+      "value": 0
+    },
+    {
+      "obsId": "obs.geo.moveCombination",
+      "path": "moves[] を (gameNo, kifPly) で decisionContext[] に突き合わせ、fork === true かつ collapse === true かつ side === \"both\" の行数",
+      "value": 1
+    },
+    {
+      "obsId": "obs.time.decisionContext",
+      "path": "decisionContext[] のうち fork === true かつ collapse === null(崩れが測れていない)の行数",
+      "value": 84
+    }
+  ],
+  "counterEvidence": {
+    "attempted": true,
+    "items": [
+      {
+        "kind": "counterexample",
+        "text": "分かれ道と数えられた手を局ごとに分けると、守り側の手のほうが多い局が 4 局あります。gameNo 4 は攻め側 1・守り側 3、gameNo 6 は攻め側 1・守り側 2、gameNo 7 は攻め側 0・守り側 1、gameNo 17 は攻め側 0・守り側 1 です。同数の局も 2 局あり、gameNo 2 は攻め側 2・守り側 2、gameNo 8 は攻め側 4・守り側 4 でした。全体の向きと逆、または向きの出ない局が実在するという読みです。",
+        "observations": [
+          {
+            "obsId": "obs.geo.moveCombination",
+            "path": "decisionContext[] の fork === true の行を (gameNo, kifPly) で突き合わせ、局ごとに side を数えたとき、守り側の行数が攻め側の行数を上回った局の数",
+            "value": 4
+          },
+          {
+            "obsId": "obs.geo.moveCombination",
+            "path": "同上、守り側と攻め側の行数が同じだった局の数",
+            "value": 2
+          },
+          {
+            "obsId": "obs.geo.moveCombination",
+            "path": "同上、局ごとの内訳(fork === true の行の gameNo と side 別の行数)",
+            "value": {
+              "gameNo": 4,
+              "attack": 1,
+              "defense": 3
+            }
+          },
+          {
+            "obsId": "obs.geo.moveCombination",
+            "path": "同上、局ごとの内訳",
+            "value": {
+              "gameNo": 6,
+              "attack": 1,
+              "defense": 2
+            }
+          },
+          {
+            "obsId": "obs.geo.moveCombination",
+            "path": "同上、局ごとの内訳",
+            "value": {
+              "gameNo": 7,
+              "attack": 0,
+              "defense": 1
+            }
+          },
+          {
+            "obsId": "obs.geo.moveCombination",
+            "path": "同上、局ごとの内訳",
+            "value": {
+              "gameNo": 17,
+              "attack": 0,
+              "defense": 1
+            }
+          },
+          {
+            "obsId": "obs.geo.moveCombination",
+            "path": "同上、局ごとの内訳",
+            "value": {
+              "gameNo": 2,
+              "attack": 2,
+              "defense": 2
+            }
+          },
+          {
+            "obsId": "obs.geo.moveCombination",
+            "path": "同上、局ごとの内訳",
+            "value": {
+              "gameNo": 8,
+              "attack": 4,
+              "defense": 4
+            }
+          }
+        ]
+      },
+      {
+        "kind": "denominator",
+        "text": "崩れの旗を使った部分は分母が小さいという読みです。fork === true の行 107 のうち、崩れが true か false のどちらかで測れている行は 23 しかなく、残る 84 行は collapse === null(測れていない)です。さらに、崩れが測れていて守り側だった行は collapse === false の 2 行だけで、崩れが真の守り側 0 はこの 2 行を分母にした 0 です。攻め側は collapse === false が 8 行あり、崩れが真の 8 行にも side が none の行が 1 つ入っています。",
+        "observations": [
+          {
+            "obsId": "obs.time.decisionContext",
+            "path": "decisionContext[] のうち fork === true かつ collapse !== null(true または false)の行数",
+            "value": 23
+          },
+          {
+            "obsId": "obs.time.decisionContext",
+            "path": "decisionContext[] のうち fork === true かつ collapse === null の行数",
+            "value": 84
+          },
+          {
+            "obsId": "obs.time.decisionContext",
+            "path": "decisionContext[] のうち fork === true の行数",
+            "value": 107
+          },
+          {
+            "obsId": "obs.geo.moveCombination",
+            "path": "moves[] を (gameNo, kifPly) で decisionContext[] に突き合わせ、fork === true かつ collapse === false かつ side === \"defense\" の行数",
+            "value": 2
+          },
+          {
+            "obsId": "obs.geo.moveCombination",
+            "path": "同上、fork === true かつ collapse === false かつ side === \"attack\" の行数",
+            "value": 8
+          },
+          {
+            "obsId": "obs.geo.moveCombination",
+            "path": "同上、fork === true かつ collapse === true かつ side === \"defense\" の行数",
+            "value": 0
+          },
+          {
+            "obsId": "obs.geo.moveCombination",
+            "path": "同上、fork === true かつ collapse === true かつ side === \"none\" の行数",
+            "value": 1
+          }
+        ]
+      },
+      {
+        "kind": "denominator",
+        "text": "分かれ道の行が引かれた元の集まりが、同じ 18 局の手のうちの一部であるという読みです。decisionContext[] は長めに考えた手の帯だけを写した 182 行で、同じ写しの moves[] には本人の手が 580 行あります。decisionContext[] に入らなかった手は 398 行あり、この 398 行が分かれ道かどうかは写しからは分かりません。また decisionContext[] の中にも fork === null の行が 19 あり、そのうち攻め側は 7、守り側は 3 で、この 10 行も分かれ道かどうかが測れていない側にあります。",
+        "observations": [
+          {
+            "obsId": "obs.geo.moveCombination",
+            "path": "moves[] の行数(3 分の組・本人の手)",
+            "value": 580
+          },
+          {
+            "obsId": "obs.geo.moveCombination",
+            "path": "moves[] に現れる gameNo の種類の数",
+            "value": 18
+          },
+          {
+            "obsId": "obs.time.decisionContext",
+            "path": "decisionContext[] の行数(長めに考えた手の帯)",
+            "value": 182
+          },
+          {
+            "obsId": "obs.geo.moveCombination",
+            "path": "moves[] のうち (gameNo, kifPly) が decisionContext[] に無い行数",
+            "value": 398
+          },
+          {
+            "obsId": "obs.time.decisionContext",
+            "path": "decisionContext[] のうち fork === null(測れていない)の行数",
+            "value": 19
+          },
+          {
+            "obsId": "obs.geo.moveCombination",
+            "path": "同上、fork === null かつ side === \"attack\" の行数",
+            "value": 7
+          },
+          {
+            "obsId": "obs.geo.moveCombination",
+            "path": "同上、fork === null かつ side === \"defense\" の行数",
+            "value": 3
+          },
+          {
+            "obsId": "obs.geo.moveCombination",
+            "path": "decisionContext[] のうち fork === null かつ side が \"attack\" または \"defense\" の行数",
+            "value": 10
+          }
+        ]
+      },
+      {
+        "kind": "alternative",
+        "text": "分かれ道ではなく、時間の帯で行を絞ったことだけで同じ向きが出ている可能性があります。decisionContext[] に入った 182 手では攻め側 83・守り側 43 ですが、decisionContext[] に入らなかった 398 手では攻め側 124・守り側 120 でほぼ同じ数です。decisionContext[] の中では fork === false の行も攻め側 25・守り側 17 と同じ向きに出ており、攻め側へ寄る向きが分かれ道の行だけに現れているとは写しからは言えないという読みです。",
+        "observations": [
+          {
+            "obsId": "obs.geo.moveCombination",
+            "path": "moves[] のうち (gameNo, kifPly) が decisionContext[] にある行で side === \"attack\" の行数",
+            "value": 83
+          },
+          {
+            "obsId": "obs.geo.moveCombination",
+            "path": "同上、side === \"defense\" の行数",
+            "value": 43
+          },
+          {
+            "obsId": "obs.geo.moveCombination",
+            "path": "moves[] のうち (gameNo, kifPly) が decisionContext[] に無い行で side === \"attack\" の行数",
+            "value": 124
+          },
+          {
+            "obsId": "obs.geo.moveCombination",
+            "path": "同上、side === \"defense\" の行数",
+            "value": 120
+          },
+          {
+            "obsId": "obs.geo.moveCombination",
+            "path": "同上、fork === false かつ side === \"attack\" の行数",
+            "value": 25
+          },
+          {
+            "obsId": "obs.geo.moveCombination",
+            "path": "同上、fork === false かつ side === \"defense\" の行数",
+            "value": 17
+          }
+        ]
+      },
+      {
+        "kind": "alternative",
+        "text": "側の分け方の定義の側で説明がつく可能性があります。写しの moves[] 580 行の全体でも side は攻め側 207・守り側 163・どちらでもない 166・両方 44 で、分かれ道に限らず攻め側の行数のほうが多く出ています。側の判定に使われた値では attackZoneRadius が 3、sideZoneRadius が 2 と置かれており、攻め側と守り側で当てている広さが同じではありません。",
+        "observations": [
+          {
+            "obsId": "obs.geo.moveCombination",
+            "path": "moves[] の行数(3 分の組・本人の手。帯で絞らない全体)",
+            "value": 580
+          },
+          {
+            "obsId": "obs.geo.moveCombination",
+            "path": "moves[] のうち side === \"attack\" の行数(帯で絞らない全体)",
+            "value": 207
+          },
+          {
+            "obsId": "obs.geo.moveCombination",
+            "path": "同上、side === \"defense\" の行数",
+            "value": 163
+          },
+          {
+            "obsId": "obs.geo.moveCombination",
+            "path": "同上、side === \"none\" の行数",
+            "value": 166
+          },
+          {
+            "obsId": "obs.geo.moveCombination",
+            "path": "同上、side === \"both\" の行数",
+            "value": 44
+          },
+          {
+            "obsId": "obs.fork.values",
+            "path": "values(側と分かれ道の定義に使われた値)",
+            "value": {
+              "sideZoneRadius": 2,
+              "startPly": 17,
+              "minLossCp": 600,
+              "narrowGapCp": 400,
+              "riseCp": 400,
+              "sideVersion": 2,
+              "hitsDefenderRadius": 2,
+              "attackZoneRadius": 3
+            }
+          }
+        ]
+      },
+      {
+        "kind": "denominator",
+        "text": "エンジンの第 1 候補が守り側だった場面の分母についての読みです。3 分の組で絞った answers[] は 161 行で、そこに現れる局は 17 で、仮説が主題にしている 18 局すべてではありません。top1Side === \"defense\" の行は 56 あり、そのうち actualSide が \"none\" の行が 15、\"both\" の行が 3 で、この 18 行は攻め側・守り側のどちらの数にも入っていません。なお obs.direct.counts の totalCount 167・totalForkCount 277・gamesCount 18 は組で絞られていない数なので、161 行と同じ分母として並べられないという読みです。",
+        "observations": [
+          {
+            "obsId": "obs.direct.answer",
+            "path": "answers[] の行数(3 分の組で絞った行)",
+            "value": 161
+          },
+          {
+            "obsId": "obs.direct.answer",
+            "path": "answers[](3 分の組)に現れる gameNo の種類の数",
+            "value": 17
+          },
+          {
+            "obsId": "obs.direct.answer",
+            "path": "answers[](3 分の組)のうち top1Side === \"defense\" の行数",
+            "value": 56
+          },
+          {
+            "obsId": "obs.direct.answer",
+            "path": "同上、top1Side === \"defense\" かつ actualSide === \"none\" の行数",
+            "value": 15
+          },
+          {
+            "obsId": "obs.direct.answer",
+            "path": "同上、top1Side === \"defense\" かつ actualSide === \"both\" の行数",
+            "value": 3
+          },
+          {
+            "obsId": "obs.direct.answer",
+            "path": "同上、top1Side === \"defense\" かつ actualSide が \"none\" または \"both\" の行数",
+            "value": 18
+          },
+          {
+            "obsId": "obs.direct.counts",
+            "path": "counts.{totalCount, gamesCount, totalForkCount}(組で絞られていない数。P-89)",
+            "value": {
+              "totalCount": 167,
+              "gamesCount": 18,
+              "totalForkCount": 277
+            }
+          }
+        ]
+      }
+    ],
+    "result": "weakened",
+    "provenance": {
+      "inputs": [
+        "records/obs-3/p4-min3-r2/00-obs_snapshot.p4.min3.r2b.json"
+      ]
+    }
+  },
+  "prediction": {
+    "writtenAt": "2026-09-26",
+    "window": "next_20_games_same_time_limit",
+    "metric": "obs.time.decisionContext の fork が true の行のうち、obs.geo.moveCombination の side が attack の行数 ÷ side が defense の行数",
+    "comparator": ">=",
+    "value": 1.5,
+    "alsoRequires": [
+      {
+        "metric": "obs.time.decisionContext の fork が true かつ obs.geo.moveCombination の side が attack または defense の行数",
+        "comparator": ">=",
+        "value": 40
+      },
+      {
+        "metric": "obs.direct.answer の行のうち top1Side が defense の行数",
+        "comparator": ">=",
+        "value": 20
+      },
+      {
+        "metric": "obs.time.decisionContext の fork が null の行数",
+        "comparator": "<=",
+        "value": 40
+      }
+    ]
+  },
+  "status": "stands_after_refutation",
+  "knowledge": {
+    "kind": "discovered",
+    "reviewStatus": "draft",
+    "origin": {
+      "kifu": "p4/min3",
+      "lane": "fork"
+    },
+    "range": "this_user"
+  },
+  "provenance": {
+    "gitHead": "f22ae4d",
+    "inputs": [
+      "records/obs-3/p4-min3-r2/00-obs_snapshot.p4.min3.r2b.json"
+    ],
+    "excludedInputs": []
+  }
+}

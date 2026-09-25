@@ -1,0 +1,500 @@
+{
+  "schemaVersion": "0.3",
+  "subject": {
+    "customer": "p4",
+    "groups": [
+      "3 分"
+    ],
+    "gamesCount": 18
+  },
+  "scope": "this_user",
+  "lane": "shape",
+  "counterEvidence": {
+    "attempted": true,
+    "items": [
+      {
+        "kind": "denominator",
+        "text": "13 は局の数ですが、同じ観測に並んでいる 31804 は局面 × レコードの延べ件数で、分母が別のものです。また「最も近づいた形」は形の認識が forming だった局面からしか選ばれず、自分側の形の状態は forming が 5360 件、none が 22558 件です。13 局という数の土台は、各局のうち形の認識が付いた一部の局面に限られている可能性があります。",
+        "observations": [
+          {
+            "obsId": "obs.vocab.shapeMissingSummary",
+            "path": "recognition byGroup[group].{shapeMissingTotal,selfClosestOneAwayGames}",
+            "value": {
+              "shapeMissingTotal": 31804,
+              "selfClosestOneAwayGames": 13
+            }
+          },
+          {
+            "obsId": "obs.vocab.shapeStatus",
+            "path": "recognition byGroup[group].statusCounts.shape.{self,opponent}.{none,forming,completed,matched}",
+            "value": {
+              "self": {
+                "none": 22558,
+                "forming": 5360,
+                "completed": 0,
+                "matched": 0
+              },
+              "opponent": {
+                "none": 15549,
+                "forming": 5208,
+                "completed": 33,
+                "matched": 0
+              }
+            }
+          }
+        ]
+      },
+      {
+        "kind": "denominator",
+        "text": "自分側の形の露出は、断定して名前を出せた件数が 0、控えめな言い方が 657 件、伏せたものが 4703 件です。「同じ最後の 1 枚」を形の名前で指し直せる材料は、この写しの範囲では小さい可能性があります。",
+        "observations": [
+          {
+            "obsId": "obs.vocab.exposure",
+            "path": "recognition byGroup[group].exposure[\"D''\"].{shape,intent,opening}.{self,opponent}.{named,hedged,hidden}",
+            "value": {
+              "shape": {
+                "self": {
+                  "named": 0,
+                  "hedged": 657,
+                  "hidden": 4703
+                },
+                "opponent": {
+                  "named": 0,
+                  "hedged": 1109,
+                  "hidden": 4132
+                }
+              },
+              "intent": {
+                "self": {
+                  "named": 0,
+                  "hedged": 0,
+                  "hidden": 0
+                },
+                "opponent": {
+                  "named": 95,
+                  "hedged": 1255,
+                  "hidden": 837
+                }
+              },
+              "opening": {
+                "self": {
+                  "named": 0,
+                  "hedged": 2238,
+                  "hidden": 3124
+                },
+                "opponent": {
+                  "named": 0,
+                  "hedged": 233,
+                  "hidden": 866
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "kind": "alternative",
+        "text": "自分側の形は completed が 0 件で、forming が 5360 件です。完成が 0 件であれば、欠けの枚数が取り得る一番小さい値は 1 枚になります。13 という数は「同じ 1 枚の手前で止まった」ではなく「どの局でも最も近い形は何かしら 1 枚欠けたものだった」という読みでも同じ数になり得る、という別の説明が残ります。",
+        "observations": [
+          {
+            "obsId": "obs.vocab.shapeStatus",
+            "path": "recognition byGroup[group].statusCounts.shape.{self,opponent}.{none,forming,completed,matched}",
+            "value": {
+              "self": {
+                "none": 22558,
+                "forming": 5360,
+                "completed": 0,
+                "matched": 0
+              },
+              "opponent": {
+                "none": 15549,
+                "forming": 5208,
+                "completed": 33,
+                "matched": 0
+              }
+            }
+          },
+          {
+            "obsId": "obs.vocab.shapeMissingSummary",
+            "path": "recognition byGroup[group].{shapeMissingTotal,selfClosestOneAwayGames}",
+            "value": {
+              "shapeMissingTotal": 31804,
+              "selfClosestOneAwayGames": 13
+            }
+          }
+        ]
+      },
+      {
+        "kind": "alternative",
+        "text": "どの形のどの 1 枚かを分ける内訳(形ごとの数や、局ごとの「最も近づいた形」の中身)は、この写しには含まれていません。局ごとに別の形の別の 1 枚だった場合でも 13 という数は同じになり得るため、「ばらばらではない」の側だけを支える観測は、この写しの中では見つけられませんでした。",
+        "observations": [
+          {
+            "obsId": "obs.vocab.shapeMissingSummary",
+            "path": "recognition byGroup[group].{shapeMissingTotal,selfClosestOneAwayGames}",
+            "value": {
+              "shapeMissingTotal": 31804,
+              "selfClosestOneAwayGames": 13
+            }
+          }
+        ]
+      },
+      {
+        "kind": "alternative",
+        "text": "18 局の手数には 24 から 115 までの開きがあり、24 手・32 手で終わった局も含まれています。13 局がどの局かは写しから指せないため、「進んで止まっている」のうち「進んで」の部分を、局の長さの側から説明できる余地が残ります。",
+        "observations": [
+          {
+            "obsId": "obs.eval.game",
+            "path": "games[].{no,total,result,ending,events}",
+            "value": [
+              {
+                "no": 1,
+                "total": 46,
+                "result": "負け",
+                "ending": "切れ負け",
+                "events": 9
+              },
+              {
+                "no": 2,
+                "total": 82,
+                "result": "負け",
+                "ending": "切れ負け",
+                "events": 4
+              },
+              {
+                "no": 3,
+                "total": 77,
+                "result": "負け",
+                "ending": "詰み",
+                "events": 9
+              },
+              {
+                "no": 4,
+                "total": 72,
+                "result": "勝ち",
+                "ending": "切れ負け",
+                "events": 13
+              },
+              {
+                "no": 5,
+                "total": 53,
+                "result": "勝ち",
+                "ending": "詰み",
+                "events": 2
+              },
+              {
+                "no": 6,
+                "total": 115,
+                "result": "負け",
+                "ending": "詰み",
+                "events": 10
+              },
+              {
+                "no": 7,
+                "total": 35,
+                "result": "負け",
+                "ending": "詰み",
+                "events": 5
+              },
+              {
+                "no": 8,
+                "total": 43,
+                "result": "負け",
+                "ending": "詰み",
+                "events": 9
+              },
+              {
+                "no": 9,
+                "total": 62,
+                "result": "負け",
+                "ending": "詰み",
+                "events": 9
+              },
+              {
+                "no": 10,
+                "total": 73,
+                "result": "負け",
+                "ending": "詰み",
+                "events": 13
+              },
+              {
+                "no": 11,
+                "total": 69,
+                "result": "負け",
+                "ending": "切れ負け",
+                "events": 8
+              },
+              {
+                "no": 12,
+                "total": 71,
+                "result": "負け",
+                "ending": "詰み",
+                "events": 9
+              },
+              {
+                "no": 13,
+                "total": 58,
+                "result": "負け",
+                "ending": "詰み",
+                "events": 6
+              },
+              {
+                "no": 14,
+                "total": 84,
+                "result": "負け",
+                "ending": "切れ負け",
+                "events": 8
+              },
+              {
+                "no": 15,
+                "total": 74,
+                "result": "負け",
+                "ending": "詰み",
+                "events": 10
+              },
+              {
+                "no": 16,
+                "total": 97,
+                "result": "負け",
+                "ending": "切れ負け",
+                "events": 10
+              },
+              {
+                "no": 17,
+                "total": 24,
+                "result": "勝ち",
+                "ending": "投了",
+                "events": 1
+              },
+              {
+                "no": 18,
+                "total": 32,
+                "result": "勝ち",
+                "ending": "切れ負け",
+                "events": 2
+              }
+            ]
+          },
+          {
+            "obsId": "obs.direct.counts",
+            "path": "counts",
+            "value": {
+              "top1TagCounts": {
+                "drop": 37,
+                "capture": 39,
+                "retreat": 27,
+                "declinesPromotion": 2,
+                "sacrifice": 76,
+                "kingMove": 21,
+                "givesCheck": 29
+              },
+              "top1SideCounts": {
+                "attack": 67,
+                "defense": 56,
+                "both": 11,
+                "none": 33
+              },
+              "actualTagCounts": {
+                "drop": 47,
+                "capture": 35,
+                "retreat": 11,
+                "declinesPromotion": 1,
+                "sacrifice": 73,
+                "kingMove": 13,
+                "givesCheck": 9
+              },
+              "gamesCount": 18,
+              "totalCount": 167,
+              "totalForkCount": 277
+            }
+          }
+        ]
+      }
+    ],
+    "result": "weakened",
+    "provenance": {
+      "inputs": [
+        "records/obs-3/p4-min3-r2/00-obs_snapshot.p4.min3.r2b.json"
+      ]
+    }
+  },
+  "status": "weak",
+  "knowledge": {
+    "kind": "discovered",
+    "reviewStatus": "draft",
+    "origin": {
+      "kifu": "p4/min3",
+      "lane": "shape"
+    },
+    "range": "this_user"
+  },
+  "provenance": {
+    "gitHead": "a54eae9",
+    "inputs": [
+      "records/obs-3/p4-min3-r2/00-obs_snapshot.p4.min3.r2b.json"
+    ],
+    "excludedInputs": []
+  },
+  "hypothesisId": "H-p4-min3r2bshape-002",
+  "statement": "自分側の「最も近づいた形」の欠けがちょうど 1 枚だった局は、18 局のうち 13 局でした。止まる場所が局ごとにばらばらなのではなく、多くの局で同じ最後の 1 枚の手前まで進んで止まっている可能性があります。",
+  "observations": [
+    {
+      "obsId": "obs.vocab.shapeMissingSummary",
+      "path": "recognition byGroup[group].{shapeMissingTotal,selfClosestOneAwayGames}",
+      "value": {
+        "shapeMissingTotal": 31804,
+        "selfClosestOneAwayGames": 13
+      }
+    },
+    {
+      "obsId": "obs.eval.game",
+      "path": "games[].{no,total,result,ending,events}",
+      "value": [
+        {
+          "no": 1,
+          "total": 46,
+          "result": "負け",
+          "ending": "切れ負け",
+          "events": 9
+        },
+        {
+          "no": 2,
+          "total": 82,
+          "result": "負け",
+          "ending": "切れ負け",
+          "events": 4
+        },
+        {
+          "no": 3,
+          "total": 77,
+          "result": "負け",
+          "ending": "詰み",
+          "events": 9
+        },
+        {
+          "no": 4,
+          "total": 72,
+          "result": "勝ち",
+          "ending": "切れ負け",
+          "events": 13
+        },
+        {
+          "no": 5,
+          "total": 53,
+          "result": "勝ち",
+          "ending": "詰み",
+          "events": 2
+        },
+        {
+          "no": 6,
+          "total": 115,
+          "result": "負け",
+          "ending": "詰み",
+          "events": 10
+        },
+        {
+          "no": 7,
+          "total": 35,
+          "result": "負け",
+          "ending": "詰み",
+          "events": 5
+        },
+        {
+          "no": 8,
+          "total": 43,
+          "result": "負け",
+          "ending": "詰み",
+          "events": 9
+        },
+        {
+          "no": 9,
+          "total": 62,
+          "result": "負け",
+          "ending": "詰み",
+          "events": 9
+        },
+        {
+          "no": 10,
+          "total": 73,
+          "result": "負け",
+          "ending": "詰み",
+          "events": 13
+        },
+        {
+          "no": 11,
+          "total": 69,
+          "result": "負け",
+          "ending": "切れ負け",
+          "events": 8
+        },
+        {
+          "no": 12,
+          "total": 71,
+          "result": "負け",
+          "ending": "詰み",
+          "events": 9
+        },
+        {
+          "no": 13,
+          "total": 58,
+          "result": "負け",
+          "ending": "詰み",
+          "events": 6
+        },
+        {
+          "no": 14,
+          "total": 84,
+          "result": "負け",
+          "ending": "切れ負け",
+          "events": 8
+        },
+        {
+          "no": 15,
+          "total": 74,
+          "result": "負け",
+          "ending": "詰み",
+          "events": 10
+        },
+        {
+          "no": 16,
+          "total": 97,
+          "result": "負け",
+          "ending": "切れ負け",
+          "events": 10
+        },
+        {
+          "no": 17,
+          "total": 24,
+          "result": "勝ち",
+          "ending": "投了",
+          "events": 1
+        },
+        {
+          "no": 18,
+          "total": 32,
+          "result": "勝ち",
+          "ending": "切れ負け",
+          "events": 2
+        }
+      ]
+    }
+  ],
+  "prediction": {
+    "writtenAt": "2026-09-26",
+    "window": "next_20_games_same_time_limit",
+    "metric": "obs.vocab.shapeMissingSummary の selfClosestOneAwayGames(3 分の次の 20 局)",
+    "comparator": ">=",
+    "value": 10,
+    "alsoRequires": [
+      {
+        "metric": "obs.eval.game の局数(3 分の次の組)",
+        "comparator": ">=",
+        "value": 20
+      },
+      {
+        "metric": "obs.vocab.shapeStatus の self.forming(同じ組の延べ件数)",
+        "comparator": ">=",
+        "value": 1000
+      }
+    ]
+  }
+}

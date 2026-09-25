@@ -1,0 +1,434 @@
+{
+  "schemaVersion": "0.3",
+  "hypothesisId": "H-p4-min3r2bfork-003",
+  "subject": {
+    "customer": "p4",
+    "groups": [
+      "3 分"
+    ],
+    "gamesCount": 18
+  },
+  "scope": "this_user",
+  "lane": "fork",
+  "statement": "相手の直前の手が王手だった 16 行では、分かれ道と数えられた手は 2、分かれ道でないと数えられた手は 14 でした。相手が駒を打った直後では分かれ道 14・分かれ道でない 19、打っていないときは分かれ道 93・分かれ道でない 37 でした。相手の手が王手や打ちだった直後は、分かれ道と数えられる手が現れにくいという読みです。",
+  "observations": [
+    {
+      "obsId": "obs.fork.values",
+      "path": "values(分かれ道の定義に使われた値。minLossCp = 第 1 候補との差の下限、startPly = 数え始めの手数)",
+      "value": {
+        "sideZoneRadius": 2,
+        "startPly": 17,
+        "minLossCp": 600,
+        "narrowGapCp": 400,
+        "riseCp": 400,
+        "sideVersion": 2,
+        "hitsDefenderRadius": 2,
+        "attackZoneRadius": 3
+      }
+    },
+    {
+      "obsId": "obs.time.decisionContext",
+      "path": "decisionContext[] の行数(3 分の組・5〜9 秒と 10 秒以上の帯の手)",
+      "value": 182
+    },
+    {
+      "obsId": "obs.time.decisionContext",
+      "path": "decisionContext[] のうち oppPrevGivesCheck === true の行数",
+      "value": 16
+    },
+    {
+      "obsId": "obs.time.decisionContext",
+      "path": "decisionContext[] のうち oppPrevGivesCheck === true かつ fork === true の行数",
+      "value": 2
+    },
+    {
+      "obsId": "obs.time.decisionContext",
+      "path": "decisionContext[] のうち oppPrevGivesCheck === true かつ fork === false の行数",
+      "value": 14
+    },
+    {
+      "obsId": "obs.time.decisionContext",
+      "path": "decisionContext[] のうち oppPrevDrop === true かつ fork === true の行数",
+      "value": 14
+    },
+    {
+      "obsId": "obs.time.decisionContext",
+      "path": "decisionContext[] のうち oppPrevDrop === true かつ fork === false の行数",
+      "value": 19
+    },
+    {
+      "obsId": "obs.time.decisionContext",
+      "path": "decisionContext[] のうち oppPrevDrop === false かつ fork === true の行数",
+      "value": 93
+    },
+    {
+      "obsId": "obs.time.decisionContext",
+      "path": "decisionContext[] のうち oppPrevDrop === false かつ fork === false の行数",
+      "value": 37
+    },
+    {
+      "obsId": "obs.time.decisionContext",
+      "path": "decisionContext[] のうち oppPrevCapture === true かつ fork === true の行数",
+      "value": 42
+    },
+    {
+      "obsId": "obs.time.decisionContext",
+      "path": "decisionContext[] のうち oppPrevCapture === true かつ fork === false の行数",
+      "value": 21
+    },
+    {
+      "obsId": "obs.time.decisionContext",
+      "path": "decisionContext[] のうち oppPrevCapture === false かつ fork === true の行数",
+      "value": 65
+    },
+    {
+      "obsId": "obs.time.decisionContext",
+      "path": "decisionContext[] のうち oppPrevCapture === false かつ fork === false の行数",
+      "value": 35
+    },
+    {
+      "obsId": "obs.time.decisionContext",
+      "path": "decisionContext[] のうち fork === null(測れていない)の行数",
+      "value": 19
+    },
+    {
+      "obsId": "obs.time.decisionContext",
+      "path": "decisionContext[] のうち oppPrevDrop === false かつ fork === null(測れていない)の行数",
+      "value": 17
+    },
+    {
+      "obsId": "obs.time.decisionContext",
+      "path": "decisionContext[] のうち inCheck === true の行数(王手中の手)",
+      "value": 16
+    },
+    {
+      "obsId": "obs.geo.replyToCheck",
+      "path": "moves[] のうち replyToCheck が「王手ではない」以外の行数(3 分の組・580 行から数えた)",
+      "value": 58
+    },
+    {
+      "obsId": "obs.geo.replyToCheck",
+      "path": "moves[] のうち replyToCheck === \"玉を動かす\" の行数(3 分の組・580 行から数えた)",
+      "value": 46
+    }
+  ],
+  "counterEvidence": {
+    "attempted": true,
+    "items": [
+      {
+        "kind": "denominator",
+        "text": "「王手の直後」として引かれた obs.time.decisionContext の 16 行は、同じ写しの obs.geo.replyToCheck の 580 行のうち王手を受けた手に名前が付いた 58 行(玉を動かす 46・取る 8・それ以外 4)の一部にあたります。decisionContext は考慮の長い帯の手だけを写した 182 行なので、王手の直後に短く指した手はこの 16 行に入っていない可能性があります。",
+        "observations": [
+          {
+            "obsId": "obs.geo.replyToCheck",
+            "path": "moves[] の行数(3 分の組)",
+            "value": 580
+          },
+          {
+            "obsId": "obs.geo.replyToCheck",
+            "path": "moves[] のうち replyToCheck が「王手ではない」以外の行数",
+            "value": 58
+          },
+          {
+            "obsId": "obs.geo.replyToCheck",
+            "path": "moves[] のうち replyToCheck === \"玉を動かす\" の行数",
+            "value": 46
+          },
+          {
+            "obsId": "obs.geo.replyToCheck",
+            "path": "moves[] のうち replyToCheck === \"取る\" の行数",
+            "value": 8
+          },
+          {
+            "obsId": "obs.geo.replyToCheck",
+            "path": "moves[] のうち replyToCheck === \"それ以外\" の行数",
+            "value": 4
+          },
+          {
+            "obsId": "obs.time.decisionContext",
+            "path": "decisionContext[] の行数",
+            "value": 182
+          },
+          {
+            "obsId": "obs.time.decisionContext",
+            "path": "decisionContext[] のうち oppPrevGivesCheck === true の行数",
+            "value": 16
+          }
+        ]
+      },
+      {
+        "kind": "denominator",
+        "text": "その 16 は局の数ではなく手の数です。16 行が出た局は 9 局で、うち gameNo 11 に 4 行が集まっています。写しの decisionContext に行がある局は 18 局です。比べている相手(打っていないとき)は分かれ道 93・分かれ道でない 37 の行で、片側の分母がかなり小さいまま並べられています。",
+        "observations": [
+          {
+            "obsId": "obs.time.decisionContext",
+            "path": "decisionContext[] のうち oppPrevGivesCheck === true の行数",
+            "value": 16
+          },
+          {
+            "obsId": "obs.time.decisionContext",
+            "path": "decisionContext[] のうち oppPrevGivesCheck === true の行がある gameNo の種類数",
+            "value": 9
+          },
+          {
+            "obsId": "obs.time.decisionContext",
+            "path": "decisionContext[] のうち oppPrevGivesCheck === true の行の gameNo の一覧",
+            "value": [
+              3,
+              6,
+              7,
+              8,
+              9,
+              10,
+              11,
+              12,
+              16
+            ]
+          },
+          {
+            "obsId": "obs.time.decisionContext",
+            "path": "decisionContext[] のうち oppPrevGivesCheck === true かつ gameNo === 11 の行数",
+            "value": 4
+          },
+          {
+            "obsId": "obs.time.decisionContext",
+            "path": "decisionContext[] に行がある gameNo の種類数",
+            "value": 18
+          },
+          {
+            "obsId": "obs.time.decisionContext",
+            "path": "decisionContext[] のうち oppPrevDrop === false かつ fork === true の行数",
+            "value": 93
+          },
+          {
+            "obsId": "obs.time.decisionContext",
+            "path": "decisionContext[] のうち oppPrevDrop === false かつ fork === false の行数",
+            "value": 37
+          }
+        ]
+      },
+      {
+        "kind": "counterexample",
+        "text": "「打った直後」の行には、王手の行と重なるものが 9 行あり(gameNo 3・7・9・10・11・12・16)、その 9 行は fork がすべて false です。重なりを外して oppPrevDrop === true かつ oppPrevGivesCheck === false の行だけを見ると、fork === true が 14 行・fork === false が 10 行で、打ちの側だけでは向きが逆に出ています。その fork === true の 14 行は 12 の局にまたがっています。打ちについては、逆向きの行が実在すると読めます。",
+        "observations": [
+          {
+            "obsId": "obs.time.decisionContext",
+            "path": "decisionContext[] のうち oppPrevDrop === true かつ oppPrevGivesCheck === true の行数",
+            "value": 9
+          },
+          {
+            "obsId": "obs.time.decisionContext",
+            "path": "decisionContext[] のうち oppPrevDrop === true かつ oppPrevGivesCheck === true かつ fork === false の行数",
+            "value": 9
+          },
+          {
+            "obsId": "obs.time.decisionContext",
+            "path": "decisionContext[] のうち oppPrevDrop === true かつ oppPrevGivesCheck === true の行の gameNo の一覧",
+            "value": [
+              3,
+              7,
+              9,
+              10,
+              11,
+              12,
+              16
+            ]
+          },
+          {
+            "obsId": "obs.time.decisionContext",
+            "path": "decisionContext[] のうち oppPrevDrop === true かつ oppPrevGivesCheck === false かつ fork === true の行数",
+            "value": 14
+          },
+          {
+            "obsId": "obs.time.decisionContext",
+            "path": "decisionContext[] のうち oppPrevDrop === true かつ oppPrevGivesCheck === false かつ fork === false の行数",
+            "value": 10
+          },
+          {
+            "obsId": "obs.time.decisionContext",
+            "path": "decisionContext[] のうち oppPrevDrop === true かつ oppPrevGivesCheck === false かつ fork === true の行の gameNo の種類数",
+            "value": 12
+          },
+          {
+            "obsId": "obs.time.decisionContext",
+            "path": "decisionContext[] のうち oppPrevDrop === true かつ oppPrevGivesCheck === false かつ fork === true の行の gameNo の一覧",
+            "value": [
+              1,
+              2,
+              3,
+              4,
+              7,
+              8,
+              10,
+              11,
+              12,
+              13,
+              15,
+              16
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "alternative",
+        "text": "oppPrevGivesCheck === true の 16 行と inCheck === true の 16 行は、片方だけが真になる行が 0 行で、同じ行を指しています。相手の直前の手の性質ではなく、王手を受けている局面という同じ条件の言い換えとして読むこともできます。また王手の行と打ちの行は 9 行を共有しているので、別々の支えとして並べられない可能性があります。",
+        "observations": [
+          {
+            "obsId": "obs.time.decisionContext",
+            "path": "decisionContext[] のうち oppPrevGivesCheck === true の行数",
+            "value": 16
+          },
+          {
+            "obsId": "obs.time.decisionContext",
+            "path": "decisionContext[] のうち inCheck === true の行数",
+            "value": 16
+          },
+          {
+            "obsId": "obs.time.decisionContext",
+            "path": "decisionContext[] のうち (inCheck === true) と (oppPrevGivesCheck === true) が食い違う行数",
+            "value": 0
+          },
+          {
+            "obsId": "obs.time.decisionContext",
+            "path": "decisionContext[] のうち oppPrevDrop === true かつ oppPrevGivesCheck === true の行数",
+            "value": 9
+          }
+        ]
+      },
+      {
+        "kind": "denominator",
+        "text": "fork === null(測れていない)の 19 行は、kifPly がすべて 16 以下で、obs.fork.values の startPly 17 より前の手にあたります。王手の 16 行の kifPly は最小が 22 で、そのうち fork === null は 0 行です。打った直後の行にも fork === null が 1 行あります(引かれているのは打っていない側の 17 行だけです)。この点については、null を「分かれ道ではない」の側に数えた形跡は見当たりません。",
+        "observations": [
+          {
+            "obsId": "obs.time.decisionContext",
+            "path": "decisionContext[] のうち fork === null の行数",
+            "value": 19
+          },
+          {
+            "obsId": "obs.time.decisionContext",
+            "path": "decisionContext[] のうち fork === null の行の kifPly の一覧(昇順)",
+            "value": [
+              1,
+              4,
+              6,
+              6,
+              7,
+              8,
+              10,
+              10,
+              11,
+              12,
+              12,
+              13,
+              14,
+              14,
+              15,
+              15,
+              16,
+              16,
+              16
+            ]
+          },
+          {
+            "obsId": "obs.fork.values",
+            "path": "values",
+            "value": {
+              "sideZoneRadius": 2,
+              "startPly": 17,
+              "minLossCp": 600,
+              "narrowGapCp": 400,
+              "riseCp": 400,
+              "sideVersion": 2,
+              "hitsDefenderRadius": 2,
+              "attackZoneRadius": 3
+            }
+          },
+          {
+            "obsId": "obs.time.decisionContext",
+            "path": "decisionContext[] のうち oppPrevGivesCheck === true の行の kifPly の一覧(昇順)",
+            "value": [
+              22,
+              22,
+              30,
+              32,
+              32,
+              34,
+              42,
+              46,
+              50,
+              50,
+              52,
+              59,
+              60,
+              62,
+              64,
+              70
+            ]
+          },
+          {
+            "obsId": "obs.time.decisionContext",
+            "path": "decisionContext[] のうち oppPrevGivesCheck === true かつ fork === null の行数",
+            "value": 0
+          },
+          {
+            "obsId": "obs.time.decisionContext",
+            "path": "decisionContext[] のうち oppPrevDrop === true かつ fork === null の行数",
+            "value": 1
+          },
+          {
+            "obsId": "obs.time.decisionContext",
+            "path": "decisionContext[] のうち oppPrevDrop === false かつ fork === null の行数",
+            "value": 17
+          }
+        ]
+      }
+    ],
+    "result": "weakened",
+    "provenance": {
+      "inputs": [
+        "records/obs-3/p4-min3-r2/00-obs_snapshot.p4.min3.r2b.json"
+      ]
+    }
+  },
+  "prediction": {
+    "writtenAt": "2026-09-26",
+    "window": "next_20_games_same_time_limit",
+    "metric": "obs.time.decisionContext の oppPrevGivesCheck が true の行のうち fork が true の行数 ÷ oppPrevGivesCheck が true で fork が true か false の行数",
+    "comparator": "<=",
+    "value": 0.3,
+    "alsoRequires": [
+      {
+        "metric": "obs.time.decisionContext の oppPrevGivesCheck が true で fork が true か false の行数",
+        "comparator": ">=",
+        "value": 15
+      },
+      {
+        "metric": "obs.time.decisionContext の oppPrevDrop が true で fork が true か false の行数",
+        "comparator": ">=",
+        "value": 30
+      },
+      {
+        "metric": "obs.time.decisionContext の fork が null の行数",
+        "comparator": "<=",
+        "value": 40
+      }
+    ]
+  },
+  "status": "weak",
+  "knowledge": {
+    "kind": "discovered",
+    "reviewStatus": "draft",
+    "origin": {
+      "kifu": "p4/min3",
+      "lane": "fork"
+    },
+    "range": "this_user"
+  },
+  "provenance": {
+    "gitHead": "f22ae4d",
+    "inputs": [
+      "records/obs-3/p4-min3-r2/00-obs_snapshot.p4.min3.r2b.json"
+    ],
+    "excludedInputs": []
+  }
+}
