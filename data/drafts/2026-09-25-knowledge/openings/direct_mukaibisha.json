@@ -1,0 +1,19 @@
+{
+  "id": "direct_mukaibisha",
+  "name": "ダイレクト向かい飛車",
+  "name_kana": "だいれくとむかいびしゃ",
+  "side": "opponent",
+  "family": "振り飛車系",
+  "leads_to_shape_ids": [],
+  "scenario": null,
+  "recognition_pattern": [
+    {
+      "piece": "飛",
+      "to": "2b",
+      "order_hint": 1
+    }
+  ],
+  "source": "【AI起草】相手側(後手)のダイレクト向かい飛車。角を交換した後、四間飛車に振り直す手順を省いて、初期位置から直接 2二 へ飛車を振る指し方。定義は Wikipedia『ダイレクト向かい飛車』(https://ja.wikipedia.org/wiki/ダイレクト向かい飛車 (参照日 2026-09-25)) の本文(後手が初期位置の 8二 から △2二飛 と振る。角交換四間飛車のように一度振り直す手順を省くぶん手を得する。居飛車の ▲6五角 に △7四角 と切り返すのが対抗手段)による。recognition_pattern は 2二 への飛車 1 手。**この 1 手は `mukaibisha_opponent`(普通の向かい飛車)と同じ**で、違いは「振り直しを省いたこと」という**手順の来歴**にあるため、いまのスキーマ(駒種 + 移動先)では 2 つを分けられない。 戦型を認識するコードは apps/server/src/analysis/ に無いため、このレコードを足しても認識の数は動かない(**測れない**)。 追加の経緯: 2026-09-25 の知識レーン第 9 組(docs/LANE_KNOWLEDGE_LOG_2026-09.md §11)。振り飛車の各系統。",
+  "confidence_level": "medium",
+  "review_status": "draft"
+}

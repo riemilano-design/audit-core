@@ -1,0 +1,29 @@
+{
+  "id": "meriken_mukaibisha",
+  "name": "メリケン向かい飛車",
+  "name_kana": "めりけんむかいびしゃ",
+  "side": "self",
+  "family": "振り飛車系",
+  "leads_to_shape_ids": [],
+  "scenario": null,
+  "recognition_pattern": [
+    {
+      "piece": "飛",
+      "to": "8h",
+      "order_hint": 1
+    },
+    {
+      "piece": "銀",
+      "to": "6g",
+      "order_hint": 2
+    },
+    {
+      "piece": "歩",
+      "to": "7e",
+      "order_hint": 3
+    }
+  ],
+  "source": "【AI起草】自分側(先手)のメリケン向かい飛車。向かい飛車のうち、左の金を上げて攻めの形を作り、7 筋の位を取って指すもの。定義は Wikipedia『メリケン向かい飛車』(https://ja.wikipedia.org/wiki/メリケン向かい飛車 (参照日 2026-09-25)) の本文(先手は飛車を8筋、後手は2筋に振り、左に金が上がる攻撃型の向かい飛車のうち、先手なら7筋・後手なら3筋の位を取って指す戦型。▲6七銀から▲7五歩と7筋の位を取る)による。recognition_pattern は 3 手(8八飛・6七銀・7五歩)。左の金のマスは出典が書いていないので入れていない。 戦型を認識するコードは apps/server/src/analysis/ に無いため、このレコードを足しても認識の数は動かない(**測れない**)。 追加の経緯: 2026-09-25 の知識レーン第 9 組(docs/LANE_KNOWLEDGE_LOG_2026-09.md §11)。振り飛車の各系統。",
+  "confidence_level": "medium",
+  "review_status": "draft"
+}
