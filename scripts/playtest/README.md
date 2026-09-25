@@ -254,7 +254,7 @@ npx tsx scripts/playtest/pipeline.ts --person <id> --kifu-dir <dir> --work <dir>
 - **`lib/findingTexts.ts`**(新規、純粋データ): `FINDING_TEXTS`(発見の種類ごとの `title`・`considerations`・
   `distinguish`・`tryable`。`phase` は 3 つとも `null` ― §5.2 T5「考えられること・試せることは付けない」)、
   `CONSIDERATIONS_LEAD`(「考えられること」の頭に付ける 1 文)、`PREVIOUS_TEXTS`(§5.3 の 3 通り)、
-  `EVAL_JITTER_NOTE`(評価の揺れの注記)、`FORBIDDEN_FINDING_TEXT_WORDS`(§5.1 の禁止語 18 語 + 「すべき」
+  `EVAL_JITTER_NOTE`(評価の揺れの注記)、`FORBIDDEN_FINDING_TEXT_WORDS`(TS 側の固定文だけを見張る試験用の一覧。python 側の禁止語は 2026-09-25 の人間の決定で機械の禁止語は無し(凍結の例外 14 件目) ― この一覧は対象外で 20 語のまま。§5.1 の 18 語 + 「すべき」
   「した方がよい」)、`buildFindingTextsFile()`(`finding_texts.json` の形を作る)。
   - **`title` について**: 型には `title: string` があるが、docs §5.2 の見出し行(「T1 \`timeSpent\`: …」)は
     §5.1 の「答えの形」(3 段)には含まれず、1 ページ目の見出しはすでに `render_front.py` の `TITLE_JP`
@@ -827,8 +827,8 @@ npx tsx scripts/playtest/timeSearch.ts \
 (長考・崩れ、それぞれ試した組の数・採用候補の数・再現の数・偶然の目安)→ 共通因子の表(上位 15。部品ごとに
 3 つのアウトカムを「単独で再現」「組で再現」「―」で分類)→ 時間と崩れの両方を説明する条件の一覧 →
 速く指して崩れの条件の一覧(上位 10)。A/B/C は文中で「型」と呼ばず「時間だけ」「時間と崩れ」「速く指して
-崩れ」と書く。禁止語(「原因」「傾向」「型」「クセ」「パターン」を含む 18 語。`render_front.py` と同じ)は
-固定文に使わない。詳しくは `report-pdf/README.md` の同じ見出しを参照。
+崩れ」と書く。機械の禁止語は無い(2026-09-25 の人間の決定で機械の禁止語は無し(凍結の例外 14 件目)。`render_front.py` の `BANNED` は空)。固定文は今も
+「原因」「傾向」「型」「クセ」「パターン」を使っていない(文そのものの書き直しは別の作業)。詳しくは `report-pdf/README.md` の同じ見出しを参照。
 
 ### 試験
 
@@ -1025,10 +1025,10 @@ done
 ### 伏せ字・個人情報の検査(`report-pdf/check_delivery.py`)
 
 `<out>` 直下の `*.pdf`(`fitz` でテキスト抽出)と `*.md` に、`--forbid` の語・`@`・`/Users/`・「水匠」・`None`(python の None が印字された跡。凍結の例外 12 件目)・
-禁止語 18 語が無いことを確かめる。**18 語は書き写さず `check_answer.py` の `BANNED_WORDS` の先頭 18 語を
-import する**(語のリストを二重に持たない)。`direct/` の JSON は対象外。
+が無いことを確かめる。**禁止語は無し**(2026-09-25 の人間の決定で機械の禁止語は無し(凍結の例外 14 件目)。`check_answer.py` の `BANNED_WORDS` を import する形は
+そのままで、一覧が空)。`direct/` の JSON は対象外。
 
-- 実測(固定材料の納品フォルダ 7 本 = PDF 5 冊 + md 2 本): 禁止語 18 語・`@`・`/Users/`・「水匠」は **0 件**(rc=0)。
+- 実測(例外 14 より前。固定材料の納品フォルダ 7 本 = PDF 5 冊 + md 2 本): 禁止語 18 語・`@`・`/Users/`・「水匠」は **0 件**(rc=0)。
 - **注意**: `--forbid` に**お客さま自身の表示名**を渡すと必ず落ちる(本人の冊子には本人の名前が出るのが正しい)。
   実測では `--forbid <表示名>` で 42 件(本編・付録 1・B の本文)。`--forbid` は「出てはいけない語」
   (相手の名前など)に使う。
