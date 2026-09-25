@@ -631,6 +631,30 @@ typecheck rc=0(worktree の緑。P-84)。所見: `willHaveWhatif` の `"pdf"` �
 
 **OPEN-2b(欄の追加だけ。2026-09-25。知識レーンの依頼: レコード 1 件ごとの「立った局数/完成した局数」を 形・狙い・戦型 の 3 つに。予測を実測の前に書く)**: `byGroup[].{shapeOnGames, shapeCompGames, intentOnGames, intentCompGames, openOnGames, openCompGames}`(id → 局数。「立った」= その局で 1 局面でも `forming|completed`(狙いは `forming|matched`)、「完成」= 1 局面でも `completed`(狙いは `matched`))。既存の `gamesCompleted`(形の完成した局数)は残す(`shapeCompGames` と同じ値になるはず = 試験で固定)。判定・閾値なし(局数に数え直すだけ)。試験 **+2**(局数は延べでない: 同じ局の 2 局面で立っても 1/`gamesCompleted === shapeCompGames`)。予測: vitest 1688 → **1690**、他は不変。校正: 知識レーンの外した後の `openmeasure.ts` の出力(scratchpad `measure/open2-30.json`・`open2-0.json` の `onGames`/`compGames`)と **戦型の 2 欄が id ごとに完全一致**(30 手・全手)。形の `shapeCompGames` は `gamesCompleted` と一致。狙い・形の `OnGames` は参照が無いので `compGames ≤ onGames ≤ games` の整合だけ確かめて記録。手順: 実装担当(worktree)→ 監査 1 回(変異: 局数を延べに変える → 試験が落ちる)→ コミット → 校正 → ここに追記。
 
+### 12.9 STEP 3 = EXPO-1: 控えめな露出の規則を 1 つの関数にして前後を測る + `expired` の実装(人間の決定 3・決-D。2026-09-25。着手。予測を実測の前に書く。**閾値の値は案 = 統括承認待ち。本体の見え方はこの STEP では変えない**)
+
+**下調べで分かった前提(事実)**:
+- 今日の露出の門は `apps/server/src/analysis/nameExposure.ts` の `exposeName(name, reviewStatus, site)` 1 つで、やることは **`draft` のとき注記を付ける**だけ(名前は常に通す)。「forming では名前を出さない」は各組み立て側に**別々に**書かれている(`explanationGenerator.ts:238-266`〈完成の形〉・`:377-405`〈相手の狙い、matched + draft は名前を落とす〉、`stateResponse.ts:1288/1310/1329/1349/954`、web `gameApi.ts:855-865`)。**証拠の件数・欠けの数・必要な駒の数は、露出のどこにも使われていない**(`formationEvidence` は client に出ない。`completed` は証拠 0 でも `completed` = P-85/P-86 の穴)。戦型の名前が出る経路は無い(`analyzeOpeningFormationFromEvents` の呼び手は測る道具だけ)。
+- `review_status` の enum は `data/schemas/{shapes,openings,intents}.schema.json` の 3 本とも 3 値(`expired` 無し)。TS の写しは `nameExposure.ts:23`(正)+ `shapeRepository.ts:38`・`intentRepository.ts:39`・`openingDetector.ts:63` + 派生 4 か所。`hypothesis.v0.1.schema.json` の `knowledge.reviewStatus` も 3 値(`status` の `expired` は仮説の寿命で別物)。`check_answer.py` 検査 6 は `human_reviewed|expert_verified` の許可リストなので `expired` は自然に落ちる。DATA_MODEL は `ecae08c` で 4 値済み(露出は `draft` と同じ)。実物の `data/`: shapes 3(human_reviewed 2・draft 1)、intents 8(human_reviewed 3・draft 5)、openings 3(draft 3)、下書き 200 はすべて draft。`expert_verified`・`expired` は 0 件。
+- 「名前を見せた回数」を数えるものは狙いだけ(`lib/intentStatement.ts` の `spokeLatest/spokeOlder`)。形・戦型には無く、「証拠なしの主張のうち見せる割合」を測るものは無い。
+
+**設計判断(レーン長。閾値の**値**は統括)**: 露出を **1 つの純粋関数 `decideNameExposure(input) → {level: "hidden" | "hedged" | "named", pendingNote}`** に集める(DATA_MODEL:210「名前を出す経路はすべて 1 つの関数を通す」の実装)。入力 = `{kind: shape|intent|opening, status: none|forming|completed|matched, evidenceCount, missingCount, requiredCount(必要な駒/対の数), reviewStatus}`。規則(順に当てる。**上から先に当たったものが勝つ**):
+  - R0 `status none` → hidden。
+  - R1 `reviewStatus ∈ {draft, expired}` → `named` にはしない(規則 4。最大で hedged。`expired` は `draft` と同じ = 決-D)。
+  - R2 `status completed|matched` かつ `evidenceCount === 0` → hidden(P-86。**候補**、統括の材料 (2))。
+  - R3 `requiredCount <= NAME_EXPOSURE_VALUES.minRequiredForName` → hidden(対 1。**候補**、材料 (3)。値の案 = 1)。
+  - R4 `status completed|matched` → reviewed なら `named`、draft/expired なら `hedged`(今日と同じ + draft の落ちが hedged に上がる = 決定 3 の「控えめに見せる」)。
+  - R5 `status forming` かつ `evidenceCount >= NAME_EXPOSURE_VALUES.minEvidenceForHedged` → hedged(決定 3。値の案 = **1 と 2 の両方を測って統括が選ぶ**)。それ未満 → hidden。
+  `NAME_EXPOSURE_VALUES = {minRequiredForName, minEvidenceForHedged, hideCompletedWithoutEvidence}` は名前つき定数 1 か所(`nameExposure.ts`)。**この STEP では既存の `exposeName` と各組み立て側は触らない**(本体の見え方は不変。つなぐのは EXPO-2 = 統括が値を選んだ後、対局回帰つき)。文言(「〜のような形」)も EXPO-2。
+- **`expired` の実装(決-D、案 2)**: `data/schemas` 3 本の enum に `"expired"`、TS の写し(`nameExposure.ts` 正 + 3 つの repository/detector の guard)、`hypothesis.v0.2.schema.json`(v0.1 の複製 + `knowledge.reviewStatus` に `expired`、`schemaVersion` "0.2")と `HYPOTHESIS_SCHEMA_VERSION` の扱い(検査は v0.1 と v0.2 の両方を受ける。**既存の記録 `obs-3/p4-min3/` の 6 本が通ることを試験に固定**)、H-7 は不変(`expired` は `human_reviewed+` でない)。`validate:data` が `expired` を通すことを `data/examples/` に 1 件足して固定。失効までの回数(決-E)は**使わない**。
+- **測る(二本立て、レーン長が監査 GO の後)**: `recognitionMeasure` に露出の欄を足す: 局面 × レコードごとに `decideNameExposure` を(候補の値の組ごとに)当て、`exposure[<組名>].{named, hedged, hidden}`(延べ)と **`weakClaimShownRate` = 証拠 ≤ 1 の主張(forming|completed の行)のうち named|hedged になった割合の分子/分母**を、形・狙い・戦型 × 自分側/相手側で出す。値の組は 3 つを同時に出す: **A = 今日の規則**(completed|matched で named/draft hedged 扱い、forming は hidden、対 1・証拠 0 の門なし)、**B = 案(minEvidenceForHedged 1, minRequiredForName 1, 証拠 0 completed hidden)**、**C = 案(minEvidenceForHedged 2、他は B と同じ)**。4 人 70 局・30 手/全手で A・B・C の数を記録し、統括に「見せる回数」と「証拠なしの主張のうち見せる割合」の前後として渡す(選ぶのは統括)。
+- **予測**: `apps/server` vitest 741 → **751**(`nameExposure.test.ts` +10: R0〜R5 と `expired`=draft の同値、定数の値の写し)。`scripts/playtest` 1690 → **1696**(hypothesis v0.2 +3〈v0.2 の例が通る・v0.1 の既存 6 本が通る・`expired` を H-7 が落とす〉、露出の欄 +3〈A で forming は 0 件見せる・B の hidden に対 1 が全部入る・分母 = 証拠 ≤ 1 の行数〉)。`validate:data` 24 件(+1)。70 局・30 手の数(構造から言えること): **A の戦型の named = 0**(戦型は本体につながっていないが、関数を当てれば completed 2034 のうち reviewed 0 件なので named 0・hedged 2034)、**B で戦型の hidden に対 1 の completed(30 手で `openCompleted` のうち対 1 の分)が全部入る**、**C の hedged ≤ B の hedged**、証拠 0 の completed は今の下書きでは 0 件なので R2 は数を動かさない(外す前の写しで当てれば 1021 が hidden に入る = 記録)。割合の値は予測せず記録。
+- 予測と違ったら実装担当は直さずに理由を書く。
+
+**手順**: OPEN-2b のコミットの後に着手(同じ `recognitionMeasure.ts` を触るため)。実装担当(worktree、冒頭 3 行)→ 独立監査 1 回(変異: R1 を外す〈draft が named になる〉→ 試験が落ちる/R3 の `<=` を `<` に → 対 1 の試験が落ちる/`expired` を enum から外す → validate と H-7 の試験が落ちる)→ パス指定コミット → レーン長が 70 局で A・B・C を測る → ここに追記 → 統括へ値の選択を依頼(EXPO-2 の計画はその後)。
+
+**実測の結果**: (後で追記。)
+
 ### 12.6b 統括への案 3 件(2026-09-25。正本は書き換えない。人間へそのまま出せる形: 何を・どこに・なぜ・何が変わらないか)
 
 **案 1: CLAUDE.md に規則 8 を足す(決-A の実装。1 段落)**
