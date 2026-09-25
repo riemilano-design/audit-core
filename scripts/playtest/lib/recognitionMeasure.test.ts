@@ -882,3 +882,78 @@ describe("(13) D' の named + hedged は D 以上", () => {
     expect(shownOf(totals.exposure["D'"].shape.self)).toBeGreaterThan(0);
   });
 });
+
+// STEP OBS-5c(docs/LANE_DIAG_LOG_2026-09.md §12.10 (A2)「計画の直し」2026-09-26)。
+// `statusCounts` は露出(countExposure)と違い `none` を捨てずに数える。
+describe("(14) statusCounts は none を含めて数える(STEP OBS-5c)", () => {
+  it("none だけの記録は none だけを数え、他の状態・当てていない側は 0(none が捨てられていないことを示す)", () => {
+    // 5e は初期配置でも MOVES_4 の指し手でも駒が来ないマス(作り物、将棋知識ではない)。3 局面とも一致 0 件 = none。
+    const row = measureOne(MOVES_4, {
+      maxPly: 0,
+      shapes: [makeShape("t_never", "self", [{ piece: "香", square: "5e" }])],
+    });
+    expect(row.statusCounts.shape.self).toEqual({ none: 3, forming: 0, completed: 0, matched: 0 });
+    // 側を当てていない相手側・狙い・戦型は 0 のまま。
+    expect(row.statusCounts.shape.opponent).toEqual({ none: 0, forming: 0, completed: 0, matched: 0 });
+    expect(row.statusCounts.intent.self).toEqual({ none: 0, forming: 0, completed: 0, matched: 0 });
+    expect(row.statusCounts.intent.opponent).toEqual({ none: 0, forming: 0, completed: 0, matched: 0 });
+    expect(row.statusCounts.opening.self).toEqual({ none: 0, forming: 0, completed: 0, matched: 0 });
+    expect(row.statusCounts.opening.opponent).toEqual({ none: 0, forming: 0, completed: 0, matched: 0 });
+  });
+
+  it("forming・completed・matched が混ざる形・狙い・戦型で、4 状態の合計が「局面数 × 記録数」(行数)と一致する(不変条件)", () => {
+    // t_forming_self・o_forming は (9) と同じ作り物(ply 0 は none、ply 2・4 は forming のまま完成しない)。
+    const selfForming = makeShape("t_forming_self", "self", [
+      { piece: "歩", square: "7f" },
+      { piece: "銀", square: "3h" },
+      { piece: "金", square: "5h" },
+    ]);
+    // 1a の香は後手の初期配置のまま(指し手で動かない)= 3 局面とも matchedSquares>0・missing 0 の completed。
+    const oppCompleted = makeShape("t_completed_opp", "opponent", [{ piece: "香", square: "1a" }]);
+    const intentForming = makeIntent("t_forming_intent", [
+      { piece: "歩", to: "3d" },
+      { piece: "銀", to: "6b" },
+    ]);
+    // (2) の matchedIntent と同じ作り物(ply 0 は none、ply 2・4 は matched)。
+    const intentMatched = makeIntent("t_matched_intent", [{ piece: "歩", to: "3d" }]);
+    const openingForming = makeOpening("o_forming", "self", [
+      { piece: "歩", to: "7f" },
+      { piece: "銀", to: "3h" },
+      { piece: "金", to: "5h" },
+    ]);
+    // (10) の o_no_evid と同じ作り物(4i の金は先手の初期配置のまま = 3 局面とも completed)。
+    const openingCompleted = makeOpening("o_completed", "self", [{ piece: "金", to: "4i" }]);
+
+    const row = measureOne(MOVES_4, {
+      maxPly: 0,
+      shapes: [selfForming, oppCompleted],
+      intents: [intentForming, intentMatched],
+      openings: [openingForming, openingCompleted],
+    });
+
+    expect(row.positions).toBe(3);
+    expect(row.statusCounts.shape.self).toEqual({ none: 1, forming: 2, completed: 0, matched: 0 });
+    expect(row.statusCounts.shape.opponent).toEqual({ none: 0, forming: 0, completed: 3, matched: 0 });
+    expect(row.statusCounts.intent.self).toEqual({ none: 0, forming: 0, completed: 0, matched: 0 });
+    expect(row.statusCounts.intent.opponent).toEqual({ none: 2, forming: 2, completed: 0, matched: 2 });
+    expect(row.statusCounts.opening.self).toEqual({ none: 1, forming: 2, completed: 3, matched: 0 });
+    expect(row.statusCounts.opening.opponent).toEqual({ none: 0, forming: 0, completed: 0, matched: 0 });
+
+    // 不変条件(機械で照合できる): 4 状態の合計 = 局面数(row.positions)× その側に渡した記録の数。
+    // countExposure と違い none を捨てていないので、この和は必ず一致する(取りこぼしがあれば崩れる)。
+    const sumOf = (c: { none: number; forming: number; completed: number; matched: number }): number =>
+      c.none + c.forming + c.completed + c.matched;
+    expect(sumOf(row.statusCounts.shape.self)).toBe(row.positions * 1);
+    expect(sumOf(row.statusCounts.shape.opponent)).toBe(row.positions * 1);
+    expect(sumOf(row.statusCounts.intent.opponent)).toBe(row.positions * 2);
+    expect(sumOf(row.statusCounts.opening.self)).toBe(row.positions * 2);
+
+    // byGroup の合計は rows をそのまま足し上げたもの(1 局だけなので row と同じ値になる)。
+    const { byGroup } = measureRecognition(
+      [{ group: "g", id: "test-01", moves: MOVES_4 }],
+      { shapes: [selfForming, oppCompleted], intents: [intentForming, intentMatched], openings: [openingForming, openingCompleted], maxPly: 0 },
+    );
+    expect(byGroup["g"]!.statusCounts.shape.self).toEqual(row.statusCounts.shape.self);
+    expect(byGroup["g"]!.statusCounts.opening.self).toEqual(row.statusCounts.opening.self);
+  });
+});

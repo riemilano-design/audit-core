@@ -288,8 +288,10 @@ describe("登録簿(docs/OBSERVATION_ITEMS.md §1)", () => {
   // STEP OBS-5'(docs/LANE_DIAG_LOG_2026-09.md §12.6): obs_extra.json の 3 本を §1.6 に足したので 108→111。
   // STEP OBS-5(docs/LANE_DIAG_LOG_2026-09.md §12.10 (A)): obs_geo.json の 4 本(moveCombination・
   // replyToCapture・replyToCheck・decisionContext)を §1 に足したので 111→115。
-  it("existing の大きさは 115", () => {
-    expect(registry.size).toBe(115);
+  // STEP OBS-5c(docs/LANE_DIAG_LOG_2026-09.md §12.10 (A2)): recognition_measure.json の 4 本
+  // (obs.vocab.shapeStatus・intentStatus・openingStatus・exposure)を §1.16 に足したので 115→119。
+  it("existing の大きさは 119", () => {
+    expect(registry.size).toBe(119);
   });
 
   it("obs.timeSearch.col.* は 30 本", () => {

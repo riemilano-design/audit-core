@@ -57,6 +57,8 @@ function fullInputs(): ObsSnapshotInputs {
     extra: loadInputFile("obs_extra.json"),
     // STEP OBS-5(docs/LANE_DIAG_LOG_2026-09.md §12.10 (A))。obs_geo.json も同じ理由で足した。
     geo: loadInputFile("obs_geo.json"),
+    // STEP OBS-5c(docs/LANE_DIAG_LOG_2026-09.md §12.10 (A2))。recognition_measure.json も同じ理由で足した。
+    recognition: loadInputFile("recognition_measure.json"),
   };
 }
 
@@ -225,6 +227,11 @@ describe("任意入力が無いとき", () => {
       "obs.geo.replyToCapture",
       "obs.geo.replyToCheck",
       "obs.time.decisionContext",
+      // STEP OBS-5c(docs/LANE_DIAG_LOG_2026-09.md §12.10 (A2))。--recognition を渡さなければこの 4 本も出ない。
+      "obs.vocab.shapeStatus",
+      "obs.vocab.intentStatus",
+      "obs.vocab.openingStatus",
+      "obs.vocab.exposure",
     ];
     for (const id of optionalOnly) expect(obsIds, id).not.toContain(id);
     expect(snapshot.items.length).toBe(SNAPSHOT_ITEMS.length - optionalOnly.length);
@@ -237,7 +244,17 @@ describe("inputs[]", () => {
     const inputs = fullInputs();
     const snapshot = buildObsSnapshot(inputs, optionsOf("3 分"));
     expect(snapshot.inputs.map((i) => i.name).sort()).toEqual(
-      ["answer_menu.json", "direct_answers.json", "final_positions.json", "obs_extra.json", "obs_geo.json", "patient.json", "time_cause.json", "whatif_report_data.json"].sort(),
+      [
+        "answer_menu.json",
+        "direct_answers.json",
+        "final_positions.json",
+        "obs_extra.json",
+        "obs_geo.json",
+        "patient.json",
+        "recognition_measure.json",
+        "time_cause.json",
+        "whatif_report_data.json",
+      ].sort(),
     );
     for (const name of [
       "patient.json",
@@ -248,6 +265,7 @@ describe("inputs[]", () => {
       "answer_menu.json",
       "obs_extra.json",
       "obs_geo.json",
+      "recognition_measure.json",
     ]) {
       const expected = recordSha256(readFileSync(join(FIXTURES_DIR, name)));
       const found = snapshot.inputs.find((i) => i.name === name);
@@ -300,6 +318,9 @@ describe("CLI(obsSnapshot.ts)", () => {
             // STEP OBS-5(docs/LANE_DIAG_LOG_2026-09.md §12.10 (A))。同じ理由で --geo も足す。
             "--geo",
             join(FIXTURES_DIR, "obs_geo.json"),
+            // STEP OBS-5c(docs/LANE_DIAG_LOG_2026-09.md §12.10 (A2))。同じ理由で --recognition も足す。
+            "--recognition",
+            join(FIXTURES_DIR, "recognition_measure.json"),
             "--out",
             outPath,
           ],
@@ -330,7 +351,17 @@ describe("新しい数を作っていない", () => {
   it("出力の数の集合は、入力ファイルの数の集合の部分集合(合計・割合を新しく作っていない)", () => {
     const inputs = fullInputs();
     const fixtureNumbers = new Set<number>();
-    for (const file of [inputs.patient, inputs.timeCause, inputs.whatifData!, inputs.direct!, inputs.finalPositions!, inputs.menu!, inputs.extra!, inputs.geo!]) {
+    for (const file of [
+      inputs.patient,
+      inputs.timeCause,
+      inputs.whatifData!,
+      inputs.direct!,
+      inputs.finalPositions!,
+      inputs.menu!,
+      inputs.extra!,
+      inputs.geo!,
+      inputs.recognition!,
+    ]) {
       collectNumbers(file.data, fixtureNumbers);
     }
     const snapshot = buildObsSnapshot(inputs, optionsOf("3 分"));
@@ -428,5 +459,66 @@ describe("--geo(obs_geo.json。STEP OBS-5)", () => {
     expect(obsIds).not.toContain("obs.geo.replyToCapture");
     expect(obsIds).not.toContain("obs.geo.replyToCheck");
     expect(obsIds).not.toContain("obs.time.decisionContext");
+  });
+});
+
+// 14. STEP OBS-5c(docs/LANE_DIAG_LOG_2026-09.md §12.10 (A2))。--recognition(recognition_measure.json)の 4 項目。
+describe("--recognition(recognition_measure.json。STEP OBS-5c)", () => {
+  it("渡せば obs.vocab.shapeStatus・intentStatus・openingStatus・exposure の 4 項目が載る(fixture の値をそのまま写す。exposure は named/hedged/hidden の 3 つだけ)", () => {
+    const snapshot = buildObsSnapshot(fullInputs(), optionsOf("3 分"));
+    const shapeStatus = snapshot.items.find((i) => i.obsId === "obs.vocab.shapeStatus");
+    const intentStatus = snapshot.items.find((i) => i.obsId === "obs.vocab.intentStatus");
+    const openingStatus = snapshot.items.find((i) => i.obsId === "obs.vocab.openingStatus");
+    const exposure = snapshot.items.find((i) => i.obsId === "obs.vocab.exposure");
+    expect(shapeStatus, "obs.vocab.shapeStatus が出ていない").toBeDefined();
+    expect(intentStatus, "obs.vocab.intentStatus が出ていない").toBeDefined();
+    expect(openingStatus, "obs.vocab.openingStatus が出ていない").toBeDefined();
+    expect(exposure, "obs.vocab.exposure が出ていない").toBeDefined();
+
+    const recognitionFixture = JSON.parse(readFileSync(join(FIXTURES_DIR, "recognition_measure.json"), "utf-8")) as {
+      byGroup: {
+        "3 分": {
+          statusCounts: {
+            shape: { self: unknown; opponent: unknown };
+            intent: { self: unknown; opponent: unknown };
+            opening: { self: unknown; opponent: unknown };
+          };
+          exposure: {
+            "D''": {
+              shape: { self: { named: number; hedged: number; hidden: number }; opponent: { named: number; hedged: number; hidden: number } };
+              intent: { self: { named: number; hedged: number; hidden: number }; opponent: { named: number; hedged: number; hidden: number } };
+              opening: { self: { named: number; hedged: number; hidden: number }; opponent: { named: number; hedged: number; hidden: number } };
+            };
+          };
+        };
+      };
+    };
+    const group = recognitionFixture.byGroup["3 分"];
+    expect(shapeStatus!.value).toEqual(group.statusCounts.shape);
+    expect(intentStatus!.value).toEqual(group.statusCounts.intent);
+    expect(openingStatus!.value).toEqual(group.statusCounts.opening);
+
+    const pickNamedHedgedHidden = (c: { named: number; hedged: number; hidden: number }) => ({ named: c.named, hedged: c.hedged, hidden: c.hidden });
+    const expectedExposure = {
+      shape: { self: pickNamedHedgedHidden(group.exposure["D''"].shape.self), opponent: pickNamedHedgedHidden(group.exposure["D''"].shape.opponent) },
+      intent: { self: pickNamedHedgedHidden(group.exposure["D''"].intent.self), opponent: pickNamedHedgedHidden(group.exposure["D''"].intent.opponent) },
+      opening: { self: pickNamedHedgedHidden(group.exposure["D''"].opening.self), opponent: pickNamedHedgedHidden(group.exposure["D''"].opening.opponent) },
+    };
+    expect(exposure!.value).toEqual(expectedExposure);
+    // fixture の named/hedged/hidden 以外の欄(hiddenCompletedNoEvidence・droppedByR6ById 等)が
+    // 写っていないこと(白いリストの門とは別に、pick 自体が選んでいないことを直接確かめる)。
+    expect(exposure!.value).not.toHaveProperty("shape.self.droppedByR6ById");
+    expect(JSON.stringify(exposure!.value)).not.toContain("droppedByR6ById");
+  });
+
+  it("渡さなければ 4 項目とも出ない(空で埋めない。任意入力が無いときの一般規則と同じ)", () => {
+    const inputs = fullInputs();
+    const minimal: ObsSnapshotInputs = { patient: inputs.patient, timeCause: inputs.timeCause };
+    const snapshot = buildObsSnapshot(minimal, optionsOf("3 分"));
+    const obsIds = snapshot.items.map((i) => i.obsId);
+    expect(obsIds).not.toContain("obs.vocab.shapeStatus");
+    expect(obsIds).not.toContain("obs.vocab.intentStatus");
+    expect(obsIds).not.toContain("obs.vocab.openingStatus");
+    expect(obsIds).not.toContain("obs.vocab.exposure");
   });
 });

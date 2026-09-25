@@ -9,6 +9,7 @@
 //     [--final-positions <final_positions.json>] [--menu <answer_menu.json>] \
 //     [--extra <obs_extra.json>(STEP OBS-5'。scripts/playtest/obsExtra.ts の出力)] \
 //     [--geo <obs_geo.json>(STEP OBS-5。scripts/playtest/obsGeo.ts の出力)] \
+//     [--recognition <recognition_measure.json>(STEP OBS-5c。scripts/playtest/recognitionMeasure.ts の出力)] \
 //     [--obs-items <OBSERVATION_ITEMS.md>(既定は docs/OBSERVATION_ITEMS.md)] \
 //     --out <obs_snapshot.json>
 //
@@ -39,6 +40,7 @@ const USAGE = [
   "    [--final-positions <final_positions.json>] [--menu <answer_menu.json>] \\",
   "    [--extra <obs_extra.json>] \\",
   "    [--geo <obs_geo.json>] \\",
+  "    [--recognition <recognition_measure.json>] \\",
   "    [--obs-items <OBSERVATION_ITEMS.md>] --out <obs_snapshot.json>",
 ].join("\n");
 
@@ -71,6 +73,7 @@ function main(): number {
   const menuPath = argValue(args, "--menu");
   const extraPath = argValue(args, "--extra");
   const geoPath = argValue(args, "--geo");
+  const recognitionPath = argValue(args, "--recognition");
   const obsItemsPath = argValue(args, "--obs-items") ?? DEFAULT_OBS_ITEMS_PATH;
 
   const registry = loadObsRegistry(obsItemsPath);
@@ -85,6 +88,7 @@ function main(): number {
     menu: menuPath === undefined ? undefined : readInputFile(menuPath),
     extra: extraPath === undefined ? undefined : readInputFile(extraPath),
     geo: geoPath === undefined ? undefined : readInputFile(geoPath),
+    recognition: recognitionPath === undefined ? undefined : readInputFile(recognitionPath),
   };
 
   const snapshot = buildObsSnapshot(inputs, { customer, group, registry, gitHead: gitState.gitHead, dirty: gitState.dirty });

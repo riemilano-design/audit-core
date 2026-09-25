@@ -1,0 +1,110 @@
+{
+  "kind": "recognition_measure",
+  "schemaVersion": "0.1",
+  "gitHead": "abc123",
+  "dirty": false,
+  "maxPly": 0,
+  "shapesDirs": ["data/shapes"],
+  "intentsDirs": ["data/intents"],
+  "openingsDirs": ["data/openings"],
+  "shapeIds": ["s1", "s2"],
+  "intentIds": ["i1"],
+  "openingIds": ["o1"],
+  "byGroup": {
+    "3 分": {
+      "games": 2,
+      "positions": 20,
+      "statusCounts": {
+        "shape": {
+          "self": { "none": 5, "forming": 3, "completed": 2, "matched": 0 },
+          "opponent": { "none": 4, "forming": 2, "completed": 4, "matched": 0 }
+        },
+        "intent": {
+          "self": { "none": 0, "forming": 0, "completed": 0, "matched": 0 },
+          "opponent": { "none": 6, "forming": 3, "completed": 0, "matched": 1 }
+        },
+        "opening": {
+          "self": { "none": 7, "forming": 2, "completed": 1, "matched": 0 },
+          "opponent": { "none": 8, "forming": 1, "completed": 1, "matched": 0 }
+        }
+      },
+      "exposure": {
+        "D''": {
+          "shape": {
+            "self": {
+              "named": 1,
+              "hedged": 1,
+              "hidden": 3,
+              "hiddenCompletedNoEvidence": 0,
+              "weakClaims": 2,
+              "weakClaimsShown": 1,
+              "pickedByR5p": 0,
+              "droppedByR6": 1,
+              "droppedByR6ById": { "s1": 1 }
+            },
+            "opponent": {
+              "named": 2,
+              "hedged": 1,
+              "hidden": 3,
+              "hiddenCompletedNoEvidence": 1,
+              "weakClaims": 1,
+              "weakClaimsShown": 0,
+              "pickedByR5p": 0,
+              "droppedByR6": 0,
+              "droppedByR6ById": {}
+            }
+          },
+          "intent": {
+            "self": {
+              "named": 0,
+              "hedged": 0,
+              "hidden": 0,
+              "hiddenCompletedNoEvidence": 0,
+              "weakClaims": 0,
+              "weakClaimsShown": 0,
+              "pickedByR5p": 0,
+              "droppedByR6": 0,
+              "droppedByR6ById": {}
+            },
+            "opponent": {
+              "named": 1,
+              "hedged": 0,
+              "hidden": 3,
+              "hiddenCompletedNoEvidence": 0,
+              "weakClaims": 1,
+              "weakClaimsShown": 1,
+              "pickedByR5p": 0,
+              "droppedByR6": 0,
+              "droppedByR6ById": {}
+            }
+          },
+          "opening": {
+            "self": {
+              "named": 0,
+              "hedged": 1,
+              "hidden": 2,
+              "hiddenCompletedNoEvidence": 0,
+              "weakClaims": 1,
+              "weakClaimsShown": 1,
+              "pickedByR5p": 1,
+              "droppedByR6": 0,
+              "droppedByR6ById": {}
+            },
+            "opponent": {
+              "named": 0,
+              "hedged": 0,
+              "hidden": 1,
+              "hiddenCompletedNoEvidence": 0,
+              "weakClaims": 0,
+              "weakClaimsShown": 0,
+              "pickedByR5p": 0,
+              "droppedByR6": 0,
+              "droppedByR6ById": {}
+            }
+          }
+        }
+      }
+    }
+  },
+  "rows": []
+}

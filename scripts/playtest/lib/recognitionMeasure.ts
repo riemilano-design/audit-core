@@ -284,6 +284,73 @@ export function movedRequiredCountOf(
   return moved;
 }
 
+// ---------------------------------------------------------------------------
+// 状態の件数(STEP OBS-5c。docs/LANE_DIAG_LOG_2026-09.md §12.10 (A2)「計画の直し」2026-09-26)。
+//
+// 露出の欄(countExposure)は `status !== "none"` に絞った行にしか当たらず、`none` は集計の前に
+// 捨てられている。写し(obsSnapshot)は「道具が既に出した数をそのまま写すだけ」という不変条件を
+// 持つため、`completed` の件数(`named + hedged` の足し算)も `none` の件数(どこにも無い)も
+// 写し側では作れない。ここに「既に計算済みの `status`(または `matchStatus`)と `side` を数えるだけ」
+// の欄を 1 つ足し、`none` を含む 4 状態の件数を持たせる。**新しい盤の計算でも新しい閾値でもない**
+// ― `status`/`matchStatus`/`side` はどれも analyzeShapeFormationFromEvents・detectIntentsFromEvents・
+// analyzeOpeningFormationFromEvents が既に計算済みの値で、ここでは数えるだけ。
+// ---------------------------------------------------------------------------
+
+/** 認識の状態。形・戦型は none/forming/completed、狙いは none/forming/matched(completed は使わない)。 */
+export type RecognitionState = "none" | "forming" | "completed" | "matched";
+
+const RECOGNITION_STATES: readonly RecognitionState[] = ["none", "forming", "completed", "matched"];
+
+/** 状態ごとの件数(側 1 つぶん)。 */
+export type StatusCountsByState = Record<RecognitionState, number>;
+
+/** 自分側・相手側の状態の件数。狙いは常に相手側にしか数えない(self は 0 のまま)。 */
+export interface StatusCountsBySide {
+  self: StatusCountsByState;
+  opponent: StatusCountsByState;
+}
+
+/** 種類(形・狙い・戦型)ごとの状態の件数。 */
+export interface StatusCountsByKind {
+  shape: StatusCountsBySide;
+  intent: StatusCountsBySide;
+  opening: StatusCountsBySide;
+}
+
+function emptyStatusCountsByState(): StatusCountsByState {
+  return { none: 0, forming: 0, completed: 0, matched: 0 };
+}
+
+function emptyStatusCountsBySide(): StatusCountsBySide {
+  return { self: emptyStatusCountsByState(), opponent: emptyStatusCountsByState() };
+}
+
+function emptyStatusCountsByKind(): StatusCountsByKind {
+  return { shape: emptyStatusCountsBySide(), intent: emptyStatusCountsBySide(), opening: emptyStatusCountsBySide() };
+}
+
+function addStatusCountsByState(into: StatusCountsByState, from: StatusCountsByState): void {
+  for (const state of RECOGNITION_STATES) into[state] += from[state];
+}
+
+function addStatusCountsByKind(into: StatusCountsByKind, from: StatusCountsByKind): void {
+  addStatusCountsByState(into.shape.self, from.shape.self);
+  addStatusCountsByState(into.shape.opponent, from.shape.opponent);
+  addStatusCountsByState(into.intent.self, from.intent.self);
+  addStatusCountsByState(into.intent.opponent, from.intent.opponent);
+  addStatusCountsByState(into.opening.self, from.opening.self);
+  addStatusCountsByState(into.opening.opponent, from.opening.opponent);
+}
+
+/**
+ * `status`(または `matchStatus`)と `side` から `statusCounts` の 1 件を数える(bump)。
+ * `side` は既存の露出の数え方(`countExposure` の呼び出し)と同じ規則で self/opponent に丸める
+ * (`side === "opponent"` だけを opponent、それ以外〈"self"・"both"〉は self)。判定は一切しない。
+ */
+function bumpStatusCount(counts: StatusCountsBySide, side: "self" | "opponent", state: RecognitionState): void {
+  counts[side][state] += 1;
+}
+
 /** 1 局分の数。欄の意味は冒頭の「数え方」を参照。 */
 export interface GameRow {
   group: string;
@@ -373,6 +440,10 @@ export interface GameRow {
   // --- 露出(STEP EXPO-1)。値の組 A / B / C × 形・狙い・戦型 × 自分側・相手側 ---
   // byGroup の同じ欄は、この局ごとの数をそのまま足し上げたもの(局数ではなく延べ)。
   exposure: ExposureTotals;
+
+  // --- 状態の件数(STEP OBS-5c)。種類 × 自分側/相手側 × none/forming/completed/matched の件数 ---
+  // 露出と違い `none` も数える(捨てない)。byGroup の同じ欄は、この局ごとの数をそのまま足し上げたもの。
+  statusCounts: StatusCountsByKind;
 }
 
 /**
@@ -429,6 +500,9 @@ export interface GroupTotals {
 
   /** 露出(STEP EXPO-1)。rows の同じ欄を足し上げた延べの数(局数ではない) */
   exposure: ExposureTotals;
+
+  /** 状態の件数(STEP OBS-5c)。rows の同じ欄を足し上げた延べの数(none を含む。局数ではない) */
+  statusCounts: StatusCountsByKind;
 }
 
 export interface RecognitionMeasureResult {
@@ -480,6 +554,7 @@ function emptyRow(group: string, id: string, plies: number): GameRow {
     openForming: 0,
     openCompNoEvidById: {},
     exposure: emptyExposureTotals(),
+    statusCounts: emptyStatusCountsByKind(),
   };
 }
 
@@ -520,6 +595,7 @@ function emptyTotals(): GroupTotals {
     openForming: 0,
     openCompNoEvidById: {},
     exposure: emptyExposureTotals(),
+    statusCounts: emptyStatusCountsByKind(),
   };
 }
 
@@ -608,6 +684,10 @@ export function measureRecognition(
       // --- 形 ---
       const shapeResults = analyzeShapeFormationFromEvents(sfen, prefix, { shapes });
       const shapeOn = shapeResults.filter((r) => r.status === "forming" || r.status === "completed");
+      // 状態の件数(STEP OBS-5c)。`none` を含む全件(shapeOn で絞る前)を数える。
+      for (const r of shapeResults) {
+        bumpStatusCount(row.statusCounts.shape, r.side === "opponent" ? "opponent" : "self", r.status);
+      }
       const shapeStrong = (r: (typeof shapeResults)[number]): boolean =>
         r.status === "completed" || r.formationEvidence.length >= 2;
 
@@ -653,6 +733,10 @@ export function measureRecognition(
       const intentOn = intentResults.filter(
         (r) => r.matchStatus === "forming" || r.matchStatus === "matched",
       );
+      // 状態の件数(STEP OBS-5c)。狙いは常に相手側だけに数える(self は 0 のまま)。
+      for (const r of intentResults) {
+        bumpStatusCount(row.statusCounts.intent, "opponent", r.matchStatus);
+      }
       if (intentOn.some((r) => r.matchStatus === "matched" || r.matchedSignatures.length >= 2)) {
         row.recIntent2 += 1;
       }
@@ -684,6 +768,10 @@ export function measureRecognition(
       const openingOn = openingResults.filter(
         (r) => r.status === "forming" || r.status === "completed",
       );
+      // 状態の件数(STEP OBS-5c)。`none` を含む全件(openingOn で絞る前)を数える。
+      for (const r of openingResults) {
+        bumpStatusCount(row.statusCounts.opening, r.side === "opponent" ? "opponent" : "self", r.status);
+      }
       const openingStrong = (r: (typeof openingResults)[number]): boolean =>
         r.status === "completed" || r.formationEvidence.length >= 2;
 
@@ -759,6 +847,7 @@ export function measureRecognition(
     totals.openCompletedNoEvidence += row.openCompletedNoEvidence;
     totals.openForming += row.openForming;
     addExposureTotals(totals.exposure, row.exposure);
+    addStatusCountsByKind(totals.statusCounts, row.statusCounts);
 
     for (const [id, count] of Object.entries(row.shapeHits)) {
       totals.shapeHits[id] = (totals.shapeHits[id] ?? 0) + count;

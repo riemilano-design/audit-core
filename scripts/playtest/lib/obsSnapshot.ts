@@ -88,6 +88,11 @@ export interface ObsSnapshotInputs {
   extra?: ObsSnapshotInputFile;
   /** obs_geo.json(任意。STEP OBS-5〈docs/LANE_DIAG_LOG_2026-09.md §12.10 (A)〉。渡せば `kind: "obs_geo"` を確かめる)。 */
   geo?: ObsSnapshotInputFile;
+  /**
+   * recognition_measure.json(任意。STEP OBS-5c〈docs/LANE_DIAG_LOG_2026-09.md §12.10 (A2)〉。
+   * `scripts/playtest/recognitionMeasure.ts` の出力をそのまま渡す。渡せば `kind: "recognition_measure"` を確かめる。
+   */
+  recognition?: ObsSnapshotInputFile;
 }
 
 export interface ObsSnapshotOptions {
@@ -286,6 +291,95 @@ interface ObsGeoFileLike {
   kind?: unknown;
   moves: ObsGeoMoveLike[];
   decisionContext: ObsGeoDecisionContextLike[];
+}
+
+// STEP OBS-5c(docs/LANE_DIAG_LOG_2026-09.md §12.10 (A2))。recognition_measure.json(この段が読む欄だけ)。
+// `scripts/playtest/lib/recognitionMeasure.ts` の `StatusCountsByKind`・`ExposureTotals` の該当部分と
+// 同じ形(`byGroup[group]` から `statusCounts`・`exposure` だけを読む。`rows` は読まない)。
+interface RecognitionStateCountsLike {
+  none: number;
+  forming: number;
+  completed: number;
+  matched: number;
+}
+
+interface RecognitionStatusCountsBySideLike {
+  self: RecognitionStateCountsLike;
+  opponent: RecognitionStateCountsLike;
+}
+
+interface RecognitionStatusCountsByKindLike {
+  shape: RecognitionStatusCountsBySideLike;
+  intent: RecognitionStatusCountsBySideLike;
+  opening: RecognitionStatusCountsBySideLike;
+}
+
+// 実際の出力には hiddenCompletedNoEvidence・weakClaims・weakClaimsShown・pickedByR5p・droppedByR6・
+// droppedByR6ById(id → 数の対)も入っているが、この段が読むのは named/hedged/hidden の 3 つだけ
+// (id の一覧・id → 数の対は写さない。docs/LANE_DIAG_LOG_2026-09.md §12.10 (A2) の指示)。
+interface RecognitionExposureCountsLike {
+  named: number;
+  hedged: number;
+  hidden: number;
+}
+
+interface RecognitionExposureBySideLike {
+  self: RecognitionExposureCountsLike;
+  opponent: RecognitionExposureCountsLike;
+}
+
+interface RecognitionExposureByKindLike {
+  shape: RecognitionExposureBySideLike;
+  intent: RecognitionExposureBySideLike;
+  opening: RecognitionExposureBySideLike;
+}
+
+interface RecognitionGroupTotalsLike {
+  statusCounts: RecognitionStatusCountsByKindLike;
+  /** 値の組(A・B・C・D・D'・D'')ごとの露出。この段が読むのは `EXPOSURE_SET_FOR_VOCAB`(D'')だけ。 */
+  exposure: Record<string, RecognitionExposureByKindLike>;
+}
+
+interface RecognitionMeasureFileLike {
+  kind?: unknown;
+  byGroup: Record<string, RecognitionGroupTotalsLike>;
+}
+
+/** `obs.vocab.exposure` が読む値の組。統括の追加指示(2026-09-25)で D'' に決まっている。 */
+const EXPOSURE_SET_FOR_VOCAB = "D''";
+
+function recognitionOf(inputs: ObsSnapshotInputs): RecognitionMeasureFileLike {
+  return inputs.recognition!.data as RecognitionMeasureFileLike;
+}
+
+/** `--recognition` を渡したのに byGroup に組が無ければ例外(黙って空を出さない)。 */
+function recognitionGroupOf(inputs: ObsSnapshotInputs, group: string): RecognitionGroupTotalsLike {
+  const found = recognitionOf(inputs).byGroup[group];
+  if (found === undefined) {
+    throw new ObsSnapshotError(`--recognition の byGroup に組 "${group}" が無い`);
+  }
+  return found;
+}
+
+/** 状態の件数の 4 つだけを選んで写す(件数だけ。他の欄が増えても影響しない)。 */
+function stateCountsOf(c: RecognitionStateCountsLike): RecognitionStateCountsLike {
+  return { none: c.none, forming: c.forming, completed: c.completed, matched: c.matched };
+}
+
+function statusCountsBySideOf(bySide: RecognitionStatusCountsBySideLike): RecognitionStatusCountsBySideLike {
+  return { self: stateCountsOf(bySide.self), opponent: stateCountsOf(bySide.opponent) };
+}
+
+/** 露出の named/hedged/hidden の 3 つだけを選んで写す(hiddenCompletedNoEvidence 等・droppedByR6ById は写さない)。 */
+function exposureCountsOf(c: RecognitionExposureCountsLike): { named: number; hedged: number; hidden: number } {
+  return { named: c.named, hedged: c.hedged, hidden: c.hidden };
+}
+
+function exposureBySideOf(bySide: RecognitionExposureBySideLike): {
+  self: { named: number; hedged: number; hidden: number };
+  opponent: { named: number; hedged: number; hidden: number };
+} {
+  return { self: exposureCountsOf(bySide.self), opponent: exposureCountsOf(bySide.opponent) };
 }
 
 function patientOf(inputs: ObsSnapshotInputs): PatientLike {
@@ -587,6 +681,37 @@ export const SNAPSHOT_ITEMS: readonly SnapshotItemDefinition[] = [
     // `spentBucket`("≤9"/">9")・`phase`・`evalBand` は列挙のキーとして残す(統括経由の追加指示、2026-09-25)。
     extraEnumKeys: ["spentBucket", "phase", "evalBand"],
   },
+
+  // ---- recognition_measure.json(任意。STEP OBS-5c〈docs/LANE_DIAG_LOG_2026-09.md §12.10 (A2)〉。
+  //      --group に一致する byGroup[group] だけ。値は件数だけ〈id の一覧・droppedByR6ById は写さない〉) ----
+  {
+    obsId: "obs.vocab.shapeStatus",
+    path: "recognition byGroup[group].statusCounts.shape.{self,opponent}.{none,forming,completed,matched}",
+    pick: (inputs, opts) => (inputs.recognition === undefined ? SKIP : statusCountsBySideOf(recognitionGroupOf(inputs, opts.group).statusCounts.shape)),
+  },
+  {
+    obsId: "obs.vocab.intentStatus",
+    path: "recognition byGroup[group].statusCounts.intent.{self,opponent}.{none,forming,completed,matched}",
+    pick: (inputs, opts) => (inputs.recognition === undefined ? SKIP : statusCountsBySideOf(recognitionGroupOf(inputs, opts.group).statusCounts.intent)),
+  },
+  {
+    obsId: "obs.vocab.openingStatus",
+    path: "recognition byGroup[group].statusCounts.opening.{self,opponent}.{none,forming,completed,matched}",
+    pick: (inputs, opts) => (inputs.recognition === undefined ? SKIP : statusCountsBySideOf(recognitionGroupOf(inputs, opts.group).statusCounts.opening)),
+  },
+  {
+    obsId: "obs.vocab.exposure",
+    path: "recognition byGroup[group].exposure[\"D''\"].{shape,intent,opening}.{self,opponent}.{named,hedged,hidden}",
+    pick: (inputs, opts) => {
+      if (inputs.recognition === undefined) return SKIP;
+      const group = recognitionGroupOf(inputs, opts.group);
+      const set = group.exposure[EXPOSURE_SET_FOR_VOCAB];
+      if (set === undefined) {
+        throw new ObsSnapshotError(`--recognition の byGroup["${opts.group}"].exposure に値の組 "${EXPOSURE_SET_FOR_VOCAB}" が無い`);
+      }
+      return { shape: exposureBySideOf(set.shape), intent: exposureBySideOf(set.intent), opening: exposureBySideOf(set.opening) };
+    },
+  },
 ];
 
 // ---- 組み立て ----
@@ -618,6 +743,12 @@ export function buildObsSnapshotFromItems(items: readonly SnapshotItemDefinition
       throw new ObsSnapshotError(`--geo の kind が "obs_geo" でない(${JSON.stringify(geo.kind)})`);
     }
   }
+  if (inputs.recognition !== undefined) {
+    const recognition = recognitionOf(inputs);
+    if (recognition.kind !== "recognition_measure") {
+      throw new ObsSnapshotError(`--recognition の kind が "recognition_measure" でない(${JSON.stringify(recognition.kind)})`);
+    }
+  }
 
   const inputFiles: ObsSnapshotInputFile[] = [
     inputs.patient,
@@ -628,6 +759,7 @@ export function buildObsSnapshotFromItems(items: readonly SnapshotItemDefinition
     inputs.menu,
     inputs.extra,
     inputs.geo,
+    inputs.recognition,
   ].filter((f): f is ObsSnapshotInputFile => f !== undefined);
 
   const items_: ObsSnapshotItem[] = [];
