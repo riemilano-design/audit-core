@@ -214,7 +214,7 @@
 | 5 | 角換わり |  | 相居飛車 | <https://ja.wikipedia.org/wiki/%E8%A7%92%E6%8F%9B%E3%82%8F%E3%82%8A> | <https://ja.wikipedia.org/wiki/Category%3A%E5%B1%85%E9%A3%9B%E8%BB%8A> | 下書き済み(kakugawari 自分) |
 | 6 | 相掛かり |  | 相居飛車 | <https://ja.wikipedia.org/wiki/%E7%9B%B8%E6%8E%9B%E3%81%8B%E3%82%8A> | <https://ja.wikipedia.org/wiki/Category%3A%E5%B1%85%E9%A3%9B%E8%BB%8A> | 下書き済み(aigakari 自分) |
 | 7 | 横歩取り |  | 相居飛車 | <https://ja.wikipedia.org/wiki/%E6%A8%AA%E6%AD%A9%E5%8F%96%E3%82%8A> | <https://ja.wikipedia.org/wiki/Category%3A%E5%B1%85%E9%A3%9B%E8%BB%8A> | 下書き済み(yokofudori 自分) |
-| 8 | 雁木戦法 | 雁木 | 相居飛車 | <https://ja.wikipedia.org/wiki/%E9%9B%81%E6%9C%A8%E6%88%A6%E6%B3%95> | <https://ja.wikipedia.org/wiki/Category%3A%E5%B1%85%E9%A3%9B%E8%BB%8A> | 未 |
+| 8 | 雁木戦法 | 雁木 | 相居飛車 | <https://ja.wikipedia.org/wiki/%E9%9B%81%E6%9C%A8%E6%88%A6%E6%B3%95> | <https://ja.wikipedia.org/wiki/Category%3A%E5%B1%85%E9%A3%9B%E8%BB%8A> | 下書き済み(gangi_senpou 自分。第 17 組) |
 | 9 | 矢倉棒銀 |  | 矢倉の指し方 | <https://ja.wikipedia.org/wiki/%E7%9F%A2%E5%80%89%E6%A3%92%E9%8A%80> | <https://ja.wikipedia.org/wiki/Category%3A%E7%9F%A2%E5%80%89> | 下書き済み(yagura_bogin 自分) |
 | 10 | 雀刺し |  | 矢倉の指し方 | <https://ja.wikipedia.org/wiki/%E9%9B%80%E5%88%BA%E3%81%97> | <https://ja.wikipedia.org/wiki/Category%3A%E7%9F%A2%E5%80%89> | 下書き済み(suzumesashi 自分) |
 | 11 | 森下システム |  | 矢倉の指し方 | <https://ja.wikipedia.org/wiki/%E6%A3%AE%E4%B8%8B%E3%82%B7%E3%82%B9%E3%83%86%E3%83%A0> | <https://ja.wikipedia.org/wiki/Category%3A%E7%9F%A2%E5%80%89> | 下書き済み(morishita_system 自分。recognition_pattern 無し) |
@@ -225,7 +225,7 @@
 | 16 | 米長流急戦矢倉 |  | 矢倉の指し方 | <https://ja.wikipedia.org/wiki/%E7%B1%B3%E9%95%B7%E6%B5%81%E6%80%A5%E6%88%A6%E7%9F%A2%E5%80%89> | <https://ja.wikipedia.org/wiki/Category%3A%E7%9F%A2%E5%80%89> | 下書き済み(yonenaga_kyusen_yagura 相手) |
 | 17 | 阿久津流急戦矢倉 |  | 矢倉の指し方 | <https://ja.wikipedia.org/wiki/%E9%98%BF%E4%B9%85%E6%B4%A5%E6%B5%81%E6%80%A5%E6%88%A6%E7%9F%A2%E5%80%89> | <https://ja.wikipedia.org/wiki/Category%3A%E7%9F%A2%E5%80%89> | 未 |
 | 18 | 中原流急戦矢倉 |  | 矢倉の指し方 | <https://ja.wikipedia.org/wiki/%E4%B8%AD%E5%8E%9F%E6%B5%81%E6%80%A5%E6%88%A6%E7%9F%A2%E5%80%89> | <https://ja.wikipedia.org/wiki/Category%3A%E7%9F%A2%E5%80%89> | 未 |
-| 19 | 矢倉中飛車 |  | 矢倉の指し方 | <https://ja.wikipedia.org/wiki/%E7%9F%A2%E5%80%89%E4%B8%AD%E9%A3%9B%E8%BB%8A> | <https://ja.wikipedia.org/wiki/Category%3A%E7%9F%A2%E5%80%89> | 未 |
+| 19 | 矢倉中飛車 |  | 矢倉の指し方 | <https://ja.wikipedia.org/wiki/%E7%9F%A2%E5%80%89%E4%B8%AD%E9%A3%9B%E8%BB%8A> | <https://ja.wikipedia.org/wiki/Category%3A%E7%9F%A2%E5%80%89> | 下書き済み(yagura_nakabisha 自分。第 17 組) |
 | 20 | 6二飛戦法 |  | 矢倉の指し方 | <https://ja.wikipedia.org/wiki/6%E4%BA%8C%E9%A3%9B%E6%88%A6%E6%B3%95> | <https://ja.wikipedia.org/wiki/Category%3A%E7%9F%A2%E5%80%89> | 未 |
 | 21 | カニカニ銀 |  | 矢倉の指し方 | <https://ja.wikipedia.org/wiki/%E3%82%AB%E3%83%8B%E3%82%AB%E3%83%8B%E9%8A%80> | <https://ja.wikipedia.org/wiki/Category%3A%E7%9F%A2%E5%80%89> | 下書き済み(kanikanigin 自分) |
 | 22 | 矢倉3五歩早仕掛け |  | 矢倉の指し方 | <https://ja.wikipedia.org/wiki/%E7%9F%A2%E5%80%893%E4%BA%94%E6%AD%A9%E6%97%A9%E4%BB%95%E6%8E%9B%E3%81%91> | <https://ja.wikipedia.org/wiki/Category%3A%E7%9F%A2%E5%80%89> | 未 |
@@ -233,8 +233,8 @@
 | 24 | ウソ矢倉 |  | 矢倉の指し方 | <https://ja.wikipedia.org/wiki/%E3%82%A6%E3%82%BD%E7%9F%A2%E5%80%89> | <https://ja.wikipedia.org/wiki/Category%3A%E7%9F%A2%E5%80%89> | 未 |
 | 25 | 同型矢倉 |  | 矢倉の指し方 | <https://ja.wikipedia.org/wiki/%E5%90%8C%E5%9E%8B%E7%9F%A2%E5%80%89> | <https://ja.wikipedia.org/wiki/Category%3A%E7%9F%A2%E5%80%89> | 下書き済み(douke_yagura 自分) |
 | 26 | 飛車先不突矢倉 |  | 矢倉の指し方 | <https://ja.wikipedia.org/wiki/%E9%A3%9B%E8%BB%8A%E5%85%88%E4%B8%8D%E7%AA%81%E7%9F%A2%E5%80%89> | <https://ja.wikipedia.org/wiki/Category%3A%E7%9F%A2%E5%80%89> | 未 |
-| 27 | 金立ち戦法 |  | 矢倉の指し方 | <https://ja.wikipedia.org/wiki/%E9%87%91%E7%AB%8B%E3%81%A1%E6%88%A6%E6%B3%95> | <https://ja.wikipedia.org/wiki/Category%3A%E7%9F%A2%E5%80%89> | 未 |
-| 28 | 忍者銀 |  | 矢倉の指し方 | <https://ja.wikipedia.org/wiki/%E5%BF%8D%E8%80%85%E9%8A%80> | <https://ja.wikipedia.org/wiki/Category%3A%E7%9F%A2%E5%80%89> | 未 |
+| 27 | 金立ち戦法 |  | 矢倉の指し方 | <https://ja.wikipedia.org/wiki/%E9%87%91%E7%AB%8B%E3%81%A1%E6%88%A6%E6%B3%95> | <https://ja.wikipedia.org/wiki/Category%3A%E7%9F%A2%E5%80%89> | 下書き済み(kintachi 自分。第 17 組) |
+| 28 | 忍者銀 |  | 矢倉の指し方 | <https://ja.wikipedia.org/wiki/%E5%BF%8D%E8%80%85%E9%8A%80> | <https://ja.wikipedia.org/wiki/Category%3A%E7%9F%A2%E5%80%89> | 下書き済み(ninja_gin 自分。第 17 組) |
 | 29 | 加藤流(矢倉) |  | 矢倉の指し方 | **出典なし** | <https://ja.wikipedia.org/wiki/%E5%B0%86%E6%A3%8B%E3%81%AE%E6%88%A6%E6%B3%95%E4%B8%80%E8%A6%A7> | 未 |
 | 30 | 三手角 |  | 矢倉の指し方 | **出典なし** | <https://ja.wikipedia.org/wiki/%E5%B0%86%E6%A3%8B%E3%81%AE%E6%88%A6%E6%B3%95%E4%B8%80%E8%A6%A7> | 未 |
 | 31 | 右四間飛車(矢倉・腰掛け銀型) |  | 矢倉の指し方 | **出典なし** | <https://ja.wikipedia.org/wiki/%E5%B0%86%E6%A3%8B%E3%81%AE%E6%88%A6%E6%B3%95%E4%B8%80%E8%A6%A7> | 未 |
@@ -243,14 +243,14 @@
 | 34 | 筋違い角 |  | 角換わり | <https://ja.wikipedia.org/wiki/%E7%AD%8B%E9%81%95%E3%81%84%E8%A7%92> | <https://ja.wikipedia.org/wiki/Category%3A%E8%A7%92%E6%8F%9B%E3%82%8F%E3%82%8A> | 下書き済み(sujichigai_kaku 自分) |
 | 35 | 後手番一手損角換わり |  | 角換わり | <https://ja.wikipedia.org/wiki/%E5%BE%8C%E6%89%8B%E7%95%AA%E4%B8%80%E6%89%8B%E6%90%8D%E8%A7%92%E6%8F%9B%E3%82%8F%E3%82%8A> | <https://ja.wikipedia.org/wiki/Category%3A%E8%A7%92%E6%8F%9B%E3%82%8F%E3%82%8A> | 下書き済み(ittezon_kakugawari 相手) |
 | 36 | 木村定跡 |  | 角換わり | <https://ja.wikipedia.org/wiki/%E6%9C%A8%E6%9D%91%E5%AE%9A%E8%B7%A1> | <https://ja.wikipedia.org/wiki/Category%3A%E8%A7%92%E6%8F%9B%E3%82%8F%E3%82%8A> | 未 |
-| 37 | 早繰り銀 |  | 角換わり・相掛かり | <https://ja.wikipedia.org/wiki/%E6%97%A9%E7%B9%B0%E3%82%8A%E9%8A%80> | <https://ja.wikipedia.org/wiki/Category%3A%E5%B1%85%E9%A3%9B%E8%BB%8A> | 未 |
-| 38 | 相掛かり棒銀 |  | 相掛かり | <https://ja.wikipedia.org/wiki/%E7%9B%B8%E6%8E%9B%E3%81%8B%E3%82%8A%E6%A3%92%E9%8A%80> | <https://ja.wikipedia.org/wiki/Category%3A%E7%9B%B8%E6%8E%9B%E3%81%8B%E3%82%8A> | 未 |
+| 37 | 早繰り銀 |  | 角換わり・相掛かり | <https://ja.wikipedia.org/wiki/%E6%97%A9%E7%B9%B0%E3%82%8A%E9%8A%80> | <https://ja.wikipedia.org/wiki/Category%3A%E5%B1%85%E9%A3%9B%E8%BB%8A> | 下書き済み(hayakurigin 自分。第 17 組) |
+| 38 | 相掛かり棒銀 |  | 相掛かり | <https://ja.wikipedia.org/wiki/%E7%9B%B8%E6%8E%9B%E3%81%8B%E3%82%8A%E6%A3%92%E9%8A%80> | <https://ja.wikipedia.org/wiki/Category%3A%E7%9B%B8%E6%8E%9B%E3%81%8B%E3%82%8A> | 下書き済み(aigakari_bogin 自分。第 17 組) |
 | 39 | 塚田スペシャル |  | 相掛かり | <https://ja.wikipedia.org/wiki/%E5%A1%9A%E7%94%B0%E3%82%B9%E3%83%9A%E3%82%B7%E3%83%A3%E3%83%AB> | <https://ja.wikipedia.org/wiki/Category%3A%E7%9B%B8%E6%8E%9B%E3%81%8B%E3%82%8A> | 下書き済み(tsukada_special 自分) |
-| 40 | 相掛かり腰掛け銀 |  | 相掛かり | <https://ja.wikipedia.org/wiki/%E7%9B%B8%E6%8E%9B%E3%81%8B%E3%82%8A%E8%85%B0%E6%8E%9B%E3%81%91%E9%8A%80> | <https://ja.wikipedia.org/wiki/Category%3A%E7%9B%B8%E6%8E%9B%E3%81%8B%E3%82%8A> | 未 |
+| 40 | 相掛かり腰掛け銀 |  | 相掛かり | <https://ja.wikipedia.org/wiki/%E7%9B%B8%E6%8E%9B%E3%81%8B%E3%82%8A%E8%85%B0%E6%8E%9B%E3%81%91%E9%8A%80> | <https://ja.wikipedia.org/wiki/Category%3A%E7%9B%B8%E6%8E%9B%E3%81%8B%E3%82%8A> | 下書き済み(aigakari_koshikakegin 自分。第 17 組) |
 | 41 | 鎖鎌銀 |  | 相掛かり | <https://ja.wikipedia.org/wiki/%E9%8E%96%E9%8E%8C%E9%8A%80> | <https://ja.wikipedia.org/wiki/Category%3A%E7%9B%B8%E6%8E%9B%E3%81%8B%E3%82%8A> | 下書き済み(kusarigamagin 自分) |
 | 42 | ひねり飛車 |  | 相掛かり | <https://ja.wikipedia.org/wiki/%E3%81%B2%E3%81%AD%E3%82%8A%E9%A3%9B%E8%BB%8A> | <https://ja.wikipedia.org/wiki/Category%3A%E7%9B%B8%E6%8E%9B%E3%81%8B%E3%82%8A> | 下書き済み(hineribisha 自分) |
-| 43 | 縦歩取り |  | 相掛かり | <https://ja.wikipedia.org/wiki/%E7%B8%A6%E6%AD%A9%E5%8F%96%E3%82%8A> | <https://ja.wikipedia.org/wiki/Category%3A%E7%9B%B8%E6%8E%9B%E3%81%8B%E3%82%8A> | 未 |
-| 44 | UFO銀 |  | 相掛かり | <https://ja.wikipedia.org/wiki/UFO%E9%8A%80> | <https://ja.wikipedia.org/wiki/Category%3A%E7%9B%B8%E6%8E%9B%E3%81%8B%E3%82%8A> | 未 |
+| 43 | 縦歩取り |  | 相掛かり | <https://ja.wikipedia.org/wiki/%E7%B8%A6%E6%AD%A9%E5%8F%96%E3%82%8A> | <https://ja.wikipedia.org/wiki/Category%3A%E7%9B%B8%E6%8E%9B%E3%81%8B%E3%82%8A> | 下書き済み(tatefudori 自分。第 17 組) |
+| 44 | UFO銀 |  | 相掛かり | <https://ja.wikipedia.org/wiki/UFO%E9%8A%80> | <https://ja.wikipedia.org/wiki/Category%3A%E7%9B%B8%E6%8E%9B%E3%81%8B%E3%82%8A> | 下書き済み(ufo_gin 自分。第 17 組) |
 | 45 | 中原流相掛かり |  | 相掛かり | **出典なし** | <https://ja.wikipedia.org/wiki/%E5%B0%86%E6%A3%8B%E3%81%AE%E6%88%A6%E6%B3%95%E4%B8%80%E8%A6%A7> | 未 |
 | 46 | 新旧対抗型 |  | 相掛かり | **出典なし** | <https://ja.wikipedia.org/wiki/%E5%B0%86%E6%A3%8B%E3%81%AE%E6%88%A6%E6%B3%95%E4%B8%80%E8%A6%A7> | 未 |
 | 47 | 飛車先交換早繰り銀 |  | 相掛かり | **出典なし** | <https://ja.wikipedia.org/wiki/%E5%B0%86%E6%A3%8B%E3%81%AE%E6%88%A6%E6%B3%95%E4%B8%80%E8%A6%A7> | 未 |
@@ -967,6 +967,20 @@
 **写した 15 件の当たり方(4 人 70 局、全手。完成 / 75% 以上)**: 無敵囲い 1 / 33、一夜囲い 1 / 14、土居矢倉 0 / 4、ボナンザ囲い 1 / 4、角銀雁木 0 / 3、金開き 2 / 2、菊水矢倉 0 / 2、菱矢倉 0 / 1、二枚銀雁木 0 / 1。**穴熊系 4 件・アヒル囲い・中原囲いは 1 局も 75% に届かなかった**(相手が 70 局で穴熊に組んだ局は無い)。
 
 **埋まった数**: 囲いの目録 **自分側 35 / 62・相手側 35 / 35(完了)**・戦法 55 / 184・狙い 18 / 67。**次は戦法の残り(出典あり約 90 件)に戻る**(司令塔の指示 3。認識のコードが無いので測れないまま増えることになり、報告は 3 行に縮める)。
+
+## 20. 第 17 組(2026-09-25): 戦法 9 件 ― **測れない(認識のコードが無い)**
+
+**足した ID(すべて `draft`・`side: self`、置き場 `data/drafts/2026-09-25-knowledge/openings/`)**: `gangi_senpou`(雁木戦法)・`hayakurigin`(早繰り銀)・`aigakari_bogin`(相掛かり棒銀)・`aigakari_koshikakegin`(相掛かり腰掛け銀)・`ufo_gin`(UFO銀、low)・`yagura_nakabisha`(矢倉中飛車、low)・`tatefudori`(縦歩取り)・`ninja_gin`(忍者銀、low)・`kintachi`(金立ち戦法、low)。出典はすべて Wikipedia の個別ページ(参照日 2026-09-25。文は写さず要点だけ自分の言葉で `source` に書いた)。**目録の 9 行を「未」から「下書き済み」に更新した。**
+
+**測れない**: 戦型を認識するコードは `apps/server/src/analysis/` に無いので、**沈黙率も誤認も動かない**(2026-09-25 司令塔の訂正)。代わりに次の 2 つを確かめた。**スキーマ検証 68 件 OK**(`data/openings` 3 + 下書き 65)。**本体へ移すときの門も通した** ― Kind 3 の口 `loadApprovedScenarioVariants` に同じ 68 件のフォルダを読ませて**例外なし・承認済み変化 0 件**(全レコードの `scenario` が `null` なので 0 件が正しい)。
+
+**出典から座標が読めた範囲だけを書いた**: 早繰り銀は出典が銀の全行程(3九→4八→3七→4六)を述べていないので、出典が挙げた 4六銀 と 3五歩 だけを `recognition_pattern` に置いた。UFO銀・金立ち戦法・忍者銀・矢倉中飛車は出典が挙げるマスが 1〜2 個しかないため `confidence_level` を low にした。
+
+**重なりの記録**: 相掛かり腰掛け銀の銀の位置(5六)は既存の `koshikakegin`・`kakugawari_koshikakegin` と同じである。**戦型は認識に使われないので実害は無いが、将来コードを付けるときに区別が要る。** 今回は相掛かりであることを示す 2六飛 を先に置いて区別した。
+
+**保留**: 木村定跡(目録 #36)は手順の名前(定跡)で、駒の配置として書けないため「未」のまま残した。
+
+**埋まった数**: 戦法 **64 / 184**・囲い 自分側 35 / 62・相手側 35 / 35・狙い 18 / 67。
 
 ## 付録 A. 局ごとの一覧(4 人 70 局。40 手目と終局時の自玉・自飛の筋・相手玉・相手飛の筋、形の認識の前後)
 

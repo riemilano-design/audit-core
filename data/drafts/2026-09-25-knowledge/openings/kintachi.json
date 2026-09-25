@@ -1,0 +1,26 @@
+{
+  "id": "kintachi",
+  "name": "金立ち戦法",
+  "name_kana": "きんたちせんぽう",
+  "side": "self",
+  "family": "相居飛車",
+  "leads_to_shape_ids": [
+    "funagakoi"
+  ],
+  "scenario": null,
+  "recognition_pattern": [
+    {
+      "piece": "金",
+      "to": "5h",
+      "order_hint": 1
+    },
+    {
+      "piece": "金",
+      "to": "5g",
+      "order_hint": 2
+    }
+  ],
+  "source": "【AI起草 / 出典は下記】Wikipedia『金立ち戦法』(https://ja.wikipedia.org/wiki/金立ち戦法 (参照日 2026-09-25))による。先手なら右金を 5八金 から 5七金 と繰り出して攻める戦法の総称で、5七金戦法とも呼ばれる(後手番なら 5三金)。recognition_pattern は 5八 → 5七 の 2 件。 戦型を認識するコードは apps/server/src/analysis/ に無いため、このレコードを足しても認識の数は動かない(2026-09-25 司令塔の訂正、docs/KNOWLEDGE_LANE_BRIEF_2026-09-25.md §5.1)。座標は先手の絶対座標(docs/DATA_MODEL.md の規約)。追加の経緯: 2026-09-25 の知識レーン第 17 組(docs/LANE_KNOWLEDGE_LOG_2026-09.md §20)。人間の決定(2026-09-25、網羅)による目録の埋め。",
+  "confidence_level": "low",
+  "review_status": "draft"
+}

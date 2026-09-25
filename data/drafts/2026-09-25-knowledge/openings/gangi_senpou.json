@@ -1,0 +1,27 @@
+{
+  "id": "gangi_senpou",
+  "name": "雁木戦法",
+  "name_kana": "がんぎせんぽう",
+  "side": "self",
+  "family": "相居飛車",
+  "leads_to_shape_ids": [
+    "gangi_nimaigin",
+    "gangi_tsunogin"
+  ],
+  "scenario": null,
+  "recognition_pattern": [
+    {
+      "piece": "銀",
+      "to": "6g",
+      "order_hint": 1
+    },
+    {
+      "piece": "銀",
+      "to": "5g",
+      "order_hint": 2
+    }
+  ],
+  "source": "【AI起草 / 出典は下記】Wikipedia『雁木戦法』(https://ja.wikipedia.org/wiki/雁木戦法 (参照日 2026-09-25))による。旧型(相居飛車二枚銀雁木)の基本形は銀 6七・5七、金 7八・5八、玉 6九、飛車は初期位置の 2八。新型(ツノ銀雁木)は右銀を 5七 ではなく 4七 に置く。recognition_pattern は旧型の二枚の銀(6七・5七)を置いた。 戦型を認識するコードは apps/server/src/analysis/ に無いため、このレコードを足しても認識の数は動かない(2026-09-25 司令塔の訂正、docs/KNOWLEDGE_LANE_BRIEF_2026-09-25.md §5.1)。座標は先手の絶対座標(docs/DATA_MODEL.md の規約)。追加の経緯: 2026-09-25 の知識レーン第 17 組(docs/LANE_KNOWLEDGE_LOG_2026-09.md §20)。人間の決定(2026-09-25、網羅)による目録の埋め。",
+  "confidence_level": "medium",
+  "review_status": "draft"
+}

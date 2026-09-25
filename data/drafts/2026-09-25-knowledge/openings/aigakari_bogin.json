@@ -1,0 +1,27 @@
+{
+  "id": "aigakari_bogin",
+  "name": "相掛かり棒銀",
+  "name_kana": "あいがかりぼうぎん",
+  "side": "self",
+  "family": "相掛かり",
+  "leads_to_shape_ids": [
+    "funagakoi",
+    "yagura_kinyagura"
+  ],
+  "scenario": null,
+  "recognition_pattern": [
+    {
+      "piece": "銀",
+      "to": "2g",
+      "order_hint": 1
+    },
+    {
+      "piece": "銀",
+      "to": "2f",
+      "order_hint": 2
+    }
+  ],
+  "source": "【AI起草 / 出典は下記】Wikipedia『相掛かり棒銀』(https://ja.wikipedia.org/wiki/相掛かり棒銀 (参照日 2026-09-25))による。右銀を 3八 → 2七 → 2六 とまっすぐ進め、飛車は 2筋 に置いたままにする。まっすぐ進む銀の形が棒に見えることが名前の由来。recognition_pattern は途中と到達点の 2七・2六 を置いた(3八 は初期位置なので入れていない)。 戦型を認識するコードは apps/server/src/analysis/ に無いため、このレコードを足しても認識の数は動かない(2026-09-25 司令塔の訂正、docs/KNOWLEDGE_LANE_BRIEF_2026-09-25.md §5.1)。座標は先手の絶対座標(docs/DATA_MODEL.md の規約)。追加の経緯: 2026-09-25 の知識レーン第 17 組(docs/LANE_KNOWLEDGE_LOG_2026-09.md §20)。人間の決定(2026-09-25、網羅)による目録の埋め。",
+  "confidence_level": "medium",
+  "review_status": "draft"
+}
