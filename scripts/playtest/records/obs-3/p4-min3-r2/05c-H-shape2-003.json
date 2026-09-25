@@ -1,0 +1,467 @@
+{
+  "schemaVersion": "0.3",
+  "subject": {
+    "customer": "p4",
+    "groups": [
+      "3 分"
+    ],
+    "gamesCount": 18
+  },
+  "scope": "this_user",
+  "lane": "shape",
+  "counterEvidence": {
+    "attempted": true,
+    "items": [
+      {
+        "kind": "counterexample",
+        "text": "仮説は、生の到達率より数え直した値が下がる向きを述べています。写しの行には、その向きでない局があります。gameNo 15 の行は rawBest 0.8・movedRequiredBest 1 で、数え直した値のほうが高く出ています。gameNo 11 と gameNo 13 の行は rawBest と movedRequiredBest が同じ値で、下がっていません。向きはすべての行でそろっているわけではない、と読めます。",
+        "observations": [
+          {
+            "obsId": "obs.vocab.shapeClosestPerGame",
+            "path": "recognition rows[].{closestSelfShape.shapeId,shapeBest,shapeMovedRequiredBest} → {gameNo,shapeId,rawBest,movedRequiredBest}",
+            "value": [
+              {
+                "gameNo": 11,
+                "shapeId": "ahirugakoi",
+                "rawBest": 0.6666666666666666,
+                "movedRequiredBest": 0.6666666666666666
+              },
+              {
+                "gameNo": 13,
+                "shapeId": "nakazumai",
+                "rawBest": 0.6666666666666666,
+                "movedRequiredBest": 0.6666666666666666
+              },
+              {
+                "gameNo": 15,
+                "shapeId": "mutekigakoi",
+                "rawBest": 0.8,
+                "movedRequiredBest": 1
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "denominator",
+        "text": "rawBest 0.8・movedRequiredBest 0.5 という組み合わせの行は、shapeId が mutekigakoi の行に寄っています(例: gameNo 3)。shapeId が ahirugakoi の gameNo 11 の行と、nakazumai の gameNo 13 の行では下がっていません。仮説の読みを支えている行の出どころは、この組の行の全体ではなく、同じ形 id の行に偏っている可能性があります。形 id ごとに分母が違う行を、ひとまとまりの傾向としてまとめてよいかは写しからは決められません。",
+        "observations": [
+          {
+            "obsId": "obs.vocab.shapeClosestPerGame",
+            "path": "recognition rows[].{closestSelfShape.shapeId,shapeBest,shapeMovedRequiredBest} → {gameNo,shapeId,rawBest,movedRequiredBest}",
+            "value": [
+              {
+                "gameNo": 3,
+                "shapeId": "mutekigakoi",
+                "rawBest": 0.8,
+                "movedRequiredBest": 0.5
+              },
+              {
+                "gameNo": 11,
+                "shapeId": "ahirugakoi",
+                "rawBest": 0.6666666666666666,
+                "movedRequiredBest": 0.6666666666666666
+              },
+              {
+                "gameNo": 13,
+                "shapeId": "nakazumai",
+                "rawBest": 0.6666666666666666,
+                "movedRequiredBest": 0.6666666666666666
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "denominator",
+        "text": "completeTotal 9 と、shapeStatus の self の completed 0 は、数える単位が同じでない可能性があります。観測項目の一覧では、前者は形 id をまたいで足した局数の延べ、後者は局面 × レコードの行の件数(self の none 22558・forming 5360 と同じ数え方)と書かれています。また shapeClosestPerGame の行で movedRequiredBest が 1 なのは gameNo 15 の行だけで、9 をこの組の行の中に置き直すことはできません。並べて比べる前に、分母の出どころをそろえる必要があります。",
+        "observations": [
+          {
+            "obsId": "obs.vocab.shapeMovedRequiredSummary",
+            "path": "recognition byGroup[group].shapeMovedRequiredCompleteTotal, recognition movedRequiredZeroShapeCounts.{self,opponent}",
+            "value": {
+              "completeTotal": 9,
+              "zeroCount": {
+                "self": 0,
+                "opponent": 0
+              }
+            }
+          },
+          {
+            "obsId": "obs.vocab.shapeStatus",
+            "path": "recognition byGroup[group].statusCounts.shape.{self,opponent}.{none,forming,completed,matched}",
+            "value": {
+              "self": {
+                "none": 22558,
+                "forming": 5360,
+                "completed": 0,
+                "matched": 0
+              },
+              "opponent": {
+                "none": 15549,
+                "forming": 5208,
+                "completed": 33,
+                "matched": 0
+              }
+            }
+          },
+          {
+            "obsId": "obs.vocab.shapeClosestPerGame",
+            "path": "recognition rows[].{closestSelfShape.shapeId,shapeBest,shapeMovedRequiredBest} → {gameNo,shapeId,rawBest,movedRequiredBest}",
+            "value": [
+              {
+                "gameNo": 15,
+                "shapeId": "mutekigakoi",
+                "rawBest": 0.8,
+                "movedRequiredBest": 1
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "denominator",
+        "text": "写しの completeTotal 9 には、自分側と相手側の区別が付いていません(同じ項目の zeroCount には self 0・opponent 0 の区別があります)。仮説はこの 9 を自分側の completed 0 と並べていますが、shapeStatus の opponent の completed は 33 です。9 のうちどれだけが自分側の行なのかは、写しからは引けません。",
+        "observations": [
+          {
+            "obsId": "obs.vocab.shapeMovedRequiredSummary",
+            "path": "recognition byGroup[group].shapeMovedRequiredCompleteTotal, recognition movedRequiredZeroShapeCounts.{self,opponent}",
+            "value": {
+              "completeTotal": 9,
+              "zeroCount": {
+                "self": 0,
+                "opponent": 0
+              }
+            }
+          },
+          {
+            "obsId": "obs.vocab.shapeStatus",
+            "path": "recognition byGroup[group].statusCounts.shape.{self,opponent}.{none,forming,completed,matched}",
+            "value": {
+              "self": {
+                "none": 22558,
+                "forming": 5360,
+                "completed": 0,
+                "matched": 0
+              },
+              "opponent": {
+                "none": 15549,
+                "forming": 5208,
+                "completed": 33,
+                "matched": 0
+              }
+            }
+          }
+        ]
+      },
+      {
+        "kind": "alternative",
+        "text": "rawBest と movedRequiredBest は、その局で一番高かった値をそれぞれ独立に持つ値で、別の局面の値でありうる、と観測項目の一覧に書かれています。したがって「生の到達率が 0.8 だった局面で数え直すと 0.5 に下がる」とは写しからは言えず、言えるのは gameNo 3 の局の生の最高が 0.8、数え直しの最高が 0.5 だった、というところまでです。「下がる」という読みは、対として測っていない値どうしを対として読んだ結果である可能性があります。movedRequiredBest が 0 の gameNo 1・gameNo 7・gameNo 18 の行だけは、すべての局面で 0 と読めます。",
+        "observations": [
+          {
+            "obsId": "obs.vocab.shapeClosestPerGame",
+            "path": "recognition rows[].{closestSelfShape.shapeId,shapeBest,shapeMovedRequiredBest} → {gameNo,shapeId,rawBest,movedRequiredBest}",
+            "value": [
+              {
+                "gameNo": 1,
+                "shapeId": "mutekigakoi",
+                "rawBest": 0.6,
+                "movedRequiredBest": 0
+              },
+              {
+                "gameNo": 3,
+                "shapeId": "mutekigakoi",
+                "rawBest": 0.8,
+                "movedRequiredBest": 0.5
+              },
+              {
+                "gameNo": 7,
+                "shapeId": "mutekigakoi",
+                "rawBest": 0.6,
+                "movedRequiredBest": 0
+              },
+              {
+                "gameNo": 18,
+                "shapeId": "mutekigakoi",
+                "rawBest": 0.6,
+                "movedRequiredBest": 0
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "alternative",
+        "text": "数え直しは初期配置にある必要駒を分母から外すため、外した駒がその後に動いてしまった局でも 1 になり得る、と観測項目の一覧に書かれています。写しの「欠けがちょうど 1 枚だった局」の行では、gameNo 15 の欠けは 4i の金で、4i は先手の右の金の初期配置のマス(離れた、と読む側)です。その gameNo 15 の movedRequiredBest は 1 です。completeTotal 9 と self の completed 0 の開きは、初期配置のまま動いていない駒が生の側に入っているためではなく、数え直しの定め方からそうなっている可能性があります。",
+        "observations": [
+          {
+            "obsId": "obs.vocab.shapeOneAwayDetail",
+            "path": "recognition rows[].closestSelfShape(missing が 1 件の行) → {gameNo,shapeId,square,piece}",
+            "value": [
+              {
+                "gameNo": 15,
+                "shapeId": "mutekigakoi",
+                "square": "4i",
+                "piece": "金"
+              }
+            ]
+          },
+          {
+            "obsId": "obs.vocab.shapeClosestPerGame",
+            "path": "recognition rows[].{closestSelfShape.shapeId,shapeBest,shapeMovedRequiredBest} → {gameNo,shapeId,rawBest,movedRequiredBest}",
+            "value": [
+              {
+                "gameNo": 15,
+                "shapeId": "mutekigakoi",
+                "rawBest": 0.8,
+                "movedRequiredBest": 1
+              }
+            ]
+          },
+          {
+            "obsId": "obs.vocab.shapeMovedRequiredSummary",
+            "path": "recognition byGroup[group].shapeMovedRequiredCompleteTotal, recognition movedRequiredZeroShapeCounts.{self,opponent}",
+            "value": {
+              "completeTotal": 9,
+              "zeroCount": {
+                "self": 0,
+                "opponent": 0
+              }
+            }
+          },
+          {
+            "obsId": "obs.vocab.shapeStatus",
+            "path": "recognition byGroup[group].statusCounts.shape.{self,opponent}.{none,forming,completed,matched}",
+            "value": {
+              "self": {
+                "none": 22558,
+                "forming": 5360,
+                "completed": 0,
+                "matched": 0
+              },
+              "opponent": {
+                "none": 15549,
+                "forming": 5208,
+                "completed": 33,
+                "matched": 0
+              }
+            }
+          }
+        ]
+      },
+      {
+        "kind": "alternative",
+        "text": "数え直しの分母は「初期位置でない必要駒」だけなので、生の分母より小さくなり得ます。分母が小さいほど、欠けが 1 枚あったときの値の下がり方は大きく出ます。gameNo 3 の行で rawBest 0.8 に対し movedRequiredBest が 0.5 だったことは、生の側に動いていない駒が入って値を押し上げているためではなく、数え直しの分母が小さいことの副作用である可能性があります。どちらの読みかは、分母の枚数を写しから引けないため、この写しだけでは分けられません。",
+        "observations": [
+          {
+            "obsId": "obs.vocab.shapeClosestPerGame",
+            "path": "recognition rows[].{closestSelfShape.shapeId,shapeBest,shapeMovedRequiredBest} → {gameNo,shapeId,rawBest,movedRequiredBest}",
+            "value": [
+              {
+                "gameNo": 1,
+                "shapeId": "mutekigakoi",
+                "rawBest": 0.6,
+                "movedRequiredBest": 0
+              },
+              {
+                "gameNo": 3,
+                "shapeId": "mutekigakoi",
+                "rawBest": 0.8,
+                "movedRequiredBest": 0.5
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "result": "weakened",
+    "provenance": {
+      "inputs": [
+        "records/obs-3/p4-min3-r2/00-obs_snapshot.p4.min3.r2c.json"
+      ]
+    }
+  },
+  "status": "weak",
+  "knowledge": {
+    "kind": "discovered",
+    "reviewStatus": "draft",
+    "origin": {
+      "kifu": "p4/min3",
+      "lane": "shape"
+    },
+    "range": "this_user"
+  },
+  "provenance": {
+    "gitHead": "1690871",
+    "inputs": [
+      "records/obs-3/p4-min3-r2/00-obs_snapshot.p4.min3.r2c.json"
+    ],
+    "excludedInputs": []
+  },
+  "hypothesisId": "H-p4-min3r2cshape2-003",
+  "statement": "生の到達率が 0.8 の局でも、初期位置でない必要駒だけで数え直すと 0.5 に下がり、数え直した値が 0 の局もあります。数え直した到達率が 1.0 に達した延べ件数は 9 ありますが、自分側の形が completed になった件数は 0 でした。近づいて見えている分のいくらかは、初期配置のまま動いていない必要駒が数に入っているためだ、という読みです。",
+  "observations": [
+    {
+      "obsId": "obs.vocab.shapeClosestPerGame",
+      "path": "recognition rows[].{closestSelfShape.shapeId,shapeBest,shapeMovedRequiredBest} → {gameNo,shapeId,rawBest,movedRequiredBest}",
+      "value": [
+        {
+          "gameNo": 1,
+          "shapeId": "mutekigakoi",
+          "rawBest": 0.6,
+          "movedRequiredBest": 0
+        },
+        {
+          "gameNo": 2,
+          "shapeId": "mutekigakoi",
+          "rawBest": 0.6,
+          "movedRequiredBest": 0.5
+        },
+        {
+          "gameNo": 3,
+          "shapeId": "mutekigakoi",
+          "rawBest": 0.8,
+          "movedRequiredBest": 0.5
+        },
+        {
+          "gameNo": 4,
+          "shapeId": "mutekigakoi",
+          "rawBest": 0.6,
+          "movedRequiredBest": 0.5
+        },
+        {
+          "gameNo": 5,
+          "shapeId": "mutekigakoi",
+          "rawBest": 0.8,
+          "movedRequiredBest": 0.5
+        },
+        {
+          "gameNo": 6,
+          "shapeId": "mutekigakoi",
+          "rawBest": 0.8,
+          "movedRequiredBest": 0.5
+        },
+        {
+          "gameNo": 7,
+          "shapeId": "mutekigakoi",
+          "rawBest": 0.6,
+          "movedRequiredBest": 0
+        },
+        {
+          "gameNo": 8,
+          "shapeId": "mutekigakoi",
+          "rawBest": 0.8,
+          "movedRequiredBest": 0.5
+        },
+        {
+          "gameNo": 9,
+          "shapeId": "mutekigakoi",
+          "rawBest": 0.8,
+          "movedRequiredBest": 0.5
+        },
+        {
+          "gameNo": 10,
+          "shapeId": "mutekigakoi",
+          "rawBest": 0.8,
+          "movedRequiredBest": 0.5
+        },
+        {
+          "gameNo": 11,
+          "shapeId": "ahirugakoi",
+          "rawBest": 0.6666666666666666,
+          "movedRequiredBest": 0.6666666666666666
+        },
+        {
+          "gameNo": 12,
+          "shapeId": "mutekigakoi",
+          "rawBest": 0.8,
+          "movedRequiredBest": 0.5
+        },
+        {
+          "gameNo": 13,
+          "shapeId": "nakazumai",
+          "rawBest": 0.6666666666666666,
+          "movedRequiredBest": 0.6666666666666666
+        },
+        {
+          "gameNo": 14,
+          "shapeId": "mutekigakoi",
+          "rawBest": 0.8,
+          "movedRequiredBest": 0.5
+        },
+        {
+          "gameNo": 15,
+          "shapeId": "mutekigakoi",
+          "rawBest": 0.8,
+          "movedRequiredBest": 1
+        },
+        {
+          "gameNo": 16,
+          "shapeId": "mutekigakoi",
+          "rawBest": 0.8,
+          "movedRequiredBest": 0.5
+        },
+        {
+          "gameNo": 17,
+          "shapeId": "mutekigakoi",
+          "rawBest": 0.8,
+          "movedRequiredBest": 0.5
+        },
+        {
+          "gameNo": 18,
+          "shapeId": "mutekigakoi",
+          "rawBest": 0.6,
+          "movedRequiredBest": 0
+        }
+      ]
+    },
+    {
+      "obsId": "obs.vocab.shapeMovedRequiredSummary",
+      "path": "recognition byGroup[group].shapeMovedRequiredCompleteTotal, recognition movedRequiredZeroShapeCounts.{self,opponent}",
+      "value": {
+        "completeTotal": 9,
+        "zeroCount": {
+          "self": 0,
+          "opponent": 0
+        }
+      }
+    },
+    {
+      "obsId": "obs.vocab.shapeStatus",
+      "path": "recognition byGroup[group].statusCounts.shape.{self,opponent}.{none,forming,completed,matched}",
+      "value": {
+        "self": {
+          "none": 22558,
+          "forming": 5360,
+          "completed": 0,
+          "matched": 0
+        },
+        "opponent": {
+          "none": 15549,
+          "forming": 5208,
+          "completed": 33,
+          "matched": 0
+        }
+      }
+    }
+  ],
+  "prediction": {
+    "writtenAt": "2026-09-26",
+    "window": "next_20_games_same_time_limit",
+    "metric": "obs.vocab.shapeClosestPerGame の行のうち rawBest から movedRequiredBest を引いた差が 0.3 以上の局数",
+    "comparator": ">=",
+    "value": 10,
+    "alsoRequires": [
+      {
+        "metric": "obs.vocab.shapeClosestPerGame の行数(3 分の局数)",
+        "comparator": ">=",
+        "value": 20
+      },
+      {
+        "metric": "obs.vocab.shapeClosestPerGame の行のうち movedRequiredBest が null でない局数",
+        "comparator": ">=",
+        "value": 16
+      }
+    ]
+  }
+}
