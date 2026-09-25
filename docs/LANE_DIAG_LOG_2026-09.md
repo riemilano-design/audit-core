@@ -653,6 +653,8 @@ typecheck rc=0(worktree の緑。P-84)。所見: `willHaveWhatif` の `"pdf"` �
 - **予測**: `apps/server` vitest 741 → **751**(`nameExposure.test.ts` +10: R0〜R5 と `expired`=draft の同値、定数の値の写し)。`scripts/playtest` 1690 → **1696**(hypothesis v0.2 +3〈v0.2 の例が通る・v0.1 の既存 6 本が通る・`expired` を H-7 が落とす〉、露出の欄 +3〈A で forming は 0 件見せる・B の hidden に対 1 が全部入る・分母 = 証拠 ≤ 1 の行数〉)。`validate:data` 24 件(+1)。70 局・30 手の数(構造から言えること): **A の戦型の named = 0**(戦型は本体につながっていないが、関数を当てれば completed 2034 のうち reviewed 0 件なので named 0・hedged 2034)、**B で戦型の hidden に対 1 の completed(30 手で `openCompleted` のうち対 1 の分)が全部入る**、**C の hedged ≤ B の hedged**、証拠 0 の completed は今の下書きでは 0 件なので R2 は数を動かさない(外す前の写しで当てれば 1021 が hidden に入る = 記録)。割合の値は予測せず記録。
 - 予測と違ったら実装担当は直さずに理由を書く。
 
+**到達点(人間の指示 2026-09-25 夜、統括経由。DESIGN_BRIEF §5、`dd594be`)**: 「全て終わったら、改めて本人の 20 局のレポートを出して見比べる」。7 項目: 1 EXPO-1 → 2 閾値の値(統括)→ 3 EXPO-2(本体と**冊子の経路**にもつなぐ: `scripts/playtest` の failureEvent の `shape`/`opponentIntent` と付録 4 の名前の出し方も `decideNameExposure` を通す前提で範囲を切る)→ 4 STEP 2(狙いのスキーマ)→ 5 下書きを冊子の認識に使う判断(統括。材料 = 上位 3 件の押し出し・試験の実データ依存・`deliver.ts` が下書きの置き場を読む案の可否、EXPO-2 の後に 10 行以内)→ 6 答え合わせの表を prediction から生成(納品レーンと)→ 7 `<p4>` の 20 局を再納品 + 差分の一覧。順は変えない。
+
 **手順**: OPEN-2b のコミットの後に着手(同じ `recognitionMeasure.ts` を触るため)。実装担当(worktree、冒頭 3 行)→ 独立監査 1 回(変異: R1 を外す〈draft が named になる〉→ 試験が落ちる/R3 の `<=` を `<` に → 対 1 の試験が落ちる/`expired` を enum から外す → validate と H-7 の試験が落ちる)→ パス指定コミット → レーン長が 70 局で A・B・C を測る → ここに追記 → 統括へ値の選択を依頼(EXPO-2 の計画はその後)。
 
 **実測の結果**: (後で追記。)
