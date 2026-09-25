@@ -1,0 +1,47 @@
+{
+  "values": { "nodeShallowMaxNodes": 4000000 },
+  "answers": [
+    {
+      "group": "3 分",
+      "kifuId": "kifu-a",
+      "gameNo": 1,
+      "displayPly": 11,
+      "sfen": "lnsgkgsnl/1r5b1/ppppppppp/9/9/9/PPPPPPPPP/1B5R1/LNSGKGSNL b - 1",
+      "actualMove": "7g7f",
+      "top1Move": "3c3d",
+      "pv": ["3c3d"],
+      "top1Tags": { "drop": false, "capture": false, "retreat": false, "declinesPromotion": false, "sacrifice": false, "kingMove": false, "givesCheck": false },
+      "top1Side": "attack",
+      "actualTags": { "drop": false, "capture": false, "retreat": false, "declinesPromotion": false, "sacrifice": false, "kingMove": false, "givesCheck": true },
+      "actualSide": "defense",
+      "topGapCp": 620,
+      "actualGapCp": 400,
+      "firstVisibleNodes": 4000
+    },
+    {
+      "group": "10 分",
+      "kifuId": "kifu-c",
+      "gameNo": 3,
+      "displayPly": 20,
+      "sfen": "lnsgkgsnl/1r5b1/ppppppppp/9/9/9/PPPPPPPPP/1B5R1/LNSGKGSNL b - 1",
+      "actualMove": "2g2f",
+      "top1Move": "2g2f",
+      "pv": ["2g2f"],
+      "top1Tags": { "drop": false, "capture": false, "retreat": false, "declinesPromotion": false, "sacrifice": false, "kingMove": false, "givesCheck": false },
+      "top1Side": "attack",
+      "actualTags": { "drop": false, "capture": false, "retreat": false, "declinesPromotion": false, "sacrifice": false, "kingMove": false, "givesCheck": false },
+      "actualSide": "attack",
+      "topGapCp": 100,
+      "actualGapCp": 50,
+      "firstVisibleNodes": 1000
+    }
+  ],
+  "counts": {
+    "top1TagCounts": { "drop": 0, "capture": 0, "retreat": 0, "declinesPromotion": 0, "sacrifice": 0, "kingMove": 0, "givesCheck": 0 },
+    "top1SideCounts": { "attack": 2, "defense": 0, "both": 0, "none": 0 },
+    "actualTagCounts": { "drop": 0, "capture": 0, "retreat": 0, "declinesPromotion": 0, "sacrifice": 0, "kingMove": 0, "givesCheck": 1 },
+    "gamesCount": 2,
+    "totalCount": 2,
+    "totalForkCount": 2
+  }
+}

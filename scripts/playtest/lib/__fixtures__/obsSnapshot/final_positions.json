@@ -1,0 +1,34 @@
+{
+  "kind": "final_positions",
+  "startedAt": "2026-09-25T00:00:00.000Z",
+  "gitHead": "abc123",
+  "dirty": false,
+  "nodes": 4000000,
+  "threads": 1,
+  "entries": [
+    {
+      "group": "3 分",
+      "kifuId": "kifu-b",
+      "gameNo": 2,
+      "moves": 30,
+      "sfen": "lnsgkgsnl/1r5b1/ppppppppp/9/9/9/PPPPPPPPP/1B5R1/LNSGKGSNL b - 1",
+      "mirrored": false,
+      "top1Move": "8h2b",
+      "pv": ["8h2b"],
+      "scoreCp": -3000,
+      "mate": null
+    },
+    {
+      "group": "10 分",
+      "kifuId": "kifu-c",
+      "gameNo": 3,
+      "moves": 50,
+      "sfen": "lnsgkgsnl/1r5b1/ppppppppp/9/9/9/PPPPPPPPP/1B5R1/LNSGKGSNL b - 1",
+      "mirrored": true,
+      "top1Move": null,
+      "pv": [],
+      "scoreCp": null,
+      "mate": 5
+    }
+  ]
+}

@@ -1,0 +1,70 @@
+{
+  "title": "X",
+  "person": "X",
+  "today": "2026-09-25",
+  "summary": { "games": 3 },
+  "games": [
+    { "no": 1, "id": "kifu-a", "side": "先手", "total": 40, "result": "勝ち", "ending": "投了", "events": 1, "scores": [10, null, -50], "plies": [1, 2, 3], "marks": [] },
+    { "no": 2, "id": "kifu-b", "side": "先手", "total": 30, "result": "負け", "ending": "時間切れ", "events": 0, "scores": [5, 6], "plies": [1, 2], "marks": [] },
+    { "no": 3, "id": "kifu-c", "side": "先手", "total": 50, "result": "勝ち", "ending": "投了", "events": 0, "scores": [1], "plies": [1], "marks": [] }
+  ],
+  "events": [
+    {
+      "gameNo": 1,
+      "kind": "drop",
+      "ply": 10,
+      "before": 100,
+      "after": -50,
+      "played": "７六歩(77)",
+      "best": "３四歩(33)",
+      "sameBest": false,
+      "after5": "5 手以内に王手はありませんでした",
+      "afterPassMate": null,
+      "playedUsi": "7g7f",
+      "bestUsi": "3c3d"
+    }
+  ],
+  "overview": { "fell": 30, "early": 11, "mid": 15, "late": 4, "fromAhead": 5, "fromAheadLoss": 5, "moveCheck": null },
+  "escapeScenes": [
+    {
+      "gameNo": 1,
+      "displayPly": 12,
+      "userMove": "７六歩",
+      "opponentMove": "３四歩",
+      "before": 100,
+      "after": -50,
+      "escRoot": 4,
+      "escEnd": 2,
+      "pvEscEnd": 3
+    }
+  ],
+  "time": {
+    "available": true,
+    "perMove": { "moves": 20, "median": 5, "mean": 6.2, "ge10": 15.0, "ge30": 2.0, "le1": 5.0, "gameMedian": 90 },
+    "bySpent": [
+      { "n": 88, "collapsed": 3 },
+      { "n": 97, "collapsed": 17 },
+      { "n": 32, "collapsed": 10 },
+      { "n": 8, "collapsed": 0 }
+    ],
+    "afterLongThink": { "quickAfterLongThink": { "n": 4, "collapsed": 1 }, "afterLongThinkAny": { "n": 9, "collapsed": 2 } },
+    "byLeft": null,
+    "phaseSpent": {
+      "timeUpLoss": { "games": 1, "early": 20, "mid": 40, "late": 10 },
+      "otherGames": { "games": 2, "early": 15, "mid": 30, "late": 5 },
+      "perGame": [{ "gameNo": 1, "total": 40, "midMoves": 10, "midSec": 40, "midSecPerMove": 4, "timeUpLoss": false }],
+      "midOver": { "thresholdSec": 4, "games": 1, "over": 0, "overAndTimeUpLoss": 0 }
+    },
+    "timeUpLosses": [
+      { "gameNo": 2, "total": 30, "usedSec": 178, "finalScore": -300 },
+      { "gameNo": 4, "total": 60, "usedSec": 179, "finalScore": -6488 },
+      { "gameNo": 5, "total": 70, "usedSec": 180, "finalScore": -6045 },
+      { "gameNo": 6, "total": 55, "usedSec": 176, "finalScore": -3347 },
+      { "gameNo": 7, "total": 62, "usedSec": 177, "finalScore": 50 }
+    ]
+  },
+  "findings": [
+    { "kind": "timeSpent", "shown": true, "numbers": { "a": 3, "b": 17, "p": 17.6, "c": 1, "d": 3, "q": 33.3 }, "labels": { "a": "10 秒以上で崩れた手" }, "text": "…", "oneLine": "…" }
+  ],
+  "previous": null
+}

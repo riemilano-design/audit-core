@@ -1,0 +1,69 @@
+{
+  "gamesCount": 2,
+  "values": {
+    "sideZoneRadius": 2,
+    "startPly": 17,
+    "minLossCp": 600,
+    "narrowGapCp": 100,
+    "riseCp": 200,
+    "sideVersion": 2,
+    "hitsDefenderRadius": 2,
+    "attackZoneRadius": 3
+  },
+  "summary": {
+    "positionsRead": 40,
+    "matchesTop1": 20,
+    "withinMultiPv": 30,
+    "scenes": { "fork": 5, "narrowHeld": 2, "chanceHeld": 1, "rawTotal": 8, "distinctTotal": 7 },
+    "sideCompare": { "scenesRead": 8, "bothFound": 6, "attackNoLegalMove": 1, "defenseNoLegalMove": 1 },
+    "lossesWithNarrowHeld": { "withNarrow": 1, "lossesTotal": 1 }
+  },
+  "games": [
+    {
+      "gameNo": 1,
+      "id": "kifu-a",
+      "side": "先手",
+      "result": "勝ち",
+      "total": 40,
+      "ending": "投了",
+      "plyOffset": 0,
+      "scores": [10, -50],
+      "plies": [1, 3],
+      "positionsRead": 20,
+      "matchesTop1": 10,
+      "withinMultiPv": 15,
+      "representative": {
+        "kind": "fork",
+        "ply": 11,
+        "displayPly": 11,
+        "sfen": "lnsgkgsnl/1r5b1/ppppppppp/9/9/9/PPPPPPPPP/1B5R1/LNSGKGSNL b - 1",
+        "actualMove": "7g7f",
+        "actualRank": 2,
+        "actual": { "found": true, "scoreCp": -50, "mate": null },
+        "topGapCp": 620,
+        "candidates": [{ "move": "3c3d", "scoreCp": 100, "mate": null, "pv": ["3c3d"] }],
+        "scene": {
+          "attack": { "state": "found", "move": "8h2b", "scoreCp": 300, "mate": null, "pv": ["8h2b"] },
+          "defense": { "state": "noLegalMove" },
+          "sideGapCp": 50
+        },
+        "afterCandidate": null
+      }
+    },
+    {
+      "gameNo": 2,
+      "id": "kifu-b",
+      "side": "先手",
+      "result": "負け",
+      "total": 30,
+      "ending": "時間切れ",
+      "plyOffset": 0,
+      "scores": [5],
+      "plies": [1],
+      "positionsRead": 20,
+      "matchesTop1": 10,
+      "withinMultiPv": 15,
+      "representative": null
+    }
+  ]
+}

@@ -1,0 +1,133 @@
+{
+  "kind": "time_cause",
+  "gitHead": "abc123",
+  "dirty": false,
+  "games": [
+    {
+      "gameNo": 1,
+      "kifuId": "kifu-a",
+      "group": "3 分",
+      "timeLimitSec": 180,
+      "timeUpLoss": false,
+      "total": 40,
+      "phaseSpentSec": { "early": 20, "mid": 40, "late": 10 },
+      "longThinkCountByPhase": { "early": 1, "mid": 2, "late": 0 },
+      "longThinkTotal": 3,
+      "longestMove": { "sec": 15, "kifPly": 12 },
+      "longThinkStreakCount": 1,
+      "midThinkByPhase": { "early": { "count": 1, "sec": 5 }, "mid": { "count": 2, "sec": 12 }, "late": { "count": 0, "sec": 0 } },
+      "midThinkTotal": { "count": 3, "sec": 17 },
+      "forkAmongLongThink": { "numerator": 2, "denominator": 3 },
+      "oppositeSideAmongForkLongThink": { "numerator": 1, "denominator": 2 },
+      "rookMark": { "own": true, "opponent": false },
+      "remainingSec": 60,
+      "midMoveSeconds": [{ "kifPly": 11, "sec": 5, "fork": true }]
+    },
+    {
+      "gameNo": 2,
+      "kifuId": "kifu-b",
+      "group": "3 分",
+      "timeLimitSec": 180,
+      "timeUpLoss": true,
+      "total": 30,
+      "phaseSpentSec": { "early": 10, "mid": 30, "late": 5 },
+      "longThinkCountByPhase": { "early": 0, "mid": 1, "late": 0 },
+      "longThinkTotal": 1,
+      "longestMove": { "sec": 12, "kifPly": 8 },
+      "longThinkStreakCount": 0,
+      "midThinkByPhase": { "early": { "count": 0, "sec": 0 }, "mid": { "count": 1, "sec": 6 }, "late": { "count": 0, "sec": 0 } },
+      "midThinkTotal": { "count": 1, "sec": 6 },
+      "forkAmongLongThink": null,
+      "oppositeSideAmongForkLongThink": null,
+      "rookMark": null,
+      "remainingSec": 2,
+      "midMoveSeconds": []
+    },
+    {
+      "gameNo": 3,
+      "kifuId": "kifu-c",
+      "group": "10 分",
+      "timeLimitSec": 600,
+      "timeUpLoss": false,
+      "total": 50,
+      "phaseSpentSec": { "early": 30, "mid": 60, "late": 20 },
+      "longThinkCountByPhase": { "early": 1, "mid": 1, "late": 0 },
+      "longThinkTotal": 2,
+      "longestMove": { "sec": 22, "kifPly": 18 },
+      "longThinkStreakCount": 0,
+      "midThinkByPhase": { "early": { "count": 1, "sec": 6 }, "mid": { "count": 1, "sec": 7 }, "late": { "count": 0, "sec": 0 } },
+      "midThinkTotal": { "count": 2, "sec": 13 },
+      "forkAmongLongThink": { "numerator": 1, "denominator": 2 },
+      "oppositeSideAmongForkLongThink": { "numerator": 0, "denominator": 1 },
+      "rookMark": { "own": false, "opponent": true },
+      "remainingSec": 100,
+      "midMoveSeconds": [{ "kifPly": 17, "sec": 7, "fork": false }]
+    }
+  ],
+  "groups": [
+    {
+      "group": "3 分",
+      "timeLimitSec": 180,
+      "games": 2,
+      "timeUpLoss": {
+        "games": 1,
+        "medianEarlySec": 10,
+        "medianMidSec": 30,
+        "medianLateSec": 5,
+        "medianLongThinkTotal": 1,
+        "medianLongestMoveSec": 12,
+        "medianStreakCount": 0,
+        "medianMidThinkCount": 1,
+        "medianMidThinkSec": 6,
+        "forkFraction": null,
+        "oppositeSideFraction": null
+      },
+      "other": {
+        "games": 1,
+        "medianEarlySec": 20,
+        "medianMidSec": 40,
+        "medianLateSec": 10,
+        "medianLongThinkTotal": 3,
+        "medianLongestMoveSec": 15,
+        "medianStreakCount": 1,
+        "medianMidThinkCount": 3,
+        "medianMidThinkSec": 17,
+        "forkFraction": { "numerator": 2, "denominator": 3 },
+        "oppositeSideFraction": { "numerator": 1, "denominator": 2 }
+      },
+      "rookMarkBreakdown": [
+        { "own": true, "opponent": true, "games": 0, "medianEarlySec": null, "medianMidSec": null },
+        { "own": true, "opponent": false, "games": 1, "medianEarlySec": 20, "medianMidSec": 40 },
+        { "own": false, "opponent": true, "games": 0, "medianEarlySec": null, "medianMidSec": null },
+        { "own": false, "opponent": false, "games": 0, "medianEarlySec": null, "medianMidSec": null }
+      ],
+      "c10Table": [
+        { "gameNo": 1, "earlySec": 20, "midSec": 40, "remainingSec": 60 },
+        { "gameNo": 2, "earlySec": 10, "midSec": 30, "remainingSec": 2 }
+      ]
+    },
+    {
+      "group": "10 分",
+      "timeLimitSec": 600,
+      "games": 1,
+      "timeUpLoss": { "games": 0, "medianEarlySec": null, "medianMidSec": null, "medianLateSec": null, "medianLongThinkTotal": null, "medianLongestMoveSec": null, "medianStreakCount": null, "medianMidThinkCount": null, "medianMidThinkSec": null, "forkFraction": null, "oppositeSideFraction": null },
+      "other": {
+        "games": 1,
+        "medianEarlySec": 30,
+        "medianMidSec": 60,
+        "medianLateSec": 20,
+        "medianLongThinkTotal": 2,
+        "medianLongestMoveSec": 22,
+        "medianStreakCount": 0,
+        "medianMidThinkCount": 2,
+        "medianMidThinkSec": 13,
+        "forkFraction": { "numerator": 1, "denominator": 2 },
+        "oppositeSideFraction": { "numerator": 0, "denominator": 1 }
+      },
+      "rookMarkBreakdown": [
+        { "own": false, "opponent": true, "games": 1, "medianEarlySec": 30, "medianMidSec": 60 }
+      ],
+      "c10Table": [{ "gameNo": 3, "earlySec": 30, "midSec": 60, "remainingSec": 100 }]
+    }
+  ]
+}

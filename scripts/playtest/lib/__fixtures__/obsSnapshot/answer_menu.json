@@ -1,0 +1,24 @@
+{
+  "items": [
+    {
+      "id": "M1",
+      "stage": "時間",
+      "actionCore": "3 分切れ負けの中盤は 1 手 4 秒を目安に",
+      "evidenceName": "中盤 4 秒超の局のうち時間で負けた側の局",
+      "minN": 5,
+      "verifyName": "時間負けの局数、中盤 4 秒超の局数",
+      "verifyGate": { "fraction": "midOver.overAndTimeUpLoss / midOver.over", "min": 0.5 },
+      "foundInSameData": false
+    },
+    {
+      "id": "M9",
+      "stage": "時間",
+      "actionCore": "中盤の消費が自分のふだんの中央値を超えたら、次の手の前に残り時間を見る",
+      "evidenceName": "時間負けの局の中盤の消費と、他の局の中央値",
+      "minN": 2,
+      "verifyName": "時間負けの局のうち中央値超え / 時間負けの局",
+      "verifyGate": null,
+      "foundInSameData": true
+    }
+  ]
+}
