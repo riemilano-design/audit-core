@@ -215,23 +215,23 @@
 | 6 | 相掛かり |  | 相居飛車 | <https://ja.wikipedia.org/wiki/%E7%9B%B8%E6%8E%9B%E3%81%8B%E3%82%8A> | <https://ja.wikipedia.org/wiki/Category%3A%E5%B1%85%E9%A3%9B%E8%BB%8A> | 下書き済み(aigakari 自分) |
 | 7 | 横歩取り |  | 相居飛車 | <https://ja.wikipedia.org/wiki/%E6%A8%AA%E6%AD%A9%E5%8F%96%E3%82%8A> | <https://ja.wikipedia.org/wiki/Category%3A%E5%B1%85%E9%A3%9B%E8%BB%8A> | 下書き済み(yokofudori 自分) |
 | 8 | 雁木戦法 | 雁木 | 相居飛車 | <https://ja.wikipedia.org/wiki/%E9%9B%81%E6%9C%A8%E6%88%A6%E6%B3%95> | <https://ja.wikipedia.org/wiki/Category%3A%E5%B1%85%E9%A3%9B%E8%BB%8A> | 未 |
-| 9 | 矢倉棒銀 |  | 矢倉の指し方 | <https://ja.wikipedia.org/wiki/%E7%9F%A2%E5%80%89%E6%A3%92%E9%8A%80> | <https://ja.wikipedia.org/wiki/Category%3A%E7%9F%A2%E5%80%89> | 未 |
-| 10 | 雀刺し |  | 矢倉の指し方 | <https://ja.wikipedia.org/wiki/%E9%9B%80%E5%88%BA%E3%81%97> | <https://ja.wikipedia.org/wiki/Category%3A%E7%9F%A2%E5%80%89> | 未 |
-| 11 | 森下システム |  | 矢倉の指し方 | <https://ja.wikipedia.org/wiki/%E6%A3%AE%E4%B8%8B%E3%82%B7%E3%82%B9%E3%83%86%E3%83%A0> | <https://ja.wikipedia.org/wiki/Category%3A%E7%9F%A2%E5%80%89> | 未 |
-| 12 | 脇システム |  | 矢倉の指し方 | <https://ja.wikipedia.org/wiki/%E8%84%87%E3%82%B7%E3%82%B9%E3%83%86%E3%83%A0> | <https://ja.wikipedia.org/wiki/Category%3A%E7%9F%A2%E5%80%89> | 未 |
+| 9 | 矢倉棒銀 |  | 矢倉の指し方 | <https://ja.wikipedia.org/wiki/%E7%9F%A2%E5%80%89%E6%A3%92%E9%8A%80> | <https://ja.wikipedia.org/wiki/Category%3A%E7%9F%A2%E5%80%89> | 下書き済み(yagura_bogin 自分) |
+| 10 | 雀刺し |  | 矢倉の指し方 | <https://ja.wikipedia.org/wiki/%E9%9B%80%E5%88%BA%E3%81%97> | <https://ja.wikipedia.org/wiki/Category%3A%E7%9F%A2%E5%80%89> | 下書き済み(suzumesashi 自分) |
+| 11 | 森下システム |  | 矢倉の指し方 | <https://ja.wikipedia.org/wiki/%E6%A3%AE%E4%B8%8B%E3%82%B7%E3%82%B9%E3%83%86%E3%83%A0> | <https://ja.wikipedia.org/wiki/Category%3A%E7%9F%A2%E5%80%89> | 下書き済み(morishita_system 自分。recognition_pattern 無し) |
+| 12 | 脇システム |  | 矢倉の指し方 | <https://ja.wikipedia.org/wiki/%E8%84%87%E3%82%B7%E3%82%B9%E3%83%86%E3%83%A0> | <https://ja.wikipedia.org/wiki/Category%3A%E7%9F%A2%E5%80%89> | 下書き済み(wakisystem 自分) |
 | 13 | 矢倉3七桂 |  | 矢倉の指し方 | <https://ja.wikipedia.org/wiki/%E7%9F%A2%E5%80%893%E4%B8%83%E6%A1%82> | <https://ja.wikipedia.org/wiki/Category%3A%E7%9F%A2%E5%80%89> | 未 |
-| 14 | 矢倉3七銀 |  | 矢倉の指し方 | <https://ja.wikipedia.org/wiki/%E7%9F%A2%E5%80%893%E4%B8%83%E9%8A%80> | <https://ja.wikipedia.org/wiki/Category%3A%E7%9F%A2%E5%80%89> | 未 |
+| 14 | 矢倉3七銀 |  | 矢倉の指し方 | <https://ja.wikipedia.org/wiki/%E7%9F%A2%E5%80%893%E4%B8%83%E9%8A%80> | <https://ja.wikipedia.org/wiki/Category%3A%E7%9F%A2%E5%80%89> | 下書き済み(yagura_37gin 自分) |
 | 15 | 四手角 |  | 矢倉の指し方 | <https://ja.wikipedia.org/wiki/%E5%9B%9B%E6%89%8B%E8%A7%92> | <https://ja.wikipedia.org/wiki/Category%3A%E7%9F%A2%E5%80%89> | 未 |
-| 16 | 米長流急戦矢倉 |  | 矢倉の指し方 | <https://ja.wikipedia.org/wiki/%E7%B1%B3%E9%95%B7%E6%B5%81%E6%80%A5%E6%88%A6%E7%9F%A2%E5%80%89> | <https://ja.wikipedia.org/wiki/Category%3A%E7%9F%A2%E5%80%89> | 未 |
+| 16 | 米長流急戦矢倉 |  | 矢倉の指し方 | <https://ja.wikipedia.org/wiki/%E7%B1%B3%E9%95%B7%E6%B5%81%E6%80%A5%E6%88%A6%E7%9F%A2%E5%80%89> | <https://ja.wikipedia.org/wiki/Category%3A%E7%9F%A2%E5%80%89> | 下書き済み(yonenaga_kyusen_yagura 相手) |
 | 17 | 阿久津流急戦矢倉 |  | 矢倉の指し方 | <https://ja.wikipedia.org/wiki/%E9%98%BF%E4%B9%85%E6%B4%A5%E6%B5%81%E6%80%A5%E6%88%A6%E7%9F%A2%E5%80%89> | <https://ja.wikipedia.org/wiki/Category%3A%E7%9F%A2%E5%80%89> | 未 |
 | 18 | 中原流急戦矢倉 |  | 矢倉の指し方 | <https://ja.wikipedia.org/wiki/%E4%B8%AD%E5%8E%9F%E6%B5%81%E6%80%A5%E6%88%A6%E7%9F%A2%E5%80%89> | <https://ja.wikipedia.org/wiki/Category%3A%E7%9F%A2%E5%80%89> | 未 |
 | 19 | 矢倉中飛車 |  | 矢倉の指し方 | <https://ja.wikipedia.org/wiki/%E7%9F%A2%E5%80%89%E4%B8%AD%E9%A3%9B%E8%BB%8A> | <https://ja.wikipedia.org/wiki/Category%3A%E7%9F%A2%E5%80%89> | 未 |
 | 20 | 6二飛戦法 |  | 矢倉の指し方 | <https://ja.wikipedia.org/wiki/6%E4%BA%8C%E9%A3%9B%E6%88%A6%E6%B3%95> | <https://ja.wikipedia.org/wiki/Category%3A%E7%9F%A2%E5%80%89> | 未 |
-| 21 | カニカニ銀 |  | 矢倉の指し方 | <https://ja.wikipedia.org/wiki/%E3%82%AB%E3%83%8B%E3%82%AB%E3%83%8B%E9%8A%80> | <https://ja.wikipedia.org/wiki/Category%3A%E7%9F%A2%E5%80%89> | 未 |
+| 21 | カニカニ銀 |  | 矢倉の指し方 | <https://ja.wikipedia.org/wiki/%E3%82%AB%E3%83%8B%E3%82%AB%E3%83%8B%E9%8A%80> | <https://ja.wikipedia.org/wiki/Category%3A%E7%9F%A2%E5%80%89> | 下書き済み(kanikanigin 自分) |
 | 22 | 矢倉3五歩早仕掛け |  | 矢倉の指し方 | <https://ja.wikipedia.org/wiki/%E7%9F%A2%E5%80%893%E4%BA%94%E6%AD%A9%E6%97%A9%E4%BB%95%E6%8E%9B%E3%81%91> | <https://ja.wikipedia.org/wiki/Category%3A%E7%9F%A2%E5%80%89> | 未 |
 | 23 | 無理矢理矢倉 |  | 矢倉の指し方 | <https://ja.wikipedia.org/wiki/%E7%84%A1%E7%90%86%E7%9F%A2%E7%90%86%E7%9F%A2%E5%80%89> | <https://ja.wikipedia.org/wiki/Category%3A%E7%9F%A2%E5%80%89> | 未 |
 | 24 | ウソ矢倉 |  | 矢倉の指し方 | <https://ja.wikipedia.org/wiki/%E3%82%A6%E3%82%BD%E7%9F%A2%E5%80%89> | <https://ja.wikipedia.org/wiki/Category%3A%E7%9F%A2%E5%80%89> | 未 |
-| 25 | 同型矢倉 |  | 矢倉の指し方 | <https://ja.wikipedia.org/wiki/%E5%90%8C%E5%9E%8B%E7%9F%A2%E5%80%89> | <https://ja.wikipedia.org/wiki/Category%3A%E7%9F%A2%E5%80%89> | 未 |
+| 25 | 同型矢倉 |  | 矢倉の指し方 | <https://ja.wikipedia.org/wiki/%E5%90%8C%E5%9E%8B%E7%9F%A2%E5%80%89> | <https://ja.wikipedia.org/wiki/Category%3A%E7%9F%A2%E5%80%89> | 下書き済み(douke_yagura 自分) |
 | 26 | 飛車先不突矢倉 |  | 矢倉の指し方 | <https://ja.wikipedia.org/wiki/%E9%A3%9B%E8%BB%8A%E5%85%88%E4%B8%8D%E7%AA%81%E7%9F%A2%E5%80%89> | <https://ja.wikipedia.org/wiki/Category%3A%E7%9F%A2%E5%80%89> | 未 |
 | 27 | 金立ち戦法 |  | 矢倉の指し方 | <https://ja.wikipedia.org/wiki/%E9%87%91%E7%AB%8B%E3%81%A1%E6%88%A6%E6%B3%95> | <https://ja.wikipedia.org/wiki/Category%3A%E7%9F%A2%E5%80%89> | 未 |
 | 28 | 忍者銀 |  | 矢倉の指し方 | <https://ja.wikipedia.org/wiki/%E5%BF%8D%E8%80%85%E9%8A%80> | <https://ja.wikipedia.org/wiki/Category%3A%E7%9F%A2%E5%80%89> | 未 |
@@ -653,6 +653,20 @@
 **スキーマに書けなかった条件(記録)**: `genshi_nakabisha` の「序盤の早い段階で」という**手数の早さ**(`order_hint` は並びの目安で何手目かではない)、`sente_nakabisha` の「先手だけが組める」という**手番の条件**(いまは `side: self` = 先手という仕様に頼っている)、`fuusha` の「玉と飛車が決まったマスに落ち着かない」(出典自身が行き来すると述べている)。
 
 **埋まった数(目録の行): 囲い 35 / 62、戦法 39 / 184。** レコード数は 囲い 45・戦型 43(既存 3 + 下書き 40)。
+
+## 13. 第 11 組(2026-09-25): 戦型 8 件(矢倉の中の指し方) ― **測れない(認識のコードが無い)**
+
+**足した ID(すべて `draft`)**: `wakisystem`(脇システム・自分)・`suzumesashi`(雀刺し・自分)・`kanikanigin`(カニカニ銀・自分)・`morishita_system`(森下システム・自分、low、`recognition_pattern` 無し)・`yagura_bogin`(矢倉棒銀・自分)・`yagura_37gin`(矢倉3七銀・自分)・`douke_yagura`(同型矢倉・自分)・`yonenaga_kyusen_yagura`(米長流急戦矢倉・**相手**)。出典は各 `source`(Wikipedia、URL + 参照日 2026-09-25)。スキーマ検証 OK。**測れない**。
+
+**この組で分かった、スキーマの限界の 4 つ目の型**: これまでに出た「否定の条件(飛車を動かさない)」「初期位置の駒を条件にすること(5七の歩)」「手順の来歴(振り直しを省いた)」「手数(何手目)」に加えて、
+
+- **`morishita_system`**: 骨子が「**先に形を決めないこと**」。出典が挙げる 4八銀は「そこへ動く手」ではなく「**そこに留まること**」が特徴で、その後は相手次第で分かれる。`recognition_pattern` を書かずに置いた(認識の候補にならない戦型)。
+- **`douke_yagura`・`wakisystem`**: 定義の半分が「**相手も同じ形であること**」「相手の角が 6四 にあること」。いまのスキーマは**片側の手しか書けない**ので、書いた手は同型でない矢倉にも当たる。
+- **`kanikanigin`**: 「玉と金を動かさない(居玉)」が書けない。
+
+**同じマスに集まる手(記録)**: **4六銀**は山田定跡・鷺宮定跡・4六銀左戦法・超速3七銀・カニカニ銀の 5 つに出る。**銀 2六**は相掛かりの棒銀と矢倉棒銀に出る(通り道が 3八→2七 か 4八→3七 かで分かれる)。**銀 3七**は矢倉3七銀と超速3七銀に出る。**1 手の一致で forming が立つ作り**では、序盤でこれらが同時に立つ。
+
+**埋まった数(目録の行): 囲い 35 / 62、戦法 47 / 184。** レコード数は 囲い 45・戦型 51(既存 3 + 下書き 48)。
 
 ## 付録 A. 局ごとの一覧(4 人 70 局。40 手目と終局時の自玉・自飛の筋・相手玉・相手飛の筋、形の認識の前後)
 

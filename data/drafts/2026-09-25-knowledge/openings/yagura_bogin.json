@@ -1,0 +1,31 @@
+{
+  "id": "yagura_bogin",
+  "name": "矢倉棒銀",
+  "name_kana": "やぐらぼうぎん",
+  "side": "self",
+  "family": "居飛車系",
+  "leads_to_shape_ids": [
+    "yagura_kinyagura"
+  ],
+  "scenario": null,
+  "recognition_pattern": [
+    {
+      "piece": "銀",
+      "to": "4h",
+      "order_hint": 1
+    },
+    {
+      "piece": "銀",
+      "to": "3g",
+      "order_hint": 2
+    },
+    {
+      "piece": "銀",
+      "to": "2f",
+      "order_hint": 3
+    }
+  ],
+  "source": "【AI起草】自分側(先手)の矢倉棒銀。矢倉に囲ってから、右の銀をまっすぐ 2六 まで進めて 2筋 の突破を狙う指し方。定義は Wikipedia『矢倉棒銀』(https://ja.wikipedia.org/wiki/矢倉棒銀 (参照日 2026-09-25)) の本文(通常の矢倉での棒銀では銀を ▲4八 - ▲3七 - ▲2六 と進めるのが普通)による。recognition_pattern はその 3 手。**銀 2六 は相掛かりの棒銀(`boh_gin_self`)と同じマス**で、分かれ目は 4八 → 3七 を通ることである(相掛かりは 3八 → 2七 を通る)。 戦型を認識するコードは apps/server/src/analysis/ に無いため、このレコードを足しても認識の数は動かない(**測れない**)。 追加の経緯: 2026-09-25 の知識レーン第 11 組(docs/LANE_KNOWLEDGE_LOG_2026-09.md §13)。矢倉の中の指し方。",
+  "confidence_level": "medium",
+  "review_status": "draft"
+}

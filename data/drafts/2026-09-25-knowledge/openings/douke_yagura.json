@@ -1,0 +1,26 @@
+{
+  "id": "douke_yagura",
+  "name": "同型矢倉",
+  "name_kana": "どうけいやぐら",
+  "side": "self",
+  "family": "居飛車系",
+  "leads_to_shape_ids": [
+    "yagura_kinyagura"
+  ],
+  "scenario": null,
+  "recognition_pattern": [
+    {
+      "piece": "銀",
+      "to": "4g",
+      "order_hint": 1
+    },
+    {
+      "piece": "桂",
+      "to": "3g",
+      "order_hint": 2
+    }
+  ],
+  "source": "【AI起草】自分側(先手)の同型矢倉。相矢倉で、先手と後手が同じ形に組んで戦う局面。定義は Wikipedia『同型矢倉』(https://ja.wikipedia.org/wiki/同型矢倉 (参照日 2026-09-25)) の本文(▲4七銀-3七桂 と △6三銀-7三桂 の陣にして戦う相矢倉戦。近年は土居矢倉での同型も現れる)による。recognition_pattern は先手側の 2 手(4七銀・3七桂)。**「相手も同じ形であること」が定義の半分**だが、いまのスキーマは片側の手しか書けないため、この 2 手は同型でない矢倉にも当たる。 戦型を認識するコードは apps/server/src/analysis/ に無いため、このレコードを足しても認識の数は動かない(**測れない**)。 追加の経緯: 2026-09-25 の知識レーン第 11 組(docs/LANE_KNOWLEDGE_LOG_2026-09.md §13)。矢倉の中の指し方。",
+  "confidence_level": "medium",
+  "review_status": "draft"
+}

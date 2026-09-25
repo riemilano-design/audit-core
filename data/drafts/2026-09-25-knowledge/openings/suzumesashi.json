@@ -1,0 +1,31 @@
+{
+  "id": "suzumesashi",
+  "name": "雀刺し",
+  "name_kana": "すずめさし",
+  "side": "self",
+  "family": "居飛車系",
+  "leads_to_shape_ids": [
+    "yagura_kinyagura"
+  ],
+  "scenario": null,
+  "recognition_pattern": [
+    {
+      "piece": "香",
+      "to": "1g",
+      "order_hint": 1
+    },
+    {
+      "piece": "飛",
+      "to": "1h",
+      "order_hint": 2
+    },
+    {
+      "piece": "桂",
+      "to": "2e",
+      "order_hint": 3
+    }
+  ],
+  "source": "【AI起草】自分側(先手)の雀刺し。矢倉から、1筋 に攻め駒を集めて 1三 の地点を一点で破ろうとする指し方。定義は Wikipedia『雀刺し』(https://ja.wikipedia.org/wiki/雀刺し (参照日 2026-09-25)) の本文(▲1七香・▲1八飛・▲6八角または▲7九角・▲2五桂 と攻め駒を移して 1三 の地点に集中させる。角が 1三 を狙う構えが、槍を斜めに構えて雀を捕らえる姿に似ていることが名前の由来)による。recognition_pattern は 3 手(1七香・1八飛・2五桂)。角は 6八 と 7九 のどちらもありうると出典が述べているので入れていない。**飛車が 1八 に回る**のは他の戦型では少なく、手がかりとしては強い方である。 戦型を認識するコードは apps/server/src/analysis/ に無いため、このレコードを足しても認識の数は動かない(**測れない**)。 追加の経緯: 2026-09-25 の知識レーン第 11 組(docs/LANE_KNOWLEDGE_LOG_2026-09.md §13)。矢倉の中の指し方。",
+  "confidence_level": "medium",
+  "review_status": "draft"
+}
