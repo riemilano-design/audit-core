@@ -573,5 +573,25 @@ typecheck rc=0(worktree の緑。P-84)。所見: `willHaveWhatif` の `"pdf"` �
 **契約が言ったこと(この周の成果)**: (a) **H-3 が「反証なしでは先へ進めない」を機械で言った**(③ で 3 本とも NG、④ で通る)。(b) 分母の小ささ(5 局の中央値 = 1 局の値)と「使った時間の合計の言い換え」は、時間の観測だけからでも反証役が出せた ― 設計案 §12 #5「時間 = 症状」を LLM の側が数で言い直した形。(c) 予測は幅と分母の下限が無いと「1 局の入れ替わりで動く」= ⑥ を ⑤ の後に置いた設計の意味が実物で出た。(d) `04-integration.md` の別の説明 6 本は、`lane: "alternative"` の新しい H の候補(台帳に入れるかは次の周)。
 **回らなかったもの・測れないもの**: 段ごとの手数あたり(`midSecPerMove`)の中央値・組(pair)と局・手の対応は写しに無い(観測項目の不足 = 次の観測項目の候補、`copy` で作れる)。判断の中身は時間からは分からない(設計どおり)。
 **人間が監査する列**: `07-audit-columns.md`。**承認の根拠(委任の 3 条件)**: 動きを変える変更なし(記録の追加だけ)、根拠は上の数、測っていないものは「測れない」に書いた。独立監査は**付けていない**(コード変更が無く、成果は記録。統括が §10.2 の右の列で照合する)。
-**設計案の直し**: §10.3 ① を写しの実数に、H-1 が落とす実例を 1 行、§15 に 1 行(同じコミット)。
+**設計案の直し**: §10.3 ① を写しの実数に、H-1 が落とす実例を 1 行、§15 に 1 行(同じコミット)。統括の照合: 一致(`0df2f69`)。次の順は統括の指示(2026-09-25): OBS-5'(不足 2 項目)→ OBS-5(幾何の写し)→ §14 の 4 は案だけ → 規則 8・`expired` の正本の文を案として統括へ → 次の周の指示に「初稿を残す」→ L-形は P-85 と証拠数の後。
+
+### 12.6 STEP OBS-5': 1 周で不足した観測項目 2 つを既存の材料の写しで作る(2026-09-25。着手。予測を実測の前に書く)
+
+**何を**: 新しい出力 `obs_extra.json`(`kind: "obs_extra"`。**納品物ではない**。DELIVER-1 の凍結に触れない: `patient_report_data.json`・`time_cause.json` は変えない)を作る道具 `scripts/playtest/obsExtra.ts` + `lib/obsExtra.ts` + 試験。入力は `reportData.ts` と同じ(`--records <段 2 の JSONL…> --kifu <固定棋譜…>` + `--out <obs_extra.json>`。`--time-limit-sec` は要らない)。中身 3 項目:
+1. **`obs.time.pairSpent`**(`pairs[]`): 崩れの分母になる「組」(`countedPairsOf` = `reportData.ts:552`)1 つずつに、`{gameNo, branchPly, displayPly, phase, spentSec | null, spentBucket 0〜3 | null, collapsed}`。`spentBucket` は `spentBucketIndexOf`(`TIME_VALUES.spentBucketsSec` の写し。**新しい閾値なし**)。`spentSec` が取れない組は `null`(落とさない)。= 組と局・手の対応。
+2. **`obs.time.phaseMoves`**(`phaseMoves[]`、局ごと): `{gameNo, timeUpLoss, early: {moves, sec}, mid: {moves, sec}, late: {moves, sec}}`。`ownMoveTimesOf`(`reportData.ts:529`)+ `phaseOf` の集計 = `phaseSpentOfGame` と同じ数え方(秒の側は `time_cause.json` の `phaseSpentSec` と一致するはず)。手数あたりはここでは**計算しない**(仮説側が `derived` で割る)。
+3. **`obs.time.phaseSecPerMoveMedians`**(`phaseSecPerMoveMedians`): `{timeUpLoss: {games, early, mid, late}, other: {games, early, mid, late}}` = 局ごとの `sec/moves` の**中央値**(段ごと・組ごと)。**これだけは計算あり**(中央値は `TimeCauseSubgroupSummary` と同じ関数を使う。閾値ではない)。理由: 1 周で統合が「手数あたりでは並びが変わる可能性」を未確認に置いたが、中央値は `derived` で書けない。OBSERVATION_ITEMS では状態を `existing` にせず **`existing(計算あり)`** と注記する。`moves` が 0 の局は分母に入れない(`null` にせず、`games` に数えない)。
+- `lib/reportData.ts` の変更は `countedPairsOf`・`ownMoveTimesOf` に `export` を付けるだけ(動きは変えない。`git diff` が 2 行)。
+- `obsSnapshot.ts` に `--extra <obs_extra.json>` を足し、`SNAPSHOT_ITEMS` に上の 3 本(35 → 38)。`docs/OBSERVATION_ITEMS.md` §1 に 3 行(existing 108 → 111)、§3 の数を直す。設計案 §2 の表の「時間」の行に 1 文(不足 2 項目を OBS-5' で足した)。
+
+**なぜ**: 1 周(§12.5)で統合と反証が「組と局・手の対応」「段ごとの手数あたり」を写しに無いと未確認に置いた。次の周で仮説がこれを引けるように、既存の内部の値に名前を付けて出す(設計案 §2 足す順番 (1))。
+
+**測定の予測(実測の前に書く)**:
+- vitest 1674 → **1682**(新規 8: obsExtra 6〈組の数と bucket が fixture の bySpent と一致/`spentSec` null の組が落ちない/`phaseMoves` の sec が `phaseSpentOfGame` と一致/中央値が `moves 0` を除く/`kind`/CLI exit 0・引数不足 2〉+ obsSnapshot 2〈`--extra` の 3 項目が載る/無ければ出ない〉)。`typecheck:scripts` 緑(worktree)。`reportData.ts` の diff は `export` 2 行。
+- **4 人目の 3 分の組で基準の入力を最後まで通す**(入力は `pipeline.ts` が `reportData.ts` に渡したのと同じ `--records`・`--kifu`。出力は scratchpad、`out/` に書かない): `pairs` のうち `spentSec` が非 null の数 = **225**(= bySpent の n の和 88+97+32+8)、bucket ごとの `{n, collapsed}` を数え直すと **[{88,3},{97,17},{32,10},{8,0}] に一致**(二本立て: 既存の `bySpent` と同じ数が別経路から出る)/`phaseMoves[].{early,mid,late}.sec` は `time_cause.json` の `games[].phaseSpentSec` と **18/18 一致**/`mid.{moves, sec}` は `patient_report_data.json` の `time.phaseSpent.perGame[].{midMoves, midSec}` と **18/18 一致**/`phaseSecPerMoveMedians.timeUpLoss.games` 5・`other.games` 13。中央値の値は予測しない(記録する)。写しを `--extra` つきで作り直すと `items` **38**、白いリスト外の文字列 0、登録簿 **111**。
+- 予測と違ったら実装担当は直さずに理由を書く。
+
+**手順**: 実装担当(worktree。指示の冒頭に「`<p4>` とだけ書く・`person` の値を写さない・未追跡は `git diff --no-index`・add/reset/checkout/stash 禁止」)→ 独立監査 1 回(変異: bucket の境界を 1 ずらす → bySpent 一致の試験が落ちる/`spentSec` null の組を落とす → 試験が落ちる/`moves 0` を分母に入れる → 中央値の試験が落ちる)→ パス指定コミット → 実測をここに追記。
+
+**実測の結果**: (後で追記。)
 
