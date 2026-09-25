@@ -1,0 +1,51 @@
+{
+  "id": "yagura_ryusen",
+  "name": "流線矢倉",
+  "name_kana": "りゅうせんやぐら",
+  "side": "self",
+  "family": "矢倉系",
+  "parent_shape_id": "yagura_kikusui",
+  "required_pieces": [
+    {
+      "piece": "玉",
+      "square": "8i",
+      "optional": false
+    },
+    {
+      "piece": "銀",
+      "square": "8h",
+      "optional": false
+    },
+    {
+      "piece": "金",
+      "square": "7h",
+      "optional": false
+    },
+    {
+      "piece": "金",
+      "square": "6g",
+      "optional": false
+    },
+    {
+      "piece": "銀",
+      "square": "5g",
+      "optional": false
+    }
+  ],
+  "typical_build_order": [
+    "8i",
+    "8h",
+    "7h",
+    "6g",
+    "5g"
+  ],
+  "characteristics": "玉を 8九 の低い位置に置き(菊水矢倉の形)、守りの左銀を中央の 5七 へ出した形(流れ矢倉の形)を合わせた囲いです。金 2 枚と銀 2 枚で守ります。",
+  "beginner_friendliness": {
+    "score": 2,
+    "reason": "菊水矢倉と流れ矢倉を先に知っていれば分かりやすい形です。手数はかかります。"
+  },
+  "weak_against": "玉が低いぶん横からの攻めには強いものの、上からの攻めには弱さが残ります(菊水矢倉と同じ弱点)。中央へ出た銀は守りから離れています。",
+  "source": "【AI起草。図から起こした / 出典は下記】Wikipedia『矢倉囲い』(https://ja.wikipedia.org/wiki/矢倉囲い (参照日 2026-09-25))の図と本文が一致した(図は 玉8九・銀8八・金7八・金6七・銀5七、本文は「流れ矢倉と菊水矢倉をミックスした囲い」で、菊水矢倉の 玉8九・銀8八 と流れ矢倉の 銀5七 を合わせた形にちょうど当たる)。 **図から起こした。一次資料の確認はしていない。** 読み方は §32.1 の手順どおり(図の向きを既知の座標で校正 → 同じ形を 2 度違うもので読む → 一致した駒だけ)。追加の経緯: 2026-09-25 の知識レーン第 29 組(docs/LANE_KNOWLEDGE_LOG_2026-09.md §34)。",
+  "confidence_level": "low",
+  "review_status": "draft"
+}
