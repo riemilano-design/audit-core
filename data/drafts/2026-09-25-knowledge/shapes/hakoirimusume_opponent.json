@@ -1,0 +1,45 @@
+{
+  "id": "hakoirimusume_opponent",
+  "name": "箱入り娘",
+  "name_kana": "はこいりむすめ",
+  "side": "opponent",
+  "family": "舟囲い系",
+  "parent_shape_id": null,
+  "required_pieces": [
+    {
+      "piece": "玉",
+      "square": "3b",
+      "optional": false
+    },
+    {
+      "piece": "金",
+      "square": "4b",
+      "optional": false
+    },
+    {
+      "piece": "金",
+      "square": "4a",
+      "optional": false
+    },
+    {
+      "piece": "銀",
+      "square": "3a",
+      "optional": false
+    }
+  ],
+  "typical_build_order": [
+    "3b",
+    "4b",
+    "3a",
+    "4a"
+  ],
+  "characteristics": "相手がこの形に組んでいるかを読むためのレコードです。形そのものの意味は自分側の同じ名前の形(hakoirimusume)と同じで、盤の上では 180 度回った位置に現れます。舟囲いから右の金を6八へ上げて、玉7八の右側を金2枚(6八・6九)で固めた囲いです。7九の銀と合わせて玉が箱の中に入ったように見えることからこの名前で呼ばれます。相手が振り飛車のときに、舟囲いより少し手をかけて固くした形です。",
+  "beginner_friendliness": {
+    "score": 4,
+    "reason": "**相手の陣形を読むためのレコードで、自分が組むための評価ではありません。** 点は自分側の同じ形(hakoirimusume)から写しただけの値です。"
+  },
+  "weak_against": "相手がこの形のとき、attackable な方向の目安です(断定ではありません)。上からの攻め(7筋・6筋の歩の上)には金2枚で受けられますが、玉の頭上(7七)を狙う角や桂の攻めと、8筋・9筋の端の攻めには弱さが残ります。金2枚が玉の右に寄っているため、左側(8八)への逃げ道も限られます。",
+  "source": "【AI起草。座標の一次資料確認は行っていない(docs/ROLES.md の保留事項)】**自分側の同じ形 hakoirimusume の座標を、盤ごと 180 度回して写したもの**(筋 f → 10−f、段 r → 10−r の両方を反転。写像: 玉3b・金4b・金4a・銀3a)。**出典そのものが後手の座標を述べているわけではない**(出典は自分側のレコードの source を参照)。過去に「段だけを反転させて左右が入れ替わる」取り違えが起きているため(docs/PHASES.md の P-12、docs/STEP_UNIT6_PLAN_2026-09-12.md §9.5 の決定 3)、**写像の式をこの source に書き、4 人 70 局の実棋譜で相手の陣形として当たるかを測ってから記録した**。判定は後手視点で行われる(apps/server/src/analysis/shapeDetector.ts の perspectiveColorsForSide が side: opponent を gote に固定する)。 追加の経緯: 2026-09-25 の知識レーン第 15 組(docs/LANE_KNOWLEDGE_LOG_2026-09.md §18)。第 7 組の相手側 10 件が効いた(30 手までで相手側の認識 0 → 365 局面)ため、同じ方法で残りを写した。",
+  "confidence_level": "medium",
+  "review_status": "draft"
+}

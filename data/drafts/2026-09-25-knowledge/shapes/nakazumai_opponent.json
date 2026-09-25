@@ -1,0 +1,39 @@
+{
+  "id": "nakazumai_opponent",
+  "name": "中住まい",
+  "name_kana": "なかずまい",
+  "side": "opponent",
+  "family": "その他(相居飛車)",
+  "parent_shape_id": null,
+  "required_pieces": [
+    {
+      "piece": "玉",
+      "square": "5b",
+      "optional": false
+    },
+    {
+      "piece": "金",
+      "square": "3b",
+      "optional": false
+    },
+    {
+      "piece": "銀",
+      "square": "7b",
+      "optional": false
+    }
+  ],
+  "typical_build_order": [
+    "3b",
+    "7b",
+    "5b"
+  ],
+  "characteristics": "相手がこの形に組んでいるかを読むためのレコードです。形そのものの意味は自分側の同じ名前の形(nakazumai)と同じで、盤の上では 180 度回った位置に現れます。玉を5八に上げ、左右に金銀を振り分けて構える囲いです。玉が盤の中央にいるので左右どちらにも逃げやすく、横歩取り(相居飛車の激しい指し方)など、囲う手数をかけずに早く戦う対局で使われます。金・銀の位置は対局によって変わり、ここでは基本の3手(金7八・銀3八・玉5八)を形としています。",
+  "beginner_friendliness": {
+    "score": 3,
+    "reason": "**相手の陣形を読むためのレコードで、自分が組むための評価ではありません。** 点は自分側の同じ形(nakazumai)から写しただけの値です。"
+  },
+  "weak_against": "相手がこの形のとき、attackable な方向の目安です(断定ではありません)。玉のまわりの駒が少なく、上からの攻めにも横からの攻めにも薄いです。中央にいるぶん相手の飛車や角が玉に直接向きやすく、受けの手が続きにくいです。",
+  "source": "【AI起草。座標の一次資料確認は行っていない(docs/ROLES.md の保留事項)】**自分側の同じ形 nakazumai の座標を、盤ごと 180 度回して写したもの**(筋 f → 10−f、段 r → 10−r の両方を反転。写像: 玉5b・金3b・銀7b)。**出典そのものが後手の座標を述べているわけではない**(出典は自分側のレコードの source を参照)。過去に「段だけを反転させて左右が入れ替わる」取り違えが起きているため(docs/PHASES.md の P-12、docs/STEP_UNIT6_PLAN_2026-09-12.md §9.5 の決定 3)、**写像の式をこの source に書き、4 人 70 局の実棋譜で相手の陣形として当たるかを測ってから記録した**。判定は後手視点で行われる(apps/server/src/analysis/shapeDetector.ts の perspectiveColorsForSide が side: opponent を gote に固定する)。 追加の経緯: 2026-09-25 の知識レーン第 15 組(docs/LANE_KNOWLEDGE_LOG_2026-09.md §18)。第 7 組の相手側 10 件が効いた(30 手までで相手側の認識 0 → 365 局面)ため、同じ方法で残りを写した。",
+  "confidence_level": "low",
+  "review_status": "draft"
+}

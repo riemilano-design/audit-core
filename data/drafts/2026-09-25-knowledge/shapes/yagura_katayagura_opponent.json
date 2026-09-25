@@ -1,0 +1,45 @@
+{
+  "id": "yagura_katayagura_opponent",
+  "name": "片矢倉",
+  "name_kana": "かたやぐら",
+  "side": "opponent",
+  "family": "矢倉系",
+  "parent_shape_id": null,
+  "required_pieces": [
+    {
+      "piece": "玉",
+      "square": "3b",
+      "optional": false
+    },
+    {
+      "piece": "金",
+      "square": "4b",
+      "optional": false
+    },
+    {
+      "piece": "金",
+      "square": "4c",
+      "optional": false
+    },
+    {
+      "piece": "銀",
+      "square": "3c",
+      "optional": false
+    }
+  ],
+  "typical_build_order": [
+    "3c",
+    "4c",
+    "4b",
+    "3b"
+  ],
+  "characteristics": "相手がこの形に組んでいるかを読むためのレコードです。形そのものの意味は自分側の同じ名前の形(yagura_katayagura)と同じで、盤の上では 180 度回った位置に現れます。金矢倉より玉が1つ右(7八)にいて、金が6八・6七に縦に並ぶ矢倉です。玉が8八まで行かないぶん短い手数で形になり、角換わり(序盤で角を交換しあう指し方)などで使われます。",
+  "beginner_friendliness": {
+    "score": 3,
+    "reason": "**相手の陣形を読むためのレコードで、自分が組むための評価ではありません。** 点は自分側の同じ形(yagura_katayagura)から写しただけの値です。"
+  },
+  "weak_against": "相手がこの形のとき、attackable な方向の目安です(断定ではありません)。玉が中央寄りにいるため、8筋・7筋の端の方からの攻めには金矢倉ほど遠くありません。上からの攻めには金2枚と銀で受けられますが、横からの攻めに対しては玉の逃げ場が少なめです。",
+  "source": "【AI起草。座標の一次資料確認は行っていない(docs/ROLES.md の保留事項)】**自分側の同じ形 yagura_katayagura の座標を、盤ごと 180 度回して写したもの**(筋 f → 10−f、段 r → 10−r の両方を反転。写像: 玉3b・金4b・金4c・銀3c)。**出典そのものが後手の座標を述べているわけではない**(出典は自分側のレコードの source を参照)。過去に「段だけを反転させて左右が入れ替わる」取り違えが起きているため(docs/PHASES.md の P-12、docs/STEP_UNIT6_PLAN_2026-09-12.md §9.5 の決定 3)、**写像の式をこの source に書き、4 人 70 局の実棋譜で相手の陣形として当たるかを測ってから記録した**。判定は後手視点で行われる(apps/server/src/analysis/shapeDetector.ts の perspectiveColorsForSide が side: opponent を gote に固定する)。 追加の経緯: 2026-09-25 の知識レーン第 15 組(docs/LANE_KNOWLEDGE_LOG_2026-09.md §18)。第 7 組の相手側 10 件が効いた(30 手までで相手側の認識 0 → 365 局面)ため、同じ方法で残りを写した。",
+  "confidence_level": "medium",
+  "review_status": "draft"
+}

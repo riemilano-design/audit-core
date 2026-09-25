@@ -1,0 +1,51 @@
+{
+  "id": "yagura_souyagura_opponent",
+  "name": "総矢倉",
+  "name_kana": "そうやぐら",
+  "side": "opponent",
+  "family": "矢倉系",
+  "parent_shape_id": "yagura_kinyagura_opponent",
+  "required_pieces": [
+    {
+      "piece": "玉",
+      "square": "2b",
+      "optional": false
+    },
+    {
+      "piece": "金",
+      "square": "3b",
+      "optional": false
+    },
+    {
+      "piece": "金",
+      "square": "4c",
+      "optional": false
+    },
+    {
+      "piece": "銀",
+      "square": "3c",
+      "optional": false
+    },
+    {
+      "piece": "銀",
+      "square": "5c",
+      "optional": false
+    }
+  ],
+  "typical_build_order": [
+    "3c",
+    "3b",
+    "2b",
+    "4c",
+    "5c"
+  ],
+  "characteristics": "相手がこの形に組んでいるかを読むためのレコードです。形そのものの意味は自分側の同じ名前の形(yagura_souyagura)と同じで、盤の上では 180 度回った位置に現れます。金矢倉に右の銀を5七へ足した、金2枚・銀2枚の矢倉です。玉の前に金銀が4枚並ぶので上からの攻めにとても厚く、囲いの駒がそのまま盤の中央にも利きます。",
+  "beginner_friendliness": {
+    "score": 2,
+    "reason": "**相手の陣形を読むためのレコードで、自分が組むための評価ではありません。** 点は自分側の同じ形(yagura_souyagura)から写しただけの値です。"
+  },
+  "weak_against": "相手がこの形のとき、attackable な方向の目安です(断定ではありません)。右の銀まで守りに使うため、自分の攻めの駒が少なくなりやすいです。横からの攻めと、9筋・8筋の端からの攻めには金矢倉と同じ弱さが残ります。",
+  "source": "【AI起草。座標の一次資料確認は行っていない(docs/ROLES.md の保留事項)】**自分側の同じ形 yagura_souyagura の座標を、盤ごと 180 度回して写したもの**(筋 f → 10−f、段 r → 10−r の両方を反転。写像: 玉2b・金3b・金4c・銀3c・銀5c)。**出典そのものが後手の座標を述べているわけではない**(出典は自分側のレコードの source を参照)。過去に「段だけを反転させて左右が入れ替わる」取り違えが起きているため(docs/PHASES.md の P-12、docs/STEP_UNIT6_PLAN_2026-09-12.md §9.5 の決定 3)、**写像の式をこの source に書き、4 人 70 局の実棋譜で相手の陣形として当たるかを測ってから記録した**。判定は後手視点で行われる(apps/server/src/analysis/shapeDetector.ts の perspectiveColorsForSide が side: opponent を gote に固定する)。 追加の経緯: 2026-09-25 の知識レーン第 15 組(docs/LANE_KNOWLEDGE_LOG_2026-09.md §18)。第 7 組の相手側 10 件が効いた(30 手までで相手側の認識 0 → 365 局面)ため、同じ方法で残りを写した。",
+  "confidence_level": "medium",
+  "review_status": "draft"
+}

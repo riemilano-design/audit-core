@@ -1,0 +1,39 @@
+{
+  "id": "kabegakoi_opponent",
+  "name": "壁囲い",
+  "name_kana": "かべがこい",
+  "side": "opponent",
+  "family": "その他(振り飛車)",
+  "parent_shape_id": null,
+  "required_pieces": [
+    {
+      "piece": "玉",
+      "square": "7b",
+      "optional": false
+    },
+    {
+      "piece": "銀",
+      "square": "6b",
+      "optional": false
+    },
+    {
+      "piece": "金",
+      "square": "5b",
+      "optional": false
+    }
+  ],
+  "typical_build_order": [
+    "6b",
+    "7b",
+    "5b"
+  ],
+  "characteristics": "相手がこの形に組んでいるかを読むためのレコードです。形そのものの意味は自分側の同じ名前の形(kabegakoi)と同じで、盤の上では 180 度回った位置に現れます。玉を3八に置き、その左に銀4八、さらに左に金5八を並べて、玉の横に駒の壁を作る形です。数手でできるので、囲う手数が取れないときの最低限の構えとして使われます。",
+  "beginner_friendliness": {
+    "score": 3,
+    "reason": "**相手の陣形を読むためのレコードで、自分が組むための評価ではありません。** 点は自分側の同じ形(kabegakoi)から写しただけの値です。"
+  },
+  "weak_against": "相手がこの形のとき、attackable な方向の目安です(断定ではありません)。玉の頭の上(3七)と右側(2八の方向)が空いているため、上からの攻めや端(1筋・2筋)からの攻めを受けにくいです。駒が横一列に並ぶだけなので、玉の逃げ道が作りにくくなります。",
+  "source": "【AI起草。座標の一次資料確認は行っていない(docs/ROLES.md の保留事項)】**自分側の同じ形 kabegakoi の座標を、盤ごと 180 度回して写したもの**(筋 f → 10−f、段 r → 10−r の両方を反転。写像: 玉7b・銀6b・金5b)。**出典そのものが後手の座標を述べているわけではない**(出典は自分側のレコードの source を参照)。過去に「段だけを反転させて左右が入れ替わる」取り違えが起きているため(docs/PHASES.md の P-12、docs/STEP_UNIT6_PLAN_2026-09-12.md §9.5 の決定 3)、**写像の式をこの source に書き、4 人 70 局の実棋譜で相手の陣形として当たるかを測ってから記録した**。判定は後手視点で行われる(apps/server/src/analysis/shapeDetector.ts の perspectiveColorsForSide が side: opponent を gote に固定する)。 追加の経緯: 2026-09-25 の知識レーン第 15 組(docs/LANE_KNOWLEDGE_LOG_2026-09.md §18)。第 7 組の相手側 10 件が効いた(30 手までで相手側の認識 0 → 365 局面)ため、同じ方法で残りを写した。",
+  "confidence_level": "low",
+  "review_status": "draft"
+}
