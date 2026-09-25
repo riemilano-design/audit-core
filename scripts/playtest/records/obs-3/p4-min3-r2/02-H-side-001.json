@@ -1,0 +1,227 @@
+{
+  "schemaVersion": "0.2",
+  "hypothesisId": "H-p4-min3r2side-001",
+  "subject": {
+    "customer": "p4",
+    "groups": [
+      "3 分"
+    ],
+    "gamesCount": 18
+  },
+  "scope": "this_user",
+  "lane": "side",
+  "statement": "道具が分かれ道と呼ぶ本人の手は 161 手あり、その側は相手玉側 76・自玉側 38、分かれ道でない 419 手では相手玉側 131・自玉側 125 でした。差が 600cp 開く場面ほど手が相手玉側へ寄っているという読みです。第 1 候補の側が自玉側だった 56 手でも実戦は相手玉側 21・自玉側 17 で、示された側へ戻る手は選ばれにくい可能性があります。",
+  "observations": [
+    {
+      "obsId": "obs.fork.values",
+      "path": "whatif_report_data values",
+      "value": {
+        "sideZoneRadius": 2,
+        "startPly": 17,
+        "minLossCp": 600,
+        "narrowGapCp": 400,
+        "riseCp": 400,
+        "sideVersion": 2,
+        "hitsDefenderRadius": 2,
+        "attackZoneRadius": 3
+      }
+    },
+    {
+      "obsId": "obs.direct.counts",
+      "path": "direct_answers counts",
+      "value": {
+        "top1TagCounts": {
+          "drop": 37,
+          "capture": 39,
+          "retreat": 27,
+          "declinesPromotion": 2,
+          "sacrifice": 76,
+          "kingMove": 21,
+          "givesCheck": 29
+        },
+        "top1SideCounts": {
+          "attack": 67,
+          "defense": 56,
+          "both": 11,
+          "none": 33
+        },
+        "actualTagCounts": {
+          "drop": 47,
+          "capture": 35,
+          "retreat": 11,
+          "declinesPromotion": 1,
+          "sacrifice": 73,
+          "kingMove": 13,
+          "givesCheck": 9
+        },
+        "gamesCount": 18,
+        "totalCount": 167,
+        "totalForkCount": 277
+      }
+    },
+    {
+      "obsId": "obs.geo.moveCombination",
+      "path": "obs_geo moves[] の行数(本人の手)",
+      "value": 580,
+      "unit": "手"
+    },
+    {
+      "obsId": "obs.direct.answer",
+      "path": "direct_answers answers[] の行数(写しに入っている分かれ道の行)",
+      "value": 161,
+      "unit": "手"
+    },
+    {
+      "obsId": "obs.geo.moveCombination",
+      "path": "obs_geo moves[] のうち (gameNo,kifPly) が direct_answers answers[] の (gameNo,displayPly) と一致し、かつ side と actualSide が同じ値だった行数",
+      "value": 161,
+      "unit": "手"
+    },
+    {
+      "obsId": "obs.direct.answer",
+      "path": "direct_answers answers[] のうち actualSide が attack の行数",
+      "value": 76,
+      "unit": "手"
+    },
+    {
+      "obsId": "obs.direct.answer",
+      "path": "direct_answers answers[] のうち actualSide が defense の行数",
+      "value": 38,
+      "unit": "手"
+    },
+    {
+      "obsId": "obs.direct.answer",
+      "path": "direct_answers answers[] のうち actualSide が none の行数",
+      "value": 38,
+      "unit": "手"
+    },
+    {
+      "obsId": "obs.direct.answer",
+      "path": "direct_answers answers[] のうち actualSide が both の行数",
+      "value": 9,
+      "unit": "手"
+    },
+    {
+      "obsId": "obs.geo.moveCombination",
+      "path": "obs_geo moves[] のうち (gameNo,kifPly) が direct_answers answers[] の (gameNo,displayPly) に無い行の行数",
+      "value": 419,
+      "unit": "手"
+    },
+    {
+      "obsId": "obs.geo.moveCombination",
+      "path": "obs_geo moves[] のうち direct_answers answers[] に無く side が attack の行数",
+      "value": 131,
+      "unit": "手"
+    },
+    {
+      "obsId": "obs.geo.moveCombination",
+      "path": "obs_geo moves[] のうち direct_answers answers[] に無く side が defense の行数",
+      "value": 125,
+      "unit": "手"
+    },
+    {
+      "obsId": "obs.geo.moveCombination",
+      "path": "obs_geo moves[] のうち direct_answers answers[] に無く side が none の行数",
+      "value": 128,
+      "unit": "手"
+    },
+    {
+      "obsId": "obs.geo.moveCombination",
+      "path": "obs_geo moves[] のうち direct_answers answers[] に無く side が both の行数",
+      "value": 35,
+      "unit": "手"
+    },
+    {
+      "obsId": "obs.direct.answer",
+      "path": "direct_answers answers[] のうち top1Side が defense の行数",
+      "value": 56,
+      "unit": "手"
+    },
+    {
+      "obsId": "obs.direct.answer",
+      "path": "direct_answers answers[] のうち top1Side が defense で actualSide が attack の行数",
+      "value": 21,
+      "unit": "手"
+    },
+    {
+      "obsId": "obs.direct.answer",
+      "path": "direct_answers answers[] のうち top1Side が defense で actualSide が defense の行数",
+      "value": 17,
+      "unit": "手"
+    },
+    {
+      "obsId": "obs.direct.answer",
+      "path": "direct_answers answers[] のうち top1Side が defense で actualSide が none の行数",
+      "value": 15,
+      "unit": "手"
+    },
+    {
+      "obsId": "obs.direct.answer",
+      "path": "direct_answers answers[] のうち top1Side が defense で actualSide が both の行数",
+      "value": 3,
+      "unit": "手"
+    },
+    {
+      "obsId": "obs.direct.answer",
+      "path": "direct_answers answers[] のうち top1Side が attack の行数",
+      "value": 62,
+      "unit": "手"
+    },
+    {
+      "obsId": "obs.direct.answer",
+      "path": "direct_answers answers[] のうち top1Side が attack で actualSide が attack の行数",
+      "value": 38,
+      "unit": "手"
+    },
+    {
+      "obsId": "obs.direct.answer",
+      "path": "direct_answers answers[] のうち top1Side が attack で actualSide が defense の行数",
+      "value": 11,
+      "unit": "手"
+    }
+  ],
+  "counterEvidence": {
+    "attempted": false,
+    "items": [],
+    "result": "none_found",
+    "provenance": {
+      "inputs": []
+    }
+  },
+  "prediction": {
+    "writtenAt": "2026-09-26",
+    "window": "next_20_games_same_time_limit",
+    "metric": "obs.direct.answer の actualSide が attack の手数 ÷(actualSide が attack または defense の手数)",
+    "comparator": ">=",
+    "value": 0.55,
+    "alsoRequires": [
+      {
+        "metric": "obs.direct.answer の actualSide が attack または defense の手数",
+        "comparator": ">=",
+        "value": 60
+      },
+      {
+        "metric": "obs.direct.answer の top1Side が defense の手数",
+        "comparator": ">=",
+        "value": 30
+      }
+    ]
+  },
+  "status": "proposed",
+  "knowledge": {
+    "kind": "discovered",
+    "reviewStatus": "draft",
+    "origin": {
+      "kifu": "p4/min3",
+      "lane": "side"
+    },
+    "range": "this_user"
+  },
+  "provenance": {
+    "gitHead": "a4a5929",
+    "inputs": [
+      "records/obs-3/p4-min3-r2/00-obs_snapshot.p4.min3.r2.json"
+    ],
+    "excludedInputs": []
+  }
+}

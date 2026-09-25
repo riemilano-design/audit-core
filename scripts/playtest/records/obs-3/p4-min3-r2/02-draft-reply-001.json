@@ -1,0 +1,136 @@
+{
+  "schemaVersion": "0.2",
+  "hypothesisId": "H-p4-min3-r2-reply-001",
+  "subject": {
+    "customer": "p4",
+    "groups": ["3 分"],
+    "gamesCount": 18
+  },
+  "scope": "this_user",
+  "lane": "reply",
+  "statement": "本人の手 580 のうち、相手が駒を取った直後の手は 196(34%)ですが、相手に手番を渡すと詰む型の行 48 のうち 36(75%)、急落の行 185 のうち 101(55%)が、その 196 の側に寄っています。相手が駒を取った直後の一手が、この人にとって崩れの生まれやすい場面になっている可能性があります。",
+  "observations": [
+    {
+      "obsId": "obs.geo.replyToCapture",
+      "path": "obs_geo moves[] の行の数(本人の手)",
+      "value": 580,
+      "unit": "手"
+    },
+    {
+      "obsId": "obs.geo.replyToCapture",
+      "path": "obs_geo moves[].replyToCapture が「相手は取っていない」以外の行の数",
+      "value": 196,
+      "unit": "手",
+      "derived": {
+        "kind": "percent",
+        "numerator": { "obsId": "obs.geo.replyToCapture", "value": 196 },
+        "denominator": { "obsId": "obs.geo.replyToCapture", "value": 580 }
+      }
+    },
+    {
+      "obsId": "obs.geo.replyToCapture",
+      "path": "obs_geo moves[].replyToCapture が「取らない」の行の数",
+      "value": 132,
+      "unit": "手"
+    },
+    {
+      "obsId": "obs.geo.replyToCapture",
+      "path": "obs_geo moves[].replyToCapture が「取り返し」の行の数",
+      "value": 64,
+      "unit": "手"
+    },
+    {
+      "obsId": "obs.report.event",
+      "path": "events[] の行の数",
+      "value": 185,
+      "unit": "行"
+    },
+    {
+      "obsId": "obs.report.event",
+      "path": "events[] のうち、同じ gameNo・ply の obs_geo moves[].replyToCapture が「相手は取っていない」以外である行の数",
+      "value": 101,
+      "unit": "行",
+      "derived": {
+        "kind": "percent",
+        "numerator": { "obsId": "obs.report.event", "value": 101 },
+        "denominator": { "obsId": "obs.report.event", "value": 185 }
+      }
+    },
+    {
+      "obsId": "obs.report.event",
+      "path": "events[].kind が matedIfPass の行の数",
+      "value": 48,
+      "unit": "行"
+    },
+    {
+      "obsId": "obs.report.event",
+      "path": "events[].kind が matedIfPass の行のうち、同じ gameNo・ply の obs_geo moves[].replyToCapture が「相手は取っていない」以外である行の数",
+      "value": 36,
+      "unit": "行",
+      "derived": {
+        "kind": "percent",
+        "numerator": { "obsId": "obs.report.event", "value": 36 },
+        "denominator": { "obsId": "obs.report.event", "value": 48 }
+      }
+    },
+    {
+      "obsId": "obs.report.event",
+      "path": "events[].kind が matedIfPass の行のうち、同じ gameNo・ply の obs_geo moves[].replyToCapture が「取らない」である行の数",
+      "value": 24,
+      "unit": "行",
+      "derived": {
+        "kind": "percent",
+        "numerator": { "obsId": "obs.report.event", "value": 24 },
+        "denominator": { "obsId": "obs.report.event", "value": 48 }
+      }
+    },
+    {
+      "obsId": "obs.report.overview",
+      "path": "overview.fell",
+      "value": 30,
+      "unit": "組"
+    }
+  ],
+  "counterEvidence": {
+    "attempted": false,
+    "items": [],
+    "result": "none_found",
+    "provenance": { "inputs": [] }
+  },
+  "prediction": {
+    "writtenAt": "2026-09-26",
+    "window": "next_20_games_same_time_limit",
+    "metric": "obs.report.event のうち kind が matedIfPass の行で、同じ gameNo・ply の obs.geo.replyToCapture が「相手は取っていない」以外である行の割合(百分率)",
+    "comparator": ">=",
+    "value": 50,
+    "alsoRequires": [
+      {
+        "metric": "obs.report.event のうち kind が matedIfPass の行の数",
+        "comparator": ">=",
+        "value": 20
+      },
+      {
+        "metric": "obs.geo.replyToCapture の行の数(本人の手)",
+        "comparator": ">=",
+        "value": 400
+      },
+      {
+        "metric": "obs.geo.replyToCapture が「相手は取っていない」以外の行の数",
+        "comparator": ">=",
+        "value": 120
+      }
+    ]
+  },
+  "status": "proposed",
+  "knowledge": {
+    "kind": "discovered",
+    "reviewStatus": "draft",
+    "origin": { "kifu": "p4/min3", "lane": "reply" },
+    "range": "this_user"
+  },
+  "provenance": {
+    "gitHead": "a4a5929",
+    "inputs": ["records/obs-3/p4-min3-r2/00-obs_snapshot.p4.min3.r2.json"],
+    "excludedInputs": []
+  }
+}

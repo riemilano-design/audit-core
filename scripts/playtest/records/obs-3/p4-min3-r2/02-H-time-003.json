@@ -1,0 +1,662 @@
+{
+  "schemaVersion": "0.2",
+  "subject": {
+    "customer": "p4",
+    "groups": [
+      "3 分"
+    ],
+    "gamesCount": 18
+  },
+  "scope": "this_user",
+  "lane": "time",
+  "counterEvidence": {
+    "attempted": false,
+    "items": [],
+    "result": "none_found",
+    "provenance": {
+      "inputs": []
+    }
+  },
+  "status": "proposed",
+  "knowledge": {
+    "kind": "discovered",
+    "reviewStatus": "draft",
+    "origin": {
+      "kifu": "p4/min3",
+      "lane": "time"
+    },
+    "range": "this_user"
+  },
+  "provenance": {
+    "gitHead": "a4a5929",
+    "inputs": [
+      "records/obs-3/p4-min3-r2/00-obs_snapshot.p4.min3.r2.json"
+    ],
+    "excludedInputs": []
+  },
+  "hypothesisId": "H-p4-min3r2time-003",
+  "statement": "崩れを判定できた行のうち、相手が直前に持ち駒を打っていたのは 8 行で、そのうち 3 行が崩れでした。割合にすると 38% で、相手が打っていなかった行の 23% より高く、この 8 行はすべて 5〜9 秒の帯でした。相手が駒を打った直後の局面で、短い時間の判断が崩れと重なりやすい可能性があります。",
+  "observations": [
+    {
+      "obsId": "obs.time.decisionContext",
+      "path": "obs_geo decisionContext[]（collapse が null でなく oppPrevDrop が真の 8 行）",
+      "value": [
+        {
+          "gameNo": 2,
+          "kifPly": 73,
+          "spentBucket": "≤9",
+          "collapse": false,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": false,
+          "oppPrevDrop": true,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "late",
+          "evalBand": "ahead"
+        },
+        {
+          "gameNo": 9,
+          "kifPly": 19,
+          "spentBucket": "≤9",
+          "collapse": true,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": false,
+          "oppPrevDrop": true,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "early",
+          "evalBand": "level"
+        },
+        {
+          "gameNo": 10,
+          "kifPly": 18,
+          "spentBucket": "≤9",
+          "collapse": true,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": false,
+          "oppPrevDrop": true,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "early",
+          "evalBand": "level"
+        },
+        {
+          "gameNo": 10,
+          "kifPly": 22,
+          "spentBucket": "≤9",
+          "collapse": false,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": false,
+          "oppPrevDrop": true,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "early",
+          "evalBand": "level"
+        },
+        {
+          "gameNo": 11,
+          "kifPly": 22,
+          "spentBucket": "≤9",
+          "collapse": false,
+          "fork": null,
+          "inCheck": true,
+          "oppPrevCapture": false,
+          "oppPrevDrop": true,
+          "oppPrevGivesCheck": true,
+          "oppPrevPromotion": false,
+          "phase": "early",
+          "evalBand": "level"
+        },
+        {
+          "gameNo": 11,
+          "kifPly": 28,
+          "spentBucket": "≤9",
+          "collapse": true,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": false,
+          "oppPrevDrop": true,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "mid",
+          "evalBand": "ahead"
+        },
+        {
+          "gameNo": 12,
+          "kifPly": 10,
+          "spentBucket": "≤9",
+          "collapse": false,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": false,
+          "oppPrevDrop": true,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "early",
+          "evalBand": "level"
+        },
+        {
+          "gameNo": 14,
+          "kifPly": 23,
+          "spentBucket": "≤9",
+          "collapse": false,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": false,
+          "oppPrevDrop": true,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "early",
+          "evalBand": "level"
+        }
+      ],
+      "derived": {
+        "kind": "percent",
+        "numerator": {
+          "obsId": "obs.time.decisionContext",
+          "value": 3
+        },
+        "denominator": {
+          "obsId": "obs.time.decisionContext",
+          "value": 8
+        }
+      }
+    },
+    {
+      "obsId": "obs.time.decisionContext",
+      "path": "obs_geo decisionContext[]（collapse が null でなく oppPrevDrop が偽の 31 行）",
+      "value": [
+        {
+          "gameNo": 2,
+          "kifPly": 43,
+          "spentBucket": "≤9",
+          "collapse": true,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": true,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "mid",
+          "evalBand": "ahead"
+        },
+        {
+          "gameNo": 2,
+          "kifPly": 51,
+          "spentBucket": ">9",
+          "collapse": false,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": false,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "mid",
+          "evalBand": "level"
+        },
+        {
+          "gameNo": 2,
+          "kifPly": 57,
+          "spentBucket": ">9",
+          "collapse": false,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": true,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "late",
+          "evalBand": "level"
+        },
+        {
+          "gameNo": 2,
+          "kifPly": 59,
+          "spentBucket": ">9",
+          "collapse": false,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": true,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "late",
+          "evalBand": "level"
+        },
+        {
+          "gameNo": 2,
+          "kifPly": 71,
+          "spentBucket": ">9",
+          "collapse": false,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": false,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "late",
+          "evalBand": "ahead"
+        },
+        {
+          "gameNo": 3,
+          "kifPly": 18,
+          "spentBucket": "≤9",
+          "collapse": false,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": false,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "early",
+          "evalBand": "level"
+        },
+        {
+          "gameNo": 3,
+          "kifPly": 24,
+          "spentBucket": "≤9",
+          "collapse": false,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": false,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "early",
+          "evalBand": "level"
+        },
+        {
+          "gameNo": 5,
+          "kifPly": 15,
+          "spentBucket": "≤9",
+          "collapse": false,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": false,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "early",
+          "evalBand": "ahead"
+        },
+        {
+          "gameNo": 5,
+          "kifPly": 17,
+          "spentBucket": "≤9",
+          "collapse": false,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": false,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "early",
+          "evalBand": "ahead"
+        },
+        {
+          "gameNo": 5,
+          "kifPly": 23,
+          "spentBucket": "≤9",
+          "collapse": false,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": false,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "mid",
+          "evalBand": "ahead"
+        },
+        {
+          "gameNo": 5,
+          "kifPly": 25,
+          "spentBucket": ">9",
+          "collapse": false,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": false,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "mid",
+          "evalBand": "ahead"
+        },
+        {
+          "gameNo": 5,
+          "kifPly": 29,
+          "spentBucket": "≤9",
+          "collapse": false,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": false,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "mid",
+          "evalBand": "ahead"
+        },
+        {
+          "gameNo": 5,
+          "kifPly": 37,
+          "spentBucket": "≤9",
+          "collapse": false,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": false,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "late",
+          "evalBand": "ahead"
+        },
+        {
+          "gameNo": 5,
+          "kifPly": 41,
+          "spentBucket": ">9",
+          "collapse": false,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": false,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "late",
+          "evalBand": "ahead"
+        },
+        {
+          "gameNo": 5,
+          "kifPly": 43,
+          "spentBucket": "≤9",
+          "collapse": false,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": false,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "late",
+          "evalBand": "ahead"
+        },
+        {
+          "gameNo": 5,
+          "kifPly": 49,
+          "spentBucket": "≤9",
+          "collapse": false,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": false,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "late",
+          "evalBand": "ahead"
+        },
+        {
+          "gameNo": 6,
+          "kifPly": 20,
+          "spentBucket": "≤9",
+          "collapse": true,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": false,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "early",
+          "evalBand": "level"
+        },
+        {
+          "gameNo": 8,
+          "kifPly": 10,
+          "spentBucket": "≤9",
+          "collapse": true,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": false,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "early",
+          "evalBand": "level"
+        },
+        {
+          "gameNo": 10,
+          "kifPly": 26,
+          "spentBucket": "≤9",
+          "collapse": false,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": false,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "mid",
+          "evalBand": "level"
+        },
+        {
+          "gameNo": 11,
+          "kifPly": 6,
+          "spentBucket": "≤9",
+          "collapse": false,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": false,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "early",
+          "evalBand": "level"
+        },
+        {
+          "gameNo": 11,
+          "kifPly": 12,
+          "spentBucket": "≤9",
+          "collapse": false,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": false,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "early",
+          "evalBand": "level"
+        },
+        {
+          "gameNo": 11,
+          "kifPly": 18,
+          "spentBucket": "≤9",
+          "collapse": false,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": false,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "early",
+          "evalBand": "level"
+        },
+        {
+          "gameNo": 11,
+          "kifPly": 26,
+          "spentBucket": ">9",
+          "collapse": false,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": false,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "mid",
+          "evalBand": "ahead"
+        },
+        {
+          "gameNo": 13,
+          "kifPly": 25,
+          "spentBucket": "≤9",
+          "collapse": false,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": true,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "mid",
+          "evalBand": "ahead"
+        },
+        {
+          "gameNo": 14,
+          "kifPly": 25,
+          "spentBucket": ">9",
+          "collapse": false,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": true,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "early",
+          "evalBand": "level"
+        },
+        {
+          "gameNo": 14,
+          "kifPly": 33,
+          "spentBucket": "≤9",
+          "collapse": true,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": false,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "mid",
+          "evalBand": "level"
+        },
+        {
+          "gameNo": 14,
+          "kifPly": 45,
+          "spentBucket": "≤9",
+          "collapse": true,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": false,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "mid",
+          "evalBand": "level"
+        },
+        {
+          "gameNo": 17,
+          "kifPly": 4,
+          "spentBucket": "≤9",
+          "collapse": false,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": false,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "early",
+          "evalBand": "level"
+        },
+        {
+          "gameNo": 17,
+          "kifPly": 6,
+          "spentBucket": "≤9",
+          "collapse": false,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": false,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "early",
+          "evalBand": "level"
+        },
+        {
+          "gameNo": 18,
+          "kifPly": 18,
+          "spentBucket": "≤9",
+          "collapse": true,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": false,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "mid",
+          "evalBand": "level"
+        },
+        {
+          "gameNo": 18,
+          "kifPly": 22,
+          "spentBucket": "≤9",
+          "collapse": true,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": false,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "mid",
+          "evalBand": "level"
+        }
+      ],
+      "derived": {
+        "kind": "percent",
+        "numerator": {
+          "obsId": "obs.time.decisionContext",
+          "value": 7
+        },
+        "denominator": {
+          "obsId": "obs.time.decisionContext",
+          "value": 31
+        }
+      }
+    },
+    {
+      "obsId": "obs.time.bySpent",
+      "path": "time.bySpent",
+      "value": [
+        {
+          "n": 88,
+          "collapsed": 3
+        },
+        {
+          "n": 97,
+          "collapsed": 17
+        },
+        {
+          "n": 32,
+          "collapsed": 10
+        },
+        {
+          "n": 8,
+          "collapsed": 0
+        }
+      ]
+    }
+  ],
+  "prediction": {
+    "writtenAt": "2026-09-26",
+    "window": "next_20_games_same_time_limit",
+    "metric": "obs.time.decisionContext の崩れを判定できた行のうち oppPrevDrop が真の行に占める崩れの割合",
+    "comparator": ">=",
+    "value": 0.3,
+    "alsoRequires": [
+      {
+        "metric": "obs.time.decisionContext の崩れを判定できた行のうち oppPrevDrop が真の行の数",
+        "comparator": ">=",
+        "value": 20
+      },
+      {
+        "metric": "obs.time.decisionContext の崩れを判定できた行のうち oppPrevDrop が偽の行の数",
+        "comparator": ">=",
+        "value": 40
+      }
+    ]
+  }
+}

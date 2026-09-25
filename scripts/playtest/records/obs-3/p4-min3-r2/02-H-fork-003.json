@@ -1,0 +1,447 @@
+{
+  "schemaVersion": "0.2",
+  "hypothesisId": "H-p4-min3-r2-fork-003",
+  "subject": {
+    "customer": "p4",
+    "groups": [
+      "3 分"
+    ],
+    "gamesCount": 18
+  },
+  "scope": "this_user",
+  "lane": "fork",
+  "statement": "長考した手のうち分かれ道だった数は 4(分母 6)・3(分母 3)・2(分母 2)のように局で差があり、そのうち第 1 候補と側が逆だったのは 10 局目の 2(分母 3)、11 局目の 1(分母 3)、2 局目の 1(分母 2)だけで、ほかの局では 0 でした。分かれ道で長く考えるとき、迷いが出ているのは攻めと守りのどちらへ行くかではなく、同じ側の中のどの手かである可能性があります。",
+  "observations": [
+    {
+      "obsId": "obs.time.forkAmongLongThink",
+      "path": "time_cause games[].forkAmongLongThink",
+      "value": [
+        {
+          "gameNo": 1,
+          "forkAmongLongThink": {
+            "numerator": 4,
+            "denominator": 6
+          }
+        },
+        {
+          "gameNo": 2,
+          "forkAmongLongThink": {
+            "numerator": 2,
+            "denominator": 4
+          }
+        },
+        {
+          "gameNo": 3,
+          "forkAmongLongThink": {
+            "numerator": 1,
+            "denominator": 3
+          }
+        },
+        {
+          "gameNo": 4,
+          "forkAmongLongThink": {
+            "numerator": 2,
+            "denominator": 2
+          }
+        },
+        {
+          "gameNo": 5,
+          "forkAmongLongThink": {
+            "numerator": 2,
+            "denominator": 2
+          }
+        },
+        {
+          "gameNo": 6,
+          "forkAmongLongThink": {
+            "numerator": 1,
+            "denominator": 1
+          }
+        },
+        {
+          "gameNo": 7,
+          "forkAmongLongThink": {
+            "numerator": 0,
+            "denominator": 1
+          }
+        },
+        {
+          "gameNo": 8,
+          "forkAmongLongThink": {
+            "numerator": 2,
+            "denominator": 2
+          }
+        },
+        {
+          "gameNo": 9,
+          "forkAmongLongThink": {
+            "numerator": 0,
+            "denominator": 0
+          }
+        },
+        {
+          "gameNo": 10,
+          "forkAmongLongThink": {
+            "numerator": 3,
+            "denominator": 3
+          }
+        },
+        {
+          "gameNo": 11,
+          "forkAmongLongThink": {
+            "numerator": 3,
+            "denominator": 5
+          }
+        },
+        {
+          "gameNo": 12,
+          "forkAmongLongThink": {
+            "numerator": 0,
+            "denominator": 1
+          }
+        },
+        {
+          "gameNo": 13,
+          "forkAmongLongThink": {
+            "numerator": 2,
+            "denominator": 2
+          }
+        },
+        {
+          "gameNo": 14,
+          "forkAmongLongThink": {
+            "numerator": 1,
+            "denominator": 3
+          }
+        },
+        {
+          "gameNo": 15,
+          "forkAmongLongThink": {
+            "numerator": 0,
+            "denominator": 0
+          }
+        },
+        {
+          "gameNo": 16,
+          "forkAmongLongThink": {
+            "numerator": 3,
+            "denominator": 3
+          }
+        },
+        {
+          "gameNo": 17,
+          "forkAmongLongThink": {
+            "numerator": 1,
+            "denominator": 1
+          }
+        },
+        {
+          "gameNo": 18,
+          "forkAmongLongThink": {
+            "numerator": 0,
+            "denominator": 0
+          }
+        }
+      ]
+    },
+    {
+      "obsId": "obs.time.oppositeSideAmongForkLongThink",
+      "path": "time_cause games[].oppositeSideAmongForkLongThink",
+      "value": [
+        {
+          "gameNo": 1,
+          "oppositeSideAmongForkLongThink": {
+            "numerator": 0,
+            "denominator": 4
+          }
+        },
+        {
+          "gameNo": 2,
+          "oppositeSideAmongForkLongThink": {
+            "numerator": 1,
+            "denominator": 2
+          }
+        },
+        {
+          "gameNo": 3,
+          "oppositeSideAmongForkLongThink": {
+            "numerator": 0,
+            "denominator": 1
+          }
+        },
+        {
+          "gameNo": 4,
+          "oppositeSideAmongForkLongThink": {
+            "numerator": 0,
+            "denominator": 2
+          }
+        },
+        {
+          "gameNo": 5,
+          "oppositeSideAmongForkLongThink": {
+            "numerator": 0,
+            "denominator": 2
+          }
+        },
+        {
+          "gameNo": 6,
+          "oppositeSideAmongForkLongThink": {
+            "numerator": 0,
+            "denominator": 1
+          }
+        },
+        {
+          "gameNo": 7,
+          "oppositeSideAmongForkLongThink": {
+            "numerator": 0,
+            "denominator": 0
+          }
+        },
+        {
+          "gameNo": 8,
+          "oppositeSideAmongForkLongThink": {
+            "numerator": 0,
+            "denominator": 2
+          }
+        },
+        {
+          "gameNo": 9,
+          "oppositeSideAmongForkLongThink": {
+            "numerator": 0,
+            "denominator": 0
+          }
+        },
+        {
+          "gameNo": 10,
+          "oppositeSideAmongForkLongThink": {
+            "numerator": 2,
+            "denominator": 3
+          }
+        },
+        {
+          "gameNo": 11,
+          "oppositeSideAmongForkLongThink": {
+            "numerator": 1,
+            "denominator": 3
+          }
+        },
+        {
+          "gameNo": 12,
+          "oppositeSideAmongForkLongThink": {
+            "numerator": 0,
+            "denominator": 0
+          }
+        },
+        {
+          "gameNo": 13,
+          "oppositeSideAmongForkLongThink": {
+            "numerator": 0,
+            "denominator": 2
+          }
+        },
+        {
+          "gameNo": 14,
+          "oppositeSideAmongForkLongThink": {
+            "numerator": 0,
+            "denominator": 1
+          }
+        },
+        {
+          "gameNo": 15,
+          "oppositeSideAmongForkLongThink": {
+            "numerator": 0,
+            "denominator": 0
+          }
+        },
+        {
+          "gameNo": 16,
+          "oppositeSideAmongForkLongThink": {
+            "numerator": 0,
+            "denominator": 3
+          }
+        },
+        {
+          "gameNo": 17,
+          "oppositeSideAmongForkLongThink": {
+            "numerator": 0,
+            "denominator": 1
+          }
+        },
+        {
+          "gameNo": 18,
+          "oppositeSideAmongForkLongThink": {
+            "numerator": 0,
+            "denominator": 0
+          }
+        }
+      ]
+    },
+    {
+      "obsId": "obs.time.longThinkTotal",
+      "path": "time_cause games[].longThinkTotal",
+      "value": [
+        {
+          "gameNo": 1,
+          "longThinkTotal": 7
+        },
+        {
+          "gameNo": 2,
+          "longThinkTotal": 4
+        },
+        {
+          "gameNo": 3,
+          "longThinkTotal": 3
+        },
+        {
+          "gameNo": 4,
+          "longThinkTotal": 2
+        },
+        {
+          "gameNo": 5,
+          "longThinkTotal": 2
+        },
+        {
+          "gameNo": 6,
+          "longThinkTotal": 1
+        },
+        {
+          "gameNo": 7,
+          "longThinkTotal": 2
+        },
+        {
+          "gameNo": 8,
+          "longThinkTotal": 3
+        },
+        {
+          "gameNo": 9,
+          "longThinkTotal": 0
+        },
+        {
+          "gameNo": 10,
+          "longThinkTotal": 3
+        },
+        {
+          "gameNo": 11,
+          "longThinkTotal": 5
+        },
+        {
+          "gameNo": 12,
+          "longThinkTotal": 1
+        },
+        {
+          "gameNo": 13,
+          "longThinkTotal": 2
+        },
+        {
+          "gameNo": 14,
+          "longThinkTotal": 3
+        },
+        {
+          "gameNo": 15,
+          "longThinkTotal": 0
+        },
+        {
+          "gameNo": 16,
+          "longThinkTotal": 3
+        },
+        {
+          "gameNo": 17,
+          "longThinkTotal": 1
+        },
+        {
+          "gameNo": 18,
+          "longThinkTotal": 0
+        }
+      ]
+    },
+    {
+      "obsId": "obs.fork.summary",
+      "path": "summary",
+      "value": {
+        "positionsRead": 436,
+        "matchesTop1": 88,
+        "withinMultiPv": 205,
+        "scenes": {
+          "fork": 259,
+          "narrowHeld": 23,
+          "chanceHeld": 10,
+          "rawTotal": 292,
+          "distinctTotal": 287
+        },
+        "sideCompare": {
+          "scenesRead": 288,
+          "bothFound": 262,
+          "attackNoLegalMove": 26,
+          "defenseNoLegalMove": 0
+        },
+        "lossesWithNarrowHeld": {
+          "withNarrow": 9,
+          "lossesTotal": 14
+        }
+      }
+    },
+    {
+      "obsId": "obs.fork.values",
+      "path": "values",
+      "value": {
+        "sideZoneRadius": 2,
+        "startPly": 17,
+        "minLossCp": 600,
+        "narrowGapCp": 400,
+        "riseCp": 400,
+        "sideVersion": 2,
+        "hitsDefenderRadius": 2,
+        "attackZoneRadius": 3
+      }
+    }
+  ],
+  "counterEvidence": {
+    "attempted": false,
+    "items": [],
+    "result": "none_found",
+    "provenance": {
+      "inputs": []
+    }
+  },
+  "prediction": {
+    "writtenAt": "2026-09-26",
+    "window": "next_20_games_same_time_limit",
+    "metric": "obs.time.oppositeSideAmongForkLongThink の numerator が 1 以上の局数 ÷ obs.time.forkAmongLongThink の numerator が 1 以上の局数",
+    "comparator": "<=",
+    "value": 0.4,
+    "alsoRequires": [
+      {
+        "metric": "obs.time.forkAmongLongThink の denominator の合計",
+        "comparator": ">=",
+        "value": 25
+      },
+      {
+        "metric": "obs.time.oppositeSideAmongForkLongThink の denominator の合計",
+        "comparator": ">=",
+        "value": 20
+      },
+      {
+        "metric": "obs.fork.game の局数",
+        "comparator": ">=",
+        "value": 20
+      }
+    ]
+  },
+  "status": "proposed",
+  "knowledge": {
+    "kind": "discovered",
+    "reviewStatus": "draft",
+    "origin": {
+      "kifu": "p4/min3",
+      "lane": "fork"
+    },
+    "range": "this_user"
+  },
+  "provenance": {
+    "gitHead": "a4a5929",
+    "inputs": [
+      "records/obs-3/p4-min3-r2/00-obs_snapshot.p4.min3.r2.json"
+    ],
+    "excludedInputs": []
+  }
+}

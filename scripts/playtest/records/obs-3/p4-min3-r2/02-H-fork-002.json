@@ -1,0 +1,112 @@
+{
+  "schemaVersion": "0.2",
+  "hypothesisId": "H-p4-min3-r2-fork-002",
+  "subject": {
+    "customer": "p4",
+    "groups": [
+      "3 分"
+    ],
+    "gamesCount": 18
+  },
+  "scope": "this_user",
+  "lane": "fork",
+  "statement": "第 1 候補と実戦の手を並べた 167 件の分かれ道で、「引く」の印が付いたのは第 1 候補で 27 件・実戦の手で 11 件、「玉を動かす」は 21 件と 13 件、「打つ」は 37 件と 47 件でした。同じ 167 件を分母にした比べで、この人は分かれ道で自玉の側へ引き戻す形より駒を打つ形を選んでいるという読みです。",
+  "observations": [
+    {
+      "obsId": "obs.direct.counts",
+      "path": "counts",
+      "value": {
+        "top1TagCounts": {
+          "drop": 37,
+          "capture": 39,
+          "retreat": 27,
+          "declinesPromotion": 2,
+          "sacrifice": 76,
+          "kingMove": 21,
+          "givesCheck": 29
+        },
+        "top1SideCounts": {
+          "attack": 67,
+          "defense": 56,
+          "both": 11,
+          "none": 33
+        },
+        "actualTagCounts": {
+          "drop": 47,
+          "capture": 35,
+          "retreat": 11,
+          "declinesPromotion": 1,
+          "sacrifice": 73,
+          "kingMove": 13,
+          "givesCheck": 9
+        },
+        "gamesCount": 18,
+        "totalCount": 167,
+        "totalForkCount": 277
+      }
+    },
+    {
+      "obsId": "obs.fork.values",
+      "path": "values",
+      "value": {
+        "sideZoneRadius": 2,
+        "startPly": 17,
+        "minLossCp": 600,
+        "narrowGapCp": 400,
+        "riseCp": 400,
+        "sideVersion": 2,
+        "hitsDefenderRadius": 2,
+        "attackZoneRadius": 3
+      }
+    }
+  ],
+  "counterEvidence": {
+    "attempted": false,
+    "items": [],
+    "result": "none_found",
+    "provenance": {
+      "inputs": []
+    }
+  },
+  "prediction": {
+    "writtenAt": "2026-09-26",
+    "window": "next_20_games_same_time_limit",
+    "metric": "obs.direct.counts の actualTagCounts.retreat ÷ 同じ写しの top1TagCounts.retreat",
+    "comparator": "<=",
+    "value": 0.7,
+    "alsoRequires": [
+      {
+        "metric": "obs.direct.counts の totalCount",
+        "comparator": ">=",
+        "value": 100
+      },
+      {
+        "metric": "obs.direct.counts の top1TagCounts.retreat",
+        "comparator": ">=",
+        "value": 15
+      },
+      {
+        "metric": "obs.direct.counts の gamesCount",
+        "comparator": ">=",
+        "value": 15
+      }
+    ]
+  },
+  "status": "proposed",
+  "knowledge": {
+    "kind": "discovered",
+    "reviewStatus": "draft",
+    "origin": {
+      "kifu": "p4/min3",
+      "lane": "fork"
+    },
+    "range": "this_user"
+  },
+  "provenance": {
+    "gitHead": "a4a5929",
+    "inputs": [
+      "records/obs-3/p4-min3-r2/00-obs_snapshot.p4.min3.r2.json"
+    ],
+    "excludedInputs": []
+  }
+}

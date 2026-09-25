@@ -1,0 +1,120 @@
+{
+  "schemaVersion": "0.2",
+  "hypothesisId": "H-p4-min3-r2-reply-002",
+  "subject": {
+    "customer": "p4",
+    "groups": ["3 分"],
+    "gamesCount": 18
+  },
+  "scope": "this_user",
+  "lane": "reply",
+  "statement": "相手が駒を取った直後の手 196 のうち、時間を使った手の写しに入っている 71 手では「取り返し」が 12 手(17%)、写しに入っていない 125 手では 52 手(42%)でした。取り返すかどうかがすぐ決まる場面と、時間を使って取り返し以外を選ぶ場面が、この人の中で分かれているという読みです。",
+  "observations": [
+    {
+      "obsId": "obs.geo.replyToCapture",
+      "path": "obs_geo moves[].replyToCapture が「相手は取っていない」以外の行の数",
+      "value": 196,
+      "unit": "手"
+    },
+    {
+      "obsId": "obs.time.decisionContext",
+      "path": "obs_geo decisionContext[] の行の数(5〜9 秒と 10 秒以上の帯の手)",
+      "value": 182,
+      "unit": "手"
+    },
+    {
+      "obsId": "obs.time.decisionContext",
+      "path": "obs_geo decisionContext[] のうち、同じ gameNo・kifPly の obs_geo moves[].replyToCapture が「相手は取っていない」以外である行の数",
+      "value": 71,
+      "unit": "手"
+    },
+    {
+      "obsId": "obs.geo.replyToCapture",
+      "path": "上の 71 手のうち obs_geo moves[].replyToCapture が「取り返し」である手の数",
+      "value": 12,
+      "unit": "手",
+      "derived": {
+        "kind": "percent",
+        "numerator": { "obsId": "obs.geo.replyToCapture", "value": 12 },
+        "denominator": { "obsId": "obs.time.decisionContext", "value": 71 }
+      }
+    },
+    {
+      "obsId": "obs.geo.replyToCapture",
+      "path": "obs_geo moves[].replyToCapture が「相手は取っていない」以外で、同じ gameNo・kifPly の行が obs_geo decisionContext[] に無い手の数",
+      "value": 125,
+      "unit": "手"
+    },
+    {
+      "obsId": "obs.geo.replyToCapture",
+      "path": "上の 125 手のうち obs_geo moves[].replyToCapture が「取り返し」である手の数",
+      "value": 52,
+      "unit": "手",
+      "derived": {
+        "kind": "percent",
+        "numerator": { "obsId": "obs.geo.replyToCapture", "value": 52 },
+        "denominator": { "obsId": "obs.geo.replyToCapture", "value": 125 }
+      }
+    },
+    {
+      "obsId": "obs.geo.replyToCapture",
+      "path": "obs_geo moves[].replyToCapture が「取り返し」の行の数(全体)",
+      "value": 64,
+      "unit": "手"
+    },
+    {
+      "obsId": "obs.time.decisionContext",
+      "path": "obs_geo decisionContext[] のうち spentBucket が「>9」である行の数",
+      "value": 42,
+      "unit": "手"
+    },
+    {
+      "obsId": "obs.geo.replyToCapture",
+      "path": "obs_geo decisionContext[] の spentBucket が「>9」である 42 手のうち、replyToCapture が「取り返し」である手の数",
+      "value": 2,
+      "unit": "手"
+    }
+  ],
+  "counterEvidence": {
+    "attempted": false,
+    "items": [],
+    "result": "none_found",
+    "provenance": { "inputs": [] }
+  },
+  "prediction": {
+    "writtenAt": "2026-09-26",
+    "window": "next_20_games_same_time_limit",
+    "metric": "obs.geo.replyToCapture が「相手は取っていない」以外で、同じ gameNo・kifPly の行が obs.time.decisionContext に無い手のうち、「取り返し」である手の割合(百分率)",
+    "comparator": ">=",
+    "value": 30,
+    "alsoRequires": [
+      {
+        "metric": "obs.geo.replyToCapture が「相手は取っていない」以外の行の数",
+        "comparator": ">=",
+        "value": 120
+      },
+      {
+        "metric": "obs.time.decisionContext の行の数",
+        "comparator": ">=",
+        "value": 150
+      },
+      {
+        "metric": "obs.time.decisionContext のうち obs.geo.replyToCapture が「相手は取っていない」以外である行の数",
+        "comparator": ">=",
+        "value": 50
+      }
+    ]
+  },
+  "status": "proposed",
+  "knowledge": {
+    "kind": "discovered",
+    "reviewStatus": "draft",
+    "origin": { "kifu": "p4/min3", "lane": "reply" },
+    "range": "this_user"
+  },
+  "provenance": {
+    "gitHead": "a4a5929",
+    "inputs": ["records/obs-3/p4-min3-r2/00-obs_snapshot.p4.min3.r2.json"],
+    "excludedInputs": []
+  }
+}

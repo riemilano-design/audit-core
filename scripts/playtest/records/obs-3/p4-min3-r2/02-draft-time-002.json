@@ -1,0 +1,4854 @@
+{
+  "schemaVersion": "0.2",
+  "subject": {
+    "customer": "p4",
+    "groups": [
+      "3 分"
+    ],
+    "gamesCount": 18
+  },
+  "scope": "this_user",
+  "lane": "time",
+  "counterEvidence": {
+    "attempted": false,
+    "items": [],
+    "result": "none_found",
+    "provenance": {
+      "inputs": []
+    }
+  },
+  "status": "proposed",
+  "knowledge": {
+    "kind": "discovered",
+    "reviewStatus": "draft",
+    "origin": {
+      "kifu": "p4/min3",
+      "lane": "time"
+    },
+    "range": "this_user"
+  },
+  "provenance": {
+    "gitHead": "a4a5929",
+    "inputs": [
+      "records/obs-3/p4-min3-r2/00-obs_snapshot.p4.min3.r2.json"
+    ],
+    "excludedInputs": []
+  },
+  "hypothesisId": "H-p4-min3-r2-time-002",
+  "statement": "10 秒以上考えた 42 手では、相手玉側の手の数は自玉側の手の数の 1.2 倍でしたが、5〜9 秒で決めた手では 2.2 倍でした。10 秒以上の帯で崩れを判定できたのは 8 手で、そのうち崩れは 0 手、5〜9 秒の帯では 32 手のうち 10 手が崩れでした。長く時間を使った場面は、自玉側の手が候補に残っている場面に寄っている可能性があります。",
+  "observations": [
+    {
+      "obsId": "obs.time.decisionContext",
+      "path": "obs_geo decisionContext[]（spentBucket が \">9\" の行）",
+      "value": [
+        {
+          "gameNo": 1,
+          "kifPly": 7,
+          "spentBucket": ">9",
+          "collapse": null,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": true,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "early",
+          "evalBand": "behind"
+        },
+        {
+          "gameNo": 1,
+          "kifPly": 17,
+          "spentBucket": ">9",
+          "collapse": null,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": false,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "mid",
+          "evalBand": "behind"
+        },
+        {
+          "gameNo": 1,
+          "kifPly": 19,
+          "spentBucket": ">9",
+          "collapse": null,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": false,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "mid",
+          "evalBand": "behind"
+        },
+        {
+          "gameNo": 1,
+          "kifPly": 21,
+          "spentBucket": ">9",
+          "collapse": null,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": false,
+          "oppPrevDrop": true,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "mid",
+          "evalBand": "behind"
+        },
+        {
+          "gameNo": 1,
+          "kifPly": 25,
+          "spentBucket": ">9",
+          "collapse": null,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": false,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": true,
+          "phase": "mid",
+          "evalBand": "behind"
+        },
+        {
+          "gameNo": 1,
+          "kifPly": 27,
+          "spentBucket": ">9",
+          "collapse": null,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": true,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "mid",
+          "evalBand": "behind"
+        },
+        {
+          "gameNo": 1,
+          "kifPly": 31,
+          "spentBucket": ">9",
+          "collapse": null,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": false,
+          "oppPrevDrop": true,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "late",
+          "evalBand": "behind"
+        },
+        {
+          "gameNo": 2,
+          "kifPly": 51,
+          "spentBucket": ">9",
+          "collapse": false,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": false,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "mid",
+          "evalBand": "level"
+        },
+        {
+          "gameNo": 2,
+          "kifPly": 57,
+          "spentBucket": ">9",
+          "collapse": false,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": true,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "late",
+          "evalBand": "level"
+        },
+        {
+          "gameNo": 2,
+          "kifPly": 59,
+          "spentBucket": ">9",
+          "collapse": false,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": true,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "late",
+          "evalBand": "level"
+        },
+        {
+          "gameNo": 2,
+          "kifPly": 71,
+          "spentBucket": ">9",
+          "collapse": false,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": false,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "late",
+          "evalBand": "ahead"
+        },
+        {
+          "gameNo": 3,
+          "kifPly": 32,
+          "spentBucket": ">9",
+          "collapse": null,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": true,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "mid",
+          "evalBand": "behind"
+        },
+        {
+          "gameNo": 3,
+          "kifPly": 40,
+          "spentBucket": ">9",
+          "collapse": null,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": false,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "mid",
+          "evalBand": "behind"
+        },
+        {
+          "gameNo": 3,
+          "kifPly": 60,
+          "spentBucket": ">9",
+          "collapse": null,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": false,
+          "oppPrevDrop": true,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "late",
+          "evalBand": "behind"
+        },
+        {
+          "gameNo": 4,
+          "kifPly": 32,
+          "spentBucket": ">9",
+          "collapse": null,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": false,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "mid",
+          "evalBand": "behind"
+        },
+        {
+          "gameNo": 4,
+          "kifPly": 34,
+          "spentBucket": ">9",
+          "collapse": null,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": false,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "mid",
+          "evalBand": "behind"
+        },
+        {
+          "gameNo": 5,
+          "kifPly": 25,
+          "spentBucket": ">9",
+          "collapse": false,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": false,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "mid",
+          "evalBand": "ahead"
+        },
+        {
+          "gameNo": 5,
+          "kifPly": 41,
+          "spentBucket": ">9",
+          "collapse": false,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": false,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "late",
+          "evalBand": "ahead"
+        },
+        {
+          "gameNo": 6,
+          "kifPly": 34,
+          "spentBucket": ">9",
+          "collapse": null,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": true,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": true,
+          "phase": "early",
+          "evalBand": "behind"
+        },
+        {
+          "gameNo": 7,
+          "kifPly": 14,
+          "spentBucket": ">9",
+          "collapse": null,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": true,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "mid",
+          "evalBand": "behind"
+        },
+        {
+          "gameNo": 7,
+          "kifPly": 34,
+          "spentBucket": ">9",
+          "collapse": null,
+          "fork": null,
+          "inCheck": true,
+          "oppPrevCapture": false,
+          "oppPrevDrop": true,
+          "oppPrevGivesCheck": true,
+          "oppPrevPromotion": false,
+          "phase": "late",
+          "evalBand": "behind"
+        },
+        {
+          "gameNo": 8,
+          "kifPly": 16,
+          "spentBucket": ">9",
+          "collapse": null,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": true,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "mid",
+          "evalBand": "behind"
+        },
+        {
+          "gameNo": 8,
+          "kifPly": 18,
+          "spentBucket": ">9",
+          "collapse": null,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": false,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "mid",
+          "evalBand": "behind"
+        },
+        {
+          "gameNo": 8,
+          "kifPly": 22,
+          "spentBucket": ">9",
+          "collapse": null,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": true,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "mid",
+          "evalBand": "behind"
+        },
+        {
+          "gameNo": 10,
+          "kifPly": 30,
+          "spentBucket": ">9",
+          "collapse": null,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": false,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "mid",
+          "evalBand": "behind"
+        },
+        {
+          "gameNo": 10,
+          "kifPly": 34,
+          "spentBucket": ">9",
+          "collapse": null,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": true,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "mid",
+          "evalBand": "behind"
+        },
+        {
+          "gameNo": 10,
+          "kifPly": 38,
+          "spentBucket": ">9",
+          "collapse": null,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": true,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "mid",
+          "evalBand": "behind"
+        },
+        {
+          "gameNo": 11,
+          "kifPly": 26,
+          "spentBucket": ">9",
+          "collapse": false,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": false,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "mid",
+          "evalBand": "ahead"
+        },
+        {
+          "gameNo": 11,
+          "kifPly": 32,
+          "spentBucket": ">9",
+          "collapse": null,
+          "fork": null,
+          "inCheck": true,
+          "oppPrevCapture": true,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": true,
+          "oppPrevPromotion": false,
+          "phase": "mid",
+          "evalBand": "behind"
+        },
+        {
+          "gameNo": 11,
+          "kifPly": 42,
+          "spentBucket": ">9",
+          "collapse": null,
+          "fork": null,
+          "inCheck": true,
+          "oppPrevCapture": false,
+          "oppPrevDrop": true,
+          "oppPrevGivesCheck": true,
+          "oppPrevPromotion": false,
+          "phase": "mid",
+          "evalBand": "behind"
+        },
+        {
+          "gameNo": 11,
+          "kifPly": 56,
+          "spentBucket": ">9",
+          "collapse": null,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": true,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "late",
+          "evalBand": "behind"
+        },
+        {
+          "gameNo": 11,
+          "kifPly": 58,
+          "spentBucket": ">9",
+          "collapse": null,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": false,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "late",
+          "evalBand": "behind"
+        },
+        {
+          "gameNo": 12,
+          "kifPly": 42,
+          "spentBucket": ">9",
+          "collapse": null,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": true,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "mid",
+          "evalBand": "behind"
+        },
+        {
+          "gameNo": 13,
+          "kifPly": 33,
+          "spentBucket": ">9",
+          "collapse": null,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": true,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "mid",
+          "evalBand": "behind"
+        },
+        {
+          "gameNo": 13,
+          "kifPly": 49,
+          "spentBucket": ">9",
+          "collapse": null,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": false,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "late",
+          "evalBand": "behind"
+        },
+        {
+          "gameNo": 14,
+          "kifPly": 25,
+          "spentBucket": ">9",
+          "collapse": false,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": true,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "early",
+          "evalBand": "level"
+        },
+        {
+          "gameNo": 14,
+          "kifPly": 51,
+          "spentBucket": ">9",
+          "collapse": null,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": false,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "mid",
+          "evalBand": "behind"
+        },
+        {
+          "gameNo": 14,
+          "kifPly": 61,
+          "spentBucket": ">9",
+          "collapse": null,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": true,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "late",
+          "evalBand": "behind"
+        },
+        {
+          "gameNo": 16,
+          "kifPly": 52,
+          "spentBucket": ">9",
+          "collapse": null,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": true,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "mid",
+          "evalBand": "behind"
+        },
+        {
+          "gameNo": 16,
+          "kifPly": 62,
+          "spentBucket": ">9",
+          "collapse": null,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": false,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "mid",
+          "evalBand": "behind"
+        },
+        {
+          "gameNo": 16,
+          "kifPly": 74,
+          "spentBucket": ">9",
+          "collapse": null,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": true,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "late",
+          "evalBand": "behind"
+        },
+        {
+          "gameNo": 17,
+          "kifPly": 24,
+          "spentBucket": ">9",
+          "collapse": null,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": false,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "late",
+          "evalBand": "behind"
+        }
+      ],
+      "derived": {
+        "kind": "ratio",
+        "numerator": {
+          "obsId": "obs.geo.moveCombination",
+          "value": 14
+        },
+        "denominator": {
+          "obsId": "obs.geo.moveCombination",
+          "value": 12
+        }
+      }
+    },
+    {
+      "obsId": "obs.time.decisionContext",
+      "path": "obs_geo decisionContext[]（spentBucket が \"≤9\" の行）",
+      "value": [
+        {
+          "gameNo": 1,
+          "kifPly": 1,
+          "spentBucket": "≤9",
+          "collapse": false,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": null,
+          "oppPrevDrop": null,
+          "oppPrevGivesCheck": null,
+          "oppPrevPromotion": null,
+          "phase": "early",
+          "evalBand": "level"
+        },
+        {
+          "gameNo": 1,
+          "kifPly": 11,
+          "spentBucket": "≤9",
+          "collapse": null,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": false,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "early",
+          "evalBand": "behind"
+        },
+        {
+          "gameNo": 1,
+          "kifPly": 13,
+          "spentBucket": "≤9",
+          "collapse": null,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": true,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": true,
+          "phase": "early",
+          "evalBand": "behind"
+        },
+        {
+          "gameNo": 1,
+          "kifPly": 15,
+          "spentBucket": "≤9",
+          "collapse": null,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": false,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "early",
+          "evalBand": "behind"
+        },
+        {
+          "gameNo": 1,
+          "kifPly": 23,
+          "spentBucket": "≤9",
+          "collapse": null,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": false,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "mid",
+          "evalBand": "behind"
+        },
+        {
+          "gameNo": 1,
+          "kifPly": 33,
+          "spentBucket": "≤9",
+          "collapse": null,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": true,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": true,
+          "phase": "late",
+          "evalBand": "behind"
+        },
+        {
+          "gameNo": 1,
+          "kifPly": 35,
+          "spentBucket": "≤9",
+          "collapse": null,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": false,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "late",
+          "evalBand": "behind"
+        },
+        {
+          "gameNo": 1,
+          "kifPly": 37,
+          "spentBucket": "≤9",
+          "collapse": null,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": true,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "late",
+          "evalBand": "behind"
+        },
+        {
+          "gameNo": 2,
+          "kifPly": 31,
+          "spentBucket": "≤9",
+          "collapse": null,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": false,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "mid",
+          "evalBand": "behind"
+        },
+        {
+          "gameNo": 2,
+          "kifPly": 33,
+          "spentBucket": "≤9",
+          "collapse": null,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": false,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "mid",
+          "evalBand": "behind"
+        },
+        {
+          "gameNo": 2,
+          "kifPly": 39,
+          "spentBucket": "≤9",
+          "collapse": null,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": false,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "mid",
+          "evalBand": "behind"
+        },
+        {
+          "gameNo": 2,
+          "kifPly": 43,
+          "spentBucket": "≤9",
+          "collapse": true,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": true,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "mid",
+          "evalBand": "ahead"
+        },
+        {
+          "gameNo": 2,
+          "kifPly": 45,
+          "spentBucket": "≤9",
+          "collapse": null,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": false,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "mid",
+          "evalBand": "behind"
+        },
+        {
+          "gameNo": 2,
+          "kifPly": 73,
+          "spentBucket": "≤9",
+          "collapse": false,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": false,
+          "oppPrevDrop": true,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "late",
+          "evalBand": "ahead"
+        },
+        {
+          "gameNo": 3,
+          "kifPly": 18,
+          "spentBucket": "≤9",
+          "collapse": false,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": false,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "early",
+          "evalBand": "level"
+        },
+        {
+          "gameNo": 3,
+          "kifPly": 24,
+          "spentBucket": "≤9",
+          "collapse": false,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": false,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "early",
+          "evalBand": "level"
+        },
+        {
+          "gameNo": 3,
+          "kifPly": 30,
+          "spentBucket": "≤9",
+          "collapse": null,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": false,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "mid",
+          "evalBand": "behind"
+        },
+        {
+          "gameNo": 3,
+          "kifPly": 34,
+          "spentBucket": "≤9",
+          "collapse": null,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": false,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "mid",
+          "evalBand": "behind"
+        },
+        {
+          "gameNo": 3,
+          "kifPly": 44,
+          "spentBucket": "≤9",
+          "collapse": null,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": true,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": true,
+          "phase": "mid",
+          "evalBand": "behind"
+        },
+        {
+          "gameNo": 3,
+          "kifPly": 46,
+          "spentBucket": "≤9",
+          "collapse": null,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": false,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "mid",
+          "evalBand": "behind"
+        },
+        {
+          "gameNo": 3,
+          "kifPly": 62,
+          "spentBucket": "≤9",
+          "collapse": null,
+          "fork": null,
+          "inCheck": true,
+          "oppPrevCapture": false,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": true,
+          "oppPrevPromotion": true,
+          "phase": "late",
+          "evalBand": "behind"
+        },
+        {
+          "gameNo": 3,
+          "kifPly": 64,
+          "spentBucket": "≤9",
+          "collapse": null,
+          "fork": null,
+          "inCheck": true,
+          "oppPrevCapture": true,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": true,
+          "oppPrevPromotion": true,
+          "phase": "late",
+          "evalBand": "behind"
+        },
+        {
+          "gameNo": 3,
+          "kifPly": 70,
+          "spentBucket": "≤9",
+          "collapse": null,
+          "fork": null,
+          "inCheck": true,
+          "oppPrevCapture": false,
+          "oppPrevDrop": true,
+          "oppPrevGivesCheck": true,
+          "oppPrevPromotion": false,
+          "phase": "late",
+          "evalBand": "behind"
+        },
+        {
+          "gameNo": 4,
+          "kifPly": 16,
+          "spentBucket": "≤9",
+          "collapse": null,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": true,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "early",
+          "evalBand": "behind"
+        },
+        {
+          "gameNo": 4,
+          "kifPly": 20,
+          "spentBucket": "≤9",
+          "collapse": null,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": true,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "early",
+          "evalBand": "behind"
+        },
+        {
+          "gameNo": 4,
+          "kifPly": 24,
+          "spentBucket": "≤9",
+          "collapse": null,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": false,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "early",
+          "evalBand": "behind"
+        },
+        {
+          "gameNo": 4,
+          "kifPly": 28,
+          "spentBucket": "≤9",
+          "collapse": null,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": false,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "mid",
+          "evalBand": "behind"
+        },
+        {
+          "gameNo": 4,
+          "kifPly": 40,
+          "spentBucket": "≤9",
+          "collapse": null,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": true,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "mid",
+          "evalBand": "behind"
+        },
+        {
+          "gameNo": 4,
+          "kifPly": 42,
+          "spentBucket": "≤9",
+          "collapse": null,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": false,
+          "oppPrevDrop": true,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "mid",
+          "evalBand": "behind"
+        },
+        {
+          "gameNo": 4,
+          "kifPly": 46,
+          "spentBucket": "≤9",
+          "collapse": null,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": true,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "mid",
+          "evalBand": "behind"
+        },
+        {
+          "gameNo": 4,
+          "kifPly": 52,
+          "spentBucket": "≤9",
+          "collapse": null,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": false,
+          "oppPrevDrop": true,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "late",
+          "evalBand": "behind"
+        },
+        {
+          "gameNo": 4,
+          "kifPly": 66,
+          "spentBucket": "≤9",
+          "collapse": null,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": true,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": true,
+          "phase": "late",
+          "evalBand": "behind"
+        },
+        {
+          "gameNo": 5,
+          "kifPly": 15,
+          "spentBucket": "≤9",
+          "collapse": false,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": false,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "early",
+          "evalBand": "ahead"
+        },
+        {
+          "gameNo": 5,
+          "kifPly": 17,
+          "spentBucket": "≤9",
+          "collapse": false,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": false,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "early",
+          "evalBand": "ahead"
+        },
+        {
+          "gameNo": 5,
+          "kifPly": 23,
+          "spentBucket": "≤9",
+          "collapse": false,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": false,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "mid",
+          "evalBand": "ahead"
+        },
+        {
+          "gameNo": 5,
+          "kifPly": 29,
+          "spentBucket": "≤9",
+          "collapse": false,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": false,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "mid",
+          "evalBand": "ahead"
+        },
+        {
+          "gameNo": 5,
+          "kifPly": 37,
+          "spentBucket": "≤9",
+          "collapse": false,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": false,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "late",
+          "evalBand": "ahead"
+        },
+        {
+          "gameNo": 5,
+          "kifPly": 43,
+          "spentBucket": "≤9",
+          "collapse": false,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": false,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "late",
+          "evalBand": "ahead"
+        },
+        {
+          "gameNo": 5,
+          "kifPly": 49,
+          "spentBucket": "≤9",
+          "collapse": false,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": false,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "late",
+          "evalBand": "ahead"
+        },
+        {
+          "gameNo": 6,
+          "kifPly": 20,
+          "spentBucket": "≤9",
+          "collapse": true,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": false,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "early",
+          "evalBand": "level"
+        },
+        {
+          "gameNo": 6,
+          "kifPly": 24,
+          "spentBucket": "≤9",
+          "collapse": null,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": true,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "early",
+          "evalBand": "behind"
+        },
+        {
+          "gameNo": 6,
+          "kifPly": 26,
+          "spentBucket": "≤9",
+          "collapse": null,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": false,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "early",
+          "evalBand": "behind"
+        },
+        {
+          "gameNo": 6,
+          "kifPly": 38,
+          "spentBucket": "≤9",
+          "collapse": null,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": true,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "early",
+          "evalBand": "behind"
+        },
+        {
+          "gameNo": 6,
+          "kifPly": 42,
+          "spentBucket": "≤9",
+          "collapse": null,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": true,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "mid",
+          "evalBand": "behind"
+        },
+        {
+          "gameNo": 6,
+          "kifPly": 46,
+          "spentBucket": "≤9",
+          "collapse": null,
+          "fork": null,
+          "inCheck": true,
+          "oppPrevCapture": true,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": true,
+          "oppPrevPromotion": false,
+          "phase": "mid",
+          "evalBand": "behind"
+        },
+        {
+          "gameNo": 6,
+          "kifPly": 58,
+          "spentBucket": "≤9",
+          "collapse": null,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": true,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": true,
+          "phase": "mid",
+          "evalBand": "behind"
+        },
+        {
+          "gameNo": 7,
+          "kifPly": 20,
+          "spentBucket": "≤9",
+          "collapse": null,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": false,
+          "oppPrevDrop": true,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "mid",
+          "evalBand": "behind"
+        },
+        {
+          "gameNo": 7,
+          "kifPly": 22,
+          "spentBucket": "≤9",
+          "collapse": null,
+          "fork": null,
+          "inCheck": true,
+          "oppPrevCapture": false,
+          "oppPrevDrop": true,
+          "oppPrevGivesCheck": true,
+          "oppPrevPromotion": false,
+          "phase": "mid",
+          "evalBand": "behind"
+        },
+        {
+          "gameNo": 7,
+          "kifPly": 26,
+          "spentBucket": "≤9",
+          "collapse": null,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": false,
+          "oppPrevDrop": true,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "late",
+          "evalBand": "behind"
+        },
+        {
+          "gameNo": 7,
+          "kifPly": 28,
+          "spentBucket": "≤9",
+          "collapse": null,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": true,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "late",
+          "evalBand": "behind"
+        },
+        {
+          "gameNo": 8,
+          "kifPly": 8,
+          "spentBucket": "≤9",
+          "collapse": null,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": true,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": true,
+          "phase": "early",
+          "evalBand": "behind"
+        },
+        {
+          "gameNo": 8,
+          "kifPly": 10,
+          "spentBucket": "≤9",
+          "collapse": true,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": false,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "early",
+          "evalBand": "level"
+        },
+        {
+          "gameNo": 8,
+          "kifPly": 12,
+          "spentBucket": "≤9",
+          "collapse": null,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": true,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "early",
+          "evalBand": "behind"
+        },
+        {
+          "gameNo": 8,
+          "kifPly": 14,
+          "spentBucket": "≤9",
+          "collapse": null,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": true,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "early",
+          "evalBand": "behind"
+        },
+        {
+          "gameNo": 8,
+          "kifPly": 20,
+          "spentBucket": "≤9",
+          "collapse": null,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": true,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "mid",
+          "evalBand": "behind"
+        },
+        {
+          "gameNo": 8,
+          "kifPly": 24,
+          "spentBucket": "≤9",
+          "collapse": null,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": false,
+          "oppPrevDrop": true,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "mid",
+          "evalBand": "behind"
+        },
+        {
+          "gameNo": 8,
+          "kifPly": 26,
+          "spentBucket": "≤9",
+          "collapse": null,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": false,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "mid",
+          "evalBand": "behind"
+        },
+        {
+          "gameNo": 8,
+          "kifPly": 28,
+          "spentBucket": "≤9",
+          "collapse": null,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": true,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": true,
+          "phase": "mid",
+          "evalBand": "behind"
+        },
+        {
+          "gameNo": 8,
+          "kifPly": 32,
+          "spentBucket": "≤9",
+          "collapse": null,
+          "fork": null,
+          "inCheck": true,
+          "oppPrevCapture": true,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": true,
+          "oppPrevPromotion": false,
+          "phase": "late",
+          "evalBand": "behind"
+        },
+        {
+          "gameNo": 8,
+          "kifPly": 36,
+          "spentBucket": "≤9",
+          "collapse": null,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": false,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "late",
+          "evalBand": "behind"
+        },
+        {
+          "gameNo": 8,
+          "kifPly": 38,
+          "spentBucket": "≤9",
+          "collapse": null,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": true,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "late",
+          "evalBand": "behind"
+        },
+        {
+          "gameNo": 8,
+          "kifPly": 40,
+          "spentBucket": "≤9",
+          "collapse": null,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": true,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "late",
+          "evalBand": "behind"
+        },
+        {
+          "gameNo": 8,
+          "kifPly": 42,
+          "spentBucket": "≤9",
+          "collapse": null,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": false,
+          "oppPrevDrop": true,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "late",
+          "evalBand": "behind"
+        },
+        {
+          "gameNo": 9,
+          "kifPly": 19,
+          "spentBucket": "≤9",
+          "collapse": true,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": false,
+          "oppPrevDrop": true,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "early",
+          "evalBand": "level"
+        },
+        {
+          "gameNo": 9,
+          "kifPly": 21,
+          "spentBucket": "≤9",
+          "collapse": null,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": true,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": true,
+          "phase": "mid",
+          "evalBand": "behind"
+        },
+        {
+          "gameNo": 9,
+          "kifPly": 27,
+          "spentBucket": "≤9",
+          "collapse": null,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": false,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "mid",
+          "evalBand": "behind"
+        },
+        {
+          "gameNo": 9,
+          "kifPly": 29,
+          "spentBucket": "≤9",
+          "collapse": null,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": true,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "mid",
+          "evalBand": "behind"
+        },
+        {
+          "gameNo": 9,
+          "kifPly": 31,
+          "spentBucket": "≤9",
+          "collapse": null,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": false,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "mid",
+          "evalBand": "behind"
+        },
+        {
+          "gameNo": 9,
+          "kifPly": 33,
+          "spentBucket": "≤9",
+          "collapse": null,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": true,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "mid",
+          "evalBand": "behind"
+        },
+        {
+          "gameNo": 9,
+          "kifPly": 37,
+          "spentBucket": "≤9",
+          "collapse": null,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": false,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "mid",
+          "evalBand": "behind"
+        },
+        {
+          "gameNo": 9,
+          "kifPly": 43,
+          "spentBucket": "≤9",
+          "collapse": null,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": true,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "late",
+          "evalBand": "behind"
+        },
+        {
+          "gameNo": 9,
+          "kifPly": 47,
+          "spentBucket": "≤9",
+          "collapse": null,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": true,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "late",
+          "evalBand": "behind"
+        },
+        {
+          "gameNo": 9,
+          "kifPly": 57,
+          "spentBucket": "≤9",
+          "collapse": null,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": true,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "late",
+          "evalBand": "behind"
+        },
+        {
+          "gameNo": 9,
+          "kifPly": 59,
+          "spentBucket": "≤9",
+          "collapse": null,
+          "fork": null,
+          "inCheck": true,
+          "oppPrevCapture": false,
+          "oppPrevDrop": true,
+          "oppPrevGivesCheck": true,
+          "oppPrevPromotion": false,
+          "phase": "late",
+          "evalBand": "behind"
+        },
+        {
+          "gameNo": 9,
+          "kifPly": 61,
+          "spentBucket": "≤9",
+          "collapse": null,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": true,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": true,
+          "phase": "late",
+          "evalBand": "behind"
+        },
+        {
+          "gameNo": 10,
+          "kifPly": 18,
+          "spentBucket": "≤9",
+          "collapse": true,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": false,
+          "oppPrevDrop": true,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "early",
+          "evalBand": "level"
+        },
+        {
+          "gameNo": 10,
+          "kifPly": 22,
+          "spentBucket": "≤9",
+          "collapse": false,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": false,
+          "oppPrevDrop": true,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "early",
+          "evalBand": "level"
+        },
+        {
+          "gameNo": 10,
+          "kifPly": 26,
+          "spentBucket": "≤9",
+          "collapse": false,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": false,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "mid",
+          "evalBand": "level"
+        },
+        {
+          "gameNo": 10,
+          "kifPly": 42,
+          "spentBucket": "≤9",
+          "collapse": null,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": false,
+          "oppPrevDrop": true,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "mid",
+          "evalBand": "behind"
+        },
+        {
+          "gameNo": 10,
+          "kifPly": 44,
+          "spentBucket": "≤9",
+          "collapse": null,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": true,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "mid",
+          "evalBand": "behind"
+        },
+        {
+          "gameNo": 10,
+          "kifPly": 46,
+          "spentBucket": "≤9",
+          "collapse": null,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": false,
+          "oppPrevDrop": true,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "mid",
+          "evalBand": "behind"
+        },
+        {
+          "gameNo": 10,
+          "kifPly": 50,
+          "spentBucket": "≤9",
+          "collapse": null,
+          "fork": null,
+          "inCheck": true,
+          "oppPrevCapture": false,
+          "oppPrevDrop": true,
+          "oppPrevGivesCheck": true,
+          "oppPrevPromotion": false,
+          "phase": "late",
+          "evalBand": "behind"
+        },
+        {
+          "gameNo": 10,
+          "kifPly": 52,
+          "spentBucket": "≤9",
+          "collapse": null,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": true,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": true,
+          "phase": "late",
+          "evalBand": "behind"
+        },
+        {
+          "gameNo": 10,
+          "kifPly": 54,
+          "spentBucket": "≤9",
+          "collapse": null,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": false,
+          "oppPrevDrop": true,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "late",
+          "evalBand": "behind"
+        },
+        {
+          "gameNo": 10,
+          "kifPly": 56,
+          "spentBucket": "≤9",
+          "collapse": null,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": true,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "late",
+          "evalBand": "behind"
+        },
+        {
+          "gameNo": 11,
+          "kifPly": 6,
+          "spentBucket": "≤9",
+          "collapse": false,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": false,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "early",
+          "evalBand": "level"
+        },
+        {
+          "gameNo": 11,
+          "kifPly": 12,
+          "spentBucket": "≤9",
+          "collapse": false,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": false,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "early",
+          "evalBand": "level"
+        },
+        {
+          "gameNo": 11,
+          "kifPly": 18,
+          "spentBucket": "≤9",
+          "collapse": false,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": false,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "early",
+          "evalBand": "level"
+        },
+        {
+          "gameNo": 11,
+          "kifPly": 22,
+          "spentBucket": "≤9",
+          "collapse": false,
+          "fork": null,
+          "inCheck": true,
+          "oppPrevCapture": false,
+          "oppPrevDrop": true,
+          "oppPrevGivesCheck": true,
+          "oppPrevPromotion": false,
+          "phase": "early",
+          "evalBand": "level"
+        },
+        {
+          "gameNo": 11,
+          "kifPly": 28,
+          "spentBucket": "≤9",
+          "collapse": true,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": false,
+          "oppPrevDrop": true,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "mid",
+          "evalBand": "ahead"
+        },
+        {
+          "gameNo": 11,
+          "kifPly": 30,
+          "spentBucket": "≤9",
+          "collapse": null,
+          "fork": null,
+          "inCheck": true,
+          "oppPrevCapture": true,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": true,
+          "oppPrevPromotion": true,
+          "phase": "mid",
+          "evalBand": "behind"
+        },
+        {
+          "gameNo": 11,
+          "kifPly": 44,
+          "spentBucket": "≤9",
+          "collapse": null,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": true,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": true,
+          "phase": "mid",
+          "evalBand": "behind"
+        },
+        {
+          "gameNo": 11,
+          "kifPly": 48,
+          "spentBucket": "≤9",
+          "collapse": null,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": true,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "late",
+          "evalBand": "behind"
+        },
+        {
+          "gameNo": 11,
+          "kifPly": 54,
+          "spentBucket": "≤9",
+          "collapse": null,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": true,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "late",
+          "evalBand": "behind"
+        },
+        {
+          "gameNo": 12,
+          "kifPly": 10,
+          "spentBucket": "≤9",
+          "collapse": false,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": false,
+          "oppPrevDrop": true,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "early",
+          "evalBand": "level"
+        },
+        {
+          "gameNo": 12,
+          "kifPly": 30,
+          "spentBucket": "≤9",
+          "collapse": null,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": false,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": true,
+          "phase": "mid",
+          "evalBand": "behind"
+        },
+        {
+          "gameNo": 12,
+          "kifPly": 34,
+          "spentBucket": "≤9",
+          "collapse": null,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": false,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "mid",
+          "evalBand": "behind"
+        },
+        {
+          "gameNo": 12,
+          "kifPly": 36,
+          "spentBucket": "≤9",
+          "collapse": null,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": false,
+          "oppPrevDrop": true,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "mid",
+          "evalBand": null
+        },
+        {
+          "gameNo": 12,
+          "kifPly": 38,
+          "spentBucket": "≤9",
+          "collapse": null,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": false,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "mid",
+          "evalBand": "behind"
+        },
+        {
+          "gameNo": 12,
+          "kifPly": 44,
+          "spentBucket": "≤9",
+          "collapse": null,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": true,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "mid",
+          "evalBand": "behind"
+        },
+        {
+          "gameNo": 12,
+          "kifPly": 52,
+          "spentBucket": "≤9",
+          "collapse": null,
+          "fork": null,
+          "inCheck": true,
+          "oppPrevCapture": false,
+          "oppPrevDrop": true,
+          "oppPrevGivesCheck": true,
+          "oppPrevPromotion": false,
+          "phase": "late",
+          "evalBand": "behind"
+        },
+        {
+          "gameNo": 12,
+          "kifPly": 56,
+          "spentBucket": "≤9",
+          "collapse": null,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": false,
+          "oppPrevDrop": true,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "late",
+          "evalBand": "behind"
+        },
+        {
+          "gameNo": 12,
+          "kifPly": 60,
+          "spentBucket": "≤9",
+          "collapse": null,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": false,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "late",
+          "evalBand": "behind"
+        },
+        {
+          "gameNo": 13,
+          "kifPly": 25,
+          "spentBucket": "≤9",
+          "collapse": false,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": true,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "mid",
+          "evalBand": "ahead"
+        },
+        {
+          "gameNo": 13,
+          "kifPly": 53,
+          "spentBucket": "≤9",
+          "collapse": null,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": false,
+          "oppPrevDrop": true,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "late",
+          "evalBand": "behind"
+        },
+        {
+          "gameNo": 14,
+          "kifPly": 23,
+          "spentBucket": "≤9",
+          "collapse": false,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": false,
+          "oppPrevDrop": true,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "early",
+          "evalBand": "level"
+        },
+        {
+          "gameNo": 14,
+          "kifPly": 33,
+          "spentBucket": "≤9",
+          "collapse": true,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": false,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "mid",
+          "evalBand": "level"
+        },
+        {
+          "gameNo": 14,
+          "kifPly": 35,
+          "spentBucket": "≤9",
+          "collapse": null,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": false,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "mid",
+          "evalBand": "behind"
+        },
+        {
+          "gameNo": 14,
+          "kifPly": 43,
+          "spentBucket": "≤9",
+          "collapse": null,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": false,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "mid",
+          "evalBand": "behind"
+        },
+        {
+          "gameNo": 14,
+          "kifPly": 45,
+          "spentBucket": "≤9",
+          "collapse": true,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": false,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "mid",
+          "evalBand": "level"
+        },
+        {
+          "gameNo": 14,
+          "kifPly": 49,
+          "spentBucket": "≤9",
+          "collapse": null,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": false,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "mid",
+          "evalBand": "behind"
+        },
+        {
+          "gameNo": 14,
+          "kifPly": 55,
+          "spentBucket": "≤9",
+          "collapse": null,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": false,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "mid",
+          "evalBand": "behind"
+        },
+        {
+          "gameNo": 14,
+          "kifPly": 59,
+          "spentBucket": "≤9",
+          "collapse": null,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": false,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "late",
+          "evalBand": "behind"
+        },
+        {
+          "gameNo": 14,
+          "kifPly": 69,
+          "spentBucket": "≤9",
+          "collapse": null,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": true,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "late",
+          "evalBand": "behind"
+        },
+        {
+          "gameNo": 15,
+          "kifPly": 29,
+          "spentBucket": "≤9",
+          "collapse": null,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": true,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "mid",
+          "evalBand": "behind"
+        },
+        {
+          "gameNo": 15,
+          "kifPly": 35,
+          "spentBucket": "≤9",
+          "collapse": null,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": false,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "mid",
+          "evalBand": "behind"
+        },
+        {
+          "gameNo": 15,
+          "kifPly": 39,
+          "spentBucket": "≤9",
+          "collapse": null,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": false,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "mid",
+          "evalBand": "behind"
+        },
+        {
+          "gameNo": 15,
+          "kifPly": 43,
+          "spentBucket": "≤9",
+          "collapse": null,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": true,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "mid",
+          "evalBand": "behind"
+        },
+        {
+          "gameNo": 15,
+          "kifPly": 45,
+          "spentBucket": "≤9",
+          "collapse": null,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": true,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "mid",
+          "evalBand": "behind"
+        },
+        {
+          "gameNo": 15,
+          "kifPly": 49,
+          "spentBucket": "≤9",
+          "collapse": null,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": true,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": true,
+          "phase": "mid",
+          "evalBand": "behind"
+        },
+        {
+          "gameNo": 15,
+          "kifPly": 53,
+          "spentBucket": "≤9",
+          "collapse": null,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": true,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "late",
+          "evalBand": "behind"
+        },
+        {
+          "gameNo": 15,
+          "kifPly": 55,
+          "spentBucket": "≤9",
+          "collapse": null,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": true,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "late",
+          "evalBand": "behind"
+        },
+        {
+          "gameNo": 15,
+          "kifPly": 59,
+          "spentBucket": "≤9",
+          "collapse": null,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": true,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "late",
+          "evalBand": "behind"
+        },
+        {
+          "gameNo": 15,
+          "kifPly": 61,
+          "spentBucket": "≤9",
+          "collapse": null,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": false,
+          "oppPrevDrop": true,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "late",
+          "evalBand": "behind"
+        },
+        {
+          "gameNo": 15,
+          "kifPly": 63,
+          "spentBucket": "≤9",
+          "collapse": null,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": true,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "late",
+          "evalBand": "behind"
+        },
+        {
+          "gameNo": 16,
+          "kifPly": 46,
+          "spentBucket": "≤9",
+          "collapse": null,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": false,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "mid",
+          "evalBand": "behind"
+        },
+        {
+          "gameNo": 16,
+          "kifPly": 50,
+          "spentBucket": "≤9",
+          "collapse": null,
+          "fork": null,
+          "inCheck": true,
+          "oppPrevCapture": false,
+          "oppPrevDrop": true,
+          "oppPrevGivesCheck": true,
+          "oppPrevPromotion": false,
+          "phase": "mid",
+          "evalBand": "behind"
+        },
+        {
+          "gameNo": 16,
+          "kifPly": 60,
+          "spentBucket": "≤9",
+          "collapse": null,
+          "fork": null,
+          "inCheck": true,
+          "oppPrevCapture": false,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": true,
+          "oppPrevPromotion": true,
+          "phase": "mid",
+          "evalBand": "behind"
+        },
+        {
+          "gameNo": 16,
+          "kifPly": 64,
+          "spentBucket": "≤9",
+          "collapse": null,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": false,
+          "oppPrevDrop": true,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "mid",
+          "evalBand": "behind"
+        },
+        {
+          "gameNo": 16,
+          "kifPly": 66,
+          "spentBucket": "≤9",
+          "collapse": null,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": false,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "late",
+          "evalBand": "behind"
+        },
+        {
+          "gameNo": 16,
+          "kifPly": 70,
+          "spentBucket": "≤9",
+          "collapse": null,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": false,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "late",
+          "evalBand": "behind"
+        },
+        {
+          "gameNo": 16,
+          "kifPly": 76,
+          "spentBucket": "≤9",
+          "collapse": null,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": false,
+          "oppPrevDrop": true,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "late",
+          "evalBand": "behind"
+        },
+        {
+          "gameNo": 16,
+          "kifPly": 94,
+          "spentBucket": "≤9",
+          "collapse": null,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": false,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "late",
+          "evalBand": "behind"
+        },
+        {
+          "gameNo": 17,
+          "kifPly": 4,
+          "spentBucket": "≤9",
+          "collapse": false,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": false,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "early",
+          "evalBand": "level"
+        },
+        {
+          "gameNo": 17,
+          "kifPly": 6,
+          "spentBucket": "≤9",
+          "collapse": false,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": false,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "early",
+          "evalBand": "level"
+        },
+        {
+          "gameNo": 17,
+          "kifPly": 22,
+          "spentBucket": "≤9",
+          "collapse": null,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": true,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "late",
+          "evalBand": "behind"
+        },
+        {
+          "gameNo": 18,
+          "kifPly": 16,
+          "spentBucket": "≤9",
+          "collapse": null,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": false,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "mid",
+          "evalBand": "behind"
+        },
+        {
+          "gameNo": 18,
+          "kifPly": 18,
+          "spentBucket": "≤9",
+          "collapse": true,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": false,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "mid",
+          "evalBand": "level"
+        },
+        {
+          "gameNo": 18,
+          "kifPly": 22,
+          "spentBucket": "≤9",
+          "collapse": true,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": false,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "mid",
+          "evalBand": "level"
+        },
+        {
+          "gameNo": 18,
+          "kifPly": 32,
+          "spentBucket": "≤9",
+          "collapse": null,
+          "fork": null,
+          "inCheck": false,
+          "oppPrevCapture": true,
+          "oppPrevDrop": false,
+          "oppPrevGivesCheck": false,
+          "oppPrevPromotion": false,
+          "phase": "late",
+          "evalBand": "behind"
+        }
+      ],
+      "derived": {
+        "kind": "ratio",
+        "numerator": {
+          "obsId": "obs.geo.moveCombination",
+          "value": 69
+        },
+        "denominator": {
+          "obsId": "obs.geo.moveCombination",
+          "value": 31
+        }
+      }
+    },
+    {
+      "obsId": "obs.geo.moveCombination",
+      "path": "obs_geo moves[].{gameNo,kifPly,side,facts,combination}（上の 2 つの帯の手）",
+      "value": [
+        {
+          "gameNo": 1,
+          "kifPly": 1,
+          "side": "none",
+          "facts": {
+            "capture": false,
+            "drop": false,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "特になし・どちらでもない"
+        },
+        {
+          "gameNo": 1,
+          "kifPly": 7,
+          "side": "none",
+          "facts": {
+            "capture": false,
+            "drop": false,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "特になし・どちらでもない"
+        },
+        {
+          "gameNo": 1,
+          "kifPly": 11,
+          "side": "none",
+          "facts": {
+            "capture": false,
+            "drop": false,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "特になし・どちらでもない"
+        },
+        {
+          "gameNo": 1,
+          "kifPly": 13,
+          "side": "attack",
+          "facts": {
+            "capture": true,
+            "drop": false,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "取る・相手玉側"
+        },
+        {
+          "gameNo": 1,
+          "kifPly": 15,
+          "side": "none",
+          "facts": {
+            "capture": false,
+            "drop": false,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "特になし・どちらでもない"
+        },
+        {
+          "gameNo": 1,
+          "kifPly": 17,
+          "side": "defense",
+          "facts": {
+            "capture": false,
+            "drop": false,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "特になし・自玉側"
+        },
+        {
+          "gameNo": 1,
+          "kifPly": 19,
+          "side": "defense",
+          "facts": {
+            "capture": false,
+            "drop": false,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "特になし・自玉側"
+        },
+        {
+          "gameNo": 1,
+          "kifPly": 21,
+          "side": "attack",
+          "facts": {
+            "capture": false,
+            "drop": true,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "打つ・相手玉側"
+        },
+        {
+          "gameNo": 1,
+          "kifPly": 23,
+          "side": "defense",
+          "facts": {
+            "capture": false,
+            "drop": false,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "特になし・自玉側"
+        },
+        {
+          "gameNo": 1,
+          "kifPly": 25,
+          "side": "attack",
+          "facts": {
+            "capture": false,
+            "drop": false,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "特になし・相手玉側"
+        },
+        {
+          "gameNo": 1,
+          "kifPly": 27,
+          "side": "attack",
+          "facts": {
+            "capture": false,
+            "drop": false,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "特になし・相手玉側"
+        },
+        {
+          "gameNo": 1,
+          "kifPly": 31,
+          "side": "defense",
+          "facts": {
+            "capture": false,
+            "drop": false,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "特になし・自玉側"
+        },
+        {
+          "gameNo": 1,
+          "kifPly": 33,
+          "side": "attack",
+          "facts": {
+            "capture": false,
+            "drop": true,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "打つ・相手玉側"
+        },
+        {
+          "gameNo": 1,
+          "kifPly": 35,
+          "side": "attack",
+          "facts": {
+            "capture": false,
+            "drop": false,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "特になし・相手玉側"
+        },
+        {
+          "gameNo": 1,
+          "kifPly": 37,
+          "side": "attack",
+          "facts": {
+            "capture": false,
+            "drop": false,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "特になし・相手玉側"
+        },
+        {
+          "gameNo": 2,
+          "kifPly": 31,
+          "side": "none",
+          "facts": {
+            "capture": false,
+            "drop": false,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "特になし・どちらでもない"
+        },
+        {
+          "gameNo": 2,
+          "kifPly": 33,
+          "side": "attack",
+          "facts": {
+            "capture": false,
+            "drop": false,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "特になし・相手玉側"
+        },
+        {
+          "gameNo": 2,
+          "kifPly": 39,
+          "side": "attack",
+          "facts": {
+            "capture": false,
+            "drop": false,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "特になし・相手玉側"
+        },
+        {
+          "gameNo": 2,
+          "kifPly": 43,
+          "side": "attack",
+          "facts": {
+            "capture": true,
+            "drop": false,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "取る・相手玉側"
+        },
+        {
+          "gameNo": 2,
+          "kifPly": 45,
+          "side": "defense",
+          "facts": {
+            "capture": false,
+            "drop": false,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "特になし・自玉側"
+        },
+        {
+          "gameNo": 2,
+          "kifPly": 51,
+          "side": "none",
+          "facts": {
+            "capture": false,
+            "drop": false,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "特になし・どちらでもない"
+        },
+        {
+          "gameNo": 2,
+          "kifPly": 57,
+          "side": "attack",
+          "facts": {
+            "capture": true,
+            "drop": false,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "取る・相手玉側"
+        },
+        {
+          "gameNo": 2,
+          "kifPly": 59,
+          "side": "defense",
+          "facts": {
+            "capture": false,
+            "drop": true,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "打つ・自玉側"
+        },
+        {
+          "gameNo": 2,
+          "kifPly": 71,
+          "side": "attack",
+          "facts": {
+            "capture": false,
+            "drop": true,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "打つ・相手玉側"
+        },
+        {
+          "gameNo": 2,
+          "kifPly": 73,
+          "side": "attack",
+          "facts": {
+            "capture": true,
+            "drop": false,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "取る・相手玉側"
+        },
+        {
+          "gameNo": 3,
+          "kifPly": 18,
+          "side": "none",
+          "facts": {
+            "capture": false,
+            "drop": false,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "特になし・どちらでもない"
+        },
+        {
+          "gameNo": 3,
+          "kifPly": 24,
+          "side": "attack",
+          "facts": {
+            "capture": false,
+            "drop": false,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "特になし・相手玉側"
+        },
+        {
+          "gameNo": 3,
+          "kifPly": 30,
+          "side": "none",
+          "facts": {
+            "capture": false,
+            "drop": false,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "特になし・どちらでもない"
+        },
+        {
+          "gameNo": 3,
+          "kifPly": 32,
+          "side": "none",
+          "facts": {
+            "capture": false,
+            "drop": false,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "特になし・どちらでもない"
+        },
+        {
+          "gameNo": 3,
+          "kifPly": 34,
+          "side": "none",
+          "facts": {
+            "capture": false,
+            "drop": false,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "特になし・どちらでもない"
+        },
+        {
+          "gameNo": 3,
+          "kifPly": 40,
+          "side": "none",
+          "facts": {
+            "capture": false,
+            "drop": false,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "特になし・どちらでもない"
+        },
+        {
+          "gameNo": 3,
+          "kifPly": 44,
+          "side": "attack",
+          "facts": {
+            "capture": false,
+            "drop": false,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "特になし・相手玉側"
+        },
+        {
+          "gameNo": 3,
+          "kifPly": 46,
+          "side": "attack",
+          "facts": {
+            "capture": false,
+            "drop": false,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "特になし・相手玉側"
+        },
+        {
+          "gameNo": 3,
+          "kifPly": 60,
+          "side": "none",
+          "facts": {
+            "capture": false,
+            "drop": true,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "打つ・どちらでもない"
+        },
+        {
+          "gameNo": 3,
+          "kifPly": 62,
+          "side": "both",
+          "facts": {
+            "capture": true,
+            "drop": false,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "取る・両方"
+        },
+        {
+          "gameNo": 3,
+          "kifPly": 64,
+          "side": "defense",
+          "facts": {
+            "capture": false,
+            "drop": false,
+            "givesCheck": false,
+            "kingMove": true
+          },
+          "combination": "玉を動かす・自玉側"
+        },
+        {
+          "gameNo": 3,
+          "kifPly": 70,
+          "side": "defense",
+          "facts": {
+            "capture": false,
+            "drop": false,
+            "givesCheck": false,
+            "kingMove": true
+          },
+          "combination": "玉を動かす・自玉側"
+        },
+        {
+          "gameNo": 4,
+          "kifPly": 16,
+          "side": "attack",
+          "facts": {
+            "capture": false,
+            "drop": false,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "特になし・相手玉側"
+        },
+        {
+          "gameNo": 4,
+          "kifPly": 20,
+          "side": "defense",
+          "facts": {
+            "capture": false,
+            "drop": false,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "特になし・自玉側"
+        },
+        {
+          "gameNo": 4,
+          "kifPly": 24,
+          "side": "defense",
+          "facts": {
+            "capture": false,
+            "drop": false,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "特になし・自玉側"
+        },
+        {
+          "gameNo": 4,
+          "kifPly": 28,
+          "side": "defense",
+          "facts": {
+            "capture": false,
+            "drop": false,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "特になし・自玉側"
+        },
+        {
+          "gameNo": 4,
+          "kifPly": 32,
+          "side": "attack",
+          "facts": {
+            "capture": false,
+            "drop": false,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "特になし・相手玉側"
+        },
+        {
+          "gameNo": 4,
+          "kifPly": 34,
+          "side": "none",
+          "facts": {
+            "capture": false,
+            "drop": false,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "特になし・どちらでもない"
+        },
+        {
+          "gameNo": 4,
+          "kifPly": 40,
+          "side": "defense",
+          "facts": {
+            "capture": false,
+            "drop": false,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "特になし・自玉側"
+        },
+        {
+          "gameNo": 4,
+          "kifPly": 42,
+          "side": "none",
+          "facts": {
+            "capture": false,
+            "drop": true,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "打つ・どちらでもない"
+        },
+        {
+          "gameNo": 4,
+          "kifPly": 46,
+          "side": "none",
+          "facts": {
+            "capture": false,
+            "drop": true,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "打つ・どちらでもない"
+        },
+        {
+          "gameNo": 4,
+          "kifPly": 52,
+          "side": "defense",
+          "facts": {
+            "capture": false,
+            "drop": false,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "特になし・自玉側"
+        },
+        {
+          "gameNo": 4,
+          "kifPly": 66,
+          "side": "attack",
+          "facts": {
+            "capture": false,
+            "drop": true,
+            "givesCheck": true,
+            "kingMove": false
+          },
+          "combination": "打つ・王手・相手玉側"
+        },
+        {
+          "gameNo": 5,
+          "kifPly": 15,
+          "side": "attack",
+          "facts": {
+            "capture": false,
+            "drop": true,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "打つ・相手玉側"
+        },
+        {
+          "gameNo": 5,
+          "kifPly": 17,
+          "side": "defense",
+          "facts": {
+            "capture": false,
+            "drop": false,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "特になし・自玉側"
+        },
+        {
+          "gameNo": 5,
+          "kifPly": 23,
+          "side": "attack",
+          "facts": {
+            "capture": false,
+            "drop": true,
+            "givesCheck": true,
+            "kingMove": false
+          },
+          "combination": "打つ・王手・相手玉側"
+        },
+        {
+          "gameNo": 5,
+          "kifPly": 25,
+          "side": "attack",
+          "facts": {
+            "capture": true,
+            "drop": false,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "取る・相手玉側"
+        },
+        {
+          "gameNo": 5,
+          "kifPly": 29,
+          "side": "attack",
+          "facts": {
+            "capture": false,
+            "drop": false,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "特になし・相手玉側"
+        },
+        {
+          "gameNo": 5,
+          "kifPly": 37,
+          "side": "attack",
+          "facts": {
+            "capture": false,
+            "drop": false,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "特になし・相手玉側"
+        },
+        {
+          "gameNo": 5,
+          "kifPly": 41,
+          "side": "both",
+          "facts": {
+            "capture": false,
+            "drop": false,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "特になし・両方"
+        },
+        {
+          "gameNo": 5,
+          "kifPly": 43,
+          "side": "attack",
+          "facts": {
+            "capture": true,
+            "drop": false,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "取る・相手玉側"
+        },
+        {
+          "gameNo": 5,
+          "kifPly": 49,
+          "side": "attack",
+          "facts": {
+            "capture": true,
+            "drop": false,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "取る・相手玉側"
+        },
+        {
+          "gameNo": 6,
+          "kifPly": 20,
+          "side": "none",
+          "facts": {
+            "capture": false,
+            "drop": false,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "特になし・どちらでもない"
+        },
+        {
+          "gameNo": 6,
+          "kifPly": 24,
+          "side": "none",
+          "facts": {
+            "capture": false,
+            "drop": false,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "特になし・どちらでもない"
+        },
+        {
+          "gameNo": 6,
+          "kifPly": 26,
+          "side": "attack",
+          "facts": {
+            "capture": false,
+            "drop": false,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "特になし・相手玉側"
+        },
+        {
+          "gameNo": 6,
+          "kifPly": 34,
+          "side": "defense",
+          "facts": {
+            "capture": false,
+            "drop": false,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "特になし・自玉側"
+        },
+        {
+          "gameNo": 6,
+          "kifPly": 38,
+          "side": "attack",
+          "facts": {
+            "capture": false,
+            "drop": true,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "打つ・相手玉側"
+        },
+        {
+          "gameNo": 6,
+          "kifPly": 42,
+          "side": "none",
+          "facts": {
+            "capture": false,
+            "drop": false,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "特になし・どちらでもない"
+        },
+        {
+          "gameNo": 6,
+          "kifPly": 46,
+          "side": "defense",
+          "facts": {
+            "capture": false,
+            "drop": false,
+            "givesCheck": false,
+            "kingMove": true
+          },
+          "combination": "玉を動かす・自玉側"
+        },
+        {
+          "gameNo": 6,
+          "kifPly": 58,
+          "side": "none",
+          "facts": {
+            "capture": false,
+            "drop": false,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "特になし・どちらでもない"
+        },
+        {
+          "gameNo": 7,
+          "kifPly": 14,
+          "side": "none",
+          "facts": {
+            "capture": false,
+            "drop": false,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "特になし・どちらでもない"
+        },
+        {
+          "gameNo": 7,
+          "kifPly": 20,
+          "side": "defense",
+          "facts": {
+            "capture": false,
+            "drop": false,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "特になし・自玉側"
+        },
+        {
+          "gameNo": 7,
+          "kifPly": 22,
+          "side": "both",
+          "facts": {
+            "capture": true,
+            "drop": false,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "取る・両方"
+        },
+        {
+          "gameNo": 7,
+          "kifPly": 26,
+          "side": "defense",
+          "facts": {
+            "capture": false,
+            "drop": false,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "特になし・自玉側"
+        },
+        {
+          "gameNo": 7,
+          "kifPly": 28,
+          "side": "none",
+          "facts": {
+            "capture": false,
+            "drop": false,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "特になし・どちらでもない"
+        },
+        {
+          "gameNo": 7,
+          "kifPly": 34,
+          "side": "both",
+          "facts": {
+            "capture": true,
+            "drop": false,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "取る・両方"
+        },
+        {
+          "gameNo": 8,
+          "kifPly": 8,
+          "side": "attack",
+          "facts": {
+            "capture": true,
+            "drop": false,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "取る・相手玉側"
+        },
+        {
+          "gameNo": 8,
+          "kifPly": 10,
+          "side": "attack",
+          "facts": {
+            "capture": false,
+            "drop": false,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "特になし・相手玉側"
+        },
+        {
+          "gameNo": 8,
+          "kifPly": 12,
+          "side": "defense",
+          "facts": {
+            "capture": false,
+            "drop": false,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "特になし・自玉側"
+        },
+        {
+          "gameNo": 8,
+          "kifPly": 14,
+          "side": "none",
+          "facts": {
+            "capture": false,
+            "drop": false,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "特になし・どちらでもない"
+        },
+        {
+          "gameNo": 8,
+          "kifPly": 16,
+          "side": "attack",
+          "facts": {
+            "capture": true,
+            "drop": false,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "取る・相手玉側"
+        },
+        {
+          "gameNo": 8,
+          "kifPly": 18,
+          "side": "defense",
+          "facts": {
+            "capture": false,
+            "drop": true,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "打つ・自玉側"
+        },
+        {
+          "gameNo": 8,
+          "kifPly": 20,
+          "side": "attack",
+          "facts": {
+            "capture": false,
+            "drop": true,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "打つ・相手玉側"
+        },
+        {
+          "gameNo": 8,
+          "kifPly": 22,
+          "side": "defense",
+          "facts": {
+            "capture": false,
+            "drop": false,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "特になし・自玉側"
+        },
+        {
+          "gameNo": 8,
+          "kifPly": 24,
+          "side": "defense",
+          "facts": {
+            "capture": false,
+            "drop": false,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "特になし・自玉側"
+        },
+        {
+          "gameNo": 8,
+          "kifPly": 26,
+          "side": "attack",
+          "facts": {
+            "capture": false,
+            "drop": false,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "特になし・相手玉側"
+        },
+        {
+          "gameNo": 8,
+          "kifPly": 28,
+          "side": "defense",
+          "facts": {
+            "capture": false,
+            "drop": false,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "特になし・自玉側"
+        },
+        {
+          "gameNo": 8,
+          "kifPly": 32,
+          "side": "both",
+          "facts": {
+            "capture": true,
+            "drop": false,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "取る・両方"
+        },
+        {
+          "gameNo": 8,
+          "kifPly": 36,
+          "side": "attack",
+          "facts": {
+            "capture": false,
+            "drop": true,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "打つ・相手玉側"
+        },
+        {
+          "gameNo": 8,
+          "kifPly": 38,
+          "side": "attack",
+          "facts": {
+            "capture": true,
+            "drop": false,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "取る・相手玉側"
+        },
+        {
+          "gameNo": 8,
+          "kifPly": 40,
+          "side": "defense",
+          "facts": {
+            "capture": false,
+            "drop": true,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "打つ・自玉側"
+        },
+        {
+          "gameNo": 8,
+          "kifPly": 42,
+          "side": "none",
+          "facts": {
+            "capture": false,
+            "drop": false,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "特になし・どちらでもない"
+        },
+        {
+          "gameNo": 9,
+          "kifPly": 19,
+          "side": "none",
+          "facts": {
+            "capture": false,
+            "drop": false,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "特になし・どちらでもない"
+        },
+        {
+          "gameNo": 9,
+          "kifPly": 21,
+          "side": "defense",
+          "facts": {
+            "capture": false,
+            "drop": true,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "打つ・自玉側"
+        },
+        {
+          "gameNo": 9,
+          "kifPly": 27,
+          "side": "none",
+          "facts": {
+            "capture": false,
+            "drop": false,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "特になし・どちらでもない"
+        },
+        {
+          "gameNo": 9,
+          "kifPly": 29,
+          "side": "none",
+          "facts": {
+            "capture": false,
+            "drop": false,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "特になし・どちらでもない"
+        },
+        {
+          "gameNo": 9,
+          "kifPly": 31,
+          "side": "attack",
+          "facts": {
+            "capture": false,
+            "drop": false,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "特になし・相手玉側"
+        },
+        {
+          "gameNo": 9,
+          "kifPly": 33,
+          "side": "defense",
+          "facts": {
+            "capture": false,
+            "drop": false,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "特になし・自玉側"
+        },
+        {
+          "gameNo": 9,
+          "kifPly": 37,
+          "side": "attack",
+          "facts": {
+            "capture": true,
+            "drop": false,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "取る・相手玉側"
+        },
+        {
+          "gameNo": 9,
+          "kifPly": 43,
+          "side": "attack",
+          "facts": {
+            "capture": false,
+            "drop": true,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "打つ・相手玉側"
+        },
+        {
+          "gameNo": 9,
+          "kifPly": 47,
+          "side": "attack",
+          "facts": {
+            "capture": true,
+            "drop": false,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "取る・相手玉側"
+        },
+        {
+          "gameNo": 9,
+          "kifPly": 57,
+          "side": "attack",
+          "facts": {
+            "capture": false,
+            "drop": true,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "打つ・相手玉側"
+        },
+        {
+          "gameNo": 9,
+          "kifPly": 59,
+          "side": "defense",
+          "facts": {
+            "capture": false,
+            "drop": false,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "特になし・自玉側"
+        },
+        {
+          "gameNo": 9,
+          "kifPly": 61,
+          "side": "none",
+          "facts": {
+            "capture": false,
+            "drop": true,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "打つ・どちらでもない"
+        },
+        {
+          "gameNo": 10,
+          "kifPly": 18,
+          "side": "both",
+          "facts": {
+            "capture": false,
+            "drop": true,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "打つ・両方"
+        },
+        {
+          "gameNo": 10,
+          "kifPly": 22,
+          "side": "attack",
+          "facts": {
+            "capture": false,
+            "drop": false,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "特になし・相手玉側"
+        },
+        {
+          "gameNo": 10,
+          "kifPly": 26,
+          "side": "none",
+          "facts": {
+            "capture": false,
+            "drop": false,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "特になし・どちらでもない"
+        },
+        {
+          "gameNo": 10,
+          "kifPly": 30,
+          "side": "none",
+          "facts": {
+            "capture": false,
+            "drop": false,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "特になし・どちらでもない"
+        },
+        {
+          "gameNo": 10,
+          "kifPly": 34,
+          "side": "attack",
+          "facts": {
+            "capture": false,
+            "drop": true,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "打つ・相手玉側"
+        },
+        {
+          "gameNo": 10,
+          "kifPly": 38,
+          "side": "attack",
+          "facts": {
+            "capture": false,
+            "drop": false,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "特になし・相手玉側"
+        },
+        {
+          "gameNo": 10,
+          "kifPly": 42,
+          "side": "none",
+          "facts": {
+            "capture": false,
+            "drop": false,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "特になし・どちらでもない"
+        },
+        {
+          "gameNo": 10,
+          "kifPly": 44,
+          "side": "none",
+          "facts": {
+            "capture": false,
+            "drop": false,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "特になし・どちらでもない"
+        },
+        {
+          "gameNo": 10,
+          "kifPly": 46,
+          "side": "attack",
+          "facts": {
+            "capture": true,
+            "drop": false,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "取る・相手玉側"
+        },
+        {
+          "gameNo": 10,
+          "kifPly": 50,
+          "side": "defense",
+          "facts": {
+            "capture": false,
+            "drop": true,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "打つ・自玉側"
+        },
+        {
+          "gameNo": 10,
+          "kifPly": 52,
+          "side": "attack",
+          "facts": {
+            "capture": true,
+            "drop": false,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "取る・相手玉側"
+        },
+        {
+          "gameNo": 10,
+          "kifPly": 54,
+          "side": "attack",
+          "facts": {
+            "capture": true,
+            "drop": false,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "取る・相手玉側"
+        },
+        {
+          "gameNo": 10,
+          "kifPly": 56,
+          "side": "none",
+          "facts": {
+            "capture": false,
+            "drop": true,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "打つ・どちらでもない"
+        },
+        {
+          "gameNo": 11,
+          "kifPly": 6,
+          "side": "none",
+          "facts": {
+            "capture": false,
+            "drop": false,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "特になし・どちらでもない"
+        },
+        {
+          "gameNo": 11,
+          "kifPly": 12,
+          "side": "none",
+          "facts": {
+            "capture": false,
+            "drop": false,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "特になし・どちらでもない"
+        },
+        {
+          "gameNo": 11,
+          "kifPly": 18,
+          "side": "attack",
+          "facts": {
+            "capture": false,
+            "drop": false,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "特になし・相手玉側"
+        },
+        {
+          "gameNo": 11,
+          "kifPly": 22,
+          "side": "defense",
+          "facts": {
+            "capture": false,
+            "drop": false,
+            "givesCheck": false,
+            "kingMove": true
+          },
+          "combination": "玉を動かす・自玉側"
+        },
+        {
+          "gameNo": 11,
+          "kifPly": 26,
+          "side": "none",
+          "facts": {
+            "capture": false,
+            "drop": true,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "打つ・どちらでもない"
+        },
+        {
+          "gameNo": 11,
+          "kifPly": 28,
+          "side": "attack",
+          "facts": {
+            "capture": false,
+            "drop": true,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "打つ・相手玉側"
+        },
+        {
+          "gameNo": 11,
+          "kifPly": 30,
+          "side": "defense",
+          "facts": {
+            "capture": false,
+            "drop": false,
+            "givesCheck": false,
+            "kingMove": true
+          },
+          "combination": "玉を動かす・自玉側"
+        },
+        {
+          "gameNo": 11,
+          "kifPly": 32,
+          "side": "defense",
+          "facts": {
+            "capture": false,
+            "drop": false,
+            "givesCheck": false,
+            "kingMove": true
+          },
+          "combination": "玉を動かす・自玉側"
+        },
+        {
+          "gameNo": 11,
+          "kifPly": 42,
+          "side": "defense",
+          "facts": {
+            "capture": false,
+            "drop": false,
+            "givesCheck": false,
+            "kingMove": true
+          },
+          "combination": "玉を動かす・自玉側"
+        },
+        {
+          "gameNo": 11,
+          "kifPly": 44,
+          "side": "attack",
+          "facts": {
+            "capture": false,
+            "drop": true,
+            "givesCheck": true,
+            "kingMove": false
+          },
+          "combination": "打つ・王手・相手玉側"
+        },
+        {
+          "gameNo": 11,
+          "kifPly": 48,
+          "side": "attack",
+          "facts": {
+            "capture": false,
+            "drop": true,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "打つ・相手玉側"
+        },
+        {
+          "gameNo": 11,
+          "kifPly": 54,
+          "side": "attack",
+          "facts": {
+            "capture": true,
+            "drop": false,
+            "givesCheck": true,
+            "kingMove": false
+          },
+          "combination": "取る・王手・相手玉側"
+        },
+        {
+          "gameNo": 11,
+          "kifPly": 56,
+          "side": "attack",
+          "facts": {
+            "capture": false,
+            "drop": true,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "打つ・相手玉側"
+        },
+        {
+          "gameNo": 11,
+          "kifPly": 58,
+          "side": "both",
+          "facts": {
+            "capture": false,
+            "drop": true,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "打つ・両方"
+        },
+        {
+          "gameNo": 12,
+          "kifPly": 10,
+          "side": "attack",
+          "facts": {
+            "capture": false,
+            "drop": true,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "打つ・相手玉側"
+        },
+        {
+          "gameNo": 12,
+          "kifPly": 30,
+          "side": "defense",
+          "facts": {
+            "capture": false,
+            "drop": false,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "特になし・自玉側"
+        },
+        {
+          "gameNo": 12,
+          "kifPly": 34,
+          "side": "both",
+          "facts": {
+            "capture": false,
+            "drop": false,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "特になし・両方"
+        },
+        {
+          "gameNo": 12,
+          "kifPly": 36,
+          "side": "attack",
+          "facts": {
+            "capture": true,
+            "drop": false,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "取る・相手玉側"
+        },
+        {
+          "gameNo": 12,
+          "kifPly": 38,
+          "side": "attack",
+          "facts": {
+            "capture": true,
+            "drop": false,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "取る・相手玉側"
+        },
+        {
+          "gameNo": 12,
+          "kifPly": 42,
+          "side": "attack",
+          "facts": {
+            "capture": false,
+            "drop": true,
+            "givesCheck": true,
+            "kingMove": false
+          },
+          "combination": "打つ・王手・相手玉側"
+        },
+        {
+          "gameNo": 12,
+          "kifPly": 44,
+          "side": "attack",
+          "facts": {
+            "capture": true,
+            "drop": false,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "取る・相手玉側"
+        },
+        {
+          "gameNo": 12,
+          "kifPly": 52,
+          "side": "defense",
+          "facts": {
+            "capture": false,
+            "drop": false,
+            "givesCheck": false,
+            "kingMove": true
+          },
+          "combination": "玉を動かす・自玉側"
+        },
+        {
+          "gameNo": 12,
+          "kifPly": 56,
+          "side": "attack",
+          "facts": {
+            "capture": false,
+            "drop": true,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "打つ・相手玉側"
+        },
+        {
+          "gameNo": 12,
+          "kifPly": 60,
+          "side": "attack",
+          "facts": {
+            "capture": false,
+            "drop": true,
+            "givesCheck": true,
+            "kingMove": false
+          },
+          "combination": "打つ・王手・相手玉側"
+        },
+        {
+          "gameNo": 13,
+          "kifPly": 25,
+          "side": "attack",
+          "facts": {
+            "capture": false,
+            "drop": true,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "打つ・相手玉側"
+        },
+        {
+          "gameNo": 13,
+          "kifPly": 33,
+          "side": "none",
+          "facts": {
+            "capture": false,
+            "drop": true,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "打つ・どちらでもない"
+        },
+        {
+          "gameNo": 13,
+          "kifPly": 49,
+          "side": "none",
+          "facts": {
+            "capture": false,
+            "drop": false,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "特になし・どちらでもない"
+        },
+        {
+          "gameNo": 13,
+          "kifPly": 53,
+          "side": "attack",
+          "facts": {
+            "capture": false,
+            "drop": false,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "特になし・相手玉側"
+        },
+        {
+          "gameNo": 14,
+          "kifPly": 23,
+          "side": "defense",
+          "facts": {
+            "capture": false,
+            "drop": false,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "特になし・自玉側"
+        },
+        {
+          "gameNo": 14,
+          "kifPly": 25,
+          "side": "defense",
+          "facts": {
+            "capture": false,
+            "drop": false,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "特になし・自玉側"
+        },
+        {
+          "gameNo": 14,
+          "kifPly": 33,
+          "side": "attack",
+          "facts": {
+            "capture": false,
+            "drop": true,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "打つ・相手玉側"
+        },
+        {
+          "gameNo": 14,
+          "kifPly": 35,
+          "side": "none",
+          "facts": {
+            "capture": false,
+            "drop": false,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "特になし・どちらでもない"
+        },
+        {
+          "gameNo": 14,
+          "kifPly": 43,
+          "side": "attack",
+          "facts": {
+            "capture": false,
+            "drop": true,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "打つ・相手玉側"
+        },
+        {
+          "gameNo": 14,
+          "kifPly": 45,
+          "side": "attack",
+          "facts": {
+            "capture": false,
+            "drop": false,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "特になし・相手玉側"
+        },
+        {
+          "gameNo": 14,
+          "kifPly": 49,
+          "side": "none",
+          "facts": {
+            "capture": false,
+            "drop": true,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "打つ・どちらでもない"
+        },
+        {
+          "gameNo": 14,
+          "kifPly": 51,
+          "side": "none",
+          "facts": {
+            "capture": false,
+            "drop": false,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "特になし・どちらでもない"
+        },
+        {
+          "gameNo": 14,
+          "kifPly": 55,
+          "side": "defense",
+          "facts": {
+            "capture": false,
+            "drop": false,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "特になし・自玉側"
+        },
+        {
+          "gameNo": 14,
+          "kifPly": 59,
+          "side": "attack",
+          "facts": {
+            "capture": true,
+            "drop": false,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "取る・相手玉側"
+        },
+        {
+          "gameNo": 14,
+          "kifPly": 61,
+          "side": "attack",
+          "facts": {
+            "capture": false,
+            "drop": false,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "特になし・相手玉側"
+        },
+        {
+          "gameNo": 14,
+          "kifPly": 69,
+          "side": "attack",
+          "facts": {
+            "capture": false,
+            "drop": true,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "打つ・相手玉側"
+        },
+        {
+          "gameNo": 15,
+          "kifPly": 29,
+          "side": "none",
+          "facts": {
+            "capture": false,
+            "drop": false,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "特になし・どちらでもない"
+        },
+        {
+          "gameNo": 15,
+          "kifPly": 35,
+          "side": "defense",
+          "facts": {
+            "capture": false,
+            "drop": false,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "特になし・自玉側"
+        },
+        {
+          "gameNo": 15,
+          "kifPly": 39,
+          "side": "attack",
+          "facts": {
+            "capture": true,
+            "drop": false,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "取る・相手玉側"
+        },
+        {
+          "gameNo": 15,
+          "kifPly": 43,
+          "side": "attack",
+          "facts": {
+            "capture": true,
+            "drop": false,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "取る・相手玉側"
+        },
+        {
+          "gameNo": 15,
+          "kifPly": 45,
+          "side": "attack",
+          "facts": {
+            "capture": false,
+            "drop": true,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "打つ・相手玉側"
+        },
+        {
+          "gameNo": 15,
+          "kifPly": 49,
+          "side": "attack",
+          "facts": {
+            "capture": false,
+            "drop": true,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "打つ・相手玉側"
+        },
+        {
+          "gameNo": 15,
+          "kifPly": 53,
+          "side": "attack",
+          "facts": {
+            "capture": false,
+            "drop": true,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "打つ・相手玉側"
+        },
+        {
+          "gameNo": 15,
+          "kifPly": 55,
+          "side": "attack",
+          "facts": {
+            "capture": false,
+            "drop": false,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "特になし・相手玉側"
+        },
+        {
+          "gameNo": 15,
+          "kifPly": 59,
+          "side": "attack",
+          "facts": {
+            "capture": false,
+            "drop": true,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "打つ・相手玉側"
+        },
+        {
+          "gameNo": 15,
+          "kifPly": 61,
+          "side": "attack",
+          "facts": {
+            "capture": false,
+            "drop": false,
+            "givesCheck": true,
+            "kingMove": false
+          },
+          "combination": "王手・相手玉側"
+        },
+        {
+          "gameNo": 15,
+          "kifPly": 63,
+          "side": "none",
+          "facts": {
+            "capture": false,
+            "drop": false,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "特になし・どちらでもない"
+        },
+        {
+          "gameNo": 16,
+          "kifPly": 46,
+          "side": "none",
+          "facts": {
+            "capture": false,
+            "drop": false,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "特になし・どちらでもない"
+        },
+        {
+          "gameNo": 16,
+          "kifPly": 50,
+          "side": "defense",
+          "facts": {
+            "capture": false,
+            "drop": false,
+            "givesCheck": false,
+            "kingMove": true
+          },
+          "combination": "玉を動かす・自玉側"
+        },
+        {
+          "gameNo": 16,
+          "kifPly": 52,
+          "side": "none",
+          "facts": {
+            "capture": false,
+            "drop": false,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "特になし・どちらでもない"
+        },
+        {
+          "gameNo": 16,
+          "kifPly": 60,
+          "side": "both",
+          "facts": {
+            "capture": true,
+            "drop": false,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "取る・両方"
+        },
+        {
+          "gameNo": 16,
+          "kifPly": 62,
+          "side": "defense",
+          "facts": {
+            "capture": false,
+            "drop": true,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "打つ・自玉側"
+        },
+        {
+          "gameNo": 16,
+          "kifPly": 64,
+          "side": "attack",
+          "facts": {
+            "capture": false,
+            "drop": true,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "打つ・相手玉側"
+        },
+        {
+          "gameNo": 16,
+          "kifPly": 66,
+          "side": "none",
+          "facts": {
+            "capture": false,
+            "drop": false,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "特になし・どちらでもない"
+        },
+        {
+          "gameNo": 16,
+          "kifPly": 70,
+          "side": "attack",
+          "facts": {
+            "capture": false,
+            "drop": false,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "特になし・相手玉側"
+        },
+        {
+          "gameNo": 16,
+          "kifPly": 74,
+          "side": "attack",
+          "facts": {
+            "capture": false,
+            "drop": true,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "打つ・相手玉側"
+        },
+        {
+          "gameNo": 16,
+          "kifPly": 76,
+          "side": "none",
+          "facts": {
+            "capture": false,
+            "drop": false,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "特になし・どちらでもない"
+        },
+        {
+          "gameNo": 16,
+          "kifPly": 94,
+          "side": "attack",
+          "facts": {
+            "capture": false,
+            "drop": true,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "打つ・相手玉側"
+        },
+        {
+          "gameNo": 17,
+          "kifPly": 4,
+          "side": "defense",
+          "facts": {
+            "capture": false,
+            "drop": false,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "特になし・自玉側"
+        },
+        {
+          "gameNo": 17,
+          "kifPly": 6,
+          "side": "none",
+          "facts": {
+            "capture": false,
+            "drop": false,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "特になし・どちらでもない"
+        },
+        {
+          "gameNo": 17,
+          "kifPly": 22,
+          "side": "attack",
+          "facts": {
+            "capture": false,
+            "drop": true,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "打つ・相手玉側"
+        },
+        {
+          "gameNo": 17,
+          "kifPly": 24,
+          "side": "defense",
+          "facts": {
+            "capture": false,
+            "drop": false,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "特になし・自玉側"
+        },
+        {
+          "gameNo": 18,
+          "kifPly": 16,
+          "side": "defense",
+          "facts": {
+            "capture": false,
+            "drop": false,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "特になし・自玉側"
+        },
+        {
+          "gameNo": 18,
+          "kifPly": 18,
+          "side": "attack",
+          "facts": {
+            "capture": false,
+            "drop": false,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "特になし・相手玉側"
+        },
+        {
+          "gameNo": 18,
+          "kifPly": 22,
+          "side": "attack",
+          "facts": {
+            "capture": true,
+            "drop": false,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "取る・相手玉側"
+        },
+        {
+          "gameNo": 18,
+          "kifPly": 32,
+          "side": "attack",
+          "facts": {
+            "capture": false,
+            "drop": true,
+            "givesCheck": false,
+            "kingMove": false
+          },
+          "combination": "打つ・相手玉側"
+        }
+      ]
+    },
+    {
+      "obsId": "obs.time.bySpent",
+      "path": "time.bySpent",
+      "value": [
+        {
+          "n": 88,
+          "collapsed": 3
+        },
+        {
+          "n": 97,
+          "collapsed": 17
+        },
+        {
+          "n": 32,
+          "collapsed": 10
+        },
+        {
+          "n": 8,
+          "collapsed": 0
+        }
+      ]
+    }
+  ],
+  "prediction": {
+    "writtenAt": "2026-09-26",
+    "window": "next_20_games_same_time_limit",
+    "metric": "obs.time.decisionContext の spentBucket が \">9\" の行で、obs.geo.moveCombination の side が attack の行の数 ÷ side が defense の行の数",
+    "comparator": "<=",
+    "value": 1.5,
+    "alsoRequires": [
+      {
+        "metric": "obs.time.decisionContext の spentBucket が \">9\" の行の数",
+        "comparator": ">=",
+        "value": 40
+      },
+      {
+        "metric": "obs.time.decisionContext の spentBucket が \">9\" で obs.geo.moveCombination の side が defense の行の数",
+        "comparator": ">=",
+        "value": 10
+      }
+    ]
+  }
+}

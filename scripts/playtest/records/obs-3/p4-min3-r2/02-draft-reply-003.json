@@ -1,0 +1,121 @@
+{
+  "schemaVersion": "0.2",
+  "hypothesisId": "H-p4-min3-r2-reply-003",
+  "subject": {
+    "customer": "p4",
+    "groups": ["3 分"],
+    "gamesCount": 18
+  },
+  "scope": "this_user",
+  "lane": "reply",
+  "statement": "相手が王手をかけた直後の手 58 のうち 46(79%)が「玉を動かす」で、「取る」は 8、「それ以外」は 4 でした。ただしこの 58 手のうち、崩れを数える組に入ったのは 1 手だけなので、王手への応じ方の偏りが崩れとつながっているかは、この 18 局の材料では測れていないという読みです。",
+  "observations": [
+    {
+      "obsId": "obs.geo.replyToCheck",
+      "path": "obs_geo moves[].replyToCheck が「王手ではない」以外の行の数",
+      "value": 58,
+      "unit": "手"
+    },
+    {
+      "obsId": "obs.geo.replyToCheck",
+      "path": "obs_geo moves[].replyToCheck が「玉を動かす」の行の数",
+      "value": 46,
+      "unit": "手",
+      "derived": {
+        "kind": "percent",
+        "numerator": { "obsId": "obs.geo.replyToCheck", "value": 46 },
+        "denominator": { "obsId": "obs.geo.replyToCheck", "value": 58 }
+      }
+    },
+    {
+      "obsId": "obs.geo.replyToCheck",
+      "path": "obs_geo moves[].replyToCheck が「取る」の行の数",
+      "value": 8,
+      "unit": "手"
+    },
+    {
+      "obsId": "obs.geo.replyToCheck",
+      "path": "obs_geo moves[].replyToCheck が「それ以外」の行の数",
+      "value": 4,
+      "unit": "手"
+    },
+    {
+      "obsId": "obs.geo.replyToCheck",
+      "path": "obs_geo moves[].replyToCheck が「王手ではない」の行の数",
+      "value": 522,
+      "unit": "手"
+    },
+    {
+      "obsId": "obs.time.pairSpent",
+      "path": "obs_extra pairs[] の行の数(崩れを数える組)",
+      "value": 225,
+      "unit": "組"
+    },
+    {
+      "obsId": "obs.time.pairSpent",
+      "path": "obs_extra pairs[] のうち、同じ gameNo・displayPly の obs_geo moves[].replyToCheck が「王手ではない」以外である行の数",
+      "value": 1,
+      "unit": "組"
+    },
+    {
+      "obsId": "obs.direct.answer",
+      "path": "answers[] のうち、同じ gameNo・displayPly の obs_geo moves[].replyToCheck が「王手ではない」以外である行の数",
+      "value": 11,
+      "unit": "件"
+    },
+    {
+      "obsId": "obs.direct.answer",
+      "path": "answers[] の行の数",
+      "value": 161,
+      "unit": "件"
+    },
+    {
+      "obsId": "obs.report.event",
+      "path": "events[] のうち、同じ gameNo・ply の obs_geo moves[].replyToCheck が「王手ではない」以外である行の数",
+      "value": 17,
+      "unit": "行"
+    }
+  ],
+  "counterEvidence": {
+    "attempted": false,
+    "items": [],
+    "result": "none_found",
+    "provenance": { "inputs": [] }
+  },
+  "prediction": {
+    "writtenAt": "2026-09-26",
+    "window": "next_20_games_same_time_limit",
+    "metric": "obs.geo.replyToCheck が「王手ではない」以外の行のうち、「玉を動かす」である行の割合(百分率)",
+    "comparator": ">=",
+    "value": 60,
+    "alsoRequires": [
+      {
+        "metric": "obs.geo.replyToCheck が「王手ではない」以外の行の数",
+        "comparator": ">=",
+        "value": 40
+      },
+      {
+        "metric": "obs.time.pairSpent のうち、同じ gameNo・displayPly の obs.geo.replyToCheck が「王手ではない」以外である行の数",
+        "comparator": ">=",
+        "value": 10
+      },
+      {
+        "metric": "obs.geo.replyToCheck の行の数(本人の手)",
+        "comparator": ">=",
+        "value": 400
+      }
+    ]
+  },
+  "status": "proposed",
+  "knowledge": {
+    "kind": "discovered",
+    "reviewStatus": "draft",
+    "origin": { "kifu": "p4/min3", "lane": "reply" },
+    "range": "this_user"
+  },
+  "provenance": {
+    "gitHead": "a4a5929",
+    "inputs": ["records/obs-3/p4-min3-r2/00-obs_snapshot.p4.min3.r2.json"],
+    "excludedInputs": []
+  }
+}

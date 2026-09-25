@@ -1,0 +1,206 @@
+{
+  "schemaVersion": "0.2",
+  "hypothesisId": "H-p4-min3r2side-002",
+  "subject": {
+    "customer": "p4",
+    "groups": [
+      "3 分"
+    ],
+    "gamesCount": 18
+  },
+  "scope": "this_user",
+  "lane": "side",
+  "statement": "考慮が 5 秒以上だった 182 手を段で分けると、序盤の 33 手は相手玉側 11・自玉側 9、中盤の 89 手は相手玉側 37・自玉側 23、終盤の 60 手は相手玉側 35・自玉側 11 でした。段が進むほど、時間をかけた手の行き先が自玉側より相手玉側に寄っていくという読みです。",
+  "observations": [
+    {
+      "obsId": "obs.fork.values",
+      "path": "whatif_report_data values(側の決め方の値)",
+      "value": {
+        "sideZoneRadius": 2,
+        "startPly": 17,
+        "minLossCp": 600,
+        "narrowGapCp": 400,
+        "riseCp": 400,
+        "sideVersion": 2,
+        "hitsDefenderRadius": 2,
+        "attackZoneRadius": 3
+      }
+    },
+    {
+      "obsId": "obs.time.decisionContext",
+      "path": "obs_geo decisionContext[] の行数",
+      "value": 182,
+      "unit": "手"
+    },
+    {
+      "obsId": "obs.geo.moveCombination",
+      "path": "obs_geo moves[] のうち (gameNo,kifPly) が obs_geo decisionContext[] の (gameNo,kifPly) と一致した行数",
+      "value": 182,
+      "unit": "手"
+    },
+    {
+      "obsId": "obs.time.decisionContext",
+      "path": "obs_geo decisionContext[] のうち phase が early の行数",
+      "value": 33,
+      "unit": "手"
+    },
+    {
+      "obsId": "obs.geo.moveCombination",
+      "path": "obs_geo decisionContext[] の phase が early の手に対応する obs_geo moves[] のうち side が attack の行数",
+      "value": 11,
+      "unit": "手"
+    },
+    {
+      "obsId": "obs.geo.moveCombination",
+      "path": "obs_geo decisionContext[] の phase が early の手に対応する obs_geo moves[] のうち side が defense の行数",
+      "value": 9,
+      "unit": "手"
+    },
+    {
+      "obsId": "obs.geo.moveCombination",
+      "path": "obs_geo decisionContext[] の phase が early の手に対応する obs_geo moves[] のうち side が none の行数",
+      "value": 12,
+      "unit": "手"
+    },
+    {
+      "obsId": "obs.geo.moveCombination",
+      "path": "obs_geo decisionContext[] の phase が early の手に対応する obs_geo moves[] のうち side が both の行数",
+      "value": 1,
+      "unit": "手"
+    },
+    {
+      "obsId": "obs.time.decisionContext",
+      "path": "obs_geo decisionContext[] のうち phase が mid の行数",
+      "value": 89,
+      "unit": "手"
+    },
+    {
+      "obsId": "obs.geo.moveCombination",
+      "path": "obs_geo decisionContext[] の phase が mid の手に対応する obs_geo moves[] のうち side が attack の行数",
+      "value": 37,
+      "unit": "手"
+    },
+    {
+      "obsId": "obs.geo.moveCombination",
+      "path": "obs_geo decisionContext[] の phase が mid の手に対応する obs_geo moves[] のうち side が defense の行数",
+      "value": 23,
+      "unit": "手"
+    },
+    {
+      "obsId": "obs.geo.moveCombination",
+      "path": "obs_geo decisionContext[] の phase が mid の手に対応する obs_geo moves[] のうち side が none の行数",
+      "value": 26,
+      "unit": "手"
+    },
+    {
+      "obsId": "obs.geo.moveCombination",
+      "path": "obs_geo decisionContext[] の phase が mid の手に対応する obs_geo moves[] のうち side が both の行数",
+      "value": 3,
+      "unit": "手"
+    },
+    {
+      "obsId": "obs.time.decisionContext",
+      "path": "obs_geo decisionContext[] のうち phase が late の行数",
+      "value": 60,
+      "unit": "手"
+    },
+    {
+      "obsId": "obs.geo.moveCombination",
+      "path": "obs_geo decisionContext[] の phase が late の手に対応する obs_geo moves[] のうち side が attack の行数",
+      "value": 35,
+      "unit": "手"
+    },
+    {
+      "obsId": "obs.geo.moveCombination",
+      "path": "obs_geo decisionContext[] の phase が late の手に対応する obs_geo moves[] のうち side が defense の行数",
+      "value": 11,
+      "unit": "手"
+    },
+    {
+      "obsId": "obs.geo.moveCombination",
+      "path": "obs_geo decisionContext[] の phase が late の手に対応する obs_geo moves[] のうち side が none の行数",
+      "value": 9,
+      "unit": "手"
+    },
+    {
+      "obsId": "obs.geo.moveCombination",
+      "path": "obs_geo decisionContext[] の phase が late の手に対応する obs_geo moves[] のうち side が both の行数",
+      "value": 5,
+      "unit": "手"
+    },
+    {
+      "obsId": "obs.time.decisionContext",
+      "path": "obs_geo decisionContext[] のうち spentBucket が ≤9 の行数",
+      "value": 140,
+      "unit": "手"
+    },
+    {
+      "obsId": "obs.time.decisionContext",
+      "path": "obs_geo decisionContext[] のうち spentBucket が >9 の行数",
+      "value": 42,
+      "unit": "手"
+    },
+    {
+      "obsId": "obs.geo.moveCombination",
+      "path": "obs_geo moves[] の行数(本人の手。段で分けない全体)",
+      "value": 580,
+      "unit": "手"
+    },
+    {
+      "obsId": "obs.geo.moveCombination",
+      "path": "obs_geo moves[] のうち side が attack の行数(全体)",
+      "value": 207,
+      "unit": "手"
+    },
+    {
+      "obsId": "obs.geo.moveCombination",
+      "path": "obs_geo moves[] のうち side が defense の行数(全体)",
+      "value": 163,
+      "unit": "手"
+    }
+  ],
+  "counterEvidence": {
+    "attempted": false,
+    "items": [],
+    "result": "none_found",
+    "provenance": {
+      "inputs": []
+    }
+  },
+  "prediction": {
+    "writtenAt": "2026-09-26",
+    "window": "next_20_games_same_time_limit",
+    "metric": "obs.time.decisionContext の phase が late の手に対応する obs.geo.moveCombination の side が attack の手数 ÷(同じ手のうち side が attack または defense の手数)",
+    "comparator": ">=",
+    "value": 0.6,
+    "alsoRequires": [
+      {
+        "metric": "obs.time.decisionContext の phase が late で obs.geo.moveCombination の side が attack または defense の手数",
+        "comparator": ">=",
+        "value": 30
+      },
+      {
+        "metric": "obs.time.decisionContext の phase が early で obs.geo.moveCombination の side が attack または defense の手数",
+        "comparator": ">=",
+        "value": 15
+      }
+    ]
+  },
+  "status": "proposed",
+  "knowledge": {
+    "kind": "discovered",
+    "reviewStatus": "draft",
+    "origin": {
+      "kifu": "p4/min3",
+      "lane": "side"
+    },
+    "range": "this_user"
+  },
+  "provenance": {
+    "gitHead": "a4a5929",
+    "inputs": [
+      "records/obs-3/p4-min3-r2/00-obs_snapshot.p4.min3.r2.json"
+    ],
+    "excludedInputs": []
+  }
+}

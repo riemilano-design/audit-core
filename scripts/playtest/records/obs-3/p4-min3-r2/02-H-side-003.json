@@ -1,0 +1,206 @@
+{
+  "schemaVersion": "0.2",
+  "hypothesisId": "H-p4-min3r2side-003",
+  "subject": {
+    "customer": "p4",
+    "groups": [
+      "3 分"
+    ],
+    "gamesCount": 18
+  },
+  "scope": "this_user",
+  "lane": "side",
+  "statement": "考慮が 5 秒以上だった手を評価の帯で分けると、優勢の帯の 15 手は相手玉側 12・自玉側 1、互角の帯の 25 手は相手玉側 10・自玉側 5、劣勢の帯の 141 手は相手玉側 60・自玉側 37 でした。優勢の帯にいるときほど自玉側へ向かう手が少なくなる可能性があります。ただし優勢の帯は 15 手しかなく、うち 9 手が 1 局に集まっているため、同じ数がもう一度出るかを見ないと確かめられない読みです。",
+  "observations": [
+    {
+      "obsId": "obs.fork.values",
+      "path": "whatif_report_data values(側の決め方の値)",
+      "value": {
+        "sideZoneRadius": 2,
+        "startPly": 17,
+        "minLossCp": 600,
+        "narrowGapCp": 400,
+        "riseCp": 400,
+        "sideVersion": 2,
+        "hitsDefenderRadius": 2,
+        "attackZoneRadius": 3
+      }
+    },
+    {
+      "obsId": "obs.time.decisionContext",
+      "path": "obs_geo decisionContext[] のうち evalBand が ahead の行数",
+      "value": 15,
+      "unit": "手"
+    },
+    {
+      "obsId": "obs.geo.moveCombination",
+      "path": "obs_geo decisionContext[] の evalBand が ahead の手に対応する obs_geo moves[] のうち side が attack の行数",
+      "value": 12,
+      "unit": "手"
+    },
+    {
+      "obsId": "obs.geo.moveCombination",
+      "path": "obs_geo decisionContext[] の evalBand が ahead の手に対応する obs_geo moves[] のうち side が defense の行数",
+      "value": 1,
+      "unit": "手"
+    },
+    {
+      "obsId": "obs.geo.moveCombination",
+      "path": "obs_geo decisionContext[] の evalBand が ahead の手に対応する obs_geo moves[] のうち side が both の行数",
+      "value": 1,
+      "unit": "手"
+    },
+    {
+      "obsId": "obs.geo.moveCombination",
+      "path": "obs_geo decisionContext[] の evalBand が ahead の手に対応する obs_geo moves[] のうち side が none の行数",
+      "value": 1,
+      "unit": "手"
+    },
+    {
+      "obsId": "obs.time.decisionContext",
+      "path": "obs_geo decisionContext[] のうち evalBand が ahead の行が最も多く集まっていた 1 局での行数",
+      "value": 9,
+      "unit": "手"
+    },
+    {
+      "obsId": "obs.time.decisionContext",
+      "path": "obs_geo decisionContext[] のうち evalBand が ahead の行を 1 行以上持つ局の数",
+      "value": 4,
+      "unit": "局"
+    },
+    {
+      "obsId": "obs.time.decisionContext",
+      "path": "obs_geo decisionContext[] のうち evalBand が level の行数",
+      "value": 25,
+      "unit": "手"
+    },
+    {
+      "obsId": "obs.geo.moveCombination",
+      "path": "obs_geo decisionContext[] の evalBand が level の手に対応する obs_geo moves[] のうち side が attack の行数",
+      "value": 10,
+      "unit": "手"
+    },
+    {
+      "obsId": "obs.geo.moveCombination",
+      "path": "obs_geo decisionContext[] の evalBand が level の手に対応する obs_geo moves[] のうち side が defense の行数",
+      "value": 5,
+      "unit": "手"
+    },
+    {
+      "obsId": "obs.geo.moveCombination",
+      "path": "obs_geo decisionContext[] の evalBand が level の手に対応する obs_geo moves[] のうち side が none の行数",
+      "value": 9,
+      "unit": "手"
+    },
+    {
+      "obsId": "obs.geo.moveCombination",
+      "path": "obs_geo decisionContext[] の evalBand が level の手に対応する obs_geo moves[] のうち side が both の行数",
+      "value": 1,
+      "unit": "手"
+    },
+    {
+      "obsId": "obs.time.decisionContext",
+      "path": "obs_geo decisionContext[] のうち evalBand が behind の行数",
+      "value": 141,
+      "unit": "手"
+    },
+    {
+      "obsId": "obs.geo.moveCombination",
+      "path": "obs_geo decisionContext[] の evalBand が behind の手に対応する obs_geo moves[] のうち side が attack の行数",
+      "value": 60,
+      "unit": "手"
+    },
+    {
+      "obsId": "obs.geo.moveCombination",
+      "path": "obs_geo decisionContext[] の evalBand が behind の手に対応する obs_geo moves[] のうち side が defense の行数",
+      "value": 37,
+      "unit": "手"
+    },
+    {
+      "obsId": "obs.geo.moveCombination",
+      "path": "obs_geo decisionContext[] の evalBand が behind の手に対応する obs_geo moves[] のうち side が none の行数",
+      "value": 37,
+      "unit": "手"
+    },
+    {
+      "obsId": "obs.geo.moveCombination",
+      "path": "obs_geo decisionContext[] の evalBand が behind の手に対応する obs_geo moves[] のうち side が both の行数",
+      "value": 7,
+      "unit": "手"
+    },
+    {
+      "obsId": "obs.time.decisionContext",
+      "path": "obs_geo decisionContext[] のうち evalBand が null の行数",
+      "value": 1,
+      "unit": "手"
+    },
+    {
+      "obsId": "obs.report.overview",
+      "path": "patient_report_data overview",
+      "value": {
+        "fell": 30,
+        "early": 11,
+        "mid": 15,
+        "late": 4,
+        "fromAhead": 5,
+        "fromAheadLoss": 5,
+        "moveCheck": {
+          "n": 1,
+          "fell": 0,
+          "games": 1,
+          "otherN": 17,
+          "otherFell": 1
+        }
+      }
+    }
+  ],
+  "counterEvidence": {
+    "attempted": false,
+    "items": [],
+    "result": "none_found",
+    "provenance": {
+      "inputs": []
+    }
+  },
+  "prediction": {
+    "writtenAt": "2026-09-26",
+    "window": "next_20_games_same_time_limit",
+    "metric": "obs.time.decisionContext の evalBand が ahead の手に対応する obs.geo.moveCombination の side が attack の手数 ÷(同じ手のうち side が attack または defense の手数)",
+    "comparator": ">=",
+    "value": 0.7,
+    "alsoRequires": [
+      {
+        "metric": "obs.time.decisionContext の evalBand が ahead で obs.geo.moveCombination の side が attack または defense の手数",
+        "comparator": ">=",
+        "value": 20
+      },
+      {
+        "metric": "obs.time.decisionContext の evalBand が ahead の行を 1 行以上持つ局の数",
+        "comparator": ">=",
+        "value": 6
+      },
+      {
+        "metric": "obs.time.decisionContext の evalBand が behind で obs.geo.moveCombination の side が attack または defense の手数",
+        "comparator": ">=",
+        "value": 60
+      }
+    ]
+  },
+  "status": "proposed",
+  "knowledge": {
+    "kind": "discovered",
+    "reviewStatus": "draft",
+    "origin": {
+      "kifu": "p4/min3",
+      "lane": "side"
+    },
+    "range": "this_user"
+  },
+  "provenance": {
+    "gitHead": "a4a5929",
+    "inputs": [
+      "records/obs-3/p4-min3-r2/00-obs_snapshot.p4.min3.r2.json"
+    ],
+    "excludedInputs": []
+  }
+}

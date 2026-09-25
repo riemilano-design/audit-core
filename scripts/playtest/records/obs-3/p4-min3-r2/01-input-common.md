@@ -19,7 +19,7 @@
 仮説を **1〜3 本**、それぞれ 1 ファイル `scripts/playtest/records/obs-3/p4-min3-r2/02-H-<レーン>-00N.json`(レーン名は下の「あなたの役」を見る)。**契約 v0.2 に完全準拠した JSON だけ**を書く(コード・docs・他のファイルは書かない)。
 
 各仮説の中身:
-- `hypothesisId`: `H-p4-min3-r2-<レーン>-001` の形。`subject`: `{customer: "p4", groups: ["3 分"], gamesCount: 18}`。`scope: "this_user"`。`lane`: 下の「あなたの役」の値。
+- `hypothesisId`: **`H-p4-min3r2<レーン>-001` の形**(契約の `pattern` は `^H-p[0-9]+-[a-z0-9]+-[0-9]{3}$` で、**真ん中はハイフンを含めない 1 語**。2026-09-26 の第 1 陣ではここを `H-p4-min3-r2-<レーン>-001` と書いてしまい、4 役とも `schema` で落ちた ― レーン長の書き間違い)。`subject`: `{customer: "p4", groups: ["3 分"], gamesCount: 18}`。`scope: "this_user"`。`lane`: 下の「あなたの役」の値。
 - `statement`: 断定しない日本語 1〜3 文。**文に出る数はすべて `observations[].value` に実在する数**(写しから写す。合計・平均・割合を自分で計算して書かない)。文末は「〜という読みです」または「〜の可能性があります」。
 - `observations[]`: 引いた数を**全部** `{obsId, path, value}` で。割合を書きたいときだけ `derived: {kind, numerator, denominator}`(分子分母は写しの数)。
 - `counterEvidence`: **`{attempted: false, items: [], result: "none_found", provenance: {inputs: []}}`**(反証は別の役が盲検で行う)。
