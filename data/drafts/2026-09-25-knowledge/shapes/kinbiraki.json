@@ -1,0 +1,39 @@
+{
+  "id": "kinbiraki",
+  "name": "金開き",
+  "name_kana": "きんびらき",
+  "side": "self",
+  "family": "その他(居飛車)",
+  "parent_shape_id": null,
+  "required_pieces": [
+    {
+      "piece": "玉",
+      "square": "5h",
+      "optional": false
+    },
+    {
+      "piece": "金",
+      "square": "7h",
+      "optional": false
+    },
+    {
+      "piece": "金",
+      "square": "3h",
+      "optional": false
+    }
+  ],
+  "typical_build_order": [
+    "7h",
+    "3h",
+    "5h"
+  ],
+  "characteristics": "玉を5八に上げ、その左右に金を1枚ずつ(7八と3八)離して置く形です。玉の両側に金が開いて構えるのでこの名前で呼ばれます。手数が短く、玉を中央に置いたまま左右どちらへも動けるようにした構えです。",
+  "beginner_friendliness": {
+    "score": 3,
+    "reason": "玉と金2枚を動かすだけで形になりますが、金が玉から1マス離れているため、守りの固さは控えめです。囲いというより構えとして考えるとよいです。"
+  },
+  "weak_against": "玉のすぐ隣に駒がなく、上からの攻めが玉に直接届きやすいです。金が左右に離れているので、片方を攻められてももう片方が助けに行きにくいです。",
+  "source": "【AI起草。座標の一次資料確認は行っていない(docs/ROLES.md の保留事項)】先手基準の座標(5八玉・7八金・3八金)は Wikipedia『金開き』(https://ja.wikipedia.org/wiki/金開き (参照日 2026-09-25))の本文の説明(玉5八・左金7八・右金3八)から起こした。銀の位置は本文に無いので入れていない。 追加の経緯: 2026-09-25 の知識レーン第 4 組(docs/LANE_KNOWLEDGE_LOG_2026-09.md §5)。typical_build_order の並びは出典に無く、書いた側が一般的な組み方として置いた推測。beginner_friendliness の点も暫定評価で、将棋知識としての最終確認は人間のレビューが要る。",
+  "confidence_level": "low",
+  "review_status": "draft"
+}

@@ -1,0 +1,51 @@
+{
+  "id": "yagura_hishi",
+  "name": "菱矢倉",
+  "name_kana": "ひしやぐら",
+  "side": "self",
+  "family": "矢倉系",
+  "parent_shape_id": "yagura_kinyagura",
+  "required_pieces": [
+    {
+      "piece": "玉",
+      "square": "8h",
+      "optional": false
+    },
+    {
+      "piece": "金",
+      "square": "7h",
+      "optional": false
+    },
+    {
+      "piece": "銀",
+      "square": "7g",
+      "optional": false
+    },
+    {
+      "piece": "金",
+      "square": "6g",
+      "optional": false
+    },
+    {
+      "piece": "銀",
+      "square": "6f",
+      "optional": false
+    }
+  ],
+  "typical_build_order": [
+    "7g",
+    "7h",
+    "8h",
+    "6g",
+    "6f"
+  ],
+  "characteristics": "金矢倉から右の銀を6六まで上げた形です。7七の銀・6七の金・6六の銀がひし形に近い並びになるのでこの名前で呼ばれます。銀が前へ出ているので、玉の上と斜め上に厚く、そのまま攻めにも参加しやすい形です。",
+  "beginner_friendliness": {
+    "score": 2,
+    "reason": "金矢倉を組んだうえに銀を2つ進めるので手数が長くなります。組んでいる途中に攻められると、上がった銀が戻れないことがあります。"
+  },
+  "weak_against": "右の銀が6六まで出ているため、その銀を攻められると玉の前が空きます。横からの攻めと端(9筋)からの攻めには金矢倉と同じ弱さが残ります。",
+  "source": "【AI起草。座標の一次資料確認は行っていない(docs/ROLES.md の保留事項)】先手基準の座標は、Wikipedia『菱矢倉』(https://ja.wikipedia.org/wiki/菱矢倉 (参照日 2026-09-25))の本文の説明(右銀が6六の位置まで来ると菱矢倉になる。玉8八・6七金・7七銀・6六銀)と、金矢倉の 7八金(同『矢倉囲い』の本文)を組み合わせて起こした。**7八金は菱矢倉の記事の本文では確かめていない**(書いた側が金矢倉から持ってきたもの)。parent は金矢倉。 追加の経緯: 2026-09-25 の知識レーン第 4 組(docs/LANE_KNOWLEDGE_LOG_2026-09.md §5)。typical_build_order の並びは出典に無く、書いた側が一般的な組み方として置いた推測。beginner_friendliness の点も暫定評価で、将棋知識としての最終確認は人間のレビューが要る。",
+  "confidence_level": "low",
+  "review_status": "draft"
+}

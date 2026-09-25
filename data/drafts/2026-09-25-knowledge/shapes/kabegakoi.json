@@ -1,0 +1,39 @@
+{
+  "id": "kabegakoi",
+  "name": "壁囲い",
+  "name_kana": "かべがこい",
+  "side": "self",
+  "family": "その他(振り飛車)",
+  "parent_shape_id": null,
+  "required_pieces": [
+    {
+      "piece": "玉",
+      "square": "3h",
+      "optional": false
+    },
+    {
+      "piece": "銀",
+      "square": "4h",
+      "optional": false
+    },
+    {
+      "piece": "金",
+      "square": "5h",
+      "optional": false
+    }
+  ],
+  "typical_build_order": [
+    "4h",
+    "3h",
+    "5h"
+  ],
+  "characteristics": "玉を3八に置き、その左に銀4八、さらに左に金5八を並べて、玉の横に駒の壁を作る形です。数手でできるので、囲う手数が取れないときの最低限の構えとして使われます。",
+  "beginner_friendliness": {
+    "score": 3,
+    "reason": "動かす駒が少なく短い手数で形になります。ただし玉の真上と右側が空いているので、これで守りが足りるわけではないと知って使う必要があります。"
+  },
+  "weak_against": "玉の頭の上(3七)と右側(2八の方向)が空いているため、上からの攻めや端(1筋・2筋)からの攻めを受けにくいです。駒が横一列に並ぶだけなので、玉の逃げ道が作りにくくなります。",
+  "source": "【AI起草。座標の一次資料確認は行っていない(docs/ROLES.md の保留事項)】先手基準の座標(3八玉・4八銀・5八金)は Wikipedia『壁囲い』(https://ja.wikipedia.org/wiki/壁囲い (参照日 2026-09-25))の本文の説明(玉3八・右銀4八・固めを進める場合の左金5八)から起こした。同記事は 2八玉・3八金 という別の並びにも触れているが、その形はここには入れていない。 追加の経緯: 2026-09-25 の知識レーン第 4 組(docs/LANE_KNOWLEDGE_LOG_2026-09.md §5)。typical_build_order の並びは出典に無く、書いた側が一般的な組み方として置いた推測。beginner_friendliness の点も暫定評価で、将棋知識としての最終確認は人間のレビューが要る。",
+  "confidence_level": "low",
+  "review_status": "draft"
+}

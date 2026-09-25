@@ -1,0 +1,45 @@
+{
+  "id": "bonanzagakoi",
+  "name": "ボナンザ囲い",
+  "name_kana": "ぼなんざがこい",
+  "side": "self",
+  "family": "舟囲い系",
+  "parent_shape_id": null,
+  "required_pieces": [
+    {
+      "piece": "玉",
+      "square": "7h",
+      "optional": false
+    },
+    {
+      "piece": "銀",
+      "square": "7g",
+      "optional": false
+    },
+    {
+      "piece": "金",
+      "square": "6h",
+      "optional": false
+    },
+    {
+      "piece": "金",
+      "square": "5h",
+      "optional": false
+    }
+  ],
+  "typical_build_order": [
+    "7h",
+    "6h",
+    "5h",
+    "7g"
+  ],
+  "characteristics": "玉を7八に置き、その頭に銀を7七へ上げ、金2枚を6八・5八に並べる囲いです。舟囲いと同じ側に組みますが、銀が玉の真上にいるので玉の頭からの攻めを受けやすく、コンピュータ将棋(Bonanza)の指し方から名前がつきました。",
+  "beginner_friendliness": {
+    "score": 4,
+    "reason": "舟囲いと同じくらいの手数で組めます。舟囲いとの違いは銀が7九ではなく7七にいることだけなので、並べて覚えられます。"
+  },
+  "weak_against": "金2枚が下段(六八・五八)に並ぶため、横から(玉の横の段を通って)攻められることには薄いままです。銀が前に出ているので、その銀を攻められると玉の頭が空きます。",
+  "source": "【AI起草。座標の一次資料確認は行っていない(docs/ROLES.md の保留事項)】先手基準の座標(7八玉・7七銀・6八金・5八金)は https://shogi-gym.com/kakoi/bonanza/ (参照日 2026-09-25) の本文の説明(玉を7八に置き、銀を7七、金2枚を6八と5八に並べる)から起こした。Wikipedia『ボナンザ囲い』(https://ja.wikipedia.org/wiki/ボナンザ囲い、同日)は本文の座標を確かめていない。 追加の経緯: 2026-09-25 の知識レーン第 4 組(docs/LANE_KNOWLEDGE_LOG_2026-09.md §5)。typical_build_order の並びは出典に無く、書いた側が一般的な組み方として置いた推測。beginner_friendliness の点も暫定評価で、将棋知識としての最終確認は人間のレビューが要る。",
+  "confidence_level": "medium",
+  "review_status": "draft"
+}

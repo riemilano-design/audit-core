@@ -1,0 +1,51 @@
+{
+  "id": "gangi_tsunogin",
+  "name": "ツノ銀雁木",
+  "name_kana": "つのぎんがんぎ",
+  "side": "self",
+  "family": "雁木系",
+  "parent_shape_id": "gangi_nimaigin",
+  "required_pieces": [
+    {
+      "piece": "玉",
+      "square": "6i",
+      "optional": false
+    },
+    {
+      "piece": "銀",
+      "square": "6g",
+      "optional": false
+    },
+    {
+      "piece": "銀",
+      "square": "4g",
+      "optional": false
+    },
+    {
+      "piece": "金",
+      "square": "7h",
+      "optional": false
+    },
+    {
+      "piece": "金",
+      "square": "5h",
+      "optional": false
+    }
+  ],
+  "typical_build_order": [
+    "7h",
+    "5h",
+    "6i",
+    "6g",
+    "4g"
+  ],
+  "characteristics": "雁木囲いの右の銀を5七ではなく4七に置いた形です。2枚の銀が6七と4七に離れて上がるので、間の5筋から相手の駒が入りにくくなり、玉を左右どちらに置いても形が崩れにくくなります。",
+  "beginner_friendliness": {
+    "score": 3,
+    "reason": "二枚銀雁木との違いは右の銀が1マス右にあることだけですが、その違いがどう効くのかは指してみないと分かりにくい形です。"
+  },
+  "weak_against": "玉が6九のままなので横からの攻めに近く、囲いの左側(8筋・9筋)が薄いままです。銀が2枚とも前に出ているため、その後ろの段を狙われると受けにくいです。",
+  "source": "【AI起草。座標の一次資料確認は行っていない(docs/ROLES.md の保留事項)】先手基準の座標は、Wikipedia『雁木囲い』(https://ja.wikipedia.org/wiki/雁木囲い (参照日 2026-09-25))の本文の 2 つの記述(二枚銀雁木は先手番で6七銀・5七銀・7八金・5八金、玉は6九/ツノ銀雁木は右銀を5七ではなく4七に置いたもの)を組み合わせて起こした。parent は二枚銀雁木(gangi_nimaigin)。 追加の経緯: 2026-09-25 の知識レーン第 4 組(docs/LANE_KNOWLEDGE_LOG_2026-09.md §5)。typical_build_order の並びは出典に無く、書いた側が一般的な組み方として置いた推測。beginner_friendliness の点も暫定評価で、将棋知識としての最終確認は人間のレビューが要る。",
+  "confidence_level": "medium",
+  "review_status": "draft"
+}

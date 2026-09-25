@@ -1,0 +1,45 @@
+{
+  "id": "yagura_doi",
+  "name": "土居矢倉",
+  "name_kana": "どいやぐら",
+  "side": "self",
+  "family": "矢倉系",
+  "parent_shape_id": null,
+  "required_pieces": [
+    {
+      "piece": "玉",
+      "square": "7h",
+      "optional": false
+    },
+    {
+      "piece": "金",
+      "square": "6h",
+      "optional": false
+    },
+    {
+      "piece": "金",
+      "square": "5h",
+      "optional": false
+    },
+    {
+      "piece": "銀",
+      "square": "7g",
+      "optional": false
+    }
+  ],
+  "typical_build_order": [
+    "7g",
+    "6h",
+    "5h",
+    "7h"
+  ],
+  "characteristics": "玉を7八に置き、金2枚を6八・5八に横に並べ、銀を7七に上げた矢倉です。片矢倉と同じく玉が7八にいますが、金が縦ではなく横に並ぶ点が違います。土居市太郎名誉名人の名前がついた形です。",
+  "beginner_friendliness": {
+    "score": 3,
+    "reason": "動かす駒は4枚ですが、金矢倉のように玉を8八まで運ばないぶん手数は短めです。金の並びが片矢倉と違うことを意識すると覚えやすいです。"
+  },
+  "weak_against": "玉の左側(8筋・9筋)に守りの駒が無いため、そちらから攻められると受けにくいです。金2枚が横に並ぶので、上からの攻めに対しては縦の重なりがありません。",
+  "source": "【AI起草。座標の一次資料確認は行っていない(docs/ROLES.md の保留事項)】先手基準の座標(7八玉・6八金・5八金・7七銀)は Wikipedia『土居矢倉』(https://ja.wikipedia.org/wiki/土居矢倉 (参照日 2026-09-25))の本文の基本形(玉7八・左金6八・右金5八・銀7七)から起こした。同記事は右金が6八になる応用形にも触れているが、その形はここには入れていない。 追加の経緯: 2026-09-25 の知識レーン第 4 組(docs/LANE_KNOWLEDGE_LOG_2026-09.md §5)。typical_build_order の並びは出典に無く、書いた側が一般的な組み方として置いた推測。beginner_friendliness の点も暫定評価で、将棋知識としての最終確認は人間のレビューが要る。",
+  "confidence_level": "medium",
+  "review_status": "draft"
+}

@@ -1,0 +1,56 @@
+{
+  "id": "yagura_anaguma",
+  "name": "矢倉穴熊",
+  "name_kana": "やぐらあなぐま",
+  "side": "self",
+  "family": "穴熊系",
+  "parent_shape_id": null,
+  "required_pieces": [
+    {
+      "piece": "玉",
+      "square": "9i",
+      "optional": false
+    },
+    {
+      "piece": "香",
+      "square": "9h",
+      "optional": false
+    },
+    {
+      "piece": "銀",
+      "square": "7g",
+      "optional": false
+    },
+    {
+      "piece": "金",
+      "square": "7h",
+      "optional": false
+    },
+    {
+      "piece": "金",
+      "square": "6g",
+      "optional": false
+    },
+    {
+      "piece": "角",
+      "square": "6h",
+      "optional": true
+    }
+  ],
+  "typical_build_order": [
+    "9h",
+    "9i",
+    "7g",
+    "7h",
+    "6g"
+  ],
+  "characteristics": "矢倉の駒組みのまま玉を9九まで潜らせた囲いです。9八の香・7七の銀・7八の金・6七の金で玉を守り、6八に角が残る形として紹介されます。矢倉の上への厚みと、穴熊の王手がかかりにくい固さを合わせた形です。",
+  "beginner_friendliness": {
+    "score": 1,
+    "reason": "矢倉と穴熊の両方の組み方を知っていることが前提で、完成までの手数も長いです。初心者のうちはどちらか一方を先に覚える方が向いています。"
+  },
+  "weak_against": "玉が隅に固定されるため逃げ道がほとんどありません。8八が空いているので、そこへ駒を打ち込まれると受けにくく、端(9筋)を攻められると玉に直接響きます。",
+  "source": "【AI起草。座標の一次資料確認は行っていない(docs/ROLES.md の保留事項)】先手基準の座標(9九玉・9八香・7七銀・7八金・6七金・6八角)は https://shogi-gym.com/kakoi/anaguma/yagura-anaguma/ (参照日 2026-09-25) の本文の説明(9九の玉を9八の香・7七の銀・7八の金・6七の金・6八の角で守る)から起こした。角は攻めにも使う駒なので optional: true とした(囲いの必須の駒として扱わない、という書いた側の判断)。 追加の経緯: 2026-09-25 の知識レーン第 4 組(docs/LANE_KNOWLEDGE_LOG_2026-09.md §5)。typical_build_order の並びは出典に無く、書いた側が一般的な組み方として置いた推測。beginner_friendliness の点も暫定評価で、将棋知識としての最終確認は人間のレビューが要る。",
+  "confidence_level": "medium",
+  "review_status": "draft"
+}

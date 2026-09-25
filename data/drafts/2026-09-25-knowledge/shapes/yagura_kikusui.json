@@ -1,0 +1,51 @@
+{
+  "id": "yagura_kikusui",
+  "name": "菊水矢倉",
+  "name_kana": "きくすいやぐら",
+  "side": "self",
+  "family": "矢倉系",
+  "parent_shape_id": null,
+  "required_pieces": [
+    {
+      "piece": "玉",
+      "square": "8i",
+      "optional": false
+    },
+    {
+      "piece": "銀",
+      "square": "8h",
+      "optional": false
+    },
+    {
+      "piece": "金",
+      "square": "7h",
+      "optional": false
+    },
+    {
+      "piece": "金",
+      "square": "6g",
+      "optional": false
+    },
+    {
+      "piece": "桂",
+      "square": "7g",
+      "optional": false
+    }
+  ],
+  "typical_build_order": [
+    "7h",
+    "8h",
+    "6g",
+    "7g",
+    "8i"
+  ],
+  "characteristics": "玉を8九の下段に置き、8八の銀・7八の金・6七の金・7七の桂で囲う矢倉です。玉が一段低いところに入り、頭の上に桂がいるので、上からの攻めに対して盤の端の方で粘りやすい形になります。",
+  "beginner_friendliness": {
+    "score": 2,
+    "reason": "金矢倉より駒の並べ方が入り組んでいて、桂を7七へ跳ねる必要があるため手数もかかります。矢倉を組み慣れてからの形です。"
+  },
+  "weak_against": "玉が下段にいるため逃げ道が少なく、駒を打ち込まれる余地があります。桂が跳ねた後の8九・9七のあたりが薄くなりやすく、端(9筋)を攻められると受けにくいです。",
+  "source": "【AI起草。座標の一次資料確認は行っていない(docs/ROLES.md の保留事項)】先手基準の座標(8九玉・8八銀・7八金・6七金・7七桂)は https://shogi-gym.com/kakoi/yagura/kikusui-yagura/ (参照日 2026-09-25) の本文の説明(8九の玉を8八の銀・7八の金・6七の金・7七の桂で囲う)から起こした。 追加の経緯: 2026-09-25 の知識レーン第 4 組(docs/LANE_KNOWLEDGE_LOG_2026-09.md §5)。typical_build_order の並びは出典に無く、書いた側が一般的な組み方として置いた推測。beginner_friendliness の点も暫定評価で、将棋知識としての最終確認は人間のレビューが要る。",
+  "confidence_level": "medium",
+  "review_status": "draft"
+}

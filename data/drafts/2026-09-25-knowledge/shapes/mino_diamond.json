@@ -1,0 +1,51 @@
+{
+  "id": "mino_diamond",
+  "name": "ダイヤモンド美濃",
+  "name_kana": "だいやもんどみの",
+  "side": "self",
+  "family": "美濃系",
+  "parent_shape_id": "mino_honmino",
+  "required_pieces": [
+    {
+      "piece": "玉",
+      "square": "2h",
+      "optional": false
+    },
+    {
+      "piece": "銀",
+      "square": "3h",
+      "optional": false
+    },
+    {
+      "piece": "金",
+      "square": "4i",
+      "optional": false
+    },
+    {
+      "piece": "金",
+      "square": "5h",
+      "optional": false
+    },
+    {
+      "piece": "銀",
+      "square": "4g",
+      "optional": false
+    }
+  ],
+  "typical_build_order": [
+    "2h",
+    "3h",
+    "4i",
+    "5h",
+    "4g"
+  ],
+  "characteristics": "本美濃囲いに左の銀を4七へ足した形です。3八の銀・4九の金・5八の金・4七の銀がひし形(ダイヤモンド)に並ぶのでこの名前で呼ばれます。銀が一段上がっているので、本美濃囲いより玉の頭の上や斜め上からの攻めに厚くなります。",
+  "beginner_friendliness": {
+    "score": 3,
+    "reason": "本美濃囲いに1手足すだけで組めますが、左の銀を守りに使うので攻めの駒が減ります。本美濃囲いを組めるようになってからの発展形です。"
+  },
+  "weak_against": "横からの攻めには本美濃囲いと同じ強さがありますが、玉の真上(2七)は駒で埋まっていないため、そこを狙う攻めには注意が要ります。左の銀を守りに回すぶん、自分から攻める手が細くなりやすいです。",
+  "source": "【AI起草。座標の一次資料確認は行っていない(docs/ROLES.md の保留事項)】先手基準の座標は、Wikipedia『美濃囲い』(https://ja.wikipedia.org/wiki/美濃囲い (参照日 2026-09-25))の本文の説明(美濃囲いの4七の位置に左銀を置いたものをダイヤモンド美濃と呼ぶ)と、既存の本美濃囲い(data/shapes/mino_honmino.json。2八玉・3八銀・4九金・5八金。2026-09-10 に人間の承認を経た座標)を組み合わせて起こした。**出典が述べているのは 4七 の銀だけで、残る 4 マスは既存レコードから持ってきたもの**である(この組み合わせは書いた側の判断)。shogi-gym.com のダイヤモンド美濃のページ(https://shogi-gym.com/kakoi/mino/diamond-mino/、同日)は本文に完成形の座標が無い。parent は本美濃囲い。 追加の経緯: 2026-09-25 の知識レーン第 4 組(docs/LANE_KNOWLEDGE_LOG_2026-09.md §5)。typical_build_order の並びは出典に無く、書いた側が一般的な組み方として置いた推測。beginner_friendliness の点も暫定評価で、将棋知識としての最終確認は人間のレビューが要る。",
+  "confidence_level": "medium",
+  "review_status": "draft"
+}
