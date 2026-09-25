@@ -1,5 +1,7 @@
 // STEP OBS-2(docs/LANE_DIAG_LOG_2026-09.md §12.2、設計案 docs/DESIGN_OBSERVATION_LAYER_2026-09.md §7・§7.2)。
-// 仮説の記録形式(契約 hypothesis v0.1)のスキーマ読み込みと、機械検査 H-1〜H-8。
+// 仮説の記録形式(契約 hypothesis)のスキーマ読み込みと、機械検査 H-1〜H-8。
+// 版は v0.1 と v0.2 の 2 つ(STEP EXPO-1 §12.9。v0.2 は `knowledge.reviewStatus` に `expired` を足しただけ)。
+// **照合に使う版は行の `schemaVersion` が決める**(古い記録は v0.1 のまま今までどおり通る)。
 //
 // 【このファイルがやること】
 // - `loadHypothesisSchema()`: スキーマのファイル(../schemas/hypothesis.v<version>.schema.json)を読む。
@@ -22,9 +24,15 @@ import { SEARCH_COLUMNS } from "./timeSearch.js";
 
 export type HypothesisSchemaVersion = (typeof KNOWN_HYPOTHESIS_SCHEMA_VERSIONS)[number];
 
-/** 契約 hypothesis v0.1 の 1 行(観測 → 仮説 → 反証 → 予測)。設計案 §7.1。値の中身は検査 H-1〜H-8 が見る。 */
+/** 行の `schemaVersion` がスキーマのファイルがある版かどうか(未知の版は照合の相手を選べない)。 */
+export function isKnownHypothesisSchemaVersion(value: unknown): value is HypothesisSchemaVersion {
+  return typeof value === "string" && (KNOWN_HYPOTHESIS_SCHEMA_VERSIONS as readonly string[]).includes(value);
+}
+
+/** 契約 hypothesis の 1 行(観測 → 仮説 → 反証 → 予測)。設計案 §7.1。値の中身は検査 H-1〜H-8 が見る。 */
 export interface HypothesisLine {
-  schemaVersion: typeof HYPOTHESIS_SCHEMA_VERSION;
+  /** 0.1 か 0.2。0.2 は `knowledge.reviewStatus` に `expired` を足した版(STEP EXPO-1) */
+  schemaVersion: HypothesisSchemaVersion;
   hypothesisId: string;
   subject: { customer: string; groups: string[]; gamesCount: number };
   scope: "this_user" | "beginners_general";
@@ -48,7 +56,8 @@ export interface HypothesisLine {
   status: "proposed" | "stands_after_refutation" | "weak" | "refuted" | "verified" | "missed" | "partial" | "unmeasured" | "expired";
   knowledge: {
     kind: "shogi" | "discovered" | "coaching";
-    reviewStatus: "draft" | "human_reviewed" | "expert_verified";
+    /** `expired`(失効)は版 0.2 から。露出は `draft` と同じで、H-7 は expired を beginners_general に上げない */
+    reviewStatus: "draft" | "human_reviewed" | "expert_verified" | "expired";
     origin: { kifu: string; lane: string };
     range: "this_user" | "beginners_general";
   };
@@ -463,10 +472,26 @@ function checkH8(line: unknown): CheckResult {
   return { check: "H-8", ok: messages.length === 0, messages };
 }
 
+/**
+ * 行の `schemaVersion` に対応するスキーマを選ぶ(STEP EXPO-1)。
+ * `opts.schema` が渡されたときはそれを使う(呼び出し側が版を固定したい試験のための差し替え口)。
+ * 版がスキーマのファイルの一覧に無いときは照合の相手が決まらないので、そのことを message にして返す。
+ */
+function resolveSchema(line: unknown, override?: JsonSchema): { schema: JsonSchema } | { error: string } {
+  if (override !== undefined) return { schema: override };
+  const version = isRecord(line) ? line.schemaVersion : undefined;
+  if (!isKnownHypothesisSchemaVersion(version)) {
+    return {
+      error: `schemaVersion が版の一覧(${KNOWN_HYPOTHESIS_SCHEMA_VERSIONS.join(" / ")})に無い: ${JSON.stringify(version)}`,
+    };
+  }
+  return { schema: loadHypothesisSchema(version) };
+}
+
 /** スキーマ照合 + H-1〜H-8 を全部回して全部返す(最初で止めない)。スキーマが落ちても H は回す。 */
 export function validateHypothesisLine(line: unknown, opts: { today: string; registry: Set<string>; schema?: JsonSchema }): CheckResult[] {
-  const schema = opts.schema ?? loadHypothesisSchema();
-  const schemaErrors = validate(line, schema);
+  const resolved = resolveSchema(line, opts.schema);
+  const schemaErrors = "error" in resolved ? [resolved.error] : validate(line, resolved.schema);
   return [
     { check: "schema", ok: schemaErrors.length === 0, messages: schemaErrors },
     checkH1(line),

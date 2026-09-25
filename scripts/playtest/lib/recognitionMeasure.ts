@@ -26,6 +26,10 @@
 //   (開発・診断レーン §12.7 の訂正。openmeasure.ts と同じ)。
 // - **局数の欄(STEP OPEN-2b)は「延べ局面」ではなく「局の数」**。1 局の中で同じ id が
 //   何局面で立っても 1 と数える(rows に id の集合を持ち、byGroup でその集合を足し上げる)。
+// - **露出の欄(STEP EXPO-1、§12.9)は「延べ」**。局面 × レコードの行(`none` は含めない)
+//   1 つずつに `decideNameExposure` を当て、hidden / hedged / named の数を数える。
+//   **判定も閾値もここには書かない** ― 関数と値の組(`NAME_EXPOSURE_VALUES`)を
+//   apps/server から import するだけで、この道具は「どの行に当てるか」と「何を数えるか」しか持たない。
 
 import { makeSquareName } from "shogiops/util";
 
@@ -37,6 +41,12 @@ import {
 } from "../../../apps/server/src/analysis/openingDetector.js";
 import { replayMoveHistory } from "../../../apps/server/src/analysis/moveHistory.js";
 import type { IntentDefinition } from "../../../apps/server/src/analysis/intentRepository.js";
+import {
+  decideNameExposure,
+  NAME_EXPOSURE_VALUES,
+  type NameExposureInput,
+  type NameExposureValues,
+} from "../../../apps/server/src/analysis/nameExposure.js";
 import type { ShapeDefinition } from "../../../apps/server/src/analysis/shapeRepository.js";
 import { parsePosition } from "../../../apps/server/src/rules/sfenPosition.js";
 import { I9_MAX_EVIDENCE, I9_MIN_MISSING } from "../invariants/i9-shape-claim-without-evidence.js";
@@ -60,6 +70,119 @@ export interface MeasureRecognitionOptions {
   openings?: OpeningDefinition[];
   /** 0 は全手。正の数は「その ply まで」 */
   maxPly: number;
+}
+
+// ---------------------------------------------------------------------------
+// 露出の欄(STEP EXPO-1、docs/LANE_DIAG_LOG_2026-09.md §12.9)
+// ---------------------------------------------------------------------------
+
+/** 値の組の名前。A = 今日の規則、B = 案、C = 案(forming の証拠の下限だけ 2)。 */
+export type ExposureValueSetName = "A" | "B" | "C";
+
+/**
+ * 比べる 3 つの値の組。**この道具が閾値を決めるのではない** ―
+ * B は `apps/server` の `NAME_EXPOSURE_VALUES`(統括の承認待ちの案)**そのもの**、
+ * C はその `minEvidenceForHedged` だけを 2 にしたもの、
+ * A は「今日の規則」を `decideNameExposure` の値で表したもの
+ * (`minRequiredForName: 0` で R3 が当たらず、`minEvidenceForHedged: Infinity` で R5 が hedged にならず、
+ * `hideCompletedWithoutEvidence: false` で R2 が当たらない = completed/matched だけが出る今の見え方)。
+ * 値の選択は統括が行う(この欄は前後を並べて渡すためのもの)。
+ */
+export const EXPOSURE_VALUE_SETS: Record<ExposureValueSetName, NameExposureValues> = {
+  A: { minRequiredForName: 0, minEvidenceForHedged: Number.POSITIVE_INFINITY, hideCompletedWithoutEvidence: false },
+  B: { ...NAME_EXPOSURE_VALUES },
+  C: { ...NAME_EXPOSURE_VALUES, minEvidenceForHedged: 2 },
+};
+
+/** 露出の数(延べ。局面 × レコードの行を数える)。 */
+export interface ExposureCounts {
+  /** 名前を言える行 */
+  named: number;
+  /** 控えめに言う行 */
+  hedged: number;
+  /** 出さない行(下の hiddenCompletedNoEvidence もここに含む) */
+  hidden: number;
+  /** そのうち「証拠 0 件の completed / matched」を規則 R2 で落とした行(P-85・P-86 の物差し) */
+  hiddenCompletedNoEvidence: number;
+  /** 証拠が 1 件以下だった行(値の組によらない。分母) */
+  weakClaims: number;
+  /** そのうち named か hedged になった行(分子) */
+  weakClaimsShown: number;
+}
+
+/** 自分側・相手側。形と戦型は定義の side、狙いは常に相手側。 */
+export interface ExposureBySide {
+  self: ExposureCounts;
+  opponent: ExposureCounts;
+}
+
+export interface ExposureByKind {
+  shape: ExposureBySide;
+  intent: ExposureBySide;
+  opening: ExposureBySide;
+}
+
+/** 値の組 3 つ分の露出の数。 */
+export type ExposureTotals = Record<ExposureValueSetName, ExposureByKind>;
+
+const EXPOSURE_SET_NAMES: ExposureValueSetName[] = ["A", "B", "C"];
+const EXPOSURE_KINDS: Array<NameExposureInput["kind"]> = ["shape", "intent", "opening"];
+
+/** 「証拠が少ない主張」の境目。I-9 の定数(invariants 側)をそのまま使い、ここで数を書かない。 */
+const WEAK_CLAIM_MAX_EVIDENCE = I9_MAX_EVIDENCE;
+
+function emptyExposureCounts(): ExposureCounts {
+  return { named: 0, hedged: 0, hidden: 0, hiddenCompletedNoEvidence: 0, weakClaims: 0, weakClaimsShown: 0 };
+}
+
+function emptyExposureTotals(): ExposureTotals {
+  const byKind = (): ExposureByKind => ({
+    shape: { self: emptyExposureCounts(), opponent: emptyExposureCounts() },
+    intent: { self: emptyExposureCounts(), opponent: emptyExposureCounts() },
+    opening: { self: emptyExposureCounts(), opponent: emptyExposureCounts() },
+  });
+  return { A: byKind(), B: byKind(), C: byKind() };
+}
+
+function addExposureCounts(into: ExposureCounts, from: ExposureCounts): void {
+  into.named += from.named;
+  into.hedged += from.hedged;
+  into.hidden += from.hidden;
+  into.hiddenCompletedNoEvidence += from.hiddenCompletedNoEvidence;
+  into.weakClaims += from.weakClaims;
+  into.weakClaimsShown += from.weakClaimsShown;
+}
+
+function addExposureTotals(into: ExposureTotals, from: ExposureTotals): void {
+  for (const set of EXPOSURE_SET_NAMES) {
+    for (const kind of EXPOSURE_KINDS) {
+      addExposureCounts(into[set][kind].self, from[set][kind].self);
+      addExposureCounts(into[set][kind].opponent, from[set][kind].opponent);
+    }
+  }
+}
+
+/**
+ * 立っている行(`none` でない 1 レコード × 1 局面)を 3 つの値の組に当てて数える。
+ * 判定は `decideNameExposure` がすべて行う。ここは入力を組み立てて数えるだけ。
+ */
+function countExposure(
+  totals: ExposureTotals,
+  kind: NameExposureInput["kind"],
+  side: "self" | "opponent",
+  input: Omit<NameExposureInput, "kind">,
+): void {
+  const weak = input.evidenceCount <= WEAK_CLAIM_MAX_EVIDENCE;
+  for (const set of EXPOSURE_SET_NAMES) {
+    const decision = decideNameExposure({ kind, ...input }, EXPOSURE_VALUE_SETS[set]);
+    const counts = totals[set][kind][side];
+    counts[decision.level] += 1;
+    if (decision.rule === "R2") counts.hiddenCompletedNoEvidence += 1;
+    if (weak) {
+      counts.weakClaims += 1;
+      if (decision.level !== "hidden") counts.weakClaimsShown += 1;
+    }
+  }
 }
 
 /** 1 局分の数。欄の意味は冒頭の「数え方」を参照。 */
@@ -147,6 +270,10 @@ export interface GameRow {
   openForming: number;
   /** 証拠 0 の completed を戦型 id ごとに数えたもの */
   openCompNoEvidById: Record<string, number>;
+
+  // --- 露出(STEP EXPO-1)。値の組 A / B / C × 形・狙い・戦型 × 自分側・相手側 ---
+  // byGroup の同じ欄は、この局ごとの数をそのまま足し上げたもの(局数ではなく延べ)。
+  exposure: ExposureTotals;
 }
 
 /**
@@ -200,6 +327,9 @@ export interface GroupTotals {
   openCompletedNoEvidence: number;
   openForming: number;
   openCompNoEvidById: Record<string, number>;
+
+  /** 露出(STEP EXPO-1)。rows の同じ欄を足し上げた延べの数(局数ではない) */
+  exposure: ExposureTotals;
 }
 
 export interface RecognitionMeasureResult {
@@ -250,6 +380,7 @@ function emptyRow(group: string, id: string, plies: number): GameRow {
     openCompletedNoEvidence: 0,
     openForming: 0,
     openCompNoEvidById: {},
+    exposure: emptyExposureTotals(),
   };
 }
 
@@ -289,6 +420,7 @@ function emptyTotals(): GroupTotals {
     openCompletedNoEvidence: 0,
     openForming: 0,
     openCompNoEvidById: {},
+    exposure: emptyExposureTotals(),
   };
 }
 
@@ -379,6 +511,15 @@ export function measureRecognition(
           row.i9type += 1;
           if (r.side === "opponent") row.i9Opp += 1;
         }
+        // 露出(STEP EXPO-1)。必要な数 = optional でない required_pieces の数
+        // (一致したマス + 欠けたマス。shapeDetector.ts が両方 required_pieces の非 optional から作る)。
+        countExposure(row.exposure, "shape", r.side === "opponent" ? "opponent" : "self", {
+          status: r.status,
+          evidenceCount: r.formationEvidence.length,
+          missingCount: r.missingSquares.length,
+          requiredCount: r.matchedSquares.length + r.missingSquares.length,
+          reviewStatus: r.reviewStatus,
+        });
       }
 
       // --- 狙い ---
@@ -393,6 +534,16 @@ export function measureRecognition(
         bump(row.intentHits, r.intentId);
         intentOnSet.add(r.intentId);
         if (r.matchStatus === "matched") intentCompSet.add(r.intentId);
+        // 露出(STEP EXPO-1)。狙いの side は常に相手側(data/intents に side の欄が無く、
+        // intentDetector.ts が後手の指し手だけを見る。docs/DATA_MODEL.md の MVP 確定仕様)。
+        // 必要な数 = recognition_pattern の長さ(= 一致した署名 + 未一致の署名)。
+        countExposure(row.exposure, "intent", "opponent", {
+          status: r.matchStatus,
+          evidenceCount: r.matchedSignatures.length,
+          missingCount: r.unmatchedSignatures.length,
+          requiredCount: r.matchedSignatures.length + r.unmatchedSignatures.length,
+          reviewStatus: r.reviewStatus,
+        });
       }
       if (intentOn.length > 0) row.recIntent += 1;
 
@@ -413,6 +564,15 @@ export function measureRecognition(
 
       for (const r of openingOn) {
         openOnSet.add(r.openingId);
+        // 露出(STEP EXPO-1)。必要な数 = recognition_pattern の長さ
+        // (openingDetector.ts が recognition_pattern を optional でない required_pieces へ写す)。
+        countExposure(row.exposure, "opening", r.side === "opponent" ? "opponent" : "self", {
+          status: r.status,
+          evidenceCount: r.formationEvidence.length,
+          missingCount: r.missingSquares.length,
+          requiredCount: r.matchedSquares.length + r.missingSquares.length,
+          reviewStatus: r.reviewStatus,
+        });
         if (r.status === "completed") {
           openCompSet.add(r.openingId);
           row.openCompleted += 1;
@@ -468,6 +628,7 @@ export function measureRecognition(
     totals.openCompleted += row.openCompleted;
     totals.openCompletedNoEvidence += row.openCompletedNoEvidence;
     totals.openForming += row.openForming;
+    addExposureTotals(totals.exposure, row.exposure);
 
     for (const [id, count] of Object.entries(row.shapeHits)) {
       totals.shapeHits[id] = (totals.shapeHits[id] ?? 0) + count;

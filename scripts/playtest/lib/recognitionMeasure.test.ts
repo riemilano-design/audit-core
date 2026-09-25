@@ -1,7 +1,8 @@
-// STEP OPEN-2(docs/LANE_DIAG_LOG_2026-09.md §12.8)。lib/recognitionMeasure.ts の試験(6 本)。
+// STEP OPEN-2(docs/LANE_DIAG_LOG_2026-09.md §12.8)。lib/recognitionMeasure.ts の試験。
 //
 // (1)〜(5) は数え方そのもの(小さな作り物の形・狙い・戦型で、1 局面ずつ数を突き合わせる)。
 // (6) は CLI(scripts/playtest/recognitionMeasure.ts)を実際に spawn する。
+// (7)(8) は局数の欄(STEP OPEN-2b)。(9)〜(11) は露出の欄(STEP EXPO-1、§12.9)。
 // **一時ディレクトリ以外に書かない**(他の CLI 試験と同じ理由。作業ツリーへは書かない)。
 //
 // 【作り物の形・戦型・狙いについて】
@@ -583,5 +584,175 @@ describe("(8) gamesCompleted と shapeCompGames は同じ値・局数は分母�
       for (const id of row.shapeOnIds) recounted[id] = (recounted[id] ?? 0) + 1;
     }
     expect(recounted).toEqual(totals.shapeOnGames);
+  });
+});
+
+// ---- (9)〜(11) 露出の欄(STEP EXPO-1、docs/LANE_DIAG_LOG_2026-09.md §12.9) ----
+// 判定は apps/server の decideNameExposure が行う。ここで見るのは「どの行に当てたか」と
+// 「何を数えたか」だけ。**本体の見え方は変わらない**(この関数はまだ画面から呼ばれていない)。
+
+/** 露出の 3 組 × 形・狙い・戦型 × 自分側・相手側の、named / hedged / hidden を足した数。 */
+function levelSumOf(counts: { named: number; hedged: number; hidden: number }): number {
+  return counts.named + counts.hedged + counts.hidden;
+}
+
+describe("(9) A(今日の規則)の値の組では forming の行が 1 つも見えない", () => {
+  it("forming だけを作った形・狙い・戦型で、A は全部 hidden(B は hedged になる)", () => {
+    // どれも「完成しない」ように作る(3 件のうち 1 件が最後まで欠ける)。
+    const selfShape = makeShape("t_forming_self", "self", [
+      { piece: "歩", square: "7f" },
+      { piece: "銀", square: "3h" },
+      { piece: "金", square: "5h" },
+    ]);
+    const oppShape = makeShape("t_forming_opp", "opponent", [
+      { piece: "歩", square: "3d" },
+      { piece: "歩", square: "8d" },
+      { piece: "金", square: "5b" },
+    ]);
+    const intent = makeIntent("t_forming_intent", [
+      { piece: "歩", to: "3d" },
+      { piece: "銀", to: "6b" },
+    ]);
+    const opening = makeOpening("o_forming", "self", [
+      { piece: "歩", to: "7f" },
+      { piece: "銀", to: "3h" },
+      { piece: "金", to: "5h" },
+    ]);
+    const row = measureOne(MOVES_4, {
+      maxPly: 0,
+      shapes: [selfShape, oppShape],
+      intents: [intent],
+      openings: [opening],
+    });
+
+    // ply 2・4 の 2 局面ずつ立つ(ply 0 はどれも none なので数えない)。
+    const a = row.exposure.A;
+    for (const [what, counts] of [
+      ["形(自分側)", a.shape.self],
+      ["形(相手側)", a.shape.opponent],
+      ["狙い(相手側)", a.intent.opponent],
+      ["戦型(自分側)", a.opening.self],
+    ] as const) {
+      expect(levelSumOf(counts), `${what} の行数`).toBe(2);
+      expect(counts.hidden, `${what} の hidden`).toBe(2);
+      expect(counts.hedged, `${what} の hedged`).toBe(0);
+      expect(counts.named, `${what} の named`).toBe(0);
+    }
+    // 当てていない側は 0 のまま(狙いは常に相手側に数える)。
+    expect(levelSumOf(a.intent.self)).toBe(0);
+    expect(levelSumOf(a.opening.opponent)).toBe(0);
+
+    // 行が無いから 0 になったのではないことを示す(同じ行が B では hedged になる)。
+    const b = row.exposure.B;
+    expect(b.shape.self.hedged).toBe(2);
+    expect(b.intent.opponent.hedged).toBe(2);
+    expect(b.opening.self.hedged).toBe(2);
+    expect(b.shape.self.hidden).toBe(0);
+  });
+});
+
+describe("(10) B の hidden に入る「必要な数が 1 の completed」と、証拠 0 件の内訳", () => {
+  it("hiddenCompletedNoEvidence は証拠 0 件のときだけ増える(必要な数 1 で落ちた行は入らない)", () => {
+    const row = measureOne(MOVES_4, {
+      maxPly: 0,
+      openings: [
+        // 4i の金は初期配置のまま = ply 0・2・4 の 3 局面とも「証拠 0 件の completed」。
+        makeOpening("o_no_evid", "self", [{ piece: "金", to: "4i" }]),
+        // 7f の歩は指し手で作られた = ply 2・4 の 2 局面が「証拠 1 件の completed」(必要な数は 1)。
+        makeOpening("o_with_evid", "self", [{ piece: "歩", to: "7f" }]),
+        // 必要な数 2 でレビュー済み。ply 2 は forming(証拠 1)、ply 4 は completed(証拠 2)。
+        {
+          ...makeOpening("o_two_reviewed", "self", [
+            { piece: "歩", to: "7f" },
+            { piece: "銀", to: "3h" },
+          ]),
+          review_status: "human_reviewed",
+        },
+      ],
+    });
+
+    const b = row.exposure.B.opening.self;
+    expect(levelSumOf(b)).toBe(7); // 3 + 2 + 2
+    expect(b.hidden).toBe(5); // 証拠 0 の completed 3 件(R2)+ 必要な数 1 の completed 2 件(R3)
+    expect(b.hiddenCompletedNoEvidence).toBe(3); // 増えるのは R2 で落ちた 3 件だけ
+    expect(b.hedged).toBe(1); // 必要な数 2 の forming(証拠 1)
+    expect(b.named).toBe(1); // 必要な数 2 の completed(証拠 2、レビュー済み)
+
+    // A(今日の規則)では R2・R3 が当たらないので、同じ行が hidden に落ちない。
+    const a = row.exposure.A.opening.self;
+    expect(a.hiddenCompletedNoEvidence).toBe(0);
+    expect(a.hedged).toBe(5); // 下書きの completed 5 件(証拠の有無を問わない)
+    expect(a.named).toBe(1); // レビュー済みの completed
+    expect(a.hidden).toBe(1); // forming の 1 件だけ
+
+    // C は B の minEvidenceForHedged だけが違う(証拠 1 の forming が hedged から hidden へ)。
+    const c = row.exposure.C.opening.self;
+    expect(c.hedged).toBe(0);
+    expect(c.hidden).toBe(6);
+    expect(c.hiddenCompletedNoEvidence).toBe(3);
+  });
+});
+
+describe("(11) 露出の合計と「証拠の少ない主張」の分母・分子", () => {
+  it("named + hedged + hidden は行数と一致し、weakClaims は値の組によらない(weakClaimsShown はその一部)", () => {
+    // 手で数えられる作り物: 形 2 件で 5 行(forming 2 + 証拠 0 の completed 3)。
+    const row = measureOne(MOVES_4, {
+      maxPly: 0,
+      shapes: [
+        makeShape("s_evid", "self", [
+          { piece: "歩", square: "7f" },
+          { piece: "銀", square: "3h" },
+          { piece: "金", square: "5h" },
+        ]),
+        makeShape("s_comp", "self", [{ piece: "金", square: "4i" }]),
+      ],
+    });
+
+    // 行数 5 = ply 2(証拠 1 の forming)・ply 4(証拠 2 の forming)+ ply 0/2/4(証拠 0 の completed)。
+    for (const set of ["A", "B", "C"] as const) {
+      expect(levelSumOf(row.exposure[set].shape.self), `${set} の行数`).toBe(5);
+      // 証拠 ≤ 1 の行は 4 件(forming の ply 2 と、completed 3 件)。値の組によらない。
+      expect(row.exposure[set].shape.self.weakClaims, `${set} の weakClaims`).toBe(4);
+      expect(
+        row.exposure[set].shape.self.weakClaimsShown,
+        `${set} の weakClaimsShown`,
+      ).toBeLessThanOrEqual(row.exposure[set].shape.self.weakClaims);
+    }
+    // A は completed 3 件を hedged で見せる(証拠 0 でも)。B は forming の 1 件だけ。C は 0 件。
+    expect(row.exposure.A.shape.self.weakClaimsShown).toBe(3);
+    expect(row.exposure.B.shape.self.weakClaimsShown).toBe(1);
+    expect(row.exposure.C.shape.self.weakClaimsShown).toBe(0);
+
+    // 固定棋譜 4 局 + 本体の形・狙い + 作り物の戦型でも、合計は「延べの行数」と一致する。
+    const shapes = loadShapes(join(REPO_ROOT, "data", "shapes"));
+    const intents = loadIntents(join(REPO_ROOT, "data", "intents"));
+    const openings = [
+      makeOpening("o_sum_comp", "self", [{ piece: "金", to: "4i" }]),
+      makeOpening("o_sum_forming", "self", [
+        { piece: "歩", to: "7f" },
+        { piece: "銀", to: "3h" },
+        { piece: "金", to: "5h" },
+      ]),
+    ];
+    const { byGroup } = measureRecognition(readFixed4(), { shapes, intents, openings, maxPly: 0 });
+    const totals = byGroup["fixed4"]!;
+    const sumOf = (counter: Record<string, number>): number =>
+      Object.values(counter).reduce((acc, n) => acc + n, 0);
+    const shapeRows = sumOf(totals.shapeHits);
+    const intentRows = sumOf(totals.intentHits);
+    const openingRows = totals.openCompleted + totals.openForming;
+    expect(shapeRows).toBeGreaterThan(0);
+    expect(intentRows).toBeGreaterThan(0);
+    expect(openingRows).toBeGreaterThan(0);
+
+    for (const set of ["A", "B", "C"] as const) {
+      const e = totals.exposure[set];
+      expect(levelSumOf(e.shape.self) + levelSumOf(e.shape.opponent), `${set} の形の行数`).toBe(shapeRows);
+      expect(levelSumOf(e.intent.self) + levelSumOf(e.intent.opponent), `${set} の狙いの行数`).toBe(intentRows);
+      expect(levelSumOf(e.opening.self) + levelSumOf(e.opening.opponent), `${set} の戦型の行数`).toBe(openingRows);
+      // weakClaims は値の組によらない(A と同じ数になる)。
+      expect(e.shape.self.weakClaims).toBe(totals.exposure.A.shape.self.weakClaims);
+      expect(e.opening.self.weakClaims).toBe(totals.exposure.A.opening.self.weakClaims);
+    }
   });
 });

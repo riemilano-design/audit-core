@@ -87,8 +87,8 @@
     },
     "review_status": {
       "type": "string",
-      "enum": ["draft", "human_reviewed", "expert_verified"],
-      "description": "知識を追加してよいかと、ユーザーへ見せてよいかを分離する運用区分。draft=AIが追加した未レビューの知識(戦法・狙い・陣形の名前としてユーザーへ断定的に見せる経路では使わない)、human_reviewed=人間のレビューを経たもの、expert_verified=有段者・一次資料による確認を経たもの。意味の定義はdocs/DATA_MODEL.mdを正とする"
+      "enum": ["draft", "human_reviewed", "expert_verified", "expired"],
+      "description": "知識を追加してよいかと、ユーザーへ見せてよいかを分離する運用区分。draft=AIが追加した未レビューの知識(戦法・狙い・陣形の名前としてユーザーへ断定的に見せる経路では使わない)、human_reviewed=人間のレビューを経たもの、expert_verified=有段者・一次資料による確認を経たもの、expired=失効。露出はdraftと同じ(名前を断定的に見せない)。意味の定義はdocs/DATA_MODEL.mdを正とする"
     }
   }
 }

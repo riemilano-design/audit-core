@@ -4,6 +4,7 @@
 // 【構成】H-1〜H-8 × 通る 1・落ちる 1(16)+ スキーマ 4(通る・知らない欄・版違い・value の oneOf)+
 // 登録簿 2(111 本・obs.timeSearch.col.* 30 本)+ パリティ 1(report-pdf/check_answer.py の BANNED_WORDS と一致)+
 // CLI 1(hypothesisCheck.ts を子プロセスで回し exit code を見る)= 24 本。
+// STEP EXPO-1(§12.9)で版 0.2(expired)の 3 本を足して 27 本。
 // 【落ちる入力】§12.2「落ちる入力(H ごとに 1 つ、試験に固定)」をそのまま使う。
 // 【基準の例】§12.2 の設計案 §7.1 の例を実物のパス・欄名に直した fixture
 // (__fixtures__/hypothesis.v0.1.example.json)。today 2026-09-25 で 9/9 通る。writtenAt を 2026-09-26 にすると
@@ -190,6 +191,79 @@ describe("スキーマ(契約の欄)", () => {
     line.observations[0]!.value = Number.NaN;
     const errors = validate(line, schema);
     expect(errors.some((e) => e.includes("oneOf"))).toBe(true);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// STEP EXPO-1(docs/LANE_DIAG_LOG_2026-09.md §12.9): 版 0.2(knowledge.reviewStatus に expired)。
+// 照合する版は行の schemaVersion が決める(opts.schema を渡さない呼び方)。
+// ---------------------------------------------------------------------------
+
+/** 版を固定せず、行の schemaVersion から選ばせる(CLI と同じ呼び方)。 */
+function checksByVersion(line: unknown, today: string = TODAY): CheckResult[] {
+  return validateHypothesisLine(line, { today, registry });
+}
+
+const V02_FIXTURE_PATH = fileURLToPath(new URL("./__fixtures__/hypothesis.v0.2.example.json", import.meta.url));
+const V02_LINE = JSON.parse(readFileSync(V02_FIXTURE_PATH, "utf-8")) as Json;
+
+/** 既存の記録(obs-3/p4-min3)。02 は H-3 が NG、04・05 は 9 検査すべて ok。 */
+const RECORDS_DIR = fileURLToPath(new URL("../records/obs-3/p4-min3/", import.meta.url));
+const RECORD_FILES: Array<{ file: string; ngChecks: HypothesisCheckName[] }> = [
+  ...["001", "002", "003"].map((n) => ({ file: `02-H-p4-min3-${n}.json`, ngChecks: ["H-3" as HypothesisCheckName] })),
+  ...["001", "002", "003"].map((n) => ({ file: `04-H-p4-min3-${n}.json`, ngChecks: [] })),
+  ...["001", "002", "003"].map((n) => ({ file: `05-H-p4-min3-${n}.json`, ngChecks: [] })),
+];
+
+describe("版 0.2(expired)", () => {
+  it("通る: v0.2 の例(reviewStatus expired)は schema ok。同じ行を v0.1 として照合すると落ちる", () => {
+    const results = checksByVersion(V02_LINE);
+    const schemaResult = results.find((r) => r.check === "schema")!;
+    expect(schemaResult.ok, schemaResult.messages.join(" / ")).toBe(true);
+    // H-1〜H-8 も基準の例と同じく全部通る(版を上げただけで検査は変わらない)。
+    expect(results.filter((r) => !r.ok)).toEqual([]);
+    expect((V02_LINE.knowledge as Json).reviewStatus).toBe("expired");
+
+    // v0.1 のスキーマを明示して渡すと、const "0.1" と enum の両方で落ちる。
+    const asV01 = validateHypothesisLine(V02_LINE, { today: TODAY, registry, schema });
+    expect(asV01.find((r) => r.check === "schema")!.ok).toBe(false);
+
+    // 版の一覧に無い schemaVersion は「照合の相手が決まらない」として schema NG。
+    const unknownVersion = clone(V02_LINE);
+    unknownVersion.schemaVersion = "9.9";
+    const unknownResult = checksByVersion(unknownVersion).find((r) => r.check === "schema")!;
+    expect(unknownResult.ok).toBe(false);
+    expect(unknownResult.messages.join(" ")).toContain("9.9");
+  });
+
+  it("既存の記録(obs-3/p4-min3 の 9 本)は v0.1 として今までどおりの結果になる", () => {
+    for (const { file, ngChecks } of RECORD_FILES) {
+      const line = JSON.parse(readFileSync(join(RECORDS_DIR, file), "utf-8")) as Json;
+      expect(line.schemaVersion, file).toBe("0.1");
+      const results = checksByVersion(line);
+      expect(results, file).toHaveLength(9);
+      expect(
+        results.filter((r) => !r.ok).map((r) => r.check),
+        `${file} の NG の並び`,
+      ).toEqual(ngChecks);
+    }
+    expect(RECORD_FILES).toHaveLength(9);
+  });
+
+  it("落ちる: v0.2 で reviewStatus expired かつ scope beginners_general は H-7 が止める", () => {
+    const line = clone(V02_LINE);
+    line.scope = "beginners_general";
+    (line.knowledge as Json).range = "beginners_general";
+    // schema そのものは通る(expired は v0.2 の enum にある)。
+    expect(checksByVersion(line).find((r) => r.check === "schema")!.ok).toBe(true);
+    const h7 = checksByVersion(line).find((r) => r.check === "H-7")!;
+    expect(h7.ok).toBe(false);
+    expect(h7.messages.join(" ")).toContain("human_reviewed");
+
+    // human_reviewed に上げれば H-7 は通る(止めているのは expired であること)。
+    const promoted = clone(line);
+    (promoted.knowledge as Json).reviewStatus = "human_reviewed";
+    expect(checksByVersion(promoted).find((r) => r.check === "H-7")!.ok).toBe(true);
   });
 });
 

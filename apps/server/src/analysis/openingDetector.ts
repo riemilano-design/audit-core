@@ -60,7 +60,7 @@ export interface OpeningDefinition {
   recognition_pattern?: OpeningRecognitionPatternEntry[];
   source: string;
   confidence_level: "high" | "medium" | "low";
-  review_status: "draft" | "human_reviewed" | "expert_verified";
+  review_status: "draft" | "human_reviewed" | "expert_verified" | "expired";
   [key: string]: unknown;
 }
 

@@ -36,7 +36,7 @@ export interface IntentDefinition {
   /** 知識を追加してよいかと、ユーザーへ見せてよいかを分離する運用区分
    * (data/schemas/intents.schema.json参照)。名前を出してよいかの判断は
    * analysis/nameExposure.tsに集約し、このモジュールでは判断しない。 */
-  review_status: "draft" | "human_reviewed" | "expert_verified";
+  review_status: "draft" | "human_reviewed" | "expert_verified" | "expired";
   [key: string]: unknown;
 }
 

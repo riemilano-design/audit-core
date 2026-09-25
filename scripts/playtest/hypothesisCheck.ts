@@ -1,5 +1,5 @@
-// STEP OBS-2(docs/LANE_DIAG_LOG_2026-09.md §12.2)。仮説の記録(契約 hypothesis v0.1)を、スキーマ + 機械検査
-// H-1〜H-8(lib/hypothesis.ts)に照らす CLI。
+// STEP OBS-2(docs/LANE_DIAG_LOG_2026-09.md §12.2)。仮説の記録(契約 hypothesis)を、スキーマ + 機械検査
+// H-1〜H-8(lib/hypothesis.ts)に照らす CLI。照合する版は行の `schemaVersion` が決める(v0.1 / v0.2)。
 //
 // 使い方: npx tsx scripts/playtest/hypothesisCheck.ts <hypothesis.json>… --today YYYY-MM-DD [--obs-items <path>]
 //
@@ -16,7 +16,7 @@
 import { readFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { loadHypothesisSchema, loadObsRegistry, validateHypothesisLine } from "./lib/hypothesis.js";
+import { loadObsRegistry, validateHypothesisLine } from "./lib/hypothesis.js";
 
 const REPO_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..", "..");
 const USAGE = "使い方: npx tsx scripts/playtest/hypothesisCheck.ts <hypothesis.json>… --today YYYY-MM-DD [--obs-items <path>]";
@@ -68,14 +68,14 @@ function main(): void {
     return;
   }
 
-  const schema = loadHypothesisSchema();
   const registry = loadObsRegistry(path.resolve(args.obsItems));
 
   let anyFailed = false;
   for (const file of args.files) {
     const line: unknown = JSON.parse(readFileSync(path.resolve(file), "utf-8"));
     console.log(`# ${file}`);
-    for (const result of validateHypothesisLine(line, { today: args.today, registry, schema })) {
+    // スキーマはここで固定しない。行の schemaVersion に対応する版を lib 側が選ぶ(STEP EXPO-1)。
+    for (const result of validateHypothesisLine(line, { today: args.today, registry })) {
       console.log(`${result.check} ${result.ok ? "ok" : "NG"} ${result.messages.join(" / ")}`.trimEnd());
       if (!result.ok) anyFailed = true;
     }

@@ -1,0 +1,20 @@
+{
+  "id": "example_expired_shape",
+  "name": "検証用の失効した形",
+  "name_kana": "けんしょうようのしっこうしたかたち",
+  "side": "self",
+  "family": "検証用",
+  "parent_shape_id": null,
+  "required_pieces": [
+    { "piece": "玉", "square": "5i", "optional": false },
+    { "piece": "金", "square": "4i", "optional": false }
+  ],
+  "characteristics": "将棋知識ではない。review_status の値 \"expired\" がスキーマに載っていることを scripts/validate-data.mjs で確かめるためだけに置いた検証用のサンプルで、実在の囲い・陣形とは無関係。駒とマスの組も、初期配置の駒を 2 つ並べただけのもの。",
+  "beginner_friendliness": {
+    "score": 1,
+    "reason": "将棋知識ではない検証用のサンプルのため、初心者向き度としての意味を持たない"
+  },
+  "source": "将棋知識ではない・検証用。出典は無く、STEP EXPO-1(docs/LANE_DIAG_LOG_2026-09.md §12.9)でスキーマの enum に \"expired\" が入ったことを固定するために作った",
+  "confidence_level": "low",
+  "review_status": "expired"
+}
