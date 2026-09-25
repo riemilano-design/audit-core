@@ -225,6 +225,8 @@
 | `obs.vocab.intentStatus` | `byGroup[group].statusCounts.intent.{self,opponent}.{none,forming,completed,matched}` | 同上 | 狙いの認識の状態(`none`/`forming`/`matched`。狙いは常に相手側にしか数えない = `self` は 0 のまま)の件数(延べ) | 無 |
 | `obs.vocab.openingStatus` | `byGroup[group].statusCounts.opening.{self,opponent}.{none,forming,completed,matched}` | 同上 | 戦型の認識の状態(`none`/`forming`/`completed`)の件数(延べ) | 無 |
 | `obs.vocab.exposure` | `byGroup[group].exposure["D''"].{shape,intent,opening}.{self,opponent}.{named,hedged,hidden}` | `ExposureCounts`(`named`・`hedged`・`hidden` の 3 つだけを写す) `lib/recognitionMeasure.ts` | 露出の値の組 `D''`(STEP EXPO-1b の中間案)を当てたときの `named`/`hedged`/`hidden` の件数(延べ)。種類 × 自分側/相手側。`hiddenCompletedNoEvidence`・`weakClaims`・`weakClaimsShown`・`pickedByR5p`・`droppedByR6`・`droppedByR6ById`(id → 数の対)は写さない(統括の追加指示、2026-09-25。**§2 に予約が無かった新規 ID** ― `obs.vocab.shapeStatus/intentStatus/openingStatus` と違い、設計案 §2 の元の表には無い) | 無 |
+| `obs.vocab.shapeMissingSummary` | `byGroup[group].{shapeMissingTotal,selfClosestOneAwayGames}` | `GroupTotals` `lib/recognitionMeasure.ts` | 「あと 1 枚」の中身(STEP OBS-5e。docs/LANE_DIAG_LOG_2026-09.md §12.10 (A4))。欠けたマス・駒の延べ件数(forming だった局面だけ)と、自分側の「最も近づいた形」の欠けがちょうど 1 枚だった局の数。**件数だけ**(形 id ごとの内訳〈`shapeMissingCounts`。id → 数の対〉、局ごとの「最も近づいた形」の中身〈`rows[].closestSelfShape`。id・マス・駒の文字列〉は写さない ― §2 に予約が無かった新規 ID) | 無 |
+| `obs.vocab.shapeMovedRequiredSummary` | `byGroup[group].shapeMovedRequiredCompleteTotal`、`movedRequiredZeroShapeCounts.{self,opponent}` | 同上、`RecognitionMeasureResult` `lib/recognitionMeasure.ts` | 到達率を「初期位置でない必要駒」だけで数え直した版(STEP OBS-5e)。数え直した到達率が 1.0 に達した局数の延べ(id をまたいだ合計)と、「初期位置でない必要駒」が 0 の形(数え直せない形)の件数(自分側・相手側)。**件数だけ**(形 id ごとの内訳〈`shapeMovedRequiredBest`・`gamesMovedRequiredComplete`〉、id の一覧〈`movedRequiredZeroShapeIds`〉は写さない ― §2 に予約が無かった新規 ID) | 無 |
 
 `statusCounts`(`lib/recognitionMeasure.ts`)は `countExposure` と違い `status`(または `matchStatus`)が `"none"` の行も捨てずに数える(STEP OBS-5c の直し。docs/LANE_DIAG_LOG_2026-09.md §12.10 (A2) の「計画の直し」)。`exposure["D''"]` は既存(STEP EXPO-1b)。
 
@@ -257,23 +259,23 @@
 
 ---
 
-## 3. 数(2026-09-25)
+## 3. 数(2026-09-26。STEP OBS-5e で更新)
 
 | 数えるもの | 数 |
 |---|---|
-| `existing` の ID(§1) | **119** = eval 3 + fe 8 + moment 3 + cf 7 + cond 4 + time 24(局 11・組 3・本編 6・obs_extra 3〈STEP OBS-5'〉・obs_geo の `decisionContext` 1〈STEP OBS-5〉)+ timeSearch 35(列 30 + 5)+ fork 7 + side 4(`top1`・`actual` を 2 と数える)+ read 6 + direct 3 + menu 1 + recog 2 + report 5 + geo 3(obs_geo の `moveCombination`・`replyToCapture`・`replyToCheck`〈STEP OBS-5〉)+ vocab 4(`obs.vocab.shapeStatus`・`intentStatus`・`openingStatus`・`exposure`〈STEP OBS-5c〉)(列 30 以外の 89 本は表の行を機械で数えた。列 30 は `SEARCH_COLUMNS` の要素数) |
-| うち既存の欄名と 1 対 1 で対応した ID | **119**(すべて。ID の名前 = 欄名または型名) |
-| うち JSON スキーマ(契約)のある ID | **16** = eval 1(`standing`)+ fe 8 + moment 3 + cond 4。cf 7 は「穴」(スキーマの `properties` が空)で契約あり扱いにしない。recog 2 は型のみ。残り 96 は契約 無(OBS-5' の 3 本・OBS-5 の 4 本・OBS-5c の 4 本も契約 無) |
-| 設計案 §2 の項目(§2 の表) | **20 行**(`copy` 6・`new` 7・`vocab` 0・置かない 1・**→ §1(実体化済み)6**〈STEP OBS-5 の 3 + STEP OBS-5c の 3〉)。数え方: 行の状態の欄。「`copy` の一部 + `new`」「`copy`(半径 1)/`new`(半径 2・3)」の行はそれぞれ `new`・`copy` に数えた(→ §1 の 6 行は元 `new` 2〈`moveCombination`・`replyToCapture`/`replyToCheck` の対〉+ `copy` 1〈`decisionContext`〉+ `vocab` 3〈`shapeStatus`・`intentStatus`・`openingStatus`〉)。**`obs.vocab.exposure` は §2 に元の行が無い新規 ID なので、この 20 行には数えない**(§1.16 に直接足した) |
+| `existing` の ID(§1) | **121** = eval 3 + fe 8 + moment 3 + cf 7 + cond 4 + time 24(局 11・組 3・本編 6・obs_extra 3〈STEP OBS-5'〉・obs_geo の `decisionContext` 1〈STEP OBS-5〉)+ timeSearch 35(列 30 + 5)+ fork 7 + side 4(`top1`・`actual` を 2 と数える)+ read 6 + direct 3 + menu 1 + recog 2 + report 5 + geo 3(obs_geo の `moveCombination`・`replyToCapture`・`replyToCheck`〈STEP OBS-5〉)+ vocab 6(`obs.vocab.shapeStatus`・`intentStatus`・`openingStatus`・`exposure`〈STEP OBS-5c〉・`shapeMissingSummary`・`shapeMovedRequiredSummary`〈STEP OBS-5e〉)(列 30 以外の 91 本は表の行を機械で数えた。列 30 は `SEARCH_COLUMNS` の要素数) |
+| うち既存の欄名と 1 対 1 で対応した ID | **121**(すべて。ID の名前 = 欄名または型名) |
+| うち JSON スキーマ(契約)のある ID | **16** = eval 1(`standing`)+ fe 8 + moment 3 + cond 4。cf 7 は「穴」(スキーマの `properties` が空)で契約あり扱いにしない。recog 2 は型のみ。残り 98 は契約 無(OBS-5' の 3 本・OBS-5 の 4 本・OBS-5c の 4 本・OBS-5e の 2 本も契約 無) |
+| 設計案 §2 の項目(§2 の表) | **20 行**(`copy` 6・`new` 7・`vocab` 0・置かない 1・**→ §1(実体化済み)6**〈STEP OBS-5 の 3 + STEP OBS-5c の 3〉)。数え方: 行の状態の欄。「`copy` の一部 + `new`」「`copy`(半径 1)/`new`(半径 2・3)」の行はそれぞれ `new`・`copy` に数えた(→ §1 の 6 行は元 `new` 2〈`moveCombination`・`replyToCapture`/`replyToCheck` の対〉+ `copy` 1〈`decisionContext`〉+ `vocab` 3〈`shapeStatus`・`intentStatus`・`openingStatus`〉)。**`obs.vocab.exposure`・`obs.vocab.shapeMissingSummary`・`obs.vocab.shapeMovedRequiredSummary` は §2 に元の行が無い新規 ID なので、この 20 行には数えない**(§1.16 に直接足した) |
 | 設計案 §1 の表と欄名が食い違っていたもの(この一覧で直した) | **2**: (1) `TIME_VALUES` の置き場は `lib/timeCause.ts` ではなく `lib/reportData.ts:469`。(2) 設計案 §7 の例のパス `groups[min3].other.phaseSpentMedian.mid` は実在せず、正しくは `groups[].other.medianMidSec`(§7 は案の JSON なので、契約の実装で直す) |
 | 対応が取れなかった ID | **0**(取れなかったものは `new` として §2 に置いた) |
 
-**幾何/語彙の内訳**(§1 の `existing` のうち、設計案 §2 の線で「幾何(知識なし)」に当たるもの): `obs.fe.kingSurroundings`・`obs.fe.positionFacts`・`obs.cf.kingEscapesRoot/End`・`obs.cf.userMoveFacts`・`obs.cf.pvMinusActual`・`obs.side.tags`・`obs.side.of`・`obs.read.marks`・`obs.time.rookMark`・探索の列のうち手の性質 14 本(`actual*` 5・`top1*` 5・`oppPrev*` 4)・`obs.geo.moveCombination`・`obs.geo.replyToCapture`・`obs.geo.replyToCheck`(STEP OBS-5 の 3 本) = **27**。「語彙(認識)」に当たるもの: `obs.fe.shape`・`obs.fe.opponentIntent`・`obs.recog.shape`・`obs.recog.intent`・`obs.vocab.shapeStatus`・`obs.vocab.intentStatus`・`obs.vocab.openingStatus`・`obs.vocab.exposure`(STEP OBS-5c の 4 本) = **8**。残り 84 は評価・時間・探索の集計・冊子の数(どちらの列でもない = 数。OBS-5' の 3 本・OBS-5 の `obs.time.decisionContext` もここ)。
+**幾何/語彙の内訳**(§1 の `existing` のうち、設計案 §2 の線で「幾何(知識なし)」に当たるもの): `obs.fe.kingSurroundings`・`obs.fe.positionFacts`・`obs.cf.kingEscapesRoot/End`・`obs.cf.userMoveFacts`・`obs.cf.pvMinusActual`・`obs.side.tags`・`obs.side.of`・`obs.read.marks`・`obs.time.rookMark`・探索の列のうち手の性質 14 本(`actual*` 5・`top1*` 5・`oppPrev*` 4)・`obs.geo.moveCombination`・`obs.geo.replyToCapture`・`obs.geo.replyToCheck`(STEP OBS-5 の 3 本) = **27**。「語彙(認識)」に当たるもの: `obs.fe.shape`・`obs.fe.opponentIntent`・`obs.recog.shape`・`obs.recog.intent`・`obs.vocab.shapeStatus`・`obs.vocab.intentStatus`・`obs.vocab.openingStatus`・`obs.vocab.exposure`(STEP OBS-5c の 4 本)・`obs.vocab.shapeMissingSummary`・`obs.vocab.shapeMovedRequiredSummary`(STEP OBS-5e の 2 本) = **10**。残り 84 は評価・時間・探索の集計・冊子の数(どちらの列でもない = 数。OBS-5' の 3 本・OBS-5 の `obs.time.decisionContext` もここ)。
 
 ---
 
 ## 4. 設計案との対応
 
-- 設計案 §1 の表の ID は、この一覧で **`obs.fe.*` を 8 本に、`obs.cf.*` を 7 本に、`obs.time.*` を 24 本(OBS-5' の 3 本・OBS-5 の `decisionContext` 1 本を含む)に、`obs.timeSearch.*` を 35 本に分解**した(§1 の表は列の粗さで書いていた)。`obs.report.*` は §1 に無かった列(冊子の本編の数)。`obs.geo.*` は STEP OBS-5 でこの一覧に初めて `existing` が付いた列(3 本)。`obs.vocab.*` は STEP OBS-5c でこの一覧に初めて `existing` が付いた列(4 本。うち `obs.vocab.exposure` は設計案 §2 に元の行が無い新規 ID)。
+- 設計案 §1 の表の ID は、この一覧で **`obs.fe.*` を 8 本に、`obs.cf.*` を 7 本に、`obs.time.*` を 24 本(OBS-5' の 3 本・OBS-5 の `decisionContext` 1 本を含む)に、`obs.timeSearch.*` を 35 本に分解**した(§1 の表は列の粗さで書いていた)。`obs.report.*` は §1 に無かった列(冊子の本編の数)。`obs.geo.*` は STEP OBS-5 でこの一覧に初めて `existing` が付いた列(3 本)。`obs.vocab.*` は STEP OBS-5c でこの一覧に初めて `existing` が付いた列(6 本。うち `obs.vocab.exposure`〈STEP OBS-5c〉・`obs.vocab.shapeMissingSummary`・`obs.vocab.shapeMovedRequiredSummary`〈STEP OBS-5e〉の 3 本は設計案 §2 に元の行が無い新規 ID)。
 - 設計案 §7 の H-2 は、この一覧の **§1(`existing`)だけ**を登録済みとする。§2 の ID を引いた仮説は落ちる(値が無いので)。
 - 設計案 §10.3 の実例が引いた数の実体: 崩れの内訳 = `obs.report.overview`、消費の段ごと = `obs.time.bySpent`、中央値 = `obs.time.groupMedians`、長考の分母 = `obs.time.longThinkTotal`、時計で終わった局の最後の評価 = `obs.direct.finalPosition`。**5 つとも `existing`。**

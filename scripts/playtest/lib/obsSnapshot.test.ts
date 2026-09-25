@@ -232,6 +232,9 @@ describe("任意入力が無いとき", () => {
       "obs.vocab.intentStatus",
       "obs.vocab.openingStatus",
       "obs.vocab.exposure",
+      // STEP OBS-5e(docs/LANE_DIAG_LOG_2026-09.md §12.10 (A4))。同じ --recognition が無ければこの 2 本も出ない。
+      "obs.vocab.shapeMissingSummary",
+      "obs.vocab.shapeMovedRequiredSummary",
     ];
     for (const id of optionalOnly) expect(obsIds, id).not.toContain(id);
     expect(snapshot.items.length).toBe(SNAPSHOT_ITEMS.length - optionalOnly.length);
@@ -520,5 +523,51 @@ describe("--recognition(recognition_measure.json。STEP OBS-5c)", () => {
     expect(obsIds).not.toContain("obs.vocab.intentStatus");
     expect(obsIds).not.toContain("obs.vocab.openingStatus");
     expect(obsIds).not.toContain("obs.vocab.exposure");
+  });
+});
+
+// 15. STEP OBS-5e(docs/LANE_DIAG_LOG_2026-09.md §12.10 (A4))。「あと 1 枚」の中身の写し
+// (obs.vocab.shapeMissingSummary・obs.vocab.shapeMovedRequiredSummary)。件数だけ(id は写さない)。
+describe("--recognition(recognition_measure.json。STEP OBS-5e)", () => {
+  it("渡せば shapeMissingSummary・shapeMovedRequiredSummary の 2 項目が載る(fixture の件数をそのまま写す)", () => {
+    const snapshot = buildObsSnapshot(fullInputs(), optionsOf("3 分"));
+    const missingSummary = snapshot.items.find((i) => i.obsId === "obs.vocab.shapeMissingSummary");
+    const movedSummary = snapshot.items.find((i) => i.obsId === "obs.vocab.shapeMovedRequiredSummary");
+    expect(missingSummary, "obs.vocab.shapeMissingSummary が出ていない").toBeDefined();
+    expect(movedSummary, "obs.vocab.shapeMovedRequiredSummary が出ていない").toBeDefined();
+
+    const recognitionFixture = JSON.parse(readFileSync(join(FIXTURES_DIR, "recognition_measure.json"), "utf-8")) as {
+      byGroup: {
+        "3 分": {
+          shapeMissingTotal: number;
+          selfClosestOneAwayGames: number;
+          shapeMovedRequiredCompleteTotal: number;
+        };
+      };
+      movedRequiredZeroShapeCounts: { self: number; opponent: number };
+    };
+    const group = recognitionFixture.byGroup["3 分"];
+    expect(missingSummary!.value).toEqual({
+      shapeMissingTotal: group.shapeMissingTotal,
+      selfClosestOneAwayGames: group.selfClosestOneAwayGames,
+    });
+    expect(movedSummary!.value).toEqual({
+      completeTotal: group.shapeMovedRequiredCompleteTotal,
+      zeroCount: recognitionFixture.movedRequiredZeroShapeCounts,
+    });
+    // id・id → 数の対(shapeMissingCounts・gamesMovedRequiredComplete・movedRequiredZeroShapeIds)は
+    // fixture 側には実在するが、写しには出ない(白いリストの門。値が数だけであることを直接確かめる)。
+    expect(JSON.stringify(missingSummary!.value)).not.toContain("s1");
+    expect(JSON.stringify(movedSummary!.value)).not.toContain("s1");
+    expect(JSON.stringify(movedSummary!.value)).not.toContain("s2");
+  });
+
+  it("渡さなければ 2 項目とも出ない(空で埋めない)", () => {
+    const inputs = fullInputs();
+    const minimal: ObsSnapshotInputs = { patient: inputs.patient, timeCause: inputs.timeCause };
+    const snapshot = buildObsSnapshot(minimal, optionsOf("3 分"));
+    const obsIds = snapshot.items.map((i) => i.obsId);
+    expect(obsIds).not.toContain("obs.vocab.shapeMissingSummary");
+    expect(obsIds).not.toContain("obs.vocab.shapeMovedRequiredSummary");
   });
 });

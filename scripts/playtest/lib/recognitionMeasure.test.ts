@@ -20,11 +20,14 @@ import { afterAll, describe, expect, it } from "vitest";
 
 import type { IntentDefinition } from "../../../apps/server/src/analysis/intentRepository.js";
 import { loadIntents } from "../../../apps/server/src/analysis/intentRepository.js";
+import { replayMoveHistory } from "../../../apps/server/src/analysis/moveHistory.js";
 import type { OpeningDefinition } from "../../../apps/server/src/analysis/openingDetector.js";
+import { analyzeShapeFormationFromEvents } from "../../../apps/server/src/analysis/shapeFormationAnalyzer.js";
 import type { ShapeDefinition } from "../../../apps/server/src/analysis/shapeRepository.js";
 import { loadShapes } from "../../../apps/server/src/analysis/shapeRepository.js";
 import {
   measureRecognition,
+  movedRequiredPiecesOf,
   plyStepsOf,
   type GameRow,
   type MeasuredGame,
@@ -431,6 +434,8 @@ describe("(6) CLI(scripts/playtest/recognitionMeasure.ts)", () => {
       openingsDirs: string[];
       byGroup: Record<string, { positions: number; recShape: number }>;
       rows: Array<{ id: string }>;
+      movedRequiredZeroShapeIds: { self: string[]; opponent: string[] };
+      movedRequiredZeroShapeCounts: { self: number; opponent: number };
     };
     expect(written.kind).toBe("recognition_measure");
     expect(written.schemaVersion).toBe("0.1");
@@ -441,6 +446,9 @@ describe("(6) CLI(scripts/playtest/recognitionMeasure.ts)", () => {
     // 入力ディレクトリは cwd 相対で残す(絶対パスを書かない)。
     expect(written.shapesDirs).toEqual(["data/shapes"]);
     expect(written.openingsDirs).toEqual([]);
+    // STEP OBS-5e。id の一覧と、件数だけの版が両方 CLI の出力に乗る。
+    expect(written.movedRequiredZeroShapeIds.self.length).toBe(written.movedRequiredZeroShapeCounts.self);
+    expect(written.movedRequiredZeroShapeIds.opponent.length).toBe(written.movedRequiredZeroShapeCounts.opponent);
 
     const missing = spawnSync("npx", ["tsx", CLI_TS, "--maxply", "0", "--out", join(dir, "never.json")], {
       cwd: REPO_ROOT,
@@ -955,5 +963,161 @@ describe("(14) statusCounts は none を含めて数える(STEP OBS-5c)", () => 
     );
     expect(byGroup["g"]!.statusCounts.shape.self).toEqual(row.statusCounts.shape.self);
     expect(byGroup["g"]!.statusCounts.opening.self).toEqual(row.statusCounts.opening.self);
+  });
+});
+
+// STEP OBS-5e(docs/LANE_DIAG_LOG_2026-09.md §12.10 (A4))。「あと 1 枚」の中身。
+// 作り物の駒・マスは (12)(13) と同じ流儀(将棋知識ではない)。
+//
+// t_three: 歩7f(移動で一致)・銀3h(移動で一致)・金4i(先手の初期配置のまま一致)。
+//   ply0 = none(0/3)、ply2 = forming(2/3, 欠け 3h)、ply4 = completed(3/3, 欠け 0)。
+// t_one_away: 歩7f・銀3h(どちらも移動で一致しうる)・銀4h(この棋譜のどの手でも一致しない = 永久に欠け)。
+//   ply0 = none、ply2 = forming(欠け 3h・4h)、ply4 = forming(欠け 4h だけ。matchScore 最大はここ)。
+// t_zero: 金4i だけ(先手の初期配置のまま)。「初期位置でない必要駒」が 0 の形。
+describe("(15) 欠けたマスと駒の内訳(STEP OBS-5e)", () => {
+  const t_three = makeShape("t_three", "self", [
+    { piece: "歩", square: "7f" },
+    { piece: "銀", square: "3h" },
+    { piece: "金", square: "4i" },
+  ]);
+  const t_one_away = makeShape("t_one_away", "self", [
+    { piece: "歩", square: "7f" },
+    { piece: "銀", square: "3h" },
+    { piece: "銀", square: "4h" },
+  ]);
+
+  it("欠けたマスの件数の合計は forming の行の欠けの総数と一致する(不変条件。analyzeShapeFormationFromEvents を直接呼んで数え直す)", () => {
+    const shapes = [t_three, t_one_away];
+    const row = measureOne(MOVES_4, { maxPly: 0, shapes });
+
+    const total = Object.values(row.shapeMissingCounts).reduce((acc, n) => acc + n, 0);
+    expect(total).toBe(row.shapeMissingTotal);
+
+    const { events, sfens } = replayMoveHistory(MOVES_4);
+    let expectedTotal = 0;
+    for (const ply of plyStepsOf(MOVES_4.length, 0)) {
+      const results = analyzeShapeFormationFromEvents(sfens[ply]!, events.slice(0, ply), { shapes });
+      for (const r of results) {
+        if (r.status === "forming") expectedTotal += r.missingSquares.length;
+      }
+    }
+    expect(row.shapeMissingTotal).toBe(expectedTotal);
+    // t_three は ply2 だけ forming・欠け 1(3h)。t_one_away は ply2(欠け 2: 3h・4h)+ ply4(欠け 1: 4h)。
+    expect(row.shapeMissingCounts).toEqual({
+      "t_three:3h:銀": 1,
+      "t_one_away:3h:銀": 1,
+      "t_one_away:4h:銀": 2,
+    });
+    expect(expectedTotal).toBe(1 + 1 + 2);
+  });
+
+  it("局ごとに最も近づいた自分側の形(matchScore 最大)と、そのとき欠けていた駒を持つ", () => {
+    const row = measureOne(MOVES_4, { maxPly: 0, shapes: [t_three, t_one_away] });
+    // t_three は ply4 で matchScore 1(completed・欠け 0)、t_one_away は ply4 で matchScore 2/3(欠け 1)。
+    // 最も近づいた = matchScore が高いほう(t_three の 1 のほう)。
+    expect(row.closestSelfShape).toEqual({ shapeId: "t_three", matchScore: 1, missing: [] });
+  });
+
+  it("「あと 1 枚」だけの形しか無ければ、closestSelfShape の欠けは 1 枚になる", () => {
+    const row = measureOne(MOVES_4, { maxPly: 0, shapes: [t_one_away] });
+    expect(row.closestSelfShape).toEqual({
+      shapeId: "t_one_away",
+      matchScore: 2 / 3,
+      missing: [{ square: "4h", piece: "銀" }],
+    });
+
+    // byGroup の selfClosestOneAwayGames(局ごとの「欠け 1 枚」の局数)にも 1 局として数えられる。
+    const { byGroup } = measureRecognition([{ group: "g", id: "test-01", moves: MOVES_4 }], {
+      ...NO_KNOWLEDGE,
+      shapes: [t_one_away],
+      maxPly: 0,
+    });
+    expect(byGroup["g"]!.selfClosestOneAwayGames).toBe(1);
+  });
+
+  it("形が無ければ closestSelfShape は null のまま", () => {
+    const row = measureOne(MOVES_4, { maxPly: 0 });
+    expect(row.closestSelfShape).toBeNull();
+  });
+});
+
+describe("(16) 到達率を「初期位置でない必要駒」だけで数え直す(STEP OBS-5e)", () => {
+  // t_one_away: 3 つとも初期位置とは一致しない(動くべき駒 3)が、4h はこの棋譜のどの手でも
+  // 一致しない(永久に欠け)ので、数え直した到達率は 2/3 止まりで 1.0 に達しない。
+  const t_one_away = makeShape("t_one_away", "self", [
+    { piece: "歩", square: "7f" },
+    { piece: "銀", square: "3h" },
+    { piece: "銀", square: "4h" },
+  ]);
+  // t_recount_complete: 動くべき駒 2(7f・3h)がどちらも ply4 までに一致する = 数え直した到達率 1.0。
+  const t_recount_complete = makeShape("t_recount_complete", "self", [
+    { piece: "歩", square: "7f" },
+    { piece: "銀", square: "3h" },
+  ]);
+  const t_zero = makeShape("t_zero", "self", [{ piece: "金", square: "4i" }]);
+
+  it("movedRequiredPiecesOf は初期位置と一致する駒を除いた一覧を返す(movedRequiredCountOf はその件数)", () => {
+    const pieces = [
+      { piece: "金", square: "4i" }, // 先手の初期配置のまま
+      { piece: "歩", square: "7f" }, // 初期配置には無い(歩は 7g)
+    ];
+    expect(movedRequiredPiecesOf(pieces, "sente")).toEqual([{ piece: "歩", square: "7f" }]);
+  });
+
+  it("数え直した到達率は 0〜1 に入り、初期位置でない必要駒が 0 の形には持たない", () => {
+    const { byGroup, rows, movedRequiredZeroShapeIds, movedRequiredZeroShapeCounts } = measureRecognition(
+      [{ group: "g", id: "test-01", moves: MOVES_4 }],
+      { ...NO_KNOWLEDGE, shapes: [t_one_away, t_recount_complete, t_zero], maxPly: 0 },
+    );
+    const row = rows[0]!;
+
+    // t_one_away: 動くべき駒 3(7f・3h・4h。4h は一致した局面が無いので分子に入らない)。
+    // ply4 で 3 件中 2 件一致 = 2/3(1.0 には届かない ― 居玉と同じ理屈で「あと 1 枚」)。
+    expect(row.shapeMovedRequiredBest["t_one_away"]).toBeCloseTo(2 / 3);
+    // t_recount_complete: 動くべき駒 2(7f・3h)がどちらも ply4 で一致 = 1.0。
+    expect(row.shapeMovedRequiredBest["t_recount_complete"]).toBe(1);
+    // t_zero: 必要な駒(金4i)が先手の初期配置そのもの → 動くべき駒が 0 → 到達率を持たない。
+    expect(row.shapeMovedRequiredBest["t_zero"]).toBeUndefined();
+
+    for (const value of Object.values(row.shapeMovedRequiredBest)) {
+      expect(value).toBeGreaterThanOrEqual(0);
+      expect(value).toBeLessThanOrEqual(1);
+    }
+
+    expect(movedRequiredZeroShapeIds.self).toContain("t_zero");
+    expect(movedRequiredZeroShapeIds.self).not.toContain("t_one_away");
+    expect(movedRequiredZeroShapeIds.self).not.toContain("t_recount_complete");
+    expect(movedRequiredZeroShapeIds.self.length).toBe(movedRequiredZeroShapeCounts.self);
+
+    // 到達率が 1.0 に達した局・形だけが gamesMovedRequiredComplete に 1 として数えられる。
+    // t_one_away は 1.0 に届かない(=「あと 1 枚」のまま数え直しても完成しない形の例)。
+    expect(byGroup["g"]!.gamesMovedRequiredComplete["t_one_away"]).toBeUndefined();
+    expect(byGroup["g"]!.gamesMovedRequiredComplete["t_recount_complete"]).toBe(1);
+    expect(byGroup["g"]!.gamesMovedRequiredComplete["t_zero"]).toBeUndefined();
+    expect(byGroup["g"]!.shapeMovedRequiredCompleteTotal).toBe(1);
+  });
+
+  it("数え直すと、初期配置と偶然一致する駒を含む生の matchScore とは違う値になりうる(t_three の ply2)", () => {
+    const t_three = makeShape("t_three", "self", [
+      { piece: "歩", square: "7f" },
+      { piece: "銀", square: "3h" },
+      { piece: "金", square: "4i" }, // 先手の初期配置のまま(動くべき駒から除かれる)
+    ]);
+    const { events, sfens } = replayMoveHistory(MOVES_4);
+    const ply2Results = analyzeShapeFormationFromEvents(sfens[2]!, events.slice(0, 2), { shapes: [t_three] });
+    const r = ply2Results.find((x) => x.shapeId === "t_three")!;
+    expect(r.matchScore).toBeCloseTo(2 / 3); // 7f・4i が一致(4i は偶然)、3h が欠け
+    const moved = movedRequiredPiecesOf(
+      [
+        { piece: "歩", square: "7f" },
+        { piece: "銀", square: "3h" },
+        { piece: "金", square: "4i" },
+      ],
+      "sente",
+    );
+    const movedMatched = moved.filter((p) => r.matchedSquares.includes(p.square)).length;
+    const recounted = movedMatched / moved.length;
+    expect(recounted).toBeCloseTo(0.5); // 動くべき駒は 7f・3h の 2 つ、一致は 7f だけ
+    expect(recounted).not.toBeCloseTo(r.matchScore);
   });
 });

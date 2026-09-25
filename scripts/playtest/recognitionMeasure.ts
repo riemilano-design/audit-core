@@ -164,7 +164,12 @@ function main(): number {
   );
 
   const games = readGameList(args.games).map(readFixedKifu);
-  const { byGroup, rows } = measureRecognition(games, { shapes, intents, openings, maxPly: args.maxPly });
+  const { byGroup, rows, movedRequiredZeroShapeIds, movedRequiredZeroShapeCounts } = measureRecognition(games, {
+    shapes,
+    intents,
+    openings,
+    maxPly: args.maxPly,
+  });
 
   const gitState = readGitState(REPO_ROOT);
   const output = {
@@ -181,6 +186,10 @@ function main(): number {
     openingIds: openings.map((o) => o.id),
     byGroup,
     rows,
+    // STEP OBS-5e(docs/LANE_DIAG_LOG_2026-09.md §12.10 (A4))。「初期位置でない必要駒」が
+    // 0 の形の id(到達率を数え直せない形)。id の一覧と、obsSnapshot が写す用の件数だけの版。
+    movedRequiredZeroShapeIds,
+    movedRequiredZeroShapeCounts,
   };
 
   const outPath = path.resolve(args.out);

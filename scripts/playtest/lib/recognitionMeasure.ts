@@ -259,18 +259,19 @@ function countExposure(
 const INITIAL_POSITION = parsePosition(DEFAULT_INITIAL_SFEN);
 
 /**
- * 必要な駒(非 optional)のうち、**平手の初期局面でその色・その駒種が置かれていないマス**の数
- * (STEP EXPO-1b の R6 `"movedRequired"` が使う `movedRequiredCount`)。
+ * 必要な駒(非 optional)のうち、**平手の初期局面でその色・その駒種が置かれていないマス**の一覧
+ * (STEP EXPO-1b の R6 `"movedRequired"` が使う `movedRequiredCount` の元。STEP OBS-5e で
+ * 「どの駒が動くべき駒か」を到達率の数え直しにも使うため、件数だけでなく一覧を返す版を切り出した)。
  *
  * 将棋の判断はしない ― 「そのマスに、その色のその駒種が初期局面から在るか」の照合だけである。
  * 初期位置のまま一致する駒は、動いた証拠(`formationEvidence`)を持ちようがないので、
  * 「証拠を求めてよい駒」から外すために数える。
  */
-export function movedRequiredCountOf(
+export function movedRequiredPiecesOf(
   pieces: ReadonlyArray<{ piece: string; square: string }>,
   perspectiveColor: Color,
-): number {
-  let moved = 0;
+): Array<{ piece: string; square: string }> {
+  const moved: Array<{ piece: string; square: string }> = [];
   for (const required of pieces) {
     const square = parseSquareName(required.square);
     if (square === undefined) {
@@ -279,9 +280,17 @@ export function movedRequiredCountOf(
     const initial = INITIAL_POSITION.board.get(square);
     const sameAsInitial =
       initial !== undefined && initial.color === perspectiveColor && initial.role === japaneseToRole(required.piece);
-    if (!sameAsInitial) moved += 1;
+    if (!sameAsInitial) moved.push(required);
   }
   return moved;
+}
+
+/** `movedRequiredPiecesOf` の件数だけを返す版(STEP EXPO-1b までの呼び出し口をそのまま残す)。 */
+export function movedRequiredCountOf(
+  pieces: ReadonlyArray<{ piece: string; square: string }>,
+  perspectiveColor: Color,
+): number {
+  return movedRequiredPiecesOf(pieces, perspectiveColor).length;
 }
 
 // ---------------------------------------------------------------------------
@@ -349,6 +358,43 @@ function addStatusCountsByKind(into: StatusCountsByKind, from: StatusCountsByKin
  */
 function bumpStatusCount(counts: StatusCountsBySide, side: "self" | "opponent", state: RecognitionState): void {
   counts[side][state] += 1;
+}
+
+// ---------------------------------------------------------------------------
+// 「あと 1 枚」の中身(STEP OBS-5e。docs/LANE_DIAG_LOG_2026-09.md §12.10 (A4))。
+//
+// レーン長が測った事実: 18 局で最も完成に近づいた自分側の形の多くが `mutekigakoi`
+// (12 局で到達率 0.80)だったが、必要な駒 5 枚のうち 3 枚(玉・金・金)は先手の初期配置その
+// ものだった。「あと 1 枚」の大部分は「玉と金を動かしていない」の言い換えで、居玉 91% と
+// 同じ事実を別の側から見た数になっている。ここに足すのは次の 2 つ(**新しい盤の計算・新しい
+// 閾値は置かない**。既存の `missingSquares`・`matchedSquares`・`movedRequiredPiecesOf` の
+// 突き合わせだけ):
+// 1. 欠けたマスと駒の内訳(形 id ごとの件数、局ごとに最も近づいた自分側の形とその欠け)。
+// 2. 到達率を「初期位置でない必要駒」だけで数え直した版(D'' の考え方を到達率にも当てる)。
+// ---------------------------------------------------------------------------
+
+/** 欠けていた 1 マス・1 駒(`missingSquares` の 1 件を定義の `required_pieces` へ突き合わせたもの)。 */
+export interface MissingPiece {
+  square: string;
+  piece: string;
+}
+
+/** 局の中で最も近づいた自分側の形(matchScore が最大のもの)と、そのとき欠けていた駒。 */
+export interface ClosestSelfShape {
+  shapeId: string;
+  matchScore: number;
+  missing: MissingPiece[];
+}
+
+/** 形の定義の `required_pieces`(非 optional)から、`missingSquares` に対応する駒名を引く。 */
+function missingPiecesOf(shapeDef: ShapeDefinition, missingSquares: readonly string[]): MissingPiece[] {
+  return missingSquares.map((square) => {
+    const required = shapeDef.required_pieces.find((p) => p.square === square && !p.optional);
+    if (required === undefined) {
+      throw new RecognitionMeasureError(`missingSquares のマスが required_pieces に無い(id="${shapeDef.id}" square="${square}")`);
+    }
+    return { square, piece: required.piece };
+  });
 }
 
 /** 1 局分の数。欄の意味は冒頭の「数え方」を参照。 */
@@ -444,6 +490,24 @@ export interface GameRow {
   // --- 状態の件数(STEP OBS-5c)。種類 × 自分側/相手側 × none/forming/completed/matched の件数 ---
   // 露出と違い `none` も数える(捨てない)。byGroup の同じ欄は、この局ごとの数をそのまま足し上げたもの。
   statusCounts: StatusCountsByKind;
+
+  // --- 「あと 1 枚」の中身(STEP OBS-5e) ---
+  /**
+   * 形の id・欠けたマス・駒(`"${shapeId}:${square}:${piece}"`)ごとの件数。
+   * **forming だった局面だけ**を数える(completed は `missingSquares` が必ず 0 件なので数えても増えない)。
+   */
+  shapeMissingCounts: Record<string, number>;
+  /** shapeMissingCounts の値をそのまま足した合計(この局分。forming の行の欠けの総数と一致するはず)。 */
+  shapeMissingTotal: number;
+  /** 局の中で最も近づいた自分側の形(side !== "opponent" のうち matchScore が最大)と、そのとき欠けていた駒。無ければ null。 */
+  closestSelfShape: ClosestSelfShape | null;
+  /**
+   * 形 id ごとの「初期位置でない必要駒」だけで数え直した到達率(`movedRequiredPiecesOf` の一致数 /
+   * `movedRequiredPiecesOf` の総数)の、この局での最大値。**分母が 0(movedRequiredZeroShapeIds に
+   * 含まれる形)は入らない**(数え直せない = 到達率を持たない)。自分側・相手側の両方を持つ
+   * (id が既に側を確定しているので、この欄では側で分けない)。
+   */
+  shapeMovedRequiredBest: Record<string, number>;
 }
 
 /**
@@ -503,11 +567,31 @@ export interface GroupTotals {
 
   /** 状態の件数(STEP OBS-5c)。rows の同じ欄を足し上げた延べの数(none を含む。局数ではない) */
   statusCounts: StatusCountsByKind;
+
+  // --- 「あと 1 枚」の中身(STEP OBS-5e)。rows の同じ欄を足し上げたもの ---
+  /** 形の id・欠けたマス・駒ごとの件数(延べ。forming だった局面だけ)。rows の shapeMissingCounts の合計 */
+  shapeMissingCounts: Record<string, number>;
+  /** shapeMissingCounts の値の合計(延べ) */
+  shapeMissingTotal: number;
+  /** 自分側の closestSelfShape の欠けがちょうど 1 枚だった局の数(あと 1 枚で完成、の局数) */
+  selfClosestOneAwayGames: number;
+  /** 形 id ごとの「数え直した到達率(shapeMovedRequiredBest)が 1 局面でも 1.0 に達した局数」 */
+  gamesMovedRequiredComplete: Record<string, number>;
+  /** gamesMovedRequiredComplete の値の合計(延べ。id をまたいで数える) */
+  shapeMovedRequiredCompleteTotal: number;
 }
 
 export interface RecognitionMeasureResult {
   byGroup: Record<string, GroupTotals>;
   rows: GameRow[];
+  /**
+   * 「初期位置でない必要駒」が 0 の形の id(STEP OBS-5e)。**到達率を数え直せない形**
+   * (必要な駒が全部、平手の初期配置と一致している = 動いた証拠を持ちようがない)。
+   * 局・組に依らない、形の定義から決まる値(自分側・相手側)。
+   */
+  movedRequiredZeroShapeIds: { self: string[]; opponent: string[] };
+  /** movedRequiredZeroShapeIds の件数だけを持つ版(obsSnapshot が写す用。id の一覧は白いリストの門に掛かるため件数だけ渡す)。 */
+  movedRequiredZeroShapeCounts: { self: number; opponent: number };
 }
 
 /** byGroup の gamesBest75 の境目。使い捨て台本の 0.75 をそのまま写したもので、新しい閾値ではない。 */
@@ -555,6 +639,10 @@ function emptyRow(group: string, id: string, plies: number): GameRow {
     openCompNoEvidById: {},
     exposure: emptyExposureTotals(),
     statusCounts: emptyStatusCountsByKind(),
+    shapeMissingCounts: {},
+    shapeMissingTotal: 0,
+    closestSelfShape: null,
+    shapeMovedRequiredBest: {},
   };
 }
 
@@ -596,6 +684,11 @@ function emptyTotals(): GroupTotals {
     openCompNoEvidById: {},
     exposure: emptyExposureTotals(),
     statusCounts: emptyStatusCountsByKind(),
+    shapeMissingCounts: {},
+    shapeMissingTotal: 0,
+    selfClosestOneAwayGames: 0,
+    gamesMovedRequiredComplete: {},
+    shapeMovedRequiredCompleteTotal: 0,
   };
 }
 
@@ -635,14 +728,14 @@ export function measureRecognition(
   const { shapes, intents, maxPly } = options;
   const openings = options.openings ?? [];
 
-  // R6 の "movedRequired" に渡す数。定義 × 視点で決まるので 1 回だけ数えて使い回す
-  // (局面ごとに数え直しても同じ値になる ― 定義も初期局面も動かないため)。
+  // R6 の "movedRequired" に渡す数(と、STEP OBS-5e が使う一覧)。定義 × 視点で決まるので
+  // 1 回だけ数えて使い回す(局面ごとに数え直しても同じ値になる ― 定義も初期局面も動かないため)。
   const shapeById = new Map(shapes.map((shape) => [shape.id, shape]));
   const openingById = new Map(openings.map((opening) => [opening.id, opening]));
-  const movedRequiredCache = new Map<string, number>();
-  const movedRequiredOf = (kind: "shape" | "opening", id: string, color: Color): number => {
+  const movedRequiredPiecesCache = new Map<string, MissingPiece[]>();
+  const movedRequiredPiecesOfId = (kind: "shape" | "opening", id: string, color: Color): MissingPiece[] => {
     const key = `${kind}:${id}:${color}`;
-    const cached = movedRequiredCache.get(key);
+    const cached = movedRequiredPiecesCache.get(key);
     if (cached !== undefined) return cached;
     let pieces: Array<{ piece: string; square: string }>;
     if (kind === "shape") {
@@ -655,10 +748,17 @@ export function measureRecognition(
       // openingDetector.ts が recognition_pattern を「非 optional の required_pieces」へ写すのと同じ対応。
       pieces = (opening.recognition_pattern ?? []).map((entry) => ({ piece: entry.piece, square: entry.to }));
     }
-    const count = movedRequiredCountOf(pieces, color);
-    movedRequiredCache.set(key, count);
-    return count;
+    const moved = movedRequiredPiecesOf(pieces, color);
+    movedRequiredPiecesCache.set(key, moved);
+    return moved;
   };
+  const movedRequiredOf = (kind: "shape" | "opening", id: string, color: Color): number =>
+    movedRequiredPiecesOfId(kind, id, color).length;
+
+  // STEP OBS-5e: 「初期位置でない必要駒」が 0 の形の id(自分側・相手側)。局・組に依らない
+  // (形の定義から決まる)ので、games のループの外で 1 つの集合として持つ。
+  const movedRequiredZeroSelfIds = new Set<string>();
+  const movedRequiredZeroOpponentIds = new Set<string>();
 
   const rows: GameRow[] = [];
 
@@ -706,6 +806,42 @@ export function measureRecognition(
         if (r.status === "completed") {
           bump(row.shapeCompleted, r.shapeId);
           shapeCompSet.add(r.shapeId);
+        }
+
+        const shapeDef = shapeById.get(r.shapeId);
+        if (shapeDef !== undefined) {
+          // STEP OBS-5e (1a): 欠けたマスと駒の内訳(forming だった局面だけ。completed は欠け 0 件なので
+          // 数えても増えない)。
+          if (r.status === "forming") {
+            for (const missing of missingPiecesOf(shapeDef, r.missingSquares)) {
+              bump(row.shapeMissingCounts, `${r.shapeId}:${missing.square}:${missing.piece}`);
+              row.shapeMissingTotal += 1;
+            }
+          }
+
+          // STEP OBS-5e (1b): 局の中で最も近づいた自分側の形(matchScore が最大。shapeBest と同じ
+          // 基準〈status を問わない〉。同点は先に見つかったほうを残す)。
+          if (r.side !== "opponent" && (row.closestSelfShape === null || r.matchScore > row.closestSelfShape.matchScore)) {
+            row.closestSelfShape = {
+              shapeId: r.shapeId,
+              matchScore: r.matchScore,
+              missing: missingPiecesOf(shapeDef, r.missingSquares),
+            };
+          }
+
+          // STEP OBS-5e (2): 到達率を「初期位置でない必要駒」だけで数え直す(shapeBest と同じく
+          // status を問わず、この局で一番高かった値を持つ)。分母が 0(movedRequired が無い形)は
+          // 「数え直せない」ので shapeMovedRequiredBest に入れず、id だけ別の集合へ記録する。
+          const movedPieces = movedRequiredPiecesOfId("shape", r.shapeId, r.perspectiveColor);
+          if (movedPieces.length === 0) {
+            (r.side === "opponent" ? movedRequiredZeroOpponentIds : movedRequiredZeroSelfIds).add(r.shapeId);
+          } else {
+            const movedMatched = movedPieces.filter((p) => r.matchedSquares.includes(p.square)).length;
+            const recounted = movedMatched / movedPieces.length;
+            if (recounted > (row.shapeMovedRequiredBest[r.shapeId] ?? -1)) {
+              row.shapeMovedRequiredBest[r.shapeId] = recounted;
+            }
+          }
         }
       }
       for (const r of shapeOn) {
@@ -848,6 +984,10 @@ export function measureRecognition(
     totals.openForming += row.openForming;
     addExposureTotals(totals.exposure, row.exposure);
     addStatusCountsByKind(totals.statusCounts, row.statusCounts);
+    totals.shapeMissingTotal += row.shapeMissingTotal;
+    if (row.closestSelfShape !== null && row.closestSelfShape.missing.length === 1) {
+      totals.selfClosestOneAwayGames += 1;
+    }
 
     for (const [id, count] of Object.entries(row.shapeHits)) {
       totals.shapeHits[id] = (totals.shapeHits[id] ?? 0) + count;
@@ -857,6 +997,9 @@ export function measureRecognition(
     }
     for (const [id, count] of Object.entries(row.openCompNoEvidById)) {
       totals.openCompNoEvidById[id] = (totals.openCompNoEvidById[id] ?? 0) + count;
+    }
+    for (const [key, count] of Object.entries(row.shapeMissingCounts)) {
+      totals.shapeMissingCounts[key] = (totals.shapeMissingCounts[key] ?? 0) + count;
     }
     // ここから下は「局数」で数える(局面の数ではない)。1 局につき 1 しか足さない。
     for (const id of Object.keys(row.shapeCompleted)) bump(totals.gamesCompleted, id);
@@ -869,7 +1012,19 @@ export function measureRecognition(
     for (const id of row.intentCompIds) bump(totals.intentCompGames, id);
     for (const id of row.openOnIds) bump(totals.openOnGames, id);
     for (const id of row.openCompIds) bump(totals.openCompGames, id);
+    for (const [id, best] of Object.entries(row.shapeMovedRequiredBest)) {
+      if (best >= 1) {
+        bump(totals.gamesMovedRequiredComplete, id);
+        totals.shapeMovedRequiredCompleteTotal += 1;
+      }
+    }
   }
 
-  return { byGroup, rows };
+  const sortedIds = (ids: Set<string>): string[] => [...ids].sort();
+  return {
+    byGroup,
+    rows,
+    movedRequiredZeroShapeIds: { self: sortedIds(movedRequiredZeroSelfIds), opponent: sortedIds(movedRequiredZeroOpponentIds) },
+    movedRequiredZeroShapeCounts: { self: movedRequiredZeroSelfIds.size, opponent: movedRequiredZeroOpponentIds.size },
+  };
 }

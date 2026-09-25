@@ -338,11 +338,21 @@ interface RecognitionGroupTotalsLike {
   statusCounts: RecognitionStatusCountsByKindLike;
   /** 値の組(A・B・C・D・D'・D'')ごとの露出。この段が読むのは `EXPOSURE_SET_FOR_VOCAB`(D'')だけ。 */
   exposure: Record<string, RecognitionExposureByKindLike>;
+  // STEP OBS-5e(docs/LANE_DIAG_LOG_2026-09.md §12.10 (A4))。「あと 1 枚」の中身。件数だけ
+  // (id → 数の対・id の一覧はここでは読まない ― `lib/recognitionMeasure.ts` 側にはあるが写さない)。
+  /** 欠けたマス・駒の延べ件数(forming だった局面だけ) */
+  shapeMissingTotal: number;
+  /** 自分側の「最も近づいた形」の欠けがちょうど 1 枚だった局の数 */
+  selfClosestOneAwayGames: number;
+  /** 「初期位置でない必要駒」だけで数え直した到達率が 1.0 に達した局数の延べ(id をまたいだ合計) */
+  shapeMovedRequiredCompleteTotal: number;
 }
 
 interface RecognitionMeasureFileLike {
   kind?: unknown;
   byGroup: Record<string, RecognitionGroupTotalsLike>;
+  /** STEP OBS-5e。「初期位置でない必要駒」が 0 の形の件数(自分側・相手側。id の一覧は読まない)。 */
+  movedRequiredZeroShapeCounts: { self: number; opponent: number };
 }
 
 /** `obs.vocab.exposure` が読む値の組。統括の追加指示(2026-09-25)で D'' に決まっている。 */
@@ -710,6 +720,28 @@ export const SNAPSHOT_ITEMS: readonly SnapshotItemDefinition[] = [
         throw new ObsSnapshotError(`--recognition の byGroup["${opts.group}"].exposure に値の組 "${EXPOSURE_SET_FOR_VOCAB}" が無い`);
       }
       return { shape: exposureBySideOf(set.shape), intent: exposureBySideOf(set.intent), opening: exposureBySideOf(set.opening) };
+    },
+  },
+
+  // ---- recognition_measure.json(STEP OBS-5e〈docs/LANE_DIAG_LOG_2026-09.md §12.10 (A4)〉。
+  //      「あと 1 枚」の中身。件数だけ ― id の一覧・id → 数の対は写さない) ----
+  {
+    obsId: "obs.vocab.shapeMissingSummary",
+    path: "recognition byGroup[group].{shapeMissingTotal,selfClosestOneAwayGames}",
+    pick: (inputs, opts) => {
+      if (inputs.recognition === undefined) return SKIP;
+      const group = recognitionGroupOf(inputs, opts.group);
+      return { shapeMissingTotal: group.shapeMissingTotal, selfClosestOneAwayGames: group.selfClosestOneAwayGames };
+    },
+  },
+  {
+    obsId: "obs.vocab.shapeMovedRequiredSummary",
+    path: "recognition byGroup[group].shapeMovedRequiredCompleteTotal, recognition movedRequiredZeroShapeCounts.{self,opponent}",
+    pick: (inputs, opts) => {
+      if (inputs.recognition === undefined) return SKIP;
+      const group = recognitionGroupOf(inputs, opts.group);
+      const zero = recognitionOf(inputs).movedRequiredZeroShapeCounts;
+      return { completeTotal: group.shapeMovedRequiredCompleteTotal, zeroCount: { self: zero.self, opponent: zero.opponent } };
     },
   },
 ];

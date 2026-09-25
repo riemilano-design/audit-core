@@ -103,8 +103,15 @@
             }
           }
         }
-      }
+      },
+      "shapeMissingCounts": { "s1:6h:銀": 4, "s2:4h:銀": 3 },
+      "shapeMissingTotal": 7,
+      "selfClosestOneAwayGames": 1,
+      "gamesMovedRequiredComplete": { "s2": 1 },
+      "shapeMovedRequiredCompleteTotal": 1
     }
   },
-  "rows": []
+  "rows": [],
+  "movedRequiredZeroShapeIds": { "self": ["s1"], "opponent": [] },
+  "movedRequiredZeroShapeCounts": { "self": 1, "opponent": 0 }
 }
