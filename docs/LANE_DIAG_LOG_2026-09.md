@@ -862,6 +862,12 @@ typecheck rc=0(worktree の緑。P-84)。所見: `willHaveWhatif` の `"pdf"` �
 **FIG-2(候補形の図: この局面で選択肢になる自玉側の形を、登録済みの形から出して盤で並べる)― 新しいものが多い**
 - **既存**: `data/shapes/` の形の定義(必要駒とマス)、到達率の計算(`recognitionMeasure` / `shapeDetector`)、**露出の規則 `decideNameExposure`(採用値 D'')**、盤の描画。
 - **新しいもの**: (a) **「現局面から到達可能な形を検索する」経路が対局後診断の側に無い**(いまは**局ごとの最大の到達率**を出しているだけで、「**この局面で選択肢になる形**」を出す道具は無い)。(b) 「証拠の強い候補だけ残す」の絞りを D'' にどう当てるかの設計。(c) 名前の確度が低いときの「**〜のような形**」への落とし方。(d) **十分な候補が無ければ図自体を出さない**の判定。
+- **重なりの確認(統括の指示で先に読んだ。2026-09-26。読むだけ、実装していない)**: **`apps/server/src/analysis/shapeGraphRanking.ts` の `rankReachableShapes`(131 行)は、対局後診断からそのまま呼べる。**
+  - **入出力**: `(ShapeFormationResult[], TargetPurposeAdjustment[]) → RankedReachableShape[]`。**純関数**で、`import` は**型だけ**(`import type` 2 本)。実行時の依存が無いので、`apps/` の内側に閉じていない。
+  - **材料はすでに診断側にある**: `scripts/playtest/lib/recognitionMeasure.ts` が**既に `analyzeShapeFormationFromEvents` と `detectIntentsFromEvents` を `apps/server/src/analysis/` から import している**。したがって `ShapeFormationResult[]` はそのまま手に入り、⑤の調整も `detectIntentsFromEvents` → `selectTargetPurpose` で作れる(渡さず `[]` にすると全部「中立」になる ― 劣化版だが筋は通る)。
+  - **露出とは独立**: このモジュールは `reviewStatus` をそのまま通すだけで、**名前を出してよいかは判断しない**(コメントに「判断は `nameExposure.ts` に集約」と明記)。**D'' を上から当てられる。**
+  - **ただし「到達可能」の意味に注意**: この関数がやっているのは **(1) 相手側の形を外す (2) 完成済みを外す (3) ⑤の調整区分 → `matchScore` 降順 → id 昇順で並べる**だけで、**「あと何手で届くか」のような経路の判定はしていない**。人間の言う「到達可能な形を検索」がそれ以上を指すなら、**そこは新規**になる。
+  - → **同じ判定を 2 か所に書かないためには「呼ぶ」一択**。(a) は**新しい判定を書く STEP ではなく、既存の関数を診断側の材料で呼ぶだけの小さな STEP**になる見込み。
 - → **FIG-2 は 1 つの STEP に収まらない見込み**。**(a) の検索の道具**と**(b)〜(d) の見せ方**で分けるのが素直。**候補数を 2〜3 と決め打ちしない**(人間の指定)。**「この囲いが正解です」ではなく「この局面では、こういう自玉側の形が選択肢になります」。**
 - **順**: どちらも **B の後、到達点 #7 の前**。計画と予測を先に書く。
 
