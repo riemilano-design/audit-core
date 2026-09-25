@@ -1,0 +1,335 @@
+{
+  "schemaVersion": "0.3",
+  "hypothesisId": "H-p4-min3r2btime-001",
+  "subject": {
+    "customer": "p4",
+    "groups": [
+      "3 分"
+    ],
+    "gamesCount": 18
+  },
+  "scope": "this_user",
+  "lane": "time",
+  "statement": "崩れを判定できた 40 行のうち、分かれ道が真の 23 行では 8 行が崩れ、分かれ道が偽の 9 行では 1 行が崩れています。崩れは分かれ道の行に寄っているという読みです。ただし判定できた 40 行はすべて評価の帯が behind でない行で、behind の 141 行では崩れを判定できていません。",
+  "observations": [
+    {
+      "obsId": "obs.time.decisionContext",
+      "path": "items[obsId=obs.time.decisionContext].value[] の全 182 行を collapse の値で数えた行数",
+      "value": {
+        "rows": 182,
+        "collapseTrue": 10,
+        "collapseFalse": 30,
+        "collapseNull": 142
+      },
+      "unit": "行"
+    },
+    {
+      "obsId": "obs.time.decisionContext",
+      "path": "items[obsId=obs.time.decisionContext].value[] のうち collapse が null でない 40 行を fork の値で数えた行数",
+      "value": {
+        "judgedRows": 40,
+        "forkTrue": 23,
+        "forkFalse": 9,
+        "forkNull": 8
+      },
+      "unit": "行"
+    },
+    {
+      "obsId": "obs.time.decisionContext",
+      "path": "items[obsId=obs.time.decisionContext].value[] のうち collapse が null でなく fork が true の 23 行で collapse が true の行数",
+      "value": {
+        "forkTrueJudgedRows": 23,
+        "collapseTrueAmongForkTrue": 8
+      },
+      "unit": "行",
+      "derived": {
+        "kind": "percent",
+        "numerator": {
+          "obsId": "obs.time.decisionContext",
+          "value": 8
+        },
+        "denominator": {
+          "obsId": "obs.time.decisionContext",
+          "value": 23
+        }
+      }
+    },
+    {
+      "obsId": "obs.time.decisionContext",
+      "path": "items[obsId=obs.time.decisionContext].value[] のうち collapse が null でなく fork が false の 9 行で collapse が true の行数",
+      "value": {
+        "forkFalseJudgedRows": 9,
+        "collapseTrueAmongForkFalse": 1
+      },
+      "unit": "行",
+      "derived": {
+        "kind": "percent",
+        "numerator": {
+          "obsId": "obs.time.decisionContext",
+          "value": 1
+        },
+        "denominator": {
+          "obsId": "obs.time.decisionContext",
+          "value": 9
+        }
+      }
+    },
+    {
+      "obsId": "obs.time.decisionContext",
+      "path": "items[obsId=obs.time.decisionContext].value[] のうち collapse が null でなく fork も null の 8 行で collapse が true の行数",
+      "value": {
+        "forkNullJudgedRows": 8,
+        "collapseTrueAmongForkNull": 1
+      },
+      "unit": "行"
+    },
+    {
+      "obsId": "obs.time.decisionContext",
+      "path": "items[obsId=obs.time.decisionContext].value[] のうち collapse が null の 142 行を evalBand の値で数えた行数",
+      "value": {
+        "collapseNullRows": 142,
+        "evalBandBehind": 141,
+        "evalBandNull": 1
+      },
+      "unit": "行"
+    },
+    {
+      "obsId": "obs.time.decisionContext",
+      "path": "items[obsId=obs.time.decisionContext].value[] のうち collapse が null でない 40 行を evalBand の値で数えた行数",
+      "value": {
+        "judgedRows": 40,
+        "evalBandLevel": 25,
+        "evalBandAhead": 15,
+        "evalBandBehind": 0
+      },
+      "unit": "行"
+    }
+  ],
+  "counterEvidence": {
+    "attempted": true,
+    "items": [
+      {
+        "kind": "counterexample",
+        "text": "分かれ道が真で、しかも崩れていない行が 15 行あります。局で見ると、分かれ道が真で崩れを判定できた行を持つ局は 9 局あり、そのうち 3 局(局 3・局 5・局 13)は合計 9 行すべてが崩れていません。とくに局 5 は 6 行あって崩れた行は 0 行です。分かれ道が真であれば崩れる、という向きではない行が多数側にある可能性があります。",
+        "observations": [
+          {
+            "obsId": "obs.time.decisionContext",
+            "path": "items[obsId=obs.time.decisionContext].value[] のうち collapse が null でなく fork が true で collapse が false の行数",
+            "value": {
+              "forkTrueCollapseFalseRows": 15
+            },
+            "unit": "行"
+          },
+          {
+            "obsId": "obs.time.decisionContext",
+            "path": "items[obsId=obs.time.decisionContext].value[] のうち collapse が null でなく fork が true の行を gameNo で分け、崩れた行が 0 の局を数えた",
+            "value": {
+              "gamesWithForkTrueJudgedRows": 9,
+              "gamesWithZeroCollapseAmongForkTrue": 3,
+              "gameNos": [
+                3,
+                5,
+                13
+              ],
+              "rowsInThoseGames": 9,
+              "game5ForkTrueJudgedRows": 6,
+              "game5CollapseTrueRows": 0
+            },
+            "unit": "局・行"
+          }
+        ]
+      },
+      {
+        "kind": "denominator",
+        "text": "比べている 2 つの側の行数がそろっていません。分かれ道が真の側は 23 行、偽の側は 9 行で、偽の側で崩れた行は 1 行だけです。仮説の向きは、この 1 行が動くだけで変わる大きさの分母に載っている可能性があります。さらに行は局の中で重なっており、真の 23 行は 9 局、偽の 9 行は 6 局から出ています。行数は局数ではありません。",
+        "observations": [
+          {
+            "obsId": "obs.time.decisionContext",
+            "path": "items[obsId=obs.time.decisionContext].value[] のうち collapse が null でない行を fork と collapse で数え、gameNo の種類数も数えた",
+            "value": {
+              "judgedForkTrueRows": 23,
+              "judgedForkFalseRows": 9,
+              "collapseTrueAmongForkFalse": 1,
+              "forkTrueGames": 9,
+              "forkFalseGames": 6
+            },
+            "unit": "行・局"
+          }
+        ]
+      },
+      {
+        "kind": "denominator",
+        "text": "判定できた 40 行は写し全体 182 行の一部にすぎません。分かれ道が真の行は写しに 107 行、偽の行は 56 行ありますが、崩れを判定できたのはそれぞれ 23 行と 9 行です。崩れを判定できない 142 行の中にも、分かれ道が真の行が 84 行、偽の行が 47 行あります。また判定できた 40 行は 18 局のうち 14 局からで、4 局は 1 行も入っていません。分かれ道が測れていない行(fork が null)も 19 行あり、そのうち判定できた 8 行では 1 行が崩れています。これらの行は「分かれ道ではない」ではなく「測れていない」なので、偽の側にも真の側にも入りません。",
+        "observations": [
+          {
+            "obsId": "obs.time.decisionContext",
+            "path": "items[obsId=obs.time.decisionContext].value[] の全行を fork と collapse で数え、gameNo の種類数も数えた",
+            "value": {
+              "rows": 182,
+              "judgedRows": 40,
+              "forkTrueAllRows": 107,
+              "forkFalseAllRows": 56,
+              "forkNullAllRows": 19,
+              "judgedForkTrueRows": 23,
+              "judgedForkFalseRows": 9,
+              "unjudgedForkTrueRows": 84,
+              "unjudgedForkFalseRows": 47,
+              "unjudgedForkNullRows": 11,
+              "judgedForkNullRows": 8,
+              "collapseTrueAmongForkNull": 1,
+              "judgedGames": 14,
+              "allGames": 18
+            },
+            "unit": "行・局"
+          }
+        ]
+      },
+      {
+        "kind": "denominator",
+        "text": "評価の帯で分けると、比べる升がさらに小さくなります。level の 25 行では、分かれ道が真の 12 行のうち崩れは 6 行、偽の 6 行のうち 1 行です。ahead の 15 行では、真の 11 行のうち 2 行、偽の 3 行のうち 0 行です。帯ごとに見ると、偽の側は 6 行と 3 行まで下がります。",
+        "observations": [
+          {
+            "obsId": "obs.time.decisionContext",
+            "path": "items[obsId=obs.time.decisionContext].value[] のうち collapse が null でない行を evalBand で分け、その中で fork と collapse を数えた",
+            "value": {
+              "level": {
+                "rows": 25,
+                "forkTrueRows": 12,
+                "collapseTrueAmongForkTrue": 6,
+                "forkFalseRows": 6,
+                "collapseTrueAmongForkFalse": 1
+              },
+              "ahead": {
+                "rows": 15,
+                "forkTrueRows": 11,
+                "collapseTrueAmongForkTrue": 2,
+                "forkFalseRows": 3,
+                "collapseTrueAmongForkFalse": 0
+              }
+            },
+            "unit": "行"
+          }
+        ]
+      },
+      {
+        "kind": "alternative",
+        "text": "段(序盤・中盤・終盤)の偏りで同じ観測が説明できる可能性があります。判定できた行のうち、崩れたのは中盤が 13 行中 6 行、序盤が 19 行中 4 行、終盤が 8 行中 0 行です。一方、分かれ道が真の 23 行のうち中盤は 12 行を占め、偽の 9 行で中盤は 1 行しかありません。崩れが分かれ道の行に寄って見えるのは、分かれ道が真の行が中盤に寄っているためという読みも立ちます。",
+        "observations": [
+          {
+            "obsId": "obs.time.decisionContext",
+            "path": "items[obsId=obs.time.decisionContext].value[] のうち collapse が null でない行を phase で分け、崩れた行と fork の内訳を数えた",
+            "value": {
+              "early": {
+                "rows": 19,
+                "collapseTrueRows": 4
+              },
+              "mid": {
+                "rows": 13,
+                "collapseTrueRows": 6
+              },
+              "late": {
+                "rows": 8,
+                "collapseTrueRows": 0
+              },
+              "forkTrueMidRows": 12,
+              "forkFalseMidRows": 1
+            },
+            "unit": "行"
+          }
+        ]
+      },
+      {
+        "kind": "alternative",
+        "text": "消費の帯の偏りで説明できる可能性もあります。判定できた行で崩れた 10 行はすべて ≤9 の帯にあり、>9 の帯の 8 行は 1 行も崩れていません。分かれ道が真の 23 行のうち >9 は 5 行、偽の 9 行のうち >9 は 3 行で、偽の側のほうが「崩れた行が 1 つも無い帯」を多く含んでいる形です。",
+        "observations": [
+          {
+            "obsId": "obs.time.decisionContext",
+            "path": "items[obsId=obs.time.decisionContext].value[] のうち collapse が null でない行を spentBucket で分け、崩れた行と fork の内訳を数えた",
+            "value": {
+              "le9": {
+                "rows": 32,
+                "collapseTrueRows": 10
+              },
+              "gt9": {
+                "rows": 8,
+                "collapseTrueRows": 0
+              },
+              "forkTrueGt9Rows": 5,
+              "forkFalseGt9Rows": 3
+            },
+            "unit": "行"
+          }
+        ]
+      },
+      {
+        "kind": "alternative",
+        "text": "定義の上で重なっている可能性もあります。分かれ道の旗も崩れの旗も、どちらもエンジンの評価から作られた旗です。分かれ道が真の行は、実戦の手が第 1 候補から離れていた行として立ちます。評価が下がった行が分かれ道の行に寄って見えることは、2 つの旗が同じ材料から作られていることの反映という読みも立ちます。これは新しい仮説の候補であって、正しさの判定ではありません。",
+        "observations": [
+          {
+            "obsId": "obs.time.decisionContext",
+            "path": "items[obsId=obs.time.decisionContext].value[] の全行を fork と collapse の組で数えた交差表",
+            "value": {
+              "forkTrue_collapseTrue": 8,
+              "forkTrue_collapseFalse": 15,
+              "forkTrue_collapseNull": 84,
+              "forkFalse_collapseTrue": 1,
+              "forkFalse_collapseFalse": 8,
+              "forkFalse_collapseNull": 47,
+              "forkNull_collapseTrue": 1,
+              "forkNull_collapseFalse": 7,
+              "forkNull_collapseNull": 11
+            },
+            "unit": "行"
+          }
+        ]
+      }
+    ],
+    "result": "weakened",
+    "provenance": {
+      "inputs": [
+        "records/obs-3/p4-min3-r2/00-obs_snapshot.p4.min3.r2b.json"
+      ]
+    }
+  },
+  "prediction": {
+    "writtenAt": "2026-09-26",
+    "window": "next_20_games_same_time_limit",
+    "metric": "obs.time.decisionContext のうち collapse が null でない行で、fork が true の行の collapse 率 から fork が false の行の collapse 率 を引いた差(百分率)",
+    "comparator": ">",
+    "value": 0,
+    "alsoRequires": [
+      {
+        "metric": "obs.time.decisionContext のうち collapse が null でなく fork が true の行数",
+        "comparator": ">=",
+        "value": 20
+      },
+      {
+        "metric": "obs.time.decisionContext のうち collapse が null でなく fork が false の行数",
+        "comparator": ">=",
+        "value": 15
+      },
+      {
+        "metric": "obs.time.decisionContext のうち collapse が null でない行数",
+        "comparator": ">=",
+        "value": 40
+      }
+    ]
+  },
+  "status": "proposed",
+  "knowledge": {
+    "kind": "discovered",
+    "reviewStatus": "draft",
+    "origin": {
+      "kifu": "p4/min3",
+      "lane": "time"
+    },
+    "range": "this_user"
+  },
+  "provenance": {
+    "gitHead": "8f628f2",
+    "inputs": [
+      "records/obs-3/p4-min3-r2/00-obs_snapshot.p4.min3.r2b.json"
+    ],
+    "excludedInputs": []
+  }
+}

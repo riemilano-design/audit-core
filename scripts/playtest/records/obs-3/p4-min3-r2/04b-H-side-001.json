@@ -1,0 +1,508 @@
+{
+  "schemaVersion": "0.3",
+  "hypothesisId": "H-p4-min3r2bside-001",
+  "subject": {
+    "customer": "p4",
+    "groups": [
+      "3 分"
+    ],
+    "gamesCount": 18
+  },
+  "scope": "this_user",
+  "lane": "side",
+  "statement": "分かれ道として局面つきで見えている 161 回のうち、エンジンの第一候補が相手玉側だった 62 回では実戦も相手玉側だったのが 38 回(61%)でした。第一候補が自玉側だった 56 回では実戦も自玉側だったのが 17 回(30%)で、同じ 56 回のうち 21 回は実戦が相手玉側、3 回はどちらにも当たる手でした。相手玉側の合図より自玉側の合図のほうが実戦の手に届きにくい、という読みです。",
+  "observations": [
+    {
+      "obsId": "obs.direct.answer",
+      "path": "obs_direct answers[] の行数(写しは 3 分の組だけに絞られている。obs.direct.counts の totalCount とは分母が違う ― P-89)",
+      "value": 161,
+      "unit": "行"
+    },
+    {
+      "obsId": "obs.direct.answer",
+      "path": "obs_direct answers[] のうち top1Side == \"attack\" の行数",
+      "value": 62,
+      "unit": "行"
+    },
+    {
+      "obsId": "obs.direct.answer",
+      "path": "obs_direct answers[] のうち top1Side == \"attack\" かつ actualSide == \"attack\" の行数",
+      "value": 38,
+      "unit": "行",
+      "derived": {
+        "kind": "percent",
+        "numerator": {
+          "obsId": "obs.direct.answer",
+          "value": 38
+        },
+        "denominator": {
+          "obsId": "obs.direct.answer",
+          "value": 62
+        }
+      }
+    },
+    {
+      "obsId": "obs.direct.answer",
+      "path": "obs_direct answers[] のうち top1Side == \"attack\" かつ actualSide == \"defense\" の行数",
+      "value": 11,
+      "unit": "行"
+    },
+    {
+      "obsId": "obs.direct.answer",
+      "path": "obs_direct answers[] のうち top1Side == \"attack\" かつ actualSide == \"both\" の行数(一致の分子に足さない ― 2026-09-26 の決め)",
+      "value": 3,
+      "unit": "行"
+    },
+    {
+      "obsId": "obs.direct.answer",
+      "path": "obs_direct answers[] のうち top1Side == \"defense\" の行数",
+      "value": 56,
+      "unit": "行"
+    },
+    {
+      "obsId": "obs.direct.answer",
+      "path": "obs_direct answers[] のうち top1Side == \"defense\" かつ actualSide == \"defense\" の行数",
+      "value": 17,
+      "unit": "行",
+      "derived": {
+        "kind": "percent",
+        "numerator": {
+          "obsId": "obs.direct.answer",
+          "value": 17
+        },
+        "denominator": {
+          "obsId": "obs.direct.answer",
+          "value": 56
+        }
+      }
+    },
+    {
+      "obsId": "obs.direct.answer",
+      "path": "obs_direct answers[] のうち top1Side == \"defense\" かつ actualSide == \"attack\" の行数",
+      "value": 21,
+      "unit": "行"
+    },
+    {
+      "obsId": "obs.direct.answer",
+      "path": "obs_direct answers[] のうち top1Side == \"defense\" かつ actualSide == \"both\" の行数(一致の分子に足さない)",
+      "value": 3,
+      "unit": "行"
+    },
+    {
+      "obsId": "obs.fork.values",
+      "path": "whatif values(側の決め方: sideZoneRadius・attackZoneRadius・hitsDefenderRadius・sideVersion。道具の定義であって書き手が決めた定義ではない)",
+      "value": {
+        "sideZoneRadius": 2,
+        "attackZoneRadius": 3,
+        "hitsDefenderRadius": 2,
+        "sideVersion": 2,
+        "minLossCp": 600,
+        "startPly": 17
+      }
+    },
+    {
+      "obsId": "obs.time.decisionContext",
+      "path": "obs_geo decisionContext[] のうち fork == true の行数(この列は r2b の写しで初めて測れた。r2 では 182 行すべて null)",
+      "value": 107,
+      "unit": "行"
+    },
+    {
+      "obsId": "obs.geo.moveCombination",
+      "path": "obs_geo decisionContext[] を obs_geo moves[] と (gameNo, kifPly) で突き合わせた行(182 行すべて突き合った) のうち fork == true かつ side == \"attack\" の行数",
+      "value": 51,
+      "unit": "行"
+    },
+    {
+      "obsId": "obs.geo.moveCombination",
+      "path": "obs_geo decisionContext[] を obs_geo moves[] と (gameNo, kifPly) で突き合わせた行(182 行すべて突き合った) のうち fork == true かつ side == \"defense\" の行数",
+      "value": 23,
+      "unit": "行"
+    },
+    {
+      "obsId": "obs.time.decisionContext",
+      "path": "obs_geo decisionContext[] のうち fork == false の行数",
+      "value": 56,
+      "unit": "行"
+    },
+    {
+      "obsId": "obs.geo.moveCombination",
+      "path": "obs_geo decisionContext[] を obs_geo moves[] と (gameNo, kifPly) で突き合わせた行(182 行すべて突き合った) のうち fork == false かつ side == \"attack\" の行数",
+      "value": 25,
+      "unit": "行"
+    },
+    {
+      "obsId": "obs.geo.moveCombination",
+      "path": "obs_geo decisionContext[] を obs_geo moves[] と (gameNo, kifPly) で突き合わせた行(182 行すべて突き合った) のうち fork == false かつ side == \"defense\" の行数",
+      "value": 17,
+      "unit": "行"
+    },
+    {
+      "obsId": "obs.time.decisionContext",
+      "path": "obs_geo decisionContext[] のうち fork == null(分かれ道かどうかが測れていない)の行数",
+      "value": 19,
+      "unit": "行"
+    }
+  ],
+  "counterEvidence": {
+    "attempted": true,
+    "items": [
+      {
+        "kind": "counterexample",
+        "text": "局ごとに見ると向きが逆になる局が実在します。gameNo 4 では、第一候補が自玉側だった行が 10 あり、そのうち実戦も自玉側だったのが 5 でした。同じ局で第一候補が相手玉側だった行は 2 で、そのうち実戦も相手玉側だったのは 0 です。gameNo 6 でも、相手玉側だった行 7 のうち実戦も相手玉側だったのは 1、自玉側だった行 5 のうち実戦も自玉側だったのは 2 でした。全体の向きが、どの局でも同じ向きに出ているわけではない、という読みです。",
+        "observations": [
+          {
+            "obsId": "obs.direct.answer",
+            "path": "反例に使った局の gameNo(1 つ目)",
+            "value": 4,
+            "unit": "局番号"
+          },
+          {
+            "obsId": "obs.direct.answer",
+            "path": "gameNo 4 の行のうち top1Side == \"defense\" の行数",
+            "value": 10,
+            "unit": "行"
+          },
+          {
+            "obsId": "obs.direct.answer",
+            "path": "gameNo 4 の行のうち top1Side == \"defense\" かつ actualSide == \"defense\" の行数",
+            "value": 5,
+            "unit": "行"
+          },
+          {
+            "obsId": "obs.direct.answer",
+            "path": "gameNo 4 の行のうち top1Side == \"attack\" の行数",
+            "value": 2,
+            "unit": "行"
+          },
+          {
+            "obsId": "obs.direct.answer",
+            "path": "gameNo 4 の行のうち top1Side == \"attack\" かつ actualSide == \"attack\" の行数",
+            "value": 0,
+            "unit": "行"
+          },
+          {
+            "obsId": "obs.direct.answer",
+            "path": "反例に使った局の gameNo(2 つ目)",
+            "value": 6,
+            "unit": "局番号"
+          },
+          {
+            "obsId": "obs.direct.answer",
+            "path": "gameNo 6 の行のうち top1Side == \"attack\" の行数",
+            "value": 7,
+            "unit": "行"
+          },
+          {
+            "obsId": "obs.direct.answer",
+            "path": "gameNo 6 の行のうち top1Side == \"attack\" かつ actualSide == \"attack\" の行数",
+            "value": 1,
+            "unit": "行"
+          },
+          {
+            "obsId": "obs.direct.answer",
+            "path": "gameNo 6 の行のうち top1Side == \"defense\" の行数",
+            "value": 5,
+            "unit": "行"
+          },
+          {
+            "obsId": "obs.direct.answer",
+            "path": "gameNo 6 の行のうち top1Side == \"defense\" かつ actualSide == \"defense\" の行数",
+            "value": 2,
+            "unit": "行"
+          }
+        ]
+      },
+      {
+        "kind": "denominator",
+        "text": "分母は局の数ではなく行(局面)の数です。自玉側の 56 行は、行のある 17 局のうち 13 局から出ており、そのうち 10 行は gameNo 4、8 行は gameNo 9 の 1 局ずつに寄っています。相手玉側の 62 行は 16 局から出ており、最も多い局で 10 行です。56 と 62 を、互いに独立した 56 回・62 回として読むと数を取り違える可能性があります。",
+        "observations": [
+          {
+            "obsId": "obs.direct.answer",
+            "path": "3 分の組の answers[] のうち top1Side == \"defense\" の行数",
+            "value": 56,
+            "unit": "行"
+          },
+          {
+            "obsId": "obs.direct.answer",
+            "path": "3 分の組の answers[] に行が 1 つ以上ある局の数(gameNo の異なり数)",
+            "value": 17,
+            "unit": "局"
+          },
+          {
+            "obsId": "obs.direct.answer",
+            "path": "top1Side == \"defense\" の行が 1 つ以上ある局の数",
+            "value": 13,
+            "unit": "局"
+          },
+          {
+            "obsId": "obs.direct.answer",
+            "path": "top1Side == \"defense\" の行が最も多い局の行数",
+            "value": 10,
+            "unit": "行"
+          },
+          {
+            "obsId": "obs.direct.answer",
+            "path": "top1Side == \"defense\" の行が最も多い局の gameNo",
+            "value": 4,
+            "unit": "局番号"
+          },
+          {
+            "obsId": "obs.direct.answer",
+            "path": "top1Side == \"defense\" の行が 2 番目に多い局の行数",
+            "value": 8,
+            "unit": "行"
+          },
+          {
+            "obsId": "obs.direct.answer",
+            "path": "top1Side == \"defense\" の行が 2 番目に多い局の gameNo",
+            "value": 9,
+            "unit": "局番号"
+          },
+          {
+            "obsId": "obs.direct.answer",
+            "path": "3 分の組の answers[] のうち top1Side == \"attack\" の行数",
+            "value": 62,
+            "unit": "行"
+          },
+          {
+            "obsId": "obs.direct.answer",
+            "path": "top1Side == \"attack\" の行が 1 つ以上ある局の数",
+            "value": 16,
+            "unit": "局"
+          },
+          {
+            "obsId": "obs.direct.answer",
+            "path": "top1Side == \"attack\" の行が最も多い局の行数",
+            "value": 10,
+            "unit": "行"
+          }
+        ]
+      },
+      {
+        "kind": "denominator",
+        "text": "比べた 2 つの分母は 161 行のうちの 62 と 56 で、第一候補の側が none だった 32 行と both だった 11 行は、どちらの分母にも分子にも入っていません。また obs.direct.counts の top1SideCounts は組で絞られておらず(attack 67・defense 56、totalCount 167、totalForkCount 277)、defense だけが 56 で行から数えた値と同じになります。この一致を、組で絞れていることの確かめには使えない点に注意が要ります。",
+        "observations": [
+          {
+            "obsId": "obs.direct.answer",
+            "path": "3 分の組の answers[] の行数",
+            "value": 161,
+            "unit": "行"
+          },
+          {
+            "obsId": "obs.direct.answer",
+            "path": "3 分の組の answers[] のうち top1Side == \"attack\" の行数",
+            "value": 62,
+            "unit": "行"
+          },
+          {
+            "obsId": "obs.direct.answer",
+            "path": "3 分の組の answers[] のうち top1Side == \"defense\" の行数",
+            "value": 56,
+            "unit": "行"
+          },
+          {
+            "obsId": "obs.direct.answer",
+            "path": "3 分の組の answers[] のうち top1Side == \"none\" の行数(どちらの分母にも入らない)",
+            "value": 32,
+            "unit": "行"
+          },
+          {
+            "obsId": "obs.direct.answer",
+            "path": "3 分の組の answers[] のうち top1Side == \"both\" の行数(どちらの分母にも入らない)",
+            "value": 11,
+            "unit": "行"
+          },
+          {
+            "obsId": "obs.direct.counts",
+            "path": "counts.top1SideCounts.attack(組で絞られていない ― 既知事項 P-89)",
+            "value": 67,
+            "unit": "行"
+          },
+          {
+            "obsId": "obs.direct.counts",
+            "path": "counts.top1SideCounts.defense(組で絞られていない)",
+            "value": 56,
+            "unit": "行"
+          },
+          {
+            "obsId": "obs.direct.counts",
+            "path": "counts.totalCount(組で絞られていない)",
+            "value": 167,
+            "unit": "行"
+          },
+          {
+            "obsId": "obs.direct.counts",
+            "path": "counts.totalForkCount(別の数え方)",
+            "value": 277,
+            "unit": "回"
+          }
+        ]
+      },
+      {
+        "kind": "alternative",
+        "text": "同じ観測は、実戦の手の側そのものの偏りでも説明がつく可能性があります。161 行のうち実戦が相手玉側だった行は 76、自玉側だった行は 38 です。第一候補の側が none だった 32 行でも実戦は相手玉側 12・自玉側 8、both だった 11 行でも相手玉側 5・自玉側 2 で、第一候補の側にかかわらず実戦は相手玉側の行のほうが多く出ています。合図の届きやすさの差ではなく、実戦の手が相手玉側に寄っていることの表れ、という別の読みが残ります。",
+        "observations": [
+          {
+            "obsId": "obs.direct.answer",
+            "path": "3 分の組の answers[] の行数",
+            "value": 161,
+            "unit": "行"
+          },
+          {
+            "obsId": "obs.direct.answer",
+            "path": "3 分の組の answers[] のうち actualSide == \"attack\" の行数(第一候補の側で分けない)",
+            "value": 76,
+            "unit": "行"
+          },
+          {
+            "obsId": "obs.direct.answer",
+            "path": "3 分の組の answers[] のうち actualSide == \"defense\" の行数(第一候補の側で分けない)",
+            "value": 38,
+            "unit": "行"
+          },
+          {
+            "obsId": "obs.direct.answer",
+            "path": "3 分の組の answers[] のうち top1Side == \"none\" の行数",
+            "value": 32,
+            "unit": "行"
+          },
+          {
+            "obsId": "obs.direct.answer",
+            "path": "top1Side == \"none\" かつ actualSide == \"attack\" の行数",
+            "value": 12,
+            "unit": "行"
+          },
+          {
+            "obsId": "obs.direct.answer",
+            "path": "top1Side == \"none\" かつ actualSide == \"defense\" の行数",
+            "value": 8,
+            "unit": "行"
+          },
+          {
+            "obsId": "obs.direct.answer",
+            "path": "3 分の組の answers[] のうち top1Side == \"both\" の行数",
+            "value": 11,
+            "unit": "行"
+          },
+          {
+            "obsId": "obs.direct.answer",
+            "path": "top1Side == \"both\" かつ actualSide == \"attack\" の行数",
+            "value": 5,
+            "unit": "行"
+          },
+          {
+            "obsId": "obs.direct.answer",
+            "path": "top1Side == \"both\" かつ actualSide == \"defense\" の行数",
+            "value": 2,
+            "unit": "行"
+          }
+        ]
+      },
+      {
+        "kind": "alternative",
+        "text": "側の名づけ方そのものが左右非対称である、という別の読みもできます。道具の値は attackZoneRadius が 3、sideZoneRadius が 2、hitsDefenderRadius が 2 で、相手玉側と数える範囲のほうが広く取られています。加えて、分かれ道かどうかとは別に測った列でも同じ向きの偏りが出ています ― fork == true の 107 行では側が attack 51・defense 23、fork == false の 56 行でも attack 25・defense 17、fork == null(測れていない)の行は 19 でどちらにも数えていません。偏りが分かれ道の内外どちらにも出ているなら、分かれ道での合図の届き方の話とは別の要因が残ります。",
+        "observations": [
+          {
+            "obsId": "obs.fork.values",
+            "path": "values.attackZoneRadius",
+            "value": 3
+          },
+          {
+            "obsId": "obs.fork.values",
+            "path": "values.sideZoneRadius",
+            "value": 2
+          },
+          {
+            "obsId": "obs.fork.values",
+            "path": "values.hitsDefenderRadius",
+            "value": 2
+          },
+          {
+            "obsId": "obs.time.decisionContext",
+            "path": "decisionContext[] のうち fork == true の行数",
+            "value": 107,
+            "unit": "行"
+          },
+          {
+            "obsId": "obs.geo.moveCombination",
+            "path": "decisionContext[] を moves[] と (gameNo, kifPly) で突き合わせた行のうち fork == true かつ side == \"attack\" の行数",
+            "value": 51,
+            "unit": "行"
+          },
+          {
+            "obsId": "obs.geo.moveCombination",
+            "path": "decisionContext[] を moves[] と (gameNo, kifPly) で突き合わせた行のうち fork == true かつ side == \"defense\" の行数",
+            "value": 23,
+            "unit": "行"
+          },
+          {
+            "obsId": "obs.time.decisionContext",
+            "path": "decisionContext[] のうち fork == false の行数",
+            "value": 56,
+            "unit": "行"
+          },
+          {
+            "obsId": "obs.geo.moveCombination",
+            "path": "decisionContext[] を moves[] と (gameNo, kifPly) で突き合わせた行のうち fork == false かつ side == \"attack\" の行数",
+            "value": 25,
+            "unit": "行"
+          },
+          {
+            "obsId": "obs.geo.moveCombination",
+            "path": "decisionContext[] を moves[] と (gameNo, kifPly) で突き合わせた行のうち fork == false かつ side == \"defense\" の行数",
+            "value": 17,
+            "unit": "行"
+          },
+          {
+            "obsId": "obs.time.decisionContext",
+            "path": "decisionContext[] のうち fork == null(測れていない)の行数",
+            "value": 19,
+            "unit": "行"
+          }
+        ]
+      }
+    ],
+    "result": "weakened",
+    "provenance": {
+      "inputs": [
+        "records/obs-3/p4-min3-r2/00-obs_snapshot.p4.min3.r2b.json"
+      ]
+    }
+  },
+  "prediction": {
+    "writtenAt": "2026-09-26",
+    "window": "next_20_games_same_time_limit",
+    "metric": "obs.direct.answer の行のうち top1Side が defense のものに占める、actualSide も defense だった行の割合(both は分子に足さない。3 分の組だけで数える)",
+    "comparator": "<=",
+    "value": 0.45,
+    "alsoRequires": [
+      {
+        "metric": "obs.direct.answer の行のうち top1Side が defense のものの行数(3 分の組だけで数えた分母)",
+        "comparator": ">=",
+        "value": 30
+      },
+      {
+        "metric": "obs.direct.answer の行のうち top1Side が attack のものの行数(比べる側の分母)",
+        "comparator": ">=",
+        "value": 30
+      }
+    ]
+  },
+  "status": "proposed",
+  "knowledge": {
+    "kind": "discovered",
+    "reviewStatus": "draft",
+    "origin": {
+      "kifu": "p4/min3",
+      "lane": "side"
+    },
+    "range": "this_user"
+  },
+  "provenance": {
+    "gitHead": "302bc37",
+    "inputs": [
+      "records/obs-3/p4-min3-r2/00-obs_snapshot.p4.min3.r2b.json"
+    ],
+    "excludedInputs": []
+  }
+}

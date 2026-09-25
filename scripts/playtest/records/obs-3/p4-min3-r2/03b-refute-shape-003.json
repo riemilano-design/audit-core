@@ -1,0 +1,118 @@
+{
+  "attempted": true,
+  "items": [
+    {
+      "kind": "counterexample",
+      "text": "「どの段まで進んだのかを外から見分けられている場面がそもそも少ない」と逆の向きの観測が、同じ写しの別の列にあります。自分側の戦型は最後の段(completed)が 607、相手側の形は 33、相手の狙いは matched が 705 で、いずれも 0 ではありません。自分側の形(completed は 0)で見えた向きを、認識の列の全体に広げて読むことはできない可能性があります。",
+      "observations": [
+        {
+          "obsId": "obs.vocab.openingStatus",
+          "path": "recognition byGroup[group].statusCounts.opening.{self,opponent}",
+          "value": {
+            "self": { "none": 44534, "forming": 4755, "completed": 607, "matched": 0 },
+            "opponent": { "none": 12563, "forming": 498, "completed": 601, "matched": 0 }
+          }
+        },
+        {
+          "obsId": "obs.vocab.shapeStatus",
+          "path": "recognition byGroup[group].statusCounts.shape.{self,opponent}",
+          "value": {
+            "self": { "none": 22558, "forming": 5360, "completed": 0, "matched": 0 },
+            "opponent": { "none": 15549, "forming": 5208, "completed": 33, "matched": 0 }
+          }
+        },
+        {
+          "obsId": "obs.vocab.intentStatus",
+          "path": "recognition byGroup[group].statusCounts.intent.{self,opponent}",
+          "value": {
+            "self": { "none": 0, "forming": 0, "completed": 0, "matched": 0 },
+            "opponent": { "none": 8505, "forming": 1482, "completed": 0, "matched": 705 }
+          }
+        }
+      ]
+    },
+    {
+      "kind": "counterexample",
+      "text": "「止まり方が局ごとに違うのか同じなのかを、いまの数だけでは言い分けられない」について、同じ写しには局数で数えた欄が残っています。自分側の「最も近づいた形」があとわずかで足りた局を数えた欄(selfClosestOneAwayGames)は 13 で、0 ではありません。仮説が引いた語彙の数(completeTotal など)は局面やレコードをまたいだ延べで局数ではないため、局ごとの止まり方は、この局数の欄からなら見分けられる余地が残る、という読みです。",
+      "observations": [
+        {
+          "obsId": "obs.vocab.shapeMissingSummary",
+          "path": "recognition byGroup[group].{shapeMissingTotal,selfClosestOneAwayGames}",
+          "value": { "shapeMissingTotal": 31804, "selfClosestOneAwayGames": 13 }
+        },
+        {
+          "obsId": "obs.vocab.shapeMovedRequiredSummary",
+          "path": "recognition byGroup[group].shapeMovedRequiredCompleteTotal, recognition movedRequiredZeroShapeCounts.{self,opponent}",
+          "value": { "completeTotal": 9, "zeroCount": { "self": 0, "opponent": 0 } }
+        }
+      ]
+    },
+    {
+      "kind": "denominator",
+      "text": "仮説は「同じ写しで」として 9 と 657・4703 を並べていますが、これらは分母の出どころが違います。9(shapeMovedRequiredSummary.completeTotal)は形の id をまたいだ局の延べ、657・4703(exposure)は局面 × レコードの延べです。さらに露出の側は状態が none の行を数えないのに対し、statusCounts の 22558・5360・0・0 は none の行も数えます。同じ母集団の内訳のように並べて読むことはできない可能性があります。",
+      "observations": [
+        {
+          "obsId": "obs.vocab.shapeMovedRequiredSummary",
+          "path": "recognition byGroup[group].shapeMovedRequiredCompleteTotal",
+          "value": { "completeTotal": 9, "zeroCount": { "self": 0, "opponent": 0 } }
+        },
+        {
+          "obsId": "obs.vocab.exposure",
+          "path": "recognition byGroup[group].exposure[\"D''\"].shape.self.{named,hedged,hidden}",
+          "value": { "named": 0, "hedged": 657, "hidden": 4703 }
+        },
+        {
+          "obsId": "obs.vocab.shapeStatus",
+          "path": "recognition byGroup[group].statusCounts.shape.self.{none,forming,completed,matched}",
+          "value": { "none": 22558, "forming": 5360, "completed": 0, "matched": 0 }
+        }
+      ]
+    },
+    {
+      "kind": "alternative",
+      "text": "9 を「そろっていた」の数と読まない別の説明が残ります。同じ写しの statusCounts では自分側の形の completed は 0 です。数え直しは初期位置にある必要駒を分母から外す決まりなので、外した駒がその後に動いた局でも「そろった」側に数えられ得ます。9 は対局の中身ではなく数え方の決まりから出ている、という読みです。",
+      "observations": [
+        {
+          "obsId": "obs.vocab.shapeMovedRequiredSummary",
+          "path": "recognition byGroup[group].shapeMovedRequiredCompleteTotal",
+          "value": { "completeTotal": 9, "zeroCount": { "self": 0, "opponent": 0 } }
+        },
+        {
+          "obsId": "obs.vocab.shapeStatus",
+          "path": "recognition byGroup[group].statusCounts.shape.self.{none,forming,completed,matched}",
+          "value": { "none": 22558, "forming": 5360, "completed": 0, "matched": 0 }
+        }
+      ]
+    },
+    {
+      "kind": "alternative",
+      "text": "自分側の形の named が 0 であることは、「段が見分けられている場面が少ない」からではなく、断定して名前を出せる段の行がそもそも無いこと(statusCounts の自分側の形は completed も matched も 0)だけで説明がつく、という別の読みがあります。同じ写しでは自分側の戦型も named が 0 ですが、そちらは completed が 607 あります。露出の決まり方だけで 0 になっている可能性が残り、これは次の組でも同じ決まりのまま測られる見込みです。",
+      "observations": [
+        {
+          "obsId": "obs.vocab.exposure",
+          "path": "recognition byGroup[group].exposure[\"D''\"].{shape,opening}.self.{named,hedged,hidden}",
+          "value": {
+            "shape": { "self": { "named": 0, "hedged": 657, "hidden": 4703 } },
+            "opening": { "self": { "named": 0, "hedged": 2238, "hidden": 3124 } }
+          }
+        },
+        {
+          "obsId": "obs.vocab.shapeStatus",
+          "path": "recognition byGroup[group].statusCounts.shape.self.{none,forming,completed,matched}",
+          "value": { "none": 22558, "forming": 5360, "completed": 0, "matched": 0 }
+        },
+        {
+          "obsId": "obs.vocab.openingStatus",
+          "path": "recognition byGroup[group].statusCounts.opening.self.{none,forming,completed,matched}",
+          "value": { "none": 44534, "forming": 4755, "completed": 607, "matched": 0 }
+        }
+      ]
+    }
+  ],
+  "result": "weakened",
+  "provenance": {
+    "inputs": [
+      "records/obs-3/p4-min3-r2/00-obs_snapshot.p4.min3.r2b.json"
+    ]
+  }
+}

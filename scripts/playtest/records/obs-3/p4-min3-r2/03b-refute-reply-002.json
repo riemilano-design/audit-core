@@ -1,0 +1,327 @@
+{
+  "attempted": true,
+  "items": [
+    {
+      "kind": "counterexample",
+      "text": "局ごとに分けると、向きが逆になる局があります。両方の群に手がある局は 17 で、そのうち 3 局(gameNo 2・8・12)では、写しに入っている側の「取り返し」の割り当てが写しに入っていない側より少なくありません。gameNo 8 は写しに入っている手が 10 でそのうち「取り返し」が 4、写しに入っていない手が 1 でそのうち「取り返し」が 0 です。gameNo 2 は写しの中が 3 で「取り返し」2、写しの外が 6 で「取り返し」3。gameNo 12 は写しの中が 2 で「取り返し」1、写しの外が 13 で「取り返し」4。全体の差は、局をまたいで足した後にだけ見えている可能性があります。",
+      "observations": [
+        {
+          "obsId": "obs.geo.replyToCapture",
+          "path": "replyToCapture が「相手は取っていない」以外の手が、obs_geo decisionContext[] に行がある側と無い側の両方に 1 手以上ある局の数",
+          "value": 17,
+          "unit": "局"
+        },
+        {
+          "obsId": "obs.geo.replyToCapture",
+          "path": "上の 17 局のうち、写しに入っている側の「取り返し」の割り当てが写しに入っていない側を下回らない局の数",
+          "value": 3,
+          "unit": "局"
+        },
+        {
+          "obsId": "obs.geo.replyToCapture",
+          "path": "向きが逆になった局の gameNo(1 つ目)",
+          "value": 8,
+          "unit": "局番号"
+        },
+        {
+          "obsId": "obs.time.decisionContext",
+          "path": "gameNo 8 の、replyToCapture が「相手は取っていない」以外で obs_geo decisionContext[] に同じ gameNo・kifPly の行がある手の数",
+          "value": 10,
+          "unit": "手"
+        },
+        {
+          "obsId": "obs.geo.replyToCapture",
+          "path": "gameNo 8 の上の手のうち「取り返し」である手の数",
+          "value": 4,
+          "unit": "手"
+        },
+        {
+          "obsId": "obs.geo.replyToCapture",
+          "path": "gameNo 8 の、replyToCapture が「相手は取っていない」以外で obs_geo decisionContext[] に同じ gameNo・kifPly の行が無い手の数",
+          "value": 1,
+          "unit": "手"
+        },
+        {
+          "obsId": "obs.geo.replyToCapture",
+          "path": "gameNo 8 の上の手のうち「取り返し」である手の数",
+          "value": 0,
+          "unit": "手"
+        },
+        {
+          "obsId": "obs.geo.replyToCapture",
+          "path": "向きが逆になった局の gameNo(2 つ目)",
+          "value": 2,
+          "unit": "局番号"
+        },
+        {
+          "obsId": "obs.time.decisionContext",
+          "path": "gameNo 2 の、replyToCapture が「相手は取っていない」以外で obs_geo decisionContext[] に同じ gameNo・kifPly の行がある手の数",
+          "value": 3,
+          "unit": "手"
+        },
+        {
+          "obsId": "obs.geo.replyToCapture",
+          "path": "gameNo 2 の上の手のうち「取り返し」である手の数",
+          "value": 2,
+          "unit": "手"
+        },
+        {
+          "obsId": "obs.geo.replyToCapture",
+          "path": "gameNo 2 の、replyToCapture が「相手は取っていない」以外で obs_geo decisionContext[] に同じ gameNo・kifPly の行が無い手の数",
+          "value": 6,
+          "unit": "手"
+        },
+        {
+          "obsId": "obs.geo.replyToCapture",
+          "path": "gameNo 2 の上の手のうち「取り返し」である手の数",
+          "value": 3,
+          "unit": "手"
+        },
+        {
+          "obsId": "obs.geo.replyToCapture",
+          "path": "向きが逆になった局の gameNo(3 つ目)",
+          "value": 12,
+          "unit": "局番号"
+        },
+        {
+          "obsId": "obs.time.decisionContext",
+          "path": "gameNo 12 の、replyToCapture が「相手は取っていない」以外で obs_geo decisionContext[] に同じ gameNo・kifPly の行がある手の数",
+          "value": 2,
+          "unit": "手"
+        },
+        {
+          "obsId": "obs.geo.replyToCapture",
+          "path": "gameNo 12 の上の手のうち「取り返し」である手の数",
+          "value": 1,
+          "unit": "手"
+        },
+        {
+          "obsId": "obs.geo.replyToCapture",
+          "path": "gameNo 12 の、replyToCapture が「相手は取っていない」以外で obs_geo decisionContext[] に同じ gameNo・kifPly の行が無い手の数",
+          "value": 13,
+          "unit": "手"
+        },
+        {
+          "obsId": "obs.geo.replyToCapture",
+          "path": "gameNo 12 の上の手のうち「取り返し」である手の数",
+          "value": 4,
+          "unit": "手"
+        }
+      ]
+    },
+    {
+      "kind": "counterexample",
+      "text": "時間を使った側にも「取り返し」は実在します。写しに入っている 71 手のうち「取り返し」は 12 手で、そのうち 2 手は spentBucket が長いほうの帯(gameNo 2 の kifPly 57、gameNo 8 の kifPly 16)、残り 10 手は短いほうの帯にあります。取り返しがすぐ決まるという向きでは説明しにくい手が、写しの中に残っている可能性があります。",
+      "observations": [
+        {
+          "obsId": "obs.time.decisionContext",
+          "path": "obs_geo decisionContext[].spentBucket の列挙語(長いほうの帯)",
+          "value": ">9"
+        },
+        {
+          "obsId": "obs.time.decisionContext",
+          "path": "obs_geo decisionContext[].spentBucket の列挙語(短いほうの帯)",
+          "value": "≤9"
+        },
+        {
+          "obsId": "obs.time.decisionContext",
+          "path": "obs_geo decisionContext[] のうち spentBucket が「>9」で、同じ gameNo・kifPly の replyToCapture が「取り返し」である手の数",
+          "value": 2,
+          "unit": "手"
+        },
+        {
+          "obsId": "obs.time.decisionContext",
+          "path": "obs_geo decisionContext[] のうち spentBucket が「≤9」で、同じ gameNo・kifPly の replyToCapture が「取り返し」である手の数",
+          "value": 10,
+          "unit": "手"
+        },
+        {
+          "obsId": "obs.geo.replyToCapture",
+          "path": "10 秒以上の帯にある「取り返し」の 1 手目の gameNo",
+          "value": 2,
+          "unit": "局番号"
+        },
+        {
+          "obsId": "obs.geo.replyToCapture",
+          "path": "10 秒以上の帯にある「取り返し」の 1 手目の kifPly",
+          "value": 57,
+          "unit": "手目"
+        },
+        {
+          "obsId": "obs.geo.replyToCapture",
+          "path": "10 秒以上の帯にある「取り返し」の 2 手目の gameNo",
+          "value": 8,
+          "unit": "局番号"
+        },
+        {
+          "obsId": "obs.geo.replyToCapture",
+          "path": "10 秒以上の帯にある「取り返し」の 2 手目の kifPly",
+          "value": 16,
+          "unit": "手目"
+        }
+      ]
+    },
+    {
+      "kind": "denominator",
+      "text": "「写しに入っていない」は、本人の手のうち、写しに載る 2 つの帯に入らなかったもの全部を指します。obs_geo moves[] の本人の手は 580、obs_geo decisionContext[] の行は 182 で、写しの外は 398 手です。比べている 2 つの群の分母は 71 と 125 で、同じ 196 の分け方ではありますが、大きさが揃っておらず、写しの外では速さの違いが区別されていません。写しの中の「取り返し」12 手は、分母 71 の上に乗る小さい数です。",
+      "observations": [
+        {
+          "obsId": "obs.geo.moveCombination",
+          "path": "obs_geo moves[] の行の数(本人の手)",
+          "value": 580,
+          "unit": "手"
+        },
+        {
+          "obsId": "obs.time.decisionContext",
+          "path": "obs_geo decisionContext[] の行の数",
+          "value": 182,
+          "unit": "手"
+        },
+        {
+          "obsId": "obs.geo.moveCombination",
+          "path": "obs_geo moves[] のうち、同じ gameNo・kifPly の行が obs_geo decisionContext[] に無い手の数",
+          "value": 398,
+          "unit": "手"
+        },
+        {
+          "obsId": "obs.geo.replyToCapture",
+          "path": "replyToCapture が「相手は取っていない」以外の行の数",
+          "value": 196,
+          "unit": "手"
+        },
+        {
+          "obsId": "obs.time.decisionContext",
+          "path": "上の 196 手のうち obs_geo decisionContext[] に同じ gameNo・kifPly の行がある手の数",
+          "value": 71,
+          "unit": "手"
+        },
+        {
+          "obsId": "obs.geo.replyToCapture",
+          "path": "上の 196 手のうち obs_geo decisionContext[] に同じ gameNo・kifPly の行が無い手の数",
+          "value": 125,
+          "unit": "手"
+        },
+        {
+          "obsId": "obs.geo.replyToCapture",
+          "path": "上の 71 手のうち「取り返し」である手の数",
+          "value": 12,
+          "unit": "手"
+        }
+      ]
+    },
+    {
+      "kind": "denominator",
+      "text": "長いほうの帯の数は、分母が二重になっています。obs_geo decisionContext[] で spentBucket が長いほうの帯の行は 42 ですが、そのうち相手の直前の手が取る手だったのは 19 手だけで、残り 23 手は replyToCapture が「相手は取っていない」です。「取り返し」2 手を 42 の上に置くと、相手が取っていない場面まで分母に入ります。",
+      "observations": [
+        {
+          "obsId": "obs.time.decisionContext",
+          "path": "obs_geo decisionContext[] のうち spentBucket が「>9」である行の数",
+          "value": 42,
+          "unit": "手"
+        },
+        {
+          "obsId": "obs.geo.replyToCapture",
+          "path": "上の 42 手のうち replyToCapture が「相手は取っていない」以外である手の数",
+          "value": 19,
+          "unit": "手"
+        },
+        {
+          "obsId": "obs.geo.replyToCapture",
+          "path": "上の 42 手のうち replyToCapture が「相手は取っていない」である手の数",
+          "value": 23,
+          "unit": "手"
+        },
+        {
+          "obsId": "obs.geo.replyToCapture",
+          "path": "上の 42 手のうち「取り返し」である手の数",
+          "value": 2,
+          "unit": "手"
+        }
+      ]
+    },
+    {
+      "kind": "alternative",
+      "text": "取る手全体で同じ向きが出ます。obs_geo moves[].facts.capture が真の手は 121 で、写しに入っているのが 28、入っていないのが 93 です。「取り返し」は取る手の一部なので、「取る手は速い帯に多い」という一つのことだけで同じ差が出る可能性があります。相手が取った後に取らなかった手(「取らない」)は 132 で、写しの中 59・外 73 と分かれ方が違うため、分かれ目は「取り返すかどうか」ではなく「取る手かどうか」の側にある、という読みもできます。",
+      "observations": [
+        {
+          "obsId": "obs.geo.moveCombination",
+          "path": "obs_geo moves[].facts.capture が true である手の数",
+          "value": 121,
+          "unit": "手"
+        },
+        {
+          "obsId": "obs.geo.moveCombination",
+          "path": "上の 121 手のうち obs_geo decisionContext[] に同じ gameNo・kifPly の行がある手の数",
+          "value": 28,
+          "unit": "手"
+        },
+        {
+          "obsId": "obs.geo.moveCombination",
+          "path": "上の 121 手のうち obs_geo decisionContext[] に同じ gameNo・kifPly の行が無い手の数",
+          "value": 93,
+          "unit": "手"
+        },
+        {
+          "obsId": "obs.geo.replyToCapture",
+          "path": "replyToCapture が「取らない」である手の数",
+          "value": 132,
+          "unit": "手"
+        },
+        {
+          "obsId": "obs.geo.replyToCapture",
+          "path": "上の 132 手のうち obs_geo decisionContext[] に同じ gameNo・kifPly の行がある手の数",
+          "value": 59,
+          "unit": "手"
+        },
+        {
+          "obsId": "obs.geo.replyToCapture",
+          "path": "上の 132 手のうち obs_geo decisionContext[] に同じ gameNo・kifPly の行が無い手の数",
+          "value": 73,
+          "unit": "手"
+        }
+      ]
+    },
+    {
+      "kind": "alternative",
+      "text": "写しに入る手は、打つ手の側に寄っています。obs_geo moves[].facts.drop が真の手は 89 で、写しに入っているのが 49、入っていないのが 40 です。写しの外の手のほうが全体では多い(398 対 182)ことを踏まえると、帯に入るかどうかが手の種類そのものと結びついている可能性があり、その偏りの裏返しとして取る手の側が写しの外に寄っている、という読みもできます。",
+      "observations": [
+        {
+          "obsId": "obs.geo.moveCombination",
+          "path": "obs_geo moves[].facts.drop が true である手の数",
+          "value": 89,
+          "unit": "手"
+        },
+        {
+          "obsId": "obs.geo.moveCombination",
+          "path": "上の 89 手のうち obs_geo decisionContext[] に同じ gameNo・kifPly の行がある手の数",
+          "value": 49,
+          "unit": "手"
+        },
+        {
+          "obsId": "obs.geo.moveCombination",
+          "path": "上の 89 手のうち obs_geo decisionContext[] に同じ gameNo・kifPly の行が無い手の数",
+          "value": 40,
+          "unit": "手"
+        },
+        {
+          "obsId": "obs.geo.moveCombination",
+          "path": "obs_geo moves[] のうち、同じ gameNo・kifPly の行が obs_geo decisionContext[] に無い手の数",
+          "value": 398,
+          "unit": "手"
+        },
+        {
+          "obsId": "obs.time.decisionContext",
+          "path": "obs_geo decisionContext[] の行の数",
+          "value": 182,
+          "unit": "手"
+        }
+      ]
+    }
+  ],
+  "result": "weakened",
+  "provenance": {
+    "inputs": [
+      "records/obs-3/p4-min3-r2/00-obs_snapshot.p4.min3.r2b.json"
+    ]
+  }
+}

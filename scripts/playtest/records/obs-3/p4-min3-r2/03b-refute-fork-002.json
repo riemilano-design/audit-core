@@ -1,0 +1,184 @@
+{
+  "attempted": true,
+  "items": [
+    {
+      "kind": "counterexample",
+      "text": "終盤の分かれ道の行を局ごとに分けると、側が数えられた行がある局は 15 局、そのうち攻め側の行があった局は 13 局、攻め側の行が無く守り側の行だけだった局が 2 局あります。局ごとに見ると、終盤の攻め側の行は最も多い局でも 3 行です。",
+      "observations": [
+        {
+          "obsId": "obs.geo.moveCombination",
+          "path": "moves[] を (gameNo, kifPly) で decisionContext[] に突き合わせ、fork === true かつ phase === \"late\" かつ side === \"attack\" または \"defense\" の行がある局の数",
+          "value": 15
+        },
+        {
+          "obsId": "obs.geo.moveCombination",
+          "path": "同じ突き合わせで、fork === true かつ phase === \"late\" かつ side === \"attack\" の行が 1 行以上ある局の数",
+          "value": 13
+        },
+        {
+          "obsId": "obs.geo.moveCombination",
+          "path": "同じ突き合わせで、fork === true かつ phase === \"late\" の attack の行が 0 で defense の行が 1 行以上ある局の数(gameNo 7・17)",
+          "value": 2
+        },
+        {
+          "obsId": "obs.geo.moveCombination",
+          "path": "同じ突き合わせで、1 局あたりの fork === true かつ phase === \"late\" かつ side === \"attack\" の行数の最大",
+          "value": 3
+        },
+        {
+          "obsId": "obs.eval.game",
+          "path": "games[] の局数(この組)",
+          "value": 18
+        }
+      ]
+    },
+    {
+      "kind": "denominator",
+      "text": "段どうしで分母が同じではありません。序盤で側が数えられた行は 7 行で、終盤の 26 行・中盤の 41 行より小さい分母です。さらに序盤は fork === null(測れていない)の行が 16 あり、同じ序盤の fork === true の 11 行より多いです。序盤の向きは、この 7 行の上に乗っています。",
+      "observations": [
+        {
+          "obsId": "obs.geo.moveCombination",
+          "path": "moves[] を (gameNo, kifPly) で decisionContext[] に突き合わせ、fork === true かつ phase === \"early\" かつ side === \"attack\" または \"defense\" の行数",
+          "value": 7
+        },
+        {
+          "obsId": "obs.geo.moveCombination",
+          "path": "同じ突き合わせで、fork === true かつ phase === \"late\" かつ side === \"attack\" または \"defense\" の行数",
+          "value": 26
+        },
+        {
+          "obsId": "obs.geo.moveCombination",
+          "path": "同じ突き合わせで、fork === true かつ phase === \"mid\" かつ side === \"attack\" または \"defense\" の行数",
+          "value": 41
+        },
+        {
+          "obsId": "obs.time.decisionContext",
+          "path": "decisionContext[] のうち fork === null(測れていない)かつ phase === \"early\" の行数",
+          "value": 16
+        },
+        {
+          "obsId": "obs.time.decisionContext",
+          "path": "decisionContext[] のうち fork === true かつ phase === \"early\" の行数",
+          "value": 11
+        }
+      ]
+    },
+    {
+      "kind": "denominator",
+      "text": "この 107 行は、写しの obs.time.decisionContext にある 182 行(spentBucket の帯に入った手だけを写した行)の中の数です。同じ 18 局で本人が指した手は obs.geo.moveCombination に 580 行あり、obs.time.perMove の moves も 580 です。「分かれ道で選んだ側」として数えられているのは、その帯に入った手だけである可能性があります。",
+      "observations": [
+        {
+          "obsId": "obs.time.decisionContext",
+          "path": "decisionContext[] の全行数(spentBucket が \"≤9\" または \">9\" の手だけを写した行)",
+          "value": 182
+        },
+        {
+          "obsId": "obs.time.decisionContext",
+          "path": "decisionContext[] のうち fork === true の行数",
+          "value": 107
+        },
+        {
+          "obsId": "obs.geo.moveCombination",
+          "path": "moves[] の全行数(この組の本人の手)",
+          "value": 580
+        },
+        {
+          "obsId": "obs.time.perMove",
+          "path": "perMove.moves",
+          "value": 580
+        },
+        {
+          "obsId": "obs.eval.game",
+          "path": "games[] の局数(この組)",
+          "value": 18
+        }
+      ]
+    },
+    {
+      "kind": "denominator",
+      "text": "側の分母に入らない行(none・both)の 33 は、段で分けられていません。分けると終盤は none 9・both 2、中盤は none 17・both 1、序盤は none 3・both 1 で、分母の外に出る行は中盤が最も多いです。段ごとの分母の外し方が同じではありません。",
+      "observations": [
+        {
+          "obsId": "obs.geo.moveCombination",
+          "path": "moves[] を (gameNo, kifPly) で decisionContext[] に突き合わせ、fork === true かつ side === \"none\" または \"both\" の行数",
+          "value": 33
+        },
+        {
+          "obsId": "obs.geo.moveCombination",
+          "path": "同じ突き合わせで、fork === true かつ phase === \"late\" かつ side === \"none\" の行数",
+          "value": 9
+        },
+        {
+          "obsId": "obs.geo.moveCombination",
+          "path": "同じ突き合わせで、fork === true かつ phase === \"late\" かつ side === \"both\" の行数",
+          "value": 2
+        },
+        {
+          "obsId": "obs.geo.moveCombination",
+          "path": "同じ突き合わせで、fork === true かつ phase === \"mid\" かつ side === \"none\" の行数",
+          "value": 17
+        },
+        {
+          "obsId": "obs.geo.moveCombination",
+          "path": "同じ突き合わせで、fork === true かつ phase === \"mid\" かつ side === \"both\" の行数",
+          "value": 1
+        },
+        {
+          "obsId": "obs.geo.moveCombination",
+          "path": "同じ突き合わせで、fork === true かつ phase === \"early\" かつ side === \"none\" の行数",
+          "value": 3
+        },
+        {
+          "obsId": "obs.geo.moveCombination",
+          "path": "同じ突き合わせで、fork === true かつ phase === \"early\" かつ side === \"both\" の行数",
+          "value": 1
+        }
+      ]
+    },
+    {
+      "kind": "alternative",
+      "text": "同じ段の向きが、分かれ道ではない行にも出ています。fork === false の行では、終盤が攻め側 13・守り側 7、中盤が攻め側 10・守り側 7、序盤が攻め側 2・守り側 3 です。側は幾何の定義(取る・王手・相手玉の区域・自玉の区域・玉を動かす)で決まる欄なので、段が進むほど攻め側の行が増えるのは、分かれ道で選んだかどうかとは別のところで起きている可能性があります。",
+      "observations": [
+        {
+          "obsId": "obs.geo.moveCombination",
+          "path": "moves[] を (gameNo, kifPly) で decisionContext[] に突き合わせ、fork === false かつ phase === \"late\" かつ side === \"attack\" の行数",
+          "value": 13
+        },
+        {
+          "obsId": "obs.geo.moveCombination",
+          "path": "同じ突き合わせで、fork === false かつ phase === \"late\" かつ side === \"defense\" の行数",
+          "value": 7
+        },
+        {
+          "obsId": "obs.geo.moveCombination",
+          "path": "同じ突き合わせで、fork === false かつ phase === \"mid\" かつ side === \"attack\" の行数",
+          "value": 10
+        },
+        {
+          "obsId": "obs.geo.moveCombination",
+          "path": "同じ突き合わせで、fork === false かつ phase === \"mid\" かつ side === \"defense\" の行数",
+          "value": 7
+        },
+        {
+          "obsId": "obs.geo.moveCombination",
+          "path": "同じ突き合わせで、fork === false かつ phase === \"early\" かつ side === \"attack\" の行数",
+          "value": 2
+        },
+        {
+          "obsId": "obs.geo.moveCombination",
+          "path": "同じ突き合わせで、fork === false かつ phase === \"early\" かつ side === \"defense\" の行数",
+          "value": 3
+        },
+        {
+          "obsId": "obs.time.decisionContext",
+          "path": "decisionContext[] のうち fork === false の行数",
+          "value": 56
+        }
+      ]
+    }
+  ],
+  "result": "weakened",
+  "provenance": {
+    "inputs": ["records/obs-3/p4-min3-r2/00-obs_snapshot.p4.min3.r2b.json"]
+  }
+}

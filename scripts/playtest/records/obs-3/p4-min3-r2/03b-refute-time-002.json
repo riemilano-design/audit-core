@@ -1,0 +1,115 @@
+{
+  "attempted": true,
+  "items": [
+    {
+      "kind": "denominator",
+      "text": "仮説は分かれ道の割合を fork が測れた行(長い側 39 行・短い側 124 行)で数え、側の割合は帯の全行(長い側 42 行・短い側 140 行)で数えています。分母がそろわないまま並べている可能性があります。fork が測れた行だけに絞って側を数え直すと、長い側は 39 行のうち攻め側 13 行、短い側は 124 行のうち攻め側 63 行です。",
+      "observations": [
+        {
+          "obsId": "obs.time.decisionContext",
+          "path": "items[obsId=obs.time.decisionContext].value[] を spentBucket ごとに、全行数と fork が null でない行数で数えた行数",
+          "value": { "rowsLongBucket": 42, "forkKnownLongBucket": 39, "rowsShortBucket": 140, "forkKnownShortBucket": 124 },
+          "unit": "行"
+        },
+        {
+          "obsId": "obs.geo.moveCombination",
+          "path": "items[obsId=obs.geo.moveCombination].value[] を gameNo と kifPly で obs.time.decisionContext の fork が null でない行だけに突き合わせ、spentBucket ごとに side の値で数えた行数",
+          "value": {
+            "longBucket": { "forkKnownRows": 39, "attack": 13, "defense": 12, "none": 11, "both": 3 },
+            "shortBucket": { "forkKnownRows": 124, "attack": 63, "defense": 28, "none": 27, "both": 6 }
+          },
+          "unit": "行"
+        }
+      ]
+    },
+    {
+      "kind": "denominator",
+      "text": "`obs.side.of` では `both` と `none` は側の分母に入らないとされています。長い側の帯 42 行のうち `none` が 13 行・`both` が 3 行、短い側の帯 140 行のうち `none` が 34 行・`both` が 6 行で、側の分母から外れる行の数が、長い側と短い側で違います。攻め側と守り側だけを見ると、長い側は攻め側 14 行・守り側 12 行、短い側は攻め側 69 行・守り側 31 行です。",
+      "observations": [
+        {
+          "obsId": "obs.geo.moveCombination",
+          "path": "items[obsId=obs.geo.moveCombination].value[] を gameNo と kifPly で obs.time.decisionContext の各 spentBucket の行に突き合わせ、side の値で数えた行数",
+          "value": {
+            "longBucket": { "rows": 42, "attack": 14, "defense": 12, "none": 13, "both": 3 },
+            "shortBucket": { "rows": 140, "attack": 69, "defense": 31, "none": 34, "both": 6 }
+          },
+          "unit": "行"
+        }
+      ]
+    },
+    {
+      "kind": "denominator",
+      "text": "長い側の帯の 42 行は、写しの 18 局のうち 15 局から出ています。長い側の帯の行が 0 行の局が 3 局あり、最も多い局で 7 行です。局をまたいだ広がりは短い側の帯(140 行・18 局)とそろっていません。",
+      "observations": [
+        {
+          "obsId": "obs.time.decisionContext",
+          "path": "items[obsId=obs.time.decisionContext].value[] を spentBucket ごとに gameNo で数えた局数と行数",
+          "value": {
+            "gamesInSnapshot": 18,
+            "longBucket": { "rows": 42, "gamesWithRows": 15, "gamesWithZeroRows": 3, "maxRowsInOneGame": 7 },
+            "shortBucket": { "rows": 140, "gamesWithRows": 18, "gamesWithZeroRows": 0 }
+          },
+          "unit": "局・行"
+        }
+      ]
+    },
+    {
+      "kind": "counterexample",
+      "text": "局ごとに見ると向きがそろわない局があります。gameNo 10 は長い側の帯 3 行のうち攻め側が 2 行、短い側の帯 10 行のうち攻め側が 4 行。gameNo 12 は長い側の帯 1 行のうち攻め側が 1 行、短い側の帯 9 行のうち攻め側が 6 行。gameNo 1 は長い側の帯 7 行のうち攻め側が 3 行、短い側の帯 8 行のうち攻め側が 4 行です。",
+      "observations": [
+        {
+          "obsId": "obs.geo.moveCombination",
+          "path": "items[obsId=obs.geo.moveCombination].value[] を gameNo と kifPly で obs.time.decisionContext の行に突き合わせ、gameNo × spentBucket ごとに side が attack の行数と全行数を数えたもの",
+          "value": [
+            { "gameNo": 10, "longBucket": { "rows": 3, "attack": 2 }, "shortBucket": { "rows": 10, "attack": 4 } },
+            { "gameNo": 12, "longBucket": { "rows": 1, "attack": 1 }, "shortBucket": { "rows": 9, "attack": 6 } },
+            { "gameNo": 1, "longBucket": { "rows": 7, "attack": 3 }, "shortBucket": { "rows": 8, "attack": 4 } }
+          ],
+          "unit": "行"
+        }
+      ]
+    },
+    {
+      "kind": "counterexample",
+      "text": "分かれ道の列が帯を分けていない、とは限らない局があります。gameNo 10 は長い側の帯で fork が測れた 3 行すべてが分かれ道、短い側の帯では測れた 10 行のうち 4 行です。gameNo 1 は長い側の帯で測れた 6 行のうち 4 行、短い側の帯では測れた 4 行のうち 1 行です。gameNo 16 は長い側の帯で測れた 3 行すべてが分かれ道、短い側の帯では測れた 8 行のうち 6 行です。",
+      "observations": [
+        {
+          "obsId": "obs.time.decisionContext",
+          "path": "items[obsId=obs.time.decisionContext].value[] を gameNo × spentBucket ごとに、fork が null でない行数と fork が true の行数で数えたもの",
+          "value": [
+            { "gameNo": 10, "longBucket": { "forkKnown": 3, "forkTrue": 3 }, "shortBucket": { "forkKnown": 10, "forkTrue": 4 } },
+            { "gameNo": 1, "longBucket": { "forkKnown": 6, "forkTrue": 4 }, "shortBucket": { "forkKnown": 4, "forkTrue": 1 } },
+            { "gameNo": 16, "longBucket": { "forkKnown": 3, "forkTrue": 3 }, "shortBucket": { "forkKnown": 8, "forkTrue": 6 } }
+          ],
+          "unit": "行"
+        }
+      ]
+    },
+    {
+      "kind": "alternative",
+      "text": "同じ数は別の読みでも説明がつく可能性があります。`obs.side.of` の攻め側には取る手と王手が含まれます。長い側の帯の攻め側 14 行のうち取る手は 3 行・王手は 1 行、短い側の帯の攻め側 69 行のうち取る手は 20 行・王手は 6 行です。`obs.geo.replyToCapture` が「取り返し」の行は長い側の帯で 2 行、短い側の帯で 10 行です。相手が取った直後に取り返した手が短い側の帯に入りやすい、という読みでも同じ向きになりえます。",
+      "observations": [
+        {
+          "obsId": "obs.geo.moveCombination",
+          "path": "items[obsId=obs.geo.moveCombination].value[] のうち side が attack の行を、obs.time.decisionContext の spentBucket ごとに facts.capture・facts.givesCheck が真の行数で数えたもの",
+          "value": {
+            "longBucket": { "attackRows": 14, "capture": 3, "givesCheck": 1 },
+            "shortBucket": { "attackRows": 69, "capture": 20, "givesCheck": 6 }
+          },
+          "unit": "行"
+        },
+        {
+          "obsId": "obs.geo.replyToCapture",
+          "path": "items[obsId=obs.geo.replyToCapture].value[] を gameNo と kifPly で obs.time.decisionContext の行に突き合わせ、spentBucket ごとに replyToCapture の値で数えた行数",
+          "value": {
+            "longBucket": { "rows": 42, "取り返し": 2, "取らない": 17, "相手は取っていない": 23 },
+            "shortBucket": { "rows": 140, "取り返し": 10, "取らない": 42, "相手は取っていない": 88 }
+          },
+          "unit": "行"
+        }
+      ]
+    }
+  ],
+  "result": "weakened",
+  "provenance": { "inputs": ["records/obs-3/p4-min3-r2/00-obs_snapshot.p4.min3.r2b.json"] }
+}

@@ -1,0 +1,240 @@
+{
+  "attempted": true,
+  "items": [
+    {
+      "kind": "counterexample",
+      "text": "同じ向きの条件がそろっていても崩れていない行があります。collapse が false の 30 行のうち、spentBucket が短い側で inCheck が false・oppPrevGivesCheck が false・oppPrevPromotion が false で、side が attack の行は 12 行あり、gameNo 2・3・5・10・11・12・13 に出ています。仮説が挙げた条件は崩れていない側にも並んでいるという読みです。",
+      "observations": [
+        {
+          "obsId": "obs.time.decisionContext",
+          "path": "items[obsId=obs.time.decisionContext].value[] のうち collapse が false の 30 行を spentBucket・inCheck・oppPrevGivesCheck・oppPrevPromotion で絞った行数",
+          "value": {
+            "collapseFalseRows": 30,
+            "shortQuietRows": 20
+          },
+          "unit": "行"
+        },
+        {
+          "obsId": "obs.geo.moveCombination",
+          "path": "items[obsId=obs.geo.moveCombination].value[] を gameNo と kifPly で上の 20 行に突き合わせ、side が attack の行を数え、その gameNo と kifPly を並べたもの",
+          "value": {
+            "shortQuietAttackFalseRows": 12,
+            "gameNos": [
+              2,
+              3,
+              5,
+              10,
+              11,
+              12,
+              13
+            ],
+            "rows": [
+              [
+                2,
+                73
+              ],
+              [
+                3,
+                24
+              ],
+              [
+                5,
+                15
+              ],
+              [
+                5,
+                23
+              ],
+              [
+                5,
+                29
+              ],
+              [
+                5,
+                37
+              ],
+              [
+                5,
+                43
+              ],
+              [
+                5,
+                49
+              ],
+              [
+                10,
+                22
+              ],
+              [
+                11,
+                18
+              ],
+              [
+                12,
+                10
+              ],
+              [
+                13,
+                25
+              ]
+            ]
+          },
+          "unit": "行"
+        }
+      ]
+    },
+    {
+      "kind": "denominator",
+      "text": "写し全体で同じ条件の行を数えます。182 行のうち spentBucket が短い側で inCheck が false・oppPrevGivesCheck が false・oppPrevPromotion が false で side が attack の行は 61 行あり、そのうち collapse が true は 7 行、false は 12 行、null は 42 行です。この条件に当たる行の大半には崩れの判定が付いていないという読みです。",
+      "observations": [
+        {
+          "obsId": "obs.time.decisionContext",
+          "path": "items[obsId=obs.time.decisionContext].value[] の全行を spentBucket・inCheck・oppPrevGivesCheck・oppPrevPromotion で絞り、obs.geo.moveCombination の side が attack の行に突き合わせ、collapse の値で数えた行数",
+          "value": {
+            "rows": 182,
+            "shortQuietAttackRows": 61,
+            "collapseTrue": 7,
+            "collapseFalse": 12,
+            "collapseNull": 42
+          },
+          "unit": "行"
+        }
+      ]
+    },
+    {
+      "kind": "denominator",
+      "text": "「10 行とも短い側の帯」の分母を見ます。写しの 182 行のうち spentBucket が短い側の行は 140 行、長い側の行は 42 行で、collapse が false の 30 行でも短い側が 22 行・長い側が 8 行です。短い側は崩れた行に限らず多数の側だという読みです。",
+      "observations": [
+        {
+          "obsId": "obs.time.decisionContext",
+          "path": "items[obsId=obs.time.decisionContext].value[] の全行と collapse が false の 30 行を、それぞれ spentBucket の値で数えた行数",
+          "value": {
+            "rows": 182,
+            "allShortBucket": 140,
+            "allLongBucket": 42,
+            "collapseFalseRows": 30,
+            "falseShortBucket": 22,
+            "falseLongBucket": 8
+          },
+          "unit": "行"
+        }
+      ]
+    },
+    {
+      "kind": "denominator",
+      "text": "「王手をかけられておらず、相手の直前の手が王手だった行も成りだった行も 0 行」の分母を見ます。写しの 182 行のうち inCheck が true は 16 行、oppPrevGivesCheck が true は 16 行、oppPrevPromotion が true は 19 行しかありません。崩れた 10 行でこれらが 0 行なのは、写し全体でも true が少ない列だからという読みが残ります。",
+      "observations": [
+        {
+          "obsId": "obs.time.decisionContext",
+          "path": "items[obsId=obs.time.decisionContext].value[] の全行を inCheck・oppPrevGivesCheck・oppPrevPromotion の値で数えた行数(true の行数)",
+          "value": {
+            "rows": 182,
+            "inCheckTrue": 16,
+            "oppPrevGivesCheckTrue": 16,
+            "oppPrevPromotionTrue": 19
+          },
+          "unit": "行"
+        },
+        {
+          "obsId": "obs.time.decisionContext",
+          "path": "items[obsId=obs.time.decisionContext].value[] のうち collapse が true の 10 行を同じ 3 列の値で数えた行数(比べる側)",
+          "value": {
+            "collapseTrueRows": 10,
+            "inCheckTrue": 0,
+            "oppPrevGivesCheckTrue": 0,
+            "oppPrevPromotionTrue": 0
+          },
+          "unit": "行"
+        }
+      ]
+    },
+    {
+      "kind": "denominator",
+      "text": "「自玉側の手は 0 行」の分母を見ます。obs.geo.moveCombination を写しの 182 行に突き合わせると、side は attack が 83 行・none が 47 行・defense が 43 行・both が 9 行で、attack が最も多い側です。崩れた側の分母は 10 行しかなく、defense が 0 行であることは 10 行という小さい分母でも起こりうるという読みです。",
+      "observations": [
+        {
+          "obsId": "obs.geo.moveCombination",
+          "path": "items[obsId=obs.geo.moveCombination].value[] を gameNo と kifPly で obs.time.decisionContext の全 182 行に突き合わせ、side の値で数えた行数",
+          "value": {
+            "rows": 182,
+            "attack": 83,
+            "none": 47,
+            "defense": 43,
+            "both": 9
+          },
+          "unit": "行"
+        },
+        {
+          "obsId": "obs.geo.moveCombination",
+          "path": "items[obsId=obs.geo.moveCombination].value[] を gameNo と kifPly で collapse が true の 10 行に突き合わせ、side が defense の行を数えた行数(比べる側)",
+          "value": {
+            "collapseTrueRows": 10,
+            "defense": 0
+          },
+          "unit": "行"
+        }
+      ]
+    },
+    {
+      "kind": "alternative",
+      "text": "同じ観測を、どの行に崩れの判定が付いたかの偏りで説明する別の読みがあります。collapse が null でない 40 行は 14 局に散っており、collapse が false の 30 行のうち 9 行は gameNo 5 に集まっていて、この局には collapse が true の行が 0 行です。崩れた 10 行が出たのは gameNo 2・6・8・9・10・11・14・18 の 8 局です。",
+      "observations": [
+        {
+          "obsId": "obs.time.decisionContext",
+          "path": "items[obsId=obs.time.decisionContext].value[] のうち collapse が null でない行を gameNo で数えた局数と、collapse が false の行のうち最も多い局の行数",
+          "value": {
+            "judgedRows": 40,
+            "judgedGames": 14,
+            "collapseFalseRows": 30,
+            "maxFalseRowsInOneGame": 9,
+            "maxFalseRowsGameNo": 5,
+            "trueRowsInThatGame": 0
+          },
+          "unit": "行"
+        },
+        {
+          "obsId": "obs.time.decisionContext",
+          "path": "items[obsId=obs.time.decisionContext].value[] のうち collapse が true の 10 行の gameNo を並べたもの",
+          "value": {
+            "collapseTrueRows": 10,
+            "gameNos": [
+              2,
+              6,
+              8,
+              9,
+              10,
+              11,
+              14,
+              18
+            ],
+            "gamesCount": 8
+          },
+          "unit": "局"
+        }
+      ]
+    },
+    {
+      "kind": "alternative",
+      "text": "「分かりやすい合図が出ていない静かな場面」という読みには、別の読みが並びます。崩れた 10 行のうち oppPrevDrop が true は 3 行、oppPrevCapture が true は 1 行で、相手の直前の手が駒を打つ手だった行・駒を取る手だった行は 0 行ではありません。仮説が「合図」として数えた列が王手と成りに限られている、という読みです。",
+      "observations": [
+        {
+          "obsId": "obs.time.decisionContext",
+          "path": "items[obsId=obs.time.decisionContext].value[] のうち collapse が true の 10 行を oppPrevDrop・oppPrevCapture の値で数えた行数",
+          "value": {
+            "collapseTrueRows": 10,
+            "oppPrevDropTrue": 3,
+            "oppPrevCaptureTrue": 1,
+            "zero": 0
+          },
+          "unit": "行"
+        }
+      ]
+    }
+  ],
+  "result": "weakened",
+  "provenance": {
+    "inputs": [
+      "records/obs-3/p4-min3-r2/00-obs_snapshot.p4.min3.r2b.json"
+    ]
+  }
+}

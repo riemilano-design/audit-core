@@ -1,0 +1,461 @@
+{
+  "schemaVersion": "0.3",
+  "hypothesisId": "H-p4-min3r2bside-003",
+  "subject": {
+    "customer": "p4",
+    "groups": [
+      "3 分"
+    ],
+    "gamesCount": 18
+  },
+  "scope": "this_user",
+  "lane": "side",
+  "statement": "同じ 182 回を評価の帯で分けると、有利の帯の 15 回では相手玉側が 12 回・自玉側が 1 回、互角の帯の 25 回では相手玉側 10 回・自玉側 5 回、不利の帯の 141 回では相手玉側 60 回・自玉側 37 回でした。冊子の崩れの数では、有利からの崩れが 5、有利からの崩れで負けた局が 5 です。有利の帯に入っても手の向きが自玉側へ戻りにくい可能性があります。",
+  "observations": [
+    {
+      "obsId": "obs.time.decisionContext",
+      "path": "obs_geo decisionContext[] の行数",
+      "value": 182,
+      "unit": "行"
+    },
+    {
+      "obsId": "obs.time.decisionContext",
+      "path": "obs_geo decisionContext[] のうち evalBand == \"ahead\" の行数",
+      "value": 15,
+      "unit": "行"
+    },
+    {
+      "obsId": "obs.geo.moveCombination",
+      "path": "obs_geo decisionContext[] を obs_geo moves[] と (gameNo, kifPly) で突き合わせた行(182 行すべて突き合った) のうち evalBand == \"ahead\" かつ side == \"attack\" の行数",
+      "value": 12,
+      "unit": "行"
+    },
+    {
+      "obsId": "obs.geo.moveCombination",
+      "path": "obs_geo decisionContext[] を obs_geo moves[] と (gameNo, kifPly) で突き合わせた行(182 行すべて突き合った) のうち evalBand == \"ahead\" かつ side == \"defense\" の行数",
+      "value": 1,
+      "unit": "行"
+    },
+    {
+      "obsId": "obs.time.decisionContext",
+      "path": "obs_geo decisionContext[] のうち evalBand == \"level\" の行数",
+      "value": 25,
+      "unit": "行"
+    },
+    {
+      "obsId": "obs.geo.moveCombination",
+      "path": "obs_geo decisionContext[] を obs_geo moves[] と (gameNo, kifPly) で突き合わせた行(182 行すべて突き合った) のうち evalBand == \"level\" かつ side == \"attack\" の行数",
+      "value": 10,
+      "unit": "行"
+    },
+    {
+      "obsId": "obs.geo.moveCombination",
+      "path": "obs_geo decisionContext[] を obs_geo moves[] と (gameNo, kifPly) で突き合わせた行(182 行すべて突き合った) のうち evalBand == \"level\" かつ side == \"defense\" の行数",
+      "value": 5,
+      "unit": "行"
+    },
+    {
+      "obsId": "obs.time.decisionContext",
+      "path": "obs_geo decisionContext[] のうち evalBand == \"behind\" の行数",
+      "value": 141,
+      "unit": "行"
+    },
+    {
+      "obsId": "obs.geo.moveCombination",
+      "path": "obs_geo decisionContext[] を obs_geo moves[] と (gameNo, kifPly) で突き合わせた行(182 行すべて突き合った) のうち evalBand == \"behind\" かつ side == \"attack\" の行数",
+      "value": 60,
+      "unit": "行"
+    },
+    {
+      "obsId": "obs.geo.moveCombination",
+      "path": "obs_geo decisionContext[] を obs_geo moves[] と (gameNo, kifPly) で突き合わせた行(182 行すべて突き合った) のうち evalBand == \"behind\" かつ side == \"defense\" の行数",
+      "value": 37,
+      "unit": "行"
+    },
+    {
+      "obsId": "obs.time.decisionContext",
+      "path": "obs_geo decisionContext[] のうち evalBand が null(帯が測れていない)の行数",
+      "value": 1,
+      "unit": "行"
+    },
+    {
+      "obsId": "obs.report.overview",
+      "path": "overview.fromAhead(有利からの崩れ)",
+      "value": 5
+    },
+    {
+      "obsId": "obs.report.overview",
+      "path": "overview.fromAheadLoss(有利からの崩れで負けた局)",
+      "value": 5
+    },
+    {
+      "obsId": "obs.report.overview",
+      "path": "overview.fell(崩れの総数。段の内訳は early 11・mid 15・late 4)",
+      "value": {
+        "fell": 30,
+        "early": 11,
+        "mid": 15,
+        "late": 4
+      }
+    }
+  ],
+  "counterEvidence": {
+    "attempted": true,
+    "items": [
+      {
+        "kind": "denominator",
+        "text": "有利の帯の 15 行は、この組の 18 局のうち 4 局からしか出ていません。しかもそのうち 9 行が 1 局に集まっています。帯どうしを比べる分母として小さい可能性があります。",
+        "observations": [
+          {
+            "obsId": "obs.time.decisionContext",
+            "path": "decisionContext[] のうち evalBand == \"ahead\" の行数",
+            "value": 15,
+            "unit": "行"
+          },
+          {
+            "obsId": "obs.eval.game",
+            "path": "game[] の行数(この組の局数)",
+            "value": 18,
+            "unit": "局"
+          },
+          {
+            "obsId": "obs.time.decisionContext",
+            "path": "decisionContext[] のうち evalBand == \"ahead\" の行を持つ gameNo の異なりの数",
+            "value": 4,
+            "unit": "局"
+          },
+          {
+            "obsId": "obs.time.decisionContext",
+            "path": "decisionContext[] のうち evalBand == \"ahead\" の行がいちばん多い 1 局が持つ行数",
+            "value": 9,
+            "unit": "行"
+          },
+          {
+            "obsId": "obs.time.decisionContext",
+            "path": "上の「いちばん多い 1 局」が占める局の数",
+            "value": 1,
+            "unit": "局"
+          }
+        ]
+      },
+      {
+        "kind": "denominator",
+        "text": "帯ごとに、相手玉側でも自玉側でもない行の数が違います。有利の 15 行では相手玉側 12・自玉側 1 のほかに、両方が 1・どちらでもないが 1。互角の 25 行では相手玉側 10・自玉側 5 のほかに、両方が 1・どちらでもないが 9。不利の 141 行では相手玉側 60・自玉側 37 のほかに、両方が 7・どちらでもないが 37 です。帯から外れる行の割合がそろっていないまま、相手玉側と自玉側の数だけを並べている可能性があります。",
+        "observations": [
+          {
+            "obsId": "obs.time.decisionContext",
+            "path": "decisionContext[] のうち evalBand == \"ahead\" の行数",
+            "value": 15,
+            "unit": "行"
+          },
+          {
+            "obsId": "obs.geo.moveCombination",
+            "path": "decisionContext[] を moves[] と (gameNo, kifPly) で突き合わせた行のうち evalBand == \"ahead\" かつ side == \"attack\" の行数",
+            "value": 12,
+            "unit": "行"
+          },
+          {
+            "obsId": "obs.geo.moveCombination",
+            "path": "同上のうち evalBand == \"ahead\" かつ side == \"defense\" の行数",
+            "value": 1,
+            "unit": "行"
+          },
+          {
+            "obsId": "obs.geo.moveCombination",
+            "path": "同上のうち evalBand == \"ahead\" かつ side == \"both\" の行数",
+            "value": 1,
+            "unit": "行"
+          },
+          {
+            "obsId": "obs.geo.moveCombination",
+            "path": "同上のうち evalBand == \"ahead\" かつ side == \"none\" の行数",
+            "value": 1,
+            "unit": "行"
+          },
+          {
+            "obsId": "obs.time.decisionContext",
+            "path": "decisionContext[] のうち evalBand == \"level\" の行数",
+            "value": 25,
+            "unit": "行"
+          },
+          {
+            "obsId": "obs.geo.moveCombination",
+            "path": "同上のうち evalBand == \"level\" かつ side == \"attack\" の行数",
+            "value": 10,
+            "unit": "行"
+          },
+          {
+            "obsId": "obs.geo.moveCombination",
+            "path": "同上のうち evalBand == \"level\" かつ side == \"defense\" の行数",
+            "value": 5,
+            "unit": "行"
+          },
+          {
+            "obsId": "obs.geo.moveCombination",
+            "path": "同上のうち evalBand == \"level\" かつ side == \"both\" の行数",
+            "value": 1,
+            "unit": "行"
+          },
+          {
+            "obsId": "obs.geo.moveCombination",
+            "path": "同上のうち evalBand == \"level\" かつ side == \"none\" の行数",
+            "value": 9,
+            "unit": "行"
+          },
+          {
+            "obsId": "obs.time.decisionContext",
+            "path": "decisionContext[] のうち evalBand == \"behind\" の行数",
+            "value": 141,
+            "unit": "行"
+          },
+          {
+            "obsId": "obs.geo.moveCombination",
+            "path": "同上のうち evalBand == \"behind\" かつ side == \"attack\" の行数",
+            "value": 60,
+            "unit": "行"
+          },
+          {
+            "obsId": "obs.geo.moveCombination",
+            "path": "同上のうち evalBand == \"behind\" かつ side == \"defense\" の行数",
+            "value": 37,
+            "unit": "行"
+          },
+          {
+            "obsId": "obs.geo.moveCombination",
+            "path": "同上のうち evalBand == \"behind\" かつ side == \"both\" の行数",
+            "value": 7,
+            "unit": "行"
+          },
+          {
+            "obsId": "obs.geo.moveCombination",
+            "path": "同上のうち evalBand == \"behind\" かつ side == \"none\" の行数",
+            "value": 37,
+            "unit": "行"
+          }
+        ]
+      },
+      {
+        "kind": "denominator",
+        "text": "崩れの 5 と 5 は局の数で、分母はこの組の 18 局です。向きの 12 と 1 は手の行の数で、分母は 182 行、さらにその 182 行は本人の手の行 580 行のうち消費が 5 秒以上の手に絞った写しです。写しの側で崩れの旗が true の行を持つ局は 8 局あり、有利の帯の行を持つ 4 局と重なるのは 2 局です。分母の出どころが違う数を並べている可能性があります。",
+        "observations": [
+          {
+            "obsId": "obs.report.overview",
+            "path": "overview.fromAhead",
+            "value": 5,
+            "unit": "局"
+          },
+          {
+            "obsId": "obs.report.overview",
+            "path": "overview.fromAheadLoss",
+            "value": 5,
+            "unit": "局"
+          },
+          {
+            "obsId": "obs.eval.game",
+            "path": "game[] の行数(この組の局数)",
+            "value": 18,
+            "unit": "局"
+          },
+          {
+            "obsId": "obs.geo.moveCombination",
+            "path": "decisionContext[] を moves[] と (gameNo, kifPly) で突き合わせた行のうち evalBand == \"ahead\" かつ side == \"attack\" の行数",
+            "value": 12,
+            "unit": "行"
+          },
+          {
+            "obsId": "obs.geo.moveCombination",
+            "path": "同上のうち evalBand == \"ahead\" かつ side == \"defense\" の行数",
+            "value": 1,
+            "unit": "行"
+          },
+          {
+            "obsId": "obs.time.decisionContext",
+            "path": "decisionContext[] の行数",
+            "value": 182,
+            "unit": "行"
+          },
+          {
+            "obsId": "obs.geo.moveCombination",
+            "path": "moves[] の行数(本人の手)",
+            "value": 580,
+            "unit": "行"
+          },
+          {
+            "obsId": "obs.time.decisionContext",
+            "path": "decisionContext[] のうち collapse == true の行を持つ gameNo の異なりの数",
+            "value": 8,
+            "unit": "局"
+          },
+          {
+            "obsId": "obs.time.decisionContext",
+            "path": "decisionContext[] のうち evalBand == \"ahead\" の行を持つ gameNo の異なりの数",
+            "value": 4,
+            "unit": "局"
+          },
+          {
+            "obsId": "obs.time.decisionContext",
+            "path": "上の 2 つの gameNo の集合が重なる局数",
+            "value": 2,
+            "unit": "局"
+          }
+        ]
+      },
+      {
+        "kind": "counterexample",
+        "text": "有利の帯にも、自玉側の行と両方の行が実在します。gameNo 5 の kifPly 17 は side が \"defense\"、同じ gameNo 5 の kifPly 41 は side が \"both\" です。この 2 行は、有利の帯の行がいちばん多い 1 局の中にあります。",
+        "observations": [
+          {
+            "obsId": "obs.time.decisionContext",
+            "path": "decisionContext[] の gameNo(有利の帯の行がいちばん多い局)",
+            "value": 5
+          },
+          {
+            "obsId": "obs.geo.moveCombination",
+            "path": "moves[] のうち gameNo が上の局・kifPly が下の値の行の kifPly",
+            "value": 17
+          },
+          {
+            "obsId": "obs.geo.moveCombination",
+            "path": "moves[] の gameNo 5・kifPly 17 の side",
+            "value": "defense"
+          },
+          {
+            "obsId": "obs.geo.moveCombination",
+            "path": "moves[] のもう 1 行の kifPly",
+            "value": 41
+          },
+          {
+            "obsId": "obs.geo.moveCombination",
+            "path": "moves[] の gameNo 5・kifPly 41 の side",
+            "value": "both"
+          },
+          {
+            "obsId": "obs.geo.moveCombination",
+            "path": "evalBand == \"ahead\" の行のうち side が \"defense\" または \"both\" の行数",
+            "value": 2,
+            "unit": "行"
+          },
+          {
+            "obsId": "obs.time.decisionContext",
+            "path": "上の 2 行が入っている局の数",
+            "value": 1,
+            "unit": "局"
+          }
+        ]
+      },
+      {
+        "kind": "alternative",
+        "text": "同じ観測は、局の単位で説明がつく可能性もあります。有利の帯の 15 行のうち 9 行は 1 局に集まり、その局の result は \"勝ち\" です。帯と向きが手ごとに別々に現れたのではなく、1 局の中で続いた手が繰り返し数えられているだけ、という読みが残ります。",
+        "observations": [
+          {
+            "obsId": "obs.time.decisionContext",
+            "path": "decisionContext[] のうち evalBand == \"ahead\" の行数",
+            "value": 15,
+            "unit": "行"
+          },
+          {
+            "obsId": "obs.time.decisionContext",
+            "path": "decisionContext[] のうち evalBand == \"ahead\" の行がいちばん多い 1 局が持つ行数",
+            "value": 9,
+            "unit": "行"
+          },
+          {
+            "obsId": "obs.time.decisionContext",
+            "path": "上の「いちばん多い 1 局」が占める局の数",
+            "value": 1,
+            "unit": "局"
+          },
+          {
+            "obsId": "obs.eval.game",
+            "path": "game[] のうち上の局の result",
+            "value": "勝ち"
+          }
+        ]
+      },
+      {
+        "kind": "alternative",
+        "text": "写しの絞り方だけで説明がつく可能性もあります。decisionContext の 182 行は、消費が 5 秒以上の手だけを写した行です。本人の手の行 580 行では相手玉側 207・自玉側 163 ですが、その 182 行に絞ると相手玉側 83・自玉側 43 になります。向きの偏りは評価の帯ではなく、絞り方の側で生じているという読みが残ります。",
+        "observations": [
+          {
+            "obsId": "obs.time.decisionContext",
+            "path": "decisionContext[] の行数",
+            "value": 182,
+            "unit": "行"
+          },
+          {
+            "obsId": "obs.report.overview",
+            "path": "overview.fromAhead(この文で使う数としての 5)",
+            "value": 5
+          },
+          {
+            "obsId": "obs.geo.moveCombination",
+            "path": "moves[] の行数(本人の手)",
+            "value": 580,
+            "unit": "行"
+          },
+          {
+            "obsId": "obs.geo.moveCombination",
+            "path": "moves[] のうち side == \"attack\" の行数",
+            "value": 207,
+            "unit": "行"
+          },
+          {
+            "obsId": "obs.geo.moveCombination",
+            "path": "moves[] のうち side == \"defense\" の行数",
+            "value": 163,
+            "unit": "行"
+          },
+          {
+            "obsId": "obs.geo.moveCombination",
+            "path": "decisionContext[] を moves[] と (gameNo, kifPly) で突き合わせた 182 行のうち side == \"attack\" の行数",
+            "value": 83,
+            "unit": "行"
+          },
+          {
+            "obsId": "obs.geo.moveCombination",
+            "path": "同上のうち side == \"defense\" の行数",
+            "value": 43,
+            "unit": "行"
+          }
+        ]
+      }
+    ],
+    "result": "weakened",
+    "provenance": {
+      "inputs": [
+        "records/obs-3/p4-min3-r2/00-obs_snapshot.p4.min3.r2b.json"
+      ]
+    }
+  },
+  "prediction": {
+    "writtenAt": "2026-09-26",
+    "window": "next_20_games_same_time_limit",
+    "metric": "obs.time.decisionContext の evalBand が ahead の行に突き合った obs.geo.moveCombination の side が defense の割合",
+    "comparator": "<=",
+    "value": 0.2,
+    "alsoRequires": [
+      {
+        "metric": "obs.time.decisionContext の evalBand が ahead の行数(この帯の分母。18 局では 15 行しかなかった)",
+        "comparator": ">=",
+        "value": 20
+      }
+    ]
+  },
+  "status": "proposed",
+  "knowledge": {
+    "kind": "discovered",
+    "reviewStatus": "draft",
+    "origin": {
+      "kifu": "p4/min3",
+      "lane": "side"
+    },
+    "range": "this_user"
+  },
+  "provenance": {
+    "gitHead": "302bc37",
+    "inputs": [
+      "records/obs-3/p4-min3-r2/00-obs_snapshot.p4.min3.r2b.json"
+    ],
+    "excludedInputs": []
+  }
+}
