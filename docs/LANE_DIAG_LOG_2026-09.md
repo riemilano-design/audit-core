@@ -576,6 +576,27 @@ typecheck rc=0(worktree の緑。P-84)。所見: `willHaveWhatif` の `"pdf"` �
 **人間が監査する列**: `07-audit-columns.md`。**承認の根拠(委任の 3 条件)**: 動きを変える変更なし(記録の追加だけ)、根拠は上の数、測っていないものは「測れない」に書いた。独立監査は**付けていない**(コード変更が無く、成果は記録。統括が §10.2 の右の列で照合する)。
 **設計案の直し**: §10.3 ① を写しの実数に、H-1 が落とす実例を 1 行、§15 に 1 行(同じコミット)。統括の照合: 一致(`0df2f69`)。次の順は統括の指示(2026-09-25): OBS-5'(不足 2 項目)→ OBS-5(幾何の写し)→ §14 の 4 は案だけ → 規則 8・`expired` の正本の文を案として統括へ → 次の周の指示に「初稿を残す」→ L-形は P-85 と証拠数の後。
 
+### 12.7 STEP OPEN-1: 戦型を認識するコード(人間の決定 4、`456e1ba` KNOWLEDGE_LANE_BRIEF §7。2026-09-25。着手。予測を実測の前に書く)
+
+**下調べで分かった前提(事実。決定 4 の文との差)**:
+- `data/openings` の `recognition_pattern` は `{piece, to, order_hint?}` の配列(`data/schemas/openings.schema.json:101-115`。任意の欄、`side` は record の `self|opponent` だけで `both` なし)。**形の `required_pieces`(`{piece, square, optional}`)と同じ「駒 × マス」の対**であり、`to` は USI のマス。`order_hint` はどこにも使われていない。**読む側のコードは無い**(`scenarioRepository.ts` は `scenario` だけ、`opening_id` は狙いの欄の文字列)。決定 4 の「固定マス」はこの `to` のこと。
+- `shapeDetector`(`apps/server/src/analysis/shapeDetector.ts:61-128`)= 盤の占有(`pos.board.get(square)` の色と駒種が一致)→ `matched/missing/matchScore`、`shapeFormationAnalyzer.ts:78-103` = matched の各マスに「その駒がそこへ動いた手」(`findMoveEvidence`)を付け、証拠 0 なら `none`(P-85 の型はここを通る)。I-9 = 証拠 ≤ 1 かつ欠け ≥ 2(`invariants/i9-shape-claim-without-evidence.ts:50-51`)。相手側は色(gote)で読む(回転ではない)。
+- 下書き `data/drafts/2026-09-25-knowledge/openings/` **111 件**: `recognition_pattern` あり **108**・なし 3、`side` self 87 / opponent 24、対の数 1 → 35 件・2 → 37・3 → 28・4 → 6・5 → 2。`scenario` はすべて `null`。
+- 知識レーンの測る道具は**コミットされていない**(scratchpad の `measure.ts`。`analyzeShapeFormationFromEvents`・`detectIntentsFromEvents` に `shapes`/`intents` の option で下書きを注入、`recognitionTimeline.ts:139-140` と同じ呼び方)。`DEFAULT_SHAPES_DIR` に上書きは無い。
+
+**設計判断(レーン長。設計判断は委任の範囲)**: 「`shapeDetector` と同じ方法」を**字義どおり**に採る = `recognition_pattern` の各対を `required_pieces` の `{piece, square: to, optional: false}` に写し(適合器)、**既存の `analyzeShapeFormationFromEvents(…, {shapes})` をそのまま呼ぶ**。新しい判定・閾値を書かない。理由: (1) 盤の占有 + 動いた証拠で読むので、**I-9 相当がそのまま定義できる**(狙いの `intentDetector` 方式には I-9 相当が無い = §12.3 の 3)。(2) 3 段の名前は形と同じ `none/forming/completed`(盤の尺度なので形の側。DATA_MODEL の「2 つの尺度を統合しない」は、狙い `matched` と混ぜないことで守る)。**対象外(明記)**: 相手の形を条件にする型・否定(「〜を突かない」)・来歴(手順の順、`order_hint`)・`leads_to_shape_ids`。`recognition_pattern` の無い 3 件は候補にしない(スキーマの記述どおり)。
+
+**何を(OPEN-1 = 認識の関数だけ。本体の経路には**つながない**)**: `apps/server/src/analysis/openingDetector.ts`: `openingToShapeDefinition(opening): ShapeDefinition | null`(適合器。`id`/`name`/`side` を写し、`family` は opening の `family`、`parent_shape_id: null`、`typical_build_order` なし、`review_status`・`confidence_level` は写す。`side: "both"` は生まれない)と `analyzeOpeningFormationFromEvents(startSfen, events, openings)` = 適合 → `analyzeShapeFormationFromEvents` → 結果に `openingId` を付けて返す(`ShapeFormationResult` の欄をそのまま: `matchedSquares`・`missingSquares`・`formationEvidence`・`status`)。`OpeningDefinition` 型は `openings.schema.json` に合わせて新設(`recognition_pattern?`)。読み込み器 `loadOpeningsFromDir(dir)`(`shapeRepository.ts` と同じ形。**既定のディレクトリは置かない** = 本体は今までどおり `data/openings` を認識には読まない。DATA_MODEL:58「実行時に読み込まれていない」は真のまま)。`recognitionTimeline.ts`・`stateResponse.ts`・`apps/web` は**触らない**(露出なし。名前は出ない)。試験 `openingDetector.test.ts` **9 本**: 適合器が `to` → `square`・`optional:false` に写す/`recognition_pattern` 無しは `null`/`self` は sente の駒だけ・`opponent` は gote の駒だけを数える/全対が盤にあり証拠ありで `completed`/1 対だけ盤にあり証拠ありで `forming`/盤にあるが証拠なし(初期配置)で `none`/欠け 2 以上・証拠 1 以下の出力から I-9 相当が計算できる(欄が揃っている)/`matchScore` 降順・id 昇順/**下書き 111 件を読むと 108 件が候補・3 件が `null`、例外なし**(fixture は下書きの実ファイルを読む。名前は出さない)。
+- 測る(基準の入力、実測の前の予測): `<p4>` 3 分の組 18 局の固定棋譜を 30 手目まで再生し、111 件の下書きで `analyzeOpeningFormationFromEvents` を回す(出力は scratchpad。`out/` に書かない。エンジン不要)。**予測**: 候補 108/111。30 手目の時点で `completed` が 1 件以上ある局は **18 局中 10 局以上**(対 1〜2 の下書きが 72 件あるので、1〜2 手で完成する)。`forming` かつ証拠 1 件 = 30 手目で 1 局あたり **5 件以上**(囲いの I-9 と同じ向き)。I-9 相当(証拠 ≤ 1 かつ欠け ≥ 2)は対 3 以上の 36 件でしか起きえない(対 2 以下は欠け 2 が立たない = §12.3 の 6 の盲点と同型)→ 件数は予測せず記録。self / opponent の別も記録。
+- vitest: `apps/server` **732 → 741**(+9)。`scripts/playtest` 1682 のまま。`typecheck` 緑(server)。`data/` に変更なし、`data/schemas` に変更なし(構造的知識に触れない)。
+- **予測と違ったら実装担当は直さずに理由を書く。**
+
+**次(OPEN-2、別 STEP、計画は OPEN-1 の実測の後)**: 測る道具をコミットする(`scripts/playtest/recognitionMeasure.ts`: 固定棋譜の一覧 + `data/drafts/<日付>-knowledge/` を注入して 形/狙い/戦型 の沈黙と I-9 相当を数える。知識レーンの scratchpad の `measure.ts` と同じ数が出ることを校正 = 二本立て)。知識レーンには OPEN-1 の関数名と option を知らせ、既存の `measure.ts` から呼べるようにする。OPEN-2 の後に STEP 3(控えめな露出 + `expired` の実装)。
+
+**手順**: 実装担当(worktree。指示の冒頭に「`<p4>` とだけ書く・`person` の値を写さない・未追跡は `git diff --no-index`・add/reset/checkout/stash 禁止」)→ 独立監査 1 回(変異: 適合器の `optional` を `true` にする → `completed`/`forming` の試験が落ちる/`side` の色を取り違える → self/opponent の試験が落ちる/証拠なしを `forming` にする → `none` の試験が落ちる)→ パス指定コミット → 実測をここに追記。
+
+**実測の結果**: (後で追記。)
+
 ### 12.6b 統括への案 3 件(2026-09-25。正本は書き換えない。人間へそのまま出せる形: 何を・どこに・なぜ・何が変わらないか)
 
 **案 1: CLAUDE.md に規則 8 を足す(決-A の実装。1 段落)**
