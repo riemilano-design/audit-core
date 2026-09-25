@@ -37,3 +37,21 @@
 
 - `collapse` が判定できたのは 182 行中 **40 行**(真 10・偽 30)、`null` 142 行。判定行の `evalBand` は `level` 25・`ahead` 15 で **`behind` が 0 行**。
 - 40 行の内訳は `obs.time.bySpent` の第 3 段(32 手中 10)・第 4 段(8 手中 0)と一致(別経路の二本立て)。
+
+## 5. 写しの作り直し(2026-09-26。`00-obs_snapshot.p4.min3.r2b.json`)
+
+第 1 陣に渡した `00-obs_snapshot.p4.min3.r2.json`(42 項目)を置き換えず、**新しい番号の写しとして `...r2b.json`(48 項目)を足した**(初稿の材料を残すため。初稿の仮説はその写しで読めるままにしておく)。
+
+**2 周目の第 2 陣(回し直しと L-形)は `r2b` を使う。**
+
+| | r2(第 1 陣) | r2b(第 2 陣) |
+|---|---|---|
+| 項目数 | 42 | **48** |
+| `gitHead` | `a4a5929` | `fa871af` |
+| 幾何の入力 | `--whatif-v2-dir` **なし** | **あり**(`obs.time.decisionContext` の `fork` が 真 107・偽 56・null 19) |
+| 認識(OBS-5c) | 無 | `obs.vocab.shapeStatus`・`intentStatus`・`openingStatus`・`exposure` の 4 項目 |
+| 「あと 1 枚」(OBS-5e) | 無 | `obs.vocab.shapeMissingSummary`・`shapeMovedRequiredSummary` の 2 項目 |
+
+**差分は機械で確かめた**: 消えた obsId **0**、足された obsId **6**、値が変わった既存の obsId は **`obs.time.decisionContext` の 1 つだけ**(`fork` の列)。したがって **L-時間・L-反応 の初稿は r2b でもそのまま有効**(両者は `fork` を主材料にしていない)。回し直すのは **L-側・L-分かれ道** の 2 つ。
+
+**入力の同定のしかた(次に作り直す人へ)**: 入力の 6 本は、r2 の写しの `inputs[].sha256` と一致するファイルを `scripts/playtest/out/` 配下から機械で探して特定した(基準の入力を取り違えないため。ファイル名だけでは同名の別物が複数ある)。写しの `inputs` には basename しか残らないので、**この照合をやらずに「たぶんこれ」で回さないこと**。
