@@ -1,0 +1,31 @@
+{
+  "id": "eishunryu",
+  "name": "英春流",
+  "name_kana": "えいしゅんりゅう",
+  "side": "self",
+  "family": "奇襲戦法",
+  "leads_to_shape_ids": [
+    "yagura_kikusui"
+  ],
+  "scenario": null,
+  "recognition_pattern": [
+    {
+      "piece": "銀",
+      "to": "4h",
+      "order_hint": 1
+    },
+    {
+      "piece": "歩",
+      "to": "5f",
+      "order_hint": 2
+    },
+    {
+      "piece": "銀",
+      "to": "5g",
+      "order_hint": 3
+    }
+  ],
+  "source": "【AI起草 / 出典は下記】Wikipedia『英春流』(https://ja.wikipedia.org/wiki/英春流 (参照日 2026-09-25))による。鈴木英春が作ったアマチュア発の戦法体系で、**相手の戦術によらず ▲4八銀 〜 ▲5六歩 〜 ▲5七銀 と右の銀を中央へ進出させる**のが基本の構え。対振り飛車ではさらに ▲5六銀 〜 ▲6五銀 と進めることもある。角に備える形では菊水矢倉に囲う。かまいたち・つくつくぼうし・カメレオンの 3 つを含む体系。**2 度の読みが一致した 4八銀・5六歩・5七銀 の 3 件**を置いた。 戦型を認識するコードは apps/server/src/analysis/ に無いため、このレコードを足しても認識の数は動かない(2026-09-25 司令塔の訂正)。座標は先手の絶対座標(docs/DATA_MODEL.md の規約)。**司令塔の指示(2026-09-25)により、同じページを 2 度、違う問いで読み、両方の読みが一致した駒だけを置いた。** 追加の経緯: 2026-09-25 の知識レーン第 25 組(docs/LANE_KNOWLEDGE_LOG_2026-09.md §28)。",
+  "confidence_level": "medium",
+  "review_status": "draft"
+}
