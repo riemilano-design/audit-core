@@ -1,0 +1,34 @@
+{
+  "id": "tenshukaku_mino",
+  "name": "天守閣美濃",
+  "name_kana": "てんしゅかくみの",
+  "side": "self",
+  "family": "美濃系",
+  "parent_shape_id": "hidarimino",
+  "required_pieces": [
+    {
+      "piece": "玉",
+      "square": "8g",
+      "optional": false
+    },
+    {
+      "piece": "銀",
+      "square": "7h",
+      "optional": false
+    }
+  ],
+  "typical_build_order": [
+    "8h",
+    "7h",
+    "8g"
+  ],
+  "characteristics": "左美濃から玉をもう一段上げて 8七 に置いた形です。玉が高い位置にあって見晴らしがよいことから、この名前で呼ばれます。相手の飛車から遠ざかる一方で、玉の頭が薄くなります。",
+  "beginner_friendliness": {
+    "score": 3,
+    "reason": "左美濃を組んでから玉を 1 つ上げるだけです。ただし玉が前に出るぶん、攻められたときの逃げ道が少なくなります。"
+  },
+  "weak_against": "玉の頭(8六)と、斜め上のコビン(7六)に守りの駒が少ない形です。出典もこの 2 点を弱点として挙げています。",
+  "source": "【AI起草。座標の一次資料確認は行っていない】将棋ジム『左美濃』(https://shogi-gym.com/kakoi/mino/hidarimino/ (参照日 2026-09-25))による。**2 度の読みが一致したのは 玉8七 と、弱点が 8六(玉頭)・7六(コビン)であること**。銀 7八 は、出典が天守閣美濃を「左美濃の玉を 8七 に上げた形」として述べていることから左美濃のまま引き継いだ(**推測**)。 **司令塔の指示(2026-09-25)により、同じページを 2 度、違う問いで読み、両方の読みが一致した駒だけを required_pieces に入れた。** 座標の一次資料確認は行っていない(docs/ROLES.md の保留事項)。追加の経緯: 2026-09-25 の知識レーン第 26 組(docs/LANE_KNOWLEDGE_LOG_2026-09.md §29)。§5.1 で「図のみ・食い違い」として保留していた行を、文で座標を述べるページが見つかったので埋めた。",
+  "confidence_level": "low",
+  "review_status": "draft"
+}

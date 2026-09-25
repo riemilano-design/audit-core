@@ -1,0 +1,45 @@
+{
+  "id": "ibisha_ginkanmuri",
+  "name": "居飛車銀冠",
+  "name_kana": "いびしゃぎんかんむり",
+  "side": "self",
+  "family": "美濃系",
+  "parent_shape_id": "hidarimino",
+  "required_pieces": [
+    {
+      "piece": "玉",
+      "square": "8h",
+      "optional": false
+    },
+    {
+      "piece": "銀",
+      "square": "8g",
+      "optional": false
+    },
+    {
+      "piece": "金",
+      "square": "7h",
+      "optional": false
+    },
+    {
+      "piece": "金",
+      "square": "6g",
+      "optional": true
+    }
+  ],
+  "typical_build_order": [
+    "8h",
+    "7h",
+    "8g",
+    "7h"
+  ],
+  "characteristics": "左美濃から銀を 8七 へ進めて、玉に銀の冠をかぶせたような形にした囲いです。玉の頭が銀で守られるため、上からの攻めに強くなります。組み上がるまでに 12 手かかります。",
+  "beginner_friendliness": {
+    "score": 3,
+    "reason": "手数はかかりますが、玉の頭が厚くなるので上からの攻めに強い囲いです。銀冠穴熊へ発展させることもできます。"
+  },
+  "weak_against": "手数がかかるため、囲いが完成する前に攻められると間に合わないことがあります。端(9筋)は銀と金の利きが届きにくく、端攻めに弱さが残ります。",
+  "source": "【AI起草。座標の一次資料確認は行っていない】将棋ジム『左美濃』(https://shogi-gym.com/kakoi/mino/hidarimino/ (参照日 2026-09-25))による。**2 度の読みが一致したのは 銀8七・金7八**で、玉 8八 は 2 度目の読みが明示し 1 度目も「基本の左美濃から銀を進めた発展形」と述べているため入れた。**金 6七 は 2 度目の読みにしか出てこないので optional にした。** 振り飛車側の銀冠(既存の mino_ginkanmuri)と同じ名前の形を、居飛車側(盤の左側)に作ったもの。 **司令塔の指示(2026-09-25)により、同じページを 2 度、違う問いで読み、両方の読みが一致した駒だけを required_pieces に入れた。** 座標の一次資料確認は行っていない(docs/ROLES.md の保留事項)。追加の経緯: 2026-09-25 の知識レーン第 26 組(docs/LANE_KNOWLEDGE_LOG_2026-09.md §29)。§5.1 で「図のみ・食い違い」として保留していた行を、文で座標を述べるページが見つかったので埋めた。",
+  "confidence_level": "medium",
+  "review_status": "draft"
+}
