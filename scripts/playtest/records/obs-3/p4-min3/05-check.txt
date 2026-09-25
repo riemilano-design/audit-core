@@ -1,0 +1,36 @@
+== 05-H-p4-min3-001.json
+# scripts/playtest/records/obs-3/p4-min3/05-H-p4-min3-001.json
+schema ok
+H-1 ok
+H-2 ok
+H-3 ok
+H-4 ok
+H-5 ok
+H-6 ok
+H-7 ok
+H-8 ok
+exit=0
+== 05-H-p4-min3-002.json
+# scripts/playtest/records/obs-3/p4-min3/05-H-p4-min3-002.json
+schema ok
+H-1 ok
+H-2 ok
+H-3 ok
+H-4 ok
+H-5 ok
+H-6 ok
+H-7 ok
+H-8 ok
+exit=0
+== 05-H-p4-min3-003.json
+# scripts/playtest/records/obs-3/p4-min3/05-H-p4-min3-003.json
+schema ok
+H-1 ok
+H-2 ok
+H-3 ok
+H-4 ok
+H-5 ok
+H-6 ok
+H-7 ok
+H-8 ok
+exit=0

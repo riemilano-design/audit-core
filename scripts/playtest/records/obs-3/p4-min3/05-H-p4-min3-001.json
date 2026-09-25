@@ -1,0 +1,744 @@
+{
+  "schemaVersion": "0.1",
+  "hypothesisId": "H-p4-min3-001",
+  "subject": {
+    "customer": "p4",
+    "groups": [
+      "3 分"
+    ],
+    "gamesCount": 18
+  },
+  "scope": "this_user",
+  "lane": "time",
+  "statement": "時間で負けた 5 局は、序盤の消費の中央値が 37 秒・中盤が 68 秒・終盤が 57 秒で、それ以外の 13 局(序盤 26 秒・中盤 51 秒・終盤 40 秒)よりどの段でも多いという読みです。次の同じ持ち時間の局でも、時間で負けた局は中盤の消費の中央値がそれ以外の局より大きい側に出る可能性があります。",
+  "observations": [
+    {
+      "obsId": "obs.time.groupMedians",
+      "path": "groups[0].timeUpLoss.games",
+      "value": 5,
+      "unit": "局"
+    },
+    {
+      "obsId": "obs.time.groupMedians",
+      "path": "groups[0].timeUpLoss.medianEarlySec",
+      "value": 37,
+      "unit": "秒"
+    },
+    {
+      "obsId": "obs.time.groupMedians",
+      "path": "groups[0].timeUpLoss.medianMidSec",
+      "value": 68,
+      "unit": "秒"
+    },
+    {
+      "obsId": "obs.time.groupMedians",
+      "path": "groups[0].timeUpLoss.medianLateSec",
+      "value": 57,
+      "unit": "秒"
+    },
+    {
+      "obsId": "obs.time.groupMedians",
+      "path": "groups[0].other.games",
+      "value": 13,
+      "unit": "局"
+    },
+    {
+      "obsId": "obs.time.groupMedians",
+      "path": "groups[0].other.medianEarlySec",
+      "value": 26,
+      "unit": "秒"
+    },
+    {
+      "obsId": "obs.time.groupMedians",
+      "path": "groups[0].other.medianMidSec",
+      "value": 51,
+      "unit": "秒"
+    },
+    {
+      "obsId": "obs.time.groupMedians",
+      "path": "groups[0].other.medianLateSec",
+      "value": 40,
+      "unit": "秒"
+    },
+    {
+      "obsId": "obs.time.phaseSpentPatient",
+      "path": "time.phaseSpent.timeUpLoss",
+      "value": {
+        "games": 5,
+        "early": 37,
+        "mid": 68,
+        "late": 57
+      }
+    },
+    {
+      "obsId": "obs.time.phaseSpentPatient",
+      "path": "time.phaseSpent.otherGames",
+      "value": {
+        "games": 13,
+        "early": 26,
+        "mid": 51,
+        "late": 40
+      }
+    },
+    {
+      "obsId": "obs.time.remainingSec",
+      "path": "games[].timeLimitSec",
+      "value": 180,
+      "unit": "秒"
+    }
+  ],
+  "counterEvidence": {
+    "attempted": true,
+    "items": [
+      {
+        "kind": "counterexample",
+        "text": "序盤について、時間で負けた局 2 は序盤 18 秒、局 16 は序盤 21 秒で、それ以外の局の序盤の中央値 26 秒より少ない。逆に、それ以外の局 6 は序盤 60 秒、局 8 は序盤 32 秒、局 4 は序盤 31 秒で、時間で負けた局の序盤の中央値 37 秒に近いか上回る。「どの段でも多い」は局ごとに見ると成り立たない局がある。",
+        "observations": [
+          {
+            "obsId": "obs.time.phaseSpentSec",
+            "path": "games[gameNo=2].phaseSpentSec",
+            "value": {
+              "gameNo": 2,
+              "phaseSpentSec": {
+                "early": 18,
+                "mid": 68,
+                "late": 73
+              }
+            },
+            "unit": "秒"
+          },
+          {
+            "obsId": "obs.time.phaseSpentSec",
+            "path": "games[gameNo=16].phaseSpentSec",
+            "value": {
+              "gameNo": 16,
+              "phaseSpentSec": {
+                "early": 21,
+                "mid": 66,
+                "late": 71
+              }
+            },
+            "unit": "秒"
+          },
+          {
+            "obsId": "obs.time.phaseSpentSec",
+            "path": "games[gameNo=6].phaseSpentSec",
+            "value": {
+              "gameNo": 6,
+              "phaseSpentSec": {
+                "early": 60,
+                "mid": 51,
+                "late": 36
+              }
+            },
+            "unit": "秒"
+          },
+          {
+            "obsId": "obs.time.phaseSpentSec",
+            "path": "games[gameNo=8].phaseSpentSec",
+            "value": {
+              "gameNo": 8,
+              "phaseSpentSec": {
+                "early": 32,
+                "mid": 62,
+                "late": 36
+              }
+            },
+            "unit": "秒"
+          },
+          {
+            "obsId": "obs.time.phaseSpentSec",
+            "path": "games[gameNo=4].phaseSpentSec",
+            "value": {
+              "gameNo": 4,
+              "phaseSpentSec": {
+                "early": 31,
+                "mid": 69,
+                "late": 38
+              }
+            },
+            "unit": "秒"
+          },
+          {
+            "obsId": "obs.time.groupMedians",
+            "path": "groups[0].other.medianEarlySec",
+            "value": 26,
+            "unit": "秒"
+          },
+          {
+            "obsId": "obs.time.groupMedians",
+            "path": "groups[0].timeUpLoss.medianEarlySec",
+            "value": 37,
+            "unit": "秒"
+          },
+          {
+            "obsId": "obs.time.remainingSec",
+            "path": "games[gameNo=2].timeUpLoss",
+            "value": {
+              "gameNo": 2,
+              "remainingSec": 21,
+              "timeUpLoss": true,
+              "timeLimitSec": 180
+            }
+          },
+          {
+            "obsId": "obs.time.remainingSec",
+            "path": "games[gameNo=16].timeUpLoss",
+            "value": {
+              "gameNo": 16,
+              "remainingSec": 22,
+              "timeUpLoss": true,
+              "timeLimitSec": 180
+            }
+          }
+        ]
+      },
+      {
+        "kind": "counterexample",
+        "text": "中盤について、それ以外の局 10 は中盤 76 秒、局 4 は中盤 69 秒で、時間で負けた局 2・11・14 の中盤 68 秒と局 16 の中盤 66 秒を上回る。それ以外の局 3 の中盤 66 秒は局 16 と同じ値。時間で負けた 5 局のうち、局 10 の中盤を上回るのは局 1 の中盤 79 秒だけ。",
+        "observations": [
+          {
+            "obsId": "obs.time.phaseSpentSec",
+            "path": "games[gameNo=10].phaseSpentSec",
+            "value": {
+              "gameNo": 10,
+              "phaseSpentSec": {
+                "early": 28,
+                "mid": 76,
+                "late": 45
+              }
+            },
+            "unit": "秒"
+          },
+          {
+            "obsId": "obs.time.phaseSpentSec",
+            "path": "games[gameNo=4].phaseSpentSec",
+            "value": {
+              "gameNo": 4,
+              "phaseSpentSec": {
+                "early": 31,
+                "mid": 69,
+                "late": 38
+              }
+            },
+            "unit": "秒"
+          },
+          {
+            "obsId": "obs.time.phaseSpentSec",
+            "path": "games[gameNo=3].phaseSpentSec",
+            "value": {
+              "gameNo": 3,
+              "phaseSpentSec": {
+                "early": 26,
+                "mid": 66,
+                "late": 63
+              }
+            },
+            "unit": "秒"
+          },
+          {
+            "obsId": "obs.time.phaseSpentSec",
+            "path": "games[gameNo=1].phaseSpentSec",
+            "value": {
+              "gameNo": 1,
+              "phaseSpentSec": {
+                "early": 46,
+                "mid": 79,
+                "late": 44
+              }
+            },
+            "unit": "秒"
+          },
+          {
+            "obsId": "obs.time.phaseSpentSec",
+            "path": "games[gameNo=2].phaseSpentSec",
+            "value": {
+              "gameNo": 2,
+              "phaseSpentSec": {
+                "early": 18,
+                "mid": 68,
+                "late": 73
+              }
+            },
+            "unit": "秒"
+          },
+          {
+            "obsId": "obs.time.phaseSpentSec",
+            "path": "games[gameNo=11].phaseSpentSec",
+            "value": {
+              "gameNo": 11,
+              "phaseSpentSec": {
+                "early": 37,
+                "mid": 68,
+                "late": 57
+              }
+            },
+            "unit": "秒"
+          },
+          {
+            "obsId": "obs.time.phaseSpentSec",
+            "path": "games[gameNo=14].phaseSpentSec",
+            "value": {
+              "gameNo": 14,
+              "phaseSpentSec": {
+                "early": 39,
+                "mid": 68,
+                "late": 51
+              }
+            },
+            "unit": "秒"
+          },
+          {
+            "obsId": "obs.time.phaseSpentSec",
+            "path": "games[gameNo=16].phaseSpentSec",
+            "value": {
+              "gameNo": 16,
+              "phaseSpentSec": {
+                "early": 21,
+                "mid": 66,
+                "late": 71
+              }
+            },
+            "unit": "秒"
+          },
+          {
+            "obsId": "obs.time.groupMedians",
+            "path": "groups[0].timeUpLoss.games",
+            "value": 5,
+            "unit": "局"
+          }
+        ]
+      },
+      {
+        "kind": "counterexample",
+        "text": "終盤について、それ以外の局 3 は終盤 63 秒、局 9 は終盤 53 秒で、時間で負けた局 1 の終盤 44 秒と局 14 の終盤 51 秒を上回る。局 3 の終盤 63 秒は、時間で負けた局の終盤の中央値 57 秒も上回る。",
+        "observations": [
+          {
+            "obsId": "obs.time.phaseSpentSec",
+            "path": "games[gameNo=3].phaseSpentSec",
+            "value": {
+              "gameNo": 3,
+              "phaseSpentSec": {
+                "early": 26,
+                "mid": 66,
+                "late": 63
+              }
+            },
+            "unit": "秒"
+          },
+          {
+            "obsId": "obs.time.phaseSpentSec",
+            "path": "games[gameNo=9].phaseSpentSec",
+            "value": {
+              "gameNo": 9,
+              "phaseSpentSec": {
+                "early": 20,
+                "mid": 50,
+                "late": 53
+              }
+            },
+            "unit": "秒"
+          },
+          {
+            "obsId": "obs.time.phaseSpentSec",
+            "path": "games[gameNo=1].phaseSpentSec",
+            "value": {
+              "gameNo": 1,
+              "phaseSpentSec": {
+                "early": 46,
+                "mid": 79,
+                "late": 44
+              }
+            },
+            "unit": "秒"
+          },
+          {
+            "obsId": "obs.time.phaseSpentSec",
+            "path": "games[gameNo=14].phaseSpentSec",
+            "value": {
+              "gameNo": 14,
+              "phaseSpentSec": {
+                "early": 39,
+                "mid": 68,
+                "late": 51
+              }
+            },
+            "unit": "秒"
+          },
+          {
+            "obsId": "obs.time.groupMedians",
+            "path": "groups[0].timeUpLoss.medianLateSec",
+            "value": 57,
+            "unit": "秒"
+          }
+        ]
+      },
+      {
+        "kind": "counterexample",
+        "text": "局 4 は終局の語が「切れ負け」で結果は「勝ち」(相手の側の時間切れ)。この局の序盤 31 秒・中盤 69 秒・残り 42 秒のうち中盤は、時間で負けた局の中盤の中央値 68 秒を上回るが、時間で負けた側には入っていない。局 18 も「切れ負け」で「勝ち」、残り 134 秒。「切れ負け」の局がどちらの側にも入る。",
+        "observations": [
+          {
+            "obsId": "obs.eval.game",
+            "path": "games[no=4].{result,ending}",
+            "value": {
+              "no": 4,
+              "total": 72,
+              "result": "勝ち",
+              "ending": "切れ負け",
+              "events": 13
+            }
+          },
+          {
+            "obsId": "obs.eval.game",
+            "path": "games[no=18].{result,ending}",
+            "value": {
+              "no": 18,
+              "total": 32,
+              "result": "勝ち",
+              "ending": "切れ負け",
+              "events": 2
+            }
+          },
+          {
+            "obsId": "obs.time.c10Table",
+            "path": "groups[0].c10Table[gameNo=4]",
+            "value": {
+              "gameNo": 4,
+              "earlySec": 31,
+              "midSec": 69,
+              "remainingSec": 42
+            },
+            "unit": "秒"
+          },
+          {
+            "obsId": "obs.time.c10Table",
+            "path": "groups[0].c10Table[gameNo=18]",
+            "value": {
+              "gameNo": 18,
+              "earlySec": 6,
+              "midSec": 26,
+              "remainingSec": 134
+            },
+            "unit": "秒"
+          },
+          {
+            "obsId": "obs.time.remainingSec",
+            "path": "games[gameNo=4].timeUpLoss",
+            "value": {
+              "gameNo": 4,
+              "remainingSec": 42,
+              "timeUpLoss": false,
+              "timeLimitSec": 180
+            }
+          },
+          {
+            "obsId": "obs.time.remainingSec",
+            "path": "games[gameNo=18].timeUpLoss",
+            "value": {
+              "gameNo": 18,
+              "remainingSec": 134,
+              "timeUpLoss": false,
+              "timeLimitSec": 180
+            }
+          },
+          {
+            "obsId": "obs.time.groupMedians",
+            "path": "groups[0].timeUpLoss.medianMidSec",
+            "value": 68,
+            "unit": "秒"
+          }
+        ]
+      },
+      {
+        "kind": "denominator",
+        "text": "時間で負けた局は 18 局中 5 局。その 5 局の中央値 37・68・57 秒は、局 11 の序盤 37 秒・中盤 68 秒・終盤 57 秒とそのまま同じ値で、中央値は局 11 という 1 局の値になっている。予測の条件が認める最小の局数でも、中央値は同じく 1 局の値になる。",
+        "observations": [
+          {
+            "obsId": "obs.time.groupMedians",
+            "path": "groups[0].timeUpLoss",
+            "value": {
+              "games": 5,
+              "medianEarlySec": 37,
+              "medianMidSec": 68,
+              "medianLateSec": 57
+            }
+          },
+          {
+            "obsId": "obs.time.phaseSpentSec",
+            "path": "games[gameNo=11].phaseSpentSec",
+            "value": {
+              "gameNo": 11,
+              "phaseSpentSec": {
+                "early": 37,
+                "mid": 68,
+                "late": 57
+              }
+            },
+            "unit": "秒"
+          },
+          {
+            "obsId": "obs.time.phaseSpentPatient",
+            "path": "time.phaseSpent.midOver",
+            "value": {
+              "thresholdSec": 4,
+              "games": 18,
+              "over": 15,
+              "overAndTimeUpLoss": 5
+            }
+          },
+          {
+            "obsId": "obs.time.timeUpLosses",
+            "path": "time.timeUpLosses[]",
+            "value": [
+              {
+                "gameNo": 1,
+                "total": 46,
+                "usedSec": 169,
+                "finalScore": -6648
+              },
+              {
+                "gameNo": 2,
+                "total": 82,
+                "usedSec": 159,
+                "finalScore": -42
+              },
+              {
+                "gameNo": 11,
+                "total": 69,
+                "usedSec": 162,
+                "finalScore": -3000
+              },
+              {
+                "gameNo": 14,
+                "total": 84,
+                "usedSec": 158,
+                "finalScore": -6213
+              },
+              {
+                "gameNo": 16,
+                "total": 97,
+                "usedSec": 158,
+                "finalScore": -3976
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "denominator",
+        "text": "手ごとの中盤の消費が 4 秒を超えた局は 18 局中 15 局で、時間で負けた 5 局はすべてその中に入るが、それ以外の局の多くも入る。中盤の消費の多さは、時間で負けた局とそれ以外の局を分けていない可能性がある。",
+        "observations": [
+          {
+            "obsId": "obs.time.phaseSpentPatient",
+            "path": "time.phaseSpent.midOver",
+            "value": {
+              "thresholdSec": 4,
+              "games": 18,
+              "over": 15,
+              "overAndTimeUpLoss": 5
+            }
+          }
+        ]
+      },
+      {
+        "kind": "alternative",
+        "text": "持ち時間は全局 180 秒で、時間で負けた 5 局の使った時間は 169・159・162・158・158 秒、残りは 11・21・18・22・22 秒。それ以外の局の残りは、局 3 の 25 秒から局 17 の 139 秒まで。段ごとの消費を足したものが使った時間そのものなので、残りが少ない局ほど段ごとの消費が大きくなるのは、時間の側だけで説明がつく可能性がある(時間で負けた局を「使った時間が多い局」と言い換えたものに近い)。",
+        "observations": [
+          {
+            "obsId": "obs.time.remainingSec",
+            "path": "games[].timeLimitSec",
+            "value": 180,
+            "unit": "秒"
+          },
+          {
+            "obsId": "obs.time.timeUpLosses",
+            "path": "time.timeUpLosses[]",
+            "value": [
+              {
+                "gameNo": 1,
+                "total": 46,
+                "usedSec": 169,
+                "finalScore": -6648
+              },
+              {
+                "gameNo": 2,
+                "total": 82,
+                "usedSec": 159,
+                "finalScore": -42
+              },
+              {
+                "gameNo": 11,
+                "total": 69,
+                "usedSec": 162,
+                "finalScore": -3000
+              },
+              {
+                "gameNo": 14,
+                "total": 84,
+                "usedSec": 158,
+                "finalScore": -6213
+              },
+              {
+                "gameNo": 16,
+                "total": 97,
+                "usedSec": 158,
+                "finalScore": -3976
+              }
+            ]
+          },
+          {
+            "obsId": "obs.time.remainingSec",
+            "path": "games[].remainingSec",
+            "value": [
+              {
+                "gameNo": 1,
+                "remainingSec": 11,
+                "timeUpLoss": true,
+                "timeLimitSec": 180
+              },
+              {
+                "gameNo": 2,
+                "remainingSec": 21,
+                "timeUpLoss": true,
+                "timeLimitSec": 180
+              },
+              {
+                "gameNo": 3,
+                "remainingSec": 25,
+                "timeUpLoss": false,
+                "timeLimitSec": 180
+              },
+              {
+                "gameNo": 11,
+                "remainingSec": 18,
+                "timeUpLoss": true,
+                "timeLimitSec": 180
+              },
+              {
+                "gameNo": 14,
+                "remainingSec": 22,
+                "timeUpLoss": true,
+                "timeLimitSec": 180
+              },
+              {
+                "gameNo": 16,
+                "remainingSec": 22,
+                "timeUpLoss": true,
+                "timeLimitSec": 180
+              },
+              {
+                "gameNo": 17,
+                "remainingSec": 139,
+                "timeUpLoss": false,
+                "timeLimitSec": 180
+              }
+            ],
+            "unit": "秒"
+          },
+          {
+            "obsId": "obs.time.groupMedians",
+            "path": "groups[0].timeUpLoss.games",
+            "value": 5,
+            "unit": "局"
+          }
+        ]
+      },
+      {
+        "kind": "alternative",
+        "text": "段ごとの消費は、その段の手数にも依る。局 1 は中盤 7 手で 79 秒、局 6 は中盤 19 手で 51 秒。局 8 は中盤 7 手で 62 秒、局 14 は中盤 14 手で 68 秒。手数あたりの値(midSecPerMove)は写しにあり、手数あたりで見ると局の並びが変わる可能性がある。",
+        "observations": [
+          {
+            "obsId": "obs.time.phaseSpentPatient",
+            "path": "time.phaseSpent.perGame[gameNo=1]",
+            "value": {
+              "gameNo": 1,
+              "total": 46,
+              "midMoves": 7,
+              "midSec": 79,
+              "midSecPerMove": 11.285714285714286,
+              "timeUpLoss": true
+            }
+          },
+          {
+            "obsId": "obs.time.phaseSpentPatient",
+            "path": "time.phaseSpent.perGame[gameNo=6]",
+            "value": {
+              "gameNo": 6,
+              "total": 115,
+              "midMoves": 19,
+              "midSec": 51,
+              "midSecPerMove": 2.6842105263157894,
+              "timeUpLoss": false
+            }
+          },
+          {
+            "obsId": "obs.time.phaseSpentPatient",
+            "path": "time.phaseSpent.perGame[gameNo=8]",
+            "value": {
+              "gameNo": 8,
+              "total": 43,
+              "midMoves": 7,
+              "midSec": 62,
+              "midSecPerMove": 8.857142857142858,
+              "timeUpLoss": false
+            }
+          },
+          {
+            "obsId": "obs.time.phaseSpentPatient",
+            "path": "time.phaseSpent.perGame[gameNo=14]",
+            "value": {
+              "gameNo": 14,
+              "total": 84,
+              "midMoves": 14,
+              "midSec": 68,
+              "midSecPerMove": 4.857142857142857,
+              "timeUpLoss": true
+            }
+          }
+        ]
+      }
+    ],
+    "result": "weakened",
+    "provenance": {
+      "inputs": [
+        "records/obs-3/p4-min3/00-obs_snapshot.p4.min3.json"
+      ]
+    }
+  },
+  "prediction": {
+    "writtenAt": "2026-09-25",
+    "window": "next_20_games_same_time_limit",
+    "metric": "obs.time.groupMedians[group='3 分'].timeUpLoss.medianMidSec - obs.time.groupMedians[group='3 分'].other.medianMidSec",
+    "comparator": ">=",
+    "value": 10,
+    "alsoRequires": [
+      {
+        "metric": "obs.time.groupMedians[group='3 分'].timeUpLoss.games",
+        "comparator": ">=",
+        "value": 5
+      },
+      {
+        "metric": "obs.time.groupMedians[group='3 分'].other.games",
+        "comparator": ">=",
+        "value": 10
+      }
+    ]
+  },
+  "status": "weak",
+  "knowledge": {
+    "kind": "discovered",
+    "reviewStatus": "draft",
+    "origin": {
+      "kifu": "p4/min3",
+      "lane": "time"
+    },
+    "range": "this_user"
+  },
+  "provenance": {
+    "gitHead": "c59fa4f",
+    "inputs": [
+      "records/obs-3/p4-min3/00-obs_snapshot.p4.min3.json"
+    ],
+    "excludedInputs": []
+  }
+}
