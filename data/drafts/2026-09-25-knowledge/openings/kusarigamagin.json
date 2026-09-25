@@ -1,0 +1,19 @@
+{
+  "id": "kusarigamagin",
+  "name": "鎖鎌銀",
+  "name_kana": "くさりがまぎん",
+  "side": "self",
+  "family": "居飛車系",
+  "leads_to_shape_ids": [],
+  "scenario": null,
+  "recognition_pattern": [
+    {
+      "piece": "銀",
+      "to": "2c",
+      "order_hint": 1
+    }
+  ],
+  "source": "【AI起草】自分側(先手)の鎖鎌銀。銀を相手陣の 2三 まで進出させる攻め方。定義は Wikipedia『鎖鎌銀』(https://ja.wikipedia.org/wiki/鎖鎌銀 (参照日 2026-09-25)) による。**出典の本文には定義の文が無く、図の説明(▲2三銀不成 に進出する局面)からしか座標を取れなかった**ので、confidence を low にした。recognition_pattern は **2三 への銀** 1 手。相手陣の 3 段目へ銀が入る手なので、序盤で当たることは少ない。 戦型を認識するコードは apps/server/src/analysis/ に無いため、このレコードを足しても認識の数は動かない(**測れない**)。 追加の経緯: 2026-09-25 の知識レーン第 12 組(docs/LANE_KNOWLEDGE_LOG_2026-09.md §14)。角換わり・相掛かり・横歩取りの中の指し方。",
+  "confidence_level": "low",
+  "review_status": "draft"
+}

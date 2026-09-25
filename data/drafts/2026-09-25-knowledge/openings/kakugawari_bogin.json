@@ -1,0 +1,29 @@
+{
+  "id": "kakugawari_bogin",
+  "name": "角換わり棒銀",
+  "name_kana": "かくがわりぼうぎん",
+  "side": "self",
+  "family": "居飛車系",
+  "leads_to_shape_ids": [],
+  "scenario": null,
+  "recognition_pattern": [
+    {
+      "piece": "銀",
+      "to": "3h",
+      "order_hint": 1
+    },
+    {
+      "piece": "銀",
+      "to": "2g",
+      "order_hint": 2
+    },
+    {
+      "piece": "銀",
+      "to": "2f",
+      "order_hint": 3
+    }
+  ],
+  "source": "【AI起草】自分側(先手)の角換わり棒銀。角を交換したあと、右の銀をまっすぐ 2六 まで進め、1筋 を絡めて攻める指し方。定義は Wikipedia『角換わり棒銀』(https://ja.wikipedia.org/wiki/角換わり棒銀 (参照日 2026-09-25)) の本文(右銀を ▲3八 - ▲2七 - ▲2六 へ進め、1筋 を絡めて攻める)による。recognition_pattern は 3 手(3八銀・2七銀・2六銀)。**この 3 手は相掛かりの棒銀(`boh_gin_self`)と同じ通り道**で、分かれ目は角を交換しているかどうかにあるが、それは書けない。 戦型を認識するコードは apps/server/src/analysis/ に無いため、このレコードを足しても認識の数は動かない(**測れない**)。 追加の経緯: 2026-09-25 の知識レーン第 12 組(docs/LANE_KNOWLEDGE_LOG_2026-09.md §14)。角換わりの中の指し方。",
+  "confidence_level": "medium",
+  "review_status": "draft"
+}
