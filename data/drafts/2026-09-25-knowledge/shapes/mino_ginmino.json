@@ -1,0 +1,44 @@
+{
+  "id": "mino_ginmino",
+  "name": "銀美濃",
+  "name_kana": "ぎんみの",
+  "side": "self",
+  "family": "美濃系",
+  "parent_shape_id": "mino_honmino",
+  "required_pieces": [
+    {
+      "piece": "玉",
+      "square": "2h",
+      "optional": false
+    },
+    {
+      "piece": "銀",
+      "square": "3h",
+      "optional": false
+    },
+    {
+      "piece": "銀",
+      "square": "5h",
+      "optional": false
+    },
+    {
+      "piece": "金",
+      "square": "4i",
+      "optional": false
+    }
+  ],
+  "typical_build_order": [
+    "2h",
+    "3h",
+    "5h"
+  ],
+  "characteristics": "本美濃囲いの 5八 の金の代わりに、左の銀を置いた囲いです。金と銀のつながりは良くなりますが、手数がかかり、あまり使われない形だと出典は述べています。",
+  "beginner_friendliness": {
+    "score": 2,
+    "reason": "本美濃囲いを覚えたあとの変化形です。手数がかかるうえ、左の銀の横腹が弱点になるなど欠点が多いと出典は述べています。"
+  },
+  "weak_against": "左の銀の横腹(5八の銀の横)が弱点になります。本美濃囲いと同じく、端からの攻めと上からの攻めにも弱さが残ります。",
+  "source": "【AI起草。図から起こした / 出典は下記】Wikipedia『美濃囲い』(https://ja.wikipedia.org/wiki/美濃囲い (参照日 2026-09-25))の派生形の図と本文の説明が一致した(図は 玉2八・銀3八・銀5八・金4九、本文は「左金の代わりに左銀が参加する形」)。 **図から起こした。一次資料の確認はしていない。** 人間の決定(2026-09-25 夜、指示書 §7)により「図を人が読む工程」は入れず、このレーンが図を読む。読み方は司令塔の条件どおり: **同じ形を 2 度、違うもの(盤の図と本文の説明)で読み、一致した駒だけ**を required_pieces に入れた。図の向きは先に確かめた ― この記事の図は筋が 9→1(左→右)・段が 一→九(上→下)の**先手側**で、既に座標の分かっている本美濃(玉2八・銀3八・金5八)・片美濃・金美濃と一致することで校正した。追加の経緯: 2026-09-25 の知識レーン第 28 組(docs/LANE_KNOWLEDGE_LOG_2026-09.md §32)。",
+  "confidence_level": "low",
+  "review_status": "draft"
+}

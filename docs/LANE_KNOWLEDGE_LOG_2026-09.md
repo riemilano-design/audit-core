@@ -142,30 +142,30 @@
 | 2 | 銀矢倉 |  | 矢倉系 | <https://ja.wikipedia.org/wiki/%E9%8A%80%E7%9F%A2%E5%80%89> | <https://ja.wikipedia.org/wiki/Category%3A%E5%B0%86%E6%A3%8B%E3%81%AE%E5%9B%B2%E3%81%84> | 下書き済み(yagura_ginyagura) |
 | 3 | 片矢倉 |  | 矢倉系 | <https://ja.wikipedia.org/wiki/%E7%89%87%E7%9F%A2%E5%80%89> | <https://ja.wikipedia.org/wiki/Category%3A%E5%B0%86%E6%A3%8B%E3%81%AE%E5%9B%B2%E3%81%84> | 下書き済み(yagura_katayagura) |
 | 4 | 総矢倉 |  | 矢倉系 | <https://ja.wikipedia.org/wiki/%E7%B7%8F%E7%9F%A2%E5%80%89> | <https://ja.wikipedia.org/wiki/Category%3A%E5%B0%86%E6%A3%8B%E3%81%AE%E5%9B%B2%E3%81%84> | 下書き済み(yagura_souyagura) |
-| 5 | 銀立ち矢倉 |  | 矢倉系 | <https://ja.wikipedia.org/wiki/%E9%8A%80%E7%AB%8B%E3%81%A1%E7%9F%A2%E5%80%89> | <https://ja.wikipedia.org/wiki/Category%3A%E5%B0%86%E6%A3%8B%E3%81%AE%E5%9B%B2%E3%81%84> | 保留(図のみ。§5.1) |
+| 5 | 銀立ち矢倉 |  | 矢倉系 | <https://ja.wikipedia.org/wiki/%E9%8A%80%E7%AB%8B%E3%81%A1%E7%9F%A2%E5%80%89> | <https://ja.wikipedia.org/wiki/Category%3A%E5%B0%86%E6%A3%8B%E3%81%AE%E5%9B%B2%E3%81%84> | 下書き済み(yagura_gindachi。第 28 組。図から) |
 | 6 | 菱矢倉 |  | 矢倉系 | <https://ja.wikipedia.org/wiki/%E8%8F%B1%E7%9F%A2%E5%80%89> | <https://ja.wikipedia.org/wiki/Category%3A%E5%B0%86%E6%A3%8B%E3%81%AE%E5%9B%B2%E3%81%84> | 下書き済み(yagura_hishi) |
 | 7 | 土居矢倉 |  | 矢倉系 | <https://ja.wikipedia.org/wiki/%E5%9C%9F%E5%B1%85%E7%9F%A2%E5%80%89> | <https://ja.wikipedia.org/wiki/Category%3A%E5%B0%86%E6%A3%8B%E3%81%AE%E5%9B%B2%E3%81%84> | 下書き済み(yagura_doi) |
 | 8 | 天野矢倉 |  | 矢倉系 | <https://ja.wikipedia.org/wiki/%E5%A4%A9%E9%87%8E%E7%9F%A2%E5%80%89> | <https://ja.wikipedia.org/wiki/Category%3A%E5%B0%86%E6%A3%8B%E3%81%AE%E5%9B%B2%E3%81%84> | 保留(図のみ。§5.1) |
 | 9 | 矢倉早囲い |  | 矢倉系 | <https://ja.wikipedia.org/wiki/%E7%9F%A2%E5%80%89%E6%97%A9%E5%9B%B2%E3%81%84> | <https://ja.wikipedia.org/wiki/Category%3A%E5%B0%86%E6%A3%8B%E3%81%AE%E5%9B%B2%E3%81%84> | 保留(図のみ。§5.1) |
 | 10 | 矢倉穴熊 |  | 矢倉系 | <https://ja.wikipedia.org/wiki/%E7%9F%A2%E5%80%89%E7%A9%B4%E7%86%8A> | <https://ja.wikipedia.org/wiki/Category%3A%E5%B0%86%E6%A3%8B%E3%81%AE%E5%9B%B2%E3%81%84> | 下書き済み(yagura_anaguma) |
-| 11 | 右矢倉 |  | 矢倉系 | <https://ja.wikipedia.org/wiki/%E5%8F%B3%E7%9F%A2%E5%80%89> | <https://ja.wikipedia.org/wiki/Category%3A%E5%B0%86%E6%A3%8B%E3%81%AE%E5%9B%B2%E3%81%84> | 保留(図のみ。§5.1) |
+| 11 | 右矢倉 |  | 矢倉系 | <https://ja.wikipedia.org/wiki/%E5%8F%B3%E7%9F%A2%E5%80%89> | <https://ja.wikipedia.org/wiki/Category%3A%E5%B0%86%E6%A3%8B%E3%81%AE%E5%9B%B2%E3%81%84> | 下書き済み(migi_yagura。第 28 組。図から) |
 | 12 | カニ囲い |  | 矢倉系 | <https://ja.wikipedia.org/wiki/%E3%82%AB%E3%83%8B%E5%9B%B2%E3%81%84> | <https://ja.wikipedia.org/wiki/Category%3A%E5%B0%86%E6%A3%8B%E3%81%AE%E5%9B%B2%E3%81%84> | 下書き済み(kanigakoi) |
 | 13 | 菊水矢倉 |  | 矢倉系 | <https://shogi-gym.com/kakoi/yagura/kikusui-yagura/> | <https://shogi-gym.com/kakoi/> | 下書き済み(yagura_kikusui) |
 | 14 | 富士見矢倉 |  | 矢倉系 | **出典なし** | <https://www.shougi.jp/kakoi/> | 未 |
-| 15 | へこみ矢倉 |  | 矢倉系 | **出典なし** | <https://www.shougi.jp/kakoi/> | 未 |
-| 16 | 流れ矢倉 |  | 矢倉系 | **出典なし** | <https://www.shougi.jp/kakoi/> | 未 |
+| 15 | へこみ矢倉 |  | 矢倉系 | **出典なし** | <https://www.shougi.jp/kakoi/> | 下書き済み(yagura_hekomi。第 28 組。図から) |
+| 16 | 流れ矢倉 |  | 矢倉系 | **出典なし** | <https://www.shougi.jp/kakoi/> | 下書き済み(yagura_nagare。第 28 組。図から) |
 | 17 | 流線矢倉 |  | 矢倉系 | **出典なし** | <https://www.shougi.jp/kakoi/> | 未 |
 | 18 | 角矢倉 |  | 矢倉系 | **出典なし** | <https://www.shougi.jp/kakoi/> | 未 |
 | 19 | 本美濃囲い | 美濃囲い | 美濃系 | <https://ja.wikipedia.org/wiki/%E6%9C%AC%E7%BE%8E%E6%BF%83%E5%9B%B2%E3%81%84> | <https://ja.wikipedia.org/wiki/Category%3A%E5%B0%86%E6%A3%8B%E3%81%AE%E5%9B%B2%E3%81%84> | 既存(mino_honmino) |
 | 20 | 高美濃囲い |  | 美濃系 | <https://ja.wikipedia.org/wiki/%E9%AB%98%E7%BE%8E%E6%BF%83%E5%9B%B2%E3%81%84> | <https://ja.wikipedia.org/wiki/Category%3A%E5%B0%86%E6%A3%8B%E3%81%AE%E5%9B%B2%E3%81%84> | 既存(mino_takamino) |
 | 21 | 銀冠 |  | 美濃系 | <https://ja.wikipedia.org/wiki/%E7%BE%8E%E6%BF%83%E5%9B%B2%E3%81%84> | <https://ja.wikipedia.org/wiki/Category%3A%E5%B0%86%E6%A3%8B%E3%81%AE%E5%9B%B2%E3%81%84> | 既存(mino_ginkanmuri) |
 | 22 | 片美濃囲い |  | 美濃系 | <https://ja.wikipedia.org/wiki/%E7%89%87%E7%BE%8E%E6%BF%83%E5%9B%B2%E3%81%84> | <https://ja.wikipedia.org/wiki/Category%3A%E5%B0%86%E6%A3%8B%E3%81%AE%E5%9B%B2%E3%81%84> | 下書き済み(mino_katamino) |
-| 23 | 木村美濃 |  | 美濃系 | <https://ja.wikipedia.org/wiki/%E6%9C%A8%E6%9D%91%E7%BE%8E%E6%BF%83> | <https://ja.wikipedia.org/wiki/Category%3A%E5%B0%86%E6%A3%8B%E3%81%AE%E5%9B%B2%E3%81%84> | 保留(図のみ。§5.1) |
+| 23 | 木村美濃 |  | 美濃系 | <https://ja.wikipedia.org/wiki/%E6%9C%A8%E6%9D%91%E7%BE%8E%E6%BF%83> | <https://ja.wikipedia.org/wiki/Category%3A%E5%B0%86%E6%A3%8B%E3%81%AE%E5%9B%B2%E3%81%84> | 下書き済み(mino_kimura。第 28 組。図から。§27 の保留を解消) |
 | 24 | ダイヤモンド美濃 |  | 美濃系 | <https://ja.wikipedia.org/wiki/%E3%83%80%E3%82%A4%E3%83%A4%E3%83%A2%E3%83%B3%E3%83%89%E7%BE%8E%E6%BF%83> | <https://ja.wikipedia.org/wiki/Category%3A%E5%B0%86%E6%A3%8B%E3%81%AE%E5%9B%B2%E3%81%84> | 下書き済み(mino_diamond) |
 | 25 | 金美濃 |  | 美濃系 | <https://ja.wikipedia.org/wiki/%E9%87%91%E7%BE%8E%E6%BF%83> | <https://ja.wikipedia.org/wiki/Category%3A%E5%B0%86%E6%A3%8B%E3%81%AE%E5%9B%B2%E3%81%84> | 下書き済み(mino_kinmino) |
-| 26 | 銀美濃 |  | 美濃系 | <https://ja.wikipedia.org/wiki/%E9%8A%80%E7%BE%8E%E6%BF%83> | <https://ja.wikipedia.org/wiki/Category%3A%E5%B0%86%E6%A3%8B%E3%81%AE%E5%9B%B2%E3%81%84> | 保留(図のみ。§5.1) |
-| 27 | ちょんまげ美濃 |  | 美濃系 | <https://ja.wikipedia.org/wiki/%E3%81%A1%E3%82%87%E3%82%93%E3%81%BE%E3%81%92%E7%BE%8E%E6%BF%83> | <https://ja.wikipedia.org/wiki/Category%3A%E5%B0%86%E6%A3%8B%E3%81%AE%E5%9B%B2%E3%81%84> | 保留(図のみ。§5.1) |
-| 28 | 坊主美濃 |  | 美濃系 | <https://ja.wikipedia.org/wiki/%E5%9D%8A%E4%B8%BB%E7%BE%8E%E6%BF%83> | <https://ja.wikipedia.org/wiki/Category%3A%E5%B0%86%E6%A3%8B%E3%81%AE%E5%9B%B2%E3%81%84> | 保留(図のみ。§5.1) |
+| 26 | 銀美濃 |  | 美濃系 | <https://ja.wikipedia.org/wiki/%E9%8A%80%E7%BE%8E%E6%BF%83> | <https://ja.wikipedia.org/wiki/Category%3A%E5%B0%86%E6%A3%8B%E3%81%AE%E5%9B%B2%E3%81%84> | 下書き済み(mino_ginmino。第 28 組。図から) |
+| 27 | ちょんまげ美濃 |  | 美濃系 | <https://ja.wikipedia.org/wiki/%E3%81%A1%E3%82%87%E3%82%93%E3%81%BE%E3%81%92%E7%BE%8E%E6%BF%83> | <https://ja.wikipedia.org/wiki/Category%3A%E5%B0%86%E6%A3%8B%E3%81%AE%E5%9B%B2%E3%81%84> | 下書き済み(mino_chonmage。第 28 組。図から。歩を入れた数少ない形) |
+| 28 | 坊主美濃 |  | 美濃系 | <https://ja.wikipedia.org/wiki/%E5%9D%8A%E4%B8%BB%E7%BE%8E%E6%BF%83> | <https://ja.wikipedia.org/wiki/Category%3A%E5%B0%86%E6%A3%8B%E3%81%AE%E5%9B%B2%E3%81%84> | 保留(定義が「玉頭に歩が無い」という否定で、片美濃と駒の位置が同じ。第 28 組) |
 | 29 | 四枚美濃 |  | 美濃系 | <https://ja.wikipedia.org/wiki/%E5%9B%9B%E6%9E%9A%E7%BE%8E%E6%BF%83> | <https://ja.wikipedia.org/wiki/Category%3A%E5%B0%86%E6%A3%8B%E3%81%AE%E5%9B%B2%E3%81%84> | 保留(図のみ。§5.1) |
 | 30 | 天守閣美濃 |  | 美濃系 | <https://ja.wikipedia.org/wiki/%E5%A4%A9%E5%AE%88%E9%96%A3%E7%BE%8E%E6%BF%83> | <https://ja.wikipedia.org/wiki/Category%3A%E5%B0%86%E6%A3%8B%E3%81%AE%E5%9B%B2%E3%81%84> | 下書き済み(tenshukaku_mino 自分、low。第 26 組。§5.1 の保留を解消) |
 | 31 | 左美濃 |  | 美濃系 | <https://ja.wikipedia.org/wiki/%E5%B7%A6%E7%BE%8E%E6%BF%83> | <https://ja.wikipedia.org/wiki/Category%3A%E5%B0%86%E6%A3%8B%E3%81%AE%E5%9B%B2%E3%81%84> | 下書き済み(hidarimino 自分。第 26 組。§5.1 の保留を解消) |
@@ -1187,7 +1187,7 @@
 | 5 | **盤上から駒が消える/現れる** | 角交換振り飛車・角交換相振り飛車(角が盤から消える)・持ち駒を打つ手筋 | §24・§26 |
 | 6 | **タイミング** | 陽動振り飛車(相居飛車から途中で振る)・「囲いをまだ決めない」こと自体を指す名前 | §24 |
 
-**数の目安**: この 6 つで書けなかったのは、狙い 52 件(型 4 が大半)・戦法 28 件・囲い 0 件である。**囲いは駒の位置だけで決まるので 1 件も落ちていない**。落ちるのは「動きの意味」を名前にしたもの ― つまり**このアプリが本当に言いたいこと**の側である。
+**数の目安**: この 6 つで書けなかったのは、狙い 52 件(型 4 が大半)・戦法 28 件・囲い 0 件である。**囲いは駒の位置だけで決まるのでほとんど落ちない**(**訂正: 第 28 組で 1 件見つかった ― 坊主美濃は「玉頭に歩が無い」という否定で、駒の位置は片美濃と同じ。§32)。落ちるのは「動きの意味」を名前にしたもの ― つまり**このアプリが本当に言いたいこと**の側である。
 
 ### 31.3 誤認の側で分かった 2 つ(どちらも物差しが要る)
 
@@ -1220,6 +1220,35 @@
 4. **上位は相手側に偏っている**(I-9 の多い 25 件のうち 20 件が `*_opponent`)。相手側は 35 件すべてを写したので、**同じ局面で多くの候補が同時に立つ**。1 位は一夜囲いの相手側(立った 558・I-9 467)で、これは P-85(初期配置と重なる)と同じ形の問題である。
 
 **したがって、枚数を減らす直しは「誤認の割合」ではなく「候補として立つ回数」を減らす手段である。** 誤認の割合(4 本に 3 本)を下げるには、判定側の扱い(何をもって forming と呼ぶか、証拠 1 件で立った候補を見せるか)を変えるしかない。**それは判断的知識なので、このレーンの持ち物ではない。**
+
+## 32. 第 28 組(2026-09-25 夜): 囲い 7 件 ― **図を自分で読んで埋めた。沈黙は動かない**
+
+人間の決定(2026-09-25 夜、指示書 §7)により「図を人が読む工程」は入れず、**このレーンが図を読む**ことになった。対象は保留 11 + 未 13 = 24 行。この組はその最初のまとまり。
+
+**読み方(司令塔の条件どおり)**。Wikipedia の囲いの記事の図は、`get_page_text` では要約されて落ちるが、**内蔵ブラウザで開くと筋 9→1・段 一→九 の表としてそのまま読める**。そこで次の手順にした。
+
+1. **図の向きを先に確かめる。** 記事の先頭の図(本美濃)を読み、既に座標の分かっている 玉2八・銀3八・金5八・金4九 と一致することで、**この記事の図が先手側の向きである**ことを校正した。片美濃・金美濃も既存のレコードと一致した。
+2. **同じ形を 2 度、違うもので読む。** 盤の図と、本文の説明(「左銀が7六に移れば銀立ち矢倉」など)の両方で読み、**一致した駒だけ**を `required_pieces` に入れた。木村美濃は、派生形の図と「木村美濃囲いの攻略」の図という**2 つの図が一致した**。
+3. `confidence_level` はすべて **low**、`source` に「図から起こした・一次資料の確認はしていない」と明記。
+
+**足した ID**: `mino_kimura`(木村美濃 = 玉2八・金3八・銀4七)・`mino_ginmino`(銀美濃 = 玉2八・銀3八・銀5八・金4九)・`mino_chonmage`(ちょんまげ美濃 = 片美濃 + 2六歩)・`yagura_hekomi`(へこみ矢倉 = 玉8八・銀7七・金7八・金6八)・`migi_yagura`(右矢倉 = 玉2八・金3八・銀3七・金4七)・`yagura_gindachi`(銀立ち矢倉 = 玉8八・金7八・金6七・銀7六)・`yagura_nagare`(流れ矢倉 = 玉8八・金7八・金6七・銀5七)。**スキーマ検証 80 件 OK**。
+
+**第 27 組の保留を 1 件解消した**: 木村美濃は、将棋ジムのページの座標が後手側の段で向きが読めず保留にしていたが、**向きを校正できる図が見つかったので埋めた**。
+
+**保留を 1 件足した**: 坊主美濃。**定義が「玉頭に歩が無い」という否定**で、駒の位置は片美濃とまったく同じである(図で確かめた)。**囲いで「書けない型」に当たったのはこれが初めて**(§31.2 では囲い 0 件と書いていたので、そこを 1 件に改める)。
+
+**測った数**(狙いは 18 件で固定。形を 73 件 → 80 件):
+
+| 範囲 | 自分側の沈黙 | 自分側の I-9 型 | 相手側 | 形全体の沈黙 |
+|---|---|---|---|---|
+| 30 手まで | 779 → **779**(不変) | 6942 → **7781**(+839) | 554・9248 で不変 | 460 → 460 |
+| 全手 | 1232 → **1221**(−11) | 24795 → **28380**(+3585) | 947・27804 で不変 | 628 → 622 |
+
+**読み方**: **30 手までは 1 局面も動かなかった。** 全手で 11 局面だけ減り、代価は証拠なしの主張 3585 件(**1 局面あたり 326 件**)である。相手側の 104 件/局面よりさらに悪い。**図を読んで語彙を増やしても、沈黙は動かない**という第 4 組以来の結論が、材料を変えても再現した。
+
+**当たり方(4 人 70 局、全手)**: ちょんまげ美濃 53 局で立ち完成 1・75% 以上 7、へこみ矢倉 45 局、流れ矢倉 34 局、木村美濃 33 局(完成 2)、銀立ち矢倉 30 局、右矢倉 26 局、銀美濃 20 局。**歩を `required_pieces` に入れたちょんまげ美濃が問題なく動いた**ので、歩を含む形は書ける(片美濃との違いが歩 1 枚だけなので、当たる局面はほぼ片美濃と重なる)。
+
+**埋まった数**: 囲い 自分側 **45 / 62**・相手側 35 / 35(相手側への写しはこの 7 件ぶん未処理)・戦法 185 行(未 0)・狙い 18 / 67。**残りの対象は 24 − 8 = 16 行。**
 
 ## 付録 A. 局ごとの一覧(4 人 70 局。40 手目と終局時の自玉・自飛の筋・相手玉・相手飛の筋、形の認識の前後)
 

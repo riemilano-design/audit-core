@@ -1,0 +1,45 @@
+{
+  "id": "yagura_gindachi",
+  "name": "銀立ち矢倉",
+  "name_kana": "ぎんだちやぐら",
+  "side": "self",
+  "family": "矢倉系",
+  "parent_shape_id": "yagura_kinyagura",
+  "required_pieces": [
+    {
+      "piece": "玉",
+      "square": "8h",
+      "optional": false
+    },
+    {
+      "piece": "金",
+      "square": "7h",
+      "optional": false
+    },
+    {
+      "piece": "金",
+      "square": "6g",
+      "optional": false
+    },
+    {
+      "piece": "銀",
+      "square": "7f",
+      "optional": false
+    }
+  ],
+  "typical_build_order": [
+    "8h",
+    "7h",
+    "6g",
+    "7f"
+  ],
+  "characteristics": "金矢倉の左の銀が 7六 まで前に出た形です。相矢倉よりも、振り飛車に対する玉頭位取り戦法で使われることが多いと出典は述べています。",
+  "beginner_friendliness": {
+    "score": 2,
+    "reason": "銀が前に出ているぶん攻めに使いやすい形ですが、玉のまわりの守りは薄くなります。昭和 40 年代に多く指された形です。"
+  },
+  "weak_against": "銀が玉から離れるため、玉のまわりが薄くなります。7七 の地点が空くので、そこを狙われる筋が生じます。",
+  "source": "【AI起草。図から起こした / 出典は下記】Wikipedia『矢倉囲い』(https://ja.wikipedia.org/wiki/矢倉囲い (参照日 2026-09-25))の図と本文の説明が一致した(図は 玉8八・金7八・金6七・銀7六、本文は「左銀が7六に移れば銀立ち矢倉」)。 **図から起こした。一次資料の確認はしていない。** 人間の決定(2026-09-25 夜、指示書 §7)により「図を人が読む工程」は入れず、このレーンが図を読む。読み方は司令塔の条件どおり: **同じ形を 2 度、違うもの(盤の図と本文の説明)で読み、一致した駒だけ**を required_pieces に入れた。図の向きは先に確かめた ― この記事の図は筋が 9→1(左→右)・段が 一→九(上→下)の**先手側**で、既に座標の分かっている本美濃(玉2八・銀3八・金5八)・片美濃・金美濃と一致することで校正した。追加の経緯: 2026-09-25 の知識レーン第 28 組(docs/LANE_KNOWLEDGE_LOG_2026-09.md §32)。",
+  "confidence_level": "low",
+  "review_status": "draft"
+}
