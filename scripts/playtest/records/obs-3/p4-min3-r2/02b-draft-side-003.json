@@ -1,0 +1,141 @@
+{
+  "schemaVersion": "0.3",
+  "hypothesisId": "H-p4-min3r2bside-003",
+  "subject": {
+    "customer": "p4",
+    "groups": [
+      "3 分"
+    ],
+    "gamesCount": 18
+  },
+  "scope": "this_user",
+  "lane": "side",
+  "statement": "同じ 182 回を評価の帯で分けると、有利の帯の 15 回では相手玉側が 12 回・自玉側が 1 回、互角の帯の 25 回では相手玉側 10 回・自玉側 5 回、不利の帯の 141 回では相手玉側 60 回・自玉側 37 回でした。冊子の崩れの数では、有利からの崩れが 5、有利からの崩れで負けた局が 5 です。有利の帯に入っても手の向きが自玉側へ戻りにくい可能性があります。",
+  "observations": [
+    {
+      "obsId": "obs.time.decisionContext",
+      "path": "obs_geo decisionContext[] の行数",
+      "value": 182,
+      "unit": "行"
+    },
+    {
+      "obsId": "obs.time.decisionContext",
+      "path": "obs_geo decisionContext[] のうち evalBand == \"ahead\" の行数",
+      "value": 15,
+      "unit": "行"
+    },
+    {
+      "obsId": "obs.geo.moveCombination",
+      "path": "obs_geo decisionContext[] を obs_geo moves[] と (gameNo, kifPly) で突き合わせた行(182 行すべて突き合った) のうち evalBand == \"ahead\" かつ side == \"attack\" の行数",
+      "value": 12,
+      "unit": "行"
+    },
+    {
+      "obsId": "obs.geo.moveCombination",
+      "path": "obs_geo decisionContext[] を obs_geo moves[] と (gameNo, kifPly) で突き合わせた行(182 行すべて突き合った) のうち evalBand == \"ahead\" かつ side == \"defense\" の行数",
+      "value": 1,
+      "unit": "行"
+    },
+    {
+      "obsId": "obs.time.decisionContext",
+      "path": "obs_geo decisionContext[] のうち evalBand == \"level\" の行数",
+      "value": 25,
+      "unit": "行"
+    },
+    {
+      "obsId": "obs.geo.moveCombination",
+      "path": "obs_geo decisionContext[] を obs_geo moves[] と (gameNo, kifPly) で突き合わせた行(182 行すべて突き合った) のうち evalBand == \"level\" かつ side == \"attack\" の行数",
+      "value": 10,
+      "unit": "行"
+    },
+    {
+      "obsId": "obs.geo.moveCombination",
+      "path": "obs_geo decisionContext[] を obs_geo moves[] と (gameNo, kifPly) で突き合わせた行(182 行すべて突き合った) のうち evalBand == \"level\" かつ side == \"defense\" の行数",
+      "value": 5,
+      "unit": "行"
+    },
+    {
+      "obsId": "obs.time.decisionContext",
+      "path": "obs_geo decisionContext[] のうち evalBand == \"behind\" の行数",
+      "value": 141,
+      "unit": "行"
+    },
+    {
+      "obsId": "obs.geo.moveCombination",
+      "path": "obs_geo decisionContext[] を obs_geo moves[] と (gameNo, kifPly) で突き合わせた行(182 行すべて突き合った) のうち evalBand == \"behind\" かつ side == \"attack\" の行数",
+      "value": 60,
+      "unit": "行"
+    },
+    {
+      "obsId": "obs.geo.moveCombination",
+      "path": "obs_geo decisionContext[] を obs_geo moves[] と (gameNo, kifPly) で突き合わせた行(182 行すべて突き合った) のうち evalBand == \"behind\" かつ side == \"defense\" の行数",
+      "value": 37,
+      "unit": "行"
+    },
+    {
+      "obsId": "obs.time.decisionContext",
+      "path": "obs_geo decisionContext[] のうち evalBand が null(帯が測れていない)の行数",
+      "value": 1,
+      "unit": "行"
+    },
+    {
+      "obsId": "obs.report.overview",
+      "path": "overview.fromAhead(有利からの崩れ)",
+      "value": 5
+    },
+    {
+      "obsId": "obs.report.overview",
+      "path": "overview.fromAheadLoss(有利からの崩れで負けた局)",
+      "value": 5
+    },
+    {
+      "obsId": "obs.report.overview",
+      "path": "overview.fell(崩れの総数。段の内訳は early 11・mid 15・late 4)",
+      "value": {
+        "fell": 30,
+        "early": 11,
+        "mid": 15,
+        "late": 4
+      }
+    }
+  ],
+  "counterEvidence": {
+    "attempted": false,
+    "items": [],
+    "result": "none_found",
+    "provenance": {
+      "inputs": []
+    }
+  },
+  "prediction": {
+    "writtenAt": "2026-09-26",
+    "window": "next_20_games_same_time_limit",
+    "metric": "obs.time.decisionContext の evalBand が ahead の行に突き合った obs.geo.moveCombination の side が defense の割合",
+    "comparator": "<=",
+    "value": 0.2,
+    "alsoRequires": [
+      {
+        "metric": "obs.time.decisionContext の evalBand が ahead の行数(この帯の分母。18 局では 15 行しかなかった)",
+        "comparator": ">=",
+        "value": 20
+      }
+    ]
+  },
+  "status": "proposed",
+  "knowledge": {
+    "kind": "discovered",
+    "reviewStatus": "draft",
+    "origin": {
+      "kifu": "p4/min3",
+      "lane": "side"
+    },
+    "range": "this_user"
+  },
+  "provenance": {
+    "gitHead": "302bc37",
+    "inputs": [
+      "records/obs-3/p4-min3-r2/00-obs_snapshot.p4.min3.r2b.json"
+    ],
+    "excludedInputs": []
+  }
+}

@@ -1,0 +1,200 @@
+{
+  "schemaVersion": "0.3",
+  "subject": {
+    "customer": "p4",
+    "groups": [
+      "3 分"
+    ],
+    "gamesCount": 18
+  },
+  "scope": "this_user",
+  "lane": "shape",
+  "counterEvidence": {
+    "attempted": false,
+    "items": [],
+    "result": "none_found",
+    "provenance": {
+      "inputs": []
+    }
+  },
+  "status": "proposed",
+  "knowledge": {
+    "kind": "discovered",
+    "reviewStatus": "draft",
+    "origin": {
+      "kifu": "p4/min3",
+      "lane": "shape"
+    },
+    "range": "this_user"
+  },
+  "provenance": {
+    "gitHead": "a54eae9",
+    "inputs": [
+      "records/obs-3/p4-min3-r2/00-obs_snapshot.p4.min3.r2b.json"
+    ],
+    "excludedInputs": []
+  },
+  "hypothesisId": "H-p4-min3r2bshape-002",
+  "statement": "自分側の「最も近づいた形」の欠けがちょうど 1 枚だった局は、18 局のうち 13 局でした。止まる場所が局ごとにばらばらなのではなく、多くの局で同じ最後の 1 枚の手前まで進んで止まっている可能性があります。",
+  "observations": [
+    {
+      "obsId": "obs.vocab.shapeMissingSummary",
+      "path": "recognition byGroup[group].{shapeMissingTotal,selfClosestOneAwayGames}",
+      "value": {
+        "shapeMissingTotal": 31804,
+        "selfClosestOneAwayGames": 13
+      }
+    },
+    {
+      "obsId": "obs.eval.game",
+      "path": "games[].{no,total,result,ending,events}",
+      "value": [
+        {
+          "no": 1,
+          "total": 46,
+          "result": "負け",
+          "ending": "切れ負け",
+          "events": 9
+        },
+        {
+          "no": 2,
+          "total": 82,
+          "result": "負け",
+          "ending": "切れ負け",
+          "events": 4
+        },
+        {
+          "no": 3,
+          "total": 77,
+          "result": "負け",
+          "ending": "詰み",
+          "events": 9
+        },
+        {
+          "no": 4,
+          "total": 72,
+          "result": "勝ち",
+          "ending": "切れ負け",
+          "events": 13
+        },
+        {
+          "no": 5,
+          "total": 53,
+          "result": "勝ち",
+          "ending": "詰み",
+          "events": 2
+        },
+        {
+          "no": 6,
+          "total": 115,
+          "result": "負け",
+          "ending": "詰み",
+          "events": 10
+        },
+        {
+          "no": 7,
+          "total": 35,
+          "result": "負け",
+          "ending": "詰み",
+          "events": 5
+        },
+        {
+          "no": 8,
+          "total": 43,
+          "result": "負け",
+          "ending": "詰み",
+          "events": 9
+        },
+        {
+          "no": 9,
+          "total": 62,
+          "result": "負け",
+          "ending": "詰み",
+          "events": 9
+        },
+        {
+          "no": 10,
+          "total": 73,
+          "result": "負け",
+          "ending": "詰み",
+          "events": 13
+        },
+        {
+          "no": 11,
+          "total": 69,
+          "result": "負け",
+          "ending": "切れ負け",
+          "events": 8
+        },
+        {
+          "no": 12,
+          "total": 71,
+          "result": "負け",
+          "ending": "詰み",
+          "events": 9
+        },
+        {
+          "no": 13,
+          "total": 58,
+          "result": "負け",
+          "ending": "詰み",
+          "events": 6
+        },
+        {
+          "no": 14,
+          "total": 84,
+          "result": "負け",
+          "ending": "切れ負け",
+          "events": 8
+        },
+        {
+          "no": 15,
+          "total": 74,
+          "result": "負け",
+          "ending": "詰み",
+          "events": 10
+        },
+        {
+          "no": 16,
+          "total": 97,
+          "result": "負け",
+          "ending": "切れ負け",
+          "events": 10
+        },
+        {
+          "no": 17,
+          "total": 24,
+          "result": "勝ち",
+          "ending": "投了",
+          "events": 1
+        },
+        {
+          "no": 18,
+          "total": 32,
+          "result": "勝ち",
+          "ending": "切れ負け",
+          "events": 2
+        }
+      ]
+    }
+  ],
+  "prediction": {
+    "writtenAt": "2026-09-26",
+    "window": "next_20_games_same_time_limit",
+    "metric": "obs.vocab.shapeMissingSummary の selfClosestOneAwayGames(3 分の次の 20 局)",
+    "comparator": ">=",
+    "value": 10,
+    "alsoRequires": [
+      {
+        "metric": "obs.eval.game の局数(3 分の次の組)",
+        "comparator": ">=",
+        "value": 20
+      },
+      {
+        "metric": "obs.vocab.shapeStatus の self.forming(同じ組の延べ件数)",
+        "comparator": ">=",
+        "value": 1000
+      }
+    ]
+  }
+}

@@ -1,0 +1,126 @@
+{
+  "schemaVersion": "0.3",
+  "hypothesisId": "H-p4-min3r2bfork-002",
+  "subject": {
+    "customer": "p4",
+    "groups": ["3 分"],
+    "gamesCount": 18
+  },
+  "scope": "this_user",
+  "lane": "fork",
+  "statement": "分かれ道で選んだ側は段によって違い、終盤では攻め側 22・守り側 4、中盤では攻め側 26・守り側 15、序盤では攻め側 3・守り側 4 でした。段が進むほど攻め側へ寄る選び方になっている可能性があります。",
+  "observations": [
+    {
+      "obsId": "obs.fork.values",
+      "path": "values(分かれ道と側の定義に使われた値)",
+      "value": { "sideZoneRadius": 2, "startPly": 17, "minLossCp": 600, "narrowGapCp": 400, "riseCp": 400, "sideVersion": 2, "hitsDefenderRadius": 2, "attackZoneRadius": 3 }
+    },
+    {
+      "obsId": "obs.time.decisionContext",
+      "path": "decisionContext[] のうち fork === true の行数",
+      "value": 107
+    },
+    {
+      "obsId": "obs.time.decisionContext",
+      "path": "decisionContext[] のうち fork === true かつ phase === \"late\" の行数",
+      "value": 37
+    },
+    {
+      "obsId": "obs.time.decisionContext",
+      "path": "decisionContext[] のうち fork === true かつ phase === \"mid\" の行数",
+      "value": 59
+    },
+    {
+      "obsId": "obs.time.decisionContext",
+      "path": "decisionContext[] のうち fork === true かつ phase === \"early\" の行数",
+      "value": 11
+    },
+    {
+      "obsId": "obs.geo.moveCombination",
+      "path": "moves[] を (gameNo, kifPly) で decisionContext[] に突き合わせ、fork === true かつ phase === \"late\" かつ side === \"attack\" の行数",
+      "value": 22
+    },
+    {
+      "obsId": "obs.geo.moveCombination",
+      "path": "moves[] を (gameNo, kifPly) で decisionContext[] に突き合わせ、fork === true かつ phase === \"late\" かつ side === \"defense\" の行数",
+      "value": 4
+    },
+    {
+      "obsId": "obs.geo.moveCombination",
+      "path": "moves[] を (gameNo, kifPly) で decisionContext[] に突き合わせ、fork === true かつ phase === \"mid\" かつ side === \"attack\" の行数",
+      "value": 26
+    },
+    {
+      "obsId": "obs.geo.moveCombination",
+      "path": "moves[] を (gameNo, kifPly) で decisionContext[] に突き合わせ、fork === true かつ phase === \"mid\" かつ side === \"defense\" の行数",
+      "value": 15
+    },
+    {
+      "obsId": "obs.geo.moveCombination",
+      "path": "moves[] を (gameNo, kifPly) で decisionContext[] に突き合わせ、fork === true かつ phase === \"early\" かつ side === \"attack\" の行数",
+      "value": 3
+    },
+    {
+      "obsId": "obs.geo.moveCombination",
+      "path": "moves[] を (gameNo, kifPly) で decisionContext[] に突き合わせ、fork === true かつ phase === \"early\" かつ side === \"defense\" の行数",
+      "value": 4
+    },
+    {
+      "obsId": "obs.geo.moveCombination",
+      "path": "moves[] を (gameNo, kifPly) で decisionContext[] に突き合わせ、fork === true かつ side === \"none\" または \"both\" の行数(側の分母に入らない)",
+      "value": 33
+    },
+    {
+      "obsId": "obs.time.decisionContext",
+      "path": "decisionContext[] のうち fork === null(測れていない)かつ phase === \"early\" の行数",
+      "value": 16
+    },
+    {
+      "obsId": "obs.time.decisionContext",
+      "path": "decisionContext[] のうち fork === null(測れていない)の行数",
+      "value": 19
+    }
+  ],
+  "counterEvidence": {
+    "attempted": false,
+    "items": [],
+    "result": "none_found",
+    "provenance": { "inputs": [] }
+  },
+  "prediction": {
+    "writtenAt": "2026-09-26",
+    "window": "next_20_games_same_time_limit",
+    "metric": "obs.time.decisionContext の fork が true かつ phase が late の行のうち、obs.geo.moveCombination の side が attack の行数 ÷ side が defense の行数",
+    "comparator": ">=",
+    "value": 2,
+    "alsoRequires": [
+      {
+        "metric": "obs.time.decisionContext の fork が true かつ phase が late で obs.geo.moveCombination の side が attack または defense の行数",
+        "comparator": ">=",
+        "value": 20
+      },
+      {
+        "metric": "obs.time.decisionContext の fork が true かつ phase が mid で obs.geo.moveCombination の side が attack または defense の行数",
+        "comparator": ">=",
+        "value": 30
+      },
+      {
+        "metric": "obs.time.decisionContext の fork が true かつ phase が early で obs.geo.moveCombination の side が attack または defense の行数",
+        "comparator": ">=",
+        "value": 15
+      }
+    ]
+  },
+  "status": "proposed",
+  "knowledge": {
+    "kind": "discovered",
+    "reviewStatus": "draft",
+    "origin": { "kifu": "p4/min3", "lane": "fork" },
+    "range": "this_user"
+  },
+  "provenance": {
+    "gitHead": "f22ae4d",
+    "inputs": ["records/obs-3/p4-min3-r2/00-obs_snapshot.p4.min3.r2b.json"],
+    "excludedInputs": []
+  }
+}

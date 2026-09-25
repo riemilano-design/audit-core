@@ -1,0 +1,113 @@
+{
+  "schemaVersion": "0.3",
+  "subject": {
+    "customer": "p4",
+    "groups": [
+      "3 分"
+    ],
+    "gamesCount": 18
+  },
+  "scope": "this_user",
+  "lane": "shape",
+  "counterEvidence": {
+    "attempted": false,
+    "items": [],
+    "result": "none_found",
+    "provenance": {
+      "inputs": []
+    }
+  },
+  "status": "proposed",
+  "knowledge": {
+    "kind": "discovered",
+    "reviewStatus": "draft",
+    "origin": {
+      "kifu": "p4/min3",
+      "lane": "shape"
+    },
+    "range": "this_user"
+  },
+  "provenance": {
+    "gitHead": "a54eae9",
+    "inputs": [
+      "records/obs-3/p4-min3-r2/00-obs_snapshot.p4.min3.r2b.json"
+    ],
+    "excludedInputs": []
+  },
+  "hypothesisId": "H-p4-min3r2bshape-003",
+  "statement": "初期位置から動かす必要がある駒だけで数え直すと、「そろっていた」に数えられた延べは 9 にとどまり、数え直せない形(必要駒が 0 枚の形)は自分側・相手側とも 0 件でした。同じ写しで、自分側の形を名前で断定して出せた件数は 0、控えめに出した件数は 657、伏せた件数は 4703 です。どの段まで進んだのかを外から見分けられている場面がそもそも少なく、止まり方が局ごとに違うのか同じなのかを、いまの数だけでは言い分けられない、という読みです。",
+  "observations": [
+    {
+      "obsId": "obs.vocab.shapeMovedRequiredSummary",
+      "path": "recognition byGroup[group].shapeMovedRequiredCompleteTotal, recognition movedRequiredZeroShapeCounts.{self,opponent}",
+      "value": {
+        "completeTotal": 9,
+        "zeroCount": {
+          "self": 0,
+          "opponent": 0
+        }
+      }
+    },
+    {
+      "obsId": "obs.vocab.exposure",
+      "path": "recognition byGroup[group].exposure[\"D''\"].{shape,intent,opening}.{self,opponent}.{named,hedged,hidden}",
+      "value": {
+        "shape": {
+          "self": {
+            "named": 0,
+            "hedged": 657,
+            "hidden": 4703
+          },
+          "opponent": {
+            "named": 0,
+            "hedged": 1109,
+            "hidden": 4132
+          }
+        },
+        "intent": {
+          "self": {
+            "named": 0,
+            "hedged": 0,
+            "hidden": 0
+          },
+          "opponent": {
+            "named": 95,
+            "hedged": 1255,
+            "hidden": 837
+          }
+        },
+        "opening": {
+          "self": {
+            "named": 0,
+            "hedged": 2238,
+            "hidden": 3124
+          },
+          "opponent": {
+            "named": 0,
+            "hedged": 233,
+            "hidden": 866
+          }
+        }
+      }
+    }
+  ],
+  "prediction": {
+    "writtenAt": "2026-09-26",
+    "window": "next_20_games_same_time_limit",
+    "metric": "obs.vocab.exposure の shape.self.named(3 分の次の 20 局・延べ件数)",
+    "comparator": "==",
+    "value": 0,
+    "alsoRequires": [
+      {
+        "metric": "obs.eval.game の局数(3 分の次の組)",
+        "comparator": ">=",
+        "value": 20
+      },
+      {
+        "metric": "obs.vocab.shapeMovedRequiredSummary の zeroCount.self(同じ組)",
+        "comparator": "==",
+        "value": 0
+      }
+    ]
+  }
+}

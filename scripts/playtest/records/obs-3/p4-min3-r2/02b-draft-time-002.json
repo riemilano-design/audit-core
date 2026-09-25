@@ -1,0 +1,92 @@
+{
+  "schemaVersion": "0.3",
+  "hypothesisId": "H-p4-min3r2btime-002",
+  "subject": { "customer": "p4", "groups": ["3 分"], "gamesCount": 18 },
+  "scope": "this_user",
+  "lane": "time",
+  "statement": "分かれ道を測れた行では、長い側の帯 39 行のうち 27 行、短い側の帯 124 行のうち 80 行が分かれ道でした。一方で攻め側で指された手は、長い側の帯 42 行のうち 14 行、短い側の帯 140 行のうち 69 行です。長く考えた局面を短く指した局面から分けている印は、分かれ道であるかどうかよりも、その手がどちら側で指されたかにある可能性があります。",
+  "observations": [
+    {
+      "obsId": "obs.time.decisionContext",
+      "path": "items[obsId=obs.time.decisionContext].value[] のうち spentBucket が長い側の 42 行を fork の値で数えた行数",
+      "value": { "rowsLongBucket": 42, "forkKnown": 39, "forkTrue": 27, "forkFalse": 12, "forkNull": 3 },
+      "unit": "行",
+      "derived": {
+        "kind": "percent",
+        "numerator": { "obsId": "obs.time.decisionContext", "value": 27 },
+        "denominator": { "obsId": "obs.time.decisionContext", "value": 39 }
+      }
+    },
+    {
+      "obsId": "obs.time.decisionContext",
+      "path": "items[obsId=obs.time.decisionContext].value[] のうち spentBucket が短い側の 140 行を fork の値で数えた行数",
+      "value": { "rowsShortBucket": 140, "forkKnown": 124, "forkTrue": 80, "forkFalse": 44, "forkNull": 16 },
+      "unit": "行",
+      "derived": {
+        "kind": "percent",
+        "numerator": { "obsId": "obs.time.decisionContext", "value": 80 },
+        "denominator": { "obsId": "obs.time.decisionContext", "value": 124 }
+      }
+    },
+    {
+      "obsId": "obs.geo.moveCombination",
+      "path": "items[obsId=obs.geo.moveCombination].value[] を gameNo と kifPly で obs.time.decisionContext の spentBucket が長い側の 42 行に突き合わせ、side の値で数えた行数",
+      "value": { "rowsLongBucket": 42, "attack": 14, "defense": 12, "none": 13, "both": 3 },
+      "unit": "行"
+    },
+    {
+      "obsId": "obs.geo.moveCombination",
+      "path": "items[obsId=obs.geo.moveCombination].value[] を gameNo と kifPly で obs.time.decisionContext の spentBucket が短い側の 140 行に突き合わせ、side の値で数えた行数",
+      "value": { "rowsShortBucket": 140, "attack": 69, "defense": 31, "none": 34, "both": 6 },
+      "unit": "行"
+    },
+    {
+      "obsId": "obs.time.decisionContext",
+      "path": "items[obsId=obs.time.decisionContext].value[] を spentBucket と phase で数えた行数",
+      "value": {
+        "longBucket": { "rows": 42, "early": 3, "mid": 26, "late": 13 },
+        "shortBucket": { "rows": 140, "early": 30, "mid": 63, "late": 47 }
+      },
+      "unit": "行"
+    },
+    {
+      "obsId": "obs.time.decisionContext",
+      "path": "items[obsId=obs.time.decisionContext].value[] を spentBucket と evalBand で数えた行数",
+      "value": {
+        "longBucket": { "rows": 42, "behind": 34, "level": 4, "ahead": 4, "evalBandNull": 0 },
+        "shortBucket": { "rows": 140, "behind": 107, "level": 21, "ahead": 11, "evalBandNull": 1 }
+      },
+      "unit": "行"
+    }
+  ],
+  "counterEvidence": {
+    "attempted": false,
+    "items": [],
+    "result": "none_found",
+    "provenance": { "inputs": [] }
+  },
+  "prediction": {
+    "writtenAt": "2026-09-26",
+    "window": "next_20_games_same_time_limit",
+    "metric": "obs.time.decisionContext の spentBucket が長い側の行で obs.geo.moveCombination の side が attack である行の割合 から、spentBucket が短い側の行での同じ割合 を引いた差(百分率)",
+    "comparator": "<",
+    "value": 0,
+    "alsoRequires": [
+      { "metric": "obs.time.decisionContext のうち spentBucket が長い側の行数", "comparator": ">=", "value": 30 },
+      { "metric": "obs.time.decisionContext のうち spentBucket が短い側の行数", "comparator": ">=", "value": 100 },
+      { "metric": "obs.time.decisionContext のうち fork が null でない行数", "comparator": ">=", "value": 120 }
+    ]
+  },
+  "status": "proposed",
+  "knowledge": {
+    "kind": "discovered",
+    "reviewStatus": "draft",
+    "origin": { "kifu": "p4/min3", "lane": "time" },
+    "range": "this_user"
+  },
+  "provenance": {
+    "gitHead": "8f628f2",
+    "inputs": ["records/obs-3/p4-min3-r2/00-obs_snapshot.p4.min3.r2b.json"],
+    "excludedInputs": []
+  }
+}

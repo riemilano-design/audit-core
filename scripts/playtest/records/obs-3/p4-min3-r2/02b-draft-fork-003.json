@@ -1,0 +1,146 @@
+{
+  "schemaVersion": "0.3",
+  "hypothesisId": "H-p4-min3r2bfork-003",
+  "subject": {
+    "customer": "p4",
+    "groups": ["3 分"],
+    "gamesCount": 18
+  },
+  "scope": "this_user",
+  "lane": "fork",
+  "statement": "相手の直前の手が王手だった 16 行では、分かれ道と数えられた手は 2、分かれ道でないと数えられた手は 14 でした。相手が駒を打った直後では分かれ道 14・分かれ道でない 19、打っていないときは分かれ道 93・分かれ道でない 37 でした。相手の手が王手や打ちだった直後は、分かれ道と数えられる手が現れにくいという読みです。",
+  "observations": [
+    {
+      "obsId": "obs.fork.values",
+      "path": "values(分かれ道の定義に使われた値。minLossCp = 第 1 候補との差の下限、startPly = 数え始めの手数)",
+      "value": { "sideZoneRadius": 2, "startPly": 17, "minLossCp": 600, "narrowGapCp": 400, "riseCp": 400, "sideVersion": 2, "hitsDefenderRadius": 2, "attackZoneRadius": 3 }
+    },
+    {
+      "obsId": "obs.time.decisionContext",
+      "path": "decisionContext[] の行数(3 分の組・5〜9 秒と 10 秒以上の帯の手)",
+      "value": 182
+    },
+    {
+      "obsId": "obs.time.decisionContext",
+      "path": "decisionContext[] のうち oppPrevGivesCheck === true の行数",
+      "value": 16
+    },
+    {
+      "obsId": "obs.time.decisionContext",
+      "path": "decisionContext[] のうち oppPrevGivesCheck === true かつ fork === true の行数",
+      "value": 2
+    },
+    {
+      "obsId": "obs.time.decisionContext",
+      "path": "decisionContext[] のうち oppPrevGivesCheck === true かつ fork === false の行数",
+      "value": 14
+    },
+    {
+      "obsId": "obs.time.decisionContext",
+      "path": "decisionContext[] のうち oppPrevDrop === true かつ fork === true の行数",
+      "value": 14
+    },
+    {
+      "obsId": "obs.time.decisionContext",
+      "path": "decisionContext[] のうち oppPrevDrop === true かつ fork === false の行数",
+      "value": 19
+    },
+    {
+      "obsId": "obs.time.decisionContext",
+      "path": "decisionContext[] のうち oppPrevDrop === false かつ fork === true の行数",
+      "value": 93
+    },
+    {
+      "obsId": "obs.time.decisionContext",
+      "path": "decisionContext[] のうち oppPrevDrop === false かつ fork === false の行数",
+      "value": 37
+    },
+    {
+      "obsId": "obs.time.decisionContext",
+      "path": "decisionContext[] のうち oppPrevCapture === true かつ fork === true の行数",
+      "value": 42
+    },
+    {
+      "obsId": "obs.time.decisionContext",
+      "path": "decisionContext[] のうち oppPrevCapture === true かつ fork === false の行数",
+      "value": 21
+    },
+    {
+      "obsId": "obs.time.decisionContext",
+      "path": "decisionContext[] のうち oppPrevCapture === false かつ fork === true の行数",
+      "value": 65
+    },
+    {
+      "obsId": "obs.time.decisionContext",
+      "path": "decisionContext[] のうち oppPrevCapture === false かつ fork === false の行数",
+      "value": 35
+    },
+    {
+      "obsId": "obs.time.decisionContext",
+      "path": "decisionContext[] のうち fork === null(測れていない)の行数",
+      "value": 19
+    },
+    {
+      "obsId": "obs.time.decisionContext",
+      "path": "decisionContext[] のうち oppPrevDrop === false かつ fork === null(測れていない)の行数",
+      "value": 17
+    },
+    {
+      "obsId": "obs.time.decisionContext",
+      "path": "decisionContext[] のうち inCheck === true の行数(王手中の手)",
+      "value": 16
+    },
+    {
+      "obsId": "obs.geo.replyToCheck",
+      "path": "moves[] のうち replyToCheck が「王手ではない」以外の行数(3 分の組・580 行から数えた)",
+      "value": 58
+    },
+    {
+      "obsId": "obs.geo.replyToCheck",
+      "path": "moves[] のうち replyToCheck === \"玉を動かす\" の行数(3 分の組・580 行から数えた)",
+      "value": 46
+    }
+  ],
+  "counterEvidence": {
+    "attempted": false,
+    "items": [],
+    "result": "none_found",
+    "provenance": { "inputs": [] }
+  },
+  "prediction": {
+    "writtenAt": "2026-09-26",
+    "window": "next_20_games_same_time_limit",
+    "metric": "obs.time.decisionContext の oppPrevGivesCheck が true の行のうち fork が true の行数 ÷ oppPrevGivesCheck が true で fork が true か false の行数",
+    "comparator": "<=",
+    "value": 0.3,
+    "alsoRequires": [
+      {
+        "metric": "obs.time.decisionContext の oppPrevGivesCheck が true で fork が true か false の行数",
+        "comparator": ">=",
+        "value": 15
+      },
+      {
+        "metric": "obs.time.decisionContext の oppPrevDrop が true で fork が true か false の行数",
+        "comparator": ">=",
+        "value": 30
+      },
+      {
+        "metric": "obs.time.decisionContext の fork が null の行数",
+        "comparator": "<=",
+        "value": 40
+      }
+    ]
+  },
+  "status": "proposed",
+  "knowledge": {
+    "kind": "discovered",
+    "reviewStatus": "draft",
+    "origin": { "kifu": "p4/min3", "lane": "fork" },
+    "range": "this_user"
+  },
+  "provenance": {
+    "gitHead": "f22ae4d",
+    "inputs": ["records/obs-3/p4-min3-r2/00-obs_snapshot.p4.min3.r2b.json"],
+    "excludedInputs": []
+  }
+}
