@@ -1,0 +1,284 @@
+{
+  "schemaVersion": "0.3",
+  "subject": {
+    "customer": "p4",
+    "groups": [
+      "3 分"
+    ],
+    "gamesCount": 18
+  },
+  "scope": "this_user",
+  "lane": "shape",
+  "counterEvidence": {
+    "attempted": false,
+    "items": [],
+    "result": "none_found",
+    "provenance": {
+      "inputs": []
+    }
+  },
+  "status": "proposed",
+  "knowledge": {
+    "kind": "discovered",
+    "reviewStatus": "draft",
+    "origin": {
+      "kifu": "p4/min3",
+      "lane": "shape"
+    },
+    "range": "this_user"
+  },
+  "provenance": {
+    "gitHead": "1690871",
+    "inputs": [
+      "records/obs-3/p4-min3-r2/00-obs_snapshot.p4.min3.r2c.json"
+    ],
+    "excludedInputs": []
+  },
+  "hypothesisId": "H-p4-min3r2cshape2-002",
+  "statement": "自分側の形は、この組を通して completed が 0 件・matched が 0 件で、欠けがちょうど 1 枚まで届いた局は 13 でした。届かなかった局の最も近づいた生の到達率は 0.6 で、欠けが 1 枚だった局のなかには初期配置のマスである 4 九から金が離れた局も混ざっているので、止まる場所が 1 通りに揃っているとは言えない可能性があります。",
+  "observations": [
+    {
+      "obsId": "obs.vocab.shapeStatus",
+      "path": "recognition byGroup[group].statusCounts.shape.{self,opponent}.{none,forming,completed,matched}",
+      "value": {
+        "self": {
+          "none": 22558,
+          "forming": 5360,
+          "completed": 0,
+          "matched": 0
+        },
+        "opponent": {
+          "none": 15549,
+          "forming": 5208,
+          "completed": 33,
+          "matched": 0
+        }
+      }
+    },
+    {
+      "obsId": "obs.vocab.shapeMissingSummary",
+      "path": "recognition byGroup[group].{shapeMissingTotal,selfClosestOneAwayGames}",
+      "value": {
+        "shapeMissingTotal": 31804,
+        "selfClosestOneAwayGames": 13
+      }
+    },
+    {
+      "obsId": "obs.vocab.shapeClosestPerGame",
+      "path": "recognition rows[].{closestSelfShape.shapeId,shapeBest,shapeMovedRequiredBest} → {gameNo,shapeId,rawBest,movedRequiredBest}",
+      "value": [
+        {
+          "gameNo": 1,
+          "shapeId": "mutekigakoi",
+          "rawBest": 0.6,
+          "movedRequiredBest": 0
+        },
+        {
+          "gameNo": 2,
+          "shapeId": "mutekigakoi",
+          "rawBest": 0.6,
+          "movedRequiredBest": 0.5
+        },
+        {
+          "gameNo": 3,
+          "shapeId": "mutekigakoi",
+          "rawBest": 0.8,
+          "movedRequiredBest": 0.5
+        },
+        {
+          "gameNo": 4,
+          "shapeId": "mutekigakoi",
+          "rawBest": 0.6,
+          "movedRequiredBest": 0.5
+        },
+        {
+          "gameNo": 5,
+          "shapeId": "mutekigakoi",
+          "rawBest": 0.8,
+          "movedRequiredBest": 0.5
+        },
+        {
+          "gameNo": 6,
+          "shapeId": "mutekigakoi",
+          "rawBest": 0.8,
+          "movedRequiredBest": 0.5
+        },
+        {
+          "gameNo": 7,
+          "shapeId": "mutekigakoi",
+          "rawBest": 0.6,
+          "movedRequiredBest": 0
+        },
+        {
+          "gameNo": 8,
+          "shapeId": "mutekigakoi",
+          "rawBest": 0.8,
+          "movedRequiredBest": 0.5
+        },
+        {
+          "gameNo": 9,
+          "shapeId": "mutekigakoi",
+          "rawBest": 0.8,
+          "movedRequiredBest": 0.5
+        },
+        {
+          "gameNo": 10,
+          "shapeId": "mutekigakoi",
+          "rawBest": 0.8,
+          "movedRequiredBest": 0.5
+        },
+        {
+          "gameNo": 11,
+          "shapeId": "ahirugakoi",
+          "rawBest": 0.6666666666666666,
+          "movedRequiredBest": 0.6666666666666666
+        },
+        {
+          "gameNo": 12,
+          "shapeId": "mutekigakoi",
+          "rawBest": 0.8,
+          "movedRequiredBest": 0.5
+        },
+        {
+          "gameNo": 13,
+          "shapeId": "nakazumai",
+          "rawBest": 0.6666666666666666,
+          "movedRequiredBest": 0.6666666666666666
+        },
+        {
+          "gameNo": 14,
+          "shapeId": "mutekigakoi",
+          "rawBest": 0.8,
+          "movedRequiredBest": 0.5
+        },
+        {
+          "gameNo": 15,
+          "shapeId": "mutekigakoi",
+          "rawBest": 0.8,
+          "movedRequiredBest": 1
+        },
+        {
+          "gameNo": 16,
+          "shapeId": "mutekigakoi",
+          "rawBest": 0.8,
+          "movedRequiredBest": 0.5
+        },
+        {
+          "gameNo": 17,
+          "shapeId": "mutekigakoi",
+          "rawBest": 0.8,
+          "movedRequiredBest": 0.5
+        },
+        {
+          "gameNo": 18,
+          "shapeId": "mutekigakoi",
+          "rawBest": 0.6,
+          "movedRequiredBest": 0
+        }
+      ]
+    },
+    {
+      "obsId": "obs.vocab.shapeOneAwayDetail",
+      "path": "recognition rows[].closestSelfShape(missing が 1 件の行) → {gameNo,shapeId,square,piece}",
+      "value": [
+        {
+          "gameNo": 3,
+          "shapeId": "mutekigakoi",
+          "square": "4h",
+          "piece": "銀"
+        },
+        {
+          "gameNo": 5,
+          "shapeId": "mutekigakoi",
+          "square": "4h",
+          "piece": "銀"
+        },
+        {
+          "gameNo": 6,
+          "shapeId": "mutekigakoi",
+          "square": "6h",
+          "piece": "銀"
+        },
+        {
+          "gameNo": 8,
+          "shapeId": "mutekigakoi",
+          "square": "4h",
+          "piece": "銀"
+        },
+        {
+          "gameNo": 9,
+          "shapeId": "mutekigakoi",
+          "square": "4h",
+          "piece": "銀"
+        },
+        {
+          "gameNo": 10,
+          "shapeId": "mutekigakoi",
+          "square": "6h",
+          "piece": "銀"
+        },
+        {
+          "gameNo": 11,
+          "shapeId": "ahirugakoi",
+          "square": "5h",
+          "piece": "玉"
+        },
+        {
+          "gameNo": 12,
+          "shapeId": "mutekigakoi",
+          "square": "4h",
+          "piece": "銀"
+        },
+        {
+          "gameNo": 13,
+          "shapeId": "nakazumai",
+          "square": "5h",
+          "piece": "玉"
+        },
+        {
+          "gameNo": 14,
+          "shapeId": "mutekigakoi",
+          "square": "4h",
+          "piece": "銀"
+        },
+        {
+          "gameNo": 15,
+          "shapeId": "mutekigakoi",
+          "square": "4i",
+          "piece": "金"
+        },
+        {
+          "gameNo": 16,
+          "shapeId": "mutekigakoi",
+          "square": "4h",
+          "piece": "銀"
+        },
+        {
+          "gameNo": 17,
+          "shapeId": "mutekigakoi",
+          "square": "6h",
+          "piece": "銀"
+        }
+      ]
+    }
+  ],
+  "prediction": {
+    "writtenAt": "2026-09-26",
+    "window": "next_20_games_same_time_limit",
+    "metric": "obs.vocab.shapeOneAwayDetail に現れる square の種類数",
+    "comparator": ">=",
+    "value": 3,
+    "alsoRequires": [
+      {
+        "metric": "obs.vocab.shapeClosestPerGame の行数(3 分の局数)",
+        "comparator": ">=",
+        "value": 20
+      },
+      {
+        "metric": "obs.vocab.shapeOneAwayDetail の行数",
+        "comparator": ">=",
+        "value": 10
+      }
+    ]
+  }
+}
