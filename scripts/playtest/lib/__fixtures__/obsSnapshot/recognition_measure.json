@@ -4,28 +4,71 @@
   "gitHead": "abc123",
   "dirty": false,
   "maxPly": 0,
-  "shapesDirs": ["data/shapes"],
-  "intentsDirs": ["data/intents"],
-  "openingsDirs": ["data/openings"],
-  "shapeIds": ["s1", "s2"],
-  "intentIds": ["i1"],
-  "openingIds": ["o1"],
+  "shapesDirs": [
+    "data/shapes"
+  ],
+  "intentsDirs": [
+    "data/intents"
+  ],
+  "openingsDirs": [
+    "data/openings"
+  ],
+  "shapeIds": [
+    "s1",
+    "s2"
+  ],
+  "intentIds": [
+    "i1"
+  ],
+  "openingIds": [
+    "o1"
+  ],
   "byGroup": {
     "3 分": {
       "games": 2,
       "positions": 20,
       "statusCounts": {
         "shape": {
-          "self": { "none": 5, "forming": 3, "completed": 2, "matched": 0 },
-          "opponent": { "none": 4, "forming": 2, "completed": 4, "matched": 0 }
+          "self": {
+            "none": 5,
+            "forming": 3,
+            "completed": 2,
+            "matched": 0
+          },
+          "opponent": {
+            "none": 4,
+            "forming": 2,
+            "completed": 4,
+            "matched": 0
+          }
         },
         "intent": {
-          "self": { "none": 0, "forming": 0, "completed": 0, "matched": 0 },
-          "opponent": { "none": 6, "forming": 3, "completed": 0, "matched": 1 }
+          "self": {
+            "none": 0,
+            "forming": 0,
+            "completed": 0,
+            "matched": 0
+          },
+          "opponent": {
+            "none": 6,
+            "forming": 3,
+            "completed": 0,
+            "matched": 1
+          }
         },
         "opening": {
-          "self": { "none": 7, "forming": 2, "completed": 1, "matched": 0 },
-          "opponent": { "none": 8, "forming": 1, "completed": 1, "matched": 0 }
+          "self": {
+            "none": 7,
+            "forming": 2,
+            "completed": 1,
+            "matched": 0
+          },
+          "opponent": {
+            "none": 8,
+            "forming": 1,
+            "completed": 1,
+            "matched": 0
+          }
         }
       },
       "exposure": {
@@ -40,7 +83,9 @@
               "weakClaimsShown": 1,
               "pickedByR5p": 0,
               "droppedByR6": 1,
-              "droppedByR6ById": { "s1": 1 }
+              "droppedByR6ById": {
+                "s1": 1
+              }
             },
             "opponent": {
               "named": 2,
@@ -104,10 +149,15 @@
           }
         }
       },
-      "shapeMissingCounts": { "s1:6h:銀": 4, "s2:4h:銀": 3 },
+      "shapeMissingCounts": {
+        "s1:6h:銀": 4,
+        "s2:4h:銀": 3
+      },
       "shapeMissingTotal": 7,
       "selfClosestOneAwayGames": 1,
-      "gamesMovedRequiredComplete": { "s2": 1 },
+      "gamesMovedRequiredComplete": {
+        "s2": 1
+      },
       "shapeMovedRequiredCompleteTotal": 1
     }
   },
@@ -115,16 +165,35 @@
     {
       "group": "3 分",
       "id": "kifu-a",
-      "closestSelfShape": { "shapeId": "s1", "matchScore": 0.8, "missing": [{ "square": "6h", "piece": "銀" }] },
-      "shapeBest": { "s1": 0.8, "s2": 0.5 },
-      "shapeMovedRequiredBest": { "s2": 0.5 }
+      "closestSelfShape": {
+        "shapeId": "s1",
+        "matchScore": 0.8,
+        "missing": [
+          {
+            "square": "6h",
+            "piece": "銀"
+          }
+        ],
+        "movedRequired": []
+      },
+      "shapeBest": {
+        "s1": 0.8,
+        "s2": 0.5
+      },
+      "shapeMovedRequiredBest": {
+        "s2": 0.5
+      },
+      "shapeMovedRequiredBestArrived": {
+        "s2": 1
+      }
     },
     {
       "group": "3 分",
       "id": "kifu-b",
       "closestSelfShape": null,
       "shapeBest": {},
-      "shapeMovedRequiredBest": {}
+      "shapeMovedRequiredBest": {},
+      "shapeMovedRequiredBestArrived": {}
     },
     {
       "group": "3 分",
@@ -133,28 +202,88 @@
         "shapeId": "s2",
         "matchScore": 0.6,
         "missing": [
-          { "square": "4h", "piece": "銀" },
-          { "square": "5h", "piece": "玉" }
+          {
+            "square": "4h",
+            "piece": "銀"
+          },
+          {
+            "square": "5h",
+            "piece": "玉"
+          }
+        ],
+        "movedRequired": [
+          {
+            "square": "4h",
+            "piece": "銀",
+            "arrived": false
+          },
+          {
+            "square": "5h",
+            "piece": "玉",
+            "arrived": false
+          }
         ]
       },
-      "shapeBest": { "s2": 0.6 },
-      "shapeMovedRequiredBest": { "s2": 0.3 }
+      "shapeBest": {
+        "s2": 0.6
+      },
+      "shapeMovedRequiredBest": {
+        "s2": 0.5
+      },
+      "shapeMovedRequiredBestArrived": {
+        "s2": 1
+      }
     },
     {
       "group": "10 分",
       "id": "kifu-z",
-      "closestSelfShape": { "shapeId": "s1", "matchScore": 0.8, "missing": [{ "square": "4h", "piece": "銀" }] },
-      "shapeBest": { "s1": 0.8 },
-      "shapeMovedRequiredBest": {}
+      "closestSelfShape": {
+        "shapeId": "s1",
+        "matchScore": 0.8,
+        "missing": [
+          {
+            "square": "4h",
+            "piece": "銀"
+          }
+        ],
+        "movedRequired": []
+      },
+      "shapeBest": {
+        "s1": 0.8
+      },
+      "shapeMovedRequiredBest": {},
+      "shapeMovedRequiredBestArrived": {}
     },
     {
       "group": "3 分",
       "id": "kifu-unmatched",
-      "closestSelfShape": { "shapeId": "s3", "matchScore": 0.99, "missing": [{ "square": "2h", "piece": "歩" }] },
-      "shapeBest": { "s3": 0.99 },
-      "shapeMovedRequiredBest": { "s3": 0.99 }
+      "closestSelfShape": {
+        "shapeId": "s3",
+        "matchScore": 0.99,
+        "missing": [
+          {
+            "square": "2h",
+            "piece": "歩"
+          }
+        ],
+        "movedRequired": []
+      },
+      "shapeBest": {
+        "s3": 0.99
+      },
+      "shapeMovedRequiredBest": {},
+      "shapeMovedRequiredBestArrived": {}
     }
   ],
-  "movedRequiredZeroShapeIds": { "self": ["s1"], "opponent": [] },
-  "movedRequiredZeroShapeCounts": { "self": 1, "opponent": 0 }
+  "movedRequiredZeroShapeIds": {
+    "self": [
+      "s1",
+      "s3"
+    ],
+    "opponent": []
+  },
+  "movedRequiredZeroShapeCounts": {
+    "self": 2,
+    "opponent": 0
+  }
 }

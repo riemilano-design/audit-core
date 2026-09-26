@@ -371,6 +371,8 @@ interface RecognitionClosestSelfShapeLike {
   shapeId: string;
   matchScore: number;
   missing: RecognitionMissingPieceLike[];
+  /** STEP OBS-5g: **最も近づいた 1 局面**で、動かして持って来る必要がある駒が来ていたか。分母 0 なら空。 */
+  movedRequired: Array<{ square: string; piece: string; arrived: boolean }>;
 }
 
 interface RecognitionRowLike {
@@ -382,6 +384,8 @@ interface RecognitionRowLike {
   closestSelfShape: RecognitionClosestSelfShapeLike | null;
   shapeBest: Record<string, number>;
   shapeMovedRequiredBest: Record<string, number>;
+  /** STEP OBS-5g: 上の割合が最大になった局面での**来ていた枚数**(**局を通して**の数)。 */
+  shapeMovedRequiredBestArrived: Record<string, number>;
 }
 
 interface RecognitionMeasureFileLike {
@@ -826,6 +830,51 @@ export const SNAPSHOT_ITEMS: readonly SnapshotItemDefinition[] = [
     },
     // `shapeId` は `data/` の形の認識(review_status を経たもの)。`square`・`piece` は幾何の事実
     // (欠けていたマスとそこに要る駒)。この 2 種類だけを通す(§12.10 (A5) の条件)。
+    extraEnumKeys: ["shapeId", "square", "piece"],
+  },
+  {
+    // STEP OBS-5g: 「動かして持って来る必要がある駒が何枚来ていたか」を局ごとに出す。
+    // **なぜ要るか**: `shapeClosestPerGame` の `movedRequiredBest` は**割合**(0・0.5・1)なので、
+    // 「0.5 = 銀が 2 枚のうち 1 枚」と読むには `data/` の形の定義が要る ― **その読み替えは導出**で、
+    // 写しの値ではない。冊子の柱の数(2 枚とも来た局・片方だけの局・どちらも来なかった局)を
+    // **写しから直に読める**ようにするのがこの項目(その場で数えた数を冊子に載せない。規則 5 (1))。
+    // **`movedRequiredBest` と混ぜないこと**: あちらは局内の最大値を独立に持ち、こちらは
+    // **最も近づいた 1 局面**の値(既知事項 P-95)。
+    obsId: "obs.vocab.shapeMovedRequiredPerGame",
+    path: "recognition rows[].{closestSelfShape.movedRequired,shapeMovedRequiredBestArrived} → {gameNo,shapeId,arrivedAtClosest,arrivedBest,total,piecesAtClosest[]}",
+    pick: (inputs, opts) => {
+      if (inputs.recognition === undefined) return SKIP;
+      const gameNoById = patientGameNoById(inputs);
+      const out: Array<{
+        gameNo: number;
+        shapeId: string;
+        arrivedAtClosest: number;
+        arrivedBest: number;
+        total: number;
+        piecesAtClosest: Array<{ square: string; piece: string; arrived: boolean }>;
+      }> = [];
+      for (const row of recognitionRowsForGroup(inputs, opts.group)) {
+        const closest = row.closestSelfShape;
+        if (closest === null) continue;
+        const gameNo = gameNoById.get(row.id);
+        if (gameNo === undefined) continue; // --patient の games に無い局(組の対象外)。無視する
+        const moved = closest.movedRequired;
+        out.push({
+          gameNo,
+          shapeId: closest.shapeId,
+          // **最も近づいた 1 局面**での到着枚数。
+          arrivedAtClosest: moved.filter((p) => p.arrived).length,
+          // **局を通して**いちばんそろった時点での到着枚数。**最大が 1 なら、その局では一度も
+          // それ以上そろっていない。**「もう 1 枚が最後まで来ない」はこちらの数で言う。
+          // 分母 0(数え直せない形)は欄が無いので 0。
+          arrivedBest: row.shapeMovedRequiredBestArrived[closest.shapeId] ?? 0,
+          total: moved.length,
+          piecesAtClosest: moved.map((p) => ({ square: p.square, piece: p.piece, arrived: p.arrived })),
+        });
+      }
+      return out;
+    },
+    // `shapeId` は `data/` の認識、`square`・`piece` は幾何の事実。OBS-5f と同じ 3 種類だけを通す。
     extraEnumKeys: ["shapeId", "square", "piece"],
   },
   {

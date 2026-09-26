@@ -241,6 +241,8 @@ describe("任意入力が無いとき", () => {
       // STEP OBS-5f(docs/LANE_DIAG_LOG_2026-09.md §12.10 (A5))。同じ --recognition が無ければこの 2 本も出ない。
       "obs.vocab.shapeOneAwayDetail",
       "obs.vocab.shapeClosestPerGame",
+      // STEP OBS-5g(docs/LANE_DIAG_LOG_2026-09.md §12.10 (H))。同じ --recognition が無ければこの 1 本も出ない。
+      "obs.vocab.shapeMovedRequiredPerGame",
     ];
     for (const id of optionalOnly) expect(obsIds, id).not.toContain(id);
     expect(snapshot.items.length).toBe(SNAPSHOT_ITEMS.length - optionalOnly.length);
@@ -622,10 +624,41 @@ describe("--recognition(recognition_measure.json。STEP OBS-5f)", () => {
     const closest = snapshot.items.find((i) => i.obsId === "obs.vocab.shapeClosestPerGame");
     expect(closest, "obs.vocab.shapeClosestPerGame が出ていない").toBeDefined();
     // kifu-a(no=1): shapeBest.s1=0.8、shapeMovedRequiredBest に s1 が無い(分母 0)→ null。
-    // kifu-b: closestSelfShape が null → 出ない。kifu-c(no=3): shapeBest.s2=0.6、shapeMovedRequiredBest.s2=0.3。
+    // kifu-b: closestSelfShape が null → 出ない。kifu-c(no=3): shapeBest.s2=0.6、shapeMovedRequiredBest.s2=0.5。
+    // **0.5 は STEP OBS-5g で 0.3 から直した値**(独立監査の指摘): この行の分母は
+    // `closestSelfShape.movedRequired` の長さ 2 なので、取りうる割合は 0 / 0.5 / 1 しかない。
+    // **0.3 はどの枚数にも対応せず、fixture が実装では起きない状態を表していた。**
     expect(closest!.value).toEqual([
       { gameNo: 1, shapeId: "s1", rawBest: 0.8, movedRequiredBest: null },
-      { gameNo: 3, shapeId: "s2", rawBest: 0.6, movedRequiredBest: 0.3 },
+      { gameNo: 3, shapeId: "s2", rawBest: 0.6, movedRequiredBest: 0.5 },
+    ]);
+  });
+
+  it("渡せば obs.vocab.shapeMovedRequiredPerGame が載り、動かす必要がある駒の到着を**枚数**で写す(STEP OBS-5g)", () => {
+    const snapshot = buildObsSnapshot(fullInputs(), optionsOf("3 分"));
+    const perGame = snapshot.items.find((i) => i.obsId === "obs.vocab.shapeMovedRequiredPerGame");
+    expect(perGame, "obs.vocab.shapeMovedRequiredPerGame が出ていない").toBeDefined();
+    // fixture:
+    // - kifu-a(no=1)は **分母 0**(動かす必要がある駒が無い形)。実データにはこの場合が無いので
+    //   fixture の側で枝を通しておく(既知事項 P-94)。
+    // - kifu-b は closestSelfShape が null で出ない。
+    // - kifu-c(no=3)は **`arrivedBest`(1)が `arrivedAtClosest`(0)より大きい**。
+    //   **2 つは別の範囲についての数**で、局のどこかで 1 枚来ていたが、最も近づいた局面では
+    //   0 枚だった、という状態。**実データの第 2・第 4 局で実際に起きた食い違いを fixture に固定した**
+    //   (既知事項 P-95。片方しか持たないと、次に読む人が同じ取り違えをする)。
+    expect(perGame!.value).toEqual([
+      { gameNo: 1, shapeId: "s1", arrivedAtClosest: 0, arrivedBest: 0, total: 0, piecesAtClosest: [] },
+      {
+        gameNo: 3,
+        shapeId: "s2",
+        arrivedAtClosest: 0,
+        arrivedBest: 1,
+        total: 2,
+        piecesAtClosest: [
+          { square: "4h", piece: "銀", arrived: false },
+          { square: "5h", piece: "玉", arrived: false },
+        ],
+      },
     ]);
   });
 
@@ -636,6 +669,7 @@ describe("--recognition(recognition_measure.json。STEP OBS-5f)", () => {
     const obsIds = snapshot.items.map((i) => i.obsId);
     expect(obsIds).not.toContain("obs.vocab.shapeOneAwayDetail");
     expect(obsIds).not.toContain("obs.vocab.shapeClosestPerGame");
+    expect(obsIds).not.toContain("obs.vocab.shapeMovedRequiredPerGame");
   });
 
   // 独立監査の指摘(2026-09-26): `--patient` の games[].id に無い局番号の突き合わせに失敗した行が、

@@ -384,6 +384,14 @@ export interface ClosestSelfShape {
   shapeId: string;
   matchScore: number;
   missing: MissingPiece[];
+  /**
+   * STEP OBS-5g: **この 1 局面で**、その形が要る「初期位置でない必要駒」(= 動かして持って来る必要がある駒)
+   * が、それぞれ行き先のマスに来ていたか。**`matchScore` が最大だったその局面の値**であって、
+   * 局をまたいだ最大値ではない ― **`shapeMovedRequiredBest` とは別のもの**(あちらは局内の最大値を
+   * 独立に持つので、この欄と同じ局面の値とは限らない。既知事項 P-95)。
+   * **分母が 0(動かす必要がある必要駒が無い形)のときは空の配列**になる。
+   */
+  movedRequired: Array<{ square: string; piece: string; arrived: boolean }>;
 }
 
 /** 形の定義の `required_pieces`(非 optional)から、`missingSquares` に対応する駒名を引く。 */
@@ -508,6 +516,13 @@ export interface GameRow {
    * (id が既に側を確定しているので、この欄では側で分けない)。
    */
   shapeMovedRequiredBest: Record<string, number>;
+  /**
+   * STEP OBS-5g: `shapeMovedRequiredBest` が最大になった局面での、**来ていた枚数そのもの**(割合ではない)。
+   * **「局を通して」の数**である ― 最大が 1 なら、その局では**一度も**それ以上そろっていない。
+   * **`closestSelfShape.movedRequired` とは別の範囲の数**(あちらは「最も近づいた 1 局面」)。
+   * **どの範囲についての数かを名前で分けること**(既知事項 P-95。**規則を出した本人が踏んだ型**)。
+   */
+  shapeMovedRequiredBestArrived: Record<string, number>;
 }
 
 /**
@@ -649,6 +664,7 @@ function emptyRow(group: string, id: string, plies: number): GameRow {
     shapeMissingTotal: 0,
     closestSelfShape: null,
     shapeMovedRequiredBest: {},
+    shapeMovedRequiredBestArrived: {},
   };
 }
 
@@ -832,6 +848,14 @@ export function measureRecognition(
               shapeId: r.shapeId,
               matchScore: r.matchScore,
               missing: missingPiecesOf(shapeDef, r.missingSquares),
+              // STEP OBS-5g: 「動かして持って来る必要がある駒」が、**この局面で**来ていたか。
+              // ここで採るのは closestSelfShape と同じ 1 局面の値なので、shapeMovedRequiredBest
+              // (局内の最大値を独立に持つ)と混ぜないこと(既知事項 P-95)。
+              movedRequired: movedRequiredPiecesOfId("shape", r.shapeId, r.perspectiveColor).map((p) => ({
+                square: p.square,
+                piece: p.piece,
+                arrived: r.matchedSquares.includes(p.square),
+              })),
             };
           }
 
@@ -846,6 +870,9 @@ export function measureRecognition(
             const recounted = movedMatched / movedPieces.length;
             if (recounted > (row.shapeMovedRequiredBest[r.shapeId] ?? -1)) {
               row.shapeMovedRequiredBest[r.shapeId] = recounted;
+              // STEP OBS-5g: 同じ局面の「来ていた枚数」も持つ(割合だけだと、2 枚のうち 1 枚なのか
+              // 3 枚のうち 1.5 枚なのかが読めない。枚数は `data/` を見ずに読める)。
+              row.shapeMovedRequiredBestArrived[r.shapeId] = movedMatched;
             }
           }
         }

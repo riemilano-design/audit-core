@@ -1015,7 +1015,17 @@ describe("(15) 欠けたマスと駒の内訳(STEP OBS-5e)", () => {
     const row = measureOne(MOVES_4, { maxPly: 0, shapes: [t_three, t_one_away] });
     // t_three は ply4 で matchScore 1(completed・欠け 0)、t_one_away は ply4 で matchScore 2/3(欠け 1)。
     // 最も近づいた = matchScore が高いほう(t_three の 1 のほう)。
-    expect(row.closestSelfShape).toEqual({ shapeId: "t_three", matchScore: 1, missing: [] });
+    // STEP OBS-5g: 金 4i は平手の初期配置にあるので「動かして持って来る必要がある駒」に入らない。
+    // 残る 2 枚(歩 7f・銀 3h)は matchScore 1 の局面なので両方とも来ている。
+    expect(row.closestSelfShape).toEqual({
+      shapeId: "t_three",
+      matchScore: 1,
+      missing: [],
+      movedRequired: [
+        { square: "7f", piece: "歩", arrived: true },
+        { square: "3h", piece: "銀", arrived: true },
+      ],
+    });
   });
 
   it("「あと 1 枚」だけの形しか無ければ、closestSelfShape の欠けは 1 枚になる", () => {
@@ -1024,6 +1034,13 @@ describe("(15) 欠けたマスと駒の内訳(STEP OBS-5e)", () => {
       shapeId: "t_one_away",
       matchScore: 2 / 3,
       missing: [{ square: "4h", piece: "銀" }],
+      // STEP OBS-5g: 3 枚とも初期配置に無いので全部が「動かして持って来る必要がある駒」。
+      // 欠けている 4h の銀だけが arrived: false。
+      movedRequired: [
+        { square: "7f", piece: "歩", arrived: true },
+        { square: "3h", piece: "銀", arrived: true },
+        { square: "4h", piece: "銀", arrived: false },
+      ],
     });
 
     // byGroup の selfClosestOneAwayGames(局ごとの「欠け 1 枚」の局数)にも 1 局として数えられる。
