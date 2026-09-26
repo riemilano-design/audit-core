@@ -573,7 +573,13 @@ export interface GroupTotals {
   shapeMissingCounts: Record<string, number>;
   /** shapeMissingCounts の値の合計(延べ) */
   shapeMissingTotal: number;
-  /** 自分側の closestSelfShape の欠けがちょうど 1 枚だった局の数(あと 1 枚で完成、の局数) */
+  /**
+   * 自分側の closestSelfShape の欠けがちょうど 1 枚だった局の数。**駒の種類を問わない**(銀でも玉でも金でも数える)。
+   * **「あと 1 枚で完成」と読まないこと**(既知事項 P-90): 欠けが 1 枚でも、その 1 枚が初期配置のマスの駒なら
+   * 「まだ来ていない」ではなく「離れた」であり、完成に近いことを意味しない。
+   * **銀だけを数えた局数はこの値ではない**(既知事項 P-97。`<p4>` の 3 分 18 局では、この値が 13 で
+   * そのうち駒が銀だったのは 10。**13 と 10 を混ぜない**)。
+   */
   selfClosestOneAwayGames: number;
   /** 形 id ごとの「数え直した到達率(shapeMovedRequiredBest)が 1 局面でも 1.0 に達した局数」 */
   gamesMovedRequiredComplete: Record<string, number>;
