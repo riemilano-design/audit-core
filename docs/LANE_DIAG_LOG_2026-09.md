@@ -1646,3 +1646,69 @@ typecheck rc=0(worktree の緑。P-84)。所見: `willHaveWhatif` の `"pdf"` �
 - **28 手のうち 26 手は「実戦の手が上位 5 候補に無かった」場面**(残り 2 手が順位 2〜5)。
 
 **冊子に「12 局」を刷るなら**: 数の検査(`check_answer.py` 検査 1)は文の数を事実の表と突き合わせるので、**12 という数が事実の表に無いと落ちる**。道 2 つ ― (a) 観測項目(`obs.fork.sideCrossByGame` 相当)を写しに足す(実装 + 独立監査つきの小さな STEP)、(b) 統括が事実の表に手で入れて出どころを記録する。**顧客に出る数なので (a) を薦める**が、決めるのは統括。
+
+---
+
+### 12.14 STEP OBS-5h: 交差表の 16 マスを「何局に散っているか」でも写す(計画。2026-09-26。**着手前。予測を実測の前に書く**)
+
+**依頼**: 統括の (a)。「自玉側 → 攻め 28 手は 18 局のうち 12 局に散っている(最多でも 4 手)」を冊子に刷るには、**その 12 が事実の表に無いと数の検査(`check_answer.py` 検査 1)で落ちる**。手で入れる (b) を採らない理由は統括の言葉で 1 つ ― **今日、写しを通らない数を冊子に載せる型で 2 回止まっている**(53/92 と 1/12/3)。
+
+#### 1. 顧客の PDF にどう出るか(先に書く)
+
+② の本文に**一文が足せる**ようになる。
+
+> 3 分の 18 局のうち **12 局**で起きていました。**1 局に集まっているのではありません**(最も多い局でも 28 のうち 4)。
+
+**この一文の値打ち**: 数が「1 局の事故」かどうかを顧客が自分で判断できる。**統括の言うとおり、この問いはどの観測項目にも当たる** ― 局ごとの散らばりが写しに入れば、次の顧客でも同じことが言える。
+**顧客に出ない**: どの局か(局番号)は写さない。**要るのは「何局か」と「最多何件か」だけ。**
+
+#### 2. 作るもの
+
+`lib/obsGeo.ts` に `sideCrossByGame` を足す(既存の `sideCrossTableOf` の隣)。**新しい盤の計算・新しい閾値を書かない**(`whatifPositionsByKifuId` の Map のキー 1 つ = 1 局、という既存の作りで数えるだけ)。
+
+```
+sideCrossByGame: {
+  gamesTotal: number;               // 分母(= Map のキーの数。--whatif-v2-dir が無ければ 0)
+  cells: Array<{
+    top1Side, actualSide,           // 既存の 4 値。16 マスを常に返す(0 も省かない)
+    positions: number;              // この組み合わせだった fork 局面の数(= sideCrossTable の count)
+    gamesWithAtLeastOne: number;    // この組み合わせが 1 局面以上あった局の数
+    maxPositionsInOneGame: number;  // 1 局の中でのこの組み合わせの最大数
+  }>;
+}
+```
+
+**名前の付け方は族 F-1 の枝に従った** ― 単位(局面か局か)と範囲(1 局か全体か)と分母を名前に入れた。`positions` と `gamesWithAtLeastOne` を**同じ形の中に並べて置く**(片方だけ出すと、次に読む人が他方の問いに答える ― P-95 で踏んだ型)。
+
+写しの側: `obs.fork.sideCrossByGame`、path `obs_geo sideCrossByGame`。**`top1Side`・`actualSide` は既に `OBS_SNAPSHOT_ENUM_KEYS` にあるので `extraEnumKeys` は不要**(`obsSnapshot.ts:750` の先例と同じ)。`OBSERVATION_ITEMS.md` §1 に登録(§1 の `obs.*` 96 → **97**、`registry.size` 125 → **126**)。
+
+**やらないこと**: 局番号・棋譜 id を写さない。16 マスを合計しない(`both` を足し込まない ― 2026-09-26 の統括の決定のまま)。`sideCrossTable` を置き換えない(**残す** ― 既存の読みと冊子が引いている)。
+
+#### 3. 機械で確かめる不変条件(**OBS-5g の fixture 自己矛盾の教訓から、先に書く**)
+
+1. 16 マスを常に返す(0 のマスも省かない)。
+2. `positions` は同じ入力の `sideCrossTable` の同じマスの `count` と **16/16 一致**。
+3. `positions` の 16 マスの和 = `sideCrossTable` の和(= `fork` 行の数)。
+4. `positions == 0` ⇒ `gamesWithAtLeastOne == 0` かつ `maxPositionsInOneGame == 0`。
+5. `positions > 0` ⇒ `gamesWithAtLeastOne ≥ 1` かつ `maxPositionsInOneGame ≥ 1`。
+6. `gamesWithAtLeastOne ≤ min(positions, gamesTotal)`、`maxPositionsInOneGame ≤ positions`。
+7. `--whatif-v2-dir` 無し ⇒ `gamesTotal == 0` かつ全マス 0(**18 局測ったように見せない**)。
+
+#### 4. 予測(実測の前。**二本立ての照合 B** ― 下の (a)(b)(c) は §12.13 で私が手で数えた値で、道具が同じ数を出すかを見る)
+
+- (a) `gamesTotal` = **18**
+- (b) 自玉側 → 攻め: `positions` **28**・`gamesWithAtLeastOne` **12**・`maxPositionsInOneGame` **4**
+- (c) 自玉側 → 自玉側: `positions` **28**・`gamesWithAtLeastOne` **14**・`maxPositionsInOneGame` **6**
+- (d) `positions` の 16 マスは `sideCrossTable` と **16/16 一致**、和 **259**
+- (e) 他の 14 マスの局数・最多は**予測しない**(記録する)
+- (f) 写しの `items` と `SNAPSHOT_ITEMS` は **+1**、`registry.size` 125 → **126**(絶対値は実装担当が実装前に測って記録する ― **「すべて通過」だけの報告をしない**、族 F-1 の枝)
+- (g) 試験は **+6〜8 本**(obsGeo 4〜6〈16 マス・`sideCrossTable` と一致・不変条件 4〜6・2 局の fixture で局数と最多・`--whatif-v2-dir` 無し〉+ obsSnapshot 2〈項目が載る・`numbersOnly` が壊さない〉)。**前例**: OBS-5g は +2 だったが**あれは既存の関数への追加**、OBS-5d(`sideCrossTable` 新設)は新しい関数で複数本。新しい欄 + 不変条件 7 本なのでこちらに寄せた
+- (h) 所要: **実装 30〜50 分・独立監査 20〜40 分**(前例: FIG-1 と OBS-5g はどちらも REVISE 1 往復で GO。**往復 1 回を見込む**)
+
+#### 5. 独立監査に渡すもの
+
+差分・試験の結果(**範囲つき** = どの門で・何を対象に・いくつ)・上の不変条件 7 本・予測 (a)〜(h) の突き合わせ・**基準の入力(3 分の組 18 局)を最後まで通した写しの実物**。監査の観点に**族 F-1 の 3 つ**(別々の数を合成しない・統計量の名前を落とさない・分母を文に書く)と**族 F-2**(定義から出ることを実態と読み替えない)を入れる。
+
+#### 6. 締め切り
+
+**無い。** 統括「顧客の棋譜が届いても 1 冊に 2 日かかる見込みなので慌てて入れる必要はない。**入るまでは、その一文を冊子に入れずに置いておく。**」
