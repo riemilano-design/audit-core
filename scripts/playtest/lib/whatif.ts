@@ -36,6 +36,11 @@
 // 【判断的知識】WHATIF_VALUES(multiPv・nodes・startPly・minLossCp・narrowGapCp・riseCp・pvMoves・
 // sideZoneRadius・sideNodes・sideVersion・hitsDefenderRadius・attackZoneRadius)は計画の仮置きの値であり、
 // 将棋一般の閾値ではない(2026-09-22、司令塔 e3。計画 §2.1・§2.2・§2.5・§9.3)。承認前の draft 相当。
+// **この値を顧客の文に数として出さないこと。**(2026-09-26。司令塔の申し送り。冊子の ② の母集団の説明に
+// `minLossCp` の 600 を「第一候補より 600 点以上下がった場面」と書きかけて止めた ― 承認前の draft 相当の値が
+// 将棋一般の基準のように読める。母集団は「候補 5 つの中に無かった、または第一候補より大きく下がった場面」の
+// ように語で書く。数で書くなら「この診断では 600 点以上を『大きく』としています」と添える。
+// 経緯は docs/LANE_DIAG_LOG_2026-09.md §12.13。)
 // `sideZoneRadius` = 2 は §2.4-3 の実測(候補 5 つの中に攻め・守りの両方が見つかった局面が 4/85)を受けて、
 // 8 マス(1 マス以内)から広げた値(§2.5)。`sideVersion` = 2(既定)・`hitsDefenderRadius` = 2・
 // `attackZoneRadius` = 3 は §9.2 の下見(第 1 候補の 53% が v1 で「なし」だった)を受けた決め方 v2(§9.3)。
