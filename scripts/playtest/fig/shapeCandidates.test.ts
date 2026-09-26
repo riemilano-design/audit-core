@@ -23,6 +23,7 @@ import {
   FIG2A_NOTES,
   ShapeCandidatesError,
   STANDARD_PIECE_COUNTS,
+  drawableOf,
   findShapeCandidates,
   loadAllShapes,
   type ShapeCandidatesResult,
@@ -93,9 +94,9 @@ function candidate(result: ShapeCandidatesResult, shapeId: string) {
 // ---------------------------------------------------------------------------
 
 describe("findShapeCandidates", () => {
-  it("1. 候補が 0 件なら figure: false・candidates: [](0 個は正常な出口)", () => {
+  it("1. 候補が 0 件なら hasReachableCandidates: false・candidates: [](0 個は正常な出口)", () => {
     const result = run([]);
-    expect(result.figure).toBe(false);
+    expect(result.hasReachableCandidates).toBe(false);
     expect(result.candidates).toStrictEqual([]);
     // 0 件でも注は全部入る。
     expect(result.notes).toStrictEqual([...FIG2A_NOTES]);
@@ -213,7 +214,7 @@ describe("findShapeCandidates", () => {
       { kifuId: "t", displayPly: MIRRORED_PLY, sfen: MIRRORED_SFEN, moves: [...POSITION_MOVES], initialSfen: MIRRORED_START_SFEN },
       { shapes: ALL_TEST_SHAPES },
     );
-    expect(result.figure).toBe(true);
+    expect(result.hasReachableCandidates).toBe(true);
     expect(result.candidates.map((c) => c.shapeId)).toStrictEqual(["t2_hedged", "t4_r5p", "t3_none", "t6_zero"]);
     // 開始局面を渡さないと(= 平手として読むと)同じ局面には行けない。
     expect(() =>
@@ -229,7 +230,7 @@ describe("findShapeCandidates", () => {
     expect(result.candidates.map((c) => c.shapeId)).not.toContain("t5_opponent");
     // 相手側の形だけを渡せば候補は 0 件になる(= 図を出さない)。
     const onlyOpponent = run([T5_OPPONENT]);
-    expect(onlyOpponent.figure).toBe(false);
+    expect(onlyOpponent.hasReachableCandidates).toBe(false);
     expect(onlyOpponent.candidates).toStrictEqual([]);
   });
 });
@@ -302,10 +303,10 @@ describe("露出の値と形の件数", () => {
 });
 
 // ---------------------------------------------------------------------------
-// STEP P-100(2026-09-26)。**`figure: false` の枝と、形を 0 件読んだときの挙動。**
+// STEP P-100(2026-09-26)。**`hasReachableCandidates: false` の枝と、形を 0 件読んだときの挙動。**
 //
 // 【この 3 本が言うこと】
-// - 15: 自分側の形が全部 `completed` のとき `figure: false` になる(C2。到達できる候補が 0 件という出口)。
+// - 15: 自分側の形が全部 `completed` のとき `hasReachableCandidates: false` になる(C2。到達できる候補が 0 件という出口)。
 // - 16・17: **形を 0 件読んだのは「図なし」ではなく読み込みの失敗**なので、`loadAllShapes()` が
 //   止まり、**文面に読もうとしたディレクトリのパスが出る**(固定文言では通らない契約)。
 //   17 は**片方だけ 0 件でも止まる**(合計 0 で判定していないことの証明)を、**両方の並びで**見る。
@@ -324,18 +325,18 @@ function filledTempDir(id: string): string {
   return dir;
 }
 
-describe("figure: false の枝と 0 件の読み込み(STEP P-100)", () => {
-  it("15. 自分側の形が全部 completed なら figure: false・candidates: [](C2 の枝)", () => {
+describe("hasReachableCandidates: false の枝と 0 件の読み込み(STEP P-100)", () => {
+  it("15. 自分側の形が全部 completed なら hasReachableCandidates: false・candidates: [](C2 の枝)", () => {
     // T1 は 6h・4h の金が揃っており、この局面では completed になる形(既存試験 5 の前提と同じ)。
     const result = run([T1_COMPLETED]);
-    expect(result.figure).toBe(false);
+    expect(result.hasReachableCandidates).toBe(false);
     expect(result.candidates).toStrictEqual([]);
     expect(result.internal.exposureCounts).toStrictEqual({ named: 0, hedged: 0, none: 0 });
     expect(result.notes).toStrictEqual([...FIG2A_NOTES]);
     // 校正: 「自分側 1 件だけ」だから 0 件になったのではない ― 一致しない自分側の形は候補に残る。
     // つまり 0 件になった理由は completed を候補から外していることである。
     expect(run([T6_ZERO]).candidates.map((c) => c.shapeId)).toStrictEqual(["t6_zero"]);
-    expect(run([T6_ZERO]).figure).toBe(true);
+    expect(run([T6_ZERO]).hasReachableCandidates).toBe(true);
   });
 
   it("16. 形が 0 件のディレクトリを読んだら例外(文面にそのディレクトリのパスが出る)", () => {
@@ -373,5 +374,40 @@ describe("figure: false の枝と 0 件の読み込み(STEP P-100)", () => {
       expect(message).toContain(empty);
       expect(message).not.toContain(filled);
     }
+  });
+});
+
+// ---------------------------------------------------------------------------
+// STEP 2(FIG-2。2026-09-26)。**`drawable` = ラベルが `none` でない候補が 1 件以上か。**
+//
+// 【この 3 本が言うこと】
+// - 20: `hedged` が 1 件ある局面は `drawable: true`。
+// - 21: **`hedged` が 0 件でも `named` が 1 件あれば `true`**(= 定義が `hedged >= 1` ではないことの証明)。
+//   `named` は本番では構造上返らないので、**純関数 `drawableOf` を直接叩く**(本番に値を外から渡す口は作らない)。
+// - 22: **`hasReachableCandidates: true` かつ `drawable: false` が成り立つ**(2 つが別の数であることの証明)。
+// ---------------------------------------------------------------------------
+
+describe("drawable(STEP 2)", () => {
+  it("20. hedged が 1 件ある局面は drawable: true", () => {
+    const result = run([T2_HEDGED]);
+    // 校正: この局面の hedged はちょうど 1 件(T2 だけを渡している)。
+    expect(result.internal.exposureCounts).toStrictEqual({ named: 0, hedged: 1, none: 0 });
+    expect(result.drawable).toBe(true);
+  });
+
+  it("21. hedged が 0 件でも named が 1 件あれば drawable: true(定義は hedged ではなく「none でない」)", () => {
+    expect(drawableOf({ named: 1, hedged: 0, none: 5 })).toBe(true);
+    // 校正: 全部 none なら false(この試験は「常に true を返す式」では通らない)。
+    expect(drawableOf({ named: 0, hedged: 0, none: 5 })).toBe(false);
+  });
+
+  it("22. hasReachableCandidates: true でも drawable: false になる(候補はあるが全部 none)", () => {
+    const result = run([T6_ZERO]);
+    expect(result.hasReachableCandidates).toBe(true);
+    expect(result.drawable).toBe(false);
+    // 2 つが別物であることの中身: 候補は 1 件残っていて、ラベルは全部 none。
+    expect(result.candidates.map((c) => c.shapeId)).toStrictEqual(["t6_zero"]);
+    expect(result.candidates.every((c) => c.label.level === "none")).toBe(true);
+    expect(result.internal.exposureCounts).toStrictEqual({ named: 0, hedged: 0, none: 1 });
   });
 });

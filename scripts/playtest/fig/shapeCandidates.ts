@@ -74,8 +74,8 @@ export const DEFAULT_SHAPE_DIRS: readonly string[] = [DEFAULT_SHAPES_DIR, DRAFT_
  * 同じ id が 2 つの置き場に跨って現れたら例外(どちらを採ったか黙って決めない)。
  *
  * 【0 件は正当な入力ではなく読み込みの失敗として止める(STEP P-100。計画 §9.2)】
- * 黙って 0 件を返すと、呼び出し側では**候補 0 件 = `figure: false`(図なし)**に化けてしまい、
- * 読み込みの失敗が「図を出さない」という正常な出口と見分けられなくなる。だから
+ * 黙って 0 件を返すと、呼び出し側では**候補 0 件 = `hasReachableCandidates: false`**に化けてしまい、
+ * 読み込みの失敗が「到達できる候補が 0 件」という正常な出口と見分けられなくなる。だから
  * **読んだディレクトリ「ごと」に 0 件で例外にし、文面にそのディレクトリのパスを入れる。**
  * **合計で判定しない** ― 合計だと片方だけ読めなくなった場合(82 → 2)を見逃すため。
  * **件数を期待値(82/80/2)と突き合わせることはしない**(それは試験の仕事で、実行時に持つと新しい閾値になる)。
@@ -187,13 +187,20 @@ export interface ShapeCandidatesResult {
   displayPly: number;
   sfen: string;
   /**
-   * **到達できる候補が 0 件のときだけ false**(名前が出せないことは図を出さない理由にしない。計画 §8.2)。
+   * **到達できる候補が 0 件のときだけ false**(名前が出せないことは候補を落とす理由にしない。計画 §8.2)。
    *
-   * **`figure` は到達できる候補が 0 件かどうかであって、図を載せるかどうかではない**
-   * (STEP P-100。紙面に図を載せるかの判断は別の数 ― `internal.exposureCounts.hedged` ― を見る側の仕事で、
-   * この旗を「図あり」と読むと食い違う)。
+   * **この旗は「到達できる候補が 0 件かどうか」であって、図を載せるかどうかではない**
+   * (STEP P-100。だから STEP 2 で旧名(図を指す名前)から改名した ― 紙面に図を載せるかの判断は下の `drawable` を見る)。
    */
-  figure: boolean;
+  hasReachableCandidates: boolean;
+  /**
+   * **ラベルが `none` でない候補が 1 件以上あるか**(= `named + hedged > 0`。STEP 2 で新設)。
+   *
+   * 紙面が図を載せるかどうかはこちらで決まる(見せ方 (b) の決定 = 「名前が出せる候補が無い局面は選ばない」)。
+   * `hasReachableCandidates` が true でもこちらは false になりうる(候補は残っているが全部 `none`)。
+   * **`hedged >= 1` ではなく「`none` でない」で定義する** ― 将来 `named` が出るようになってもこの旗が壊れないため。
+   */
+  drawable: boolean;
   candidates: ShapeCandidate[];
   notes: string[];
   internal: ShapeCandidatesInternal;
@@ -310,6 +317,17 @@ function indexByShapeId<T extends { shapeId: string }>(rows: T[]): Map<string, T
 }
 
 /**
+ * 紙面に図を載せられるか(= **ラベルが `none` でない候補が 1 件以上あるか**)。STEP 2 で新設。
+ *
+ * **`hedged >= 1` ではなく「`none` でない」で定義する**(計画 §1 の 2)。いまは `named` が構造上返らない
+ * ため両定義の数は同じだが、将来 `named` が出るようになってもこの旗が壊れないようにするため。
+ * **すでに単一走査で数え終えた `exposureCounts` から O(1) で引くだけ**(`candidates` を 2 度走査しない)。
+ */
+export function drawableOf(counts: { named: number; hedged: number; none: number }): boolean {
+  return counts.named + counts.hedged > 0;
+}
+
+/**
  * 1 局面から候補形を探す。同じ入力に対しては常に同じ結果を返す(決定的)。
  *
  * 手順(計画 §3 を §8.2 で読み替えたもの):
@@ -317,7 +335,8 @@ function indexByShapeId<T extends { shapeId: string }>(rows: T[]): Map<string, T
  * 2. `rankReachableShapes(results, [])` … 到達できる形の順位。**`selectTargetPurpose` を呼ばない劣化版**で、
  *    `[]` を渡すので全件が中立の段になり、並びは `matchScore` 降順 → `shapeId` 昇順だけで決まる(注 1)。
  * 3. 各候補に `decideNameExposure(..., D'')` を当てる。**候補は捨てず、名前の出し方だけを決める。**
- * 4. 候補が 0 件なら `figure: false`(0 個は正常な出口)。
+ * 4. 候補が 0 件なら `hasReachableCandidates: false`(0 個は正常な出口)。
+ * 5. `drawable` は `drawableOf(exposureCounts)`(ラベルが `none` でない候補が 1 件以上か)。**候補を数え直さない。**
  */
 export function findShapeCandidates(
   input: ShapeCandidateInput,
@@ -378,7 +397,8 @@ export function findShapeCandidates(
     kifuId: input.kifuId,
     displayPly: input.displayPly,
     sfen: input.sfen,
-    figure: candidates.length > 0,
+    hasReachableCandidates: candidates.length > 0,
+    drawable: drawableOf(exposureCounts),
     candidates,
     notes: [...FIG2A_NOTES],
     internal: { customerVisible: false, exposureCounts, countsByRule },

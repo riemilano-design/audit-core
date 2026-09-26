@@ -142,8 +142,9 @@ function summarize(run: RunOutput): string {
   const positions = run.positions;
   const candidateCounts = positions.map((p) => p.candidates.length).sort((a, b) => a - b);
   const matchScores = positions.flatMap((p) => p.candidates.map((c) => c.matchScore)).sort((a, b) => a - b);
-  const figureTrue = positions.filter((p) => p.figure).length;
-  const figureFalse = positions.filter((p) => !p.figure);
+  const reachableTrue = positions.filter((p) => p.hasReachableCandidates).length;
+  const reachableFalse = positions.filter((p) => !p.hasReachableCandidates);
+  const drawableFalse = positions.filter((p) => !p.drawable);
   const hedgedPerPosition = positions.map((p) => p.internal.exposureCounts.hedged).sort((a, b) => a - b);
   const totals = { named: 0, hedged: 0, none: 0 };
   const byRule = new Map<NameExposureRule, number>();
@@ -165,9 +166,13 @@ function summarize(run: RunOutput): string {
     lines.push(`- 落ちた局面: ${failure.kifuId} ply ${failure.displayPly} mirrored=${failure.mirrored} ${failure.error}`);
   }
   lines.push("## 図を出すか(P1)", "");
-  lines.push(`- \`figure: true\`: **${figureTrue} / ${positions.length}**`);
-  lines.push(`- \`figure: false\`: ${figureFalse.length} 件${figureFalse.length === 0 ? "(**この材料ではこの出口が一度も使われなかった**)" : ""}`);
-  for (const p of figureFalse) lines.push(`  - ${p.kifuId} ply ${p.displayPly}`);
+  lines.push(`- \`hasReachableCandidates: true\`: **${reachableTrue} / ${positions.length}**`);
+  lines.push(
+    `- \`hasReachableCandidates: false\`: ${reachableFalse.length} 件${reachableFalse.length === 0 ? "(**この材料ではこの出口が一度も使われなかった**)" : ""}`,
+  );
+  for (const p of reachableFalse) lines.push(`  - ${p.kifuId} ply ${p.displayPly}`);
+  // 紙面が図を載せるかどうかは `hasReachableCandidates` ではなく `drawable` で決まる(STEP 2)。両方を並べて出すだけ。
+  lines.push(`- \`drawable: false\`(ラベルが \`none\` でない候補が 1 件も無い): **${drawableFalse.length} / ${positions.length}**`);
   lines.push("");
   lines.push("## 1 局面あたりの候補数(P2)", "");
   lines.push(`- 最小 ${candidateCounts[0] ?? 0} / 中央値 ${median(candidateCounts) ?? 0} / 最大 ${candidateCounts[candidateCounts.length - 1] ?? 0}`);
@@ -183,7 +188,7 @@ function summarize(run: RunOutput): string {
   lines.push("## 名前の見せ方の内訳(延べ。候補は捨てていない)", "");
   lines.push(`- \`named\`: **${totals.named}** / \`hedged\`: ${totals.hedged} / \`none\`(盤だけ): ${totals.none}`);
   lines.push(`- \`hedged\` が 1 件以上ある局面: ${positions.filter((p) => p.internal.exposureCounts.hedged > 0).length} / ${positions.length}`);
-  // `figure` は到達できる候補が 0 件かどうかで、図を載せるかどうかではない(STEP P-100)。
+  // `hasReachableCandidates` は到達できる候補が 0 件かどうかで、図を載せるかどうかではない(STEP P-100)。
   // 紙面の側が見る数をここに並べて出すだけ。**選別はしない。**
   lines.push(`- \`hedged\` が 0 件の局面: ${positions.filter((p) => p.internal.exposureCounts.hedged === 0).length} / ${positions.length}`);
   lines.push(`- 1 局面あたりの \`hedged\`: 最小 ${hedgedPerPosition[0] ?? 0} / 中央値 ${median(hedgedPerPosition) ?? 0} / 最大 ${hedgedPerPosition[hedgedPerPosition.length - 1] ?? 0}`, "");
@@ -263,7 +268,8 @@ function main(): void {
   }
   console.log(
     `局面 ${run.calibration.answers} 件 / 一致 ${run.calibration.matched} / 落ちた ${run.calibration.failed}` +
-      ` | figure: true ${positions.filter((p) => p.figure).length} | 形 ${run.shapes.total}`,
+      ` | hasReachableCandidates: true ${positions.filter((p) => p.hasReachableCandidates).length}` +
+      ` | drawable: false ${positions.filter((p) => !p.drawable).length} | 形 ${run.shapes.total}`,
   );
 }
 
