@@ -366,10 +366,11 @@ describe("登録簿(docs/OBSERVATION_ITEMS.md §1)", () => {
   // STEP OBS-5f(§12.10 (A5))で obs.vocab.shapeOneAwayDetail・shapeClosestPerGame を
   // 同じ §1.16 に足したので 122→124。
   // STEP OBS-5g(§12.10 (H))で obs.vocab.shapeMovedRequiredPerGame を同じ §1.16 に足したので 124→125。
+  // STEP OBS-5h(§12.14)で obs.fork.sideCrossByGame を §1.8 に足したので 125→126。
   // **この試験は、登録簿に行を足したときに必ず落ちる門**(足したことを記録に残させるためにある)。
   // 落ちたら、まず「足した行は意図したものか」を確かめてから数を直す。
-  it("existing の大きさは 125", () => {
-    expect(registry.size).toBe(125);
+  it("existing の大きさは 126", () => {
+    expect(registry.size).toBe(126);
   });
 
   it("obs.timeSearch.col.* は 30 本", () => {

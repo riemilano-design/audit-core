@@ -56,5 +56,26 @@
     { "top1Side": "none", "actualSide": "defense", "count": 0 },
     { "top1Side": "none", "actualSide": "both", "count": 0 },
     { "top1Side": "none", "actualSide": "none", "count": 2 }
-  ]
+  ],
+  "sideCrossByGame": {
+    "gamesTotal": 3,
+    "cells": [
+      { "top1Side": "attack", "actualSide": "attack", "positions": 3, "gamesWithAtLeastOne": 2, "maxPositionsInOneGame": 2 },
+      { "top1Side": "attack", "actualSide": "defense", "positions": 1, "gamesWithAtLeastOne": 1, "maxPositionsInOneGame": 1 },
+      { "top1Side": "attack", "actualSide": "both", "positions": 0, "gamesWithAtLeastOne": 0, "maxPositionsInOneGame": 0 },
+      { "top1Side": "attack", "actualSide": "none", "positions": 2, "gamesWithAtLeastOne": 2, "maxPositionsInOneGame": 1 },
+      { "top1Side": "defense", "actualSide": "attack", "positions": 1, "gamesWithAtLeastOne": 1, "maxPositionsInOneGame": 1 },
+      { "top1Side": "defense", "actualSide": "defense", "positions": 2, "gamesWithAtLeastOne": 1, "maxPositionsInOneGame": 2 },
+      { "top1Side": "defense", "actualSide": "both", "positions": 0, "gamesWithAtLeastOne": 0, "maxPositionsInOneGame": 0 },
+      { "top1Side": "defense", "actualSide": "none", "positions": 1, "gamesWithAtLeastOne": 1, "maxPositionsInOneGame": 1 },
+      { "top1Side": "both", "actualSide": "attack", "positions": 0, "gamesWithAtLeastOne": 0, "maxPositionsInOneGame": 0 },
+      { "top1Side": "both", "actualSide": "defense", "positions": 0, "gamesWithAtLeastOne": 0, "maxPositionsInOneGame": 0 },
+      { "top1Side": "both", "actualSide": "both", "positions": 1, "gamesWithAtLeastOne": 1, "maxPositionsInOneGame": 1 },
+      { "top1Side": "both", "actualSide": "none", "positions": 0, "gamesWithAtLeastOne": 0, "maxPositionsInOneGame": 0 },
+      { "top1Side": "none", "actualSide": "attack", "positions": 1, "gamesWithAtLeastOne": 1, "maxPositionsInOneGame": 1 },
+      { "top1Side": "none", "actualSide": "defense", "positions": 0, "gamesWithAtLeastOne": 0, "maxPositionsInOneGame": 0 },
+      { "top1Side": "none", "actualSide": "both", "positions": 0, "gamesWithAtLeastOne": 0, "maxPositionsInOneGame": 0 },
+      { "top1Side": "none", "actualSide": "none", "positions": 2, "gamesWithAtLeastOne": 2, "maxPositionsInOneGame": 1 }
+    ]
+  }
 }

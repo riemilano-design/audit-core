@@ -164,6 +164,7 @@
 | obs ID | パス | 型(file:line) | 中身 | 契約 |
 |---|---|---|---|---|
 | `obs.fork.sideCrossTable` | `sideCrossTable[].{top1Side, actualSide, count}` | `ObsGeoSideCrossCell` `lib/obsGeo.ts` | `whatif-v2` の `kind:"position"` かつ `scenes.fork` が真の行について、第 1 候補の側(`candidates[0]` に `sideOf` を当てた値。既存)× 実戦の側(`actualSide`。既存)の交差表(4×4 = 16 マス、件数のみ。件数 0 のマスも省かない)。**顧客に送付済みの冊子の「エンジンが攻めのとき実戦も攻めた 53/92」が道具の出力と照合できなかったため道具に載せた**(規則 5 (1))。**`both` は他のマスへ足し込まない**(統括の決定 2026-09-26。「一致」「不一致」という合計はこの表を読む側が作る)。新しい盤の計算・新しい閾値は無し | 無 |
+| `obs.fork.sideCrossByGame` | `sideCrossByGame.{gamesTotal, cells[].{top1Side, actualSide, positions, gamesWithAtLeastOne, maxPositionsInOneGame}}` | `ObsGeoSideCrossByGame`・`ObsGeoSideCrossByGameCell` `lib/obsGeo.ts` | `sideCrossTable` と同じ交差表(4×4 = 16 マス)を、**「何局に散っているか」でも数え直した版**(STEP OBS-5h。docs/LANE_DIAG_LOG_2026-09.md §12.14)。**単位・分母・範囲**: `gamesTotal` = 分母(`--whatif-v2-dir` で渡した局の数。無ければ 0)。`positions` = このマスだった fork 局面の**延べ数**(= `sideCrossTable` の同じマスの `count` と同じ)。`gamesWithAtLeastOne` = このマスが 1 局面以上あった**局の数**。`maxPositionsInOneGame` = **1 局の中の**このマスの最多件数。件数 0 のマスも省かない。**`both` は他のマスへ足し込まない**(`sideCrossTable` と同じ、統括の決定 2026-09-26)。新しい盤の計算・新しい閾値は無し | 無 |
 
 ### 1.9 `obs.side.*`(側。出どころ `whatif.jsonl`(局ごと)、`direct_answers.json`、探索の列。契約 無)
 
@@ -282,18 +283,22 @@
 
 ---
 
-## 3. 数(2026-09-26。STEP OBS-5f で更新)
+## 3. 数(2026-09-26。**この節は人が手で持つ数を置かない** ― 統括の決定)
+
+> **§1 から数えられる数は、ここに書かずに §1 を指す。** 2026-09-26 に、下の「`existing` の ID」の総数と内訳が **OBS-5g(124→125)・OBS-5h(125→126)の 2 周続けて更新漏れ**していたことが分かった(OBS-5h の実装担当が見つけ、独立監査が範囲を確かめた)。**原因は、そこが人が手で持っている数だから** ― 機械が読むのは §1 の表の行だけ(`lib/hypothesis.ts` の `loadObsRegistry` は `## 1.` から `## 2.` の手前まで)で、**この節の数は誰も検査していない。書いておけば 3 周目も漏れる。** そこで**総数と接頭辞ごとの内訳を消し、数え方だけを残した。**
+> **残してある数は、同じ文の中に一覧があるもの**(数と一覧が離れていないので、片方だけずれない)。
+> **人が持たない数は、ずれない。**「次は忘れずに直す」は構造ではない(統括、2026-09-26)。
 
 | 数えるもの | 数 |
 |---|---|
-| `existing` の ID(§1) | **124** = eval 3 + fe 8 + moment 3 + cf 7 + cond 4 + time 24(局 11・組 3・本編 6・obs_extra 3〈STEP OBS-5'〉・obs_geo の `decisionContext` 1〈STEP OBS-5〉)+ timeSearch 35(列 30 + 5)+ fork 8(元 7 + obs_geo の `sideCrossTable` 1〈STEP OBS-5d〉)+ side 4(`top1`・`actual` を 2 と数える)+ read 6 + direct 3 + menu 1 + recog 2 + report 5 + geo 3(obs_geo の `moveCombination`・`replyToCapture`・`replyToCheck`〈STEP OBS-5〉)+ vocab 8(`obs.vocab.shapeStatus`・`intentStatus`・`openingStatus`・`exposure`〈STEP OBS-5c〉・`shapeMissingSummary`・`shapeMovedRequiredSummary`〈STEP OBS-5e〉・`shapeOneAwayDetail`・`shapeClosestPerGame`〈STEP OBS-5f〉)(列 30 以外の 94 本は表の行を機械で数えた。列 30 は `SEARCH_COLUMNS` の要素数) |
-| うち既存の欄名と 1 対 1 で対応した ID | **124**(すべて。ID の名前 = 欄名または型名) |
-| うち JSON スキーマ(契約)のある ID | **16** = eval 1(`standing`)+ fe 8 + moment 3 + cond 4。cf 7 は「穴」(スキーマの `properties` が空)で契約あり扱いにしない。recog 2 は型のみ。残り 101 は契約 無(OBS-5' の 3 本・OBS-5 の 4 本・OBS-5c の 4 本・OBS-5e の 2 本・OBS-5d の 1 本・OBS-5f の 2 本も契約 無) |
+| `existing` の ID(§1) | **数えない(§1 を数えること)**。数え方 = §1 の `## 1.` から `## 2.` の手前までで、`` | `obs. `` で始まる行の先頭欄にある `obs.*` を全部(1 セルに複数ある行は全部)+ `obs.timeSearch.col.` × `SEARCH_COLUMNS`(`lib/timeSearch.ts` の要素数。§1.7 の表は 5〜6 本ずつ束ねて書いてあり、先頭以外は `.name` の略記なので**行から数えられない**のはここだけ)。**機械の正本は `lib/hypothesis.ts` の `loadObsRegistry` で、その数は `lib/hypothesis.test.ts` の「`existing` の大きさは N」が固定している**(この数を直すのは観測項目を足す STEP の仕事) |
+| うち既存の欄名と 1 対 1 で対応した ID | **すべて**(ID の名前 = 欄名または型名)。**数は書かない** ― 上と同じ数なので、片方だけずれる |
+| うち JSON スキーマ(契約)のある ID | **16** = eval 1(`standing`)+ fe 8 + moment 3 + cond 4。cf 7 は「穴」(スキーマの `properties` が空)で契約あり扱いにしない。recog 2 は型のみ。**残りは契約 無**(数は書かない ― 総数から引いた数なので、総数がずれると一緒にずれる)(OBS-5' の 3 本・OBS-5 の 4 本・OBS-5c の 4 本・OBS-5e の 2 本・OBS-5d の 1 本・OBS-5f の 2 本も契約 無) |
 | 設計案 §2 の項目(§2 の表) | **20 行**(`copy` 6・`new` 7・`vocab` 0・置かない 1・**→ §1(実体化済み)6**〈STEP OBS-5 の 3 + STEP OBS-5c の 3〉)。数え方: 行の状態の欄。「`copy` の一部 + `new`」「`copy`(半径 1)/`new`(半径 2・3)」の行はそれぞれ `new`・`copy` に数えた(→ §1 の 6 行は元 `new` 2〈`moveCombination`・`replyToCapture`/`replyToCheck` の対〉+ `copy` 1〈`decisionContext`〉+ `vocab` 3〈`shapeStatus`・`intentStatus`・`openingStatus`〉)。**`obs.vocab.exposure`・`obs.vocab.shapeMissingSummary`・`obs.vocab.shapeMovedRequiredSummary`・`obs.fork.sideCrossTable`(STEP OBS-5d)・`obs.vocab.shapeOneAwayDetail`・`obs.vocab.shapeClosestPerGame`(STEP OBS-5f)は §2 に元の行が無い新規 ID なので、この 20 行には数えない**(§1.16・§1.8 に直接足した) |
 | 設計案 §1 の表と欄名が食い違っていたもの(この一覧で直した) | **2**: (1) `TIME_VALUES` の置き場は `lib/timeCause.ts` ではなく `lib/reportData.ts:469`。(2) 設計案 §7 の例のパス `groups[min3].other.phaseSpentMedian.mid` は実在せず、正しくは `groups[].other.medianMidSec`(§7 は案の JSON なので、契約の実装で直す) |
 | 対応が取れなかった ID | **0**(取れなかったものは `new` として §2 に置いた) |
 
-**幾何/語彙の内訳**(§1 の `existing` のうち、設計案 §2 の線で「幾何(知識なし)」に当たるもの): `obs.fe.kingSurroundings`・`obs.fe.positionFacts`・`obs.cf.kingEscapesRoot/End`・`obs.cf.userMoveFacts`・`obs.cf.pvMinusActual`・`obs.side.tags`・`obs.side.of`・`obs.read.marks`・`obs.time.rookMark`・探索の列のうち手の性質 14 本(`actual*` 5・`top1*` 5・`oppPrev*` 4)・`obs.geo.moveCombination`・`obs.geo.replyToCapture`・`obs.geo.replyToCheck`(STEP OBS-5 の 3 本) = **27**。「語彙(認識)」に当たるもの: `obs.fe.shape`・`obs.fe.opponentIntent`・`obs.recog.shape`・`obs.recog.intent`・`obs.vocab.shapeStatus`・`obs.vocab.intentStatus`・`obs.vocab.openingStatus`・`obs.vocab.exposure`(STEP OBS-5c の 4 本)・`obs.vocab.shapeMissingSummary`・`obs.vocab.shapeMovedRequiredSummary`(STEP OBS-5e の 2 本)・`obs.vocab.shapeOneAwayDetail`・`obs.vocab.shapeClosestPerGame`(STEP OBS-5f の 2 本) = **12**。残り 85 は評価・時間・探索の集計・冊子の数(どちらの列でもない = 数。OBS-5' の 3 本・OBS-5 の `obs.time.decisionContext`・OBS-5d の `obs.fork.sideCrossTable` もここ)。
+**幾何/語彙の内訳**(§1 の `existing` のうち、設計案 §2 の線で「幾何(知識なし)」に当たるもの): `obs.fe.kingSurroundings`・`obs.fe.positionFacts`・`obs.cf.kingEscapesRoot/End`・`obs.cf.userMoveFacts`・`obs.cf.pvMinusActual`・`obs.side.tags`・`obs.side.of`・`obs.read.marks`・`obs.time.rookMark`・探索の列のうち手の性質 14 本(`actual*` 5・`top1*` 5・`oppPrev*` 4)・`obs.geo.moveCombination`・`obs.geo.replyToCapture`・`obs.geo.replyToCheck`(STEP OBS-5 の 3 本) = **27**。「語彙(認識)」に当たるもの: `obs.fe.shape`・`obs.fe.opponentIntent`・`obs.recog.shape`・`obs.recog.intent`・`obs.vocab.shapeStatus`・`obs.vocab.intentStatus`・`obs.vocab.openingStatus`・`obs.vocab.exposure`(STEP OBS-5c の 4 本)・`obs.vocab.shapeMissingSummary`・`obs.vocab.shapeMovedRequiredSummary`(STEP OBS-5e の 2 本)・`obs.vocab.shapeOneAwayDetail`・`obs.vocab.shapeClosestPerGame`(STEP OBS-5f の 2 本) = **12**。**残りは**評価・時間・探索の集計・冊子の数(**数は書かない** ― 総数から引いた数なので)(どちらの列でもない = 数。OBS-5' の 3 本・OBS-5 の `obs.time.decisionContext`・OBS-5d の `obs.fork.sideCrossTable` もここ)。
 
 ---
 

@@ -238,6 +238,8 @@ describe("任意入力が無いとき", () => {
       // STEP OBS-5d(docs/LANE_DIAG_LOG_2026-09.md §12.10 (A3))。--geo を渡さなければこの 1 本も出ない
       // (出どころは obs_geo.json。obs.geo.* と同じファイルだが obsId の列は fork)。
       "obs.fork.sideCrossTable",
+      // STEP OBS-5h(docs/LANE_DIAG_LOG_2026-09.md §12.14)。同じ --geo が無ければこの 1 本も出ない。
+      "obs.fork.sideCrossByGame",
       // STEP OBS-5f(docs/LANE_DIAG_LOG_2026-09.md §12.10 (A5))。同じ --recognition が無ければこの 2 本も出ない。
       "obs.vocab.shapeOneAwayDetail",
       "obs.vocab.shapeClosestPerGame",
@@ -741,5 +743,34 @@ describe("--recognition(recognition_measure.json。STEP OBS-5f)", () => {
     // (局番号は数の gameNo に変換済み)。
     expect(JSON.stringify(detail.value)).not.toContain("kifu-");
     expect(JSON.stringify(closest.value)).not.toContain("kifu-");
+  });
+});
+
+// 18. STEP OBS-5h(docs/LANE_DIAG_LOG_2026-09.md §12.14)。sideCrossTable の 16 マスを「何局に散っているか」
+// でも写した版(obs.fork.sideCrossByGame)。数え方そのもの(局ごとに数える・both を足し込まない・
+// 不変条件 7 本)は lib/obsGeo.test.ts が見る。ここは「写しはそのまま写すだけ」の一般規則(top1Side・
+// actualSide は既に OBS_SNAPSHOT_ENUM_KEYS にあるので numbersOnly が落とさない、渡さなければ出ない)だけを見る。
+describe("--geo(obs_geo.json。STEP OBS-5h)", () => {
+  it("渡せば obs.fork.sideCrossByGame が載り、gamesTotal と 16 マス(fixture の値そのまま)を写す", () => {
+    const snapshot = buildObsSnapshot(fullInputs(), optionsOf("3 分"));
+    const crossByGame = snapshot.items.find((i) => i.obsId === "obs.fork.sideCrossByGame");
+    expect(crossByGame, "obs.fork.sideCrossByGame が出ていない").toBeDefined();
+
+    const geoFixture = JSON.parse(readFileSync(join(FIXTURES_DIR, "obs_geo.json"), "utf-8")) as {
+      sideCrossByGame: { gamesTotal: number; cells: Array<{ top1Side: string; actualSide: string; positions: number; gamesWithAtLeastOne: number; maxPositionsInOneGame: number }> };
+    };
+    expect(geoFixture.sideCrossByGame.cells).toHaveLength(16); // fixture 自身が 4×4 を持つことの確認(値の出どころ)
+    expect(crossByGame!.value).toEqual(geoFixture.sideCrossByGame);
+    // numbersOnly が top1Side・actualSide の文字列を落としていないこと(壊さない側の確認)。
+    const cells = (crossByGame!.value as { cells: Array<{ top1Side: unknown; actualSide: unknown }> }).cells;
+    expect(cells.every((c) => typeof c.top1Side === "string" && typeof c.actualSide === "string")).toBe(true);
+  });
+
+  it("渡さなければ出ない(空で埋めない)", () => {
+    const inputs = fullInputs();
+    const minimal: ObsSnapshotInputs = { patient: inputs.patient, timeCause: inputs.timeCause };
+    const snapshot = buildObsSnapshot(minimal, optionsOf("3 分"));
+    const obsIds = snapshot.items.map((i) => i.obsId);
+    expect(obsIds).not.toContain("obs.fork.sideCrossByGame");
   });
 });

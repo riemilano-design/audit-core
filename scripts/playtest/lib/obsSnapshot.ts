@@ -297,11 +297,26 @@ interface ObsGeoSideCrossCellLike {
   count: number;
 }
 
+// STEP OBS-5h(docs/LANE_DIAG_LOG_2026-09.md §12.14)。obs_geo.json の `sideCrossByGame`(この段が読む欄だけ)。
+interface ObsGeoSideCrossByGameCellLike {
+  top1Side: string;
+  actualSide: string;
+  positions: number;
+  gamesWithAtLeastOne: number;
+  maxPositionsInOneGame: number;
+}
+
+interface ObsGeoSideCrossByGameLike {
+  gamesTotal: number;
+  cells: ObsGeoSideCrossByGameCellLike[];
+}
+
 interface ObsGeoFileLike {
   kind?: unknown;
   moves: ObsGeoMoveLike[];
   decisionContext: ObsGeoDecisionContextLike[];
   sideCrossTable: ObsGeoSideCrossCellLike[];
+  sideCrossByGame: ObsGeoSideCrossByGameLike;
 }
 
 // STEP OBS-5c(docs/LANE_DIAG_LOG_2026-09.md §12.10 (A2))。recognition_measure.json(この段が読む欄だけ)。
@@ -752,6 +767,14 @@ export const SNAPSHOT_ITEMS: readonly SnapshotItemDefinition[] = [
     obsId: "obs.fork.sideCrossTable",
     path: "obs_geo sideCrossTable[]",
     pick: (inputs) => (inputs.geo === undefined ? SKIP : (inputs.geo.data as ObsGeoFileLike).sideCrossTable),
+  },
+  // STEP OBS-5h(docs/LANE_DIAG_LOG_2026-09.md §12.14)。同じ交差表を「何局に散っているか」でも数えた版。
+  // `top1Side`・`actualSide` は既に `OBS_SNAPSHOT_ENUM_KEYS` にあるので `extraEnumKeys` は不要
+  // (`obs.fork.sideCrossTable` の先例と同じ ― 確かめた。上の `OBS_SNAPSHOT_ENUM_KEYS` の定義に両方入っている)。
+  {
+    obsId: "obs.fork.sideCrossByGame",
+    path: "obs_geo sideCrossByGame",
+    pick: (inputs) => (inputs.geo === undefined ? SKIP : (inputs.geo.data as ObsGeoFileLike).sideCrossByGame),
   },
 
   // ---- recognition_measure.json(任意。STEP OBS-5c〈docs/LANE_DIAG_LOG_2026-09.md §12.10 (A2)〉。

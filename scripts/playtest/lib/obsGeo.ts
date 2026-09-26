@@ -35,8 +35,11 @@
 //   「既存の道具を呼ぶだけ」という制約を越えるため)。
 // - 新しい判定的知識(閾値)を置くこと。5〜9 秒・10 秒以上の帯は既存の `TIME_VALUES.spentBucketsSec [1,4,9]`
 //   (`lib/reportData.ts`)の区切りを `buildGameMoveFeatureRows` 経由でそのまま使う(新しい閾値は置かない)。
-// - `sideCrossTable` で「一致」「不一致」という合計を作ること(統括の決定、2026-09-26)。`both` を
+// - `sideCrossTable`・`sideCrossByGame` で「一致」「不一致」という合計を作ること(統括の決定、2026-09-26)。`both` を
 //   他のマスへ足し込まない。16 マスの件数をそのまま出すだけで、読む側が必要な足し算をする。
+// - STEP OBS-5h(§12.14)で `sideCrossByGame`(16 マスを「何局に散っているか」でも写す)を足した。
+//   `sideCrossTable` と同じ `whatifPositionsByKifuId` を数えるだけ(新しい盤の計算・新しい閾値は無し)。
+//   `sideCrossTable` は残す(置き換えない ― 既存の読みと冊子が引いている)。
 
 import { DEFAULT_INITIAL_SFEN, replayMoveHistory } from "../../../apps/server/src/analysis/moveHistory.js";
 import { POSITION_FACTS_RULES } from "./counterfactual.js";
@@ -147,6 +150,69 @@ function sideCrossTableOf(whatifPositionsByKifuId: ReadonlyMap<string, readonly 
   return out;
 }
 
+// ---- sideCrossByGame(STEP OBS-5h、§12.14)。sideCrossTable の 16 マスを「何局に散っているか」でも数える ----
+
+export interface ObsGeoSideCrossByGameCell {
+  /** 第 1 候補(`candidates[0]`)の側。 */
+  top1Side: WhatifSide;
+  /** 実戦の手の側。 */
+  actualSide: WhatifSide;
+  /** この組み合わせだった、`kind:"position"` かつ `scenes.fork` が真の行の件数(= `sideCrossTable` の同じマスの `count`)。 */
+  positions: number;
+  /** この組み合わせが 1 局面以上あった局の数。 */
+  gamesWithAtLeastOne: number;
+  /** 1 局の中でのこの組み合わせの最大数。 */
+  maxPositionsInOneGame: number;
+}
+
+export interface ObsGeoSideCrossByGame {
+  /** 分母(= `whatifPositionsByKifuId` の Map のキーの数。`--whatif-v2-dir` が無ければ 0)。 */
+  gamesTotal: number;
+  cells: ObsGeoSideCrossByGameCell[];
+}
+
+/**
+ * `sideCrossTableOf` と同じ入力(`whatifPositionsByKifuId`)を、`fork` が真の行について
+ * 第 1 候補の側 × 実戦の側で数えるが、**局(Map のキー)ごとに数えてから 16 マスへ集計する**(決-A3 の延長、§12.14)。
+ * **新しい盤の計算・新しい閾値はしない**(`sideCrossTableOf` と同じ値〈`top1Side`/`actualSide`/`fork`〉を
+ * 局ごとに数えるだけ)。16 マス(4×4)を常に返す(件数 0 のマスも省かない)。
+ * `both` は他のマスへ足し込まない(統括の決定、2026-09-26。`sideCrossTableOf` と同じ)。
+ * `whatifPositionsByKifuId` が `null`(`--whatif-v2-dir` 無し)なら `gamesTotal` は 0、全マス 0。
+ */
+function sideCrossByGameOf(whatifPositionsByKifuId: ReadonlyMap<string, readonly MoveFeatureWhatifPosition[]> | null): ObsGeoSideCrossByGame {
+  const gamesTotal = whatifPositionsByKifuId?.size ?? 0;
+  // マスのキーごとに、局ごとの件数を積む(1 局に付き 1 エントリ。0 件の局も含む)。
+  const perGameCountsByCell = new Map<string, number[]>();
+  for (const top1Side of SIDE_VALUES) {
+    for (const actualSide of SIDE_VALUES) perGameCountsByCell.set(`${top1Side}|${actualSide}`, []);
+  }
+  if (whatifPositionsByKifuId !== null) {
+    for (const positions of whatifPositionsByKifuId.values()) {
+      const countsInGame = new Map<string, number>();
+      for (const top1Side of SIDE_VALUES) {
+        for (const actualSide of SIDE_VALUES) countsInGame.set(`${top1Side}|${actualSide}`, 0);
+      }
+      for (const position of positions) {
+        if (!position.fork) continue;
+        const key = `${position.top1Side}|${position.actualSide}`;
+        countsInGame.set(key, (countsInGame.get(key) ?? 0) + 1);
+      }
+      for (const [key, count] of countsInGame) perGameCountsByCell.get(key)!.push(count);
+    }
+  }
+  const cells: ObsGeoSideCrossByGameCell[] = [];
+  for (const top1Side of SIDE_VALUES) {
+    for (const actualSide of SIDE_VALUES) {
+      const perGameCounts = perGameCountsByCell.get(`${top1Side}|${actualSide}`)!;
+      const positions = perGameCounts.reduce((sum, count) => sum + count, 0);
+      const gamesWithAtLeastOne = perGameCounts.filter((count) => count > 0).length;
+      const maxPositionsInOneGame = perGameCounts.reduce((max, count) => Math.max(max, count), 0);
+      cells.push({ top1Side, actualSide, positions, gamesWithAtLeastOne, maxPositionsInOneGame });
+    }
+  }
+  return { gamesTotal, cells };
+}
+
 export interface ObsGeo {
   kind: "obs_geo";
   schemaVersion: "0.1";
@@ -155,6 +221,7 @@ export interface ObsGeo {
   moves: ObsGeoMove[];
   decisionContext: ObsGeoDecisionContext[];
   sideCrossTable: ObsGeoSideCrossCell[];
+  sideCrossByGame: ObsGeoSideCrossByGame;
 }
 
 // ---- 名前の表(幾何だけ。将棋の語彙を含まない。§12.10 (A) の 1.) ----
@@ -324,5 +391,6 @@ export function buildObsGeo(
     moves: movesOf(games, patientGames),
     decisionContext: decisionContextOf(games, patientGames, whatifPositionsByKifuId),
     sideCrossTable: sideCrossTableOf(whatifPositionsByKifuId),
+    sideCrossByGame: sideCrossByGameOf(whatifPositionsByKifuId),
   };
 }
