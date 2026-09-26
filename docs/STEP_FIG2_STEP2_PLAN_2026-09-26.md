@@ -71,3 +71,49 @@
 - **`drawable` の算出が `candidates` を 1 度しか走査せず、判定を変えていないこと**(`git diff` の中身を読む)。
 - **試験 21 が書けたか、落としたか**(落としたなら、その事実が報告に書いてあるか)。
 - `run1.json` の新しいキーの**中身**(`cmp` は使えない。`drawable: false` が **87**、`hasReachableCandidates: true` が **167**)。
+
+## 7. 自動化レーン長の差し戻しへの直し(2026-09-26 夜)
+
+### 7.1 §6 の検査コマンドは壊れていた(校正した。指摘どおり)
+
+**`git grep -E "\bfigure\b"` はこの環境で 0 件を返す**(自分で校正: `echo "figure test" | grep -cE "\bfigure\b"` は **1** =
+素の grep では `\b` が効くが、**`git grep -c -E "\bfigure\b" -- scripts` はヒットするファイルが 0**)。
+**改名が 1 つも済んでいなくても 0 件**なので、**「何も見つけない命令で『漏れていない』と結論する」**ところだった。
+`--root` の取りこぼし(P-88)と同じ型。**空・不一致は校正してから使う。**
+
+**§6 の条件を差し替える**:
+```
+git grep -c "figure" -- scripts apps          # `\b` を使わない。md と out/ は対象外(git 管理外・別物)
+```
+**改名の完了条件: この結果が 0 件**(`figure` の語が残ってよいのは計画の md と、説明文として意図的に書くコメントだけ
+― コメントに残す場合は**その行を報告に列挙する**)。
+
+### 7.2 参照の実数(数え直した。自動化レーン長の数と一致)
+
+| ファイル | 行数(`git grep -c`) | 出現回数(`grep -o`) |
+|---|---|---|
+| `scripts/playtest/fig/shapeCandidates.ts` | **5** | 5 |
+| `scripts/playtest/fig/shapeCandidates.test.ts` | **10** | 10 |
+| `scripts/playtest/figShapeCandidates.ts` | **7** | **13**(1 行に複数あるため) |
+| 合計 | **22 行** | **28 箇所** |
+
+**§2 に書いた「4 / 7 / 5 箇所」は私の数え落とし**(`git grep -n` の出力を目で数えた)。**差し戻しの数が正しい。**
+**監査に渡す数は「3 ファイル・22 行・28 箇所」で統一する。**
+(メッセージで「道具自身の 2 本だけ」と書いたのも不正確で、**試験を入れて 3 ファイル**。読み手が納品レーンの中だけ、という趣旨は変わらない。)
+
+### 7.3 試験 21 は書ける(自動化レーン長の見立てを採る)
+
+**`options` に露出の値を渡す口は作らない**(判定を外から変えられる口になり「判定は変えない」に触れる)。
+代わりに **`drawable` の算出を `internal.exposureCounts` から引く純関数に切り出す**:
+```ts
+export function drawableOf(counts: { named: number; hedged: number; none: number }): boolean {
+  return counts.named + counts.hedged > 0;   // = ラベルが `none` でない候補が 1 件以上
+}
+```
+- **`exposureCounts` は既に 3 値を数えている**(`shapeCandidates.ts:336` で初期化、`:360` で `exposureCounts[label.level] += 1`)ので、
+  **`candidates` の走査は 1 度のまま**(§6 の条件と矛盾しない。むしろ**追加の走査が 0** になる)。
+- **試験 21 は `drawableOf({ named: 1, hedged: 0, none: 5 })` → `true`** で書ける。**本番に新しい口を作らない。**
+- **変異 (a)(`drawable` を `hedged >= 1` に)は空振りしない** ― 試験 21 が落ちる。**§3 の「空振りしうる」という但し書きは、この切り出しにより不要になった。**
+  ただし**切り出しが監査で REVISE になった場合**に備え、但し書き自体は §3 に残す(そのときは「区別できていない」と報告する)。
+
+### 7.4 `shapeRepository.ts:68` は **P-104** として開発・診断レーンに登録された(独立監査つきの別 STEP)。**この STEP では触らない**(変更なし)。
