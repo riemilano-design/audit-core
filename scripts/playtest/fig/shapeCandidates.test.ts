@@ -10,6 +10,10 @@
 // - §5 の 4・5(`named` になる条件)は、**`named` が構造上返らないこと**の試験に置き換える
 //   (司令塔の追加指示 1(a))。D'' の肝は R5(証拠 2 件の下限)と R5' で固定する(試験 4・5)。
 
+import { mkdtempSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
+import nodePath from "node:path";
+
 import { describe, expect, it } from "vitest";
 
 import { EXPOSURE_VALUE_SETS } from "../lib/recognitionMeasure.js";
@@ -294,5 +298,80 @@ describe("露出の値と形の件数", () => {
     expect(shapes.map((s) => s.id)).toStrictEqual([...shapes.map((s) => s.id)].sort((a, b) => a.localeCompare(b)));
     // 注 3 の文に出る数が、上で数えた数と合っていること。
     expect(FIG2A_NOTES[2]).toContain(`下書き ${draft.length} 件を含む ${shapes.length} 形`);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// STEP P-100(2026-09-26)。**`figure: false` の枝と、形を 0 件読んだときの挙動。**
+//
+// 【この 3 本が言うこと】
+// - 15: 自分側の形が全部 `completed` のとき `figure: false` になる(C2。到達できる候補が 0 件という出口)。
+// - 16・17: **形を 0 件読んだのは「図なし」ではなく読み込みの失敗**なので、`loadAllShapes()` が
+//   止まり、**文面に読もうとしたディレクトリのパスが出る**(固定文言では通らない契約)。
+//   17 は**片方だけ 0 件でも止まる**(合計 0 で判定していないことの証明)を、**両方の並びで**見る。
+// 材料は空のテンポラリのディレクトリと、その場で書いた合成の形の JSON だけ(`data/` は読まない)。
+// ---------------------------------------------------------------------------
+
+/** 空のテンポラリのディレクトリを作る(中身は作らない)。 */
+function emptyTempDir(): string {
+  return mkdtempSync(nodePath.join(tmpdir(), "fig-p100-empty-"));
+}
+
+/** 合成の形 1 件だけを置いたテンポラリのディレクトリ(「読めるディレクトリ」の側)。 */
+function filledTempDir(id: string): string {
+  const dir = mkdtempSync(nodePath.join(tmpdir(), "fig-p100-filled-"));
+  writeFileSync(nodePath.join(dir, `${id}.json`), `${JSON.stringify(shape(id, "draft", [["金", "6h"]]))}\n`, "utf-8");
+  return dir;
+}
+
+describe("figure: false の枝と 0 件の読み込み(STEP P-100)", () => {
+  it("15. 自分側の形が全部 completed なら figure: false・candidates: [](C2 の枝)", () => {
+    // T1 は 6h・4h の金が揃っており、この局面では completed になる形(既存試験 5 の前提と同じ)。
+    const result = run([T1_COMPLETED]);
+    expect(result.figure).toBe(false);
+    expect(result.candidates).toStrictEqual([]);
+    expect(result.internal.exposureCounts).toStrictEqual({ named: 0, hedged: 0, none: 0 });
+    expect(result.notes).toStrictEqual([...FIG2A_NOTES]);
+    // 校正: 「自分側 1 件だけ」だから 0 件になったのではない ― 一致しない自分側の形は候補に残る。
+    // つまり 0 件になった理由は completed を候補から外していることである。
+    expect(run([T6_ZERO]).candidates.map((c) => c.shapeId)).toStrictEqual(["t6_zero"]);
+    expect(run([T6_ZERO]).figure).toBe(true);
+  });
+
+  it("16. 形が 0 件のディレクトリを読んだら例外(文面にそのディレクトリのパスが出る)", () => {
+    const dir = emptyTempDir();
+    expect(() => loadAllShapes([dir])).toThrow(ShapeCandidatesError);
+    // 固定文言では通らない契約: 読もうとしたパスそのものが文面に含まれること。
+    let message = "";
+    try {
+      loadAllShapes([dir]);
+    } catch (error) {
+      message = (error as Error).message;
+    }
+    expect(message).toContain(dir);
+    // 0 件は「図なし」に化けない(空配列を返さない)。
+    expect(() => loadAllShapes([dir])).toThrow();
+  });
+
+  it("17. 片方だけ 0 件でも例外(合計 0 で判定していない)。本物 → 空 と 空 → 本物 の両方の並びで見る", () => {
+    const filled = filledTempDir("p100_filled");
+    const empty = emptyTempDir();
+    // 校正: 読めるディレクトリだけなら通る(1 件返る)。
+    expect(loadAllShapes([filled]).map((s) => s.id)).toStrictEqual(["p100_filled"]);
+
+    for (const dirs of [
+      [filled, empty],
+      [empty, filled],
+    ]) {
+      expect(() => loadAllShapes(dirs)).toThrow(ShapeCandidatesError);
+      let message = "";
+      try {
+        loadAllShapes(dirs);
+      } catch (error) {
+        message = (error as Error).message;
+      }
+      expect(message).toContain(empty);
+      expect(message).not.toContain(filled);
+    }
   });
 });

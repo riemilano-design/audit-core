@@ -183,6 +183,9 @@ function summarize(run: RunOutput): string {
   lines.push("## 名前の見せ方の内訳(延べ。候補は捨てていない)", "");
   lines.push(`- \`named\`: **${totals.named}** / \`hedged\`: ${totals.hedged} / \`none\`(盤だけ): ${totals.none}`);
   lines.push(`- \`hedged\` が 1 件以上ある局面: ${positions.filter((p) => p.internal.exposureCounts.hedged > 0).length} / ${positions.length}`);
+  // `figure` は到達できる候補が 0 件かどうかで、図を載せるかどうかではない(STEP P-100)。
+  // 紙面の側が見る数をここに並べて出すだけ。**選別はしない。**
+  lines.push(`- \`hedged\` が 0 件の局面: ${positions.filter((p) => p.internal.exposureCounts.hedged === 0).length} / ${positions.length}`);
   lines.push(`- 1 局面あたりの \`hedged\`: 最小 ${hedgedPerPosition[0] ?? 0} / 中央値 ${median(hedgedPerPosition) ?? 0} / 最大 ${hedgedPerPosition[hedgedPerPosition.length - 1] ?? 0}`, "");
   lines.push("## 規則ごとの件数(延べ)", "");
   lines.push("| 規則 | 件数 |");

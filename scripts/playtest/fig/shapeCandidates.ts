@@ -44,7 +44,7 @@ import {
   type ShapeFormationResult,
 } from "../../../apps/server/src/analysis/shapeFormationAnalyzer.js";
 import { rankReachableShapes, type RankedReachableShape } from "../../../apps/server/src/analysis/shapeGraphRanking.js";
-import { loadShapes, type ShapeDefinition } from "../../../apps/server/src/analysis/shapeRepository.js";
+import { DEFAULT_SHAPES_DIR, loadShapes, type ShapeDefinition } from "../../../apps/server/src/analysis/shapeRepository.js";
 import { parsePosition } from "../../../apps/server/src/rules/sfenPosition.js";
 import { movedRequiredCountOf } from "../lib/recognitionMeasure.js";
 
@@ -63,12 +63,33 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const DRAFT_SHAPES_DIR = path.join(__dirname, "..", "..", "..", "data", "drafts", "2026-09-25-knowledge", "shapes");
 
 /**
+ * 形の読み先の既定(確定の置き場 → 下書きの置き場の順)。**本番の呼び出し
+ * (`figShapeCandidates.ts`)は引数を渡さないので、この既定がそのまま使われる。**
+ */
+export const DEFAULT_SHAPE_DIRS: readonly string[] = [DEFAULT_SHAPES_DIR, DRAFT_SHAPES_DIR];
+
+/**
  * `data/shapes/`(確定の置き場)と `data/drafts/2026-09-25-knowledge/shapes/`(下書き)の形を
  * すべて読み、id 昇順で返す。**読み込みは既存の `loadShapes` に委ね、ここでは形式の判断をしない。**
  * 同じ id が 2 つの置き場に跨って現れたら例外(どちらを採ったか黙って決めない)。
+ *
+ * 【0 件は正当な入力ではなく読み込みの失敗として止める(STEP P-100。計画 §9.2)】
+ * 黙って 0 件を返すと、呼び出し側では**候補 0 件 = `figure: false`(図なし)**に化けてしまい、
+ * 読み込みの失敗が「図を出さない」という正常な出口と見分けられなくなる。だから
+ * **読んだディレクトリ「ごと」に 0 件で例外にし、文面にそのディレクトリのパスを入れる。**
+ * **合計で判定しない** ― 合計だと片方だけ読めなくなった場合(82 → 2)を見逃すため。
+ * **件数を期待値(82/80/2)と突き合わせることはしない**(それは試験の仕事で、実行時に持つと新しい閾値になる)。
+ * ディレクトリ自体が無い場合は `loadShapes` が既にパス入りの例外を投げる(ここでは足さない)。
  */
-export function loadAllShapes(): ShapeDefinition[] {
-  const shapes = [...loadShapes(), ...loadShapes(DRAFT_SHAPES_DIR)];
+export function loadAllShapes(dirs: readonly string[] = DEFAULT_SHAPE_DIRS): ShapeDefinition[] {
+  const shapes: ShapeDefinition[] = [];
+  for (const dir of dirs) {
+    const loaded = loadShapes(dir);
+    if (loaded.length === 0) {
+      throw new ShapeCandidatesError(`形の JSON が 1 件もありません(読み込みの失敗として止めます): "${dir}"`);
+    }
+    shapes.push(...loaded);
+  }
   const seen = new Set<string>();
   for (const shape of shapes) {
     if (seen.has(shape.id)) throw new ShapeCandidatesError(`形の id が重複しています: "${shape.id}"`);
@@ -165,7 +186,13 @@ export interface ShapeCandidatesResult {
   kifuId: string;
   displayPly: number;
   sfen: string;
-  /** **到達できる候補が 0 件のときだけ false**(名前が出せないことは図を出さない理由にしない。計画 §8.2)。 */
+  /**
+   * **到達できる候補が 0 件のときだけ false**(名前が出せないことは図を出さない理由にしない。計画 §8.2)。
+   *
+   * **`figure` は到達できる候補が 0 件かどうかであって、図を載せるかどうかではない**
+   * (STEP P-100。紙面に図を載せるかの判断は別の数 ― `internal.exposureCounts.hedged` ― を見る側の仕事で、
+   * この旗を「図あり」と読むと食い違う)。
+   */
   figure: boolean;
   candidates: ShapeCandidate[];
   notes: string[];
