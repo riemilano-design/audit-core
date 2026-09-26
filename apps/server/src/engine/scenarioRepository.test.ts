@@ -19,6 +19,18 @@ describe("scenarioRepository", () => {
     );
   });
 
+  it("存在しないディレクトリに対する例外の文は、渡したパスを含み、固定のディレクトリ名を含まない", () => {
+    const missingDir = `${DEFAULT_OPENINGS_DIR}-does-not-exist`;
+    try {
+      loadApprovedScenarioVariants(missingDir);
+      throw new Error("loadApprovedScenarioVariantsが例外を投げなかった");
+    } catch (err) {
+      const message = (err as Error).message;
+      expect(message).toContain(missingDir);
+      expect(message).not.toContain("data/openings/");
+    }
+  });
+
   describe("verification_statusによる除外(実運用ゲート)", () => {
     let dir: string;
 

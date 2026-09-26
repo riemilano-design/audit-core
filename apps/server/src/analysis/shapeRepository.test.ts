@@ -21,6 +21,18 @@ describe("shapeRepository", () => {
     expect(() => loadShapes(`${DEFAULT_SHAPES_DIR}-does-not-exist`)).toThrow(ShapeRepositoryError);
   });
 
+  it("存在しないディレクトリに対する例外の文は、渡したパスを含み、固定のディレクトリ名を含まない", () => {
+    const missingDir = `${DEFAULT_SHAPES_DIR}-does-not-exist`;
+    try {
+      loadShapes(missingDir);
+      throw new Error("loadShapesが例外を投げなかった");
+    } catch (err) {
+      const message = (err as Error).message;
+      expect(message).toContain(missingDir);
+      expect(message).not.toContain("data/shapes/");
+    }
+  });
+
   it("getShapesはキャッシュされ、同じ内容を返す", () => {
     expect(getShapes()).toEqual(getShapes());
   });

@@ -21,6 +21,18 @@ describe("intentRepository", () => {
     expect(() => loadIntents(`${DEFAULT_INTENTS_DIR}-does-not-exist`)).toThrow(IntentRepositoryError);
   });
 
+  it("存在しないディレクトリに対する例外の文は、渡したパスを含み、固定のディレクトリ名を含まない", () => {
+    const missingDir = `${DEFAULT_INTENTS_DIR}-does-not-exist`;
+    try {
+      loadIntents(missingDir);
+      throw new Error("loadIntentsが例外を投げなかった");
+    } catch (err) {
+      const message = (err as Error).message;
+      expect(message).toContain(missingDir);
+      expect(message).not.toContain("data/intents/");
+    }
+  });
+
   it("getIntentsはキャッシュされ、同じ内容を返す", () => {
     expect(getIntents()).toEqual(getIntents());
   });

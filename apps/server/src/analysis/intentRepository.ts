@@ -65,7 +65,7 @@ export function loadIntents(dir: string = DEFAULT_INTENTS_DIR): IntentDefinition
     files = readdirSync(dir).filter((f) => f.endsWith(".json"));
   } catch (err) {
     throw new IntentRepositoryError(
-      `data/intents/ ディレクトリを読み込めません: "${dir}" (${(err as Error).message})`,
+      `狙いのディレクトリを読み込めません: "${dir}" (${(err as Error).message})`,
     );
   }
 

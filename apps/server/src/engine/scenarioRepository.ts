@@ -85,7 +85,7 @@ export function loadApprovedScenarioVariants(
     files = readdirSync(dir).filter((f) => f.endsWith(".json"));
   } catch (err) {
     throw new ScenarioRepositoryError(
-      `data/openings/ ディレクトリを読み込めません: "${dir}" (${(err as Error).message})`,
+      `シナリオのディレクトリを読み込めません: "${dir}" (${(err as Error).message})`,
     );
   }
 

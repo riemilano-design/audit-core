@@ -65,7 +65,7 @@ export function loadShapes(dir: string = DEFAULT_SHAPES_DIR): ShapeDefinition[] 
     files = readdirSync(dir).filter((f) => f.endsWith(".json"));
   } catch (err) {
     throw new ShapeRepositoryError(
-      `data/shapes/ ディレクトリを読み込めません: "${dir}" (${(err as Error).message})`,
+      `形のディレクトリを読み込めません: "${dir}" (${(err as Error).message})`,
     );
   }
 
