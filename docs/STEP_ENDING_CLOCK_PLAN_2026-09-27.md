@@ -177,8 +177,25 @@
 **生成物の扱い**: `_head.py`・`_mid.py` を直したら **`report-pdf/build.sh` を必ず走らせる**(走らせないと `render_main.py` が古いまま)。
 **`render_*.py` は git の追跡外なので、コミットには現れない** ― **だから「走らせた」ことを報告に書く。**
 
+| 15 | `finalPositions.ts` の `entries[]` | **`via` を載せて運ぶだけ**(局を選ぶ判定は上流のまま。**ここで判定しない**) |
+| 16 | `timeCause.ts` の `GameTimeCause` | **同じ。`timeUpLoss: boolean` の隣に `via` を運ぶ**(真偽値だけだと語り分けができない) |
+
+> **2026-09-27 の境界の変更(実装担当が止めて報告した)**: **`via` が付録 3・付録 4 の描画まで届いていなかった。**
+> `render_direct.py` は `direct_answers.json` と `final_positions.json` しか読まず、`render_time_cause.py` は `time_cause.json` しか読まない。
+> **どちらの入力にも `via` が無い**(`finalPositions.ts` は `timeUpLosses[*].gameNo` の**集合**だけを見て局を選び、`timeCause.ts` は `timeUpLoss: boolean` だけを持つ)。
+>
+> **「触らないもの」に書いた `finalPositions.ts`・`timeCause.ts` を、`via` を運ぶ分だけ開ける。**
+> **理由**: あの一文は「**局を選ぶ判定を下流に作らない**」ために書いた(`timeUpLosses` を読む側は判定しない = 上流が直れば通る)。
+> **語り分けのための観測を運ぶことは、判定を作ることではない。** むしろ **判定は上流で 1 回だけ下し、下流は運ばれてきた印を読む**という、
+> この計画自身の原則(観測事実 → 判定 → 解釈)に沿う。**選ぶ判定は 1 バイトも下流に置かない。**
+>
+> **もう 1 つの道(python に `patient_report_data.json` を渡す)は採らない**: 呼び出し元 `lib/deliver.ts` の引数も変えることになり、
+> **組が 2 つある顧客では patient が組ごとに複数あるので「`gameNo` → `via`」の束ね方を新しく決める**ことになる ―
+> **新しい判断を増やす方向**である。**データに印を付けて運ぶほうが、決めることが少ない。**
+
 **触らないもの**: `lib/kifuImport.ts` の `ENDING_KIF_WORDS`(**棋譜の語の表は正しい。新しい語を作らない**)・
-`finalPositions.ts`・`timeCause.ts`(**`timeUpLosses` を読む側は変えない** ― 上流が直れば通る)・`check_answer.py` の 6 検査。
+**`finalPositions.ts`・`timeCause.ts` の「どの局を対象にするか」の判定**(`timeUpLosses[*].gameNo` の集合を見る所は変えない ―
+**運ぶのは印だけ**)・`lib/deliver.ts` の引数一式・`check_answer.py` の 6 検査。
 
 ---
 
