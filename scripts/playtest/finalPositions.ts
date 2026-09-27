@@ -37,6 +37,7 @@ import { UsiEngine } from "../../apps/server/src/engine/usiEngine.js";
 import { parseInfoLine, type UsiScore } from "../../apps/server/src/engine/usiInfoParser.js";
 import { finalPositionOf, type FinalPositionKifu } from "./lib/finalPosition.js";
 import { readGitState } from "./lib/gitState.js";
+import type { FixedKifuEnding } from "./lib/kifuImport.js";
 import { READ_VALUES } from "./lib/read.js";
 
 const REPO_ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), "..", "..");
@@ -87,6 +88,8 @@ function groupLabelOf(args: readonly string[]): string {
 
 interface FixedKifuFile extends FinalPositionKifu {
   id: string;
+  /** STEP ENDING_CLOCK §4 の 15(計画の直し、7a40122)。`via`(印)を運ぶために読むだけ。判定はしない。 */
+  ending?: FixedKifuEnding | null;
 }
 
 interface PatientGameLike {
@@ -204,12 +207,16 @@ async function main(): Promise<number> {
       pv: string[];
       scoreCp: number | null;
       mate: number | null;
+      /** STEP ENDING_CLOCK §4 の 15(計画の直し、7a40122)。どう選ばれたかを運ぶ印(印を運ぶだけ・ここで判定しない)。
+       * `lib/reportData.ts` の `buildTimeUpLosses` と同じ対応(語 `切れ負け` = "word"・それ以外(`投了` の時計一致) = "clock")。 */
+      via: "word" | "clock";
     }[] = [];
 
     for (const target of targets) {
       const final = finalPositionOf(target.kifu);
       const mirrored = target.kifu.mirrored === true;
       const top1 = await readTop1(engine, final.sfen, NODES);
+      const via: "word" | "clock" = target.kifu.ending?.kind === "timeUp" ? "word" : "clock";
       entries.push({
         group,
         kifuId: target.kifu.id,
@@ -221,6 +228,7 @@ async function main(): Promise<number> {
         pv: top1?.pv ?? [],
         scoreCp: top1?.scoreCp ?? null,
         mate: top1?.mate ?? null,
+        via,
       });
     }
 

@@ -118,7 +118,8 @@ interface PatientGameLike {
 
 interface PatientLike {
   games: PatientGameLike[];
-  time: { available: boolean; timeUpLosses: { gameNo: number }[] | null };
+  // STEP ENDING_CLOCK §4 の 16(計画の直し、7a40122)。`via` を運ぶだけ(判定はしない。局を選ぶのは既存の gameNo のまま)。
+  time: { available: boolean; timeUpLosses: { gameNo: number; via?: "word" | "clock" }[] | null };
 }
 
 function readPatient(patientPath: string): PatientLike {
@@ -170,6 +171,8 @@ function processGroup(groupArgs: GroupArgs): GameTimeCause[] {
   const patient = readPatient(patientPath);
   const gameNoById = new Map(patient.games.map((g) => [g.id, g.no]));
   const timeUpLossGameNos = new Set((patient.time.timeUpLosses ?? []).map((loss) => loss.gameNo));
+  // STEP ENDING_CLOCK §4 の 16。gameNo → via(局を選ぶ判定〈timeUpLossGameNos〉は変えない。印を運ぶだけ)。
+  const viaByGameNo = new Map((patient.time.timeUpLosses ?? []).map((loss) => [loss.gameNo, loss.via ?? null]));
 
   const kifuDirPath = path.resolve(kifuDir);
   const fixedFiles = readdirSync(kifuDirPath)
@@ -190,7 +193,7 @@ function processGroup(groupArgs: GroupArgs): GameTimeCause[] {
       whatifPositions = readWhatifPositions(whatifPath);
     }
 
-    games.push(buildGameTimeCause(fixed, gameNo, group, timeLimitSec, timeUpLossGameNos.has(gameNo), whatifPositions));
+    games.push(buildGameTimeCause(fixed, gameNo, group, timeLimitSec, timeUpLossGameNos.has(gameNo), whatifPositions, viaByGameNo.get(gameNo) ?? null));
   }
   return games;
 }

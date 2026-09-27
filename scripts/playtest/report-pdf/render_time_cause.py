@@ -177,7 +177,9 @@ story.append(P("時間の使い方", S_TITLE))
 story.append(
     P(
         emit(
-            f"時間切れで負けたことに、機械で数えられる材料からどんな要因の候補が見つかるかを並べます。全 <b>{len(games)}</b> 局"
+            # STEP ENDING_CLOCK §4 の 14(計画の直し、7a40122)。局をまたぐ呼び名は via を問わず使える言い方にする
+            # (人間の決定。「時間切れ」と断定しない)。
+            f"持ち時間に到達した対局について、機械で数えられる材料からどんな要因の候補が見つかるかを並べます。全 <b>{len(games)}</b> 局"
             f"(組は <b>{len(groups)}</b> つ)について、序盤・中盤・終盤の消費秒、長考(10 秒以上)の回数・最長の 1 手・連続、"
             f"中考(5〜9 秒)の回数、本人・相手の飛車が初期の筋のままかを並べます。",
             allowed_p1,
@@ -189,7 +191,7 @@ story.append(
 # kifuId を持たせる理由(実装担当の判断): --time-limit-sec が同じ複数の --kifu-dir(例: tatsunami20・tatsunami3
 # の両方が 180 秒 = 「3 分」)を 1 つの組に合算すると、局番号(gameNo)は元の --patient ごとに 1 から始まるため、
 # 同じ組・同じ局番号が別の対局を指すことがある(下の表で実際に起きる)。kifuId で一意に見分けられるようにする。
-header = ["組", "局", "kifuId", "手数", "序", "中", "終", "長考", "最長", "連続", "中考", "飛車(本人)", "飛車(相手)", "時間切れ"]
+header = ["組", "局", "kifuId", "手数", "序", "中", "終", "長考", "最長", "連続", "中考", "飛車(本人)", "飛車(相手)", "持ち時間に到達"]
 rows = [[P(x, S_K) for x in header]]
 for g in games:
     row_allowed = {
@@ -249,7 +251,7 @@ story.append(PageBreak())
 
 # ==================== 2 ページ目以降(組ごとの集計) ====================
 story.append(P("要因の候補", S_H2))
-story.append(P("時間切れで負けた対局と、それ以外の対局を組ごとに分けて並べます。", S_BODY))
+story.append(P("持ち時間に到達した対局と、それ以外の対局を組ごとに分けて並べます。", S_BODY))
 story.append(Spacer(1, 1.5 * mm))
 
 CAND_LABELS = [
@@ -267,7 +269,7 @@ for g in groups:
     story.append(P(f"{g['group']}の組({g['games']} 局)", S_H3))
     allowed_g = {g["timeLimitSec"], g["timeUpLoss"]["games"], g["other"]["games"]}
 
-    cand_rows = [[P(x, S_K) for x in ["候補", "時間切れの局", "他の局"]]]
+    cand_rows = [[P(x, S_K) for x in ["候補", "持ち時間に到達した局", "他の局"]]]
     for key, label, fmt in CAND_LABELS:
         up_text = fmt(g["timeUpLoss"][key])
         ot_text = fmt(g["other"][key])
@@ -283,7 +285,7 @@ for g in groups:
             return "(この組には whatif-v2 の記録がありません)"
         return f"{fr['numerator']} / {fr['denominator']}"
 
-    for label, fr in (("時間切れの局", g["timeUpLoss"]), ("他の局", g["other"])):
+    for label, fr in (("持ち時間に到達した局", g["timeUpLoss"]), ("他の局", g["other"])):
         fork = fr["forkFraction"]
         opp = fr["oppositeSideFraction"]
         allowed_f = set(allowed_g)
@@ -342,7 +344,7 @@ for g in groups:
     story.append(PageBreak())
 
 
-# ==================== 帯(時間切れで負けた対局ごとの、中盤の手ごとの秒) ====================
+# ==================== 帯(持ち時間に到達した対局ごとの、中盤の手ごとの秒) ====================
 class MidBars(Flowable):
     """中盤の本人の手ごとの秒を、手目を横軸にした縦棒で描く(計画 §3「中盤の手ごとの秒の横棒」)。
     分かれ道(fork: true)の手は棒の色を変えて印にする。fork が全部 null(whatif-v2 が無い組)なら
@@ -398,7 +400,7 @@ class MidBars(Flowable):
 
 
 time_up_games = [g for g in games if g["timeUpLoss"]]
-story.append(P("時間切れで負けた対局の、中盤の手ごとの秒", S_H2))
+story.append(P("持ち時間に到達した対局の、中盤の手ごとの秒", S_H2))
 story.append(
     P(
         "横軸は手目、棒の高さがその手にかけた秒です。破線は 10 秒(長考の目安)の参考線です。"

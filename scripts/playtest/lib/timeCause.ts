@@ -105,6 +105,10 @@ export interface GameTimeCause {
   group: string;
   timeLimitSec: number;
   timeUpLoss: boolean;
+  /** STEP ENDING_CLOCK §4 の 16(計画の直し、7a40122)。`timeUpLoss` が true の局の印(どちらで分かったか)。
+   * `timeUpLoss` が false なら null(真偽値だけでは語り分けができないため運ぶだけ ― ここで判定しない)。
+   * 省略可能(既存の試験の作り物〈`fakeGame`〉と両立させるため)。 */
+  via?: "word" | "clock" | null;
   total: number;
   /** C1(early)・C2(mid)・late の消費秒(本人の手だけの合計)。 */
   phaseSpentSec: TimeCausePhaseTriple;
@@ -203,6 +207,9 @@ export function buildGameTimeCause(
   timeLimitSec: number,
   timeUpLoss: boolean,
   whatifPositions: readonly TimeCauseWhatifPositionInput[] | null,
+  /** STEP ENDING_CLOCK §4 の 16。`timeUpLoss` が true の局の印(呼び出し側が運んできたものをそのまま置くだけ)。
+   * 省略時は null(既存の呼び出し・試験と合わせる)。 */
+  via: "word" | "clock" | null = null,
 ): GameTimeCause {
   const side = sideOf(fixed);
   const plyOffset = plyOffsetOf(fixed);
@@ -275,6 +282,7 @@ export function buildGameTimeCause(
     group,
     timeLimitSec,
     timeUpLoss,
+    via,
     total,
     phaseSpentSec,
     longThinkCountByPhase,

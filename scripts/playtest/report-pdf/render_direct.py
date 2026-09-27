@@ -451,7 +451,9 @@ story.append(P("直接の答え ― この局面では、この手", S_TITLE))
 story.append(
     P(
         emit(
-            f"エンジンで答え合わせした指し手を、局面つきで示します。まず、時間切れで負けた対局の最後の局面から"
+            # STEP ENDING_CLOCK §4 の 13(計画の直し、7a40122)。局をまたぐ呼び名は via を問わず使える言い方にする
+            # (人間の決定。「時間切れ」と断定しない)。
+            f"エンジンで答え合わせした指し手を、局面つきで示します。まず、持ち時間に到達した対局の最後の局面から"
             f"エンジンで読んだ手順(「盤上はこう勝てた」)。次に、長く読まなくても第 1 候補と実戦の手の評価差が"
             f"見えた分かれ道 <b>{counts['totalCount']}</b> 局面(全 <b>{counts['totalForkCount']}</b> 分かれ道のうち)を、"
             f"実戦の手が第 1 候補からどれだけ下がったか(実戦との差)が大きい順に並べます。",
@@ -518,11 +520,12 @@ story.append(
 )
 story.append(PageBreak())
 
-# ==================== 「盤上はこう勝てた」(問題 1。時間切れで負けた対局の最後の局面) ====================
+# ==================== 「盤上はこう勝てた」(問題 1。持ち時間に到達した対局の最後の局面) ====================
 story.append(P("盤上はこう勝てた", S_H2))
 story.append(
     P(
-        "時間切れで負けた対局の、最後の局面からエンジンで読みました。時間切れにならず指し続けていたら、という"
+        # STEP ENDING_CLOCK §4 の 13。局をまたぐ呼び名は via を問わず使える言い方にする(人間の決定)。
+        "持ち時間に到達した対局の、最後の局面からエンジンで読みました。持ち時間が残っていて指し続けていたら、という"
         "仮定の読みです(実際にこう進んだわけではありません)。",
         S_BODY,
     )
@@ -545,8 +548,19 @@ for e in FP["entries"]:
 
     board = Board(final_sfen, user_is_sente, arrows=arrows, person="本人", size=50 * mm)
 
+    # STEP ENDING_CLOCK §4 の 13。局ごとの見出しは via(final_positions.json が運ぶ印)で書き分ける(人間の決定、
+    # 断定しない)。via == "word" は棋譜に `切れ負け` と書かれている局なので断定にならない。
+    via = e.get("via")
+    if via == "word":
+        ending_clause = "切れ負け"
+    elif via == "clock":
+        ending_clause = "持ち時間に到達(終局の表示は投了)"
+    else:
+        _problems.append(f"{e['kifuId']}: final_positions.json の via が無い/不明({via!r})")
+        ending_clause = "持ち時間に到達"
+
     allowed_g = {e["gameNo"], e["moves"]}
-    lines = [P(f"{e['group']} の {e['gameNo']} 局目 ・ {e['moves']} 手で時間切れ", S_EYEBROW), P("最後の局面から、エンジンの読み", S_H3)]
+    lines = [P(f"{e['group']} の {e['gameNo']} 局目 ・ {e['moves']} 手で{ending_clause}", S_EYEBROW), P("最後の局面から、エンジンの読み", S_H3)]
     if e.get("mate") is not None:
         n = abs(e["mate"])
         allowed_g.add(n)
