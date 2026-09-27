@@ -142,7 +142,25 @@
 | 4 | 同 `:1496` `allowedNumbersOf` | **`_mid.py` の双子。** ここを直さないと `prose-request.md` の「文に使ってよい数」に秒が出ない(**監査の所見 C**) |
 | 5 | `lib/obsExtra.ts:106` | `isTimeUpLoss` を import して呼んでいる**6 か所目**(**監査の所見 B**)。**判定を 2 つにしない** ― `buildTimeUpLosses` が出した判定を受け取る形にする |
 | 6 | `report-pdf/_mid.py:12` `allowed_numbers` | 累計・持ち時間を許す数に入れる |
-| 7 | `report-pdf/_head.py:134`・`:176`・`:187` | `time_loss` の作り方と、**`"clock"` の局の語り方**(「持ち時間切れとなりました」は断定になる) |
+| 7 | `report-pdf/_head.py:134` | `time_loss` の作り方(判定は TS が出したものを読む。python で作り直さない) |
+| 8 | `report-pdf/_head.py:142` の `title` | **`"clock"` の局の題**(「持ち時間切れで負けた将棋」は断定になる)。**ここは実際に印字される**(`_mid.py:133`・`:163` が `F[no]["title"]` を読む) |
+| 9 | `report-pdf/_head.py` の `resigned_ahead`(`:141`) | **`"clock"` の局を `resigned_ahead` から外す。** 外さないと `time_loss` と二重に数えられ、`_mid.py:52` の `assert n_la_collapsed + n_time_ahead + n_la_resigned_ahead == len(la)` が将来破綻する(**新しい閾値ではなく、既存の 3 分割を排他に保つだけ**) |
+| 10 | `report-pdf/_mid.py:133` の見出しの副行 | **(3) の併記の場所。** ここが `g["ending"]`(= 「投了」)を**実際に印字している**。併記はこの行に置く |
+| 11 | `report-pdf/render_front.py:419` の固定の注記 | 「**『持ち時間を使い切って負けた局』は、終局の種類が切れ負けで、かつ本人が負けた局です**」が、**直した後は偽になる**(時計で一致した局は終局の種類が「投了」でも数に入る)。**顧客が読む文なので直す** |
+| 12 | `lib/reportData.ts:792`・`:814`(`phaseSpent` 系の呼び出し) | **同じ判定を渡す。** 語だけのままにすると `timeUpLosses` と `phaseSpent`(= `answerMenu` の M1/M9 の分母)で**判定が 2 つに割れる**(計画の原則違反。今回のデータでは発火しないが、時計一致が 2 局出た顧客で割れる) |
+
+**`_head.py` の `narrative()`(`:180`)と `lesson()`(`:206`)は死んだコードである** ― **呼び出しが 1 か所も無い**
+(`grep -rn "narrative(" scripts/playtest/report-pdf/*.py` は**定義 3 件だけ**。`render_main.py`・`render_appendix.py` は
+`build.sh` が `_head.py`+`_util.py`+`_mid.py` を連結して作る**生成物**で、git の追跡外)。
+**顧客が読む 1 局ずつの本文は `prose.json`(書き手が書き、`_mid.py` の `allowed_numbers` が照合する)から来る。**
+
+> **私の誤り(2026-09-27)**: 最初の版は **(1b) と (3) の場所に `_head.py:176`(= `narrative()`)を指定していた。**
+> **呼ばれていない関数だった。** **場所を名指しする前に、それが実行されるかを確かめていなかった** ― **族 F-4(決め手を確かめずに語る)。今日 3 件目。**
+> **実装担当はそこへ正しく実装し、そのうえで「この関数は死んでいる」と報告した。** 報告が無ければ、
+> **「直したのに顧客の紙は 1 文字も変わらない」まま監査へ回っていた。**
+
+**生成物の扱い**: `_head.py`・`_mid.py` を直したら **`report-pdf/build.sh` を必ず走らせる**(走らせないと `render_main.py` が古いまま)。
+**`render_*.py` は git の追跡外なので、コミットには現れない** ― **だから「走らせた」ことを報告に書く。**
 
 **触らないもの**: `lib/kifuImport.ts` の `ENDING_KIF_WORDS`(**棋譜の語の表は正しい。新しい語を作らない**)・
 `finalPositions.ts`・`timeCause.ts`(**`timeUpLosses` を読む側は変えない** ― 上流が直れば通る)・`check_answer.py` の 6 検査。
@@ -163,7 +181,10 @@
 6. **変異**: `result === "負け"` の縛りを外すと 4 が**落ちること**。
 7. **変異**: `allowed_numbers`(および双子の `allowedNumbersOf`)から累計を外すと、秒を含む文が `_mid.py` の検査 2 で**落ちること**。
 8. **`lib/obsExtra.ts` の `timeUpLoss` が、`timeUpLosses` と同じ局を指していること**(判定が 2 つに割れていないことの裏)。
-9. **門は 2 本のまま**(`npx vitest run --root scripts/playtest` と `npm run typecheck:scripts`)。**その場で組んだ確認を門にしない。**
+9. **PDF の実物から文字を抜いて、併記の文が出ていることを確かめる**(**ログで確かめない。成果物で確かめる**)。
+   **第 16 局の節に「終局の表示は投了。本人の累計消費時間は 179 秒(持ち時間は 180 秒)」が印字されていること。**
+   **これが無ければ (3) は入っていない** ― 死んだ関数に書いても PDF は 1 文字も変わらない(上記)。
+10. **門は 2 本のまま**(`npx vitest run --root scripts/playtest` と `npm run typecheck:scripts`)。**その場で組んだ確認を門にしない。**
    **いまのベースラインは緑**(監査の実測: 94 files / 1,771 tests 全通。`typecheck:scripts` の赤は gitignore 下の `out/` の残骸だけ = P-84)。
 
 ---
