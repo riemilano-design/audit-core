@@ -108,6 +108,64 @@ describe("buildObsExtra: phaseSecPerMoveMedians(d)moves が 0 の局はその段
   });
 });
 
+// STEP ENDING_CLOCK(docs/STEP_ENDING_CLOCK_PLAN_2026-09-27.md §4 の 5・§5 の 8)。
+// `timeUpLossGameNos` を渡せば、`buildTimeUpLosses`(lib/reportData.ts)が出した判定と同じ局を指す(判定を 2 つにしない)。
+describe("buildObsExtra: timeUpLossGameNos(判定を 2 つにしない。試験 8)", () => {
+  // 4 手(偶数)・ending: resign(投了)。本人(先手)の最後の手(3 手目)の totalSec がちょうど 180(時計が一致)。
+  const clockLossMoves = GAME01_MOVES.slice(0, 4);
+  const clockLossSource: GameSource = {
+    kifuId: "obsx-clock-loss",
+    meta: { kind: "meta", kifuId: "obsx-clock-loss", startedAt: "", gitHead: null, enginePath: "" } as unknown as MetaLine,
+    records: plantedRecords(clockLossMoves, {}),
+    fixed: {
+      id: "obsx-clock-loss",
+      ending: { kind: "resign", ply: 5 },
+      moves: clockLossMoves,
+      moveSeconds: [
+        { spentSec: 1, totalSec: 1 },
+        { spentSec: 1, totalSec: 2 },
+        { spentSec: 178, totalSec: 180 },
+        { spentSec: 1, totalSec: 3 },
+      ],
+    },
+  };
+  // 同じ形だが本人の最後の手が 179 秒(時計は一致しない)。
+  const nearMissSource: GameSource = {
+    kifuId: "obsx-clock-nearmiss",
+    meta: { kind: "meta", kifuId: "obsx-clock-nearmiss", startedAt: "", gitHead: null, enginePath: "" } as unknown as MetaLine,
+    records: plantedRecords(clockLossMoves, {}),
+    fixed: {
+      id: "obsx-clock-nearmiss",
+      ending: { kind: "resign", ply: 5 },
+      moves: clockLossMoves,
+      moveSeconds: [
+        { spentSec: 1, totalSec: 1 },
+        { spentSec: 1, totalSec: 2 },
+        { spentSec: 177, totalSec: 179 },
+        { spentSec: 1, totalSec: 3 },
+      ],
+    },
+  };
+
+  it("timeUpLossGameNos を渡さなければ、語だけの判定に落ちる(ending が resign なので 2 局とも false。既定の挙動)", () => {
+    const extra = buildObsExtra([clockLossSource, nearMissSource], null, null);
+    expect(extra.phaseMoves.map((row) => row.timeUpLoss)).toEqual([false, false]);
+  });
+
+  it("buildPatientTime(timeLimitSec: 180).timeUpLosses の局番号を渡すと、buildObsExtra の timeUpLoss はそれと同じ局を指す(時計で一致した局だけ true)", () => {
+    const games = buildGames([clockLossSource, nearMissSource]);
+    const patientGames = buildPatientGames(games);
+    const time = buildPatientTime(games, patientGames, 180);
+    const timeUpLossGameNos = new Set((time.timeUpLosses ?? []).map((g) => g.gameNo));
+    expect(timeUpLossGameNos.size).toBe(1); // clockLossSource だけ(nearMiss は入らない)
+
+    const extra = buildObsExtra([clockLossSource, nearMissSource], null, null, timeUpLossGameNos);
+    const byId = new Map(extra.phaseMoves.map((row, index) => [patientGames[index]!.id, row.timeUpLoss]));
+    expect(byId.get("obsx-clock-loss")).toBe(true);
+    expect(byId.get("obsx-clock-nearmiss")).toBe(false);
+  });
+});
+
 describe("buildObsExtra(e): 入力の形が違えば例外", () => {
   it("記録の kifuId と固定棋譜の id が違えば例外(既存の buildGames の検査をそのまま使う。落ちる先は ReportDataError なので ObsExtraError では拾わない)", () => {
     const badSource: GameSource = { kifuId: "obsx-01", meta, records, fixed: { id: "different-id", ending: { kind: "mate", ply: 56 }, moves: GAME01_MOVES } };

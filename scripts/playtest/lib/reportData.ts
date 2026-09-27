@@ -753,10 +753,27 @@ function phaseSpentGroupOf(rows: ReadonlyArray<{ early: number; mid: number; lat
  * 相手が切れ負けた(本人が勝った)局は含めない。
  * STEP OBS-5'(docs/LANE_DIAG_LOG_2026-09.md §12.6)が `lib/obsExtra.ts` から使うため export した
  * (最小の export 追加。値は変えていない)。
+ *
+ * STEP ENDING_CLOCK(docs/STEP_ENDING_CLOCK_PLAN_2026-09-27.md §3 の (1))で時計の入口を足した:
+ * 終局の語が `投了` で、本人が負けた局で、`usedSec`(本人の累計消費時間)が `timeLimitSec`(持ち時間)と
+ * ぴったり一致する局も同じ扱いにする。`usedSec`・`timeLimitSec` のどちらかが無ければ(呼び出し側が渡さなければ)
+ * 時計の入口は使わず、いまと同じ語だけの判定に落ちる(§5a の既定の挙動)。
+ * 母集団は変えない ― この関数はあくまで「本人が負けた局」の中だけを見る(`result === "負け"` を外さない)。
+ * 「語が無い」(`unlisted`・`unreadable`)には広げない(計画 §3 の (1))。
  */
-export function isTimeUpLoss(fixedEnding: FixedKifuEnding | null | undefined, result: "勝ち" | "負け"): boolean {
-  return fixedEnding?.kind === "timeUp" && result === "負け";
+export function isTimeUpLoss(
+  fixedEnding: FixedKifuEnding | null | undefined,
+  result: "勝ち" | "負け",
+  usedSec?: number,
+  timeLimitSec?: number,
+): boolean {
+  if (fixedEnding?.kind === "timeUp" && result === "負け") return true;
+  if (fixedEnding?.kind === "resign" && result === "負け" && usedSec !== undefined && timeLimitSec !== undefined && usedSec === timeLimitSec) return true;
+  return false;
 }
+
+/** `isTimeUpLoss` が真を返した理由(計画 §3 の (1b))。`"word"` = 棋譜に `切れ負け` と書かれていた。`"clock"` = 語は `投了` だが、時計(累計消費時間)が持ち時間とぴったり一致した。 */
+export type TimeUpLossVia = "word" | "clock";
 
 /** 中盤(phaseOf が "mid")の本人の手の件数・消費の合計(phaseSpentOfGame と同じ数え方。ANSWER-M1)。 */
 function midSpentOfGame(game: BuiltGame, seconds: readonly (MoveTime | null)[], total: number): { midMoves: number; midSec: number } {
@@ -775,21 +792,34 @@ function midSpentOfGame(game: BuiltGame, seconds: readonly (MoveTime | null)[], 
   return { midMoves, midSec };
 }
 
+/** 本人の累計消費時間(その局で読めた最後の本人の手の totalSec。累積の時計の値であり、spentSec の和ではない)。
+ * STEP ENDING_CLOCK §4 の 12(計画の直し、904d317)。`buildTimeUpLosses`・`buildPhaseSpent` 系・`buildLossUsedSecs`
+ * が同じ計算を共有する(判定を 2 つにしない ― 監査の所見)。 */
+function usedSecOf(game: BuiltGame, seconds: readonly (MoveTime | null)[]): number {
+  const own = ownMoveTimesOf(game, seconds);
+  return own.reduce((max, m) => Math.max(max, m.time.totalSec), 0);
+}
+
 function buildPhaseSpentPerGame(
   games: readonly BuiltGame[],
   patientGames: readonly PatientGame[],
   secondsByGame: ReadonlyMap<string, readonly (MoveTime | null)[]>,
+  timeLimitSec: number | undefined,
 ): PatientPhaseSpentPerGame[] {
   return games.map((game, index) => {
     const patientGame = patientGames[index]!;
-    const { midMoves, midSec } = midSpentOfGame(game, secondsByGame.get(game.source.kifuId)!, patientGame.total);
+    const seconds = secondsByGame.get(game.source.kifuId)!;
+    const { midMoves, midSec } = midSpentOfGame(game, seconds, patientGame.total);
+    const usedSec = usedSecOf(game, seconds);
     return {
       gameNo: patientGame.no,
       total: patientGame.total,
       midMoves,
       midSec,
       midSecPerMove: midMoves === 0 ? null : midSec / midMoves,
-      timeUpLoss: isTimeUpLoss(game.source.fixed.ending, patientGame.result),
+      // STEP ENDING_CLOCK §4 の 12。`buildTimeUpLosses` と同じ判定(usedSec・timeLimitSec)を渡す ― word だけの
+      // ままだと、この欄(→ answerMenu.ts の M1/M9 の分母)と `time.timeUpLosses` とで判定が 2 つに割れる。
+      timeUpLoss: isTimeUpLoss(game.source.fixed.ending, patientGame.result, usedSec, timeLimitSec),
     };
   });
 }
@@ -805,15 +835,20 @@ function buildPhaseSpent(
   games: readonly BuiltGame[],
   patientGames: readonly PatientGame[],
   secondsByGame: ReadonlyMap<string, readonly (MoveTime | null)[]>,
+  timeLimitSec: number | undefined,
 ): PatientPhaseSpent {
   const timeUpLossRows: Array<{ early: number; mid: number; late: number }> = [];
   const otherRows: Array<{ early: number; mid: number; late: number }> = [];
   games.forEach((game, index) => {
-    const total = patientGames[index]!.total;
-    const sums = phaseSpentOfGame(game, secondsByGame.get(game.source.kifuId)!, total);
-    (isTimeUpLoss(game.source.fixed.ending, patientGames[index]!.result) ? timeUpLossRows : otherRows).push(sums);
+    const patientGame = patientGames[index]!;
+    const seconds = secondsByGame.get(game.source.kifuId)!;
+    const total = patientGame.total;
+    const sums = phaseSpentOfGame(game, seconds, total);
+    // STEP ENDING_CLOCK §4 の 12。buildTimeUpLosses と同じ判定(usedSec・timeLimitSec)を渡す。
+    const usedSec = usedSecOf(game, seconds);
+    (isTimeUpLoss(game.source.fixed.ending, patientGame.result, usedSec, timeLimitSec) ? timeUpLossRows : otherRows).push(sums);
   });
-  const perGame = buildPhaseSpentPerGame(games, patientGames, secondsByGame);
+  const perGame = buildPhaseSpentPerGame(games, patientGames, secondsByGame, timeLimitSec);
   return { timeUpLoss: phaseSpentGroupOf(timeUpLossRows), otherGames: phaseSpentGroupOf(otherRows), perGame, midOver: buildMidOver(perGame) };
 }
 
@@ -824,6 +859,12 @@ export interface TimeUpGame {
   usedSec: number;
   /** 最後に読んだ局面の評価(displayScoreOf。読めていなければ null)。 */
   finalScore: number | null;
+  /**
+   * どちらで分かったか(計画 §3 の (1b))。`"word"` = 棋譜に `切れ負け` と書かれていた。
+   * `"clock"` = 語は `投了` だが時計が一致した。省略可能(既存の試験がこの欄を持たない作り物を使っているため。
+   * `buildTimeUpLosses` が作る値には必ず入る)。
+   */
+  via?: TimeUpLossVia;
 }
 
 /** 本人が時間で負けた局(isTimeUpLoss)だけを対象にする(司令塔の指示、2026-09-23)。 */
@@ -831,15 +872,45 @@ function buildTimeUpLosses(
   games: readonly BuiltGame[],
   patientGames: readonly PatientGame[],
   secondsByGame: ReadonlyMap<string, readonly (MoveTime | null)[]>,
+  timeLimitSec: number | undefined,
 ): TimeUpGame[] {
   const out: TimeUpGame[] = [];
   games.forEach((game, index) => {
-    if (!isTimeUpLoss(game.source.fixed.ending, patientGames[index]!.result)) return;
-    const own = ownMoveTimesOf(game, secondsByGame.get(game.source.kifuId)!);
-    const usedSec = own.reduce((max, m) => Math.max(max, m.time.totalSec), 0);
+    const patientGame = patientGames[index]!;
+    // STEP ENDING_CLOCK §3 の (1)・(2): usedSec は全局で先に出してから isTimeUpLoss に渡す(時計の入口のため)。
+    const usedSec = usedSecOf(game, secondsByGame.get(game.source.kifuId)!);
+    if (!isTimeUpLoss(game.source.fixed.ending, patientGame.result, usedSec, timeLimitSec)) return;
+    const via: TimeUpLossVia = game.source.fixed.ending?.kind === "timeUp" ? "word" : "clock";
     const measured = readEvaluations(game.source.records).filter((row) => row.evaluation.state === "measured");
     const last = measured[measured.length - 1];
-    out.push({ gameNo: patientGames[index]!.no, total: patientGames[index]!.total, usedSec, finalScore: last === undefined ? null : displayScoreOf(last.evaluation) });
+    out.push({ gameNo: patientGame.no, total: patientGame.total, usedSec, finalScore: last === undefined ? null : displayScoreOf(last.evaluation), via });
+  });
+  return out;
+}
+
+/**
+ * 併記(観測。判定はしない)専用の 1 局ぶん(計画 §3 の (3))。`timeUpLosses` とは別に、本人が負けた局**全部**の
+ * 累計消費時間を持つ(時計が一致しなかった局 ― 例: 179 秒 ― も含む)。「本人の累計消費時間は
+ * 179 秒(持ち時間は 180 秒)」のような文を、判定を増やさずに書けるようにするためだけの値
+ * (頭の「終局の表示は投了。」は 2026-09-27 の人間の決定で落とした ― 直前の副行が `投了` を印字しており重複するため)。
+ */
+export interface LossUsedSec {
+  gameNo: number;
+  usedSec: number;
+}
+
+/** 本人が負けた局全部の usedSec(§3 の (3) の併記に使う。母集団は timeUpLosses と同じ「本人が負けた局」)。 */
+function buildLossUsedSecs(
+  games: readonly BuiltGame[],
+  patientGames: readonly PatientGame[],
+  secondsByGame: ReadonlyMap<string, readonly (MoveTime | null)[]>,
+): LossUsedSec[] {
+  const out: LossUsedSec[] = [];
+  games.forEach((game, index) => {
+    const patientGame = patientGames[index]!;
+    if (patientGame.result !== "負け") return;
+    const usedSec = usedSecOf(game, secondsByGame.get(game.source.kifuId)!);
+    out.push({ gameNo: patientGame.no, usedSec });
   });
   return out;
 }
@@ -853,8 +924,12 @@ export interface PatientTime {
   /** `--time-limit-sec` が渡されなければ null(持ち時間が分からないと「残り」を出せない)。 */
   byLeft: TimeBucket[] | null;
   phaseSpent: PatientPhaseSpent | null;
-  /** 本人が時間で負けた局(ending.kind === "timeUp" かつ本人の結果が「負け」)だけ。相手が切れ負けた勝ちの局は入らない。 */
+  /** 本人が時間で負けた局(ending.kind === "timeUp" かつ本人の結果が「負け」、または時計が一致した局)だけ。相手が切れ負けた勝ちの局は入らない。 */
   timeUpLosses: TimeUpGame[] | null;
+  /** `--time-limit-sec` の値(秒)。判定にも併記(§3 の (3))にも使う。渡されなければ null。省略可能(既存の試験の作り物と合わせる)。 */
+  timeLimitSec?: number | null;
+  /** 併記専用(§3 の (3))。本人が負けた局全部の usedSec(時計が一致しなかった局も含む)。省略可能(同上)。 */
+  lossUsedSecs?: LossUsedSec[];
 }
 
 const EMPTY_PATIENT_TIME: PatientTime = { available: false, perMove: null, bySpent: null, afterLongThink: null, byLeft: null, phaseSpent: null, timeUpLosses: null };
@@ -872,8 +947,10 @@ export function buildPatientTime(games: readonly BuiltGame[], patientGames: read
     bySpent: buildBySpent(games, secondsByGame),
     afterLongThink: buildAfterLongThink(games, secondsByGame),
     byLeft: timeLimitSec === undefined ? null : buildByLeft(games, secondsByGame, timeLimitSec),
-    phaseSpent: buildPhaseSpent(games, patientGames, secondsByGame),
-    timeUpLosses: buildTimeUpLosses(games, patientGames, secondsByGame),
+    timeLimitSec: timeLimitSec === undefined ? null : timeLimitSec,
+    lossUsedSecs: buildLossUsedSecs(games, patientGames, secondsByGame),
+    phaseSpent: buildPhaseSpent(games, patientGames, secondsByGame, timeLimitSec),
+    timeUpLosses: buildTimeUpLosses(games, patientGames, secondsByGame, timeLimitSec),
   };
 }
 
@@ -1498,9 +1575,21 @@ export function allowedNumbersOf(
   facts: GameFacts,
   events: readonly PatientEvent[],
   escapeScenes: readonly EscapeScene[],
-  context: { total20: number; lossesCount: number; winsCount: number; lossesFromAheadCount: number; winsFromBehindCount: number },
+  context: {
+    total20: number;
+    lossesCount: number;
+    winsCount: number;
+    lossesFromAheadCount: number;
+    winsFromBehindCount: number;
+    /** STEP ENDING_CLOCK §3 の (2)。この局の本人の累計消費時間(秒)。無ければ null(`_mid.py` の双子)。 */
+    usedSec?: number | null;
+    /** STEP ENDING_CLOCK §3 の (2)。持ち時間(秒)。無ければ null。 */
+    timeLimitSec?: number | null;
+  },
 ): number[] {
   const numbers = new Set<number>([game.total, game.no, context.total20, 300, context.lossesFromAheadCount, context.winsFromBehindCount, context.winsCount, context.lossesCount]);
+  if (context.usedSec !== undefined && context.usedSec !== null) numbers.add(context.usedSec);
+  if (context.timeLimitSec !== undefined && context.timeLimitSec !== null) numbers.add(context.timeLimitSec);
   for (const point of facts.points) {
     numbers.add(point.ply);
     numbers.add(Math.abs(point.score));
@@ -1547,6 +1636,10 @@ export function buildProseRequestMarkdown(
     lossesFromAheadCount: featured.lossesFromAhead.length,
     winsFromBehindCount: featured.winsFromBehindTop3.length,
   };
+  // STEP ENDING_CLOCK §3 の (2): この局の usedSec(patient.time.lossUsedSecs)・timeLimitSec(patient.time.timeLimitSec)を
+  // allowedNumbersOf に渡す(`_mid.py` の allowed_numbers の双子。片方だけ直すと prose-request.md の案内文に秒が出ない)。
+  const lossUsedSecByGameNo = new Map((patient.time.lossUsedSecs ?? []).map((row) => [row.gameNo, row.usedSec]));
+  const timeLimitSec = patient.time.timeLimitSec ?? null;
   const allFeatured = [...featured.lossesFromAhead, ...featured.winsFromBehindTop3];
   for (const game of allFeatured) {
     const facts = factsByNo.get(game.no)!;
@@ -1578,7 +1671,11 @@ export function buildProseRequestMarkdown(
         lines.push(`  - ${scene.displayPly} 手目 ${scene.userMove ?? "?"} → ${scene.opponentMove ?? "?"}(逃げ道 ${scene.escRoot} → ${scene.escEnd}、読み筋なら ${scene.pvEscEnd}）`);
       }
     }
-    const allowed = allowedNumbersOf(game, facts, patient.events, patient.escapeScenes, context);
+    const allowed = allowedNumbersOf(game, facts, patient.events, patient.escapeScenes, {
+      ...context,
+      usedSec: lossUsedSecByGameNo.get(game.no) ?? null,
+      timeLimitSec,
+    });
     lines.push(`- 文に使ってよい数(_mid.py の allowed_numbers と同じ集め方): ${allowed.join("、")}`);
     lines.push("");
   }

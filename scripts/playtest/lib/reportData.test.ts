@@ -16,6 +16,7 @@ import { alignMovesToSente } from "./sideAlignment.js";
 import { rotateUsiMove } from "./usiRotation.js";
 import kingEscapesDefinition from "./conditions/king_escapes_decrease_v1.js";
 import {
+  allowedNumbersOf,
   assertNoForbiddenWords,
   buildAuditCandidatePhase,
   buildAuditPairs,
@@ -32,6 +33,7 @@ import {
   formatPlayedMove,
   gameFactsOf,
   featuredGamesOf,
+  isTimeUpLoss,
   leftBucketIndexOf,
   moveCheckFromGateLines,
   originalMovesOf,
@@ -504,6 +506,175 @@ describe("buildPatientTime: timeUpLosses・phaseSpent.timeUpLoss は「本人が
     const time = buildPatientTime(games, buildPatientGames(games), undefined);
     expect(time.phaseSpent!.timeUpLoss.games).toBe(1);
     expect(time.phaseSpent!.otherGames.games).toBe(1);
+  });
+});
+
+// STEP ENDING_CLOCK(docs/STEP_ENDING_CLOCK_PLAN_2026-09-27.md §3・§5)。isTimeUpLoss に足した時計の入口の単体試験。
+describe("isTimeUpLoss: 時計の入口(計画 §3 の (1))", () => {
+  it("語が `切れ負け`(timeUp)なら、usedSec・timeLimitSec を渡さなくても true(word のまま)", () => {
+    expect(isTimeUpLoss({ kind: "timeUp", ply: 5 }, "負け")).toBe(true);
+  });
+  it("語が `切れ負け` なら、時計の値が一致していなくても true(word が優先)", () => {
+    expect(isTimeUpLoss({ kind: "timeUp", ply: 5 }, "負け", 1, 9999)).toBe(true);
+  });
+  it("語が `投了`(resign)でも、本人が負けて usedSec が timeLimitSec とぴったり一致すれば true", () => {
+    expect(isTimeUpLoss({ kind: "resign", ply: 5 }, "負け", 180, 180)).toBe(true);
+  });
+  it("179 秒(1 秒でも足りない)は線の外(false。閾値を緩めない ― 変異 1)", () => {
+    expect(isTimeUpLoss({ kind: "resign", ply: 5 }, "負け", 179, 180)).toBe(false);
+  });
+  it("181 秒(持ち時間を超えている)も線の外(false。ぴったり一致だけ)", () => {
+    expect(isTimeUpLoss({ kind: "resign", ply: 5 }, "負け", 181, 180)).toBe(false);
+  });
+  it("勝った局は時計が一致していても false(母集団は本人が負けた局だけ ― 変異 2)", () => {
+    expect(isTimeUpLoss({ kind: "resign", ply: 5 }, "勝ち", 180, 180)).toBe(false);
+  });
+  it("usedSec・timeLimitSec を渡さなければ(undefined)、語だけの判定に落ちる(既定の挙動。計画 §5a)", () => {
+    expect(isTimeUpLoss({ kind: "resign", ply: 5 }, "負け")).toBe(false);
+  });
+});
+
+describe("buildPatientTime: 時計の入口(計画 §3 の (1)・(2)・(3)。5 人目の第 12・16・20 局のような形)", () => {
+  // 4 手(偶数)・ending: resign(投了)。最後の手(4 手目)は後手 → 先手(本人)の負け(既存の lossSource と同じ形)。
+  // 本人(先手・奇数手目)の最後の手(3 手目)の totalSec を持ち時間ぴったり(180)にする(第 12 局のような形)。
+  const clockLossMoves = GAME01_MOVES.slice(0, 4);
+  const clockLossSource: GameSource = {
+    kifuId: "clock-loss",
+    meta: { kind: "meta", kifuId: "clock-loss", startedAt: "", gitHead: null, enginePath: "" } as unknown as MetaLine,
+    records: plantedRecords(clockLossMoves, {}),
+    fixed: {
+      id: "clock-loss",
+      ending: { kind: "resign", ply: 5 },
+      moves: clockLossMoves,
+      moveSeconds: [
+        { spentSec: 1, totalSec: 1 },
+        { spentSec: 1, totalSec: 2 },
+        { spentSec: 178, totalSec: 180 },
+        { spentSec: 1, totalSec: 3 },
+      ],
+    },
+  };
+
+  // 同じ形だが、本人の最後の手が 179 秒(1 秒足りない。第 16 局のような形)。
+  const nearMissSource: GameSource = {
+    kifuId: "clock-nearmiss",
+    meta: { kind: "meta", kifuId: "clock-nearmiss", startedAt: "", gitHead: null, enginePath: "" } as unknown as MetaLine,
+    records: plantedRecords(clockLossMoves, {}),
+    fixed: {
+      id: "clock-nearmiss",
+      ending: { kind: "resign", ply: 5 },
+      moves: clockLossMoves,
+      moveSeconds: [
+        { spentSec: 1, totalSec: 1 },
+        { spentSec: 1, totalSec: 2 },
+        { spentSec: 177, totalSec: 179 },
+        { spentSec: 1, totalSec: 3 },
+      ],
+    },
+  };
+
+  // 3 手(奇数)・ending: resign。最後の手(3 手目)は先手 → 先手(本人)の勝ち。本人の usedSec も 180 だが、
+  // 勝った局なので timeUpLosses にも lossUsedSecs にも入らない(第 20・22・25 局のような形)。
+  const winMoves = GAME01_MOVES.slice(0, 3);
+  const winAtLimitSource: GameSource = {
+    kifuId: "win-at-limit",
+    meta: { kind: "meta", kifuId: "win-at-limit", startedAt: "", gitHead: null, enginePath: "" } as unknown as MetaLine,
+    records: plantedRecords(winMoves, {}),
+    fixed: {
+      id: "win-at-limit",
+      ending: { kind: "resign", ply: 4 },
+      moves: winMoves,
+      moveSeconds: [
+        { spentSec: 1, totalSec: 1 },
+        { spentSec: 1, totalSec: 2 },
+        { spentSec: 178, totalSec: 180 },
+      ],
+    },
+  };
+
+  it("前提: clockLossSource・nearMissSource は先手(本人)の負け、winAtLimitSource は先手(本人)の勝ち", () => {
+    const games = buildGames([clockLossSource, nearMissSource, winAtLimitSource]);
+    const patientGames = buildPatientGames(games);
+    expect(patientGames.map((g) => [g.id, g.result])).toEqual([
+      ["clock-loss", "負け"],
+      ["clock-nearmiss", "負け"],
+      ["win-at-limit", "勝ち"],
+    ]);
+  });
+
+  it("timeLimitSec を渡さなければ、投了(resign)の負けは時計が一致していても timeUpLosses に入らない(既定の挙動、計画 §5a)", () => {
+    const games = buildGames([clockLossSource]);
+    const time = buildPatientTime(games, buildPatientGames(games), undefined);
+    expect(time.timeUpLosses).toHaveLength(0);
+    expect(time.timeLimitSec).toBeNull();
+  });
+
+  it("timeLimitSec(180)を渡すと、時計が一致した投了の負け(clockLossSource)だけが timeUpLosses に入り、via は clock(試験 2)", () => {
+    const games = buildGames([clockLossSource, nearMissSource, winAtLimitSource]);
+    const time = buildPatientTime(games, buildPatientGames(games), 180);
+    expect(time.timeUpLosses).toHaveLength(1);
+    expect(time.timeUpLosses![0]).toMatchObject({ usedSec: 180, via: "clock" });
+    expect(time.timeLimitSec).toBe(180);
+  });
+
+  it("179 秒(nearMiss)は timeUpLosses に入らない(試験 3)が、lossUsedSecs には usedSec 179 として残る(§3 の (3) の併記用)", () => {
+    const games = buildGames([clockLossSource, nearMissSource, winAtLimitSource]);
+    const patientGames = buildPatientGames(games);
+    const time = buildPatientTime(games, patientGames, 180);
+    const nearMissGameNo = patientGames.find((g) => g.id === "clock-nearmiss")!.no;
+    expect(time.timeUpLosses!.some((g) => g.gameNo === nearMissGameNo)).toBe(false);
+    expect(time.lossUsedSecs).toContainEqual({ gameNo: nearMissGameNo, usedSec: 179 });
+  });
+
+  it("本人の勝ち局(winAtLimitSource)は、usedSec が時計とぴったり一致していても timeUpLosses にも lossUsedSecs にも入らない(試験 4。母集団は本人が負けた局だけ)", () => {
+    const games = buildGames([clockLossSource, nearMissSource, winAtLimitSource]);
+    const patientGames = buildPatientGames(games);
+    const time = buildPatientTime(games, patientGames, 180);
+    const winGameNo = patientGames.find((g) => g.id === "win-at-limit")!.no;
+    expect(time.timeUpLosses!.some((g) => g.gameNo === winGameNo)).toBe(false);
+    expect(time.lossUsedSecs!.some((g) => g.gameNo === winGameNo)).toBe(false);
+  });
+
+  it("変異の見張り: 語(切れ負け)による判定は timeLimitSec を渡しても変わらない(4 人目の回帰と同じ形。試験 1)", () => {
+    const wordLossMoves = GAME01_MOVES.slice(0, 4);
+    const wordLossSource: GameSource = {
+      kifuId: "word-loss-2",
+      meta: { kind: "meta", kifuId: "word-loss-2", startedAt: "", gitHead: null, enginePath: "" } as unknown as MetaLine,
+      records: plantedRecords(wordLossMoves, {}),
+      fixed: { id: "word-loss-2", ending: { kind: "timeUp", ply: 5 }, moves: wordLossMoves, moveSeconds: wordLossMoves.map((_, i) => ({ spentSec: i + 1, totalSec: i + 1 })) },
+    };
+    const games = buildGames([wordLossSource]);
+    // timeLimitSec を、本人の usedSec(4 手なので最後の本人の手は 3 手目 = totalSec 3)と絶対に一致しない値にする。
+    const time = buildPatientTime(games, buildPatientGames(games), 999);
+    expect(time.timeUpLosses).toHaveLength(1);
+    expect(time.timeUpLosses![0]!.via).toBe("word");
+  });
+});
+
+// STEP ENDING_CLOCK §3 の (2)。allowedNumbersOf(_mid.py の allowed_numbers の双子)に usedSec・timeLimitSec を足した分。
+describe("allowedNumbersOf: usedSec・timeLimitSec(計画 §3 の (2)。変異 3 の TS 側の裏)", () => {
+  const game: PatientGame = { no: 16, id: "g16", side: "先手", total: 114, result: "負け", ending: "投了", events: 0, scores: [100, 2415], plies: [1, 114], marks: [] };
+  const facts = gameFactsOf(game);
+  const baseContext = { total20: 25, lossesCount: 9, winsCount: 16, lossesFromAheadCount: 5, winsFromBehindCount: 3 };
+
+  it("context.usedSec・context.timeLimitSec を渡せば、その数が許す数に入る(179・180 のような値)", () => {
+    const allowed = allowedNumbersOf(game, facts, [], [], { ...baseContext, usedSec: 179, timeLimitSec: 180 });
+    expect(allowed).toContain(179);
+    expect(allowed).toContain(180);
+  });
+
+  it("context.usedSec・context.timeLimitSec を渡さなければ(undefined)、その数は入らない(いまの許す数を増やさない)", () => {
+    const allowed = allowedNumbersOf(game, facts, [], [], baseContext);
+    expect(allowed).not.toContain(179);
+    // 180 は自分の得点(2415)や 300 などと衝突しないが、渡さない限り 180 単体では入らないことを確かめる
+    // (このゲームの facts.points に 180 は出てこない)。
+    expect(allowed).not.toContain(180);
+  });
+
+  it("context.usedSec が null なら入らない(0 局・比べる材料が無い場合の形)", () => {
+    const allowed = allowedNumbersOf(game, facts, [], [], { ...baseContext, usedSec: null, timeLimitSec: null });
+    expect(allowed).not.toContain(179);
+    expect(allowed).not.toContain(180);
   });
 });
 

@@ -89,8 +89,14 @@ function emptyPhaseCell(): ObsExtraPhaseCell {
  * `phaseSpentOfGame`(lib/reportData.ts)と同じ数え方(本人が指した手・秒が取れたものだけ)で、
  * 段ごとの手数もあわせて数える。`ownMoveTimesOf` が返す手の集合は `phaseSpentOfGame` の走査と同じ
  * (parity が合い、秒が null でない手だけ)なので、`sec` の合計は `phaseSpentOfGame` と一致する。
+ *
+ * `timeUpLossGameNos`(STEP ENDING_CLOCK、docs/STEP_ENDING_CLOCK_PLAN_2026-09-27.md §4 の 5、監査の所見 B):
+ * `buildTimeUpLosses`(lib/reportData.ts)が出した判定(局番号の集合)を渡せば、それをそのまま使う
+ * (この道具の中で時計の判定を作り直さない ― 判定を 2 つにしない)。渡さなければ、この CLI が
+ * `--time-limit-sec` を持たない(いまの `scripts/playtest/obsExtra.ts` はこの引数を渡していない)ので、
+ * 既定の挙動(語だけの `isTimeUpLoss`)に落ちる(計画 §5a と同じ理由)。
  */
-function phaseMovesOf(games: readonly BuiltGame[], patientGames: readonly PatientGame[]): ObsExtraPhaseMoves[] {
+function phaseMovesOf(games: readonly BuiltGame[], patientGames: readonly PatientGame[], timeUpLossGameNos?: ReadonlySet<number>): ObsExtraPhaseMoves[] {
   return games.map((game, index) => {
     const patientGame = patientGames[index]!;
     const seconds = moveSecondsOf(game.source.fixed) ?? [];
@@ -103,7 +109,7 @@ function phaseMovesOf(games: readonly BuiltGame[], patientGames: readonly Patien
     }
     return {
       gameNo: patientGame.no,
-      timeUpLoss: isTimeUpLoss(game.source.fixed.ending, patientGame.result),
+      timeUpLoss: timeUpLossGameNos !== undefined ? timeUpLossGameNos.has(patientGame.no) : isTimeUpLoss(game.source.fixed.ending, patientGame.result),
       early: cells.early,
       mid: cells.mid,
       late: cells.late,
@@ -163,10 +169,15 @@ export interface ObsExtra {
   phaseSecPerMoveMedians: ObsExtraPhaseSecPerMoveMedians;
 }
 
-export function buildObsExtra(sources: readonly GameSource[], gitHead: string | null, dirty: boolean | null): ObsExtra {
+/**
+ * `timeUpLossGameNos`(STEP ENDING_CLOCK §4 の 5): `patient.time.timeUpLosses`(`buildTimeUpLosses` の出力)の
+ * 局番号の集合を渡せば、`phaseMoves[].timeUpLoss` はそれと同じ局を指す(判定を 2 つに割らない)。省略すれば
+ * 既定の挙動(語だけの判定)のまま(いまの CLI はこの引数を渡していない。計画 §5a)。
+ */
+export function buildObsExtra(sources: readonly GameSource[], gitHead: string | null, dirty: boolean | null, timeUpLossGameNos?: ReadonlySet<number>): ObsExtra {
   const games = buildGames(sources);
   const patientGames = buildPatientGames(games);
-  const phaseMoves = phaseMovesOf(games, patientGames);
+  const phaseMoves = phaseMovesOf(games, patientGames, timeUpLossGameNos);
   return {
     kind: "obs_extra",
     schemaVersion: "0.1",

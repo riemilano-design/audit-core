@@ -12,6 +12,10 @@ def fill(g, text, ply=None):
 def allowed_numbers(g):
     # STEP FILL 作業 Y(H4-1)。固定の 20 を、このお客さんの局数(s["games"])にした(allowed_numbers の照合は変えない)。
     f = F[g["no"]]; A = {g["total"], g["no"], s["games"], 300, len(la), len(wb), len(wins), len(losses), n_la_collapsed, n_la_resigned_ahead}
+    # STEP ENDING_CLOCK §3 の (2)。この局の本人の累計消費時間・持ち時間の秒を許す数に足す(`lib/reportData.ts` の
+    # `allowedNumbersOf` の双子。片方だけ直すと、判定は変わるのに言い換えの文には秒を書けない)。
+    if f.get("used_sec") is not None: A.add(f["used_sec"])
+    if f.get("time_limit_sec") is not None: A.add(f["time_limit_sec"])
     for p, sc in f["pts"]: A.add(p); A.add(abs(sc))
     for p, _, _ in f["trans"]: A.add(p)
     for e in m["events"]:
@@ -126,7 +130,15 @@ S_SEC = st("sec", font=FONT_B, fontSize=10.5, leading=14, color=ACCENT, spaceBef
 S_SC = st("sc5", fontSize=10.8, leading=16.5)
 for g in featured:
     no = g["no"]; f = F[no]; pz = PROSE[str(no)]; us = g["side"] == "先手"; k = SF[g["id"]]
-    head_tbl = Table([[P(f"第 {no} 局　<font size='12'>「{f['title']}」</font>", S_GH)], [P(f"結果: {g['result']}　｜　{g['side']}　｜　{g['total']} 手" + (f"　｜　{g['ending']}" if g.get("ending") else ""), S_GSUB)]], colWidths=[W])
+    # STEP ENDING_CLOCK §4 の 10(計画の直し、904d317)。ここが g["ending"](= 「投了」)を実際に印字している。
+    # (3) の併記: 終局の語は投了・本人が負け・時計は一致しなかった局(resigned_ahead。第 16 局のような形)に、
+    # 判定はしない・数だけの観測を添える。
+    obs_suffix = (
+        f"　｜　本人の累計消費時間は {f['used_sec']} 秒(持ち時間は {f['time_limit_sec']} 秒)"
+        if g["result"] == "負け" and f["resigned_ahead"] and f["used_sec"] is not None and f["time_limit_sec"] is not None
+        else ""
+    )
+    head_tbl = Table([[P(f"第 {no} 局　<font size='12'>「{f['title']}」</font>", S_GH)], [P(f"結果: {g['result']}　｜　{g['side']}　｜　{g['total']} 手" + (f"　｜　{g['ending']}" if g.get("ending") else "") + obs_suffix, S_GSUB)]], colWidths=[W])
     head_tbl.setStyle(TableStyle([("BACKGROUND", (0, 0), (-1, -1), BG), ("LINEBELOW", (0, -1), (-1, -1), 1.0, ACCENT), ("LEFTPADDING", (0, 0), (-1, -1), 3 * mm), ("TOPPADDING", (0, 0), (0, 0), 2 * mm), ("BOTTOMPADDING", (0, -1), (-1, -1), 1.8 * mm)]))
     marks = [min(range(len(g["plies"])), key=lambda i: abs((g["plies"][i] + f["off"]) - s_["ply"])) for s_ in pz["scenes"]]
     story += [head_tbl, Spacer(1, 1.5 * mm), P("どんな将棋だったか", S_SEC), P(fill(g, pz["summary"]), S_SC), P("形勢の変化(赤い点と番号が、下の場面です。縦の点線は手数の目安)", S_SEC), SparkWide(g["scores"], marks, w=W, h=20 * mm, plies=[p + f["off"] for p in g["plies"]], labels={mi: "①②③"[j] for j, mi in enumerate(marks)}), Spacer(1, 4.5 * mm), P("形勢が動いた場面", S_SEC)]

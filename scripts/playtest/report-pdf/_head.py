@@ -116,6 +116,14 @@ for r in c["reps"]: reps_by_game.setdefault(r["gameNo"], []).append(r)
 
 
 import re as _re
+# STEP ENDING_CLOCK(docs/STEP_ENDING_CLOCK_PLAN_2026-09-27.md §4 の 7)。
+# 判定は `lib/reportData.ts` の `buildTimeUpLosses` が唯一の出所(ここでは判定を作り直さない ― 判定を 2 つにしない)。
+# `time_up_by_game`: 本人が時間で負けたと判定された局(gameNo → { via: "word" | "clock", … })。
+# `loss_used_sec_by_game`・`time_limit_sec`: 併記(§3 の (3))専用。判定はしない、数だけ。
+_time_data = m.get("time") or {}
+time_up_by_game = {t["gameNo"]: t for t in (_time_data.get("timeUpLosses") or [])}
+loss_used_sec_by_game = {r["gameNo"]: r["usedSec"] for r in (_time_data.get("lossUsedSecs") or [])}
+time_limit_sec = _time_data.get("timeLimitSec")
 # ---- 局ごとの材料 ----
 def game_facts(g):
     off = 1 if g["side"] == "後手" else 0
@@ -131,15 +139,26 @@ def game_facts(g):
     drop_after_max = next((p for p, v in pts if p > mxp and v < 300), None) if ever_ahead else None
     recover = next((p for p, v in pts if p > mnp and v > -300), None) if ever_behind else None
     def phase(p): return "序盤" if p / g["total"] < 1 / 3 else ("中盤" if p / g["total"] < 2 / 3 else "終盤")
-    time_loss = g["result"] == "負け" and "切れ負け" in (g.get("ending") or "")
+    # STEP ENDING_CLOCK §3 の (1)・(1b)。`time_loss` は `lib/reportData.ts` の `isTimeUpLoss`(語 `切れ負け` に加え、
+    # 語が `投了` でも時計〈累計消費時間 = 持ち時間〉が一致すれば真)の結果をそのまま読む(ここで判定を作り直さない)。
+    # `via` は「どちらで分かったか」("word" = 棋譜の語 / "clock" = 時計)。
+    time_up_info = time_up_by_game.get(g["no"])
+    time_loss = time_up_info is not None
+    via = time_up_info["via"] if time_up_info is not None else None
+    used_sec = loss_used_sec_by_game.get(g["no"])
     # STEP FILL 作業 Y(H4-2、独立監査 REVISE 2026-09-22 の直し)。「切れ負けでない」だけでは、詰み・反則負け・
     # 終局の記録なしの負けも「投了で終わった」と断定してしまう(誤った断定)。実際の終局の語(ending)が
     # 「投了」であることを見て判定する(g.get("ending") はレポート道具が持つ唯一の終局の事実。lib/kifuImport.ts
     # の ENDING_KIF_WORDS の日本語語をそのまま比べる ― 新しい語を作らない)。
     ending_word = g.get("ending") or ""
-    resigned_ahead = ending_word == "投了" and final >= 300
+    # STEP ENDING_CLOCK §4 の 9(計画の直し、904d317)。時計で分かった局(via == "clock")は resigned_ahead から外す
+    # ― 外さないと time_loss と resigned_ahead の両方に数えられ、_mid.py:52 の 3 分割の assert が将来破綻する
+    # (新しい閾値ではなく、既存の 3 分割を排他に保つだけ)。
+    resigned_ahead = ending_word == "投了" and final >= 300 and via != "clock"
     if g["result"] == "負け":
-        if time_loss and final >= 300: title = "盤上は優勢のまま、持ち時間切れで負けた将棋"
+        # STEP ENDING_CLOCK §4 の 8。時計で分かった局(via == "clock")は「持ち時間切れ」と断定しない。
+        if time_loss and final >= 300 and via == "clock": title = "盤上は優勢のまま、時計上、持ち時間に到達して負けた将棋"
+        elif time_loss and final >= 300: title = "盤上は優勢のまま、持ち時間切れで負けた将棋"
         # 「持ち時間切れ」の次、「途中で崩れた」の前に置く。投了でない「切れ負けでない・+300 以上」の負け
         # (詰み・反則負け・終局の記録なし等)は、この分岐に入れず、直しの前と同じ ever_ahead の分岐へ流す。
         elif resigned_ahead: title = "盤上は優勢のまま、投了で終わった将棋"
@@ -155,7 +174,7 @@ def game_facts(g):
             else: title = "一度は悪くなったが、戻せないまま勝った将棋"
         elif ever_behind: title = f"一度は悪くなったが、{recover} 手目に戻して勝った将棋"
         else: title = "形勢を落とさずに勝った将棋"
-    return dict(off=off, pts=pts, trans=trans, mxp=mxp, mxv=mxv, mnp=mnp, mnv=mnv, ever_ahead=ever_ahead, ever_behind=ever_behind, final=final, drop=drop_after_max, recover=recover, phase=phase, time_loss=time_loss, resigned_ahead=resigned_ahead, title=title)
+    return dict(off=off, pts=pts, trans=trans, mxp=mxp, mxv=mxv, mnp=mnp, mnv=mnv, ever_ahead=ever_ahead, ever_behind=ever_behind, final=final, drop=drop_after_max, recover=recover, phase=phase, time_loss=time_loss, via=via, used_sec=used_sec, time_limit_sec=time_limit_sec, resigned_ahead=resigned_ahead, title=title)
 F = {g["no"]: game_facts(g) for g in m["games"]}
 n_never_ahead_loss = sum(1 for g in losses if not F[g["no"]]["ever_ahead"]); n_never_behind_win = sum(1 for g in wins if not F[g["no"]]["ever_behind"]); n_time = sum(1 for g in losses if F[g["no"]]["time_loss"])
 RANK_JP = {"ahead": "優勢", "level": "互角", "behind": "劣勢"}
@@ -173,8 +192,17 @@ def narrative(g, f):
     if not phr: text = "評価は最後まで互角の範囲(−300 から +300)にとどまり"
     elif len(phr) <= 6: text = "、".join(phr)
     else: text = "、".join(phr[:3]) + "、(途中の上下を省略)、" + "、".join(phr[-3:])
-    if f["time_loss"]: text += f"、{g['total']} 手で持ち時間切れとなりました(最後の評価は {fmt(f['final'])})。"
-    else: text += f"、{g['total']} 手で{g.get('ending') or '終局'}、{g['result']}となりました。"
+    # STEP ENDING_CLOCK §3 の (1b)。時計で分かった局(via == "clock")は、棋譜の語で分かった局と同じ言い方(断定)を
+    # 使わない ―「持ち時間切れとなりました」は語 `切れ負け` があるときだけ(via == "word")。
+    if f["time_loss"] and f["via"] == "clock":
+        text += f"、{g['total']} 手で、時計上、持ち時間に到達しました(最後の評価は {fmt(f['final'])})。"
+    elif f["time_loss"]:
+        text += f"、{g['total']} 手で持ち時間切れとなりました(最後の評価は {fmt(f['final'])})。"
+    elif g["result"] == "負け" and f["resigned_ahead"] and f["used_sec"] is not None and f["time_limit_sec"] is not None:
+        # STEP ENDING_CLOCK §3 の (3)。判定はしない(via は付けない)。数を置くだけ(人間の決定、2026-09-27)。
+        text += f"、{g['total']} 手で{g.get('ending') or '終局'}、{g['result']}となりました。本人の累計消費時間は {f['used_sec']} 秒(持ち時間は {f['time_limit_sec']} 秒)。"
+    else:
+        text += f"、{g['total']} 手で{g.get('ending') or '終局'}、{g['result']}となりました。"
     extra = []
     if f["ever_ahead"]: extra.append(f"最も良かったのは {f['mxp']} 手目の {fmt(f['mxv'])}")
     if f["ever_behind"]: extra.append(f"最も悪かったのは {f['mnp']} 手目の {fmt(f['mnv'])}")
@@ -184,7 +212,8 @@ def lesson(g, f, reps):
     # STEP FILL 作業 Y(H4-3)。このファイル内では呼び出し元が無い(render_main.py・render_appendix.py のどちらの
     # 連結先からも参照されない ― 出力に影響しない死んだコード)。固定の「20」だけ、ほかの箇所と揃えて s['games'] にした。
     if g["result"] == "負け":
-        if f["time_loss"] and f["final"] >= 300: t = f"この対局は盤上では{m['person']}が良い形勢のまま、持ち時間切れで負けています。{s['games']} 局のうち、時間切れの負けは {n_time} 局です。"
+        if f["time_loss"] and f["final"] >= 300 and f["via"] == "clock": t = f"この対局は盤上では{m['person']}が良い形勢のまま、時計上、持ち時間に到達して負けています。{s['games']} 局のうち、時間切れの負けは {n_time} 局です。"
+        elif f["time_loss"] and f["final"] >= 300: t = f"この対局は盤上では{m['person']}が良い形勢のまま、持ち時間切れで負けています。{s['games']} 局のうち、時間切れの負けは {n_time} 局です。"
         elif f["ever_ahead"]: t = f"この対局は、最初から悪かったわけではありません。一度は優勢になっています。その後、{f['phase'](f['drop'] or f['mxp'])}に形勢が大きく動き、優勢を保てないまま負けています。{s['games']} 局全体でも、同じように「良くなってから崩れた」負けが {len(la)} 局あります。"
         else: t = f"この対局では、途中で優勢になる場面がありませんでした。{s['games']} 局のうち、良くならないまま負けた局は {n_never_ahead_loss} 局で、多くはありません。"
     else:
