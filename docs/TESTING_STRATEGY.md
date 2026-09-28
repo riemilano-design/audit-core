@@ -96,3 +96,27 @@ Phase 1で作った定跡データに対応する代表的な局面(SFEN)を10�
 
 この規則は `check_answer.py`・`check_delivery.py` にも当てるべきだが、**2026-09-28 時点では当てていない**
 (範囲を広げないため)。**当てていないことを既知事項 P-115 に登録している。**
+
+## python の変異試験とバイトコード ― Apple python の `pycache_prefix`(2026-09-29)
+
+**観測(P-122)**: 変異試験の道具が「この変異は誰も捕まえない」という**偽の緑**を 1 回返した(別の道具で同じ変異を回すと 14 本が赤)。その回で何が起きたかは**測れなかった**(証拠は `scratchpad/pyc_evidence/`、変異前のソースに対応する pyc しか残っていなかった)。
+
+**機構(司令塔・自動化レーンがそれぞれ再現)**: この Mac の `python3`(`/Library/Developer/CommandLineTools/usr/bin/python3` 3.9.6)は `sys.pycache_prefix = ~/Library/Caches/com.apple.python` で、**pyc をソースの隣の `__pycache__` ではなくそこへ絶対パスごと書く**。だから `find -name __pycache__` は常に 0 件で、「キャッシュは無い」に見える。pyc の有効性は既定で**ソースの mtime(秒)と長さ**だけで判定されるので、**同じ長さ・同じ mtime の変異は古い pyc に隠れる**。`-B` は書くのを止めるだけで**読むのは止めない**。
+
+```
+printf 'X=1\n' > m.py; python3 -c 'import m; print(m.X)'        # 1
+cp -p m.py m.bak; printf 'X=2\n' > m.py; touch -r m.bak m.py    # 同じ長さ・同じ mtime に変異
+python3 -c 'import m; print(m.X)'                                # 1 ← 隠れる
+python3 -B -c 'import m; print(m.X)'                             # 1 ← -B でも隠れる
+python3 -X pycache_prefix=$(mktemp -d) -c 'import m; print(m.X)' # 2 ← 効く
+```
+
+当たりやすい変異: `!=`→`==`、`>=`→`> `、数字 1 桁の差し替え、同じ文字数の日本語(「形勢の流れ」→「知らない節」は 5 文字・15 バイトで同じ)。写しを `cp -p`・`rsync -a`・`shutil.copytree` で作ると mtime が保たれるので特に危ない。
+
+**規則**
+1. **主**: 変異の一本目は**陽性対照**(捕まると分かっている変異)。鳴らなければ、その回の変異の結果は**全部捨てる**。原因が何であっても効く。
+2. **副**: 変異の写しは `python3 -X pycache_prefix=<その回だけの新しい dir>`(または `PYTHONPYCACHEPREFIX`)で走らせる。`__pycache__` を消すのと `-B` では効かない。
+3. 「変異なしで rc=0」の校正はこの穴を**捕まえない**(古い pyc でも同じ内容なら緑)。
+4. **「見つからなかった」を「無い」と読まない**(探した場所を書く)。
+
+自動化レーンの記録は `docs/LANE_AUTOMATION_LOG_2026-09.md` §44、既知事項は P-122。
