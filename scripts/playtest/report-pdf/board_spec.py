@@ -64,3 +64,102 @@ def user_sente_from_sfens(record):
     `_head.py`・`render_direct.py` が使っているのと同じ ― `"gote"` なら本人が後手。
     """
     return record.get("side") != "gote"
+
+
+# ==================== 付録 3 の盤(分かれ道・最終局面) ====================
+# **付録 3 の判断も、付録 1 と同じ理由でここに置く**(司令塔の指示 2026-09-29)。
+#
+# 【材料の `sfen` は盤に使わない】`render_direct.py` の 22〜26 行が理由を持っている:
+# **`direct_answers.json` の `sfen`・USI は「本人 = 先手」に正規化された記録**で、
+# mirrored の局は `rotate_usi` で本人が指した向きへ戻してから当てる。
+# **正規化された sfen をそのまま描くと、後手の局で盤が逆になる。**
+# だから盤は **`sfens.json`(本人が指した実際の向き)**から引く。
+# **自動化レーンは最初「材料が SFEN を持つので `sfens.json` は要らない」と書いた** ― 間違いだった。
+# **材料が値を持っていることと、組版がその値を使っていることは別**(2026-09-29 の教訓)。
+#
+# 【向きの規則は付録 1 と違う】付録 1 は `patient_report_data.json` の `games[].side`(「先手」/「後手」)。
+# 付録 3 は **`sfens.json` の `side`**(`"gote"` なら mirrored)。**材料が別なので規則も別。**
+
+
+def fork_spec(answer, sfens_record):
+    """分かれ道の盤(`render_direct.py` 495〜499 行と同じ判断)。
+
+    **`sfens[dply - 1]` ― 指す前の局面。**`dply` にすると 1 手先を見せることになり、
+    「この手を指す前にどう見えていたか」という文と盤が食い違う。
+    """
+    sfens = sfens_record.get("sfens") or []
+    if not sfens:
+        raise BoardSpecError("sfens が空(この局の局面が材料に無い)")
+    dply = answer.get("displayPly")
+    if dply is None:
+        raise BoardSpecError(f"分かれ道に displayPly が無い: {answer.get('kifuId')}")
+    idx = int(dply) - 1
+    if not 0 <= idx < len(sfens):
+        raise BoardSpecError(
+            f"{dply} 手目の 1 手前が材料に無い(sfens は {len(sfens)} 件)")
+    return {"kind": "fork", "ply": int(dply), "sfen": sfens[idx],
+            "mirrored": is_mirrored(sfens_record),
+            "user_sente": user_sente_from_sfens(sfens_record)}
+
+
+def final_spec(entry, sfens_record):
+    """最終局面の盤(`render_direct.py` 560〜562 行と同じ判断)。
+
+    **`sfens[-1]` ― 最後の局面**(本人が指した実際の向き)。
+    **手数は `entries[].moves`**(`displayPly` ではない ― 検査 7 が受ける鍵もこれ)。
+    """
+    sfens = sfens_record.get("sfens") or []
+    if not sfens:
+        raise BoardSpecError("sfens が空(この局の局面が材料に無い)")
+    moves = entry.get("moves")
+    if moves is None:
+        raise BoardSpecError(f"最終局面に moves が無い: {entry.get('kifuId')}")
+    return {"kind": "final", "ply": int(moves), "sfen": sfens[-1],
+            "mirrored": is_mirrored(sfens_record),
+            "user_sente": user_sente_from_sfens(sfens_record)}
+
+
+def is_mirrored(sfens_record):
+    """本人が後手か(`render_direct.py` と同じ ― `sfens.json` の `side` が `"gote"`)。"""
+    return sfens_record.get("side") == "gote"
+
+
+# ==================== 盤に渡す指し手の向き ====================
+# **`render_direct.py` から移した**(写していない ― 2026-09-29 の司令塔の条件 1)。
+#
+# 【なぜここに移すか】本編の md にも同じ盤を出す(`exit_body.py`)。矢印の USI は
+# **「盤に何を渡すか」の一部**であり、`render_direct.py` は冒頭で `sys.argv` を読んで走る形なので
+# **import できない**。写せば P-111 の病気(同じ関数が 2 実装)をもう 1 つ作る。
+#
+# 【移したのはこの 4 つ】`rotate_usi` は `rotate_square` だけに依り、`rotate_square` は `RANKS` に依る。
+# **`RANKS` は `render_direct.py` の `sq()` も使っている**ので、あちらは定義を消して**ここの 1 つを束縛する**
+# (定義を 2 つにしない)。**自動化レーンは最初「`rotate_square` 以外から使われていない」と書いた** ―
+# 出現が 3 行であることだけを見て、内訳を確かめなかった誤り。移した直後に `NameError` で鳴って分かった。
+# **数えただけで内訳を書かない**(2026-09-29 の 4 つ目の同型)。
+#
+# 【残る写し 1 つ】`render_whatif.py` にも `rotate_usi` の写しがある。**触らない**
+# (付録 2 は正本の束に入っていない ― 司令塔の条件 2)。既知事項に 1 行残す。
+#
+# 【移す前の校正値(実測 2026-09-29。c5 の材料の USI 856 件)】
+# 往復 856/856、打つ手 306 件・成る手 92 件、全件の写像の指紋
+# sha256 = 3eae09155296e667cfd8752f9b5e030f8f233e7ff4a4bd886c84b4d2349231a3
+# `3a1c+` → `7i9g+`、`B*8a` → `B*2i`、`6a7b` → `4i3h`。
+RANKS = "abcdefghi"
+
+
+def rotate_square(token):
+    f, r = int(token[0]), token[1]
+    return f"{10 - f}{RANKS[len(RANKS) - 1 - RANKS.index(r)]}"
+
+
+def rotate_usi(usi):
+    """USI を 180 度回す(打つ手は打つ先だけ・成りの `+` は末尾に残す)。"""
+    if usi[1] == "*":
+        return f"{usi[0]}*{rotate_square(usi[2:4])}"
+    suffix = usi[4:]
+    return rotate_square(usi[0:2]) + rotate_square(usi[2:4]) + suffix
+
+
+def genuine_move(usi, mirrored):
+    """材料の USI(本人 = 先手に正規化された向き)を、**本人が指した実際の向き**へ戻す。"""
+    return rotate_usi(usi) if mirrored and usi is not None else usi

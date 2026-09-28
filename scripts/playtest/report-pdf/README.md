@@ -479,7 +479,7 @@ python3 -X utf8 check_delivery.py <顧客フォルダ> [--forbid <語>]…
   (実測は `scripts/playtest/README.md` の「伝わる形」節を参照)、変異(禁止語チェックの「組」判定を外す)で
   合成データの「組」を含む文が rc=0 になってしまうこと(= 検査が無いと通ってしまうこと)を確かめたうえで戻した。
 
-## STEP CUSTOMER-EXIT の道具(`exit_index.py`・`exit_render.py`・`exit_cover.py`・`compare_render.py`・`rename_list.py`)
+## STEP CUSTOMER-EXIT の道具(`exit_index.py`・`exit_render.py`・`exit_body.py`・`exit_cover.py`・`board_spec.py`・`board_draw.py`・`compare_render.py`・`rename_list.py`)
 
 承認済みの 30 ページの形(`docs/GOLDEN_MASTER_CUSTOMER_EXIT.md`)で顧客に渡すための段。
 **まだ `deliver.ts` の本番導線には繋いでいない**(手で呼ぶ道具として置いている)。
@@ -488,11 +488,21 @@ python3 -X utf8 check_delivery.py <顧客フォルダ> [--forbid <語>]…
 |---|---|
 | `exit_index.py` | **定数だけの正本。**節の固定名・印字される題・表紙の枠と型・束ねた索引の鍵。組版(`_mid.py`・`render_direct.py`)と門(`check_structure.py`)の両方が import する ― **写しを 2 か所に持たない。**`PageIndexRecorder` は組んだ後のページ番号を `<PDF>_page_index.json` に書く(`doc.afterFlowable` で `doc.page` を読むだけ。**flowable は足さない**) |
 | `exit_render.py` | 本編の `<!-- pos: -->`・`<!-- sec: -->` を読み、**組版が書いた索引だけで**付録のページを引いて 1 冊に束ねる。**PDF の文字は検索しない** |
+| `exit_body.py` | **本編の md → 本人用・見本用の PDF。**`<!-- pos: -->` の場所に盤を差し込む。**照合は作らない** ― 印が材料に実在するかは `check_answer.check_answer()` の検査 7 がやる。**見本用 = 本人用から対応表の節が載ったページを抜いたもの**(`check_structure.SECTIONS`・`MAPPING_ROLE` で見分け、**ページ数では決めない**。2 ページにまたがれば落とす) |
+| `board_spec.py` | **「盤に何を渡すか」の判断を 1 か所に置く。**付録 1 の場面(`scene_spec`)・付録 3 の分かれ道と最終局面(`fork_spec`・`final_spec`)・向き(`user_sente*`・`is_mirrored`)・指し手の向き戻し(`rotate_usi`・`genuine_move`)。`_mid.py`・`render_direct.py`・`exit_body.py` が**同じここを呼ぶ** ― **写すと 1 手ずれ、ずれても試験は通る** |
+| `board_draw.py` | **盤の描き方**(`Board`・`parse_sfen`・駒の字・矢印の 2 色)。様式は借りず `BoardStyle` で受ける。`_util.py` は薄い包み(`build.sh` の断片なので import できないため) |
 | `exit_cover.py` | **付録の表紙の md** を作る(見出し・段落・表「この冊子に入っているもの」・末尾の 4 要素)。表の行は `COVER_SECTIONS`、数は材料から、対応の列は印の逆引き |
 | `compare_render.py` | **出力が変わっていないか**を測る。ページ数・ページごとの文字・`get_drawings()` のベクタの形。**バイトでは測れない**(`invariant` が無く、`get_images()` は盤がベクタなので 0) |
 | `rename_list.py` | **実物から文・題を写す前に通す「改名の一覧」**をコミットの diff から作る(正本 §9・§10)。範囲は**実物の mtime**(名前の日付は当てにならない) |
 
 使い方:
+
+```sh
+# 本編の md → 本人用・見本用(引数は check_answer.py と同じものをそのまま渡す)
+REPORT_DATA_DIR=<report フォルダ> python3 -X utf8 exit_body.py <本編.md> \
+  --out-person <本人用.pdf> --out-sample <見本用.pdf> [--person <呼び名>] \
+  --patient … --prose … --direct … --menu …
+```
 
 ```sh
 # 表紙の md

@@ -24,7 +24,7 @@ def disp_move(g, ply, text):
         _, to = usi_squares(SF[g["id"]]["moves"][ply - 1]); t = ZEN[to[0]] + KAN[to[1]] + t
     return side_mark(ply) + t
 
-COL_PLAYED = colors.HexColor("#8a5a1e"); COL_CAND = colors.HexColor("#1f7a78")
+from board_draw import COL_CAND, COL_PLAYED  # noqa: F401  ― 定義は board_draw.py の 1 か所
 class Legend(Flowable):
     def __init__(self, same=False): super().__init__(); self.same = same
     def wrap(self, aw, ah): return 60 * mm, 9 * mm if not self.same else 5 * mm

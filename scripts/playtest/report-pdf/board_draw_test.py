@@ -21,6 +21,12 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import board_draw as BD
 
 HERE = os.path.dirname(os.path.abspath(__file__))
+
+
+def read_text(path):
+    """**開いたファイルを閉じる**(`open(...).read()` は `ResourceWarning` を出す ― P-127)。"""
+    with open(path, encoding="utf-8") as f:
+        return f.read()
 STYLE = BD.BoardStyle(ink="#000000", red="#ff0000", bg="#ffffff",
                       line="#cccccc", muted="#888888", font="Helvetica")
 # 初期局面(本人が先手)
@@ -29,7 +35,7 @@ SFEN = "lnsgkgsnl/1r5b1/ppppppppp/9/9/9/PPPPPPPPP/1B5R1/LNSGKGSNL b - 1"
 
 def external_names(path):
     """モジュールが外から借りている名前を全部挙げる(import と組み込みは除く)。"""
-    src = open(path, encoding="utf-8").read()
+    src = read_text(path)
     tree = ast.parse(src)
     defined = set(dir(builtins))
     for n in ast.walk(tree):
@@ -119,6 +125,22 @@ class UtilIsAThinWrapperTest(unittest.TestCase):
                          f"_util.py の Board が board_draw を継いでいない: {bases}")
         self.assertNotIn("def draw", ast.unparse(boards[0]),
                          "_util.py の Board が自分で描いている(薄い包みでない)")
+
+    def test_07_util_does_not_redefine_the_arrow_colours(self):
+        """矢印の 2 色は `board_draw.py` の 1 か所。**`_util.py` が定義し直していないこと。**
+
+        2026-09-29 に `_util.py` から移した(あちらは `build.sh` の断片で import できないため、
+        写せば `Board` を移した意味が薄れる)。**定義し直すと、直しが片方だけに入る。**
+        `Legend` は `_util.py` に残っているので、**束縛(import)は在ってよい。**
+        """
+        src = read_text(os.path.join(HERE, "_util.py"))
+        tree = ast.parse("\n".join(src.split("\n")[1:]))
+        assigned = [t.id for n in ast.walk(tree) if isinstance(n, ast.Assign)
+                    for t in n.targets if isinstance(t, ast.Name)]
+        for name in ("COL_PLAYED", "COL_CAND"):
+            self.assertNotIn(name, assigned, f"_util.py が {name} を定義し直している")
+        self.assertIn("from board_draw import COL_CAND, COL_PLAYED", src,
+                      "board_draw からの束縛が無い")
 
 
 if __name__ == "__main__":

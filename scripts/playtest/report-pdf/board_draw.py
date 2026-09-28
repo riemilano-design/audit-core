@@ -21,6 +21,14 @@ from reportlab.lib.units import mm
 from reportlab.platypus import Flowable
 
 # 盤を描くのに要る様式。**`_head.py` の名前を借りない**ための受け皿。
+# **矢印の色。**`_util.py` にあったものを移した(2026-09-29)。**写していない** ―
+# `_util.py` は `build.sh` で連結される断片なので import できず、写せば `Board` を移した意味が薄れる。
+# 出どころは §9.1「実戦の手 = 茶の実線、第 1 候補 = 青緑の破線」。
+# **残る写し**: `render_direct.py`・`render_whatif.py` も同じ 2 色を自分で持つ(どちらも自前の `Board` を
+# 持つファイルで、今回の範囲外 ― 司令塔の条件 2・5)。既知事項に 1 行残す。
+COL_PLAYED = colors.HexColor("#8a5a1e")  # 実戦の手(茶の実線)
+COL_CAND = colors.HexColor("#1f7a78")    # 第 1 候補(青緑の破線)
+
 BoardStyle = collections.namedtuple("BoardStyle", "ink red bg line muted font")
 
 ZEN = "０１２３４５６７８９"; KAN = "〇一二三四五六七八九"

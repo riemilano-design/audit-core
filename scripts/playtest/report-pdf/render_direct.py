@@ -36,6 +36,13 @@ import os
 import re
 import sys
 
+import board_spec
+# 向きを戻す道具は `board_spec.py` の 1 か所(2026-09-29 に移した)。**呼び出しの 7 か所は触っていない。**
+# `RANKS` はこのファイルの `sq()` も使う(実測: 出現 3 行のうち 1 行は `sq()`)。**定義を 2 つにしない**ので、
+# `board_spec` の 1 つを束縛する。私は最初「`rotate_square` 以外から使われていない」と書いたが、
+# **出現行数だけを見て内訳を確かめなかった**ための誤り(移した直後に `NameError` で鳴った)。
+from board_spec import RANKS, genuine_move
+
 from reportlab.lib import colors
 from reportlab.lib.enums import TA_LEFT
 from reportlab.lib.pagesizes import A4
@@ -119,7 +126,6 @@ ZEN = "０１２３４５６７８９"
 KAN = "〇一二三四五六七八九"
 PIECE = {"p": "歩", "l": "香", "n": "桂", "s": "銀", "g": "金", "b": "角", "r": "飛", "k": "玉"}
 PROM = {"p": "と", "l": "杏", "n": "圭", "s": "全", "b": "馬", "r": "竜"}
-RANKS = "abcdefghi"
 TAG_JP = [("capture", "取る"), ("drop", "打つ"), ("givesCheck", "王手"), ("sacrifice", "捨て駒"), ("retreat", "引く")]
 SIDE_JP = {"attack": "攻め", "defense": "守り", "both": "攻め・守り両方", "none": "どちらでもない"}
 
@@ -160,18 +166,6 @@ def usi_squares(usi):
     if usi[1] == "*":
         return None, sq(usi[2:4])
     return sq(usi[0:2]), sq(usi[2:4])
-
-
-def rotate_square(token):
-    f, r = int(token[0]), token[1]
-    return f"{10 - f}{RANKS[len(RANKS) - 1 - RANKS.index(r)]}"
-
-
-def rotate_usi(usi):
-    if usi[1] == "*":
-        return f"{usi[0]}*{rotate_square(usi[2:4])}"
-    suffix = usi[4:]
-    return rotate_square(usi[0:2]) + rotate_square(usi[2:4]) + suffix
 
 
 def apply_move(cells, turn, hands, usi):
@@ -433,10 +427,6 @@ CAND_HEADER_STYLE = TableStyle(
 )
 
 
-def genuine_move(usi, mirrored):
-    return rotate_usi(usi) if mirrored and usi is not None else usi
-
-
 def tags_text_of(tags_obj):
     names = [jp for key, jp in TAG_JP if tags_obj.get(key)]
     return "・".join(names) if names else "特になし"
@@ -492,11 +482,14 @@ for a in answers:
     if k is None:
         _problems.append(f"{kifu_id}: sfens.json にこの局が無い(付録 3 の材料と局が食い違っている)")
         continue
-    mirrored = k["side"] == "gote"
-    user_is_sente = not mirrored
+    # **どの局面を盤・表記に渡すかの判断は `board_spec.py` の 1 か所**(2026-09-29 の司令塔の判断)。
+    # 描き方(`Board`・色・大きさ)はここに残す ― 動かしたのは「どの SFEN を渡すか」だけ。
+    spec = board_spec.fork_spec(a, k)
+    mirrored = spec["mirrored"]
+    user_is_sente = spec["user_sente"]
     genuine_actual = genuine_move(a["actualMove"], mirrored)
     genuine_top1 = genuine_move(a["top1Move"], mirrored)
-    before_sfen = k["sfens"][dply - 1]
+    before_sfen = spec["sfen"]
     cells0, turn0, hands0 = parse_sfen(before_sfen)
     actual_text = mark(turn0, user_is_sente) + move_kanji(cells0, genuine_actual, None)
     top1_text = mark(turn0, user_is_sente) + move_kanji(cells0, genuine_top1, None)
@@ -557,9 +550,11 @@ for e in FP["entries"]:
     if k is None:
         _problems.append(f"{kifu_id}: sfens.json にこの局が無い(final_positions.json の材料と局が食い違っている)")
         continue
-    mirrored = k["side"] == "gote"
-    user_is_sente = not mirrored
-    final_sfen = k["sfens"][-1]  # 本人が指した実際の向きの、最後の局面(genuine)
+    # 判断は `board_spec.py`(上と同じ理由)。**手数は `entries[].moves`** ― `displayPly` は無い。
+    spec = board_spec.final_spec(e, k)
+    mirrored = spec["mirrored"]
+    user_is_sente = spec["user_sente"]
+    final_sfen = spec["sfen"]  # 本人が指した実際の向きの、最後の局面(genuine)
     cells0, turn0, hands0 = parse_sfen(final_sfen)
     top1_usi = e.get("top1Move")
     genuine_top1 = genuine_move(top1_usi, mirrored)
@@ -632,11 +627,14 @@ for a in answers:
     k = SF.get(kifu_id)
     if k is None:
         continue  # 1 ページ目ですでに問題を記録済み
-    mirrored = k["side"] == "gote"
-    user_is_sente = not mirrored
+    # **どの局面を盤・表記に渡すかの判断は `board_spec.py` の 1 か所**(2026-09-29 の司令塔の判断)。
+    # 描き方(`Board`・色・大きさ)はここに残す ― 動かしたのは「どの SFEN を渡すか」だけ。
+    spec = board_spec.fork_spec(a, k)
+    mirrored = spec["mirrored"]
+    user_is_sente = spec["user_sente"]
     genuine_actual = genuine_move(a["actualMove"], mirrored)
     genuine_top1 = genuine_move(a["top1Move"], mirrored)
-    before_sfen = k["sfens"][dply - 1]
+    before_sfen = spec["sfen"]
     cells0, turn0, hands0 = parse_sfen(before_sfen)
 
     arrows = arrows_of(genuine_actual, genuine_top1)
