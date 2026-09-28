@@ -479,20 +479,22 @@ python3 -X utf8 check_delivery.py <顧客フォルダ> [--forbid <語>]…
   (実測は `scripts/playtest/README.md` の「伝わる形」節を参照)、変異(禁止語チェックの「組」判定を外す)で
   合成データの「組」を含む文が rc=0 になってしまうこと(= 検査が無いと通ってしまうこと)を確かめたうえで戻した。
 
-## STEP CUSTOMER-EXIT の道具(`exit_index.py`・`exit_candidates.py`・`exit_render.py`・`exit_body.py`・`exit_cover.py`・`board_spec.py`・`board_draw.py`・`compare_render.py`・`rename_list.py`)
+## STEP CUSTOMER-EXIT の道具(`exit_index.py`・`exit_candidates.py`・`exit_gate.py`・`exit_render.py`・`exit_body.py`・`exit_cover.py`・`board_spec.py`・`board_draw.py`・`compare_render.py`・`rename_list.py`)
 
 承認済みの 30 ページの形(`docs/GOLDEN_MASTER_CUSTOMER_EXIT.md`)で顧客に渡すための段。
-**まだ `deliver.ts` の本番導線には繋いでいない**(手で呼ぶ道具として置いている)。
+**`deliver.ts` の 4 段(`exit-candidates` → `exit-gate` → `exit-render` → `exit-check`)として繋がっている**
+(2026-09-29。`scripts/playtest/README.md` の段の表を参照)。単体でも手で呼べる。
 
 | ファイル | 何をするか |
 |---|---|
 | `exit_index.py` | **定数だけの正本。**節の固定名・印字される題・表紙の枠と型・**数え方の固定文**・束ねた索引の鍵。組版(`_mid.py`・`render_direct.py`)と門(`check_structure.py`)の両方が import する ― **写しを 2 か所に持たない。**`PageIndexRecorder` は組んだ後のページ番号を `<PDF>_page_index.json` に書く(`doc.afterFlowable` で `doc.page` を読むだけ。**flowable は足さない**) |
 | `exit_candidates.py` | **本編の md の下書き(候補)を作る。選ばない。**選ぶ場所は `<!-- TODO: 選ぶ -->`。(a) 発見 5 種類 + **再現 8 種類**(`answer_facts.py` の `bullet_11` と同じ 8 つ・局数つき) (b) 盤の候補(差の大きい順) (c) minN を通った行動 + **落ちた一覧** (d) 答え合わせの表 (e) 数え方の固定文 + **分母の出どころ** (f) 対応表 (g) 商品の範囲の 1 段落。**判定は 1 つも作らない** ― minN は `check_answer.py`、見出しは `check_structure.SECTIONS`、固定文は `exit_index.COUNTING_NOTES` |
+| `exit_gate.py` | **書き手の席の検査**(段 `exit-gate`)。(i) `<!-- TODO: 選ぶ -->` が 0 件 (ii) P1 の数がちょうど 3 つで全部が候補の JSON に在る (iii) 盤の印がちょうど 2 つで候補に在る (iv) 行動が minN を通った候補の中だけ (v) `check_answer.py` を通る (vi) 下書きだけの節と書き手への注が消えている。**判定を 1 つも作らない** ― 数の拾い方は `check_answer.scan_numbers()`、本数は `check_structure.HONBUN_P1_NUMBER_COUNT`・`BOARD_COUNT`、節の見分けは `check_structure.heading_matches()`、下書きだけの見出しは `exit_candidates.DRAFT_ONLY_HEADINGS`。**数を数える上限だけは 0 を渡す**(検査 1 の既定 9 では**1 桁の 4 つ目が黙って通る** ― 実物の p1 は「6 局」を含む) |
 | `exit_render.py` | 本編の `<!-- pos: -->`・`<!-- sec: -->` を読み、**組版が書いた索引だけで**付録のページを引いて 1 冊に束ねる。**PDF の文字は検索しない** |
 | `exit_body.py` | **本編の md → 本人用・見本用の PDF。****対応表の節の前で改ページし、索引が示すそのページを全部抜く**(枚数は固定しない ― 対応表は局数でページ数が伸びる。実測: 節がページ先頭から始まる場合 25 行 = 1 ページ・26 行 = 2 ページ)。**本編の索引**(`<本人用>_page_index.json` の `mappingPages`)を書き、検査 4 がそれを見る。`<!-- pos: -->` の場所に盤を差し込む。**照合は作らない** ― 印が材料に実在するかは `check_answer.check_answer()` の検査 7 がやる。**見本用 = 本人用から対応表の節が載ったページを抜いたもの**(`check_structure.SECTIONS`・`MAPPING_ROLE` で見分け、**ページ数では決めない**。**節が最後のページまで続かなければ落ちる** ― 後ろに本文があると、抜いたページに顧客が読む文が混ざる) |
 | `board_spec.py` | **「盤に何を渡すか」の判断を 1 か所に置く。**付録 1 の場面(`scene_spec`)・付録 3 の分かれ道と最終局面(`fork_spec`・`final_spec`)・向き(`user_sente*`・`is_mirrored`)・指し手の向き戻し(`rotate_usi`・`genuine_move`)。`_mid.py`・`render_direct.py`・`exit_body.py` が**同じここを呼ぶ** ― **写すと 1 手ずれ、ずれても試験は通る** |
 | `board_draw.py` | **盤の描き方**(`Board`・`parse_sfen`・駒の字・矢印の 2 色)。様式は借りず `BoardStyle` で受ける。`_util.py` は薄い包み(`build.sh` の断片なので import できないため) |
-| `exit_cover.py` | **付録の表紙の md** を作る(見出し・段落・表「この冊子に入っているもの」・末尾の 4 要素)。表の行は `COVER_SECTIONS`、数は材料から、対応の列は印の逆引き |
+| `exit_cover.py` | **付録の表紙の md**(と `--out-pdf` を渡せば PDF も**同じ実行で**)を作る(見出し・段落・表「この冊子に入っているもの」・末尾の 4 要素)。表の行は `COVER_SECTIONS`、数は材料から、対応の列は印の逆引き。組版は `exit_body.render_plain`(表紙の枠は `check_answer.py` の「道具に実在する語」を通らないので、**検査を通さない道**を使う ― 本編はこの道を通らない) |
 | `compare_render.py` | **出力が変わっていないか**を測る。ページ数・ページごとの文字・`get_drawings()` のベクタの形。**バイトでは測れない**(`invariant` が無く、`get_images()` は盤がベクタなので 0) |
 | `rename_list.py` | **実物から文・題を写す前に通す「改名の一覧」**をコミットの diff から作る(正本 §9・§10)。範囲は**実物の mtime**(名前の日付は当てにならない) |
 
@@ -502,6 +504,12 @@ python3 -X utf8 check_delivery.py <顧客フォルダ> [--forbid <語>]…
 # 本編の md の下書き(候補)を作る
 python3 -X utf8 exit_candidates.py --out-md <下書き.md> --out-json <分母の出どころ.json> \
   --kifu-dir <g01.fixed.json のあるフォルダ> \
+  --patient … --prose … --direct … --menu …
+```
+
+```sh
+# 書き手の席の検査(段 exit-gate)。rc=0 で通過、rc=1 で落ちた項目を 1 行 1 件
+python3 -X utf8 exit_gate.py <本編.md> --candidates <exit_candidates.json> \
   --patient … --prose … --direct … --menu …
 ```
 
@@ -518,7 +526,7 @@ python3 -X utf8 exit_cover.py --honbun-md <本編.md> \
   --source-index <付録1の索引.json> --source-index <付録3の索引.json> \
   --patient <patient_report_data.json> --group <組のラベル> \
   --prose <prose.json> --final-positions <final_positions.json> --direct <direct_answers.json> \
-  --out <表紙.md>
+  --out <表紙.md> [--out-pdf <表紙.pdf>]
 
 # 付録を束ねる
 python3 -X utf8 exit_render.py --honbun-md <本編.md> \

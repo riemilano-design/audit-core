@@ -184,8 +184,14 @@ class MappingSectionTest(unittest.TestCase):
         if contains is not None:
             self.assertNotIn(contains, strings, "見出しに含まれる語を写している")
         src = read_text(os.path.join(HERE, "exit_body.py"))
-        self.assertIn("CS.SECTIONS", src)
+        # **判定そのものは `check_structure.heading_matches` に移した**(2026-09-29)。
+        # `exit_gate.py` が P1〜P3 の節に同じ判定を要り、ここに残すと 2 か所になるため。
+        # こちらが持つのは「どの役割か」だけ。
+        self.assertIn("CS.heading_matches", src)
         self.assertIn("CS.MAPPING_ROLE", src)
+        # 移した先でも文字列を写していないこと(表から引いていること)。
+        moved = function_strings(os.path.join(HERE, "check_structure.py"), "heading_matches")
+        self.assertNotIn(head, moved, "移した先で見出しの頭を写している")
 
     def test_12_the_role_exists_in_the_gate(self):
         """門の側に役割が在ること(消えたらこの道具の見分けが黙って何も一致しなくなる)。"""
@@ -354,6 +360,48 @@ class SharedJudgmentTest(unittest.TestCase):
         self.assertIn("CA.POS_TAG_RE", src)
         self.assertIn("CA.POS_INNER_RE", src)
         self.assertNotIn("re.compile(r\"<!--\\s*pos", src)
+
+
+class SectionMarkTest(unittest.TestCase):
+    """**節の印(`<!-- sec: 付録N/節 -->`)も自分で外す**(P-123 の家族)。"""
+
+    def test_s1_the_section_mark_is_removed_from_the_text(self):
+        """印が組版に渡る文から消えていること。
+
+        reportlab が知らないタグとして黙って捨てているだけなので、**書式が変われば顧客の文に出る。**
+        本編は `exit-candidates` が `exit_index.COVER_SECTIONS` から 3 つの印を必ず置くので、
+        **外さない道が実際に通る**(校正で黙っていた ― 2026-09-29)。
+        """
+        import exit_render as ER
+
+        body = "## 数え方\n\n- 25 局の形勢の流れ<!-- sec: 付録1/形勢の流れ -->\n"
+        self.assertTrue(ER.SEC_TAG_RE.search(body))
+        self.assertIsNone(ER.SEC_TAG_RE.search(ER.SEC_TAG_RE.sub("", body)))
+
+    def test_s1b_strip_marks_removes_the_section_mark(self):
+        """**組版に渡す文に節の印が残っていない。**
+
+        `build()` の中に置いていたときは**外す行を消しても緑だった**(校正で実測 2026-09-29) ―
+        材料が要る `build()` を回す試験が無かったため。番人ごと関数に切ったのでここで測れる。
+        """
+        body = "## 数え方\n\n- 25 局の形勢の流れ<!-- sec: 付録1/形勢の流れ -->\n"
+        out = EB.strip_marks(body, [])
+        self.assertNotIn("sec:", out)
+        self.assertIn("25 局の形勢の流れ", out)
+
+    def test_s2_the_guard_names_the_section_mark_too(self):
+        """**取り除けていないときに落ちる番人**が、節の印も見ていること。
+
+        番人が `POS_TAG_RE` だけを見ていると、節の印が残ったまま PDF になる。
+        """
+        src = read_text(os.path.join(HERE, "exit_body.py"))
+        lines = src.split("\n")
+        raise_at = next(i for i, line in enumerate(lines) if "印が取り除けていない" in line)
+        # 番人の条件は raise の直前の `if` の行(複数行に折れていれば手前へ遡る)。
+        cond = next(lines[i] for i in range(raise_at - 1, -1, -1) if lines[i].lstrip().startswith("if "))
+        guard = "".join(lines[lines.index(cond):raise_at])
+        self.assertIn("POS_TAG_RE", guard, guard)
+        self.assertIn("SEC_TAG_RE", guard, guard)
 
 
 if __name__ == "__main__":

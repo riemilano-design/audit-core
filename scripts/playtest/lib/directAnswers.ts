@@ -245,3 +245,17 @@ export function buildDirectAnswersFile(games: readonly DirectAnswersGameJoinResu
   const counts = directAnswersCountsOf(games, answers);
   return { values, answers, counts };
 }
+
+/**
+ * 組のラベル(`report-pdf/check_answer.py` の `tag_of_time_limit_sec` と**同じ対応**。
+ * 司令塔の仕様追記 1、2026-09-24)。`direct_answers.json` の `answers[].group` に入る値。
+ *
+ * **2026-09-29 に `scripts/playtest/directAnswers.ts` からここへ移した。**段 `exit-render` の表紙
+ * (`exit_cover.py --group`)が同じラベルを要るため ― CLI に置いたままだと `lib/deliver.ts` が
+ * 写しを持つことになる(`Board` が 4 実装に散った P-111 と同じ病気)。
+ */
+export function groupLabelOfTimeLimitSec(sec: number): string {
+  if (sec === 180) return "3 分";
+  if (sec === 600) return "10 分";
+  throw new Error(`--time-limit-sec は 180 か 600 です(${sec})`);
+}

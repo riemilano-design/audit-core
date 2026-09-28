@@ -30,14 +30,20 @@ import {
   TODO_MARK,
   deliverLogLineOf,
   deliverOutPaths,
+  exitBodyCommand,
+  exitCoverCommand,
   finalPositionsPartPath,
   finalPositionsCommand,
   groupListOf,
+  groupPaths,
   kifuNameProblems,
+  materialPlanOf,
   materialsPending,
   mergeFinalPositions,
   parseDeliverArgs,
   planDeliver,
+  reportDataDirEnv,
+  seatSecondsOf,
   unexpectedOutFiles,
   type DeliverArgs,
   type DeliverProbe,
@@ -45,6 +51,7 @@ import {
   type KifuNameProblem,
   type PlannedDeliverStep,
 } from "./lib/deliver.js";
+import { groupLabelOfTimeLimitSec } from "./lib/directAnswers.js";
 import { PipelineConfigError } from "./lib/pipeline.js";
 
 const SCRIPT_DIR = path.dirname(fileURLToPath(import.meta.url));
@@ -69,6 +76,14 @@ const PY_TOOLS: Partial<Record<DeliverTool, string>> = {
   "check-answer": "check_answer.py",
   "render-answer": "render_answer.py",
   "check-delivery": "check_delivery.py",
+  // 顧客向け出口の 4 段(STEP CUSTOMER-EXIT)。段 `exit-render` は 3 本を順に回す
+  // (表紙 `exit_cover.py` → 本編 `exit_body.py` → 束ね `exit_render.py`)。
+  "exit-candidates": "exit_candidates.py",
+  "exit-gate": "exit_gate.py",
+  "exit-cover": "exit_cover.py",
+  "exit-body": "exit_body.py",
+  "exit-render": "exit_render.py",
+  "check-structure": "check_structure.py",
 };
 
 function cmdOf(tool: DeliverTool): string {
@@ -225,6 +240,39 @@ function gateBlocked(step: PlannedDeliverStep): string | null {
   return readFileSync(target, "utf-8").includes(TODO_MARK) ? `B の「読み」が未記入: ${target}(${TODO_MARK} が残っている)` : null;
 }
 
+/**
+ * 段 `exit-render`。**表紙 → 本編 → 束ね**の順に 3 本回す(1 段で 3 本回すのは段 6 と同じ形)。
+ * 順序に理由がある: 束ね(`exit_render.py`)は**表紙の PDF が在ること**を前提にし、
+ * 本編(`exit_body.py`)は**本編の md が指す局面**を描くので、どちらも本編の md が確定した後。
+ * 表紙を先に置くのは、表紙が 1 ページであることを確かめてから束ねるため。
+ */
+async function runExitRender(args: DeliverArgs, step: PlannedDeliverStep): Promise<number> {
+  const out = deliverOutPaths(args.out);
+  const groups = groupListOf(args);
+  const thisGroup = groupPaths({ work: args.work, timeLimitSec: args.timeLimitSec }, args.person);
+  const plan = materialPlanOf(args);
+  const groupLabel = groupLabelOfTimeLimitSec(args.timeLimitSec);
+
+  const runs: [DeliverTool, string[]][] = [
+    ["exit-cover", exitCoverCommand(thisGroup, out, groupLabel)],
+    ["exit-body", exitBodyCommand(groups, probe, out, plan, args.name)],
+    // 束ねの引数は計画が持っている(`--dry-run` に出るのはこれ)。
+    ["exit-render", [...step.args]],
+  ];
+  for (const [tool, toolArgs] of runs) {
+    console.log(`[exit-render] ${cmdOf(tool)}`);
+    // 本編(`exit_body.py`)は `REPORT_DATA_DIR` から sfens.json 等を読む(付録 3 の組版と同じ流儀)。
+    const env = tool === "exit-body" ? { REPORT_DATA_DIR: reportDataDirEnv(groups) } : undefined;
+    const result = await runTool(tool, toolArgs, env);
+    process.stdout.write(result.stdout);
+    if (result.code !== 0) {
+      console.error(result.stderr.trim().slice(0, 4000));
+      return result.code;
+    }
+  }
+  return 0;
+}
+
 async function main(): Promise<number> {
   let args: DeliverArgs;
   try {
@@ -302,7 +350,8 @@ async function main(): Promise<number> {
       // 引数が足りない段(段 pipeline-gate だけ)。人間の確認点ではないので humanGate は付けない。
       rc = 1;
       console.error(`[${step.stage}] ${step.reason}`);
-    } else if (step.action === "gate") {
+    } else if (step.action === "gate" && step.tool === "gate") {
+      // 既存の 2 つ(`prose-gate`・`answer-gate`)は fs を見るだけ。
       const blocked = gateBlocked(step);
       if (blocked === null) {
         console.log(`[${step.stage}] 確認点は済んでいる`);
@@ -311,6 +360,21 @@ async function main(): Promise<number> {
         rc = 1;
         console.error(`[${step.stage}] 人間の確認点で止まります: ${blocked}`);
       }
+    } else if (step.action === "gate") {
+      // 道具つきの確認点(`exit-gate`)。**判定を TS に写さない** ― python の検査をそのまま回す。
+      console.log(`[${step.stage}] ${step.cmd}`);
+      const result = await runTool(step.tool, step.args, step.env);
+      process.stdout.write(result.stdout);
+      if (result.code === 0) {
+        console.log(`[${step.stage}] 確認点は済んでいる`);
+      } else {
+        humanGate = true;
+        rc = 1;
+        console.error(result.stderr.trim().slice(0, 4000));
+        console.error(`[${step.stage}] 人間の確認点で止まります`);
+      }
+    } else if (step.stage === "exit-render") {
+      rc = await runExitRender(args, step);
     } else if (step.stage === "deliverables-pdf") {
       rc = copyPairs(step.args);
     } else if (step.stage === "appendix3-final") {
@@ -324,7 +388,21 @@ async function main(): Promise<number> {
     }
 
     const finishedAt = new Date().toISOString();
-    appendFileSync(out.log, deliverLogLineOf({ stage: step.stage, startedAt, finishedAt, rc, humanGate }), "utf-8");
+    // 人の席の時間(原価③。仕様 §5)。**その段を通した実行にだけ付く** ―
+    // 前に同じ段で止まった記録があれば、その時刻から今までの差を秒で書く。
+    // 止まった記録が無ければキー自体を付けない(**測っていないものを数にしない**)。
+    // **通った確認点の `rc` は `"skip"` のまま**(既存の分岐が rc を 0 にしない)ので、
+    // `rc === 0` で見ると席時間が一度も書かれない(実測 2026-09-29)。**止まっていないこと**で見る。
+    const seatSeconds =
+      step.action === "gate" && !humanGate && existsSync(out.log)
+        ? seatSecondsOf(readFileSync(out.log, "utf-8").split("\n"), step.stage, finishedAt)
+        : undefined;
+    appendFileSync(
+      out.log,
+      deliverLogLineOf({ stage: step.stage, startedAt, finishedAt, rc, humanGate, ...(seatSeconds !== undefined ? { seatSeconds } : {}) }),
+      "utf-8",
+    );
+    if (seatSeconds !== undefined) console.log(`[${step.stage}] 人の席: ${seatSeconds} 秒`);
 
     if (rc !== "skip" && rc !== 0) {
       console.error(`段 ${step.stage} で止まりました(rc=${rc})。直したら --from ${step.stage} で再開できます。`);

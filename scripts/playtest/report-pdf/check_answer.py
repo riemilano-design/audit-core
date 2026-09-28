@@ -1232,7 +1232,27 @@ def mask_spans(line, spans):
 ISO_DATE_RE = re.compile(r"\d{4}-\d{2}-\d{2}")
 
 
-def check_line_numbers(line, ctx, problems, line_no):
+# 単位の無い小さな数は検査 1 の対象外(§2.1 検査 1。実装担当の判断: しきい値 9 で近似)。
+SMALL_NUMBER_MAX = 9
+
+
+def scan_numbers(line, small_max=None):
+    """1 行から「文中の数の主張」を拾う。**検査 1 が見るものと同じ規則の 1 か所。**
+
+    `small_max` は「単位の無い小さな数」として単独では見ない上限。既定は `SMALL_NUMBER_MAX`
+    (検査 1 の値。**検査 1 の動きは変わらない**)。段 `exit-gate` は **0** を渡す ―
+    あちらは「書き手が選んだ数がちょうど 3 つか」を数えるので、**1 桁の数も数に入る**
+    (実物の p1 は「6 局」のような 1 桁を含む)。**見落とす側に倒すと、材料に無い 4 つ目の数が
+    門をすり抜ける**ので、数える側は上限を持たない。
+
+    切り出した理由(2026-09-29): 段 `exit-gate` が「P1 の数はちょうど 3 つ」を数えるのに、
+    **同じ規則が要る**。別に書けば、**門が数える数と検査 1 が見る数が食い違う**道ができる
+    (`Board` が 4 実装に散った P-111 と同じ病気)。**判定は 1 つも変えていない** ―
+    `check_line_numbers` はこの関数の結果を材料と突き合わせるだけになった。
+
+    返り値 = `(倍割の語があるか, 分数の組 [(a, b, span)], 割合の数 [n], 単独の数 [n])`。
+    `倍割の語` が True のときは残りを空で返す(元の `return` と同じ ― その行は数を見ない)。
+    """
     # `<!-- pos: G/P 付録N -->` の印の中の数字(検査 7)は、検査 1 の対象から外す(`menu` の印と同じ扱い。
     # 印の全体を空白に置き換えるので、G・P・N のどれも「文中の数の主張」としては見ない)。
     scan_line = POS_TAG_RE.sub(lambda m: " " * len(m.group(0)), line)
@@ -1241,22 +1261,29 @@ def check_line_numbers(line, ctx, problems, line_no):
     # 報告する原文(line)はそのまま、数を探す側だけ日付を消す)。
     scan_line = ISO_DATE_RE.sub(" ", scan_line)
     if RATIO_WORD_RE.search(scan_line):
+        return True, [], [], []
+    fractions = find_fraction_pairs(scan_line)
+    masked = mask_spans(scan_line, [span for _, _, span in fractions])
+    percents = [int(m.group(1)) for m in re.finditer(r"(\d+)\s*%", masked)]
+    masked_no_percent = re.sub(r"(\d+)\s*%", " ", masked)
+    limit = SMALL_NUMBER_MAX if small_max is None else small_max
+    plains = [int(m.group(0)) for m in re.finditer(r"\d+", masked_no_percent)
+              if int(m.group(0)) > limit]
+    return False, fractions, percents, plains
+
+
+def check_line_numbers(line, ctx, problems, line_no):
+    ratio, fractions, percents, plains = scan_numbers(line)
+    if ratio:
         problems.append((line_no, "「倍」「割」は使わない(検査 1)", line))
         return
-    fraction_matches = find_fraction_pairs(scan_line)
-    for a, b, span in fraction_matches:
+    for a, b, _span in fractions:
         if (a, b) not in ctx["pairs"]:
             problems.append((line_no, f"数の組み合わせが登録済みの組に無い({a}/{b}。検査 1)", line))
-    masked = mask_spans(scan_line, [span for _, _, span in fraction_matches])
-    for token_m in re.finditer(r"(\d+)\s*%", masked):
-        n = int(token_m.group(1))
+    for n in percents:
         if n not in ctx["allowedNumbers"]:
             problems.append((line_no, f"データに無い割合 {n}% が文に出ている(検査 1)", line))
-    masked_no_percent = re.sub(r"(\d+)\s*%", " ", masked)
-    for token_m in re.finditer(r"\d+", masked_no_percent):
-        n = int(token_m.group(0))
-        if n <= 9:
-            continue  # 単位の無い小さな数は対象外(§2.1 検査 1。実装担当の判断: しきい値 9 で近似)
+    for n in plains:
         if n not in ctx["allowedNumbers"]:
             problems.append((line_no, f"データに無い数 {n} が文に出ている(検査 1)", line))
 

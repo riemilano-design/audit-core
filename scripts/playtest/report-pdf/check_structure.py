@@ -5,7 +5,8 @@
 # 使い方:
 #   python3 -X utf8 check_structure.py <顧客フォルダ> \
 #     --honbun-md <本編.md> --honbun-personal <本人用.pdf> --honbun-sample <見本用.pdf> \
-#     --appendix <付録.pdf> --page-index <page_index.json> \
+#     --appendix <付録.pdf> --page-index <束ねた付録の索引.json> \
+#     --honbun-index <本編の索引.json>  (`exit_body.py` が本人用の PDF の隣に書くもの) \
 #     [--source-index <組版が書いた索引.json>]…  (付録ごとに 1 本。束ねた値が書き換えられていないかを見る) \
 #     (以下は check_answer.py と同じ形。本編の md をそのまま検査に通すため)
 #     [--patient <patient_report_data.json> --time-limit-sec <秒>]… --menu <answer_menu.json> \
@@ -76,6 +77,22 @@ MAX_APPENDIX_PAGES = 25
 MAX_TOTAL_PAGES = 30
 # 盤の数(正本 §1「盤 2 つ」。**両方の実物で合計 2 つ**。ページ配置は固定しない)。
 BOARD_COUNT = 2
+# 本編の 1 ページ目に置く数の本数(正本 §1「p1 数 3 つ+ひとことで」)。
+# **段 `exit-gate` がこの数で数える** ― 門と段が同じ定数を見る(写しを 2 か所に持たない)。
+HONBUN_P1_NUMBER_COUNT = 3
+
+
+def heading_matches(role, text):
+    """`## <見出し>` の行が、その役割の節の見出しかどうかを `SECTIONS` の表から決める。
+
+    **役割ごとに写しを作らない**ための 1 か所(`exit_body.py` の対応表の節・
+    `exit_gate.py` の P1〜P3 の節が使う)。`contains` が None の役割は頭で決まる。
+    """
+    head, contains = next((h, c) for r, h, c in SECTIONS if r == role)
+    body = text.strip()
+    if not body.startswith(head):
+        return False
+    return contains is None or contains in body
 
 
 # **束ねた索引の上の階層に置いてよい鍵。**正本は `exit_index.py` の 1 か所(書く側の `exit_render.py` も

@@ -44,16 +44,21 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 
 TODO = "<!-- TODO: 選ぶ -->"
 
+# **下書きにだけ在る節の見出しと、書き手への注の頭。**
+# 書き手はこれらを消してから段 `exit-gate` を通す。**門(`exit_gate.py`)はここを読む** ―
+# 門に文字列を写すと、見出しを直したときに**門だけが古い名前を探して黙る**。
+DRAFT_ONLY_HEADINGS = (
+    "### 候補 1: 発見(材料が出した 5 種類)",
+    "### 候補 2: 同じ型が何局で起きたか",
+    "### 下限を通った項目",
+    "### 下限に届かなかった項目(何がどれだけ足りないか)",
+)
+NOTE_PREFIX = "<!-- 書き手へ: "
+
 
 def note(text):
-    """書き手への指示を**注釈にする。**顧客の PDF に出てはいけない文だから。
-
-    **`check_answer.py` の検査 4 は「を選ぶ」のような行動の言い方を、メニューの印の外で落とす。**
-    実測(2026-09-29): 素の `<!-- TODO: 選ぶ -->` は通り、`数を選ぶ` は落ちる(引っかかるのは「を選ぶ」)。
-    **検査をかいくぐるための言い換えではない** ― 指示文は顧客に出ない側へ移し、
-    そのうえで**行動の文に見えない言い方**にする(顧客に出る文の門は 1 つも緩めない)。
-    """
-    return f"<!-- 書き手へ: {text} -->"
+    """書き手への指示を注釈にする(顧客の PDF には出ない)。頭は `NOTE_PREFIX` の 1 か所。"""
+    return f"{NOTE_PREFIX}{text} -->"
 
 
 class ExitCandidatesError(Exception):
@@ -179,6 +184,64 @@ def mapping_rows(patient, kifu_dir):
     return rows
 
 
+# ==================== 盤の候補 ====================
+# **md と JSON が同じ並びを見る。**別に並べ替えると、**md に出ていない印が JSON にだけ在る**
+# (= 門が通してしまう)道ができる。
+def board_marks(direct):
+    """盤の候補を、**md に印字するのと同じ順**で `(行の文, 印の中身)` の対で返す。"""
+    rows = sorted(answers_of(direct),
+                  key=lambda x: (-(abs(x["actualGapCp"]) if x["actualGapCp"] is not None else -1),
+                                 x["gameNo"], x["displayPly"]))
+    out = []
+    for a in rows:
+        inner = f"{a['gameNo']}/{a['displayPly']} 付録3 {a['group']}"
+        text = (f"- {a['group']} の {a['gameNo']} 局目 {a['displayPly']} 手目"
+                f"<!-- pos: {inner} -->")
+        out.append((text, inner))
+    return out
+
+
+# ==================== P1 の数の候補 ====================
+# **門(`exit-gate`)が「書き手が作った数」を見つけるための一覧。**
+# 出どころは **md に印字したものだけ**。印字していない数を一覧に入れると、
+# **顧客の冊子に、候補に出ていない数が載る道**ができる(門が通してしまう)。
+#
+# **言い回しの型の数(「型が N 通りあります」)は入れない** ― それは材料の作りの話で、
+# この人の対局について言える数ではない。書き手が使ったら門で落ちる(それが正しい)。
+def p1_numbers(patient, repro):
+    out = [{"number": len(patient["games"]), "unit": "局",
+            "from": "patient_report_data.json の games(この報告が見た対局の全部)"}]
+    out.append({"number": repro["totalPositions"], "unit": "局面",
+                "from": "direct_answers.json の answers(再現の表の分母)"})
+    out.append({"number": repro["totalGames"], "unit": "局",
+                "from": "direct_answers.json の answers に出てくる局(再現の表の分母)"})
+    for r in repro["rows"]:
+        out.append({"number": r["positions"], "unit": "局面",
+                    "from": f"再現の表「{r['phrase']}」の局面"})
+        out.append({"number": r["games"], "unit": "局",
+                    "from": f"再現の表「{r['phrase']}」の局"})
+    # 発見の 5 種類の数は `text`(埋まった文)に出る。**その文に実際に出た数だけ**を採る
+    # (`numbers` の全部ではない ― 文に出ない値を候補にすると、印字していない数を許してしまう)。
+    for f in patient["findings"]:
+        # **上限 0 で拾う。**既定(9 以下は単独では見ない)で拾うと、
+        # **1 桁の数が候補に入らない**まま、門(`exit_gate.py` は上限 0 で数える)が
+        # 「6 局が候補に無い」と言って**まともな選択を止める**(実測 2026-09-29。
+        # 3 人目の実物の p1 は aheadLossGames = 6 を使っている)。
+        # **数える側と候補を作る側は同じ上限**でなければならない。
+        ratio, fractions, percents, plains = CA.scan_numbers(f["text"], small_max=0)
+        if ratio:
+            continue
+        seen = []
+        for a, b, _span in fractions:
+            seen += [(a, "分数の左"), (b, "分数の右")]
+        seen += [(n, "割合(%)") for n in percents]
+        seen += [(n, "数") for n in plains]
+        for number, unit in seen:
+            out.append({"number": number, "unit": unit,
+                        "from": f"patient_report_data.json の findings「{f['kind']}」の text"})
+    return out
+
+
 # ==================== 分母の出どころ ====================
 # **文字列に埋めない**(仕様 §3 の 1)。「数 → その分母がどの集計から出たか」の対を JSON に出し、
 # 数え方の節には**行として**印字する。**数え方の節と JSON が同じ対から作られる**ので、片方だけ直らない。
@@ -221,13 +284,17 @@ def build_md(direct, patient, repro, passed, dropped, mapping, denoms, fdata):
     L.append(TODO)
     L.append(note("ここに残すのは、数 3 つと「ひとことで」の 1 文だけ。候補の節は消す"))
     L.append("")
-    L.append("### 候補 1: 発見(材料が出した 5 種類)")
+    L.append(DRAFT_ONLY_HEADINGS[0])
     L.append("")
     for f in patient["findings"]:
         texts = fdata["findings"].get(f["kind"]) if fdata else None
         title = (texts or {}).get("title", f["kind"])
         L.append(f"- **{title}**{'(材料が出すと決めた側)' if f.get('shown') else '(材料が出さないと決めた側)'}")
         L.append(f"  - {f['oneLine']}")
+        # **数の実物はこちら。**`oneLine` は数の入っていない一言で、
+        # **書き手が選ぶ 3 つの数はこの `text` に出る**(2026-09-29 に門を繋いで見つけた穴 ―
+        # `oneLine` だけ印字していたので、**選ぶ相手が印字されていなかった**)。
+        L.append(f"  - 数: {f['text']}")
         # **`oneLineVariants` は印字しない。**材料にあるのは `{序盤|中盤|終盤}`・`{X}` のような
         # **未展開の型**で、埋めるのは `lib/reportData.ts` の仕事(埋まった文が `oneLine`)。
         # ここで埋めれば、**私が言い回しを選んだ**ことになる(候補の段の越権)。
@@ -237,7 +304,7 @@ def build_md(direct, patient, repro, passed, dropped, mapping, denoms, fdata):
             L.append(f"  - この種類には言い回しの型が {len(variants)} 通りあります"
                      "(埋まった文は上の 1 つ。型は finding_texts.json にあります)")
     L.append("")
-    L.append("### 候補 2: 同じ型が何局で起きたか")
+    L.append(DRAFT_ONLY_HEADINGS[1])
     L.append("")
     L.append(f"分母は {repro['totalPositions']} 局面・{repro['totalGames']} 局です。")
     L.append("")
@@ -253,11 +320,8 @@ def build_md(direct, patient, repro, passed, dropped, mapping, denoms, fdata):
     L.append(TODO)
     L.append(note("ここに残すのは盤 2 つ分の行だけ。残りの行は消す"))
     L.append("")
-    for a in sorted(answers_of(direct),
-                    key=lambda x: (-(abs(x["actualGapCp"]) if x["actualGapCp"] is not None else -1),
-                                   x["gameNo"], x["displayPly"])):
-        L.append(f"- {a['group']} の {a['gameNo']} 局目 {a['displayPly']} 手目"
-                 f"<!-- pos: {a['gameNo']}/{a['displayPly']} 付録3 {a['group']} -->")
+    for text, _inner in board_marks(direct):
+        L.append(text)
     L.append("")
 
     # ---- (c) 試せること ----
@@ -266,7 +330,7 @@ def build_md(direct, patient, repro, passed, dropped, mapping, denoms, fdata):
     L.append(TODO)
     L.append(note("下の「下限を通った項目」から本数を決め、1 行ずつ書く。この表の外から行動を作らない"))
     L.append("")
-    L.append("### 下限を通った項目")
+    L.append(DRAFT_ONLY_HEADINGS[2])
     L.append("")
     for i, r in enumerate(passed, start=1):
         item = r["item"]
@@ -276,7 +340,7 @@ def build_md(direct, patient, repro, passed, dropped, mapping, denoms, fdata):
             line += f"。{CA.FOUND_IN_SAME_DATA_PHRASE}。"
         L.append(line)
     L.append("")
-    L.append("### 下限に届かなかった項目(何がどれだけ足りないか)")
+    L.append(DRAFT_ONLY_HEADINGS[3])
     L.append("")
     L.append("| 項目 | 下限 | いまの分母 | 届かなかった理由 |")
     L.append("|---|---|---|---|")
@@ -288,10 +352,15 @@ def build_md(direct, patient, repro, passed, dropped, mapping, denoms, fdata):
     # ---- (d) 答え合わせの表 ----
     L.append(f"## {heading_of('答え合わせ', games=games)}")
     L.append("")
+    L.append(note("残した行動の行だけにする(器の門の項目 6 が、この表の行と本編の行動の印の"
+                  "集合が一致することを見る)"))
+    L.append("")
     L.append("| 項目 | 何で答え合わせをするか | いまの値 |")
     L.append("|---|---|---|")
     for r in passed:
-        L.append(f"| {r['id']} | {r['item']['verifyName']} | {r['denominator']} |")
+        # **行にメニューの印を入れる。**器の門の項目 6 が行ごとに印をちょうど 1 つ求める
+        # (実測 2026-09-29。印が無いと工程の最後で 5 行ぶん落ちる)。
+        L.append(f"| {r['id']}<!-- menu: {r['id']} --> | {r['item']['verifyName']} | {r['denominator']} |")
     L.append("")
 
     # ---- (e) 数え方 ----
@@ -301,6 +370,19 @@ def build_md(direct, patient, repro, passed, dropped, mapping, denoms, fdata):
         L.append(f"- {sentence}")
     if fdata and fdata.get("evalJitterNote"):
         L.append(f"- {fdata['evalJitterNote']}")
+    L.append("")
+    # ---- 付録の節を指す印(`<!-- sec: 付録N/節 -->`)----
+    # **選ぶものではない。**束ねる付録(付録 1 + 付録 3)とその節は `exit_index.COVER_SECTIONS` が正本で、
+    # **表紙の表の行はこの印から作られる**(`exit_cover.py` は本編が指していない節を表に載せない)。
+    # ここに出さないと、**表紙が「本編が指していない節を表に載せようとした」で落ちる**
+    # (実測 2026-09-29。段を繋いで初めて出た ― 候補の段だけを回している間は見えなかった)。
+    # 題は `exit_index.section_title` から引く(**顧客に見せる言い方をここで作らない**)。
+    L.append("### 数の出どころを引ける付録")
+    L.append("")
+    for appendix in EI.COVER_SECTIONS:
+        for name in EI.COVER_SECTIONS[appendix]:
+            title = EI.section_title(appendix, name, games=games)
+            L.append(f"- {title}<!-- sec: {appendix}/{name} -->")
     L.append("")
     L.append("### 数の分母がどこから来たか")
     L.append("")
@@ -374,6 +456,9 @@ def build(own, rest):
         f.write(md + "\n")
     with open(own["out_json"], "w", encoding="utf-8") as f:
         json.dump({"denominators": denoms, "repro": repro,
+                   # 門(`exit_gate.py`)が照合する 3 つ。**md に印字したものと同じ値**。
+                   "p1Numbers": p1_numbers(patient, repro),
+                   "boards": [inner for _text, inner in board_marks(direct)],
                    "menuPassed": [r["id"] for r in passed],
                    "menuDropped": [{"id": r["id"], "minN": r["minN"],
                                     "denominator": r["denominator"], "why": r["why"]}

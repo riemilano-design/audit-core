@@ -13,6 +13,7 @@ import unittest
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 
+import check_answer as CA  # noqa: E402
 import check_structure as CS  # noqa: E402
 import exit_candidates as EC  # noqa: E402
 import exit_index as EI  # noqa: E402
@@ -57,7 +58,11 @@ def emitted_md():
     repro = EC.repro_rows(direct)
     patient = {"games": [{"no": 1, "id": "g01", "side": "先手", "total": 99, "result": "勝ち"},
                          {"no": 2, "id": "g02", "side": "後手", "total": 88, "result": "負け"}],
-               "findings": [{"kind": "phase", "oneLine": "崩れは中盤に多かった", "shown": True}]}
+               # `text` は**埋まった文**(数が入っている側)。2026-09-29 に候補の段が印字するようになった ―
+               # `oneLine` には数が無く、**書き手が選ぶ 3 つの数が下書きに出ていなかった**。
+               "findings": [{"kind": "phase", "oneLine": "崩れは中盤に多かった",
+                             "text": "崩れ 79 回のうち、序盤 7・中盤 41・終盤 31 でした",
+                             "shown": True}]}
     mapping = [{"no": 1, "source": "g01-sente.kif", "side": "先手", "total": 99, "result": "勝ち"},
                {"no": 2, "source": "g02-gote.kif", "side": "後手", "total": 88, "result": "負け"}]
     denoms = EC.denominators(direct, patient, repro)
@@ -91,6 +96,50 @@ def direct_of(answers):
         "top1SideCounts": {s: sum(1 for a in answers if a["top1Side"] == s)
                            for s in ("attack", "defense")},
     }
+
+
+class DraftOffersWhatTheWriterMustPickTest(unittest.TestCase):
+    """**選ぶ相手が下書きに印字されていること。**印字されていなければ、書き手は材料を開くしかない。"""
+
+    def test_00a_the_filled_sentence_with_the_numbers_is_printed(self):
+        """**発見の「埋まった文」(数が入っている側)が出ていること。**
+
+        `oneLine` には数が無い。**`text` を印字するまで、選ぶ 3 つの数が下書きに出ていなかった**
+        (2026-09-29 に門を繋いで見つけた穴。校正でも黙っていたのでここで測る)。
+        """
+        md = emitted_md()
+        self.assertIn("崩れ 79 回のうち、序盤 7・中盤 41・終盤 31 でした", md)
+
+    def test_00b_every_verify_row_carries_exactly_one_menu_mark(self):
+        """**答え合わせの表の行に、行動の印がちょうど 1 つ。**
+
+        器の門の項目 6 がこれを求める。印が無いと**工程の最後(`exit-check`)で行数ぶん落ちる**
+        (実測 2026-09-29: 5 行ぶん + 集合が合わない 1 件)。
+        """
+        passed = [{"id": "M3", "minN": 5, "denominator": 20,
+                   "item": {"actionCore": "やってみる", "evidenceName": "根拠", "verifyName": "答え合わせ"}},
+                  {"id": "M4", "minN": 5, "denominator": 20,
+                   "item": {"actionCore": "やってみる", "evidenceName": "根拠", "verifyName": "答え合わせ"}}]
+        answers = [answer(1, 10, top1=("drop",))]
+        direct = direct_of(answers)
+        repro = EC.repro_rows(direct)
+        patient = {"games": [{"no": 1}],
+                   "findings": [{"kind": "phase", "oneLine": "一言", "text": "崩れ 79 回でした", "shown": True}]}
+        md = EC.build_md(direct, patient, repro, passed, [], [], EC.denominators(direct, patient, repro), None)
+        head, contains = next((h, c) for r, h, c in CS.SECTIONS if r == CS.VERIFY_ROLE)
+        rows = []
+        inside = False
+        for line in md.split("\n"):
+            if line.startswith("## "):
+                inside = line.startswith(f"## {head}")
+                continue
+            if inside and line.startswith("| ") and not line.startswith("|---"):
+                rows.append(line)
+        # 見出しの行を除いた本文行(2 件)。
+        body_rows = [r for r in rows if "何で答え合わせをするか" not in r]
+        self.assertEqual(len(body_rows), 2, rows)
+        for row in body_rows:
+            self.assertEqual(len(CA.MENU_TAG_RE.findall(row)), 1, row)
 
 
 class ReproKindsTest(unittest.TestCase):

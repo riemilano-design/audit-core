@@ -15,9 +15,16 @@ import {
   answerMaterialFlags,
   checkAnswerCommand,
   checkDeliveryCommand,
+  checkStructureCommand,
   deliverLogLineOf,
   deliverOutPaths,
   directAnswersCommand,
+  exitBodyCommand,
+  exitCandidatesCommand,
+  exitCoverCommand,
+  exitGateCommand,
+  exitRenderCommand,
+  exitSourceIndexPairs,
   finalPositionsCommand,
   finalPositionsPartPath,
   groupListOf,
@@ -30,10 +37,12 @@ import {
   parseDeliverArgs,
   pipelineCommand,
   pipelineGateCommand,
+  pageIndexNameOf,
   planDeliver,
   renderAnswerCommand,
   renderTimeCauseCommand,
   reportDataDirEnv,
+  seatSecondsOf,
   stagesFrom,
   timeCauseCommand,
   timeSearchCommand,
@@ -603,7 +612,12 @@ describe("deliverLogLineOf", () => {
 describe("stagesFrom", () => {
   it("--from が無ければ全段、あればその段から", () => {
     expect(stagesFrom(undefined)).toEqual([...DELIVER_STAGES]);
-    expect(stagesFrom("answer-check")).toEqual(["answer-check", "answer-pdf", "check-delivery"]);
+    // 顧客向け出口の 4 段が入った(2026-09-29)。**最後の段は変わらず `check-delivery`**。
+    expect(stagesFrom("answer-check")).toEqual([
+      "answer-check", "answer-pdf",
+      "exit-candidates", "exit-gate", "exit-render", "exit-check",
+      "check-delivery",
+    ]);
   });
 
   it("--from pipeline-gate は最初の段(= 全段)", () => {
@@ -679,7 +693,11 @@ describe("planDeliver", () => {
 
   it("--from はその段から先だけを組む", () => {
     const resumed = planDeliver(argsOf(["--from", "answer-check"]), probe, (t) => t);
-    expect(resumed.map((s) => s.stage)).toEqual(["answer-check", "answer-pdf", "check-delivery"]);
+    expect(resumed.map((s) => s.stage)).toEqual([
+      "answer-check", "answer-pdf",
+      "exit-candidates", "exit-gate", "exit-render", "exit-check",
+      "check-delivery",
+    ]);
   });
 
   // 【fixture だけの追記(凍結の例外 10 件目。PDF_DONE3_BRIEF.md §5)】期待値(9 段すべて skip)は変えない。
@@ -1341,9 +1359,192 @@ describe("planDeliver は実際の work でも冪等(§3(C)。材料が無い環
       `${REPLAN_OUT_ROOT}/_replan/out_dry_ready`,
     ]);
     const first = planDeliver(realArgs, realProbe, (t) => t);
-    expect(first).toHaveLength(17);
-    for (let i = 0; i < 16; i += 1) {
+    // **段の数は一覧から取る**(足すたびに数を書き換えない ― 書き換え忘れが黙る)。
+    expect(first).toHaveLength(DELIVER_STAGES.length);
+    for (let i = 0; i < DELIVER_STAGES.length - 1; i += 1) {
       expect(planDeliver(realArgs, realProbe, (t) => t)).toStrictEqual(first);
     }
+  });
+});
+
+// ==================== 顧客向け出口の 4 段(STEP CUSTOMER-EXIT) ====================
+
+describe("顧客向け出口の 4 段", () => {
+  const argv = [...BASE_ARGV];
+  const args = parseDeliverArgs(argv);
+  const out = deliverOutPaths(args.out);
+  const groups = groupListOf(args);
+  const thisGroup = groupPaths({ work: args.work, timeLimitSec: args.timeLimitSec }, args.person);
+  const plan = materialPlanOf(args);
+
+  it("段は既存 17 段の後・check-delivery の直前に 4 つ入る(既存の順は動かない)", () => {
+    const stages = [...DELIVER_STAGES];
+    expect(stages.slice(-5)).toEqual(["exit-candidates", "exit-gate", "exit-render", "exit-check", "check-delivery"]);
+    // **既存 17 段の並びが 1 つも動いていない**(仕様「既存 17 段は触らない。足すだけ」)。
+    expect(stages.slice(0, 16)).toEqual([
+      "pipeline-gate", "pipeline-data", "prose-gate", "pipeline-pdf", "deliverables-pdf",
+      "appendix3-answers", "appendix3-final", "appendix3-pdf",
+      "appendix4-cause", "appendix4-search", "appendix4-pdf",
+      "answer-menu", "answer-draft", "answer-gate", "answer-check", "answer-pdf",
+    ]);
+    expect(stages).toHaveLength(21);
+  });
+
+  it("--from exit-gate で書き手の席から再開できる", () => {
+    expect(stagesFrom("exit-gate")).toEqual(["exit-gate", "exit-render", "exit-check", "check-delivery"]);
+  });
+
+  it("索引の名前は PDF の名前から導く(手で書かない)", () => {
+    expect(pageIndexNameOf("9_本編_本人用.pdf")).toBe("9_本編_本人用_page_index.json");
+    // `exit_body.py` と `exit_index.PageIndexRecorder.path_for` が使う形。**形が変わったらここで気づく。**
+    expect(out.honbunIndex.endsWith("/9_本編_本人用_page_index.json")).toBe(true);
+    expect(out.appendix3Index.endsWith("/5_付録3_直接の答え_page_index.json")).toBe(true);
+    expect(() => pageIndexNameOf("表紙.md")).toThrow(DeliverArgError);
+  });
+
+  it("--out の安全装置が、道具が書く索引 2 本を知らないファイルとして止めない", () => {
+    // これを忘れると、**2 回目の納品が「知らないファイルがある」で何もせず止まる**。
+    const names = [
+      "9_本編.md", "9_本編_本人用.pdf", "9_本編_見本用.pdf", "9_本編_本人用_page_index.json",
+      "10_付録_表紙.md", "10_付録_表紙.pdf", "10_付録_数の出どころ.pdf", "10_付録_page_index.json",
+      "5_付録3_直接の答え_page_index.json",
+    ];
+    expect(unexpectedOutFiles(names, ["exit_candidates.json"])).toEqual([]);
+    expect(unexpectedOutFiles(["知らない.pdf"], [])).toEqual(["知らない.pdf"]);
+  });
+
+  it("候補の段は本編の md と候補の JSON を出し、材料の旗は B と同じ並び", () => {
+    const cmd = exitCandidatesCommand(groups, fakeProbe({}), out, plan, thisGroup);
+    // **固定棋譜のフォルダ**(生の `--kifu-dir` ではない)。取り違えると工程の最後で落ちる。
+    expect(cmd.slice(0, 6)).toEqual(["--out-md", out.honbunMd, "--out-json", out.exitCandidates, "--kifu-dir", thisGroup.fixedKifuDir]);
+    expect(thisGroup.fixedKifuDir).not.toBe(args.kifuDir);
+    // **2 つ目の材料の並びを作らない**(片方だけ直ると数が食い違う)。
+    expect(cmd.slice(6)).toEqual(answerMaterialFlags(groups, fakeProbe({}), out, plan));
+  });
+
+  it("書き手の席の検査は、本編の md と候補の JSON を突き合わせる", () => {
+    const cmd = exitGateCommand(groups, fakeProbe({}), out, plan);
+    expect(cmd[0]).toBe(out.honbunMd);
+    expect(cmd.slice(1, 3)).toEqual(["--candidates", out.exitCandidates]);
+  });
+
+  it("索引は、それが書かれた PDF と対にする(複製と組ませない)", () => {
+    const pairs = exitSourceIndexPairs(thisGroup, out);
+    expect(pairs).toEqual([
+      [`${thisGroup.reportDir}/main_page_index.json`, thisGroup.mainPdf],
+      [out.appendix3Index, out.appendix3],
+    ]);
+    // **付録 1 は work の中で対になっている**(納品フォルダの複製 `out.main` とは組ませない) ―
+    // 複製だけ作り直したときに古い索引が通るのを防ぐ。
+    expect(pairs[0]![1]).not.toBe(out.main);
+  });
+
+  it("表紙は md と PDF を同じ実行で作る(2 つの版が並ばない)", () => {
+    const cmd = exitCoverCommand(thisGroup, out, "3 分");
+    expect(cmd).toContain("--out-pdf");
+    expect(cmd[cmd.indexOf("--out") + 1]).toBe(out.exitCoverMd);
+    expect(cmd[cmd.indexOf("--out-pdf") + 1]).toBe(out.exitCoverPdf);
+    expect(cmd[cmd.indexOf("--group") + 1]).toBe("3 分");
+  });
+
+  it("束ねは表紙を 1 ページ目に置き、索引と PDF の対を渡す", () => {
+    const cmd = exitRenderCommand(thisGroup, out);
+    expect(cmd[cmd.indexOf("--cover") + 1]).toBe(`${out.exitCoverPdf}:1`);
+    const sources = cmd.filter((_v, i) => cmd[i - 1] === "--source-index");
+    expect(sources).toEqual(exitSourceIndexPairs(thisGroup, out).map(([i, p]) => `${i}:${p}`));
+    expect(cmd[cmd.indexOf("--out-index") + 1]).toBe(out.exitIndex);
+  });
+
+  it("本編の組版は本人用・見本用と表示名を渡す", () => {
+    const cmd = exitBodyCommand(groups, fakeProbe({}), out, plan, "お客さま");
+    expect(cmd[0]).toBe(out.honbunMd);
+    expect(cmd[cmd.indexOf("--out-person") + 1]).toBe(out.honbunPerson);
+    expect(cmd[cmd.indexOf("--out-sample") + 1]).toBe(out.honbunSample);
+    expect(cmd[cmd.indexOf("--person") + 1]).toBe("お客さま");
+  });
+
+  it("器の門は本編の索引も渡す(検査 4 が対応表のページ数を索引から取るため)", () => {
+    const cmd = checkStructureCommand(groups, fakeProbe({}), out, plan, thisGroup, args.out);
+    expect(cmd[0]).toBe(args.out);
+    expect(cmd[cmd.indexOf("--honbun-index") + 1]).toBe(out.honbunIndex);
+    expect(cmd[cmd.indexOf("--page-index") + 1]).toBe(out.exitIndex);
+    // 組版が書いた索引も渡す(束ねた値が書き換えられていないかを門が見る)。
+    const sources = cmd.filter((_v, i) => cmd[i - 1] === "--source-index");
+    expect(sources).toEqual(exitSourceIndexPairs(thisGroup, out).map(([i]) => i));
+  });
+
+  it("候補の段は下書きがあれば飛ばす(書き手の編集を上書きしない)", () => {
+    const withDraft = fakeProbe({ files: [out.honbunMd, out.exitCandidates] });
+    const step = planDeliver(args, withDraft, (t) => t).find((s) => s.stage === "exit-candidates")!;
+    expect(step.action).toBe("skip");
+    const without = planDeliver(args, fakeProbe({}), (t) => t).find((s) => s.stage === "exit-candidates")!;
+    expect(without.action).toBe("run");
+  });
+
+  it("書き手の席は道具つきの確認点(fs を見るだけの gate ではない)", () => {
+    const step = planDeliver(args, fakeProbe({}), (t) => t).find((s) => s.stage === "exit-gate")!;
+    expect(step.action).toBe("gate");
+    // **`tool` が `"gate"` ではない**ことが、呼び出し側が python を回す合図になっている。
+    expect(step.tool).toBe("exit-gate");
+    const proseStep = planDeliver(args, fakeProbe({}), (t) => t).find((s) => s.stage === "prose-gate")!;
+    expect(proseStep.tool).toBe("gate");
+  });
+
+  it("本編の組版は、本人用が md より新しいときだけ飛ばす", () => {
+    const stale = fakeProbe({ mtimes: { [out.honbunMd]: 200, [out.honbunPerson]: 100, [out.honbunSample]: 100 } });
+    expect(planDeliver(args, stale, (t) => t).find((s) => s.stage === "exit-render")!.action).toBe("run");
+    const fresh = fakeProbe({ mtimes: { [out.honbunMd]: 100, [out.honbunPerson]: 200, [out.honbunSample]: 200 } });
+    expect(planDeliver(args, fresh, (t) => t).find((s) => s.stage === "exit-render")!.action).toBe("skip");
+    // 見本用だけ古い場合も作り直す(片方だけ古い版が顧客に渡るのを防ぐ)。
+    const halfStale = fakeProbe({ mtimes: { [out.honbunMd]: 100, [out.honbunPerson]: 200, [out.honbunSample]: 50 } });
+    expect(planDeliver(args, halfStale, (t) => t).find((s) => s.stage === "exit-render")!.action).toBe("run");
+  });
+});
+
+describe("人の席の時間(原価③。仕様 §5)", () => {
+  const blocked = (stage: string, at: string) =>
+    JSON.stringify({ stage, startedAt: at, finishedAt: at, rc: 1, humanGate: true });
+
+  it("止まった時刻から通った時刻までの差を秒で返す", () => {
+    const lines = [blocked("exit-gate", "2026-09-29T01:00:00.000Z")];
+    expect(seatSecondsOf(lines, "exit-gate", "2026-09-29T01:30:00.000Z")).toBe(1800);
+  });
+
+  it("止まった記録が無ければ測らない(0 と書かない)", () => {
+    expect(seatSecondsOf([], "exit-gate", "2026-09-29T01:00:00.000Z")).toBeUndefined();
+    // 他の段で止まった記録は使わない(段ごとに分けて測るため)。
+    const other = [blocked("prose-gate", "2026-09-29T01:00:00.000Z")];
+    expect(seatSecondsOf(other, "exit-gate", "2026-09-29T01:30:00.000Z")).toBeUndefined();
+  });
+
+  it("同じ段で何度も止まったら、最後に止まった時刻から測る", () => {
+    const lines = [blocked("exit-gate", "2026-09-29T01:00:00.000Z"), blocked("exit-gate", "2026-09-29T02:00:00.000Z")];
+    expect(seatSecondsOf(lines, "exit-gate", "2026-09-29T02:00:10.000Z")).toBe(10);
+  });
+
+  it("一度通した後の再実行では測らない(同じ待ち時間を二度書かない)", () => {
+    // 実測で踏んだ(2026-09-29): 止まった記録を全部たどって最後のものを採る作りだと、
+    // **通した後の再実行が同じ席を「13 秒」と書き直した**(本当は 1 秒だった)。
+    const passed = JSON.stringify({ stage: "exit-gate", startedAt: "x", finishedAt: "2026-09-29T01:10:00.000Z", rc: "skip", humanGate: false, seatSeconds: 600 });
+    const lines = [blocked("exit-gate", "2026-09-29T01:00:00.000Z"), passed];
+    expect(seatSecondsOf(lines, "exit-gate", "2026-09-29T02:00:00.000Z")).toBeUndefined();
+  });
+
+  it("読めない行・通った記録・負の差は測らない", () => {
+    const passed = JSON.stringify({ stage: "exit-gate", startedAt: "x", finishedAt: "2026-09-29T01:00:00.000Z", rc: 0, humanGate: false });
+    expect(seatSecondsOf([passed], "exit-gate", "2026-09-29T02:00:00.000Z")).toBeUndefined();
+    const broken = ["{壊れた", "", blocked("exit-gate", "2026-09-29T01:00:00.000Z")];
+    expect(seatSecondsOf(broken, "exit-gate", "2026-09-29T01:00:30.000Z")).toBe(30);
+    // 手で編集された記録で**負の席時間**という有り得ない数を残さない。
+    const future = [blocked("exit-gate", "2026-09-29T03:00:00.000Z")];
+    expect(seatSecondsOf(future, "exit-gate", "2026-09-29T01:00:00.000Z")).toBeUndefined();
+  });
+
+  it("記録の行に seatSeconds を足せる(既存の 5 つの鍵は変わらない)", () => {
+    const line = deliverLogLineOf({ stage: "exit-gate", startedAt: "a", finishedAt: "b", rc: 0, humanGate: false, seatSeconds: 42 });
+    expect(JSON.parse(line)).toEqual({ stage: "exit-gate", startedAt: "a", finishedAt: "b", rc: 0, humanGate: false, seatSeconds: 42 });
+    // 渡さなければ鍵自体が付かない(**測っていないものを数にしない**)。
+    const plain = deliverLogLineOf({ stage: "exit-gate", startedAt: "a", finishedAt: "b", rc: 0, humanGate: false });
+    expect(Object.keys(JSON.parse(plain) as object)).toEqual(["stage", "startedAt", "finishedAt", "rc", "humanGate"]);
   });
 });

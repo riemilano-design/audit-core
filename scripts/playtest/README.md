@@ -1000,11 +1000,25 @@ done
 | 14 | `answer-gate` | 段 13 の下書き | — | 0.0 秒 | **「読み」を書く**(`<!-- TODO: 読み -->` を埋める) | 印が残っていれば止まる(`humanGate`) |
 | 15 | `answer-check` | 下書き + 材料の旗 20 個 | — | 0.5 秒 | なし | `check_answer.py` rc≠0(落ちた文の一覧) |
 | 16 | `answer-pdf` | 同 15 | `<out>/8_B_どうしたら.pdf` | 0.8 秒 | なし | `render_answer.py` rc≠0 |
-| 17 | `check-delivery` | `<out>` の PDF 全冊と md | — | 0.2 秒 | **PDF の目視** | 禁止語・`@`・`/Users/`・「水匠」・`None`・`--forbid` の語があれば rc≠0 |
+| 17 | `exit-candidates` | 段 15 と同じ材料の旗 + 固定棋譜のフォルダ | `<out>/9_本編.md`(下書き)・`<out>/direct/exit_candidates.json` | 1 秒 | なし | `exit_candidates.py` rc≠0 |
+| 18 | `exit-gate` | 段 17 の 2 本 + 材料の旗 | — | 0.3 秒 | **数 3 つ・盤 2 つ・行動を選ぶ** | `exit_gate.py` rc≠0(落ちた項目の一覧。`humanGate`) |
+| 19 | `exit-render` | 本編の md・組版が書いた索引 2 本(付録 1 は `<work>/report/main_page_index.json`、付録 3 は `<out>/5_付録3_直接の答え_page_index.json`) | `<out>/10_付録_表紙.md`・`.pdf`・`<out>/9_本編_本人用.pdf`・`_見本用.pdf`・`9_本編_本人用_page_index.json`・`10_付録_数の出どころ.pdf`・`10_付録_page_index.json` | 3 秒 | なし | 3 本のどれかが rc≠0(表紙 → 本編 → 束ねの順) |
+| 20 | `exit-check` | 段 19 の成果物 + 索引 + 材料の旗 | — | 3 秒 | なし | `check_structure.py` rc≠0(器の 8 項目) |
+| 21 | `check-delivery` | `<out>` の PDF 全冊と md | — | 0.2 秒 | **PDF の目視** | 禁止語・`@`・`/Users/`・「水匠」・`None`・`--forbid` の語があれば rc≠0 |
+
+段 17〜20 は**顧客向け出口**(承認済みの 30 ページの形。`docs/GOLDEN_MASTER_CUSTOMER_EXIT.md`)。
+**既存の 6 冊は材料として残り**、ここで本編 1 冊 + 付録 1 冊に束ね直す。
+段 `exit-render` だけは 1 段で 3 本回す(`exit_cover.py` → `exit_body.py` → `exit_render.py`。段 6 と同じ形)。
 
 段の前後に `<out>/deliver_log.jsonl` へ 1 行追記する(`{stage, startedAt, finishedAt, rc, humanGate}`。
 `rc` は数か `"skip"`)。人間の確認点で止まった段は、**止まった時刻の行と、`--from` で再開したときの行の
 2 行**が残る(原価③の測り方)。段が rc≠0 ならそこで止まり、以降の段は実行しない。
+
+**人の席の時間(原価③)は `seatSeconds` として記録の行に入る**(2026-09-29。仕様 §5)。
+**通した実行にだけ付き、その段の「最後の記録」が止まった記録のときだけ測る** ―
+一度通した後の再実行で同じ待ち時間を二度書かないため。止まった記録が無ければ**鍵自体を付けない**
+(0 と書くと「席に 0 秒かかった」と読めるため。**測っていないものを数にしない**)。
+`prose-gate`・`answer-gate`・`exit-gate` の 3 つとも同じ形で測れる。
 
 ### B の「分かっている事実」を機械で組む(`report-pdf/answer_facts.py`)
 

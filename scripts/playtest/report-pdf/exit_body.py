@@ -185,12 +185,10 @@ def is_section_heading(flowable):
 
 
 def mapping_heading_matches(text):
-    """`## 対応表 …` の見出しか。**`check_structure.py` の役割の表から引く**(文字列を写さない)。"""
-    head, contains = next((h, c) for role, h, c in CS.SECTIONS if role == CS.MAPPING_ROLE)
-    body = text.strip()
-    if not body.startswith(head):
-        return False
-    return contains is None or contains in body
+    """`## 対応表 …` の見出しか。**判定は `check_structure.heading_matches` の 1 か所**
+    (2026-09-29 にそちらへ寄せた ― `exit_gate.py` が P1〜P3 の節に同じ判定を要るため、
+    ここに写しを残すと 2 か所になる)。"""
+    return CS.heading_matches(CS.MAPPING_ROLE, text)
 
 
 def drop_pages(src_pdf, out_pdf, page_nos):
@@ -431,6 +429,64 @@ class MappingPageRecorder:
 
 
 # ==================== 本体 ====================
+def strip_marks(body, marks):
+    """組版に渡す文を作る。**印を外し、外せていなければ落ちる。**
+
+    外すのは 2 種類:
+    - 局面の印(`<!-- pos: -->`)― `strip_and_insert` が外し、代わりに盤の目印を入れる
+    - **節の印(`<!-- sec: 付録N/節 -->`)**― ここで外す。文法は `exit_render.SEC_TAG_RE` の 1 か所
+
+    【なぜ自分で外すか(P-123)】reportlab は知らないタグを**黙って捨てているだけ**で、
+    取り除いているわけではない。書式が変われば顧客の文にそのまま出る。
+    **節の印は `exit-candidates` が `exit_index.COVER_SECTIONS` から必ず 3 つ置く**ので、
+    外さない道は毎回通る(2026-09-29 に段を繋いで足した)。
+
+    【関数に切った理由】`build()` の中に置いていたときは、**外す行を消しても試験が緑だった**
+    (校正で実測 2026-09-29 ― `build()` を回す試験が材料を要るため、節の印つきの本編を通す道が無かった)。
+    **番人のある単位を関数にすると、そこだけで測れる。**
+    """
+    import exit_render as ER
+
+    text = ER.SEC_TAG_RE.sub("", strip_and_insert(body, marks))
+    if CA.POS_TAG_RE.search(text) or ER.SEC_TAG_RE.search(text):
+        raise ExitBodyError("印が取り除けていない(P-123: 印は reportlab が黙って捨てるだけなので自分で外す)")
+    return text
+
+
+def render_plain(md_text, out_pdf, pdf_title):
+    """**盤を差し込まず・検査もせず**、md を PDF に組むだけ。組んだページ数を返す。
+
+    【誰が使うか】**付録の表紙**(`exit_cover.py`)。表紙の枠は `exit_index.py` の固定文で、
+    **`check_answer.py` を通らない** ― あちらは対局の材料と文を突き合わせる道具で、
+    表紙の枠(「盤の図は、後手番の局でも本人を下にして回しています」等)は対局の話ではないため
+    (`exit_index.py` の注記のとおり、表紙を作る道具がこれまで無かったので語の一覧に入っていない)。
+
+    【本編はこの道を通らない】本編は `build()` が**検査を先に通してから**組む。
+    ここを本編に使うと、**検査を飛ばして顧客の冊子が出る**道ができる ―
+    だから引数に md の**パスを取らない**(呼ぶ側が中身を渡す形にして、CLI から直に使えないようにする)。
+
+    【組版は `render_answer` のまま】見出し・箇条書き・表・太字の作りを 2 つ持たない
+    (仕様 §2 の「md → PDF は `render_answer.py` の作り」)。
+    """
+    import functools
+
+    from reportlab.lib.pagesizes import A4
+    from reportlab.platypus import SimpleDocTemplate
+
+    import render_answer as RA
+
+    title = RA._find_doc_title(md_text)
+    doc = SimpleDocTemplate(
+        out_pdf, pagesize=A4,
+        leftMargin=RA.LEFT_MARGIN, rightMargin=RA.RIGHT_MARGIN,
+        topMargin=RA.TOP_MARGIN, bottomMargin=RA.BOTTOM_MARGIN,
+        title=pdf_title, author="将棋コーチ(試作)",
+    )
+    doc.build(RA.build_story(md_text, title),
+              canvasmaker=functools.partial(RA._ReportCanvas, report_title=title))
+    return doc.page
+
+
 def parse_own_args(argv):
     """この道具だけの引数を抜き、残りは `check_answer.py` にそのまま渡す。"""
     own = {"out_person": None, "out_sample": None, "person": "本人"}
@@ -501,9 +557,7 @@ def build(own, rest):
         else:
             boards[n] = appendix3_board(mark, records3, sfens, style, own["person"])
 
-    with_sentinels = strip_and_insert(body, marks)
-    if CA.POS_TAG_RE.search(with_sentinels):
-        raise ExitBodyError("印が取り除けていない(P-123: 印は reportlab が黙って捨てるだけなので自分で外す)")
+    with_sentinels = strip_marks(body, marks)
 
     title = RA._find_doc_title(with_sentinels)
     doc = SimpleDocTemplate(

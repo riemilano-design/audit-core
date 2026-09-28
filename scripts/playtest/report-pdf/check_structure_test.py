@@ -618,5 +618,31 @@ class MappingPagesTest(unittest.TestCase):
         self.assertIn("索引が指す 1 ページに対応表の節が無い", out)
 
 
+class HeadingMatchesTest(unittest.TestCase):
+    """**節の見出しの見分け**(`heading_matches`)。`exit_body.py`・`exit_gate.py` が共有する 1 か所。"""
+
+    def test_h1_the_head_alone_is_not_enough_when_a_word_is_required(self):
+        """**頭が合っても、要る語が無ければ節ではない。**
+
+        答え合わせの節は「次の」で始まり「答え合わせ」を含む(顧客ごとに局数が変わるため)。
+        `contains` を見ない作りにすると、**「次の」で始まる別の見出しが答え合わせの節として通る** ―
+        そのとき項目 6 が「表が無い」ではなく**違う節の表**を数える。
+        校正で黙っていた(2026-09-29)のでここで測る。
+        """
+        self.assertTrue(CS.heading_matches(CS.VERIFY_ROLE, "次の 20 局で、何で答え合わせをするか"))
+        self.assertFalse(CS.heading_matches(CS.VERIFY_ROLE, "次の 20 局で起きそうなこと"))
+
+    def test_h2_the_head_must_be_at_the_front(self):
+        """**頭は前方一致**(語が含まれるだけでは節ではない)。"""
+        self.assertTrue(CS.heading_matches(CS.MAPPING_ROLE, "対応表 ― 何局目がどのファイルか"))
+        self.assertFalse(CS.heading_matches(CS.MAPPING_ROLE, "この対応表について"))
+
+    def test_h3_every_role_in_the_table_can_be_matched(self):
+        """**表の 6 役割すべてが、自分の見出しで見分けられる。**役割を足して題を忘れる道を閉じる。"""
+        for role, head, contains in CS.SECTIONS:
+            heading = head if contains is None else f"{head} 20 局で、何で{contains}をするか"
+            self.assertTrue(CS.heading_matches(role, heading), (role, heading))
+
+
 if __name__ == "__main__":
     unittest.main()

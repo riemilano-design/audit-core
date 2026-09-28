@@ -24,7 +24,10 @@
 #     --source-index <付録1の索引.json> [--source-index <付録3の索引.json>]… \
 #     --patient <patient_report_data.json> --group <組のラベル> \
 #     --prose <prose.json> --final-positions <final_positions.json> --direct <direct_answers.json> \
-#     --out <表紙.md>
+#     --out <表紙.md> [--out-pdf <表紙.pdf>]
+#
+# `--out-pdf` を渡すと、**同じ実行で** md を PDF に組む(組版は `exit_body.render_plain`)。
+# md と PDF を別の実行に分けると、md を直して PDF を組み忘れた 2 つの版が並ぶ。
 import json
 import sys
 
@@ -46,6 +49,9 @@ def parse_args(argv):
               "--out": "out"}
     out = {v: None for v in single.values()}
     out["sources"] = []
+    # 表紙の PDF(任意)。渡されたら md と**同じ実行で**組む ―
+    # 別の道具に分けると、md を直してから PDF を組み忘れる道ができる(2 つの版が並ぶ)。
+    out["out_pdf"] = None
     i = 0
     while i < len(argv):
         flag, value = argv[i], argv[i + 1] if i + 1 < len(argv) else None
@@ -53,6 +59,8 @@ def parse_args(argv):
             raise ExitCoverError(f"{flag} に値が無い")
         if flag == "--source-index":
             out["sources"].append(value)
+        elif flag == "--out-pdf":
+            out["out_pdf"] = value
         elif flag in single:
             out[single[flag]] = value
         else:
@@ -173,6 +181,16 @@ def main(argv):
         f.write(text)
     print(f"wrote {args['out']}({len(rows)} 行: "
           + "・".join(f"{r['appendix']}/{r['section']}" for r in rows) + ")")
+    if args["out_pdf"] is not None:
+        # 組版は `exit_body.render_plain`(`render_answer.py` の作り)の 1 か所。
+        # **表紙は 1 ページのはず** ― 増えたら黙らない(`exit_render.py` は `--cover` に
+        # ページ番号を 1 つしか受け取らないので、2 ページ目は束から落ちる)。
+        import exit_body as EB
+
+        pages = EB.render_plain(text, args["out_pdf"], "対局後診断・付録の表紙")
+        if pages != 1:
+            raise ExitCoverError(f"表紙が {pages} ページになった(束に入るのは 1 ページだけ)")
+        print(f"wrote {args['out_pdf']}(1 ページ)")
     return 0
 
 

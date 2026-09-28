@@ -40,6 +40,7 @@ import type { ReadMoveMarks } from "./lib/read.js";
 import type { WhatifSideRaw } from "./lib/type.js";
 import {
   buildDirectAnswersFile,
+  groupLabelOfTimeLimitSec,
   joinDirectAnswersGame,
   type DirectAnswersGameJoinResult,
   type DirectAnswersReadPositionInput,
@@ -167,13 +168,6 @@ function jsonlFilesOf(dirPath: string): string[] {
   return readdirSync(dirPath)
     .filter((name) => name.endsWith(".jsonl"))
     .sort();
-}
-
-/** `report-pdf/check_answer.py` の `tag_of_time_limit_sec` と同じ対応(司令塔の仕様追記 1)。 */
-function groupLabelOfTimeLimitSec(sec: number): string {
-  if (sec === 180) return "3 分";
-  if (sec === 600) return "10 分";
-  throw new Error(`--time-limit-sec は 180 か 600 です(${sec})`);
 }
 
 function processGroup(whatifDir: string, readDir: string, group: string): DirectAnswersGameJoinResult[] {

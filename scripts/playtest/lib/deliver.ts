@@ -38,6 +38,11 @@ export type DeliverStage =
   | "answer-gate"
   | "answer-check"
   | "answer-pdf"
+  // STEP CUSTOMER-EXIT の 4 段(仕様 §1 の表)。**既存 17 段は触らない ― 足すだけ。**
+  | "exit-candidates"
+  | "exit-gate"
+  | "exit-render"
+  | "exit-check"
   | "check-delivery";
 
 export const DELIVER_STAGES: readonly DeliverStage[] = [
@@ -57,6 +62,12 @@ export const DELIVER_STAGES: readonly DeliverStage[] = [
   "answer-gate",
   "answer-check",
   "answer-pdf",
+  // 顧客向け出口(承認済みの 30 ページの形)。**既存の 6 冊は材料として残り**、
+  // ここで本編 1 冊 + 付録 1 冊に束ね直す(正本 §1・§3a)。
+  "exit-candidates",
+  "exit-gate",
+  "exit-render",
+  "exit-check",
   "check-delivery",
 ];
 
@@ -74,6 +85,12 @@ export type DeliverTool =
   | "check-answer"
   | "render-answer"
   | "check-delivery"
+  | "exit-candidates"
+  | "exit-gate"
+  | "exit-cover"
+  | "exit-render"
+  | "exit-body"
+  | "check-structure"
   | "copy"
   | "gate";
 
@@ -87,9 +104,35 @@ export const DELIVER_OUT_NAMES = {
   appendix4: "6_付録4_時間の使い方.pdf",
   answerDraft: "8_B_どうしたら_下書き.md",
   answerPdf: "8_B_どうしたら.pdf",
+  // ---- 顧客向け出口(STEP CUSTOMER-EXIT)----
+  // **正本 §2.1・§2.2 の名前は「送付用」フォルダの名前で、納品フォルダの名前ではない**
+  // (実物の指紋は `deliver3_送付用_v3/` などに付いている)。既存の 6 冊が
+  // `1_まとめ.pdf` 等の別の名前で並んでいるのと同じ扱いで、**ここは局数を含まない安定した名前**にする
+  // (局数を入れると `deliverOutPaths` が patient を読む必要が出て、段 1 より前に決められない)。
+  honbunMd: "9_本編.md",
+  honbunPerson: "9_本編_本人用.pdf",
+  honbunSample: "9_本編_見本用.pdf",
+  exitCoverMd: "10_付録_表紙.md",
+  exitCoverPdf: "10_付録_表紙.pdf",
+  exitAppendix: "10_付録_数の出どころ.pdf",
+  exitIndex: "10_付録_page_index.json",
   directDir: "direct",
   log: "deliver_log.jsonl",
 } as const;
+
+/**
+ * **道具が自分で決める名前**(`deliver.ts` が選ぶのではなく、**導く**)。
+ * - `exit_body.py` は本人用の PDF の隣に `<拡張子を外した名前>_page_index.json` を書く
+ * - `render_direct.py`(付録 3)は `exit_index.PageIndexRecorder.path_for` で同じ形の索引を書く
+ *
+ * **写さずに導く**理由: 名前を手で書くと、python 側を直したときにこちらが古い名前を許し、
+ * `--out` の安全装置が「知らないファイル」として納品を止める(= 直した側が黙って壊れる)。
+ * 形(`_page_index.json`)が変わったら `deliver.test.ts` の固定で気づく。
+ */
+export function pageIndexNameOf(pdfName: string): string {
+  if (!pdfName.endsWith(".pdf")) throw new DeliverArgError(`PDF の名前ではない: ${pdfName}`);
+  return `${pdfName.slice(0, -".pdf".length)}_page_index.json`;
+}
 
 export const DELIVER_DIRECT_NAMES = {
   directAnswers: "direct_answers.json",
@@ -97,6 +140,8 @@ export const DELIVER_DIRECT_NAMES = {
   timeCause: "time_cause.json",
   timeSearch: "time_cause_search.json",
   answerMenu: "answer_menu.json",
+  // 段 `exit-candidates` が出す候補の一覧(段 `exit-gate` が照合に使う)。
+  exitCandidates: "exit_candidates.json",
 } as const;
 
 /** B の下書きで「読み」を人が埋める場所の印(計画 §3 の 4)。`answer-gate` はこの印が残っていれば止まる。 */
@@ -117,6 +162,17 @@ export interface DeliverOutPaths {
   timeCause: string;
   timeSearch: string;
   answerMenu: string;
+  honbunMd: string;
+  honbunPerson: string;
+  honbunSample: string;
+  honbunIndex: string;
+  exitCoverMd: string;
+  exitCoverPdf: string;
+  exitAppendix: string;
+  exitIndex: string;
+  exitCandidates: string;
+  /** 付録 3 の PDF の隣に `render_direct.py` が書く索引(段 `exit-render` の材料)。 */
+  appendix3Index: string;
 }
 
 export function deliverOutPaths(out: string): DeliverOutPaths {
@@ -136,6 +192,16 @@ export function deliverOutPaths(out: string): DeliverOutPaths {
     timeCause: path.join(directDir, DELIVER_DIRECT_NAMES.timeCause),
     timeSearch: path.join(directDir, DELIVER_DIRECT_NAMES.timeSearch),
     answerMenu: path.join(directDir, DELIVER_DIRECT_NAMES.answerMenu),
+    honbunMd: path.join(out, DELIVER_OUT_NAMES.honbunMd),
+    honbunPerson: path.join(out, DELIVER_OUT_NAMES.honbunPerson),
+    honbunSample: path.join(out, DELIVER_OUT_NAMES.honbunSample),
+    honbunIndex: path.join(out, pageIndexNameOf(DELIVER_OUT_NAMES.honbunPerson)),
+    exitCoverMd: path.join(out, DELIVER_OUT_NAMES.exitCoverMd),
+    exitCoverPdf: path.join(out, DELIVER_OUT_NAMES.exitCoverPdf),
+    exitAppendix: path.join(out, DELIVER_OUT_NAMES.exitAppendix),
+    exitIndex: path.join(out, DELIVER_OUT_NAMES.exitIndex),
+    exitCandidates: path.join(directDir, DELIVER_DIRECT_NAMES.exitCandidates),
+    appendix3Index: path.join(out, pageIndexNameOf(DELIVER_OUT_NAMES.appendix3)),
   };
 }
 
@@ -153,6 +219,10 @@ const FINAL_POSITIONS_PART_RE = /^final_positions_\d+\.json$/;
  */
 export function unexpectedOutFiles(outNames: readonly string[], directNames: readonly string[]): string[] {
   const allowedTop = new Set<string>(Object.values(DELIVER_OUT_NAMES));
+  // 道具が自分で決める名前(**写さずに導く**。`pageIndexNameOf` の注記を参照)。
+  // 付録 3 の索引は `render_direct.py` が PDF の隣に書き、本編の索引は `exit_body.py` が書く。
+  allowedTop.add(pageIndexNameOf(DELIVER_OUT_NAMES.appendix3));
+  allowedTop.add(pageIndexNameOf(DELIVER_OUT_NAMES.honbunPerson));
   const allowedDirect = new Set<string>(Object.values(DELIVER_DIRECT_NAMES));
   const unexpected: string[] = [];
   for (const name of outNames) {
@@ -684,6 +754,82 @@ export function answerFactsCommand(groups: readonly GroupPaths[], probe: Deliver
   return flags;
 }
 
+// ---- 顧客向け出口の 4 段(STEP CUSTOMER-EXIT。仕様 §1 の表) ----
+//
+// **材料の旗は `answerMaterialFlags` をそのまま使う。**本編は B の md と同じ材料(patient・prose・
+// direct・time-cause・menu・付録の PDF)を見るので、**2 つ目の並びを作らない** ―
+// 片方だけ直ると「検査は通るのに違う数が出る」道ができる(凍結の例外 7a〜7c と同じ型)。
+
+/** 段 `exit-candidates`(`exit_candidates.py`)。本編の md の下書きと、候補の一覧の JSON。 */
+export function exitCandidatesCommand(groups: readonly GroupPaths[], probe: DeliverProbe, out: DeliverOutPaths, plan: MaterialPlan, thisGroup: GroupPaths): string[] {
+  // **固定棋譜のフォルダ**(`<work>/<person>/kifu`)を渡す ― 生の `--kifu-dir` ではない。
+  // 対応表の「ファイル名」の欄は `<kifuId>.fixed.json` の `source` から引くので、
+  // 生のフォルダを渡すと **45 分の工程の最後で「固定棋譜が無い」で落ちる**(実測 2026-09-29)。
+  return ["--out-md", out.honbunMd, "--out-json", out.exitCandidates, "--kifu-dir", thisGroup.fixedKifuDir,
+          ...answerMaterialFlags(groups, probe, out, plan)];
+}
+
+/** 段 `exit-gate`(`exit_gate.py`)。**人の席の検査**。候補の一覧と突き合わせる。 */
+export function exitGateCommand(groups: readonly GroupPaths[], probe: DeliverProbe, out: DeliverOutPaths, plan: MaterialPlan): string[] {
+  return [out.honbunMd, "--candidates", out.exitCandidates,
+          ...answerMaterialFlags(groups, probe, out, plan)];
+}
+
+/**
+ * 段 `exit-render` の材料(組版が書いた索引と、その索引が書かれた PDF の対)。
+ *
+ * **索引は、それが書かれた PDF と対にする。**付録 1 の索引は `work/report/main.pdf` の隣に
+ * `_mid.py` が書き、付録 3 の索引は納品フォルダの付録 3 の隣に `render_direct.py` が書く。
+ * 索引を別の複製と組ませると、**複製だけ作り直したときに索引が古いまま通る**
+ * (`newerThanAll` が見るのは PDF どうしで、索引は見ていない)。
+ */
+export function exitSourceIndexPairs(thisGroup: GroupPaths, out: DeliverOutPaths): [string, string][] {
+  const mainIndex = path.join(path.dirname(thisGroup.mainPdf), pageIndexNameOf(path.basename(thisGroup.mainPdf)));
+  return [
+    [mainIndex, thisGroup.mainPdf],
+    [out.appendix3Index, out.appendix3],
+  ];
+}
+
+/** 段 `exit-render` の前半(`exit_cover.py`)。表紙の md と PDF を同じ実行で作る。 */
+export function exitCoverCommand(thisGroup: GroupPaths, out: DeliverOutPaths, groupLabel: string): string[] {
+  const flags = ["--honbun-md", out.honbunMd];
+  for (const [indexPath] of exitSourceIndexPairs(thisGroup, out)) flags.push("--source-index", indexPath);
+  flags.push("--patient", thisGroup.patient, "--group", groupLabel,
+             "--prose", thisGroup.prose, "--final-positions", out.finalPositions,
+             "--direct", out.directAnswers,
+             "--out", out.exitCoverMd, "--out-pdf", out.exitCoverPdf);
+  return flags;
+}
+
+/** 段 `exit-render` の束ね(`exit_render.py`)。本編が指すページだけを抜いて付録 1 冊にする。 */
+export function exitRenderCommand(thisGroup: GroupPaths, out: DeliverOutPaths): string[] {
+  const flags = ["--honbun-md", out.honbunMd];
+  for (const [indexPath, pdfPath] of exitSourceIndexPairs(thisGroup, out)) {
+    flags.push("--source-index", `${indexPath}:${pdfPath}`);
+  }
+  // 表紙は束の先頭(1 ページ目)。`exit_cover.py` が 1 ページであることを確かめている。
+  flags.push("--cover", `${out.exitCoverPdf}:1`);
+  flags.push("--out-appendix", out.exitAppendix, "--out-index", out.exitIndex);
+  return flags;
+}
+
+/** 段 `exit-render` の本編(`exit_body.py`)。本人用・見本用と本編の索引。 */
+export function exitBodyCommand(groups: readonly GroupPaths[], probe: DeliverProbe, out: DeliverOutPaths, plan: MaterialPlan, displayName: string): string[] {
+  return [out.honbunMd, "--out-person", out.honbunPerson, "--out-sample", out.honbunSample,
+          "--person", displayName, ...answerMaterialFlags(groups, probe, out, plan)];
+}
+
+/** 段 `exit-check`(`check_structure.py`)。器の門(仕様 §4 の 8 項目)。 */
+export function checkStructureCommand(groups: readonly GroupPaths[], probe: DeliverProbe, out: DeliverOutPaths, plan: MaterialPlan, thisGroup: GroupPaths, outDir: string): string[] {
+  const flags = [outDir, "--honbun-md", out.honbunMd,
+                 "--honbun-personal", out.honbunPerson, "--honbun-sample", out.honbunSample,
+                 "--appendix", out.exitAppendix, "--page-index", out.exitIndex,
+                 "--honbun-index", out.honbunIndex];
+  for (const [indexPath] of exitSourceIndexPairs(thisGroup, out)) flags.push("--source-index", indexPath);
+  return [...flags, ...answerMaterialFlags(groups, probe, out, plan)];
+}
+
 export function checkDeliveryCommand(outDir: string, forbid: readonly string[]): string[] {
   const flags = [outDir];
   for (const word of forbid) flags.push("--forbid", word);
@@ -698,10 +844,51 @@ export interface DeliverLogEntry {
   finishedAt: string;
   rc: number | "skip";
   humanGate: boolean;
+  /**
+   * **書き手(人)の席の時間**(秒。原価③。仕様 §5)。その段が**止まった時刻から、通った時刻まで**。
+   * 通った実行にだけ付く ― 止まった実行では測れない(まだ終わっていない)。
+   * 測れない実行(その段で止まった記録が無い)ではキー自体を付けない
+   * (0 を書くと「席に 0 秒かかった」と読めてしまう。**測っていないものを数にしない**)。
+   */
+  seatSeconds?: number;
 }
 
 export function deliverLogLineOf(entry: DeliverLogEntry): string {
   return `${JSON.stringify(entry)}\n`;
+}
+
+/**
+ * 人の席の時間(秒)。**その段で最後に止まった記録の `finishedAt`** から `passedAt` までの差。
+ * 仕様 §5 の原価③ ― `prose-gate`・`answer-gate`・`exit-gate` の 3 つとも同じ形で測れる。
+ *
+ * `logLines` は `deliver_log.jsonl` の行(**この実行で書く行より前**のもの)。読めない行は飛ばす
+ * (途中で落ちた実行の書きかけがあっても、測りが落ちないため)。
+ * 止まった記録が無い・時刻が読めない・差が負になるときは `undefined`(**測れないと言う**)。
+ * 負を捨てるのは、記録を手で編集した場合に**負の席時間**という有り得ない数を残さないため。
+ */
+export function seatSecondsOf(logLines: readonly string[], stage: DeliverStage, passedAt: string): number | undefined {
+  const passed = Date.parse(passedAt);
+  if (Number.isNaN(passed)) return undefined;
+  // **その段の「最後の記録」だけを見る。**止まった記録を全部たどって最後のものを採ると、
+  // 一度通した後の再実行で**同じ待ち時間をもう一度、しかも伸びた値で**書いてしまう
+  // (実測 2026-09-29: 1 秒と書いた後、48 秒後の再実行が 13 秒と書いた)。
+  // 最後の記録が「通った」なら、この実行は席を待っていない。
+  let last: Partial<DeliverLogEntry> | undefined;
+  for (const line of logLines) {
+    let entry: Partial<DeliverLogEntry>;
+    try {
+      entry = JSON.parse(line) as Partial<DeliverLogEntry>;
+    } catch {
+      continue;
+    }
+    if (entry.stage !== stage) continue;
+    last = entry;
+  }
+  if (last === undefined || last.humanGate !== true || typeof last.finishedAt !== "string") return undefined;
+  const blockedAt = Date.parse(last.finishedAt);
+  if (Number.isNaN(blockedAt)) return undefined;
+  const seconds = Math.round((passed - blockedAt) / 1000);
+  return seconds >= 0 ? seconds : undefined;
 }
 
 // ---- --dry-run 用のプレビュー(何も書かず・何も実行しない) ----
@@ -958,6 +1145,50 @@ export function planDeliver(args: DeliverArgs, probe: DeliverProbe, cmdOf: (tool
     args: renderAnswerCommand(groups, probe, out, plan),
     action: answerPdfDone ? "skip" : "run",
     reason: answerPdfDone ? "B の PDF が md より新しい" : "B の PDF を作る(md より古いか無い)",
+  });
+
+  // ---- 顧客向け出口の 4 段(STEP CUSTOMER-EXIT)----
+  // **既存の 6 冊は材料として残る。**ここで本編 1 冊 + 付録 1 冊(承認済みの 30 ページの形)に束ね直す。
+  const candidatesDone = probe.exists(out.honbunMd) && probe.exists(out.exitCandidates);
+  push({
+    stage: "exit-candidates",
+    tool: "exit-candidates",
+    cmd: cmdOf("exit-candidates"),
+    args: exitCandidatesCommand(groups, probe, out, plan, thisGroup),
+    // **書き手が編集した後の md を上書きしない**(`answer-draft` と同じ流儀)。
+    action: candidatesDone ? "skip" : "run",
+    reason: candidatesDone ? "本編の md と候補の JSON がある(上書きしない)" : "本編の md の下書きと候補の一覧を作る",
+  });
+
+  push({
+    stage: "exit-gate",
+    tool: "exit-gate",
+    cmd: cmdOf("exit-gate"),
+    args: exitGateCommand(groups, probe, out, plan),
+    action: "gate",
+    reason: "書き手が数 3 つ・盤 2 つ・行動を選び終わるまで止まる(検査は exit_gate.py)",
+  });
+
+  // 凍結の例外 10 件目と同じ考え方: 本人用の PDF が本編の md より新しいか。
+  const bodyDone = newerThanAll(probe, out.honbunPerson, [out.honbunMd]) && newerThanAll(probe, out.honbunSample, [out.honbunMd]);
+  push({
+    stage: "exit-render",
+    tool: "exit-render",
+    cmd: cmdOf("exit-render"),
+    // 1 つの段で 3 つの道具を順に回す(表紙 → 本編 → 束ね)。並びは呼び出し側が持つ ―
+    // `args` には**束ねの引数**を入れ、表紙と本編の引数は下の 2 つの関数で組む。
+    args: exitRenderCommand(thisGroup, out),
+    action: bodyDone ? "skip" : "run",
+    reason: bodyDone ? "本人用・見本用が本編の md より新しい" : "表紙 → 本編(本人用・見本用)→ 付録の束ね → 索引",
+  });
+
+  push({
+    stage: "exit-check",
+    tool: "check-structure",
+    cmd: cmdOf("check-structure"),
+    args: checkStructureCommand(groups, probe, out, plan, thisGroup, args.out),
+    action: "run",
+    reason: "器の門(節の順番・ページ数・盤の数・付録のページ)。落ちたら批評に回さない",
   });
 
   push({
