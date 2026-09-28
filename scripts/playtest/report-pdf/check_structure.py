@@ -37,6 +37,7 @@ import sys
 import unicodedata
 
 import check_answer as CA
+import exit_index as EI
 
 # ==================== 正本の形(docs/GOLDEN_MASTER_CUSTOMER_EXIT.md §1・§7) ====================
 # **節は「役割」で見る。見出しの文字そのものでは見ない。**
@@ -70,6 +71,12 @@ MAX_TOTAL_PAGES = 30
 # 盤の数(正本 §1「盤 2 つ」。**両方の実物で合計 2 つ**。ページ配置は固定しない)。
 BOARD_COUNT = 2
 
+
+# **束ねた索引の上の階層に置いてよい鍵。**正本は `exit_index.py` の 1 か所(書く側の `exit_render.py` も
+# 同じものを import する)。**写しを 2 か所に持たない** ― 写しは片方だけ直る。
+# `exit_index.py` は**定数だけのモジュール**なので、門が組版を import することにはならない
+# (司令塔の条件 2026-09-28。`exit_render_test.py` が import 文を見て固定している)。
+EXIT_RENDER_KEYS = EI.EXIT_RENDER_KEYS
 
 class CheckStructureError(Exception):
     pass
@@ -358,9 +365,16 @@ def check_bundled_index(index, source_paths, problems):
                     f"束ねた索引: 付録「{appendix}」の {field} が組版の索引と違う"
                     f"(束ねた側に無い: {only_src or 'なし'} / 組版に無い: {only_bundled or 'なし'} / 値が違う: {changed or 'なし'})"
                 )
-    extra = [k for k in index if k.startswith("付録") and k not in seen]
-    if extra:
-        problems.append(f"束ねた索引: 組版の索引が渡されていない付録がある: {sorted(extra)}")
+    # **許可一覧で見る。接頭辞では見ない**(司令塔の指示 2026-09-28)。
+    # 「付録」で始まるかどうかで判定すると、**付録名の付け方に依存**し、**知らない鍵が黙って混ざる道**も残る。
+    # 上の階層に置いてよいのは、**`exit-render` が新しく書く固定の名前**か、**渡された付録名**だけ。
+    allowed = set(EXIT_RENDER_KEYS) | set(seen)
+    unknown = sorted(set(index) - allowed)
+    if unknown:
+        problems.append(
+            f"束ねた索引: 上の階層に置いてよくない鍵がある: {unknown}"
+            f"(置けるのは {sorted(EXIT_RENDER_KEYS)} と、--source-index で渡された付録名 {sorted(seen) or 'なし'})"
+        )
 
 
 def check_scope_and_mapping(personal, problems):

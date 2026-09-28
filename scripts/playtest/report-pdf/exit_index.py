@@ -28,6 +28,17 @@ APPENDIX_SECTIONS = {
 # (両実物で付録 2 のページは 0 枚。本編が指すことになったら足す ― 司令塔の判断 2026-09-28)。
 
 
+# **束ねた索引の上の階層に置いてよい鍵**(`exit-render` が新しく書く 5 つ)。
+# **ここが正本の 1 か所** ― `exit_render.py`(書く側)と `check_structure.py`(読む側)の両方が import する。
+# **写しを 2 か所に持たない**(写しは片方だけ直る ― §8「分けて書くだけでは足りない。分けられない形で書く」)。
+# **接頭辞では判定しない**(付録名の付け方に依存させず、知らない鍵が黙って混ざる道も閉じる)。
+# 付録名は `--source-index` で渡されたものだけを許す。
+EXIT_RENDER_KEYS = ("outputPositions", "appendixPages", "boardsDrawn", "hasCover", "sourcePages")
+
+# **このモジュールは定数だけを置く。**reportlab・fitz・pypdf などの組版の道具は import しない
+# ― **門(`check_structure.py`)が import するのは「定数」であって「組版」ではない**、を保つため
+# (司令塔の条件 2026-09-28)。`exit_render_test.py` が import 文を見て固定している。
+
 def pos_key(game_no, ply):
     """本編の `<!-- pos: 局/手 付録N -->` と同じ鍵の形(変換を挟まない)。"""
     return f"{int(game_no)}/{int(ply)}"

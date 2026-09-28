@@ -476,13 +476,21 @@ class CheckStructureTest(unittest.TestCase):
         os.remove(os.path.join(self.dir, "appendix1_page_index.json"))
         self.assert_falls("--source-index のファイルが無い")
 
-    def test_36_bundled_appendix_without_source(self):
-        # 束ねた索引に、組版の索引が渡されていない付録が入っている
-        # (`exit-render` が自分で付録の節を書き足した形)。
+    # 上の階層の鍵は**許可一覧**で見る(接頭辞では見ない ― 司令塔の指示 2026-09-28)。
+    # 司令塔が名指しした 2 つの形を、それぞれ 1 本ずつ:
+    def test_36_appendix_without_source_index(self):
+        # (1) **付録名だが、その組版の索引が渡されていない**(`exit-render` が勝手に足した形)。
         index = read_index(self.dir)
-        index["付録2"] = {"positions": {}, "sections": {"分かれ道": 1}}
+        index["付録9"] = {"positions": {}, "sections": {}}
         write_json(os.path.join(self.dir, "page_index.json"), index)
-        self.assert_falls("組版の索引が渡されていない付録がある")
+        self.assert_falls("上の階層に置いてよくない鍵がある: ['付録9']")
+
+    def test_38_unknown_top_level_key(self):
+        # (2) **名前の規則から外れた鍵**。接頭辞で見ていたら「付録」で始まらないので**素通りしていた**。
+        index = read_index(self.dir)
+        index["foo"] = 1
+        write_json(os.path.join(self.dir, "page_index.json"), index)
+        self.assert_falls("上の階層に置いてよくない鍵がある: ['foo']")
 
     def test_37_old_key_name_remains(self):
         # **改名を門にする**(司令塔の条件 2026-09-28)。上の階層に旧い名前が残っていたら落とす ―
