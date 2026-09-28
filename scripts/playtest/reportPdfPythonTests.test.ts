@@ -38,6 +38,14 @@ const PYTHON_TESTS: readonly string[] = readdirSync(REPORT_PDF)
  */
 const MIN_PYTHON_TESTS = 10;
 
+/**
+ * python を起こす 1 本ぶんの上限(ms)。**vitest の既定 5000ms では足りない。**
+ * 実測(2026-09-29): `check_structure_test.py` は単独 2.58 秒・**並行の負荷がかかると 4.88〜6.69 秒**。
+ * 既定のままだと 6 回に 2 回、`Test timed out in 5000ms` で落ちた(P-138)。
+ * **本物の固まり(無限ループ・入力待ち)は 30 秒で捕まる。**
+ */
+const PYTHON_TEST_TIMEOUT_MS = 30_000;
+
 describe("report-pdf の python の試験(P-113)", () => {
   it(`試験のファイルが ${MIN_PYTHON_TESTS} 本以上ある(消えたら赤)`, () => {
     expect(PYTHON_TESTS.length, `見つかった試験: ${PYTHON_TESTS.join(", ") || "なし"}`).toBeGreaterThanOrEqual(MIN_PYTHON_TESTS);
@@ -50,6 +58,13 @@ describe("report-pdf の python の試験(P-113)", () => {
   });
 
   for (const name of PYTHON_TESTS) {
+    // **上限を明示する。**vitest の既定は 5000ms だが、この `it` は **python の子プロセスを起こし、
+    // その中で PDF を組む**。実測(2026-09-29): `check_structure_test.py` は**単独で 2.58 秒**でも、
+    // **vitest が 95 本の試験ファイルを並行で回している最中は 4.88〜6.69 秒**になり、
+    // 5 秒を超えて 6 回に 2 回落ちた(`Test timed out in 5000ms`)。
+    // **これは偽の赤** ― 門が見ているのは「python の試験が通るか」であって、所要時間ではない。
+    // 所要を測りたいなら別の物差しを置く(いまの上限は負荷しか測っていない)。
+    // 上限は**本物の固まりを捕まえられる長さ**にする(負荷の最悪 6.69 秒に対して 30 秒)。
     it(`${name} が通る`, () => {
       const result = spawnSync("python3", ["-X", "utf8", name], { cwd: REPORT_PDF, encoding: "utf-8" });
       // 落ちた理由が読めない門にしない ― 標準出力・標準エラーを失敗の文に載せる。
@@ -62,6 +77,6 @@ describe("report-pdf の python の試験(P-113)", () => {
         .filter((part) => part !== "")
         .join("\n");
       expect(result.status, detail).toBe(0);
-    });
+    }, PYTHON_TEST_TIMEOUT_MS);
   }
 });

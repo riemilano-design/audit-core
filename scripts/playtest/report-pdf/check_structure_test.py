@@ -168,6 +168,15 @@ def build_base(out_dir):
     # 組版が書いた索引(付録ごとに 1 本)。`exit-render` が束ねる前の値。
     write_json(j("appendix1_page_index.json"), SOURCE_INDEX_1)
     write_json(j("appendix3_page_index.json"), SOURCE_INDEX_3)
+    # **本編の索引**(`exit_body.py` が書く)。検査 4 が「差 = 対応表のページ数」を見るのに使う
+    # (司令塔の判断 2026-09-29・案 1。P-133)。**PDF の文字からは数えない** ―
+    # 対応表が 2 ページに伸びたとき、2 枚目には見出しの語が無い。
+    write_json(j("honbun_page_index.json"), {
+        "mappingPages": [MAPPING_PAGE_INDEX + 1],
+        "personPages": len(HONBUN_PAGES),
+        "samplePages": len(HONBUN_PAGES) - 1,
+        "boardsDrawn": 2,
+    })
     return out_dir
 
 
@@ -179,6 +188,7 @@ def gate_argv(out_dir):
             "--honbun-sample", j("honbun_sample.pdf"),
             "--appendix", j("appendix.pdf"),
             "--page-index", j("page_index.json"),
+            "--honbun-index", j("honbun_page_index.json"),
             "--patient", j("patient_min3.json"), "--time-limit-sec", "180",
             "--patient", j("patient_min10.json"), "--time-limit-sec", "600",
             "--prose", j("prose.json"),
@@ -254,7 +264,7 @@ class CheckStructureTest(unittest.TestCase):
     def test_03_personal_without_mapping(self):
         write_pdf(os.path.join(self.dir, "honbun_personal.pdf"),
                   [p for i, p in enumerate(HONBUN_PAGES) if i != MAPPING_PAGE_INDEX])
-        self.assert_falls("対応表のページが本人用に無い")
+        self.assert_falls("索引が 5 ページを指しているが、本人用は 4 ページ")
 
     def test_04_sample_keeps_mapping(self):
         write_pdf(os.path.join(self.dir, "honbun_sample.pdf"), HONBUN_PAGES)
@@ -320,7 +330,7 @@ class CheckStructureTest(unittest.TestCase):
         # 対応表の在り処は正しいままなので、**ページ数の差の行だけ**が落とす。
         write_pdf(os.path.join(self.dir, "honbun_sample.pdf"),
                   [p for i, p in enumerate(HONBUN_PAGES) if i not in (2, MAPPING_PAGE_INDEX)])
-        self.assert_falls("差は 1 ページでなければならない")
+        self.assert_falls("差は索引が示す対応表の 1 ページでなければならない")
 
     def test_15_body_differs_between_personal_and_sample(self):
         # ページ数の差は 1・対応表の在り処も正しいが、**本文が違う**。
@@ -523,6 +533,89 @@ class CheckStructureTest(unittest.TestCase):
         joined = "".join(CS.page_texts(os.path.join(self.dir, "honbun_personal.pdf")))
         self.assertNotIn(CS.SCOPE_SENTENCE, joined, "土台の PDF は折り返されていなければ意味が無い")
         self.assertIn(CS.squeeze(CS.SCOPE_SENTENCE), CS.squeeze(joined))
+
+
+class MappingPagesTest(unittest.TestCase):
+    """**差は索引が示す対応表のページ数**(司令塔の判断 2026-09-29・案 1。P-133)。
+
+    前は「差 = 1」に固定していた。**26 局以上の顧客では対応表が 2 ページになる**ので
+    (実測: 節がページ先頭から始まる場合 25 行 = 1 ページ・26 行 = 2 ページ)、
+    1 に固定すると**その顧客の本編がこの門を通れない**。
+    """
+
+    # **土台は 1 回だけ組む**(既存の `CheckStructureTest` と同じ流儀)。
+    # 試験ごとに `build_base` を呼ぶと PDF を 3 回組み直すことになり、
+    # **`check_structure_test.py` 全体が 5 秒を超えて、vitest の門が時々落ちた**
+    # (実測 2026-09-29: 3 回に 1 回・5483ms。揺れではなく時間切れだった)。
+    @classmethod
+    def setUpClass(cls):
+        cls._base_tmp = tempfile.TemporaryDirectory()
+        cls.base = build_base(cls._base_tmp.name)
+
+    @classmethod
+    def tearDownClass(cls):
+        cls._base_tmp.cleanup()
+
+    def setUp(self):
+        self._tmp = tempfile.TemporaryDirectory()
+        self.dir = os.path.join(self._tmp.name, "c")
+        shutil.copytree(self.base, self.dir)
+
+    def tearDown(self):
+        self._tmp.cleanup()
+
+    def run_gate(self):
+        buf = io.StringIO()
+        err = sys.stderr
+        sys.stderr = buf
+        try:
+            rc = CS.main(gate_argv(self.dir))
+        finally:
+            sys.stderr = err
+        return rc, buf.getvalue()
+
+    def test_40_a_two_page_mapping_section_passes(self):
+        """**対応表が 2 ページでも通る**(索引が 2 ページだと言い、差も 2 のとき)。"""
+        j = lambda name: os.path.join(self.dir, name)
+        pages = list(HONBUN_PAGES)
+        # 対応表のページの直後に「つづき」のページを足す(本人用は 1 枚増える)
+        # 1 ページは行の一覧(`HONBUN_PAGES` の要素は行のリスト)。
+        # 対応表の「つづき」は、**見出しの行を持たないページ**にする ―
+        # 実物でも 2 枚目に見出しは出ない(だから検査 4 は文字で数えない)。
+        extra = [line for line in pages[MAPPING_PAGE_INDEX] if "対応表" not in line] or ["つづき"]
+        pages.insert(MAPPING_PAGE_INDEX + 1, extra)
+        write_pdf(j("honbun_personal.pdf"), pages)
+        write_pdf(j("honbun_sample.pdf"),
+                  [x for i, x in enumerate(pages)
+                   if i not in (MAPPING_PAGE_INDEX, MAPPING_PAGE_INDEX + 1)])
+        write_json(j("honbun_page_index.json"), {
+            "mappingPages": [MAPPING_PAGE_INDEX + 1, MAPPING_PAGE_INDEX + 2],
+            "personPages": len(pages), "samplePages": len(pages) - 2, "boardsDrawn": 2})
+        rc, out = self.run_gate()
+        self.assertEqual(rc, 0, out)
+
+    def test_41_a_missing_index_falls(self):
+        """**索引が無ければ検査 4 が落ちる。**黙って「差は 1」に戻らない
+        (戻れば 26 局以上の顧客で嘘になる)。
+        """
+        j = lambda name: os.path.join(self.dir, name)
+        write_json(j("honbun_page_index.json"), {"personPages": 5})
+        rc, out = self.run_gate()
+        self.assertEqual(rc, 1)
+        self.assertIn("本編の索引に mappingPages が無い", out)
+
+    def test_42_an_index_pointing_at_a_page_without_the_section_falls(self):
+        """**索引が指すページに対応表の節が無ければ落ちる。**
+
+        索引だけを信じると、**別のページを抜いても「できた」ことになる**。
+        """
+        j = lambda name: os.path.join(self.dir, name)
+        write_json(j("honbun_page_index.json"), {
+            "mappingPages": [1], "personPages": len(HONBUN_PAGES),
+            "samplePages": len(HONBUN_PAGES) - 1, "boardsDrawn": 2})
+        rc, out = self.run_gate()
+        self.assertEqual(rc, 1)
+        self.assertIn("索引が指す 1 ページに対応表の節が無い", out)
 
 
 if __name__ == "__main__":

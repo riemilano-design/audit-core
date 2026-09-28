@@ -204,21 +204,38 @@ class RecorderTest(unittest.TestCase):
         rec = EB.MappingPageRecorder(doc)
         rec._record(heading("ひとことで"))
         with self.assertRaises(EB.ExitBodyError):
-            rec.page_to_drop()
+            rec.pages_to_drop(1)
 
-    def test_14_a_section_spanning_two_pages_falls(self):
-        """**2 ページにまたがれば落とす。**見本用との差が 1 ページでなくなるので、
-        黙って 1 枚だけ抜かない(抜いた方が「できた」ことになるのを防ぐ)。
+    def test_14_a_section_spanning_pages_is_allowed_and_all_are_dropped(self):
+        """**差は 1 ページに固定しない**(司令塔の判断 2026-09-29・案 1)。
+
+        対応表は分析の中身ではなく**顧客が自分の局を引く索引**で、**行数は局数に比例する**。
+        実測(節がページ先頭から始まる場合): **25 行 = 1 ページ・26 行 = 2 ページ**。
+        だから**索引が示すページを全部抜く**。
+        **はじめは「2 ページにまたがれば落とす」にしていた** ― 25 局の顧客が出せないので、
+        司令塔の判断で変えた(P-133)。
         """
         doc = _FakeDoc()
+        doc.page = 4
         rec = EB.MappingPageRecorder(doc)
         rec._record(heading("対応表 ― 何局目が、どのファイルか(本人用)"))
-        doc.page = 6
+        doc.page = 5
         rec._record(_FakeParagraph("つづきの行"))
-        with self.assertRaises(EB.ExitBodyError):
-            rec.page_to_drop()
+        self.assertEqual(rec.pages_to_drop(5), [4, 5])
 
-    def test_15_the_page_is_the_one_the_section_landed_on(self):
+    def test_14b_a_section_that_does_not_reach_the_last_page_falls(self):
+        """**節の後ろに本文があれば落とす。**
+
+        固定を外したぶん、ここを見ないと**抜いたページに顧客が読むべき文が混ざる**。
+        """
+        doc = _FakeDoc()
+        doc.page = 3
+        rec = EB.MappingPageRecorder(doc)
+        rec._record(heading("対応表 ― 何局目が、どのファイルか(本人用)"))
+        with self.assertRaises(EB.ExitBodyError):
+            rec.pages_to_drop(5)      # 本編は 5 ページあるのに節は 3 ページで終わっている
+
+    def test_15_the_pages_are_the_ones_the_section_landed_on(self):
         """**ページ数では決めない**(「最後の 1 枚」にすると、対応表が最後でなくなった日に別の
         ページを黙って抜く)。節が載ったページを返す。
         """
@@ -227,7 +244,7 @@ class RecorderTest(unittest.TestCase):
         rec = EB.MappingPageRecorder(doc)
         rec._record(heading("対応表 ― 何局目が、どの対局か(本人用)"))
         rec._record(_FakeParagraph("表の中身"))
-        self.assertEqual(rec.page_to_drop(), 5)
+        self.assertEqual(rec.pages_to_drop(5), [5])
 
     def test_15b_a_body_paragraph_starting_with_the_word_is_not_the_heading(self):
         """**本文の段落を見出しと間違えない。**
@@ -242,10 +259,10 @@ class RecorderTest(unittest.TestCase):
         rec = EB.MappingPageRecorder(doc)
         rec._record(_FakeParagraph("対応表は本人用だけに入っています。"))   # 本文の様式
         with self.assertRaises(EB.ExitBodyError):
-            rec.page_to_drop()   # まだ節は始まっていない
+            rec.pages_to_drop(5)   # まだ節は始まっていない
         doc.page = 5
         rec._record(heading("対応表 ― 何局目が、どのファイルか(本人用)"))
-        self.assertEqual(rec.page_to_drop(), 5)
+        self.assertEqual(rec.pages_to_drop(5), [5])
 
     def test_15c_the_heading_style_name_is_not_copied(self):
         """様式の名前は `render_answer.py` の `S_H2` から引く(`"ah2"` と書き写さない)。"""
@@ -265,9 +282,60 @@ class RecorderTest(unittest.TestCase):
         tree = ast.parse(src)
         cls = next(n for n in ast.walk(tree)
                    if isinstance(n, ast.ClassDef) and n.name == "MappingPageRecorder")
-        body = ast.dump(cls)
+        # **docstring を落としてから見る。**落とさないと、`pages_to_drop` の説明文にある
+        # 「`PageBreak` を差し込む」という**説明そのもの**を捕まえる(2026-09-29 に実際に赤になった)。
+        # **検査は「動くコード」に当てる** ― 同日 4 度目の同型。
+        def strip_docstrings(node):
+            for n in ast.walk(node):
+                body = getattr(n, "body", None)
+                if (isinstance(body, list) and body and isinstance(body[0], ast.Expr)
+                        and isinstance(body[0].value, ast.Constant)
+                        and isinstance(body[0].value.value, str)):
+                    del body[0]
+            return node
+
+        body = ast.dump(strip_docstrings(cls))
         for bad in ("Spacer", "PageBreak", "append(P("):
             self.assertNotIn(bad, body, f"記録する側が {bad} を足している")
+
+
+class PageBreakTest(unittest.TestCase):
+    """**対応表の前で改ページする**(司令塔の判断 2026-09-29・案 1)。
+
+    改ページしないと、対応表の最初のページに**その前の節の文が残り**、
+    そのページを抜くと顧客が読むべき文まで消える。
+    **実測でもここが効いた**: 改ページ前は 25 行の対応表が 3〜4 ページにまたがり、
+    改ページ後は 4 ページ目 1 枚に収まった(本人用 4 / 見本用 3)。
+    """
+
+    def test_16b_a_page_break_goes_in_front_of_the_heading(self):
+        from reportlab.platypus import PageBreak
+
+        story = [_FakeParagraph("本文"),
+                 heading("対応表 ― 何局目が、どのファイルか(本人用)"),
+                 _FakeParagraph("表")]
+        out = EB.break_before_mapping(story)
+        self.assertIsInstance(out[1], PageBreak)
+        self.assertIs(out[2], story[1])
+        self.assertEqual(len(out), 4)
+
+    def test_16c_no_mapping_heading_falls(self):
+        with self.assertRaises(EB.ExitBodyError):
+            EB.break_before_mapping([_FakeParagraph("本文")])
+
+    def test_16d_two_mapping_headings_fall(self):
+        """**ちょうど 1 つ。**2 つあると、どちらから抜くかが決まらない。"""
+        story = [heading("対応表 ― 何局目が、どのファイルか(本人用)"),
+                 heading("対応表 ― 何局目が、どの対局か(本人用)")]
+        with self.assertRaises(EB.ExitBodyError):
+            EB.break_before_mapping(story)
+
+
+class DropPagesTest(unittest.TestCase):
+    def test_16e_dropping_zero_pages_falls(self):
+        """**1 枚も抜かない指定は落とす** ― 対応表が付いたまま外へ出る。"""
+        with self.assertRaises(EB.ExitBodyError):
+            EB.drop_pages("dummy.pdf", "out.pdf", [])
 
 
 class SharedJudgmentTest(unittest.TestCase):

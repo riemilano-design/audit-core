@@ -25,6 +25,7 @@
 #   REPORT_DATA_DIR=<sfens.json・prose.json・patient_report_data.json のあるフォルダ>[,…] \
 #     python3 -X utf8 exit_body.py <本編.md> --out-person <本人用.pdf> --out-sample <見本用.pdf> \
 #     [check_answer.py と同じ引数…]
+import json
 import os
 import re
 import sys
@@ -115,6 +116,29 @@ def strip_and_insert(md_text, marks):
     return "\n".join(out)
 
 
+def break_before_mapping(story):
+    """**対応表の節の前で改ページする。**(司令塔の判断 2026-09-29・案 1)
+
+    改ページしないと、対応表の最初のページに**その前の節の文が残る** ―
+    そのページを抜くと顧客が読むべき文まで消える。**抜くページを「対応表だけ」にするための改ページ。**
+    **ちょうど 1 か所**(見出しが 2 つあれば落ちる)。
+    """
+    from reportlab.platypus import PageBreak
+
+    out = []
+    inserted = 0
+    for flowable in story:
+        text = getattr(flowable, "text", None)
+        if (is_section_heading(flowable) and isinstance(text, str)
+                and mapping_heading_matches(text)):
+            out.append(PageBreak())
+            inserted += 1
+        out.append(flowable)
+    if inserted != 1:
+        raise ExitBodyError(f"対応表の見出しが {inserted} 個(ちょうど 1 つでなければ改ページを決められない)")
+    return out
+
+
 def swap_boards(story, boards):
     """目印の `Paragraph` を `Board` に入れ替える。**数が合わなければ落ちる**(印 1 つに盤 1 つ)。
 
@@ -169,20 +193,31 @@ def mapping_heading_matches(text):
     return contains is None or contains in body
 
 
-def drop_page(src_pdf, out_pdf, page_no):
-    """`src_pdf` から `page_no`(1 起点)を抜いたものを `out_pdf` に書く。"""
+def drop_pages(src_pdf, out_pdf, page_nos):
+    """`src_pdf` から `page_nos`(1 起点)を抜いたものを `out_pdf` に書く。
+
+    **枚数は固定しない**(対応表は局数でページ数が伸びる ― P-133・司令塔の判断 2026-09-29)。
+    **1 枚も抜かない指定は落とす** ― 差が 0 の見本用は、対応表が付いたまま外へ出る。
+    """
     from pypdf import PdfReader, PdfWriter
 
+    wanted = sorted(set(page_nos))
+    if not wanted:
+        raise ExitBodyError("抜くページが 0 枚(見本用に対応表が残る)")
     reader = PdfReader(src_pdf)
-    if not 1 <= page_no <= len(reader.pages):
-        raise ExitBodyError(f"抜くページ {page_no} が範囲外(PDF は {len(reader.pages)} ページ)")
+    for page_no in wanted:
+        if not 1 <= page_no <= len(reader.pages):
+            raise ExitBodyError(f"抜くページ {page_no} が範囲外(PDF は {len(reader.pages)} ページ)")
+    if len(wanted) >= len(reader.pages):
+        raise ExitBodyError(
+            f"抜くページ {len(wanted)} 枚が PDF の {len(reader.pages)} ページ以上(見本用が空になる)")
     writer = PdfWriter()
     for i, page in enumerate(reader.pages, start=1):
-        if i != page_no:
+        if i not in wanted:
             writer.add_page(page)
     with open(out_pdf, "wb") as f:
         writer.write(f)
-    return len(reader.pages) - 1
+    return len(reader.pages) - len(wanted)
 
 
 # ==================== 材料(REPORT_DATA_DIR の流儀。新しい渡し方を作らない) ====================
@@ -339,10 +374,11 @@ class MappingPageRecorder:
     """**対応表の節が載ったページ**を `doc.afterFlowable` で記録する。
 
     **ページ数では決めない** ― 「最後の 1 ページを抜く」にすると、対応表が最後でなくなった日に
-    黙って別のページを抜く。**節が載ったページ**を見て、**2 ページにまたがれば落とす**
-    (差が 1 ページでなくなるので、黙って 1 枚だけ抜かない)。
+    黙って別のページを抜く。**節が載ったページを索引で数え、そのページを全部抜く**
+    (枚数は固定しない ― 司令塔の判断 2026-09-29・案 1。P-133)。
 
-    `exit_index.PageIndexRecorder` と**同じ流儀**: flowable を 1 つも足さない(足すと組版が変わる)。
+    `exit_index.PageIndexRecorder` と**同じ流儀**: **この記録する側は flowable を 1 つも足さない**
+    (足すと組版が変わる)。改ページを差し込むのは別の関数(`break_before_mapping`)。
     """
 
     def __init__(self, doc):
@@ -366,16 +402,32 @@ class MappingPageRecorder:
         if self._in_mapping:
             self.pages.append(self.doc.page)
 
-    def page_to_drop(self):
+    def pages_to_drop(self, total_pages):
+        """抜くページの一覧(1 起点・昇順)。
+
+        **差は 1 ページに固定しない**(司令塔の判断 2026-09-29・案 1)。
+        対応表は分析の中身ではなく**顧客が自分の局を引く索引**で、**行数は局数に比例する**。
+        実測(`render_answer` の組版・A4。**節がページ先頭から始まる場合** ―
+        この道具が前で改ページするので、実際の配置はこれ): **25 行 = 1 ページ・26 行 = 2 ページ**。
+        だから**索引が示すページ数**をそのまま抜く(局数が増えれば 2 枚以上になる)。
+        **自動化レーンは最初 23/24 が境界だと報告したが、あれは表題を表の上に置いた状態の測り**で、
+        実際の配置ではない(2026-09-29 に測り直して訂正)。
+
+        **ただし固定しないぶん、2 つを確かめる。**
+        (1) 対応表の前で改ページしている(この道具が `PageBreak` を差し込む)ので、
+            **先頭のページは対応表から始まる**。
+        (2) **最後のページまで対応表の節が続く** ― 節の後ろに本文が来ると、
+            抜いたページに顧客が読むべき文が混ざる。続いていなければ落ちる。
+        """
         if not self.pages:
             raise ExitBodyError(
                 "対応表の節が本編に無い(正本 §1: 対応表は本人用だけ・見本用はそのページを抜く)")
         first, last = min(self.pages), max(self.pages)
-        if first != last:
+        if last != total_pages:
             raise ExitBodyError(
-                f"対応表の節が {first}〜{last} ページにまたがっている"
-                "(見本用との差が 1 ページでなくなるので、黙って 1 枚だけ抜かない)")
-        return first
+                f"対応表の節が {last} ページで終わり、本編は {total_pages} ページある"
+                "(節の後ろに本文がある ― 抜いたページに顧客が読む文が混ざる)")
+        return list(range(first, last + 1))
 
 
 # ==================== 本体 ====================
@@ -461,19 +513,31 @@ def build(own, rest):
         title="対局後診断・本編", author="将棋コーチ(試作)",
     )
     recorder = MappingPageRecorder(doc)
-    story = swap_boards(RA.build_story(with_sentinels, title), boards)
+    story = break_before_mapping(swap_boards(RA.build_story(with_sentinels, title), boards))
     doc.build(story, canvasmaker=functools.partial(RA._ReportCanvas, report_title=title))
 
-    dropped = drop_page(own["out_person"], own["out_sample"], recorder.page_to_drop())
-    return {"marks": len(marks), "boards": len(boards),
-            "mappingPage": recorder.page_to_drop(), "samplePages": dropped}
+    mapping_pages = recorder.pages_to_drop(doc.page)
+    dropped = drop_pages(own["out_person"], own["out_sample"], mapping_pages)
+    # **本編の索引を書く。**`check_structure.py` の検査 4 が「差 = 対応表のページ数」を見るのに使う
+    # (司令塔の判断 2026-09-29・案 1)。**PDF の文字から数えない** ― 対応表が 2 ページに伸びたとき、
+    # **2 枚目には見出しの語が無い**ので、文字で数えると足りなくなる。
+    # **ページを置いたのと同じ経路が書く**(`exit_index.PageIndexRecorder` と同じ流儀)。
+    index = {"mappingPages": mapping_pages, "personPages": doc.page,
+             "samplePages": dropped, "boardsDrawn": len(boards)}
+    index_path = os.path.splitext(own["out_person"])[0] + "_page_index.json"
+    with open(index_path, "w", encoding="utf-8") as f:
+        json.dump(index, f, ensure_ascii=False, indent=1, sort_keys=True)
+    return dict(index, marks=len(marks), boards=len(boards), indexPath=index_path)
 
 
 def main(argv):
     own, rest = parse_own_args(argv)
     out = build(own, rest)
-    print(f"wrote {own['out_person']}(盤 {out['boards']} 枚・対応表は {out['mappingPage']} ページ)")
-    print(f"wrote {own['out_sample']}({out['samplePages']} ページ ― 対応表を抜いた)")
+    print(f"wrote {own['out_person']}({out['personPages']} ページ・盤 {out['boards']} 枚・"
+          f"対応表は {out['mappingPages']} ページ目)")
+    print(f"wrote {own['out_sample']}({out['samplePages']} ページ ― 対応表の "
+          f"{len(out['mappingPages'])} ページを抜いた)")
+    print(f"wrote {out['indexPath']}")
     return 0
 
 

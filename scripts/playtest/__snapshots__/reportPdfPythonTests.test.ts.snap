@@ -10,6 +10,7 @@ exports[`report-pdf の python の試験(P-113) > 試験のファイルの名前
   "check_structure_test.py",
   "compare_render_test.py",
   "exit_body_test.py",
+  "exit_candidates_test.py",
   "exit_cover_test.py",
   "exit_render_test.py",
   "rename_list_test.py",

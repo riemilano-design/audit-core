@@ -65,7 +65,13 @@ MAPPING_ROLE = "対応表"
 # 商品の範囲の 1 段落(正本 §1。**ちょうど 1 か所**)。
 SCOPE_SENTENCE = "この冊子は、エンジンの解析と機械の集計から、次の 20 局で確かめる仮説を出すものです。"
 # 上限(正本 §2。実物に合わせて 本編 ≤ 5・付録 ≤ 25・合計 ≤ 30)。
+# **2026-09-29 の読み替え(司令塔・案 1。正本 §12)**: 本編の上限は
+# **「4 + 対応表のページ数」** ― 対応表は分析の中身ではなく**顧客が自分の局を引く索引**で、
+# **行数は局数に比例する**(実測: 節がページ先頭から始まる場合 25 行 = 1 ページ・26 行 = 2 ページ)。
+# 5 に固定すると、**26 局以上の顧客の本編がこの門を通れない**(P-133)。
+# **器(役割・順番)は変わらず、上限だけが局数で伸びる。**
 MAX_HONBUN_PAGES = 5
+HONBUN_PAGES_WITHOUT_MAPPING = 4
 MAX_APPENDIX_PAGES = 25
 MAX_TOTAL_PAGES = 30
 # 盤の数(正本 §1「盤 2 つ」。**両方の実物で合計 2 つ**。ページ配置は固定しない)。
@@ -112,7 +118,9 @@ def parse_args(argv):
         raise CheckStructureError("顧客フォルダを渡してください")
     out_dir = argv[0]
     mine = {"--honbun-md": None, "--honbun-personal": None, "--honbun-sample": None,
-            "--appendix": None, "--page-index": None}
+            "--appendix": None, "--page-index": None,
+            # 本編の索引(`exit_body.py` が書く)。検査 4 が「差 = 対応表のページ数」を見るのに使う。
+            "--honbun-index": None}
     # 組版が書いた索引(付録ごとに 1 本。繰り返せる)。
     source_indexes = []
     rest = []
@@ -237,13 +245,27 @@ def check_verify_table(md_text, problems):
         )
 
 
-def check_pages(personal, sample, appendix, problems):
-    """検査 2(ページ数)。本編 ≤ 5・付録 ≤ 25・合計 ≤ 30。"""
+def check_pages(personal, sample, appendix, honbun_index, problems):
+    """検査 2(ページ数)。**本編 ≤ 4 + 対応表のページ数**・付録 ≤ 25・合計 ≤ 30。
+
+    **2026-09-29 に「本編 ≤ 5」から読み替えた**(司令塔・案 1。正本 §12)。
+    対応表のページ数は**索引から取る**(PDF の文字からは数えない ― 2 枚目に見出しの語が無い)。
+    **見本用は対応表を抜いた側**なので、上限は `HONBUN_PAGES_WITHOUT_MAPPING` そのまま。
+    索引が無いときは**読み替えない**(従来の 5 を使う) ― 検査 4 が別に「索引が無い」で落とすので、
+    ここで黙って甘くしない。
+    """
     n_personal, n_sample, n_appendix = len(personal), len(sample), len(appendix)
-    if n_personal > MAX_HONBUN_PAGES:
-        problems.append(f"検査 2: 本編(本人用)が {n_personal} ページ(上限 {MAX_HONBUN_PAGES})")
-    if n_sample > MAX_HONBUN_PAGES:
-        problems.append(f"検査 2: 本編(見本用)が {n_sample} ページ(上限 {MAX_HONBUN_PAGES})")
+    mapping_pages = (honbun_index or {}).get("mappingPages") or []
+    personal_limit = (HONBUN_PAGES_WITHOUT_MAPPING + len(mapping_pages)
+                      if mapping_pages else MAX_HONBUN_PAGES)
+    if n_personal > personal_limit:
+        problems.append(f"検査 2: 本編(本人用)が {n_personal} ページ"
+                        f"(上限 {personal_limit} = 4 + 対応表 {len(mapping_pages)} ページ)"
+                        if mapping_pages else
+                        f"検査 2: 本編(本人用)が {n_personal} ページ(上限 {personal_limit})")
+    if n_sample > HONBUN_PAGES_WITHOUT_MAPPING:
+        problems.append(f"検査 2: 本編(見本用)が {n_sample} ページ"
+                        f"(上限 {HONBUN_PAGES_WITHOUT_MAPPING} ― 対応表を抜いた側)")
     if n_appendix > MAX_APPENDIX_PAGES:
         problems.append(f"検査 2: 付録が {n_appendix} ページ(上限 {MAX_APPENDIX_PAGES})")
     total = n_personal + n_appendix
@@ -251,18 +273,40 @@ def check_pages(personal, sample, appendix, problems):
         problems.append(f"検査 2: 本人用 + 付録が {total} ページ(上限 {MAX_TOTAL_PAGES})")
 
 
-def check_sample_difference(personal, sample, problems):
-    """検査 4(本人用と見本用の差)。**差は対応表の 1 ページだけ**(fitz で本文を比べる ― P-112)。"""
-    if len(personal) - len(sample) != 1:
-        problems.append(f"検査 4: 本人用 {len(personal)} ページ・見本用 {len(sample)} ページ(差は 1 ページでなければならない)")
+def check_sample_difference(personal, sample, honbun_index, problems):
+    """検査 4(本人用と見本用の差)。**差は索引が示す対応表のページ数**(fitz で本文を比べる ― P-112)。
+
+    **2026-09-29 に「差は 1 ページ」から変えた**(司令塔の判断・案 1。P-133)。
+    対応表は分析の中身ではなく**顧客が自分の局を引く索引**で、**行数は局数に比例する**。
+    実測(節がページ先頭から始まる場合): **25 行 = 1 ページ・26 行 = 2 ページ**。
+    **1 に固定すると、26 局以上の顧客の本編がこの門を通れない。**
+
+    **枚数は索引から取る。PDF の文字から数えない** ― 対応表が 2 ページに伸びたとき、
+    **2 枚目には見出しの語が無い**ので、文字で数えると足りなくなる
+    (ページを置いた経路が書いた索引を見る。検査 8 が `hasCover` を見るのと同じ流儀)。
+    **そのうえで、抜かれたページが本当に対応表の節だったか**を文字で確かめる。
+    """
+    mapping_pages = (honbun_index or {}).get("mappingPages")
+    if not mapping_pages:
+        problems.append("検査 4: 本編の索引に mappingPages が無い"
+                        "(--honbun-index が渡されていないか、exit_body が書いていない)")
+        return
+    want = len(mapping_pages)
+    if len(personal) - len(sample) != want:
+        problems.append(f"検査 4: 本人用 {len(personal)} ページ・見本用 {len(sample)} ページ"
+                        f"(差は索引が示す対応表の {want} ページでなければならない)")
     mapping_word = squeeze(MAPPING_ROLE)
-    personal_mapping = [i + 1 for i, t in enumerate(personal) if mapping_word in squeeze(t)]
+    # **索引が指すページの先頭に、対応表の節の語があること**(改ページしているので先頭ページに出る)。
+    first = mapping_pages[0]
+    if not 1 <= first <= len(personal):
+        problems.append(f"検査 4: 索引が {first} ページを指しているが、本人用は {len(personal)} ページ")
+        return
+    if mapping_word not in squeeze(personal[first - 1]):
+        problems.append(f"検査 4: 索引が指す {first} ページに対応表の節が無い")
     sample_mapping = [i + 1 for i, t in enumerate(sample) if mapping_word in squeeze(t)]
-    if not personal_mapping:
-        problems.append("検査 4: 対応表のページが本人用に無い")
     if sample_mapping:
         problems.append(f"検査 4: 対応表のページが見本用に残っている({sample_mapping} ページ)")
-    remaining = [t for i, t in enumerate(personal) if (i + 1) not in personal_mapping]
+    remaining = [t for i, t in enumerate(personal) if (i + 1) not in set(mapping_pages)]
     if len(remaining) == len(sample):
         for i, (a, b) in enumerate(zip(remaining, sample), start=1):
             if a != b:
@@ -397,6 +441,12 @@ def main(argv):
         md_text = f.read()
     with open(mine["--page-index"], encoding="utf-8") as f:
         index = json.load(f)
+    # **本編の索引**(`exit_body.py` が書く)。検査 4 が「差 = 対応表のページ数」を見るのに使う。
+    # **無ければ検査 4 が落ちる**(黙って「差は 1」に戻らない ― 戻れば 26 局以上の顧客で嘘になる)。
+    honbun_index = None
+    if mine["--honbun-index"]:
+        with open(mine["--honbun-index"], encoding="utf-8") as f:
+            honbun_index = json.load(f)
 
     # 文と数・行動の minN・`<!-- pos: -->` の宣言は check_answer.py に任せる(二重に判定しない)。
     args = CA.parse_args([mine["--honbun-md"]] + rest)
@@ -411,8 +461,8 @@ def main(argv):
 
     check_sections(md_text, problems)
     check_verify_table(md_text, problems)
-    check_pages(personal, sample, appendix, problems)
-    check_sample_difference(personal, sample, problems)
+    check_pages(personal, sample, appendix, honbun_index, problems)
+    check_sample_difference(personal, sample, honbun_index, problems)
     check_boards(md_text, index, personal, problems)
     check_appendix_pages(index, appendix, problems)
     check_scope_and_mapping(personal, problems)
