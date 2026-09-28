@@ -35,7 +35,7 @@ import { fileURLToPath } from "node:url";
 import { resolveEnginePath } from "../../apps/server/src/engine/enginePath.js";
 import { UsiEngine } from "../../apps/server/src/engine/usiEngine.js";
 import { parseInfoLine, type UsiScore } from "../../apps/server/src/engine/usiInfoParser.js";
-import { finalPositionOf, type FinalPositionKifu } from "./lib/finalPosition.js";
+import { finalPositionOf, originalMovesOf, type FinalPositionKifu } from "./lib/finalPosition.js";
 import { readGitState } from "./lib/gitState.js";
 import type { FixedKifuEnding } from "./lib/kifuImport.js";
 import { READ_VALUES } from "./lib/read.js";
@@ -200,6 +200,11 @@ async function main(): Promise<number> {
       group: string;
       kifuId: string;
       gameNo: number;
+      /** 本人が指した向きの手数(= 進めた手数 + plyOffset)。**本人が後手だった局(mirrored)では固定棋譜の
+       *  `moves` から相手の初手が落ちているので、`moves.length` のままだと 1 手少ない数が印字される**
+       *  (2026-09-28、文脈ゼロの批評席が「同じ局の手数が冊子の間で違う」と指摘 → 実測で特定。付録 1・付録 4 は
+       *  `patient_report_data.json` の `total` を使うので正しかった)。規約は `lib/reportData.ts` の
+       *  `displayPlyOf`(displayPly = 記録の ply + plyOffset)と同じ ― ここで新しい数え方を作らない。 */
       moves: number;
       sfen: string;
       mirrored: boolean;
@@ -221,7 +226,8 @@ async function main(): Promise<number> {
         group,
         kifuId: target.kifu.id,
         gameNo: target.gameNo,
-        moves: final.moves,
+        // 顧客の紙に出す手数は「元の手数」(= 進めた手数 + plyOffset)。数え方は `lib/finalPosition.ts` に 1 本だけ置く。
+        moves: originalMovesOf(final, target.kifu),
         sfen: final.sfen,
         mirrored,
         top1Move: top1?.pv[0] ?? null,

@@ -993,7 +993,7 @@ export const FINDING_VALUES = {
  */
 export const FINDING_NUMBER_LABELS: Record<FindingKind, Record<string, string>> = {
   timeSpent: { a: "10 秒以上で崩れた手", b: "10 秒以上の手", p: "その割合(%)", c: "0〜1 秒で崩れた手", d: "0〜1 秒の手", q: "その割合(%)" },
-  timeUpLoss: { n: "使い切って負けた局", m: "うち最後の評価が +300 以上" },
+  timeUpLoss: { n: "持ち時間に到達した局", m: "うち最後の評価が +300 以上" },
   aheadLoss: { aheadGames: "優勢になった局", aheadLossGames: "うち負けた局" },
   phase: { fell: "崩れ", early: "序盤", mid: "中盤", late: "終盤" },
   none: { games: "対局数" },
@@ -1068,14 +1068,14 @@ function timeUpLossFinding(time: PatientTime): Finding {
       shown: false,
       numbers: { n: null, m: null },
       labels,
-      text: "持ち時間を使い切って負けた — 局のうち、最後の局面の評価が +300 以上だったのは — 局でした",
+      text: "持ち時間に到達した — 局のうち、最後の局面の評価が +300 以上だったのは — 局でした",
       oneLine: timeUpLossOneLine(null, null),
     };
   }
   const n = time.timeUpLosses.length;
   // m: 最後に読んだ局面の評価が +300 以上(displayScoreOf は詰みを ±3000 で表すので、本人側の詰みもここへ自動的に入る)。
   const m = time.timeUpLosses.filter((game) => game.finalScore !== null && game.finalScore >= 300).length;
-  const text = `持ち時間を使い切って負けた ${n} 局のうち、最後の局面の評価が +300 以上だったのは ${m} 局でした`;
+  const text = `持ち時間に到達した ${n} 局のうち、最後の局面の評価が +300 以上だったのは ${m} 局でした`;
   return { kind, shown: n >= 1, numbers: { n, m }, labels, text, oneLine: timeUpLossOneLine(n, m) };
 }
 

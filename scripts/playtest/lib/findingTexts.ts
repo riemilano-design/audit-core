@@ -80,15 +80,15 @@ export const FINDING_TEXTS: Record<FindingKind, FindingTextSet> = {
     oneLineVariants: null,
   },
   timeUpLoss: {
-    title: "持ち時間を使い切って負けた局の、最後の局面の評価",
+    title: "持ち時間に到達した局の、最後の局面の評価",
     considerations: ["(a) 中盤で 1 手ずつが長かった", "(b) 候補が並ぶ局面が続いた", "(c) 序盤で使いすぎた"],
     distinguish: "中盤の 1 手あたりの秒(4 秒の線)、候補の差、序盤の消費",
     tryable: "秒読みのある持ち時間(10 分 + 30 秒など)で 5 局ほど指すと、時間で終わる局が消えるか、それでも盤上で下がるかが分かれます",
     oneLine: null,
     oneLineVariants: {
-      mEqualsN: "持ち時間を使い切って負けた局は、どれも盤の上では互角以上だった",
-      partial: "持ち時間を使い切って負けた局のうち、盤の上では互角以上だった局があった",
-      mZero: "持ち時間を使い切って負けた局は、盤の上でも下がっていた",
+      mEqualsN: "持ち時間に到達した局は、どれも盤の上では互角以上だった",
+      partial: "持ち時間に到達した局のうち、盤の上では互角以上だった局があった",
+      mZero: "持ち時間に到達した局は、盤の上でも下がっていた",
     } satisfies Record<TimeUpLossOneLineKey, string>,
   },
   aheadLoss: {

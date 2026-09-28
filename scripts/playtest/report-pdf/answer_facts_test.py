@@ -202,6 +202,49 @@ class AnswerFactsRenderTest(unittest.TestCase):
         with self.assertRaises(AF.Missing):
             AF.bullet_1(materials, "テスト名")
 
+    # ---- via(final_positions.json が運ぶ印)の 3 通り。STEP ENDING_CLOCK §4 の 18・21。
+    # 独立監査 REVISE R2(2026-09-28): この枝に試験が 1 件も無く、変異 4 本(分岐を消す・常に「切れ負け」・
+    # word と clock を入れ替える・読む鍵を変える)がすべて沈黙した。とくに「常に『切れ負け』」は、人間が
+    # 2026-09-27 に禁じた断定を全局に付ける変更で、門が全部緑になっていた。3 通りをここで固定する。
+    def _bullet_1_with_via(self, entry_extra):
+        materials = build_materials(self._tmp.name)
+        entry = {"kifuId": "k1", "gameNo": 11, "moves": 68, "scoreCp": 82}
+        entry.update(entry_extra)
+        materials["direct"] = {"raw": [{"kind": "final_positions", "entries": [entry]}]}
+        AF._via_warnings.clear()
+        return AF.bullet_1(materials, "テスト名")
+
+    def test_via_word_uses_the_kifu_word(self):
+        # 棋譜に「切れ負け」と書かれていた局(via == "word")は、その語をそのまま使ってよい。
+        text = self._bullet_1_with_via({"via": "word"})
+        # 局ごとの節だけを見る(同じ文の「持ち時間に到達した 2 局」は局をまたぐ数の呼び名で、これは #18 のとおり)。
+        self.assertIn("68 手で切れ負け", text)
+        self.assertNotIn("68 手で持ち時間に到達", text)
+        self.assertEqual(AF._via_warnings, [])
+
+    def test_via_clock_does_not_assert_the_kifu_word(self):
+        # 時計で分かった局(via == "clock")は「切れ負け」と断定しない(人間の決定、2026-09-27)。
+        text = self._bullet_1_with_via({"via": "clock"})
+        self.assertIn("68 手で持ち時間に到達", text)
+        self.assertNotIn("切れ負け", text)  # この文には局をまたぐ「切れ負け」も出ない
+        self.assertEqual(AF._via_warnings, [])
+
+    def test_via_missing_is_neutral_and_not_silent(self):
+        # 印が来ていない局は中立の呼び名に倒すが、黙らない(標準エラーへ出す器に積む)。
+        text = self._bullet_1_with_via({})
+        self.assertIn("68 手で持ち時間に到達", text)
+        self.assertNotIn("切れ負け", text)
+        self.assertEqual(len(AF._via_warnings), 1)
+        kifu_id, game_no, via, has_key = AF._via_warnings[0]
+        self.assertEqual((kifu_id, game_no, via, has_key), ("k1", 11, None, False))
+
+    def test_via_unknown_value_is_neutral_and_not_silent(self):
+        # 知らない値も同じ(鍵はあるが値が読めない、を区別して積む)。
+        text = self._bullet_1_with_via({"via": "timeUp"})
+        self.assertIn("68 手で持ち時間に到達", text)
+        self.assertEqual(len(AF._via_warnings), 1)
+        self.assertEqual(AF._via_warnings[0][2:], ("timeUp", True))
+
 
 if __name__ == "__main__":
     unittest.main()

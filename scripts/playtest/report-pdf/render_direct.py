@@ -438,6 +438,16 @@ def tags_text_of(tags_obj):
 answers = DA["answers"]
 counts = DA["counts"]
 
+# STEP ENDING_CLOCK §4 の 23(2026-09-28)。**節の題は中立の 1 つだけ。条件分岐を作らない。**
+# もとは固定文字列「盤上はこう勝てた」だった。5 人目の顧客では最後の局面の評価が −4800(盤の上でも
+# 下がっていた)で、**題が中身と逆のことを言っていた**(文脈ゼロの批評席が指摘。私と司令塔は同じページの
+# 本文から数を抜きながら、題を読んでいなかった)。
+# **評価で題を切り替える案は採らない**(司令塔の決定、2026-09-28): この題は entries 全部にかかる
+# **局をまたぐ文**であり、#19 で決めた規則「局をまたぐ文には、和に対して真である中立の呼び名だけ」が
+# そのまま当たる。切り替えにすると「どの線で勝ちと呼ぶか」という**判定**を道具に入れることになり(線は
+# 人間の持ち物)、**分岐の条件を間違える道も残る**。勝ち負けは局ごとの行(`scoreCp`・`mate`)に書く。
+FINAL_SECTION_TITLE = "最後の局面をエンジンで読むと"
+
 allowed_p1 = {counts["gamesCount"], counts["totalCount"], counts["totalForkCount"]}
 for k, v in counts["top1TagCounts"].items():
     allowed_p1.add(v)
@@ -454,7 +464,7 @@ story.append(
             # STEP ENDING_CLOCK §4 の 13(計画の直し、7a40122)。局をまたぐ呼び名は via を問わず使える言い方にする
             # (人間の決定。「時間切れ」と断定しない)。
             f"エンジンで答え合わせした指し手を、局面つきで示します。まず、持ち時間に到達した対局の最後の局面から"
-            f"エンジンで読んだ手順(「盤上はこう勝てた」)。次に、長く読まなくても第 1 候補と実戦の手の評価差が"
+            f"エンジンで読んだ手順(「{FINAL_SECTION_TITLE}」)。次に、長く読まなくても第 1 候補と実戦の手の評価差が"
             f"見えた分かれ道 <b>{counts['totalCount']}</b> 局面(全 <b>{counts['totalForkCount']}</b> 分かれ道のうち)を、"
             f"実戦の手が第 1 候補からどれだけ下がったか(実戦との差)が大きい順に並べます。",
             allowed_p1,
@@ -520,8 +530,8 @@ story.append(
 )
 story.append(PageBreak())
 
-# ==================== 「盤上はこう勝てた」(問題 1。持ち時間に到達した対局の最後の局面) ====================
-story.append(P("盤上はこう勝てた", S_H2))
+# ==================== 最後の局面の節(持ち時間に到達した対局) ====================
+story.append(P(FINAL_SECTION_TITLE, S_H2))
 story.append(
     P(
         # STEP ENDING_CLOCK §4 の 13。局をまたぐ呼び名は via を問わず使える言い方にする(人間の決定)。
@@ -655,4 +665,4 @@ if _problems:
     sys.exit(1)
 
 doc.build(story)
-print(f"wrote {out}({len(FP['entries'])} 局(盤上はこう勝てた)・{len(answers)} 局面(浅い読みで見えた分かれ道))")
+print(f"wrote {out}({len(FP['entries'])} 局({FINAL_SECTION_TITLE})・{len(answers)} 局面(浅い読みで見えた分かれ道))")

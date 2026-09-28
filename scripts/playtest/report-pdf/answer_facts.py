@@ -177,6 +177,11 @@ def read_game_count(materials):
 # ==================== 「分かっている事実」の 14 個(v7 の文をテンプレートにする) ====================
 
 
+# 独立監査 REVISE R1(2026-09-28)。`final_positions.json` の `via` が無い/知らない値だった局を積む器。
+# bullet_1 が積み、main が標準エラーへ出す(rc は変えない ― 落とすかどうかは司令塔の判断。沈黙だけを消す)。
+_via_warnings = []
+
+
 class Missing(Exception):
     """その箇条書きに要る数が材料から引けない(呼び出し側が TODO に落とし、報告する)。"""
 
@@ -200,7 +205,17 @@ def bullet_1(m, name):
     parts = []
     for e in entries:
         prefix = "今回の " if e.get("kifuId") in cur_ids else ""
-        head = f"{prefix}{e['gameNo']} 局目({e['moves']} 手で時間切れ)は"
+        # STEP ENDING_CLOCK §4 の 18(計画の直し、742e40c)と 21(独立監査 REVISE R1 の直し、2026-09-28)。
+        # via(final_positions.json が運ぶ印)で書き分ける(人間の決定・案 1)。via が無い/知らない値のときは
+        # 中立の呼び名に倒す ― 断定を避けるのが目的で、箇条書きを落とすこと自体が目的ではない。
+        # ただし黙って倒さない: この道具の約束(冒頭 21 行目「黙って省かない」)のとおり、印が来ていないことを
+        # 標準エラーへ 1 行出す。倒すだけだと「印が来ていない」と「clock だった」が顧客の文の上で同じになり、
+        # どこにも記録が残らない(独立監査が 4 人目の保存済み材料で 5/5 件この形になることを実測した)。
+        via = e.get("via")
+        if via not in ("word", "clock"):
+            _via_warnings.append((e.get("kifuId"), e.get("gameNo"), via, "via" in e))
+        ending_clause = "切れ負け" if via == "word" else "持ち時間に到達"
+        head = f"{prefix}{e['gameNo']} 局目({e['moves']} 手で{ending_clause})は"
         if e.get("mate") is not None:
             mate = e["mate"]
             if mate > 0:
@@ -218,9 +233,9 @@ def bullet_1(m, name):
         else:
             raise Missing(f"final_positions の {e.get('kifuId')} の評価(scoreCp も mate も無い)")
     return (
-        f"- 時間で負けた {g3.time_up_losses['n']} 局の最後の局面をエンジンで読むと(付録 3 の 3 ページ)、"
+        f"- 持ち時間に到達した {g3.time_up_losses['n']} 局の最後の局面をエンジンで読むと(付録 3 の 3 ページ)、"
         f"{'、'.join(parts)}。"
-        f"10 分 + 30 秒の {g10.games} 局では、時間で負けた局は {g10.time_up_losses['n']} 局。"
+        f"10 分 + 30 秒の {g10.games} 局では、持ち時間に到達した局は {g10.time_up_losses['n']} 局。"
     )
 
 
@@ -236,7 +251,7 @@ def bullet_2(m, name):
         raise Missing("time_cause.json の remainingSec")
     return (
         f"- 中盤の消費(付録 4 の 4 ページ): "
-        f"時間で負けた {g3.time_up_losses['n']} 局の中盤の消費は {joined(mids)} 秒。"
+        f"持ち時間に到達した {g3.time_up_losses['n']} 局の中盤の消費は {joined(mids)} 秒。"
         f"他の {tc3['other']['games']} 局の中央値は {tc3['other']['medianMidSec']} 秒。"
         f"中盤が終わった時点の残り時間は {joined(remains)} 秒でした。"
     )
@@ -289,9 +304,9 @@ def bullet_5(m, name):
         raise Missing("time_cause.json の 3 分の組の時間切れ負けの局")
     earlies = [g["phaseSpentSec"]["early"] for g in tul]
     return (
-        f"- 序盤の消費: 時間で負けた {g3.time_up_losses['n']} 局は {joined(earlies)} 秒、"
+        f"- 序盤の消費: 持ち時間に到達した {g3.time_up_losses['n']} 局は {joined(earlies)} 秒、"
         f"他の局の中央値は {tc3['other']['medianEarlySec']} 秒。"
-        f"時間で負けた局の中央値は序盤 {tc3['timeUpLoss']['medianEarlySec']} 秒・"
+        f"持ち時間に到達した局の中央値は序盤 {tc3['timeUpLoss']['medianEarlySec']} 秒・"
         f"中盤 {tc3['timeUpLoss']['medianMidSec']} 秒。"
     )
 
@@ -437,11 +452,11 @@ def render(materials, name, has_time_search):
         return heading + "\n" + "\n".join(lines)
 
     if has_time_search:
-        time_search_heading_1 = "**何がその局を遅くするのか ― 機械に探させた結果(付録 4 の 8〜11 ページ)**"
-        time_search_heading_2 = "**機械に探させた結果(問題 2 にも同じ探索を当てました。付録 4 の 8〜11 ページ)**"
+        time_search_heading_1 = "**何がその局を遅くするのか ― 機械に探させた結果(上の節と同じ探索を当てました。付録 4 の 8〜11 ページ)**"
+        time_search_heading_2 = "**機械に探させた結果(付録 4 の 8〜11 ページ)**"
     else:
         time_search_heading_1 = "**何がその局を遅くするのか ― 今回は機械に探させていません(発見用と検証用の 2 組が要るため、2 回目の納品から出ます)**"
-        time_search_heading_2 = "**今回は機械に探させていません(問題 2 も同じです。2 回目の納品から出ます)**"
+        time_search_heading_2 = "**今回は機械に探させていません(発見用と検証用の 2 組が要るため、2 回目の納品から出ます)**"
 
     md = f"""# 「どうしたら」への答え
 
@@ -459,21 +474,7 @@ def render(materials, name, has_time_search):
 
 ---
 
-## 問題 1: 時間で負ける
-
-{block(0)}
-
-{time_search_heading_1}
-
-{TODO}
-
-**こうしてみては**
-
-{TODO}
-
----
-
-## 問題 2: 考えた手で崩れる
+## 考えた手で崩れる
 
 {TODO}
 
@@ -492,6 +493,21 @@ def render(materials, name, has_time_search):
 {TODO}
 
 ---
+
+## 時間の使い方について
+
+{block(0)}
+
+{time_search_heading_1}
+
+{TODO}
+
+**こうしてみては**
+
+{TODO}
+
+---
+
 
 ## 例: 付録 2・付録 3 の局面で、上の手順をなぞると(手と評価は付録の印字のまま)
 
@@ -529,6 +545,12 @@ def main(argv):
         print(f"材料から出せなかった箇条書き {len(missing)} 件(その行は {TODO} に落とした):", file=sys.stderr)
         for heading, index, reason in missing:
             print(f"- {heading} の {index} 個目: {reason}", file=sys.stderr)
+    if _via_warnings:
+        print(f"final_positions.json の via が読めなかった局 {len(_via_warnings)} 件"
+              f"(中立の呼び名「持ち時間に到達」で書いた ― 棋譜の語が「切れ負け」でも同じ文になる):", file=sys.stderr)
+        for kifu_id, game_no, via, has_key in _via_warnings:
+            reason = f"値 {via!r}" if has_key else "鍵が無い"
+            print(f"- {kifu_id}({game_no} 局目): {reason}", file=sys.stderr)
     return 0
 
 

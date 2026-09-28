@@ -209,11 +209,14 @@ def narrative(g, f):
     if extra: text += "、".join(extra) + "です。"
     return text
 def lesson(g, f, reps):
+    # STEP ENDING_CLOCK §4 の 22(司令塔の決定、2026-09-28)。この関数は呼び出し 0 件(下の注記のとおり)だが、
+    # 局をまたぐ数 `n_time`(= 語と時計の和)の呼び名を中立にした。動きは変わらない ― 直す理由は、
+    # 生き返らせたときに和に対する断定が出る形を残さないため(注意書きより、取り違えても害が出ない形の方が強い)。
     # STEP FILL 作業 Y(H4-3)。このファイル内では呼び出し元が無い(render_main.py・render_appendix.py のどちらの
     # 連結先からも参照されない ― 出力に影響しない死んだコード)。固定の「20」だけ、ほかの箇所と揃えて s['games'] にした。
     if g["result"] == "負け":
-        if f["time_loss"] and f["final"] >= 300 and f["via"] == "clock": t = f"この対局は盤上では{m['person']}が良い形勢のまま、時計上、持ち時間に到達して負けています。{s['games']} 局のうち、時間切れの負けは {n_time} 局です。"
-        elif f["time_loss"] and f["final"] >= 300: t = f"この対局は盤上では{m['person']}が良い形勢のまま、持ち時間切れで負けています。{s['games']} 局のうち、時間切れの負けは {n_time} 局です。"
+        if f["time_loss"] and f["final"] >= 300 and f["via"] == "clock": t = f"この対局は盤上では{m['person']}が良い形勢のまま、時計上、持ち時間に到達して負けています。{s['games']} 局のうち、持ち時間に到達した負けは {n_time} 局です。"
+        elif f["time_loss"] and f["final"] >= 300: t = f"この対局は盤上では{m['person']}が良い形勢のまま、持ち時間切れで負けています。{s['games']} 局のうち、持ち時間に到達した負けは {n_time} 局です。"
         elif f["ever_ahead"]: t = f"この対局は、最初から悪かったわけではありません。一度は優勢になっています。その後、{f['phase'](f['drop'] or f['mxp'])}に形勢が大きく動き、優勢を保てないまま負けています。{s['games']} 局全体でも、同じように「良くなってから崩れた」負けが {len(la)} 局あります。"
         else: t = f"この対局では、途中で優勢になる場面がありませんでした。{s['games']} 局のうち、良くならないまま負けた局は {n_never_ahead_loss} 局で、多くはありません。"
     else:

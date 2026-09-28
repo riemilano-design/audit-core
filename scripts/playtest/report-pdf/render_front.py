@@ -161,7 +161,7 @@ def kv_table(rows):
 # この道具で最小限の事実だけの題を決めた ― 実装担当の判断。判断・助言の言葉は含まない) ====================
 TITLE_JP = {
     "timeSpent": "時間をかけた手と、崩れの割合",
-    "timeUpLoss": "持ち時間を使い切って負けた局の、最後の局面の評価",
+    "timeUpLoss": "持ち時間に到達した局の、最後の局面の評価",
     "aheadLoss": "優勢になった後に負けた対局",
     "phase": "崩れの時期(序盤・中盤・終盤)",
     "none": "時間と形勢の動きについて",
@@ -392,9 +392,9 @@ if time_data.get("available"):
         # STEP TIME 作業 4(§6.10 の 3・§5.5「言い換え」): 表の名を「(崩れた手 / 手)」に(「組」を使わない)。
         rows.append((f"かけた時間 {label}(崩れた手 / 手)", bucket_text(bucket)))
     time_up_n = len(time_data["timeUpLosses"]) if time_data.get("timeUpLosses") is not None else None
-    rows.append(("持ち時間を使い切って負けた局", str(time_up_n) if time_up_n is not None else "—(比べられない)"))
+    rows.append(("持ち時間に到達した局", str(time_up_n) if time_up_n is not None else "—(比べられない)"))
 else:
-    rows.append(("かけた時間・持ち時間を使い切って負けた局", "—(比べられない)"))
+    rows.append(("かけた時間・持ち時間に到達した局", "—(比べられない)"))
 ahead_loss_numbers = findings_by_kind["aheadLoss"]["numbers"]
 rows.append(("優勢になった対局", str(ahead_loss_numbers["aheadGames"])))
 rows.append(("優勢から負けた対局", str(ahead_loss_numbers["aheadLossGames"])))
@@ -418,7 +418,7 @@ notes = [
     "「崩れ」は、直前の評価の区分(優勢・互角・劣勢)が優勢または互角だった局面から、直後に区分が 1 段以上下がったことです。+300 以上を優勢、−300 以下を劣勢、その間を互角とします。",
     # STEP ENDING_CLOCK §4 の 11(計画の直し、904d317)。「終局の種類が切れ負けで」だけでは、
     # 終局の語が投了でも時計(累計消費時間 = 持ち時間)が一致した局(§3 の (1))を含められず、直した後は偽になる。
-    "「持ち時間を使い切って負けた局」は、本人が負けた局のうち、終局の種類が切れ負けだった局、または本人の累計消費時間が持ち時間とぴったり一致した局です。",
+    "「持ち時間に到達した局」は、本人が負けた局のうち、終局の種類が切れ負けだった局、または本人の累計消費時間が持ち時間とぴったり一致した局です。",
     "「優勢から負けた対局」は、対局中に一度でも評価が +300 以上になり、その対局の結果が負けだった局の数です。",
     "この報告の数は、棋力や手の良し悪しを表す数ではありません。",
 ]

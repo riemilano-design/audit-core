@@ -5,7 +5,7 @@
 
 import { describe, expect, it } from "vitest";
 import { applyMove } from "../../../apps/server/src/rules/applyMove.js";
-import { finalPositionOf } from "./finalPosition.js";
+import { finalPositionOf, originalMovesOf } from "./finalPosition.js";
 import { STANDARD_START_SFEN } from "./kifuImport.js";
 import { alignMovesToSente } from "./sideAlignment.js";
 
@@ -58,5 +58,25 @@ describe("finalPositionOf", () => {
     const result = finalPositionOf({ moves: [], mirrored: false });
     expect(result.sfen).toBe(STANDARD_START_SFEN);
     expect(result.moves).toBe(0);
+  });
+});
+
+// STEP ENDING_CLOCK §4 の 24(2026-09-28、独立監査 REVISE R6 の直し込み)。顧客の紙に出す手数の試験。
+// **この 3 本が無い間、後手の局の手数は 1 手少ないまま印字されていた**(付録 1・付録 4 は正しく、付録 3 だけが
+// 乗っていなかった ― 文脈ゼロの批評席が「同じ局の手数が冊子の間で違う」と指摘して見つかった)。
+describe("originalMovesOf(顧客の紙に出す手数 = 元の棋譜の手数)", () => {
+  it("mirrored でなければ、進めた手数そのまま", () => {
+    expect(originalMovesOf({ sfen: "x", moves: 118 }, { mirrored: false })).toBe(118);
+    expect(originalMovesOf({ sfen: "x", moves: 118 }, {})).toBe(118);
+  });
+
+  it("mirrored なら plyOffset を足す(本人が後手だった局は相手の初手が畳まれている)", () => {
+    expect(originalMovesOf({ sfen: "x", moves: 118 }, { mirrored: true, plyOffset: 1 })).toBe(119);
+    expect(originalMovesOf({ sfen: "x", moves: 96 }, { mirrored: true, plyOffset: 1 })).toBe(97);
+  });
+
+  it("mirrored なのに plyOffset の欄が無ければ例外(黙って 1 を足さない)", () => {
+    expect(() => originalMovesOf({ sfen: "x", moves: 118 }, { mirrored: true })).toThrow(/plyOffset/);
+    expect(() => originalMovesOf({ sfen: "x", moves: 118 }, { mirrored: true, plyOffset: "1" })).toThrow(/plyOffset/);
   });
 });

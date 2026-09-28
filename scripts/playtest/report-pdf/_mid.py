@@ -52,7 +52,10 @@ featured = [g for g in la] + [g for g in wb if str(g["no"]) in PROSE]
 assert all(str(g["no"]) in PROSE for g in featured), "言い換えの無い局がある"
 rest = [g for g in m["games"] if g not in featured]
 n_time_ahead = sum(1 for g in la if F[g["no"]]["time_loss"])
-# STEP FILL 作業 Y(H4-2)。la は 3 つ(持ち時間切れ・優勢のまま投了・崩れた)に分かれる(_head.py の n_la_resigned_ahead)。
+# STEP FILL 作業 Y(H4-2)。la は 3 つ(持ち時間に到達・優勢のまま投了・崩れた)に分かれる(_head.py の n_la_resigned_ahead)。
+# STEP ENDING_CLOCK §4 の 19。n_time_ahead は F[no]["time_loss"](= 語 `切れ負け` と 時計の一致の和)で数える。
+# 局をまたぐ数は via が混ざるので、和に対して真である中立の呼び名だけを使う(「持ち時間切れ」は via == "word" の
+# 局にしか言えない)。局ごとの題・文は via が分かるので _head.py 側で書き分けている。
 assert n_la_collapsed + n_time_ahead + n_la_resigned_ahead == len(la)
 person = m["person"]
 S_BIG = st("big5", font=FONT_B, fontSize=22, leading=28, spaceAfter=1.5 * mm)
@@ -71,7 +74,7 @@ def big_item(no, head, body):
 # STEP FILL 作業 Y(H4-2)。n_la_resigned_ahead が 0 のとき(第 6 版の 20 局を含む)は元の文と 1 バイトも変わらない
 # (空の節を挟むだけ)。0 でないときだけ、承認済みの題の語(盤上・優勢のまま・投了)をそのまま使って件数を足す。
 resigned_ahead_clause = f"、{n_la_resigned_ahead} 局は優勢のまま投了しています" if n_la_resigned_ahead > 0 else ""
-story.append(big_item(1, f"負けた {len(losses)} 局のうち {len(la)} 局は、途中まで{person}が優勢でした。", f"{n_la_collapsed} 局は優勢になった後に形勢が崩れ、{n_time_ahead} 局は優勢のまま持ち時間が切れています{resigned_ahead_clause}。最初から押されて負けた将棋は {n_never_ahead_loss} 局だけです。"))
+story.append(big_item(1, f"負けた {len(losses)} 局のうち {len(la)} 局は、途中まで{person}が優勢でした。", f"{n_la_collapsed} 局は優勢になった後に形勢が崩れ、{n_time_ahead} 局は優勢のまま、時計上、持ち時間に到達しています{resigned_ahead_clause}。最初から押されて負けた将棋は {n_never_ahead_loss} 局だけです。"))
 story.append(Spacer(1, 2 * mm))
 story.append(big_item(2, f"勝った {len(wins)} 局のうち {len(wb)} 局は、一度劣勢になってから勝っています。", f"良くなってから崩れる将棋と、悪くなってから勝つ将棋が、同じ {s['games']} 局の中に両方あります。"))
 story.append(Spacer(1, 2 * mm))
@@ -178,7 +181,7 @@ story.append(boxes([(len(la), f"負けた {len(losses)} 局のうち、<br/>途�
 story.append(Spacer(1, 3 * mm))
 for items, bgc in ((
     [P("分かったこと", S_BOXH),
-     P(f"・負けた {len(losses)} 局のうち {len(la)} 局で、途中に優勢の場面がありました。{n_la_collapsed} 局はその後に崩れ、{n_time_ahead} 局は優勢のまま持ち時間切れです{resigned_ahead_clause}。", S_B2),
+     P(f"・負けた {len(losses)} 局のうち {len(la)} 局で、途中に優勢の場面がありました。{n_la_collapsed} 局はその後に崩れ、{n_time_ahead} 局は優勢のまま、時計上、持ち時間に到達しています{resigned_ahead_clause}。", S_B2),
      P(f"・勝った {len(wins)} 局のうち {len(wb)} 局は、一度劣勢になっています。", S_B2),
      P(f"・形勢が崩れた {pr['fell']} か所のうち、優勢から崩れたのは {ph.get('fromAhead','—')} か所。そのうち {ph.get('fromAheadLoss','—')} か所が負けた局のものでした。", S_B2)], BG),
     ([P("まだ言えないこと", S_BOXH),

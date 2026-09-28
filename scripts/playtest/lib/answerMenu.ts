@@ -91,12 +91,12 @@ export const ANSWER_MENU: readonly AnswerMenuItem[] = [
     id: "M1",
     stage: "時間",
     actionCore: "3 分切れ負けの中盤は 1 手 4 秒を目安に",
-    evidenceName: "中盤 4 秒超の局のうち時間で負けた側の局",
+    evidenceName: "中盤 4 秒超の局のうち、持ち時間に到達した局",
     // 司令塔の指示(2026-09-23 REVISE 3): minN は「中盤 4 秒超の局 5 かつ 時間で負けた局 2」の 2 本。
     // この欄は number 型なので、大きい方(5)を代表として持たせる(実装担当の判断)。分母(中盤 1 手あたり
     // 4 秒超の局)は ANSWER-M1(§7.2)で `midOver.over` として出せるようになった。
     minN: 5,
-    verifyName: "時間負けの局数、中盤 4 秒超の局数",
+    verifyName: "持ち時間に到達した局の数、中盤 4 秒超の局数",
     // ANSWER-MENU2(§8.1): 4 秒超の局の半分以上が時間負けでなければ、「1 手 4 秒」は時間負けの処方にならない。
     verifyGate: { fraction: "midOver.overAndTimeUpLoss / midOver.over", min: 0.5 },
     foundInSameData: false,
@@ -105,9 +105,9 @@ export const ANSWER_MENU: readonly AnswerMenuItem[] = [
     id: "M2",
     stage: "条件",
     actionCore: "勝ちたい対局は持ち時間の長い形(10 分 + 30 秒)で",
-    evidenceName: "両組の崩れ率、時間負け 0",
+    evidenceName: "両組の崩れ率、持ち時間に到達した局 0",
     minN: 5,
-    verifyName: "次の組での時間負け・崩れ率",
+    verifyName: "次の組で持ち時間に到達した局・崩れ率",
     verifyGate: null,
     foundInSameData: false,
   },
@@ -176,10 +176,10 @@ export const ANSWER_MENU: readonly AnswerMenuItem[] = [
     id: "M9",
     stage: "時間",
     actionCore: "中盤の消費が自分のふだんの中央値を超えたら、次の手の前に残り時間を見る",
-    evidenceName: "時間負けの局の中盤の消費と、他の局の中央値",
+    evidenceName: "持ち時間に到達した局の中盤の消費と、他の局の中央値",
     // docs §8.2: minN は「時間負け 2」。
     minN: 2,
-    verifyName: "時間負けの局のうち中央値超え / 時間負けの局",
+    verifyName: "持ち時間に到達した局のうち中央値超え / 持ち時間に到達した局",
     // docs §8.2: 条件そのものが答え合わせなので null。
     verifyGate: null,
     // docs §8.2: 今回の 44 局から見つけた読み(§7.6)。B に出すときは句が必須(検査は check_answer.py)。

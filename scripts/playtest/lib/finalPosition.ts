@@ -39,3 +39,27 @@ export function finalPositionOf(kifu: FinalPositionKifu): FinalPosition {
   for (const move of kifu.moves) sfen = applyMove(sfen, move);
   return { sfen, moves: kifu.moves.length };
 }
+
+/**
+ * 元の棋譜の手数(= 進めた手数 + plyOffset)。**顧客の紙に出す手数はこちら。**
+ *
+ * STEP ENDING_CLOCK §4 の 24(2026-09-28、独立監査 REVISE R6 の直し込み)。
+ * `finalPositionOf` が返す `moves` は**進めた手数**で、その約束は正しい。ただし本人が後手だった局
+ * (`mirrored: true`)は、固定棋譜が相手の初手を開始局面に畳んでいる(`plyOffset: 1`)ので、
+ * **進めた手数は元の手数より 1 少ない**。規約は前からある ― `lib/reportData.ts` の `displayPlyOf`
+ * (displayPly = 記録の ply + plyOffset)・`invariants/types.ts`(「元の ply = 記録の ply + plyOffset」)。
+ * **付録 3 の最後の局面だけがこの規約に乗っていなかった**(付録 1・付録 4 は `patient_report_data.json` の
+ * `total` を使うので正しかった。同じ 1 局の手数が冊子の間で違う、と文脈ゼロの批評席が指摘した)。
+ *
+ * **`mirrored: true` なのに `plyOffset` の欄が無い固定棋譜は例外にする。** 黙って 1 を足さない ―
+ * 「欄が無い」と「1 だった」を同じ値にすると、入口が壊れていることに誰も気づけない(「無い」の 3 種類を分ける)。
+ */
+export function originalMovesOf(final: FinalPosition, meta: Readonly<Record<string, unknown>>): number {
+  if (meta.mirrored !== true) return final.moves;
+  if (typeof meta.plyOffset !== "number") {
+    throw new Error(
+      `mirrored: true なのに plyOffset の欄が無い(${JSON.stringify(meta.plyOffset)})。元の手数へ戻せない`,
+    );
+  }
+  return final.moves + meta.plyOffset;
+}
