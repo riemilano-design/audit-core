@@ -1481,6 +1481,17 @@ describe("顧客向け出口の 4 段", () => {
     expect(without.action).toBe("run");
   });
 
+  it("候補の JSON が無くても、md が在れば段は走らない(書き手の md を消さない)", () => {
+    // **実際に書き手の 92 行を消した**(2026-09-29)。判定が `md と JSON の両方が在る` だったため、
+    // **JSON を消しただけで段が走り、md が素の下書きに戻った**(git の追跡外で戻せなかった)。
+    // JSON が無いまま進めば段 `exit-gate` が「候補の JSON に p1Numbers が無い」で止まる ―
+    // **止まるのは良く、消すのは悪い。**
+    const mdOnly = fakeProbe({ files: [out.honbunMd] });
+    expect(planDeliver(args, mdOnly, (t) => t).find((s) => s.stage === "exit-candidates")!.action).toBe("skip");
+    const jsonOnly = fakeProbe({ files: [out.exitCandidates] });
+    expect(planDeliver(args, jsonOnly, (t) => t).find((s) => s.stage === "exit-candidates")!.action).toBe("run");
+  });
+
   it("書き手の席は道具つきの確認点(fs を見るだけの gate ではない)", () => {
     const step = planDeliver(args, fakeProbe({}), (t) => t).find((s) => s.stage === "exit-gate")!;
     expect(step.action).toBe("gate");

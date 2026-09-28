@@ -68,7 +68,18 @@ n_time_ahead = sum(1 for g in la if F[g["no"]]["time_loss"])
 # 局をまたぐ数は via が混ざるので、和に対して真である中立の呼び名だけを使う(「持ち時間切れ」は via == "word" の
 # 局にしか言えない)。局ごとの題・文は via が分かるので _head.py 側で書き分けている。
 assert n_la_collapsed + n_time_ahead + n_la_resigned_ahead == len(la)
-person = m["person"]
+# **表示名は環境変数で差し替えられる**(2026-09-29。D5)。
+# 既定は `patient_report_data.json` の `person`(これまでどおり ― **渡さなければ出力は変わらない**)。
+#
+# 【なぜ要るか】**束ねた付録は本編と同じ名前でなければならない。**
+# 本編は `deliver.ts --name` の表示名(例「〇〇さん」)で組まれるのに、付録 1 はデータの実名で組まれていた。
+# **見本用は本人用からページを抜いたものなので名前を分けられず**、付録は 1 冊で両方に付く ―
+# つまり**見本用の一式に実名が乗る。**実物で出た(付録 p4「上に行くほど〈実名〉が良く」)。
+#
+# 【なぜ位置引数でなく環境変数か】`render_main.py` は `build.sh` が 3 つの断片を連結して作るもので、
+# 引数の形は凍結された第 6 版の一部である。`REPORT_DATA_DIR` と同じ流儀で足すほうが、
+# **既存の呼び出しを 1 つも変えずに済む**(渡さなければ今までと同じ)。
+person = os.environ.get("REPORT_DISPLAY_NAME") or m["person"]
 S_BIG = st("big5", font=FONT_B, fontSize=22, leading=28, spaceAfter=1.5 * mm)
 S_L = st("l5", fontSize=11.5, leading=18)
 S_LB = st("lb5", font=FONT_B, fontSize=12.5, leading=18, color=INK)
@@ -182,7 +193,14 @@ for g in featured:
     story += [P("この一局から見えたこと", S_SEC), P(fill(g, pz["takeaway"]) + f" この一局だけから、{person}の決まった特徴とは判断しません。", S_SC), PageBreak()]
 
 # ===== 残りの局 =====
-story.append(mark_sec(P("そのほかの 10 局", S_BIG) if len(rest) == 10 else P(f"そのほかの {len(rest)} 局", S_BIG), "そのほかの局"))
+# **題は `exit_index.py` が正本**(表紙の「節」の列も同じ型から作る ― 2026-09-29)。
+# **表紙は `games - len(PROSE)` で同じ数を出す**ので、**ここで一致を確かめる** ―
+# 食い違えば表紙の題と付録の中の題が違い、顧客がページを探せない。
+# 引き算のどちらかが変わったとき、**組版の側(ここ)が落ちる**(表紙が黙って違う数を出すのではなく)。
+assert len(rest) == exit_index.rest_count(s["games"], len(PROSE)), (
+    f"そのほかの局の数が引き算と合わない: len(rest)={len(rest)} / "
+    f"games-PROSE={s['games'] - len(PROSE)}(表紙は後者で題を作る)")
+story.append(mark_sec(P(exit_index.section_title("付録1", "そのほかの局", rest=len(rest)), S_BIG), "そのほかの局"))
 story.append(P("一局ずつのページに載せなかった局の一覧です。グラフの見方は同じです。", S_LEAD))
 rows = [[P(x, S_K) for x in ["局", "先後", "結果", "手数", "どんな将棋だったか", "形勢の変化"]]]
 for g in rest:

@@ -56,7 +56,8 @@ def emitted_md():
                answer(2, 20, top1=("sacrifice",), actual=("drop",), side="defense")]
     direct = direct_of(answers)
     repro = EC.repro_rows(direct)
-    patient = {"games": [{"no": 1, "id": "g01", "side": "先手", "total": 99, "result": "勝ち"},
+    patient = {"summary": {"games": 2},
+               "games": [{"no": 1, "id": "g01", "side": "先手", "total": 99, "result": "勝ち"},
                          {"no": 2, "id": "g02", "side": "後手", "total": 88, "result": "負け"}],
                # `text` は**埋まった文**(数が入っている側)。2026-09-29 に候補の段が印字するようになった ―
                # `oneLine` には数が無く、**書き手が選ぶ 3 つの数が下書きに出ていなかった**。
@@ -123,7 +124,7 @@ class DraftOffersWhatTheWriterMustPickTest(unittest.TestCase):
         answers = [answer(1, 10, top1=("drop",))]
         direct = direct_of(answers)
         repro = EC.repro_rows(direct)
-        patient = {"games": [{"no": 1}],
+        patient = {"summary": {"games": 1}, "games": [{"no": 1}],
                    "findings": [{"kind": "phase", "oneLine": "一言", "text": "崩れ 79 回でした", "shown": True}]}
         md = EC.build_md(direct, patient, repro, passed, [], [], EC.denominators(direct, patient, repro), None)
         head, contains = next((h, c) for r, h, c in CS.SECTIONS if r == CS.VERIFY_ROLE)
@@ -140,6 +141,31 @@ class DraftOffersWhatTheWriterMustPickTest(unittest.TestCase):
         self.assertEqual(len(body_rows), 2, rows)
         for row in body_rows:
             self.assertEqual(len(CA.MENU_TAG_RE.findall(row)), 1, row)
+
+
+class DoesNotOverwriteTheWriterTest(unittest.TestCase):
+    """**既に在る本編の md を上書きしない**(2026-09-29。実際に書き手の 92 行を消した)。
+
+    経緯: 候補の JSON だけを作り直したくて JSON を消して段を回したら、段の「済みの判定」が
+    `md と JSON の両方が在る` だったため段が走り、**書き手が書いた md が素の下書きに戻った。**
+    git の追跡外なので戻せなかった。**番人は道具の側に置く** ―
+    段の判定を直すだけでは、手で呼んだときに消せる。
+    """
+
+    def test_00c_an_existing_md_is_refused(self):
+        import tempfile
+
+        with tempfile.TemporaryDirectory() as d:
+            md = os.path.join(d, "honbun.md")
+            with io.open(md, "w", encoding="utf-8") as f:
+                f.write("書き手が書いた本文")
+            own = {"out_md": md, "out_json": os.path.join(d, "c.json"), "kifu_dir": d}
+            with self.assertRaises(EC.ExitCandidatesError) as e:
+                EC.build(own, [])
+            self.assertIn("既にある", str(e.exception))
+            # **中身が残っていること**(落ちる前に開いていない)。
+            with io.open(md, encoding="utf-8") as f:
+                self.assertEqual(f.read(), "書き手が書いた本文")
 
 
 class ReproKindsTest(unittest.TestCase):
@@ -251,7 +277,10 @@ class NoOverreachTest(unittest.TestCase):
 
     def test_08b_the_scope_sentence_appears_exactly_once(self):
         """商品の範囲の 1 段落は**ちょうど 1 か所**(正本 §1)。"""
-        self.assertEqual(emitted_md().count(CS.SCOPE_SENTENCE), 1)
+        # 合成の材料は 2 局(`emitted_md` の patient)。**局数で作った文**がちょうど 1 か所(D1)。
+        self.assertEqual(emitted_md().count(CS.scope_sentence(2)), 1)
+        # 別の局数の文は出ない(20 が直書きだった頃はこちらが 1 か所だった)。
+        self.assertEqual(emitted_md().count(CS.scope_sentence(20)), 0)
 
     def test_08c_every_place_to_choose_is_marked(self):
         """**選ぶ場所は 3 か所**(数・盤・行動)。印が減ったら書き手が気づけない。"""
@@ -271,11 +300,11 @@ class NoOverreachTest(unittest.TestCase):
     def test_10_the_fixed_sentences_are_not_copied(self):
         """数え方の固定文・商品の範囲の 1 段落・節の見出しを**写していないこと**。"""
         self.assertIn("EI.COUNTING_NOTES", SRC)
-        self.assertIn("CS.SCOPE_SENTENCE", SRC)
+        self.assertIn("CS.scope_sentence", SRC)
         self.assertIn("CS.SECTIONS", SRC)
         # 固定文の 1 つ目の頭 10 文字が道具に直接書かれていないこと
         self.assertNotIn(EI.COUNTING_NOTES[0][:10], SRC, "数え方の固定文を写している")
-        self.assertNotIn(CS.SCOPE_SENTENCE[:10], SRC, "商品の範囲の段落を写している")
+        self.assertNotIn(CS.SCOPE_SENTENCE_TEMPLATE[:10], SRC, "商品の範囲の段落を写している")
 
     def test_11_the_heading_judgment_holds_no_string_of_its_own(self):
         """見出しを作る関数が、見出しの値を自分の文字列として持たないこと。"""
@@ -337,7 +366,7 @@ class DenominatorTest(unittest.TestCase):
         """**分母の出どころは JSON の側に持つ**(文字列に埋めない ― 仕様 §3 の 1)。"""
         answers = [answer(1, 10, top1=("drop",)), answer(2, 20)]
         repro = EC.repro_rows(direct_of(answers))
-        patient = {"games": [{"no": i} for i in range(1, 6)]}
+        patient = {"summary": {"games": 5}, "games": [{"no": i} for i in range(1, 6)]}
         rows = EC.denominators(direct_of(answers), patient, repro)
         self.assertTrue(rows)
         for r in rows:
@@ -347,5 +376,44 @@ class DenominatorTest(unittest.TestCase):
         self.assertIn(5, [r["number"] for r in rows], "全部の局数が分母に入っていない")
 
 
+class RestCountTest(unittest.TestCase):
+    """「そのほかの N 局」の引き算。**3 か所で同じ引き算をしていた所を 1 本にした**(2026-09-29)。
+
+    2026-09-29 の独立監査が実測した穴 ― **`exit_candidates` 側の引き算だけを変えても、
+    この試験ファイルは 1 本も落ちなかった**(`exit_cover` 側は `test_03b` が守っていた)。
+    `_mid.py` の `assert` は**自分が作った一覧と自分の引き算**を比べるだけで、
+    別プロセスの 2 つが同じ形で引いていることは確かめられない。
+    """
+
+    def test_18_the_number_in_the_md_is_the_subtraction(self):
+        # 材料は 2 局・1 局ずつ見た局は 0 → 「そのほかの 2 局」
+        self.assertIn("そのほかの 2 局", emitted_md())
+
+    def test_18b_the_number_moves_with_the_featured_count(self):
+        answers = [answer(1, 10, top1=("drop",), actual=("capture",))]
+        direct = direct_of(answers)
+        repro = EC.repro_rows(direct)
+        patient = {"summary": {"games": 7}, "games": [], "findings": []}
+        denoms = EC.denominators(direct, patient, repro)
+        md = EC.build_md(direct, patient, repro, [], [], [], denoms, None, featured=2)
+        self.assertIn("そのほかの 5 局", md)
+        self.assertNotIn("そのほかの 7 局", md)
+
+    def test_18c_the_subtraction_lives_in_one_place(self):
+        """**引き算を持つのは `exit_index.rest_count` だけ。**3 つの書く側は全部そこを呼ぶ。
+
+        写しが戻ったら落ちる ― **これが監査が見つけた穴の再発の歯止め**。
+        """
+        self.assertEqual(EI.rest_count(25, 6), 19)
+        self.assertEqual(EI.rest_count("25", "6"), 19)  # 材料が文字でも数で引く
+        for name in ("exit_candidates.py", "exit_cover.py", "_mid.py"):
+            src = read_text(os.path.join(HERE, name))
+            self.assertIn("rest_count(", src, name + " が共通の引き算を呼んでいない")
+        # **`summary.games` から直に引く形が戻っていないか**(3 つのファイルすべて)
+        for name in ("exit_candidates.py", "exit_cover.py"):
+            src = read_text(os.path.join(HERE, name))
+            self.assertNotIn('int(patient["summary"]["games"]) - ', src,
+                             name + " に引き算の写しが戻っている")
+        self.assertNotIn('s["games"] - len(PROSE)', read_text(os.path.join(HERE, "_mid.py")))
 if __name__ == "__main__":
     unittest.main(verbosity=2)

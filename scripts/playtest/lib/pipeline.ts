@@ -1035,7 +1035,16 @@ export async function runPipeline(args: PipelineArgs, games: readonly GameJob[],
       if (buildResult.code !== 0) {
         failures.push({ gameId: "*", stage: "pdf", message: `report-pdf/build.sh rc=${buildResult.code}: render_main.py を作れない` });
       } else {
-        const renderResult = await run("report-pdf-render-main", [rp.dir, rp.patient, rp.mainPdf]);
+        // **表示名を渡す**(2026-09-29。D5)。`--name` は本編の表紙・B の冊子だけでなく
+        // **付録 1(`render_main.py`)にも要る** ― あちらは `patient_report_data.json` の `person`
+        // (実名)で組んでいたため、**本編は「〇〇さん」・付録は実名**という冊子が出ていた。
+        // **見本用は本人用からページを抜いたもので名前を分けられず**、付録は 1 冊で両方に付くので、
+        // **見本用の一式に実名が乗る**(器の門の `check_name_agrees` が落とす)。
+        // `args.report` は `--until pdf` のときだけ在る(型が任意)。**無ければ渡さない** ―
+        // 渡さなければ `_mid.py` の既定(patient の `person`)のままで、出力は変わらない。
+        const renderArgs = [rp.dir, rp.patient, rp.mainPdf];
+        if (args.report !== undefined) renderArgs.push(args.report.name);
+        const renderResult = await run("report-pdf-render-main", renderArgs);
         if (renderResult.code !== 0) {
           failures.push({ gameId: "*", stage: "pdf", message: `render_main.py rc=${renderResult.code}: ${renderResult.stderr.trim().slice(0, 1000)}` });
         } else {

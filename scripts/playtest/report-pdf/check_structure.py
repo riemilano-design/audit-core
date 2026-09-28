@@ -64,7 +64,18 @@ SECTIONS = [
 VERIFY_ROLE = "答え合わせ"
 MAPPING_ROLE = "対応表"
 # 商品の範囲の 1 段落(正本 §1。**ちょうど 1 か所**)。
-SCOPE_SENTENCE = "この冊子は、エンジンの解析と機械の集計から、次の 20 局で確かめる仮説を出すものです。"
+#
+# **局数は型で持つ**(2026-09-29。司令塔の ⑥ が実物で見つけた D1)。
+# 「次の **20** 局」を直書きしていたため、**同じ冊子の答え合わせの見出し「次の 25 局」と食い違っていた**
+# ― 25 局を見た顧客の冊子が、1 ページ目で「次の 20 局で確かめる」と言う。
+# **数は組の局数から入れる**(`patient_report_data.json` の `games`。新しい数を作らない)。
+# 正本 §1 の実物が 20 局の顧客のものだったので、20 が固定値として写っていた。
+SCOPE_SENTENCE_TEMPLATE = "この冊子は、エンジンの解析と機械の集計から、次の {games} 局で確かめる仮説を出すものです。"
+
+
+def scope_sentence(games):
+    """商品の範囲の 1 段落。**組版と門が同じここから作る**(片方だけ直らない)。"""
+    return SCOPE_SENTENCE_TEMPLATE.format(games=int(games))
 # 上限(正本 §2。実物に合わせて 本編 ≤ 5・付録 ≤ 25・合計 ≤ 30)。
 # **2026-09-29 の読み替え(司令塔・案 1。正本 §12)**: 本編の上限は
 # **「4 + 対応表のページ数」** ― 対応表は分析の中身ではなく**顧客が自分の局を引く索引**で、
@@ -77,9 +88,19 @@ MAX_APPENDIX_PAGES = 25
 MAX_TOTAL_PAGES = 30
 # 盤の数(正本 §1「盤 2 つ」。**両方の実物で合計 2 つ**。ページ配置は固定しない)。
 BOARD_COUNT = 2
-# 本編の 1 ページ目に置く数の本数(正本 §1「p1 数 3 つ+ひとことで」)。
+# 本編の 1 ページ目に置く**事実の本数**(正本 §1「p1 数 3 つ+ひとことで」)。
+#
+# **「数 3 つ」は「異なる値が 3 つ」ではなく「事実が 3 本」である**(2026-09-29 に実物 2 件を数えて確定):
+# - 3 人目の試作 `reedit/honbun.md` の「ひとことで」= **箇条書きちょうど 3 本**。
+#   値は 14・6 / 20・46・28・4・14 / 19・52・62・99 の **11 個**
+# - 4 人目の本人用 p1(fitz で読んだ)= **事実 3 本 + 1 文**。値は 5・18・79・68・66・13・51・11・21・22 /
+#   53・92・34・20・277・167 / 30・3・88・17・97・10・32・0・8
+#
+# **最初は「異なる値でちょうど 3 つ」として実装し、書き手(司令塔)が書けなかった。**
+# 人間の線「局数で数える・分母を付ける」と両立しない ― 「18 局のうち 6 局」だけで既に 2 値になる。
+# 名前も `HONBUN_P1_NUMBER_COUNT` から直した(**値の数ではなく事実の数**)。
 # **段 `exit-gate` がこの数で数える** ― 門と段が同じ定数を見る(写しを 2 か所に持たない)。
-HONBUN_P1_NUMBER_COUNT = 3
+HONBUN_P1_FACT_COUNT = 3
 
 
 def heading_matches(role, text):
@@ -112,7 +133,7 @@ def norm(text):
 
 def squeeze(text):
     """空白・改行をすべて落とす。**組版は文を行に折る**ので、PDF から抜いた文字には途中に改行が入る
-    (実測: 土台の 1 ページ目で `SCOPE_SENTENCE` が 2 行に折られ、そのままでは 0 か所と数えた)。
+    (実測: 土台の 1 ページ目で商品の範囲の 1 段落が 2 行に折られ、そのままでは 0 か所と数えた)。
     `check_answer.py` の `build_materials` が `--whatif-pdf` の本文に対して使っているのと同じ流儀
     (`re.sub(r"\s+", "", …)`)を、こちらでも使う。"""
     return re.sub(r"\s+", "", text)
@@ -442,12 +463,44 @@ def check_bundled_index(index, source_paths, problems):
         )
 
 
-def check_scope_and_mapping(personal, problems):
-    """商品の範囲の 1 段落が**ちょうど 1 か所**。**行の折り返しを越えて数える**(`squeeze`)。"""
+def check_name_agrees(personal, appendix, person, problems):
+    """**付録に出ている名前が本編に出ていないなら落とす**(2026-09-29。D5)。
+
+    `person` は `patient_report_data.json` の `person`(材料の中の実名)。
+
+    【何を守るか】**見本用は本人用からページを抜いたものなので、名前を分けられない。**
+    付録は 1 冊で本人用にも見本用にも付く。だから**付録に実名が乗れば、見本用の一式に実名が乗る。**
+    実物で出た: 本編は `--name 〇〇さん` で組まれているのに、付録 1 は
+    `patient_report_data.json` の `person` で組まれていて「上に行くほど〈実名〉が良く」と印字された。
+
+    【なぜ「本編に無ければ落とす」か】**実名そのものを禁じるのではない。**
+    本人用に本人の名前を出すのは正しい。**禁じたいのは「本編と付録で名前が違う」こと** ―
+    どちらかが匿名なら、もう一方も匿名でなければ意味が無い。
+    """
+    if not person:
+        return
+    name = squeeze(norm(person))
+    in_appendix = any(name in squeeze(norm(t)) for t in appendix)
+    in_personal = any(name in squeeze(norm(t)) for t in personal)
+    if in_appendix and not in_personal:
+        problems.append(
+            f"付録に「{person}」が出ているのに本編に出ていない(本編と付録で名前が違う。"
+            "見本用は本人用からページを抜いたもので、付録は 1 冊で両方に付くため、"
+            "付録の実名は見本用の一式に乗る)")
+
+
+def check_scope_and_mapping(personal, games, problems):
+    """商品の範囲の 1 段落が**ちょうど 1 か所**。**行の折り返しを越えて数える**(`squeeze`)。
+
+    `games` は組の局数。**その局数で作った文**をちょうど 1 か所求める ―
+    局数が違う文(例: 25 局の冊子に「次の 20 局」)は 0 か所として落ちる(D1)。
+    """
     joined = squeeze("".join(personal))
-    count = joined.count(squeeze(norm(SCOPE_SENTENCE)))
+    count = joined.count(squeeze(norm(scope_sentence(games))))
     if count != 1:
-        problems.append(f"商品の範囲の 1 段落が {count} か所(ちょうど 1 か所でなければならない)")
+        problems.append(
+            f"商品の範囲の 1 段落が {count} か所(ちょうど 1 か所。この冊子は {games} 局なので"
+            f"「次の {games} 局で確かめる」でなければならない)")
 
 
 def main(argv):
@@ -482,7 +535,13 @@ def main(argv):
     check_sample_difference(personal, sample, honbun_index, problems)
     check_boards(md_text, index, personal, problems)
     check_appendix_pages(index, appendix, problems)
-    check_scope_and_mapping(personal, problems)
+    # 局数は材料から取る(`check_answer` が読んだ patient の 1 本目 = 今回の組)。
+    # **`summary.games` を使う** ― `exit_cover.numbers_of` が既にここを読んでいる(出どころを 2 つにしない)。
+    # 実物では `len(games)` と一致するが(25 = 25 を実測)、**宣言されている数はこちら**。
+    games = CA.load_json(args.patients[0][0])["summary"]["games"] if args.patients else 0
+    check_scope_and_mapping(personal, games, problems)
+    person = CA.load_json(args.patients[0][0]).get("person") if args.patients else None
+    check_name_agrees(personal, appendix, person, problems)
     check_bundled_index(index, source_indexes, problems)
 
     if problems:

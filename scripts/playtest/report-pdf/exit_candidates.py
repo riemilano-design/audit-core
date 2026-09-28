@@ -17,7 +17,7 @@
 #
 # 【新しい判定・新しい文言を作らない】
 # - 節の見出し: `check_structure.py` の `SECTIONS`(門と同じ定数)
-# - 商品の範囲の 1 段落: `check_structure.SCOPE_SENTENCE`(ちょうど 1 か所)
+# - 商品の範囲の 1 段落: `check_structure.scope_sentence(局数)`(ちょうど 1 か所。**局数は型に入れる** ― D1)
 # - 数え方の固定文: `exit_index.COUNTING_NOTES`(`render_front.py` から移した 1 か所)
 # - 行動が minN を通ったか: `check_answer.py` の `MENU_HOLDS`・`MENU_DENOMINATOR`・`menu_verify_gate_holds`
 #   (検査 4・5 と**同じ判定**。二重に作らない)
@@ -209,8 +209,16 @@ def board_marks(direct):
 # **言い回しの型の数(「型が N 通りあります」)は入れない** ― それは材料の作りの話で、
 # この人の対局について言える数ではない。書き手が使ったら門で落ちる(それが正しい)。
 def p1_numbers(patient, repro):
-    out = [{"number": len(patient["games"]), "unit": "局",
-            "from": "patient_report_data.json の games(この報告が見た対局の全部)"}]
+    # **本編の形の数**(事実の本数)。実物は「数は 3 つ。」と**冊子が自分の形を言う** ―
+    # 3 人目の試作の「ひとことで」の 1 文にこの言い方が在る(実測 2026-09-29)。
+    # **対局の事実ではないが、書き手が書く数である。**
+    # 候補に入れない作りにしたら、**実物と同じ言い方をした書き手が門で止まった**(実測 2026-09-29)。
+    # なお `check_answer.py` の検査 1 は 3 を無条件に許している(`allowedNumbers` に {1,2,3,4,5,…})ので、
+    # **ここで許しても検査 1 より緩くはならない。**
+    out = [{"number": CS.HONBUN_P1_FACT_COUNT, "unit": "本",
+            "from": "本編の形(正本 §1: 「ひとことで」の事実は 3 本)"}]
+    out.append({"number": patient["summary"]["games"], "unit": "局",
+                "from": "patient_report_data.json の summary.games(この報告が見た対局の数)"})
     out.append({"number": repro["totalPositions"], "unit": "局面",
                 "from": "direct_answers.json の answers(再現の表の分母)"})
     out.append({"number": repro["totalGames"], "unit": "局",
@@ -251,8 +259,8 @@ def denominators(direct, patient, repro):
          "from": "direct_answers.json の answers(長く読まなくても実戦の手と第 1 候補の差が見えた分かれ道)"},
         {"number": repro["totalGames"], "unit": "局",
          "from": "direct_answers.json の answers に出てくる局の数(重複を除いたもの)"},
-        {"number": len(patient["games"]), "unit": "局",
-         "from": "patient_report_data.json の games(この報告が見た対局の全部)"},
+        {"number": patient["summary"]["games"], "unit": "局",
+         "from": "patient_report_data.json の summary.games(この報告が見た対局の数)"},
     ]
     return out
 
@@ -270,12 +278,24 @@ def heading_of(role, **numbers):
     return f"{head} {numbers['games']} 局で、何で{contains}をするか"
 
 
-def build_md(direct, patient, repro, passed, dropped, mapping, denoms, fdata):
-    games = len(patient["games"])
+def rest_games(patient, featured):
+    """「そのほかの局」の数。**引き算そのものは `exit_index.rest_count` が正本**(2026-09-29)。
+
+    以前はここ・`exit_cover.numbers_of`・`_mid.py` の 3 か所が同じ引き算を持っていた。
+    **独立監査が「ここだけ変えても試験が 1 本も落ちない」を実測した**ので、`exit_index` に 1 本にした。
+    """
+    return EI.rest_count(patient["summary"]["games"], featured)
+
+
+def build_md(direct, patient, repro, passed, dropped, mapping, denoms, fdata, featured=0):
+    # **局数は `summary.games`**(`exit_cover.numbers_of`・`check_structure` と同じ出どころ)。
+    # `len(patient["games"])` でも同じ数だが(25 = 25 を実測 2026-09-29)、
+    # **出どころを 2 つ持つと、片方の材料が欠けたときに数が黙って変わる。**
+    games = patient["summary"]["games"]
     L = []
     L.append(f"# {games} 局で起きていたこと")
     L.append("")
-    L.append(CS.SCOPE_SENTENCE)
+    L.append(CS.scope_sentence(games))
     L.append("")
 
     # ---- (a) ひとことで ----
@@ -381,7 +401,8 @@ def build_md(direct, patient, repro, passed, dropped, mapping, denoms, fdata):
     L.append("")
     for appendix in EI.COVER_SECTIONS:
         for name in EI.COVER_SECTIONS[appendix]:
-            title = EI.section_title(appendix, name, games=games)
+            title = EI.section_title(appendix, name, games=games,
+                                     rest=rest_games(patient, featured))
             L.append(f"- {title}<!-- sec: {appendix}/{name} -->")
     L.append("")
     L.append("### 数の分母がどこから来たか")
@@ -427,6 +448,21 @@ def parse_own_args(argv):
 
 
 def build(own, rest):
+    # **既に在る md を上書きしない。**この md は**書き手(人)が書き換える場所**であり、
+    # 上書きは**人の仕事を消す**ことになる。
+    #
+    # 【実際に消した(2026-09-29)】候補の JSON だけを作り直したくて JSON を消して段を回したら、
+    # 段の「済みの判定」が `md と JSON の両方が在る` だったため段が走り、**書き手が書いた 92 行の md が
+    # 240 行の素の下書きに戻った。**git の追跡外なので戻せなかった。
+    # **「片方を消せばもう片方も作り直される」形になっていた。**
+    #
+    # 番人を道具の側に置くのは、**段の判定を直すだけでは手で呼んだときに消せる**ため。
+    # 作り直したいときは、**呼ぶ側が md を先にどかす**(何を捨てるかを人が決める)。
+    if os.path.exists(own["out_md"]):
+        raise ExitCandidatesError(
+            f"本編の md が既にある: {own['out_md']}\n"
+            "この md は書き手が書き換える場所なので上書きしない。"
+            "作り直すなら、先に別の名前へ移してから呼ぶこと(消すかどうかは人が決める)。")
     # `check_answer.parse_args` は md のパスを 1 つ要求する(B の文を検査する道具なので)。
     # **この段には入力の md が無い** ― これから書く側だから。`build_materials` は `markdown_path` を
     # 一度も読まないことを確かめたうえで、**これから書く md のパスを渡す**(別の値を作らない)。
@@ -450,7 +486,9 @@ def build(own, rest):
     passed, dropped = menu_rows(ctx)
     mapping = mapping_rows(patient, own["kifu_dir"])
     denoms = denominators(direct, patient, repro)
-    md = build_md(direct, patient, repro, passed, dropped, mapping, denoms, fdata)
+    # `featured` = 1 局ずつ見た局(`prose.json` の件数)。**「そのほかの局」の題に要る。**
+    featured = len(CA.load_json(args.prose_paths[0])) if args.prose_paths else 0
+    md = build_md(direct, patient, repro, passed, dropped, mapping, denoms, fdata, featured)
 
     with open(own["out_md"], "w", encoding="utf-8") as f:
         f.write(md + "\n")

@@ -17,7 +17,7 @@
 #   別に数えると「門が数える数」と「検査 1 が見る数」が食い違う(`Board` が 4 実装に
 #   散った P-111 と同じ病気)。2026-09-29 にあちらから切り出した。
 # - 節の見分け: `check_structure.heading_matches()`(`SECTIONS` の表が正本)
-# - 本数: `check_structure.HONBUN_P1_NUMBER_COUNT`・`BOARD_COUNT`(正本 §1)
+# - 本数: `check_structure.HONBUN_P1_FACT_COUNT`・`BOARD_COUNT`(正本 §1)
 # - 印の文法: `check_answer.POS_TAG_RE`・`MENU_TAG_RE`
 # - 文の検査: `check_answer.check_answer()` をそのまま呼ぶ(禁止語・数・指し手の照合)
 # - 下書きだけの見出し・書き手への注: `exit_candidates.DRAFT_ONLY_HEADINGS`・`NOTE_PREFIX`
@@ -153,15 +153,31 @@ def check_todo(raw_md, problems):
 
 
 def check_p1(sections, cands, problems):
-    """(ii) P1 の数がちょうど 3 つ・全部が候補に在るか。"""
+    """(ii) P1 が**事実ちょうど 3 本**で、**節の中の数が全部候補に在る**か。
+
+    【なぜ「事実の本数」で数えるか】最初は「異なる値でちょうど 3 つ」にしたが、
+    **書き手がそれでは書けなかった**(2026-09-29)。人間の線「局数で数える・**分母を付ける**」と
+    両立しない ― 「18 局のうち 6 局」だけで既に 2 値になり、3 本目の事実が書けない。
+    分母を落とせば、封をした読みが弱点に挙げた「分母の無い見出し」を作り直すことになる。
+    **実物 2 件(3 人目の試作・4 人目の本人用 p1)は、どちらも「事実 3 本」で値は 10 個以上**だった。
+    本数は `check_structure.HONBUN_P1_FACT_COUNT` が正本。
+
+    【「箇条書き以外の行の数は箇条書きの部分集合」は入れない】司令塔の提案に入っていたが、
+    **その根拠として引かれた実物そのものが落ちる** ― 3 人目の 1 文は「2 局ありました」「97 / 236」を
+    使っており、どれも箇条書きに出ていない(実測 2026-09-29)。
+    **守りたい 2 つ(候補に無い数・事実が足りない)は、下の 2 つの検査でどちらも捕まる。**
+    """
     lines = section_lines(sections, "ひとことで")
     if lines is None:
         problems.append("(ii) 「ひとことで」の節が無い")
         return
+    # **事実 = 箇条書きの行**(`- `)。表の行・1 文の解説・空行は事実として数えない。
+    facts = [line for line in lines if line.lstrip().startswith("- ")]
+    want = CS.HONBUN_P1_FACT_COUNT
+    if len(facts) != want:
+        problems.append(f"(ii) 「ひとことで」の事実(箇条書き)が {len(facts)} 本(ちょうど {want} 本にする)")
+    # **節の中のすべての数**を照合する(箇条書きでも 1 文でも。分数は左右とも)。
     claims = number_claims(lines)
-    want = CS.HONBUN_P1_NUMBER_COUNT
-    if len(claims) != want:
-        problems.append(f"(ii) 「ひとことで」の数が {len(claims)} 個(ちょうど {want} 個にする): {claims}")
     allowed = {int(x["number"]) for x in cands.get("p1Numbers") or []}
     if not allowed:
         problems.append("(ii) 候補の JSON に p1Numbers が無い(候補の段を回し直す)")

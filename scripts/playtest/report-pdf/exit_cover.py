@@ -80,8 +80,12 @@ def load(path):
 
 
 def bundled_appendices(source_paths):
-    """束ねる付録を、組版の索引そのものから決める(引数で二重に指定させない)。"""
-    names = []
+    """束ねる付録と、その索引を、組版の索引そのものから決める(引数で二重に指定させない)。
+
+    返り値 = `(付録名の一覧〈順序つき〉, {付録名: 索引})`。
+    索引も返すのは、**局面の印がどの節に属するかを索引から決める**ため(D2)。
+    """
+    names, indexes = [], {}
     for path in source_paths:
         idx = load(path)
         name = idx.get("appendix")
@@ -92,7 +96,26 @@ def bundled_appendices(source_paths):
         if name in names:
             raise ExitCoverError(f"同じ付録の索引が 2 回渡された: {name}")
         names.append(name)
-    return names
+        indexes[name] = idx
+    return names, indexes
+
+
+def section_of_position(index, group, key):
+    """その局面が**どの節のページに在るか**を、組版の索引だけから決める(D2)。
+
+    節の開始ページ以下で**最も後ろの節**を返す(流し込みなので、節はページの途中から始まる)。
+    **PDF の文字は見ない** ― 索引が正本(`exit_render.py` と同じ流儀)。
+    引けなければ `None`(黙って別の節に混ぜない)。
+    """
+    positions = index.get("positions") or {}
+    page = positions.get(group, {}).get(key) if group else positions.get(key)
+    if page is None:
+        return None
+    best = None
+    for name, start in (index.get("sections") or {}).items():
+        if start <= page and (best is None or start > best[1]):
+            best = (name, start)
+    return best[0] if best else None
 
 
 def numbers_of(args):
@@ -106,17 +129,30 @@ def numbers_of(args):
         "games": int(patient["summary"]["games"]),
         "group": args["group"],
         "featured": len(load(args["prose"])),
+        # `rest` = 1 局ずつ見た局を除いた残り。**`_mid.py` の `len(rest)` と同じ数でなければならない。**
+        # **引き算は `exit_index.rest_count` の 1 本だけ**(2026-09-29。以前は 3 か所が同じ形を持ち、
+        # `_mid.py` の `assert` は自分の一覧と自分の引き算しか比べていなかった ― 独立監査が実測)。
+        # ここで別に数えると、**表紙の題と付録の中の題が食い違う**(顧客がページを探せない)。
+        "rest": EI.rest_count(patient["summary"]["games"], len(load(args["prose"]))),
         "finals": len(finals.get("entries", [])),
         "forks": len(direct.get("answers", [])),
     }
 
 
-def honbun_refs(md_text):
+def honbun_refs(md_text, indexes):
     """本編の印を、**それが書かれた本編の見出しの下**に割り当てる(「本編との対応」の列)。
 
     **実物の対応の列より粗い。**実物は「「ひとことで」の 3 つ目(崩れ)」のように
     節の中の順番や仮説番号まで書いているが、**それは印からは機械で出せない**
     (印は付録と節を指すだけ)。出せないものを作らず、**指している本編の見出しだけ**を出す。
+
+    **2 種類の印を両方読む**(2026-09-29。司令塔の ⑥ が実物で見つけた D2):
+    - **節の印**(`<!-- sec: 付録N/節 -->`)― その節への参照
+    - **局面の印**(`<!-- pos: 局/手 付録N [組] -->`)― **その局面が在る節**への参照。
+      どの節かは `section_of_position` が組版の索引から決める
+
+    局面の印を読まないと、**節の印を置いた 1 か所の見出しが 3 行とも並ぶ**(実物で出た) ―
+    顧客は「どの節から引ける付録か」が分からない。盤を載せた「局面で見る」が出るのが正しい。
     """
     refs = {}
     heading = None
@@ -125,41 +161,71 @@ def honbun_refs(md_text):
         if stripped.startswith("#"):
             heading = stripped.lstrip("#").strip()
             continue
-        for appendix, name in ER.SEC_TAG_RE.findall(line):
+
+        def add(appendix, name):
             refs.setdefault((appendix, name), [])
             if heading and heading not in refs[(appendix, name)]:
                 refs[(appendix, name)].append(heading)
+
+        for appendix, name in ER.SEC_TAG_RE.findall(line):
+            add(appendix, name)
+        for m in CA.POS_TAG_RE.finditer(line):
+            inner = CA.POS_INNER_RE.match(m.group(1))
+            if inner is None:
+                raise ExitCoverError(f"局面の印の形が崩れている: {m.group(1)}")
+            appendix = f"付録{int(inner.group(3))}"
+            index = indexes.get(appendix)
+            if index is None:
+                continue  # その付録を束ねていない(束ねの側が落とす)
+            group = (inner.group(4) or "").strip() or None
+            name = section_of_position(index, group, EI.pos_key(int(inner.group(1)), int(inner.group(2))))
+            if name is not None and name in EI.COVER_SECTIONS.get(appendix, ()):
+                add(appendix, name)
     return refs
 
 
 def build_rows(appendices, numbers, refs, problems):
+    """表紙の表の行。**本編が指した節だけ**を載せる。
+
+    【なぜ「指していない節は載せない」か】束ねた付録に入るのは**本編が指すページだけ**である
+    (`exit_render.py`)。指していない節のページはそもそも冊子に無いので、
+    **表に載せれば顧客は在りもしないページを案内される。**
+    はじめは「指していないなら落とす」にしていたが、**それでは書き手が節を 1 つ使わなかっただけで
+    工程が止まる**(実測 2026-09-29: 書き手が「最後の局面」〈標本 1 局〉を使わないことにして止まった)。
+    **使う節の数を書き手が決められること**が正しい ― 表はそれに合わせて 2 行になる。
+
+    【それでも落とす場合】**索引を渡した付録が 1 行も持たないとき。**
+    その付録は束ねられないのに `--source-index` で渡されている = 呼ぶ側の引数が食い違っている。
+    """
     rows = []
     n = 0
     for appendix in appendices:
+        before = n
         for name in EI.COVER_SECTIONS[appendix]:
+            where = refs.get((appendix, name))
+            if not where:
+                continue  # 本編が指していない節 ― 束ねた付録にそのページは無い
             n += 1
             title = EI.section_title(appendix, name, **numbers)
             content = EI.COVER_CONTENT[(appendix, name)].format(**numbers)
-            where = refs.get((appendix, name))
-            if not where:
-                # **黙って空欄にしない。**本編が指していない節を表紙に載せると、
-                # 顧客は本編から辿れないページを案内される。
-                problems.append(f"表紙: 本編が指していない節を表に載せようとした: {appendix}/{name}")
-                where = []
             rows.append({"no": n, "appendix": appendix, "section": name, "title": f"{n}. {title}",
                          "content": content,
                          "ref": "・".join(f"「{h}」" for h in where)})
+        if n == before:
+            problems.append(
+                f"表紙: {appendix} の索引を渡されたが、本編がこの付録の節を 1 つも指していない"
+                "(束ねられない付録の索引が渡されている)")
     return rows
 
 
 def build_md(args):
     problems = []
-    appendices = bundled_appendices(args["sources"])
+    appendices, indexes = bundled_appendices(args["sources"])
     numbers = numbers_of(args)
     with open(args["honbun_md"], encoding="utf-8") as f:
         md_text = f.read()
     # **開発用の節の印は読まない** ― `exit_render.py` と同じ扱い(`check_answer` の関数をそのまま呼ぶ)。
-    refs = honbun_refs(CA.strip_dev_section(md_text))
+    refs = honbun_refs(CA.strip_dev_section(md_text), indexes)
     rows = build_rows(appendices, numbers, refs, problems)
     if problems:
         raise ExitCoverError("\n".join(problems))

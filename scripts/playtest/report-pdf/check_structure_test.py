@@ -96,6 +96,11 @@ SOURCE_INDEX_3 = {"appendix": "付録3", "source": "appendix3.pdf", "pages": 9,
                   "positions": {"3 分": {"5/59": 8}},
                   "sections": {"分かれ道": 6}}
 
+# 土台の 3 分の組の局数(`build_base` が書く `patient_min3.json`)。
+# 商品の範囲の 1 段落は**この局数で作られる**(D1。`CS.scope_sentence`)。
+BASE_GAMES = 20
+
+
 def patient(games, time_up_losses):
     return {
         "summary": {"games": games},
@@ -150,7 +155,7 @@ def build_base(out_dir):
     # 付録 1 の材料(`<!-- pos: -->` が指す局面が実在すること)。
     write_json(j("prose.json"), {"1": {"scenes": [{"type": "move", "ply": 40, "text": "x"}]},
                                  "2": {"scenes": [{"type": "still", "ply": 70, "text": "y"}]}})
-    write_json(j("patient_min3.json"), patient(20, [{"finalScore": 400}, {"finalScore": 500}, {"finalScore": 600}]))
+    write_json(j("patient_min3.json"), patient(BASE_GAMES, [{"finalScore": 400}, {"finalScore": 500}, {"finalScore": 600}]))
     write_json(j("patient_min10.json"), patient(1, []))
     write_json(j("answer_menu.json"), MENU)
     # 束ねた索引。**`positions`(上の階層)は束ねた後のページ**で `exit-render` が新しく書く値。
@@ -531,8 +536,9 @@ class CheckStructureTest(unittest.TestCase):
     # この試験と test_00 の両方が落ちる。
     def test_13_scope_survives_line_wrap(self):
         joined = "".join(CS.page_texts(os.path.join(self.dir, "honbun_personal.pdf")))
-        self.assertNotIn(CS.SCOPE_SENTENCE, joined, "土台の PDF は折り返されていなければ意味が無い")
-        self.assertIn(CS.squeeze(CS.SCOPE_SENTENCE), CS.squeeze(joined))
+        sentence = CS.scope_sentence(BASE_GAMES)
+        self.assertNotIn(sentence, joined, "土台の PDF は折り返されていなければ意味が無い")
+        self.assertIn(CS.squeeze(sentence), CS.squeeze(joined))
 
 
 class MappingPagesTest(unittest.TestCase):
@@ -616,6 +622,77 @@ class MappingPagesTest(unittest.TestCase):
         rc, out = self.run_gate()
         self.assertEqual(rc, 1)
         self.assertIn("索引が指す 1 ページに対応表の節が無い", out)
+
+
+class ScopeSentenceTest(unittest.TestCase):
+    """**商品の範囲の 1 段落は局数で変わる**(D1。2026-09-29)。"""
+
+    def test_s1_the_sentence_carries_the_game_count(self):
+        """局数を変えれば文も変わる。
+
+        **土台の局数(20)以外で測る。**土台だけで測っていたら、
+        **「いつでも 20 で作る」変異が緑のまま通った**(校正で実測)。
+        """
+        self.assertIn("次の 25 局で確かめる", CS.scope_sentence(25))
+        self.assertIn("次の 7 局で確かめる", CS.scope_sentence(7))
+        self.assertNotEqual(CS.scope_sentence(25), CS.scope_sentence(20))
+
+    def test_s2_the_check_uses_the_given_count(self):
+        """門は**渡された局数で作った文**を探す(違う局数の文は 0 か所になる)。"""
+        personal = [CS.scope_sentence(25)]
+        problems = []
+        CS.check_scope_and_mapping(personal, 25, problems)
+        self.assertEqual(problems, [])
+        problems = []
+        CS.check_scope_and_mapping(personal, 20, problems)
+        self.assertEqual(len(problems), 1, problems)
+        self.assertIn("20 局", problems[0])
+
+
+class NameAgreesTest(unittest.TestCase):
+    """**本編と付録で名前が同じ**(D5。2026-09-29)。
+
+    見本用は本人用からページを抜いたもので名前を分けられず、付録は 1 冊で両方に付く ―
+    **付録に実名が乗れば見本用の一式に乗る。**実物で出た(付録 p4「上に行くほど〈実名〉が良く」)。
+    """
+
+    def test_n1_a_name_only_in_the_appendix_falls(self):
+        problems = []
+        CS.check_name_agrees(["本編は〇〇さんの話"], ["付録は ぷる の話"], "ぷる", problems)
+        self.assertEqual(len(problems), 1, problems)
+        self.assertIn("ぷる", problems[0])
+
+    def test_n2_the_same_name_in_both_passes(self):
+        """**実名そのものを禁じない** ― 本人用に本人の名前を出すのは正しい。"""
+        problems = []
+        CS.check_name_agrees(["本編は ぷる の話"], ["付録も ぷる の話"], "ぷる", problems)
+        self.assertEqual(problems, [])
+
+    def test_n3_a_name_in_neither_passes(self):
+        problems = []
+        CS.check_name_agrees(["本編は〇〇さん"], ["付録も〇〇さん"], "ぷる", problems)
+        self.assertEqual(problems, [])
+
+    def test_n4_line_wrap_does_not_hide_the_name(self):
+        """折り返しを越えて探す(`squeeze`。門の他の検査と同じ流儀)。"""
+        problems = []
+        CS.check_name_agrees(["本編は〇〇さん"], ["上に行くほど ぷ\nる が良く"], "ぷる", problems)
+        self.assertEqual(len(problems), 1, problems)
+
+    def test_n5_the_appendix_render_can_be_told_the_name(self):
+        """**付録 1 の組版が表示名を受け取れること。**
+
+        受け取れなければ、門が落としたまま**直せない**(門が仕事を止める)。
+        `_mid.py` は `build.sh` の断片で import できないので、**中身を読んで確かめる**。
+        校正で黙ったので足した(2026-09-29)。
+        """
+        here = os.path.dirname(os.path.abspath(__file__))
+        with io.open(os.path.join(here, "_mid.py"), encoding="utf-8") as f:
+            src = f.read()
+        self.assertIn("REPORT_DISPLAY_NAME", src,
+                      "付録 1 の組版が表示名を受け取れない(本編と名前を揃えられない)")
+        # 既定は材料の `person`(渡さなければ出力は変わらない)。
+        self.assertIn('or m["person"]', src)
 
 
 class HeadingMatchesTest(unittest.TestCase):

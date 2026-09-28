@@ -58,6 +58,12 @@ class CoverTestBase(unittest.TestCase):
                   {"appendix": name, "source": f"{name}.pdf", "pages": 3,
                    "positions": {}, "sections": {}})
 
+    def index_with_pages(self, appendix, positions, sections, pages=9):
+        """組版の索引に節と局面のページを入れる(D2 の逆引きを測るため)。"""
+        write(f"{self.d}/idx_{appendix}.json",
+              {"appendix": appendix, "source": f"{appendix}.pdf", "pages": pages,
+               "positions": positions, "sections": sections})
+
     def honbun(self, body=None):
         text = body if body is not None else (
             "# 20 局で起きていたこと\n\n"
@@ -109,9 +115,33 @@ class ShapeTest(CoverTestBase):
         self.material(games=7, featured=2, finals=4, forks=11)
         text, _ = self.build()
         self.assertIn("7 局の形勢の流れ", text)
-        self.assertIn("形勢が大きく動いた 2 局", text)
         self.assertIn("持ち時間に到達した 4 局", text)
         self.assertIn("差が見えた 11 局面", text)
+        # 「形勢が大きく動いた M 局を 1 局ずつ」は**「そのほかの局」の行**に移った
+        # (2026-09-29。司令塔の判断 (a)。下の test_03b が本編から指した場合を測る)。
+        self.assertNotIn("形勢が大きく動いた", text)
+
+    def test_03b_the_other_games_row_carries_the_split_half(self):
+        """**中身は節ごと**(4 人目の固定文を「と、」で割った片方が「そのほかの局」の行に出る)。
+
+        割った理由(2026-09-29。司令塔の判断 (a)): 表の行が節ごとになったのに中身が 2 つの節の話を
+        していて、**束ねた付録 1 が折れ線 1 ページだけのとき、束ねていない中身を言っていた**(実物で出た)。
+        題の数(`rest`)は `games - featured` で出す ― **`_mid.py` 側に「この引き算と一致すること」の
+        検査を置いてある**(食い違えば組版が落ちる)。
+        """
+        self.material(games=7, featured=2, finals=4, forks=11)
+        honbun = self.honbun(
+            "## ひとことで\n\n数<!-- sec: 付録1/形勢の流れ -->\n"
+            "残り<!-- sec: 付録1/そのほかの局 -->\n\n"
+            "## 局面で見る\n\n盤<!-- sec: 付録3/分かれ道 -->\n")
+        text, rows = self.build(honbun=honbun)
+        self.assertEqual([(r["appendix"], r["section"]) for r in rows],
+                         [("付録1", "形勢の流れ"), ("付録1", "そのほかの局"), ("付録3", "分かれ道")])
+        self.assertIn("2. そのほかの 5 局", text)           # 7 - 2
+        self.assertIn("形勢が大きく動いた 2 局を 1 局ずつ", text)
+        # 「形勢の流れ」の行は**束ねた範囲だけ**を言う。
+        flow = next(r for r in rows if r["section"] == "形勢の流れ")
+        self.assertEqual(flow["content"], "3 分切れ負け 7 局の形勢の流れ")
 
     def test_04_the_customer_name_is_not_printed(self):
         """表紙に顧客の名前を入れない(3 人目の実物は入っていた ― 廃止済み)。"""
@@ -139,27 +169,49 @@ class ShapeTest(CoverTestBase):
 
 
 class MutationTest(CoverTestBase):
-    def test_08_section_not_pointed_at_by_honbun_is_an_error(self):
-        """本編が指していない節を表に載せない(顧客が本編から辿れないページを案内される)。"""
+    def test_08_an_appendix_with_no_reference_at_all_is_an_error(self):
+        """**索引を渡した付録が 1 行も持たないなら落ちる**(束ねられない付録の索引が渡されている)。
+
+        2026-09-29 に契約を変えた: **指していない「節」は落とすのではなく載せない** ―
+        束ねた付録に入るのは本編が指すページだけで、載せれば顧客は在りもしないページを案内される。
+        書き手が節を 1 つ使わないだけで工程が止まるのは道具の不具合だった
+        (実測: 書き手が「最後の局面」〈標本 1 局〉を使わないことにして止まった)。
+        **付録ごと 1 行も無いのは引数の食い違い**なので、そちらは落とす。
+        """
         honbun = self.honbun("## ひとことで\n\n数を並べます。<!-- sec: 付録1/形勢の流れ -->\n")
         with self.assertRaises(EC.ExitCoverError) as e:
             self.build(honbun=honbun)
-        self.assertIn("本編が指していない節", str(e.exception))
+        self.assertIn("付録3", str(e.exception))
+        self.assertIn("1 つも指していない", str(e.exception))
+
+    def test_08b_a_section_the_honbun_skips_is_simply_not_listed(self):
+        """**使わなかった節は表に出ない**(行数は書き手が決める)。"""
+        honbun = self.honbun(
+            "## ひとことで\n\n数を並べます。<!-- sec: 付録1/形勢の流れ -->\n\n"
+            "## 局面で見る\n\n盤<!-- sec: 付録3/分かれ道 -->\n")
+        text, rows = self.build(honbun=honbun)
+        self.assertEqual([(r["appendix"], r["section"]) for r in rows],
+                         [("付録1", "形勢の流れ"), ("付録3", "分かれ道")])
+        # 番号は詰まる(1. 2. で、3. は無い)。
+        self.assertIn("1. 25 局の形勢の流れ", text)
+        self.assertIn("2. 浅い読みで見えた分かれ道", text)
+        self.assertNotIn("最後の局面", text)
 
     def test_09_dev_section_marks_are_ignored(self):
         """**「書いた側の記録」の節の印は読まない**(`exit_render.py` と同じ扱い)。
 
-        dev 節の中だけで指された節は「本編が指していない」として落ちる。
-        **静かに skip する枝は置かない** ― `check_answer` の関数が無くなったら赤で気づく。
+        dev 節の中だけで指された節は**表に出ない**。
+        (2026-09-29 に「落ちる」から「出ない」へ ― 契約が変わったので、**出力で測る**。)
         """
         honbun = self.honbun(
             "## ひとことで\n\n数を並べます。<!-- sec: 付録1/形勢の流れ -->\n"
             "<!-- sec: 付録3/最後の局面 -->\n\n"
             "## 書いた側の記録(顧客には見せない)\n\n"
             "<!-- sec: 付録3/分かれ道 -->\n")
-        with self.assertRaises(EC.ExitCoverError) as e:
-            self.build(honbun=honbun)
-        self.assertIn("付録3/分かれ道", str(e.exception))
+        text, rows = self.build(honbun=honbun)
+        self.assertEqual([(r["appendix"], r["section"]) for r in rows],
+                         [("付録1", "形勢の流れ"), ("付録3", "最後の局面")])
+        self.assertNotIn("分かれ道", text)
 
     def test_09b_the_dev_section_marker_is_the_one_check_answer_uses(self):
         """dev 節の印を**写していない**ことを確かめる(`check_answer` の正規表現で照合)。"""
@@ -302,6 +354,79 @@ class CheckAnswerTest(CoverTestBase):
         text, _ = self.build()
         for word in ("べき", "間違い", "正しい手", "良い手", "悪い"):
             self.assertNotIn(word, text, f"表紙に断定の語: {word}")
+
+
+class PositionMarkRefTest(CoverTestBase):
+    """**局面の印からの逆引き**(2026-09-29。司令塔の ⑥ が実物で見つけた D2)。
+
+    局面の印を読まないと、**節の印を置いた 1 か所の見出しが 3 行とも並ぶ** ―
+    実物で「本編との対応」列が 3 行とも「数の出どころを引ける付録」になった。
+    顧客は「どの節から引ける付録か」が分からない。
+    """
+
+    def setUp(self):
+        super().setUp()
+        # 付録 3: 最後の局面 = p2 から、分かれ道 = p4 から。局面 16/93 は p5(= 分かれ道の中)。
+        self.index_with_pages("付録3",
+                              {"3 分": {"16/93": 5, "1/20": 3}},
+                              {"最後の局面": 2, "分かれ道": 4})
+
+    def honbun_with_pos(self):
+        return self.honbun(
+            "# 25 局で起きていたこと\n\n"
+            "## ひとことで\n\n"
+            "数を並べます。<!-- sec: 付録1/形勢の流れ -->\n\n"
+            "## 局面で見る\n\n"
+            "この局面です<!-- pos: 16/93 付録3 3 分 -->\n\n"
+            "## 数え方\n\n"
+            "付録で引けます。<!-- sec: 付録3/最後の局面 -->\n")
+
+    def test_p0_a_position_mark_counts_as_a_reference_to_its_section(self):
+        """**局面が在る節**への参照として数える(どの節かは索引から決める)。"""
+        text, rows = self.build(honbun=self.honbun_with_pos())
+        by = {(r["appendix"], r["section"]): r["ref"] for r in rows}
+        # 16/93 は p5 = 分かれ道(p4 から)の中。**本編の「局面で見る」から引ける**。
+        self.assertEqual(by[("付録3", "分かれ道")], "「局面で見る」")
+        # 節の印は書かれた見出しのまま。
+        self.assertEqual(by[("付録3", "最後の局面")], "「数え方」")
+        self.assertEqual(by[("付録1", "形勢の流れ")], "「ひとことで」")
+
+    def test_p1_the_section_is_chosen_by_page_not_by_order(self):
+        """節は**ページで決める**(索引の辞書の並び順ではない)。
+
+        1/20 は p3 = 最後の局面(p2 から)の中で、分かれ道(p4)より前。
+        """
+        self.assertEqual(EC.section_of_position(
+            {"positions": {"3 分": {"1/20": 3}}, "sections": {"最後の局面": 2, "分かれ道": 4}},
+            "3 分", "1/20"), "最後の局面")
+        self.assertEqual(EC.section_of_position(
+            {"positions": {"3 分": {"16/93": 5}}, "sections": {"最後の局面": 2, "分かれ道": 4}},
+            "3 分", "16/93"), "分かれ道")
+
+    def test_p2_an_unknown_position_is_not_guessed(self):
+        """索引に無い局面は**黙って別の節に混ぜない**(None を返す)。
+
+        **1 ページ目から始まる節がある索引で測る。**最初は `sections` が `{"分かれ道": 4}` だけの
+        索引で測っていたが、**「引けなければ 1 ページ目とみなす」変異でも None のまま**だった
+        (4 ページ目より前に節が無いため)。**校正で黙ったので、1 ページ目の節を置いて測る。**
+        """
+        index = {"positions": {"3 分": {"1/20": 3}}, "sections": {"読み方": 1, "分かれ道": 4}}
+        self.assertIsNone(EC.section_of_position(index, "3 分", "99/1"))
+        # 在る局面はちゃんと引ける(上の None が「何も引けない」ではないことの対照)。
+        self.assertEqual(EC.section_of_position(index, "3 分", "1/20"), "読み方")
+        # 節が 1 つも無ければ決められない。
+        self.assertIsNone(EC.section_of_position(
+            {"positions": {"3 分": {"1/20": 3}}, "sections": {}}, "3 分", "1/20"))
+
+    def test_p3_a_position_pointing_at_an_unbundled_appendix_is_skipped(self):
+        """束ねていない付録の局面の印は無視する(落とすのは束ねの側の仕事)。"""
+        refs = EC.honbun_refs("## 局面で見る\n\n盤<!-- pos: 5/59 付録4 3 分 -->\n", {})
+        self.assertEqual(refs, {})
+
+    def test_p4_a_broken_position_mark_falls(self):
+        """印の形が崩れていれば落ちる(黙って飛ばさない)。"""
+        with self.assertRaises(EC.ExitCoverError):
+            EC.honbun_refs("## 局面で見る\n\n盤<!-- pos: こわれた -->\n", {})
 
 
 if __name__ == "__main__":

@@ -117,6 +117,15 @@ def marks_of(md_text):
     return marks
 
 
+def appendix_number(appendix):
+    """`付録3` → 3。**並べる順を決めるためだけ**に使う(名前の付け方に依存させない ―
+    知らない形なら落ちる。`exit_index.APPENDIX_SECTIONS` の鍵はこの形で書かれている)。"""
+    m = re.fullmatch(r"付録(\d+)", appendix)
+    if m is None:
+        raise ExitRenderError(f"付録の名前から番号が取れない: {appendix}(`付録N` の形で書く)")
+    return int(m.group(1))
+
+
 def source_page_of(sources, appendix, kind, key):
     """組版の索引から、元の付録の中のページを引く(**索引だけで決める。PDF の文字は見ない**)。"""
     src = sources.get(appendix)
@@ -160,11 +169,22 @@ def build(args):
         writer.add_page(readers[cover_path].pages[cover_page - 1])
         has_cover = True
 
-    # **本編が指す順に、重複を除いて並べる**(同じページを 2 回指しても 1 枚だけ入れる)。
+    # **付録番号 → 元のページ番号**の順に並べる(重複は除く。同じページを 2 回指しても 1 枚)。
+    #
+    # **「印の出た順」ではない**(2026-09-29 の直し。司令塔の ⑥ が実物で見つけた D7):
+    # 本編が「局面で見る」で付録 3 を指し、あとの節で付録 1 を指すと、
+    # **束ねた付録が 分かれ道 → 形勢の流れ → 最後の局面 の順**になり、
+    # **表紙の表の順(付録 1 → 付録 3)と食い違った。**顧客は表紙の順でページを探す。
+    # 実物(4 人目)は**付録番号順**(付録 1 → 3 → 4)である。
+    # 並べ替えるのは**ページの順だけ**で、どのページを入れるかは変わらない(本編が指すページだけ)。
+    def slot_key(mark):
+        appendix, kind, key, _label = mark
+        return (appendix_number(appendix), source_page_of(sources, appendix, kind, key))
+
     placed = {}          # (付録名, 元のページ) -> 出力のページ番号
     output_positions = {}  # 印の文字列 -> 出力のページ番号
-    source_pages = {}      # 付録名 -> 抜いた元のページの一覧(出た順)
-    for appendix, kind, key, label in marks:
+    source_pages = {}      # 付録名 -> 抜いた元のページの一覧(入れた順)
+    for appendix, kind, key, label in sorted(marks, key=slot_key):
         page = source_page_of(sources, appendix, kind, key)
         slot = (appendix, page)
         if slot not in placed:

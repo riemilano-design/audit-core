@@ -142,6 +142,11 @@ export const DELIVER_DIRECT_NAMES = {
   answerMenu: "answer_menu.json",
   // 段 `exit-candidates` が出す候補の一覧(段 `exit-gate` が照合に使う)。
   exitCandidates: "exit_candidates.json",
+  // 顧客に渡す 4 冊の封(`compare_render.py --seal`)。**段ではなく人が決めて回す** ―
+  // 封をするのは「この版を批評に出す」という判断であって、工程の 1 段ではない。
+  // 名前をここに書くのは、**`--out` の安全装置がこのファイルを「知らないファイル」として
+  // 納品を止めないため**(フォルダを直下に置いて止まった件と同じ型。2026-09-29)。
+  exitSeal: "exit_seal.json",
 } as const;
 
 /** B の下書きで「読み」を人が埋める場所の印(計画 §3 の 4)。`answer-gate` はこの印が残っていれば止まる。 */
@@ -171,6 +176,7 @@ export interface DeliverOutPaths {
   exitAppendix: string;
   exitIndex: string;
   exitCandidates: string;
+  exitSeal: string;
   /** 付録 3 の PDF の隣に `render_direct.py` が書く索引(段 `exit-render` の材料)。 */
   appendix3Index: string;
 }
@@ -201,6 +207,7 @@ export function deliverOutPaths(out: string): DeliverOutPaths {
     exitAppendix: path.join(out, DELIVER_OUT_NAMES.exitAppendix),
     exitIndex: path.join(out, DELIVER_OUT_NAMES.exitIndex),
     exitCandidates: path.join(directDir, DELIVER_DIRECT_NAMES.exitCandidates),
+    exitSeal: path.join(directDir, DELIVER_DIRECT_NAMES.exitSeal),
     appendix3Index: path.join(out, pageIndexNameOf(DELIVER_OUT_NAMES.appendix3)),
   };
 }
@@ -1149,7 +1156,12 @@ export function planDeliver(args: DeliverArgs, probe: DeliverProbe, cmdOf: (tool
 
   // ---- 顧客向け出口の 4 段(STEP CUSTOMER-EXIT)----
   // **既存の 6 冊は材料として残る。**ここで本編 1 冊 + 付録 1 冊(承認済みの 30 ページの形)に束ね直す。
-  const candidatesDone = probe.exists(out.honbunMd) && probe.exists(out.exitCandidates);
+  // **判定は本編の md だけを見る。**`&& probe.exists(out.exitCandidates)` を付けていたため、
+  // **候補の JSON を消しただけで段が走り、書き手が書いた md が素の下書きに戻った**
+  // (実測 2026-09-29。git の追跡外なので戻せなかった)。
+  // JSON が無いまま進んだ場合は**段 `exit-gate` が「候補の JSON に p1Numbers が無い」で止まる** ―
+  // **止まるのは良く、消すのは悪い。**
+  const candidatesDone = probe.exists(out.honbunMd);
   push({
     stage: "exit-candidates",
     tool: "exit-candidates",

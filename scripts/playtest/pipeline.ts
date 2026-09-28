@@ -95,8 +95,9 @@ function spawnProcess(cmd: string, args: readonly string[], cwd: string, env: No
  * S1〜S5 は `npx tsx <道具>.ts <引数>`(cwd はリポジトリの根)。
  * S7(report-pdf-*)は report-pdf/README.md の手順どおり(python の実行ファイルは README のとおり `python3`、cwd は report-pdf/):
  * - `report-pdf-build`(args 無し): `sh build.sh` で render_main.py・render_appendix.py を作る
- * - `report-pdf-render-main`(args = [REPORT_DATA_DIR, patient_report_data.json, 出力 PDF]):
- *   `REPORT_DATA_DIR=<args[0]> python3 -X utf8 render_main.py <args[1]> <args[2]>`
+ * - `report-pdf-render-main`(args = [REPORT_DATA_DIR, patient_report_data.json, 出力 PDF, 表示名(任意)]):
+ *   `REPORT_DATA_DIR=<args[0]> [REPORT_DISPLAY_NAME=<args[3]>] python3 -X utf8 render_main.py <args[1]> <args[2]>`
+ *   表示名は 2026-09-29 に足した(D5。**渡さなければ出力は変わらない**)
  * - `report-pdf-render-front`(STEP TIME 作業 2。args = [patient_report_data.json, 出力 PDF]。REPORT_DATA_DIR は渡さない ―
  *   `render_front.py` は sfens.json・prose.json を読まない): `python3 -X utf8 render_front.py <args[0]> <args[1]>`
  * - `report-pdf-check-fonts`(args = [PDF …]): `python3 -X utf8 check_fonts_embedded.py <args…>`
@@ -107,8 +108,16 @@ function spawnProcess(cmd: string, args: readonly string[], cwd: string, env: No
 function spawnTool(tool: ToolName, args: readonly string[]): Promise<ToolResult> {
   if (tool === "report-pdf-build") return spawnProcess("sh", ["build.sh"], REPORT_PDF_DIR);
   if (tool === "report-pdf-render-main") {
-    const [reportDataDir, patientPath, outPdfPath] = args;
-    return spawnProcess("python3", ["-X", "utf8", "render_main.py", patientPath!, outPdfPath!], REPORT_PDF_DIR, { ...process.env, REPORT_DATA_DIR: reportDataDir });
+    // `args[3]` は表示名(任意。2026-09-29 に足した ― D5)。**渡さなければ出力は変わらない**
+    // (`_mid.py` の既定は `patient_report_data.json` の `person`)。
+    // 位置引数ではなく環境変数で渡すのは `REPORT_DATA_DIR` と同じ流儀 ―
+    // `render_main.py` は `build.sh` が凍結した 3 断片を連結して作るもので、引数の形を変えない。
+    const [reportDataDir, patientPath, outPdfPath, displayName] = args;
+    return spawnProcess("python3", ["-X", "utf8", "render_main.py", patientPath!, outPdfPath!], REPORT_PDF_DIR, {
+      ...process.env,
+      REPORT_DATA_DIR: reportDataDir,
+      ...(displayName !== undefined ? { REPORT_DISPLAY_NAME: displayName } : {}),
+    });
   }
   if (tool === "report-pdf-render-front") {
     const [patientPath, outPdfPath] = args;

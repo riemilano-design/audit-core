@@ -132,12 +132,31 @@ class ExitRenderTest(unittest.TestCase):
             doc.close()
 
     # ---- 土台 ----
-    def test_00_bundles_pages_in_mark_order(self):
+    def test_00_bundles_pages_in_appendix_then_page_order(self):
+        """**付録番号 → 元のページ番号**の順に並ぶ(2026-09-29 に「印の出た順」から変えた)。
+
+        変えた理由(司令塔の ⑥ が実物で見つけた D7): 本編が「局面で見る」で付録 3 を指し、
+        あとの節で付録 1 を指すと、束ねた付録が **分かれ道 → 形勢の流れ → 最後の局面** の順になり、
+        **表紙の表の順(付録 1 → 付録 3)と食い違った。**顧客は表紙の順でページを探す。
+        実物(4 人目)は**付録番号順**(付録 1 → 3 → 4)。
+        **どのページを入れるかは変わらない**(本編が指すページだけ)― 順だけが変わる。
+        """
         bundled = self.run_build()
         self.assertEqual(bundled["boardsDrawn"], 2)
         self.assertFalse(bundled["hasCover"])
         self.assertEqual(bundled["appendixPages"], [1, 2, 3, 4])
-        self.assertEqual(bundled["sourcePages"], {"付録1": [3, 2], "付録3": [3, 2]})
+        # この土台は付録 1 の p3・p2 と付録 3 の p3・p2 をこの順で指している(印の順)。
+        # **元のページ番号の昇順**に並ぶ。
+        self.assertEqual(bundled["sourcePages"], {"付録1": [2, 3], "付録3": [2, 3]})
+        # **付録 1 の 2 枚が先、付録 3 の 2 枚が後**(付録番号の順)。
+        by_page = {p: label for label, p in bundled["outputPositions"].items()}
+        self.assertEqual(sorted(by_page), [1, 2, 3, 4])
+
+    def test_00b_the_appendix_number_must_be_readable(self):
+        """**付録の名前から番号が取れなければ落ちる**(黙って並び順を諦めない)。"""
+        with self.assertRaises(ER.ExitRenderError):
+            ER.appendix_number("付録おまけ")
+        self.assertEqual(ER.appendix_number("付録3"), 3)
 
     # **抜いたページに本当にその局面・節があるか**(索引が合っていても、抜くページを間違えれば無い)。
     def test_01_extracted_pages_contain_the_marks(self):

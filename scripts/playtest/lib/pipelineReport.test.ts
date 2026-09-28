@@ -315,7 +315,10 @@ describe("runPipeline: pdf 段", () => {
     ]);
     expect(calls[0]!.args).toStrictEqual([rp.patient, rp.frontPdf]);
     expect(calls[1]!.args).toStrictEqual([rp.frontPdf]);
-    expect(calls[3]!.args).toStrictEqual([rp.dir, rp.patient, rp.mainPdf]);
+    // **4 つ目は表示名**(2026-09-29。D5)。付録 1 の組版は `patient_report_data.json` の `person`
+    // (実名)で組んでいたため、**本編は「〇〇さん」・付録は実名**の冊子が出ていた。
+    // 見本用は本人用からページを抜いたもので名前を分けられず、付録は 1 冊で両方に付く。
+    expect(calls[3]!.args).toStrictEqual([rp.dir, rp.patient, rp.mainPdf, report.name]);
     expect(calls[4]!.args).toStrictEqual([rp.mainPdf]);
     expect(result.exitCode).toBe(0);
   });

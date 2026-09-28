@@ -43,10 +43,13 @@ def md_of(p1=None, p2=None, p3=None, extra=""):
         h, c = next((h, c) for r, h, c in CS.SECTIONS if r == role)
         return h if c is None else f"{h} 20 局で、何で{c}をするか"
 
-    p1 = ["- 崩れ 79 回のうち、中盤が 41 回でした。", "- 優勢から負けた対局が 6 局ありました。"] if p1 is None else p1
+    # 既定は**事実 3 本**(正本の形。`HONBUN_P1_FACT_COUNT`)。
+    p1 = ["- 崩れ 79 回のうち、中盤が 41 回でした。",
+          "- 優勢から負けた対局が 6 局ありました。",
+          "- 分かれ道は 25 局にありました。"] if p1 is None else p1
     p2 = [f"- この局面です<!-- pos: {BOARDS[0]} -->", f"- この局面です<!-- pos: {BOARDS[1]} -->"] if p2 is None else p2
     p3 = ["1. 試せることがあります<!-- menu: M3 -->"] if p3 is None else p3
-    lines = ["# 20 局で起きていたこと", "", CS.SCOPE_SENTENCE, ""]
+    lines = ["# 20 局で起きていたこと", "", CS.scope_sentence(20), ""]
     for role, body in (("ひとことで", p1), ("局面で見る", p2), ("試せること", p3)):
         lines += [f"## {head(role)}", ""] + list(body) + [""]
     for role in ("答え合わせ", "数え方", "対応表"):
@@ -78,7 +81,7 @@ class PassesTest(unittest.TestCase):
         あの段落は最初の `## ` より前にあり、**書き手が選んだ数ではない**(正本 §1 の固定文)。
         節の中だけを数える作りでここが守られる ― 入ってしまうと、まともな本編が必ず 4 つになる。
         """
-        self.assertIn("20 局", CS.SCOPE_SENTENCE)
+        self.assertIn("20 局", CS.scope_sentence(20))
         self.assertEqual(problems_of(md_of()), [])
 
 
@@ -93,55 +96,81 @@ class SectionsTest(unittest.TestCase):
         """
         sections = EG.sections_of(md_of())
         for _heading, lines in sections:
-            self.assertNotIn(CS.SCOPE_SENTENCE, lines)
+            self.assertNotIn(CS.scope_sentence(20), lines)
             self.assertNotIn("# 20 局で起きていたこと", lines)
         # 節の数は `## ` の数(6)。
         self.assertEqual(len(sections), len(CS.SECTIONS))
 
 
 class P1Test(unittest.TestCase):
-    def test_03_four_numbers_fall(self):
-        """**4 つ目の数は落ちる。**「ちょうど 3 つ」を通す門でないと器が崩れる。"""
-        md = md_of(p1=["- 79 回・41 回・6 局・25 局の 4 つを書きました。"])
-        self.assertTrue(any("ちょうど 3 個" in p for p in problems_of(md)))
+    def test_03_four_facts_fall(self):
+        """**4 本目の事実は落ちる。**正本の p1 は事実 3 本(`HONBUN_P1_FACT_COUNT`)。"""
+        md = md_of(p1=["- 79 回でした。", "- 41 回でした。", "- 6 局でした。", "- 25 局でした。"])
+        found = problems_of(md)
+        self.assertTrue(any("ちょうど 3 本" in p for p in found), found)
 
-    def test_04_two_numbers_fall(self):
-        """**3 つ未満も落ちる。**足りないまま進むと p1 が承認済みの形にならない。"""
-        md = md_of(p1=["- 79 回と 41 回でした。"])
-        self.assertTrue(any("ちょうど 3 個" in p for p in problems_of(md)))
+    def test_04_two_facts_fall(self):
+        """**3 本未満も落ちる。**足りないまま進むと p1 が承認済みの形にならない。"""
+        md = md_of(p1=["- 79 回でした。", "- 41 回でした。"])
+        self.assertTrue(any("ちょうど 3 本" in p for p in problems_of(md)))
+
+    def test_04c_many_values_in_three_facts_pass(self):
+        """**1 本の事実が値をいくつ持っていてもよい。**
+
+        これが「異なる値で 3 つ」を撤回した理由(2026-09-29)。人間の線
+        「局数で数える・**分母を付ける**」と両立しない ― 「18 局のうち 6 局」だけで既に 2 値。
+        **実物 2 件(3 人目の試作・4 人目の本人用 p1)はどちらも値 10 個以上で事実 3 本**だった。
+        """
+        md = md_of(p1=["- 一度は優勢になった 25 局のうち、負けたのは 6 局でした。",
+                       "- 崩れ 79 回のうち、中盤が 41 回でした。",
+                       "- 分かれ道は 41 局面(6 局)ありました。"])
+        self.assertEqual(problems_of(md), [])
+
+    def test_04d_a_sentence_outside_the_bullets_is_not_a_fact(self):
+        """**箇条書き以外の 1 文は事実として数えない**(実物はどちらも「1 文 + 事実 3 本」)。
+
+        その 1 文の数も候補に在ることは見る ― **部分集合は要求しない。**
+        司令塔の提案に入っていたが、**根拠に引かれた実物そのものが落ちる**(3 人目の 1 文は
+        「2 局ありました」「97 / 236」を使い、どれも箇条書きに出ていない。実測 2026-09-29)。
+        """
+        md = md_of(p1=["- 崩れ 79 回のうち、中盤が 41 回でした。",
+                       "- 優勢から負けた対局が 6 局ありました。",
+                       "- 分かれ道は 25 局にありました。",
+                       "中盤で形勢が動いているという読みです。"])
+        self.assertEqual(problems_of(md), [])
+        # 1 文の中の数も照合される(候補に無ければ落ちる)。
+        md2 = md_of(p1=["- 崩れ 79 回のうち、中盤が 41 回でした。",
+                        "- 優勢から負けた対局が 6 局ありました。",
+                        "- 分かれ道は 25 局にありました。",
+                        "4321 回という読みです。"])
+        self.assertTrue(any("4321" in p and "候補に無い" in p for p in problems_of(md2)))
 
     def test_05_a_number_not_in_the_candidates_falls(self):
         """**候補に無い数は落ちる。**書き手が材料に無い数を作った場合。"""
-        md = md_of(p1=["- 79 回・41 回・4321 回でした。"])
+        md = md_of(p1=["- 79 回でした。", "- 41 回でした。", "- 4321 回でした。"])
         found = problems_of(md)
         self.assertTrue(any("4321" in p and "候補に無い" in p for p in found), found)
 
     def test_06_a_single_digit_number_is_counted(self):
-        """**1 桁の数も数える。**実物の p1 は「6 局」を含む ―
+        """**1 桁の数も照合する。**実物の p1 は「6 局」を含む ―
         `check_answer.py` の既定(9 以下は単独では見ない)をそのまま使うと、
-        **1 桁の 4 つ目が黙って通る。**`small_max=0` を渡している理由がこれ。
+        **1 桁の、候補に無い数が黙って通る。**`small_max=0` を渡している理由がこれ。
         """
-        md = md_of(p1=["- 79 回・41 回・6 局・7 局の 4 つ。"])
+        md = md_of(p1=["- 79 回でした。", "- 41 回でした。", "- 6 局と 7 局でした。"])
         found = problems_of(md)
-        self.assertTrue(any("ちょうど 3 個" in p for p in found), found)
         self.assertTrue(any("7" in p and "候補に無い" in p for p in found), found)
+        self.assertFalse(any("数 6 が候補に無い" in p for p in found), found)
 
     def test_07_repeating_a_number_is_allowed(self):
-        """**同じ数を 2 回書いても 1 つと数える。**
-
-        「ひとことで」の 1 文が上の数をもう一度使うのは自然な書き方で、
-        **出た回数で数えるとまともな文が落ちる。**異なる値で数える理由がこれ。
-        """
+        """**同じ数を何度書いてもよい。**照合は「候補に在るか」だけを見る。"""
         md = md_of(p1=["- 崩れ 79 回のうち、中盤が 41 回でした。",
                        "- 優勢から負けた対局が 6 局ありました。",
-                       "- 79 回のうち中盤が多いという読みです。"])
+                       "- 79 回のうち中盤が多い形でした。"])
         self.assertEqual(problems_of(md), [])
 
     def test_08_the_ordered_item_marker_is_not_a_number(self):
-        """**番号つき箇条書きの頭は数ではない。**「1. 」を数えると本数が狂う。"""
-        md = md_of(p1=["1. 崩れ 79 回のうち、中盤が 41 回でした。",
-                       "2. 優勢から負けた対局が 6 局ありました。"])
-        self.assertEqual(problems_of(md), [])
+        """**番号つき箇条書きの頭は数ではない。**「1. 」を照合にかけると候補に無い数として落ちる。"""
+        self.assertEqual(EG.number_claims(["11. 崩れ 79 回でした。"]), [79])
 
     def test_09_the_menu_mark_number_is_not_a_number(self):
         """**行動の印の中の数(`M3` の 3)は数ではない。**
@@ -165,6 +194,13 @@ class P1Test(unittest.TestCase):
         """
         cands = {k: v for k, v in CANDS.items() if k != "p1Numbers"}
         self.assertTrue(any("p1Numbers" in p for p in problems_of(md_of(), cands)))
+
+    def test_10b_three_facts_are_required_even_with_the_right_numbers(self):
+        """**数が全部候補に在っても、事実が 3 本でなければ落ちる**(2 つの検査は独立)。"""
+        md = md_of(p1=["- 79 回と 41 回と 6 局と 25 局でした。"])
+        found = problems_of(md)
+        self.assertTrue(any("ちょうど 3 本" in p for p in found), found)
+        self.assertFalse(any("候補に無い" in p for p in found), found)
 
     def test_11_a_missing_section_falls(self):
         """**節が無ければ落ちる。**器の門より先に、書き手の席で気づける。"""
@@ -277,7 +313,7 @@ class NoOwnRulesTest(unittest.TestCase):
             if (isinstance(node, ast.Attribute) and isinstance(node.value, ast.Name)
                     and node.value.id == "CS"):
                 used.add(node.attr)
-        self.assertIn("HONBUN_P1_NUMBER_COUNT", used)
+        self.assertIn("HONBUN_P1_FACT_COUNT", used)
         self.assertIn("BOARD_COUNT", used)
         self.assertIn("heading_matches", used)
 
@@ -328,9 +364,24 @@ class SameLimitOnBothSidesTest(unittest.TestCase):
                   for kw in n.keywords if kw.arg == "small_max"]
         self.assertEqual(limits, [0], f"候補の側の上限が門と違う: {limits}")
 
+    def test_28b_the_fact_count_itself_is_a_candidate(self):
+        """**「数は 3 つ。」の 3 が候補に在ること。**
+
+        実物(3 人目の試作の「ひとことで」の 1 文)がこの言い方をしている。
+        候補に入れない作りにしたら、**実物と同じ言い方をした書き手が門で止まった**
+        (実測 2026-09-29: 本番の下書きで残った問題はこの 1 件だけだった)。
+        **これは対局の事実ではなく冊子の形の数**なので `from` にそう書いてある。
+        """
+        patient = {"summary": {"games": 20}, "games": [{}] * 20, "findings": []}
+        repro = {"totalPositions": 100, "totalGames": 20, "rows": []}
+        rows = EC.p1_numbers(patient, repro)
+        shape = [r for r in rows if r["number"] == CS.HONBUN_P1_FACT_COUNT and r["unit"] == "本"]
+        self.assertEqual(len(shape), 1, rows)
+        self.assertIn("正本", shape[0]["from"])
+
     def test_29_a_single_digit_finding_number_is_a_candidate(self):
         """**1 桁の数が候補に入ること**(実物の 6 局が通ること)。"""
-        patient = {"games": [{}] * 20,
+        patient = {"summary": {"games": 20}, "games": [{}] * 20,
                    "findings": [{"kind": "aheadLoss",
                                  "text": "一度は優勢(+300 以上)になった後に負けた対局が 6 局ありました"}]}
         repro = {"totalPositions": 100, "totalGames": 20, "rows": []}
