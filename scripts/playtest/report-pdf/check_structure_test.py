@@ -501,6 +501,21 @@ class CheckStructureTest(unittest.TestCase):
         write_json(os.path.join(self.dir, "page_index.json"), index)
         self.assert_falls("旧い名前が残っている")
 
+    def test_39_cover_is_missing(self):
+        # **表紙を抜いたら赤**(正本 §8。承認済みの形に表紙が入っている)。
+        # 抜けると顧客は「この冊子に入っているもの」の案内を失い、本編から付録のページを辿れなくなる。
+        index = read_index(self.dir)
+        index["hasCover"] = False
+        write_json(os.path.join(self.dir, "page_index.json"), index)
+        self.assert_falls("付録に表紙が無い")
+
+    def test_40_cover_key_absent_is_also_red(self):
+        # **鍵ごと無い場合も赤**(偽を書く道だけ塞いでも、書かない道が残る)。
+        index = read_index(self.dir)
+        del index["hasCover"]
+        write_json(os.path.join(self.dir, "page_index.json"), index)
+        self.assert_falls("付録に表紙が無い")
+
     # ---- 折り返しを越えて数えること自体の試験(最初の実測で見つけた穴) ----
     # 商品の範囲の 1 段落が 2 行に折られていても 1 か所と数える。`squeeze` を外すと
     # この試験と test_00 の両方が落ちる。

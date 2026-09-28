@@ -293,6 +293,10 @@ def check_appendix_pages(index, appendix, problems):
         problems.append("検査 8: page_index.json に appendixPages(抜いたページの一覧)が無い")
         return
     cover = 1 if index.get("hasCover") else 0
+    # **表紙は必須**(正本 GOLDEN_MASTER_CUSTOMER_EXIT.md §8。承認済みの 30 ページの形に表紙が入っている)。
+    # 抜けると顧客は「この冊子に入っているもの」の案内を失い、**本編から付録のページを辿れなくなる**。
+    if not index.get("hasCover"):
+        problems.append("検査 8: 付録に表紙が無い(hasCover が真でない ― 正本 §8 の 4 要素が付かない)")
     if len(picked) + cover != len(appendix):
         problems.append(
             f"検査 8: 付録が {len(appendix)} ページだが、指しているのは {len(picked)} ページ"

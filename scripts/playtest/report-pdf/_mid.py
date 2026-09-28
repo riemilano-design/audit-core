@@ -105,7 +105,8 @@ story.append(P(f"次のページから、形勢が大きく動いた {len(featur
 story.append(PageBreak())
 
 # ===== 局の俯瞰(STEP FILL 作業 Y、H4-1: 見出しは s["games"] を使う) =====
-story.append(mark_sec(P(f"{s['games']} 局の形勢の流れ", S_BIG), "形勢の流れ"))
+# 題は `exit_index.py` が正本(表紙の「節」の列も同じ定数から出す ― 写しを 2 か所に持たない)。
+story.append(mark_sec(P(exit_index.section_title("付録1", "形勢の流れ", games=s["games"]), S_BIG), "形勢の流れ"))
 story.append(P("上に行くほど" + person + "が良く、下に行くほど相手が良いことを表します。色のついた枠は、次のページから 1 局ずつ見ていく局です。", S_LEAD))
 fset = {g["no"] for g in featured}; cells = []
 for g in m["games"]:

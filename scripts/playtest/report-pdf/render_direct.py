@@ -454,7 +454,8 @@ counts = DA["counts"]
 # **局をまたぐ文**であり、#19 で決めた規則「局をまたぐ文には、和に対して真である中立の呼び名だけ」が
 # そのまま当たる。切り替えにすると「どの線で勝ちと呼ぶか」という**判定**を道具に入れることになり(線は
 # 人間の持ち物)、**分岐の条件を間違える道も残る**。勝ち負けは局ごとの行(`scoreCp`・`mate`)に書く。
-FINAL_SECTION_TITLE = "最後の局面をエンジンで読むと"
+# 題の正本は `exit_index.py`(表紙の「節」の列も同じ定数から出す ― 写しを 2 か所に持たない)。
+FINAL_SECTION_TITLE = exit_index.section_title("付録3", "最後の局面")
 
 allowed_p1 = {counts["gamesCount"], counts["totalCount"], counts["totalForkCount"]}
 for k, v in counts["top1TagCounts"].items():
@@ -609,7 +610,8 @@ if len(FP["entries"]) == 0:
 story.append(PageBreak())
 
 # ==================== 「浅い読みで見えた分かれ道」(問題 2) ====================
-story.append(INDEX.mark_sec(P("浅い読みで見えた分かれ道", S_H2), "分かれ道"))
+FORK_SECTION_TITLE = exit_index.section_title("付録3", "分かれ道")
+story.append(INDEX.mark_sec(P(FORK_SECTION_TITLE, S_H2), "分かれ道"))
 story.append(
     P(
         emit(
@@ -678,4 +680,4 @@ if _problems:
 
 doc.build(story)
 print("wrote", INDEX.write(out))
-print(f"wrote {out}({len(FP['entries'])} 局({FINAL_SECTION_TITLE})・{len(answers)} 局面(浅い読みで見えた分かれ道))")
+print(f"wrote {out}({len(FP['entries'])} 局({FINAL_SECTION_TITLE})・{len(answers)} 局面({FORK_SECTION_TITLE}))")

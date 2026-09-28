@@ -478,3 +478,42 @@ python3 -X utf8 check_delivery.py <顧客フォルダ> [--forbid <語>]…
   作業 4 では、実データ 3 組で「ひとことで」の文字列・試せることのまとめの項目数・表の名・「組」0 件を確認し
   (実測は `scripts/playtest/README.md` の「伝わる形」節を参照)、変異(禁止語チェックの「組」判定を外す)で
   合成データの「組」を含む文が rc=0 になってしまうこと(= 検査が無いと通ってしまうこと)を確かめたうえで戻した。
+
+## STEP CUSTOMER-EXIT の道具(`exit_index.py`・`exit_render.py`・`exit_cover.py`・`compare_render.py`・`rename_list.py`)
+
+承認済みの 30 ページの形(`docs/GOLDEN_MASTER_CUSTOMER_EXIT.md`)で顧客に渡すための段。
+**まだ `deliver.ts` の本番導線には繋いでいない**(手で呼ぶ道具として置いている)。
+
+| ファイル | 何をするか |
+|---|---|
+| `exit_index.py` | **定数だけの正本。**節の固定名・印字される題・表紙の枠と型・束ねた索引の鍵。組版(`_mid.py`・`render_direct.py`)と門(`check_structure.py`)の両方が import する ― **写しを 2 か所に持たない。**`PageIndexRecorder` は組んだ後のページ番号を `<PDF>_page_index.json` に書く(`doc.afterFlowable` で `doc.page` を読むだけ。**flowable は足さない**) |
+| `exit_render.py` | 本編の `<!-- pos: -->`・`<!-- sec: -->` を読み、**組版が書いた索引だけで**付録のページを引いて 1 冊に束ねる。**PDF の文字は検索しない** |
+| `exit_cover.py` | **付録の表紙の md** を作る(見出し・段落・表「この冊子に入っているもの」・末尾の 4 要素)。表の行は `COVER_SECTIONS`、数は材料から、対応の列は印の逆引き |
+| `compare_render.py` | **出力が変わっていないか**を測る。ページ数・ページごとの文字・`get_drawings()` のベクタの形。**バイトでは測れない**(`invariant` が無く、`get_images()` は盤がベクタなので 0) |
+| `rename_list.py` | **実物から文・題を写す前に通す「改名の一覧」**をコミットの diff から作る(正本 §9・§10)。範囲は**実物の mtime**(名前の日付は当てにならない) |
+
+使い方:
+
+```sh
+# 表紙の md
+python3 -X utf8 exit_cover.py --honbun-md <本編.md> \
+  --source-index <付録1の索引.json> --source-index <付録3の索引.json> \
+  --patient <patient_report_data.json> --group <組のラベル> \
+  --prose <prose.json> --final-positions <final_positions.json> --direct <direct_answers.json> \
+  --out <表紙.md>
+
+# 付録を束ねる
+python3 -X utf8 exit_render.py --honbun-md <本編.md> \
+  --source-index <索引.json>:<付録.pdf> [--cover <表紙.pdf>:1] \
+  --out-appendix <付録.pdf> --out-index <page_index.json>
+
+# 改名の一覧(実物から写す前に必ず通す)
+python3 -X utf8 rename_list.py --since "<古い実物の mtime>" --since-newer "<新しい実物の mtime>" \
+  [--out <納品フォルダ>/rename_list.md]
+
+# 出力が変わっていないかを測る
+python3 -X utf8 compare_render.py <前の PDF> <後の PDF>
+```
+
+**試験は `report-pdf/*_test.py` が `npx vitest run --root scripts/playtest` の下で走る**(P-113)。
+**合成材料だけが門で、実物での確認は記録**(① の制約 ― 顧客の棋譜はリポジトリに置けない)。
