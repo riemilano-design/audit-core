@@ -1,5 +1,15 @@
 
 # ===================== 第 5 版: 盤面図・短縮・言い換え =====================
+# ==================== 局面・節 → ページの索引(STEP CUSTOMER-EXIT。仕様 §3 の 2 + 司令塔の追補) ====================
+# **ページを置いたのと同じコードの経路が索引を書く**(別に計算しない・PDF の文字を検索しない)。
+# 鍵の形と節の固定名は **`exit_index.py` が正本**(組版と `check_structure.py` が同じ定数を共有する)。
+# ここは **`doc.page` を読むだけ**で、**flowable は 1 つも足さない**。
+import exit_index
+
+INDEX = exit_index.PageIndexRecorder(doc, "付録1")
+mark_pos = lambda fl, no, ply: INDEX.mark_pos(fl, no, ply)
+mark_sec = INDEX.mark_sec
+
 PROSE = json.load(open(os.path.join(_data_dir, "prose.json"), encoding="utf-8"))
 def fill(g, text, ply=None):
     def rep(mo):
@@ -65,7 +75,7 @@ S_LB = st("lb5", font=FONT_B, fontSize=12.5, leading=18, color=INK)
 mc = m["overview"]["moveCheck"]
 # ===== 1 ページ目 =====
 story.append(P(f"対局後診断・途中報告(第 6 版)", S_TAG))
-story.append(P(f"{person}の {s['games']} 局を調べました", S_BIG))
+story.append(mark_sec(P(f"{person}の {s['games']} 局を調べました", S_BIG), "調べたこと"))
 story.append(P(f"{len(wins)} 勝 {len(losses)} 敗の {s['games']} 局を、将棋エンジンで 1 手ずつ調べました。分かったことは 3 つです。", S_LEAD))
 def big_item(no, head, body):
     t = Table([[P(str(no), S_NUM2), [P(head, S_LB), P(body, S_B2)]]], colWidths=[12 * mm, W - 12 * mm])
@@ -82,7 +92,7 @@ story.append(big_item(3, "形勢が動いたのは、ほとんどが中盤と終
 story.append(Spacer(1, 3.5 * mm))
 story.append(boxflow([P("まだ分かっていないこと", S_BOXH), P(f"崩れた場面に共通する条件は、まだ見つかっていません。「数手のうちに玉の逃げ場が減る」場面が {len(c['reps'])} か所ありましたが、エンジン同士の進め方でも同じことが起きるため、{person}だけに当てはまることとは言えませんでした。次に、{person}が選んだ手そのものも数えました。「優勢のときに、自分の玉のすぐそばへ駒を動かす手」は {s['games']} 局で {mc['n']} 回あり、そのうち {mc['fell']} 回で直後に形勢が崩れていました。ただ、比較対象の 10 局では同じ種類の手が {mc['otherN']} 回あって、崩れたのは {mc['otherFell']} 回でした。これも、{person}だけに当てはまることとは、まだ言えません。", S_B2)], colors.white))
 story.append(Spacer(1, 3.5 * mm))
-story.append(P("このレポートの読み方", S_K))
+story.append(mark_sec(P("このレポートの読み方", S_K), "読み方"))
 story.append(notebox([
     "グラフは、上に行くほど" + person + "が良く、下に行くほど相手が良いことを表します。真ん中の点線が互角です。",
     "エンジンの評価が +300 以上を「優勢」、−300 以下を「劣勢」、その間を「互角」と呼んでいます(仮の目安です)。",
@@ -95,7 +105,7 @@ story.append(P(f"次のページから、形勢が大きく動いた {len(featur
 story.append(PageBreak())
 
 # ===== 局の俯瞰(STEP FILL 作業 Y、H4-1: 見出しは s["games"] を使う) =====
-story.append(P(f"{s['games']} 局の形勢の流れ", S_BIG))
+story.append(mark_sec(P(f"{s['games']} 局の形勢の流れ", S_BIG), "形勢の流れ"))
 story.append(P("上に行くほど" + person + "が良く、下に行くほど相手が良いことを表します。色のついた枠は、次のページから 1 局ずつ見ていく局です。", S_LEAD))
 fset = {g["no"] for g in featured}; cells = []
 for g in m["games"]:
@@ -160,11 +170,13 @@ for g in featured:
         sidx = pz["scenes"].index(s_); band = P(f"<font color='#c9473f'><b>場面 {'①②③'[sidx]}</b></font>　{s_['ply']} 手目", S_CARDH)
         row = Table([[band, ""], [bd, cell]], colWidths=[66 * mm, W - 66 * mm])
         row.setStyle(TableStyle([("SPAN", (0, 0), (1, 0)), ("BACKGROUND", (0, 0), (-1, 0), BG), ("LINEBELOW", (0, 0), (-1, 0), 0.6, LINE), ("VALIGN", (0, 0), (-1, -1), "TOP"), ("BOX", (0, 0), (-1, -1), 0.8, colors.HexColor("#b8c4cb")), ("TOPPADDING", (0, 1), (-1, 1), 2.5 * mm), ("BOTTOMPADDING", (0, 1), (-1, 1), 2 * mm), ("TOPPADDING", (0, 0), (-1, 0), 1.2 * mm), ("BOTTOMPADDING", (0, 0), (-1, 0), 1.2 * mm), ("LEFTPADDING", (0, 0), (0, -1), 3 * mm)]))
-        story += [KeepTogether([row]), Spacer(1, 2 * mm)]
+        # 索引: この札が置かれたページを記録する(`KeepTogether` は組むときに中身へ開かれるので両方に付ける)。
+        mark_pos(row, no, s_["ply"])
+        story += [mark_pos(KeepTogether([row]), no, s_["ply"]), Spacer(1, 2 * mm)]
     story += [P("この一局から見えたこと", S_SEC), P(fill(g, pz["takeaway"]) + f" この一局だけから、{person}の決まった特徴とは判断しません。", S_SC), PageBreak()]
 
 # ===== 残りの局 =====
-story.append(P("そのほかの 10 局", S_BIG) if len(rest) == 10 else P(f"そのほかの {len(rest)} 局", S_BIG))
+story.append(mark_sec(P("そのほかの 10 局", S_BIG) if len(rest) == 10 else P(f"そのほかの {len(rest)} 局", S_BIG), "そのほかの局"))
 story.append(P("一局ずつのページに載せなかった局の一覧です。グラフの見方は同じです。", S_LEAD))
 rows = [[P(x, S_K) for x in ["局", "先後", "結果", "手数", "どんな将棋だったか", "形勢の変化"]]]
 for g in rest:
@@ -175,7 +187,7 @@ story.append(gt)
 story.append(PageBreak())
 
 # ===== まとめ =====
-story.append(P(f"{s['games']} 局を通して見えたこと", S_BIG))
+story.append(mark_sec(P(f"{s['games']} 局を通して見えたこと", S_BIG), "通して見えたこと"))
 story.append(P(f"<b>勝ち負けは序盤で決まっておらず、形勢が良くなった後、そして悪くなった後の数手で動いています。</b>", S_LEAD))
 story.append(boxes([(len(la), f"負けた {len(losses)} 局のうち、<br/>途中で優勢だった局"), (len(wb), f"勝った {len(wins)} 局のうち、<br/>劣勢になってから勝った局"), (pr["fell"], f"形勢がはっきり崩れた場面<br/>(序盤 {ph.get('early','—')}・中盤 {ph.get('mid','—')}・終盤 {ph.get('late','—')})"), (len(c["reps"]), "そのうち、直前に<br/>玉の逃げ場が減っていた場面")]))
 story.append(Spacer(1, 3 * mm))
@@ -195,5 +207,9 @@ for items, bgc in ((
 story.append(Spacer(1, 4 * mm))
 story.append(P(f"作成 {m['today']} / 将棋エンジン(やねうら王)で 1 手ずつ評価 / 試作版につき、有段者による確認はまだ受けていません。数の内訳と判定の詳細は、別冊「技術資料」にまとめています。", st("foot", fontSize=8, leading=11, color=MUTED)))
 doc.build(story)
+
+# 索引を PDF の隣に書く(仕様 §3 の 2。`exit-render` がこれを読んで付録のページを抜く)。
+# **書けなければ落ちる**(黙って飛ばすと、索引の無い PDF が「できた」ことになる)。
 print("wrote", out)
+print("wrote", INDEX.write(out))
 

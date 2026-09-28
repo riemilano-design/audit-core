@@ -103,6 +103,14 @@ S_EYEBROW = st("deyebrow", fontSize=8.2, leading=11, color=ACCENT)
 BANNED = []
 
 doc = SimpleDocTemplate(out, pagesize=A4, leftMargin=14 * mm, rightMargin=14 * mm, topMargin=16 * mm, bottomMargin=16 * mm, title="対局後診断・付録 3(直接の答え)", author="将棋コーチ(試作)")
+
+# ==================== 局面・節 → ページの索引(STEP CUSTOMER-EXIT。仕様 §3 の 2 + 司令塔の追補) ====================
+# **ページを置いたのと同じコードの経路が索引を書く。**鍵の形と節の固定名は **`exit_index.py` が正本**。
+# **付録 3 は `組 → 局/手`**(局番号は組ごとに 1 から振られ、組をまたいで衝突する ― 凍結の例外 7b。
+# 本編の印も `<!-- pos: 局/手 付録3 組 -->`)。ここは **`doc.page` を読むだけ・flowable は足さない**。
+import exit_index
+
+INDEX = exit_index.PageIndexRecorder(doc, "付録3", grouped=True)
 W = A4[0] - 28 * mm
 story = []
 
@@ -512,13 +520,13 @@ table1.setStyle(CAND_HEADER_STYLE)
 story.append(table1)
 story.append(Spacer(1, 2.5 * mm))
 
-story.append(P("印の数", S_H3))
+story.append(INDEX.mark_sec(P("印の数", S_H3), "印の数"))
 tag_rows_top1 = "・".join(f"{jp} {counts['top1TagCounts'][key]}" for key, jp in TAG_JP)
 tag_rows_actual = "・".join(f"{jp} {counts['actualTagCounts'][key]}" for key, jp in TAG_JP)
 side_rows = "・".join(f"{SIDE_JP[key]} {counts['top1SideCounts'][key]}" for key in ("attack", "defense", "both", "none"))
 story.append(notebox([emit(f"第 1 候補の性質: {tag_rows_top1}", allowed_p1), emit(f"第 1 候補の側: {side_rows}", allowed_p1), emit(f"実戦の手の性質: {tag_rows_actual}", allowed_p1)]))
 story.append(Spacer(1, 2 * mm))
-story.append(P("この付録の読み方", S_K))
+story.append(INDEX.mark_sec(P("この付録の読み方", S_K), "読み方"))
 story.append(
     notebox(
         [
@@ -531,7 +539,7 @@ story.append(
 story.append(PageBreak())
 
 # ==================== 最後の局面の節(持ち時間に到達した対局) ====================
-story.append(P(FINAL_SECTION_TITLE, S_H2))
+story.append(INDEX.mark_sec(P(FINAL_SECTION_TITLE, S_H2), "最後の局面"))
 story.append(
     P(
         # STEP ENDING_CLOCK §4 の 13。局をまたぐ呼び名は via を問わず使える言い方にする(人間の決定)。
@@ -591,7 +599,9 @@ for e in FP["entries"]:
 
     row = Table([[board, lines]], colWidths=[62 * mm, W - 62 * mm])
     row.setStyle(TableStyle([("VALIGN", (0, 0), (-1, -1), "TOP")]))
-    story.append(KeepTogether([row]))
+    # 索引: 最後の局面の札(`check_answer.py` の検査 7 は entries を (局, 手数) で受ける)。
+    INDEX.mark_pos(row, e["gameNo"], e["moves"], group=e["group"])
+    story.append(INDEX.mark_pos(KeepTogether([row]), e["gameNo"], e["moves"], group=e["group"]))
     story.append(Spacer(1, 4 * mm))
 
 if len(FP["entries"]) == 0:
@@ -599,7 +609,7 @@ if len(FP["entries"]) == 0:
 story.append(PageBreak())
 
 # ==================== 「浅い読みで見えた分かれ道」(問題 2) ====================
-story.append(P("浅い読みで見えた分かれ道", S_H2))
+story.append(INDEX.mark_sec(P("浅い読みで見えた分かれ道", S_H2), "分かれ道"))
 story.append(
     P(
         emit(
@@ -652,7 +662,9 @@ for a in answers:
     ]
     row = Table([[board, lines]], colWidths=[58 * mm, W - 58 * mm])
     row.setStyle(TableStyle([("VALIGN", (0, 0), (-1, -1), "TOP"), ("BOTTOMPADDING", (0, 0), (-1, -1), 2 * mm)]))
-    story.append(KeepTogether([row, Spacer(1, 3 * mm)]))
+    # 索引: この札が置かれたページを記録する(組つき ― 局番号は組をまたいで衝突する)。
+    INDEX.mark_pos(row, game_no, dply, group=group)
+    story.append(INDEX.mark_pos(KeepTogether([row, Spacer(1, 3 * mm)]), game_no, dply, group=group))
 
 if len(answers) == 0:
     story.append(P("該当する局面はありませんでした。", S_SMALL))
@@ -665,4 +677,5 @@ if _problems:
     sys.exit(1)
 
 doc.build(story)
+print("wrote", INDEX.write(out))
 print(f"wrote {out}({len(FP['entries'])} 局({FINAL_SECTION_TITLE})・{len(answers)} 局面(浅い読みで見えた分かれ道))")
