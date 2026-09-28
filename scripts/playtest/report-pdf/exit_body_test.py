@@ -404,5 +404,72 @@ class SectionMarkTest(unittest.TestCase):
         self.assertIn("SEC_TAG_RE", guard, guard)
 
 
+class KeepsTheHeadingWithTheBoardTest(unittest.TestCase):
+    """**見出しと盤を離さない**(D6 = P-150。2026-09-29)。
+
+    1 周目の批評席が「2 つ目の局面は見出しだけで盤が次ページに送られており、
+    1 ページ目では途切れています」と挙げた。封は「小さいもの(門にしない)」に置いていた。
+    """
+
+    class Para(object):
+        def __init__(self, text, style_name="abody"):
+            self.text = text
+            self.style = type("S", (), {"name": style_name})()
+
+    class Board(object):
+        pass
+
+    def test_d1_bold_only_line_is_recognized(self):
+        """盤の見出しは `## ` の行ではないので**様式では見分けられない**(実測 2026-09-29)。"""
+        self.assertTrue(EB.is_bold_only_line(self.Para("<b>16 局目 93 手目 ― …</b>")))
+        self.assertTrue(EB.is_bold_only_line(self.Para("  <b><b>16</b> 局目</b>  ")))
+        self.assertFalse(EB.is_bold_only_line(self.Para("盤は付録と同じく、本人を下にしています。")))
+        self.assertFalse(EB.is_bold_only_line(self.Para("<b>太字</b>のあとに本文")))
+        self.assertFalse(EB.is_bold_only_line(self.Board()))
+
+    def test_d2_the_heading_and_the_board_become_one_flowable(self):
+        from reportlab.platypus import KeepTogether
+        board = self.Board()
+        heading = self.Para("<b>16 局目 93 手目 ― …</b>")
+        story = [self.Para("まえがき"), heading, self.Para(EB.sentinel(0))]
+        out = EB.swap_boards(story, {0: board})
+        self.assertEqual(len(out), 2)
+        self.assertIsInstance(out[1], KeepTogether)
+        self.assertEqual(out[1]._content, [heading, board])
+
+    def test_d3_a_board_without_a_heading_is_left_alone(self):
+        from reportlab.platypus import KeepTogether
+        board = self.Board()
+        story = [self.Para("ふつうの本文です。"), self.Para(EB.sentinel(0))]
+        out = EB.swap_boards(story, {0: board})
+        self.assertEqual(len(out), 2)
+        self.assertNotIsInstance(out[1], KeepTogether)
+        self.assertIs(out[1], board)
+
+    def test_d4_the_count_check_still_holds(self):
+        """**まとめても数の照合は残る**(印 1 つに盤 1 つ)。"""
+        board = self.Board()
+        story = [self.Para("<b>見出し</b>"), self.Para(EB.sentinel(0))]
+        with self.assertRaises(EB.ExitBodyError):
+            EB.swap_boards(story, {0: board, 1: self.Board()})
+
+
+class LeadSentencesDoNotPromiseAllPagesTest(unittest.TestCase):
+    """**束ねられる付録の前文は「全部並べる」と約束しない**(2026-09-29。P-152 の家族)。
+
+    `render_direct.py`・`_mid.py` は `sys.argv` を読んで走るので import できない。**原文で見る。**
+    """
+
+    def test_d5_appendix3_does_not_say_it_lists_them_all(self):
+        src = read_text(os.path.join(HERE, "render_direct.py"))
+        self.assertNotIn("局面)を、実戦との差が大きい順に並べます。", src)
+        self.assertIn("局面ありました。", src)
+        self.assertIn("ここから先は、実戦との差が大きい順に並べています。", src)
+
+    def test_d6_appendix1_does_not_say_from_the_next_page(self):
+        src = read_text(os.path.join(HERE, "_mid.py"))
+        self.assertNotIn("次のページから、形勢が大きく動いた", src)
+        self.assertIn("形勢が大きく動いたのは", src)
+        self.assertIn("一覧にまとめています", src)
 if __name__ == "__main__":
     unittest.main(verbosity=2)

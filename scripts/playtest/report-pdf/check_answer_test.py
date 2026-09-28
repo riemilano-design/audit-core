@@ -606,5 +606,110 @@ class CheckLineBannedEmptyTest(unittest.TestCase):
         self.assertEqual(problems, [])
 
 
+class MenuFractionsTest(unittest.TestCase):
+    """**判定が見る分数と、冊子に印字する分数が同じであること。**
+
+    2026-09-29 まではずれていた ― `M4` の行が `forkTotal`(分かれ道の総数)を「いまの値」として
+    出していたが、**判定 `m4_holds` はその数で割っていない**(攻め・自玉側それぞれの分母で割る)。P-152。
+    """
+
+    @staticmethod
+    def materials(attack=(65, 107), defense=(76, 132), fork_total=404,
+                  sacrifice=(50, 137), quick=(7, 41), zero_to_one=(22, 531)):
+        class G(object):
+            pass
+        g = G()
+        g.after_long_think_quick = {"collapsed": quick[0], "n": quick[1]}
+        g.by_spent = [{"collapsed": zero_to_one[0], "n": zero_to_one[1]}]
+        return {
+            "sideMatch": {"attack": {"collapsed": attack[0], "n": attack[1]},
+                          "defense": {"collapsed": defense[0], "n": defense[1]},
+                          "forkTotal": fork_total},
+            "readCombined": {"sacrificeDiagonal": sacrifice[0], "sacrificeRowTotal": sacrifice[1]},
+            "groups": {"min3": g},
+        }
+
+    def test_f1_the_printed_fraction_is_the_one_the_judgment_divides_by(self):
+        """**印字する分子 / 分母から作った割合が、判定が閾値に当てる割合と同じ。**"""
+        m = self.materials()
+        sm = m["sideMatch"]
+        got = {f["label"]: (f["numerator"], f["denominator"]) for f in CA.menu_fractions("M4", m)}
+        self.assertEqual(got["攻め"], (sm["attack"]["collapsed"], sm["attack"]["n"]))
+        self.assertEqual(got["自玉側"], (sm["defense"]["collapsed"], sm["defense"]["n"]))
+        for label, bucket in (("攻め", sm["attack"]), ("自玉側", sm["defense"])):
+            num, den = got[label]
+            self.assertEqual(num / den, CA.rate_of(bucket), label)
+
+    def test_f2_the_fork_total_is_not_printed(self):
+        """**`forkTotal` は分数に出てこない。**判定が割っていない数だから。"""
+        m = self.materials(fork_total=999)
+        numbers = []
+        for f in CA.menu_fractions("M4", m):
+            numbers += [f["numerator"], f["denominator"]]
+        self.assertNotIn(999, numbers)
+
+    def test_f3_m6_is_the_diagonal_over_the_row(self):
+        m = self.materials()
+        f = CA.menu_fractions("M6", m)[0]
+        r = m["readCombined"]
+        self.assertEqual((f["numerator"], f["denominator"]),
+                         (r["sacrificeDiagonal"], r["sacrificeRowTotal"]))
+        self.assertEqual(f["numerator"] / f["denominator"],
+                         r["sacrificeDiagonal"] / r["sacrificeRowTotal"])
+
+    def test_f4_m5_is_the_quick_move_after_a_long_think(self):
+        m = self.materials()
+        f = CA.menu_fractions("M5", m)[0]
+        q = m["groups"]["min3"].after_long_think_quick
+        self.assertEqual((f["numerator"], f["denominator"]), (q["collapsed"], q["n"]))
+        self.assertEqual(f["numerator"] / f["denominator"], CA.rate_of(q))
+
+    def test_f5_missing_material_gives_none_not_a_wrong_number(self):
+        m = self.materials()
+        m["sideMatch"] = None
+        m["readCombined"] = None
+        self.assertIsNone(CA.menu_fractions("M4", m))
+        self.assertIsNone(CA.menu_fractions("M6", m))
+
+    def test_f6_items_without_a_fraction_are_none(self):
+        """**分数を持たない項目は `None`** ― 呼ぶ側が承認済みの表の文に落ちる。"""
+        m = self.materials()
+        for item_id in ("M1", "M2", "M3", "M7", "M8", "M9"):
+            self.assertIsNone(CA.menu_fractions(item_id, m), item_id)
+
+    def test_f7_the_names_say_what_is_counted(self):
+        """**名前は判定関数が数えている中身。**将棋の言葉を足していないことを、語で固定する。"""
+        m = self.materials()
+        names = {f["label"]: f["name"] for f in CA.menu_fractions("M4", m)}
+        self.assertIn("第 1 候補が攻めの手だった分かれ道のうち", names["攻め"])
+        self.assertIn("実戦も攻めの手だった局面", names["攻め"])
+        self.assertIn("自玉側", names["自玉側"])
+        # M5 は `answer_facts.bullet_8` の承認済みの言い方から取った
+        m5 = CA.menu_fractions("M5", m)[0]["name"]
+        self.assertIn("10 秒以上", m5)
+        self.assertIn("4 秒以内", m5)
+        self.assertIn("崩れた手", m5)
+
+    def test_f8_every_registered_fraction_is_allowed_by_check_1(self):
+        """**印字する組は検査 1 の登録済みの組に在る**(無いと門が冊子を落とす)。
+
+        `registered_pairs_of` は材料から組を作るので、**同じ材料で照合する**。
+        """
+        m = self.materials()
+        pairs = set()
+
+        def add(a, b):
+            pairs.add((a, b)); pairs.add((b, a))
+
+        sm = m["sideMatch"]
+        add(sm["attack"]["n"], sm["attack"]["collapsed"])
+        add(sm["defense"]["n"], sm["defense"]["collapsed"])
+        r = m["readCombined"]
+        add(r["sacrificeRowTotal"], r["sacrificeDiagonal"])
+        q = m["groups"]["min3"].after_long_think_quick
+        add(q["n"], q["collapsed"])
+        for item_id in ("M4", "M5", "M6"):
+            for f in CA.menu_fractions(item_id, m):
+                self.assertIn((f["numerator"], f["denominator"]), pairs, f"{item_id} / {f['name']}")
 if __name__ == "__main__":
     unittest.main()

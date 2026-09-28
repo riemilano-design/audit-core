@@ -85,12 +85,12 @@ REPRO_KINDS = (
 
 
 def answers_of(direct):
-    """`direct_answers.json` の `answers[]`(組をまたいで全部)。"""
-    out = []
-    for raw in direct["raw"]:
-        if raw.get("kind") == "direct_answers":
-            out.extend(raw.get("answers") or [])
-    return out
+    """`direct_answers.json` の `answers[]`(組をまたいで全部)。
+
+    **取り出し方は `check_answer.direct_answers_of` が正本**(2026-09-29 にそちらへ寄せた ―
+    観測 1 行が同じ取り出しを要るので、ここに写しを残すと 2 か所になる)。
+    """
+    return CA.direct_answers_of(direct)
 
 
 def matches(answer, source, key):
@@ -127,6 +127,18 @@ def repro_rows(direct):
     return {"rows": rows, "totalPositions": total_positions, "totalGames": total_games}
 
 
+# **否定の型**(「〜の必要は数からは出ていない」)は**動くはずの分数を持たない**ので、
+# 本編の行動に入れない(2026-09-29 の司令塔の判断)。答え合わせの表にも載らない
+# ― 載せても「次の 25 局で何が動けば当たりか」を書けないので、顧客への約束にならない。
+# `verifyName` が空で `MENU_FRACTIONS` にも無い項目がこれに当たる(実物では M3・M7・M8)。
+NEGATIVE_TYPE_REASON = "否定の型(動くはずの分数を持たないので答え合わせができない)"
+
+
+def is_negative_type(item, fractions):
+    """その項目が否定の型か。**分数も承認済みの答え合わせの文も無い**なら真。"""
+    return not fractions and not item["verifyName"]
+
+
 # ==================== 行動(minN) ====================
 def menu_rows(ctx):
     """`answer_menu.json` の項目を**通った / 落ちた**に分ける。
@@ -145,13 +157,17 @@ def menu_rows(ctx):
             dropped.append({"id": item_id, "item": item, "minN": min_n,
                             "denominator": None, "why": f"材料が足りない({e})"})
             continue
-        row = {"id": item_id, "item": item, "minN": min_n, "denominator": denominator}
+        fractions = CA.menu_fractions(item_id, ctx["materials"])
+        row = {"id": item_id, "item": item, "minN": min_n, "denominator": denominator,
+               "fractions": fractions}
         if not holds:
             row["why"] = "条件が成り立たない"
         elif denominator is None or denominator < min_n:
             row["why"] = f"根拠の数が下限 {min_n} に届かない(いまの分母 {denominator})"
         elif not gate:
             row["why"] = "答え合わせの数が下限に届かない"
+        elif is_negative_type(item, fractions):
+            row["why"] = NEGATIVE_TYPE_REASON
         else:
             passed.append(row)
             continue
@@ -159,6 +175,81 @@ def menu_rows(ctx):
     passed.sort(key=lambda r: r["id"])
     dropped.sort(key=lambda r: r["id"])
     return passed, dropped
+
+
+# ==================== 観測 1 行(第 1 候補の印 × 実戦の印) ====================
+# **2026-09-29 に足した。**人間が 09-28 に「言ってよいのはここまで」と引いた線そのもの ―
+# 「第 1 候補が『打つ』で実戦が『打たない』型が 103 局面のうち ○ 局面、24 局中 ○ 局」。
+# **行動にはしない。観測として出すだけ**(承認済みの表に「打つ」の項目が無いので、
+# 行動にすれば表の外から行動を作ることになる)。
+# **語は `render_direct.py` の `TAG_JP` から取る**(「打つ」「捨て駒」)。
+# **「打たない」「見落とし」「候補に入れない」は使わない**(規則 8 (3)・人間の線)。
+# **出す印だけを持つ**(`check_answer.CROSS_TAGS` と同じ集合であることを試験が見る)。
+# 語は本編 p1 の言い方に合わせる(`TAG_JP` の「打つ」を含む形)。
+CROSS_PHRASE_JP = {"drop": "駒を打つ手"}
+
+
+def cross_line(direct, tag):
+    """観測の 1 行。**分子・分母を両側に出す**(局面と局の両方)。"""
+    c = CA.top1_actual_cross(direct, tag)
+    what = CROSS_PHRASE_JP[tag]
+    return (f"第 1 候補が{what}だった分かれ道 {c['positions']} 局面({c['games']} 局)のうち、"
+            f"実戦も{what}だった局面 {c['bothPositions']}({c['bothGames']} 局)、"
+            f"実戦は{what}ではなかった局面 {c['otherPositions']}({c['otherGames']} 局)。")
+
+
+# ==================== 行動の根拠と答え合わせの欄(分数は `check_answer.MENU_FRACTIONS` が正本) ====================
+# **3 つの出口(根拠の 1 行・動くはずの事実の欄・いまの値の欄)が同じ関数を読む。**
+# 判定が見た分数をそのまま出す ― **新しい分析を足すのではない**(2026-09-29 の人間の訂正:
+# 「橋が無いのではない。橋は判定ロジックに存在していた。問題はその橋を本編に出していなかったこと」)。
+
+
+# **表の見出しの行は定数**(2026-09-29)。試験が見出しの行を本文行から除くのに使う
+# ― **写しを持たせると、見出しを変えたときに試験が黙って本文行を数え間違える**(実測でそうなった)。
+VERIFY_TABLE_HEADER = "| 試したこと | 動くはずの事実 | いまの値 |"
+
+
+def _pairs(row):
+    """`[(見出し, 分子, 分母), ...]`。分数を持たない項目は空。"""
+    return [(f["label"], f["numerator"], f["denominator"]) for f in (row.get("fractions") or [])]
+
+
+def evidence_phrase(row):
+    """行動の直下に出る根拠の文。**分数を持つ項目は分数で書く。**
+
+    持たない項目(M1・M2・M9 など)は `answer_menu.json` の `evidenceName` に落ちる
+    ― **あちらは承認済みの表の文なので触らない**(2026-09-29 の司令塔の判断 (A))。
+    """
+    fractions = row.get("fractions")
+    if not fractions:
+        item = row["item"]
+        return f"{item['evidenceName']}({row['denominator']}・下限 {row['minN']})"
+    parts = [f"{f['name']}が {f['numerator']} / {f['denominator']}" for f in fractions]
+    return "、".join(parts) + " です"
+
+
+def facts_cell(row):
+    """答え合わせの表の「動くはずの事実」。**分数の名前をそのまま置く。**"""
+    fractions = row.get("fractions")
+    if not fractions:
+        return row["item"]["verifyName"]
+    return "と".join(f"「{f['name']}」" for f in fractions)
+
+
+def values_cell(row):
+    """答え合わせの表の「いまの値」。**分子 / 分母の両方を出す。**
+
+    2026-09-29 まではここが分母 1 つ(`137`・`404`)だった ― **列名が「いまの値」なのに値が入っていなかった。**
+    `M4` は分かれ道の総数(`forkTotal` = 404)を出していたが、**判定はその数で割っていない**(P-152)。
+    """
+    fractions = row.get("fractions")
+    if not fractions:
+        return str(row["denominator"])
+    parts = []
+    for f in fractions:
+        value = f"{f['numerator']} / {f['denominator']}"
+        parts.append(f"{f['label']} {value}" if f["label"] else value)
+    return "、".join(parts)
 
 
 # ==================== 対応表 ====================
@@ -328,6 +419,10 @@ def build_md(direct, patient, repro, passed, dropped, mapping, denoms, fdata, fe
     L.append("")
     L.append(f"分母は {repro['totalPositions']} 局面・{repro['totalGames']} 局です。")
     L.append("")
+    # **観測 1 行(行動ではない)。**書き手が「ひとことで」の 3 本に使える候補として出す。
+    for tag in CA.CROSS_TAGS:
+        L.append(f"- 観測(行動ではありません): {cross_line(direct, tag)}")
+    L.append("")
     L.append("| どんな手だったか | 局面 | 局 |")
     L.append("|---|---|---|")
     for r in repro["rows"]:
@@ -352,10 +447,12 @@ def build_md(direct, patient, repro, passed, dropped, mapping, denoms, fdata, fe
     L.append("")
     L.append(DRAFT_ONLY_HEADINGS[2])
     L.append("")
+    if not passed:
+        L.append(EI.NO_ACTION_SENTENCE)
     for i, r in enumerate(passed, start=1):
         item = r["item"]
         line = (f"{i}. {item['actionCore']}<!-- menu: {r['id']} -->"
-                f"　― 根拠は{item['evidenceName']}({r['denominator']}・下限 {r['minN']})")
+                f"　― 根拠は{evidence_phrase(r)}")
         if item.get("foundInSameData"):
             line += f"。{CA.FOUND_IN_SAME_DATA_PHRASE}。"
         L.append(line)
@@ -375,12 +472,15 @@ def build_md(direct, patient, repro, passed, dropped, mapping, denoms, fdata, fe
     L.append(note("残した行動の行だけにする(器の門の項目 6 が、この表の行と本編の行動の印の"
                   "集合が一致することを見る)"))
     L.append("")
-    L.append("| 項目 | 何で答え合わせをするか | いまの値 |")
+    # **列は 3 つ。道具の中の名前(`M4`・`M6`)の列は置かない**(2026-09-29。実物 2 件 ― 3 人目・
+    # 4 人目 ― はどちらも「試したこと / 動くはずの事実 / 今の値」の 3 列で、**1 列目は行動の文**だった。
+    # `ID` と `137`・`404` だけが並ぶ表は読者に何も渡さない。P-152)。
+    L.append(VERIFY_TABLE_HEADER)
     L.append("|---|---|---|")
     for r in passed:
         # **行にメニューの印を入れる。**器の門の項目 6 が行ごとに印をちょうど 1 つ求める
         # (実測 2026-09-29。印が無いと工程の最後で 5 行ぶん落ちる)。
-        L.append(f"| {r['id']}<!-- menu: {r['id']} --> | {r['item']['verifyName']} | {r['denominator']} |")
+        L.append(f"| {r['item']['actionCore']}<!-- menu: {r['id']} --> | {facts_cell(r)} | {values_cell(r)} |")
     L.append("")
 
     # ---- (e) 数え方 ----

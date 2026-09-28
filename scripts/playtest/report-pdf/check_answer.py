@@ -877,6 +877,61 @@ def m9_denominator(materials):
 
 
 MENU_HOLDS = {"M1": m1_holds, "M2": m2_holds, "M3": m3_holds, "M4": m4_holds, "M5": m5_holds, "M6": m6_holds, "M7": m7_holds, "M8": m8_holds, "M9": m9_holds}
+# ==================== 分数の定義(判定・根拠の 1 行・答え合わせの表が同じ 1 か所を読む) ====================
+# **写しを 2 か所に持たない。**判定(`MENU_HOLDS`)が見る分数と冊子に印字する分数がずれると、
+# **「いまの値」として判定が見ていない数が出る** ― 2026-09-29 の実物で起きた
+# (`M4` の行が `forkTotal` = 404 を出していたが、判定は `attack`・`defense` の分数で見ていた。P-152)。
+#
+# **名前は判定関数が数えている中身をそのまま日本語にしたもの。**将棋の言葉を足していない。
+# `M5` の言い方は `answer_facts.bullet_8` の承認済みの文から取った(「直前の自分の手が 10 秒以上で、この手は 4 秒以内」)。
+# **`answerMenu.ts` の `verifyName` は触らない**(承認済みの表の文を変えない)。
+# M4/M5/M6 はここから文を作り、他の項目は `verifyName` をそのまま使う(2026-09-29 の司令塔の判断 (A))。
+#
+# `label` は値を並べるときの短い見出し(1 項目が 2 本の分数を持つとき要る)。1 本だけなら空。
+
+
+def m4_fractions(materials):
+    sm = materials["sideMatch"]
+    if sm is None:
+        return None
+    return [
+        {"label": "攻め",
+         "name": "第 1 候補が攻めの手だった分かれ道のうち、実戦も攻めの手だった局面",
+         "numerator": sm["attack"]["collapsed"], "denominator": sm["attack"]["n"]},
+        {"label": "自玉側",
+         "name": "第 1 候補が自玉側の手だった分かれ道のうち、実戦も自玉側の手だった局面",
+         "numerator": sm["defense"]["collapsed"], "denominator": sm["defense"]["n"]},
+    ]
+
+
+def m5_fractions(materials):
+    g = primary_group(materials)
+    if g is None:
+        return None
+    q = g.after_long_think_quick
+    return [{"label": "",
+             "name": "直前の自分の手が 10 秒以上で、この手は 4 秒以内だった手のうち、崩れた手",
+             "numerator": q["collapsed"], "denominator": q["n"]}]
+
+
+def m6_fractions(materials):
+    r = materials["readCombined"]
+    if r is None:
+        return None
+    return [{"label": "",
+             "name": "第 1 候補が駒を捨てる手だった分かれ道のうち、実戦も駒を捨てる手だった局面",
+             "numerator": r["sacrificeDiagonal"], "denominator": r["sacrificeRowTotal"]}]
+
+
+MENU_FRACTIONS = {"M4": m4_fractions, "M5": m5_fractions, "M6": m6_fractions}
+
+
+def menu_fractions(item_id, materials):
+    """その項目の分数(無ければ `None`)。**`MENU_FRACTIONS` に無い項目は `None`** ― 呼ぶ側が `verifyName` に落ちる。"""
+    fn = MENU_FRACTIONS.get(item_id)
+    return None if fn is None else fn(materials)
+
+
 MENU_DENOMINATOR = {"M1": m1_denominator, "M2": m2_denominator, "M3": m3_denominator, "M4": m4_denominator, "M5": m5_denominator, "M6": m6_denominator, "M7": m7_denominator, "M8": m8_denominator, "M9": m9_denominator}
 
 
@@ -905,6 +960,48 @@ def menu_verify_gate_holds(item_id, materials, menu_items_by_id):
 
 
 # ==================== 検査 1: 数の照合(登録済みの組。司令塔の指示 2026-09-23 REVISE 6) ====================
+
+
+def direct_answers_of(direct):
+    """材料の `direct` から `answers[]` を引く(組をまたいで全部)。**取り出し方は 1 か所**
+    ― `exit_candidates.answers_of` はここへ委譲する(2026-09-29。写しを持たない)。"""
+    out = []
+    for raw in (direct or {}).get("raw") or []:
+        if raw.get("kind") == "direct_answers":
+            out.extend(raw.get("answers") or [])
+    return out
+
+
+def top1_actual_cross(direct, tag):
+    """**第 1 候補の印が `tag` だった分かれ道**と、そのうち**実戦の手も同じ印だった / そうでなかった**数。
+
+    局面と局の両方を返す。**材料は `direct`**(= 本編 p1 の数と同じ出どころ)なので、
+    分母は p1 の「第 1 候補が駒を打つ手だった局面が 54(22 局)」と同じ数になる。
+    **`read` の `tagCrossTable` は使わない** ― あちらの分母は読んだ局面の数(実物で 170)で、
+    **p1 の 54 と並べると同じ言葉に 2 つの分母が付く**(2026-09-29 に測って避けた。「分母の出どころを書く」の家族)。
+
+    **数えるだけで、目的を書かない**(規則 8 (3))。「打たない」「見落とし」「候補に入れない」は言わない。
+    """
+    answers = direct_answers_of(direct)
+    hit = [a for a in answers if (a.get("top1Tags") or {}).get(tag)]
+    both = [a for a in hit if (a.get("actualTags") or {}).get(tag)]
+    other = [a for a in hit if not (a.get("actualTags") or {}).get(tag)]
+
+    def games(rows):
+        return len({a["gameNo"] for a in rows})
+
+    return {"positions": len(hit), "games": games(hit),
+            "bothPositions": len(both), "bothGames": games(both),
+            "otherPositions": len(other), "otherGames": games(other)}
+
+
+# **`drop` だけ**(2026-09-29。測って決めた)。
+# `sacrifice` も同じ形で数えられるが、**`M6` の答え合わせの分数と分母が違う** ―
+# `direct` から数えると「第 1 候補が捨てる手 41 局面のうち実戦も捨てる手 22」、
+# `read` の `tagCrossTable` から数えると「137 のうち 50」。**同じ言葉に 2 つの分母が付く。**
+# 「分母の出どころを書く」の家族(`compare-rates-need-same-base`)なので、**並べない。**
+# `drop` は承認済みの表に対応する行動が無いので、**答え合わせの分数と衝突しない。**
+CROSS_TAGS = ("drop",)
 
 
 def registered_pairs_of(patient_files, materials):
@@ -948,6 +1045,18 @@ def registered_pairs_of(patient_files, materials):
         add(r["forkPositionsRead"], r["forkPositionsRead"] - r["firstVisibleNodesNoneCount"])
         add(r["sacrificeRowTotal"], r["sacrificeDiagonal"])
         add(r["opponentReplyMatchesPv"]["matched"], r["opponentReplyMatchesPv"]["measured"])
+
+    # **第 1 候補の印 × 実戦の印の組**(2026-09-29。観測 1 行を印字するために足した)。
+    # 分母は「第 1 候補がその印だった局面(局)」、分子は「実戦も同じ印だった / そうでなかった」。
+    # **`direct` から数えるので p1 の数と同じ出どころ**(`top1_actual_cross` の docstring)。
+    direct_material = materials.get("direct")
+    if direct_material:
+        for tag in CROSS_TAGS:
+            c = top1_actual_cross(direct_material, tag)
+            add(c["bothPositions"], c["positions"])
+            add(c["otherPositions"], c["positions"])
+            add(c["bothGames"], c["games"])
+            add(c["otherGames"], c["games"])
 
     sm = materials["sideMatch"]
     if sm is not None:

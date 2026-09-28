@@ -113,7 +113,10 @@ story.append(notebox([
     "「比較対象」は、" + person + "とは別の方の対局 10 局です(お名前は載せていません)。",
 ]))
 story.append(Spacer(1, 3 * mm))
-story.append(P(f"次のページから、形勢が大きく動いた {len(featured)} 局を 1 局ずつ見ていきます(負けた {len(la)} 局と、劣勢から勝った {len(featured) - len(la)} 局)。残りの {len(rest)} 局は、その後の一覧にまとめました。", S_BODY))
+# **「次のページから」と約束しない**(2026-09-29。同じ理由 ― この付録は束ねられて
+# 本編が指したページだけが冊子に入ることがある。1 周目の実物では折れ線 1 ページだけが入った)。
+# 数はそのまま、言い方だけ事実にする。
+story.append(P(f"形勢が大きく動いたのは {len(featured)} 局で、負けた {len(la)} 局と、劣勢から勝った {len(featured) - len(la)} 局でした。残りの {len(rest)} 局は一覧にまとめています。", S_BODY))
 story.append(PageBreak())
 
 # ===== 局の俯瞰(STEP FILL 作業 Y、H4-1: 見出しは s["games"] を使う) =====
@@ -199,7 +202,7 @@ for g in featured:
 # 引き算のどちらかが変わったとき、**組版の側(ここ)が落ちる**(表紙が黙って違う数を出すのではなく)。
 assert len(rest) == exit_index.rest_count(s["games"], len(PROSE)), (
     f"そのほかの局の数が引き算と合わない: len(rest)={len(rest)} / "
-    f"games-PROSE={s['games'] - len(PROSE)}(表紙は後者で題を作る)")
+    f"games-PROSE={exit_index.rest_count(s['games'], len(PROSE))}(表紙は後者で題を作る)")
 story.append(mark_sec(P(exit_index.section_title("付録1", "そのほかの局", rest=len(rest)), S_BIG), "そのほかの局"))
 story.append(P("一局ずつのページに載せなかった局の一覧です。グラフの見方は同じです。", S_LEAD))
 rows = [[P(x, S_K) for x in ["局", "先後", "結果", "手数", "どんな将棋だったか", "形勢の変化"]]]

@@ -92,10 +92,18 @@ def direct_of(answers):
     return {
         "raw": [{"kind": "direct_answers", "answers": answers}],
         "totalCount": len(answers),
+        # **実物には必ず在る鍵**(検査 1 が「浅い読みで見えた分かれ道 / 分かれ道」の組に使う)。
+        # 2026-09-29 に足した ― 合成材料に無かったので、`registered_pairs_of` を呼ぶ試験が
+        # `KeyError` で落ちた。**合成は実物の形に合わせる。**
+        "totalForkCount": len(answers) * 4,
         "top1TagCounts": {k: sum(1 for a in answers if a["top1Tags"][k]) for k in tag_keys},
         "actualTagCounts": {k: sum(1 for a in answers if a["actualTags"][k]) for k in tag_keys},
         "top1SideCounts": {s: sum(1 for a in answers if a["top1Side"] == s)
                            for s in ("attack", "defense")},
+        # **実物には必ず在る鍵**(検査 1 の (v) 組ごとの数 / 総数)。2026-09-29 に足した。
+        "groupCounts": {a.get("group", "3 分"): sum(1 for b in answers
+                                                    if b.get("group", "3 分") == a.get("group", "3 分"))
+                        for a in answers},
     }
 
 
@@ -136,8 +144,8 @@ class DraftOffersWhatTheWriterMustPickTest(unittest.TestCase):
                 continue
             if inside and line.startswith("| ") and not line.startswith("|---"):
                 rows.append(line)
-        # 見出しの行を除いた本文行(2 件)。
-        body_rows = [r for r in rows if "何で答え合わせをするか" not in r]
+        # 見出しの行を除いた本文行(2 件)。**見出しは道具の定数から引く**(写しを持たない)。
+        body_rows = [r for r in rows if r != EC.VERIFY_TABLE_HEADER]
         self.assertEqual(len(body_rows), 2, rows)
         for row in body_rows:
             self.assertEqual(len(CA.MENU_TAG_RE.findall(row)), 1, row)
@@ -414,6 +422,205 @@ class RestCountTest(unittest.TestCase):
             src = read_text(os.path.join(HERE, name))
             self.assertNotIn('int(patient["summary"]["games"]) - ', src,
                              name + " に引き算の写しが戻っている")
-        self.assertNotIn('s["games"] - len(PROSE)', read_text(os.path.join(HERE, "_mid.py")))
+        mid = read_text(os.path.join(HERE, "_mid.py"))
+        # **引用符の形を両方見る**(2026-09-29 の監査が挙げた宿題 ― 二重引用符だけを探していたので、
+        # `assert` のエラーの文に残っていた単一引用符の写しが網に入っていなかった)。
+        self.assertNotIn('s["games"] - len(PROSE)', mid)
+        self.assertNotIn("s['games'] - len(PROSE)", mid)
+def passed_row(item_id="M4", fractions=None, action="攻めと自玉側を 1 つずつ比べる",
+               verify_name="側の一致率", denominator=404, min_n=30):
+    return {"id": item_id, "minN": min_n, "denominator": denominator, "fractions": fractions,
+            "item": {"actionCore": action, "evidenceName": "側の分数", "verifyName": verify_name}}
+
+
+TWO = [{"label": "攻め", "name": "第 1 候補が攻めの手だった分かれ道のうち、実戦も攻めの手だった局面",
+        "numerator": 65, "denominator": 107},
+       {"label": "自玉側", "name": "第 1 候補が自玉側の手だった分かれ道のうち、実戦も自玉側の手だった局面",
+        "numerator": 76, "denominator": 132}]
+ONE = [{"label": "", "name": "第 1 候補が駒を捨てる手だった分かれ道のうち、実戦も駒を捨てる手だった局面",
+        "numerator": 50, "denominator": 137}]
+
+
+class VerifyTableTest(unittest.TestCase):
+    """**答え合わせの表は 3 列で、いまの値に分子 / 分母の両方が入る**(2026-09-29。P-152)。"""
+
+    def test_19_the_value_cell_carries_both_numbers(self):
+        self.assertEqual(EC.values_cell(passed_row(fractions=TWO)), "攻め 65 / 107、自玉側 76 / 132")
+        self.assertEqual(EC.values_cell(passed_row("M6", ONE)), "50 / 137")
+
+    def test_19b_the_denominator_of_the_gate_is_not_printed(self):
+        """**`404` は出ない。**判定が割っていない数だから(いまの値の列に置いていた)。"""
+        self.assertNotIn("404", EC.values_cell(passed_row(fractions=TWO)))
+        self.assertNotIn("404", EC.facts_cell(passed_row(fractions=TWO)))
+        self.assertNotIn("30", EC.evidence_phrase(passed_row(fractions=TWO)))
+
+    def test_19c_the_fact_cell_is_the_spelled_out_fraction(self):
+        cell = EC.facts_cell(passed_row(fractions=TWO))
+        self.assertIn("第 1 候補が攻めの手だった分かれ道のうち", cell)
+        self.assertIn("自玉側", cell)
+        self.assertNotIn("側の一致率", cell)
+
+    def test_19d_an_item_without_a_fraction_falls_back_to_the_approved_words(self):
+        """**承認済みの表の文には触らない。**分数を持たない項目は `verifyName` のまま。"""
+        row = passed_row("M9", None, verify_name="持ち時間に到達した局のうち中央値超え / 持ち時間に到達した局",
+                         denominator=5, min_n=2)
+        self.assertEqual(EC.facts_cell(row), row["item"]["verifyName"])
+        self.assertEqual(EC.values_cell(row), "5")
+        self.assertIn("側の分数", EC.evidence_phrase(row))
+
+    def test_19e_the_reason_line_carries_the_same_numbers_as_the_table(self):
+        """**根拠の 1 行と表が同じ数を出す**(写しを 2 か所に持たない)。"""
+        row = passed_row(fractions=TWO)
+        phrase = EC.evidence_phrase(row)
+        for f in TWO:
+            self.assertIn(f"{f['numerator']} / {f['denominator']}", phrase)
+            self.assertIn(f"{f['numerator']} / {f['denominator']}", EC.values_cell(row))
+
+    def test_19f_the_table_has_three_columns_and_no_id_column(self):
+        passed = [passed_row(fractions=TWO), passed_row("M6", ONE, action="捨てる手を候補に入れる")]
+        answers = [answer(1, 10, top1=("drop",))]
+        direct = direct_of(answers)
+        repro = EC.repro_rows(direct)
+        patient = {"summary": {"games": 1}, "games": [{"no": 1}],
+                   "findings": [{"kind": "phase", "oneLine": "一言", "text": "崩れ 79 回でした", "shown": True}]}
+        md = EC.build_md(direct, patient, repro, passed, [], [],
+                         EC.denominators(direct, patient, repro), None)
+        self.assertIn(EC.VERIFY_TABLE_HEADER, md)
+        self.assertEqual(EC.VERIFY_TABLE_HEADER.count("|"), 4)  # 3 列
+        rows = [l for l in md.split("\n") if l.startswith("| ") and "<!-- menu:" in l]
+        for r in rows:
+            # **1 列目は行動の文。**`M4` のような道具の中の名前が 1 列目に来ない。
+            first = r.split("|")[1]
+            self.assertNotIn("M4", first.replace("<!-- menu: M4 -->", ""))
+            self.assertNotIn("M6", first.replace("<!-- menu: M6 -->", ""))
+
+
+class NoActionTest(unittest.TestCase):
+    def test_20_zero_actions_prints_the_fixed_sentence(self):
+        """**差が無ければ行動にしない。**0 本なら固定文が出る(2026-09-29 の司令塔の判断)。"""
+        answers = [answer(1, 10, top1=("drop",))]
+        direct = direct_of(answers)
+        repro = EC.repro_rows(direct)
+        patient = {"summary": {"games": 1}, "games": [{"no": 1}],
+                   "findings": [{"kind": "phase", "oneLine": "一言", "text": "崩れ 79 回でした", "shown": True}]}
+        md = EC.build_md(direct, patient, repro, [], [], [],
+                         EC.denominators(direct, patient, repro), None)
+        self.assertIn(EI.NO_ACTION_SENTENCE, md)
+
+    def test_20b_the_sentence_is_not_printed_when_there_are_actions(self):
+        answers = [answer(1, 10, top1=("drop",))]
+        direct = direct_of(answers)
+        repro = EC.repro_rows(direct)
+        patient = {"summary": {"games": 1}, "games": [{"no": 1}],
+                   "findings": [{"kind": "phase", "oneLine": "一言", "text": "崩れ 79 回でした", "shown": True}]}
+        md = EC.build_md(direct, patient, repro, [passed_row(fractions=TWO)], [], [],
+                         EC.denominators(direct, patient, repro), None)
+        self.assertNotIn(EI.NO_ACTION_SENTENCE, md)
+class NegativeTypeTest(unittest.TestCase):
+    """**否定の型は本編の行動に入れない**(2026-09-29。`verifyName` が空で分数も無い項目)。"""
+
+    def test_21_the_predicate(self):
+        self.assertTrue(EC.is_negative_type({"verifyName": ""}, None))
+        self.assertTrue(EC.is_negative_type({"verifyName": ""}, []))
+        self.assertFalse(EC.is_negative_type({"verifyName": "側の一致率"}, None))
+        self.assertFalse(EC.is_negative_type({"verifyName": ""}, ONE))
+
+    def test_21b_menu_rows_drops_it_with_the_reason(self):
+        """**段の中で落ちること**を測る(述語だけでは、呼ばれているかが分からない)。"""
+        class G(object):
+            pass
+        g = G()
+        g.time_up_losses = {"n": 3, "m": 3}
+        materials = {"groups": {"min3": g}, "sideMatch": None, "readCombined": None}
+        items = {"M8": {"actionCore": "やってみる", "evidenceName": "根拠",
+                        "verifyName": "", "verifyGate": None}}
+        ctx = {"menuItemsById": items, "menuMinN": {"M8": 2}, "materials": materials}
+        passed, dropped = EC.menu_rows(ctx)
+        self.assertEqual(passed, [])
+        self.assertEqual([r["id"] for r in dropped], ["M8"])
+        self.assertEqual(dropped[0]["why"], EC.NEGATIVE_TYPE_REASON)
+        # **判定・下限・門はどれも通っている**(落ちた理由が否定の型であることの裏)
+        self.assertTrue(CA.MENU_HOLDS["M8"](materials))
+        self.assertGreaterEqual(CA.MENU_DENOMINATOR["M8"](materials), 2)
+
+    def test_21c_an_item_with_a_verify_name_still_passes(self):
+        class G(object):
+            pass
+        g = G()
+        g.time_up_losses = {"n": 3, "m": 3}
+        materials = {"groups": {"min3": g}, "sideMatch": None, "readCombined": None}
+        items = {"M8": {"actionCore": "やってみる", "evidenceName": "根拠",
+                        "verifyName": "時間切れの局数", "verifyGate": None}}
+        ctx = {"menuItemsById": items, "menuMinN": {"M8": 2}, "materials": materials}
+        passed, dropped = EC.menu_rows(ctx)
+        self.assertEqual([r["id"] for r in passed], ["M8"])
+        self.assertEqual(dropped, [])
+class CrossObservationTest(unittest.TestCase):
+    """**観測 1 行(第 1 候補の印 × 実戦の印)。行動ではない。**
+
+    人間が 2026-09-28 に引いた線そのもの。**分母は `direct` から数える** ―
+    `read` の `tagCrossTable` から数えると p1 の数と分母が違う(実測: 捨てる手は 41 対 137)。
+    """
+
+    def test_22_the_line_carries_both_sides_with_positions_and_games(self):
+        answers = [answer(1, 10, top1=("drop",), actual=("drop",)),
+                   answer(1, 20, top1=("drop",), actual=("capture",)),
+                   answer(2, 30, top1=("drop",), actual=("capture",)),
+                   answer(2, 40, top1=("capture",), actual=("drop",))]
+        direct = direct_of(answers)
+        line = EC.cross_line(direct, "drop")
+        # 第 1 候補が打つ手: 3 局面 / 2 局。実戦も打つ手: 1 局面 / 1 局。そうでない: 2 局面 / 2 局。
+        self.assertIn("3 局面(2 局)", line)
+        self.assertIn("実戦も駒を打つ手だった局面 1(1 局)", line)
+        self.assertIn("実戦は駒を打つ手ではなかった局面 2(2 局)", line)
+
+    def test_22b_the_line_says_it_is_not_an_action(self):
+        """**行動と混ぜない。**承認済みの表に「打つ」の項目が無いので、行動にすれば表の外から作ることになる。"""
+        md = emitted_md()
+        cross = [l for l in md.split("\n") if "観測(行動ではありません)" in l]
+        self.assertEqual(len(cross), len(CA.CROSS_TAGS), md)
+
+    def test_22c_only_the_drop_tag_is_printed(self):
+        """**`sacrifice` は出さない** ― `M6` の答え合わせの分数と分母が違うので並べられない。"""
+        self.assertEqual(CA.CROSS_TAGS, ("drop",))
+        md = emitted_md()
+        self.assertNotIn("第 1 候補が駒を捨てる手だった分かれ道", md)
+
+    def test_22d_the_banned_words_are_not_used(self):
+        """**「打たない」「見落とし」「候補に入れない」は使わない**(規則 8 (3)・人間の線)。"""
+        answers = [answer(1, 10, top1=("drop",), actual=("capture",))]
+        line = EC.cross_line(direct_of(answers), "drop")
+        for banned in ("打たない", "見落と", "候補に入れ"):
+            self.assertNotIn(banned, line)
+
+    def test_22e_the_words_come_from_the_tag_table(self):
+        """**語は `render_direct.py` の `TAG_JP` から**(写していないことを AST で突き合わせる)。"""
+        words = tag_words()
+        self.assertIn(words["drop"], EC.CROSS_PHRASE_JP["drop"])
+        # **出す印と語の集合が一致する**(語だけ残る・印だけ増えるを止める)
+        self.assertEqual(set(EC.CROSS_PHRASE_JP), set(CA.CROSS_TAGS))
+
+    def test_22f_check_1_allows_the_printed_pairs(self):
+        """**印字する組が検査 1 の登録済みの組に在る**(無いと門が冊子を落とす)。"""
+        # **偶然一致を避ける材料。**2026-09-29 に変異で見つけた ― 最初の材料では
+        # 「第 1 候補が打つ手」の数が総数と同じで、**実戦の印ごとの組(既に登録済み)が
+        # 同じ組を作っていた**ので、新しい登録を外しても試験が黙った。
+        # **総数 5・第 1 候補が打つ手 3 局面(2 局)**にして、組が重ならないようにする。
+        answers = [answer(1, 10, top1=("drop",), actual=("drop",)),
+                   answer(1, 20, top1=("drop",), actual=("capture",)),
+                   answer(2, 30, top1=("drop",), actual=("capture",)),
+                   answer(2, 40, top1=("capture",), actual=("drop",)),
+                   answer(3, 50, top1=("capture",), actual=("drop",))]
+        direct = direct_of(answers)
+        c = CA.top1_actual_cross(direct, "drop")
+        self.assertEqual((c["positions"], c["games"]), (3, 2))
+        self.assertNotEqual(c["positions"], direct["totalCount"])
+        pairs = CA.registered_pairs_of([], {"direct": direct, "groups": {}, "readCombined": None,
+                                            "sideMatch": None, "timeCause": None, "timeSearch": None,
+                                            "patientGroups": []})
+        for num in ("bothPositions", "otherPositions"):
+            self.assertIn((c[num], c["positions"]), pairs, num)
+        for num in ("bothGames", "otherGames"):
+            self.assertIn((c[num], c["games"]), pairs, num)
 if __name__ == "__main__":
     unittest.main(verbosity=2)

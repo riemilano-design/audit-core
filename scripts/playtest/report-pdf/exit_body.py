@@ -139,11 +139,32 @@ def break_before_mapping(story):
     return out
 
 
+def is_bold_only_line(flowable):
+    """行の中身が太字だけの段落か。**盤の見出しがこの形**(`**16 局目 93 手目 ― …**`)。
+
+    実測 2026-09-29: 盤の見出しは `## ` の行ではないので `S_H2` にならず、**本文と同じ様式**
+    (`abody`)で、中身だけが `<b>…</b>` で包まれる。だから様式の名前では見分けられない。
+    `check_answer.py` も「行の中身が太字だけの見出し」という同じ形を見ているが、
+    **あちらは md の行を見る**のでここからは使えない(こちらは組んだ後の `Paragraph`)。
+    """
+    text = getattr(flowable, "text", None)
+    if not isinstance(text, str):
+        return False
+    t = text.strip()
+    return t.startswith("<b>") and t.endswith("</b>")
+
+
 def swap_boards(story, boards):
     """目印の `Paragraph` を `Board` に入れ替える。**数が合わなければ落ちる**(印 1 つに盤 1 つ)。
 
     引数 `boards`: `{番号: Flowable}`。番号は `marks` の並び。
+
+    **見出しと盤は離さない**(D6 = P-150。2026-09-29)。直前が太字だけの段落なら
+    `KeepTogether` で 1 つにまとめる ― **見出しだけがページの下端に残り、盤が次のページに出る**
+    のを止めるため(1 周目の批評席が「1 ページ目では途切れています」と挙げた)。
     """
+    from reportlab.platypus import KeepTogether
+
     out = []
     seen = []
     for flowable in story:
@@ -160,7 +181,11 @@ def swap_boards(story, boards):
             # 番号がたまたま揃ったときに通ってしまう(変異試験で実測 2026-09-29)。
             raise ExitBodyError(f"{n} 番の目印に対応する盤が無い")
         seen.append(n)
-        out.append(boards[n])
+        if out and is_bold_only_line(out[-1]):
+            # **見出し + 盤を 1 つにする。**`out[-1]` を置き換える(足すのではない)。
+            out[-1] = KeepTogether([out[-1], boards[n]])
+        else:
+            out.append(boards[n])
     if sorted(seen) != sorted(boards):
         raise ExitBodyError(
             f"差し替えた目印 {sorted(seen)} と盤 {sorted(boards)} の数が合わない(印 1 つに盤 1 つ)")
