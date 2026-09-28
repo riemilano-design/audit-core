@@ -3,6 +3,7 @@
 exports[`report-pdf の python の試験(P-113) > 試験のファイルの名前の集合が、承認済みの一覧と一致する(足す・消す・改名で赤) 1`] = `
 [
   "answer_facts_test.py",
+  "board_draw_test.py",
   "board_spec_test.py",
   "check_answer_test.py",
   "check_delivery_test.py",
