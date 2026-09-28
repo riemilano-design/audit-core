@@ -88,6 +88,14 @@ MENU = {"items": [
 ]}
 
 
+# 組版が書いた索引(`exit_index.py` が書く形)。**付録 1 は `局/手`・付録 3 は `組 → 局/手`。**
+SOURCE_INDEX_1 = {"appendix": "付録1", "source": "appendix1.pdf", "pages": 8,
+                  "positions": {"1/40": 3, "2/70": 5},
+                  "sections": {"読み方": 1, "形勢の流れ": 2}}
+SOURCE_INDEX_3 = {"appendix": "付録3", "source": "appendix3.pdf", "pages": 9,
+                  "positions": {"3 分": {"5/59": 8}},
+                  "sections": {"分かれ道": 6}}
+
 def patient(games, time_up_losses):
     return {
         "summary": {"games": games},
@@ -145,13 +153,21 @@ def build_base(out_dir):
     write_json(j("patient_min3.json"), patient(20, [{"finalScore": 400}, {"finalScore": 500}, {"finalScore": 600}]))
     write_json(j("patient_min10.json"), patient(1, []))
     write_json(j("answer_menu.json"), MENU)
+    # 束ねた索引。**`positions`(上の階層)は束ねた後のページ**で `exit-render` が新しく書く値。
+    # **`付録N.positions` は元の付録のページ**で、組版が書いた索引と 1 バイトも違ってはいけない。
     write_json(j("page_index.json"), {
         "boardsDrawn": 2,
         "hasCover": True,
         "appendixPages": list(range(2, APPENDIX_BODY_PAGES + 2)),
         "sourcePages": {"付録1": [2, 3]},
-        "positions": {"1/40": 2, "2/70": 3},
+        "outputPositions": {"1/40": 2, "2/70": 3},
+        "付録1": {"positions": dict(SOURCE_INDEX_1["positions"]), "sections": dict(SOURCE_INDEX_1["sections"])},
+        "付録3": {"positions": {g: dict(d) for g, d in SOURCE_INDEX_3["positions"].items()},
+                  "sections": dict(SOURCE_INDEX_3["sections"])},
     })
+    # 組版が書いた索引(付録ごとに 1 本)。`exit-render` が束ねる前の値。
+    write_json(j("appendix1_page_index.json"), SOURCE_INDEX_1)
+    write_json(j("appendix3_page_index.json"), SOURCE_INDEX_3)
     return out_dir
 
 
@@ -166,7 +182,9 @@ def gate_argv(out_dir):
             "--patient", j("patient_min3.json"), "--time-limit-sec", "180",
             "--patient", j("patient_min10.json"), "--time-limit-sec", "600",
             "--prose", j("prose.json"),
-            "--menu", j("answer_menu.json")]
+            "--menu", j("answer_menu.json"),
+            "--source-index", j("appendix1_page_index.json"),
+            "--source-index", j("appendix3_page_index.json")]
 
 
 def read_md(d):
@@ -254,7 +272,7 @@ class CheckStructureTest(unittest.TestCase):
 
     def test_07_index_one_past_end(self):
         index = read_index(self.dir)
-        index["positions"]["1/40"] = len(appendix_pages(APPENDIX_BODY_PAGES)) + 1
+        index["outputPositions"]["1/40"] = len(appendix_pages(APPENDIX_BODY_PAGES)) + 1
         write_json(os.path.join(self.dir, "page_index.json"), index)
         self.assert_falls("索引と PDF の整合")
 
@@ -383,6 +401,97 @@ class CheckStructureTest(unittest.TestCase):
         write_md(self.dir, read_md(self.dir).replace(
             VERIFY_SECTION, "## 次の 20 局が来たら、何で答え合わせをするか\n\n次の 20 局で確かめます。\n"))
         self.assert_falls("答え合わせの節に表が無い")
+
+    # ---- 束ねた索引が組版の索引と等しいか(司令塔の条件 2026-09-28。
+    # **`exit-render` が黙って書き換える道を閉じる** ― 「書き換えず足すだけ」を機械で確かめる) ----
+    def test_27_bundled_value_changed(self):
+        # **司令塔が名指しした変異**: 束ねた値を 1 つ変える。
+        index = read_index(self.dir)
+        index["付録1"]["positions"]["1/40"] = 99
+        write_json(os.path.join(self.dir, "page_index.json"), index)
+        self.assert_falls("値が違う: ['1/40']")
+
+    def test_28_bundled_key_dropped(self):
+        # 束ねるときに 1 件落とす(組版は書いたのに、束ねた側に無い)。
+        index = read_index(self.dir)
+        del index["付録1"]["positions"]["2/70"]
+        write_json(os.path.join(self.dir, "page_index.json"), index)
+        self.assert_falls("束ねた側に無い: ['2/70']")
+
+    def test_29_bundled_key_invented(self):
+        # 束ねるときに 1 件でっち上げる(組版が書いていない局面が索引に入る)。
+        index = read_index(self.dir)
+        index["付録1"]["positions"]["9/99"] = 4
+        write_json(os.path.join(self.dir, "page_index.json"), index)
+        self.assert_falls("組版に無い: ['9/99']")
+
+    def test_30_bundled_section_changed(self):
+        # 節の側も同じように見る(局面だけの検査になっていないか)。
+        index = read_index(self.dir)
+        index["付録3"]["sections"]["分かれ道"] = 1
+        write_json(os.path.join(self.dir, "page_index.json"), index)
+        self.assert_falls("sections が組版の索引と違う")
+
+    def test_31_appendix_missing_from_bundle(self):
+        # 付録 1 つを束ねるのを忘れる。
+        index = read_index(self.dir)
+        del index["付録3"]
+        write_json(os.path.join(self.dir, "page_index.json"), index)
+        self.assert_falls("付録「付録3」が束ねた索引に無い")
+
+    def test_32_source_index_not_passed(self):
+        # 組版の索引を 1 本も渡さない(突き合わせずに通す道を閉じる)。
+        argv = [a for a in gate_argv(self.dir)]
+        drop = {"--source-index"}
+        trimmed, i = [], 0
+        while i < len(argv):
+            if argv[i] in drop:
+                i += 2
+                continue
+            trimmed.append(argv[i])
+            i += 1
+        old = sys.stderr
+        sys.stderr = captured = io.StringIO()
+        try:
+            rc = CS.main(trimmed)
+        finally:
+            sys.stderr = old
+        self.assertEqual(rc, 1, captured.getvalue())
+        self.assertIn("--source-index が 1 本も無い", captured.getvalue())
+
+    def test_33_source_index_appendix_field_missing(self):
+        # 組版の索引に appendix の欄が無い(どの付録のものか分からない)。
+        src = dict(SOURCE_INDEX_1)
+        del src["appendix"]
+        write_json(os.path.join(self.dir, "appendix1_page_index.json"), src)
+        self.assert_falls("appendix の欄が無い")
+
+    def test_34_same_appendix_twice(self):
+        # 同じ付録の索引を 2 本渡す(どちらが正か決められない)。
+        write_json(os.path.join(self.dir, "appendix3_page_index.json"), SOURCE_INDEX_1)
+        self.assert_falls("の索引が 2 本渡されている")
+
+    def test_35_source_index_file_missing(self):
+        # 組版の索引のファイルが無い(パスを渡したのに存在しない)。
+        os.remove(os.path.join(self.dir, "appendix1_page_index.json"))
+        self.assert_falls("--source-index のファイルが無い")
+
+    def test_36_bundled_appendix_without_source(self):
+        # 束ねた索引に、組版の索引が渡されていない付録が入っている
+        # (`exit-render` が自分で付録の節を書き足した形)。
+        index = read_index(self.dir)
+        index["付録2"] = {"positions": {}, "sections": {"分かれ道": 1}}
+        write_json(os.path.join(self.dir, "page_index.json"), index)
+        self.assert_falls("組版の索引が渡されていない付録がある")
+
+    def test_37_old_key_name_remains(self):
+        # **改名を門にする**(司令塔の条件 2026-09-28)。上の階層に旧い名前が残っていたら落とす ―
+        # これが無いと、旧い名前で書かれたとき `outputPositions` が「無い」だけになり、
+        # 索引と PDF の整合の検査が**黙って何も見ない**道が残る。
+        index = read_index(self.dir)
+        index["positions"] = dict(index["outputPositions"])
+        write_json(os.path.join(self.dir, "page_index.json"), index)
+        self.assert_falls("旧い名前が残っている")
 
     # ---- 折り返しを越えて数えること自体の試験(最初の実測で見つけた穴) ----
     # 商品の範囲の 1 段落が 2 行に折られていても 1 か所と数える。`squeeze` を外すと

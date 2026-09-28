@@ -6,6 +6,7 @@
 #   python3 -X utf8 check_structure.py <顧客フォルダ> \
 #     --honbun-md <本編.md> --honbun-personal <本人用.pdf> --honbun-sample <見本用.pdf> \
 #     --appendix <付録.pdf> --page-index <page_index.json> \
+#     [--source-index <組版が書いた索引.json>]…  (付録ごとに 1 本。束ねた値が書き換えられていないかを見る) \
 #     (以下は check_answer.py と同じ形。本編の md をそのまま検査に通すため)
 #     [--patient <patient_report_data.json> --time-limit-sec <秒>]… --menu <answer_menu.json> \
 #     [--direct <json>]… [--time-cause <json>]… [--prose <prose.json>] [--whatif-data-now <json>]…
@@ -105,10 +106,18 @@ def parse_args(argv):
     out_dir = argv[0]
     mine = {"--honbun-md": None, "--honbun-personal": None, "--honbun-sample": None,
             "--appendix": None, "--page-index": None}
+    # 組版が書いた索引(付録ごとに 1 本。繰り返せる)。
+    source_indexes = []
     rest = []
     i = 1
     while i < len(argv):
         flag = argv[i]
+        if flag == "--source-index":
+            if i + 1 >= len(argv):
+                raise CheckStructureError("--source-index に値が無い")
+            source_indexes.append(argv[i + 1])
+            i += 2
+            continue
         if flag in mine:
             if i + 1 >= len(argv):
                 raise CheckStructureError(f"{flag} に値が無い")
@@ -122,7 +131,7 @@ def parse_args(argv):
         raise CheckStructureError(f"足りない引数: {' '.join(missing)}")
     if not os.path.isdir(out_dir):
         raise CheckStructureError(f"顧客フォルダが無い: {out_dir}")
-    return out_dir, mine, rest
+    return out_dir, mine, rest, source_indexes
 
 
 def heading_lines(md_text):
@@ -286,9 +295,72 @@ def check_appendix_pages(index, appendix, problems):
         for page in pages:
             if page < 1:
                 problems.append(f"索引: {source} のページ番号が {page}(1 以上でなければならない)")
-    for entry, page in (index.get("positions") or {}).items():
+    # **`outputPositions`(束ねた後の 1 冊の中のページ)**。`付録N.positions`(元の付録のページ)とは別物
+    # ― 同じ名前だと 2 つの検査がどちらも嘘になるので改名した(P-120。司令塔の判断 2026-09-28、案 1)。
+    for entry, page in (index.get("outputPositions") or {}).items():
         if not isinstance(page, int) or page < 1 or page > len(appendix):
             problems.append(f"索引と PDF の整合: {entry} が付録の {page} ページを指しているが、付録は {len(appendix)} ページ")
+    # **改名を慣習ではなく門にする**(司令塔の条件 2026-09-28)。旧い名前が残っていると、
+    # `outputPositions` が「無い」だけになり、**この検査が黙って何も見ない**道が残る。
+    if "positions" in index:
+        problems.append("上の階層の positions は outputPositions に改名済み。旧い名前が残っている")
+
+
+def check_bundled_index(index, source_paths, problems):
+    """**束ねた索引が、組版が書いた索引の和集合と等しいか**(司令塔の条件 2026-09-28)。
+
+    **【注意: `positions` は 1 つのファイルの中で 2 つの意味を持つ】**
+    - **`index["outputPositions"]`(上の階層)** = **束ねた後の付録 1 冊の中のページ**。`check_appendix_pages` が
+      「PDF のページ数を超えていないか」で見る値。**`exit-render` が新しく書く。**
+    - **`index["付録N"]["positions"]`** = **元の付録の中のページ**(組版が書いた値)。この検査が見る値。
+      **`exit-render` は書き換えてはいけない。**
+
+    **この 2 つを混ぜると、どちらの検査も嘘になる**(元のページ番号を出力のページ数と比べることになる)。
+    名前が同じなのは読み手に危ないので、**既知事項に登録して司令塔の判断を仰いでいる。**
+
+    **`exit-render` が黙って書き換える道を閉じる。**「組版が書いた値は書き換えず、足すだけ」を
+    **言葉ではなく機械で確かめる** ― 鍵も値も一致しなければ落とす。
+
+    `exit-render` だけが知る値(`boardsDrawn`・`appendixPages`・`hasCover`・`sourcePages`)は
+    **この検査の対象ではない**(新しく書いてよい)。見るのは `positions` と `sections` だけ。
+    """
+    if not source_paths:
+        problems.append("束ねた索引: --source-index が 1 本も無い(組版が書いた索引と突き合わせられない)")
+        return
+    seen = {}
+    for path in source_paths:
+        try:
+            with open(path, encoding="utf-8") as f:
+                src = json.load(f)
+        except FileNotFoundError:
+            problems.append(f"束ねた索引: --source-index のファイルが無い: {path}")
+            continue
+        appendix = src.get("appendix")
+        if appendix is None:
+            problems.append(f"束ねた索引: {os.path.basename(path)} に appendix の欄が無い(どの付録のものか分からない)")
+            continue
+        if appendix in seen:
+            problems.append(f"束ねた索引: 付録「{appendix}」の索引が 2 本渡されている({seen[appendix]} と {os.path.basename(path)})")
+            continue
+        seen[appendix] = os.path.basename(path)
+        bundled = index.get(appendix)
+        if bundled is None:
+            problems.append(f"束ねた索引: 付録「{appendix}」が束ねた索引に無い(組版は書いたのに落ちている)")
+            continue
+        for field in ("positions", "sections"):
+            want = src.get(field) or {}
+            got = bundled.get(field) or {}
+            if got != want:
+                only_src = sorted(set(want) - set(got))
+                only_bundled = sorted(set(got) - set(want))
+                changed = sorted(k for k in set(want) & set(got) if want[k] != got[k])
+                problems.append(
+                    f"束ねた索引: 付録「{appendix}」の {field} が組版の索引と違う"
+                    f"(束ねた側に無い: {only_src or 'なし'} / 組版に無い: {only_bundled or 'なし'} / 値が違う: {changed or 'なし'})"
+                )
+    extra = [k for k in index if k.startswith("付録") and k not in seen]
+    if extra:
+        problems.append(f"束ねた索引: 組版の索引が渡されていない付録がある: {sorted(extra)}")
 
 
 def check_scope_and_mapping(personal, problems):
@@ -300,7 +372,7 @@ def check_scope_and_mapping(personal, problems):
 
 
 def main(argv):
-    out_dir, mine, rest = parse_args(argv)
+    out_dir, mine, rest, source_indexes = parse_args(argv)
     problems = []
 
     with open(mine["--honbun-md"], encoding="utf-8") as f:
@@ -326,6 +398,7 @@ def main(argv):
     check_boards(md_text, index, personal, problems)
     check_appendix_pages(index, appendix, problems)
     check_scope_and_mapping(personal, problems)
+    check_bundled_index(index, source_indexes, problems)
 
     if problems:
         print(f"落ちた項目 {len(problems)} 件:", file=sys.stderr)
