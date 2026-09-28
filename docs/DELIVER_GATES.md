@@ -285,6 +285,11 @@ npx tsx scripts/playtest/deliver.ts <同じ引数> --from answer-check
 
 ### 3a.5 道具は試作のまま
 
+**この節の判断は 2026-09-28 の人間の決定で上書きされた。** 5 人目で `deliver.ts` がこの §3a の形ではなく却下済みの 6 冊の形を出したため
+(§3a の形は試作にしかなく、道具に無かった)、**顧客向け出口を `deliver.ts` の段にする。** 順番と線引きは
+[STEP_CUSTOMER_EXIT_2026-09-28.md](STEP_CUSTOMER_EXIT_2026-09-28.md)、正本は [GOLDEN_MASTER_CUSTOMER_EXIT.md](GOLDEN_MASTER_CUSTOMER_EXIT.md)。
+下の記述は経緯として残す。
+
 `scripts/playtest/out/_deliver1_handoff/reedit/` に `build.py`・`honbun.md`・`check.sh` がある(`out/` は gitignore なのでリポジトリには入っていない)。SFEN から盤の SVG を描き、md を HTML 経由で PDF にし、既存の付録 PDF のページを抜いて 1 冊にまとめる。**リポジトリに入れるかは、次のモニターで 1 回使って原価③を測ってから決める**(司令塔の判断)。`check.sh` の中のパスは書いた時点の顧客のものなので、**そのまま実行せず書き換えて使う。**
 
 ---
