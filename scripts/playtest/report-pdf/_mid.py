@@ -144,7 +144,7 @@ S_GSUB = st("gsub", fontSize=10, leading=13, color=MUTED)
 S_SEC = st("sec", font=FONT_B, fontSize=10.5, leading=14, color=ACCENT, spaceBefore=2.5 * mm, spaceAfter=1 * mm)
 S_SC = st("sc5", fontSize=10.8, leading=16.5)
 for g in featured:
-    no = g["no"]; f = F[no]; pz = PROSE[str(no)]; us = g["side"] == "先手"; k = SF[g["id"]]
+    no = g["no"]; f = F[no]; pz = PROSE[str(no)]; us = board_spec.user_sente(g["side"]); k = SF[g["id"]]
     # STEP ENDING_CLOCK §4 の 10(計画の直し、904d317)。ここが g["ending"](= 「投了」)を実際に印字している。
     # (3) の併記: 終局の語は投了・本人が負け・時計は一致しなかった局(resigned_ahead。第 16 局のような形)に、
     # 判定はしない・数だけの観測を添える。
