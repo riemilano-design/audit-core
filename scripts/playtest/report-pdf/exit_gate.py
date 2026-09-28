@@ -64,6 +64,26 @@ def sections_of(md_text):
     return out
 
 
+def without_draft_only(lines):
+    """下書きだけの節(`### 候補 …`・`### 下限 …`)の中の行を落とす(2026-09-29)。
+
+    **検査 (vi) がこれらの節の削除を求めているので、(ii) が中の数に苦情を言うのは無駄である** ―
+    実物で **「数 5 が候補に無い」「数 2 が候補に無い」** が出た(見出し「候補 1: 発見(材料が出した 5 種類)」
+    「候補 2: 同じ型が何局で起きたか」の中の数字)。**書き手の一覧に、消せば消える苦情を混ぜない。**
+    見出しの一覧は `exit_candidates.DRAFT_ONLY_HEADINGS` が正本(写さない)。
+    """
+    out = []
+    skipping = False
+    for line in lines:
+        if line.startswith("#"):
+            # **見出しの行そのものも落ちる**(下の `if not skipping` で外れる)。
+            # 2026-09-29: ここに `continue` を置いていたが**等価**だった(変異が黙って気づいた)。
+            skipping = any(line.strip() == h.strip() for h in EC.DRAFT_ONLY_HEADINGS)
+        if not skipping:
+            out.append(line)
+    return out
+
+
 def section_lines(sections, role):
     """その役割の節の行。無ければ None(節が無いこと自体は器の門〈項目 1〉の仕事)。"""
     for heading, lines in sections:
@@ -177,7 +197,8 @@ def check_p1(sections, cands, problems):
     if len(facts) != want:
         problems.append(f"(ii) 「ひとことで」の事実(箇条書き)が {len(facts)} 本(ちょうど {want} 本にする)")
     # **節の中のすべての数**を照合する(箇条書きでも 1 文でも。分数は左右とも)。
-    claims = number_claims(lines)
+    # **下書きだけの節は外す** ― (vi) が削除を求めている節の数に苦情を言わない(2026-09-29)。
+    claims = number_claims(without_draft_only(lines))
     allowed = {int(x["number"]) for x in cands.get("p1Numbers") or []}
     if not allowed:
         problems.append("(ii) 候補の JSON に p1Numbers が無い(候補の段を回し直す)")

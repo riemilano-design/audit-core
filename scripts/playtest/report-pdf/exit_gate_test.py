@@ -407,5 +407,54 @@ class ScanNumbersTest(unittest.TestCase):
         self.assertEqual(set(claims), {68, 5})
 
 
+class DraftOnlySectionsAreNotCountedTest(unittest.TestCase):
+    """**(vi) が削除を求めている節の数に、(ii) が苦情を言わない**(2026-09-29。実物で出た)。
+
+    実物で「数 5 が候補に無い」「数 2 が候補に無い」が出た ― どちらも下書きだけの見出し
+    (「候補 1: 発見(材料が出した 5 種類)」「候補 2: 同じ型が何局で起きたか」)の中の数字だった。
+    **書き手の一覧に、消せば消える苦情を混ぜない。**
+    """
+
+    def test_30_lines_inside_a_draft_only_section_are_dropped(self):
+        lines = ["- 一度は優勢になった 18 局のうち 6 局。",
+                 EC.DRAFT_ONLY_HEADINGS[0],
+                 "- 崩れ 79 回のうち中盤 41 回。",
+                 "## 次の節"]
+        kept = EG.without_draft_only(lines)
+        self.assertIn("- 一度は優勢になった 18 局のうち 6 局。", kept)
+        self.assertNotIn("- 崩れ 79 回のうち中盤 41 回。", kept)
+        self.assertNotIn(EC.DRAFT_ONLY_HEADINGS[0], kept)
+        # **次の見出しで拾い直す**(節の外に出たら落とさない)
+        self.assertIn("## 次の節", kept)
+
+    def test_30b_a_number_only_inside_a_draft_only_section_is_not_a_problem(self):
+        cands = {"p1Numbers": [{"number": 3}, {"number": 18}, {"number": 6}]}
+        # **事実の行に数を入れない**(入れるとその数の苦情が出て、測りたいものが見えない)。
+        sections = [("ひとことで", ["- 一度は優勢になった 18 局のうち 6 局。",
+                                    "- ふたつ目の事実。", "- みつ目の事実。",
+                                    EC.DRAFT_ONLY_HEADINGS[1],
+                                    "- 候補の中の 97 / 236。"])]
+        problems = []
+        EG.check_p1(sections, cands, problems)
+        self.assertEqual([p for p in problems if "97" in p or "236" in p], [])
+        # **見出しそのものの数にも苦情を言わない**(見出しを落とさないと「数 2」が出る。
+        # 2026-09-29 に変異で実測 ― 見出しを残す変異が黙っていた)
+        self.assertEqual([p for p in problems if "数 2 " in p], [], problems)
+
+    def test_30c_a_number_outside_is_still_a_problem(self):
+        """**外の数は今までどおり止める**(緩めていないことの裏)。"""
+        cands = {"p1Numbers": [{"number": 3}, {"number": 18}, {"number": 6}]}
+        sections = [("ひとことで", ["- 一度は優勢になった 18 局のうち 6 局。",
+                                    "- 97 / 236 でした。", "- 3 本目。"])]
+        problems = []
+        EG.check_p1(sections, cands, problems)
+        self.assertTrue([p for p in problems if "97" in p], problems)
+
+    def test_30d_the_headings_come_from_the_candidates_tool(self):
+        """**見出しの一覧は写さない**(`exit_candidates` が正本)。"""
+        src = read_text(os.path.join(HERE, "exit_gate.py"))
+        self.assertIn("EC.DRAFT_ONLY_HEADINGS", src)
+        for h in EC.DRAFT_ONLY_HEADINGS:
+            self.assertNotIn(h, src)
 if __name__ == "__main__":
     unittest.main(verbosity=2)

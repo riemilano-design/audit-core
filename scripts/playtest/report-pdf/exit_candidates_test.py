@@ -622,5 +622,73 @@ class CrossObservationTest(unittest.TestCase):
             self.assertIn((c[num], c["positions"]), pairs, num)
         for num in ("bothGames", "otherGames"):
             self.assertIn((c[num], c["games"]), pairs, num)
+class ObservationNumbersAreCandidatesTest(unittest.TestCase):
+    """**印字する側と数える側は同じ集合。**観測 1 行の数が `p1Numbers` に在ること(2026-09-29)。
+
+    通して見つけた ― 観測を下書きに印字しているのに候補に無かったので、
+    **書き手が観測を p1 に使うと門が「数 32 が候補に無い」と言って止めた**(実物で出た)。
+    P-139(門が 1 桁を数え、候補が数えなかった)と**同じ型の 2 度目**。
+    """
+
+    @staticmethod
+    def fixture():
+        answers = [answer(1, 10, top1=("drop",), actual=("drop",)),
+                   answer(1, 20, top1=("drop",), actual=("capture",)),
+                   answer(2, 30, top1=("drop",), actual=("capture",)),
+                   answer(2, 40, top1=("capture",), actual=("drop",)),
+                   answer(3, 50, top1=("capture",), actual=("drop",))]
+        direct = direct_of(answers)
+        return direct, EC.repro_rows(direct), {
+            "summary": {"games": 3}, "games": [{"no": 1}, {"no": 2}, {"no": 3}],
+            "findings": [{"kind": "phase", "oneLine": "一言", "text": "崩れ 79 回でした", "shown": True}]}
+
+    def test_23_all_six_numbers_of_the_observation_are_candidates(self):
+        direct, repro, patient = self.fixture()
+        got = {int(x["number"]) for x in EC.p1_numbers(patient, repro, direct)}
+        c = CA.top1_actual_cross(direct, "drop")
+        for key in ("positions", "games", "bothPositions", "bothGames", "otherPositions", "otherGames"):
+            self.assertIn(c[key], got, key)
+
+    def test_23b_every_number_the_line_prints_is_a_candidate(self):
+        """**出す文から数を拾って突き合わせる**(欄の名前ではなく、印字された数で測る)。"""
+        direct, repro, patient = self.fixture()
+        got = {int(x["number"]) for x in EC.p1_numbers(patient, repro, direct)}
+        line = EC.cross_line(direct, "drop")
+        _ratio, fractions, percents, plains = CA.scan_numbers(line, small_max=0)
+        printed = [n for a, b, _s in fractions for n in (a, b)] + list(percents) + list(plains)
+        self.assertTrue(printed)
+        for n in printed:
+            self.assertIn(n, got, f"{n} が候補に無い(門が止める): {line}")
+
+    def test_23c_the_candidates_carry_where_the_number_came_from(self):
+        direct, repro, patient = self.fixture()
+        rows = [x for x in EC.p1_numbers(patient, repro, direct) if "観測" in x["from"]]
+        self.assertEqual(len(rows), 6)
+        for r in rows:
+            self.assertIn("direct_answers.json", r["from"])
+
+    def test_23e_the_json_the_gate_reads_carries_them(self):
+        """**門が読む JSON まで届いていること。**関数を直接呼ぶ試験だけでは、
+        `build()` の中で `direct` を渡し忘れても黙る(2026-09-29 に変異で実測)。"""
+        direct, repro, patient = self.fixture()
+        payload = EC.candidates_json(direct, patient, repro, [], [], [])
+        got = {int(x["number"]) for x in payload["p1Numbers"]}
+        c = CA.top1_actual_cross(direct, "drop")
+        for key in ("positions", "games", "bothPositions", "bothGames", "otherPositions", "otherGames"):
+            self.assertIn(c[key], got, key)
+
+    def test_23f_the_json_is_built_by_the_function(self):
+        """**`build()` は自分で辞書を組まない**(組むと測れない所に戻る)。"""
+        src = read_text(os.path.join(HERE, "exit_candidates.py"))
+        self.assertIn("json.dump(candidates_json(", src)
+        self.assertEqual(src.count('"p1Numbers"'), 1)
+
+    def test_23d_without_the_material_the_list_is_unchanged(self):
+        """`direct` を渡さなければ**前と同じ**(既存の呼び出しを壊していない)。"""
+        direct, repro, patient = self.fixture()
+        without = EC.p1_numbers(patient, repro)
+        with_direct = EC.p1_numbers(patient, repro, direct)
+        self.assertEqual(without, with_direct[:len(without)])
+        self.assertEqual(len(with_direct) - len(without), 6)
 if __name__ == "__main__":
     unittest.main(verbosity=2)

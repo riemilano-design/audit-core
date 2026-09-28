@@ -216,7 +216,7 @@ function kifuNameProblemsMessage(problems: readonly KifuNameProblem[]): string {
   const lines = ["棋譜のファイル名に使えない数字があります(付録 4 が kifuId を数の照合にかけ、冊子に印字します):"];
   let prevKey = "";
   for (const p of problems) {
-    const key = `${p.fileName} ${p.kifuId} ${p.gameNo}`;
+    const key = `${p.fileName}\u0000${p.kifuId}\u0000${p.gameNo}`;
     const detail = key === prevKey ? "同上" : `${p.gameNo} 局目。許すのは局番号と 1,2,3,4,5,9,10,300`;
     lines.push(`- ${p.fileName}: kifuId「${p.kifuId}」の ${p.badNumber}(${detail})`);
     prevKey = key;

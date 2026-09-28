@@ -299,7 +299,7 @@ def board_marks(direct):
 #
 # **言い回しの型の数(「型が N 通りあります」)は入れない** ― それは材料の作りの話で、
 # この人の対局について言える数ではない。書き手が使ったら門で落ちる(それが正しい)。
-def p1_numbers(patient, repro):
+def p1_numbers(patient, repro, direct=None):
     # **本編の形の数**(事実の本数)。実物は「数は 3 つ。」と**冊子が自分の形を言う** ―
     # 3 人目の試作の「ひとことで」の 1 文にこの言い方が在る(実測 2026-09-29)。
     # **対局の事実ではないが、書き手が書く数である。**
@@ -338,7 +338,39 @@ def p1_numbers(patient, repro):
         for number, unit in seen:
             out.append({"number": number, "unit": unit,
                         "from": f"patient_report_data.json の findings「{f['kind']}」の text"})
+    # **観測 1 行の数も候補に入れる**(2026-09-29。通して見つけた ― 観測を印字しているのに
+    # 候補に無かったので、**書き手が観測を p1 に使うと門が「数 32 が候補に無い」と言って止める**)。
+    # **印字する側と数える側は同じ集合**でなければならない(P-139 と同じ型の 2 度目)。
+    if direct is not None:
+        for tag in CA.CROSS_TAGS:
+            c = CA.top1_actual_cross(direct, tag)
+            what = CROSS_PHRASE_JP[tag]
+            for key, unit, label in (("positions", "局面", "第 1 候補が%sだった分かれ道"),
+                                     ("games", "局", "第 1 候補が%sだった局"),
+                                     ("bothPositions", "局面", "実戦も%sだった局面"),
+                                     ("bothGames", "局", "実戦も%sだった局"),
+                                     ("otherPositions", "局面", "実戦は%sではなかった局面"),
+                                     ("otherGames", "局", "実戦は%sではなかった局")):
+                out.append({"number": c[key], "unit": unit,
+                            "from": "direct_answers.json の answers(観測: " + (label % what) + ")"})
     return out
+
+
+# ==================== 門が照合する候補の JSON ====================
+# **関数にして測れるようにした**(2026-09-29)。`build()` の中に書いてあったので、
+# **`p1_numbers` に `direct` を渡すのを外しても変異が黙った** ― 中を回す試験が無かった。
+# §48 の「番人のある単位を関数にする」と同じ型の 2 度目。
+
+
+def candidates_json(direct, patient, repro, denoms, passed, dropped):
+    """門(`exit_gate.py`)が照合する候補。**md に印字したものと同じ値**でなければならない。"""
+    return {"denominators": denoms, "repro": repro,
+            "p1Numbers": p1_numbers(patient, repro, direct),
+            "boards": [inner for _text, inner in board_marks(direct)],
+            "menuPassed": [r["id"] for r in passed],
+            "menuDropped": [{"id": r["id"], "minN": r["minN"],
+                             "denominator": r["denominator"], "why": r["why"]}
+                            for r in dropped]}
 
 
 # ==================== 分母の出どころ ====================
@@ -593,14 +625,7 @@ def build(own, rest):
     with open(own["out_md"], "w", encoding="utf-8") as f:
         f.write(md + "\n")
     with open(own["out_json"], "w", encoding="utf-8") as f:
-        json.dump({"denominators": denoms, "repro": repro,
-                   # 門(`exit_gate.py`)が照合する 3 つ。**md に印字したものと同じ値**。
-                   "p1Numbers": p1_numbers(patient, repro),
-                   "boards": [inner for _text, inner in board_marks(direct)],
-                   "menuPassed": [r["id"] for r in passed],
-                   "menuDropped": [{"id": r["id"], "minN": r["minN"],
-                                    "denominator": r["denominator"], "why": r["why"]}
-                                   for r in dropped]},
+        json.dump(candidates_json(direct, patient, repro, denoms, passed, dropped),
                   f, ensure_ascii=False, indent=1, sort_keys=True)
     return {"todo": md.count(TODO), "repro": len(repro["rows"]),
             "passed": len(passed), "dropped": len(dropped),
