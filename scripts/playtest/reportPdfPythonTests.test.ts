@@ -36,7 +36,7 @@ const PYTHON_TESTS: readonly string[] = readdirSync(REPORT_PDF)
  * (2026-09-28 時点で 4 本: answer_facts・check_answer・check_delivery・check_structure)。
  * 試験を足したときに上げる必要は無い(足すぶんは `readdirSync` が拾う)。
  */
-const MIN_PYTHON_TESTS = 8;
+const MIN_PYTHON_TESTS = 9;
 
 describe("report-pdf の python の試験(P-113)", () => {
   it(`試験のファイルが ${MIN_PYTHON_TESTS} 本以上ある(消えたら赤)`, () => {

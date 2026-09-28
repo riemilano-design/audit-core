@@ -4,6 +4,7 @@
 # **ページを置いたのと同じコードの経路が索引を書く**(別に計算しない・PDF の文字を検索しない)。
 # 鍵の形と節の固定名は **`exit_index.py` が正本**(組版と `check_structure.py` が同じ定数を共有する)。
 # ここは **`doc.page` を読むだけ**で、**flowable は 1 つも足さない**。
+import board_spec
 import exit_index
 
 INDEX = exit_index.PageIndexRecorder(doc, "付録1")
@@ -158,15 +159,19 @@ for g in featured:
     story += [head_tbl, Spacer(1, 1.5 * mm), P("どんな将棋だったか", S_SEC), P(fill(g, pz["summary"]), S_SC), P("形勢の変化(赤い点と番号が、下の場面です。縦の点線は手数の目安)", S_SEC), SparkWide(g["scores"], marks, w=W, h=20 * mm, plies=[p + f["off"] for p in g["plies"]], labels={mi: "①②③"[j] for j, mi in enumerate(marks)}), Spacer(1, 4.5 * mm), P("形勢が動いた場面", S_SEC)]
     BSZ = (42 if len(pz["scenes"]) > 1 else 56) * mm
     for s_ in pz["scenes"]:
-        ply = min(s_["ply"], len(k["sfens"]) - 1)
-        if s_["type"] == "move":
+        # **盤に渡す値の判断は `board_spec.py` の 1 か所**(切り詰め・分岐・添字・usi)。
+        # 後半(本編 md → PDF)が同じ盤を出すので、**写しを 2 か所に持たない** ―
+        # 写すと 1 手ずれ、ずれても試験は通ってしまう(司令塔の指示 2026-09-29)。
+        spec = board_spec.scene_spec(s_, k["sfens"], k["moves"])
+        ply = spec["ply"]
+        if spec["kind"] == "move":
             e = EV[(no, s_["ply"])]; same = e["sameBest"] or not e.get("bestUsi") or e["bestUsi"] == e["playedUsi"]
             arrows = [(e["playedUsi"], COL_PLAYED, False, 0 if same else 1.3)] + ([] if same else [(e["bestUsi"], COL_CAND, True, -1.3)])
-            bd = Board(k["sfens"][ply - 1], us, usi=None, person=person, arrows=arrows, size=BSZ)
+            bd = Board(spec["sfen"], us, usi=spec["usi"], person=person, arrows=arrows, size=BSZ)
             cap = f"{disp_move(g, s_['ply'], e['played'])} を指す前の局面"
             cell = [P(cap, S_CARDH), Spacer(1, 1.5 * mm), P(fill(g, s_["text"], s_["ply"]), S_SC), Spacer(1, 2 * mm), Legend(same)]
         else:
-            bd = Board(k["sfens"][ply], us, usi=k["moves"][ply - 1], person=person, size=BSZ)
+            bd = Board(spec["sfen"], us, usi=spec["usi"], person=person, size=BSZ)
             cell = [P("相手が指した後の局面(赤い升が相手の手)", S_CARDH), Spacer(1, 1.5 * mm), P(fill(g, s_["text"], s_["ply"]), S_SC)]
         sidx = pz["scenes"].index(s_); band = P(f"<font color='#c9473f'><b>場面 {'①②③'[sidx]}</b></font>　{s_['ply']} 手目", S_CARDH)
         row = Table([[band, ""], [bd, cell]], colWidths=[66 * mm, W - 66 * mm])
