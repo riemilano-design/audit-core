@@ -24,7 +24,7 @@ def disp_move(g, ply, text):
         _, to = usi_squares(SF[g["id"]]["moves"][ply - 1]); t = ZEN[to[0]] + KAN[to[1]] + t
     return side_mark(ply) + t
 
-from board_draw import COL_CAND, COL_PLAYED  # noqa: F401  ― 定義は board_draw.py の 1 か所
+from board_draw import COL_CAND, COL_PLAYED, DASH_CAND  # noqa: F401  ― 定義は board_draw.py の 1 か所
 class Legend(Flowable):
     def __init__(self, same=False): super().__init__(); self.same = same
     def wrap(self, aw, ah): return 60 * mm, 9 * mm if not self.same else 5 * mm
@@ -32,5 +32,5 @@ class Legend(Flowable):
         c = self.canv; c.setFont(FONT, 7.5); y = 5.5 * mm if not self.same else 1.5 * mm
         c.setStrokeColor(COL_PLAYED); c.setLineWidth(1.6); c.line(0, y + 2, 9 * mm, y + 2); c.setFillColor(INK); c.drawString(10.5 * mm, y, "実戦の手" + ("(エンジンの候補も同じ手)" if self.same else ""))
         if not self.same:
-            y = 1.5 * mm; c.setStrokeColor(COL_CAND); c.setDash(3, 2); c.line(0, y + 2, 9 * mm, y + 2); c.setDash(); c.drawString(10.5 * mm, y, "比べるためのエンジンの候補(丸は打つ手)")
+            y = 1.5 * mm; c.setStrokeColor(COL_CAND); c.setDash(*DASH_CAND); c.line(0, y + 2, 9 * mm, y + 2); c.setDash(); c.drawString(10.5 * mm, y, "比べるためのエンジンの候補(丸は打つ手)")
 

@@ -31,6 +31,19 @@ from reportlab.platypus import Flowable
 COL_PLAYED = colors.HexColor("#8a5a1e")  # 実戦の手(茶の実線)
 COL_CAND = colors.HexColor("#1f7a78")    # 第 1 候補(青緑の破線)
 
+# **第 1 候補の破線の型(`setDash` の引数)。1 か所。**(2026-09-29。司令塔の決定 (ア))
+#
+# 【なぜ (1.5, 1) にしたか】(3, 2) では**矢じるしの外に出ている軸が短い手で、破線が 2 本しか見えない** ―
+# 実測: 11 局目 48 手目の第 1 候補(1 マスの手)は軸が **0.66 マス ≒ 10.8pt** で、
+# (3, 2) の周期は 5pt なので **2.4 周**(110dpi・400dpi で組んで目で数えても 2 本)。
+# (1.5, 1) なら周期 2.5pt で **4.3 周**。**矢の太さ・矢じるしの大きさ・色は変えない**(司令塔の条件)。
+#
+# 【なぜ 1 か所にするか】**同じ局面を本編と付録の両方に載せる作り**なのに、破線の型が 3 通りあった
+# (実測 2026-09-29): 本編の盤と凡例が (3, 2)・付録 3 の矢印が (2.2, 1.6)・付録 3 の打つ手の丸が (2, 1.5)。
+# **顧客は同じ局面を見比べるので、同じものが違う書き方で出ると同じものと思えない**(P-176 と同じ家族)。
+# **凡例も同じ値でなければならない** ― 凡例が粗い破線を見せて盤が細かいと、凡例が盤の説明にならない。
+DASH_CAND = (1.5, 1)
+
 BoardStyle = collections.namedtuple("BoardStyle", "ink red bg line muted font")
 
 ZEN = "０１２３４５６７８９"; KAN = "〇一二三四五六七八九"
@@ -95,7 +108,7 @@ class Board(Flowable):
             import math
             fr, to_ = usi_squares(usi); tx, ty = center(to_)
             c.saveState(); c.setStrokeColor(col); c.setFillColor(col); c.setLineWidth(1.6)
-            if dash: c.setDash(3, 2)
+            if dash: c.setDash(*DASH_CAND)
             if fr is None:  # 打つ手: 行き先を丸で囲む
                 c.circle(tx, ty, q * 0.46, stroke=1, fill=0)
             else:

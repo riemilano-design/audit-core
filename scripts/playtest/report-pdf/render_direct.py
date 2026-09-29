@@ -37,6 +37,7 @@ import re
 import sys
 
 import board_spec
+from board_draw import DASH_CAND
 # 向きを戻す道具は `board_spec.py` の 1 か所(2026-09-29 に移した)。**呼び出しの 7 か所は触っていない。**
 # `RANKS` はこのファイルの `sq()` も使う(実測: 出現 3 行のうち 1 行は `sq()`)。**定義を 2 つにしない**ので、
 # `board_spec` の 1 つを束縛する。私は最初「`rotate_square` 以外から使われていない」と書いたが、
@@ -327,7 +328,7 @@ class Board(Flowable):
                 tx, ty = center(*arrow["to"])
                 c.setLineWidth(1.6)
                 if arrow.get("dashed"):
-                    c.setDash(2, 1.5)
+                    c.setDash(*DASH_CAND)
                 else:
                     c.setDash()
                 c.circle(tx, ty, q * 0.4, stroke=1, fill=0)
@@ -337,7 +338,7 @@ class Board(Flowable):
             tx, ty = center(*arrow["to"])
             c.setLineWidth(1.8)
             if arrow.get("dashed"):
-                c.setDash(2.2, 1.6)
+                c.setDash(*DASH_CAND)
             else:
                 c.setDash()
             # 矢の先端の手前で線を止め、そこに三角の矢じるしを描く(線と重ならないように)

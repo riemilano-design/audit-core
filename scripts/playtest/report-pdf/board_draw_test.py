@@ -145,8 +145,86 @@ class UtilIsAThinWrapperTest(unittest.TestCase):
                       "board_draw からの束縛が無い")
 
 
-if __name__ == "__main__":
-    unittest.main(verbosity=2)
+
+
+class CandidateDashIsOnePlaceTest(unittest.TestCase):
+    """**第 1 候補の破線の型は 1 か所**(2026-09-29。司令塔の決定 (ア))。
+
+    実測で **3 通り**あった: 本編の盤と凡例が `(3, 2)`・付録 3 の矢印が `(2.2, 1.6)`・
+    付録 3 の打つ手の丸が `(2, 1.5)`。**同じ局面を本編と付録の両方に載せる作り**なので、
+    同じものが違う書き方で出ると同じものと思えない(P-176 と同じ家族)。
+    **凡例も同じ値**でなければ、凡例が盤の説明にならない。
+    """
+
+    # 破線を引くファイル。**凡例(`_util.py`)を入れるのが要点** ― 盤だけ直すと凡例が取り残される。
+    FILES = ("board_draw.py", "_util.py", "render_direct.py")
+
+    def test_d1_the_pattern_is_the_one_the_commander_chose(self):
+        self.assertEqual(BD.DASH_CAND, (1.5, 1))
+
+    def test_d2_every_dash_with_arguments_uses_the_one_place(self):
+        """**引数つきの `setDash` は、この 3 本では必ず `*DASH_CAND`。**
+
+        `ast` で呼び出しを見る(字面では、なぜ変えたかを書いたコメントの数字に当たる)。
+        引数なしの `setDash()`(破線をやめる)は対象外 ― 値を持たないので写しにならない。
+        """
+        for name in self.FILES:
+            with io.open(os.path.join(HERE, name), encoding="utf-8") as f:
+                tree = ast.parse(f.read())
+            calls = [n for n in ast.walk(tree)
+                     if isinstance(n, ast.Call) and isinstance(n.func, ast.Attribute)
+                     and n.func.attr == "setDash" and n.args]
+            self.assertTrue(calls, f"{name} に引数つきの setDash が無い(移し忘れか、対象の取り違え)")
+            for call in calls:
+                self.assertEqual(
+                    [ast.unparse(a) for a in call.args], ["*DASH_CAND"],
+                    f"{name} が破線の型を自分で持っている: {ast.unparse(call)}")
+
+    def test_d3_the_two_other_files_bind_the_constant(self):
+        """**写すのではなく束縛する**(`from board_draw import DASH_CAND`)。
+
+        写せば、直しが片方だけに入る。**`ast` で import を見る** ―
+        字面で探すと、説明のコメントに名前を書いただけで通る。
+        `_util.py` は 1 行目に読み込みの細工が在るので、他の試験と同じく 1 行目を外して読む。
+        """
+        for name in ("_util.py", "render_direct.py"):
+            src = read_text(os.path.join(HERE, name))
+            if name == "_util.py":
+                src = "\n".join(src.split("\n")[1:])
+            tree = ast.parse(src)
+            bound = {a.name for n in ast.walk(tree) if isinstance(n, ast.ImportFrom)
+                     and (n.module or "") == "board_draw" for a in n.names}
+            self.assertIn("DASH_CAND", bound,
+                          f"{name} が board_draw から DASH_CAND を束縛していない(束縛は {sorted(bound)})")
+
+    # **実測した軸の長さ**(pt。矢じるしの外に出ている線の長さ)。2026-09-29 に PDF のベクタから測った。
+    # 本編の盤 = 10.8(11 局目 48 手目の第 1 候補)。付録 3 の 20 ページ目の 3 本 = 9.56・27.47・38.54。
+    # **同じ手でも冊子によってマスの大きさが違う**ので、いちばん短いものを含めて並べる。
+    SHAFTS_PT = (9.56, 10.8, 27.47, 38.54)
+    # 直す前に在った 3 通りの破線の型(周期 = 和)。
+    OLD_PATTERNS = ((3, 2), (2.2, 1.6), (2, 1.5))
+
+    def test_d4_the_new_pattern_shows_more_dashes_than_every_old_one(self):
+        """**どの古い型よりも、どの軸でも破線の周期が増えること。**
+
+        「2 本しか見えない」が直った証拠を数で残す。いちばん短い軸(9.56pt)では
+        (2.2, 1.6) の 2.5 周 → (1.5, 1) の 3.8 周、本編の 10.8pt では 2.2 周 → 4.3 周。
+        **「4 本以上見えるか」は司令塔が目で確かめる**(この試験は周期の数までしか言えない ―
+        見え方は数ではないので、ここで断定しない)。
+        """
+        new_period = sum(BD.DASH_CAND)
+        for shaft in self.SHAFTS_PT:
+            for old in self.OLD_PATTERNS:
+                self.assertGreater(shaft / new_period, shaft / sum(old),
+                                   f"軸 {shaft}pt で {old} より周期が増えていない")
+
+    def test_d5_the_shortest_shaft_gets_at_least_three_cycles(self):
+        """**いちばん短い軸(9.56pt)でも 3 周以上**。直す前は 2.5 周だった。
+
+        下限を 3 にしたのは**実測の 3.8 周から少し下**に置いたもので、見え方の基準ではない
+        (見え方は司令塔が目で決める)。型を粗く戻したらここが赤くなる。
+        """
+        self.assertGreaterEqual(min(self.SHAFTS_PT) / sum(BD.DASH_CAND), 3.0)
 
 class HandWordIsOnePlaceTest(unittest.TestCase):
     """**持ち駒の語は 1 か所**(P-176。2026-09-29)。
