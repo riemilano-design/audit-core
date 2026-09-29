@@ -43,17 +43,39 @@
 
 読者席(F)は必須工程から外す。品質保証装置ではなく、最後の人間的な読み手による違和感検出装置として残す。
 
+### 2.5 追加の 2 点(2026-09-30 未明、人間)
+
+5. **顧客の問いは packet に混ぜない(schema 上で分離)。** packet = 事実層、顧客の問い = 分析・編集の条件。「顧客がこう聞いたから事実の作り方を変えた」を防ぐ。
+
+```
+packet                      request
+├── facts                   ├── customer_questions
+│   ├── games               └── requested_scope
+│   ├── moves
+│   ├── engine
+│   ├── time
+│   ├── branches
+│   ├── collapse
+│   └── recognition
+├── aggregates
+└── provenance
+```
+
+   両方が LLM 分析の入力になる(packet → 事実、request → 条件)。
+
+6. **packet の全部の値に provenance(出どころ)を持たせる。** 数値: `source: {type: engine, engine_version, pipeline_version, generated_at}`。局面: `source: {game_id, ply, sfen}`。集計: `derived_from: [game_id…]`。最終冊子の数から packet まで戻れることが、「LLM が事実を作った・途中の編集で数字が変わった」を追跡できる形の実体。
+
 ## 3. 今作るもの 5 つ(基本版。上位版はこの後)
 
 | # | 作るもの | いま在るもの | 担当(案) |
 |---|---|---|---|
-| 1 | **Observation Packet**(局 × 手の表・局の表・25 局の集計・顧客の問い・局面の実在の索引。数はここで全部作る) | patient_report_data・direct_answers・time_cause・whatif-v2/read・opening_recognition・obsSnapshot/obsGeo/obsExtra・実験席の bundle.md | 自動化レーン |
+| 1 | **Observation Packet**(facts: 局 × 手の表・局の表・エンジン・時間・分かれ道・崩れ・認識 / aggregates / provenance。数はここで全部作る。顧客の問いは別の `request` に) | patient_report_data・direct_answers・time_cause・whatif-v2/read・opening_recognition・obsSnapshot/obsGeo/obsExtra・実験席の bundle.md | 自動化レーン |
 | 2 | **3 席 LLM API**(同一入力・構造化出力。内部分析は自由、形式と事実/仮説の区別だけ縛る) | 実験 1・2(人間の中継)・hypothesis スキーマ | 実験席 |
 | 3 | **検証器の拡張**(数・分母・局面の実在・母集団・仮説か事実か。一致を証拠にしない) | hypothesisCheck.ts・check_answer 検査 1〜3・実験 2 の突き合わせ | 自動化レーン |
 | 4 | **Answer Slot / 冊子の器**(P1 発見 + 顧客の問いへの答え / P2 代表局面 / P3 行動 + 次回測るもの / P4 数え方・限界 / P5 対応表。器は固定、内容は可変。器の余裕 0 を先に直す) | exit_candidates・exit_body・exit_render・書き手の script | 自動化レーン + 司令塔 |
 | 5 | **「顧客の問いへの答えが本編のどこにあるか」の監査門** | exit_gate・check_structure・P-171 の門 | 自動化レーン |
 
-順は 1 → 2 → 3 → 4 → 5(2 と 3 は並行可)。上位版(重要局面の解説・全局・戦型別・継続比較)は基本版が閉じてから、同じ packet の上に足す。
+順は **1 packet → 既存の検証器を packet 対応 → 2 LLM API と 3 検証器の拡張 → 4 Answer Slot → 5 監査門**(2 と 3 を別工程にしない。検証器を先に packet に載せておけば、API ができた瞬間から検証できる)。基本版 5 つを閉じる → 実データで 1 周通す → その後に上位版。上位版(重要局面の解説・全局・戦型別・継続比較)は基本版が閉じてから、同じ packet の上に足す。
 
 ## 4. 変えない線
 
