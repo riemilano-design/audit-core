@@ -272,6 +272,30 @@ request.json ┘   + 固定の指示文            (sha256 を記録)        ├
 
 ---
 
+## 8. 接続設計案 [NEXTGEN_CONNECTION_DESIGN](NEXTGEN_CONNECTION_DESIGN_2026-09-30.md)(fc8a8a8)§5 の提案 S-1・S-2・A-1 への判断(2026-09-30、司令塔の依頼。記録だけ、今は動かさない)
+
+| # | 提案 | 判断 | 実装計画での形 | 前提 |
+|---|---|---|---|---|
+| S-1 | `answers[].reason` の隣に機械が読める `missing: [{what, howToMeasure}]` | **採用** | `seat-output.v0.1` の `answers[]` に `missing[]` を足す。`status` が `partial` / `unanswerable` のとき **必須**(空配列は不可 ― 「無い」を空で埋めない、H-3 と同じ型)。`items[kind=needed_observation]` は残すが任意にし、正式な置き場は `answers[].missing` に 1 本化(二重に書かせない)。③ の照合(欄で見る): `missing[].what` に packet の `aggregates[].id` または `facts` の欄名が字面で含まれていれば「在るものを無いと言った」で落とす。`what`・`howToMeasure` に数を含めない(H-1) | ― |
+| S-2 | seat_input の request の節に `thresholds.id` と `timeLimitSec` を必ず写す(render の規則) | **採用**(§5 の「3 切れと 10 切れを混ぜない」と同じ向き) | render は packet の `provenance.thresholds.id` と `request.requestedScope.timeLimitSec` を request の節の先頭行と seat_input の 1 行目の両方に印字する。**どちらかが無い packet / request は render が止まる**(黙って 180 の線で送らない)。`facts.games[].timeLimitSec` が全部一致することは packet の入口(P-3)が見る前提で、render は二重に数えない(写すだけ) | P-1(`provenance.thresholds`)・R-1(`requestedScope.timeLimitSec` 必須)が束 A・C に入ること |
+| A-1 | 新契約 `answer-selection.v0.1`(⑤ の出力・⑥ の唯一の入力) | **`integration.v0.1` から流せる。ただし合わせが 3 点** | 下の表 | ― |
+
+### 8.1 `integration.v0.1` → `answer-selection.v0.1` の対応(欄ごとに見た)
+
+| answer-selection の欄 | integration の出どころ | 通るか | 合わせ |
+|---|---|---|---|
+| `lead.itemRef {seatIndex, itemId}` + `statementSource: "integration.representative"` | `clusters[].representative`(整理役が書き直した v0.4 の行)と `clusters[].itemRefs[]` | **半分**: `itemRef` は席の項目を指すが、`representative` は束(cluster)に属するので、どの束の文かが `itemRef` からは一意に決まらない(1 項目が複数の束に入りうる) | **(i)** `clusters[].clusterId` を足し、answer-selection の `lead` と `p1[]` の参照を `{clusterId}` または `{seatIndex, itemId}` のどちらかで書けるようにする(A-1 への提案) |
+| `p1[].aggregateIds` | 項目の `observations[].packetRef.path` | **半分**: いまの計画は `packetRef.path` を `facts.time.bySpent[3].collapsed` の形で例示していて、`aggregates[].id` を機械で取り出す規則が無い | **(ii)** `packetRef.path` の文法を固定: 集計の数は `aggregates.<id>`(例 `aggregates.side_match.attack`)、事実は `facts.…`。⑤ は `aggregates.` で始まる path から id を機械で抜く。指示文 v1 の 5 行目の例も v1.1 でこの形に(sha 取り直しのとき) |
+| `answers[] {questionId, status, itemRefs, aggregateIds, neededObservation}` | `answersByQuestion[]` + 席の `answers[].missing`(S-1) | **通る**(S-1 を採るとそのまま写せる) | ― |
+| `boards[] {gameId, ply, packetRef: "facts.engine[…]"}` | 採用された項目の `observations[].packetRef` が局面を指す行 | **通る**(項目が局面の path を持つときだけ。持たない項目からは盤を選べない = 既存の門 (iii) と同じ) | ― |
+| `actions[] {menuId}` / `humanQueue[]` | 項目の `actionCandidate.menuMatch`(③ が埋める)/ `menuMatch: null` の項目 | **通る** | ― |
+| `adoptedBy` | ―(⑤ の人が書く) | integration の外 | ― |
+| `internal` 無し・`additionalProperties: false` | integration の入力・出力とも `internal` を持たない(§4.1) | **通る** | ― |
+| 席の原文へ戻る道 | `seatIndex` は実行ごとの無作為な番号(§4.1) | **半分**: answer-selection の `itemRef.seatIndex` から原文 `seat_<x>_raw.json` へ戻るには対応表が要る | **(iii)** `integration.v0.1` に `seatOrderRef`(run のログの中の対応表への参照。**席の名前そのものは持たない** ― 整理役に見せないため)を足す。⑤ 以降はログを引いて戻れる |
+
+- (i)〜(iii) はいずれも `integration.v0.1` の欄を足す・path の文法を固めるだけで、§4 の縛り(席名を伏せる・seatCount を証拠にしない・dropped で明示)は変えない。
+- 実装の順: packet C(P-1・P-3・R-1)→ render(S-2)→ seat-output(S-1)→ integration(i〜iii)→ 検証器 ③ → answer-selection(A-1、⑤ の束)。この節は計画の変更ではなく**実装計画に入れる項目の記録**。
+
 ## 付録 A ― 席への指示文(草案。固定するのは司令塔の承認の後)
 
 - 実験 1 の `request.md` 冒頭の「守ってほしいこと」6 項目を土台にする(数え直さない・束に無い数の印・束以外を根拠にしない・目的を書かない・名前は認識の id だけ・「差がない」も結果)。
