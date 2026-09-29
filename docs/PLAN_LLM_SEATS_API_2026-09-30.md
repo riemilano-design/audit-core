@@ -47,6 +47,7 @@ request.json ┘   + 固定の指示文            (sha256 を記録)        ├
 - **同一バイト**: 3 席に送る本文は同じファイル 1 本。sha256 を記録し、各席の API 送信ログにも同じ sha を書く(実験 1 は貼り付けだったので「同じ文」を人間の申告で担保していた。API では機械で担保する)。
 - **request は packet に混ぜない**(人間の直し 5)。seat_input.md の中でも節を分け、request の節に「この問いに合わせて事実の作り方を変えていない」と固定文で書く。
 - **顧客の名前・相手の名前は入れない**(`〇〇さん`・棋譜のヘッダは開かない)。packet 側の規則でもあるが、render の側でも人名の検査(H-8 と同じ一覧)を掛けてから送る。
+- **顧客の符号は載せてよい**(監査の条件、2026-09-30、束 B 5eda3c7): packet の `customerRef`(符号だけ。例 `c5`)と、`provenance.inputs[].path` の中の同じ符号(`out/c5/...`)は**同じ扱い**とし、どちらも seat_input.md に写してよい。実名は元から packet に無い(符号は実名ではない)ので、render の人名検査(H-8 の一覧)は符号を止めない。逆に、符号以外の識別子(メールアドレス・対局サイトの ID・棋譜のヘッダの語)が path や値に混ざっていれば render は止まる。
 
 ### 1.2 大きさの扱い(入力の切れ ― 実験 1 の席 C が §11 に届かなかった)
 
@@ -277,7 +278,7 @@ request.json ┘   + 固定の指示文            (sha256 を記録)        ├
 | # | 提案 | 判断 | 実装計画での形 | 前提 |
 |---|---|---|---|---|
 | S-1 | `answers[].reason` の隣に機械が読める `missing: [{what, howToMeasure}]` | **採用** | `seat-output.v0.1` の `answers[]` に `missing[]` を足す。`status` が `partial` / `unanswerable` のとき **必須**(空配列は不可 ― 「無い」を空で埋めない、H-3 と同じ型)。`items[kind=needed_observation]` は残すが任意にし、正式な置き場は `answers[].missing` に 1 本化(二重に書かせない)。③ の照合(欄で見る): `missing[].what` に packet の `aggregates[].id` または `facts` の欄名が字面で含まれていれば「在るものを無いと言った」で落とす。`what`・`howToMeasure` に数を含めない(H-1) | ― |
-| S-2 | seat_input の request の節に `thresholds.id` と `timeLimitSec` を必ず写す(render の規則) | **採用**(§5 の「3 切れと 10 切れを混ぜない」と同じ向き) | render は packet の `provenance.thresholds.id` と `request.requestedScope.timeLimitSec` を request の節の先頭行と seat_input の 1 行目の両方に印字する。**どちらかが無い packet / request は render が止まる**(黙って 180 の線で送らない)。`facts.games[].timeLimitSec` が全部一致することは packet の入口(P-3)が見る前提で、render は二重に数えない(写すだけ) | P-1(`provenance.thresholds`)・R-1(`requestedScope.timeLimitSec` 必須)が束 A・C に入ること |
+| S-2 | seat_input の request の節に `thresholds.id` と `timeLimitSec` を必ず写す(render の規則) | **採用**(§5 の「3 切れと 10 切れを混ぜない」と同じ向き) | render は packet の `provenance.thresholds.id` と `request.requestedScope.timeLimitSec` を request の節の先頭行と seat_input の 1 行目の両方に印字する。**どちらかが無い packet / request は render が止まる**(黙って 180 の線で送らない)。`facts.games[].timeLimitSec` が全部一致することは packet の入口(P-3)が見る前提で、render は二重に数えない(写すだけ) | P-1(`provenance.thresholds`)・R-1(`requestedScope.timeLimitSec` 必須)が束 A・C に入ること ― **P-1・P-2・P-3・R-1 は束 C に入ることが決まった(4c33ed2、司令塔 2026-09-30)ので、前提は満たされる見込み** |
 | A-1 | 新契約 `answer-selection.v0.1`(⑤ の出力・⑥ の唯一の入力) | **`integration.v0.1` から流せる。ただし合わせが 3 点** | 下の表 | ― |
 
 ### 8.1 `integration.v0.1` → `answer-selection.v0.1` の対応(欄ごとに見た)
