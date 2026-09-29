@@ -509,3 +509,10 @@ S-1 採用(`answers[].missing` は partial/unanswerable で必須・空配列不
 1. **5 人目の request の原文**: 記録に在る本人の言葉(人間が中継、2026-09-29 の節)「3 切れは練習対局のイメージで、何局かは普段指さない戦型を採用している。どのような影響があるのか興味がある」を `customerQuestions[0].text` にそのまま使う。`via: "relayed"`、note に「人間が中継した本人の言葉(AUTOMATION_STATUS 2026-09-29)。本人が書いた文字列そのものではない」。**本人には聞かない。** 正式な request.json は `out/c5/packet/observation-request.json`(gitignore)に実験席が置いてよい(記録の写しであって新しく作る文ではない)。
 2. **節の順**(小さい節 → 大きい表、集計を局の直後): GO。席が数を引くときに最初に見る場所を前に出す理由で足りる。
 3. **moves の畳み方**: 局ごと 1 行で始める。初回の実行の到達検査(`reach.sections`)と観測の `packetRef` で、席が手を `gameId + ply` で引けているかを測り、引けていなければ 1 手 1 行に切り替える(測ってから変える)。
+
+## 2026-09-30 ― 実験席 束 R1(render)完了 dfa7047(独立監査 REVISE → 直し → GO)
+
+- 実測(5 人目の packet 22aee8fe696d0262): `seat_input.md` 223,201 バイト・概算 70,159 トークン(chars/3、count-tokens は鍵が無く未測)、sha 93e45565…。見込み 300〜350 KB より小さい。校正 5 本すべて予測どおり、変異 7 本のうち外れ 1(M6 thresholds 空は schema が先に止め、render 側の同じ検査に到達しない ― 内側の守りは生きていない。害なし、記録)。
+- **監査の REVISE(実物)**: ファイルから読み直す口が 1 行目(線の組の値・持ち時間・局数)を検査から落としていた ― 1 行目の 180 を 999999 にしても緑。実装側の試験・変異は 1 行目を狙っていなかった(**校正の道具の穴は、その道具で作った緑からは見えない**)。直し + 試験 1 本、監査が直しを外して赤を確認。
+- request.json は `out/c5/packet/observation-request.json`(本人の言葉の写し、via relayed、gitignore)。moves は局ごと 1 行で開始。他レーンの未コミット差分(束 D)は触っていない。
+- 次: 束 R2(seat-output v0.1 + hypothesis v0.4 の契約と、席の出力側の契約検査。H-9/H-10 の packet 照合は自動化レーンの検証器で)。
