@@ -475,8 +475,6 @@ class LeadSentencesDoNotPromiseAllPagesTest(unittest.TestCase):
         self.assertNotIn("次のページから、形勢が大きく動いた", src)
         self.assertIn("形勢が大きく動いたのは", src)
         self.assertIn("一覧にまとめています", src)
-if __name__ == "__main__":
-    unittest.main(verbosity=2)
 
 
 class SinglePageHasNoPageNumberTest(unittest.TestCase):
@@ -523,3 +521,10 @@ class SinglePageHasNoPageNumberTest(unittest.TestCase):
         self.assertIn(f"ページ {pages}", joined)
         # **「/ 総数」の形が 1 つも無いこと**(見本用が嘘の総数を持てなくなる)。
         self.assertNotRegex(joined, r"ページ\s*\d+\s*/")
+
+
+# **`__main__` の塊はファイルの末尾に 1 つだけ**(P-181。2026-09-29)。
+# 途中に置くと `unittest.main()` の `sys.exit` で**後ろのクラスが定義されず、直接実行で 1 本も走らない**
+# (門の `discover` では走るので赤にならない ―「手元で回して OK だった」が嘘になる)。
+if __name__ == "__main__":
+    unittest.main(verbosity=2)

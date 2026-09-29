@@ -744,8 +744,6 @@ class MenuFractionsTest(unittest.TestCase):
         for item_id in ("M4", "M5", "M6"):
             for f in CA.menu_fractions(item_id, m):
                 self.assertIn((f["numerator"], f["denominator"]), pairs, f"{item_id} / {f['name']}")
-if __name__ == "__main__":
-    unittest.main()
 
 
 class MenuThresholdsTest(unittest.TestCase):
@@ -930,3 +928,10 @@ class SideMatchRowsTest(unittest.TestCase):
             self.assertEqual(sm["forkTotal"], 5)
             # 側が「両方」の局面は分母に入らない ― 印も付かない。
             self.assertIsNone(CA.side_match_mark_of(sm, "g01", 4))
+
+
+# **`__main__` の塊はファイルの末尾に 1 つだけ**(P-181。2026-09-29)。
+# 途中に置くと `unittest.main()` の `sys.exit` で**後ろのクラスが定義されず、直接実行で 1 本も走らない**
+# (門の `discover` では走るので赤にならない ―「手元で回して OK だった」が嘘になる)。
+if __name__ == "__main__":
+    unittest.main()
