@@ -16,6 +16,7 @@ import {
   checkAnswerCommand,
   checkDeliveryCommand,
   checkStructureCommand,
+  deliverLogArgsLineOf,
   deliverLogLineOf,
   deliverOutPaths,
   directAnswersCommand,
@@ -608,6 +609,56 @@ describe("deliverLogLineOf", () => {
       '{"stage":"answer-check","startedAt":"A","finishedAt":"B","rc":0,"humanGate":false}\n',
     );
     expect(deliverLogLineOf({ stage: "prose-gate", startedAt: "A", finishedAt: "B", rc: "skip", humanGate: true })).toContain('"rc":"skip"');
+  });
+});
+
+describe("deliverLogArgsLineOf(P-168 (ウ))", () => {
+  it("再開に要る 7 つだけを書く(`--name`・`--title`・`--forbid` は書かない)", () => {
+    const line = deliverLogArgsLineOf(argsOf(["--group-label", "3 分切れ負け", "--forbid", "禁じる語"]), "2026-09-29T10:00:00.000Z");
+    const entry = JSON.parse(line) as Record<string, unknown>;
+    // **鍵を列挙で見る** ― 「名前が無いこと」だけを見ると、後から別の鍵が増えても通る。
+    expect(Object.keys(entry).sort()).toEqual(
+      ["groupLabel", "kifuDir", "out", "person", "timeLimitSec", "today", "work", "kind", "writtenAt"].sort(),
+    );
+    expect(entry.person).toBe("p2");
+    expect(entry.groupLabel).toBe("3 分切れ負け");
+    expect(line.endsWith("\n")).toBe(true);
+  });
+
+  it("名前を渡す引数の値が 1 つも行に出ない", () => {
+    // `--name`・`--title`・`--forbid` に渡した値そのものを探す ―
+    // 鍵の名前を変えて中身だけ残す直しが入っても落ちる。
+    const line = deliverLogArgsLineOf(argsOf(["--forbid", "禁じる語"]), "2026-09-29T10:00:00.000Z");
+    for (const value of ["お客さま", "題", "禁じる語"]) {
+      expect(line).not.toContain(value);
+    }
+  });
+
+  it("`--group-label` を渡さなければ鍵自体が付かない", () => {
+    const entry = JSON.parse(deliverLogArgsLineOf(argsOf(), "t")) as Record<string, unknown>;
+    expect("groupLabel" in entry).toBe(false);
+  });
+
+  it("deliver.ts が本当に呼んでいる(段の繰り返しより前で、1 回だけ)", () => {
+    // **呼び出しを消しても試験が黙る**のを防ぐ(2026-09-29 に同じ型で当たった ―
+    // `check_no_real_name` の呼び出しを外したとき、字面の試験が `def` の行に当たって通った)。
+    // `deliver.ts` は副作用の本体(`run()`)を輸出しないので、**原文で位置を見る**。
+    const src = readFileSync(new URL("../deliver.ts", import.meta.url), "utf-8");
+    const calls = src.match(/^ {2}appendFileSync\(out\.log, deliverLogArgsLineOf\(/gm) ?? [];
+    expect(calls.length).toBe(1);
+    expect(src.indexOf("appendFileSync(out.log, deliverLogArgsLineOf(")).toBeLessThan(
+      src.indexOf("for (const stage of initialSteps.map"),
+    );
+  });
+
+  it("段の行を読む側(seatSecondsOf)は、この行を飛ばす", () => {
+    // 引数の行に `stage` が無いので、段ごとの読みには混ざらない(**混ざると席の時間が壊れる**)。
+    const argsLine = deliverLogArgsLineOf(argsOf(), "2026-09-29T10:00:00.000Z");
+    const lines = [
+      argsLine.trimEnd(),
+      JSON.stringify({ stage: "exit-gate", startedAt: "a", finishedAt: "2026-09-29T10:00:00.000Z", rc: 1, humanGate: true }),
+    ];
+    expect(seatSecondsOf(lines, "exit-gate", "2026-09-29T10:00:30.000Z")).toBe(30);
   });
 });
 

@@ -895,6 +895,53 @@ export interface DeliverLogEntry {
   seatSeconds?: number;
 }
 
+/**
+ * **再開に要る引数のうち、名前を含まないものだけ**を納品ログの 1 行目に書く(P-168 (ウ)。2026-09-29)。
+ *
+ * 【なぜ要るか】`--from <段>` で再開するには引数が全部要るが、ログには段と時刻しか無かった。
+ * 2026-09-29 に実際に工程が止まった ― 書き手の席が再開できず、流した席に 1 行送ってもらう往復が入った。
+ *
+ * 【なぜ `argv` 全部ではないか】(ア)(`argv` をそのまま書く)は却下した ―
+ * **`--name`・`--title`・`--forbid` には顧客の名前が入る**ので、**納品フォルダに実名が平文で残る**
+ * (P-170 で閉じた道をログで開け直すことになる)。書くのは 7 つだけ:
+ * `person`(**id。実名ではない**)・`kifuDir`・`work`・`timeLimitSec`・`today`・`out`・`groupLabel`。
+ *
+ * 【`--name`・`--title` が無くても再開できる根拠(2026-09-29 の実測)】P-170 の直しの後、
+ * この 2 つは **30p 形のどの冊子にも届かない** ― `--name` は `answer_facts`(8_B)、`--title` は
+ * `whatif` の 2 つだけで、どちらも却下済みの 6 冊形。付録 1 の名前は pipeline 側の
+ * `REPORT_DISPLAY_NAME` から来る別の道である。
+ *
+ * 【`--forbid` は書かない】名前を渡す引数なので、書けば同じ懸念が戻る。
+ */
+export interface DeliverLogArgsEntry {
+  /** この行が引数の記録であることを言う印(段の行と混ざらないように)。 */
+  kind: "args";
+  writtenAt: string;
+  person: string;
+  kifuDir: string;
+  work: string;
+  timeLimitSec: number;
+  today: string;
+  out: string;
+  /** 渡されたときだけキーが付く(`DeliverArgs` と同じ流儀)。 */
+  groupLabel?: string;
+}
+
+export function deliverLogArgsLineOf(args: DeliverArgs, writtenAt: string): string {
+  const entry: DeliverLogArgsEntry = {
+    kind: "args",
+    writtenAt,
+    person: args.person,
+    kifuDir: args.kifuDir,
+    work: args.work,
+    timeLimitSec: args.timeLimitSec,
+    today: args.today,
+    out: args.out,
+    ...(args.groupLabel !== undefined ? { groupLabel: args.groupLabel } : {}),
+  };
+  return `${JSON.stringify(entry)}\n`;
+}
+
 export function deliverLogLineOf(entry: DeliverLogEntry): string {
   return `${JSON.stringify(entry)}\n`;
 }

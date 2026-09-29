@@ -388,6 +388,19 @@ def combined_groups_of(patient_files):
 # ==================== M4: 側の一致(司令塔の指示。2026-09-23 REVISE 2・2026-09-24 の再監査 2) ====================
 
 
+# **「側が逆」の定義**(`lib/type.ts` の `sideBucketOf` と同じ。2026-09-29)。
+# `sideBucketOf` は (1) どちらかが `none` なら `eitherNone`、(2) 交われば `same`、
+# (3) top1 攻め × 実戦 自玉側 → `top1AttackActualDefense`、(4) その逆 → `top1DefenseActualAttack`。
+# `isOppositeSide` は (3)(4) だけを真とする。**`both` は必ず交わるので逆にならない。**
+# だから真になる組は**ちょうど 2 通り**である。
+OPPOSITE_SIDE_PAIRS = (("attack", "defense"), ("defense", "attack"))
+
+
+def is_opposite_side(top1_side, actual_side):
+    """第 1 候補と実戦の側が逆か(`lib/timeCause.ts` の `isOppositeSide` と同じ判定)。"""
+    return (top1_side, actual_side) in OPPOSITE_SIDE_PAIRS
+
+
 def side_match_of(whatif_v2_dirs):
     """whatif-v2 jsonl(複数フォルダ)の position 行(kind="position", scenes.fork が true)から、
     第 1 候補の側(candidates[0].side)が「攻め」「守り」ちょうど 1 つだった局面だけを分母にし
@@ -395,6 +408,9 @@ def side_match_of(whatif_v2_dirs):
     attack_n = attack_collapsed = 0
     defense_n = defense_collapsed = 0
     fork_total = 0
+    # **側が逆だった局面(長考の絞りなし)**(2026-09-29。③ の比べる相手)。
+    # **同じ走査の中で数える** ― 別の関数で数え直せば、同じ言葉に 2 つの分母が付く(P-156 の家族)。
+    opposite = 0
     # **局面ごとの側**(2026-09-29。P-164 の項目 3 ― 盤の候補に「どの分数に入るか」の印を付ける)。
     # **鍵は `(kifuId, displayPly)`。`sfen` では結合しない** ― 実物の 404 行で `sfen` の一意は 403 で、
     # **重複した 1 件は第 1 候補の側が `defense` と `none` で食い違う**(実測)。
@@ -428,6 +444,8 @@ def side_match_of(whatif_v2_dirs):
                     # 実物では起きない(404 行 → 404 個の鍵)が、起きたときに黙って片方を採らない。
                     rows[key] = None if key in rows else {"top1Side": top1_side,
                                                           "actualSide": actual_side}
+                    if is_opposite_side(top1_side, actual_side):
+                        opposite += 1
                     if top1_side == "attack":
                         attack_n += 1
                         if actual_side in ("attack", "both"):
@@ -442,6 +460,11 @@ def side_match_of(whatif_v2_dirs):
         "attack": {"n": attack_n, "collapsed": attack_collapsed},
         "defense": {"n": defense_n, "collapsed": defense_collapsed},
         "forkTotal": fork_total,
+        # **側が逆だった分かれ道(全部)**。分母は**第 1 候補の側が 1 つだった分かれ道**
+        # (攻め + 自玉側)― 「両方」「どちらでもない」は逆になりえないので分母にも入れない。
+        # **長考で絞った 5 / 33 とは分母の出どころが違う**(33 は「両方」「どちらでもない」も含む
+        # 「長考かつ分かれ道」の数)。**率で並べない。**
+        "opposite": {"numerator": opposite, "denominator": attack_n + defense_n},
         "rows": rows,
     }
 
@@ -663,6 +686,64 @@ def rounded_count_of(moves, rate):
     return rounded
 
 
+# ==================== 10 秒以上考えた手のうち分かれ道だった数(2026-09-29。③) ====================
+# **なぜ要ったか**: 行動 1 の条件は「10 秒以上考える局面では」なのに、根拠の分数(攻め 65 / 107・
+# 自玉側 76 / 132)は**全部の分かれ道**で数えたものだった。批評席は **2・3・4 周目と 3 周続けて**
+# 「条件と根拠の母集団が違う」と書いた(人間の判断待ちの項目)。
+# **その橋にあたる数は材料に在った** ― `time_cause.json` の per-game の
+# `forkAmongLongThink`・`oppositeSideAmongForkLongThink`。**観測として出す**(行動にはしない ―
+# 承認済みの表に無い項目を行動にすれば、表の外から行動を作ることになる)。
+#
+# 【「10 秒以上考えた手」の数は 2 通りある(2026-09-29 に実測)】
+# - `time_cause` の `longThinkTotal` の和 = **全部の手**
+# - `patient.time.bySpent[3].n` = **崩れを判定できた手だけ**(`countedPairsOf` の手に限る)
+# **同じ言い方で並べると、分母の出どころが違う数を比べることになる**(2026-09-24 の教訓)。
+# だから下の `name` は**どちらの数かを言う**。
+LONG_THINK_NAME = "10 秒以上考えた手(全部)"
+LONG_THINK_FORK_NAME = "10 秒以上考えた手のうち、分かれ道だった手"
+LONG_THINK_OPPOSITE_NAME = "その分かれ道のうち、第 1 候補と実戦の側が逆だった手"
+# **長考で絞らない「側が逆」**(2026-09-29。③ の比べる相手 ― 司令塔の依頼)。
+# 5 / 33 だけでは高いか低いかが読めない(M5 で 22 / 531 を出したのと同じ話)。
+# **分母の出どころが違う**ので、名前で「長考で絞らない」と言う。
+# **単位は「局面」**(この数は攻めの分かれ道と自玉側の分かれ道の合計 ― M4 の 2 つの分母の和なので、
+# あちらと同じ単位で言う)。長考の側の数は**棋譜の手**を数えたものなので「手」である。**混ぜない。**
+OPPOSITE_ALL_NAME = "第 1 候補の側が 1 つだった分かれ道(長考で絞らない。攻めと自玉側の分かれ道の合計)"
+OPPOSITE_ALL_NUMERATOR_NAME = "そのうち実戦が逆の側だった分かれ道"
+OPPOSITE_ALL_UNIT = "局面"
+
+
+def long_think_fork_of(time_cause, group):
+    """`time_cause.json` の per-game を**組の中で足す**(組をまたがない)。
+
+    返り値 = `{"longThink": 61, "fork": 33, "oppositeSide": 5}`(実物の値)。
+    組に 1 局も無ければ `None`。
+
+    **足した数どうしの筋が通ることを確かめる**(通らなければ落とす。`exit_groups` の総和の見張りと同じ形):
+    - `forkAmongLongThink` の分母の和 == `longThinkTotal` の和(どちらも「10 秒以上考えた手」)
+    - `oppositeSideAmongForkLongThink` の分母の和 == `forkAmongLongThink` の分子の和(どちらも「分かれ道だった手」)
+    **この見張りが無いと、材料の作りが変わったときに黙って別の数を出す。**
+    """
+    if time_cause is None:
+        return None
+    games = [g for data in time_cause["raw"] for g in data["games"] if g["group"] == group]
+    if not games:
+        return None
+    long_think = sum(g["longThinkTotal"] for g in games)
+    fork_d = sum(g["forkAmongLongThink"]["denominator"] for g in games)
+    fork_n = sum(g["forkAmongLongThink"]["numerator"] for g in games)
+    opp_d = sum(g["oppositeSideAmongForkLongThink"]["denominator"] for g in games)
+    opp_n = sum(g["oppositeSideAmongForkLongThink"]["numerator"] for g in games)
+    if fork_d != long_think:
+        raise CheckAnswerError(
+            f"10 秒以上考えた手の数が合わない(longThinkTotal の和 {long_think} と "
+            f"forkAmongLongThink の分母の和 {fork_d})")
+    if opp_d != fork_n:
+        raise CheckAnswerError(
+            f"分かれ道だった手の数が合わない(forkAmongLongThink の分子の和 {fork_n} と "
+            f"oppositeSideAmongForkLongThink の分母の和 {opp_d})")
+    return {"longThink": long_think, "fork": fork_n, "oppositeSide": opp_n}
+
+
 def time_search_materials_of(time_search_paths):
     """`--time-search` で渡した `time_cause_search.json`(`timeSearch.ts` の出力。複数可)から、検査 1 の材料を
     作る(`direct_materials_of`・`time_cause_materials_of` と同じ流儀)。1 つも無ければ None(既存の材料は
@@ -832,6 +913,54 @@ def m3_denominator(materials):
     return g.overview_fell if g is not None else None
 
 
+# ==================== 判定の線(2026-09-29。人間の決定「7 割の線を出す・道具上の仮置きと明記」) ====================
+# **値は 1 バイトも変えていない。**リテラルを名前つきの 1 か所へ移しただけである
+# (P-152 と同じ型 ― **「判定だけが知っている数」を無くす**)。判定・印字・検査が同じここを読む。
+#
+# 【なぜ要ったか】批評席 (a) が 3 周続けて「一致率が高いのか低いのか、比べる相手が無い」と書いた。
+# **比べる相手は道具の中に在った** ― `m4_holds` の `0.7`、`m5_holds` の「2 つぶん」である。
+# 冊子に出ていなかったのは、値が関数の中のリテラルだったからで、材料に無いので印字もできなかった。
+#
+# 【冊子に出る形の制約(2026-09-29 に実測)】
+# - **「7 割」「2 倍」とは書けない。**検査 1 は `RATIO_WORD_RE`(数字 + 倍|割)を
+#   「『倍』『割』は使わない」で落とす。だから**線は `0.7`、倍率は「2 つぶん」**と書く。
+# - **小数は冊子で初めて出る**(4 周目まで本編・付録に小数は 0 件。fitz で数えた)。
+#   検査 1 は小数の**小数点以下を整数として読む**(`0.61` → 61)ので、**`0.7` は両方の桁が
+#   `SMALL_NUMBER_MAX`(9)以下だから黙って通る**。**`0.75` のような線に変えると
+#   検査 1 が「75 が材料に無い」と言って落ちる**(P-177)。`check_answer_test.py` の
+#   `MenuThresholdsTest` がこれを見張る。
+MENU_THRESHOLDS = {
+    "M4": {"kind": "rate_below", "line": 0.7,
+           "what": "攻めと自玉側のどちらの一致率も、この線を下回ること"},
+    "M5": {"kind": "times_of_other_rate", "times": 2,
+           "what": "長考の直後の崩れ率が、0〜1 秒の崩れ率の 2 つぶん以上であること"},
+}
+# M5 の線の「比べる相手」。**`m5_holds` が見ている `by_spent[0]` そのもの**。
+THRESHOLD_OTHER_RATE_NAME = "0〜1 秒で指した手のうち崩れた手"
+
+
+def menu_threshold_of(item_id, materials):
+    """**判定の線と、線と並べる「比べる相手」**(2026-09-29)。
+
+    `MENU_THRESHOLDS` に無い項目は `None`(線を冊子に出さない項目)。
+    **判定と同じ表・同じ材料から作る** ― 別に書けば、冊子の線と判定の線がずれる。
+    """
+    spec = MENU_THRESHOLDS.get(item_id)
+    if spec is None:
+        return None
+    out = dict(spec)
+    if spec["kind"] == "times_of_other_rate":
+        g = primary_group(materials)
+        if g is None or not g.by_spent:
+            return None
+        other = g.by_spent[0]
+        if other is None or other["n"] == 0:
+            return None
+        out["other"] = {"name": THRESHOLD_OTHER_RATE_NAME, "unit": "手",
+                        "numerator": other["collapsed"], "denominator": other["n"]}
+    return out
+
+
 def m4_holds(materials):
     sm = materials["sideMatch"]
     if sm is None:
@@ -840,7 +969,8 @@ def m4_holds(materials):
     defense_rate = rate_of(sm["defense"])
     if attack_rate is None or defense_rate is None:
         return False
-    return attack_rate < 0.7 and defense_rate < 0.7
+    line = MENU_THRESHOLDS["M4"]["line"]
+    return attack_rate < line and defense_rate < line
 
 
 def m4_denominator(materials):
@@ -856,7 +986,7 @@ def m5_holds(materials):
     zero_to_one_rate = rate_of(g.by_spent[0])
     if quick_rate is None or zero_to_one_rate is None:
         return False
-    return quick_rate >= zero_to_one_rate * 2
+    return quick_rate >= zero_to_one_rate * MENU_THRESHOLDS["M5"]["times"]
 
 
 def m5_denominator(materials):

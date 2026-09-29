@@ -23,6 +23,8 @@ import os
 import re
 import sys
 
+import board_spec  # 持ち駒の語の 1 か所(P-176)
+
 from reportlab.lib import colors
 from reportlab.lib.enums import TA_LEFT
 from reportlab.lib.pagesizes import A4
@@ -327,7 +329,7 @@ class Board(Flowable):
                 key = letter if is_sente_side else letter.lower()
                 n = self.hands.get(key, 0)
                 if n > 0:
-                    items.append(PIECE[letter.lower()] + (KAN[n] if n < 10 else str(n)))
+                    items.append(board_spec.hand_word(PIECE[letter.lower()], n))
             return "　".join(items) or "なし"
 
         for yy, lab, is_sente_side in ((oy - 6.2 * mm, f"{self.person}の持ち駒", self.us), (oy + S + 3.4 * mm, "相手の持ち駒", not self.us)):

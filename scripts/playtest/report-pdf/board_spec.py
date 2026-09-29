@@ -144,6 +144,38 @@ def is_mirrored(sfens_record):
 # 往復 856/856、打つ手 306 件・成る手 92 件、全件の写像の指紋
 # sha256 = 3eae09155296e667cfd8752f9b5e030f8f233e7ff4a4bd886c84b4d2349231a3
 # `3a1c+` → `7i9g+`、`B*8a` → `B*2i`、`6a7b` → `4i3h`。
+# ==================== 持ち駒の語(P-176。2026-09-29) ====================
+# **同じ局面の持ち駒が、本編と付録で違う書き方だった**(批評席 (a) が 4 周目に実物で挙げた) ―
+# 本編「桂二 香 歩二」(`board_draw.py`)・付録 3「桂二　香一　歩二」(`render_direct.py`)。
+# **1 枚のときに数を付けるかと、区切りの空白の幅**の 2 つが違っていた。
+# **P-111 の家族**(同じものを 4 つの実装が別々に組んでいる: `board_draw`・`fig1`・
+# `render_direct`・`render_whatif`)。**ここを 1 か所にして 4 つが呼ぶ。**
+#
+# **形は本編に揃えた**(1 枚は数を付けない・半角の空白)。本編は顧客が最初に読む冊子で、
+# 席は付録の側を「揃っていない」と挙げた。**形を変えるならここ 1 行を変えれば 4 つとも変わる。**
+HAND_KAN = "〇一二三四五六七八九"
+HANDS_SEPARATOR = " "
+HANDS_EMPTY = "なし"
+
+
+def hand_word(piece, count):
+    """持ち駒 1 種類の語。**1 枚のときは数を付けない**(将棋の持ち駒の書き方)。
+
+    `count` が 0 以下なら `None`(呼ぶ側が落とす)。10 枚以上は算用数字
+    (`HAND_KAN` が 1 桁しか持たないため。実物では歩が 18 枚まで在りうる)。
+    """
+    if count <= 0:
+        return None
+    if count == 1:
+        return piece
+    return piece + (HAND_KAN[count] if count < 10 else str(count))
+
+
+def hands_phrase(words):
+    """持ち駒の行。**空なら「なし」**(空文字にすると枠だけが残って読めない)。"""
+    return HANDS_SEPARATOR.join(w for w in words if w) or HANDS_EMPTY
+
+
 RANKS = "abcdefghi"
 
 

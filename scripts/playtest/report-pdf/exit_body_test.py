@@ -464,7 +464,11 @@ class LeadSentencesDoNotPromiseAllPagesTest(unittest.TestCase):
         src = read_text(os.path.join(HERE, "render_direct.py"))
         self.assertNotIn("局面)を、実戦との差が大きい順に並べます。", src)
         self.assertIn("局面ありました。", src)
-        self.assertIn("ここから先は、実戦との差が大きい順に並べています。", src)
+        # 2026-09-29(P-171): **「ここから先は、」も外した** ― 束ねると 6 ページ目の次は
+        # 20 ページ目になる(4 周目の実物)ので、続きのページを約束して嘘になる。
+        # **無いことは `ast` で見る**(`exit_render_test.NeighbourPromiseTest.test_n8`)―
+        # ここで `assertNotIn` にすると、**なぜ外したかを書いたこのコメント自身**に当たる。
+        self.assertIn("実戦との差が大きい順に並べています。", src)
 
     def test_d6_appendix1_does_not_say_from_the_next_page(self):
         src = read_text(os.path.join(HERE, "_mid.py"))

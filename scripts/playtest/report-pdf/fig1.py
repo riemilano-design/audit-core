@@ -31,6 +31,8 @@ import json
 import os
 import sys
 
+import board_spec  # 持ち駒の語の 1 か所(P-176)
+
 from reportlab.lib import colors
 from reportlab.lib.enums import TA_LEFT
 from reportlab.lib.pagesizes import A4
@@ -97,7 +99,7 @@ def parse_sfen(sfen):
             if ch.isdigit():
                 n += ch
                 continue
-            hands[ch.isupper()].append(PIECE[ch.lower()] + (KAN[int(n)] if n and int(n) < 10 else (n or "")))
+            hands[ch.isupper()].append(board_spec.hand_word(PIECE[ch.lower()], int(n) if n else 1))
             n = ""
     return cells, turn, hands
 

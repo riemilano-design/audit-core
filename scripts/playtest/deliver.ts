@@ -28,6 +28,7 @@ import { fileURLToPath } from "node:url";
 import {
   DeliverArgError,
   TODO_MARK,
+  deliverLogArgsLineOf,
   deliverLogLineOf,
   deliverOutPaths,
   exitBodyCommand,
@@ -335,6 +336,11 @@ async function main(): Promise<number> {
   }
 
   mkdirSync(out.directDir, { recursive: true });
+
+  // **再開に要る引数(名前を含まないものだけ)を先に書く**(P-168 (ウ)。2026-09-29)。
+  // 段より前に書く ― 途中で落ちた実行でも、次の席が `--from` で再開できるようにするため。
+  // `--name`・`--title`・`--forbid` は書かない(納品フォルダに実名を残さない)。
+  appendFileSync(out.log, deliverLogArgsLineOf(args, new Date().toISOString()), "utf-8");
 
   // 段の一覧・順序は `initialSteps` のまま(DELIVER_STAGES と --from だけで決まり、読み直しでは変わらない)。
   // **段を 1 つ実行する直前に `planDeliver` を呼び直し**、その段の PlannedDeliverStep を使う(指示書 §2.1)。

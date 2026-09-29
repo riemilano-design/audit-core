@@ -16,6 +16,8 @@
 import collections
 import math
 
+import board_spec
+
 from reportlab.lib import colors
 from reportlab.lib.units import mm
 from reportlab.platypus import Flowable
@@ -48,7 +50,9 @@ def parse_sfen(sfen):
         n = ""
         for ch in hands:
             if ch.isdigit(): n += ch; continue
-            hs[ch.isupper()].append(PIECE[ch.lower()] + (KAN[int(n)] if n and int(n) < 10 else (n or ""))); n = ""
+            # **持ち駒の語は `board_spec.hand_word` の 1 か所**(P-176。2026-09-29)。
+            # SFEN は 1 枚のとき数字を書かないので、数が無ければ 1 枚。
+            hs[ch.isupper()].append(board_spec.hand_word(PIECE[ch.lower()], int(n) if n else 1)); n = ""
     return cells, hs
 def usi_squares(usi):
     rk = lambda c: ord(c) - ord("a") + 1
@@ -84,7 +88,7 @@ class Board(Flowable):
         for yy, lab, hs in ((oy - 6.2 * mm, f"{self.person}の持ち駒", self.hands[self.us]), (oy + S + 3.4 * mm, "相手の持ち駒", self.hands[not self.us])):
             c.setFillColor(self.st.bg); c.setStrokeColor(self.st.line); c.setLineWidth(0.4); c.rect(ox, yy, S, 4.6 * mm, stroke=1, fill=1)
             c.setFillColor(self.st.muted); c.setFont(self.st.font, 7); c.drawString(ox + 1.2 * mm, yy + 1.35 * mm, lab)
-            c.setFillColor(self.st.ink); c.setFont(self.st.font, 9); c.drawRightString(ox + S - 1.2 * mm, yy + 1.2 * mm, " ".join(hs) or "なし")
+            c.setFillColor(self.st.ink); c.setFont(self.st.font, 9); c.drawRightString(ox + S - 1.2 * mm, yy + 1.2 * mm, board_spec.hands_phrase(hs))
         # 矢印(実戦の手 = 実線、比べる候補 = 破線)。色は良し悪しを表さない
         def center(sq): x, y = xy(*sq); return x + q / 2, y + q / 2
         def arrow(usi, col, dash, shift):

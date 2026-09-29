@@ -748,6 +748,98 @@ if __name__ == "__main__":
     unittest.main()
 
 
+class MenuThresholdsTest(unittest.TestCase):
+    """**判定の線を名前つきの表に出した**(2026-09-29。人間の決定「7 割の線を出す・道具上の仮置きと明記」)。
+
+    **値は 1 バイトも変えていない** ― リテラルを 1 か所へ移しただけ(P-152 と同じ型:
+    「判定だけが知っている数」を無くす)。この試験が見張るのは **(1) 値が元のリテラルと同じこと**、
+    **(2) 判定が表を読んでいること**(値を変えると判定が変わる = 陽性対照)、
+    **(3) 冊子に出せる形であること**(検査 1 が線の値を「材料に無い数」と言わないこと)。
+    """
+
+    materials = staticmethod(MenuFractionsTest.materials)
+
+    def test_t1_the_values_are_the_original_literals(self):
+        """**元のリテラルと同一。**`0.7`(M4 の線)と `2`(M5 の倍率)。
+
+        **この 2 つは承認済みの表の側(判断的知識)なので、道具の側では変えない。**
+        変えたくなったら人間の承認を経る ― この試験が落ちることでそれが分かる。
+        """
+        self.assertEqual(CA.MENU_THRESHOLDS["M4"]["line"], 0.7)
+        self.assertEqual(CA.MENU_THRESHOLDS["M5"]["times"], 2)
+
+    def test_t2_m4_reads_the_table(self):
+        """**陽性対照**: 線を下げると同じ材料で判定が変わる(判定が表を読んでいる証拠)。"""
+        m = self.materials()  # 攻め 65/107 = 0.607・自玉側 76/132 = 0.576
+        self.assertTrue(CA.m4_holds(m))
+        saved = CA.MENU_THRESHOLDS["M4"]["line"]
+        try:
+            CA.MENU_THRESHOLDS["M4"]["line"] = 0.5
+            self.assertFalse(CA.m4_holds(m), "線を 0.5 にしても成り立つ = 判定が表を読んでいない")
+        finally:
+            CA.MENU_THRESHOLDS["M4"]["line"] = saved
+        self.assertTrue(CA.m4_holds(m))
+
+    def test_t3_m5_reads_the_table(self):
+        """**陽性対照**: 倍率を上げると同じ材料で判定が変わる。"""
+        m = self.materials()  # 長考直後 7/41 = 0.171・0〜1 秒 22/531 = 0.041
+        self.assertTrue(CA.m5_holds(m))
+        saved = CA.MENU_THRESHOLDS["M5"]["times"]
+        try:
+            CA.MENU_THRESHOLDS["M5"]["times"] = 10
+            self.assertFalse(CA.m5_holds(m), "倍率を 10 にしても成り立つ = 判定が表を読んでいない")
+        finally:
+            CA.MENU_THRESHOLDS["M5"]["times"] = saved
+
+    def test_t4_the_line_can_be_printed_without_tripping_check_1(self):
+        """**線の値を冊子に出せる形か**(P-177 の歯止め)。
+
+        検査 1 は小数の**小数点以下を整数として読む**(`0.61` → 61)。**`0.7` は両方の桁が
+        `SMALL_NUMBER_MAX` 以下なので数として拾われない** ― だから材料に無くても落ちない。
+        **`0.75` のような線に変えると、検査 1 が「75 が材料に無い」と言って冊子が組めなくなる。**
+        そのときこの試験が落ちるので、**線を変える人がその場で気づく。**
+        """
+        for item_id, spec in CA.MENU_THRESHOLDS.items():
+            for key in ("line", "times"):
+                if key not in spec:
+                    continue
+                ratio, fractions, percents, plains = CA.scan_numbers(f"線は {spec[key]} です")
+                self.assertFalse(ratio, (item_id, key))
+                self.assertEqual((fractions, percents, plains), ([], [], []),
+                                 f"{item_id} の {key} = {spec[key]} は検査 1 が数として拾う"
+                                 "(材料に無い数として冊子が落ちる)")
+
+    def test_t4b_the_words_of_the_line_avoid_the_banned_ratio_words(self):
+        """**「倍」「割」を使わない**(検査 1 が「使わない」で落とす語)。
+
+        人間の決定の語は「7 割」だが、**検査 1 は数字 + 「割」を落とす**(2026-09-29 に実測)。
+        だから冊子に出る語は `0.7` と「2 つぶん」である。
+        """
+        for item_id, spec in CA.MENU_THRESHOLDS.items():
+            ratio, _f, _p, _pl = CA.scan_numbers(spec["what"])
+            self.assertFalse(ratio, f"{item_id} の線の説明に「倍」「割」が入っている: {spec['what']}")
+
+    def test_t5_the_comparison_pair_comes_from_the_materials(self):
+        """**M5 の「比べる相手」は判定が見ている `by_spent[0]` そのもの。**
+
+        批評席 (a) は 3 周続けて「長考直後でない手の崩れ率が無いので前提が数から出ているか分からない」
+        と書いた。**その数は判定の中に在った** ― 印字するだけで閉じる。
+        """
+        got = CA.menu_threshold_of("M5", self.materials())
+        self.assertEqual(got["other"]["numerator"], 22)
+        self.assertEqual(got["other"]["denominator"], 531)
+        self.assertEqual(got["other"]["unit"], "手")
+        self.assertEqual(got["times"], 2)
+
+    def test_t6_an_item_without_a_line_says_so(self):
+        """線を持たない項目は `None`(勝手に線を作らない)。"""
+        self.assertIsNone(CA.menu_threshold_of("M8", self.materials()))
+
+    def test_t7_no_materials_means_no_line(self):
+        """材料が無ければ線も出さない(0 除算も推測もしない)。"""
+        self.assertIsNone(CA.menu_threshold_of("M5", self.materials(zero_to_one=(0, 0))))
+
+
 class SideMatchRowsTest(unittest.TestCase):
     """**局面ごとの側**(P-164 の項目 3。2026-09-29)。
 
@@ -766,6 +858,29 @@ class SideMatchRowsTest(unittest.TestCase):
                     "ply": ply, "displayPly": display_ply, "sfen": f"sfen-{kifu_id}-{ply}",
                     "candidates": [{"side": top1}], "actualSide": actual,
                 }, ensure_ascii=False) + "\n")
+
+    def test_r0_the_opposite_side_count_and_its_denominator(self):
+        """**側が逆だった分かれ道(長考で絞らない)**(2026-09-29。③ の比べる相手)。
+
+        **分母は「第 1 候補の側が 1 つだった分かれ道」(攻め + 自玉側)で、`forkTotal` ではない。**
+        「両方」「どちらでもない」は**逆になりえない**ので分母にも入れない ―
+        `forkTotal` を分母にすると、**逆になりえない局面を分母に入れた率**になる。
+        **合成材料で両者をわざと違う数にして測る**(同じ数なら取り違えが測れない)。
+        """
+        with tempfile.TemporaryDirectory() as d:
+            # 逆 2 件(攻め→自玉側・自玉側→攻め)、同じ側 2 件、both 1 件、none 1 件。
+            # 攻め + 自玉側 = 4、forkTotal = 6 ― **わざと違う数にする。**
+            self.write(d, "g01", [(1, 1, "attack", "defense"),
+                                  (2, 2, "defense", "attack"),
+                                  (3, 3, "attack", "attack"),
+                                  (4, 4, "defense", "both"),
+                                  (5, 5, "both", "attack"),
+                                  (6, 6, "none", "defense")])
+            sm = CA.side_match_of([d])
+            self.assertEqual(sm["forkTotal"], 6)
+            self.assertEqual(sm["attack"]["n"] + sm["defense"]["n"], 4)
+            self.assertEqual(sm["opposite"], {"numerator": 2, "denominator": 4},
+                             "分母が forkTotal になっている(逆になりえない局面を分母に入れている)")
 
     def test_r1_the_key_is_the_kifu_id_and_the_display_ply(self):
         """**鍵は `(kifuId, displayPly)`。**`ply` で引くと、先後で番号が違う局面を取り違える。"""

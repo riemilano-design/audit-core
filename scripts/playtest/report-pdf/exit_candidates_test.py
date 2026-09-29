@@ -809,6 +809,357 @@ class DenominatorTableTest(unittest.TestCase):
         self.assertEqual(len(keys), len(set(keys)))
 
 
+    # ---- 顧客の語(P-172。2026-09-29)----
+    # 4 周目の実物は、この列に「行動 M4 の根拠」「観測」「direct_answers.json」
+    # 「patient_report_data.json」「opening_recognition.json の署名」を顧客に見せていた。
+    # **表の「数」と「数えたもの」は変えない。「どの集計から出たか」の列だけを顧客の語にする。**
+    def all_from(self):
+        direct, patient, repro = self.fixture()
+        rows = EC.denominators(direct, patient, repro, [passed_row(fractions=TWO)],
+                               groups=[("群 A", 2)])
+        return [r["from"] for r in rows]
+
+    def test_26g_no_machine_file_name_reaches_the_table(self):
+        """**機械のファイル名を顧客に見せない。**
+
+        席 (a) は内部の名札を挙げた。**JSON のファイル名は席も挙げていない**(集計のときに
+        私が測って見つけた)。**どちらも顧客の冊子に出す理由が無い。**
+        """
+        for text in self.all_from():
+            for bad in (".json", "direct_answers", "patient_report_data", "opening_recognition"):
+                self.assertNotIn(bad, text, f"分母の表に機械の名前が出ている: {text}")
+
+    def test_26h_no_internal_action_number_reaches_the_table(self):
+        """**行動の番号(M4・M5…)を出さない。**
+
+        席 (a): 「『行動 M4』『M5』という番号から M1〜M3 が存在して落とされたことがうかがえるが、
+        それが何でなぜ落ちたかは本文のどこにも無い」 ― **番号を消せば、落ちた候補の存在が
+        表から漏れることも無くなる。**
+        """
+        for text in self.all_from():
+            self.assertNotRegex(text, r"\bM\d\b", f"分母の表に行動の番号が出ている: {text}")
+            self.assertNotIn("観測", text, f"分母の表に内部の区分が出ている: {text}")
+
+    def test_26i_the_action_rows_say_what_was_counted(self):
+        """**番号を消しても「何を数えた分母か」は残る**(分数の名前で言う)。
+
+        行動の文そのものは道具に無い(`answer_menu.json` は `verifyName` と `minN` だけ)。
+        だから分数の名前で言う ― 名前は判定関数が数えている中身をそのまま日本語にしたもの。
+        """
+        texts = [t for t in self.all_from() if "分かれ道のうち" in t]
+        self.assertEqual(len(texts), 2, texts)
+        for text in texts:
+            self.assertIn(EC.DENOM_SECTION_ACTION, text)
+
+    def test_26j_the_section_name_is_not_a_copy(self):
+        """**節の名は正本(`check_structure.SECTIONS`)と同じ語**(写しが片方だけ古くならない)。"""
+        import check_structure as CS
+        roles = [role for role, _head, _contains in CS.SECTIONS]
+        self.assertIn(EC.DENOM_SECTION_ACTION, roles,
+                      "分母の表が使う節の名が、門の正本の役割名に無い")
+
+
+class ThresholdInTheBookletTest(unittest.TestCase):
+    """**判定の線を冊子に出す**(2026-09-29。人間の決定「7 割の線を出す・道具上の仮置きと明記」)。
+
+    批評席 (a) が **3 周続けて**「一致率が高いのか低いのか、**比べる相手が無い**」と書いた。
+    **比べる相手は道具の中に在った** ― `m4_holds` の `0.7`、`m5_holds` の「0〜1 秒の崩れ率の 2 つぶん」。
+    冊子に出ていなかったのは、値が関数の中のリテラルだったからである。
+    """
+
+    @staticmethod
+    def materials(zero_to_one=(22, 531)):
+        class G(object):
+            pass
+        g = G()
+        g.after_long_think_quick = {"collapsed": 9, "n": 37}
+        g.by_spent = [{"collapsed": zero_to_one[0], "n": zero_to_one[1]}]
+        return {"groups": {"min3": g},
+                "sideMatch": {"attack": {"collapsed": 65, "n": 107},
+                              "defense": {"collapsed": 76, "n": 132}, "forkTotal": 404}}
+
+    M5_ROW = [{"label": "", "unit": "手",
+               "name": "直前の自分の手が 10 秒以上で、この手は 4 秒以内だった手のうち、崩れた手",
+               "numerator": 9, "denominator": 37}]
+
+    def thresholds(self):
+        return EC.thresholds_of([passed_row(item_id="M4", fractions=TWO),
+                                 passed_row(item_id="M5", fractions=self.M5_ROW)],
+                                self.materials())
+
+    def test_30_the_line_becomes_a_row_in_the_table(self):
+        """**線そのものが分母の表の行になる**(顧客が線を引けるように)。"""
+        rows = EC.threshold_denominator_rows(self.thresholds())
+        numbers = [(r["number"], r["unit"]) for r in rows]
+        self.assertIn((0.7, EC.THRESHOLD_UNIT), numbers)
+        for r in rows:
+            if r["number"] == 0.7:
+                self.assertIn("道具上の仮置き", r["from"])
+
+    def test_30b_the_comparison_pair_becomes_a_row(self):
+        """**M5 の線の「比べる相手」の分母も行になる**(席 (a) が 3 周求めた数)。"""
+        rows = EC.threshold_denominator_rows(self.thresholds())
+        got = [(r["number"], r["unit"], r["from"]) for r in rows if r["number"] == 531]
+        self.assertEqual(len(got), 1, rows)
+        self.assertIn("比べる相手", got[0][2])
+
+    def test_30c_the_sentences_say_the_line_and_this_time(self):
+        """**線の値と「今回の値」を並べるだけ。**「下回った」は書かない(それは書き手の文)。"""
+        sentences = EC.threshold_sentences(self.thresholds())
+        self.assertEqual(len(sentences), 2, sentences)
+        joined = "".join(sentences)
+        self.assertIn("0.7", joined)
+        self.assertIn("65 / 107", joined)
+        self.assertIn("76 / 132", joined)
+        self.assertIn("22 / 531", joined)
+        self.assertIn("9 / 37", joined)
+        for word in ("下回", "上回", "低い", "高い", "問題"):
+            self.assertNotIn(word, joined, f"道具が判断の語を書いている: {word}")
+
+    def test_30d_the_sentences_pass_the_ratio_word_rule_of_check_1(self):
+        """**「倍」「割」を使わない。**検査 1 は数字 + 倍|割 を「使わない」で落とす(実測 2026-09-29)。
+
+        人間の決定の語は「7 割」だが、**そのままでは冊子に出せない** ― だから `0.7` と「2 つぶん」。
+        **この試験が無いと、語を戻した人が組版の最後まで気づかない。**
+        """
+        for sentence in EC.threshold_sentences(self.thresholds()):
+            ratio, _f, _p, _pl = CA.scan_numbers(sentence)
+            self.assertFalse(ratio, f"検査 1 が落とす語が入っている: {sentence}")
+
+    def test_30e_the_comparison_numbers_are_candidates_but_the_line_is_not(self):
+        """**印字する数は候補に入れる**(P-139 の型)。**線の値は入れない** ―
+
+        `0.7` は検査 1 も門も数として拾わない(両方の桁が `SMALL_NUMBER_MAX` 以下)。
+        **拾われない数を候補に入れると、候補の一覧が嘘になる。**
+        """
+        rows = EC.threshold_numbers(self.thresholds())
+        numbers = [r["number"] for r in rows]
+        self.assertIn(22, numbers)
+        self.assertIn(531, numbers)
+        self.assertNotIn(0.7, numbers)
+
+    def test_30f_an_action_without_a_line_adds_nothing(self):
+        """**線を持たない行動では、行も文も増えない**(勝手に線を作らない)。"""
+        thresholds = EC.thresholds_of([passed_row(item_id="M8", fractions=TWO)], self.materials())
+        self.assertEqual(thresholds, [])
+        self.assertEqual(EC.threshold_denominator_rows(thresholds), [])
+        self.assertEqual(EC.threshold_sentences(thresholds), [])
+        self.assertEqual(EC.threshold_numbers(thresholds), [])
+
+    # ---- 配線(**関数を書いても呼ばれなければ冊子に出ない**)----
+    # 先に `check_no_real_name` で踏んだ型: **関数の試験だけでは、呼び出しを消す変異が黙る。**
+    def wired_fixture(self):
+        answers = [answer(1, 10, top1=("drop",), actual=("drop",))]
+        direct = direct_of(answers)
+        patient = {"summary": {"games": 1}, "games": [], "findings": []}
+        repro = EC.repro_rows(direct)
+        passed = [passed_row(item_id="M4", fractions=TWO),
+                  passed_row(item_id="M5", fractions=self.M5_ROW)]
+        thresholds = EC.thresholds_of(passed, self.materials())
+        denoms = EC.denominators(direct, patient, repro, passed, None, thresholds)
+        md = EC.build_md(direct, patient, repro, passed, [], [], denoms, None,
+                         EC.opening_lines(patient, direct, TODAY), 0, None, (), thresholds)
+        p1 = EC.p1_numbers(patient, repro, direct, passed, thresholds)
+        return denoms, md, p1
+
+    def test_30h_the_table_really_carries_the_line(self):
+        """**`denominators` が線の行を持つ**(呼び出しを消したら落ちる)。"""
+        denoms, _md, _p1 = self.wired_fixture()
+        self.assertIn((0.7, EC.THRESHOLD_UNIT), [(r["number"], r["unit"]) for r in denoms])
+        self.assertIn(531, [r["number"] for r in denoms])
+
+    def test_30i_the_draft_really_carries_the_sentences(self):
+        """**下書きの「使ってよい固定文」に線の文が在る**(呼び出しを消したら落ちる)。"""
+        _denoms, md, _p1 = self.wired_fixture()
+        section = md.split(EC.DRAFT_ONLY_HEADINGS[4])[1]
+        for sentence in EC.threshold_sentences(EC.thresholds_of(
+                [passed_row(item_id="M4", fractions=TWO),
+                 passed_row(item_id="M5", fractions=self.M5_ROW)], self.materials())):
+            self.assertIn(sentence, section)
+
+    def test_30j_the_candidate_numbers_really_carry_the_pair(self):
+        """**候補の数に比べる相手が在る**(呼び出しを消すと、書き手が書いた瞬間に門が止める)。"""
+        _denoms, _md, p1 = self.wired_fixture()
+        numbers = [r["number"] for r in p1]
+        self.assertIn(22, numbers)
+        self.assertIn(531, numbers)
+
+    def test_30g_the_values_come_from_the_judgment_table(self):
+        """**線の値の出どころは `check_answer.MENU_THRESHOLDS` の 1 か所**(写しを持たない)。
+
+        **字面では見ない。**`assertNotIn("0.7", src)` と書いたら**自分の説明の文に当たって落ちた**
+        (このリポジトリで繰り返している型)。**コードの中の数のリテラルだけ**を AST で見る。
+        """
+        import ast
+        path = os.path.join(os.path.dirname(os.path.abspath(EC.__file__)), "exit_candidates.py")
+        with io.open(path, encoding="utf-8") as f:
+            tree = ast.parse(f.read())
+        floats = [n.value for n in ast.walk(tree)
+                  if isinstance(n, ast.Constant) and isinstance(n.value, float)]
+        self.assertEqual(floats, [], f"線の値が候補の段に写されている: {floats}")
+        self.assertIn("CA.menu_threshold_of", io.open(path, encoding="utf-8").read())
+
+
+class LongThinkForkObservationTest(unittest.TestCase):
+    """**10 秒以上考えた手のうち分かれ道だった数**(2026-09-29。③)。行動 1 の条件との橋。
+
+    批評席は **2・3・4 周目と 3 周続けて**「行動 1 の条件『10 秒以上』と根拠の分数(全部の分かれ道)が
+    つながらない」と書いた。**その橋にあたる数は材料に在った** ― `time_cause.json` の per-game。
+    **観測として出すだけ**(行動にしない)。**判定も割合も作らない。**
+    """
+
+    COUNTS = {"longThink": 61, "fork": 33, "oppositeSide": 5}
+
+    def test_31_the_line_says_all_three_numbers(self):
+        line = EC.long_think_fork_line(self.COUNTS)
+        for n in ("61", "33", "5"):
+            self.assertIn(n, line)
+        self.assertIn("観測(行動ではありません)", line)
+
+    def test_31b_the_line_says_which_of_the_two_counts_it_is(self):
+        """**「10 秒以上考えた手」は 2 通りある**(全部の手 / 崩れを判定できた手)。
+
+        名前でどちらかを言わないと、**分母の出どころが違う数を同じ言い方で並べる**ことになる
+        (2026-09-24 の教訓「一致率を 2 つ並べて比べない」)。
+        """
+        line = EC.long_think_fork_line(self.COUNTS)
+        self.assertIn("全部", line)
+
+    def test_31c_no_judgment_and_no_rate(self):
+        """**判定の語も割合も作らない**(規則 8 (3)・人間の決定)。"""
+        line = EC.long_think_fork_line(self.COUNTS)
+        for word in ("%", "率", "多い", "少ない", "傾向", "見落と", "べき"):
+            self.assertNotIn(word, line, f"観測に判定の語が入っている: {word}")
+        ratio, _f, _p, _pl = CA.scan_numbers(line)
+        self.assertFalse(ratio, "「倍」「割」が入っている(検査 1 が落とす)")
+
+    def test_31d_no_material_means_no_line(self):
+        """材料が無ければ何も出さない(推測しない)。"""
+        self.assertIsNone(EC.long_think_fork_line(None))
+        self.assertEqual(EC.long_think_fork_rows(None), [])
+        self.assertEqual(EC.long_think_fork_numbers(None), [])
+
+    def test_31e_the_denominators_and_the_candidates_carry_the_numbers(self):
+        """**分母の表に 2 つの分母・候補の数に 3 つ全部**(印字する側と数える側は同じ集合。P-139)。"""
+        rows = [(r["number"], r["unit"]) for r in EC.long_think_fork_rows(self.COUNTS)]
+        self.assertEqual(rows, [(61, "手"), (33, "手")])
+        numbers = [r["number"] for r in EC.long_think_fork_numbers(self.COUNTS)]
+        self.assertEqual(numbers, [61, 33, 5])
+
+    def test_31f_the_totals_are_guarded(self):
+        """**足した数どうしの筋が通らなければ落とす**(`exit_groups` の総和の見張りと同じ形)。
+
+        材料の作りが変わったときに**黙って別の数を出さない**ため。
+        """
+        def tc(long_think, fork_d, fork_n, opp_d, opp_n):
+            return {"raw": [{"games": [{"group": "3 分", "longThinkTotal": long_think,
+                                        "forkAmongLongThink": {"numerator": fork_n,
+                                                               "denominator": fork_d},
+                                        "oppositeSideAmongForkLongThink": {"numerator": opp_n,
+                                                                           "denominator": opp_d}}]}]}
+        got = CA.long_think_fork_of(tc(61, 61, 33, 33, 5), "3 分")
+        self.assertEqual(got, {"longThink": 61, "fork": 33, "oppositeSide": 5})
+        with self.assertRaises(CA.CheckAnswerError):
+            CA.long_think_fork_of(tc(61, 60, 33, 33, 5), "3 分")   # 10 秒以上の数が合わない
+        with self.assertRaises(CA.CheckAnswerError):
+            CA.long_think_fork_of(tc(61, 61, 33, 32, 5), "3 分")   # 分かれ道の数が合わない
+
+    def test_31g_the_group_is_the_material_tag_not_the_display_label(self):
+        """**組は材料の `group` で引く。**CLI の呼び名(「3 分切れ負け」)では当たらない。
+
+        当たらないと**黙って `None`** になり、観測が丸ごと消える(顧客には「無かった」ように見える)。
+        """
+        tc = {"raw": [{"games": [{"group": "3 分", "longThinkTotal": 1,
+                                  "forkAmongLongThink": {"numerator": 1, "denominator": 1},
+                                  "oppositeSideAmongForkLongThink": {"numerator": 0,
+                                                                     "denominator": 1}}]}]}
+        self.assertIsNotNone(CA.long_think_fork_of(tc, "3 分"))
+        self.assertIsNone(CA.long_think_fork_of(tc, "3 分切れ負け"))
+        # **字面では見ない。**`assertIn("group_label_of(direct, None)", src)` と書いたら
+        # **すぐ上の説明のコメントに当たって**、呼び名で引く変異が黙った(実測。この型は今日 4 度目)。
+        # **AST で呼び出しの引数を見る。**
+        import ast
+        path = os.path.join(os.path.dirname(os.path.abspath(EC.__file__)), "exit_candidates.py")
+        with io.open(path, encoding="utf-8") as f:
+            tree = ast.parse(f.read())
+        calls = [n for n in ast.walk(tree)
+                 if isinstance(n, ast.Call) and isinstance(n.func, ast.Attribute)
+                 and n.func.attr == "long_think_fork_of"]
+        self.assertEqual(len(calls), 1, "long_think_fork_of の呼び出しが 1 か所でない")
+        group_arg = calls[0].args[1]
+        self.assertIsInstance(group_arg, ast.Call, f"組の引数が呼び出しでない: {ast.dump(group_arg)}")
+        self.assertEqual(group_arg.func.id, "group_label_of")
+        self.assertIsInstance(group_arg.args[1], ast.Constant)
+        self.assertIsNone(group_arg.args[1].value,
+                          "組を CLI の呼び名で引いている(材料の group に当たらず、観測が黙って消える)")
+
+    # ---- 長考で絞らない「側が逆」(③ の比べる相手。司令塔の依頼 2026-09-29)----
+    OPPOSITE_ALL = {"numerator": 51, "denominator": 239}
+
+    def test_31j_the_comparison_line_names_its_own_denominator(self):
+        """**5 / 33 と 51 / 239 は分母の出どころが違う** ― だから**別の文**にし、名前で言う。
+
+        1 文に混ぜると「そのうち」で繋がって読め、**比べられない 2 つの率を比べたことになる**
+        (2026-09-24 の教訓)。
+        """
+        line = EC.opposite_all_line(self.OPPOSITE_ALL)
+        self.assertIn("239", line)
+        self.assertIn("51", line)
+        self.assertIn("長考で絞らない", line)
+        # **長考の行とは別の文**(同じ行に入れない)。
+        self.assertNotIn("10 秒以上", line)
+        ratio, _f, _p, _pl = CA.scan_numbers(line)
+        self.assertFalse(ratio)
+
+    def test_31k_the_definition_is_the_same_as_the_typescript_one(self):
+        """**「側が逆」の定義は `lib/type.ts` の `sideBucketOf` と同じ**(真になる組はちょうど 2 通り)。
+
+        `both` は必ず交わるので逆にならない。`none` も逆にならない。
+        **ここがずれると、冊子の数と `time_cause` の数が別の定義になる。**
+        """
+        self.assertTrue(CA.is_opposite_side("attack", "defense"))
+        self.assertTrue(CA.is_opposite_side("defense", "attack"))
+        for pair in (("attack", "attack"), ("defense", "defense"),
+                     ("attack", "both"), ("both", "attack"), ("both", "both"),
+                     ("attack", "none"), ("none", "defense"), ("none", "none")):
+            self.assertFalse(CA.is_opposite_side(*pair), pair)
+        self.assertEqual(len(CA.OPPOSITE_SIDE_PAIRS), 2)
+
+    def test_31l_the_comparison_rows_and_numbers(self):
+        rows = [(r["number"], r["unit"]) for r in EC.opposite_all_rows(self.OPPOSITE_ALL)]
+        self.assertEqual(rows, [(239, CA.OPPOSITE_ALL_UNIT)])
+        numbers = [r["number"] for r in EC.opposite_all_numbers(self.OPPOSITE_ALL)]
+        self.assertEqual(numbers, [239, 51])
+        self.assertEqual(EC.opposite_all_line(None), None)
+        self.assertEqual(EC.opposite_all_rows(None), [])
+        self.assertEqual(EC.opposite_all_numbers(None), [])
+
+    def test_31h_the_draft_and_the_table_really_carry_it(self):
+        """**配線**(関数を書いても呼ばれなければ冊子に出ない)。"""
+        answers = [answer(1, 10, top1=("drop",), actual=("drop",))]
+        direct = direct_of(answers)
+        patient = {"summary": {"games": 1}, "games": [], "findings": []}
+        repro = EC.repro_rows(direct)
+        sm = {"attack": {"n": 107, "collapsed": 65}, "defense": {"n": 132, "collapsed": 76},
+              "forkTotal": 404, "opposite": self.OPPOSITE_ALL, "rows": {}}
+        denoms = EC.denominators(direct, patient, repro, [], None, (), self.COUNTS, sm)
+        md = EC.build_md(direct, patient, repro, [], [], [], denoms, None,
+                         EC.opening_lines(patient, direct, TODAY), 0, sm, (), (), self.COUNTS)
+        self.assertIn(EC.long_think_fork_line(self.COUNTS), md)
+        self.assertIn(EC.opposite_all_line(self.OPPOSITE_ALL), md)
+        self.assertIn(EC.LONG_THINK_TWO_COUNTS_NOTE, md)
+        numbers = [(r["number"], r["unit"]) for r in denoms]
+        self.assertIn((61, "手"), numbers)
+        self.assertIn((239, CA.OPPOSITE_ALL_UNIT), numbers)
+        p1 = [r["number"] for r in EC.p1_numbers(patient, repro, direct, [], (), self.COUNTS, sm)]
+        self.assertIn(5, p1)
+        self.assertIn(51, p1)
+
+    def test_31i_the_note_has_no_digits(self):
+        """**書き手への注に数を書かない**(検査 1 と門 (ii) が偽の苦情を出す。`c6c8b5b`)。"""
+        self.assertNotRegex(EC.LONG_THINK_TWO_COUNTS_NOTE, r"\d")
+
+
 class OpeningGroupsInTheDraftTest(unittest.TestCase):
     """**戦型の群ごとの再集計が観測の欄に出る**(2026-09-29)。数だけ・戦型名なし。
 

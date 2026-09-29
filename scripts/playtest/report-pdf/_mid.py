@@ -122,7 +122,10 @@ story.append(PageBreak())
 # ===== 局の俯瞰(STEP FILL 作業 Y、H4-1: 見出しは s["games"] を使う) =====
 # 題は `exit_index.py` が正本(表紙の「節」の列も同じ定数から出す ― 写しを 2 か所に持たない)。
 story.append(mark_sec(P(exit_index.section_title("付録1", "形勢の流れ", games=s["games"]), S_BIG), "形勢の流れ"))
-story.append(P("上に行くほど" + person + "が良く、下に行くほど相手が良いことを表します。色のついた枠は、次のページから 1 局ずつ見ていく局です。", S_LEAD))
+# **ここでも「次のページから」と約束しない**(2026-09-29。上の 116 行と**同じ家族の 2 か所目** ―
+# あちらだけ直して、この折れ線の前文を直していなかった。P-171 の 3 回目の再発がこれ)。
+# 色の枠が指すのは `fset`(= `featured`)なので、**枠の意味を事実で言う**(ページを指さない)。
+story.append(P("上に行くほど" + person + "が良く、下に行くほど相手が良いことを表します。色のついた枠は、形勢が大きく動いた局です。", S_LEAD))
 fset = {g["no"] for g in featured}; cells = []
 for g in m["games"]:
     lab = P(f"<b>第 {g['no']} 局</b>　{g['side']}・{g['total']} 手　<font color='{'#2d6a8a' if g['result'] == '勝ち' else '#c9473f'}'><b>{g['result']}</b></font>", S_K)
@@ -204,7 +207,10 @@ assert len(rest) == exit_index.rest_count(s["games"], len(PROSE)), (
     f"そのほかの局の数が引き算と合わない: len(rest)={len(rest)} / "
     f"games-PROSE={exit_index.rest_count(s['games'], len(PROSE))}(表紙は後者で題を作る)")
 story.append(mark_sec(P(exit_index.section_title("付録1", "そのほかの局", rest=len(rest)), S_BIG), "そのほかの局"))
-story.append(P("一局ずつのページに載せなかった局の一覧です。グラフの見方は同じです。", S_LEAD))
+# **「一局ずつのページ」を指さない**(2026-09-29。P-171 の家族の 3 か所目)。
+# 束ねると**この一覧のページだけが冊子に入る**ことがあり、そのとき「一局ずつのページ」は
+# 冊子のどこにも無い。**同じ中身を、他のページを指さずに言う**(除いた条件は `featured` = 形勢が大きく動いた局)。
+story.append(P("形勢が大きく動いた局を除いた局の一覧です。グラフの見方は同じです。", S_LEAD))
 rows = [[P(x, S_K) for x in ["局", "先後", "結果", "手数", "どんな将棋だったか", "形勢の変化"]]]
 for g in rest:
     rows.append([P(str(g["no"]), S_V), P(g["side"], S_V), P(g["result"], S_V), P(str(g["total"]), S_V), P(F[g["no"]]["title"], S_V), Spark(g["scores"], [], w=50 * mm, h=11 * mm)])

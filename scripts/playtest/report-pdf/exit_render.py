@@ -146,6 +146,38 @@ def source_page_of(sources, appendix, kind, key):
     return table[group][name]
 
 
+def check_neighbour_promises(sources, placed, problems):
+    """**束ねたページが、束に入っていない隣のページを約束していないこと**(P-171。2026-09-29)。
+
+    付録は本編が指したページだけを抜くので、**元の付録では本当だった「次のページから…」が、
+    抜いた先で嘘になる。**顧客は在りもしないページを探す(3 周目の批評席 (a) が実物で挙げた)。
+
+    見るのは **抜いた元のページの文字**(`fitz`)。**出力の PDF は見ない** ― 出力を見るには
+    先に書かなければならず、**落ちたときに嘘のページを書いた PDF が残る。**
+    語は `exit_index.NEIGHBOUR_PROMISES` の 1 か所(床であって天井ではない ― 上の注記)。
+
+    改行は取り除いて探す ― `fitz` は「次のページか / ら 1 局ずつ」のように行で割る(実測)。
+    """
+    import fitz
+
+    for appendix, page in sorted(placed):
+        pdf_path = sources[appendix]["pdf"]
+        with fitz.open(pdf_path) as doc:
+            text = "".join(doc[page - 1].get_text().split())
+        for phrase, step in EI.NEIGHBOUR_PROMISES.items():
+            if phrase not in text:
+                continue
+            need = page + step
+            if (appendix, need) in placed:
+                continue
+            problems.append(
+                f"{appendix} の元の {page} ページ目が「{phrase}」と書いているが、"
+                f"約束している {need} ページ目を束ねていない"
+                f"(束ねたのは {sorted(p for a, p in placed if a == appendix)} ページ目)。"
+                "直し方は 2 つ ― そのページを本編から指して束に入れるか、"
+                f"組版の道具からその言い方を外す({appendix} の前文)")
+
+
 def build(args):
     from pypdf import PdfReader, PdfWriter
 
@@ -198,6 +230,13 @@ def build(args):
             placed[slot] = len(writer.pages)
             source_pages.setdefault(appendix, []).append(page)
         output_positions[label] = placed[slot]
+
+    # **書く前に確かめる**(P-171)。落ちたら PDF は作らない ―
+    # 嘘のページを約束した冊子が「できた」ことにならないようにする。
+    problems = []
+    check_neighbour_promises(sources, placed, problems)
+    if problems:
+        raise ExitRenderError("\n".join(problems))
 
     with open(args["out_appendix"], "wb") as f:
         writer.write(f)

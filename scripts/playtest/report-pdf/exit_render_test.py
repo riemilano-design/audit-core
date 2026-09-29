@@ -66,6 +66,27 @@ def write_json(path, obj):
         json.dump(obj, f, ensure_ascii=False)
 
 
+
+def strings_outside_docstrings(path):
+    """その py ファイルの**文字定数**(docstring は除く)。
+
+    **docstring を除くのがこの関数の全部。**2026-09-29 に 5 回続けて踏んだ型 ―
+    「語を写していないこと」を字面や文字定数で見ると、**なぜ外したかを書いた説明文が当たる。**
+    コメント(`#`)は `ast` に残らないので、除くのは docstring だけでよい。
+    """
+    with io.open(path, encoding="utf-8") as f:
+        tree = ast.parse(f.read())
+    docs = set()
+    for node in ast.walk(tree):
+        if isinstance(node, (ast.Module, ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef)):
+            body = getattr(node, "body", None) or []
+            if body and isinstance(body[0], ast.Expr) and isinstance(body[0].value, ast.Constant) \
+               and isinstance(body[0].value.value, str):
+                docs.add(id(body[0].value))
+    return [n.value for n in ast.walk(tree)
+            if isinstance(n, ast.Constant) and isinstance(n.value, str) and id(n) not in docs]
+
+
 class ExitIndexIsConstantsOnlyTest(unittest.TestCase):
     """**`exit_index.py` は定数だけ。**組版の道具を import し始めたら赤にする
     ― 門が `exit_index.py` を import してよいのは、それが組版ではないから(司令塔の条件)。"""
@@ -267,6 +288,131 @@ class ExitRenderTest(unittest.TestCase):
         # 表紙を足したぶん、印の指す出力ページが 1 つずれる。
         self.assertEqual(min(bundled["outputPositions"].values()), 2)
 
+
+
+class NeighbourPromiseTest(unittest.TestCase):
+    """**束ねたページが、束に入っていない隣のページを約束していないこと**(P-171。2026-09-29)。
+
+    3 周目の批評席 (a) が実物で挙げ、私が数え直した: 付録 1 の折れ線のページが
+    「色のついた枠は、次のページから 1 局ずつ見ていく局です」と書き、**1 局ずつのページは
+    束のどこにも無かった。**4 周目の実物でも残っていた(付録 1 は元の 2 ページ目だけ、
+    付録 3 は元の 6・20・21 ページ目 ― 6 ページ目の「ここから先は」の次は 20 ページ目)。
+    """
+
+    PAGES = [["付録 1 の 1 ページ", "読み方"],
+             ["付録 1 の 2 ページ", "形勢の流れ", "色のついた枠は、次のページから見ていく局です。"],
+             ["付録 1 の 3 ページ", "40 手目の局面"],
+             ["付録 1 の 4 ページ", "70 手目の局面"]]
+
+    def setUp(self):
+        self._tmp = tempfile.TemporaryDirectory()
+        self.dir = self._tmp.name
+        write_json(self.j("i1.json"), INDEX_1)
+
+    def tearDown(self):
+        self._tmp.cleanup()
+
+    def j(self, name):
+        return os.path.join(self.dir, name)
+
+    def build(self, pages, md):
+        write_pdf(self.j("a1.pdf"), pages)
+        with io.open(self.j("honbun.md"), "w", encoding="utf-8") as f:
+            f.write(md)
+        return ER.build(ER.parse_args([
+            "--honbun-md", self.j("honbun.md"),
+            "--source-index", f"{self.j('i1.json')}:{self.j('a1.pdf')}",
+            "--out-appendix", self.j("out.pdf"),
+            "--out-index", self.j("out_index.json")]))
+
+    ONLY_THE_GRAPH = "# 試し\n\n## 数え方\n\n<!-- sec: 付録1/形勢の流れ -->\n"
+    GRAPH_AND_NEXT = ("# 試し\n\n## 数え方\n\n<!-- sec: 付録1/形勢の流れ -->\n\n"
+                      "<!-- pos: 1/40 付録1 -->\n")
+
+    def test_n1_the_promise_without_the_promised_page_stops(self):
+        """約束したページを束ねていないと**止まる**(嘘の冊子を出さない)。"""
+        with self.assertRaises(ER.ExitRenderError) as cm:
+            self.build(self.PAGES, self.ONLY_THE_GRAPH)
+        msg = str(cm.exception)
+        self.assertIn("次のページ", msg)
+        self.assertIn("付録1 の元の 2 ページ目", msg)
+        self.assertIn("3 ページ目を束ねていない", msg)
+
+    def test_n2_no_pdf_is_written_when_it_stops(self):
+        """**落ちたときに PDF を残さない。**出力を読んで判定すると、先に書くしかなくなり、
+        **嘘のページを約束した冊子がフォルダに残る**(次の段がそれを拾う)。"""
+        with self.assertRaises(ER.ExitRenderError):
+            self.build(self.PAGES, self.ONLY_THE_GRAPH)
+        self.assertFalse(os.path.exists(self.j("out.pdf")), "落ちたのに PDF が残っている")
+
+    def test_n3_the_promise_with_the_promised_page_passes(self):
+        """**校正**: 約束したページ(元の 3 ページ目)も束ねれば通る ―
+        検査が何にでも落ちるのではないこと。"""
+        bundled = self.build(self.PAGES, self.GRAPH_AND_NEXT)
+        self.assertEqual(bundled["sourcePages"], {"付録1": [2, 3]})
+
+    def test_n4_the_same_page_without_the_phrase_passes(self):
+        """**校正**: 同じ束ね方でも、言い方を外してあれば通る
+        (= 実際の直し方の 2 つ目。組版から語を外す)。"""
+        pages = [list(p) for p in self.PAGES]
+        pages[1] = ["付録 1 の 2 ページ", "形勢の流れ", "色のついた枠は、形勢が大きく動いた局です。"]
+        bundled = self.build(pages, self.ONLY_THE_GRAPH)
+        self.assertEqual(bundled["sourcePages"], {"付録1": [2]})
+
+    def test_n5_a_line_break_inside_the_phrase_is_still_found(self):
+        """**改行で割れていても見つかる。**`fitz` は「次のページか / ら」のように行で割る
+        ― 割れた字面をそのまま探すと、**検査が黙る。**"""
+        pages = [list(p) for p in self.PAGES]
+        pages[1] = ["付録 1 の 2 ページ", "形勢の流れ", "色のついた枠は、次のペ", "ージから見ていく局です。"]
+        with self.assertRaises(ER.ExitRenderError):
+            self.build(pages, self.ONLY_THE_GRAPH)
+
+    def test_n6_pointing_backwards_needs_the_page_before(self):
+        """前を指す言い方は**前のページ**を要求する(向きを 1 つにしていない)。"""
+        pages = [list(p) for p in self.PAGES]
+        pages[1] = ["付録 1 の 2 ページ", "形勢の流れ", "前のページの表と見比べてください。"]
+        with self.assertRaises(ER.ExitRenderError) as cm:
+            self.build(pages, self.ONLY_THE_GRAPH)
+        self.assertIn("1 ページ目を束ねていない", str(cm.exception))
+
+    def test_n7_the_phrases_live_in_one_place(self):
+        """語は `exit_index.NEIGHBOUR_PROMISES` の 1 か所。**束ねる道具に写しを持たない**
+        (片方だけ足すと、検査と組版が別の語を見る ― P-111 の病気)。
+
+        **字面ではなく `ast` で文字定数を見る** ― 説明のコメントに語を書くと字面の試験は当たる。
+        """
+        path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "exit_render.py")
+        hits = sorted({s for s in strings_outside_docstrings(path)
+                       for p in EI.NEIGHBOUR_PROMISES if p in s})
+        self.assertEqual(hits, [], f"exit_render.py が語を写している: {hits}")
+
+    def test_n8_the_two_bundled_renderers_do_not_promise_a_neighbour(self):
+        """**束ねられる付録を組む 2 本に、隣を指す言い方が無いこと**(2026-09-29 の直し)。
+
+        付録 1 = `_mid.py`(`build.sh` が `render_main.py` に連結する断片)、
+        付録 3 = `render_direct.py`。**この 2 本だけ**が束ねられる(`APPENDIX_SECTIONS`)。
+        **`ast` の文字定数だけを見る** ― 両方とも、なぜ外したかを**コメントに語で書いてある。**
+        """
+        here = os.path.dirname(os.path.abspath(__file__))
+        for name in ("_mid.py", "render_direct.py"):
+            hits = sorted({s for s in strings_outside_docstrings(os.path.join(here, name))
+                           for p in EI.NEIGHBOUR_PROMISES if p in s})
+            self.assertEqual(hits, [], f"{name} が隣のページを約束している: {hits}")
+
+    def test_n9_the_helper_really_drops_docstrings(self):
+        """**校正**: この助けが docstring を落とし、ふつうの文字定数は落とさないこと。
+
+        落としすぎれば n7・n8 は**何も見ていない試験**になる(常に緑)。
+        """
+        import tempfile as _t
+        with _t.NamedTemporaryFile("w", suffix=".py", delete=False, encoding="utf-8") as f:
+            f.write('"""次のページ(docstring)"""\n'
+                    "def g():\n"
+                    '    """次のページ(関数の docstring)"""\n'
+                    '    return "次のページ(ふつうの定数)"\n')
+            path = f.name
+        self.addCleanup(os.unlink, path)
+        self.assertEqual(strings_outside_docstrings(path), ["次のページ(ふつうの定数)"])
 
 if __name__ == "__main__":
     unittest.main()

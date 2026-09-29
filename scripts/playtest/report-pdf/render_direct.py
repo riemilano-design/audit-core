@@ -300,9 +300,10 @@ class Board(Flowable):
             for letter in "RBGSNLP":
                 key = letter if is_sente_side else letter.lower()
                 n = self.hands.get(key, 0)
-                if n > 0:
-                    items.append(PIECE[letter.lower()] + (KAN[n] if n < 10 else str(n)))
-            return "　".join(items) or "なし"
+                # **持ち駒の語は `board_spec.hand_word` の 1 か所**(P-176。2026-09-29) ―
+                # 本編は「香」・ここは「香一」と書いていた(同じ局面で書き方が違った)。
+                items.append(board_spec.hand_word(PIECE[letter.lower()], n))
+            return board_spec.hands_phrase(items)
 
         for yy, lab, is_sente_side in ((oy - 6.2 * mm, f"{self.person}の持ち駒", self.us), (oy + S + 3.4 * mm, "相手の持ち駒", not self.us)):
             c.setFillColor(BG)
@@ -616,7 +617,11 @@ story.append(
             # 数(404・103)は材料のままで、**約束の言い方だけを事実の言い方に変える。**
             f"長く読まなくても、実戦の手と第 1 候補の評価差が見えた局面は、"
             f"全 {counts['totalForkCount']} 分かれ道のうち {counts['totalCount']} 局面ありました。"
-            f"ここから先は、実戦との差が大きい順に並べています。",
+            # **「ここから先は」も外す**(2026-09-29。上の直しと同じ家族の 2 か所目 ―
+            # 「並べます」を「並べています」に直したときに、**隣のページを指す「ここから先は」を
+            # 残していた**。束ねると 6 ページ目の次は 20 ページ目になる〈4 周目の実物〉ので、
+            # 「ここから先」は続きのページを約束して嘘になる。順序の事実だけを残す)。
+            f"実戦との差が大きい順に並べています。",
             allowed_p1,
         ),
         S_BODY,

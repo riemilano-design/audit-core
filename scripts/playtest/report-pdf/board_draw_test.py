@@ -12,13 +12,15 @@
 # 数え上げは必ず漏れる(§40 の家族。P-124 で AST でも同じ間違いをした)。
 import ast
 import builtins
+import io
 import os
 import sys
 import unittest
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-import board_draw as BD
+import board_draw as BD      # noqa: E402
+import board_spec as BS      # noqa: E402
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 
@@ -141,6 +143,59 @@ class UtilIsAThinWrapperTest(unittest.TestCase):
             self.assertNotIn(name, assigned, f"_util.py が {name} を定義し直している")
         self.assertIn("from board_draw import COL_CAND, COL_PLAYED", src,
                       "board_draw からの束縛が無い")
+
+
+if __name__ == "__main__":
+    unittest.main(verbosity=2)
+
+class HandWordIsOnePlaceTest(unittest.TestCase):
+    """**持ち駒の語は 1 か所**(P-176。2026-09-29)。
+
+    批評席 (a)(4 周目)が実物で挙げた: 同じ 12 局目 70 手目の局面で、
+    本編「桂二 香 歩二」・付録 3「桂二　香一　歩二」。**1 枚のときに数を付けるかと、
+    区切りの空白の幅**の 2 つが違っていた。**P-111 の家族**(4 つの実装が別々に組んでいた)。
+    """
+
+    def test_w1_one_piece_has_no_number(self):
+        """**1 枚のときは数を付けない**(将棋の持ち駒の書き方)。"""
+        self.assertEqual(BS.hand_word("香", 1), "香")
+        self.assertEqual(BS.hand_word("香", 2), "香二")
+        self.assertEqual(BS.hand_word("歩", 9), "歩九")
+
+    def test_w2_ten_or_more_uses_digits(self):
+        """10 枚以上は算用数字(漢数字の表は 1 桁しか持たない。歩は 18 枚まで在りうる)。"""
+        self.assertEqual(BS.hand_word("歩", 10), "歩10")
+        self.assertEqual(BS.hand_word("歩", 18), "歩18")
+
+    def test_w3_zero_is_not_a_word(self):
+        self.assertIsNone(BS.hand_word("香", 0))
+        self.assertIsNone(BS.hand_word("香", -1))
+
+    def test_w4_the_phrase_drops_none_and_says_nashi(self):
+        self.assertEqual(BS.hands_phrase(["桂二", None, "香"]), "桂二 香")
+        self.assertEqual(BS.hands_phrase([]), "なし")
+        self.assertEqual(BS.hands_phrase([None]), "なし")
+
+    def test_w5_the_sfen_parse_goes_through_the_one_place(self):
+        """**SFEN から作る側も同じ 1 か所を通る**(1 枚は数なし)。"""
+        _cells, hs = BD.parse_sfen("9/9/9/9/9/9/9/9/9 b 2NL2P 1")
+        self.assertEqual(BS.hands_phrase(hs[True]), "桂二 香 歩二")
+
+    def test_w6_all_four_renderers_call_the_one_place(self):
+        """**4 つの実装が同じ 1 か所を呼ぶ**(写しが残っていれば、また書き方が分かれる)。
+
+        **字面ではなく `ast` で呼び出しを見る**(説明のコメントに語を書くと字面の試験は当たる ―
+        2026-09-29 に何度も踏んだ型)。
+        """
+        import ast
+        here = os.path.dirname(os.path.abspath(__file__))
+        for name in ("board_draw.py", "render_direct.py", "render_whatif.py", "fig1.py"):
+            with io.open(os.path.join(here, name), encoding="utf-8") as f:
+                tree = ast.parse(f.read())
+            calls = [n for n in ast.walk(tree)
+                     if isinstance(n, ast.Call) and isinstance(n.func, ast.Attribute)
+                     and n.func.attr == "hand_word"]
+            self.assertTrue(calls, f"{name} が board_spec.hand_word を呼んでいない(写しが残っている)")
 
 
 if __name__ == "__main__":

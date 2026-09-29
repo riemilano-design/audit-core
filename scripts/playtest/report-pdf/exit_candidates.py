@@ -358,7 +358,8 @@ def action_fraction_line(f):
 #
 # **言い回しの型の数(「型が N 通りあります」)は入れない** ― それは材料の作りの話で、
 # この人の対局について言える数ではない。書き手が使ったら門で落ちる(それが正しい)。
-def p1_numbers(patient, repro, direct=None, passed=()):
+def p1_numbers(patient, repro, direct=None, passed=(), thresholds=(), long_think=None,
+               side_match=None):
     # **本編の形の数**(事実の本数)。実物は「数は 3 つ。」と**冊子が自分の形を言う** ―
     # 3 人目の試作の「ひとことで」の 1 文にこの言い方が在る(実測 2026-09-29)。
     # **対局の事実ではないが、書き手が書く数である。**
@@ -420,6 +421,10 @@ def p1_numbers(patient, repro, direct=None, passed=()):
                                      ("otherGames", "局", "実戦は%sではなかった局")):
                 out.append({"number": c[key], "unit": unit,
                             "from": "direct_answers.json の answers(観測: " + (label % what) + ")"})
+    # **線の比べる相手の数**(2026-09-29)。印字する側と数える側は同じ集合(P-139 の型)。
+    out += threshold_numbers(thresholds)
+    out += long_think_fork_numbers(long_think)
+    out += opposite_all_numbers((side_match or {}).get("opposite"))
     return out
 
 
@@ -455,13 +460,15 @@ def opening_lines(patient, direct, today, group_label=None):
 # §48 の「番人のある単位を関数にする」と同じ型の 2 度目。
 
 
-def candidates_json(direct, patient, repro, denoms, passed, dropped, opening, groups=()):
+def candidates_json(direct, patient, repro, denoms, passed, dropped, opening, groups=(), thresholds=(),
+                    long_think=None, side_match=None):
     """門(`exit_gate.py`)が照合する候補。**md に印字したものと同じ値**でなければならない。"""
     return {"opening": opening, "denominators": denoms, "repro": repro,
             "actionFractions": action_fractions(passed),
             "openingGroups": list(groups),
             "unitMismatchFractions": unit_mismatch_fractions(dropped) + unit_mismatch_fractions(passed),
-            "p1Numbers": p1_numbers(patient, repro, direct, passed),
+            "p1Numbers": p1_numbers(patient, repro, direct, passed, thresholds, long_think,
+                                    side_match),
             "boards": [inner for _text, inner in board_marks(direct)],
             "menuPassed": [r["id"] for r in passed],
             "menuDropped": [{"id": r["id"], "minN": r["minN"],
@@ -478,7 +485,199 @@ def group_denominator_rows(groups):
     return [(r["label"], r["games"]) for r in groups or ()]
 
 
-def denominators(direct, patient, repro, passed=(), groups=None):
+# ==================== 分母の表の「どの集計から出たか」の語(P-172。2026-09-29) ====================
+# **顧客の語で書く。**4 周目の実物は、この列に
+# 「行動 M4 の根拠」「観測」「`direct_answers.json`」「`patient_report_data.json`」
+# 「`opening_recognition.json` の署名」と**内部の名札と機械のファイル名**を出していた
+# (席 (a) が挙げ、JSON 名は集計のときに私が測って見つけた)。
+#
+# **変えるのはこの列だけ。**「数」と「数えたもの」の列は変えない(司令塔の指示 ①)。
+# **行動の番号(M4・M5)を出さない** ― 席 (a) は「M1〜M3 があったのか・なぜ無いのかも分からない」と書いた。
+# 番号を消せば、落ちた候補の存在が表から漏れることも無くなる。
+# **行動の文そのものは道具に無い**(`answer_menu.json` は `verifyName` と `minN` しか持たず、
+# 行動の文は承認済みの表 = `answerMenu.ts` の側にある)。だから**分数の名前で言う** ―
+# 分数の名前は「判定関数が数えている中身をそのまま日本語にしたもの」(`MENU_FRACTIONS` の注)なので、
+# 顧客にとっては「何を数えた分母か」がそのまま読める。
+DENOM_SECTION_ACTION = "試せること"  # 正本の節の名(`check_structure.SECTIONS` の役割名と同じ。試験で固定する)
+DENOM_FORK_POSITIONS = "付録の「浅い読みで見えた分かれ道」に並べた局面"
+DENOM_FORK_GAMES = "その分かれ道が出てきた局(同じ局を重ねて数えない)"
+DENOM_GAMES = "この報告が見た対局の数"
+DENOM_ACTION_TEMPLATE = "「{name}」の分母({section}の根拠)"
+DENOM_OBSERVATION_TEMPLATE = "「第 1 候補が{what}だった{of}」の分母"
+DENOM_GROUP_TEMPLATE = "群「{name}」の局数(序盤の駒の動きの型で分けたもの)"
+
+
+# ==================== 判定の線を冊子に出す(2026-09-29。人間の決定「7 割の線を出す」) ====================
+# **線の値は `check_answer.MENU_THRESHOLDS` の 1 か所**(判定が読んでいるのと同じ表)。
+# ここは**顧客の語**だけを持つ ― 判定側に顧客向けの言い回しを置かない。
+#
+# 【なぜ要ったか】批評席 (a) が 3 周続けて「一致率が高いのか低いのか、**比べる相手が無い**」と書いた。
+# **比べる相手は道具の中に在った**(M4 の 0.7、M5 の「0〜1 秒の崩れ率の 2 つぶん」)。
+#
+# 【語の制約(実測)】**「7 割」「2 倍」とは書けない** ― 検査 1 が数字 + 倍|割 を落とす。
+# だから **`0.7`** と **「2 つぶん」**。**「下回った」は言わない**(それは書き手の文。
+# 道具は**線の値と「今回の値」を並べるだけ**― 司令塔の指示)。
+THRESHOLD_UNIT = "線"
+THRESHOLD_LINE_FROM = "{what}(道具上の仮置き)"
+THRESHOLD_OTHER_FROM = "「{name}」の分母(この線の比べる相手)"
+THRESHOLD_SENTENCES = {
+    "rate_below": "道具の仮置きの線は {line} です。今回の値は {values} でした。",
+    "times_of_other_rate": ("道具の仮置きの線は「{other_name}」({other_value})の {times} つぶんです。"
+                            "今回の値は {values} でした。"),
+}
+
+
+# ==================== 10 秒以上考えた手のうち分かれ道だった数(2026-09-29。③) ====================
+# **行動 1 の条件「10 秒以上考える局面では」と、根拠の分数(全部の分かれ道)の橋にあたる数。**
+# **観測として出すだけ**(行動にはしない ― 承認済みの表に無い項目を行動にしないため)。
+# **判定も割合も作らない。数だけ**(人間の決定・規則 8 (3))。
+#
+# **「10 秒以上考えた手」は 2 通りある**ので、名前でどちらかを言う
+# (`check_answer.LONG_THINK_NAME` ほか)。**同じ言い方で 2 つの数を並べない**(2026-09-24 の教訓)。
+# **名前そのものが「何のうちの何か」を言う**ので、「そのうち」を重ねない
+# (重ねると「そのうち 10 秒以上考えた手のうち、分かれ道だった手」と読める ― 校正で実測)。
+LONG_THINK_FORK_LINE = ("- 観測(行動ではありません): {long_think_name}が {long_think} 手。"
+                        "{fork_name}が {fork} 手。{opposite_name}が {opposite} 手。")
+# **長考で絞らない「側が逆」**(③ の比べる相手)。**別の文にする** ― 分母の出どころが違うので、
+# 1 文に混ぜると「そのうち」で繋がって読める(5 / 33 と 51 / 239 は比べられない)。
+OPPOSITE_ALL_LINE = ("- 観測(行動ではありません): {all_name}が {denominator} {unit}。"
+                     "{numerator_name}が {numerator} {unit}。")
+# **書き手への注に数を書かない**(検査 1 と門 (ii) が偽の苦情を出す。`c6c8b5b`)。
+# **数字を書かない**(半角も全角も) ― 検査 1 と門 (ii) が注の数を拾って偽の苦情を出す(`c6c8b5b`)。
+# 漢数字は拾われない(`\d` に当たらない)。
+LONG_THINK_TWO_COUNTS_NOTE = ("長考の手の数え方は二通りある ― 全部の手と、崩れを判定できた手だけ。"
+                              "同じ言い方で並べない(分母の表の行を見ること)")
+
+
+def opposite_all_line(opposite_all):
+    """長考で絞らない「側が逆」の 1 行。**長考の行とは別の文**(分母の出どころが違う)。"""
+    if not opposite_all:
+        return None
+    return OPPOSITE_ALL_LINE.format(
+        all_name=CA.OPPOSITE_ALL_NAME, denominator=opposite_all["denominator"],
+        numerator_name=CA.OPPOSITE_ALL_NUMERATOR_NAME, numerator=opposite_all["numerator"],
+        unit=CA.OPPOSITE_ALL_UNIT)
+
+
+def opposite_all_rows(opposite_all):
+    """分母の表に足す行(分母は「第 1 候補の側が 1 つだった分かれ道」)。"""
+    if not opposite_all:
+        return []
+    return [{"number": opposite_all["denominator"], "unit": CA.OPPOSITE_ALL_UNIT,
+             "from": CA.OPPOSITE_ALL_NAME}]
+
+
+def opposite_all_numbers(opposite_all):
+    """候補の数(分子も入れる。印字する側と数える側は同じ集合。P-139)。"""
+    if not opposite_all:
+        return []
+    return [{"number": opposite_all["denominator"], "unit": CA.OPPOSITE_ALL_UNIT,
+             "from": CA.OPPOSITE_ALL_NAME},
+            {"number": opposite_all["numerator"], "unit": CA.OPPOSITE_ALL_UNIT,
+             "from": CA.OPPOSITE_ALL_NUMERATOR_NAME}]
+
+
+def long_think_fork_line(counts):
+    """観測の 1 行。`counts` が None なら None(材料が無ければ何も出さない)。"""
+    if counts is None:
+        return None
+    return LONG_THINK_FORK_LINE.format(
+        long_think_name=CA.LONG_THINK_NAME, long_think=counts["longThink"],
+        fork_name=CA.LONG_THINK_FORK_NAME, fork=counts["fork"],
+        opposite_name=CA.LONG_THINK_OPPOSITE_NAME, opposite=counts["oppositeSide"])
+
+
+def long_think_fork_rows(counts):
+    """分母の表に足す行。**分母になる 2 つの数**(全部の手・分かれ道だった手)。"""
+    if counts is None:
+        return []
+    return [{"number": counts["longThink"], "unit": "手", "from": CA.LONG_THINK_NAME},
+            {"number": counts["fork"], "unit": "手", "from": CA.LONG_THINK_FORK_NAME}]
+
+
+def long_think_fork_numbers(counts):
+    """候補の数(印字する側と数える側は同じ集合。P-139 の型)。**分子も入れる。**"""
+    if counts is None:
+        return []
+    return [{"number": counts["longThink"], "unit": "手", "from": CA.LONG_THINK_NAME},
+            {"number": counts["fork"], "unit": "手", "from": CA.LONG_THINK_FORK_NAME},
+            {"number": counts["oppositeSide"], "unit": "手", "from": CA.LONG_THINK_OPPOSITE_NAME}]
+
+
+def thresholds_of(passed, materials):
+    """線を持つ行動の一覧。**`check_answer.menu_threshold_of` をそのまま並べる**(写しを作らない)。"""
+    out = []
+    for row in passed:
+        threshold = CA.menu_threshold_of(row["id"], materials)
+        if threshold is None:
+            continue
+        out.append({"id": row["id"], "threshold": threshold,
+                    "fractions": [f for f in (row.get("fractions") or [])
+                                  if not f.get("unitMismatch")]})
+    return out
+
+
+def values_phrase(fractions):
+    """「攻めが 65 / 107、自玉側が 76 / 132」。**分数の名札があるときだけ名札を付ける。**"""
+    parts = []
+    for f in fractions:
+        value = f"{f['numerator']} / {f['denominator']}"
+        parts.append(f"{f['label']} {value}" if f.get("label") else value)
+    return "、".join(parts)
+
+
+def threshold_denominator_rows(thresholds):
+    """分母の表に足す行 ― **線そのもの**と、**線の比べる相手の分母**。"""
+    rows = []
+    for row in thresholds:
+        t = row["threshold"]
+        if "line" in t:
+            rows.append({"number": t["line"], "unit": THRESHOLD_UNIT,
+                         "from": THRESHOLD_LINE_FROM.format(what=t["what"])})
+        other = t.get("other")
+        if other:
+            rows.append({"number": other["denominator"], "unit": other["unit"],
+                         "from": THRESHOLD_OTHER_FROM.format(name=other["name"])})
+    return rows
+
+
+def threshold_sentences(thresholds):
+    """**使ってよい固定文**(書き手が選ぶ)。線の値と今回の値を並べるだけ。"""
+    out = []
+    for row in thresholds:
+        t = row["threshold"]
+        template = THRESHOLD_SENTENCES.get(t["kind"])
+        if template is None:
+            continue
+        other = t.get("other") or {}
+        out.append(template.format(
+            line=t.get("line"), times=t.get("times"),
+            other_name=other.get("name"),
+            other_value=f"{other.get('numerator')} / {other.get('denominator')}",
+            values=values_phrase(row["fractions"])))
+    return out
+
+
+def threshold_numbers(thresholds):
+    """**線の周りの数を候補に入れる**(印字する側と数える側は同じ集合。P-139 の型)。
+
+    **線の値そのものは入れない** ― `0.7` は検査 1 も門も数として拾わない(両方の桁が
+    `SMALL_NUMBER_MAX` 以下)。拾われない数を候補に入れると、**候補の一覧が嘘になる**。
+    """
+    out = []
+    for row in thresholds:
+        other = row["threshold"].get("other")
+        if not other:
+            continue
+        out.append({"number": other["numerator"], "unit": other["unit"],
+                    "from": f"「{other['name']}」の分子(この線の比べる相手)"})
+        out.append({"number": other["denominator"], "unit": other["unit"],
+                    "from": f"「{other['name']}」の分母(この線の比べる相手)"})
+    return out
+
+
+def denominators(direct, patient, repro, passed=(), groups=None, thresholds=(), long_think=None,
+                 side_match=None):
     """分母の出どころ。**冊子に出る分母は全部ここに行がある**(P-161)。
 
     2 周目の表は 3 行(103・24・25)しかなく、**行動の根拠の分母(107・132)と観測の分母(54)が
@@ -492,12 +691,9 @@ def denominators(direct, patient, repro, passed=(), groups=None):
     表そのものが嘘になる(P-165)。**出さない理由は書き手への注に出す**(黙って落とさない)。
     """
     out = [
-        {"number": repro["totalPositions"], "unit": "局面",
-         "from": "direct_answers.json の answers(長く読まなくても実戦の手と第 1 候補の差が見えた分かれ道)"},
-        {"number": repro["totalGames"], "unit": "局",
-         "from": "direct_answers.json の answers に出てくる局の数(重複を除いたもの)"},
-        {"number": patient["summary"]["games"], "unit": "局",
-         "from": "patient_report_data.json の summary.games(この報告が見た対局の数)"},
+        {"number": repro["totalPositions"], "unit": "局面", "from": DENOM_FORK_POSITIONS},
+        {"number": repro["totalGames"], "unit": "局", "from": DENOM_FORK_GAMES},
+        {"number": patient["summary"]["games"], "unit": "局", "from": DENOM_GAMES},
     ]
     # ---- 行動の根拠の分母(P-161) ----
     for row in passed:
@@ -505,20 +701,24 @@ def denominators(direct, patient, repro, passed=(), groups=None):
             if f.get("unitMismatch"):
                 continue
             out.append({"number": f["denominator"], "unit": f["unit"],
-                        "from": f"行動 {row['id']} の根拠「{f['name']}」の分母"})
+                        "from": DENOM_ACTION_TEMPLATE.format(name=f["name"], section=DENOM_SECTION_ACTION)})
     # ---- 観測の分母(P-161。行動ではないが冊子に出る) ----
     if direct is not None:
         for tag in CA.CROSS_TAGS:
             c = CA.top1_actual_cross(direct, tag)
             what = CROSS_PHRASE_JP[tag]
             out.append({"number": c["positions"], "unit": "局面",
-                        "from": f"観測「第 1 候補が{what}だった分かれ道」の分母"})
+                        "from": DENOM_OBSERVATION_TEMPLATE.format(what=what, of="分かれ道")})
             out.append({"number": c["games"], "unit": "局",
-                        "from": f"観測「第 1 候補が{what}だった局」の分母"})
+                        "from": DENOM_OBSERVATION_TEMPLATE.format(what=what, of="局")})
     # ---- 群ごとの分母(戦型の群の再集計。群が小さいので割合は出さない) ----
     for name, n in (groups or []):
-        out.append({"number": n, "unit": "局",
-                    "from": f"群「{name}」の局数(opening_recognition.json の署名で分けたもの)"})
+        out.append({"number": n, "unit": "局", "from": DENOM_GROUP_TEMPLATE.format(name=name)})
+    # ---- 判定の線と、線の比べる相手(2026-09-29) ----
+    out += threshold_denominator_rows(thresholds)
+    # ---- 10 秒以上考えた手のうち分かれ道だった数(2026-09-29。③) ----
+    out += long_think_fork_rows(long_think)
+    out += opposite_all_rows((side_match or {}).get("opposite"))
     # **同じ数と同じ出どころの行は 1 つにする**(順番は保つ)。
     seen, unique = set(), []
     for row in out:
@@ -566,7 +766,7 @@ def rest_games(patient, featured):
 
 
 def build_md(direct, patient, repro, passed, dropped, mapping, denoms, fdata,
-             opening, featured=0, side_match=None, groups=()):
+             opening, featured=0, side_match=None, groups=(), thresholds=(), long_think=None):
     # **局数は `summary.games`**(`exit_cover.numbers_of`・`check_structure` と同じ出どころ)。
     # `len(patient["games"])` でも同じ数だが(25 = 25 を実測 2026-09-29)、
     # **出どころを 2 つ持つと、片方の材料が欠けたときに数が黙って変わる。**
@@ -619,6 +819,16 @@ def build_md(direct, patient, repro, passed, dropped, mapping, denoms, fdata,
     # **観測 1 行(行動ではない)。**書き手が「ひとことで」の 3 本に使える候補として出す。
     for tag in CA.CROSS_TAGS:
         L.append(f"- 観測(行動ではありません): {cross_line(direct, tag)}")
+    # **10 秒以上考えた手のうち分かれ道だった数**(2026-09-29。③)。行動 1 の条件との橋。
+    line = long_think_fork_line(long_think)
+    if line is not None:
+        L.append(line)
+    # **長考で絞らない「側が逆」**(③ の比べる相手)。**長考の行と分母の出どころが違う。**
+    all_line = opposite_all_line((side_match or {}).get("opposite"))
+    if all_line is not None:
+        L.append(all_line)
+    if line is not None or all_line is not None:
+        L.append(note(LONG_THINK_TWO_COUNTS_NOTE))
     # **戦型の群ごとの再集計(観測。行動ではない)**(2026-09-29)。
     # **数だけ。割合・%・群どうしを比べる文・「差がある / ない」の判定は作らない**
     # (群が 4 局・3 局なので、割合を出せば 1 局の違いが 25 ポイント動く)。
@@ -685,6 +895,9 @@ def build_md(direct, patient, repro, passed, dropped, mapping, denoms, fdata,
     L.append("")
     L.append(f"- {EI.selection_sentence(games)}")
     L.append(f"- {EI.NOTHING_TO_HIDE_SENTENCE}")
+    # **判定の線**(2026-09-29)。**「下回った」は書かない** ― 線と今回の値を並べるだけ。
+    for sentence in threshold_sentences(thresholds):
+        L.append(f"- {sentence}")
     negatives = [r for r in dropped if r["why"] == NEGATIVE_TYPE_REASON]
     if negatives:
         L.append(note("下は承認済みの表の「否定の型」の文。そのまま使える"
@@ -840,20 +1053,29 @@ def build(own, rest):
     groups = ()
     if own.get("opening_recognition"):
         groups = EGR.group_rows(EGR.load(own["opening_recognition"]), patient, direct, side_match)
-    # **`passed` と群を渡す**(P-161。行動の根拠の分母と群の分母を表に出すため)。
-    denoms = denominators(direct, patient, repro, passed, group_denominator_rows(groups))
+    # **判定の線**(2026-09-29)。`check_answer.MENU_THRESHOLDS` に在る行動だけが線を持つ。
+    thresholds = thresholds_of(passed, ctx["materials"])
+    # **`passed` と群と線を渡す**(P-161。行動の根拠の分母・群の分母・線を表に出すため)。
+    # **10 秒以上考えた手のうち分かれ道だった数**(2026-09-29。③)。組の中だけで足す。
+    # **組は材料の `group`(`group_label_of(direct, None)`)で引く** ― CLI の `--group-label`
+    # (人間が渡す「3 分切れ負け」のような呼び名)では `time_cause.json` の `group`(「3 分」)に
+    # **当たらず、黙って 0 件になる**。顧客に見せる呼び名と、材料を引く鍵は別物である。
+    long_think = CA.long_think_fork_of(ctx["materials"].get("timeCause"),
+                                       group_label_of(direct, None))
+    denoms = denominators(direct, patient, repro, passed, group_denominator_rows(groups),
+                          thresholds, long_think, side_match)
     # `featured` = 1 局ずつ見た局(`prose.json` の件数)。**「そのほかの局」の題に要る。**
     featured = len(CA.load_json(args.prose_paths[0])) if args.prose_paths else 0
     # **冒頭の段落は md と JSON の両方へ同じものを渡す**(門が 1 文ずつ在るかを見る)。
     opening = opening_lines(patient, direct, own["today"], own.get("group_label"))
     md = build_md(direct, patient, repro, passed, dropped, mapping, denoms, fdata,
-                  opening, featured, side_match, groups)
+                  opening, featured, side_match, groups, thresholds, long_think)
 
     with open(own["out_md"], "w", encoding="utf-8") as f:
         f.write(md + "\n")
     with open(own["out_json"], "w", encoding="utf-8") as f:
         json.dump(candidates_json(direct, patient, repro, denoms, passed, dropped, opening,
-                                  groups),
+                                  groups, thresholds, long_think, side_match),
                   f, ensure_ascii=False, indent=1, sort_keys=True)
     return {"todo": md.count(TODO), "repro": len(repro["rows"]),
             "passed": len(passed), "dropped": len(dropped),
