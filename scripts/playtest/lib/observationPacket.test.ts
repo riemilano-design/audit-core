@@ -27,8 +27,8 @@ function minimalFacts() {
       { gameId: "g01", no: 1, side: "先手", result: "負け", ending: "投了", ownPlyCount: 62, totalPlyCount: 123, timeLimitSec: 180, mirrored: false, src: "m1" },
     ],
     moves: [
-      { gameId: "g01", ply: 48, side: "own", usi: "P*4d", piece: "p", pieceFrom: "hand", spentSec: 12.5, phase: "mid", isFork: true, tags: ["drop"], collapsed: false, src: "m1" },
-      { gameId: "g01", ply: 50, side: "own", usi: "8g8f", piece: "p", pieceFrom: "board", spentSec: 3, phase: "mid", isFork: false, tags: [], collapsed: true, src: "m1" },
+      { gameId: "g01", ply: 48, side: "own", usi: "P*4d", piece: "pawn", drop: true, spentSec: 12.5, phase: "mid", isFork: true, tags: ["drop"], collapsed: false, src: "m1" },
+      { gameId: "g01", ply: 50, side: "own", usi: "8g8f", piece: "pawn", drop: false, spentSec: 3, phase: "mid", isFork: false, tags: [], collapsed: true, src: "m1" },
     ],
     engine: [
       { gameId: "g01", ply: 48, sfen: "lnsgkgsnl/1r5b1/ppppppppp/9/9/9/PPPPPPPPP/1B5R1/LNSGKGSNL b - 1", scoreCp: 120, top1Usi: "8g8f", actualUsi: "P*4d", candidates: [{ usi: "8g8f", scoreCp: 120, pv: ["8g8f", "3c3d"] }], nodes: 2000, multipv: 5, src: "e1" },
@@ -205,10 +205,10 @@ describe("Observation Packet v0.1 の契約", () => {
 
   it("a13 駒の字が表に無い字だと落ちる(実験 2 の B2 = 駒種の取り違え)", () => {
     const packet = minimalPacket();
-    packet.facts.moves[0]!.piece = "P" as never; // 大文字は色を表すので入れない
-    expect(validateObservationPacket(packet).join("\n")).toContain('"P"');
+    packet.facts.moves[0]!.piece = "p" as never; // SFEN の字は別の語彙(この契約は STANDARD_ROLES)
+    expect(validateObservationPacket(packet).join("\n")).toContain('"p"');
     const ok = minimalPacket();
-    ok.facts.moves[0]!.piece = "+p";
+    ok.facts.moves[0]!.piece = "tokin";
     ok.packetId = packetIdOf(ok.facts, ok.aggregates);
     expect(validateObservationPacket(ok)).toEqual([]);
   });

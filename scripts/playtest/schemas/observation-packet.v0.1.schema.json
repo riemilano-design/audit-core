@@ -152,17 +152,23 @@
                 ]
               },
               "piece": {
-                "type": "string",
-                "pattern": "^\\+?[plnsgbrk]$",
-                "description": "動いた駒・打った駒の種類(SFEN の字を小文字に。成り駒は先頭に +)。**打つ手は USI の 1 文字目だが、盤の手は USI に駒種が無いので、その手を指す前の局面の元の升を引いて決める**(材料 sfens.json は全局面を持つ ― 実測: 1 局に sfens 124・moves 123)。実験 2 の B2(USI の駒種の取り違え)への答え。幾何と表記の事実で、将棋の判断は入らない",
-                "$comment": "実験席の要望(2026-09-30)。pieceFrom と対で読む"
-              },
-              "pieceFrom": {
                 "enum": [
-                  "board",
-                  "hand"
+                  "king",
+                  "rook",
+                  "bishop",
+                  "gold",
+                  "silver",
+                  "knight",
+                  "lance",
+                  "pawn",
+                  "dragon",
+                  "horse",
+                  "promotedsilver",
+                  "promotedknight",
+                  "promotedlance",
+                  "tokin"
                 ],
-                "description": "board = 盤の手(元の升から引いた)/ hand = 打つ手(USI の 1 文字目)。**どちらの出どころで決めたかを残す**"
+                "description": "動かした駒・打った駒の駒種。**語彙は既存のもの** ― `lib/moveFacts.ts` の `STANDARD_ROLES`(`userMoveFacts.role` と同じ 14 語)。**新しい表記を作らない**(SFEN の字で書くと、この repo に 2 つ目の駒の語彙ができる)。打つ手は USI の 1 文字目、盤の手は**指す前の局面の元の升**から引く(材料 `sfens.json` は全局面を持つ ― 実測: 1 局に sfens 124・moves 123)。実験 2 の B2(駒種の取り違え)への答え。幾何と表記の事実で、将棋の判断は入らない"
               },
               "isFork": {
                 "type": "boolean",
@@ -189,6 +195,10 @@
               },
               "src": {
                 "type": "string"
+              },
+              "drop": {
+                "type": "boolean",
+                "description": "持ち駒を打った手か(`userMoveFacts.drop` と同じ意味)。真なら `piece` は USI の 1 文字目から、偽なら元の升から引いた"
               }
             }
           }
@@ -416,6 +426,14 @@
               },
               "srcFirstVisibleNodes": {
                 "type": "string"
+              },
+              "srcTop1Side": {
+                "type": "string",
+                "description": "第 1 候補の側の出どころ(whatif-v2 の candidates[0].side)"
+              },
+              "srcActualGapCp": {
+                "type": "string",
+                "description": "実戦の手との差の出どころ(direct_answers。whatif-v2 の loss は下限のことがあり数として書けない)"
               }
             }
           }
