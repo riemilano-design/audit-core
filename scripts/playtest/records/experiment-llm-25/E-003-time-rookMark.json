@@ -1,0 +1,147 @@
+{
+  "schemaVersion": "0.3",
+  "hypothesisId": "H-p5-exp25time-003",
+  "subject": {
+    "customer": "p5",
+    "groups": [
+      "3 分"
+    ],
+    "gamesCount": 25
+  },
+  "scope": "this_user",
+  "lane": "time",
+  "statement": "序盤の終わりに本人の飛車が初期の筋を離れていた局は 4 局で、序盤の消費秒の中央値 27・中盤 78.5 でした。本人の飛車が初期の筋に居て相手が離れていた 8 局は 16.5・67.5、両方とも初期の筋の 13 局は 14・49 です。飛車の位置の印と序盤・中盤の消費秒に関係がある可能性があります(戦型の名前は付けません)。",
+  "observations": [
+    {
+      "obsId": "obs.time.rookMarkBreakdown",
+      "path": "groups[0].rookMarkBreakdown[own=false,opponent=true].{games,medianEarlySec,medianMidSec}",
+      "value": {
+        "games": 4,
+        "medianEarlySec": 27,
+        "medianMidSec": 78.5
+      },
+      "unit": "局・秒"
+    },
+    {
+      "obsId": "obs.time.rookMarkBreakdown",
+      "path": "groups[0].rookMarkBreakdown[own=true,opponent=true].{games,medianEarlySec,medianMidSec}",
+      "value": {
+        "games": 8,
+        "medianEarlySec": 16.5,
+        "medianMidSec": 67.5
+      },
+      "unit": "局・秒"
+    },
+    {
+      "obsId": "obs.time.rookMarkBreakdown",
+      "path": "groups[0].rookMarkBreakdown[own=true,opponent=false].{games,medianEarlySec,medianMidSec}",
+      "value": {
+        "games": 13,
+        "medianEarlySec": 14,
+        "medianMidSec": 49
+      },
+      "unit": "局・秒"
+    },
+    {
+      "obsId": "obs.time.rookMarkBreakdown",
+      "path": "groups[0].rookMarkBreakdown[own=false,opponent=false].games",
+      "value": {
+        "games": 0
+      },
+      "unit": "局"
+    }
+  ],
+  "counterEvidence": {
+    "attempted": true,
+    "items": [
+      {
+        "kind": "denominator",
+        "text": "4 局の中央値であり、一局動くと値が大きく動きます。",
+        "observations": [
+          {
+            "obsId": "obs.time.rookMarkBreakdown",
+            "path": "groups[0].rookMarkBreakdown[own=false,opponent=true].games",
+            "value": {
+              "games": 4
+            },
+            "unit": "局"
+          }
+        ]
+      },
+      {
+        "kind": "alternative",
+        "text": "相手の飛車が初期の筋を離れていた局(own=true,opponent=true の 8 局)も中盤の消費 67.5 で、両方とも初期の筋の 13 局(49)より高く、本人の飛車の位置だけの効果とは分けられません。",
+        "observations": [
+          {
+            "obsId": "obs.time.rookMarkBreakdown",
+            "path": "groups[0].rookMarkBreakdown[].{games,medianMidSec}",
+            "value": [
+              {
+                "own": true,
+                "opponent": true,
+                "games": 8,
+                "medianMidSec": 67.5
+              },
+              {
+                "own": true,
+                "opponent": false,
+                "games": 13,
+                "medianMidSec": 49
+              }
+            ],
+            "unit": "局・秒"
+          }
+        ]
+      }
+    ],
+    "result": "weakened",
+    "provenance": {
+      "inputs": [
+        "scripts/playtest/out/c5/experiment-llm-25/bundle.md(元: pipe-3min/report/patient_report_data.json, deliver1/direct/direct_answers.json, deliver1/direct/time_cause.json, pipe-3min/p2/read/g*.jsonl, pipe-3min/p2/whatif-v2/g*.jsonl)"
+      ]
+    }
+  },
+  "prediction": {
+    "writtenAt": "2026-09-29",
+    "window": "next_25_games_same_time_limit",
+    "metric": "obs.time.rookMarkBreakdown の own=false の行の medianMidSec から own=true,opponent=false の行の medianMidSec を引いた差(秒)",
+    "comparator": ">",
+    "value": 0,
+    "alsoRequires": [
+      {
+        "metric": "obs.time.rookMarkBreakdown の own=false の行の games の合計",
+        "comparator": ">=",
+        "value": 3
+      },
+      {
+        "metric": "obs.time.rookMarkBreakdown の own=true,opponent=false の行の games",
+        "comparator": ">=",
+        "value": 5
+      }
+    ]
+  },
+  "status": "proposed",
+  "knowledge": {
+    "kind": "discovered",
+    "reviewStatus": "draft",
+    "origin": {
+      "kifu": "p5/min3",
+      "lane": "time"
+    },
+    "range": "this_user"
+  },
+  "provenance": {
+    "gitHead": "e6b404c",
+    "inputs": [
+      "scripts/playtest/out/c5/experiment-llm-25/bundle.md(元: pipe-3min/report/patient_report_data.json, deliver1/direct/direct_answers.json, deliver1/direct/time_cause.json, pipe-3min/p2/read/g*.jsonl, pipe-3min/p2/whatif-v2/g*.jsonl)"
+    ],
+    "excludedInputs": [
+      "scripts/playtest/out/c5/deliver1/direct/answer_menu.json",
+      "scripts/playtest/out/c5/deliver1/direct/exit_candidates.json",
+      "scripts/playtest/out/c5/deliver1/9_本編.md",
+      "docs/EXPERIMENT_LLM_DISCOVERY_25GAMES_SEAT_A.md(席の文は数の出どころにしない)",
+      "docs/EXPERIMENT_LLM_DISCOVERY_25GAMES_SEAT_B.md",
+      "docs/EXPERIMENT_LLM_DISCOVERY_25GAMES_SEAT_C.md"
+    ]
+  }
+}

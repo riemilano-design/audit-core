@@ -1,0 +1,145 @@
+{
+  "schemaVersion": "0.3",
+  "hypothesisId": "H-p5-exp25time-007",
+  "subject": {
+    "customer": "p5",
+    "groups": [
+      "3 分"
+    ],
+    "gamesCount": 25
+  },
+  "scope": "this_user",
+  "lane": "time",
+  "statement": "持ち時間に到達しなかった 24 局では、長考のうち分かれ道だった手が 56 のうち 30、そのうち最上位の候補(第一候補)と実戦の手の側が逆だったのは 30 のうち 4 でした。持ち時間に到達した 1 局では 5 のうち 3、3 のうち 1 です。長考の局面の半分ほどは分かれ道で、側の逆はその中では少ない可能性があります。",
+  "observations": [
+    {
+      "obsId": "obs.time.groupMedians",
+      "path": "groups[0].other.{games,forkFraction,oppositeSideFraction}",
+      "value": {
+        "games": 24,
+        "forkFraction": {
+          "numerator": 30,
+          "denominator": 56
+        },
+        "oppositeSideFraction": {
+          "numerator": 4,
+          "denominator": 30
+        }
+      },
+      "unit": "手",
+      "derived": {
+        "kind": "percent",
+        "numerator": {
+          "obsId": "obs.time.groupMedians",
+          "value": 30
+        },
+        "denominator": {
+          "obsId": "obs.time.groupMedians",
+          "value": 56
+        }
+      }
+    },
+    {
+      "obsId": "obs.time.groupMedians",
+      "path": "groups[0].timeUpLoss.{games,forkFraction,oppositeSideFraction}",
+      "value": {
+        "games": 1,
+        "forkFraction": {
+          "numerator": 3,
+          "denominator": 5
+        },
+        "oppositeSideFraction": {
+          "numerator": 1,
+          "denominator": 3
+        }
+      },
+      "unit": "手"
+    }
+  ],
+  "counterEvidence": {
+    "attempted": true,
+    "items": [
+      {
+        "kind": "denominator",
+        "text": "分母は 分かれ道の読み(whatif)の局面と結合できた長考だけで、17 手目より前の長考は入りません。側が逆の分母は 30 と 3 で小さいです。",
+        "observations": [
+          {
+            "obsId": "obs.time.groupMedians",
+            "path": "groups[0].{other,timeUpLoss}.oppositeSideFraction.denominator",
+            "value": {
+              "other": 30,
+              "timeUpLoss": 3
+            },
+            "unit": "手"
+          },
+          {
+            "obsId": "obs.fork.values",
+            "path": "values.startPly",
+            "value": {
+              "startPly": 17
+            },
+            "unit": "手"
+          }
+        ]
+      },
+      {
+        "kind": "alternative",
+        "text": "分かれ道は長考でない手にも多く(404 局面)、長考の中で分かれ道が半分ほどでも、分かれ道全体に対する長考の割合は分かりません。",
+        "observations": [
+          {
+            "obsId": "obs.direct.counts",
+            "path": "counts.totalForkCount",
+            "value": {
+              "totalForkCount": 404
+            },
+            "unit": "局面"
+          }
+        ]
+      }
+    ],
+    "result": "weakened",
+    "provenance": {
+      "inputs": [
+        "scripts/playtest/out/c5/experiment-llm-25/bundle.md(元: pipe-3min/report/patient_report_data.json, deliver1/direct/direct_answers.json, deliver1/direct/time_cause.json, pipe-3min/p2/read/g*.jsonl, pipe-3min/p2/whatif-v2/g*.jsonl)"
+      ]
+    }
+  },
+  "prediction": {
+    "writtenAt": "2026-09-29",
+    "window": "next_25_games_same_time_limit",
+    "metric": "obs.time.groupMedians の other.forkFraction.numerator / other.forkFraction.denominator(百分率)",
+    "comparator": ">=",
+    "value": 40,
+    "alsoRequires": [
+      {
+        "metric": "obs.time.groupMedians の other.forkFraction.denominator",
+        "comparator": ">=",
+        "value": 30
+      }
+    ]
+  },
+  "status": "proposed",
+  "knowledge": {
+    "kind": "discovered",
+    "reviewStatus": "draft",
+    "origin": {
+      "kifu": "p5/min3",
+      "lane": "time"
+    },
+    "range": "this_user"
+  },
+  "provenance": {
+    "gitHead": "e6b404c",
+    "inputs": [
+      "scripts/playtest/out/c5/experiment-llm-25/bundle.md(元: pipe-3min/report/patient_report_data.json, deliver1/direct/direct_answers.json, deliver1/direct/time_cause.json, pipe-3min/p2/read/g*.jsonl, pipe-3min/p2/whatif-v2/g*.jsonl)"
+    ],
+    "excludedInputs": [
+      "scripts/playtest/out/c5/deliver1/direct/answer_menu.json",
+      "scripts/playtest/out/c5/deliver1/direct/exit_candidates.json",
+      "scripts/playtest/out/c5/deliver1/9_本編.md",
+      "docs/EXPERIMENT_LLM_DISCOVERY_25GAMES_SEAT_A.md(席の文は数の出どころにしない)",
+      "docs/EXPERIMENT_LLM_DISCOVERY_25GAMES_SEAT_B.md",
+      "docs/EXPERIMENT_LLM_DISCOVERY_25GAMES_SEAT_C.md"
+    ]
+  }
+}

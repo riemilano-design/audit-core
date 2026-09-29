@@ -1,0 +1,109 @@
+{
+  "schemaVersion": "0.3",
+  "hypothesisId": "H-p5-exp25prior-004",
+  "subject": {
+    "customer": "p5",
+    "groups": [
+      "3 分"
+    ],
+    "gamesCount": 25
+  },
+  "scope": "this_user",
+  "lane": "prior",
+  "statement": "承認済み条件に当たる手 13 手のうち崩れは 1 手、当たらない手 17 手のうち崩れは 1 手で、当たる手があった局は 5 局でした。この組では、条件に当たるかどうかで崩れの割合に差が出ていない可能性があります。",
+  "observations": [
+    {
+      "obsId": "obs.report.overview",
+      "path": "overview.moveCheck.{n,fell,otherN,otherFell,games}",
+      "value": {
+        "n": 13,
+        "fell": 1,
+        "otherN": 17,
+        "otherFell": 1,
+        "games": 5
+      },
+      "unit": "手・局",
+      "derived": {
+        "kind": "percent",
+        "numerator": {
+          "obsId": "obs.report.overview",
+          "value": 1
+        },
+        "denominator": {
+          "obsId": "obs.report.overview",
+          "value": 13
+        }
+      }
+    }
+  ],
+  "counterEvidence": {
+    "attempted": true,
+    "items": [
+      {
+        "kind": "denominator",
+        "text": "13 手と 17 手は小さく、崩れ 1 手の差で割合が大きく動きます。条件に当たる手があった局も 5 局だけです。",
+        "observations": [
+          {
+            "obsId": "obs.report.overview",
+            "path": "overview.moveCheck.{n,otherN,games}",
+            "value": {
+              "n": 13,
+              "otherN": 17,
+              "games": 5
+            },
+            "unit": "手・局"
+          }
+        ]
+      }
+    ],
+    "result": "weakened",
+    "provenance": {
+      "inputs": [
+        "scripts/playtest/out/c5/experiment-llm-25/bundle.md(元: pipe-3min/report/patient_report_data.json, deliver1/direct/direct_answers.json, deliver1/direct/time_cause.json, pipe-3min/p2/read/g*.jsonl, pipe-3min/p2/whatif-v2/g*.jsonl)"
+      ]
+    }
+  },
+  "prediction": {
+    "writtenAt": "2026-09-29",
+    "window": "next_25_games_same_time_limit",
+    "metric": "obs.report.overview の moveCheck.fell / moveCheck.n(百分率)から moveCheck.otherFell / moveCheck.otherN(百分率)を引いた差",
+    "comparator": "<=",
+    "value": 0,
+    "alsoRequires": [
+      {
+        "metric": "obs.report.overview の moveCheck.n",
+        "comparator": ">=",
+        "value": 10
+      },
+      {
+        "metric": "obs.report.overview の moveCheck.otherN",
+        "comparator": ">=",
+        "value": 10
+      }
+    ]
+  },
+  "status": "proposed",
+  "knowledge": {
+    "kind": "discovered",
+    "reviewStatus": "draft",
+    "origin": {
+      "kifu": "p5/min3",
+      "lane": "prior"
+    },
+    "range": "this_user"
+  },
+  "provenance": {
+    "gitHead": "e6b404c",
+    "inputs": [
+      "scripts/playtest/out/c5/experiment-llm-25/bundle.md(元: pipe-3min/report/patient_report_data.json, deliver1/direct/direct_answers.json, deliver1/direct/time_cause.json, pipe-3min/p2/read/g*.jsonl, pipe-3min/p2/whatif-v2/g*.jsonl)"
+    ],
+    "excludedInputs": [
+      "scripts/playtest/out/c5/deliver1/direct/answer_menu.json",
+      "scripts/playtest/out/c5/deliver1/direct/exit_candidates.json",
+      "scripts/playtest/out/c5/deliver1/9_本編.md",
+      "docs/EXPERIMENT_LLM_DISCOVERY_25GAMES_SEAT_A.md(席の文は数の出どころにしない)",
+      "docs/EXPERIMENT_LLM_DISCOVERY_25GAMES_SEAT_B.md",
+      "docs/EXPERIMENT_LLM_DISCOVERY_25GAMES_SEAT_C.md"
+    ]
+  }
+}

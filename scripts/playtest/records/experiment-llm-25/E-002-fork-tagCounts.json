@@ -1,0 +1,156 @@
+{
+  "schemaVersion": "0.3",
+  "hypothesisId": "H-p5-exp25fork-002",
+  "subject": {
+    "customer": "p5",
+    "groups": [
+      "3 分"
+    ],
+    "gamesCount": 25
+  },
+  "scope": "this_user",
+  "lane": "fork",
+  "statement": "浅い読みで差が見えた分かれ道 103 局面(24 局)で、最上位の候補(第一候補)の印は打つ 54・取る 19・引く 5、実戦の手の印は打つ 33・取る 32・引く 12 でした(印は独立に数えるため合計は局面数ではありません)。分かれ道では最上位の候補(第一候補)と実戦の手の種類の分布が違う可能性があります。「打つ手を思いつかなかった」とは読みません。",
+  "observations": [
+    {
+      "obsId": "obs.direct.counts",
+      "path": "counts.top1TagCounts.{drop,capture,retreat}",
+      "value": {
+        "drop": 54,
+        "capture": 19,
+        "retreat": 5
+      },
+      "unit": "局面(印ごとに独立)"
+    },
+    {
+      "obsId": "obs.direct.counts",
+      "path": "counts.actualTagCounts.{drop,capture,retreat}",
+      "value": {
+        "drop": 33,
+        "capture": 32,
+        "retreat": 12
+      },
+      "unit": "局面(印ごとに独立)"
+    },
+    {
+      "obsId": "obs.direct.counts",
+      "path": "counts.{totalCount,gamesCount,totalForkCount}",
+      "value": {
+        "totalCount": 103,
+        "gamesCount": 24,
+        "totalForkCount": 404
+      },
+      "unit": "局面・局"
+    }
+  ],
+  "counterEvidence": {
+    "attempted": true,
+    "items": [
+      {
+        "kind": "counterexample",
+        "text": "同じ 103 局面で、捨て駒の印は最上位の候補(第一候補) 41・実戦 44、玉の手は 7・8 で差がなく、種類によっては分布が違いません。",
+        "observations": [
+          {
+            "obsId": "obs.direct.counts",
+            "path": "counts.top1TagCounts.{sacrifice,kingMove}",
+            "value": {
+              "sacrifice": 41,
+              "kingMove": 7
+            },
+            "unit": "局面"
+          },
+          {
+            "obsId": "obs.direct.counts",
+            "path": "counts.actualTagCounts.{sacrifice,kingMove}",
+            "value": {
+              "sacrifice": 44,
+              "kingMove": 8
+            },
+            "unit": "局面"
+          }
+        ]
+      },
+      {
+        "kind": "denominator",
+        "text": "分かれ道でない局面での最上位の候補(第一候補)の印の分布(基準率)が集計されていないため、分かれ道に固有の差かどうかは分かりません。103 局面は分かれ道 404 のうち浅い読みで差が見えたものだけです。",
+        "observations": [
+          {
+            "obsId": "obs.direct.counts",
+            "path": "counts.{totalCount,totalForkCount}",
+            "value": {
+              "totalCount": 103,
+              "totalForkCount": 404
+            },
+            "unit": "局面"
+          }
+        ]
+      },
+      {
+        "kind": "alternative",
+        "text": "実戦の手に取る印が多いのは、分かれ道が取り合いの最中の局面に集まっていることの反映である可能性があります(側の印 attack 42・defense 26・both 11・none 24 の分布から独立には分けられません)。",
+        "observations": [
+          {
+            "obsId": "obs.direct.counts",
+            "path": "counts.top1SideCounts.{attack,defense,both,none}",
+            "value": {
+              "attack": 42,
+              "defense": 26,
+              "both": 11,
+              "none": 24
+            },
+            "unit": "局面"
+          }
+        ]
+      }
+    ],
+    "result": "weakened",
+    "provenance": {
+      "inputs": [
+        "scripts/playtest/out/c5/experiment-llm-25/bundle.md(元: pipe-3min/report/patient_report_data.json, deliver1/direct/direct_answers.json, deliver1/direct/time_cause.json, pipe-3min/p2/read/g*.jsonl, pipe-3min/p2/whatif-v2/g*.jsonl)"
+      ]
+    }
+  },
+  "prediction": {
+    "writtenAt": "2026-09-29",
+    "window": "next_25_games_same_time_limit",
+    "metric": "obs.direct.counts の top1TagCounts.drop から actualTagCounts.drop を引いた差",
+    "comparator": ">",
+    "value": 0,
+    "alsoRequires": [
+      {
+        "metric": "obs.direct.counts の totalCount",
+        "comparator": ">=",
+        "value": 50
+      },
+      {
+        "metric": "obs.direct.counts の top1TagCounts.capture から actualTagCounts.capture を引いた差",
+        "comparator": "<",
+        "value": 0
+      }
+    ]
+  },
+  "status": "proposed",
+  "knowledge": {
+    "kind": "discovered",
+    "reviewStatus": "draft",
+    "origin": {
+      "kifu": "p5/min3",
+      "lane": "fork"
+    },
+    "range": "this_user"
+  },
+  "provenance": {
+    "gitHead": "e6b404c",
+    "inputs": [
+      "scripts/playtest/out/c5/experiment-llm-25/bundle.md(元: pipe-3min/report/patient_report_data.json, deliver1/direct/direct_answers.json, deliver1/direct/time_cause.json, pipe-3min/p2/read/g*.jsonl, pipe-3min/p2/whatif-v2/g*.jsonl)"
+    ],
+    "excludedInputs": [
+      "scripts/playtest/out/c5/deliver1/direct/answer_menu.json",
+      "scripts/playtest/out/c5/deliver1/direct/exit_candidates.json",
+      "scripts/playtest/out/c5/deliver1/9_本編.md",
+      "docs/EXPERIMENT_LLM_DISCOVERY_25GAMES_SEAT_A.md(席の文は数の出どころにしない)",
+      "docs/EXPERIMENT_LLM_DISCOVERY_25GAMES_SEAT_B.md",
+      "docs/EXPERIMENT_LLM_DISCOVERY_25GAMES_SEAT_C.md"
+    ]
+  }
+}

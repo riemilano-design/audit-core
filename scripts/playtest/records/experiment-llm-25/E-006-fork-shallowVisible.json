@@ -1,0 +1,126 @@
+{
+  "schemaVersion": "0.3",
+  "hypothesisId": "H-p5-exp25fork-006",
+  "subject": {
+    "customer": "p5",
+    "groups": [
+      "3 分"
+    ],
+    "gamesCount": 25
+  },
+  "scope": "this_user",
+  "lane": "fork",
+  "statement": "分かれ道 404 局面のうち、10000 ノード以下の浅い読みで最上位の候補(第一候補)との差が見えたのは 103 局面でした。分かれ道の多くは深い読みでも差が見えないか、浅い読みで既に見える差である可能性があります(道具側の観測。「見えていなかった」とは読みません)。",
+  "observations": [
+    {
+      "obsId": "obs.direct.counts",
+      "path": "counts.{totalCount,totalForkCount}",
+      "value": {
+        "totalCount": 103,
+        "totalForkCount": 404
+      },
+      "unit": "局面",
+      "derived": {
+        "kind": "percent",
+        "numerator": {
+          "obsId": "obs.direct.counts",
+          "value": 103
+        },
+        "denominator": {
+          "obsId": "obs.direct.counts",
+          "value": 404
+        }
+      }
+    },
+    {
+      "obsId": "obs.fork.values",
+      "path": "values.{minLossCp,startPly,multiPv}(WHATIF_VALUES。仮置きの値)",
+      "value": {
+        "minLossCp": 600,
+        "startPly": 17,
+        "multiPv": 5
+      },
+      "unit": "cp・手・本"
+    },
+    {
+      "obsId": "obs.read.firstVisibleNodes",
+      "path": "values.nodeLadder と directAnswers の nodeShallowMaxNodes(道具の定数)",
+      "value": {
+        "nodeLadder": [
+          2000,
+          10000,
+          50000,
+          200000,
+          1000000
+        ],
+        "nodeShallowMaxNodes": 10000
+      },
+      "unit": "ノード"
+    }
+  ],
+  "counterEvidence": {
+    "attempted": true,
+    "items": [
+      {
+        "kind": "alternative",
+        "text": "分かれ道の定義は、実戦の手が候補 5 本に無ければ差の大きさに関わらず拾うため、17 手目からの序盤の局面で差が小さいものも 404 に含まれます。",
+        "observations": [
+          {
+            "obsId": "obs.fork.values",
+            "path": "values.{multiPv,startPly,minLossCp}",
+            "value": {
+              "multiPv": 5,
+              "startPly": 17,
+              "minLossCp": 600
+            },
+            "unit": "本・手・cp"
+          }
+        ]
+      }
+    ],
+    "result": "weakened",
+    "provenance": {
+      "inputs": [
+        "scripts/playtest/out/c5/experiment-llm-25/bundle.md(元: pipe-3min/report/patient_report_data.json, deliver1/direct/direct_answers.json, deliver1/direct/time_cause.json, pipe-3min/p2/read/g*.jsonl, pipe-3min/p2/whatif-v2/g*.jsonl)"
+      ]
+    }
+  },
+  "prediction": {
+    "writtenAt": "2026-09-29",
+    "window": "next_25_games_same_time_limit",
+    "metric": "obs.direct.counts の totalCount / totalForkCount(百分率)",
+    "comparator": ">=",
+    "value": 20,
+    "alsoRequires": [
+      {
+        "metric": "obs.direct.counts の totalForkCount",
+        "comparator": ">=",
+        "value": 200
+      }
+    ]
+  },
+  "status": "proposed",
+  "knowledge": {
+    "kind": "discovered",
+    "reviewStatus": "draft",
+    "origin": {
+      "kifu": "p5/min3",
+      "lane": "fork"
+    },
+    "range": "this_user"
+  },
+  "provenance": {
+    "gitHead": "e6b404c",
+    "inputs": [
+      "scripts/playtest/out/c5/experiment-llm-25/bundle.md(元: pipe-3min/report/patient_report_data.json, deliver1/direct/direct_answers.json, deliver1/direct/time_cause.json, pipe-3min/p2/read/g*.jsonl, pipe-3min/p2/whatif-v2/g*.jsonl)"
+    ],
+    "excludedInputs": [
+      "scripts/playtest/out/c5/deliver1/direct/answer_menu.json",
+      "scripts/playtest/out/c5/deliver1/direct/exit_candidates.json",
+      "scripts/playtest/out/c5/deliver1/9_本編.md",
+      "docs/EXPERIMENT_LLM_DISCOVERY_25GAMES_SEAT_A.md(席の文は数の出どころにしない)",
+      "docs/EXPERIMENT_LLM_DISCOVERY_25GAMES_SEAT_B.md",
+      "docs/EXPERIMENT_LLM_DISCOVERY_25GAMES_SEAT_C.md"
+    ]
+  }
+}

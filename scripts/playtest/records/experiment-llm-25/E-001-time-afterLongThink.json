@@ -1,0 +1,194 @@
+{
+  "schemaVersion": "0.3",
+  "hypothesisId": "H-p5-exp25time-001",
+  "subject": {
+    "customer": "p5",
+    "groups": [
+      "3 分"
+    ],
+    "gamesCount": 25
+  },
+  "scope": "this_user",
+  "lane": "time",
+  "statement": "直前の自分の手が 10 秒以上だった手 44 手のうち 11 手が崩れ、1 秒以下の手は 531 手のうち 22 手、10 秒以上の手は 41 手のうち 7 手が崩れました。長考の直後の手は、他の手より崩れる割合が高い可能性があります(時間の使い方の処方にはしない)。",
+  "observations": [
+    {
+      "obsId": "obs.time.afterLongThink",
+      "path": "time.afterLongThink.afterLongThinkAny.{n,collapsed}",
+      "value": {
+        "n": 44,
+        "collapsed": 11
+      },
+      "unit": "手",
+      "derived": {
+        "kind": "percent",
+        "numerator": {
+          "obsId": "obs.time.afterLongThink",
+          "value": 11
+        },
+        "denominator": {
+          "obsId": "obs.time.afterLongThink",
+          "value": 44
+        }
+      }
+    },
+    {
+      "obsId": "obs.time.afterLongThink",
+      "path": "time.afterLongThink.quickAfterLongThink.{n,collapsed}",
+      "value": {
+        "n": 37,
+        "collapsed": 9
+      },
+      "unit": "手"
+    },
+    {
+      "obsId": "obs.time.bySpent",
+      "path": "time.bySpent[0].{n,collapsed}(0〜1 秒)",
+      "value": {
+        "n": 531,
+        "collapsed": 22
+      },
+      "unit": "手",
+      "derived": {
+        "kind": "percent",
+        "numerator": {
+          "obsId": "obs.time.bySpent",
+          "value": 22
+        },
+        "denominator": {
+          "obsId": "obs.time.bySpent",
+          "value": 531
+        }
+      }
+    },
+    {
+      "obsId": "obs.time.bySpent",
+      "path": "time.bySpent[3].{n,collapsed}(10 秒以上)",
+      "value": {
+        "n": 41,
+        "collapsed": 7
+      },
+      "unit": "手"
+    },
+    {
+      "obsId": "obs.time.bySpent",
+      "path": "TIME_VALUES(lib/reportData.ts:469)の spentBucketsSec・longThinkSec・quickSec(道具の定数。仮置きの値)",
+      "value": {
+        "spentBucketsSec": [
+          1,
+          4,
+          9
+        ],
+        "longThinkSec": 10,
+        "quickSec": 4
+      },
+      "unit": "秒"
+    },
+    {
+      "obsId": "obs.time.groupMedians",
+      "path": "groups[0].other.games",
+      "value": {
+        "games": 24
+      },
+      "unit": "局"
+    }
+  ],
+  "counterEvidence": {
+    "attempted": true,
+    "items": [
+      {
+        "kind": "alternative",
+        "text": "長考は難しい局面で起きている可能性があります。持ち時間に到達しなかった局の長考のうち分かれ道だったのは 56 のうち 30 で、長考の直後の手の崩れは、局面の難しさの反映かもしれません。",
+        "observations": [
+          {
+            "obsId": "obs.time.groupMedians",
+            "path": "groups[0].other.forkFraction.{numerator,denominator}",
+            "value": {
+              "numerator": 30,
+              "denominator": 56
+            },
+            "unit": "手"
+          }
+        ]
+      },
+      {
+        "kind": "denominator",
+        "text": "分母が 44 手と小さく、37 手は 4 秒以下で指されているため、直後を速く指したかどうかで分けた比較はできません。",
+        "observations": [
+          {
+            "obsId": "obs.time.afterLongThink",
+            "path": "time.afterLongThink.{afterLongThinkAny.n, quickAfterLongThink.n}",
+            "value": {
+              "afterLongThinkAnyN": 44,
+              "quickAfterLongThinkN": 37
+            },
+            "unit": "手"
+          },
+          {
+            "obsId": "obs.time.bySpent",
+            "path": "TIME_VALUES(lib/reportData.ts:469)の spentBucketsSec・longThinkSec・quickSec(道具の定数。仮置きの値)",
+            "value": {
+              "spentBucketsSec": [
+                1,
+                4,
+                9
+              ],
+              "longThinkSec": 10,
+              "quickSec": 4
+            },
+            "unit": "秒"
+          }
+        ]
+      }
+    ],
+    "result": "weakened",
+    "provenance": {
+      "inputs": [
+        "scripts/playtest/out/c5/experiment-llm-25/bundle.md(元: pipe-3min/report/patient_report_data.json, deliver1/direct/direct_answers.json, deliver1/direct/time_cause.json, pipe-3min/p2/read/g*.jsonl, pipe-3min/p2/whatif-v2/g*.jsonl)"
+      ]
+    }
+  },
+  "prediction": {
+    "writtenAt": "2026-09-29",
+    "window": "next_25_games_same_time_limit",
+    "metric": "obs.time.afterLongThink の afterLongThinkAny.collapsed / afterLongThinkAny.n(百分率)から obs.time.bySpent[0] の collapsed / n(百分率)を引いた差",
+    "comparator": ">",
+    "value": 0,
+    "alsoRequires": [
+      {
+        "metric": "obs.time.afterLongThink の afterLongThinkAny.n",
+        "comparator": ">=",
+        "value": 30
+      },
+      {
+        "metric": "obs.time.bySpent[0] の n",
+        "comparator": ">=",
+        "value": 300
+      }
+    ]
+  },
+  "status": "proposed",
+  "knowledge": {
+    "kind": "discovered",
+    "reviewStatus": "draft",
+    "origin": {
+      "kifu": "p5/min3",
+      "lane": "time"
+    },
+    "range": "this_user"
+  },
+  "provenance": {
+    "gitHead": "e6b404c",
+    "inputs": [
+      "scripts/playtest/out/c5/experiment-llm-25/bundle.md(元: pipe-3min/report/patient_report_data.json, deliver1/direct/direct_answers.json, deliver1/direct/time_cause.json, pipe-3min/p2/read/g*.jsonl, pipe-3min/p2/whatif-v2/g*.jsonl)"
+    ],
+    "excludedInputs": [
+      "scripts/playtest/out/c5/deliver1/direct/answer_menu.json",
+      "scripts/playtest/out/c5/deliver1/direct/exit_candidates.json",
+      "scripts/playtest/out/c5/deliver1/9_本編.md",
+      "docs/EXPERIMENT_LLM_DISCOVERY_25GAMES_SEAT_A.md(席の文は数の出どころにしない)",
+      "docs/EXPERIMENT_LLM_DISCOVERY_25GAMES_SEAT_B.md",
+      "docs/EXPERIMENT_LLM_DISCOVERY_25GAMES_SEAT_C.md"
+    ]
+  }
+}
