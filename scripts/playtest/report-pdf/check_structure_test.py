@@ -30,9 +30,13 @@ import check_structure as CS  # noqa: E402
 SCOPE_WRAPPED = ["この冊子は、エンジンの解析と機械の集計から、次の 20 局で",
                  "確かめる仮説を出すものです。"]
 
+# 冒頭の断り書き 2 文(P-162)。**道具の定数から引く**(写さない) ―
+# 写すと、文を直したときに**土台だけが古い文で緑のまま通る**。
+OPENING_CAVEATS = [CS.OPENING_NOT_A_JUDGE, CS.OPENING_APPENDIX]
+
 # 本人用 5 ページ。最後が対応表(見本用では抜くページ)。
 HONBUN_PAGES = [
-    ["合成材料の冊子(変異試験)"] + SCOPE_WRAPPED,
+    ["合成材料の冊子(変異試験)"] + SCOPE_WRAPPED + OPENING_CAVEATS,
     ["ひとことで", "3 のうち 3 局は、時計の上で持ち時間に到達しています。"],
     ["局面で見る", "盤は 2 つ。"],
     ["試せること / 数え方", "分母は 20 局です。"],
@@ -639,7 +643,7 @@ class ScopeSentenceTest(unittest.TestCase):
 
     def test_s2_the_check_uses_the_given_count(self):
         """門は**渡された局数で作った文**を探す(違う局数の文は 0 か所になる)。"""
-        personal = [CS.scope_sentence(25)]
+        personal = ["".join(CS.opening_paragraph(25, (("3 分", 25),), "2026-09-29"))]
         problems = []
         CS.check_scope_and_mapping(personal, 25, problems)
         self.assertEqual(problems, [])
@@ -647,6 +651,37 @@ class ScopeSentenceTest(unittest.TestCase):
         CS.check_scope_and_mapping(personal, 20, problems)
         self.assertEqual(len(problems), 1, problems)
         self.assertIn("20 局", problems[0])
+
+    def test_s3_the_two_caveats_are_required(self):
+        """**冒頭の断り書き 2 文がちょうど 1 か所**(P-162)。
+
+        **とくに「手の良し悪しを判定するものではありません。」** ―
+        2 周目の冊子はこの文が本編に無いまま顧客に出た(付録の表紙には在った)。
+        **無ければ落ちる**ことをここで測る。
+        """
+        full = CS.opening_paragraph(25, (("3 分", 25),), "2026-09-29")
+        for dropped in (CS.OPENING_NOT_A_JUDGE, CS.OPENING_APPENDIX):
+            personal = ["".join(x for x in full if x != dropped)]
+            problems = []
+            CS.check_scope_and_mapping(personal, 25, problems)
+            self.assertEqual(len(problems), 1, problems)
+            self.assertIn(dropped, problems[0])
+        # 2 回出ても落ちる(片方だけ直した版が混ざるのを防ぐ)。
+        problems = []
+        CS.check_scope_and_mapping(["".join(full) + CS.OPENING_APPENDIX], 25, problems)
+        self.assertEqual(len(problems), 1, problems)
+
+    def test_s4_two_groups_name_both(self):
+        """**組が 2 つなら 6 文**(4 人目の実物と同じ並び)。和が合わなければ落ちる。"""
+        got = CS.opening_paragraph(20, (("3 分切れ負け", 18), ("10 分 + 30 秒", 2)), "2026-09-25")
+        self.assertEqual(len(got), 6)
+        self.assertEqual(got[0], "3 分切れ負け 18 局と、10 分 + 30 秒 2 局を、"
+                                 "1 手ずつ将棋エンジンで調べました(2026-09-25)。")
+        self.assertEqual(got[5], "以下の数は、断りが無ければ 3 分切れ負けの 18 局のものです。")
+        with self.assertRaises(CS.CheckStructureError):
+            CS.opening_paragraph(20, (("3 分切れ負け", 18),), "2026-09-25")
+        with self.assertRaises(CS.CheckStructureError):
+            CS.opening_paragraph(20, (("3 分切れ負け", 20),), "2026/09/25")
 
 
 class NameAgreesTest(unittest.TestCase):

@@ -50,8 +50,8 @@ import {
   type DeliverTool,
   type KifuNameProblem,
   type PlannedDeliverStep,
+  groupLabelOf,
 } from "./lib/deliver.js";
-import { groupLabelOfTimeLimitSec } from "./lib/directAnswers.js";
 import { PipelineConfigError } from "./lib/pipeline.js";
 
 const SCRIPT_DIR = path.dirname(fileURLToPath(import.meta.url));
@@ -251,7 +251,8 @@ async function runExitRender(args: DeliverArgs, step: PlannedDeliverStep): Promi
   const groups = groupListOf(args);
   const thisGroup = groupPaths({ work: args.work, timeLimitSec: args.timeLimitSec }, args.person);
   const plan = materialPlanOf(args);
-  const groupLabel = groupLabelOfTimeLimitSec(args.timeLimitSec);
+  // **ラベルの出どころは `groupLabelOf` の 1 か所**(仕様 §4d)。本編の冒頭も付録の見出しも同じ語になる。
+  const groupLabel = groupLabelOf(args);
 
   const runs: [DeliverTool, string[]][] = [
     ["exit-cover", exitCoverCommand(thisGroup, out, groupLabel)],

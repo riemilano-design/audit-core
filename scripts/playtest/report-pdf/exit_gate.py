@@ -36,6 +36,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import check_answer as CA          # noqa: E402
 import check_structure as CS       # noqa: E402
 import exit_candidates as EC       # noqa: E402
+import exit_index as EI            # noqa: E402
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 
@@ -172,6 +173,26 @@ def check_todo(raw_md, problems):
         problems.append(f"(i) 選ぶ場所が {count} か所残っている({EC.TODO})")
 
 
+def check_opening(raw_md, cands, problems):
+    """(vii) 冒頭の段落の文が**1 文ずつ、ちょうど 1 回**在るか(P-162)。
+
+    **候補の JSON の `opening` と突き合わせる** ― 文の型は
+    `check_structure.opening_paragraph` が正本で、ここに写しを持たない。
+
+    **なぜ門にするか**: 2 周目の冊子は冒頭が 1 文だけで、
+    **「手の良し悪しを判定するものではありません。」が本編に無いまま顧客に出た**
+    (付録の表紙には在った)。書き手が消せる場所なので、**消えたら止まる**形にする。
+    """
+    opening = cands.get("opening")
+    if not opening:
+        problems.append("(vii) 候補の JSON に opening が無い(候補の段を回し直す)")
+        return
+    for sentence in opening:
+        count = raw_md.count(sentence)
+        if count != 1:
+            problems.append(f"(vii) 冒頭の文が {count} か所(ちょうど 1 か所): {sentence[:40]}")
+
+
 def check_p1(sections, cands, problems):
     """(ii) P1 が**事実ちょうど 3 本**で、**節の中の数が全部候補に在る**か。
 
@@ -206,6 +227,71 @@ def check_p1(sections, cands, problems):
     for n in claims:
         if n not in allowed:
             problems.append(f"(ii) 数 {n} が候補に無い(下書きに印字された数から選ぶ)")
+
+
+def check_p1_reaches_the_actions(sections, cands, problems):
+    """(viii) **P1 の事実が、行動のページに届いているか**(P-164。2026-09-29 の司令塔の判断)。
+
+    【なぜ門にするか】4 人目(18 局版)と 5 人目(25 局版)の実物を突き合わせて測った ―
+    **18 局版は p1 の 3 本すべてが p3 に届いている**(2 本は行動の「根拠:」に**同じ数・ほぼ同じ文**で
+    引かれ、3 本目は「長く考えた手で崩れる形は出ていません」= **行動にしない理由**として明示)。
+    **25 局版は 3 本のうち 0 本。** 人間の判断「18 局版のほうが診断として一段上。理由は数字の量ではなく
+    **観測 → 解釈 → 行動のつながり**」。2 周目の批評でも 2 席が「p1 と行動の断絶」を挙げた。
+
+    【どう測るか】**書き手が何を選ぶかは強制しない。選んだものがつながっているかだけを見る。**
+    - 事実の数に**行動の根拠の分数の分子と分母の両方**が出ていれば「届いている」。
+    - 届いていない事実は **1 本まで**許す。ただし**節に「無いものは無いと書きます。」が在るときだけ**
+      (= 18 局版の 3 本目の型。**行動にしない理由を書いた**ことの印)。
+
+    【なぜ「事実ごとに固定文」ではなく「節に 1 つ」か】**実物を読んで決めた** ― 4 人目のあの尾の文は
+    **3 本目の箇条書きの中ではなく、その後の別の段落**に在る(実測 2026-09-29)。
+    事実の行の中に求めると、**手本にした実物そのものが落ちる。**
+    """
+    lines = section_lines(sections, "ひとことで")
+    if lines is None:
+        return  # 節が無いことは (ii) が言う
+    body = without_draft_only(lines)
+    facts = [line for line in body if line.lstrip().startswith("- ")]
+    fractions = cands.get("actionFractions")
+    if fractions is None:
+        problems.append("(viii) 候補の JSON に actionFractions が無い(候補の段を回し直す)")
+        return
+    pairs = [(int(f["numerator"]), int(f["denominator"])) for f in fractions]
+    unreached = []
+    for fact in facts:
+        nums = set(number_claims([fact]))
+        if any(a in nums and b in nums for a, b in pairs):
+            continue
+        unreached.append(fact)
+    allowance = 1 if any(EI.NOTHING_TO_HIDE_SENTENCE in line for line in body) else 0
+    if len(unreached) > allowance:
+        heads = "・".join(f.lstrip("- ").strip()[:30] for f in unreached)
+        problems.append(
+            f"(viii) 行動の根拠につながらない事実が {len(unreached)} 本"
+            f"(許されるのは {allowance} 本): {heads}"
+            + ("" if allowance else " ― 行動にしないものを 1 本置くなら、節に"
+                                    f"「{EI.NOTHING_TO_HIDE_SENTENCE}」を書く"))
+
+
+def check_no_unit_mismatch(raw_md, cands, problems):
+    """(ix) **単位が違う分数が顧客の本編に残っていないか**(P-165。2026-09-29)。
+
+    実物の M6 の分数「50 / 137」は、**分子が局面の数・分母が印の組の数**である
+    (`read` の局面行から数え直すと、第 1 候補が捨て駒だった局面は 107。137 はその 107 局面の
+    「実戦の手に付いた印」の総数)。**顧客に送った 2 周目の冊子にこの数が出ている。**
+
+    **判定(`m6_holds`)と答え合わせの表の作りは動かさない**(判断的知識 ― 人間の承認事項)。
+    **3 周目は書き手がこの行動を落とす**(司令塔の判断「(ウ)」)。
+    **その落としを書き手の記憶に頼らない** ― 忘れれば、単位の違う数がまた顧客に出る。
+    **候補の段が印が付いた分数を知っているのだから、門が機械で確かめられる。**
+    """
+    for f in cands.get("unitMismatchFractions") or []:
+        pair = f"{f['numerator']} / {f['denominator']}"
+        if pair in raw_md:
+            problems.append(
+                f"(ix) 単位が違う分数が本編に残っている: {pair}"
+                f"(行動 {f['id']}) ― {f['unitMismatch']}。"
+                "この行動の行と答え合わせの行を落とすこと")
 
 
 def check_p2(sections, cands, problems):
@@ -296,7 +382,10 @@ def run(own, rest):
 
     problems = []
     check_todo(raw_md, problems)
+    check_opening(raw_md, cands, problems)
     check_p1(sections, cands, problems)
+    check_p1_reaches_the_actions(sections, cands, problems)
+    check_no_unit_mismatch(raw_md, cands, problems)
     check_p2(sections, cands, problems)
     check_p3(sections, cands, problems)
     check_sentences(raw_md, ctx, problems)

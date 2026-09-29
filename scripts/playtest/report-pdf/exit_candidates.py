@@ -52,6 +52,9 @@ DRAFT_ONLY_HEADINGS = (
     "### 候補 2: 同じ型が何局で起きたか",
     "### 下限を通った項目",
     "### 下限に届かなかった項目(何がどれだけ足りないか)",
+    # 2026-09-29 に足した(5 つ目)。**使ってよい固定文の一覧** ―
+    # 書き手が選んだら本文へ移し、この節は消す(門の (vi) が残りを落とす)。
+    "### 使ってよい固定文(選んだら本文へ移す)",
 )
 NOTE_PREFIX = "<!-- 書き手へ: "
 
@@ -278,7 +281,31 @@ def mapping_rows(patient, kifu_dir):
 # ==================== 盤の候補 ====================
 # **md と JSON が同じ並びを見る。**別に並べ替えると、**md に出ていない印が JSON にだけ在る**
 # (= 門が通してしまう)道ができる。
-def board_marks(direct):
+def board_fraction_note(side_match, passed, answer):
+    """その局面が**どの行動の根拠の分数に入るか**の注(P-164 の項目 3。2026-09-29)。
+
+    入らなければ `None`。**書き手への注の形で出す** ― 選び終えたら消す場所であり、
+    残っていれば門 (vi) が落とす(顧客の冊子に道具の覚え書きが出ない)。
+
+    **側は `check_answer.side_match_mark_of` が決める**(`(kifuId, displayPly)` で結合。
+    合算と同じ走査から来るので、分数と食い違う道が無い)。
+    **行動の名は `action_fractions` の `label` で引く** ― 「M4」を写さない。
+    """
+    mark = CA.side_match_mark_of(side_match, answer["kifuId"], answer["displayPly"])
+    if mark is None:
+        return None
+    hit = [f for f in action_fractions(passed) if f["label"] == mark["label"]]
+    if not hit:
+        return None
+    f = hit[0]
+    where = "分子にも入る" if mark["inNumerator"] else "分母に入るが分子ではない"
+    tail = ("実戦も同じ側の手だった局面" if mark["inNumerator"]
+            else "実戦は同じ側の手ではなかった局面")
+    return note(f"行動 {f['id']}・{f['label']} の根拠({f['numerator']} / {f['denominator']})の"
+                f"{where}({tail})")
+
+
+def board_marks(direct, side_match=None, passed=()):
     """盤の候補を、**md に印字するのと同じ順**で `(行の文, 印の中身)` の対で返す。"""
     rows = sorted(answers_of(direct),
                   key=lambda x: (-(abs(x["actualGapCp"]) if x["actualGapCp"] is not None else -1),
@@ -288,8 +315,39 @@ def board_marks(direct):
         inner = f"{a['gameNo']}/{a['displayPly']} 付録3 {a['group']}"
         text = (f"- {a['group']} の {a['gameNo']} 局目 {a['displayPly']} 手目"
                 f"<!-- pos: {inner} -->")
+        extra = board_fraction_note(side_match, passed, a)
+        if extra:
+            text += extra
         out.append((text, inner))
     return out
+
+
+# ==================== 行動の根拠の分数(p1 の候補。P-164・2026-09-29) ====================
+# **なぜ p1 に出すか**: 4 人目(18 局版)の p1 の 3 本は、**2 本が行動の「根拠:」と同じ数・ほぼ同じ文**で、
+# 3 本目が「行動にしない理由」だった(3 本とも行動に届いている)。**5 人目(25 局版)は 0 本**。
+# 人間の判断「18 局版のほうが診断として一段上。理由は数字の量ではなく観測 → 解釈 → 行動のつながり」。
+#
+# **切れていたのは 2 か所**で、そのうち道具の側は **`MENU_FRACTIONS` を p3 の行動の下にしか出していなかった**
+# こと ― 書き手が p1 に根拠の数を選べなかった。**ここに出して選べるようにする。**
+#
+# **単位が違う分数は出さない**(`unitMismatch`。P-165) ― p1 に出せば穴が 1 か所から 2 か所になる。
+def action_fractions(passed):
+    """行動の根拠の分数を、**行動ごとに平らに**並べる(`unitMismatch` は外す)。"""
+    out = []
+    for row in passed:
+        for f in row.get("fractions") or []:
+            if f.get("unitMismatch"):
+                continue
+            out.append({"id": row["id"], "label": f["label"], "name": f["name"],
+                        "unit": f["unit"],
+                        "numerator": f["numerator"], "denominator": f["denominator"]})
+    return out
+
+
+def action_fraction_line(f):
+    """p1 の候補の 1 行。**文と数を両方出す**(書き手が文ごと選べるように)。"""
+    which = f"行動 {f['id']}" + (f"・{f['label']}" if f["label"] else "")
+    return f"- 行動の根拠({which}): {f['name']}が {f['numerator']} / {f['denominator']}。"
 
 
 # ==================== P1 の数の候補 ====================
@@ -299,7 +357,7 @@ def board_marks(direct):
 #
 # **言い回しの型の数(「型が N 通りあります」)は入れない** ― それは材料の作りの話で、
 # この人の対局について言える数ではない。書き手が使ったら門で落ちる(それが正しい)。
-def p1_numbers(patient, repro, direct=None):
+def p1_numbers(patient, repro, direct=None, passed=()):
     # **本編の形の数**(事実の本数)。実物は「数は 3 つ。」と**冊子が自分の形を言う** ―
     # 3 人目の試作の「ひとことで」の 1 文にこの言い方が在る(実測 2026-09-29)。
     # **対局の事実ではないが、書き手が書く数である。**
@@ -338,6 +396,14 @@ def p1_numbers(patient, repro, direct=None):
         for number, unit in seen:
             out.append({"number": number, "unit": unit,
                         "from": f"patient_report_data.json の findings「{f['kind']}」の text"})
+    # **行動の根拠の分数の数も候補に入れる**(2026-09-29。P-164) ―
+    # p1 に印字するのに候補に無ければ、**書き手が根拠の数を p1 に書くと門が止める**。
+    # **印字する側と数える側は同じ集合**(P-139 と同じ型の 3 度目)。
+    for f in action_fractions(passed):
+        out.append({"number": f["numerator"], "unit": f["unit"],
+                    "from": f"行動 {f['id']} の根拠「{f['name']}」の分子"})
+        out.append({"number": f["denominator"], "unit": f["unit"],
+                    "from": f"行動 {f['id']} の根拠「{f['name']}」の分母"})
     # **観測 1 行の数も候補に入れる**(2026-09-29。通して見つけた ― 観測を印字しているのに
     # 候補に無かったので、**書き手が観測を p1 に使うと門が「数 32 が候補に無い」と言って止める**)。
     # **印字する側と数える側は同じ集合**でなければならない(P-139 と同じ型の 2 度目)。
@@ -356,16 +422,44 @@ def p1_numbers(patient, repro, direct=None):
     return out
 
 
+# ==================== 組の名と冒頭の段落(P-162・仕様 §4d) ====================
+# **組の名の出どころは 1 か所。**既定は**材料そのもの**(`direct_answers` の `answers[].group`)で、
+# CLI の `--group-label` があればそれを使う(人間が「3 分切れ負け」のような持ち時間の形を渡す)。
+# **棋譜のヘッダから読まない**(KIF の書式が場所で違う。仕様 §4d)。
+#
+# **2 組以上は落とす。**この段は「今回の組の 1 つだけ」を前提に組んであり(`--patient` の番人と同じ)、
+# 局番号も組ごとに 1 から振られる。**2 組の冒頭の型は `check_structure.opening_paragraph` に在るが、
+# それを呼ぶには組ごとの局数が要る** ― 渡す道が無いまま黙って 1 組として書くと、
+# **冒頭が「25 局」と言い、本文が別の組の数を混ぜる**冊子ができる。**止まるほうを採る。**
+def group_label_of(direct, given):
+    """今回の組の名。`given` があればそれ、無ければ材料の `group`。**2 種類あれば落とす。**"""
+    found = sorted({a["group"] for a in answers_of(direct)})
+    if len(found) != 1:
+        raise ExitCandidatesError(
+            f"材料の組が {len(found)} 種類({found}) ― この段は今回の組の 1 つだけを組む。"
+            "2 組以上の冒頭は組ごとの局数が要るので、渡す道を作ってから呼ぶこと。")
+    return given if given else found[0]
+
+
+def opening_lines(patient, direct, today, group_label=None):
+    """冒頭の段落。**文は `check_structure.opening_paragraph` が正本**(写しを持たない)。"""
+    games = patient["summary"]["games"]
+    label = group_label_of(direct, group_label)
+    return CS.opening_paragraph(games, ((label, games),), today)
+
+
 # ==================== 門が照合する候補の JSON ====================
 # **関数にして測れるようにした**(2026-09-29)。`build()` の中に書いてあったので、
 # **`p1_numbers` に `direct` を渡すのを外しても変異が黙った** ― 中を回す試験が無かった。
 # §48 の「番人のある単位を関数にする」と同じ型の 2 度目。
 
 
-def candidates_json(direct, patient, repro, denoms, passed, dropped):
+def candidates_json(direct, patient, repro, denoms, passed, dropped, opening):
     """門(`exit_gate.py`)が照合する候補。**md に印字したものと同じ値**でなければならない。"""
-    return {"denominators": denoms, "repro": repro,
-            "p1Numbers": p1_numbers(patient, repro, direct),
+    return {"opening": opening, "denominators": denoms, "repro": repro,
+            "actionFractions": action_fractions(passed),
+            "unitMismatchFractions": unit_mismatch_fractions(dropped) + unit_mismatch_fractions(passed),
+            "p1Numbers": p1_numbers(patient, repro, direct, passed),
             "boards": [inner for _text, inner in board_marks(direct)],
             "menuPassed": [r["id"] for r in passed],
             "menuDropped": [{"id": r["id"], "minN": r["minN"],
@@ -376,7 +470,19 @@ def candidates_json(direct, patient, repro, denoms, passed, dropped):
 # ==================== 分母の出どころ ====================
 # **文字列に埋めない**(仕様 §3 の 1)。「数 → その分母がどの集計から出たか」の対を JSON に出し、
 # 数え方の節には**行として**印字する。**数え方の節と JSON が同じ対から作られる**ので、片方だけ直らない。
-def denominators(direct, patient, repro):
+def denominators(direct, patient, repro, passed=(), groups=None):
+    """分母の出どころ。**冊子に出る分母は全部ここに行がある**(P-161)。
+
+    2 周目の表は 3 行(103・24・25)しかなく、**行動の根拠の分母(107・132)と観測の分母(54)が
+    どれも引けなかった** ― 「数の出どころを引ける」と約束して、行動の根拠の数だけが引けない形だった。
+
+    `passed` = 下限を通った行動の行。**その行動の分数の分母**を行にする。
+    `groups` = 群ごとの分母(`[(群の名, 局数), …]`)。**戦型の群の再集計を見込んで最初から受ける** ―
+    後から足すと、また表が追いつかない(今回と同じ失敗になる)。
+
+    **単位が違う分数は出さない**(`unitMismatch`)。単位の違う数を「局面」として並べれば、
+    表そのものが嘘になる(P-165)。**出さない理由は書き手への注に出す**(黙って落とさない)。
+    """
     out = [
         {"number": repro["totalPositions"], "unit": "局面",
          "from": "direct_answers.json の answers(長く読まなくても実戦の手と第 1 候補の差が見えた分かれ道)"},
@@ -385,7 +491,48 @@ def denominators(direct, patient, repro):
         {"number": patient["summary"]["games"], "unit": "局",
          "from": "patient_report_data.json の summary.games(この報告が見た対局の数)"},
     ]
-    return out
+    # ---- 行動の根拠の分母(P-161) ----
+    for row in passed:
+        for f in row.get("fractions") or []:
+            if f.get("unitMismatch"):
+                continue
+            out.append({"number": f["denominator"], "unit": f["unit"],
+                        "from": f"行動 {row['id']} の根拠「{f['name']}」の分母"})
+    # ---- 観測の分母(P-161。行動ではないが冊子に出る) ----
+    if direct is not None:
+        for tag in CA.CROSS_TAGS:
+            c = CA.top1_actual_cross(direct, tag)
+            what = CROSS_PHRASE_JP[tag]
+            out.append({"number": c["positions"], "unit": "局面",
+                        "from": f"観測「第 1 候補が{what}だった分かれ道」の分母"})
+            out.append({"number": c["games"], "unit": "局",
+                        "from": f"観測「第 1 候補が{what}だった局」の分母"})
+    # ---- 群ごとの分母(戦型の群の再集計。群が小さいので割合は出さない) ----
+    for name, n in (groups or []):
+        out.append({"number": n, "unit": "局",
+                    "from": f"群「{name}」の局数(opening_recognition.json の署名で分けたもの)"})
+    # **同じ数と同じ出どころの行は 1 つにする**(順番は保つ)。
+    seen, unique = set(), []
+    for row in out:
+        key = (row["number"], row["unit"], row["from"])
+        if key in seen:
+            continue
+        seen.add(key)
+        unique.append(row)
+    return unique
+
+
+def unit_mismatch_fractions(passed):
+    """**単位が違う分数**(P-165)。門 (ix) が「顧客の本編に残っていないか」を見るのに使う。"""
+    return [{"id": row["id"], "numerator": f["numerator"], "denominator": f["denominator"],
+             "unitMismatch": f["unitMismatch"]}
+            for row in passed for f in (row.get("fractions") or []) if f.get("unitMismatch")]
+
+
+def unit_mismatch_notes(passed):
+    """**分母の表に出せなかった分数**の理由(書き手への注。黙って落とさない)。"""
+    return [f"行動 {row['id']} の根拠「{f['name']}」は分母の表に出していません ― {f['unitMismatch']}"
+            for row in passed for f in (row.get("fractions") or []) if f.get("unitMismatch")]
 
 
 # ==================== md を組む ====================
@@ -410,7 +557,8 @@ def rest_games(patient, featured):
     return EI.rest_count(patient["summary"]["games"], featured)
 
 
-def build_md(direct, patient, repro, passed, dropped, mapping, denoms, fdata, featured=0):
+def build_md(direct, patient, repro, passed, dropped, mapping, denoms, fdata,
+             opening, featured=0, side_match=None):
     # **局数は `summary.games`**(`exit_cover.numbers_of`・`check_structure` と同じ出どころ)。
     # `len(patient["games"])` でも同じ数だが(25 = 25 を実測 2026-09-29)、
     # **出どころを 2 つ持つと、片方の材料が欠けたときに数が黙って変わる。**
@@ -418,14 +566,19 @@ def build_md(direct, patient, repro, passed, dropped, mapping, denoms, fdata, fe
     L = []
     L.append(f"# {games} 局で起きていたこと")
     L.append("")
-    L.append(CS.scope_sentence(games))
+    # **冒頭は 4 文**(P-162。組が 2 つ以上なら 6 文)。**1 文ずつ別の行**にする ―
+    # 門は 1 文ずつ在るかを見るので、つないで 1 行にすると折り返しの照合が要る。
+    for sentence in opening:
+        L.append(sentence)
     L.append("")
 
     # ---- (a) ひとことで ----
     L.append(f"## {heading_of('ひとことで')}")
     L.append("")
     L.append(TODO)
-    L.append(note("ここに残すのは、数 3 つと「ひとことで」の 1 文だけ。候補の節は消す"))
+    L.append(note("ここに残すのは、数 3 つと「ひとことで」の 1 文だけ。候補の節は消す。"
+                  "**3 本のうち、行動の根拠の分数に引いたものが 2 本以上**"
+                  "(残り 1 本は「無いものは無いと書きます。」を節に置けば通る)"))
     L.append("")
     L.append(DRAFT_ONLY_HEADINGS[0])
     L.append("")
@@ -451,6 +604,10 @@ def build_md(direct, patient, repro, passed, dropped, mapping, denoms, fdata, fe
     L.append("")
     L.append(f"分母は {repro['totalPositions']} 局面・{repro['totalGames']} 局です。")
     L.append("")
+    # **行動の根拠の分数**(P-164)。**これを p1 に選べば、観測 → 行動がつながる。**
+    # 4 人目(18 局版)の p1 は 3 本のうち 2 本がこの形だった。
+    for f in action_fractions(passed):
+        L.append(action_fraction_line(f))
     # **観測 1 行(行動ではない)。**書き手が「ひとことで」の 3 本に使える候補として出す。
     for tag in CA.CROSS_TAGS:
         L.append(f"- 観測(行動ではありません): {cross_line(direct, tag)}")
@@ -467,7 +624,7 @@ def build_md(direct, patient, repro, passed, dropped, mapping, denoms, fdata, fe
     L.append(TODO)
     L.append(note("ここに残すのは盤 2 つ分の行だけ。残りの行は消す"))
     L.append("")
-    for text, _inner in board_marks(direct):
+    for text, _inner in board_marks(direct, side_match, passed):
         L.append(text)
     L.append("")
 
@@ -496,6 +653,24 @@ def build_md(direct, patient, repro, passed, dropped, mapping, denoms, fdata, fe
     for r in dropped:
         den = "—" if r["denominator"] is None else r["denominator"]
         L.append(f"| {r['id']} | {r['minN']} | {den} | {r['why']} |")
+    L.append("")
+    # ---- 使ってよい固定文(書き手が選ぶ。2026-09-29) ----
+    # **候補として出すだけ。**使う / 使わないは書き手が決める(この段は選ばない)。
+    # **1 つ目**は「なぜこの N つだけなのか」の 1 文(批評席 (b) の提案文。3 席が 2 周続けて
+    # 「選定の基準が読めない」を挙げた)。**2 つ目**は「無いものは無いと書きます。」
+    # (4 人目の実物の型。行動にしない理由を明示した 1 本の尾)。
+    # **前半の主語は道具が作らない** ― 4 人目のあの主語は書き手が数から書いたもので、
+    # 材料のどこにも文として無い(`exit_index` の注記)。
+    L.append(DRAFT_ONLY_HEADINGS[4])
+    L.append("")
+    L.append(f"- {EI.selection_sentence(games)}")
+    L.append(f"- {EI.NOTHING_TO_HIDE_SENTENCE}")
+    negatives = [r for r in dropped if r["why"] == NEGATIVE_TYPE_REASON]
+    if negatives:
+        L.append(note("下は承認済みの表の「否定の型」の文。そのまま使える"
+                      "(前半の主語を道具は作らない ― 数から書くのは書き手)"))
+        for r in negatives:
+            L.append(f"- {r['item']['actionCore']}")
     L.append("")
 
     # ---- (d) 答え合わせの表 ----
@@ -544,6 +719,11 @@ def build_md(direct, patient, repro, passed, dropped, mapping, denoms, fdata, fe
     for d in denoms:
         L.append(f"| {d['number']} | {d['unit']} | {d['from']} |")
     L.append("")
+    # **表に出せなかった分数の理由**(黙って落とさない。P-165)。
+    for why in unit_mismatch_notes(passed):
+        L.append(note(why))
+    if unit_mismatch_notes(passed):
+        L.append("")
 
     # ---- (f) 対応表 ----
     L.append(f"## {heading_of('対応表')} ― 何局目が、どのファイルか(本人用)")
@@ -558,12 +738,21 @@ def build_md(direct, patient, repro, passed, dropped, mapping, denoms, fdata, fe
 
 # ==================== 本体 ====================
 def parse_own_args(argv):
-    own = {"out_md": None, "out_json": None, "kifu_dir": None}
+    # `--group-label` は**任意**(渡さなければ材料の `group` のまま。仕様 §4d「出力不変」)。
+    own = {"out_md": None, "out_json": None, "kifu_dir": None, "today": None}
+    optional = {"group_label": None}
     rest = []
     i = 0
     while i < len(argv):
         flag = argv[i]
-        if flag in ("--out-md", "--out-json", "--kifu-dir"):
+        if flag == "--group-label":
+            value = argv[i + 1] if i + 1 < len(argv) else None
+            if value is None or value.startswith("--"):
+                raise ExitCandidatesError(f"{flag} に値が無い")
+            optional["group_label"] = value
+            i += 2
+            continue
+        if flag in ("--out-md", "--out-json", "--kifu-dir", "--today"):
             value = argv[i + 1] if i + 1 < len(argv) else None
             if value is None or value.startswith("--"):
                 raise ExitCandidatesError(f"{flag} に値が無い")
@@ -576,6 +765,7 @@ def parse_own_args(argv):
     if missing:
         raise ExitCandidatesError(
             f"足りない引数: {' '.join('--' + m.replace('_', '-') for m in sorted(missing))}")
+    own.update(optional)
     return own, rest
 
 
@@ -617,15 +807,20 @@ def build(own, rest):
     repro = repro_rows(direct)
     passed, dropped = menu_rows(ctx)
     mapping = mapping_rows(patient, own["kifu_dir"])
-    denoms = denominators(direct, patient, repro)
+    # **`passed` を渡す**(P-161。行動の根拠の分母を表に出すため)。
+    # 群(戦型)は知識レーンの JSON が届いてから渡す。
+    denoms = denominators(direct, patient, repro, passed)
     # `featured` = 1 局ずつ見た局(`prose.json` の件数)。**「そのほかの局」の題に要る。**
     featured = len(CA.load_json(args.prose_paths[0])) if args.prose_paths else 0
-    md = build_md(direct, patient, repro, passed, dropped, mapping, denoms, fdata, featured)
+    # **冒頭の段落は md と JSON の両方へ同じものを渡す**(門が 1 文ずつ在るかを見る)。
+    opening = opening_lines(patient, direct, own["today"], own.get("group_label"))
+    md = build_md(direct, patient, repro, passed, dropped, mapping, denoms, fdata,
+                  opening, featured, ctx["materials"]["sideMatch"])
 
     with open(own["out_md"], "w", encoding="utf-8") as f:
         f.write(md + "\n")
     with open(own["out_json"], "w", encoding="utf-8") as f:
-        json.dump(candidates_json(direct, patient, repro, denoms, passed, dropped),
+        json.dump(candidates_json(direct, patient, repro, denoms, passed, dropped, opening),
                   f, ensure_ascii=False, indent=1, sort_keys=True)
     return {"todo": md.count(TODO), "repro": len(repro["rows"]),
             "passed": len(passed), "dropped": len(dropped),

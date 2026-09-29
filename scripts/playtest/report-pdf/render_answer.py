@@ -328,7 +328,12 @@ class _ReportCanvas(canvas_mod.Canvas):
         self.saveState()
         self.setFont(FONT, 8.3)
         self.setFillColor(MUTED)
-        self.drawCentredString(A4[0] / 2, 10 * mm, f"ページ {page_no} / {total_pages}")
+        # **1 ページの文書にはノンブルを出さない**(P-163。2026-09-29)。
+        # 「ページ 1 / 1」は読者に何も渡さない ― むしろ「この冊子は 1 ページなのか」と読める
+        # (実物: 付録の表紙が 1 ページで、束ねた付録は 4 ページある)。
+        # **この道具で組む 1 ページの文書はいまのところ表紙だけ**(納品の 10 冊を数えた)。
+        if total_pages > 1:
+            self.drawCentredString(A4[0] / 2, 10 * mm, f"ページ {page_no} / {total_pages}")
         if page_no > 1 and self._report_title:
             self.drawString(LEFT_MARGIN, A4[1] - 12.5 * mm, self._report_title)
         self.restoreState()

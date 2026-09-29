@@ -18,6 +18,7 @@ import path from "node:path";
 // そのまま使う(1 コマンド化の指示書 §3.2。判定を二重に持たないため)。
 // 局の順序(gameNo)の判定も **新しく作らない**。`listGames` をそのまま使う(kifuNameProblems。指示書 §2.1)。
 import { gateDone, gateOutPath, listGames } from "./pipeline.js";
+import { groupLabelOfTimeLimitSec } from "./directAnswers.js";
 
 // ---- 段の一覧(計画 §3 の 3 の順。司令塔の指示書 §3.3 の表) ----
 
@@ -311,6 +312,8 @@ export interface DeliverArgs {
   name: string;
   title: string;
   today: string;
+  /** 組の名(仕様 §4d)。**人間が渡す**(例 `"3 分切れ負け"`)。渡さなければ `groupLabelOfTimeLimitSec` のまま。 */
+  groupLabel?: string;
   out: string;
   /** 渡されたときだけキーが付く(`lib/pipeline.ts` の任意のキーと同じ流儀)。 */
   previousWork?: string;
@@ -330,7 +333,7 @@ export interface DeliverArgs {
   dryRun: boolean;
 }
 
-const SINGLE_FLAGS = ["--person", "--kifu-dir", "--work", "--time-limit-sec", "--name", "--title", "--today", "--out", "--previous-work", "--parallel", "--from", "--compare-person"] as const;
+const SINGLE_FLAGS = ["--person", "--kifu-dir", "--work", "--time-limit-sec", "--name", "--title", "--today", "--out", "--previous-work", "--parallel", "--from", "--compare-person", "--group-label"] as const;
 type SingleFlag = (typeof SINGLE_FLAGS)[number];
 
 function positiveIntOf(flag: string, raw: string): number {
@@ -449,6 +452,7 @@ export function parseDeliverArgs(argv: readonly string[]): DeliverArgs {
     name,
     title,
     today,
+    groupLabel: single.get("--group-label"),
     out,
     ...(previousWork !== undefined ? { previousWork } : {}),
     ...(parallel !== undefined ? { parallel } : {}),
@@ -767,12 +771,29 @@ export function answerFactsCommand(groups: readonly GroupPaths[], probe: Deliver
 // direct・time-cause・menu・付録の PDF)を見るので、**2 つ目の並びを作らない** ―
 // 片方だけ直ると「検査は通るのに違う数が出る」道ができる(凍結の例外 7a〜7c と同じ型)。
 
+/**
+ * 組の名(仕様 §4d)。**出どころは 1 か所** ― 本編の冒頭(`exit-candidates`)も
+ * 付録の見出し(`exit-cover`)もここから引く。
+ *
+ * **人間が渡したラベルが勝つ。**渡されなければ `groupLabelOfTimeLimitSec`(「3 分」)のまま
+ * ― **渡さなければ出力は変わらない**(仕様 §4d)。
+ *
+ * **棋譜のヘッダから読まない**(KIF の書式が場所で違う)。持ち時間の形(切れ負け / 秒読みつき)は
+ * 秒数からは決まらないので、**人間が渡すもの**である。
+ */
+export function groupLabelOf(args: Pick<DeliverArgs, "groupLabel" | "timeLimitSec">): string {
+  return args.groupLabel ?? groupLabelOfTimeLimitSec(args.timeLimitSec);
+}
+
 /** 段 `exit-candidates`(`exit_candidates.py`)。本編の md の下書きと、候補の一覧の JSON。 */
-export function exitCandidatesCommand(groups: readonly GroupPaths[], probe: DeliverProbe, out: DeliverOutPaths, plan: MaterialPlan, thisGroup: GroupPaths): string[] {
+export function exitCandidatesCommand(groups: readonly GroupPaths[], probe: DeliverProbe, out: DeliverOutPaths, plan: MaterialPlan, thisGroup: GroupPaths, today: string, groupLabel: string): string[] {
   // **固定棋譜のフォルダ**(`<work>/<person>/kifu`)を渡す ― 生の `--kifu-dir` ではない。
   // 対応表の「ファイル名」の欄は `<kifuId>.fixed.json` の `source` から引くので、
   // 生のフォルダを渡すと **45 分の工程の最後で「固定棋譜が無い」で落ちる**(実測 2026-09-29)。
+  // **`--today` は冒頭の 1 文目に入る日付**(P-162)。`--group-label` は組の名 ―
+  // **`groupLabelOf` の 1 か所から来る**ので、付録の見出しと違う語になることがない。
   return ["--out-md", out.honbunMd, "--out-json", out.exitCandidates, "--kifu-dir", thisGroup.fixedKifuDir,
+          "--today", today, "--group-label", groupLabel,
           ...answerMaterialFlags(groups, probe, out, plan)];
 }
 
@@ -1166,7 +1187,7 @@ export function planDeliver(args: DeliverArgs, probe: DeliverProbe, cmdOf: (tool
     stage: "exit-candidates",
     tool: "exit-candidates",
     cmd: cmdOf("exit-candidates"),
-    args: exitCandidatesCommand(groups, probe, out, plan, thisGroup),
+    args: exitCandidatesCommand(groups, probe, out, plan, thisGroup, args.today, groupLabelOf(args)),
     // **書き手が編集した後の md を上書きしない**(`answer-draft` と同じ流儀)。
     action: candidatesDone ? "skip" : "run",
     reason: candidatesDone ? "本編の md と候補の JSON がある(上書きしない)" : "本編の md の下書きと候補の一覧を作る",

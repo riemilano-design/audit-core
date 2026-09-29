@@ -473,3 +473,43 @@ class LeadSentencesDoNotPromiseAllPagesTest(unittest.TestCase):
         self.assertIn("一覧にまとめています", src)
 if __name__ == "__main__":
     unittest.main(verbosity=2)
+
+
+class SinglePageHasNoPageNumberTest(unittest.TestCase):
+    """**1 ページの文書にノンブルを出さない**(P-163。2026-09-29)。
+
+    批評席 (a) が付録の表紙の「ページ 1 / 1」を挙げた。**読者に何も渡さない**どころか、
+    「この冊子は 1 ページなのか」と読める(束ねた付録は 4 ページある)。
+    **実際に組んで fitz で読む** ― 組版の中だけを見ると、直したつもりで届かない(P-159 の家族)。
+    """
+
+    def _render(self, md_text):
+        import tempfile
+
+        import fitz
+
+        with tempfile.TemporaryDirectory() as d:
+            out = os.path.join(d, "x.pdf")
+            pages = EB.render_plain(md_text, out, "校正")
+            doc = fitz.open(out)
+            try:
+                texts = [doc[i].get_text() for i in range(doc.page_count)]
+            finally:
+                doc.close()
+            return pages, texts
+
+    def test_d7_one_page_prints_no_page_number(self):
+        pages, texts = self._render("# 表紙\n\n短い 1 段落です。\n")
+        self.assertEqual(pages, 1)
+        self.assertNotIn("ページ 1 / 1", "".join(texts))
+        # **「ページ」の語ごと出ない**(「ページ 1 /」のような半端な形も出ない)。
+        self.assertNotRegex("".join(texts), r"ページ\s*\d+\s*/")
+
+    def test_d7b_two_pages_still_print_it(self):
+        """**2 ページ以上では出る。**出なくなったら、顧客が何ページ目を見ているか分からない。"""
+        md = "# 題\n\n" + "".join(f"{i} 行目の段落です。\n\n" for i in range(1, 121))
+        pages, texts = self._render(md)
+        self.assertGreater(pages, 1)
+        joined = "".join(texts)
+        self.assertIn(f"ページ 1 / {pages}", joined)
+        self.assertIn(f"ページ {pages} / {pages}", joined)

@@ -395,8 +395,18 @@ def side_match_of(whatif_v2_dirs):
     attack_n = attack_collapsed = 0
     defense_n = defense_collapsed = 0
     fork_total = 0
+    # **局面ごとの側**(2026-09-29。P-164 の項目 3 ― 盤の候補に「どの分数に入るか」の印を付ける)。
+    # **鍵は `(kifuId, displayPly)`。`sfen` では結合しない** ― 実物の 404 行で `sfen` の一意は 403 で、
+    # **重複した 1 件は第 1 候補の側が `defense` と `none` で食い違う**(実測)。
+    # `sfen` で結合すると**印が 2 通りになる局面**ができ、どちらを書いても断定になる。
+    # `kifuId` は `whatif-v2` のファイル名の語幹(実物で `direct_answers` の `kifuId` と 25 / 25 一致)。
+    #
+    # **数え直さない。****同じ走査の中で集めるので、合算と局面ごとが食い違う道が無い**
+    # (別の関数で数え直せば、同じ言葉に 2 つの分母が付く。P-156 の家族)。
+    rows = {}
     for d in whatif_v2_dirs:
         for path in sorted(glob.glob(os.path.join(d, "*.jsonl"))):
+            kifu_id = os.path.splitext(os.path.basename(path))[0]
             with open(path, encoding="utf-8") as f:
                 for line in f:
                     line = line.strip()
@@ -413,6 +423,11 @@ def side_match_of(whatif_v2_dirs):
                         continue
                     top1_side = candidates[0].get("side")
                     actual_side = row.get("actualSide")
+                    key = (kifu_id, row.get("displayPly"))
+                    # **同じ鍵が 2 度来たら、その鍵の印を捨てる**(断定しない)。
+                    # 実物では起きない(404 行 → 404 個の鍵)が、起きたときに黙って片方を採らない。
+                    rows[key] = None if key in rows else {"top1Side": top1_side,
+                                                          "actualSide": actual_side}
                     if top1_side == "attack":
                         attack_n += 1
                         if actual_side in ("attack", "both"):
@@ -427,7 +442,33 @@ def side_match_of(whatif_v2_dirs):
         "attack": {"n": attack_n, "collapsed": attack_collapsed},
         "defense": {"n": defense_n, "collapsed": defense_collapsed},
         "forkTotal": fork_total,
+        "rows": rows,
     }
+
+
+# M4 の分数の側(`m4_fractions` の `label` と同じ語)。**写しを作らない**ため 1 か所に置く。
+SIDE_LABEL_JP = {"attack": "攻め", "defense": "自玉側"}
+
+
+def side_match_mark_of(side_match, kifu_id, display_ply):
+    """その局面が **M4 の分数のどこに入るか**。入らなければ `None`。
+
+    返り値 = `{"label": "攻め" | "自玉側", "inNumerator": bool}`。
+
+    **分母に入らない局面には印を付けない**(第 1 候補の側が「両方」または「どちらでもない」もの ―
+    実物の 103 局面のうち 35 件)。**「分母に入らない」と書くと、読者は「関係が無い」と読む**が、
+    その局面は分かれ道としては在る。**言えることだけを言う。**
+    """
+    if side_match is None:
+        return None
+    row = (side_match.get("rows") or {}).get((kifu_id, display_ply))
+    if not row:
+        return None
+    label = SIDE_LABEL_JP.get(row["top1Side"])
+    if label is None:
+        return None
+    same = row["actualSide"] in (row["top1Side"], "both")
+    return {"label": label, "inNumerator": bool(same)}
 
 
 # ==================== READ 合算(司令塔の指示。2026-09-23 REVISE 1・2026-09-24 の再監査(M6)) ====================
@@ -890,15 +931,21 @@ MENU_HOLDS = {"M1": m1_holds, "M2": m2_holds, "M3": m3_holds, "M4": m4_holds, "M
 # `label` は値を並べるときの短い見出し(1 項目が 2 本の分数を持つとき要る)。1 本だけなら空。
 
 
+# 分数の欄(2026-09-29 に `unit` と `unitMismatch` を足した)。
+#
+# - `unit`: **分子と分母が何を数えたものか**(「局面」「手」)。分母の出どころの表に出す行の単位。
+# - `unitMismatch`: **分子と分母の単位が違うとき、その理由**(無ければ鍵ごと無い)。
+#   **P-165 を測ってここに書いた** ― 「その数は何を数えたものか」は分子と分母の**両方**について
+#   測らなければならない。同じ行に並んでいても単位は同じとは限らない。
 def m4_fractions(materials):
     sm = materials["sideMatch"]
     if sm is None:
         return None
     return [
-        {"label": "攻め",
+        {"label": "攻め", "unit": "局面",
          "name": "第 1 候補が攻めの手だった分かれ道のうち、実戦も攻めの手だった局面",
          "numerator": sm["attack"]["collapsed"], "denominator": sm["attack"]["n"]},
-        {"label": "自玉側",
+        {"label": "自玉側", "unit": "局面",
          "name": "第 1 候補が自玉側の手だった分かれ道のうち、実戦も自玉側の手だった局面",
          "numerator": sm["defense"]["collapsed"], "denominator": sm["defense"]["n"]},
     ]
@@ -909,7 +956,7 @@ def m5_fractions(materials):
     if g is None:
         return None
     q = g.after_long_think_quick
-    return [{"label": "",
+    return [{"label": "", "unit": "手",
              "name": "直前の自分の手が 10 秒以上で、この手は 4 秒以内だった手のうち、崩れた手",
              "numerator": q["collapsed"], "denominator": q["n"]}]
 
@@ -918,7 +965,16 @@ def m6_fractions(materials):
     r = materials["readCombined"]
     if r is None:
         return None
-    return [{"label": "",
+    # **分子は局面の数・分母は印の組の数**(P-165。2026-09-29 に `read` の局面行から数え直して分かった)。
+    # `sacrificeRowTotal` は `tagCrossTable["sacrifice"]` の**行の合計**で、
+    # **第 1 候補が捨て駒だった局面は 107**、137 はその 107 局面の「実戦の手に付いた印」の総数である
+    # (印が 2 つ以上の局面は何度も数えられ、印が 1 つも無い 18 局面は分母に入っていない)。
+    # **分母を局面数に直すと判定が変わる**(50/137 = 0.365 は閾値 0.4 を通るが 50/107 = 0.467 は通らない)ので、
+    # **判定は動かさない**(判断的知識 ― 人間の承認事項として上げた)。
+    # ここには**測った事実だけを置く** ― 分母の出どころの表には出さない(単位の違う数を
+    # 「局面」として並べることになるため)。
+    return [{"label": "", "unit": "印の組",
+             "unitMismatch": "分子は局面の数・分母は印の組の数(P-165。人間の承認待ち)",
              "name": "第 1 候補が駒を捨てる手だった分かれ道のうち、実戦も駒を捨てる手だった局面",
              "numerator": r["sacrificeDiagonal"], "denominator": r["sacrificeRowTotal"]}]
 

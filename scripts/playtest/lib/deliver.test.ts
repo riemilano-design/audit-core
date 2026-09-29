@@ -21,6 +21,7 @@ import {
   directAnswersCommand,
   exitBodyCommand,
   exitCandidatesCommand,
+  groupLabelOf,
   exitCoverCommand,
   exitGateCommand,
   exitRenderCommand,
@@ -50,6 +51,7 @@ import {
   type DeliverArgs,
   type DeliverProbe,
 } from "./deliver.js";
+import { groupLabelOfTimeLimitSec } from "./directAnswers.js";
 import { PipelineConfigError } from "./pipeline.js";
 
 // ---- 偽の probe(見えているものを表で与える) ----
@@ -1414,12 +1416,32 @@ describe("顧客向け出口の 4 段", () => {
   });
 
   it("候補の段は本編の md と候補の JSON を出し、材料の旗は B と同じ並び", () => {
-    const cmd = exitCandidatesCommand(groups, fakeProbe({}), out, plan, thisGroup);
+    const cmd = exitCandidatesCommand(groups, fakeProbe({}), out, plan, thisGroup, "2026-09-29", "3 分切れ負け");
     // **固定棋譜のフォルダ**(生の `--kifu-dir` ではない)。取り違えると工程の最後で落ちる。
     expect(cmd.slice(0, 6)).toEqual(["--out-md", out.honbunMd, "--out-json", out.exitCandidates, "--kifu-dir", thisGroup.fixedKifuDir]);
     expect(thisGroup.fixedKifuDir).not.toBe(args.kifuDir);
+    // **冒頭の 1 文目に入る日付と組の名**(P-162・仕様 §4d)。
+    expect(cmd.slice(6, 10)).toEqual(["--today", "2026-09-29", "--group-label", "3 分切れ負け"]);
     // **2 つ目の材料の並びを作らない**(片方だけ直ると数が食い違う)。
-    expect(cmd.slice(6)).toEqual(answerMaterialFlags(groups, fakeProbe({}), out, plan));
+    expect(cmd.slice(10)).toEqual(answerMaterialFlags(groups, fakeProbe({}), out, plan));
+  });
+
+  it("組の名は 1 か所から来る ― 渡さなければ「N 分」のまま(仕様 §4d)", () => {
+    // **渡さなければ出力不変**。これが崩れると、2 回目の納品で付録の見出しが黙って変わる。
+    expect(groupLabelOf({ timeLimitSec: 180 })).toBe(groupLabelOfTimeLimitSec(180));
+    expect(groupLabelOf({ timeLimitSec: 180, groupLabel: undefined })).toBe(groupLabelOfTimeLimitSec(180));
+    // **人間が渡したラベルが勝つ。**
+    expect(groupLabelOf({ timeLimitSec: 180, groupLabel: "3 分切れ負け" })).toBe("3 分切れ負け");
+  });
+
+  it("本編の冒頭と付録の見出しは、同じ 1 つのラベルを受け取る(名前が食い違わない)", () => {
+    // 仕様 §4d の門。**2 か所が別の関数からラベルを引くと、本編が「3 分切れ負け」・付録が「3 分」になる。**
+    const label = groupLabelOf({ timeLimitSec: 180, groupLabel: "3 分切れ負け" });
+    const honbun = exitCandidatesCommand(groups, fakeProbe({}), out, plan, thisGroup, "2026-09-29", label);
+    const cover = exitCoverCommand(thisGroup, out, label);
+    const labelOf = (cmd: readonly string[], flag: string) => cmd[cmd.indexOf(flag) + 1];
+    expect(labelOf(honbun, "--group-label")).toBe(labelOf(cover, "--group"));
+    expect(labelOf(honbun, "--group-label")).toBe("3 分切れ負け");
   });
 
   it("書き手の席の検査は、本編の md と候補の JSON を突き合わせる", () => {

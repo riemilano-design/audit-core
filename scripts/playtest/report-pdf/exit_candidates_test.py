@@ -45,6 +45,10 @@ def tag_words():
     return words
 
 
+# 冒頭の段落に入る日付(P-162)。**試験の中で 1 か所**にする。
+TODAY = "2026-09-29"
+
+
 def emitted_md():
     """**道具が実際に出す md**(合成の材料で 1 本組む)。
 
@@ -67,7 +71,8 @@ def emitted_md():
     mapping = [{"no": 1, "source": "g01-sente.kif", "side": "先手", "total": 99, "result": "勝ち"},
                {"no": 2, "source": "g02-gote.kif", "side": "後手", "total": 88, "result": "負け"}]
     denoms = EC.denominators(direct, patient, repro)
-    return EC.build_md(direct, patient, repro, [], [], mapping, denoms, None)
+    return EC.build_md(direct, patient, repro, [], [], mapping, denoms, None,
+                       EC.opening_lines(patient, direct, TODAY))
 
 
 # ---- 合成の材料(実物は使わない ― ① の制約。実物での確認は門にできない) ----
@@ -134,7 +139,8 @@ class DraftOffersWhatTheWriterMustPickTest(unittest.TestCase):
         repro = EC.repro_rows(direct)
         patient = {"summary": {"games": 1}, "games": [{"no": 1}],
                    "findings": [{"kind": "phase", "oneLine": "一言", "text": "崩れ 79 回でした", "shown": True}]}
-        md = EC.build_md(direct, patient, repro, passed, [], [], EC.denominators(direct, patient, repro), None)
+        md = EC.build_md(direct, patient, repro, passed, [], [], EC.denominators(direct, patient, repro), None,
+                         EC.opening_lines(patient, direct, TODAY))
         head, contains = next((h, c) for r, h, c in CS.SECTIONS if r == CS.VERIFY_ROLE)
         rows = []
         inside = False
@@ -308,11 +314,16 @@ class NoOverreachTest(unittest.TestCase):
     def test_10_the_fixed_sentences_are_not_copied(self):
         """数え方の固定文・商品の範囲の 1 段落・節の見出しを**写していないこと**。"""
         self.assertIn("EI.COUNTING_NOTES", SRC)
-        self.assertIn("CS.scope_sentence", SRC)
+        # 冒頭の段落は `CS.opening_paragraph` から作る(2026-09-29。P-162 で 1 文 → 4 文になった)。
+        self.assertIn("CS.opening_paragraph", SRC)
         self.assertIn("CS.SECTIONS", SRC)
         # 固定文の 1 つ目の頭 10 文字が道具に直接書かれていないこと
         self.assertNotIn(EI.COUNTING_NOTES[0][:10], SRC, "数え方の固定文を写している")
         self.assertNotIn(CS.SCOPE_SENTENCE_TEMPLATE[:10], SRC, "商品の範囲の段落を写している")
+        # **冒頭の断り書きも写さない**(P-162)。ここに写しが入ると、
+        # **器の門が数える文と、道具が印字する文が別々に直る**道ができる。
+        for sentence in (CS.OPENING_NOT_A_JUDGE, CS.OPENING_APPENDIX, CS.OPENING_ENGINE_TEMPLATE):
+            self.assertNotIn(sentence[:10], SRC, f"冒頭の固定文を写している: {sentence[:10]}")
 
     def test_11_the_heading_judgment_holds_no_string_of_its_own(self):
         """見出しを作る関数が、見出しの値を自分の文字列として持たないこと。"""
@@ -403,7 +414,8 @@ class RestCountTest(unittest.TestCase):
         repro = EC.repro_rows(direct)
         patient = {"summary": {"games": 7}, "games": [], "findings": []}
         denoms = EC.denominators(direct, patient, repro)
-        md = EC.build_md(direct, patient, repro, [], [], [], denoms, None, featured=2)
+        md = EC.build_md(direct, patient, repro, [], [], [], denoms, None,
+                         EC.opening_lines(patient, direct, TODAY), featured=2)
         self.assertIn("そのほかの 5 局", md)
         self.assertNotIn("そのほかの 7 局", md)
 
@@ -433,12 +445,18 @@ def passed_row(item_id="M4", fractions=None, action="攻めと自玉側を 1 つ
             "item": {"actionCore": action, "evidenceName": "側の分数", "verifyName": verify_name}}
 
 
-TWO = [{"label": "攻め", "name": "第 1 候補が攻めの手だった分かれ道のうち、実戦も攻めの手だった局面",
+TWO = [{"label": "攻め", "unit": "局面",
+        "name": "第 1 候補が攻めの手だった分かれ道のうち、実戦も攻めの手だった局面",
         "numerator": 65, "denominator": 107},
-       {"label": "自玉側", "name": "第 1 候補が自玉側の手だった分かれ道のうち、実戦も自玉側の手だった局面",
+       {"label": "自玉側", "unit": "局面",
+        "name": "第 1 候補が自玉側の手だった分かれ道のうち、実戦も自玉側の手だった局面",
         "numerator": 76, "denominator": 132}]
-ONE = [{"label": "", "name": "第 1 候補が駒を捨てる手だった分かれ道のうち、実戦も駒を捨てる手だった局面",
+ONE = [{"label": "", "unit": "局面",
+        "name": "第 1 候補が駒を捨てる手だった分かれ道のうち、実戦も駒を捨てる手だった局面",
         "numerator": 50, "denominator": 137}]
+# **単位が違う分数**(P-165。実物の M6 がこれ ― 分子は局面・分母は印の組)。
+MISMATCH = [dict(ONE[0], unit="印の組",
+                 unitMismatch="分子は局面の数・分母は印の組の数(P-165。人間の承認待ち)")]
 
 
 class VerifyTableTest(unittest.TestCase):
@@ -484,7 +502,8 @@ class VerifyTableTest(unittest.TestCase):
         patient = {"summary": {"games": 1}, "games": [{"no": 1}],
                    "findings": [{"kind": "phase", "oneLine": "一言", "text": "崩れ 79 回でした", "shown": True}]}
         md = EC.build_md(direct, patient, repro, passed, [], [],
-                         EC.denominators(direct, patient, repro), None)
+                         EC.denominators(direct, patient, repro), None,
+                         EC.opening_lines(patient, direct, TODAY))
         self.assertIn(EC.VERIFY_TABLE_HEADER, md)
         self.assertEqual(EC.VERIFY_TABLE_HEADER.count("|"), 4)  # 3 列
         rows = [l for l in md.split("\n") if l.startswith("| ") and "<!-- menu:" in l]
@@ -493,6 +512,343 @@ class VerifyTableTest(unittest.TestCase):
             first = r.split("|")[1]
             self.assertNotIn("M4", first.replace("<!-- menu: M4 -->", ""))
             self.assertNotIn("M6", first.replace("<!-- menu: M6 -->", ""))
+
+
+class FixedSentenceCandidatesTest(unittest.TestCase):
+    """**使ってよい固定文が下書きに出ている**(2026-09-29。項目 2)。
+
+    候補に無い文を書き手が使えば門が止める ― **印字していないものは選べない。**
+    """
+
+    def test_25_the_selection_sentence_is_offered_with_the_game_count(self):
+        """「なぜこの N つだけなのか」の 1 文が、**この冊子の局数**で出ている。"""
+        md = emitted_md()
+        self.assertIn(EI.selection_sentence(2), md)
+        # 別の局数の文は出ない(直書きしていないこと)。
+        self.assertNotIn(EI.selection_sentence(25), md)
+
+    def test_25b_the_nothing_to_hide_sentence_is_offered(self):
+        """「無いものは無いと書きます。」が出ている(4 人目の実物の型の尾)。"""
+        self.assertIn(EI.NOTHING_TO_HIDE_SENTENCE, emitted_md())
+
+    def test_25c_the_tool_does_not_write_the_subject(self):
+        """**「〜という形は出ていません」の主語を道具が作らない。**
+
+        4 人目のあの主語(「長く考えた手で崩れる」)は書き手が数から書いたもので、
+        材料のどこにも文として無い。道具が埋めれば**私が将棋の言い方を決める**ことになる。
+        """
+        md = emitted_md()
+        self.assertNotIn("という形はこの", md)
+        self.assertNotIn("長く考えた手で崩れる", md)
+
+    def test_25d_the_approved_negative_statements_are_offered(self):
+        """**否定の型の文は承認済みの表からそのまま出す**(道具が言い換えない)。"""
+        answers = [answer(1, 10, top1=("drop",))]
+        direct = direct_of(answers)
+        repro = EC.repro_rows(direct)
+        patient = {"summary": {"games": 1}, "games": [{"no": 1}], "findings": []}
+        core = "序盤を急ぐ必要は数からは出ていない"
+        dropped = [{"id": "M3", "minN": 10, "denominator": 20,
+                    "why": EC.NEGATIVE_TYPE_REASON,
+                    "item": {"actionCore": core, "evidenceName": "根拠", "verifyName": ""}}]
+        md = EC.build_md(direct, patient, repro, [], dropped, [],
+                         EC.denominators(direct, patient, repro), None,
+                         EC.opening_lines(patient, direct, TODAY))
+        self.assertIn(f"- {core}", md)
+
+    def test_25e_only_negative_types_are_offered_that_way(self):
+        """**下限に届かなかっただけの項目は固定文の一覧に出さない。**
+
+        出すと「条件が成り立たなかった行動」を否定の事実として書ける道ができる。
+        """
+        answers = [answer(1, 10, top1=("drop",))]
+        direct = direct_of(answers)
+        repro = EC.repro_rows(direct)
+        patient = {"summary": {"games": 1}, "games": [{"no": 1}], "findings": []}
+        core = "これは条件が成り立たなかった行動"
+        dropped = [{"id": "M9", "minN": 10, "denominator": 3,
+                    "why": "根拠の数が下限 10 に届かない(いまの分母 3)",
+                    "item": {"actionCore": core, "evidenceName": "根拠", "verifyName": "答え"}}]
+        md = EC.build_md(direct, patient, repro, [], dropped, [],
+                         EC.denominators(direct, patient, repro), None,
+                         EC.opening_lines(patient, direct, TODAY))
+        # 落ちた一覧の表には出るが、固定文の一覧(`- ` の行)には出ない。
+        self.assertIn(f"| M9 |", md)
+        self.assertNotIn(f"- {core}", md)
+
+
+class ActionFractionsInP1Test(unittest.TestCase):
+    """**行動の根拠の分数が p1 の候補に出ている**(P-164。2026-09-29)。
+
+    4 人目(18 局版)の p1 は 3 本のうち **2 本が行動の「根拠:」と同じ数・ほぼ同じ文**だった。
+    5 人目(25 局版)は 0 本 ― 道具が `MENU_FRACTIONS` を **p3 の行動の下にしか出していなかった**ため、
+    **書き手が p1 に根拠の数を選べなかった。**
+    """
+
+    def fixture(self, fractions):
+        answers = [answer(1, 10, top1=("drop",), actual=("drop",)),
+                   answer(2, 20, top1=("drop",), actual=("capture",))]
+        direct = direct_of(answers)
+        patient = {"summary": {"games": 2}, "games": [], "findings": []}
+        repro = EC.repro_rows(direct)
+        row = passed_row(fractions=fractions)
+        denoms = EC.denominators(direct, patient, repro, [row])
+        md = EC.build_md(direct, patient, repro, [row], [], [], denoms, None,
+                         EC.opening_lines(patient, direct, TODAY))
+        return direct, patient, repro, row, md
+
+    def test_27_the_fraction_lines_are_printed_in_the_draft(self):
+        """**文と数の両方が p1 の候補に出る**(書き手が文ごと選べるように)。"""
+        _direct, _patient, _repro, _row, md = self.fixture(TWO)
+        for f in TWO:
+            self.assertIn(f"{f['name']}が {f['numerator']} / {f['denominator']}。", md)
+        self.assertIn("行動の根拠(行動 M4・攻め)", md)
+        self.assertIn("行動の根拠(行動 M4・自玉側)", md)
+
+    def test_27b_the_numbers_are_in_the_gate_allow_list(self):
+        """**印字する側と数える側は同じ集合。**候補に無ければ門が書き手を止める(P-139 の 3 度目)。"""
+        direct, patient, repro, row, _md = self.fixture(TWO)
+        got = {int(x["number"]) for x in EC.p1_numbers(patient, repro, direct, [row])}
+        for f in TWO:
+            self.assertIn(f["numerator"], got, f)
+            self.assertIn(f["denominator"], got, f)
+        # 渡さなければ入らない(勝手に増えていないこと)。
+        plain = {int(x["number"]) for x in EC.p1_numbers(patient, repro, direct)}
+        self.assertNotIn(107, plain)
+        self.assertNotIn(132, plain)
+
+    def test_27c_the_json_the_gate_reads_carries_them(self):
+        """**門が読む JSON まで届いていること**(関数だけでは `build()` の渡し忘れが黙る)。"""
+        direct, patient, repro, row, _md = self.fixture(TWO)
+        payload = EC.candidates_json(direct, patient, repro, [], [row], [],
+                                     EC.opening_lines(patient, direct, TODAY))
+        pairs = {(f["numerator"], f["denominator"]) for f in payload["actionFractions"]}
+        self.assertEqual(pairs, {(65, 107), (76, 132)})
+        got = {int(x["number"]) for x in payload["p1Numbers"]}
+        self.assertTrue({65, 107, 76, 132} <= got, sorted(got))
+
+    def test_27d_a_unit_mismatch_is_not_offered(self):
+        """**単位が違う分数は p1 に出さない**(P-165)。出せば穴が 1 か所から 2 か所になる。"""
+        direct, patient, repro, row, md = self.fixture(MISMATCH)
+        self.assertEqual(EC.action_fractions([row]), [])
+        # **p1 の候補の節にだけ出ない。**行動の「根拠:」と答え合わせの表には残る ―
+        # あちらは判定が見た分数をそのまま出す場所で、**判定は動かさない**(P-165 は人間の承認待ち)。
+        # 落とすのは書き手(司令塔の判断「3 周目は (ウ)」)で、下の門 (ix) がそれを機械で確かめる。
+        p1 = md.split("## 局面で見る")[0]
+        self.assertNotIn("行動の根拠(", p1)
+        self.assertNotIn("50 / 137", p1)
+        self.assertIn("50 / 137", md)  # p3 の根拠と表には在る
+        # 門の一覧(p1 の許可)にも入らない。
+        got = {int(x["number"]) for x in EC.p1_numbers(patient, repro, direct, [row])}
+        self.assertNotIn(137, got)
+
+
+class BoardFractionMarkTest(unittest.TestCase):
+    """**盤の候補に「どの行動の根拠の分数に入るか」の印**(P-164 の項目 3。2026-09-29)。
+
+    実物で測った ― `(kifuId, displayPly)` は 404 行 → 404 個の鍵で一意、盤の候補 103 が 103 とも当たり、
+    **M4 の分母に入るのは 68・分子は 49・入らないのは 35**。
+    `sfen` では結合しない(一意は 403 で、重複した 1 件は側が `defense` と `none` で食い違う)。
+    """
+
+    @staticmethod
+    def side_match(top1="attack", actual="attack"):
+        return {"attack": {"n": 107, "collapsed": 65},
+                "defense": {"n": 132, "collapsed": 76},
+                "forkTotal": 404,
+                "rows": {("g01", 10): {"top1Side": top1, "actualSide": actual}}}
+
+    def test_28_a_numerator_position_says_so(self):
+        a = answer(1, 10, top1=("drop",))
+        got = EC.board_fraction_note(self.side_match("attack", "attack"),
+                                     [passed_row(fractions=TWO)], a)
+        self.assertIn("行動 M4・攻め", got)
+        self.assertIn("65 / 107", got)
+        self.assertIn("分子にも入る", got)
+        # **書き手への注の形**(残っていれば門 (vi) が落とす)。
+        self.assertTrue(got.startswith(EC.NOTE_PREFIX), got)
+
+    def test_28b_a_denominator_only_position_says_so(self):
+        a = answer(1, 10, top1=("drop",))
+        got = EC.board_fraction_note(self.side_match("defense", "attack"),
+                                     [passed_row(fractions=TWO)], a)
+        self.assertIn("自玉側", got)
+        self.assertIn("76 / 132", got)
+        self.assertIn("分母に入るが分子ではない", got)
+
+    def test_28c_both_sides_get_no_mark(self):
+        """**分母に入らない局面には印を付けない**(側が「両方」「どちらでもない」もの ― 実物で 35 件)。
+
+        「分母に入らない」と書くと読者は「関係が無い」と読むが、その局面は分かれ道としては在る。
+        """
+        a = answer(1, 10, top1=("drop",))
+        for top1 in ("both", "none", None):
+            self.assertIsNone(EC.board_fraction_note(self.side_match(top1, "attack"),
+                                                     [passed_row(fractions=TWO)], a))
+
+    def test_28d_an_unknown_position_gets_no_mark(self):
+        """**結合できない局面には印を付けない**(材料が足りないときに断定しない)。"""
+        a = answer(2, 99, top1=("drop",))  # rows に無い鍵
+        self.assertIsNone(EC.board_fraction_note(self.side_match(), [passed_row(fractions=TWO)], a))
+        self.assertIsNone(EC.board_fraction_note(None, [passed_row(fractions=TWO)], a))
+
+    def test_28e_a_duplicate_key_gets_no_mark(self):
+        """**同じ鍵が 2 度来た局面には印を付けない**(どちらの側かを断定しない)。
+
+        実物では起きない(404 行 → 404 個の鍵)が、起きたときに黙って片方を採らない。
+        """
+        sm = self.side_match()
+        sm["rows"][("g01", 10)] = None
+        a = answer(1, 10, top1=("drop",))
+        self.assertIsNone(EC.board_fraction_note(sm, [passed_row(fractions=TWO)], a))
+
+    def test_28f_no_action_means_no_mark(self):
+        """**行動が無ければ印も無い**(「どの行動の根拠か」が言えない)。"""
+        a = answer(1, 10, top1=("drop",))
+        self.assertIsNone(EC.board_fraction_note(self.side_match(), [], a))
+        # 単位が違う分数だけのときも印を付けない(P-165)。
+        self.assertIsNone(EC.board_fraction_note(self.side_match(),
+                                                 [passed_row(fractions=MISMATCH)], a))
+
+    def test_28g_the_mark_reaches_the_draft(self):
+        """印が**下書きの本文まで**届く(関数だけ直っていても書き手には見えない)。"""
+        answers = [answer(1, 10, top1=("drop",))]
+        direct = direct_of(answers)
+        patient = {"summary": {"games": 1}, "games": [], "findings": []}
+        repro = EC.repro_rows(direct)
+        row = passed_row(fractions=TWO)
+        md = EC.build_md(direct, patient, repro, [row], [], [],
+                         EC.denominators(direct, patient, repro, [row]), None,
+                         EC.opening_lines(patient, direct, TODAY), 0,
+                         self.side_match("attack", "attack"))
+        self.assertIn("分子にも入る", md)
+        # 印が無い形でも下書きは組める(印は足すもので、要るものではない)。
+        md2 = EC.build_md(direct, patient, repro, [row], [], [],
+                          EC.denominators(direct, patient, repro, [row]), None,
+                          EC.opening_lines(patient, direct, TODAY))
+        self.assertNotIn("分子にも入る", md2)
+
+    def test_28h_the_side_label_is_not_copied(self):
+        """**側の語は `check_answer` の 1 か所から来る**(「攻め」「自玉側」を写さない)。"""
+        self.assertEqual(set(CA.SIDE_LABEL_JP.values()),
+                         {f["label"] for f in TWO})
+
+
+class DenominatorTableTest(unittest.TestCase):
+    """**冊子に出る分母は全部表に行がある**(P-161。2026-09-29)。
+
+    2 周目の表は 3 行(103・24・25)だけで、**行動の根拠の分母と観測の分母が引けなかった**。
+    「数の出どころを引ける」と約束しているのに、**行動の根拠の数だけが引けない**形だった。
+    """
+
+    def fixture(self):
+        answers = [answer(1, 10, top1=("drop",), actual=("drop",)),
+                   answer(2, 20, top1=("drop",), actual=("capture",)),
+                   answer(2, 30, top1=("capture",))]
+        direct = direct_of(answers)
+        patient = {"summary": {"games": 2}, "games": [], "findings": []}
+        return direct, patient, EC.repro_rows(direct)
+
+    def test_26_the_action_denominators_are_rows(self):
+        """**行動の根拠の分母が行になる**(分数の 1 本ごとに 1 行)。"""
+        direct, patient, repro = self.fixture()
+        rows = EC.denominators(direct, patient, repro, [passed_row(fractions=TWO)])
+        got = {(r["number"], r["unit"]) for r in rows}
+        self.assertIn((107, "局面"), got)
+        self.assertIn((132, "局面"), got)
+        # 渡さなければ出ない(前の形に戻せることを測る ― 行が勝手に増えない)。
+        plain = {(r["number"], r["unit"]) for r in EC.denominators(direct, patient, repro)}
+        self.assertNotIn((107, "局面"), plain)
+        self.assertNotIn((132, "局面"), plain)
+
+    def test_26b_the_observation_denominators_are_rows(self):
+        """**観測の分母も行になる**(局面と局の両方)。行動ではないが冊子に出る。"""
+        direct, patient, repro = self.fixture()
+        rows = EC.denominators(direct, patient, repro)
+        c = CA.top1_actual_cross(direct, "drop")
+        got = {(r["number"], r["unit"]) for r in rows}
+        self.assertIn((c["positions"], "局面"), got)
+        self.assertIn((c["games"], "局"), got)
+
+    def test_26c_a_unit_mismatch_is_not_a_row(self):
+        """**単位が違う分数は表に出さない**(P-165)。出せば表そのものが嘘になる。"""
+        direct, patient, repro = self.fixture()
+        rows = EC.denominators(direct, patient, repro, [passed_row(fractions=MISMATCH)])
+        self.assertNotIn(137, {r["number"] for r in rows})
+        # **黙って落とさない** ― 理由が書き手への注に出る。
+        notes = EC.unit_mismatch_notes([passed_row(fractions=MISMATCH)])
+        self.assertEqual(len(notes), 1)
+        self.assertIn("P-165", notes[0])
+
+    def test_26d_the_note_reaches_the_draft(self):
+        """注が**下書きの本文まで**届く(関数だけ直っていても書き手には見えない)。"""
+        direct, patient, repro = self.fixture()
+        row = passed_row(fractions=MISMATCH)
+        denoms = EC.denominators(direct, patient, repro, [row])
+        md = EC.build_md(direct, patient, repro, [row], [], [], denoms, None,
+                         EC.opening_lines(patient, direct, TODAY))
+        self.assertIn("分母の表に出していません", md)
+        self.assertNotIn("| 137 |", md)
+
+    def test_26e_group_denominators_are_anticipated(self):
+        """**群ごとの分母を最初から受ける**(戦型の再集計。後から足すと表が追いつかない)。"""
+        direct, patient, repro = self.fixture()
+        rows = EC.denominators(direct, patient, repro, [],
+                              [("多数の核を共有", 18), ("それ以外", 4), ("署名なし", 3)])
+        got = {(r["number"], r["unit"]) for r in rows}
+        for n in (18, 4, 3):
+            self.assertIn((n, "局"), got)
+        self.assertTrue(any("署名なし" in r["from"] for r in rows))
+
+    def test_26f_the_same_row_is_not_repeated(self):
+        """同じ数・同じ出どころの行は 1 つ(同じ分数を 2 本の行動が使っても表が二重にならない)。"""
+        direct, patient, repro = self.fixture()
+        two = [passed_row(item_id="M4", fractions=TWO), passed_row(item_id="M4", fractions=TWO)]
+        rows = EC.denominators(direct, patient, repro, two)
+        keys = [(r["number"], r["unit"], r["from"]) for r in rows]
+        self.assertEqual(len(keys), len(set(keys)))
+
+
+class GroupLabelTest(unittest.TestCase):
+    """**組の名の出どころは 1 か所**(仕様 §4d・P-162)。
+
+    2026-09-29 の校正で、**「組の名を『3 分』に固定する」変異が緑のまま通った** ―
+    合成材料の `group` がたまたま「3 分」だったので、
+    **材料から取っているのか固定値なのかを区別する試験が 1 本も無かった。**
+    """
+
+    def test_24_the_default_comes_from_the_material(self):
+        """渡されなければ**材料の `group`**(「N 分」)。固定値ではない。"""
+        answers = [answer(1, 10, top1=("drop",))]
+        for label in ("3 分", "10 分 + 30 秒"):
+            for a in answers:
+                a["group"] = label
+            self.assertEqual(EC.group_label_of(direct_of(answers), None), label)
+
+    def test_24b_the_given_label_wins(self):
+        """**人間が渡したラベルが勝つ**(持ち時間の形は秒数から決まらない)。"""
+        answers = [answer(1, 10, top1=("drop",))]
+        got = EC.group_label_of(direct_of(answers), "3 分切れ負け")
+        self.assertEqual(got, "3 分切れ負け")
+        self.assertNotEqual(got, answers[0]["group"])
+
+    def test_24c_two_groups_fall(self):
+        """**2 組以上は落ちる。**黙って 1 組として書くと、冒頭の局数と本文の分母が食い違う。"""
+        answers = [answer(1, 10, top1=("drop",)), answer(2, 20, top1=("drop",))]
+        answers[1]["group"] = "10 分 + 30 秒"
+        with self.assertRaises(EC.ExitCandidatesError):
+            EC.group_label_of(direct_of(answers), None)
+
+    def test_24d_the_label_reaches_the_opening(self):
+        """**渡したラベルが冒頭の 1 文目に出る**(関数の戻り値だけでなく md まで届く)。"""
+        answers = [answer(1, 10, top1=("drop",))]
+        direct = direct_of(answers)
+        patient = {"summary": {"games": 1}, "games": [{"no": 1}], "findings": []}
+        got = EC.opening_lines(patient, direct, TODAY, "3 分切れ負け")
+        self.assertIn("3 分切れ負け 1 局を、", got[0])
+        self.assertIn(TODAY, got[0])
+        # 渡さなければ材料の語のまま(出力不変)。
+        self.assertIn("3 分 1 局を、", EC.opening_lines(patient, direct, TODAY)[0])
 
 
 class NoActionTest(unittest.TestCase):
@@ -504,7 +860,8 @@ class NoActionTest(unittest.TestCase):
         patient = {"summary": {"games": 1}, "games": [{"no": 1}],
                    "findings": [{"kind": "phase", "oneLine": "一言", "text": "崩れ 79 回でした", "shown": True}]}
         md = EC.build_md(direct, patient, repro, [], [], [],
-                         EC.denominators(direct, patient, repro), None)
+                         EC.denominators(direct, patient, repro), None,
+                         EC.opening_lines(patient, direct, TODAY))
         self.assertIn(EI.NO_ACTION_SENTENCE, md)
 
     def test_20b_the_sentence_is_not_printed_when_there_are_actions(self):
@@ -514,7 +871,8 @@ class NoActionTest(unittest.TestCase):
         patient = {"summary": {"games": 1}, "games": [{"no": 1}],
                    "findings": [{"kind": "phase", "oneLine": "一言", "text": "崩れ 79 回でした", "shown": True}]}
         md = EC.build_md(direct, patient, repro, [passed_row(fractions=TWO)], [], [],
-                         EC.denominators(direct, patient, repro), None)
+                         EC.denominators(direct, patient, repro), None,
+                         EC.opening_lines(patient, direct, TODAY))
         self.assertNotIn(EI.NO_ACTION_SENTENCE, md)
 class NegativeTypeTest(unittest.TestCase):
     """**否定の型は本編の行動に入れない**(2026-09-29。`verifyName` が空で分数も無い項目)。"""
@@ -671,7 +1029,8 @@ class ObservationNumbersAreCandidatesTest(unittest.TestCase):
         """**門が読む JSON まで届いていること。**関数を直接呼ぶ試験だけでは、
         `build()` の中で `direct` を渡し忘れても黙る(2026-09-29 に変異で実測)。"""
         direct, repro, patient = self.fixture()
-        payload = EC.candidates_json(direct, patient, repro, [], [], [])
+        payload = EC.candidates_json(direct, patient, repro, [], [], [],
+                                     EC.opening_lines(patient, direct, TODAY))
         got = {int(x["number"]) for x in payload["p1Numbers"]}
         c = CA.top1_actual_cross(direct, "drop")
         for key in ("positions", "games", "bothPositions", "bothGames", "otherPositions", "otherGames"):

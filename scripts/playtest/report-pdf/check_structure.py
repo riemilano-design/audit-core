@@ -76,6 +76,63 @@ SCOPE_SENTENCE_TEMPLATE = "この冊子は、エンジンの解析と機械の�
 def scope_sentence(games):
     """商品の範囲の 1 段落。**組版と門が同じここから作る**(片方だけ直らない)。"""
     return SCOPE_SENTENCE_TEMPLATE.format(games=int(games))
+
+
+# ==================== 本編 p1 の冒頭の段落(P-162。2026-09-29) ====================
+# **4 人目(送付済み)の実物を測って型にした。**c5 の 2 周目の冒頭は
+# `SCOPE_SENTENCE_TEMPLATE` の 1 文だけで、**次の 5 つが本編に 0 件だった**(実測):
+#
+# 1. 「〈組の名〉〈局数〉局を、1 手ずつ将棋エンジンで調べました(日付)」
+# 2. **「手の良し悪しを判定するものではありません。」**
+#    ― **これが無いのがいちばん重い。**「最善手を教えるアプリではない」という
+#    このプロジェクトの核心の断り書きが、付録の表紙には在るのに本編に無かった
+# 3. 「数の出どころは付録で引けます。」
+# 4・5. 組が 2 つ以上のときの 2 文(分けて数えている / 断りが無ければどの組か)
+#
+# **人の名前は入れない**(2026-09-29 に測って決めた)。4 人目の実物は
+# 「〈名前〉さんの 3 分切れ負け 18 局と…」で始まるが、**あの顧客には本人用しか渡していない**
+# (送付フォルダに本編が 1 本だけ)。c5 は**見本用も作る**ので、冒頭に名前を置くと
+# **見本用にも載る** ― 見本用は他人に見せるものなので、名前は冒頭に入れない(P-147 の家族)。
+# 名前を入れるかは人間の判断として上げる。
+OPENING_ENGINE_TEMPLATE = "{groups}を、1 手ずつ将棋エンジンで調べました({today})。"
+OPENING_NOT_A_JUDGE = "手の良し悪しを判定するものではありません。"
+OPENING_APPENDIX = "数の出どころは付録で引けます。"
+OPENING_SPLIT_TEMPLATE = ("持ち時間の違う {n} つの組は分けて数えています"
+                          "(混ぜると 1 手あたりの秒が意味を失うため)。")
+OPENING_PRIMARY_TEMPLATE = "以下の数は、断りが無ければ {label}の {games} 局のものです。"
+# 日付の形。**ISO(YYYY-MM-DD)だけを通す** ― `check_answer.scan_numbers` は ISO 日付を
+# 数の主張から外すので、**この形以外を入れると門が日付を「書き手が選んだ数」として数える**。
+TODAY_RE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
+
+
+def opening_paragraph(games, groups, today):
+    """本編 p1 の冒頭の段落を、**文の並び**で返す(組版と門が同じここから作る)。
+
+    `games` は冊子が見た局数の合計、`groups` は `((ラベル, 局数), …)` で**先頭が今回の組**。
+    組が 1 つなら 4 文、2 つ以上なら 6 文(4 人目の実物と同じ並び)。
+
+    **合計が合わないものは落とす** ― 組ごとの局数の和が `games` と違えば、
+    冒頭の「〈組の名〉〈局数〉局」と本文の分母が食い違う冊子ができる。
+    """
+    if not groups:
+        raise CheckStructureError("組が 0 件(冒頭の段落を作れない)")
+    if not TODAY_RE.match(str(today)):
+        raise CheckStructureError(f"日付の形が YYYY-MM-DD でない: {today!r}")
+    total = sum(int(n) for _label, n in groups)
+    if total != int(games):
+        raise CheckStructureError(
+            f"組ごとの局数の和 {total} が冊子の局数 {int(games)} と違う"
+            "(冒頭の局数と本文の分母が食い違う)")
+    phrase = "と、".join(f"{label} {int(n)} 局" for label, n in groups)
+    out = [OPENING_ENGINE_TEMPLATE.format(groups=phrase, today=today),
+           scope_sentence(games),
+           OPENING_NOT_A_JUDGE,
+           OPENING_APPENDIX]
+    if len(groups) > 1:
+        label, n = groups[0]
+        out.append(OPENING_SPLIT_TEMPLATE.format(n=len(groups)))
+        out.append(OPENING_PRIMARY_TEMPLATE.format(label=label, games=int(n)))
+    return out
 # 上限(正本 §2。実物に合わせて 本編 ≤ 5・付録 ≤ 25・合計 ≤ 30)。
 # **2026-09-29 の読み替え(司令塔・案 1。正本 §12)**: 本編の上限は
 # **「4 + 対応表のページ数」** ― 対応表は分析の中身ではなく**顧客が自分の局を引く索引**で、
@@ -501,6 +558,15 @@ def check_scope_and_mapping(personal, games, problems):
         problems.append(
             f"商品の範囲の 1 段落が {count} か所(ちょうど 1 か所。この冊子は {games} 局なので"
             f"「次の {games} 局で確かめる」でなければならない)")
+    # **冒頭の断り書き 2 文**(P-162)。**局数も日付も組の名も入らない文**なので、
+    # ここ(組版した PDF の側)でそのまま数えられる。
+    # **(2) が無い版は顧客に出さない**(2026-09-29 の司令塔の判断) ―
+    # 「最善手を教えるアプリではない」という核心の断り書きが、2 周目は本編に無かった。
+    # 冒頭の 1 文目(組の名・局数・日付が入る)は**段 `exit-gate` の (vii)** が候補の JSON と照合する。
+    for sentence in (OPENING_NOT_A_JUDGE, OPENING_APPENDIX):
+        n = joined.count(squeeze(norm(sentence)))
+        if n != 1:
+            problems.append(f"冒頭の断り書きが {n} か所(ちょうど 1 か所): {sentence}")
 
 
 def main(argv):

@@ -629,6 +629,34 @@ class MenuFractionsTest(unittest.TestCase):
             "groups": {"min3": g},
         }
 
+    def test_f0_every_fraction_says_what_it_counted(self):
+        """**分数は「何を数えたか」を必ず持つ**(`unit`)。分母の出どころの表の単位になる。"""
+        m = self.materials()
+        for item_id in CA.MENU_FRACTIONS:
+            for f in CA.menu_fractions(item_id, m):
+                self.assertTrue(f.get("unit"), (item_id, f))
+
+    def test_f0b_the_sacrifice_fraction_is_marked_as_a_unit_mismatch(self):
+        """**M6 の分母は局面の数ではない**(P-165。2026-09-29 に `read` の局面行から数え直した)。
+
+        `sacrificeRowTotal` は `tagCrossTable["sacrifice"]` の**行の合計**で、実物では 137。
+        第 1 候補が捨て駒だった**局面は 107** で、137 はその 107 局面の
+        「実戦の手に付いた印」の総数である(印が 2 つ以上の局面は何度も数えられ、
+        印が 1 つも無い 18 局面は分母に入っていない)。**分子 50 は局面の数。**
+        **分子と分母の単位が違う。**
+
+        判定 `m6_holds` は動かさない(判断的知識 ― 人間の承認事項)。
+        **この印が外れると、単位の違う数が分母の出どころの表に「局面」として並ぶ。**
+        """
+        m = self.materials()
+        (f,) = CA.menu_fractions("M6", m)
+        self.assertTrue(f.get("unitMismatch"), f)
+        self.assertIn("P-165", f["unitMismatch"])
+        # **単位が違うのは M6 だけ**(M4 は局面・M5 は手で、分子と分母がそろっている)。
+        for item_id in ("M4", "M5"):
+            for other in CA.menu_fractions(item_id, m):
+                self.assertIsNone(other.get("unitMismatch"), (item_id, other))
+
     def test_f1_the_printed_fraction_is_the_one_the_judgment_divides_by(self):
         """**印字する分子 / 分母から作った割合が、判定が閾値に当てる割合と同じ。**"""
         m = self.materials()
@@ -713,3 +741,72 @@ class MenuFractionsTest(unittest.TestCase):
                 self.assertIn((f["numerator"], f["denominator"]), pairs, f"{item_id} / {f['name']}")
 if __name__ == "__main__":
     unittest.main()
+
+
+class SideMatchRowsTest(unittest.TestCase):
+    """**局面ごとの側**(P-164 の項目 3。2026-09-29)。
+
+    実物で測った ― `whatif-v2` の fork 局面は 404 行で、**`(kifuId, displayPly)` は 404 個で一意**。
+    **`sfen` では結合しない**(一意は 403 で、重複した 1 件は第 1 候補の側が
+    `defense` と `none` で食い違う ― `sfen` で結合すると印が 2 通りになる局面ができる)。
+    """
+
+    @staticmethod
+    def write(dir_path, kifu_id, positions):
+        path = os.path.join(dir_path, f"{kifu_id}.jsonl")
+        with open(path, "w", encoding="utf-8") as f:
+            for ply, display_ply, top1, actual in positions:
+                f.write(json.dumps({
+                    "kind": "position", "scenes": {"fork": True},
+                    "ply": ply, "displayPly": display_ply, "sfen": f"sfen-{kifu_id}-{ply}",
+                    "candidates": [{"side": top1}], "actualSide": actual,
+                }, ensure_ascii=False) + "\n")
+
+    def test_r1_the_key_is_the_kifu_id_and_the_display_ply(self):
+        """**鍵は `(kifuId, displayPly)`。**`ply` で引くと、先後で番号が違う局面を取り違える。"""
+        with tempfile.TemporaryDirectory() as d:
+            # `ply` と `displayPly` を**わざと違う値**にする(同じ値なら取り違えが測れない)。
+            self.write(d, "g01", [(9, 10, "attack", "attack"), (19, 20, "defense", "attack")])
+            sm = CA.side_match_of([d])
+            self.assertEqual(sorted(sm["rows"]), [("g01", 10), ("g01", 20)])
+            self.assertEqual(CA.side_match_mark_of(sm, "g01", 10),
+                             {"label": "攻め", "inNumerator": True})
+            self.assertEqual(CA.side_match_mark_of(sm, "g01", 20),
+                             {"label": "自玉側", "inNumerator": False})
+            # `ply` の値では引けない。
+            self.assertIsNone(CA.side_match_mark_of(sm, "g01", 9))
+
+    def test_r2_a_duplicate_key_is_dropped(self):
+        """**同じ鍵が 2 度来たら、その鍵の印を捨てる**(黙って片方を採らない)。
+
+        実物では起きないが、**起きたときに断定しない**ことが要る ―
+        実物の `sfen` の重複 1 件は側が食い違っていた。
+        """
+        with tempfile.TemporaryDirectory() as d:
+            self.write(d, "g01", [(9, 10, "attack", "attack"), (11, 10, "defense", "attack")])
+            sm = CA.side_match_of([d])
+            self.assertIsNone(sm["rows"][("g01", 10)])
+            self.assertIsNone(CA.side_match_mark_of(sm, "g01", 10))
+            # **合算は捨てない**(分数は 2 局面とも数える ― 判定は動かさない)。
+            self.assertEqual(sm["attack"]["n"], 1)
+            self.assertEqual(sm["defense"]["n"], 1)
+
+    def test_r3_the_rows_agree_with_the_totals(self):
+        """**局面ごとと合算が同じ走査から来る。**別に数え直せば、同じ言葉に 2 つの分母が付く。"""
+        with tempfile.TemporaryDirectory() as d:
+            self.write(d, "g01", [(1, 1, "attack", "attack"), (2, 2, "attack", "defense"),
+                                  (3, 3, "defense", "both"), (4, 4, "both", "attack")])
+            self.write(d, "g02", [(1, 1, "defense", "defense")])
+            sm = CA.side_match_of([d])
+            rows = [v for v in sm["rows"].values() if v]
+            attack = [r for r in rows if r["top1Side"] == "attack"]
+            defense = [r for r in rows if r["top1Side"] == "defense"]
+            self.assertEqual(len(attack), sm["attack"]["n"])
+            self.assertEqual(len(defense), sm["defense"]["n"])
+            self.assertEqual(sum(1 for r in attack if r["actualSide"] in ("attack", "both")),
+                             sm["attack"]["collapsed"])
+            self.assertEqual(sum(1 for r in defense if r["actualSide"] in ("defense", "both")),
+                             sm["defense"]["collapsed"])
+            self.assertEqual(sm["forkTotal"], 5)
+            # 側が「両方」の局面は分母に入らない ― 印も付かない。
+            self.assertIsNone(CA.side_match_mark_of(sm, "g01", 4))
