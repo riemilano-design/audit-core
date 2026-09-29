@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "observation-request.v0.1.schema.json",
+  "title": "Observation Request v0.1",
+  "description": "顧客の問いと、分析の範囲(docs/NEXTGEN_PIPELINE_BRIEF_2026-09-29.md §2.5 の 5)。**packet と別のファイルにする** ― 「顧客がこう聞いたから事実の作り方を変えた」を防ぐため、事実層(observation-packet)には入れない。packet は request を参照しない(向きは一方通行)。両方が LLM 分析の入力になる(packet → 事実、request → 条件)。顧客の実名を入れない(customerRef は出力フォルダの符号)。問いの原文は顧客の言葉なので、そのまま写して編集しない。検証は scripts/playtest/lib/observationPacket.ts",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["contract", "schemaVersion", "customerRef", "customerQuestions", "requestedScope"],
+  "properties": {
+    "contract": { "const": "observation-request" },
+    "schemaVersion": { "const": "0.1" },
+    "customerRef": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9_-]{0,15}$",
+      "description": "packet の customerRef と同じ符号。実名・姓を入れない"
+    },
+    "customerQuestions": {
+      "type": "array",
+      "description": "顧客が聞いたこと。**原文をそのまま写す**(要約・言い換えをしない ― 言い換えると「問いに答えたか」を後から確かめられない)。0 件でよい(問いが無い回もある)",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "text"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^q[0-9]+$" },
+          "text": { "type": "string" },
+          "askedAt": { "type": "string" },
+          "via": { "enum": ["dm", "mail", "form", "relayed"], "description": "どこで聞いたか。人が中継したものは relayed(伝聞であることを残す)" }
+        }
+      }
+    },
+    "requestedScope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["games"],
+      "properties": {
+        "games": { "type": "integer", "minimum": 1, "description": "分析する局数(局)" },
+        "timeLimitSec": { "type": "integer", "minimum": 0 },
+        "note": { "type": "string" }
+      }
+    }
+  }
+}

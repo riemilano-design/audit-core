@@ -1,0 +1,885 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "observation-packet.v0.1.schema.json",
+  "title": "Observation Packet v0.1",
+  "description": "次世代パイプラインの Phase A(docs/NEXTGEN_PIPELINE_BRIEF_2026-09-29.md §2 の 1・§2.5 の 5・6、計画 docs/PLAN_OBSERVATION_PACKET_2026-09-30.md)。分析・検証・編集の全工程が参照する唯一の事実入力。既存の出力(patient_report_data・whatif-v2/read の jsonl・direct_answers・time_cause・opening_recognition)を束ねるだけで、新しい判定は作らない。顧客の問いは入れない(別契約 observation-request)。顧客の実名は入れない ― customerRef は出力フォルダの符号だけ(3 席の LLM が外部 API になると実名が外へ出る経路ができるため、入口で落とす)。欄の名前は機械の語・camelCase(既存の JSON と同じ流儀)。単位は欄の名前に持たせる(Sec・Cp・Count)。「局」と「局面」を必ず区別する(同じ数が別の単位で 2 回出る型 = P-186 を機械で捕まえるため)。検証は scripts/playtest/lib/observationPacket.ts(検証器 lib/eventSchema.ts の部分集合に収めるため、辞書ではなく配列 + id を使う)",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "contract",
+    "schemaVersion",
+    "packetId",
+    "customerRef",
+    "facts",
+    "aggregates",
+    "provenance"
+  ],
+  "properties": {
+    "contract": {
+      "const": "observation-packet"
+    },
+    "schemaVersion": {
+      "const": "0.1"
+    },
+    "packetId": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{16}$",
+      "description": "facts + aggregates を鍵の順にそろえて取った sha256 の先頭 16。封(材料の sha256 は provenance.inputs)"
+    },
+    "customerRef": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9_-]{0,15}$",
+      "description": "出力フォルダの符号(例 c5)。実名・姓・人が見て誰か分かる符号を入れない"
+    },
+    "facts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "games",
+        "moves",
+        "engine",
+        "time",
+        "branches",
+        "collapse",
+        "recognition"
+      ],
+      "properties": {
+        "games": {
+          "type": "array",
+          "description": "1 行 = 1 局",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "gameId",
+              "no",
+              "side",
+              "result",
+              "ownPlyCount",
+              "totalPlyCount",
+              "src"
+            ],
+            "properties": {
+              "gameId": {
+                "type": "string",
+                "pattern": "^[A-Za-z0-9_-]+$"
+              },
+              "no": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "side": {
+                "enum": [
+                  "先手",
+                  "後手"
+                ],
+                "description": "本人の側。材料の値をそのまま写す"
+              },
+              "result": {
+                "enum": [
+                  "勝ち",
+                  "負け",
+                  "引き分け"
+                ],
+                "description": "材料の値をそのまま写す(新しい判定を作らない)"
+              },
+              "ending": {
+                "type": "string",
+                "description": "終局の語(投了・切れ負けなど)。材料が持っていなければ欄を出さない"
+              },
+              "ownPlyCount": {
+                "type": "integer",
+                "minimum": 0,
+                "description": "本人が指した手の数(局面ではなく手)"
+              },
+              "totalPlyCount": {
+                "type": "integer",
+                "minimum": 0,
+                "description": "その局の全部の手の数"
+              },
+              "timeLimitSec": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "mirrored": {
+                "type": "boolean",
+                "description": "材料の向きの規約(本人が後手なら真)。ここで判定を作り直さない"
+              },
+              "src": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "moves": {
+          "type": "array",
+          "description": "1 行 = 1 手。v0.1 は本人の手だけを入れるが、side の欄を最初から持つ(相手の手を足すときに schema を変えない ― 司令塔の条件 4)",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "gameId",
+              "ply",
+              "side",
+              "src"
+            ],
+            "properties": {
+              "gameId": {
+                "type": "string"
+              },
+              "ply": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "side": {
+                "enum": [
+                  "own",
+                  "opponent"
+                ]
+              },
+              "usi": {
+                "type": "string"
+              },
+              "spentSec": {
+                "type": "number",
+                "minimum": 0
+              },
+              "phase": {
+                "enum": [
+                  "early",
+                  "mid",
+                  "late"
+                ]
+              },
+              "piece": {
+                "type": "string",
+                "pattern": "^\\+?[plnsgbrk]$",
+                "description": "動いた駒・打った駒の種類(SFEN の字を小文字に。成り駒は先頭に +)。**打つ手は USI の 1 文字目だが、盤の手は USI に駒種が無いので、その手を指す前の局面の元の升を引いて決める**(材料 sfens.json は全局面を持つ ― 実測: 1 局に sfens 124・moves 123)。実験 2 の B2(USI の駒種の取り違え)への答え。幾何と表記の事実で、将棋の判断は入らない",
+                "$comment": "実験席の要望(2026-09-30)。pieceFrom と対で読む"
+              },
+              "pieceFrom": {
+                "enum": [
+                  "board",
+                  "hand"
+                ],
+                "description": "board = 盤の手(元の升から引いた)/ hand = 打つ手(USI の 1 文字目)。**どちらの出どころで決めたかを残す**"
+              },
+              "isFork": {
+                "type": "boolean",
+                "description": "分かれ道だったか(facts.branches に同じ (gameId, ply) の行が在るか)"
+              },
+              "tags": {
+                "type": "array",
+                "description": "read.ts の印をそのまま写す",
+                "items": {
+                  "enum": [
+                    "capture",
+                    "drop",
+                    "givesCheck",
+                    "sacrifice",
+                    "retreat",
+                    "kingMove",
+                    "declinesPromotion"
+                  ]
+                }
+              },
+              "collapsed": {
+                "type": "boolean",
+                "description": "形勢の段が 1 段以上下がった手か(材料の判定をそのまま写す)"
+              },
+              "src": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "engine": {
+          "type": "array",
+          "description": "1 行 = 1 局面(局面の実在の索引。(gameId, ply) で引く)",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "gameId",
+              "ply",
+              "sfen",
+              "src"
+            ],
+            "properties": {
+              "gameId": {
+                "type": "string"
+              },
+              "ply": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "sfen": {
+                "type": "string"
+              },
+              "scoreCp": {
+                "type": "integer"
+              },
+              "top1Usi": {
+                "type": "string"
+              },
+              "actualUsi": {
+                "type": "string"
+              },
+              "candidates": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "usi"
+                  ],
+                  "properties": {
+                    "usi": {
+                      "type": "string"
+                    },
+                    "scoreCp": {
+                      "type": "integer"
+                    },
+                    "pv": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              },
+              "nodes": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "multipv": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "src": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "time": {
+          "type": "array",
+          "description": "1 行 = 1 局の時間。手ごとの秒は facts.moves の spentSec",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "gameId",
+              "src"
+            ],
+            "properties": {
+              "gameId": {
+                "type": "string"
+              },
+              "earlySpentSec": {
+                "type": "number",
+                "minimum": 0
+              },
+              "midSpentSec": {
+                "type": "number",
+                "minimum": 0
+              },
+              "lateSpentSec": {
+                "type": "number",
+                "minimum": 0
+              },
+              "longThinkCount": {
+                "type": "integer",
+                "minimum": 0,
+                "description": "10 秒以上考えた手の数(手)"
+              },
+              "longThinkForkCount": {
+                "type": "integer",
+                "minimum": 0,
+                "description": "そのうち分かれ道だった手の数(手)"
+              },
+              "longThinkOppositeCount": {
+                "type": "integer",
+                "minimum": 0,
+                "description": "その分かれ道のうち側が逆だった手の数(手)"
+              },
+              "remainingSec": {
+                "type": "number"
+              },
+              "timeUpLoss": {
+                "type": "boolean"
+              },
+              "src": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "branches": {
+          "type": "array",
+          "description": "1 行 = 1 分かれ道(局面)。実戦の手と第 1 候補が分かれた局面",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "gameId",
+              "ply",
+              "displayPly",
+              "src"
+            ],
+            "properties": {
+              "gameId": {
+                "type": "string"
+              },
+              "ply": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "displayPly": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "top1Usi": {
+                "type": "string"
+              },
+              "actualUsi": {
+                "type": "string"
+              },
+              "top1Side": {
+                "enum": [
+                  "attack",
+                  "defense",
+                  "both",
+                  "none"
+                ]
+              },
+              "actualSide": {
+                "enum": [
+                  "attack",
+                  "defense",
+                  "both",
+                  "none"
+                ]
+              },
+              "top1Tags": {
+                "type": "array",
+                "items": {
+                  "enum": [
+                    "capture",
+                    "drop",
+                    "givesCheck",
+                    "sacrifice",
+                    "retreat",
+                    "kingMove",
+                    "declinesPromotion"
+                  ]
+                }
+              },
+              "actualTags": {
+                "type": "array",
+                "items": {
+                  "enum": [
+                    "capture",
+                    "drop",
+                    "givesCheck",
+                    "sacrifice",
+                    "retreat",
+                    "kingMove",
+                    "declinesPromotion"
+                  ]
+                }
+              },
+              "topGapCp": {
+                "type": "integer",
+                "description": "第 1 候補と第 2 候補の差"
+              },
+              "actualGapCp": {
+                "type": "integer",
+                "description": "第 1 候補の評価 − 実戦の手の評価(候補に無ければ欄を出さない)"
+              },
+              "firstVisibleNodes": {
+                "type": "integer",
+                "minimum": 0,
+                "description": "差が見えた読みの深さ(ノード数)"
+              },
+              "shallowVisible": {
+                "type": "boolean",
+                "description": "浅い読みで差が見えたか(材料の値 nodeShallowMaxNodes との比較結果をそのまま写す)"
+              },
+              "src": {
+                "type": "string"
+              },
+              "srcTopGapCp": {
+                "type": "string",
+                "description": "行の src と出どころが違う欄だけ、その欄の src を置く(provenance の参照方式)"
+              },
+              "srcFirstVisibleNodes": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "collapse": {
+          "type": "array",
+          "description": "1 行 = 1 件の崩れ(本人の 1 手で形勢の段が下がった)",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "gameId",
+              "ply",
+              "src"
+            ],
+            "properties": {
+              "gameId": {
+                "type": "string"
+              },
+              "ply": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "beforeCp": {
+                "type": "integer"
+              },
+              "afterCp": {
+                "type": "integer"
+              },
+              "bandBefore": {
+                "enum": [
+                  "ahead",
+                  "level",
+                  "behind"
+                ]
+              },
+              "bandAfter": {
+                "enum": [
+                  "ahead",
+                  "level",
+                  "behind"
+                ]
+              },
+              "kind": {
+                "type": "string",
+                "description": "材料の kind をそのまま写す"
+              },
+              "src": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "recognition": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "rows",
+            "definitions"
+          ],
+          "description": "機械認識。rows = 1 行 1 局の判定(opening_recognition.json の rows を写す)、definitions = その判定に使った定義(実験席の要望 2026-09-30。実験 1 の穴 §1.5「定義の中身が無いので席が照合できない」への答え)。名前は data/ の認識を経たものだけ ― CLAUDE.md 規則 8 の (4)。**測ってから入れた**: 定義は 114 本で、全部写して 93 KB(照合に要る欄だけなら 21 KB)。packet の見込み 2.5〜4 MB に対して 2〜4 % なので、実験席が置いた「1 割」の線を下回る",
+          "properties": {
+            "rows": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "gameId",
+                  "src"
+                ],
+                "properties": {
+                  "gameId": {
+                    "type": "string"
+                  },
+                  "selfSignature": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "description": "本人側の署名(openingId の列)。材料の proposalSignature をそのまま写す"
+                  },
+                  "opponentSignature": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "signatureClass": {
+                    "type": "string",
+                    "description": "材料の proposalSignatureClass をそのまま写す(群の分け方の根拠)"
+                  },
+                  "names": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "description": "材料の proposalSignatureNames"
+                  },
+                  "selfRecognized": {
+                    "type": "boolean"
+                  },
+                  "opponentRecognized": {
+                    "type": "boolean"
+                  },
+                  "selfStrongRecognized": {
+                    "type": "boolean"
+                  },
+                  "opponentStrongRecognized": {
+                    "type": "boolean"
+                  },
+                  "reviewStatus": {
+                    "enum": [
+                      "draft",
+                      "reviewed",
+                      "approved"
+                    ]
+                  },
+                  "src": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "definitions": {
+              "type": "array",
+              "description": "読んだ定義の写し(dirs は provenance の recognition の source に置く)。**recognitionPattern が無い定義も入れる**(実測 114 本のうち 7 本)― 「定義が在るのに認識できない」と「定義自体が無い」を席が区別できるようにする",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "id",
+                  "name",
+                  "side",
+                  "reviewStatus"
+                ],
+                "properties": {
+                  "id": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  },
+                  "nameKana": {
+                    "type": "string"
+                  },
+                  "side": {
+                    "type": "string",
+                    "description": "材料の side をそのまま写す"
+                  },
+                  "family": {
+                    "type": "string"
+                  },
+                  "reviewStatus": {
+                    "enum": [
+                      "draft",
+                      "reviewed",
+                      "approved"
+                    ]
+                  },
+                  "confidenceLevel": {
+                    "type": "string"
+                  },
+                  "recognitionPattern": {
+                    "type": "array",
+                    "description": "定義の recognition_pattern をそのまま写す(鍵は camelCase に直すだけ)。**実データを数えて欄を決めた**(2026-09-30 の独立監査の REVISE 2): 定義 114 本の要素 226 件は**例外なく order_hint・piece・to の 3 つだけ**を持つ。最初この schema は ply・usi・note・from を許して orderHint を持っておらず、**実データを写すと 114 本すべてが違反になる形**だった(試験の仮の値が実在しない形だったので、試験からは見えなかった)。**piece は日本語の駒の字**(歩・桂・銀…)で、facts.moves[].piece(SFEN の字)とは**別の表記**",
+                    "items": {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "required": [
+                        "orderHint",
+                        "piece",
+                        "to"
+                      ],
+                      "properties": {
+                        "orderHint": {
+                          "type": "integer",
+                          "description": "材料の order_hint"
+                        },
+                        "piece": {
+                          "type": "string",
+                          "description": "駒の字(日本語)。歩・香・桂・銀・金・角・飛・玉"
+                        },
+                        "to": {
+                          "type": "string",
+                          "description": "行き先の升(材料のまま)"
+                        }
+                      }
+                    }
+                  },
+                  "leadsToShapeIds": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "src": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "aggregates": {
+      "type": "array",
+      "description": "冊子に出る数は 1 つ残らずここ。LLM に数えさせない。分数は numerator + denominator、単独の数は value(形の検査は道具側)",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "description": "1 行 = 1 つの数。**分数の行は numerator + denominator、単独の数の行は value。どちらか片方だけであることは道具(lib/observationPacket.ts の aggregateFormProblems)が見る** ― oneOf にすると、行の中のどこが悪くて落ちたのかが誤りの文に出ず、試験が「別の理由で落ちても緑」になる(2026-09-30 に校正で見つけた)",
+        "required": [
+          "id",
+          "unit",
+          "name",
+          "population",
+          "derivedFrom",
+          "src"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z][a-zA-Z0-9_.]*$"
+          },
+          "numerator": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "denominator": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "unit": {
+            "enum": [
+              "positions",
+              "games",
+              "moves",
+              "seconds",
+              "centipawns"
+            ]
+          },
+          "name": {
+            "type": "string",
+            "description": "人が読む名前(冊子の語ではなく、何を数えたかの説明)"
+          },
+          "population": {
+            "$comment": "下の population と同じ形",
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "from",
+              "where",
+              "unit"
+            ],
+            "properties": {
+              "from": {
+                "enum": [
+                  "games",
+                  "moves",
+                  "engine",
+                  "time",
+                  "branches",
+                  "collapse",
+                  "recognition"
+                ]
+              },
+              "where": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "field",
+                    "op",
+                    "value"
+                  ],
+                  "properties": {
+                    "field": {
+                      "enum": [
+                        "side",
+                        "result",
+                        "phase",
+                        "isFork",
+                        "collapsed",
+                        "top1Side",
+                        "actualSide",
+                        "shallowVisible",
+                        "bandBefore",
+                        "bandAfter",
+                        "signatureClass",
+                        "reviewStatus",
+                        "timeUpLoss",
+                        "spentSec",
+                        "topGapCp",
+                        "actualGapCp",
+                        "firstVisibleNodes",
+                        "longThinkCount",
+                        "ownPlyCount",
+                        "totalPlyCount",
+                        "tags",
+                        "top1Tags",
+                        "actualTags"
+                      ]
+                    },
+                    "op": {
+                      "enum": [
+                        "==",
+                        "!=",
+                        ">=",
+                        "<=",
+                        ">",
+                        "<",
+                        "includes"
+                      ]
+                    },
+                    "value": {
+                      "$comment": "型は欄によって違うので縛らない(検証器は空のスキーマを素通しする)"
+                    }
+                  }
+                }
+              },
+              "unit": {
+                "enum": [
+                  "positions",
+                  "games",
+                  "moves",
+                  "seconds",
+                  "centipawns"
+                ]
+              }
+            }
+          },
+          "derivedFrom": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string"
+            },
+            "description": "この数が出た局の gameId の列(正本 §2.5 の 6)"
+          },
+          "src": {
+            "type": "string"
+          },
+          "value": {
+            "type": "number",
+            "description": "単独の数の行(分数でないもの)"
+          }
+        }
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "pipelineVersion",
+        "generatedAt",
+        "sources",
+        "inputs"
+      ],
+      "properties": {
+        "pipelineVersion": {
+          "type": "string",
+          "description": "この packet を組んだ道具の git head"
+        },
+        "generatedAt": {
+          "type": "string"
+        },
+        "sources": {
+          "type": "array",
+          "description": "facts・aggregates の src が指す出どころ。値ごとに埋め込まず参照にする(埋め込むと provenance だけで約 3.6 MB。実測の行数から計算)",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "type"
+            ],
+            "properties": {
+              "id": {
+                "type": "string",
+                "pattern": "^[a-z][a-z0-9]*$"
+              },
+              "type": {
+                "enum": [
+                  "engine",
+                  "material",
+                  "recognition"
+                ]
+              },
+              "engineVersion": {
+                "type": "string"
+              },
+              "nodesLimit": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "multipv": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "path": {
+                "type": "string",
+                "description": "リポジトリの根からの相対パス(絶対パス・ホームのユーザー名を書かない)"
+              },
+              "sha256": {
+                "type": "string",
+                "pattern": "^[0-9a-f]{64}$"
+              },
+              "kind": {
+                "type": "string"
+              },
+              "gitHead": {
+                "type": "string"
+              },
+              "definitionsDirs": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "reviewStatus": {
+                "enum": [
+                  "draft",
+                  "reviewed",
+                  "approved"
+                ]
+              },
+              "generatedAt": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "inputs": {
+          "type": "array",
+          "description": "読んだ材料の一覧(封。分析が走った後に材料が差し替わったことを機械で言えるようにする)",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "path",
+              "sha256",
+              "bytes"
+            ],
+            "properties": {
+              "path": {
+                "type": "string"
+              },
+              "sha256": {
+                "type": "string",
+                "pattern": "^[0-9a-f]{64}$"
+              },
+              "bytes": {
+                "type": "integer",
+                "minimum": 0
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
