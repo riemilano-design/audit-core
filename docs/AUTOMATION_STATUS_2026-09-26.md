@@ -472,3 +472,7 @@ API なら、**渡した文・モデル名・返った全文**が記録に入る
 - 順序は上位正本 §3 のまま。H-3・H-4・H-10 は ①〜⑥ に依存しないので、packet C の後に単独の束で入れる(レーンの手が空くまで着手しない)。
 
 **人間に上げるもの(委任の外)**: H-1 節「お預かりした問い」を器に足し問いがあるときは必須(位置は「ひとことで」の直後)/ H-2 時間の線を持ち時間ごとの表にし 10 切れは未定 = 時間の集計と M1/M5/M9 を出さず「線が未定」の固定文 / H-7 unanswerable の固定文「今回の数からは、明確な差は確認できませんでした。」/ H-9 採用の席 = 答え・読みは司令塔、行動の表への追加と送るかは人間。司令塔の推奨はいずれも設計案のとおり。
+
+## 2026-09-30 ― 実験席が設計案 §5 の S-1・S-2・A-1 を計画 §8 に記録(f0a9ac3、docs のみ)
+
+S-1 採用(`answers[].missing` は partial/unanswerable で必須・空配列不可、`needed_observation` を任意に落として 1 本化)。S-2 採用(render が `thresholds.id` と `timeLimitSec` を先頭に印字、無ければ止まる。前提は P-1・R-1)。A-1 は欄ごとの対応表(§8.1)で通り、合わせが要るのは 3 点 = (i) integration に `clusters[].clusterId`、answer-selection の lead/p1 は `{clusterId}` か `{seatIndex,itemId}` (ii) `packetRef.path` の文法を `aggregates.<id>` / `facts.…` に固定(指示文 v1.1 で例を直す) (iii) integration に `seatOrderRef`(席名は持たない)。**司令塔: 3 点とも設計として了承**(§4 の縛りは不変。実装は packet C の後、順 = packet C → render → seat-output → integration → ③ → ⑤)。
