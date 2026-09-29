@@ -89,7 +89,7 @@
 | B | 0(数はすべて束の値。§3 findings の 17%・4% も束にある文) | 0 | ― |
 | C | 0 | 0(「崩れの過半数は中盤」は語だけで数を作っていない) | ― |
 
-席 A の 2 つの誤りは、どちらも束の表の行を席が手で拾って数えたもので、**「席が数を作った場合は採用候補にしない」の規則が要る証拠**として残す。印の付け忘れは 3 席とも実質無し。
+席 A の 2 つの誤りは、どちらも束の表の行を席が手で拾って数えたもので、**「席が数を作った場合は採用候補にしない」の規則(指示書 §11「数え直さない」)が実測で裏づけられた印**として残す。印の付け忘れは 3 席とも実質無し。
 
 ### 2.3 席の回答と原則(指示書 §2・§5)の関係(実験席の判定。司令塔は判定しない)
 
@@ -185,4 +185,110 @@
 
 **入れていないもの**: `opening_recognition.json` の `rows`・`proposal`(機械の認識結果と署名の案。席の読みを寄せないため)。突き合わせは実験席が後から。
 
-(以降、席 A2・B2・C2 の回答と突き合わせは §6.2〜 に追記する)
+### 6.2 席に掛け、回答を原文のまま保存した
+
+| 席 | 掛け方 | 原本 | sha256 | 保存先 | 扱い |
+|---|---|---|---|---|---|
+| A2(Claude) | 実験席が subagent(新規会話)を起こし `request2.md` を全行読ませた。他のファイル・コード実行・ウェブ無し | `seat_A2_claude_raw.md`(74 行・51,025 バイト) | `eb1ecc7ee6189313e61db6152cea8bebfea01ed9a60674ccce13e1fb78a98570` | [SEAT2_A](EXPERIMENT_LLM_DISCOVERY_25GAMES_SEAT2_A.md) | 正式な席 |
+| B2(GPT) | 人間がブラウザで本文貼り付け(司令塔が中継) | `seat_B2_gpt_raw.md`(141 行・13,971 バイト) | `f21ef9f4980021b5cf8350070f503d2987d5a38bca25cb19f88aa61b5c290cfb` | [SEAT2_B](EXPERIMENT_LLM_DISCOVERY_25GAMES_SEAT2_B.md) | **保留**(人間の決定 2026-09-29 昼: 回答自身が「本編・『数の出どころ』付録も確認した」と書き、request2.md にはそれが無い → 独立性に疑いあり。表と指摘は保存するが、比較の正式な 1 席にしない・3 席一致の数に入れない) |
+| C2(Gemini) | 同上(新規会話) | `seat_C2_gemini_raw.md`(59 行・9,676 バイト) | `ef893090f388433ab755083bed362478294150d317e6da4a073b196ce8cd9693` | [SEAT2_C](EXPERIMENT_LLM_DISCOVERY_25GAMES_SEAT2_C.md) | 正式な席 |
+
+**入力到達の欄**(実験 1 §2.1 と同じ形。C2 は前回 §11 が届かなかった席なので、材料 2 の定義を引用しているかで判定):
+
+| 席 | 材料 2(定義)の id を引用しているか | 判定 |
+|---|---|---|
+| A2 | 50 行すべてで id を引き、114 件の内訳(相手側 29 件・pattern 無し 7 件)にも触れている | 届いた |
+| B2 | 50 行で id を引き、pattern 長の分布(1 手 34・2 手 37)を引いている | 届いた(ただし独立性は保留) |
+| C2 | 50 行で id を引いている(うち 5 行は side=self の定義を相手側に当て「(side=self)」と注記) | **届いた**(実験 1 と違い、末尾の材料まで読めている) |
+
+### 6.3 突き合わせ ― 席の主張を機械で検査し、機械の rows と局ごとに比べた
+
+**検査器**(scratchpad `exp2_check.py`、盤を再生する python): 定義の座標は「本人=先手」の向きとし、定義の side の色が実際と違う局は 180 度回して照合。判定 B = 「pattern の全駒(種類一致・未成)が**同時に**その側の駒として盤上の to に居る時点がある」。判定 A = 「その側の駒が to に**着いた手が 1 回以上ある**」(B より緩い)。**校正**: 判定 B は機械の rows(`opening_recognition.json` の completed、253 件)と **253/253 で一致、不一致 0**(機械の detector は order_hint を読まず「盤の占有 + 動いた証拠」で判定 ― `openingDetector.ts` の明記どおり)。判定 A は 88 件多い。
+
+| 席 | 引用した手(手数と USI)の実在 | 「完全」と主張した id | うち判定 B(機械と同じ)で成立 | うち判定 A で成立 | 判定 A でも不成立 | 不成立の主因 |
+|---|---|---|---|---|---|---|
+| A2 | 384 / 384 | 160 | 134 | 159 | 0(部分 143 のうち判定 B で実は完全 7・何も無し 4) | 「着いた手が 1 回ある」を完全と読んだ(同時に盤上でない 25 件)。180 度回転は正しい |
+| B2(保留) | 283 / 283 | 217 | 145 | 183 | 31 | **飛と角の取り違え**(USI に駒の文字が無い)が 31 件中 28 件。180 度回転は正しい |
+| C2 | 98 / 98 | 50(1 行 1 id) | 30 | 48 | 1 | 5 行で side=self の定義を相手側に当てた(注記あり) |
+
+**局ごとの表**(機械 = `rows` の completed。判定 = 席の「完全」の id と機械の completed の関係: 一致(共通の id がある)/ 席と機械が別の id / 席だけ / 機械だけ / どちらも未認識。**B2 は保留列**):
+
+| 局 | 側 | 機械(completed) | 群(案) | 席 A2(完全) | 判定 A2 | 席 C2 | 判定 C2 | A2∩C2∩機械 | 席 B2(保留) | 判定 B2(保留) |
+|---|---|---|---|---|---|---|---|---|---|---|
+| 1 | 本人 | onikoroshi, douke_yagura, kakutoufu, migigyoku, ufo_gin, yagura_37gin | 多数の核 | douke_yagura, migigyoku, yagura_37kei | 一致 | chousoku_37gin | 席と機械が別の id | ― | chousoku_37gin, douke_yagura, kakutoufu, migigyoku, onikoroshi, ufo_gin, yagura_37gin | 一致 |
+| 1 | 相手 | sansan_kaku_senpo, yokofudori_33kaku, rokusuji_kuraidori, yonyonfu_pacman, yokofudori_85hi |  | sansan_kaku_senpo, yokofudori_33kaku | 一致 | rokusuji_kuraidori | 一致 | ― | rokusuji_kuraidori, yokofudori_44kaku, yokofudori_45kaku, yonyonfu_pacman | 一致 |
+| 2 | 本人 | douke_yagura, migigyoku, koshikakegin | 多数の核 | douke_yagura, koshikakegin, migigyoku, yagura_37kei | 一致 | douke_yagura | 一致 | douke_yagura | douke_yagura, kintachi, koshikakegin, migigyoku, ponpon_kei | 一致 |
+| 2 | 相手 | gokigen_nakabisha, sansan_kaku_senpo, yokofudori_33kaku, rokusuji_kuraidori, yonyonfu_pacman |  | gokigen_nakabisha, sansan_kaku_senpo, yagura_ryu_nakabisha | 一致 | gokigen_nakabisha | 一致 | gokigen_nakabisha | rokusuji_kuraidori, yonyonfu_pacman | 一致 |
+| 3 | 本人 | yagura_37kei, douke_yagura, migigyoku, koshikakegin | 多数の核 | douke_yagura, migigyoku, yagura_37kei | 一致 | koshikakegin | 一致 | ― | koshikakegin, migigyoku | 一致 |
+| 3 | 相手 | sansan_kaku_senpo, yokofudori_33kaku, shikenbisha_opponent, rokusuji_kuraidori, yonyonfu_pacman, yokofudori_33kei |  | rokusuji_kuraidori, sansan_kaku_senpo, shikenbisha_opponent, yonyonfu_pacman | 一致 | ittezon_kakugawari | 席と機械が別の id | ― | direct_mukaibisha, mukaibisha_opponent, rokusuji_kuraidori, yokofudori_33kei, yokofudori_45kaku, yonyonfu_pacman | 一致 |
+| 4 | 本人 | kakugawari_koshikakegin, gosuji_kuraidori_nakabisha, eichanryu_nakabisha, fuusha, nakabisha_self, koshikakegin, migigyoku, kakutoufu | それ以外 | eichanryu_nakabisha, fuusha, genshi_nakabisha, gosuji_kuraidori_nakabisha, migigyoku, nakabisha_self | 一致 | eichanryu_nakabisha | 一致 | eichanryu_nakabisha | kakutoufu, koshikakegin, migigyoku | 一致 |
+| 4 | 相手 | (なし) |  | (なし) | どちらも未認識 | kakutoufu | 席だけ | ― | (なし) | どちらも未認識 |
+| 5 | 本人 | yagura_37kei, douke_yagura, onikoroshi, kamereon_senpo, migigyoku, koshikakegin | 多数の核 | douke_yagura, kamereon_senpo, migigyoku, yagura_37kei | 一致 | kamereon_senpo | 一致 | kamereon_senpo | kamereon_senpo, koshikakegin, migigyoku, onikoroshi, ponpon_kei | 一致 |
+| 5 | 相手 | yonenaga_kyusen_yagura, sansan_kaku_senpo, yokofudori_33kaku, rokusuji_kuraidori, yonyonfu_pacman, shikenbisha_opponent |  | rokusuji_kuraidori, sansan_kaku_senpo, shikenbisha_opponent, yonenaga_kyusen_yagura, yonyonfu_pacman | 一致 | yonenaga_kyusen_yagura | 一致 | yonenaga_kyusen_yagura | rokusuji_kuraidori, yonenaga_kyusen_yagura, yonyonfu_pacman | 一致 |
+| 6 | 本人 | onikoroshi, kamereon_senpo, kanazawaryu, mukaibisha, migigyoku, koshikakegin | 多数の核 | kamereon_senpo, kanazawaryu, migigyoku, mukaibisha | 一致 | gangi_senpou | 席と機械が別の id | ― | gangi_senpou, kamereon_senpo, kintachi, koshikakegin, migigyoku, onikoroshi | 一致 |
+| 6 | 相手 | sansan_kaku_senpo, yokofudori_33kaku, yokofudori_33kei |  | sansan_kaku_senpo | 一致 | ai_yokofudori | 席と機械が別の id | ― | ai_yokofudori, shikenbisha_opponent, yokofudori_33kei, yokofudori_85hi | 一致 |
+| 7 | 本人 | henachoko_kyusen, onikoroshi, douke_yagura, kamereon_senpo, migigyoku | 多数の核 | douke_yagura, kamereon_senpo, migigyoku, yagura_37kei | 一致 | douke_yagura | 一致 | douke_yagura | douke_yagura, kamereon_senpo, migigyoku, onikoroshi | 一致 |
+| 7 | 相手 | sansan_kaku_senpo, yokofudori_33kaku, rokusuji_kuraidori, yonyonfu_pacman, nitemme_32hi, sankenbisha_opponent, shikenbisha_opponent |  | nitemme_32hi, rokusuji_kuraidori, sankenbisha_opponent, sansan_kaku_senpo, yonyonfu_pacman | 一致 | yagura_35fu_hayajikake | 席と機械が別の id | ― | rokusuji_kuraidori, shikenbisha_opponent, yonyonfu_pacman | 一致 |
+| 8 | 本人 | yagura_37kei, douke_yagura, onikoroshi, migigyoku, koshikakegin | 多数の核 | douke_yagura, kamereon_senpo, migigyoku, yagura_37kei | 一致 | onikoroshi | 一致 | ― | hikikaku, koshikakegin, migigyoku, onikoroshi, ponpon_kei, torisashi | 一致 |
+| 8 | 相手 | sansan_kaku_senpo, yokofudori_33kaku, rokusuji_kuraidori, yonyonfu_pacman, shikenbisha_opponent |  | rokusuji_kuraidori, sansan_kaku_senpo, shikenbisha_opponent, yonenaga_kyusen_yagura, yonyonfu_pacman | 一致 | yonenaga_kyusen_yagura | 席と機械が別の id | ― | rokusuji_kuraidori, yonenaga_kyusen_yagura, yonyonfu_pacman | 一致 |
+| 9 | 本人 | (なし) | 署名なし | hineribisha, kakugawari, tatefudori, yagura_senpo | 席だけ | yagura_senpo | 席だけ | ― | yagura_senpo | 席だけ |
+| 9 | 相手 | yokofudori_44kaku, rokusuji_kuraidori, yonyonfu_pacman |  | (なし) | 機械だけ | rokusuji_kuraidori | 一致 | ― | rokusuji_kuraidori, yonyonfu_pacman | 一致 |
+| 10 | 本人 | yokofudori | 署名なし | aigakari | 席と機械が別の id | aigakari | 席と機械が別の id | ― | mukaibisha | 席と機械が別の id |
+| 10 | 相手 | rokusuji_kuraidori, yonyonfu_pacman, yokofudori_33kei |  | (なし) | 機械だけ | rokusuji_kuraidori | 一致 | ― | rokusuji_kuraidori, yokofudori_33kei, yonyonfu_pacman | 一致 |
+| 11 | 本人 | yagura_37kei, douke_yagura, onikoroshi, migigyoku | 多数の核 | douke_yagura, migigyoku, yagura_37kei | 一致 | onikoroshi | 一致 | ― | migigyoku, onikoroshi | 一致 |
+| 11 | 相手 | yonenaga_kyusen_yagura, rokusuji_kuraidori, yonyonfu_pacman, sansan_kaku_senpo, yokofudori_33kaku, shikenbisha_opponent |  | rokusuji_kuraidori, sansan_kaku_senpo, shikenbisha_opponent, yonenaga_kyusen_yagura, yonyonfu_pacman | 一致 | yonenaga_kyusen_yagura | 一致 | yonenaga_kyusen_yagura | direct_mukaibisha, mukaibisha_opponent, rokusuji_kuraidori, yokofudori_44kaku, yonenaga_kyusen_yagura, yonyonfu_pacman | 一致 |
+| 12 | 本人 | yagura_37kei, douke_yagura, onikoroshi, kamereon_senpo, kakugawari_koshikakegin, migigyoku, koshikakegin | 多数の核 | douke_yagura, migigyoku, yagura_37kei | 一致 | kakugawari_koshikakegin | 一致 | ― | kamereon_senpo, koshikakegin, migigyoku, onikoroshi, youryuu_shikenbisha | 一致 |
+| 12 | 相手 | yonenaga_kyusen_yagura, rokusuji_kuraidori, yonyonfu_pacman, sansan_kaku_senpo, yokofudori_33kaku, shikenbisha_opponent |  | rokusuji_kuraidori, sansan_kaku_senpo, shikenbisha_opponent, yonenaga_kyusen_yagura, yonyonfu_pacman | 一致 | yonenaga_kyusen_yagura | 一致 | yonenaga_kyusen_yagura | rokusuji_kuraidori, yonenaga_kyusen_yagura, yonyonfu_pacman | 一致 |
+| 13 | 本人 | ninja_gin, yagura_37gin, wakisystem, kusarigamagin, migi_shikenbisha | それ以外 | yagura_37gin, yagura_bogin | 一致 | aigakari | 席と機械が別の id | ― | kusarigamagin, migi_shikenbisha, ponpon_kei, sujichigai_kaku, wakisystem, yagura_37gin, yagura_bogin | 一致 |
+| 13 | 相手 | akutsu_kyusen_yagura, sansan_kaku_senpo, yokofudori_33kaku, yokofudori_33kei, yokofudori_44kaku |  | sansan_kaku_senpo | 一致 | sansan_kaku_senpo | 一致 | sansan_kaku_senpo | yokofudori_33kei, yokofudori_44kaku | 一致 |
+| 14 | 本人 | yagura_37kei, douke_yagura, onikoroshi, migigyoku | 多数の核 | douke_yagura, migigyoku, yagura_37kei | 一致 | onikoroshi | 一致 | ― | migigyoku, onikoroshi, ponpon_kei | 一致 |
+| 14 | 相手 | yonenaga_kyusen_yagura, sansan_kaku_senpo, yokofudori_33kaku, rokusuji_kuraidori, yonyonfu_pacman, shikenbisha_opponent |  | rokusuji_kuraidori, sansan_kaku_senpo, shikenbisha_opponent, yonenaga_kyusen_yagura, yonyonfu_pacman | 一致 | yonenaga_kyusen_yagura | 一致 | yonenaga_kyusen_yagura | rokusuji_kuraidori, yonenaga_kyusen_yagura, yonyonfu_pacman | 一致 |
+| 15 | 本人 | douke_yagura, gangi_senpou, kamereon_senpo, migigyoku, kakutoufu, yagura_37gin | 多数の核 | douke_yagura, kamereon_senpo, migigyoku, yagura_37kei | 一致 | eishunryu | 席と機械が別の id | ― | douke_yagura, eishunryu, gangi_senpou, kakutoufu, kamereon_senpo, kanikanigin, migigyoku, mukaibisha, yagura_37gin | 一致 |
+| 15 | 相手 | rokusuji_kuraidori, yonyonfu_pacman, sansan_kaku_senpo, yokofudori_33kaku, yokofudori_33kei |  | rokusuji_kuraidori, sansan_kaku_senpo, yonyonfu_pacman | 一致 | rokusuji_kuraidori | 一致 | rokusuji_kuraidori | rokusuji_kuraidori, shikenbisha_opponent, yokofudori_33kei, yonyonfu_pacman | 一致 |
+| 16 | 本人 | onikoroshi, douke_yagura, migigyoku, kakutoufu, koshikakegin, wakisystem | 多数の核 | aigakari, douke_yagura, migigyoku, yagura_37kei | 一致 | aigakari | 席と機械が別の id | ― | douke_yagura, henachoko_kyusen, kakutoufu, koshikakegin, migigyoku, onikoroshi, ponpon_kei | 一致 |
+| 16 | 相手 | yonenaga_kyusen_yagura, rokusuji_kuraidori, yonyonfu_pacman, yokofudori_33kei |  | yonenaga_kyusen_yagura | 一致 | yonenaga_kyusen_yagura | 一致 | yonenaga_kyusen_yagura | rokusuji_kuraidori, shikenbisha_opponent, yokofudori_33kei, yonenaga_kyusen_yagura, yonyonfu_pacman | 一致 |
+| 17 | 本人 | kakugawari_koshikakegin, gosuji_kuraidori_nakabisha, eichanryu_nakabisha, fuusha, nakabisha_self, koshikakegin, migigyoku, yagura_37gin | それ以外 | eichanryu_nakabisha, fuusha, genshi_nakabisha, gosuji_kuraidori_nakabisha, migigyoku, nakabisha_self | 一致 | kanikanigin | 席と機械が別の id | ― | chousoku_37gin, kanikanigin, koshikakegin, migigyoku, yagura_37gin | 一致 |
+| 17 | 相手 | yonenaga_kyusen_yagura, yokofudori_44kaku, rokusuji_kuraidori, yonyonfu_pacman |  | yonenaga_kyusen_yagura | 一致 | yonenaga_kyusen_yagura | 一致 | yonenaga_kyusen_yagura | rokusuji_kuraidori, yonenaga_kyusen_yagura, yonyonfu_pacman | 一致 |
+| 18 | 本人 | kakutoufu, koshikakegin, yagura_37gin | 署名なし | aigakari, koshikakegin | 一致 | aigakari | 席と機械が別の id | ― | douke_yagura, kakutoufu, koshikakegin, onikoroshi, yagura_37gin | 一致 |
+| 18 | 相手 | ai_yokofudori, yokofudori_85hi, yokofudori_33kei |  | ai_yokofudori, yokofudori_85hi | 一致 | ai_yokofudori | 一致 | ai_yokofudori | ittezon_kakugawari, shikenbisha_opponent, yokofudori_33kei | 一致 |
+| 19 | 本人 | kakugawari_koshikakegin, yagura_37kei, douke_yagura, koshikakegin, migigyoku, kakutoufu, yagura_37gin | 多数の核 | douke_yagura, henachoko_kyusen, kakugawari_koshikakegin, kamereon_senpo, koshikakegin, migigyoku, yagura_37kei | 一致 | henachoko_kyusen | 席と機械が別の id | ― | henachoko_kyusen, kakutoufu, kamereon_senpo, koshikakegin, migigyoku, ponpon_kei, sujichigai_kaku, wakisystem, yagura_37gin | 一致 |
+| 19 | 相手 | gokigen_nakabisha, sansan_kaku_senpo, yokofudori_33kaku, rokusuji_kuraidori, yonyonfu_pacman, shikenbisha_opponent, yokofudori_33kei |  | rokusuji_kuraidori, sansan_kaku_senpo, yonyonfu_pacman | 一致 | gokigen_nakabisha | 一致 | ― | rokusuji_kuraidori, shikenbisha_opponent, yokofudori_33kei, yonyonfu_pacman | 一致 |
+| 20 | 本人 | onikoroshi, hidarimino_senpo, hayakurigin, naname_bogin_self, migigyoku, kakutoufu, mukaibisha, koshikakegin | 多数の核 | douke_yagura, koshikakegin, migigyoku, mukaibisha | 一致 | genshi_bogin | 席と機械が別の id | ― | aigakari_bogin, boh_gin_self, genshi_bogin, hayakurigin, kakutoufu, koshikakegin, migigyoku, naname_bogin_self, onikoroshi | 一致 |
+| 20 | 相手 | yonenaga_kyusen_yagura, yokofudori_45kaku, yokofudori_85hi |  | yokofudori_45kaku | 一致 | kakugawari | 席と機械が別の id | ― | yokofudori_44kaku, yokofudori_45kaku | 一致 |
+| 21 | 本人 | yagura_37kei, douke_yagura, migigyoku | 多数の核 | douke_yagura, migigyoku, yagura_37kei | 一致 | migigyoku | 一致 | migigyoku | migigyoku | 一致 |
+| 21 | 相手 | sansan_kaku_senpo, yokofudori_33kaku, shikenbisha_opponent, direct_mukaibisha, mukaibisha_opponent, rokusuji_kuraidori, yonyonfu_pacman |  | direct_mukaibisha, mukaibisha_opponent, rokusuji_kuraidori, sansan_kaku_senpo, shikenbisha_opponent, yonyonfu_pacman | 一致 | direct_mukaibisha | 一致 | direct_mukaibisha | rokusuji_kuraidori, yonyonfu_pacman | 一致 |
+| 22 | 本人 | onikoroshi, douke_yagura, kamereon_senpo, kakugawari_koshikakegin, kakutoufu, koshikakegin, migi_shikenbisha, hikikaku, torisashi | 多数の核 | douke_yagura, koshikakegin, yagura_37kei | 一致 | eishunryu | 席と機械が別の id | ― | douke_yagura, eishunryu, gangi_senpou, henachoko_kyusen, hidarigyoku, kakutoufu, kamereon_senpo, koshikakegin, mukaibisha, onikoroshi | 一致 |
+| 22 | 相手 | rokusuji_kuraidori, yonyonfu_pacman, yokofudori_85hi |  | rokusuji_kuraidori, yonyonfu_pacman | 一致 | onikoroshi | 席と機械が別の id | ― | rokusuji_kuraidori, shikenbisha_opponent, yonyonfu_pacman | 一致 |
+| 23 | 本人 | douke_yagura, hayaishida, sankenbisha | 多数の核 | douke_yagura, yagura_37kei | 一致 | douke_yagura | 一致 | douke_yagura | douke_yagura | 一致 |
+| 23 | 相手 | sansan_kaku_senpo, yokofudori_33kaku, nitemme_32hi, sankenbisha_opponent, rokusuji_kuraidori, yonyonfu_pacman, shikenbisha_opponent, yokofudori_33kei |  | nitemme_32hi, rokusuji_kuraidori, sankenbisha_opponent, sansan_kaku_senpo, shikenbisha_opponent, yonyonfu_pacman | 一致 | nitemme_32hi | 一致 | nitemme_32hi | rokusuji_kuraidori, yokofudori_33kei, yonyonfu_pacman | 一致 |
+| 24 | 本人 | hayakurigin, naname_bogin_self, kakutoufu, migigyoku, yagura_37gin | それ以外 | eishunryu, yagura_senpo | 席と機械が別の id | eishunryu | 席と機械が別の id | ― | chousoku_37gin, eishunryu, hayakurigin, henachoko_kyusen, kakutoufu, kanikanigin, migigyoku, naname_bogin_self, onikoroshi, yagura_37gin, yagura_senpo, yamada_joseki | 一致 |
+| 24 | 相手 | yokofudori_33kei, rokusuji_kuraidori, yonyonfu_pacman |  | (なし) | 機械だけ | onikoroshi | 席と機械が別の id | ― | direct_mukaibisha, mukaibisha_opponent, rokusuji_kuraidori, sansan_kaku_senpo, yokofudori_33kaku, yokofudori_33kei, yonyonfu_pacman | 一致 |
+| 25 | 本人 | yagura_37kei, douke_yagura, yagura_nakabisha, onikoroshi, migigyoku, kakutoufu, koshikakegin, yagura_37gin, wakisystem | 多数の核 | douke_yagura, eishunryu, kakutoufu, migigyoku, yagura_37kei | 一致 | eishunryu | 席と機械が別の id | ― | eishunryu, hikikaku, kakutoufu, kanikanigin, koshikakegin, migigyoku, onikoroshi, torisashi, ureshino, yagura_37gin | 一致 |
+| 25 | 相手 | yonenaga_kyusen_yagura, rokusuji_kuraidori, yonyonfu_pacman, sansan_kaku_senpo, yokofudori_33kaku, shikenbisha_opponent, direct_mukaibisha, mukaibisha_opponent, yokofudori_44kaku |  | rokusuji_kuraidori, sansan_kaku_senpo, shikenbisha_opponent, yonyonfu_pacman | 一致 | direct_mukaibisha | 一致 | ― | rokusuji_kuraidori, yonyonfu_pacman | 一致 |
+
+**数**(50 行 = 25 局 × 本人/相手):
+
+| 判定 | A2 | C2 | B2(保留) |
+|---|---|---|---|
+| 一致(共通の id あり) | 43 | 28 | 47 |
+| 席と機械が別の id | 2 | 20 | 1 |
+| 席だけ | 1(局 9 本人) | 2(局 4 相手・局 9 本人) | 1(局 9 本人) |
+| 機械だけ | 3(局 9 相手・局 10 相手・局 24 相手) | 0 | 0 |
+| どちらも未認識 | 1(局 4 相手) | 0 | 1(局 4 相手) |
+
+- A2 と C2(正式な 2 席)が同じ id を挙げ、機械にもある行: **18 / 50**。A2 と C2 が同じ id を挙げた行: 26 / 50。**2 席の一致は証拠ではない**(再検証の価値の印)。
+- 機械が空(completed 無し)の行は 2(局 4 相手・局 9 本人)。局 4 相手は A2・B2 も「なし」(どちらも未認識)、C2 は side=self の kakutoufu を当てた。局 9 本人は 3 席とも yagura_senpo(A2 は hineribisha・tatefudori・kakugawari も)を挙げ、機械は無し(定義 yagura_senpo は 3 手で、機械の「同時に盤上」では 29 手目の銀→7g の時点で 7f の歩が動いている等で不成立 ― 検査器の判定 B も不成立、A は成立)。
+- C2 の「別の id」20 行の多くは、C2 が 1 行 1 id で「浅い一致」を避けて手順の長い定義(eishunryu・aigakari・kanikanigin 等)を選び、機械は 1〜2 手の定義を complete にしているため。機械と席の**判定の基準の違い**であって、局面の読みの違いではない。
+- 群(案)との関係: 「それ以外」4 局(4・13・17・24)のうち、局 4・17 は A2 が nakabisha_self・gosuji_kuraidori_nakabisha・eichanryu_nakabisha を機械と同じく完全にした(一致)。局 13 は A2 が yagura_37gin・yagura_bogin、機械は kusarigamagin・migi_shikenbisha・ninja_gin・wakisystem・yagura_37gin(一致は yagura_37gin のみ)。局 24 は A2 が eishunryu・yagura_senpo、機械は hayakurigin・naname_bogin_self 等で**別の id**。署名なし 3 局(9・10・18)は、局 9 本人が席だけ、局 10 本人が別の id(A2 aigakari vs 機械 yokofudori)。**群(案)を席の読みで裏づけたとは言えない**。
+
+### 6.4 「定義の側で何が足りないか」― 3 席分を 1 本に(名前なし・条件の形)
+
+[EXPERIMENT_LLM_DISCOVERY_25GAMES_EXP2_DEF_GAPS.md](EXPERIMENT_LLM_DISCOVERY_25GAMES_EXP2_DEF_GAPS.md)(G1〜G17、席の記号つき、実例つき)。3 席が独立に言ったのは G1(1 手 pattern の重なり)・G2(手数の窓が無い)。A2 だけが G4(取る手で一致)・G6(経由と停止の区別)・G7(前提の駒の位置)・G9〜G12・G15・G16 を実例つきで挙げた。**G1〜G4 は機械の判定にもそのまま当てはまる**(機械も同じ条件で completed にしている)。「定義に無い名前の候補」: A2・B2 は 50 行すべて名前なし、C2 は 50 行すべてに 5 種の名前(角換わり・矢倉・相掛かり・横歩取り・ゴキゲン中飛車)。分類・比較には使っていない。
+
+### 6.5 実験席の読み(結論ではない。指示書 §13.4 の 2・3 への入力)
+
+- 「棋譜の流れから戦型を認識できるか」への答え: **現行の 114 定義では、席も機械も「完全一致」を 1 局に多数出し、id を 1 つに絞れない**(A2 は 1 行あたり最大 7 id を完全、機械は最大 9)。原因は定義の側(G1〜G5)で、席の読みの弱さではない。席 A2 は 180 度回転・手数・USI の引用をすべて正しく行い(384/384)、機械と同じ判定でも 134/160 が成立した。
+- 席が機械より多く見たもの: 「取る手での一致」「経由と停止」「角交換の経路」「飛先の歩交換の戻り」「本人=後手 9 局で繰り返す右側の順」「相手側の定義の薄さ」(G4・G6・G9〜G12)。これらは**定義を 3 手以上の流れへ深める条件の候補**として知識レーンへ(§13.4 の 2)。
+- 席が機械より弱かったもの: 「同時に盤上」の条件を席は使わない(A2 の 25 件、C2 の 18 件、B2 の 38 件が判定 A のみ)。USI から駒の種類を取り違える(B2 28 件)。
+- 顧客の関心(普段指さない戦型)への含意: 群(案)の 4 局のうち 2 局(4・17)は席と機械が同じ「中飛車系(下書き)」の id で一致、2 局(13・24)は別の id。**戦型別の再集計(§13.4 の 3)は、定義を深めた後の再走査を待つ**。顧客の文には出さない(§13.5)。
+
