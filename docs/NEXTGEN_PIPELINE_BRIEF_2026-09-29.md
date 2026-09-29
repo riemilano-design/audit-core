@@ -65,6 +65,8 @@ packet                      request
 
 6. **packet の全部の値に provenance(出どころ)を持たせる。** 数値: `source: {type: engine, engine_version, pipeline_version, generated_at}`。局面: `source: {game_id, ply, sfen}`。集計: `derived_from: [game_id…]`。最終冊子の数から packet まで戻れることが、「LLM が事実を作った・途中の編集で数字が変わった」を追跡できる形の実体。
 
+   **読み替え(2026-09-30、司令塔。計画 `PLAN_OBSERVATION_PACKET_2026-09-30.md` §4・§10)**: 値ごとに埋め込むと provenance だけで約 3.6 MB になるので、**参照方式**にする ― 行が `src` の符号を持ち、`provenance.sources` が engine_version・pipeline_version・材料の path と sha256・generated_at を持つ。行の中で出どころが違う数値だけ `src_<欄名>`。集計の行は `derived_from` を必ず持つ。遡れることは失われない。加えて `population` は機械が読める 3 欄(`from`・`where`・`unit`)にし、集計の値を facts から数え直せる形にする。packet に実名は入れない(`customer_ref` の符号だけ)。
+
 ## 3. 今作るもの 5 つ(基本版。上位版はこの後)
 
 | # | 作るもの | いま在るもの | 担当(案) |
