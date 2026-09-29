@@ -292,3 +292,56 @@
 - 席が機械より弱かったもの: 「同時に盤上」の条件を席は使わない(A2 の 25 件、C2 の 18 件、B2 の 38 件が判定 A のみ)。USI から駒の種類を取り違える(B2 28 件)。
 - 顧客の関心(普段指さない戦型)への含意: 群(案)の 4 局のうち 2 局(4・17)は席と機械が同じ「中飛車系(下書き)」の id で一致、2 局(13・24)は別の id。**戦型別の再集計(§13.4 の 3)は、定義を深めた後の再走査を待つ**。顧客の文には出さない(§13.5)。
 
+
+## 7. 3 席 LLM API ― 束 R1(render: packet + request → `seat_input.md`)の実装と実測(2026-09-30)
+
+計画 [STEP_LLM_SEATS_R1_RENDER](STEP_LLM_SEATS_R1_RENDER_2026-09-30.md)(f2023c5、司令塔 GO)。上位 [PLAN_LLM_SEATS_API](PLAN_LLM_SEATS_API_2026-09-30.md)。**LLM は呼んでいない**(鍵は無い)。冊子・`deliver.ts`・packet を作る道具・schema・指示文には触っていない。
+
+### 7.1 作ったもの
+
+| 物 | 場所 | 中身 |
+|---|---|---|
+| lib | `scripts/playtest/lib/seatInput.ts` | `renderSeatInput`(抽出だけ。値は `JSON.stringify` の写し)、`numberInclusionProblems`(本文の data 行の数値トークンの多重集合 ⊆ packet + request の多重集合)、`dataLinesOf`(ファイルから data 行を抜く口)、`identifierProblems`(全部の文字列の値を歩き `@`・URL・絶対パス・`~`・禁止の語で止める。語はメッセージに出さない)、`INSTRUCTION_V1_SHA256`(3b09bec2…) |
+| 試験 | `scripts/playtest/lib/seatInput.test.ts` | 24 本。最小の packet は隣の束(`observationPacket.test.ts`)と同じ形で、契約を通ることを先に見る |
+| CLI | `scripts/playtest/seatInput.ts` | `--packet --request --instruction --run-id --out-dir [--forbid-file] [--instruction-sha]`。書いた後、ファイルから読み直して数の包含をもう一度(別の口)。止まれば書かず終了コード 1 |
+| request | `scripts/playtest/out/c5/packet/observation-request.json`(gitignore) | 司令塔の指示どおり、記録に在る本人の言葉(人間が中継)を `customerQuestions[0].text` にそのまま、`via: relayed`、note に「人間が中継した本人の言葉。本人が書いた文字列そのものではない」。本人には聞いていない |
+
+**計画からの変更**: 置き場は `scripts/playtest/llmSeats/` でなくリポジトリの慣例(lib / 隣の試験 / CLI)。`facts.moves` は局ごと 1 行(司令塔の指示。初回の実行で席が gameId + ply で手を引けるかを測ってから 1 手 1 行に切り替えるかを決める)。`lastKey` は先頭 60 字で切る(問いの全文が入っていたため)。「固定文に数字を含めない」の規則は成り立たなかった(欄名 `top1Side`・「第 1 候補」に数字が入る)ので、**固定文は data 行ではない(検査から除く)**に改め、試験は固定文の全行が data 行から除かれることを見る。
+
+### 7.2 実装中に検査が捕まえたもの(直した)
+
+- 持ち時間 180 を 1 行目と request の節の 2 か所に写していた → 数の包含が「180 が本文に 3 回、packet + request には 2 回」で赤。request の節は note だけにした。**同じ値を 2 か所に写すと写しではなくなる**(検査が設計どおりに働いた実例)。
+- ファイルから読み直す口が「省いたもの」の固定文(`§0.3`・`v0.1` を含む)を data 行と数えていた → render の内側の検査(`e.data`)と食い違う。固定文の集合に `OMITTED`・`NOT_INCLUDED` を足して 2 つの口を同じ集合にした。
+- 決定性の試験で runId の先頭 8 桁が同じ 2 つを比べていた(試験側の誤り)。
+
+### 7.3 5 人目の 25 局での実測(packet は束 C の CLI で scratchpad に生成。packetId `22aee8fe696d0262` = 束 C の記録と一致。**実物は scratchpad、コミットしない**)
+
+| 数 | 実測 |
+|---|---|
+| `seat_input.md` | **223,201 バイト・210,476 字・概算 70,159 トークン(chars/3。count-tokens は鍵が無いので未測)**。計画の見込み 300〜350 KB より小さい(表の行に組むと JSON の鍵名が消えるため) |
+| sha256 | `93e45565c83fba73c4ad7949638a8028fa46cc6925fc4e89a927ce9cf833ad51`(runId `r1calib20260930a`) |
+| 節と行数 | A 1 / 0.3 5 / 1 25 / 2 26 / 3 25 / 4 155 / 5 404 / 6 25 / 6.1 114 / 7 1242(局ごと 25 行)/ 8 1033 |
+| 本文の数値トークン | 31,036 |
+| 所要 | 1 秒未満 |
+
+**校正(予測は計画 §4 に先に書いた)**: 1 数の包含 差 0(render の中とファイルからの 2 つの口)/ 2 行数 = packet の配列の長さ、全節一致 / 3 集計 26 行の `| aggregates.<id> | 名前 | 値 |` が §2 にそのまま 26/26 / 4 実名 0(`patient_report_data.person`・`opening_recognition.customer` の 3 通りの表記で照合。語は書かない)・`@` 0・`/Users` 0 / 5 同じ入力 2 回でバイト一致、runId を変えると差は末尾の 1 行だけ。**5 つとも予測どおり。**
+
+**変異(予測は計画 §4)**:
+
+| 変異 | 予測 | 実測 |
+|---|---|---|
+| M1 packet の `aggregates[0].numerator` 65→66 | 封で止まる・校正 3 も赤 | 止まる(`packetId が中身と合わない`、書かない)。校正 3 を当てると 25/26(`sideMatch.attack` だけ赤)。**両方赤** |
+| M2 `seat_input.md` の −715 を −716 に | ファイルの口が 1 件挙げる | `数「-716」が本文に 1 回、packet + request には 0 回` の 1 件 |
+| M3 request の `timeLimitSec` 600 | 止まる | `範囲: request の持ち時間が 600 秒(packet の局は 180 秒)` |
+| M4 問いの文に `x@y` | 止まる(欄の型) | `request.customerQuestions[0].text にメールの記号を含む` |
+| M5 指示文の 1 バイト | 止まる(sha) | `指示文の sha256 が固定値と違う` |
+| M6 `provenance.thresholds` を `[]` | schema と render の両方で止まる | schema の `minItems` で止まる。**render 側の同じ検査には到達しない**(schema が先に走るので、内側の守りは生きていない = 予測の「両方」は半分外れ。害は無い。記録) |
+
+### 7.4 門
+
+- `npx vitest run --root scripts/playtest lib/seatInput.test.ts` 24/24。全体 102 files / **1955 passed**。
+- `npm run typecheck:scripts` 赤 **11** = 既知の 10(`out/` 配下、P-84)+ **1 は他レーンの未コミット差分**(`scripts/playtest/observationPacket.ts` 107 行。作業ツリーに `observationAggregates*.ts`・`observationPacket.ts`・`dump_booklet_numbers.py` の差分があり、実験席は触っていない・コミットしない)。seatInput 由来の赤 0。
+- 独立監査(step-auditor)1 回目: **REVISE 1 点**。監査が自分で render を回し直し(バイト数・行数・集計 26/26・決定性を独立に再現)、変異 3 本(pv を漏らす・`@` の検査行を消す・配列の再帰を消す)で試験が赤くなることを確かめたうえで、**`dataLinesOf`(ファイルから読み直す口)が `# (A)` から後ろだけを切り出していて 1 行目(符号・持ち時間・局数・線の組の値)が検査から落ちている**ことを実物で示した(1 行目の 180 を 999999 にしても緑)。線の組の値は本文で 1 行目にしか出ないので、読み直しの口はそれを一度も packet と突き合わせていなかった。render の内側の検査(`e.data`)とは食い違い。**私の試験・変異はどれも 1 行目を狙っていなかった**(校正の道具の穴は、その道具で作った緑からは見えない)。
+- **直し**: `dataLinesOf` が 1 行目を含むようにし、試験を 1 本追加(1 行目の 180→999999・300→301 で読み直しの口が 2 件挙げる)→ 25/25。実物で校正 1(差 0)・校正 5(バイト一致、sha 変わらず `93e45565…`)を回し直し、変異 M7(実物の 1 行目 180→999999)を追加 → `数「999999」が本文に 1 回、packet + request には 0 回` で赤。M2 も引き続き赤。
+- 監査の付記(自己申告): 監査中 `git add --intent-to-add` を一時使用し `git reset` で戻した、変異はバックアップから復元し差分 0。
+- 独立監査 2 回目: **GO**。監査が直しの部分だけを手で外して新設の試験が赤くなること(ダミーでないこと)を確かめ、実物で 1 行目の 999999 が検出されること、note の行・線の組の id 行・inputs の path 行が読み直しの口に含まれること、全体 1957 本緑・typecheck の赤は既知の 10 だけ(監査の手元では他レーンの差分が無い状態)を独立に確認。GO の対象は lib・試験・CLI・LOG・計画で、他レーンの未コミット差分は含まない。
