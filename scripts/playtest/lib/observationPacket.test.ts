@@ -5,10 +5,14 @@
 // 【器だけを見る】facts・aggregates の中身を材料から組むのは束 B・C。ここは契約の形と封の符号だけ。
 import { readFileSync, readdirSync } from "node:fs";
 import { describe, expect, it } from "vitest";
+import { traceProblems } from "./observationProvenance.js";
 import {
   OBSERVATION_PACKET_CONTRACT,
   aggregateFormProblems,
+  commonTimeLimitSec,
   observationPacketProblems,
+  requestAgreementProblems,
+  timeLimitProblems,
   OBSERVATION_PACKET_SCHEMA_VERSION,
   OBSERVATION_REQUEST_CONTRACT,
   canonicalJson,
@@ -66,6 +70,8 @@ function minimalAggregates() {
       population: { from: "branches", where: [{ field: "top1Side", op: "==", value: "attack" }], unit: "positions" },
       derivedFrom: ["g01"],
       src: "e1",
+      recountable: true,
+      timeDependent: false,
     },
     {
       id: "branches.total",
@@ -75,6 +81,8 @@ function minimalAggregates() {
       population: { from: "branches", where: [], unit: "positions" },
       derivedFrom: ["g01"],
       src: "e1",
+      recountable: true,
+      timeDependent: false,
     },
   ];
 }
@@ -93,12 +101,14 @@ function minimalPacket() {
       pipelineVersion: "0000000",
       generatedAt: "2026-09-30T00:00:00Z",
       sources: [
-        { id: "e1", type: "engine", engineVersion: "(仮)", nodesLimit: 2000, multipv: 5, generatedAt: "2026-09-30T00:00:00Z" },
-        { id: "e2", type: "engine", engineVersion: "(仮)", nodesLimit: 10000, multipv: 5 },
-        { id: "m1", type: "material", path: "scripts/playtest/out/c5/pipe-3min/report/patient_report_data.json", sha256: "a".repeat(64), kind: "patient-report-data", gitHead: "0000000" },
-        { id: "r1", type: "recognition", definitionsDirs: ["data/openings"], reviewStatus: "draft" },
+        // **出どころは読んだ材料を名指しする**(束 C。集計の src から材料の sha256 まで辿れるようにするため)
+        { id: "e1", type: "engine", engineVersion: "(仮)", nodesLimit: 2000, multipv: 5, generatedAt: "2026-09-30T00:00:00Z", inputPaths: ["scripts/playtest/out/c5/pipe-3min/report/patient_report_data.json"] },
+        { id: "e2", type: "engine", engineVersion: "(仮)", nodesLimit: 10000, multipv: 5, inputPaths: ["scripts/playtest/out/c5/pipe-3min/report/patient_report_data.json"] },
+        { id: "m1", type: "material", kind: "patient-report-data", gitHead: "0000000", inputPaths: ["scripts/playtest/out/c5/pipe-3min/report/patient_report_data.json"] },
+        { id: "r1", type: "recognition", definitionsDirs: ["data/openings"], reviewStatus: "draft", inputPaths: ["scripts/playtest/out/c5/pipe-3min/report/patient_report_data.json"] },
       ],
       inputs: [{ path: "scripts/playtest/out/c5/pipe-3min/report/patient_report_data.json", sha256: "a".repeat(64), bytes: 104857 }],
+      thresholds: [{ id: "ahead_cp", value: 300, unit: "centipawns", from: "scripts/playtest/report-pdf/exit_groups.py AHEAD_CP" }],
     },
   };
 }
@@ -185,10 +195,14 @@ describe("Observation Packet v0.1 の契約", () => {
     expect(validateObservationPacket(packet).join("\n")).toContain("attackScore");
   });
 
-  it("a10 derivedFrom が空だと落ちる(集計は局の列を必ず持つ ― 司令塔の条件 1)", () => {
+  it("a10 derivedFrom が空でも schema は通る ― 数が 0 でないのに空なら追跡性が言う(束 C で規則を移した)", () => {
+    // **束 A では schema が minItems 1 で落としていた。**しかし実物には「0 件の群」が在りうる
+    // (局が 1 つも無い群。合成でも 0 の行が出た)。0 件の集合に局は無いので、
+    // **schema で縛ると 0 の行を書けなくなる** ― 規則を「数が 0 でないのに空なら落ちる」に移した(追跡性の側)。
     const packet = minimalPacket();
     packet.aggregates[0]!.derivedFrom = [];
-    expect(validateObservationPacket(packet).join("\n")).toContain("derivedFrom");
+    expect(validateObservationPacket(packet)).toEqual([]);
+    expect(traceProblems(packet, { repoRoot: "/(合成)", readBytes: () => Buffer.alloc(1) }).join("\n")).toContain("derivedFrom が無い");
   });
 
   it("a11 src を落とすと落ちる(provenance の参照が切れる)", () => {
@@ -222,6 +236,36 @@ describe("Observation Packet v0.1 の契約", () => {
     const packet = minimalPacket() as unknown as Record<string, unknown>;
     packet.customerQuestions = [{ id: "q1", text: "…" }];
     expect(validateObservationPacket(packet).join("\n")).toContain("customerQuestions");
+  });
+});
+
+describe("範囲と持ち時間(P-3・R-1。設計セッションの提案 → 束 C で受けた)", () => {
+  it("a16 持ち時間が局ごとに違う・欠けていれば言う(比べられない数の寄せ集めにしない)", () => {
+    const facts = { games: [{ gameId: "g01", timeLimitSec: 180 }, { gameId: "g02", timeLimitSec: 180 }] };
+    expect(timeLimitProblems(facts)).toEqual([]);
+    expect(commonTimeLimitSec(facts)).toBe(180);
+    const mixed = { games: [{ gameId: "g01", timeLimitSec: 180 }, { gameId: "g02", timeLimitSec: 600 }] };
+    expect(timeLimitProblems(mixed).join("\n")).toContain("局によって違う");
+    expect(commonTimeLimitSec(mixed)).toBeUndefined();
+    const missing = { games: [{ gameId: "g01", timeLimitSec: 180 }, { gameId: "g02" }] };
+    expect(timeLimitProblems(missing).join("\n")).toContain("1 局に持ち時間が無い");
+  });
+
+  it("a17 request の範囲と packet が食い違えば言う(向きは一方通行のまま、突き合わせは外でやる)", () => {
+    const packet = { customerRef: "c5", facts: { games: [{ gameId: "g01", timeLimitSec: 180 }, { gameId: "g02", timeLimitSec: 180 }] } };
+    const request = { customerRef: "c5", requestedScope: { games: 2, timeLimitSec: 180 } };
+    expect(requestAgreementProblems(packet, request)).toEqual([]);
+    expect(requestAgreementProblems(packet, { ...request, requestedScope: { games: 3, timeLimitSec: 180 } }).join("\n")).toContain("request の局数が 3");
+    expect(requestAgreementProblems(packet, { ...request, requestedScope: { games: 2, timeLimitSec: 600 } }).join("\n")).toContain("request の持ち時間が 600");
+    expect(requestAgreementProblems(packet, { ...request, customerRef: "c4" }).join("\n")).toContain("顧客の符号が違う");
+    expect(requestAgreementProblems(packet, {}).join("\n")).toContain("requestedScope が無い");
+  });
+
+  it("a18 request は持ち時間を必ず持つ(R-1。無いと突き合わせができない)", () => {
+    const request = { contract: "observation-request", schemaVersion: "0.1", customerRef: "c5", customerQuestions: [], requestedScope: { games: 25, timeLimitSec: 180 } };
+    expect(validateObservationRequest(request)).toEqual([]);
+    const withoutLimit = { ...request, requestedScope: { games: 25 } };
+    expect(validateObservationRequest(withoutLimit).join("\n")).toContain("timeLimitSec");
   });
 });
 

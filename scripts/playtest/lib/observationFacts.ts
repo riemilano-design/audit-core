@@ -12,6 +12,7 @@
 //   ここが要るのは「動かした駒は何か」だけなので、**同じ 2 行の引き当て**(打つ手は USI の 1 文字目、
 //   盤の手は指す前の局面の元の升)を持つ。**語彙は写さずに import する。**
 import { parseSquareName } from "shogiops/util";
+import { READ_MOVE_MARK_KEYS } from "./read.js";
 import { parsePosition } from "../../../apps/server/src/rules/sfenPosition.js";
 import { STANDARD_ROLES, type StandardRole } from "./moveFacts.js";
 
@@ -25,6 +26,57 @@ const DROP_ROLE: Record<string, StandardRole> = {
 };
 
 export type MoveRole = { readonly piece: StandardRole; readonly drop: boolean };
+
+// ==================== 評価の区分と崩れの印(束 C。**既存の規則の写し**) ====================
+//
+// 【新しい判定ではない】顧客に出ている「数え方」の節が既に「+300 以上を優勢、−300 以下を劣勢、
+//   その間を互角」「一度でも +300 以上になった局」と書いており、道具の側は
+//   `report-pdf/exit_groups.py` の `AHEAD_CP` / `band_of` / `collapses_of` / `is_ahead` が持っている。
+//   **ここはその写し**で、写しが合っていることを試験が python の定数と突き合わせる(P-1 の「確かめた写し」)。
+// 【なぜ facts に入れるか】この 2 つが facts に無いと、冊子の「優勢になった局 18 / うち負け 6」と
+//   「群ごとの崩れ 56 / 18 / 5」が**事実の行まで辿れない**(人間の指示の試験 D が閉じない)。
+//   材料の `scores` は本人の手と 1 対 1(実測 1242 / 1242)なので、**手の行に載せられる。**
+// 【校正】組んだ数は毎回、材料が既に持っている合計(`findings` の `fell` = 79・
+//   `aheadGames` = 18・`aheadLossGames` = 6)と突き合わせる ― 合わなければ写しがずれたということ。
+export const AHEAD_CP = 300;
+
+/** 評価の区分(2 = 優勢・1 = 互角・0 = 劣勢・null = 値が無い)。`exit_groups.band_of` の写し */
+export function bandOf(value: number | null | undefined): number | null {
+  if (value === null || value === undefined) return null;
+  if (value >= AHEAD_CP) return 2;
+  if (value <= -AHEAD_CP) return 0;
+  return 1;
+}
+
+/**
+ * 崩れの印。`scores` の**隣り合う組**で区分が下がった手の**添字**(下がった後の手)を返す。
+ * `exit_groups.collapses_of` の写し(あちらは回数だけ、ここは手の位置も要る)。
+ */
+export function collapseMarkIndexes(scores: readonly (number | null)[]): Set<number> {
+  const marks = new Set<number>();
+  for (let index = 1; index < scores.length; index += 1) {
+    const before = bandOf(scores[index - 1]);
+    const after = bandOf(scores[index]);
+    if ((before === 1 || before === 2) && after !== null && after < before) marks.add(index);
+  }
+  return marks;
+}
+
+/**
+ * 第 1 候補と実戦の**側が逆**か。`check_answer.OPPOSITE_SIDE_PAIRS`(= `lib/timeCause.ts` の `isOppositeSide`)の写し。
+ * **「両方」「どちらでもない」は逆になりえない**(表に無い組は false)。
+ * 写しが効いていることは、`==` だけで書いた 2 行(attackToDefense・defenseToAttack)の分子の和と
+ * この印で数えた行が一致するかで確かめる(別の仕組みで同じ数に着く ― 集計側の検査)。
+ */
+export function isOppositeSide(top1Side: unknown, actualSide: unknown): boolean {
+  return (top1Side === "attack" && actualSide === "defense") || (top1Side === "defense" && actualSide === "attack");
+}
+
+/** その局で一度でも優勢(閾値以上)になったか。`exit_groups.is_ahead` の写し */
+export function aheadAtAnyPointOf(scores: readonly (number | null)[]): boolean {
+  return scores.some((value) => value !== null && value >= AHEAD_CP);
+}
+
 
 /**
  * その手が動かした(打った)駒の駒種。`sfenBefore` は**指す前**の局面。
@@ -75,7 +127,25 @@ export type PatientEvent = {
   readonly before?: number | null;
   readonly after?: number | null;
 };
-export type PatientData = { readonly games: readonly PatientGame[]; readonly events?: readonly PatientEvent[] };
+/** 材料が既に持っている合計(`findings`)。**束 C の校正の相手**にする ― 私が組んだ数がここと違えば止める */
+export type PatientFinding = { readonly kind?: string; readonly numbers?: Record<string, number> };
+/**
+ * 時間の組(`patient_report_data.time`)。**束 C で 2 行だけこれを写す** ―
+ * 「直前の手が 10 秒以上で、この手は 4 秒以内」と「0〜1 秒の手」の分母は、
+ * **材料が持っている秒が中盤の手だけ**なので facts から数え直せない(実測 161 / 1242)。
+ * 写した行は `recountable: false` と理由を付けて packet に出す(人間の了承 2026-09-30)。
+ */
+export type PatientTimeBucket = { readonly n: number; readonly collapsed: number };
+export type PatientTimeData = {
+  readonly afterLongThink?: { readonly quickAfterLongThink?: PatientTimeBucket } | null;
+  readonly bySpent?: readonly PatientTimeBucket[] | null;
+};
+export type PatientData = {
+  readonly games: readonly PatientGame[];
+  readonly events?: readonly PatientEvent[];
+  readonly findings?: readonly PatientFinding[];
+  readonly time?: PatientTimeData | null;
+};
 export type SfensData = Record<string, { readonly sfens: readonly string[]; readonly moves: readonly string[]; readonly side?: string }>;
 export type TimeCauseGame = Record<string, unknown> & { readonly kifuId: string };
 export type TimeCauseData = { readonly games: readonly TimeCauseGame[]; readonly groups?: readonly Record<string, unknown>[] };
@@ -139,6 +209,8 @@ export function gameRowsOf(materials: FactsMaterials): Record<string, unknown>[]
       src: materials.sources.material,
     };
     if (game.ending) row.ending = game.ending;
+    // **一度でも優勢になったか**(束 C。閾値は provenance.thresholds の ahead_cp に写して packet に出す)
+    row.aheadAtAnyPoint = aheadAtAnyPointOf(game.scores ?? []);
     const limit = timeLimitByGame.get(game.id) ?? materials.timeLimitSec;
     if (typeof limit === "number") row.timeLimitSec = limit;
     const record = materials.sfens[game.id];
@@ -159,10 +231,18 @@ export function moveRowsOf(materials: FactsMaterials): Record<string, unknown>[]
   for (const game of materials.patient.games) {
     const record = materials.sfens[game.id];
     if (record === undefined) throw new ObservationFactsError(`${game.id} の局面が材料に無い(sfens.json)`);
-    for (const ply of game.plies) {
+    // **評価の列は本人の手と 1 対 1**(実測 1242 / 1242。材料の `scores`)。**添字で対応させる** ―
+    // 手数(`ply`)では引けない(`scores` は本人の手だけの列なので、番号が飛ぶ)
+    const scores = game.scores ?? [];
+    const marks = collapseMarkIndexes(scores);
+    game.plies.forEach((ply, index) => {
       const usi = record.moves[ply];
       const sfenBefore = record.sfens[ply];
       const row: Record<string, unknown> = { gameId: game.id, ply: ply + 1, side: "own", src: materials.sources.material };
+      const score = scores[index];
+      // **材料が null の手には欄を出さない**(実物で 4 件。「0」と「無い」を混ぜない)
+      if (typeof score === "number") row.scoreCp = Math.trunc(score);
+      row.collapsed = marks.has(index);
       if (usi !== undefined) {
         row.usi = usi;
         if (sfenBefore !== undefined) {
@@ -175,7 +255,7 @@ export function moveRowsOf(materials: FactsMaterials): Record<string, unknown>[]
       if (seconds !== undefined) row.spentSec = seconds;
       row.isFork = forks.has(`${game.id}/${ply + 1}`);
       rows.push(row);
-    }
+    });
   }
   return rows;
 }
@@ -232,6 +312,24 @@ export function engineRowsOf(materials: FactsMaterials): Record<string, unknown>
  * 分かれ道。**行の骨は read(404 件)**で、側(`*Side`)は whatif-v2、浅い読みで差が見えた印は direct_answers から足す。
  * **出どころが違う欄には `src*` を置く**(provenance の参照方式。計画 §4)。
  */
+/**
+ * 手の印 → **立っている印の名前の列**。材料は `{drop: false, capture: true, …}` の**真偽の組**で来る(実測)。
+ *
+ * 【ここを間違えていた】束 B は `Array.isArray` で見て**組を配列でないと捨てていた** ―
+ * 404 行すべてで `top1Tags` が packet に入らず、束 C で冊子の「54 局面 / 22 局」が **0** になって初めて分かった。
+ * **行数だけ数えていて、欄の中身を数えていなかった。**(2026-09-30)
+ * 【語彙は写さない】`lib/read.ts` の `READ_MOVE_MARK_KEYS`(型と機械で結んである)を import する。
+ * **表に無い印が立っていたら例外** ― 材料の作りが変わったことを黙って通さない。
+ */
+export function tagListOf(value: unknown, at: string): string[] | undefined {
+  if (Array.isArray(value)) return value.map((tag) => String(tag));
+  if (value === null || typeof value !== "object") return undefined;
+  const record = value as Record<string, unknown>;
+  const unknown = Object.keys(record).filter((key) => record[key] === true && !(READ_MOVE_MARK_KEYS as readonly string[]).includes(key));
+  if (unknown.length > 0) throw new ObservationFactsError(`${at} に表に無い印が立っている: ${unknown.join("・")}`);
+  return READ_MOVE_MARK_KEYS.filter((key) => record[key] === true);
+}
+
 export function branchRowsOf(materials: FactsMaterials): Record<string, unknown>[] {
   const whatif = new Map<string, WhatifPosition>();
   for (const position of materials.whatifPositions) {
@@ -253,8 +351,10 @@ export function branchRowsOf(materials: FactsMaterials): Record<string, unknown>
     };
     if (position.top1Move !== undefined) row.top1Usi = String(position.top1Move);
     if (position.actualMove !== undefined) row.actualUsi = String(position.actualMove);
-    if (Array.isArray(position.top1Tags)) row.top1Tags = position.top1Tags.map((tag) => String(tag));
-    if (Array.isArray(position.actualTags)) row.actualTags = position.actualTags.map((tag) => String(tag));
+    const top1Tags = tagListOf(position.top1Tags, `${gameId}/${displayPly} の top1Tags`);
+    if (top1Tags !== undefined) row.top1Tags = top1Tags;
+    const actualTags = tagListOf(position.actualTags, `${gameId}/${displayPly} の actualTags`);
+    if (actualTags !== undefined) row.actualTags = actualTags;
     if (typeof position.firstVisibleNodes === "number") row.firstVisibleNodes = position.firstVisibleNodes;
     const engine = whatif.get(key);
     if (engine !== undefined) {
@@ -269,6 +369,8 @@ export function branchRowsOf(materials: FactsMaterials): Record<string, unknown>
         }
       }
       if (typeof engine.actualSide === "string") row.actualSide = engine.actualSide;
+      // **側が逆だったか**(束 C。2 組の表の写し。どちらかの側が無い行には印を出さない)
+      if (row.top1Side !== undefined && row.actualSide !== undefined) row.oppositeSide = isOppositeSide(row.top1Side, row.actualSide);
       if (typeof engine.topGapCp === "number") {
         row.topGapCp = Math.trunc(engine.topGapCp);
         row.srcTopGapCp = materials.sources.engine;
@@ -477,6 +579,54 @@ export function granularityProblems(facts: Record<string, unknown>, materials: F
   return problems;
 }
 
+/**
+ * **校正**(束 C)。写した規則から組んだ数を、**材料が既に持っている合計**と突き合わせる。
+ *
+ * 【なぜ要るか】`scoreCp` と `collapsed` は材料の生の値ではなく**規則の写し**なので、
+ * 写しがずれても行は埋まる。ずれを機械で言えるのは、**同じ材料の中に答えがある**からである
+ * (`findings` の `fell` = 崩れの合計・`aheadGames` / `aheadLossGames` = 優勢になった局 / うち負け)。
+ * 既存の `exit_groups.group_rows` も同じ形の番人を持っている(あちらが落ちて 133 ≠ 79 を見つけた)。
+ * 【材料に答えが無いときは黙らない】`findings` が在るのに必要な数が無ければ、**校正できていないと言う。**
+ */
+export function calibrationProblems(facts: Record<string, unknown>, materials: FactsMaterials): string[] {
+  const problems: string[] = [];
+  // (1) 評価の列の長さ = 本人の手の数(添字で対応させているので、ここがずれると `scoreCp` が別の手に付く)
+  for (const game of materials.patient.games) {
+    const scores = game.scores;
+    if (scores === undefined) continue;
+    if (scores.length !== game.plies.length) {
+      problems.push(`校正: ${game.id} の評価の列が ${scores.length}(本人の手は ${game.plies.length}) ― 添字で対応させられない`);
+    }
+  }
+  const findings = materials.patient.findings;
+  if (findings === undefined) return problems;
+  const numberOf = (kind: string, key: string): number | undefined => {
+    const found = findings.find((row) => row.kind === kind);
+    return found?.numbers?.[key];
+  };
+  const moves = (facts.moves ?? []) as { collapsed?: boolean }[];
+  const games = (facts.games ?? []) as { aheadAtAnyPoint?: boolean; result?: string }[];
+
+  // (2) 崩れの印の合計 = 材料の `fell`
+  const marks = moves.filter((move) => move.collapsed === true).length;
+  const fell = numberOf("phase", "fell");
+  if (fell === undefined) problems.push("校正: 材料の findings に崩れの合計(phase.fell)が無い ― 崩れの印を校正できていない");
+  else if (marks !== fell) problems.push(`校正: 崩れの印が ${marks}(材料の合計は ${fell}) ― 評価の区分の写しがずれている`);
+
+  // (3) 優勢になった局 / うち負け = 材料の `aheadGames` / `aheadLossGames`
+  const ahead = games.filter((game) => game.aheadAtAnyPoint === true);
+  const aheadLoss = ahead.filter((game) => game.result === "負け").length;
+  const aheadGames = numberOf("aheadLoss", "aheadGames");
+  const aheadLossGames = numberOf("aheadLoss", "aheadLossGames");
+  if (aheadGames === undefined || aheadLossGames === undefined) {
+    problems.push("校正: 材料の findings に優勢になった局の数(aheadLoss)が無い ― 優勢の印を校正できていない");
+  } else {
+    if (ahead.length !== aheadGames) problems.push(`校正: 優勢になった局が ${ahead.length}(材料は ${aheadGames})`);
+    if (aheadLoss !== aheadLossGames) problems.push(`校正: 優勢になって負けた局が ${aheadLoss}(材料は ${aheadLossGames})`);
+  }
+  return problems;
+}
+
 export function factsProblems(facts: Record<string, unknown>, materials: FactsMaterials): string[] {
-  return [...completenessProblems(facts, materials), ...granularityProblems(facts, materials)];
+  return [...completenessProblems(facts, materials), ...granularityProblems(facts, materials), ...calibrationProblems(facts, materials)];
 }

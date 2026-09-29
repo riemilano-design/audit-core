@@ -32,7 +32,7 @@
     "requestedScope": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["games"],
+      "required": ["games", "timeLimitSec"],
       "properties": {
         "games": { "type": "integer", "minimum": 1, "description": "分析する局数(局)" },
         "timeLimitSec": { "type": "integer", "minimum": 0 },

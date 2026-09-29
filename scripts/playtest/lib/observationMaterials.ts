@@ -53,8 +53,12 @@ function readWithInput(filePath: string, repoRoot: string, inputs: MaterialInput
   return JSON.parse(bytes.toString("utf-8"));
 }
 
-/** フォルダの `*.jsonl` の position 行を、ファイル名の語幹を `kifuId` として付けて並べる */
-function readPositionRows(dirs: readonly string[], repoRoot: string, inputs: MaterialInput[]): Record<string, unknown>[] {
+/**
+ * フォルダの `*.jsonl` の position 行を、ファイル名の語幹を `kifuId` として付けて並べる。
+ * **meta 行も別に集める**(束 C。provenance の出どころに「どのエンジンの設定で作ったか」を入れるため ―
+ * 実物の meta 行は `gitHead`・`values.nodes`・`values.multiPv`・`values.minLossCp` を持つ)。
+ */
+function readPositionRows(dirs: readonly string[], repoRoot: string, inputs: MaterialInput[], metaRows: Record<string, unknown>[]): Record<string, unknown>[] {
   const rows: Record<string, unknown>[] = [];
   for (const dir of dirs) {
     for (const name of readdirSync(dir).sort()) {
@@ -67,6 +71,10 @@ function readPositionRows(dirs: readonly string[], repoRoot: string, inputs: Mat
         const trimmed = line.trim();
         if (trimmed === "") continue;
         const row = JSON.parse(trimmed) as Record<string, unknown>;
+        if (row.kind === "meta") {
+          metaRows.push({ ...row, kifuId });
+          continue;
+        }
         if (row.kind !== "position") continue;
         rows.push({ ...row, kifuId });
       }
@@ -88,18 +96,41 @@ function readDefinitions(dirs: readonly string[], repoRoot: string, inputs: Mate
   return records;
 }
 
-export type ReadMaterialsResult = { readonly materials: FactsMaterials; readonly inputs: readonly MaterialInput[] };
+export type ReadMaterialsResult = {
+  readonly materials: FactsMaterials;
+  readonly inputs: readonly MaterialInput[];
+  /**
+   * 出どころの符号 → その出どころで読んだファイルのパス(束 C)。
+   * **provenance の sources[].inputPaths になる** ― 集計の行の `src` から材料の `sha256` まで
+   * 機械で辿れるようにするため(人間の指示の試験 D)。**読みながら組む**(後から順番で復元しない)。
+   */
+  readonly inputsBySource: Readonly<Record<string, readonly string[]>>;
+  /** jsonl の meta 行(read / whatif-v2)。**provenance の出どころの欄に使う。facts には入れない** */
+  readonly meta: { readonly read: readonly Record<string, unknown>[]; readonly whatif: readonly Record<string, unknown>[] };
+};
 
 export function readFactsMaterials(paths: MaterialPaths, repoRoot: string, sources: FactsSources = DEFAULT_SOURCES): ReadMaterialsResult {
   const inputs: MaterialInput[] = [];
-  const patient = readWithInput(paths.patient, repoRoot, inputs) as PatientData;
-  const sfens = readWithInput(paths.sfens, repoRoot, inputs) as SfensData;
-  const timeCause = readWithInput(paths.timeCause, repoRoot, inputs) as TimeCauseData;
-  const directFile = readWithInput(paths.direct, repoRoot, inputs) as { answers?: DirectAnswer[] };
-  const recognition = readWithInput(paths.recognition, repoRoot, inputs) as RecognitionData;
-  const readPositions = readPositionRows(paths.readDirs, repoRoot, inputs) as unknown as ReadPosition[];
-  const whatifPositions = readPositionRows(paths.whatifDirs, repoRoot, inputs) as unknown as WhatifPosition[];
-  const definitions = readDefinitions(paths.definitionDirs, repoRoot, inputs);
+  const bySource: Record<string, string[]> = {};
+  /** 読んだ分のパスを、その出どころの符号に付ける(読みながら組む) */
+  const under = <T,>(sourceId: string, read: () => T): T => {
+    const before = inputs.length;
+    const value = read();
+    const list = bySource[sourceId] ?? [];
+    for (const input of inputs.slice(before)) list.push(input.path);
+    bySource[sourceId] = list;
+    return value;
+  };
+  const patient = under(sources.material, () => readWithInput(paths.patient, repoRoot, inputs)) as PatientData;
+  const sfens = under(sources.material, () => readWithInput(paths.sfens, repoRoot, inputs)) as SfensData;
+  const timeCause = under(sources.material, () => readWithInput(paths.timeCause, repoRoot, inputs)) as TimeCauseData;
+  const directFile = under(sources.direct, () => readWithInput(paths.direct, repoRoot, inputs)) as { answers?: DirectAnswer[] };
+  const recognition = under(sources.recognition, () => readWithInput(paths.recognition, repoRoot, inputs)) as RecognitionData;
+  const readMeta: Record<string, unknown>[] = [];
+  const whatifMeta: Record<string, unknown>[] = [];
+  const readPositions = under(sources.engineShallow, () => readPositionRows(paths.readDirs, repoRoot, inputs, readMeta)) as unknown as ReadPosition[];
+  const whatifPositions = under(sources.engine, () => readPositionRows(paths.whatifDirs, repoRoot, inputs, whatifMeta)) as unknown as WhatifPosition[];
+  const definitions = under(sources.recognition, () => readDefinitions(paths.definitionDirs, repoRoot, inputs));
   if (!Array.isArray(patient.games) || patient.games.length === 0) throw new ObservationMaterialsError("patient_report_data に games が無い");
   if (!Array.isArray(directFile.answers)) throw new ObservationMaterialsError("direct_answers に answers が無い");
   const materials: FactsMaterials = {
@@ -113,5 +144,5 @@ export function readFactsMaterials(paths: MaterialPaths, repoRoot: string, sourc
     definitions,
     sources,
   };
-  return { materials, inputs };
+  return { materials, inputs, inputsBySource: bySource, meta: { read: readMeta, whatif: whatifMeta } };
 }

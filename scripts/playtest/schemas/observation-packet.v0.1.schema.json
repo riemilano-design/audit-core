@@ -107,6 +107,10 @@
               },
               "src": {
                 "type": "string"
+              },
+              "aheadAtAnyPoint": {
+                "type": "boolean",
+                "description": "その局で一度でも scoreCp が閾値(provenance.thresholds の ahead_cp)以上になったか。既存の exit_groups.is_ahead の写し(新しい判定ではない)"
               }
             }
           }
@@ -199,6 +203,10 @@
               "drop": {
                 "type": "boolean",
                 "description": "持ち駒を打った手か(`userMoveFacts.drop` と同じ意味)。真なら `piece` は USI の 1 文字目から、偽なら元の升から引いた"
+              },
+              "scoreCp": {
+                "type": "integer",
+                "description": "この手の後の評価(材料 patient_report_data の games[].scores の写し。本人の手と 1 対 1 ― 実測で 1242 / 1242)。材料が null の手には欄を出さない"
               }
             }
           }
@@ -374,29 +382,31 @@
               },
               "top1Tags": {
                 "type": "array",
+                "description": "立っている印の名前(材料は真偽の組で持っている。語彙は lib/read.ts の READ_MOVE_MARK_KEYS と試験で突き合わせる)",
                 "items": {
                   "enum": [
-                    "capture",
                     "drop",
-                    "givesCheck",
-                    "sacrifice",
+                    "capture",
                     "retreat",
+                    "declinesPromotion",
+                    "sacrifice",
                     "kingMove",
-                    "declinesPromotion"
+                    "givesCheck"
                   ]
                 }
               },
               "actualTags": {
                 "type": "array",
+                "description": "立っている印の名前(材料は真偽の組で持っている。語彙は lib/read.ts の READ_MOVE_MARK_KEYS と試験で突き合わせる)",
                 "items": {
                   "enum": [
-                    "capture",
                     "drop",
-                    "givesCheck",
-                    "sacrifice",
+                    "capture",
                     "retreat",
+                    "declinesPromotion",
+                    "sacrifice",
                     "kingMove",
-                    "declinesPromotion"
+                    "givesCheck"
                   ]
                 }
               },
@@ -434,6 +444,10 @@
               "srcActualGapCp": {
                 "type": "string",
                 "description": "実戦の手との差の出どころ(direct_answers。whatif-v2 の loss は下限のことがあり数として書けない)"
+              },
+              "oppositeSide": {
+                "type": "boolean",
+                "description": "第 1 候補と実戦の側が逆だったか(check_answer.OPPOSITE_SIDE_PAIRS の写し)。どちらかの側が無い行には出さない"
               }
             }
           }
@@ -653,7 +667,9 @@
           "name",
           "population",
           "derivedFrom",
-          "src"
+          "src",
+          "recountable",
+          "timeDependent"
         ],
         "properties": {
           "id": {
@@ -737,7 +753,15 @@
                         "totalPlyCount",
                         "tags",
                         "top1Tags",
-                        "actualTags"
+                        "actualTags",
+                        "scoreCp",
+                        "aheadAtAnyPoint",
+                        "oppositeSide",
+                        "longThinkForkCount",
+                        "longThinkOppositeCount",
+                        "timeLimitSec",
+                        "drop",
+                        "piece"
                       ]
                     },
                     "op": {
@@ -748,7 +772,8 @@
                         "<=",
                         ">",
                         "<",
-                        "includes"
+                        "includes",
+                        "in"
                       ]
                     },
                     "value": {
@@ -770,11 +795,10 @@
           },
           "derivedFrom": {
             "type": "array",
-            "minItems": 1,
             "items": {
               "type": "string"
             },
-            "description": "この数が出た局の gameId の列(正本 §2.5 の 6)"
+            "description": "この数が出た局の gameId の列(正本 §2.5 の 6)。**数が 0 の行は空でよい**(0 件の集合に局は無い) ― 数が 0 でないのに空なら、追跡性の検査が言う"
           },
           "src": {
             "type": "string"
@@ -782,6 +806,126 @@
           "value": {
             "type": "number",
             "description": "単独の数の行(分数でないもの)"
+          },
+          "numeratorWhere": {
+            "type": "array",
+            "description": "分子の条件(母集団にこれを足した部分集合が分子)。where と同じ形。分数の行だけが持つ",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "field",
+                "op",
+                "value"
+              ],
+              "properties": {
+                "field": {
+                  "enum": [
+                    "side",
+                    "result",
+                    "phase",
+                    "isFork",
+                    "collapsed",
+                    "top1Side",
+                    "actualSide",
+                    "shallowVisible",
+                    "bandBefore",
+                    "bandAfter",
+                    "signatureClass",
+                    "reviewStatus",
+                    "timeUpLoss",
+                    "spentSec",
+                    "topGapCp",
+                    "actualGapCp",
+                    "firstVisibleNodes",
+                    "longThinkCount",
+                    "ownPlyCount",
+                    "totalPlyCount",
+                    "tags",
+                    "top1Tags",
+                    "actualTags",
+                    "scoreCp",
+                    "aheadAtAnyPoint",
+                    "oppositeSide",
+                    "longThinkForkCount",
+                    "longThinkOppositeCount",
+                    "timeLimitSec",
+                    "drop",
+                    "piece"
+                  ]
+                },
+                "op": {
+                  "enum": [
+                    "==",
+                    "!=",
+                    ">=",
+                    "<=",
+                    ">",
+                    "<",
+                    "includes",
+                    "in"
+                  ]
+                },
+                "value": {
+                  "$comment": "型は欄によって違うので縛らない(検証器は空のスキーマを素通しする)"
+                }
+              }
+            }
+          },
+          "sumField": {
+            "enum": [
+              "side",
+              "result",
+              "phase",
+              "isFork",
+              "collapsed",
+              "top1Side",
+              "actualSide",
+              "shallowVisible",
+              "bandBefore",
+              "bandAfter",
+              "signatureClass",
+              "reviewStatus",
+              "timeUpLoss",
+              "spentSec",
+              "topGapCp",
+              "actualGapCp",
+              "firstVisibleNodes",
+              "longThinkCount",
+              "ownPlyCount",
+              "totalPlyCount",
+              "tags",
+              "top1Tags",
+              "actualTags",
+              "scoreCp",
+              "aheadAtAnyPoint",
+              "oppositeSide",
+              "longThinkForkCount",
+              "longThinkOppositeCount",
+              "timeLimitSec",
+              "drop",
+              "piece"
+            ],
+            "description": "行を数えるのではなく、この欄を母集団の全行で足した数(long_think の 3 行がこれ)"
+          },
+          "recountable": {
+            "type": "boolean",
+            "description": "facts からこの数を数え直せるか。false の行は数え直しの対象外にし、理由を recountNote に書く(材料に欄が無い・where に書けない条件がある)"
+          },
+          "recountNote": {
+            "type": "string",
+            "description": "recountable が false のときの理由。where が定義の一部しか書けていない場合もここに書く"
+          },
+          "timeDependent": {
+            "type": "boolean",
+            "description": "時間の欄に依る行か(population・numeratorWhere の欄名と from から機械で決める。手で立てない)"
+          },
+          "srcExtra": {
+            "type": "array",
+            "description": "この行の条件が別の出どころの欄に依るときの、その出どころの符号(例: 群の条件 signatureClass は認識 r1)。src は主たる出どころ",
+            "items": {
+              "type": "string"
+            }
           }
         }
       }
@@ -793,7 +937,8 @@
         "pipelineVersion",
         "generatedAt",
         "sources",
-        "inputs"
+        "inputs",
+        "thresholds"
       ],
       "properties": {
         "pipelineVersion": {
@@ -812,7 +957,8 @@
             "additionalProperties": false,
             "required": [
               "id",
-              "type"
+              "type",
+              "inputPaths"
             ],
             "properties": {
               "id": {
@@ -866,6 +1012,14 @@
               },
               "generatedAt": {
                 "type": "string"
+              },
+              "inputPaths": {
+                "type": "array",
+                "description": "この出どころで読んだ材料のパス(provenance.inputs のパスと同じ文字列)。集計の行の src から材料の sha256 まで機械で辿れるようにするため。inputs のどのパスも、いずれかの出どころが名指しする",
+                "minItems": 1,
+                "items": {
+                  "type": "string"
+                }
               }
             }
           }
@@ -893,6 +1047,44 @@
               "bytes": {
                 "type": "integer",
                 "minimum": 0
+              }
+            }
+          }
+        },
+        "thresholds": {
+          "type": "array",
+          "description": "この packet の数に効いている閾値。**道具の定数の写し**で、写しが合っていることを試験で確かめる(from がその定数の在り処)。packet を読む側が閾値を推測しないため",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "value",
+              "unit",
+              "from"
+            ],
+            "properties": {
+              "id": {
+                "type": "string",
+                "pattern": "^[a-z][a-z0-9_]*$"
+              },
+              "value": {
+                "type": "number"
+              },
+              "unit": {
+                "enum": [
+                  "centipawns",
+                  "seconds",
+                  "moves",
+                  "games",
+                  "positions",
+                  "nodes"
+                ]
+              },
+              "from": {
+                "type": "string",
+                "description": "その値が定義されている場所(リポジトリの根からの相対パス + 定数名)"
               }
             }
           }

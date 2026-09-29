@@ -11,6 +11,7 @@
 import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
 import { validate, type JsonSchema } from "./eventSchema.js";
+import { aggregateAgreementProblems, type AggregateRow } from "./observationAggregates.js";
 
 export const OBSERVATION_PACKET_CONTRACT = "observation-packet" as const;
 export const OBSERVATION_REQUEST_CONTRACT = "observation-request" as const;
@@ -75,14 +76,61 @@ export function aggregateFormProblems(aggregates: unknown): string[] {
 }
 
 /**
- * packet の検査の入口(後の束・検証器はここを呼ぶ)。**schema の形 + 集計の行の形 + 封の符号**を 1 つに束ねる。
- * 空なら通った。
+ * **持ち時間が 25 局で 1 つか**(P-3。設計セッションの提案 → 束 C で受けた)。
+ * 局ごとに違う持ち時間の材料を混ぜると、時間の数(長考・速い手)が**比べられない数の寄せ集め**になる。
+ * 混ざっているなら、それを言う(勝手に代表値を選ばない)。
+ */
+export function timeLimitProblems(facts: unknown): string[] {
+  const games = ((facts as { games?: unknown })?.games ?? []) as { gameId?: unknown; timeLimitSec?: unknown }[];
+  if (!Array.isArray(games) || games.length === 0) return [];
+  const missing = games.filter((game) => typeof game.timeLimitSec !== "number").map((game) => String(game.gameId));
+  const problems: string[] = [];
+  if (missing.length > 0) problems.push(`持ち時間: ${missing.length} 局に持ち時間が無い(例 ${missing.slice(0, 3).join("・")})`);
+  const limits = new Set(games.filter((game) => typeof game.timeLimitSec === "number").map((game) => game.timeLimitSec as number));
+  if (limits.size > 1) problems.push(`持ち時間: 局によって違う(${[...limits].sort((a, b) => a - b).join(" / ")} 秒) ― 時間の数を 1 つの母集団として出せない`);
+  return problems;
+}
+
+/** 25 局に共通の持ち時間(1 つでなければ undefined) */
+export function commonTimeLimitSec(facts: unknown): number | undefined {
+  const games = ((facts as { games?: unknown })?.games ?? []) as { timeLimitSec?: unknown }[];
+  const limits = new Set(games.filter((game) => typeof game.timeLimitSec === "number").map((game) => game.timeLimitSec as number));
+  return limits.size === 1 ? [...limits][0] : undefined;
+}
+
+/**
+ * **packet と request が同じ範囲を指しているか**(R-1・P-3。設計セッションの提案 → 束 C で受けた)。
+ * **packet は request を参照しない**(向きは一方通行)ので、突き合わせはこの外の関数でやる。
+ */
+export function requestAgreementProblems(packet: unknown, request: unknown): string[] {
+  const problems: string[] = [];
+  const facts = (packet as { facts?: unknown })?.facts;
+  const games = ((facts as { games?: unknown })?.games ?? []) as unknown[];
+  const scope = (request as { requestedScope?: { games?: unknown; timeLimitSec?: unknown } })?.requestedScope;
+  if (scope === undefined) return ["範囲: request に requestedScope が無い"];
+  if (scope.games !== games.length) problems.push(`範囲: request の局数が ${String(scope.games)}(packet は ${games.length} 局)`);
+  const limit = commonTimeLimitSec(facts);
+  if (limit === undefined) problems.push("範囲: packet の持ち時間が 1 つに決まらないので request と突き合わせられない");
+  else if (scope.timeLimitSec !== limit) problems.push(`範囲: request の持ち時間が ${String(scope.timeLimitSec)} 秒(packet の局は ${limit} 秒)`);
+  const packetRef = (packet as { customerRef?: unknown })?.customerRef;
+  const requestRef = (request as { customerRef?: unknown })?.customerRef;
+  if (packetRef !== requestRef) problems.push(`範囲: 顧客の符号が違う(packet ${String(packetRef)} / request ${String(requestRef)})`);
+  return problems;
+}
+
+/**
+ * packet の検査の入口(後の束・検証器はここを呼ぶ)。**schema の形 + 集計の行の形 + 集計の筋 + 持ち時間 + 封の符号**を
+ * 1 つに束ねる。空なら通った。
  */
 export function observationPacketProblems(packet: unknown, schema: JsonSchema = loadObservationPacketSchema()): string[] {
   const problems = validateObservationPacket(packet, schema);
   if (packet !== null && typeof packet === "object") {
     const record = packet as { aggregates?: unknown; facts?: unknown; packetId?: unknown };
     problems.push(...aggregateFormProblems(record.aggregates));
+    if (Array.isArray(record.aggregates) && record.facts !== null && typeof record.facts === "object") {
+      problems.push(...aggregateAgreementProblems(record.aggregates as AggregateRow[], record.facts as Record<string, unknown>));
+    }
+    problems.push(...timeLimitProblems(record.facts));
     problems.push(...packetIdProblems(record));
   }
   return problems;

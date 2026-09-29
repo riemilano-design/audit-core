@@ -137,6 +137,15 @@ export interface ReadMoveMarks {
   givesCheck: boolean;
 }
 
+/**
+ * `ReadMoveMarks` の欄の名前を**実行時に使える語彙**にしたもの(2026-09-30。Observation Packet の束 C)。
+ * **写しではなく、型と機械で結んである** ― 下の `_ReadMoveMarkKeysComplete` が、
+ * 欄が増えてこの並びに無いときに**型検査で落ちる**(語彙が 2 か所でずれる道を塞ぐ)。
+ */
+export const READ_MOVE_MARK_KEYS = ["drop", "capture", "retreat", "declinesPromotion", "sacrifice", "kingMove", "givesCheck"] as const;
+type AssertNever<T extends never> = T;
+export type _ReadMoveMarkKeysComplete = AssertNever<Exclude<keyof ReadMoveMarks, (typeof READ_MOVE_MARK_KEYS)[number]>>;
+
 /** `sfen` の局面(本人の手番)で `moveUsi` を指したときの印(計画「作るもの」2.)。合法でない手・読めない手は例外。 */
 export function moveMarksOf(sfen: string, moveUsi: string, values: ReadValues = READ_VALUES): ReadMoveMarks {
   const ctx = moveMaterialContextOf(sfen, moveUsi, values);
