@@ -28,20 +28,21 @@ SRC = read_text(os.path.join(HERE, "exit_candidates.py"))
 
 
 def tag_words():
-    """`render_direct.py` の `TAG_JP`・`SIDE_JP` を **AST で引く**(写さない)。
+    """印の語は `render_direct.py` の `TAG_JP` を **AST で引く**(写さない)。側の語は `check_answer.SIDE_JP`。
 
     `render_direct.py` は冒頭で `sys.argv` を読んで走るので import できない。
-    **語の正本はあちら**なので、あちらのコードから引いて突き合わせる。
+    **印の語の正本はあちら**なので、あちらのコードから引いて突き合わせる。
+
+    **側の語の正本は `check_answer.SIDE_JP` に移った**(P-185。2026-09-29)―
+    `render_direct.SIDE_JP` はそれを束縛するだけになったので、**ここもあちらではなく正本を読む**
+    (AST で literal を読もうとすると `check_answer.SIDE_JP` という参照に当たって落ちる。実際に落ちた)。
     """
     tree = ast.parse(read_text(os.path.join(HERE, "render_direct.py")))
-    words = {}
+    words = dict(CA.SIDE_JP)
     for node in ast.walk(tree):
         if isinstance(node, ast.Assign) and any(getattr(t, "id", None) == "TAG_JP" for t in node.targets):
             for el in node.value.elts:
                 words[el.elts[0].value] = el.elts[1].value
-        if isinstance(node, ast.Assign) and any(getattr(t, "id", None) == "SIDE_JP" for t in node.targets):
-            for k, v in zip(node.value.keys, node.value.values):
-                words[k.value] = v.value
     return words
 
 
@@ -257,8 +258,10 @@ class ReproKindsTest(unittest.TestCase):
         self.assertEqual([a["actualSide"] for a in answers], ["defense", "defense"],
                          "合成材料の 2 つの欄が同じ値になっている(取り違えを区別できない)")
         got = EC.repro_rows(direct_of(answers))
-        attack = next(r for r in got["rows"] if "攻め" in r["phrase"])
-        defense = next(r for r in got["rows"] if "守り" in r["phrase"])
+        # **側の語は正本から引く**(P-185。2026-09-29)― ここに語を書くと、
+        # 語を変えたときに試験だけが古い語を探して落ちる(実際に落ちた)。
+        attack = next(r for r in got["rows"] if CA.SIDE_JP["attack"] in r["phrase"])
+        defense = next(r for r in got["rows"] if CA.SIDE_JP["defense"] in r["phrase"])
         self.assertEqual((attack["positions"], defense["positions"]), (2, 0))
 
     def test_05_empty_material_falls(self):

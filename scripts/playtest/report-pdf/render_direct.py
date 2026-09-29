@@ -37,6 +37,7 @@ import re
 import sys
 
 import board_spec
+import check_answer
 from board_draw import DASH_CAND
 # 向きを戻す道具は `board_spec.py` の 1 か所(2026-09-29 に移した)。**呼び出しの 7 か所は触っていない。**
 # `RANKS` はこのファイルの `sq()` も使う(実測: 出現 3 行のうち 1 行は `sq()`)。**定義を 2 つにしない**ので、
@@ -128,7 +129,9 @@ KAN = "〇一二三四五六七八九"
 PIECE = {"p": "歩", "l": "香", "n": "桂", "s": "銀", "g": "金", "b": "角", "r": "飛", "k": "玉"}
 PROM = {"p": "と", "l": "杏", "n": "圭", "s": "全", "b": "馬", "r": "竜"}
 TAG_JP = [("capture", "取る"), ("drop", "打つ"), ("givesCheck", "王手"), ("sacrifice", "捨て駒"), ("retreat", "引く")]
-SIDE_JP = {"attack": "攻め", "defense": "守り", "both": "攻め・守り両方", "none": "どちらでもない"}
+# 側の語は **`check_answer.SIDE_JP` の 1 か所**を束縛する(P-185。2026-09-29)。
+# **写さない** ― 写した結果が「本編は自玉側・付録は守り」だった(批評席 (a) が 6 周目に実物で挙げた)。
+SIDE_JP = check_answer.SIDE_JP
 
 
 def parse_sfen(sfen):

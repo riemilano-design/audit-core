@@ -19,6 +19,14 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 import check_answer as CA  # noqa: E402
 
+# 側の語の試験(P-185)が同じフォルダの他のファイルを原文で読むために使う。
+HERE = os.path.dirname(os.path.abspath(__file__))
+
+
+def read_text(path):
+    with open(path, encoding="utf-8") as f:
+        return f.read()
+
 
 def make_ctx(positions, pairs=None, allowed_numbers=None):
     """`check_pos_tags`・`check_line_numbers` が読む欄だけを持つ、最小の合成 `ctx`。"""
@@ -929,6 +937,102 @@ class SideMatchRowsTest(unittest.TestCase):
             # 側が「両方」の局面は分母に入らない ― 印も付かない。
             self.assertIsNone(CA.side_match_mark_of(sm, "g01", 4))
 
+
+
+class SideWordIsOnePlaceTest(unittest.TestCase):
+    """**側の語は 1 か所**(P-185。2026-09-29。司令塔の決定「自玉側」に統一)。
+
+    実測で **2 通り**が同じ顧客の手元に出ていた: 本編「自玉側」20 件・付録 3「守り」3 件
+    (批評席 (a) が 6 周目に実物で挙げ、私が封をした PDF で数え直した)。
+    語の表は顧客に出る道に **4 つ**あった ― `check_answer.SIDE_JP`(本編)・
+    `render_direct.SIDE_JP`(付録 3)・`render_time_cause.VALUE_LABELS` の 2 つ(付録 4)・
+    `fig1.SIDE_SHORT`(本編の図)。**ここを 1 か所にして、他は束縛する。**
+
+    **字面では見ない。**「守り」を消した説明のコメント自体に当たるため(2026-09-29 に 4 回踏んだ型)。
+    **他のファイルは import できない**(`sys.argv` を読んで走る)ので、
+    **該当の代入だけを `ast` で取り出し、偽の `check_answer` を渡して動かす** ―
+    写しに戻したら、偽の目印が出てこないので落ちる。
+    """
+
+    # 側の語の表を持つ(= 束縛すべき)ファイルと、その中の代入の名前。
+    BOUND = (("render_direct.py", "SIDE_JP"), ("fig1.py", "SIDE_SHORT"))
+    MARK = {"attack": "＜攻＞", "defense": "＜自＞", "both": "＜両＞", "none": "＜無＞"}
+
+    def _exec_assign(self, name, target, ns):
+        import ast
+        src = read_text(os.path.join(HERE, name))
+        tree = ast.parse(src)
+        found = [n for n in tree.body
+                 if isinstance(n, ast.Assign)
+                 and any(getattr(t, "id", "") == target for t in n.targets)]
+        self.assertEqual(len(found), 1,
+                         f"{name} の {target} の代入が {len(found)} 個(1 個のはず)")
+        ns = dict(ns)
+        exec(compile(ast.Module(found, []), f"<{name}>", "exec"), ns)  # noqa: S102
+        return ns[target]
+
+    def test_s1_the_word_is_the_one_the_commander_chose(self):
+        self.assertEqual(CA.SIDE_JP["defense"], "自玉側")
+        self.assertEqual(CA.SIDE_JP["attack"], "攻め")
+        self.assertEqual(sorted(CA.SIDE_JP), ["attack", "both", "defense", "none"])
+
+    def test_s2_the_two_key_view_is_derived_from_the_four_key_table(self):
+        """**2 鍵の表は写しではなく view。**
+
+        値の一致だけを見ると**写しでも通る**(同じ語を書けば等しい)ので、
+        `check_answer.py` の代入を取り出し、**偽の 4 鍵の表**を渡して動かす ―
+        写しに書き換えたら、偽の語が出てこないので落ちる。
+        """
+        self.assertEqual(sorted(CA.SIDE_LABEL_JP), ["attack", "defense"])
+        got = self._exec_assign("check_answer.py", "SIDE_LABEL_JP", {"SIDE_JP": self.MARK})
+        self.assertEqual(got, {"attack": "＜攻＞", "defense": "＜自＞"},
+                         "SIDE_LABEL_JP が 4 鍵の表から作られていない(写しになっている)")
+
+    def test_s3_no_side_table_says_mamori(self):
+        """**どの表にも「守り」が無い**(振る舞いで見る ― 表を動かして中身を見る)。"""
+        for name, target in self.BOUND:
+            table = self._exec_assign(name, target, {"check_answer": CA})
+            for key, word in table.items():
+                self.assertNotIn("守り", word, f"{name} の {target}[{key!r}] = {word}")
+
+    def test_s4_the_other_files_bind_instead_of_copying(self):
+        """**偽の表を渡すと、偽の語が出てくる**(= 束縛している)。写しなら出てこない。"""
+        import types
+        fake = types.SimpleNamespace(SIDE_JP=self.MARK)
+        rd = self._exec_assign("render_direct.py", "SIDE_JP", {"check_answer": fake})
+        self.assertEqual(rd, self.MARK, "render_direct が側の語を自分で持っている")
+        f1 = self._exec_assign("fig1.py", "SIDE_SHORT", {"check_answer": fake})
+        self.assertEqual(f1, {"attack": "＜攻＞側", "defense": "＜自＞"},
+                         "fig1 が側の語を自分で持っている")
+
+    def test_s5_the_time_cause_table_binds_the_same_one_place(self):
+        """付録 4 の 2 つの欄も同じ 1 か所を引く(`ast` で**値の形**を見る)。
+
+        `render_time_cause.py` は冒頭で材料を読むので import できない。
+        `VALUE_LABELS` の中の `top1Side`・`actualSide` が**辞書の literal ではなく名前**であること、
+        その名前が `check_answer` から束縛されていることを見る。
+        """
+        import ast
+        tree = ast.parse(read_text(os.path.join(HERE, "render_time_cause.py")))
+        # **どの名前から束縛したかを見る**(独立監査 2026-09-29 の REVISE (a))。
+        # `as` の名前だけを見ていたので、**`SIDE_LABEL_JP`(2 鍵の view)に差し替えても 5 本とも緑**だった。
+        # 2 鍵の表を渡すと、`both`・`none` の値が来たときに `KeyError` になる
+        # (付録 3 の実物では「攻め・自玉側両方」が 38 件出ている = 実際に来る値)。
+        pairs = {(a.name, a.asname or a.name) for n in ast.walk(tree)
+                 if isinstance(n, ast.ImportFrom) and (n.module or "") == "check_answer"
+                 for a in n.names}
+        self.assertIn(("SIDE_JP", "CA_SIDE_JP"), pairs,
+                      f"render_time_cause が 4 鍵の SIDE_JP を束縛していない(束縛は {sorted(pairs)})")
+        self.assertNotIn("SIDE_LABEL_JP", {name for name, _ in pairs},
+                         "付録 4 が 2 鍵の view を引いている(both・none が来ると KeyError)")
+        labels = [n for n in tree.body if isinstance(n, ast.Assign)
+                  and any(getattr(t, "id", "") == "VALUE_LABELS" for t in n.targets)]
+        self.assertEqual(len(labels), 1)
+        got = {}
+        for k, v in zip(labels[0].value.keys, labels[0].value.values):
+            if getattr(k, "value", None) in ("top1Side", "actualSide"):
+                got[k.value] = ast.unparse(v)
+        self.assertEqual(got, {"top1Side": "CA_SIDE_JP", "actualSide": "CA_SIDE_JP"})
 
 # **`__main__` の塊はファイルの末尾に 1 つだけ**(P-181。2026-09-29)。
 # 途中に置くと `unittest.main()` の `sys.exit` で**後ろのクラスが定義されず、直接実行で 1 本も走らない**

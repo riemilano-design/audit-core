@@ -81,8 +81,11 @@ REPRO_KINDS = (
     ("top1", "sacrifice", "第 1 候補が駒を捨てる手"),
     ("top1", "capture", "第 1 候補が駒を取る手"),
     ("top1", "givesCheck", "第 1 候補が王手"),
-    ("side", "attack", "第 1 候補の側が攻め"),
-    ("side", "defense", "第 1 候補の側が守り"),
+    # 側の語は **`check_answer.SIDE_JP` の 1 か所**から作る(P-185。2026-09-29)。
+    # **写した結果、ここだけ「守り」のまま残っていた** ― 既存の試験
+    # (`ReproKindsTest.test_02`)が、本編の語と食い違ったことで捕まえた(5 つ目の写し)。
+    ("side", "attack", f"第 1 候補の側が{CA.SIDE_JP['attack']}"),
+    ("side", "defense", f"第 1 候補の側が{CA.SIDE_JP['defense']}"),
     ("actual", "drop", "実戦の手が駒を打つ手"),
     ("actual", "sacrifice", "実戦の手が駒を捨てる手"),
 )

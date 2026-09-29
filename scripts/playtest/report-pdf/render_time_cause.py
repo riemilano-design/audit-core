@@ -26,6 +26,9 @@ from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.platypus import Flowable, PageBreak, Paragraph, SimpleDocTemplate, Spacer, Table, TableStyle
 
+# 側の語の 1 か所(P-185。2026-09-29)。`check_answer.py` は import して副作用が無い(main は `__main__` 内)。
+from check_answer import SIDE_JP as CA_SIDE_JP
+
 # STEP TIME-CAUSE-2(docs/STEP_TIME_CAUSE_PLAN_2026-09-24.md §7.5)。--search <time_cause_search.json> は
 # 任意(渡さなければ「探索の結果」のページは作らない ― render_front.py の第 3 引数と同じ流儀)。
 _args = sys.argv[1:]
@@ -460,8 +463,14 @@ VALUE_LABELS = {
     "phase": {"early": "序盤", "mid": "中盤", "late": "終盤"},
     "evalBand": {"ahead": "優勢", "level": "互角", "behind": "劣勢"},
     "evalChangePrev": {"up": "上", "same": "同", "down": "下"},
-    "top1Side": {"attack": "攻め", "defense": "守り", "both": "両方", "none": "なし"},
-    "actualSide": {"attack": "攻め", "defense": "守り", "both": "両方", "none": "なし"},
+    # 側の語は **`check_answer.SIDE_JP` の 1 か所**を束縛する(P-185。2026-09-29)。
+    # **写さない** ― 写した結果が「本編は自玉側・付録は守り」だった。
+    # 語が長くなる(「両方」→「攻め・自玉側両方」)。**欄の幅は測っていない** ―
+    # この付録の材料(c5 の 25 局)には `both`・`none` の値が 0 件で、組んでも語が出てこないため
+    # (ページ数は 5 → 5 で不変。**幅が壊れないことの証拠ではない**)。
+    # 独立監査の REVISE (b)(2026-09-29)― 最初ここに「幅を測ってから入れた」と書いたのは誤り。
+    "top1Side": CA_SIDE_JP,
+    "actualSide": CA_SIDE_JP,
     "lossBand": {"over300": "300 以上", "under300": "300 未満", "outOfCandidates": "候補外"},
     "remainingBucket": {"<60": "60 秒未満", "60-119": "60〜119 秒", ">=120": "120 秒以上"},
 }

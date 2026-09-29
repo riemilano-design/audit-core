@@ -32,6 +32,7 @@ import os
 import sys
 
 import board_spec  # 持ち駒の語の 1 か所(P-176)
+import check_answer  # 側の語の 1 か所(P-185)
 
 from reportlab.lib import colors
 from reportlab.lib.enums import TA_LEFT
@@ -57,7 +58,13 @@ LINE = colors.HexColor("#d5dde2")
 BG = colors.HexColor("#f4f7f9")
 
 SIDE_LABEL = {"attack": "相手玉の近くへ向かう候補", "defense": "自玉の近くへ向かう候補"}
-SIDE_SHORT = {"attack": "攻め側", "defense": "自玉側"}
+# 側の語は **`check_answer.SIDE_JP` の 1 か所**から作る(P-185。2026-09-29)。
+# 「攻め側」は攻めの語 + 「側」。**語を別に書くと、片方だけ直して 2 通りに戻る。**
+# この表は今は例外の文にしか出ないが、**写しは残さない**(P-111 の病気)。
+# **文の中の語は表では覆えない** ― この図の `STEPS` と承認済みの行動の文は
+# 「自玉側」を文として持っている(承認済みの文は変えない)。
+SIDE_SHORT = {"attack": check_answer.SIDE_JP["attack"] + "側",
+              "defense": check_answer.SIDE_JP["defense"]}
 
 # 「どちらが良い手かは示していません」という否定文は**入れない**(統括の判断 2026-09-26)。理由は 2 つ:
 #   (1) 冊子の 1 ページ目の冒頭に既に「手の良し悪しを採点するものではありません」がある。同じことを
