@@ -947,6 +947,22 @@ npx tsx scripts/playtest/deliver.ts \
   渡さないときの既定は `[--previous-work(あれば), --work]` の順。`--work` は一覧にちょうど 1 回含めること。
 - `--from <段の名前>`: 人間の確認点で止まった後、その段から再開する。各段に済みの判定があるので、
   既定(最初から)でも再実行は無駄にならない。
+
+  **流した席以外が再開するとき(P-168。2026-09-29 に実測して書いた)**: `deliver_log.jsonl` には
+  段ごとの `stage`・`rc`・時刻しか書かれておらず、**引数が残らない**。`--from` には `--person`・
+  `--kifu-dir`・`--work`・`--time-limit-sec`・`--out` 等が全部要るので、**`--dry-run` で復元する**:
+
+  ```bash
+  npx tsx deliver.ts --person <p番号> --kifu-dir <棋譜> --work <work> \
+    --time-limit-sec <秒> --name X --title X --today <YYYY-MM-DD> --out <納品先> --dry-run
+  ```
+
+  印字された JSON の `steps[].args` が、その段をそのまま手で流せる引数一式である。
+  **`--name`・`--title` は何を渡してもよい**(2026-09-29 の P-170 の直しで、顧客向け出口 30p 形の
+  どの冊子にも届かなくなった。届くのは却下済みの 6 冊形の 2 つの段だけ)。
+  **`--today` だけは復元できない**が、本編の 1 ページ目に印字されているので実物から読める。
+  **校正済み**: この手順で本編を scratchpad に組み直し、封(`direct/exit_seal.json`)の 3 つの数と
+  一致することを確かめた(2026-09-29)。
 - `--dry-run`: 何も実行・書き込みせず、段ごとの `{stage, tool, cmd, args, action, reason}` を JSON で出す。
   **段 `pipeline-data` が作る材料(`read/`・`whatif-v2/`・固定棋譜)がまだ無いとき、`--dry-run` の引数は
   「その時点の見え方」でしかない**(それを使う段の引数は実行時に読み直して決まる)。そのときは JSON の
