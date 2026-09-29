@@ -556,6 +556,20 @@ export type BookletActionFraction = { readonly id?: string; readonly label?: str
 export type BookletDenominator = { readonly number?: number; readonly unit?: string; readonly from?: string };
 export type BookletReproRow = { readonly phrase?: string; readonly positions?: number; readonly games?: number };
 export type BookletGroup = { readonly key?: string; readonly games?: number; readonly collapses?: number; readonly aheadGames?: number; readonly aheadLossGames?: number };
+/**
+ * **冊子の道具(python)がその場で数える数**(束 D で足した)。
+ * `report-pdf/dump_booklet_numbers.py` が `check_answer.side_match_of`・`long_think_fork_of` を呼んで出す。
+ * **別の言語の別の実装**なので、書き写した期待値より強い相手になる。
+ */
+export type BookletPythonNumbers = {
+  readonly longThink?: { readonly longThink?: number; readonly fork?: number; readonly oppositeSide?: number };
+  readonly sideMatch?: {
+    readonly attack?: { readonly n?: number; readonly collapsed?: number };
+    readonly defense?: { readonly n?: number; readonly collapsed?: number };
+    readonly forkTotal?: number;
+    readonly opposite?: { readonly numerator?: number; readonly denominator?: number };
+  };
+};
 export type BookletNumbers = {
   readonly actionFractions?: readonly BookletActionFraction[];
   readonly denominators?: readonly BookletDenominator[];
@@ -563,6 +577,7 @@ export type BookletNumbers = {
   readonly openingGroups?: readonly BookletGroup[];
   readonly findings?: readonly { readonly kind?: string; readonly numbers?: Record<string, number> }[];
   readonly directCounts?: Record<string, number>;
+  readonly python?: BookletPythonNumbers;
 };
 
 /** 冊子の側の数の引き当て(1 つでも見つからなければ、それを言う) */
@@ -594,65 +609,102 @@ function findingOf(booklet: BookletNumbers, kind: string, key: string): number |
 }
 
 /** 集計の id + どの数か → 冊子の側の引き当て。**照合の相手が無い数はここに載せない**(下の MISSING に書く) */
-const BOOKLET_EXPECTATIONS: Readonly<Record<string, Partial<Record<"numerator" | "denominator" | "value", Expectation>>>> = {
+/**
+ * 集計の id + どの数か → **冊子の側の引き当て(1 つの数に複数持てる)。**
+ * 同じ数に 2 つの相手(冊子が使った JSON と、冊子の道具の python の実装)を置く ―
+ * **別の道で同じ数に着くほど強い**(束 D で 7 つの数が 2 つの相手を持つようになった)。
+ * 相手が 1 つも見つからない数は、`bookletAgreementProblems` が「相手が無い」と言う。
+ */
+const BOOKLET_EXPECTATIONS: Readonly<Record<string, Partial<Record<"numerator" | "denominator" | "value", readonly Expectation[]>>>> = {
   "sideMatch.attack": {
-    numerator: { label: "M4 攻めの分子", get: (b) => fractionOf(b, "M4", "攻め", "numerator") },
-    denominator: { label: "M4 攻めの分母", get: (b) => fractionOf(b, "M4", "攻め", "denominator") },
+    numerator: [
+      { label: "M4 攻めの分子", get: (b) => fractionOf(b, "M4", "攻め", "numerator") },
+      { label: "python の side_match_of の attack.collapsed", get: (b) => b.python?.sideMatch?.attack?.collapsed },
+    ],
+    denominator: [
+      { label: "M4 攻めの分母", get: (b) => fractionOf(b, "M4", "攻め", "denominator") },
+      { label: "python の side_match_of の attack.n", get: (b) => b.python?.sideMatch?.attack?.n },
+    ],
   },
   "sideMatch.defense": {
-    numerator: { label: "M4 自玉側の分子", get: (b) => fractionOf(b, "M4", "自玉側", "numerator") },
-    denominator: { label: "M4 自玉側の分母", get: (b) => fractionOf(b, "M4", "自玉側", "denominator") },
+    numerator: [
+      { label: "M4 自玉側の分子", get: (b) => fractionOf(b, "M4", "自玉側", "numerator") },
+      { label: "python の side_match_of の defense.collapsed", get: (b) => b.python?.sideMatch?.defense?.collapsed },
+    ],
+    denominator: [
+      { label: "M4 自玉側の分母", get: (b) => fractionOf(b, "M4", "自玉側", "denominator") },
+      { label: "python の side_match_of の defense.n", get: (b) => b.python?.sideMatch?.defense?.n },
+    ],
   },
   "sideMatch.oppositeAll": {
-    denominator: { label: "数の出どころ「第 1 候補の側が 1 つだった分かれ道」", get: (b) => denominatorOf(b, "局面", "第 1 候補の側が 1 つだった") },
+    // **分子は冊子が使った JSON に残っていない**(本文の 51)。束 D で python の実装を相手にして閉じた
+    numerator: [{ label: "python の side_match_of の opposite.numerator", get: (b) => b.python?.sideMatch?.opposite?.numerator }],
+    denominator: [
+      { label: "数の出どころ「第 1 候補の側が 1 つだった分かれ道」", get: (b) => denominatorOf(b, "局面", "第 1 候補の側が 1 つだった") },
+      { label: "python の side_match_of の opposite.denominator", get: (b) => b.python?.sideMatch?.opposite?.denominator },
+    ],
   },
   "time.quickAfterLongThink": {
-    numerator: { label: "M5 の分子", get: (b) => fractionOf(b, "M5", "", "numerator") },
-    denominator: { label: "M5 の分母", get: (b) => fractionOf(b, "M5", "", "denominator") },
+    numerator: [{ label: "M5 の分子", get: (b) => fractionOf(b, "M5", "", "numerator") }],
+    denominator: [{ label: "M5 の分母", get: (b) => fractionOf(b, "M5", "", "denominator") }],
   },
   "time.bySpent0to1": {
-    denominator: { label: "数の出どころ「0〜1 秒で指した手」", get: (b) => denominatorOf(b, "手", "0〜1 秒で指した手") },
+    denominator: [{ label: "数の出どころ「0〜1 秒で指した手」", get: (b) => denominatorOf(b, "手", "0〜1 秒で指した手") }],
   },
-  "longThink.total": { value: { label: "数の出どころ「10 秒以上考えた手(全部)」", get: (b) => denominatorOf(b, "手", "10 秒以上考えた手(全部)") } },
-  "longThink.fork": { value: { label: "数の出どころ「10 秒以上考えた手のうち、分かれ道」", get: (b) => denominatorOf(b, "手", "分かれ道だった手") } },
-  "branches.total": { value: { label: "direct_answers の totalForkCount", get: (b) => b.directCounts?.totalForkCount } },
-  "branches.shallowVisible": { value: { label: "direct_answers の totalCount", get: (b) => b.directCounts?.totalCount } },
-  "branches.shallowVisibleGames": { value: { label: "direct_answers の gamesCount", get: (b) => b.directCounts?.gamesCount } },
-  "repro.top1Drop.positions": { value: { label: "再現の表「第 1 候補が駒を打つ手」の局面", get: (b) => reproOf(b, "第 1 候補が駒を打つ手", "positions") } },
-  "repro.top1Drop.games": { value: { label: "再現の表「第 1 候補が駒を打つ手」の局", get: (b) => reproOf(b, "第 1 候補が駒を打つ手", "games") } },
-  "collapse.total": { value: { label: "patient の findings phase.fell", get: (b) => findingOf(b, "phase", "fell") } },
+  "longThink.total": {
+    value: [
+      { label: "数の出どころ「10 秒以上考えた手(全部)」", get: (b) => denominatorOf(b, "手", "10 秒以上考えた手(全部)") },
+      { label: "python の long_think_fork_of の longThink", get: (b) => b.python?.longThink?.longThink },
+    ],
+  },
+  "longThink.fork": {
+    value: [
+      { label: "数の出どころ「10 秒以上考えた手のうち、分かれ道」", get: (b) => denominatorOf(b, "手", "分かれ道だった手") },
+      { label: "python の long_think_fork_of の fork", get: (b) => b.python?.longThink?.fork },
+    ],
+  },
+  // **冊子が使った JSON に残っていない**(本文の 5)。束 D で python の実装を相手にして閉じた
+  "longThink.opposite": { value: [{ label: "python の long_think_fork_of の oppositeSide", get: (b) => b.python?.longThink?.oppositeSide }] },
+  "branches.total": {
+    value: [
+      { label: "direct_answers の totalForkCount", get: (b) => b.directCounts?.totalForkCount },
+      { label: "python の side_match_of の forkTotal", get: (b) => b.python?.sideMatch?.forkTotal },
+    ],
+  },
+  "branches.shallowVisible": { value: [{ label: "direct_answers の totalCount", get: (b) => b.directCounts?.totalCount }] },
+  "branches.shallowVisibleGames": { value: [{ label: "direct_answers の gamesCount", get: (b) => b.directCounts?.gamesCount }] },
+  "repro.top1Drop.positions": { value: [{ label: "再現の表「第 1 候補が駒を打つ手」の局面", get: (b) => reproOf(b, "第 1 候補が駒を打つ手", "positions") }] },
+  "repro.top1Drop.games": { value: [{ label: "再現の表「第 1 候補が駒を打つ手」の局", get: (b) => reproOf(b, "第 1 候補が駒を打つ手", "games") }] },
+  "collapse.total": { value: [{ label: "patient の findings phase.fell", get: (b) => findingOf(b, "phase", "fell") }] },
   aheadThenLost: {
-    numerator: { label: "patient の findings aheadLoss.aheadLossGames", get: (b) => findingOf(b, "aheadLoss", "aheadLossGames") },
-    denominator: { label: "patient の findings aheadLoss.aheadGames", get: (b) => findingOf(b, "aheadLoss", "aheadGames") },
+    numerator: [{ label: "patient の findings aheadLoss.aheadLossGames", get: (b) => findingOf(b, "aheadLoss", "aheadLossGames") }],
+    denominator: [{ label: "patient の findings aheadLoss.aheadGames", get: (b) => findingOf(b, "aheadLoss", "aheadGames") }],
   },
-  "groups.core.games": { value: { label: "群 A の局数", get: (b) => groupOf(b, "core", "games") } },
-  "groups.other.games": { value: { label: "群 B の局数", get: (b) => groupOf(b, "other", "games") } },
-  "groups.noSignature.games": { value: { label: "群 C の局数", get: (b) => groupOf(b, "noSignature", "games") } },
-  "groups.core.collapses": { value: { label: "群 A の崩れ", get: (b) => groupOf(b, "core", "collapses") } },
-  "groups.other.collapses": { value: { label: "群 B の崩れ", get: (b) => groupOf(b, "other", "collapses") } },
-  "groups.noSignature.collapses": { value: { label: "群 C の崩れ", get: (b) => groupOf(b, "noSignature", "collapses") } },
+  "groups.core.games": { value: [{ label: "群 A の局数", get: (b) => groupOf(b, "core", "games") }] },
+  "groups.other.games": { value: [{ label: "群 B の局数", get: (b) => groupOf(b, "other", "games") }] },
+  "groups.noSignature.games": { value: [{ label: "群 C の局数", get: (b) => groupOf(b, "noSignature", "games") }] },
+  "groups.core.collapses": { value: [{ label: "群 A の崩れ", get: (b) => groupOf(b, "core", "collapses") }] },
+  "groups.other.collapses": { value: [{ label: "群 B の崩れ", get: (b) => groupOf(b, "other", "collapses") }] },
+  "groups.noSignature.collapses": { value: [{ label: "群 C の崩れ", get: (b) => groupOf(b, "noSignature", "collapses") }] },
   "groups.core.aheadThenLost": {
-    numerator: { label: "群 A の優勢→負け", get: (b) => groupOf(b, "core", "aheadLossGames") },
-    denominator: { label: "群 A の優勢になった局", get: (b) => groupOf(b, "core", "aheadGames") },
+    numerator: [{ label: "群 A の優勢→負け", get: (b) => groupOf(b, "core", "aheadLossGames") }],
+    denominator: [{ label: "群 A の優勢になった局", get: (b) => groupOf(b, "core", "aheadGames") }],
   },
   "groups.other.aheadThenLost": {
-    numerator: { label: "群 B の優勢→負け", get: (b) => groupOf(b, "other", "aheadLossGames") },
-    denominator: { label: "群 B の優勢になった局", get: (b) => groupOf(b, "other", "aheadGames") },
+    numerator: [{ label: "群 B の優勢→負け", get: (b) => groupOf(b, "other", "aheadLossGames") }],
+    denominator: [{ label: "群 B の優勢になった局", get: (b) => groupOf(b, "other", "aheadGames") }],
   },
   "groups.noSignature.aheadThenLost": {
-    numerator: { label: "群 C の優勢→負け", get: (b) => groupOf(b, "noSignature", "aheadLossGames") },
-    denominator: { label: "群 C の優勢になった局", get: (b) => groupOf(b, "noSignature", "aheadGames") },
+    numerator: [{ label: "群 C の優勢→負け", get: (b) => groupOf(b, "noSignature", "aheadLossGames") }],
+    denominator: [{ label: "群 C の優勢になった局", get: (b) => groupOf(b, "noSignature", "aheadGames") }],
   },
 };
 
-/**
- * **照合の相手が材料に無い数**(2026-09-30 の実測)。既存の python の関数がその場で数えているだけで、
- * JSON に残っていない ― **無いことを毎回言わせる**(黙って照合の対象から外さない)。
- */
-export const BOOKLET_MISSING: readonly { readonly id: string; readonly key: string; readonly why: string }[] = [
-  { id: "sideMatch.oppositeAll", key: "numerator", why: "check_answer.side_match_of が返す opposite.numerator(冊子の本文の 51)は JSON に残っていない" },
-  { id: "longThink.opposite", key: "value", why: "check_answer.long_think_fork_of が返す oppositeSide(冊子の本文の 5)は JSON に残っていない" },
-];
+// **「照合の相手が無い数」の表は束 D で消した。**
+// 束 C では、側が逆の分子(冊子の本文の 51)と長考のうち側が逆(本文の 5)に突き合わせる相手が
+// 冊子の JSON に無く、道具が毎回「相手が無い」と声に出していた。
+// 束 D で**冊子の道具の python(`report-pdf/dump_booklet_numbers.py`)を相手として呼ぶ**ようにしたので、
+// 2 つとも普通の照合になった。**相手が渡されなければ上の「相手が無い」の 1 行が出る**ので、黙って外れる道は無い。
 
 /** 集計の行と冊子の数の突き合わせ。空なら 1 つ残らず一致 */
 export function bookletAgreementProblems(aggregates: readonly AggregateRow[], booklet: BookletNumbers): string[] {
@@ -664,14 +716,18 @@ export function bookletAgreementProblems(aggregates: readonly AggregateRow[], bo
       problems.push(`A 再現性: 集計に ${id} が無い`);
       continue;
     }
-    for (const [key, expectation] of Object.entries(expectations) as [keyof AggregateRow & ("numerator" | "denominator" | "value"), Expectation][]) {
+    for (const [key, list] of Object.entries(expectations) as [keyof AggregateRow & ("numerator" | "denominator" | "value"), readonly Expectation[]][]) {
       const mine = row[key];
-      const theirs = expectation.get(booklet);
-      if (theirs === undefined) {
-        problems.push(`A 再現性: ${id} の ${key} を照合する相手(${expectation.label})が材料に無い`);
-        continue;
+      let found = 0;
+      for (const expectation of list) {
+        const theirs = expectation.get(booklet);
+        // **渡されなかった相手は数えない。**同じ数に 2 つ置いてあり、片方(python)が無い回もある
+        if (theirs === undefined) continue;
+        found += 1;
+        if (mine !== theirs) problems.push(`A 再現性: ${id} の ${key} が ${String(mine)}(冊子の ${expectation.label} は ${theirs})`);
       }
-      if (mine !== theirs) problems.push(`A 再現性: ${id} の ${key} が ${String(mine)}(冊子の ${expectation.label} は ${theirs})`);
+      // **相手が 1 つも無いときは言う**(黙って照合の対象から外さない)
+      if (found === 0) problems.push(`A 再現性: ${id} の ${key} を照合する相手(${list.map((expectation) => expectation.label).join(" / ")})が材料に無い`);
     }
   }
   return problems;
@@ -696,23 +752,58 @@ export function aggregateCoverageProblems(aggregates: readonly AggregateRow[]): 
   return problems;
 }
 
+
 /**
- * **照合の相手が無い数の報告**(問題ではない。道具が毎回**声に出す**ための行)。
- * 黙って対象から外すと「20 のうち 18 だけ見た」ことが記録から消える。
- * 【裏の取り方】`sideMatch.oppositeAll` の分子は、印を使わず `==` だけで数えた 2 行の和と
- * 一致することを `aggregateAgreementProblems` が見ている(別の道で同じ数に着く)。
- * `longThink.opposite` は材料の局ごとの欄の合計そのもので、**照合の相手が原理的に無い。**
+ * **packet だけを見て数え直す**(束 D。人間の指示の試験 E の相手)。
+ *
+ * 【誰のための検査か】packet を受け取る側(3 席の LLM・検証器・組版)は**材料を持たない。**
+ * その立場で「この数は本当にこの母集団を数えた数か」を確かめられるようにする ―
+ * `population`・`numeratorWhere`・`sumField` のとおりに `facts` を数え、行の数と突き合わせる。
+ * 【数え直せない行は対象外】`recountable: false` の 2 行(材料の秒が中盤の手だけ)は飛ばす。
+ * **理由が書かれていない `recountable: false` は `aggregateAgreementProblems` が落とす**ので、
+ * ここで飛ばしても「黙って外れた行」は残らない。
+ * 【これは同じ道か】数え方の仕組みは `aggregatesOf` と同じものを使う(別に書けば二重の実装になり、
+ * どちらが正しいか決められない)。**この検査が捕まえるのは「packet の数が後から書き換わった」形** ―
+ * 母集団の言葉と数が食い違う packet を、材料が無い側でも落とせる。
  */
-export function bookletMissingNotes(aggregates: readonly AggregateRow[]): string[] {
-  const byId = new Map(aggregates.map((row) => [row.id, row] as const));
-  const notes: string[] = [];
-  for (const missing of BOOKLET_MISSING) {
-    const row = byId.get(missing.id);
-    if (row === undefined) {
-      notes.push(`照合の相手が無い数の表に ${missing.id} が在るのに、集計にその行が無い`);
+export function recountProblems(packet: { facts?: unknown; aggregates?: unknown }): string[] {
+  const facts = packet.facts;
+  if (facts === null || typeof facts !== "object") return ["数え直し: facts が無い"];
+  const aggregates = packet.aggregates;
+  if (!Array.isArray(aggregates)) return ["数え直し: aggregates が無い"];
+  const index = factsIndexOf(facts as Record<string, unknown>);
+  const problems: string[] = [];
+  for (const row of aggregates as AggregateRow[]) {
+    if (row.recountable === false) continue;
+    const population = row.population;
+    if (population === undefined) {
+      problems.push(`数え直し: ${row.id} に population が無い`);
       continue;
     }
-    notes.push(`${missing.id} の ${missing.key} = ${String(row[missing.key as keyof AggregateRow])} ― ${missing.why}`);
+    try {
+      if (row.sumField !== undefined) {
+        const total = sumOf(index, population, row.sumField);
+        if (row.value !== total) problems.push(`数え直し: ${row.id} の数が ${String(row.value)}(${population.from} の ${row.sumField} を足すと ${total})`);
+        continue;
+      }
+      if (row.numeratorWhere !== undefined) {
+        const denominator = countOf(index, population);
+        const numerator = countOf(index, population, row.numeratorWhere);
+        if (row.denominator !== denominator) problems.push(`数え直し: ${row.id} の分母が ${String(row.denominator)}(数え直すと ${denominator})`);
+        if (row.numerator !== numerator) problems.push(`数え直し: ${row.id} の分子が ${String(row.numerator)}(数え直すと ${numerator})`);
+        continue;
+      }
+      const value = countOf(index, population);
+      if (row.value !== value) problems.push(`数え直し: ${row.id} の数が ${String(row.value)}(数え直すと ${value})`);
+    } catch (error) {
+      problems.push(`数え直し: ${row.id} を数え直せない(${error instanceof Error ? error.message : String(error)})`);
+    }
+    // **局の列も数え直す**(数が合っていても、どの局から出たかが書き換わっていれば辿れない)
+    const derivedFrom = gameIdsOf(selectRows(index, population));
+    const written = [...(row.derivedFrom ?? [])].sort();
+    if (written.length > 0 && derivedFrom.length > 0 && written.join(",") !== derivedFrom.join(",")) {
+      problems.push(`数え直し: ${row.id} の derivedFrom が ${written.length} 局(数え直すと ${derivedFrom.length} 局)`);
+    }
   }
-  return notes;
+  return problems;
 }
