@@ -38,6 +38,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 import check_answer as CA        # noqa: E402
 import check_structure as CS     # noqa: E402
+import exit_groups as EGR       # noqa: E402
 import exit_index as EI          # noqa: E402
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -454,10 +455,11 @@ def opening_lines(patient, direct, today, group_label=None):
 # §48 の「番人のある単位を関数にする」と同じ型の 2 度目。
 
 
-def candidates_json(direct, patient, repro, denoms, passed, dropped, opening):
+def candidates_json(direct, patient, repro, denoms, passed, dropped, opening, groups=()):
     """門(`exit_gate.py`)が照合する候補。**md に印字したものと同じ値**でなければならない。"""
     return {"opening": opening, "denominators": denoms, "repro": repro,
             "actionFractions": action_fractions(passed),
+            "openingGroups": list(groups),
             "unitMismatchFractions": unit_mismatch_fractions(dropped) + unit_mismatch_fractions(passed),
             "p1Numbers": p1_numbers(patient, repro, direct, passed),
             "boards": [inner for _text, inner in board_marks(direct)],
@@ -470,6 +472,12 @@ def candidates_json(direct, patient, repro, denoms, passed, dropped, opening):
 # ==================== 分母の出どころ ====================
 # **文字列に埋めない**(仕様 §3 の 1)。「数 → その分母がどの集計から出たか」の対を JSON に出し、
 # 数え方の節には**行として**印字する。**数え方の節と JSON が同じ対から作られる**ので、片方だけ直らない。
+def group_denominator_rows(groups):
+    """群の分母の表に流す対。**関数にして測れるようにした**(2026-09-29) ―
+    `build()` の中に書いていたので、**`[]` を渡す変異が黙った**(§48 と同じ型の 3 度目)。"""
+    return [(r["label"], r["games"]) for r in groups or ()]
+
+
 def denominators(direct, patient, repro, passed=(), groups=None):
     """分母の出どころ。**冊子に出る分母は全部ここに行がある**(P-161)。
 
@@ -558,7 +566,7 @@ def rest_games(patient, featured):
 
 
 def build_md(direct, patient, repro, passed, dropped, mapping, denoms, fdata,
-             opening, featured=0, side_match=None):
+             opening, featured=0, side_match=None, groups=()):
     # **局数は `summary.games`**(`exit_cover.numbers_of`・`check_structure` と同じ出どころ)。
     # `len(patient["games"])` でも同じ数だが(25 = 25 を実測 2026-09-29)、
     # **出どころを 2 つ持つと、片方の材料が欠けたときに数が黙って変わる。**
@@ -611,6 +619,18 @@ def build_md(direct, patient, repro, passed, dropped, mapping, denoms, fdata,
     # **観測 1 行(行動ではない)。**書き手が「ひとことで」の 3 本に使える候補として出す。
     for tag in CA.CROSS_TAGS:
         L.append(f"- 観測(行動ではありません): {cross_line(direct, tag)}")
+    # **戦型の群ごとの再集計(観測。行動ではない)**(2026-09-29)。
+    # **数だけ。割合・%・群どうしを比べる文・「差がある / ない」の判定は作らない**
+    # (群が 4 局・3 局なので、割合を出せば 1 局の違いが 25 ポイント動く)。
+    # **戦型の名前も「普段指さない戦型」も書かない** ― 顧客向けの分類としては未承認
+    # (人間の決定 2026-09-29)。**顧客の表での呼び方は書き手が決める**ので、
+    # ここは仮の見出し(群 A / 群 B / 群 C)で出す。
+    if groups:
+        L.append(note("下は戦型の群ごとの再集計(観測。行動ではない)。**戦型の名前は書かない** ― "
+                      "顧客向けの分類としては未承認。**群の呼び方は書き手が決める**"
+                      "(仮の見出しは 群 A / 群 B / 群 C)。**割合を出さない・群どうしを比べない**"))
+        for line in EGR.lines_of(groups, CROSS_PHRASE_JP):
+            L.append(line)
     L.append("")
     L.append("| どんな手だったか | 局面 | 局 |")
     L.append("|---|---|---|")
@@ -740,7 +760,7 @@ def build_md(direct, patient, repro, passed, dropped, mapping, denoms, fdata,
 def parse_own_args(argv):
     # `--group-label` は**任意**(渡さなければ材料の `group` のまま。仕様 §4d「出力不変」)。
     own = {"out_md": None, "out_json": None, "kifu_dir": None, "today": None}
-    optional = {"group_label": None}
+    optional = {"group_label": None, "opening_recognition": None}
     rest = []
     i = 0
     while i < len(argv):
@@ -750,6 +770,13 @@ def parse_own_args(argv):
             if value is None or value.startswith("--"):
                 raise ExitCandidatesError(f"{flag} に値が無い")
             optional["group_label"] = value
+            i += 2
+            continue
+        if flag == "--opening-recognition":
+            value = argv[i + 1] if i + 1 < len(argv) else None
+            if value is None or value.startswith("--"):
+                raise ExitCandidatesError(f"{flag} に値が無い")
+            optional["opening_recognition"] = value
             i += 2
             continue
         if flag in ("--out-md", "--out-json", "--kifu-dir", "--today"):
@@ -807,20 +834,26 @@ def build(own, rest):
     repro = repro_rows(direct)
     passed, dropped = menu_rows(ctx)
     mapping = mapping_rows(patient, own["kifu_dir"])
-    # **`passed` を渡す**(P-161。行動の根拠の分母を表に出すため)。
-    # 群(戦型)は知識レーンの JSON が届いてから渡す。
-    denoms = denominators(direct, patient, repro, passed)
+    # **戦型の群ごとの再集計**(2026-09-29)。**渡されなければ何も変わらない。**
+    # `--opening-recognition` は任意 ― 知識レーンの JSON が無い顧客でも通る。
+    side_match = ctx["materials"]["sideMatch"]
+    groups = ()
+    if own.get("opening_recognition"):
+        groups = EGR.group_rows(EGR.load(own["opening_recognition"]), patient, direct, side_match)
+    # **`passed` と群を渡す**(P-161。行動の根拠の分母と群の分母を表に出すため)。
+    denoms = denominators(direct, patient, repro, passed, group_denominator_rows(groups))
     # `featured` = 1 局ずつ見た局(`prose.json` の件数)。**「そのほかの局」の題に要る。**
     featured = len(CA.load_json(args.prose_paths[0])) if args.prose_paths else 0
     # **冒頭の段落は md と JSON の両方へ同じものを渡す**(門が 1 文ずつ在るかを見る)。
     opening = opening_lines(patient, direct, own["today"], own.get("group_label"))
     md = build_md(direct, patient, repro, passed, dropped, mapping, denoms, fdata,
-                  opening, featured, ctx["materials"]["sideMatch"])
+                  opening, featured, side_match, groups)
 
     with open(own["out_md"], "w", encoding="utf-8") as f:
         f.write(md + "\n")
     with open(own["out_json"], "w", encoding="utf-8") as f:
-        json.dump(candidates_json(direct, patient, repro, denoms, passed, dropped, opening),
+        json.dump(candidates_json(direct, patient, repro, denoms, passed, dropped, opening,
+                                  groups),
                   f, ensure_ascii=False, indent=1, sort_keys=True)
     return {"todo": md.count(TODO), "repro": len(repro["rows"]),
             "passed": len(passed), "dropped": len(dropped),

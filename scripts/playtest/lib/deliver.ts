@@ -484,6 +484,8 @@ export interface GroupPaths {
   frontPdf: string;
   mainPdf: string;
   prose: string;
+  /** 戦型の認識(知識レーンが出す)。**顧客向けの分類ではなく盲検候補**(人間の決定 2026-09-29)。 */
+  openingRecognition: string;
   proseRequest: string;
 }
 
@@ -507,6 +509,9 @@ export function groupPaths(group: DeliverGroup, person: string): GroupPaths {
     mainPdf: path.join(reportDir, "main.pdf"),
     prose: path.join(reportDir, "prose.json"),
     proseRequest: path.join(reportDir, "prose-request.md"),
+    // 戦型の認識(知識レーンが出す)。**無い顧客もいる**ので、渡すのは在るときだけ
+    // (`exit_candidates.py` の `--opening-recognition` は任意)。
+    openingRecognition: path.join(reportDir, "opening_recognition.json"),
   };
 }
 
@@ -792,8 +797,11 @@ export function exitCandidatesCommand(groups: readonly GroupPaths[], probe: Deli
   // 生のフォルダを渡すと **45 分の工程の最後で「固定棋譜が無い」で落ちる**(実測 2026-09-29)。
   // **`--today` は冒頭の 1 文目に入る日付**(P-162)。`--group-label` は組の名 ―
   // **`groupLabelOf` の 1 か所から来る**ので、付録の見出しと違う語になることがない。
+  // **戦型の認識は在るときだけ渡す。**無い顧客でも段が通る(渡さなければ群の行も観測も出ない)。
+  const opening = probe.exists(thisGroup.openingRecognition)
+    ? ["--opening-recognition", thisGroup.openingRecognition] : [];
   return ["--out-md", out.honbunMd, "--out-json", out.exitCandidates, "--kifu-dir", thisGroup.fixedKifuDir,
-          "--today", today, "--group-label", groupLabel,
+          "--today", today, "--group-label", groupLabel, ...opening,
           ...answerMaterialFlags(groups, probe, out, plan)];
 }
 

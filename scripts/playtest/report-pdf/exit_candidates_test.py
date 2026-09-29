@@ -809,6 +809,88 @@ class DenominatorTableTest(unittest.TestCase):
         self.assertEqual(len(keys), len(set(keys)))
 
 
+class OpeningGroupsInTheDraftTest(unittest.TestCase):
+    """**戦型の群ごとの再集計が観測の欄に出る**(2026-09-29)。数だけ・戦型名なし。
+
+    群ごとの数の作りは `exit_groups_test.py` が測る。ここは**下書きと候補の JSON まで届くか**。
+    """
+
+    GROUPS = [{"key": "core", "label": "群 A", "games": 18, "gameNos": [1, 2],
+               "gameIds": ["g01", "g02"], "aheadGames": 12, "aheadLossGames": 3,
+               "collapses": 56},
+              {"key": "other", "label": "群 B", "games": 4, "gameNos": [4],
+               "gameIds": ["g04"], "aheadGames": 4, "aheadLossGames": 3, "collapses": 18},
+              {"key": "noSignature", "label": "群 C", "games": 3, "gameNos": [9],
+               "gameIds": ["g09"], "aheadGames": 2, "aheadLossGames": 0, "collapses": 5}]
+
+    def fixture(self, groups):
+        answers = [answer(1, 10, top1=("drop",), actual=("drop",))]
+        direct = direct_of(answers)
+        patient = {"summary": {"games": 1}, "games": [], "findings": []}
+        repro = EC.repro_rows(direct)
+        denoms = EC.denominators(direct, patient, repro, [],
+                                 EC.group_denominator_rows(groups))
+        md = EC.build_md(direct, patient, repro, [], [], [], denoms, None,
+                         EC.opening_lines(patient, direct, TODAY), 0, None, groups)
+        return direct, patient, repro, denoms, md
+
+    def test_29_the_group_lines_are_in_the_observation_part(self):
+        """**観測の欄に 1 群 1 行。**「ひとことで」の節の中(候補の節)に在る。"""
+        _d, _p, _r, _den, md = self.fixture(self.GROUPS)
+        p1 = md.split("## 局面で見る")[0]
+        for label in ("群 A", "群 B", "群 C"):
+            self.assertIn(f"- {label}: ", p1)
+        self.assertIn("18 局", p1)
+        self.assertIn("崩れ 56 回", p1)
+
+    def test_29b_the_group_rows_are_in_the_denominator_table(self):
+        """**群の分母が表の行になる**(3 行)。"""
+        _d, _p, _r, denoms, md = self.fixture(self.GROUPS)
+        got = {(r["number"], r["unit"]) for r in denoms}
+        for n in (18, 4, 3):
+            self.assertIn((n, "局"), got)
+        for label in ("群 A", "群 B", "群 C"):
+            self.assertTrue(any(label in r["from"] for r in denoms), label)
+        self.assertIn("| 18 | 局 |", md)
+
+    def test_29c_nothing_appears_when_no_groups_are_given(self):
+        """**渡さなければ何も変わらない**(認識の JSON が無い顧客でも通る)。"""
+        _d, _p, _r, denoms, md = self.fixture([])
+        self.assertNotIn("群 A", md)
+        self.assertNotIn("戦型", md)
+        self.assertFalse(any("群" in r["from"] for r in denoms))
+
+    def test_29d_the_note_tells_the_writer_not_to_name_the_opening(self):
+        """**書き手への注で「戦型の名前は書かない」と伝える**(未承認の分類なので)。"""
+        _d, _p, _r, _den, md = self.fixture(self.GROUPS)
+        self.assertIn("戦型の名前は書かない", md)
+        self.assertIn("割合を出さない", md)
+
+    def test_29e_the_json_the_gate_reads_carries_the_groups(self):
+        """**候補の JSON まで届く**(書き手と門が同じものを見る)。"""
+        direct, patient, repro, denoms, _md = self.fixture(self.GROUPS)
+        payload = EC.candidates_json(direct, patient, repro, denoms, [], [],
+                                     EC.opening_lines(patient, direct, TODAY), self.GROUPS)
+        self.assertEqual([r["key"] for r in payload["openingGroups"]],
+                         ["core", "other", "noSignature"])
+        self.assertEqual(payload["openingGroups"][1]["gameIds"], ["g04"])
+
+    def test_29g_the_rows_the_table_gets_are_built_by_the_function(self):
+        """**`build()` は自分で対を組まない**(組むと `[]` を渡す変異が黙る)。"""
+        got = EC.group_denominator_rows(self.GROUPS)
+        self.assertEqual(got, [("群 A", 18), ("群 B", 4), ("群 C", 3)])
+        self.assertEqual(EC.group_denominator_rows(()), [])
+        self.assertEqual(EC.group_denominator_rows(None), [])
+        self.assertIn("group_denominator_rows(groups)", SRC)
+        # **対を作る式が 1 か所だけ**(写しが戻ったら落ちる)。
+        self.assertEqual(SRC.count('for r in groups or ()'), 1)
+
+    def test_29f_the_lines_come_from_exit_groups(self):
+        """**行の文は `exit_groups.lines_of` が正本**(候補の段に写しを持たない)。"""
+        self.assertIn("EGR.lines_of", SRC)
+        self.assertNotIn("一度は優勢になった局", SRC)
+
+
 class GroupLabelTest(unittest.TestCase):
     """**組の名の出どころは 1 か所**(仕様 §4d・P-162)。
 
