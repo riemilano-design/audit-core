@@ -588,6 +588,37 @@ def check_no_real_name(personal, sample, appendix, person, problems):
                 "(2026-09-29 の人間の決定: 本人用でも名前で呼ばない ― 盤の名札も本文も「本人」)")
 
 
+def check_one_referent(personal, sample, appendix, problems):
+    """**顧客の呼び方が 1 通りであること**(項目 12。2026-09-29。P-174)。
+
+    2026-09-29 の人間の決定は「**顧客を名前で呼ばない** ― 盤の名札も本文も「本人」」(P-170)。
+    だから**「〜さん」と呼ぶ文が 1 つでも出たら、それは名前で呼んでいる**(伏せ字でも同じ)。
+
+    【実物で出た形】4 周目の封の 4 冊で、**本編は「本人」6 か所・「さん」0 か所**なのに、
+    **束ねた付録の 2 ページ目だけ「上に行くほど〇〇さんが良く」**だった(実測)。
+    実名ではないので `check_no_real_name`(項目 11)では落ちない。
+    **顧客には埋め忘れの穴に見え、名札が 2 通りになる**(P-176 と同じ家族)。
+
+    【出どころ】付録 1(`_mid.py`)の呼び方は **pipeline 側の `REPORT_DISPLAY_NAME`**
+    (= `deliver.ts --name` に渡した値)から来る**別の道**で、本編の名札の 1 か所
+    (`exit_body.py` の既定「本人」)を通らない。**`_mid.py` は「さん」を自分で付けていない**
+    (実測 2026-09-29。付けていたと私は一度書いたが誤り)― つまり「さん」が出るのは
+    **流す側が `--name` に「〜さん」を渡したとき**だけである。
+
+    【なぜ「さん」で見るか】「呼び方の語」を機械で見分けることはできないが、
+    **決定が「名前で呼ばない」なので、敬称が出ていないことは機械で見られる。**
+    これは床であって天井ではない ― 別の呼び方(「あなた」など)は捕まえない。
+    **呼び方の決定が変わったら、この検査も変える**(決定を写している検査なので)。
+    """
+    for label, pages in (("本人用", personal), ("見本用", sample), ("付録", appendix)):
+        hits = [i + 1 for i, t in enumerate(pages) if "さん" in squeeze(norm(t))]
+        if hits:
+            problems.append(
+                f"{label}の {hits} ページ目が顧客を「〜さん」と呼んでいる"
+                "(2026-09-29 の人間の決定: 名前で呼ばない ― 呼び方は「本人」の 1 通り。"
+                "付録 1 の呼び方は pipeline の REPORT_DISPLAY_NAME = deliver の --name から来る)")
+
+
 def check_scope_and_mapping(personal, games, problems):
     """商品の範囲の 1 段落が**ちょうど 1 か所**。**行の折り返しを越えて数える**(`squeeze`)。
 
@@ -651,6 +682,7 @@ def main(argv):
     person = CA.load_json(args.patients[0][0]).get("person") if args.patients else None
     check_name_agrees(personal, appendix, person, problems)
     check_no_real_name(personal, sample, appendix, person, problems)
+    check_one_referent(personal, sample, appendix, problems)
     check_bundled_index(index, source_indexes, problems)
 
     if problems:

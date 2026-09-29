@@ -584,6 +584,45 @@ class CheckStructureTest(unittest.TestCase):
         write_pdf(os.path.join(self.dir, "appendix.pdf"), pages)
         self.assert_falls("付録の [3] ページ目に顧客の実名が出ている")
 
+    # ---- 項目 12 呼び方が 1 通り(P-174。2026-09-29)----
+    # **門を通して測る**(項目 11 と同じ理由 ― 関数だけを呼ぶ試験では「呼び出しを消す」変異が黙る)。
+    def test_46_a_honorific_in_the_appendix_falls(self):
+        """**付録が「〜さん」と呼んだら落ちる。**4 周目の実物で出た形そのもの。
+
+        実測(4 周目の封): 本編は「本人」6 か所・「さん」0 か所なのに、
+        **付録の 2 ページ目だけ「上に行くほど〇〇さんが良く」**。実名ではないので項目 11 では落ちない。
+        """
+        pages = appendix_pages(APPENDIX_BODY_PAGES)
+        pages[1].append("上に行くほど 〇〇さん が良く、下に行くほど相手が良い")
+        write_pdf(os.path.join(self.dir, "appendix.pdf"), pages)
+        self.assert_falls("付録の [2] ページ目が顧客を「〜さん」と呼んでいる")
+
+    def test_47_a_honorific_in_the_personal_pdf_falls(self):
+        """本編に出ても落ちる(呼び方は 3 冊で 1 通り)。"""
+        pages = [list(p) for p in HONBUN_PAGES]
+        pages[0].append("〇〇さん の 25 局を調べました")
+        write_pdf(os.path.join(self.dir, "honbun_personal.pdf"), pages)
+        write_pdf(os.path.join(self.dir, "honbun_sample.pdf"),
+                  [p for i, p in enumerate(pages) if i != MAPPING_PAGE_INDEX])
+        self.assert_falls("本人用の [1] ページ目が顧客を「〜さん」と呼んでいる")
+        self.assert_falls("見本用の [1] ページ目が顧客を「〜さん」と呼んでいる")
+
+    def test_48_a_honorific_split_across_lines_still_falls(self):
+        """**行で割れていても落ちる**(`squeeze` を通す ― `fitz` は「〇〇さ / ん」と割る)。"""
+        pages = appendix_pages(APPENDIX_BODY_PAGES)
+        pages[1] += ["上に行くほど 〇〇さ", "ん が良く"]
+        write_pdf(os.path.join(self.dir, "appendix.pdf"), pages)
+        self.assert_falls("付録の [2] ページ目が顧客を「〜さん」と呼んでいる")
+
+    def test_49_the_normal_books_pass_this_check(self):
+        """**校正**: ふつうの材料(「本人」で呼んでいる)では、この文が出ないこと。
+
+        出てしまうと、この検査は何にでも落ちる番人になる。
+        """
+        rc, out = self.run_gate()
+        self.assertEqual(rc, 0, f"土台が通らない: {out}")
+        self.assertNotIn("〜さん", out)
+
 class MappingPagesTest(unittest.TestCase):
     """**差は索引が示す対応表のページ数**(司令塔の判断 2026-09-29・案 1。P-133)。
 
