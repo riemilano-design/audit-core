@@ -526,5 +526,77 @@ class SinglePageHasNoPageNumberTest(unittest.TestCase):
 # **`__main__` の塊はファイルの末尾に 1 つだけ**(P-181。2026-09-29)。
 # 途中に置くと `unittest.main()` の `sys.exit` で**後ろのクラスが定義されず、直接実行で 1 本も走らない**
 # (門の `discover` では走るので赤にならない ―「手元で回して OK だった」が嘘になる)。
+
+class NoTagWordingTest(unittest.TestCase):
+    """**印が 1 つも付かないときの語**(P-184。2026-09-29。5 周目の批評席 (a))。
+
+    直す前は「特になし」で、席は「意味が取れません」と書いた ― **「調べていない」とも読める。**
+    直した後は**印の一覧からその場で組む**(「取る・打つ・王手・捨て駒・引くのどれでもない」)ので、
+    **印を足し引きしても語がずれない。**
+
+    `render_direct.py` は `sys.argv` を読んで走るので import できない。
+    **原文から `TAG_JP` と 3 つの定義だけを取り出して動かす**(字面で見るのではなく、**振る舞いで見る**)。
+    """
+
+    def piece(self):
+        """`render_direct.py` から、この件に要る定義だけを取り出して動かす。"""
+        import ast
+
+        src = read_text(os.path.join(HERE, "render_direct.py"))
+        tree = ast.parse(src)
+        wanted_names = {"TAG_JP"}
+        wanted_defs = {"no_tag_text", "tags_text_of"}
+        picked = []
+        for node in tree.body:
+            if isinstance(node, ast.Assign) and any(
+                    isinstance(t, ast.Name) and (t.id in wanted_names or t.id == "NO_TAG_TEMPLATE")
+                    for t in node.targets):
+                picked.append(node)
+            elif isinstance(node, ast.FunctionDef) and node.name in wanted_defs:
+                picked.append(node)
+        self.assertEqual(len(picked), 4, f"取り出せた定義が 4 つでない: {len(picked)}")
+        ns = {}
+        exec(compile(ast.Module(body=picked, type_ignores=[]), "<render_direct>", "exec"), ns)
+        return ns
+
+    def test_t1_no_tag_says_which_marks_were_checked(self):
+        ns = self.piece()
+        self.assertEqual(ns["no_tag_text"](), "取る・打つ・王手・捨て駒・引くのどれでもない")
+        self.assertEqual(ns["tags_text_of"]({}), ns["no_tag_text"]())
+
+    def test_t2_the_wording_is_built_from_the_table(self):
+        """**表から組む。**印を 1 つ減らすと語も変わる(語を別に書いていれば変わらない)。"""
+        ns = self.piece()
+        ns["TAG_JP"] = [("capture", "取る"), ("drop", "打つ")]
+        self.assertEqual(ns["no_tag_text"](), "取る・打つのどれでもない")
+
+    def test_t3_a_tagged_move_is_unchanged(self):
+        """印が付く手の語は変えていない(直したのは「1 つも無いとき」だけ)。"""
+        ns = self.piece()
+        self.assertEqual(ns["tags_text_of"]({"capture": True}), "取る")
+        self.assertEqual(ns["tags_text_of"]({"capture": True, "retreat": True}), "取る・引く")
+
+    def test_t4_the_old_wording_is_gone(self):
+        """**「特になし」が道具の文字定数に残っていないこと。**
+
+        **docstring は除く**(なぜ変えたかを書いた説明文に当たるため ― この日 5 回踏んだ型)。
+        """
+        import ast
+
+        src = read_text(os.path.join(HERE, "render_direct.py"))
+        tree = ast.parse(src)
+        docs = set()
+        for node in ast.walk(tree):
+            if isinstance(node, (ast.Module, ast.FunctionDef, ast.ClassDef)):
+                body = getattr(node, "body", None) or []
+                if body and isinstance(body[0], ast.Expr) and isinstance(body[0].value, ast.Constant) \
+                   and isinstance(body[0].value.value, str):
+                    docs.add(id(body[0].value))
+        hits = [n.value for n in ast.walk(tree)
+                if isinstance(n, ast.Constant) and isinstance(n.value, str)
+                and id(n) not in docs and "特になし" in n.value]
+        self.assertEqual(hits, [], f"「特になし」が残っている: {hits}")
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)

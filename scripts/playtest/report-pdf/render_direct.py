@@ -237,7 +237,8 @@ def sc_text(score_cp, mate):
 # ==================== 盤面図(render_whatif.py の Board を土台に、矢印(2 本まで)・打つ手の丸を足す) ====================
 class Board(Flowable):
     """本人側を下にした盤面図。`sfen` は表示したい局面。`arrows` は最大 2 本
-    (`{"frm": (f,r) or None, "to": (f,r), "color": Color, "dashed": bool}`。`frm` が None なら打つ手 = 丸)。"""
+    (`{"frm": (f,r) or None, "to": (f,r), "color": Color, "dashed": bool, "usi": str}`。
+    `frm` が None なら打つ手 = 丸で、**丸の中に `usi` の 1 文字目の駒を書く**)。"""
 
     def __init__(self, sfen, user_sente, arrows=(), size=50 * mm, person="本人"):
         super().__init__()
@@ -333,6 +334,12 @@ class Board(Flowable):
                     c.setDash()
                 c.circle(tx, ty, q * 0.4, stroke=1, fill=0)
                 c.setDash()
+                # **丸の中に打つ駒の字**(P-182。大きさ・下げ幅は `board_spec` の 1 か所)。
+                letter = board_spec.drop_piece_letter(arrow.get("usi"), PIECE)
+                if letter is not None:
+                    size = q * board_spec.DROP_LABEL_SCALE
+                    c.setFont(FONT, size)
+                    c.drawCentredString(tx, ty - size * board_spec.DROP_LABEL_BASELINE, letter)
                 continue
             fx, fy = center(*arrow["frm"])
             tx, ty = center(*arrow["to"])
@@ -370,7 +377,9 @@ def arrows_of(genuine_actual_usi, genuine_top1_usi):
         if usi is None:
             continue
         frm, to = usi_squares(usi)
-        result.append({"frm": frm, "to": to, "color": color, "dashed": dashed})
+        # `usi` も持たせる(P-182。**打つ手の丸の中に駒の字を書く**のに要る ―
+        # 丸だけでは何を打ったのか盤から読めない。字は USI の 1 文字目)。
+        result.append({"frm": frm, "to": to, "color": color, "dashed": dashed, "usi": usi})
     return result
 
 
@@ -429,9 +438,22 @@ CAND_HEADER_STYLE = TableStyle(
 )
 
 
+# **印が 1 つも付かないときの言い方**(P-184。2026-09-29。**文は司令塔が決めた**)。
+# 直す前は「特になし」で、5 周目の批評席 (a) が「意味が取れません」と挙げた ―
+# **「調べていない」とも読める。**印の一覧(`TAG_JP` の 5 つ)から**その場で組む**ので、
+# 印を足し引きしても言い方がずれない(語を別に書くと、表と文が食い違う)。
+# **説明の節は足さない**(語そのものが説明になる形。司令塔の判断)。
+NO_TAG_TEMPLATE = "{names}のどれでもない"
+
+
+def no_tag_text():
+    """印が 1 つも無いときの語。**`TAG_JP` の順そのまま**(表と同じ並び)。"""
+    return NO_TAG_TEMPLATE.format(names="・".join(jp for _key, jp in TAG_JP))
+
+
 def tags_text_of(tags_obj):
     names = [jp for key, jp in TAG_JP if tags_obj.get(key)]
-    return "・".join(names) if names else "特になし"
+    return "・".join(names) if names else no_tag_text()
 
 
 # ==================== 1 ページ目(表と印の数) ====================

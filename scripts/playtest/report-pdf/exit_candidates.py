@@ -425,6 +425,7 @@ def p1_numbers(patient, repro, direct=None, passed=(), thresholds=(), long_think
     out += threshold_numbers(thresholds)
     out += long_think_fork_numbers(long_think)
     out += opposite_all_numbers((side_match or {}).get("opposite"))
+    out += fork_nesting_numbers(fork_nesting_of(direct, side_match))
     return out
 
 
@@ -577,6 +578,67 @@ def opposite_all_numbers(opposite_all):
              "from": CA.OPPOSITE_ALL_NUMERATOR_NAME}]
 
 
+
+# ==================== 分かれ道の数の入れ子(P-183。2026-09-29) ====================
+# 5 周目の批評席 (a): 「**404・239・103・51 という分かれ道の数の関係(どれがどれの部分集合か)**が、
+# 本編・付録のどちらにも整理されていません」。さらに **404 は本編に 0 件**で、付録の前文にしか無い
+# (実測)― 本編だけを読む顧客には 3 つしか見えない。
+#
+# **実測した関係**(2026-09-29。`whatif-v2` の 404 行と `direct_answers` の 103 件を突き合わせた):
+#   404 = 全部の分かれ道 / 239 ⊆ 404 / 103 ⊆ 404 / 51 ⊆ 239 /
+#   **103 ⊄ 239 かつ 239 ⊄ 103**(別の絞り方。両方に当たるのは 68 局面)
+# **だから「そのうち」を 404 にだけ掛け、239 と 103 の間には掛けない。**
+# **68 は文に出さない** ― 新しい数を増やさずに「別の絞り方」だけを言う(司令塔の条件)。
+#
+# **文は司令塔が書いた**(2026-09-29)。括弧の 1 節だけ、実測に合わせて私が確定した。
+# **数字を使わない**(「この二つ」は漢数字)― 検査 1 と門 (ii) が拾うため。
+FORK_NESTING_SENTENCE = (
+    "分かれ道は全部で {all_forks} 局面。そのうち、第 1 候補の側が攻めか自玉側のどちらか 1 つだったのが "
+    "{one_side} 局面、実戦の手と第 1 候補の差が浅い読みで見えたのが {shallow} 局面です"
+    "(この二つは別の絞り方で、片方がもう片方に含まれるわけではありません)。"
+    "{one_side} 局面のうち、実戦が逆の側だったのが {opposite} 局面でした。")
+FORK_NESTING_UNIT = "局面"
+FORK_ALL_NAME = "全部の分かれ道"
+FORK_SHALLOW_NAME = "浅い読みで実戦の手と第 1 候補の差が見えた分かれ道"
+
+
+def fork_nesting_of(direct, side_match):
+    """入れ子の 4 つの数。材料が足りなければ `None`(**数を作らない**)。"""
+    opposite = (side_match or {}).get("opposite")
+    all_forks = (side_match or {}).get("forkTotal")
+    if not opposite or not all_forks:
+        return None
+    return {"all": int(all_forks), "oneSide": int(opposite["denominator"]),
+            "shallow": len(answers_of(direct)), "opposite": int(opposite["numerator"])}
+
+
+def fork_nesting_line(nesting):
+    """**使ってよい固定文**(書き手が選ぶ)。数はすべて材料から。"""
+    if nesting is None:
+        return None
+    return FORK_NESTING_SENTENCE.format(
+        all_forks=nesting["all"], one_side=nesting["oneSide"],
+        shallow=nesting["shallow"], opposite=nesting["opposite"])
+
+
+def fork_nesting_rows(nesting):
+    """分母の表に足す行。**全部の分かれ道(404)だけ** ― 他の 3 つは既に表に行がある。"""
+    if nesting is None:
+        return []
+    return [{"number": nesting["all"], "unit": FORK_NESTING_UNIT, "from": FORK_ALL_NAME}]
+
+
+def fork_nesting_numbers(nesting):
+    """候補の数(門 (ii))。**文に出る 4 つ全部**を入れる ― 印字する側と数える側は同じ集合(P-139)。"""
+    if nesting is None:
+        return []
+    return [{"number": nesting["all"], "unit": FORK_NESTING_UNIT, "from": FORK_ALL_NAME},
+            {"number": nesting["shallow"], "unit": FORK_NESTING_UNIT, "from": FORK_SHALLOW_NAME},
+            {"number": nesting["oneSide"], "unit": FORK_NESTING_UNIT, "from": CA.OPPOSITE_ALL_NAME},
+            {"number": nesting["opposite"], "unit": FORK_NESTING_UNIT,
+             "from": CA.OPPOSITE_ALL_NUMERATOR_NAME}]
+
+
 def long_think_fork_line(counts):
     """観測の 1 行。`counts` が None なら None(材料が無ければ何も出さない)。"""
     if counts is None:
@@ -719,6 +781,7 @@ def denominators(direct, patient, repro, passed=(), groups=None, thresholds=(), 
     # ---- 10 秒以上考えた手のうち分かれ道だった数(2026-09-29。③) ----
     out += long_think_fork_rows(long_think)
     out += opposite_all_rows((side_match or {}).get("opposite"))
+    out += fork_nesting_rows(fork_nesting_of(direct, side_match))
     # **同じ数と同じ出どころの行は 1 つにする**(順番は保つ)。
     seen, unique = set(), []
     for row in out:
@@ -898,6 +961,11 @@ def build_md(direct, patient, repro, passed, dropped, mapping, denoms, fdata,
     # **判定の線**(2026-09-29)。**「下回った」は書かない** ― 線と今回の値を並べるだけ。
     for sentence in threshold_sentences(thresholds):
         L.append(f"- {sentence}")
+    # **分かれ道の数の入れ子**(P-183。2026-09-29)。**404 は本編に無かった数**なので、
+    # この文を使えば本編に入る(使う / 使わないは書き手が決める)。
+    nesting_line = fork_nesting_line(fork_nesting_of(direct, side_match))
+    if nesting_line is not None:
+        L.append(f"- {nesting_line}")
     negatives = [r for r in dropped if r["why"] == NEGATIVE_TYPE_REASON]
     if negatives:
         L.append(note("下は承認済みの表の「否定の型」の文。そのまま使える"

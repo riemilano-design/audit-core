@@ -109,8 +109,14 @@ class Board(Flowable):
             fr, to_ = usi_squares(usi); tx, ty = center(to_)
             c.saveState(); c.setStrokeColor(col); c.setFillColor(col); c.setLineWidth(1.6)
             if dash: c.setDash(*DASH_CAND)
-            if fr is None:  # 打つ手: 行き先を丸で囲む
+            if fr is None:  # 打つ手: 行き先を丸で囲み、**丸の中に打つ駒の字**(P-182)
                 c.circle(tx, ty, q * 0.46, stroke=1, fill=0)
+                letter = board_spec.drop_piece_letter(usi, PIECE)
+                if letter is not None:
+                    c.setDash()          # 字は破線にしない(丸だけが破線)
+                    size = q * board_spec.DROP_LABEL_SCALE
+                    c.setFont(self.st.font, size)
+                    c.drawCentredString(tx, ty - size * board_spec.DROP_LABEL_BASELINE, letter)
             else:
                 fx, fy = center(fr); ang = math.atan2(ty - fy, tx - fx); nx, ny = -math.sin(ang) * shift, math.cos(ang) * shift
                 fx, fy, tx, ty = fx + nx, fy + ny, tx + nx, ty + ny

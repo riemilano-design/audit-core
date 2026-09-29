@@ -33,6 +33,8 @@ STYLE = BD.BoardStyle(ink="#000000", red="#ff0000", bg="#ffffff",
                       line="#cccccc", muted="#888888", font="Helvetica")
 # 初期局面(本人が先手)
 SFEN = "lnsgkgsnl/1r5b1/ppppppppp/9/9/9/PPPPPPPPP/1B5R1/LNSGKGSNL b - 1"
+# 打つ手の試し(P-182)。先手が歩と桂を持っている局面。
+SFEN_WITH_HANDS = "lnsgkgsnl/1r5b1/ppppppppp/9/9/9/PPPPPPPPP/1B5R1/LNSGKGSNL b PN 1"
 
 
 def external_names(path):
@@ -53,6 +55,29 @@ def external_names(path):
             defined.add(n.name)
     used = {n.id for n in ast.walk(tree) if isinstance(n, ast.Name) and isinstance(n.ctx, ast.Load)}
     return sorted(used - defined)
+
+
+
+def jp_style():
+    """日本語の字を PDF から読み取る試しに要る様式(**書体を埋め込む**)。
+
+    既定の `STYLE` は `Helvetica` なので、**歩・桂が字として出ない**(抽出すると `I` になる ―
+    2026-09-29 に実測)。道具と同じ順で書体を探し、無ければ試験を飛ばす(**無いものを在ることにしない**)。
+    """
+    import unittest as _ut
+    from reportlab.pdfbase import pdfmetrics
+    from reportlab.pdfbase.ttfonts import TTFont
+    here = os.path.dirname(os.path.abspath(__file__))
+    cands = [os.path.join(here, "fonts", "IPAexfont00401", "ipaexg.ttf"),
+             "/System/Library/Fonts/Supplemental/Arial Unicode.ttf",
+             "/Library/Fonts/Arial Unicode.ttf"]
+    path = next((p for p in cands if os.path.exists(p)), None)
+    if path is None:
+        raise _ut.SkipTest("日本語の書体が見つからない(字の位置は測れない)")
+    if "JPTest" not in pdfmetrics.getRegisteredFontNames():
+        pdfmetrics.registerFont(TTFont("JPTest", path))
+    return BD.BoardStyle(ink="#000000", red="#ff0000", bg="#ffffff",
+                         line="#cccccc", muted="#888888", font="JPTest")
 
 
 class DoesNotBorrowStyleTest(unittest.TestCase):
@@ -274,6 +299,102 @@ class HandWordIsOnePlaceTest(unittest.TestCase):
                      if isinstance(n, ast.Call) and isinstance(n.func, ast.Attribute)
                      and n.func.attr == "hand_word"]
             self.assertTrue(calls, f"{name} が board_spec.hand_word を呼んでいない(写しが残っている)")
+
+
+
+class DropCircleShowsThePieceTest(unittest.TestCase):
+    """**打つ手の丸の中に駒の字を書く**(P-182。2026-09-29)。
+
+    5 周目の批評席 (a) が実物で挙げた: 「11 局目 48 手目の実戦の手は **4 四に空の丸**が置かれている
+    だけで駒が描かれておらず」。分かれ道の盤は**その手を指す前**の局面(実戦の手と第 1 候補を 1 枚に
+    描くため)なので、打った駒は盤に無い。本文は「▲４四歩打」と書くのに、**盤を見ても歩とは読めない。**
+    """
+
+    def test_x1_a_drop_gives_the_piece_letter(self):
+        self.assertEqual(BS.drop_piece_letter("P*5e", BD.PIECE), "歩")
+        self.assertEqual(BS.drop_piece_letter("N*4e", BD.PIECE), "桂")
+
+    def test_x2_a_move_is_not_a_drop(self):
+        """動かす手には字を書かない(元の升から矢印が引けるので、何の駒かは盤で追える)。"""
+        self.assertIsNone(BS.drop_piece_letter("7g7f", BD.PIECE))
+        self.assertIsNone(BS.drop_piece_letter("8h2b+", BD.PIECE))
+        self.assertIsNone(BS.drop_piece_letter(None, BD.PIECE))
+        self.assertIsNone(BS.drop_piece_letter("", BD.PIECE))
+
+    def test_x3_the_letter_is_drawn_inside_the_circle(self):
+        """**実際に丸の中に描かれること。**`get_text("dict")` で字の位置を取り、丸の中心と比べる。
+
+        字が出ることだけを見ると、**盤の他の升の同じ駒**に当たって通ってしまう(この盤には歩が 18 枚ある)。
+        **位置で見る。**
+        """
+        import tempfile
+        from reportlab.lib.pagesizes import A4
+        from reportlab.platypus import SimpleDocTemplate
+        import fitz
+
+        out = os.path.join(tempfile.mkdtemp(), "drop.pdf")
+        board = BD.Board(SFEN_WITH_HANDS, True, jp_style(), usi="P*5e",
+                         arrows=[("P*5e", BD.COL_PLAYED, False, 0)])
+        SimpleDocTemplate(out, pagesize=A4).build([board])
+        with fitz.open(out) as d:
+            page = d[0]
+            circles = [dr["rect"] for dr in page.get_drawings()
+                       for it in dr["items"] if it[0] == "c"]
+            self.assertTrue(circles, "打つ手の丸が描かれていない")
+            r = circles[0]
+            cx, cy = r.x0 + r.width / 2, r.y0 + r.height / 2
+            inside = []
+            for block in page.get_text("dict")["blocks"]:
+                for line in block.get("lines", []):
+                    for span in line.get("spans", []):
+                        bx = (span["bbox"][0] + span["bbox"][2]) / 2
+                        by = (span["bbox"][1] + span["bbox"][3]) / 2
+                        if abs(bx - cx) < r.width / 2 and abs(by - cy) < r.height / 2:
+                            inside.append(span["text"].strip())
+        self.assertEqual(inside, ["歩"], f"丸の中に在る字: {inside}")
+
+    def test_x4_both_renderers_call_the_one_place(self):
+        """**本編の盤と付録 3 の盤が同じ 1 か所を呼ぶ**(写しが残れば、また書き方が分かれる ― P-176 の家族)。
+
+        **字面ではなく `ast` で呼び出しを見る**(説明のコメントに名前を書くと字面の試験は当たる)。
+        """
+        here = os.path.dirname(os.path.abspath(__file__))
+        for name in ("board_draw.py", "render_direct.py"):
+            with io.open(os.path.join(here, name), encoding="utf-8") as f:
+                tree = ast.parse(f.read())
+            calls = [n for n in ast.walk(tree)
+                     if isinstance(n, ast.Call) and isinstance(n.func, ast.Attribute)
+                     and n.func.attr == "drop_piece_letter"]
+            self.assertTrue(calls, f"{name} が board_spec.drop_piece_letter を呼んでいない")
+
+    def test_x6_the_appendix_arrow_carries_the_usi(self):
+        """**付録 3 の矢印が `usi` を持つこと。**持たないと `drop_piece_letter` に渡すものが無く、
+        **呼び出しは残ったまま字だけが消える**(実測 2026-09-29: `usi` を落とす変異が試験をすり抜けた)。
+
+        `render_direct.py` は `sys.argv` を読んで走るので import できない。**`ast` で辞書の鍵を見る**
+        (字面で見ると、なぜ持たせたかを書いたコメントに当たる)。
+        """
+        here = os.path.dirname(os.path.abspath(__file__))
+        with io.open(os.path.join(here, "render_direct.py"), encoding="utf-8") as f:
+            tree = ast.parse(f.read())
+        dicts = [n.args[0] for n in ast.walk(tree)
+                 if isinstance(n, ast.Call) and isinstance(n.func, ast.Attribute)
+                 and n.func.attr == "append" and n.args and isinstance(n.args[0], ast.Dict)]
+        arrows = [d for d in dicts
+                  if {k.value for k in d.keys if isinstance(k, ast.Constant)} >= {"frm", "to", "color"}]
+        self.assertEqual(len(arrows), 1, "矢印を組む辞書が 1 つでない(場所の取り違え)")
+        keys = {k.value for k in arrows[0].keys if isinstance(k, ast.Constant)}
+        self.assertIn("usi", keys, f"付録 3 の矢印が usi を持っていない(鍵: {sorted(keys)})")
+
+    def test_x5_the_size_is_smaller_than_the_pieces_on_the_board(self):
+        """**丸の中に入れるので、盤の駒の字より小さいこと。**
+
+        盤の駒は `q * 0.72`、丸の直径は本編の盤で `q * 0.92`・付録 3 で `q * 0.8`。
+        **付録 3 の丸に入る大きさ**でなければならない(小さいほうに合わせる)。
+        """
+        self.assertLess(BS.DROP_LABEL_SCALE, 0.72, "盤の駒の字より大きい")
+        self.assertLess(BS.DROP_LABEL_SCALE, 0.8, "付録 3 の丸の直径より大きい")
+        self.assertGreater(BS.DROP_LABEL_SCALE, 0.3, "小さすぎて読めない")
 
 
 if __name__ == "__main__":

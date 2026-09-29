@@ -1482,5 +1482,88 @@ class ObservationNumbersAreCandidatesTest(unittest.TestCase):
         with_direct = EC.p1_numbers(patient, repro, direct)
         self.assertEqual(without, with_direct[:len(without)])
         self.assertEqual(len(with_direct) - len(without), 6)
+
+class ForkNestingTest(unittest.TestCase):
+    """**分かれ道の数の入れ子**(P-183。2026-09-29。5 周目の批評席 (a))。
+
+    席は「404・239・103・51 の関係(どれがどれの部分集合か)が本編・付録のどちらにも無い」と書いた。
+    **404 は本編に 0 件**で、付録の前文にしか無い(実測)。
+
+    **実測した関係**(`whatif-v2` の 404 行と `direct_answers` の 103 件を突き合わせた):
+    239 ⊆ 404・103 ⊆ 404・51 ⊆ 239、**103 ⊄ 239 かつ 239 ⊄ 103**(別の絞り方。両方に当たるのは 68)。
+    """
+
+    SIDE_MATCH = {"forkTotal": 404, "opposite": {"numerator": 51, "denominator": 239}}
+    # **103 件**。他の試験と同じ `answer()` で組む(材料の形を 2 通り持たない)。
+    DIRECT = direct_of([answer(1, i + 1) for i in range(103)])
+    PATIENT = {"summary": {"games": 25}, "games": [], "findings": []}
+
+    def nesting(self):
+        return EC.fork_nesting_of(self.DIRECT, self.SIDE_MATCH)
+
+    def test_32_the_four_numbers_come_from_the_materials(self):
+        self.assertEqual(self.nesting(),
+                         {"all": 404, "oneSide": 239, "shallow": 103, "opposite": 51})
+
+    def test_32b_no_material_means_no_sentence(self):
+        """**材料が無ければ数を作らない。**"""
+        self.assertIsNone(EC.fork_nesting_of(self.DIRECT, None))
+        self.assertIsNone(EC.fork_nesting_of(self.DIRECT, {"forkTotal": 404}))
+        self.assertIsNone(EC.fork_nesting_line(None))
+        self.assertEqual(EC.fork_nesting_rows(None), [])
+        self.assertEqual(EC.fork_nesting_numbers(None), [])
+
+    def test_32c_the_sentence_carries_all_four(self):
+        line = EC.fork_nesting_line(self.nesting())
+        for n in ("404", "239", "103", "51"):
+            self.assertIn(n, line)
+
+    def test_32d_the_sentence_does_not_nest_the_two_cuts(self):
+        """**239 と 103 の間に「そのうち」を掛けない**(実測では部分集合ではない)。
+
+        「そのうち」は **404 に 1 回だけ**掛かる。そのうえで「別の絞り方」と明言する ―
+        この 1 節が、席が挙げた「どれがどれの部分集合か」への答えである。
+        """
+        line = EC.fork_nesting_line(self.nesting())
+        self.assertEqual(line.count("そのうち"), 1, f"「そのうち」が 1 回でない: {line}")
+        self.assertIn("別の絞り方", line)
+        self.assertIn("片方がもう片方に含まれるわけではありません", line)
+
+    def test_32e_the_sentence_has_no_number_outside_the_four(self):
+        """**文に出る数は 4 つだけ**(検査 1 と門 (ii) が拾う)。「この二つ」は漢数字。"""
+        import re as _re
+        # **10 以上の数だけを見る。**「第 1 候補」の 1 は冊子じゅうに在る言い方で、
+        # 検査 1 も 9 以下を落とす(`SMALL_NUMBER_MAX`)。
+        found = {int(x) for x in _re.findall(r"[0-9]+", EC.fork_nesting_line(self.nesting()))}
+        self.assertEqual({n for n in found if n >= 10}, {404, 239, 103, 51})
+
+    def test_32f_the_numbers_are_in_the_candidate_list(self):
+        """**門 (ii) を通る**(印字する側と数える側は同じ集合。P-139)。"""
+        repro = EC.repro_rows(self.DIRECT)
+        numbers = EC.p1_numbers(self.PATIENT, repro, direct=self.DIRECT, side_match=self.SIDE_MATCH)
+        got = {n["number"] for n in numbers}
+        for want in (404, 239, 103, 51):
+            self.assertIn(want, got, f"{want} が候補の数に無い")
+
+    def test_32g_only_the_new_denominator_is_added_to_the_table(self):
+        """分母の表に足すのは **404 だけ**(239・103・51 は既に行がある / 分子)。
+
+        器の余裕は 0 なので、**行を増やすのは 1 行まで**(司令塔の条件)。
+        """
+        rows = EC.fork_nesting_rows(self.nesting())
+        self.assertEqual([r["number"] for r in rows], [404])
+
+    def test_32h_the_sentence_is_offered_in_the_draft(self):
+        """**md の「使ってよい固定文」に出ること**(書き手が選ぶ)。
+
+        **`build_md` を通して見る** ― 関数だけを見ると、`build_md` が呼んでいなくても緑になる。
+        """
+        repro = EC.repro_rows(self.DIRECT)
+        denoms = EC.denominators(self.DIRECT, self.PATIENT, repro, side_match=self.SIDE_MATCH)
+        md = EC.build_md(self.DIRECT, self.PATIENT, repro, [], [], [], denoms, None,
+                         EC.opening_lines(self.PATIENT, self.DIRECT, TODAY), 0, self.SIDE_MATCH)
+        self.assertIn("分かれ道は全部で 404 局面", md)
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)

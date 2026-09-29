@@ -556,11 +556,35 @@ export function newerThanAll(probe: DeliverProbe, output: string, inputs: readon
 
 // ---- 段ごとのコマンドの組み立て ----
 
+/**
+ * **顧客の呼び方**(P-174 (ウ)。2026-09-29。**司令塔の決定**)。
+ *
+ * 2026-09-29 の人間の決定は「**顧客を名前で呼ばない** ― 盤の名札も本文も「本人」」(P-170)。
+ * **`exit_body.py` の既定がこの語**(`own = {..., "person": "本人"}`)で、本編の名札はそこ 1 か所。
+ * ここは**もう 1 つの道**(付録 1 = `render_main.py` の `REPORT_DISPLAY_NAME`)に同じ語を渡すためにある。
+ *
+ * 【なぜ `args.name` を渡さないか】4 周目の実物で、**束ねた付録の 2 ページ目だけ「〇〇さんが良く」**だった
+ * (本編は「本人」6 か所・「さん」0 か所)。`_mid.py` は「さん」を付けていない ―
+ * **流す側が `--name 〇〇さん` を渡した**ためである。門(`check_structure` の項目 12)は落とすが、
+ * **能力としては防げていなかった。**ここを固定すると、`--name` に何を渡しても付録 1 は「本人」になる。
+ *
+ * 【承知のうえの副作用】同じ `--name` は**却下済みの 6 冊形**の `1_まとめ`(`front.pdf`)にも流れるので、
+ * そちらの呼び方も「本人」になる。**人間の決定「名前で呼ばない」は冊子全部に掛かる**ため、
+ * 司令塔が「変わってよい」と判断した(2026-09-29)。
+ * **`answer_facts` へ渡す `--name`(8_B)は触らない**(同じ決定による ― そこは別の判断)。
+ *
+ * 【検査には要らない】項目 11(実名がどこにも無い)は `patient_report_data.json` の `person` から
+ * 実名を取るので、`--name` を固定しても**検査の力は落ちない**(司令塔が実測して確かめた)。
+ */
+export const PERSON_REFERENT = "本人";
+
 /** `pipeline.ts` へ渡す引数(段 1・段 3。`--until` だけが違う)。 */
 export function pipelineCommand(args: DeliverArgs, until: "report-data" | "pdf"): string[] {
   const out = ["--person", args.person, "--kifu-dir", args.kifuDir, "--work", args.work];
   if (args.parallel !== undefined) out.push("--parallel", String(args.parallel));
-  out.push("--whatif", "--until", until, "--name", args.name, "--title", args.title, "--today", args.today, "--time-limit-sec", String(args.timeLimitSec));
+  // **`--name` は `args.name` ではなく `PERSON_REFERENT` 固定**(P-174 (ウ)。上の注)。
+  // これで `REPORT_DISPLAY_NAME` = 「本人」になり、付録 1 が顧客を名前で呼ぶ道が閉じる。
+  out.push("--whatif", "--until", until, "--name", PERSON_REFERENT, "--title", args.title, "--today", args.today, "--time-limit-sec", String(args.timeLimitSec));
   if (args.previousWork !== undefined) {
     out.push("--previous", path.join(args.previousWork, "report", "patient_report_data.json"));
   }

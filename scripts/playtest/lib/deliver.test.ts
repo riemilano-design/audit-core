@@ -16,6 +16,7 @@ import {
   checkAnswerCommand,
   checkDeliveryCommand,
   checkStructureCommand,
+  PERSON_REFERENT,
   deliverLogArgsLineOf,
   deliverLogLineOf,
   deliverOutPaths,
@@ -251,8 +252,10 @@ describe("pipelineCommand", () => {
       "--whatif",
       "--until",
       "report-data",
+      // **`--name` は `PERSON_REFERENT` 固定**(P-174 (ウ)。2026-09-29 の司令塔の決定)。
+      // `args.name`(この試験では「お客さま」)は**渡さない** ― 付録 1 が顧客を名前で呼ぶ道を閉じる。
       "--name",
-      "お客さま",
+      PERSON_REFERENT,
       "--title",
       "題",
       "--today",
@@ -659,6 +662,34 @@ describe("deliverLogArgsLineOf(P-168 (ウ))", () => {
       JSON.stringify({ stage: "exit-gate", startedAt: "a", finishedAt: "2026-09-29T10:00:00.000Z", rc: 1, humanGate: true }),
     ];
     expect(seatSecondsOf(lines, "exit-gate", "2026-09-29T10:00:30.000Z")).toBe(30);
+  });
+});
+
+describe("PERSON_REFERENT(P-174 (ウ))", () => {
+  it("pipeline へ渡す引数に、名前として渡された値が 1 つも出ない", () => {
+    // **値そのものを探す。**鍵の名前を変えて中身だけ残す直しが入っても落ちる。
+    const args = argsOf();
+    const flat = pipelineCommand(args, "pdf").join("\u0000");
+    expect(flat).not.toContain(args.name);
+    expect(pipelineCommand(args, "pdf")).toContain(PERSON_REFERENT);
+  });
+
+  it("陽性対照: 実名を渡しても pipeline の引数には出ない", () => {
+    //  の土台が既に `--name` を持つので、**土台ごと置き換える**(同じ旗は 2 回渡せない)。
+    const args = parseDeliverArgs(BASE_ARGV.map((v) => (v === "お客さま" ? "実名テスト" : v)));
+    expect(args.name).toBe("実名テスト");
+    expect(pipelineCommand(args, "pdf").join("\u0000")).not.toContain("実名テスト");
+  });
+
+  it("`--title` は触っていない(司令塔の条件 ― 直すのは `--name` の 1 か所だけ)", () => {
+    const args = argsOf();
+    expect(pipelineCommand(args, "pdf")).toContain(args.title);
+  });
+
+  it("`exit_body.py` の既定と同じ語(呼び方の出どころを 2 つにしない)", () => {
+    // TS と python で定数を共有できないので、**python の既定を読んで一致を見る**。
+    const src = readFileSync(new URL("../report-pdf/exit_body.py", import.meta.url), "utf-8");
+    expect(src).toContain(`"person": "${PERSON_REFERENT}"`);
   });
 });
 
