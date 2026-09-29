@@ -585,8 +585,8 @@ def build_md(direct, patient, repro, passed, dropped, mapping, denoms, fdata,
     L.append("")
     L.append(TODO)
     L.append(note("ここに残すのは、数 3 つと「ひとことで」の 1 文だけ。候補の節は消す。"
-                  "**3 本のうち、行動の根拠の分数に引いたものが 2 本以上**"
-                  "(残り 1 本は「無いものは無いと書きます。」を節に置けば通る)"))
+                  "**多くを行動の根拠の分数から引く**"
+                  "(引けないものを置くなら、節に「無いものは無いと書きます。」を書く)"))
     L.append("")
     L.append(DRAFT_ONLY_HEADINGS[0])
     L.append("")

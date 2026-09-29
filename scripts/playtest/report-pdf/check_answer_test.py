@@ -10,6 +10,7 @@
 # 実行: `python3 -X utf8 scripts/playtest/report-pdf/check_answer_test.py`
 import json
 import os
+import re
 import sys
 import tempfile
 import unittest
@@ -651,7 +652,11 @@ class MenuFractionsTest(unittest.TestCase):
         m = self.materials()
         (f,) = CA.menu_fractions("M6", m)
         self.assertTrue(f.get("unitMismatch"), f)
-        self.assertIn("P-165", f["unitMismatch"])
+        self.assertIn("印の組", f["unitMismatch"])
+        # **既知事項の番号をこの文に書かない。**この文は候補の md の書き手への注に入るので、
+        # 「P-165」の `165` が「データに無い数」として検査 1 に当たる(実測 2026-09-29)。
+        # **消せば消える苦情を書き手の一覧に混ぜない。**
+        self.assertFalse(re.search(r"\d", f["unitMismatch"]), f["unitMismatch"])
         # **単位が違うのは M6 だけ**(M4 は局面・M5 は手で、分子と分母がそろっている)。
         for item_id in ("M4", "M5"):
             for other in CA.menu_fractions(item_id, m):
