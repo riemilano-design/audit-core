@@ -116,7 +116,10 @@ class ShapeTest(CoverTestBase):
         text, _ = self.build()
         self.assertIn("7 局の形勢の流れ", text)
         self.assertIn("持ち時間に到達した 4 局", text)
-        self.assertIn("差が見えた 11 局面", text)
+        # 2026-09-29(P-179): 型が「…分かれ道は {forks} 局面ありました。この冊子に載せているのは…
+        # {bundled_forks} 局面です」に変わった。**材料の数(11)と束に入る数(この材料では 0)は別物。**
+        self.assertIn("分かれ道は 11 局面ありました", text)
+        self.assertIn("含む 0 局面です", text)
         # 「形勢が大きく動いた M 局を 1 局ずつ」は**「そのほかの局」の行**に移った
         # (2026-09-29。司令塔の判断 (a)。下の test_03b が本編から指した場合を測る)。
         self.assertNotIn("形勢が大きく動いた", text)
@@ -304,8 +307,17 @@ class WordingExistsInToolsTest(unittest.TestCase):
     # その節のページに実際に在る欄(一覧・先後・結果・手数・形勢の変化)を言う型に変えた。
     PHRASES = ["形勢の流れ", "そのほかの", "局の一覧", "先後", "結果", "手数", "形勢の変化",
                "持ち時間に到達した", "最後の局面を", "エンジンで読んだ手順",
-               "長く読まなくても実戦の手と第 1 候補の差が見えた", "実戦の手と第 1 候補",
-               "局面つきで", "並べています"]
+               "実戦の手と第 1 候補", "の評価差が見えた分かれ道は", "局面ありました",
+               "この冊子に載せているのは、そのうち本編で引いた局面を含む", "局面です", "局面つき"]
+
+    # **司令塔が書いて承認した新しい文**(2026-09-29。P-179)。`COVER_HEADING` などの枠と同じ扱いで、
+    # **「道具に実在する語」の検査(test_17)から外す** ― 枠が外れている理由と同じで、
+    # **この言い方を持つ道具がまだ無い**(表紙が初めて言う)。
+    # 外す代わりに**ここに名前で並べる**(検査をゆるめるのではなく、例外を一覧にする)。
+    # 元の型は「…見えた {forks} 局面。実戦の手と第 1 候補を局面つきで並べています」で、
+    # **束に入るのは 9 局面なのに 103 並んでいると読めた**(P-179)。
+    APPROVED_NEW_PHRASES = ["この冊子に載せているのは、そのうち本編で引いた局面を含む",
+                            "の評価差が見えた分かれ道は", "局面です", "局面つき"]
     # **型を置いているファイル自身を数から除く。**除かないと**循環する** ―
     # 型に書いた語はそのファイルに存在するので、どんな新語でも「道具にある」ことになる
     # (実測: 「盤つき」を 1 件と数えたが、その 1 件は `exit_index.py` の型自身だった)。
@@ -325,11 +337,24 @@ class WordingExistsInToolsTest(unittest.TestCase):
 
     def test_17_every_declared_phrase_exists_in_the_tools(self):
         for phrase in self.PHRASES:
+            if phrase in self.APPROVED_NEW_PHRASES:
+                continue   # 司令塔が承認した新しい文(上の注)。**一覧に名前が在ることが例外の根拠。**
             r = subprocess.run(["git", "grep", "-l", phrase, "--", *self.SCAN],
                                capture_output=True, text=True, cwd=REPO)
             files = [ln for ln in r.stdout.splitlines() if ln.strip()]
             self.assertTrue(files, f"道具に無い語を中身に書いている: 「{phrase}」"
                                    f"(実物にしかない言い回しは『新しい文』なので承認が要る)")
+
+    def test_17b_the_approved_new_phrases_are_really_in_the_templates(self):
+        """**例外の一覧に、型に出てこない語を書けないようにする。**
+
+        書けてしまうと、`APPROVED_NEW_PHRASES` が「検査を外す抜け道」になる。
+        """
+        joined = "".join(EI.COVER_CONTENT.values())
+        for phrase in self.APPROVED_NEW_PHRASES:
+            self.assertIn(phrase, joined, f"型に無い語を例外にしている: 「{phrase}」")
+        self.assertTrue(set(self.APPROVED_NEW_PHRASES) <= set(self.PHRASES),
+                        "例外が PHRASES に入っていない(test_18 の敷き詰めから漏れる)")
 
     def test_18_the_declared_list_tiles_the_templates(self):
         """**宣言した語句で型を敷き詰められるか**を機械で見る(一覧の抜けを人の目に頼らない)。
@@ -340,7 +365,9 @@ class WordingExistsInToolsTest(unittest.TestCase):
         残れば、それは**道具から採っていない、書くときに作った語**である。
         """
         for key, template in EI.COVER_CONTENT.items():
-            rest = re.sub(r"\{[a-z]+\}", "\x00", template)
+            # 鍵に `_` が入るもの(`{bundled_forks}`。2026-09-29)も外す ―
+            # 外さないと、型に残った `{bundled_forks}` を「覆えない日本語」と数えかける。
+            rest = re.sub(r"\{[a-z_]+\}", "\x00", template)
             for phrase in sorted(self.PHRASES, key=len, reverse=True):
                 rest = rest.replace(phrase, "\x00")
             leftovers = [r for r in CJK_RUN.findall(rest) if len(r.strip("、。")) >= 3]
@@ -397,6 +424,34 @@ class PositionMarkRefTest(CoverTestBase):
         # 節の印は書かれた見出しのまま。
         self.assertEqual(by[("付録3", "最後の局面")], "「数え方」")
         self.assertEqual(by[("付録1", "形勢の流れ")], "「ひとことで」")
+
+    def test_p4_the_cover_says_how_many_positions_the_bundle_holds(self):
+        """**表紙の「この冊子に載せているのは N 局面」の N は、束に入る数**(P-179。2026-09-29)。
+
+        直す前は材料の全部(103)を出していて、**束に入るのは 9 局面なのに 103 並んでいると読めた**
+        (1 周目から 3 周続いた家族。5 周目の席 (a) も挙げた)。
+
+        この材料: 付録 3 の索引は「分かれ道」が p4 から。本編は **16/93(p5)の局面の印**と
+        **「最後の局面」(p2)の節の印**を引くので、**束に入るページは p2 と p5 の 2 枚**。
+        p5 には「分かれ道」の局面を **4 つ**(16/93・17/99・18/105・19/111)置き、p3 にもう 1 つ(1/20)置く。
+        したがって答えは **4**。
+
+        **近くにある数を全部ずらしてある** ― 材料の全部 **103**・本編の印の数 **3**(付録 1 の節 1 +
+        付録 3 の局面 1 + 付録 3 の節 1)・束のページ数 **2**・節の外の局面 **1**・答え **4**。
+        **同じ数にすると、別のものを返す変異が緑のまま通る**(実測 2026-09-29 に 2 回踏んだ:
+        最初は答え 2 = 束のページ数 2 で `len(pages)` が通り、次は答え 3 = 印の数 3 で
+        `len(marks_of(...))` が通った)。**「近い数を全部ずらす」まで変異を回し直すこと。**
+        """
+        self.material(forks=103)
+        self.index_with_pages("付録3",
+                              {"3 分": {"16/93": 5, "17/99": 5, "18/105": 5, "19/111": 5, "1/20": 3}},
+                              {"最後の局面": 2, "分かれ道": 4})
+        text, _ = self.build(honbun=self.honbun_with_pos())
+        self.assertIn("分かれ道は 103 局面ありました", text)
+        self.assertIn("含む 4 局面です", text)
+        for wrong in ("含む 103 局面です", "含む 1 局面です", "含む 2 局面です", "含む 3 局面です",
+                      "含む 5 局面です"):
+            self.assertNotIn(wrong, text, f"束に入る数が {wrong} になっている")
 
     def test_p1_the_section_is_chosen_by_page_not_by_order(self):
         """節は**ページで決める**(索引の辞書の並び順ではない)。

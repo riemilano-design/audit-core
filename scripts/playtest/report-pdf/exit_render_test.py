@@ -115,6 +115,48 @@ class ExitIndexIsConstantsOnlyTest(unittest.TestCase):
         self.assertIs(CS.EXIT_RENDER_KEYS, EI.EXIT_RENDER_KEYS)
 
 
+
+class PositionsInSectionTest(unittest.TestCase):
+    """`exit_index.positions_in_section`(束に入る局面を節ごとに数える 1 か所。P-179)。
+
+    表紙が「この冊子に載せているのは N 局面」と言う N を出す。**2 つのふるいが両方効くこと**を測る:
+    (1) 束に入るページに乗っていること (2) その節のページの範囲に在ること。
+    """
+
+    # 付録 3 の形(組 → 局/手 → ページ)。節は 4 ページ目から 29 ページ目まで。
+    INDEX = {"appendix": "付録3",
+             "sections": {"読み方": 1, "最後の局面": 2, "分かれ道": 4, "通して見えたこと": 30},
+             "positions": {"3 分": {"1/10": 2, "5/20": 5, "6/30": 5, "7/40": 20, "8/50": 31}}}
+    # 付録 1 の形(平ら)も受ける。
+    FLAT = {"appendix": "付録1", "sections": {"形勢の流れ": 2, "そのほかの局": 20},
+            "positions": {"1/40": 3, "2/70": 4, "3/90": 21}}
+
+    def test_q1_counts_only_pages_in_the_bundle(self):
+        self.assertEqual(EI.positions_in_section(self.INDEX, [5, 20], "分かれ道"), 3)
+        self.assertEqual(EI.positions_in_section(self.INDEX, [5], "分かれ道"), 2)
+        self.assertEqual(EI.positions_in_section(self.INDEX, [], "分かれ道"), 0)
+
+    def test_q2_counts_only_pages_inside_the_section(self):
+        """節の外のページは、束に入っていても数えない。
+
+        2 ページ目は「最後の局面」、31 ページ目は「通して見えたこと」の側。
+        """
+        self.assertEqual(EI.positions_in_section(self.INDEX, [2, 5, 31], "分かれ道"), 2)
+        self.assertEqual(EI.positions_in_section(self.INDEX, [2], "最後の局面"), 1)
+
+    def test_q3_the_last_section_has_no_upper_edge(self):
+        self.assertEqual(EI.positions_in_section(self.INDEX, [31], "通して見えたこと"), 1)
+
+    def test_q4_a_flat_index_works_too(self):
+        """付録 1 の鍵は組を持たない(平ら)。**両方の形を受ける。**"""
+        self.assertEqual(EI.positions_in_section(self.FLAT, [3, 4], "形勢の流れ"), 2)
+        self.assertEqual(EI.positions_in_section(self.FLAT, [21], "そのほかの局"), 1)
+
+    def test_q5_an_unknown_section_is_an_error(self):
+        """知らない節は落とす(黙って 0 と言わない ― 0 は「無かった」と読まれる)。"""
+        with self.assertRaises(ValueError):
+            EI.positions_in_section(self.INDEX, [5], "無い節")
+
 class ExitRenderTest(unittest.TestCase):
     def setUp(self):
         self._tmp = tempfile.TemporaryDirectory()
@@ -172,6 +214,41 @@ class ExitRenderTest(unittest.TestCase):
         # **付録 1 の 2 枚が先、付録 3 の 2 枚が後**(付録番号の順)。
         by_page = {p: label for label, p in bundled["outputPositions"].items()}
         self.assertEqual(sorted(by_page), [1, 2, 3, 4])
+
+    def test_03b_the_helper_agrees_with_what_build_bundled(self):
+        """**表紙が使う `bundled_source_pages` と、束ねが実際に抜いたページが一致すること**(P-179)。
+
+        表紙は「この冊子に載せているのは N 局面」と言うために**束ねる前に**ページを知る必要がある。
+        判定が 2 か所になると、**表紙の数と束の中身が食い違う**(顧客が数えて合わない)。
+        だから**同じ入力で両方を出して比べる** ― これが食い違ったら、どちらかが写しになっている。
+        """
+        bundled = self.run_build()
+        indexes = {"付録1": INDEX_1, "付録3": INDEX_3}
+        with io.open(self.j("honbun.md"), encoding="utf-8") as f:
+            md = f.read()
+        self.assertEqual(ER.bundled_source_pages(md, indexes), bundled["sourcePages"])
+
+    def test_03c_asking_for_one_appendix_gives_only_that_one(self):
+        """1 つの付録だけを聞ける(表紙は付録 3 の数だけが要る)。"""
+        indexes = {"付録1": INDEX_1, "付録3": INDEX_3}
+        with io.open(self.j("honbun.md"), encoding="utf-8") as f:
+            md = f.read()
+        only = ER.bundled_source_pages(md, indexes, appendix="付録3")
+        self.assertEqual(sorted(only), ["付録3"])
+        self.assertEqual(only["付録3"], [2, 3])
+
+    def test_03d_strict_false_skips_a_mark_it_cannot_resolve(self):
+        """`strict=False`(表紙だけが使う)は引けない印を数に入れない。**既定は落とす。**
+
+        落とすことは `build()` が同じ実行で行う(順は 表紙 → 本編 → 束ね)ので、
+        黙って通る道にはならない。
+        """
+        thin = {"付録3": {"appendix": "付録3", "positions": {}, "sections": {}}}
+        with io.open(self.j("honbun.md"), encoding="utf-8") as f:
+            md = f.read()
+        with self.assertRaises(ER.ExitRenderError):
+            ER.bundled_source_pages(md, thin, appendix="付録3")
+        self.assertEqual(ER.bundled_source_pages(md, thin, appendix="付録3", strict=False), {})
 
     def test_00b_the_appendix_number_must_be_readable(self):
         """**付録の名前から番号が取れなければ落ちる**(黙って並び順を諦めない)。"""

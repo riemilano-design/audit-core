@@ -146,6 +146,38 @@ def source_page_of(sources, appendix, kind, key):
     return table[group][name]
 
 
+def bundled_source_pages(md_text, indexes, appendix=None, strict=True):
+    """**束に入る元のページ**(`{付録名: [ページ…]}`)。**束ねる前に分かる。**
+
+    表紙(`exit_cover.py`)が「この冊子に何局面載るか」を言うために要る(P-179)。
+    **段の順は変えない** ― 表紙は本編の md と索引だけから数を出せる(2026-09-29 に実測:
+    5 周目の材料で 9 局面が索引だけから出た。PDF は読まない)。
+
+    `indexes` は `{付録名: 索引}`。`build()` が持っている形とは違うので、呼ぶ側が渡し替える
+    (**判定は 1 か所** ― `marks_of` と `source_page_of` をそのまま使う)。
+    `build()` の `sourcePages` と一致することは試験が固定する(写しを 2 つ持たないため)。
+    """
+    sources = {name: {"index": index} for name, index in indexes.items()}
+    pages = {}
+    for name, kind, key, _label in marks_of(md_text):
+        # **1 つの付録だけを聞かれたら、他の付録の印は見ない。**表紙は付録 3 の数だけが要るので、
+        # 付録 1 の索引に無い節を引いて落ちる道を作らない(`build()` はそれを落としたいので既定は全部)。
+        if appendix is not None and name != appendix:
+            continue
+        if strict:
+            page = source_page_of(sources, name, kind, key)
+        else:
+            # **`strict=False` は表紙だけが使う。**表紙は数を出すだけなので、引けない印は数に入れない。
+            # **引けないこと自体は黙らせていない** ― 同じ実行の後の段(`build()`)が `strict=True` で落とす
+            # (順は 表紙 → 本編 → 束ね。`runExitRender` の 3 つ)。
+            try:
+                page = source_page_of(sources, name, kind, key)
+            except ExitRenderError:
+                continue
+        pages.setdefault(name, set()).add(page)
+    return {name: sorted(v) for name, v in pages.items()}
+
+
 def check_neighbour_promises(sources, placed, problems):
     """**束ねたページが、束に入っていない隣のページを約束していないこと**(P-171。2026-09-29)。
 

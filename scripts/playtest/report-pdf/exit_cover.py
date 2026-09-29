@@ -118,6 +118,29 @@ def section_of_position(index, group, key):
     return best[0] if best else None
 
 
+def bundled_forks_of(args, indexes):
+    """**この冊子に載る「分かれ道」の局面の数**(P-179。2026-09-29)。
+
+    表紙は「103 局面ありました。この冊子に載せているのは… N 局面です」と言うので、
+    **N は束に入る数**でなければならない(材料の全部ではない)。
+    **段の順は変えない** ― 束ねる前に、本編の md と組版の索引だけから出る(実測で 9 と一致)。
+    判定は 2 か所とも借りもの: 束に入るページは `exit_render.bundled_source_pages`、
+    節の中の数え方は `exit_index.positions_in_section`。**写しをここに作らない。**
+
+    その付録を束ねていない・節が索引に無いときは `None`(表紙はその行を出さない)。
+    """
+    if "付録3" not in indexes:
+        return None
+    with open(args["honbun_md"], encoding="utf-8") as f:
+        md_text = CA.strip_dev_section(f.read())
+    pages = ER.bundled_source_pages(md_text, indexes, appendix="付録3", strict=False).get("付録3") or []
+    if not pages:
+        # **束に入るページが 0 枚なら、その上に乗る局面も 0。**節を引かずに 0 と言える
+        # (節が索引に無い材料でも落ちない ― 落とすのは束ねる側の仕事)。
+        return 0
+    return EI.positions_in_section(indexes["付録3"], pages, "分かれ道")
+
+
 def numbers_of(args):
     """数は材料から。**新しい数を作らない。**"""
     patient = load(args["patient"])
@@ -222,6 +245,12 @@ def build_md(args):
     problems = []
     appendices, indexes = bundled_appendices(args["sources"])
     numbers = numbers_of(args)
+    # **束に入る局面の数**(P-179)。`None` なら型に無いので鍵を足さない
+    # (`format` が落ちるのは型がその鍵を使っているときだけ)。
+    bundled = bundled_forks_of(args, indexes)
+    if bundled is not None:
+        # **鍵は 1 つ**(2 つ持つと、型がどちらを使っているか分からなくなる)。
+        numbers["bundled_forks"] = bundled
     with open(args["honbun_md"], encoding="utf-8") as f:
         md_text = f.read()
     # **開発用の節の印は読まない** ― `exit_render.py` と同じ扱い(`check_answer` の関数をそのまま呼ぶ)。

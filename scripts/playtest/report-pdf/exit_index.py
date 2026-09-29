@@ -54,6 +54,32 @@ def rest_count(games, featured):
     return int(games) - int(featured)
 
 
+
+def positions_in_section(index, pages, name):
+    """**その節に在り、かつ束に入るページに乗っている局面の数**(P-179。2026-09-29)。
+
+    表紙が「この冊子に載せているのは N 局面」と言うために要る。**PDF は読まない** ―
+    組版の索引(`sections` の開始ページと `positions` のページ)だけで出る(実測で 9 と一致)。
+    節の範囲は「その節の開始ページ以上、**次の節の開始ページ未満**」
+    (`exit_cover.section_of_position` と同じ考え方 ― 流し込みなので節はページの途中から始まる)。
+    """
+    sections = index.get("sections") or {}
+    if name not in sections:
+        raise ValueError(f"索引に節「{name}」が無い")
+    start = sections[name]
+    later = [v for k, v in sections.items() if v > start]
+    end = min(later) if later else None
+    inside = lambda page: start <= page and (end is None or page < end)
+    wanted = set(pages)
+    n = 0
+    for key, value in (index.get("positions") or {}).items():
+        # 付録ごとに鍵の形が違う(付録 1 は平ら・付録 3 は組 → 局/手)。**両方を受ける。**
+        entries = value.values() if isinstance(value, dict) else [value]
+        for page in entries:
+            if page in wanted and inside(page):
+                n += 1
+    return n
+
 def section_title(appendix, name, **numbers):
     """印字される題を 1 か所から引く。**知らない組み合わせは落とす**(黙って鍵をそのまま出さない)。"""
     if (appendix, name) not in SECTION_TITLES:
@@ -181,7 +207,12 @@ COVER_CONTENT = {
     # **この節のページに在るもの**を書く ― 一覧の欄(局・先後・結果・手数・形勢の変化)。
     ("付録1", "そのほかの局"): "そのほかの {rest} 局の一覧(先後・結果・手数・形勢の変化)",
     ("付録3", "最後の局面"): "持ち時間に到達した {finals} 局の最後の局面を、エンジンで読んだ手順",
-    ("付録3", "分かれ道"): "長く読まなくても実戦の手と第 1 候補の差が見えた {forks} 局面。実戦の手と第 1 候補を局面つきで並べています",
+    # **件数の約束を、材料の数と冊子に入る数の 2 つに分ける**(2026-09-29。P-179。**文は司令塔が決めた**)。
+    # 直す前は「…見えた {forks} 局面。実戦の手と第 1 候補を局面つきで並べています」で、
+    # **束に入るのは 9 局面なのに 103 並んでいると読めた**(1 周目から 3 周続いた家族。5 周目の席 (a) も挙げた)。
+    # **「並べています」を消した**のがこの直しの要点。{bundled_forks} は道具が数える(リテラルにしない)。
+    ("付録3", "分かれ道"): ("実戦の手と第 1 候補の評価差が見えた分かれ道は {forks} 局面ありました。"
+                        "この冊子に載せているのは、そのうち本編で引いた局面を含む {bundled_forks} 局面です(局面つき)"),
 }
 
 
