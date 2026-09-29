@@ -105,8 +105,14 @@ SOURCE_INDEX_3 = {"appendix": "付録3", "source": "appendix3.pdf", "pages": 9,
 BASE_GAMES = 20
 
 
+# 土台の材料の実名(**PDF には 1 か所も入れない** ― 入れると土台が落ちる。項目 11)。
+FIXTURE_PERSON = "ぷる"
+
+
 def patient(games, time_up_losses):
     return {
+        # **実名は材料に在る**(冊子に出ていないことを門が見る。項目 11・P-170)。
+        "person": FIXTURE_PERSON,
         "summary": {"games": games},
         "overview": {"fell": 5, "early": 0},
         "time": {
@@ -545,6 +551,39 @@ class CheckStructureTest(unittest.TestCase):
         self.assertIn(CS.squeeze(sentence), CS.squeeze(joined))
 
 
+    # ---- 項目 11 実名がどこにも無い(P-170。2026-09-29)----
+    # **門を通して測る。**関数だけを呼ぶ試験は書いたが、**`main` が呼んでいなければ門ではない** ―
+    # 実際に「呼び出しを消す」変異で関数の試験は全部黙った(定義の行に当たっていた)。
+    def test_43_a_real_name_in_the_personal_pdf_falls(self):
+        """本人用に実名が出たら落ちる(人間の決定: 本人用でも名前で呼ばない)。"""
+        pages = [list(p) for p in HONBUN_PAGES]
+        pages[2].append(f"{FIXTURE_PERSON} の持ち駒 銀")
+        write_pdf(os.path.join(self.dir, "honbun_personal.pdf"), pages)
+        write_pdf(os.path.join(self.dir, "honbun_sample.pdf"),
+                  [p for i, p in enumerate(pages) if i != MAPPING_PAGE_INDEX])
+        # **この検査だけが出す文で見る。**「本人用」だけでは
+        # 「本人用と見本用の本文が違う」など別の検査の文にも当たる(実測: 呼び出しを消す変異で黙った)。
+        self.assert_falls("本人用の [3] ページ目に顧客の実名が出ている")
+        self.assert_falls("見本用の [3] ページ目に顧客の実名が出ている")
+
+    def test_44_a_real_name_only_on_the_mapping_page_still_falls(self):
+        """**抜くページに置いても落ちる。**
+
+        人間の決定は「呼ばない」なので、**対応表のページの例外は使わない**
+        (見本用から消えても本人用に残るため)。
+        """
+        pages = [list(p) for p in HONBUN_PAGES]
+        pages[MAPPING_PAGE_INDEX].append(f"{FIXTURE_PERSON} さんの局")
+        write_pdf(os.path.join(self.dir, "honbun_personal.pdf"), pages)
+        self.assert_falls("本人用の [5] ページ目に顧客の実名が出ている")
+
+    def test_45_a_real_name_in_the_appendix_falls(self):
+        """付録は 1 冊で本人用にも見本用にも付くので、付録の実名は見本用の一式に乗る。"""
+        pages = appendix_pages(APPENDIX_BODY_PAGES)
+        pages[2].append(f"上に行くほど {FIXTURE_PERSON} が良く")
+        write_pdf(os.path.join(self.dir, "appendix.pdf"), pages)
+        self.assert_falls("付録の [3] ページ目に顧客の実名が出ている")
+
 class MappingPagesTest(unittest.TestCase):
     """**差は索引が示す対応表のページ数**(司令塔の判断 2026-09-29・案 1。P-133)。
 
@@ -695,7 +734,23 @@ class NameAgreesTest(unittest.TestCase):
         problems = []
         CS.check_name_agrees(["本編は〇〇さんの話"], ["付録は ぷる の話"], "ぷる", problems)
         self.assertEqual(len(problems), 1, problems)
-        self.assertIn("ぷる", problems[0])
+        self.assertIn("付録", problems[0])
+        # **落ちたときほど、ログに名前そのものを残さない**(2026-09-29。P-170)。
+        self.assertNotIn("ぷる", problems[0])
+
+    def test_n1b_a_name_only_in_the_body_falls(self):
+        """**逆向きも落とす**(2026-09-29。P-170)。
+
+        もとは「付録に在って本編に無い」だけを見ていたので、**実物で出た向きが通った** ―
+        本編の盤の名札に実名が入り、付録は「本人」だったため、この検査は黙った。
+        docstring は「本編と付録で名前が違うこと」を禁じると書いていたのに、
+        実装はその片側だけだった。
+        """
+        problems = []
+        CS.check_name_agrees(["本編は ぷる の話"], ["付録は〇〇さんの話"], "ぷる", problems)
+        self.assertEqual(len(problems), 1, problems)
+        self.assertIn("本編", problems[0])
+        self.assertNotIn("ぷる", problems[0])
 
     def test_n2_the_same_name_in_both_passes(self):
         """**実名そのものを禁じない** ― 本人用に本人の名前を出すのは正しい。"""
@@ -728,6 +783,74 @@ class NameAgreesTest(unittest.TestCase):
                       "付録 1 の組版が表示名を受け取れない(本編と名前を揃えられない)")
         # 既定は材料の `person`(渡さなければ出力は変わらない)。
         self.assertIn('or m["person"]', src)
+
+
+class NoRealNameTest(unittest.TestCase):
+    """**実名が 3 冊のどこにも無いこと**(2026-09-29 の人間の決定。P-170)。
+
+    決定は「本人用でも顧客を名前で呼ばない」 ― 盤の名札も本文も「本人」。
+    実物で出た: 盤の名札「〈実名〉の持ち駒」が**本人用にも見本用にも**入った(各 2 か所)。
+    **見本用は他人に見せる冊子**なので、他人に顧客の実名が出る。
+    """
+
+    def test_r1_a_name_in_the_personal_book_falls(self):
+        """**陽性対照から始める。**実名を入れた本人用で赤くなること。"""
+        problems = []
+        CS.check_no_real_name(["1 ページ目", "ぷる の持ち駒"], ["1 ページ目"], ["付録"], "ぷる", problems)
+        self.assertEqual(len(problems), 1, problems)
+        self.assertIn("本人用", problems[0])
+        self.assertIn("[2]", problems[0], "何ページ目かを言わない")
+
+    def test_r2_a_name_in_the_sample_book_falls(self):
+        """**見本用も別に見る** ― ページの抜き方が変わったときに黙って通らないため。"""
+        problems = []
+        CS.check_no_real_name(["1 ページ目"], ["ぷる の持ち駒"], ["付録"], "ぷる", problems)
+        self.assertEqual(len(problems), 1, problems)
+        self.assertIn("見本用", problems[0])
+
+    def test_r3_a_name_in_the_appendix_falls(self):
+        problems = []
+        CS.check_no_real_name(["1 ページ目"], ["1 ページ目"], ["上に行くほど ぷる が良く"], "ぷる", problems)
+        self.assertEqual(len(problems), 1, problems)
+        self.assertIn("付録", problems[0])
+
+    def test_r4_no_name_anywhere_passes(self):
+        problems = []
+        CS.check_no_real_name(["本人の持ち駒"], ["本人の持ち駒"], ["本人の持ち駒"], "ぷる", problems)
+        self.assertEqual(problems, [])
+
+    def test_r5_the_message_does_not_carry_the_name(self):
+        """**落ちたときほど、ログに名前そのものを残さない。**"""
+        problems = []
+        CS.check_no_real_name(["ぷる"], ["ぷる"], ["ぷる"], "ぷる", problems)
+        self.assertEqual(len(problems), 3, problems)
+        for problem in problems:
+            self.assertNotIn("ぷる", problem)
+
+    def test_r6_line_wrap_does_not_hide_the_name(self):
+        """折り返しを越えて探す(`squeeze`。門の他の検査と同じ流儀)。"""
+        problems = []
+        CS.check_no_real_name(["ぷ\nる の持ち駒"], ["1 ページ目"], ["付録"], "ぷる", problems)
+        self.assertEqual(len(problems), 1, problems)
+
+    def test_r7_no_person_in_the_material_does_nothing(self):
+        """材料に名前が無い顧客では**何も言わない**(空文字を全ページに見つけない)。"""
+        problems = []
+        CS.check_no_real_name(["本編"], ["見本"], ["付録"], "", problems)
+        self.assertEqual(problems, [])
+
+    def test_r8_the_gate_runs_this_check(self):
+        """**`main` がこの検査を呼んでいること。**関数を書いても呼ばれなければ門ではない。
+
+        **字面で探すときは、定義の行に当たらない形で探す** ― 最初に書いた
+        `assertIn("check_no_real_name(personal, sample, appendix, person, problems)")` は
+        **`def check_no_real_name(...)` の行にも当たる**ので、呼び出しを消す変異で黙った(実測)。
+        **本物の校正は門を通す試験**(`CheckStructureTest` の test_43〜45)で、ここは字面の念押し。
+        """
+        here = os.path.dirname(os.path.abspath(__file__))
+        with io.open(os.path.join(here, "check_structure.py"), encoding="utf-8") as f:
+            src = f.read()
+        self.assertRegex(src, r"(?m)^    check_no_real_name\(")
 
 
 class HeadingMatchesTest(unittest.TestCase):

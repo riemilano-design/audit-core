@@ -256,7 +256,8 @@ async function runExitRender(args: DeliverArgs, step: PlannedDeliverStep): Promi
 
   const runs: [DeliverTool, string[]][] = [
     ["exit-cover", exitCoverCommand(thisGroup, out, groupLabel)],
-    ["exit-body", exitBodyCommand(groups, probe, out, plan, args.name)],
+    // **`args.name` は渡さない**(P-170。盤の名札に実名が入り、見本用にも乗る)。
+    ["exit-body", exitBodyCommand(groups, probe, out, plan)],
     // 束ねの引数は計画が持っている(`--dry-run` に出るのはこれ)。
     ["exit-render", [...step.args]],
   ];

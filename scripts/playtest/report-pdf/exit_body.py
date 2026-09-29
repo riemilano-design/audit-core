@@ -514,6 +514,9 @@ def render_plain(md_text, out_pdf, pdf_title):
 
 def parse_own_args(argv):
     """この道具だけの引数を抜き、残りは `check_answer.py` にそのまま渡す。"""
+    # **`person` の既定「本人」は盤の名札の語**(`board_draw.py` の `f"{person}の持ち駒"`)。
+    # **`deliver.ts` は `--person` を渡さない**(P-170。2026-09-29 の人間の決定で
+    # 本人用でも名前で呼ばないため)。**ここが名札の語の 1 か所**。
     own = {"out_person": None, "out_sample": None, "person": "本人"}
     rest = []
     i = 0

@@ -1477,12 +1477,23 @@ describe("顧客向け出口の 4 段", () => {
     expect(cmd[cmd.indexOf("--out-index") + 1]).toBe(out.exitIndex);
   });
 
-  it("本編の組版は本人用・見本用と表示名を渡す", () => {
-    const cmd = exitBodyCommand(groups, fakeProbe({}), out, plan, "お客さま");
+  it("本編の組版は本人用・見本用を渡す。**名前は渡さない**(P-170)", () => {
+    const cmd = exitBodyCommand(groups, fakeProbe({}), out, plan);
     expect(cmd[0]).toBe(out.honbunMd);
     expect(cmd[cmd.indexOf("--out-person") + 1]).toBe(out.honbunPerson);
     expect(cmd[cmd.indexOf("--out-sample") + 1]).toBe(out.honbunSample);
-    expect(cmd[cmd.indexOf("--person") + 1]).toBe("お客さま");
+    // **`--person` が無いこと**。在れば `exit_body.py` の既定「本人」が上書きされ、
+    // 盤の名札に渡した語が入る(実名を渡すと見本用にも乗る)。
+    expect(cmd).not.toContain("--person");
+  });
+
+  it("本編の組版の引数に、顧客の名前になりうる語が 1 つも無い(P-170)", () => {
+    const cmd = exitBodyCommand(groups, fakeProbe({}), out, plan);
+    // **args.name・args.title を渡す道を塞ぐ**。関数の引数に名前が無いので、
+    // 呼ぶ側が名前を混ぜるには引数を足すしかない(足したらこの試験が落ちる)。
+    expect(exitBodyCommand.length).toBe(4);
+    expect(cmd).not.toContain(args.name);
+    expect(cmd).not.toContain(args.title);
   });
 
   it("器の門は本編の索引も渡す(検査 4 が対応表のページ数を索引から取るため)", () => {

@@ -521,29 +521,71 @@ def check_bundled_index(index, source_paths, problems):
 
 
 def check_name_agrees(personal, appendix, person, problems):
-    """**付録に出ている名前が本編に出ていないなら落とす**(2026-09-29。D5)。
+    """**本編と付録で名前が違うなら落とす(両方向)**(2026-09-29。D5 → P-170 で両方向にした)。
 
     `person` は `patient_report_data.json` の `person`(材料の中の実名)。
 
     【何を守るか】**見本用は本人用からページを抜いたものなので、名前を分けられない。**
-    付録は 1 冊で本人用にも見本用にも付く。だから**付録に実名が乗れば、見本用の一式に実名が乗る。**
-    実物で出た: 本編は `--name 〇〇さん` で組まれているのに、付録 1 は
-    `patient_report_data.json` の `person` で組まれていて「上に行くほど〈実名〉が良く」と印字された。
+    付録は 1 冊で本人用にも見本用にも付く。だから**どちらに実名が乗っても、見本用の一式に乗る。**
+    実物で出た 2 つの向き:
+    - **付録だけ**(2026-09-29 の D5 = P-147): 本編は `--name 〇〇さん` で組まれているのに、
+      付録 1 は材料の `person` で組まれていて「上に行くほど〈実名〉が良く」と印字された。
+    - **本編だけ**(2026-09-29 の P-170): 盤の名札が `--name`(実名)で組まれ、付録は「本人」だった。
+      **この向きをこの検査は見ていなかったので通した** ― 下の注のとおり、
+      docstring が「名前が違うこと」を禁じると書いていたのに、実装は片側だけだった。
 
-    【なぜ「本編に無ければ落とす」か】**実名そのものを禁じるのではない。**
-    本人用に本人の名前を出すのは正しい。**禁じたいのは「本編と付録で名前が違う」こと** ―
-    どちらかが匿名なら、もう一方も匿名でなければ意味が無い。
+    【禁じたいのは「本編と付録で名前が違う」こと】どちらかが匿名なら、もう一方も匿名でなければ
+    意味が無い。**実名そのものを禁じるのはこの検査ではなく `check_no_real_name`**(項目 11)で、
+    2026-09-29 の人間の決定「本人用でも名前で呼ばない」以降はそちらが厳しい側の規則になった。
+    この検査は、**名前を出す決定に戻ったときの歯止め**として残してある。
     """
     if not person:
         return
     name = squeeze(norm(person))
     in_appendix = any(name in squeeze(norm(t)) for t in appendix)
     in_personal = any(name in squeeze(norm(t)) for t in personal)
+    # **両方向を見る**(2026-09-29。P-170)。もとは「付録に在って本編に無い」だけを見ていたため、
+    # **逆向き(本編に在って付録に無い)が通った** ― 実物では本編の盤の名札に実名が入り、
+    # 付録は「本人」だったので、この検査は黙って通った。docstring は「名前が違うこと」を
+    # 禁じると書いていたのに、実装はその片側だけだった。
+    # **メッセージに名前そのものを書かない**(落ちた時ほどログに名前を残さない)。
     if in_appendix and not in_personal:
         problems.append(
-            f"付録に「{person}」が出ているのに本編に出ていない(本編と付録で名前が違う。"
+            "付録に顧客の実名が出ているのに本編に出ていない(本編と付録で名前が違う。"
             "見本用は本人用からページを抜いたもので、付録は 1 冊で両方に付くため、"
             "付録の実名は見本用の一式に乗る)")
+    if in_personal and not in_appendix:
+        problems.append(
+            "本編に顧客の実名が出ているのに付録に出ていない(本編と付録で名前が違う。"
+            "見本用は本人用からページを抜いたものなので、本編の実名は見本用に乗る)")
+
+
+def check_no_real_name(personal, sample, appendix, person, problems):
+    """**顧客の実名が、顧客に渡す 3 冊のどのページにも無いこと**(2026-09-29 の人間の決定。P-170)。
+
+    決定は「**本人用でも顧客を名前で呼ばない**」 ― 盤の名札も本文も「本人」。
+    だから規則が 1 つに決まる: **実名は本編(本人用・見本用)・付録のどこにも無い。**
+
+    【なぜ本人用にも掛けるか】**見本用は本人用からページを抜いたもの**なので、
+    本人用に名前が在れば、抜かないページに在るかぎり見本用に乗る。
+    本人用に掛ければ両方が閉じる(見本用 ⊂ 本人用)。**それでも見本用を別に見る** ―
+    ページの抜き方が変わったときに黙って通らないため。
+
+    【この検査が要る理由】`check_delivery.py --forbid` には**顧客自身の名前を渡せない**
+    (フォルダ全体を対象にする道具なので、名前を禁じると本人用も落ちる…という前提で
+    作られていた)。名前の規則が「どこにも出さない」に決まった今、**冊子の側で見る場所**が要る。
+
+    **メッセージに名前そのものを書かない。**どの冊子の何ページかだけを言う。
+    """
+    if not person:
+        return
+    name = squeeze(norm(person))
+    for label, pages in (("本人用", personal), ("見本用", sample), ("付録", appendix)):
+        hits = [i + 1 for i, t in enumerate(pages) if name in squeeze(norm(t))]
+        if hits:
+            problems.append(
+                f"{label}の {hits} ページ目に顧客の実名が出ている"
+                "(2026-09-29 の人間の決定: 本人用でも名前で呼ばない ― 盤の名札も本文も「本人」)")
 
 
 def check_scope_and_mapping(personal, games, problems):
@@ -608,6 +650,7 @@ def main(argv):
     check_scope_and_mapping(personal, games, problems)
     person = CA.load_json(args.patients[0][0]).get("person") if args.patients else None
     check_name_agrees(personal, appendix, person, problems)
+    check_no_real_name(personal, sample, appendix, person, problems)
     check_bundled_index(index, source_indexes, problems)
 
     if problems:

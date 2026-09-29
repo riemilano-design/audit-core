@@ -505,11 +505,17 @@ class SinglePageHasNoPageNumberTest(unittest.TestCase):
         # **「ページ」の語ごと出ない**(「ページ 1 /」のような半端な形も出ない)。
         self.assertNotRegex("".join(texts), r"ページ\s*\d+\s*/")
 
-    def test_d7b_two_pages_still_print_it(self):
-        """**2 ページ以上では出る。**出なくなったら、顧客が何ページ目を見ているか分からない。"""
+    def test_d7b_two_pages_still_print_the_number_but_not_the_total(self):
+        """**2 ページ以上では出る。**出なくなったら、顧客が何ページ目を見ているか分からない。
+
+        **ただし総数は出さない**(P-166。2026-09-29)― 見本用は本人用からページを抜いたもので、
+        **同じ組版が描いた「/ 5」を 4 ページの冊子が持っていた**(実測)。
+        """
         md = "# 題\n\n" + "".join(f"{i} 行目の段落です。\n\n" for i in range(1, 121))
         pages, texts = self._render(md)
         self.assertGreater(pages, 1)
         joined = "".join(texts)
-        self.assertIn(f"ページ 1 / {pages}", joined)
-        self.assertIn(f"ページ {pages} / {pages}", joined)
+        self.assertIn("ページ 1", joined)
+        self.assertIn(f"ページ {pages}", joined)
+        # **「/ 総数」の形が 1 つも無いこと**(見本用が嘘の総数を持てなくなる)。
+        self.assertNotRegex(joined, r"ページ\s*\d+\s*/")

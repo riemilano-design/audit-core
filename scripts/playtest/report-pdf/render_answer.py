@@ -332,8 +332,15 @@ class _ReportCanvas(canvas_mod.Canvas):
         # 「ページ 1 / 1」は読者に何も渡さない ― むしろ「この冊子は 1 ページなのか」と読める
         # (実物: 付録の表紙が 1 ページで、束ねた付録は 4 ページある)。
         # **この道具で組む 1 ページの文書はいまのところ表紙だけ**(納品の 10 冊を数えた)。
+        # **総数は出さない**(P-166。2026-09-29 の人間の決定の後に測って決めた)。
+        # 実物で出た: **見本用は本人用からページを抜いたもの**なので、同じ組版が
+        # 「ページ n / 5」を描き、**4 ページの見本用が「/ 5」と言っていた**(実測)。
+        # **総数を正しく描ける場所は無い** ― 描くのは 1 回の組版で、2 冊はその後に分かれる。
+        # 置き場所も測った: 束ねた付録(7 ページ)には**ノンブルがそもそも無く**、
+        # 付録の表紙は本編より先に組まれるので本編の総数を知らない。**足せば穴が開く**。
+        # だから「ページ n」だけにする。総数は索引の JSON(`personPages`・`samplePages`)が持つ。
         if total_pages > 1:
-            self.drawCentredString(A4[0] / 2, 10 * mm, f"ページ {page_no} / {total_pages}")
+            self.drawCentredString(A4[0] / 2, 10 * mm, f"ページ {page_no}")
         if page_no > 1 and self._report_title:
             self.drawString(LEFT_MARGIN, A4[1] - 12.5 * mm, self._report_title)
         self.restoreState()

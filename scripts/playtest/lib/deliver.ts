@@ -850,10 +850,16 @@ export function exitRenderCommand(thisGroup: GroupPaths, out: DeliverOutPaths): 
   return flags;
 }
 
-/** 段 `exit-render` の本編(`exit_body.py`)。本人用・見本用と本編の索引。 */
-export function exitBodyCommand(groups: readonly GroupPaths[], probe: DeliverProbe, out: DeliverOutPaths, plan: MaterialPlan, displayName: string): string[] {
+/** 段 `exit-render` の本編(`exit_body.py`)。本人用・見本用と本編の索引。
+ *
+ * **`--person` は渡さない**(P-170。2026-09-29 の人間の決定「本人用でも顧客を名前で呼ばない」)。
+ * `exit_body.py` の既定が「本人」で、**盤の名札の語はそこ 1 か所**。
+ * ここで `--name`(呼びかけの表示名)を渡していたため、**盤の名札に実名が入り、
+ * 見本用は本人用からページを抜いたものなので見本用にも乗った**(実測 4 件)。
+ * **名前を渡す引数を足さないこと**が、この関数がこの穴を塞ぎ続ける唯一の形である。 */
+export function exitBodyCommand(groups: readonly GroupPaths[], probe: DeliverProbe, out: DeliverOutPaths, plan: MaterialPlan): string[] {
   return [out.honbunMd, "--out-person", out.honbunPerson, "--out-sample", out.honbunSample,
-          "--person", displayName, ...answerMaterialFlags(groups, probe, out, plan)];
+          ...answerMaterialFlags(groups, probe, out, plan)];
 }
 
 /** 段 `exit-check`(`check_structure.py`)。器の門(仕様 §4 の 8 項目)。 */
