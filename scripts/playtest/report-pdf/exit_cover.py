@@ -277,15 +277,24 @@ def main(argv):
     print(f"wrote {args['out']}({len(rows)} 行: "
           + "・".join(f"{r['appendix']}/{r['section']}" for r in rows) + ")")
     if args["out_pdf"] is not None:
-        # 組版は `exit_body.render_plain`(`render_answer.py` の作り)の 1 か所。
-        # **表紙は 1 ページのはず** ― 増えたら黙らない(`exit_render.py` は `--cover` に
-        # ページ番号を 1 つしか受け取らないので、2 ページ目は束から落ちる)。
+        # 組版は `exit_body.render_plain_pages`(`render_answer.py` の作り)の 1 か所。
+        # ---- 付録へ回す節を表紙の次のページに組む(器の単独束 C-4。2026-09-30)----
+        # 本編の md に `<!-- appendix: … -->` の印が付いた節があれば、**表紙の次のページから**
+        # 1 節 1 ページで組む(印の文法と切り出しは `exit_index` の 1 か所)。
+        # **本編の側はこの節を組まない**(`exit_body.py` が外す)。両側は `check_structure` が見る。
+        # 表紙だけのときは**今までどおり 1 ページ**で、増えたら落ちる ―
+        # 印が無いのにページが増えるのは組版の変化であって、黙って束に入れてよいものではない。
         import exit_body as EB
 
-        pages = EB.render_plain(text, args["out_pdf"], "対局後診断・付録の表紙")
-        if pages != 1:
-            raise ExitCoverError(f"表紙が {pages} ページになった(束に入るのは 1 ページだけ)")
-        print(f"wrote {args['out_pdf']}(1 ページ)")
+        with open(args["honbun_md"], encoding="utf-8") as f:
+            _keep, moved = EI.split_appendix_sections(f.read())
+        pages = EB.render_plain_pages([text] + [section for _title, section in moved],
+                                      args["out_pdf"], "対局後診断・付録の表紙")
+        expected = 1 + len(moved)
+        if pages != expected:
+            raise ExitCoverError(
+                f"表紙が {pages} ページになった(表紙 1 + 付録へ回す節 {len(moved)} = {expected} ページのはず)")
+        print(f"wrote {args['out_pdf']}({pages} ページ: 表紙 1 + 付録へ回す節 {len(moved)})")
     return 0
 
 

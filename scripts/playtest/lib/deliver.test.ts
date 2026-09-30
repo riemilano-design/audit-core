@@ -1553,9 +1553,14 @@ describe("顧客向け出口の 4 段", () => {
     expect(cmd[cmd.indexOf("--group") + 1]).toBe("3 分");
   });
 
-  it("束ねは表紙を 1 ページ目に置き、索引と PDF の対を渡す", () => {
+  it("束ねは表紙 PDF を**ページ番号なしで**渡し(全ページ)、索引と PDF の対を渡す", () => {
     const cmd = exitRenderCommand(thisGroup, out);
-    expect(cmd[cmd.indexOf("--cover") + 1]).toBe(`${out.exitCoverPdf}:1`);
+    const cover = cmd[cmd.indexOf("--cover") + 1];
+    expect(cover).toBe(out.exitCoverPdf);
+    // **`:<ページ>` を付けないこと**(器の単独束 C-4)。表紙 PDF は表紙 1 ページのあとに
+    // 「付録へ回した節」(分母の表)を載せるので、`:1` と書くと 2 ページ目が束から落ち、
+    // 顧客が読む表がどこにも出なくなる。
+    expect(cover).not.toMatch(/:\d+$/);
     const sources = cmd.filter((_v, i) => cmd[i - 1] === "--source-index");
     expect(sources).toEqual(exitSourceIndexPairs(thisGroup, out).map(([i, p]) => `${i}:${p}`));
     expect(cmd[cmd.indexOf("--out-index") + 1]).toBe(out.exitIndex);

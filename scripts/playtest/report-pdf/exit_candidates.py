@@ -1016,6 +1016,14 @@ def build_md(direct, patient, repro, passed, dropped, mapping, denoms, fdata,
                                      rest=rest_games(patient, featured))
             L.append(f"- {title}<!-- sec: {appendix}/{name} -->")
     L.append("")
+    # ---- 分母の表は**付録の表紙の次のページ**へ(器の単独束 C-4。2026-09-30。司令塔の判断)----
+    # 印は `exit_index.APPENDIX_TAG_RE` の文法 1 か所。読む側は 3 つ ―
+    # `exit_body.py`(本編から外す)・`exit_cover.py`(付録に組む)・`check_structure.py`(両側を見る)。
+    # **md 自身に「この節は付録へ行く」と書かせる** ― 印が無いと、md だけを読んだ席が
+    # 「表は本編にある」と誤って読む(P-159・P-171 の家族)。
+    L.append(f"<!-- appendix: {EI.APPENDIX_TAG_TITLE} -->")
+    L.append(note(EI.APPENDIX_TAG_NOTE))
+    L.append("")
     L.append("### 数の分母がどこから来たか")
     L.append("")
     L.append("| 数 | 数えたもの | どの集計から出たか |")

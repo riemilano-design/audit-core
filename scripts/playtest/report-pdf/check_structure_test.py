@@ -918,5 +918,138 @@ class HeadingMatchesTest(unittest.TestCase):
             self.assertTrue(CS.heading_matches(role, heading), (role, heading))
 
 
+class CoverPagesTest(unittest.TestCase):
+    """**検査 8 は表紙の枚数を索引から読む**(器の単独束 C-4。2026-09-30)。
+
+    付録へ回した節(分母の表)が表紙 PDF の 2 ページ目に付くので、**表紙は 1 ページとは限らない。**
+    枚数を真偽値(`hasCover`)で数え続けると、**付録が 1 ページ増えたことが「指していないページが
+    混ざっている」という嘘の指摘になり**、門が通らなくなる ― 直し方は「検査を消す」に流れる。
+    """
+
+    # 付録は 5 ページ・指しているのは 3 ページ・表紙は 2 ページ(**3 つとも違う数**にする ―
+    # そろえると足し算の向きを変える変異が黙る)。
+    INDEX = {"appendixPages": [1, 2, 3], "hasCover": True, "coverPages": 2}
+    APPENDIX = ["付録 1 ページ目", "付録 2", "付録 3", "付録 4", "付録 5"]
+
+    def test_c1_two_cover_pages_add_up(self):
+        problems = []
+        CS.check_appendix_pages(dict(self.INDEX), list(self.APPENDIX), problems)
+        self.assertEqual(problems, [])
+
+    def test_c2_without_the_key_the_old_count_falls(self):
+        """**`coverPages` を読まなければ落ちる。**表紙を 1 ページと数えると 3 + 1 ≠ 5。"""
+        index = dict(self.INDEX)
+        del index["coverPages"]
+        problems = []
+        CS.check_appendix_pages(index, list(self.APPENDIX), problems)
+        self.assertEqual(len(problems), 1, problems)
+        self.assertIn("検査 8", problems[0])
+        self.assertIn("表紙 1 ページ", problems[0])
+
+    def test_c3_a_non_integer_falls_back(self):
+        """**文字の "2" は数として使わない**(索引が壊れていたら黙って通さない)。"""
+        index = dict(self.INDEX)
+        index["coverPages"] = "2"
+        problems = []
+        CS.check_appendix_pages(index, list(self.APPENDIX), problems)
+        self.assertEqual(len(problems), 1, problems)
+        self.assertIn("表紙 1 ページ", problems[0])
+
+    def test_c4_the_cover_is_still_required(self):
+        """**枚数が在っても表紙そのものは必須**(正本 §8)。2 つの検査が混ざっていない。"""
+        index = dict(self.INDEX)
+        index["hasCover"] = False
+        problems = []
+        CS.check_appendix_pages(index, list(self.APPENDIX), problems)
+        self.assertEqual(len(problems), 1, problems)
+        self.assertIn("表紙が無い", problems[0])
+
+    def test_c5_a_wrong_count_still_falls(self):
+        """**枚数を読むようにしても、合わない束は落ちる**(検査が甘くなっていない)。"""
+        index = dict(self.INDEX)
+        index["coverPages"] = 3
+        problems = []
+        CS.check_appendix_pages(index, list(self.APPENDIX), problems)
+        self.assertEqual(len(problems), 1, problems)
+        self.assertIn("表紙 3 ページ", problems[0])
+
+
+class MovedToAppendixTest(unittest.TestCase):
+    """**検査 9(付録へ回した節)は両側を見る**(器の単独束 C-4。2026-09-30。司令塔の条件)。
+
+    印の付いた節が**本編の PDF に出ない**こと、かつ**付録の PDF に出る**こと。
+    片側だけ見ると片方が腐る(P-171 の型) ― 本編から外れたのに付録に組まれなければ、
+    **顧客が読む表がどこにも出ない。**
+    """
+
+    HEAD = "数の分母がどこから来たか"
+    # 印の付いた節(`### ` の小見出しを 1 つ持つ)。本編に残る節を前後に置き、
+    # **切り出しの範囲**(次の `## ` の直前まで)も一緒に通す。
+    MD = ("## 本編の節\n\n本文。\n\n"
+          "<!-- appendix: 数の出どころ -->\n### " + HEAD + "\n\n"
+          "| 名前 | 分母 |\n| --- | --- |\n| 崩れ | 20 局 |\n\n"
+          "## 次の節\n\n次の本文。\n")
+    # 本編は 2 ページ・付録は 3 ページ(**数をそろえない**)。
+    PERSONAL = ["本編の節\n本文。", "次の節\n次の本文。"]
+    APPENDIX = ["付録の表紙", HEAD + "\n崩れ 20 局", "付録 3 ページ目"]
+
+    def test_m1_moved_out_of_the_body_and_into_the_appendix_passes(self):
+        problems = []
+        CS.check_moved_to_appendix(self.MD, list(self.PERSONAL), list(self.APPENDIX), problems)
+        self.assertEqual(problems, [])
+
+    def test_m2_still_in_the_body_falls(self):
+        """**二重に出る向き。**印が付いているのに本編から外れていない。"""
+        problems = []
+        CS.check_moved_to_appendix(self.MD, self.PERSONAL + [self.HEAD], list(self.APPENDIX), problems)
+        self.assertEqual(len(problems), 1, problems)
+        self.assertIn("本編の PDF に出ている", problems[0])
+
+    def test_m3_missing_from_the_appendix_falls(self):
+        """**どこにも出ない向き。**本編から外したのに付録に組まれていない。"""
+        problems = []
+        CS.check_moved_to_appendix(self.MD, list(self.PERSONAL), ["付録の表紙", "別の話", "3"], problems)
+        self.assertEqual(len(problems), 1, problems)
+        self.assertIn("付録の PDF に無い", problems[0])
+
+    def test_m4_both_sides_can_fall_together(self):
+        """**片側を消す変異で 1 件に減る**(2 つの指摘が別々に立っている)。"""
+        problems = []
+        CS.check_moved_to_appendix(self.MD, self.PERSONAL + [self.HEAD],
+                                   ["付録の表紙", "別の話", "3"], problems)
+        self.assertEqual(len(problems), 2, problems)
+
+    def test_m5_no_marker_says_nothing(self):
+        """**印が無ければ何も言わない**(既に送った冊子・印を付けない顧客でも通る)。
+        本編に見出しが在っても指摘しない ― 印が無ければ「回した節」ではない。"""
+        problems = []
+        CS.check_moved_to_appendix("## 節\n\n### " + self.HEAD + "\n\n本文。\n",
+                                   self.PERSONAL + [self.HEAD], ["付録の表紙"], problems)
+        self.assertEqual(problems, [])
+
+    def test_m6_a_section_without_a_heading_falls(self):
+        """**照合する語が取れないまま通さない**(印だけ置いて見出しを書き忘れた道)。"""
+        problems = []
+        CS.check_moved_to_appendix("<!-- appendix: 数の出どころ -->\n本文だけ。\n",
+                                   list(self.PERSONAL), list(self.APPENDIX), problems)
+        self.assertEqual(len(problems), 1, problems)
+        self.assertIn("見出し", problems[0])
+
+    def test_m7_line_wrap_in_the_appendix_does_not_look_missing(self):
+        """**付録側の折り返し。**組版は見出しも折るので、そのままでは「無い」と数える。"""
+        problems = []
+        wrapped = ["付録の表紙", "数の分母がど\nこから来たか\n崩れ 20 局", "3"]
+        CS.check_moved_to_appendix(self.MD, list(self.PERSONAL), wrapped, problems)
+        self.assertEqual(problems, [])
+
+    def test_m8_line_wrap_in_the_body_does_not_hide_it(self):
+        """**本編側の折り返し。**折れたまま残っているのを見逃さない(両側で空白を落としている)。"""
+        problems = []
+        body = self.PERSONAL + ["数の分母がど\nこから来たか"]
+        CS.check_moved_to_appendix(self.MD, body, list(self.APPENDIX), problems)
+        self.assertEqual(len(problems), 1, problems)
+        self.assertIn("本編の PDF に出ている", problems[0])
+
+
 if __name__ == "__main__":
     unittest.main()

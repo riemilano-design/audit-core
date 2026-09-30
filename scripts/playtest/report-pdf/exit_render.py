@@ -64,8 +64,14 @@ def parse_args(argv):
         elif flag == "--source-index":
             out["sources"].append(parse_pair(value, "--source-index"))
         elif flag == "--cover":
-            path, page = parse_pair(value, "--cover")
-            out["cover"] = (path, int(page))
+            # **ページ番号なし = 表紙 PDF の全ページ**(器の単独束 C-4。2026-09-30)。
+            # 表紙のあとに「付録へ回した節」のページが付くので、枚数は組んでみるまで決まらない ―
+            # だから**呼ぶ側がページ番号を書かない**形を足した。`<パス>:<番号>` は今までどおり 1 ページ。
+            if ":" in value and value.rsplit(":", 1)[1].isdigit():
+                path, page = parse_pair(value, "--cover")
+                out["cover"] = (path, int(page))
+            else:
+                out["cover"] = (value, None)
         elif flag == "--out-appendix":
             out["out_appendix"] = value
         elif flag == "--out-index":
@@ -227,11 +233,17 @@ def build(args):
     writer = PdfWriter()
     readers = {}
     has_cover = False
+    cover_pages = 0
     if args["cover"] is not None:
         cover_path, cover_page = args["cover"]
         readers[cover_path] = PdfReader(cover_path)
-        writer.add_page(readers[cover_path].pages[cover_page - 1])
+        # ページ番号が無ければ**全ページ**(表紙 + 付録へ回した節)。在れば今までどおりその 1 ページ。
+        picked = (list(range(len(readers[cover_path].pages))) if cover_page is None
+                  else [cover_page - 1])
+        for index in picked:
+            writer.add_page(readers[cover_path].pages[index])
         has_cover = True
+        cover_pages = len(picked)
 
     # **付録番号 → 元のページ番号**の順に並べる(重複は除く。同じページを 2 回指しても 1 枚)。
     #
@@ -279,6 +291,10 @@ def build(args):
         "appendixPages": sorted(placed.values()),
         "boardsDrawn": sum(1 for _, kind, _, _ in marks if kind == "positions"),
         "hasCover": has_cover,
+        # **表紙の枚数**(器の単独束 C-4。2026-09-30)。付録へ回した節が付くと 1 より大きくなる ―
+        # `check_structure` の検査 8 は「付録のページ数 = 指しているページ + 表紙の枚数」を見るので、
+        # 枚数を真偽値から数に変えないと**表が増えたぶんだけ落ちる**。
+        "coverPages": cover_pages,
         "sourcePages": source_pages,
     }
     for appendix, src in sources.items():
@@ -298,7 +314,7 @@ def build(args):
 def main(argv):
     args = parse_args(argv)
     bundled = build(args)
-    print(f"wrote {args['out_appendix']}({len(bundled['appendixPages'])} ページ + 表紙 {1 if bundled['hasCover'] else 0})")
+    print(f"wrote {args['out_appendix']}({len(bundled['appendixPages'])} ページ + 表紙 {bundled['coverPages']})")
     print(f"wrote {args['out_index']}(盤 {bundled['boardsDrawn']} 件・付録 {sorted(k for k in bundled if k not in OWN_KEYS)})")
     return 0
 

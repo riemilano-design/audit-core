@@ -364,6 +364,58 @@ class ExitRenderTest(unittest.TestCase):
         self.assertIn("付録 1 の 1 ページ", self.page_texts()[0])
         # 表紙を足したぶん、印の指す出力ページが 1 つずれる。
         self.assertEqual(min(bundled["outputPositions"].values()), 2)
+        self.assertEqual(bundled["coverPages"], 1)
+
+    # ---- 表紙のページ番号を書かない形(器の単独束 C-4。2026-09-30)----
+    # **表紙 PDF は「表紙 1 ページ + 付録へ回した節」**になったので、枚数は組んでみるまで決まらない。
+    # `--cover <パス>:1` のままだと **2 ページ目が束から落ち、顧客が読む表がどこにも出ない**(P-171 の型)。
+    # 表紙は 2 ページ(付録 1 の 4 ページ・付録 3 の 3 ページ・束の中身 3 ページと**どれとも違う数**)。
+    COVER_PAGES = [["付録の表紙", "この冊子に入っているもの"],
+                   ["数の分母がどこから来たか", "25 局"]]
+
+    def _write_cover(self):
+        write_pdf(self.j("cover.pdf"), self.COVER_PAGES)
+        return self.j("cover.pdf")
+
+    def test_12b_a_cover_without_a_page_number_bundles_every_page(self):
+        """**ページ番号を書かなければ表紙 PDF の全ページ**が束の先頭に入る。"""
+        bundled = self.run_build(["--cover", self._write_cover()])
+        self.assertTrue(bundled["hasCover"])
+        self.assertEqual(bundled["coverPages"], 2)
+        texts = self.page_texts()
+        self.assertIn("付録の表紙", texts[0])
+        # **2 ページ目 = 付録へ回した節。**ここが落ちるのが P-171 の型。
+        self.assertIn("数の分母がどこから来たか", texts[1])
+        # 表紙 2 ページぶん、印の指す出力ページがずれる(1 ページぶんではない)。
+        self.assertEqual(min(bundled["outputPositions"].values()), 3)
+
+    def test_12c_a_page_number_still_takes_only_that_page(self):
+        """**番号を書いたときは今までどおりその 1 ページだけ。**古い呼び方を壊していない。"""
+        bundled = self.run_build(["--cover", f"{self._write_cover()}:2"])
+        self.assertEqual(bundled["coverPages"], 1)
+        texts = self.page_texts()
+        self.assertIn("数の分母がどこから来たか", texts[0])
+        self.assertNotIn("この冊子に入っているもの", texts[0])
+        self.assertEqual(min(bundled["outputPositions"].values()), 2)
+
+    def test_12d_the_bundle_has_the_cover_pages_plus_the_marked_pages(self):
+        """**束の総ページ = 表紙の枚数 + 印が指すページ数。**
+        器の門の検査 8 が同じ足し算をする(索引の `coverPages` を読む) ―
+        ここが合わないと、門が「指していないページが混ざっている」という嘘の指摘を出す。"""
+        bundled = self.run_build(["--cover", self._write_cover()])
+        self.assertEqual(len(self.page_texts()),
+                         bundled["coverPages"] + len(bundled["appendixPages"]))
+        # **数がそろっていないことを固定する**(表紙 2 + 指すページ 4 = 6)。
+        # どちらかを取り違えても合わないので、足し算の向きを変える変異が黙らない。
+        self.assertEqual(bundled["coverPages"], 2)
+        self.assertEqual(len(bundled["appendixPages"]), 4)
+        self.assertEqual(len(self.page_texts()), 6)
+
+    def test_12e_without_a_cover_the_count_is_zero(self):
+        """**表紙を渡さなければ枚数は 0**(「無い」を 1 と数えない)。"""
+        bundled = self.run_build()
+        self.assertFalse(bundled["hasCover"])
+        self.assertEqual(bundled["coverPages"], 0)
 
 
 

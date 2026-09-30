@@ -527,6 +527,72 @@ class SinglePageHasNoPageNumberTest(unittest.TestCase):
 # 途中に置くと `unittest.main()` の `sys.exit` で**後ろのクラスが定義されず、直接実行で 1 本も走らない**
 # (門の `discover` では走るので赤にならない ―「手元で回して OK だった」が嘘になる)。
 
+class RenderPlainPagesTest(unittest.TestCase):
+    """**md を 1 本ずつ別のページに組む**(器の単独束 C-4。2026-09-30)。
+
+    表紙の次のページから、**印の付いた節が 1 つずつ別のページで始まる**。
+    自然改ページに任せると**表紙の下に表の頭が乗る** ― 司令塔の判断は
+    「付録の**表紙の次のページ**へ」なので、載る場所そのものが約束の中身である。
+    **実際に組んで fitz で読む**(組版の中だけを見ると、直したつもりで届かない。P-159 の家族)。
+    """
+
+    # **3 本渡す**(2 本だと「最後だけ改ページ」でも「毎回改ページ」でも同じ結果になり、
+    # 数え方を取り違える変異が黙る)。文字は 1 本ずつ違う語にして、どのページに出たかを見る。
+    MD_COVER = "# 付録の表紙\n\nこの冊子に入っているものの案内です。\n"
+    MD_MOVED_1 = "### 数の分母がどこから来たか\n\n分母の一覧です。\n"
+    MD_MOVED_2 = "### 数え方のことわり\n\n数え方の断り書きです。\n"
+
+    def _render(self, md_texts):
+        import tempfile
+
+        import fitz
+
+        with tempfile.TemporaryDirectory() as d:
+            out = os.path.join(d, "cover.pdf")
+            pages = EB.render_plain_pages(md_texts, out, "校正")
+            doc = fitz.open(out)
+            try:
+                texts = [doc[i].get_text() for i in range(doc.page_count)]
+            finally:
+                doc.close()
+            return pages, texts
+
+    def test_r1_each_md_starts_on_its_own_page(self):
+        """**3 本 → 3 ページ**。それぞれの語が自分のページにだけ出る。"""
+        pages, texts = self._render([self.MD_COVER, self.MD_MOVED_1, self.MD_MOVED_2])
+        self.assertEqual(pages, 3)
+        self.assertEqual(len(texts), 3)
+        self.assertIn("付録の表紙", texts[0])
+        self.assertIn("数の分母がどこから来たか", texts[1])
+        self.assertIn("数え方のことわり", texts[2])
+        # **同じページに 2 本が流れ込んでいないこと**(明示の改ページが効いている)。
+        self.assertNotIn("数の分母がどこから来たか", texts[0])
+        self.assertNotIn("数え方のことわり", texts[1])
+        # **題(「付録の表紙」)はどのページにも出る** ― ヘッダだから(`test_r4` がそれを固定する)。
+        # ここで「出ない」と書くと 2 つの試験が食い違う。
+
+    def test_r2_one_md_is_one_page_and_prints_no_page_number(self):
+        """**1 本だけなら 1 ページ**(先頭に改ページを入れていない)。ノンブルも出ない(P-163)。"""
+        pages, texts = self._render([self.MD_COVER])
+        self.assertEqual(pages, 1)
+        self.assertNotRegex("".join(texts), r"ページ\s*\d+\s*/")
+
+    def test_r3_no_md_falls(self):
+        """**0 本は落とす。**表紙が無いまま束の先頭を作らせない(黙って 0 ページを返さない)。"""
+        with self.assertRaises(EB.ExitBodyError):
+            self._render([])
+
+    def test_r4_the_title_comes_from_the_first_md(self):
+        """**題は先頭の md から取る**(回した節の見出しが冊子の題になってしまわない)。
+
+        `render_answer._find_doc_title` は `# ` の行を探す ― 回した節は `### ` しか持たないので、
+        先頭以外から取ると題が空になる。ヘッダの語で見る。
+        """
+        _pages, texts = self._render([self.MD_COVER, self.MD_MOVED_1, self.MD_MOVED_2])
+        for page_no, text in enumerate(texts, start=1):
+            self.assertIn("付録の表紙", text, f"{page_no} ページ目のヘッダに題が無い")
+
+
 class NoTagWordingTest(unittest.TestCase):
     """**印が 1 つも付かないときの語**(P-184。2026-09-29。5 周目の批評席 (a))。
 

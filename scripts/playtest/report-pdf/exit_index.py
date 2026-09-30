@@ -17,6 +17,7 @@
 # (盤は埋め込み画像ではないので `get_images()` は 0 を返す ― 実測 2026-09-28)。
 import json
 import os
+import re
 
 # 節の固定名。**印字される文字は鍵にしない** ― 印字は「25 局の形勢の流れ」のように顧客ごとに局数が入る。
 # `check_structure.py` はこの定数を import して見る(文字列を写さない)。
@@ -117,6 +118,54 @@ NOTHING_TO_HIDE_SENTENCE = "無いものは無いと書きます。"
 def selection_sentence(games):
     """「なぜこの N つだけなのか」の 1 文。**組版と門が同じここから作る。**"""
     return SELECTION_SENTENCE_TEMPLATE.format(games=int(games))
+
+# ==================== 付録へ回す節の印(器の単独束 C-4。2026-09-30)====================
+#
+# 【顧客の PDF にどう出るか】印の付いた節は**本編の PDF に出ず、付録の表紙の次のページに出る。**
+#   顧客が読む文は同じで、置き場所だけが変わる ― 付録の名は「数の出どころ」で、
+#   分母の表はまさに数の出どころだから(司令塔の判断 2026-09-30)。
+#   本編にはその 1 ページ弱の余裕が残り、冒頭の用語の文を足せるようになる(実測: 余裕 1 行 → 9 行)。
+#
+# 【なぜ md に印を書くか】本編の md に書いたものが本編の PDF に出ない、という食い違いを
+#   **md 自身に持たせる**ため。印が無いと、md だけを読んだ席が「表は本編にある」と誤って読む
+#   (P-159・P-171 の家族。司令塔の条件 2026-09-30)。
+# 【文法はここ 1 か所】読む側は 3 つ ― `exit_body.py`(本編から外す)・`exit_cover.py`(付録に組む)・
+#   `check_structure.py`(**両側**を見る: 本編の PDF に出ない・付録の PDF に出る)。
+APPENDIX_TAG_RE = re.compile(r"<!--\s*appendix:\s*(.*?)\s*-->")
+
+# 印の題(**顧客に見える言い方をここ 1 か所で持つ** ― 骨・組版・門が同じ語を使う)
+APPENDIX_TAG_TITLE = "数の出どころ"
+
+# 印の行に添える注(書き手への説明。**数字を書かない** ― 検査 1 と門が偽の苦情を出すため)
+APPENDIX_TAG_NOTE = "この節は本編ではなく付録の表紙の次のページに組まれます(印を消さないでください)。"
+
+
+def split_appendix_sections(md_text):
+    """`<!-- appendix: 題 -->` の印が付いた節を本編から切り出す。
+
+    返り値 = `(本編に残す md, [(題, その節の md)])`。**節の範囲は印の次の行から、次の `## ` の直前まで**
+    (`### ` の小見出しは節の中に含める)。印の行そのものは**どちらにも残さない**。
+
+    **黙って落とさない**: 印が在るのに次の `## ` が無ければ、文末までをその節とする。
+    """
+    lines = md_text.split("\n")
+    keep, moved = [], []
+    i = 0
+    while i < len(lines):
+        m = APPENDIX_TAG_RE.search(lines[i])
+        if m is None:
+            keep.append(lines[i])
+            i += 1
+            continue
+        title = m.group(1).strip()
+        i += 1
+        section = []
+        while i < len(lines) and not lines[i].startswith("## "):
+            section.append(lines[i])
+            i += 1
+        moved.append((title, "\n".join(section).strip("\n")))
+    return "\n".join(keep), moved
+
 
 COUNTING_NOTES = [
     "「かけた時間」は、棋譜に書かれた秒をそのまま使います(切り捨ての整数)。0〜1 秒・2〜4 秒・5〜9 秒・10 秒以上の 4 段に分けます。",
@@ -221,7 +270,10 @@ COVER_CONTENT = {
 # **写しを 2 か所に持たない**(写しは片方だけ直る ― §8「分けて書くだけでは足りない。分けられない形で書く」)。
 # **接頭辞では判定しない**(付録名の付け方に依存させず、知らない鍵が黙って混ざる道も閉じる)。
 # 付録名は `--source-index` で渡されたものだけを許す。
-EXIT_RENDER_KEYS = ("outputPositions", "appendixPages", "boardsDrawn", "hasCover", "sourcePages")
+EXIT_RENDER_KEYS = ("outputPositions", "appendixPages", "boardsDrawn", "hasCover", "sourcePages",
+                    # **表紙の枚数**(器の単独束 C-4。2026-09-30)。付録へ回した節が表紙の次のページに
+                    # 付くので、真偽値の `hasCover` だけでは「付録のページ数 = 指したページ + 表紙」が合わない。
+                    "coverPages")
 
 # **このモジュールは定数だけを置く。**reportlab・fitz・pypdf などの組版の道具は import しない
 # ― **門(`check_structure.py`)が import するのは「定数」であって「組版」ではない**、を保つため

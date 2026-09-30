@@ -431,7 +431,11 @@ def check_appendix_pages(index, appendix, problems):
     if picked is None:
         problems.append("検査 8: page_index.json に appendixPages(抜いたページの一覧)が無い")
         return
-    cover = 1 if index.get("hasCover") else 0
+    # **表紙の枚数**(器の単独束 C-4。2026-09-30)。付録へ回した節が表紙の次のページに付くので、
+    # 真偽値では足りない。古い索引(枚数が無い)は今までどおり 1 ページとして扱う。
+    cover = index.get("coverPages")
+    if not isinstance(cover, int):
+        cover = 1 if index.get("hasCover") else 0
     # **表紙は必須**(正本 GOLDEN_MASTER_CUSTOMER_EXIT.md §8。承認済みの 30 ページの形に表紙が入っている)。
     # 抜けると顧客は「この冊子に入っているもの」の案内を失い、**本編から付録のページを辿れなくなる**。
     if not index.get("hasCover"):
@@ -642,6 +646,41 @@ def check_scope_and_mapping(personal, games, problems):
             problems.append(f"冒頭の断り書きが {n} か所(ちょうど 1 か所): {sentence}")
 
 
+def check_moved_to_appendix(md_text, personal, appendix, problems):
+    """検査 9(付録へ回した節)。**両側を見る** ― 印の付いた節が
+    **本編の PDF に出ない**こと、かつ**付録の PDF に出る**こと(器の単独束 C-4。2026-09-30)。
+
+    【なぜ両側か】片側だけ見ると片方が腐る(P-171 の型)。
+    本編から外れたのに付録に組まれなければ、**顧客が読む表がどこにも出ない** ―
+    それは「消えた」であって「移した」ではない。逆に、外れていないのに付録にも出れば**二重に出る。**
+    【何を照合するか】節の**見出しの文**(`### …`)と、**表の 1 行目の左端の言葉**。
+    PDF は折り返しで行が変わるので、**行ではなく語**で見る(`check_name_agrees` と同じ流儀)。
+    【印が無ければ何も言わない】印を付ける段はまだ無い顧客(既に送った冊子)でも通る。
+    """
+    _keep, moved = EI.split_appendix_sections(md_text)
+    if not moved:
+        return
+    # `page_texts` は**ページごとの文字列**を返す(番号は付かない)。**空白を落として**から探す ―
+    # 組版は見出しも折るので、そのままでは出ているものを「無い」と数える(`squeeze` の説明のとおり)。
+    personal_text = squeeze("".join(personal))
+    appendix_text = squeeze("".join(appendix))
+    for title, section in moved:
+        words = [squeeze(line[4:]) for line in section.split("\n") if line.startswith("### ")]
+        words = [w for w in words if w]
+        if not words:
+            problems.append(f"検査 9: 付録へ回す節「{title}」に見出し(### )が無い(照合する語が取れない)")
+            continue
+        for word in words:
+            if word in personal_text:
+                problems.append(
+                    f"検査 9: 付録へ回した節の見出し「{word}」が**本編の PDF に出ている**"
+                    "(印が付いているのに本編から外れていない ― 二重に出る)")
+            if word not in appendix_text:
+                problems.append(
+                    f"検査 9: 付録へ回した節の見出し「{word}」が**付録の PDF に無い**"
+                    "(本編から外したのに付録に組まれていない ― 顧客が読む文がどこにも出ない)")
+
+
 def main(argv):
     out_dir, mine, rest, source_indexes = parse_args(argv)
     problems = []
@@ -674,6 +713,7 @@ def main(argv):
     check_sample_difference(personal, sample, honbun_index, problems)
     check_boards(md_text, index, personal, problems)
     check_appendix_pages(index, appendix, problems)
+    check_moved_to_appendix(md_text, personal, appendix, problems)
     # 局数は材料から取る(`check_answer` が読んだ patient の 1 本目 = 今回の組)。
     # **`summary.games` を使う** ― `exit_cover.numbers_of` が既にここを読んでいる(出どころを 2 つにしない)。
     # 実物では `len(games)` と一致するが(25 = 25 を実測)、**宣言されている数はこちら**。

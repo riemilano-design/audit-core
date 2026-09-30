@@ -35,6 +35,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import board_spec as BS          # noqa: E402  ― 盤に渡す値の判断は 1 か所
 import check_answer as CA        # noqa: E402
 import check_structure as CS     # noqa: E402
+import exit_index as EI          # noqa: E402  ― 付録へ回す節の印の文法は 1 か所
 
 
 class ExitBodyError(Exception):
@@ -512,6 +513,44 @@ def render_plain(md_text, out_pdf, pdf_title):
     return doc.page
 
 
+def render_plain_pages(md_texts, out_pdf, pdf_title):
+    """md を**1 つずつ改ページして**1 つの PDF に組む。組んだページ数を返す。
+
+    【誰が使うか】**付録の表紙 + 付録へ回した節**(`exit_cover.py`)。
+    表紙の次のページから、印の付いた節が 1 つずつ別のページで始まる
+    (器の単独束 C-4。2026-09-30。司令塔の判断「付録の表紙の次のページへ」)。
+
+    【なぜ `render_plain` を使い回さないか】あれは md 1 本で PDF 1 本。
+    **改ページの位置は組版の判断**なので、`break_before_mapping` と同じ流儀で
+    **明示の `PageBreak`** を入れる ― 自然改ページに任せると、表紙の下に表の頭が乗る。
+    【検査は通らない】`render_plain` と同じ(表紙と付録の節は対局の材料と突き合わせる文ではない)。
+    **ただし付録へ回す節は、本編の md の一部として `exit_body.main` の `check_answer` を通っている。**
+    """
+    import functools
+
+    from reportlab.lib.pagesizes import A4
+    from reportlab.platypus import PageBreak, SimpleDocTemplate
+
+    import render_answer as RA
+
+    if not md_texts:
+        raise ExitBodyError("組む md が 0 本(表紙が無い)")
+    title = RA._find_doc_title(md_texts[0])
+    doc = SimpleDocTemplate(
+        out_pdf, pagesize=A4,
+        leftMargin=RA.LEFT_MARGIN, rightMargin=RA.RIGHT_MARGIN,
+        topMargin=RA.TOP_MARGIN, bottomMargin=RA.BOTTOM_MARGIN,
+        title=pdf_title, author="将棋コーチ(試作)",
+    )
+    story = []
+    for index, md_text in enumerate(md_texts):
+        if index > 0:
+            story.append(PageBreak())
+        story.extend(RA.build_story(md_text, title))
+    doc.build(story, canvasmaker=functools.partial(RA._ReportCanvas, report_title=title))
+    return doc.page
+
+
 def parse_own_args(argv):
     """この道具だけの引数を抜き、残りは `check_answer.py` にそのまま渡す。"""
     # **`person` の既定「本人」は盤の名札の語**(`board_draw.py` の `f"{person}の持ち駒"`)。
@@ -558,6 +597,13 @@ def build(own, rest):
         raise ExitBodyError("\n".join(f"{ln}: {why}: {line.strip()[:100]}" for ln, why, line in problems))
 
     body = CA.strip_dev_section(raw_md)
+    # ---- 付録へ回す節を本編から外す(器の単独束 C-4。2026-09-30)----
+    # **検査より後に外す。**`check_answer` は上で **raw_md 全文**に掛かっているので、
+    # 付録へ回る節の数も検査 1 を通っている ― ここで外すのは**組版だけ**である。
+    # 先に外すと、移した節の数が検査を通らずに顧客の冊子へ出る道ができる。
+    # 印の文法と切り出しは `exit_index.split_appendix_sections` の 1 か所
+    # (付録に組むのは `exit_cover.py`、両側を見るのは `check_structure.py`)。
+    body, _moved_to_appendix = EI.split_appendix_sections(body)
     marks = marks_of(body)
     for mark in marks:
         if mark.appendix not in (1, 3):

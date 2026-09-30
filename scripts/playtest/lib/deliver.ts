@@ -900,8 +900,11 @@ export function exitRenderCommand(thisGroup: GroupPaths, out: DeliverOutPaths): 
   for (const [indexPath, pdfPath] of exitSourceIndexPairs(thisGroup, out)) {
     flags.push("--source-index", `${indexPath}:${pdfPath}`);
   }
-  // 表紙は束の先頭(1 ページ目)。`exit_cover.py` が 1 ページであることを確かめている。
-  flags.push("--cover", `${out.exitCoverPdf}:1`);
+  // 表紙は束の先頭。**ページ番号を書かない** = 表紙 PDF の全ページ(器の単独束 C-4。2026-09-30)。
+  // 表紙のあとに「付録へ回した節」(分母の表)が付くので、**枚数は組んでみるまで決まらない** ―
+  // ここで `:1` と書くと 2 ページ目が束から落ち、**顧客が読む表がどこにも出ない**。
+  // 枚数は `exit_cover.py` が「表紙 1 + 印の付いた節の数」と照合し、索引の `coverPages` に残る。
+  flags.push("--cover", out.exitCoverPdf);
   flags.push("--out-appendix", out.exitAppendix, "--out-index", out.exitIndex);
   return flags;
 }
