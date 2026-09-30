@@ -16,18 +16,56 @@ import check_delivery as CD  # noqa: E402
 
 
 class WordsOfTest(unittest.TestCase):
-    # (a) `words_of([])` に `"None"` が入り、個数が 4(`--forbid` なし。2026-09-25 の人間の決定で禁止語が
-    # 空になったため、`ALWAYS_FORBIDDEN` の 4 個だけ)。
-    def test_none_included_and_count_is_4(self):
+    # (a) `words_of([])` に `"None"` が入り、個数が 5(`--forbid` なし。2026-09-25 の人間の決定で禁止語が
+    # 空になったため、`ALWAYS_FORBIDDEN` の 4 個 + `ALWAYS_FORBIDDEN_WORDS` の 1 語)。
+    def test_none_included_and_count_is_5(self):
         words = CD.words_of([])
         self.assertIn("None", words)
-        self.assertEqual(len(words), 4)
+        self.assertEqual(len(words), 5)
 
-    # (e) `--forbid None` を渡しても語の個数は 4 のまま(重複は 1 つ)。
+    # (e) `--forbid None` を渡しても語の個数は 5 のまま(重複は 1 つ)。
     def test_forbid_none_does_not_duplicate(self):
         words = CD.words_of(["None"])
-        self.assertEqual(len(words), 4)
+        self.assertEqual(len(words), 5)
         self.assertEqual(words.count("None"), 1)
+
+    # (f) **冊子に出さない語は渡さなくても入る**(器の単独束 C-2。2026-09-30)。
+    # 語は**試験の側に書く** ― 定数を読むと、語を消す変異と一緒に期待値が消えて黙る。
+    def test_saizenshu_is_always_searched(self):
+        words = CD.words_of([])
+        self.assertIn("最善手", words)
+        # 渡しても重複しない
+        self.assertEqual(CD.words_of(["最善手"]).count("最善手"), 1)
+        # **語以外の表には入れていない**(意味が違うものを混ぜない)
+        self.assertNotIn("最善手", CD.ALWAYS_FORBIDDEN)
+
+
+class SaizenshuOnMdTest(unittest.TestCase):
+    """**冊子の md に「最善手」があれば納品が止まる**(器の単独束 C-2。2026-09-30)。
+
+    語の表に入っていることだけでなく、**実際に落ちること**を見る
+    (表に足しても `words_of` を通らない道があれば、ここで赤くなる)。
+    """
+
+    def setUp(self):
+        self._tmp = tempfile.TemporaryDirectory()
+        self.dir = self._tmp.name
+
+    def tearDown(self):
+        self._tmp.cleanup()
+
+    def _write(self, name, text):
+        with open(os.path.join(self.dir, name), "w", encoding="utf-8") as f:
+            f.write(text)
+
+    def test_md_with_saizenshu_fails(self):
+        self._write("9_本編.md", "- エンジンの最善手と同じでした。\n")
+        self.assertEqual(CD.main([self.dir]), 1)
+
+    def test_md_with_dai1kouho_passes(self):
+        # **言い換えた側は通る**(何でも落とす検査ではない)
+        self._write("9_本編.md", "- エンジンが 1 番に挙げた手(第 1 候補)と同じでした。\n")
+        self.assertEqual(CD.main([self.dir]), 0)
 
 
 class MainOnMdTest(unittest.TestCase):

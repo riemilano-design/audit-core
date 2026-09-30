@@ -7,6 +7,7 @@
 # あれば rc=1 で、どのファイルの何ページ・何行に何があったかを標準エラーへ出す。
 #
 # - `--forbid <語>` で渡した語(名前など。繰り返し可)
+# - `ALWAYS_FORBIDDEN_WORDS`(冊子に出さない語。いまは「最善手」の 1 語)
 # - `@`、`/Users/`、`水匠`、`None`(python の None がそのまま印字された跡。凍結の例外 12 件目)
 # - 禁止語は無し(2026-09-25 の人間の決定、凍結の例外 14 件目 ― 冊子の禁止語はすべて使ってよい)。
 #   `check_answer.py` の `BANNED_WORDS` は import のまま(空)。語のリストを二重に持たないため、この道具は
@@ -28,6 +29,21 @@ BANNED_18 = BANNED_WORDS[:18]
 
 # 語以外の、常に伏せるもの(計画 §3 の 6)。
 ALWAYS_FORBIDDEN = ["@", "/Users/", "水匠", "None"]
+
+# **顧客の冊子に出さない語**(2026-09-30。器の単独束 C-2。正本は
+# `docs/NEXTGEN_CONNECTION_DESIGN_2026-09-30.md` §4 の H-4)。
+# 「最善手」は**人間が固定した用語の決定** ― 冊子は「第 1 候補」と書く。
+#
+# 【なぜ `ALWAYS_FORBIDDEN` と分けるか】あちらは「語以外の、常に伏せるもの」(記号・パス・道具の名・None)で、
+# 意味が違う。混ぜると、片方を直すときにもう片方の理由が読めなくなる。
+# 【なぜ `check_answer.BANNED_WORDS` に足さないか】あの表は **2026-09-25 の人間の決定で空にした**もので、
+# 足すと**席の文の検査(H-5)まで動く**。ここに置けば効くのは納品の走査だけ。
+# 【なぜ `--forbid` の固定引数にしないか】`--forbid` の値は顧客の実名なので**記録に書かない決まり**があり
+# (`lib/deliver.ts` の 929〜938 行)、固定語をそこに乗せると**記録から見えない語**になる。
+# ここに書けば、道具の出力(「語 N 個」)と原本の両方から誰でも読める。
+# 【実測(2026-09-30)】5 人目の納品フォルダ(13 本)で、この語を足しても**通過**(語 4 個 → 5 個)。
+# 封じた最終版の本編にも 0 件(司令塔が確認)。**既存の道を赤くしない。**
+ALWAYS_FORBIDDEN_WORDS = ["最善手"]
 
 USAGE = "使い方: python3 -X utf8 check_delivery.py <顧客フォルダ> [--forbid <語>]…"
 
@@ -63,7 +79,7 @@ def parse_args(argv):
 def words_of(forbid):
     """探す語の一覧(重複は 1 つにまとめ、渡された順・18 語の順を保つ)。"""
     words = []
-    for w in list(forbid) + ALWAYS_FORBIDDEN + list(BANNED_18):
+    for w in list(forbid) + ALWAYS_FORBIDDEN + ALWAYS_FORBIDDEN_WORDS + list(BANNED_18):
         if w not in words:
             words.append(w)
     return words
