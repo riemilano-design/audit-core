@@ -554,3 +554,12 @@ S-1 採用(`answers[].missing` は partial/unanswerable で必須・空配列不
 - 残差(司令塔が `git diff --stat` で照合): 8 ファイル + 未追跡 1 はすべて自動化レーンの hunk。hypothesis.ts の残差は H-9 だけ、schemaVersions.ts は 0。実験席の hunk だけの worktree は 1981 本緑・typecheck 赤 0 で HEAD と一致。
 - 監査の指摘(対応済み): partial の空 missing の試験 1 本追加。席への注意点: statement の「第 1 候補」の 1 も H-1(数の実在)に掛かる → 指示文 v1.1 の候補(LOG §8.2)。
 - 次: R3(integration の契約と検査: integration_input.v0.1 / integration.v0.1、clusterId・path の文法・seatOrderRef)。callSeat は鍵・モデル名の後。**レーンへ: R2 が HEAD に入った → H-9 を新しい HEAD に乗せ直し、packetRef.ts の定数を読む。**
+
+## 2026-09-30 ― 実験席 STEP R3(統合の契約と検査)計画 170322d に司令塔 GO。§7 の 4 点の答え
+
+R3 は LLM を呼ばず、器 3 本(integration_input.v0.1 = internal 無し・席名を伏せる / integration.v0.1 = clusterId・seatCount は evidence:false 固定・dropped・answersByQuestion・seatOrderRef / 整理役が書く形)+ 検査 I-1〜I-8 + 校正 4・変異 9。packet を読まない。
+
+1. packetDigest の範囲 = 線の組・集計 37 行・局の表(facts の大きい表は渡さない): GO。整理役は席の出力を整理する側で、事実の再読みはしない。
+2. I-3 の逆方向: **「捨てる束すべてに理由を要求する」に直して GO。** seatCount = 3 だけを特別扱いすると、一致の数が再び信号になる(規則 8 (2))。理由の欄は seatCount を参照しない。
+3. 整理役の指示文は R4(呼び出し)で: GO。
+4. 席の順の置換は runId から決定的に作る: GO(再現を優先。runId は実行ごとに新しい)。
