@@ -213,3 +213,40 @@ describe("packet を読まない(校正 4)・足すだけ(校正 1)", () => {
     }
   });
 });
+
+describe("H-2 の歩く先(2026-09-30 に R4 で見つけた抜け。反証と分数の中の packet. の id)", () => {
+  // 【なぜ在来の fixture で捕まらなかったか】反証・分数が使う path が item.observations と同じ字だったので、
+  // 先に集めた packetIds に入っていて登録簿の側へ回らなかった。**別の path**にすると抜けが出る(集合の重なりで隠れる型)。
+  const OTHER = "facts.collapse[3].afterCp";
+  function withCounterOnlyPath(path: string) {
+    const src = llm();
+    src.items[0]!.counterEvidence = { attempted: true, items: [{ kind: "counterexample", text: "崩れた局面の側を見た。", observations: [{ value: -140, packetRef: { path } }] }], result: "weakened" };
+    return completeSeatOutput(src, ctx());
+  }
+  function withDerivedOnlyPath(path: string) {
+    const src = llm();
+    src.items[0]!.observations = [{ value: 65, unit: "positions", packetRef: NUM(), derived: { kind: "ratio", numerator: { path, value: 65 }, denominator: { path: "aggregates.sideMatch.attack.denominator", value: 107 } } }, { value: 107, unit: "positions", packetRef: DEN() }];
+    return completeSeatOutput(src, ctx());
+  }
+  it("反証だけが持つ path でも通る(登録簿の側へ回さない)", () => {
+    expect(problems(withCounterOnlyPath(OTHER))).toEqual([]);
+  });
+  it("反証の path の文法が壊れていれば、その場所を名指しで落ちる", () => {
+    const found = problems(withCounterOnlyPath("facts.collapse.afterCp"));
+    expect(found.length).toBe(1);
+    expect(found[0]).toContain("H-2");
+    expect(found[0]).toContain("counterEvidence.items[0].observations[0]");
+  });
+  it("分数の分子だけが持つ path でも通る / 壊れていれば分子を名指しで落ちる", () => {
+    expect(problems(withDerivedOnlyPath("aggregates.groups.core.games.value"))).toEqual([]);
+    const found = problems(withDerivedOnlyPath("aggregates.groups.core.games"));
+    expect(found.length).toBe(1);
+    expect(found[0]).toContain("observations[0].derived.numerator");
+  });
+  it("登録簿の obs.* は今までどおり登録簿で見る(packet. の分岐が全部を通してしまわない)", () => {
+    const env = envelope() as { items: Record<string, unknown>[] };
+    (env.items[0]!.observations as Record<string, unknown>[])[0]!.obsId = "obs.notInRegistry";
+    const found = problems(env);
+    expect(found.some((p) => p.includes("H-2") && p.includes("obs.notInRegistry"))).toBe(true);
+  });
+});

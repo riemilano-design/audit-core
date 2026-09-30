@@ -401,22 +401,43 @@ function collectObsIdsForH2(line: unknown): string[] {
 
 /**
  * 0.4 の分岐: `packet.` で始まる obsId は登録簿でなく **packetRef.path の文法**で見る(司令塔の判断 2026-09-30、STEP R2 §3)。
- * obsId = `packet.` + packetRef.path であること・path が文法に合うこと。**path が packet に実在するかは見ない**(H-9 = 自動化レーン)。
+ * obsId = `packet.` + path であること・path が文法に合うこと。**path が packet に実在するかは見ない**(H-9 = 自動化レーン)。
  * 0.3 以前の行では `packet.` の obsId も今までどおり登録簿で落ちる(判定を変えない)。
+ *
+ * **歩く先は 3 か所**(2026-09-30 に R4 で見つけた抜けを閉じた): `observations[]`・`observations[].derived` の分子分母・
+ * `counterEvidence.items[].observations[]`。collectObsIdsForH2 が集める場所と同じにしないと、**反証や分数の中の `packet.` の id が
+ * 登録簿の側へ落ちて、正しい席の行が落ちる**(封筒では反証の観測は packetRef を持たず `path` を持つので、そこを見る)。
  */
 function packetObsIdProblems(line: unknown): { messages: string[]; packetIds: Set<string> } {
   const messages: string[] = [];
   const packetIds = new Set<string>();
-  asArray(get(line, ["observations"])).forEach((obs, index) => {
+  const visit = (obs: unknown, label: string, path: unknown): void => {
     const obsId = get(obs, ["obsId"]);
     if (!isPacketObsId(obsId)) return;
-    const path = get(obs, ["packetRef", "path"]);
+    packetIds.add(String(obsId));
     const problems = packetRefPathProblems(path);
-    for (const problem of problems) messages.push(`observations[${index}]: ${problem}`);
+    for (const problem of problems) messages.push(`${label}: ${problem}`);
     if (problems.length === 0 && obsId !== `${PACKET_OBS_ID_PREFIX}${String(path)}`) {
-      messages.push(`observations[${index}]: obsId「${obsId}」が packet. + packetRef.path「${String(path)}」と違う`);
+      messages.push(`${label}: obsId「${String(obsId)}」が packet. + path「${String(path)}」と違う`);
     }
-    packetIds.add(obsId);
+  };
+  asArray(get(line, ["observations"])).forEach((obs, index) => {
+    visit(obs, `observations[${index}]`, get(obs, ["packetRef", "path"]));
+    const derived = get(obs, ["derived"]);
+    if (!isRecord(derived)) return;
+    // 分数の分子・分母は封筒では path を持たない(obsId だけ)。文法は obsId の後ろで見る
+    for (const side of ["numerator", "denominator"]) {
+      const sideObs = get(derived, [side]);
+      const sideId = get(sideObs, ["obsId"]);
+      if (!isPacketObsId(sideId)) continue;
+      visit(sideObs, `observations[${index}].derived.${side}`, String(sideId).slice(PACKET_OBS_ID_PREFIX.length));
+    }
+  });
+  asArray(get(line, ["counterEvidence", "items"])).forEach((item, i) => {
+    asArray(get(item, ["observations"])).forEach((obs, j) => {
+      // 封筒の反証の観測は packetRef を持たず path を持つ(seatOutput.completeSeatOutput)
+      visit(obs, `counterEvidence.items[${i}].observations[${j}]`, get(obs, ["path"]));
+    });
   });
   return { messages, packetIds };
 }
@@ -429,9 +450,10 @@ function checkH2(line: unknown, registry: Set<string>): CheckResult {
   }
   const packet = packetObsIdProblems(line);
   const messages = [...packet.messages];
-  // packet. の id は observations に packetRef つきで在るものだけ(derived・counterEvidence から観測に無い packet. の id を引かない)
+  // packet. の id は**歩いた 3 か所(observations・その derived の分子分母・counterEvidence の観測)で文法を見たもの**だけ。
+  // そこに無い packet. の id(どこからも裏づかない字)は登録簿の側へ回して落とす。
   const unknownIds = ids.filter((id) => (isPacketObsId(id) ? !packet.packetIds.has(id) : !registry.has(id)));
-  if (unknownIds.length > 0) messages.push(`登録簿に無い obsId(packet. は observations の packetRef で裏づく): ${unknownIds.join(", ")}`);
+  if (unknownIds.length > 0) messages.push(`登録簿に無い obsId(packet. は observations・derived・counterEvidence の場所で裏づく): ${unknownIds.join(", ")}`);
   return { check: "H-2", ok: messages.length === 0, messages };
 }
 
