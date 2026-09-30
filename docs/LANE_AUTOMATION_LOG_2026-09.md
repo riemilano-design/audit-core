@@ -3061,10 +3061,35 @@ md・log・`direct/` の材料・却下済みの 6 冊形。**最初から入れ
   実物の本編 8,678 文字に**偶然の当たり 0 件**。表に無い名前(`ダイヤモンド美濃`)は**落ちない**(書き残す穴)。
 - 変異 **11 本すべて赤**(予測は 11 本中 10 当たり)。門は 2 本とも緑
   (vitest **2024**・typecheck の既知の赤 **10** は `out/` 配下 = P-84)。
-- **この実物の校正は他の席から再現できない**(独立監査が指摘)。校正に使った packet は
-  scratchpad にあり、リポジトリには無い(`out/` は gitignore、5 人目の材料は records/ に置く承認が無い)。
-  **門と変異は誰でも回せるが、「108 件中 92 件」「8,678 文字に 0 件」は私の実行の記録でしか裏が取れない。**
-  packet を材料として置くかは顧客の材料の扱いの判断なので、司令塔へ渡した(私は置かない)。
+- **packet は材料として置かない**(司令塔の判断。顧客の材料をリポジトリに置くのは人間の判断で、
+  5 人目については承認が無い)。代わりに**材料からの再生成の手順と期待値**を書く ―
+  裏は「実行した席の記録」ではなく「**材料 + 手順**」になる。
+
+  ```
+  npx tsx scripts/playtest/observationPacket.ts --customer-ref c5 \
+    --patient  scripts/playtest/out/c5/pipe-3min/report/patient_report_data.json \
+    --sfens    scripts/playtest/out/c5/pipe-3min/report/sfens.json \
+    --time-cause scripts/playtest/out/c5/deliver1/direct/time_cause.json \
+    --direct   scripts/playtest/out/c5/deliver1/direct/direct_answers.json \
+    --recognition scripts/playtest/out/c5/pipe-3min/report/opening_recognition.json \
+    --read     scripts/playtest/out/c5/pipe-3min/p2/read \
+    --whatif   scripts/playtest/out/c5/pipe-3min/p2/whatif-v2 \
+    --definitions data/openings,data/drafts/2026-09-25-knowledge/openings \
+    --out <scratchpad>/packet_c5.json
+  ```
+
+  **期待値**: `packetId` = `22aee8fe696d0262`(中身から取る封なので、材料が同じなら一致する)・
+  集計 **26 行**・定義の名前 **108 件**・この顧客の局で認識された名前 **16 件**・
+  認識されていない **92 件**。散文の側は
+  `scripts/playtest/out/c5/_final_sealed_2026-09-29/9_本編_最終版.md`(4,442 文字、
+  sha256 先頭 `eb4c0b1e231e040f`)に対して**偶然の当たり 0 件**。
+  **実際に上のコマンドで再生成して `packetId` の一致と 108/16/92 を確かめた**(2026-09-30)。
+- **訂正(2026-09-30)**: 束 V-c の §5b に書いた本編の内訳(169 行・印を付けられるのは 7 行)は
+  **材料ではなく私の scratchpad の下書きで測った数**だった。材料の封じた最終版では
+  **62 行・印を付けられるのは 2 行**(「1 つの印で足りる行」は どちらでも 2 行なので継ぎ目の判断は変わらない)。
+  計画 §5b を**どちらの本編で測ったかが分かる表**に直した。
+  **型**: 実物で測ったと書くときは、**その実物がリポジトリの材料か自分の scratchpad か**を書く ―
+  書かないと、数が合わないときにどちらが古いのか誰にも分からない。
 
 **型(既知の家族へ・今日 2 度目)**: **材料が「守りたい行」を通っていなかった。**
 最長一致の変異(長い方を採る → 最初に当たった語を採る)が**緑で通った** ―
