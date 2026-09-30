@@ -571,3 +571,9 @@ R3 は LLM を呼ばず、器 3 本(integration_input.v0.1 = internal 無し・�
 - **継ぎ目の数(5 人目の本編 233 行)**: 数の主張がある 169 行 = 1 つの印で足りる 2 行 + 合併で足りる 5 行 + **集計の行に無い数を含む 59 行**(300 cp・10 秒の閾値、局数、ply、付録の索引の数。閾値は `provenance.thresholds`、局数は `facts` に在る)+ 盤の印の行 103 行(検査 7 の担当)。今すぐ印を付けられるのは 7 行。
 - **司令塔の判断: V-c はこのまま閉じる。印の指し先を今は広げない・集計の行も今は増やさない。** 59 行の内訳は ⑥(器へ配置する束)の入力として記録し、そこで「局数・閾値・ply を packet のどの欄から引くか」を決める(印の文法は packetRef の 1 か所に寄せたので、広げるならそこで 1 回)。今の冊子の道は印 0 件でも止まらないので害は無い。「新しい論点を増やさない」(人間、2026-09-30)。
 - 測り: 自動で付けた 7 行で苦情 0、壊した 2 通りで各 1 件、変異 13 本すべて赤(予測 11 当たり・2 外れ = 波及を狭く見た向き)。vitest 1993。次は V-b(H-10)。
+
+## 2026-09-30 ― 実験席 束 R3(統合の契約)完了 cf9e4cb(独立監査 GO、新規 8 ファイル、既存の変更 0)
+
+- `lib/integration.ts` + 試験 19 本、CLI `integrationCheck.ts`、schema 3 本(integration_input.v0.1 = internal 無し・席名を伏せる / integration.v0.1 = seatCount は `evidence: const false`、整理役が書く形には seatCount と answersByQuestion の欄が無い = 構造で拒む / heldBack は全部に理由、理由に一致の数があれば I-3、summary は 1 席でも違えば mixed)。worktree で 2001 本緑・typecheck 赤 0。
+- 実装で見つけた穴 2 つ(LOG §9.2): (1) 席の hypothesisId(H-c5-gptrun2-001)が席名を埋め込む → 器では匿名 I-<seatIndex>-<連番> に写し替え、対応表 itemMap は seatOrder と一緒に run のログへ(封筒の id は変えない)。(2) 代表の行の provenance.inputs を `integration_input:<sha>` にすると H-6(盲検)の禁止語「integrat」に当たる → 出どころを束の成員の列 `seat_item:<seatIndex>:<匿名 id>` にし I-8 で itemRefs と集合一致(言い換えでなく出どころが成員そのもの、と監査も確認)。
+- 次: R4(callSeat と整理役の呼び出し・再試行・原文保存・整理役の指示文・指示文 v1.1 の 3 点)の計画。実行は鍵・モデル名(人間)の後。
