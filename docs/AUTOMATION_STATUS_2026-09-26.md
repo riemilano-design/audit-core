@@ -547,3 +547,10 @@ S-1 採用(`answers[].missing` は partial/unanswerable で必須・空配列不
 ## 2026-09-30 ― 継ぎ目の衝突(レーン便 98、実測): R1 の render は集計を `aggregates.<id>` 単独で席に渡すが、決定 (1) と H-9 は `.numerator/.denominator/.value` まで要る → 26/26 が引き当てられない。**司令塔の決定: (a) render を数ごと 1 行に**
 
 実測: 単独の形では 26 行すべて引けず、数の欄を付けた形なら 37/37(分数は 2 つ、単独の数は 1 つ)引ける。席が render の表をそのまま写すと集計を根拠にした観測が全部 H-9 で落ちる。(b) 指し方の列を足して席に付け足させる、(c) H-9 を緩める(決定 (1) の取り消し = P-178 の型に戻る)は採らない。**(a) を実験席の R2 に含める**(`lib/packetRef.ts` の `aggregateRef` が `.numerator` / `.denominator` / `.value` の形を返し、`seatInput.ts` の集計の表を数ごと 1 行に。校正 3 は「26/26」から「37/37」へ、R1 の LOG §7 に差し替えの記録)。文法は 1 か所のまま。事実の参照は見本 8/8、1 行ずつの数え直しは問題 0・印 2(時間の 2 行)。レーンは待つ間 V-c(本編の `<!-- agg: id -->` 照合、python 側)と解決器の試験を進める。
+
+## 2026-09-30 ― 実験席 束 R2(席の出力の契約)完了 5a19060(独立監査 GO、blob を index に置いてコミット)
+
+- 15 ファイル: `lib/packetRef.ts`(文法 1 か所: `aggregates.<id>.numerator|denominator|value`、単独形は落とす。facts は列の直後に添字必須)+ `seatOutput.ts`(封筒の検査 E-1〜E-7)+ hypothesis.ts の v0.4 分岐 + schema 3 本 + CLI `seatOutputCheck.ts` + render の集計を数ごと 1 行(37 行。seat_input 224,907 バイト、校正 3 = 37/37)。
+- 残差(司令塔が `git diff --stat` で照合): 8 ファイル + 未追跡 1 はすべて自動化レーンの hunk。hypothesis.ts の残差は H-9 だけ、schemaVersions.ts は 0。実験席の hunk だけの worktree は 1981 本緑・typecheck 赤 0 で HEAD と一致。
+- 監査の指摘(対応済み): partial の空 missing の試験 1 本追加。席への注意点: statement の「第 1 候補」の 1 も H-1(数の実在)に掛かる → 指示文 v1.1 の候補(LOG §8.2)。
+- 次: R3(integration の契約と検査: integration_input.v0.1 / integration.v0.1、clusterId・path の文法・seatOrderRef)。callSeat は鍵・モデル名の後。**レーンへ: R2 が HEAD に入った → H-9 を新しい HEAD に乗せ直し、packetRef.ts の定数を読む。**
