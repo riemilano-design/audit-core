@@ -577,3 +577,22 @@ R3 は LLM を呼ばず、器 3 本(integration_input.v0.1 = internal 無し・�
 - `lib/integration.ts` + 試験 19 本、CLI `integrationCheck.ts`、schema 3 本(integration_input.v0.1 = internal 無し・席名を伏せる / integration.v0.1 = seatCount は `evidence: const false`、整理役が書く形には seatCount と answersByQuestion の欄が無い = 構造で拒む / heldBack は全部に理由、理由に一致の数があれば I-3、summary は 1 席でも違えば mixed)。worktree で 2001 本緑・typecheck 赤 0。
 - 実装で見つけた穴 2 つ(LOG §9.2): (1) 席の hypothesisId(H-c5-gptrun2-001)が席名を埋め込む → 器では匿名 I-<seatIndex>-<連番> に写し替え、対応表 itemMap は seatOrder と一緒に run のログへ(封筒の id は変えない)。(2) 代表の行の provenance.inputs を `integration_input:<sha>` にすると H-6(盲検)の禁止語「integrat」に当たる → 出どころを束の成員の列 `seat_item:<seatIndex>:<匿名 id>` にし I-8 で itemRefs と集合一致(言い換えでなく出どころが成員そのもの、と監査も確認)。
 - 次: R4(callSeat と整理役の呼び出し・再試行・原文保存・整理役の指示文・指示文 v1.1 の 3 点)の計画。実行は鍵・モデル名(人間)の後。
+
+## 2026-09-30 ― 実験席 STEP R4(callSeat)計画 f31982c に司令塔 GO(鍵なしで作れる部分から)。§9 の 6 点の答え
+
+先決め 3 つは規則に入った(上限額を越える見込みなら送らない・鍵は `lib/env.ts` の 1 か所で名前だけ読み保存物に写さない(試験が保存物の全文を鍵の値で grep)・失敗した席は空席のまま)。
+
+| # | 答え |
+|---|---|
+| 1 | 変数名の一覧(`OPENAI_API_KEY`・`GEMINI_API_KEY`・`ANTHROPIC_API_KEY`・`SEAT_GPT_MODEL`・`SEAT_GEMINI_MODEL`・`SEAT_CLAUDE_MODEL`・`INTEGRATOR_PROVIDER`・`INTEGRATOR_MODEL`・`PRICE_*`・`SEAT_COST_CAP_USD`・`SEAT_*_INPUT_LIMIT`)は司令塔が了承。`.env.example`(値は空)をコミットしてよい。`.env` は gitignore 済み(6 行目)。**値は人間**(急がないが、初回実行の唯一の残り) |
+| 2 | SDK を足さず `fetch`: GO(依存 0・鍵の流れ 1 か所・試験で差し替え) |
+| 3 | 整理役の社は席の社と同じでよい: GO(独立性は席どうしに求める) |
+| 4 | 指示文 v1.1・整理役の指示文 v1 は実文を見せる: GO(司令塔が読んでから sha 固定、初回実行の直前に 1 回) |
+| 5 | 揺れの床の 2 回目(費用 2 倍)を初回に含めるか: **人間**(費用)。司令塔の推奨: 上限額が許せば含める、許さなければ 1 回で始める(計画案のまま) |
+| 6 | OpenAI は chars/3 の概算で上限を見る: GO(越えたら送らない側に倒れる) |
+
+## 2026-09-30 ― レーン便 100: V-a・V-c 独立監査 GO、コミット aabf0aa(残差 0)。V-b(H-10)へ
+
+- 監査の REVISE 1 点(妥当): H-9 が `skipped` を返すのに実運用の CLI が状態語を自分で組み `H-9 ok 未照合` と出ていた(「照合して通った」と「照合していない」が同じ語)。直し: 状態語を決める場所を `checkResultLines` の 1 か所に寄せ(`skip`/`ok`/`NG`)、CLI の子プロセス試験に「`H-9 skip` と出る・`H-9 ok` と出ない」を追加。**この束が閉じようとしている穴そのものが、唯一の実運用の出口で開いていた**。
+- vitest 1996 / 105 files、変異 17 本すべて赤(予測 14 当たり・3 外れ = 波及が予測より広い向き)、監査は凍結写しの sha256 と git diff の一致を確認。
+- H-10 の実測: 定義 114・名前 108(同名 6)→ 名前から定義は 1 対 1 でない → H-10 は「どの定義か」を決めず `rows[].names` に在るかだけ。2 文字以下 7 件・包含 49 組 → 各位置で最長一致。25 局の認識名 16 件はすべて定義に在る。reviewStatus は 114 件すべて draft。**捕まえられない穴**: 定義に無い名前(席が作った名前・別の戦法名)は H-10 で落ちない。**司令塔: 今は埋めない・書き残す。** 顧客に出る文の側で ⑥ を作るときに「名前は rows の認識名のうち reviewStatus が承認済みのものだけ(白い一覧)」の検査を入れる。それまでは ⑤ の採用(司令塔が読む)と人間の送付判断が網。
