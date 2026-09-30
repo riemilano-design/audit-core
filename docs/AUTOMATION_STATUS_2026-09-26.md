@@ -600,3 +600,10 @@ R3 は LLM を呼ばず、器 3 本(integration_input.v0.1 = internal 無し・�
 ## 2026-09-30 ― 人間の決定: Claude の席と整理役のモデルは `claude-opus-5`
 
 司令塔の案 `claude-fable-5-1` を人間が `claude-opus-5` に変更(席 `SEAT_CLAUDE_MODEL` と整理役 `INTEGRATOR_MODEL` の両方)。GPT・Gemini のモデル名は人間が各社のダッシュボードで選ぶ。`.env.example` の例の値もこれに合わせる。鍵の値はチャット・記録に書かない。
+
+## 2026-09-30 ― `.env` の値が入った(鍵 3・モデル名・単価)。上限額と揺れの床の 2 回目は人間の判断待ち
+
+- 鍵 3 本は人間が `.env` に置いた(司令塔は値を見ていない。空でないことと前後の空白・引用符が無いことだけ確認)。`.env` は gitignore の 6 行目。
+- **モデル名**(司令塔が両社の API の一覧を鍵で引いて選び、人間の `claude-opus-5` の決定を反映): `SEAT_GPT_MODEL=gpt-5.5`・`SEAT_GEMINI_MODEL=gemini-3.1-pro-preview`・`SEAT_CLAUDE_MODEL=claude-opus-5`・`INTEGRATOR_PROVIDER=anthropic`・`INTEGRATOR_MODEL=claude-opus-5`。**別名(`gemini-pro-latest` 等)は使わない** ― 周をまたいで席を比べるので、動く別名では比べられなくなる(版を釘で留める)。pro 版(`gpt-5.5-pro` = 30/180)は採らない(入力 1 本あたり 6 倍)。
+- **単価**(2026-09-30 に各社の料金ページから引いた、USD / 100 万トークン): gpt-5.5 = 5 / 30、gemini-3.1-pro-preview = 2 / 12、claude-opus-5 = 5 / 25。**Gemini は入力 200k 超で 4 / 18 に上がる段があり、`PRICE_*` の 1 つの値では表せない** → R4 で「概算入力が 200k を超える組では高い段の単価で見積もる(または送らない)」を実装側の規則にする(実験席へ伝達)。
+- **1 回の実行の概算**(入力 = seat_input 約 7 万トークン × 3 席 + 整理役、出力 = 各 1 万トークンの見込み): **約 2 ドル**。揺れの床のための 2 回目を含めて **約 4 ドル**。司令塔の推奨: `SEAT_COST_CAP_USD=10`(1 回の実行の累計。概算の 5 倍の余裕)+ 2 回目を初回に含める。**金銭の判断は人間**(CLAUDE.md の委任の外)。
