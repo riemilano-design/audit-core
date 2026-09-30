@@ -97,6 +97,38 @@ def scope_sentence(games):
 OPENING_ENGINE_TEMPLATE = "{groups}を、1 手ずつ将棋エンジンで調べました({today})。"
 OPENING_NOT_A_JUDGE = "手の良し悪しを判定するものではありません。"
 OPENING_APPENDIX = "数の出どころは付録で引けます。"
+# **用語の 4 行**(器の単独束 C-3。2026-09-30。**文は人間が固定したもの**)。
+#
+# 【なぜ要るか】5 人目の感想が「第一候補 = ソフトの最善手か」と聞いた ―
+# **冊子の中でいちばん使う語が、冊子の中で定義されていなかった。**
+# 語の形は人間の言葉そのまま(`docs/NEXTGEN_CONNECTION_DESIGN_2026-09-30.md` の
+# 「第 1 候補: この局面でエンジンが 1 番に挙げた手。…」)。**「最善手」の語は使わない**
+# (`check_delivery.ALWAYS_FORBIDDEN_WORDS` が納品を止める)。
+#
+# 【なぜここ 1 か所か】`exit_candidates.build_md` が**この表から md を作り**、
+# 下の `check_term_lines` が**組んだ PDF に在るか**を見る。写しを持たないので、
+# 文を直せば組版と門が同時に動く(**2 か所ある欠陥は片方で閉じない**の逆 ― 元から 1 か所)。
+#
+# 【文は道具の言い方から採る】「分かれ道」の文は `answer_facts.py` の
+# 「第 1 候補との差が大きい、または候補 5 つに入らなかった局面」から採った。
+# **自分で新しい定義を書かない** ― 文と機械の数え方が食い違うと、付録で引いたときに合わない。
+TERM_LINES = (
+    ("第 1 候補",
+     "この局面でエンジンが 1 番に挙げた手。正解と決めるものではなく、実戦の手と比べるために使っています。"),
+    ("分かれ道",
+     "実戦の手とエンジンの第 1 候補の差が大きかった局面、"
+     "または実戦の手がエンジンの候補 5 つに入らなかった局面。"),
+    ("自玉側",
+     "相手の玉に向かう手を「攻め」、自分の玉のまわりを固める手を「自玉側」と数えています。"),
+    ("一致率", "分かれ道のうち、実戦の手とエンジンの第 1 候補が同じ側だった割合。"),
+)
+
+
+def term_md_lines():
+    """用語の 4 行を md の箇条書きにして返す(組版と門が同じここから作る)。"""
+    return [f"- **{term}**: {sentence}" for term, sentence in TERM_LINES]
+
+
 OPENING_SPLIT_TEMPLATE = ("持ち時間の違う {n} つの組は分けて数えています"
                           "(混ぜると 1 手あたりの秒が意味を失うため)。")
 OPENING_PRIMARY_TEMPLATE = "以下の数は、断りが無ければ {label}の {games} 局のものです。"
@@ -646,6 +678,22 @@ def check_scope_and_mapping(personal, games, problems):
             problems.append(f"冒頭の断り書きが {n} か所(ちょうど 1 か所): {sentence}")
 
 
+def check_term_lines(personal, problems):
+    """**用語の 4 文が本編にちょうど 1 回ずつ在る**(器の単独束 C-3。2026-09-30)。
+
+    【何を数えるか】**文**(`TERM_LINES` の 2 つ目)。**語は数えない** ―
+    「第 1 候補」「分かれ道」は本文に何度も出るので、語の数では定義が在るか分からない。
+    【折り返し】組版は文を行に折るので `squeeze` で空白を落としてから探す(門の他の検査と同じ流儀)。
+    【なぜ落とすのか】この 4 文が抜けた冊子は、**いちばん使う語が定義されないまま顧客に届く**
+    (5 人目の感想「第一候補 = ソフトの最善手か」がその状態で出た)。
+    """
+    joined = squeeze("".join(personal))
+    for term, sentence in TERM_LINES:
+        n = joined.count(squeeze(norm(sentence)))
+        if n != 1:
+            problems.append(f"用語「{term}」の説明が {n} か所(ちょうど 1 か所)")
+
+
 def check_moved_to_appendix(md_text, personal, appendix, problems):
     """検査 9(付録へ回した節)。**両側を見る** ― 印の付いた節が
     **本編の PDF に出ない**こと、かつ**付録の PDF に出る**こと(器の単独束 C-4。2026-09-30)。
@@ -714,6 +762,7 @@ def main(argv):
     check_boards(md_text, index, personal, problems)
     check_appendix_pages(index, appendix, problems)
     check_moved_to_appendix(md_text, personal, appendix, problems)
+    check_term_lines(personal, problems)
     # 局数は材料から取る(`check_answer` が読んだ patient の 1 本目 = 今回の組)。
     # **`summary.games` を使う** ― `exit_cover.numbers_of` が既にここを読んでいる(出どころを 2 つにしない)。
     # 実物では `len(games)` と一致するが(25 = 25 を実測)、**宣言されている数はこちら**。

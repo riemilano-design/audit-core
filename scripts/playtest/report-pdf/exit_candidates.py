@@ -845,6 +845,12 @@ def build_md(direct, patient, repro, passed, dropped, mapping, denoms, fdata,
     for sentence in opening:
         L.append(sentence)
     L.append("")
+    # **用語の 4 行**(器の単独束 C-3。2026-09-30)。**表は `check_structure.TERM_LINES` の 1 か所**で、
+    # 同じ表を門(`check_structure.check_term_lines`)が組んだ PDF に対して数える。
+    # ここで書き手に任せると、**いちばん使う語が定義されないまま出る**(5 人目の感想で出た状態)。
+    for line in CS.term_md_lines():
+        L.append(line)
+    L.append("")
 
     # ---- (a) ひとことで ----
     L.append(f"## {heading_of('ひとことで')}")

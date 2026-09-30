@@ -327,6 +327,11 @@ class NoOverreachTest(unittest.TestCase):
         # **器の門が数える文と、道具が印字する文が別々に直る**道ができる。
         for sentence in (CS.OPENING_NOT_A_JUDGE, CS.OPENING_APPENDIX, CS.OPENING_ENGINE_TEMPLATE):
             self.assertNotIn(sentence[:10], SRC, f"冒頭の固定文を写している: {sentence[:10]}")
+        # **用語の 4 文も写さない**(器の単独束 C-3。2026-09-30)。表は `CS.TERM_LINES` の 1 か所で、
+        # 写しが入ると**門が数える文と道具が印字する文が別々に直る**。
+        self.assertIn("CS.term_md_lines", SRC)
+        for _term, sentence in CS.TERM_LINES:
+            self.assertNotIn(sentence[:10], SRC, f"用語の文を写している: {sentence[:10]}")
 
     def test_11_the_heading_judgment_holds_no_string_of_its_own(self):
         """見出しを作る関数が、見出しの値を自分の文字列として持たないこと。"""
@@ -421,6 +426,21 @@ class RestCountTest(unittest.TestCase):
                          EC.opening_lines(patient, direct, TODAY), featured=2)
         self.assertIn("そのほかの 5 局", md)
         self.assertNotIn("そのほかの 7 局", md)
+
+    def test_18d_the_term_lines_are_emitted(self):
+        """**用語の 4 行が道具の出す md に在る**(器の単独束 C-3。2026-09-30)。
+
+        **ソースの字面ではなく出た md で見る** ― 呼び出しを外しても字面の試験は
+        `import` の行に当たって通る(2026-09-29 に同型を 4 回踏んだ)。
+        5 人目の感想「第一候補 = ソフトの最善手か」が、この 4 行が無い冊子で出た。
+        """
+        md = emitted_md()
+        for line in CS.term_md_lines():
+            self.assertIn(line, md)
+        # **冒頭の段落の後ろ**(「ひとことで」の節より前)に在ること ―
+        # 用語は使う前に出ていなければ意味が無い。
+        self.assertLess(md.index(CS.term_md_lines()[0]), md.index("## ひとことで"))
+        self.assertLess(md.index(CS.OPENING_APPENDIX), md.index(CS.term_md_lines()[0]))
 
     def test_18c_the_subtraction_lives_in_one_place(self):
         """**引き算を持つのは `exit_index.rest_count` だけ。**3 つの書く側は全部そこを呼ぶ。

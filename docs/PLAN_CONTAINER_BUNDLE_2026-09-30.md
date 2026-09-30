@@ -94,7 +94,7 @@ C-4 の後なら満たせる見込み。ただし確定した文で測り直し�
 |---|---|---|---|
 | C-1 | 送付用の名前を `DELIVER_OUT_NAMES` の隣に置き、段が改名する | `lib/deliver.ts`(1 か所) | 名前の形が変わったら試験が赤 |
 | C-2 | `--forbid 最善手` を固定引数にする | `checkDeliveryCommand` | 冊子に `最善手` が出たら納品が止まる |
-| C-3 | 冒頭の用語の 1 文(第 1 候補)を `opening_paragraph` の側に足す | `report-pdf/check_structure.py` | 文が消えたら門が赤 |
+| C-3 | **済み(2026-09-30)**。用語の **4 行**を `check_structure.TERM_LINES` に置き、`exit_candidates` が md に出し、門が組んだ PDF を数える | `report-pdf/check_structure.py`(1 か所) | 文が消えたら門が赤(実測: 指摘 4 件)。余裕は 9 行残った。記録は LANE_AUTOMATION_LOG §75 |
 | C-4 | 分母の表を付録へ(**2 の測りで余裕が出たときだけ**) | `exit_body.render_plain` の流儀 | 本編に表が残っていたら赤 / 付録が 25 ページを超えたら赤 |
 
 ## 4. 順序

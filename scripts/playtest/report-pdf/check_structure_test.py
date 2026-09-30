@@ -34,9 +34,19 @@ SCOPE_WRAPPED = ["この冊子は、エンジンの解析と機械の集計か�
 # 写すと、文を直したときに**土台だけが古い文で緑のまま通る**。
 OPENING_CAVEATS = [CS.OPENING_NOT_A_JUDGE, CS.OPENING_APPENDIX]
 
+# 用語の 4 文(C-3。2026-09-30)。**道具の表から引く**(写さない) ―
+# 写すと、文を直したときに土台だけが古い文で緑のまま通る。
+#
+# **20 文字ずつに折って置く。**`write_pdf` は折り返さないので、長い文をそのまま 1 行に置くと
+# **ページの外にはみ出して抽出できず**、門が「0 か所」と数えた(最初の実測でここが落ちた)。
+# 折るのは実物に合わせた形でもある(組版は文を行に折る ― `SCOPE_WRAPPED` と同じ理由)。
+TERM_SENTENCES = [sentence[i:i + 20]
+                  for _term, sentence in CS.TERM_LINES
+                  for i in range(0, len(sentence), 20)]
+
 # 本人用 5 ページ。最後が対応表(見本用では抜くページ)。
 HONBUN_PAGES = [
-    ["合成材料の冊子(変異試験)"] + SCOPE_WRAPPED + OPENING_CAVEATS,
+    ["合成材料の冊子(変異試験)"] + SCOPE_WRAPPED + OPENING_CAVEATS + TERM_SENTENCES,
     ["ひとことで", "3 のうち 3 局は、時計の上で持ち時間に到達しています。"],
     ["局面で見る", "盤は 2 つ。"],
     ["試せること / 数え方", "分母は 20 局です。"],
@@ -323,6 +333,19 @@ class CheckStructureTest(unittest.TestCase):
         write_pdf(os.path.join(self.dir, "honbun_sample.pdf"),
                   [p for i, p in enumerate(pages) if i != MAPPING_PAGE_INDEX])
         self.assert_falls("本編(本人用)が 6 ページ")
+
+    def test_10b_missing_term_sentences_fall(self):
+        """**用語の説明を抜いた本編は通らない**(C-3。2026-09-30)。
+
+        **門に配線されていることをここで測る** ― 単体の `check_term_lines` が緑でも、
+        `main` から呼んでいなければ**顧客には定義の無い冊子が出る**(呼び出しを外す変異が黙る道)。
+        """
+        pages = [list(p) for p in HONBUN_PAGES]
+        pages[0] = [line for line in pages[0] if line not in TERM_SENTENCES]
+        write_pdf(os.path.join(self.dir, "honbun_personal.pdf"), pages)
+        write_pdf(os.path.join(self.dir, "honbun_sample.pdf"),
+                  [p for i, p in enumerate(pages) if i != MAPPING_PAGE_INDEX])
+        self.assert_falls("用語")
 
     def test_11_index_missing_appendix_pages(self):
         index = read_index(self.dir)
@@ -972,6 +995,100 @@ class CoverPagesTest(unittest.TestCase):
         CS.check_appendix_pages(index, list(self.APPENDIX), problems)
         self.assertEqual(len(problems), 1, problems)
         self.assertIn("表紙 3 ページ", problems[0])
+
+
+class TermLinesTest(unittest.TestCase):
+    """**用語の 4 文が本編にちょうど 1 回ずつ在る**(器の単独束 C-3。2026-09-30)。
+
+    5 人目の感想が「第一候補 = ソフトの最善手か」と聞いた ―
+    **冊子の中でいちばん使う語が、冊子の中で定義されていなかった。**
+    """
+
+    def test_t1_four_lines_with_the_term_and_the_sentence(self):
+        """md の 4 行。**語と文の両方**が入る(語だけでは定義にならない)。"""
+        lines = CS.term_md_lines()
+        self.assertEqual(len(lines), 4)
+        self.assertEqual(len(CS.TERM_LINES), 4)
+        for line, (term, sentence) in zip(lines, CS.TERM_LINES):
+            self.assertTrue(line.startswith("- "), line)
+            self.assertIn(term, line)
+            self.assertIn(sentence, line)
+
+    def test_t1b_the_terms_are_the_four_we_decided(self):
+        """**どの語かを試験の側に書く**(表を読むと、語を入れ替える変異と一緒に動いて黙る)。"""
+        self.assertEqual([term for term, _s in CS.TERM_LINES],
+                         ["第 1 候補", "分かれ道", "自玉側", "一致率"])
+        # **「最善手」は使わない**(`check_delivery.ALWAYS_FORBIDDEN_WORDS` が納品を止める語)。
+        self.assertNotIn("最善手", "".join(CS.term_md_lines()))
+
+    def test_t1c_the_term_and_the_sentence_are_not_swapped(self):
+        """**語と文の組が入れ替わっていないこと**(監査の指摘。2026-09-30)。
+
+        t1・t1b は**表から作った行が自己整合的**であることしか見ていないので、
+        **表そのものの語と文の組を入れ替えても全部緑だった**(監査が変異で実測)。
+        文が 1 回ずつ在るかを数える門も、**どの語に付いた文かは見ていない。**
+        入れ替わると、顧客は「分かれ道」の欄で第 1 候補の説明を読む ―
+        **いちばん使う語の定義が、別の語の定義になる。**
+
+        【写しにしない】文全体を書き写すと、文を直したときに**土台だけ古い文で緑のまま通る**
+        (`TERM_SENTENCES` を道具の表から引いているのと同じ理由)。
+        だから見るのは**その語だけが持つ短い断片**で、文の同一性ではなく**対応関係**だけを測る。
+        """
+        by_term = dict(CS.TERM_LINES)
+        self.assertIn("エンジンが 1 番に挙げた", by_term["第 1 候補"])
+        self.assertIn("候補 5 つに入らなかった", by_term["分かれ道"])
+        self.assertIn("自分の玉のまわり", by_term["自玉側"])
+        self.assertIn("同じ側だった割合", by_term["一致率"])
+        # **断片は 1 つの文にしか出ないこと**(どの文に当てても通る断片では入れ替えを見分けられない)。
+        for fragment in ("エンジンが 1 番に挙げた", "候補 5 つに入らなかった",
+                         "自分の玉のまわり", "同じ側だった割合"):
+            hits = [term for term, sentence in CS.TERM_LINES if fragment in sentence]
+            self.assertEqual(len(hits), 1, (fragment, hits))
+
+    def _pages_with_all_terms(self):
+        """4 文が 1 回ずつ在る本編(ページに散らして置く ― ページをまたいで探すことも測る)。"""
+        sentences = [s for _t, s in CS.TERM_LINES]
+        return ["1 ページ目。" + sentences[0] + sentences[1],
+                "2 ページ目。" + sentences[2],
+                "3 ページ目。" + sentences[3]]
+
+    def test_t2_all_four_present_passes(self):
+        problems = []
+        CS.check_term_lines(self._pages_with_all_terms(), problems)
+        self.assertEqual(problems, [])
+
+    def test_t3_a_missing_sentence_falls(self):
+        """**1 文でも抜ければ落とす。**どの語かを指摘に出す。"""
+        pages = self._pages_with_all_terms()
+        pages[1] = "2 ページ目。説明は消えました。"
+        problems = []
+        CS.check_term_lines(pages, problems)
+        self.assertEqual(len(problems), 1, problems)
+        self.assertIn("自玉側", problems[0])
+        self.assertIn("0 か所", problems[0])
+
+    def test_t4_the_term_alone_is_not_enough(self):
+        """**語の数では数えない。**「第 1 候補」は本文に何度も出るので、語だけでは定義が在るか分からない。"""
+        problems = []
+        CS.check_term_lines(["第 1 候補 第 1 候補 第 1 候補 分かれ道 自玉側 一致率"], problems)
+        self.assertEqual(len(problems), 4, problems)
+
+    def test_t5_twice_falls_too(self):
+        """**2 回出るのも落とす**(冒頭と別の節で二重に定義した形)。"""
+        pages = self._pages_with_all_terms()
+        pages.append("4 ページ目。" + CS.TERM_LINES[0][1])
+        problems = []
+        CS.check_term_lines(pages, problems)
+        self.assertEqual(len(problems), 1, problems)
+        self.assertIn("2 か所", problems[0])
+
+    def test_t6_line_wrap_does_not_hide_the_sentence(self):
+        """折り返しを越えて探す(`squeeze`。門の他の検査と同じ流儀)。"""
+        sentences = [s for _t, s in CS.TERM_LINES]
+        folded = sentences[0][:10] + "\n" + sentences[0][10:]
+        problems = []
+        CS.check_term_lines([folded, sentences[1], sentences[2], sentences[3]], problems)
+        self.assertEqual(problems, [])
 
 
 class MovedToAppendixTest(unittest.TestCase):
