@@ -107,11 +107,45 @@ describe("最小の packet / request は契約を通る(通らない fixture で
   });
 });
 
+describe("見出しだけの節と §0.3 の最後の行(2026-09-30 の司令塔の決定 (iii))", () => {
+  // 【なぜ要るか】席は束の見出しどおり「0」「0.1」「0.2」も読んだと書く。meta が持っていないと到達の検査が正直な席を落とす
+  //(初回の実行で実測)。§0.3 の lastKey が本文の最後の行と違っていたのも同じ原因。
+  it("データの行を持つ節は headingSections に入らない(0.2 は線の組の行を持つ)", () => {
+    const { meta } = render();
+    const section = meta.sections.find((s) => s.section === "0.2");
+    expect(section).toBeDefined();
+    expect(section!.rows).toBe(1);
+    expect(section!.lastKey).toContain("ahead_cp");
+    expect(meta.headingSections).not.toContain("0.2");
+  });
+  it("meta は見出しだけの節(データの行が無い節)を持つ", () => {
+    const { meta } = render();
+    // 0.2(線の組)は**データの行を持つ**ので見出しだけの節ではない(2026-09-30 の独立監査の指摘)
+    expect(meta.headingSections).toEqual(["0", "0.1"]);
+    // データの行が在る節は headingSections に混ざらない
+    for (const section of meta.sections) expect(meta.headingSections).not.toContain(section.section);
+  });
+  it("§0.3 の lastKey は本文の実際の最後の行(inputs の最後の path)から取る", () => {
+    const { text, meta } = render();
+    const section = meta.sections.find((s) => s.section === "0.3")!;
+    expect(section.lastKey.startsWith("- scripts/playtest/out/c5")).toBe(true); // 60 字で切られるので先頭で見る
+    expect(section.lastKey).not.toContain("recognition"); // sources の最後の行ではない
+    // 本文で inputs の行が §0.3 の中(§1 の見出しより前)に在る
+    expect(text.indexOf("#### inputs(")).toBeLessThan(text.indexOf("## 1. 局"));
+  });
+  it("見出しを増やせば meta も増える(字面を手で並べていない)", () => {
+    const { text } = render();
+    const labels = (text.match(/^#{2,4} ([0-9]+(?:\.[0-9]+)*)[.、 ]/gm) ?? []).length;
+    expect(labels).toBeGreaterThan(3);
+  });
+});
+
 describe("本文の形(節の順・行数・packetRef の文法)", () => {
   it("節は A → 0.3 → 1 … 8 の順で、行数は packet の配列の長さ", () => {
     const { meta } = render();
-    expect(meta.sections.map((s) => s.section)).toEqual(["A", "0.3", "1", "2", "3", "4", "5", "6", "6.1", "7", "8"]);
-    expect(meta.sections.map((s) => s.rows)).toEqual([1, 3, 1, 3, 1, 1, 1, 1, 1, 2, 1]); // 集計 2 本 = 分数 1(2 行)+ 単独 1(1 行)
+    expect(meta.sections.map((s) => s.section)).toEqual(["A", "0.2", "0.3", "1", "2", "3", "4", "5", "6", "6.1", "7", "8"]);
+    // §0.3 は sources 3 本 + inputs 1 本 = 4 行(inputs の一覧を節の**中**に置いた。2026-09-30 の司令塔の決定 (iii))
+    expect(meta.sections.map((s) => s.rows)).toEqual([1, 1, 4, 1, 3, 1, 1, 1, 1, 1, 2, 1]); // 0.2 = 線 1 本、集計 2 本 = 分数 1(2 行)+ 単独 1(1 行)
     expect(meta.games).toBe(1);
   });
   it("見出しの行数と data 行の数が一致し、lastKey は最後の data 行の先頭 2 トークン", () => {

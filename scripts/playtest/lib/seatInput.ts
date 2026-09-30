@@ -49,6 +49,12 @@ export interface SeatInputMeta {
   chars: number;
   tokenEstimate: { value: number; method: "chars/3" };
   sections: SeatInputSection[];
+  /**
+   * **本文に見出しだけが在る節**(データの行を持たない。例: 0 読み方・0.1 省いたもの・0.2 線の組)。
+   * 席はこれらも「読んだ節」として挙げるので、**meta が持っていないと到達の検査が正直な席を落とす**
+   * (2026-09-30 の初回の実行で実測。司令塔の決定は「meta に載せ、無い節名は従来どおり落とす」)。
+   */
+  headingSections: string[];
   /** packet にはあるが本文に写さなかったもの */
   omitted: string[];
   /** 意図して含めていないもの(現行ルートの出力) */
@@ -208,6 +214,26 @@ function data(e: Emitter, line: string): void {
   e.lines.push(line);
   e.data.push(line);
 }
+/**
+ * 本文の見出しから節の番号を拾い、**`section()` で正式に登録された節を除く**。残るのが「見出しだけの節」。
+ * 字面を手で並べないので、見出しを増やしても meta が付いてくる。
+ * **注意**: ここが見ているのは「正式に登録されたか」だけで、`data()` を呼んでいるかは見ていない ―
+ * **データの行を持つ節を登録し忘れると、この関数はそれを「見出しだけ」と見なし、E-1 の lastKey の照合が外れる**
+ * (2026-09-30 の独立監査が 0.2 でこれを見つけた。データの行を書く節は必ず `section()` で登録する)。
+ */
+export function headingSectionsOf(lines: readonly string[], dataSections: readonly string[]): string[] {
+  const found: string[] = [];
+  const have = new Set(dataSections);
+  for (const line of lines) {
+    const match = /^#{2,4} ([0-9]+(?:\.[0-9]+)*)[.、 ]/.exec(line);
+    if (match === null) continue;
+    const label = match[1]!;
+    if (have.has(label) || found.includes(label)) continue;
+    found.push(label);
+  }
+  return found;
+}
+
 export const LAST_KEY_MAX_CHARS = 60;
 /** data 行の先頭 2 トークン(表なら先頭 2 セル)。長い文は先頭 60 字で切る(到達検査は前方一致で見る) */
 function keyOf(line: string): string {
@@ -289,17 +315,22 @@ export function renderSeatInput(args: RenderSeatInputArgs): { text: string; meta
   prose(e, FIXED_PROSE[2]!);
   for (const line of NOT_INCLUDED) prose(e, `- ${line}`);
   heading(e, "");
-  heading(e, "### 0.2 線の組(provenance.thresholds。値は 1 行目に写した。ここは id と在り処)");
-  for (const t of thresholds) data(e, `- ${v(t.id)}: ${v(t.from)}`);
+  // 0.2 は**データの行を持つ節**なので、0.3 と同じく正式に登録する(2026-09-30 の独立監査の指摘)。
+  // 登録しないと headingSections(= 正式な節に無いもの)に混ざり、**この節だけ lastKey の照合が外れる**。
+  section(e, "0.2", "線の組(値は 1 行目に写した。ここは id と在り処)", "provenance.thresholds", thresholds, () => {
+    for (const t of thresholds) data(e, `- ${v(t.id)}: ${v(t.from)}`);
+  });
   heading(e, "");
   const sources = provenance.sources as Row[];
   const inputs = provenance.inputs as Row[];
-  section(e, "0.3", "出どころ", "provenance.sources[] と provenance.inputs[].path", sources, () => {
+  // inputs の一覧は §0.3 の**中**に置く(節の最後の行が meta の lastKey と同じになるように。
+  // 2026-09-30: 節の外に置いていたため、席が見た最後の行と meta が食い違い、到達の検査が落ちた)
+  section(e, "0.3", "出どころ", "provenance.sources[] と provenance.inputs[].path", [...sources, ...inputs], () => {
     table(e, ["id", "type", "kind", "engineVersion", "nodesLimit", "multipv", "reviewStatus", "definitionsDirs"], sources.map((s) => [v(s.id), v(s.type), v(s.kind), v(s.engineVersion), v(s.nodesLimit), v(s.multipv), v(s.reviewStatus), list(s.definitionsDirs, "; ")]));
+    heading(e, "");
+    heading(e, `#### inputs(provenance.inputs[].path、${inputs.length} 本)`);
+    for (const input of inputs) data(e, `- ${v(input.path)}`);
   });
-  heading(e, "");
-  heading(e, `#### inputs(provenance.inputs[].path、${inputs.length} 本)`);
-  for (const input of inputs) data(e, `- ${v(input.path)}`);
 
   section(e, "1", "局", "facts.games[]", games, () => {
     table(e, ["gameId", "no", "side", "result", "ending", "ownPlyCount", "totalPlyCount", "timeLimitSec", "mirrored", "aheadAtAnyPoint"],
@@ -406,6 +437,7 @@ export function renderSeatInput(args: RenderSeatInputArgs): { text: string; meta
     chars: [...text].length,
     tokenEstimate: { value: Math.ceil([...text].length / 3), method: "chars/3" },
     sections: e.sections,
+    headingSections: headingSectionsOf(e.lines, e.sections.map((section) => section.section)),
     omitted: [...OMITTED],
     notIncluded: [...NOT_INCLUDED],
   };

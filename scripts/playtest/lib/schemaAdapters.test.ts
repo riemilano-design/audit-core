@@ -5,7 +5,7 @@
 import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import { validateIntegrationLlm } from "./integration.js";
-import { adaptSchema, dropNullsNotAllowed, forbiddenKeywords, toAnthropic, toGemini, toOpenAIStrict } from "./schemaAdapters.js";
+import { adaptSchema, dropNullsNotAllowed, effectiveValueShape, forbiddenKeywords, toAnthropic, toGemini, toOpenAIStrict } from "./schemaAdapters.js";
 import { validateSeatOutputLlm } from "./seatOutput.js";
 
 type Rec = Record<string, unknown>;
@@ -29,6 +29,20 @@ function fillNullsForOptional(json: unknown, schema: unknown): unknown {
   for (const k of Object.keys(props)) if (!(k in out) && !required.has(k)) out[k] = null;
   return out;
 }
+/**
+ * **自由形の節**を探す(2026-09-30 の初回の実行で 3 社が 400 を返した形)。
+ * `{type:"array"}` に items が無い → Gemini も OpenAI も 400 / `{type:"object"}` に properties が無い → OpenAI strict が 400。
+ */
+function freeFormNodes(schema: unknown, path = "$"): string[] {
+  const found: string[] = [];
+  if (Array.isArray(schema)) { schema.forEach((s, i) => found.push(...freeFormNodes(s, `${path}[${i}]`))); return found; }
+  if (!isRecord(schema)) return found;
+  if (schema.type === "array" && schema.items === undefined) found.push(`${path}: array に items が無い`);
+  if (schema.type === "object" && schema.properties === undefined) found.push(`${path}: object に properties が無い`);
+  for (const [k, v] of Object.entries(schema)) if (k !== "enum" && k !== "required") found.push(...freeFormNodes(v, `${path}.${k}`));
+  return found;
+}
+
 /** 節を歩いて、objects に required と additionalProperties が揃っているかを見る(OpenAI strict の条件) */
 function strictProblems(schema: unknown, path = "$"): string[] {
   const problems: string[] = [];
@@ -98,6 +112,20 @@ describe("OpenAI strict の写し", () => {
       expect(forbiddenKeywords("openai", adapted), name).toEqual([]);
     }
   });
+  it("自由形の節が残っていない(初回の実行の 400 の回帰): array に items・object の枝は落とす", () => {
+    for (const [name, schema] of [["seat", SEAT_SCHEMA], ["integ", INTEG_SCHEMA]] as const) {
+      expect(freeFormNodes(toOpenAIStrict(schema as Rec)), name).toEqual([]);
+    }
+    // 正本には自由形が在る(だから写しで始末する必要がある)= この試験が本当に何かを測っている証拠
+    expect(freeFormNodes(SEAT_SCHEMA).length).toBeGreaterThan(0);
+  });
+  it("value の枝は「数・字・真偽・無し・数や字の配列」になる(object の枝は落ちる)", () => {
+    const value = (toOpenAIStrict(SEAT_SCHEMA) as any).properties.items.items.properties.observations.items.properties.value;
+    const types = (value.anyOf as Record<string, unknown>[]).map((b) => b.type);
+    expect(types).toEqual(["number", "string", "boolean", "null", "array"]);
+    const array = (value.anyOf as Record<string, any>[]).find((b) => b.type === "array");
+    expect((array!.items.anyOf as Record<string, unknown>[]).map((b) => b.type)).toEqual(["number", "string", "boolean", "null"]);
+  });
   it("任意の欄は「その形 か null」になる(strict は全欄 required なので null で「無い」を表す)", () => {
     const adapted = toOpenAIStrict(SEAT_SCHEMA) as any;
     const item = adapted.properties.items.items;
@@ -119,6 +147,12 @@ describe("Gemini の写し", () => {
       const adapted = toGemini(schema as Rec);
       expect(forbiddenKeywords("gemini", adapted), name).toEqual([]);
       expect(JSON.stringify(adapted), name).not.toContain("additionalProperties");
+    }
+  });
+  it("自由形の array に items を足す(Gemini は items の無い array を 400 で返す。2026-09-30 の実測)", () => {
+    for (const [name, schema] of [["seat", SEAT_SCHEMA], ["integ", INTEG_SCHEMA]] as const) {
+      const found = freeFormNodes(toGemini(schema as Rec)).filter((line) => line.includes("array"));
+      expect(found, name).toEqual([]);
     }
   });
   it("任意の欄はそのまま任意(required を足さない)", () => {
@@ -149,6 +183,35 @@ describe("Anthropic の写し", () => {
     expect(adaptSchema("openai", SEAT_SCHEMA)).toEqual(toOpenAIStrict(SEAT_SCHEMA));
     expect(adaptSchema("gemini", SEAT_SCHEMA)).toEqual(toGemini(SEAT_SCHEMA));
     expect(adaptSchema("anthropic", SEAT_SCHEMA)).toEqual(toAnthropic(SEAT_SCHEMA));
+  });
+});
+
+describe("3 社の有効な形をそろえる(司令塔の条件 2026-09-30 ― 席をまたいで比べるため)", () => {
+  // 社ごとに狭さが違うと、**席の間で「書ける形」が変わり、一致・不一致を実力差として読めなくなる**。
+  // いちばん狭い形(数・字・真偽・無し・その配列)に 3 社そろえる。
+  it("observations[].value の形が 3 社で同じ", () => {
+    const shapes = (["openai", "gemini", "anthropic"] as const).map((p) => effectiveValueShape(p, SEAT_SCHEMA));
+    expect(shapes[0]).toEqual(["array", "boolean", "null", "number", "string"]);
+    expect(shapes[1], "gemini").toEqual(shapes[0]);
+    expect(shapes[2], "anthropic").toEqual(shapes[0]);
+    // 正本は object も許す(だから写しでそろえる必要が在る)= この試験が何かを測っている証拠
+    const canonical = ((SEAT_SCHEMA as any).properties.items.items.properties.observations.items.properties.value.oneOf as Record<string, unknown>[]).map((b) => b.type).sort();
+    expect(canonical).toContain("object");
+  });
+  it("枝が全部自由形の object なら、字の枝を残す(空の anyOf にしない。独立監査の変異 L)", () => {
+    // 空の anyOf は「何も受け付けない」形になり、社の入口で落ちる。受け皿を残す。
+    const canonical = { type: "object", properties: { x: { oneOf: [{ type: "object" }, { type: "object" }] } }, required: ["x"], additionalProperties: false };
+    for (const provider of ["openai", "gemini", "anthropic"] as const) {
+      const adapted = adaptSchema(provider, canonical) as any;
+      const node = provider === "openai" ? adapted.properties.x : adapted.properties.x;
+      const branches = (node.anyOf ?? node.oneOf) as Record<string, unknown>[];
+      expect(branches, provider).toEqual([{ type: "string" }]);
+    }
+  });
+  it("自由形の節は 3 社とも残らない", () => {
+    for (const provider of ["openai", "gemini", "anthropic"] as const) {
+      for (const schema of [SEAT_SCHEMA, INTEG_SCHEMA]) expect(freeFormNodes(adaptSchema(provider, schema)), provider).toEqual([]);
+    }
   });
 });
 

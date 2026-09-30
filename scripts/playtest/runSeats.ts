@@ -217,9 +217,13 @@ async function main(): Promise<void> {
       seats: (summary.seats as Record<string, any>[]).map((s) => ({ seat: s.seat, present: s.present, absentReason: s.absentReason ?? null, items: s.items, checkProblems: s.checkProblems })),
       integration: summary.integration === null ? null : { present: (summary.integration as Record<string, any>).present, clusters: (summary.integration as Record<string, any>).clusters },
     });
-    if (summary.totals.seatsPresent === 0) {
-      writeFileSync(path.join(outDir, "pair_summary.json"), `${JSON.stringify({ runIds, runs: pair }, null, 1)}\n`, "utf-8");
-      console.log(`\n${runId}: 席が 1 つも立たなかった ― ここで止める`);
+    // ここで止める 2 つ(司令塔 2026-09-30): 席が 1 つも立たない / **上限に当たって送らなかった席が出た**。
+    // 上限に当たったら残りを無理に埋めない・上限を上げない ― 止めて人間に聞く。
+    const stopReason = summary.totals.seatsPresent === 0 ? "席が 1 つも立たなかった"
+      : summary.totals.capReached === true ? "費用の上限に当たって送らなかった席が出た(上限を上げない・残りを埋めない)" : undefined;
+    if (stopReason !== undefined) {
+      writeFileSync(path.join(outDir, "pair_summary.json"), `${JSON.stringify({ runIds, runs: pair, stoppedAt: runId, stopReason }, null, 1)}\n`, "utf-8");
+      console.log(`\n${runId}: ${stopReason} ― ここで止める`);
       process.exitCode = 1;
       return;
     }

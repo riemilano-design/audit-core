@@ -8,6 +8,14 @@
 import { redactSecrets } from "./env.js";
 
 export type Provider = "openai" | "gemini" | "anthropic";
+/**
+ * その社に `temperature` を送るか。**いまは 3 社とも送らない**(2026-09-30 の初回の実行で実測):
+ * claude-opus-5 は `temperature is deprecated for this model`、gpt-5.5 は `Unsupported parameter: 'temperature'` で 400。
+ * 受け付ける Gemini だけに送ると**席の条件が非対称になり、一致・不一致を実力差として読めなくなる**
+ * (司令塔の対称性の線 2026-09-30。value の形をそろえるのと同じ理由)。
+ * 送らなかったことは記録に残す(`run_summary` の `temperatureSent`)― 「温度 0 で回した」と読ませない。
+ */
+export const SENDS_TEMPERATURE: Readonly<Record<Provider, boolean>> = { openai: false, gemini: false, anthropic: false };
 export type FinishReason = "stop" | "length" | "other";
 
 export interface StructuredRequest {
@@ -128,13 +136,13 @@ function bodyOf(req: StructuredRequest): Record<string, unknown> {
         text: { format: { type: "json_schema", name: req.schemaName, schema: req.schema, strict: true } },
         max_output_tokens: req.maxOutputTokens,
       };
-      if (req.temperature !== undefined) body.temperature = req.temperature;
+      if (req.temperature !== undefined && SENDS_TEMPERATURE.openai) body.temperature = req.temperature;
       if (req.seed !== undefined) body.seed = req.seed;
       return body;
     }
     case "gemini": {
       const generationConfig: Record<string, unknown> = { maxOutputTokens: req.maxOutputTokens, responseMimeType: "application/json", responseSchema: req.schema };
-      if (req.temperature !== undefined) generationConfig.temperature = req.temperature;
+      if (req.temperature !== undefined && SENDS_TEMPERATURE.gemini) generationConfig.temperature = req.temperature;
       return { systemInstruction: { parts: [{ text: req.system }] }, contents: [{ role: "user", parts: [{ text: req.user }] }], generationConfig };
     }
     case "anthropic": {
@@ -146,7 +154,7 @@ function bodyOf(req: StructuredRequest): Record<string, unknown> {
         tools: [{ name: req.schemaName, description: "この形で答えを出す(欄の意味は指示文)", input_schema: req.schema }],
         tool_choice: { type: "tool", name: req.schemaName },
       };
-      if (req.temperature !== undefined) body.temperature = req.temperature;
+      // temperature は送らない(SENDS_TEMPERATURE.anthropic = false)
       return body;
     }
   }

@@ -22,7 +22,7 @@ function meta(): SeatInputMeta {
       { section: "1", title: "局", packetPath: "facts.games[]", rows: 25, lastKey: "g25 25" },
       { section: "2", title: "集計", packetPath: "aggregates.<id>.numerator|denominator|value", rows: 37, lastKey: "aggregates.branches.total.value 値" },
     ],
-    omitted: [], notIncluded: [],
+    headingSections: ["0", "0.1", "0.2"], omitted: [], notIncluded: [],
   };
 }
 function request() {
@@ -211,6 +211,40 @@ describe("packet を読まない(校正 4)・足すだけ(校正 1)", () => {
       const results = validateHypothesisLine(line, { today: TODAY, registry });
       expect(results.filter((r) => !r.ok).map((r) => `${f} ${r.check}: ${r.messages.join(" / ")}`)).toEqual([]);
     }
+  });
+});
+
+describe("E-1 と見出しだけの節(2026-09-30 の初回の実行で実測。司令塔の決定 (iii))", () => {
+  // 席は束の見出しどおり「0」「0.1」「0.2」(読み方・省いたもの・線の組)も読んだと書く。
+  // **meta がそれを持っていないと、正直な席が落ちる**。持っていれば通り、束にも無い節名は落ちる。
+  function withReachSections(sections: { section: string; lastKey: string }[]) {
+    const src = llm();
+    src.reach.sections = sections as typeof src.reach.sections;
+    return completeSeatOutput(src, ctx());
+  }
+  const DATA = [{ section: "A", lastKey: "q1" }, { section: "1", lastKey: "g25 25" }, { section: "2", lastKey: "aggregates.branches.total.value" }];
+  it("見出しだけの節を挙げても落ちない(lastKey は何でもよい ― データの行が無いので)", () => {
+    const found = problems(withReachSections([...DATA, { section: "0", lastKey: "読み方" }, { section: "0.1", lastKey: "-" }]));
+    expect(found).toEqual([]);
+  });
+  it("データの行を持つ節は、見出しに見えても lastKey を厳しく照合する(0.2 線の組。2026-09-30 の独立監査の指摘)", () => {
+    // meta が 0.2 を**データの節**として持つとき、席の lastKey が違えば落ちる(見出しの枝に逃げない)
+    const metaWith = { ...meta(), sections: [...meta().sections, { section: "0.2", title: "線の組", packetPath: "provenance.thresholds", rows: 1, lastKey: "- ahead_cp:" }], headingSections: ["0", "0.1"] };
+    const check = (lastKey: string) => seatOutputProblems(withReachSections([...DATA, { section: "0.2", lastKey }]), { meta: metaWith, request: request(), today: TODAY, registry: REGISTRY });
+    expect(check("- ahead_cp:")).toEqual([]);
+    const wrong = check("それらしい鍵");
+    expect(wrong.length).toBe(1);
+    expect(wrong[0]).toContain("前方一致しない");
+  });
+  it("meta にも束の見出しにも無い節名は落ちる(捏造は通らない)", () => {
+    const found = problems(withReachSections([...DATA, { section: "9.9", lastKey: "それらしい鍵" }]));
+    expect(found.length).toBe(1);
+    expect(found[0]).toContain("meta にも束の見出しにも無い節「9.9」");
+  });
+  it("データの行が在る節は今までどおり lastKey を照合する", () => {
+    const found = problems(withReachSections([{ section: "A", lastKey: "q1" }, { section: "1", lastKey: "ちがう鍵" }, { section: "2", lastKey: "aggregates.branches.total.value" }]));
+    expect(found.length).toBe(1);
+    expect(found[0]).toContain("前方一致しない");
   });
 });
 

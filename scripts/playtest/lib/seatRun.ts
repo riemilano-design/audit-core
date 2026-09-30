@@ -9,12 +9,12 @@
 import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
 import { redactSecrets } from "./env.js";
-import { LlmHttpError, callStructured, countTokens, type ClientDeps, type Provider, type StructuredResponse } from "./llmClient.js";
+import { LlmHttpError, SENDS_TEMPERATURE, callStructured, countTokens, type ClientDeps, type Provider, type StructuredResponse } from "./llmClient.js";
 import {
   buildIntegrationInput, canonicalJson, completeIntegration, integrationProblems, validateIntegrationLlm,
   type ItemMapRow, type SeatSlot,
 } from "./integration.js";
-import { adaptSchema, dropNullsNotAllowed } from "./schemaAdapters.js";
+import { adaptSchema, dropNullsNotAllowed, effectiveValueShape } from "./schemaAdapters.js";
 import { renderSeatInput, type SeatInputMeta } from "./seatInput.js";
 import { completeSeatOutput, loadSeatOutputLlmSchema, seatOutputProblems, validateSeatOutputLlm, type Seat } from "./seatOutput.js";
 import { budgetDecision, costUsd, estimateTokensByChars, type Prices } from "./tokenBudget.js";
@@ -451,6 +451,10 @@ function summaryOf(args: {
     seats: seats.map((s) => ({
       seat: s.seat, present: s.present, ...(s.absentReason === undefined ? {} : { absentReason: s.absentReason }), ...(s.absentNote === undefined ? {} : { absentNote: s.absentNote }),
       provider: cfg.seats.find((c) => c.seat === s.seat)?.provider, model: cfg.seats.find((c) => c.seat === s.seat)?.model ?? null,
+      // 「温度 0 で回した」と読ませない ― Anthropic は temperature を受け付けないので送っていない(2026-09-30 の実測)
+      temperatureSent: temperatureSentOf(cfg.seats.find((c) => c.seat === s.seat)),
+      // その社の写しで観測の値に書ける形(席をまたいで比べるとき「入力の形が同じか」を先に見る)
+      valueShape: valueShapeOf(cfg.seats.find((c) => c.seat === s.seat)),
       ...(s.modelVersion === undefined ? {} : { modelVersion: s.modelVersion }),
       estimate: s.estimate, estimatedCostUsd: round4(s.estimatedCostUsd), actualCostUsd: round4(s.actualCostUsd), usage: s.usage,
       attempts: s.attempts.map((a) => ({ attempt: a.attempt, kind: a.kind, httpAttempts: a.httpAttempts, ...(a.httpStatus === undefined ? {} : { httpStatus: a.httpStatus }), ...(a.finishReasonRaw === undefined ? {} : { finishReason: a.finishReasonRaw }), reserveOutputTokens: a.reserveOutputTokens, problems: a.problems.length, ...(a.error === undefined ? {} : { error: a.error }) })),
@@ -460,7 +464,8 @@ function summaryOf(args: {
     })),
     integration: integrator === undefined ? null : {
       present: integrator.present, ...(integrator.absentReason === undefined ? {} : { absentReason: integrator.absentReason }), ...(integrator.absentNote === undefined ? {} : { absentNote: integrator.absentNote }),
-      provider: cfg.integrator?.provider, model: cfg.integrator?.model ?? null, ...(integrator.modelVersion === undefined ? {} : { modelVersion: integrator.modelVersion }),
+      provider: cfg.integrator?.provider, model: cfg.integrator?.model ?? null, temperatureSent: temperatureSentOf(cfg.integrator),
+      ...(integrator.modelVersion === undefined ? {} : { modelVersion: integrator.modelVersion }),
       inputSha256: args.inputSha256,
       estimate: integrator.estimate, estimatedCostUsd: round4(integrator.estimatedCostUsd), actualCostUsd: round4(integrator.actualCostUsd), usage: integrator.usage,
       attempts: integrator.attempts.length, elapsedMs: integrator.elapsedMs,
@@ -469,10 +474,24 @@ function summaryOf(args: {
     },
     totals: {
       seatsPresent: seats.filter((s) => s.present).length,
+      /**
+       * 3 席の**有効な形がそろっているか**(司令塔の条件 2026-09-30)。false なら席の間の一致・不一致を
+       * 実力差として読めない ― 比較の表に「入力の形が違う」注記を付ける材料。
+       */
+      valueShapeSame: new Set(cfg.seats.map((seat) => JSON.stringify(valueShapeOf(seat)))).size === 1,
       cumulativeCostUsd: round4(args.cumulative),
       capReached: seats.some((s) => s.absentReason === "cost_cap"),
     },
   };
+}
+/** その席の写しで観測の値に書ける形(社ごとの狭さの差を記録に出す) */
+function valueShapeOf(cfg: SlotConfig | undefined): string[] {
+  return cfg === undefined ? [] : effectiveValueShape(cfg.provider, loadSeatOutputLlmSchema() as Rec);
+}
+
+/** その席に temperature を送ったか(社が受け付け、かつ値が渡されたときだけ true) */
+function temperatureSentOf(cfg: SlotConfig | undefined): boolean {
+  return cfg !== undefined && cfg.temperature !== undefined && SENDS_TEMPERATURE[cfg.provider];
 }
 function round4(n: number): number {
   return Math.round(n * 10_000) / 10_000;

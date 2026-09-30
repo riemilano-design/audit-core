@@ -5,7 +5,7 @@
 // 【要点 3】429・5xx・接続の失敗は 1・4・16 秒で再送し、4 回目で諦めること(sleep は差し替えて待たない)。
 import { describe, expect, it } from "vitest";
 import { redactSecrets } from "./env.js";
-import { LlmHttpError, callStructured, countTokens, parseStructuredResponse, type ClientDeps, type StructuredRequest } from "./llmClient.js";
+import { LlmHttpError, SENDS_TEMPERATURE, callStructured, countTokens, parseStructuredResponse, type ClientDeps, type StructuredRequest } from "./llmClient.js";
 
 const KEY = "sk-test-0123456789abcdefKEYVALUE";
 const SCHEMA = { type: "object", properties: { a: { type: "number" } }, required: ["a"], additionalProperties: false } as const;
@@ -80,7 +80,7 @@ describe("3 社の応答の取り出し", () => {
 });
 
 describe("入口・ヘッダ・本体", () => {
-  it("OpenAI: /v1/responses・Bearer・json_schema strict・temperature と seed", async () => {
+  it("OpenAI: /v1/responses・Bearer・json_schema strict・seed(temperature は送らない)", async () => {
     const { fetch: f, calls } = fakeFetch([{ status: 200, body: OPENAI_OK }]);
     await callStructured(req("openai"), deps(f));
     expect(calls[0]!.url).toBe("https://api.openai.com/v1/responses");
@@ -89,7 +89,7 @@ describe("入口・ヘッダ・本体", () => {
     const body = JSON.parse(String(calls[0]!.init.body)) as Record<string, any>;
     expect(body.text.format).toMatchObject({ type: "json_schema", name: "submit_seat_output", strict: true });
     expect(body.text.format.schema).toEqual(SCHEMA);
-    expect(body.temperature).toBe(0);
+    expect("temperature" in body).toBe(false); // gpt-5.5 は temperature を受け付けない(2026-09-30 の実測)
     expect(body.seed).toBe(7);
     expect(body.max_output_tokens).toBe(30000);
   });
@@ -101,6 +101,7 @@ describe("入口・ヘッダ・本体", () => {
     expect(calls[0]!.url).not.toContain("key=");
     expect((calls[0]!.init.headers as Record<string, string>)["x-goog-api-key"]).toBe(KEY);
     const body = JSON.parse(String(calls[0]!.init.body)) as Record<string, any>;
+    expect("temperature" in body.generationConfig).toBe(false); // 受け付けるが送らない(席の条件をそろえる)
     expect(body.generationConfig.responseMimeType).toBe("application/json");
     expect(body.generationConfig.responseSchema).toEqual(SCHEMA);
     expect(body.systemInstruction.parts[0].text).toBe("指示文");
@@ -116,6 +117,17 @@ describe("入口・ヘッダ・本体", () => {
     expect(body.tool_choice).toEqual({ type: "tool", name: "submit_seat_output" });
     expect(body.tools[0].input_schema).toEqual(SCHEMA);
     expect(body.max_tokens).toBe(30000);
+  });
+  it("3 社とも temperature を送らない(値を渡されても。2026-09-30 の実測と席の対称性)", async () => {
+    // claude-opus-5 は `temperature is deprecated`、gpt-5.5 は `Unsupported parameter: 'temperature'` で 400。
+    // 受け付ける Gemini だけに送ると席の条件が非対称になるので、そろえて送らない(司令塔の対称性の線)。
+    for (const [provider, ok] of [["openai", OPENAI_OK], ["gemini", GEMINI_OK], ["anthropic", ANTHROPIC_OK]] as const) {
+      const { fetch: f, calls } = fakeFetch([{ status: 200, body: ok }]);
+      await callStructured(req(provider), deps(f)); // req() は temperature: 0 を渡している
+      const text = String(calls[0]!.init.body);
+      expect(text.includes('"temperature"'), provider).toBe(false);
+    }
+    expect(SENDS_TEMPERATURE).toEqual({ openai: false, gemini: false, anthropic: false });
   });
   it("temperature を渡さない席には送らない(推論モデルが受け付けないとき)", async () => {
     const { fetch: f, calls } = fakeFetch([{ status: 200, body: OPENAI_OK }]);

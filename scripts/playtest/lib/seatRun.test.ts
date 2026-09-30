@@ -267,6 +267,19 @@ describe("1 回の実行が通る(3 席 + 整理役)", () => {
     expect(s.totals.capReached).toBe(false);
     expect(s.integration.inputSha256).toMatch(/^[0-9a-f]{64}$/);
   });
+  it("run_summary は「温度を送ったか」を席ごとに持つ(Anthropic には送らないので false)", async () => {
+    const { result } = await run();
+    const s = result.summary as any;
+    // 3 社とも温度を送らない(gpt-5.5 も claude-opus-5 も受け付けない。Gemini だけに送ると非対称)
+    expect(s.seats.map((x: any) => [x.seat, x.temperatureSent])).toEqual([["gpt", false], ["gemini", false], ["claude", false]]);
+    expect(s.integration.temperatureSent).toBe(false);
+  });
+  it("run_summary は席ごとの「有効な形」と、3 席でそろっているかを持つ", async () => {
+    const { result } = await run();
+    const s = result.summary as any;
+    for (const seat of s.seats) expect(seat.valueShape, seat.seat).toEqual(["array", "boolean", "null", "number", "string"]);
+    expect(s.totals.valueShapeSame).toBe(true);
+  });
   it("席には 1 通だけ送る(会話にしない・他席の出力を渡さない)", async () => {
     const { api } = await run();
     const seatBodies = api.calls.filter((c) => c.role !== "count" && c.role !== "integrator").map((c) => c.body);

@@ -204,11 +204,15 @@ export function seatOutputProblems(envelope: unknown, opts: SeatOutputCheckOptio
   if (reach.passphrase !== meta.passphrase) problems.push(`E-1: 合言葉が違う(席「${String(reach.passphrase)}」/ meta「${meta.passphrase}」)― 届いていない`);
   const metaSections = new Map(meta.sections.map((s) => [s.section, s.lastKey]));
   const seen = new Set<string>();
+  const headingSections = new Set(meta.headingSections ?? []);
   for (const s of asArray(reach.sections) as Rec[]) {
     const sec = String(s.section);
     const key = String(s.lastKey);
     const expected = metaSections.get(sec);
-    if (expected === undefined) { problems.push(`E-1: 席の reach.sections に meta に無い節「${sec}」`); continue; }
+    // 見出しだけの節(データの行が無い)は「読んだ」と言えるだけで、最後の鍵名を持たない。
+    // **在ることだけ見る** ― 束にも無い節名は下の行で落ちるので、捏造は通らない(司令塔の決定 2026-09-30)。
+    if (expected === undefined && headingSections.has(sec)) continue;
+    if (expected === undefined) { problems.push(`E-1: 席の reach.sections に meta にも束の見出しにも無い節「${sec}」`); continue; }
     seen.add(sec);
     if (key.length === 0 || !(expected.startsWith(key) || key.startsWith(expected))) problems.push(`E-1: 節「${sec}」の lastKey が meta と前方一致しない(席「${key}」/ meta「${expected}」)`);
   }

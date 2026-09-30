@@ -19,7 +19,7 @@ function meta(): SeatInputMeta {
     schemaVersion: "0.1", runId: RUN, passphrase: "run20260", packetId: "22aee8fe696d0262", customerRef: "c5", timeLimitSec: 180, games: 25,
     instructionSha256: SHA("3"), seatInputSha256: SHA("9"), bytes: 1, chars: 1, tokenEstimate: { value: 1, method: "chars/3" },
     sections: [{ section: "2", title: "集計", packetPath: "aggregates.<id>.numerator|denominator|value", rows: 3, lastKey: "aggregates.branches.total.value 値" }],
-    omitted: [], notIncluded: [],
+    headingSections: ["0", "0.1", "0.2"], omitted: [], notIncluded: [],
   };
 }
 function packet() {

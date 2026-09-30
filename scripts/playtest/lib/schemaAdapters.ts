@@ -13,6 +13,54 @@ function isRecord(x: unknown): x is Rec {
 
 const ANNOTATIONS = new Set(["$schema", "$id", "title", "description", "$comment"]);
 
+/**
+ * **自由形の節**(2026-09-30 の初回の実行で 3 社の 400 から分かった):
+ * - `{type: "array"}` に `items` が無いと **Gemini は 400**(`any_of[5].items: missing field`)。
+ *   **OpenAI strict も** items を要る。→ 中身を「数・字・真偽・無し」にする(束の値の配列は名前や印の列なので収まる)。
+ * - `{type: "object"}` に `properties` が無いと **OpenAI strict は 400**(`additionalProperties is required to be supplied and to be false`)。
+ *   strict では「何でも入る object」を書けないので、**枝が他にあれば落とす**(落とすほうが、空の object しか許さない偽の枝より正直)。
+ *   Gemini は自由形の object を受け付けた(400 の指摘に出ていない)ので触らない。
+ * 正本は変えないので、返ってきた JSON は今までどおり正本で受理・却下される。
+ */
+const SCALAR_BRANCHES = [{ type: "number" }, { type: "string" }, { type: "boolean" }, { type: "null" }];
+function isFreeFormObject(node: unknown): boolean {
+  return isRecord(node) && node.type === "object" && node.properties === undefined;
+}
+function isFreeFormArray(node: unknown): boolean {
+  return isRecord(node) && node.type === "array" && node.items === undefined;
+}
+function withScalarItems(node: Rec): Rec {
+  return { ...node, items: { anyOf: SCALAR_BRANCHES.map((b) => ({ ...b })) } };
+}
+
+/**
+ * 自由形の始末を **3 社で同じにする**(司令塔の条件 2026-09-30)。
+ * 社ごとに写しの狭さが違うと、**席の間で「書ける形」が変わり、一致・不一致を実力差として読めなくなる**
+ * (「一致を証拠にしない」と同じ家族の、逆向きの穴)。だから **いちばん狭い社に全社をそろえる**:
+ * `value` の形は「数・字・真偽・無し・その配列」。観測の値に自由形の object が要る場面は無い。
+ */
+function normalizeFreeForm(node: Rec): Rec {
+  const out = isFreeFormArray(node) ? withScalarItems(node) : node;
+  for (const key of ["anyOf", "oneOf"]) {
+    if (!Array.isArray(out[key])) continue;
+    const kept = (out[key] as unknown[]).filter((branch) => !isFreeFormObject(branch));
+    out[key] = kept.length > 0 ? kept : [{ type: "string" }];
+  }
+  return out;
+}
+
+/** その社の写しで `observations[].value` に書ける形(記録に残して 3 席で比べる) */
+export function effectiveValueShape(provider: "openai" | "gemini" | "anthropic", canonical: Rec): string[] {
+  const adapted = adaptSchema(provider, canonical) as Rec;
+  const items = ((adapted.properties as Rec | undefined)?.items as Rec | undefined);
+  const row = (items?.items as Rec | undefined);
+  const value = (((row?.properties as Rec | undefined)?.observations as Rec | undefined)?.items as Rec | undefined);
+  const node = ((value?.properties as Rec | undefined)?.value) as Rec | undefined;
+  const branches = (node?.anyOf ?? node?.oneOf) as Rec[] | undefined;
+  if (branches === undefined) return node?.type === undefined ? [] : [String(node.type)];
+  return branches.map((b) => String(b.type ?? (b.nullable === true ? "null" : "?"))).sort();
+}
+
 function stripAnnotations(schema: Rec): Rec {
   const out: Rec = {};
   for (const [k, v] of Object.entries(schema)) if (!ANNOTATIONS.has(k)) out[k] = v;
@@ -47,6 +95,9 @@ export function toOpenAIStrict(canonical: Rec): Rec {
       out.required = Object.keys(out.properties);
       out.additionalProperties = false;
     }
+    const normalized = normalizeFreeForm(out);
+    for (const key of Object.keys(normalized)) out[key] = normalized[key];
+    if (isFreeFormArray(out)) return withScalarItems(out);
     if (optional) {
       // 任意の欄は「その形 か null」にする(strict は全欄 required なので null で「無い」を表す)
       return { anyOf: [out, { type: "null" }] };
@@ -72,16 +123,16 @@ export function toGemini(canonical: Rec): Rec {
       out.type = types[0] ?? "string";
       if ((node.type as string[]).includes("null")) out.nullable = true;
     }
-    return out;
+    return normalizeFreeForm(out);
   }) as Rec;
 }
 
-/** Anthropic tool の input_schema 向け(正本のまま。注記だけ外す) */
+/** Anthropic tool の input_schema 向け(注記を外し、**自由形は 3 社と同じに狭める**) */
 export function toAnthropic(canonical: Rec): Rec {
   return mapSchema(stripAnnotations(canonical), (node) => {
     const out: Rec = {};
     for (const [k, v] of Object.entries(node)) if (!ANNOTATIONS.has(k)) out[k] = v;
-    return out;
+    return normalizeFreeForm(out);
   }) as Rec;
 }
 
