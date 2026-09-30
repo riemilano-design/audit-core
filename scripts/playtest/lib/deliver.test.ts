@@ -7,40 +7,41 @@ import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 
 import {
-  DELIVER_STAGES,
-  DeliverArgError,
-  KIFU_NAME_FIXED_ALLOWED_NUMBERS,
-  TODO_MARK,
   answerFactsCommand,
   answerMaterialFlags,
   checkAnswerCommand,
   checkDeliveryCommand,
   checkStructureCommand,
-  PERSON_REFERENT,
+  DELIVER_SEND_DIRS,
+  DELIVER_STAGES,
+  DeliverArgError,
   deliverLogArgsLineOf,
   deliverLogLineOf,
   deliverOutPaths,
+  deliverSendNames,
   directAnswersCommand,
   exitBodyCommand,
   exitCandidatesCommand,
-  groupLabelOf,
   exitCoverCommand,
   exitGateCommand,
   exitRenderCommand,
   exitSourceIndexPairs,
   finalPositionsCommand,
   finalPositionsPartPath,
+  groupLabelOf,
   groupListOf,
   groupPaths,
   groupsWithRead,
+  KIFU_NAME_FIXED_ALLOWED_NUMBERS,
   kifuNameProblems,
   materialPlanOf,
   materialsPending,
   mergeFinalPositions,
+  pageIndexNameOf,
   parseDeliverArgs,
+  PERSON_REFERENT,
   pipelineCommand,
   pipelineGateCommand,
-  pageIndexNameOf,
   planDeliver,
   renderAnswerCommand,
   renderTimeCauseCommand,
@@ -49,6 +50,7 @@ import {
   stagesFrom,
   timeCauseCommand,
   timeSearchCommand,
+  TODO_MARK,
   unexpectedOutFiles,
   type DeliverArgs,
   type DeliverProbe,
@@ -1672,5 +1674,46 @@ describe("人の席の時間(原価③。仕様 §5)", () => {
     // 渡さなければ鍵自体が付かない(**測っていないものを数にしない**)。
     const plain = deliverLogLineOf({ stage: "exit-gate", startedAt: "a", finishedAt: "b", rc: 0, humanGate: false });
     expect(Object.keys(JSON.parse(plain) as object)).toEqual(["stage", "startedAt", "finishedAt", "rc", "humanGate"]);
+  });
+});
+
+describe("送付用の名前(器の単独束 C-1)", () => {
+  it("顧客に届く 2 冊の名前(局数と組の名が入る)", () => {
+    expect(deliverSendNames(25, "3 分")).toEqual({
+      honbun: "01_本編_対局後診断_3分25局.pdf",
+      appendix: "02_付録_数の出どころ_3分25局.pdf",
+    });
+    // **継続の顧客で同じ名前にならない**(局数と組の名の両方が効く)
+    expect(deliverSendNames(25, "10 分").honbun).toBe("01_本編_対局後診断_10分25局.pdf");
+    expect(deliverSendNames(20, "3 分").honbun).toBe("01_本編_対局後診断_3分20局.pdf");
+    expect(deliverSendNames(25, "3 分").honbun).not.toBe(deliverSendNames(25, "10 分").honbun);
+  });
+
+  it("空白は名前から外す(人間が渡すラベルは空白を含む)", () => {
+    const names = deliverSendNames(25, "3 分切れ負け");
+    expect(names.honbun).toBe("01_本編_対局後診断_3分切れ負け25局.pdf");
+    // **どちらの名前にも空白が残っていない**(全角の空白も外れる)
+    for (const name of [names.honbun, names.appendix]) expect(name).not.toMatch(/\s/);
+    expect(deliverSendNames(25, "3　分").honbun).toBe("01_本編_対局後診断_3分25局.pdf");
+  });
+
+  it("素の並べ替えで先頭が本編(名前だけで最初に読むものが分かる)", () => {
+    // **人間の要求を機械で固定する** ― `ls` で並べると付録が本編の上に来ていたため、
+    // 5 人目の本人が「まず順番に上の付録から選びました」と書いた(実測された取り違え)
+    const names = deliverSendNames(25, "3 分");
+    expect([names.appendix, names.honbun].sort()[0]).toBe(names.honbun);
+    expect([names.honbun, names.appendix].sort()[0]).toBe(names.honbun);
+  });
+
+  it("黙って変な名前を作らない(局数とラベルを検める)", () => {
+    for (const games of [0, -1, 2.5, Number.NaN]) {
+      expect(() => deliverSendNames(games, "3 分"), `局数 ${games}`).toThrow(DeliverArgError);
+    }
+    expect(() => deliverSendNames(25, "   ")).toThrow(DeliverArgError);
+    expect(() => deliverSendNames(25, "")).toThrow(DeliverArgError);
+  });
+
+  it("2 段の名前は 1 か所(封の照合は原本の側)", () => {
+    expect(DELIVER_SEND_DIRS).toEqual({ original: "原本", send: "送付" });
   });
 });

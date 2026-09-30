@@ -121,6 +121,38 @@ export const DELIVER_OUT_NAMES = {
   log: "deliver_log.jsonl",
 } as const;
 
+// ---- 送付用の名前(器の単独束 C-1。2026-09-30。司令塔の決定・伝聞)----
+//
+// 【顧客の PDF にどう出るか】顧客に届く 2 冊の**ファイル名**がこれになる。中身は原本と 1 バイトも同じ。
+//   数字の接頭辞は好みではなく、**実測された取り違えを消すためのもの** ―
+//   `ls` で並べると付録が本編の上に来るため、5 人目の本人が「まず順番に上の付録から選びました」と書いた。
+// 【なぜ静的な表に置けないか】名前に**局数と組の名**が入るので、`DELIVER_OUT_NAMES`(段 1 より前に決まる
+//   静的な表)には置けない ― あの表が局数を避けている理由と同じ(110〜113 行)。**関数にして 1 か所**にする。
+// 【なぜ局数と組の名を入れるか】継続の顧客で「3 分 25 局」と「10 分 25 局」が同じ名前にならないため。
+// 【2 段は残す】`原本/`(封のとおりの冊数 + 封の JSON。照合用)と `送付/`(渡す 2 冊)。
+//   **封の照合は原本の側で掛ける**(`--verify` は封の JSON からの相対パスを引く)。
+// 【既に送ったものは改名しない】封の後は触らない。この形は次の顧客から。
+
+/** 送付用フォルダの 2 段の名前(照合は `原本/` の側で掛ける) */
+export const DELIVER_SEND_DIRS = { original: "原本", send: "送付" } as const;
+
+/**
+ * 顧客に届く 2 冊の名前。`groupLabel` は `groupLabelOf()` が決めた語(人間が渡したラベルか、
+ * 無ければ `groupLabelOfTimeLimitSec`)。**空白は名前から外す**(「3 分切れ負け」→「3分切れ負け」)。
+ *
+ * **黙って変な名前を作らない** ― 局数が 0 以下・ラベルが空(空白だけ)なら落とす。
+ */
+export function deliverSendNames(games: number, groupLabel: string): { honbun: string; appendix: string } {
+  const label = groupLabel.replace(/\s+/g, "");
+  if (!Number.isInteger(games) || games <= 0) throw new DeliverArgError(`送付用の名前の局数が整数の正の数でない(${games})`);
+  if (label === "") throw new DeliverArgError("送付用の名前の組の名が空(空白だけ)");
+  const tail = `${label}${games}局`;
+  return {
+    honbun: `01_本編_対局後診断_${tail}.pdf`,
+    appendix: `02_付録_数の出どころ_${tail}.pdf`,
+  };
+}
+
 /**
  * **道具が自分で決める名前**(`deliver.ts` が選ぶのではなく、**導く**)。
  * - `exit_body.py` は本人用の PDF の隣に `<拡張子を外した名前>_page_index.json` を書く

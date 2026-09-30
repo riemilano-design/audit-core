@@ -366,7 +366,12 @@ def bullet_10(m, name):
         raise Missing("--read-dir の *.jsonl が 0 本")
     measured = r["forkPositionsRead"] - r["firstVisibleNodesNoneCount"]
     return (
-        f"- 分かれ道(第 1 候補との差が大きい、または候補 5 つに入らなかった手)は {games} 局で {r['forkPositionsRead']}。"
+        # 数えている単位は **局面**(`positions`。packet の行の名前も「分かれ道として読んだ局面」)なので、
+        # 顧客に見える文もそれに合わせる(2026-09-30。器の単独束 C-5。司令塔の決定・伝聞)。
+        # `lib/findingTexts.ts` の「分かれ道」の説明も「局面」で、こちらだけが「手」と書いていた。
+        # **正本 `docs/OBSERVATION_ITEMS.md` §1 の定義文は「手」**(2026-09-26 に統括が確認)なので、
+        # あちらとこの文の名詞が違う ― 引き起こすのは「手」、数えるのは「局面」という関係である。
+        f"- 分かれ道(第 1 候補との差が大きい、または候補 5 つに入らなかった局面)は {games} 局で {r['forkPositionsRead']}。"
         f"そのうち、100 万ノードまで読んで差が 600 以上と測れたものは {measured} / {r['forkPositionsRead']}。"
         f"残りは「少しずつ低い手」です。"
     )
