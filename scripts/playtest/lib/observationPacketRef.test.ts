@@ -11,7 +11,7 @@ import { recountRowProblems } from "./observationAggregates.js";
 import { resolvePacketPath } from "./observationPacket.js";
 import { packetRefPathProblems } from "./packetRef.js";
 import { KNOWN_HYPOTHESIS_SCHEMA_VERSIONS } from "./schemaVersions.js";
-import { H10_NON_PROSE_FIELDS, H10_PROSE_FIELDS, loadHypothesisSchema, loadObsRegistry, namesInText, recognitionNameCorpus, recognizedNames, stringsAtField, validateHypothesisLine, type CheckResult } from "./hypothesis.js";
+import { APPROVED_REVIEW_STATUSES, approvedRecognitionWords, H10_NON_PROSE_FIELDS, H10_PROSE_FIELDS, loadHypothesisSchema, loadObsRegistry, namesInText, recognitionNameCorpus, recognizedNames, stringsAtField, validateHypothesisLine, type CheckResult } from "./hypothesis.js";
 
 /**
  * 最小の packet(**数は facts から数えた値**にしてある ― 数え直しが通る形)。
@@ -240,13 +240,16 @@ function recognitionPacket(): Record<string, unknown> {
     facts: {
       recognition: {
         definitions: [
-          { id: "nakabisha", name: "中飛車", nameKana: "なかびしゃ" },
-          { id: "gokigen", name: "ゴキゲン中飛車", nameKana: "ごきげんなかびしゃ" },
-          { id: "nakabisha_hidariana", name: "中飛車左穴熊", nameKana: "なかびしゃひだりあなぐま" },
-          { id: "yagura", name: "矢倉", nameKana: "やぐら" },
-          { id: "hirame", name: "平目", nameKana: "ひらめ" },
-          // **同名の定義**(実物に 6 件あった)。名前から定義は 1 対 1 でない
-          { id: "yagura2", name: "矢倉", nameKana: "やぐら" },
+          // `reviewStatus` は H-11(③(e))の材料。**承認済み 2 件・draft 3 件・expired 1 件**と
+          // ばらしてある(そろえると「全部 draft を返す変異」「段を見ない変異」が緑で通る)
+          { id: "nakabisha", name: "中飛車", nameKana: "なかびしゃ", reviewStatus: "draft" },
+          { id: "gokigen", name: "ゴキゲン中飛車", nameKana: "ごきげんなかびしゃ", reviewStatus: "expired" },
+          { id: "nakabisha_hidariana", name: "中飛車左穴熊", nameKana: "なかびしゃひだりあなぐま", reviewStatus: "draft" },
+          { id: "yagura", name: "矢倉", nameKana: "やぐら", reviewStatus: "human_reviewed" },
+          { id: "hirame", name: "平目", nameKana: "ひらめ", reviewStatus: "expert_verified" },
+          // **同名の定義**(実物に 6 件あった)。名前から定義は 1 対 1 でない。
+          // こちらは draft だが、同じ語の `yagura` が承認済みなので**語としては承認済み**(緩い側)
+          { id: "yagura2", name: "矢倉", nameKana: "やぐら", reviewStatus: "draft" },
         ],
         rows: [
           { gameId: "g01", names: ["ゴキゲン中飛車"] },
@@ -399,5 +402,74 @@ describe("H-10 名前はその顧客の局で認識されたものか", () => {
     expect(gone, "表に在るのに schema に無い欄(消えた欄は表からも消す)").toEqual([]);
     // 分類が空でないこと(両方の表を消す変異を赤にする)
     expect(leaves.size).toBeGreaterThan(20);
+  });
+});
+
+// ==================== H-11(③(e)): 名前を顧客に出せる段か ― 印だけ ====================
+function h11(line: unknown, packet?: unknown): { ok: boolean; messages: string[]; skipped?: boolean; notes?: string[] } {
+  return validateHypothesisLine(line, { today: "2026-09-30", registry: new Set<string>(), packet })
+    .find((result) => result.check === "H-11")!;
+}
+
+describe("H-11 名前を顧客に出せる段か(落とさない。印だけ)", () => {
+  it("e1 承認済みの定義が無い名前に印が付く。ok は true のまま", () => {
+    const result = h11({ statement: "中飛車の形でした。" }, recognitionPacket());
+    expect(result.ok, "落とす検査になっている(③(e) は印だけ)").toBe(true);
+    expect(result.notes).toHaveLength(1);
+    expect(result.notes![0]!).toContain("中飛車");
+    expect(result.notes![0]!).toContain("〜のような形");
+  });
+
+  it("e2 承認済みの定義がある名前には印が付かない(同じ語の 1 件が承認済みなら足りる)", () => {
+    // `矢倉` は human_reviewed の定義と draft の定義の両方を持つ → **語としては承認済み**
+    expect(h11({ statement: "矢倉の形でした。" }, recognitionPacket()).notes).toBeUndefined();
+    // かな も同じ扱い(語の表は 3 つの欄の合併)
+    expect(h11({ statement: "やぐらの形でした。" }, recognitionPacket()).notes).toBeUndefined();
+    // `平目` は expert_verified → 印なし(H-10 では「認識されていない」で落ちるが、それは別の検査)
+    expect(h11({ statement: "平目の形でした。" }, recognitionPacket()).notes).toBeUndefined();
+  });
+
+  it("e3 expired は承認済みに数えない(期限切れは使わない)", () => {
+    const result = h11({ statement: "ゴキゲン中飛車でした。" }, recognitionPacket());
+    expect(result.notes).toHaveLength(1);
+    expect(result.notes![0]!).toContain("ゴキゲン中飛車");
+    // 承認済みの段の一覧は 2 つだけ(expired・draft を足す変異を赤にする)
+    expect([...APPROVED_REVIEW_STATUSES]).toEqual(["human_reviewed", "expert_verified"]);
+    expect(approvedRecognitionWords(recognitionPacket()).has("ゴキゲン中飛車")).toBe(false);
+  });
+
+  it("e4 群の呼び名と名前の無い文には印が付かない", () => {
+    // 群は `signatureClass` の機械の呼び名 ― 名前の表に無いので対象にならない
+    expect(h11({ statement: "多数の核の群は 18 局でした。" }, recognitionPacket()).notes).toBeUndefined();
+    expect(h11({ statement: "署名なしの群は 3 局でした。" }, recognitionPacket()).notes).toBeUndefined();
+    expect(h11({ statement: "崩れは 79 回でした。" }, recognitionPacket()).notes).toBeUndefined();
+  });
+
+  it("e5 印は名前ごと・欄ごとに出る(散文の欄だけ)", () => {
+    const line = {
+      statement: "中飛車と中飛車左穴熊の形でした。",
+      counterEvidence: { items: [{ text: "中飛車左穴熊でした。" }] },
+      internal: { reasoning: "中飛車のように見える" },
+    };
+    const notes = h11(line, recognitionPacket()).notes!;
+    // statement の 2 語 + 反証の 1 語 = 3 件。**内部の欄は見ない**(規則 8 の (3))
+    expect(notes).toHaveLength(3);
+    expect(notes.filter((note) => note.startsWith("statement"))).toHaveLength(2);
+    expect(notes.filter((note) => note.startsWith("counterEvidence"))).toHaveLength(1);
+    expect(notes.some((note) => note.includes("internal"))).toBe(false);
+  });
+
+  it("e6 packet が無い・定義が無いときは skip(緑にしない)", () => {
+    expect(h11({ statement: "中飛車でした。" }).skipped).toBe(true);
+    expect(h11({ statement: "中飛車でした。" }, { facts: { recognition: { definitions: [], rows: [] } } }).skipped).toBe(true);
+  });
+
+  it("e7 承認済みの語は 材料の 6 件の定義から 6 語(矢倉・やぐら・yagura・平目・ひらめ・hirame)", () => {
+    const approved = approvedRecognitionWords(recognitionPacket());
+    // 並びは JS の既定(UTF-16 の順)。かな → 漢字で、漢字は 平(U+5E73) < 矢(U+77E2)
+    expect([...approved].sort()).toEqual(["hirame", "yagura", "ひらめ", "やぐら", "平目", "矢倉"]);
+    // **語の表 16 と同じ数にしない**(件数がそろうと「全部承認済みにする変異」が緑で通る)
+    expect(approved.size).toBe(6);
+    expect(approved.size).not.toBe(recognitionNameCorpus(recognitionPacket()).size);
   });
 });

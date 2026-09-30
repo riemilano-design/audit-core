@@ -174,7 +174,7 @@ export function loadObsRegistry(mdPath: string): Set<string> {
   return ids;
 }
 
-export type HypothesisCheckName = "schema" | "H-1" | "H-2" | "H-3" | "H-4" | "H-5" | "H-6" | "H-7" | "H-8" | "H-9" | "H-10";
+export type HypothesisCheckName = "schema" | "H-1" | "H-2" | "H-3" | "H-4" | "H-5" | "H-6" | "H-7" | "H-8" | "H-9" | "H-10" | "H-11";
 
 export interface CheckResult {
   check: HypothesisCheckName;
@@ -848,8 +848,69 @@ function checkH10(line: unknown, packet: unknown): CheckResult {
   return { check: "H-10", ok: messages.length === 0, messages };
 }
 
+// ---- H-11(接続設計案 ③(e)): 名前を顧客に出せる段か ― **落とさない。印だけ** ----
+//
+// 【何のために在るか(顧客の PDF にどう出るか)】この検査は**顧客に見える文字を決めない。**
+//   渡すのは「この名前を顧客に出すなら『〜のような形』か群の呼び名に落とす」という**印**だけで、
+//   落とす判定は作らない(正本の「判定は作らない。印だけ」)。
+//   実物は定義 114 件すべて `draft` なので、**名前に触れれば必ず印が付く**(それが今の正しい状態)。
+// 【正本の読み替え】接続設計案は `facts.recognition.rows[].reviewStatus` と書くが、
+//   **`rows[]` に `reviewStatus` は無く `definitions[]` に在る**(実測。司令塔の指示で読み替え。2026-09-30)。
+// 【H-10 と混ぜない】H-10 は落とす検査(その顧客の局で認識された名前か)、こちらは落とさない印。
+//   1 か所にまとめると「印が付いたから落ちた」と読める。名前を探す道具だけ共有する。
+// 【群の呼び名には印を付けない】群は `signatureClass` の機械の呼び名(材料では「多数の核」「それ以外」
+//   「署名なし」)で `reviewStatus` を持たず、**「〜のような形」に落とす先がそもそも群の呼び名**である。
+//   名前の表に無いので、この検査の対象にもならない(計画 §3.2。司令塔へ 1 行で伝えた)。
+
+/** 顧客に出せる段(`draft` は含めない。`expired` は期限切れなので含めない ― `data/` の規則) */
+export const APPROVED_REVIEW_STATUSES = ["human_reviewed", "expert_verified"] as const;
+
 /**
- * スキーマ照合 + H-1〜H-10 を全部回して全部返す(最初で止めない)。スキーマが落ちても H は回す。
+ * 承認済みの定義を持つ語(名前・かな・id)。**1 つでも承認済みなら承認済みに数える** ―
+ * 同じ語に複数の定義が付く(実物で同名の定義 6 組)ので、H-10 の「どれかが在れば」と同じ緩い側に合わせる。
+ */
+export function approvedRecognitionWords(packet: unknown): Set<string> {
+  const approved = new Set<string>();
+  for (const definition of asArray(get(packet, ["facts", "recognition", "definitions"]))) {
+    const status = asString(get(definition, ["reviewStatus"]));
+    if (status === undefined || !(APPROVED_REVIEW_STATUSES as readonly string[]).includes(status)) continue;
+    for (const key of ["name", "nameKana", "id"] as const) {
+      const word = asString(get(definition, [key]));
+      if (word !== undefined && word !== "") approved.add(word);
+    }
+  }
+  return approved;
+}
+
+function checkH11(line: unknown, packet: unknown): CheckResult {
+  if (packet === undefined || packet === null) {
+    return { check: "H-11", ok: true, skipped: true, messages: ["未照合: packet が渡されていないので名前の段を見ていない"] };
+  }
+  const corpus = recognitionNameCorpus(packet);
+  if (corpus.size === 0) {
+    return { check: "H-11", ok: true, skipped: true, messages: ["未照合: packet に認識の定義が無いので名前の段を見ていない"] };
+  }
+  const approved = approvedRecognitionWords(packet);
+  const notes: string[] = [];
+  for (const field of H10_PROSE_FIELDS) {
+    for (const node of stringsAtField(line, field)) {
+      for (const hit of namesInText(node.text, corpus)) {
+        if (approved.has(hit.word)) continue;
+        notes.push(
+          `${node.at}: 名前「${hit.word}」に承認済みの定義が無い` +
+            `(顧客に出すなら「〜のような形」か群の呼び名に落とす)`,
+        );
+      }
+    }
+  }
+  // **落とさない**(ok は常に true)。印だけを返す
+  const result: CheckResult = { check: "H-11", ok: true, messages: [] };
+  if (notes.length > 0) result.notes = notes;
+  return result;
+}
+
+/**
+ * スキーマ照合 + H-1〜H-11 を全部回して全部返す(最初で止めない)。スキーマが落ちても H は回す。
  *
  * `opts.bannedWords` は H-5 の一覧の差し替え口(試験用)。渡されなければ
  * `report-pdf/check_answer.py` の `BANNED_WORDS` を読む(STEP H5-SYNC)。
@@ -872,5 +933,6 @@ export function validateHypothesisLine(
     checkH8(line),
     checkH9(line, opts.packet),
     checkH10(line, opts.packet),
+    checkH11(line, opts.packet),
   ];
 }

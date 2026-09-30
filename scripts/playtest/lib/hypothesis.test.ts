@@ -92,14 +92,14 @@ describe("H-3 反証を試みたことの記録", () => {
 });
 
 describe("H-4 予測は数で、測る前に書く", () => {
-  it("通る: today 2026-09-25 で基準の例は 11/11 通る(writtenAt(2026-09-25) <= today)", () => {
+  it("通る: today 2026-09-25 で基準の例は 12/12 通る(writtenAt(2026-09-25) <= today)", () => {
     const results = checksOf(BASE_LINE);
-    // **検査の本数は 11**(schema + H-1〜H-10)。H-9(packet の照合)と H-10(名前の照合)は
-    // 2026-09-30 に足した ― packet を渡していないのでどちらも `skipped` の印が付く
-    // (**ok だが緑ではない**)
-    expect(results).toHaveLength(11);
+    // **検査の本数は 12**(schema + H-1〜H-11)。H-9(packet の照合)・H-10(名前の照合)・
+    // H-11(名前の段の印)は 2026-09-30 に足した ― packet を渡していないので 3 つとも
+    // `skipped` の印が付く(**ok だが緑ではない**)
+    expect(results).toHaveLength(12);
     for (const result of results) expect(result, `${result.check}: ${result.messages.join(" / ")}`).toMatchObject({ ok: true });
-    for (const check of ["H-9", "H-10"] as const) {
+    for (const check of ["H-9", "H-10", "H-11"] as const) {
       const result = results.find((candidate) => candidate.check === check)!;
       expect(result.skipped, `${check}: packet を渡していないのに未照合の印が無い`).toBe(true);
     }
@@ -266,7 +266,7 @@ describe("版 0.2(expired)", () => {
       const line = JSON.parse(readFileSync(join(RECORDS_DIR, file), "utf-8")) as Json;
       expect(line.schemaVersion, file).toBe("0.1");
       const results = checksByVersion(line);
-      expect(results, file).toHaveLength(11); // H-9・H-10 を足した(2026-09-30)
+      expect(results, file).toHaveLength(12); // H-9・H-10・H-11 を足した(2026-09-30)
       expect(
         results.filter((r) => !r.ok).map((r) => r.check),
         `${file} の NG の並び`,
@@ -439,6 +439,53 @@ describe("CLI(hypothesisCheck.ts)", () => {
     },
     60_000,
   );
+});
+
+describe("H-5 事実の行に読みの語を混ぜない(接続設計案 ③(d)。R2 が足した 0.4 の分岐の測り)", () => {
+  // 【なぜここに足すか】判定は **R2 が H-5 の分岐として実装済み**で、2 つ目の実装は作らない
+  //   (同じ判定を 2 か所に作ると直しが片方に届かない ― P-159 の家族。司令塔の GO 2026-09-30)。
+  //   足すのは**測り**だけ。2026-09-30 に worktree で変異 8 本を回して、
+  //   **読みの語 5 語のうち 4 語(可能性・のでは・と思われ・かもしれ)を消しても門が緑**、
+  //   **`kind === "finding"` の側を外しても緑**だった ― その穴をここで閉じる。
+  // 【schema は通らなくてよい】H-5 は schema が落ちても回る(`validateHypothesisLine` の作り)。
+  //   だから最小の行で測る ― 見るのは H-5 の結果だけ。
+  const h5 = (line: unknown): CheckResult =>
+    validateHypothesisLine(line, { today: TODAY, registry: new Set<string>() }).find((r) => r.check === "H-5")!;
+
+  // **この 5 語は試験の側に書く**(コードの定数を読むと、語を消す変異と一緒に消えて黙る)
+  const READING_WORDS_EXPECTED = ["という読み", "可能性", "のでは", "と思われ", "かもしれ"] as const;
+
+  it("5 語のどれを混ぜても落ちる(語ごとに 1 件)", () => {
+    for (const word of READING_WORDS_EXPECTED) {
+      const result = h5({ schemaVersion: "0.4", factOrHypothesis: "fact", kind: "finding", statement: `崩れは 79 回${word}。` });
+      expect(result.ok, `読みの語「${word}」が通ってしまった`).toBe(false);
+      expect(result.messages.join(" / "), `「${word}」の苦情に語が出ない`).toContain(word);
+    }
+  });
+
+  it("読みの語が無い事実の文は通る(何でも落とす検査ではない)", () => {
+    const result = h5({ schemaVersion: "0.4", factOrHypothesis: "fact", kind: "finding", statement: "崩れは 79 回だった。" });
+    expect(result, result.messages.join(" / ")).toMatchObject({ ok: true });
+  });
+
+  it("事実の行の見分けは 2 通りとも効く(factOrHypothesis: fact / kind: finding)", () => {
+    // (a) `factOrHypothesis: fact` だけ(kind は既定の hypothesis)
+    expect(h5({ schemaVersion: "0.4", factOrHypothesis: "fact", statement: "崩れは 79 回の可能性があります。" }).ok).toBe(false);
+    // (b) `kind: finding` だけ(factOrHypothesis が無い)― **この側が 2026-09-30 まで測られていなかった**
+    expect(h5({ schemaVersion: "0.4", kind: "finding", statement: "崩れは 79 回の可能性があります。" }).ok).toBe(false);
+  });
+
+  it("仮説の行は今までどおり読みの形を求める(裏返しが効いていることの裏)", () => {
+    // 0.4 の仮説の行: 読みの形が無ければ落ちる
+    const bare = h5({ schemaVersion: "0.4", factOrHypothesis: "hypothesis", statement: "崩れは 79 回だった。" });
+    expect(bare.ok).toBe(false);
+    expect(bare.messages.join(" / ")).toContain("という読みです");
+    // 読みの形があれば通る(**事実の行の分岐が仮説の行に漏れていない**)
+    expect(h5({ schemaVersion: "0.4", factOrHypothesis: "hypothesis", statement: "崩れが増えている、という読みです。" }).ok).toBe(true);
+    // 0.4 より前の版は分岐の外(factOrHypothesis を書いても読みの形を求める)
+    const old = h5({ schemaVersion: "0.1", factOrHypothesis: "fact", statement: "崩れは 79 回だった。" });
+    expect(old.ok, "0.4 より前の行が事実の行として扱われた").toBe(false);
+  });
 });
 
 describe("検査 1 件を人が読む行にする(状態の語は 1 か所)", () => {
