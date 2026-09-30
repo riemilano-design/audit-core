@@ -401,3 +401,51 @@ GO を妨げない指摘 2 点(直した・記録した): (1) partial の空 mis
 ### 8.5 共有ツリーの衝突とコミットの仕方
 
 作業ツリーの `lib/hypothesis.ts`・`lib/schemaVersions.ts`・`lib/hypothesis.test.ts` に自動化レーンの未コミット H-9 が同居していた(検査が 9 → 10 本になり、レーンの側の試験 2 本が赤)。司令塔の決定: **R2 が先**(レーンの H-9 が `packetRef.ts` を読む側)。私の hunk だけを HEAD から script で作り直し(scratchpad `r2/apply_mine.py`)、別 worktree で全体の試験・型検査を通し(1981 本緑・非 out の赤 0)、監査 GO の後、**私の版の blob を index に置いて**(`git hash-object` + `update-index`)`git diff --cached --stat` に私のファイルだけが載っていることを見てから commit。コミット後の共有ツリーの残差はレーンの hunk だけになる(1 行で報告)。
+
+## 9. 3 席 LLM API ― 束 R3(統合 = 整理役の入力と出力の契約と検査)の実装と実測(2026-09-30)
+
+計画 [STEP_LLM_SEATS_R3_INTEGRATION](STEP_LLM_SEATS_R3_INTEGRATION_2026-09-30.md)(170322d、司令塔 GO + 判断 4 点。I-3 は「forVerification から外す束は**すべて** heldBack に理由つき。理由は seatCount を参照しない」に直して GO)。**LLM は呼んでいない・packet を読まない**(packetDigest は呼び出し側が渡す packet の JSON からの写し。検査は読まない)。実装は R2 と同じく私だけの worktree(HEAD 4119298)で行った(共有ツリーには自動化レーンの未コミット差分が残っているため)。
+
+### 9.1 作ったもの(新規 6 ファイル。既存のファイルは触っていない)
+
+| 物 | 場所 | 中身 |
+|---|---|---|
+| 器(入力) | `schemas/integration-input.v0.1.schema.json` | 席は `seatIndex` だけ(名前なし)、`internal` の欄が無い(`additionalProperties: false`)、席の行の写しは許した欄だけ、`packetDigest` = 線の組・集計 37 行・局の表、空席は `present: false` + 理由 |
+| 器(出力) | `schemas/integration.v0.1.schema.json` | `clusters[]`(`clusterId`・`packetRefs`・`itemRefs`・`seatCount {value, evidence: const false}`・`representative` = v0.4 の行)・`contradictions`・`dropped`・`heldBack`(理由つき)・`forVerification`・`answersByQuestion`・`selfComputedNumbers`・`seatOrderRef`・`run` |
+| 整理役が書く形 | `schemas/integration.llm.v0.1.schema.json` | clusters(representative は席が書く形と同じ欄)・contradictions・dropped・heldBack・forVerification・answerNotes。**seatCount・answersByQuestion・run・代表の道具の欄は書けない** |
+| lib | `lib/integration.ts` | `seatPermutation`(runId → 決定的な置換、`lib/prng.ts`)、`copySeatItem`(許した欄だけ)、`packetDigestOf`、`buildIntegrationInput`(封筒 → 器。**席の hypothesisId も匿名 `I-<seatIndex>-<連番>` に写し替え**、対応表 `itemMap` は seatOrder と一緒に run のログへ)、`answersByQuestionOf`(機械で決まる内訳と summary。1 席でも違えば `mixed`)、`completeIntegration`(整理役の形 → 器。決定的。`seatCount.value` = 異なる席の数)、`integrationProblems`(I-1〜I-8)、`canonicalJson`(observationPacket.ts を import しないために同じ規則を持つ) |
+| CLI | `scripts/playtest/integrationCheck.ts` | `--integration --input --today [--obs-items]` |
+| 試験 | `lib/integration.test.ts`(19 本) | 全体 **105 files / 2001 passed**(worktree)、typecheck の非 out の赤 0 |
+
+### 9.2 実装中に検査が捕まえたもの(直した)
+
+- **席の hypothesisId(R2 の形 `H-c5-gptrun2-001`)が席名を埋め込んでいた** → 入力の器にそのまま写すと整理役に席名が漏れる(校正 1 の「席名が無い」が赤)。器では匿名 id に写し替え、`answers[].itemIds`・`derivedFrom` も同じ対応で置き換える。対応表はログ側(seatOrderRef)。R2 の id の形は変えていない(封筒の中では席名を持ってよい ― 封筒は整理役に渡らない)。
+- **代表の行の `provenance.inputs` を `integration_input:<sha>` にすると H-6(盲検)の禁止語「integrat」に当たる**。代表は席の項目から作られるので、入力として正直なのは成員の列 → `seat_item:<seatIndex>:<匿名 id>` にし、**I-8 で束の itemRefs と一致すること**を見る(器の sha は `run.inputSha256`)。H-6 を避けるための言い換えではなく、出どころが成員そのものになった。
+- 予測の外れ 2 点(記録): 同じ席の項目を別の束に足す変異は seatCount を変えない(I-3 は鳴らず I-1・I-2・I-8 の 3 件)。I-4 の変異に隔離欄と同じ数 0.61 を使うと I-6 も鳴る(試験側の誤り、数を変えた)。
+
+### 9.3 校正・変異(予測は計画 §5)
+
+| 校正 | 実測 |
+|---|---|
+| 1 封筒 3 つ(1 つは空席)から器を組む → schema を通る、`internal` 0、席名 0、itemMap 6、空席は理由つき | ok |
+| 2 最小の出力(束 2・dropped 2・矛盾 1・heldBack 1)が I-1〜I-8 を通り、道具が seatCount `{2, false}`・answersByQuestion(summary `unanswerable`、bySeat 2)・run を埋める | ok。**実物**: R2 の smoke 封筒(5 人目の meta)× 2 席 + 空席 1 で器を組み(集計 37・局 25・12,181 バイト・`internal` 無し・席名無し)、CLI が「問題なし」。heldBack を空に → I-3 の 1 件、代表に `origin.seat: claude` → I-7 の 2 件 |
+| 3 同じ runId で同じ順・同じ器、違う runId で順が変わる例あり | ok |
+| 4 packet を読まない(`from "./observation…"` と `readFileSync(…packet…)` の不在) | ok |
+
+| 変異 | 予測 | 実測 |
+|---|---|---|
+| 項目を clusters からも dropped からも落とす | I-1 | I-1 の 1 件 |
+| 根拠の場所を共有しない項目を束に | I-2 | I-2 + I-1(2 回)+ I-8 の 3 件(I-3 は鳴らない ― 上) |
+| `evidence: true` | schema | schema の 1 件 |
+| `seatCount.value` +1 | I-3 | I-3 の 1 件 |
+| 束を forVerification から外し heldBack に置かない / 理由が一致の数を参照 | I-3 | I-3 の 1 件ずつ |
+| 代表の statement に成員に無い数 / 代表の観測に成員に無い場所 | I-4 | H-1 の 1 件 / I-4 の 1 件 |
+| 1 席 unanswerable なのに summary を answered | I-5 | I-5 の 1 件 |
+| 隔離欄の数を矛盾の text に | I-6 | I-6 の 1 件 |
+| 代表に `origin.seat: gpt` | I-7 | I-7 の 2 件(origin + 席名の語) |
+| `run.inputSha256` を変える | I-8 | I-8 の 1 件 |
+| 入力に `internal` を入れる / 整理役が seatCount・answersByQuestion を書く | 器の schema で落ちる | 落ちる(構造で拒む) |
+
+### 9.4 独立監査(step-auditor): **GO**
+
+監査が worktree で自分で回したもの: 全体 2001 本緑・typecheck 赤 0 / CLI smoke 3 本(ok・heldBack 空 → I-3・origin.seat → I-7 の 2 件)/ 実物の器を走査して集計 37・局 25・線 6・`internal` 0・席名の語 0 / 実装を消す変異 3 本(I-1 の「どちらにも無い」・SEAT_COUNT_REFERENCE_RE・copySeatItem の白名簿に internal)で対応する試験が赤くなる(3 本目は入力 schema が先に落とし、copySeatItem の単体試験も独立に赤 = 二重の壁)ことを確かめ、バイト一致に復元 / H-6 の禁止語「integrat」に `integration_input:<sha>` が当たることを自分で実測し、`seat_item:` の形は言い換えでなく出どころが成員そのものになった、と判断。指摘 1 点(GO を妨げない): 計画 §3・§4 I-8 の文言が実装と食い違っていた → 正本を実装に合わせた(この commit)。

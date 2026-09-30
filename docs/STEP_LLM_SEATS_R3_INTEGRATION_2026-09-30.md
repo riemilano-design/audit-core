@@ -54,7 +54,7 @@
 ```
 
 - `seatCount.evidence` は **schema で `const: false`**(整理役にも道具にも true を書かせない)。
-- `representative` は v0.4 の行。`hypothesisId` は道具が `H-<customerRef>-integ<runId 先頭 4>-<連番>` で埋め、`origin: {seat: "integrator"}`、`provenance.inputs` は席の行の id の列(`seat_input:` の sha ではなく `integration_input:<sha>`)。
+- `representative` は v0.4 の行。`hypothesisId` は道具が `H-<customerRef>-integ<runId 先頭 4>-<連番>` で埋め、`origin: {seat: "integrator"}`、`provenance.inputs` は**束の成員の列 `seat_item:<seatIndex>:<匿名 id>`**(実装で変更。§4 I-8 参照)。席の項目の id は器の中では匿名 `I-<seatIndex>-<連番>`(席の hypothesisId は席名を埋め込むため。対応表 itemMap は seatOrder と一緒に run のログへ ― 実装で見つけた穴、LOG §9.2)。
 - `internal` の欄は**どこにも無い**(`additionalProperties: false`)。
 
 ## 4. 検査 `integrationProblems`(I-1〜I-8。packet を読まない。実在は H-9)
@@ -68,7 +68,7 @@
 | I-5 問い | `request.customerQuestions` の id ごとに `answersByQuestion` が 1 行、`bySeat` は present の席ごとに 1 行、`summary` は bySeat の status から機械で決まる(全部同じならその値、違えば `mixed`。**多数決で unanswerable を消さない**: 1 席でも unanswerable なら `mixed` か `unanswerable`) | 席の「答えられない」を落とした |
 | I-6 隔離 | `selfComputedNumbers` の値が `representative.statement`・`contradictions[].text` に出ない | 席の作った率を代表の文に |
 | I-7 席名 | 出力のどこにも `gpt` / `gemini` / `claude` / モデル名の字が無い(`run.model` を除く)。`seatOrderRef` が在る | 整理役が席を名指し |
-| I-8 run | `run.inputSha256` = 入力の sha。`representative.provenance.inputs` が `integration_input:<sha>` を持つ | 別の入力で得た出力 |
+| I-8 run | `run.inputSha256` = 入力の sha。`representative.provenance.inputs` = **束の成員の列 `seat_item:<seatIndex>:<匿名 id>` と集合として一致**(**実装で変更、2026-09-30**: 計画の `integration_input:<sha>` は H-6 の盲検の禁止語「integrat」に当たる。代表は席の項目から作られるので出どころは成員そのもの。器の sha は `run.inputSha256` が持つ。監査 GO の付記で正本を合わせた) | 別の入力で得た出力・成員と違う出どころ |
 
 ## 5. 校正と変異(予測を先に書く)
 
