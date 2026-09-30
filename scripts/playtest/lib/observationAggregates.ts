@@ -766,7 +766,7 @@ export function aggregateCoverageProblems(aggregates: readonly AggregateRow[]): 
  * どちらが正しいか決められない)。**この検査が捕まえるのは「packet の数が後から書き換わった」形** ―
  * 母集団の言葉と数が食い違う packet を、材料が無い側でも落とせる。
  */
-export function recountProblems(packet: { facts?: unknown; aggregates?: unknown }): string[] {
+export function recountProblems(packet: { facts?: unknown; aggregates?: unknown }, onlyId?: string): string[] {
   const facts = packet.facts;
   if (facts === null || typeof facts !== "object") return ["数え直し: facts が無い"];
   const aggregates = packet.aggregates;
@@ -774,6 +774,8 @@ export function recountProblems(packet: { facts?: unknown; aggregates?: unknown 
   const index = factsIndexOf(facts as Record<string, unknown>);
   const problems: string[] = [];
   for (const row of aggregates as AggregateRow[]) {
+    // **1 行だけ見る口**(束 V-a の H-9 が、仮説の根拠にされた行を数え直すため)
+    if (onlyId !== undefined && row.id !== onlyId) continue;
     if (row.recountable === false) continue;
     const population = row.population;
     if (population === undefined) {
@@ -806,4 +808,22 @@ export function recountProblems(packet: { facts?: unknown; aggregates?: unknown 
     }
   }
   return problems;
+}
+
+/**
+ * **1 つの集計行を数え直す**(束 V-a。検証器の H-9 が根拠にされた行を見るため)。
+ *
+ * 返すのは問題の行と**印**の 2 つ。印は落とすためのものではなく、**採る側(⑤)に見せる**ためのもの
+ * (司令塔の決定 2026-09-30): 数え直せない 2 行(材料の秒が中盤の手だけ)を根拠にした仮説は、
+ * **落とさないが「数え直していない」ことを見えるようにする。**
+ */
+export function recountRowProblems(packet: { facts?: unknown; aggregates?: unknown }, id: string): { problems: string[]; notes: string[] } {
+  const aggregates = packet.aggregates;
+  if (!Array.isArray(aggregates)) return { problems: ["数え直し: aggregates が無い"], notes: [] };
+  const row = (aggregates as AggregateRow[]).find((candidate) => candidate.id === id);
+  if (row === undefined) return { problems: [`数え直し: 集計に ${id} の行が無い`], notes: [] };
+  if (row.recountable === false) {
+    return { problems: [], notes: [`${id} は数え直せない行(理由: ${row.recountNote ?? "理由が書かれていない"})`] };
+  }
+  return { problems: recountProblems(packet, id), notes: [] };
 }

@@ -669,5 +669,229 @@ class DraftOnlySectionsAreNotCountedTest(unittest.TestCase):
         self.assertIn("EC.DRAFT_ONLY_HEADINGS", src)
         for h in EC.DRAFT_ONLY_HEADINGS:
             self.assertNotIn(h, src)
+class AggTagTest(unittest.TestCase):
+    """検査 (x) 本編の数の id 照合(2026-09-30)。
+
+    【材料の数はぜんぶ違う値にする】正解が近くの別の値と同じだと、
+    「別の欄を返す変異」「最初の印だけ見る変異」が緑で通る(2026-09-29 に 2 回踏んだ型)。
+    だから下の packet は **7・41・79・107・65・999・5** と、どれも重ならない値にした。
+    """
+
+    def packet(self):
+        return {"aggregates": [
+            {"id": "collapse.total", "value": 79},
+            {"id": "collapse.middle", "value": 41},
+            {"id": "fork.attack", "numerator": 65, "denominator": 107},
+            {"id": "solo", "value": 5, "recountable": 7},
+            # **真偽値が `value` に入った packet**(schema は integer を求めるが、
+            # 壊れた packet が来たときに 1 を「言える数」にしてはいけない)
+            {"id": "flag", "value": True},
+        ]}
+
+    def test_x1_a_marked_line_whose_numbers_are_in_the_row_passes(self):
+        md = "- 崩れ 79 回。<!-- agg: collapse.total -->"
+        problems, notes = [], []
+        EG.check_agg_tags(md, self.packet(), problems, notes)
+        self.assertEqual(problems, [])
+        self.assertEqual(notes, [])
+
+    def test_x2_a_number_not_in_the_row_is_a_problem(self):
+        md = "- 崩れ 41 回。<!-- agg: collapse.total -->"
+        problems, notes = [], []
+        EG.check_agg_tags(md, self.packet(), problems, notes)
+        self.assertEqual(len(problems), 1, problems)
+        self.assertIn("41", problems[0])
+        self.assertIn("collapse.total", problems[0])
+
+    def test_x3_an_unknown_id_is_a_problem(self):
+        md = "- 崩れ 79 回。<!-- agg: collapse.nosuch -->"
+        problems, notes = [], []
+        EG.check_agg_tags(md, self.packet(), problems, notes)
+        self.assertEqual(len(problems), 1, problems)
+        self.assertIn("collapse.nosuch", problems[0])
+        self.assertIn("packet の集計に無い", problems[0])
+
+    def test_x4_without_a_packet_it_reports_instead_of_skipping_silently(self):
+        md = "- 崩れ 79 回。<!-- agg: collapse.total -->"
+        problems, notes = [], []
+        EG.check_agg_tags(md, None, problems, notes)
+        self.assertEqual(problems, [])
+        self.assertEqual(len(notes), 1, notes)
+        self.assertIn("照合をしていない", notes[0])
+        # **印の件数を報告に入れる**(0 件と区別が付かないと「渡し忘れ」が見えない)
+        self.assertIn("1", notes[0])
+
+    def test_x5_zero_markers_is_reported_not_failed(self):
+        problems, notes = [], []
+        EG.check_agg_tags("- 崩れ 79 回。", self.packet(), problems, notes)
+        self.assertEqual(problems, [])
+        self.assertEqual(len(notes), 1, notes)
+        self.assertIn("0 件", notes[0])
+        # packet の集計の行数(5)を**単位つきで**報告に入れる ―
+        # **印の数(0)と取り違えないため**。行数と印の数がそろわない材料にしてある
+        # (そろえると「印の数を報告する変異」が緑で通る)
+        self.assertIn("5 行", notes[0])
+        self.assertEqual(len(self.packet()["aggregates"]), 5)
+
+    def test_x6_two_markers_on_one_line_allow_the_union(self):
+        md = "- 崩れ 79 回のうち中盤 41 回。<!-- agg: collapse.total --><!-- agg: collapse.middle -->"
+        problems, notes = [], []
+        EG.check_agg_tags(md, self.packet(), problems, notes)
+        self.assertEqual(problems, [])
+        # **片方だけの印では落ちる**(合併が効いていることの裏。
+        # 「最初の印だけ見る」変異はここで赤になる)
+        one = []
+        EG.check_agg_tags("- 崩れ 79 回のうち中盤 41 回。<!-- agg: collapse.total -->",
+                          self.packet(), one, [])
+        self.assertEqual(len(one), 1, one)
+        self.assertIn("41", one[0])
+        # 逆向きも(「最後の印だけ見る」変異のため)
+        other = []
+        EG.check_agg_tags("- 崩れ 79 回のうち中盤 41 回。<!-- agg: collapse.middle -->",
+                          self.packet(), other, [])
+        self.assertEqual(len(other), 1, other)
+        self.assertIn("79", other[0])
+
+    def test_x7_both_sides_of_a_fraction_are_checked(self):
+        """分子だけ・分母だけ見る変異を赤にする。"""
+        md = "- 攻めは 65 / 107 でした。<!-- agg: fork.attack -->"
+        problems, notes = [], []
+        EG.check_agg_tags(md, self.packet(), problems, notes)
+        self.assertEqual(problems, [])
+        # 分母を別の値にした packet では**分母だけ**が苦情に出る
+        pkt = self.packet()
+        pkt["aggregates"][2] = {"id": "fork.attack", "numerator": 65, "denominator": 999}
+        only_denominator = []
+        EG.check_agg_tags(md, pkt, only_denominator, [])
+        self.assertEqual(len(only_denominator), 1, only_denominator)
+        self.assertIn("107", only_denominator[0])
+        self.assertNotIn("65", only_denominator[0].split("が印の")[0])
+        # 分子を別の値にした packet では**分子だけ**が苦情に出る
+        pkt2 = self.packet()
+        pkt2["aggregates"][2] = {"id": "fork.attack", "numerator": 999, "denominator": 107}
+        only_numerator = []
+        EG.check_agg_tags(md, pkt2, only_numerator, [])
+        self.assertEqual(len(only_numerator), 1, only_numerator)
+        self.assertIn("65", only_numerator[0])
+
+    def test_x8_digits_inside_the_marker_are_not_numbers_of_the_line(self):
+        """**印の id の中の数字を文の数として見ない。**
+
+        実測(2026-09-30): 除外しないと id の `bySpent10plus` から **10** が拾われ、
+        集計行に 10 が無いので**偽の苦情**が出る。いまの id の数字は 1 桁で
+        共通の規則の床に隠れるが、この門は上限 0 で数えるので**1 桁でも拾う**。
+        """
+        pkt = {"aggregates": [{"id": "time.bySpent10plus", "value": 5}]}
+        md = "- 5 回ありました。<!-- agg: time.bySpent10plus -->"
+        problems, notes = [], []
+        EG.check_agg_tags(md, pkt, problems, notes)
+        self.assertEqual(problems, [])
+        # 印を消さない場合に何が起きるかを同じ材料で見せる(除外が効いている証拠)
+        raw = md.replace("<!--", "[").replace("-->", "]")
+        self.assertIn(10, CA.scan_numbers(raw, 0)[3])
+        self.assertNotIn(10, CA.scan_numbers(md, 0)[3])
+
+    def test_x9_a_ratio_word_line_is_reported_not_silently_passed(self):
+        """共通の規則が数を見ない行(倍割の語)は、**通すが黙らない。**"""
+        md = "- 前より 2 倍に増えました(79 回)。<!-- agg: collapse.total -->"
+        # **前提を仮定せず測る** ― この行が共通の規則で「倍割の語あり」になることを先に確かめる
+        self.assertTrue(CA.RATIO_WORD_RE.search(md))
+        self.assertEqual(CA.scan_numbers(md, 0), (True, [], [], []))
+        problems, notes = [], []
+        EG.check_agg_tags(md, self.packet(), problems, notes)
+        self.assertEqual(problems, [])
+        self.assertEqual(len(notes), 1, notes)
+        self.assertIn("倍割", notes[0])
+
+    def test_x10_a_boolean_value_is_not_a_number(self):
+        """`value: True` の 1 を「言える数」に数えない(python では `True == 1`)。
+
+        【2026-09-30 の直し】最初は `recountable: True` で測ろうとしたが、
+        **その欄はそもそも読まない**(下の x10b)ので、真偽値の除外を消す変異が**黙っていた** ―
+        試験が「守っているつもりの場所」を通っていなかった。実際に通る道(`value`)で測り直した。
+        """
+        md = "- 1 回でした。<!-- agg: flag -->"
+        problems, notes = [], []
+        EG.check_agg_tags(md, self.packet(), problems, notes)
+        self.assertEqual(len(problems), 1, problems)
+        self.assertIn("1", problems[0])
+        # 正しい値(5)は通る ― **何でも落とす変異ではない**
+        ok = []
+        EG.check_agg_tags("- 5 回でした。<!-- agg: solo -->", self.packet(), ok, [])
+        self.assertEqual(ok, [])
+
+    def test_x10b_only_the_three_number_fields_are_readable(self):
+        """`value`・`numerator`・`denominator` **以外の欄の数は「言える数」にならない。**
+
+        材料の `solo` は `recountable: 7`(壊れた値。schema は真偽値を求める)。
+        7 を言う行は**通ってはいけない** ― 通ると「packet のどこかに在る同じ数」で
+        すり抜ける道が戻る(この検査を足した理由そのもの)。
+        """
+        problems = []
+        EG.check_agg_tags("- 7 回でした。<!-- agg: solo -->", self.packet(), problems, [])
+        self.assertEqual(len(problems), 1, problems)
+        self.assertIn("7", problems[0])
+
+    def test_x13_the_head_of_a_numbered_item_is_not_a_number(self):
+        """**行動の行(「1. 」で始まる)で偽の苦情を出さない。**
+
+        実測(2026-09-30、実物の本編 233 行): 自前で数を拾っていたときは、
+        番号つき箇条書きの頭が「packet に無い数」として苦情に出ていた。
+        拾い方をこの門の `number_claims()` に寄せて消えた。
+        """
+        md = "1. 攻めは 65 / 107 でした。<!-- agg: fork.attack -->"
+        problems, notes = [], []
+        EG.check_agg_tags(md, self.packet(), problems, notes)
+        self.assertEqual(problems, [])
+        self.assertEqual(notes, [])
+        # **頭の数を外しているだけで、文中の数は今までどおり見る**(緩めていないことの裏)
+        bad = []
+        EG.check_agg_tags("1. 攻めは 65 / 999 でした。<!-- agg: fork.attack -->",
+                          self.packet(), bad, [])
+        self.assertEqual(len(bad), 1, bad)
+        self.assertIn("999", bad[0])
+
+    def test_x14_the_action_marker_is_not_a_number(self):
+        """行動の印(`<!-- menu: M3 -->` の 3)も数に数えない(`number_claims` と同じ扱い)。"""
+        problems = []
+        EG.check_agg_tags("- 5 回でした。<!-- menu: M3 --><!-- agg: solo -->",
+                          self.packet(), problems, [])
+        self.assertEqual(problems, [])
+
+    def test_x15_the_number_rule_is_the_gate_s_own_one_place(self):
+        """数の拾い方を 2 本目として書いていない(`number_claims` を呼ぶ)。
+
+        **字面ではなく振る舞いで測る**: `number_claims` を通していれば、
+        番号つき箇条書きの頭と行動の印が外れ、分数の左右が両方見える ―
+        その 3 つを x13・x14・x7 が押さえている。ここではそれらが**同じ 1 か所**を
+        通っていることだけを、返り値の一致で確かめる。
+        """
+        line = "1. 攻めは 65 / 107 でした。<!-- menu: M3 -->"
+        self.assertEqual(EG.number_claims([line]), [65, 107])
+
+    def test_x11_the_marker_grammar_is_not_copied_into_this_gate(self):
+        """印の文法は `check_answer` の 1 か所(`menu`・`pos` と同じ家族)。
+
+        **この門に 2 本目の正規表現を置かない** ― 置くと片方だけ直したとき門が黙る(P-185 の型)。
+        """
+        src = read_text(os.path.join(HERE, "exit_gate.py"))
+        self.assertIn("CA.AGG_TAG_RE", src)
+        self.assertNotIn('re.compile(r"<!--', src)
+
+    def test_x12_the_flag_is_optional_so_the_21_stages_keep_running(self):
+        own, rest = EG.parse_own_args(["a.md", "--candidates", "c.json"])
+        self.assertIsNone(own["packet"])
+        self.assertEqual(rest, ["a.md"])
+        own2, rest2 = EG.parse_own_args(["a.md", "--candidates", "c.json", "--packet", "p.json"])
+        self.assertEqual(own2["packet"], "p.json")
+        self.assertEqual(rest2, ["a.md"])
+        # 値が無ければ落とす(黙って None にしない)
+        with self.assertRaises(EG.ExitGateError):
+            EG.parse_own_args(["a.md", "--candidates", "c.json", "--packet"])
+        # `--candidates` の方は今までどおり必須
+        with self.assertRaises(EG.ExitGateError):
+            EG.parse_own_args(["a.md", "--packet", "p.json"])
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)

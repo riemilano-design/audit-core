@@ -348,17 +348,108 @@ def check_draft_leftovers(raw_md, problems):
 
 
 # ==================== 本体 ====================
+# ==================== (x) 本編の数の id 照合(2026-09-30) ====================
+# 【何のために在るか(顧客の PDF にどう出るか)】本編の数の行に、書き手が
+# `<!-- agg: <集計の id> -->` の印を付ける。**顧客に見える文字は 1 文字も増えない**(md のコメント)。
+# 増えるのは「その数がどの集計から来たか」を機械が辿れること ―
+# 今までは「材料のどこかに在る同じ数」で通っていたので、**別の集計の同じ数**が通った。
+#
+# 【この検査が決めないこと】どの数を選ぶか・何と書くかは 1 つも決めない(この段の原則)。
+# 見るのは「印の id が packet に在るか」と「その行の数が、その集計行の数と合うか」だけ。
+#
+# 【印を書く段はまだ無い】だから **印が 0 件でも落とさない**(報告だけ)。
+# packet が渡されなければ**飛ばすが黙らない**(「照合していない」と報告する)。
+def agg_tags_of(md_text):
+    """本編から `<!-- agg: <id> -->` を拾う。返り値 = `[(行番号, [id…], 行の文)]`(印が在る行だけ)。
+
+    **1 行に複数の印を許す** ― 1 つの文が 2 つの集計の数を言うことがある
+    (「25 局のうち 18 局」の 25 と 18 が別の集計行から来る場合)。
+    許される数は**その行の印ぜんぶの合併**にする(片方だけの印で他方の数を苦情にしない)。
+    """
+    out = []
+    for line_no, line in enumerate(md_text.split("\n"), 1):
+        ids = [m.group(1).strip() for m in CA.AGG_TAG_RE.finditer(line)]
+        if ids:
+            out.append((line_no, ids, line))
+    return out
+
+
+def numbers_of_aggregate_row(row):
+    """集計の 1 行が持つ「文に書ける数」= `value`・`numerator`・`denominator` の整数。
+
+    **この 3 つの名前は packet の schema(`observation-packet.v0.1.schema.json`)の欄の名前**で、
+    ここで新しい欄を作っていない。真偽値は数として数えない(python では `True` が 1 になる)。
+    """
+    out = set()
+    for key in ("value", "numerator", "denominator"):
+        v = row.get(key)
+        if isinstance(v, int) and not isinstance(v, bool):
+            out.add(v)
+    return out
+
+
+def check_agg_tags(md_text, packet, problems, notes):
+    """(x) 印の id が packet の集計に在り、その行の数がその集計行の数と合うか。
+
+    【拾い方は写さない】数は **この門の `number_claims()` の 1 か所**。
+    自前で `scan_numbers` を呼んでいたのを 2026-09-30 に寄せた ― 実物の本編で測ると、
+    **番号つき箇条書きの頭(「1. 」)を数の主張として拾って偽の苦情を出していた**
+    (行動の行は全部この形)。`number_claims` はその頭と行動の印(`menu`)を外し、
+    分数の左右を両方数える。**同じ規則を 2 本置かない。**
+    【拾えないもの(測って書く)】
+    - **0** は拾えない(共通の規則が「上限より大きい数」で、この門は上限 0)。
+      0 を言う行の照合は効かない。**規則を 2 本に分けないためにここは直さない。**
+    - **割合(%)** は照合しない ― 分数から計算した数で、集計行の欄には無い(検査 1 が見る)。
+    - **倍割の語**が在る行は、共通の規則がその行の数を見ないので照合できない(報告する)。
+    - **閾値(300 cp・10 秒)と局数**は集計行ではなく `provenance.thresholds`・`facts` に在るので、
+      その数を言う行に印は付けられない(実測: 実物の本編で 59 行。§5 の測りに書く)。
+    """
+    tags = agg_tags_of(md_text)
+    if packet is None:
+        notes.append(f"(x) packet が渡されていないので id の照合をしていない(印 {len(tags)} 件)")
+        return
+    rows = {}
+    for row in (packet.get("aggregates") or []):
+        if isinstance(row, dict) and isinstance(row.get("id"), str):
+            rows[row["id"]] = row
+    if not tags:
+        notes.append(f"(x) 本編に集計の印が 0 件(packet の集計は {len(rows)} 行)")
+        return
+    for line_no, ids, line in tags:
+        allowed = set()
+        known = []
+        for agg_id in ids:
+            row = rows.get(agg_id)
+            if row is None:
+                problems.append(f"(x) {line_no} 行目の印の id「{agg_id}」が packet の集計に無い")
+                continue
+            known.append(agg_id)
+            allowed |= numbers_of_aggregate_row(row)
+        if not known:
+            continue
+        if CA.RATIO_WORD_RE.search(line):
+            notes.append(f"(x) {line_no} 行目は倍割の語があるので数を照合していない")
+            continue
+        missing = sorted({n for n in number_claims([line]) if n not in allowed})
+        if missing:
+            problems.append(
+                f"(x) {line_no} 行目の数 {missing} が印の集計行({'・'.join(known)})の数 "
+                f"{sorted(allowed)} に無い")
+
+
 def parse_own_args(argv):
-    own = {"candidates": None}
+    own = {"candidates": None, "packet": None}
     rest = []
     i = 0
     while i < len(argv):
         flag = argv[i]
-        if flag == "--candidates":
+        # `--packet` は**任意**(検査 (x))。渡されなければ (x) を飛ばして「照合していない」と報告する
+        # ― 印を書く段も packet を渡す段もまだ無いので、必須にすると既にある 21 段が全部止まる。
+        if flag in ("--candidates", "--packet"):
             value = argv[i + 1] if i + 1 < len(argv) else None
             if value is None or value.startswith("--"):
-                raise ExitGateError("--candidates に値が無い")
-            own["candidates"] = value
+                raise ExitGateError(f"{flag} に値が無い")
+            own[flag[2:]] = value
             i += 2
             continue
         rest.append(flag)
@@ -368,7 +459,11 @@ def parse_own_args(argv):
     return own, rest
 
 
-def run(own, rest):
+def run(own, rest, notes=None):
+    """`notes` を渡すと、**落とさないが黙らない報告**(検査 (x))をそこへ足す。
+    渡さない呼び方を壊さないために既定は None(捨てる)。"""
+    if notes is None:
+        notes = []
     args = CA.parse_args(rest)
     repo_root = os.path.abspath(os.path.join(HERE, "..", "..", ".."))
     ctx = CA.build_materials(args, repo_root)
@@ -376,6 +471,10 @@ def run(own, rest):
         raw_md = f.read()
     with open(own["candidates"], encoding="utf-8") as f:
         cands = json.load(f)
+    packet = None
+    if own.get("packet"):
+        with open(own["packet"], encoding="utf-8") as f:
+            packet = json.load(f)
 
     # 節に割るのは**顧客が読む側だけ**(書いた側の記録の節は節の中身に混ぜない)。
     sections = sections_of(CA.strip_dev_section(raw_md))
@@ -390,12 +489,16 @@ def run(own, rest):
     check_p3(sections, cands, problems)
     check_sentences(raw_md, ctx, problems)
     check_draft_leftovers(raw_md, problems)
+    check_agg_tags(raw_md, packet, problems, notes)
     return problems
 
 
 def main(argv):
     own, rest = parse_own_args(argv)
-    problems = run(own, rest)
+    notes = []
+    problems = run(own, rest, notes)
+    for n in notes:
+        print(f"(報告){n}", file=sys.stderr)
     if problems:
         print("書き手の席がまだ終わっていません(直したら --from exit-gate で再開):", file=sys.stderr)
         for p in problems:

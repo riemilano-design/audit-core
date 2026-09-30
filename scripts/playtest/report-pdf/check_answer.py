@@ -107,6 +107,14 @@ PRIORITY_TAG_RE = re.compile(r"<!--\s*priority:\s*(M\d+)\s*-->")
 # 「10 分」等。前後の空白は POS_TAG_RE 側の `\s*` と `\s+` の消費で既に落ちているが、`check_pos_tags` 側でも
 # 念のため strip する)で、無ければ None。中身が POS_INNER_RE に合わなければ「形が崩れている」として落とす。
 POS_TAG_RE = re.compile(r"<!--\s*pos:\s*(.*?)\s*-->")
+
+# 検査 (x)(本編の数の id 照合。段 `exit-gate`。2026-09-30)の印 `<!-- agg: <集計の id> -->`。
+# **印の文法はこの 1 か所**(`menu`・`pos`・`sec` と同じ家族。同じ規則を 2 か所に置かない ― P-185 の教訓)。
+# **この定数を足しただけで、検査 1〜7 の判定は変えていない。**
+# ただし下の `scan_numbers` で**印の中の数字を数の主張として見ない**ようにする ―
+# 集計の id は数字を含みうる(`repo.top1Drop…` の「1」)。いまの id の数字は 1 桁で
+# `SMALL_NUMBER_MAX = 9` の床に隠れるが、**2 桁を含む id が来たら偽の苦情になる**(実測で確かめた)。
+AGG_TAG_RE = re.compile(r"<!--\s*agg:\s*(.*?)\s*-->")
 POS_INNER_RE = re.compile(r"^(\d+)\s*/\s*(\d+)\s*付録\s*(\d+)(?:\s+(.+))?$")
 
 # 指し手の表記(report-pdf/render_whatif.py の move_kanji と同じ形)。▲/△ + (同 or マス) + 駒 + (成/打)?
@@ -1580,6 +1588,8 @@ def scan_numbers(line, small_max=None):
     # `<!-- pos: G/P 付録N -->` の印の中の数字(検査 7)は、検査 1 の対象から外す(`menu` の印と同じ扱い。
     # 印の全体を空白に置き換えるので、G・P・N のどれも「文中の数の主張」としては見ない)。
     scan_line = POS_TAG_RE.sub(lambda m: " " * len(m.group(0)), line)
+    # `<!-- agg: <id> -->` の印(検査 (x))も同じ扱い ― **id の中の数字を文中の数の主張として見ない**
+    scan_line = AGG_TAG_RE.sub(lambda m: " " * len(m.group(0)), scan_line)
     # 日付(YYYY-MM-DD。見出し・作成日の表記)は「文中の数の主張」ではないので対象から外す
     # (実装担当の判断。表題行の「2026-09-24」等が「データに無い数」として誤検知するのを防ぐ。
     # 報告する原文(line)はそのまま、数を探す側だけ日付を消す)。

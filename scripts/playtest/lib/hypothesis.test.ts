@@ -18,7 +18,7 @@ import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 import { validate } from "./eventSchema.js";
-import { loadHypothesisBannedWords, loadHypothesisSchema, loadObsRegistry, validateHypothesisLine, type CheckResult, type HypothesisCheckName } from "./hypothesis.js";
+import { checkResultLines, loadHypothesisBannedWords, loadHypothesisSchema, loadObsRegistry, validateHypothesisLine, type CheckResult, type HypothesisCheckName } from "./hypothesis.js";
 
 type Json = Record<string, unknown>;
 
@@ -92,10 +92,14 @@ describe("H-3 反証を試みたことの記録", () => {
 });
 
 describe("H-4 予測は数で、測る前に書く", () => {
-  it("通る: today 2026-09-25 で基準の例は 9/9 通る(writtenAt(2026-09-25) <= today)", () => {
+  it("通る: today 2026-09-25 で基準の例は 10/10 通る(writtenAt(2026-09-25) <= today)", () => {
     const results = checksOf(BASE_LINE);
-    expect(results).toHaveLength(9);
+    // **検査の本数は 10**(schema + H-1〜H-9)。H-9(packet の照合)は 2026-09-30 に足した ―
+    // packet を渡していないので `skipped` の印が付く(**ok だが緑ではない**)
+    expect(results).toHaveLength(10);
     for (const result of results) expect(result, `${result.check}: ${result.messages.join(" / ")}`).toMatchObject({ ok: true });
+    const h9 = results.find((result) => result.check === "H-9")!;
+    expect(h9.skipped, "packet を渡していないのに未照合の印が無い").toBe(true);
   });
 
   it("落ちる: writtenAt を 2026-09-26 にすると H-4 だけ落ちる(他 8 は通る)", () => {
@@ -259,7 +263,7 @@ describe("版 0.2(expired)", () => {
       const line = JSON.parse(readFileSync(join(RECORDS_DIR, file), "utf-8")) as Json;
       expect(line.schemaVersion, file).toBe("0.1");
       const results = checksByVersion(line);
-      expect(results, file).toHaveLength(9);
+      expect(results, file).toHaveLength(10); // H-9 を足した(2026-09-30)
       expect(
         results.filter((r) => !r.ok).map((r) => r.check),
         `${file} の NG の並び`,
@@ -407,6 +411,11 @@ describe("CLI(hypothesisCheck.ts)", () => {
         });
         expect(stdout).toContain("schema ok");
         expect(stdout).not.toContain("NG");
+        // **CLI が表示の 1 か所(`checkResultLines`)を通っていること。**
+        // packet を渡していないので H-9 は `skip` ― ここが `H-9 ok` に戻ると、
+        // 記録(02-check.txt)を読む人が「照合して通った」と読む(独立監査の指摘。2026-09-30)。
+        expect(stdout).toContain("H-9 skip");
+        expect(stdout).not.toContain("H-9 ok");
 
         const badLine = clone(BASE_LINE);
         badLine.statement = "崩れは 31 回で、長考の割合は 56%でした。という読みです。";
@@ -427,4 +436,35 @@ describe("CLI(hypothesisCheck.ts)", () => {
     },
     60_000,
   );
+});
+
+describe("検査 1 件を人が読む行にする(状態の語は 1 か所)", () => {
+  it("n1 packet を渡していない H-9 は skip と書く(ok と書かない)", () => {
+    const lines = checkResultLines({
+      check: "H-9",
+      ok: true,
+      skipped: true,
+      messages: ["未照合: packet が渡されていないので packetRef を照合していない(参照 2 件)"],
+    });
+    expect(lines).toHaveLength(1);
+    expect(lines[0]!.startsWith("H-9 skip ")).toBe(true);
+    // **「ok」と読めないこと**(記録に残って人が読む行なので、ここが本題)
+    expect(lines[0]!).not.toContain(" ok ");
+    expect(lines[0]!).toContain("未照合");
+  });
+
+  it("n2 通った検査は ok、落ちた検査は NG(緩めていないことの裏)", () => {
+    expect(checkResultLines({ check: "H-9", ok: true, messages: [] })).toEqual(["H-9 ok"]);
+    expect(checkResultLines({ check: "H-1", ok: false, messages: ["あ", "い"] })).toEqual(["H-1 NG あ / い"]);
+  });
+
+  it("n3 報告(notes)を落とさない ― 状態の行とは別の行で出す", () => {
+    const lines = checkResultLines({
+      check: "H-9",
+      ok: true,
+      messages: [],
+      notes: ["observations[0]: この行は数え直せない"],
+    });
+    expect(lines).toEqual(["H-9 ok", "  (報告) observations[0]: この行は数え直せない"]);
+  });
 });

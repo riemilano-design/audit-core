@@ -16,7 +16,7 @@
 import { readFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { loadObsRegistry, validateHypothesisLine } from "./lib/hypothesis.js";
+import { checkResultLines, loadObsRegistry, validateHypothesisLine } from "./lib/hypothesis.js";
 
 const REPO_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..", "..");
 const USAGE = "使い方: npx tsx scripts/playtest/hypothesisCheck.ts <hypothesis.json>… --today YYYY-MM-DD [--obs-items <path>]";
@@ -76,7 +76,8 @@ function main(): void {
     console.log(`# ${file}`);
     // スキーマはここで固定しない。行の schemaVersion に対応する版を lib 側が選ぶ(STEP EXPO-1)。
     for (const result of validateHypothesisLine(line, { today: args.today, registry })) {
-      console.log(`${result.check} ${result.ok ? "ok" : "NG"} ${result.messages.join(" / ")}`.trimEnd());
+      // 状態の語は lib の 1 か所で決める(`skip` を `ok` と書かないため)
+      for (const text of checkResultLines(result)) console.log(text);
       if (!result.ok) anyFailed = true;
     }
   }

@@ -12,6 +12,7 @@ import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
 import { validate, type JsonSchema } from "./eventSchema.js";
 import { aggregateAgreementProblems, type AggregateRow } from "./observationAggregates.js";
+import { packetRefPathProblems } from "./packetRef.js";
 
 export const OBSERVATION_PACKET_CONTRACT = "observation-packet" as const;
 export const OBSERVATION_REQUEST_CONTRACT = "observation-request" as const;
@@ -165,4 +166,79 @@ export function packetIdProblems(packet: { packetId?: unknown; facts?: unknown; 
   const expected = packetIdOf(packet.facts, packet.aggregates);
   if (packet.packetId === expected) return [];
   return [`packetId が中身と合わない(封: ${String(packet.packetId)} / 中身から取った値: ${expected})`];
+}
+
+// ==================== packet の中の場所を引く(束 V-a。検証器の H-9 のため) ====================
+//
+// 【なぜここか】packet を読むのは自動化レーンの仕事(司令塔の境界。2026-09-30)。
+//   **path の文法(正規表現)は実験席の `lib/packetRef.ts`** が持つ ― ここでは**引き当てだけ**をやる。
+//   文法と引き当ての 2 つを同じ場所に置くと、**同じ規則が 2 か所に増える**(P-185 の型)。
+// 【観測は 1 つの数を指す】司令塔の決定(2026-09-30): 集計の行を指す path は
+//   `.numerator` / `.denominator` / `.value` の**どれかまで必ず書く**。
+//   `aggregates.<id>` 単独は**引き当てない**(どの数を指しているか決まらない)。
+//   **本編の印 `<!-- agg: id -->` は別** ― あちらは行を指すので id 単独でよい。
+// 【黙って通さない】引き当てられない path は理由を返す(`undefined` を「値が無い」と混ぜない)。
+// 【2026-09-30 の寄せ】文法の判定を自分でも書いていた(単独形を落とす・packet の外を落とす・形が読めない)。
+//   R2 が `lib/packetRef.ts` に文法を 1 か所で置いたので、**`packetRefPathProblems` を呼ぶだけにした** ―
+//   自分の側に残すと、文法を直したとき**こちらだけ古い判定で黙る**(P-185 の 2 か所の型)。
+
+export type ResolvedPacketPath = { readonly ok: true; readonly value: unknown } | { readonly ok: false; readonly reason: string };
+
+/** `facts.moves[3].usi` の形を鍵と添字の列にする(`[` `]` と `.` だけを見る。文法の判定はしない) */
+function pathSteps(path: string): (string | number)[] | undefined {
+  const steps: (string | number)[] = [];
+  for (const part of path.split(".")) {
+    if (part === "") return undefined;
+    const match = /^([A-Za-z0-9_]+)((?:\[\d+\])*)$/.exec(part);
+    if (match === null) return undefined;
+    steps.push(match[1]!);
+    for (const index of match[2]!.matchAll(/\[(\d+)\]/g)) steps.push(Number(index[1]));
+  }
+  return steps;
+}
+
+/**
+ * packet の中の場所を引く。**集計の行は数の欄まで書かせる**(上のコメントの決定)。
+ * 事実の行は `facts.<列>[n].<欄>`(`facts.recognition.rows[n].<欄>` も同じ形で引ける)。
+ */
+export function resolvePacketPath(packet: unknown, path: string): ResolvedPacketPath {
+  if (packet === null || typeof packet !== "object") return { ok: false, reason: "packet が無い" };
+  const record = packet as Record<string, unknown>;
+  // 文法は実験席の 1 か所(単独形・packet の外・読めない形はここで落ちる)
+  const grammar = packetRefPathProblems(path);
+  if (grammar.length > 0) return { ok: false, reason: grammar[0]! };
+  const steps = pathSteps(path);
+  if (steps === undefined) return { ok: false, reason: `path の形が読めない: ${path}` };
+  const head = steps[0];
+
+  if (head === "aggregates") {
+    const last = steps[steps.length - 1] as string;
+    const id = steps.slice(1, -1).join(".");
+    const rows = record.aggregates;
+    if (!Array.isArray(rows)) return { ok: false, reason: "packet に aggregates が無い" };
+    const row = (rows as Record<string, unknown>[]).find((candidate) => candidate.id === id);
+    if (row === undefined) return { ok: false, reason: `集計に ${id} の行が無い` };
+    if (!Object.hasOwn(row, last)) return { ok: false, reason: `集計の ${id} に ${last} が無い(分数の行と単独の数の行を取り違えていないか)` };
+    return { ok: true, value: row[last] };
+  }
+
+  let current: unknown = record;
+  const walked: string[] = [];
+  for (const step of steps) {
+    walked.push(String(step));
+    if (typeof step === "number") {
+      if (!Array.isArray(current)) return { ok: false, reason: `${walked.join(".")} は列でない` };
+      if (step >= current.length) return { ok: false, reason: `${walked.join(".")} は列の外(長さ ${current.length})` };
+      current = current[step];
+      continue;
+    }
+    if (current === null || typeof current !== "object" || Array.isArray(current)) {
+      return { ok: false, reason: `${walked.join(".")} を引けない` };
+    }
+    if (!Object.hasOwn(current as Record<string, unknown>, step)) {
+      return { ok: false, reason: `${walked.join(".")} が packet に無い` };
+    }
+    current = (current as Record<string, unknown>)[step];
+  }
+  return { ok: true, value: current };
 }

@@ -23,7 +23,9 @@
 
 import { readFileSync } from "node:fs";
 import { validate, type JsonSchema } from "./eventSchema.js";
-import { PACKET_OBS_ID_PREFIX, isPacketObsId, packetRefPathProblems } from "./packetRef.js";
+import { recountRowProblems } from "./observationAggregates.js";
+import { canonicalJson, resolvePacketPath } from "./observationPacket.js";
+import { AGGREGATE_PARTS, PACKET_OBS_ID_PREFIX, isPacketObsId, packetRefPathProblems } from "./packetRef.js";
 import { HYPOTHESIS_SCHEMA_VERSION, KNOWN_HYPOTHESIS_SCHEMA_VERSIONS } from "./schemaVersions.js";
 import { SEARCH_COLUMNS } from "./timeSearch.js";
 
@@ -172,12 +174,35 @@ export function loadObsRegistry(mdPath: string): Set<string> {
   return ids;
 }
 
-export type HypothesisCheckName = "schema" | "H-1" | "H-2" | "H-3" | "H-4" | "H-5" | "H-6" | "H-7" | "H-8";
+export type HypothesisCheckName = "schema" | "H-1" | "H-2" | "H-3" | "H-4" | "H-5" | "H-6" | "H-7" | "H-8" | "H-9";
 
 export interface CheckResult {
   check: HypothesisCheckName;
   ok: boolean;
   messages: string[];
+  /**
+   * **回していない**(材料が渡されていないので判定できない)。`ok` は true だが**緑ではない** ―
+   * 読む側(道具・人)に「見ていない」と見せるための印(H-9 は packet が無ければ照合できない)。
+   * **無い検査を「通った」と読ませない**ためにこの欄を足した(束 V-a。2026-09-30)。
+   */
+  skipped?: boolean;
+  /** 落とさないが採る側(⑤)に見せること(例: 数え直せない集計行を根拠にしている。司令塔の決定 2026-09-30) */
+  notes?: string[];
+}
+
+/**
+ * 検査 1 件を**人が読む行**にする(呼ぶ側が状態の語を自分で組まない)。
+ *
+ * **`skipped` を「ok」と書かない。**この行はレーンの記録(`02-check.txt`)に残って人が読むので、
+ * 「packet と照合して通った」と「照合していない」が同じ語に見えると、**無い検査を通ったと読む** ―
+ * この束(V-a)が閉じようとしている穴そのものである(独立監査の指摘。2026-09-30)。
+ * `notes`(落とさないが採る側に見せること)も**落とさない** ― 黙ると「数え直せない行を根拠にした」が消える。
+ */
+export function checkResultLines(result: CheckResult): string[] {
+  const state = result.skipped === true ? "skip" : result.ok ? "ok" : "NG";
+  const lines = [`${result.check} ${state} ${result.messages.join(" / ")}`.trimEnd()];
+  for (const note of result.notes ?? []) lines.push(`  (報告) ${note}`);
+  return lines;
 }
 
 // ---- 小さな安全なアクセサ(型が違っても例外を投げず、通れなかった理由を messages に積む側で使う) ----
@@ -578,6 +603,78 @@ function resolveSchema(line: unknown, override?: JsonSchema): { schema: JsonSche
   return { schema: loadHypothesisSchema(version) };
 }
 
+// ---- H-9: packetRef の実在と値の一致(自動化レーンの検証器。束 V-a) ----
+//
+// 【何を見るか】席が「packet にこの数が在る」と言った場所を**こちらが packet を開いて確かめる。**
+//   (a) path が引き当てられる、(b) `observations[].value` が packet の値と同じ、
+//   (c) 集計の行を根拠にしたなら**その行を数え直す**(束 D の数え直しを 1 行に絞って呼ぶ)。
+// 【文法は見ない】path の文法は `lib/packetRef.ts`(実験席の module)が 1 か所で持ち、**H-2 が見る。**
+//   ここは**実在と値**だけ ― 同じ規則を 2 か所に置かない(司令塔の条件 2026-09-30)。
+// 【観測は 1 つの数】集計の行を指す path は `.numerator` / `.denominator` / `.value` まで書く
+//   (司令塔の決定 2026-09-30)。**引き当ての規則は `resolvePacketPath` の側**に書いてある。
+// 【packet が渡されなければ回さない】`skipped` の印を付けて返す ― **緑にはしない。**
+
+/** packetRef を持つ観測を全部集める(本体の観測と、反証の項目の観測) */
+function packetRefObservations(line: unknown): Array<{ at: string; path: string; value: unknown }> {
+  const out: Array<{ at: string; path: string; value: unknown }> = [];
+  const collect = (list: unknown, at: string): void => {
+    asArray(list).forEach((obs, index) => {
+      const path = asString(get(obs, ["packetRef", "path"]));
+      if (path === undefined) return;
+      out.push({ at: `${at}[${index}]`, path, value: get(obs, ["value"]) });
+    });
+  };
+  collect(get(line, ["observations"]), "observations");
+  asArray(get(line, ["counterEvidence", "items"])).forEach((item, index) => {
+    collect(get(item, ["observations"]), `counterEvidence.items[${index}].observations`);
+  });
+  return out;
+}
+
+function checkH9(line: unknown, packet: unknown): CheckResult {
+  const observations = packetRefObservations(line);
+  if (packet === undefined || packet === null) {
+    return {
+      check: "H-9",
+      ok: true,
+      skipped: true,
+      messages: [`未照合: packet が渡されていないので packetRef を照合していない(参照 ${observations.length} 件)`],
+    };
+  }
+  const messages: string[] = [];
+  const notes: string[] = [];
+  for (const observation of observations) {
+    const resolved = resolvePacketPath(packet, observation.path);
+    if (!resolved.ok) {
+      messages.push(`${observation.at}: ${resolved.reason}`);
+      continue;
+    }
+    if (canonicalJson(observation.value) !== canonicalJson(resolved.value)) {
+      messages.push(`${observation.at}: value が packet と違う(行 ${JSON.stringify(observation.value)} / packet ${JSON.stringify(resolved.value)})`);
+    }
+    // 集計の行を根拠にしたなら、その行を数え直す(母集団のとおりに数えた数か)
+    const aggregateId = aggregateIdOf(observation.path);
+    if (aggregateId !== undefined) {
+      const recount = recountRowProblems(packet as { facts?: unknown; aggregates?: unknown }, aggregateId);
+      for (const problem of recount.problems) messages.push(`${observation.at}: ${problem}`);
+      for (const note of recount.notes) notes.push(`${observation.at}: ${note}`);
+    }
+  }
+  const result: CheckResult = { check: "H-9", ok: messages.length === 0, messages };
+  if (notes.length > 0) result.notes = notes;
+  return result;
+}
+
+/** `aggregates.<id>.numerator` → `<id>`(集計の行を指していなければ undefined) */
+function aggregateIdOf(path: string): string | undefined {
+  if (!path.startsWith("aggregates.")) return undefined;
+  const parts = path.slice("aggregates.".length).split(".");
+  const last = parts[parts.length - 1];
+  if (last === undefined || !(AGGREGATE_PARTS as readonly string[]).includes(last)) return undefined;
+  const id = parts.slice(0, -1).join(".");
+  return id === "" ? undefined : id;
+}
+
 /**
  * スキーマ照合 + H-1〜H-8 を全部回して全部返す(最初で止めない)。スキーマが落ちても H は回す。
  *
@@ -586,7 +683,7 @@ function resolveSchema(line: unknown, override?: JsonSchema): { schema: JsonSche
  */
 export function validateHypothesisLine(
   line: unknown,
-  opts: { today: string; registry: Set<string>; schema?: JsonSchema; bannedWords?: readonly string[] },
+  opts: { today: string; registry: Set<string>; schema?: JsonSchema; bannedWords?: readonly string[]; packet?: unknown },
 ): CheckResult[] {
   const resolved = resolveSchema(line, opts.schema);
   const schemaErrors = "error" in resolved ? [resolved.error] : validate(line, resolved.schema);
@@ -600,5 +697,6 @@ export function validateHypothesisLine(
     checkH6(line),
     checkH7(line),
     checkH8(line),
+    checkH9(line, opts.packet),
   ];
 }
