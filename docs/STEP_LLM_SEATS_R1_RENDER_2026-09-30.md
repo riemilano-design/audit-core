@@ -20,6 +20,8 @@
 
 ## 2. `seat_input.md` の形(節の順は計画 §1.1。小さい節を先、大きい表を後)
 
+**差し替え(2026-09-30、R2 の中。司令塔の決定)**: §2 の集計は **数ごとに 1 行**(分数は `aggregates.<id>.numerator` と `.denominator` の 2 行、単独の数は `.value`。26 集計 → 37 行)。名前・母集団・出どころの局は分子の行にだけ書く。理由と実測は LOG §7 の差し替えの行。以下の図の「集計(aggregates、26 行)」「aggregates.<id>」はこの差し替えで読み替える。
+
 ```
 <1 行目>  対象: 〇〇さん(符号 c5)。持ち時間 180 秒の組・25 局。線の組: ahead_cp=300 centipawns; long_think_sec=10 seconds; …   ← S-2(request と provenance.thresholds から。無ければ止まる)
 <指示文>  docs/LLM_SEATS_INSTRUCTION_v1 のバイト列そのまま(sha256 が固定値 3b09bec2… と違えば止まる)

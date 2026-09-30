@@ -344,4 +344,60 @@
 - 独立監査(step-auditor)1 回目: **REVISE 1 点**。監査が自分で render を回し直し(バイト数・行数・集計 26/26・決定性を独立に再現)、変異 3 本(pv を漏らす・`@` の検査行を消す・配列の再帰を消す)で試験が赤くなることを確かめたうえで、**`dataLinesOf`(ファイルから読み直す口)が `# (A)` から後ろだけを切り出していて 1 行目(符号・持ち時間・局数・線の組の値)が検査から落ちている**ことを実物で示した(1 行目の 180 を 999999 にしても緑)。線の組の値は本文で 1 行目にしか出ないので、読み直しの口はそれを一度も packet と突き合わせていなかった。render の内側の検査(`e.data`)とは食い違い。**私の試験・変異はどれも 1 行目を狙っていなかった**(校正の道具の穴は、その道具で作った緑からは見えない)。
 - **直し**: `dataLinesOf` が 1 行目を含むようにし、試験を 1 本追加(1 行目の 180→999999・300→301 で読み直しの口が 2 件挙げる)→ 25/25。実物で校正 1(差 0)・校正 5(バイト一致、sha 変わらず `93e45565…`)を回し直し、変異 M7(実物の 1 行目 180→999999)を追加 → `数「999999」が本文に 1 回、packet + request には 0 回` で赤。M2 も引き続き赤。
 - 監査の付記(自己申告): 監査中 `git add --intent-to-add` を一時使用し `git reset` で戻した、変異はバックアップから復元し差分 0。
+- **差し替え(2026-09-30、R2 の中で。司令塔の決定)**: 自動化レーンが H-9 の実測で継ぎ目の衝突を見つけた ― §2 の集計を `aggregates.<id>` 単独で写すと、分子と分母のどちらを引いたかが決まらず H-9 で 26 行すべて引けない(数ごとの形なら 37/37)。**集計を数ごと 1 行**(分数は `.numerator` と `.denominator` の 2 行、単独の数は `.value`)に変え、`aggregateRef(id, part)` と文法(`lib/packetRef.ts`、1 か所)も同じ形にした。名前・母集団・出どころの局は分子の行にだけ書く(同じ値を 2 度写さない)。回し直しの実測: `seat_input.md` **224,907 バイト・211,946 字・概算 70,649 トークン**、sha256 **`19f2cca0da6fa131f3435c7d9afe838c9ffcbefd135d1d7ab1da5bac3f73a632`**、§2 は 37 行。校正 1(差 0)・2(行数一致、§2 = 37)・**3 = 37/37**(`| aggregates.<id>.<part> | 分子|分母|値 | 値 |` が全部そのまま)・4(実名 0・@ 0・/Users 0)・5(2 回でバイト一致、runId 違いは末尾 1 行)すべて予測どおり。
 - 独立監査 2 回目: **GO**。監査が直しの部分だけを手で外して新設の試験が赤くなること(ダミーでないこと)を確かめ、実物で 1 行目の 999999 が検出されること、note の行・線の組の id 行・inputs の path 行が読み直しの口に含まれること、全体 1957 本緑・typecheck の赤は既知の 10 だけ(監査の手元では他レーンの差分が無い状態)を独立に確認。GO の対象は lib・試験・CLI・LOG・計画で、他レーンの未コミット差分は含まない。
+
+## 8. 3 席 LLM API ― 束 R2(席の出力の契約: hypothesis.v0.4 + 封筒 seat-output.v0.1 + 席の出力側の契約検査)の実装と実測(2026-09-30)
+
+計画 [STEP_LLM_SEATS_R2_CONTRACT](STEP_LLM_SEATS_R2_CONTRACT_2026-09-30.md)(57a6b31、司令塔 GO + 判断 4 点: H-2 は `packet.` を文法で / pattern を `[a-z][0-9]+` に / kind 無しは hypothesis / writtenAt は道具)。**LLM は呼んでいない・packet を読まない**(実在は H-9 = 自動化レーン)。
+
+### 8.1 作ったもの
+
+| 物 | 場所 | 中身 |
+|---|---|---|
+| 文法(1 か所) | `scripts/playtest/lib/packetRef.ts` | `AGGREGATE_REF_RE`(`aggregates.<id>.numerator|denominator|value`)・`FACTS_REF_RE`(`facts.<列>[添字].欄名…`、recognition は `rows|definitions[添字]`)・`aggregateRef(id, part)`・`packetRefPathProblems`・`PACKET_OBS_ID_PREFIX`。observationPacket* を import しない(試験が見る)。R1 の render・R2 の E-4・H-2 の分岐・レーンの H-9 が同じ定数を読む(司令塔の条件) |
+| 契約 v0.4 | `schemas/hypothesis.v0.4.schema.json`(v0.3 から生成、足すだけ)、`lib/schemaVersions.ts` の KNOWN に `"0.4"`(既定は据え置き) | kind・factOrHypothesis・origin・requestRef・observations[].packetRef・actionCandidate・neededObservation・internal、prediction は任意、pattern は `[a-z][0-9]+` |
+| 検査の版分岐 | `lib/hypothesis.ts` | v0.4 の行だけ: H-2(`packet.` は文法、obsId = `packet.` + path)・H-4(finding / action_candidate / unanswerable / needed_observation は予測が無くてよい)・H-5(fact / finding は読みの形を要らず、読みの語を混ぜたら落ちる)。v0.1〜v0.3 の判定は変えない |
+| 封筒 | `schemas/seat-output.v0.1.schema.json`(道具が保存する形)・`schemas/seat-output.llm.v0.1.schema.json`(席が書く形。provenance・subject・knowledge・hypothesisId・status・obsId・writtenAt・run は無い) | ― |
+| lib | `lib/seatOutput.ts` | `completeSeatOutput`(席の形 → 封筒。決定的。数を作らない。`structuredClone` で写してから組む)、`seatOutputProblems`(E-1 到達 / E-2 答え・missing 必須 / E-3 行 = schema v0.4 + H-1〜H-8 + kind の必須 / E-4 文法 / E-5 隔離 / E-6 内部 / E-7 run) |
+| CLI | `scripts/playtest/seatOutputCheck.ts` | `--seat-output --meta --request --today [--obs-items]`。1 本でも落ちれば終了コード 1 |
+| 試験 | `lib/seatOutput.test.ts`(19)・`lib/packetRef.test.ts`(4)・`lib/seatInput.test.ts`(+2 = 27)。`hypothesis.test.ts` は触っていない(v0.4 の分岐の試験は seatOutput.test.ts の中) | 全体 **104 files / 1981 passed**(私の hunk だけの worktree)、typecheck の非 out の赤 0 |
+
+### 8.2 実装中に検査が捕まえたもの(直した)
+
+- 事実の列の文法が緩く `facts.time.bySpent[3].collapsed`(v0.1 の packet に無い列の書き方)を通した → **列の直後に添字を必須**にした(`facts.time[3].midSpentSec` は通り、`facts.time.bySpent[3]` は落ちる)。実在の照合ではなく packet の形(配列)の文法。
+- fixture の「第 1 候補」の 1 を H-1 が拾った(契約どおり)。fixture は「第一候補」に。**席への注意点**: statement の「第 1 候補」も数として H-1 に掛かる → 指示文 v1.1 に 1 句(または render の §0 の固定文)で伝える候補。
+- fixture の packetRef を 3 か所で共有していて、変異の試験が互いに漏れた(8 本が連鎖で赤)。fixture は毎回新しい object に。**同じ危うさが道具側にもあった**(封筒に席の object を参照のまま入れていた)→ `structuredClone`。試験: 封筒を直しても入力が変わらない。
+- 「内部の分岐 = 検査が 10 本」の赤 2 本は、共有ツリーに同居していた自動化レーンの未コミット H-9 によるもの(§8.4)。
+
+### 8.3 校正・変異(予測は計画 §6)
+
+| 校正 | 予測 | 実測 |
+|---|---|---|
+| 1 実験 1 の契約 6 本(v0.3)の schemaVersion を 0.4 にした写し | 6/6 で 9 検査 ok | **ok**(`hypothesisCheck.ts` 終了コード 0。元の v0.3 も 0)。試験にも固定 |
+| 2 最小の封筒(finding / hypothesis / unanswerable・問い 1)が E-1〜E-7 を通る | ok | ok。**実物の meta(5 人目、37 行の §2)と request でも CLI が「問題なし」** |
+| 3 `hypothesis.test.ts` の既存 31 本 | 変わらず緑 | 緑(worktree) |
+| 4 packet を読まない | import の一覧に無い | 試験が `from "./observation…"` と `readFileSync(…packet…)` の不在を見る |
+
+| 変異 | 予測 | 実測 |
+|---|---|---|
+| unanswerable の missing を空 | E-2 | E-2 の 1 件(CLI でも rc=1) |
+| packetRef.path を `facts.time.bySpent[3].collapsed` | E-4(文法) | **E-4 + E-3(H-2)の 2 件**(同じ文法を 2 か所から読むので両方落ちる。文法は 1 か所) |
+| 合言葉を 1 字 | E-1 | E-1 の 1 件 |
+| 隔離欄の数を statement に | E-5(H-1 も) | E-5 + H-1 の 2 件 |
+| fact の statement に「という読みです」 | E-3(H-5) | H-5 の分岐の 1 件 |
+| hypothesis から prediction を外す | E-3(H-4) | H-4 の 1 件 |
+| finding から prediction を外す・付ける | 通る | 通る(kind で必須が変わる) |
+| answers の中に internal | E-6 | **封筒の schema が先に落とす**(`additionalProperties: false`)。E-6 は schema をすり抜けた形の備え(計画の予測は半分外れ。記録) |
+| 席が書く形に provenance を入れる | 席が書く形で落ちる | 落ちる(`completeSeatOutput` も例外) |
+| itemId の重複 | ― | `completeSeatOutput` が例外(追加) |
+| 節を写さず omissions にも無い | E-1 | E-1 の 1 件(追加) |
+
+### 8.4 独立監査(step-auditor): **GO**
+
+監査が worktree で自分で回したもの: 全体 1981 本緑・typecheck 赤 0 / schema の差分(required から prediction を除いた 1 点以外は全部追加、additionalProperties false のまま)/ 校正 1(6 本 × v0.3・v0.4 とも exit 0)/ 校正 2(**監査が自分の script で封筒を組み直し**、実物の meta と request で「問題なし」)/ 変異 6 本(E-1・E-2・E-4+H-2・E-5+H-1・H-4・H-5)を自分のデータで再現、二重検出まで一致 / 実装を 3 か所消す変異(H-5 の fact 分岐・FACTS_REF_RE の添字必須・E-5 の塊)で対応する試験が赤くなること(11 本・1 本・1 本)を確かめ、バイト一致に復元。
+GO を妨げない指摘 2 点(直した・記録した): (1) partial の空 missing の専用試験が無かった → 1 本追加(20 本)。(2) scratchpad の smoke script `r2/make_env.ts` は古い meta(26 行版)を指したまま ― 実際の校正 2 は sed で置き換えた写しで回した(§8.3 の env_ok.json は 37 行版)。**再現の手順を書くときはこの script を指さない**。監査は独立に別の script で同じ結果を得た。
+
+### 8.5 共有ツリーの衝突とコミットの仕方
+
+作業ツリーの `lib/hypothesis.ts`・`lib/schemaVersions.ts`・`lib/hypothesis.test.ts` に自動化レーンの未コミット H-9 が同居していた(検査が 9 → 10 本になり、レーンの側の試験 2 本が赤)。司令塔の決定: **R2 が先**(レーンの H-9 が `packetRef.ts` を読む側)。私の hunk だけを HEAD から script で作り直し(scratchpad `r2/apply_mine.py`)、別 worktree で全体の試験・型検査を通し(1981 本緑・非 out の赤 0)、監査 GO の後、**私の版の blob を index に置いて**(`git hash-object` + `update-index`)`git diff --cached --stat` に私のファイルだけが載っていることを見てから commit。コミット後の共有ツリーの残差はレーンの hunk だけになる(1 行で報告)。

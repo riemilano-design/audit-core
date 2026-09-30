@@ -5,6 +5,7 @@
 import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import { OBSERVATION_PACKET_CONTRACT, OBSERVATION_PACKET_SCHEMA_VERSION, OBSERVATION_REQUEST_CONTRACT, observationPacketProblems, packetIdOf, validateObservationRequest } from "./observationPacket.js";
+import { AGGREGATE_REF_RE } from "./packetRef.js";
 import {
   INSTRUCTION_V1_SHA256, READING_GUIDE, SeatInputError, dataLinesOf, identifierProblems, numberInclusionProblems, numberTokens, renderSeatInput,
 } from "./seatInput.js";
@@ -110,14 +111,14 @@ describe("本文の形(節の順・行数・packetRef の文法)", () => {
   it("節は A → 0.3 → 1 … 8 の順で、行数は packet の配列の長さ", () => {
     const { meta } = render();
     expect(meta.sections.map((s) => s.section)).toEqual(["A", "0.3", "1", "2", "3", "4", "5", "6", "6.1", "7", "8"]);
-    expect(meta.sections.map((s) => s.rows)).toEqual([1, 3, 1, 2, 1, 1, 1, 1, 1, 2, 1]);
+    expect(meta.sections.map((s) => s.rows)).toEqual([1, 3, 1, 3, 1, 1, 1, 1, 1, 2, 1]); // 集計 2 本 = 分数 1(2 行)+ 単独 1(1 行)
     expect(meta.games).toBe(1);
   });
   it("見出しの行数と data 行の数が一致し、lastKey は最後の data 行の先頭 2 トークン", () => {
     const { text, meta } = render();
     for (const s of meta.sections) expect(text).toContain(`(${s.packetPath}、${s.rows} 行)`);
     expect(meta.sections.find((s) => s.section === "8")?.lastKey).toBe("g01 48");
-    expect(meta.sections.find((s) => s.section === "2")?.lastKey).toBe("aggregates.branches.total 分かれ道の総数");
+    expect(meta.sections.find((s) => s.section === "2")?.lastKey).toBe("aggregates.branches.total.value 値");
     expect([...meta.sections.find((s) => s.section === "A")!.lastKey].length).toBeLessThanOrEqual(60);
   });
   it("lastKey は 60 字で切る", () => {
@@ -133,9 +134,17 @@ describe("本文の形(節の順・行数・packetRef の文法)", () => {
     expect(text).toContain(INSTRUCTION.toString("utf-8").replace(/\n$/, ""));
     expect(text.indexOf("# (A) ")).toBeLessThan(text.indexOf("# (B) "));
   });
-  it("集計は aggregates.<id> の文法で写され、値・母集団・分子の条件がそのまま", () => {
+  it("集計は数ごと 1 行(aggregates.<id>.numerator / .denominator / .value)で写され、名前・母集団・分子の条件は分子の行にだけ", () => {
     const { text } = render();
-    expect(text).toContain("| aggregates.side_match.attack | 第 1 候補が攻めの手だった分かれ道のうち、実戦も攻めの手だった局面 | 1 / 1 | positions | branches / top1Side == \"attack\" / positions | - | null | false | true | null | g01 |");
+    expect(text).toContain("| aggregates.side_match.attack.numerator | 分子 | 1 | 第 1 候補が攻めの手だった分かれ道のうち、実戦も攻めの手だった局面 | positions | branches / top1Side == \"attack\" / positions | - | null | false | true | null | g01 |");
+    expect(text).toContain("| aggregates.side_match.attack.denominator | 分母 | 1 | - | positions | - | - | - | - | - | - | - |");
+    expect(text).toContain("| aggregates.branches.total.value | 値 | 1 | 分かれ道の総数 | positions | branches / - / positions | - | null | false | true | null | g01 |");
+  });
+  it("集計の列は packetRef の文法(1 か所の定数)に合う", () => {
+    const { text } = render();
+    const rows = text.split("\n").filter((line) => line.startsWith("| aggregates."));
+    expect(rows).toHaveLength(3);
+    for (const row of rows) expect(AGGREGATE_REF_RE.test(row.split("|")[1]!.trim()), row).toBe(true);
   });
   it("本人の手は局ごと 1 行、候補は局面ごと 1 行", () => {
     const { text } = render();

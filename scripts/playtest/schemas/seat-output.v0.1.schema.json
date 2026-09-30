@@ -1,0 +1,220 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "seat-output.v0.1.schema.json",
+  "title": "Seat Output v0.1",
+  "description": "STEP R2(docs/STEP_LLM_SEATS_R2_CONTRACT_2026-09-30.md §4)。3 席 LLM API の席 1 つの出力の封筒(道具が保存する形)。items[] の各要素は hypothesis.v0.4 の行で、中身は lib/hypothesis.ts の validateHypothesisLine が 1 行ずつ見る(この検証器に $ref が無いため schema では object に留める)。封筒の検査 E-1〜E-7 は lib/seatOutput.ts。**packet を読まない**(packetRef の実在は H-9 = 自動化レーンの検証器)。internal は items[] の中にだけ在ってよい(E-6)。",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "contract",
+    "schemaVersion",
+    "run",
+    "reach",
+    "items",
+    "answers",
+    "selfComputedNumbers",
+    "omissions"
+  ],
+  "properties": {
+    "contract": {
+      "const": "seat-output"
+    },
+    "schemaVersion": {
+      "const": "0.1"
+    },
+    "run": {
+      "type": "object",
+      "properties": {
+        "runId": {
+          "type": "string"
+        },
+        "seat": {
+          "enum": [
+            "gpt",
+            "gemini",
+            "claude"
+          ]
+        },
+        "model": {
+          "type": "string"
+        },
+        "modelVersion": {
+          "type": "string"
+        },
+        "inputSha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "instructionSha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "requestedAt": {
+          "type": "string"
+        },
+        "usage": {
+          "type": "object",
+          "properties": {
+            "inputTokens": {
+              "type": "integer"
+            },
+            "outputTokens": {
+              "type": "integer"
+            }
+          },
+          "required": [
+            "inputTokens",
+            "outputTokens"
+          ],
+          "additionalProperties": false
+        },
+        "finishReason": {
+          "type": "string"
+        },
+        "attempts": {
+          "type": "integer",
+          "minimum": 1
+        }
+      },
+      "required": [
+        "runId",
+        "seat",
+        "model",
+        "inputSha256",
+        "instructionSha256",
+        "requestedAt",
+        "usage",
+        "finishReason",
+        "attempts"
+      ],
+      "additionalProperties": false
+    },
+    "reach": {
+      "type": "object",
+      "properties": {
+        "passphrase": {
+          "type": "string"
+        },
+        "sections": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "section": {
+                "type": "string"
+              },
+              "lastKey": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "section",
+              "lastKey"
+            ],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": [
+        "passphrase",
+        "sections"
+      ],
+      "additionalProperties": false
+    },
+    "items": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "answers": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "questionId": {
+            "type": "string",
+            "pattern": "^q[0-9]+$"
+          },
+          "status": {
+            "enum": [
+              "answered",
+              "partial",
+              "unanswerable"
+            ]
+          },
+          "itemIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "reason": {
+            "type": "string"
+          },
+          "missing": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "what": {
+                  "type": "string"
+                },
+                "howToMeasure": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "what",
+                "howToMeasure"
+              ],
+              "additionalProperties": false
+            }
+          }
+        },
+        "required": [
+          "questionId",
+          "status",
+          "itemIds",
+          "missing"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "selfComputedNumbers": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "number"
+          },
+          "how": {
+            "type": "string"
+          },
+          "fromPaths": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "note": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "value",
+          "how",
+          "fromPaths"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "omissions": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  }
+}

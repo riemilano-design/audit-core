@@ -9,6 +9,7 @@
 // 【外へ出る入力】席は外部 API。実名は packet に元から無い(customerRef は符号)。符号 c5 と path の中の c5 は載せてよい(計画 §1.1 の監査の条件)。
 import { createHash } from "node:crypto";
 import { observationPacketProblems, requestAgreementProblems, validateObservationRequest } from "./observationPacket.js";
+import { aggregateRef } from "./packetRef.js";
 
 export const SEAT_INPUT_META_SCHEMA_VERSION = "0.1" as const;
 /** 指示文 v1(docs/LLM_SEATS_INSTRUCTION_v1_2026-09-30.md)の sha256。司令塔が文面を承認した版。変えるときは版を上げる */
@@ -93,7 +94,7 @@ export const READING_GUIDE: readonly string[] = [
   "- 側 `top1Side`・`actualSide`(attack / defense / both / none)は手の行き先だけで決まる印で、手の意味の判定ではない。`oppositeSide` = 第 1 候補と実戦の側が逆。",
   "- 分かれ道(branches)は、第 1 候補と実戦の手の差が線の組 `branch_min_loss_cp` 以上の本人の局面。`shallowVisible` = 浅い読み(線の組 `shallow_first_nodes` のノード数)で既に差が見えた局面。`firstVisibleNodes` = 差が見えた最小のノード数。",
   "- 時間: `spentSec` は棋譜に書かれた秒。長考は線の組 `long_think_sec` 以上、早指しは `quick_sec` 以下(集計の行の名前と population に定義がある)。",
-  "- 集計(aggregates)の各行は `id`・名前・値(分子 / 分母、または単独の数)・単位・母集団(population: どの facts から、どの条件で)・分子の条件・時間に依るか・facts から数え直せるか・出どころの局。**分母は population に書かれたとおりで、行の名前を読み替えない。**",
+  "- 集計(aggregates)は数ごとに 1 行。分数は分子の行と分母の行に分かれ、名前・母集団(population: どの facts から、どの条件で)・分子の条件・時間に依るか・facts から数え直せるか・出どころの局は分子の行にだけ書いてある。根拠に引くときは、その行の 1 列目(packetRef)と値をそのまま写す。**分母は population に書かれたとおりで、行の名前を読み替えない。**",
   "- 戦型の機械認識(recognition)は**すべて下書き(draft)の定義**による。`rows` は局ごとの署名(定義の id の列)と群の分類、`definitions` は判定に使った定義の写し(id・名前・側・型)。名前は定義にあるものだけ。",
   "- 第 1 候補は鍵名が top1 なだけで「正解」ではない。実戦が第 1 候補と違うことから、見落とし・苦手・知らないを読まない。",
 ];
@@ -305,14 +306,23 @@ export function renderSeatInput(args: RenderSeatInputArgs): { text: string; meta
       games.map((g) => [v(g.gameId), v(g.no), v(g.side), v(g.result), v(g.ending), v(g.ownPlyCount), v(g.totalPlyCount), v(g.timeLimitSec), v(g.mirrored), v(g.aheadAtAnyPoint)]));
   });
 
+  // 集計は**数ごとに 1 行**(司令塔の決定 2026-09-30): 分数は .numerator と .denominator の 2 行、単独の数は .value の 1 行。
+  // 席は 1 列目をそのまま packetRef.path に写す。名前・母集団・出どころの局は最初の行にだけ書く(同じ値を 2 度写さない ― 抽出の証拠を守る)。
   const aggregates = pk.aggregates as Row[];
-  section(e, "2", "集計", "aggregates.<id>", aggregates, () => {
-    table(e, ["packetRef(aggregates.<id>)", "名前", "値", "unit", "population(from / where / unit)", "numeratorWhere", "sumField", "timeDependent", "recountable", "recountNote", "derivedFrom"],
-      aggregates.map((a) => {
-        const pop = a.population as Row;
-        const value = typeof a.value === "number" ? v(a.value) : `${v(a.numerator)} / ${v(a.denominator)}`;
-        return [`aggregates.${v(a.id)}`, v(a.name), value, v(a.unit), `${v(pop.from)} / ${where(pop.where)} / ${v(pop.unit)}`, where(a.numeratorWhere), v(a.sumField), v(a.timeDependent), v(a.recountable), v(a.recountNote), list(a.derivedFrom)];
-      }));
+  const aggregateRows: string[][] = [];
+  for (const a of aggregates) {
+    const pop = a.population as Row;
+    const id = v(a.id);
+    const head = [v(a.name), v(a.unit), `${v(pop.from)} / ${where(pop.where)} / ${v(pop.unit)}`, where(a.numeratorWhere), v(a.sumField), v(a.timeDependent), v(a.recountable), v(a.recountNote), list(a.derivedFrom)];
+    const rest = ["-", v(a.unit), "-", "-", "-", "-", "-", "-", "-"];
+    if (typeof a.value === "number") aggregateRows.push([aggregateRef(id, "value"), "値", v(a.value), ...head]);
+    else {
+      aggregateRows.push([aggregateRef(id, "numerator"), "分子", v(a.numerator), ...head]);
+      aggregateRows.push([aggregateRef(id, "denominator"), "分母", v(a.denominator), ...rest]);
+    }
+  }
+  section(e, "2", "集計(数ごとに 1 行。分数は分子・分母の 2 行)", "aggregates.<id>.numerator|denominator|value", aggregateRows, () => {
+    table(e, ["packetRef", "どの数", "値", "名前", "unit", "population(from / where / unit)", "numeratorWhere", "sumField", "timeDependent", "recountable", "recountNote", "derivedFrom"], aggregateRows);
   });
 
   const time = facts.time as Row[];

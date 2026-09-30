@@ -23,6 +23,7 @@
 
 import { readFileSync } from "node:fs";
 import { validate, type JsonSchema } from "./eventSchema.js";
+import { PACKET_OBS_ID_PREFIX, isPacketObsId, packetRefPathProblems } from "./packetRef.js";
 import { HYPOTHESIS_SCHEMA_VERSION, KNOWN_HYPOTHESIS_SCHEMA_VERSIONS } from "./schemaVersions.js";
 import { SEARCH_COLUMNS } from "./timeSearch.js";
 
@@ -35,8 +36,18 @@ export function isKnownHypothesisSchemaVersion(value: unknown): value is Hypothe
 
 /** 契約 hypothesis の 1 行(観測 → 仮説 → 反証 → 予測)。設計案 §7.1。値の中身は検査 H-1〜H-8 が見る。 */
 export interface HypothesisLine {
-  /** 0.1・0.2・0.3。0.2 は `knowledge.reviewStatus` に `expired` を足した版(STEP EXPO-1)。0.3 は `lane` に `reply`・`fork` を足した版 */
+  /** 0.1・0.2・0.3・0.4。0.2 は `knowledge.reviewStatus` に `expired` を足した版(STEP EXPO-1)。0.3 は `lane` に `reply`・`fork` を足した版。0.4 は席の出力の欄を足した版(STEP R2。下の任意の欄) */
   schemaVersion: HypothesisSchemaVersion;
+  /** 0.4 から。項目の種類(無ければ hypothesis) */
+  kind?: HypothesisKind;
+  /** 0.4 から。事実と読みの区別(無ければ hypothesis) */
+  factOrHypothesis?: "fact" | "hypothesis";
+  origin?: { seat: "gpt" | "gemini" | "claude" | "integrator" | "human"; itemId?: string };
+  requestRef?: { questionId: string };
+  actionCandidate?: { text: string; derivedFrom: string[]; menuMatch: string | null };
+  neededObservation?: { what: string; whyNotInPacket: string; howToMeasure: string };
+  /** 席の自由分析。**検査は読まない**。下流の器は欄を持たない(人間の決定 2026-09-30) */
+  internal?: { reasoning: string; namesOutsideVocabulary?: string[] };
   hypothesisId: string;
   subject: { customer: string; groups: string[]; gamesCount: number };
   scope: "this_user" | "beginners_general";
@@ -50,7 +61,8 @@ export interface HypothesisLine {
     result: "stands" | "weakened" | "refuted" | "none_found";
     provenance: { inputs: string[] };
   };
-  prediction: {
+  /** 0.4 では schema 上は任意。H-4 が kind で必須を決める(hypothesis / answer_candidate は必須) */
+  prediction?: {
     writtenAt: string;
     window: string;
     metric: string;
@@ -69,11 +81,15 @@ export interface HypothesisLine {
   provenance: { gitHead: string | null; inputs: string[]; excludedInputs: string[] };
 }
 
+export type HypothesisKind = "finding" | "hypothesis" | "answer_candidate" | "action_candidate" | "unanswerable" | "needed_observation";
+
 export interface HypothesisObservation {
   obsId: string;
   path: string;
   value: unknown;
   unit?: string;
+  /** 0.4 から。packet の中の場所(文法は lib/packetRef.ts。実在は H-9 = 自動化レーンの検証器) */
+  packetRef?: { path: string; provenanceId?: string };
   derived?: {
     kind: "percent" | "share10" | "ratio";
     numerator: { obsId: string; value: number };
@@ -194,6 +210,30 @@ function asArray(value: unknown): unknown[] {
 function asStringArray(value: unknown): string[] {
   return asArray(value).filter((item): item is string => typeof item === "string");
 }
+
+// ---- 版と kind(0.4 の分岐に使う。0.1〜0.3 の行の判定は変えない) ----
+
+/** 0.4 以上の行か(版の分岐は「0.4 から」だけ。版の一覧に無い版は false) */
+function isV04OrLater(line: unknown): boolean {
+  const version = asString(get(line, ["schemaVersion"]));
+  return version !== undefined && isKnownHypothesisSchemaVersion(version) && version >= "0.4";
+}
+
+/** 0.4 の行の kind(無ければ hypothesis ― 司令塔の判断 2026-09-30) */
+function kindOf(line: unknown): string {
+  return asString(get(line, ["kind"])) ?? "hypothesis";
+}
+
+/** 事実の行か(factOrHypothesis: fact または kind: finding) */
+function isFactLine(line: unknown): boolean {
+  return asString(get(line, ["factOrHypothesis"])) === "fact" || kindOf(line) === "finding";
+}
+
+/** 予測が要らない kind(発見・行動候補・答えられない・追加の観測に「動く数」を書かせない) */
+const KINDS_WITHOUT_PREDICTION = new Set(["finding", "action_candidate", "unanswerable", "needed_observation"]);
+
+/** 事実の文に混ぜない読みの語 */
+const READING_WORDS = ["という読み", "可能性", "のでは", "と思われ", "かもしれ"] as const;
 
 // ---- H-1: 数の実在 ----
 
@@ -334,13 +374,40 @@ function collectObsIdsForH2(line: unknown): string[] {
   return ids;
 }
 
+/**
+ * 0.4 の分岐: `packet.` で始まる obsId は登録簿でなく **packetRef.path の文法**で見る(司令塔の判断 2026-09-30、STEP R2 §3)。
+ * obsId = `packet.` + packetRef.path であること・path が文法に合うこと。**path が packet に実在するかは見ない**(H-9 = 自動化レーン)。
+ * 0.3 以前の行では `packet.` の obsId も今までどおり登録簿で落ちる(判定を変えない)。
+ */
+function packetObsIdProblems(line: unknown): { messages: string[]; packetIds: Set<string> } {
+  const messages: string[] = [];
+  const packetIds = new Set<string>();
+  asArray(get(line, ["observations"])).forEach((obs, index) => {
+    const obsId = get(obs, ["obsId"]);
+    if (!isPacketObsId(obsId)) return;
+    const path = get(obs, ["packetRef", "path"]);
+    const problems = packetRefPathProblems(path);
+    for (const problem of problems) messages.push(`observations[${index}]: ${problem}`);
+    if (problems.length === 0 && obsId !== `${PACKET_OBS_ID_PREFIX}${String(path)}`) {
+      messages.push(`observations[${index}]: obsId「${obsId}」が packet. + packetRef.path「${String(path)}」と違う`);
+    }
+    packetIds.add(obsId);
+  });
+  return { messages, packetIds };
+}
+
 function checkH2(line: unknown, registry: Set<string>): CheckResult {
-  const unknownIds = [...new Set(collectObsIdsForH2(line))].filter((id) => !registry.has(id));
-  return {
-    check: "H-2",
-    ok: unknownIds.length === 0,
-    messages: unknownIds.length === 0 ? [] : [`登録簿に無い obsId: ${unknownIds.join(", ")}`],
-  };
+  const ids = [...new Set(collectObsIdsForH2(line))];
+  if (!isV04OrLater(line)) {
+    const unknownIds = ids.filter((id) => !registry.has(id));
+    return { check: "H-2", ok: unknownIds.length === 0, messages: unknownIds.length === 0 ? [] : [`登録簿に無い obsId: ${unknownIds.join(", ")}`] };
+  }
+  const packet = packetObsIdProblems(line);
+  const messages = [...packet.messages];
+  // packet. の id は observations に packetRef つきで在るものだけ(derived・counterEvidence から観測に無い packet. の id を引かない)
+  const unknownIds = ids.filter((id) => (isPacketObsId(id) ? !packet.packetIds.has(id) : !registry.has(id)));
+  if (unknownIds.length > 0) messages.push(`登録簿に無い obsId(packet. は observations の packetRef で裏づく): ${unknownIds.join(", ")}`);
+  return { check: "H-2", ok: messages.length === 0, messages };
 }
 
 // ---- H-3: 反証を試みたことの記録(「無い」を空で埋めない) ----
@@ -368,6 +435,8 @@ function checkH4(line: unknown, today: string): CheckResult {
   const messages: string[] = [];
   const prediction = get(line, ["prediction"]);
   if (!isRecord(prediction)) {
+    // 0.4 の分岐: 発見・行動候補・答えられない・追加の観測には予測が要らない(STEP R2 §3)。在れば今までどおり見る
+    if (isV04OrLater(line) && KINDS_WITHOUT_PREDICTION.has(kindOf(line))) return { check: "H-4", ok: true, messages: [] };
     return { check: "H-4", ok: false, messages: ["prediction が無い"] };
   }
   for (const field of PREDICTION_REQUIRED_FIELDS) {
@@ -402,7 +471,12 @@ function checkH5(line: unknown, bannedWords: readonly string[]): CheckResult {
       if (text.includes(word)) messages.push(`${source}: 禁止語「${word}」を含む`);
     }
   }
-  if (!(statement.includes("という読みです") || statement.includes("可能性があります"))) {
+  if (isV04OrLater(line) && isFactLine(line)) {
+    // 0.4 の分岐: 事実の行(factOrHypothesis: fact / kind: finding)は読みの形を要らない代わりに、読みの語を混ぜたら落ちる(STEP R2 §3)
+    for (const word of READING_WORDS) {
+      if (statement.includes(word)) messages.push(`事実の行(fact / finding)の statement に読みの語「${word}」を含む`);
+    }
+  } else if (!(statement.includes("という読みです") || statement.includes("可能性があります"))) {
     messages.push('statement が「という読みです」「可能性があります」の形でない');
   }
   return { check: "H-5", ok: messages.length === 0, messages };
