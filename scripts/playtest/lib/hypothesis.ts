@@ -174,7 +174,7 @@ export function loadObsRegistry(mdPath: string): Set<string> {
   return ids;
 }
 
-export type HypothesisCheckName = "schema" | "H-1" | "H-2" | "H-3" | "H-4" | "H-5" | "H-6" | "H-7" | "H-8" | "H-9";
+export type HypothesisCheckName = "schema" | "H-1" | "H-2" | "H-3" | "H-4" | "H-5" | "H-6" | "H-7" | "H-8" | "H-9" | "H-10";
 
 export interface CheckResult {
   check: HypothesisCheckName;
@@ -675,8 +675,181 @@ function aggregateIdOf(path: string): string | undefined {
   return id === "" ? undefined : id;
 }
 
+// ---- H-10: 形・戦法の名前が、その顧客の局で認識された名前か(束 V-b) ----
+//
+// 【何を見るか】席が文に書いた名前を、**packet の認識(`facts.recognition`)と突き合わせる。**
+//   名前の表 = `definitions[].name` / `nameKana` / `id`(**文字として**探す)。
+//   通す条件 = その名前を持つ定義の `name` が、**この顧客の局の `rows[].names` に在る**こと。
+// 【決めないこと】「どの定義か」は決めない ― 実測(2026-09-30)で**同名の定義が 6 件**あり、
+//   名前から定義は 1 対 1 でない。だから「名前が顧客の局の認識に在るか」だけを見る。
+// 【各位置で最長一致】実測で**他の名前の中に丸ごと入る名前が 49 組**(中飛車 ⊂ ゴキゲン中飛車)。
+//   素朴な部分一致は同じ文字列を 2 つの名前として数えるので、各位置で最長の語を採る。
+// 【通っても顧客に出せる名前ではない】`reviewStatus` は**定義の側**にあり、**顧客に出す段が見る**
+//   (実物は 114 件すべて `draft`)。H-10 は「使った名前が顧客の局の認識に在るか」だけの検査である。
+//   司令塔の指示(2026-09-30・伝聞)。
+// 【捕まえられない穴(埋めずに書き残す。司令塔了承)】
+//   - 名前の表に**無い**名前(席が作った名前・表に無い戦法名)は文字として一致しないので落ちない。
+//   - かな の短い語(`ひらめ` など)は**ふつうの日本語の中に偶然出る**ことがある(偽の当たり)。
+//     だから苦情には**当たった語と欄**を書き、人が見て分かる形にする。
+// 【見る欄は表で決める】下の 2 つの表(散文 / 機械の欄)で schema の文字列の欄を**全部**分類する。
+//   schema に欄が増えたら試験が赤くなる ― **黙って見ない欄が増える道を消すため。**
+
+/** H-10 が名前を探す欄(散文。人が読む文) */
+export const H10_PROSE_FIELDS = [
+  "statement",
+  "counterEvidence.items[].text",
+  "actionCandidate.text",
+  "neededObservation.what",
+  "neededObservation.whyNotInPacket",
+  "neededObservation.howToMeasure",
+] as const;
+
 /**
- * スキーマ照合 + H-1〜H-8 を全部回して全部返す(最初で止めない)。スキーマが落ちても H は回す。
+ * H-10 が名前を探さない欄(機械の欄・内部の欄)。**理由つきで分類する。**
+ * - `internal.reasoning`: 内部の自由分析。**顧客の文へ流れる道が構造で消えている**(規則 8 の (3))。
+ *   ここを見ると、顧客に届かない文で門が止まる。
+ * - `internal.namesOutsideVocabulary[]`: 席の自己申告。**申告を証拠にしない**(申告があっても通さない・
+ *   無くても落とさない)。見ると申告そのものを苦情にしてしまう。
+ * - 残りは id・path・単位・日付・入力のファイル名など、**人が読む文でない**欄。
+ */
+export const H10_NON_PROSE_FIELDS = [
+  "hypothesisId",
+  "subject.customer",
+  "subject.groups[]",
+  "origin.itemId",
+  "requestRef.questionId",
+  "observations[].obsId",
+  "observations[].path",
+  "observations[].value",
+  "observations[].unit",
+  "observations[].derived.numerator.obsId",
+  "observations[].derived.denominator.obsId",
+  "observations[].packetRef.path",
+  "observations[].packetRef.provenanceId",
+  "counterEvidence.items[].observations[].obsId",
+  "counterEvidence.items[].observations[].path",
+  "counterEvidence.items[].observations[].value",
+  "counterEvidence.items[].observations[].unit",
+  "counterEvidence.provenance.inputs[]",
+  "prediction.writtenAt",
+  "prediction.window",
+  "prediction.metric",
+  "prediction.alsoRequires[].metric",
+  "actionCandidate.derivedFrom[]",
+  "internal.reasoning",
+  "internal.namesOutsideVocabulary[]",
+  "knowledge.origin.kifu",
+  "knowledge.origin.lane",
+  "provenance.inputs[]",
+  "provenance.excludedInputs[]",
+] as const;
+
+/** 欄の道(`counterEvidence.items[].text` の形)をたどって、そこに在る文字列を全部集める */
+export function stringsAtField(line: unknown, field: string): Array<{ at: string; text: string }> {
+  let current: Array<{ at: string; value: unknown }> = [{ at: "", value: line }];
+  for (const step of field.split(".")) {
+    const isList = step.endsWith("[]");
+    const key = isList ? step.slice(0, -2) : step;
+    const next: Array<{ at: string; value: unknown }> = [];
+    for (const node of current) {
+      const value = get(node.value, [key]);
+      const at = node.at === "" ? key : `${node.at}.${key}`;
+      if (!isList) {
+        if (value !== undefined) next.push({ at, value });
+        continue;
+      }
+      asArray(value).forEach((item, index) => next.push({ at: `${at}[${index}]`, value: item }));
+    }
+    current = next;
+  }
+  const out: Array<{ at: string; text: string }> = [];
+  for (const node of current) {
+    if (typeof node.value === "string") out.push({ at: node.at, text: node.value });
+  }
+  return out;
+}
+
+/** 名前の表(語 → その語を持つ定義の `name` の集合)。packet の認識の定義から作る */
+export function recognitionNameCorpus(packet: unknown): Map<string, Set<string>> {
+  const corpus = new Map<string, Set<string>>();
+  for (const definition of asArray(get(packet, ["facts", "recognition", "definitions"]))) {
+    const name = asString(get(definition, ["name"]));
+    if (name === undefined) continue;
+    for (const key of ["name", "nameKana", "id"] as const) {
+      const word = asString(get(definition, [key]));
+      if (word === undefined || word === "") continue;
+      const names = corpus.get(word) ?? new Set<string>();
+      names.add(name);
+      corpus.set(word, names);
+    }
+  }
+  return corpus;
+}
+
+/** この顧客の局で認識された名前(`facts.recognition.rows[].names` の合併) */
+export function recognizedNames(packet: unknown): Set<string> {
+  const names = new Set<string>();
+  for (const row of asArray(get(packet, ["facts", "recognition", "rows"]))) {
+    for (const name of asArray(get(row, ["names"]))) {
+      const value = asString(name);
+      if (value !== undefined) names.add(value);
+    }
+  }
+  return names;
+}
+
+/** 文の中の名前を**各位置で最長一致**で拾う(同じ文字列を 2 つの名前として数えない) */
+export function namesInText(text: string, corpus: Map<string, Set<string>>): Array<{ at: number; word: string }> {
+  const out: Array<{ at: number; word: string }> = [];
+  let index = 0;
+  while (index < text.length) {
+    let longest: string | undefined;
+    for (const word of corpus.keys()) {
+      if (!text.startsWith(word, index)) continue;
+      if (longest === undefined || word.length > longest.length) longest = word;
+    }
+    if (longest === undefined) {
+      index += 1;
+      continue;
+    }
+    out.push({ at: index, word: longest });
+    index += longest.length;
+  }
+  return out;
+}
+
+function checkH10(line: unknown, packet: unknown): CheckResult {
+  if (packet === undefined || packet === null) {
+    return {
+      check: "H-10",
+      ok: true,
+      skipped: true,
+      messages: ["未照合: packet が渡されていないので名前を照合していない"],
+    };
+  }
+  const corpus = recognitionNameCorpus(packet);
+  const recognized = recognizedNames(packet);
+  const messages: string[] = [];
+  if (corpus.size === 0) {
+    return { check: "H-10", ok: true, skipped: true, messages: ["未照合: packet に認識の定義が無いので名前を照合していない"] };
+  }
+  for (const field of H10_PROSE_FIELDS) {
+    for (const node of stringsAtField(line, field)) {
+      for (const hit of namesInText(node.text, corpus)) {
+        const names = [...(corpus.get(hit.word) ?? new Set<string>())];
+        if (names.some((name) => recognized.has(name))) continue;
+        messages.push(
+          `${node.at}: 名前「${hit.word}」(${hit.at} 文字目)はこの顧客の局で認識されていない` +
+            `(認識された名前 ${recognized.size} 件のどれにも当たらない)`,
+        );
+      }
+    }
+  }
+  return { check: "H-10", ok: messages.length === 0, messages };
+}
+
+/**
+ * スキーマ照合 + H-1〜H-10 を全部回して全部返す(最初で止めない)。スキーマが落ちても H は回す。
  *
  * `opts.bannedWords` は H-5 の一覧の差し替え口(試験用)。渡されなければ
  * `report-pdf/check_answer.py` の `BANNED_WORDS` を読む(STEP H5-SYNC)。
@@ -698,5 +871,6 @@ export function validateHypothesisLine(
     checkH7(line),
     checkH8(line),
     checkH9(line, opts.packet),
+    checkH10(line, opts.packet),
   ];
 }

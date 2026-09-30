@@ -92,14 +92,17 @@ describe("H-3 反証を試みたことの記録", () => {
 });
 
 describe("H-4 予測は数で、測る前に書く", () => {
-  it("通る: today 2026-09-25 で基準の例は 10/10 通る(writtenAt(2026-09-25) <= today)", () => {
+  it("通る: today 2026-09-25 で基準の例は 11/11 通る(writtenAt(2026-09-25) <= today)", () => {
     const results = checksOf(BASE_LINE);
-    // **検査の本数は 10**(schema + H-1〜H-9)。H-9(packet の照合)は 2026-09-30 に足した ―
-    // packet を渡していないので `skipped` の印が付く(**ok だが緑ではない**)
-    expect(results).toHaveLength(10);
+    // **検査の本数は 11**(schema + H-1〜H-10)。H-9(packet の照合)と H-10(名前の照合)は
+    // 2026-09-30 に足した ― packet を渡していないのでどちらも `skipped` の印が付く
+    // (**ok だが緑ではない**)
+    expect(results).toHaveLength(11);
     for (const result of results) expect(result, `${result.check}: ${result.messages.join(" / ")}`).toMatchObject({ ok: true });
-    const h9 = results.find((result) => result.check === "H-9")!;
-    expect(h9.skipped, "packet を渡していないのに未照合の印が無い").toBe(true);
+    for (const check of ["H-9", "H-10"] as const) {
+      const result = results.find((candidate) => candidate.check === check)!;
+      expect(result.skipped, `${check}: packet を渡していないのに未照合の印が無い`).toBe(true);
+    }
   });
 
   it("落ちる: writtenAt を 2026-09-26 にすると H-4 だけ落ちる(他 8 は通る)", () => {
@@ -263,7 +266,7 @@ describe("版 0.2(expired)", () => {
       const line = JSON.parse(readFileSync(join(RECORDS_DIR, file), "utf-8")) as Json;
       expect(line.schemaVersion, file).toBe("0.1");
       const results = checksByVersion(line);
-      expect(results, file).toHaveLength(10); // H-9 を足した(2026-09-30)
+      expect(results, file).toHaveLength(11); // H-9・H-10 を足した(2026-09-30)
       expect(
         results.filter((r) => !r.ok).map((r) => r.check),
         `${file} の NG の並び`,

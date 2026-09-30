@@ -10,7 +10,8 @@ import { describe, expect, it } from "vitest";
 import { recountRowProblems } from "./observationAggregates.js";
 import { resolvePacketPath } from "./observationPacket.js";
 import { packetRefPathProblems } from "./packetRef.js";
-import { loadObsRegistry, validateHypothesisLine, type CheckResult } from "./hypothesis.js";
+import { KNOWN_HYPOTHESIS_SCHEMA_VERSIONS } from "./schemaVersions.js";
+import { H10_NON_PROSE_FIELDS, H10_PROSE_FIELDS, loadHypothesisSchema, loadObsRegistry, namesInText, recognitionNameCorpus, recognizedNames, stringsAtField, validateHypothesisLine, type CheckResult } from "./hypothesis.js";
 
 /**
  * 最小の packet(**数は facts から数えた値**にしてある ― 数え直しが通る形)。
@@ -219,5 +220,184 @@ describe("H-9(packetRef の実在と値の一致)", () => {
   it("m11 登録簿を読む口は前と同じ(H-9 を足しても他の検査の入口は変わらない)", () => {
     // `loadObsRegistry` は既存の入口(H-2 が使う)。H-9 を足しても引数の形は変えていない
     expect(typeof loadObsRegistry).toBe("function");
+  });
+});
+
+// ==================== H-10: 名前がその顧客の局で認識されたものか(束 V-b) ====================
+//
+// 【材料の数をそろえない】定義 5 件・行 3 件・認識された名前 2 件と**全部違う件数**にする ―
+// そろえると「別の列を返す変異」「件数を返す変異」が緑で通る(2026-09-29〜30 に 5 回踏んだ型)。
+// 【最長一致を測るための組は 2 通り要る】(2026-09-30 実測: 1 通りでは変異が黙った)
+// (a) **同じ位置で 2 語当たる**組 = `中飛車`(認識されていない)と `中飛車左穴熊`(認識されている)。
+//     短い方を先に置く ― 「最初に当たった語を採る」変異はここで赤くなる。
+//     最初は後方一致の組(`中飛車` ⊂ `ゴキゲン中飛車`)だけで測ろうとしたが、
+//     `中飛車` は 0 文字目に当たらないので**最長一致の行を通っていなかった**(変異が緑で通った)。
+// (b) **後方に入っている**組 = `中飛車` ⊂ `ゴキゲン中飛車`。
+//     当たった語の長さだけ進む(`index += longest.length`)ことを固定する ―
+//     1 文字ずつ進める変異なら、4 文字目の `中飛車` で苦情が出る。
+function recognitionPacket(): Record<string, unknown> {
+  return {
+    facts: {
+      recognition: {
+        definitions: [
+          { id: "nakabisha", name: "中飛車", nameKana: "なかびしゃ" },
+          { id: "gokigen", name: "ゴキゲン中飛車", nameKana: "ごきげんなかびしゃ" },
+          { id: "nakabisha_hidariana", name: "中飛車左穴熊", nameKana: "なかびしゃひだりあなぐま" },
+          { id: "yagura", name: "矢倉", nameKana: "やぐら" },
+          { id: "hirame", name: "平目", nameKana: "ひらめ" },
+          // **同名の定義**(実物に 6 件あった)。名前から定義は 1 対 1 でない
+          { id: "yagura2", name: "矢倉", nameKana: "やぐら" },
+        ],
+        rows: [
+          { gameId: "g01", names: ["ゴキゲン中飛車"] },
+          { gameId: "g02", names: ["矢倉", "中飛車左穴熊"] },
+          { gameId: "g03", names: [] },
+          { gameId: "g04", names: [] },
+        ],
+      },
+    },
+  };
+}
+
+function h10(line: unknown, packet?: unknown): { ok: boolean; messages: string[]; skipped?: boolean } {
+  const results = validateHypothesisLine(line, {
+    today: "2026-09-30",
+    registry: new Set<string>(),
+    packet,
+  });
+  return results.find((result) => result.check === "H-10")!;
+}
+
+describe("H-10 名前はその顧客の局で認識されたものか", () => {
+  it("h1 名前の表と、この顧客の局で認識された名前を packet から作る", () => {
+    const packet = recognitionPacket();
+    const corpus = recognitionNameCorpus(packet);
+    // 6 件の定義から 語 = name 5 種 + かな 5 種 + id 6 種 = 16(同名の 矢倉 は 1 つの語に合流)
+    expect(corpus.size).toBe(16);
+    expect([...(corpus.get("矢倉") ?? [])]).toEqual(["矢倉"]);
+    expect([...(corpus.get("やぐら") ?? [])]).toEqual(["矢倉"]);
+    const recognized = recognizedNames(packet);
+    expect([...recognized].sort()).toEqual(["ゴキゲン中飛車", "中飛車左穴熊", "矢倉"]);
+    // **件数をそろえない**(定義 6・行 4・認識された名前 3・語 16 と全部違う値にしてある。
+    // そろえる直しが入ったら赤くする ― 件数を返す変異が緑で通らないため)
+    expect(recognized.size).toBe(3);
+    for (const other of [corpus.size, 4, 6]) expect(recognized.size).not.toBe(other);
+  });
+
+  it("h2 認識された名前は通り、認識されていない名前は落ちる(欄と語を出す)", () => {
+    const packet = recognitionPacket();
+    expect(h10({ statement: "矢倉の形でした。という読みです。" }, packet).ok).toBe(true);
+    const bad = h10({ statement: "平目の形でした。という読みです。" }, packet);
+    expect(bad.ok).toBe(false);
+    expect(bad.messages).toHaveLength(1);
+    expect(bad.messages[0]!).toContain("平目");
+    expect(bad.messages[0]!).toContain("statement");
+  });
+
+  it("h3 各位置で最長一致(同じ位置で 2 語当たるとき長い方を採る)", () => {
+    const packet = recognitionPacket();
+    const corpus = recognitionNameCorpus(packet);
+    // (a) **同じ 0 文字目に `中飛車` と `中飛車左穴熊` の両方が当たる。**長い方は認識されている
+    expect(namesInText("中飛車左穴熊", corpus)).toEqual([{ at: 0, word: "中飛車左穴熊" }]);
+    expect(h10({ statement: "中飛車左穴熊でした。という読みです。" }, packet).messages).toEqual([]);
+    // (b) 後方に入っている短い名前を**別に数えない**(当たった語の長さだけ進む)
+    expect(namesInText("ゴキゲン中飛車", corpus)).toEqual([{ at: 0, word: "ゴキゲン中飛車" }]);
+    expect(h10({ statement: "ゴキゲン中飛車でした。という読みです。" }, packet).messages).toEqual([]);
+    // 短い方を単独で書けば、今までどおり落ちる(緩めていないことの裏)
+    expect(h10({ statement: "中飛車でした。という読みです。" }, packet).ok).toBe(false);
+  });
+
+  it("h4 かな と id でも当たる(名前の表は 3 つの欄の合併)", () => {
+    const packet = recognitionPacket();
+    expect(h10({ statement: "ひらめの形でした。" }, packet).ok).toBe(false);
+    expect(h10({ statement: "hirame の形でした。" }, packet).ok).toBe(false);
+    // 認識された名前の かな は通る(名前に写して判定している)
+    expect(h10({ statement: "やぐらの形でした。" }, packet).ok).toBe(true);
+  });
+
+  it("h5 packet が無い・認識の定義が無いときは skip(緑にしない)", () => {
+    const noPacket = h10({ statement: "平目の形でした。" });
+    expect(noPacket.skipped).toBe(true);
+    expect(noPacket.messages[0]!).toContain("未照合");
+    const noDefinitions = h10({ statement: "平目の形でした。" }, { facts: { recognition: { definitions: [], rows: [] } } });
+    expect(noDefinitions.skipped).toBe(true);
+    expect(noDefinitions.messages[0]!).toContain("認識の定義が無い");
+  });
+
+  it("h6 見る欄は散文だけ(内部の欄・機械の欄の名前で落とさない)", () => {
+    const packet = recognitionPacket();
+    // 内部の自由分析は顧客の文へ流れない(規則 8 の (3))ので見ない
+    expect(h10({ internal: { reasoning: "平目のように見える" } }, packet).ok).toBe(true);
+    // 席の自己申告も証拠にしない(見ない)
+    expect(h10({ internal: { reasoning: "あ", namesOutsideVocabulary: ["平目"] } }, packet).ok).toBe(true);
+    // 反証の項目の文と行動の文は見る
+    expect(h10({ counterEvidence: { items: [{ text: "平目の形でした。" }] } }, packet).ok).toBe(false);
+    expect(h10({ actionCandidate: { text: "平目を試す" } }, packet).ok).toBe(false);
+  });
+
+  it("h7 欄の道をたどって文字列を集める(列の添字つきで場所を言う)", () => {
+    const line = { counterEvidence: { items: [{ text: "あ" }, { text: "い" }, { noText: 1 }] } };
+    expect(stringsAtField(line, "counterEvidence.items[].text")).toEqual([
+      { at: "counterEvidence.items[0].text", text: "あ" },
+      { at: "counterEvidence.items[1].text", text: "い" },
+    ]);
+    expect(stringsAtField({}, "statement")).toEqual([]);
+    // 型が違っても落ちない(文字列でなければ集めない)
+    expect(stringsAtField({ statement: 3 }, "statement")).toEqual([]);
+  });
+
+  it("h9 1 語が 2 つの名前に対応するとき、どちらかが認識されていれば通す", () => {
+    // **どの定義かは決めない**のが H-10 の建て方(実測で同名の定義が 6 件あった)。
+    // かな が同じで名前が違う定義が来ると、その かな は 2 つの名前を指す ―
+    // **片方が認識されていれば、席が認識に無い名前を使ったとは言えない**(緩い側が正しい)。
+    // 【実物の今の材料では 0 件】(2026-09-30 実測: 1 語が複数の名前に対応する語は 0)。
+    // だから**ここだけの材料**で測る ― 実物が変わったとき(かなの重なる定義が入ったとき)に効く。
+    const packet = {
+      facts: {
+        recognition: {
+          definitions: [
+            { id: "yagura", name: "矢倉", nameKana: "やぐら" },
+            { id: "yagura_gakoi", name: "矢倉囲い", nameKana: "やぐら" },
+          ],
+          rows: [{ gameId: "g01", names: ["矢倉"] }],
+        },
+      },
+    };
+    // かな は {矢倉, 矢倉囲い} を指し、矢倉 だけが認識されている → 通す
+    expect(h10({ statement: "やぐらの形でした。" }, packet).ok).toBe(true);
+    // どちらも認識されていない packet なら落ちる(緩めきっていないことの裏)
+    const other = {
+      facts: {
+        recognition: {
+          definitions: packet.facts.recognition.definitions,
+          rows: [{ gameId: "g01", names: ["中飛車"] }],
+        },
+      },
+    };
+    expect(h10({ statement: "やぐらの形でした。" }, other).ok).toBe(false);
+  });
+
+  it("h8 schema の文字列の欄が 2 つの表で全部分類されている(黙って見ない欄を増やせない)", () => {
+    const leaves = new Set<string>();
+    const walk = (node: unknown, path: string): void => {
+      if (node === null || typeof node !== "object") return;
+      const record = node as Record<string, unknown>;
+      if (record.type === "string" && path !== "") leaves.add(path);
+      const properties = record.properties as Record<string, unknown> | undefined;
+      for (const [key, value] of Object.entries(properties ?? {})) walk(value, path === "" ? key : `${path}.${key}`);
+      if (record.items !== undefined) walk(record.items, `${path}[]`);
+      for (const key of ["oneOf", "anyOf", "allOf"] as const) {
+        for (const branch of (record[key] as unknown[]) ?? []) walk(branch, path);
+      }
+    };
+    for (const version of KNOWN_HYPOTHESIS_SCHEMA_VERSIONS) walk(loadHypothesisSchema(version), "");
+    const classified = new Set<string>([...H10_PROSE_FIELDS, ...H10_NON_PROSE_FIELDS]);
+    const unclassified = [...leaves].filter((leaf) => !classified.has(leaf)).sort();
+    expect(unclassified, "schema に文字列の欄が増えている ― 散文か機械の欄かを表に足すこと").toEqual([]);
+    // 表に在って schema に無い欄(消えた欄)も見る
+    const gone = [...classified].filter((field) => !leaves.has(field)).sort();
+    expect(gone, "表に在るのに schema に無い欄(消えた欄は表からも消す)").toEqual([]);
+    // 分類が空でないこと(両方の表を消す変異を赤にする)
+    expect(leaves.size).toBeGreaterThan(20);
   });
 });
