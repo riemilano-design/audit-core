@@ -44,7 +44,9 @@ export type DeliverStage =
   | "exit-gate"
   | "exit-render"
   | "exit-check"
-  | "check-delivery";
+  | "check-delivery"
+  // 器の単独束 C-1b(2026-09-30。司令塔の GO)。**渡す入れ物を段にする。**
+  | "exit-send";
 
 export const DELIVER_STAGES: readonly DeliverStage[] = [
   "pipeline-gate",
@@ -70,6 +72,8 @@ export const DELIVER_STAGES: readonly DeliverStage[] = [
   "exit-render",
   "exit-check",
   "check-delivery",
+  // **最後**に置く(局数を `patient_report_data.json` から読めるのはここ ― 司令塔の条件)。
+  "exit-send",
 ];
 
 /** 段ごとに起こす道具(呼び出し側が実際の実行ファイルへ対応させる)。`copy` と `gate` は子プロセスを起こさない。 */
@@ -93,6 +97,9 @@ export type DeliverTool =
   | "exit-body"
   | "check-structure"
   | "copy"
+  // **写して照合する**道具(C-1b)。`copy` と分ける ― `copy` は上書きするが、
+  // こちらは**行き先が在って中身が違えば止まる**(送付済みのものを黙って書き換えない)。
+  | "copy-verify"
   | "gate";
 
 // ---- 顧客フォルダの中の名前(司令塔が決めた固定の名前。判断を持たない) ----
@@ -151,6 +158,113 @@ export function deliverSendNames(games: number, groupLabel: string): { honbun: s
     honbun: `01_本編_対局後診断_${tail}.pdf`,
     appendix: `02_付録_数の出どころ_${tail}.pdf`,
   };
+}
+
+/** 送付用フォルダの場所。納品フォルダの**隣**に `<納品>_送付用/` を作る(実物 `deliver1_送付用/` と同じ形)。 */
+export function deliverSendPaths(out: string): { dir: string; originalDir: string; sendDir: string } {
+  const dir = `${out.replace(/[/\\]+$/, "")}_送付用`;
+  return {
+    dir,
+    originalDir: path.join(dir, DELIVER_SEND_DIRS.original),
+    sendDir: path.join(dir, DELIVER_SEND_DIRS.send),
+  };
+}
+
+/** `原本/` に置く 4 冊(**納品フォルダのままの名前**)。器の門が見た 3 冊 + 付録の表紙。 */
+export const DELIVER_ORIGINAL_KEYS = ["honbunPerson", "honbunSample", "exitCoverPdf", "exitAppendix"] as const;
+
+/**
+ * 段 `exit-send` が写す組([写す元, 行き先] の並び)。**動かさない ― 写すだけ。**
+ *
+ * 前半 4 組が `原本/`(名前はそのまま)、後半 2 組が `送付/`(`deliverSendNames` の名前)。
+ * **`送付/` は 2 冊だけ**(承認済みの 30 ページの形 = 本編 1 冊 + 付録 1 冊。正本 §3a)。
+ * 見本用と付録の表紙は `原本/` にだけ置く ― **見本用は他人に見せるもので、顧客に渡すものではない。**
+ */
+export function exitSendPairs(out: DeliverOutPaths, sendPaths: { originalDir: string; sendDir: string },
+                              games: number, groupLabel: string): [string, string][] {
+  const names = deliverSendNames(games, groupLabel);
+  const pairs: [string, string][] = [];
+  for (const key of DELIVER_ORIGINAL_KEYS) {
+    pairs.push([out[key], path.join(sendPaths.originalDir, path.basename(out[key]))]);
+  }
+  pairs.push([out.honbunPerson, path.join(sendPaths.sendDir, names.honbun)]);
+  pairs.push([out.exitAppendix, path.join(sendPaths.sendDir, names.appendix)]);
+  return pairs;
+}
+
+/**
+ * 段 `exit-send` が**局数を読むファイル**。**今回の組(`--work`)のもの**を指す。
+ *
+ * 【なぜ関数にするか】最初は `groupListOf(args)` の**最後の組**から取っていた ―
+ * これは**誤り**で、独立監査が実物の手順で再現した。`--group-work` は**持ち時間の昇順**に並べる
+ * (`scripts/playtest/README.md`)ので、**今回の組が一覧の途中や先頭に来る運用が正規**である
+ * (4 人目の顧客が実例)。末尾の組の局数を読むと、**顧客に渡す冊子のファイル名だけが別の局数になり、
+ * しかも rc=0 で静かに通る**(実測: 25 局の冊子に `…3分999局.pdf` という名前が付いた)。
+ * **この束の目的(取り違えを消す)そのものに反する。**
+ *
+ * 【既存の形に合わせる】`planDeliver` と同じ `groupPaths({ work: args.work, … })`(1171 行)。
+ * **新しい仮定を置かない** ― 一覧の並びに頼らず、`--work` から直に組を作る。
+ */
+export function exitSendPatientPath(args: Pick<DeliverArgs, "work" | "timeLimitSec" | "person">): string {
+  return groupPaths({ work: args.work, timeLimitSec: args.timeLimitSec }, args.person).patient;
+}
+
+/** 写しの判断に要る「見えているもの」だけ(書き込みはしない ― 書くのは呼び出し側)。 */
+export interface SendProbe {
+  exists(filePath: string): boolean;
+  /** 2 つのファイルの中身が**バイトで**同じか(どちらかが読めなければ false)。 */
+  sameBytes(a: string, b: string): boolean;
+  /** そのフォルダの `*.pdf` の**基底名**の一覧(名前の昇順。無いフォルダは空)。 */
+  pdfNamesIn(dirPath: string): string[];
+}
+
+export interface SendDecisions {
+  /** 実際に写す組。 */
+  copy: [string, string][];
+  /** すでに同じ中身が在るので写さない行き先。 */
+  skip: string[];
+  /** 止める理由(1 つでもあれば段は走らない)。 */
+  problems: string[];
+}
+
+/**
+ * 段 `exit-send` の判断(**書き込みの前に全部決める**)。司令塔の条件 4 つをここで満たす。
+ *
+ * 1. **写す元が無ければ止める**(「写したつもり」の空フォルダを作らない)。
+ * 2. **行き先が在って中身が違えば止める** ― 黙って上書きしない。
+ *    **同じなら写さない**(冪等。mtime だけ動かして「新しくなった」と見せない)。
+ * 3. **`送付/` に予定の 2 冊以外の PDF が在れば止める。** これが
+ *    「**既に送った顧客には回さない**」の実装である ― 送付済みのフォルダは
+ *    前の名前の冊子を持っているので、ここで必ず止まる。**旗ではなく実物で見る。**
+ * 4. 判断は**全部集めてから返す**(1 件目で投げない) ― 止まった理由を人が一度に読める。
+ */
+export function sendCopyDecisions(pairs: readonly [string, string][], sendDir: string,
+                                  probe: SendProbe): SendDecisions {
+  const copy: [string, string][] = [];
+  const skip: string[] = [];
+  const problems: string[] = [];
+  for (const [src, dst] of pairs) {
+    if (!probe.exists(src)) {
+      problems.push(`写す元が無い: ${src}`);
+      continue;
+    }
+    if (!probe.exists(dst)) {
+      copy.push([src, dst]);
+    } else if (probe.sameBytes(src, dst)) {
+      skip.push(dst);
+    } else {
+      problems.push(`行き先が在って中身が違う(上書きしない): ${dst}`);
+    }
+  }
+  const expected = new Set(pairs
+    .filter(([, dst]) => path.dirname(dst) === sendDir)
+    .map(([, dst]) => path.basename(dst)));
+  for (const name of probe.pdfNamesIn(sendDir)) {
+    if (!expected.has(name)) {
+      problems.push(`送付フォルダに予定外の PDF がある(既に渡した冊子かもしれない): ${name}`);
+    }
+  }
+  return { copy, skip, problems };
 }
 
 /**
@@ -1351,6 +1465,18 @@ export function planDeliver(args: DeliverArgs, probe: DeliverProbe, cmdOf: (tool
     args: checkDeliveryCommand(args.out, args.forbid),
     action: "run",
     reason: "伏せ字・個人情報・禁止語の検査(PDF 全冊と md)",
+  });
+
+  // 段 `exit-send`(C-1b。2026-09-30)。**引数は実行時に組む** ―
+  // 送付用の名前に**局数**が入り、局数は段 1 が作る `patient_report_data.json` から読むので、
+  // **計画を組むこの時点では読めないことがある**(`appendix3-final` と同じ理由)。
+  push({
+    stage: "exit-send",
+    tool: "copy-verify",
+    cmd: cmdOf("copy-verify"),
+    args: [],
+    action: "run",
+    reason: `渡す 2 冊を ${DELIVER_SEND_DIRS.send}/ へ写して名前を付ける(原本は ${DELIVER_SEND_DIRS.original}/ に納品のままの名前で)`,
   });
 
   return steps;

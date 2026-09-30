@@ -52,6 +52,11 @@ import {
   type KifuNameProblem,
   type PlannedDeliverStep,
   groupLabelOf,
+  deliverSendPaths,
+  exitSendPairs,
+  exitSendPatientPath,
+  sendCopyDecisions,
+  type SendProbe,
 } from "./lib/deliver.js";
 import { PipelineConfigError } from "./lib/pipeline.js";
 
@@ -160,6 +165,77 @@ function copyPairs(args: readonly string[]): number {
     mkdirSync(path.dirname(dst), { recursive: true });
     copyFileSync(src, dst);
   }
+  return 0;
+}
+
+/** 写しの判断に要る「見えているもの」(読み取りだけ)。**バイトで比べる** ― mtime や大きさでは見ない。 */
+const sendProbe: SendProbe = {
+  exists: (filePath) => existsSync(filePath),
+  sameBytes: (a, b) => {
+    try {
+      return readFileSync(a).equals(readFileSync(b));
+    } catch {
+      return false;
+    }
+  },
+  pdfNamesIn: (dirPath) => (existsSync(dirPath)
+    ? readdirSync(dirPath).filter((name) => name.toLowerCase().endsWith(".pdf")).sort()
+    : []),
+};
+
+/**
+ * 段 `exit-send`(C-1b。2026-09-30)。**渡す入れ物を作る。**
+ *
+ * `原本/` に納品のままの名前で 4 冊、`送付/` に `deliverSendNames()` の名前で 2 冊を**写す**。
+ * **動かさない**(元は納品フォルダに残る)。**写した直後にバイトで照合する** ―
+ * 「写したつもり」を作らない(司令塔の条件)。
+ *
+ * **局数はここで読む。**送付用の名前に局数が入り、`patient_report_data.json` は段 1 が作るので、
+ * 計画を組む時点では読めないことがある。**読めなければ止まる**(0 局の名前を作らない)。
+ */
+function runExitSend(args: DeliverArgs): number {
+  const out = deliverOutPaths(args.out);
+  // **今回の組(`--work`)の `patient`** を読む。**一覧の最後ではない** ―
+  // `--group-work` は持ち時間の昇順に並べるので、今回の組は途中や先頭に来ることがある
+  // (独立監査が実物の手順で再現。別の組の局数がファイル名に入り、rc=0 で静かに通った)。
+  const patientPath = exitSendPatientPath(args);
+  let games: unknown;
+  try {
+    games = (JSON.parse(readFileSync(patientPath, "utf-8")) as { summary?: { games?: unknown } })
+      .summary?.games;
+  } catch {
+    console.error(`局数が読めない(送付用の名前を決められない): ${patientPath}`);
+    return 1;
+  }
+  if (typeof games !== "number") {
+    console.error(`局数が数でない(送付用の名前を決められない): ${String(games)}`);
+    return 1;
+  }
+  const send = deliverSendPaths(args.out);
+  let pairs: [string, string][];
+  try {
+    pairs = exitSendPairs(out, send, games, groupLabelOf(args));
+  } catch (error) {
+    console.error(error instanceof DeliverArgError ? error.message : String(error));
+    return 1;
+  }
+  const decisions = sendCopyDecisions(pairs, send.sendDir, sendProbe);
+  if (decisions.problems.length > 0) {
+    for (const problem of decisions.problems) console.error(`- ${problem}`);
+    console.error(`[exit-send] ${decisions.problems.length} 件で止まりました(1 冊も書いていません)`);
+    return 1;
+  }
+  for (const [src, dst] of decisions.copy) {
+    mkdirSync(path.dirname(dst), { recursive: true });
+    copyFileSync(src, dst);
+    // **写した直後に照合する。**ここで違えば、写しが途中で切れたか別の何かが書いている。
+    if (!sendProbe.sameBytes(src, dst)) {
+      console.error(`写した後の照合が合わない: ${dst}`);
+      return 1;
+    }
+  }
+  console.log(`[exit-send] 写した ${decisions.copy.length} 件・同じ中身で飛ばした ${decisions.skip.length} 件`);
+  console.log(`[exit-send] ${send.sendDir} に ${games} 局の 2 冊`);
   return 0;
 }
 
@@ -385,6 +461,8 @@ async function main(): Promise<number> {
       rc = await runExitRender(args, step);
     } else if (step.stage === "deliverables-pdf") {
       rc = copyPairs(step.args);
+    } else if (step.stage === "exit-send") {
+      rc = runExitSend(args);
     } else if (step.stage === "appendix3-final") {
       rc = await runFinalPositions(args);
     } else {

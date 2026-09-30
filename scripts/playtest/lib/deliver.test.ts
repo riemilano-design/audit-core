@@ -19,6 +19,11 @@ import {
   deliverLogLineOf,
   deliverOutPaths,
   deliverSendNames,
+  deliverSendPaths,
+  DELIVER_ORIGINAL_KEYS,
+  exitSendPairs,
+  exitSendPatientPath,
+  sendCopyDecisions,
   directAnswersCommand,
   exitBodyCommand,
   exitCandidatesCommand,
@@ -698,11 +703,11 @@ describe("PERSON_REFERENT(P-174 (ウ))", () => {
 describe("stagesFrom", () => {
   it("--from が無ければ全段、あればその段から", () => {
     expect(stagesFrom(undefined)).toEqual([...DELIVER_STAGES]);
-    // 顧客向け出口の 4 段が入った(2026-09-29)。**最後の段は変わらず `check-delivery`**。
+    // 顧客向け出口の 4 段が入った(2026-09-29)。**最後の段は `exit-send`**(C-1b。2026-09-30)。
     expect(stagesFrom("answer-check")).toEqual([
       "answer-check", "answer-pdf",
       "exit-candidates", "exit-gate", "exit-render", "exit-check",
-      "check-delivery",
+      "check-delivery", "exit-send",
     ]);
   });
 
@@ -782,7 +787,7 @@ describe("planDeliver", () => {
     expect(resumed.map((s) => s.stage)).toEqual([
       "answer-check", "answer-pdf",
       "exit-candidates", "exit-gate", "exit-render", "exit-check",
-      "check-delivery",
+      "check-delivery", "exit-send",
     ]);
   });
 
@@ -1463,9 +1468,14 @@ describe("顧客向け出口の 4 段", () => {
   const thisGroup = groupPaths({ work: args.work, timeLimitSec: args.timeLimitSec }, args.person);
   const plan = materialPlanOf(args);
 
-  it("段は既存 17 段の後・check-delivery の直前に 4 つ入る(既存の順は動かない)", () => {
+  it("段は既存 17 段の後に入り、最後が exit-send(既存の順は動かない)", () => {
     const stages = [...DELIVER_STAGES];
-    expect(stages.slice(-5)).toEqual(["exit-candidates", "exit-gate", "exit-render", "exit-check", "check-delivery"]);
+    expect(stages.slice(-6)).toEqual(["exit-candidates", "exit-gate", "exit-render", "exit-check",
+                                      "check-delivery", "exit-send"]);
+    // **`exit-send` は最後**(C-1b。局数を `patient_report_data.json` から読めるのはここ) ―
+    // 器の門と禁止語の検査を**通った後**でなければ、落ちた冊子の写しを渡す入れ物に入れてしまう。
+    expect(stages[stages.length - 1]).toBe("exit-send");
+    expect(stages.indexOf("exit-send")).toBeGreaterThan(stages.indexOf("check-delivery"));
     // **既存 17 段の並びが 1 つも動いていない**(仕様「既存 17 段は触らない。足すだけ」)。
     expect(stages.slice(0, 16)).toEqual([
       "pipeline-gate", "pipeline-data", "prose-gate", "pipeline-pdf", "deliverables-pdf",
@@ -1473,11 +1483,12 @@ describe("顧客向け出口の 4 段", () => {
       "appendix4-cause", "appendix4-search", "appendix4-pdf",
       "answer-menu", "answer-draft", "answer-gate", "answer-check", "answer-pdf",
     ]);
-    expect(stages).toHaveLength(21);
+    expect(stages).toHaveLength(22);
   });
 
   it("--from exit-gate で書き手の席から再開できる", () => {
-    expect(stagesFrom("exit-gate")).toEqual(["exit-gate", "exit-render", "exit-check", "check-delivery"]);
+    expect(stagesFrom("exit-gate")).toEqual(["exit-gate", "exit-render", "exit-check",
+                                             "check-delivery", "exit-send"]);
   });
 
   it("索引の名前は PDF の名前から導く(手で書かない)", () => {
@@ -1720,5 +1731,157 @@ describe("送付用の名前(器の単独束 C-1)", () => {
 
   it("2 段の名前は 1 か所(封の照合は原本の側)", () => {
     expect(DELIVER_SEND_DIRS).toEqual({ original: "原本", send: "送付" });
+  });
+});
+
+describe("送付用の段(器の単独束 C-1b)", () => {
+  const OUT = "/tmp/にせもの/deliver1";
+  const out = deliverOutPaths(OUT);
+  const send = deliverSendPaths(OUT);
+
+  /** 見えているものの合成。**在るファイルと、中身が同じ組**を並べで渡す。 */
+  function probeOf(exist: readonly string[], same: readonly string[][] = [], pdfs: readonly string[] = []) {
+    const has = new Set(exist);
+    const pairs = new Set(same.map(([a, b]) => `${a} -> ${b}`));
+    return {
+      exists: (p: string) => has.has(p),
+      sameBytes: (a: string, b: string) => pairs.has(`${a} -> ${b}`),
+      pdfNamesIn: (d: string) => (d === send.sendDir ? [...pdfs] : []),
+    };
+  }
+
+  it("送付用は納品フォルダの隣・2 段", () => {
+    expect(send.dir).toBe("/tmp/にせもの/deliver1_送付用");
+    expect(send.originalDir).toBe(`/tmp/にせもの/deliver1_送付用/${DELIVER_SEND_DIRS.original}`);
+    expect(send.sendDir).toBe(`/tmp/にせもの/deliver1_送付用/${DELIVER_SEND_DIRS.send}`);
+    // **末尾の / を足しても同じ場所**(`deliver1/_送付用` のような入れ子を作らない)。
+    expect(deliverSendPaths(`${OUT}/`).dir).toBe(send.dir);
+  });
+
+  it("原本に 4 冊(名前はそのまま)・送付に 2 冊(改名)", () => {
+    const pairs = exitSendPairs(out, send, 25, "3 分");
+    // **6 組**(原本 4 + 送付 2)。数がそろっていないので、片方だけ数える取り違えが黙らない。
+    expect(pairs).toHaveLength(6);
+    expect(DELIVER_ORIGINAL_KEYS).toHaveLength(4);
+    const originals = pairs.filter(([, dst]) => dst.startsWith(send.originalDir));
+    expect(originals.map(([, dst]) => dst.slice(send.originalDir.length + 1))).toEqual([
+      "9_本編_本人用.pdf", "9_本編_見本用.pdf", "10_付録_表紙.pdf", "10_付録_数の出どころ.pdf",
+    ]);
+    const sent = pairs.filter(([, dst]) => dst.startsWith(send.sendDir));
+    expect(sent).toEqual([
+      [out.honbunPerson, `${send.sendDir}/01_本編_対局後診断_3分25局.pdf`],
+      [out.exitAppendix, `${send.sendDir}/02_付録_数の出どころ_3分25局.pdf`],
+    ]);
+    // **見本用は渡さない**(他人に見せるもので、顧客に渡すものではない)。
+    expect(sent.some(([src]) => src === out.honbunSample)).toBe(false);
+    // **写す元は納品フォルダのまま**(動かさないので、元の場所が行き先になっていない)。
+    for (const [src, dst] of pairs) expect(src).not.toBe(dst);
+  });
+
+  it("行き先が無ければ写す", () => {
+    const pairs = exitSendPairs(out, send, 25, "3 分");
+    const d = sendCopyDecisions(pairs, send.sendDir, probeOf(pairs.map(([src]) => src)));
+    expect(d.problems).toEqual([]);
+    expect(d.copy).toHaveLength(6);
+    expect(d.skip).toEqual([]);
+  });
+
+  it("同じ中身が在れば写さない(冪等)", () => {
+    const pairs = exitSendPairs(out, send, 25, "3 分");
+    const probe = probeOf(pairs.flat(), pairs,
+                          ["01_本編_対局後診断_3分25局.pdf", "02_付録_数の出どころ_3分25局.pdf"]);
+    const d = sendCopyDecisions(pairs, send.sendDir, probe);
+    expect(d.problems).toEqual([]);
+    expect(d.copy).toEqual([]);
+    expect(d.skip).toHaveLength(6);
+  });
+
+  it("**行き先が在って中身が違えば止まる**(黙って上書きしない)", () => {
+    const pairs = exitSendPairs(out, send, 25, "3 分");
+    // 在るのは全部。**中身が同じなのは 1 組目だけ** ― 残り 5 組は「違う」。
+    const probe = probeOf(pairs.flat(), [pairs[0]!]);
+    const d = sendCopyDecisions(pairs, send.sendDir, probe);
+    expect(d.copy).toEqual([]);
+    expect(d.skip).toEqual([pairs[0]![1]]);
+    expect(d.problems).toHaveLength(5);
+    expect(d.problems[0]).toContain("上書きしない");
+  });
+
+  it("写す元が無ければ止まる(空の入れ物を作らない)", () => {
+    const pairs = exitSendPairs(out, send, 25, "3 分");
+    const d = sendCopyDecisions(pairs, send.sendDir, probeOf([out.honbunPerson]));
+    // 本人用は 2 か所へ写すので、残り 4 冊ぶんが「元が無い」。
+    expect(d.problems).toHaveLength(4);
+    for (const problem of d.problems) expect(problem).toContain("写す元が無い");
+    expect(d.copy).toHaveLength(2);
+  });
+
+  it("**送付フォルダに予定外の PDF が在れば止まる**(既に渡した冊子を上に積まない)", () => {
+    const pairs = exitSendPairs(out, send, 25, "3 分");
+    const probe = probeOf(pairs.map(([src]) => src), [], ["対局後診断_25局_本編.pdf"]);
+    const d = sendCopyDecisions(pairs, send.sendDir, probe);
+    expect(d.problems).toHaveLength(1);
+    expect(d.problems[0]).toContain("予定外の PDF");
+    expect(d.problems[0]).toContain("対局後診断_25局_本編.pdf");
+  });
+
+  it("予定の 2 冊そのものは予定外ではない(自分の名前で止まらない)", () => {
+    const pairs = exitSendPairs(out, send, 25, "3 分");
+    const probe = probeOf(pairs.map(([src]) => src), [],
+                          ["01_本編_対局後診断_3分25局.pdf", "02_付録_数の出どころ_3分25局.pdf"]);
+    expect(sendCopyDecisions(pairs, send.sendDir, probe).problems).toEqual([]);
+  });
+
+  it("原本の名前は送付フォルダでは予定外(見る場所は送付フォルダだけ)", () => {
+    // `原本/` には 4 冊入るが、**送付フォルダにその名前が在れば**止める ―
+    // 顧客に渡す入れ物に納品の名前の冊子が在るのは、渡す前の形ではない。
+    const pairs = exitSendPairs(out, send, 25, "3 分");
+    const probe = probeOf(pairs.map(([src]) => src), [], ["9_本編_本人用.pdf"]);
+    const d = sendCopyDecisions(pairs, send.sendDir, probe);
+    expect(d.problems).toHaveLength(1);
+    expect(d.problems[0]).toContain("9_本編_本人用.pdf");
+  });
+
+  it("**局数は今回の組から読む(一覧の最後ではない)**", () => {
+    // `--group-work` は**持ち時間の昇順**に並べる(README)。今回の組(`--work` = /w/now)を
+    // **先頭**に、別の組を後ろに置く ― 独立監査がこの並びで「別の組の局数がファイル名に入る」
+    // 欠陥を実物の手順で再現した(25 局の冊子に `…3分999局.pdf` が付き、rc=0 で静かに通った)。
+    const args = argsOf(["--group-work", "/w/now", "--group-time-limit-sec", "180",
+                         "--group-work", "/w/other", "--group-time-limit-sec", "600"]);
+    const groups = groupListOf(args);
+    // **今回の組が一覧の最後ではない**ことを土台で固定する(ここがそろうと欠陥が再現しない)。
+    expect(groups).toHaveLength(2);
+    expect(groups[groups.length - 1]!.work).toBe("/w/other");
+    expect(exitSendPatientPath(args)).toBe(groups[0]!.patient);
+    expect(exitSendPatientPath(args)).not.toBe(groups[groups.length - 1]!.patient);
+    expect(exitSendPatientPath(args)).toContain("/w/now/");
+    expect(exitSendPatientPath(args)).not.toContain("/w/other");
+  });
+
+  it("**並びが変わっても今回の組を指す(先頭でも末尾でもない)**", () => {
+    // **1 つ目の材料は今回の組が先頭**なので、「先頭から読む」という誤りでは**同じ答えになり黙る**
+    // (変異 W2 が実測で緑だった)。ここは**今回の組を真ん中に置いた 3 組**で測る ―
+    // 先頭でも末尾でもない位置を通すと、並びに頼る書き方はどれも落ちる。
+    const args = argsOf(["--group-work", "/w/slow", "--group-time-limit-sec", "60",
+                         "--group-work", "/w/now", "--group-time-limit-sec", "180",
+                         "--group-work", "/w/other", "--group-time-limit-sec", "600"]);
+    const groups = groupListOf(args);
+    expect(groups).toHaveLength(3);
+    expect(groups[0]!.work).toBe("/w/slow");
+    expect(groups[2]!.work).toBe("/w/other");
+    expect(exitSendPatientPath(args)).toBe(groups[1]!.patient);
+    expect(exitSendPatientPath(args)).not.toBe(groups[0]!.patient);
+    expect(exitSendPatientPath(args)).not.toBe(groups[2]!.patient);
+  });
+
+  it("組が 1 つのときも同じ場所を指す", () => {
+    const args = argsOf();
+    expect(exitSendPatientPath(args)).toBe(groupListOf(args)[0]!.patient);
+    expect(exitSendPatientPath(args).endsWith("/report/patient_report_data.json")).toBe(true);
+  });
+
+  it("局数が 0 以下・組の名が空なら名前を作らない", () => {
+    expect(() => exitSendPairs(out, send, 0, "3 分")).toThrow(DeliverArgError);
+    expect(() => exitSendPairs(out, send, 25, "  ")).toThrow(DeliverArgError);
   });
 });
