@@ -9,7 +9,7 @@ import { readFileSync } from "node:fs";
 import { validate, type JsonSchema } from "./eventSchema.js";
 import { loadObsRegistry, validateHypothesisLine, type CheckResult } from "./hypothesis.js";
 import { packetObsIdOf, packetRefPathProblems } from "./packetRef.js";
-import type { SeatInputMeta } from "./seatInput.js";
+import { normalizeLastKey, type SeatInputMeta } from "./seatInput.js";
 
 export const SEAT_OUTPUT_CONTRACT = "seat-output" as const;
 export const SEAT_OUTPUT_SCHEMA_VERSION = "0.1" as const;
@@ -207,14 +207,19 @@ export function seatOutputProblems(envelope: unknown, opts: SeatOutputCheckOptio
   const headingSections = new Set(meta.headingSections ?? []);
   for (const s of asArray(reach.sections) as Rec[]) {
     const sec = String(s.section);
-    const key = String(s.lastKey);
-    const expected = metaSections.get(sec);
+    // **両側に同じ正規化**を掛ける(箇条書きの印と末尾の `:` は鍵ではない。2026-10-01 の司令塔の決定)
+    const key = normalizeLastKey(String(s.lastKey));
+    const expectedRaw = metaSections.get(sec);
+    const expected = expectedRaw === undefined ? undefined : normalizeLastKey(expectedRaw);
     // 見出しだけの節(データの行が無い)は「読んだ」と言えるだけで、最後の鍵名を持たない。
     // **在ることだけ見る** ― 束にも無い節名は下の行で落ちるので、捏造は通らない(司令塔の決定 2026-09-30)。
     if (expected === undefined && headingSections.has(sec)) continue;
     if (expected === undefined) { problems.push(`E-1: 席の reach.sections に meta にも束の見出しにも無い節「${sec}」`); continue; }
     seen.add(sec);
-    if (key.length === 0 || !(expected.startsWith(key) || key.startsWith(expected))) problems.push(`E-1: 節「${sec}」の lastKey が meta と前方一致しない(席「${key}」/ meta「${expected}」)`);
+    // **空の鍵は両側で落とす。** 片側(席)だけ守ると、meta の鍵が正規化で空になった束
+    // (例: `provenance.inputs[].path` が ":" の 1 字)で `key.startsWith("")` が常に真になり、
+    // **その節の E-1 がどんな鍵でも素通りする**(2026-10-01 の独立監査が実物で再現した穴)。
+    if (key.length === 0 || expected.length === 0 || !(expected.startsWith(key) || key.startsWith(expected))) problems.push(`E-1: 節「${sec}」の lastKey が meta と前方一致しない(席「${key}」/ meta「${expected}」)`);
   }
   const omissions = asArray(env.omissions).map(String);
   for (const sec of metaSections.keys()) {

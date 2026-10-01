@@ -8,6 +8,7 @@ import { OBSERVATION_PACKET_CONTRACT, OBSERVATION_PACKET_SCHEMA_VERSION, OBSERVA
 import { AGGREGATE_REF_RE } from "./packetRef.js";
 import {
   INSTRUCTION_V1_SHA256, READING_GUIDE, SeatInputError, dataLinesOf, identifierProblems, numberInclusionProblems, numberTokens, renderSeatInput,
+  normalizeLastKey,
 } from "./seatInput.js";
 
 const INSTRUCTION = readFileSync(new URL("../../../docs/LLM_SEATS_INSTRUCTION_v1_2026-09-30.md", import.meta.url));
@@ -128,7 +129,9 @@ describe("見出しだけの節と §0.3 の最後の行(2026-09-30 の司令塔
   it("§0.3 の lastKey は本文の実際の最後の行(inputs の最後の path)から取る", () => {
     const { text, meta } = render();
     const section = meta.sections.find((s) => s.section === "0.3")!;
-    expect(section.lastKey.startsWith("- scripts/playtest/out/c5")).toBe(true); // 60 字で切られるので先頭で見る
+    // 箇条書きの印は鍵ではないので meta は印を持たない(2026-10-01 の直し)。60 字で切られるので先頭で見る
+    expect(section.lastKey.startsWith("scripts/playtest/out/c5")).toBe(true);
+    expect(section.lastKey.startsWith("- ")).toBe(false);
     expect(section.lastKey).not.toContain("recognition"); // sources の最後の行ではない
     // 本文で inputs の行が §0.3 の中(§1 の見出しより前)に在る
     expect(text.indexOf("#### inputs(")).toBeLessThan(text.indexOf("## 1. 局"));
@@ -302,5 +305,32 @@ describe("止まる条件(それぞれ止まり、書かない)", () => {
     expect(identifierProblems(minimalPacket(), "packet")).toEqual([]);
     expect(identifierProblems({ a: "/Users/x" }, "p")).toEqual(["p.a が絶対パス"]);
     expect(identifierProblems({ a: ["see https://x.example"] }, "p")).toEqual(["p.a[0] に URL を含む"]);
+  });
+});
+
+// 2026-10-01: 席は「shallow_first_nodes」と正しく書いたのに meta が「- shallow_first_nodes:」を持っていたため、
+// **正直に読んだ席が E-1 で落ちた**(§0.2・§0.3)。鍵の正規化はその直し。
+describe("鍵の正規化(normalizeLastKey)", () => {
+  it("行頭の箇条書きの印と末尾の `:` を外す", () => {
+    expect(normalizeLastKey("- shallow_first_nodes:")).toBe("shallow_first_nodes");
+    expect(normalizeLastKey("* ahead_cp ")).toBe("ahead_cp");
+    expect(normalizeLastKey("• ahead_cp：")).toBe("ahead_cp");
+  });
+  it("内側の空白は 1 つに詰める(表記のゆれで正直な席を落とさない)", () => {
+    expect(normalizeLastKey("g25   25")).toBe("g25 25");
+    expect(normalizeLastKey("- g25\t25:")).toBe("g25 25");
+  });
+  it("鍵の中身は変えない(途中の `-` も `:` も残す)", () => {
+    expect(normalizeLastKey("g25 1:7g7f")).toBe("g25 1:7g7f");
+    expect(normalizeLastKey("youryuu-shikenbisha")).toBe("youryuu-shikenbisha");
+    expect(normalizeLastKey("aggregates.branches.total.value 値")).toBe("aggregates.branches.total.value 値");
+    // 印に見えても後ろに空白が無ければ鍵の一部
+    expect(normalizeLastKey("-abc")).toBe("-abc");
+  });
+  it("meta の §0.2 の鍵は印を持たず、線の組の id から始まる", () => {
+    const { meta } = render();
+    const section = meta.sections.find((s) => s.section === "0.2")!;
+    expect(section.lastKey.startsWith("- ")).toBe(false);
+    expect(section.lastKey.startsWith("ahead_cp")).toBe(true);
   });
 });

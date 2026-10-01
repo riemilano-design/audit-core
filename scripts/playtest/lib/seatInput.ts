@@ -236,9 +236,22 @@ export function headingSectionsOf(lines: readonly string[], dataSections: readon
 
 export const LAST_KEY_MAX_CHARS = 60;
 /** data 行の先頭 2 トークン(表なら先頭 2 セル)。長い文は先頭 60 字で切る(到達検査は前方一致で見る) */
+/**
+ * 鍵の正規化。**箇条書きの印は鍵ではない** ― 行頭の `- `(`*`・`•` も)と末尾の `:` を外す。
+ *
+ * 【なぜ要るか】2026-10-01 の実行で、席は「shallow_first_nodes」と正しく書いたのに
+ * meta が「- shallow_first_nodes:」を持っていたため、**正直に読んだ席が E-1 で落ちた**(§0.2・§0.3 の 2 件)。
+ * 司令塔の決定: meta は鍵だけを持ち、照合は**両側に同じ正規化**を掛ける。
+ * **鍵そのものが違えば落ちることは変えない**(正規化で穴を開けない)。
+ */
+export function normalizeLastKey(key: string): string {
+  // 内側の空白は 1 つに詰める(表記のゆれで正直な席を落とさない。実物では数が変わらないことを測った)
+  return key.trim().replace(/^[-*•]\s+/, "").replace(/[:：]\s*$/, "").trim().replace(/\s+/g, " ");
+}
 function keyOf(line: string): string {
   const cells = line.startsWith("|") ? line.split("|").slice(1).map((c) => c.trim()) : line.split(/\s+/);
-  return [...cells.filter((c) => c.length > 0).slice(0, 2).join(" ")].slice(0, LAST_KEY_MAX_CHARS).join("");
+  // 正規化は**ここ 1 か所**(箇条書きの行は「- 鍵:」の 2 セルになるので、切った後に印を外せば鍵だけが残る)
+  return normalizeLastKey([...cells.filter((c) => c.length > 0).slice(0, 2).join(" ")].slice(0, LAST_KEY_MAX_CHARS).join(""));
 }
 function section(e: Emitter, section: string, title: string, packetPath: string, rows: unknown[], body: () => void): void {
   heading(e, "");

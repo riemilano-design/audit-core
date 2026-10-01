@@ -236,6 +236,39 @@ describe("E-1 と見出しだけの節(2026-09-30 の初回の実行で実測。
     expect(wrong.length).toBe(1);
     expect(wrong[0]).toContain("前方一致しない");
   });
+  // 2026-10-01 の実行で実測した落ち方の回帰: 席は鍵だけを書き、meta は「- 鍵:」を持っていた。
+  it("箇条書きの印と末尾の `:` の違いだけなら落ちない(両側に同じ正規化を掛ける)", () => {
+    const metaWith = { ...meta(), sections: [...meta().sections, { section: "0.2", title: "線の組", packetPath: "provenance.thresholds", rows: 1, lastKey: "- ahead_cp:" }], headingSections: ["0", "0.1"] };
+    const check = (lastKey: string) => seatOutputProblems(withReachSections([...DATA, { section: "0.2", lastKey }]), { meta: metaWith, request: request(), today: TODAY, registry: REGISTRY });
+    expect(check("ahead_cp")).toEqual([]);      // 席が鍵だけを書いた(実際の落ち方)
+    expect(check("- ahead_cp:")).toEqual([]);   // 行をそのまま写した
+    expect(check("* ahead_cp")).toEqual([]);    // 別の印
+    // **鍵そのものが違えば落ちる**(正規化で穴を開けない ― 司令塔の条件)
+    expect(check("deep_first_nodes").length).toBe(1);
+    expect(check("deep_first_nodes")[0]).toContain("前方一致しない");
+    // 印だけ・空は落ちる(正規化して空になるものを「読んだ」にしない)
+    expect(check("- ").length).toBe(1);
+    expect(check("").length).toBe(1);
+  });
+  // 独立監査が実物で再現した穴(2026-10-01): meta の鍵が正規化で空になると、双方向の前方一致では
+  // `key.startsWith("")` が常に真になり、**その節の検査がどんな鍵でも素通りする**。
+  it("meta の鍵が正規化で空になる束では、席が何を書いても落ちる(片側だけ守らない)", () => {
+    const metaWith = { ...meta(), sections: [...meta().sections, { section: "0.3", title: "出どころ", packetPath: "provenance.inputs[].path", rows: 1, lastKey: "- :" }], headingSections: ["0", "0.1"] };
+    const check = (lastKey: string) => seatOutputProblems(withReachSections([...DATA, { section: "0.3", lastKey }]), { meta: metaWith, request: request(), today: TODAY, registry: REGISTRY });
+    expect(check("まるで関係のない鍵 12345").length).toBe(1);
+    expect(check("まるで関係のない鍵 12345")[0]).toContain("前方一致しない");
+    // 正しそうに見える鍵でも通さない(空の鍵は照合の根拠にならない)
+    expect(check("- :").length).toBe(1);
+    expect(check("").length).toBe(1);
+  });
+  it("長い鍵は meta が 60 字で切られていても、席の全文と前方一致すれば落ちない(§0.3 の実際の落ち方)", () => {
+    const full = "data/drafts/2026-09-25-knowledge/openings/youryuu_shikenbisha.json";
+    const metaWith = { ...meta(), sections: [...meta().sections, { section: "0.3", title: "出どころ", packetPath: "provenance.inputs[].path", rows: 2, lastKey: full.slice(0, 60) }], headingSections: ["0", "0.1"] };
+    const check = (lastKey: string) => seatOutputProblems(withReachSections([...DATA, { section: "0.3", lastKey }]), { meta: metaWith, request: request(), today: TODAY, registry: REGISTRY });
+    expect(check(full)).toEqual([]);
+    expect(check(`- ${full}`)).toEqual([]);
+    expect(check("data/drafts/2026-09-25-knowledge/openings/ibisha_anaguma.json").length).toBe(1);
+  });
   it("meta にも束の見出しにも無い節名は落ちる(捏造は通らない)", () => {
     const found = problems(withReachSections([...DATA, { section: "9.9", lastKey: "それらしい鍵" }]));
     expect(found.length).toBe(1);
