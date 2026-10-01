@@ -1880,6 +1880,37 @@ describe("送付用の段(器の単独束 C-1b)", () => {
     expect(exitSendPatientPath(args).endsWith("/report/patient_report_data.json")).toBe(true);
   });
 
+  it("**段は封の JSON を写さない・消さない**(司令塔の条件。2026-10-01)", () => {
+    const pairs = exitSendPairs(out, send, 25, "3 分");
+    // **書く先は 6 つだけ。**封(`封_exit_seal.json`)はこの一覧に無い ―
+    // 封は**この段の後に人が `原本/` へ掛ける**もので、段が触ってよいものではない。
+    // 毎回自動で掛け直すと封の意味が消える(段は 4 冊を書き、**何も消さない**)。
+    expect(pairs.map(([, dst]) => dst.slice(dst.lastIndexOf("/") + 1))).toEqual([
+      "9_本編_本人用.pdf", "9_本編_見本用.pdf", "10_付録_表紙.pdf", "10_付録_数の出どころ.pdf",
+      "01_本編_対局後診断_3分25局.pdf", "02_付録_数の出どころ_3分25局.pdf",
+    ]);
+    // **封という語が行き先にも写す元にも出ない。**(名前が変わっても語で捕まえる)
+    for (const [src, dst] of pairs) {
+      expect(src).not.toContain("封");
+      expect(dst).not.toContain("封");
+      expect(dst.endsWith(".pdf")).toBe(true);
+    }
+  });
+
+  it("封が既に在っても段は止まらない(PDF しか見ない)", () => {
+    // `原本/` に封が在る状態で 2 回目を流しても、段は封を読まない・写さない。
+    // `送付/` の一覧も **PDF だけ**を見るので、封が在っても「予定外」にはならない。
+    const pairs = exitSendPairs(out, send, 25, "3 分");
+    const probe = {
+      exists: (p: string) => pairs.some(([src]) => src === p),
+      sameBytes: () => false,
+      // **封を混ぜて渡す。**`pdfNamesIn` の約束は「`*.pdf` の基底名」なので、
+      // 封はここに出ない ― 出るようになったら(= 約束が変わったら)この試験が落ちる。
+      pdfNamesIn: (_d: string) => [],
+    };
+    expect(sendCopyDecisions(pairs, send.sendDir, probe).problems).toEqual([]);
+  });
+
   it("局数が 0 以下・組の名が空なら名前を作らない", () => {
     expect(() => exitSendPairs(out, send, 0, "3 分")).toThrow(DeliverArgError);
     expect(() => exitSendPairs(out, send, 25, "  ")).toThrow(DeliverArgError);

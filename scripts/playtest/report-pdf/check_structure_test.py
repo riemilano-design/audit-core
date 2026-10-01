@@ -1014,6 +1014,19 @@ class TermLinesTest(unittest.TestCase):
             self.assertIn(term, line)
             self.assertIn(sentence, line)
 
+    def test_t1d_only_the_term_is_bold(self):
+        """**太字は語だけ・文は太字にしない**(2026-10-01 の司令塔の条件)。
+
+        本編の他の箇条書きと同じ形(`- **名前**: 文`)にする。
+        文まで太字にすると、**冒頭の 4 行が本文の中でいちばん強い見た目**になり、
+        顧客が最初に読むべき「数 3 つ」より目立つ。
+        """
+        for line, (term, sentence) in zip(CS.term_md_lines(), CS.TERM_LINES):
+            self.assertEqual(line, "- **" + term + "**: " + sentence)
+            # **文の側に太字の印が無いこと**(語の分の 2 組だけ)。
+            self.assertNotIn("**", sentence)
+            self.assertEqual(line.count("**"), 2)
+
     def test_t1b_the_terms_are_the_four_we_decided(self):
         """**どの語かを試験の側に書く**(表を読むと、語を入れ替える変異と一緒に動いて黙る)。"""
         self.assertEqual([term for term, _s in CS.TERM_LINES],
