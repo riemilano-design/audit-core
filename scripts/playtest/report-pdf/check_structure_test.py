@@ -1222,5 +1222,259 @@ class MovedToAppendixTest(unittest.TestCase):
         self.assertIn("本編の PDF に出ている", problems[0])
 
 
+class QuestionSectionTest(unittest.TestCase):
+    """**⑧ の G-4・G-5・G-7。**節「お預かりした問い」の 有無・位置・長さ。
+
+    **節は `SECTIONS` に足さない**(司令塔の判断 2026-10-01)。表に足すと
+    `check_sections` が全行を必須にするので、問いが 0 件の顧客の本編が門を通れなくなる。
+    だから**別の検査**。位置も `SECTIONS` ではなく**行番号**で留める。
+    """
+
+    # 「ひとことで」と、その次の節。**md は節の並びだけを持つ最小の形**。
+    HEAD = ["# 対局後診断", "", "## ひとことで", "", "- 25 局のうち 18 局でした。", ""]
+    TAIL = ["## 局面で見る", "", "(盤)", "", "## 数え方", "", "(数え方)", ""]
+    Q = ["## お預かりした問い", "",
+         "お預かりした問い: 「普段指さない戦型のとき、どこで崩れているか」", "",
+         "― 読み: 普段と違う型の 4 局では、優勢から負けた割合が 3 / 4 局でした。", ""]
+
+    def md(self, question=True, place="直後"):
+        """`place`: 直後 / 前 / 間に節 / 末尾。"""
+        if not question:
+            return "\n".join(self.HEAD + self.TAIL)
+        if place == "直後":
+            return "\n".join(self.HEAD + self.Q + self.TAIL)
+        if place == "前":
+            return "\n".join(["# 対局後診断", ""] + self.Q + self.HEAD[2:] + self.TAIL)
+        if place == "間に節":
+            return "\n".join(self.HEAD + self.TAIL[:4] + self.Q + self.TAIL[4:])
+        if place == "末尾":
+            return "\n".join(self.HEAD + self.TAIL + self.Q)
+        raise AssertionError(place)
+
+    def problems(self, md_text, question_count):
+        out = []
+        CS.check_question_section(md_text, question_count, out)
+        return out
+
+    # ---- G-4 有無(0 = 0 で通る・片方だけでは落ちる)----
+    def test_q1_no_question_no_section_passes(self):
+        """問いが 0 件で節も無ければ**通る**(「問いは無かった」とも書かない)。"""
+        self.assertEqual(self.problems(self.md(question=False), 0), [])
+
+    def test_q2_question_with_section_passes(self):
+        """問いが 1 件で節が「ひとことで」の直後なら**通る**。"""
+        self.assertEqual(self.problems(self.md(), 1), [])
+
+    def test_q3_question_without_section_falls(self):
+        """問いが在るのに節が無ければ落ちる(**必須の向き**)。"""
+        got = self.problems(self.md(question=False), 1)
+        self.assertEqual(len(got), 1)
+        self.assertIn("1 件あるのに", got[0])
+        self.assertIn("お預かりした問い", got[0])
+
+    def test_q4_section_without_question_falls(self):
+        """問いが 0 件なのに節が在れば落ちる(**余った向き**)。
+        **向きが 2 つあるので、片方だけ実装した変異が黙らない。**"""
+        got = self.problems(self.md(), 0)
+        self.assertEqual(len(got), 1)
+        self.assertIn("0 件なのに", got[0])
+
+    def test_q5_unknown_count_does_not_judge_presence(self):
+        """**件数が分からない(`None`)ときは有無を判定しない。**
+        0 件と決めつけると、問いが在る顧客の節を「余った節」として落としてしまう。"""
+        self.assertEqual(self.problems(self.md(), None), [])
+        self.assertEqual(self.problems(self.md(question=False), None), [])
+
+    def test_q6_many_questions_still_one_section(self):
+        """問いが 3 件でも節は 1 つ(件数ぶん節を要求しない)。"""
+        self.assertEqual(self.problems(self.md(), 3), [])
+
+    # ---- G-5 位置 ----
+    def test_q7_section_before_hitokotode_falls(self):
+        got = self.problems(self.md(place="前"), 1)
+        self.assertEqual(len(got), 1)
+        self.assertIn("より前に在る", got[0])
+
+    def test_q8_section_not_immediately_after_falls(self):
+        """間に別の見出しが在れば落ちる(**「直後」を見ている** ― 「後ろのどこか」ではない)。"""
+        got = self.problems(self.md(place="間に節"), 1)
+        self.assertEqual(len(got), 1)
+        self.assertIn("直後でない", got[0])
+        self.assertIn("局面で見る", got[0])
+
+    def test_q9_section_at_the_end_falls(self):
+        got = self.problems(self.md(place="末尾"), 1)
+        self.assertEqual(len(got), 1)
+        self.assertIn("直後でない", got[0])
+
+    def test_q10_missing_anchor_is_not_said_twice(self):
+        """「ひとことで」そのものが無いときは**位置を言わない**(`check_sections` が落とす)。"""
+        md_text = "\n".join(["# 対局後診断", ""] + self.Q + self.TAIL)
+        self.assertEqual(self.problems(md_text, 1), [])
+
+    # ---- G-7 長さ(両側で校正する)----
+    def test_q11_at_the_limit_passes(self):
+        """**ちょうど上限は通る。**(上限 + 1 で落ちる試験と対にする)"""
+        limit = CS.MAX_QUESTION_SECTION_CHARS
+        body = "あ" * limit
+        md_text = "\n".join(self.HEAD + ["## お預かりした問い", "", body, ""] + self.TAIL)
+        self.assertEqual(len(CS.question_section_body(md_text)), limit)
+        self.assertEqual(self.problems(md_text, 1), [])
+
+    def test_q12_one_over_the_limit_falls(self):
+        limit = CS.MAX_QUESTION_SECTION_CHARS
+        body = "あ" * (limit + 1)
+        md_text = "\n".join(self.HEAD + ["## お預かりした問い", "", body, ""] + self.TAIL)
+        got = self.problems(md_text, 1)
+        self.assertEqual(len(got), 1)
+        self.assertIn(f"{limit + 1} 文字", got[0])
+        self.assertIn(f"上限 {limit}", got[0])
+
+    def test_q13_length_counts_only_the_section(self):
+        """長さは**節の中だけ**を数える(本編ぜんたいでも、見出しの行でもない)。
+        **範囲を広げる変異が黙らない** ― 他の節は上限を超える量を持っている。"""
+        limit = CS.MAX_QUESTION_SECTION_CHARS
+        big = "い" * limit
+        md_text = "\n".join(self.HEAD + ["", big, ""] + self.Q + self.TAIL + ["", big])
+        self.assertLess(len(CS.question_section_body(md_text)), limit)
+        self.assertEqual(self.problems(md_text, 1), [])
+
+    def test_q14_heading_line_is_not_counted(self):
+        """見出しの行(`## お預かりした問い`)は長さに入らない。"""
+        md_text = "\n".join(self.HEAD + ["## お預かりした問い", ""] + self.TAIL)
+        self.assertEqual(CS.question_section_body(md_text), "")
+
+    def test_q15_two_sections_fall(self):
+        """節が 2 つあれば落ちる(**位置と長さは見ない** ― どちらを見るべきか決まらない)。"""
+        md_text = "\n".join(self.HEAD + self.Q + self.TAIL + self.Q)
+        got = self.problems(md_text, 1)
+        self.assertEqual(len(got), 1)
+        self.assertIn("2 個", got[0])
+
+    def test_q16_real_estimate_fits_the_limit(self):
+        """**実物の見込みの文**(便 116 で測った 156 文字)が上限に収まること。
+        上限を見込みより小さくする変異が黙らない。"""
+        md_text = self.md()
+        body = CS.question_section_body(md_text)
+        self.assertLessEqual(len(body), CS.MAX_QUESTION_SECTION_CHARS)
+        # **近くの数と同じにしない**: 上限そのものでも 0 でもない。
+        self.assertNotEqual(len(body), CS.MAX_QUESTION_SECTION_CHARS)
+        self.assertGreater(len(body), 60)
+
+    # ---- 人が決めた数と中身を**字で留める**(2026-10-01 の変異で見つけた沈黙)----
+    #
+    # 上の q11・q12 は `CS.MAX_QUESTION_SECTION_CHARS` から土台を作るので、
+    # **上限そのものを 1000 や 100 に変える変異が 1 本も赤くならなかった**
+    # (「表から作った出力を同じ表と比べても中身は測れない」の家族)。
+    # 200 は**司令塔が決めた数**なので、字で留めて**動かしたら赤**にする。
+    def test_q17_the_limit_is_the_approved_number(self):
+        """**上限 200 は人が決めた数**(司令塔の判断 2026-10-01。見込みの文 156 文字 + 余裕 44)。
+        動かすには判断が要る ― **字で留める。**"""
+        self.assertEqual(CS.MAX_QUESTION_SECTION_CHARS, 200)
+        # **近くの数と同じにしない**(ページ数の定数・見込みの文の長さと取り違えない)。
+        for near in (4, 5, 100, 156, 240, 1000):
+            self.assertNotEqual(CS.MAX_QUESTION_SECTION_CHARS, near)
+
+    def test_q18_two_hundred_one_characters_fall(self):
+        """**201 文字は落ちる**(土台を定数から作らず、**字で 201 文字**を置く)。
+        上限を緩める変異がここで赤くなる。"""
+        md_text = "\n".join(self.HEAD + ["## お預かりした問い", "", "あ" * 201, ""] + self.TAIL)
+        got = self.problems(md_text, 1)
+        self.assertEqual(len(got), 1)
+        self.assertIn("201 文字", got[0])
+
+    def test_q19_two_hundred_characters_pass(self):
+        """**ちょうど 200 文字は通る**(字で 200 文字)。上限を厳しくする変異がここで赤くなる。"""
+        md_text = "\n".join(self.HEAD + ["## お預かりした問い", "", "あ" * 200, ""] + self.TAIL)
+        self.assertEqual(self.problems(md_text, 1), [])
+
+    def test_q20_the_body_strips_each_line(self):
+        """`question_section_body` は**各行の前後の空白を落とす** ― 字で留める。
+
+        **独立監査が実測(2026-10-01)**: `.strip()` を外す変異が **121 本全部を素通り**した。
+        いまの実物(`out/c5` の本編)は節の行に前後の空白を持たないので影響しないが、
+        **実物の「試せること」節にはインデント付きの続き行が在る**(`   ※「10秒以上」は…` の形)。
+        ⑥ が節の中身をその形で書けば、落とさないぶんだけ**長さが実際より多く数えられ**、
+        G-7 の 200 文字の門が**本当は収まる文を落とす**。
+        方向は安全側(過剰に厳しくなる)だが、**この束が N8〜N11 で埋めたのと同じ型の抜け**なので
+        同じ基準を当てる ― **数も中身も字で留める。**
+        """
+        md_text = "\n".join(self.HEAD + [
+            "## お預かりした問い", "",
+            "  前後に半角空白  ",
+            "　全角空白　",
+            "\t前にタブ",
+            ""] + self.TAIL)
+        body = CS.question_section_body(md_text)
+        # **中身を字で留める**(空白が 1 つでも残れば一致しない)。
+        self.assertEqual(body, "前後に半角空白全角空白前にタブ")
+        # **長さも字で留める**(中身の照合が緩んだときの二重の留め)。
+        self.assertEqual(len(body), 15)
+        # **落とさなければ長くなる**(方向を留める ― `.strip()` を外す変異がここでも赤くなる)。
+        raw = "".join(["  前後に半角空白  ", "　全角空白　", "\t前にタブ", ""])
+        self.assertGreater(len(raw), 15)
+
+
+class NoGlossaryTextTest(unittest.TestCase):
+    """**⑧ の G-8。**却下済みの 6 冊形の用語の文(TS `findingTexts.GLOSSARY`)が
+    出口の本編に出ないこと(司令塔の判断 2026-10-01。寄せない・照合しない・黒名簿 1 本)。"""
+
+    def problems(self, md_text):
+        out = []
+        CS.check_no_glossary_text(md_text, out)
+        return out
+
+    def test_g8a_clean_md_passes(self):
+        md_text = "## ひとことで\n\n" + "\n".join(CS.term_md_lines())
+        self.assertEqual(self.problems(md_text), [])
+
+    def test_g8b_each_fragment_falls_on_its_own(self):
+        """**断片ごとに別々に落ちる**(1 語だけ見る変異が黙らない)。"""
+        self.assertGreaterEqual(len(CS.GLOSSARY_FRAGMENTS), 2)
+        for term, fragment in CS.GLOSSARY_FRAGMENTS:
+            got = self.problems(f"## ひとことで\n\n- **{term}**: {fragment}です\n")
+            self.assertEqual(len(got), 1, f"{term} が落ちない")
+            self.assertIn(fragment, got[0])
+
+    def test_g8c_all_fragments_at_once(self):
+        md_text = "\n".join(f"- {fragment}" for _term, fragment in CS.GLOSSARY_FRAGMENTS)
+        self.assertEqual(len(self.problems(md_text)), len(CS.GLOSSARY_FRAGMENTS))
+
+    def test_g8d_fragments_are_in_the_ts_glossary(self):
+        """**断片が TS の実物に在ること。**TS が文を書き換えたら**ここが赤になる** ―
+        黒名簿が写しのまま黙って効き目を失う道を閉じる(これが赤くなる日に、1 か所へ寄せる判断をする)。"""
+        ts = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                          "..", "lib", "findingTexts.ts")
+        with open(ts, encoding="utf-8") as f:
+            src = f.read()
+        start = src.index("export const GLOSSARY")
+        block = src[start:src.index("];", start)]
+        for term, fragment in CS.GLOSSARY_FRAGMENTS:
+            self.assertIn(fragment, block, f"TS の GLOSSARY に無い断片: {term}")
+            self.assertIn(f'term: "{term}"', block, f"TS の GLOSSARY に無い語: {term}")
+
+    def test_g8e_fragments_are_not_in_the_exit_terms(self):
+        """**断片が出口の `TERM_LINES` には出ないこと。**出ていたら黒名簿は
+        **正しい本編を落とす**(重なる 2 語の文が一致していないことの裏返し)。"""
+        exit_text = "\n".join(CS.term_md_lines())
+        for term, fragment in CS.GLOSSARY_FRAGMENTS:
+            self.assertNotIn(fragment, exit_text, f"出口の用語に在る断片: {term}")
+
+    def test_g8f_the_blacklist_holds_both_overlapping_terms(self):
+        """**黒名簿の中身を字で留める**(2026-10-01 の変異で見つけた沈黙)。
+
+        上の `test_g8c` は `len(CS.GLOSSARY_FRAGMENTS)` と問題の件数を比べるので、
+        **黒名簿を 1 語に縮める変異・空にする変異のどちらも、件数がそろって黙った**
+        (「件数がそろうと母集団の入れ替えが黙る」の家族)。
+        **重なる 2 語は TS と python の両方に在る語**なので、字で留める。
+        """
+        self.assertEqual(sorted(term for term, _fragment in CS.GLOSSARY_FRAGMENTS),
+                         sorted(["第 1 候補", "分かれ道"]))
+        self.assertEqual(len(CS.GLOSSARY_FRAGMENTS), 2)
+        # 断片そのものも空でない(語だけ在って断片が空だと、検査は全文に当たってしまう)。
+        for term, fragment in CS.GLOSSARY_FRAGMENTS:
+            self.assertGreaterEqual(len(fragment), 8, f"断片が短すぎる: {term}")
+
+
 if __name__ == "__main__":
     unittest.main()

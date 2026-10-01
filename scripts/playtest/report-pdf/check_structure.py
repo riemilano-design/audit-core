@@ -250,6 +250,9 @@ def parse_args(argv):
             "--honbun-index": None}
     # 組版が書いた索引(付録ごとに 1 本。繰り返せる)。
     source_indexes = []
+    # **任意の引数**(渡されなければ飛ばして声に出す。⑧ の G-6 と同じ扱い)。
+    # `observation-request.json`(`customerQuestions[]` の件数で節の有無が決まる)。
+    optional = {"--request": None}
     rest = []
     i = 1
     while i < len(argv):
@@ -260,10 +263,10 @@ def parse_args(argv):
             source_indexes.append(argv[i + 1])
             i += 2
             continue
-        if flag in mine:
+        if flag in mine or flag in optional:
             if i + 1 >= len(argv):
                 raise CheckStructureError(f"{flag} に値が無い")
-            mine[flag] = argv[i + 1]
+            (mine if flag in mine else optional)[flag] = argv[i + 1]
             i += 2
             continue
         rest.append(flag)
@@ -273,7 +276,7 @@ def parse_args(argv):
         raise CheckStructureError(f"足りない引数: {' '.join(missing)}")
     if not os.path.isdir(out_dir):
         raise CheckStructureError(f"顧客フォルダが無い: {out_dir}")
-    return out_dir, mine, rest, source_indexes
+    return out_dir, mine, rest, source_indexes, optional
 
 
 def heading_lines(md_text):
@@ -729,8 +732,128 @@ def check_moved_to_appendix(md_text, personal, appendix, problems):
                     "(本編から外したのに付録に組まれていない ― 顧客が読む文がどこにも出ない)")
 
 
+# ==================== ⑧ の門: 節「お預かりした問い」(2026-10-01)====================
+#
+# **`SECTIONS` に足さない**(司令塔の判断 2026-10-01。計画 §6 の判断 1)。
+# `check_sections` は `SECTIONS` の全行を必須にする(「減るのは落とす」)ので、
+# **表に 7 行目として足すと、問いが 0 件の顧客の本編が門を通れなくなる。**
+# だから**別の検査**にし、位置も `SECTIONS` ではなく**行番号で留める**
+# (`role_of` が None を返す「間に増えた任意の節」の枠のまま置く)。
+QUESTION_HEADING = "お預かりした問い"
+# 節が座る場所(「ひとことで」の**直後** = 間に別の見出しが無い)。
+QUESTION_AFTER_ROLE = "ひとことで"
+# 節の長さの持ち分(司令塔の判断 2026-10-01。計画 §6 の判断 2)。
+#
+# **これはページ数の門(検査 2)を置き換えない。** 顧客が変われば本編の残り
+# (数の個数・群の数・局数)も伸びるので、**節が 200 文字を守ってもページは増えうる** ―
+# 越えたときに落ちるのは検査 2 であって、こちらではない。
+# **この門の値打ちは「⑥ が文を書いた時点で落ちる = 早く分かる」ことだけ**で、安全の保証ではない。
+# 実測(2026-10-01、見本用側): いまの道具の出力の余裕は 240 文字、この節を入れて 96 文字。
+MAX_QUESTION_SECTION_CHARS = 200
+
+
+def question_heading_lines(md_text):
+    """節「お預かりした問い」の見出しの行番号(0 起算)を**全部**返す。"""
+    return [line_no for line_no, text in heading_lines(md_text) if text.startswith(QUESTION_HEADING)]
+
+
+def question_section_body(md_text):
+    """節「お預かりした問い」の**中身**(見出しの行を含まない)を 1 本の文字列で返す。
+    節が無ければ None。長さを数えるのはこの文字列(空白と改行は落とす)。"""
+    heads = question_heading_lines(md_text)
+    if not heads:
+        return None
+    lines = md_text.split("\n")
+    at = heads[0]
+    end = len(lines)
+    for line_no, _ in heading_lines(md_text):
+        if line_no > at:
+            end = line_no
+            break
+    return "".join(line.strip() for line in lines[at + 1:end])
+
+
+def check_question_section(md_text, question_count, problems):
+    """**G-4・G-5・G-7。**節「お預かりした問い」の 有無・位置・長さ。
+
+    `question_count` は `observation-request.json` の `customerQuestions[]` の件数。
+    **`None` = 渡されていない**(件数が分からない)。そのときは**有無を判定しない** ―
+    0 件だと決めつけると、問いが在る顧客の節を「余った節」として落としてしまう。
+    位置と長さは、節が在るなら件数が分からなくても見られるので見る。
+    """
+    heads = question_heading_lines(md_text)
+    if len(heads) > 1:
+        problems.append(f"⑧: 節「{QUESTION_HEADING}」が {len(heads)} 個(ちょうど 1 つが要る)")
+        return
+    if not heads:
+        # **0 = 0 で通る**(問いが無い顧客には節ごと出ない。「問いは無かった」とも書かない)。
+        if question_count:
+            problems.append(
+                f"⑧: お預かりした問いが {question_count} 件あるのに節「{QUESTION_HEADING}」が本編に無い"
+            )
+        return
+    if question_count == 0:
+        problems.append(
+            f"⑧: お預かりした問いが 0 件なのに節「{QUESTION_HEADING}」が本編に在る"
+            "(問いが無い顧客には出さない)"
+        )
+    at = heads[0]
+    # ---- 位置(G-5)。**「ひとことで」の直後** = 間に別の見出しが無い ----
+    anchor = section_positions(md_text).get(QUESTION_AFTER_ROLE)
+    if anchor is None:
+        pass  # 「ひとことで」の不在は `check_sections` が落とす(二重に言わない)
+    elif at < anchor:
+        problems.append(
+            f"⑧: 節「{QUESTION_HEADING}」が「{QUESTION_AFTER_ROLE}」より前に在る(直後が要る)"
+        )
+    else:
+        between = [text for line_no, text in heading_lines(md_text) if anchor < line_no < at]
+        if between:
+            problems.append(
+                f"⑧: 節「{QUESTION_HEADING}」が「{QUESTION_AFTER_ROLE}」の直後でない"
+                f"(間に {between} が在る)"
+            )
+    # ---- 長さ(G-7)----
+    body = question_section_body(md_text)
+    if len(body) > MAX_QUESTION_SECTION_CHARS:
+        problems.append(
+            f"⑧: 節「{QUESTION_HEADING}」の中身が {len(body)} 文字"
+            f"(上限 {MAX_QUESTION_SECTION_CHARS})"
+        )
+
+
+# ==================== ⑧ の門: 却下済みの用語の文が出ないこと(2026-10-01)====================
+#
+# **用語の表は 2 か所に在る**が、**寄せない・照合しない**(司令塔の判断 2026-10-01。計画 §6 の判断 3)。
+# - TS `findingTexts.GLOSSARY`(5 項目)を描くのは `render_front.py` **1 か所だけ = 却下済みの 6 冊形**
+# - 出口(30p 正本)の道は `exit_candidates` → `TERM_LINES`(4 項目)
+# - **重なる 2 語(第 1 候補・分かれ道)の文は一致していない**ので、照合の試験を足せば即座に赤になり、
+#   足すには顧客に出る文を書き換えることになる
+#
+# だから足すのは **1 本だけ**: **出口の本編に TS 側の文が出ないこと**。
+# **これが赤くなる日 = `render_front` が出口に戻った日**で、そのとき 1 か所へ寄せる判断をする。
+#
+# 断片は **その文にしか出ない短い部分**。**TS が文を書き換えたら試験が赤くなる**
+# (`check_structure_test.py` の `test_g8_fragments_are_in_ts` が `findingTexts.ts` を読んで確かめる) ―
+# 写しを置いたまま黙って効き目が消える道を閉じるため。
+GLOSSARY_FRAGMENTS = (
+    ("第 1 候補", "エンジンが最も良いとした手"),
+    ("分かれ道", "第 1 候補より 600 以上低かった"),
+)
+
+
+def check_no_glossary_text(md_text, problems):
+    """**G-8。**却下済みの 6 冊形の用語の文が出口の本編に出ていないこと。"""
+    for term, fragment in GLOSSARY_FRAGMENTS:
+        if fragment in md_text:
+            problems.append(
+                f"⑧: 却下済みの 6 冊形の用語の文が本編に出た(「{term}」= 「{fragment}」)。"
+                "出口の用語は TERM_LINES の 4 行"
+            )
+
+
 def main(argv):
-    out_dir, mine, rest, source_indexes = parse_args(argv)
+    out_dir, mine, rest, source_indexes, optional = parse_args(argv)
     problems = []
 
     with open(mine["--honbun-md"], encoding="utf-8") as f:
@@ -763,6 +886,18 @@ def main(argv):
     check_appendix_pages(index, appendix, problems)
     check_moved_to_appendix(md_text, personal, appendix, problems)
     check_term_lines(personal, problems)
+    # ---- ⑧ の門(2026-10-01)。節「お預かりした問い」と、却下済みの用語の文 ----
+    # **件数は `--request` から取る。渡されなければ有無を判定せず、黙らずに声に出す**
+    # (0 件だと決めつけると、問いが在る顧客の節を「余った節」として落としてしまう)。
+    if optional["--request"]:
+        request = CA.load_json(optional["--request"])
+        question_count = len(request.get("customerQuestions") or [])
+    else:
+        question_count = None
+        print("注記: --request が渡されていないので、節「お預かりした問い」の有無は判定しない"
+              "(位置と長さは節が在れば見る)", file=sys.stderr)
+    check_question_section(md_text, question_count, problems)
+    check_no_glossary_text(md_text, problems)
     # 局数は材料から取る(`check_answer` が読んだ patient の 1 本目 = 今回の組)。
     # **`summary.games` を使う** ― `exit_cover.numbers_of` が既にここを読んでいる(出どころを 2 つにしない)。
     # 実物では `len(games)` と一致するが(25 = 25 を実測)、**宣言されている数はこちら**。

@@ -914,5 +914,162 @@ class AggTagTest(unittest.TestCase):
             EG.parse_own_args(["a.md", "--packet", "p.json"])
 
 
+class AnsTagTest(unittest.TestCase):
+    """検査 (x) 顧客の問いの答えの場所(2026-10-01)。
+
+    **正本**: `docs/NEXTGEN_CONNECTION_DESIGN_2026-09-30.md` の ⑧ の行と §3.3。
+    門が見るのは 3 つ ― **件数**(問いごとにちょうど 1 つ)・**場所**(節の中)・
+    **状態の語**(採用と一致)。**顧客の文は 1 文字も見ない。**
+    """
+
+    # **問いは 2 件**(1 件だと「全部の問いを回していない」変異が黙る)。
+    REQUEST = {"customerQuestions": [{"id": "q1", "text": "普段指さない戦型で何が起きているか"},
+                                     {"id": "q2", "text": "時間の使い方は変わったか"}]}
+    SELECTION = {"answers": [{"questionId": "q1", "status": "answered"},
+                             {"questionId": "q2", "status": "unanswerable"}]}
+    # 節の中に 2 段落。**状態の語は 2 通り違うものにする**(片方だけ見る変異が黙らない)。
+    GOOD_MD = ("# 題\n\n## ひとことで\n\n数 3 つ。\n\n"
+               "## お預かりした問い\n\n"
+               "お預かりした問い: 「普段指さない戦型で何が起きているか」\n"
+               "― 読み: そう読めます。<!-- ans: q1 answered -->\n\n"
+               "お預かりした問い: 「時間の使い方は変わったか」\n"
+               "今回の数からは、明確な差は確認できませんでした。<!-- ans: q2 unanswerable -->\n\n"
+               "## 数え方\n\n分母は 25 局です。\n")
+
+    def run_check(self, md, request=None, selection=None):
+        problems, notes = [], []
+        EG.check_ans_tags(md, request, selection, problems, notes)
+        return problems, notes
+
+    def test_a1_the_good_shape_passes(self):
+        problems, notes = self.run_check(self.GOOD_MD, self.REQUEST, self.SELECTION)
+        self.assertEqual(problems, [])
+        self.assertEqual(notes, [])
+
+    def test_a2_a_missing_marker_falls(self):
+        """**問いに印が無い = 答えの場所が無い。**"""
+        md = self.GOOD_MD.replace("<!-- ans: q2 unanswerable -->", "")
+        problems, _notes = self.run_check(md, self.REQUEST, self.SELECTION)
+        self.assertEqual(len(problems), 1, problems)
+        self.assertIn("「q2」の印が 0 件", problems[0])
+
+    def test_a3_two_markers_for_one_question_fall(self):
+        """**2 つ在るのも落とす**(どちらが答えか決まらない)。"""
+        # **2 件目も節の中**に置く(場所の苦情を混ぜない ― 1 つの試験で 1 つの原因を見る)。
+        md = self.GOOD_MD.replace("## 数え方", "もう 1 つ。<!-- ans: q1 answered -->\n\n## 数え方", 1)
+        problems, _notes = self.run_check(md, self.REQUEST, self.SELECTION)
+        self.assertEqual(len(problems), 1, problems)
+        self.assertIn("「q1」の印が 2 件", problems[0])
+
+    def test_a3b_a_duplicate_outside_the_section_falls_twice(self):
+        """**件数と場所は別々に落ちる**(どちらか 1 つを消す変異が黙らない)。"""
+        md = self.GOOD_MD + "\n## 付け足し\n\nもう 1 つ。<!-- ans: q1 answered -->\n"
+        problems, _notes = self.run_check(md, self.REQUEST, self.SELECTION)
+        self.assertEqual(len(problems), 2, problems)
+        self.assertTrue(any("「q1」の印が 2 件" in p for p in problems), problems)
+        self.assertTrue(any("節「お預かりした問い」の外" in p for p in problems), problems)
+
+    def test_a4_a_marker_outside_the_section_falls(self):
+        """**場所が違えば落とす。**顧客は答えをその節で探す(5 人目は「数え方」の 4 ページ目で出た)。"""
+        md = self.GOOD_MD.replace("― 読み: そう読めます。<!-- ans: q1 answered -->",
+                                  "― 読み: そう読めます。")
+        md = md.replace("分母は 25 局です。", "分母は 25 局です。<!-- ans: q1 answered -->")
+        problems, _notes = self.run_check(md, self.REQUEST, self.SELECTION)
+        self.assertEqual(len(problems), 1, problems)
+        self.assertIn("節「お預かりした問い」の外", problems[0])
+
+    def test_a5_an_unknown_question_falls(self):
+        """**request に無い問いの印**は落とす(作った問いに答えた形)。"""
+        md = self.GOOD_MD.replace("<!-- ans: q2 unanswerable -->", "<!-- ans: q9 answered -->")
+        problems, _notes = self.run_check(md, self.REQUEST, self.SELECTION)
+        self.assertTrue(any("「q9」は request に無い" in p for p in problems), problems)
+        self.assertTrue(any("「q2」の印が 0 件" in p for p in problems), problems)
+
+    def test_a6_an_unknown_status_word_falls(self):
+        """**状態の語は決めた 3 つだけ**(正本 §3.3.3)。"""
+        md = self.GOOD_MD.replace("<!-- ans: q1 answered -->", "<!-- ans: q1 たぶん -->")
+        problems, _notes = self.run_check(md, self.REQUEST, self.SELECTION)
+        self.assertTrue(any("決めた語でない" in p for p in problems), problems)
+        for word in EG.ANS_STATUSES:
+            self.assertIn(word, problems[0] if "決めた語でない" in problems[0] else problems[1])
+
+    def test_a7_a_status_that_differs_from_the_selection_falls(self):
+        """**採用と違う状態**は落とす ― 「答えられなかった」ものを「答えた」と書けない。"""
+        md = self.GOOD_MD.replace("<!-- ans: q2 unanswerable -->", "<!-- ans: q2 answered -->")
+        problems, _notes = self.run_check(md, self.REQUEST, self.SELECTION)
+        self.assertEqual(len(problems), 1, problems)
+        self.assertIn("採用「unanswerable」と違う", problems[0])
+
+    def test_a8_the_other_direction_falls_too(self):
+        """**逆向きも落とす**(採用は answered なのに冊子は unanswerable)。片側だけ見ていない。"""
+        md = self.GOOD_MD.replace("<!-- ans: q1 answered -->", "<!-- ans: q1 unanswerable -->")
+        problems, _notes = self.run_check(md, self.REQUEST, self.SELECTION)
+        self.assertEqual(len(problems), 1, problems)
+        self.assertIn("採用「answered」と違う", problems[0])
+
+    def test_a9_a_question_missing_from_the_selection_falls(self):
+        """**採用が済んでいない問い**は落とす(印だけ先に書いた形)。"""
+        selection = {"answers": [{"questionId": "q1", "status": "answered"}]}
+        problems, _notes = self.run_check(self.GOOD_MD, self.REQUEST, selection)
+        self.assertEqual(len(problems), 1, problems)
+        self.assertIn("answer_selection に無い", problems[0])
+
+    def test_a10_no_questions_passes_without_the_section(self):
+        """**問いが 0 件なら節ごと無くてよい**(正本 §3.3.2。0 = 0 で通る)。
+        「問いは無かった」と冊子に書かない。"""
+        md = "# 題\n\n## ひとことで\n\n数 3 つ。\n\n## 数え方\n\n分母は 25 局です。\n"
+        problems, notes = self.run_check(md, {"customerQuestions": []}, {"answers": []})
+        self.assertEqual(problems, [])
+        self.assertEqual(notes, [])
+
+    def test_a11_without_the_request_it_says_so(self):
+        """**渡されなければ飛ばして報告する**(`--packet` と同じ扱い。黙らない)。"""
+        problems, notes = self.run_check(self.GOOD_MD)
+        self.assertEqual(problems, [])
+        self.assertEqual(len(notes), 1, notes)
+        self.assertIn("--request が渡されていない", notes[0])
+        self.assertIn("印 2 件", notes[0])
+
+    def test_a12_without_the_selection_the_other_two_still_run(self):
+        """**採用が無くても件数と場所は見る**(飛ばすのは状態の照合だけ)。"""
+        md = self.GOOD_MD.replace("<!-- ans: q2 unanswerable -->", "")
+        problems, notes = self.run_check(md, self.REQUEST)
+        self.assertEqual(len(problems), 1, problems)
+        self.assertIn("「q2」の印が 0 件", problems[0])
+        self.assertTrue(any("--answer-selection が渡されていない" in n for n in notes), notes)
+
+    def test_a13_a_broken_request_falls_loudly(self):
+        """**「無い」と「壊れている」は別。**形が違えば飛ばさずに落とす。"""
+        for broken in ([], {"customerQuestions": {}}, {"customerQuestions": [{"text": "id が無い"}]}):
+            with self.assertRaises(EG.ExitGateError):
+                self.run_check(self.GOOD_MD, broken, self.SELECTION)
+
+    def test_a14_a_broken_selection_falls_loudly(self):
+        """同じ理由。**黙って飛ばすと、⑤ が別の形で書いたとき門が何も見ないまま緑になる。**"""
+        for broken in ({"answers": {}},
+                       {"answers": [{"questionId": "q1"}]},
+                       {"answers": [{"questionId": "q1", "status": "answered"},
+                                    {"questionId": "q1", "status": "partial"}]}):
+            with self.assertRaises(EG.ExitGateError):
+                self.run_check(self.GOOD_MD, self.REQUEST, broken)
+
+    def test_a15_the_section_head_is_matched_by_its_front(self):
+        """節の見出しは**頭で見る**(顧客ごとに後ろが変わっても節と分かる)。"""
+        md = self.GOOD_MD.replace("## お預かりした問い", "## お預かりした問い(1 件)")
+        problems, _notes = self.run_check(md, self.REQUEST, self.SELECTION)
+        self.assertEqual(problems, [])
+
+    def test_a16_the_grammar_lives_in_check_answer(self):
+        """**印の文法は `check_answer` の 1 か所**(`pos`・`menu`・`agg` と同じ家族)。
+
+        門に写すと、文法を直したとき門だけが古い形を探して黙る。
+        ここでは**振る舞いで**確かめる ― `check_answer` の側を通してしか読めない形を使う。
+        """
+        self.assertEqual(EG.ans_tags_of("x<!--  ans:   q3    partial  -->\n"), [(1, "q3", "partial")])
+        # **`scan_numbers` が印の数字を拾わない**(`q12` の 12 を数の主張にしない)。
+        self.assertEqual(CA.scan_numbers("- 25 局<!-- ans: q12 answered -->"),
+                         CA.scan_numbers("- 25 局"))
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)

@@ -348,6 +348,140 @@ def check_draft_leftovers(raw_md, problems):
 
 
 # ==================== 本体 ====================
+# ==================== (x) 顧客の問いの答えの場所(2026-10-01) ====================
+# **正本**: `docs/NEXTGEN_CONNECTION_DESIGN_2026-09-30.md` の ⑧ の行と §3.3。
+#
+# 【顧客の PDF にどう出るか】本編の「ひとことで」の直後に節「お預かりした問い」が増え、
+# 問いごとに 1 段落が出る。**答えが出ないときも同じ場所に出る**(「明確な差は確認できませんでした」)。
+# **この門は顧客の文を 1 文字も作らない** ― 場所と件数と状態の語が合っているかだけを見る。
+#
+# 【見る 3 つ】(1) request の問いごとに印が**ちょうど 1 つ**。(2) その印が**節の中**に在る。
+# (3) 印の**状態の語**が `answer_selection` と一致。
+#
+# 【無いものは飛ばして報告する】`--request` も `--answer-selection` も**任意**
+# (`--packet` と同じ扱い。2026-10-01 の司令塔の判断) ― 印を書く段(⑥)も
+# 採用を書く段(⑤)もまだ無いので、必須にすると既にある 22 段が全部止まる。
+# **ただし「渡されたのに形が違う」は飛ばさず落とす** ― 無いことと壊れていることは別である。
+# **印の文法は `check_answer.ANS_TAG_RE` の 1 か所**(`pos`・`menu`・`agg` と同じ家族)。
+# ここに写すと、文法を直したとき門だけが古い形を探して黙る(`test_x11` がそれを見張る)。
+ANS_SECTION_HEAD = "お預かりした問い"
+# 状態の語。**正本 §3.3.3 の 3 つだけ**(ここが語の 1 か所)。
+ANS_STATUSES = ("answered", "partial", "unanswerable")
+
+
+def ans_tags_of(md_text):
+    """印の一覧 `[(行番号, 問いの id, 状態の語)]`(1 起算)。**文法はこの 1 か所。**"""
+    out = []
+    for line_no, line in enumerate(md_text.split("\n"), start=1):
+        for m in CA.ANS_TAG_RE.finditer(line):
+            out.append((line_no, m.group(1), m.group(2)))
+    return out
+
+
+def ans_section_lines(md_text):
+    """節「お預かりした問い」の**行番号の集合**(1 起算)。節が無ければ空集合。
+
+    節の切り出しは `sections_of` と同じ流儀(`## ` の見出しから次の `## ` の直前まで)だが、
+    **行番号が要る**のでここで数える ― 印がその節の中に在るかを行番号で見る。
+    """
+    inside, lines = False, set()
+    for line_no, line in enumerate(md_text.split("\n"), start=1):
+        if line.startswith("## "):
+            inside = line[3:].strip().startswith(ANS_SECTION_HEAD)
+            continue
+        if inside:
+            lines.add(line_no)
+    return lines
+
+
+def question_ids_of(request):
+    """request の問いの id の並び。**原文は読まない**(門は文を見ない)。
+
+    形が違えば落とす(`ExitGateError`)― 「無い」と「壊れている」を同じに扱わない。
+    """
+    if not isinstance(request, dict):
+        raise ExitGateError("--request の中身が object でない")
+    questions = request.get("customerQuestions")
+    if questions is None:
+        return []
+    if not isinstance(questions, list):
+        raise ExitGateError("--request の customerQuestions が配列でない")
+    ids = []
+    for q in questions:
+        if not isinstance(q, dict) or not isinstance(q.get("id"), str):
+            raise ExitGateError("--request の customerQuestions に id の無い行がある")
+        ids.append(q["id"])
+    return ids
+
+
+def selected_statuses_of(selection):
+    """`answer_selection` の `{問いの id: 状態の語}`。
+
+    **形は ⑤ の契約**(`answers[]` に問いごとにちょうど 1 行。`questionId` と `status`)。
+    まだ ⑤ が無いので、**形が違えば落とす** ― 黙って飛ばすと、
+    ⑤ が別の形で書いたときに**門が何も見ないまま緑になる**(いちばん危ない形)。
+    """
+    if not isinstance(selection, dict):
+        raise ExitGateError("--answer-selection の中身が object でない")
+    answers = selection.get("answers")
+    if not isinstance(answers, list):
+        raise ExitGateError("--answer-selection の answers が配列でない")
+    out = {}
+    for a in answers:
+        if not isinstance(a, dict) or not isinstance(a.get("questionId"), str) \
+                or not isinstance(a.get("status"), str):
+            raise ExitGateError("--answer-selection の answers に questionId か status の無い行がある")
+        if a["questionId"] in out:
+            raise ExitGateError(f"--answer-selection の answers に同じ問い {a['questionId']} が 2 行ある")
+        out[a["questionId"]] = a["status"]
+    return out
+
+
+def check_ans_tags(md_text, request, selection, problems, notes):
+    """(x) 問いごとに印がちょうど 1 つ・節の中に在る・状態の語が採用と一致。
+
+    **問いが 0 件なら何も言わない**(0 = 0 で通る。正本 §3.3.2 ―
+    「問いは無かった」と冊子に書かない顧客でも通る)。
+    """
+    tags = ans_tags_of(md_text)
+    if request is None:
+        notes.append(f"(x) --request が渡されていないので問いの照合をしていない(印 {len(tags)} 件)")
+        return
+    ids = question_ids_of(request)
+    in_section = ans_section_lines(md_text)
+    seen = {}
+    for line_no, qid, status in tags:
+        seen.setdefault(qid, []).append((line_no, status))
+        if qid not in ids:
+            problems.append(f"(x) {line_no} 行目の印の問い「{qid}」は request に無い")
+        if line_no not in in_section:
+            problems.append(
+                f"(x) {line_no} 行目の印が節「{ANS_SECTION_HEAD}」の外に在る"
+                "(顧客は答えをその節で探す)")
+        if status not in ANS_STATUSES:
+            problems.append(
+                f"(x) {line_no} 行目の印の状態「{status}」が決めた語でない"
+                f"({'・'.join(ANS_STATUSES)})")
+    for qid in ids:
+        n = len(seen.get(qid, []))
+        if n != 1:
+            problems.append(f"(x) 問い「{qid}」の印が {n} 件(ちょうど 1 件)")
+    if selection is None:
+        if ids:
+            notes.append(f"(x) --answer-selection が渡されていないので状態の語を照合していない(問い {len(ids)} 件)")
+        return
+    chosen = selected_statuses_of(selection)
+    for qid in ids:
+        want = chosen.get(qid)
+        if want is None:
+            problems.append(f"(x) 問い「{qid}」が answer_selection に無い(採用が済んでいない)")
+            continue
+        for line_no, status in seen.get(qid, []):
+            if status != want:
+                problems.append(
+                    f"(x) {line_no} 行目の状態「{status}」が採用「{want}」と違う(問い {qid})")
+
+
 # ==================== (xi) 本編の数の id 照合(2026-09-30) ====================
 # **番号は正本に合わせた**(接続設計案 `docs/NEXTGEN_CONNECTION_DESIGN_2026-09-30.md` の表)。
 # 最初は **(x)** と名づけていたが、正本では **(x) = `<!-- ans: qN status -->` の門**(顧客の問いの
@@ -442,14 +576,14 @@ def check_agg_tags(md_text, packet, problems, notes):
 
 
 def parse_own_args(argv):
-    own = {"candidates": None, "packet": None}
+    own = {"candidates": None, "packet": None, "request": None, "answer-selection": None}
     rest = []
     i = 0
     while i < len(argv):
         flag = argv[i]
         # `--packet` は**任意**(検査 (xi))。渡されなければ (xi) を飛ばして「照合していない」と報告する
         # ― 印を書く段も packet を渡す段もまだ無いので、必須にすると既にある 21 段が全部止まる。
-        if flag in ("--candidates", "--packet"):
+        if flag in ("--candidates", "--packet", "--request", "--answer-selection"):
             value = argv[i + 1] if i + 1 < len(argv) else None
             if value is None or value.startswith("--"):
                 raise ExitGateError(f"{flag} に値が無い")
@@ -479,6 +613,14 @@ def run(own, rest, notes=None):
     if own.get("packet"):
         with open(own["packet"], encoding="utf-8") as f:
             packet = json.load(f)
+    # **任意の 2 つ**(検査 (x))。渡されなければ飛ばして報告する。
+    request = selection = None
+    if own.get("request"):
+        with open(own["request"], encoding="utf-8") as f:
+            request = json.load(f)
+    if own.get("answer-selection"):
+        with open(own["answer-selection"], encoding="utf-8") as f:
+            selection = json.load(f)
 
     # 節に割るのは**顧客が読む側だけ**(書いた側の記録の節は節の中身に混ぜない)。
     sections = sections_of(CA.strip_dev_section(raw_md))
@@ -494,6 +636,8 @@ def run(own, rest, notes=None):
     check_sentences(raw_md, ctx, problems)
     check_draft_leftovers(raw_md, problems)
     check_agg_tags(raw_md, packet, problems, notes)
+    # **顧客が読む側だけ**を渡す(書いた側の記録の節に印が残っていても顧客には出ない)。
+    check_ans_tags(CA.strip_dev_section(raw_md), request, selection, problems, notes)
     return problems
 
 

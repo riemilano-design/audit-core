@@ -115,6 +115,10 @@ POS_TAG_RE = re.compile(r"<!--\s*pos:\s*(.*?)\s*-->")
 # 集計の id は数字を含みうる(`repo.top1Drop…` の「1」)。いまの id の数字は 1 桁で
 # `SMALL_NUMBER_MAX = 9` の床に隠れるが、**2 桁を含む id が来たら偽の苦情になる**(実測で確かめた)。
 AGG_TAG_RE = re.compile(r"<!--\s*agg:\s*(.*?)\s*-->")
+# **顧客の問いの答えの印**(⑧ の検査 (x)。2026-10-01)。`<!-- ans: qN status -->`。
+# **印の文法はこのファイルの 1 か所**(`exit_gate_test.test_x11` が門の側に写しが無いことを見る)。
+# `q12` のような 2 桁の id が来ると数の主張として拾われるので、`scan_numbers` で覆う。
+ANS_TAG_RE = re.compile(r"<!--\s*ans:\s*(q\d+)\s+(\S+?)\s*-->")
 POS_INNER_RE = re.compile(r"^(\d+)\s*/\s*(\d+)\s*付録\s*(\d+)(?:\s+(.+))?$")
 
 # 指し手の表記(report-pdf/render_whatif.py の move_kanji と同じ形)。▲/△ + (同 or マス) + 駒 + (成/打)?
@@ -1590,6 +1594,7 @@ def scan_numbers(line, small_max=None):
     scan_line = POS_TAG_RE.sub(lambda m: " " * len(m.group(0)), line)
     # `<!-- agg: <id> -->` の印(検査 (x))も同じ扱い ― **id の中の数字を文中の数の主張として見ない**
     scan_line = AGG_TAG_RE.sub(lambda m: " " * len(m.group(0)), scan_line)
+    scan_line = ANS_TAG_RE.sub(lambda m: " " * len(m.group(0)), scan_line)
     # 日付(YYYY-MM-DD。見出し・作成日の表記)は「文中の数の主張」ではないので対象から外す
     # (実装担当の判断。表題行の「2026-09-24」等が「データに無い数」として誤検知するのを防ぐ。
     # 報告する原文(line)はそのまま、数を探す側だけ日付を消す)。
