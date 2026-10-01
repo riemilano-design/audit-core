@@ -12,6 +12,7 @@ exports[`report-pdf の python の試験(P-113) > 試験のファイルの名前
   "exit_body_test.py",
   "exit_candidates_test.py",
   "exit_cover_test.py",
+  "exit_fill_test.py",
   "exit_gate_test.py",
   "exit_groups_test.py",
   "exit_index_test.py",

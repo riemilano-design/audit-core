@@ -315,7 +315,8 @@
 |---|---|
 | 群ごとの数 | `exit_groups.group_rows(recognition, patient, direct, side_match)` |
 | 群の機械の名 | `exit_groups.CLASS_KEYS`(`core / other / noSignature`。**局数を鍵に入れない**) |
-| 仮の見出し | `exit_groups.PROVISIONAL_LABELS`(群 A / 群 B / 群 C)。**顧客の呼び方は書き手が決める** |
+| 冊子のラベル | `exit_groups.GROUP_LABELS`(**人間の決定 2026-10-01**。packet の群 ↔ 冊子のラベルの対応表は**ここだけ**)。局数は**型で持つ**。「普段」を使わない ― 「この局数の中で多かった」は「本人が普段指している」ではない |
+| ラベルの守り | `exit_groups.LABEL_FORBIDDEN_WORDS` = `("普段",)`。**的はラベルと群の表の行の見出しの 2 か所だけ**(文書全体の黒名簿にしない ― 顧客の問いの字と人間が書いた 80 文字の文には「普段」が正しく出る) |
 | 崩れの数え方 | `exit_groups.collapses_of`(`scores` の隣り合う組。**`games[].events` ではない** ― 実物で 133 ≠ 79) |
 | 顧客に出る行 | `exit_groups.lines_of`(**数だけ**。割合・%・比べる語・「差」の判定を入れない) |
 | 段への渡し | `exit_candidates.py` の `--opening-recognition`(任意。**渡さなければ何も変わらない**) |

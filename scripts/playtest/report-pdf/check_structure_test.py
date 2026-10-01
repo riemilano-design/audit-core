@@ -23,6 +23,7 @@ import unittest
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 import check_structure as CS  # noqa: E402
+import exit_index as EI  # noqa: E402
 
 # **商品の範囲の 1 段落は、わざと 2 行に折って置く。**実物の組版は文を行に折るので、折れていない土台で
 # 測ると「折れた実物では通らない」門を通してしまう(最初の実測でここが落ち、`squeeze` を足した)。
@@ -1068,7 +1069,6 @@ class TermLinesTest(unittest.TestCase):
         【冒頭の用語とは語が違う】冒頭の 4 行は「差が大きかった」と書く
         (顧客が最初に読む所に cp の線を出さない)。**ここは数え方なので線そのものを書く。**
         """
-        import exit_index as EI
 
         fork = [s for s in EI.COUNTING_NOTES if s.startswith("「分かれ道」は、")]
         self.assertEqual(len(fork), 1, EI.COUNTING_NOTES)
@@ -1233,9 +1233,15 @@ class QuestionSectionTest(unittest.TestCase):
     # 「ひとことで」と、その次の節。**md は節の並びだけを持つ最小の形**。
     HEAD = ["# 対局後診断", "", "## ひとことで", "", "- 25 局のうち 18 局でした。", ""]
     TAIL = ["## 局面で見る", "", "(盤)", "", "## 数え方", "", "(数え方)", ""]
+    # **土台は顧客に出してよい形だけを使う**(司令塔 2026-10-01)。
+    # 前の土台は「― 読み: 普段と違う型の 4 局では…」を持っていた ―
+    # **人間が却下した「25 局内の頻度を『普段』の代用にする」読み**そのものなので、
+    # 残すと後で誰かが写す。だから**人間が書いた文**(`EI.unanswerable_past_games`)に替えた。
+    # **問いの行には「普段」が出る**(顧客の問いの字)― これは正しい。
+    # 「普段」を文書全体の黒名簿にすると**この行と人間の文の 2 か所が壊れる。**
     Q = ["## お預かりした問い", "",
-         "お預かりした問い: 「普段指さない戦型のとき、どこで崩れているか」", "",
-         "― 読み: 普段と違う型の 4 局では、優勢から負けた割合が 3 / 4 局でした。", ""]
+         "お預かりした問い: 「3 切れで普段指さない戦型を採用したときの影響」", "",
+         EI.unanswerable_past_games(25), ""]
 
     def md(self, question=True, place="直後"):
         """`place`: 直後 / 前 / 間に節 / 末尾。"""
@@ -1352,10 +1358,17 @@ class QuestionSectionTest(unittest.TestCase):
         self.assertIn("2 個", got[0])
 
     def test_q16_real_estimate_fits_the_limit(self):
-        """**実物の見込みの文**(便 116 で測った 156 文字)が上限に収まること。
-        上限を見込みより小さくする変異が黙らない。"""
+        """**実物の文**が上限に収まること。上限を小さくする変異が黙らない。
+
+        **2026-10-01 に土台を替えた**(司令塔の指示): 前の土台は却下された読みを模した文で
+        **156 文字の見込み**(便 116 で測った数)だった。いまは**問いの字 + 人間が書いた文**で、
+        **実測 115 文字**(問いの行 35 + 人間の文 80)。
+        """
         md_text = self.md()
         body = CS.question_section_body(md_text)
+        # **字で留める**(土台が人間の文に変わったら気づく)。
+        self.assertEqual(len(body), 115)
+        self.assertIn(EI.unanswerable_past_games(25), body)
         self.assertLessEqual(len(body), CS.MAX_QUESTION_SECTION_CHARS)
         # **近くの数と同じにしない**: 上限そのものでも 0 でもない。
         self.assertNotEqual(len(body), CS.MAX_QUESTION_SECTION_CHARS)

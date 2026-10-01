@@ -4,7 +4,7 @@
 # 【顧客の PDF にどう出るか】本編の**観測の欄**に、群ごとの既存指標が**数だけ**並ぶ。
 # **割合(%・率)は出さない。群どうしを比べる文も、「差がある / ない」の判定も作らない。**
 # **戦型の名前は出さない**(顧客向けの分類としては未承認 ― 人間の決定 2026-09-29)。
-# 顧客の表での呼び方は書き手(段 `exit-gate`)が決める。ここが出すのは**機械の名**と**仮の見出し**だけ。
+# **顧客の表での呼び方は `GROUP_LABELS` の 1 か所**(人間の決定 2026-10-01。それまでは書き手が決めていた)。
 #
 # 【なぜ「数だけ」か】群が小さい(実物で 18 / 4 / 3)。4 局・3 局で割合を出せば、
 # **1 局の違いが 25 ポイント動く**。同じ基底でない率を並べない(`compare-rates-need-same-base` の型)。
@@ -38,13 +38,72 @@ CLASS_KEYS = {
     "それ以外": "other",
     "署名なし": "noSignature",
 }
-# 出す順。**顧客に見せる呼び方ではない**(書き手が決める)。
+# 出す順。
 GROUP_ORDER = ("core", "other", "noSignature")
-# 書き手が決めるまでの仮の見出し(司令塔の条件 3)。**戦型名を入れない。**
-PROVISIONAL_LABELS = {"core": "群 A", "other": "群 B", "noSignature": "群 C"}
+
+# ==================== 顧客の冊子での群の呼び方(人間の決定 2026-10-01)====================
+#
+# **packet の群 ↔ 冊子のラベルの対応表は、リポジトリでここだけ。**
+# packet 側は内部の名を持っている(`observationAggregates.ts` の「群 A の局数」など)が、
+# **それを冊子へ写さない。** packet は封がしてあって直せない(ラベルを変えると `packetId` が
+# 変わる)ので、**翻訳はこちら側の仕事**である。
+#
+# 【「普段」を使わない】人間の決定 2026-10-01。人間の言葉:
+#   **「25 局内で多かった」≠「本人が普段指している」。**
+#   根拠(2026-10-01 の実測): 1 回だけ出た型が 7 件 / 25 局では「珍しい」と「指さない」を
+#   区別できない / 「多数の核」はこの 25 局内の上位 3 件をそう呼んでいた。
+#   **外部基準(普段)を内部頻度で代用する根拠が無い。**
+#   封じた最終版は「普段の型 18 局・普段と違う型 4 局」と書いている(「普段」が 5 行・9 か所)。
+#   **そのまま写すと、人間が却下した代用を焼き付ける**ことになる。だから写さない。
+#   **送った冊子は直さない**(封の後は触らない)。言い換えるのは**次の冊子から**。
+#
+# 【「型」ではなく「分類」】人間の理由: 「この 25 局で多かった**型**」と**型そのものとして
+#   確定表示してよいか**は、戦型名の認識基盤とは別問題。**戦型の定義・認識が知識レーンで
+#   承認された後に、必要なら「戦型」へ昇格できる。**いまは「分類」が最も安全。
+#   3 つ目も「分類」で揃えたのは司令塔の判断 ― 人間の一覧は「型が取れない局」だったが、
+#   **他の 2 つが「分類」で 3 つ目だけ「型」だと、最初の 2 つが型であることを含意してしまう。**
+#
+# 【局数は値で持たない】ラベルに局数が入るので**型で持つ**(`exit_index.SECTION_TITLES` と同じ扱い)。
+#   値で焼くと**別の顧客の冊子に 25 が出る** ― 2026-09-30 に顧客に見える名前で実際に起きた型である。
+GROUP_LABELS = {
+    "core": "この {games} 局で多かった分類",
+    "other": "この {games} 局でそれ以外だった分類",
+    "noSignature": "分類が取れない局",
+}
+# **ラベルに出てはいけない語。**
+# **文書全体の黒名簿にはしない**(司令塔が実物で確かめた 2 か所が壊れる ― 顧客の問いの字
+# `observation-request.json` の q1「**普段**指さない戦型を採用している…」と、人間が書いた
+# 80 文字の文 `exit_index.UNANSWERABLE_PAST_GAMES`。どちらにも「普段」が**正しく**出る)。
+# **守るのは「群のラベル」と「群の表の行の見出し」の 2 か所だけ。**
+LABEL_FORBIDDEN_WORDS = ("普段",)
 # 優勢の閾値。**新しい閾値ではない** ― 顧客に出る「数え方」の節が既に
 # 「一度でも評価が +300 以上」と書いている(`exit_index.COUNTING_NOTES`)。
 AHEAD_CP = 300
+
+
+def check_label_words(text):
+    """**ラベルに「普段」が入っていたら落とす。**黙って却下済みの代用を顧客に出さない。"""
+    for word in LABEL_FORBIDDEN_WORDS:
+        if word in text:
+            raise ExitGroupsError(
+                f"群のラベルに「{word}」が入っている: {text} ― "
+                "「この局数の中で多かった」は「普段指している」ではない(人間の決定 2026-10-01)。"
+                "外部の棋譜との比較ができるまで、この語をラベルに使わない")
+    return text
+
+
+def label_of(key, games):
+    """群の鍵 → **冊子のラベル**。局数は**材料から渡す**(ここで数えない・既定値を入れない)。"""
+    template = GROUP_LABELS.get(key)
+    if template is None:
+        raise ExitGroupsError(
+            f"群の鍵「{key}」のラベルが無い ― 群が増えたら、顧客に出す呼び方を人が決めてから足すこと")
+    if "{games}" in template and (isinstance(games, bool) or not isinstance(games, int)
+                                  or games <= 0):
+        raise ExitGroupsError(
+            f"ラベルに入れる局数が数でない: {games} ― "
+            "局数は材料(`summary.games`)から渡す(既定値を入れない)")
+    return check_label_words(template.format(games=games))
 
 
 def load(path):
@@ -117,6 +176,8 @@ def group_rows(recognition, patient, direct=None, side_match=None):
             f"局の集合が合わない(認識に無い局 {missing} / 報告に無い局 {extra}) ― "
             "戦型の認識と今回の報告が同じ 25 局を見ているか確かめること")
     key_of_game = {gid: class_key_of(rows[gid]["proposalSignatureClass"]) for gid in ids}
+    # ラベルに入れる局数。**材料の合計をそのまま使う**(群に割った合計との一致は `_check_totals`)。
+    total_games = (patient.get("summary") or {}).get("games")
 
     out = []
     for key in GROUP_ORDER:
@@ -127,7 +188,8 @@ def group_rows(recognition, patient, direct=None, side_match=None):
         ahead = [g for g in mine if is_ahead(g)]
         row = {
             "key": key,
-            "label": PROVISIONAL_LABELS[key],
+            # **ラベルは 1 か所の対応表から**(局数は材料の合計 ― ここで数え直さない)。
+            "label": label_of(key, total_games),
             "gameNos": [g["no"] for g in mine],
             "gameIds": members,
             "games": len(mine),
@@ -225,6 +287,9 @@ def lines_of(rows, cross_phrase):
     """観測の欄に置く行。**1 群 1 行。割合・%・比べる語を入れない。**"""
     out = []
     for r in rows:
+        # **行の見出しに「普段」が出ないこと**(司令塔が名指しした 2 本目の守り)。
+        # `label_of` とは別にここでも見る ― ラベルを別の道で入れた行が、**印字の手前で止まる。**
+        check_label_words(r["label"])
         parts = [f"{r['games']} 局"]
         parts.append(f"一度は優勢になった局 {r['aheadGames']}(うち負けた局 {r['aheadLossGames']})")
         parts.append(f"崩れ {r['collapses']} 回")
