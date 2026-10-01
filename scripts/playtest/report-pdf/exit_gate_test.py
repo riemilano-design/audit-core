@@ -670,7 +670,7 @@ class DraftOnlySectionsAreNotCountedTest(unittest.TestCase):
         for h in EC.DRAFT_ONLY_HEADINGS:
             self.assertNotIn(h, src)
 class AggTagTest(unittest.TestCase):
-    """検査 (x) 本編の数の id 照合(2026-09-30)。
+    """検査 (xi) 本編の数の id 照合(2026-09-30)。
 
     【材料の数はぜんぶ違う値にする】正解が近くの別の値と同じだと、
     「別の欄を返す変異」「最初の印だけ見る変異」が緑で通る(2026-09-29 に 2 回踏んだ型)。
@@ -687,6 +687,27 @@ class AggTagTest(unittest.TestCase):
             # 壊れた packet が来たときに 1 を「言える数」にしてはいけない)
             {"id": "flag", "value": True},
         ]}
+
+    def test_xi1_every_message_is_labelled_xi(self):
+        """**この門の苦情と報告は「(xi)」で始まる**(2026-10-01 の付け直し)。
+
+        番号は**司令塔と話すときの名前**である。正本(接続設計案)では
+        **(x) = `<!-- ans: qN status -->` の門**・**(xi) = この id の照合**なので、
+        最初に私が付けた「(x)」のままだと「(x) を足して」が**別の検査**を指す。
+        **番号は正本の表に合わせる**ことを、ここで固定する。
+        """
+        problems, notes = [], []
+        # 印の id が packet に無い → 苦情が 1 件
+        EG.check_agg_tags("- 25 局<!-- agg: 無い_id -->\n", {"aggregates": []}, problems, notes)
+        # packet を渡さない → 報告が 1 件
+        problems2, notes2 = [], []
+        EG.check_agg_tags("- 25 局<!-- agg: a -->\n", None, problems2, notes2)
+        said = problems + notes + problems2 + notes2
+        self.assertGreaterEqual(len(said), 2, said)
+        for line in said:
+            self.assertTrue(line.startswith("(xi)"), line)
+            # **(x) で始まらない**(付け直しが戻ったら落ちる)。
+            self.assertFalse(line.startswith("(x)"), line)
 
     def test_x1_a_marked_line_whose_numbers_are_in_the_row_passes(self):
         md = "- 崩れ 79 回。<!-- agg: collapse.total -->"

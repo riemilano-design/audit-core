@@ -348,7 +348,11 @@ def check_draft_leftovers(raw_md, problems):
 
 
 # ==================== 本体 ====================
-# ==================== (x) 本編の数の id 照合(2026-09-30) ====================
+# ==================== (xi) 本編の数の id 照合(2026-09-30) ====================
+# **番号は正本に合わせた**(接続設計案 `docs/NEXTGEN_CONNECTION_DESIGN_2026-09-30.md` の表)。
+# 最初は **(x)** と名づけていたが、正本では **(x) = `<!-- ans: qN status -->` の門**(顧客の問いの
+# 答えの場所)で、**(xi) = この id の照合**である。**番号は司令塔と話すときの名前**なので、
+# 食い違うと「(x) を足して」が別の検査を指す。**動きは何も変えていない**(語だけの付け直し)。
 # 【何のために在るか(顧客の PDF にどう出るか)】本編の数の行に、書き手が
 # `<!-- agg: <集計の id> -->` の印を付ける。**顧客に見える文字は 1 文字も増えない**(md のコメント)。
 # 増えるのは「その数がどの集計から来たか」を機械が辿れること ―
@@ -389,7 +393,7 @@ def numbers_of_aggregate_row(row):
 
 
 def check_agg_tags(md_text, packet, problems, notes):
-    """(x) 印の id が packet の集計に在り、その行の数がその集計行の数と合うか。
+    """(xi) 印の id が packet の集計に在り、その行の数がその集計行の数と合うか。
 
     【拾い方は写さない】数は **この門の `number_claims()` の 1 か所**。
     自前で `scan_numbers` を呼んでいたのを 2026-09-30 に寄せた ― 実物の本編で測ると、
@@ -406,14 +410,14 @@ def check_agg_tags(md_text, packet, problems, notes):
     """
     tags = agg_tags_of(md_text)
     if packet is None:
-        notes.append(f"(x) packet が渡されていないので id の照合をしていない(印 {len(tags)} 件)")
+        notes.append(f"(xi) packet が渡されていないので id の照合をしていない(印 {len(tags)} 件)")
         return
     rows = {}
     for row in (packet.get("aggregates") or []):
         if isinstance(row, dict) and isinstance(row.get("id"), str):
             rows[row["id"]] = row
     if not tags:
-        notes.append(f"(x) 本編に集計の印が 0 件(packet の集計は {len(rows)} 行)")
+        notes.append(f"(xi) 本編に集計の印が 0 件(packet の集計は {len(rows)} 行)")
         return
     for line_no, ids, line in tags:
         allowed = set()
@@ -421,19 +425,19 @@ def check_agg_tags(md_text, packet, problems, notes):
         for agg_id in ids:
             row = rows.get(agg_id)
             if row is None:
-                problems.append(f"(x) {line_no} 行目の印の id「{agg_id}」が packet の集計に無い")
+                problems.append(f"(xi) {line_no} 行目の印の id「{agg_id}」が packet の集計に無い")
                 continue
             known.append(agg_id)
             allowed |= numbers_of_aggregate_row(row)
         if not known:
             continue
         if CA.RATIO_WORD_RE.search(line):
-            notes.append(f"(x) {line_no} 行目は倍割の語があるので数を照合していない")
+            notes.append(f"(xi) {line_no} 行目は倍割の語があるので数を照合していない")
             continue
         missing = sorted({n for n in number_claims([line]) if n not in allowed})
         if missing:
             problems.append(
-                f"(x) {line_no} 行目の数 {missing} が印の集計行({'・'.join(known)})の数 "
+                f"(xi) {line_no} 行目の数 {missing} が印の集計行({'・'.join(known)})の数 "
                 f"{sorted(allowed)} に無い")
 
 
@@ -443,7 +447,7 @@ def parse_own_args(argv):
     i = 0
     while i < len(argv):
         flag = argv[i]
-        # `--packet` は**任意**(検査 (x))。渡されなければ (x) を飛ばして「照合していない」と報告する
+        # `--packet` は**任意**(検査 (xi))。渡されなければ (xi) を飛ばして「照合していない」と報告する
         # ― 印を書く段も packet を渡す段もまだ無いので、必須にすると既にある 21 段が全部止まる。
         if flag in ("--candidates", "--packet"):
             value = argv[i + 1] if i + 1 < len(argv) else None
@@ -460,7 +464,7 @@ def parse_own_args(argv):
 
 
 def run(own, rest, notes=None):
-    """`notes` を渡すと、**落とさないが黙らない報告**(検査 (x))をそこへ足す。
+    """`notes` を渡すと、**落とさないが黙らない報告**(検査 (xi))をそこへ足す。
     渡さない呼び方を壊さないために既定は None(捨てる)。"""
     if notes is None:
         notes = []
