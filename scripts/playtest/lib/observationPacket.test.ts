@@ -217,6 +217,66 @@ describe("Observation Packet v0.1 の契約", () => {
     expect(validateObservationPacket(packet).join("\n")).toContain("abc");
   });
 
+  // ---- 退化した path を入口で落とす(2026-10-01。司令塔の依頼) ----
+  //
+  // 【なぜ足したか】`provenance.inputs[].path` が **1 字の `:`** でも packet の検査を通り、
+  // その束を組むと本文に `- :` の行ができて、席の到達の照合が素通りしていた(実験席が実物で再現)。
+  // 照合の側は閉じたが、**入口を閉じていないと同じ穴が別の道で開く**。
+  //
+  // 【両側で校正する】落ちる値を 3 つ並べる ―
+  //   `":"`    = 長さも英数字も無い(両方で落ちる)
+  //   `"ab"`   = **英数字は在るが短い**(`minLength` だけが効く)
+  //   `"::::"` = **長さは足りるが英数字が無い**(`pattern` だけが効く)
+  // こうしておくと、`minLength` を外せば `"ab"` の行が、`pattern` を外せば `"::::"` の行が
+  // 別々に赤くなる。片方だけ外した変異が黙らない。
+  //
+  // 【`/` を必須にしない】根に在るファイル(`CLAUDE.md` など)が落ちるため。だから
+  // 「通る側」の校正は **`/` を持たない根のファイル**で当てる。
+  const DEGENERATE_PATHS = [":", "ab", "::::"] as const;
+  const ROOT_FILE = "CLAUDE.md"; // `/` を持たないが正しい path
+
+  it("a12b provenance.inputs[].path が退化した文字だと落ちる(`/` の無い根のファイルは通る)", () => {
+    for (const bad of DEGENERATE_PATHS) {
+      const packet = minimalPacket();
+      packet.provenance.inputs[0]!.path = bad;
+      const problems = validateObservationPacket(packet).join("\n");
+      expect(problems).toContain("provenance.inputs[0].path");
+      expect(problems).toContain(`"${bad}"`);
+    }
+    const ok = minimalPacket();
+    ok.provenance.inputs[0]!.path = ROOT_FILE;
+    expect(validateObservationPacket(ok)).toEqual([]);
+  });
+
+  it("a12c provenance.sources[].inputPaths[] が退化した文字だと落ちる(同じ家族の 3 つ目の扉)", () => {
+    for (const bad of DEGENERATE_PATHS) {
+      const packet = minimalPacket();
+      packet.provenance.sources[0]!.inputPaths = [bad];
+      const problems = validateObservationPacket(packet).join("\n");
+      expect(problems).toContain("provenance.sources[0].inputPaths[0]");
+      expect(problems).toContain(`"${bad}"`);
+    }
+    const ok = minimalPacket();
+    ok.provenance.sources[0]!.inputPaths = [ROOT_FILE];
+    expect(validateObservationPacket(ok)).toEqual([]);
+  });
+
+  it("a12d provenance.sources[].path(任意の欄)も同じ検査を受ける", () => {
+    for (const bad of DEGENERATE_PATHS) {
+      const packet = minimalPacket() as unknown as { provenance: { sources: Record<string, unknown>[] } };
+      packet.provenance.sources[0]!.path = bad;
+      const problems = validateObservationPacket(packet).join("\n");
+      expect(problems).toContain("provenance.sources[0].path");
+      expect(problems).toContain(`"${bad}"`);
+    }
+    // 欄そのものは任意 ― **無くても通る**(必須にしたつもりの取り違えを落とす)。
+    const absent = minimalPacket();
+    expect(validateObservationPacket(absent)).toEqual([]);
+    const ok = minimalPacket() as unknown as { provenance: { sources: Record<string, unknown>[] } };
+    ok.provenance.sources[0]!.path = ROOT_FILE;
+    expect(validateObservationPacket(ok)).toEqual([]);
+  });
+
   it("a13 駒の字が表に無い字だと落ちる(実験 2 の B2 = 駒種の取り違え)", () => {
     const packet = minimalPacket();
     packet.facts.moves[0]!.piece = "p" as never; // SFEN の字は別の語彙(この契約は STANDARD_ROLES)

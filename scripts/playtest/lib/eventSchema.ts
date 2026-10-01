@@ -27,6 +27,10 @@ const KEYWORDS = new Set([
   "required",
   "additionalProperties",
   "minItems",
+  // **文字列の最小の長さ**(2026-10-01)。退化した文字(1 字の `:` など)を入口で落とすために足した
+  // ― packet の `provenance` のパスが 1 字でも通り、その束を組むと本文に `- :` の行ができていた
+  // (実験席が実物で再現)。**`pattern` だけでは長さを縛れない**(長さを正規表現に混ぜると読めなくなる)。
+  "minLength",
   "items",
   "oneOf",
 ]);
@@ -81,7 +85,7 @@ function validateInto(instance: unknown, schema: JsonSchema, path: string, error
       throw new SchemaKeywordError(`${path}: この検証器が扱わないキーワード「${keyword}」`);
     }
   }
-  for (const keyword of ["minimum", "maximum", "minItems"]) {
+  for (const keyword of ["minimum", "maximum", "minItems", "minLength"]) {
     if (schema[keyword] !== undefined && typeof schema[keyword] !== "number") throw new SchemaKeywordError(`${path}: ${keyword} は数でなければならない`);
   }
   if (schema.pattern !== undefined && typeof schema.pattern !== "string") throw new SchemaKeywordError(`${path}: pattern は文字列でなければならない`);
@@ -113,6 +117,11 @@ function validateInto(instance: unknown, schema: JsonSchema, path: string, error
 
   if (schema.pattern !== undefined && typeof instance === "string") {
     if (!new RegExp(String(schema.pattern)).test(instance)) errors.push(`${path}: "${instance}" は ${String(schema.pattern)} に合わない`);
+  }
+
+  // **文字列の長さ**(`pattern` と同じ扱い ― 文字列でないものには当てない)。
+  if (typeof schema.minLength === "number" && typeof instance === "string" && instance.length < schema.minLength) {
+    errors.push(`${path}: "${instance}" は ${schema.minLength} 文字より短い(${instance.length} 文字)`);
   }
 
   if (typeof instance === "number") {

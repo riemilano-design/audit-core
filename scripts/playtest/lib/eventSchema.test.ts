@@ -106,4 +106,26 @@ describe("T-1: 検証器(外部ライブラリ無し。計画 J-7)", () => {
     // 注記は検証に使わず、例外にもしない
     ok(1, { $schema: "x", $id: "y", $comment: "z", title: "t", description: "d", type: "integer" });
   });
+  it("minLength は短い文字列を落とす(退化した文字を入口で止める)", () => {
+    // **1 字の `:` が packet の provenance のパスとして通っていた**(2026-10-01。実験席が実物で再現)。
+    // その束を組むと本文に `- :` の行ができ、席の到達の照合がその節を素通りしていた。
+    const schema = { type: "string", minLength: 3 };
+    expect(validate(":", schema)).toHaveLength(1);
+    expect(validate(":", schema)[0]).toContain("3 文字より短い");
+    expect(validate("ab", schema)).toHaveLength(1);
+    // **ちょうど 3 文字は通る**(境目を数で固定する ― `<` と `<=` の取り違えが黙らない)。
+    expect(validate("a.b", schema)).toEqual([]);
+    expect(validate("docs/README.md", schema)).toEqual([]);
+  });
+
+  it("minLength は文字列でないものには当てない(pattern と同じ扱い)", () => {
+    // 数や配列に長さを当てると、**型の誤りと長さの誤りが 2 行出る**(同じ 1 つの誤りを 2 回言う)。
+    expect(validate(1, { minLength: 3 })).toEqual([]);
+    expect(validate([1, 2], { minLength: 3 })).toEqual([]);
+    expect(validate(null, { minLength: 3 })).toEqual([]);
+  });
+
+  it("minLength が数でなければスキーマの誤り(黙って何も見ないにしない)", () => {
+    expect(() => validate("x", { minLength: "3" })).toThrow(SchemaKeywordError);
+  });
 });
