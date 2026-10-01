@@ -20,6 +20,7 @@
 // 既存の道具(lib/ の純粋関数・report-pdf/ の python)の中身の複製・改変。
 // 人間の確認点(S6 の言い換え・B の「読み」)を自動で埋めること。
 
+import { createHash } from "node:crypto";
 import { spawn } from "node:child_process";
 import { appendFileSync, copyFileSync, existsSync, mkdirSync, readdirSync, readFileSync, statSync, writeFileSync } from "node:fs";
 import path from "node:path";
@@ -66,6 +67,8 @@ const REPORT_PDF_DIR = path.join(SCRIPT_DIR, "report-pdf");
 
 /** `npx tsx <道具>.ts` で起こすもの。 */
 const TSX_TOOLS: Partial<Record<DeliverTool, string>> = {
+  // ⑤ の門(2026-10-01)。**採用は機械がしない** ― この道具は選択を読んで 3 つを見るだけ。
+  "exit-select": "scripts/playtest/exitSelect.ts",
   pipeline: path.join(SCRIPT_DIR, "pipeline.ts"),
   "direct-answers": path.join(SCRIPT_DIR, "directAnswers.ts"),
   "final-positions": path.join(SCRIPT_DIR, "finalPositions.ts"),
@@ -483,9 +486,23 @@ async function main(): Promise<number> {
       step.action === "gate" && !humanGate && existsSync(out.log)
         ? seatSecondsOf(readFileSync(out.log, "utf-8").split("\n"), step.stage, finishedAt)
         : undefined;
+    // 段 `exit-select` だけ: **使った選択の道と中身の封**を納品ログに残す(司令塔の条件 2。2026-10-01)。
+    // 選択は work の**外**に在るので、これが無いと**どの採用から組んだのか work の中から言えない**。
+    const selection =
+      step.stage === "exit-select" && step.args[0] !== undefined && existsSync(step.args[0])
+        ? { path: step.args[0], sha256: createHash("sha256").update(readFileSync(step.args[0])).digest("hex") }
+        : undefined;
     appendFileSync(
       out.log,
-      deliverLogLineOf({ stage: step.stage, startedAt, finishedAt, rc, humanGate, ...(seatSeconds !== undefined ? { seatSeconds } : {}) }),
+      deliverLogLineOf({
+        stage: step.stage,
+        startedAt,
+        finishedAt,
+        rc,
+        humanGate,
+        ...(seatSeconds !== undefined ? { seatSeconds } : {}),
+        ...(selection !== undefined ? { selection } : {}),
+      }),
       "utf-8",
     );
     if (seatSeconds !== undefined) console.log(`[${step.stage}] 人の席: ${seatSeconds} 秒`);

@@ -39,6 +39,9 @@ export type DeliverStage =
   | "answer-gate"
   | "answer-check"
   | "answer-pdf"
+  // ⑤ Answer selection の門(2026-10-01。司令塔の GO)。**⑤ の仕事は deliver の外**で、
+  // この段は「できているか」を見る門だけ(`prose-gate` と同じ形)。
+  | "exit-select"
   // STEP CUSTOMER-EXIT の 4 段(仕様 §1 の表)。**既存 17 段は触らない ― 足すだけ。**
   | "exit-candidates"
   | "exit-gate"
@@ -65,6 +68,8 @@ export const DELIVER_STAGES: readonly DeliverStage[] = [
   "answer-gate",
   "answer-check",
   "answer-pdf",
+  // ⑤ の門は `exit-candidates` の**直前**(正本 ⑤ の行)。
+  "exit-select",
   // 顧客向け出口(承認済みの 30 ページの形)。**既存の 6 冊は材料として残り**、
   // ここで本編 1 冊 + 付録 1 冊に束ね直す(正本 §1・§3a)。
   "exit-candidates",
@@ -90,6 +95,7 @@ export type DeliverTool =
   | "check-answer"
   | "render-answer"
   | "check-delivery"
+  | "exit-select"
   | "exit-candidates"
   | "exit-gate"
   | "exit-cover"
@@ -326,6 +332,51 @@ export interface DeliverOutPaths {
   exitSeal: string;
   /** 付録 3 の PDF の隣に `render_direct.py` が書く索引(段 `exit-render` の材料)。 */
   appendix3Index: string;
+}
+
+// ---- ⑤ の選択の置き場(2026-10-01。司令塔の判断 = 正本のまま)----
+//
+// 【なぜ work の中ではないか】`direct/` の他の JSON は**その 1 回の組版の機械の出力**で、
+// 組み直せば作り直される。**選択は人の判断**なので、**組版をやり直すたびに消えてはいけない**
+// (5 人目は 7 周回った)。採用が紐づくのは **(顧客, runId)** で、work ではない。
+//
+// 【`--out` の安全装置に当たらない】`unexpectedOutFiles` が見るのは `<out>` 直下と
+// `<out>/direct/` 直下だけで、ここは **work の兄弟**(`out/c5/deliver1` の隣)なので見られない
+// (`deliver.ts` の呼び出し側を読んで確かめた。2026-10-01)。
+export const DELIVER_EXIT_DIR = "exit";
+export const DELIVER_EXIT_NAMES = {
+  /** ⑤ の出力 = ⑥ の唯一の入力(契約 `answer-selection.v0.1`)。**人が採用の印を付ける** */
+  answerSelection: "answer_selection.json",
+  /** 候補の一覧(S-2 が書く。**採用の印は空のまま**) */
+  selectionDraft: "answer_selection.draft.json",
+} as const;
+
+/**
+ * 顧客のフォルダ(work の親)。**仮定にせず、組の一覧で確かめる** ―
+ * 全部の組が同じ親を持たなければ落とす(「work の親が顧客」が崩れた形で黙って動かない)。
+ */
+export function customerDirOf(groups: readonly { work: string }[]): string {
+  if (groups.length === 0) throw new DeliverArgError("組の一覧が空(顧客のフォルダを導けない)");
+  const parents = [...new Set(groups.map((group) => path.dirname(path.resolve(group.work))))];
+  if (parents.length !== 1) {
+    throw new DeliverArgError(
+      `組の一覧が同じ顧客のフォルダに無い(親が ${parents.length} 通り): ${parents.join(", ")}`,
+    );
+  }
+  return parents[0]!;
+}
+
+export function exitSelectPaths(customerDir: string): {
+  dir: string;
+  answerSelection: string;
+  selectionDraft: string;
+} {
+  const dir = path.join(customerDir, DELIVER_EXIT_DIR);
+  return {
+    dir,
+    answerSelection: path.join(dir, DELIVER_EXIT_NAMES.answerSelection),
+    selectionDraft: path.join(dir, DELIVER_EXIT_NAMES.selectionDraft),
+  };
 }
 
 export function deliverOutPaths(out: string): DeliverOutPaths {
@@ -1066,6 +1117,14 @@ export interface DeliverLogEntry {
    * (0 を書くと「席に 0 秒かかった」と読めてしまう。**測っていないものを数にしない**)。
    */
   seatSeconds?: number;
+  /**
+   * 段 `exit-select` だけ。**使った選択の道と中身の封**(司令塔の条件 2。2026-10-01)。
+   *
+   * 【なぜ要るか】選択は work の**外**(`out/<顧客>/exit/`)に在るので、これが無いと
+   * **組んだ冊子がどの採用から出たのか work の中から言えない。**
+   * 材料 + レシピで再現できる形(packet の `provenance` と同じ考え方)。
+   */
+  selection?: { path: string; sha256: string };
 }
 
 /**
@@ -1416,6 +1475,22 @@ export function planDeliver(args: DeliverArgs, probe: DeliverProbe, cmdOf: (tool
   // (実測 2026-09-29。git の追跡外なので戻せなかった)。
   // JSON が無いまま進んだ場合は**段 `exit-gate` が「候補の JSON に p1Numbers が無い」で止まる** ―
   // **止まるのは良く、消すのは悪い。**
+  // ---- ⑤ の門(2026-10-01)。**`exit-candidates` の直前**(正本 ⑤ の行)----
+  //
+  // 【門だけ】⑤ の仕事(候補の一覧と採用)は **deliver の外**(別コマンド `exitSelect.ts`)。
+  // この段が見るのは 3 つ ― **選択が在る / 契約に合う / `adoptedBy` が埋まっている**。
+  // **判定は TS に写さない**(`exit-gate` と同じ ― 道具をそのまま回す)。
+  // 【門は書けない】この段は選択を**読むだけ**で、`adoptedBy` を埋める道を持たない ―
+  // 埋められる門を書いてしまうと ⑤ が消える(司令塔 2026-10-01)。
+  push({
+    stage: "exit-select",
+    tool: "exit-select",
+    cmd: cmdOf("exit-select"),
+    args: [exitSelectPaths(customerDirOf(args.groups)).answerSelection],
+    action: "gate",
+    reason: "採用(どの読み・数・盤・行動を出すか)が済むまで止まる。検査は exitSelect.ts",
+  });
+
   const candidatesDone = probe.exists(out.honbunMd);
   push({
     stage: "exit-candidates",

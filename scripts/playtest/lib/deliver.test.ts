@@ -704,8 +704,10 @@ describe("stagesFrom", () => {
   it("--from が無ければ全段、あればその段から", () => {
     expect(stagesFrom(undefined)).toEqual([...DELIVER_STAGES]);
     // 顧客向け出口の 4 段が入った(2026-09-29)。**最後の段は `exit-send`**(C-1b。2026-09-30)。
+    // **⑤ の門 `exit-select` が `exit-candidates` の直前に入った**(2026-10-01。司令塔の GO)。
     expect(stagesFrom("answer-check")).toEqual([
       "answer-check", "answer-pdf",
+      "exit-select",
       "exit-candidates", "exit-gate", "exit-render", "exit-check",
       "check-delivery", "exit-send",
     ]);
@@ -744,7 +746,7 @@ describe("planDeliver", () => {
   });
   const steps = planDeliver(args, probe, (t) => `cmd:${t}`);
 
-  it("計画の順どおり 17 段(段 pipeline-gate が先頭)", () => {
+  it("計画の順どおり(段 pipeline-gate が先頭。⑤ の門を入れて 23 段)", () => {
     expect(steps.map((s) => s.stage)).toEqual([...DELIVER_STAGES]);
     expect(steps[0]!.stage).toBe("pipeline-gate");
     expect(steps[1]!.stage).toBe("pipeline-data");
@@ -786,6 +788,8 @@ describe("planDeliver", () => {
     const resumed = planDeliver(argsOf(["--from", "answer-check"]), probe, (t) => t);
     expect(resumed.map((s) => s.stage)).toEqual([
       "answer-check", "answer-pdf",
+      // ⑤ の門(2026-10-01)。**`exit-candidates` の直前**。
+      "exit-select",
       "exit-candidates", "exit-gate", "exit-render", "exit-check",
       "check-delivery", "exit-send",
     ]);
@@ -1468,10 +1472,13 @@ describe("顧客向け出口の 4 段", () => {
   const thisGroup = groupPaths({ work: args.work, timeLimitSec: args.timeLimitSec }, args.person);
   const plan = materialPlanOf(args);
 
-  it("段は既存 17 段の後に入り、最後が exit-send(既存の順は動かない)", () => {
+  it("段は既存 17 段の後に入り、最後が exit-send(既存の順は動かない。⑤ の門は exit-candidates の直前)", () => {
     const stages = [...DELIVER_STAGES];
-    expect(stages.slice(-6)).toEqual(["exit-candidates", "exit-gate", "exit-render", "exit-check",
+    // **⑤ の門は `exit-candidates` の直前**(2026-10-01。正本 ⑤ の行)。
+    expect(stages.slice(-7)).toEqual(["exit-select", "exit-candidates", "exit-gate", "exit-render", "exit-check",
                                       "check-delivery", "exit-send"]);
+    // **直前であることを隣で見る**(「どこかに在る」では位置が留まらない)。
+    expect(stages[stages.indexOf("exit-candidates") - 1]).toBe("exit-select");
     // **`exit-send` は最後**(C-1b。局数を `patient_report_data.json` から読めるのはここ) ―
     // 器の門と禁止語の検査を**通った後**でなければ、落ちた冊子の写しを渡す入れ物に入れてしまう。
     expect(stages[stages.length - 1]).toBe("exit-send");
@@ -1483,7 +1490,8 @@ describe("顧客向け出口の 4 段", () => {
       "appendix4-cause", "appendix4-search", "appendix4-pdf",
       "answer-menu", "answer-draft", "answer-gate", "answer-check", "answer-pdf",
     ]);
-    expect(stages).toHaveLength(22);
+    // 22 → 23(⑤ の門 `exit-select` を足した。2026-10-01)。
+    expect(stages).toHaveLength(23);
   });
 
   it("--from exit-gate で書き手の席から再開できる", () => {
