@@ -16,7 +16,7 @@ import {
 } from "./integration.js";
 import { adaptSchema, dropNullsNotAllowed, effectiveValueShape } from "./schemaAdapters.js";
 import { renderSeatInput, type SeatInputMeta } from "./seatInput.js";
-import { completeSeatOutput, loadSeatOutputLlmSchema, seatOutputProblems, validateSeatOutputLlm, type Seat } from "./seatOutput.js";
+import { completeSeatOutput, loadSeatOutputLlmSchema, seatOutputProblems, seatReachNotes, validateSeatOutputLlm, type Seat } from "./seatOutput.js";
 import { budgetDecision, costUsd, estimateTokensByChars, type Prices } from "./tokenBudget.js";
 
 type Rec = Record<string, unknown>;
@@ -40,6 +40,8 @@ export const LENGTH_RETRY_FACTOR = 1.5;
 export const FIXED_INSTRUCTION_SHA256: Readonly<Record<string, string>> = {
   "LLM_SEATS_INSTRUCTION_v1_2026-09-30.md": "3b09bec22b7ea95c1a7e7a3cce1087b1c3c9f54ad2583d35f2d00e46242b2f88",
   "LLM_SEATS_INSTRUCTION_v1.1_2026-09-30.md": "11d1f533c74ec6dcecbd9010fb512546961bc753f57e45e88b34157b8cdb148b",
+  // v1.2(2026-10-01): 封印語・partial のときの missing・新しい欄を作らない の 3 文を足した(版名の行以外は 1 バイトも変えていない)
+  "LLM_SEATS_INSTRUCTION_v1.2_2026-10-01.md": "2870e1baa288f9a067d29d81d1d95f878f89508432e9e8b2aa0e9931684aec56",
   "LLM_SEATS_INTEGRATOR_INSTRUCTION_v1_2026-09-30.md": "5118a6949862a104942f6975191dd3d16b00ca834f18b4bba5807aeaf2d7d94a",
 };
 
@@ -199,6 +201,18 @@ export async function runSlot(
   let user = ctx.user;
   let reserve = cfg.reserveOutputTokens;
   let schemaRetries = 0;
+  /**
+   * **これまでの試行で落ちた理由を全部ためる。** 2026-10-01 の実測で、再依頼が**直前の試行の理由だけ**を
+   * 渡していたため、席は「言われた所を直し、前に言われた所を壊す」往復をした
+   * (1 回目「missing が無い」→ 2 回目 missing は書いたが知らない欄 items2 を作った → 3 回目 items2 は消したが
+   * また missing が無い)。**3 試行で 2.77 ドル**。理由をためて渡せば、前に言われた所を忘れない。
+   * 前回の**出力**は渡さない(席が自分の誤りを土台にすると周の独立が壊れる)。
+   */
+  const reasonsSoFar: string[] = [];
+  const retryWith = (problems: readonly string[]): string => {
+    for (const p of problems) if (!reasonsSoFar.includes(p)) reasonsSoFar.push(p);
+    return retryUserText(ctx.user, reasonsSoFar);
+  };
   let lengthRetries = 0;
   let lastEstimate = estimate;
   let lastDecision = budgetDecision({ inputTokens: estimate.inputTokens, reserveOutputTokens: reserve, prices: cfg.prices, capUsd: ctx.capUsd, cumulativeCostUsd: ctx.cumulativeCostUsd, ...(cfg.inputLimit === undefined ? {} : { inputLimit: cfg.inputLimit }) });
@@ -237,29 +251,43 @@ export async function runSlot(
     attempts.push(record);
     files.push({ name: `${ctx.label}_attempt_${attempt}_raw.json`, content: `${JSON.stringify(res.raw, null, 1)}\n` });
     files.push({ name: `${ctx.label}_attempt_${attempt}_raw.txt`, content: res.text });
+    /**
+     * 落ちた試行の**指摘の本文**を成果物に残す。2026-10-01 に、形が 3 回とも合わずに
+     * **2.77 ドル**を使った席の記録が件数だけで、理由は保存された原文に検査を当て直して特定するしかなかった。
+     * 3 回とも**違う**理由(必須の欄が無い → 知らない欄を作った → また必須の欄が無い)で、
+     * 件数だけでは「同じ所で落ちた」のか「毎回別の所か」が読めない ― 対策が逆になる。
+     */
+    const writeProblems = (): void => {
+      if (record.problems.length === 0) return;
+      files.push({ name: `${ctx.label}_attempt_${attempt}_problems.txt`, content: `${record.problems.map((p) => `- ${p}`).join("\n")}\n` });
+    };
 
     // 途中で切れた → 取り置きを 1.5 倍にして 1 回だけ
     if (res.finishReason === "length" && lengthRetries < LENGTH_RETRY_LIMIT) {
       lengthRetries += 1;
       reserve = Math.ceil(reserve * LENGTH_RETRY_FACTOR);
       record.problems.push("途中で切れた(length)― 取り置きを増やして送り直す");
+      writeProblems();
       continue;
     }
     if (res.json === undefined) {
       record.problems.push("JSON が取り出せなかった");
-      if (schemaRetries < SCHEMA_RETRY_LIMIT) { schemaRetries += 1; user = retryUserText(ctx.user, record.problems); continue; }
+      writeProblems();
+      if (schemaRetries < SCHEMA_RETRY_LIMIT) { schemaRetries += 1; user = retryWith(record.problems); continue; }
       return absent("no_json", `${ctx.label}: ${SCHEMA_RETRY_LIMIT + 1} 回とも JSON にならなかった`, lastEstimate, lastDecision.estimatedCostUsd);
     }
     const cleaned = dropNullsNotAllowed(res.json, ctx.canonicalSchema);
     const problems = ctx.validateLlm(cleaned);
     if (problems.length > 0) {
       record.problems.push(...problems);
-      if (schemaRetries < SCHEMA_RETRY_LIMIT) { schemaRetries += 1; user = retryUserText(ctx.user, problems); continue; }
+      writeProblems();
+      if (schemaRetries < SCHEMA_RETRY_LIMIT) { schemaRetries += 1; user = retryWith(problems); continue; }
       return absent("schema_failed", `${ctx.label}: ${SCHEMA_RETRY_LIMIT + 1} 回とも形が合わなかった(最後は ${problems.length} 件)`, lastEstimate, lastDecision.estimatedCostUsd);
     }
     const after = ctx.afterValidate?.(cleaned as Rec);
     if (after !== undefined) {
       record.problems.push(...after.problems);
+      writeProblems();
       // 合言葉が違う = 入力が届いていない。**再試行しない**(計画 §4)
       return absent(after.absentReason, `${ctx.label}: ${after.problems.join(" / ")}`, lastEstimate, lastDecision.estimatedCostUsd);
     }
@@ -346,7 +374,7 @@ export interface RunAllResult {
   itemMap?: ItemMapRow[];
   integration?: Rec;
   integrator?: SlotRunResult;
-  checks: { seats: Array<{ seat: Seat; problems: string[] }>; integration?: { problems: string[] } };
+  checks: { seats: Array<{ seat: Seat; problems: string[]; notes: string[] }>; integration?: { problems: string[] } };
   summary: Rec;
   files: SavedFile[];
 }
@@ -402,6 +430,8 @@ export async function runAll(cfg: RunAllConfig, deps: SlotDeps): Promise<RunAllR
   const checks: RunAllResult["checks"] = {
     seats: seats.map((s) => ({
       seat: s.seat,
+      // 到達の記録(指摘ではない。lastKey の食い違いはここに置く ― 2026-10-01 の実測で到達を測っていないと分かった)
+      notes: s.present && s.envelope !== undefined ? seatReachNotes(s.envelope, meta) : [],
       problems: s.present && s.envelope !== undefined
         ? seatOutputProblems(s.envelope, { meta, request: cfg.request, today: cfg.today, ...(cfg.obsItemsPath === undefined ? {} : { obsItemsPath: cfg.obsItemsPath }) })
         : [],

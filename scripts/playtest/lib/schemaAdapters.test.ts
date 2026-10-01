@@ -63,7 +63,7 @@ function strictProblems(schema: unknown, path = "$"): string[] {
 // ---- 正本を通る fixture(最小) ----
 function seatLlm(): Rec {
   return {
-    reach: { passphrase: "run20260", sections: [{ section: "A", lastKey: "q1 普段指さない" }, { section: "2", lastKey: "aggregates.branches.total.value" }] },
+    reach: { passphrase: "run20260", sections: [{ section: "A", lastKey: "q1 普段指さない", seal: "a1b2c3" }, { section: "2", lastKey: "aggregates.branches.total.value", seal: "d4e5f6" }] },
     items: [
       {
         itemId: "S-001", kind: "finding", factOrHypothesis: "fact", lane: "side",

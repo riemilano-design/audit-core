@@ -8,7 +8,7 @@ import { OBSERVATION_PACKET_CONTRACT, OBSERVATION_PACKET_SCHEMA_VERSION, OBSERVA
 import { AGGREGATE_REF_RE } from "./packetRef.js";
 import {
   INSTRUCTION_V1_SHA256, READING_GUIDE, SeatInputError, dataLinesOf, identifierProblems, numberInclusionProblems, numberTokens, renderSeatInput,
-  normalizeLastKey,
+  normalizeLastKey, SEAL_HEAD, sealOf,
 } from "./seatInput.js";
 
 const INSTRUCTION = readFileSync(new URL("../../../docs/LLM_SEATS_INSTRUCTION_v1_2026-09-30.md", import.meta.url));
@@ -210,7 +210,7 @@ describe("本文の形(節の順・行数・packetRef の文法)", () => {
 });
 
 describe("決定性", () => {
-  it("同じ入力で 2 回 → バイト一致。runId を変えると末尾の 1 行だけ変わる", () => {
+  it("同じ入力で 2 回 → バイト一致。runId を変えると**合言葉の行と封印語の行だけ**が変わる", () => {
     const a = render();
     const b = render();
     expect(a.text).toBe(b.text);
@@ -218,7 +218,16 @@ describe("決定性", () => {
     const c = render({ runId: "xyz20260930run" });
     const la = a.text.trimEnd().split("\n");
     const lc = c.text.trimEnd().split("\n");
-    expect(la.slice(0, -1)).toEqual(lc.slice(0, -1));
+    expect(la.length).toBe(lc.length);
+    // 変わった行はどれも「合言葉」か「封印語」の行(材料の行は 1 行も動かない)
+    const moved = la.map((line, i) => [line, lc[i]!] as const).filter(([x, y]) => x !== y);
+    expect(moved.length).toBe(a.meta.sections.length + 1);
+    for (const [x, y] of moved) {
+      const isMarker = (l: string) => l.startsWith(SEAL_HEAD) || l.startsWith("(束はここまで。合言葉: ");
+      expect(isMarker(x)).toBe(true);
+      expect(isMarker(y)).toBe(true);
+    }
+    // 末尾の合言葉は確かに変わる
     expect(la[la.length - 1]).not.toBe(lc[lc.length - 1]);
   });
 });
@@ -332,5 +341,37 @@ describe("鍵の正規化(normalizeLastKey)", () => {
     const section = meta.sections.find((s) => s.section === "0.2")!;
     expect(section.lastKey.startsWith("- ")).toBe(false);
     expect(section.lastKey.startsWith("ahead_cp")).toBe(true);
+  });
+});
+
+// 2026-10-01: lastKey は到達を測っていないと実測で分かったので、**節ごとの封印語**で測る(司令塔の決定)。
+describe("節の封印語(到達の証拠)", () => {
+  it("節ごとに違い・周ごとに変わる(推測できない)", () => {
+    const a = sealOf("run-aaaa-1", "1");
+    expect(a).toMatch(/^[0-9a-f]{6}$/);
+    expect(sealOf("run-aaaa-1", "1")).toBe(a);          // 同じ入力なら同じ
+    expect(sealOf("run-aaaa-1", "2")).not.toBe(a);      // 節が違えば違う
+    expect(sealOf("run-bbbb-2", "1")).not.toBe(a);      // 周が違えば違う
+    // 節の番号を字として使う(1 と 1.1 を混ぜない)
+    expect(sealOf("run-aaaa-1", "1.1")).not.toBe(sealOf("run-aaaa-1", "11"));
+  });
+  it("本文では**各データ節の最後の行**に出て、meta が同じ語を持つ", () => {
+    const { text, meta } = render();
+    const lines = text.split("\n");
+    for (const section of meta.sections) {
+      expect(section.seal).toBe(sealOf(meta.runId, section.section));
+      const line = `${SEAL_HEAD}${section.seal})`;
+      expect(text).toContain(line);
+      // その節の見出しより後に在る(節の終わりの印なので)
+      const headingAt = lines.findIndex((l) => l.startsWith(`## ${section.section}.`));
+      const sealAt = lines.indexOf(line);
+      expect(headingAt).toBeGreaterThanOrEqual(0);
+      expect(sealAt).toBeGreaterThan(headingAt);
+    }
+    // 封印語の行はデータの行ではない(lastKey を動かさない)
+    expect(meta.sections.every((s) => !s.lastKey.includes("封印語"))).toBe(true);
+    // 束の中で語は節の数だけ出る(1 つの語を使い回さない)
+    const seals = new Set(meta.sections.map((s) => s.seal));
+    expect(seals.size).toBe(meta.sections.length);
   });
 });

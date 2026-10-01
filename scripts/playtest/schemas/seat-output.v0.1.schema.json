@@ -105,11 +105,16 @@
               },
               "lastKey": {
                 "type": "string"
+              },
+              "seal": {
+                "type": "string",
+                "description": "その節の封印語(節の最後の行に印字した語をそのまま写す)。到達の判定はこの語で行う"
               }
             },
             "required": [
               "section",
-              "lastKey"
+              "lastKey",
+              "seal"
             ],
             "additionalProperties": false
           }

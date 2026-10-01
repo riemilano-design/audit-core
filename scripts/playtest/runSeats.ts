@@ -5,6 +5,8 @@
 //   下見(鍵を使わず、束と概算と上限だけ見る):
 //     npx tsx scripts/playtest/runSeats.ts --packet <packet.json> --request <request.json> --out-dir <dir> --dry-run
 //   本番(既定で 2 回。人間の決定 2026-09-30 = 揺れの床を初回に含める。**上限は 2 回の累計に掛かる**):
+//   【上限の単位】`SEAT_COST_CAP_USD` は **1 回の実行(この CLI の 1 起動。`--runs` の全周を含む)**に掛かる。
+//   **生涯累計の歯止めは無い** ― 起動し直せば枠は改めて効く。生涯の歯止めは入金の残高だけ(人間の決定 2026-10-01)。
 //     npx tsx scripts/playtest/runSeats.ts --packet <packet.json> --request <request.json> --out-dir <dir> \
 //       --instruction docs/LLM_SEATS_INSTRUCTION_v1.1_2026-09-30.md --instruction-sha <固定 sha> \
 //       --integrator-instruction docs/LLM_SEATS_INTEGRATOR_INSTRUCTION_v1_2026-09-30.md [--runs 2] [--env .env]
@@ -126,7 +128,8 @@ function printRun(runId: string, result: RunAllResult): void {
   }
   const integ = summary.integration as Record<string, any> | null;
   if (integ !== null) console.log(`  整理役  ${String(integ.model ?? "-").padEnd(26)} ${integ.present === true ? `束 ${String(integ.clusters)} 件・検査の指摘 ${String(integ.checkProblems)} 件` : `無し(${String(integ.absentReason)})`} / 実費 ${String(integ.actualCostUsd)} ドル`);
-  console.log(`  累計の実費 ${String(summary.totals.cumulativeCostUsd)} ドル(上限 ${String(summary.capUsd)} ドル・上限に達した: ${String(summary.totals.capReached)})`);
+  // 「累計」は**この実行(CLI の 1 起動)の累計**。生涯累計ではない ― 読み違えると上限の意味を間違える
+  console.log(`  この実行の累計の実費 ${String(summary.totals.cumulativeCostUsd)} ドル(上限 ${String(summary.capUsd)} ドル・上限に達した: ${String(summary.totals.capReached)})`);
 }
 
 async function main(): Promise<void> {
@@ -240,7 +243,7 @@ async function main(): Promise<void> {
     }
   }
   writeFileSync(path.join(outDir, "pair_summary.json"), `${JSON.stringify({ runIds, runs: pair }, null, 1)}\n`, "utf-8");
-  console.log(`\n書いた: ${outDir}(${runIds.join(" / ")})・累計 ${cumulative.toFixed(4)} ドル`);
+  console.log(`\n書いた: ${outDir}(${runIds.join(" / ")})・この実行の累計 ${cumulative.toFixed(4)} ドル`);
 }
 
 await main();

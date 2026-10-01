@@ -31,8 +31,14 @@ export interface SeatInputSection {
   /** その節の行が packet のどこか(席が packetRef.path に写す文法の根) */
   packetPath: string;
   rows: number;
-  /** 最後の data 行の先頭 2 トークン(先頭 60 字まで。到達検査が席の reach.sections と前方一致で照合する) */
+  /** 最後の data 行の先頭 2 トークン(先頭 60 字まで。**到達の証拠ではない** ― 記録として残すだけ) */
   lastKey: string;
+  /**
+   * その節の**封印語**。`sha256(runId + ":" + 節番号)` の先頭 6 桁で、節の最後の行として印字する。
+   * **推測できず、周ごとに変わる**(runId が変わる)ので、写せたことは「その字が席に届いた」証拠になる。
+   * **限界**: 節の中身を読んだ証拠ではない(封印語の行だけを拾う席は通る)。E-1 はそこまでしか主張しない。
+   */
+  seal: string;
 }
 
 export interface SeatInputMeta {
@@ -165,7 +171,8 @@ export function dataLinesOf(text: string, instruction: string): string {
   const body = text.slice(text.indexOf("\n# (A) ") + 1);
   const fixed = new Set<string>([...READING_GUIDE, ...FIXED_PROSE, ...OMITTED.map((l) => `- ${l}`), ...NOT_INCLUDED.map((l) => `- ${l}`), ...instruction.split("\n")]);
   return [firstLine, ...body.split("\n")]
-    .filter((line) => line.length > 0 && !line.startsWith("#") && !line.startsWith(SENTINEL_HEAD) && !fixed.has(line))
+    // 合言葉の行と**封印語の行**は道具が作る字で、packet から来た数ではない(数の包含の検査に掛けない)
+    .filter((line) => line.length > 0 && !line.startsWith("#") && !line.startsWith(SENTINEL_HEAD) && !line.startsWith(SEAL_HEAD) && !fixed.has(line))
     .join("\n");
 }
 
@@ -192,6 +199,8 @@ export function identifierProblems(value: unknown, path: string, forbid: readonl
 // ---- 本文 ----
 
 const SENTINEL_HEAD = "(束はここまで。合言葉: ";
+/** 節の終わりの印(席はこの語を `reach.sections[].seal` に写す) */
+export const SEAL_HEAD = "(この節はここまで。封印語: ";
 const FIXED_PROSE: readonly string[] = [
   "この問いに合わせて事実の作り方を変えていない(packet は request を参照しない。問いは分析の条件であり、事実の入力ではない)。",
   "省いたもの(packet にはある):",
@@ -202,6 +211,8 @@ interface Emitter {
   lines: string[];
   data: string[];
   sections: SeatInputSection[];
+  /** 封印語を作るために要る(節ごとに違う語にする) */
+  runId: string;
 }
 
 function heading(e: Emitter, line: string): void {
@@ -234,6 +245,16 @@ export function headingSectionsOf(lines: readonly string[], dataSections: readon
   return found;
 }
 
+export const SEAL_LENGTH = 6;
+/**
+ * 節の封印語。**節ごとに違い・周ごとに変わり・推測できない**。
+ * 2026-10-01 の実測で `lastKey`(最後の鍵)は席ごと周ごとに意味が変わり(行の先頭 / 列の名前 / packet の道)、
+ * 「最後まで届いたか」を測っていないと分かった。司令塔の決定で、測る先をこの語にした。
+ */
+export function sealOf(runId: string, section: string): string {
+  return createHash("sha256").update(`${runId}:${section}`, "utf-8").digest("hex").slice(0, SEAL_LENGTH);
+}
+
 export const LAST_KEY_MAX_CHARS = 60;
 /** data 行の先頭 2 トークン(表なら先頭 2 セル)。長い文は先頭 60 字で切る(到達検査は前方一致で見る) */
 /**
@@ -259,7 +280,10 @@ function section(e: Emitter, section: string, title: string, packetPath: string,
   const before = e.data.length;
   body();
   const written = e.data.slice(before);
-  e.sections.push({ section, title, packetPath, rows: rows.length, lastKey: written.length > 0 ? keyOf(written[written.length - 1]!) : "-" });
+  // **封印語は節の最後の行**(ここまで届いたことの証拠。data ではなく lines に出すので lastKey は動かない)
+  const seal = sealOf(e.runId, section);
+  heading(e, `${SEAL_HEAD}${seal})`);
+  e.sections.push({ section, title, packetPath, rows: rows.length, lastKey: written.length > 0 ? keyOf(written[written.length - 1]!) : "-", seal });
 }
 function table(e: Emitter, header: string[], rows: string[][]): void {
   heading(e, `| ${header.join(" | ")} |`);
@@ -298,7 +322,7 @@ export function renderSeatInput(args: RenderSeatInputArgs): { text: string; meta
   const scope = rq.requestedScope as Row;
   const questions = rq.customerQuestions as Row[];
   const passphrase = runId.slice(0, PASSPHRASE_LENGTH);
-  const e: Emitter = { lines: [], data: [], sections: [] };
+  const e: Emitter = { lines: [], data: [], sections: [], runId };
 
   // 1 行目(S-2: 線の組と持ち時間。無ければ上で止まっている)
   data(e, `対象: 〇〇さん(符号 ${v(pk.customerRef)})。持ち時間 ${v(scope.timeLimitSec)} 秒の組・${v(scope.games)} 局。線の組: ${thresholds.map((t) => `${v(t.id)}=${v(t.value)} ${v(t.unit)}`).join("; ")}`);

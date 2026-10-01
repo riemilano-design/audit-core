@@ -6,7 +6,7 @@ import { readFileSync, readdirSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import { validateHypothesisLine } from "./hypothesis.js";
 import type { SeatInputMeta } from "./seatInput.js";
-import { SEAT_INPUT_PROVENANCE_PREFIX, completeSeatOutput, seatOutputProblems, validateSeatOutputEnvelope, validateSeatOutputLlm } from "./seatOutput.js";
+import { SEAT_INPUT_PROVENANCE_PREFIX, completeSeatOutput, seatOutputProblems, validateSeatOutputEnvelope, validateSeatOutputLlm , seatReachNotes } from "./seatOutput.js";
 
 const SHA_IN = "9".repeat(64);
 const SHA_INS = "3".repeat(64);
@@ -18,9 +18,9 @@ function meta(): SeatInputMeta {
     schemaVersion: "0.1", runId: "run20260930abc", passphrase: "run20260", packetId: "22aee8fe696d0262", customerRef: "c5", timeLimitSec: 180, games: 25,
     instructionSha256: SHA_INS, seatInputSha256: SHA_IN, bytes: 10, chars: 10, tokenEstimate: { value: 4, method: "chars/3" },
     sections: [
-      { section: "A", title: "顧客の問い", packetPath: "request.customerQuestions[]", rows: 1, lastKey: "q1 普段指さない" },
-      { section: "1", title: "局", packetPath: "facts.games[]", rows: 25, lastKey: "g25 25" },
-      { section: "2", title: "集計", packetPath: "aggregates.<id>.numerator|denominator|value", rows: 37, lastKey: "aggregates.branches.total.value 値" },
+      { section: "A", title: "顧客の問い", packetPath: "request.customerQuestions[]", rows: 1, lastKey: "q1 普段指さない", seal: "sA" },
+      { section: "1", title: "局", packetPath: "facts.games[]", rows: 25, lastKey: "g25 25", seal: "s1" },
+      { section: "2", title: "集計", packetPath: "aggregates.<id>.numerator|denominator|value", rows: 37, lastKey: "aggregates.branches.total.value 値", seal: "s2" },
     ],
     headingSections: ["0", "0.1", "0.2"], omitted: [], notIncluded: [],
   };
@@ -33,7 +33,7 @@ const NUM = (): { path: string } => ({ path: "aggregates.sideMatch.attack.numera
 const DEN = (): { path: string } => ({ path: "aggregates.sideMatch.attack.denominator" });
 function llm() {
   return {
-    reach: { passphrase: "run20260", sections: [{ section: "A", lastKey: "q1" }, { section: "1", lastKey: "g25 25" }, { section: "2", lastKey: "aggregates.branches.total.value" }] },
+    reach: { passphrase: "run20260", sections: [{ section: "A", lastKey: "q1", seal: "sA" }, { section: "1", lastKey: "g25 25", seal: "s1" }, { section: "2", lastKey: "aggregates.branches.total.value", seal: "s2" }] },
     items: [
       {
         itemId: "S-001", kind: "finding", factOrHypothesis: "fact", lane: "side",
@@ -214,70 +214,96 @@ describe("packet を読まない(校正 4)・足すだけ(校正 1)", () => {
   });
 });
 
-describe("E-1 と見出しだけの節(2026-09-30 の初回の実行で実測。司令塔の決定 (iii))", () => {
-  // 席は束の見出しどおり「0」「0.1」「0.2」(読み方・省いたもの・線の組)も読んだと書く。
-  // **meta がそれを持っていないと、正直な席が落ちる**。持っていれば通り、束にも無い節名は落ちる。
-  function withReachSections(sections: { section: string; lastKey: string }[]) {
+describe("E-1 = 封印語で到達を見る(2026-10-01 の実測で lastKey は到達を測っていないと分かった)", () => {
+  // 【なぜ変えたか】2 席 × 2 周の実測で、席は「最後の鍵」を 行の先頭(`g25`)・列の名前(`aheadAtAnyPoint`)・
+  // packet の道(`provenance.inputs[].path`)の 3 通りに書いた。**意味が一つに決まっていないので到達を測れない。**
+  // 司令塔の決定で、測る先を**節ごとの封印語**(推測できず周ごとに変わる)にし、lastKey は記録へ移した。
+  function withReachSections(sections: { section: string; lastKey: string; seal?: string }[]) {
     const src = llm();
     src.reach.sections = sections as typeof src.reach.sections;
     return completeSeatOutput(src, ctx());
   }
-  const DATA = [{ section: "A", lastKey: "q1" }, { section: "1", lastKey: "g25 25" }, { section: "2", lastKey: "aggregates.branches.total.value" }];
-  it("見出しだけの節を挙げても落ちない(lastKey は何でもよい ― データの行が無いので)", () => {
-    const found = problems(withReachSections([...DATA, { section: "0", lastKey: "読み方" }, { section: "0.1", lastKey: "-" }]));
+  const DATA = [{ section: "A", lastKey: "q1", seal: "sA" }, { section: "1", lastKey: "g25 25", seal: "s1" }, { section: "2", lastKey: "aggregates.branches.total.value", seal: "s2" }];
+  it("見出しだけの節を挙げても落ちない(データの行が無いので鍵も封印語も持たない)", () => {
+    const found = problems(withReachSections([...DATA, { section: "0", lastKey: "読み方", seal: "s0" }, { section: "0.1", lastKey: "-", seal: "s01" }]));
     expect(found).toEqual([]);
   });
-  it("データの行を持つ節は、見出しに見えても lastKey を厳しく照合する(0.2 線の組。2026-09-30 の独立監査の指摘)", () => {
-    // meta が 0.2 を**データの節**として持つとき、席の lastKey が違えば落ちる(見出しの枝に逃げない)
-    const metaWith = { ...meta(), sections: [...meta().sections, { section: "0.2", title: "線の組", packetPath: "provenance.thresholds", rows: 1, lastKey: "- ahead_cp:" }], headingSections: ["0", "0.1"] };
-    const check = (lastKey: string) => seatOutputProblems(withReachSections([...DATA, { section: "0.2", lastKey }]), { meta: metaWith, request: request(), today: TODAY, registry: REGISTRY });
-    expect(check("- ahead_cp:")).toEqual([]);
-    const wrong = check("それらしい鍵");
-    expect(wrong.length).toBe(1);
-    expect(wrong[0]).toContain("前方一致しない");
+  it("封印語が違えば落ちる ― **鍵が合っていても通さない**", () => {
+    const found = problems(withReachSections([{ section: "A", lastKey: "q1", seal: "sA" }, { section: "1", lastKey: "g25 25", seal: "ちがう" }, { section: "2", lastKey: "aggregates.branches.total.value", seal: "s2" }]));
+    expect(found.length).toBe(1);
+    expect(found[0]).toContain("封印語が合わない");
+    expect(found[0]).toContain("節「1」");
   });
-  // 2026-10-01 の実行で実測した落ち方の回帰: 席は鍵だけを書き、meta は「- 鍵:」を持っていた。
-  it("箇条書きの印と末尾の `:` の違いだけなら落ちない(両側に同じ正規化を掛ける)", () => {
-    const metaWith = { ...meta(), sections: [...meta().sections, { section: "0.2", title: "線の組", packetPath: "provenance.thresholds", rows: 1, lastKey: "- ahead_cp:" }], headingSections: ["0", "0.1"] };
-    const check = (lastKey: string) => seatOutputProblems(withReachSections([...DATA, { section: "0.2", lastKey }]), { meta: metaWith, request: request(), today: TODAY, registry: REGISTRY });
-    expect(check("ahead_cp")).toEqual([]);      // 席が鍵だけを書いた(実際の落ち方)
-    expect(check("- ahead_cp:")).toEqual([]);   // 行をそのまま写した
-    expect(check("* ahead_cp")).toEqual([]);    // 別の印
-    // **鍵そのものが違えば落ちる**(正規化で穴を開けない ― 司令塔の条件)
-    expect(check("deep_first_nodes").length).toBe(1);
-    expect(check("deep_first_nodes")[0]).toContain("前方一致しない");
-    // 印だけ・空は落ちる(正規化して空になるものを「読んだ」にしない)
-    expect(check("- ").length).toBe(1);
-    expect(check("").length).toBe(1);
+  it("封印語の欄が無ければ**形**で落ちる(E-1 まで行かない)", () => {
+    expect(() => withReachSections([{ section: "A", lastKey: "q1", seal: "sA" }, { section: "1", lastKey: "g25 25" }, { section: "2", lastKey: "aggregates.branches.total.value", seal: "s2" }]))
+      .toThrow(/必須の欄「seal」が無い/);
   });
-  // 独立監査が実物で再現した穴(2026-10-01): meta の鍵が正規化で空になると、双方向の前方一致では
-  // `key.startsWith("")` が常に真になり、**その節の検査がどんな鍵でも素通りする**。
-  it("meta の鍵が正規化で空になる束では、席が何を書いても落ちる(片側だけ守らない)", () => {
-    const metaWith = { ...meta(), sections: [...meta().sections, { section: "0.3", title: "出どころ", packetPath: "provenance.inputs[].path", rows: 1, lastKey: "- :" }], headingSections: ["0", "0.1"] };
-    const check = (lastKey: string) => seatOutputProblems(withReachSections([...DATA, { section: "0.3", lastKey }]), { meta: metaWith, request: request(), today: TODAY, registry: REGISTRY });
-    expect(check("まるで関係のない鍵 12345").length).toBe(1);
-    expect(check("まるで関係のない鍵 12345")[0]).toContain("前方一致しない");
-    // 正しそうに見える鍵でも通さない(空の鍵は照合の根拠にならない)
-    expect(check("- :").length).toBe(1);
-    expect(check("").length).toBe(1);
+  it("**束の側の封印語が空**でも落ちる(両方空を「一致」にしない)", () => {
+    const metaEmpty = { ...meta(), sections: meta().sections.map((x) => (x.section === "1" ? { ...x, seal: "" } : x)) };
+    const found = seatOutputProblems(withReachSections([{ section: "A", lastKey: "q1", seal: "sA" }, { section: "1", lastKey: "g25 25", seal: "" }, { section: "2", lastKey: "aggregates.branches.total.value", seal: "s2" }]), { meta: metaEmpty, request: request(), today: TODAY, registry: REGISTRY });
+    expect(found.length).toBe(1);
+    expect(found[0]).toContain("封印語が合わない");
   });
-  it("長い鍵は meta が 60 字で切られていても、席の全文と前方一致すれば落ちない(§0.3 の実際の落ち方)", () => {
+  it("封印語が空・空白だけなら E-1 で落ちる(空の語は到達の根拠にならない)", () => {
+    for (const seal of ["", "   "]) {
+      const found = problems(withReachSections([{ section: "A", lastKey: "q1", seal: "sA" }, { section: "1", lastKey: "g25 25", seal }, { section: "2", lastKey: "aggregates.branches.total.value", seal: "s2" }]));
+      expect(found.length).toBe(1);
+      expect(found[0]).toContain("封印語が合わない");
+    }
+  });
+  it("鍵が全く違っても、封印語が合っていれば E-1 の指摘は出ない(鍵は到達の判定に使わない)", () => {
+    const found = problems(withReachSections([{ section: "A", lastKey: "まるで関係のない字", seal: "sA" }, { section: "1", lastKey: "aheadAtAnyPoint", seal: "s1" }, { section: "2", lastKey: "derivedFrom", seal: "s2" }]));
+    expect(found).toEqual([]);
+  });
+  it("データの行を持つ節は、見出しに見えても封印語を照合する(0.2 線の組)", () => {
+    const metaWith = { ...meta(), sections: [...meta().sections, { section: "0.2", title: "線の組", packetPath: "provenance.thresholds", rows: 1, lastKey: "ahead_cp", seal: "s02" }], headingSections: ["0", "0.1"] };
+    const check = (seal: string) => seatOutputProblems(withReachSections([...DATA, { section: "0.2", lastKey: "ahead_cp", seal }]), { meta: metaWith, request: request(), today: TODAY, registry: REGISTRY });
+    expect(check("s02")).toEqual([]);
+    expect(check("s2").length).toBe(1);   // 他の節の封印語では通らない
+  });
+  // **字そのままの完全一致**(司令塔の決定)。鍵用の正規化を使い回すと、下の 5 通りが「一致」になる
+  //(2026-10-01 の独立監査が実物で再現した。私のコメントは「正規化なし」と書いてあるのに実装が掛けていた)。
+  it("封印語は字そのまま ― 印・コロン・前後の空白が付いたら落ちる(鍵の正規化を使い回さない)", () => {
+    const metaWith = { ...meta(), sections: [...meta().sections, { section: "0.2", title: "線の組", packetPath: "provenance.thresholds", rows: 1, lastKey: "ahead_cp", seal: "s02" }], headingSections: ["0", "0.1"] };
+    const check = (seal: string) => seatOutputProblems(withReachSections([...DATA, { section: "0.2", lastKey: "ahead_cp", seal }]), { meta: metaWith, request: request(), today: TODAY, registry: REGISTRY });
+    for (const seal of ["- s02", "* s02", "• s02", "s02:", "s02：", "s02 ", " s02", "s0 2", "S02"]) {
+      const found = check(seal);
+      expect(found.length, `封印語「${seal}」は落ちるべき`).toBe(1);
+      expect(found[0]).toContain("封印語が合わない");
+    }
+    // 字が同じなら通る(厳しくしただけで、正しい写しを落としていない)
+    expect(check("s02")).toEqual([]);
+  });
+  // lastKey は**記録**へ(指摘から外した)。記録が死なないように、何がどう食い違ったかを残す。
+  it("lastKey の食い違いは指摘ではなく記録に出る(seatReachNotes)", () => {
+    const env = withReachSections([{ section: "A", lastKey: "q1", seal: "sA" }, { section: "1", lastKey: "aheadAtAnyPoint", seal: "s1" }, { section: "2", lastKey: "aggregates.branches.total.value", seal: "s2" }]);
+    expect(problems(env)).toEqual([]);
+    const notes = seatReachNotes(env, meta());
+    expect(notes.length).toBe(1);
+    expect(notes[0]).toContain("節「1」");
+    expect(notes[0]).toContain("aheadAtAnyPoint");
+    expect(notes[0]).toContain("到達の判定には使っていない");
+  });
+  it("記録は印と `:` と内側の空白の違いでは出ない(両側に同じ正規化)", () => {
+    const metaWith = { ...meta(), sections: [...meta().sections, { section: "0.2", title: "線の組", packetPath: "provenance.thresholds", rows: 1, lastKey: "ahead_cp", seal: "s02" }], headingSections: ["0", "0.1"] };
+    const notesOf = (lastKey: string) => seatReachNotes(withReachSections([...DATA, { section: "0.2", lastKey, seal: "s02" }]), metaWith);
+    expect(notesOf("ahead_cp")).toEqual([]);
+    expect(notesOf("- ahead_cp:")).toEqual([]);
+    expect(notesOf("deep_cp").length).toBe(1);
+    // meta が 60 字で切られていても、席の全文なら記録に出ない
     const full = "data/drafts/2026-09-25-knowledge/openings/youryuu_shikenbisha.json";
-    const metaWith = { ...meta(), sections: [...meta().sections, { section: "0.3", title: "出どころ", packetPath: "provenance.inputs[].path", rows: 2, lastKey: full.slice(0, 60) }], headingSections: ["0", "0.1"] };
-    const check = (lastKey: string) => seatOutputProblems(withReachSections([...DATA, { section: "0.3", lastKey }]), { meta: metaWith, request: request(), today: TODAY, registry: REGISTRY });
-    expect(check(full)).toEqual([]);
-    expect(check(`- ${full}`)).toEqual([]);
-    expect(check("data/drafts/2026-09-25-knowledge/openings/ibisha_anaguma.json").length).toBe(1);
+    const metaLong = { ...meta(), sections: [...meta().sections, { section: "0.3", title: "出どころ", packetPath: "provenance.inputs[].path", rows: 2, lastKey: full.slice(0, 60), seal: "s03" }], headingSections: ["0", "0.1"] };
+    expect(seatReachNotes(withReachSections([...DATA, { section: "0.3", lastKey: full, seal: "s03" }]), metaLong)).toEqual([]);
   });
   it("meta にも束の見出しにも無い節名は落ちる(捏造は通らない)", () => {
-    const found = problems(withReachSections([...DATA, { section: "9.9", lastKey: "それらしい鍵" }]));
+    const found = problems(withReachSections([...DATA, { section: "9.9", lastKey: "それらしい鍵", seal: "s99" }]));
     expect(found.length).toBe(1);
     expect(found[0]).toContain("meta にも束の見出しにも無い節「9.9」");
   });
-  it("データの行が在る節は今までどおり lastKey を照合する", () => {
-    const found = problems(withReachSections([{ section: "A", lastKey: "q1" }, { section: "1", lastKey: "ちがう鍵" }, { section: "2", lastKey: "aggregates.branches.total.value" }]));
-    expect(found.length).toBe(1);
-    expect(found[0]).toContain("前方一致しない");
+  it("**鍵が違っても指摘にはならない**(2026-10-01 に指摘から記録へ移した。記録には出る)", () => {
+    const env = withReachSections([{ section: "A", lastKey: "q1", seal: "sA" }, { section: "1", lastKey: "ちがう鍵", seal: "s1" }, { section: "2", lastKey: "aggregates.branches.total.value", seal: "s2" }]);
+    expect(problems(env)).toEqual([]);
+    expect(seatReachNotes(env, meta()).length).toBe(1);
   });
 });
 

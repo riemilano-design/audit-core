@@ -69,7 +69,7 @@ function metaOf(): SeatInputMeta {
 // ---- 席・整理役が返す形(正本を通る最小) ----
 function seatLlm(meta: SeatInputMeta, over: { passphrase?: string } = {}): Rec {
   return {
-    reach: { passphrase: over.passphrase ?? meta.passphrase, sections: meta.sections.map((s) => ({ section: s.section, lastKey: s.lastKey })) },
+    reach: { passphrase: over.passphrase ?? meta.passphrase, sections: meta.sections.map((s) => ({ section: s.section, lastKey: s.lastKey, seal: s.seal })) },
     items: [
       {
         itemId: "S-001", kind: "finding", factOrHypothesis: "fact", lane: "side",
@@ -509,8 +509,11 @@ describe("固定した指示文の sha(司令塔 2026-09-30)", () => {
     expect(problems.length).toBe(1);
     expect(problems[0]).toContain("固定されていない");
   });
-  it("3 本(v1・v1.1・整理役 v1)が表に在る", () => {
-    expect(Object.keys(FIXED_INSTRUCTION_SHA256).length).toBe(3);
+  it("4 本(席 v1・v1.1・**v1.2**・整理役 v1)が表に在る", () => {
+    expect(Object.keys(FIXED_INSTRUCTION_SHA256).length).toBe(4);
+    // 古い版を消さない ― v1.1 で回した 3 周と比べられるようにする(版名を上げても前の sha は残す)
+    expect(Object.keys(FIXED_INSTRUCTION_SHA256)).toContain("LLM_SEATS_INSTRUCTION_v1.1_2026-09-30.md");
+    expect(Object.keys(FIXED_INSTRUCTION_SHA256)).toContain("LLM_SEATS_INSTRUCTION_v1.2_2026-10-01.md");
   });
 });
 
@@ -625,5 +628,56 @@ describe("単価が無い席の洗い出し(seatsMissingPrices)", () => {
   });
   it("**送らない席**の単価が無くても返さない(保留の指定が「実行できない」に化けない)", () => {
     expect(seatsMissingPrices([{ seat: "gemini", prices: none, holdBack: { reason: "無料枠・人間の判断で保留" } }, { seat: "gpt", prices: ok }])).toEqual([]);
+  });
+});
+
+// 2026-10-01 の実測: 形が 3 回とも合わず **2.77 ドル**を使った席は、毎回**違う**理由で落ちていた
+//(必須の欄が無い → 知らない欄を作った → また必須の欄が無い)。再依頼が**直前の理由だけ**を渡していたため、
+// 席は「言われた所を直し、前に言われた所を壊す」往復をした。
+describe("再依頼は理由をためて渡す(前回の出力は渡さない)", () => {
+  function brokenThen(meta: SeatInputMeta): Reply[] {
+    const first = seatLlm(meta); delete (first as Rec).answers;                       // 1 回目: answers が無い
+    const second = seatLlm(meta); (second as Rec).items2 = [];                        // 2 回目: 知らない欄
+    return [anthropicOk(first), anthropicOk(second), anthropicOk(seatLlm(meta))];     // 3 回目: 通る
+  }
+  it("2 回目の再依頼の文に、1 回目の理由も残っている", async () => {
+    const meta = metaOf();
+    const { result, api } = await run({ seats: [seats()[2]!], integrator: undefined }, { claude: brokenThen(meta) });
+    expect(result.seats[0]!.present).toBe(true);
+    const users = api.usersOf("claude");
+    expect(users.length).toBe(3);
+    // **理由の所だけを見る。** 束の本文には指示文が入っていて「answers」も「必須」も出てくるので、
+    // 送った字の全体で探すと、理由を渡していなくても緑になる(2026-10-01 に変異 S7 が黙って分かった)。
+    const reasonsOf = (text: string): string => {
+      const at = text.indexOf("前回の返答は次の欄で形が合わず");
+      return at < 0 ? "" : text.slice(at);
+    };
+    expect(reasonsOf(users[0]!)).toBe("");                       // 1 回目は理由が無い
+    expect(reasonsOf(users[1]!)).toContain("「answers」");          // 2 回目は 1 回目の理由
+    expect(reasonsOf(users[1]!)).not.toContain("items2");
+    // **3 回目は 1 回目と 2 回目の理由を両方持つ**(ここが直した所)
+    expect(reasonsOf(users[2]!)).toContain("「answers」");
+    expect(reasonsOf(users[2]!)).toContain("items2");
+    // 前回の出力そのものは渡さない(席が自分の誤りを土台にすると周の独立が壊れる)
+    expect(users[2]!).toContain("前回の返答そのものは渡していません");
+    expect(users[2]!).not.toContain("S-001");
+  });
+  it("落ちた試行の**指摘の本文**が成果物に残る(件数だけで終わらない)", async () => {
+    const meta = metaOf();
+    const { result } = await run({ seats: [seats()[2]!], integrator: undefined }, { claude: brokenThen(meta) });
+    const names = result.files.map((f) => f.name);
+    expect(names).toContain("seat_claude_attempt_1_problems.txt");
+    expect(names).toContain("seat_claude_attempt_2_problems.txt");
+    // 通った試行には指摘のファイルが無い
+    expect(names).not.toContain("seat_claude_attempt_3_problems.txt");
+    const first = result.files.find((f) => f.name === "seat_claude_attempt_1_problems.txt")!.content;
+    expect(first).toContain("answers");
+    const second = result.files.find((f) => f.name === "seat_claude_attempt_2_problems.txt")!.content;
+    expect(second).toContain("items2");
+    // **どの試行で何が落ちたかが読める** ― 1 回目のファイルに 2 回目の理由は無く、
+    // 2 回目のファイルに 1 回目の理由も混ざらない(ためた理由を全部書くと、どこで何が起きたか読めなくなる)
+    expect(first).not.toContain("items2");
+    expect(second).not.toContain("「answers」");
+    expect(first).toContain("「answers」");
   });
 });

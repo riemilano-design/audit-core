@@ -35,6 +35,31 @@ export function loadSeatOutputLlmSchema(): JsonSchema {
   return JSON.parse(readFileSync(new URL("../schemas/seat-output.llm.v0.1.schema.json", import.meta.url), "utf-8")) as JsonSchema;
 }
 
+/**
+ * 到達の**記録**(指摘ではない)。`lastKey` が meta と前方一致しない節を並べる。
+ *
+ * 【なぜ指摘にしないか】2026-10-01 の 2 席 × 2 周の実測で、席は「最後の鍵」を
+ * 行の先頭(`g25`)・列の名前(`aheadAtAnyPoint`)・packet の道(`provenance.inputs[].path`)の
+ * 3 通りに書いた。**意味が指示文で一つに決まっていないので、合っても合わなくても読めない。**
+ * 落とし続けると 1 席 11 件の雑音になり、本当の指摘(E-3)が埋もれる。**欄は捨てずに記録に残す。**
+ */
+export function seatReachNotes(env: Rec, meta: SeatInputMeta): string[] {
+  const notes: string[] = [];
+  const metaSections = new Map(meta.sections.map((s) => [s.section, s.lastKey]));
+  const reach = (env.reach ?? {}) as Rec;
+  for (const s of asArray(reach.sections) as Rec[]) {
+    const sec = String(s.section);
+    const expected = metaSections.get(sec);
+    if (expected === undefined) continue;
+    const key = normalizeLastKey(String(s.lastKey ?? ""));
+    const want = normalizeLastKey(expected);
+    if (key.length === 0 || want.length === 0 || !(want.startsWith(key) || key.startsWith(want))) {
+      notes.push(`節「${sec}」の lastKey は meta と前方一致しない(席「${key}」/ meta「${want}」)― 到達の判定には使っていない`);
+    }
+  }
+  return notes;
+}
+
 /** 席が返した JSON が「席が書く形」か(schema だけ) */
 export function validateSeatOutputLlm(json: unknown, schema: JsonSchema = loadSeatOutputLlmSchema()): string[] {
   return validate(json, schema);
@@ -203,23 +228,29 @@ export function seatOutputProblems(envelope: unknown, opts: SeatOutputCheckOptio
   const reach = env.reach as Rec;
   if (reach.passphrase !== meta.passphrase) problems.push(`E-1: 合言葉が違う(席「${String(reach.passphrase)}」/ meta「${meta.passphrase}」)― 届いていない`);
   const metaSections = new Map(meta.sections.map((s) => [s.section, s.lastKey]));
+  const metaSeals = new Map(meta.sections.map((s) => [s.section, s.seal]));
   const seen = new Set<string>();
   const headingSections = new Set(meta.headingSections ?? []);
   for (const s of asArray(reach.sections) as Rec[]) {
     const sec = String(s.section);
-    // **両側に同じ正規化**を掛ける(箇条書きの印と末尾の `:` は鍵ではない。2026-10-01 の司令塔の決定)
-    const key = normalizeLastKey(String(s.lastKey));
+    // **封印語**(節の最後に印字した推測できない語)で到達を見る。2026-10-01 の実測で `lastKey` は
+    // 席ごと周ごとに意味が変わり(行の先頭 / 列の名前 / packet の道)、**到達を測っていない**と分かった。
+    // `lastKey` の食い違いは指摘にせず `seatReachNotes` に記録する(本当の指摘を雑音で埋めない)。
     const expectedRaw = metaSections.get(sec);
-    const expected = expectedRaw === undefined ? undefined : normalizeLastKey(expectedRaw);
     // 見出しだけの節(データの行が無い)は「読んだ」と言えるだけで、最後の鍵名を持たない。
     // **在ることだけ見る** ― 束にも無い節名は下の行で落ちるので、捏造は通らない(司令塔の決定 2026-09-30)。
-    if (expected === undefined && headingSections.has(sec)) continue;
-    if (expected === undefined) { problems.push(`E-1: 席の reach.sections に meta にも束の見出しにも無い節「${sec}」`); continue; }
+    if (expectedRaw === undefined && headingSections.has(sec)) continue;
+    if (expectedRaw === undefined) { problems.push(`E-1: 席の reach.sections に meta にも束の見出しにも無い節「${sec}」`); continue; }
     seen.add(sec);
-    // **空の鍵は両側で落とす。** 片側(席)だけ守ると、meta の鍵が正規化で空になった束
-    // (例: `provenance.inputs[].path` が ":" の 1 字)で `key.startsWith("")` が常に真になり、
-    // **その節の E-1 がどんな鍵でも素通りする**(2026-10-01 の独立監査が実物で再現した穴)。
-    if (key.length === 0 || expected.length === 0 || !(expected.startsWith(key) || key.startsWith(expected))) problems.push(`E-1: 節「${sec}」の lastKey が meta と前方一致しない(席「${key}」/ meta「${expected}」)`);
+    // **空は両側で落とす。** 片側だけ守ると、空の語がどんな語とも一致してしまう
+    //(2026-10-01 の独立監査が前方一致の版で実物に再現した穴。封印語でも同じ守りを置く)。
+    // 封印語は**字そのままの完全一致**(司令塔の決定 2026-10-01)。**正規化を掛けない** ―
+    // `normalizeLastKey`(鍵用)を使い回すと、`- 語` や `語:` が「一致」になり、
+    // さらに**鍵の正規化の仕様を変えた日に封印語の判定が黙って変わる**(独立監査が実物で再現。2026-10-01)。
+    // 空も落とす ― 空の語は到達の根拠にならない(両側が空なら「一致」になってしまう)。
+    const seal = String(s.seal ?? "");
+    const expectedSeal = metaSeals.get(sec) ?? "";
+    if (seal.length === 0 || expectedSeal.length === 0 || seal !== expectedSeal) problems.push(`E-1: 節「${sec}」の封印語が合わない(席「${seal}」/ 束「${expectedSeal}」)― その節が届いていない`);
   }
   const omissions = asArray(env.omissions).map(String);
   for (const sec of metaSections.keys()) {
