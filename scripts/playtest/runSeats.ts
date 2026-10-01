@@ -8,6 +8,8 @@
 //     npx tsx scripts/playtest/runSeats.ts --packet <packet.json> --request <request.json> --out-dir <dir> \
 //       --instruction docs/LLM_SEATS_INSTRUCTION_v1.1_2026-09-30.md --instruction-sha <固定 sha> \
 //       --integrator-instruction docs/LLM_SEATS_INTEGRATOR_INSTRUCTION_v1_2026-09-30.md [--runs 2] [--env .env]
+//   人の判断で席を**送らない**(断られた空席と区別して記録に残る。送らない席には鍵も単価も要らない):
+//     … --hold-back-seat gemini --hold-back-reason "無料枠・人間の判断で保留"
 // 【出口】1 回の中で席が 1 つも立たなければ終了コード 1(黙って「0 席の実行」を成功にしない)。
 import { execFileSync } from "node:child_process";
 import { randomBytes } from "node:crypto";
@@ -16,7 +18,7 @@ import path from "node:path";
 import { ENV_NAMES, loadDotEnv, readEnv, readEnvNumber, redactSecrets } from "./lib/env.js";
 import { instructionExampleReport } from "./lib/instructionExamples.js";
 import { renderSeatInput } from "./lib/seatInput.js";
-import { FIXED_INSTRUCTION_SHA256, INTEGRATOR_RESERVE_OUTPUT_TOKENS, SEAT_RESERVE_OUTPUT_TOKENS, fixedShaProblems, runAll, type IntegratorConfig, type RunAllResult, type SeatConfig } from "./lib/seatRun.js";
+import { FIXED_INSTRUCTION_SHA256, INTEGRATOR_RESERVE_OUTPUT_TOKENS, SEAT_RESERVE_OUTPUT_TOKENS, fixedShaProblems, parseHoldBack, runAll, seatsMissingPrices, type IntegratorConfig, type RunAllResult, type SeatConfig } from "./lib/seatRun.js";
 import type { Seat } from "./lib/seatOutput.js";
 import { budgetDecision, estimateTokensByChars, type Prices } from "./lib/tokenBudget.js";
 import type { Provider } from "./lib/llmClient.js";
@@ -77,14 +79,17 @@ function pricesOf(seat: Seat, names: readonly [string, string], warnings: string
 }
 
 function seatConfigs(warnings: string[]): SeatConfig[] {
+  // 人の判断で**送らない**席(読み方は lib/seatRun.ts の parseHoldBack。知らない名前・理由の空は投げる)
+  const heldBack = parseHoldBack(process.argv, SEATS.map((s) => s.seat));
   return SEATS.map((s) => {
     const limit = readEnvNumber(s.limitName);
     const apiKey = readEnv(s.keyName);
     const model = readEnv(s.modelName);
     return {
       seat: s.seat, provider: s.provider, ...(model === undefined ? {} : { model }), ...(apiKey === undefined ? {} : { apiKey }),
-      prices: pricesOf(s.seat, s.priceNames, warnings), ...(limit === undefined ? {} : { inputLimit: limit }),
+      prices: pricesOf(s.seat, s.priceNames, heldBack.has(s.seat) ? [] : warnings), ...(limit === undefined ? {} : { inputLimit: limit }),
       reserveOutputTokens: SEAT_RESERVE_OUTPUT_TOKENS, temperature: 0,
+      ...(heldBack.has(s.seat) ? { holdBack: heldBack.get(s.seat)! } : {}),
     };
   });
 }
@@ -115,7 +120,8 @@ function printRun(runId: string, result: RunAllResult): void {
   const summary = result.summary as Record<string, any>;
   console.log(`\n== ${runId}(packetId ${result.meta.packetId}・束 ${result.meta.bytes} B・概算 ${result.meta.tokenEstimate.value} トークン)`);
   for (const seat of summary.seats as Record<string, any>[]) {
-    const state = seat.present === true ? `項目 ${String(seat.items)} 件・検査の指摘 ${String(seat.checkProblems)} 件` : `空席(${String(seat.absentReason)})`;
+    const state = seat.present === true ? `項目 ${String(seat.items)} 件・検査の指摘 ${String(seat.checkProblems)} 件`
+      : seat.absentReason === "held_back" ? `送っていない(${String(seat.absentNote).replace(/^seat_[a-z]+: /, "")})` : `空席(${String(seat.absentReason)})`;
     console.log(`  ${String(seat.seat).padEnd(7)} ${String(seat.model ?? "-").padEnd(26)} ${state} / 実費 ${String(seat.actualCostUsd)} ドル・${String(seat.elapsedMs)} ms`);
   }
   const integ = summary.integration as Record<string, any> | null;
@@ -184,6 +190,11 @@ async function main(): Promise<void> {
     const estimate = estimateTokensByChars(text).inputTokens;
     let cumulative = 0;
     for (const seat of [...seats, ...(integrator === undefined ? [] : [{ seat: "integrator" as const, ...integrator }])]) {
+      if ("holdBack" in seat && seat.holdBack !== undefined) {
+        // 送らない席は**見積もりにも入れない**(入れると「2 回でいくら」が送らない分だけ高く見える)
+        console.log(`  ${String(seat.seat).padEnd(10)} ${(seat.model ?? "(モデル名が無い)").padEnd(26)} 送っていない(${seat.holdBack.reason})`);
+        continue;
+      }
       const decision = budgetDecision({ inputTokens: estimate, reserveOutputTokens: seat.reserveOutputTokens, prices: seat.prices, capUsd: capUsd ?? 0, cumulativeCostUsd: cumulative, ...(("inputLimit" in seat && seat.inputLimit !== undefined) ? { inputLimit: seat.inputLimit } : {}) });
       if (decision.ok) cumulative = decision.cumulativeCostUsd;
       console.log(`  ${String(seat.seat).padEnd(10)} ${(seat.model ?? "(モデル名が無い)").padEnd(26)} 見込み ${decision.estimatedCostUsd.toFixed(4)} ドル / 累計 ${cumulative.toFixed(4)} ドル ${decision.ok ? "" : `→ 送らない(${String(decision.reason)})`}`);
@@ -194,8 +205,7 @@ async function main(): Promise<void> {
 
   if (capUsd === undefined) throw new Error(`${ENV_NAMES.costCap} が .env に無い ― 上限の無い実行はしない`);
   // **単価が無ければ費用が 0 に見え、上限が効かない** ― 送る前に止める(司令塔の先決め 1 の裏側)
-  const noPrice = [...seats, ...(integrator === undefined ? [] : [{ seat: "integrator" as const, prices: integrator.prices }])]
-    .filter((s) => s.prices.inPerMillion === 0 || s.prices.outPerMillion === 0).map((s) => String(s.seat));
+  const noPrice = seatsMissingPrices([...seats, ...(integrator === undefined ? [] : [{ seat: "integrator", prices: integrator.prices }])]);
   if (noPrice.length > 0) throw new Error(`単価が .env に無い席(${noPrice.join(" / ")})― 費用が 0 に見えて上限が効かないので送らない`);
   const runIds: string[] = [];
   const pair: Record<string, unknown>[] = [];
@@ -213,7 +223,8 @@ async function main(): Promise<void> {
     const summary = result.summary as Record<string, any>;
     cumulative = Number(summary.totals.cumulativeCostUsd);
     pair.push({
-      runId, seatsPresent: summary.totals.seatsPresent, capReached: summary.totals.capReached, cumulativeCostUsd: cumulative,
+      runId, seatsPresent: summary.totals.seatsPresent, seatsSent: summary.totals.seatsSent, seatsHeldBack: summary.totals.seatsHeldBack,
+      valueShapeSame: summary.totals.valueShapeSame, capReached: summary.totals.capReached, cumulativeCostUsd: cumulative,
       seats: (summary.seats as Record<string, any>[]).map((s) => ({ seat: s.seat, present: s.present, absentReason: s.absentReason ?? null, items: s.items, checkProblems: s.checkProblems })),
       integration: summary.integration === null ? null : { present: (summary.integration as Record<string, any>).present, clusters: (summary.integration as Record<string, any>).clusters },
     });

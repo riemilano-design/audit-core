@@ -52,7 +52,13 @@ export function fixedShaProblems(basename: string, content: Buffer | string): st
   return [];
 }
 
-export type AbsentReason = "no_key" | "no_model" | "cost_cap" | "input_limit" | "http_failed" | "schema_failed" | "reach_failed" | "no_json";
+/**
+ * 空席の理由。**「断られた」と「送っていない」を分ける**(司令塔・人間の決定 2026-10-01):
+ * `held_back` = **人の判断で送らなかった席**(例: 鍵が無料枠のままなので回さない)。道具が断られたのではないので、
+ * 到達の比較の分母に入れない・費用も発生しない。`http_failed` や `no_key` と同じ語にすると、
+ * **「席が立たなかった」の意味が混ざって読めなくなる。**
+ */
+export type AbsentReason = "no_key" | "no_model" | "cost_cap" | "input_limit" | "http_failed" | "schema_failed" | "reach_failed" | "no_json" | "held_back";
 
 export interface SlotConfig {
   provider: Provider;
@@ -67,6 +73,12 @@ export interface SlotConfig {
 }
 export interface SeatConfig extends SlotConfig {
   seat: Seat;
+  /**
+   * 人の判断で**送らない**席。理由を記録に残す(空席だが「断られた」ではない)。
+   * **用語の注意**(独立監査の所見 2026-10-01): `lib/integration.ts` の `heldBack` は別概念で、
+   * **整理役が束から外した読み**を指す。こちらは**席に送らなかったこと**で、入れ物も検査も別。
+   */
+  holdBack?: { reason: string };
 }
 
 export interface AttemptRecord {
@@ -358,6 +370,14 @@ export async function runAll(cfg: RunAllConfig, deps: SlotDeps): Promise<RunAllR
   let cumulative = cfg.cumulativeCostUsdBefore ?? 0;
   let capReached = false;
   for (const seatCfg of cfg.seats) {
+    if (seatCfg.holdBack !== undefined) {
+      // **送っていない席**(人の判断)。上限の判定より前に処理する ― cost_cap と語が混ざらないように
+      seats.push({
+        seat: seatCfg.seat, present: false, absentReason: "held_back", absentNote: `seat_${seatCfg.seat}: ${seatCfg.holdBack.reason}`,
+        attempts: [], estimate: { inputTokens: 0, method: "chars/3" }, estimatedCostUsd: 0, actualCostUsd: 0, cumulativeCostUsd: cumulative, capReached: false, files: [], usage: { inputTokens: 0, outputTokens: 0 }, elapsedMs: 0,
+      });
+      continue;
+    }
     if (capReached) {
       seats.push({
         seat: seatCfg.seat, present: false, absentReason: "cost_cap", absentNote: `seat_${seatCfg.seat}: この実行は費用の上限に達したので送らない(上限は実行単位)`,
@@ -478,12 +498,59 @@ function summaryOf(args: {
        * 3 席の**有効な形がそろっているか**(司令塔の条件 2026-09-30)。false なら席の間の一致・不一致を
        * 実力差として読めない ― 比較の表に「入力の形が違う」注記を付ける材料。
        */
-      valueShapeSame: new Set(cfg.seats.map((seat) => JSON.stringify(valueShapeOf(seat)))).size === 1,
+      // **送った席だけ**で見る(送っていない席の写しを比較に混ぜない)。
+      // 送った席が 1 つ以下なら **null = 比べられない**(1 席だけで「そろっている」と読ませない)。
+      valueShapeSame: valueShapeSameOf(cfg.seats),
+      /** 送った席の数(到達の比較の分母。送っていない席は入らない) */
+      seatsSent: sentSeats(cfg.seats).length,
+      /** 人の判断で送らなかった席の名前(断られた空席と区別して記録に残す) */
+      seatsHeldBack: cfg.seats.filter((seat) => seat.holdBack !== undefined).map((seat) => seat.seat),
       cumulativeCostUsd: round4(args.cumulative),
       capReached: seats.some((s) => s.absentReason === "cost_cap"),
     },
   };
 }
+/**
+ * `--hold-back-seat gemini[,gpt]` と `--hold-back-reason "…"` を読む(入口の一本化。CLI はこれだけを使う)。
+ * - **知らない名前は投げる**: 綴り違いを黙って無視すると、送らないはずの席に送ってしまう。
+ * - **理由が空なら投げる**: 「送っていない」は記録に理由が残って初めて「断られた」と区別できる。
+ */
+export function parseHoldBack(argv: readonly string[], seatNames: readonly string[]): Map<string, { reason: string }> {
+  const valueOf = (name: string): string | undefined => {
+    const index = argv.indexOf(`--${name}`);
+    if (index < 0) return undefined;
+    const value = argv[index + 1];
+    return value === undefined || value.startsWith("--") ? undefined : value;
+  };
+  const names = (valueOf("hold-back-seat") ?? "").split(",").map((n) => n.trim()).filter((n) => n.length > 0);
+  if (names.length === 0) return new Map();
+  const unknown = names.filter((n) => !seatNames.includes(n));
+  if (unknown.length > 0) throw new Error(`--hold-back-seat に知らない席の名前(${unknown.join(" / ")})― 綴り違いを黙って無視すると、送らないはずの席に送る。使える名前: ${seatNames.join(" / ")}`);
+  const reason = valueOf("hold-back-reason");
+  if (reason === undefined || reason.trim().length === 0) throw new Error("--hold-back-seat には --hold-back-reason が要る(なぜ送らなかったかを記録に残す)");
+  return new Map(names.map((n) => [n, { reason }]));
+}
+
+/**
+ * 単価が `.env` に無い席の名前。**送らない席は数えない** ―
+ * 送らない席の単価が欠けているだけで実行を止めると、保留の指定が「実行できない」に化ける。
+ * (送る席の単価が無いときに止めるのは、費用が 0 に見えて上限が効かなくなるため。)
+ */
+export function seatsMissingPrices(entries: readonly { seat: string; prices: { inPerMillion: number; outPerMillion: number }; holdBack?: unknown }[]): string[] {
+  return entries.filter((e) => e.holdBack === undefined && (e.prices.inPerMillion === 0 || e.prices.outPerMillion === 0)).map((e) => e.seat);
+}
+
+/** 送った席(人の判断で保留した席を除く) */
+function sentSeats(all: readonly SeatConfig[]): readonly SeatConfig[] {
+  return all.filter((seat) => seat.holdBack === undefined);
+}
+/** 送った席の間で観測の値の形がそろっているか。送った席が 1 つ以下なら null(比べられない) */
+function valueShapeSameOf(all: readonly SeatConfig[]): boolean | null {
+  const sent = sentSeats(all);
+  if (sent.length < 2) return null;
+  return new Set(sent.map((seat) => JSON.stringify(valueShapeOf(seat)))).size === 1;
+}
+
 /** その席の写しで観測の値に書ける形(社ごとの狭さの差を記録に出す) */
 function valueShapeOf(cfg: SlotConfig | undefined): string[] {
   return cfg === undefined ? [] : effectiveValueShape(cfg.provider, loadSeatOutputLlmSchema() as Rec);

@@ -10,7 +10,7 @@ import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import { OBSERVATION_PACKET_CONTRACT, OBSERVATION_PACKET_SCHEMA_VERSION, OBSERVATION_REQUEST_CONTRACT, packetIdOf } from "./observationPacket.js";
 import { renderSeatInput, type SeatInputMeta } from "./seatInput.js";
-import { FIXED_INSTRUCTION_SHA256, fixedShaProblems, runAll, retryUserText, type RunAllConfig, type SeatConfig } from "./seatRun.js";
+import { FIXED_INSTRUCTION_SHA256, fixedShaProblems, parseHoldBack, runAll, retryUserText, seatsMissingPrices, type RunAllConfig, type SeatConfig } from "./seatRun.js";
 
 const INSTRUCTION = readFileSync(new URL("../../../docs/LLM_SEATS_INSTRUCTION_v1_2026-09-30.md", import.meta.url));
 const INTEGRATOR_INSTRUCTION = "あなたは整理役です。席の名前は知りません。";
@@ -511,5 +511,119 @@ describe("固定した指示文の sha(司令塔 2026-09-30)", () => {
   });
   it("3 本(v1・v1.1・整理役 v1)が表に在る", () => {
     expect(Object.keys(FIXED_INSTRUCTION_SHA256).length).toBe(3);
+  });
+});
+
+// 人の判断で**送らなかった席**(2026-10-01 の人間の決定: Gemini は無料枠のままなので回さない)。
+// 「断られた空席」と同じ語にすると、席が立たなかった理由が読めなくなる ― 語と数の両方で分ける。
+describe("送っていない席(人の判断。断られた空席と区別する)", () => {
+  const HOLD = { reason: "無料枠・人間の判断で保留" };
+  it("held_back の席はその社の入口を叩かず、実費 0・試行 0・理由が記録に残る(他の席は回る)", async () => {
+    const { result, api } = await run({ seats: seats({ gemini: { holdBack: HOLD } }) });
+    expect(result.seats.map((s) => s.absentReason)).toEqual([undefined, "held_back", undefined]);
+    expect(api.urls.some((u) => u.includes("generativelanguage"))).toBe(false);
+    expect(api.generateCalls("gemini")).toBe(0);
+    const held = result.seats[1]!;
+    expect(held.present).toBe(false);
+    expect(held.attempts).toEqual([]);
+    expect(held.actualCostUsd).toBe(0);
+    expect(held.estimatedCostUsd).toBe(0);
+    expect(held.absentNote).toContain("無料枠・人間の判断で保留");
+    expect(result.seats.filter((s) => s.present).length).toBe(2);
+  });
+  it("同じ実行の中で「送っていない」と「断られた」が別の語になる", async () => {
+    const meta = metaOf();
+    const { result } = await run({ seats: seats({ gemini: { holdBack: HOLD } }) }, {
+      gpt: [{ status: 500, body: { error: "こちらの都合で落ちた" } }],
+      claude: [anthropicOk(seatLlm(meta))], integrator: [integratorOk(EMPTY_INTEGRATION)],
+    });
+    expect(result.seats[0]!.absentReason).toBe("http_failed");
+    expect(result.seats[1]!.absentReason).toBe("held_back");
+    expect(result.seats[0]!.absentReason).not.toBe(result.seats[1]!.absentReason);
+    // 断られた席は試行が残る / 送っていない席は残らない(数でも分かる)
+    expect(result.seats[0]!.attempts.length).toBeGreaterThan(0);
+    expect(result.seats[1]!.attempts.length).toBe(0);
+  });
+  it("到達の比較の分母は送った席だけ(seatsSent 2・seatsHeldBack に名前)", async () => {
+    const { result } = await run({ seats: seats({ gemini: { holdBack: HOLD } }) });
+    const totals = (result.summary as any).totals;
+    expect(totals.seatsSent).toBe(2);
+    expect(totals.seatsHeldBack).toEqual(["gemini"]);
+    expect(totals.seatsPresent).toBe(2);
+    // 席の数(3)とは別の数であること ― 3 のままなら分母が送っていない席を含んでいる
+    expect(totals.seatsSent).not.toBe(result.seats.length);
+    expect(totals.valueShapeSame).toBe(true);
+  });
+  it("送った席が 1 つなら valueShapeSame は null(1 席で「形がそろっている」と読ませない)", async () => {
+    const { result } = await run({ seats: seats({ gemini: { holdBack: HOLD }, claude: { holdBack: HOLD } }) });
+    const totals = (result.summary as any).totals;
+    expect(totals.valueShapeSame).toBe(null);
+    expect(totals.seatsSent).toBe(1);
+    expect(totals.seatsHeldBack).toEqual(["gemini", "claude"]);
+  });
+  it("全席を保留にしたら送った席 0・valueShapeSame は null(独立監査の指摘の境界)", async () => {
+    const { result, api } = await run({ integrator: undefined, seats: seats({ gpt: { holdBack: HOLD }, gemini: { holdBack: HOLD }, claude: { holdBack: HOLD } }) });
+    expect(api.generateCalls()).toBe(0);
+    const totals = (result.summary as any).totals;
+    expect(totals.seatsSent).toBe(0);
+    expect(totals.seatsPresent).toBe(0);
+    expect(totals.valueShapeSame).toBe(null);
+    expect(totals.capReached).toBe(false);
+    expect(result.seats.map((s) => s.absentReason)).toEqual(["held_back", "held_back", "held_back"]);
+  });
+  it("上限の判定より前に処理する ― 上限に当たった実行でも held_back は cost_cap にならない", async () => {
+    const { result, api } = await run({ capUsd: 0.6, seats: seats({ gemini: { holdBack: HOLD } }) });
+    expect(result.seats.map((s) => s.absentReason)).toEqual(["cost_cap", "held_back", "cost_cap"]);
+    expect(api.generateCalls()).toBe(0);
+    expect((result.summary as any).totals.capReached).toBe(true);
+  });
+  it("器に残る理由も held_back(整理役が「送っていない席」と読める)", async () => {
+    const { result } = await run({ seats: seats({ gemini: { holdBack: HOLD } }) });
+    const inInput = (result.integrationInput!.seats as Rec[]);
+    expect(inInput.length).toBe(3);
+    const absent = inInput.filter((s) => s.present !== true);
+    expect(absent.length).toBe(1);
+    expect(String(absent[0]!.reason)).toContain("held_back");
+    expect(String(absent[0]!.reason)).toContain("無料枠・人間の判断で保留");
+  });
+});
+
+describe("--hold-back-seat の読み方(parseHoldBack)", () => {
+  const NAMES = ["gpt", "gemini", "claude"];
+  it("名前と理由が揃えばその席だけを保留にする", () => {
+    const held = parseHoldBack(["node", "x", "--hold-back-seat", "gemini", "--hold-back-reason", "無料枠・人間の判断で保留"], NAMES);
+    expect([...held.keys()]).toEqual(["gemini"]);
+    expect(held.get("gemini")).toEqual({ reason: "無料枠・人間の判断で保留" });
+  });
+  it("2 席でもカンマで読める", () => {
+    const held = parseHoldBack(["--hold-back-seat", "gemini,gpt", "--hold-back-reason", "理由"], NAMES);
+    expect([...held.keys()]).toEqual(["gemini", "gpt"]);
+  });
+  it("指定が無ければ空(既定は全席に送る)", () => {
+    expect(parseHoldBack(["node", "x"], NAMES).size).toBe(0);
+  });
+  it("知らない名前は投げる ― 綴り違いで「送らないはずの席」に送らせない", () => {
+    expect(() => parseHoldBack(["--hold-back-seat", "gemni", "--hold-back-reason", "理由"], NAMES)).toThrow(/知らない席の名前/);
+    // 片方だけ合っていても投げる(合っている方だけ保留にして進めない)
+    expect(() => parseHoldBack(["--hold-back-seat", "gemini,claud", "--hold-back-reason", "理由"], NAMES)).toThrow(/claud/);
+  });
+  it("理由が無い・空ならば投げる(理由の無い「送っていない」は記録として読めない)", () => {
+    expect(() => parseHoldBack(["--hold-back-seat", "gemini"], NAMES)).toThrow(/--hold-back-reason/);
+    expect(() => parseHoldBack(["--hold-back-seat", "gemini", "--hold-back-reason", "   "], NAMES)).toThrow(/--hold-back-reason/);
+    // 次の旗を理由と読み違えない
+    expect(() => parseHoldBack(["--hold-back-seat", "gemini", "--hold-back-reason", "--runs"], NAMES)).toThrow(/--hold-back-reason/);
+  });
+});
+
+describe("単価が無い席の洗い出し(seatsMissingPrices)", () => {
+  const ok = { inPerMillion: 5, outPerMillion: 30 };
+  const none = { inPerMillion: 0, outPerMillion: 0 };
+  it("送る席の単価が無ければ名前を返す(費用が 0 に見えて上限が効かない)", () => {
+    expect(seatsMissingPrices([{ seat: "gpt", prices: ok }, { seat: "claude", prices: none }])).toEqual(["claude"]);
+    // 片側だけ欠けていても返す
+    expect(seatsMissingPrices([{ seat: "gpt", prices: { inPerMillion: 5, outPerMillion: 0 } }])).toEqual(["gpt"]);
+  });
+  it("**送らない席**の単価が無くても返さない(保留の指定が「実行できない」に化けない)", () => {
+    expect(seatsMissingPrices([{ seat: "gemini", prices: none, holdBack: { reason: "無料枠・人間の判断で保留" } }, { seat: "gpt", prices: ok }])).toEqual([]);
   });
 });
