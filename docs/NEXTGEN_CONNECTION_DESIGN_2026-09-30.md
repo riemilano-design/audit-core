@@ -90,13 +90,17 @@ A の理由をもう 1 つ: packet が入れば **本編の全部の数に `aggr
 
 ```
 { contract: "answer-selection", schemaVersion: "0.1", customerRef, packetId, runId,
-  lead:      { itemRef: {seatIndex, itemId}, statementSource: "integration.representative" },
+  lead:      { itemRef: {seatIndex, hypothesisId}, statementSource: "integration.representative" },
   p1:        [ { slot: "p1.1", aggregateIds: ["side_match.attack","side_match.defense"], itemRef, readingRequired: true }, … 3 本 ],
   answers:   [ { questionId: "q1", status: "answered|partial|unanswerable", itemRefs: [...], aggregateIds: [...],
                  neededObservation?: {what, howToMeasure} } ],           // request の問いごとに必ず 1 行
   boards:    [ { slot: "p2.1", gameId, ply, packetRef: "facts.engine[…]" }, … 2 つ ],
   actions:   [ { slot: "act.1", menuId: "M4", itemRef } … ],            // menuId は answer_menu.json に実在
   humanQueue:[ { itemRef, actionCandidateText, why: "menuMatch: null" } ], // 表に無い行動候補。冊子に出ない
+
+**【2026-10-01 訂正・司令塔】**素描は `itemRef: {seatIndex, itemId}` と書いていたが**誤り**。**実装済みの `integration.v0.1` は `{seatIndex, hypothesisId}`**(実物の `itemRefs[0]` も `{seatIndex: 1, hypothesisId: "I-1-001"}`)。自動化レーンが実装と素描の食い違いを見つけ、**新しい語を増やさないために実装側に合わせた**。以後 `itemId` は使わない。
+
+**`status` の語の数も書き分ける**: `integration` の**席ごとの `status` は 3 語**(`answered`・`partial`・`unanswerable`)、**問いごとの `summary` は 5 語**(+ `mixed`・`no_seat`)。`answer-selection.v0.1` の `status` は **3 語**。**5 語から 3 語への写し方の規則は作らない** ― `mixed`・`no_seat` をどれに落とすかは**採用の判断**(H-9 ①)で、機械が既定値で埋めてはならない(2026-10-01 に実物で食い違いが出た ― 機械の `summary` は `partial`、人間の決定は `unanswerable`)。
   adoptedBy: { who: "commander|human", at, basis: "…" } }               // 承認の根拠(委任の条件 2)
 ```
 
