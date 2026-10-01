@@ -16,6 +16,7 @@ sys.path.insert(0, HERE)
 import check_answer as CA  # noqa: E402
 import check_structure as CS  # noqa: E402
 import exit_candidates as EC  # noqa: E402
+import exit_gate as EG  # noqa: E402
 import exit_index as EI  # noqa: E402
 
 
@@ -441,6 +442,33 @@ class RestCountTest(unittest.TestCase):
         # 用語は使う前に出ていなければ意味が無い。
         self.assertLess(md.index(CS.term_md_lines()[0]), md.index("## ひとことで"))
         self.assertLess(md.index(CS.OPENING_APPENDIX), md.index(CS.term_md_lines()[0]))
+
+    def test_18e_the_counting_notes_reach_the_md(self):
+        """**数え方の固定文が、道具が出す md に全部出る**(2026-10-01。独立監査の指摘)。
+
+        C-6 で足した「分かれ道」の文は `EI.COUNTING_NOTES` に在ることしか測っていなかった ―
+        **`build_md` の列挙を 1 文だけ落とす変異が、96 + 119 本の試験を緑で通った**(監査が実測)。
+        **道具の中のリストに在ること**と**顧客の md に出ること**は別である。
+
+        文は写さない(`EI.COUNTING_NOTES` から引く)。**全文**で見るので、
+        文を半分だけ出す変異も落ちる。
+        """
+        md = emitted_md()
+        # **「数え方」の節の中に在ること**を見る(2026-10-01。独立監査の 2 回目の指摘)。
+        # md 全体への `assertIn` だと、**固定文一式を丸ごと別の節へ移す変異が完全に沈黙した**
+        # (監査が実測。見出しの並びは `check_sections` が見るが、どの節の中身かは誰も見ていない)。
+        # 節に割るのは `exit_gate.sections_of`(**4 つ目の割り方を作らない**)、
+        # 節の見分けは `CS.heading_matches`(`SECTIONS` の表が正本)。
+        body = [lines for head, lines in EG.sections_of(md) if CS.heading_matches("数え方", head)]
+        self.assertEqual(len(body), 1, "「数え方」の節が 1 つでない")
+        counting = "\n".join(body[0])
+        for sentence in EI.COUNTING_NOTES:
+            self.assertIn(sentence, counting,
+                          f"数え方の固定文が「数え方」の節に出ていない: {sentence[:18]}")
+        # **件数もそろえる**(1 文落として別の文を 2 回出す変異が黙らない)。
+        # **md 全体でも節の中でも同じ数**(= 節の外に写しが無い)。
+        self.assertEqual(sum(counting.count(s) for s in EI.COUNTING_NOTES), len(EI.COUNTING_NOTES))
+        self.assertEqual(sum(md.count(s) for s in EI.COUNTING_NOTES), len(EI.COUNTING_NOTES))
 
     def test_18c_the_subtraction_lives_in_one_place(self):
         """**引き算を持つのは `exit_index.rest_count` だけ。**3 つの書く側は全部そこを呼ぶ。
