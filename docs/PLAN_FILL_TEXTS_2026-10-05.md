@@ -103,3 +103,21 @@ Claude 1 席 / 4 スロット(lead + 読み 3 本。`readingRequired: false` の
 2. `SEAT_COST_CAP_USD=1 npx tsx scripts/playtest/fillTexts.ts --selection out/<顧客>/exit/answer_selection.json --seats-dir out/<顧客>/llm-seats --out-dir out/<顧客>/exit --dry-run` で下見し「有効な上限 SEAT_COST_CAP_USD = 1」の印字を確かめる → 同じコマンドから `--dry-run` を外して 1 回。**実際に打ったコマンドの字を report と LANE に残す。**
    回す前に out-dir(`out/<顧客>/exit`)の中身を目で見る ― 守りは `fill_texts.report.json` の有無だけで、report を書く前に落ちた 1 回目の `attempts/` が残っていても 2 回目を止めない(監査の指摘 2026-10-05)。`--dry-run` もローカルの python(`--print-terms`)を呼ぶ(鍵・送信は無い)。
 3. 条件 5 の表(report)を司令塔に返して**停止**。成功しても Audit Core に組み込まない(条件 6)。失敗しても追加実行しない(条件 7)。この本編は顧客に送らない。
+
+### 7.6 修正の束(人間の GO 2026-10-05「実験装置の修正後に行う最後の 1 回」― 司令塔が本人の言葉で直接受けた・原文は LANE §86)
+
+**1 回限りの実行は LLM 1 回の後に道具の不具合で落ちた**(LANE §86: `fillTexts.ts` の `pyJson` が python を cwd = report-pdf で起こす一方、道の引数を打った相対のまま渡していた。下見は照合を呼ばないので出なかった)。人間の決定: **その停止は実験結果ではなく道具の不具合として扱い、修正後に最後の 1 回を回す。** 修正条件 13 件(原文は LANE §86)に対する実装:
+
+| 条件 | 実装 | 試験 |
+|---|---|---|
+| 1 相対パス依存をなくす | CLI の `--selection`・`--seats-dir`・`--out-dir`・`--env` は**打った場所(cwd)から `path.resolve`** して使う(`requiredPath`)。python には絶対の道だけ渡る | `lib/fillTextsCli.test.ts` c2(repo の根・相対)・c4(別の cwd `scripts/playtest`・その cwd 相対) |
+| 2 dry-run でも本番の照合経路を通す | 下見は API だけ省き、**本番と同じ `verifyTexts`**(文を書く → python 起動 → JSON の往復)を**文を空にした入力**で 1 回通す。結果は `fill_texts.dryrun.json` の `verifyWiring`(calls・checked・problemCounts・f5・inputPath) | c3(calls 1・checked 4・空の入力 4 本・attempts/ は作らない) |
+| 3 落ちたケースを陽性対照として固定 | `FAILED_COMMAND_2026_10_05`(落ちた手の字そのもの)を試験に留め、**同じ旗の並び・同じ相対の道の形**で合成の材料に打つ(顧客の道は書けない)。直す前は落ちた手と同じ理由で赤(scratchpad `fix/positive_control_before.txt`・変異 M01)、直した後は緑 | c1(旗の並びの一致)+ c2 |
+| 4 試行ごとに記録を先に作り、後に必ず書く | `attempts/<runId>/attempt_<slot>_<n>.json` を**呼び出しの前**に(試行 ID `<runId>:<slot>:<n>`・slot・試行番号・費用の欄は null)、**呼び出しの後**に同じファイルへ status(`responded` / `send_failed`)+ usage・実費・累計、**照合の後**に `adoptable` / `rejected` + 問題を書く(`FillTextsDeps.persist`、同じ name は上書き)。report はこれらの集計(`attemptRows`)。**前の実行の記録は上書きしない**(runId の下) | `lib/fillTexts.test.ts` t16(照合が落ちても usage・実費が残る・send_failed・persist 無しでも files に 1 本ずつ) |
+| 5 指示文は変えない | `RULES_LINES`・`RULES_SHA256` は 1 字も触っていない(t2 で固定)。lead の 1 本への観察 3 つは LANE §86 に記録だけ | t2 |
+| 6 既存試験・変異・dry-run・陽性対照 | LANE §87 | ― |
+| 7 凍結・独立監査 1 往復 | LANE §87 | ― |
+| 8〜10・12・13 | 固定値 `EXPERIMENT` は不変(t1)。report の列は条件 10 の 6 つ + `columns` の説明。`measured.notMeasured` 不変。段にしない | t1・t13 |
+| 11 「F-5 通過」と「採用可能」は別項目 | python `--verify-texts` が `f5`(スロット → bool。**F-5 そのもの** = 数と指し手の字が statement の部分集合で字も同じ。禁止語・長さは見ない ― `f5_only_problems`)を `problems` と別に返す。lib は `f5Passed` = F-5 を通った**試行の数**(禁止語・長さで落ちた試行も数える)、`adoptable` = 機械の検査を全部通って残った数(0 か 1)。⑥ の `verified_text` が通す検査(`paraphrase_problems` = F-5 + 禁止語、+ 長さ)は変わらない | python f85(`f5` の欄)・f86(禁止語だけ / 長さだけ → F-5 は True)・TS t14(F-5 通過 2・採用可能 1) |
+
+**回し方の変更**: 下見は `fill_texts.dryrun.verify_input.json` と `fill_texts.dryrun.json` を out-dir に書く(前の下見の 2 本を**上書き**する)。本番は `attempts/<runId>/` の下に書くので、2026-10-05 に落ちた実行の `attempts/verify_input_1.json` は残る。**2 回目を止める守りは引き続き `fill_texts.report.json` の有無だけ**(人間の条件 9「今回の実行後は追加実行しない」は運用で持つ)。

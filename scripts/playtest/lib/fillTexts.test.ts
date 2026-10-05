@@ -2,7 +2,7 @@
 import { describe, expect, it } from "vitest";
 import {
   EXPERIMENT, FillTextsError, RULES_LINES, RULES_SHA256, capProblems, instructionText, itemRefKey, maxCostBefore, rulesSha256, runFillTexts,
-  slotJobsOf, statementsOf, userTextOf, type FillTextsDeps, type SlotJob,
+  slotJobsOf, statementsOf, userTextOf, type FillTextsDeps, type SlotJob, type VerifyVerdict,
 } from "./fillTexts.js";
 import type { StructuredRequest, StructuredResponse } from "./llmClient.js";
 
@@ -36,7 +36,8 @@ function response(text: string | undefined, opts: { finish?: "stop" | "length"; 
   const json = opts.json !== undefined ? opts.json : text === undefined ? undefined : { text };
   return { text: JSON.stringify(json ?? null), json, raw: { ok: true }, usage: opts.usage ?? { inputTokens: 600, outputTokens: 40 }, finishReason: opts.finish ?? "stop", finishReasonRaw: "end_turn", httpStatus: 200, attempts: 1 };
 }
-/** 偽の席: スロットごとに返答の列。偽の照合: 文 → 問題の一覧(既定は「99」が入っていれば落とす・それ以外は通す) */
+/** 偽の席: スロットごとに返答の列。偽の照合: 文 → 問題の一覧(既定は「99」が入っていれば落とす・それ以外は通す)。
+ *  F-5 そのものの判定は「数の字」「指し手」の問題が無いこと(禁止語・長さの問題だけなら F-5 は通る ― 条件 11) */
 function fakeDeps(answers: Record<string, (string | undefined)[]>, verifyRule?: (slot: string, text: string) => string[]): FillTextsDeps & { calls: StructuredRequest[]; verified: Record<string, string>[] } {
   const calls: StructuredRequest[] = [];
   const verified: Record<string, string>[] = [];
@@ -53,8 +54,11 @@ function fakeDeps(answers: Record<string, (string | undefined)[]>, verifyRule?: 
     },
     verify: async (texts) => {
       verified.push(texts);
-      const out: Record<string, string[]> = {};
-      for (const [slot, text] of Object.entries(texts)) out[slot] = verifyRule ? verifyRule(slot, text) : (text.includes("99") ? [`スロット ${slot}: 数の字「99」が statement に無い`] : []);
+      const out: Record<string, VerifyVerdict> = {};
+      for (const [slot, text] of Object.entries(texts)) {
+        const problems = verifyRule ? verifyRule(slot, text) : (text.includes("99") ? [`スロット ${slot}: 数の字「99」が statement に無い`] : []);
+        out[slot] = { problems, f5Passed: !problems.some((p) => p.includes("数の字") || p.includes("指し手")) };
+      }
       return out;
     },
     now: () => new Date("2026-10-05T12:00:00Z"),
@@ -245,10 +249,56 @@ describe("実行 ― 1 試行 = 1 呼び出し・F-5 を通った文だけ・落
     expect(slots[3]!.notAttempted).toContain("費用の上限");
     expect((r.report.totals as Record<string, unknown>).actualCostUsd).toBeCloseTo(1.5, 6);
   });
-  it("t14 長さの判定は照合側(python)の仕事 ― 照合が返した理由をそのまま失敗理由にする", async () => {
+  it("t14 長さの判定は照合側(python)の仕事 ― 照合が返した理由をそのまま失敗理由にする。F-5 通過と採用可能は別項目(条件 11)", async () => {
     const deps = fakeDeps({ lead: ["A"], "p1.1": ["長い", "短い"], "p1.2": ["C"], "p1.3": ["D"] }, (slot, text) => (text === "長い" ? [`スロット ${slot}: 201 字 ― 上限 200 字を越えている`] : []));
     const r = await runFillTexts(cfg(), deps);
     expect(r.texts["p1.1"]).toBe("短い");
-    expect(((r.report.slots as Record<string, unknown>[])[1]!.failureReasons as string[])[0]).toContain("上限 200 字");
+    const p11 = (r.report.slots as Record<string, unknown>[])[1]!;
+    expect((p11.failureReasons as string[])[0]).toContain("上限 200 字");
+    // 長さで落ちた 1 回目も F-5 は通っている → F-5 通過 2・採用可能 1(同じ数にならない)。
+    expect(p11).toMatchObject({ attempts: 2, f5Passed: 2, adoptable: 1 });
+    expect((r.report.totals as Record<string, unknown>).f5Passed).toBe(5);
+    expect((r.report.totals as Record<string, unknown>).adoptable).toBe(4);
+    const rows = p11.attemptRows as Record<string, unknown>[];
+    expect(rows.map((a) => a.status)).toEqual(["rejected", "adoptable"]);
+    expect(rows.map((a) => a.f5Passed)).toEqual([true, true]);
+    expect(String((r.report.columns as Record<string, string>).adoptable)).toContain("採用そのもの");
+    // 数の字で落ちた試行は F-5 も落ちる。
+    const deps2 = fakeDeps({ lead: ["99", "A"], "p1.1": ["B"], "p1.2": ["C"], "p1.3": ["D"] });
+    const r2 = await runFillTexts(cfg(), deps2);
+    expect((r2.report.slots as Record<string, unknown>[])[0]).toMatchObject({ attempts: 2, f5Passed: 1, adoptable: 1 });
+  });
+});
+
+describe("試行の記録は呼び出しの前に作り、後に同じファイルへ書き足す(人間の GO 条件 4・2026-10-05 の実行で usage が消えた)", () => {
+  it("t16 照合が落ちても attempt_<slot>_<n>.json に usage と実費が残る・前の記録は欄が空・persist が無くても files に 1 本ずつ", async () => {
+    const deps = fakeDeps({ lead: ["A"], "p1.1": ["B"], "p1.2": ["C"], "p1.3": ["D"] });
+    const persisted: { name: string; content: string }[] = [];
+    deps.verify = async () => { throw new Error("exit_fill.py --verify-texts が JSON を返さなかった(合成)"); };
+    deps.persist = (f) => { persisted.push(f); };
+    await expect(runFillTexts(cfg({ runId: "r1" }), deps)).rejects.toThrow(/JSON を返さなかった/);
+    expect(persisted.map((f) => f.name)).toEqual(["attempt_lead_1.json", "attempt_lead_1.json", "lead_attempt_1_raw.json"]);
+    const before = JSON.parse(persisted[0]!.content) as Record<string, unknown>;
+    expect(before).toMatchObject({ attemptId: "r1:lead:1", slot: "lead", attempt: 1, status: "requested", usage: null, costUsd: null, cumulativeCostUsd: null, f5Passed: null, problems: [] });
+    expect(typeof before.requestedAt).toBe("string");
+    const after = JSON.parse(persisted[1]!.content) as Record<string, unknown>;
+    expect(after).toMatchObject({ attemptId: "r1:lead:1", status: "responded", usage: { inputTokens: 600, outputTokens: 40 }, finishReason: "stop", f5Passed: null });
+    expect(after.costUsd).toBeCloseTo((600 * 5 + 40 * 25) / 1_000_000, 12);
+    expect(after.cumulativeCostUsd).toBeCloseTo((600 * 5 + 40 * 25) / 1_000_000, 12);
+    // 送れなかったときも同じファイルに send_failed が残る。
+    const deps3 = fakeDeps({ lead: ["A"], "p1.1": ["B"], "p1.2": ["C"], "p1.3": ["D"] });
+    const names3: string[] = [];
+    deps3.call = async () => { throw new Error("HTTP 500: boom"); };
+    deps3.persist = (f) => { names3.push(`${f.name}:${String((JSON.parse(f.content.startsWith("{") ? f.content : "{}") as Record<string, unknown>).status ?? "-")}`); };
+    await runFillTexts(cfg(), deps3);
+    expect(names3.slice(0, 2)).toEqual(["attempt_lead_1.json:requested", "attempt_lead_1.json:send_failed"]);
+    // persist が無くても files に試行の記録が 1 本ずつ(同じ name は上書き)、最後の状態で返る。
+    const deps2 = fakeDeps({ lead: ["A"], "p1.1": ["99", "B"], "p1.2": ["C"], "p1.3": ["D"] });
+    const r = await runFillTexts(cfg(), deps2);
+    const attemptFiles = r.files.filter((f) => f.name.startsWith("attempt_"));
+    expect(attemptFiles.map((f) => f.name)).toEqual(["attempt_lead_1.json", "attempt_p1.1_1.json", "attempt_p1.1_2.json", "attempt_p1.2_1.json", "attempt_p1.3_1.json"]);
+    expect((JSON.parse(attemptFiles[1]!.content) as Record<string, unknown>).status).toBe("rejected");
+    expect((JSON.parse(attemptFiles[2]!.content) as Record<string, unknown>).status).toBe("adoptable");
+    expect(new Set(r.files.map((f) => f.name)).size).toBe(r.files.length);
   });
 });

@@ -374,8 +374,9 @@ def move_tokens(text):
     return [m.group(0) for m in CA.MOVE_RE.finditer(text)]
 
 
-def paraphrase_problems(output, statement, where):
-    """言い換えの文 `output` が、元の `statement` に無い数・指し手を持っていれば 1 件ずつ返す。"""
+def f5_only_problems(output, statement, where):
+    """**F-5 そのもの**: 言い換えの文 `output` が、元の `statement` に無い数・指し手を持っていれば 1 件ずつ返す。
+    禁止語・長さは見ない(人間の GO 条件 11「F-5 通過」と「採用可能」は別項目 ― 2026-10-05)。"""
     if _blank(output):
         return [f"{where}: 言い換えの文が空白だけ"]
     if _blank(statement):
@@ -391,6 +392,14 @@ def paraphrase_problems(output, statement, where):
     for move in move_tokens(output):
         if move not in allowed_moves:
             problems.append(f"{where}: 指し手「{move}」が statement に無い")
+    return problems
+
+
+def paraphrase_problems(output, statement, where):
+    """F-5(`f5_only_problems`)+ 禁止語。⑥ の `verified_text` が通す検査(長さは `text_problems` が足す)。"""
+    problems = f5_only_problems(output, statement, where)
+    if _blank(output) or _blank(statement):
+        return problems
     problems.extend(forbidden_word_problems(output, where))
     return problems
 
@@ -485,6 +494,20 @@ def verify_texts(texts, selection, statements, max_chars):
     return out
 
 
+def f5_verdicts(texts, selection, statements):
+    """スロット → F-5 そのものを通ったか(bool)。⑤ に無いスロット・空の文は False。禁止語・長さは見ない(条件 11)。"""
+    refs = slot_item_refs(selection)
+    out = {}
+    for slot, text in (texts or {}).items():
+        if slot not in refs or _blank(text):
+            out[slot] = False
+            continue
+        where = f"スロット {slot}"
+        pool = " ".join(statement_for(statements, ref, where) or "" for ref in refs[slot])
+        out[slot] = not f5_only_problems(text, pool, where)
+    return out
+
+
 def parse_verify_args(argv):
     """`--verify-texts <fill_texts.json> --selection <path> --seats-dir <dir> [--max-chars N]`。"""
     out = {"max-chars": None}
@@ -519,7 +542,8 @@ def run_verify_texts(argv, out=sys.stdout):
         raise ExitFillError("⑤ の runId が空 ― 統合の周を引けない")
     statements = statements_of(_load(os.path.join(own["seats-dir"], run_id, INTEGRATION_NAME), "統合の出力"))
     problems = verify_texts(texts, selection, statements, own["max-chars"])
-    json.dump({"problems": problems, "checked": sorted(problems), "maxChars": own["max-chars"]}, out, ensure_ascii=False, indent=1)
+    f5 = f5_verdicts(texts, selection, statements)
+    json.dump({"problems": problems, "f5": f5, "checked": sorted(problems), "maxChars": own["max-chars"]}, out, ensure_ascii=False, indent=1)
     out.write("\n")
     return 1 if any(problems.values()) else 0
 

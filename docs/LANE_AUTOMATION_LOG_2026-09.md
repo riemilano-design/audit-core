@@ -4419,3 +4419,53 @@ FillTextsError: exit_fill.py --verify-texts が JSON を返さなかった(rc 1)
 **lead の 1 本についての司令塔の観察 3 つ(測定ではなく観察。表の数には入れない)**: (1) statement をほぼそのまま写して末尾に「可能性があります」を足しただけで、言い換えになっていない。(2) fact に「可能性があります」を付けている ― 断定しない規則を事実に当てている。(3) packet の語のまま(「分子 51・分母 239」「第一候補」)。冊子の語は「第 1 候補」(`TERM_LINES`)・「107 局面のうち 65」。**F-5 はこの 3 つを 1 つも捕まえない。** 指示文を変えるかは人間に報告した後に決める(sha は動かさない)。
 
 **直しの束(司令塔が着手可・回さない)**: (a) CLI で 3 つの道を `path.resolve` / (b) 試行ごとに生の応答と usage を `attempts/` に先に書く(落ちても消えない)/ (c) `--dry-run` が照合の配線を通る ― 文を空にした入力で `--verify-texts` を実際に呼び、rc と JSON が返ることを見る(金銭ゼロで今回の不具合が出る)。試験 3 本: 「repo の根から相対の道で打って通る」「落ちた後に usage が残る」「dry-run が verify を 1 回呼ぶ」。陽性対照 = 今回落ちた形を直す前に当てて赤(鍵は使わない ― 金銭の動かない形で再現する)。道具 → 凍結 → 独立監査(往復 1 回まで)→ コミット。
+
+## §87 言い換えの束の修正の束 ― 人間の GO「実験装置の修正後に行う最後の 1 回」(2026-10-05・司令塔が本人の言葉で直接受けた)― 2026-10-05
+
+**人間の GO(原文。司令塔の便から写した ― 私から見れば中継だが、司令塔は「伝聞ではない」と明記)**:
+
+> GO。ただし、今回の再実行は「実験装置の修正後に行う最後の1回」とする。今回のLLM呼び出し1回後の停止は実験結果ではなく、道具の不具合として扱う。
+> 修正条件: 1. 相対パス依存をなくし、照合対象は絶対パスまたは実行位置に依存しない解決方式にする。 2. dry-runでも、本番で通る照合経路を実際に通す。API呼び出しだけを省略してよい。 3. 今回の「lead 1試行でLLM呼び出し後に停止したケース」を陽性対照として固定する。 4. 各試行について、LLM呼び出し前に試行ID・slot・試行番号・費用記録欄を作り、LLM呼び出し後は成功・失敗・実費を必ず記録する。途中停止しても記録が失われないこと。 5. 実験の指示文は変更しない。今回観察された出力を理由にプロンプトを変更しない。 6. 修正後、既存試験・変異試験・dry-run・今回の陽性対照を通す。 7. 凍結して独立監査を1往復行う。 8. 独立監査GO後、上限1 USD、最大費用0.32 USD、Claude 1席、4スロット、最大3試行、最大12呼び出しの条件で、最後の1回だけ本番実行する。 9. 今回の実行後は追加実行しない。 10. 結果はslotごとに、試行数、F-5通過数、採用可能数、失敗理由、実費、最大費用を記録する。 11. 「F-5通過」と「採用可能」は別項目として扱う。 12. 因果・対象・条件・新規事実・自然さは機械検証済みとは扱わない。 13. 今回の実験結果をAudit Coreへの正式機能化には接続しない。
+> 目的は、言い換え機能を完成させることではなく、「承認済みstatementの言い換えを、機械検証と人間確認を分離した状態で一度測定する」こと。最後の実行が終了したら停止し、結果だけを返す。
+
+**司令塔の読み替え**(便から): 条件 5 が前便の「観察 3 つは指示文を変える根拠になる」を上書き(指示文は 1 字も変えない・sha を動かさない)/ 条件 11 の定義 = 「F-5 通過」は F-5 そのもの(数と指し手の字が statement の部分集合で字も同じ)、「採用可能」は機械の検査(F-5・禁止語・長さ ≤ 200)を全部通って候補として残った数。採用そのもの(司令塔・人間)は数えない / 条件 3 = 直す前に落ちた手(repo の根・相対の道)を打って赤・直した後に同じ手で緑を試験として字で留める / 条件 4 = `attempts/<試行ID>.json` を呼び出しの前に作り(欄は空)、後に同じファイルへ / 条件 2 = python の起動・道の解決・JSON の往復を本番と同じ経路で / 順序: 直し → 門 4 本 → 凍結 → 独立監査 1 往復 → コミット → 司令塔が確かめて合図 → 最後の 1 回 → 条件 10 の表 → 停止。
+
+### 作ったもの(条件との対応は計画 `docs/PLAN_FILL_TEXTS_2026-10-05.md` §7.6 の表)
+
+- `scripts/playtest/fillTexts.ts`(CLI): `requiredPath` = 道の引数 3 つと `--env` を**打った場所(cwd)から `path.resolve`**(条件 1)/ `verifyTexts` = 文を書く → python `--verify-texts` → JSON の往復を**本番と下見の 1 か所**にし、下見は**文を空にした入力**で 1 回通して結果を `fill_texts.dryrun.json` の `verifyWiring` に書く(条件 2)/ 試行の記録は `attempts/<runId>/` の下(前の実行を上書きしない)/ `persist` で**その場で**書く。
+- `scripts/playtest/lib/fillTexts.ts`(純粋部): `FillTextsDeps.verify` は `VerifyVerdict {problems, f5Passed}` を返す / `persist?`(同じ name は上書き)/ 試行の記録 `attempt_<slot>_<n>.json`(試行 ID `<runId>:<slot>:<n>`)を**呼び出しの前**(status `requested`・usage/費用は null)、**呼び出しの後**(`responded` + usage・実費・累計 / `send_failed`)、**照合の後**(`adoptable` / `rejected` + 問題)に書く(条件 4)/ `f5Passed` = F-5 を通った試行の数、`adoptable` = 全部の機械検査を通った数(0 か 1)。report に `columns` の説明(条件 11)。
+- `scripts/playtest/report-pdf/exit_fill.py`: `paraphrase_problems` を `f5_only_problems`(数・指し手だけ)+ 禁止語に分け(⑥ の `verified_text` が通す検査は不変)、`f5_verdicts`(スロット → bool)を足し、`--verify-texts` の JSON に `f5` の欄を足した。
+- 試験: `lib/fillTextsCli.test.ts`(新規。c1 旗の並びが落ちた手の字そのもの `FAILED_COMMAND_2026_10_05`・c2 repo の根から相対で通る・c3 下見が照合を本番の経路で 1 回呼ぶ(空の文 4 本・attempts/ は作らない)・c4 repo の外の材料のフォルダを cwd にして下向きの相対で通る)/ `lib/fillTexts.test.ts` t14(F-5 通過 2・採用可能 1 ― 同じ数にならない)・t16(照合が落ちても usage・実費が残る・send_failed・persist 無しでも files に 1 本ずつ)/ `exit_fill_test.py` f85(`f5` の欄)・f86(禁止語だけ・長さだけ → F-5 は True。`paraphrase_problems` の禁止語は不変)。
+- 指示文 `RULES_LINES`・`RULES_SHA256`・`EXPERIMENT`・`measured.notMeasured` は**触っていない**(条件 5・8・12。t1・t2 で固定)。
+
+### 陽性対照(条件 3)
+
+**直す前(条件 2 の配線だけ入れて、道の解決は入れない状態)**: (1) `lib/fillTextsCli.test.ts` c2・c3 が赤(scratchpad `fix/positive_control_before.txt` ― `tail` で切ったので例外の文は途中まで。例外の文そのものは変異 M01 の出力 `fix/mut_out/M01.txt` に在る: `言い換えの文(fill_texts)が無い: ../../…/exit/fill_texts.dryrun.verify_input.json` = 落ちた実行と同じ理由)/ (2) 合成の材料 `measure/c5` へ repo の根から**落ちた手と同じ旗の並び・相対の道**で下見 → rc 1・同じ例外。**直した後**: 同じ 2 本が緑・rc 0(`fix/positive_control_after.txt`。下見の印字「照合の配線: exit_fill.py --verify-texts を 1 回呼んだ(空の文 4 本 → JSON が返った・問題 4 件)」、最大費用 0.3170 USD は不変)。
+
+### 変異 13 本(worktree `fix/wt`・予測を先に印字・runner `fix/mut_fix.py`・各変異の全出力 `fix/mut_out/<id>.txt`)
+
+**1 回目は 12 / 13**(`fix/mut_fix_results_run1_M12_equivalent_under_tmp.txt`): M12「cwd でなく repo の根から解く」が**緑**。原因は試験側 ― c4 の材料が repo の外の一時フォルダで、相対の道の `..` が根で飽和するので、repo の根から解いても cwd から解いても同じ絶対の道に落ちる(等価変異)。c4 を「cwd = 材料のフォルダ、道は `exit/answer_selection.json` のような下向きの相対(`..` を含まない)」に直した(repo の根から解くと無い道になる)。**2 回目 13 / 13・★ 0**(`fix/mut_fix_results.txt`): M01(陽性対照 = 落ちた手)c2・c3・c4 赤 / M02 配線を飛ばす c3 / M12 c4 / M03・M04・M09・M08・M11 試行の記録(前・後・送れなかった・上書き・状態)t16 / M05 F-5 と採用可能を同じ数に t14 / M06 F-5 に禁止語を混ぜる f86 / M07 `f5` を返さない f85 / M10 ⑥ の禁止語が抜ける f39・f82・f86 / NEG(コメント)緑。**予測の外れ: 1 回目の M12(過大評価 ― 試験が見分けられると思っていた)。**
+
+### 門(記録の直前に測り直した)
+
+- python: 765 → **766**(f86)。`-X pycache_prefix` 新しい dir。
+- vitest: 115 files・2303 → **116 files・2308**(`lib/fillTextsCli.test.ts` 4 + t16)。
+- typecheck: 赤 **10**、全部 `scripts/playtest/out/` の下(cond-draft 8・report-template-v6 1・report5 1)。外 0。
+
+### 正直に書くこと(限界)
+
+1. **CLI の本番の道(`attempts/<runId>/` へ `persist` で書く所・report を書く所)は API 無しで自動試験できない** ― 読んで確かめた(下見は attempts/ を作らない・c3 で固定)。記録の中身は純粋部の t16 で測った。
+2. 2 回目を止める守りは引き続き `fill_texts.report.json` の有無だけ(**P-198**)。人間の条件 9 は運用で持つ。
+3. 下見は `fill_texts.dryrun.json`・`fill_texts.dryrun.verify_input.json` を out-dir に書き、**前の下見の 2 本を上書き**する。落ちた実行の `attempts/verify_input_1.json` は新しい実行の `attempts/<runId>/` と衝突しないので残る。**`out/c5/exit` の落ちた実行の 2 本(`fill_texts.dryrun.json`・`attempts/verify_input_1.json`)を退避するかは司令塔の判断**(私は out/c5/exit に書かない)。
+4. 条件 3「落ちた手の字そのもの」は顧客の道(out/<顧客>/…)を試験に書けないので、旗の並びを字で留め(`FAILED_COMMAND_2026_10_05`)、道だけ合成に置き換えた。
+5. 条件 4 の試行 ID は `<runId>:<slot>:<n>`(runId は実行ごとの乱数 + 日付)。ファイルは `attempt_<slot>_<n>.json`(runId はフォルダ名)。
+
+凍結: scratchpad `freeze/fix/`(sha256 一覧・diff・status・stat)。独立監査 1 往復 → コミット → 司令塔へ便。回すのは合図の後に 1 回だけ。
+
+### 独立監査 ― GO(2026-10-05・往復 0。判定の後に直し 1 便 = 空白 2 件)
+
+監査が自分で測って一致: 凍結の sha256 10 本(開始時・終了時の 2 回。HEAD は司令塔の文書コミットで 498875f → 783ae6e に動いたが私のファイルは不変)/ 門 3 本(vitest 116・2308、typecheck 10 = 全部 out/ の下、python 766)/ 条件 1〜5・11 をコードで 1 件ずつ裏取り(`requiredPath`・`verifyTexts` の 1 か所・`emitAttempt` の前後・`RULES_LINES` 等の差分 0・`f5_only_problems` と `paraphrase_problems` の分離で ⑥ の検査は不変)/ 変異 M05・M12 を自分の worktree で当て直し t14・c4 赤を再現(全件の再実行はせず記録の中身を読んだ)/ 新規ファイルの凍結の写しと実物が一致 / 禁止語 0 / `deliver.ts` 不変。
+**GO の判断に影響させなかった指摘(判定の後に直した)**: `git diff --check` が 2 件 ― LANE §87 の行末の空白 1 か所・PLAN §7.6 の末尾の余分な空行。文書だけ。直して `git diff --check` 0。
+**GO の条件でない指摘(記録済み)**: persist の本番の道は読んで確かめたのみ / 落ちた実行の 2 本の退避(司令塔が `out/c5/_fill_texts_failed_run_2026-10-05/` へ済ませた ― 便 146 の返し)/ 2 回目の守りは report の有無だけ(P-198)。
+最後の 1 回の実行は監査の対象外・回していない。コミット → 便 147 → 司令塔の合図を待つ。
+

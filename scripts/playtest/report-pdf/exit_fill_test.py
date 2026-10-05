@@ -1421,6 +1421,7 @@ class VerifyTextsTest(unittest.TestCase):
             self.assertEqual(rc, 0)
             got = json.loads(buf.getvalue())
             self.assertEqual(got["problems"], {"lead": [], "p1.1": []})
+            self.assertEqual(got["f5"], {"lead": True, "p1.1": True})
             self.assertEqual(got["maxChars"], 200)
             bad = os.path.join(d, "bad.json")
             with io.open(bad, "w", encoding="utf-8") as f:
@@ -1431,6 +1432,8 @@ class VerifyTextsTest(unittest.TestCase):
             got = json.loads(buf.getvalue())
             self.assertIn("数の字「99」", got["problems"]["p1.1"][0])
             self.assertIn("201 字", got["problems"]["p1.2"][0])
+            # 条件 11: F-5 と採用可能は別 ― 長さで落ちた p1.2 は F-5 を通っている(True)、数の字で落ちた p1.1 は False。
+            self.assertEqual(got["f5"], {"p1.1": False, "p1.2": True})
             # 引数の守り。
             with self.assertRaises(EF.ExitFillError):
                 EF.parse_verify_args(["--verify-texts", ok, "--selection", sel])
@@ -1447,6 +1450,32 @@ class VerifyTextsTest(unittest.TestCase):
         finally:
             sys.stdout = saved
 
+    def test_f86_f5_verdicts_separate_f5_from_forbidden_length_and_empty(self):
+        """人間の GO 条件 11(2026-10-05): 「F-5 通過」= 数と指し手の字が statement の部分集合で字も同じ。
+        「採用可能」= F-5・禁止語・長さを全部通った。禁止語や長さで落ちた文は F-5 は通っている(True)。"""
+        s = selection2()
+        st = self.statements()
+        forbidden = EGR.LABEL_FORBIDDEN_WORDS[0]
+        probe = {
+            "lead": texts()["lead"],                              # 通る
+            "p1.1": "一致率は 99 でした。",                           # 数の字 → F-5 で落ちる
+            "p1.2": "あ" * 201,                                     # 長さだけ
+            "p1.3": "負けた局の多くは " + forbidden + " と違う形でした。",  # 禁止語だけ
+            "ans.q1": "",                                          # 空
+            "p9.9": "x",                                           # ⑤ に無い
+        }
+        f5 = EF.f5_verdicts(probe, s, st)
+        self.assertEqual(f5, {"lead": True, "p1.1": False, "p1.2": True, "p1.3": True, "ans.q1": False, "p9.9": False})
+        full = EF.verify_texts(probe, s, st, 200)
+        self.assertEqual(full["lead"], [])
+        self.assertTrue(full["p1.1"] and full["p1.2"] and full["p1.3"] and full["ans.q1"] and full["p9.9"])
+        self.assertIn("201 字", full["p1.2"][0])
+        self.assertIn(forbidden, full["p1.3"][0])
+        # f5_only_problems は禁止語を見ない・paraphrase_problems は見る(⑥ の verified_text の検査は変わらない)。
+        self.assertEqual(EF.f5_only_problems(probe["p1.3"], texts()["p1.3"], "x"), [])
+        self.assertEqual(len(EF.paraphrase_problems(probe["p1.3"], texts()["p1.3"], "x")), 1)
+        self.assertEqual(EF.paraphrase_problems("", "a", "x"), ["x: 言い換えの文が空白だけ"])
+        self.assertEqual(EF.paraphrase_problems("a", "", "x"), ["x: 元の statement が無い(言い換えを照合できない)"])
 
 class RunTest(unittest.TestCase):
     """**段としての振る舞い。**書き手の道を消さない。"""

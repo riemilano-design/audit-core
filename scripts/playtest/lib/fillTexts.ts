@@ -157,28 +157,52 @@ export interface FillTextsConfig {
   today: string;
   gitHead: string | null;
 }
+export interface VerifyVerdict {
+  /** 機械の検査の問題(F-5・禁止語・長さ・空)。空なら**採用可能** */
+  problems: string[];
+  /** F-5 そのもの(数と指し手の字が statement の部分集合で字も同じ)を通ったか。禁止語・長さは見ない(人間の GO 条件 11) */
+  f5Passed: boolean;
+}
 export interface FillTextsDeps {
   call: (req: StructuredRequest, apiKey: string) => Promise<StructuredResponse>;
-  /** F-5 + 長さの照合(python の 1 か所)。スロット → 問題の一覧(空なら通過) */
-  verify: (texts: Record<string, string>) => Promise<Record<string, string[]>>;
+  /** F-5 + 禁止語 + 長さの照合(python の 1 か所)。スロット → 判定 */
+  verify: (texts: Record<string, string>) => Promise<Record<string, VerifyVerdict>>;
+  /**
+   * 試行の記録を**その場で**書く(同じ name は上書き)。人間の GO 条件 4(2026-10-05): 呼び出しの前に試行 ID・slot・試行番号・費用の欄を作り、
+   * 呼び出しの後に成功/失敗と usage/実費を**同じファイル**に書く。途中で落ちても attempts/ から復元できる。
+   * (2026-10-05 の 1 回限りの実行は、照合の段で落ちて lead 1 回分の usage が書かれずに消えた ― 返った後にまとめて書く作りだった。)
+   * 無ければ `files` に返すだけ。
+   */
+  persist?: (file: { name: string; content: string }) => void;
   now?: () => Date;
 }
+export type AttemptStatus = "requested" | "send_failed" | "responded" | "rejected" | "adoptable";
 export interface AttemptRow {
+  /** `<runId>:<slot>:<試行番号>` */
+  attemptId: string;
+  slot: string;
   attempt: number;
   requestedAt: string;
   inputTokensEstimate: number;
-  usage?: { inputTokens: number; outputTokens: number };
-  finishReason?: string;
-  /** その試行が落ちた理由(形・F-5・長さ・HTTP)。通れば空 */
+  status: AttemptStatus;
+  usage: { inputTokens: number; outputTokens: number } | null;
+  finishReason: string | null;
+  costUsd: number | null;
+  cumulativeCostUsd: number | null;
+  /** F-5 そのものの判定(照合に届かなければ null) */
+  f5Passed: boolean | null;
+  /** その試行が落ちた理由(形・F-5・禁止語・長さ・HTTP)。通れば空 */
   problems: string[];
-  /** 通った文(F-5 を通ったときだけ) */
+  /** 採用可能の文(機械の検査を全部通ったときだけ) */
   passedText?: string;
 }
 export interface SlotReport {
   slot: string;
   kind: SlotJob["kind"];
   attempts: number;
+  /** F-5 そのものを通った試行の数(禁止語・長さで落ちた試行も数える ― 条件 11「別項目」) */
   f5Passed: number;
+  /** 機械の検査(F-5・禁止語・長さ)を全部通って候補として残った数(0 か 1)。採用そのものは数えない */
   adoptable: number;
   failureReasons: string[];
   actualCostUsd: number;
@@ -219,6 +243,11 @@ function textOf(json: unknown, schema: JsonSchema): { text?: string; problems: s
   return { text: (cleaned as { text: string }).text, problems: [] };
 }
 
+/** 試行の記録のファイル名(attempts/ の下)。 */
+export function attemptFileName(slot: string, attempt: number): string {
+  return `attempt_${slot}_${String(attempt)}.json`;
+}
+
 export async function runFillTexts(cfg: FillTextsConfig, deps: FillTextsDeps): Promise<FillTextsResult> {
   const now = (): Date => (deps.now === undefined ? new Date() : deps.now());
   const startedAt = now().toISOString();
@@ -233,6 +262,15 @@ export async function runFillTexts(cfg: FillTextsConfig, deps: FillTextsDeps): P
   const texts: Record<string, string> = {};
   const problems: FillTextsResult["problems"] = {};
   const files: FillTextsResult["files"] = [];
+  // その場で書く(同じ name は上書き = 試行の記録は 1 ファイルを呼び出しの前・後・照合の後に書き直す)。
+  const emit = (file: { name: string; content: string }): void => {
+    const at = files.findIndex((f) => f.name === file.name);
+    if (at < 0) files.push(file); else files[at] = file;
+    if (deps.persist !== undefined) deps.persist(file);
+  };
+  const emitAttempt = (rec: AttemptRow): void => {
+    emit({ name: attemptFileName(rec.slot, rec.attempt), content: `${JSON.stringify(rec, null, 1)}\n` });
+  };
   const slots: SlotReport[] = [];
   let totalCalls = 0;
   let cumulative = 0;
@@ -258,41 +296,56 @@ export async function runFillTexts(cfg: FillTextsConfig, deps: FillTextsDeps): P
       }
       totalCalls += 1;
       row.attempts += 1;
-      const rec: AttemptRow = { attempt, requestedAt: now().toISOString(), inputTokensEstimate: estimate, problems: [] };
+      // 条件 4: **呼び出しの前に**試行 ID・slot・試行番号・費用の欄(空)を書く。
+      const rec: AttemptRow = { attemptId: `${cfg.runId}:${job.slot}:${String(attempt)}`, slot: job.slot, attempt, requestedAt: now().toISOString(), inputTokensEstimate: estimate, status: "requested", usage: null, finishReason: null, costUsd: null, cumulativeCostUsd: null, f5Passed: null, problems: [] };
       row.attemptRows.push(rec);
+      emitAttempt(rec);
       let res: StructuredResponse;
       try {
         res = await deps.call({ provider: EXPERIMENT.provider, model: cfg.model, system: cfg.instruction, user, schema: adapted, schemaName: FILL_TEXT_SCHEMA_NAME, maxOutputTokens: EXPERIMENT.reserveOutputTokens, temperature: EXPERIMENT.temperature }, cfg.apiKey);
       } catch (err) {
+        rec.status = "send_failed";
         rec.problems.push(`送れなかった: ${(err as Error).message.slice(0, 200)}`);
         row.failureReasons.push(...rec.problems);
         slotProblems.push({ attempt, reasons: [...rec.problems] });
-        files.push({ name: `${job.slot}_attempt_${String(attempt)}_error.txt`, content: rec.problems.join("\n") });
+        emitAttempt(rec);
+        emit({ name: `${job.slot}_attempt_${String(attempt)}_error.txt`, content: rec.problems.join("\n") });
         break; // 送れないときは再試行しない(落ちたら止まる)
       }
-      rec.usage = res.usage;
-      rec.finishReason = res.finishReason;
+      // 条件 4: **呼び出しの後に**成功と usage・実費を同じファイルへ(照合の前 ― 照合で落ちても消えない)。
       const cost = costUsd(res.usage.inputTokens, res.usage.outputTokens, cfg.prices);
       cumulative += cost;
       row.actualCostUsd += cost;
-      files.push({ name: `${job.slot}_attempt_${String(attempt)}_raw.json`, content: `${JSON.stringify(res.raw, null, 1)}\n` });
+      rec.status = "responded";
+      rec.usage = res.usage;
+      rec.finishReason = res.finishReason;
+      rec.costUsd = cost;
+      rec.cumulativeCostUsd = cumulative;
+      emitAttempt(rec);
+      emit({ name: `${job.slot}_attempt_${String(attempt)}_raw.json`, content: `${JSON.stringify(res.raw, null, 1)}\n` });
       const got = res.json === undefined ? { problems: ["JSON が取り出せなかった"] } : textOf(res.json, schema);
       let reasons: string[] = got.problems.map((p) => `形: ${p}`);
       if (got.text !== undefined) {
-        const verdict = await deps.verify({ [job.slot]: got.text });
-        reasons = verdict[job.slot] ?? [];
+        const verdict = (await deps.verify({ [job.slot]: got.text }))[job.slot];
+        if (verdict === undefined) throw new FillTextsError(`照合がスロット ${job.slot} の判定を返さなかった`);
+        reasons = verdict.problems;
+        rec.f5Passed = verdict.f5Passed;
+        if (verdict.f5Passed) row.f5Passed += 1;
         if (reasons.length === 0) {
           texts[job.slot] = got.text;
           rec.passedText = got.text;
-          row.f5Passed += 1;
+          rec.status = "adoptable";
           row.adoptable = 1;
+          emitAttempt(rec);
           break;
         }
       }
+      rec.status = "rejected";
       rec.problems.push(...reasons);
+      emitAttempt(rec);
       row.failureReasons.push(...reasons.map((r) => `試行 ${String(attempt)}: ${r}`));
       slotProblems.push({ attempt, reasons: [...reasons] });
-      files.push({ name: `${job.slot}_attempt_${String(attempt)}_problems.txt`, content: `${reasons.map((r) => `- ${r}`).join("\n")}\n` });
+      emit({ name: `${job.slot}_attempt_${String(attempt)}_problems.txt`, content: `${reasons.map((r) => `- ${r}`).join("\n")}\n` });
       for (const r of reasons) if (!reasonsSoFar.includes(r)) reasonsSoFar.push(r);
       user = retryUserText(baseUser, reasonsSoFar);
     }
@@ -311,6 +364,10 @@ export async function runFillTexts(cfg: FillTextsConfig, deps: FillTextsDeps): P
       actualCostUsd: cumulative, maxCostUsdBefore: before.total, capUsd: EXPERIMENT.capUsd, stopReason: stopReason ?? null,
     },
     slots: slots.map((s) => ({ slot: s.slot, kind: s.kind, attempts: s.attempts, f5Passed: s.f5Passed, adoptable: s.adoptable, failureReasons: s.failureReasons, actualCostUsd: s.actualCostUsd, maxCostUsdBefore: s.maxCostUsdBefore, ...(s.notAttempted === undefined ? {} : { notAttempted: s.notAttempted }), attemptRows: s.attemptRows })),
+    columns: {
+      f5Passed: "F-5 そのもの(数と指し手の字が statement の部分集合で字も同じ)を通った試行の数。禁止語・長さは見ない",
+      adoptable: "機械の検査(F-5・禁止語・長さ ≤ 200)を全部通って候補として残った数(0 か 1)。採用そのもの(司令塔・人間)は数えない",
+    },
     measured: {
       byMachine: ["F-5: 数(全角・半角・小数)と指し手の表記の字が statement の部分集合で、字がそのまま(exit_fill.paraphrase_problems)", "禁止語(exit_groups.LABEL_FORBIDDEN_WORDS)が無い", `長さ ≤ ${String(EXPERIMENT.maxChars)} 字(印の無い文なので素直に数える)`],
       notMeasured: ["因果関係・条件・対象が statement と同じか(機械では測れない ― 通った文を人間が読む)", "新しい事実が足されていないか(数と指し手以外の語は照合していない)", "文として自然か・初心者に伝わるか"],
