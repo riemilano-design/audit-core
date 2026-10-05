@@ -450,3 +450,632 @@ class QuestionSectionTest(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)
+
+
+# ==================== 束 2(F-4〜F-7)====================
+#
+# 【土台は合成】packet・候補の JSON・統合・下書きの md は全部ここで組む(`out/` は読まない)。
+# **数と字だけ封じた最終版(2026-09-29、`9_本編_最終版.md`)に合わせる** ― 期待値は実物の行の字。
+# 「表から作った出力を同じ表と比べない」: 期待値は ⑥ の定数からではなく、**送った冊子の行をそのまま**書く。
+import exit_candidates as EC  # noqa: E402
+import exit_gate as EG  # noqa: E402
+import exit_groups as EGR  # noqa: E402
+
+M4_ATTACK_NAME = "第 1 候補が攻めの手だった分かれ道のうち、実戦も攻めの手だった局面"
+M4_DEFENSE_NAME = "第 1 候補が自玉側の手だった分かれ道のうち、実戦も自玉側の手だった局面"
+M5_NAME = "直前の自分の手が 10 秒以上で、この手は 4 秒以内だった手のうち、崩れた手"
+M4_CORE = "10 秒以上考える局面では、攻めの候補と自玉側の候補を 1 つずつ思い浮かべてから比べる"
+M5_CORE = "長考した次の 1 手は、相手の返しを見てからひと呼吸"
+
+# 封じた最終版の 12〜14 行目(事実の部分)と 20・22 行目(盤)。**字をそのまま**。
+SEALED_FACT_1 = ("第 1 候補が攻めの手だった分かれ道 107 局面のうち、実戦も攻めの手だった局面が 65。"
+                 "第 1 候補が自玉側の手だった分かれ道 132 局面のうち、実戦も自玉側の手だった局面が 76。")
+SEALED_FACT_2 = "直前の自分の手が 10 秒以上で、この手は 4 秒以内だった 37 手のうち、崩れた手が 9。"
+SEALED_FACT_3 = "一度は優勢(+300 以上)になった対局が 18 局。そのうち負けた対局が 6 局。"
+SEALED_ACTION_1 = (f"1. {M4_CORE}<!-- menu: M4 -->　― 根拠は{M4_ATTACK_NAME}が 65 / 107、"
+                   f"{M4_DEFENSE_NAME}が 76 / 132 です")
+SEALED_ACTION_2 = f"2. {M5_CORE}<!-- menu: M5 -->　― 根拠は{M5_NAME}が 9 / 37 です"
+
+
+def packet():
+    return {
+        "packetId": "22aee8fe696d0262",
+        "facts": {
+            "games": [{"gameId": "g11", "no": 11}, {"gameId": "g12", "no": 12}, {"gameId": "g13", "no": 13}],
+            # 添字 0 と 1 を盤に使う。**engine の ply は表示の手数**(`displayPly`)で、分かれ道の行の
+            # `ply`(本人の手の鍵)とはわざと違う値にする(実物は 404 行のうち 263 行で違う)。
+            "engine": [{"gameId": "g11", "ply": 48, "sfen": "(合成)", "src": "e1"},
+                       {"gameId": "g12", "ply": 70, "sfen": "(合成)", "src": "e1"},
+                       {"gameId": "g13", "ply": 110, "sfen": "(合成)", "src": "e1"}],
+            "branches": [{"gameId": "g11", "ply": 47, "displayPly": 48, "top1Side": "attack",
+                          "actualSide": "defense", "src": "e2"},
+                         {"gameId": "g12", "ply": 69, "displayPly": 70, "top1Side": "defense",
+                          "actualSide": "attack", "src": "e2"},
+                         {"gameId": "g13", "ply": 109, "displayPly": 110, "src": "e2"}],
+        },
+        "aggregates": [
+            {"id": "sideMatch.attack", "numerator": 65, "denominator": 107},
+            {"id": "sideMatch.defense", "numerator": 76, "denominator": 132},
+            {"id": "time.quickAfterLongThink", "numerator": 9, "denominator": 37},
+            {"id": "time.bySpent0to1", "numerator": 22, "denominator": 531},
+            {"id": "aheadThenLost", "numerator": 6, "denominator": 18},
+        ],
+    }
+
+
+def fraction(menu_id, label, name, unit, numerator, denominator):
+    return {"id": menu_id, "label": label, "name": name, "unit": unit,
+            "numerator": numerator, "denominator": denominator}
+
+
+def candidates():
+    return {
+        "actionFractions": [fraction("M4", "攻め", M4_ATTACK_NAME, "局面", 65, 107),
+                            fraction("M4", "自玉側", M4_DEFENSE_NAME, "局面", 76, 132),
+                            fraction("M5", "", M5_NAME, "手", 9, 37)],
+        "boards": ["13/110 付録3 3 分", "11/48 付録3 3 分", "12/70 付録3 3 分"],
+        "menuPassed": ["M4", "M5", "M6"],
+        # 実物の候補の p1Numbers(deliver1、2026-10-05 に読んだ)は 1・4・7・10・300 も持つ
+        # (閾値と「第 1 候補」の 1、「0.7」が割れた 7)。門 (ii) はそれで通っている。同じ数を置く。
+        "p1Numbers": [{"number": n, "unit": "x", "from": "合成"}
+                      for n in (3, 25, 65, 107, 76, 132, 9, 37, 18, 6, 22, 531, 1, 4, 7, 10, 300)],
+        "unitMismatchFractions": [],
+    }
+
+
+def passed_rows():
+    def row(menu_id, core, fractions):
+        return {"id": menu_id, "minN": 5, "denominator": fractions[0]["denominator"],
+                "item": {"actionCore": core, "evidenceName": "x", "verifyName": "y"},
+                "fractions": fractions}
+    return [row("M4", M4_CORE, [f for f in candidates()["actionFractions"] if f["id"] == "M4"]),
+            row("M5", M5_CORE, [f for f in candidates()["actionFractions"] if f["id"] == "M5"]),
+            row("M6", "(合成の M6)", [fraction("M6", "", "x のうち、y", "局面", 1, 2)])]
+
+
+def ref(seat, hid):
+    return {"seatIndex": seat, "hypothesisId": hid}
+
+
+STATEMENTS = {
+    "0:lead": "攻めも自玉側も第 1 候補と違う側が残り(65 / 107、76 / 132)、長考の直後の 1 手は 9 / 37 で崩れ、優勢 18 局のうち 6 局を落とした",
+    "0:h1": "一致率は 0.7 を下回り、65 / 107 と 76 / 132 で両方の側に残った",
+    "1:h2": "0〜1 秒の 531 手で崩れは 22 手、長考直後は 9 / 37",
+    "2:h3": "一度優勢になった 18 局のうち 6 局を落とした",
+    "0:q1": "問いの読み(合成)",
+}
+
+
+def integration():
+    def cluster(key, statement):
+        seat, hid = key.split(":")
+        return {"itemRefs": [ref(int(seat), hid)],
+                "representative": {"statement": statement,
+                                   # **`internal` は読まれない**(schema に無い欄。写しても参照されないことを f52 が見る)
+                                   "internal": {"reasoning": "普段と違う型を試していた(内部の推測)"}}}
+    return {"clusters": [cluster(k, v) for k, v in STATEMENTS.items()]}
+
+
+def texts():
+    return {
+        "lead": "攻めか自玉側かの分かれ道で第 1 候補と違う側が両方に残り、長考の直後の 1 手は崩れやすく、一度良くなった局を落としていた",
+        "p1.1": "どちらの一致率も、道具が仮に置いている線(0.7)を下回りました。",
+        "p1.2": "0〜1 秒で指した 531 手では崩れが 22 手でした。長考の直後の 1 手は、それより崩れる割合が高かった、という数です。",
+        "p1.3": "負けた局の多くは、一度は良くなってからのものでした。",
+    }
+
+
+def selection2():
+    return selection(
+        runId="558b8a81-20261001-2",
+        lead={"itemRef": ref(0, "lead"), "statementSource": "integration.representative"},
+        p1=[{"slot": "p1.1", "aggregateIds": ["sideMatch.attack", "sideMatch.defense"],
+             "itemRef": ref(0, "h1"), "readingRequired": True},
+            {"slot": "p1.2", "aggregateIds": ["time.quickAfterLongThink", "time.bySpent0to1"],
+             "itemRef": ref(1, "h2"), "readingRequired": True},
+            {"slot": "p1.3", "aggregateIds": ["aheadThenLost"],
+             "itemRef": ref(2, "h3"), "readingRequired": True}],
+        answers=[{"questionId": "q1", "status": "unanswerable", "machineSummary": "partial",
+                  "itemRefs": [ref(0, "q1")], "aggregateIds": []}],
+        boards=[{"slot": "p2.1", "gameId": "g11", "ply": 48, "packetRef": "facts.engine[0].top1Usi"},
+                {"slot": "p2.2", "gameId": "g12", "ply": 70, "packetRef": "facts.engine[1].top1Usi"}],
+        actions=[{"slot": "act.2", "menuId": "M5", "itemRef": ref(1, "h2")},
+                 {"slot": "act.1", "menuId": "M4", "itemRef": ref(0, "h1")}],
+    )
+
+
+def draft_md():
+    """段 `exit-candidates` の下書きの**形**(節の並び・TODO・注・下書きだけの節)。中身は合成。"""
+    L = ["# 本編(合成)", "", "3 分切れ負け 25 局を、1 手ずつ将棋エンジンで調べました(2026-09-28)。", "",
+         "## ひとことで", "", EC.TODO, EC.note("数 3 つを選ぶ"), "",
+         EC.DRAFT_ONLY_HEADINGS[0], "", "- **発見(合成)**", "  - 数: 999 局面", "",
+         EC.DRAFT_ONLY_HEADINGS[1], "", "- 行動の根拠(行動 M4・攻め): x が 65 / 107。", "",
+         "## 局面で見る", "", EC.TODO, EC.note("ここに残すのは盤 2 つ分の行だけ"), "",
+         "- 3 分 の 13 局目 110 手目<!-- pos: 13/110 付録3 3 分 -->",
+         "- 3 分 の 11 局目 48 手目<!-- pos: 11/48 付録3 3 分 -->",
+         "- 3 分 の 12 局目 70 手目<!-- pos: 12/70 付録3 3 分 -->", "",
+         "## 試せること", "", EC.TODO, EC.note("下から本数を決める"), "",
+         EC.DRAFT_ONLY_HEADINGS[2], "", SEALED_ACTION_1, SEALED_ACTION_2,
+         "3. (合成の M6)<!-- menu: M6 -->　― 根拠は x のうち、y が 1 / 2 です", "",
+         EC.DRAFT_ONLY_HEADINGS[3], "", "| 項目 | 下限 | いまの分母 | 届かなかった理由 |", "|---|---|---|---|", "",
+         EC.DRAFT_ONLY_HEADINGS[4], "", f"- {EI.NOTHING_TO_HIDE_SENTENCE}", "",
+         "## 次の 25 局で、何で答え合わせをするか", "", EC.note("残した行動の行だけにする"), "",
+         EC.VERIFY_TABLE_HEADER, "|---|---|---|",
+         f"| {M4_CORE}<!-- menu: M4 --> | 「{M4_ATTACK_NAME}」と「{M4_DEFENSE_NAME}」 | 攻め 65 / 107、自玉側 76 / 132 |",
+         f"| {M5_CORE}<!-- menu: M5 --> | 「{M5_NAME}」 | 9 / 37 |",
+         "| (合成の M6)<!-- menu: M6 --> | 「x のうち、y」 | 1 / 2 |", "",
+         "## 数え方", "", "- 数え方の固定文(合成)。", "",
+         "<!-- appendix: 数の出どころ -->", EC.note("この節の下の表は付録へ"), "",
+         "### 数の分母がどこから来たか", "", "| 数 | 数えたもの | どの集計から出たか |", "|---|---|---|",
+         "| 107 | 局面 | (合成) |", "",
+         "## 対応表 ― 何局目が、どのファイルか(本人用)", "", "| 局 | ファイル名 | 先後 | 手数 | 結果 |",
+         "|---|---|---|---|---|", "| 1 | g01-sente.kif | 先手 | 123 | 勝ち |", ""]
+    return "\n".join(L)
+
+
+QUESTIONS2 = QuestionSectionTest.QUESTIONS
+
+
+def build(**over):
+    kw = dict(draft_md=draft_md(), selection=selection2(), packet=packet(), candidates=candidates(),
+              questions=QUESTIONS2, texts=texts(), statements=EF.statements_of(integration()),
+              passed=passed_rows(), games=25)
+    kw.update(over)
+    return EF.build_document(**kw)
+
+
+class ParaphraseCheckTest(unittest.TestCase):
+    """**§3 の 1 番。言い換えは `statement` だけに掛ける ― 数・手の字は部分集合で、字も同じ。**"""
+
+    def test_f37_same_value_in_another_form_falls(self):
+        """**「値が同じなら通す」に緩めた変異がここで赤くなる**(計画 §7.3 の 1 行目)。"""
+        statement = "一致率は 3 / 4 で、▲７六歩が第 1 候補"
+        self.assertEqual(EF.paraphrase_problems("3 / 4 でした", statement, "x"), [])
+        for output in ("75% でした", "３ / ４ でした", "0.75 でした"):
+            got = EF.paraphrase_problems(output, statement, "x")
+            self.assertTrue(got, output)
+        # 漢数字は数の字として拾えないので**部分集合の検査では通る** ― 測って書く(限界。
+        # 漢数字の「三」は数の主張として検査 1 も拾わない。ここで新しい拾い方を作らない)。
+        self.assertEqual(EF.paraphrase_problems("三 / 四 でした", statement, "x"), [])
+
+    def test_f38_moves_must_be_the_same_characters(self):
+        statement = "▲７六歩が第 1 候補で、実戦は ▲２六歩"
+        self.assertEqual(EF.paraphrase_problems("▲７六歩と ▲２六歩", statement, "x"), [])
+        got = EF.paraphrase_problems("▲７六歩と ▲３四歩", statement, "x")
+        self.assertEqual(len(got), 1, got)
+        self.assertIn("▲３四歩", got[0])
+        # 統合の statement に無い手を言い換えが足したら落ちる(文法は `check_answer.MOVE_RE`)。
+        self.assertTrue(EF.paraphrase_problems("△３四歩", "手の無い文", "x"))
+
+    def test_f39_the_forbidden_word_falls_in_every_supplied_text(self):
+        """**§7.3 の 5 行目: 「普段」は太字の 1 文にも読みの文にも出ない。**語の表は 1 か所。"""
+        self.assertEqual(EGR.LABEL_FORBIDDEN_WORDS, ("普段",))
+        got = EF.paraphrase_problems("普段と違う型でした", "普段と違う型でした", "x")
+        self.assertEqual(len(got), 1, got)
+        self.assertIn("普段", got[0])
+        with self.assertRaises(EF.ExitFillError):
+            EF.check_supplied_words("普段の型", "x")
+        for slot in ("lead", "p1.1"):
+            t = texts()
+            t[slot] = t[slot] + " 普段の型より多い"
+            with self.assertRaises(EF.ExitFillError) as cm:
+                build(texts=t)
+            self.assertIn("普段", str(cm.exception))
+            self.assertIn(slot, str(cm.exception))
+
+    def test_f40_a_number_the_statement_does_not_have_falls_with_its_place(self):
+        t = texts()
+        t["p1.1"] = "一致率は 0.7 を下回り、108 局面でした"
+        with self.assertRaises(EF.ExitFillError) as cm:
+            build(texts=t)
+        self.assertIn("108", str(cm.exception))
+        self.assertIn("p1.1", str(cm.exception))
+        self.assertNotIn("0.7", str(cm.exception).split("statement の数")[0])
+
+    def test_f41_a_missing_text_stops_and_names_the_slot(self):
+        """**⑥ は書かない。**渡されなければ止まる(既定の文を入れない)。"""
+        for slot in ("lead", "p1.2"):
+            t = texts()
+            del t[slot]
+            with self.assertRaises(EF.ExitFillError) as cm:
+                build(texts=t)
+            self.assertIn(slot, str(cm.exception))
+            self.assertIn("渡されていない", str(cm.exception))
+
+    def test_f42_the_statement_is_the_representative_and_internal_is_not_read(self):
+        """統合から読むのは `representative.statement` だけ。`internal` は参照しない
+        (人間の決定: 内部の推測は下流から参照できない)。"""
+        statements = EF.statements_of(integration())
+        self.assertEqual(statements["0:h1"], STATEMENTS["0:h1"])
+        self.assertNotIn("普段", json.dumps(statements, ensure_ascii=False))
+        with self.assertRaises(EF.ExitFillError) as cm:
+            EF.statement_for(statements, ref(9, "zz"), "x")
+        self.assertIn("9:zz", str(cm.exception))
+        self.assertIn("統合の clusters に無い", str(cm.exception))
+
+
+class TermMaskTest(unittest.TestCase):
+    def test_f70_the_term_first_candidate_is_not_a_number_claim(self):
+        """「第 1 候補」の 1 は用語の一部(`check_structure.TERM_LINES`)。席の statement が「第一候補」と
+        書いていても、言い換えが「第 1 候補」と書いてよい(用語の 4 行に合わせる)。"""
+        self.assertEqual(CS.TERM_LINES[0][0], "第 1 候補")
+        self.assertEqual(EF.number_tokens("第 1 候補が 65 / 107"), ["65", "107"])
+        self.assertEqual(EF.paraphrase_problems("第 1 候補と違う側が 51 / 239", "第一候補と逆の側は 51・239", "x"), [])
+        # 用語の外の 1 は数の主張のまま(「1 手」)。
+        self.assertTrue(EF.paraphrase_problems("長考の直後の 1 手", "長考の直後の手", "x"))
+        self.assertEqual(EF.paraphrase_problems("長考の直後の 1 手", "直後の 1 手", "x"), [])
+
+
+class LeadAndFactsTest(unittest.TestCase):
+    """**F-5 の尾と F-4 の 3 本。**期待値は封じた最終版の字。"""
+
+    def test_f43_the_tail_and_the_count_are_pinned(self):
+        self.assertEqual(EF.LEAD_TAIL_TEMPLATE, " ― という読みです。数は {n} つ。")
+        self.assertEqual(EF.lead_line("読み", 3), "**読み** ― という読みです。数は 3 つ。")
+        self.assertEqual(CS.HONBUN_P1_FACT_COUNT, 3)
+        for n in (2, 4, 0):
+            with self.assertRaises(EF.ExitFillError):
+                EF.lead_line("読み", n)
+
+    def test_f44_the_connective_type_reproduces_the_sealed_three(self):
+        """**2 規則で 3 本が字まで再現する**(司令塔の判断 (D)。名前は `check_answer` の `name`)。"""
+        self.assertEqual(EF.FACT_CONNECTIVE, "のうち、")
+        self.assertEqual(EF.connective_fact(M4_ATTACK_NAME, 65, 107, "局面"),
+                         "第 1 候補が攻めの手だった分かれ道 107 局面のうち、実戦も攻めの手だった局面が 65。")
+        self.assertEqual(EF.connective_fact(M4_DEFENSE_NAME, 76, 132, "局面"),
+                         "第 1 候補が自玉側の手だった分かれ道 132 局面のうち、実戦も自玉側の手だった局面が 76。")
+        # **A の末尾が単位の語なら落とす**(「…4 秒以内だった手」+「37 手」→「…4 秒以内だった 37 手」)。
+        self.assertEqual(EF.connective_fact(M5_NAME, 9, 37, "手"), SEALED_FACT_2)
+        with self.assertRaises(EF.ExitFillError):
+            EF.connective_fact("のうち、が 2 回のうち、ある", 1, 2, "局")
+        with self.assertRaises(EF.ExitFillError):
+            EF.connective_fact("接続が無い", 1, 2, "局")
+
+    def test_f45_the_ahead_then_lost_type_is_pinned_with_two_holes(self):
+        """**司令塔の判断 (ii)**: 封じた 2 文を型に。穴 2 つ。局数も閾値も値として焼かない
+        (`+300` は字の一部 = P-188 の 3 か所目)。「のうち、」の型に乗せない。"""
+        self.assertEqual(EF.AHEAD_THEN_LOST_TEMPLATE,
+                         "一度は優勢(+300 以上)になった対局が {denominator} 局。そのうち負けた対局が {numerator} 局。")
+        self.assertEqual(EF.AHEAD_THEN_LOST_HOLES, 2)
+        self.assertEqual(EF.AHEAD_THEN_LOST_TEMPLATE.count("{"), EF.AHEAD_THEN_LOST_HOLES)
+        self.assertEqual(EF.ahead_then_lost_fact(6, 18), SEALED_FACT_3)
+        self.assertNotEqual(EF.ahead_then_lost_fact(3, 12), SEALED_FACT_3)
+        self.assertNotIn(EF.FACT_CONNECTIVE, EF.AHEAD_THEN_LOST_TEMPLATE)
+        self.assertNotIn("18", EF.AHEAD_THEN_LOST_TEMPLATE)
+        self.assertIn("+300", EF.AHEAD_THEN_LOST_TEMPLATE)
+        # 局の語は `exit_index.COUNTING_NOTES` の「優勢から負けた対局」と同じ「対局」(司令塔の理由 (2))。
+        self.assertTrue(any("優勢から負けた対局" in s for s in EI.COUNTING_NOTES))
+
+    def test_f46_two_aggregates_make_one_fact_in_the_sealed_order(self):
+        fact, reaches = EF.fact_text(["sideMatch.attack", "sideMatch.defense"],
+                                     EF.aggregate_rows_of(packet()), candidates())
+        self.assertEqual(fact, SEALED_FACT_1)
+        self.assertTrue(reaches)
+        fact3, reaches3 = EF.fact_text(["aheadThenLost"], EF.aggregate_rows_of(packet()), candidates())
+        self.assertEqual(fact3, SEALED_FACT_3)
+        self.assertFalse(reaches3)
+        # **印だけの id**(読みの数の裏づけ)は文を作らない。
+        fact2, _ = EF.fact_text(["time.quickAfterLongThink", "time.bySpent0to1"],
+                                EF.aggregate_rows_of(packet()), candidates())
+        self.assertEqual(fact2, SEALED_FACT_2)
+        with self.assertRaises(EF.ExitFillError) as cm:
+            EF.fact_text(["time.bySpent0to1"], EF.aggregate_rows_of(packet()), candidates())
+        self.assertIn("組める型が無い", str(cm.exception))
+
+    def test_f47_the_numbers_come_from_the_packet_and_must_agree_with_the_candidates(self):
+        """**数は packet から**(⑤ は id だけ)。候補の分数と食い違えば止まる ― どちらが正しいかを決めない。"""
+        p = packet()
+        p["aggregates"][0]["numerator"] = 66
+        with self.assertRaises(EF.ExitFillError) as cm:
+            EF.fact_text(["sideMatch.attack"], EF.aggregate_rows_of(p), candidates())
+        self.assertIn("66 / 107", str(cm.exception))
+        self.assertIn("65 / 107", str(cm.exception))
+        with self.assertRaises(EF.ExitFillError) as cm:
+            EF.fact_text(["sideMatch.nowhere"], EF.aggregate_rows_of(packet()), candidates())
+        self.assertIn("packet に無い", str(cm.exception))
+        # 分母を落とした packet の行は整数でないので止まる。
+        p = packet()
+        del p["aggregates"][2]["denominator"]
+        with self.assertRaises(EF.ExitFillError):
+            EF.fact_text(["time.quickAfterLongThink"], EF.aggregate_rows_of(p), candidates())
+        # 候補に同じ (行動, ラベル) の分数が 2 件なら止まる。
+        c = candidates()
+        c["actionFractions"].append(dict(c["actionFractions"][0]))
+        with self.assertRaises(EF.ExitFillError):
+            EF.fact_text(["sideMatch.attack"], EF.aggregate_rows_of(packet()), c)
+
+    def test_f48_the_id_table_is_pinned_and_the_marks_use_the_one_grammar(self):
+        self.assertEqual(EF.AGGREGATE_FRACTION_OF, {
+            "sideMatch.attack": ("M4", "攻め"),
+            "sideMatch.defense": ("M4", "自玉側"),
+            "time.quickAfterLongThink": ("M5", ""),
+        })
+        self.assertEqual(EF.AHEAD_THEN_LOST_ID, "aheadThenLost")
+        mark = EF.agg_mark("sideMatch.attack")
+        self.assertEqual(CA.AGG_TAG_RE.fullmatch(mark).group(1), "sideMatch.attack")
+        with self.assertRaises(EF.ExitFillError):
+            EF.agg_mark("")
+        with self.assertRaises(EF.ExitFillError):
+            EF.agg_mark("a -->")
+        self.assertEqual(EF.READING_PREFIX, "― 読み: ")
+        bullet = EF.fact_bullet("事実。", "読み。", [EF.agg_mark("a"), EF.agg_mark("b")])
+        self.assertEqual(bullet, "- 事実。― 読み: 読み。<!-- agg: a --><!-- agg: b -->")
+        self.assertEqual(EF.fact_bullet("事実。", "読み。"), "- 事実。― 読み: 読み。")
+        with self.assertRaises(EF.ExitFillError):
+            EF.agg_mark("a b")
+
+
+class AggMarksTest(unittest.TestCase):
+    def test_f69_marks_are_written_when_every_number_of_the_line_is_in_the_aggregate_rows(self):
+        """印が付く道も測る: 行の数が全部集計行の数なら 2 つの印が付く。1 つ外れた数で付かない。"""
+        rows = EF.aggregate_rows_of(packet())
+        line = "- 攻めの分かれ道 107 局面のうち、実戦も攻めの局面が 65。― 読み: 両方の側に残った。"
+        marks, why = EF.agg_marks_for(line, ["sideMatch.attack"], rows)
+        self.assertEqual(marks, ["<!-- agg: sideMatch.attack -->"])
+        self.assertIsNone(why)
+        marks, why = EF.agg_marks_for(line + " 第 1 候補は", ["sideMatch.attack"], rows)
+        self.assertEqual(marks, [])
+        self.assertIn("[1]", why)
+        self.assertIn("(xi)", why)
+
+
+class BoardsTest(unittest.TestCase):
+    """**F-6。候補に無い局面を出さない。**"""
+
+    def test_f49_a_board_comes_out_with_the_candidate_mark_and_the_sides(self):
+        line, inner = EF.board_line(selection2()["boards"][0], packet(), candidates())
+        self.assertEqual(inner, "11/48 付録3 3 分")
+        self.assertEqual(line, "**11 局目 48 手目 ― 実戦は自玉側の手、第 1 候補は攻めの手**<!-- pos: 11/48 付録3 3 分 -->")
+        # **印の鍵は engine の ply(= 表示の手数 48)**。分かれ道の行の ply(47)は出ない。
+        self.assertNotIn("47", line)
+        self.assertEqual(CA.POS_TAG_RE.search(line).group(1), inner)
+        # 側の語は `check_answer.SIDE_JP` の 1 か所から(「守り」は出ない。P-185)。
+        self.assertNotIn("守り", line)
+        self.assertEqual((CA.SIDE_JP["attack"], CA.SIDE_JP["defense"]), ("攻め", "自玉側"))
+        self.assertEqual(EF.BOARD_LINE_TEMPLATE,
+                         "**{game_no} 局目 {display_ply} 手目 ― 実戦は{actual}の手、第 1 候補は{top1}の手**")
+
+    def test_f50_only_facts_engine_is_accepted(self):
+        """**`facts.engine` 以外の場所を受けない**(計画 §7.2 の F-6 の変異)。"""
+        for bad in ("aggregates.sideMatch.attack.numerator", "facts.moves[0].usi",
+                    "facts.branches[0].top1Usi", "facts.engine", "engine[0].top1Usi", None, 3):
+            b = dict(selection2()["boards"][0], packetRef=bad)
+            with self.assertRaises(EF.ExitFillError, msg=bad) as cm:
+                EF.board_line(b, packet(), candidates())
+            self.assertIn("facts.engine", str(cm.exception))
+
+    def test_f51_the_row_must_agree_with_the_selection_and_be_a_candidate(self):
+        # 添字の行と ⑤ の (gameId, ply) が違う(⑤ が分かれ道の行の ply 47 を書いた形)。
+        b = dict(selection2()["boards"][0], ply=47)
+        with self.assertRaises(EF.ExitFillError) as cm:
+            EF.board_line(b, packet(), candidates())
+        self.assertIn("違う", str(cm.exception))
+        # 添字が範囲の外。
+        b = dict(selection2()["boards"][0], packetRef="facts.engine[9].top1Usi")
+        with self.assertRaises(EF.ExitFillError) as cm:
+            EF.board_line(b, packet(), candidates())
+        self.assertIn("facts.engine[9]", str(cm.exception))
+        # **候補の boards に無い局面**(下書きに印字されていない)。
+        c = candidates()
+        c["boards"] = [m for m in c["boards"] if not m.startswith("11/48")]
+        with self.assertRaises(EF.ExitFillError) as cm:
+            EF.board_line(selection2()["boards"][0], packet(), c)
+        self.assertIn("候補の boards に 0 件", str(cm.exception))
+        # 分かれ道でない局面(branches に無い)。
+        p = packet()
+        p["facts"]["branches"] = p["facts"]["branches"][1:]
+        with self.assertRaises(EF.ExitFillError) as cm:
+            EF.board_line(selection2()["boards"][0], p, candidates())
+        self.assertIn("分かれ道", str(cm.exception))
+
+    def test_f52_without_sides_the_heading_is_only_the_place(self):
+        b = {"slot": "p2.1", "gameId": "g13", "ply": 110, "packetRef": "facts.engine[2].sfen"}
+        line, inner = EF.board_line(b, packet(), candidates())
+        self.assertEqual(line, "**13 局目 110 手目**<!-- pos: 13/110 付録3 3 分 -->")
+
+    def test_f53_exactly_two_boards(self):
+        s = selection2()
+        s["boards"] = s["boards"][:1]
+        with self.assertRaises(EF.ExitFillError) as cm:
+            build(selection=s)
+        self.assertIn("1 件", str(cm.exception))
+
+
+class ActionsTest(unittest.TestCase):
+    """**F-7。文は承認済みの表の passed 行から。表に無い・届かない行動は出ない。**"""
+
+    def test_f54_the_action_lines_are_the_draft_s_lines_in_slot_order(self):
+        adopted = EF.adopted_action_rows(selection2()["actions"], passed_rows())
+        self.assertEqual([slot for slot, _ in adopted], ["act.1", "act.2"])
+        self.assertEqual(EF.action_line(1, adopted[0][1]), SEALED_ACTION_1)
+        self.assertEqual(EF.action_line(2, adopted[1][1]), SEALED_ACTION_2)
+        self.assertEqual(EF.verify_table_row(adopted[1][1]),
+                         f"| {M5_CORE}<!-- menu: M5 --> | 「{M5_NAME}」 | 9 / 37 |")
+
+    def test_f55_an_action_outside_the_passed_rows_falls(self):
+        actions = [{"slot": "act.1", "menuId": "M6", "itemRef": ref(0, "h1")}]
+        passed = [r for r in passed_rows() if r["id"] != "M6"]
+        with self.assertRaises(EF.ExitFillError) as cm:
+            EF.adopted_action_rows(actions, passed)
+        self.assertIn("M6", str(cm.exception))
+        self.assertIn("下限を通った候補に無い", str(cm.exception))
+        with self.assertRaises(EF.ExitFillError):
+            EF.adopted_action_rows([{"slot": "act.1", "menuId": "M9", "itemRef": ref(0, "h1")}], passed_rows())
+
+    def test_f56_slot_numbers_must_run_from_one(self):
+        for slots in (("act.2",), ("act.1", "act.3"), ("act.0",), ("p3.1",)):
+            actions = [{"slot": s, "menuId": "M4", "itemRef": ref(0, "h1")} for s in slots]
+            with self.assertRaises(EF.ExitFillError, msg=slots):
+                EF.adopted_action_rows(actions, passed_rows())
+
+    def test_f57_no_action_adopted_prints_the_approved_sentence(self):
+        s = selection2()
+        s["actions"] = []
+        md, rows, _notes = build(selection=s)
+        self.assertIn(EI.NO_ACTION_SENTENCE, md)
+        self.assertEqual([r for r in rows if r["slot"].startswith("act.")], [])
+        self.assertNotIn("<!-- menu:", md)
+
+
+class BuildDocumentTest(unittest.TestCase):
+    """**器を埋めた本編。**封じた最終版の行がそのまま出て、下書きの印・注・候補の節は残らない。"""
+
+    def test_f58_the_sealed_lines_come_out(self):
+        md, rows, _notes = build()
+        for line in (SEALED_FACT_1, SEALED_FACT_2, SEALED_FACT_3, SEALED_ACTION_1, SEALED_ACTION_2,
+                     "**11 局目 48 手目 ― 実戦は自玉側の手、第 1 候補は攻めの手**<!-- pos: 11/48 付録3 3 分 -->",
+                     "**12 局目 70 手目 ― 実戦は攻めの手、第 1 候補は自玉側の手**<!-- pos: 12/70 付録3 3 分 -->",
+                     "**" + texts()["lead"] + "** ― という読みです。数は 3 つ。",
+                     "- " + SEALED_FACT_1 + "― 読み: " + texts()["p1.1"],
+                     EI.unanswerable_past_games(25) + " <!-- ans: q1 unanswerable -->"):
+            self.assertIn(line, md, line)
+        # 下書きの印・注・候補の節は 1 つも残らない。(印 `agg` は f60 ― 3 本とも付けられない)
+        self.assertNotIn(EC.TODO, md)
+        self.assertNotIn(EC.NOTE_PREFIX, md)
+        for heading in EC.DRAFT_ONLY_HEADINGS:
+            self.assertNotIn(heading, md)
+        self.assertNotIn("999", md)
+        # 下書きの他の節は**そのまま**(冒頭・数え方・対応表)。
+        for kept in ("3 分切れ負け 25 局を、1 手ずつ将棋エンジンで調べました(2026-09-28)。",
+                     "- 数え方の固定文(合成)。", "<!-- appendix: 数の出どころ -->",
+                     "| 1 | g01-sente.kif | 先手 | 123 | 勝ち |", "| 107 | 局面 | (合成) |"):
+            self.assertIn(kept, md, kept)
+        # 答え合わせの表は採った 2 行だけ(M6 の行は落ちる)。
+        self.assertNotIn("(合成の M6)", md)
+        self.assertEqual(md.count("<!-- menu: M4 -->"), 2)  # 行動の行 + 表の行
+        self.assertEqual(md.count("<!-- menu: M5 -->"), 2)
+        self.assertTrue(md.endswith("\n"))
+
+    def test_f59_the_question_section_sits_right_after_the_lead_section(self):
+        md, _, _ = build()
+        heads = [t for _, t in CS.heading_lines(md)]
+        self.assertEqual(heads[:3], ["ひとことで", CS.QUESTION_HEADING, "局面で見る"])
+        # 問いが 0 件なら節が無い。
+        md0, rows0, _ = build(questions=[], selection=dict(selection2(), answers=[]))
+        self.assertNotIn(CS.QUESTION_HEADING, md0)
+        self.assertEqual([r for r in rows0 if r["slot"].startswith("ans.")], [])
+
+    def test_f60_the_slot_map_covers_every_slot_and_seals_the_body(self):
+        md, rows, _notes = build()
+        self.assertEqual([r["slot"] for r in rows],
+                         ["lead", "p1.1", "p1.2", "p1.3", "ans.q1", "p2.1", "p2.2", "act.1", "act.2"])
+        self.assertEqual(EF.slot_map_problems(rows), [])
+        for row in rows:
+            self.assertIn(row["text"], md)
+            self.assertEqual(row["textSha256"], EF.text_sha256(row["text"]))
+        by_slot = {r["slot"]: r for r in rows}
+        self.assertEqual(by_slot["p1.1"]["aggregateIds"], ["sideMatch.attack", "sideMatch.defense"])
+        # **印は 3 本とも付かない**(測った: 第 1 候補 → 1、(0.7) → 7、10 秒・4 秒、+300 が門 (xi) の
+        # 「行の数は全部集計行に在る」に当たる)。対応は aggregateIds に残り、理由は注記に出る。
+        self.assertEqual(by_slot["p1.1"]["marks"], [])
+        self.assertEqual(by_slot["p1.2"]["marks"], [])
+        self.assertEqual(by_slot["p1.3"]["marks"], [])
+        self.assertEqual(len(_notes), 3, _notes)
+        self.assertIn("[1, 7]", _notes[0])
+        self.assertIn("[1, 4, 10]", _notes[1])
+        self.assertIn("[300]", _notes[2])
+        self.assertNotIn("<!-- agg:", md)
+        self.assertEqual(by_slot["p1.1"]["itemRef"], ref(0, "h1"))
+        self.assertEqual(by_slot["lead"]["itemRef"], ref(0, "lead"))
+        self.assertEqual(by_slot["p2.1"]["marks"], ["<!-- pos: 11/48 付録3 3 分 -->"])
+        self.assertEqual(by_slot["act.1"]["marks"], ["<!-- menu: M4 -->"])
+        self.assertEqual(by_slot["ans.q1"]["marks"], ["<!-- ans: q1 unanswerable -->"])
+        self.assertNotIn("page", by_slot["lead"])
+
+    def test_f61_the_built_body_passes_the_gate_s_checks_that_need_no_materials(self):
+        """**同じ `exit_gate.py` を通る**(書き手の道と同じ門)。材料の要らない検査を全部回す。"""
+        md, _, _ = build()
+        problems, notes = [], []
+        sections = EG.sections_of(CA.strip_dev_section(md))
+        EG.check_todo(md, problems)
+        EG.check_p1(sections, candidates(), problems)
+        EG.check_p1_reaches_the_actions(sections, candidates(), problems)
+        EG.check_no_unit_mismatch(md, candidates(), problems)
+        EG.check_p2(sections, candidates(), problems)
+        EG.check_draft_leftovers(md, problems)
+        EG.check_agg_tags(md, packet(), problems, notes)
+        request = {"customerQuestions": QUESTIONS2}
+        EG.check_ans_tags(CA.strip_dev_section(md), request, selection2(), problems, notes)
+        self.assertEqual(problems, [])
+        # 器の門(⑧)の節の有無・位置・長さ。
+        CS.check_question_section(md, 1, problems)
+        self.assertEqual(problems, [])
+
+    def test_f62_the_forbidden_word_is_only_in_the_human_sentence(self):
+        """**§7.3 の 5 行目を本編の全部で見る。**人間が承認した 1 文を除くと「普段」は 0 か所。"""
+        md, _, _ = build()
+        rest = md.replace(EI.unanswerable_past_games(25), "")
+        self.assertNotIn("普段", rest)
+        self.assertEqual(md.count("普段"), EI.unanswerable_past_games(25).count("普段"))
+
+    def test_f63_an_unreached_fact_adds_the_approved_sentence_once(self):
+        """優勢後敗は行動の根拠に届かない事実 → 節に「無いものは無いと書きます。」を 1 回。"""
+        md, _, _ = build()
+        self.assertEqual(md.count(EI.NOTHING_TO_HIDE_SENTENCE), 1)
+        s = selection2()
+        s["p1"][2] = dict(s["p1"][2], aggregateIds=["time.quickAfterLongThink"], itemRef=ref(1, "h2"))
+        t = dict(texts(), **{"p1.3": "長考直後は 9 / 37 でした。"})
+        md2, _, _ = build(selection=s, texts=t)
+        self.assertNotIn(EI.NOTHING_TO_HIDE_SENTENCE, md2)
+
+    def test_f64_a_draft_without_a_slot_section_falls(self):
+        for role_head in ("## ひとことで", "## 局面で見る", "## 試せること", "## 次の 25 局で、何で答え合わせをするか"):
+            d = draft_md().replace(role_head, "## べつの節")
+            with self.assertRaises(EF.ExitFillError) as cm:
+                build(draft_md=d)
+            self.assertIn("ちょうど 1 つ", str(cm.exception))
+
+    def test_f65_the_constants_it_adds_are_pinned(self):
+        """**⑥ が新しく持つ字は定数に全部ある**(§3 の 3 番。固定文を足す変異はここに現れる)。"""
+        self.assertEqual(EF.SLOT_ROLES, ("ひとことで", "局面で見る", "試せること", "答え合わせ"))
+        self.assertEqual(EF.VERIFY_TABLE_SEPARATOR, "|---|---|---|")
+        self.assertEqual(EF.BOARD_LINE_TEMPLATE_WITHOUT_SIDES, "**{game_no} 局目 {display_ply} 手目**")
+        self.assertEqual(EF.INTEGRATION_NAME, "integration.json")
+        self.assertEqual(EF.OWN_FLAGS, ("--selection", "--packet", "--request", "--candidates", "--md",
+                                        "--out-slot-map", "--seats-dir", "--texts"))
+
+
+class RunTest(unittest.TestCase):
+    """**段としての振る舞い。**書き手の道を消さない。"""
+
+    def test_f66_a_body_without_todo_is_left_alone(self):
+        with tempfile.TemporaryDirectory() as d:
+            md_path = os.path.join(d, "9_本編.md")
+            with io.open(md_path, "w", encoding="utf-8") as f:
+                f.write("## ひとことで\n\n書き手が書いた本編\n")
+            own = {k[2:]: os.path.join(d, k[2:]) for k in EF.OWN_FLAGS}
+            own["md"] = md_path
+            out = io.StringIO()
+            self.assertEqual(EF.run(own, [], out=out), 0)
+            self.assertIn("触らずに退く", out.getvalue())
+            with io.open(md_path, encoding="utf-8") as f:
+                self.assertEqual(f.read(), "## ひとことで\n\n書き手が書いた本編\n")
+            self.assertFalse(os.path.exists(own["out-slot-map"]))
+
+    def test_f67_missing_flags_are_named(self):
+        with self.assertRaises(EF.ExitFillError) as cm:
+            EF.parse_own_args(["--selection", "a", "--md", "b"])
+        for flag in ("--packet", "--request", "--candidates", "--out-slot-map", "--seats-dir", "--texts"):
+            self.assertIn(flag, str(cm.exception))
+        self.assertNotIn("--selection", str(cm.exception))
+        own, rest = EF.parse_own_args(["--selection", "a", "--packet", "b", "--request", "c", "--candidates", "d",
+                                       "--md", "e", "--out-slot-map", "f", "--seats-dir", "g", "--texts", "h",
+                                       "--patient", "p.json"])
+        self.assertEqual(rest, ["--patient", "p.json"])
+        self.assertEqual(own["seats-dir"], "g")
+
+    def test_f68_a_packet_of_another_id_stops(self):
+        """⑤ の `packetId` と packet の封が違えば組まない(違う材料の数を入れない)。"""
+        with tempfile.TemporaryDirectory() as d:
+            paths = {k[2:]: os.path.join(d, k[2:] + ".json") for k in EF.OWN_FLAGS}
+            paths["md"] = os.path.join(d, "9_本編.md")
+            with io.open(paths["md"], "w", encoding="utf-8") as f:
+                f.write(draft_md())
+            for key, value in (("selection", selection2()), ("packet", dict(packet(), packetId="0000000000000000")),
+                               ("request", {"customerQuestions": QUESTIONS2}), ("candidates", candidates()),
+                               ("texts", texts())):
+                with io.open(paths[key], "w", encoding="utf-8") as f:
+                    json.dump(value, f, ensure_ascii=False)
+            with self.assertRaises(EF.ExitFillError) as cm:
+                EF.run(paths, [], out=io.StringIO())
+            self.assertIn("packetId", str(cm.exception))

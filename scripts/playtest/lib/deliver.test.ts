@@ -4,6 +4,7 @@
 
 import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
 
+import path from "node:path";
 import { describe, expect, it } from "vitest";
 
 import {
@@ -29,6 +30,10 @@ import {
   exitCandidatesCommand,
   exitCoverCommand,
   exitGateCommand,
+  exitFillCommand,
+  exitPacketPaths,
+  customerDirOf,
+  exitSelectPaths,
   exitRenderCommand,
   exitSourceIndexPairs,
   finalPositionsCommand,
@@ -708,7 +713,8 @@ describe("stagesFrom", () => {
     expect(stagesFrom("answer-check")).toEqual([
       "answer-check", "answer-pdf",
       "exit-select",
-      "exit-candidates", "exit-gate", "exit-render", "exit-check",
+      // ⑥ `exit-fill` は候補の直後・門の直前(2026-10-05)。
+      "exit-candidates", "exit-fill", "exit-gate", "exit-render", "exit-check",
       "check-delivery", "exit-send",
     ]);
   });
@@ -788,9 +794,9 @@ describe("planDeliver", () => {
     const resumed = planDeliver(argsOf(["--from", "answer-check"]), probe, (t) => t);
     expect(resumed.map((s) => s.stage)).toEqual([
       "answer-check", "answer-pdf",
-      // ⑤ の門(2026-10-01)。**`exit-candidates` の直前**。
+      // ⑤ の門(2026-10-01)。**`exit-candidates` の直前**。⑥ は候補の直後(2026-10-05)。
       "exit-select",
-      "exit-candidates", "exit-gate", "exit-render", "exit-check",
+      "exit-candidates", "exit-fill", "exit-gate", "exit-render", "exit-check",
       "check-delivery", "exit-send",
     ]);
   });
@@ -1475,10 +1481,13 @@ describe("顧客向け出口の 4 段", () => {
   it("段は既存 17 段の後に入り、最後が exit-send(既存の順は動かない。⑤ の門は exit-candidates の直前)", () => {
     const stages = [...DELIVER_STAGES];
     // **⑤ の門は `exit-candidates` の直前**(2026-10-01。正本 ⑤ の行)。
-    expect(stages.slice(-7)).toEqual(["exit-select", "exit-candidates", "exit-gate", "exit-render", "exit-check",
+    expect(stages.slice(-8)).toEqual(["exit-select", "exit-candidates", "exit-fill", "exit-gate", "exit-render", "exit-check",
                                       "check-delivery", "exit-send"]);
     // **直前であることを隣で見る**(「どこかに在る」では位置が留まらない)。
     expect(stages[stages.indexOf("exit-candidates") - 1]).toBe("exit-select");
+    // **⑥ は候補の直後・門の直前**(正本 ⑥ の行。2026-10-05)。両隣で見る。
+    expect(stages[stages.indexOf("exit-fill") - 1]).toBe("exit-candidates");
+    expect(stages[stages.indexOf("exit-fill") + 1]).toBe("exit-gate");
     // **`exit-send` は最後**(C-1b。局数を `patient_report_data.json` から読めるのはここ) ―
     // 器の門と禁止語の検査を**通った後**でなければ、落ちた冊子の写しを渡す入れ物に入れてしまう。
     expect(stages[stages.length - 1]).toBe("exit-send");
@@ -1490,13 +1499,92 @@ describe("顧客向け出口の 4 段", () => {
       "appendix4-cause", "appendix4-search", "appendix4-pdf",
       "answer-menu", "answer-draft", "answer-gate", "answer-check", "answer-pdf",
     ]);
-    // 22 → 23(⑤ の門 `exit-select` を足した。2026-10-01)。
-    expect(stages).toHaveLength(23);
+    // 22 → 23(⑤ の門 `exit-select` を足した。2026-10-01)→ 24(⑥ `exit-fill`。2026-10-05)。
+    expect(stages).toHaveLength(24);
   });
 
   it("--from exit-gate で書き手の席から再開できる", () => {
     expect(stagesFrom("exit-gate")).toEqual(["exit-gate", "exit-render", "exit-check",
                                              "check-delivery", "exit-send"]);
+    // ⑥ からの再開は門を飛ばさない。
+    expect(stagesFrom("exit-fill")).toEqual(["exit-fill", "exit-gate", "exit-render", "exit-check",
+                                             "check-delivery", "exit-send"]);
+  });
+
+  // ---- ⑥ 段 `exit-fill`(2026-10-05。計画 PLAN_EXIT_FILL §7 の F-9)----
+  describe("exit-fill(⑥)", () => {
+    const customerDir = customerDirOf(args.groups);
+    const packetPaths = exitPacketPaths(customerDir);
+    const selectPaths = exitSelectPaths(customerDir);
+
+    it("packet が在れば走り、無ければ飛ぶ(書き手の道を消さない)", () => {
+      const ready = planDeliver(args, fakeProbe({ files: [packetPaths.packet] }), (t) => t).find((s) => s.stage === "exit-fill")!;
+      expect(ready.action).toBe("run");
+      expect(ready.tool).toBe("exit-fill");
+      const notReady = planDeliver(args, fakeProbe({}), (t) => t).find((s) => s.stage === "exit-fill")!;
+      expect(notReady.action).toBe("skip");
+      expect(notReady.reason).toContain("packet が無い");
+      // 選択だけ在っても packet が無ければ飛ぶ(数を引く相手が無い)。
+      const selOnly = planDeliver(args, fakeProbe({ files: [selectPaths.answerSelection] }), (t) => t).find((s) => s.stage === "exit-fill")!;
+      expect(selOnly.action).toBe("skip");
+    });
+
+    it("引数は ⑤ の採用・packet・request・候補・本編・slot_map・周のフォルダ・言い換えの文 + 門と同じ材料の旗", () => {
+      const cmd = exitFillCommand(groups, fakeProbe({}), out, plan, customerDir);
+      const valueOf = (flag: string) => cmd[cmd.indexOf(flag) + 1];
+      expect(valueOf("--selection")).toBe(selectPaths.answerSelection);
+      expect(valueOf("--packet")).toBe(packetPaths.packet);
+      expect(valueOf("--request")).toBe(packetPaths.request);
+      expect(valueOf("--candidates")).toBe(out.exitCandidates);
+      expect(valueOf("--md")).toBe(out.honbunMd);
+      expect(valueOf("--out-slot-map")).toBe(out.slotMap);
+      expect(valueOf("--seats-dir")).toBe(packetPaths.seatsDir);
+      expect(valueOf("--texts")).toBe(selectPaths.fillTexts);
+      // **門と同じ材料の旗**(埋めた本編を書く前に check_answer を通すため)。
+      const material = answerMaterialFlags(groups, fakeProbe({}), out, plan);
+      expect(cmd.slice(cmd.length - material.length)).toEqual(material);
+      // 名前は渡さない(本編は見本用にも載る)。
+      expect(cmd).not.toContain(args.name);
+    });
+
+    it("置き場は顧客のフォルダの packet/・llm-seats/・exit/(work の外。組み直しても消えない)", () => {
+      expect(packetPaths.packet).toBe(path.join(customerDir, "packet", "observation-packet.json"));
+      expect(packetPaths.request).toBe(path.join(customerDir, "packet", "observation-request.json"));
+      expect(packetPaths.seatsDir).toBe(path.join(customerDir, "llm-seats"));
+      expect(selectPaths.fillTexts).toBe(path.join(customerDir, "exit", "fill_texts.json"));
+      expect(out.slotMap).toBe(path.join(args.out, "direct", "slot_map.json"));
+      // `--out` の安全装置は slot_map.json を知っている(知らないと納品が止まる)。
+      expect(unexpectedOutFiles([], ["slot_map.json"])).toEqual([]);
+    });
+
+    it("門には ⑤・① の成果物のうち在るものだけを渡す(無いものは渡さない)", () => {
+      const none = exitGateCommand(groups, fakeProbe({}), out, plan, customerDir);
+      expect(none).not.toContain("--packet");
+      expect(none).not.toContain("--request");
+      expect(none).not.toContain("--answer-selection");
+      const all = exitGateCommand(groups, fakeProbe({ files: [packetPaths.packet, packetPaths.request, selectPaths.answerSelection] }), out, plan, customerDir);
+      expect(all[all.indexOf("--packet") + 1]).toBe(packetPaths.packet);
+      expect(all[all.indexOf("--request") + 1]).toBe(packetPaths.request);
+      expect(all[all.indexOf("--answer-selection") + 1]).toBe(selectPaths.answerSelection);
+      // 1 つだけ在る形でも、その 1 つだけ。
+      const one = exitGateCommand(groups, fakeProbe({ files: [packetPaths.request] }), out, plan, customerDir);
+      expect(one).toContain("--request");
+      expect(one).not.toContain("--packet");
+      // 顧客のフォルダを渡さない呼び方(既存)は旗が増えない。
+      expect(exitGateCommand(groups, fakeProbe({ files: [packetPaths.packet] }), out, plan)).not.toContain("--packet");
+      // 器の門も `--request` を在るときだけ。
+      const cs = checkStructureCommand(groups, fakeProbe({ files: [packetPaths.request] }), out, plan, thisGroup, args.out, customerDir);
+      expect(cs[cs.indexOf("--request") + 1]).toBe(packetPaths.request);
+      expect(checkStructureCommand(groups, fakeProbe({}), out, plan, thisGroup, args.out, customerDir)).not.toContain("--request");
+    });
+
+    it("計画の中で ⑥ の段は門の直前に並び、門の引数に packet が入る", () => {
+      const steps = planDeliver(args, fakeProbe({ files: [packetPaths.packet] }), (t) => t);
+      const names = steps.map((s) => s.stage);
+      expect(names[names.indexOf("exit-fill") + 1]).toBe("exit-gate");
+      const gate = steps.find((s) => s.stage === "exit-gate")!;
+      expect(gate.args[gate.args.indexOf("--packet") + 1]).toBe(packetPaths.packet);
+    });
   });
 
   it("索引の名前は PDF の名前から導く(手で書かない)", () => {

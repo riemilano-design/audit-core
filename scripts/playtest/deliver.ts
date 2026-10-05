@@ -88,6 +88,8 @@ const PY_TOOLS: Partial<Record<DeliverTool, string>> = {
   // 顧客向け出口の 4 段(STEP CUSTOMER-EXIT)。段 `exit-render` は 3 本を順に回す
   // (表紙 `exit_cover.py` → 本編 `exit_body.py` → 束ね `exit_render.py`)。
   "exit-candidates": "exit_candidates.py",
+  // ⑥ Slot filling(2026-10-05)。候補の後・門の前。
+  "exit-fill": "exit_fill.py",
   "exit-gate": "exit_gate.py",
   "exit-cover": "exit_cover.py",
   "exit-body": "exit_body.py",

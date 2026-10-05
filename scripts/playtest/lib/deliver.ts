@@ -44,6 +44,10 @@ export type DeliverStage =
   | "exit-select"
   // STEP CUSTOMER-EXIT の 4 段(仕様 §1 の表)。**既存 17 段は触らない ― 足すだけ。**
   | "exit-candidates"
+  // ⑥ Slot filling(2026-10-05。計画 PLAN_EXIT_FILL §7 の F-9)。**候補の後・門の前。**
+  // 下書きのスロットを ⑤ の採用から機械で埋める。**書き手の道は消さない**(埋められない回は人が書き、
+  // 同じ `exit_gate.py` を通る)。
+  | "exit-fill"
   | "exit-gate"
   | "exit-render"
   | "exit-check"
@@ -73,6 +77,8 @@ export const DELIVER_STAGES: readonly DeliverStage[] = [
   // 顧客向け出口(承認済みの 30 ページの形)。**既存の 6 冊は材料として残り**、
   // ここで本編 1 冊 + 付録 1 冊に束ね直す(正本 §1・§3a)。
   "exit-candidates",
+  // ⑥ は候補の直後・門の直前(正本 ⑥ の行)。
+  "exit-fill",
   "exit-gate",
   "exit-render",
   "exit-check",
@@ -97,6 +103,7 @@ export type DeliverTool =
   | "check-delivery"
   | "exit-select"
   | "exit-candidates"
+  | "exit-fill"
   | "exit-gate"
   | "exit-cover"
   | "exit-render"
@@ -295,6 +302,8 @@ export const DELIVER_DIRECT_NAMES = {
   answerMenu: "answer_menu.json",
   // 段 `exit-candidates` が出す候補の一覧(段 `exit-gate` が照合に使う)。
   exitCandidates: "exit_candidates.json",
+  // 段 `exit-fill`(⑥)が書く**スロットの表**(どの文がどの採用・集計から来たか。⑦ が `page` を足す)。
+  slotMap: "slot_map.json",
   // 顧客に渡す 4 冊の封(`compare_render.py --seal`)。**段ではなく人が決めて回す** ―
   // 封をするのは「この版を批評に出す」という判断であって、工程の 1 段ではない。
   // 名前をここに書くのは、**`--out` の安全装置がこのファイルを「知らないファイル」として
@@ -329,6 +338,7 @@ export interface DeliverOutPaths {
   exitAppendix: string;
   exitIndex: string;
   exitCandidates: string;
+  slotMap: string;
   exitSeal: string;
   /** 付録 3 の PDF の隣に `render_direct.py` が書く索引(段 `exit-render` の材料)。 */
   appendix3Index: string;
@@ -349,7 +359,35 @@ export const DELIVER_EXIT_NAMES = {
   answerSelection: "answer_selection.json",
   /** 候補の一覧(S-2 が書く。**採用の印は空のまま**) */
   selectionDraft: "answer_selection.draft.json",
+  /**
+   * ⑥ が読む**言い換えの文**(`lead`・`p1.N`・`ans.qN` → 文)。⑤ の `statement` を規則 5 の言い換えに
+   * 通したもの。**書くのは ⑥ ではない**(⑥ は読んで `statement` と照合するだけ)。
+   * 選択と同じく人の判断の側に置く ― 組版をやり直しても消えない。
+   */
+  fillTexts: "fill_texts.json",
 } as const;
+
+// ---- ① の packet と ④ の統合の置き場(正本 NEXTGEN_CONNECTION_DESIGN の ① の行・計画 PLAN_OBSERVATION_PACKET §5)----
+//
+// ⑥ が**数を引く唯一の相手**。`deliver.ts` の段では作らない(冊子を作りながら分析しない ― 別コマンド
+// `observationPacket.ts --out`)。**在れば ⑥ が走り、無ければ ⑥ は飛ぶ**(書き手の道)。
+export const DELIVER_PACKET_DIR = "packet";
+export const DELIVER_PACKET_NAMES = {
+  packet: "observation-packet.json",
+  request: "observation-request.json",
+} as const;
+/** 3 席 LLM の周(`runSeats.ts --out-dir`)。⑥ は ⑤ の `runId` の `integration.json` から `statement` を引く。 */
+export const DELIVER_SEATS_DIR = "llm-seats";
+
+export function exitPacketPaths(customerDir: string): { dir: string; packet: string; request: string; seatsDir: string } {
+  const dir = path.join(customerDir, DELIVER_PACKET_DIR);
+  return {
+    dir,
+    packet: path.join(dir, DELIVER_PACKET_NAMES.packet),
+    request: path.join(dir, DELIVER_PACKET_NAMES.request),
+    seatsDir: path.join(customerDir, DELIVER_SEATS_DIR),
+  };
+}
 
 /**
  * 顧客のフォルダ(work の親)。**仮定にせず、組の一覧で確かめる** ―
@@ -370,12 +408,14 @@ export function exitSelectPaths(customerDir: string): {
   dir: string;
   answerSelection: string;
   selectionDraft: string;
+  fillTexts: string;
 } {
   const dir = path.join(customerDir, DELIVER_EXIT_DIR);
   return {
     dir,
     answerSelection: path.join(dir, DELIVER_EXIT_NAMES.answerSelection),
     selectionDraft: path.join(dir, DELIVER_EXIT_NAMES.selectionDraft),
+    fillTexts: path.join(dir, DELIVER_EXIT_NAMES.fillTexts),
   };
 }
 
@@ -405,6 +445,7 @@ export function deliverOutPaths(out: string): DeliverOutPaths {
     exitAppendix: path.join(out, DELIVER_OUT_NAMES.exitAppendix),
     exitIndex: path.join(out, DELIVER_OUT_NAMES.exitIndex),
     exitCandidates: path.join(directDir, DELIVER_DIRECT_NAMES.exitCandidates),
+    slotMap: path.join(directDir, DELIVER_DIRECT_NAMES.slotMap),
     exitSeal: path.join(directDir, DELIVER_DIRECT_NAMES.exitSeal),
     appendix3Index: path.join(out, pageIndexNameOf(DELIVER_OUT_NAMES.appendix3)),
   };
@@ -1026,9 +1067,40 @@ export function exitCandidatesCommand(groups: readonly GroupPaths[], probe: Deli
           ...answerMaterialFlags(groups, probe, out, plan)];
 }
 
+/**
+ * ⑤・① の成果物のうち**在るものだけ**を門に渡す旗(`exit_gate.py` の任意の 3 つ: (x) と (xi))。
+ * 無いものは渡さない ― 門は「渡されていない」と報告して飛ぶ(2026-10-01 の司令塔の判断)。
+ * **渡されたのに形が違うものは門が落とす**ので、在るかどうかだけをここで見る。
+ */
+export function exitOptionalGateFlags(probe: DeliverProbe, customerDir: string | undefined): string[] {
+  if (customerDir === undefined) return [];
+  const packetPaths = exitPacketPaths(customerDir);
+  const selectPaths = exitSelectPaths(customerDir);
+  const flags: string[] = [];
+  if (probe.exists(packetPaths.packet)) flags.push("--packet", packetPaths.packet);
+  if (probe.exists(packetPaths.request)) flags.push("--request", packetPaths.request);
+  if (probe.exists(selectPaths.answerSelection)) flags.push("--answer-selection", selectPaths.answerSelection);
+  return flags;
+}
+
+/**
+ * 段 `exit-fill`(`exit_fill.py`。⑥)。**⑤ の採用 + ① の packet + 候補の JSON から、下書きのスロットを埋める。**
+ * 材料の旗は門と同じ(`answerMaterialFlags`)― 埋めた本編を**書く前に** `check_answer` に通すため。
+ */
+export function exitFillCommand(groups: readonly GroupPaths[], probe: DeliverProbe, out: DeliverOutPaths, plan: MaterialPlan, customerDir: string): string[] {
+  const packetPaths = exitPacketPaths(customerDir);
+  const selectPaths = exitSelectPaths(customerDir);
+  return ["--selection", selectPaths.answerSelection, "--packet", packetPaths.packet,
+          "--request", packetPaths.request, "--candidates", out.exitCandidates,
+          "--md", out.honbunMd, "--out-slot-map", out.slotMap,
+          "--seats-dir", packetPaths.seatsDir, "--texts", selectPaths.fillTexts,
+          ...answerMaterialFlags(groups, probe, out, plan)];
+}
+
 /** 段 `exit-gate`(`exit_gate.py`)。**人の席の検査**。候補の一覧と突き合わせる。 */
-export function exitGateCommand(groups: readonly GroupPaths[], probe: DeliverProbe, out: DeliverOutPaths, plan: MaterialPlan): string[] {
+export function exitGateCommand(groups: readonly GroupPaths[], probe: DeliverProbe, out: DeliverOutPaths, plan: MaterialPlan, customerDir?: string): string[] {
   return [out.honbunMd, "--candidates", out.exitCandidates,
+          ...exitOptionalGateFlags(probe, customerDir),
           ...answerMaterialFlags(groups, probe, out, plan)];
 }
 
@@ -1087,12 +1159,17 @@ export function exitBodyCommand(groups: readonly GroupPaths[], probe: DeliverPro
 }
 
 /** 段 `exit-check`(`check_structure.py`)。器の門(仕様 §4 の 8 項目)。 */
-export function checkStructureCommand(groups: readonly GroupPaths[], probe: DeliverProbe, out: DeliverOutPaths, plan: MaterialPlan, thisGroup: GroupPaths, outDir: string): string[] {
+export function checkStructureCommand(groups: readonly GroupPaths[], probe: DeliverProbe, out: DeliverOutPaths, plan: MaterialPlan, thisGroup: GroupPaths, outDir: string, customerDir?: string): string[] {
   const flags = [outDir, "--honbun-md", out.honbunMd,
                  "--honbun-personal", out.honbunPerson, "--honbun-sample", out.honbunSample,
                  "--appendix", out.exitAppendix, "--page-index", out.exitIndex,
                  "--honbun-index", out.honbunIndex];
   for (const [indexPath] of exitSourceIndexPairs(thisGroup, out)) flags.push("--source-index", indexPath);
+  // ⑧ の門(節「お預かりした問い」の有無)は問いの件数を `--request` から取る。**在るときだけ渡す**。
+  if (customerDir !== undefined) {
+    const request = exitPacketPaths(customerDir).request;
+    if (probe.exists(request)) flags.push("--request", request);
+  }
   return [...flags, ...answerMaterialFlags(groups, probe, out, plan)];
 }
 
@@ -1502,11 +1579,31 @@ export function planDeliver(args: DeliverArgs, probe: DeliverProbe, cmdOf: (tool
     reason: candidatesDone ? "本編の md と候補の JSON がある(上書きしない)" : "本編の md の下書きと候補の一覧を作る",
   });
 
+  // ---- ⑥ Slot filling(2026-10-05。計画 PLAN_EXIT_FILL §7 の F-9)----
+  //
+  // **候補の直後・門の直前。**⑤ の採用(段 `exit-select` を通っている)と ① の packet から、
+  // 下書きのスロットを機械で埋める。**判定は TS に写さない**(埋めるのも検査も `exit_fill.py`)。
+  // 【書き手の道を消さない】packet が無ければ走らない(人が書き、同じ門を通る)。
+  // 本編の md に `TODO` が無ければ道具の側が退く(人か前の ⑥ が書き終えた本編を上書きしない ―
+  // 判定は md の中身なので TS では見ず、`exit_fill.py` が見る)。
+  const customerDir = customerDirOf(args.groups);
+  const packetReady = probe.exists(exitPacketPaths(customerDir).packet);
+  push({
+    stage: "exit-fill",
+    tool: "exit-fill",
+    cmd: cmdOf("exit-fill"),
+    args: exitFillCommand(groups, probe, out, plan, customerDir),
+    action: packetReady ? "run" : "skip",
+    reason: packetReady
+      ? "⑤ の採用と packet から下書きのスロットを埋める(TODO が無い本編は触らない)"
+      : `packet が無い(${exitPacketPaths(customerDir).packet})― 書き手が書く(段 exit-gate で止まる)`,
+  });
+
   push({
     stage: "exit-gate",
     tool: "exit-gate",
     cmd: cmdOf("exit-gate"),
-    args: exitGateCommand(groups, probe, out, plan),
+    args: exitGateCommand(groups, probe, out, plan, customerDir),
     action: "gate",
     reason: "書き手が数 3 つ・盤 2 つ・行動を選び終わるまで止まる(検査は exit_gate.py)",
   });
@@ -1528,7 +1625,7 @@ export function planDeliver(args: DeliverArgs, probe: DeliverProbe, cmdOf: (tool
     stage: "exit-check",
     tool: "check-structure",
     cmd: cmdOf("check-structure"),
-    args: checkStructureCommand(groups, probe, out, plan, thisGroup, args.out),
+    args: checkStructureCommand(groups, probe, out, plan, thisGroup, args.out, customerDir),
     action: "run",
     reason: "器の門(節の順番・ページ数・盤の数・付録のページ)。落ちたら批評に回さない",
   });

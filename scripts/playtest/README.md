@@ -1017,12 +1017,13 @@ done
 | 15 | `answer-check` | 下書き + 材料の旗 20 個 | — | 0.5 秒 | なし | `check_answer.py` rc≠0(落ちた文の一覧) |
 | 16 | `answer-pdf` | 同 15 | `<out>/8_B_どうしたら.pdf` | 0.8 秒 | なし | `render_answer.py` rc≠0 |
 | 17 | `exit-candidates` | 段 15 と同じ材料の旗 + 固定棋譜のフォルダ | `<out>/9_本編.md`(下書き)・`<out>/direct/exit_candidates.json` | 1 秒 | なし | `exit_candidates.py` rc≠0 |
-| 18 | `exit-gate` | 段 17 の 2 本 + 材料の旗 | — | 0.3 秒 | **数 3 つ・盤 2 つ・行動を選ぶ** | `exit_gate.py` rc≠0(落ちた項目の一覧。`humanGate`) |
-| 19 | `exit-render` | 本編の md・組版が書いた索引 2 本(付録 1 は `<work>/report/main_page_index.json`、付録 3 は `<out>/5_付録3_直接の答え_page_index.json`) | `<out>/10_付録_表紙.md`・`.pdf`・`<out>/9_本編_本人用.pdf`・`_見本用.pdf`・`9_本編_本人用_page_index.json`・`10_付録_数の出どころ.pdf`・`10_付録_page_index.json` | 3 秒 | なし | 3 本のどれかが rc≠0(表紙 → 本編 → 束ねの順) |
-| 20 | `exit-check` | 段 19 の成果物 + 索引 + 材料の旗 | — | 3 秒 | なし | `check_structure.py` rc≠0(器の 8 項目) |
-| 21 | `check-delivery` | `<out>` の PDF 全冊と md | — | 0.2 秒 | **PDF の目視** | 禁止語・`@`・`/Users/`・「水匠」・`None`・`--forbid` の語があれば rc≠0 |
+| 18 | `exit-fill` | ⑤ の採用(`<顧客>/exit/answer_selection.json`)・① の packet(`<顧客>/packet/observation-packet.json`)・request・段 17 の 2 本・言い換えの文(`<顧客>/exit/fill_texts.json`)・統合の周(`<顧客>/llm-seats/<runId>/integration.json`)+ 材料の旗 | `<out>/9_本編.md`(スロットを埋めた本編)・`<out>/direct/slot_map.json` | 1 秒 | なし(packet が無ければ飛ぶ = 書き手が書く。`TODO` の無い本編は触らない) | `exit_fill.py` rc≠0(言い換えが statement を越える・候補に無い局面・表に無い行動・`check_answer` 不通過) |
+| 19 | `exit-gate` | 段 17 の 2 本 + 材料の旗 | — | 0.3 秒 | **数 3 つ・盤 2 つ・行動を選ぶ** | `exit_gate.py` rc≠0(落ちた項目の一覧。`humanGate`) |
+| 20 | `exit-render` | 本編の md・組版が書いた索引 2 本(付録 1 は `<work>/report/main_page_index.json`、付録 3 は `<out>/5_付録3_直接の答え_page_index.json`) | `<out>/10_付録_表紙.md`・`.pdf`・`<out>/9_本編_本人用.pdf`・`_見本用.pdf`・`9_本編_本人用_page_index.json`・`10_付録_数の出どころ.pdf`・`10_付録_page_index.json` | 3 秒 | なし | 3 本のどれかが rc≠0(表紙 → 本編 → 束ねの順) |
+| 21 | `exit-check` | 段 19 の成果物 + 索引 + 材料の旗 | — | 3 秒 | なし | `check_structure.py` rc≠0(器の 8 項目) |
+| 22 | `check-delivery` | `<out>` の PDF 全冊と md | — | 0.2 秒 | **PDF の目視** | 禁止語・`@`・`/Users/`・「水匠」・`None`・`--forbid` の語があれば rc≠0 |
 
-段 17〜20 は**顧客向け出口**(承認済みの 30 ページの形。`docs/GOLDEN_MASTER_CUSTOMER_EXIT.md`)。
+段 17〜21 は**顧客向け出口**(18 の `exit-fill` は ⑥ Slot filling。2026-10-05)(承認済みの 30 ページの形。`docs/GOLDEN_MASTER_CUSTOMER_EXIT.md`)。
 **既存の 6 冊は材料として残り**、ここで本編 1 冊 + 付録 1 冊に束ね直す。
 段 `exit-render` だけは 1 段で 3 本回す(`exit_cover.py` → `exit_body.py` → `exit_render.py`。段 6 と同じ形)。
 

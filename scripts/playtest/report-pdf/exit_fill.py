@@ -20,12 +20,16 @@ import hashlib
 import io
 import json
 import os
+import re
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 import check_answer as CA  # noqa: E402
 import check_structure as CS  # noqa: E402
+import exit_candidates as EC  # noqa: E402
+import exit_gate as EG  # noqa: E402
+import exit_groups as EGR  # noqa: E402
 import exit_index as EI  # noqa: E402
 
 
@@ -303,3 +307,639 @@ def question_section_lines(customer_ref, questions, answers, games, supplied=Non
         out.append(body + " " + ans_mark(qid, status))
         out.append("")
     return out
+
+
+# ==================== 束 2(F-4〜F-7): 器(下書きの md)にスロットを埋める ====================
+#
+# 【顧客の PDF にどう出るか】「ひとことで」の太字 1 文 + 事実 3 本(読みつき)、「局面で見る」の
+# 盤 2 つの見出し、「試せること」の行動の行と答え合わせの表の行が、**人が書かずに**組まれる。
+# 器は段 `exit-candidates` が書いた下書きそのもので、⑥ はその**スロットの節だけ**を置き換える
+# (冒頭の段落・数え方・対応表は下書きのまま。書き手への注だけ落とす)。
+#
+# 【文の出どころは 5 つだけ】(計画 §3 の 3)
+#   packet の数 / ⑤ の `statement` の言い換え(呼ぶ側が渡す。⑥ は検査するだけ)/
+#   `answer_menu.json` の行動の文(`exit_candidates` の passed 行) /
+#   既存の固定文の定数(`exit_index`・`check_answer` の `name`)/ 接続の字(この module の定数)。
+# **⑥ が新しく持つ字は、下の大文字の定数に全部ある**(試験が字で留める)。
+#
+# 【「普段」】材料の外の判定を要する語は ⑥ が決めない(人間の決定 2026-10-01)。
+# 語の表は `exit_groups.LABEL_FORBIDDEN_WORDS` の 1 か所。**渡された言い換えの文の全部**に当てる
+# (太字の 1 文・読みの文・答えの文)。人間が承認した固定文(`APPROVED_ANSWER_TEXTS`)は
+# 人間がこの語を「判定できないもの」として使っている文なので、当てない。
+
+
+def forbidden_word_problems(text, where):
+    """渡された言い換えの文に ⑥ が決めてはいけない語が入っていれば 1 件ずつ返す(**検査はここ 1 か所**。
+    `paraphrase_problems` が呼ぶ ― 監査の指摘 2026-10-05: 別の関数に写しがあり導線から呼ばれていなかった)。"""
+    return [f"{where}: 「{word}」が入っている(⑥ が決めない語。人間の決定 2026-10-01)"
+            for word in EGR.LABEL_FORBIDDEN_WORDS if word in (text or "")]
+
+
+def check_supplied_words(text, where):
+    """同じ検査を、止まる形で(手で呼ぶ側のため)。"""
+    problems = forbidden_word_problems(text, where)
+    if problems:
+        raise ExitFillError(problems[0] + " ― 材料の外の判定を要する語は ⑥ が決めない")
+
+
+# ---- 言い換えの検査(計画 §3 の 1 番。言い換えは `statement` だけに掛ける) ----
+#
+# 【何を見るか】言い換えの文に出る**数の字**と**指し手の表記**が、元の `statement` に出たものの
+# **部分集合で、字も同じ**こと。値が同じでも字が違えば落とす(`3 / 4` → `75%`・`３`)。
+# 【なぜ字で比べるか】値で比べると、言い換えが数を計算して別の形で書ける(割合・漢数字)。
+# それは「数には掛けない」の線を越えている。字が同じなら計算は起きていない。
+NUMBER_TOKEN_RE = re.compile(r"[0-9０-９]+(?:[.,][0-9０-９]+)?")
+
+
+def _mask_terms_and_moves(text):
+    """数の字を拾う前に伏せるもの: **用語の 4 行の語**(「第 1 候補」の 1 は数の主張ではない ―
+    語の表は `check_structure.TERM_LINES` の 1 か所)と**指し手の表記**(「▲３四歩」の ３ は手の一部)。"""
+    for term, _sentence in CS.TERM_LINES:
+        text = text.replace(term, " ")
+    return CA.MOVE_RE.sub(" ", text)
+
+
+def number_tokens(text):
+    return NUMBER_TOKEN_RE.findall(_mask_terms_and_moves(text))
+
+
+def move_tokens(text):
+    """指し手の表記。**文法は `check_answer.MOVE_RE` の 1 か所**。"""
+    return [m.group(0) for m in CA.MOVE_RE.finditer(text)]
+
+
+def paraphrase_problems(output, statement, where):
+    """言い換えの文 `output` が、元の `statement` に無い数・指し手を持っていれば 1 件ずつ返す。"""
+    if _blank(output):
+        return [f"{where}: 言い換えの文が空白だけ"]
+    if _blank(statement):
+        return [f"{where}: 元の statement が無い(言い換えを照合できない)"]
+    problems = []
+    allowed_numbers = set(number_tokens(statement))
+    for token in number_tokens(output):
+        if token not in allowed_numbers:
+            problems.append(
+                f"{where}: 数の字「{token}」が statement に無い"
+                f"(字も同じでなければ通さない。statement の数: {sorted(allowed_numbers)})")
+    allowed_moves = set(move_tokens(statement))
+    for move in move_tokens(output):
+        if move not in allowed_moves:
+            problems.append(f"{where}: 指し手「{move}」が statement に無い")
+    problems.extend(forbidden_word_problems(output, where))
+    return problems
+
+
+def item_ref_key(ref):
+    if not isinstance(ref, dict) or _blank(ref.get("hypothesisId")) or \
+            isinstance(ref.get("seatIndex"), bool) or not isinstance(ref.get("seatIndex"), int):
+        raise ExitFillError(f"itemRef の形が違う: {ref!r}")
+    return f"{ref['seatIndex']}:{ref['hypothesisId']}"
+
+
+def statements_of(integration):
+    """④ の統合から `itemRef → 代表の statement`。**読むのは `clusters[].itemRefs` と
+    `representative.statement` だけ**(`internal` は schema に無い ― 参照できない)。"""
+    out = {}
+    for cluster in (integration or {}).get("clusters") or []:
+        statement = ((cluster.get("representative") or {}).get("statement"))
+        for ref in cluster.get("itemRefs") or []:
+            out[item_ref_key(ref)] = statement
+    return out
+
+
+def statement_for(statements, item_ref, where):
+    key = item_ref_key(item_ref)
+    if key not in statements:
+        raise ExitFillError(f"{where}: itemRef {key} が統合の clusters に無い")
+    return statements[key]
+
+
+def verified_text(texts, slot, statements, item_refs):
+    """スロット `slot` の言い換えの文。**渡されていなければ止まる**(⑥ は書かない)。
+    `item_refs` の statement 全部を照合の母集団にする(答えは複数の候補から 1 文になる)。"""
+    text = (texts or {}).get(slot)
+    if _blank(text):
+        raise ExitFillError(
+            f"スロット {slot} の言い換えの文が渡されていない ― "
+            "⑥ は固定文を新しく作らない(言い換えを通した文を fill_texts に書くこと)")
+    pool = " ".join(statement_for(statements, ref, f"スロット {slot}") or "" for ref in item_refs)
+    problems = paraphrase_problems(text, pool, f"スロット {slot}")
+    if problems:
+        raise ExitFillError("言い換えの文が statement を越えている:\n" + "\n".join(problems))
+    return text
+
+
+# ---- 太字の 1 文(F-5) ----
+# **尾は封じた最終版の実物から取った字**(2026-09-29 の 9_本編_最終版.md 10 行目)。n は事実の本数。
+LEAD_TAIL_TEMPLATE = " ― という読みです。数は {n} つ。"
+
+
+def lead_line(lead_text, fact_count):
+    if fact_count != CS.HONBUN_P1_FACT_COUNT:
+        raise ExitFillError(
+            f"事実が {fact_count} 本(正本は {CS.HONBUN_P1_FACT_COUNT} 本)― ⑤ の p1 を直すこと")
+    return "**" + lead_text + "**" + LEAD_TAIL_TEMPLATE.format(n=fact_count)
+
+
+# ---- 事実 3 本(F-4) ----
+#
+# 【出どころ = (D)。司令塔の判断 2026-10-01】文は `check_answer.py` の `m4_fractions`〜`m6_fractions` の
+# `name`(顧客に出た審査済みの字)を、候補の JSON の `actionFractions`(= `exit_candidates.action_fractions`、
+# `evidence_phrase` と同じ正本)から引く。**数は packet の集計の行から引く**(⑤ は id だけを渡す)。
+# **2 つの出どころの数が食い違えば止まる**(どちらが正しいかを ⑥ が決めない)。
+#
+# 【接続型(「のうち、」)】`name` は「A のうち、B」の 1 本の句。封じた最終版の 3 本(M4 × 2・M5 × 1)は
+# `{A} {分母} {単位}のうち、{B}が {分子}。` の形で、A の末尾が単位の語ならそれを落とす
+# (「…4 秒以内だった手」+「37 手」→「…4 秒以内だった 37 手」)。**この 2 規則で 3 本が字まで再現する**
+# (試験 f40〜f42 が字で留める)。
+FACT_CONNECTIVE = "のうち、"
+# 集計の id → (行動の id, 分数のラベル)。**数の対応は `lib/observationAggregates.ts` の booklet の期待と同じ**
+# (`sideMatch.attack` ↔ M4 攻め、`sideMatch.defense` ↔ M4 自玉側、`time.quickAfterLongThink` ↔ M5)。
+# ここに無い id は**印だけ**(読みの文の数の裏づけ)で、事実の文は作らない。
+AGGREGATE_FRACTION_OF = {
+    "sideMatch.attack": ("M4", "攻め"),
+    "sideMatch.defense": ("M4", "自玉側"),
+    "time.quickAfterLongThink": ("M5", ""),
+}
+# 【優勢後敗は別の型(司令塔の判断 (ii)。2026-10-01)】封じて送った 2 文を型として採る。
+# 穴は 2 つ(packet の numerator / denominator)。**局数も閾値も値として焼かない** ―
+# `+300` は字の一部(P-188 の 3 か所目。1 か所目 600・2 か所目 300 は `exit_index.COUNTING_NOTES`)。
+# 「のうち、」の接続型に**乗せない**(型をそろえるために線を落とすのは逆)。
+AHEAD_THEN_LOST_ID = "aheadThenLost"
+AHEAD_THEN_LOST_TEMPLATE = "一度は優勢(+300 以上)になった対局が {denominator} 局。そのうち負けた対局が {numerator} 局。"
+AHEAD_THEN_LOST_HOLES = 2
+# 読みの尾(封じた最終版 12〜14 行目の実物の形。「。」の直後に空白無し)。
+READING_PREFIX = "― 読み: "
+
+
+def _int_of(row, key, where):
+    value = row.get(key)
+    if isinstance(value, bool) or not isinstance(value, int):
+        raise ExitFillError(f"{where} の {key} が整数でない: {value!r}")
+    return value
+
+
+def aggregate_rows_of(packet):
+    rows = {}
+    for row in (packet.get("aggregates") or []):
+        if isinstance(row, dict) and isinstance(row.get("id"), str):
+            rows[row["id"]] = row
+    return rows
+
+
+def fraction_of(candidates, menu_id, label):
+    """候補の JSON の `actionFractions` から (行動の id, ラベル) の分数を**ちょうど 1 つ**引く。"""
+    hits = [f for f in candidates.get("actionFractions") or []
+            if f.get("id") == menu_id and (f.get("label") or "") == label]
+    if len(hits) != 1:
+        raise ExitFillError(
+            f"候補の actionFractions に 行動 {menu_id}・ラベル「{label}」の分数が {len(hits)} 件"
+            "(ちょうど 1 件が要る。候補の段を回し直す)")
+    return hits[0]
+
+
+def connective_fact(name, numerator, denominator, unit):
+    parts = name.split(FACT_CONNECTIVE)
+    if len(parts) != 2:
+        raise ExitFillError(
+            f"分数の名前に「{FACT_CONNECTIVE}」がちょうど 1 回でない: {name}")
+    head, tail = parts
+    if _blank(unit):
+        raise ExitFillError(f"分数の単位が空: {name}")
+    if head.endswith(unit):
+        head = head[:-len(unit)]
+    return f"{head} {denominator} {unit}{FACT_CONNECTIVE}{tail}が {numerator}。"
+
+
+def ahead_then_lost_fact(numerator, denominator):
+    return AHEAD_THEN_LOST_TEMPLATE.format(numerator=numerator, denominator=denominator)
+
+
+def agg_mark(aggregate_id):
+    """検査 (xi) の印。**文法は `check_answer.AGG_TAG_RE` の 1 か所**。"""
+    if _blank(aggregate_id) or re.search(r"\s|-->", aggregate_id):
+        raise ExitFillError(f"集計の id が印に書ける形でない: {aggregate_id!r}")
+    mark = "<!-- agg: " + aggregate_id + " -->"
+    m = CA.AGG_TAG_RE.fullmatch(mark)
+    if m is None or m.group(1).strip() != aggregate_id:
+        raise ExitFillError(f"組んだ印が印の文法に合わない: {mark}")
+    return mark
+
+
+def fact_text(aggregate_ids, aggregate_rows, candidates):
+    """1 本の事実の文。**id ごとに型を選び、文を連ねる**(封じた 1 本目は M4 の 2 分数で 2 文)。
+    返り値 = (文, 行動の根拠に届くか)。"""
+    parts = []
+    reaches = False
+    for agg_id in aggregate_ids:
+        row = aggregate_rows.get(agg_id)
+        if row is None:
+            raise ExitFillError(f"集計 {agg_id} が packet に無い")
+        if agg_id in AGGREGATE_FRACTION_OF:
+            menu_id, label = AGGREGATE_FRACTION_OF[agg_id]
+            fraction = fraction_of(candidates, menu_id, label)
+            numerator = _int_of(row, "numerator", f"集計 {agg_id}")
+            denominator = _int_of(row, "denominator", f"集計 {agg_id}")
+            if (numerator, denominator) != (int(fraction["numerator"]), int(fraction["denominator"])):
+                raise ExitFillError(
+                    f"集計 {agg_id} の数 {numerator} / {denominator} が、候補の分数"
+                    f"(行動 {menu_id}・{label or 'ラベル無し'})の {fraction['numerator']} / "
+                    f"{fraction['denominator']} と違う ― どちらが正しいかを ⑥ は決めない")
+            parts.append(connective_fact(fraction["name"], numerator, denominator, fraction["unit"]))
+            reaches = True
+        elif agg_id == AHEAD_THEN_LOST_ID:
+            parts.append(ahead_then_lost_fact(_int_of(row, "numerator", f"集計 {agg_id}"),
+                                              _int_of(row, "denominator", f"集計 {agg_id}")))
+    if not parts:
+        raise ExitFillError(
+            f"集計 {list(aggregate_ids)} から事実の文を組める型が無い"
+            f"(組めるのは {sorted(AGGREGATE_FRACTION_OF)} と {AHEAD_THEN_LOST_ID})")
+    return "".join(parts), reaches
+
+
+def fact_bullet(fact, reading, marks=()):
+    return "- " + fact + READING_PREFIX + reading + "".join(marks)
+
+
+def agg_marks_for(line, aggregate_ids, aggregate_rows):
+    """その行に `<!-- agg: -->` を付けられるか。付けられれば印の並び、付けられなければ空と理由。
+
+    【なぜ条件つきか(2026-10-05 に測った)】門 (xi) は**印の在る行の数の全部**が集計行の数に在ることを
+    求める。ところが審査済みの事実の文は、**数の主張でない数**を持つ ― 「第 1 候補」の 1、
+    「10 秒以上」「4 秒以内」「+300 以上」の閾値、読みの「(0.7)」が 7 と数えられる。
+    封じた最終版の 3 本は**3 本とも**この理由で印を付けられない(測った数は試験 f60 に)。
+    印を付けて門で落ちるより、**付けずに理由を声に出す** ― 集計との対応は `slot_map.json` の
+    `aggregateIds` に残る。門 (xi) をどう直すかは司令塔の判断(⑥ は門を変えない)。
+    """
+    allowed = set()
+    for agg_id in aggregate_ids:
+        allowed |= EG.numbers_of_aggregate_row(aggregate_rows.get(agg_id) or {})
+    blocking = sorted(n for n in EG.number_claims([line]) if n not in allowed)
+    if blocking:
+        return [], (f"行の数 {blocking} が集計行の数 {sorted(allowed)} に無いので印を付けない"
+                    "(門 (xi) が落とす。対応は slot_map の aggregateIds に残る)")
+    return [agg_mark(a) for a in aggregate_ids], None
+
+
+# ---- 盤 2 つ(F-6) ----
+#
+# 【候補に無い局面を出さない】⑤ の `packetRef` は `facts.engine[添字]` の形だけを受ける
+# (文法の正本は `lib/packetRef.ts`。ここは**自分が読む列と添字だけ**を見る ― 文法の写しではない)。
+# 添字の行の (gameId, ply) が ⑤ の欄と一致し、`facts.games` で局番号を引き、
+# **候補の JSON の `boards` にちょうど 1 つ当たる印**を使う。当たらなければ止まる
+# (= 下書きに印字されていない局面は出ない)。
+# 【engine の `ply` は表示の手数】`lib/observationFacts.ts` の `engineRowsOf` は `displayPly ?? ply` を
+# `ply` に置く(実測 2026-10-05: 分かれ道 404 行は `displayPly` で engine に 404 / 404 当たり、
+# `branches.ply` では 141)。だから印の数は engine の `ply` そのもので、分かれ道の行は
+# `displayPly == engine.ply` で引く(側の語のため)。
+#
+# 【見出しの字】指し手の漢字表記は `render_direct.py`(module に副作用)にしか無く ⑥ からは引けない。
+# 盤の図(`exit_body.py`)が実戦と第 1 候補を矢印で描くので、見出しは局番号・手数と**側の語**だけ
+# (`check_answer.SIDE_JP` の 1 か所。「攻めの手」「自玉側の手」は `check_answer` の `name` に在る字)。
+ENGINE_REF_RE = re.compile(r"^facts\.engine\[(\d+)\](?:\.|$)")
+BOARD_LINE_TEMPLATE = "**{game_no} 局目 {display_ply} 手目 ― 実戦は{actual}の手、第 1 候補は{top1}の手**"
+BOARD_LINE_TEMPLATE_WITHOUT_SIDES = "**{game_no} 局目 {display_ply} 手目**"
+
+
+def engine_row_of(packet, packet_ref, where):
+    m = ENGINE_REF_RE.match(packet_ref if isinstance(packet_ref, str) else "")
+    if m is None:
+        raise ExitFillError(
+            f"{where}: 盤に選べるのは facts.engine[...] の局面だけ(渡されたのは {packet_ref!r})")
+    rows = (packet.get("facts") or {}).get("engine") or []
+    index = int(m.group(1))
+    if index >= len(rows):
+        raise ExitFillError(f"{where}: facts.engine[{index}] が packet に無い(行は {len(rows)})")
+    return rows[index]
+
+
+def pos_mark(inner):
+    mark = "<!-- pos: " + inner + " -->"
+    m = CA.POS_TAG_RE.fullmatch(mark)
+    if m is None or m.group(1) != inner:
+        raise ExitFillError(f"組んだ印が印の文法に合わない: {mark}")
+    return mark
+
+
+def board_line(board, packet, candidates):
+    """盤 1 つの見出しの行。返り値 = (行, 印の中身)。"""
+    where = f"盤 {board.get('slot')}"
+    row = engine_row_of(packet, board.get("packetRef"), where)
+    if row.get("gameId") != board.get("gameId") or row.get("ply") != board.get("ply"):
+        raise ExitFillError(
+            f"{where}: ⑤ の (gameId, ply) = ({board.get('gameId')}, {board.get('ply')}) が "
+            f"packetRef の行 ({row.get('gameId')}, {row.get('ply')}) と違う")
+    facts = packet.get("facts") or {}
+    games = {g.get("gameId"): g for g in facts.get("games") or []}
+    game = games.get(row["gameId"])
+    if game is None:
+        raise ExitFillError(f"{where}: 局 {row['gameId']} が facts.games に無い")
+    display_ply = _int_of(row, "ply", f"{where} の局面")
+    branch = next((b for b in facts.get("branches") or []
+                   if b.get("gameId") == row["gameId"] and b.get("displayPly") == display_ply), None)
+    if branch is None:
+        raise ExitFillError(
+            f"{where}: ({row['gameId']}, 表示の手数 {display_ply}) が facts.branches に無い ― 盤に選べるのは分かれ道")
+    game_no = _int_of(game, "no", f"{where} の局")
+    prefix = f"{game_no}/{display_ply} 付録3 "
+    hits = [m for m in candidates.get("boards") or [] if EG.normalize_mark(m).startswith(prefix)]
+    if len(hits) != 1:
+        raise ExitFillError(
+            f"{where}: 局面 {game_no} 局目 {display_ply} 手目 の印が候補の boards に {len(hits)} 件"
+            "(ちょうど 1 件が要る ― 下書きに印字されていない局面は出さない)")
+    inner = EG.normalize_mark(hits[0])
+    top1 = CA.SIDE_JP.get(branch.get("top1Side"))
+    actual = CA.SIDE_JP.get(branch.get("actualSide"))
+    if top1 and actual:
+        text = BOARD_LINE_TEMPLATE.format(game_no=game_no, display_ply=display_ply,
+                                          actual=actual, top1=top1)
+    else:
+        text = BOARD_LINE_TEMPLATE_WITHOUT_SIDES.format(game_no=game_no, display_ply=display_ply)
+    return text + pos_mark(inner), inner
+
+
+# ---- 行動と答え合わせの表(F-7) ----
+#
+# 文は**承認済みの表(`answer_menu.json`)の passed 行**から(`exit_candidates.menu_rows` が決めた
+# 通った / 落ちた を使う ― ⑥ は判定しない)。根拠の分数は `exit_candidates.evidence_phrase` が正本。
+# **passed に無い id を ⑤ が採っていれば止まる**(表に無い・下限に届かない行動は出ない)。
+ACTION_SLOT_RE = re.compile(r"^act\.([1-9][0-9]*)$")
+VERIFY_TABLE_SEPARATOR = "|---|---|---|"
+
+
+def menu_mark(menu_id):
+    mark = "<!-- menu: " + menu_id + " -->"
+    m = CA.MENU_TAG_RE.fullmatch(mark)
+    if m is None or m.group(1) != menu_id:
+        raise ExitFillError(f"組んだ印が印の文法に合わない: {mark}")
+    return mark
+
+
+def adopted_action_rows(actions, passed):
+    """⑤ の `actions` を slot の番号順に、passed の行と組にして返す `[(slot, 行)]`。"""
+    out = []
+    by_id = {r["id"]: r for r in passed}
+    for action in actions or []:
+        slot = action.get("slot")
+        m = ACTION_SLOT_RE.match(slot if isinstance(slot, str) else "")
+        if m is None:
+            raise ExitFillError(f"行動のスロットの名が act.N の形でない: {slot!r}")
+        menu_id = action.get("menuId")
+        row = by_id.get(menu_id)
+        if row is None:
+            raise ExitFillError(
+                f"行動 {menu_id}(スロット {slot})が下限を通った候補に無い ― "
+                f"通ったのは {sorted(by_id)}(表に無い・届かない行動は出さない)")
+        out.append((int(m.group(1)), slot, row))
+    out.sort(key=lambda t: t[0])
+    numbers = [t[0] for t in out]
+    if numbers != list(range(1, len(out) + 1)):
+        raise ExitFillError(f"行動のスロットの番号が 1 から連続でない: {numbers}")
+    return [(slot, row) for _n, slot, row in out]
+
+
+def action_line(index, row):
+    """行動の 1 行。**下書きが印字する行と同じ形**(`exit_candidates.build_md` の (c))。"""
+    item = row["item"]
+    line = f"{index}. {item['actionCore']}{menu_mark(row['id'])}　― 根拠は{EC.evidence_phrase(row)}"
+    if item.get("foundInSameData"):
+        line += f"。{CA.FOUND_IN_SAME_DATA_PHRASE}。"
+    return line
+
+
+def verify_table_row(row):
+    return f"| {row['item']['actionCore']}{menu_mark(row['id'])} | {EC.facts_cell(row)} | {EC.values_cell(row)} |"
+
+
+# ---- 器 ----
+def split_sections(md_text):
+    """`## ` の見出しで割る。返り値 = `[(見出しの行 or None, [行…])]`。先頭の塊は見出し無し。"""
+    out = [(None, [])]
+    for line in md_text.split("\n"):
+        if line.startswith("## "):
+            out.append((line, []))
+        else:
+            out[-1][1].append(line)
+    return out
+
+
+def role_of_heading(heading_line):
+    return CS.role_of(heading_line[3:].strip()) if heading_line else None
+
+
+def is_note(line):
+    return line.lstrip().startswith(EC.NOTE_PREFIX)
+
+
+SLOT_ROLES = ("ひとことで", "局面で見る", "試せること", "答え合わせ")
+
+
+def build_document(draft_md, selection, packet, candidates, questions, texts, statements, passed, games):
+    """下書きの md のスロットの節を埋めて、(本編の md, slot_map の行, 注記) を返す。**書き込まない。**
+    注記 = 落とさないが黙らない報告(印を付けなかった行など)。"""
+    sections = split_sections(draft_md)
+    roles = [role_of_heading(h) for h, _ in sections]
+    for role in SLOT_ROLES:
+        if roles.count(role) != 1:
+            raise ExitFillError(f"下書きに節「{role}」が {roles.count(role)} 個(ちょうど 1 つが要る)")
+
+    rows = []
+    notes = []
+    aggregate_rows = aggregate_rows_of(packet)
+
+    # ---- ひとことで ----
+    p1 = list(selection.get("p1") or [])
+    lead_ref = selection["lead"]["itemRef"]
+    lead_text = verified_text(texts, LEAD_SLOT, statements, [lead_ref])
+    lead = lead_line(lead_text, len(p1))
+    rows.append(fill_row(LEAD_SLOT, lead, item_ref=lead_ref))
+    bullets = []
+    unreached = 0
+    for row in p1:
+        slot = row.get("slot")
+        ids = list(row.get("aggregateIds") or [])
+        fact, reaches = fact_text(ids, aggregate_rows, candidates)
+        reading = verified_text(texts, slot, statements, [row["itemRef"]])
+        marks, why = agg_marks_for(fact_bullet(fact, reading), ids, aggregate_rows)
+        if why:
+            notes.append(f"スロット {slot}: {why}")
+        bullet = fact_bullet(fact, reading, marks)
+        bullets.append(bullet)
+        rows.append(fill_row(slot, bullet, marks=marks, item_ref=row["itemRef"], aggregate_ids=ids))
+        if not reaches:
+            unreached += 1
+
+    # ---- お預かりした問い(F-3。「ひとことで」の直後) ----
+    answers = selection.get("answers") or []
+    supplied = {}
+    for row in answers:
+        qid = row.get("questionId")
+        slot = answer_slot(qid)
+        if (texts or {}).get(slot) is not None:
+            supplied[qid] = verified_text(texts, slot, statements, list(row.get("itemRefs") or []))
+    question_lines = question_section_lines(selection["customerRef"], questions, answers, games, supplied)
+    agg_by_qid = {row.get("questionId"): list(row.get("aggregateIds") or []) for row in answers}
+    for line in question_lines:
+        m = CA.ANS_TAG_RE.search(line)
+        if m is not None:
+            rows.append(fill_row(answer_slot(m.group(1)), line, marks=[m.group(0)],
+                                 aggregate_ids=agg_by_qid.get(m.group(1), [])))
+
+    # ---- 局面で見る ----
+    boards = list(selection.get("boards") or [])
+    if len(boards) != CS.BOARD_COUNT:
+        raise ExitFillError(f"⑤ の盤が {len(boards)} 件(正本は {CS.BOARD_COUNT} 件)")
+    board_lines = []
+    for board in boards:
+        line, inner = board_line(board, packet, candidates)
+        board_lines.append(line)
+        rows.append(fill_row(board["slot"], line, marks=[pos_mark(inner)]))
+
+    # ---- 試せること + 答え合わせ ----
+    adopted = adopted_action_rows(selection.get("actions"), passed)
+    action_lines = []
+    for index, (slot, row) in enumerate(adopted, start=1):
+        line = action_line(index, row)
+        action_lines.append(line)
+        rows.append(fill_row(slot, line, marks=[menu_mark(row["id"])], item_ref=None))
+    if not adopted:
+        action_lines.append(EI.NO_ACTION_SENTENCE)
+    table = [EC.VERIFY_TABLE_HEADER, VERIFY_TABLE_SEPARATOR] + [verify_table_row(r) for _s, r in adopted]
+
+    # ---- 組む ----
+    out = []
+    for heading, body in sections:
+        role = role_of_heading(heading)
+        if role == "ひとことで":
+            out += [heading, "", lead, ""] + bullets + [""]
+            if unreached:
+                out += [EI.NOTHING_TO_HIDE_SENTENCE, ""]
+            out += question_lines
+        elif role == "局面で見る":
+            out += [heading, ""]
+            for line in board_lines:
+                out += [line, ""]
+        elif role == "試せること":
+            out += [heading, ""] + action_lines + [""]
+        elif role == "答え合わせ":
+            out += [heading, ""] + table + [""]
+        else:
+            if heading is not None:
+                out.append(heading)
+            out += [line for line in body if not is_note(line)]
+    md = "\n".join(out)
+    if not md.endswith("\n"):
+        md += "\n"
+    problems = slot_map_problems(rows)
+    if problems:
+        raise ExitFillError("slot_map の形が崩れている:\n" + "\n".join(problems))
+    for row in rows:
+        if row["text"] not in md:
+            raise ExitFillError(f"スロット {row['slot']} の本文が本編に無い(組む側の不具合)")
+    return md, rows, notes
+
+
+# ==================== 本体(段 `exit-fill`) ====================
+#
+# 使い方:
+#   python3 -X utf8 exit_fill.py --selection <answer_selection.json> --packet <observation-packet.json> \
+#     --request <observation-request.json> --candidates <exit_candidates.json> --md <9_本編.md> \
+#     --out-slot-map <slot_map.json> --seats-dir <out/<顧客>/llm-seats> --texts <fill_texts.json> \
+#     [check_answer.py と同じ材料の引数…]
+#
+# 【書き手の道を消さない】`--md` が在って `TODO` が無ければ、**人(か前の ⑥)が書き終えた本編**なので
+# 触らずに rc=0 で退く。`TODO` が在れば下書きなので埋めて上書きする。
+# 【描く前に検査】組んだ md を `check_answer.check_answer` に通し、1 件でも落ちれば**書かない**。
+OWN_FLAGS = ("--selection", "--packet", "--request", "--candidates", "--md", "--out-slot-map",
+             "--seats-dir", "--texts")
+INTEGRATION_NAME = "integration.json"
+
+
+def parse_own_args(argv):
+    own = {flag[2:]: None for flag in OWN_FLAGS}
+    rest = []
+    i = 0
+    while i < len(argv):
+        flag = argv[i]
+        if flag in OWN_FLAGS:
+            value = argv[i + 1] if i + 1 < len(argv) else None
+            if value is None or value.startswith("--"):
+                raise ExitFillError(f"{flag} に値が無い")
+            own[flag[2:]] = value
+            i += 2
+            continue
+        rest.append(flag)
+        i += 1
+    missing = sorted(k for k, v in own.items() if v is None)
+    if missing:
+        raise ExitFillError("足りない引数: " + " ".join("--" + m for m in missing))
+    return own, rest
+
+
+def _load(path, what):
+    if not os.path.exists(path):
+        raise ExitFillError(f"{what}が無い: {path}")
+    with io.open(path, encoding="utf-8") as f:
+        return json.load(f)
+
+
+def run(own, rest, out=sys.stdout):
+    with io.open(own["md"], encoding="utf-8") as f:
+        draft_md = f.read()
+    if EC.TODO not in draft_md:
+        print(f"[exit-fill] 本編の md に {EC.TODO} が無い(書き終えた本編)― 触らずに退く: {own['md']}",
+              file=out)
+        return 0
+    selection = read_selection(own["selection"])
+    packet = _load(own["packet"], "packet")
+    if packet.get("packetId") != selection.get("packetId"):
+        raise ExitFillError(
+            f"⑤ の packetId {selection.get('packetId')} と packet の {packet.get('packetId')} が違う")
+    request = _load(own["request"], "observation-request")
+    candidates = _load(own["candidates"], "候補の JSON")
+    texts = _load(own["texts"], "言い換えの文(fill_texts)")
+    run_id = selection.get("runId")
+    if _blank(run_id):
+        raise ExitFillError("⑤ の runId が空 ― 統合の周を引けない")
+    statements = statements_of(_load(os.path.join(own["seats-dir"], run_id, INTEGRATION_NAME), "統合の出力"))
+
+    args = CA.parse_args(rest + [own["md"]])
+    repo_root = os.path.abspath(os.path.join(HERE, "..", "..", ".."))
+    ctx = CA.build_materials(args, repo_root)
+    passed, _dropped = EC.menu_rows(ctx)
+    if len(args.patients) != 1:
+        raise ExitFillError(f"--patient は今回の組の 1 つだけ({len(args.patients)} 件渡された)")
+    games = (CA.load_json(args.patients[0][0]).get("summary") or {}).get("games")
+
+    md, rows, notes = build_document(draft_md, selection, packet, candidates,
+                                     request.get("customerQuestions") or [], texts, statements, passed, games)
+    for note in notes:
+        print(f"[exit-fill] 注記: {note}", file=out)
+    problems = CA.check_answer(md, ctx)
+    if problems:
+        raise ExitFillError("組んだ本編が check_answer を通らない(書かない):\n" + "\n".join(
+            f"{line_no}: {why}: {line.strip()[:100]}" for line_no, why, line in problems))
+    with io.open(own["md"], "w", encoding="utf-8") as f:
+        f.write(md)
+    with io.open(own["out-slot-map"], "w", encoding="utf-8") as f:
+        json.dump(rows, f, ensure_ascii=False, indent=1)
+        f.write("\n")
+    print(f"wrote {own['md']}(スロット {len(rows)} 行)", file=out)
+    print(f"wrote {own['out-slot-map']}", file=out)
+    return 0
+
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+
+
+def main(argv):
+    own, rest = parse_own_args(argv)
+    return run(own, rest)
+
+
+if __name__ == "__main__":
+    try:
+        sys.exit(main(sys.argv[1:]))
+    except (ExitFillError, CA.CheckAnswerError, EGR.ExitGroupsError) as e:
+        print(str(e), file=sys.stderr)
+        sys.exit(1)
