@@ -1,0 +1,4 @@
+{
+  "note": "検査 3(report-pdf/check_answer.py)と検査 H-5(scripts/playtest/lib/hypothesis.ts)が共に読む禁止語の一覧。正本はこのファイル 1 つ(Audit Core T-3 で check_answer.py の BANNED_WORDS から移した。2026-10-06)。2026-09-25 の人間の決定(凍結の例外 14 件目、f715da2)で空。語を足す・外すのは人間の決定。",
+  "words": []
+}

@@ -69,12 +69,10 @@ export interface KnownException extends BoundaryViolation {
 
 /**
  * 現在すでに在る逆依存(計画 §3.1・§3.2 の表と 1 対 1)。**増やすときは計画に根拠を書く。減るのは T-3 以降。**
+ * T-3(I-2、2026-10-06)で `lib/hypothesis.ts` の 2 本(`./timeSearch.js` の `SEARCH_COLUMNS`、`../report-pdf/check_answer.py` の
+ * 字面読み)を外した ― 30 列は `schemas/obs-registry.extra-ids.json`、禁止語は `data/governance/banned_words.json` に。
  */
 export const KNOWN_EXCEPTIONS: readonly KnownException[] = [
-  { file: "lib/hypothesis.ts", specifier: "./timeSearch.js", kind: "runtime", reaches: "apps/server (via invariants/types.ts)",
-    reason: "§3.1: `SEARCH_COLUMNS` を `loadObsRegistry` の 30 本の id のためだけに引く。timeSearch → reportData → apps/server + shogiops。T-3(I-2)で引数注入に替える" },
-  { file: "lib/hypothesis.ts", specifier: "../report-pdf/check_answer.py", kind: "text", reaches: "report-pdf",
-    reason: "§3.2: `BANNED_WORDS` を Python のソースから正規表現で抜く(言語をまたぐ字面依存)。T-3(I-2)で JSON 化" },
   { file: "lib/observationProvenance.ts", specifier: "./observationFacts.js", kind: "runtime", reaches: "shogiops (via lib/observationFacts.ts)",
     reason: "§3.1: `AHEAD_CP` を閾値の表 `toolThresholds()` のために引く。I-3 で `ThresholdRow[]` の引数に" },
   { file: "lib/observationProvenance.ts", specifier: "./reportData.js", kind: "runtime", reaches: "apps/server (via invariants/types.ts)",

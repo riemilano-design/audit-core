@@ -91,7 +91,22 @@ import sys
 # よい」「すれば直る」「間違いなく」「危ない」「確実」「絶対」「安い」)は、冊子ですべて使ってよい。
 # `check_line_banned` と検査 3 の枠は残す(語が無いので何も落とさない)。「断定しない」は機械では見ず、
 # 監査が読む。
-BANNED_WORDS = []
+# 一覧の正本は `data/governance/banned_words.json` の `words`(Audit Core T-3、2026-10-06。`lib/hypothesis.ts` の検査 H-5 も
+# 同じファイルを読む ― 語の一覧は 1 か所)。読めなければ例外(黙って空にすると「語が 0 件」と「検査していない」が
+# 見分けられない)。
+BANNED_WORDS_JSON = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "..", "data", "governance", "banned_words.json")
+
+
+def load_banned_words(path=BANNED_WORDS_JSON):
+    with open(path, encoding="utf-8") as f:
+        data = json.load(f)
+    words = data.get("words") if isinstance(data, dict) else None
+    if not isinstance(words, list) or not all(isinstance(w, str) for w in words):
+        raise ValueError("禁止語の一覧(words)が見つかりません: %s" % path)
+    return list(words)
+
+
+BANNED_WORDS = load_banned_words()
 
 # 検査 4(司令塔の指示。2026-09-23 REVISE 4・2026-09-24 の再監査 3)。`<!-- menu: -->`/`<!-- priority: -->` の
 # 外で、行動・優先順位を表す言い回しが見つかったら落とす。

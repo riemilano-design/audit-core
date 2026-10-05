@@ -2,7 +2,8 @@
 // (lib/hypothesis.ts)を見る。**エンジンは起動しない。**
 //
 // 【構成】H-1〜H-8 × 通る 1・落ちる 1(16)+ スキーマ 4(通る・知らない欄・版違い・value の oneOf)+
-// 登録簿 2(111 本・obs.timeSearch.col.* 30 本)+ パリティ 1(lib が読んだ一覧 = report-pdf/check_answer.py の BANNED_WORDS)+
+// 登録簿 2(111 本・obs.timeSearch.col.* 30 本)+ パリティ 1(lib が読んだ一覧 = data/governance/banned_words.json =
+// report-pdf/check_answer.py の BANNED_WORDS)+
 // CLI 1(hypothesisCheck.ts を子プロセスで回し exit code を見る)= 24 本。
 // STEP EXPO-1(§12.9)で版 0.2(expired)の 3 本を足して 27 本。
 // STEP 契約の仮説 v0.3(2026-09-26)で版 0.3(lane に reply・fork)の 4 本を足して 31 本。
@@ -18,13 +19,15 @@ import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 import { validate } from "./eventSchema.js";
-import { checkResultLines, loadHypothesisBannedWords, loadHypothesisSchema, loadObsRegistry, validateHypothesisLine, type CheckResult, type HypothesisCheckName } from "./hypothesis.js";
+import { checkResultLines, loadHypothesisBannedWords, loadHypothesisSchema, loadObsRegistry, loadObsRegistryExtraIds, validateHypothesisLine, type CheckResult, type HypothesisCheckName } from "./hypothesis.js";
+import { SEARCH_COLUMNS } from "./timeSearch.js";
 
 type Json = Record<string, unknown>;
 
 const REPO_ROOT = fileURLToPath(new URL("../../../", import.meta.url));
 const OBS_ITEMS_PATH = fileURLToPath(new URL("../../../docs/OBSERVATION_ITEMS.md", import.meta.url));
-const CHECK_ANSWER_PY = fileURLToPath(new URL("../report-pdf/check_answer.py", import.meta.url));
+const REPORT_PDF_DIR = fileURLToPath(new URL("../report-pdf/", import.meta.url));
+const BANNED_WORDS_JSON = fileURLToPath(new URL("../../../data/governance/banned_words.json", import.meta.url));
 const HYPOTHESIS_CHECK_TS = fileURLToPath(new URL("../hypothesisCheck.ts", import.meta.url));
 const FIXTURE_PATH = fileURLToPath(new URL("./__fixtures__/hypothesis.v0.1.example.json", import.meta.url));
 
@@ -384,19 +387,41 @@ describe("登録簿(docs/OBSERVATION_ITEMS.md §1)", () => {
     const columns = [...registry].filter((id) => id.startsWith("obs.timeSearch.col."));
     expect(columns).toHaveLength(30);
   });
+
+  // Audit Core T-3: lib/hypothesis.ts は lib/timeSearch.ts を import しない。30 列は仕様データ
+  // (schemas/obs-registry.extra-ids.json)が持ち、正本 SEARCH_COLUMNS との一致はこの試験が固定する。
+  it("補いの仕様データは lib/timeSearch.ts の SEARCH_COLUMNS と並びまで一致する(読めなければ例外)", () => {
+    expect([...loadObsRegistryExtraIds()]).toEqual(SEARCH_COLUMNS.map((column) => `obs.timeSearch.col.${column}`));
+    expect(() => loadObsRegistryExtraIds(join(REPO_ROOT, "この名前のファイルは無い.json"))).toThrow();
+  });
+
+  it("extraIds を渡せば(注入口)表の id にそれだけを足す ― 既定の登録簿 = 表の id ∪ 仕様データの ids", () => {
+    const tableOnly = loadObsRegistry(OBS_ITEMS_PATH, []);
+    expect(tableOnly.has("obs.probe.injected")).toBe(false);
+    const injected = loadObsRegistry(OBS_ITEMS_PATH, ["obs.probe.injected"]);
+    expect(injected.has("obs.probe.injected")).toBe(true);
+    expect(injected.size).toBe(tableOnly.size + 1);
+    // 表だけでは 30 列は揃わない(§1.7 は束ねて書いてある)。既定値の補いを足すと既定の登録簿と同じ集合になる
+    expect([...tableOnly].filter((id) => id.startsWith("obs.timeSearch.col.")).length).toBeLessThan(30);
+    expect(new Set([...tableOnly, ...loadObsRegistryExtraIds()])).toEqual(registry);
+  });
 });
 
 describe("パリティ(検査 3・禁止語)", () => {
-  it("lib が読んだ一覧は report-pdf/check_answer.py の BANNED_WORDS と並びまで一致する(空でも通る)", () => {
-    // STEP H5-SYNC(§12.9): lib は一覧の写しを持たず、python の実物を読む。
-    // 人間の決定(f715da2)で語が空になっても、この試験は通る(一致を見るだけ)。
-    const source = readFileSync(CHECK_ANSWER_PY, "utf-8");
-    const match = /BANNED_WORDS\s*=\s*\[([\s\S]*?)\]/.exec(source);
-    expect(match, "check_answer.py に BANNED_WORDS が見つからない").not.toBeNull();
-    const words = Array.from(match![1]!.matchAll(/"([^"]*)"/g)).map((m) => m[1]!);
-    expect([...loadHypothesisBannedWords()]).toEqual(words);
+  it("lib が読んだ一覧は data/governance/banned_words.json と、report-pdf/check_answer.py の BANNED_WORDS に並びまで一致する(空でも通る)", () => {
+    // STEP H5-SYNC(§12.9)→ Audit Core T-3: lib は一覧の写しを持たず、JSON の実物を読む。python 側も同じ JSON を読む
+    // (言語をまたいで 1 か所)。人間の決定(f715da2)で語が空になっても、この試験は通る(一致を見るだけ)。
+    const json = JSON.parse(readFileSync(BANNED_WORDS_JSON, "utf-8")) as { words: string[] };
+    expect(Array.isArray(json.words)).toBe(true);
+    expect([...loadHypothesisBannedWords()]).toEqual(json.words);
+    const fromPython = execFileSync(
+      "python3",
+      ["-X", "utf8", "-c", "import json, sys; sys.path.insert(0, sys.argv[1]); import check_answer; print(json.dumps(check_answer.BANNED_WORDS, ensure_ascii=False))", REPORT_PDF_DIR],
+      { encoding: "utf-8" },
+    );
+    expect(JSON.parse(fromPython.trim())).toEqual(json.words);
     // 読めないときは黙って空にせず例外(「0 件だった」と「検査していない」を混ぜない)。
-    expect(() => loadHypothesisBannedWords(join(REPO_ROOT, "この名前のファイルは無い.py"))).toThrow();
+    expect(() => loadHypothesisBannedWords(join(REPO_ROOT, "この名前のファイルは無い.json"))).toThrow();
   });
 });
 

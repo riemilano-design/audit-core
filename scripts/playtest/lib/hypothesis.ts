@@ -6,18 +6,20 @@
 //
 // 【このファイルがやること】
 // - `loadHypothesisSchema()`: スキーマのファイル(../schemas/hypothesis.v<version>.schema.json)を読む。
-// - `loadObsRegistry(mdPath)`: `docs/OBSERVATION_ITEMS.md` の §1(`## 1.` から `## 2.` の手前)の表の先頭欄にある
-//   `obs.*` を全部 + `obs.timeSearch.col.` × `SEARCH_COLUMNS`(30 本。列の全部が表に書かれていないため、
-//   `lib/timeSearch.ts` の実物から作る)。
+// - `loadObsRegistry(mdPath, extraIds?)`: `docs/OBSERVATION_ITEMS.md` の §1(`## 1.` から `## 2.` の手前)の表の先頭欄にある
+//   `obs.*` を全部 + 表から読めない id の補い `extraIds`(既定は仕様データ `../schemas/obs-registry.extra-ids.json`。
+//   中身は §1.7 の 30 列。Audit Core T-3 で `lib/timeSearch.ts` の `SEARCH_COLUMNS` の import を外した ―
+//   この lib は将棋側の module を読まず、正本との一致は `lib/hypothesis.test.ts` のパリティ試験が固定する)。
 // - `validateHypothesisLine(line, opts)`: スキーマ照合(lib/eventSchema.ts)+ H-1〜H-8 を**全部回して全部返す**
 //   (最初の失敗で止めない)。
 //
 // 【このファイルが絶対にやらないこと】
 // - 将棋の判断・仮説の妥当性の判断(機械で検査できる「形式」だけを見る。F-1 の型 ― 設計案 §7.2 の注記)。
 // - ファイルの書き換え。エンジンの起動。
-// - 検査 3(禁止語)の一覧を書き写して 2 か所で持つこと。**一覧は `report-pdf/check_answer.py` の
-//   `BANNED_WORDS` だけが持ち**、この lib は `loadHypothesisBannedWords()` でそれを読む
-//   (STEP H5-SYNC、§12.9。人間の決定 `f715da2` で語を外すときも、直す場所は 1 か所)。
+// - 検査 3(禁止語)の一覧を書き写して 2 か所で持つこと。**一覧は `data/governance/banned_words.json` だけが持ち**、
+//   この lib は `loadHypothesisBannedWords()` で、`report-pdf/check_answer.py` は `BANNED_WORDS` でそれを読む
+//   (STEP H5-SYNC、§12.9。Audit Core T-3 で Python のソースを正規表現で読む形から JSON に移した。
+//   人間の決定 `f715da2` で語を外すときも、直す場所は 1 か所)。
 //   **読めないときは黙って空にせず例外を投げる**(「検査したが 0 件」と「検査していない」を
 //   同じ結果にしない。docs/AGENT_PROTOCOL.md 11.6)。
 
@@ -27,7 +29,6 @@ import { recountRowProblems } from "./observationAggregates.js";
 import { canonicalJson, resolvePacketPath } from "./observationPacket.js";
 import { AGGREGATE_PARTS, PACKET_OBS_ID_PREFIX, isPacketObsId, packetRefPathProblems } from "./packetRef.js";
 import { HYPOTHESIS_SCHEMA_VERSION, KNOWN_HYPOTHESIS_SCHEMA_VERSIONS } from "./schemaVersions.js";
-import { SEARCH_COLUMNS } from "./timeSearch.js";
 
 export type HypothesisSchemaVersion = (typeof KNOWN_HYPOTHESIS_SCHEMA_VERSIONS)[number];
 
@@ -106,10 +107,24 @@ export interface HypothesisItemObservation {
   unit?: string;
 }
 
-/** 禁止語の一覧の出どころ(`report-pdf/check_answer.py`)。写しを持たないための 1 か所。 */
-const CHECK_ANSWER_PY = new URL("../report-pdf/check_answer.py", import.meta.url);
+/** 禁止語の一覧の出どころ(governance の仕様データ)。写しを持たないための 1 か所。Python 側の検査 3 も同じファイルを読む。 */
+const BANNED_WORDS_JSON = new URL("../../../data/governance/banned_words.json", import.meta.url);
 
-const BANNED_WORDS_RE = /BANNED_WORDS\s*=\s*\[([\s\S]*?)\]/;
+/** 登録簿の表から読めない id の補い(仕様データ)。`loadObsRegistry` の `extraIds` の既定値。 */
+const OBS_REGISTRY_EXTRA_IDS_JSON = new URL("../schemas/obs-registry.extra-ids.json", import.meta.url);
+
+/** 仕様データ(JSON)の `key` にある文字列の配列を返す。無い・形が違う・JSON でないときは undefined(呼ぶ側が例外にする)。 */
+function stringListOf(source: string, key: string): readonly string[] | undefined {
+  let parsed: unknown;
+  try {
+    parsed = JSON.parse(source);
+  } catch {
+    return undefined;
+  }
+  if (parsed === null || typeof parsed !== "object" || Array.isArray(parsed)) return undefined;
+  const value = (parsed as Record<string, unknown>)[key];
+  return Array.isArray(value) && value.every((v) => typeof v === "string") ? (value as string[]) : undefined;
+}
 
 /** 禁止語の一覧を読めなかったとき(ファイルが無い・`BANNED_WORDS` が見つからない)。 */
 export class HypothesisBannedWordsError extends Error {}
@@ -118,27 +133,59 @@ export class HypothesisBannedWordsError extends Error {}
 let bannedWordsCache: readonly string[] | undefined;
 
 /**
- * 検査 H-5(禁止語)の一覧を `report-pdf/check_answer.py` の `BANNED_WORDS` から読む(STEP H5-SYNC)。
+ * 検査 H-5(禁止語)の一覧を `data/governance/banned_words.json` の `words` から読む(STEP H5-SYNC → Audit Core T-3)。
  *
  * **一覧の写しをこのファイルに持たない。** 2026-09-25 の人間の決定(`f715da2`)で語を外すときも、
- * 直すのは python 側 1 か所で、この lib は読むだけになる。
+ * 直すのは JSON 1 か所で、この lib と python 側(`check_answer.py`)は読むだけになる。
  * **一覧が空になっても H-5 は消えない** ― 「という読みです / 可能性があります の形」の検査は残る。
  *
- * 読めないとき(ファイルが無い・`BANNED_WORDS` が見つからない)は**例外**にする。
+ * 読めないとき(ファイルが無い・`words` が見つからない)は**例外**にする。
  * 黙って空の一覧にすると「語が 0 件だった」と「検査していない」が見分けられなくなるため。
  */
-export function loadHypothesisBannedWords(pyPath: URL | string = CHECK_ANSWER_PY): readonly string[] {
+export function loadHypothesisBannedWords(jsonPath: URL | string = BANNED_WORDS_JSON): readonly string[] {
   let source: string;
   try {
-    source = readFileSync(pyPath, "utf-8");
+    source = readFileSync(jsonPath, "utf-8");
   } catch (err) {
-    throw new HypothesisBannedWordsError(`禁止語の一覧を読めません: ${String(pyPath)}(${(err as Error).message})`);
+    throw new HypothesisBannedWordsError(`禁止語の一覧を読めません: ${String(jsonPath)}(${(err as Error).message})`);
   }
-  const match = BANNED_WORDS_RE.exec(source);
-  if (match === null || match[1] === undefined) {
-    throw new HypothesisBannedWordsError(`禁止語の一覧(BANNED_WORDS)が見つかりません: ${String(pyPath)}`);
+  const words = stringListOf(source, "words");
+  if (words === undefined) {
+    throw new HypothesisBannedWordsError(`禁止語の一覧(words)が見つかりません: ${String(jsonPath)}`);
   }
-  return Array.from(match[1].matchAll(/"([^"]*)"/g)).map((m) => m[1]!);
+  return words;
+}
+
+/** 登録簿の補いの一覧を読めなかったとき(ファイルが無い・`ids` が見つからない)。 */
+export class ObsRegistryExtraIdsError extends Error {}
+
+/** 1 回読んだら覚えておく(同じ実行の中でファイルを何度も読まない)。 */
+let obsRegistryExtraIdsCache: readonly string[] | undefined;
+
+/**
+ * 登録簿(§1 の表)から読めない id の補いを仕様データ `../schemas/obs-registry.extra-ids.json` の `ids` から読む。
+ * 中身は §1.7 の 30 列(`obs.timeSearch.col.<列名>`)で、正本 `lib/timeSearch.ts` の `SEARCH_COLUMNS` との一致は
+ * `lib/hypothesis.test.ts` のパリティ試験が固定する(この lib は将棋側の module を import しない ― Audit Core T-3)。
+ * 読めないときは**例外**(黙って空にすると「補いが 0 件」と「読んでいない」が見分けられない)。
+ */
+export function loadObsRegistryExtraIds(jsonPath: URL | string = OBS_REGISTRY_EXTRA_IDS_JSON): readonly string[] {
+  let source: string;
+  try {
+    source = readFileSync(jsonPath, "utf-8");
+  } catch (err) {
+    throw new ObsRegistryExtraIdsError(`登録簿の補いを読めません: ${String(jsonPath)}(${(err as Error).message})`);
+  }
+  const ids = stringListOf(source, "ids");
+  if (ids === undefined) {
+    throw new ObsRegistryExtraIdsError(`登録簿の補い(ids)が見つかりません: ${String(jsonPath)}`);
+  }
+  return ids;
+}
+
+/** 既定の補い(1 回だけ読む)。`loadObsRegistry` に `extraIds` が渡されたときはそちらを使う。 */
+function defaultObsRegistryExtraIds(): readonly string[] {
+  obsRegistryExtraIdsCache ??= loadObsRegistryExtraIds();
+  return obsRegistryExtraIdsCache;
 }
 
 /** 既定の一覧(1 回だけ読む)。`opts.bannedWords` が渡されたときはそちらを使う。 */
@@ -154,10 +201,11 @@ export function loadHypothesisSchema(version: HypothesisSchemaVersion = HYPOTHES
 /**
  * `docs/OBSERVATION_ITEMS.md` の §1(`existing`)を登録簿にする(H-2 の検査 H-2 が引く集合)。
  * §1 の表の行のうち `| \`obs.` で始まる行の先頭欄にある `obs.*` を全部(1 セルに複数ある行は全部)、
- * + `obs.timeSearch.col.` × `SEARCH_COLUMNS`(30 本。§1.7 の表は 5〜6 本ずつ束ねて書いてあり、
- * 先頭以外は `.name` の略記で `obs.` を持たないため、正本の `SEARCH_COLUMNS` から作る)。
+ * + `extraIds`(表から読めない id の補い。§1.7 の表は 5〜6 本ずつ束ねて書いてあり、先頭以外は `.name` の略記で
+ * `obs.` を持たないため、30 列は仕様データ `../schemas/obs-registry.extra-ids.json` が持つ ― 既定値はそれを読む。
+ * 呼ぶ側が渡せば(注入口)そちらを使う)。
  */
-export function loadObsRegistry(mdPath: string): Set<string> {
+export function loadObsRegistry(mdPath: string, extraIds: Iterable<string> = defaultObsRegistryExtraIds()): Set<string> {
   const text = readFileSync(mdPath, "utf-8");
   const lines = text.split("\n");
   const startIndex = lines.findIndex((line) => line.startsWith("## 1. "));
@@ -170,7 +218,7 @@ export function loadObsRegistry(mdPath: string): Set<string> {
     const firstCell = line.split("|")[1] ?? "";
     for (const match of firstCell.matchAll(/obs\.[\w.]+/g)) ids.add(match[0]);
   }
-  for (const column of SEARCH_COLUMNS) ids.add(`obs.timeSearch.col.${column}`);
+  for (const id of extraIds) ids.add(id);
   return ids;
 }
 
@@ -935,7 +983,7 @@ function checkH11(line: unknown, packet: unknown): CheckResult {
  * スキーマ照合 + H-1〜H-11 を全部回して全部返す(最初で止めない)。スキーマが落ちても H は回す。
  *
  * `opts.bannedWords` は H-5 の一覧の差し替え口(試験用)。渡されなければ
- * `report-pdf/check_answer.py` の `BANNED_WORDS` を読む(STEP H5-SYNC)。
+ * `data/governance/banned_words.json` の `words` を読む(STEP H5-SYNC → Audit Core T-3)。
  */
 export function validateHypothesisLine(
   line: unknown,
