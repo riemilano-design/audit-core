@@ -4468,3 +4468,22 @@ FillTextsError: exit_fill.py --verify-texts が JSON を返さなかった(rc 1)
 **GO の判断に影響させなかった指摘(判定の後に直した)**: `git diff --check` が 2 件 ― LANE §87 の行末の空白 1 か所・PLAN §7.6 の末尾の余分な空行。文書だけ。直して `git diff --check` 0。
 **GO の条件でない指摘(記録済み)**: persist の本番の道は読んで確かめたのみ / 落ちた実行の 2 本の退避(司令塔が `out/c5/_fill_texts_failed_run_2026-10-05/` へ済ませた ― 便 146 の返し)/ 2 回目の守りは report の有無だけ(P-198)。
 最後の 1 回の実行は監査の対象外・回していない。コミット → 便 147 → 司令塔の合図を待つ。
+
+### 最後の 1 回(2026-10-05 23:52・司令塔の合図 = 便 147 の返し。人間の GO は本人の言葉で司令塔が直接受けたもの)― 完了・停止
+
+**回す前**: HEAD 45ed123(司令塔の文書コミットの上)、`ls out/c5/exit` = `answer_selection.json` 1 本(sha `2ba38c20…c83c`)。落ちた実行の 2 本は司令塔が `out/c5/_fill_texts_failed_run_2026-10-05/` へ退避済み。
+**打った手(repo の根)**: 便 147 の字のとおり ― `SEAT_COST_CAP_USD=1 npx tsx scripts/playtest/fillTexts.ts --selection scripts/playtest/out/c5/exit/answer_selection.json --seats-dir scripts/playtest/out/c5/llm-seats --out-dir scripts/playtest/out/c5/exit --dry-run`(有効な上限 1・最大費用 0.3170・照合の配線 1 回・rc 0)→ 同じ字から `--dry-run` を外して 1 回(rc 0)。console の写しは scratchpad `fix/final_run_stdout.txt`。
+**結果(条件 10 の表。`fill_texts.report.json`、runId `433dbb4e-20261005`、model claude-opus-5、指示文 sha `449a98d5…` 不変、12 秒)**:
+
+| スロット | 試行 | F-5 通過 | 採用可能 | 失敗理由 | 実費 USD | 最大費用(実行前) |
+|---|---|---|---|---|---|---|
+| lead | 1 | 1 | 1 | なし | 0.0102 | 0.0793 |
+| p1.1 | 1 | 1 | 1 | なし | 0.0104 | 0.0794 |
+| p1.2 | 1 | 1 | 1 | なし | 0.0091 | 0.0792 |
+| p1.3 | 1 | 1 | 1 | なし | 0.0094 | 0.0792 |
+| 計 | 4 呼び出し | 4 | 4 | ― | **0.0391** | 0.3170 |
+
+上限 1 USD。止めた理由 null。usage は 4 試行とも `attempts/433dbb4e-20261005/attempt_<slot>_1.json` に残った(入力 1294 / 1315 / 1283 / 1281・出力 151 / 154 / 106 / 119・finish stop・status adoptable)。鍵の字は書かれていない(grep 0 件)。書かれたもの: `fill_texts.json`(4 文・121 / 128 / 79 / 95 字)・`fill_texts.problems.json`(全部空)・`fill_texts.report.json`・`attempts/433dbb4e-20261005/`(12 本 = 試行の記録 4・raw 4・verify_input 4)。4 文は便 148 で司令塔へ写した(ここには書かない ― 採用は司令塔・送付は人間。**生成結果は監査済みの事実ではない**)。
+**機械で測っていないこと(条件 12)**: 因果・対象・条件・新規事実・自然さ。
+**観察(測定ではない)**: lead と p1.1 は同じ statement なのでほぼ同じ文(lead は packet の語「第一候補」、p1.1 は冊子の語「第 1 候補」)/ p1.2 に packet の局の id「g12」がそのまま(冊子の語なら「12 局目」。statement に在る字なので F-5 は捕まえない)/ p1.3 に群の名前がそのまま(notMeasured の注のとおり人間の読み)/ **入力トークンの実測(約 1,290)は実行前の見込み(約 285 = 字数 ÷ 3)の約 4.5 倍** ― 上限は実費の累計で守るので費用の守りは効いたが、「最大費用(実行前)」の入力の部分は過小(既知事項の候補・P-197 の隣。司令塔へ上げた)。指示文は変えていない(条件 5)。
+**停止。追加実行なし(条件 9)。Audit Core には接続しない(条件 13)。**
