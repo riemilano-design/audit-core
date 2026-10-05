@@ -1,0 +1,1626 @@
+{
+ "golden_master": "c5",
+ "base_commit": "29321ffad6c3db00dd77326d66ba99b0438e3b0b",
+ "note": "Audit Core T-1(docs/AUDIT_CORE_EXTRACTION_PLAN.md §5 G-2/G-8/G-9)。実物(scripts/playtest/out/c5)は git に無い。ここにあるのは入力の sha256・packet の封・門の判定・PDF の 3 つの数だけ。測り方・比べ方は scripts/playtest/goldenMasterCheck.ts(--expect で照合、--write で書き直し)。sha256 は「同じファイルか」を言うだけで、実行環境の決定論性を保証するものではない。PDF はバイト一致を求めない(/CreationDate が動く)― G-8 は compare_render.py --seal の意味比較。",
+ "inputs": {
+  "customer_dir": "scripts/playtest/out/c5",
+  "packet": "packet/observation-packet.json",
+  "request": "packet/observation-request.json",
+  "answer_selection": "exit/answer_selection.json",
+  "deliver_dir": "deliver1",
+  "work_dir": "pipe-3min",
+  "kifu_dir": "kifu-3min",
+  "person": "p2",
+  "time_limit_sec": 180,
+  "today": "2026-09-28",
+  "group_label": "3 分切れ負け",
+  "sent_pdf_dir": "deliver1_送付用/原本",
+  "sent_pdfs": [
+   "9_本編_本人用.pdf",
+   "9_本編_見本用.pdf",
+   "10_付録_数の出どころ.pdf",
+   "10_付録_表紙.pdf"
+  ],
+  "seat_runs_dir": "llm-seats",
+  "obs_items": "docs/OBSERVATION_ITEMS.md"
+ },
+ "identity": {
+  "docs/OBSERVATION_ITEMS.md": {
+   "sha256": "efafb50cf21ba95f133447f511e55c292dfa5568b87d262c753771640137d346",
+   "bytes": 56500
+  },
+  "scripts/playtest/out/c5/deliver1/10_付録_page_index.json": {
+   "sha256": "bb1ce6a736da7fcf0b004f89d8dd6dadbe79f24e96848297c95527e67f8df642",
+   "bytes": 2840
+  },
+  "scripts/playtest/out/c5/deliver1/10_付録_数の出どころ.pdf": {
+   "sha256": "330887a768a2d16003f6a29173d4c2b6745bc051f80821016c1d73aa04643247",
+   "bytes": 313263
+  },
+  "scripts/playtest/out/c5/deliver1/5_付録3_直接の答え.pdf": {
+   "sha256": "69e4e0a1e10af0bf848ba4edbe467db65c648612cb14fe74f5ebe6ec230fe0ed",
+   "bytes": 229704
+  },
+  "scripts/playtest/out/c5/deliver1/5_付録3_直接の答え_page_index.json": {
+   "sha256": "449fd60b3b2fb248da5f119b0bae8361953dadffb80e0cc3a173ccb2f49143a3",
+   "bytes": 1885
+  },
+  "scripts/playtest/out/c5/deliver1/9_本編.md": {
+   "sha256": "eb4c0b1e231e040f57db56cbe6fcca63145484cee560e6dad3af48f1eb9d7cbc",
+   "bytes": 9240
+  },
+  "scripts/playtest/out/c5/deliver1/9_本編_本人用.pdf": {
+   "sha256": "937ff883a55934aac0833c9b1172cbc456de5abc2ac6a9ee25b14a4391351efd",
+   "bytes": 134986
+  },
+  "scripts/playtest/out/c5/deliver1/9_本編_本人用_page_index.json": {
+   "sha256": "7de105e49af89253055eb413fa147289f4244c75a6c2decda457ac289920203b",
+   "bytes": 86
+  },
+  "scripts/playtest/out/c5/deliver1/9_本編_見本用.pdf": {
+   "sha256": "ae830c052746c93625c693406af3156c19011923605bb94810a5f002b4feacca",
+   "bytes": 131827
+  },
+  "scripts/playtest/out/c5/deliver1/direct/answer_menu.json": {
+   "sha256": "31d1109344d30c0b34c3e7e51acf18a7f568d9b51adabddcc948eeda3d5913c8",
+   "bytes": 3174
+  },
+  "scripts/playtest/out/c5/deliver1/direct/direct_answers.json": {
+   "sha256": "3bf64e8a2d1127a75f225a02b6da7ea4ecbe4a32de834ae43e3591564c0b5836",
+   "bytes": 99723
+  },
+  "scripts/playtest/out/c5/deliver1/direct/exit_candidates.json": {
+   "sha256": "4f60e3ff50d09cafe3d7d8425ac891b5d2a93842a5a96d6d07a22f4b0b216900",
+   "bytes": 17567
+  },
+  "scripts/playtest/out/c5/deliver1/direct/final_positions.json": {
+   "sha256": "dce80627a36883c6a57395178e5986228ccb73d08d05911cfcf87cdad4bb7653",
+   "bytes": 564
+  },
+  "scripts/playtest/out/c5/deliver1/direct/time_cause.json": {
+   "sha256": "8bb9461af1342b8f28a1d0770fb36b9562b8f77d21d4ebf66568d912e425a5d8",
+   "bytes": 70206
+  },
+  "scripts/playtest/out/c5/deliver1_送付用/原本/10_付録_数の出どころ.pdf": {
+   "sha256": "330887a768a2d16003f6a29173d4c2b6745bc051f80821016c1d73aa04643247",
+   "bytes": 313263
+  },
+  "scripts/playtest/out/c5/deliver1_送付用/原本/10_付録_表紙.pdf": {
+   "sha256": "c184b553f6240d09a374fbb84ec19966baa5bdc4a2c0fd8675c99913b3314a25",
+   "bytes": 62067
+  },
+  "scripts/playtest/out/c5/deliver1_送付用/原本/9_本編_本人用.pdf": {
+   "sha256": "937ff883a55934aac0833c9b1172cbc456de5abc2ac6a9ee25b14a4391351efd",
+   "bytes": 134986
+  },
+  "scripts/playtest/out/c5/deliver1_送付用/原本/9_本編_見本用.pdf": {
+   "sha256": "ae830c052746c93625c693406af3156c19011923605bb94810a5f002b4feacca",
+   "bytes": 131827
+  },
+  "scripts/playtest/out/c5/exit/answer_selection.json": {
+   "sha256": "2ba38c202080b11e02f9b26ad6bf8d20994093b231421b0b4c74d618b48cb83c",
+   "bytes": 4329
+  },
+  "scripts/playtest/out/c5/llm-seats/0f1b019e-20261001-1/integration.json": {
+   "sha256": "9748f1d5c1c4289fe968c46b632d708ace61033b9a841ad60df0e9c530d77816",
+   "bytes": 25538
+  },
+  "scripts/playtest/out/c5/llm-seats/0f1b019e-20261001-1/integration_input.json": {
+   "sha256": "1912c4dd2d5a6d4548abc1f8e910abad4d392555f473a49e2dfe385f0d88e13c",
+   "bytes": 27575
+  },
+  "scripts/playtest/out/c5/llm-seats/0f1b019e-20261001-1/seat_gpt.json": {
+   "sha256": "cf5b8c32f355f1652896ec24337eda2f47f55914483e7c8a5cf4ab9b0ed641c3",
+   "bytes": 24052
+  },
+  "scripts/playtest/out/c5/llm-seats/0f1b019e-20261001-1/seat_input.meta.json": {
+   "sha256": "bcf7e782d7a160c39bbbefae5ff3bea133c3a0e2b49c28c5fb863f2b66d45880",
+   "bytes": 4070
+  },
+  "scripts/playtest/out/c5/llm-seats/11ac8780-20261001-2/seat_input.meta.json": {
+   "sha256": "2b91a8506407b4b3093ec369e065eac39f61dba3b831d786816655d644e4dac4",
+   "bytes": 4075
+  },
+  "scripts/playtest/out/c5/llm-seats/268dac98-20260930-1/integration.json": {
+   "sha256": "7b0933d652a429d8112abc8b015832dbdda72ba016d9a721b3f69482cbfc5689",
+   "bytes": 42973
+  },
+  "scripts/playtest/out/c5/llm-seats/268dac98-20260930-1/integration_input.json": {
+   "sha256": "01e71e66cf7e3ce35f0d98d98af2ad88a00b618f01d40025222f6f7a59e3d2d8",
+   "bytes": 40357
+  },
+  "scripts/playtest/out/c5/llm-seats/268dac98-20260930-1/seat_claude.json": {
+   "sha256": "ff7e79844de496711e681b5cd8e1f33ac93d9802a9f8b3644f2ed04633d33b0c",
+   "bytes": 39933
+  },
+  "scripts/playtest/out/c5/llm-seats/268dac98-20260930-1/seat_input.meta.json": {
+   "sha256": "9d8fc179fc2aa1affaba07c6f5d72aef133a95c3d257f22dd81583c3b9966ad5",
+   "bytes": 3779
+  },
+  "scripts/playtest/out/c5/llm-seats/52ae3745-20261001-1/seat_claude.json": {
+   "sha256": "974e1383e19a2d7190cd64b92fff2022b323861c08c39d8c2cde64bf74e50f2e",
+   "bytes": 37140
+  },
+  "scripts/playtest/out/c5/llm-seats/52ae3745-20261001-1/seat_input.meta.json": {
+   "sha256": "ef55206193e3cc54ee86e3608f11952b19f3a9b216a21cde04d34f158a8b8dc4",
+   "bytes": 4075
+  },
+  "scripts/playtest/out/c5/llm-seats/558b8a81-20261001-2/integration.json": {
+   "sha256": "e312920690af341cda52ef7db12d21f45bbb2bab85fc573bf3fd492f19b78bf9",
+   "bytes": 54797
+  },
+  "scripts/playtest/out/c5/llm-seats/558b8a81-20261001-2/integration_input.json": {
+   "sha256": "d14d0d6e284f669bf42a14a73b2284b8dc48312db96062a83b3ad7a5ab7e3fe6",
+   "bytes": 59388
+  },
+  "scripts/playtest/out/c5/llm-seats/558b8a81-20261001-2/seat_claude.json": {
+   "sha256": "ff51c2cfc2eecbe58cb5eabb4f3f434ce60eece96a75f04de8c8c4977f7c2b93",
+   "bytes": 47181
+  },
+  "scripts/playtest/out/c5/llm-seats/558b8a81-20261001-2/seat_gpt.json": {
+   "sha256": "a559e8b75fb48709f4210513699890aad4fd2c052e01be1f9092727a19a64c83",
+   "bytes": 21561
+  },
+  "scripts/playtest/out/c5/llm-seats/558b8a81-20261001-2/seat_input.meta.json": {
+   "sha256": "ee2197deaebe246faa2f7daadd88349fe49eafa64b4c17731c9a30dad422f2fe",
+   "bytes": 4070
+  },
+  "scripts/playtest/out/c5/llm-seats/b3d860a7-20260930-1/seat_input.meta.json": {
+   "sha256": "48cd84e6695b021dc8b47c07cfddc7a7bc2508e8e03c4957300e9047d42f1be7",
+   "bytes": 3779
+  },
+  "scripts/playtest/out/c5/llm-seats/f37561e1-20260930-2/integration.json": {
+   "sha256": "ccfc719d6d5f359c90335fa1e54c52b6f8c929c8fb3522e3f22582b4e8c490a2",
+   "bytes": 43578
+  },
+  "scripts/playtest/out/c5/llm-seats/f37561e1-20260930-2/integration_input.json": {
+   "sha256": "f07012f21937abbd14b2896548e7af8ac40597a56c3a48ddd024c3a3364868c0",
+   "bytes": 42101
+  },
+  "scripts/playtest/out/c5/llm-seats/f37561e1-20260930-2/seat_claude.json": {
+   "sha256": "76191b95243caf1a174bc6c9d71211415129a2693c86d3663d6289ba92fefa35",
+   "bytes": 42333
+  },
+  "scripts/playtest/out/c5/llm-seats/f37561e1-20260930-2/seat_input.meta.json": {
+   "sha256": "31a86d0b9a7400bedb4958292b1636e0e361ddf2d7c1017f0de29a7516724b7b",
+   "bytes": 3779
+  },
+  "scripts/playtest/out/c5/packet/observation-packet.json": {
+   "sha256": "1c43582b568757613497b6fae9d5038b7a5f27c03baf2e81db209fbdc9a7fbc7",
+   "bytes": 1715395
+  },
+  "scripts/playtest/out/c5/packet/observation-request.json": {
+   "sha256": "bf047e065665387d2953b08293608935936716a136a925d1848a4b7f37750c7a",
+   "bytes": 626
+  },
+  "scripts/playtest/out/c5/pipe-3min/report/main_page_index.json": {
+   "sha256": "9b6ca69e2e2047644925e6b5d797dc4b5689a856537ef194a2b1502310d3bf6f",
+   "bytes": 609
+  },
+  "scripts/playtest/out/c5/pipe-3min/report/patient_report_data.json": {
+   "sha256": "7c5dfa08d64b8c0c31fdfb380bf49801c4275eb9fb93a39d0e9073827b7473c8",
+   "bytes": 104610
+  },
+  "scripts/playtest/out/c5/pipe-3min/report/prose.json": {
+   "sha256": "9c4a021efd23ad66e98c10e9032b997ee540c7694b00730a80d284d17d3e7578",
+   "bytes": 10132
+  },
+  "scripts/playtest/out/c5/pipe-3min/report/whatif.pdf": {
+   "sha256": "9e1294cbadae0fec075121eb6f4ca6a81f6717cc73511307ef1fd80469e34eea",
+   "bytes": 278519
+  },
+  "scripts/playtest/out/c5/pipe-3min/report/whatif_report_data.json": {
+   "sha256": "3029537264d53219888a9571b8808a35bdef728680d8aaf5d309215f3481680f",
+   "bytes": 89963
+  }
+ },
+ "packet": {
+  "packet_id": "22aee8fe696d0262",
+  "packet_id_recomputed": "22aee8fe696d0262",
+  "canonical_sha256": "22aee8fe696d0262f65a0f1ef05a2ed37019c1514b3744bfa7b3b3cc4e3ba9ad",
+  "canonical_bytes": 968310,
+  "file_sha256": "1c43582b568757613497b6fae9d5038b7a5f27c03baf2e81db209fbdc9a7fbc7",
+  "file_bytes": 1715395,
+  "problems": []
+ },
+ "seat_runs": [
+  {
+   "run_id": "0f1b019e-20261001-1",
+   "today": "2026-10-01",
+   "seat_files": [
+    "seat_gpt.json"
+   ],
+   "integration": true
+  },
+  {
+   "run_id": "11ac8780-20261001-2",
+   "today": "2026-10-01",
+   "seat_files": [],
+   "integration": false
+  },
+  {
+   "run_id": "268dac98-20260930-1",
+   "today": "2026-09-30",
+   "seat_files": [
+    "seat_claude.json"
+   ],
+   "integration": true
+  },
+  {
+   "run_id": "52ae3745-20261001-1",
+   "today": "2026-10-01",
+   "seat_files": [
+    "seat_claude.json"
+   ],
+   "integration": false
+  },
+  {
+   "run_id": "558b8a81-20261001-2",
+   "today": "2026-10-01",
+   "seat_files": [
+    "seat_claude.json",
+    "seat_gpt.json"
+   ],
+   "integration": true
+  },
+  {
+   "run_id": "b3d860a7-20260930-1",
+   "today": "2026-09-30",
+   "seat_files": [],
+   "integration": false
+  },
+  {
+   "run_id": "f37561e1-20260930-2",
+   "today": "2026-09-30",
+   "seat_files": [
+    "seat_claude.json"
+   ],
+   "integration": true
+  }
+ ],
+ "g9": {
+  "exit_gate": {
+   "status": "fail",
+   "return_code": 1,
+   "errors": [
+    "書き手の席がまだ終わっていません(直したら --from exit-gate で再開):",
+    "- (x) 問い「q1」の印が 0 件(ちょうど 1 件)"
+   ],
+   "warnings": [
+    "(報告)(xi) 本編に集計の印が 0 件(packet の集計は 26 行)"
+   ],
+   "stdout": []
+  },
+  "check_answer": {
+   "status": "pass",
+   "return_code": 0,
+   "errors": [],
+   "warnings": [],
+   "stdout": [
+    "通過(落ちた文なし)"
+   ]
+  },
+  "check_structure": {
+   "status": "fail",
+   "return_code": 1,
+   "errors": [
+    "落ちた項目 5 件:",
+    "- 用語「第 1 候補」の説明が 0 か所(ちょうど 1 か所)",
+    "- 用語「分かれ道」の説明が 0 か所(ちょうど 1 か所)",
+    "- 用語「自玉側」の説明が 0 か所(ちょうど 1 か所)",
+    "- 用語「一致率」の説明が 0 か所(ちょうど 1 か所)",
+    "- ⑧: お預かりした問いが 1 件あるのに節「お預かりした問い」が本編に無い"
+   ],
+   "warnings": [],
+   "stdout": []
+  },
+  "hypothesisCheck": {
+   "0f1b019e-20261001-1/seat_gpt.json": {
+    "status": "fail",
+    "return_code": 1,
+    "items": [
+     {
+      "hypothesis_id": "H-c5-gpt0f1b-001",
+      "lines": [
+       "schema ok",
+       "H-1 ok",
+       "H-2 ok",
+       "H-3 ok",
+       "H-4 ok",
+       "H-5 ok",
+       "H-6 ok",
+       "H-7 ok",
+       "H-8 ok",
+       "H-9 skip 未照合: packet が渡されていないので packetRef を照合していない(参照 4 件)",
+       "H-10 skip 未照合: packet が渡されていないので名前を照合していない",
+       "H-11 skip 未照合: packet が渡されていないので名前の段を見ていない"
+      ]
+     },
+     {
+      "hypothesis_id": "H-c5-gpt0f1b-002",
+      "lines": [
+       "schema ok",
+       "H-1 ok",
+       "H-2 ok",
+       "H-3 ok",
+       "H-4 ok",
+       "H-5 ok",
+       "H-6 ok",
+       "H-7 ok",
+       "H-8 ok",
+       "H-9 skip 未照合: packet が渡されていないので packetRef を照合していない(参照 4 件)",
+       "H-10 skip 未照合: packet が渡されていないので名前を照合していない",
+       "H-11 skip 未照合: packet が渡されていないので名前の段を見ていない"
+      ]
+     },
+     {
+      "hypothesis_id": "H-c5-gpt0f1b-003",
+      "lines": [
+       "schema ok",
+       "H-1 ok",
+       "H-2 ok",
+       "H-3 ok",
+       "H-4 ok",
+       "H-5 ok",
+       "H-6 ok",
+       "H-7 ok",
+       "H-8 ok",
+       "H-9 skip 未照合: packet が渡されていないので packetRef を照合していない(参照 4 件)",
+       "H-10 skip 未照合: packet が渡されていないので名前を照合していない",
+       "H-11 skip 未照合: packet が渡されていないので名前の段を見ていない"
+      ]
+     },
+     {
+      "hypothesis_id": "H-c5-gpt0f1b-004",
+      "lines": [
+       "schema ok",
+       "H-1 ok",
+       "H-2 ok",
+       "H-3 ok",
+       "H-4 ok",
+       "H-5 ok",
+       "H-6 ok",
+       "H-7 ok",
+       "H-8 ok",
+       "H-9 skip 未照合: packet が渡されていないので packetRef を照合していない(参照 6 件)",
+       "H-10 skip 未照合: packet が渡されていないので名前を照合していない",
+       "H-11 skip 未照合: packet が渡されていないので名前の段を見ていない"
+      ]
+     },
+     {
+      "hypothesis_id": "H-c5-gpt0f1b-005",
+      "lines": [
+       "schema ok",
+       "H-1 ok",
+       "H-2 ok",
+       "H-3 ok",
+       "H-4 ok",
+       "H-5 ok",
+       "H-6 ok",
+       "H-7 ok",
+       "H-8 ok",
+       "H-9 skip 未照合: packet が渡されていないので packetRef を照合していない(参照 3 件)",
+       "H-10 skip 未照合: packet が渡されていないので名前を照合していない",
+       "H-11 skip 未照合: packet が渡されていないので名前の段を見ていない"
+      ]
+     },
+     {
+      "hypothesis_id": "H-c5-gpt0f1b-006",
+      "lines": [
+       "schema ok",
+       "H-1 ok",
+       "H-2 ok",
+       "H-3 NG counterEvidence.attempted が true でない",
+       "H-4 ok",
+       "H-5 ok",
+       "H-6 ok",
+       "H-7 ok",
+       "H-8 ok",
+       "H-9 skip 未照合: packet が渡されていないので packetRef を照合していない(参照 1 件)",
+       "H-10 skip 未照合: packet が渡されていないので名前を照合していない",
+       "H-11 skip 未照合: packet が渡されていないので名前の段を見ていない"
+      ]
+     },
+     {
+      "hypothesis_id": "H-c5-gpt0f1b-007",
+      "lines": [
+       "schema ok",
+       "H-1 ok",
+       "H-2 ok",
+       "H-3 ok",
+       "H-4 ok",
+       "H-5 NG statement が「という読みです」「可能性があります」の形でない",
+       "H-6 ok",
+       "H-7 ok",
+       "H-8 ok",
+       "H-9 skip 未照合: packet が渡されていないので packetRef を照合していない(参照 1 件)",
+       "H-10 skip 未照合: packet が渡されていないので名前を照合していない",
+       "H-11 skip 未照合: packet が渡されていないので名前の段を見ていない"
+      ]
+     }
+    ]
+   },
+   "268dac98-20260930-1/seat_claude.json": {
+    "status": "fail",
+    "return_code": 1,
+    "items": [
+     {
+      "hypothesis_id": "H-c5-claude268d-001",
+      "lines": [
+       "schema ok",
+       "H-1 ok",
+       "H-2 ok",
+       "H-3 NG items があるのに counterEvidence.result が \"none_found\"",
+       "H-4 ok",
+       "H-5 ok",
+       "H-6 ok",
+       "H-7 ok",
+       "H-8 ok",
+       "H-9 skip 未照合: packet が渡されていないので packetRef を照合していない(参照 3 件)",
+       "H-10 skip 未照合: packet が渡されていないので名前を照合していない",
+       "H-11 skip 未照合: packet が渡されていないので名前の段を見ていない"
+      ]
+     },
+     {
+      "hypothesis_id": "H-c5-claude268d-002",
+      "lines": [
+       "schema ok",
+       "H-1 ok",
+       "H-2 ok",
+       "H-3 ok",
+       "H-4 ok",
+       "H-5 ok",
+       "H-6 ok",
+       "H-7 ok",
+       "H-8 ok",
+       "H-9 skip 未照合: packet が渡されていないので packetRef を照合していない(参照 3 件)",
+       "H-10 skip 未照合: packet が渡されていないので名前を照合していない",
+       "H-11 skip 未照合: packet が渡されていないので名前の段を見ていない"
+      ]
+     },
+     {
+      "hypothesis_id": "H-c5-claude268d-003",
+      "lines": [
+       "schema ok",
+       "H-1 ok",
+       "H-2 ok",
+       "H-3 ok",
+       "H-4 ok",
+       "H-5 ok",
+       "H-6 ok",
+       "H-7 ok",
+       "H-8 ok",
+       "H-9 skip 未照合: packet が渡されていないので packetRef を照合していない(参照 6 件)",
+       "H-10 skip 未照合: packet が渡されていないので名前を照合していない",
+       "H-11 skip 未照合: packet が渡されていないので名前の段を見ていない"
+      ]
+     },
+     {
+      "hypothesis_id": "H-c5-claude268d-004",
+      "lines": [
+       "schema ok",
+       "H-1 ok",
+       "H-2 ok",
+       "H-3 ok",
+       "H-4 ok",
+       "H-5 ok",
+       "H-6 ok",
+       "H-7 ok",
+       "H-8 ok",
+       "H-9 skip 未照合: packet が渡されていないので packetRef を照合していない(参照 4 件)",
+       "H-10 skip 未照合: packet が渡されていないので名前を照合していない",
+       "H-11 skip 未照合: packet が渡されていないので名前の段を見ていない"
+      ]
+     },
+     {
+      "hypothesis_id": "H-c5-claude268d-005",
+      "lines": [
+       "schema ok",
+       "H-1 NG statement: 数「5」が observations の値に無い",
+       "H-2 ok",
+       "H-3 NG items があるのに counterEvidence.result が \"none_found\"",
+       "H-4 ok",
+       "H-5 ok",
+       "H-6 ok",
+       "H-7 ok",
+       "H-8 ok",
+       "H-9 skip 未照合: packet が渡されていないので packetRef を照合していない(参照 5 件)",
+       "H-10 skip 未照合: packet が渡されていないので名前を照合していない",
+       "H-11 skip 未照合: packet が渡されていないので名前の段を見ていない"
+      ]
+     },
+     {
+      "hypothesis_id": "H-c5-claude268d-006",
+      "lines": [
+       "schema ok",
+       "H-1 ok",
+       "H-2 ok",
+       "H-3 NG items があるのに counterEvidence.result が \"none_found\"",
+       "H-4 ok",
+       "H-5 ok",
+       "H-6 ok",
+       "H-7 ok",
+       "H-8 ok",
+       "H-9 skip 未照合: packet が渡されていないので packetRef を照合していない(参照 3 件)",
+       "H-10 skip 未照合: packet が渡されていないので名前を照合していない",
+       "H-11 skip 未照合: packet が渡されていないので名前の段を見ていない"
+      ]
+     },
+     {
+      "hypothesis_id": "H-c5-claude268d-007",
+      "lines": [
+       "schema ok",
+       "H-1 NG statement: 数「10」が observations の値に無い / counterEvidence.items[0].text: 数「0」が observations の値に無い / counterEvidence.items[0].text: 数「1」が observations の値に無い",
+       "H-2 ok",
+       "H-3 ok",
+       "H-4 ok",
+       "H-5 ok",
+       "H-6 ok",
+       "H-7 ok",
+       "H-8 ok",
+       "H-9 skip 未照合: packet が渡されていないので packetRef を照合していない(参照 3 件)",
+       "H-10 skip 未照合: packet が渡されていないので名前を照合していない",
+       "H-11 skip 未照合: packet が渡されていないので名前の段を見ていない"
+      ]
+     },
+     {
+      "hypothesis_id": "H-c5-claude268d-008",
+      "lines": [
+       "schema ok",
+       "H-1 ok",
+       "H-2 ok",
+       "H-3 NG items があるのに counterEvidence.result が \"none_found\"",
+       "H-4 ok",
+       "H-5 ok",
+       "H-6 ok",
+       "H-7 ok",
+       "H-8 ok",
+       "H-9 skip 未照合: packet が渡されていないので packetRef を照合していない(参照 6 件)",
+       "H-10 skip 未照合: packet が渡されていないので名前を照合していない",
+       "H-11 skip 未照合: packet が渡されていないので名前の段を見ていない"
+      ]
+     },
+     {
+      "hypothesis_id": "H-c5-claude268d-009",
+      "lines": [
+       "schema ok",
+       "H-1 ok",
+       "H-2 ok",
+       "H-3 ok",
+       "H-4 ok",
+       "H-5 ok",
+       "H-6 ok",
+       "H-7 ok",
+       "H-8 ok",
+       "H-9 skip 未照合: packet が渡されていないので packetRef を照合していない(参照 2 件)",
+       "H-10 skip 未照合: packet が渡されていないので名前を照合していない",
+       "H-11 skip 未照合: packet が渡されていないので名前の段を見ていない"
+      ]
+     },
+     {
+      "hypothesis_id": "H-c5-claude268d-010",
+      "lines": [
+       "schema ok",
+       "H-1 ok",
+       "H-2 ok",
+       "H-3 ok",
+       "H-4 ok",
+       "H-5 ok",
+       "H-6 ok",
+       "H-7 ok",
+       "H-8 ok",
+       "H-9 skip 未照合: packet が渡されていないので packetRef を照合していない(参照 1 件)",
+       "H-10 skip 未照合: packet が渡されていないので名前を照合していない",
+       "H-11 skip 未照合: packet が渡されていないので名前の段を見ていない"
+      ]
+     },
+     {
+      "hypothesis_id": "H-c5-claude268d-011",
+      "lines": [
+       "schema ok",
+       "H-1 NG statement: 数「1」が observations の値に無い / statement: 数「12」が observations の値に無い / counterEvidence.items[0].text: 数「18」が observations の値に無い",
+       "H-2 ok",
+       "H-3 ok",
+       "H-4 ok",
+       "H-5 ok",
+       "H-6 ok",
+       "H-7 ok",
+       "H-8 ok",
+       "H-9 skip 未照合: packet が渡されていないので packetRef を照合していない(参照 3 件)",
+       "H-10 skip 未照合: packet が渡されていないので名前を照合していない",
+       "H-11 skip 未照合: packet が渡されていないので名前の段を見ていない"
+      ]
+     }
+    ]
+   },
+   "52ae3745-20261001-1/seat_claude.json": {
+    "status": "fail",
+    "return_code": 1,
+    "items": [
+     {
+      "hypothesis_id": "H-c5-claude52ae-001",
+      "lines": [
+       "schema ok",
+       "H-1 NG counterEvidence.items[0].text: 数「25」が observations の値に無い",
+       "H-2 ok",
+       "H-3 NG items があるのに counterEvidence.result が \"none_found\"",
+       "H-4 ok",
+       "H-5 ok",
+       "H-6 ok",
+       "H-7 ok",
+       "H-8 ok",
+       "H-9 skip 未照合: packet が渡されていないので packetRef を照合していない(参照 3 件)",
+       "H-10 skip 未照合: packet が渡されていないので名前を照合していない",
+       "H-11 skip 未照合: packet が渡されていないので名前の段を見ていない"
+      ]
+     },
+     {
+      "hypothesis_id": "H-c5-claude52ae-002",
+      "lines": [
+       "schema ok",
+       "H-1 ok",
+       "H-2 ok",
+       "H-3 ok",
+       "H-4 ok",
+       "H-5 ok",
+       "H-6 ok",
+       "H-7 ok",
+       "H-8 ok",
+       "H-9 skip 未照合: packet が渡されていないので packetRef を照合していない(参照 4 件)",
+       "H-10 skip 未照合: packet が渡されていないので名前を照合していない",
+       "H-11 skip 未照合: packet が渡されていないので名前の段を見ていない"
+      ]
+     },
+     {
+      "hypothesis_id": "H-c5-claude52ae-003",
+      "lines": [
+       "schema ok",
+       "H-1 NG counterEvidence.items[0].text: 数「1」が observations の値に無い",
+       "H-2 ok",
+       "H-3 ok",
+       "H-4 ok",
+       "H-5 ok",
+       "H-6 ok",
+       "H-7 ok",
+       "H-8 ok",
+       "H-9 skip 未照合: packet が渡されていないので packetRef を照合していない(参照 8 件)",
+       "H-10 skip 未照合: packet が渡されていないので名前を照合していない",
+       "H-11 skip 未照合: packet が渡されていないので名前の段を見ていない"
+      ]
+     },
+     {
+      "hypothesis_id": "H-c5-claude52ae-004",
+      "lines": [
+       "schema ok",
+       "H-1 ok",
+       "H-2 ok",
+       "H-3 ok",
+       "H-4 ok",
+       "H-5 ok",
+       "H-6 ok",
+       "H-7 ok",
+       "H-8 ok",
+       "H-9 skip 未照合: packet が渡されていないので packetRef を照合していない(参照 4 件)",
+       "H-10 skip 未照合: packet が渡されていないので名前を照合していない",
+       "H-11 skip 未照合: packet が渡されていないので名前の段を見ていない"
+      ]
+     },
+     {
+      "hypothesis_id": "H-c5-claude52ae-005",
+      "lines": [
+       "schema ok",
+       "H-1 ok",
+       "H-2 ok",
+       "H-3 NG items があるのに counterEvidence.result が \"none_found\"",
+       "H-4 ok",
+       "H-5 ok",
+       "H-6 ok",
+       "H-7 ok",
+       "H-8 ok",
+       "H-9 skip 未照合: packet が渡されていないので packetRef を照合していない(参照 3 件)",
+       "H-10 skip 未照合: packet が渡されていないので名前を照合していない",
+       "H-11 skip 未照合: packet が渡されていないので名前の段を見ていない"
+      ]
+     },
+     {
+      "hypothesis_id": "H-c5-claude52ae-006",
+      "lines": [
+       "schema ok",
+       "H-1 ok",
+       "H-2 ok",
+       "H-3 NG items があるのに counterEvidence.result が \"none_found\"",
+       "H-4 ok",
+       "H-5 ok",
+       "H-6 ok",
+       "H-7 ok",
+       "H-8 ok",
+       "H-9 skip 未照合: packet が渡されていないので packetRef を照合していない(参照 6 件)",
+       "H-10 skip 未照合: packet が渡されていないので名前を照合していない",
+       "H-11 skip 未照合: packet が渡されていないので名前の段を見ていない"
+      ]
+     },
+     {
+      "hypothesis_id": "H-c5-claude52ae-007",
+      "lines": [
+       "schema ok",
+       "H-1 NG statement: 数「10」が observations の値に無い / statement: 数「10」が observations の値に無い",
+       "H-2 ok",
+       "H-3 NG items があるのに counterEvidence.result が \"none_found\"",
+       "H-4 ok",
+       "H-5 ok",
+       "H-6 ok",
+       "H-7 ok",
+       "H-8 ok",
+       "H-9 skip 未照合: packet が渡されていないので packetRef を照合していない(参照 3 件)",
+       "H-10 skip 未照合: packet が渡されていないので名前を照合していない",
+       "H-11 skip 未照合: packet が渡されていないので名前の段を見ていない"
+      ]
+     },
+     {
+      "hypothesis_id": "H-c5-claude52ae-008",
+      "lines": [
+       "schema ok",
+       "H-1 ok",
+       "H-2 ok",
+       "H-3 NG items があるのに counterEvidence.result が \"none_found\"",
+       "H-4 ok",
+       "H-5 ok",
+       "H-6 ok",
+       "H-7 ok",
+       "H-8 ok",
+       "H-9 skip 未照合: packet が渡されていないので packetRef を照合していない(参照 4 件)",
+       "H-10 skip 未照合: packet が渡されていないので名前を照合していない",
+       "H-11 skip 未照合: packet が渡されていないので名前の段を見ていない"
+      ]
+     },
+     {
+      "hypothesis_id": "H-c5-claude52ae-009",
+      "lines": [
+       "schema ok",
+       "H-1 ok",
+       "H-2 ok",
+       "H-3 ok",
+       "H-4 ok",
+       "H-5 ok",
+       "H-6 ok",
+       "H-7 ok",
+       "H-8 ok",
+       "H-9 skip 未照合: packet が渡されていないので packetRef を照合していない(参照 4 件)",
+       "H-10 skip 未照合: packet が渡されていないので名前を照合していない",
+       "H-11 skip 未照合: packet が渡されていないので名前の段を見ていない"
+      ]
+     },
+     {
+      "hypothesis_id": "H-c5-claude52ae-010",
+      "lines": [
+       "schema ok",
+       "H-1 ok",
+       "H-2 ok",
+       "H-3 NG counterEvidence.attempted が true でない",
+       "H-4 ok",
+       "H-5 ok",
+       "H-6 ok",
+       "H-7 ok",
+       "H-8 ok",
+       "H-9 skip 未照合: packet が渡されていないので packetRef を照合していない(参照 2 件)",
+       "H-10 skip 未照合: packet が渡されていないので名前を照合していない",
+       "H-11 skip 未照合: packet が渡されていないので名前の段を見ていない"
+      ]
+     }
+    ]
+   },
+   "558b8a81-20261001-2/seat_claude.json": {
+    "status": "fail",
+    "return_code": 1,
+    "items": [
+     {
+      "hypothesis_id": "H-c5-claude558b-001",
+      "lines": [
+       "schema ok",
+       "H-1 NG counterEvidence.items[0].text: 数「25」が observations の値に無い",
+       "H-2 ok",
+       "H-3 NG items があるのに counterEvidence.result が \"none_found\"",
+       "H-4 ok",
+       "H-5 ok",
+       "H-6 ok",
+       "H-7 ok",
+       "H-8 ok",
+       "H-9 skip 未照合: packet が渡されていないので packetRef を照合していない(参照 3 件)",
+       "H-10 skip 未照合: packet が渡されていないので名前を照合していない",
+       "H-11 skip 未照合: packet が渡されていないので名前の段を見ていない"
+      ]
+     },
+     {
+      "hypothesis_id": "H-c5-claude558b-002",
+      "lines": [
+       "schema ok",
+       "H-1 NG counterEvidence.items[0].text: 数「3」が observations の値に無い",
+       "H-2 ok",
+       "H-3 ok",
+       "H-4 ok",
+       "H-5 ok",
+       "H-6 ok",
+       "H-7 ok",
+       "H-8 ok",
+       "H-9 skip 未照合: packet が渡されていないので packetRef を照合していない(参照 4 件)",
+       "H-10 skip 未照合: packet が渡されていないので名前を照合していない",
+       "H-11 skip 未照合: packet が渡されていないので名前の段を見ていない"
+      ]
+     },
+     {
+      "hypothesis_id": "H-c5-claude558b-003",
+      "lines": [
+       "schema ok",
+       "H-1 ok",
+       "H-2 ok",
+       "H-3 ok",
+       "H-4 ok",
+       "H-5 ok",
+       "H-6 ok",
+       "H-7 ok",
+       "H-8 ok",
+       "H-9 skip 未照合: packet が渡されていないので packetRef を照合していない(参照 8 件)",
+       "H-10 skip 未照合: packet が渡されていないので名前を照合していない",
+       "H-11 skip 未照合: packet が渡されていないので名前の段を見ていない"
+      ]
+     },
+     {
+      "hypothesis_id": "H-c5-claude558b-004",
+      "lines": [
+       "schema ok",
+       "H-1 NG statement: 数「5」が observations の値に無い",
+       "H-2 ok",
+       "H-3 ok",
+       "H-4 ok",
+       "H-5 ok",
+       "H-6 ok",
+       "H-7 ok",
+       "H-8 ok",
+       "H-9 skip 未照合: packet が渡されていないので packetRef を照合していない(参照 6 件)",
+       "H-10 skip 未照合: packet が渡されていないので名前を照合していない",
+       "H-11 skip 未照合: packet が渡されていないので名前の段を見ていない"
+      ]
+     },
+     {
+      "hypothesis_id": "H-c5-claude558b-005",
+      "lines": [
+       "schema ok",
+       "H-1 NG counterEvidence.items[1].text: 数「25」が observations の値に無い",
+       "H-2 ok",
+       "H-3 ok",
+       "H-4 ok",
+       "H-5 ok",
+       "H-6 ok",
+       "H-7 ok",
+       "H-8 ok",
+       "H-9 skip 未照合: packet が渡されていないので packetRef を照合していない(参照 4 件)",
+       "H-10 skip 未照合: packet が渡されていないので名前を照合していない",
+       "H-11 skip 未照合: packet が渡されていないので名前の段を見ていない"
+      ]
+     },
+     {
+      "hypothesis_id": "H-c5-claude558b-006",
+      "lines": [
+       "schema ok",
+       "H-1 ok",
+       "H-2 ok",
+       "H-3 NG items があるのに counterEvidence.result が \"none_found\"",
+       "H-4 ok",
+       "H-5 ok",
+       "H-6 ok",
+       "H-7 ok",
+       "H-8 ok",
+       "H-9 skip 未照合: packet が渡されていないので packetRef を照合していない(参照 3 件)",
+       "H-10 skip 未照合: packet が渡されていないので名前を照合していない",
+       "H-11 skip 未照合: packet が渡されていないので名前の段を見ていない"
+      ]
+     },
+     {
+      "hypothesis_id": "H-c5-claude558b-007",
+      "lines": [
+       "schema ok",
+       "H-1 ok",
+       "H-2 ok",
+       "H-3 ok",
+       "H-4 ok",
+       "H-5 ok",
+       "H-6 ok",
+       "H-7 ok",
+       "H-8 ok",
+       "H-9 skip 未照合: packet が渡されていないので packetRef を照合していない(参照 6 件)",
+       "H-10 skip 未照合: packet が渡されていないので名前を照合していない",
+       "H-11 skip 未照合: packet が渡されていないので名前の段を見ていない"
+      ]
+     },
+     {
+      "hypothesis_id": "H-c5-claude558b-008",
+      "lines": [
+       "schema ok",
+       "H-1 NG statement: 数「10」が observations の値に無い / statement: 数「12」が observations の値に無い / statement: 数「1」が observations の値に無い / counterEvidence.items[0].text: 数「12」が observations の値に無い / counterEvidence.items[0].text: 数「18」が observations の値に無い / counterEvidence.items[0].text: 数「20」が observations の値に無い",
+       "H-2 ok",
+       "H-3 ok",
+       "H-4 ok",
+       "H-5 ok",
+       "H-6 ok",
+       "H-7 ok",
+       "H-8 ok",
+       "H-9 skip 未照合: packet が渡されていないので packetRef を照合していない(参照 5 件)",
+       "H-10 skip 未照合: packet が渡されていないので名前を照合していない",
+       "H-11 skip 未照合: packet が渡されていないので名前の段を見ていない"
+      ]
+     },
+     {
+      "hypothesis_id": "H-c5-claude558b-009",
+      "lines": [
+       "schema ok",
+       "H-1 ok",
+       "H-2 ok",
+       "H-3 ok",
+       "H-4 ok",
+       "H-5 ok",
+       "H-6 ok",
+       "H-7 ok",
+       "H-8 ok",
+       "H-9 skip 未照合: packet が渡されていないので packetRef を照合していない(参照 2 件)",
+       "H-10 skip 未照合: packet が渡されていないので名前を照合していない",
+       "H-11 skip 未照合: packet が渡されていないので名前の段を見ていない"
+      ]
+     },
+     {
+      "hypothesis_id": "H-c5-claude558b-010",
+      "lines": [
+       "schema ok",
+       "H-1 ok",
+       "H-2 ok",
+       "H-3 ok",
+       "H-4 ok",
+       "H-5 ok",
+       "H-6 ok",
+       "H-7 ok",
+       "H-8 ok",
+       "H-9 skip 未照合: packet が渡されていないので packetRef を照合していない(参照 2 件)",
+       "H-10 skip 未照合: packet が渡されていないので名前を照合していない",
+       "H-11 skip 未照合: packet が渡されていないので名前の段を見ていない"
+      ]
+     },
+     {
+      "hypothesis_id": "H-c5-claude558b-011",
+      "lines": [
+       "schema ok",
+       "H-1 NG statement: 数「25」が observations の値に無い / counterEvidence.items[0].text: 数「3」が observations の値に無い",
+       "H-2 NG counterEvidence.items[0].observations[0]: packetRef.path「provenance.inputs[4].path」が文法(aggregates.<id>.numerator|denominator|value / facts.<列>[添字].欄名)に合わない",
+       "H-3 ok",
+       "H-4 ok",
+       "H-5 ok",
+       "H-6 ok",
+       "H-7 ok",
+       "H-8 ok",
+       "H-9 skip 未照合: packet が渡されていないので packetRef を照合していない(参照 2 件)",
+       "H-10 skip 未照合: packet が渡されていないので名前を照合していない",
+       "H-11 skip 未照合: packet が渡されていないので名前の段を見ていない"
+      ]
+     },
+     {
+      "hypothesis_id": "H-c5-claude558b-012",
+      "lines": [
+       "schema ok",
+       "H-1 ok",
+       "H-2 ok",
+       "H-3 ok",
+       "H-4 ok",
+       "H-5 ok",
+       "H-6 ok",
+       "H-7 ok",
+       "H-8 ok",
+       "H-9 skip 未照合: packet が渡されていないので packetRef を照合していない(参照 6 件)",
+       "H-10 skip 未照合: packet が渡されていないので名前を照合していない",
+       "H-11 skip 未照合: packet が渡されていないので名前の段を見ていない"
+      ]
+     }
+    ]
+   },
+   "558b8a81-20261001-2/seat_gpt.json": {
+    "status": "fail",
+    "return_code": 1,
+    "items": [
+     {
+      "hypothesis_id": "H-c5-gpt558b-001",
+      "lines": [
+       "schema ok",
+       "H-1 ok",
+       "H-2 ok",
+       "H-3 ok",
+       "H-4 ok",
+       "H-5 ok",
+       "H-6 ok",
+       "H-7 ok",
+       "H-8 ok",
+       "H-9 skip 未照合: packet が渡されていないので packetRef を照合していない(参照 3 件)",
+       "H-10 skip 未照合: packet が渡されていないので名前を照合していない",
+       "H-11 skip 未照合: packet が渡されていないので名前の段を見ていない"
+      ]
+     },
+     {
+      "hypothesis_id": "H-c5-gpt558b-002",
+      "lines": [
+       "schema ok",
+       "H-1 ok",
+       "H-2 ok",
+       "H-3 ok",
+       "H-4 ok",
+       "H-5 ok",
+       "H-6 ok",
+       "H-7 ok",
+       "H-8 ok",
+       "H-9 skip 未照合: packet が渡されていないので packetRef を照合していない(参照 3 件)",
+       "H-10 skip 未照合: packet が渡されていないので名前を照合していない",
+       "H-11 skip 未照合: packet が渡されていないので名前の段を見ていない"
+      ]
+     },
+     {
+      "hypothesis_id": "H-c5-gpt558b-003",
+      "lines": [
+       "schema ok",
+       "H-1 ok",
+       "H-2 ok",
+       "H-3 ok",
+       "H-4 ok",
+       "H-5 ok",
+       "H-6 ok",
+       "H-7 ok",
+       "H-8 ok",
+       "H-9 skip 未照合: packet が渡されていないので packetRef を照合していない(参照 6 件)",
+       "H-10 skip 未照合: packet が渡されていないので名前を照合していない",
+       "H-11 skip 未照合: packet が渡されていないので名前の段を見ていない"
+      ]
+     },
+     {
+      "hypothesis_id": "H-c5-gpt558b-004",
+      "lines": [
+       "schema ok",
+       "H-1 ok",
+       "H-2 ok",
+       "H-3 ok",
+       "H-4 ok",
+       "H-5 ok",
+       "H-6 ok",
+       "H-7 ok",
+       "H-8 ok",
+       "H-9 skip 未照合: packet が渡されていないので packetRef を照合していない(参照 4 件)",
+       "H-10 skip 未照合: packet が渡されていないので名前を照合していない",
+       "H-11 skip 未照合: packet が渡されていないので名前の段を見ていない"
+      ]
+     },
+     {
+      "hypothesis_id": "H-c5-gpt558b-005",
+      "lines": [
+       "schema ok",
+       "H-1 ok",
+       "H-2 ok",
+       "H-3 NG items があるのに counterEvidence.result が \"none_found\"",
+       "H-4 ok",
+       "H-5 ok",
+       "H-6 ok",
+       "H-7 ok",
+       "H-8 ok",
+       "H-9 skip 未照合: packet が渡されていないので packetRef を照合していない(参照 2 件)",
+       "H-10 skip 未照合: packet が渡されていないので名前を照合していない",
+       "H-11 skip 未照合: packet が渡されていないので名前の段を見ていない"
+      ]
+     },
+     {
+      "hypothesis_id": "H-c5-gpt558b-006",
+      "lines": [
+       "schema ok",
+       "H-1 ok",
+       "H-2 ok",
+       "H-3 NG counterEvidence.attempted が true でない",
+       "H-4 ok",
+       "H-5 NG statement が「という読みです」「可能性があります」の形でない",
+       "H-6 ok",
+       "H-7 ok",
+       "H-8 ok",
+       "H-9 skip 未照合: packet が渡されていないので packetRef を照合していない(参照 1 件)",
+       "H-10 skip 未照合: packet が渡されていないので名前を照合していない",
+       "H-11 skip 未照合: packet が渡されていないので名前の段を見ていない"
+      ]
+     },
+     {
+      "hypothesis_id": "H-c5-gpt558b-007",
+      "lines": [
+       "schema ok",
+       "H-1 ok",
+       "H-2 ok",
+       "H-3 NG counterEvidence.attempted が true でない",
+       "H-4 ok",
+       "H-5 NG statement が「という読みです」「可能性があります」の形でない",
+       "H-6 ok",
+       "H-7 ok",
+       "H-8 ok",
+       "H-9 skip 未照合: packet が渡されていないので packetRef を照合していない(参照 1 件)",
+       "H-10 skip 未照合: packet が渡されていないので名前を照合していない",
+       "H-11 skip 未照合: packet が渡されていないので名前の段を見ていない"
+      ]
+     }
+    ]
+   },
+   "f37561e1-20260930-2/seat_claude.json": {
+    "status": "fail",
+    "return_code": 1,
+    "items": [
+     {
+      "hypothesis_id": "H-c5-claudef375-001",
+      "lines": [
+       "schema ok",
+       "H-1 NG counterEvidence.items[0].text: 数「25」が observations の値に無い",
+       "H-2 ok",
+       "H-3 ok",
+       "H-4 ok",
+       "H-5 ok",
+       "H-6 ok",
+       "H-7 ok",
+       "H-8 ok",
+       "H-9 skip 未照合: packet が渡されていないので packetRef を照合していない(参照 3 件)",
+       "H-10 skip 未照合: packet が渡されていないので名前を照合していない",
+       "H-11 skip 未照合: packet が渡されていないので名前の段を見ていない"
+      ]
+     },
+     {
+      "hypothesis_id": "H-c5-claudef375-002",
+      "lines": [
+       "schema ok",
+       "H-1 ok",
+       "H-2 ok",
+       "H-3 ok",
+       "H-4 ok",
+       "H-5 ok",
+       "H-6 ok",
+       "H-7 ok",
+       "H-8 ok",
+       "H-9 skip 未照合: packet が渡されていないので packetRef を照合していない(参照 4 件)",
+       "H-10 skip 未照合: packet が渡されていないので名前を照合していない",
+       "H-11 skip 未照合: packet が渡されていないので名前の段を見ていない"
+      ]
+     },
+     {
+      "hypothesis_id": "H-c5-claudef375-003",
+      "lines": [
+       "schema ok",
+       "H-1 ok",
+       "H-2 ok",
+       "H-3 ok",
+       "H-4 ok",
+       "H-5 ok",
+       "H-6 ok",
+       "H-7 ok",
+       "H-8 ok",
+       "H-9 skip 未照合: packet が渡されていないので packetRef を照合していない(参照 6 件)",
+       "H-10 skip 未照合: packet が渡されていないので名前を照合していない",
+       "H-11 skip 未照合: packet が渡されていないので名前の段を見ていない"
+      ]
+     },
+     {
+      "hypothesis_id": "H-c5-claudef375-004",
+      "lines": [
+       "schema ok",
+       "H-1 ok",
+       "H-2 ok",
+       "H-3 ok",
+       "H-4 ok",
+       "H-5 ok",
+       "H-6 ok",
+       "H-7 ok",
+       "H-8 ok",
+       "H-9 skip 未照合: packet が渡されていないので packetRef を照合していない(参照 4 件)",
+       "H-10 skip 未照合: packet が渡されていないので名前を照合していない",
+       "H-11 skip 未照合: packet が渡されていないので名前の段を見ていない"
+      ]
+     },
+     {
+      "hypothesis_id": "H-c5-claudef375-005",
+      "lines": [
+       "schema ok",
+       "H-1 NG statement: 数「5」が observations の値に無い / statement: 数「4」が observations の値に無い / counterEvidence.items[0].text: 数「3」が observations の値に無い / counterEvidence.items[0].text: 数「4」が observations の値に無い",
+       "H-2 ok",
+       "H-3 ok",
+       "H-4 ok",
+       "H-5 ok",
+       "H-6 ok",
+       "H-7 ok",
+       "H-8 ok",
+       "H-9 skip 未照合: packet が渡されていないので packetRef を照合していない(参照 4 件)",
+       "H-10 skip 未照合: packet が渡されていないので名前を照合していない",
+       "H-11 skip 未照合: packet が渡されていないので名前の段を見ていない"
+      ]
+     },
+     {
+      "hypothesis_id": "H-c5-claudef375-006",
+      "lines": [
+       "schema ok",
+       "H-1 NG statement: 数「10」が observations の値に無い / counterEvidence.items[0].text: 数「04」が observations の値に無い / counterEvidence.items[0].text: 数「10」が observations の値に無い / counterEvidence.items[0].text: 数「21」が observations の値に無い / counterEvidence.items[0].text: 数「18」が observations の値に無い",
+       "H-2 ok",
+       "H-3 ok",
+       "H-4 ok",
+       "H-5 ok",
+       "H-6 ok",
+       "H-7 ok",
+       "H-8 ok",
+       "H-9 skip 未照合: packet が渡されていないので packetRef を照合していない(参照 3 件)",
+       "H-10 skip 未照合: packet が渡されていないので名前を照合していない",
+       "H-11 skip 未照合: packet が渡されていないので名前の段を見ていない"
+      ]
+     },
+     {
+      "hypothesis_id": "H-c5-claudef375-007",
+      "lines": [
+       "schema ok",
+       "H-1 ok",
+       "H-2 ok",
+       "H-3 ok",
+       "H-4 ok",
+       "H-5 ok",
+       "H-6 ok",
+       "H-7 ok",
+       "H-8 ok",
+       "H-9 skip 未照合: packet が渡されていないので packetRef を照合していない(参照 3 件)",
+       "H-10 skip 未照合: packet が渡されていないので名前を照合していない",
+       "H-11 skip 未照合: packet が渡されていないので名前の段を見ていない"
+      ]
+     },
+     {
+      "hypothesis_id": "H-c5-claudef375-008",
+      "lines": [
+       "schema ok",
+       "H-1 ok",
+       "H-2 ok",
+       "H-3 ok",
+       "H-4 ok",
+       "H-5 ok",
+       "H-6 ok",
+       "H-7 ok",
+       "H-8 ok",
+       "H-9 skip 未照合: packet が渡されていないので packetRef を照合していない(参照 6 件)",
+       "H-10 skip 未照合: packet が渡されていないので名前を照合していない",
+       "H-11 skip 未照合: packet が渡されていないので名前の段を見ていない"
+      ]
+     },
+     {
+      "hypothesis_id": "H-c5-claudef375-009",
+      "lines": [
+       "schema ok",
+       "H-1 ok",
+       "H-2 ok",
+       "H-3 ok",
+       "H-4 ok",
+       "H-5 ok",
+       "H-6 ok",
+       "H-7 ok",
+       "H-8 ok",
+       "H-9 skip 未照合: packet が渡されていないので packetRef を照合していない(参照 2 件)",
+       "H-10 skip 未照合: packet が渡されていないので名前を照合していない",
+       "H-11 skip 未照合: packet が渡されていないので名前の段を見ていない"
+      ]
+     },
+     {
+      "hypothesis_id": "H-c5-claudef375-010",
+      "lines": [
+       "schema ok",
+       "H-1 ok",
+       "H-2 ok",
+       "H-3 ok",
+       "H-4 ok",
+       "H-5 ok",
+       "H-6 ok",
+       "H-7 ok",
+       "H-8 ok",
+       "H-9 skip 未照合: packet が渡されていないので packetRef を照合していない(参照 2 件)",
+       "H-10 skip 未照合: packet が渡されていないので名前を照合していない",
+       "H-11 skip 未照合: packet が渡されていないので名前の段を見ていない"
+      ]
+     },
+     {
+      "hypothesis_id": "H-c5-claudef375-011",
+      "lines": [
+       "schema ok",
+       "H-1 ok",
+       "H-2 ok",
+       "H-3 ok",
+       "H-4 ok",
+       "H-5 NG statement が「という読みです」「可能性があります」の形でない",
+       "H-6 ok",
+       "H-7 ok",
+       "H-8 ok",
+       "H-9 skip 未照合: packet が渡されていないので packetRef を照合していない(参照 2 件)",
+       "H-10 skip 未照合: packet が渡されていないので名前を照合していない",
+       "H-11 skip 未照合: packet が渡されていないので名前の段を見ていない"
+      ]
+     }
+    ]
+   }
+  },
+  "seatOutputCheck": {
+   "0f1b019e-20261001-1/seat_gpt.json": {
+    "status": "fail",
+    "return_code": 1,
+    "problems": [
+     "schema: $.reach.sections[0]: 必須の欄「seal」が無い",
+     "schema: $.reach.sections[1]: 必須の欄「seal」が無い",
+     "schema: $.reach.sections[2]: 必須の欄「seal」が無い",
+     "schema: $.reach.sections[3]: 必須の欄「seal」が無い",
+     "schema: $.reach.sections[4]: 必須の欄「seal」が無い",
+     "schema: $.reach.sections[5]: 必須の欄「seal」が無い",
+     "schema: $.reach.sections[6]: 必須の欄「seal」が無い",
+     "schema: $.reach.sections[7]: 必須の欄「seal」が無い",
+     "schema: $.reach.sections[8]: 必須の欄「seal」が無い",
+     "schema: $.reach.sections[9]: 必須の欄「seal」が無い",
+     "schema: $.reach.sections[10]: 必須の欄「seal」が無い",
+     "schema: $.reach.sections[11]: 必須の欄「seal」が無い",
+     "schema: $.reach.sections[12]: 必須の欄「seal」が無い"
+    ]
+   },
+   "268dac98-20260930-1/seat_claude.json": {
+    "status": "fail",
+    "return_code": 1,
+    "problems": [
+     "schema: $.reach.sections[0]: 必須の欄「seal」が無い",
+     "schema: $.reach.sections[1]: 必須の欄「seal」が無い",
+     "schema: $.reach.sections[2]: 必須の欄「seal」が無い",
+     "schema: $.reach.sections[3]: 必須の欄「seal」が無い",
+     "schema: $.reach.sections[4]: 必須の欄「seal」が無い",
+     "schema: $.reach.sections[5]: 必須の欄「seal」が無い",
+     "schema: $.reach.sections[6]: 必須の欄「seal」が無い",
+     "schema: $.reach.sections[7]: 必須の欄「seal」が無い",
+     "schema: $.reach.sections[8]: 必須の欄「seal」が無い",
+     "schema: $.reach.sections[9]: 必須の欄「seal」が無い",
+     "schema: $.reach.sections[10]: 必須の欄「seal」が無い",
+     "schema: $.reach.sections[11]: 必須の欄「seal」が無い",
+     "schema: $.reach.sections[12]: 必須の欄「seal」が無い"
+    ]
+   },
+   "52ae3745-20261001-1/seat_claude.json": {
+    "status": "fail",
+    "return_code": 1,
+    "problems": [
+     "schema: $.reach.sections[0]: 必須の欄「seal」が無い",
+     "schema: $.reach.sections[1]: 必須の欄「seal」が無い",
+     "schema: $.reach.sections[2]: 必須の欄「seal」が無い",
+     "schema: $.reach.sections[3]: 必須の欄「seal」が無い",
+     "schema: $.reach.sections[4]: 必須の欄「seal」が無い",
+     "schema: $.reach.sections[5]: 必須の欄「seal」が無い",
+     "schema: $.reach.sections[6]: 必須の欄「seal」が無い",
+     "schema: $.reach.sections[7]: 必須の欄「seal」が無い",
+     "schema: $.reach.sections[8]: 必須の欄「seal」が無い",
+     "schema: $.reach.sections[9]: 必須の欄「seal」が無い",
+     "schema: $.reach.sections[10]: 必須の欄「seal」が無い",
+     "schema: $.reach.sections[11]: 必須の欄「seal」が無い"
+    ]
+   },
+   "558b8a81-20261001-2/seat_claude.json": {
+    "status": "fail",
+    "return_code": 1,
+    "problems": [
+     "schema: $.reach.sections[0]: 必須の欄「seal」が無い",
+     "schema: $.reach.sections[1]: 必須の欄「seal」が無い",
+     "schema: $.reach.sections[2]: 必須の欄「seal」が無い",
+     "schema: $.reach.sections[3]: 必須の欄「seal」が無い",
+     "schema: $.reach.sections[4]: 必須の欄「seal」が無い",
+     "schema: $.reach.sections[5]: 必須の欄「seal」が無い",
+     "schema: $.reach.sections[6]: 必須の欄「seal」が無い",
+     "schema: $.reach.sections[7]: 必須の欄「seal」が無い",
+     "schema: $.reach.sections[8]: 必須の欄「seal」が無い",
+     "schema: $.reach.sections[9]: 必須の欄「seal」が無い",
+     "schema: $.reach.sections[10]: 必須の欄「seal」が無い",
+     "schema: $.reach.sections[11]: 必須の欄「seal」が無い"
+    ]
+   },
+   "558b8a81-20261001-2/seat_gpt.json": {
+    "status": "fail",
+    "return_code": 1,
+    "problems": [
+     "schema: $.reach.sections[0]: 必須の欄「seal」が無い",
+     "schema: $.reach.sections[1]: 必須の欄「seal」が無い",
+     "schema: $.reach.sections[2]: 必須の欄「seal」が無い",
+     "schema: $.reach.sections[3]: 必須の欄「seal」が無い",
+     "schema: $.reach.sections[4]: 必須の欄「seal」が無い",
+     "schema: $.reach.sections[5]: 必須の欄「seal」が無い",
+     "schema: $.reach.sections[6]: 必須の欄「seal」が無い",
+     "schema: $.reach.sections[7]: 必須の欄「seal」が無い",
+     "schema: $.reach.sections[8]: 必須の欄「seal」が無い",
+     "schema: $.reach.sections[9]: 必須の欄「seal」が無い",
+     "schema: $.reach.sections[10]: 必須の欄「seal」が無い",
+     "schema: $.reach.sections[11]: 必須の欄「seal」が無い"
+    ]
+   },
+   "f37561e1-20260930-2/seat_claude.json": {
+    "status": "fail",
+    "return_code": 1,
+    "problems": [
+     "schema: $.reach.sections[0]: 必須の欄「seal」が無い",
+     "schema: $.reach.sections[1]: 必須の欄「seal」が無い",
+     "schema: $.reach.sections[2]: 必須の欄「seal」が無い",
+     "schema: $.reach.sections[3]: 必須の欄「seal」が無い",
+     "schema: $.reach.sections[4]: 必須の欄「seal」が無い",
+     "schema: $.reach.sections[5]: 必須の欄「seal」が無い",
+     "schema: $.reach.sections[6]: 必須の欄「seal」が無い",
+     "schema: $.reach.sections[7]: 必須の欄「seal」が無い",
+     "schema: $.reach.sections[8]: 必須の欄「seal」が無い",
+     "schema: $.reach.sections[9]: 必須の欄「seal」が無い",
+     "schema: $.reach.sections[10]: 必須の欄「seal」が無い",
+     "schema: $.reach.sections[11]: 必須の欄「seal」が無い",
+     "schema: $.reach.sections[12]: 必須の欄「seal」が無い"
+    ]
+   }
+  },
+  "integrationCheck": {
+   "0f1b019e-20261001-1": {
+    "status": "fail",
+    "return_code": 1,
+    "problems": [
+     "I-4: C-006 の representative H-3: counterEvidence.attempted が true でない",
+     "I-4: C-007 の representative H-5: statement が「という読みです」「可能性があります」の形でない"
+    ]
+   },
+   "268dac98-20260930-1": {
+    "status": "fail",
+    "return_code": 1,
+    "problems": [
+     "I-4: C-001 の representative H-3: items があるのに counterEvidence.result が \"none_found\"",
+     "I-4: C-005 の representative H-1: statement: 数「5」が observations の値に無い",
+     "I-4: C-005 の representative H-3: items があるのに counterEvidence.result が \"none_found\"",
+     "I-4: C-006 の representative H-3: items があるのに counterEvidence.result が \"none_found\"",
+     "I-4: C-007 の representative H-1: statement: 数「10」が observations の値に無い",
+     "I-4: C-007 の representative H-1: counterEvidence.items[0].text: 数「0」が observations の値に無い",
+     "I-4: C-007 の representative H-1: counterEvidence.items[0].text: 数「1」が observations の値に無い",
+     "I-4: C-008 の representative H-3: items があるのに counterEvidence.result が \"none_found\"",
+     "I-4: C-011 の representative H-1: statement: 数「1」が observations の値に無い",
+     "I-4: C-011 の representative H-1: statement: 数「12」が observations の値に無い",
+     "I-4: C-011 の representative H-1: counterEvidence.items[0].text: 数「18」が observations の値に無い",
+     "I-3: heldBack[2] の理由が一致の数を参照している(seatCount は理由にしない)"
+    ]
+   },
+   "558b8a81-20261001-2": {
+    "status": "fail",
+    "return_code": 1,
+    "problems": [
+     "I-4: C-001 の representative H-3: items があるのに counterEvidence.result が \"none_found\"",
+     "I-4: C-006 の representative H-2: counterEvidence.items[0].observations[0]: packetRef.path「provenance.inputs[4].path」が文法(aggregates.<id>.numerator|denominator|value / facts.<列>[添字].欄名)に合わない",
+     "I-4: C-006 の representative H-5: statement が「という読みです」「可能性があります」の形でない",
+     "I-4: C-007 の representative H-3: counterEvidence.attempted が true でない",
+     "I-4: C-007 の representative H-5: statement が「という読みです」「可能性があります」の形でない",
+     "I-4: C-008 の representative H-1: statement: 数「5」が observations の値に無い",
+     "I-4: C-009 の representative H-3: items があるのに counterEvidence.result が \"none_found\"",
+     "I-4: C-011 の representative H-1: statement: 数「10」が observations の値に無い",
+     "I-4: C-011 の representative H-1: statement: 数「12」が observations の値に無い",
+     "I-4: C-011 の representative H-1: statement: 数「1」が observations の値に無い",
+     "I-4: C-011 の representative H-1: counterEvidence.items[0].text: 数「12」が observations の値に無い",
+     "I-4: C-011 の representative H-1: counterEvidence.items[0].text: 数「18」が observations の値に無い",
+     "I-4: C-011 の representative H-1: counterEvidence.items[0].text: 数「20」が observations の値に無い",
+     "I-3: heldBack[2] の理由が一致の数を参照している(seatCount は理由にしない)",
+     "I-6: selfComputedNumbers[2] の値「0」が代表の文・矛盾・注に出ている"
+    ]
+   },
+   "f37561e1-20260930-2": {
+    "status": "fail",
+    "return_code": 1,
+    "problems": [
+     "I-4: C-001 の representative H-1: counterEvidence.items[0].text: 数「25」が observations の値に無い",
+     "I-4: C-005 の representative H-1: statement: 数「5」が observations の値に無い",
+     "I-4: C-005 の representative H-1: statement: 数「4」が observations の値に無い",
+     "I-4: C-005 の representative H-1: counterEvidence.items[0].text: 数「3」が observations の値に無い",
+     "I-4: C-005 の representative H-1: counterEvidence.items[0].text: 数「4」が observations の値に無い",
+     "I-4: C-006 の representative H-1: statement: 数「10」が observations の値に無い",
+     "I-4: C-006 の representative H-1: counterEvidence.items[0].text: 数「04」が observations の値に無い",
+     "I-4: C-006 の representative H-1: counterEvidence.items[0].text: 数「10」が observations の値に無い",
+     "I-4: C-006 の representative H-1: counterEvidence.items[0].text: 数「21」が observations の値に無い",
+     "I-4: C-006 の representative H-1: counterEvidence.items[0].text: 数「18」が observations の値に無い",
+     "I-4: C-011 の representative H-5: statement が「という読みです」「可能性があります」の形でない"
+    ]
+   }
+  }
+ },
+ "g8": {
+  "10_付録_数の出どころ.pdf": {
+   "pages": 5,
+   "perPage": [
+    {
+     "draw": "1ec36a5f3672a422",
+     "text": "43c35dcd95fbfdb0",
+     "vectors": 12
+    },
+    {
+     "draw": "0e0bd71590a774c3",
+     "text": "b8dcc36ff06d1475",
+     "vectors": 1283
+    },
+    {
+     "draw": "e2a6612cb5a16c99",
+     "text": "29c9aace7947052a",
+     "vectors": 96
+    },
+    {
+     "draw": "9bc8d313f7092ce2",
+     "text": "0daee83f0877bf7f",
+     "vectors": 96
+    },
+    {
+     "draw": "bc211d391d2bb8d0",
+     "text": "bb6cc0b1d0b582fc",
+     "vectors": 96
+    }
+   ],
+   "sha256": "330887a768a2d16003f6a29173d4c2b6745bc051f80821016c1d73aa04643247",
+   "vectors": 1583
+  },
+  "10_付録_表紙.pdf": {
+   "pages": 1,
+   "perPage": [
+    {
+     "draw": "1ec36a5f3672a422",
+     "text": "43c35dcd95fbfdb0",
+     "vectors": 12
+    }
+   ],
+   "sha256": "c184b553f6240d09a374fbb84ec19966baa5bdc4a2c0fd8675c99913b3314a25",
+   "vectors": 12
+  },
+  "9_本編_本人用.pdf": {
+   "pages": 5,
+   "perPage": [
+    {
+     "draw": "146bfe43b7351479",
+     "text": "9b8a69c25ff9aa0b",
+     "vectors": 3
+    },
+    {
+     "draw": "39e084bd4e918afa",
+     "text": "a9f0f90ae0408fc5",
+     "vectors": 65
+    },
+    {
+     "draw": "7003eed41f48fa00",
+     "text": "4696e1f20e5553fb",
+     "vectors": 24
+    },
+    {
+     "draw": "d2562d6551ac65a7",
+     "text": "745491f93ddc559b",
+     "vectors": 38
+    },
+    {
+     "draw": "01ac94f4684e141c",
+     "text": "52d4b6b01945667b",
+     "vectors": 36
+    }
+   ],
+   "sha256": "937ff883a55934aac0833c9b1172cbc456de5abc2ac6a9ee25b14a4391351efd",
+   "vectors": 166
+  },
+  "9_本編_見本用.pdf": {
+   "pages": 4,
+   "perPage": [
+    {
+     "draw": "146bfe43b7351479",
+     "text": "9b8a69c25ff9aa0b",
+     "vectors": 3
+    },
+    {
+     "draw": "39e084bd4e918afa",
+     "text": "a9f0f90ae0408fc5",
+     "vectors": 65
+    },
+    {
+     "draw": "7003eed41f48fa00",
+     "text": "4696e1f20e5553fb",
+     "vectors": 24
+    },
+    {
+     "draw": "d2562d6551ac65a7",
+     "text": "745491f93ddc559b",
+     "vectors": 38
+    }
+   ],
+   "sha256": "ae830c052746c93625c693406af3156c19011923605bb94810a5f002b4feacca",
+   "vectors": 130
+  }
+ }
+}
