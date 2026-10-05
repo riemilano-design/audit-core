@@ -19,7 +19,7 @@ import path from "node:path";
 import {
   aggregateCoverageProblems, aggregatesOf, bookletAgreementProblems, recountProblems, type AggregateRow, type BookletNumbers, type BookletPythonNumbers,
 } from "./lib/observationAggregates.js";
-import { factsOf, factsProblems } from "./lib/observationFacts.js";
+import { factsOf, factsProblems, toolThresholds } from "./lib/observationFacts.js";
 import { DEFAULT_SOURCES, readFactsMaterials, type MaterialPaths } from "./lib/observationMaterials.js";
 import {
   OBSERVATION_PACKET_CONTRACT, OBSERVATION_PACKET_SCHEMA_VERSION, observationPacketProblems,
@@ -144,6 +144,7 @@ function main(): void {
     inputsBySource,
     meta,
     sources: DEFAULT_SOURCES,
+    toolThresholds: toolThresholds(),
     recognitionReviewStatus: "draft",
   });
   const packet = {

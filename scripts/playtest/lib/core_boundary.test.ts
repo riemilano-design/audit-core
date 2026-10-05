@@ -71,12 +71,10 @@ export interface KnownException extends BoundaryViolation {
  * 現在すでに在る逆依存(計画 §3.1・§3.2 の表と 1 対 1)。**増やすときは計画に根拠を書く。減るのは T-3 以降。**
  * T-3(I-2、2026-10-06)で `lib/hypothesis.ts` の 2 本(`./timeSearch.js` の `SEARCH_COLUMNS`、`../report-pdf/check_answer.py` の
  * 字面読み)を外した ― 30 列は `schemas/obs-registry.extra-ids.json`、禁止語は `data/governance/banned_words.json` に。
+ * T-4(I-3、2026-10-06)で `lib/observationProvenance.ts` の 2 本(`./observationFacts.js` の `AHEAD_CP`、`./reportData.js` の
+ * `TIME_VALUES`)を外した ― 閾値の表は将棋側 `lib/observationFacts.ts` の `toolThresholds()` が組み、`provenanceOf` の引数で渡す。
  */
 export const KNOWN_EXCEPTIONS: readonly KnownException[] = [
-  { file: "lib/observationProvenance.ts", specifier: "./observationFacts.js", kind: "runtime", reaches: "shogiops (via lib/observationFacts.ts)",
-    reason: "§3.1: `AHEAD_CP` を閾値の表 `toolThresholds()` のために引く。I-3 で `ThresholdRow[]` の引数に" },
-  { file: "lib/observationProvenance.ts", specifier: "./reportData.js", kind: "runtime", reaches: "apps/server (via invariants/types.ts)",
-    reason: "§3.1: `TIME_VALUES` を閾値の表のために引く。I-3 で引数に" },
   { file: "lib/observationAggregates.ts", specifier: "./observationFacts.js", kind: "type", reaches: "shogiops (via lib/observationFacts.ts)",
     reason: "§3.1: `FactsMaterials` の型だけ(実行時依存なし)。I-4 で generic に" },
   { file: "lib/gitState.ts", specifier: "../invariants/types.js", kind: "type", reaches: "apps/server (via invariants/types.ts)",

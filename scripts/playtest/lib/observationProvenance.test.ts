@@ -1,15 +1,12 @@
 // 束 C の試験(provenance と閾値の写し。計画 §4・P-1)。
 //
-// 【いちばん大事な 1 本】**閾値の写しが、写し元の実物と合っていること**(i 系ではなく j1)。
-// packet に「+300 で優勢」と書いておきながら道具が別の値で数えていたら、
-// 読む側は**気づけないまま**その数を使う。だから `from` に書いた場所を**実際に読んで**突き合わせる。
+// 【いちばん大事な 1 本は将棋側へ移した】**閾値の写しが、写し元の実物と合っていること**(j0〜j2)は、
+// Audit Core T-4/I-3 で表を組む側(`lib/observationFacts.ts` の `toolThresholds()`)と一緒に
+// `observationFacts.test.ts` へ移した。ここ(Core)は**渡された表をそのまま・材料の閾値の前に**載せることだけを見る(j7)。
 // 【追跡性そのもの】辿る道の試験は束 B の試験ファイル側(g2)に置いた ―
 // あちらは合成材料から組んだ packet を持っているので、同じものを 2 つ作らない。
-import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
-import { ObservationProvenanceError, materialThresholds, metaValue, provenanceOf, sourcesOf, toolThresholds } from "./observationProvenance.js";
-
-const REPO_ROOT = new URL("../../../", import.meta.url);
+import { ObservationProvenanceError, materialThresholds, metaValue, provenanceOf, sourcesOf, type ThresholdRow } from "./observationProvenance.js";
 
 const META = {
   read: [{ gitHead: "abc123", values: { nodeLadder: [2000, 1000000], minLossCp: 600 } }],
@@ -17,34 +14,13 @@ const META = {
 };
 const SOURCES = { material: "m1", engine: "e1", engineShallow: "e2", direct: "d1", recognition: "r1" };
 const BY_SOURCE = { m1: ["a.json"], d1: ["b.json"], e1: ["c.jsonl"], e2: ["d.jsonl"], r1: ["e.json"] };
+/** 将棋側が組んで渡す閾値の表の**合成**(Core の試験は将棋側の定数を読まない。写しの正しさは observationFacts.test.ts の j0〜j2) */
+const TOOL: readonly ThresholdRow[] = [
+  { id: "ahead_cp", value: 300, unit: "centipawns", from: "x.py AHEAD_CP" },
+  { id: "long_think_sec", value: 10, unit: "seconds", from: "y.ts T.longThinkSec" },
+];
 
 describe("閾値は確かめた写し(P-1)", () => {
-  it("j1 `from` に書いた場所を実際に読み、その値が在ることを確かめる", () => {
-    const thresholds = toolThresholds();
-    expect(thresholds.length).toBeGreaterThan(3);
-    for (const threshold of thresholds) {
-      const parts = threshold.from.split(" ");
-      expect(parts, `${threshold.id} の from が「パス 定数名」の形でない`).toHaveLength(2);
-      const source = readFileSync(new URL(parts[0]!, REPO_ROOT), "utf-8");
-      // 定数名の最後の部分(`TIME_VALUES.spentBucketsSec[0]` → `spentBucketsSec`)
-      const name = parts[1]!.split(".").pop()!.replace(/\[\d+\]$/, "");
-      const lines = source.split("\n").filter((line) => line.includes(name) && !line.trimStart().startsWith("//") && !line.trimStart().startsWith("*"));
-      expect(lines.length, `${parts[0]} に ${name} の行が無い`).toBeGreaterThan(0);
-      const withValue = lines.filter((line) => new RegExp(`(^|[^0-9])${threshold.value}([^0-9]|$)`).test(line));
-      expect(withValue.length, `${parts[0]} の ${name} の行に ${threshold.value} が無い(写しがずれている)`).toBeGreaterThan(0);
-    }
-  });
-
-  it("j2 優勢の閾値は python 側(exit_groups.py)の定数と同じ値", () => {
-    // **写した先が python なので、型検査では結べない** ― ここで実物を読んで突き合わせる
-    const source = readFileSync(new URL("scripts/playtest/report-pdf/exit_groups.py", REPO_ROOT), "utf-8");
-    const found = /^AHEAD_CP = (\d+)$/m.exec(source);
-    expect(found, "exit_groups.py に AHEAD_CP の行が無い").not.toBeNull();
-    const ahead = toolThresholds().find((row) => row.id === "ahead_cp")!;
-    expect(ahead.value).toBe(Number(found![1]));
-    expect(ahead.unit).toBe("centipawns");
-  });
-
   it("j3 材料から読める閾値は写さず読む(読めなければ載せない)", () => {
     const rows = materialThresholds(META);
     expect(rows.map((row) => row.id)).toEqual(["branch_min_loss_cp", "shallow_first_nodes"]);
@@ -78,13 +54,13 @@ describe("出どころの一覧", () => {
     expect(metaValue([{ values: {} }, ...META.whatif], ["values", "nodes"], "x")).toBe(1000000);
   });
 
-  it("j7 provenance は出どころ・材料・閾値を 1 つに束ねる", () => {
+  it("j7 provenance は出どころ・材料・閾値を 1 つに束ねる(渡された道具の閾値が**そのまま・その順で**先、材料の閾値が後)", () => {
     const provenance = provenanceOf({
       pipelineVersion: "0000000", generatedAt: "2026-09-30T00:00:00Z",
       inputs: [{ path: "a.json", sha256: "a".repeat(64), bytes: 1 }],
-      inputsBySource: BY_SOURCE, meta: META, sources: SOURCES,
+      inputsBySource: BY_SOURCE, meta: META, sources: SOURCES, toolThresholds: TOOL,
     });
     expect(Object.keys(provenance).sort()).toEqual(["generatedAt", "inputs", "pipelineVersion", "sources", "thresholds"]);
-    expect((provenance.thresholds as unknown[]).length).toBe(toolThresholds().length + materialThresholds(META).length);
+    expect(provenance.thresholds).toEqual([...TOOL, ...materialThresholds(META)]);
   });
 });

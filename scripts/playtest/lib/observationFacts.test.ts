@@ -5,11 +5,13 @@
 // 実物で確かめた形(`kifuId` は行に無い・`top1Side` は `candidates[0].side`・`midMoveSeconds` は `kifPly`)を使う。
 // 【B と C は道具が自分で測る】`completenessProblems`・`granularityProblems` は試験の中だけでなく道具が毎回呼ぶ。
 //   だから**壊した材料で落ちること**を 1 本ずつ校正する。
+import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import { aggregatesOf } from "./observationAggregates.js";
 import { provenanceOf, traceProblems } from "./observationProvenance.js";
 import {
   ObservationFactsError,
+  toolThresholds,
   branchRowsOf,
   aheadAtAnyPointOf,
   bandOf,
@@ -316,6 +318,7 @@ describe("束 A の契約との突き合わせ", () => {
       },
       meta: { read: [{ gitHead: "abc", values: { nodeLadder: [2000, 1000000] } }], whatif: [{ gitHead: "abc", values: { nodes: 1000000, multiPv: 5, minLossCp: 600 } }] },
       sources: data.sources,
+      toolThresholds: toolThresholds(),
       recognitionReviewStatus: "draft",
     });
     const packet = {
@@ -464,5 +467,48 @@ describe("束 A の契約との突き合わせ", () => {
       expect(isOppositeSide(pair[0], pair[1]), pair.join("→")).toBe(false);
     }
     expect(branchRowsOf(materials())[0]!.oppositeSide).toBe(true); // 第 1 候補 attack・実戦 defense
+  });
+});
+
+// ==================== 閾値は確かめた写し(P-1) ====================
+// Audit Core T-4/I-3 で `observationProvenance.test.ts`(束 C)から**表を組む側と一緒に**移した。
+// packet に「+300 で優勢」と書いておきながら道具が別の値で数えていたら、読む側は**気づけないまま**その数を使う。
+// だから `from` に書いた場所を**実際に読んで**突き合わせる(j1・j2)。j0 は人が決めた数を**字で**留める(定数から組まない)。
+const REPO_ROOT = new URL("../../../", import.meta.url);
+
+describe("閾値は確かめた写し(P-1。表は将棋側が組む)", () => {
+  it("j0 表は 4 行で、値・単位・在り処は c5 の packet に出ているものと字で同じ(300・10・4・1)", () => {
+    expect(toolThresholds()).toEqual([
+      { id: "ahead_cp", value: 300, unit: "centipawns", from: "scripts/playtest/report-pdf/exit_groups.py AHEAD_CP" },
+      { id: "long_think_sec", value: 10, unit: "seconds", from: "scripts/playtest/lib/reportData.ts TIME_VALUES.longThinkSec" },
+      { id: "quick_sec", value: 4, unit: "seconds", from: "scripts/playtest/lib/reportData.ts TIME_VALUES.quickSec" },
+      { id: "spent_band_1_sec", value: 1, unit: "seconds", from: "scripts/playtest/lib/reportData.ts TIME_VALUES.spentBucketsSec[0]" },
+    ]);
+  });
+
+  it("j1 `from` に書いた場所を実際に読み、その値が在ることを確かめる", () => {
+    const thresholds = toolThresholds();
+    expect(thresholds.length).toBeGreaterThan(3);
+    for (const threshold of thresholds) {
+      const parts = threshold.from.split(" ");
+      expect(parts, `${threshold.id} の from が「パス 定数名」の形でない`).toHaveLength(2);
+      const source = readFileSync(new URL(parts[0]!, REPO_ROOT), "utf-8");
+      // 定数名の最後の部分(`TIME_VALUES.spentBucketsSec[0]` → `spentBucketsSec`)
+      const name = parts[1]!.split(".").pop()!.replace(/\[\d+\]$/, "");
+      const lines = source.split("\n").filter((line) => line.includes(name) && !line.trimStart().startsWith("//") && !line.trimStart().startsWith("*"));
+      expect(lines.length, `${parts[0]} に ${name} の行が無い`).toBeGreaterThan(0);
+      const withValue = lines.filter((line) => new RegExp(`(^|[^0-9])${threshold.value}([^0-9]|$)`).test(line));
+      expect(withValue.length, `${parts[0]} の ${name} の行に ${threshold.value} が無い(写しがずれている)`).toBeGreaterThan(0);
+    }
+  });
+
+  it("j2 優勢の閾値は python 側(exit_groups.py)の定数と同じ値", () => {
+    // **写した先が python なので、型検査では結べない** ― ここで実物を読んで突き合わせる
+    const source = readFileSync(new URL("scripts/playtest/report-pdf/exit_groups.py", REPO_ROOT), "utf-8");
+    const found = /^AHEAD_CP = (\d+)$/m.exec(source);
+    expect(found, "exit_groups.py に AHEAD_CP の行が無い").not.toBeNull();
+    const ahead = toolThresholds().find((row) => row.id === "ahead_cp")!;
+    expect(ahead.value).toBe(Number(found![1]));
+    expect(ahead.unit).toBe("centipawns");
   });
 });

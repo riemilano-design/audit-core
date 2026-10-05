@@ -6,15 +6,15 @@
 // 【参照方式】値ごとに出どころを埋め込むと provenance だけで約 3.6 MB(実測の行数から計算)。
 //   行は符号(`src`)だけを持ち、符号 → 出どころ → 材料のパスと `sha256` をここで結ぶ(計画 §4)。
 // 【閾値は「確かめた写し」】packet を読む側に閾値を推測させない(P-1)。
-//   値は道具の定数から取り(`AHEAD_CP`・`TIME_VALUES`)、**python 側の定数と合っていることは試験が突き合わせる。**
+//   値は道具の定数から取る(`AHEAD_CP`・`TIME_VALUES`)が、**この層は将棋側の定数を読まない**(Audit Core T-4/I-3)。
+//   表 `ThresholdRow[]` は packet の生産者(将棋側 `lib/observationFacts.ts` の `toolThresholds()`)が組み、
+//   `provenanceOf` の `toolThresholds` で渡す。**写しが python 側・TS 側の定数と合っていることは将棋側の試験が突き合わせる。**
 //   材料から読めるもの(エンジンの `minLossCp` など)は**写しではなく読んだ値**を入れる。
 // 【D は「辿れた」で止めない】`sha256` を引いて**材料のファイルを実際に読み直し、同じ値になること**まで見る ―
 //   参照が生きているだけでは、差し替わった材料を指していても緑になる(私から足した 1 点)。
 import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
 import path from "node:path";
-import { AHEAD_CP } from "./observationFacts.js";
-import { TIME_VALUES } from "./reportData.js";
 
 export class ObservationProvenanceError extends Error {
   override name = "ObservationProvenanceError";
@@ -23,19 +23,6 @@ export class ObservationProvenanceError extends Error {
 export type ThresholdRow = { readonly id: string; readonly value: number; readonly unit: string; readonly from: string };
 export type SourceRow = Record<string, unknown> & { readonly id: string; readonly type: string; readonly inputPaths: readonly string[] };
 export type InputRow = { readonly path: string; readonly sha256: string; readonly bytes: number };
-
-/**
- * 道具の定数から取る閾値。**ここに数を書かない**(import した定数をそのまま入れる)。
- * `from` はその値が定義されている場所 ― 試験が `exit_groups.py` の `AHEAD_CP` と突き合わせる。
- */
-export function toolThresholds(): ThresholdRow[] {
-  return [
-    { id: "ahead_cp", value: AHEAD_CP, unit: "centipawns", from: "scripts/playtest/report-pdf/exit_groups.py AHEAD_CP" },
-    { id: "long_think_sec", value: TIME_VALUES.longThinkSec, unit: "seconds", from: "scripts/playtest/lib/reportData.ts TIME_VALUES.longThinkSec" },
-    { id: "quick_sec", value: TIME_VALUES.quickSec, unit: "seconds", from: "scripts/playtest/lib/reportData.ts TIME_VALUES.quickSec" },
-    { id: "spent_band_1_sec", value: TIME_VALUES.spentBucketsSec[0], unit: "seconds", from: "scripts/playtest/lib/reportData.ts TIME_VALUES.spentBucketsSec[0]" },
-  ];
-}
 
 /**
  * jsonl の meta 行から 1 つの値を取る。**行ごとに違っていたら例外**(25 局が同じ設定で作られたことを確かめる) ―
@@ -138,6 +125,11 @@ export type ProvenanceInput = SourcesInput & {
   readonly pipelineVersion: string;
   readonly generatedAt: string;
   readonly inputs: readonly InputRow[];
+  /**
+   * 道具の定数の写し(閾値の表)。**この層は作らない** ― packet の生産者(将棋側)が組んで渡す(Audit Core T-4/I-3)。
+   * 既定値を持たない(渡し忘れは型検査で落ちる)。`materialThresholds` の前に、渡した順のまま並ぶ。
+   */
+  readonly toolThresholds: readonly ThresholdRow[];
 };
 
 export function provenanceOf(input: ProvenanceInput): Record<string, unknown> {
@@ -146,7 +138,7 @@ export function provenanceOf(input: ProvenanceInput): Record<string, unknown> {
     generatedAt: input.generatedAt,
     sources: sourcesOf(input),
     inputs: input.inputs,
-    thresholds: [...toolThresholds(), ...materialThresholds(input.meta)],
+    thresholds: [...input.toolThresholds, ...materialThresholds(input.meta)],
   };
 }
 

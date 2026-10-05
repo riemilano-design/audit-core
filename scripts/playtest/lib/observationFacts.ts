@@ -15,6 +15,8 @@ import { parseSquareName } from "shogiops/util";
 import { READ_MOVE_MARK_KEYS } from "./read.js";
 import { parsePosition } from "../../../apps/server/src/rules/sfenPosition.js";
 import { STANDARD_ROLES, type StandardRole } from "./moveFacts.js";
+import type { ThresholdRow } from "./observationProvenance.js";
+import { TIME_VALUES } from "./reportData.js";
 
 export class ObservationFactsError extends Error {
   override name = "ObservationFactsError";
@@ -75,6 +77,22 @@ export function isOppositeSide(top1Side: unknown, actualSide: unknown): boolean 
 /** その局で一度でも優勢(閾値以上)になったか。`exit_groups.is_ahead` の写し */
 export function aheadAtAnyPointOf(scores: readonly (number | null)[]): boolean {
   return scores.some((value) => value !== null && value >= AHEAD_CP);
+}
+
+/**
+ * provenance に出す閾値の表(道具の定数の**写し**)。Audit Core T-4/I-3 で `lib/observationProvenance.ts` から
+ * **そのまま**移した ― Core 層が将棋側の定数(`AHEAD_CP`・`TIME_VALUES`)を読まないため。
+ * **ここに数を書かない**(import した定数をそのまま入れる)。`from` はその値が定義されている場所 ―
+ * 試験(observationFacts.test.ts の j0〜j2)が `from` の実物と `exit_groups.py` の `AHEAD_CP` を突き合わせる。
+ * 渡し方: `provenanceOf({ toolThresholds: toolThresholds(), … })`(`scripts/playtest/observationPacket.ts`)。
+ */
+export function toolThresholds(): ThresholdRow[] {
+  return [
+    { id: "ahead_cp", value: AHEAD_CP, unit: "centipawns", from: "scripts/playtest/report-pdf/exit_groups.py AHEAD_CP" },
+    { id: "long_think_sec", value: TIME_VALUES.longThinkSec, unit: "seconds", from: "scripts/playtest/lib/reportData.ts TIME_VALUES.longThinkSec" },
+    { id: "quick_sec", value: TIME_VALUES.quickSec, unit: "seconds", from: "scripts/playtest/lib/reportData.ts TIME_VALUES.quickSec" },
+    { id: "spent_band_1_sec", value: TIME_VALUES.spentBucketsSec[0], unit: "seconds", from: "scripts/playtest/lib/reportData.ts TIME_VALUES.spentBucketsSec[0]" },
+  ];
 }
 
 
