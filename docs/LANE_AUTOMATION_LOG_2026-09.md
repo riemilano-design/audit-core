@@ -4373,3 +4373,43 @@ worktree で Mut-B・C・D・D2(`sfens_from_env` が環境変数を読まない)
 
 **独立監査(2 回目)GO**(2026-10-05・往復 1 回): 監査が自分で測って一致 ― `mut_ft_results.txt` は一致 19 / ★ 0・落ちた 1 回目と F03 未検証の 2 回目のファイルの中身が記録どおり / 凍結 ft → ft2 で変わったのは 4 本だけ(lib・python・試験・schema はビット一致)/ 下見を自分の合成材料で 2 回(環境変数なし → 有効な上限 10、`SEAT_COST_CAP_USD=1` → 1)/ python 765・vitest 115・2303・typecheck 10(out/ の下)/ 禁止語 0・`git diff --check` 0。
 **GO の条件でない指摘 2 件(2 回とも挙がった。記録に残す)**: (1) `--dry-run` でも `exit_fill.py --print-terms`(ローカル python)を呼ぶ ― 鍵・送信は無い。(2) 「2 回目を回さない」の守りは `fill_texts.report.json` の有無だけを見る ― 1 回目が report を書く前に落ちて `attempts/` が残った形では 2 回目を止めない。運用(司令塔の合図の後に人が 1 回・コマンドの字を記録)で持つ。**回す前に out-dir の中身を目で見る**(計画 §7.5 に足した)。
+
+### 1 回限りの実行(2026-10-05 夜)― LLM を 1 回呼んだ後に道具の不具合で落ちた。2 回目は回していない(条件 7)
+
+**人間の GO**: 金銭が動く実行(上限 1 USD)の GO は、司令塔が**本人の言葉で直接受けた**と便で伝えてきた(私から見れば伝聞。司令塔の席の記録が正本)。合図の便に「金銭が動く」旨の 1 行が在ることを確かめてから回した。
+
+**回す前に見たもの**: `ls scripts/playtest/out/c5/exit` → `answer_selection.json` 1 本(司令塔の物。sha256 `2ba38c20…c83c` が司令塔の値と一致。触っていない)。packet は私が `out/c5/packet/observation-packet.json` に作り直した(司令塔の依頼。`--verify` 問題なし)。
+
+**打った手(repo の根で。2 本とも同じ字で、2 本目だけ `--dry-run` を外した)**:
+```
+SEAT_COST_CAP_USD=1 npx tsx scripts/playtest/fillTexts.ts --selection scripts/playtest/out/c5/exit/answer_selection.json --seats-dir scripts/playtest/out/c5/llm-seats --out-dir scripts/playtest/out/c5/exit --dry-run
+```
+下見の印字: 有効な上限 `SEAT_COST_CAP_USD = 1`・最大費用(実行前)0.317025 USD(lead 0.079275 / p1.1 0.07935 / p1.2 0.0792 / p1.3 0.0792)・model claude-opus-5・statement 123・123・94・92 字(`fill_texts.dryrun.json`)。
+
+**落ちた所**: lead の試行 1(呼び出し 1 回)の後、F-5 の照合を python へ渡す所。
+```
+FillTextsError: exit_fill.py --verify-texts が JSON を返さなかった(rc 1): 言い換えの文(fill_texts)が無い: scripts/playtest/out/c5/exit/attempts/verify_input_1.json
+```
+**原因(コードで確かめた)**: `fillTexts.ts` の `pyJson` は python を **cwd = `scripts/playtest/report-pdf`** で起こす一方、`--verify-texts` の入力・`--selection`・`--seats-dir` には私が打った **repo 相対の道をそのまま**渡していた。python は report-pdf 相対で探して「無い」と答えた。`--dry-run` は照合を呼ばず、scratchpad の下見は絶対の道で打っていたので、試験 15 本・変異 19 本・下見 2 回・監査の下見 2 回のどれにも当たっていない。**下見は本番と同じ字(道の相対・絶対まで)で打つ**べきだった。
+
+**条件 5 の表(道具の記録)**:
+
+| スロット | 試行 | F-5 通過 | 採用可能 | 失敗理由 | 実費 USD | 最大費用(実行前) |
+|---|---|---|---|---|---|---|
+| lead | 1 | 記録なし | 0 | 道具の不具合(照合の道) | 記録できず | 0.079275 |
+| p1.1 | 0(回していない) | – | – | 上の停止 | 0 | 0.07935 |
+| p1.2 | 0 | – | – | 同 | 0 | 0.0792 |
+| p1.3 | 0 | – | – | 同 | 0 | 0.0792 |
+
+実費: 道具は結果の束を `runFillTexts` が返った**後に**まとめて書く作りなので、例外で lead 1 回分の usage が書かれずに消えた。見込みは 1 試行で 0.0793 / 3 ≒ **0.026 USD 以下**。実物の数は Anthropic の console にだけある(読んでいない)。上限 1 USD には遠い。
+
+**残っていたもの(ls の写し・23:03)**: `out/c5/exit/` = `answer_selection.json`(4329 B)・`attempts/`・`fill_texts.dryrun.json`(748 B)。`attempts/` = `verify_input_1.json`(375 B)。`fill_texts.json`・`fill_texts.problems.json`・`fill_texts.report.json` は**無い**。
+これは監査の GO の条件でない指摘 (2)(「report を書く前に落ちて attempts/ が残った形」)が**そのまま起きた形**。2 回目を道具は止めないので、運用(条件 7・この記録)で止めている。
+
+**道具の記録ではなく、手で 1 回測った事実(表の数には入れない)**: `verify_input_1.json` に lead の生成文 1 本(135 字)が落ちる前に書かれて残っていた。同じファイルを、金銭の動かない python の照合だけ**絶対の道で**手回しした所 `problems: {lead: []}`・rc 0(F-5・200 字とも通過)。文は便 145 で司令塔へ写した。採用するかは司令塔の判断(私は数に入れない ― 一回限りの手の実測は門ではない)。
+
+**直しの案(別の束。判断待ち・触っていない)**: (a) CLI で 3 つの道を `path.resolve` して python へ渡す。(b) 試行ごとに `attempts/` へ生の応答と usage を先に書き、落ちても消えない作りにする。試験は「相対の道で打って通る」1 本・「落ちた後に usage が残る」1 本。2 回目を回すには人間の新しい GO が要る(条件 7)。
+
+**司令塔の注(便で受けた・写す)**: p1.3(I-3-003)の `measured.notMeasured` には「群の名前 → 冊子の語」の対応が人間の読みに残る旨を書く(道具は群の名前を冊子の語に直さない)。実行が落ちたので report は無く、この注は次に回る report へ付ける。
+
+便 145 で司令塔へ送付(2026-10-05)。コードの sha は動かしていない(HEAD 33e747d)。
