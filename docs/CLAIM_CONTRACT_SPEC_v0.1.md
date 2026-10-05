@@ -81,7 +81,9 @@
 | `population` | 母集団の表と絞り込み(where)・分子の絞り込み(numeratorWhere) | `aggregates[].population.{from, where}`・`numeratorWhere` |
 | `time_range` | 事象時刻の範囲・基準日 | (将棋の 25 局では局の日時を使った主張が無い。§7 で測る) |
 | `normalization` | 値の正規化(単位・語彙への写し・丸め) | `unit` enum、tags/side → 日本語(`SIDE_JP`)、手の表記 |
-| 予測で足すとした候補 | `source_kind`(packet / 登録簿 / 文書自身 / 承認済み固定文 / 人間の文)、`join`(表を鍵で結ぶ) | §7 で要るかを測る |
+| `source_kind`(**実測で足した**) | 正準データの種類: `packet` / `aggregate` / `registry` / `document` / `approved_text` / `material_files` / `code` | §7。将棋の冊子だけで 7 種類が要った(F-4・F-5) |
+| `join`(**実測で足した**) | 表を鍵で結ぶ。鍵の名前 + **鍵の約束の正規化** | C-35(gameId)、C-29(gameId + ply。F-2: 表で ply の約束が違う) |
+| `verification_depth`(**実測で足した**) | `value_match`(宣言された集計行の値と一致)/ `recount`(`facts` から数え直して一致) | F-1。packet の `recountable` と同じ区別。門 (xi) は value_match しか見ない |
 
 ### 3.3 Claim Contract の欄(形ごとに必須が違う)
 
@@ -101,7 +103,8 @@
 | `comparator` | ― | ― | ― | ✔ | `<`, `<=`, `>`, `>=`, `==` |
 | `tolerance` | △ | ✔ | ― | ― | 許容幅(人が承認した数。字で留める) |
 | `approval_record` | ― | △(式) | ― | ✔(線) | 承認記録への参照 |
-| `normalization` | △ | △ | △ | △ | 正規化の規則の id |
+| `normalization` | △ | △ | △ | △ | 正規化の規則の id の**並び**(順序つき。F-3: 盤の主張 1 つに 4 つ重なる) |
+| `verification_depth` | ― | ✔ | ✔ | △ | `value_match` / `recount`。GROUNDED の深さを顧客にも区別して出す(F-1) |
 | `registration_time` | ― | ― | ― | ― | 予測のときだけ(Prediction Ledger 側) |
 
 必須(✔)が 1 つでも欠ければ **Claim Validation で落ち、結果は UNVERIFIABLE**。△は在れば使う。
@@ -216,6 +219,8 @@ Claim(form + modifiers)
 | `source_kind`(欄として) | 門ごとに引数で渡しているので、Claim 1 件を見て「どこから取ったか」が分からない。監査側 Binding(§8.2)では必須 |
 | `registration_time` / `event_time` | 予測の `writtenAt` は文字列で、コミット時刻やデータの事象時刻と機械で比べていない(§10) |
 | 主張どうしの整合 | C-17 と C-36c(§7)のように、本編の 2 文が両立しない組を門は見ない(集計の整合関係 (5) は集計行の間だけ) |
+| `verification_depth`(実測で足した。F-1) | 門 (xi) は「印の行の数が集計行の数に在るか」= 値一致しか見ない。packet は `recountable` を持つのに、門も冊子もその区別を顧客に出していない |
+| 鍵の約束(実測で足した。F-2) | `facts.engine.ply` と `facts.branches.ply` の約束が 1 ずれる(`displayPly` が橋)。表を結ぶ検査(C-29・C-35 の再計算)はどの門にも無い |
 
 ---
 
@@ -281,9 +286,88 @@ Claim(form + modifiers)
 
 ---
 
-## 7. 分解の結果(手順 4・9。**§6 のコミットの後に書く**)
+## 7. 分解の結果(手順 4・9。予測の封 = コミット `b4580f3`、2026-10-06 07:52:19 +0900)
 
-(封印後に埋める)
+**測り方**: packet(`scripts/playtest/out/c5/packet/observation-packet.json`、packetId `22aee8fe696d0262`)と `9_本編.md` を python で突き合わせた(再計算は `facts` の表から数え直した。集計行の値を写しただけのものは「値一致」と書く)。判定の 3 値は予測の §0 と同じ(A 表現可・充足 / B 表現可・不充足 / C 表現不能)。
+
+| id | 判定 | form | modifiers | pointer(source_kind) | 実測 |
+|---|---|---|---|---|---|
+| C-01a | A | direct | ― | `facts.games` の件数 25・`timeLimitSec` 180(packet)、日付 = Golden Master `inputs.today` | 25 / 180 一致 |
+| C-01b | B | aggregate | population | `facts.engine` 1033 行 vs `facts.moves` 1242 行(packet) | 「1 手ずつ」= 網羅の主張。欄が無い。**鍵の約束も違う**(engine.ply = displayPly、branches.ply = displayPly − 1。F-2) |
+| C-02 | B | threshold | ― | `sideMatch.attackToDefense` 29・`defenseToAttack` 22(aggregate) | 両方 > 0 は真だが、0 を線として承認した記録が無い(存在の比較子を承認なしで許すかは設計論点) |
+| C-03 | B | threshold | ― | 線「2 つぶん」= `check_answer.MENU_THRESHOLDS["M5"].times = 2`(**code**) | 承認記録: docs に無い。字は「道具の仮置き」 |
+| C-04 | A | aggregate | population | `aheadThenLost` 6 / 18(aggregate)。`facts.games` から再計算 6 / 18 | 再計算一致 |
+| C-05 | B | threshold | population | `groups.other.aheadThenLost` 3 / 4 | 「目立った」の線が無い |
+| C-06 | A | aggregate | population | `9_本編.md` 8〜15 行の `- ` の行(**document**) | 3 = 3 |
+| C-07 | A | aggregate | population, normalization(unit) | `sideMatch.attack` 65 / 107。`facts.branches` から再計算 | 再計算一致 |
+| C-08 | A | aggregate | population, normalization(unit) | `sideMatch.defense` 76 / 132。再計算 | 再計算一致 |
+| C-09 | B | threshold | ― | 線 0.7 = `MENU_THRESHOLDS["M4"].line`(**code**)。`provenance.thresholds` に無い | 65/107 = 0.607、76/132 = 0.576、どちらも < 0.7 は真。**承認記録が解決できない**(批評 R2 は「閾値は承認済みの表の側」と書くが、承認済みの表 DELIVER_GATES §2.4 は minN だけで 0.7 を持たない。F-5) |
+| C-10 | B | threshold | ― | 同 C-02 | 比較の語に線が無い |
+| C-11 | A | aggregate | population(spentSec ≤ 4、直前 ≥ 10)、normalization(unit) | `time.quickAfterLongThink` 9 / 37(aggregate。`recountable: false`) | **値一致だけ**。`facts.moves` の `spentSec` は 1242 手中 161 手(12 局)にしか無く、再計算できない(F-1) |
+| C-12 | A | aggregate | population(spentSec ≤ 1) | `time.bySpent0to1` 22 / 531(`recountable: false`) | 値一致だけ(moves から数えると 4 / 77。別物) |
+| C-13 | B | threshold | ― | 9/37 = 0.243、22/531 = 0.041、2 倍 = 0.083(derived は再計算できる) | 「高かった」の線 = C-03 と同じ承認の欠け |
+| C-14 | A | aggregate | population(aheadAtAnyPoint)、threshold_ref = `ahead_cp` 300(`provenance.thresholds` に在る) | `aheadThenLost` の分母 18 | 再計算一致 |
+| C-15 | A | aggregate | population | 同 分子 6 | 再計算一致 |
+| C-16 | B | derived + threshold | population | 負け 9 局のうち一度優勢 6 局(`facts.games` から再計算。集計行は無い) | 6 / 9 は出るが「多く」の線が無い |
+| C-17 | C | ― | ― | (不在の主張) | 「優勢になった後の局面」の集計行は無い = 真だが、形が無い |
+| C-18 | C | ― | ― | (約束) | Prediction Ledger の登録。本仕様の 4 形の外 |
+| C-19 | A | aggregate | population | `sideMatch.oppositeAll` 51 / 239。再計算 | 再計算一致 |
+| C-20 | A | direct | normalization(displayPly) | `facts.branches` g11 displayPly 48: top1Side attack / g12 displayPly 70: top1Side defense | 攻め 1・自玉側 1 = 真 |
+| C-21 | A | direct | normalization(**mirror**・USI → 漢字表記・tags → 語・displayPly) | `facts.engine[354]`(ply 48): top1 `2d2c+`、actual `P*6f`。`facts.branches`(ply 47, displayPly 48): top1 attack/capture、actual defense/drop+sacrifice | g11 は後手で `mirrored: true` → `P*6f` = ▲４四歩打、`2d2c+` = ▲８七歩成。**正規化の規則が 4 つ重なる**(F-3) |
+| C-22 | A | direct | 同上 | `facts.engine[403]`、branches ply 69: top1 defense/drop+sacrifice、actual attack/capture+sacrifice | 一致 |
+| C-23a | A | aggregate | population | 本編の `N. ` の行(**document**) | 2 = 2 |
+| C-23b | B | threshold | ― | `menuPassed` = [M4, M5, M6](候補 JSON) | 「測り直せる」の欄が無い。なお M5 の集計行は `recountable: false`(文の「同じ数を測り直せる」は次の 25 局での測定の意味で、packet の再計算とは別の語) |
+| C-24 | A | direct + aggregate | ― | 行動の文 = `ANSWER_MENU` M4 の文(**registry**、字が一致)。根拠 = C-07・C-08 | 一致 |
+| C-25 | A | direct + aggregate | ― | M5 の文(registry、一致)。根拠 = C-11 | 一致 |
+| C-26 | B | threshold | ― | 同 C-09 | 承認記録が解決できない |
+| C-27 | A | aggregate | population | `longThink.total/fork/opposite` 61 / 33 / 5。`facts.time` の合計で再計算 | 再計算一致 |
+| C-28 | A | aggregate | population | 同 C-19 | 一致 |
+| C-29 | B | derived + threshold | **join**(branches × moves、鍵 gameId + ply) | 51 − 5 = 46 は `facts.time` 経由で出る。`facts.moves` で結ぶと spentSec が 43 / 51 で欠ける(< 10 が 7、≥ 10 が 1) | 「多く」の線が無い。**再計算の道が表によって違う**(F-1) |
+| C-30 | B | threshold | ― | 同 C-03 | 承認記録が無い |
+| C-31a | A | aggregate | population | `repro.top1Drop.positions` 54 | 値一致(再計算は branches の `shallowVisible` + `top1Tags includes drop` で可) |
+| C-31b | C | ― | ― | (不在の主張) | 形が無い |
+| C-31c | C | ― | ― | (工程の状態。候補 JSON `unitMismatchFractions` に「人間の承認待ち」の字は在る) | 形が無い |
+| C-32 | C | ― | ― | (予測の登録) | metric(集計 id)と「いまの値」は在るが comparator と value が無い。H-4 の形を満たさない。**顧客向けの予測は、契約上は PREDICTIVE になれない** |
+| C-33 | C | ― | ― | (定義。300 は `ahead_cp` に在る) | 定義の文を比べる形が無い |
+| C-34a | A | aggregate | population(signatureClass) | `groups.*.games` 18 / 4 / 3。`facts.recognition.rows` から再計算 | 再計算一致 |
+| C-34b | A | aggregate + direct | population(reviewStatus) | `facts.recognition.definitions` 114 件すべて `draft` | 一致(本文に名前が無いことは H-10 の機構) |
+| C-35 | A | aggregate | population(signatureClass)、**join**(branches / moves / games × recognition.rows、鍵 gameId) | 群 × 4 列 = 12 セル。games・collapses・aheadThenLost の 6 セルは集計行(値一致)、**側の一致 6 セルは集計行に無く再計算** | **12 / 12 一致**(70(38)・111(65)・29(20)・15(8)・8(7)・6(3)) |
+| C-36a | A | aggregate | population | `groups.other.aheadThenLost` 3 / 4、`groups.other.games` 4 | 一致 |
+| C-36b | B | derived + threshold | population | 18/4 = 4.50、56/18 = 3.11(再計算可) | 「多く」の線が無い |
+| C-36c | B | threshold | ― | (数が無い) | **C-17 と両立しない**(「材料が無い」ものについて「出やすかった」と言う) |
+| C-37 | A(9 行)+ B(1 行) | direct | ― | 9 つの数は集計行の `value/numerator/denominator` に在る。25 は `facts.games` の件数。0.7 は code | 0.7 の行は C-09 と同じ |
+| C-38 | A | direct | normalization(path → ファイル名) | side / totalPlyCount / result は `facts.games[]`(**25 / 25 一致**)。**ファイル名は packet に無い**(`src` は出どころ id `m1`)→ `kifu-3min/` のファイル一覧(**material files**) | 一致。ポインタの出どころが packet の外に 1 列ある(F-4) |
+
+### 7.1 集計
+
+| 数 | 予測 | 実測 |
+|---|---|---|
+| 単位 | 45 | 45 |
+| A | 25 | **25**(C-37 は A に数えた) |
+| B | 14 | **14** |
+| C | 6 | **6** |
+| 形で足りないもの | 0 | **0**(A・B は 4 形に当たった) |
+| 使われた形 | aggregate 最多 | aggregate 22・threshold 14(うち B 13)・direct 10・derived 4(重なりあり) |
+| 修飾 3 つで足りるか | 足りない(+2) | **足りない。+3**: `source_kind`(値: packet / aggregate / registry / document / approved_text / material_files / **code**)、`join`(鍵 + **鍵の約束の正規化**)、それと予測に無かった **`verification_depth`**(値一致 / 再計算)。F-1〜F-4 |
+| `time_range` | 0〜1 | **0** |
+| C-35 の側の 6 セル | 6 / 6 | **6 / 6** |
+| 0.7・2 倍の承認記録 | 無い | **無い**。ただし「無い」ではなく「解決できない」(批評が「承認済みの表の側」と書き、表に無い。F-5) |
+| 両立しない 2 文 | 1 組 | **1 組**(C-17 / C-36c) |
+
+### 7.2 予測に無かった事実(F-1〜F-6)
+
+| # | 事実 | 契約への影響 |
+|---|---|---|
+| F-1 | **GROUNDED に 2 つの深さがある。** `time.*` の集計行は `recountable: false` と正直に宣言されており、`facts.moves.spentSec` は 1242 手中 161 手にしか無い。C-11・C-12・C-29 は集計行の値とは一致するが、`facts` から数え直せない | 契約に `verification_depth`(`value_match` / `recount`)を持たせ、冊子にも「数え直せる数」と「写した数」を分けて出せるようにする。**packet はすでにこの区別を持っている**(`recountable`)。門 (xi) は持っていない |
+| F-2 | **表によって手数の鍵の約束が違う。** `facts.engine.ply` = 表示の手数、`facts.branches.ply` = その 1 つ前(`displayPly` が表示の手数)。`facts.moves.ply` は engine と同じ | `join` 修飾は鍵の名前だけでなく**鍵の約束(正規化)**を持つ。確定監査 A-5(`gameId`/`games` の一般化)に「ply の約束」を足す |
+| F-3 | **後手の局は座標が鏡映。** `mirrored: true` の局では USI `P*6f` が本文の ▲４四歩打に、`2d2c+` が ▲８七歩成になる。盤の主張 1 つに正規化が 4 つ重なる(鏡映・USI → 漢字・tags → 語・displayPly) | `normalization` は規則の **id の並び**(順序つき)で持つ。1 つでも落ちると VALUE_MISMATCH を誤って出す |
+| F-4 | **対応表のファイル名は packet に無い。** `facts.games[].src` は出どころの id(`m1`)で、ファイル名は `kifu-3min/` の一覧から来る | `source_kind` に `material_files` が要る。packet を唯一の事実入力とする設計(人間の決定 2026-09-29)と、ファイル名の列が packet の外に在ることは両立していない ― **既知事項の候補** |
+| F-5 | **承認記録が「無い」ではなく「解決できない」。** 0.7 と 2 倍は `check_answer.MENU_THRESHOLDS` に在り(code、変異試験つき。P-181)、批評 R2 は「承認済みの表の側」と書くが、承認済みの表(DELIVER_GATES §2.4)は minN だけ | `approval_record` の解決は登録簿への Canonical Fetch と同じ形(POINTER_NOT_FOUND になりうる)。線は `provenance.thresholds` に載せる(ahead_cp・long_think_sec は載っている。0.7・2 倍は載っていない ― 載せるのは判断的知識の承認) |
+| F-6 | **顧客向けの予測は comparator を持たない**(C-32)。「動くはずの事実」と「いまの値」はあるが、どちらへ動けば CONFIRMED かが無い。内部の仮説(H-4)は持っている | 顧客に見せる答え合わせの表に比較子と向きを出すかは、顧客の理解(customer-comprehension-first)と予測の契約の両方の話 ― 人間の判断 |
+
+### 7.3 偏りの注記
+
+予測と実測が 3 値で 45 / 45 一致したのは、**予測した席と測った席が同じ**で、しかも予測を書く前に門と集計 26 行を読んでいたからである(A はほぼ集計行の有無で決まる)。一致は仕様の正しさの証拠ではなく、**3 値の粒度が粗い**ことの証拠。F-1〜F-6 は全部その粒度の下で出た。次に同じ型で測るなら、(1) 契約の欄ごと(pointer が解決するか・再計算が一致するか・承認が解決するか)に予測を書く、(2) 埋める席を分ける。
 
 ---
 
@@ -361,9 +445,34 @@ PREDICTIVE の成立条件: `registration_time < min(event_time of 照合に使�
 
 ---
 
-## 11. 予測と実測の照合(手順 10。**§7 の後に書く**)
+## 11. 予測と実測の照合(手順 10)
 
-(封印後に埋める)
+| 項目 | 値 |
+|---|---|
+| 予測の封 | コミット `b4580f3`(2026-10-06 07:52:19 +0900)。`CLAIM_CONTRACT_PREDICTION_2026-10-06.md` sha256 `db9c2bb07d6e46535e10747819cbd42f267fc7747d80e9b480116502324dde33` |
+| 分解と測定 | 封の後(同日)。§7 |
+| 3 値の一致 | **45 / 45**(A 25・B 14・C 6) |
+| 数の予測の一致 | 形で足りる ✔ / 修飾 +2 → 実測 +3(`verification_depth` が増えた。**外れ**)/ `time_range` 0〜1 → 0 ✔ / C-35 6 / 6 ✔ / 承認記録 無い → 「解決できない」(**半分外れ**: 無いのではなく、在ると書いた文書と無い表が両方ある)/ 両立しない 2 文 1 組 ✔ |
+| 予測に無かった事実 | F-1〜F-6(§7.2) |
+| 読み方(予測 §3) | A が予測どおりなので契約の必須欄は実物を落としていない。C が予測どおりなので「数でない主張を Core が扱うか」は設計論点のまま(扱わない、が v0.1 の答え: C は Prediction Ledger・登録簿・人間の文のどれかに属し、4 形の外)。`time_range` 0 回なので、時間の修飾は将棋では試せない ― XBRL が最初の実戦 |
+| 偏り | §7.3。同じ席・粗い粒度。**一致を仕様の正しさの証拠に数えない** |
+
+### 11.1 v0.1 に反映したもの(§3 を直した箇所)
+
+- §3.2 に `source_kind`・`join`・`verification_depth` を足した(実測で要った 3 つ)。
+- §3.3 に `verification_depth` の欄を足した。
+- §4.7 の「門に無い欄」に `verification_depth`(門 (xi) は値一致しか見ない)と鍵の約束(F-2)を数える。
+
+### 11.2 v0.2 に持ち越す論点(人間か司令塔の判断)
+
+| # | 論点 | 由来 |
+|---|---|---|
+| Q-1 | 存在の比較子(> 0)を承認なしで許すか | C-02・C-04・C-10 |
+| Q-2 | 線 0.7・2 倍を `provenance.thresholds` に載せる(= 判断的知識として承認する)か、「仮置き」の札を契約に持つか | F-5 |
+| Q-3 | 顧客向けの答え合わせの表に比較子と向きを出すか | F-6・C-32 |
+| Q-4 | packet の外(ファイル名・code の定数)を `source_kind` として認めるか、packet に取り込むか | F-4・F-5 |
+| Q-5 | `INCONCLUSIVE` と結果状態 4 語を契約の版上げで入れるか | §2 の 5・7 |
+| Q-6 | 両立しない 2 文(C-17 / C-36c)を門で見るか(主張どうしの整合の欄) | §4.7 |
 
 ---
 

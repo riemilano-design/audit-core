@@ -4,6 +4,7 @@
 
 | ファイル | 何が書いてあるか | 主な読者 |
 |---|---|---|
+| [CLAIM_CONTRACT_SPEC_v0.1.md](CLAIM_CONTRACT_SPEC_v0.1.md) | **Audit Core の「主張の契約」v0.1**(司令塔、2026-10-06)。形 4(direct / derived / aggregate / threshold)+ 修飾(population / time_range / normalization / source_kind / join / verification_depth)、UNVERIFIABLE は形でなく結果、Claim Binding を Core の 10 番目に(生成側 / 監査側・束縛率)、時刻の契約(コミット時刻 / データの事象時刻)。門 6 種を契約欄に転記し、5 人目の冊子の 45 単位を予測([CLAIM_CONTRACT_PREDICTION_2026-10-06.md](CLAIM_CONTRACT_PREDICTION_2026-10-06.md)、封 `b4580f3`)→ 分解 → 照合(3 値 45/45・予測に無かった事実 F-1〜F-6・持ち越し Q-1〜Q-6)。**コードは触っていない** | Audit Core の設計を読む人・2 つ目の Adapter(XBRL 候補)を設計する人 |
 | [COMMAND_STRUCTURE.md](COMMAND_STRUCTURE.md) | **指示系統の正本(2026-09-24)**。いま誰がどの席にいて(4 レーン: 開発・診断 / 納品 / 広報 / 営業)、誰に報告し、どこに記録を書くか。報告の向き 4 つ、人間だけが決めるもの、同じ木を共有するための物理の決まり、時計から入る予約タスク、片づけの台帳。**権限は変えない**(権限は CLAUDE.md と AGENT_PROTOCOL 5.、手順は AGENT_PROTOCOL、判断権限は ROLES) | 全員。**新しいセッションは CLAUDE.md の次にここを読む** |
 | [DESIGN_BRIEF_OBSERVATION_LAYER_2026-09-25.md](DESIGN_BRIEF_OBSERVATION_LAYER_2026-09-25.md) | 司令塔の指示書(2026-09-25): 「多角的 LLM 分析のための観測レイヤー設計案」を開発・診断レーンに書かせる。人間の決定 7 つ(対局後診断は対局中コーチのための研究工程 / GO は shapes でなく設計思想 / LLM は判定者でなく仮説生成器・批判者・整理者 / ヒアリングは事前仮説だけ / 時間は症状 / 知識 3 種類の蓄積 / 今は実装しない)、設計案に含める 9 節 + 3 点 + 知識レイヤー、完了の判定。**設計案まで。実装の GO は含まない** | 設計案を書く人・読む人 |
 | [KNOWLEDGE_LANE_BRIEF_2026-09-25.md](KNOWLEDGE_LANE_BRIEF_2026-09-25.md) | 司令塔の指示書(2026-09-25): 知識レーン(5 つ目のレーン。人間の決定)。形・戦型・狙いの下書きを観測レイヤーと同時進行で集め、増やしたら必ず測る(沈黙率・誤認)。目的は多角的分析と対局中コーチの共通言語。コード・閾値・露出制御・スキーマは触らない。最初の 1 まとまりの手順つき | 知識レーン、司令塔 |
