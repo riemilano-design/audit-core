@@ -4,6 +4,7 @@
 
 | ファイル | 何が書いてあるか | 主な読者 |
 |---|---|---|
+| [XBRL_ADAPTER_INVESTIGATION_2026-10-06.md](XBRL_ADAPTER_INVESTIGATION_2026-10-06.md) | **XBRL(EDINET)の実物調査と封じた予測の照合**(2026-10-06)。鍵は 401 で要ることを確認、規約は PDL1.0(出典・加工の明記・API は例外)、コンテキスト ID の命名規約・同一要素の複数値の禁止・`decimals`/`scale`・MD&A は textBlock(HTML)。予測との照合: `time_range` は contextRef に写る、F-2/F-3 は再来、**`tolerance` は外れ(データ自身が精度を宣言)**、Core 変更と層の数は Adapter 未接続で未測定。X-1〜X-4。提案: 人間がアカウントを作り、使い捨ての探り 1 本(予測を封じてから) | XBRL の採用を決める人、探りを回す席 |
 | [CLAIM_CONTRACT_SPEC_v0.2.md](CLAIM_CONTRACT_SPEC_v0.2.md) | **Claim Contract v0.2 ― 4 層**(Claim / Evidence Pointer / Contract / Result。2026-10-06)。修飾は 3 のまま、scheme(packet / aggregate / registry / code / files / document)に信頼の段、線・比較子・承認は registry へのポインタ解決、INCONCLUSIVE と CONTRADICTED は足さない、予測台帳は H-4 + 封じたコミット時刻。c5 を読み直すと A 32 / B 7 / C 6(線の 5 件は POINTER_NOT_FOUND = H-A)。**コードは触っていない** | Audit Core の仕様を読む人、XBRL 調査の席 |
 | [XBRL_ADAPTER_PREDICTION_2026-10-06.md](XBRL_ADAPTER_PREDICTION_2026-10-06.md) | **XBRL を調べる前の予測(封印)**。層 4 のまま・scheme +2 まで・form/modifier +0・tolerance と time_range が初めて使われる・意味変更 0・contextRef で F-2 が再来。例 4 つの表現可能性と、調査そのものの予測(鍵・ZIP・textBlock・丸め)。採用の判定表 | XBRL を調べる席、外れを数える人 |
 | [AUDIT_CORE_BOUNDARY_AUDIT_2026-10-06.md](AUDIT_CORE_BOUNDARY_AUDIT_2026-10-06.md) | **Audit Core 確定監査**(セッション「Audit Core確定監査」、2026-10-06。調査だけ。コードは触っていない)。T-5 時点の Core 候補 26 本を依存境界と意味境界の 2 列で判定、Shogi Adapter へ移す仕様 A-1〜A-15、Core に残す機構、保留 H-1〜H-8、最小 API、将棋を外して成立する部分(TS 7 + Python 2)、Meeting の 4 Claim の表現可能性、**audit-platform は NO-GO**(GO に変わる条件 6 つ) | Audit Core の次の T を決める人、Claim Contract v0.2 を書く人 |
