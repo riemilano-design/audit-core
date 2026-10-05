@@ -1034,6 +1034,50 @@ class SideWordIsOnePlaceTest(unittest.TestCase):
                 got[k.value] = ast.unparse(v)
         self.assertEqual(got, {"top1Side": "CA_SIDE_JP", "actualSide": "CA_SIDE_JP"})
 
+class MarkFamilyTest(unittest.TestCase):
+    """**本編の印の家族の一覧 `MARK_TAG_RES` と `strip_marks`**(門の数え方の束。2026-10-05。裁定 Q2)。"""
+
+    # **実物の印の字**(封じた本編 2026-09-29 の 20・28 行目、⑥ 束 2 の出力、answer_facts の優先順位の印)。
+    REAL = {
+        "pos": "<!-- pos: 11/48 付録3 3 分 -->",
+        "menu": "<!-- menu: M4 -->",
+        "priority": "<!-- priority: M4 -->",
+        "agg": "<!-- agg: sideMatch.attack -->",
+        "ans": "<!-- ans: q1 unanswerable -->",
+    }
+    BY_NAME = {"menu": CA.MENU_TAG_RE, "priority": CA.PRIORITY_TAG_RE, "pos": CA.POS_TAG_RE,
+               "agg": CA.AGG_TAG_RE, "ans": CA.ANS_TAG_RE}
+
+    def test_m1_the_family_is_the_five_kinds_that_can_appear_in_the_counted_lines(self):
+        """**5 種で足りることは測った**(2026-10-05): コードが書く印の種類は 8(TODO・agg・ans・appendix・menu・pos・priority・sec)。
+        問いの節に出るのは `ans` だけ、(xi) の行に出るのは `agg` だけ(合成の顧客フォルダの本編で実測)。
+        `sec`・`appendix` は数え方の節にだけ出る(付録へ回す印)、`TODO` は門の前に消える。だから 5。"""
+        self.assertEqual(len(CA.MARK_TAG_RES), 5)
+        self.assertEqual(set(CA.MARK_TAG_RES), set(self.BY_NAME.values()))
+        kinds = set()
+        for name in os.listdir(HERE):
+            if name.endswith(".py") and not name.endswith("_test.py"):
+                kinds |= set(re.findall(r"<!--\s*([a-zA-Z]+):", open(os.path.join(HERE, name), encoding="utf-8").read()))
+        self.assertEqual(kinds, {"TODO", "agg", "ans", "appendix", "menu", "pos", "priority", "sec"})
+        self.assertEqual(kinds - set(self.REAL), {"TODO", "appendix", "sec"})
+
+    def test_m2_each_regex_matches_its_own_real_mark_and_no_other(self):
+        for name, mark in self.REAL.items():
+            for other, tag_re in self.BY_NAME.items():
+                hit = tag_re.search(mark) is not None
+                self.assertEqual(hit, name == other, (name, other))
+
+    def test_m3_strip_marks_removes_the_whole_family_and_nothing_else(self):
+        line = "文" + "".join(self.REAL.values()) + "。"
+        self.assertEqual(CA.strip_marks(line), "文。")
+        self.assertEqual(CA.strip_marks("印の無い行 25 局"), "印の無い行 25 局")
+        # 家族の外(数え方の節の印)は剥かない ― 数える節には出ないことを測って 5 にした。
+        self.assertEqual(CA.strip_marks("- 題<!-- sec: 付録1/形勢の流れ -->"), "- 題<!-- sec: 付録1/形勢の流れ -->")
+        for name, mark in self.REAL.items():
+            self.assertNotIn(mark, CA.strip_marks("a" + mark + "b"), name)
+            self.assertEqual(CA.strip_marks("a" + mark + "b"), "ab", name)
+
+
 # **`__main__` の塊はファイルの末尾に 1 つだけ**(P-181。2026-09-29)。
 # 途中に置くと `unittest.main()` の `sys.exit` で**後ろのクラスが定義されず、直接実行で 1 本も走らない**
 # (門の `discover` では走るので赤にならない ―「手元で回して OK だった」が嘘になる)。

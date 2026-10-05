@@ -913,6 +913,181 @@ class AggTagTest(unittest.TestCase):
         with self.assertRaises(EG.ExitGateError):
             EG.parse_own_args(["a.md", "--packet", "p.json"])
 
+    # ==================== 型からの再構成(門の数え方の束。2026-10-05。P-192)====================
+    # 期待値は**封じた最終版の行の字**(2026-09-29 の 9_本編_最終版.md 12〜14 行目の事実部)。
+    M4A = "第 1 候補が攻めの手だった分かれ道のうち、実戦も攻めの手だった局面"
+    M4D = "第 1 候補が自玉側の手だった分かれ道のうち、実戦も自玉側の手だった局面"
+    M5 = "直前の自分の手が 10 秒以上で、この手は 4 秒以内だった手のうち、崩れた手"
+    FACT1 = ("第 1 候補が攻めの手だった分かれ道 107 局面のうち、実戦も攻めの手だった局面が 65。"
+             "第 1 候補が自玉側の手だった分かれ道 132 局面のうち、実戦も自玉側の手だった局面が 76。")
+    FACT2 = "直前の自分の手が 10 秒以上で、この手は 4 秒以内だった 37 手のうち、崩れた手が 9。"
+    FACT3 = "一度は優勢(+300 以上)になった対局が 18 局。そのうち負けた対局が 6 局。"
+
+    def cands2(self):
+        return {"actionFractions": [
+            {"id": "M4", "label": "攻め", "name": self.M4A, "unit": "局面", "numerator": 65, "denominator": 107},
+            {"id": "M4", "label": "自玉側", "name": self.M4D, "unit": "局面", "numerator": 76, "denominator": 132},
+            {"id": "M5", "label": "", "name": self.M5, "unit": "手", "numerator": 9, "denominator": 37}]}
+
+    def packet2(self):
+        return {"aggregates": [
+            {"id": "sideMatch.attack", "numerator": 65, "denominator": 107},
+            {"id": "sideMatch.defense", "numerator": 76, "denominator": 132},
+            {"id": "time.quickAfterLongThink", "numerator": 9, "denominator": 37},
+            {"id": "time.bySpent0to1", "numerator": 22, "denominator": 531},
+            {"id": "aheadThenLost", "numerator": 6, "denominator": 18}]}
+
+    def test_x16_the_sealed_three_facts_match_the_templates_and_only_the_holes_are_claims(self):
+        """**型の字の中の数(第 1 候補の 1・10 秒・4 秒・+300)は主張ではない。穴の数だけ。**"""
+        ok, holes, reading = EG.fact_line_holes("- " + self.FACT1 + "― 読み: 両方の側に残った。<!-- agg: sideMatch.attack -->", self.cands2())
+        self.assertTrue(ok)
+        # 穴は**文に出た順**(分母 → 分子)。照合は集合で見る。
+        self.assertEqual(holes, [107, 65, 132, 76])
+        self.assertEqual(reading, "両方の側に残った。")
+        ok, holes, _ = EG.fact_line_holes("- " + self.FACT2, self.cands2())
+        self.assertEqual((ok, holes), (True, [37, 9]))
+        ok, holes, _ = EG.fact_line_holes("- " + self.FACT3, self.cands2())
+        self.assertEqual((ok, holes), (True, [18, 6]))
+        # 門を通す: 3 本とも印つきで苦情 0(2026-10-01 までは 3 本とも落ちた)。
+        md = "\n".join([
+            "- " + self.FACT1 + "― 読み: 両方の側に残った。<!-- agg: sideMatch.attack --><!-- agg: sideMatch.defense -->",
+            # 読み部の数(531・22)は印の 2 つ目の集計行に在る。「0〜1 秒」と書くと 1 が線の値として落ちる(x21 の家族・(ア))。
+            "- " + self.FACT2 + "― 読み: 速く指した 531 手では崩れが 22 手でした。<!-- agg: time.quickAfterLongThink --><!-- agg: time.bySpent0to1 -->",
+            "- " + self.FACT3 + "― 読み: 一度は良くなってからのものでした。<!-- agg: aheadThenLost -->"])
+        problems, notes = [], []
+        EG.check_agg_tags(md, self.packet2(), problems, notes, self.cands2())
+        self.assertEqual(problems, [])
+        # **候補を渡さなければ接続型は組めない**(型に当たらない → 行全体の数 → 1・10・4 で落ちる)。
+        # 優勢後敗の型は**定数**なので候補が無くても当たる(3 行目は通る)。
+        problems2, notes2 = [], []
+        EG.check_agg_tags(md, self.packet2(), problems2, notes2)
+        self.assertEqual(len(problems2), 2, problems2)
+        self.assertIn("[1]", problems2[0])
+        self.assertIn("[4, 10]", problems2[1])
+
+    def test_x17_a_hole_that_disagrees_with_the_row_falls(self):
+        line = "- " + self.FACT1.replace("が 65。", "が 66。") + "<!-- agg: sideMatch.attack --><!-- agg: sideMatch.defense -->"
+        problems, notes = [], []
+        EG.check_agg_tags(line, self.packet2(), problems, notes, self.cands2())
+        self.assertEqual(len(problems), 1, problems)
+        self.assertIn("[66]", problems[0])
+        self.assertNotIn("1,", problems[0])  # 型の字の 1 は主張ではない
+
+    def test_x18_a_line_that_does_not_end_exactly_on_a_template_is_not_matched(self):
+        """**型の連結でちょうど尽きるときだけ**(司令塔の条件: 型の後に 1 字余る例を負の例に)。"""
+        for tail in ("。", "です", "、", "1"):
+            ok, holes, _ = EG.fact_line_holes("- " + self.FACT3 + tail, self.cands2())
+            self.assertFalse(ok, tail)
+            self.assertEqual(holes, [])
+        # 末尾の空白は行の `.strip()` で落ちるので余りではない(数える側と同じ扱い)。
+        self.assertTrue(EG.fact_line_holes("- " + self.FACT3 + " ", self.cands2())[0])
+        # 型の前に 1 字余っても当たらない。
+        self.assertFalse(EG.fact_line_holes("- また" + self.FACT3, self.cands2())[0])
+        # 空の事実部・印だけの行も当たらない。
+        self.assertFalse(EG.fact_line_holes("- <!-- agg: aheadThenLost -->", self.cands2())[0])
+
+    def test_x19_one_changed_character_in_the_type_breaks_the_match_and_falls_back(self):
+        """型の字を 1 字変えたら型に当たらず、`number_claims` の道に戻って 300 で落ちる(今までの振る舞い)。"""
+        line = "- " + self.FACT3.replace("対局", "対戦", 1) + "<!-- agg: aheadThenLost -->"
+        self.assertFalse(EG.fact_line_holes(line, self.cands2())[0])
+        problems, notes = [], []
+        EG.check_agg_tags(line, self.packet2(), problems, notes, self.cands2())
+        self.assertEqual(len(problems), 1, problems)
+        self.assertIn("300", problems[0])
+        # 正規表現の特殊文字(括弧・+)が字として当たっている(`re.escape` を外す変異が落ちる)。
+        self.assertTrue(EG.fact_line_holes("- " + self.FACT3, self.cands2())[0])
+        self.assertFalse(EG.fact_line_holes("- " + self.FACT3.replace("(+300 以上)", "+300 以上"), self.cands2())[0])
+
+    def test_x20_the_reading_part_masks_the_four_terms_only(self):
+        """読み部は `number_claims` のまま。ただし用語の 4 語(`TERM_LINES`)と指し手の字は伏せる(裁定 Q1 = (イ))。
+        5 語目(「崩れ」)は伏せない。"""
+        base = "- " + self.FACT3 + "― 読み: {r}<!-- agg: aheadThenLost -->"
+        problems, notes = [], []
+        EG.check_agg_tags(base.format(r="第 1 候補と違う側が残り、一致率は低い。"), self.packet2(), problems, notes, self.cands2())
+        self.assertEqual(problems, [])
+        problems, notes = [], []
+        EG.check_agg_tags(base.format(r="崩れ 5 手。"), self.packet2(), problems, notes, self.cands2())
+        self.assertEqual(len(problems), 1, problems)
+        self.assertIn("[5]", problems[0])
+        # 伏せる語の集合は **4 語ちょうど**(5 語目「崩れ」「評価」を伏せる変異が赤に)。
+        import exit_fill as EF
+        self.assertEqual(EF.mask_terms_and_moves("崩れ 5 手。評価が 7"), "崩れ 5 手。評価が 7")
+        for term, _s in CS.TERM_LINES:
+            self.assertNotIn(term, EF.mask_terms_and_moves("x" + term + "y"))
+        # 読み部の数が集計行に在れば通る(18 局)。
+        problems, notes = [], []
+        EG.check_agg_tags(base.format(r="18 局のうちの話です。"), self.packet2(), problems, notes, self.cands2())
+        self.assertEqual(problems, [])
+
+    def test_x21_the_threshold_value_in_the_reading_still_falls(self):
+        """「(0.7)」は集計行の数ではないので、読みに書くと落ちる(裁定 Q1 の 3 = (ア) のまま。⑥ は付けずに注記)。"""
+        line = "- " + self.FACT1 + "― 読み: 線(0.7)を下回りました。<!-- agg: sideMatch.attack --><!-- agg: sideMatch.defense -->"
+        problems, notes = [], []
+        EG.check_agg_tags(line, self.packet2(), problems, notes, self.cands2())
+        self.assertEqual(len(problems), 1, problems)
+        self.assertIn("[7]", problems[0])
+        # 「0〜1 秒」の 1(段の境の値)も同じ(線の値は集計行の数ではない)。
+        line = "- " + self.FACT2 + "― 読み: 0〜1 秒で指した 531 手。<!-- agg: time.quickAfterLongThink --><!-- agg: time.bySpent0to1 -->"
+        problems, notes = [], []
+        EG.check_agg_tags(line, self.packet2(), problems, notes, self.cands2())
+        self.assertEqual(len(problems), 1, problems)
+        self.assertIn("[1]", problems[0])
+
+    def test_x22_the_filler_calls_this_one_judgement(self):
+        """⑥(`exit_fill.agg_marks_for`)は門の `agg_line_missing` を呼ぶ(判定を 2 つにしない)。"""
+        src = read_text(os.path.join(HERE, "exit_fill.py"))
+        self.assertIn("EG.agg_line_missing(", src)
+        start = src.index("def agg_marks_for(")
+        body = src[start:src.index("\ndef ", start + 1)]
+        self.assertNotIn("number_claims", body)
+
+    def test_x23_the_reconstruction_does_not_read_slot_map(self):
+        """**slot_map を信じない**(司令塔の裁定)― 行から再構成する。"""
+        import inspect
+        for fn in (EG.fact_templates, EG.fact_line_holes, EG.agg_line_missing):
+            self.assertNotIn("slot_map", inspect.getsource(fn))
+        # 型の字は exit_fill の定数から(写しが無い): この module に型の字を直書きしていない。
+        src = read_text(os.path.join(HERE, "exit_gate.py"))
+        self.assertNotIn("一度は優勢", src)
+        self.assertNotIn("のうち、", src.split("def fact_templates")[1].split("def fact_line_holes")[0])
+
+    def test_x25_the_connective_type_escapes_regex_characters_in_the_name(self):
+        """候補の `name` に正規表現の特殊文字が入っても**字として**当てる(2026-10-05 の変異 G2-M3 が黙った穴:
+        いまの 3 つの name に特殊文字が無いので、接続型の `re.escape` を外しても緑だった)。"""
+        cands = {"actionFractions": [
+            {"id": "M9", "label": "", "name": "評価が (+300) 以上の局のうち、負けた局", "unit": "局", "numerator": 6, "denominator": 18},
+            {"id": "M8", "label": "", "name": "a.bのうち、c", "unit": "局", "numerator": 2, "denominator": 5}]}
+        ok, holes, _ = EG.fact_line_holes("- 評価が (+300) 以上の 18 局のうち、負けた局が 6。", cands)
+        self.assertEqual((ok, holes), (True, [18, 6]))
+        # `.` は任意の 1 字ではない: 「aXb」は「a.b」の型に当たらない。
+        self.assertFalse(EG.fact_line_holes("- aXb 5 局のうち、cが 2。", cands)[0])
+        self.assertTrue(EG.fact_line_holes("- a.b 5 局のうち、cが 2。", cands)[0])
+
+    def test_x26_an_empty_hole_does_not_match(self):
+        """**穴が空の行は当たらない**(監査が 2026-10-05 に見つけた沈黙: `HOLE_RE` を `(\\d*)` に緩める変異が 364 本を素通りした。
+        退化した入力(穴に数が無い)を自分で置く ― 「変異が全部赤でも入力の退化値の穴は残る」)。例外にもならない。"""
+        self.assertEqual(EG.HOLE_RE, r"(\d+)")
+        for line in ("- 一度は優勢(+300 以上)になった対局が  局。そのうち負けた対局が  局。",
+                     "- 一度は優勢(+300 以上)になった対局が 局。そのうち負けた対局が 6 局。",
+                     "- 第 1 候補が攻めの手だった分かれ道  局面のうち、実戦も攻めの手だった局面が 65。"):
+            ok, holes, _ = EG.fact_line_holes(line, self.cands2())
+            self.assertFalse(ok, line)
+            self.assertEqual(holes, [])
+        # 門でも落ちる(型に当たらず number_claims へ → 300 が主張になる)。例外で止まらない。
+        problems, notes = [], []
+        EG.check_agg_tags("- 一度は優勢(+300 以上)になった対局が  局。そのうち負けた対局が  局。<!-- agg: aheadThenLost -->",
+                          self.packet2(), problems, notes, self.cands2())
+        self.assertEqual(len(problems), 1, problems)
+
+    def test_x24_the_templates_are_built_from_the_candidates_names(self):
+        """候補に無い名前の文は型に当たらない(= 下書きに印字されていない事実の文は通らない)。"""
+        cands = self.cands2()
+        cands["actionFractions"] = [f for f in cands["actionFractions"] if f["id"] != "M5"]
+        self.assertFalse(EG.fact_line_holes("- " + self.FACT2, cands)[0])
+        self.assertTrue(EG.fact_line_holes("- " + self.FACT1, cands)[0])
+        # 空の候補でも優勢後敗の型だけは在る(定数)。
+        self.assertTrue(EG.fact_line_holes("- " + self.FACT3, {})[0])
+
 
 class AnsTagTest(unittest.TestCase):
     """検査 (x) 顧客の問いの答えの場所(2026-10-01)。

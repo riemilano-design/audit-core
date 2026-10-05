@@ -318,7 +318,8 @@ class QuestionSectionTest(unittest.TestCase):
         self.assertIn("本人が書いた文字列そのものではない", SRC)
 
     def test_f25_the_section_passes_the_gate(self):
-        """**⑧ の門を通る。**長さは**門が数える道**で測る(印も数に入る)。"""
+        """**⑧ の門を通る。**長さは**門が数える道**で測る。**印は数えない**(2026-10-05 の直し。
+        それまでは印 29 文字が持ち分 200 を食っていた = 司令塔の訂正 2026-10-01)。"""
         lines = EF.question_section_lines("c5", self.QUESTIONS, self.answers(), 25)
         md = "\n".join(["# 対局後診断", "", "## ひとことで", "", "- 数。", ""]
                        + lines + ["## 数え方", "", "(注)"])
@@ -326,16 +327,16 @@ class QuestionSectionTest(unittest.TestCase):
         CS.check_question_section(md, len(self.QUESTIONS), problems)
         self.assertEqual(problems, [])
         body = CS.question_section_body(md)
-        # **字で留める**(実測 2026-10-01)。問いの字 53 + 人間の文 80 + 印 29 + 空白 1。
+        # **字で留める**(実測 2026-10-05)。問いの字 53 + 人間の文 80 = 133。印 29 と印の前の空白 1 は数えない。
         self.assertEqual(len(self.QUESTION_TEXT), 53)
-        self.assertEqual(len(body), 163)
-        # **足し算を留める**(どれか 1 つが変わったら 163 も変わる)。
-        self.assertEqual(len(body),
-                         len(self.QUESTION_TEXT) + len(EI.unanswerable_past_games(25))
-                         + len("<!-- ans: q1 unanswerable -->") + 1)
-        self.assertLessEqual(len(body), CS.MAX_QUESTION_SECTION_CHARS)
-        # **印が 29 文字ぶん持ち分を食う**(門は機械の印も数える)。正直な限界。
+        self.assertEqual(len(body), 133)
+        # **足し算を留める**(どれか 1 つが変わったら 133 も変わる)。
+        self.assertEqual(len(body), len(self.QUESTION_TEXT) + len(EI.unanswerable_past_games(25)))
+        # **取り違えを赤に**: 空白を数えると 134、印も数えると 163(2026-10-01 までの数)。
+        self.assertNotEqual(len(body), 134)
+        self.assertNotEqual(len(body), 163)
         self.assertEqual(len("<!-- ans: q1 unanswerable -->"), 29)
+        self.assertLessEqual(len(body), CS.MAX_QUESTION_SECTION_CHARS)
 
     def test_f26_the_approved_table_is_pinned(self):
         """**承認済みの文の表を字で留める。**鍵は(顧客の符号, 問いの id)で、
@@ -706,6 +707,23 @@ class TermMaskTest(unittest.TestCase):
         self.assertEqual(EF.paraphrase_problems("長考の直後の 1 手", "直後の 1 手", "x"), [])
 
 
+    def test_f71_the_mask_is_one_function_shared_with_the_gate(self):
+        """**伏せる関数は 1 本**(裁定 Q1 の条件 1)。門 (xi) は `exit_fill.mask_terms_and_moves` を import する。
+        伏せる語は `TERM_LINES` の **4 語だけ**(条件 2)― 5 語目(「崩れ」)は伏せない。"""
+        gate_src = io.open(os.path.join(HERE, "exit_gate.py"), encoding="utf-8").read()
+        self.assertIn("EF.mask_terms_and_moves(", gate_src)
+        self.assertEqual([t for t, _ in CS.TERM_LINES], ["第 1 候補", "分かれ道", "自玉側", "一致率"])
+        self.assertEqual(len(CS.TERM_LINES), 4)
+        self.assertEqual(EF.number_tokens("第 1 候補と一致率 0.7"), ["0.7"])
+        # 5 語目は伏せない: 「崩れ 5」の 5 は数の主張のまま。**語そのものが残る**ことで見る
+        # (数だけ見ると、数字を含まない 5 語目を足す変異が黙る ― 2026-10-05 の変異 G2-M6 で踏んだ)。
+        self.assertEqual(EF.number_tokens("崩れ 5 手"), ["5"])
+        self.assertEqual(EF.number_tokens("分かれ道 3 つ"), ["3"])
+        self.assertEqual(EF.mask_terms_and_moves("崩れ 5 手"), "崩れ 5 手")
+        self.assertEqual(EF.mask_terms_and_moves("第 1 候補 ▲７六歩"), "   ")
+        self.assertNotIn("第 1 候補", EF.mask_terms_and_moves("第 1 候補が"))
+
+
 class LeadAndFactsTest(unittest.TestCase):
     """**F-5 の尾と F-4 の 3 本。**期待値は封じた最終版の字。"""
 
@@ -965,16 +983,17 @@ class BuildDocumentTest(unittest.TestCase):
             self.assertEqual(row["textSha256"], EF.text_sha256(row["text"]))
         by_slot = {r["slot"]: r for r in rows}
         self.assertEqual(by_slot["p1.1"]["aggregateIds"], ["sideMatch.attack", "sideMatch.defense"])
-        # **印は 3 本とも付かない**(測った: 第 1 候補 → 1、(0.7) → 7、10 秒・4 秒、+300 が門 (xi) の
-        # 「行の数は全部集計行に在る」に当たる)。対応は aggregateIds に残り、理由は注記に出る。
+        # **型からの再構成(2026-10-05)**: 事実部の型の字の中の数(第 1 候補の 1・10 秒・4 秒・+300)は主張ではない。
+        # 残るのは**読み部**の数 ― p1.1 の「(0.7)」の 7(線の値。集計行でない = 裁定 Q1 の 3)と
+        # p1.2 の「0〜1 秒」「1 手」の 1。p1.3 の読みには数が無いので**印が付く**。
         self.assertEqual(by_slot["p1.1"]["marks"], [])
         self.assertEqual(by_slot["p1.2"]["marks"], [])
-        self.assertEqual(by_slot["p1.3"]["marks"], [])
-        self.assertEqual(len(_notes), 3, _notes)
-        self.assertIn("[1, 7]", _notes[0])
-        self.assertIn("[1, 4, 10]", _notes[1])
-        self.assertIn("[300]", _notes[2])
-        self.assertNotIn("<!-- agg:", md)
+        self.assertEqual(by_slot["p1.3"]["marks"], ["<!-- agg: aheadThenLost -->"])
+        self.assertEqual(len(_notes), 2, _notes)
+        self.assertIn("[7]", _notes[0])
+        self.assertIn("[1]", _notes[1])
+        self.assertIn("<!-- agg: aheadThenLost -->", md)
+        self.assertEqual(md.count("<!-- agg:"), 1)
         self.assertEqual(by_slot["p1.1"]["itemRef"], ref(0, "h1"))
         self.assertEqual(by_slot["lead"]["itemRef"], ref(0, "lead"))
         self.assertEqual(by_slot["p2.1"]["marks"], ["<!-- pos: 11/48 付録3 3 分 -->"])
@@ -993,7 +1012,7 @@ class BuildDocumentTest(unittest.TestCase):
         EG.check_no_unit_mismatch(md, candidates(), problems)
         EG.check_p2(sections, candidates(), problems)
         EG.check_draft_leftovers(md, problems)
-        EG.check_agg_tags(md, packet(), problems, notes)
+        EG.check_agg_tags(md, packet(), problems, notes, candidates())
         request = {"customerQuestions": QUESTIONS2}
         EG.check_ans_tags(CA.strip_dev_section(md), request, selection2(), problems, notes)
         self.assertEqual(problems, [])

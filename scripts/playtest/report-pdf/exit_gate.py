@@ -526,7 +526,84 @@ def numbers_of_aggregate_row(row):
     return out
 
 
-def check_agg_tags(md_text, packet, problems, notes):
+# ==================== (xi) 型からの再構成(門の数え方の束。2026-10-05)====================
+#
+# 【なぜ】審査済みの事実の文は**数の主張でない数**を持つ ― 「第 1 候補」の 1・「10 秒以上」「4 秒以内」「+300 以上」の閾値。
+# 行の数を全部集計行と比べると、封じた形の 3 本は 3 本とも印を付けられない(実測 2026-10-05、0 / 3。P-192)。
+# **用語・閾値・小数を「例外の一覧」で外す道は採らない**(司令塔の裁定。表から作った出力を同じ表と比べる家族)。
+# 採るのは**型からの再構成**: 行を ⑥ の型(追跡された定数 1 か所 = `exit_fill`)に当て、**穴に入った数だけ**を照合する。
+# 型の字の中の数は主張ではない。**型に当たらない行は今までどおり `number_claims`**。`slot_map.json` は読まない(信じずに再構成)。
+#
+# 【⑥ もこの判定を呼ぶ】`exit_fill.agg_marks_for` は印を付けるかをここで決める(判定を 2 つにしない)。
+# `exit_fill` はこの module を import しているので、ここでは**関数の中で**読む(循環を import 時に起こさない)。
+HOLE_RE = r"(\d+)"
+
+
+def fact_templates(cands):
+    """型の正規表現の一覧 `[(名, 正規表現)]`。**字は `exit_fill` の定数と候補の `name` から作る**(写さない)。"""
+    import exit_fill as EF  # noqa: E402  循環 import を避けて関数の中で
+
+    out = []
+    for f in cands.get("actionFractions") or []:
+        name, unit = f.get("name"), f.get("unit")
+        if not isinstance(name, str) or EF.FACT_CONNECTIVE not in name or not isinstance(unit, str) or not unit:
+            continue
+        # 穴に目印を入れて組み、目印の外を re.escape する(**型の字を 1 字変えたら当たらない**)。
+        shape = EF.connective_fact(name, "\x00N", "\x00D", unit)
+        pattern = re.escape(shape).replace(re.escape("\x00N"), HOLE_RE).replace(re.escape("\x00D"), HOLE_RE)
+        out.append((name, pattern))
+    ahead = EF.AHEAD_THEN_LOST_TEMPLATE.format(numerator="\x00N", denominator="\x00D")
+    out.append((EF.AHEAD_THEN_LOST_ID,
+                re.escape(ahead).replace(re.escape("\x00N"), HOLE_RE).replace(re.escape("\x00D"), HOLE_RE)))
+    return out
+
+
+def fact_line_holes(line, cands):
+    """印を剥いた行を**型の連結**に当てる。返り値 = `(当たったか, 穴の数 [int], 読み部の字)`。
+
+    事実部 = `― 読み: `(`exit_fill.READING_PREFIX`)の手前(無ければ全体)。先頭の `- ` は落とす。
+    **型の連結でちょうど尽きる**(余り 0 文字)ときだけ当たり。1 本以上・順は任意。
+    """
+    import exit_fill as EF  # noqa: E402
+
+    text = CA.strip_marks(line).strip()
+    if text.startswith("- "):
+        text = text[2:]
+    fact, reading = (text.split(EF.READING_PREFIX, 1) + [""])[:2] if EF.READING_PREFIX in text else (text, "")
+    templates = fact_templates(cands or {})
+    holes = []
+    rest = fact
+    while rest:
+        for _name, pattern in templates:
+            m = re.match(pattern, rest)
+            if m:
+                holes.extend(int(g) for g in m.groups())
+                rest = rest[m.end():]
+                break
+        else:
+            return False, [], reading
+    if not holes:
+        return False, [], reading
+    return True, holes, reading
+
+
+def agg_line_missing(line, allowed, cands):
+    """その行の数のうち、集計行の数 `allowed` に無いもの(昇順)。**型に当たれば穴の数 + 読み部の数、当たらなければ行全体**。
+    ⑥(`exit_fill.agg_marks_for`)と門(`check_agg_tags`)が**同じこの 1 か所**で決める。"""
+    import exit_fill as EF  # noqa: E402
+
+    matched, holes, reading = fact_line_holes(line, cands)
+    if matched:
+        # 読み部は型ではないので `number_claims` のまま。ただし**用語の 4 語と指し手の字は伏せる**
+        # (F-5 の照合と同じ 1 本 `exit_fill.mask_terms_and_moves`。司令塔の裁定 Q1 = (イ)、2026-10-05)。
+        # 線の値「(0.7)」は集計行の数ではないので、ここでは伏せない(⑥ は付けずに注記する)。
+        claims = set(holes) | (set(number_claims([EF.mask_terms_and_moves(reading)])) if reading else set())
+    else:
+        claims = set(number_claims([line]))
+    return sorted(n for n in claims if n not in allowed)
+
+
+def check_agg_tags(md_text, packet, problems, notes, cands=None):
     """(xi) 印の id が packet の集計に在り、その行の数がその集計行の数と合うか。
 
     【拾い方は写さない】数は **この門の `number_claims()` の 1 か所**。
@@ -568,7 +645,8 @@ def check_agg_tags(md_text, packet, problems, notes):
         if CA.RATIO_WORD_RE.search(line):
             notes.append(f"(xi) {line_no} 行目は倍割の語があるので数を照合していない")
             continue
-        missing = sorted({n for n in number_claims([line]) if n not in allowed})
+        # **型からの再構成**(2026-10-05): 候補が渡されていれば型に当て、穴の数だけを照合する。
+        missing = agg_line_missing(line, allowed, cands)
         if missing:
             problems.append(
                 f"(xi) {line_no} 行目の数 {missing} が印の集計行({'・'.join(known)})の数 "
@@ -635,7 +713,7 @@ def run(own, rest, notes=None):
     check_p3(sections, cands, problems)
     check_sentences(raw_md, ctx, problems)
     check_draft_leftovers(raw_md, problems)
-    check_agg_tags(raw_md, packet, problems, notes)
+    check_agg_tags(raw_md, packet, problems, notes, cands)
     # **顧客が読む側だけ**を渡す(書いた側の記録の節に印が残っていても顧客には出ない)。
     check_ans_tags(CA.strip_dev_section(raw_md), request, selection, problems, notes)
     return problems

@@ -759,7 +759,12 @@ def question_heading_lines(md_text):
 
 def question_section_body(md_text):
     """節「お預かりした問い」の**中身**(見出しの行を含まない)を 1 本の文字列で返す。
-    節が無ければ None。長さを数えるのはこの文字列(空白と改行は落とす)。"""
+    節が無ければ None。長さを数えるのはこの文字列(空白と改行は落とす)。
+
+    **印(`<!-- ans: … -->` の家族)は数えない**(2026-10-05。司令塔の訂正 2026-10-01: 印は印字されないので
+    文字数の門が数える理由が無い ― 顧客が 1 文字も読まない 29 文字が、顧客に出る文の枠を削っていた)。
+    剥くのは `check_answer.strip_marks` の 1 か所(文法の隣)。**数える側のここだけ**を直した。
+    """
     heads = question_heading_lines(md_text)
     if not heads:
         return None
@@ -770,7 +775,7 @@ def question_section_body(md_text):
         if line_no > at:
             end = line_no
             break
-    return "".join(line.strip() for line in lines[at + 1:end])
+    return "".join(CA.strip_marks(line).strip() for line in lines[at + 1:end])
 
 
 def check_question_section(md_text, question_count, problems):

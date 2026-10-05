@@ -351,16 +351,19 @@ def check_supplied_words(text, where):
 NUMBER_TOKEN_RE = re.compile(r"[0-9０-９]+(?:[.,][0-9０-９]+)?")
 
 
-def _mask_terms_and_moves(text):
+def mask_terms_and_moves(text):
     """数の字を拾う前に伏せるもの: **用語の 4 行の語**(「第 1 候補」の 1 は数の主張ではない ―
-    語の表は `check_structure.TERM_LINES` の 1 か所)と**指し手の表記**(「▲３四歩」の ３ は手の一部)。"""
+    語の表は `check_structure.TERM_LINES` の 1 か所)と**指し手の表記**(「▲３四歩」の ３ は手の一部)。
+
+    **門 (xi) も読み部にこの 1 本を使う**(司令塔の裁定 Q1 = (イ)。2026-10-05。伏せる語の集合は
+    `TERM_LINES` の 4 語だけ ― 5 語目を足すのは新しい一覧)。写しを作らない。"""
     for term, _sentence in CS.TERM_LINES:
         text = text.replace(term, " ")
     return CA.MOVE_RE.sub(" ", text)
 
 
 def number_tokens(text):
-    return NUMBER_TOKEN_RE.findall(_mask_terms_and_moves(text))
+    return NUMBER_TOKEN_RE.findall(mask_terms_and_moves(text))
 
 
 def move_tokens(text):
@@ -561,7 +564,7 @@ def fact_bullet(fact, reading, marks=()):
     return "- " + fact + READING_PREFIX + reading + "".join(marks)
 
 
-def agg_marks_for(line, aggregate_ids, aggregate_rows):
+def agg_marks_for(line, aggregate_ids, aggregate_rows, candidates=None):
     """その行に `<!-- agg: -->` を付けられるか。付けられれば印の並び、付けられなければ空と理由。
 
     【なぜ条件つきか(2026-10-05 に測った)】門 (xi) は**印の在る行の数の全部**が集計行の数に在ることを
@@ -574,7 +577,8 @@ def agg_marks_for(line, aggregate_ids, aggregate_rows):
     allowed = set()
     for agg_id in aggregate_ids:
         allowed |= EG.numbers_of_aggregate_row(aggregate_rows.get(agg_id) or {})
-    blocking = sorted(n for n in EG.number_claims([line]) if n not in allowed)
+    # **判定は門の 1 か所**(`exit_gate.agg_line_missing`。2026-10-05: 型からの再構成 ― 型の字の中の数は主張ではない)。
+    blocking = EG.agg_line_missing(line, allowed, candidates)
     if blocking:
         return [], (f"行の数 {blocking} が集計行の数 {sorted(allowed)} に無いので印を付けない"
                     "(門 (xi) が落とす。対応は slot_map の aggregateIds に残る)")
@@ -760,7 +764,7 @@ def build_document(draft_md, selection, packet, candidates, questions, texts, st
         ids = list(row.get("aggregateIds") or [])
         fact, reaches = fact_text(ids, aggregate_rows, candidates)
         reading = verified_text(texts, slot, statements, [row["itemRef"]])
-        marks, why = agg_marks_for(fact_bullet(fact, reading), ids, aggregate_rows)
+        marks, why = agg_marks_for(fact_bullet(fact, reading), ids, aggregate_rows, candidates)
         if why:
             notes.append(f"スロット {slot}: {why}")
         bullet = fact_bullet(fact, reading, marks)

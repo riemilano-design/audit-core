@@ -119,6 +119,20 @@ AGG_TAG_RE = re.compile(r"<!--\s*agg:\s*(.*?)\s*-->")
 # **印の文法はこのファイルの 1 か所**(`exit_gate_test.test_x11` が門の側に写しが無いことを見る)。
 # `q12` のような 2 桁の id が来ると数の主張として拾われるので、`scan_numbers` で覆う。
 ANS_TAG_RE = re.compile(r"<!--\s*ans:\s*(q\d+)\s+(\S+?)\s*-->")
+# **本編の印の家族の一覧**(門の数え方の束。2026-10-05。`docs/PLAN_GATE_COUNTING_2026-10-05.md` G-1)。
+# 印は**印字されない**(reportlab が知らないタグとして捨てる。P-123)。だから「顧客に出る字の数」を
+# 数える門は、この家族を剥いてから数える。**一覧は文法と同じこのファイルの 1 か所**。
+# `scan_numbers` の 3 行(pos・agg・ans を空白に置き換える)は触っていない ― 2 か所に並ぶことは既知事項(計画 §5)。
+MARK_TAG_RES = (MENU_TAG_RE, PRIORITY_TAG_RE, POS_TAG_RE, AGG_TAG_RE, ANS_TAG_RE)
+
+
+def strip_marks(text):
+    """本編の印(`MARK_TAG_RES` の家族)を**全部取り除いた**字。顧客に出る字の数を数える側が使う。"""
+    for tag_re in MARK_TAG_RES:
+        text = tag_re.sub("", text)
+    return text
+
+
 POS_INNER_RE = re.compile(r"^(\d+)\s*/\s*(\d+)\s*付録\s*(\d+)(?:\s+(.+))?$")
 
 # 指し手の表記(report-pdf/render_whatif.py の move_kanji と同じ形)。▲/△ + (同 or マス) + 駒 + (成/打)?

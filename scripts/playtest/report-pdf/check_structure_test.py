@@ -1374,6 +1374,26 @@ class QuestionSectionTest(unittest.TestCase):
         self.assertNotEqual(len(body), CS.MAX_QUESTION_SECTION_CHARS)
         self.assertGreater(len(body), 60)
 
+    def test_q17_marks_are_not_counted(self):
+        """**印は数えない**(2026-10-05。司令塔の訂正 2026-10-01: 印は印字されない)。
+        印つきと印なしで同じ 115。印を数えると 144(+29)、空白も数えると 145。"""
+        marked = list(self.Q)
+        marked[4] = marked[4] + " <!-- ans: q1 unanswerable -->"
+        md_marked = "\n".join(self.HEAD + marked + self.TAIL)
+        body = CS.question_section_body(md_marked)
+        self.assertEqual(len(body), 115)
+        self.assertEqual(len(body), len(CS.question_section_body(self.md())))
+        self.assertNotIn("<!--", body)
+        self.assertNotEqual(len(body), 144)
+        self.assertNotEqual(len(body), 145)
+        # 家族の印ぜんぶが落ちる(1 家族だけ剥く変異が赤に)。
+        marked[4] = marked[4] + "<!-- pos: 11/48 付録3 3 分 --><!-- menu: M4 --><!-- agg: a.b --><!-- priority: M4 -->"
+        body2 = CS.question_section_body("\n".join(self.HEAD + marked + self.TAIL))
+        self.assertEqual(len(body2), 115)
+        # 剥くのは `check_answer.strip_marks` の 1 か所(数える側だけを直した)。
+        import inspect
+        self.assertIn("CA.strip_marks(", inspect.getsource(CS.question_section_body))
+
     # ---- 人が決めた数と中身を**字で留める**(2026-10-01 の変異で見つけた沈黙)----
     #
     # 上の q11・q12 は `CS.MAX_QUESTION_SECTION_CHARS` から土台を作るので、
