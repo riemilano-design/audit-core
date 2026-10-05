@@ -727,8 +727,12 @@ class TermMaskTest(unittest.TestCase):
     def test_f71_the_mask_is_one_function_shared_with_the_gate(self):
         """**伏せる関数は 1 本**(裁定 Q1 の条件 1)。門 (xi) は `exit_fill.mask_terms_and_moves` を import する。
         伏せる語は `TERM_LINES` の **4 語だけ**(条件 2)― 5 語目(「崩れ」)は伏せない。"""
+        # T-5 の後: 門は `EF.AGG_RULES.mask_reading`(= この 1 本)を遅延で読む。写しも 2 本目も無い。
+        self.assertIs(EF.AGG_RULES.mask_reading, EF.mask_terms_and_moves)
+        self.assertIs(EG.GATE_RULES.agg_rules_of().mask_reading, EF.mask_terms_and_moves)
         gate_src = io.open(os.path.join(HERE, "exit_gate.py"), encoding="utf-8").read()
-        self.assertIn("EF.mask_terms_and_moves(", gate_src)
+        self.assertNotIn("def mask_terms_and_moves", gate_src)
+        self.assertNotIn("def mask_terms_and_moves", io.open(os.path.join(HERE, "exit_verification.py"), encoding="utf-8").read())
         self.assertEqual([t for t, _ in CS.TERM_LINES], ["第 1 候補", "分かれ道", "自玉側", "一致率"])
         self.assertEqual(len(CS.TERM_LINES), 4)
         self.assertEqual(EF.number_tokens("第 1 候補と一致率 0.7"), ["0.7"])

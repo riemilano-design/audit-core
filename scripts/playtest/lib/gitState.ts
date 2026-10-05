@@ -18,7 +18,6 @@
 
 import { execFileSync } from "node:child_process";
 
-import type { MetaLine } from "../invariants/types.js";
 
 /** 汚れとして数えるパスの接頭辞。docs/ は結果に影響しないため数えない
  * (数えると常に汚れることになり、警告が意味を失う)。 */
@@ -164,7 +163,7 @@ export type DirtyState =
  * `=== null` / それ以外、の明示分岐にしてある。**`null` と欄が無いことは別の状態である**
  * (前者は「測ろうとして取れなかった」と記録している。後者は何も記録していない)。
  */
-export function readDirtyState(meta: Pick<MetaLine, "dirty"> | undefined): DirtyState {
+export function readDirtyState(meta: { readonly dirty?: boolean | null } | undefined): DirtyState {
   if (meta?.dirty === true) return "dirty";
   if (meta?.dirty === false) return "clean";
   if (meta?.dirty === null) return "unmeasured";

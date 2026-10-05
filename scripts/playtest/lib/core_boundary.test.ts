@@ -41,13 +41,14 @@ export const CORE_TS_A_PRIME = [
 
 /** Core 候補(Python)。計画 §3 結論の 3 本と、§2.3 の [A′] 5 本。 */
 export const CORE_PY_PURE = ["compare_render.py", "check_fonts_embedded.py", "rename_list.py"] as const;
-export const CORE_PY_A_PRIME = ["check_answer.py", "exit_gate.py", "check_structure.py", "check_delivery.py", "exit_index.py"] as const;
+export const CORE_PY_A_PRIME = ["check_answer.py", "exit_verification.py", "check_structure.py", "check_delivery.py", "exit_index.py"] as const;
 
 /** report-pdf の将棋側(組版・盤・指し手・冊子の材料。計画 §2.3 の [B])。 */
 export const SHOGI_PY_MODULES = [
   "board_draw", "board_spec", "move_text", "fig1",
   "render_answer", "render_appendix", "render_direct", "render_front", "render_main", "render_time_cause", "render_whatif",
   "exit_fill", "exit_body", "exit_cover", "exit_render", "exit_groups", "exit_candidates", "answer_facts",
+  "exit_gate",  // T-5(I-8)で Adapter に再分類: 正本の定数を GateRules に束ねて exit_verification へ渡す側
   "_app", "_app_head", "_head", "_mid", "_tail", "_util", "dump_booklet_numbers",
 ] as const;
 
@@ -73,16 +74,13 @@ export interface KnownException extends BoundaryViolation {
  * 字面読み)を外した ― 30 列は `schemas/obs-registry.extra-ids.json`、禁止語は `data/governance/banned_words.json` に。
  * T-4(I-3、2026-10-06)で `lib/observationProvenance.ts` の 2 本(`./observationFacts.js` の `AHEAD_CP`、`./reportData.js` の
  * `TIME_VALUES`)を外した ― 閾値の表は将棋側 `lib/observationFacts.ts` の `toolThresholds()` が組み、`provenanceOf` の引数で渡す。
+ * T-5(2026-10-06)で残り 4 本を外した ― `observationAggregates.ts` は材料の 2 欄だけの局所型 `MaterialNumbersSource`、
+ * `gitState.ts` は `{ dirty?: boolean | null }` の局所型、`exit_gate.py` は判定の汎用部を `exit_verification.py` へ移し
+ * 自身は Adapter(SHOGI_PY_MODULES)へ再分類(`exit_fill.py` の循環 import も `exit_verification` へ付け替えた)。
+ * **例外 0 は「将棋依存の import が 0」であって Core 完成ではない** ― `ROW_DEFINITIONS`(I-4)・集計の整合関係(I-5)・
+ * `packetRef` の 7 列(I-6)・`check_answer.py` の材料層(I-7)は中身が将棋のまま(計画 §7)。
  */
 export const KNOWN_EXCEPTIONS: readonly KnownException[] = [
-  { file: "lib/observationAggregates.ts", specifier: "./observationFacts.js", kind: "type", reaches: "shogiops (via lib/observationFacts.ts)",
-    reason: "§3.1: `FactsMaterials` の型だけ(実行時依存なし)。I-4 で generic に" },
-  { file: "lib/gitState.ts", specifier: "../invariants/types.js", kind: "type", reaches: "apps/server (via invariants/types.ts)",
-    reason: "§3.1: `MetaLine` の型だけ。`invariants/types.ts` が apps/server の型を import する。`Pick<MetaLine,\"dirty\">` を局所型に置き換えれば切れる" },
-  { file: "report-pdf/exit_gate.py", specifier: "exit_candidates", kind: "runtime", reaches: "exit_candidates",
-    reason: "§3.1: 門が候補の一覧(⑤ の材料)の module を読む。走査層の分離(I-8)の後に見直す" },
-  { file: "report-pdf/exit_gate.py", specifier: "exit_fill", kind: "runtime", reaches: "exit_fill",
-    reason: "§3.1: 検査 (xi) の型の再構成のため関数内で `exit_fill` を import(循環を避けて関数内)。⑥ = 将棋" },
 ];
 
 // ==================== TS の走査(typescript 7 の実 AST) ====================

@@ -10,7 +10,22 @@
 //   その 2 行は材料の値を写し、`recountable: false` と理由を付ける(P-4。人間の了承 2026-09-30)。
 // 【合わなければ止まる】群に割った数の合計・側の 2 通りの数え方が食い違えば `aggregateAgreementProblems` が言う。
 //   既存の `exit_groups.group_rows` と同じ形の番人(あちらは 133 ≠ 79 でずれを見つけた)。
-import type { FactsMaterials } from "./observationFacts.js";
+
+/**
+ * 材料から**写す 2 行**(`time.quickAfterLongThink`・`time.bySpent0to1`)が読む欄だけの構造型(Audit Core T-5)。
+ * 将棋側の `FactsMaterials`(lib/observationFacts.ts)はこの形を含むので、呼ぶ側はそのまま渡せる(型は構造で合う)。
+ * **ここは将棋側の型を import しない** ― ただし欄の名前(`patient.time.afterLongThink` …)は材料の記述で、
+ * `ROW_DEFINITIONS` と一緒に将棋側へ移す対象(I-4。T-5 では型の依存だけを切った)。
+ */
+export type MaterialNumbersSource = {
+  readonly patient: {
+    readonly time?: {
+      readonly afterLongThink?: { readonly quickAfterLongThink?: MaterialBucket } | null;
+      readonly bySpent?: readonly MaterialBucket[] | null;
+    } | null;
+  };
+};
+export type MaterialBucket = { readonly n: number; readonly collapsed: number };
 
 export class ObservationAggregatesError extends Error {
   override name = "ObservationAggregatesError";
@@ -172,7 +187,7 @@ type RowDefinition = {
   readonly src: string;
   readonly srcExtra?: readonly string[];
   readonly recountNote?: string;
-  readonly fromMaterial?: (materials: FactsMaterials) => MaterialNumbers | undefined;
+  readonly fromMaterial?: (materials: MaterialNumbersSource) => MaterialNumbers | undefined;
 };
 
 const SIGNATURE_GROUPS = [
@@ -392,7 +407,7 @@ export const ROW_DEFINITIONS: readonly RowDefinition[] = [
  * `facts` から `aggregates` を組む。**数はここで数える**(材料から写す 2 行を除く)。
  * `materials` は、その 2 行の値と、写した理由を取るためだけに使う。
  */
-export function aggregatesOf(facts: Record<string, unknown>, materials: FactsMaterials): AggregateRow[] {
+export function aggregatesOf(facts: Record<string, unknown>, materials: MaterialNumbersSource): AggregateRow[] {
   const index = factsIndexOf(facts);
   return ROW_DEFINITIONS.map((definition) => {
     const rows = selectRows(index, definition.population);

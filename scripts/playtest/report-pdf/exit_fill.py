@@ -28,7 +28,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import check_answer as CA  # noqa: E402
 import check_structure as CS  # noqa: E402
 import exit_candidates as EC  # noqa: E402
-import exit_gate as EG  # noqa: E402
+import exit_verification as EV  # noqa: E402  ― 門の判定の汎用部(循環なし。Audit Core T-5)
 import exit_groups as EGR  # noqa: E402
 import exit_index as EI  # noqa: E402
 import board_spec as BS  # noqa: E402  ― 盤に渡す局面・向きの判断は 1 か所(exit_body と同じ)
@@ -684,6 +684,35 @@ def fact_bullet(fact, reading, marks=()):
     return "- " + fact + READING_PREFIX + reading + "".join(marks)
 
 
+def fact_templates(cands):
+    """(xi) の型の正規表現の一覧 `[(名, 正規表現)]`。**字はこの module の定数と候補の `name` から作る**(写さない)。
+    Audit Core T-5 で `exit_gate.py` から移した ― 型の字の持ち主(⑥)が表を組み、門はそれを受け取る。"""
+    out = []
+    for f in cands.get("actionFractions") or []:
+        name, unit = f.get("name"), f.get("unit")
+        if not isinstance(name, str) or FACT_CONNECTIVE not in name or not isinstance(unit, str) or not unit:
+            continue
+        # 穴に目印を入れて組み、目印の外を re.escape する(**型の字を 1 字変えたら当たらない**)。
+        shape = connective_fact(name, "\x00N", "\x00D", unit)
+        pattern = re.escape(shape).replace(re.escape("\x00N"), EV.HOLE_RE).replace(re.escape("\x00D"), EV.HOLE_RE)
+        out.append((name, pattern))
+    ahead = AHEAD_THEN_LOST_TEMPLATE.format(numerator="\x00N", denominator="\x00D")
+    out.append((AHEAD_THEN_LOST_ID,
+                re.escape(ahead).replace(re.escape("\x00N"), EV.HOLE_RE).replace(re.escape("\x00D"), EV.HOLE_RE)))
+    return out
+
+
+# (xi) の型からの再構成の規則。**門(`exit_gate.py`)もここを読む**(判定を 2 つにしない)。
+AGG_RULES = EV.AggRules(
+    strip_marks=CA.strip_marks,
+    reading_prefix=READING_PREFIX,
+    templates_of=fact_templates,
+    mask_reading=mask_terms_and_moves,
+    scan_numbers=CA.scan_numbers,
+    menu_tag_re=CA.MENU_TAG_RE,
+)
+
+
 def agg_marks_for(line, aggregate_ids, aggregate_rows, candidates=None):
     """その行に `<!-- agg: -->` を付けられるか。付けられれば印の並び、付けられなければ空と理由。
 
@@ -696,9 +725,9 @@ def agg_marks_for(line, aggregate_ids, aggregate_rows, candidates=None):
     """
     allowed = set()
     for agg_id in aggregate_ids:
-        allowed |= EG.numbers_of_aggregate_row(aggregate_rows.get(agg_id) or {})
-    # **判定は門の 1 か所**(`exit_gate.agg_line_missing`。2026-10-05: 型からの再構成 ― 型の字の中の数は主張ではない)。
-    blocking = EG.agg_line_missing(line, allowed, candidates)
+        allowed |= EV.numbers_of_aggregate_row(aggregate_rows.get(agg_id) or {})
+    # **判定は門の 1 か所**(`exit_verification.agg_line_missing`。2026-10-05: 型からの再構成 ― 型の字の中の数は主張ではない)。
+    blocking = EV.agg_line_missing(line, allowed, candidates, AGG_RULES)
     if blocking:
         return [], (f"行の数 {blocking} が集計行の数 {sorted(allowed)} に無いので印を付けない"
                     "(門 (xi) が落とす。対応は slot_map の aggregateIds に残る)")
@@ -798,12 +827,12 @@ def board_line(board, packet, candidates, sfens=None):
             f"{where}: ({row['gameId']}, 表示の手数 {display_ply}) が facts.branches に無い ― 盤に選べるのは分かれ道")
     game_no = _int_of(game, "no", f"{where} の局")
     prefix = f"{game_no}/{display_ply} 付録3 "
-    hits = [m for m in candidates.get("boards") or [] if EG.normalize_mark(m).startswith(prefix)]
+    hits = [m for m in candidates.get("boards") or [] if EV.normalize_mark(m).startswith(prefix)]
     if len(hits) != 1:
         raise ExitFillError(
             f"{where}: 局面 {game_no} 局目 {display_ply} 手目 の印が候補の boards に {len(hits)} 件"
             "(ちょうど 1 件が要る ― 下書きに印字されていない局面は出さない)")
-    inner = EG.normalize_mark(hits[0])
+    inner = EV.normalize_mark(hits[0])
     actual, why_actual = move_text_for(row["gameId"], display_ply, row.get("actualUsi"), sfens, where)
     top1, why_top1 = move_text_for(row["gameId"], display_ply, row.get("top1Usi"), sfens, where)
     note = None

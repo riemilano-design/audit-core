@@ -22,6 +22,7 @@ import check_structure as CS  # noqa: E402
 import exit_candidates as EC  # noqa: E402
 import exit_index as EI  # noqa: E402
 import exit_gate as EG  # noqa: E402
+import exit_verification as EV  # noqa: E402
 
 
 def read_text(path):
@@ -536,27 +537,33 @@ class NoOwnRulesTest(unittest.TestCase):
         **自分で `re.finditer(r"\\d+")` を書いていたら、規則が 2 か所になる。**
         `exit_gate.py` の関数の本文だけを見る(説明文は除く)。
         """
+        # T-5 の後: 拾い方は `exit_gate.py` が `GateRules` に **`CA.scan_numbers` を渡し**、汎用部はそれを呼ぶだけ。
         tree = ast.parse(read_text(os.path.join(HERE, "exit_gate.py")))
-        calls = set()
-        for node in ast.walk(tree):
-            if isinstance(node, ast.Call) and isinstance(node.func, ast.Attribute):
-                value = node.func.value
-                if isinstance(value, ast.Name):
-                    calls.add(f"{value.id}.{node.func.attr}")
-        self.assertIn("CA.scan_numbers", calls)
-        digit_res = [n.args[0].value for n in ast.walk(tree)
-                     if isinstance(n, ast.Call) and isinstance(n.func, ast.Attribute)
-                     and n.func.attr == "compile" and n.args
-                     and isinstance(n.args[0], ast.Constant) and isinstance(n.args[0].value, str)]
-        # 番号つき箇条書きの頭を外す 1 本だけは自前(数を拾う規則ではない)。
-        self.assertEqual(digit_res, [EG.ORDERED_ITEM_RE.pattern], digit_res)
+        attrs = {f"{n.value.id}.{n.attr}" for n in ast.walk(tree)
+                 if isinstance(n, ast.Attribute) and isinstance(n.value, ast.Name)}
+        self.assertIn("CA.scan_numbers", attrs)
+        self.assertIs(EG.GATE_RULES.scan_numbers, CA.scan_numbers)
+
+        def compiled_patterns(name):
+            t = ast.parse(read_text(os.path.join(HERE, name)))
+            return [n.args[0].value for n in ast.walk(t)
+                    if isinstance(n, ast.Call) and isinstance(n.func, ast.Attribute)
+                    and n.func.attr == "compile" and n.args
+                    and isinstance(n.args[0], ast.Constant) and isinstance(n.args[0].value, str)]
+        # 番号つき箇条書きの頭を外す 1 本だけは自前(数を拾う規則ではない)。汎用部に在り、Adapter 側には 1 本も無い。
+        self.assertEqual(compiled_patterns("exit_verification.py"), [EG.ORDERED_ITEM_RE.pattern])
+        self.assertEqual(compiled_patterns("exit_gate.py"), [])
+        self.assertIs(EG.ORDERED_ITEM_RE, EV.ORDERED_ITEM_RE)
 
     def test_25_the_draft_headings_come_from_the_writer_side(self):
         """下書きだけの見出しは `exit_candidates.py` から読んでいること(写していない)。"""
         src = read_text(os.path.join(HERE, "exit_gate.py"))
+        core = read_text(os.path.join(HERE, "exit_verification.py"))
         for heading in EC.DRAFT_ONLY_HEADINGS:
             self.assertNotIn(heading, src, f"見出しを写している: {heading}")
+            self.assertNotIn(heading, core, f"汎用部が見出しを写している: {heading}")
         self.assertIn("EC.DRAFT_ONLY_HEADINGS", src)
+        self.assertIs(EG.GATE_RULES.draft_only_headings, EC.DRAFT_ONLY_HEADINGS)
 
 
 class SameLimitOnBothSidesTest(unittest.TestCase):
@@ -669,6 +676,7 @@ class DraftOnlySectionsAreNotCountedTest(unittest.TestCase):
         self.assertIn("EC.DRAFT_ONLY_HEADINGS", src)
         for h in EC.DRAFT_ONLY_HEADINGS:
             self.assertNotIn(h, src)
+            self.assertNotIn(h, read_text(os.path.join(HERE, "exit_verification.py")))
 class AggTagTest(unittest.TestCase):
     """検査 (xi) 本編の数の id 照合(2026-09-30)。
 
@@ -898,6 +906,8 @@ class AggTagTest(unittest.TestCase):
         src = read_text(os.path.join(HERE, "exit_gate.py"))
         self.assertIn("CA.AGG_TAG_RE", src)
         self.assertNotIn('re.compile(r"<!--', src)
+        self.assertNotIn('re.compile(r"<!--', read_text(os.path.join(HERE, "exit_verification.py")))
+        self.assertIs(EG.GATE_RULES.agg_tag_re, CA.AGG_TAG_RE)
 
     def test_x12_the_flag_is_optional_so_the_21_stages_keep_running(self):
         own, rest = EG.parse_own_args(["a.md", "--candidates", "c.json"])
@@ -1036,7 +1046,9 @@ class AggTagTest(unittest.TestCase):
     def test_x22_the_filler_calls_this_one_judgement(self):
         """⑥(`exit_fill.agg_marks_for`)は門の `agg_line_missing` を呼ぶ(判定を 2 つにしない)。"""
         src = read_text(os.path.join(HERE, "exit_fill.py"))
-        self.assertIn("EG.agg_line_missing(", src)
+        # T-5 の後: ⑥ は門の Adapter(`exit_gate`)ではなく**判定の持ち主**(`exit_verification`)を直接呼ぶ(循環なし)。
+        self.assertIn("EV.agg_line_missing(", src)
+        self.assertNotIn("import exit_gate", src)
         start = src.index("def agg_marks_for(")
         body = src[start:src.index("\ndef ", start + 1)]
         self.assertNotIn("number_claims", body)
@@ -1050,6 +1062,18 @@ class AggTagTest(unittest.TestCase):
         src = read_text(os.path.join(HERE, "exit_gate.py"))
         self.assertNotIn("一度は優勢", src)
         self.assertNotIn("のうち、", src.split("def fact_templates")[1].split("def fact_line_holes")[0])
+        # 汎用部は型の字を 1 字も持たない(持ち主は exit_fill)。**説明文は見ず、コードの文字列定数だけを見る**
+        # (字面の試験は自分の説明文に当たる ― 「68 局のうち 5 局」の例文で 1 度踏んだ)。
+        tree = ast.parse(read_text(os.path.join(HERE, "exit_verification.py")))
+        docstrings = set()
+        for node in ast.walk(tree):
+            if isinstance(node, (ast.Module, ast.FunctionDef, ast.ClassDef)) and node.body \
+                    and isinstance(node.body[0], ast.Expr) and isinstance(node.body[0].value, ast.Constant):
+                docstrings.add(id(node.body[0].value))
+        literals = [n.value for n in ast.walk(tree)
+                    if isinstance(n, ast.Constant) and isinstance(n.value, str) and id(n) not in docstrings]
+        for piece in ("一度は優勢", "のうち、", "― 読み: "):
+            self.assertEqual([s for s in literals if piece in s], [], piece)
 
     def test_x25_the_connective_type_escapes_regex_characters_in_the_name(self):
         """候補の `name` に正規表現の特殊文字が入っても**字として**当てる(2026-10-05 の変異 G2-M3 が黙った穴:
@@ -1245,6 +1269,124 @@ class AnsTagTest(unittest.TestCase):
         self.assertEqual(CA.scan_numbers("- 25 局<!-- ans: q12 answered -->"),
                          CA.scan_numbers("- 25 局"))
 
+
+
+# ==================== Audit Core T-5/I-8: 抽出前後の同値(2026-10-06) ====================
+# 判定の機構は `exit_verification.py`(将棋・冊子の定数を持たない)へ移り、`exit_gate.py` は正本の定数を
+# `GateRules` に束ねて渡す Adapter になった。ここは **「渡しているものが正本そのもの」** と **「公開名が同じ判定に届く」**
+# と **「本数・語は規則から来る(直書きでない)」** を見る。問題の文字列の同値は、抽出前に取った関数レベル Golden
+# (972 件)と c5 の CLI の stderr/rc(G-9)で別に測った。
+class ExtractionEquivalenceTest(unittest.TestCase):
+    def test_e1_the_generic_part_imports_only_the_standard_library(self):
+        """汎用部は report-pdf の module を 1 つも読まない(`lib/core_boundary.test.ts` と同じ向き)。"""
+        tree = ast.parse(read_text(os.path.join(HERE, "exit_verification.py")))
+        modules = set()
+        for node in ast.walk(tree):
+            if isinstance(node, ast.Import):
+                modules |= {a.name for a in node.names}
+            elif isinstance(node, ast.ImportFrom):
+                modules.add(node.module or "")
+        self.assertEqual(modules, {"re", "collections"}, modules)
+        names = {f"{n.value.id}." for n in ast.walk(tree)
+                 if isinstance(n, ast.Attribute) and isinstance(n.value, ast.Name) and n.value.id in ("CA", "CS", "EC", "EF", "EI", "EG")}
+        self.assertEqual(names, set(), names)
+        # 正本の値を**写していない**(コードの文字列定数に、規則で渡す字が 1 つも無い。説明文は見ない)。
+        docstrings = set()
+        for node in ast.walk(tree):
+            if isinstance(node, (ast.Module, ast.FunctionDef, ast.ClassDef)) and node.body \
+                    and isinstance(node.body[0], ast.Expr) and isinstance(node.body[0].value, ast.Constant):
+                docstrings.add(id(node.body[0].value))
+        literals = {n.value for n in ast.walk(tree) if isinstance(n, ast.Constant) and isinstance(n.value, str) and id(n) not in docstrings}
+        r = EG.GATE_RULES
+        for value in (r.todo_marker, r.note_prefix, r.nothing_to_hide_sentence, r.ans_section_head, r.p1_role, r.p2_role, r.p3_role,
+                      *r.draft_only_headings, *r.ans_statuses):
+            self.assertNotIn(value, literals, value)
+
+    def test_e2_the_rules_are_the_originals_not_copies(self):
+        """`GateRules` の欄は正本の object そのもの(`is`)。写しなら、正本を直したとき門だけが古い値を見る。"""
+        r = EG.GATE_RULES
+        self.assertIs(r.strip_dev_section, CA.strip_dev_section)
+        self.assertIs(r.heading_matches, CS.heading_matches)
+        self.assertEqual(r.p1_fact_count, CS.HONBUN_P1_FACT_COUNT)
+        self.assertEqual(r.board_count, CS.BOARD_COUNT)
+        self.assertEqual(r.todo_marker, EC.TODO)
+        self.assertIs(r.draft_only_headings, EC.DRAFT_ONLY_HEADINGS)
+        self.assertEqual(r.note_prefix, EC.NOTE_PREFIX)
+        self.assertEqual(r.nothing_to_hide_sentence, EI.NOTHING_TO_HIDE_SENTENCE)
+        self.assertEqual(r.ans_section_head, EG.ANS_SECTION_HEAD)
+        self.assertIs(r.ans_statuses, EG.ANS_STATUSES)
+        self.assertIs(r.scan_numbers, CA.scan_numbers)
+        for field, want in (("menu_tag_re", CA.MENU_TAG_RE), ("pos_tag_re", CA.POS_TAG_RE), ("agg_tag_re", CA.AGG_TAG_RE),
+                            ("ans_tag_re", CA.ANS_TAG_RE), ("ratio_word_re", CA.RATIO_WORD_RE)):
+            self.assertIs(getattr(r, field), want, field)
+        # 節の役割名は check_structure の表に在る役割そのもの。
+        roles = {role for role, _h, _c in CS.SECTIONS}
+        for role in (r.p1_role, r.p2_role, r.p3_role):
+            self.assertIn(role, roles)
+        self.assertIs(EG.ExitGateError, EV.ExitGateError)
+
+    def test_e3_the_agg_rules_belong_to_the_filler_and_the_gate_reads_them(self):
+        """(xi) の型の表は ⑥(`exit_fill`)が自分の定数から組み、門は**同じ object**を遅延で読む(判定を 2 つにしない)。"""
+        import exit_fill as EF
+        self.assertIs(EG.GATE_RULES.agg_rules_of(), EF.AGG_RULES)
+        a = EF.AGG_RULES
+        self.assertIs(a.strip_marks, CA.strip_marks)
+        self.assertEqual(a.reading_prefix, EF.READING_PREFIX)
+        self.assertIs(a.templates_of, EF.fact_templates)
+        self.assertIs(a.mask_reading, EF.mask_terms_and_moves)
+        self.assertIs(a.scan_numbers, CA.scan_numbers)
+        self.assertIs(a.menu_tag_re, CA.MENU_TAG_RE)
+        self.assertEqual(EG.fact_templates(CANDS), EF.fact_templates(CANDS))
+
+    def test_e4_the_public_names_reach_the_same_judgement(self):
+        """`EG.check_*`(前と同じ引数)と `EV.check_*(…, GATE_RULES)` は同じ問題を同じ順で出す。"""
+        md = md_of(p1=["- 1 本だけ 999 です。"], p2=["- 盤<!-- pos: 13/110 付録3 3 分 -->"] * 3,
+                   p3=["1. 試せる<!-- menu: M9 -->"], extra="\n" + EC.TODO + "\n" + EC.NOTE_PREFIX + "x -->\n")
+        sections = EG.sections_of(CA.strip_dev_section(md))
+        via_gate, via_core = [], []
+        EG.check_todo(md, via_gate); EV.check_todo(md, via_core, EG.GATE_RULES.todo_marker)
+        EG.check_p1(sections, CANDS, via_gate); EV.check_p1(sections, CANDS, via_core, EG.GATE_RULES)
+        EG.check_p1_reaches_the_actions(sections, CANDS, via_gate); EV.check_p1_reaches_the_actions(sections, CANDS, via_core, EG.GATE_RULES)
+        EG.check_p2(sections, CANDS, via_gate); EV.check_p2(sections, CANDS, via_core, EG.GATE_RULES)
+        EG.check_p3(sections, CANDS, via_gate); EV.check_p3(sections, CANDS, via_core, EG.GATE_RULES)
+        EG.check_draft_leftovers(md, via_gate); EV.check_draft_leftovers(md, via_core, EG.GATE_RULES)
+        self.assertEqual(via_gate, via_core)
+        self.assertGreaterEqual(len(via_gate), 6, via_gate)
+        self.assertEqual(EG.number_claims(["- 68 局のうち 5 局<!-- menu: M3 -->"]),
+                         EV.number_claims(["- 68 局のうち 5 局<!-- menu: M3 -->"], CA.scan_numbers, CA.MENU_TAG_RE))
+
+    def test_e5_the_counts_come_from_the_rules_not_from_the_source(self):
+        """本数を規則で 2 にすれば 2 本で通り 3 本で落ちる(汎用部に 3 が焼かれていない)。"""
+        two = EG.GATE_RULES._replace(p1_fact_count=2, board_count=1)
+        sections = EG.sections_of(CA.strip_dev_section(md_of()))
+        problems = []
+        EV.check_p1(sections, CANDS, problems, two)
+        EV.check_p2(sections, CANDS, problems, two)
+        self.assertEqual([p for p in problems if "ちょうど 2 本" in p or "ちょうど 1 個" in p and "盤の印が 2 個" in p],
+                         ["(ii) 「ひとことで」の事実(箇条書き)が 3 本(ちょうど 2 本にする)", "(iii) 盤の印が 2 個(ちょうど 1 個にする)"])
+        md2 = md_of(p1=["- 65 / 107 です。", "- 76 / 132 です。"], p2=[f"- 盤<!-- pos: {BOARDS[0]} -->"])
+        problems2 = []
+        EV.check_p1(EG.sections_of(CA.strip_dev_section(md2)), CANDS, problems2, two)
+        EV.check_p2(EG.sections_of(CA.strip_dev_section(md2)), CANDS, problems2, two)
+        self.assertEqual(problems2, [])
+
+    def test_e6_verify_runs_the_checks_in_the_fixed_order(self):
+        """`verify` の順 = (i)(vii)(ii)(viii)(ix)(iii)(iv)(v)(vi)(xi)(x)。stderr の並びはこの順(G-9 がその字で固定)。"""
+        cands = dict(CANDS, unitMismatchFractions=[{"id": "M6", "numerator": 50, "denominator": 137, "unitMismatch": "単位違い"}])
+        md = md_of(p1=["- 999 と 50 / 137 です。"], p2=[], p3=["1. x<!-- menu: M9 -->"],
+                   extra="\n" + EC.TODO + "\n" + EC.DRAFT_ONLY_HEADINGS[0] + "\n<!-- agg: nope -->5\n")
+        md = md.replace(OPENING[0], "")
+        notes = []
+        seen = []
+        problems = EV.verify(md, cands, {"aggregates": []}, {"customerQuestions": [{"id": "q1"}]}, None, EG.GATE_RULES, notes,
+                             lambda raw, probs: (seen.append(len(probs)), probs.append("(v) 文の検査")))
+        order = []
+        for p in problems:
+            tag = p.split(")")[0] + ")"
+            if not order or order[-1] != tag:
+                order.append(tag)
+        self.assertEqual(order, ["(i)", "(vii)", "(ii)", "(viii)", "(ix)", "(iii)", "(iv)", "(v)", "(vi)", "(xi)", "(x)"], problems)
+        self.assertEqual(seen, [len([p for p in problems if not p.startswith(("(v)", "(vi)", "(xi)", "(x)"))])])
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)
