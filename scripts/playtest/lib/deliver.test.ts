@@ -1547,6 +1547,13 @@ describe("顧客向け出口の 4 段", () => {
       expect(cmd).not.toContain(args.name);
     });
 
+    it("見出しの指し手の字の材料は REPORT_DATA_DIR(付録 3・本編と同じ・組の順)", () => {
+      const step = planDeliver(args, fakeProbe({ files: [packetPaths.packet] }), (t) => t).find((s) => s.stage === "exit-fill")!;
+      const appendix3 = planDeliver(args, fakeProbe({ files: [packetPaths.packet] }), (t) => t).find((s) => s.stage === "appendix3-pdf")!;
+      expect(step.env).toEqual({ REPORT_DATA_DIR: groups.map((g) => g.reportDir).join(",") });
+      expect(step.env).toEqual(appendix3.env);
+    });
+
     it("置き場は顧客のフォルダの packet/・llm-seats/・exit/(work の外。組み直しても消えない)", () => {
       expect(packetPaths.packet).toBe(path.join(customerDir, "packet", "observation-packet.json"));
       expect(packetPaths.request).toBe(path.join(customerDir, "packet", "observation-request.json"));

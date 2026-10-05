@@ -24,6 +24,10 @@ import re
 import sys
 
 import board_spec  # 持ち駒の語の 1 か所(P-176)
+from board_spec import RANKS  # `rotate_square` が使う(段の並びの 1 か所)
+# 指し手の字(ZEN/KAN/PIECE/PROM・parse_sfen・sq・usi_squares・piece_kanji・move_kanji・mark)は
+# **`move_text.py` の 1 か所**(⑥ 束 3。2026-10-05 の司令塔の裁定 5)。ここでは定義せず束縛する。
+from move_text import KAN, PIECE, PROM, ZEN, mark, move_kanji, parse_sfen, piece_kanji, sq, usi_squares
 
 from reportlab.lib import colors
 from reportlab.lib.enums import TA_LEFT
@@ -93,49 +97,6 @@ story = []
 # _util.py の parse_sfen・usi_squares と同じマスの数え方(筋 1〜9・段 a〜i)を使う。ここは盤面を「進める」ために
 # 駒の移動・持ち駒の増減・成りまで機械的に反映する(将棋の判断はしない。合法性の確認はしない ―
 # 入力(候補・読み筋)はすでに測る段(whatif.ts)でエンジンが読んだ手であり、ここでは動かすだけ)。
-ZEN = "０１２３４５６７８９"
-KAN = "〇一二三四五六七八九"
-PIECE = {"p": "歩", "l": "香", "n": "桂", "s": "銀", "g": "金", "b": "角", "r": "飛", "k": "玉"}
-PROM = {"p": "と", "l": "杏", "n": "圭", "s": "全", "b": "馬", "r": "竜"}
-RANKS = "abcdefghi"
-
-
-def parse_sfen(sfen):
-    board_s, turn, hands_s = sfen.split(" ")[:3]
-    cells = {}
-    for r, row in enumerate(board_s.split("/"), start=1):
-        f = 9
-        prom = False
-        for ch in row:
-            if ch == "+":
-                prom = True
-                continue
-            if ch.isdigit():
-                f -= int(ch)
-                continue
-            cells[(f, r)] = ("+" if prom else "") + ch
-            prom = False
-            f -= 1
-    hands = {}
-    if hands_s != "-":
-        n = ""
-        for ch in hands_s:
-            if ch.isdigit():
-                n += ch
-                continue
-            hands[ch] = hands.get(ch, 0) + (int(n) if n else 1)
-            n = ""
-    return cells, turn, hands
-
-
-def sq(token):
-    return (int(token[0]), RANKS.index(token[1]) + 1)
-
-
-def usi_squares(usi):
-    if usi[1] == "*":
-        return None, sq(usi[2:4])
-    return sq(usi[0:2]), sq(usi[2:4])
 
 
 def rotate_square(token):
@@ -208,27 +169,6 @@ def serialize_sfen(cells, turn, hands):
                 parts.append((str(n) if n > 1 else "") + k)
         hands_s = "".join(parts)
     return f"{board_s} {turn} {hands_s} 1"
-
-
-def piece_kanji(token):
-    letter = token.lstrip("+").lower()
-    return (PROM if token.startswith("+") else PIECE)[letter]
-
-
-def move_kanji(cells, usi, prev_to):
-    """指し手の日本語表記(_util.py の disp_move と同じ考え方。ここでは生の USI + 局面から直接組み立てる)。"""
-    if usi[1] == "*":
-        to = sq(usi[2:4])
-        return f"{ZEN[to[0]]}{KAN[to[1]]}{PIECE[usi[0].lower()]}打"
-    frm, to = sq(usi[0:2]), sq(usi[2:4])
-    name = piece_kanji(cells[frm])
-    head = "同　" if prev_to == to else f"{ZEN[to[0]]}{KAN[to[1]]}"
-    return head + name + ("成" if usi.endswith("+") else "")
-
-
-def mark(turn, user_is_sente):
-    """▲ が本人、△ が相手(先手・後手にかかわらず)。"""
-    return "▲" if (turn == "b") == user_is_sente else "△"
 
 
 def line_of(cells, turn, hands, pv, user_is_sente, k=5):

@@ -31,6 +31,9 @@ import exit_candidates as EC  # noqa: E402
 import exit_gate as EG  # noqa: E402
 import exit_groups as EGR  # noqa: E402
 import exit_index as EI  # noqa: E402
+import board_spec as BS  # noqa: E402  ― 盤に渡す局面・向きの判断は 1 か所(exit_body と同じ)
+import exit_body as EB  # noqa: E402  ― sfens.json の読み方は 1 か所
+import move_text as MT  # noqa: E402  ― 指し手の字は 1 か所(renderer から移した)
 
 
 class ExitFillError(Exception):
@@ -561,6 +564,10 @@ def fact_text(aggregate_ids, aggregate_rows, candidates):
 
 
 def fact_bullet(fact, reading, marks=()):
+    """事実の行。`reading` が None なら**事実の文だけ**(⑤ の `readingRequired: false`。P-194・司令塔の裁定 7。
+    「― 読み: 」の尾を付けない ― statement が在っても付けない)。"""
+    if reading is None:
+        return "- " + fact + "".join(marks)
     return "- " + fact + READING_PREFIX + reading + "".join(marks)
 
 
@@ -595,14 +602,46 @@ def agg_marks_for(line, aggregate_ids, aggregate_rows, candidates=None):
 # 【engine の `ply` は表示の手数】`lib/observationFacts.ts` の `engineRowsOf` は `displayPly ?? ply` を
 # `ply` に置く(実測 2026-10-05: 分かれ道 404 行は `displayPly` で engine に 404 / 404 当たり、
 # `branches.ply` では 141)。だから印の数は engine の `ply` そのもので、分かれ道の行は
-# `displayPly == engine.ply` で引く(側の語のため)。
+# `displayPly == engine.ply` で引く(分かれ道であることの確認)。
 #
-# 【見出しの字】指し手の漢字表記は `render_direct.py`(module に副作用)にしか無く ⑥ からは引けない。
-# 盤の図(`exit_body.py`)が実戦と第 1 候補を矢印で描くので、見出しは局番号・手数と**側の語**だけ
-# (`check_answer.SIDE_JP` の 1 か所。「攻めの手」「自玉側の手」は `check_answer` の `name` に在る字)。
+# 【見出しの字 ― (β)。2026-10-05 の司令塔の裁定 5】送った見出しの**括弧を除いた部分列**:
+#   「**11 局目 48 手目 ― 実戦 ▲４四歩打、第 1 候補は ▲８七歩成**」(穴 4・新しい語 0)。
+#   束 2 の側の語の文(「実戦は自玉側の手、第 1 候補は攻めの手」)は**採られなかった**ので消した。
+#   指し手の字は `move_text.py`(renderer から移した 1 か所)。局面と向きは `render_direct.py` と**同じ 3 つの判断** ―
+#   局面 = `board_spec.fork_spec`(`sfens.json` の `sfens[dply-1]`。本人が指した実際の向き)、
+#   向き = `board_spec.genuine_move`、字 = `move_text.mark` + `move_text.move_kanji`。USI は packet の engine 行の `actualUsi`・`top1Usi`。
+# 【packet の `sfen` を字に使わない(測った 2026-10-05)】packet の局面は**本人 = 先手に正規化**されている
+#   (合成の 25 局: engine 1033 行の手番は全部 b・後手の 13 局も b。USI は正規化の局面に 1582 / 1582 当たり、回した USI は 103 / 993)。
+#   正規化の向きで字を組むと、後手の局で「４四」が「６六」になり、盤(`exit_body.py` は `sfens.json` の実際の向き)と食い違う。
+# 【引けないとき】`REPORT_DATA_DIR` が無い / その局が `sfens.json` に無い / USI が無い → **場所だけの見出し + 注記**(黙らない)。
+#   駒が局面に無い(材料の食い違い)は止まる。
+# 【答え合わせ】組んだ字は `run()` の `check_answer`(検査 2: 指し手が付録 2・3 の印字に在る)を通る ―
+#   renderer と同じ字になっていることの機械の照合。
 ENGINE_REF_RE = re.compile(r"^facts\.engine\[(\d+)\](?:\.|$)")
-BOARD_LINE_TEMPLATE = "**{game_no} 局目 {display_ply} 手目 ― 実戦は{actual}の手、第 1 候補は{top1}の手**"
-BOARD_LINE_TEMPLATE_WITHOUT_SIDES = "**{game_no} 局目 {display_ply} 手目**"
+BOARD_LINE_TEMPLATE = "**{game_no} 局目 {display_ply} 手目 ― 実戦 {actual_move}、第 1 候補は {top1_move}**"
+BOARD_LINE_TEMPLATE_FALLBACK = "**{game_no} 局目 {display_ply} 手目**"
+REPORT_DATA_DIR_ENV = "REPORT_DATA_DIR"
+
+
+def move_text_for(game_id, display_ply, usi, sfens, where):
+    """見出しに書く指し手の字(「▲４四歩打」)。返り値 = (字 or None, 引けなかった理由)。"""
+    if not usi:
+        return None, "USI が packet の行に無い"
+    record = (sfens or {}).get(game_id)
+    if record is None:
+        return None, f"{game_id} が sfens.json に無い({REPORT_DATA_DIR_ENV} が無いか、その局が材料に無い)"
+    try:
+        spec = BS.fork_spec({"displayPly": display_ply, "kifuId": game_id}, record)
+    except BS.BoardSpecError as e:
+        return None, str(e)
+    cells, turn, _hands = MT.parse_sfen(spec["sfen"])
+    genuine = BS.genuine_move(usi, spec["mirrored"])
+    try:
+        return MT.mark(turn, spec["user_sente"]) + MT.move_kanji(cells, genuine, None), None
+    except KeyError:
+        raise ExitFillError(
+            f"{where}: 指し手 {usi}(実際の向き {genuine})の駒が {display_ply} 手目の局面に無い ― "
+            "packet と sfens.json が同じ局を見ているか確かめること")
 
 
 def engine_row_of(packet, packet_ref, where):
@@ -625,8 +664,8 @@ def pos_mark(inner):
     return mark
 
 
-def board_line(board, packet, candidates):
-    """盤 1 つの見出しの行。返り値 = (行, 印の中身)。"""
+def board_line(board, packet, candidates, sfens=None):
+    """盤 1 つの見出しの行。返り値 = (行, 印の中身, 注記 or None)。"""
     where = f"盤 {board.get('slot')}"
     row = engine_row_of(packet, board.get("packetRef"), where)
     if row.get("gameId") != board.get("gameId") or row.get("ply") != board.get("ply"):
@@ -652,14 +691,60 @@ def board_line(board, packet, candidates):
             f"{where}: 局面 {game_no} 局目 {display_ply} 手目 の印が候補の boards に {len(hits)} 件"
             "(ちょうど 1 件が要る ― 下書きに印字されていない局面は出さない)")
     inner = EG.normalize_mark(hits[0])
-    top1 = CA.SIDE_JP.get(branch.get("top1Side"))
-    actual = CA.SIDE_JP.get(branch.get("actualSide"))
-    if top1 and actual:
+    actual, why_actual = move_text_for(row["gameId"], display_ply, row.get("actualUsi"), sfens, where)
+    top1, why_top1 = move_text_for(row["gameId"], display_ply, row.get("top1Usi"), sfens, where)
+    note = None
+    if actual and top1:
         text = BOARD_LINE_TEMPLATE.format(game_no=game_no, display_ply=display_ply,
-                                          actual=actual, top1=top1)
+                                          actual_move=actual, top1_move=top1)
     else:
-        text = BOARD_LINE_TEMPLATE_WITHOUT_SIDES.format(game_no=game_no, display_ply=display_ply)
-    return text + pos_mark(inner), inner
+        text = BOARD_LINE_TEMPLATE_FALLBACK.format(game_no=game_no, display_ply=display_ply)
+        note = f"{where}: 見出しに指し手を出せない({why_actual or why_top1})― 場所だけの見出しにした"
+    return text + pos_mark(inner), inner, note
+
+
+# ---- 数え方の群の 3 行(司令塔の裁定 3。2026-10-05) ----
+#
+# 【顧客の PDF にどう出るか】「数え方」の「崩れ」の定義の直後に、戦型の群ごとの行(1 群 1 行・数だけ)が入る。
+# 封じた版の表(列を手で選んだもの)と読みは**書き手の字(追跡 0 件)**なので再現しない。
+# 【同じ呼び出し】候補の段(`exit_candidates.build_md`)が観測の節に印字するのと**同じ** `exit_groups.lines_of` +
+# `exit_candidates.CROSS_PHRASE_JP`。前置きの文は置かない(追跡された定数が無い)。読みは付けない(群の読みが ⑤ で採用されたときに決める)。
+# 【置く場所】`exit_index.COUNTING_NOTES` の「崩れ」で始まる 1 本の直後。下書きに無ければ止まる(黙って節末に置かない)。
+def collapse_note():
+    hits = [s for s in EI.COUNTING_NOTES if s.startswith("「崩れ」")]
+    if len(hits) != 1:
+        raise ExitFillError(f"数え方の固定文に「崩れ」で始まる文が {len(hits)} 本(群の行を置く場所が決まらない)")
+    return hits[0]
+
+
+def group_lines(candidates):
+    return EGR.lines_of(candidates.get("openingGroups") or [], EC.CROSS_PHRASE_JP)
+
+
+def insert_group_lines(body, lines):
+    """数え方の節の本文に群の行を挿す(崩れの定義の行の直後)。群が無ければそのまま。"""
+    if not lines:
+        return list(body)
+    target = "- " + collapse_note()
+    where = [i for i, line in enumerate(body) if line.strip() == target]
+    if len(where) != 1:
+        raise ExitFillError(f"数え方に崩れの定義の行が {len(where)} 行(群の行を置く場所が決まらない)")
+    i = where[0]
+    return list(body[:i + 1]) + list(lines) + list(body[i + 1:])
+
+
+# ---- 試せることの固定文(司令塔の裁定 4。2026-10-05) ----
+#
+# 【顧客の PDF にどう出るか】見出しの直後に前文 1 文(`exit_index.selection_sentence`。**常に**)、行動の行の後に
+# 線の文(`exit_candidates.threshold_sentences`。**採用された行動のうち線を持つもの**だけ、行動の順)。
+# 下書きと**同じ関数呼び出し**(`exit_candidates.build_md` 969・972 行)。「行動 1 の線: 」「どちらも線を下回ったので」
+# 「候補にしたものの行動にしなかったもの」「※「10秒以上」は」は**書き手の字(追跡 0 件)**なので置かない。
+# 線の値そのもの(0.7)は検査 1 が数として拾わない(`threshold_numbers` の注)。
+def threshold_lines(adopted, materials):
+    """採用された行動の線の文。`materials` が無ければ空(試験・手回し)。判定の線は `check_answer.menu_threshold_of` の 1 か所。"""
+    if materials is None:
+        return []
+    return EC.threshold_sentences(EC.thresholds_of([row for _slot, row in adopted], materials))
 
 
 # ---- 行動と答え合わせの表(F-7) ----
@@ -738,9 +823,11 @@ def is_note(line):
 SLOT_ROLES = ("ひとことで", "局面で見る", "試せること", "答え合わせ")
 
 
-def build_document(draft_md, selection, packet, candidates, questions, texts, statements, passed, games):
+def build_document(draft_md, selection, packet, candidates, questions, texts, statements, passed, games,
+                   sfens=None, materials=None):
     """下書きの md のスロットの節を埋めて、(本編の md, slot_map の行, 注記) を返す。**書き込まない。**
-    注記 = 落とさないが黙らない報告(印を付けなかった行など)。"""
+    注記 = 落とさないが黙らない報告(印を付けなかった行・指し手を出せなかった見出しなど)。
+    `sfens` = `sfens.json` の束(見出しの指し手の字。無ければ場所だけの見出し)。`materials` = 線の文の材料(無ければ線の文は無い)。"""
     sections = split_sections(draft_md)
     roles = [role_of_heading(h) for h, _ in sections]
     for role in SLOT_ROLES:
@@ -763,7 +850,16 @@ def build_document(draft_md, selection, packet, candidates, questions, texts, st
         slot = row.get("slot")
         ids = list(row.get("aggregateIds") or [])
         fact, reaches = fact_text(ids, aggregate_rows, candidates)
-        reading = verified_text(texts, slot, statements, [row["itemRef"]])
+        wants_reading = row.get("readingRequired")
+        if wants_reading is True:
+            reading = verified_text(texts, slot, statements, [row["itemRef"]])
+        elif wants_reading is False:
+            # 事実の文だけ(P-194)。**渡された文が在っても使わない** ― 黙らず注記する。
+            reading = None
+            if (texts or {}).get(slot) is not None:
+                notes.append(f"スロット {slot}: readingRequired が false なので、渡された読みの文は使わない")
+        else:
+            raise ExitFillError(f"スロット {slot}: readingRequired が真偽値でない({wants_reading!r})")
         marks, why = agg_marks_for(fact_bullet(fact, reading), ids, aggregate_rows, candidates)
         if why:
             notes.append(f"スロット {slot}: {why}")
@@ -795,7 +891,9 @@ def build_document(draft_md, selection, packet, candidates, questions, texts, st
         raise ExitFillError(f"⑤ の盤が {len(boards)} 件(正本は {CS.BOARD_COUNT} 件)")
     board_lines = []
     for board in boards:
-        line, inner = board_line(board, packet, candidates)
+        line, inner, note = board_line(board, packet, candidates, sfens)
+        if note:
+            notes.append(note)
         board_lines.append(line)
         rows.append(fill_row(board["slot"], line, marks=[pos_mark(inner)]))
 
@@ -809,6 +907,9 @@ def build_document(draft_md, selection, packet, candidates, questions, texts, st
     if not adopted:
         action_lines.append(EI.NO_ACTION_SENTENCE)
     table = [EC.VERIFY_TABLE_HEADER, VERIFY_TABLE_SEPARATOR] + [verify_table_row(r) for _s, r in adopted]
+    selection_line = EI.selection_sentence(games)
+    lines_of_threshold = threshold_lines(adopted, materials)
+    lines_of_groups = group_lines(candidates)
 
     # ---- 組む ----
     out = []
@@ -824,13 +925,18 @@ def build_document(draft_md, selection, packet, candidates, questions, texts, st
             for line in board_lines:
                 out += [line, ""]
         elif role == "試せること":
-            out += [heading, ""] + action_lines + [""]
+            out += [heading, "", selection_line, ""] + action_lines + [""]
+            for sentence in lines_of_threshold:
+                out += [sentence, ""]
         elif role == "答え合わせ":
             out += [heading, ""] + table + [""]
         else:
             if heading is not None:
                 out.append(heading)
-            out += [line for line in body if not is_note(line)]
+            kept = [line for line in body if not is_note(line)]
+            if role == "数え方":
+                kept = insert_group_lines(kept, lines_of_groups)
+            out += kept
     md = "\n".join(out)
     if not md.endswith("\n"):
         md += "\n"
@@ -887,6 +993,13 @@ def _load(path, what):
         return json.load(f)
 
 
+def sfens_from_env(environ):
+    """`REPORT_DATA_DIR`(組の順・カンマ区切り)から `sfens.json` の束を読む。無ければ空(= 見出しは場所だけ + 注記)。
+    読み方は `exit_body.load_sfens` の 1 か所(監査の指摘 Mut-D。2026-10-05: この配線を試験で叩けるように関数にした)。"""
+    dirs = [d for d in (environ.get(REPORT_DATA_DIR_ENV) or "").split(",") if d]
+    return EB.load_sfens(dirs) if dirs else {}
+
+
 def run(own, rest, out=sys.stdout):
     with io.open(own["md"], encoding="utf-8") as f:
         draft_md = f.read()
@@ -915,8 +1028,11 @@ def run(own, rest, out=sys.stdout):
         raise ExitFillError(f"--patient は今回の組の 1 つだけ({len(args.patients)} 件渡された)")
     games = (CA.load_json(args.patients[0][0]).get("summary") or {}).get("games")
 
+    # 見出しの指し手の字の材料(`sfens.json`)は `exit_body.py`・`render_direct.py` と同じ `REPORT_DATA_DIR`(組の順・カンマ区切り)。
+    sfens = sfens_from_env(os.environ)
     md, rows, notes = build_document(draft_md, selection, packet, candidates,
-                                     request.get("customerQuestions") or [], texts, statements, passed, games)
+                                     request.get("customerQuestions") or [], texts, statements, passed, games,
+                                     sfens=sfens, materials=ctx["materials"])
     for note in notes:
         print(f"[exit-fill] 注記: {note}", file=out)
     problems = CA.check_answer(md, ctx)

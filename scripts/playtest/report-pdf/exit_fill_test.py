@@ -485,8 +485,12 @@ def packet():
             "games": [{"gameId": "g11", "no": 11}, {"gameId": "g12", "no": 12}, {"gameId": "g13", "no": 13}],
             # 添字 0 と 1 を盤に使う。**engine の ply は表示の手数**(`displayPly`)で、分かれ道の行の
             # `ply`(本人の手の鍵)とはわざと違う値にする(実物は 404 行のうち 263 行で違う)。
-            "engine": [{"gameId": "g11", "ply": 48, "sfen": "(合成)", "src": "e1"},
-                       {"gameId": "g12", "ply": 70, "sfen": "(合成)", "src": "e1"},
+            # USI は **本人 = 先手に正規化された向き**(実物の packet と同じ。sfen は字に使わないので合成のまま)。
+            # g12 は後手の局 ― 実際の向きへ回すと 7g7f → 3c3d、8h8g → 2b2c。g13 は USI 無し(引けない形)。
+            "engine": [{"gameId": "g11", "ply": 48, "sfen": "(合成)", "src": "e1",
+                        "actualUsi": "P*4d", "top1Usi": "8h8g+"},
+                       {"gameId": "g12", "ply": 70, "sfen": "(合成)", "src": "e1",
+                        "actualUsi": "7g7f", "top1Usi": "8h8g"},
                        {"gameId": "g13", "ply": 110, "sfen": "(合成)", "src": "e1"}],
             "branches": [{"gameId": "g11", "ply": 47, "displayPly": 48, "top1Side": "attack",
                           "actualSide": "defense", "src": "e2"},
@@ -617,10 +621,23 @@ def draft_md():
 QUESTIONS2 = QuestionSectionTest.QUESTIONS
 
 
+def sfens():
+    """`sfens.json` の束(本人が指した実際の向き。`sfens[dply-1]` = 指す前の局面)。
+    g11 = 先手(48 手目の前: ８八に歩・持ち駒 歩)。g12 = 後手(70 手目の前: ３三に歩・２二に角。手番は後手 = 本人)。"""
+    return {
+        "g11": {"side": "sente", "moves": [], "sfens": ["(合成)"] * 47 + ["9/9/9/9/9/9/9/1P7/9 b P 1"]},
+        "g12": {"side": "gote", "moves": [], "sfens": ["(合成)"] * 69 + ["9/7b1/6p2/9/9/9/9/9/9 w - 1"]},
+    }
+
+
+HEADING_11 = "**11 局目 48 手目 ― 実戦 ▲４四歩打、第 1 候補は ▲８七歩成**<!-- pos: 11/48 付録3 3 分 -->"
+HEADING_12 = "**12 局目 70 手目 ― 実戦 ▲３四歩、第 1 候補は ▲２三角**<!-- pos: 12/70 付録3 3 分 -->"
+
+
 def build(**over):
     kw = dict(draft_md=draft_md(), selection=selection2(), packet=packet(), candidates=candidates(),
               questions=QUESTIONS2, texts=texts(), statements=EF.statements_of(integration()),
-              passed=passed_rows(), games=25)
+              passed=passed_rows(), games=25, sfens=sfens(), materials=None)
     kw.update(over)
     return EF.build_document(**kw)
 
@@ -840,18 +857,38 @@ class AggMarksTest(unittest.TestCase):
 class BoardsTest(unittest.TestCase):
     """**F-6。候補に無い局面を出さない。**"""
 
-    def test_f49_a_board_comes_out_with_the_candidate_mark_and_the_sides(self):
-        line, inner = EF.board_line(selection2()["boards"][0], packet(), candidates())
+    def test_f49_a_board_comes_out_with_the_candidate_mark_and_the_moves(self):
+        """**(β)。送った見出しの括弧を除いた部分列**(司令塔の裁定 5。2026-10-05)。"""
+        line, inner, note = EF.board_line(selection2()["boards"][0], packet(), candidates(), sfens())
         self.assertEqual(inner, "11/48 付録3 3 分")
-        self.assertEqual(line, "**11 局目 48 手目 ― 実戦は自玉側の手、第 1 候補は攻めの手**<!-- pos: 11/48 付録3 3 分 -->")
+        self.assertEqual(line, HEADING_11)
+        self.assertIsNone(note)
         # **印の鍵は engine の ply(= 表示の手数 48)**。分かれ道の行の ply(47)は出ない。
         self.assertNotIn("47", line)
         self.assertEqual(CA.POS_TAG_RE.search(line).group(1), inner)
-        # 側の語は `check_answer.SIDE_JP` の 1 か所から(「守り」は出ない。P-185)。
-        self.assertNotIn("守り", line)
-        self.assertEqual((CA.SIDE_JP["attack"], CA.SIDE_JP["defense"]), ("攻め", "自玉側"))
+        # 側の語の文(束 2 の私の文)は**採られなかった** ― 「の手」も側の語も出ない。
+        for word in ("の手", "攻め", "自玉側", "守り"):
+            self.assertNotIn(word, line)
         self.assertEqual(EF.BOARD_LINE_TEMPLATE,
-                         "**{game_no} 局目 {display_ply} 手目 ― 実戦は{actual}の手、第 1 候補は{top1}の手**")
+                         "**{game_no} 局目 {display_ply} 手目 ― 実戦 {actual_move}、第 1 候補は {top1_move}**")
+        # 字は renderer と同じ 1 か所(`move_text`)から ― 検査 2 の形に合う。
+        self.assertEqual(CA.MOVE_RE.findall(line), ["▲４四歩打", "▲８七歩成"])
+
+    def test_f49b_a_gote_game_is_written_in_the_real_orientation(self):
+        """**後手の局は実際の向きへ回してから字にする**(`board_spec.genuine_move`)。
+        packet の USI は正規化(7g7f)。回さなければ「７六歩」になり、盤(sfens.json の実際の向き)と食い違う。"""
+        line, inner, note = EF.board_line(selection2()["boards"][1], packet(), candidates(), sfens())
+        self.assertEqual(line, HEADING_12)
+        self.assertIsNone(note)
+        for wrong in ("７六", "８七", "６六"):
+            self.assertNotIn(wrong, line)
+        # 局面は **指す前**(`sfens[dply-1]`)。1 手先の局面を渡す変異は駒が無くて止まる。
+        s = sfens()
+        s["g12"]["sfens"] = s["g12"]["sfens"] + ["9/9/9/9/9/9/9/9/9 b - 1"]
+        s["g12"]["sfens"][69] = "9/9/9/9/9/9/9/9/9 w - 1"
+        with self.assertRaises(EF.ExitFillError) as cm:
+            EF.board_line(selection2()["boards"][1], packet(), candidates(), s)
+        self.assertIn("駒が", str(cm.exception))
 
     def test_f50_only_facts_engine_is_accepted(self):
         """**`facts.engine` 以外の場所を受けない**(計画 §7.2 の F-6 の変異)。"""
@@ -886,10 +923,34 @@ class BoardsTest(unittest.TestCase):
             EF.board_line(selection2()["boards"][0], p, candidates())
         self.assertIn("分かれ道", str(cm.exception))
 
-    def test_f52_without_sides_the_heading_is_only_the_place(self):
+    def test_f52_when_the_move_cannot_be_looked_up_the_heading_is_only_the_place_and_says_so(self):
+        """**引けないときだけ**場所だけの見出し。黙らない(注記)。"""
         b = {"slot": "p2.1", "gameId": "g13", "ply": 110, "packetRef": "facts.engine[2].sfen"}
-        line, inner = EF.board_line(b, packet(), candidates())
+        # (a) USI が packet の行に無い。
+        line, inner, note = EF.board_line(b, packet(), candidates(), sfens())
         self.assertEqual(line, "**13 局目 110 手目**<!-- pos: 13/110 付録3 3 分 -->")
+        self.assertIn("指し手を出せない", note)
+        self.assertIn("USI", note)
+        # (b) sfens が無い(REPORT_DATA_DIR が無い)。
+        line, inner, note = EF.board_line(selection2()["boards"][0], packet(), candidates(), None)
+        self.assertEqual(line, "**11 局目 48 手目**<!-- pos: 11/48 付録3 3 分 -->")
+        self.assertIn("sfens.json", note)
+        self.assertIn(EF.REPORT_DATA_DIR_ENV, note)
+        # (c) その局が sfens.json に無い。
+        s = sfens()
+        del s["g11"]
+        line, inner, note = EF.board_line(selection2()["boards"][0], packet(), candidates(), s)
+        self.assertEqual(line, "**11 局目 48 手目**<!-- pos: 11/48 付録3 3 分 -->")
+        self.assertIn("g11", note)
+        # (d) 局面が足りない(`fork_spec` が落とす理由を注記に写す)。
+        s = sfens()
+        s["g11"]["sfens"] = s["g11"]["sfens"][:10]
+        line, inner, note = EF.board_line(selection2()["boards"][0], packet(), candidates(), s)
+        self.assertIn("48 手目の 1 手前", note)
+        # 注記は build_document の notes に出る。
+        p = packet()
+        _md, _rows, notes = build(packet=p, sfens=None)
+        self.assertEqual(len([n for n in notes if "指し手を出せない" in n]), 2)
 
     def test_f53_exactly_two_boards(self):
         s = selection2()
@@ -941,8 +1002,7 @@ class BuildDocumentTest(unittest.TestCase):
     def test_f58_the_sealed_lines_come_out(self):
         md, rows, _notes = build()
         for line in (SEALED_FACT_1, SEALED_FACT_2, SEALED_FACT_3, SEALED_ACTION_1, SEALED_ACTION_2,
-                     "**11 局目 48 手目 ― 実戦は自玉側の手、第 1 候補は攻めの手**<!-- pos: 11/48 付録3 3 分 -->",
-                     "**12 局目 70 手目 ― 実戦は攻めの手、第 1 候補は自玉側の手**<!-- pos: 12/70 付録3 3 分 -->",
+                     HEADING_11, HEADING_12, EI.selection_sentence(25),
                      "**" + texts()["lead"] + "** ― という読みです。数は 3 つ。",
                      "- " + SEALED_FACT_1 + "― 読み: " + texts()["p1.1"],
                      EI.unanswerable_past_games(25) + " <!-- ans: q1 unanswerable -->"):
@@ -1048,10 +1108,238 @@ class BuildDocumentTest(unittest.TestCase):
         """**⑥ が新しく持つ字は定数に全部ある**(§3 の 3 番。固定文を足す変異はここに現れる)。"""
         self.assertEqual(EF.SLOT_ROLES, ("ひとことで", "局面で見る", "試せること", "答え合わせ"))
         self.assertEqual(EF.VERIFY_TABLE_SEPARATOR, "|---|---|---|")
-        self.assertEqual(EF.BOARD_LINE_TEMPLATE_WITHOUT_SIDES, "**{game_no} 局目 {display_ply} 手目**")
+        self.assertEqual(EF.BOARD_LINE_TEMPLATE_FALLBACK, "**{game_no} 局目 {display_ply} 手目**")
+        self.assertEqual(EF.BOARD_LINE_TEMPLATE,
+                         "**{game_no} 局目 {display_ply} 手目 ― 実戦 {actual_move}、第 1 候補は {top1_move}**")
+        self.assertEqual(EF.REPORT_DATA_DIR_ENV, "REPORT_DATA_DIR")
+        self.assertFalse(hasattr(EF, "BOARD_LINE_TEMPLATE_WITHOUT_SIDES"))
         self.assertEqual(EF.INTEGRATION_NAME, "integration.json")
         self.assertEqual(EF.OWN_FLAGS, ("--selection", "--packet", "--request", "--candidates", "--md",
                                         "--out-slot-map", "--seats-dir", "--texts"))
+
+
+def collapse_line():
+    return "- " + [s for s in EI.COUNTING_NOTES if s.startswith("「崩れ」")][0]
+
+
+def draft_with_real_counting_note():
+    return draft_md().replace("- 数え方の固定文(合成)。", collapse_line() + "\n- 数え方のほかの固定文(合成)。")
+
+
+def group_rows():
+    return [{"key": "core", "label": "この 25 局で多かった分類", "gameNos": [1], "gameIds": ["g01"], "games": 18,
+             "aheadGames": 12, "aheadLossGames": 3, "collapses": 56},
+            {"key": "other", "label": "この 25 局でそれ以外だった分類", "gameNos": [2], "gameIds": ["g02"], "games": 4,
+             "aheadGames": 4, "aheadLossGames": 3, "collapses": 18,
+             "sideMatch": {"attack": {"n": 29, "collapsed": 20}, "defense": {"n": 15, "collapsed": 8}},
+             "cross": {"drop": {"positions": 8, "bothPositions": 5}}},
+            {"key": "noSignature", "label": "分類が取れない局", "gameNos": [3], "gameIds": ["g03"], "games": 3,
+             "aheadGames": 2, "aheadLossGames": 0, "collapses": 5}]
+
+
+class Bundle3Test(unittest.TestCase):
+    """**束 3**(司令塔の裁定 3・4・7。2026-10-05): 数え方の群の行・試せることの固定文・`readingRequired=false`。"""
+
+    def test_f72_group_lines_sit_right_after_the_collapse_definition_with_no_reading_and_no_preface(self):
+        c = dict(candidates(), openingGroups=group_rows())
+        md, _rows, _notes = build(draft_md=draft_with_real_counting_note(), candidates=c)
+        lines = md.split("\n")
+        expected = EGR.lines_of(group_rows(), EC.CROSS_PHRASE_JP)
+        self.assertEqual(len(expected), 3)
+        i = lines.index(collapse_line())
+        self.assertEqual(lines[i + 1:i + 4], expected)
+        # **崩れの定義の直後**(前置きの文が無い)、**読み無し**、他の固定文はその後ろにそのまま。
+        self.assertEqual(lines[i + 4], "- 数え方のほかの固定文(合成)。")
+        for line in expected:
+            self.assertNotIn(EF.READING_PREFIX, line)
+            self.assertNotIn("普段", line)
+        # 候補の段と**同じ呼び出し**の字(1 群 1 行・数だけ)。
+        self.assertIn("- この 25 局で多かった分類: 18 局、一度は優勢になった局 12(うち負けた局 3)、崩れ 56 回。", md)
+        self.assertEqual(md.count("この 25 局で多かった分類"), 1)
+
+    def test_f73_no_groups_changes_nothing_and_a_missing_collapse_line_stops(self):
+        md0, _, _ = build(draft_md=draft_with_real_counting_note())
+        self.assertNotIn("多かった分類", md0)
+        lines = md0.split("\n")
+        i = lines.index(collapse_line())
+        self.assertEqual(lines[i + 1], "- 数え方のほかの固定文(合成)。")
+        # 群は在るが崩れの定義の行が下書きに無い → 止まる(黙って節末に置かない)。
+        c = dict(candidates(), openingGroups=group_rows())
+        with self.assertRaises(EF.ExitFillError) as cm:
+            build(candidates=c)
+        self.assertIn("崩れ", str(cm.exception))
+        # 群の行の見出しに「普段」が入れば止まる(束 1 の守りはここでも効く)。
+        bad = group_rows()
+        bad[0]["label"] = "普段の型"
+        with self.assertRaises(EGR.ExitGroupsError):
+            build(draft_md=draft_with_real_counting_note(), candidates=dict(candidates(), openingGroups=bad))
+
+    def test_f74_the_selection_sentence_is_always_the_first_paragraph_of_the_actions(self):
+        md, _, _ = build()
+        lines = md.split("\n")
+        i = next(k for k, l in enumerate(lines) if l.startswith("## ") and CS.role_of(l[3:].strip()) == "試せること")
+        self.assertEqual(lines[i + 1:i + 5], ["", EI.selection_sentence(25), "", SEALED_ACTION_1])
+        self.assertEqual(md.count(EI.selection_sentence(25)), 1)
+        # 採用が 0 件でも前文は常に(司令塔の裁定 4「前文は常に」)。
+        md0, _, _ = build(selection=dict(selection2(), actions=[]))
+        self.assertIn(EI.selection_sentence(25), md0)
+        self.assertIn(EI.NO_ACTION_SENTENCE, md0)
+
+    def materials(self):
+        import types
+        return {"groups": {"min3": types.SimpleNamespace(by_spent=[{"n": 531, "collapsed": 22}])}}
+
+    def test_f75_threshold_sentences_follow_the_actions_for_adopted_actions_with_a_line_only(self):
+        md, _, _ = build(materials=self.materials())
+        lines = md.split("\n")
+        m4 = "道具の仮置きの線は 0.7 です。今回の値は 攻め 65 / 107、自玉側 76 / 132 でした。"
+        m5 = "道具の仮置きの線は「0〜1 秒で指した手のうち崩れた手」(22 / 531)の 2 つぶんです。今回の値は 9 / 37 でした。"
+        j = lines.index(SEALED_ACTION_2)
+        self.assertEqual(lines[j + 1:j + 5], ["", m4, "", m5])
+        # 候補の段と同じ関数の字(写しではない)。
+        self.assertEqual(EC.threshold_sentences(EC.thresholds_of(passed_rows()[:2], self.materials())), [m4, m5])
+        # 書き手の字は置かない。
+        for word in ("行動 1 の線", "下回ったので", "候補にしたものの", "※"):
+            self.assertNotIn(word, md)
+        # 材料が無ければ線の文は無い(前文だけ)。
+        md0, _, _ = build()
+        self.assertNotIn("道具の仮置きの線", md0)
+        # **採用された行動だけ** ― M4 だけ採れば M5 の線は出ない(M6 は線を持たない)。
+        md1, _, _ = build(materials=self.materials(),
+                          selection=dict(selection2(), actions=[{"slot": "act.1", "menuId": "M4", "itemRef": ref(0, "h1")}]))
+        self.assertIn(m4, md1)
+        self.assertNotIn("2 つぶん", md1)
+        md2, _, _ = build(materials=self.materials(),
+                          selection=dict(selection2(), actions=[{"slot": "act.1", "menuId": "M6", "itemRef": ref(0, "h1")}]))
+        self.assertNotIn("道具の仮置きの線", md2)
+
+    def test_f76_reading_required_false_prints_the_fact_only(self):
+        s = selection2()
+        s["p1"][2]["readingRequired"] = False
+        md, rows, notes = build(selection=s)
+        by_slot = {r["slot"]: r for r in rows}
+        self.assertEqual(by_slot["p1.3"]["text"], "- " + SEALED_FACT_3 + "<!-- agg: aheadThenLost -->")
+        self.assertNotIn(texts()["p1.3"], md)
+        # 渡された文は使わず、黙らない。
+        self.assertEqual(len([n for n in notes if "p1.3" in n and "readingRequired" in n]), 1)
+        # 文が渡されていなければ注記も無い(true の行は読みが要る ― 無ければ止まる)。
+        t = texts()
+        del t["p1.3"]
+        _md, _rows, notes2 = build(selection=s, texts=t)
+        self.assertEqual([n for n in notes2 if "readingRequired" in n], [])
+        with self.assertRaises(EF.ExitFillError):
+            build(texts=t)
+        # 真偽値でなければ止まる(既定値を入れない)。
+        s2 = selection2()
+        s2["p1"][2]["readingRequired"] = "yes"
+        with self.assertRaises(EF.ExitFillError) as cm:
+            build(selection=s2)
+        self.assertIn("真偽値", str(cm.exception))
+        self.assertEqual(EF.fact_bullet("A。", None, ["<!-- agg: x -->"]), "- A。<!-- agg: x -->")
+        self.assertEqual(EF.fact_bullet("A。", "B", []), "- A。― 読み: B")
+
+
+class AuditMutationsTest(unittest.TestCase):
+    """独立監査(2026-10-05)が黙らせた変異 3 本(Mut-B・C・D)を赤にする試験。"""
+
+    def test_f77_the_collapse_note_must_be_exactly_one(self):
+        """Mut-B: `!= 1` を `< 1` に緩める変異 ― 「崩れ」で始まる固定文が 2 本でも止まること。"""
+        saved = EI.COUNTING_NOTES
+        try:
+            EI.COUNTING_NOTES = list(saved) + ["「崩れ」の 2 本目(合成)。"]
+            with self.assertRaises(EF.ExitFillError) as cm:
+                EF.collapse_note()
+            self.assertIn("2 本", str(cm.exception))
+            EI.COUNTING_NOTES = [s for s in saved if not s.startswith("「崩れ」")]
+            with self.assertRaises(EF.ExitFillError) as cm:
+                EF.collapse_note()
+            self.assertIn("0 本", str(cm.exception))
+        finally:
+            EI.COUNTING_NOTES = saved
+        self.assertTrue(EF.collapse_note().startswith("「崩れ」"))
+
+    def test_f78_one_missing_usi_is_enough_to_fall_back_and_say_so(self):
+        """Mut-C: `if actual and top1` を `or` に緩める変異 ― 片方だけ無いとき「None」が見出しに出る。"""
+        for key in ("actualUsi", "top1Usi"):
+            p = packet()
+            del p["facts"]["engine"][0][key]
+            line, _inner, note = EF.board_line(selection2()["boards"][0], p, candidates(), sfens())
+            self.assertEqual(line, "**11 局目 48 手目**<!-- pos: 11/48 付録3 3 分 -->", key)
+            self.assertNotIn("None", line)
+            self.assertIn("USI", note)
+
+    def test_f79_sfens_come_from_report_data_dir_in_group_order(self):
+        """Mut-D: `run()` の `REPORT_DATA_DIR` の配線(環境変数 → `exit_body.load_sfens`)。
+        無ければ空、在れば組の順(先の組が勝つ)、無いフォルダは飛ばす。"""
+        self.assertEqual(EF.sfens_from_env({}), {})
+        self.assertEqual(EF.sfens_from_env({EF.REPORT_DATA_DIR_ENV: ""}), {})
+        with tempfile.TemporaryDirectory() as d:
+            a, b = os.path.join(d, "a"), os.path.join(d, "b")
+            os.makedirs(a)
+            os.makedirs(b)
+            with io.open(os.path.join(a, "sfens.json"), "w", encoding="utf-8") as f:
+                json.dump({"g11": {"side": "sente", "sfens": ["A"], "moves": []}}, f)
+            with io.open(os.path.join(b, "sfens.json"), "w", encoding="utf-8") as f:
+                json.dump({"g11": {"side": "gote", "sfens": ["B"], "moves": []},
+                           "g12": {"side": "gote", "sfens": ["B2"], "moves": []}}, f)
+            got = EF.sfens_from_env({EF.REPORT_DATA_DIR_ENV: f"{a},{b},{os.path.join(d, 'none')}"})
+            self.assertEqual(sorted(got), ["g11", "g12"])
+            self.assertEqual(got["g11"]["sfens"], ["A"])  # 先の組が勝つ(exit_body と同じ)
+            self.assertEqual(got["g12"]["sfens"], ["B2"])
+            # 環境変数の名前は 1 つ(別の名前では読まない)。
+            self.assertEqual(EF.sfens_from_env({"REPORT_DIR": a}), {})
+
+
+    def test_f80_run_hands_the_env_sfens_and_the_materials_to_build_document(self):
+        """Mut-D の本体: `run()` が環境変数の sfens と `ctx["materials"]` を `build_document` に渡す配線。
+        材料の読み込みは重いので偽物に差し替え、**渡された引数だけ**を見る。"""
+        import types
+
+        with tempfile.TemporaryDirectory() as d:
+            report = os.path.join(d, "report")
+            os.makedirs(report)
+            with io.open(os.path.join(report, "sfens.json"), "w", encoding="utf-8") as f:
+                json.dump(sfens(), f)
+            paths = {}
+            for key, obj in (("selection", selection2()), ("packet", packet()),
+                             ("request", {"customerQuestions": QUESTIONS2}), ("candidates", candidates()),
+                             ("texts", texts())):
+                paths[key] = os.path.join(d, key + ".json")
+                with io.open(paths[key], "w", encoding="utf-8") as f:
+                    json.dump(obj, f)
+            seats = os.path.join(d, "seats", selection2()["runId"])
+            os.makedirs(seats)
+            with io.open(os.path.join(seats, EF.INTEGRATION_NAME), "w", encoding="utf-8") as f:
+                json.dump(integration(), f)
+            md_path = os.path.join(d, "9_本編.md")
+            with io.open(md_path, "w", encoding="utf-8") as f:
+                f.write(draft_md())
+            own = dict(paths, md=md_path, **{"out-slot-map": os.path.join(d, "slot_map.json"), "seats-dir": os.path.join(d, "seats")})
+            captured = {}
+
+            def fake_build(*args, **kw):
+                captured.update(kw)
+                return "# 本編\n", [], []
+
+            saved = (EF.build_document, CA.parse_args, CA.build_materials, EC.menu_rows, CA.load_json, CA.check_answer, dict(os.environ))
+            try:
+                EF.build_document = fake_build
+                CA.parse_args = lambda argv: types.SimpleNamespace(patients=[("p.json", "3 分")])
+                CA.build_materials = lambda args, root: {"materials": "MATERIALS"}
+                EC.menu_rows = lambda ctx: ([], [])
+                real_load_json = saved[4]
+                # 偽物は patient の 1 本だけ(sfens.json は本物の読み方 `exit_body.load_sfens` → `CA.load_json` を通す)。
+                CA.load_json = lambda path: {"summary": {"games": 25}} if path == "p.json" else real_load_json(path)
+                CA.check_answer = lambda md, ctx: []
+                os.environ[EF.REPORT_DATA_DIR_ENV] = report
+                self.assertEqual(EF.run(own, [], out=io.StringIO()), 0)
+            finally:
+                (EF.build_document, CA.parse_args, CA.build_materials, EC.menu_rows, CA.load_json, CA.check_answer, _env) = saved
+                os.environ.clear()
+                os.environ.update(_env)
+            self.assertEqual(captured["materials"], "MATERIALS")
+            self.assertEqual(sorted(captured["sfens"]), ["g11", "g12"])
+            self.assertEqual(captured["sfens"]["g12"]["side"], "gote")
 
 
 class RunTest(unittest.TestCase):

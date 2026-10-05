@@ -17,6 +17,7 @@ exports[`report-pdf の python の試験(P-113) > 試験のファイルの名前
   "exit_groups_test.py",
   "exit_index_test.py",
   "exit_render_test.py",
+  "move_text_test.py",
   "rename_list_test.py",
   "report_fragments_test.py",
 ]

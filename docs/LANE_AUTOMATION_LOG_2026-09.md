@@ -4332,3 +4332,25 @@ sha256 の 12 本は開始時と終了時でビット一致。監査自身の変
 **司令塔の整理(便 137 への返し)**: 最初の回で黙った 2 本のうち「5 語目の伏せ ― 試験が数だけを見て語を見ていなかった」は
 **「件数は中身の抜けを見ない」の家族**(5 語目を足しても伏せた後の数が同じなら緑)。等価だった理由と足した試験: 接続型の `re.escape`(いまの 3 つの
 `name` に特殊文字が無い)→ **x25**、5 語目の伏せ(数だけ見ていた)→ **f71・x20**(語そのものが残ることで見る)。監査の 1 本(穴の退化値)→ **x26**。
+
+## §85 ⑥ 束 3 ― 盤の見出し (β)・`move_kanji` の 1 か所化・群の行・固定文・`readingRequired=false` ― 2026-10-05
+
+司令塔の裁定 3・4・5(β)・7(`docs/AUTOMATION_STATUS_2026-09-26.md`)と便 138 への返し(封で測る)に従う。計画は `docs/PLAN_EXIT_FILL_2026-10-01.md` §8。
+
+**作ったもの**: `report-pdf/move_text.py`(新規。`render_direct.py`・`render_whatif.py` から ZEN/KAN/PIECE/PROM・`parse_sfen`・`sq`・`usi_squares`・`piece_kanji`・`move_kanji`・`mark` を**移した**。
+2 本は `from move_text import …` で束縛)・`move_text_test.py`(9。振る舞い 5 + 写しでない 4)/ `exit_fill.py`(見出し (β)・`move_text_for`・群の行 `insert_group_lines`・固定文 `threshold_lines`・`fact_bullet(…, None)`。
+`build_document(…, sfens=None, materials=None)`。`sfens.json` は `exit_body.load_sfens` で `REPORT_DATA_DIR` から)/ `exit_fill_test.py`(71 → 77: f49・f49b・f52 を書き直し、f72〜f76 を足した)/
+`lib/deliver.ts`(段 `exit-fill` に `env: { REPORT_DATA_DIR }`)/ `lib/deliver.test.ts`(+1)/ README 2 本 / PHASES(P-194 済み・P-196 登録)。
+
+**測った**(計画 §8.6): 封 2 冊とも不変(陽性対照は反応)/ 見出し 2 / 2 が送った版の括弧なしと完全一致 / 見本用 4 ページ(残り 17.8 行)/ python 756・typecheck 10 / 変異 17 本中 予測一致 16(外れ 1 = 効き方の過大評価、捕まらない変異 0)。
+
+**設計で決めたこと(司令塔へ。§8.5)**: 線の文に前置きを置かない(P-196)/ ⑥ が `sfens.json` を読む(packet の局面は正規化の向きなので字に使えない ― 測って決めた)/ `mark` も一緒に移した(▲△ は指し手の字の一部)。
+
+**packet の向きを測った記録**: engine 1033 行の手番は全部 `b`(後手の 13 局も)、USI は正規化の局面に 1582 / 1582 当たり、回した USI は 103 / 993。
+
+**承認済みの一覧の更新**: `reportPdfPythonTests.test.ts` の snapshot(python の試験ファイルの名前の集合。足す・消す・改名で赤 ― P-113)に `move_text_test.py` を足した(`vitest -u`。差分は 1 行)。全体の vitest はこの 1 件が赤 → 更新後に緑。
+
+**独立監査 GO**(往復 0。2026-10-05): 監査が自分で測って一致 ― python 756 / vitest 114・2288(1 回目は `obsExtra.test.ts` が無関係の時間切れで赤・単体 8/8 緑・2 回目通しで緑)/ typecheck 赤 10(out/ の外 0)/ 封 2 冊「組版は変わっていない」(ファイルサイズも一致 277773・229704)/ 見出し 2 / 2 一致・12 局目の向きを独立に再計算して同じ字 / sha256 14 本が開始時と終了時で一致。
+監査自身の変異 4 本: Mut-A(mark と move_kanji の連結順)赤、**Mut-B(崩れの定義の一意性 `!= 1` → `< 1`)・Mut-C(`and` → `or`。片方だけ USI が無いと見出しに「None」)・Mut-D(`run()` の `REPORT_DATA_DIR` の配線)が黙った**(GO の条件でない指摘)。
+**判定の後の 1 便**: f77(崩れの文が 2 本・0 本で止まる)・f78(片方だけ USI が無い → 場所だけ + 注記、「None」は出ない)・f79(`sfens_from_env` ― 空・組の順・無いフォルダ・別の名前)・f80(`run()` が環境変数の sfens と `ctx["materials"]` を `build_document` に渡す配線。材料は偽物に差し替えて引数だけ見る)を足し、`run()` の 2 行を `sfens_from_env(environ)` に出した(振る舞いは同じ)。
+worktree で Mut-B・C・D・D2(`sfens_from_env` が環境変数を読まない)・D3(materials を渡さない)を当て直して**5 本とも赤**(f79 だけでは Mut-D が黙った ― 助けの関数の試験は配線の試験ではない。f80 で閉じた)。python 756 → **760**。

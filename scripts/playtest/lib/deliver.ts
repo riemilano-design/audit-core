@@ -1593,6 +1593,9 @@ export function planDeliver(args: DeliverArgs, probe: DeliverProbe, cmdOf: (tool
     tool: "exit-fill",
     cmd: cmdOf("exit-fill"),
     args: exitFillCommand(groups, probe, out, plan, customerDir),
+    // 見出しの指し手の字(「▲４四歩打」)の材料 `sfens.json` は、付録 3(`render_direct.py`)・本編(`exit_body.py`)と
+    // 同じ `REPORT_DATA_DIR`(組の順)から読む(⑥ 束 3。2026-10-05)。
+    env: { REPORT_DATA_DIR: reportDataDirEnv(groups) },
     action: packetReady ? "run" : "skip",
     reason: packetReady
       ? "⑤ の採用と packet から下書きのスロットを埋める(TODO が無い本編は触らない)"

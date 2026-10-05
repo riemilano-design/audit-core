@@ -40,10 +40,11 @@ import board_spec
 import check_answer
 from board_draw import DASH_CAND
 # 向きを戻す道具は `board_spec.py` の 1 か所(2026-09-29 に移した)。**呼び出しの 7 か所は触っていない。**
-# `RANKS` はこのファイルの `sq()` も使う(実測: 出現 3 行のうち 1 行は `sq()`)。**定義を 2 つにしない**ので、
-# `board_spec` の 1 つを束縛する。私は最初「`rotate_square` 以外から使われていない」と書いたが、
-# **出現行数だけを見て内訳を確かめなかった**ための誤り(移した直後に `NameError` で鳴った)。
-from board_spec import RANKS, genuine_move
+from board_spec import genuine_move
+# 指し手の字(ZEN/KAN/PIECE/PROM・parse_sfen・sq・usi_squares・piece_kanji・move_kanji・mark)は
+# **`move_text.py` の 1 か所**(⑥ 束 3。2026-10-05 の司令塔の裁定 5)。ここでは定義せず束縛する。
+# `RANKS` は `sq()` と一緒に移った(このファイルで他に使う所は無い)。
+from move_text import KAN, PIECE, PROM, ZEN, mark, move_kanji, parse_sfen, piece_kanji, sq, usi_squares
 
 from reportlab.lib import colors
 from reportlab.lib.enums import TA_LEFT
@@ -123,53 +124,11 @@ INDEX = exit_index.PageIndexRecorder(doc, "付録3", grouped=True)
 W = A4[0] - 28 * mm
 story = []
 
-# ==================== SFEN の機構(render_whatif.py と同じコード) ====================
-ZEN = "０１２３４５６７８９"
-KAN = "〇一二三四五六七八九"
-PIECE = {"p": "歩", "l": "香", "n": "桂", "s": "銀", "g": "金", "b": "角", "r": "飛", "k": "玉"}
-PROM = {"p": "と", "l": "杏", "n": "圭", "s": "全", "b": "馬", "r": "竜"}
+# ==================== SFEN の機構(盤を進める。指し手の字は move_text.py)====================
 TAG_JP = [("capture", "取る"), ("drop", "打つ"), ("givesCheck", "王手"), ("sacrifice", "捨て駒"), ("retreat", "引く")]
 # 側の語は **`check_answer.SIDE_JP` の 1 か所**を束縛する(P-185。2026-09-29)。
 # **写さない** ― 写した結果が「本編は自玉側・付録は守り」だった(批評席 (a) が 6 周目に実物で挙げた)。
 SIDE_JP = check_answer.SIDE_JP
-
-
-def parse_sfen(sfen):
-    board_s, turn, hands_s = sfen.split(" ")[:3]
-    cells = {}
-    for r, row in enumerate(board_s.split("/"), start=1):
-        f = 9
-        prom = False
-        for ch in row:
-            if ch == "+":
-                prom = True
-                continue
-            if ch.isdigit():
-                f -= int(ch)
-                continue
-            cells[(f, r)] = ("+" if prom else "") + ch
-            prom = False
-            f -= 1
-    hands = {}
-    if hands_s != "-":
-        n = ""
-        for ch in hands_s:
-            if ch.isdigit():
-                n += ch
-                continue
-            hands[ch] = hands.get(ch, 0) + (int(n) if n else 1)
-            n = ""
-    return cells, turn, hands
-
-
-def sq(token):
-    return (int(token[0]), RANKS.index(token[1]) + 1)
-
-
-def usi_squares(usi):
-    if usi[1] == "*":
-        return None, sq(usi[2:4])
-    return sq(usi[0:2]), sq(usi[2:4])
 
 
 def apply_move(cells, turn, hands, usi):
@@ -195,27 +154,6 @@ def apply_move(cells, turn, hands, usi):
         new_cells[to] = token
     new_turn = "w" if turn == "b" else "b"
     return new_cells, new_turn, new_hands
-
-
-def piece_kanji(token):
-    letter = token.lstrip("+").lower()
-    return (PROM if token.startswith("+") else PIECE)[letter]
-
-
-def move_kanji(cells, usi, prev_to):
-    """指し手の日本語表記(render_whatif.py の move_kanji と同じ)。check_answer.py の検査 2 が
-    --whatif-pdf の印字と付録 3 の印字を同じ文字列として照合できるよう、表記のコードは変えていない。"""
-    if usi[1] == "*":
-        to = sq(usi[2:4])
-        return f"{ZEN[to[0]]}{KAN[to[1]]}{PIECE[usi[0].lower()]}打"
-    frm, to = sq(usi[0:2]), sq(usi[2:4])
-    name = piece_kanji(cells[frm])
-    head = "同　" if prev_to == to else f"{ZEN[to[0]]}{KAN[to[1]]}"
-    return head + name + ("成" if usi.endswith("+") else "")
-
-
-def mark(turn, user_is_sente):
-    return "▲" if (turn == "b") == user_is_sente else "△"
 
 
 def line_of(cells, turn, hands, pv, user_is_sente, k=5):
