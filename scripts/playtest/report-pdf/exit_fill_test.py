@@ -1342,6 +1342,112 @@ class AuditMutationsTest(unittest.TestCase):
             self.assertEqual(captured["sfens"]["g12"]["side"], "gote")
 
 
+class VerifyTextsTest(unittest.TestCase):
+    """言い換えの束の道具が呼ぶ 2 つの入口(`--print-terms`・`--verify-texts`)と、その 1 か所 `text_problems`。"""
+
+    def statements(self):
+        return EF.statements_of(integration())
+
+    def test_f81_sfens_lend_only_the_orientation_and_the_move_text_never_a_number(self):
+        """司令塔の条件(2026-10-05): sfens.json から引くのは盤の向きと指し手の字だけ ― 数は packet から。"""
+        line, _inner, _note = EF.board_line(selection2()["boards"][0], packet(), candidates(), sfens())
+        moves = CA.MOVE_RE.findall(line)
+        self.assertEqual(len(moves), 2)
+        # 指し手の字・印・用語(「第 1 候補」)を除いた数字は packet の局番号と手数だけ。
+        rest = EF.mask_terms_and_moves(CA.strip_marks(line))
+        self.assertEqual(sorted(EF.NUMBER_TOKEN_RE.findall(rest)), ["11", "48"])
+        # sfens の中身(局面の並び・手の数)を変えても、数は動かない(向きと字だけが変わりうる)。
+        s = sfens()
+        s["g11"]["sfens"] = s["g11"]["sfens"] + ["(合成)"] * 30
+        s["g11"]["moves"] = ["7g7f"] * 77
+        line2, _, _ = EF.board_line(selection2()["boards"][0], packet(), candidates(), s)
+        self.assertEqual(line2, line)
+
+    def test_f82_text_problems_is_the_one_place(self):
+        st = self.statements()
+        refs = [ref(0, "h1")]
+        self.assertEqual(EF.text_problems(texts()["p1.1"], "p1.1", st, refs), [])
+        self.assertEqual(EF.text_problems(texts()["p1.1"], "p1.1", st, refs, max_chars=200), [])
+        # 数が statement に無い / 禁止語 / 空 / 長さ。
+        self.assertTrue(any("数の字「99」" in p for p in EF.text_problems("一致率は 99 でした。", "p1.1", st, refs)))
+        self.assertTrue(any("「普段」" in p for p in EF.text_problems("普段と違う。", "p1.1", st, refs)))
+        self.assertEqual(EF.text_problems("   ", "p1.1", st, refs), ["スロット p1.1: 言い換えの文が空"])
+        long = "あ" * 201
+        problems = EF.text_problems(long, "p1.1", st, refs, max_chars=200)
+        self.assertEqual(len(problems), 1)
+        self.assertIn("201 字", problems[0])
+        self.assertIn("上限 200 字", problems[0])
+        self.assertEqual(EF.text_problems("あ" * 200, "p1.1", st, refs, max_chars=200), [])
+        self.assertEqual(EF.text_problems(long, "p1.1", st, refs), [])  # 上限を渡さなければ長さは見ない(⑥ の既定)
+        # ⑥ の verified_text はこの 1 か所を通る(同じ入力で同じ問題で止まる)。
+        with self.assertRaises(EF.ExitFillError) as cm:
+            EF.verified_text({"p1.1": "一致率は 99 でした。"}, "p1.1", st, refs)
+        self.assertIn("数の字「99」", str(cm.exception))
+
+    def test_f83_slot_item_refs_excludes_reading_required_false_and_keeps_answers(self):
+        s = selection2()
+        refs = EF.slot_item_refs(s)
+        self.assertEqual(sorted(refs), ["ans.q1", "lead", "p1.1", "p1.2", "p1.3"])
+        s["p1"][2]["readingRequired"] = False
+        self.assertEqual(sorted(EF.slot_item_refs(s)), ["ans.q1", "lead", "p1.1", "p1.2"])
+        # verify_texts: 知らないスロット・false のスロットは落ちる。通る文は空の一覧。
+        out = EF.verify_texts({"p1.1": texts()["p1.1"], "p1.3": "x", "p9.9": "y"}, s, self.statements(), 200)
+        self.assertEqual(out["p1.1"], [])
+        self.assertIn("readingRequired が false", out["p1.3"][0])
+        self.assertIn("⑤ の採用に無い", out["p9.9"][0])
+
+    def test_f84_print_terms_is_the_same_table_as_the_gates(self):
+        out = EF.print_terms_json()
+        self.assertEqual(out["termLines"], [list(p) for p in CS.TERM_LINES])
+        self.assertEqual(out["forbiddenWords"], list(EGR.LABEL_FORBIDDEN_WORDS))
+        self.assertEqual(len(out["termLines"]), 4)
+        self.assertIn("普段", out["forbiddenWords"])
+        self.assertEqual(sorted(out), ["forbiddenWords", "termLines"])
+
+    def test_f85_verify_texts_entry_prints_json_and_fails_only_with_problems(self):
+        with tempfile.TemporaryDirectory() as d:
+            sel = os.path.join(d, "answer_selection.json")
+            with io.open(sel, "w", encoding="utf-8") as f:
+                json.dump(selection2(), f)
+            seats = os.path.join(d, "seats", selection2()["runId"])
+            os.makedirs(seats)
+            with io.open(os.path.join(seats, EF.INTEGRATION_NAME), "w", encoding="utf-8") as f:
+                json.dump(integration(), f)
+            ok = os.path.join(d, "ok.json")
+            with io.open(ok, "w", encoding="utf-8") as f:
+                json.dump({"lead": texts()["lead"], "p1.1": texts()["p1.1"]}, f)
+            buf = io.StringIO()
+            rc = EF.run_verify_texts(["--verify-texts", ok, "--selection", sel, "--seats-dir", os.path.join(d, "seats"), "--max-chars", "200"], out=buf)
+            self.assertEqual(rc, 0)
+            got = json.loads(buf.getvalue())
+            self.assertEqual(got["problems"], {"lead": [], "p1.1": []})
+            self.assertEqual(got["maxChars"], 200)
+            bad = os.path.join(d, "bad.json")
+            with io.open(bad, "w", encoding="utf-8") as f:
+                json.dump({"p1.1": "一致率は 99 でした。", "p1.2": "あ" * 201}, f)
+            buf = io.StringIO()
+            rc = EF.run_verify_texts(["--verify-texts", bad, "--selection", sel, "--seats-dir", os.path.join(d, "seats"), "--max-chars", "200"], out=buf)
+            self.assertEqual(rc, 1)
+            got = json.loads(buf.getvalue())
+            self.assertIn("数の字「99」", got["problems"]["p1.1"][0])
+            self.assertIn("201 字", got["problems"]["p1.2"][0])
+            # 引数の守り。
+            with self.assertRaises(EF.ExitFillError):
+                EF.parse_verify_args(["--verify-texts", ok, "--selection", sel])
+            with self.assertRaises(EF.ExitFillError):
+                EF.parse_verify_args(["--verify-texts", ok, "--selection", sel, "--seats-dir", d, "--max-chars", "x"])
+            with self.assertRaises(EF.ExitFillError):
+                EF.parse_verify_args(["--verify-texts", ok, "--selection", sel, "--seats-dir", d, "--packet", "p"])
+        # main の振り分け(print-terms は JSON を出して 0)。
+        saved = sys.stdout
+        try:
+            sys.stdout = io.StringIO()
+            self.assertEqual(EF.main([EF.PRINT_TERMS_FLAG]), 0)
+            self.assertEqual(json.loads(sys.stdout.getvalue()), EF.print_terms_json())
+        finally:
+            sys.stdout = saved
+
+
 class RunTest(unittest.TestCase):
     """**段としての振る舞い。**書き手の道を消さない。"""
 

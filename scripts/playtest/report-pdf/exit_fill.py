@@ -420,19 +420,108 @@ def statement_for(statements, item_ref, where):
     return statements[key]
 
 
-def verified_text(texts, slot, statements, item_refs):
-    """スロット `slot` の言い換えの文。**渡されていなければ止まる**(⑥ は書かない)。
+def text_problems(text, slot, statements, item_refs, max_chars=None):
+    """1 スロットの言い換えの文の問題(F-5: 数・指し手の字が statement の部分集合・禁止語。`max_chars` が在れば長さも)。
+    **⑥ の `verified_text` と `--verify-texts`(言い換えの束の道具)の 1 か所。**
     `item_refs` の statement 全部を照合の母集団にする(答えは複数の候補から 1 文になる)。"""
+    where = f"スロット {slot}"
+    if _blank(text):
+        return [f"{where}: 言い換えの文が空"]
+    pool = " ".join(statement_for(statements, ref, where) or "" for ref in item_refs)
+    problems = paraphrase_problems(text, pool, where)
+    if max_chars is not None and len(text) > max_chars:
+        problems.append(f"{where}: {len(text)} 字 ― 上限 {max_chars} 字を越えている(印の無い文なので素直に数える)")
+    return problems
+
+
+def verified_text(texts, slot, statements, item_refs):
+    """スロット `slot` の言い換えの文。**渡されていなければ止まる**(⑥ は書かない)。"""
     text = (texts or {}).get(slot)
     if _blank(text):
         raise ExitFillError(
             f"スロット {slot} の言い換えの文が渡されていない ― "
             "⑥ は固定文を新しく作らない(言い換えを通した文を fill_texts に書くこと)")
-    pool = " ".join(statement_for(statements, ref, f"スロット {slot}") or "" for ref in item_refs)
-    problems = paraphrase_problems(text, pool, f"スロット {slot}")
+    problems = text_problems(text, slot, statements, item_refs)
     if problems:
         raise ExitFillError("言い換えの文が statement を越えている:\n" + "\n".join(problems))
     return text
+
+
+# ---- 言い換えの束の道具が呼ぶ 2 つの入口(2026-10-05。1 回限りの境界測定実験。計画 PLAN_FILL_TEXTS §7) ----
+#
+# 【なぜ python に入口を置くか】照合(F-5)と用語の表・禁止語の表は python の 1 か所。TS(`fillTexts.ts`)が写しを持たないように、
+# **参照で渡す**(`--print-terms`)と**照合を頼む**(`--verify-texts`)の 2 つを出す。段にはしない(deliver.ts は触らない)。
+PRINT_TERMS_FLAG = "--print-terms"
+VERIFY_TEXTS_FLAG = "--verify-texts"
+
+
+def print_terms_json():
+    """用語の 4 行(`check_structure.TERM_LINES`)と禁止語(`exit_groups.LABEL_FORBIDDEN_WORDS`)を JSON で。"""
+    return {"termLines": [list(pair) for pair in CS.TERM_LINES],
+            "forbiddenWords": list(EGR.LABEL_FORBIDDEN_WORDS)}
+
+
+def slot_item_refs(selection):
+    """スロット → itemRef の一覧。lead・p1 の `readingRequired: true` の行・answers。
+    **false の p1 は入れない**(読みが要らない行に文を作らせない・通さない)。"""
+    out = {LEAD_SLOT: [selection["lead"]["itemRef"]]}
+    for row in selection.get("p1") or []:
+        if row.get("readingRequired") is True:
+            out[row["slot"]] = [row["itemRef"]]
+    for row in selection.get("answers") or []:
+        out[answer_slot(row.get("questionId"))] = list(row.get("itemRefs") or [])
+    return out
+
+
+def verify_texts(texts, selection, statements, max_chars):
+    """`fill_texts.json` の形の dict を照合し、スロット → 問題の一覧(空なら通過)。⑤ に無いスロットは落ちる。"""
+    refs = slot_item_refs(selection)
+    out = {}
+    for slot, text in (texts or {}).items():
+        if slot not in refs:
+            out[slot] = [f"スロット {slot}: ⑤ の採用に無い(か readingRequired が false)― 文を作る場所ではない"]
+            continue
+        out[slot] = text_problems(text, slot, statements, refs[slot], max_chars)
+    return out
+
+
+def parse_verify_args(argv):
+    """`--verify-texts <fill_texts.json> --selection <path> --seats-dir <dir> [--max-chars N]`。"""
+    out = {"max-chars": None}
+    i = 0
+    while i < len(argv):
+        flag = argv[i]
+        if flag in (VERIFY_TEXTS_FLAG, "--selection", "--seats-dir", "--max-chars"):
+            value = argv[i + 1] if i + 1 < len(argv) else None
+            if value is None or value.startswith("--"):
+                raise ExitFillError(f"{flag} に値が無い")
+            out[flag[2:]] = value
+            i += 2
+            continue
+        raise ExitFillError(f"知らない引数: {flag}")
+    missing = [k for k in ("verify-texts", "selection", "seats-dir") if k not in out]
+    if missing:
+        raise ExitFillError("足りない引数: " + " ".join("--" + m for m in missing))
+    if out["max-chars"] is not None:
+        try:
+            out["max-chars"] = int(out["max-chars"])
+        except ValueError:
+            raise ExitFillError(f"--max-chars が整数でない: {out['max-chars']!r}")
+    return out
+
+
+def run_verify_texts(argv, out=sys.stdout):
+    own = parse_verify_args(argv)
+    texts = _load(own["verify-texts"], "言い換えの文(fill_texts)")
+    selection = read_selection(own["selection"])
+    run_id = selection.get("runId")
+    if _blank(run_id):
+        raise ExitFillError("⑤ の runId が空 ― 統合の周を引けない")
+    statements = statements_of(_load(os.path.join(own["seats-dir"], run_id, INTEGRATION_NAME), "統合の出力"))
+    problems = verify_texts(texts, selection, statements, own["max-chars"])
+    json.dump({"problems": problems, "checked": sorted(problems), "maxChars": own["max-chars"]}, out, ensure_ascii=False, indent=1)
+    out.write("\n")
+    return 1 if any(problems.values()) else 0
 
 
 # ---- 太字の 1 文(F-5) ----
@@ -1053,6 +1142,12 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 
 
 def main(argv):
+    if PRINT_TERMS_FLAG in argv:
+        json.dump(print_terms_json(), sys.stdout, ensure_ascii=False, indent=1)
+        sys.stdout.write("\n")
+        return 0
+    if VERIFY_TEXTS_FLAG in argv:
+        return run_verify_texts(argv)
     own, rest = parse_own_args(argv)
     return run(own, rest)
 

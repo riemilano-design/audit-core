@@ -4354,3 +4354,22 @@ sha256 の 12 本は開始時と終了時でビット一致。監査自身の変
 監査自身の変異 4 本: Mut-A(mark と move_kanji の連結順)赤、**Mut-B(崩れの定義の一意性 `!= 1` → `< 1`)・Mut-C(`and` → `or`。片方だけ USI が無いと見出しに「None」)・Mut-D(`run()` の `REPORT_DATA_DIR` の配線)が黙った**(GO の条件でない指摘)。
 **判定の後の 1 便**: f77(崩れの文が 2 本・0 本で止まる)・f78(片方だけ USI が無い → 場所だけ + 注記、「None」は出ない)・f79(`sfens_from_env` ― 空・組の順・無いフォルダ・別の名前)・f80(`run()` が環境変数の sfens と `ctx["materials"]` を `build_document` に渡す配線。材料は偽物に差し替えて引数だけ見る)を足し、`run()` の 2 行を `sfens_from_env(environ)` に出した(振る舞いは同じ)。
 worktree で Mut-B・C・D・D2(`sfens_from_env` が環境変数を読まない)・D3(materials を渡さない)を当て直して**5 本とも赤**(f79 だけでは Mut-D が黙った ― 助けの関数の試験は配線の試験ではない。f80 で閉じた)。python 756 → **760**。
+
+## §86 言い換えの束の道具 ― 1 回限りの境界測定実験(人間の GO 2026-10-05・伝聞)― 2026-10-05
+
+人間の GO(司令塔の中継。原文は `docs/AUTOMATION_STATUS_2026-09-26.md`)は**正式機能化ではなく 1 回限りの境界測定実験**。固定値と条件 1〜7 は計画 `docs/PLAN_FILL_TEXTS_2026-10-05.md` §7 に落とした。
+**回していない。**回すのは監査 GO → コミット → 司令塔の合図の後に 1 回だけ。段にしない(`deliver.ts` は触っていない)。
+
+**作ったもの**: `lib/fillTexts.ts`(純粋。固定値 `EXPERIMENT` は字で留める・規則 7 行 `RULES_LINES` を sha で固定・`slotJobsOf` は lead + p1 true だけ・`runFillTexts` は **1 試行 = 1 呼び出し**で `callStructured` を直接呼ぶ ― `runSlot` は形の再試行を内に持ち「3 試行・12 呼び出し」の数え方が合わない・落ちた理由は累積して渡す(`retryUserText` を再利用)・`maxCostBefore` は実行前の数)/ `fillTexts.ts`(CLI。`--dry-run`・report が在れば回さない・出力は out/ にだけ)/ `schemas/fill-text.v0.1.schema.json`(`{text}` だけ)/ `exit_fill.py --print-terms`・`--verify-texts`(照合は `text_problems` の 1 か所 ― ⑥ の `verified_text` も同じ所を通る。長さ ≤ 200 はこの入口だけ ― ⑥ の既定は長さを見ない)/ 試験 `lib/fillTexts.test.ts` 15・`exit_fill_test` f81〜f85(f81 は司令塔の条件「sfens.json から数を引かない」)。
+
+**司令塔の追加 2 点**: report の最大費用(実行前 = 3 × (入力の実測 + 1,000) をスロットごと)と実費(実行後)を別の欄に / `measured.byMachine`(F-5・禁止語・長さ)と `measured.notMeasured`(因果・条件・対象・新しい事実・自然さ ― 人間が読む)を分けた。**測れないものを測れたと書かない。**
+
+**下見(合成 `measure/c5`・送っていない)**: スロット 4(statement 123・123・94・92 字)、入力 ≒ 280〜290 トークン/呼び出し、**最大費用(実行前)≒ 0.317 USD**。.env の `SEAT_COST_CAP_USD` は 10 のまま ― **上限 1 は回すその 1 回のコマンドの環境変数で渡す**(司令塔の決定 2026-10-05。.env は鍵と同じファイルなので書き換えない。`loadDotEnv` は既に在る環境変数を上書きしない ― 下見で「有効な上限 = 1」の印字を確かめる)。道具は有効な上限が 1 でなければ回さない。
+
+**変異 19 本(worktree・予測を先に印字)**: **1 回目の実行は 19 本目(陰性対照)で落ちた** ― 当てる字を CLI 側のコメントにしていて lib には無く、`assert` で止まり、証跡 `mut_ft_results.txt` はトレースバックで終わっていた。私は別のスクリプトで陰性対照だけを当て直して緑を見たが、**その出力はファイルに残さず、記録に「陰性対照 1 本は緑」と書いた**(独立監査が REVISE の理由として実物で挙げた 2026-10-05)。落ちた証跡は `mut_ft_results_crashed_run1.txt` に残し、runner を「対象の字が無ければ落ちずに未検証と印字して続ける」形に直して回し直した。**2 回目は F03 が未検証**(typecheck の直しで `problems[job.slot].push` を `slotProblems.push` に変えた後、変異の対象の字が古いままだった ― 直した runner が「当てられない」と印字して続けたので、落ちずに見えた。`mut_ft_results_run2_F03_stale.txt`)。**2 回目の F03 が捕まったのは、1 回目の直し(★未検証を別の印で数えて末尾に「一致 N / 全 M」を出す)があったから** ― 直し方が次の誤りを捕まえた(司令塔が記録に残すよう指示)。F03 の対象を直して **3 回目に 19 本を通しで回した**(`mut_ft_results.txt`): F01〜F18 全部が予測の試験で赤(F02・F07・F10 は他の試験も赤 ― 広く効く変異)、陰性対照 1 本は緑(`mut_ft_results.txt`。一致 19 / 19)。python 760 → **765**、typecheck 赤 10(out/ の外 0。途中で `noUncheckedIndexedAccess` の 2 件を直した)。 vitest 114 → **115 files・2288 → 2303**(`lib/fillTexts.test.ts` 15)。
+既知事項 **P-197**(最大費用は再試行の指摘の字を含まない。上界は .env の 1 USD)。
+
+**予測の外れ**: 0(F03 は構造を直した後にもう一度当てて赤)。
+
+**独立監査(2 回目)GO**(2026-10-05・往復 1 回): 監査が自分で測って一致 ― `mut_ft_results.txt` は一致 19 / ★ 0・落ちた 1 回目と F03 未検証の 2 回目のファイルの中身が記録どおり / 凍結 ft → ft2 で変わったのは 4 本だけ(lib・python・試験・schema はビット一致)/ 下見を自分の合成材料で 2 回(環境変数なし → 有効な上限 10、`SEAT_COST_CAP_USD=1` → 1)/ python 765・vitest 115・2303・typecheck 10(out/ の下)/ 禁止語 0・`git diff --check` 0。
+**GO の条件でない指摘 2 件(2 回とも挙がった。記録に残す)**: (1) `--dry-run` でも `exit_fill.py --print-terms`(ローカル python)を呼ぶ ― 鍵・送信は無い。(2) 「2 回目を回さない」の守りは `fill_texts.report.json` の有無だけを見る ― 1 回目が report を書く前に落ちて `attempts/` が残った形では 2 回目を止めない。運用(司令塔の合図の後に人が 1 回・コマンドの字を記録)で持つ。**回す前に out-dir の中身を目で見る**(計画 §7.5 に足した)。

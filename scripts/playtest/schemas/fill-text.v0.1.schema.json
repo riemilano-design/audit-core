@@ -1,0 +1,14 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "fill-text.v0.1",
+  "description": "言い換えの束(1 回限りの境界測定実験。人間の GO 2026-10-05)で、席(Claude 1 席)が 1 スロットぶん返す形。文 1 つだけ ― 数・理由・内部の推論の欄を持たない(⑥ の照合 F-5 を通った文だけが候補になる。計画 docs/PLAN_FILL_TEXTS_2026-10-05.md §2・§7)。",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["text"],
+  "properties": {
+    "text": {
+      "type": "string",
+      "minLength": 1
+    }
+  }
+}
