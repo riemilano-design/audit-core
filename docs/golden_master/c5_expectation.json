@@ -415,7 +415,7 @@
        "schema ok",
        "H-1 ok",
        "H-2 ok",
-       "H-3 NG counterEvidence.attempted が true でない",
+       "H-3 ok",
        "H-4 ok",
        "H-5 ok",
        "H-6 ok",
@@ -527,7 +527,7 @@
       "hypothesis_id": "H-c5-claude268d-005",
       "lines": [
        "schema ok",
-       "H-1 NG statement: 数「5」が observations の値に無い",
+       "H-1 ok",
        "H-2 ok",
        "H-3 NG items があるのに counterEvidence.result が \"none_found\"",
        "H-4 ok",
@@ -831,7 +831,7 @@
        "schema ok",
        "H-1 ok",
        "H-2 ok",
-       "H-3 NG counterEvidence.attempted が true でない",
+       "H-3 ok",
        "H-4 ok",
        "H-5 ok",
        "H-6 ok",
@@ -907,7 +907,7 @@
       "hypothesis_id": "H-c5-claude558b-004",
       "lines": [
        "schema ok",
-       "H-1 NG statement: 数「5」が observations の値に無い",
+       "H-1 ok",
        "H-2 ok",
        "H-3 ok",
        "H-4 ok",
@@ -1173,7 +1173,7 @@
        "schema ok",
        "H-1 ok",
        "H-2 ok",
-       "H-3 NG counterEvidence.attempted が true でない",
+       "H-3 ok",
        "H-4 ok",
        "H-5 NG statement が「という読みです」「可能性があります」の形でない",
        "H-6 ok",
@@ -1542,7 +1542,6 @@
     "return_code": 1,
     "problems": [
      "I-4: C-005 の representative H-9: observations[2]: facts.recognition.rows.3.reviewStatus が packet に無い",
-     "I-4: C-006 の representative H-3: counterEvidence.attempted が true でない",
      "I-4: C-007 の representative H-5: statement が「という読みです」「可能性があります」の形でない"
     ]
    },
@@ -1551,7 +1550,6 @@
     "return_code": 1,
     "problems": [
      "I-4: C-001 の representative H-3: items があるのに counterEvidence.result が \"none_found\"",
-     "I-4: C-005 の representative H-1: statement: 数「5」が observations の値に無い",
      "I-4: C-005 の representative H-3: items があるのに counterEvidence.result が \"none_found\"",
      "I-4: C-005 の representative H-9: observations[1]: value が packet と違う(行 \"英ちゃん流中飛車+5筋位取り中飛車+角換わり腰掛け銀\" / packet [\"英ちゃん流中飛車\",\"5筋位取り中飛車\",\"角換わり腰掛け銀\"])",
      "I-4: C-005 の representative H-9: observations[2]: value が packet と違う(行 \"忍者銀\" / packet [\"忍者銀\"])",
@@ -1580,7 +1578,6 @@
      "I-4: C-006 の representative H-9: observations[0]: value が packet と違う(行 \"同型矢倉+鬼殺し\" / packet [\"同型矢倉\",\"鬼殺し\"])",
      "I-4: C-007 の representative H-3: counterEvidence.attempted が true でない",
      "I-4: C-007 の representative H-5: statement が「という読みです」「可能性があります」の形でない",
-     "I-4: C-008 の representative H-1: statement: 数「5」が observations の値に無い",
      "I-4: C-008 の representative H-9: observations[0]: value が packet と違う(行 \"英ちゃん流中飛車+5筋位取り中飛車+角換わり腰掛け銀\" / packet [\"英ちゃん流中飛車\",\"5筋位取り中飛車\",\"角換わり腰掛け銀\"])",
      "I-4: C-008 の representative H-9: observations[1]: value が packet と違う(行 \"忍者銀\" / packet [\"忍者銀\"])",
      "I-4: C-008 の representative H-9: observations[2]: value が packet と違う(行 \"英ちゃん流中飛車+5筋位取り中飛車+角換わり腰掛け銀\" / packet [\"英ちゃん流中飛車\",\"5筋位取り中飛車\",\"角換わり腰掛け銀\"])",
