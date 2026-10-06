@@ -52,6 +52,8 @@ export interface ClientDeps {
   baseUrl?: string;
   sleep?: (ms: number) => Promise<void>;
   maxRetries?: number;
+  /** 試験用の上書き(既定は HTTP_ATTEMPT_TIMEOUT_MS)。S-5 §2.1(f) */
+  attemptTimeoutMs?: number;
 }
 
 export class LlmHttpError extends Error {
@@ -69,6 +71,8 @@ export class LlmHttpError extends Error {
 }
 
 const BACKOFF_MS = [1000, 4000, 16000] as const;
+/** S-5 §2.1(f)。1 試行(1 回の fetch)にかける所要の上限 = 5 分。時間切れは「接続の失敗」と同じ扱い(再送)。 */
+export const HTTP_ATTEMPT_TIMEOUT_MS = 300_000;
 const DEFAULT_BASE: Record<Provider, string> = {
   openai: "https://api.openai.com",
   gemini: "https://generativelanguage.googleapis.com",
@@ -83,13 +87,14 @@ function isRetryable(status: number): boolean {
 async function fetchWithRetry(deps: ClientDeps, url: string, init: RequestInit): Promise<{ status: number; body: unknown; attempts: number }> {
   const sleep = deps.sleep ?? ((ms) => new Promise((r) => setTimeout(r, ms)));
   const maxRetries = deps.maxRetries ?? BACKOFF_MS.length;
+  const attemptTimeoutMs = deps.attemptTimeoutMs ?? HTTP_ATTEMPT_TIMEOUT_MS;
   let attempt = 0;
   for (;;) {
     attempt += 1;
     let res: Response | undefined;
     let networkError: string | undefined;
     try {
-      res = await deps.fetch(url, init);
+      res = await deps.fetch(url, { ...init, signal: AbortSignal.timeout(attemptTimeoutMs) });
     } catch (err) {
       networkError = redactSecrets((err as Error).message, [deps.apiKey]);
     }

@@ -311,6 +311,13 @@ function isFactLine(line: unknown): boolean {
 /** 予測が要らない kind(発見・行動候補・答えられない・追加の観測に「動く数」を書かせない) */
 const KINDS_WITHOUT_PREDICTION = new Set(["finding", "action_candidate", "unanswerable", "needed_observation"]);
 
+/**
+ * S-5 §2.1(d)。`counterEvidence.attempted` を求めない kind(答えられない・追加の観測 ― 反証を試みる前に
+ * 止まったことを正直に書く形)。**`action_candidate` は入れない**(観測を持ち主張の形の文を書くので、反証の
+ * 試みを求めるのは筋が通る ― 計画 §2.1(d))。**版で区切らない**(古い記録にも同じ規則が正しい)。
+ */
+const KINDS_WITHOUT_COUNTER_EVIDENCE = new Set(["unanswerable", "needed_observation"]);
+
 /** 事実の文に混ぜない読みの語 */
 const READING_WORDS = ["という読み", "可能性", "のでは", "と思われ", "かもしれ"] as const;
 
@@ -343,6 +350,69 @@ function buildAllowedNumberSet(line: unknown): Set<number> {
   return out;
 }
 
+/**
+ * S-5 §2.1(c)。観測の値から「検証済みの文字列」を集める ― `collectValueNumbers` と同じ辿り方(number・配列・
+ * object は中を辿る)だが、**文字列**を対象にする。集める条件は 2 つとも満たすもの:
+ * 文字数 2 以上、かつ `0-9 . , - + %` 以外の文字を 1 つ以上含む(数字だけの文字列 `"25"` は集めない =
+ * 数の偽装を許さない)。
+ */
+const DIGIT_LIKE_CHAR = /^[0-9.,\-+%]$/;
+
+function collectValueStrings(value: unknown, out: Set<string>): void {
+  if (typeof value === "string") {
+    if (value.length >= 2 && [...value].some((ch) => !DIGIT_LIKE_CHAR.test(ch))) out.add(value);
+    return;
+  }
+  if (Array.isArray(value)) {
+    for (const item of value) collectValueStrings(item, out);
+    return;
+  }
+  if (isRecord(value)) {
+    for (const item of Object.values(value)) collectValueStrings(item, out);
+  }
+}
+
+/** H-1 が見る観測の 2 か所(`observations[].value`・`counterEvidence.items[].observations[].value`)から検証済みの文字列を集める。 */
+function buildVerifiedStringSet(line: unknown): Set<string> {
+  const out = new Set<string>();
+  for (const obs of asArray(get(line, ["observations"]))) collectValueStrings(get(obs, ["value"]), out);
+  for (const item of asArray(get(line, ["counterEvidence", "items"]))) {
+    for (const obs of asArray(get(item, ["observations"]))) collectValueStrings(get(obs, ["value"]), out);
+  }
+  return out;
+}
+
+/**
+ * S-5 §7(2026-10-07 の訂正、コミット `2c89bf9`)。**文を書き換えない。** 検証済みの文字列が
+ * `text` のどこを覆っているかを**範囲**(半開区間 `[start, end)`)で返す。`strings` を長い順に、
+ * `normalizeFullWidthDigits` した文(`extractNumbers` と同じ正規化)の中の出現を全部見つける
+ * ― **文字列の側にも同じ正規化を掛ける**(全角の数字が入っていても合うように)。
+ * 範囲は重なってよい(畳まない。`checkH1` 側は「どれか 1 つの範囲に完全に入っているか」だけを見る)。
+ */
+function verifiedSpans(text: string, strings: Iterable<string>): Array<[number, number]> {
+  const normalizedText = normalizeFullWidthDigits(text);
+  const sorted = [...new Set(strings)].map((s) => normalizeFullWidthDigits(s)).sort((a, b) => b.length - a.length);
+  const spans: Array<[number, number]> = [];
+  for (const s of sorted) {
+    if (s.length === 0) continue;
+    let from = 0;
+    for (;;) {
+      const idx = normalizedText.indexOf(s, from);
+      if (idx === -1) break;
+      spans.push([idx, idx + s.length]);
+      from = idx + 1; // 重なる出現も見つける(例: 検証済みの文字列が互いに重なって出てくる場合)
+    }
+  }
+  return spans;
+}
+
+/** `num` の位置がどれか 1 つの範囲に完全に入っているか(部分的な重なりは見逃さない)。 */
+function isFullyCoveredBySpan(num: ExtractedNumber, spans: Array<[number, number]>): boolean {
+  const start = num.index;
+  const end = num.index + num.raw.length;
+  return spans.some(([s, e]) => s <= start && end <= e);
+}
+
 type RatioKind = "percent" | "share10" | "ratio";
 
 function ratioKindOfWord(word: string): RatioKind | null {
@@ -361,6 +431,8 @@ interface ExtractedNumber {
   raw: string;
   value: number;
   ratioKind: RatioKind | null;
+  /** S-5 §7。`match.index`(`normalizeFullWidthDigits` は 1 文字を 1 文字に置き換えるので元の文に対しても有効)。 */
+  index: number;
 }
 
 function extractNumbers(text: string): ExtractedNumber[] {
@@ -375,7 +447,7 @@ function extractNumbers(text: string): ExtractedNumber[] {
     const after = normalized.slice(match.index + raw.length);
     const wordMatch = /^\s*(%|％|割|倍)/.exec(after);
     const ratioKind = wordMatch ? ratioKindOfWord(wordMatch[1]!) : null;
-    out.push({ raw, value, ratioKind });
+    out.push({ raw, value, ratioKind, index: match.index });
   }
   return out;
 }
@@ -404,14 +476,20 @@ function checkH1(line: unknown): CheckResult {
     if (text !== undefined) texts.push({ source: `counterEvidence.items[${index}].text`, text });
   });
   const allowed = buildAllowedNumberSet(line);
+  const verifiedStrings = buildVerifiedStringSet(line);
   const derivedList = asArray(get(line, ["observations"])).map((obs) => get(obs, ["derived"]));
 
   for (const { source, text } of texts) {
+    // S-5 §7(2026-10-07 の訂正、コミット `2c89bf9`): 文を書き換えない。extractNumbers は元の文に
+    // 1 回だけ当てる。比の数(ratioKind !== null)は今までどおり必ず derived と突き合わせる。
+    // 平の数(ratioKind === null)は、その位置(index 〜 index + raw.length)が検証済みの文字列の
+    // 覆う範囲(verifiedSpans)に**完全に入っているときだけ**見逃す(部分的な重なりは見逃さない)。
+    const spans = verifiedSpans(text, verifiedStrings);
     for (const num of extractNumbers(text)) {
       if (num.ratioKind !== null) {
         const matched = derivedList.some((derived) => recomputeDerived(derived, num.ratioKind!) === num.value);
         if (!matched) messages.push(`${source}: 「${num.raw}」に一致する derived の再計算が無い(組が無い)`);
-      } else if (!allowed.has(num.value)) {
+      } else if (!isFullyCoveredBySpan(num, spans) && !allowed.has(num.value)) {
         messages.push(`${source}: 数「${num.raw}」が observations の値に無い`);
       }
     }
@@ -518,7 +596,10 @@ function checkH3(line: unknown): CheckResult {
   const attempted = asBoolean(get(line, ["counterEvidence", "attempted"]));
   const items = asArray(get(line, ["counterEvidence", "items"]));
   const result = asString(get(line, ["counterEvidence", "result"]));
-  if (attempted !== true) messages.push("counterEvidence.attempted が true でない");
+  // S-5 §2.1(d): kind が KINDS_WITHOUT_COUNTER_EVIDENCE の行だけ、attempted の文を出さない。
+  // items/result の整合の 2 文は kind によらず出し続ける。
+  const exemptFromAttempted = KINDS_WITHOUT_COUNTER_EVIDENCE.has(kindOf(line));
+  if (!exemptFromAttempted && attempted !== true) messages.push("counterEvidence.attempted が true でない");
   if (items.length === 0) {
     if (result !== "none_found") messages.push('items が空なのに counterEvidence.result が "none_found" でない');
   } else if (result === "none_found") {

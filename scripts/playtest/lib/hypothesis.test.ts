@@ -615,6 +615,291 @@ describe("H-12 観測 0 件を kind で許す(STEP S-4 §2.1(b)、契約 hypothe
   });
 });
 
+// ---------------------------------------------------------------------------
+// STEP S-5(2026-10-07、audit-core/docs/CORE_CONNECTION_S5_PLAN_2026-10-07.md §2.1(c)):
+// H-1 は「検証済みの文字列」(observations[].value・counterEvidence.items[].observations[].value)の内側に
+// ある数字を、文の中の数として数えない(観測の値そのものの名前に数字が混ざっていても誤検知しない)。
+// ---------------------------------------------------------------------------
+describe("H-1 検証済みの文字列の中の数字を数えない(S-5 §2.1(c))", () => {
+  const h1 = (line: unknown): CheckResult =>
+    validateHypothesisLine(line, { today: TODAY, registry: new Set<string>() }).find((r) => r.check === "H-1")!;
+
+  it("名前の中の数字が許される(観測の値の文字列がそのまま文に出ている所の内側は数えない)", () => {
+    const line = {
+      schemaVersion: "0.4",
+      statement: "5筋位取り中飛車型が多い。という読みです。",
+      observations: [{ obsId: "obs.x", path: "x", value: "5筋位取り中飛車" }],
+      counterEvidence: { attempted: true, items: [], result: "none_found" },
+    };
+    expect(h1(line)).toMatchObject({ ok: true, messages: [] });
+  });
+
+  it('数字だけの文字列(例 "25")は覆わない(数の偽装を許さない)', () => {
+    const line = {
+      schemaVersion: "0.4",
+      statement: "25という数値が出ました。という読みです。",
+      observations: [{ obsId: "obs.x", path: "x", value: "25" }],
+      counterEvidence: { attempted: true, items: [], result: "none_found" },
+    };
+    const result = h1(line);
+    expect(result.ok).toBe(false);
+    expect(result.messages.some((m) => m.includes("25"))).toBe(true);
+  });
+
+  it("配列の要素の文字列でも効く(observations[].value が配列)", () => {
+    const line = {
+      schemaVersion: "0.4",
+      statement: "5筋位取り中飛車から4六銀左戦法に進んだ。という読みです。",
+      observations: [{ obsId: "obs.x", path: "x", value: ["5筋位取り中飛車", "4六銀左戦法"] }],
+      counterEvidence: { attempted: true, items: [], result: "none_found" },
+    };
+    expect(h1(line)).toMatchObject({ ok: true, messages: [] });
+  });
+
+  it("counterEvidence.items[].observations[].value の文字列も覆いの対象になる", () => {
+    const line = {
+      schemaVersion: "0.4",
+      statement: "変化を調べています。という読みです。",
+      observations: [{ obsId: "obs.x", path: "x", value: 1 }],
+      counterEvidence: {
+        attempted: true,
+        items: [{ kind: "denominator", text: "4六銀左戦法が多かった", observations: [{ obsId: "obs.y", value: "4六銀左戦法" }] }],
+        result: "weakened",
+      },
+    };
+    expect(h1(line)).toMatchObject({ ok: true, messages: [] });
+  });
+
+  // S-5 §7(2026-10-07 の訂正、コミット `2c89bf9`): 文を書き換えない設計に替えたので「覆いで数字がつながる」
+  // 問題のクラスごと消えた(置き換え自体が無い)。ここは設計が明文で求める「部分的な重なりは見逃さない」を
+  // 固定する(旧試験「覆いは □ に置き換える」の役目をこちらに置き換えた ― 書き換え前提の試験は意味を失った)。
+  it("平の数は検証済みの文字列の範囲に完全に入っているときだけ見逃す(部分的な重なりは見逃さない)", () => {
+    const line = {
+      schemaVersion: "0.4",
+      statement: "崩れは50上昇でした。という読みです。",
+      // 検証済みの文字列「0上昇」は「50」の範囲 [3,5) の一部(「0」だけ、index 4〜7)にしか重ならない
+      // ― 「50」は完全には覆われないので見逃されない。50 は観測の値に無いので NG のはず。
+      observations: [{ obsId: "obs.a", path: "a", value: "0上昇" }],
+      counterEvidence: { attempted: true, items: [], result: "none_found" },
+    };
+    const result = h1(line);
+    expect(result.ok).toBe(false);
+    expect(result.messages.some((m) => m.includes("50"))).toBe(true);
+  });
+
+  it("観測に無い数は今までどおり落ちる(覆いが効きすぎて何でも通すわけではない)", () => {
+    const line = {
+      schemaVersion: "0.4",
+      statement: "99という数字が出ました。という読みです。",
+      observations: [{ obsId: "obs.a", path: "a", value: 10 }],
+      counterEvidence: { attempted: true, items: [], result: "none_found" },
+    };
+    const result = h1(line);
+    expect(result.ok).toBe(false);
+    expect(result.messages.some((m) => m.includes("99"))).toBe(true);
+  });
+
+  it("比の枝(%・derived の再計算)は不変 ― 検証済みの文字列があっても影響しない", () => {
+    const line = {
+      schemaVersion: "0.4",
+      statement: "歩損が起きた局面で、崩れの割合は50%でした。という読みです。",
+      observations: [
+        { obsId: "obs.a", path: "a", value: "歩損" },
+        {
+          obsId: "obs.b",
+          path: "b",
+          value: 15,
+          derived: { kind: "percent", numerator: { obsId: "obs.b", value: 15 }, denominator: { obsId: "obs.c", value: 30 } },
+        },
+        { obsId: "obs.c", path: "c", value: 30 },
+      ],
+      counterEvidence: { attempted: true, items: [], result: "none_found" },
+    };
+    expect(h1(line)).toMatchObject({ ok: true, messages: [] });
+  });
+
+  it("基準の例(BASE_LINE)は今までどおり通る/落ちる(S-5 の前からある回帰)", () => {
+    expect(resultOf(BASE_LINE, "H-1").ok).toBe(true);
+    const bad = clone(BASE_LINE);
+    bad.statement = "崩れは 31 回で、長考の割合は 56%でした。という読みです。";
+    const result = resultOf(bad, "H-1");
+    expect(result.ok).toBe(false);
+    expect(result.messages.some((m) => m.includes("31"))).toBe(true);
+    expect(result.messages.some((m) => m.includes("56"))).toBe(true);
+  });
+
+  // 独立監査の REVISE(2026-10-07): 覆いが比の数(%・割・倍)ごと消すと、derived との不一致を
+  // 黙らせてしまう(検証済みの文字列の内側に比の数が重なる場合)。監査の再現をそのまま試験に固定する。
+  it("検証済みの文字列の内側に比の数が重なっても、derived との不一致を黙らせない(監査の再現)", () => {
+    const line = {
+      schemaVersion: "0.4",
+      statement: "崩れの割合は50%上昇でした。という読みです。",
+      observations: [
+        { obsId: "obs.a", path: "a", value: "50%上昇" },
+        {
+          obsId: "obs.b",
+          path: "b",
+          value: 15,
+          derived: { kind: "percent", numerator: { obsId: "obs.b", value: 15 }, denominator: { obsId: "obs.c", value: 40 } },
+        },
+        { obsId: "obs.c", path: "c", value: 40 },
+      ],
+      counterEvidence: { attempted: true, items: [], result: "none_found" },
+    };
+    // 15/40 = 37.5%(round で 38)なので 50 は derived の再計算と一致しない ― 落ちるはず。
+    const result = h1(line);
+    expect(result.ok).toBe(false);
+    expect(result.messages.some((m) => m.includes("50") && m.includes("derived"))).toBe(true);
+  });
+
+  it("同じ形(検証済みの文字列の内側に比の数)でも derived と一致するときは通る", () => {
+    const line = {
+      schemaVersion: "0.4",
+      statement: "崩れの割合は50%上昇でした。という読みです。",
+      observations: [
+        { obsId: "obs.a", path: "a", value: "50%上昇" },
+        {
+          obsId: "obs.b",
+          path: "b",
+          value: 15,
+          derived: { kind: "percent", numerator: { obsId: "obs.b", value: 15 }, denominator: { obsId: "obs.c", value: 30 } },
+        },
+        { obsId: "obs.c", path: "c", value: 30 },
+      ],
+      counterEvidence: { attempted: true, items: [], result: "none_found" },
+    };
+    // 15/30 = 50% で derived の再計算と一致する ― 通るはず。
+    expect(h1(line)).toMatchObject({ ok: true, messages: [] });
+  });
+
+  // 独立監査の 2 回目の REVISE(2026-10-07): 検証済みの文字列が「接尾語だけ」(数字を含まない)のとき、
+  // 覆い後の文から平の数を取り直す旧実装は、同じ数が比の枝(覆い前)と平の枝(覆い後で分類が変わる)の
+  // **両方**で評価され、二重に出る・正しい主張に偽の NG が付いた。監査の再現をそのまま試験に固定する。
+  it("検証済みの文字列が比の数字を含まず接尾語だけでも、二重に出ない・偽の NG が付かない(監査の再現 2 回目)", () => {
+    const line = {
+      schemaVersion: "0.4",
+      statement: "崩れの割合は50%上昇でした。という読みです。",
+      observations: [
+        { obsId: "obs.a", path: "a", value: "%上昇" },
+        {
+          obsId: "obs.b",
+          path: "b",
+          value: 15,
+          derived: { kind: "percent", numerator: { obsId: "obs.b", value: 15 }, denominator: { obsId: "obs.c", value: 40 } },
+        },
+        { obsId: "obs.c", path: "c", value: 40 },
+      ],
+      counterEvidence: { attempted: true, items: [], result: "none_found" },
+    };
+    // 15/40 = 37.5%(round で 38)なので derived と不一致 ― 比の枝の NG が 1 件だけ出る
+    // (平の枝の「50 が observations の値に無い」が重ねて増えないこと = 旧実装の二重計上が直っている)。
+    const result = h1(line);
+    expect(result.ok).toBe(false);
+    expect(result.messages).toHaveLength(1);
+    expect(result.messages[0]).toContain("derived");
+  });
+
+  it("同じ形(接尾語だけ)で derived と一致するときは ok(偽の NG が付かない)", () => {
+    const line = {
+      schemaVersion: "0.4",
+      statement: "崩れの割合は50%上昇でした。という読みです。",
+      observations: [
+        { obsId: "obs.a", path: "a", value: "%上昇" },
+        {
+          obsId: "obs.b",
+          path: "b",
+          value: 15,
+          derived: { kind: "percent", numerator: { obsId: "obs.b", value: 15 }, denominator: { obsId: "obs.c", value: 30 } },
+        },
+        { obsId: "obs.c", path: "c", value: 30 },
+      ],
+      counterEvidence: { attempted: true, items: [], result: "none_found" },
+    };
+    // 15/30 = 50% で derived と一致 ― 旧実装なら「50 が observations の値に無い」が偽で付いた。
+    expect(h1(line)).toMatchObject({ ok: true, messages: [] });
+  });
+
+  // 監査の非ブロッキングの指摘: 取り出しを 1 回にしたので、メッセージは元の文の左から右の順になる。
+  it("1 件の文に平の数の NG と比の数の NG が両方出るとき、メッセージは元の文の左から右の順", () => {
+    const line = {
+      schemaVersion: "0.4",
+      // 平の数「99」(index 3)が先、比の数「50」(index 8)が後(「50%上昇」の derived は不一致)。
+      statement: "崩れは99回で、50%上昇でした。という読みです。",
+      observations: [
+        { obsId: "obs.a", path: "a", value: 10 },
+        {
+          obsId: "obs.b",
+          path: "b",
+          value: 15,
+          derived: { kind: "percent", numerator: { obsId: "obs.b", value: 15 }, denominator: { obsId: "obs.c", value: 40 } },
+        },
+        { obsId: "obs.c", path: "c", value: 40 },
+      ],
+      counterEvidence: { attempted: true, items: [], result: "none_found" },
+    };
+    const result = h1(line);
+    expect(result.ok).toBe(false);
+    expect(result.messages).toHaveLength(2);
+    expect(result.messages[0]).toContain("99");
+    expect(result.messages[1]).toContain("50");
+    expect(result.messages[1]).toContain("derived");
+  });
+});
+
+// ---------------------------------------------------------------------------
+// STEP S-5(audit-core/docs/CORE_CONNECTION_S5_PLAN_2026-10-07.md §2.1(d)):
+// H-3 の counterEvidence.attempted を kind で免除する(unanswerable・needed_observation だけ)。
+// items/result の整合の 2 文は kind によらず出し続ける。action_candidate は免除しない。版で区切らない。
+// ---------------------------------------------------------------------------
+describe("H-3 counterEvidence.attempted を kind で免除する(S-5 §2.1(d))", () => {
+  const h3 = (line: unknown): CheckResult =>
+    validateHypothesisLine(line, { today: TODAY, registry: new Set<string>() }).find((r) => r.check === "H-3")!;
+
+  const KINDS = ["finding", "action_candidate", "unanswerable", "needed_observation"] as const;
+  const EXEMPT = new Set<string>(["unanswerable", "needed_observation"]);
+
+  it("4 kind × attempted true/false(items/result は整合させた形) ― 免除は unanswerable・needed_observation だけ", () => {
+    for (const kind of KINDS) {
+      for (const attempted of [true, false]) {
+        const result = h3({ schemaVersion: "0.4", kind, counterEvidence: { attempted, items: [], result: "none_found" } });
+        if (attempted === true || EXEMPT.has(kind)) {
+          expect(result, `${kind}/${attempted}: ${result.messages.join(" / ")}`).toMatchObject({ ok: true, messages: [] });
+        } else {
+          expect(result.ok, `${kind}/${attempted}`).toBe(false);
+          expect(result.messages).toEqual(["counterEvidence.attempted が true でない"]);
+        }
+      }
+    }
+  });
+
+  it("action_candidate は免除しない(字で留める ― attempted:false で必ず落ちる、既存の H-c5-gpt558b-007 と同じ理由)", () => {
+    const result = h3({ schemaVersion: "0.4", kind: "action_candidate", counterEvidence: { attempted: false, items: [], result: "none_found" } });
+    expect(result.ok).toBe(false);
+    expect(result.messages).toContain("counterEvidence.attempted が true でない");
+  });
+
+  it("items/result の整合の 2 文は kind・attempted によらず出る(免除は attempted の文だけ)", () => {
+    for (const kind of KINDS) {
+      const emptyButNotNoneFound = h3({ schemaVersion: "0.4", kind, counterEvidence: { attempted: true, items: [], result: "weakened" } });
+      expect(emptyButNotNoneFound.messages, kind).toContain('items が空なのに counterEvidence.result が "none_found" でない');
+
+      const nonEmptyButNoneFound = h3({ schemaVersion: "0.4", kind, counterEvidence: { attempted: true, items: [{ text: "x" }], result: "none_found" } });
+      expect(nonEmptyButNoneFound.messages, kind).toContain('items があるのに counterEvidence.result が "none_found"');
+    }
+    // 免除される kind でも attempted:false のとき、items/result の不整合は残る(免除は attempted の文だけ)
+    for (const kind of EXEMPT) {
+      const result = h3({ schemaVersion: "0.4", kind, counterEvidence: { attempted: false, items: [{ text: "x" }], result: "none_found" } });
+      expect(result.ok, kind).toBe(false);
+      expect(result.messages, kind).toEqual(['items があるのに counterEvidence.result が "none_found"']);
+    }
+  });
+
+  it("版で区切らない(0.1 の行でも kind が unanswerable なら免除が効く ― H-12 の版ゲートと違う)", () => {
+    const result = h3({ schemaVersion: "0.1", kind: "unanswerable", counterEvidence: { attempted: false, items: [], result: "none_found" } });
+    expect(result, result.messages.join(" / ")).toMatchObject({ ok: true, messages: [] });
+  });
+});
+
 describe("検査 1 件を人が読む行にする(状態の語は 1 か所)", () => {
   it("n1 packet を渡していない H-9 は skip と書く(ok と書かない)", () => {
     const lines = checkResultLines({

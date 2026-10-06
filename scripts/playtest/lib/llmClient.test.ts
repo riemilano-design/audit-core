@@ -5,7 +5,7 @@
 // 【要点 3】429・5xx・接続の失敗は 1・4・16 秒で再送し、4 回目で諦めること(sleep は差し替えて待たない)。
 import { describe, expect, it } from "vitest";
 import { redactSecrets } from "./env.js";
-import { LlmHttpError, SENDS_TEMPERATURE, callStructured, countTokens, parseStructuredResponse, type ClientDeps, type StructuredRequest } from "./llmClient.js";
+import { HTTP_ATTEMPT_TIMEOUT_MS, LlmHttpError, SENDS_TEMPERATURE, callStructured, countTokens, parseStructuredResponse, type ClientDeps, type StructuredRequest } from "./llmClient.js";
 
 const KEY = "sk-test-0123456789abcdefKEYVALUE";
 const SCHEMA = { type: "object", properties: { a: { type: "number" } }, required: ["a"], additionalProperties: false } as const;
@@ -171,6 +171,50 @@ describe("再送(1・4・16 秒)", () => {
     await expect(callStructured(req("openai"), deps(f, sleeps))).rejects.toThrow(/HTTP 400/);
     expect(calls.length).toBe(1);
     expect(sleeps).toEqual([]);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// S-5 §2.1(f)(audit-core/docs/CORE_CONNECTION_S5_PLAN_2026-10-07.md): 1 試行に所要の上限(5 分)を字で置き、
+// 時間切れは「接続の失敗」と同じ扱い(1・4・16 秒の後に再送、最大 3 回)。**実際に 5 分待つ試験は書かない**
+// ― attemptTimeoutMs を試験用に上書きして、AbortSignal.timeout の実物の挙動を小さい時間で確かめる。
+// ---------------------------------------------------------------------------
+describe("所要の上限(S-5 §2.1(f))", () => {
+  it("上限の数は字で 300_000(5 分)", () => {
+    expect(HTTP_ATTEMPT_TIMEOUT_MS).toBe(300_000);
+  });
+
+  it("各 fetch に AbortSignal.timeout(既定は HTTP_ATTEMPT_TIMEOUT_MS)を渡す", async () => {
+    const { fetch: f, calls } = fakeFetch([{ status: 200, body: OPENAI_OK }]);
+    await callStructured(req("openai"), deps(f));
+    expect(calls[0]!.init.signal).toBeInstanceOf(AbortSignal);
+    expect((calls[0]!.init.signal as AbortSignal).aborted).toBe(false);
+  });
+
+  it("時間切れ(AbortSignal の中断)は接続の失敗と同じ扱いで再送し、4 回目で諦める", async () => {
+    // attemptTimeoutMs を 0 に上書き(実物の AbortSignal.timeout をそのまま使い、5 分は待たない)。
+    const sleeps: number[] = [];
+    const calls: Array<{ signal: AbortSignal }> = [];
+    const fetchImpl = (async (_url: string, init: RequestInit) => {
+      const signal = init.signal as AbortSignal;
+      calls.push({ signal });
+      // 実物の fetch も、signal が中断されたら中断の例外を投げる(待つのは abort イベントだけ)。
+      return await new Promise<Response>((_resolve, reject) => {
+        signal.addEventListener("abort", () => reject(new DOMException("The operation was aborted due to timeout", "TimeoutError")));
+      });
+    }) as unknown as typeof fetch;
+    const d: ClientDeps = { fetch: fetchImpl, apiKey: KEY, sleep: async (ms: number) => { sleeps.push(ms); }, attemptTimeoutMs: 0 };
+    await expect(callStructured(req("openai"), d)).rejects.toThrow(LlmHttpError);
+    expect(calls.length).toBe(4);
+    expect(sleeps).toEqual([1000, 4000, 16000]);
+    for (const c of calls) expect(c.signal).toBeInstanceOf(AbortSignal);
+  });
+
+  it("attemptTimeoutMs を上書きしないときは既定(HTTP_ATTEMPT_TIMEOUT_MS)のまま時間切れにならない(短いやりとりは通る)", async () => {
+    const { fetch: f, calls } = fakeFetch([{ status: 200, body: ANTHROPIC_OK }]);
+    const r = await callStructured(req("anthropic"), deps(f));
+    expect(r.httpStatus).toBe(200);
+    expect((calls[0]!.init.signal as AbortSignal).aborted).toBe(false);
   });
 });
 
