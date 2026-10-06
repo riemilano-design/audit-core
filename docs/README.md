@@ -4,6 +4,7 @@
 
 | ファイル | 何が書いてあるか | 主な読者 |
 |---|---|---|
+| [CORE_CONNECTION_THIRD_PREDICTION_2026-10-06.md](../audit-core/docs/CORE_CONNECTION_THIRD_PREDICTION_2026-10-06.md) | **3 社目(Core 経由で初めて回す書類)の予測(封印)**。選び方の規則(2026-10-01・最小 docID・連結 jppfs あり)、計測の道具 run_core_path.py(1B・5F で 224/224 の門を通過)、予測 14 項目(完走・束縛率 55〜85 / 25〜75・no_subject 3〜25・member 0 の見立て・到達しない分岐が動くのは 0〜1・VM 2〜20・手検査 10 件で false pass 0〜1)。この段では Adapter を直さない |
 | [CORE_CONNECTION_C1F_RESULT_2026-10-06.md](../audit-core/docs/CORE_CONNECTION_C1F_RESULT_2026-10-06.md) | **Core 接続 C-1f の結果**(bd0e62b)。癖 2 つを比較子だけで直し、司令塔の 1 回目で 224/224 不変、門 219、変異 26/26(戻す変異は単体試験で red・224 件の門で green = 正しさは実データでは未測)。予測は当たり 6 / 外れ 3(既存試験の数え間違い)。D-R3 の外れの記録の行方を明記。監査 GO |
 | [CORE_CONNECTION_C1F_PREDICTION_2026-10-06.md](../audit-core/docs/CORE_CONNECTION_C1F_PREDICTION_2026-10-06.md) | **Core 接続 C-1f(原本の癖 2 つの直し)の予測(封印)**。pure/ratio を符号つきで比べる・sign の差 0 はどちらにも一致しない。Adapter の comparators だけ。予測: 224/224 不変(点、1 回目は司令塔が回す)、新規試験 4〜6、門 221〜225、戻す変異 3 本は default red / gate_only green(直しは実データでは測れない、を数で残す)、変異 26 本、Core 0 |
 | [CORE_CONNECTION_C1E_CLASSIFICATION_2026-10-06.md](../audit-core/docs/CORE_CONNECTION_C1E_CLASSIFICATION_2026-10-06.md) | **Core 接続 C-1e(計器 4: 変更の分類)、C-1 の締め**。Core に触れたコミットは f917f02 の 1 つ、以後の変更要求 0。登録追加 21・インターフェース拡張 0・意味変更 0・表に無い変更 0。C-0 §3 は当たり 7 / 外れ 2(normalization 4、拡張 0 = 予測より少ない)/ 単位の曖昧さ 2。計器 3・4・5 合格、1・2 は C-2。C-1 計画 §6 は量の予測が過小(行数・変異)。証明したのは構造の側だけ、意味の独立は C-2 で。人間に決めてもらう 5 点(癖 2 つの直し・3 社目・C-2 の言語・型の数え方・repo) |
