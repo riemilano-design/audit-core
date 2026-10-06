@@ -1,9 +1,26 @@
 # -*- coding: utf-8 -*-
-"""C-1d §G: unit tests for the six comparators in
+"""C-1d §G (and C-1f): unit tests for the six comparators in
 ``adapters/xbrl/comparators.py``. Each gets a match case, a mismatch
 case, and (where the spec calls one out) a boundary case; answers are
 chosen so they do not coincide with any nearby nor previously-used number
 in this suite.
+
+C-1f (2026-10-06) fixed two of the "原本の癖" this file originally
+pinned: pure100/ratio100 now compare to the *signed* ``claim.value``
+(not ``abs(claim.value)``), and sign-direction now treats a difference
+of exactly 0 as neither an increase nor a decrease. Only claims with a
+*negative* ``claim.value`` are affected by the first fix (a positive
+claim.value gives the same result either way), so the two tests that
+pinned the old behaviour with a negative claim --
+``test_compares_against_absolute_claim_value`` in both
+``EqualsWithinPure100Test`` and ``Ratio100Test`` -- and the one test
+that pinned the old sign-zero behaviour --
+``test_zero_difference_counts_as_decrease`` in
+``BuiltinSignDirectionTest`` -- are replaced here with tests of the new
+behaviour (renamed to match; this is 3 existing tests, not the 1 the
+C-1f prediction §2/§3 anticipated -- see the implementation report for
+C-1f, which records this as a discovered gap in that prediction, not a
+silent correction of it).
 """
 
 import unittest
@@ -124,10 +141,22 @@ class EqualsWithinPure100Test(unittest.TestCase):
         self.assertTrue(result.match)
         self.assertEqual(result.recomputed, 61.7)
 
-    def test_compares_against_absolute_claim_value(self):
-        # 原本の癖 a: a negative claim.value is compared via abs().
-        evidence = (_resolved(0.102),)
-        claim = _claim(value=-10.2, unit="%")
+    def test_negative_claim_value_mismatches_positive_fact(self):
+        # C-1f fix to 原本の癖 a: a negative claim.value ("△5.8%") no
+        # longer matches a positive fact via abs() -- it is compared
+        # signed, so this now mismatches.
+        evidence = (_resolved(0.058),)
+        claim = _claim(value=-5.8, unit="%")
+        contract = _contract("equals_within(pure*100)", tolerance=0.15, pure_threshold=1.5)
+        result = C.equals_within_pure100(evidence, claim, contract)
+        self.assertFalse(result.match)
+        self.assertEqual(result.recomputed, 5.8)
+
+    def test_positive_claim_value_matches_same_fact(self):
+        # Same fact/magnitude as above with a positive claim.value: the
+        # signed comparison matches directly.
+        evidence = (_resolved(0.058),)
+        claim = _claim(value=5.8, unit="%")
         contract = _contract("equals_within(pure*100)", tolerance=0.15, pure_threshold=1.5)
         result = C.equals_within_pure100(evidence, claim, contract)
         self.assertTrue(result.match)
@@ -162,12 +191,15 @@ class Ratio100Test(unittest.TestCase):
         evidence_outside = (_resolved(1001.52), _resolved(1000.0))
         self.assertFalse(C.ratio100(evidence_outside, claim, contract).match)
 
-    def test_compares_against_absolute_claim_value(self):
+    def test_negative_claim_value_mismatches_positive_ratio(self):
+        # C-1f fix to 原本の癖 a: a negative claim.value no longer
+        # matches a positive ratio via abs() -- compared signed, this
+        # now mismatches.
         evidence = (_resolved(94.0), _resolved(100.0))
         claim = _claim(value=-94.0, unit="%")
         contract = _contract("ratio*100", tolerance=0.15)
         result = C.ratio100(evidence, claim, contract)
-        self.assertTrue(result.match)
+        self.assertFalse(result.match)
 
 
 class PctChangeTest(unittest.TestCase):
@@ -235,17 +267,25 @@ class BuiltinSignDirectionTest(unittest.TestCase):
         self.assertFalse(result.match)
         self.assertEqual(result.recomputed, -200.0)
 
-    def test_zero_difference_counts_as_decrease(self):
-        # 原本の癖 b: diff == 0 -> actual = -1 (strict > 0, not >= 0).
-        evidence = (_resolved(1000.0), _resolved(1000.0))
+    def test_zero_difference_mismatches_positive_direction(self):
+        # C-1f fix to 原本の癖 b: diff == 0 -> actual = 0, which matches
+        # neither direction (previously actual = -1, "a decrease").
+        evidence = (_resolved(500.0), _resolved(500.0))
         claim = _claim()
-        contract_pos = _contract("builtin:sign(cur-prior)==direction", direction=1)
-        contract_neg = _contract("builtin:sign(cur-prior)==direction", direction=-1)
-        result_pos = C.builtin_sign_direction(evidence, claim, contract_pos)
-        result_neg = C.builtin_sign_direction(evidence, claim, contract_neg)
-        self.assertFalse(result_pos.match)
-        self.assertTrue(result_neg.match)
-        self.assertEqual(result_pos.detail["actual"], -1)
+        contract = _contract("builtin:sign(cur-prior)==direction", direction=1)
+        result = C.builtin_sign_direction(evidence, claim, contract)
+        self.assertFalse(result.match)
+        self.assertEqual(result.detail["actual"], 0)
+
+    def test_zero_difference_mismatches_negative_direction(self):
+        # Same fix, the other direction: diff == 0 also mismatches
+        # direction=-1 now (previously it matched, since -1 == -1).
+        evidence = (_resolved(777.0), _resolved(777.0))
+        claim = _claim()
+        contract = _contract("builtin:sign(cur-prior)==direction", direction=-1)
+        result = C.builtin_sign_direction(evidence, claim, contract)
+        self.assertFalse(result.match)
+        self.assertEqual(result.detail["actual"], 0)
 
 
 if __name__ == "__main__":

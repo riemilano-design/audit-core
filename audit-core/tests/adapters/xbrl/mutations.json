@@ -96,23 +96,21 @@
     "note": "C-1d 予測 §3.6 D-R2。5F の前期が負の N049・N078・N083 の符号が変わる。"
   },
   {
-    "id": "D-R3-sign-boundary-ge-zero",
+    "id": "F-R3-sign-zero-counts-as-decrease-again",
     "file": "comparators.py",
-    "old": "    actual = 1 if diff > 0 else -1",
-    "new": "    actual = 1 if diff >= 0 else -1",
-    "predicted": "green",
-    "prediction_miss": true,
-    "actual_first_measurement": "red",
-    "note": "C-1d 予測 §3.6 D-R3。封じた予測は green(等価、根拠: c - p = 0 の Claim が 224 件中 0 件)で、スコープの指定は無い(= 既定スコープ)。既定スコープ(test_comparators.py を含む)での実測は red: 点 G で要求した境界試験 test_zero_difference_counts_as_decrease が diff == 0 を直接作るため、224 件の実データだけを根拠にした予測は外れている。司令塔の 2026-10-06 の指摘により、実測を見た後にスコープを狭めて green に揃える操作(規則を予測に合わせる)を撤回し、既定スコープ・predicted=green のまま外れとして記録する(prediction_miss=true、actual_first_measurement=red)。D-R7 は予測文書 §3.6 に明示的に「計器 3 では green」と書かれているため gate_only のままで良い(スコープを事後に決めたものではない)。"
+    "old": "    actual = 0 if diff == 0 else (1 if diff > 0 else -1)",
+    "new": "    actual = 1 if diff > 0 else -1",
+    "predicted": "red",
+    "note": "C-1f 予測 §3 row 6(癖 b を戻す)。C-1d の D-R3 は予測 green・実測 red の外れとして記録された(prediction_miss)。C-1f で癖 b を直したため old が消え、この行に置き換えた。外れの記録は C-1d の結果文書 §3 と git 履歴(25f33e9)に残る。"
   },
   {
-    "id": "D-R3b-sign-boundary-ge-zero-gate-only",
+    "id": "F-R3g-sign-zero-counts-as-decrease-again-gate-only",
     "file": "comparators.py",
-    "old": "    actual = 1 if diff > 0 else -1",
-    "new": "    actual = 1 if diff >= 0 else -1",
+    "old": "    actual = 0 if diff == 0 else (1 if diff > 0 else -1)",
+    "new": "    actual = 1 if diff > 0 else -1",
     "predicted": "green",
     "scope": "gate_only",
-    "note": "D-R3 の外れ(上記)を受けて追加した別行。実データの 2 文書(test_claim_layer + test_instrument3 のみ)では c - p = 0 の Claim が 0 件なので green になるという事実そのものは残す。ただしこの予測は実測を見た後に書いた = 予測としての価値は無い(司令塔の 2026-10-06 の指摘どおり)。"
+    "note": "C-1f 予測 §3 row 6。224 件に該当 Claim 0 なので門は無言。直しは実データでは測れていない、を数で残す。"
   },
   {
     "id": "D-R4-direction-match-inverted",
@@ -162,6 +160,40 @@
     "new": "    recomputed = pct",
     "predicted": "red",
     "note": "C-1d 予測 §3.6 D-R9(pct_change 側)。recomputed が期待値の round(pct, 2) と float で == でなくなる(5F に pct_change の Claim が複数件)。"
+  },
+  {
+    "id": "F-R1-pure100-abs-claim-again",
+    "file": "comparators.py",
+    "old": "    match = abs(fvp - claim.value) <= tolerance",
+    "new": "    match = abs(fvp - abs(claim.value)) <= tolerance",
+    "predicted": "red",
+    "note": "C-1f 予測 §3 row 2(癖 a を pure100 側で戻す)。合成単体試験(test_negative_claim_value_mismatches_positive_fact)が claim.value=-5.8 を直接作るため既定スコープでは赤。"
+  },
+  {
+    "id": "F-R1g-pure100-abs-claim-again-gate-only",
+    "file": "comparators.py",
+    "old": "    match = abs(fvp - claim.value) <= tolerance",
+    "new": "    match = abs(fvp - abs(claim.value)) <= tolerance",
+    "predicted": "green",
+    "scope": "gate_only",
+    "note": "C-1f 予測 §3 row 2。1B の pure×100 該当 3 件(N013・N014・N041)は全部正の claim.value なので門は無言。直しは実データでは測れていない、を数で残す。"
+  },
+  {
+    "id": "F-R2-ratio100-abs-claim-again",
+    "file": "comparators.py",
+    "old": "    match = abs(ratio - claim.value) <= tolerance",
+    "new": "    match = abs(ratio - abs(claim.value)) <= tolerance",
+    "predicted": "red",
+    "note": "C-1f 予測 §3 row 3(癖 a を ratio100 側で戻す)。合成単体試験(test_negative_claim_value_mismatches_positive_ratio)が claim.value=-94.0 を直接作るため既定スコープでは赤。"
+  },
+  {
+    "id": "F-R2g-ratio100-abs-claim-again-gate-only",
+    "file": "comparators.py",
+    "old": "    match = abs(ratio - claim.value) <= tolerance",
+    "new": "    match = abs(ratio - abs(claim.value)) <= tolerance",
+    "predicted": "green",
+    "scope": "gate_only",
+    "note": "C-1f 予測 §3 row 3。1B の ratio×100 該当 4 件は全部正の claim.value なので門は無言。直しは実データでは測れていない、を数で残す。"
   },
   {
     "id": "D-G1-comparators-docstring-wording",
