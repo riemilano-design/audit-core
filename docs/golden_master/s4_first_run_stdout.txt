@@ -1,0 +1,77 @@
+# S-4 の 1 回目(司令塔、2026-10-07)。鍵は出力されない道具の stdout をそのまま写した。
+
+## --dry-run(03:31)
+.env: /Users/midoriko/Desktop/sgogi-coach/.env から 17 個の名前を読んだ(値は出さない)
+  指示文の例: 5 本中 5 本が引けて値も入っている
+下見: 束 227212 B・208217 字・概算 69406 トークン(chars/3)・sha 81a1ca9c5eba…
+  gpt        gpt-5.5                    見込み 1.2470 ドル / 累計 1.2470 ドル 
+  gemini     gemini-3.1-pro-preview     送っていない(S-4: 費用上限と S-3 と同条件)
+  claude     claude-opus-5              見込み 1.0970 ドル / 累計 2.3441 ドル 
+  integrator claude-opus-5              見込み 0.8470 ドル / 累計 3.1911 ドル 
+  1 回の見込み 約 3.19 ドル(上限 5 ドル)
+
+## 実 run(03:31:14 → 04:23:16、SEAT_COST_CAP_USD=5)
+2026-10-07 03:31:14 start
+.env: /Users/midoriko/Desktop/sgogi-coach/.env から 17 個の名前を読んだ(値は出さない)
+  指示文の例: 5 本中 5 本が引けて値も入っている
+
+== effffa3e-20261006-1(packetId 22aee8fe696d0262・束 227212 B・概算 69406 トークン)
+  gpt     gpt-5.5                    項目 6 件・検査の指摘 4 件 / 実費 0.847 ドル・71834 ms
+  gemini  gemini-3.1-pro-preview     送っていない(S-4: 費用上限と S-3 と同条件) / 実費 0 ドル・0 ms
+  claude  claude-opus-5              空席(http_failed) / 実費 0 ドル・3049829 ms
+  整理役  claude-opus-5              無し(http_failed) / 実費 0 ドル
+  この実行の累計の実費 0.847 ドル(上限 5 ドル・上限に達した: false)
+
+書いた: scripts/playtest/out/c5/llm-seats-s4(effffa3e-20261006-1)・この実行の累計 0.8470 ドル
+rc=0
+2026-10-07 04:23:16 end
+
+## claude 席の HTTP の失敗(seat_claude_attempt_1_error.txt、全文)
+HTTP 400: {"type":"error","error":{"type":"invalid_request_error","message":"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits."},"request_id":"req_011CfmXdfxbCt5Evrh5BpUtL"}
+## 整理役の HTTP の失敗(integrator_attempt_1_error.txt、全文)
+HTTP 400: {"type":"error","error":{"type":"invalid_request_error","message":"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits."},"request_id":"req_011CfmXdj28S6r44LdSGM2zf"}
+## seatOutputCheck --packet(gpt)
+席 gpt(gpt-5.5) 項目 6 本・答え 1 行
+問題 4 件:
+  - E-3: items[3] H-1: statement: 数「5」が observations の値に無い
+  - E-3: items[3] H-1: statement: 数「5」が observations の値に無い
+  - E-3: items[3] H-1: statement: 数「4」が observations の値に無い
+  - E-3: items[4] H-3: counterEvidence.attempted が true でない
+
+## integrationCheck / exitSelect --draft: integration.json が無いため回していない(整理役が落ちた)
+
+## s4_compare.py
+a1_schema_pass_per_seat = {"gpt": {"schema_lines": 0, "sections_with_seal": 12}}
+a2_E1_seal_mismatch_per_seat = {"gpt": 0}
+a3_E3_runs = {"gpt": {"E3_lines": 4, "E3_H_lines": 4, "E3_H9_lines": 0}}
+a4_empty_seats = ["claude"]
+h9_own_tally = {"G": 20}
+b1_plus_flatten_VM = 0
+b2_removed_column_PNF = 0
+b5_array_grounded = 4
+b7_seat_input_bytes = 227212
+c1_obs_per_item_median = 4.0
+c3_unanswerable = 0
+e1_H9_skip_lines = 0
+f1_actual_cost_total = 0.847
+f1_per_seat = {"gpt": 0.847, "gemini": 0, "claude": 0}
+f1_integrator = 0
+f2_capReached = false
+capUsd = 5
+d1_draft = {"exists": false}
+d2_rejected_ratio = null
+S4: b3_zero_obs_by_kind {'needed_observation': 1} b5_misuse 0 g1_H12 0 c5 {'gpt': '12/12'} c7 0 c9 {'gpt': [('q1', 'partial')]} versions ['0.5']
+  attempts gpt c1_attempt1_passed True c3 [] r2_repeats 0 recorded [(1, 'first', 0)]
+  attempts claude c1_attempt1_passed False c3 [] r2_repeats 0 recorded [(1, 'first', 0)]
+  attempts gemini c1_attempt1_passed False c3 [] r2_repeats 0 recorded []
+  b7 empty aggregateIds None integration None
+b4 residual 0 c2 filler 0 e2 I4 H9 0 d3 0
+
+## Golden c5 --expect(実 run の後。rc=1、差 58 件は全部 lines の長さ +1)
+★期待値と違う(58 件):
+- g9.hypothesisCheck.0f1b019e-20261001-1/seat_gpt.json.items[0].lines: 長さ 期待 12 / 実測 13
+- g9.hypothesisCheck.0f1b019e-20261001-1/seat_gpt.json.items[1].lines: 長さ 期待 12 / 実測 13
+- g9.hypothesisCheck.0f1b019e-20261001-1/seat_gpt.json.items[2].lines: 長さ 期待 12 / 実測 13
+- g9.hypothesisCheck.0f1b019e-20261001-1/seat_gpt.json.items[3].lines: 長さ 期待 12 / 実測 13
+- g9.hypothesisCheck.0f1b019e-20261001-1/seat_gpt.json.items[4].lines: 長さ 期待 12 / 実測 13
+  …(同型が 58 件。全文は s4_first_run_golden_diff.txt)

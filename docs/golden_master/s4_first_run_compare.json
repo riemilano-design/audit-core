@@ -1,0 +1,147 @@
+{
+ "a1_schema_pass_per_seat": {
+  "gpt": {
+   "schema_lines": 0,
+   "sections_with_seal": 12
+  }
+ },
+ "a2_E1_seal_mismatch_per_seat": {
+  "gpt": 0
+ },
+ "a3_E3_runs": {
+  "gpt": {
+   "E3_lines": 4,
+   "E3_H_lines": 4,
+   "E3_H9_lines": 0
+  }
+ },
+ "a4_empty_seats": [
+  "claude"
+ ],
+ "h9_own_tally": {
+  "G": 20
+ },
+ "b1_plus_flatten_VM": 0,
+ "b2_removed_column_PNF": 0,
+ "b3_nashi_PNF": [],
+ "b4_residual_VM_PNF": [],
+ "b5_array_grounded": 4,
+ "b7_seat_input_bytes": 227212,
+ "c1_obs_per_item_median": 4.0,
+ "c2_filler_signature": [],
+ "c3_unanswerable": 0,
+ "e1_H9_skip_lines": 0,
+ "e2_I4_H9_lines": [],
+ "e4_core_vs_own": {
+  "agree": 20,
+  "disagree": []
+ },
+ "d1_draft": {
+  "exists": false
+ },
+ "f1_actual_cost_total": 0.847,
+ "f1_per_seat": {
+  "gpt": 0.847,
+  "gemini": 0,
+  "claude": 0
+ },
+ "f1_integrator": 0,
+ "f2_capReached": false,
+ "capUsd": 5,
+ "h9_rows_non_G": [],
+ "b3_zero_obs_items": [
+  {
+   "seat": "gpt",
+   "itemId": null,
+   "hid": "H-c5-gptefff-005",
+   "kind": "needed_observation",
+   "neededObservation": {
+    "what": "本人が普段指さない戦型として採用した局の一覧",
+    "whyNotInPacket": "束には戦型の機械認識と機械分類はあるが、本人の通常採用戦型や意図的な採用の印は無い。",
+    "howToMeasure": "対局ごとに本人申告または事前の通常採用戦型リストと照合して、普段外として採用した局に印を付ける。"
+   }
+  }
+ ],
+ "b3_zero_obs_by_kind": {
+  "needed_observation": 1
+ },
+ "b5_zero_obs_other_kinds": [],
+ "kinds_by_seat": {
+  "gpt": {
+   "finding": 4,
+   "needed_observation": 1,
+   "answer_candidate": 1
+  }
+ },
+ "schemaVersions": [
+  "0.5"
+ ],
+ "g1_H12_lines": [],
+ "all_problem_lines": {
+  "seats": {
+   "gpt": [
+    "E-3: items[3] H-1: statement: 数「5」が observations の値に無い",
+    "E-3: items[3] H-1: statement: 数「5」が observations の値に無い",
+    "E-3: items[3] H-1: statement: 数「4」が observations の値に無い",
+    "E-3: items[4] H-3: counterEvidence.attempted が true でない"
+   ],
+   "gemini": [],
+   "claude": []
+  },
+  "integration": []
+ },
+ "c9_answers_status": {
+  "gpt": [
+   [
+    "q1",
+    "partial"
+   ]
+  ]
+ },
+ "c5_seal_match": {
+  "gpt": "12/12"
+ },
+ "attempts": {
+  "gpt": {
+   "attempts_recorded": [
+    {
+     "attempt": 1,
+     "kind": "first",
+     "httpStatus": 200,
+     "finishReason": "completed",
+     "problems": 0
+    }
+   ],
+   "problem_files": [],
+   "raw_files": 1,
+   "c3_items2_or_string": [],
+   "r2_consecutive_repeats": 0,
+   "c1_attempt1_passed": true
+  },
+  "claude": {
+   "attempts_recorded": [
+    {
+     "attempt": 1,
+     "kind": "first",
+     "httpStatus": 400,
+     "finishReason": null,
+     "problems": 0
+    }
+   ],
+   "problem_files": [],
+   "raw_files": 0,
+   "c3_items2_or_string": [],
+   "r2_consecutive_repeats": 0,
+   "c1_attempt1_passed": false
+  },
+  "gemini": {
+   "attempts_recorded": [],
+   "problem_files": [],
+   "raw_files": 0,
+   "c3_items2_or_string": [],
+   "r2_consecutive_repeats": 0,
+   "c1_attempt1_passed": false
+  }
+ },
+ "c7_VM_PNF_total": 0
+}
