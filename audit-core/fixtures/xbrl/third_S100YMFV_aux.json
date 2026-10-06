@@ -1,0 +1,35 @@
+{
+ "sign0": [],
+ "名人": [],
+ "negpr": [],
+ "multi_member_ctx": 0,
+ "member_denominator": 12,
+ "members": [
+  "jpcrp_cor:DirectorsAppointedAsAuditAndSupervisoryCommitteeMembersExcludingOutsideDirectorsMember",
+  "jpcrp_cor:DirectorsExcludingAuditAndSupervisoryCommitteeMembersAndOutsideDirectorsMember",
+  "jpcrp_cor:OutsideDirectorsAndOtherOfficersMember",
+  "jppfs_cor:CapitalStockMember",
+  "jppfs_cor:CapitalSurplusMember",
+  "jppfs_cor:DeferredGainsOrLossesOnHedgesMember",
+  "jppfs_cor:ForeignCurrencyTranslationAdjustmentMember",
+  "jppfs_cor:RetainedEarningsMember",
+  "jppfs_cor:ShareholdersEquityMember",
+  "jppfs_cor:TreasuryStockMember",
+  "jppfs_cor:ValuationAndTranslationAdjustmentsMember",
+  "jppfs_cor:ValuationDifferenceOnAvailableForSaleSecuritiesMember"
+ ],
+ "mdna_sentences": 137,
+ "mdna_textblock": "jpcrp_cor:ManagementAnalysisOfFinancialPositionOperatingResultsAndCashFlowsTextBlock",
+ "hand_check_ids": [
+  "N067",
+  "N026",
+  "T016",
+  "N042",
+  "T048",
+  "N068",
+  "N033",
+  "T033",
+  "N071",
+  "N035"
+ ]
+}

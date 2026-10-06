@@ -4,6 +4,7 @@
 
 | ファイル | 何が書いてあるか | 主な読者 |
 |---|---|---|
+| [CORE_CONNECTION_THIRD_RESULT_2026-10-06.md](../audit-core/docs/CORE_CONNECTION_THIRD_RESULT_2026-10-06.md) | **3 社目 S100YMFV(プラッツ、09-28)の結果**。10-01/02/05 は候補 0 → 09-28 の docID 最小。Core 経由で完走、Claim 140、束縛 数 55.7% / 文章 44.2%、GROUNDED 61・VM 11・PNF 16・UNV 52。予測 12/14(外れ: sign_token 20、P-1 の表記 3 種)。no_subject 16 のうち語彙の穴は 2 だけ(12 は XBRL に無い市場の数)。XP: ポイント差の form・主語の粒度で VM 7・CF 項目の sign の意味・member 分母の粗さ。手検査 10 件 false pass 0。Adapter は直していない(次の段で封じてから) |
 | [CORE_CONNECTION_THIRD_PREDICTION_2026-10-06.md](../audit-core/docs/CORE_CONNECTION_THIRD_PREDICTION_2026-10-06.md) | **3 社目(Core 経由で初めて回す書類)の予測(封印)**。選び方の規則(2026-10-01・最小 docID・連結 jppfs あり)、計測の道具 run_core_path.py(1B・5F で 224/224 の門を通過)、予測 14 項目(完走・束縛率 55〜85 / 25〜75・no_subject 3〜25・member 0 の見立て・到達しない分岐が動くのは 0〜1・VM 2〜20・手検査 10 件で false pass 0〜1)。この段では Adapter を直さない |
 | [CORE_CONNECTION_C1F_RESULT_2026-10-06.md](../audit-core/docs/CORE_CONNECTION_C1F_RESULT_2026-10-06.md) | **Core 接続 C-1f の結果**(bd0e62b)。癖 2 つを比較子だけで直し、司令塔の 1 回目で 224/224 不変、門 219、変異 26/26(戻す変異は単体試験で red・224 件の門で green = 正しさは実データでは未測)。予測は当たり 6 / 外れ 3(既存試験の数え間違い)。D-R3 の外れの記録の行方を明記。監査 GO |
 | [CORE_CONNECTION_C1F_PREDICTION_2026-10-06.md](../audit-core/docs/CORE_CONNECTION_C1F_PREDICTION_2026-10-06.md) | **Core 接続 C-1f(原本の癖 2 つの直し)の予測(封印)**。pure/ratio を符号つきで比べる・sign の差 0 はどちらにも一致しない。Adapter の comparators だけ。予測: 224/224 不変(点、1 回目は司令塔が回す)、新規試験 4〜6、門 221〜225、戻す変異 3 本は default red / gate_only green(直しは実データでは測れない、を数で残す)、変異 26 本、Core 0 |

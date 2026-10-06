@@ -1,0 +1,27 @@
+{
+ "doc": "S100YMFV",
+ "profile": "P5F",
+ "tally": {
+  "claims": 140,
+  "num": 88,
+  "text": 52,
+  "num_bound": 49,
+  "text_bound": 23,
+  "state": {
+   "UNVERIFIABLE": 52,
+   "POINTER_NOT_FOUND": 16,
+   "GROUNDED": 61,
+   "VALUE_MISMATCH": 11
+  },
+  "reason": {
+   "no_subject": 37,
+   "no_element": 9,
+   "no_element(ratio without fact)": 6,
+   "ambiguous(elements)": 8,
+   "no_element(unit not in XBRL)": 1,
+   "state_word(no line)": 7
+  }
+ },
+ "gate": null
+}
+written: audit-core/fixtures/xbrl/third_S100YMFV_P5F.json

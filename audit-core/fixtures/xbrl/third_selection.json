@@ -1,0 +1,47 @@
+{
+ "date_listed": "2026-09-28",
+ "dates_tried": [
+  {
+   "date": "2026-10-01",
+   "candidates_total": 0,
+   "candidates_after_filter": 0
+  },
+  {
+   "date": "2026-10-02",
+   "candidates_total": 14,
+   "candidates_after_filter": 0
+  },
+  {
+   "date": "2026-10-05",
+   "candidates_total": 7,
+   "candidates_after_filter": 0
+  },
+  {
+   "date": "2026-09-28",
+   "candidates_total": 69,
+   "candidates_after_filter": 52
+  }
+ ],
+ "selection_rule": "docTypeCode 120, xbrlFlag 1, not 投資信託, consolidated jppfs facts > 0, min docID; dates in sealed order until one has a candidate",
+ "candidates_total": 69,
+ "candidates_after_filter": 52,
+ "tried": [
+  {
+   "docID": "S100YMFV",
+   "filer": "株式会社プラッツ",
+   "consolidated_jppfs_facts": 273,
+   "facts": 960
+  }
+ ],
+ "document": {
+  "docID": "S100YMFV",
+  "filerName": "株式会社プラッツ",
+  "docDescription": "有価証券報告書－第34期(2025/07/01－2026/06/30)",
+  "submitDateTime": "2026-09-28 15:30",
+  "periodStart": "2025-07-01",
+  "periodEnd": "2026-06-30",
+  "edinetCode": "E31344",
+  "secCode": "78130"
+ },
+ "zip_sha256": "4a5982e7447d6e0614c6ad12e7c091d462ca61a0128c2ce2af957a8bdfe1d52c"
+}
