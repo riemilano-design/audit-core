@@ -182,3 +182,9 @@ member 付きの context で選ばれた fact は全部 `members == [member]` �
 2. 4 本目を同じ書類でやるか: 語彙に「セグメント利益」1 行 + `ambiguous(member)` の文で「全社」「連結」の語があれば連結に戻す規則。やるなら予測を先に封じる(セグメント利益 10 件の行方・T008/T009 の復帰・false pass)。
 3. 文章の Claim の指標(束縛内 GROUNDED 率)の固定は 3 社目以降(予測どおり持ち越し)。
 4. Core 接続の GO / NO-GO は 1〜3 の後。
+
+---
+
+## 追記(2026-10-06、C-1g の結果を受けて): member の分母 19 の訂正
+
+3 本目で「連結 Duration context の explicitMember」として数えた分母 19 は、事業セグメントの member だけでなく株主資本等変動計算書の member(資本金・利益剰余金・自己株式など)と役員区分を含んでいた。C-1g(profile P6)で分母を会社拡張の名前空間の member に絞ると **5**(`jpcrp030000-asr_E05055-000:{BeautyBusinessSupportBusiness,CareerDesign,DirectSalon,Franchise,HairMake}ReportableSegmentMember`)。本文の 19 を使った率・判断は当時の記録として変えない。詳細は [CORE_CONNECTION_C1G_RESULT_2026-10-06.md](CORE_CONNECTION_C1G_RESULT_2026-10-06.md) §3.2・§6。

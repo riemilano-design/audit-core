@@ -114,3 +114,16 @@
 ## 追記(同日、結果を書いた後の再点検): XP-3rd-3 の 1 社目への遡及
 
 1 社目の T028「仕入債務の減少額」は同じ計算で偶然一致して GROUNDED になっていた(文の結論は正しいが根拠の計算が違う = **証拠の層の false pass**)。T026「売上債権の増加額」は同じ計算で正しい文を VM に落としていた。1 社目の結果文書に追記した。**2 社の false pass の記録は 値 0・証拠 2(T025・T028)・抽出の偶然一致 2 に訂正**。この誤りは語彙が CF の流量項目(DecreaseIncrease… / IncreaseDecrease…)を指すときに限って起きる。
+
+---
+
+## 追記(2026-10-06、C-1g の結果を受けて): XP-3rd-1〜4 が P6 でどう動いたか
+
+C-1g(profile P6、[結果](CORE_CONNECTION_C1G_RESULT_2026-10-06.md) §3.3)で同じ書類を 1 回回した。本文の数字は P5F 当時の記録として変えない。
+
+- XP-3rd-1(ポイント差の form): N066・N086 は derived `diff(a-b)(pure*100)` で GROUNDED、N088 は前期の語が無く `no_element(point without prior phrase)`。
+- XP-3rd-2(主語の粒度 VM 7): N046・N058〜N061・T036・T037 が正しい要素に束縛され GROUNDED。T039 は pointers が NoncurrentLiabilities に変わり G のまま。
+- XP-3rd-3(CF 項目の sign): T021 は偶然の G が VM に(安全側)、T023 は VM が G に。**T025 は主語が 投資有価証券の取得による支出 に乗り換えたが `PurchaseOf…` は規約の対象外で VM のまま(取りこぼし。次に直す物)。**
+- XP-3rd-4(member の分母): 12 → **0**(この書類に会社拡張の事業 member は無い。P5F の 12 は株主資本等変動計算書の member と役員区分)。
+- 予測に無かった変化: N019・N020(持分法による投資利益)は fact が実在し GROUNDED(本文 §の「語彙の穴 2」はこれ)。T052(ROE の文章)は UNV → PNF。
+- state 集計: G 61 → 73、VM 11 → 3、PNF 16 → 19、UNV 52 → 45。
