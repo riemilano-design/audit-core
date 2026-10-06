@@ -7,7 +7,7 @@
 //     [--previous-work <前回の work>] [--parallel <N>] \
 //     [--compare-dir <段 2 の記録のフォルダ …> --compare-person <p記号>] \
 //     [--group-work <work> --group-time-limit-sec <秒>]… \
-//     [--forbid <語>]… [--dry-run] [--from <段の名前>]
+//     [--forbid <語>]… [--dry-run] [--from <段の名前>] [--seat-run <runId>]
 //
 // `--compare-dir`/`--compare-person` は段 `pipeline-gate` で `pipeline.ts --until gate` へ中継するだけ
 // (新しい work に `gate.jsonl` が無いときに要る。既にあればその段は飛ぶ)。
@@ -69,6 +69,8 @@ const REPORT_PDF_DIR = path.join(SCRIPT_DIR, "report-pdf");
 const TSX_TOOLS: Partial<Record<DeliverTool, string>> = {
   // ⑤ の門(2026-10-01)。**採用は機械がしない** ― この道具は選択を読んで 3 つを見るだけ。
   "exit-select": "scripts/playtest/exitSelect.ts",
+  // S-3(2026-10-06)。同じ道具を `--draft` の顔で呼ぶ(候補の一覧を書くだけ。採用の印は付けない)。
+  "exit-draft": "scripts/playtest/exitSelect.ts",
   pipeline: path.join(SCRIPT_DIR, "pipeline.ts"),
   "direct-answers": path.join(SCRIPT_DIR, "directAnswers.ts"),
   "final-positions": path.join(SCRIPT_DIR, "finalPositions.ts"),

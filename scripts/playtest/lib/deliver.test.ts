@@ -29,6 +29,7 @@ import {
   exitBodyCommand,
   exitCandidatesCommand,
   exitCoverCommand,
+  exitDraftCommand,
   exitGateCommand,
   exitFillCommand,
   exitPacketPaths,
@@ -710,8 +711,10 @@ describe("stagesFrom", () => {
     expect(stagesFrom(undefined)).toEqual([...DELIVER_STAGES]);
     // 顧客向け出口の 4 段が入った(2026-09-29)。**最後の段は `exit-send`**(C-1b。2026-09-30)。
     // **⑤ の門 `exit-select` が `exit-candidates` の直前に入った**(2026-10-01。司令塔の GO)。
+    // `exit-draft` は `exit-select` の**直前**に入った(S-3。2026-10-06)。
     expect(stagesFrom("answer-check")).toEqual([
       "answer-check", "answer-pdf",
+      "exit-draft",
       "exit-select",
       // ⑥ `exit-fill` は候補の直後・門の直前(2026-10-05)。
       "exit-candidates", "exit-fill", "exit-gate", "exit-render", "exit-check",
@@ -794,6 +797,8 @@ describe("planDeliver", () => {
     const resumed = planDeliver(argsOf(["--from", "answer-check"]), probe, (t) => t);
     expect(resumed.map((s) => s.stage)).toEqual([
       "answer-check", "answer-pdf",
+      // S-3(2026-10-06)。`exit-draft` は `exit-select` の直前。
+      "exit-draft",
       // ⑤ の門(2026-10-01)。**`exit-candidates` の直前**。⑥ は候補の直後(2026-10-05)。
       "exit-select",
       "exit-candidates", "exit-fill", "exit-gate", "exit-render", "exit-check",
@@ -1485,6 +1490,8 @@ describe("顧客向け出口の 4 段", () => {
                                       "check-delivery", "exit-send"]);
     // **直前であることを隣で見る**(「どこかに在る」では位置が留まらない)。
     expect(stages[stages.indexOf("exit-candidates") - 1]).toBe("exit-select");
+    // **`exit-draft` は `exit-select` の直前**(S-3。2026-10-06)。
+    expect(stages[stages.indexOf("exit-select") - 1]).toBe("exit-draft");
     // **⑥ は候補の直後・門の直前**(正本 ⑥ の行。2026-10-05)。両隣で見る。
     expect(stages[stages.indexOf("exit-fill") - 1]).toBe("exit-candidates");
     expect(stages[stages.indexOf("exit-fill") + 1]).toBe("exit-gate");
@@ -1499,8 +1506,40 @@ describe("顧客向け出口の 4 段", () => {
       "appendix4-cause", "appendix4-search", "appendix4-pdf",
       "answer-menu", "answer-draft", "answer-gate", "answer-check", "answer-pdf",
     ]);
-    // 22 → 23(⑤ の門 `exit-select` を足した。2026-10-01)→ 24(⑥ `exit-fill`。2026-10-05)。
-    expect(stages).toHaveLength(24);
+    // 22 → 23(⑤ の門 `exit-select` を足した。2026-10-01)→ 24(⑥ `exit-fill`。2026-10-05)→ 25(`exit-draft`。S-3。2026-10-06)。
+    expect(stages).toHaveLength(25);
+  });
+
+  // ---- S-3(2026-10-06。計画 CORE_CONNECTION_S3_PLAN §2.1 の (d))----
+  describe("exit-draft(S-3)", () => {
+    it("--seat-run が無ければ skip で、既存の顧客の流れは動かない", () => {
+      const steps = planDeliver(argsOf(), fakeProbe({}), (t) => t);
+      const step = steps.find((s) => s.stage === "exit-draft")!;
+      expect(step.action).toBe("skip");
+      expect(step.reason).toBe("--seat-run 無し");
+      expect(step.args).toEqual([]);
+      // 既存の `exit-select` 段は不変。
+      expect(steps.find((s) => s.stage === "exit-select")!.action).toBe("gate");
+    });
+
+    it("--seat-run があれば run で、引数の並びが exitSelect.ts --draft の必須旗どおり", () => {
+      const steps = planDeliver(argsOf(["--seat-run", "run20261006abc"]), fakeProbe({}), (t) => t);
+      const step = steps.find((s) => s.stage === "exit-draft")!;
+      expect(step.action).toBe("run");
+      const customerDir = customerDirOf(argsOf().groups);
+      const packetPaths = exitPacketPaths(customerDir);
+      const selectPaths = exitSelectPaths(customerDir);
+      expect(step.args).toEqual(exitDraftCommand(customerDir, "run20261006abc", "2026-09-24"));
+      expect(step.args).toEqual([
+        "--draft",
+        "--packet", packetPaths.packet,
+        "--integration", `${packetPaths.seatsDir}/run20261006abc/integration.json`,
+        "--request", packetPaths.request,
+        "--obs-registry", "docs/OBSERVATION_ITEMS.md",
+        "--today", "2026-09-24",
+        "--out", selectPaths.selectionDraft,
+      ]);
+    });
   });
 
   it("--from exit-gate で書き手の席から再開できる", () => {

@@ -38,7 +38,9 @@ function minimalFacts(): Rec {
 }
 function minimalAggregates(): Rec[] {
   return [
-    { id: "side_match.attack", numerator: 1, denominator: 1, unit: "positions", name: "第 1 候補が攻めの手だった分かれ道のうち、実戦も攻めの手だった局面", population: { from: "branches", where: [{ field: "top1Side", op: "==", value: "attack" }], unit: "positions" }, derivedFrom: ["g01"], src: "e1", recountable: true, timeDependent: false },
+    // S-3 (e): numeratorWhere を立てる(無いと数え直しが「値の行」として読み、常に合わない。packet が渡って H-9 が
+    // 数え直しを回すようになって実測で分かった)。空配列 = 分母と同じ条件(数え直すと分子・分母ともに 1)。
+    { id: "side_match.attack", numerator: 1, denominator: 1, unit: "positions", name: "第 1 候補が攻めの手だった分かれ道のうち、実戦も攻めの手だった局面", population: { from: "branches", where: [{ field: "top1Side", op: "==", value: "attack" }], unit: "positions" }, numeratorWhere: [], derivedFrom: ["g01"], src: "e1", recountable: true, timeDependent: false },
     { id: "branches.total", value: 1, unit: "positions", name: "分かれ道の総数", population: { from: "branches", where: [], unit: "positions" }, derivedFrom: ["g01"], src: "e1", recountable: true, timeDependent: false },
   ];
 }
@@ -73,8 +75,10 @@ function seatLlm(meta: SeatInputMeta, over: { passphrase?: string } = {}): Rec {
     items: [
       {
         itemId: "S-001", kind: "finding", factOrHypothesis: "fact", lane: "side",
-        statement: "第一候補が攻めだった分かれ道のうち、実戦も攻めだった局面は 65 だった。",
-        observations: [{ path: "aggregates.side_match.attack.numerator", value: 65, unit: "件", packetRef: { path: "aggregates.side_match.attack.numerator" } }],
+        // S-3 (e): seatRun.ts が packet を H-9 へ渡すようになったので、合成の値は packet の実際の値(numerator: 1)に合わせる
+        // (packet が無かった頃は H-9 が skip していたため「65」でも緑だった)。
+        statement: "第一候補が攻めだった分かれ道のうち、実戦も攻めだった局面は 1 だった。",
+        observations: [{ path: "aggregates.side_match.attack.numerator", value: 1, unit: "件", packetRef: { path: "aggregates.side_match.attack.numerator" } }],
         counterEvidence: { attempted: true, items: [], result: "none_found" },
       },
       {
@@ -509,11 +513,13 @@ describe("固定した指示文の sha(司令塔 2026-09-30)", () => {
     expect(problems.length).toBe(1);
     expect(problems[0]).toContain("固定されていない");
   });
-  it("4 本(席 v1・v1.1・**v1.2**・整理役 v1)が表に在る", () => {
-    expect(Object.keys(FIXED_INSTRUCTION_SHA256).length).toBe(4);
+  it("5 本(席 v1・v1.1・v1.2・**v1.3**・整理役 v1)が表に在る", () => {
+    expect(Object.keys(FIXED_INSTRUCTION_SHA256).length).toBe(5);
     // 古い版を消さない ― v1.1 で回した 3 周と比べられるようにする(版名を上げても前の sha は残す)
     expect(Object.keys(FIXED_INSTRUCTION_SHA256)).toContain("LLM_SEATS_INSTRUCTION_v1.1_2026-09-30.md");
     expect(Object.keys(FIXED_INSTRUCTION_SHA256)).toContain("LLM_SEATS_INSTRUCTION_v1.2_2026-10-01.md");
+    // S-3(2026-10-06): 埋め草禁止・配列はそのまま配列で写す の 2 文を足した v1.3
+    expect(Object.keys(FIXED_INSTRUCTION_SHA256)).toContain("LLM_SEATS_INSTRUCTION_v1.3_2026-10-06.md");
   });
 });
 
@@ -679,5 +685,46 @@ describe("再依頼は理由をためて渡す(前回の出力は渡さない)",
     expect(first).not.toContain("items2");
     expect(second).not.toContain("「answers」");
     expect(first).toContain("「answers」");
+  });
+});
+
+// ---- S-3 (e): runAll が seatOutputProblems・integrationProblems に cfg.packet を渡すようになった ----
+//
+// 【何を見るか】packet を渡す前は H-9(packetRef の実在と値の一致)が `packet が渡されていない` で skip され、
+// 緑のまま黙っていた(観測の値が packet と違っても検査に出なかった)。この試験は、その配線が効いていることを
+// **checks.json(E-3・I-4)に H-9 の行が出ること**で見る(合成の封筒・合成 packet。LLM は fake)。
+describe("S-3 (e): packet を H-9 へ渡す", () => {
+  it("観測の値が packet と違う席だけ、checks.seats の E-3 に H-9 の行が出る(他の席は出ない)", async () => {
+    const meta = metaOf();
+    const bad = seatLlm(meta);
+    // S-001 の観測をわざと packet の実際の値(1)と違う値にする(VM = value mismatch)
+    (bad.items as Rec[])[0]!.observations = [
+      { path: "aggregates.side_match.attack.numerator", value: 999, unit: "件", packetRef: { path: "aggregates.side_match.attack.numerator" } },
+    ];
+    const api = fakeApi({
+      gpt: [openaiOk(bad)], gemini: [geminiOk(seatLlm(meta))], claude: [anthropicOk(seatLlm(meta))],
+      integrator: [],
+    });
+    const result = await runAll(config({ integrator: undefined }), { fetch: api.fetch, ...DEPS });
+    const gptProblems = result.checks.seats.find((c) => c.seat === "gpt")!.problems;
+    expect(gptProblems.some((p) => p.includes("H-9")), JSON.stringify(gptProblems)).toBe(true);
+    // packet と合っている席は H-9 で落ちない
+    expect(result.checks.seats.find((c) => c.seat === "gemini")!.problems).toEqual([]);
+    expect(result.checks.seats.find((c) => c.seat === "claude")!.problems).toEqual([]);
+  });
+
+  it("I-4(統合)にも packet が渡り、代表の観測が packet と違えば H-9 の行が出る", async () => {
+    const meta = metaOf();
+    const api1 = fakeApi({ gpt: [openaiOk(seatLlm(meta))], gemini: [geminiOk(seatLlm(meta))], claude: [anthropicOk(seatLlm(meta))], integrator: [] });
+    const first = await runAll(config({ integrator: undefined }), { fetch: api1.fetch, ...DEPS });
+    const input = first.integrationInput!;
+    // 整理役の代表の観測をわざと packet と違う値にする(クラスタ 1 件目の最初の観測)
+    const integration = integratorLlm(input);
+    const rep = (integration.clusters as Rec[])[0]!.representative as Rec;
+    (rep.observations as Rec[])[0]!.value = 999;
+    const api2 = fakeApi({ gpt: [openaiOk(seatLlm(meta))], gemini: [geminiOk(seatLlm(meta))], claude: [anthropicOk(seatLlm(meta))], integrator: [integratorOk(integration)] });
+    const result = await runAll(config(), { fetch: api2.fetch, ...DEPS });
+    const problems = result.checks.integration?.problems ?? [];
+    expect(problems.some((p) => p.includes("H-9")), JSON.stringify(problems)).toBe(true);
   });
 });

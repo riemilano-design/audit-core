@@ -173,9 +173,10 @@ describe("本文の形(節の順・行数・packetRef の文法)", () => {
   });
   it("集計は数ごと 1 行(aggregates.<id>.numerator / .denominator / .value)で写され、名前・母集団・分子の条件は分子の行にだけ", () => {
     const { text } = render();
-    expect(text).toContain("| aggregates.side_match.attack.numerator | 分子 | 1 | 第 1 候補が攻めの手だった分かれ道のうち、実戦も攻めの手だった局面 | positions | branches / top1Side == \"attack\" / positions | - | null | false | true | null | g01 |");
+    // S-3 (b): sumField・recountNote は packet に鍵が無いので `(無)`、derivedFrom は配列を JSON の字面で描く
+    expect(text).toContain("| aggregates.side_match.attack.numerator | 分子 | 1 | 第 1 候補が攻めの手だった分かれ道のうち、実戦も攻めの手だった局面 | positions | branches / top1Side == \"attack\" / positions | - | (無) | false | true | (無) | [\"g01\"] |");
     expect(text).toContain("| aggregates.side_match.attack.denominator | 分母 | 1 | - | positions | - | - | - | - | - | - | - |");
-    expect(text).toContain("| aggregates.branches.total.value | 値 | 1 | 分かれ道の総数 | positions | branches / - / positions | - | null | false | true | null | g01 |");
+    expect(text).toContain("| aggregates.branches.total.value | 値 | 1 | 分かれ道の総数 | positions | branches / - / positions | - | (無) | false | true | (無) | [\"g01\"] |");
   });
   it("集計の列は packetRef の文法(1 か所の定数)に合う", () => {
     const { text } = render();
@@ -185,7 +186,8 @@ describe("本文の形(節の順・行数・packetRef の文法)", () => {
   });
   it("本人の手は局ごと 1 行、候補は局面ごと 1 行", () => {
     const { text } = render();
-    expect(text).toContain("g01: 48:P*4d pawn 12.5 null mid FD; 50:8g8f pawn 3 null mid C");
+    // S-3 (b2): phase は packet に鍵が無い列なので描かない。scoreCp は欄が無いので `(無)`
+    expect(text).toContain("g01: 48:P*4d pawn 12.5 (無) FD; 50:8g8f pawn 3 (無) C");
     expect(text).toContain("g01 48 8g8f P*4d 120 | 8g8f 120");
   });
   it("省いたもの: 読み筋の手と sfen は本文に出ない", () => {

@@ -39,6 +39,9 @@ export type DeliverStage =
   | "answer-gate"
   | "answer-check"
   | "answer-pdf"
+  // S-3(2026-10-06。計画 CORE_CONNECTION_S3_PLAN §2.1 の (d))。**exit-select の直前**。
+  // `--seat-run <runId>` が渡されたときだけ走る draft の段(`exitSelect.ts --draft`)。無ければ skip。
+  | "exit-draft"
   // ⑤ Answer selection の門(2026-10-01。司令塔の GO)。**⑤ の仕事は deliver の外**で、
   // この段は「できているか」を見る門だけ(`prose-gate` と同じ形)。
   | "exit-select"
@@ -72,6 +75,8 @@ export const DELIVER_STAGES: readonly DeliverStage[] = [
   "answer-gate",
   "answer-check",
   "answer-pdf",
+  // S-3(2026-10-06)。**exit-select の直前**。`--seat-run` が無ければ skip。
+  "exit-draft",
   // ⑤ の門は `exit-candidates` の**直前**(正本 ⑤ の行)。
   "exit-select",
   // 顧客向け出口(承認済みの 30 ページの形)。**既存の 6 冊は材料として残り**、
@@ -101,6 +106,8 @@ export type DeliverTool =
   | "check-answer"
   | "render-answer"
   | "check-delivery"
+  // S-3(2026-10-06)。`exitSelect.ts --draft`(同じ道具を draft の顔で呼ぶ)。
+  | "exit-draft"
   | "exit-select"
   | "exit-candidates"
   | "exit-fill"
@@ -557,6 +564,8 @@ export interface DeliverArgs {
   previousWork?: string;
   parallel?: number;
   from?: DeliverStage;
+  /** S-3(2026-10-06)。段 `exit-draft` が読む 3 席 LLM の周の runId。無ければ段は skip(既存の流れは不変)。 */
+  seatRun?: string;
   /**
    * 段 `pipeline-gate` で `pipeline.ts` へ**そのまま中継するだけ**の引数(1 コマンド化の指示書 §3.1)。
    * `--compare-dir` は繰り返し可(値を連続していくつでも取る)。`--compare-person` と必ず一緒に渡す。
@@ -571,7 +580,7 @@ export interface DeliverArgs {
   dryRun: boolean;
 }
 
-const SINGLE_FLAGS = ["--person", "--kifu-dir", "--work", "--time-limit-sec", "--name", "--title", "--today", "--out", "--previous-work", "--parallel", "--from", "--compare-person", "--group-label"] as const;
+const SINGLE_FLAGS = ["--person", "--kifu-dir", "--work", "--time-limit-sec", "--name", "--title", "--today", "--out", "--previous-work", "--parallel", "--from", "--compare-person", "--group-label", "--seat-run"] as const;
 type SingleFlag = (typeof SINGLE_FLAGS)[number];
 
 function positiveIntOf(flag: string, raw: string): number {
@@ -691,6 +700,7 @@ export function parseDeliverArgs(argv: readonly string[]): DeliverArgs {
     title,
     today,
     groupLabel: single.get("--group-label"),
+    seatRun: single.get("--seat-run"),
     out,
     ...(previousWork !== undefined ? { previousWork } : {}),
     ...(parallel !== undefined ? { parallel } : {}),
@@ -1081,6 +1091,27 @@ export function exitOptionalGateFlags(probe: DeliverProbe, customerDir: string |
   if (probe.exists(packetPaths.request)) flags.push("--request", packetPaths.request);
   if (probe.exists(selectPaths.answerSelection)) flags.push("--answer-selection", selectPaths.answerSelection);
   return flags;
+}
+
+/** `exitSelect.ts --draft` の登録簿(S-3)。将棋の判断を持たない固定のパス。 */
+export const EXIT_DRAFT_OBS_REGISTRY = "docs/OBSERVATION_ITEMS.md";
+
+/**
+ * 段 `exit-draft`(S-3。計画 CORE_CONNECTION_S3_PLAN §2.1 の (d))。`exitSelect.ts --draft` を呼ぶだけ。
+ * `runId` は `llm-seats/<runId>/integration.json` を指す(⑤ の採用の前に候補を並べるだけ ― 採用の印は付けない)。
+ */
+export function exitDraftCommand(customerDir: string, runId: string, today: string): string[] {
+  const packetPaths = exitPacketPaths(customerDir);
+  const selectPaths = exitSelectPaths(customerDir);
+  return [
+    "--draft",
+    "--packet", packetPaths.packet,
+    "--integration", path.join(packetPaths.seatsDir, runId, "integration.json"),
+    "--request", packetPaths.request,
+    "--obs-registry", EXIT_DRAFT_OBS_REGISTRY,
+    "--today", today,
+    "--out", selectPaths.selectionDraft,
+  ];
 }
 
 /**
@@ -1559,6 +1590,19 @@ export function planDeliver(args: DeliverArgs, probe: DeliverProbe, cmdOf: (tool
   // **判定は TS に写さない**(`exit-gate` と同じ ― 道具をそのまま回す)。
   // 【門は書けない】この段は選択を**読むだけ**で、`adoptedBy` を埋める道を持たない ―
   // 埋められる門を書いてしまうと ⑤ が消える(司令塔 2026-10-01)。
+  // ---- S-3(2026-10-06)。段 `exit-draft` は `exit-select` の**直前**----
+  //
+  // `--seat-run <runId>` が渡されたときだけ、3 席 LLM の周から候補の一覧を書く(`exitSelect.ts --draft`)。
+  // **渡さなければ skip**(既存の顧客の流れは 1 byte も変えない)。採用(`adoptedBy`)は付けない。
+  push({
+    stage: "exit-draft",
+    tool: "exit-draft",
+    cmd: cmdOf("exit-draft"),
+    args: args.seatRun === undefined ? [] : exitDraftCommand(customerDirOf(args.groups), args.seatRun, args.today),
+    action: args.seatRun === undefined ? "skip" : "run",
+    reason: args.seatRun === undefined ? "--seat-run 無し" : `3 席 LLM の周(${args.seatRun})から候補の一覧を書く(採用の印は空のまま)`,
+  });
+
   push({
     stage: "exit-select",
     tool: "exit-select",

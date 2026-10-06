@@ -42,6 +42,8 @@ export const FIXED_INSTRUCTION_SHA256: Readonly<Record<string, string>> = {
   "LLM_SEATS_INSTRUCTION_v1.1_2026-09-30.md": "11d1f533c74ec6dcecbd9010fb512546961bc753f57e45e88b34157b8cdb148b",
   // v1.2(2026-10-01): 封印語・partial のときの missing・新しい欄を作らない の 3 文を足した(版名の行以外は 1 バイトも変えていない)
   "LLM_SEATS_INSTRUCTION_v1.2_2026-10-01.md": "2870e1baa288f9a067d29d81d1d95f878f89508432e9e8b2aa0e9931684aec56",
+  // v1.3(2026-10-06・S-3): 埋め草禁止・配列はそのまま配列で写す の 2 文を足した(版名の行以外は 1 バイトも変えていない)
+  "LLM_SEATS_INSTRUCTION_v1.3_2026-10-06.md": "284f24a900502ef2278b81d60d00eba6c7536c8b035a84edf2f9894433fee96b",
   "LLM_SEATS_INTEGRATOR_INSTRUCTION_v1_2026-09-30.md": "5118a6949862a104942f6975191dd3d16b00ca834f18b4bba5807aeaf2d7d94a",
 };
 
@@ -433,7 +435,7 @@ export async function runAll(cfg: RunAllConfig, deps: SlotDeps): Promise<RunAllR
       // 到達の記録(指摘ではない。lastKey の食い違いはここに置く ― 2026-10-01 の実測で到達を測っていないと分かった)
       notes: s.present && s.envelope !== undefined ? seatReachNotes(s.envelope, meta) : [],
       problems: s.present && s.envelope !== undefined
-        ? seatOutputProblems(s.envelope, { meta, request: cfg.request, today: cfg.today, ...(cfg.obsItemsPath === undefined ? {} : { obsItemsPath: cfg.obsItemsPath }) })
+        ? seatOutputProblems(s.envelope, { meta, request: cfg.request, today: cfg.today, packet: cfg.packet, ...(cfg.obsItemsPath === undefined ? {} : { obsItemsPath: cfg.obsItemsPath }) })
         : [],
     })),
   };
@@ -461,7 +463,7 @@ export async function runAll(cfg: RunAllConfig, deps: SlotDeps): Promise<RunAllR
         usage: integrator.last.usage, finishReason: integrator.last.finishReasonRaw, attempts: integrator.attempts.length, requestedAt: integrator.requestedAt ?? cfg.today,
       });
       files.push({ name: "integration.json", content: `${JSON.stringify(integration, null, 1)}\n` });
-      checks.integration = { problems: integrationProblems(integration, built.input, { today: cfg.today, ...(cfg.obsItemsPath === undefined ? {} : { obsItemsPath: cfg.obsItemsPath }) }) };
+      checks.integration = { problems: integrationProblems(integration, built.input, { today: cfg.today, packet: cfg.packet, ...(cfg.obsItemsPath === undefined ? {} : { obsItemsPath: cfg.obsItemsPath }) }) };
     }
   }
 

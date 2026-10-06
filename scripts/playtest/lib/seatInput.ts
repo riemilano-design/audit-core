@@ -98,8 +98,8 @@ export const NOT_INCLUDED: readonly string[] = [
  * 閾値の値は書かず、線の組の id で指す(値は 1 行目に packet から写してある)。試験は、固定文の全行が data 行から除かれることを見る。
  */
 export const READING_GUIDE: readonly string[] = [
-  "- 数はすべて packet からそのまま写した。再計算・丸め直し・欠損の補完はしていない。小数は元の桁のまま。`null` は packet でも null(測れなかった・該当なし)。",
-  "- 列挙(印・条件)は `+` または `;` 区切り。空は `-`。",
+  "- 数はすべて packet からそのまま写した。再計算・丸め直し・欠損の補完はしていない。小数は元の桁のまま。`null` は packet でも null(測れなかった・該当なし)。`(無)` は packet にその欄が無い(packetRef で引けない)。",
+  "- 配列は JSON の配列の字面(`[\"a\",\"b\"]`)。空は `[]`。",
   "- 手は USI 表記(筋の数字 + 段の英字で「元のマス」「行き先のマス」を並べる。`*` の前が駒の英字なら打つ手、末尾 `+` は成る)。局面は `gameId` と `ply`(記録の手数。本人=先手にそろえた後の手数で、本人が後手の局〈mirrored = true〉は元の棋譜の手数と一つずれる。`displayPly` が元の棋譜の手数)で指す。",
   "- 評価 `scoreCp`・`beforeCp`・`afterCp` はエンジンの評価(centipawn)で、本人から見て正が本人有利。線の組 `ahead_cp` 以上を優勢、その負を劣勢、間を互角とする(この線は道具の仮置きの値であり、将棋一般の基準ではない)。",
   "- 崩れ(collapse)は、本人の手の前と次の本人の手番の前とで、段(優勢・互角・劣勢)が下がった組。`kind` は道具の分類。",
@@ -113,15 +113,18 @@ export const READING_GUIDE: readonly string[] = [
 
 // ---- 値の写し ----
 
+// **鍵が無い(packet にその欄が無い)**ときは `(無)` と描く。`null` は packet の値が null のときだけ(b3)。
 function v(x: unknown): string {
-  if (x === undefined) return "null";
+  if (x === undefined) return "(無)";
   if (typeof x === "string") return x;
   return JSON.stringify(x) ?? "null";
 }
 
-function list(x: unknown, sep = "+"): string {
-  if (!Array.isArray(x) || x.length === 0) return "-";
-  return x.map((item) => v(item)).join(sep);
+// 配列は JSON の配列の字面でそのまま描く(b1)。空配列は `[]`。鍵が無ければ `(無)`。
+function list(x: unknown): string {
+  if (x === undefined) return "(無)";
+  if (!Array.isArray(x)) return v(x);
+  return JSON.stringify(x);
 }
 
 function where(x: unknown): string {
@@ -363,7 +366,8 @@ export function renderSeatInput(args: RenderSeatInputArgs): { text: string; meta
   // inputs の一覧は §0.3 の**中**に置く(節の最後の行が meta の lastKey と同じになるように。
   // 2026-09-30: 節の外に置いていたため、席が見た最後の行と meta が食い違い、到達の検査が落ちた)
   section(e, "0.3", "出どころ", "provenance.sources[] と provenance.inputs[].path", [...sources, ...inputs], () => {
-    table(e, ["id", "type", "kind", "engineVersion", "nodesLimit", "multipv", "reviewStatus", "definitionsDirs"], sources.map((s) => [v(s.id), v(s.type), v(s.kind), v(s.engineVersion), v(s.nodesLimit), v(s.multipv), v(s.reviewStatus), list(s.definitionsDirs, "; ")]));
+    // engineVersion・definitionsDirs は packet に鍵が 1 行も無い列なので描かない(b2)
+    table(e, ["id", "type", "kind", "nodesLimit", "multipv", "reviewStatus"], sources.map((s) => [v(s.id), v(s.type), v(s.kind), v(s.nodesLimit), v(s.multipv), v(s.reviewStatus)]));
     heading(e, "");
     heading(e, `#### inputs(provenance.inputs[].path、${inputs.length} 本)`);
     for (const input of inputs) data(e, `- ${v(input.path)}`);
@@ -401,8 +405,9 @@ export function renderSeatInput(args: RenderSeatInputArgs): { text: string; meta
 
   const collapse = facts.collapse as Row[];
   section(e, "4", "崩れ", "facts.collapse[]", collapse, () => {
-    table(e, ["gameId", "ply", "beforeCp", "afterCp", "bandBefore", "bandAfter", "kind"],
-      collapse.map((c) => [v(c.gameId), v(c.ply), v(c.beforeCp), v(c.afterCp), v(c.bandBefore), v(c.bandAfter), v(c.kind)]));
+    // bandBefore・bandAfter は packet に鍵が 1 行も無い列なので描かない(b2)
+    table(e, ["gameId", "ply", "beforeCp", "afterCp", "kind"],
+      collapse.map((c) => [v(c.gameId), v(c.ply), v(c.beforeCp), v(c.afterCp), v(c.kind)]));
   });
 
   const branches = facts.branches as Row[];
@@ -415,8 +420,9 @@ export function renderSeatInput(args: RenderSeatInputArgs): { text: string; meta
   const rows = recognition.rows as Row[];
   const definitions = recognition.definitions as Row[];
   section(e, "6", "戦型の機械認識(局ごと。すべて draft)", "facts.recognition.rows[]", rows, () => {
-    table(e, ["gameId", "selfSignature", "opponentSignature", "signatureClass", "names", "selfRecognized", "selfStrongRecognized", "opponentRecognized", "opponentStrongRecognized", "reviewStatus"],
-      rows.map((r) => [v(r.gameId), list(r.selfSignature), list(r.opponentSignature), v(r.signatureClass), list(r.names), v(r.selfRecognized), v(r.selfStrongRecognized), v(r.opponentRecognized), v(r.opponentStrongRecognized), v(r.reviewStatus)]));
+    // reviewStatus は packet に鍵が 1 行も無い列なので描かない(b2)
+    table(e, ["gameId", "selfSignature", "opponentSignature", "signatureClass", "names", "selfRecognized", "selfStrongRecognized", "opponentRecognized", "opponentStrongRecognized"],
+      rows.map((r) => [v(r.gameId), list(r.selfSignature), list(r.opponentSignature), v(r.signatureClass), list(r.names), v(r.selfRecognized), v(r.selfStrongRecognized), v(r.opponentRecognized), v(r.opponentStrongRecognized)]));
   });
   section(e, "6.1", "戦型の定義(判定に使ったもの。recognitionPattern は `orderHint:piece→to` の列。無い定義は `-`)", "facts.recognition.definitions[]", definitions, () => {
     table(e, ["id", "name", "nameKana", "side", "family", "reviewStatus", "confidenceLevel", "leadsToShapeIds", "recognitionPattern"],
@@ -434,11 +440,12 @@ export function renderSeatInput(args: RenderSeatInputArgs): { text: string; meta
     const id = v(m.gameId);
     byGame.set(id, [...(byGame.get(id) ?? []), m]);
   }
-  section(e, "7", "本人の手(局ごとに 1 行。各手は `ply:usi piece spentSec scoreCp phase 印` で、印は F = 分かれ道(isFork)・C = 崩れ(collapsed)・D = 打つ手(drop)、無ければ -)", "facts.moves[](gameId + ply で 1 手)", moves, () => {
+  // phase は packet に鍵が 1 行も無い列なので描かない(b2)
+  section(e, "7", "本人の手(局ごとに 1 行。各手は `ply:usi piece spentSec scoreCp 印` で、印は F = 分かれ道(isFork)・C = 崩れ(collapsed)・D = 打つ手(drop)、無ければ -)", "facts.moves[](gameId + ply で 1 手)", moves, () => {
     for (const [id, ms] of byGame) {
       data(e, `${id}: ${ms.map((m) => {
         const marks = [m.isFork ? "F" : "", m.collapsed ? "C" : "", m.drop ? "D" : ""].filter((x) => x.length > 0).join("");
-        return `${v(m.ply)}:${v(m.usi)} ${v(m.piece)} ${v(m.spentSec)} ${v(m.scoreCp)} ${v(m.phase)} ${marks.length > 0 ? marks : "-"}`;
+        return `${v(m.ply)}:${v(m.usi)} ${v(m.piece)} ${v(m.spentSec)} ${v(m.scoreCp)} ${marks.length > 0 ? marks : "-"}`;
       }).join("; ")}`);
     }
   });
