@@ -348,6 +348,7 @@ export interface IntegrationCheckOptions {
   registry?: Set<string>;
   bannedWords?: readonly string[];
   obsItemsPath?: string;
+  packet?: unknown;
 }
 
 const NUMBER_RE = /-?\d+(?:\.\d+)?/g;
@@ -422,7 +423,7 @@ export function integrationProblems(output: unknown, input: unknown, opts: Integ
     if (inFor === inHeld) problems.push(`I-3: ${cid} が forVerification と heldBack の${inFor ? "両方に在る" : "どちらにも無い(外すなら理由つきで heldBack へ)"}`);
     // I-4
     const rep = c.representative as Rec;
-    const results = validateHypothesisLine(rep, { today: opts.today, registry, ...(opts.bannedWords === undefined ? {} : { bannedWords: opts.bannedWords }) });
+    const results = validateHypothesisLine(rep, { today: opts.today, registry, packet: opts.packet, ...(opts.bannedWords === undefined ? {} : { bannedWords: opts.bannedWords }) });
     for (const r of results) if (!r.ok) for (const m of r.messages) problems.push(`I-4: ${cid} の representative ${r.check}: ${m}`);
     const union = new Set<string>();
     for (const m of members) for (const p of m.paths) union.add(p);

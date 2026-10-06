@@ -2,7 +2,8 @@
 //
 // 【顧客の PDF にどう出るか】今は何も変わらない。席の出力を「機械で落とせる形」にする契約と検査だけ。
 // 【この module は packet を読まない】packetRef の実在(H-9)・語彙(H-10)は自動化レーンの検証器。ここは形・文法・封筒の整合だけ。
-//   observationPacket*.ts を import しない(試験が import の一覧を見る)。
+//   観測は呼び出し側から渡された packet(SeatOutputCheckOptions.packet)を H-9/H-10/H-11 へそのまま渡すだけで、
+//   自分では読まない ― observationPacket*.ts を import しない・readFileSync で packet を開かない(試験が import の一覧を見る)。
 // 【数を作らない】completeSeatOutput が埋めるのは id・版・出どころ・日付だけ。値は席が packet から写したまま。
 // 【LLM を呼ばない・鍵を読まない】
 import { readFileSync } from "node:fs";
@@ -202,6 +203,7 @@ export interface SeatOutputCheckOptions {
   registry?: Set<string>;
   bannedWords?: readonly string[];
   obsItemsPath?: string;
+  packet?: unknown;
 }
 
 const NUMBER_RE = /-?\d+(?:\.\d+)?/g;
@@ -284,7 +286,7 @@ export function seatOutputProblems(envelope: unknown, opts: SeatOutputCheckOptio
     const id = String(item.hypothesisId);
     if (seenIds.has(id)) problems.push(`E-3: items[${i}] の hypothesisId「${id}」が重複`);
     seenIds.add(id);
-    const results: CheckResult[] = validateHypothesisLine(item, { today: opts.today, registry, ...(opts.bannedWords === undefined ? {} : { bannedWords: opts.bannedWords }) });
+    const results: CheckResult[] = validateHypothesisLine(item, { today: opts.today, registry, packet: opts.packet, ...(opts.bannedWords === undefined ? {} : { bannedWords: opts.bannedWords }) });
     for (const r of results) if (!r.ok) for (const m of r.messages) problems.push(`E-3: items[${i}] ${r.check}: ${m}`);
     const kind = typeof item.kind === "string" ? item.kind : "hypothesis";
     if ((kind === "answer_candidate" || kind === "unanswerable") && !isRecord(item.requestRef)) problems.push(`E-3: items[${i}](${kind})に requestRef が無い`);

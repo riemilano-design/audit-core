@@ -343,3 +343,22 @@ describe("H-2 の歩く先(2026-09-30 に R4 で見つけた抜け。反証と�
     expect(found.some((p) => p.includes("H-2") && p.includes("obs.notInRegistry"))).toBe(true);
   });
 });
+
+describe("H-9: 呼び出し側の packet をそのまま渡す(STEP S-2。seatOutputProblems 自身は packet を読まない)", () => {
+  // S-003(unanswerable)だけを残した封筒で見る ― 他の項目(S-001/S-002)は aggregates への packetRef を持ち
+  // H-9 の数え直し(recountRowProblems)まで要るため、ここでは数え直しを要らない facts.recognition の参照だけで確かめる。
+  function withSingleItem() {
+    const src = llm();
+    src.items = [src.items[2]!];
+    return completeSeatOutput(src, ctx());
+  }
+  const packetWith = (reviewStatus: string) => ({ facts: { recognition: { rows: [{ reviewStatus }] } } });
+  it("packet を渡さなければ今までどおり H-9 は照合しない / 渡せば一致は通り、不一致は items[0] H-9 で名指しで落ちる", () => {
+    const env = withSingleItem();
+    expect(problems(env)).toEqual([]); // opts に packet を渡さない既存の経路(今までどおり)
+    expect(seatOutputProblems(env, { meta: meta(), request: request(), today: TODAY, registry: REGISTRY, packet: packetWith("draft") })).toEqual([]);
+    expect(seatOutputProblems(env, { meta: meta(), request: request(), today: TODAY, registry: REGISTRY, packet: packetWith("approved") })).toEqual([
+      `E-3: items[0] H-9: observations[0]: value が packet と違う(行 ${JSON.stringify("draft")} / packet ${JSON.stringify("approved")})`,
+    ]);
+  });
+});

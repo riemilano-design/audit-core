@@ -271,3 +271,17 @@ describe("packet を読まない(校正 4)", () => {
     expect(src).not.toMatch(/readFileSync\([^)]*packet/i);
   });
 });
+
+describe("I-4: 呼び出し側の packet をそのまま渡す(STEP S-2。integrationProblems 自身は packet を読まない)", () => {
+  type Out = { clusters: Record<string, unknown>[] };
+  it("packet を渡さなければ H-9 の行は出ない(今までどおり)/ 渡し代表の value をずらすと I-4 … H-9 で名指しで落ちる", () => {
+    const { input, output } = full();
+    expect(problems(output, input).filter((p) => p.includes("H-9"))).toEqual([]);
+
+    const shifted = structuredClone(output) as Out;
+    const rep = shifted.clusters[0]!.representative as { observations: { value: unknown }[] };
+    rep.observations[0]!.value = 999;
+    const withPacket = integrationProblems(shifted, input, { today: TODAY, registry: new Set<string>(), packet: packet() });
+    expect(withPacket).toContain("I-4: C-001 の representative H-9: observations[0]: value が packet と違う(行 999 / packet 65)");
+  });
+});

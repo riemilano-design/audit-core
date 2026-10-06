@@ -213,7 +213,7 @@ function measure(inputs: Inputs, customerDirOverride: string | undefined): Rec {
       const envelope = readJson(seatPath) as { items?: unknown[] };
       const key = `${runId}/${seatFile}`;
 
-      const problems = seatOutputProblems(envelope, { meta, request, today }).map(normalize);
+      const problems = seatOutputProblems(envelope, { meta, request, today, packet }).map(normalize);
       seatOutputCheck[key] = { status: statusOf(problems.length > 0 ? 1 : 0), return_code: problems.length > 0 ? 1 : 0, problems };
 
       const items = Array.isArray(envelope.items) ? envelope.items : [];
@@ -231,7 +231,7 @@ function measure(inputs: Inputs, customerDirOverride: string | undefined): Rec {
       const inputPath = path.join(runDir, "integration_input.json");
       addIdentity(integrationPath);
       addIdentity(inputPath);
-      const problems = integrationProblems(readJson(integrationPath), readJson(inputPath), { today }).map(normalize);
+      const problems = integrationProblems(readJson(integrationPath), readJson(inputPath), { today, packet }).map(normalize);
       integrationCheck[runId] = { status: statusOf(problems.length > 0 ? 1 : 0), return_code: problems.length > 0 ? 1 : 0, problems };
     }
   }

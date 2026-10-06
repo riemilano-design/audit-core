@@ -2,8 +2,9 @@
 // (計画 docs/STEP_LLM_SEATS_R2_CONTRACT_2026-09-30.md §1。lib は lib/seatOutput.ts)。
 //
 // 【顧客の PDF にどう出るか】今は何も変わらない。【packet を読まない】packetRef の実在は自動化レーンの検証器(H-9)。
-// 使い方: npx tsx scripts/playtest/seatOutputCheck.ts --seat-output <json> --meta <seat_input.meta.json> --request <request.json> --today YYYY-MM-DD [--obs-items <path>]
+// 使い方: npx tsx scripts/playtest/seatOutputCheck.ts --seat-output <json> --meta <seat_input.meta.json> --request <request.json> --today YYYY-MM-DD [--obs-items <path>] [--packet <path>]
 // 出口: 問題を 1 件 1 行で出し、1 本でも落ちれば終了コード 1(hypothesisCheck.ts の流儀)。--today は必須(日付を機械が決めない)。
+// --packet は任意(STEP S-2)。指定すれば各行の H-9・H-10・H-11 の照合に渡す(無ければ今までどおり未照合)。
 import { readFileSync } from "node:fs";
 import { seatOutputProblems } from "./lib/seatOutput.js";
 import type { SeatInputMeta } from "./lib/seatInput.js";
@@ -26,7 +27,9 @@ function main(): void {
   const request = JSON.parse(readFileSync(requiredArg("request"), "utf-8")) as unknown;
   const today = requiredArg("today");
   const obsItemsPath = argOf("obs-items");
-  const problems = seatOutputProblems(envelope, { meta, request, today, ...(obsItemsPath === undefined ? {} : { obsItemsPath }) });
+  const packetPath = argOf("packet");
+  const packet: unknown = packetPath === undefined ? undefined : JSON.parse(readFileSync(packetPath, "utf-8"));
+  const problems = seatOutputProblems(envelope, { meta, request, today, packet, ...(obsItemsPath === undefined ? {} : { obsItemsPath }) });
   const env = envelope as { run?: { seat?: string; model?: string }; items?: unknown[]; answers?: unknown[] };
   console.log(`席 ${String(env.run?.seat)}(${String(env.run?.model)}) 項目 ${env.items?.length ?? 0} 本・答え ${env.answers?.length ?? 0} 行`);
   if (problems.length > 0) {
