@@ -4,6 +4,7 @@
 
 | ファイル | 何が書いてあるか | 主な読者 |
 |---|---|---|
+| [CORE_CONNECTION_C1G_PREDICTION_2026-10-06.md](../audit-core/docs/CORE_CONNECTION_C1G_PREDICTION_2026-10-06.md) | **Core 接続 C-1g(意味の層の直し 4 つ、profile P6)の予測(封印)**。人間の決定 b(CF 流量項目は要素名の規約で符号を読む)。語彙 7 行・流量規約(数と文章)・ポイント差の form・事業 member の分母。P1/P5F は凍結、P6 で 3 書類を回し ID 単位で予測: 1 社目は 5 件(T026 VM→G、T028 の証拠が正しく)、2 社目 0 件(分母 19→5)、3 社目 17 件(G 61→71、VM 11→3、PNF 16→20、UNV 52→46)。登録 24、Core 0。期待値 v1 不変、一致すれば v2/3rd を人間の承認後に新設 |
 | [CORE_CONNECTION_THIRD_RESULT_2026-10-06.md](../audit-core/docs/CORE_CONNECTION_THIRD_RESULT_2026-10-06.md) | **3 社目 S100YMFV(プラッツ、09-28)の結果**。10-01/02/05 は候補 0 → 09-28 の docID 最小。Core 経由で完走、Claim 140、束縛 数 55.7% / 文章 44.2%、GROUNDED 61・VM 11・PNF 16・UNV 52。予測 12/14(外れ: sign_token 20、P-1 の表記 3 種)。no_subject 16 のうち語彙の穴は 2 だけ(12 は XBRL に無い市場の数)。XP: ポイント差の form・主語の粒度で VM 7・CF 項目の sign の意味・member 分母の粗さ。手検査 10 件 false pass 0。Adapter は直していない(次の段で封じてから) |
 | [CORE_CONNECTION_THIRD_PREDICTION_2026-10-06.md](../audit-core/docs/CORE_CONNECTION_THIRD_PREDICTION_2026-10-06.md) | **3 社目(Core 経由で初めて回す書類)の予測(封印)**。選び方の規則(2026-10-01・最小 docID・連結 jppfs あり)、計測の道具 run_core_path.py(1B・5F で 224/224 の門を通過)、予測 14 項目(完走・束縛率 55〜85 / 25〜75・no_subject 3〜25・member 0 の見立て・到達しない分岐が動くのは 0〜1・VM 2〜20・手検査 10 件で false pass 0〜1)。この段では Adapter を直さない |
 | [CORE_CONNECTION_C1F_RESULT_2026-10-06.md](../audit-core/docs/CORE_CONNECTION_C1F_RESULT_2026-10-06.md) | **Core 接続 C-1f の結果**(bd0e62b)。癖 2 つを比較子だけで直し、司令塔の 1 回目で 224/224 不変、門 219、変異 26/26(戻す変異は単体試験で red・224 件の門で green = 正しさは実データでは未測)。予測は当たり 6 / 外れ 3(既存試験の数え間違い)。D-R3 の外れの記録の行方を明記。監査 GO |
