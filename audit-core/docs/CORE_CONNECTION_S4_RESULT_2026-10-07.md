@@ -131,3 +131,17 @@ E-3: items[4] H-3: counterEvidence.attempted が true でない        ← neede
 ## 8. この文書がしないこと
 
 Golden の書き直し。入金・やり直しの判断。H-1・H-3 の規則の変更。claude 席の効き目の主張。`additionalProperties` を緩めること。Core の変更。営業の実証範囲の更新(§6 の (a) の後)。
+
+## 9. 追記(2026-10-07、同日。結果文書への訂正は日付つきで足す)
+
+**b6 の半分は 0 円で測れた**(「測れない」から動かす)。整理役は送れなかったが、**整理役への入力 `integration_input.json` は書かれている**。読んで確かめた:
+
+| 項目 | kind | observations | neededObservation |
+|---|---|---|---|
+| I-1-001〜004 | finding | 4 | ― |
+| **I-1-005** | **needed_observation** | **0** | **在る** |
+| I-1-006 | answer_candidate | 4 | ― |
+
+`validateIntegrationInput`(新版 `integration-input.v0.2`)に通すと問題 **0 件**。つまり**観測 0 の項目は席の封筒 → 器 → 整理役への入力まで通る**。b6 のもう半分(I-1 = 全項目がちょうど 1 回、整理役の出力側)は整理役が走らないと測れないので「測れない」のまま。
+
+照合の更新: 当たり **23 + b6 の半分**、測れない **6 → 5.5**。半分を 1 に数えない(S-1 の P-10 と同じ扱い)。
