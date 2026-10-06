@@ -7,6 +7,7 @@
 import unittest
 
 from . import _material as M
+from adapters.xbrl import comparators as C
 from adapters.xbrl import extract as E
 from adapters.xbrl import instance as I
 from adapters.xbrl import vocabulary as V
@@ -14,6 +15,20 @@ from adapters.xbrl import vocabulary as V
 
 def _pattern_and_flags(regex):
     return regex.pattern, regex.flags
+
+
+# Shared by test_match_value (original vs. vocabulary.match_value) and
+# test_match_value_also_matches_comparators_copy (vocabulary.match_value
+# vs. comparators._match_value): the one set of (fact_value, target,
+# unit) triples this lineage test already exercises, in ``main``'s own
+# calling shape (fact, claim.value * unit_scale, claim_scale).
+_MATCH_VALUE_CASES = [
+    (100.0, 100.0, 1.0), (100.4, 100.0, 1.0), (100.6, 100.0, 1.0),
+    (100.0, -100.0, 1.0), (-100.4, -100.0, 1.0),
+    (1000000.0, 999999.6, 1.0), (999999.6, 1000000.0, 1.0),
+    (0.0, 0.0, 1e6), (5.8, 5.8, 1.0), (3.0, 10.0, 1.0),
+    (-52196000.0, 52196000.0, 1000.0), (-52196000.0, -52196000.0, 1000.0),
+]
 
 
 class ConstantLineageTest(unittest.TestCase):
@@ -132,15 +147,23 @@ class FunctionGoldenTest(unittest.TestCase):
             probe.SUBJECTS = original_subjects
 
     def test_match_value(self):
-        cases = [
-            (100.0, 100.0, 1.0), (100.4, 100.0, 1.0), (100.6, 100.0, 1.0),
-            (100.0, -100.0, 1.0), (-100.4, -100.0, 1.0),
-            (1000000.0, 999999.6, 1.0), (999999.6, 1000000.0, 1.0),
-            (0.0, 0.0, 1e6), (5.8, 5.8, 1.0), (3.0, 10.0, 1.0),
-            (-52196000.0, 52196000.0, 1000.0), (-52196000.0, -52196000.0, 1000.0),
-        ]
-        for fv, target, unit in cases:
+        for fv, target, unit in _MATCH_VALUE_CASES:
             self.assertEqual(self.ns.probe.match_value(fv, target, unit), V.match_value(fv, target, unit))
+
+    def test_match_value_also_matches_comparators_copy(self):
+        # comparators.py's C-1d task §A decision: copy the ladder rather
+        # than import vocabulary (so comparators.py reads only
+        # evidence/claim.value/contract.params). This is the "系譜の試験
+        # に値比較を1本足す" this decision called for: the original
+        # (via importlib), vocabulary.match_value, and comparators's own
+        # copy agree, value for value, on every case this lineage test
+        # already uses for ``test_match_value``.
+        for fv, target, unit in _MATCH_VALUE_CASES:
+            original = self.ns.probe.match_value(fv, target, unit)
+            vocabulary_copy = V.match_value(fv, target, unit)
+            comparators_copy = C._match_value(fv, target, unit)
+            self.assertEqual(original, vocabulary_copy)
+            self.assertEqual(vocabulary_copy, comparators_copy)
 
     def test_tol_of(self):
         for fact in (

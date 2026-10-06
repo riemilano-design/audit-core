@@ -28,7 +28,13 @@ _CORE_SRC_DIR = os.path.join(_AUDIT_CORE_DIR, "core", "py", "audit_core")
 _TESTS_ADAPTERS_DIR = os.path.join(_AUDIT_CORE_DIR, "tests", "adapters")
 
 _FORBIDDEN_TO_IMPORT_CORE = ("edinet.py", "instance.py", "extract.py", "vocabulary.py", "__init__.py")
-_ALLOWED_TO_IMPORT_CORE = ("recipes.py", "run.py")
+# C-1d adds three Core-touching modules: comparators.py (Comparison),
+# resolve.py (Resolved) and registry_setup.py (Registry/State). None of
+# them import vocabulary/instance/extract (comparators.py and resolve.py
+# are checked for that specifically in test_lineage.py /
+# C1D_PREDICTION.md §A/§3.2's "pure" requirement); they do legitimately
+# import audit_core itself.
+_ALLOWED_TO_IMPORT_CORE = ("recipes.py", "run.py", "comparators.py", "resolve.py", "registry_setup.py")
 
 
 def _py_files(directory):
@@ -37,6 +43,31 @@ def _py_files(directory):
         for name in os.listdir(directory)
         if name.endswith(".py")
     )
+
+
+def _imports_sibling_modules(path, sibling_names):
+    """AST scan: True if this file imports any of ``sibling_names`` from
+    the same package, as ``from . import <name>`` / ``from .<name> import
+    ...`` / ``import adapters.xbrl.<name>``.
+    """
+
+    with open(path, "r", encoding="utf-8") as handle:
+        tree = ast.parse(handle.read(), filename=path)
+    hits = []
+    for node in ast.walk(tree):
+        if isinstance(node, ast.ImportFrom):
+            if node.module in (None,) or node.module == "":
+                for alias in node.names:
+                    if alias.name in sibling_names:
+                        hits.append(alias.name)
+            elif node.module and node.module.split(".")[-1] in sibling_names:
+                hits.append(node.module.split(".")[-1])
+        elif isinstance(node, ast.Import):
+            for alias in node.names:
+                last = alias.name.split(".")[-1]
+                if last in sibling_names:
+                    hits.append(last)
+    return hits
 
 
 def _imports_audit_core(path):
@@ -102,6 +133,19 @@ class CoreImportBoundaryTest(unittest.TestCase):
             if _imports_audit_core(path) and name not in _ALLOWED_TO_IMPORT_CORE:
                 offenders.append(name)
         self.assertEqual(offenders, [])
+
+    def test_comparators_and_resolve_do_not_import_vocabulary_instance_extract(self):
+        # C-1d task §A/§3.2: comparators.py reads only evidence/claim.value/
+        # contract.params (the match_value ladder is copied locally, not
+        # imported); resolve.py takes a facts list as a plain argument
+        # instead of importing instance.py to load one itself.
+        siblings = ("vocabulary", "instance", "extract")
+        offenders = {}
+        for name in ("comparators.py", "resolve.py"):
+            hits = _imports_sibling_modules(os.path.join(_ADAPTERS_XBRL_DIR, name), siblings)
+            if hits:
+                offenders[name] = hits
+        self.assertEqual(offenders, {})
 
     def test_core_does_not_import_adapters(self):
         offenders = []

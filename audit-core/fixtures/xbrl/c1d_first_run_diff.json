@@ -1,0 +1,13 @@
+{
+ "note": "C-1d first run (comparators.py/resolve.py/registry_setup.py as committed at authoring time) vs core_expectation_{1B,5F}.json, compared on state/pointers/recomputed/reason(mapped)/normalization. 0 diffs on the first attempt; no fixes were made to comparators/resolve/registry_setup/recipes params after this file was written.",
+ "1B": {
+  "total": 91,
+  "diff_count": 0,
+  "diffs": []
+ },
+ "5F": {
+  "total": 133,
+  "diff_count": 0,
+  "diffs": []
+ }
+}

@@ -34,7 +34,11 @@ class ClaimToRecipeDirectValueTest(unittest.TestCase):
         }
         recipe = R.claim_to_recipe(raw, "num")
         self.assertEqual(recipe.contract.comparator, "equals_within(pure*100)")
-        self.assertEqual(recipe.contract.params["tolerance"], "0.15pt")
+        # C-1d §3.1: params carry the real numbers the comparator reads
+        # (tolerance 0.15 / pure_threshold 1.5), not the C-1c placeholder
+        # descriptive string "0.15pt".
+        self.assertEqual(recipe.contract.params["tolerance"], 0.15)
+        self.assertEqual(recipe.contract.params["pure_threshold"], 1.5)
 
     def test_unbound_no_element_is_pointer_not_found(self):
         raw = {"id": "N003", "value": 1.0, "unit": "円", "subject": None, "form": "direct_value",
@@ -115,7 +119,10 @@ class ClaimToRecipeTextTest(unittest.TestCase):
         }
         recipe = R.claim_to_recipe(raw, "text")
         self.assertEqual(recipe.contract.comparator, "builtin:sign(cur-prior)==direction")
-        self.assertIsNone(recipe.contract.params["tolerance"])
+        # C-1d §3.1: this comparator's params carry "direction", not
+        # "tolerance" (the raw dict here has no "word"/"direction" key,
+        # so it resolves to None).
+        self.assertIsNone(recipe.contract.params["direction"])
         self.assertIsNone(recipe.claim.value)
         self.assertIsNone(recipe.claim.unit)
 

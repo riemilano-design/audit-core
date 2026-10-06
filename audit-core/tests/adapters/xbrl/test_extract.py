@@ -47,10 +47,29 @@ class SubjectOfTest(unittest.TestCase):
         self.assertEqual(subj, "純資産合計")
 
     def test_prefers_longer_word_on_tie_end(self):
-        s = "資産合計は1,000百万円であった。"
+        # C-1c monitor note (XP-C1c-2): the earlier version of this test
+        # used only "資産合計" against SUBJECTS_73, where the only two
+        # entries spelled that way are the *same* word (a duplicate, not
+        # a tie between two different-length words ending at the same
+        # position) -- it never exercised `len(word) > len(best[1])`
+        # (SUBJECTS_73 happens to always list the longer of any two
+        # suffix-related words first, so list order alone -- not the
+        # length check -- picked the right one even without this test).
+        #
+        # This uses a small synthetic ``subjects`` list (``subject_of``
+        # takes it as a parameter) with the *shorter* word listed first,
+        # so the correct answer requires the length comparison on the
+        # tie, not just "whichever came first". "純資産合計" (5 chars)
+        # ends with "資産合計" (4 chars) at the exact same position when
+        # the sentence's head is "純資産合計は".
+        subjects = [("資産合計", ["Assets"]), ("純資産合計", ["NetAssets"])]
+        s = "純資産合計は1,000百万円であった。"
         pos = s.index("1,000")
-        subj, elems = E.subject_of(s, pos, V.SUBJECTS_73)
-        self.assertEqual(subj, "資産合計")
+        head = s[:pos]
+        self.assertEqual(head.rfind("純資産合計") + len("純資産合計"), head.rfind("資産合計") + len("資産合計"))
+        subj, elems = E.subject_of(s, pos, subjects)
+        self.assertEqual(subj, "純資産合計")
+        self.assertEqual(elems, ["NetAssets"])
 
     def test_no_subject(self):
         s = "何もない1,000百万円の文。"

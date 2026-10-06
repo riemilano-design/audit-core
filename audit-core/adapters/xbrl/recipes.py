@@ -42,6 +42,7 @@ UNBOUND_REASON_STATE = {
     "no_prior_member_context": "POINTER_NOT_FOUND",
     "no_subject": "UNVERIFIABLE",
     "ambiguous(member)": "UNVERIFIABLE",
+    "ambiguous(elements)": "UNVERIFIABLE",
     "state_word(no line)": "UNVERIFIABLE",
     "prior is 0": "UNVERIFIABLE",
 }
@@ -98,7 +99,13 @@ _PREV_YEAR_PHRASE = "前連結会計年度は"
 
 def _direct_value_claim(claim, s, a, b, sign, num, unit, prec, subj, elems, member, facts, contexts):
     scale = prec if unit == "円" else V.UNIT_SCALE[unit]
-    target = sign * num * (1.0 if unit == "円" else V.UNIT_SCALE[unit])
+    unit_scale = 1.0 if unit == "円" else V.UNIT_SCALE[unit]
+    target = sign * num * unit_scale
+    # C-1d §3.1 (comparators.py reads only evidence/claim.value/contract.params):
+    # carry the two numbers the equals_within / diff(a-b) comparators need to
+    # reproduce this function's own `scale`/`target` at verify time.
+    claim["unit_scale"] = unit_scale
+    claim["claim_scale"] = scale
     pool = I.facts_for(elems, facts, contexts, member) if subj else [f for f in facts if I.ctx_ok(f["context"], contexts, member)]
     pool = [f for f in pool if f["unit"] and f["unit"].upper().startswith("JPY")]
     is_diff = bool(_MONEY_UNIT_RE_AFTER.search(s[b:b + 4])) or bool(_MONEY_DIFF_PHRASE_RE.search(s[max(0, a - 25):a]))
@@ -116,7 +123,12 @@ def _direct_value_claim(claim, s, a, b, sign, num, unit, prec, subj, elems, memb
             if not subj:
                 claim["reason"] = "value_only(no subject)"
         else:
-            claim["reason"] = "ambiguous(%d elements)" % (len(fams),)
+            # C-1d §3.3: the registered reason name is the count-free
+            # `ambiguous(elements)` (so a 3rd document's different element
+            # count does not require a new registration); the count itself
+            # moves to Claim.provenance["ambiguous_count"] (see claim_to_recipe).
+            claim["reason"] = "ambiguous(elements)"
+            claim["ambiguous_count"] = len(fams)
     elif subj:
         fs = I.facts_for(elems, facts, contexts, member)
         fs = [f for f in fs if f["unit"] and f["unit"].upper().startswith("JPY")]
@@ -256,6 +268,9 @@ def _build_raw_num_claims(sentences, facts, contexts, profile, claim_member):
                     claim["reason"] = "no_element(ratio without fact)" if subj else "no_subject"
             elif unit in ("名", "人"):
                 claim["form"] = "direct_value"
+                # C-1d §3.1: equals_within's optional abs_tolerance branch
+                # (not exercised by the 224-claim material; none bind).
+                claim["abs_tolerance"] = 0.5
                 cur = [f for f in I.facts_for(["NumberOfEmployees"], facts, contexts, member) if f["context"].startswith("CurrentYear")]
                 if subj and elems == ["NumberOfEmployees"] and cur:
                     hit = [f for f in cur if abs(f["value"] - num) <= 0.5]
@@ -289,6 +304,7 @@ def _build_raw_text_claims(sentences, facts, contexts, profile, claim_member):
                     "id": "T%03d" % (len(text_claims) + 1,), "sentence": si, "word": w,
                     "span": s[max(0, m.start() - 30):m.end() + 5], "subject": subj,
                     "form": "threshold", "pointer": None, "bound": False, "result": None, "reason": None,
+                    "direction": sg,
                 }
                 if subj:
                     cur = [f for f in I.facts_for(elems, facts, contexts, member) if f["context"].startswith("CurrentYear") and f["unit"] and f["unit"].upper().startswith("JPY")]
@@ -403,23 +419,36 @@ def claim_to_recipe(raw, kind):
     elif state == "POINTER_NOT_FOUND":
         not_found_reason = raw.get("reason")
 
+    # C-1d §3.1: Contract.params carries the real numbers/flags the
+    # registered comparators (adapters/xbrl/comparators.py) read at verify
+    # time (unit_scale/claim_scale/abs_tolerance/tolerance/pure_threshold/
+    # direction). This replaces the C-1c placeholder ``{"tolerance": <str>}``.
     contract = None
     if ptrs:
         if kind == "text":
-            comparator, tol = "builtin:sign(cur-prior)==direction", None
+            comparator = "builtin:sign(cur-prior)==direction"
+            params = {"direction": raw.get("direction")}
         elif form_name == "direct_value":
             if raw.get("unit") not in ("%", "％", "ポイント"):
-                comparator, tol = "equals_within", "max(decimals, claim_scale/2)"
+                comparator = "equals_within"
+                if raw.get("unit") in ("名", "人"):
+                    params = {"abs_tolerance": raw.get("abs_tolerance")}
+                else:
+                    params = {"unit_scale": raw.get("unit_scale"), "claim_scale": raw.get("claim_scale")}
             else:
-                comparator, tol = "equals_within(pure*100)", "0.15pt"
+                comparator = "equals_within(pure*100)"
+                params = {"tolerance": 0.15, "pure_threshold": 1.5}
         else:
             f = others[0] if others else ""
             comparator = {
                 "formula:cur/prior*100": "ratio*100",
                 "formula:a-b": "diff(a-b) equals_within",
             }.get(f, "pct_change(cur,prior)")
-            tol = "0.15pt" if comparator != "diff(a-b) equals_within" else "max(decimals, claim_scale/2)"
-        contract = core.Contract(comparator=comparator, params={"tolerance": tol})
+            if comparator == "diff(a-b) equals_within":
+                params = {"unit_scale": raw.get("unit_scale"), "claim_scale": raw.get("claim_scale")}
+            else:
+                params = {"tolerance": 0.15}
+        contract = core.Contract(comparator=comparator, params=params)
 
     provenance = {
         "kind": kind,
@@ -429,6 +458,7 @@ def claim_to_recipe(raw, kind):
         "value_only": (raw.get("reason") or "").startswith("value_only"),
         "diff_phrase_direct": raw.get("reason") == "diff phrase but value matched a fact",
         "sign_token": raw.get("sign_token"),
+        "ambiguous_count": raw.get("ambiguous_count"),
         "member_source": raw.get("member_source"),
         "schemes": schemes,
     }

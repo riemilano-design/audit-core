@@ -78,5 +78,105 @@
     "new": "    tr = tuple(\"/\".join(_period(_ctx_of(p)[1])) for p in reversed(xptrs))",
     "predicted": "red",
     "note": "C-1c 予測 §6 の候補: 期間の対の写し順を変える(time_range の並びが期待値と合わなくなる)。"
+  },
+  {
+    "id": "D-R1-remove-truncate-from-comparators",
+    "file": "comparators.py",
+    "old": "        if 0 <= fv - t < unit:\n            return (sign_mode + \"+truncate\").strip(\"+\")",
+    "new": "        if False:\n            return (sign_mode + \"+truncate\").strip(\"+\")",
+    "predicted": "red",
+    "note": "C-1d 予測 §3.6 D-R1。1B に truncate 13 件 + abs+truncate 6 件(本日既知)。"
+  },
+  {
+    "id": "D-R2-pct-change-signed-denominator",
+    "file": "comparators.py",
+    "old": "    pct = (cur.value - prior.value) / abs(prior.value) * 100",
+    "new": "    pct = (cur.value - prior.value) / prior.value * 100",
+    "predicted": "red",
+    "note": "C-1d 予測 §3.6 D-R2。5F の前期が負の N049・N078・N083 の符号が変わる。"
+  },
+  {
+    "id": "D-R3-sign-boundary-ge-zero",
+    "file": "comparators.py",
+    "old": "    actual = 1 if diff > 0 else -1",
+    "new": "    actual = 1 if diff >= 0 else -1",
+    "predicted": "green",
+    "prediction_miss": true,
+    "actual_first_measurement": "red",
+    "note": "C-1d 予測 §3.6 D-R3。封じた予測は green(等価、根拠: c - p = 0 の Claim が 224 件中 0 件)で、スコープの指定は無い(= 既定スコープ)。既定スコープ(test_comparators.py を含む)での実測は red: 点 G で要求した境界試験 test_zero_difference_counts_as_decrease が diff == 0 を直接作るため、224 件の実データだけを根拠にした予測は外れている。司令塔の 2026-10-06 の指摘により、実測を見た後にスコープを狭めて green に揃える操作(規則を予測に合わせる)を撤回し、既定スコープ・predicted=green のまま外れとして記録する(prediction_miss=true、actual_first_measurement=red)。D-R7 は予測文書 §3.6 に明示的に「計器 3 では green」と書かれているため gate_only のままで良い(スコープを事後に決めたものではない)。"
+  },
+  {
+    "id": "D-R3b-sign-boundary-ge-zero-gate-only",
+    "file": "comparators.py",
+    "old": "    actual = 1 if diff > 0 else -1",
+    "new": "    actual = 1 if diff >= 0 else -1",
+    "predicted": "green",
+    "scope": "gate_only",
+    "note": "D-R3 の外れ(上記)を受けて追加した別行。実データの 2 文書(test_claim_layer + test_instrument3 のみ)では c - p = 0 の Claim が 0 件なので green になるという事実そのものは残す。ただしこの予測は実測を見た後に書いた = 予測としての価値は無い(司令塔の 2026-10-06 の指摘どおり)。"
+  },
+  {
+    "id": "D-R4-direction-match-inverted",
+    "file": "comparators.py",
+    "old": "    return core.Comparison(match=(actual == direction), recomputed=diff, depth=\"value_match\", detail=detail)",
+    "new": "    return core.Comparison(match=(actual != direction), recomputed=diff, depth=\"value_match\", detail=detail)",
+    "predicted": "red",
+    "note": "C-1d 予測 §3.6 D-R4。文章の Claim の GROUNDED/VALUE_MISMATCH が入れ替わる。"
+  },
+  {
+    "id": "D-R5-resolver-ignores-context",
+    "file": "resolve.py",
+    "old": "        matches = by_key.get((name, context))",
+    "new": "        matches = next((v for k, v in by_key.items() if k[0] == name), None)",
+    "predicted": "red",
+    "note": "C-1d 予測 §3.6 D-R5。当期・前期の pointer が同じ名前の最初の fact へ解決され、同じ値になる。"
+  },
+  {
+    "id": "D-R6-formula-scheme-registered-as-evidence",
+    "file": "registry_setup.py",
+    "old": "    registry.register_scheme(\"formula\", kind=\"operator\", trust=\"structural\")",
+    "new": "    registry.register_scheme(\"formula\", kind=\"evidence\", trust=\"structural\")",
+    "predicted": "red",
+    "note": "C-1d 予測 §3.6 D-R6。ratio*100・diff(a-b) の formula: pointer が resolver に渡り解決できず POINTER_NOT_FOUND になる。"
+  },
+  {
+    "id": "D-R7-ctx-ok-in-not-eq-instrument3-scope",
+    "file": "instance.py",
+    "old": "    return c.get(\"members\") == [member] and \"NonConsolidated\" not in cid",
+    "new": "    return member in (c.get(\"members\") or []) and \"NonConsolidated\" not in cid",
+    "predicted": "green",
+    "scope": "gate_only",
+    "note": "C-1d 予測 §3.6 D-R7。C-1 計画 §5 がこの変異を赤と予測し(A-R3 として C-1c の既定スコープでは実際に赤)、C-1c の監査が「224 件の門は黙る」ことを単体試験(test_instance、合成データ)で確かめた。このスコープ(test_claim_layer + test_instrument3 のみ、test_instance 抜き)では、2 社の実データに member を 2 つ以上持つ context が無いため green になる(計器 3 もこの分岐を見ない、という C-1 計画 §5 の予測の外れを公式に記録する)。"
+  },
+  {
+    "id": "D-R8-pure100-threshold-removed",
+    "file": "comparators.py",
+    "old": "    fvp = fv * 100 if abs(fv) <= pure_threshold else fv",
+    "new": "    fvp = fv",
+    "predicted": "red",
+    "note": "C-1d 予測 §3.6 D-R8。1B の N014・N041(pure×100 で GROUNDED)が ×100 されず VALUE_MISMATCH になる。"
+  },
+  {
+    "id": "D-R9-pct-change-recomputed-not-rounded",
+    "file": "comparators.py",
+    "old": "    recomputed = round(pct, 2)",
+    "new": "    recomputed = pct",
+    "predicted": "red",
+    "note": "C-1d 予測 §3.6 D-R9(pct_change 側)。recomputed が期待値の round(pct, 2) と float で == でなくなる(5F に pct_change の Claim が複数件)。"
+  },
+  {
+    "id": "D-G1-comparators-docstring-wording",
+    "file": "comparators.py",
+    "old": "one piece of XBRL-adjacent logic it needs (the round/truncate/abs ladder",
+    "new": "one piece of XBRL-adjacent logic it requires (the round/truncate/abs ladder",
+    "predicted": "green",
+    "note": "C-1d 予測 §3.6 D-G1(対照)。docstring の言い回しのみの変更。"
+  },
+  {
+    "id": "D-G2-resolve-docstring-wording",
+    "file": "resolve.py",
+    "old": "\"\"\"The Adapter's pointer resolver (C-1d prediction §3.2): turns one",
+    "new": "\"\"\"The Adapter's pointer resolver (C-1d prediction §3.2): converts one",
+    "predicted": "green",
+    "note": "C-1d 予測 §3.6 D-G2(対照)。docstring の言い回しのみの変更。"
   }
 ]

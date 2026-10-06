@@ -1,0 +1,1253 @@
+{
+ "document": "S100Z4B6",
+ "claims": [
+  {
+   "id": "N001",
+   "state": "POINTER_NOT_FOUND",
+   "pointers": [],
+   "recomputed": null,
+   "reason": "no_element",
+   "normalization": null
+  },
+  {
+   "id": "N002",
+   "state": "POINTER_NOT_FOUND",
+   "pointers": [],
+   "recomputed": null,
+   "reason": "no_element",
+   "normalization": null
+  },
+  {
+   "id": "N003",
+   "state": "VALUE_MISMATCH",
+   "pointers": [
+    "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration"
+   ],
+   "recomputed": -52196000.0,
+   "reason": null,
+   "normalization": null
+  },
+  {
+   "id": "N004",
+   "state": "UNVERIFIABLE",
+   "pointers": [],
+   "recomputed": null,
+   "reason": "ambiguous(member)",
+   "normalization": null
+  },
+  {
+   "id": "N005",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jpcrp_cor:NetSalesSummaryOfBusinessResults@CurrentYearDuration"
+   ],
+   "recomputed": 1850502000.0,
+   "reason": null,
+   "normalization": "round"
+  },
+  {
+   "id": "N006",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jpcrp_cor:NetSalesSummaryOfBusinessResults@CurrentYearDuration",
+    "xbrl:jpcrp_cor:NetSalesSummaryOfBusinessResults@Prior1YearDuration"
+   ],
+   "recomputed": 0.35,
+   "reason": null,
+   "normalization": null
+  },
+  {
+   "id": "N007",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration"
+   ],
+   "recomputed": -52196000.0,
+   "reason": null,
+   "normalization": "abs+round"
+  },
+  {
+   "id": "N008",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:OperatingIncome@Prior1YearDuration"
+   ],
+   "recomputed": -9709000.0,
+   "reason": null,
+   "normalization": "abs+round"
+  },
+  {
+   "id": "N009",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jpcrp_cor:OrdinaryIncomeLossSummaryOfBusinessResults@CurrentYearDuration"
+   ],
+   "recomputed": -98576000.0,
+   "reason": null,
+   "normalization": "abs+round"
+  },
+  {
+   "id": "N010",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jpcrp_cor:OrdinaryIncomeLossSummaryOfBusinessResults@Prior1YearDuration"
+   ],
+   "recomputed": -7091000.0,
+   "reason": null,
+   "normalization": "abs+round"
+  },
+  {
+   "id": "N011",
+   "state": "VALUE_MISMATCH",
+   "pointers": [
+    "xbrl:jpcrp_cor:OrdinaryIncomeLossSummaryOfBusinessResults@CurrentYearDuration"
+   ],
+   "recomputed": -98576000.0,
+   "reason": null,
+   "normalization": null
+  },
+  {
+   "id": "N012",
+   "state": "VALUE_MISMATCH",
+   "pointers": [
+    "xbrl:jpcrp_cor:OrdinaryIncomeLossSummaryOfBusinessResults@CurrentYearDuration"
+   ],
+   "recomputed": -98576000.0,
+   "reason": null,
+   "normalization": null
+  },
+  {
+   "id": "N013",
+   "state": "POINTER_NOT_FOUND",
+   "pointers": [],
+   "recomputed": null,
+   "reason": "no_element(unit not in XBRL)",
+   "normalization": null
+  },
+  {
+   "id": "N014",
+   "state": "POINTER_NOT_FOUND",
+   "pointers": [],
+   "recomputed": null,
+   "reason": "no_element(unit not in XBRL)",
+   "normalization": null
+  },
+  {
+   "id": "N015",
+   "state": "POINTER_NOT_FOUND",
+   "pointers": [],
+   "recomputed": null,
+   "reason": "no_element(unit not in XBRL)",
+   "normalization": null
+  },
+  {
+   "id": "N016",
+   "state": "POINTER_NOT_FOUND",
+   "pointers": [],
+   "recomputed": null,
+   "reason": "no_element(unit not in XBRL)",
+   "normalization": null
+  },
+  {
+   "id": "N017",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:NetSales@CurrentYearDuration_jpcrp030000-asr_E05055-000DirectSalonReportableSegmentMember"
+   ],
+   "recomputed": 958229000.0,
+   "reason": null,
+   "normalization": "round"
+  },
+  {
+   "id": "N018",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:NetSales@CurrentYearDuration_jpcrp030000-asr_E05055-000DirectSalonReportableSegmentMember",
+    "xbrl:jppfs_cor:NetSales@Prior1YearDuration_jpcrp030000-asr_E05055-000DirectSalonReportableSegmentMember"
+   ],
+   "recomputed": 3.3,
+   "reason": null,
+   "normalization": null
+  },
+  {
+   "id": "N019",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration_jpcrp030000-asr_E05055-000DirectSalonReportableSegmentMember"
+   ],
+   "recomputed": 32925000.0,
+   "reason": null,
+   "normalization": "round"
+  },
+  {
+   "id": "N020",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration_jpcrp030000-asr_E05055-000DirectSalonReportableSegmentMember",
+    "xbrl:jppfs_cor:OperatingIncome@Prior1YearDuration_jpcrp030000-asr_E05055-000DirectSalonReportableSegmentMember"
+   ],
+   "recomputed": -42.54,
+   "reason": null,
+   "normalization": null
+  },
+  {
+   "id": "N021",
+   "state": "POINTER_NOT_FOUND",
+   "pointers": [],
+   "recomputed": null,
+   "reason": "no_element(unit not in XBRL)",
+   "normalization": null
+  },
+  {
+   "id": "N022",
+   "state": "POINTER_NOT_FOUND",
+   "pointers": [],
+   "recomputed": null,
+   "reason": "no_element(unit not in XBRL)",
+   "normalization": null
+  },
+  {
+   "id": "N023",
+   "state": "POINTER_NOT_FOUND",
+   "pointers": [],
+   "recomputed": null,
+   "reason": "no_element(unit not in XBRL)",
+   "normalization": null
+  },
+  {
+   "id": "N024",
+   "state": "POINTER_NOT_FOUND",
+   "pointers": [],
+   "recomputed": null,
+   "reason": "no_element(unit not in XBRL)",
+   "normalization": null
+  },
+  {
+   "id": "N025",
+   "state": "POINTER_NOT_FOUND",
+   "pointers": [],
+   "recomputed": null,
+   "reason": "no_element(unit not in XBRL)",
+   "normalization": null
+  },
+  {
+   "id": "N026",
+   "state": "POINTER_NOT_FOUND",
+   "pointers": [],
+   "recomputed": null,
+   "reason": "no_element(unit not in XBRL)",
+   "normalization": null
+  },
+  {
+   "id": "N027",
+   "state": "POINTER_NOT_FOUND",
+   "pointers": [],
+   "recomputed": null,
+   "reason": "no_element(unit not in XBRL)",
+   "normalization": null
+  },
+  {
+   "id": "N028",
+   "state": "POINTER_NOT_FOUND",
+   "pointers": [],
+   "recomputed": null,
+   "reason": "no_element(unit not in XBRL)",
+   "normalization": null
+  },
+  {
+   "id": "N029",
+   "state": "POINTER_NOT_FOUND",
+   "pointers": [],
+   "recomputed": null,
+   "reason": "no_element(unit not in XBRL)",
+   "normalization": null
+  },
+  {
+   "id": "N030",
+   "state": "POINTER_NOT_FOUND",
+   "pointers": [],
+   "recomputed": null,
+   "reason": "no_element(unit not in XBRL)",
+   "normalization": null
+  },
+  {
+   "id": "N031",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:NetSales@CurrentYearDuration_jpcrp030000-asr_E05055-000FranchiseReportableSegmentMember"
+   ],
+   "recomputed": 221898000.0,
+   "reason": null,
+   "normalization": "round"
+  },
+  {
+   "id": "N032",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:NetSales@CurrentYearDuration_jpcrp030000-asr_E05055-000FranchiseReportableSegmentMember",
+    "xbrl:jppfs_cor:NetSales@Prior1YearDuration_jpcrp030000-asr_E05055-000FranchiseReportableSegmentMember"
+   ],
+   "recomputed": -2.68,
+   "reason": null,
+   "normalization": null
+  },
+  {
+   "id": "N033",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration_jpcrp030000-asr_E05055-000FranchiseReportableSegmentMember"
+   ],
+   "recomputed": 62407000.0,
+   "reason": null,
+   "normalization": "round"
+  },
+  {
+   "id": "N034",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration_jpcrp030000-asr_E05055-000FranchiseReportableSegmentMember",
+    "xbrl:jppfs_cor:OperatingIncome@Prior1YearDuration_jpcrp030000-asr_E05055-000FranchiseReportableSegmentMember"
+   ],
+   "recomputed": -11.76,
+   "reason": null,
+   "normalization": null
+  },
+  {
+   "id": "N035",
+   "state": "POINTER_NOT_FOUND",
+   "pointers": [],
+   "recomputed": null,
+   "reason": "no_element(unit not in XBRL)",
+   "normalization": null
+  },
+  {
+   "id": "N036",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:NetSales@CurrentYearDuration_jpcrp030000-asr_E05055-000HairMakeReportableSegmentMember"
+   ],
+   "recomputed": 382711000.0,
+   "reason": null,
+   "normalization": "round"
+  },
+  {
+   "id": "N037",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:NetSales@CurrentYearDuration_jpcrp030000-asr_E05055-000HairMakeReportableSegmentMember",
+    "xbrl:jppfs_cor:NetSales@Prior1YearDuration_jpcrp030000-asr_E05055-000HairMakeReportableSegmentMember"
+   ],
+   "recomputed": 2.17,
+   "reason": null,
+   "normalization": null
+  },
+  {
+   "id": "N038",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration_jpcrp030000-asr_E05055-000HairMakeReportableSegmentMember"
+   ],
+   "recomputed": 14953000.0,
+   "reason": null,
+   "normalization": "round"
+  },
+  {
+   "id": "N039",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration_jpcrp030000-asr_E05055-000HairMakeReportableSegmentMember",
+    "xbrl:jppfs_cor:OperatingIncome@Prior1YearDuration_jpcrp030000-asr_E05055-000HairMakeReportableSegmentMember"
+   ],
+   "recomputed": 19.17,
+   "reason": null,
+   "normalization": null
+  },
+  {
+   "id": "N040",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:NetSales@CurrentYearDuration_jpcrp030000-asr_E05055-000BeautyBusinessSupportBusinessReportableSegmentMember"
+   ],
+   "recomputed": 122230000.0,
+   "reason": null,
+   "normalization": "round"
+  },
+  {
+   "id": "N041",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:NetSales@CurrentYearDuration_jpcrp030000-asr_E05055-000BeautyBusinessSupportBusinessReportableSegmentMember",
+    "xbrl:jppfs_cor:NetSales@Prior1YearDuration_jpcrp030000-asr_E05055-000BeautyBusinessSupportBusinessReportableSegmentMember"
+   ],
+   "recomputed": 1.12,
+   "reason": null,
+   "normalization": null
+  },
+  {
+   "id": "N042",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration_jpcrp030000-asr_E05055-000BeautyBusinessSupportBusinessReportableSegmentMember"
+   ],
+   "recomputed": 76608000.0,
+   "reason": null,
+   "normalization": "round"
+  },
+  {
+   "id": "N043",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration_jpcrp030000-asr_E05055-000BeautyBusinessSupportBusinessReportableSegmentMember",
+    "xbrl:jppfs_cor:OperatingIncome@Prior1YearDuration_jpcrp030000-asr_E05055-000BeautyBusinessSupportBusinessReportableSegmentMember"
+   ],
+   "recomputed": -2.17,
+   "reason": null,
+   "normalization": null
+  },
+  {
+   "id": "N044",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:NetSales@CurrentYearDuration_jpcrp030000-asr_E05055-000CareerDesignReportableSegmentMember"
+   ],
+   "recomputed": 253763000.0,
+   "reason": null,
+   "normalization": "round"
+  },
+  {
+   "id": "N045",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:NetSales@CurrentYearDuration_jpcrp030000-asr_E05055-000CareerDesignReportableSegmentMember",
+    "xbrl:jppfs_cor:NetSales@Prior1YearDuration_jpcrp030000-asr_E05055-000CareerDesignReportableSegmentMember"
+   ],
+   "recomputed": -8.64,
+   "reason": null,
+   "normalization": null
+  },
+  {
+   "id": "N046",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration_jpcrp030000-asr_E05055-000CareerDesignReportableSegmentMember"
+   ],
+   "recomputed": 14224000.0,
+   "reason": null,
+   "normalization": "round"
+  },
+  {
+   "id": "N047",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration_jpcrp030000-asr_E05055-000CareerDesignReportableSegmentMember",
+    "xbrl:jppfs_cor:OperatingIncome@Prior1YearDuration_jpcrp030000-asr_E05055-000CareerDesignReportableSegmentMember"
+   ],
+   "recomputed": 7.62,
+   "reason": null,
+   "normalization": null
+  },
+  {
+   "id": "N048",
+   "state": "VALUE_MISMATCH",
+   "pointers": [
+    "xbrl:jpcrp_cor:NetCashProvidedByUsedInFinancingActivitiesSummaryOfBusinessResults@CurrentYearDuration"
+   ],
+   "recomputed": 131757000.0,
+   "reason": null,
+   "normalization": null
+  },
+  {
+   "id": "N049",
+   "state": "VALUE_MISMATCH",
+   "pointers": [
+    "xbrl:jpcrp_cor:NetCashProvidedByUsedInFinancingActivitiesSummaryOfBusinessResults@CurrentYearDuration",
+    "xbrl:jpcrp_cor:NetCashProvidedByUsedInFinancingActivitiesSummaryOfBusinessResults@Prior1YearDuration"
+   ],
+   "recomputed": 379.19,
+   "reason": null,
+   "normalization": null
+  },
+  {
+   "id": "N050",
+   "state": "UNVERIFIABLE",
+   "pointers": [],
+   "recomputed": null,
+   "reason": "ambiguous(elements)",
+   "normalization": null
+  },
+  {
+   "id": "N051",
+   "state": "UNVERIFIABLE",
+   "pointers": [],
+   "recomputed": null,
+   "reason": "ambiguous(elements)",
+   "normalization": null
+  },
+  {
+   "id": "N052",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:IncomeBeforeIncomeTaxes@CurrentYearDuration"
+   ],
+   "recomputed": -102694000.0,
+   "reason": null,
+   "normalization": "abs+round"
+  },
+  {
+   "id": "N053",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:DepreciationAndAmortizationOpeCF@CurrentYearDuration"
+   ],
+   "recomputed": 14423000.0,
+   "reason": null,
+   "normalization": "round"
+  },
+  {
+   "id": "N054",
+   "state": "VALUE_MISMATCH",
+   "pointers": [
+    "xbrl:jppfs_cor:DepreciationAndAmortizationOpeCF@CurrentYearDuration"
+   ],
+   "recomputed": 14423000.0,
+   "reason": null,
+   "normalization": null
+  },
+  {
+   "id": "N055",
+   "state": "VALUE_MISMATCH",
+   "pointers": [
+    "xbrl:jppfs_cor:DepreciationAndAmortizationOpeCF@CurrentYearDuration"
+   ],
+   "recomputed": 14423000.0,
+   "reason": null,
+   "normalization": null
+  },
+  {
+   "id": "N056",
+   "state": "VALUE_MISMATCH",
+   "pointers": [
+    "xbrl:jppfs_cor:DepreciationAndAmortizationOpeCF@CurrentYearDuration"
+   ],
+   "recomputed": 14423000.0,
+   "reason": null,
+   "normalization": null
+  },
+  {
+   "id": "N057",
+   "state": "VALUE_MISMATCH",
+   "pointers": [
+    "xbrl:jppfs_cor:DepreciationAndAmortizationOpeCF@CurrentYearDuration"
+   ],
+   "recomputed": 14423000.0,
+   "reason": null,
+   "normalization": null
+  },
+  {
+   "id": "N058",
+   "state": "UNVERIFIABLE",
+   "pointers": [],
+   "recomputed": null,
+   "reason": "ambiguous(elements)",
+   "normalization": null
+  },
+  {
+   "id": "N059",
+   "state": "UNVERIFIABLE",
+   "pointers": [],
+   "recomputed": null,
+   "reason": "ambiguous(elements)",
+   "normalization": null
+  },
+  {
+   "id": "N060",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:PurchaseOfPropertyPlantAndEquipmentInvCF@CurrentYearDuration"
+   ],
+   "recomputed": -30073000.0,
+   "reason": null,
+   "normalization": "abs+round"
+  },
+  {
+   "id": "N061",
+   "state": "VALUE_MISMATCH",
+   "pointers": [
+    "xbrl:jppfs_cor:PurchaseOfPropertyPlantAndEquipmentInvCF@CurrentYearDuration"
+   ],
+   "recomputed": -30073000.0,
+   "reason": null,
+   "normalization": null
+  },
+  {
+   "id": "N062",
+   "state": "VALUE_MISMATCH",
+   "pointers": [
+    "xbrl:jppfs_cor:PurchaseOfPropertyPlantAndEquipmentInvCF@CurrentYearDuration"
+   ],
+   "recomputed": -30073000.0,
+   "reason": null,
+   "normalization": null
+  },
+  {
+   "id": "N063",
+   "state": "UNVERIFIABLE",
+   "pointers": [],
+   "recomputed": null,
+   "reason": "ambiguous(elements)",
+   "normalization": null
+  },
+  {
+   "id": "N064",
+   "state": "UNVERIFIABLE",
+   "pointers": [],
+   "recomputed": null,
+   "reason": "ambiguous(elements)",
+   "normalization": null
+  },
+  {
+   "id": "N065",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:IncreaseDecreaseInShortTermLoansPayableFinCF@CurrentYearDuration"
+   ],
+   "recomputed": 150000000.0,
+   "reason": null,
+   "normalization": "round"
+  },
+  {
+   "id": "N066",
+   "state": "POINTER_NOT_FOUND",
+   "pointers": [],
+   "recomputed": null,
+   "reason": "no_element",
+   "normalization": null
+  },
+  {
+   "id": "N067",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:CashDividendsPaidFinCF@CurrentYearDuration"
+   ],
+   "recomputed": -5771000.0,
+   "reason": null,
+   "normalization": "abs+round"
+  },
+  {
+   "id": "N068",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jpcrp_cor:NetSalesSummaryOfBusinessResults@CurrentYearDuration"
+   ],
+   "recomputed": 1850502000.0,
+   "reason": null,
+   "normalization": "round"
+  },
+  {
+   "id": "N069",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jpcrp_cor:NetSalesSummaryOfBusinessResults@CurrentYearDuration",
+    "xbrl:jpcrp_cor:NetSalesSummaryOfBusinessResults@Prior1YearDuration",
+    "formula:a-b"
+   ],
+   "recomputed": 6442000.0,
+   "reason": null,
+   "normalization": "round"
+  },
+  {
+   "id": "N070",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jpcrp_cor:NetSalesSummaryOfBusinessResults@CurrentYearDuration",
+    "xbrl:jpcrp_cor:NetSalesSummaryOfBusinessResults@Prior1YearDuration"
+   ],
+   "recomputed": 0.35,
+   "reason": null,
+   "normalization": null
+  },
+  {
+   "id": "N071",
+   "state": "POINTER_NOT_FOUND",
+   "pointers": [],
+   "recomputed": null,
+   "reason": "no_element",
+   "normalization": null
+  },
+  {
+   "id": "N072",
+   "state": "UNVERIFIABLE",
+   "pointers": [],
+   "recomputed": null,
+   "reason": "no_subject",
+   "normalization": null
+  },
+  {
+   "id": "N073",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:CostOfSales@CurrentYearDuration"
+   ],
+   "recomputed": 1377499000.0,
+   "reason": null,
+   "normalization": "round"
+  },
+  {
+   "id": "N074",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:SellingGeneralAndAdministrativeExpenses@CurrentYearDuration",
+    "xbrl:jppfs_cor:SellingGeneralAndAdministrativeExpenses@Prior1YearDuration",
+    "formula:a-b"
+   ],
+   "recomputed": 17979000.0,
+   "reason": null,
+   "normalization": "round"
+  },
+  {
+   "id": "N075",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:SellingGeneralAndAdministrativeExpenses@CurrentYearDuration",
+    "xbrl:jppfs_cor:SellingGeneralAndAdministrativeExpenses@Prior1YearDuration"
+   ],
+   "recomputed": 3.54,
+   "reason": null,
+   "normalization": null
+  },
+  {
+   "id": "N076",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:SellingGeneralAndAdministrativeExpenses@CurrentYearDuration"
+   ],
+   "recomputed": 525200000.0,
+   "reason": null,
+   "normalization": "round"
+  },
+  {
+   "id": "N077",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration"
+   ],
+   "recomputed": -52196000.0,
+   "reason": null,
+   "normalization": "abs+round"
+  },
+  {
+   "id": "N078",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration",
+    "xbrl:jppfs_cor:OperatingIncome@Prior1YearDuration",
+    "formula:a-b"
+   ],
+   "recomputed": -42487000.0,
+   "reason": null,
+   "normalization": "abs+round"
+  },
+  {
+   "id": "N079",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:OperatingIncome@Prior1YearDuration"
+   ],
+   "recomputed": -9709000.0,
+   "reason": null,
+   "normalization": "abs+round"
+  },
+  {
+   "id": "N080",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:NonOperatingIncome@CurrentYearDuration"
+   ],
+   "recomputed": 4171000.0,
+   "reason": null,
+   "normalization": "round"
+  },
+  {
+   "id": "N081",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:NonOperatingExpenses@CurrentYearDuration"
+   ],
+   "recomputed": 50551000.0,
+   "reason": null,
+   "normalization": "round"
+  },
+  {
+   "id": "N082",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jpcrp_cor:OrdinaryIncomeLossSummaryOfBusinessResults@CurrentYearDuration"
+   ],
+   "recomputed": -98576000.0,
+   "reason": null,
+   "normalization": "abs+round"
+  },
+  {
+   "id": "N083",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jpcrp_cor:OrdinaryIncomeLossSummaryOfBusinessResults@CurrentYearDuration",
+    "xbrl:jpcrp_cor:OrdinaryIncomeLossSummaryOfBusinessResults@Prior1YearDuration",
+    "formula:a-b"
+   ],
+   "recomputed": -91485000.0,
+   "reason": null,
+   "normalization": "abs+round"
+  },
+  {
+   "id": "N084",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jpcrp_cor:OrdinaryIncomeLossSummaryOfBusinessResults@Prior1YearDuration"
+   ],
+   "recomputed": -7091000.0,
+   "reason": null,
+   "normalization": "abs+round"
+  },
+  {
+   "id": "N085",
+   "state": "UNVERIFIABLE",
+   "pointers": [],
+   "recomputed": null,
+   "reason": "ambiguous(elements)",
+   "normalization": null
+  },
+  {
+   "id": "N086",
+   "state": "UNVERIFIABLE",
+   "pointers": [],
+   "recomputed": null,
+   "reason": "ambiguous(elements)",
+   "normalization": null
+  },
+  {
+   "id": "N087",
+   "state": "UNVERIFIABLE",
+   "pointers": [],
+   "recomputed": null,
+   "reason": "ambiguous(elements)",
+   "normalization": null
+  },
+  {
+   "id": "N088",
+   "state": "POINTER_NOT_FOUND",
+   "pointers": [],
+   "recomputed": null,
+   "reason": "no_element",
+   "normalization": null
+  },
+  {
+   "id": "N089",
+   "state": "UNVERIFIABLE",
+   "pointers": [],
+   "recomputed": null,
+   "reason": "ambiguous(elements)",
+   "normalization": null
+  },
+  {
+   "id": "N090",
+   "state": "POINTER_NOT_FOUND",
+   "pointers": [],
+   "recomputed": null,
+   "reason": "no_element",
+   "normalization": null
+  },
+  {
+   "id": "N091",
+   "state": "POINTER_NOT_FOUND",
+   "pointers": [],
+   "recomputed": null,
+   "reason": "no_element",
+   "normalization": null
+  },
+  {
+   "id": "T001",
+   "state": "UNVERIFIABLE",
+   "pointers": [],
+   "recomputed": null,
+   "reason": "no_subject",
+   "normalization": null
+  },
+  {
+   "id": "T002",
+   "state": "UNVERIFIABLE",
+   "pointers": [],
+   "recomputed": null,
+   "reason": "no_subject",
+   "normalization": null
+  },
+  {
+   "id": "T003",
+   "state": "UNVERIFIABLE",
+   "pointers": [],
+   "recomputed": null,
+   "reason": "state_word(no line)",
+   "normalization": null
+  },
+  {
+   "id": "T004",
+   "state": "UNVERIFIABLE",
+   "pointers": [],
+   "recomputed": null,
+   "reason": "state_word(no line)",
+   "normalization": null
+  },
+  {
+   "id": "T005",
+   "state": "UNVERIFIABLE",
+   "pointers": [],
+   "recomputed": null,
+   "reason": "state_word(no line)",
+   "normalization": null
+  },
+  {
+   "id": "T006",
+   "state": "UNVERIFIABLE",
+   "pointers": [],
+   "recomputed": null,
+   "reason": "no_subject",
+   "normalization": null
+  },
+  {
+   "id": "T007",
+   "state": "UNVERIFIABLE",
+   "pointers": [],
+   "recomputed": null,
+   "reason": "no_subject",
+   "normalization": null
+  },
+  {
+   "id": "T008",
+   "state": "UNVERIFIABLE",
+   "pointers": [],
+   "recomputed": null,
+   "reason": "ambiguous(member)",
+   "normalization": null
+  },
+  {
+   "id": "T009",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jpcrp_cor:NetSalesSummaryOfBusinessResults@CurrentYearDuration",
+    "xbrl:jpcrp_cor:NetSalesSummaryOfBusinessResults@Prior1YearDuration",
+    "builtin:sign(cur-prior)"
+   ],
+   "recomputed": 6442000.0,
+   "reason": null,
+   "normalization": null
+  },
+  {
+   "id": "T010",
+   "state": "UNVERIFIABLE",
+   "pointers": [],
+   "recomputed": null,
+   "reason": "ambiguous(member)",
+   "normalization": null
+  },
+  {
+   "id": "T011",
+   "state": "UNVERIFIABLE",
+   "pointers": [],
+   "recomputed": null,
+   "reason": "state_word(no line)",
+   "normalization": null
+  },
+  {
+   "id": "T012",
+   "state": "UNVERIFIABLE",
+   "pointers": [],
+   "recomputed": null,
+   "reason": "no_subject",
+   "normalization": null
+  },
+  {
+   "id": "T013",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jpcrp_cor:NetSalesSummaryOfBusinessResults@CurrentYearDuration",
+    "xbrl:jpcrp_cor:NetSalesSummaryOfBusinessResults@Prior1YearDuration",
+    "builtin:sign(cur-prior)"
+   ],
+   "recomputed": 6442000.0,
+   "reason": null,
+   "normalization": null
+  },
+  {
+   "id": "T014",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jpcrp_cor:NetSalesSummaryOfBusinessResults@CurrentYearDuration",
+    "xbrl:jpcrp_cor:NetSalesSummaryOfBusinessResults@Prior1YearDuration",
+    "builtin:sign(cur-prior)"
+   ],
+   "recomputed": 6442000.0,
+   "reason": null,
+   "normalization": null
+  },
+  {
+   "id": "T015",
+   "state": "VALUE_MISMATCH",
+   "pointers": [
+    "xbrl:jpcrp_cor:NetSalesSummaryOfBusinessResults@CurrentYearDuration",
+    "xbrl:jpcrp_cor:NetSalesSummaryOfBusinessResults@Prior1YearDuration",
+    "builtin:sign(cur-prior)"
+   ],
+   "recomputed": 6442000.0,
+   "reason": null,
+   "normalization": null
+  },
+  {
+   "id": "T016",
+   "state": "UNVERIFIABLE",
+   "pointers": [],
+   "recomputed": null,
+   "reason": "state_word(no line)",
+   "normalization": null
+  },
+  {
+   "id": "T017",
+   "state": "UNVERIFIABLE",
+   "pointers": [],
+   "recomputed": null,
+   "reason": "no_subject",
+   "normalization": null
+  },
+  {
+   "id": "T018",
+   "state": "UNVERIFIABLE",
+   "pointers": [],
+   "recomputed": null,
+   "reason": "no_subject",
+   "normalization": null
+  },
+  {
+   "id": "T019",
+   "state": "UNVERIFIABLE",
+   "pointers": [],
+   "recomputed": null,
+   "reason": "no_subject",
+   "normalization": null
+  },
+  {
+   "id": "T020",
+   "state": "UNVERIFIABLE",
+   "pointers": [],
+   "recomputed": null,
+   "reason": "state_word(no line)",
+   "normalization": null
+  },
+  {
+   "id": "T021",
+   "state": "UNVERIFIABLE",
+   "pointers": [],
+   "recomputed": null,
+   "reason": "state_word(no line)",
+   "normalization": null
+  },
+  {
+   "id": "T022",
+   "state": "UNVERIFIABLE",
+   "pointers": [],
+   "recomputed": null,
+   "reason": "no_subject",
+   "normalization": null
+  },
+  {
+   "id": "T023",
+   "state": "UNVERIFIABLE",
+   "pointers": [],
+   "recomputed": null,
+   "reason": "no_subject",
+   "normalization": null
+  },
+  {
+   "id": "T024",
+   "state": "UNVERIFIABLE",
+   "pointers": [],
+   "recomputed": null,
+   "reason": "no_subject",
+   "normalization": null
+  },
+  {
+   "id": "T025",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:NetSales@CurrentYearDuration_jpcrp030000-asr_E05055-000BeautyBusinessSupportBusinessReportableSegmentMember",
+    "xbrl:jppfs_cor:NetSales@Prior1YearDuration_jpcrp030000-asr_E05055-000BeautyBusinessSupportBusinessReportableSegmentMember",
+    "builtin:sign(cur-prior)"
+   ],
+   "recomputed": 1355000.0,
+   "reason": null,
+   "normalization": null
+  },
+  {
+   "id": "T026",
+   "state": "VALUE_MISMATCH",
+   "pointers": [
+    "xbrl:jppfs_cor:NetSales@CurrentYearDuration_jpcrp030000-asr_E05055-000BeautyBusinessSupportBusinessReportableSegmentMember",
+    "xbrl:jppfs_cor:NetSales@Prior1YearDuration_jpcrp030000-asr_E05055-000BeautyBusinessSupportBusinessReportableSegmentMember",
+    "builtin:sign(cur-prior)"
+   ],
+   "recomputed": 1355000.0,
+   "reason": null,
+   "normalization": null
+  },
+  {
+   "id": "T027",
+   "state": "UNVERIFIABLE",
+   "pointers": [],
+   "recomputed": null,
+   "reason": "state_word(no line)",
+   "normalization": null
+  },
+  {
+   "id": "T028",
+   "state": "UNVERIFIABLE",
+   "pointers": [],
+   "recomputed": null,
+   "reason": "state_word(no line)",
+   "normalization": null
+  },
+  {
+   "id": "T029",
+   "state": "UNVERIFIABLE",
+   "pointers": [],
+   "recomputed": null,
+   "reason": "no_subject",
+   "normalization": null
+  },
+  {
+   "id": "T030",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:DepreciationAndAmortizationOpeCF@CurrentYearDuration",
+    "xbrl:jppfs_cor:DepreciationAndAmortizationOpeCF@Prior1YearDuration",
+    "builtin:sign(cur-prior)"
+   ],
+   "recomputed": 236000.0,
+   "reason": null,
+   "normalization": null
+  },
+  {
+   "id": "T031",
+   "state": "VALUE_MISMATCH",
+   "pointers": [
+    "xbrl:jppfs_cor:DepreciationAndAmortizationOpeCF@CurrentYearDuration",
+    "xbrl:jppfs_cor:DepreciationAndAmortizationOpeCF@Prior1YearDuration",
+    "builtin:sign(cur-prior)"
+   ],
+   "recomputed": 236000.0,
+   "reason": null,
+   "normalization": null
+  },
+  {
+   "id": "T032",
+   "state": "UNVERIFIABLE",
+   "pointers": [],
+   "recomputed": null,
+   "reason": "no_subject",
+   "normalization": null
+  },
+  {
+   "id": "T033",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jpcrp_cor:NetSalesSummaryOfBusinessResults@CurrentYearDuration",
+    "xbrl:jpcrp_cor:NetSalesSummaryOfBusinessResults@Prior1YearDuration",
+    "builtin:sign(cur-prior)"
+   ],
+   "recomputed": 6442000.0,
+   "reason": null,
+   "normalization": null
+  },
+  {
+   "id": "T034",
+   "state": "UNVERIFIABLE",
+   "pointers": [],
+   "recomputed": null,
+   "reason": "ambiguous(member)",
+   "normalization": null
+  },
+  {
+   "id": "T035",
+   "state": "UNVERIFIABLE",
+   "pointers": [],
+   "recomputed": null,
+   "reason": "no_subject",
+   "normalization": null
+  },
+  {
+   "id": "T036",
+   "state": "UNVERIFIABLE",
+   "pointers": [],
+   "recomputed": null,
+   "reason": "ambiguous(member)",
+   "normalization": null
+  },
+  {
+   "id": "T037",
+   "state": "UNVERIFIABLE",
+   "pointers": [],
+   "recomputed": null,
+   "reason": "state_word(no line)",
+   "normalization": null
+  },
+  {
+   "id": "T038",
+   "state": "UNVERIFIABLE",
+   "pointers": [],
+   "recomputed": null,
+   "reason": "no_subject",
+   "normalization": null
+  },
+  {
+   "id": "T039",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:SellingGeneralAndAdministrativeExpenses@CurrentYearDuration",
+    "xbrl:jppfs_cor:SellingGeneralAndAdministrativeExpenses@Prior1YearDuration",
+    "builtin:sign(cur-prior)"
+   ],
+   "recomputed": 17979000.0,
+   "reason": null,
+   "normalization": null
+  },
+  {
+   "id": "T040",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration",
+    "xbrl:jppfs_cor:OperatingIncome@Prior1YearDuration",
+    "builtin:sign(cur-prior)"
+   ],
+   "recomputed": -42487000.0,
+   "reason": null,
+   "normalization": null
+  },
+  {
+   "id": "T041",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jpcrp_cor:OrdinaryIncomeLossSummaryOfBusinessResults@CurrentYearDuration",
+    "xbrl:jpcrp_cor:OrdinaryIncomeLossSummaryOfBusinessResults@Prior1YearDuration",
+    "builtin:sign(cur-prior)"
+   ],
+   "recomputed": -91485000.0,
+   "reason": null,
+   "normalization": null
+  },
+  {
+   "id": "T042",
+   "state": "UNVERIFIABLE",
+   "pointers": [],
+   "recomputed": null,
+   "reason": "no_subject",
+   "normalization": null
+  }
+ ]
+}
