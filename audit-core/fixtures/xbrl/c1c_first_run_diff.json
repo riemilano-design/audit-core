@@ -1,0 +1,24 @@
+{
+ "note": "C-1c 前段照合、1 回目の実行(直す前)の差。224/224 で 0 件(移植差の直しは不要だった)。",
+ "compared_fields": [
+  "id",
+  "form",
+  "subject",
+  "value",
+  "unit",
+  "population",
+  "time_range",
+  "normalization",
+  "pointers"
+ ],
+ "1B": {
+  "total": 91,
+  "full_match": 91,
+  "diffs": []
+ },
+ "5F": {
+  "total": 133,
+  "full_match": 133,
+  "diffs": []
+ }
+}

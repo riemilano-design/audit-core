@@ -1,0 +1,18 @@
+{
+ "note": "追加計測 X: P5F profile で 1 社目(S100Z4Q1)を回し、1B 期待値と 7 欄で比較。直さない。",
+ "total_expected": 91,
+ "total_actual": 91,
+ "full_match": 91,
+ "mismatch_by_field": {
+  "id": 0,
+  "form": 0,
+  "subject": 0,
+  "value": 0,
+  "unit": 0,
+  "population": 0,
+  "time_range": 0,
+  "normalization": 0,
+  "pointers": 0
+ },
+ "diffs": []
+}

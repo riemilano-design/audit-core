@@ -1,0 +1,82 @@
+[
+  {
+    "id": "A-R1-remove-truncate",
+    "file": "vocabulary.py",
+    "old": "        if 0 <= fv - t < unit:\n            return (sign_mode + \"+truncate\").strip(\"+\")",
+    "new": "        if False:\n            return (sign_mode + \"+truncate\").strip(\"+\")",
+    "predicted": "red",
+    "note": "match_value の truncate 判定を外す(予測 §6 の候補のひとつ)。1B に truncate 一致が 13 件ある。"
+  },
+  {
+    "id": "A-R2-round-disabled-falls-through-to-truncate-label",
+    "file": "vocabulary.py",
+    "old": "        if abs(fv - t) <= unit / 2:",
+    "new": "        if False:",
+    "predicted": "red",
+    "note": "最初の試みは round の境界を <= から < に変えるだけだったが実測で green(実データに境界値ぴったりの差が無く等価変異だった、本文に記録)。round 判定を丸ごと外すと、差が 0 の完全一致も truncate 分岐(0<=diff<unit)で捕まり normalization のラベルが round→truncate に変わるため red になる。"
+  },
+  {
+    "id": "A-G1-tolof-max-arg-order",
+    "file": "vocabulary.py",
+    "old": "            return max(0.5 * (10 ** (-int(d))), 0.5 * claim_scale)",
+    "new": "            return max(0.5 * claim_scale, 0.5 * (10 ** (-int(d))))",
+    "predicted": "green",
+    "note": "max() は交換可能なので、引数順を入れ替えても出力は変わらない(等価変異の対照)。"
+  },
+  {
+    "id": "A-R3-ctx-ok-in-not-eq",
+    "file": "instance.py",
+    "old": "    return c.get(\"members\") == [member] and \"NonConsolidated\" not in cid",
+    "new": "    return member in (c.get(\"members\") or []) and \"NonConsolidated\" not in cid",
+    "predicted": "red",
+    "note": "C-1c 予測 §6 の候補: ctx_ok の == [member] を in にする(置き換えを合わせるへ変える)。"
+  },
+  {
+    "id": "A-G2-stripper-tag-tuple-reorder",
+    "file": "instance.py",
+    "old": "        if tag in (\"p\", \"br\", \"div\", \"tr\", \"li\", \"h1\", \"h2\", \"h3\", \"h4\", \"td\"):",
+    "new": "        if tag in (\"td\", \"h4\", \"h3\", \"h2\", \"h1\", \"li\", \"tr\", \"div\", \"br\", \"p\"):",
+    "predicted": "green",
+    "note": "同じ要素の順序を入れ替えただけ(in によるメンバーシップ判定は順序に依らない)の対照。"
+  },
+  {
+    "id": "A-R4-carry-back-1",
+    "file": "extract.py",
+    "old": "CARRY_BACK = 5  # xbrl_probe3.py §3.1-2: 同じ段落で 5 文以内",
+    "new": "CARRY_BACK = 1  # xbrl_probe3.py §3.1-2: 同じ段落で 5 文以内",
+    "predicted": "red",
+    "note": "C-1c 予測 §6 の候補: CARRY_BACK を変える。5F の member の carried 解決が変わる。"
+  },
+  {
+    "id": "A-R5-own-sign-match-first-hit",
+    "file": "extract.py",
+    "old": "    for pm in PCT_DIR_RE.finditer(window):\n        g = pm.group(2) or pm.group(5)\n        if g is not None and abs(float(g) - num) < 1e-9:\n            return pm\n    return None",
+    "new": "    return PCT_DIR_RE.search(window)",
+    "predicted": "red",
+    "note": "C-1c 予測 §6 の候補: own_sign_match を最初の一致に戻す(P-8 を外す)。"
+  },
+  {
+    "id": "A-R6-claim-member-b-never-ambiguous",
+    "file": "extract.py",
+    "old": "    if len({g[3] for g in group}) == 1:",
+    "new": "    if True:",
+    "predicted": "red",
+    "note": "最初の試みは接続語チェック(conn_re.match を True に)だったが実測で green(2 社目の実データでは群に 2 つ目の seg マークが連結語を介さず隣接する場面が無く、その分岐が到達されない等価変異だった、本文に記録)。群の異なり数チェック自体を外すと、5F の ambiguous(member) になっている Claim(claim_member_B 発の N004・T008 等)が claim 扱いに変わり red になる。"
+  },
+  {
+    "id": "A-R7-amount-jp-big-flag-drops-man",
+    "file": "extract.py",
+    "old": "        big = bool(m.group(2) or m.group(3) or m.group(7))",
+    "new": "        big = bool(m.group(2) or m.group(3))",
+    "predicted": "red",
+    "note": "漢数字混じりの金額(「万」単独の桁上げ)の big 判定から万を外す。293百万円 のような表記の値が変わる。"
+  },
+  {
+    "id": "A-R8-period-order-reversed",
+    "file": "recipes.py",
+    "old": "    tr = tuple(\"/\".join(_period(_ctx_of(p)[1])) for p in xptrs)",
+    "new": "    tr = tuple(\"/\".join(_period(_ctx_of(p)[1])) for p in reversed(xptrs))",
+    "predicted": "red",
+    "note": "C-1c 予測 §6 の候補: 期間の対の写し順を変える(time_range の並びが期待値と合わなくなる)。"
+  }
+]
