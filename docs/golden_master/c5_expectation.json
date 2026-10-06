@@ -1,7 +1,7 @@
 {
  "golden_master": "c5",
- "base_commit": "c3da8de",
- "note": "Audit Core T-1(docs/AUDIT_CORE_EXTRACTION_PLAN.md §5 G-2/G-8/G-9)。実物(scripts/playtest/out/c5)は git に無い。ここにあるのは入力の sha256・packet の封・門の判定・PDF の 3 つの数だけ。測り方・比べ方は scripts/playtest/goldenMasterCheck.ts(--expect で照合、--write で書き直し)。sha256 は「同じファイルか」を言うだけで、実行環境の決定論性を保証するものではない。PDF はバイト一致を求めない(/CreationDate が動く)― G-8 は compare_render.py --seal の意味比較。 2026-10-06 S-1(人間の決定): g9.hypothesisCheck の H-9/H-10/H-11 を packet つきで測るようにし、H-9 NG 8 件(VM 20・PNF 1)を「現状」として固定した。これは判定ではなく記録。書き直す前の 1 回目の差の一覧は docs/golden_master/s1_first_run_diff.txt、Core の経路との照合は同 s1_first_run_compare.json。 2026-10-06 S-2(人間の決定): g9.seatOutputCheck / integrationCheck にも packet を渡し、I-4 の H-9 行 17 件(6 束、VM 16・PNF 1)を「現状」として固定した。E-3 は 6 封筒とも封筒の schema(seal 欠落)で早期 return しており実物で走っていない。これは正しい状態の主張ではなく、次の S-3(実 run 1 周)と比べるための記録。差の一覧は docs/golden_master/s2_first_run_diff.txt、照合は同 s2_first_run_compare.json。",
+ "base_commit": "e5d319f",
+ "note": "Audit Core T-1(docs/AUDIT_CORE_EXTRACTION_PLAN.md §5 G-2/G-8/G-9)。実物(scripts/playtest/out/c5)は git に無い。ここにあるのは入力の sha256・packet の封・門の判定・PDF の 3 つの数だけ。測り方・比べ方は scripts/playtest/goldenMasterCheck.ts(--expect で照合、--write で書き直し)。sha256 は「同じファイルか」を言うだけで、実行環境の決定論性を保証するものではない。PDF はバイト一致を求めない(/CreationDate が動く)― G-8 は compare_render.py --seal の意味比較。 2026-10-06 S-1(人間の決定): g9.hypothesisCheck の H-9/H-10/H-11 を packet つきで測るようにし、H-9 NG 8 件(VM 20・PNF 1)を「現状」として固定した。これは判定ではなく記録。書き直す前の 1 回目の差の一覧は docs/golden_master/s1_first_run_diff.txt、Core の経路との照合は同 s1_first_run_compare.json。 2026-10-06 S-2(人間の決定): g9.seatOutputCheck / integrationCheck にも packet を渡し、I-4 の H-9 行 17 件(6 束、VM 16・PNF 1)を「現状」として固定した。E-3 は 6 封筒とも封筒の schema(seal 欠落)で早期 return しており実物で走っていない。これは正しい状態の主張ではなく、次の S-3(実 run 1 周)と比べるための記録。差の一覧は docs/golden_master/s2_first_run_diff.txt、照合は同 s2_first_run_compare.json。 2026-10-07 S-4(人間の決定): 新しい検査 H-12(観測 0 件を kind で許す。版 0.5 以上だけ見る)を足したため、既存 6 封筒の 58 項目すべてで lines の末尾に「H-12 skip 未照合: schemaVersion が 0.5 未満(H-12 は 0.5 以上だけ見る)」の 1 行が増えた。**落ちてはいない(skip)が、行としては必ず現れる** ― この 1 行を現状として固定する。書き直す前の 1 回目の差の一覧は docs/golden_master/s4_first_run_golden_diff.txt(58 件)、照合は同 s4_first_run_compare.json、Core の経路は audit-core/fixtures/shogi/s4_first_run_core.json。skip の行を Golden から落とさない理由: S-1 で見つけた穴(H-9 が packet 無しで黙って skip していた)は、まさにこの行が在ることで見える。正しい状態の主張ではなく、次の S-5(H-1 の覆い・H-3 の kind 免除)と比べるための記録。",
  "inputs": {
   "customer_dir": "scripts/playtest/out/c5",
   "packet": "packet/observation-packet.json",
@@ -333,7 +333,8 @@
        "H-8 ok",
        "H-9 ok",
        "H-10 ok",
-       "H-11 ok"
+       "H-11 ok",
+       "H-12 skip 未照合: schemaVersion が 0.5 未満(H-12 は 0.5 以上だけ見る)"
       ]
      },
      {
@@ -350,7 +351,8 @@
        "H-8 ok",
        "H-9 ok",
        "H-10 ok",
-       "H-11 ok"
+       "H-11 ok",
+       "H-12 skip 未照合: schemaVersion が 0.5 未満(H-12 は 0.5 以上だけ見る)"
       ]
      },
      {
@@ -367,7 +369,8 @@
        "H-8 ok",
        "H-9 ok",
        "H-10 ok",
-       "H-11 ok"
+       "H-11 ok",
+       "H-12 skip 未照合: schemaVersion が 0.5 未満(H-12 は 0.5 以上だけ見る)"
       ]
      },
      {
@@ -384,7 +387,8 @@
        "H-8 ok",
        "H-9 ok",
        "H-10 ok",
-       "H-11 ok"
+       "H-11 ok",
+       "H-12 skip 未照合: schemaVersion が 0.5 未満(H-12 は 0.5 以上だけ見る)"
       ]
      },
      {
@@ -401,7 +405,8 @@
        "H-8 ok",
        "H-9 NG observations[2]: facts.recognition.rows.3.reviewStatus が packet に無い",
        "H-10 ok",
-       "H-11 ok"
+       "H-11 ok",
+       "H-12 skip 未照合: schemaVersion が 0.5 未満(H-12 は 0.5 以上だけ見る)"
       ]
      },
      {
@@ -418,7 +423,8 @@
        "H-8 ok",
        "H-9 ok",
        "H-10 ok",
-       "H-11 ok"
+       "H-11 ok",
+       "H-12 skip 未照合: schemaVersion が 0.5 未満(H-12 は 0.5 以上だけ見る)"
       ]
      },
      {
@@ -435,7 +441,8 @@
        "H-8 ok",
        "H-9 ok",
        "H-10 ok",
-       "H-11 ok"
+       "H-11 ok",
+       "H-12 skip 未照合: schemaVersion が 0.5 未満(H-12 は 0.5 以上だけ見る)"
       ]
      }
     ]
@@ -458,7 +465,8 @@
        "H-8 ok",
        "H-9 ok",
        "H-10 ok",
-       "H-11 ok"
+       "H-11 ok",
+       "H-12 skip 未照合: schemaVersion が 0.5 未満(H-12 は 0.5 以上だけ見る)"
       ]
      },
      {
@@ -475,7 +483,8 @@
        "H-8 ok",
        "H-9 ok",
        "H-10 ok",
-       "H-11 ok"
+       "H-11 ok",
+       "H-12 skip 未照合: schemaVersion が 0.5 未満(H-12 は 0.5 以上だけ見る)"
       ]
      },
      {
@@ -492,7 +501,8 @@
        "H-8 ok",
        "H-9 ok",
        "H-10 ok",
-       "H-11 ok"
+       "H-11 ok",
+       "H-12 skip 未照合: schemaVersion が 0.5 未満(H-12 は 0.5 以上だけ見る)"
       ]
      },
      {
@@ -509,7 +519,8 @@
        "H-8 ok",
        "H-9 ok",
        "H-10 ok",
-       "H-11 ok"
+       "H-11 ok",
+       "H-12 skip 未照合: schemaVersion が 0.5 未満(H-12 は 0.5 以上だけ見る)"
       ]
      },
      {
@@ -534,7 +545,8 @@
        "  (報告) statement: 名前「早繰り銀」に承認済みの定義が無い(顧客に出すなら「〜のような形」か群の呼び名に落とす)",
        "  (報告) statement: 名前「4六銀左戦法」に承認済みの定義が無い(顧客に出すなら「〜のような形」か群の呼び名に落とす)",
        "  (報告) counterEvidence.items[0].text: 名前「同型矢倉」に承認済みの定義が無い(顧客に出すなら「〜のような形」か群の呼び名に落とす)",
-       "  (報告) counterEvidence.items[0].text: 名前「鬼殺し」に承認済みの定義が無い(顧客に出すなら「〜のような形」か群の呼び名に落とす)"
+       "  (報告) counterEvidence.items[0].text: 名前「鬼殺し」に承認済みの定義が無い(顧客に出すなら「〜のような形」か群の呼び名に落とす)",
+       "H-12 skip 未照合: schemaVersion が 0.5 未満(H-12 は 0.5 以上だけ見る)"
       ]
      },
      {
@@ -551,7 +563,8 @@
        "H-8 ok",
        "H-9 ok",
        "H-10 ok",
-       "H-11 ok"
+       "H-11 ok",
+       "H-12 skip 未照合: schemaVersion が 0.5 未満(H-12 は 0.5 以上だけ見る)"
       ]
      },
      {
@@ -568,7 +581,8 @@
        "H-8 ok",
        "H-9 ok",
        "H-10 ok",
-       "H-11 ok"
+       "H-11 ok",
+       "H-12 skip 未照合: schemaVersion が 0.5 未満(H-12 は 0.5 以上だけ見る)"
       ]
      },
      {
@@ -585,7 +599,8 @@
        "H-8 ok",
        "H-9 ok",
        "H-10 ok",
-       "H-11 ok"
+       "H-11 ok",
+       "H-12 skip 未照合: schemaVersion が 0.5 未満(H-12 は 0.5 以上だけ見る)"
       ]
      },
      {
@@ -602,7 +617,8 @@
        "H-8 ok",
        "H-9 ok",
        "H-10 ok",
-       "H-11 ok"
+       "H-11 ok",
+       "H-12 skip 未照合: schemaVersion が 0.5 未満(H-12 は 0.5 以上だけ見る)"
       ]
      },
      {
@@ -619,7 +635,8 @@
        "H-8 ok",
        "H-9 NG observations[0]: value が packet と違う(行 25 / packet 24)",
        "H-10 ok",
-       "H-11 ok"
+       "H-11 ok",
+       "H-12 skip 未照合: schemaVersion が 0.5 未満(H-12 は 0.5 以上だけ見る)"
       ]
      },
      {
@@ -636,7 +653,8 @@
        "H-8 ok",
        "H-9 ok",
        "H-10 ok",
-       "H-11 ok"
+       "H-11 ok",
+       "H-12 skip 未照合: schemaVersion が 0.5 未満(H-12 は 0.5 以上だけ見る)"
       ]
      }
     ]
@@ -659,7 +677,8 @@
        "H-8 ok",
        "H-9 ok",
        "H-10 ok",
-       "H-11 ok"
+       "H-11 ok",
+       "H-12 skip 未照合: schemaVersion が 0.5 未満(H-12 は 0.5 以上だけ見る)"
       ]
      },
      {
@@ -676,7 +695,8 @@
        "H-8 ok",
        "H-9 ok",
        "H-10 ok",
-       "H-11 ok"
+       "H-11 ok",
+       "H-12 skip 未照合: schemaVersion が 0.5 未満(H-12 は 0.5 以上だけ見る)"
       ]
      },
      {
@@ -693,7 +713,8 @@
        "H-8 ok",
        "H-9 ok",
        "H-10 ok",
-       "H-11 ok"
+       "H-11 ok",
+       "H-12 skip 未照合: schemaVersion が 0.5 未満(H-12 は 0.5 以上だけ見る)"
       ]
      },
      {
@@ -710,7 +731,8 @@
        "H-8 ok",
        "H-9 ok",
        "H-10 ok",
-       "H-11 ok"
+       "H-11 ok",
+       "H-12 skip 未照合: schemaVersion が 0.5 未満(H-12 は 0.5 以上だけ見る)"
       ]
      },
      {
@@ -727,7 +749,8 @@
        "H-8 ok",
        "H-9 ok",
        "H-10 ok",
-       "H-11 ok"
+       "H-11 ok",
+       "H-12 skip 未照合: schemaVersion が 0.5 未満(H-12 は 0.5 以上だけ見る)"
       ]
      },
      {
@@ -744,7 +767,8 @@
        "H-8 ok",
        "H-9 ok",
        "H-10 ok",
-       "H-11 ok"
+       "H-11 ok",
+       "H-12 skip 未照合: schemaVersion が 0.5 未満(H-12 は 0.5 以上だけ見る)"
       ]
      },
      {
@@ -761,7 +785,8 @@
        "H-8 ok",
        "H-9 ok",
        "H-10 ok",
-       "H-11 ok"
+       "H-11 ok",
+       "H-12 skip 未照合: schemaVersion が 0.5 未満(H-12 は 0.5 以上だけ見る)"
       ]
      },
      {
@@ -778,7 +803,8 @@
        "H-8 ok",
        "H-9 ok",
        "H-10 ok",
-       "H-11 ok"
+       "H-11 ok",
+       "H-12 skip 未照合: schemaVersion が 0.5 未満(H-12 は 0.5 以上だけ見る)"
       ]
      },
      {
@@ -795,7 +821,8 @@
        "H-8 ok",
        "H-9 NG observations[0]: value が packet と違う(行 \"同型矢倉+鬼殺し\" / packet [\"同型矢倉\",\"鬼殺し\"]) / observations[1]: value が packet と違う(行 \"英ちゃん流中飛車+5筋位取り中飛車+角換わり腰掛け銀\" / packet [\"英ちゃん流中飛車\",\"5筋位取り中飛車\",\"角換わり腰掛け銀\"]) / observations[2]: value が packet と違う(行 \"忍者銀\" / packet [\"忍者銀\"]) / observations[3]: value が packet と違う(行 \"早繰り銀+4六銀左戦法\" / packet [\"早繰り銀\",\"4六銀左戦法\"])",
        "H-10 ok",
-       "H-11 ok"
+       "H-11 ok",
+       "H-12 skip 未照合: schemaVersion が 0.5 未満(H-12 は 0.5 以上だけ見る)"
       ]
      },
      {
@@ -812,7 +839,8 @@
        "H-8 ok",
        "H-9 ok",
        "H-10 ok",
-       "H-11 ok"
+       "H-11 ok",
+       "H-12 skip 未照合: schemaVersion が 0.5 未満(H-12 は 0.5 以上だけ見る)"
       ]
      }
     ]
@@ -835,7 +863,8 @@
        "H-8 ok",
        "H-9 ok",
        "H-10 ok",
-       "H-11 ok"
+       "H-11 ok",
+       "H-12 skip 未照合: schemaVersion が 0.5 未満(H-12 は 0.5 以上だけ見る)"
       ]
      },
      {
@@ -852,7 +881,8 @@
        "H-8 ok",
        "H-9 ok",
        "H-10 ok",
-       "H-11 ok"
+       "H-11 ok",
+       "H-12 skip 未照合: schemaVersion が 0.5 未満(H-12 は 0.5 以上だけ見る)"
       ]
      },
      {
@@ -869,7 +899,8 @@
        "H-8 ok",
        "H-9 ok",
        "H-10 ok",
-       "H-11 ok"
+       "H-11 ok",
+       "H-12 skip 未照合: schemaVersion が 0.5 未満(H-12 は 0.5 以上だけ見る)"
       ]
      },
      {
@@ -892,7 +923,8 @@
        "  (報告) statement: 名前「角換わり腰掛け銀」に承認済みの定義が無い(顧客に出すなら「〜のような形」か群の呼び名に落とす)",
        "  (報告) statement: 名前「忍者銀」に承認済みの定義が無い(顧客に出すなら「〜のような形」か群の呼び名に落とす)",
        "  (報告) statement: 名前「早繰り銀」に承認済みの定義が無い(顧客に出すなら「〜のような形」か群の呼び名に落とす)",
-       "  (報告) statement: 名前「4六銀左戦法」に承認済みの定義が無い(顧客に出すなら「〜のような形」か群の呼び名に落とす)"
+       "  (報告) statement: 名前「4六銀左戦法」に承認済みの定義が無い(顧客に出すなら「〜のような形」か群の呼び名に落とす)",
+       "H-12 skip 未照合: schemaVersion が 0.5 未満(H-12 は 0.5 以上だけ見る)"
       ]
      },
      {
@@ -909,7 +941,8 @@
        "H-8 ok",
        "H-9 ok",
        "H-10 ok",
-       "H-11 ok"
+       "H-11 ok",
+       "H-12 skip 未照合: schemaVersion が 0.5 未満(H-12 は 0.5 以上だけ見る)"
       ]
      },
      {
@@ -926,7 +959,8 @@
        "H-8 ok",
        "H-9 ok",
        "H-10 ok",
-       "H-11 ok"
+       "H-11 ok",
+       "H-12 skip 未照合: schemaVersion が 0.5 未満(H-12 は 0.5 以上だけ見る)"
       ]
      },
      {
@@ -943,7 +977,8 @@
        "H-8 ok",
        "H-9 ok",
        "H-10 ok",
-       "H-11 ok"
+       "H-11 ok",
+       "H-12 skip 未照合: schemaVersion が 0.5 未満(H-12 は 0.5 以上だけ見る)"
       ]
      },
      {
@@ -960,7 +995,8 @@
        "H-8 ok",
        "H-9 ok",
        "H-10 ok",
-       "H-11 ok"
+       "H-11 ok",
+       "H-12 skip 未照合: schemaVersion が 0.5 未満(H-12 は 0.5 以上だけ見る)"
       ]
      },
      {
@@ -977,7 +1013,8 @@
        "H-8 ok",
        "H-9 ok",
        "H-10 ok",
-       "H-11 ok"
+       "H-11 ok",
+       "H-12 skip 未照合: schemaVersion が 0.5 未満(H-12 は 0.5 以上だけ見る)"
       ]
      },
      {
@@ -994,7 +1031,8 @@
        "H-8 ok",
        "H-9 ok",
        "H-10 ok",
-       "H-11 ok"
+       "H-11 ok",
+       "H-12 skip 未照合: schemaVersion が 0.5 未満(H-12 は 0.5 以上だけ見る)"
       ]
      },
      {
@@ -1011,7 +1049,8 @@
        "H-8 ok",
        "H-9 ok",
        "H-10 ok",
-       "H-11 ok"
+       "H-11 ok",
+       "H-12 skip 未照合: schemaVersion が 0.5 未満(H-12 は 0.5 以上だけ見る)"
       ]
      },
      {
@@ -1028,7 +1067,8 @@
        "H-8 ok",
        "H-9 ok",
        "H-10 ok",
-       "H-11 ok"
+       "H-11 ok",
+       "H-12 skip 未照合: schemaVersion が 0.5 未満(H-12 は 0.5 以上だけ見る)"
       ]
      }
     ]
@@ -1051,7 +1091,8 @@
        "H-8 ok",
        "H-9 ok",
        "H-10 ok",
-       "H-11 ok"
+       "H-11 ok",
+       "H-12 skip 未照合: schemaVersion が 0.5 未満(H-12 は 0.5 以上だけ見る)"
       ]
      },
      {
@@ -1068,7 +1109,8 @@
        "H-8 ok",
        "H-9 ok",
        "H-10 ok",
-       "H-11 ok"
+       "H-11 ok",
+       "H-12 skip 未照合: schemaVersion が 0.5 未満(H-12 は 0.5 以上だけ見る)"
       ]
      },
      {
@@ -1085,7 +1127,8 @@
        "H-8 ok",
        "H-9 ok",
        "H-10 ok",
-       "H-11 ok"
+       "H-11 ok",
+       "H-12 skip 未照合: schemaVersion が 0.5 未満(H-12 は 0.5 以上だけ見る)"
       ]
      },
      {
@@ -1102,7 +1145,8 @@
        "H-8 ok",
        "H-9 ok",
        "H-10 ok",
-       "H-11 ok"
+       "H-11 ok",
+       "H-12 skip 未照合: schemaVersion が 0.5 未満(H-12 は 0.5 以上だけ見る)"
       ]
      },
      {
@@ -1119,7 +1163,8 @@
        "H-8 ok",
        "H-9 NG observations[1]: value が packet と違う(行 \"同型矢倉+鬼殺し\" / packet [\"同型矢倉\",\"鬼殺し\"])",
        "H-10 ok",
-       "H-11 ok"
+       "H-11 ok",
+       "H-12 skip 未照合: schemaVersion が 0.5 未満(H-12 は 0.5 以上だけ見る)"
       ]
      },
      {
@@ -1136,7 +1181,8 @@
        "H-8 ok",
        "H-9 NG observations[0]: value が packet と違う(行 \"同型矢倉+鬼殺し\" / packet [\"同型矢倉\",\"鬼殺し\"])",
        "H-10 ok",
-       "H-11 ok"
+       "H-11 ok",
+       "H-12 skip 未照合: schemaVersion が 0.5 未満(H-12 は 0.5 以上だけ見る)"
       ]
      },
      {
@@ -1153,7 +1199,8 @@
        "H-8 ok",
        "H-9 ok",
        "H-10 ok",
-       "H-11 ok"
+       "H-11 ok",
+       "H-12 skip 未照合: schemaVersion が 0.5 未満(H-12 は 0.5 以上だけ見る)"
       ]
      }
     ]
@@ -1176,7 +1223,8 @@
        "H-8 ok",
        "H-9 ok",
        "H-10 ok",
-       "H-11 ok"
+       "H-11 ok",
+       "H-12 skip 未照合: schemaVersion が 0.5 未満(H-12 は 0.5 以上だけ見る)"
       ]
      },
      {
@@ -1193,7 +1241,8 @@
        "H-8 ok",
        "H-9 ok",
        "H-10 ok",
-       "H-11 ok"
+       "H-11 ok",
+       "H-12 skip 未照合: schemaVersion が 0.5 未満(H-12 は 0.5 以上だけ見る)"
       ]
      },
      {
@@ -1210,7 +1259,8 @@
        "H-8 ok",
        "H-9 ok",
        "H-10 ok",
-       "H-11 ok"
+       "H-11 ok",
+       "H-12 skip 未照合: schemaVersion が 0.5 未満(H-12 は 0.5 以上だけ見る)"
       ]
      },
      {
@@ -1227,7 +1277,8 @@
        "H-8 ok",
        "H-9 ok",
        "H-10 ok",
-       "H-11 ok"
+       "H-11 ok",
+       "H-12 skip 未照合: schemaVersion が 0.5 未満(H-12 は 0.5 以上だけ見る)"
       ]
      },
      {
@@ -1255,7 +1306,8 @@
        "  (報告) counterEvidence.items[0].text: 名前「鬼殺し」に承認済みの定義が無い(顧客に出すなら「〜のような形」か群の呼び名に落とす)",
        "  (報告) counterEvidence.items[0].text: 名前「矢倉3七桂」に承認済みの定義が無い(顧客に出すなら「〜のような形」か群の呼び名に落とす)",
        "  (報告) counterEvidence.items[0].text: 名前「早繰り銀」に承認済みの定義が無い(顧客に出すなら「〜のような形」か群の呼び名に落とす)",
-       "  (報告) counterEvidence.items[0].text: 名前「4六銀左戦法」に承認済みの定義が無い(顧客に出すなら「〜のような形」か群の呼び名に落とす)"
+       "  (報告) counterEvidence.items[0].text: 名前「4六銀左戦法」に承認済みの定義が無い(顧客に出すなら「〜のような形」か群の呼び名に落とす)",
+       "H-12 skip 未照合: schemaVersion が 0.5 未満(H-12 は 0.5 以上だけ見る)"
       ]
      },
      {
@@ -1272,7 +1324,8 @@
        "H-8 ok",
        "H-9 ok",
        "H-10 ok",
-       "H-11 ok"
+       "H-11 ok",
+       "H-12 skip 未照合: schemaVersion が 0.5 未満(H-12 は 0.5 以上だけ見る)"
       ]
      },
      {
@@ -1289,7 +1342,8 @@
        "H-8 ok",
        "H-9 ok",
        "H-10 ok",
-       "H-11 ok"
+       "H-11 ok",
+       "H-12 skip 未照合: schemaVersion が 0.5 未満(H-12 は 0.5 以上だけ見る)"
       ]
      },
      {
@@ -1306,7 +1360,8 @@
        "H-8 ok",
        "H-9 ok",
        "H-10 ok",
-       "H-11 ok"
+       "H-11 ok",
+       "H-12 skip 未照合: schemaVersion が 0.5 未満(H-12 は 0.5 以上だけ見る)"
       ]
      },
      {
@@ -1323,7 +1378,8 @@
        "H-8 ok",
        "H-9 ok",
        "H-10 ok",
-       "H-11 ok"
+       "H-11 ok",
+       "H-12 skip 未照合: schemaVersion が 0.5 未満(H-12 は 0.5 以上だけ見る)"
       ]
      },
      {
@@ -1342,7 +1398,8 @@
        "H-10 ok",
        "H-11 ok",
        "  (報告) counterEvidence.items[0].text: 名前「早繰り銀」に承認済みの定義が無い(顧客に出すなら「〜のような形」か群の呼び名に落とす)",
-       "  (報告) counterEvidence.items[0].text: 名前「4六銀左戦法」に承認済みの定義が無い(顧客に出すなら「〜のような形」か群の呼び名に落とす)"
+       "  (報告) counterEvidence.items[0].text: 名前「4六銀左戦法」に承認済みの定義が無い(顧客に出すなら「〜のような形」か群の呼び名に落とす)",
+       "H-12 skip 未照合: schemaVersion が 0.5 未満(H-12 は 0.5 以上だけ見る)"
       ]
      },
      {
@@ -1359,7 +1416,8 @@
        "H-8 ok",
        "H-9 ok",
        "H-10 ok",
-       "H-11 ok"
+       "H-11 ok",
+       "H-12 skip 未照合: schemaVersion が 0.5 未満(H-12 は 0.5 以上だけ見る)"
       ]
      }
     ]
