@@ -3,7 +3,7 @@
 AI が出した文章の主張(Claim)を、証拠(Evidence)へのポインタと契約(Contract)で機械が照合し、GROUNDED / VALUE_MISMATCH / POINTER_NOT_FOUND / UNVERIFIABLE の 4 状態で返す監査の Core。将棋の対局後診断(このリポジトリの `scripts/playtest/`)が最初の顧客、EDINET の XBRL が 2 番目。
 
 - 設計の正本: [docs/CLAIM_CONTRACT_SPEC_v0.2.md](docs/CLAIM_CONTRACT_SPEC_v0.2.md)(4 層)。経緯と封じた予測は [docs/](docs/)(README の一覧は [../docs/README.md](../docs/README.md))。
-- 接続の工程: [docs/CORE_CONNECTION_C0_2026-10-06.md](docs/CORE_CONNECTION_C0_2026-10-06.md)(封印)→ [docs/CORE_CONNECTION_C1_PLAN_2026-10-06.md](docs/CORE_CONNECTION_C1_PLAN_2026-10-06.md) → [docs/CORE_CONNECTION_C1C_PREDICTION_2026-10-06.md](docs/CORE_CONNECTION_C1C_PREDICTION_2026-10-06.md)(C-1c の予測、封印)。
+- 接続の工程: [docs/CORE_CONNECTION_C0_2026-10-06.md](docs/CORE_CONNECTION_C0_2026-10-06.md)(封印)→ [docs/CORE_CONNECTION_C1_PLAN_2026-10-06.md](docs/CORE_CONNECTION_C1_PLAN_2026-10-06.md) → [docs/CORE_CONNECTION_C1C_PREDICTION_2026-10-06.md](docs/CORE_CONNECTION_C1C_PREDICTION_2026-10-06.md)(C-1c の予測、封印) → [docs/CORE_CONNECTION_C1C_RESULT_2026-10-06.md](docs/CORE_CONNECTION_C1C_RESULT_2026-10-06.md)(C-1c の結果、066eb13)。
 - いまの段: **C-1a(器と移動)まで。Core のコードはまだ無い。**
 
 ## 置き場所
