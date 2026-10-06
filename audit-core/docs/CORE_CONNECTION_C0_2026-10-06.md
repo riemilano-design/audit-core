@@ -29,12 +29,12 @@ script の「未束縛」を Core の 2 つの状態に落とす規則。**こ�
 
 ## 2. 対応表(写す規則は 1 か所、期待値は 2 本)
 
-写す規則は [probe_xbrl_2026-10-06/make_core_expectation.py](probe_xbrl_2026-10-06/make_core_expectation.py)(Core のコードではない。探りの JSON を読んで 4 層に落とすだけ)。出力が C-1 の計器 3 の期待値:
+写す規則は [probe_xbrl_2026-10-06/make_core_expectation.py](../fixtures/xbrl/make_core_expectation.py)(Core のコードではない。探りの JSON を読んで 4 層に落とすだけ)。出力が C-1 の計器 3 の期待値:
 
 | 期待値 | 元 | Claim 数 | sha256 |
 |---|---|---:|---|
-| [core_expectation_1B.json](probe_xbrl_2026-10-06/core_expectation_1B.json) | `probe1B_S100Z4Q1.json`(sha `cd0d4596…`、ＤＮホールディングス、百万円・漢数字・比の式の会社) | 91(数 60・文章 31) | `f8a45ecce18a3d98181061a6943449c75a0fbb850e09ec0b71808a45a70fd820` |
-| [core_expectation_5F.json](probe_xbrl_2026-10-06/core_expectation_5F.json) | `probe5F_S100Z4B6.json`(sha `3f140d5a…`、エム・エイチ・グループ、千円・増減%・セグメントの会社) | 133(数 91・文章 42) | `a19f3419e1a6e1a0cc87df92ae7717c48049b2fcca89d7e8d7ae0161b994adc4` |
+| [core_expectation_1B.json](../fixtures/xbrl/core_expectation_1B.json) | `probe1B_S100Z4Q1.json`(sha `cd0d4596…`、ＤＮホールディングス、百万円・漢数字・比の式の会社) | 91(数 60・文章 31) | `f8a45ecce18a3d98181061a6943449c75a0fbb850e09ec0b71808a45a70fd820` |
+| [core_expectation_5F.json](../fixtures/xbrl/core_expectation_5F.json) | `probe5F_S100Z4B6.json`(sha `3f140d5a…`、エム・エイチ・グループ、千円・増減%・セグメントの会社) | 133(数 91・文章 42) | `a19f3419e1a6e1a0cc87df92ae7717c48049b2fcca89d7e8d7ae0161b994adc4` |
 
 Claim 1 件の写し方(期待値の 1 行の形):
 

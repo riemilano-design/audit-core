@@ -144,7 +144,7 @@ Claim(form + modifiers)
 | (xi) `check_agg_tags` 531 | 印の行の数 | 集計行の `value/numerator/denominator` に在るか | 型に当たれば穴の数だけ。倍割の語の行は照合しない。0 と % は拾えない | 文書 + packet.aggregates | **部分**(0・%・倍割は見ない ― docstring に明記) | **生成側 Claim Binding の実体**(`<!-- agg: id -->` = Claim ID)。`aggregate` の pointer = 集計 id |
 | `check_sentences`(呼ぶ側が渡す。= `check_answer`) | ― | ― | ― | ― | ― | §4.2 |
 
-### 4.2 `check_answer`(検査 1〜7。[DELIVER_GATES.md](DELIVER_GATES.md) §2.3)
+### 4.2 `check_answer`(検査 1〜7。[DELIVER_GATES.md](../../docs/DELIVER_GATES.md) §2.3)
 
 | 検査 | 何を数える | 何と比べる | 条件 | 参照データ | 機械判定の範囲 | 契約欄への写し |
 |---|---|---|---|---|---|---|

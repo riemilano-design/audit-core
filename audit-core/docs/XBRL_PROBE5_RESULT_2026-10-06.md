@@ -9,7 +9,7 @@
 | Gate 1(直し OFF・member ON・A+B、S100Z4B6) | `probe4AB`(sha `f6ccb99f…`)と `cmp` で **byte 一致** |
 | Gate 2(直し OFF・member OFF、S100Z4B6) | `probe2B`(sha `73f413f2…`)と **byte 一致** |
 | Gate 3(直し OFF・member OFF、S100Z4Q1、メタデータは `probe1B` から) | `probe1B`(sha `cd0d4596…`)と **byte 一致**(3 本目・4 本目の写しは 1 本目の書類も byte で再現した) |
-| Run の証跡(各 1 回) | [probe5F](probe_xbrl_2026-10-06/probe5F_S100Z4B6.json) sha256 `3f140d5a3003d956e2267bcfc8f8a3e186288647b82aeed55632c0e0c60d4ce1` / [probe5R2](probe_xbrl_2026-10-06/probe5R2_S100Z4B6.json) `10a248fa7212d069fe2f2e8cceb308384cac1410e5956754291707846efcc3dc` / [probe5R1](probe_xbrl_2026-10-06/probe5R1_S100Z4Q1.json) `8b27e733805b5a6a759fe8770f769a6081936b5630e450d8499f389eeb509f66`。鍵も API も使っていない(ZIP の sha を照合) |
+| Run の証跡(各 1 回) | [probe5F](../fixtures/xbrl/probe5F_S100Z4B6.json) sha256 `3f140d5a3003d956e2267bcfc8f8a3e186288647b82aeed55632c0e0c60d4ce1` / [probe5R2](../fixtures/xbrl/probe5R2_S100Z4B6.json) `10a248fa7212d069fe2f2e8cceb308384cac1410e5956754291707846efcc3dc` / [probe5R1](../fixtures/xbrl/probe5R1_S100Z4Q1.json) `8b27e733805b5a6a759fe8770f769a6081936b5630e450d8499f389eeb509f66`。鍵も API も使っていない(ZIP の sha を照合) |
 | Core | 触っていない |
 
 ## 1. Run F(S100Z4B6、A+B、直し ON)― 4 本目 AB との差

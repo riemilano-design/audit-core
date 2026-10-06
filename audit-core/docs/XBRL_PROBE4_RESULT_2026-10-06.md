@@ -8,7 +8,7 @@
 | script | `probe_xbrl_2026-10-06/xbrl_probe4.py`(コミット `72f36c0`、sha256 `f25652f0d35b70f7f65d0fd97a6edb9bc0c2564915a165e3456bb99b7106203f`)。`xbrl_probe.py`(sha `896492a7…`)・`xbrl_probe3.py`(sha `3d2092a9…`)は不変で import。写しは `xbrl_probe3.main` の本文に置換 7 か所を各 1 回 assert して当てて生成した(A の注入 1・B の差し込み 4・配管 2) |
 | Gate 1(member ON・A/B OFF) | 出力 sha256 **`168edc63…`** = `probe3L_S100Z4B6.json` と `cmp` で byte 一致 |
 | Gate 2(`PROBE_MEMBER=0`) | 出力 sha256 **`73f413f2…`** = `probe2B_S100Z4B6.json` と `cmp` で byte 一致 |
-| Run の証跡 | [probe4A](probe_xbrl_2026-10-06/probe4A_S100Z4B6.json) sha256 `7b8f7408cb513c4686262814178d4a85a20fb7b2209202ba7b970315507924cf` / [probe4B](probe_xbrl_2026-10-06/probe4B_S100Z4B6.json) `83e262eb87cd9e735d3c7d599e5d2475ff6462774cb049d0c3b222e15df9d6f9` / [probe4AB](probe_xbrl_2026-10-06/probe4AB_S100Z4B6.json) `f6ccb99ff66f3138522cca8b4693884d6da9e8248fc58b0e2f5b4b01d0930c76`。**各 1 回**。鍵も API も使っていない(保管 ZIP sha `d617b6e1…` を照合) |
+| Run の証跡 | [probe4A](../fixtures/xbrl/probe4A_S100Z4B6.json) sha256 `7b8f7408cb513c4686262814178d4a85a20fb7b2209202ba7b970315507924cf` / [probe4B](../fixtures/xbrl/probe4B_S100Z4B6.json) `83e262eb87cd9e735d3c7d599e5d2475ff6462774cb049d0c3b222e15df9d6f9` / [probe4AB](../fixtures/xbrl/probe4AB_S100Z4B6.json) `f6ccb99ff66f3138522cca8b4693884d6da9e8248fc58b0e2f5b4b01d0930c76`。**各 1 回**。鍵も API も使っていない(保管 ZIP sha `d617b6e1…` を照合) |
 | 事故の記録 | Run の前に zsh のループで環境変数が分割されず、**A/B とも OFF の実行が 3 回**走り、出力先が `probe3L_S100Z4B6.json` のパスだった。中身は Gate 1 と同じ OFF 出力で、実行後の sha256 は `168edc63…` のまま(git status も clean)。**3 本目の証跡は変わっていない。** Run A/B/AB はその後にループを使わず 1 回ずつ回した |
 | Core | 触っていない |
 

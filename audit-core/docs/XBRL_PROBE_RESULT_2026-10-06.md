@@ -1,6 +1,6 @@
 # XBRL 探り 1 本目の実測と、封じた予測との照合(2026-10-06、司令塔)
 
-予測の封: [XBRL_PROBE_PREDICTION_2026-10-06.md](XBRL_PROBE_PREDICTION_2026-10-06.md)、コミット `98c3add`(2026-10-06 09:06:56 +0900)、sha256 `ad97783460708f5b1dba3dc06332f2cd73751593bf0441a4d53936e2b03ebc3b`。EDINET の鍵は人間が同日に取得し env に置いた(repo に無い)。**予測は書き換えていない。** 証跡は [probe_xbrl_2026-10-06/](probe_xbrl_2026-10-06/)(完走した run の JSON 2 本と使い捨ての script。鍵の文字列は含まない ― grep 0 件)。
+予測の封: [XBRL_PROBE_PREDICTION_2026-10-06.md](XBRL_PROBE_PREDICTION_2026-10-06.md)、コミット `98c3add`(2026-10-06 09:06:56 +0900)、sha256 `ad97783460708f5b1dba3dc06332f2cd73751593bf0441a4d53936e2b03ebc3b`。EDINET の鍵は人間が同日に取得し env に置いた(repo に無い)。**予測は書き換えていない。** 証跡は [probe_xbrl_2026-10-06/](../fixtures/xbrl/)(完走した run の JSON 2 本と使い捨ての script。鍵の文字列は含まない ― grep 0 件)。
 
 ## 1. 材料(規則 §1.4 で機械が選んだ)
 

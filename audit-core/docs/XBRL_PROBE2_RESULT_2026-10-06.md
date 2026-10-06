@@ -1,6 +1,6 @@
 # XBRL 探り 2 本目(別の 1 社)の実測と、封じた予測との照合(2026-10-06、司令塔)
 
-予測の封: [XBRL_PROBE2_PREDICTION_2026-10-06.md](XBRL_PROBE2_PREDICTION_2026-10-06.md)、コミット `19d6911`(2026-10-06 11:27:18 +0900)、sha256 `d9177f473e5283060999f0ff5773cfd022872f209c4718cc14a6efc384efa94b`。**構成は凍結したまま回した**(script `85a209f` sha `896492a7…`、`PROBE_RUN=B` 語彙 73、P-1〜P-7)。**script も語彙も予測も変えていない。** 証跡: [probe_xbrl_2026-10-06/probe2B_S100Z4B6.json](probe_xbrl_2026-10-06/probe2B_S100Z4B6.json)(sha256 `73f413f228f62ec9528e42bd866cfd162e4336c94206a9e93f9d48f412752c20`、鍵の文字列は含まない)。ZIP は repo に置かない。
+予測の封: [XBRL_PROBE2_PREDICTION_2026-10-06.md](XBRL_PROBE2_PREDICTION_2026-10-06.md)、コミット `19d6911`(2026-10-06 11:27:18 +0900)、sha256 `d9177f473e5283060999f0ff5773cfd022872f209c4718cc14a6efc384efa94b`。**構成は凍結したまま回した**(script `85a209f` sha `896492a7…`、`PROBE_RUN=B` 語彙 73、P-1〜P-7)。**script も語彙も予測も変えていない。** 証跡: [probe_xbrl_2026-10-06/probe2B_S100Z4B6.json](../fixtures/xbrl/probe2B_S100Z4B6.json)(sha256 `73f413f228f62ec9528e42bd866cfd162e4336c94206a9e93f9d48f412752c20`、鍵の文字列は含まない)。ZIP は repo に置かない。
 
 ## 1. 材料(規則で機械が選んだ)
 

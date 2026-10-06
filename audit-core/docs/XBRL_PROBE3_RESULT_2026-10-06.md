@@ -7,7 +7,7 @@
 | 予測の封 | [XBRL_PROBE3_PREDICTION_2026-10-06.md](XBRL_PROBE3_PREDICTION_2026-10-06.md)、コミット **`9651eca5129dba7efaaf3562463c7e78258c5698`**(2026-10-06 12:06:31 +0900)、sha256 `2357a45e726b1ff0dfdb022b2af8f123bcd3ce9f4ae436cf9b22d73eb85f9070`。**封じた後に変えていない** |
 | script | `probe_xbrl_2026-10-06/xbrl_probe3.py`(コミット `a5bca12`、sha256 `3d2092a9b4f9793de02c6af7fd7241ee68b5398c2d4ab3ae294e34747eed136b`)。2 本目の `xbrl_probe.py` は sha `896492a7…` のまま不変。語彙 73・P-1〜P-7・正規表現・Claim の抽出・主語の取り方は不変(import して使っている) |
 | byte freeze gate(§5) | `PROBE_MEMBER=0` の出力 sha256 **`73f413f228f62ec9528e42bd866cfd162e4336c94206a9e93f9d48f412752c20`** = 2 本目の `probe2B_S100Z4B6.json` と `cmp` で byte 一致。通過後に Run L を回した |
-| Run L の証跡 | [probe_xbrl_2026-10-06/probe3L_S100Z4B6.json](probe_xbrl_2026-10-06/probe3L_S100Z4B6.json)(sha256 `168edc63ed53807183b57e184ff26de512037f20a4224769e1a1c94ae1e992d3`)。**1 回だけ回した。** 鍵も API も使っていない(保管 ZIP sha `d617b6e1…` を照合して読んだ) |
+| Run L の証跡 | [probe_xbrl_2026-10-06/probe3L_S100Z4B6.json](../fixtures/xbrl/probe3L_S100Z4B6.json)(sha256 `168edc63ed53807183b57e184ff26de512037f20a4224769e1a1c94ae1e992d3`)。**1 回だけ回した。** 鍵も API も使っていない(保管 ZIP sha `d617b6e1…` を照合して読んだ) |
 | Run R | **未実施**(人の手書きの登録簿は作っていない) |
 | Core | 触っていない |
 

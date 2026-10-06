@@ -1,0 +1,3 @@
+# 材料の ZIP は repo に置かない(置き場は ~/.cache/audit-core/edinet/)
+*.zip
+__pycache__/
