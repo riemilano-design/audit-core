@@ -1,0 +1,114 @@
+[
+  {
+    "id": "R1-order-swap",
+    "file": "verify.py",
+    "old": "    if recipe.unverifiable_reason is not None:",
+    "new": "    if recipe.not_found_reason is not None:",
+    "predicted": "red",
+    "why": "UNVERIFIABLE の短絡がもう UNVERIFIABLE を見ない(中身は unverifiable_reason を参照したまま、条件だけが not_found_reason に変わる)。優先順位の試験(test_unverifiable_takes_priority_over_not_found)と単独試験が落ちる"
+  },
+  {
+    "id": "R2-match-invert",
+    "file": "verify.py",
+    "old": "    state = State.GROUNDED if comparison.match else State.VALUE_MISMATCH",
+    "new": "    state = State.GROUNDED if not comparison.match else State.VALUE_MISMATCH",
+    "predicted": "red",
+    "why": "比較子の match を反転。GROUNDED/VALUE_MISMATCH の試験 2 本が両方落ちる"
+  },
+  {
+    "id": "R3-operator-passthrough",
+    "file": "verify.py",
+    "old": "        if info.kind != \"evidence\":",
+    "new": "        if False and info.kind != \"evidence\":",
+    "predicted": "red",
+    "why": "operator の pointer も resolver に渡るようになる。test_operator_pointer_is_never_sent_to_the_resolver が落ちる"
+  },
+  {
+    "id": "R4-no-pointer-removed",
+    "file": "verify.py",
+    "old": "    if not evidence:",
+    "new": "    if False and not evidence:",
+    "predicted": "red",
+    "why": "evidence 0 本の分岐が消える。no_pointer の試験 2 本が落ちる(空の evidence で比較子を呼び、equals は resolved[0] で例外になる経路も含む)"
+  },
+  {
+    "id": "R5-recomputed-none",
+    "file": "verify.py",
+    "old": "        recomputed=comparison.recomputed,",
+    "new": "        recomputed=None,",
+    "predicted": "red",
+    "why": "GROUNDED の recomputed が常に None になる。test_match_true_yields_grounded_with_recomputed_and_depth が落ちる"
+  },
+  {
+    "id": "R6-provenance-modifiers-dropped",
+    "file": "verify.py",
+    "old": "    provenance[\"modifiers\"] = {\n        \"population\": claim.modifiers.population,\n        \"time_range\": claim.modifiers.time_range,\n        \"normalization\": claim.modifiers.normalization,\n    }",
+    "new": "    pass",
+    "predicted": "red",
+    "why": "provenance に modifiers が入らなくなる。provenance の試験 2 本(KeyError または不一致)が落ちる"
+  },
+  {
+    "id": "R7-verify-all-order-reversed",
+    "file": "verify.py",
+    "old": "    return [verify(recipe, resolver, registry) for recipe in recipes]",
+    "new": "    return list(reversed([verify(recipe, resolver, registry) for recipe in recipes]))",
+    "predicted": "red",
+    "why": "verify_all の順序が崩れる。test_preserves_order_and_maps_each_recipe_to_its_own_result が落ちる"
+  },
+  {
+    "id": "R8-double-register-scheme-allowed",
+    "file": "registry.py",
+    "old": "        if name in self._schemes:\n            raise ValueError(\"scheme %r is already registered\" % (name,))\n",
+    "new": "",
+    "predicted": "red",
+    "why": "scheme の二重登録を許すようになる。test_double_register_scheme_raises が落ちる"
+  },
+  {
+    "id": "R9-unknown-comparator-falls-back-to-equals",
+    "file": "registry.py",
+    "old": "    def comparator(self, name):\n        try:\n            return self._comparators[name]\n        except KeyError:\n            raise UnknownRegistration(name)",
+    "new": "    def comparator(self, name):\n        try:\n            return self._comparators[name]\n        except KeyError:\n            return _equals_comparator",
+    "predicted": "red",
+    "why": "未登録の比較子名で黙って equals に落ちる。test_unknown_comparator_raises が落ちる"
+  },
+  {
+    "id": "R10-unverifiable-reason-state-check-removed",
+    "file": "verify.py",
+    "old": "        if state is not State.UNVERIFIABLE:\n            raise ValueError(\n                \"reason %r is registered as %s, not UNVERIFIABLE\"\n                % (recipe.unverifiable_reason, state)\n            )\n",
+    "new": "",
+    "predicted": "red",
+    "why": "unverifiable_reason が別の状態(例: POINTER_NOT_FOUND)に登録されていても検査せず UNVERIFIABLE を返す。test_unverifiable_reason_registered_as_wrong_state_raises が落ちる"
+  },
+  {
+    "id": "G1-type-comment-wording",
+    "file": "verify.py",
+    "old": "    # type: (Recipe) -> dict",
+    "new": "    # type: (Recipe) -> Mapping[str, Any]",
+    "predicted": "green",
+    "why": "型コメントの書き方を変えるだけ(実行時に読まれない)。挙動は変わらない"
+  },
+  {
+    "id": "G2-registry-comment-wording",
+    "file": "registry.py",
+    "old": "    def __init__(self) -> None:",
+    "new": "    def __init__(self):  # Registry starts with nothing registered",
+    "predicted": "green",
+    "why": "コンストラクタの注釈を外してコメントに変える書き換え。戻り値注釈が無くなるだけで実行結果は変わらない"
+  },
+  {
+    "id": "R11-equals-gains-tolerance",
+    "file": "registry.py",
+    "old": "        match=(value == claim.value),",
+    "new": "        match=(abs(value - claim.value) < 0.01),",
+    "predicted": "red",
+    "why": "既定の equals 比較子に許容幅(0.01)を持たせる。差 0.001 のケース(test_equals_comparator_has_zero_tolerance_even_for_a_tiny_difference)が VALUE_MISMATCH を期待するのに GROUNDED になって落ちる"
+  },
+  {
+    "id": "R12-verify-all-swallows-exceptions",
+    "file": "verify.py",
+    "old": "    return [verify(recipe, resolver, registry) for recipe in recipes]",
+    "new": "    results = []\n    for recipe in recipes:\n        try:\n            results.append(verify(recipe, resolver, registry))\n        except Exception:\n            continue\n    return results",
+    "predicted": "red",
+    "why": "verify_all が recipe ごとの例外を握りつぶす。test_verify_all_does_not_swallow_a_resolver_exception が RuntimeError の伝播を期待するのに例外が外に出ず落ちる"
+  }
+]
