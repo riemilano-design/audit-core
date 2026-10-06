@@ -1,0 +1,9 @@
+{
+ "date_listed": "2026-10-01",
+ "selection_rule": "docTypeCode 120, xbrlFlag 1, not 投資信託, consolidated jppfs facts > 0, min docID",
+ "candidates_total": 0,
+ "candidates_after_filter": 0,
+ "tried": [],
+ "document": null,
+ "zip_sha256": null
+}
