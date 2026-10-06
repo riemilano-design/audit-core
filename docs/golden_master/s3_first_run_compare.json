@@ -1,0 +1,58 @@
+{
+ "a1_schema_pass_per_seat": {
+  "gpt": {
+   "schema_lines": 0,
+   "sections_with_seal": 12
+  }
+ },
+ "a2_E1_seal_mismatch_per_seat": {
+  "gpt": 0
+ },
+ "a3_E3_runs": {
+  "gpt": {
+   "E3_lines": 0,
+   "E3_H_lines": 0,
+   "E3_H9_lines": 0
+  }
+ },
+ "a4_empty_seats": [
+  "claude"
+ ],
+ "h9_own_tally": {
+  "G": 12
+ },
+ "b1_plus_flatten_VM": 0,
+ "b2_removed_column_PNF": 0,
+ "b3_nashi_PNF": [],
+ "b4_residual_VM_PNF": [],
+ "b5_array_grounded": 0,
+ "b7_seat_input_bytes": 226568,
+ "c1_obs_per_item_median": 3,
+ "c2_filler_signature": [],
+ "c3_unanswerable": 0,
+ "e1_H9_skip_lines": 0,
+ "e2_I4_H9_lines": [],
+ "e4_core_vs_own": {
+  "agree": 12,
+  "disagree": []
+ },
+ "d1_draft": {
+  "exists": true,
+  "adoptedBy": null,
+  "items": 3,
+  "rejected": 0,
+  "questions": 1
+ },
+ "d2_rejected_ratio": 0.0,
+ "d3_rejected_by_H9_only": [],
+ "f1_actual_cost_total": 4.5351,
+ "f1_per_seat": {
+  "gpt": 1.5597,
+  "gemini": 0,
+  "claude": 2.8448
+ },
+ "f1_integrator": 0.1307,
+ "f2_capReached": false,
+ "capUsd": 5,
+ "h9_rows_non_G": []
+}

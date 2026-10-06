@@ -1,0 +1,67 @@
+{
+  "note": "これは候補の一覧であって採用ではない。採用の印(adoptedBy)は司令塔か人間が付ける。",
+  "customerRef": "c5",
+  "packetId": "22aee8fe696d0262",
+  "runId": "ae40ec51-20261006-1",
+  "items": [
+    {
+      "itemRef": {
+        "seatIndex": 2,
+        "hypothesisId": "I-2-001"
+      },
+      "statement": "序盤の駒の動きの型では、群「多数の核」の局が18、群「それ以外」の局が4、群「署名なし」の局が3だった。",
+      "aggregateIds": [
+        "groups.core.games",
+        "groups.other.games",
+        "groups.noSignature.games"
+      ],
+      "boardRefs": []
+    },
+    {
+      "itemRef": {
+        "seatIndex": 2,
+        "hypothesisId": "I-2-002"
+      },
+      "statement": "評価の区分が下がった手は、群「多数の核」で56、群「それ以外」で18、群「署名なし」で5だった。",
+      "aggregateIds": [
+        "groups.core.collapses",
+        "groups.other.collapses",
+        "groups.noSignature.collapses"
+      ],
+      "boardRefs": []
+    },
+    {
+      "itemRef": {
+        "seatIndex": 2,
+        "hypothesisId": "I-2-003"
+      },
+      "statement": "一度は優勢になった局のうち負けた局は、群「多数の核」で3/12、群「それ以外」で3/4、群「署名なし」で0/2だった。",
+      "aggregateIds": [
+        "groups.core.aheadThenLost",
+        "groups.other.aheadThenLost",
+        "groups.noSignature.aheadThenLost"
+      ],
+      "boardRefs": []
+    }
+  ],
+  "rejected": [],
+  "questions": [
+    {
+      "questionId": "q1",
+      "text": "3 切れは練習対局のイメージで、何局かは普段指さない戦型を採用している。どのような影響があるのか興味がある",
+      "machineSummary": "partial"
+    }
+  ],
+  "menuIds": [
+    "M1",
+    "M2",
+    "M3",
+    "M4",
+    "M5",
+    "M6",
+    "M7",
+    "M8",
+    "M9"
+  ],
+  "adoptedBy": null
+}

@@ -1,0 +1,486 @@
+{
+ "tool": "run_core_path_shogi",
+ "inputs": {
+  "packet_sha256": "1c43582b568757613497b6fae9d5038b7a5f27c03baf2e81db209fbdc9a7fbc7",
+  "seat_files": [
+   {
+    "run_id": "ae40ec51-20261006-1",
+    "file": "seat_gpt.json",
+    "sha256": "ebc4611adf6d7411e1dbc6af877dc8fe7c08e02dc654dd8390e84994ed117cab"
+   }
+  ]
+ },
+ "registry": {
+  "schemes": 2,
+  "comparators": 2,
+  "normalizations": 0,
+  "reasons": 6,
+  "note": "register_all 後の登録簿を数えた値(Core 自身の builtin scheme と equals 比較子を含む)"
+ },
+ "tally": {
+  "claims": 17,
+  "by_state": {
+   "GROUNDED": 12,
+   "UNVERIFIABLE": 5
+  },
+  "by_form": {
+   "aggregate": 17
+  },
+  "by_reason": {
+   "no_packet_ref(H-9 out of scope)": 5
+  },
+  "modifiers_nonempty": 0,
+  "value_is_number": 17
+ },
+ "claims": [
+  {
+   "id": "ae40ec51-20261006-1/seat_gpt.json#H-c5-gptae40-001/observations[0]",
+   "form": "aggregate",
+   "subject": "aggregates.groups.core.games.value",
+   "value": 18.0,
+   "unit": "games",
+   "modifiers": {
+    "population": null,
+    "time_range": [],
+    "normalization": null
+   },
+   "pointers": [
+    "packet:aggregates.groups.core.games.value"
+   ],
+   "comparator": "canonical_json_equals",
+   "state": "GROUNDED",
+   "recomputed": 18.0,
+   "reason": null,
+   "provenance": {
+    "hypothesis_id": "H-c5-gptae40-001",
+    "kind": "finding",
+    "obs_id": "packet.aggregates.groups.core.games.value",
+    "value_is_number": true,
+    "raw_value": 18,
+    "at": "observations[0]"
+   }
+  },
+  {
+   "id": "ae40ec51-20261006-1/seat_gpt.json#H-c5-gptae40-001/observations[1]",
+   "form": "aggregate",
+   "subject": "aggregates.groups.other.games.value",
+   "value": 4.0,
+   "unit": "games",
+   "modifiers": {
+    "population": null,
+    "time_range": [],
+    "normalization": null
+   },
+   "pointers": [
+    "packet:aggregates.groups.other.games.value"
+   ],
+   "comparator": "canonical_json_equals",
+   "state": "GROUNDED",
+   "recomputed": 4.0,
+   "reason": null,
+   "provenance": {
+    "hypothesis_id": "H-c5-gptae40-001",
+    "kind": "finding",
+    "obs_id": "packet.aggregates.groups.other.games.value",
+    "value_is_number": true,
+    "raw_value": 4,
+    "at": "observations[1]"
+   }
+  },
+  {
+   "id": "ae40ec51-20261006-1/seat_gpt.json#H-c5-gptae40-001/observations[2]",
+   "form": "aggregate",
+   "subject": "aggregates.groups.noSignature.games.value",
+   "value": 3.0,
+   "unit": "games",
+   "modifiers": {
+    "population": null,
+    "time_range": [],
+    "normalization": null
+   },
+   "pointers": [
+    "packet:aggregates.groups.noSignature.games.value"
+   ],
+   "comparator": "canonical_json_equals",
+   "state": "GROUNDED",
+   "recomputed": 3.0,
+   "reason": null,
+   "provenance": {
+    "hypothesis_id": "H-c5-gptae40-001",
+    "kind": "finding",
+    "obs_id": "packet.aggregates.groups.noSignature.games.value",
+    "value_is_number": true,
+    "raw_value": 3,
+    "at": "observations[2]"
+   }
+  },
+  {
+   "id": "ae40ec51-20261006-1/seat_gpt.json#H-c5-gptae40-002/observations[0]",
+   "form": "aggregate",
+   "subject": "aggregates.groups.core.collapses.value",
+   "value": 56.0,
+   "unit": "moves",
+   "modifiers": {
+    "population": null,
+    "time_range": [],
+    "normalization": null
+   },
+   "pointers": [
+    "packet:aggregates.groups.core.collapses.value"
+   ],
+   "comparator": "canonical_json_equals",
+   "state": "GROUNDED",
+   "recomputed": 56.0,
+   "reason": null,
+   "provenance": {
+    "hypothesis_id": "H-c5-gptae40-002",
+    "kind": "finding",
+    "obs_id": "packet.aggregates.groups.core.collapses.value",
+    "value_is_number": true,
+    "raw_value": 56,
+    "at": "observations[0]"
+   }
+  },
+  {
+   "id": "ae40ec51-20261006-1/seat_gpt.json#H-c5-gptae40-002/observations[1]",
+   "form": "aggregate",
+   "subject": "aggregates.groups.other.collapses.value",
+   "value": 18.0,
+   "unit": "moves",
+   "modifiers": {
+    "population": null,
+    "time_range": [],
+    "normalization": null
+   },
+   "pointers": [
+    "packet:aggregates.groups.other.collapses.value"
+   ],
+   "comparator": "canonical_json_equals",
+   "state": "GROUNDED",
+   "recomputed": 18.0,
+   "reason": null,
+   "provenance": {
+    "hypothesis_id": "H-c5-gptae40-002",
+    "kind": "finding",
+    "obs_id": "packet.aggregates.groups.other.collapses.value",
+    "value_is_number": true,
+    "raw_value": 18,
+    "at": "observations[1]"
+   }
+  },
+  {
+   "id": "ae40ec51-20261006-1/seat_gpt.json#H-c5-gptae40-002/observations[2]",
+   "form": "aggregate",
+   "subject": "aggregates.groups.noSignature.collapses.value",
+   "value": 5.0,
+   "unit": "moves",
+   "modifiers": {
+    "population": null,
+    "time_range": [],
+    "normalization": null
+   },
+   "pointers": [
+    "packet:aggregates.groups.noSignature.collapses.value"
+   ],
+   "comparator": "canonical_json_equals",
+   "state": "GROUNDED",
+   "recomputed": 5.0,
+   "reason": null,
+   "provenance": {
+    "hypothesis_id": "H-c5-gptae40-002",
+    "kind": "finding",
+    "obs_id": "packet.aggregates.groups.noSignature.collapses.value",
+    "value_is_number": true,
+    "raw_value": 5,
+    "at": "observations[2]"
+   }
+  },
+  {
+   "id": "ae40ec51-20261006-1/seat_gpt.json#H-c5-gptae40-002/counterEvidence.items[0].observations[0]",
+   "form": "aggregate",
+   "subject": "aggregates.groups.core.games.value",
+   "value": 18.0,
+   "unit": "games",
+   "modifiers": {
+    "population": null,
+    "time_range": [],
+    "normalization": null
+   },
+   "pointers": [],
+   "comparator": null,
+   "state": "UNVERIFIABLE",
+   "recomputed": null,
+   "reason": "no_packet_ref(H-9 out of scope)",
+   "provenance": {
+    "hypothesis_id": "H-c5-gptae40-002",
+    "kind": "finding",
+    "obs_id": "packet.aggregates.groups.core.games.value",
+    "value_is_number": true,
+    "raw_value": 18,
+    "at": "counterEvidence.items[0].observations[0]"
+   }
+  },
+  {
+   "id": "ae40ec51-20261006-1/seat_gpt.json#H-c5-gptae40-002/counterEvidence.items[0].observations[1]",
+   "form": "aggregate",
+   "subject": "aggregates.groups.other.games.value",
+   "value": 4.0,
+   "unit": "games",
+   "modifiers": {
+    "population": null,
+    "time_range": [],
+    "normalization": null
+   },
+   "pointers": [],
+   "comparator": null,
+   "state": "UNVERIFIABLE",
+   "recomputed": null,
+   "reason": "no_packet_ref(H-9 out of scope)",
+   "provenance": {
+    "hypothesis_id": "H-c5-gptae40-002",
+    "kind": "finding",
+    "obs_id": "packet.aggregates.groups.other.games.value",
+    "value_is_number": true,
+    "raw_value": 4,
+    "at": "counterEvidence.items[0].observations[1]"
+   }
+  },
+  {
+   "id": "ae40ec51-20261006-1/seat_gpt.json#H-c5-gptae40-002/counterEvidence.items[0].observations[2]",
+   "form": "aggregate",
+   "subject": "aggregates.groups.noSignature.games.value",
+   "value": 3.0,
+   "unit": "games",
+   "modifiers": {
+    "population": null,
+    "time_range": [],
+    "normalization": null
+   },
+   "pointers": [],
+   "comparator": null,
+   "state": "UNVERIFIABLE",
+   "recomputed": null,
+   "reason": "no_packet_ref(H-9 out of scope)",
+   "provenance": {
+    "hypothesis_id": "H-c5-gptae40-002",
+    "kind": "finding",
+    "obs_id": "packet.aggregates.groups.noSignature.games.value",
+    "value_is_number": true,
+    "raw_value": 3,
+    "at": "counterEvidence.items[0].observations[2]"
+   }
+  },
+  {
+   "id": "ae40ec51-20261006-1/seat_gpt.json#H-c5-gptae40-003/observations[0]",
+   "form": "aggregate",
+   "subject": "aggregates.groups.core.aheadThenLost.numerator",
+   "value": 3.0,
+   "unit": "games",
+   "modifiers": {
+    "population": null,
+    "time_range": [],
+    "normalization": null
+   },
+   "pointers": [
+    "packet:aggregates.groups.core.aheadThenLost.numerator"
+   ],
+   "comparator": "canonical_json_equals",
+   "state": "GROUNDED",
+   "recomputed": 3.0,
+   "reason": null,
+   "provenance": {
+    "hypothesis_id": "H-c5-gptae40-003",
+    "kind": "finding",
+    "obs_id": "packet.aggregates.groups.core.aheadThenLost.numerator",
+    "value_is_number": true,
+    "raw_value": 3,
+    "at": "observations[0]"
+   }
+  },
+  {
+   "id": "ae40ec51-20261006-1/seat_gpt.json#H-c5-gptae40-003/observations[1]",
+   "form": "aggregate",
+   "subject": "aggregates.groups.core.aheadThenLost.denominator",
+   "value": 12.0,
+   "unit": "games",
+   "modifiers": {
+    "population": null,
+    "time_range": [],
+    "normalization": null
+   },
+   "pointers": [
+    "packet:aggregates.groups.core.aheadThenLost.denominator"
+   ],
+   "comparator": "canonical_json_equals",
+   "state": "GROUNDED",
+   "recomputed": 12.0,
+   "reason": null,
+   "provenance": {
+    "hypothesis_id": "H-c5-gptae40-003",
+    "kind": "finding",
+    "obs_id": "packet.aggregates.groups.core.aheadThenLost.denominator",
+    "value_is_number": true,
+    "raw_value": 12,
+    "at": "observations[1]"
+   }
+  },
+  {
+   "id": "ae40ec51-20261006-1/seat_gpt.json#H-c5-gptae40-003/observations[2]",
+   "form": "aggregate",
+   "subject": "aggregates.groups.other.aheadThenLost.numerator",
+   "value": 3.0,
+   "unit": "games",
+   "modifiers": {
+    "population": null,
+    "time_range": [],
+    "normalization": null
+   },
+   "pointers": [
+    "packet:aggregates.groups.other.aheadThenLost.numerator"
+   ],
+   "comparator": "canonical_json_equals",
+   "state": "GROUNDED",
+   "recomputed": 3.0,
+   "reason": null,
+   "provenance": {
+    "hypothesis_id": "H-c5-gptae40-003",
+    "kind": "finding",
+    "obs_id": "packet.aggregates.groups.other.aheadThenLost.numerator",
+    "value_is_number": true,
+    "raw_value": 3,
+    "at": "observations[2]"
+   }
+  },
+  {
+   "id": "ae40ec51-20261006-1/seat_gpt.json#H-c5-gptae40-003/observations[3]",
+   "form": "aggregate",
+   "subject": "aggregates.groups.other.aheadThenLost.denominator",
+   "value": 4.0,
+   "unit": "games",
+   "modifiers": {
+    "population": null,
+    "time_range": [],
+    "normalization": null
+   },
+   "pointers": [
+    "packet:aggregates.groups.other.aheadThenLost.denominator"
+   ],
+   "comparator": "canonical_json_equals",
+   "state": "GROUNDED",
+   "recomputed": 4.0,
+   "reason": null,
+   "provenance": {
+    "hypothesis_id": "H-c5-gptae40-003",
+    "kind": "finding",
+    "obs_id": "packet.aggregates.groups.other.aheadThenLost.denominator",
+    "value_is_number": true,
+    "raw_value": 4,
+    "at": "observations[3]"
+   }
+  },
+  {
+   "id": "ae40ec51-20261006-1/seat_gpt.json#H-c5-gptae40-003/observations[4]",
+   "form": "aggregate",
+   "subject": "aggregates.groups.noSignature.aheadThenLost.numerator",
+   "value": 0.0,
+   "unit": "games",
+   "modifiers": {
+    "population": null,
+    "time_range": [],
+    "normalization": null
+   },
+   "pointers": [
+    "packet:aggregates.groups.noSignature.aheadThenLost.numerator"
+   ],
+   "comparator": "canonical_json_equals",
+   "state": "GROUNDED",
+   "recomputed": 0.0,
+   "reason": null,
+   "provenance": {
+    "hypothesis_id": "H-c5-gptae40-003",
+    "kind": "finding",
+    "obs_id": "packet.aggregates.groups.noSignature.aheadThenLost.numerator",
+    "value_is_number": true,
+    "raw_value": 0,
+    "at": "observations[4]"
+   }
+  },
+  {
+   "id": "ae40ec51-20261006-1/seat_gpt.json#H-c5-gptae40-003/observations[5]",
+   "form": "aggregate",
+   "subject": "aggregates.groups.noSignature.aheadThenLost.denominator",
+   "value": 2.0,
+   "unit": "games",
+   "modifiers": {
+    "population": null,
+    "time_range": [],
+    "normalization": null
+   },
+   "pointers": [
+    "packet:aggregates.groups.noSignature.aheadThenLost.denominator"
+   ],
+   "comparator": "canonical_json_equals",
+   "state": "GROUNDED",
+   "recomputed": 2.0,
+   "reason": null,
+   "provenance": {
+    "hypothesis_id": "H-c5-gptae40-003",
+    "kind": "finding",
+    "obs_id": "packet.aggregates.groups.noSignature.aheadThenLost.denominator",
+    "value_is_number": true,
+    "raw_value": 2,
+    "at": "observations[5]"
+   }
+  },
+  {
+   "id": "ae40ec51-20261006-1/seat_gpt.json#H-c5-gptae40-003/counterEvidence.items[0].observations[0]",
+   "form": "aggregate",
+   "subject": "aggregates.groups.core.aheadThenLost.numerator",
+   "value": 3.0,
+   "unit": "games",
+   "modifiers": {
+    "population": null,
+    "time_range": [],
+    "normalization": null
+   },
+   "pointers": [],
+   "comparator": null,
+   "state": "UNVERIFIABLE",
+   "recomputed": null,
+   "reason": "no_packet_ref(H-9 out of scope)",
+   "provenance": {
+    "hypothesis_id": "H-c5-gptae40-003",
+    "kind": "finding",
+    "obs_id": "packet.aggregates.groups.core.aheadThenLost.numerator",
+    "value_is_number": true,
+    "raw_value": 3,
+    "at": "counterEvidence.items[0].observations[0]"
+   }
+  },
+  {
+   "id": "ae40ec51-20261006-1/seat_gpt.json#H-c5-gptae40-003/counterEvidence.items[0].observations[1]",
+   "form": "aggregate",
+   "subject": "aggregates.groups.core.aheadThenLost.denominator",
+   "value": 12.0,
+   "unit": "games",
+   "modifiers": {
+    "population": null,
+    "time_range": [],
+    "normalization": null
+   },
+   "pointers": [],
+   "comparator": null,
+   "state": "UNVERIFIABLE",
+   "recomputed": null,
+   "reason": "no_packet_ref(H-9 out of scope)",
+   "provenance": {
+    "hypothesis_id": "H-c5-gptae40-003",
+    "kind": "finding",
+    "obs_id": "packet.aggregates.groups.core.aheadThenLost.denominator",
+    "value_is_number": true,
+    "raw_value": 12,
+    "at": "counterEvidence.items[0].observations[1]"
+   }
+  }
+ ]
+}
