@@ -1,10 +1,12 @@
 // STEP OBS-2(docs/LANE_DIAG_LOG_2026-09.md §12.2)。仮説の記録(契約 hypothesis)を、スキーマ + 機械検査
 // H-1〜H-8(lib/hypothesis.ts)に照らす CLI。照合する版は行の `schemaVersion` が決める(v0.1 / v0.2)。
 //
-// 使い方: npx tsx scripts/playtest/hypothesisCheck.ts <hypothesis.json>… --today YYYY-MM-DD [--obs-items <path>]
+// 使い方: npx tsx scripts/playtest/hypothesisCheck.ts <hypothesis.json>… --today YYYY-MM-DD [--obs-items <path>] [--packet <path>]
 //
 // - `--today` は必須(照合の日付を機械が「今日」から決めない。H-4 が測る前に書かれた予測かを見るための基準)。
 // - `--obs-items` の既定は repo の `docs/OBSERVATION_ITEMS.md`。
+// - `--packet` は任意(STEP S-1)。指定すれば packet(observation packet)の JSON を読み、H-9・H-10・H-11 の照合に渡す。
+//   指定が無ければ今までどおり H-9・H-10・H-11 は `skipped: true`(未照合)のまま。
 // - ファイルごとに 9 行(check/ok/messages)を標準出力へ書く。1 本でも落ちれば `process.exitCode = 1`
 //   (`lib/gate.ts` の流儀)。引数が無い・`--today` が無いときは使い方を出して `process.exitCode = 2`。
 //
@@ -19,12 +21,13 @@ import { fileURLToPath } from "node:url";
 import { checkResultLines, loadObsRegistry, validateHypothesisLine } from "./lib/hypothesis.js";
 
 const REPO_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..", "..");
-const USAGE = "使い方: npx tsx scripts/playtest/hypothesisCheck.ts <hypothesis.json>… --today YYYY-MM-DD [--obs-items <path>]";
+const USAGE = "使い方: npx tsx scripts/playtest/hypothesisCheck.ts <hypothesis.json>… --today YYYY-MM-DD [--obs-items <path>] [--packet <path>]";
 
 interface Args {
   files: string[];
   today: string;
   obsItems: string;
+  packet: string | undefined;
 }
 
 class UsageError extends Error {}
@@ -33,6 +36,7 @@ function parseArgs(argv: readonly string[]): Args {
   const files: string[] = [];
   let today: string | undefined;
   let obsItems: string | undefined;
+  let packet: string | undefined;
   for (let index = 0; index < argv.length; index += 1) {
     const arg = argv[index]!;
     if (arg === "--today") {
@@ -41,6 +45,9 @@ function parseArgs(argv: readonly string[]): Args {
     } else if (arg === "--obs-items") {
       obsItems = argv[index + 1];
       index += 1;
+    } else if (arg === "--packet") {
+      packet = argv[index + 1];
+      index += 1;
     } else if (arg.startsWith("--")) {
       throw new UsageError(`知らない引数: ${arg}`);
     } else {
@@ -48,7 +55,7 @@ function parseArgs(argv: readonly string[]): Args {
     }
   }
   if (today === undefined) throw new UsageError("--today が無い");
-  return { files, today, obsItems: obsItems ?? path.join(REPO_ROOT, "docs", "OBSERVATION_ITEMS.md") };
+  return { files, today, obsItems: obsItems ?? path.join(REPO_ROOT, "docs", "OBSERVATION_ITEMS.md"), packet };
 }
 
 function main(): void {
@@ -69,13 +76,16 @@ function main(): void {
   }
 
   const registry = loadObsRegistry(path.resolve(args.obsItems));
+  const packet: unknown = args.packet === undefined
+    ? undefined
+    : JSON.parse(readFileSync(path.resolve(args.packet), "utf-8"));
 
   let anyFailed = false;
   for (const file of args.files) {
     const line: unknown = JSON.parse(readFileSync(path.resolve(file), "utf-8"));
     console.log(`# ${file}`);
     // スキーマはここで固定しない。行の schemaVersion に対応する版を lib 側が選ぶ(STEP EXPO-1)。
-    for (const result of validateHypothesisLine(line, { today: args.today, registry })) {
+    for (const result of validateHypothesisLine(line, { today: args.today, registry, packet })) {
       // 状態の語は lib の 1 か所で決める(`skip` を `ok` と書かないため)
       for (const text of checkResultLines(result)) console.log(text);
       if (!result.ok) anyFailed = true;

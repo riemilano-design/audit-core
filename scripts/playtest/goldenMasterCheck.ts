@@ -219,7 +219,7 @@ function measure(inputs: Inputs, customerDirOverride: string | undefined): Rec {
       const items = Array.isArray(envelope.items) ? envelope.items : [];
       let anyFailed = false;
       const perItem: Json[] = items.map((line) => {
-        const results = validateHypothesisLine(line, { today, registry });
+        const results = validateHypothesisLine(line, { today, registry, packet });
         if (results.some((r) => !r.ok)) anyFailed = true;
         const id = (line as { hypothesisId?: unknown } | null)?.hypothesisId;
         return { hypothesis_id: String(id), lines: results.flatMap((r) => checkResultLines(r)).map(normalize) };

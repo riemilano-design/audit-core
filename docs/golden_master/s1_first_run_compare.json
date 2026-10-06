@@ -1,0 +1,266 @@
+{
+ "golden": "/private/tmp/claude-501/-Users-midoriko-Desktop-sgogi-coach/a72242fb-5410-47e1-abfe-434113310424/scratchpad/s1_golden_tmp.json",
+ "diff_keys_total": 201,
+ "diff_in_h9_lines": 201,
+ "diff_outside_lines": [],
+ "status_old": {
+  "0f1b019e-20261001-1/seat_gpt.json": [
+   "fail",
+   1
+  ],
+  "268dac98-20260930-1/seat_claude.json": [
+   "fail",
+   1
+  ],
+  "52ae3745-20261001-1/seat_claude.json": [
+   "fail",
+   1
+  ],
+  "558b8a81-20261001-2/seat_claude.json": [
+   "fail",
+   1
+  ],
+  "558b8a81-20261001-2/seat_gpt.json": [
+   "fail",
+   1
+  ],
+  "f37561e1-20260930-2/seat_claude.json": [
+   "fail",
+   1
+  ]
+ },
+ "status_new": {
+  "0f1b019e-20261001-1/seat_gpt.json": [
+   "fail",
+   1
+  ],
+  "268dac98-20260930-1/seat_claude.json": [
+   "fail",
+   1
+  ],
+  "52ae3745-20261001-1/seat_claude.json": [
+   "fail",
+   1
+  ],
+  "558b8a81-20261001-2/seat_claude.json": [
+   "fail",
+   1
+  ],
+  "558b8a81-20261001-2/seat_gpt.json": [
+   "fail",
+   1
+  ],
+  "f37561e1-20260930-2/seat_claude.json": [
+   "fail",
+   1
+  ]
+ },
+ "h9": {
+  "0f1b019e-20261001-1/seat_gpt.json": {
+   "items": 7,
+   "ng": [
+    "H-c5-gpt0f1b-005"
+   ]
+  },
+  "268dac98-20260930-1/seat_claude.json": {
+   "items": 11,
+   "ng": [
+    "H-c5-claude268d-005",
+    "H-c5-claude268d-010"
+   ]
+  },
+  "52ae3745-20261001-1/seat_claude.json": {
+   "items": 10,
+   "ng": [
+    "H-c5-claude52ae-009"
+   ]
+  },
+  "558b8a81-20261001-2/seat_claude.json": {
+   "items": 12,
+   "ng": [
+    "H-c5-claude558b-004"
+   ]
+  },
+  "558b8a81-20261001-2/seat_gpt.json": {
+   "items": 7,
+   "ng": [
+    "H-c5-gpt558b-005",
+    "H-c5-gpt558b-006"
+   ]
+  },
+  "f37561e1-20260930-2/seat_claude.json": {
+   "items": 11,
+   "ng": [
+    "H-c5-claudef375-005"
+   ]
+  }
+ },
+ "h9_ng_total": 8,
+ "h9_skip": 0,
+ "h9_messages_total": 21,
+ "h9_messages_by_kind": {
+  "PNF": 1,
+  "VM": 20
+ },
+ "h9_recount_lines": [],
+ "h9_other": [],
+ "h10_ng": [],
+ "h10_ng_total": 0,
+ "h11": {
+  "ok_all": true,
+  "with_notes": 4,
+  "ng": []
+ },
+ "core_checked": 213,
+ "agree": 213,
+ "disagree": [],
+ "h9_messages": [
+  {
+   "seat": "0f1b019e-20261001-1/seat_gpt.json",
+   "hid": "H-c5-gpt0f1b-005",
+   "at": "observations[2]",
+   "kind": "PNF",
+   "msg": "facts.recognition.rows.3.reviewStatus が packet に無い"
+  },
+  {
+   "seat": "268dac98-20260930-1/seat_claude.json",
+   "hid": "H-c5-claude268d-005",
+   "at": "observations[1]",
+   "kind": "VM",
+   "msg": "value が packet と違う(行 \"英ちゃん流中飛車+5筋位取り中飛車+角換わり腰掛け銀\" / packet [\"英ちゃん流中飛車\",\"5筋位取り中飛車\",\"角換わり腰掛け銀\"])"
+  },
+  {
+   "seat": "268dac98-20260930-1/seat_claude.json",
+   "hid": "H-c5-claude268d-005",
+   "at": "observations[2]",
+   "kind": "VM",
+   "msg": "value が packet と違う(行 \"忍者銀\" / packet [\"忍者銀\"])"
+  },
+  {
+   "seat": "268dac98-20260930-1/seat_claude.json",
+   "hid": "H-c5-claude268d-005",
+   "at": "observations[3]",
+   "kind": "VM",
+   "msg": "value が packet と違う(行 \"英ちゃん流中飛車+5筋位取り中飛車+角換わり腰掛け銀\" / packet [\"英ちゃん流中飛車\",\"5筋位取り中飛車\",\"角換わり腰掛け銀\"])"
+  },
+  {
+   "seat": "268dac98-20260930-1/seat_claude.json",
+   "hid": "H-c5-claude268d-005",
+   "at": "observations[4]",
+   "kind": "VM",
+   "msg": "value が packet と違う(行 \"早繰り銀+4六銀左戦法\" / packet [\"早繰り銀\",\"4六銀左戦法\"])"
+  },
+  {
+   "seat": "268dac98-20260930-1/seat_claude.json",
+   "hid": "H-c5-claude268d-010",
+   "at": "observations[0]",
+   "kind": "VM",
+   "msg": "value が packet と違う(行 25 / packet 24)"
+  },
+  {
+   "seat": "52ae3745-20261001-1/seat_claude.json",
+   "hid": "H-c5-claude52ae-009",
+   "at": "observations[0]",
+   "kind": "VM",
+   "msg": "value が packet と違う(行 \"同型矢倉+鬼殺し\" / packet [\"同型矢倉\",\"鬼殺し\"])"
+  },
+  {
+   "seat": "52ae3745-20261001-1/seat_claude.json",
+   "hid": "H-c5-claude52ae-009",
+   "at": "observations[1]",
+   "kind": "VM",
+   "msg": "value が packet と違う(行 \"英ちゃん流中飛車+5筋位取り中飛車+角換わり腰掛け銀\" / packet [\"英ちゃん流中飛車\",\"5筋位取り中飛車\",\"角換わり腰掛け銀\"])"
+  },
+  {
+   "seat": "52ae3745-20261001-1/seat_claude.json",
+   "hid": "H-c5-claude52ae-009",
+   "at": "observations[2]",
+   "kind": "VM",
+   "msg": "value が packet と違う(行 \"忍者銀\" / packet [\"忍者銀\"])"
+  },
+  {
+   "seat": "52ae3745-20261001-1/seat_claude.json",
+   "hid": "H-c5-claude52ae-009",
+   "at": "observations[3]",
+   "kind": "VM",
+   "msg": "value が packet と違う(行 \"早繰り銀+4六銀左戦法\" / packet [\"早繰り銀\",\"4六銀左戦法\"])"
+  },
+  {
+   "seat": "558b8a81-20261001-2/seat_claude.json",
+   "hid": "H-c5-claude558b-004",
+   "at": "observations[0]",
+   "kind": "VM",
+   "msg": "value が packet と違う(行 \"英ちゃん流中飛車+5筋位取り中飛車+角換わり腰掛け銀\" / packet [\"英ちゃん流中飛車\",\"5筋位取り中飛車\",\"角換わり腰掛け銀\"])"
+  },
+  {
+   "seat": "558b8a81-20261001-2/seat_claude.json",
+   "hid": "H-c5-claude558b-004",
+   "at": "observations[1]",
+   "kind": "VM",
+   "msg": "value が packet と違う(行 \"忍者銀\" / packet [\"忍者銀\"])"
+  },
+  {
+   "seat": "558b8a81-20261001-2/seat_claude.json",
+   "hid": "H-c5-claude558b-004",
+   "at": "observations[2]",
+   "kind": "VM",
+   "msg": "value が packet と違う(行 \"英ちゃん流中飛車+5筋位取り中飛車+角換わり腰掛け銀\" / packet [\"英ちゃん流中飛車\",\"5筋位取り中飛車\",\"角換わり腰掛け銀\"])"
+  },
+  {
+   "seat": "558b8a81-20261001-2/seat_claude.json",
+   "hid": "H-c5-claude558b-004",
+   "at": "observations[3]",
+   "kind": "VM",
+   "msg": "value が packet と違う(行 \"早繰り銀+4六銀左戦法\" / packet [\"早繰り銀\",\"4六銀左戦法\"])"
+  },
+  {
+   "seat": "558b8a81-20261001-2/seat_claude.json",
+   "hid": "H-c5-claude558b-004",
+   "at": "observations[5]",
+   "kind": "VM",
+   "msg": "value が packet と違う(行 2 / packet 4)"
+  },
+  {
+   "seat": "558b8a81-20261001-2/seat_gpt.json",
+   "hid": "H-c5-gpt558b-005",
+   "at": "observations[1]",
+   "kind": "VM",
+   "msg": "value が packet と違う(行 \"同型矢倉+鬼殺し\" / packet [\"同型矢倉\",\"鬼殺し\"])"
+  },
+  {
+   "seat": "558b8a81-20261001-2/seat_gpt.json",
+   "hid": "H-c5-gpt558b-006",
+   "at": "observations[0]",
+   "kind": "VM",
+   "msg": "value が packet と違う(行 \"同型矢倉+鬼殺し\" / packet [\"同型矢倉\",\"鬼殺し\"])"
+  },
+  {
+   "seat": "f37561e1-20260930-2/seat_claude.json",
+   "hid": "H-c5-claudef375-005",
+   "at": "observations[0]",
+   "kind": "VM",
+   "msg": "value が packet と違う(行 \"英ちゃん流中飛車+5筋位取り中飛車+角換わり腰掛け銀\" / packet [\"英ちゃん流中飛車\",\"5筋位取り中飛車\",\"角換わり腰掛け銀\"])"
+  },
+  {
+   "seat": "f37561e1-20260930-2/seat_claude.json",
+   "hid": "H-c5-claudef375-005",
+   "at": "observations[1]",
+   "kind": "VM",
+   "msg": "value が packet と違う(行 \"忍者銀\" / packet [\"忍者銀\"])"
+  },
+  {
+   "seat": "f37561e1-20260930-2/seat_claude.json",
+   "hid": "H-c5-claudef375-005",
+   "at": "observations[2]",
+   "kind": "VM",
+   "msg": "value が packet と違う(行 \"英ちゃん流中飛車+5筋位取り中飛車+角換わり腰掛け銀\" / packet [\"英ちゃん流中飛車\",\"5筋位取り中飛車\",\"角換わり腰掛け銀\"])"
+  },
+  {
+   "seat": "f37561e1-20260930-2/seat_claude.json",
+   "hid": "H-c5-claudef375-005",
+   "at": "observations[3]",
+   "kind": "VM",
+   "msg": "value が packet と違う(行 \"早繰り銀+4六銀左戦法\" / packet [\"早繰り銀\",\"4六銀左戦法\"])"
+  }
+ ]
+}
