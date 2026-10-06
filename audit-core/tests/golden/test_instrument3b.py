@@ -8,6 +8,14 @@ P5F x S100Z4B6 stays on v1 (the P6 run changed 0 of its 133 rows), so the
 P6 gate for the second document is ``P6 x 5F == v1`` -- also checked here.
 The third document has no expectation yet (the sealed rule stopped: the
 predicted and measured ID sets differed, see CORE_CONNECTION_C1G_RESULT §3.3).
+
+Core 接続 C-1h(2026-10-06)の予測(CORE_CONNECTION_C1H_PREDICTION §3.1/§3.2)
+は、profile P7 x 1 社目/2 社目は P6 から **0 件**動くと封じた。そのため P7
+の門も同じ期待値(``core_expectation_1B_v2.json`` / ``core_expectation_5F.
+json``)のまま: ``test_p7_against_1B_v2`` / ``test_p7_against_5F_v1_unchanged``。
+赤になっても(実書類との差があっても)、予測に合わせて実装や窓を調整しない
+(司令塔が凍結後に 1 回目を回して ID 単位で照合する。CORE_CONNECTION_C1H_
+PREDICTION §4)。3 社目の門はこの段では作らない。
 """
 
 import unittest
@@ -80,6 +88,30 @@ class Instrument3bTest(unittest.TestCase):
         rows = INS.load_expectation("core_expectation_5F.json")["claims"]
         self.assertEqual(len(recipe_list), 133)
         mismatches, _ = _mismatches("5F/P6", results_by_id, rows)
+        self.assertEqual(mismatches, [], "\n".join(mismatches))
+
+    def test_p7_against_1B_v2(self):
+        # Core 接続 C-1h §3.1 の予測: profile P7 x 1 社目は P6(= v2)から
+        # 0 件動く。赤でも実装を調整しない(モジュール docstring 参照)。
+        recipe_list, results_by_id, _ = INS.run_verification(
+            M.DOC_1, V.P7, lambda: M.load_zip_bytes(M.DOC_1["docID"], M.DOC_1["sha256"])
+        )
+        expectation = INS.load_expectation("core_expectation_1B_v2.json")
+        rows = expectation["claims"]
+        self.assertEqual(len(rows), 91)
+        self.assertEqual(len(recipe_list), 91)
+        mismatches, _ = _mismatches("1B/P7", results_by_id, rows)
+        self.assertEqual(mismatches, [], "\n".join(mismatches))
+
+    def test_p7_against_5F_v1_unchanged(self):
+        # Core 接続 C-1h §3.2 の予測: profile P7 x 2 社目は P6(= v1)から
+        # 0 件動く。赤でも実装を調整しない(モジュール docstring 参照)。
+        recipe_list, results_by_id, _ = INS.run_verification(
+            M.DOC_5, V.P7, lambda: M.load_zip_bytes(M.DOC_5["docID"], M.DOC_5["sha256"])
+        )
+        rows = INS.load_expectation("core_expectation_5F.json")["claims"]
+        self.assertEqual(len(recipe_list), 133)
+        mismatches, _ = _mismatches("5F/P7", results_by_id, rows)
         self.assertEqual(mismatches, [], "\n".join(mismatches))
 
 

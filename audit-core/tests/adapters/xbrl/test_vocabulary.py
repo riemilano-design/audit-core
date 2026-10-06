@@ -89,6 +89,14 @@ class ProfileTest(unittest.TestCase):
             self.assertFalse(profile.point_diff)
             self.assertFalse(profile.segment_denominator)
 
+    def test_p1_p5f_p6_c1h_flags_are_all_off(self):
+        # Core 接続 C-1h §1: P1・P5F・P6 の定義は不変(3 つの新フラグは既定
+        # False のまま)。
+        for profile in (V.P1, V.P5F, V.P6):
+            self.assertFalse(profile.expenditure_sign)
+            self.assertFalse(profile.target_word)
+            self.assertFalse(profile.text_reason_split)
+
 
 class P6ProfileTest(unittest.TestCase):
     """Core 接続 C-1g §1(人間の承認、2026-10-06): profile P6 の語彙 7 行と
@@ -105,7 +113,9 @@ class P6ProfileTest(unittest.TestCase):
 
     def test_p6_in_profiles_registry(self):
         self.assertEqual(V.PROFILES["P6"], V.P6)
-        self.assertEqual(sorted(V.PROFILES.keys()), ["P1", "P5F", "P6"])
+        # Core 接続 C-1h: PROFILES は P7 を足して 4 件になった(この行は
+        # C-1h の実装担当が更新。P6 自体の登録は不変)。
+        self.assertIn("P6", V.PROFILES)
 
     def test_subjects_p6_extra_7_count(self):
         self.assertEqual(len(V.SUBJECTS_P6_EXTRA_7), 7)
@@ -158,6 +168,79 @@ class FlowConventionTest(unittest.TestCase):
     def test_non_flow_element_is_none(self):
         self.assertIsNone(V.flow_convention("NetSales"))
         self.assertIsNone(V.flow_convention("jppfs_cor:CurrentLiabilities"))
+
+
+class P7ProfileTest(unittest.TestCase):
+    """Core 接続 C-1h §1(人間の決定、2026-10-06): profile P7 = P6 + 3 つの
+    フラグ。P7 の語彙は P6 と同じ(``SUBJECTS_P6``)。
+    """
+
+    def test_p7_flags_all_on(self):
+        self.assertTrue(V.P7.expenditure_sign)
+        self.assertTrue(V.P7.target_word)
+        self.assertTrue(V.P7.text_reason_split)
+        # P6 の 3 フラグも引き続き真(P7 は P6 の全部を引き継ぐ)。
+        self.assertTrue(V.P7.flow_sign)
+        self.assertTrue(V.P7.point_diff)
+        self.assertTrue(V.P7.segment_denominator)
+        self.assertTrue(V.P7.member_on)
+        self.assertTrue(V.P7.claim_level_member)
+        self.assertEqual(V.P7.run3, "L")
+
+    def test_p7_in_profiles_registry(self):
+        self.assertEqual(V.PROFILES["P7"], V.P7)
+        self.assertEqual(sorted(V.PROFILES.keys()), ["P1", "P5F", "P6", "P7"])
+
+    def test_p7_subjects_same_as_p6(self):
+        self.assertEqual(V.P7.subjects, V.P6.subjects)
+        self.assertEqual(len(V.P7.subjects), 81)
+
+
+class ExpenditureConventionTest(unittest.TestCase):
+    """Core 接続 C-1h §1-1(人間の決定、2026-10-06): CF の「支出」系項目。"""
+
+    def test_purchase_of_prefix_is_expenditure(self):
+        self.assertTrue(V.expenditure_convention("PurchaseOfPropertyPlantAndEquipment"))
+
+    def test_payments_for_prefix_is_expenditure(self):
+        self.assertTrue(V.expenditure_convention("PaymentsForRetirementBenefits"))
+
+    def test_payments_prefix_is_expenditure(self):
+        self.assertTrue(V.expenditure_convention("PaymentsOfSomething"))
+
+    def test_repayments_of_prefix_is_expenditure(self):
+        self.assertTrue(V.expenditure_convention("RepaymentsOfLongTermLoansPayable"))
+
+    def test_repayment_of_prefix_is_expenditure(self):
+        self.assertTrue(V.expenditure_convention("RepaymentOfLoansPayable"))
+
+    def test_redemption_of_prefix_is_expenditure(self):
+        self.assertTrue(V.expenditure_convention("RedemptionOfBonds"))
+
+    def test_dividends_paid_prefix_is_expenditure(self):
+        self.assertTrue(V.expenditure_convention("DividendsPaid"))
+
+    def test_income_taxes_paid_prefix_is_expenditure(self):
+        self.assertTrue(V.expenditure_convention("IncomeTaxesPaid"))
+
+    def test_interest_paid_prefix_is_expenditure(self):
+        self.assertTrue(V.expenditure_convention("InterestPaid"))
+
+    def test_proceeds_from_prefix_is_not_expenditure(self):
+        self.assertFalse(V.expenditure_convention("ProceedsFromLongTermLoansPayable"))
+
+    def test_increase_decrease_prefix_is_not_expenditure(self):
+        # flow_convention(DecreaseIncreaseIn…/IncreaseDecreaseIn…) が先に
+        # 効く対象で、expenditure_convention はここでは False。
+        self.assertFalse(V.expenditure_convention("IncreaseDecreaseInNotesAndAccountsPayableTrade"))
+        self.assertFalse(V.expenditure_convention("DecreaseIncreaseInNotesAndAccountsReceivableTrade"))
+
+    def test_company_extension_prefix_uses_local_name_only(self):
+        self.assertTrue(V.expenditure_convention("e01234-asr_E00001-000:PurchaseOfInvestmentSecurities"))
+
+    def test_non_expenditure_element_is_false(self):
+        self.assertFalse(V.expenditure_convention("NetSales"))
+        self.assertFalse(V.expenditure_convention("Assets"))
 
 
 if __name__ == "__main__":

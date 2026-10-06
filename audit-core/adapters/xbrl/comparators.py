@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 """The six comparators C-1d §3.1 fixes (plus two more added by Core 接続
 C-1g §1-2/§1-3 for profile P6 only: ``builtin_flow_sign_direction`` /
-``diff_ab_pure100``), all registered under ``register_all`` (see
-:mod:`registry_setup`).
+``diff_ab_pure100``, and one more added by Core 接続 C-1h §1-1 for
+profile P7 only: ``builtin_sign_abs_diff_direction``), all registered
+under ``register_all`` (see :mod:`registry_setup`).
 
 Each comparator reads only the already-resolved ``evidence`` (a tuple of
 Core ``Resolved`` objects, in the order the Recipe's ``xbrl:`` pointers
@@ -224,6 +225,35 @@ def builtin_flow_sign_direction(evidence, claim, contract):
     actual = 0 if cur.value == 0 else (1 if cur.value * flow_convention > 0 else -1)
     detail = {"direction": direction, "flow_convention": flow_convention, "actual": actual}
     return core.Comparison(match=(actual == direction), recomputed=cur.value, depth="value_match", detail=detail)
+
+
+def builtin_sign_abs_diff_direction(evidence, claim, contract):
+    """Core 接続 C-1h §1-1 (``builtin:sign(|cur|-|prior|)==direction``,
+    profile P7 only). evidence = (cur, prior) -- CF の「支出」系項目
+    (負で記録される。``vocabulary.expenditure_convention``)の当期・前期の
+    JPY fact。文の「増加/減少」は大きさ(絶対値)の増減を指す。
+
+    actual = 0 if |cur.value| == |prior.value| else (1 if |cur.value| >
+    |prior.value| else -1)(差 0 はどちらの方向にも一致しない。C-1f の
+    ``builtin_sign_direction`` の癖 b と同じ扱い)。match = actual ==
+    direction。recomputed = |cur.value| - |prior.value|(符号つき、大きさ
+    の差)。
+    """
+
+    params = contract.params or {}
+    direction = params["direction"]
+    cur, prior = evidence[0], evidence[1]
+    acur, aprior = abs(cur.value), abs(prior.value)
+    magnitude_diff = acur - aprior
+    # C-1h §1-1 (deliberately phrased/named differently from
+    # builtin_sign_direction's own ``actual = 0 if diff == 0 else (...)``
+    # / ``return core.Comparison(match=(actual == direction), recomputed=
+    # diff, ...)`` lines, so this new function's text does not collide
+    # with mutations F-R3/D-R4's unique-match targets in this file; see
+    # tests/adapters/xbrl/mutations.json).
+    actual = (1 if magnitude_diff > 0 else -1) if magnitude_diff != 0 else 0
+    detail = {"direction": direction, "actual": actual}
+    return core.Comparison(match=(direction == actual), recomputed=magnitude_diff, depth="value_match", detail=detail)
 
 
 def diff_ab_pure100(evidence, claim, contract):

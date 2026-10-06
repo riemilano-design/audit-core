@@ -48,6 +48,10 @@ UNBOUND_REASON_STATE = {
     # Core 接続 C-1g §1-3(人間の決定、2026-10-06、profile P6 のみ)。既存 9 件
     # の写し元(frozen の C-0 §2)は変えず、新しい理由を 1 件だけ足す。
     "no_element(point without prior phrase)": "POINTER_NOT_FOUND",
+    # Core 接続 C-1h §1-2/§1-3(人間の決定、2026-10-06、profile P7 のみ)。
+    "target_or_plan": "UNVERIFIABLE",
+    "no_element(text needs money fact)": "POINTER_NOT_FOUND",
+    "no_element(no prior for text)": "POINTER_NOT_FOUND",
 }
 
 
@@ -276,6 +280,112 @@ def _direct_value_claim(claim, s, a, b, sign, num, unit, prec, subj, elems, memb
         claim["reason"] = "no_element"
 
 
+# ---------------------------------------------------------------------------
+# Core 接続 C-1h §1-2(人間の決定、2026-10-06): 目標値・計画値の数の Claim。
+# profile.target_word が真のときだけ使う。窓の 10 は字で留める(定数名)。
+# 数の手前だけを見る(後ろの語は見ない)。文章 Claim には掛けない。
+# ---------------------------------------------------------------------------
+_TARGET_WINDOW = 10
+_TARGET_RE = re.compile(r"目標|計画")
+
+
+def _dispatch_num_claim(claim, s, a, b, sign, num, unit, prec, subj, elems, member, facts, contexts, profile):
+    """§1-2 の目標値判定を通らなかった数の Claim の、既存の単位ごとの振り分け
+    (C-1d/C-1g と不変)。"""
+
+    window_pm = s[max(0, a - 25):b + 6]
+    pm = E.PCT_DIR_RE.search(window_pm) if unit in ("％", "%") else None
+    if pm is not None:
+        pm = E.own_sign_match(window_pm, num)  # P-8 (always applied; P1 is unaffected, see §6)
+    window_pr = s[max(0, a - 12):b + 3]
+    pr = E.PCT_RATIO_RE.search(window_pr) if unit in ("％", "%") and not pm else None
+    if unit in ("％", "%") and pr:
+        claim["form"] = "derived_value"
+        if subj:
+            cur = [f for f in I.facts_for(elems, facts, contexts, member) if f["context"].startswith("CurrentYear")]
+            pri = [f for f in I.facts_for(elems, facts, contexts, member) if f["context"].startswith("Prior1Year")]
+            pairs = [(c, p) for c in cur for p in pri if c["name"] == p["name"] and c["context"].replace("CurrentYear", "") == p["context"].replace("Prior1Year", "")]
+            if pairs:
+                c, p = pairs[0]
+                claim["pointer"] = ["xbrl:%s@%s" % (c["name"], c["context"]), "xbrl:%s@%s" % (p["name"], p["context"]), "formula:cur/prior*100"]
+                claim["bound"] = True
+                if p["value"] != 0:
+                    ratio = c["value"] / p["value"] * 100
+                    claim["recomputed"] = round(ratio, 2)
+                    claim["result"] = "GROUNDED" if abs(ratio - num) <= 0.15 else "VALUE_MISMATCH"
+                else:
+                    claim["result"] = "UNVERIFIABLE"
+                    claim["reason"] = "prior is 0"
+            else:
+                claim["reason"] = "no_prior_member_context" if (member and member != E.AMBIG and cur) else "no_element"
+        else:
+            claim["reason"] = "no_subject"
+    elif unit in ("％", "%") and pm and (pm.group(4) or pm.group(7)):
+        claim["form"] = "derived_value"
+        sgn = 1 if (pm.group(4) or pm.group(7)) in ("増", "増加") else -1
+        claim["value"] = sgn * num
+        claim["sign_token"] = pm.group(0)
+        if subj:
+            cur = [f for f in I.facts_for(elems, facts, contexts, member) if f["context"].startswith("CurrentYear")]
+            pri = [f for f in I.facts_for(elems, facts, contexts, member) if f["context"].startswith("Prior1Year")]
+            pairs = [(c, p) for c in cur for p in pri if c["name"] == p["name"] and c["context"].replace("CurrentYear", "") == p["context"].replace("Prior1Year", "")]
+            if pairs:
+                c, p = pairs[0]
+                claim["pointer"] = ["xbrl:%s@%s" % (c["name"], c["context"]), "xbrl:%s@%s" % (p["name"], p["context"])]
+                claim["bound"] = True
+                if p["value"] != 0:
+                    pct = (c["value"] - p["value"]) / abs(p["value"]) * 100
+                    claim["recomputed"] = round(pct, 2)
+                    claim["result"] = "GROUNDED" if abs(pct - claim["value"]) <= 0.15 else "VALUE_MISMATCH"
+                else:
+                    claim["result"] = "UNVERIFIABLE"
+                    claim["reason"] = "prior is 0"
+            else:
+                claim["reason"] = "no_prior_member_context" if (member and member != E.AMBIG and cur) else "no_element"
+        else:
+            claim["reason"] = "no_subject"
+    elif unit in V.UNIT_SCALE:
+        claim["form"] = "direct_value"
+        _direct_value_claim(claim, s, a, b, sign, num, unit, prec, subj, elems, member, facts, contexts)
+        if profile.flow_sign:
+            _apply_flow_sign(claim, s, a, b)
+    elif unit in ("％", "%", "ポイント"):
+        claim["form"] = "direct_value"
+        if profile.point_diff and unit == "ポイント" and subj:
+            _build_point_diff_claim(claim, s, a, b, elems, member, facts, contexts, num)
+        elif subj and any((f["unit"] or "").lower().startswith("pure") for f in I.facts_for(elems, facts, contexts, member)):
+            cur = [f for f in I.facts_for(elems, facts, contexts, member) if f["context"].startswith("CurrentYear") and (f["unit"] or "").lower().startswith("pure")]
+            if cur:
+                fv = cur[0]["value"]
+                fvp = fv * 100 if abs(fv) <= 1.5 else fv
+                claim["pointer"] = "xbrl:%s@%s" % (cur[0]["name"], cur[0]["context"])
+                claim["bound"] = True
+                claim["recomputed"] = round(fvp, 2)
+                claim["result"] = "GROUNDED" if abs(fvp - num) <= 0.15 else "VALUE_MISMATCH"
+            else:
+                claim["reason"] = "no_element"
+        else:
+            claim["reason"] = "no_element(ratio without fact)" if subj else "no_subject"
+    elif unit in ("名", "人"):
+        claim["form"] = "direct_value"
+        # C-1d §3.1: equals_within's optional abs_tolerance branch
+        # (not exercised by the 224-claim material; none bind).
+        claim["abs_tolerance"] = 0.5
+        cur = [f for f in I.facts_for(["NumberOfEmployees"], facts, contexts, member) if f["context"].startswith("CurrentYear")]
+        if subj and elems == ["NumberOfEmployees"] and cur:
+            hit = [f for f in cur if abs(f["value"] - num) <= 0.5]
+            chosen = (hit or cur)[0]
+            claim["pointer"] = "xbrl:%s@%s" % (chosen["name"], chosen["context"])
+            claim["bound"] = True
+            claim["result"] = "GROUNDED" if hit else "VALUE_MISMATCH"
+            claim["recomputed"] = chosen["value"]
+        else:
+            claim["reason"] = "no_element"
+    else:
+        claim["form"] = "direct_value"
+        claim["reason"] = "no_element(unit not in XBRL)"
+
+
 def _build_raw_num_claims(sentences, facts, contexts, profile, claim_member):
     num_claims = []
     for si, s in enumerate(sentences):
@@ -293,97 +403,14 @@ def _build_raw_num_claims(sentences, facts, contexts, profile, claim_member):
                 "value": sign * num, "unit": unit, "subject": subj, "form": None, "pointer": None,
                 "bound": False, "reason": None, "result": None, "recomputed": None,
             }
-            window_pm = s[max(0, a - 25):b + 6]
-            pm = E.PCT_DIR_RE.search(window_pm) if unit in ("％", "%") else None
-            if pm is not None:
-                pm = E.own_sign_match(window_pm, num)  # P-8 (always applied; P1 is unaffected, see §6)
-            window_pr = s[max(0, a - 12):b + 3]
-            pr = E.PCT_RATIO_RE.search(window_pr) if unit in ("％", "%") and not pm else None
-            if unit in ("％", "%") and pr:
-                claim["form"] = "derived_value"
-                if subj:
-                    cur = [f for f in I.facts_for(elems, facts, contexts, member) if f["context"].startswith("CurrentYear")]
-                    pri = [f for f in I.facts_for(elems, facts, contexts, member) if f["context"].startswith("Prior1Year")]
-                    pairs = [(c, p) for c in cur for p in pri if c["name"] == p["name"] and c["context"].replace("CurrentYear", "") == p["context"].replace("Prior1Year", "")]
-                    if pairs:
-                        c, p = pairs[0]
-                        claim["pointer"] = ["xbrl:%s@%s" % (c["name"], c["context"]), "xbrl:%s@%s" % (p["name"], p["context"]), "formula:cur/prior*100"]
-                        claim["bound"] = True
-                        if p["value"] != 0:
-                            ratio = c["value"] / p["value"] * 100
-                            claim["recomputed"] = round(ratio, 2)
-                            claim["result"] = "GROUNDED" if abs(ratio - num) <= 0.15 else "VALUE_MISMATCH"
-                        else:
-                            claim["result"] = "UNVERIFIABLE"
-                            claim["reason"] = "prior is 0"
-                    else:
-                        claim["reason"] = "no_prior_member_context" if (member and member != E.AMBIG and cur) else "no_element"
-                else:
-                    claim["reason"] = "no_subject"
-            elif unit in ("％", "%") and pm and (pm.group(4) or pm.group(7)):
-                claim["form"] = "derived_value"
-                sgn = 1 if (pm.group(4) or pm.group(7)) in ("増", "増加") else -1
-                claim["value"] = sgn * num
-                claim["sign_token"] = pm.group(0)
-                if subj:
-                    cur = [f for f in I.facts_for(elems, facts, contexts, member) if f["context"].startswith("CurrentYear")]
-                    pri = [f for f in I.facts_for(elems, facts, contexts, member) if f["context"].startswith("Prior1Year")]
-                    pairs = [(c, p) for c in cur for p in pri if c["name"] == p["name"] and c["context"].replace("CurrentYear", "") == p["context"].replace("Prior1Year", "")]
-                    if pairs:
-                        c, p = pairs[0]
-                        claim["pointer"] = ["xbrl:%s@%s" % (c["name"], c["context"]), "xbrl:%s@%s" % (p["name"], p["context"])]
-                        claim["bound"] = True
-                        if p["value"] != 0:
-                            pct = (c["value"] - p["value"]) / abs(p["value"]) * 100
-                            claim["recomputed"] = round(pct, 2)
-                            claim["result"] = "GROUNDED" if abs(pct - claim["value"]) <= 0.15 else "VALUE_MISMATCH"
-                        else:
-                            claim["result"] = "UNVERIFIABLE"
-                            claim["reason"] = "prior is 0"
-                    else:
-                        claim["reason"] = "no_prior_member_context" if (member and member != E.AMBIG and cur) else "no_element"
-                else:
-                    claim["reason"] = "no_subject"
-            elif unit in V.UNIT_SCALE:
+            if profile.target_word and _TARGET_RE.search(s[max(0, a - _TARGET_WINDOW):a]):
+                # Core 接続 C-1h §1-2: 数の手前 10 字以内に 目標|計画 があれば
+                # UNVERIFIABLE。数の後ろの語・文章 Claim は見ない。
                 claim["form"] = "direct_value"
-                _direct_value_claim(claim, s, a, b, sign, num, unit, prec, subj, elems, member, facts, contexts)
-                if profile.flow_sign:
-                    _apply_flow_sign(claim, s, a, b)
-            elif unit in ("％", "%", "ポイント"):
-                claim["form"] = "direct_value"
-                if profile.point_diff and unit == "ポイント" and subj:
-                    _build_point_diff_claim(claim, s, a, b, elems, member, facts, contexts, num)
-                elif subj and any((f["unit"] or "").lower().startswith("pure") for f in I.facts_for(elems, facts, contexts, member)):
-                    cur = [f for f in I.facts_for(elems, facts, contexts, member) if f["context"].startswith("CurrentYear") and (f["unit"] or "").lower().startswith("pure")]
-                    if cur:
-                        fv = cur[0]["value"]
-                        fvp = fv * 100 if abs(fv) <= 1.5 else fv
-                        claim["pointer"] = "xbrl:%s@%s" % (cur[0]["name"], cur[0]["context"])
-                        claim["bound"] = True
-                        claim["recomputed"] = round(fvp, 2)
-                        claim["result"] = "GROUNDED" if abs(fvp - num) <= 0.15 else "VALUE_MISMATCH"
-                    else:
-                        claim["reason"] = "no_element"
-                else:
-                    claim["reason"] = "no_element(ratio without fact)" if subj else "no_subject"
-            elif unit in ("名", "人"):
-                claim["form"] = "direct_value"
-                # C-1d §3.1: equals_within's optional abs_tolerance branch
-                # (not exercised by the 224-claim material; none bind).
-                claim["abs_tolerance"] = 0.5
-                cur = [f for f in I.facts_for(["NumberOfEmployees"], facts, contexts, member) if f["context"].startswith("CurrentYear")]
-                if subj and elems == ["NumberOfEmployees"] and cur:
-                    hit = [f for f in cur if abs(f["value"] - num) <= 0.5]
-                    chosen = (hit or cur)[0]
-                    claim["pointer"] = "xbrl:%s@%s" % (chosen["name"], chosen["context"])
-                    claim["bound"] = True
-                    claim["result"] = "GROUNDED" if hit else "VALUE_MISMATCH"
-                    claim["recomputed"] = chosen["value"]
-                else:
-                    claim["reason"] = "no_element"
+                claim["result"] = "UNVERIFIABLE"
+                claim["reason"] = "target_or_plan"
             else:
-                claim["form"] = "direct_value"
-                claim["reason"] = "no_element(unit not in XBRL)"
+                _dispatch_num_claim(claim, s, a, b, sign, num, unit, prec, subj, elems, member, facts, contexts, profile)
             if profile.member_on:
                 if msrc == "ambiguous" and not claim["bound"]:
                     claim["reason"] = "ambiguous(member)"
@@ -391,6 +418,26 @@ def _build_raw_num_claims(sentences, facts, contexts, profile, claim_member):
                 claim["member_source"] = msrc
             num_claims.append(claim)
     return num_claims
+
+
+def _text_unbound_reason(profile, member, cur, elems, facts, contexts):
+    """§1-3(人間の決定、2026-10-06): 主語が束縛でき、当期・前期の対が
+    見つからなかったときの理由(既存の member 優先条件はそのまま維持し、
+    その後ろだけを分割する)。``cur`` は JPY の当期 fact の列。
+    ``profile.text_reason_split`` が偽の既存の挙動(P1/P5F/P6)はまったく
+    変えない(cur_any を計算しない)。
+    """
+
+    if member and member != E.AMBIG and cur:
+        return "no_prior_member_context"
+    if not profile.text_reason_split:
+        return "no_element"
+    cur_any = [f for f in I.facts_for(elems, facts, contexts, member) if f["context"].startswith("CurrentYear")]
+    if not cur_any:
+        return "no_element"
+    if not cur:
+        return "no_element(text needs money fact)"
+    return "no_element(no prior for text)"
 
 
 def _build_raw_text_claims(sentences, facts, contexts, profile, claim_member):
@@ -413,6 +460,14 @@ def _build_raw_text_claims(sentences, facts, contexts, profile, claim_member):
                         if c is not None:
                             flow_conv = c
                             break
+                expend_conv = False
+                if subj and flow_conv is None and profile.expenditure_sign:
+                    # Core 接続 C-1h §1-1: flow_convention が先に効く(非 None
+                    # ならこの判定はしない)。
+                    for e in elems:
+                        if V.expenditure_convention(e):
+                            expend_conv = True
+                            break
                 if subj and flow_conv is not None:
                     # Core 接続 C-1g §1-2: 主語が CF 流量項目なら、前期との
                     # 対でなく当期 1 件の fact + builtin:flow_sign(cur)==direction
@@ -428,6 +483,25 @@ def _build_raw_text_claims(sentences, facts, contexts, profile, claim_member):
                         claim["recomputed"] = c["value"]
                     else:
                         claim["reason"] = "no_element"
+                elif subj and expend_conv:
+                    # Core 接続 C-1h §1-1: 「支出」系項目は当期・前期の JPY
+                    # fact の対に束縛し、文の「増加/減少」は大きさ(絶対値)の
+                    # 増減として builtin:sign(|cur|-|prior|)==direction で見る。
+                    cur = [f for f in I.facts_for(elems, facts, contexts, member) if f["context"].startswith("CurrentYear") and f["unit"] and f["unit"].upper().startswith("JPY")]
+                    pri = [f for f in I.facts_for(elems, facts, contexts, member) if f["context"].startswith("Prior1Year") and f["unit"] and f["unit"].upper().startswith("JPY")]
+                    pairs = [(c, p) for c in cur for p in pri if c["name"] == p["name"] and c["context"].replace("CurrentYear", "") == p["context"].replace("Prior1Year", "")]
+                    if pairs:
+                        c, p = pairs[0]
+                        claim["pointer"] = ["xbrl:%s@%s" % (c["name"], c["context"]), "xbrl:%s@%s" % (p["name"], p["context"]), "builtin:sign(|cur|-|prior|)"]
+                        claim["bound"] = True
+                        claim["expenditure_convention"] = True
+                        acur, apri = abs(c["value"]), abs(p["value"])
+                        diff = acur - apri
+                        actual = 0 if diff == 0 else (1 if diff > 0 else -1)
+                        claim["result"] = "GROUNDED" if actual == sg else "VALUE_MISMATCH"
+                        claim["recomputed"] = diff
+                    else:
+                        claim["reason"] = _text_unbound_reason(profile, member, cur, elems, facts, contexts)
                 elif subj:
                     cur = [f for f in I.facts_for(elems, facts, contexts, member) if f["context"].startswith("CurrentYear") and f["unit"] and f["unit"].upper().startswith("JPY")]
                     pri = [f for f in I.facts_for(elems, facts, contexts, member) if f["context"].startswith("Prior1Year")]
@@ -440,7 +514,7 @@ def _build_raw_text_claims(sentences, facts, contexts, profile, claim_member):
                         claim["result"] = "GROUNDED" if actual == sg else "VALUE_MISMATCH"
                         claim["recomputed"] = c["value"] - p["value"]
                     else:
-                        claim["reason"] = "no_prior_member_context" if (member and member != E.AMBIG and cur) else "no_element"
+                        claim["reason"] = _text_unbound_reason(profile, member, cur, elems, facts, contexts)
                 else:
                     claim["reason"] = "no_subject"
                 if profile.member_on:
@@ -559,6 +633,12 @@ def claim_to_recipe(raw, kind):
             if raw.get("flow_convention") is not None:
                 comparator = "builtin:flow_sign(cur)==direction"
                 params = {"direction": raw.get("direction"), "flow_convention": raw.get("flow_convention")}
+            elif raw.get("expenditure_convention"):
+                # Core 接続 C-1h §1-1: 「支出」系項目の text claim は当期・
+                # 前期の 2 本 + builtin:sign(|cur|-|prior|)==direction(大きさ
+                # の増減)。
+                comparator = "builtin:sign(|cur|-|prior|)==direction"
+                params = {"direction": raw.get("direction")}
             else:
                 comparator = "builtin:sign(cur-prior)==direction"
                 params = {"direction": raw.get("direction")}

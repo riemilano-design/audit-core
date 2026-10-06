@@ -266,5 +266,53 @@
     "new": "def flow_convention(element_name):\n    \"\"\"CF 流量項目の符号の規約(C-1g §1-2 の決定)。``element_name`` は",
     "predicted": "green",
     "note": "C-1g 予測 §1(対照)。docstring の言い回しのみの変更。"
+  },
+  {
+    "id": "H-R1-expenditure-magnitude-sign-reversed",
+    "file": "comparators.py",
+    "old": "    magnitude_diff = acur - aprior",
+    "new": "    magnitude_diff = aprior - acur",
+    "predicted": "red",
+    "note": "C-1h §1-1(封じた規則)。「支出」系項目の大きさの差を反転すると、test_recipes.ExpenditureConventionTextClaimBuildTest の T022/T025 型の GROUNDED/VALUE_MISMATCH が入れ替わり、test_comparators.BuiltinSignAbsDiffDirectionTest も壊れる。"
+  },
+  {
+    "id": "H-R2-target-word-window-disabled",
+    "file": "recipes.py",
+    "old": "            if profile.target_word and _TARGET_RE.search(s[max(0, a - _TARGET_WINDOW):a]):",
+    "new": "            if False and profile.target_word and _TARGET_RE.search(s[max(0, a - _TARGET_WINDOW):a]):",
+    "predicted": "red",
+    "note": "C-1h §1-2(封じた規則)。目標値・計画値の窓判定を外すと、test_recipes.TargetOrPlanWindowTest の reason が target_or_plan にならなくなる。"
+  },
+  {
+    "id": "H-R3-text-reason-split-disabled",
+    "file": "recipes.py",
+    "old": "    cur_any = [f for f in I.facts_for(elems, facts, contexts, member) if f[\"context\"].startswith(\"CurrentYear\")]",
+    "new": "    cur_any = []",
+    "predicted": "red",
+    "note": "C-1h §1-3(封じた規則)。cur_any を常に空にすると分割前の no_element だけが返り、test_recipes.TextUnboundReasonSplitBuildTest の (a)/(b) が壊れる。"
+  },
+  {
+    "id": "H-R4-flow-direction-word-window-widened",
+    "file": "recipes.py",
+    "old": "    window2 = s[b:b + 4]",
+    "new": "    window2 = s[b:b + 10]",
+    "predicted": "red",
+    "note": "C-1h §1-4(封じた規則、C-1g 監査の記録事項 3)。数の直後の窓を 4→10 に広げると、test_recipes.WindowBoundaryTest.test_flow_direction_word_does_not_catch_word_at_fifth_char が 拾ってしまい壊れる。"
+  },
+  {
+    "id": "H-R5-point-diff-prior-phrase-window-widened",
+    "file": "recipes.py",
+    "old": "    window = s[max(0, a - 25):a]",
+    "new": "    window = s[max(0, a - 30):a]",
+    "predicted": "red",
+    "note": "C-1h §1-4(封じた規則、C-1g 監査の記録事項 3)。前期の語の窓を 25→30 に広げると、test_recipes.WindowBoundaryTest.test_point_diff_prior_phrase_missed_one_char_earlier が 拾ってしまい壊れる。"
+  },
+  {
+    "id": "H-G1-registry-setup-docstring-wording",
+    "file": "registry_setup.py",
+    "old": "    # Core 接続 C-1h §1-1(profile P7 のみが参照する)。",
+    "new": "    # Core 接続 C-1h §1-1(P7 のみが参照する、比較子 1 件)。",
+    "predicted": "green",
+    "note": "コメントの字句だけの変更(C-1g の D-G1/D-G2/G-G1/G-G2 と同型)。挙動は変わらないので green のまま。"
   }
 ]

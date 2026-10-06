@@ -163,6 +163,26 @@ def flow_convention(element_name):
     return None
 
 
+# ---------------------------------------------------------------------------
+# Core 接続 C-1h §1-1(人間の決定、2026-10-06)。CF の「支出」系項目(負で
+# 記録され、文の「増加/減少」は大きさの増減)。``ProceedsFrom…`` は含めない。
+# ``flow_convention`` が非 None の要素(DecreaseIncreaseIn…/IncreaseDecreaseIn…)
+# は呼び出し側で先に試すので、このチェックはそちら向け。
+# ---------------------------------------------------------------------------
+_EXPENDITURE_RE = re.compile(
+    r"^(PurchaseOf|PaymentsFor|Payments|RepaymentsOf|RepaymentOf|RedemptionOf|DividendsPaid|IncomeTaxesPaid|InterestPaid)"
+)
+
+
+def expenditure_convention(element_name):
+    """CF の「支出」系項目かどうか(C-1h §1-1)。``element_name`` は
+    ``prefix:Local`` でも局所名だけでもよい。
+    """
+
+    local = element_name.split(":")[-1]
+    return bool(_EXPENDITURE_RE.match(local))
+
+
 @dataclass(frozen=True)
 class Profile:
     """A named bundle of Adapter settings (Adapter-only knowledge; the Core
@@ -180,6 +200,12 @@ class Profile:
     flow_sign: bool = False
     point_diff: bool = False
     segment_denominator: bool = False
+    # Core 接続 C-1h §1(人間の決定、2026-10-06): P7 だけの 3 つのフラグ。
+    # P1・P5F・P6 はこれらの既定値 False のまま変わらない(定義そのものを
+    # 書き換えていない)。
+    expenditure_sign: bool = False
+    target_word: bool = False
+    text_reason_split: bool = False
 
 
 P1 = Profile(
@@ -209,4 +235,18 @@ P6 = Profile(
     segment_denominator=True,
 )
 
-PROFILES = {"P1": P1, "P5F": P5F, "P6": P6}
+P7 = Profile(
+    name="P7",
+    subjects=SUBJECTS_P6,
+    member_on=True,
+    claim_level_member=True,
+    run3="L",
+    flow_sign=True,
+    point_diff=True,
+    segment_denominator=True,
+    expenditure_sign=True,
+    target_word=True,
+    text_reason_split=True,
+)
+
+PROFILES = {"P1": P1, "P5F": P5F, "P6": P6, "P7": P7}

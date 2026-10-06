@@ -403,6 +403,50 @@ class DiffAbPure100Test(unittest.TestCase):
         self.assertEqual(result.recomputed, 1.0)
 
 
+class BuiltinSignAbsDiffDirectionTest(unittest.TestCase):
+    """Core 接続 C-1h §1-1: ``builtin:sign(|cur|-|prior|)==direction``
+    (CF の「支出」系項目。大きさ(絶対値)の増減を見る)。
+    """
+
+    def test_magnitude_decrease_matches_decrease_direction(self):
+        # |-143,940| - |-219,930| = -75,990 -> 大きさは減った。
+        evidence = (_resolved(-143940.0), _resolved(-219930.0))
+        claim = _claim()
+        contract = _contract("builtin:sign(|cur|-|prior|)==direction", direction=-1)
+        result = C.builtin_sign_abs_diff_direction(evidence, claim, contract)
+        self.assertTrue(result.match)
+        self.assertEqual(result.recomputed, -75990.0)
+
+    def test_magnitude_increase_mismatches_decrease_direction(self):
+        # |-86,046| - |-66,547| = +19,499 -> 大きさは増えた(「減少」とは
+        # 一致しない)。
+        evidence = (_resolved(-86046.0), _resolved(-66547.0))
+        claim = _claim()
+        contract = _contract("builtin:sign(|cur|-|prior|)==direction", direction=-1)
+        result = C.builtin_sign_abs_diff_direction(evidence, claim, contract)
+        self.assertFalse(result.match)
+        self.assertEqual(result.recomputed, 19499.0)
+        self.assertEqual(result.detail["actual"], 1)
+
+    def test_zero_magnitude_difference_matches_no_direction(self):
+        evidence = (_resolved(-500.0), _resolved(500.0))
+        claim = _claim()
+        contract_dec = _contract("builtin:sign(|cur|-|prior|)==direction", direction=-1)
+        contract_inc = _contract("builtin:sign(|cur|-|prior|)==direction", direction=1)
+        self.assertFalse(C.builtin_sign_abs_diff_direction(evidence, claim, contract_dec).match)
+        self.assertFalse(C.builtin_sign_abs_diff_direction(evidence, claim, contract_inc).match)
+
+    def test_positive_fact_values_also_use_magnitude(self):
+        # 正の値(通常の「支出」は負で記録されるが、符号そのものではなく
+        # 大きさだけを見ることを確かめる)。
+        evidence = (_resolved(300.0), _resolved(100.0))
+        claim = _claim()
+        contract = _contract("builtin:sign(|cur|-|prior|)==direction", direction=1)
+        result = C.builtin_sign_abs_diff_direction(evidence, claim, contract)
+        self.assertTrue(result.match)
+        self.assertEqual(result.recomputed, 200.0)
+
+
 class BuiltinSignDirectionTest(unittest.TestCase):
     def test_increase_matches_positive_direction(self):
         evidence = (_resolved(1200.0), _resolved(1000.0))
