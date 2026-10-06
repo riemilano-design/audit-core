@@ -1,0 +1,3559 @@
+{
+ "source": "probe1B_S100Z4Q1.json",
+ "source_sha256": "cd0d459611aa2670babe15e117c6f019b461f1cbd0619017575963eaa3c5fbba",
+ "document": "S100Z4Q1",
+ "claims": [
+  {
+   "id": "N001",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "受注高",
+   "value": 39419000000.0,
+   "unit": "円",
+   "word": null,
+   "modifiers": {
+    "population": null,
+    "time_range": null,
+    "normalization": null
+   },
+   "evidence": {
+    "schemes": [],
+    "pointers": []
+   },
+   "contract": {
+    "comparator": null,
+    "tolerance": null
+   },
+   "result": {
+    "state": "POINTER_NOT_FOUND",
+    "recomputed": null,
+    "script_reason": "no_element"
+   },
+   "provenance": []
+  },
+  {
+   "id": "N002",
+   "kind": "num",
+   "form": "derived_value",
+   "subject": "受注高",
+   "value": 106.0,
+   "unit": "%",
+   "word": null,
+   "modifiers": {
+    "population": null,
+    "time_range": null,
+    "normalization": null
+   },
+   "evidence": {
+    "schemes": [],
+    "pointers": []
+   },
+   "contract": {
+    "comparator": null,
+    "tolerance": null
+   },
+   "result": {
+    "state": "POINTER_NOT_FOUND",
+    "recomputed": null,
+    "script_reason": "no_element"
+   },
+   "provenance": []
+  },
+  {
+   "id": "N003",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "受注残高",
+   "value": 21422000000.0,
+   "unit": "円",
+   "word": null,
+   "modifiers": {
+    "population": null,
+    "time_range": null,
+    "normalization": null
+   },
+   "evidence": {
+    "schemes": [],
+    "pointers": []
+   },
+   "contract": {
+    "comparator": null,
+    "tolerance": null
+   },
+   "result": {
+    "state": "POINTER_NOT_FOUND",
+    "recomputed": null,
+    "script_reason": "no_element"
+   },
+   "provenance": []
+  },
+  {
+   "id": "N004",
+   "kind": "num",
+   "form": "derived_value",
+   "subject": "受注残高",
+   "value": 106.8,
+   "unit": "%",
+   "word": null,
+   "modifiers": {
+    "population": null,
+    "time_range": null,
+    "normalization": null
+   },
+   "evidence": {
+    "schemes": [],
+    "pointers": []
+   },
+   "contract": {
+    "comparator": null,
+    "tolerance": null
+   },
+   "result": {
+    "state": "POINTER_NOT_FOUND",
+    "recomputed": null,
+    "script_reason": "no_element"
+   },
+   "provenance": []
+  },
+  {
+   "id": "N005",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "売上高",
+   "value": 38064000000.0,
+   "unit": "円",
+   "word": null,
+   "modifiers": {
+    "population": "consolidated",
+    "time_range": [
+     [
+      "CurrentYear",
+      "Duration"
+     ]
+    ],
+    "normalization": "round"
+   },
+   "evidence": {
+    "schemes": [
+     "xbrl"
+    ],
+    "pointers": [
+     "xbrl:jpcrp_cor:NetSalesSummaryOfBusinessResults@CurrentYearDuration"
+    ]
+   },
+   "contract": {
+    "comparator": "equals_within",
+    "tolerance": "max(decimals, claim_scale/2)"
+   },
+   "result": {
+    "state": "GROUNDED",
+    "recomputed": 38064274000.0,
+    "script_reason": null
+   },
+   "provenance": []
+  },
+  {
+   "id": "N006",
+   "kind": "num",
+   "form": "derived_value",
+   "subject": "売上高",
+   "value": 102.9,
+   "unit": "%",
+   "word": null,
+   "modifiers": {
+    "population": "consolidated",
+    "time_range": [
+     [
+      "CurrentYear",
+      "Duration"
+     ],
+     [
+      "Prior1Year",
+      "Duration"
+     ]
+    ],
+    "normalization": null
+   },
+   "evidence": {
+    "schemes": [
+     "formula",
+     "xbrl"
+    ],
+    "pointers": [
+     "xbrl:jpcrp_cor:NetSalesSummaryOfBusinessResults@CurrentYearDuration",
+     "xbrl:jpcrp_cor:NetSalesSummaryOfBusinessResults@Prior1YearDuration",
+     "formula:cur/prior*100"
+    ]
+   },
+   "contract": {
+    "comparator": "ratio*100",
+    "tolerance": "0.15pt"
+   },
+   "result": {
+    "state": "GROUNDED",
+    "recomputed": 102.94,
+    "script_reason": null
+   },
+   "provenance": []
+  },
+  {
+   "id": "N007",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "営業利益",
+   "value": 1465000000.0,
+   "unit": "円",
+   "word": null,
+   "modifiers": {
+    "population": "consolidated",
+    "time_range": [
+     [
+      "CurrentYear",
+      "Duration"
+     ]
+    ],
+    "normalization": "round"
+   },
+   "evidence": {
+    "schemes": [
+     "xbrl"
+    ],
+    "pointers": [
+     "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration"
+    ]
+   },
+   "contract": {
+    "comparator": "equals_within",
+    "tolerance": "max(decimals, claim_scale/2)"
+   },
+   "result": {
+    "state": "GROUNDED",
+    "recomputed": 1465387000.0,
+    "script_reason": null
+   },
+   "provenance": []
+  },
+  {
+   "id": "N008",
+   "kind": "num",
+   "form": "derived_value",
+   "subject": "営業利益",
+   "value": 54.0,
+   "unit": "%",
+   "word": null,
+   "modifiers": {
+    "population": "consolidated",
+    "time_range": [
+     [
+      "CurrentYear",
+      "Duration"
+     ],
+     [
+      "Prior1Year",
+      "Duration"
+     ]
+    ],
+    "normalization": null
+   },
+   "evidence": {
+    "schemes": [
+     "formula",
+     "xbrl"
+    ],
+    "pointers": [
+     "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration",
+     "xbrl:jppfs_cor:OperatingIncome@Prior1YearDuration",
+     "formula:cur/prior*100"
+    ]
+   },
+   "contract": {
+    "comparator": "ratio*100",
+    "tolerance": "0.15pt"
+   },
+   "result": {
+    "state": "GROUNDED",
+    "recomputed": 53.96,
+    "script_reason": null
+   },
+   "provenance": []
+  },
+  {
+   "id": "N009",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "経常利益",
+   "value": 1457000000.0,
+   "unit": "円",
+   "word": null,
+   "modifiers": {
+    "population": "consolidated",
+    "time_range": [
+     [
+      "CurrentYear",
+      "Duration"
+     ]
+    ],
+    "normalization": "truncate"
+   },
+   "evidence": {
+    "schemes": [
+     "xbrl"
+    ],
+    "pointers": [
+     "xbrl:jpcrp_cor:OrdinaryIncomeLossSummaryOfBusinessResults@CurrentYearDuration"
+    ]
+   },
+   "contract": {
+    "comparator": "equals_within",
+    "tolerance": "max(decimals, claim_scale/2)"
+   },
+   "result": {
+    "state": "GROUNDED",
+    "recomputed": 1457848000.0,
+    "script_reason": null
+   },
+   "provenance": []
+  },
+  {
+   "id": "N010",
+   "kind": "num",
+   "form": "derived_value",
+   "subject": "経常利益",
+   "value": 53.8,
+   "unit": "%",
+   "word": null,
+   "modifiers": {
+    "population": "consolidated",
+    "time_range": [
+     [
+      "CurrentYear",
+      "Duration"
+     ],
+     [
+      "Prior1Year",
+      "Duration"
+     ]
+    ],
+    "normalization": null
+   },
+   "evidence": {
+    "schemes": [
+     "formula",
+     "xbrl"
+    ],
+    "pointers": [
+     "xbrl:jpcrp_cor:OrdinaryIncomeLossSummaryOfBusinessResults@CurrentYearDuration",
+     "xbrl:jpcrp_cor:OrdinaryIncomeLossSummaryOfBusinessResults@Prior1YearDuration",
+     "formula:cur/prior*100"
+    ]
+   },
+   "contract": {
+    "comparator": "ratio*100",
+    "tolerance": "0.15pt"
+   },
+   "result": {
+    "state": "GROUNDED",
+    "recomputed": 53.81,
+    "script_reason": null
+   },
+   "provenance": []
+  },
+  {
+   "id": "N011",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "親会社株主に帰属する当期純利益",
+   "value": 945000000.0,
+   "unit": "円",
+   "word": null,
+   "modifiers": {
+    "population": "consolidated",
+    "time_range": [
+     [
+      "CurrentYear",
+      "Duration"
+     ]
+    ],
+    "normalization": "truncate"
+   },
+   "evidence": {
+    "schemes": [
+     "xbrl"
+    ],
+    "pointers": [
+     "xbrl:jpcrp_cor:ProfitLossAttributableToOwnersOfParentSummaryOfBusinessResults@CurrentYearDuration"
+    ]
+   },
+   "contract": {
+    "comparator": "equals_within",
+    "tolerance": "max(decimals, claim_scale/2)"
+   },
+   "result": {
+    "state": "GROUNDED",
+    "recomputed": 945793000.0,
+    "script_reason": null
+   },
+   "provenance": []
+  },
+  {
+   "id": "N012",
+   "kind": "num",
+   "form": "derived_value",
+   "subject": "親会社株主に帰属する当期純利益",
+   "value": 49.2,
+   "unit": "%",
+   "word": null,
+   "modifiers": {
+    "population": "consolidated",
+    "time_range": [
+     [
+      "CurrentYear",
+      "Duration"
+     ],
+     [
+      "Prior1Year",
+      "Duration"
+     ]
+    ],
+    "normalization": null
+   },
+   "evidence": {
+    "schemes": [
+     "formula",
+     "xbrl"
+    ],
+    "pointers": [
+     "xbrl:jpcrp_cor:ProfitLossAttributableToOwnersOfParentSummaryOfBusinessResults@CurrentYearDuration",
+     "xbrl:jpcrp_cor:ProfitLossAttributableToOwnersOfParentSummaryOfBusinessResults@Prior1YearDuration",
+     "formula:cur/prior*100"
+    ]
+   },
+   "contract": {
+    "comparator": "ratio*100",
+    "tolerance": "0.15pt"
+   },
+   "result": {
+    "state": "GROUNDED",
+    "recomputed": 49.19,
+    "script_reason": null
+   },
+   "provenance": []
+  },
+  {
+   "id": "N013",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "株主資本利益率",
+   "value": 10.0,
+   "unit": "%",
+   "word": null,
+   "modifiers": {
+    "population": "consolidated",
+    "time_range": [
+     [
+      "CurrentYear",
+      "Duration"
+     ]
+    ],
+    "normalization": null
+   },
+   "evidence": {
+    "schemes": [
+     "xbrl"
+    ],
+    "pointers": [
+     "xbrl:jpcrp_cor:RateOfReturnOnEquitySummaryOfBusinessResults@CurrentYearDuration"
+    ]
+   },
+   "contract": {
+    "comparator": "equals_within(pure*100)",
+    "tolerance": "0.15pt"
+   },
+   "result": {
+    "state": "VALUE_MISMATCH",
+    "recomputed": 5.8,
+    "script_reason": null
+   },
+   "provenance": []
+  },
+  {
+   "id": "N014",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "株主資本利益率",
+   "value": 5.8,
+   "unit": "%",
+   "word": null,
+   "modifiers": {
+    "population": "consolidated",
+    "time_range": [
+     [
+      "CurrentYear",
+      "Duration"
+     ]
+    ],
+    "normalization": null
+   },
+   "evidence": {
+    "schemes": [
+     "xbrl"
+    ],
+    "pointers": [
+     "xbrl:jpcrp_cor:RateOfReturnOnEquitySummaryOfBusinessResults@CurrentYearDuration"
+    ]
+   },
+   "contract": {
+    "comparator": "equals_within(pure*100)",
+    "tolerance": "0.15pt"
+   },
+   "result": {
+    "state": "GROUNDED",
+    "recomputed": 5.8,
+    "script_reason": null
+   },
+   "provenance": []
+  },
+  {
+   "id": "N015",
+   "kind": "num",
+   "form": "derived_value",
+   "subject": "資産合計",
+   "value": 2281000000.0,
+   "unit": "円",
+   "word": null,
+   "modifiers": {
+    "population": "consolidated",
+    "time_range": [
+     [
+      "CurrentYear",
+      "Instant"
+     ],
+     [
+      "Prior1Year",
+      "Instant"
+     ]
+    ],
+    "normalization": "truncate"
+   },
+   "evidence": {
+    "schemes": [
+     "formula",
+     "xbrl"
+    ],
+    "pointers": [
+     "xbrl:jppfs_cor:Assets@CurrentYearInstant",
+     "xbrl:jppfs_cor:Assets@Prior1YearInstant",
+     "formula:a-b"
+    ]
+   },
+   "contract": {
+    "comparator": "diff(a-b) equals_within",
+    "tolerance": "max(decimals, claim_scale/2)"
+   },
+   "result": {
+    "state": "GROUNDED",
+    "recomputed": 2281746000.0,
+    "script_reason": null
+   },
+   "provenance": []
+  },
+  {
+   "id": "N016",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "資産合計",
+   "value": 1475000000.0,
+   "unit": "円",
+   "word": null,
+   "modifiers": {
+    "population": "consolidated",
+    "time_range": [
+     [
+      "CurrentYear",
+      "Instant"
+     ]
+    ],
+    "normalization": null
+   },
+   "evidence": {
+    "schemes": [
+     "xbrl"
+    ],
+    "pointers": [
+     "xbrl:jppfs_cor:Assets@CurrentYearInstant"
+    ]
+   },
+   "contract": {
+    "comparator": "equals_within",
+    "tolerance": "max(decimals, claim_scale/2)"
+   },
+   "result": {
+    "state": "VALUE_MISMATCH",
+    "recomputed": 27836421000.0,
+    "script_reason": "value differs(segment/other period?)"
+   },
+   "provenance": []
+  },
+  {
+   "id": "N017",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "資産合計",
+   "value": 27836000000.0,
+   "unit": "円",
+   "word": null,
+   "modifiers": {
+    "population": "consolidated",
+    "time_range": [
+     [
+      "CurrentYear",
+      "Instant"
+     ]
+    ],
+    "normalization": "round"
+   },
+   "evidence": {
+    "schemes": [
+     "xbrl"
+    ],
+    "pointers": [
+     "xbrl:jppfs_cor:Assets@CurrentYearInstant"
+    ]
+   },
+   "contract": {
+    "comparator": "equals_within",
+    "tolerance": "max(decimals, claim_scale/2)"
+   },
+   "result": {
+    "state": "GROUNDED",
+    "recomputed": 27836421000.0,
+    "script_reason": null
+   },
+   "provenance": []
+  },
+  {
+   "id": "N018",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "資産合計",
+   "value": 25554000000.0,
+   "unit": "円",
+   "word": null,
+   "modifiers": {
+    "population": "consolidated",
+    "time_range": [
+     [
+      "Prior1Year",
+      "Instant"
+     ]
+    ],
+    "normalization": "truncate"
+   },
+   "evidence": {
+    "schemes": [
+     "xbrl"
+    ],
+    "pointers": [
+     "xbrl:jppfs_cor:Assets@Prior1YearInstant"
+    ]
+   },
+   "contract": {
+    "comparator": "equals_within",
+    "tolerance": "max(decimals, claim_scale/2)"
+   },
+   "result": {
+    "state": "GROUNDED",
+    "recomputed": 25554675000.0,
+    "script_reason": null
+   },
+   "provenance": []
+  },
+  {
+   "id": "N019",
+   "kind": "num",
+   "form": "derived_value",
+   "subject": "受取手形及び売掛金",
+   "value": 804000000.0,
+   "unit": "円",
+   "word": null,
+   "modifiers": {
+    "population": "consolidated",
+    "time_range": [
+     [
+      "CurrentYear",
+      "Instant"
+     ],
+     [
+      "Prior1Year",
+      "Instant"
+     ]
+    ],
+    "normalization": "truncate"
+   },
+   "evidence": {
+    "schemes": [
+     "formula",
+     "xbrl"
+    ],
+    "pointers": [
+     "xbrl:jppfs_cor:NotesAndAccountsReceivableTrade@CurrentYearInstant",
+     "xbrl:jppfs_cor:NotesAndAccountsReceivableTrade@Prior1YearInstant",
+     "formula:a-b"
+    ]
+   },
+   "contract": {
+    "comparator": "diff(a-b) equals_within",
+    "tolerance": "max(decimals, claim_scale/2)"
+   },
+   "result": {
+    "state": "GROUNDED",
+    "recomputed": 804775000.0,
+    "script_reason": null
+   },
+   "provenance": []
+  },
+  {
+   "id": "N020",
+   "kind": "num",
+   "form": "derived_value",
+   "subject": "投資有価証券",
+   "value": 301000000.0,
+   "unit": "円",
+   "word": null,
+   "modifiers": {
+    "population": "consolidated",
+    "time_range": [
+     [
+      "CurrentYear",
+      "Instant"
+     ],
+     [
+      "Prior1Year",
+      "Instant"
+     ]
+    ],
+    "normalization": "truncate"
+   },
+   "evidence": {
+    "schemes": [
+     "formula",
+     "xbrl"
+    ],
+    "pointers": [
+     "xbrl:jppfs_cor:InvestmentSecurities@CurrentYearInstant",
+     "xbrl:jppfs_cor:InvestmentSecurities@Prior1YearInstant",
+     "formula:a-b"
+    ]
+   },
+   "contract": {
+    "comparator": "diff(a-b) equals_within",
+    "tolerance": "max(decimals, claim_scale/2)"
+   },
+   "result": {
+    "state": "GROUNDED",
+    "recomputed": 301511000.0,
+    "script_reason": null
+   },
+   "provenance": []
+  },
+  {
+   "id": "N021",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "退職給付に係る資産",
+   "value": 1828000000.0,
+   "unit": "円",
+   "word": null,
+   "modifiers": {
+    "population": null,
+    "time_range": null,
+    "normalization": null
+   },
+   "evidence": {
+    "schemes": [],
+    "pointers": []
+   },
+   "contract": {
+    "comparator": null,
+    "tolerance": null
+   },
+   "result": {
+    "state": "POINTER_NOT_FOUND",
+    "recomputed": null,
+    "script_reason": "no_element"
+   },
+   "provenance": []
+  },
+  {
+   "id": "N022",
+   "kind": "num",
+   "form": "derived_value",
+   "subject": "現金及び預金",
+   "value": 293000000.0,
+   "unit": "円",
+   "word": null,
+   "modifiers": {
+    "population": "consolidated",
+    "time_range": [
+     [
+      "CurrentYear",
+      "Instant"
+     ],
+     [
+      "Prior1Year",
+      "Instant"
+     ]
+    ],
+    "normalization": "abs+round"
+   },
+   "evidence": {
+    "schemes": [
+     "formula",
+     "xbrl"
+    ],
+    "pointers": [
+     "xbrl:jppfs_cor:CashAndDeposits@CurrentYearInstant",
+     "xbrl:jppfs_cor:CashAndDeposits@Prior1YearInstant",
+     "formula:a-b"
+    ]
+   },
+   "contract": {
+    "comparator": "diff(a-b) equals_within",
+    "tolerance": "max(decimals, claim_scale/2)"
+   },
+   "result": {
+    "state": "GROUNDED",
+    "recomputed": -293190000.0,
+    "script_reason": null
+   },
+   "provenance": []
+  },
+  {
+   "id": "N023",
+   "kind": "num",
+   "form": "derived_value",
+   "subject": "契約資産",
+   "value": 161000000.0,
+   "unit": "円",
+   "word": null,
+   "modifiers": {
+    "population": "consolidated",
+    "time_range": [
+     [
+      "CurrentYear",
+      "Instant"
+     ],
+     [
+      "Prior1Year",
+      "Instant"
+     ]
+    ],
+    "normalization": "abs+round"
+   },
+   "evidence": {
+    "schemes": [
+     "formula",
+     "xbrl"
+    ],
+    "pointers": [
+     "xbrl:jppfs_cor:ContractAssets@CurrentYearInstant",
+     "xbrl:jppfs_cor:ContractAssets@Prior1YearInstant",
+     "formula:a-b"
+    ]
+   },
+   "contract": {
+    "comparator": "diff(a-b) equals_within",
+    "tolerance": "max(decimals, claim_scale/2)"
+   },
+   "result": {
+    "state": "GROUNDED",
+    "recomputed": -161030000.0,
+    "script_reason": null
+   },
+   "provenance": []
+  },
+  {
+   "id": "N024",
+   "kind": "num",
+   "form": "derived_value",
+   "subject": "負債合計",
+   "value": 614000000.0,
+   "unit": "円",
+   "word": null,
+   "modifiers": {
+    "population": "consolidated",
+    "time_range": [
+     [
+      "CurrentYear",
+      "Instant"
+     ],
+     [
+      "Prior1Year",
+      "Instant"
+     ]
+    ],
+    "normalization": "truncate"
+   },
+   "evidence": {
+    "schemes": [
+     "formula",
+     "xbrl"
+    ],
+    "pointers": [
+     "xbrl:jppfs_cor:Liabilities@CurrentYearInstant",
+     "xbrl:jppfs_cor:Liabilities@Prior1YearInstant",
+     "formula:a-b"
+    ]
+   },
+   "contract": {
+    "comparator": "diff(a-b) equals_within",
+    "tolerance": "max(decimals, claim_scale/2)"
+   },
+   "result": {
+    "state": "GROUNDED",
+    "recomputed": 614547000.0,
+    "script_reason": null
+   },
+   "provenance": []
+  },
+  {
+   "id": "N025",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "負債合計",
+   "value": 537000000.0,
+   "unit": "円",
+   "word": null,
+   "modifiers": {
+    "population": "consolidated",
+    "time_range": [
+     [
+      "CurrentYear",
+      "Instant"
+     ]
+    ],
+    "normalization": null
+   },
+   "evidence": {
+    "schemes": [
+     "xbrl"
+    ],
+    "pointers": [
+     "xbrl:jppfs_cor:Liabilities@CurrentYearInstant"
+    ]
+   },
+   "contract": {
+    "comparator": "equals_within",
+    "tolerance": "max(decimals, claim_scale/2)"
+   },
+   "result": {
+    "state": "VALUE_MISMATCH",
+    "recomputed": 10670476000.0,
+    "script_reason": "value differs(segment/other period?)"
+   },
+   "provenance": []
+  },
+  {
+   "id": "N026",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "負債合計",
+   "value": 10670000000.0,
+   "unit": "円",
+   "word": null,
+   "modifiers": {
+    "population": "consolidated",
+    "time_range": [
+     [
+      "CurrentYear",
+      "Instant"
+     ]
+    ],
+    "normalization": "round"
+   },
+   "evidence": {
+    "schemes": [
+     "xbrl"
+    ],
+    "pointers": [
+     "xbrl:jppfs_cor:Liabilities@CurrentYearInstant"
+    ]
+   },
+   "contract": {
+    "comparator": "equals_within",
+    "tolerance": "max(decimals, claim_scale/2)"
+   },
+   "result": {
+    "state": "GROUNDED",
+    "recomputed": 10670476000.0,
+    "script_reason": null
+   },
+   "provenance": []
+  },
+  {
+   "id": "N027",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "負債合計",
+   "value": 10055000000.0,
+   "unit": "円",
+   "word": null,
+   "modifiers": {
+    "population": "consolidated",
+    "time_range": [
+     [
+      "Prior1Year",
+      "Instant"
+     ]
+    ],
+    "normalization": "truncate"
+   },
+   "evidence": {
+    "schemes": [
+     "xbrl"
+    ],
+    "pointers": [
+     "xbrl:jppfs_cor:Liabilities@Prior1YearInstant"
+    ]
+   },
+   "contract": {
+    "comparator": "equals_within",
+    "tolerance": "max(decimals, claim_scale/2)"
+   },
+   "result": {
+    "state": "GROUNDED",
+    "recomputed": 10055929000.0,
+    "script_reason": null
+   },
+   "provenance": []
+  },
+  {
+   "id": "N028",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "完成業務補償引当金",
+   "value": 786000000.0,
+   "unit": "円",
+   "word": null,
+   "modifiers": {
+    "population": "consolidated",
+    "time_range": [
+     [
+      "CurrentYear",
+      "Duration"
+     ]
+    ],
+    "normalization": "round"
+   },
+   "evidence": {
+    "schemes": [
+     "xbrl"
+    ],
+    "pointers": [
+     "xbrl:jpcrp030000-asr_E36539-000:IncreaseDecreaseInProvisionForWarrantiesForCompletedOperationOpeCF@CurrentYearDuration"
+    ]
+   },
+   "contract": {
+    "comparator": "equals_within",
+    "tolerance": "max(decimals, claim_scale/2)"
+   },
+   "result": {
+    "state": "GROUNDED",
+    "recomputed": 786000000.0,
+    "script_reason": null
+   },
+   "provenance": []
+  },
+  {
+   "id": "N029",
+   "kind": "num",
+   "form": "derived_value",
+   "subject": "繰延税金負債",
+   "value": 448000000.0,
+   "unit": "円",
+   "word": null,
+   "modifiers": {
+    "population": "consolidated",
+    "time_range": [
+     [
+      "CurrentYear",
+      "Instant"
+     ],
+     [
+      "Prior1Year",
+      "Instant"
+     ]
+    ],
+    "normalization": "truncate"
+   },
+   "evidence": {
+    "schemes": [
+     "formula",
+     "xbrl"
+    ],
+    "pointers": [
+     "xbrl:jppfs_cor:DeferredTaxLiabilities@CurrentYearInstant",
+     "xbrl:jppfs_cor:DeferredTaxLiabilities@Prior1YearInstant",
+     "formula:a-b"
+    ]
+   },
+   "contract": {
+    "comparator": "diff(a-b) equals_within",
+    "tolerance": "max(decimals, claim_scale/2)"
+   },
+   "result": {
+    "state": "GROUNDED",
+    "recomputed": 448507000.0,
+    "script_reason": null
+   },
+   "provenance": []
+  },
+  {
+   "id": "N030",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "業務未払金",
+   "value": 300000000.0,
+   "unit": "円",
+   "word": null,
+   "modifiers": {
+    "population": "consolidated",
+    "time_range": [
+     [
+      "CurrentYear",
+      "Duration"
+     ]
+    ],
+    "normalization": "abs+round"
+   },
+   "evidence": {
+    "schemes": [
+     "xbrl"
+    ],
+    "pointers": [
+     "xbrl:jppfs_cor:IncreaseDecreaseInNotesAndAccountsPayableTradeOpeCF@CurrentYearDuration"
+    ]
+   },
+   "contract": {
+    "comparator": "equals_within",
+    "tolerance": "max(decimals, claim_scale/2)"
+   },
+   "result": {
+    "state": "GROUNDED",
+    "recomputed": -300297000.0,
+    "script_reason": null
+   },
+   "provenance": []
+  },
+  {
+   "id": "N031",
+   "kind": "num",
+   "form": "derived_value",
+   "subject": "未払法人税等",
+   "value": 107000000.0,
+   "unit": "円",
+   "word": null,
+   "modifiers": {
+    "population": "consolidated",
+    "time_range": [
+     [
+      "CurrentYear",
+      "Instant"
+     ],
+     [
+      "Prior1Year",
+      "Instant"
+     ]
+    ],
+    "normalization": "abs+truncate"
+   },
+   "evidence": {
+    "schemes": [
+     "formula",
+     "xbrl"
+    ],
+    "pointers": [
+     "xbrl:jppfs_cor:IncomeTaxesPayable@CurrentYearInstant",
+     "xbrl:jppfs_cor:IncomeTaxesPayable@Prior1YearInstant",
+     "formula:a-b"
+    ]
+   },
+   "contract": {
+    "comparator": "diff(a-b) equals_within",
+    "tolerance": "max(decimals, claim_scale/2)"
+   },
+   "result": {
+    "state": "GROUNDED",
+    "recomputed": -107853000.0,
+    "script_reason": null
+   },
+   "provenance": []
+  },
+  {
+   "id": "N032",
+   "kind": "num",
+   "form": "derived_value",
+   "subject": "長期借入金",
+   "value": 234000000.0,
+   "unit": "円",
+   "word": null,
+   "modifiers": {
+    "population": "consolidated",
+    "time_range": [
+     [
+      "CurrentYear",
+      "Instant"
+     ],
+     [
+      "Prior1Year",
+      "Instant"
+     ]
+    ],
+    "normalization": "abs+truncate"
+   },
+   "evidence": {
+    "schemes": [
+     "formula",
+     "xbrl"
+    ],
+    "pointers": [
+     "xbrl:jppfs_cor:LongTermLoansPayable@CurrentYearInstant",
+     "xbrl:jppfs_cor:LongTermLoansPayable@Prior1YearInstant",
+     "formula:a-b"
+    ]
+   },
+   "contract": {
+    "comparator": "diff(a-b) equals_within",
+    "tolerance": "max(decimals, claim_scale/2)"
+   },
+   "result": {
+    "state": "GROUNDED",
+    "recomputed": -234864000.0,
+    "script_reason": null
+   },
+   "provenance": []
+  },
+  {
+   "id": "N033",
+   "kind": "num",
+   "form": "derived_value",
+   "subject": "純資産合計",
+   "value": 1667000000.0,
+   "unit": "円",
+   "word": null,
+   "modifiers": {
+    "population": "consolidated",
+    "time_range": [
+     [
+      "CurrentYear",
+      "Instant"
+     ],
+     [
+      "Prior1Year",
+      "Instant"
+     ]
+    ],
+    "normalization": "round"
+   },
+   "evidence": {
+    "schemes": [
+     "formula",
+     "xbrl"
+    ],
+    "pointers": [
+     "xbrl:jpcrp_cor:NetAssetsSummaryOfBusinessResults@CurrentYearInstant",
+     "xbrl:jpcrp_cor:NetAssetsSummaryOfBusinessResults@Prior1YearInstant",
+     "formula:a-b"
+    ]
+   },
+   "contract": {
+    "comparator": "diff(a-b) equals_within",
+    "tolerance": "max(decimals, claim_scale/2)"
+   },
+   "result": {
+    "state": "GROUNDED",
+    "recomputed": 1667198000.0,
+    "script_reason": null
+   },
+   "provenance": []
+  },
+  {
+   "id": "N034",
+   "kind": "num",
+   "form": "derived_value",
+   "subject": "純資産合計",
+   "value": 2012000000.0,
+   "unit": "円",
+   "word": null,
+   "modifiers": {
+    "population": "consolidated",
+    "time_range": [
+     [
+      "Prior1Year",
+      "Instant"
+     ],
+     [
+      "Prior2Year",
+      "Instant"
+     ]
+    ],
+    "normalization": "round"
+   },
+   "evidence": {
+    "schemes": [
+     "formula",
+     "xbrl"
+    ],
+    "pointers": [
+     "xbrl:jpcrp_cor:NetAssetsSummaryOfBusinessResults@Prior1YearInstant",
+     "xbrl:jpcrp_cor:NetAssetsSummaryOfBusinessResults@Prior2YearInstant",
+     "formula:a-b"
+    ]
+   },
+   "contract": {
+    "comparator": "diff(a-b) equals_within",
+    "tolerance": "max(decimals, claim_scale/2)"
+   },
+   "result": {
+    "state": "GROUNDED",
+    "recomputed": 2012284000.0,
+    "script_reason": null
+   },
+   "provenance": []
+  },
+  {
+   "id": "N035",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "純資産合計",
+   "value": 17165000000.0,
+   "unit": "円",
+   "word": null,
+   "modifiers": {
+    "population": "consolidated",
+    "time_range": [
+     [
+      "CurrentYear",
+      "Instant"
+     ]
+    ],
+    "normalization": "truncate"
+   },
+   "evidence": {
+    "schemes": [
+     "xbrl"
+    ],
+    "pointers": [
+     "xbrl:jpcrp_cor:NetAssetsSummaryOfBusinessResults@CurrentYearInstant"
+    ]
+   },
+   "contract": {
+    "comparator": "equals_within",
+    "tolerance": "max(decimals, claim_scale/2)"
+   },
+   "result": {
+    "state": "GROUNDED",
+    "recomputed": 17165944000.0,
+    "script_reason": null
+   },
+   "provenance": []
+  },
+  {
+   "id": "N036",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "純資産合計",
+   "value": 15498000000.0,
+   "unit": "円",
+   "word": null,
+   "modifiers": {
+    "population": "consolidated",
+    "time_range": [
+     [
+      "Prior1Year",
+      "Instant"
+     ]
+    ],
+    "normalization": "truncate"
+   },
+   "evidence": {
+    "schemes": [
+     "xbrl"
+    ],
+    "pointers": [
+     "xbrl:jpcrp_cor:NetAssetsSummaryOfBusinessResults@Prior1YearInstant"
+    ]
+   },
+   "contract": {
+    "comparator": "equals_within",
+    "tolerance": "max(decimals, claim_scale/2)"
+   },
+   "result": {
+    "state": "GROUNDED",
+    "recomputed": 15498746000.0,
+    "script_reason": null
+   },
+   "provenance": []
+  },
+  {
+   "id": "N037",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "剰余金の配当",
+   "value": 652000000.0,
+   "unit": "円",
+   "word": null,
+   "modifiers": {
+    "population": "consolidated",
+    "time_range": [
+     [
+      "CurrentYear",
+      "Duration"
+     ]
+    ],
+    "normalization": "abs+truncate"
+   },
+   "evidence": {
+    "schemes": [
+     "xbrl"
+    ],
+    "pointers": [
+     "xbrl:jppfs_cor:DividendsFromSurplus@CurrentYearDuration"
+    ]
+   },
+   "contract": {
+    "comparator": "equals_within",
+    "tolerance": "max(decimals, claim_scale/2)"
+   },
+   "result": {
+    "state": "GROUNDED",
+    "recomputed": -652881000.0,
+    "script_reason": null
+   },
+   "provenance": []
+  },
+  {
+   "id": "N038",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "親会社株主に帰属する当期純利益",
+   "value": 945000000.0,
+   "unit": "円",
+   "word": null,
+   "modifiers": {
+    "population": "consolidated",
+    "time_range": [
+     [
+      "CurrentYear",
+      "Duration"
+     ]
+    ],
+    "normalization": "truncate"
+   },
+   "evidence": {
+    "schemes": [
+     "xbrl"
+    ],
+    "pointers": [
+     "xbrl:jpcrp_cor:ProfitLossAttributableToOwnersOfParentSummaryOfBusinessResults@CurrentYearDuration"
+    ]
+   },
+   "contract": {
+    "comparator": "equals_within",
+    "tolerance": "max(decimals, claim_scale/2)"
+   },
+   "result": {
+    "state": "GROUNDED",
+    "recomputed": 945793000.0,
+    "script_reason": null
+   },
+   "provenance": []
+  },
+  {
+   "id": "N039",
+   "kind": "num",
+   "form": "derived_value",
+   "subject": "その他有価証券評価差額金",
+   "value": 217000000.0,
+   "unit": "円",
+   "word": null,
+   "modifiers": {
+    "population": "consolidated",
+    "time_range": [
+     [
+      "CurrentYear",
+      "Instant"
+     ],
+     [
+      "Prior1Year",
+      "Instant"
+     ]
+    ],
+    "normalization": "round"
+   },
+   "evidence": {
+    "schemes": [
+     "formula",
+     "xbrl"
+    ],
+    "pointers": [
+     "xbrl:jppfs_cor:ValuationDifferenceOnAvailableForSaleSecurities@CurrentYearInstant",
+     "xbrl:jppfs_cor:ValuationDifferenceOnAvailableForSaleSecurities@Prior1YearInstant",
+     "formula:a-b"
+    ]
+   },
+   "contract": {
+    "comparator": "diff(a-b) equals_within",
+    "tolerance": "max(decimals, claim_scale/2)"
+   },
+   "result": {
+    "state": "GROUNDED",
+    "recomputed": 217490000.0,
+    "script_reason": null
+   },
+   "provenance": []
+  },
+  {
+   "id": "N040",
+   "kind": "num",
+   "form": "derived_value",
+   "subject": "退職給付に係る調整累計額",
+   "value": 1085000000.0,
+   "unit": "円",
+   "word": null,
+   "modifiers": {
+    "population": "consolidated",
+    "time_range": [
+     [
+      "CurrentYear",
+      "Instant"
+     ],
+     [
+      "Prior1Year",
+      "Instant"
+     ]
+    ],
+    "normalization": "round"
+   },
+   "evidence": {
+    "schemes": [
+     "formula",
+     "xbrl"
+    ],
+    "pointers": [
+     "xbrl:jppfs_cor:RemeasurementsOfDefinedBenefitPlans@CurrentYearInstant",
+     "xbrl:jppfs_cor:RemeasurementsOfDefinedBenefitPlans@Prior1YearInstant",
+     "formula:a-b"
+    ]
+   },
+   "contract": {
+    "comparator": "diff(a-b) equals_within",
+    "tolerance": "max(decimals, claim_scale/2)"
+   },
+   "result": {
+    "state": "GROUNDED",
+    "recomputed": 1085489000.0,
+    "script_reason": null
+   },
+   "provenance": []
+  },
+  {
+   "id": "N041",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "自己資本比率",
+   "value": 61.7,
+   "unit": "%",
+   "word": null,
+   "modifiers": {
+    "population": "consolidated",
+    "time_range": [
+     [
+      "CurrentYear",
+      "Instant"
+     ]
+    ],
+    "normalization": null
+   },
+   "evidence": {
+    "schemes": [
+     "xbrl"
+    ],
+    "pointers": [
+     "xbrl:jpcrp_cor:EquityToAssetRatioSummaryOfBusinessResults@CurrentYearInstant"
+    ]
+   },
+   "contract": {
+    "comparator": "equals_within(pure*100)",
+    "tolerance": "0.15pt"
+   },
+   "result": {
+    "state": "GROUNDED",
+    "recomputed": 61.7,
+    "script_reason": null
+   },
+   "provenance": []
+  },
+  {
+   "id": "N042",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": null,
+   "value": 293000000.0,
+   "unit": "円",
+   "word": null,
+   "modifiers": {
+    "population": "consolidated",
+    "time_range": [
+     [
+      "CurrentYear",
+      "Duration"
+     ]
+    ],
+    "normalization": "abs+round"
+   },
+   "evidence": {
+    "schemes": [
+     "xbrl"
+    ],
+    "pointers": [
+     "xbrl:jppfs_cor:NetIncreaseDecreaseInCashAndCashEquivalents@CurrentYearDuration"
+    ]
+   },
+   "contract": {
+    "comparator": "equals_within",
+    "tolerance": "max(decimals, claim_scale/2)"
+   },
+   "result": {
+    "state": "GROUNDED",
+    "recomputed": -293189000.0,
+    "script_reason": "value_only(no subject)"
+   },
+   "provenance": [
+    "value_only"
+   ]
+  },
+  {
+   "id": "N043",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": null,
+   "value": 2605000000.0,
+   "unit": "円",
+   "word": null,
+   "modifiers": {
+    "population": null,
+    "time_range": null,
+    "normalization": null
+   },
+   "evidence": {
+    "schemes": [],
+    "pointers": []
+   },
+   "contract": {
+    "comparator": null,
+    "tolerance": null
+   },
+   "result": {
+    "state": "UNVERIFIABLE",
+    "recomputed": null,
+    "script_reason": "ambiguous(3 elements)"
+   },
+   "provenance": []
+  },
+  {
+   "id": "N044",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "営業活動の結果獲得した資金",
+   "value": 1032000000.0,
+   "unit": "円",
+   "word": null,
+   "modifiers": {
+    "population": "consolidated",
+    "time_range": [
+     [
+      "CurrentYear",
+      "Duration"
+     ]
+    ],
+    "normalization": "truncate"
+   },
+   "evidence": {
+    "schemes": [
+     "xbrl"
+    ],
+    "pointers": [
+     "xbrl:jpcrp_cor:NetCashProvidedByUsedInOperatingActivitiesSummaryOfBusinessResults@CurrentYearDuration"
+    ]
+   },
+   "contract": {
+    "comparator": "equals_within",
+    "tolerance": "max(decimals, claim_scale/2)"
+   },
+   "result": {
+    "state": "GROUNDED",
+    "recomputed": 1032971000.0,
+    "script_reason": null
+   },
+   "provenance": []
+  },
+  {
+   "id": "N045",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "営業活動の結果獲得した資金",
+   "value": 3029000000.0,
+   "unit": "円",
+   "word": null,
+   "modifiers": {
+    "population": "consolidated",
+    "time_range": [
+     [
+      "Prior1Year",
+      "Duration"
+     ]
+    ],
+    "normalization": "round"
+   },
+   "evidence": {
+    "schemes": [
+     "xbrl"
+    ],
+    "pointers": [
+     "xbrl:jpcrp_cor:NetCashProvidedByUsedInOperatingActivitiesSummaryOfBusinessResults@Prior1YearDuration"
+    ]
+   },
+   "contract": {
+    "comparator": "equals_within",
+    "tolerance": "max(decimals, claim_scale/2)"
+   },
+   "result": {
+    "state": "GROUNDED",
+    "recomputed": 3029245000.0,
+    "script_reason": null
+   },
+   "provenance": []
+  },
+  {
+   "id": "N046",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "税金等調整前当期純利益",
+   "value": 1452000000.0,
+   "unit": "円",
+   "word": null,
+   "modifiers": {
+    "population": "consolidated",
+    "time_range": [
+     [
+      "CurrentYear",
+      "Duration"
+     ]
+    ],
+    "normalization": "round"
+   },
+   "evidence": {
+    "schemes": [
+     "xbrl"
+    ],
+    "pointers": [
+     "xbrl:jppfs_cor:IncomeBeforeIncomeTaxes@CurrentYearDuration"
+    ]
+   },
+   "contract": {
+    "comparator": "equals_within",
+    "tolerance": "max(decimals, claim_scale/2)"
+   },
+   "result": {
+    "state": "GROUNDED",
+    "recomputed": 1452012000.0,
+    "script_reason": "diff phrase but value matched a fact"
+   },
+   "provenance": [
+    "diff_phrase_direct"
+   ]
+  },
+  {
+   "id": "N047",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "減価償却費",
+   "value": 452000000.0,
+   "unit": "円",
+   "word": null,
+   "modifiers": {
+    "population": "consolidated",
+    "time_range": [
+     [
+      "CurrentYear",
+      "Duration"
+     ]
+    ],
+    "normalization": "round"
+   },
+   "evidence": {
+    "schemes": [
+     "xbrl"
+    ],
+    "pointers": [
+     "xbrl:jppfs_cor:DepreciationAndAmortizationOpeCF@CurrentYearDuration"
+    ]
+   },
+   "contract": {
+    "comparator": "equals_within",
+    "tolerance": "max(decimals, claim_scale/2)"
+   },
+   "result": {
+    "state": "GROUNDED",
+    "recomputed": 452168000.0,
+    "script_reason": null
+   },
+   "provenance": []
+  },
+  {
+   "id": "N048",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "売上債権",
+   "value": 802000000.0,
+   "unit": "円",
+   "word": null,
+   "modifiers": {
+    "population": "consolidated",
+    "time_range": [
+     [
+      "CurrentYear",
+      "Duration"
+     ]
+    ],
+    "normalization": "abs+truncate"
+   },
+   "evidence": {
+    "schemes": [
+     "xbrl"
+    ],
+    "pointers": [
+     "xbrl:jppfs_cor:DecreaseIncreaseInNotesAndAccountsReceivableTradeOpeCF@CurrentYearDuration"
+    ]
+   },
+   "contract": {
+    "comparator": "equals_within",
+    "tolerance": "max(decimals, claim_scale/2)"
+   },
+   "result": {
+    "state": "GROUNDED",
+    "recomputed": -802686000.0,
+    "script_reason": "diff phrase but value matched a fact"
+   },
+   "provenance": [
+    "diff_phrase_direct"
+   ]
+  },
+  {
+   "id": "N049",
+   "kind": "num",
+   "form": "derived_value",
+   "subject": "契約資産",
+   "value": 161000000.0,
+   "unit": "円",
+   "word": null,
+   "modifiers": {
+    "population": "consolidated",
+    "time_range": [
+     [
+      "CurrentYear",
+      "Instant"
+     ],
+     [
+      "Prior1Year",
+      "Instant"
+     ]
+    ],
+    "normalization": "abs+round"
+   },
+   "evidence": {
+    "schemes": [
+     "formula",
+     "xbrl"
+    ],
+    "pointers": [
+     "xbrl:jppfs_cor:ContractAssets@CurrentYearInstant",
+     "xbrl:jppfs_cor:ContractAssets@Prior1YearInstant",
+     "formula:a-b"
+    ]
+   },
+   "contract": {
+    "comparator": "diff(a-b) equals_within",
+    "tolerance": "max(decimals, claim_scale/2)"
+   },
+   "result": {
+    "state": "GROUNDED",
+    "recomputed": -161030000.0,
+    "script_reason": null
+   },
+   "provenance": []
+  },
+  {
+   "id": "N050",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "仕入債務",
+   "value": 300000000.0,
+   "unit": "円",
+   "word": null,
+   "modifiers": {
+    "population": "consolidated",
+    "time_range": [
+     [
+      "CurrentYear",
+      "Duration"
+     ]
+    ],
+    "normalization": "abs+round"
+   },
+   "evidence": {
+    "schemes": [
+     "xbrl"
+    ],
+    "pointers": [
+     "xbrl:jppfs_cor:IncreaseDecreaseInNotesAndAccountsPayableTradeOpeCF@CurrentYearDuration"
+    ]
+   },
+   "contract": {
+    "comparator": "equals_within",
+    "tolerance": "max(decimals, claim_scale/2)"
+   },
+   "result": {
+    "state": "GROUNDED",
+    "recomputed": -300297000.0,
+    "script_reason": "diff phrase but value matched a fact"
+   },
+   "provenance": [
+    "diff_phrase_direct"
+   ]
+  },
+  {
+   "id": "N051",
+   "kind": "num",
+   "form": "derived_value",
+   "subject": "契約負債",
+   "value": 93000000.0,
+   "unit": "円",
+   "word": null,
+   "modifiers": {
+    "population": "consolidated",
+    "time_range": [
+     [
+      "CurrentYear",
+      "Instant"
+     ],
+     [
+      "Prior1Year",
+      "Instant"
+     ]
+    ],
+    "normalization": "abs+round"
+   },
+   "evidence": {
+    "schemes": [
+     "formula",
+     "xbrl"
+    ],
+    "pointers": [
+     "xbrl:jppfs_cor:ContractLiabilities@CurrentYearInstant",
+     "xbrl:jppfs_cor:ContractLiabilities@Prior1YearInstant",
+     "formula:a-b"
+    ]
+   },
+   "contract": {
+    "comparator": "diff(a-b) equals_within",
+    "tolerance": "max(decimals, claim_scale/2)"
+   },
+   "result": {
+    "state": "GROUNDED",
+    "recomputed": -93446000.0,
+    "script_reason": null
+   },
+   "provenance": []
+  },
+  {
+   "id": "N052",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "法人税等の支払額",
+   "value": 780000000.0,
+   "unit": "円",
+   "word": null,
+   "modifiers": {
+    "population": "consolidated",
+    "time_range": [
+     [
+      "CurrentYear",
+      "Duration"
+     ]
+    ],
+    "normalization": "abs+round"
+   },
+   "evidence": {
+    "schemes": [
+     "xbrl"
+    ],
+    "pointers": [
+     "xbrl:jppfs_cor:IncomeTaxesPaidOpeCF@CurrentYearDuration"
+    ]
+   },
+   "contract": {
+    "comparator": "equals_within",
+    "tolerance": "max(decimals, claim_scale/2)"
+   },
+   "result": {
+    "state": "GROUNDED",
+    "recomputed": -780243000.0,
+    "script_reason": "diff phrase but value matched a fact"
+   },
+   "provenance": [
+    "diff_phrase_direct"
+   ]
+  },
+  {
+   "id": "N053",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "投資活動の結果使用した資金",
+   "value": 259000000.0,
+   "unit": "円",
+   "word": null,
+   "modifiers": {
+    "population": "consolidated",
+    "time_range": [
+     [
+      "CurrentYear",
+      "Duration"
+     ]
+    ],
+    "normalization": "abs+round"
+   },
+   "evidence": {
+    "schemes": [
+     "xbrl"
+    ],
+    "pointers": [
+     "xbrl:jpcrp_cor:NetCashProvidedByUsedInInvestingActivitiesSummaryOfBusinessResults@CurrentYearDuration"
+    ]
+   },
+   "contract": {
+    "comparator": "equals_within",
+    "tolerance": "max(decimals, claim_scale/2)"
+   },
+   "result": {
+    "state": "GROUNDED",
+    "recomputed": -259037000.0,
+    "script_reason": null
+   },
+   "provenance": []
+  },
+  {
+   "id": "N054",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "投資活動の結果使用した資金",
+   "value": 506000000.0,
+   "unit": "円",
+   "word": null,
+   "modifiers": {
+    "population": "consolidated",
+    "time_range": [
+     [
+      "Prior1Year",
+      "Duration"
+     ]
+    ],
+    "normalization": "abs+truncate"
+   },
+   "evidence": {
+    "schemes": [
+     "xbrl"
+    ],
+    "pointers": [
+     "xbrl:jpcrp_cor:NetCashProvidedByUsedInInvestingActivitiesSummaryOfBusinessResults@Prior1YearDuration"
+    ]
+   },
+   "contract": {
+    "comparator": "equals_within",
+    "tolerance": "max(decimals, claim_scale/2)"
+   },
+   "result": {
+    "state": "GROUNDED",
+    "recomputed": -506793000.0,
+    "script_reason": null
+   },
+   "provenance": []
+  },
+  {
+   "id": "N055",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "有形固定資産の取得による支出",
+   "value": 307000000.0,
+   "unit": "円",
+   "word": null,
+   "modifiers": {
+    "population": "consolidated",
+    "time_range": [
+     [
+      "CurrentYear",
+      "Duration"
+     ]
+    ],
+    "normalization": "abs+round"
+   },
+   "evidence": {
+    "schemes": [
+     "xbrl"
+    ],
+    "pointers": [
+     "xbrl:jppfs_cor:PurchaseOfPropertyPlantAndEquipmentInvCF@CurrentYearDuration"
+    ]
+   },
+   "contract": {
+    "comparator": "equals_within",
+    "tolerance": "max(decimals, claim_scale/2)"
+   },
+   "result": {
+    "state": "GROUNDED",
+    "recomputed": -307279000.0,
+    "script_reason": null
+   },
+   "provenance": []
+  },
+  {
+   "id": "N056",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "無形固定資産の取得による支出",
+   "value": 44000000.0,
+   "unit": "円",
+   "word": null,
+   "modifiers": {
+    "population": "consolidated",
+    "time_range": [
+     [
+      "CurrentYear",
+      "Duration"
+     ]
+    ],
+    "normalization": "abs+round"
+   },
+   "evidence": {
+    "schemes": [
+     "xbrl"
+    ],
+    "pointers": [
+     "xbrl:jppfs_cor:PurchaseOfIntangibleAssetsInvCF@CurrentYearDuration"
+    ]
+   },
+   "contract": {
+    "comparator": "equals_within",
+    "tolerance": "max(decimals, claim_scale/2)"
+   },
+   "result": {
+    "state": "GROUNDED",
+    "recomputed": -44037000.0,
+    "script_reason": null
+   },
+   "provenance": []
+  },
+  {
+   "id": "N057",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "財務活動の結果使用した資金",
+   "value": 1073000000.0,
+   "unit": "円",
+   "word": null,
+   "modifiers": {
+    "population": "consolidated",
+    "time_range": [
+     [
+      "CurrentYear",
+      "Duration"
+     ]
+    ],
+    "normalization": "abs+round"
+   },
+   "evidence": {
+    "schemes": [
+     "xbrl"
+    ],
+    "pointers": [
+     "xbrl:jpcrp_cor:NetCashProvidedByUsedInFinancingActivitiesSummaryOfBusinessResults@CurrentYearDuration"
+    ]
+   },
+   "contract": {
+    "comparator": "equals_within",
+    "tolerance": "max(decimals, claim_scale/2)"
+   },
+   "result": {
+    "state": "GROUNDED",
+    "recomputed": -1073010000.0,
+    "script_reason": null
+   },
+   "provenance": []
+  },
+  {
+   "id": "N058",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "財務活動の結果使用した資金",
+   "value": 1740000000.0,
+   "unit": "円",
+   "word": null,
+   "modifiers": {
+    "population": "consolidated",
+    "time_range": [
+     [
+      "Prior1Year",
+      "Duration"
+     ]
+    ],
+    "normalization": "abs+round"
+   },
+   "evidence": {
+    "schemes": [
+     "xbrl"
+    ],
+    "pointers": [
+     "xbrl:jpcrp_cor:NetCashProvidedByUsedInFinancingActivitiesSummaryOfBusinessResults@Prior1YearDuration"
+    ]
+   },
+   "contract": {
+    "comparator": "equals_within",
+    "tolerance": "max(decimals, claim_scale/2)"
+   },
+   "result": {
+    "state": "GROUNDED",
+    "recomputed": -1740057000.0,
+    "script_reason": null
+   },
+   "provenance": []
+  },
+  {
+   "id": "N059",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "長期借入金の返済",
+   "value": 332000000.0,
+   "unit": "円",
+   "word": null,
+   "modifiers": {
+    "population": null,
+    "time_range": null,
+    "normalization": null
+   },
+   "evidence": {
+    "schemes": [],
+    "pointers": []
+   },
+   "contract": {
+    "comparator": null,
+    "tolerance": null
+   },
+   "result": {
+    "state": "POINTER_NOT_FOUND",
+    "recomputed": null,
+    "script_reason": "no_element"
+   },
+   "provenance": []
+  },
+  {
+   "id": "N060",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "配当金の支払額",
+   "value": 651000000.0,
+   "unit": "円",
+   "word": null,
+   "modifiers": {
+    "population": "consolidated",
+    "time_range": [
+     [
+      "CurrentYear",
+      "Duration"
+     ]
+    ],
+    "normalization": "abs+truncate"
+   },
+   "evidence": {
+    "schemes": [
+     "xbrl"
+    ],
+    "pointers": [
+     "xbrl:jppfs_cor:CashDividendsPaidFinCF@CurrentYearDuration"
+    ]
+   },
+   "contract": {
+    "comparator": "equals_within",
+    "tolerance": "max(decimals, claim_scale/2)"
+   },
+   "result": {
+    "state": "GROUNDED",
+    "recomputed": -651749000.0,
+    "script_reason": null
+   },
+   "provenance": []
+  },
+  {
+   "id": "T001",
+   "kind": "text",
+   "form": "threshold",
+   "subject": null,
+   "value": null,
+   "unit": null,
+   "word": "改善",
+   "modifiers": {
+    "population": null,
+    "time_range": null,
+    "normalization": null
+   },
+   "evidence": {
+    "schemes": [],
+    "pointers": []
+   },
+   "contract": {
+    "comparator": null,
+    "tolerance": null
+   },
+   "result": {
+    "state": "UNVERIFIABLE",
+    "recomputed": null,
+    "script_reason": "no_subject"
+   },
+   "provenance": []
+  },
+  {
+   "id": "T002",
+   "kind": "text",
+   "form": "threshold",
+   "subject": null,
+   "value": null,
+   "unit": null,
+   "word": "回復",
+   "modifiers": {
+    "population": null,
+    "time_range": null,
+    "normalization": null
+   },
+   "evidence": {
+    "schemes": [],
+    "pointers": []
+   },
+   "contract": {
+    "comparator": null,
+    "tolerance": null
+   },
+   "result": {
+    "state": "UNVERIFIABLE",
+    "recomputed": null,
+    "script_reason": "state_word(no line)"
+   },
+   "provenance": []
+  },
+  {
+   "id": "T003",
+   "kind": "text",
+   "form": "threshold",
+   "subject": null,
+   "value": null,
+   "unit": null,
+   "word": "不透明",
+   "modifiers": {
+    "population": null,
+    "time_range": null,
+    "normalization": null
+   },
+   "evidence": {
+    "schemes": [],
+    "pointers": []
+   },
+   "contract": {
+    "comparator": null,
+    "tolerance": null
+   },
+   "result": {
+    "state": "UNVERIFIABLE",
+    "recomputed": null,
+    "script_reason": "state_word(no line)"
+   },
+   "provenance": []
+  },
+  {
+   "id": "T004",
+   "kind": "text",
+   "form": "threshold",
+   "subject": null,
+   "value": null,
+   "unit": null,
+   "word": "拡大",
+   "modifiers": {
+    "population": null,
+    "time_range": null,
+    "normalization": null
+   },
+   "evidence": {
+    "schemes": [],
+    "pointers": []
+   },
+   "contract": {
+    "comparator": null,
+    "tolerance": null
+   },
+   "result": {
+    "state": "UNVERIFIABLE",
+    "recomputed": null,
+    "script_reason": "no_subject"
+   },
+   "provenance": []
+  },
+  {
+   "id": "T005",
+   "kind": "text",
+   "form": "threshold",
+   "subject": "親会社株主に帰属する当期純利益",
+   "value": null,
+   "unit": null,
+   "word": "増収",
+   "modifiers": {
+    "population": "consolidated",
+    "time_range": [
+     [
+      "CurrentYear",
+      "Duration"
+     ],
+     [
+      "Prior1Year",
+      "Duration"
+     ]
+    ],
+    "normalization": null
+   },
+   "evidence": {
+    "schemes": [
+     "builtin",
+     "xbrl"
+    ],
+    "pointers": [
+     "xbrl:jpcrp_cor:ProfitLossAttributableToOwnersOfParentSummaryOfBusinessResults@CurrentYearDuration",
+     "xbrl:jpcrp_cor:ProfitLossAttributableToOwnersOfParentSummaryOfBusinessResults@Prior1YearDuration",
+     "builtin:sign(cur-prior)"
+    ]
+   },
+   "contract": {
+    "comparator": "builtin:sign(cur-prior)==direction",
+    "tolerance": null
+   },
+   "result": {
+    "state": "VALUE_MISMATCH",
+    "recomputed": -976788000.0,
+    "script_reason": null
+   },
+   "provenance": []
+  },
+  {
+   "id": "T006",
+   "kind": "text",
+   "form": "threshold",
+   "subject": "親会社株主に帰属する当期純利益",
+   "value": null,
+   "unit": null,
+   "word": "減益",
+   "modifiers": {
+    "population": "consolidated",
+    "time_range": [
+     [
+      "CurrentYear",
+      "Duration"
+     ],
+     [
+      "Prior1Year",
+      "Duration"
+     ]
+    ],
+    "normalization": null
+   },
+   "evidence": {
+    "schemes": [
+     "builtin",
+     "xbrl"
+    ],
+    "pointers": [
+     "xbrl:jpcrp_cor:ProfitLossAttributableToOwnersOfParentSummaryOfBusinessResults@CurrentYearDuration",
+     "xbrl:jpcrp_cor:ProfitLossAttributableToOwnersOfParentSummaryOfBusinessResults@Prior1YearDuration",
+     "builtin:sign(cur-prior)"
+    ]
+   },
+   "contract": {
+    "comparator": "builtin:sign(cur-prior)==direction",
+    "tolerance": null
+   },
+   "result": {
+    "state": "GROUNDED",
+    "recomputed": -976788000.0,
+    "script_reason": null
+   },
+   "provenance": []
+  },
+  {
+   "id": "T007",
+   "kind": "text",
+   "form": "threshold",
+   "subject": "資産合計",
+   "value": null,
+   "unit": null,
+   "word": "増加",
+   "modifiers": {
+    "population": "consolidated",
+    "time_range": [
+     [
+      "CurrentYear",
+      "Instant"
+     ],
+     [
+      "Prior1Year",
+      "Instant"
+     ]
+    ],
+    "normalization": null
+   },
+   "evidence": {
+    "schemes": [
+     "builtin",
+     "xbrl"
+    ],
+    "pointers": [
+     "xbrl:jppfs_cor:Assets@CurrentYearInstant",
+     "xbrl:jppfs_cor:Assets@Prior1YearInstant",
+     "builtin:sign(cur-prior)"
+    ]
+   },
+   "contract": {
+    "comparator": "builtin:sign(cur-prior)==direction",
+    "tolerance": null
+   },
+   "result": {
+    "state": "GROUNDED",
+    "recomputed": 2281746000.0,
+    "script_reason": null
+   },
+   "provenance": []
+  },
+  {
+   "id": "T008",
+   "kind": "text",
+   "form": "threshold",
+   "subject": "資産合計",
+   "value": null,
+   "unit": null,
+   "word": "増加",
+   "modifiers": {
+    "population": "consolidated",
+    "time_range": [
+     [
+      "CurrentYear",
+      "Instant"
+     ],
+     [
+      "Prior1Year",
+      "Instant"
+     ]
+    ],
+    "normalization": null
+   },
+   "evidence": {
+    "schemes": [
+     "builtin",
+     "xbrl"
+    ],
+    "pointers": [
+     "xbrl:jppfs_cor:Assets@CurrentYearInstant",
+     "xbrl:jppfs_cor:Assets@Prior1YearInstant",
+     "builtin:sign(cur-prior)"
+    ]
+   },
+   "contract": {
+    "comparator": "builtin:sign(cur-prior)==direction",
+    "tolerance": null
+   },
+   "result": {
+    "state": "GROUNDED",
+    "recomputed": 2281746000.0,
+    "script_reason": null
+   },
+   "provenance": []
+  },
+  {
+   "id": "T009",
+   "kind": "text",
+   "form": "threshold",
+   "subject": "受取手形及び売掛金",
+   "value": null,
+   "unit": null,
+   "word": "増加",
+   "modifiers": {
+    "population": "consolidated",
+    "time_range": [
+     [
+      "CurrentYear",
+      "Instant"
+     ],
+     [
+      "Prior1Year",
+      "Instant"
+     ]
+    ],
+    "normalization": null
+   },
+   "evidence": {
+    "schemes": [
+     "builtin",
+     "xbrl"
+    ],
+    "pointers": [
+     "xbrl:jppfs_cor:NotesAndAccountsReceivableTrade@CurrentYearInstant",
+     "xbrl:jppfs_cor:NotesAndAccountsReceivableTrade@Prior1YearInstant",
+     "builtin:sign(cur-prior)"
+    ]
+   },
+   "contract": {
+    "comparator": "builtin:sign(cur-prior)==direction",
+    "tolerance": null
+   },
+   "result": {
+    "state": "GROUNDED",
+    "recomputed": 804775000.0,
+    "script_reason": null
+   },
+   "provenance": []
+  },
+  {
+   "id": "T010",
+   "kind": "text",
+   "form": "threshold",
+   "subject": "投資有価証券",
+   "value": null,
+   "unit": null,
+   "word": "増加",
+   "modifiers": {
+    "population": "consolidated",
+    "time_range": [
+     [
+      "CurrentYear",
+      "Instant"
+     ],
+     [
+      "Prior1Year",
+      "Instant"
+     ]
+    ],
+    "normalization": null
+   },
+   "evidence": {
+    "schemes": [
+     "builtin",
+     "xbrl"
+    ],
+    "pointers": [
+     "xbrl:jppfs_cor:InvestmentSecurities@CurrentYearInstant",
+     "xbrl:jppfs_cor:InvestmentSecurities@Prior1YearInstant",
+     "builtin:sign(cur-prior)"
+    ]
+   },
+   "contract": {
+    "comparator": "builtin:sign(cur-prior)==direction",
+    "tolerance": null
+   },
+   "result": {
+    "state": "GROUNDED",
+    "recomputed": 301511000.0,
+    "script_reason": null
+   },
+   "provenance": []
+  },
+  {
+   "id": "T011",
+   "kind": "text",
+   "form": "threshold",
+   "subject": "退職給付に係る資産",
+   "value": null,
+   "unit": null,
+   "word": "増加",
+   "modifiers": {
+    "population": null,
+    "time_range": null,
+    "normalization": null
+   },
+   "evidence": {
+    "schemes": [],
+    "pointers": []
+   },
+   "contract": {
+    "comparator": null,
+    "tolerance": null
+   },
+   "result": {
+    "state": "POINTER_NOT_FOUND",
+    "recomputed": null,
+    "script_reason": "no_element"
+   },
+   "provenance": []
+  },
+  {
+   "id": "T012",
+   "kind": "text",
+   "form": "threshold",
+   "subject": "現金及び預金",
+   "value": null,
+   "unit": null,
+   "word": "減少",
+   "modifiers": {
+    "population": "consolidated",
+    "time_range": [
+     [
+      "CurrentYear",
+      "Instant"
+     ],
+     [
+      "Prior1Year",
+      "Instant"
+     ]
+    ],
+    "normalization": null
+   },
+   "evidence": {
+    "schemes": [
+     "builtin",
+     "xbrl"
+    ],
+    "pointers": [
+     "xbrl:jppfs_cor:CashAndDeposits@CurrentYearInstant",
+     "xbrl:jppfs_cor:CashAndDeposits@Prior1YearInstant",
+     "builtin:sign(cur-prior)"
+    ]
+   },
+   "contract": {
+    "comparator": "builtin:sign(cur-prior)==direction",
+    "tolerance": null
+   },
+   "result": {
+    "state": "GROUNDED",
+    "recomputed": -293190000.0,
+    "script_reason": null
+   },
+   "provenance": []
+  },
+  {
+   "id": "T013",
+   "kind": "text",
+   "form": "threshold",
+   "subject": "契約資産",
+   "value": null,
+   "unit": null,
+   "word": "減少",
+   "modifiers": {
+    "population": "consolidated",
+    "time_range": [
+     [
+      "CurrentYear",
+      "Instant"
+     ],
+     [
+      "Prior1Year",
+      "Instant"
+     ]
+    ],
+    "normalization": null
+   },
+   "evidence": {
+    "schemes": [
+     "builtin",
+     "xbrl"
+    ],
+    "pointers": [
+     "xbrl:jppfs_cor:ContractAssets@CurrentYearInstant",
+     "xbrl:jppfs_cor:ContractAssets@Prior1YearInstant",
+     "builtin:sign(cur-prior)"
+    ]
+   },
+   "contract": {
+    "comparator": "builtin:sign(cur-prior)==direction",
+    "tolerance": null
+   },
+   "result": {
+    "state": "GROUNDED",
+    "recomputed": -161030000.0,
+    "script_reason": null
+   },
+   "provenance": []
+  },
+  {
+   "id": "T014",
+   "kind": "text",
+   "form": "threshold",
+   "subject": "負債合計",
+   "value": null,
+   "unit": null,
+   "word": "増加",
+   "modifiers": {
+    "population": "consolidated",
+    "time_range": [
+     [
+      "CurrentYear",
+      "Instant"
+     ],
+     [
+      "Prior1Year",
+      "Instant"
+     ]
+    ],
+    "normalization": null
+   },
+   "evidence": {
+    "schemes": [
+     "builtin",
+     "xbrl"
+    ],
+    "pointers": [
+     "xbrl:jppfs_cor:Liabilities@CurrentYearInstant",
+     "xbrl:jppfs_cor:Liabilities@Prior1YearInstant",
+     "builtin:sign(cur-prior)"
+    ]
+   },
+   "contract": {
+    "comparator": "builtin:sign(cur-prior)==direction",
+    "tolerance": null
+   },
+   "result": {
+    "state": "GROUNDED",
+    "recomputed": 614547000.0,
+    "script_reason": null
+   },
+   "provenance": []
+  },
+  {
+   "id": "T015",
+   "kind": "text",
+   "form": "threshold",
+   "subject": "負債合計",
+   "value": null,
+   "unit": null,
+   "word": "減少",
+   "modifiers": {
+    "population": "consolidated",
+    "time_range": [
+     [
+      "CurrentYear",
+      "Instant"
+     ],
+     [
+      "Prior1Year",
+      "Instant"
+     ]
+    ],
+    "normalization": null
+   },
+   "evidence": {
+    "schemes": [
+     "builtin",
+     "xbrl"
+    ],
+    "pointers": [
+     "xbrl:jppfs_cor:Liabilities@CurrentYearInstant",
+     "xbrl:jppfs_cor:Liabilities@Prior1YearInstant",
+     "builtin:sign(cur-prior)"
+    ]
+   },
+   "contract": {
+    "comparator": "builtin:sign(cur-prior)==direction",
+    "tolerance": null
+   },
+   "result": {
+    "state": "VALUE_MISMATCH",
+    "recomputed": 614547000.0,
+    "script_reason": null
+   },
+   "provenance": []
+  },
+  {
+   "id": "T016",
+   "kind": "text",
+   "form": "threshold",
+   "subject": "完成業務補償引当金",
+   "value": null,
+   "unit": null,
+   "word": "増加",
+   "modifiers": {
+    "population": "consolidated",
+    "time_range": [
+     [
+      "CurrentYear",
+      "Instant"
+     ],
+     [
+      "Prior1Year",
+      "Instant"
+     ]
+    ],
+    "normalization": null
+   },
+   "evidence": {
+    "schemes": [
+     "builtin",
+     "xbrl"
+    ],
+    "pointers": [
+     "xbrl:jpcrp030000-asr_E36539-000:ProvisionForWarrantiesForCompletedOperationCL@CurrentYearInstant",
+     "xbrl:jpcrp030000-asr_E36539-000:ProvisionForWarrantiesForCompletedOperationCL@Prior1YearInstant",
+     "builtin:sign(cur-prior)"
+    ]
+   },
+   "contract": {
+    "comparator": "builtin:sign(cur-prior)==direction",
+    "tolerance": null
+   },
+   "result": {
+    "state": "GROUNDED",
+    "recomputed": 786000000.0,
+    "script_reason": null
+   },
+   "provenance": []
+  },
+  {
+   "id": "T017",
+   "kind": "text",
+   "form": "threshold",
+   "subject": "繰延税金負債",
+   "value": null,
+   "unit": null,
+   "word": "増加",
+   "modifiers": {
+    "population": "consolidated",
+    "time_range": [
+     [
+      "CurrentYear",
+      "Instant"
+     ],
+     [
+      "Prior1Year",
+      "Instant"
+     ]
+    ],
+    "normalization": null
+   },
+   "evidence": {
+    "schemes": [
+     "builtin",
+     "xbrl"
+    ],
+    "pointers": [
+     "xbrl:jppfs_cor:DeferredTaxLiabilities@CurrentYearInstant",
+     "xbrl:jppfs_cor:DeferredTaxLiabilities@Prior1YearInstant",
+     "builtin:sign(cur-prior)"
+    ]
+   },
+   "contract": {
+    "comparator": "builtin:sign(cur-prior)==direction",
+    "tolerance": null
+   },
+   "result": {
+    "state": "GROUNDED",
+    "recomputed": 448507000.0,
+    "script_reason": null
+   },
+   "provenance": []
+  },
+  {
+   "id": "T018",
+   "kind": "text",
+   "form": "threshold",
+   "subject": "業務未払金",
+   "value": null,
+   "unit": null,
+   "word": "減少",
+   "modifiers": {
+    "population": "consolidated",
+    "time_range": [
+     [
+      "CurrentYear",
+      "Instant"
+     ],
+     [
+      "Prior1Year",
+      "Instant"
+     ]
+    ],
+    "normalization": null
+   },
+   "evidence": {
+    "schemes": [
+     "builtin",
+     "xbrl"
+    ],
+    "pointers": [
+     "xbrl:jppfs_cor:AccountsPayableOperatingSpecific@CurrentYearInstant",
+     "xbrl:jppfs_cor:AccountsPayableOperatingSpecific@Prior1YearInstant",
+     "builtin:sign(cur-prior)"
+    ]
+   },
+   "contract": {
+    "comparator": "builtin:sign(cur-prior)==direction",
+    "tolerance": null
+   },
+   "result": {
+    "state": "GROUNDED",
+    "recomputed": -300298000.0,
+    "script_reason": null
+   },
+   "provenance": []
+  },
+  {
+   "id": "T019",
+   "kind": "text",
+   "form": "threshold",
+   "subject": "未払法人税等",
+   "value": null,
+   "unit": null,
+   "word": "減少",
+   "modifiers": {
+    "population": "consolidated",
+    "time_range": [
+     [
+      "CurrentYear",
+      "Instant"
+     ],
+     [
+      "Prior1Year",
+      "Instant"
+     ]
+    ],
+    "normalization": null
+   },
+   "evidence": {
+    "schemes": [
+     "builtin",
+     "xbrl"
+    ],
+    "pointers": [
+     "xbrl:jppfs_cor:IncomeTaxesPayable@CurrentYearInstant",
+     "xbrl:jppfs_cor:IncomeTaxesPayable@Prior1YearInstant",
+     "builtin:sign(cur-prior)"
+    ]
+   },
+   "contract": {
+    "comparator": "builtin:sign(cur-prior)==direction",
+    "tolerance": null
+   },
+   "result": {
+    "state": "GROUNDED",
+    "recomputed": -107853000.0,
+    "script_reason": null
+   },
+   "provenance": []
+  },
+  {
+   "id": "T020",
+   "kind": "text",
+   "form": "threshold",
+   "subject": "長期借入金",
+   "value": null,
+   "unit": null,
+   "word": "減少",
+   "modifiers": {
+    "population": "consolidated",
+    "time_range": [
+     [
+      "CurrentYear",
+      "Instant"
+     ],
+     [
+      "Prior1Year",
+      "Instant"
+     ]
+    ],
+    "normalization": null
+   },
+   "evidence": {
+    "schemes": [
+     "builtin",
+     "xbrl"
+    ],
+    "pointers": [
+     "xbrl:jppfs_cor:LongTermLoansPayable@CurrentYearInstant",
+     "xbrl:jppfs_cor:LongTermLoansPayable@Prior1YearInstant",
+     "builtin:sign(cur-prior)"
+    ]
+   },
+   "contract": {
+    "comparator": "builtin:sign(cur-prior)==direction",
+    "tolerance": null
+   },
+   "result": {
+    "state": "GROUNDED",
+    "recomputed": -234864000.0,
+    "script_reason": null
+   },
+   "provenance": []
+  },
+  {
+   "id": "T021",
+   "kind": "text",
+   "form": "threshold",
+   "subject": "純資産合計",
+   "value": null,
+   "unit": null,
+   "word": "増加",
+   "modifiers": {
+    "population": "consolidated",
+    "time_range": [
+     [
+      "CurrentYear",
+      "Instant"
+     ],
+     [
+      "Prior1Year",
+      "Instant"
+     ]
+    ],
+    "normalization": null
+   },
+   "evidence": {
+    "schemes": [
+     "builtin",
+     "xbrl"
+    ],
+    "pointers": [
+     "xbrl:jpcrp_cor:NetAssetsSummaryOfBusinessResults@CurrentYearInstant",
+     "xbrl:jpcrp_cor:NetAssetsSummaryOfBusinessResults@Prior1YearInstant",
+     "builtin:sign(cur-prior)"
+    ]
+   },
+   "contract": {
+    "comparator": "builtin:sign(cur-prior)==direction",
+    "tolerance": null
+   },
+   "result": {
+    "state": "GROUNDED",
+    "recomputed": 1667198000.0,
+    "script_reason": null
+   },
+   "provenance": []
+  },
+  {
+   "id": "T022",
+   "kind": "text",
+   "form": "threshold",
+   "subject": "純資産合計",
+   "value": null,
+   "unit": null,
+   "word": "増加",
+   "modifiers": {
+    "population": "consolidated",
+    "time_range": [
+     [
+      "CurrentYear",
+      "Instant"
+     ],
+     [
+      "Prior1Year",
+      "Instant"
+     ]
+    ],
+    "normalization": null
+   },
+   "evidence": {
+    "schemes": [
+     "builtin",
+     "xbrl"
+    ],
+    "pointers": [
+     "xbrl:jpcrp_cor:NetAssetsSummaryOfBusinessResults@CurrentYearInstant",
+     "xbrl:jpcrp_cor:NetAssetsSummaryOfBusinessResults@Prior1YearInstant",
+     "builtin:sign(cur-prior)"
+    ]
+   },
+   "contract": {
+    "comparator": "builtin:sign(cur-prior)==direction",
+    "tolerance": null
+   },
+   "result": {
+    "state": "GROUNDED",
+    "recomputed": 1667198000.0,
+    "script_reason": null
+   },
+   "provenance": []
+  },
+  {
+   "id": "T023",
+   "kind": "text",
+   "form": "threshold",
+   "subject": "その他有価証券評価差額金",
+   "value": null,
+   "unit": null,
+   "word": "増加",
+   "modifiers": {
+    "population": "consolidated",
+    "time_range": [
+     [
+      "CurrentYear",
+      "Instant"
+     ],
+     [
+      "Prior1Year",
+      "Instant"
+     ]
+    ],
+    "normalization": null
+   },
+   "evidence": {
+    "schemes": [
+     "builtin",
+     "xbrl"
+    ],
+    "pointers": [
+     "xbrl:jppfs_cor:ValuationDifferenceOnAvailableForSaleSecurities@CurrentYearInstant",
+     "xbrl:jppfs_cor:ValuationDifferenceOnAvailableForSaleSecurities@Prior1YearInstant",
+     "builtin:sign(cur-prior)"
+    ]
+   },
+   "contract": {
+    "comparator": "builtin:sign(cur-prior)==direction",
+    "tolerance": null
+   },
+   "result": {
+    "state": "GROUNDED",
+    "recomputed": 217490000.0,
+    "script_reason": null
+   },
+   "provenance": []
+  },
+  {
+   "id": "T024",
+   "kind": "text",
+   "form": "threshold",
+   "subject": "退職給付に係る調整累計額",
+   "value": null,
+   "unit": null,
+   "word": "増加",
+   "modifiers": {
+    "population": "consolidated",
+    "time_range": [
+     [
+      "CurrentYear",
+      "Instant"
+     ],
+     [
+      "Prior1Year",
+      "Instant"
+     ]
+    ],
+    "normalization": null
+   },
+   "evidence": {
+    "schemes": [
+     "builtin",
+     "xbrl"
+    ],
+    "pointers": [
+     "xbrl:jppfs_cor:RemeasurementsOfDefinedBenefitPlans@CurrentYearInstant",
+     "xbrl:jppfs_cor:RemeasurementsOfDefinedBenefitPlans@Prior1YearInstant",
+     "builtin:sign(cur-prior)"
+    ]
+   },
+   "contract": {
+    "comparator": "builtin:sign(cur-prior)==direction",
+    "tolerance": null
+   },
+   "result": {
+    "state": "GROUNDED",
+    "recomputed": 1085489000.0,
+    "script_reason": null
+   },
+   "provenance": []
+  },
+  {
+   "id": "T025",
+   "kind": "text",
+   "form": "threshold",
+   "subject": null,
+   "value": null,
+   "unit": null,
+   "word": "減少",
+   "modifiers": {
+    "population": null,
+    "time_range": null,
+    "normalization": null
+   },
+   "evidence": {
+    "schemes": [],
+    "pointers": []
+   },
+   "contract": {
+    "comparator": null,
+    "tolerance": null
+   },
+   "result": {
+    "state": "UNVERIFIABLE",
+    "recomputed": null,
+    "script_reason": "no_subject"
+   },
+   "provenance": []
+  },
+  {
+   "id": "T026",
+   "kind": "text",
+   "form": "threshold",
+   "subject": "売上債権",
+   "value": null,
+   "unit": null,
+   "word": "増加",
+   "modifiers": {
+    "population": "consolidated",
+    "time_range": [
+     [
+      "CurrentYear",
+      "Duration"
+     ],
+     [
+      "Prior1Year",
+      "Duration"
+     ]
+    ],
+    "normalization": null
+   },
+   "evidence": {
+    "schemes": [
+     "builtin",
+     "xbrl"
+    ],
+    "pointers": [
+     "xbrl:jppfs_cor:DecreaseIncreaseInNotesAndAccountsReceivableTradeOpeCF@CurrentYearDuration",
+     "xbrl:jppfs_cor:DecreaseIncreaseInNotesAndAccountsReceivableTradeOpeCF@Prior1YearDuration",
+     "builtin:sign(cur-prior)"
+    ]
+   },
+   "contract": {
+    "comparator": "builtin:sign(cur-prior)==direction",
+    "tolerance": null
+   },
+   "result": {
+    "state": "VALUE_MISMATCH",
+    "recomputed": -1012345000.0,
+    "script_reason": null
+   },
+   "provenance": []
+  },
+  {
+   "id": "T027",
+   "kind": "text",
+   "form": "threshold",
+   "subject": "契約資産",
+   "value": null,
+   "unit": null,
+   "word": "減少",
+   "modifiers": {
+    "population": "consolidated",
+    "time_range": [
+     [
+      "CurrentYear",
+      "Instant"
+     ],
+     [
+      "Prior1Year",
+      "Instant"
+     ]
+    ],
+    "normalization": null
+   },
+   "evidence": {
+    "schemes": [
+     "builtin",
+     "xbrl"
+    ],
+    "pointers": [
+     "xbrl:jppfs_cor:ContractAssets@CurrentYearInstant",
+     "xbrl:jppfs_cor:ContractAssets@Prior1YearInstant",
+     "builtin:sign(cur-prior)"
+    ]
+   },
+   "contract": {
+    "comparator": "builtin:sign(cur-prior)==direction",
+    "tolerance": null
+   },
+   "result": {
+    "state": "GROUNDED",
+    "recomputed": -161030000.0,
+    "script_reason": null
+   },
+   "provenance": []
+  },
+  {
+   "id": "T028",
+   "kind": "text",
+   "form": "threshold",
+   "subject": "仕入債務",
+   "value": null,
+   "unit": null,
+   "word": "減少",
+   "modifiers": {
+    "population": "consolidated",
+    "time_range": [
+     [
+      "CurrentYear",
+      "Duration"
+     ],
+     [
+      "Prior1Year",
+      "Duration"
+     ]
+    ],
+    "normalization": null
+   },
+   "evidence": {
+    "schemes": [
+     "builtin",
+     "xbrl"
+    ],
+    "pointers": [
+     "xbrl:jppfs_cor:IncreaseDecreaseInNotesAndAccountsPayableTradeOpeCF@CurrentYearDuration",
+     "xbrl:jppfs_cor:IncreaseDecreaseInNotesAndAccountsPayableTradeOpeCF@Prior1YearDuration",
+     "builtin:sign(cur-prior)"
+    ]
+   },
+   "contract": {
+    "comparator": "builtin:sign(cur-prior)==direction",
+    "tolerance": null
+   },
+   "result": {
+    "state": "GROUNDED",
+    "recomputed": -456901000.0,
+    "script_reason": null
+   },
+   "provenance": []
+  },
+  {
+   "id": "T029",
+   "kind": "text",
+   "form": "threshold",
+   "subject": "契約負債",
+   "value": null,
+   "unit": null,
+   "word": "減少",
+   "modifiers": {
+    "population": "consolidated",
+    "time_range": [
+     [
+      "CurrentYear",
+      "Instant"
+     ],
+     [
+      "Prior1Year",
+      "Instant"
+     ]
+    ],
+    "normalization": null
+   },
+   "evidence": {
+    "schemes": [
+     "builtin",
+     "xbrl"
+    ],
+    "pointers": [
+     "xbrl:jppfs_cor:ContractLiabilities@CurrentYearInstant",
+     "xbrl:jppfs_cor:ContractLiabilities@Prior1YearInstant",
+     "builtin:sign(cur-prior)"
+    ]
+   },
+   "contract": {
+    "comparator": "builtin:sign(cur-prior)==direction",
+    "tolerance": null
+   },
+   "result": {
+    "state": "GROUNDED",
+    "recomputed": -93446000.0,
+    "script_reason": null
+   },
+   "provenance": []
+  },
+  {
+   "id": "T030",
+   "kind": "text",
+   "form": "threshold",
+   "subject": null,
+   "value": null,
+   "unit": null,
+   "word": "堅調",
+   "modifiers": {
+    "population": null,
+    "time_range": null,
+    "normalization": null
+   },
+   "evidence": {
+    "schemes": [],
+    "pointers": []
+   },
+   "contract": {
+    "comparator": null,
+    "tolerance": null
+   },
+   "result": {
+    "state": "UNVERIFIABLE",
+    "recomputed": null,
+    "script_reason": "state_word(no line)"
+   },
+   "provenance": []
+  },
+  {
+   "id": "T031",
+   "kind": "text",
+   "form": "threshold",
+   "subject": "売上高",
+   "value": null,
+   "unit": null,
+   "word": "拡大",
+   "modifiers": {
+    "population": "consolidated",
+    "time_range": [
+     [
+      "CurrentYear",
+      "Duration"
+     ],
+     [
+      "Prior1Year",
+      "Duration"
+     ]
+    ],
+    "normalization": null
+   },
+   "evidence": {
+    "schemes": [
+     "builtin",
+     "xbrl"
+    ],
+    "pointers": [
+     "xbrl:jpcrp_cor:NetSalesSummaryOfBusinessResults@CurrentYearDuration",
+     "xbrl:jpcrp_cor:NetSalesSummaryOfBusinessResults@Prior1YearDuration",
+     "builtin:sign(cur-prior)"
+    ]
+   },
+   "contract": {
+    "comparator": "builtin:sign(cur-prior)==direction",
+    "tolerance": null
+   },
+   "result": {
+    "state": "GROUNDED",
+    "recomputed": 1088697000.0,
+    "script_reason": null
+   },
+   "provenance": []
+  }
+ ]
+}
