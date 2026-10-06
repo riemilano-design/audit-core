@@ -1,0 +1,1292 @@
+{
+ "tool": "h9_reference",
+ "observations": [
+  {
+   "id": "0f1b019e-20261001-1/seat_gpt.json#H-c5-gpt0f1b-001/observations[0]",
+   "path": "aggregates.groups.other.games.value",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "0f1b019e-20261001-1/seat_gpt.json#H-c5-gpt0f1b-001/observations[1]",
+   "path": "aggregates.groups.other.collapses.value",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "0f1b019e-20261001-1/seat_gpt.json#H-c5-gpt0f1b-001/observations[2]",
+   "path": "aggregates.groups.other.aheadThenLost.numerator",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "0f1b019e-20261001-1/seat_gpt.json#H-c5-gpt0f1b-001/observations[3]",
+   "path": "aggregates.groups.other.aheadThenLost.denominator",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "0f1b019e-20261001-1/seat_gpt.json#H-c5-gpt0f1b-002/observations[0]",
+   "path": "aggregates.groups.core.games.value",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "0f1b019e-20261001-1/seat_gpt.json#H-c5-gpt0f1b-002/observations[1]",
+   "path": "aggregates.groups.core.collapses.value",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "0f1b019e-20261001-1/seat_gpt.json#H-c5-gpt0f1b-002/observations[2]",
+   "path": "aggregates.groups.core.aheadThenLost.numerator",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "0f1b019e-20261001-1/seat_gpt.json#H-c5-gpt0f1b-002/observations[3]",
+   "path": "aggregates.groups.core.aheadThenLost.denominator",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "0f1b019e-20261001-1/seat_gpt.json#H-c5-gpt0f1b-003/observations[0]",
+   "path": "aggregates.groups.noSignature.games.value",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "0f1b019e-20261001-1/seat_gpt.json#H-c5-gpt0f1b-003/observations[1]",
+   "path": "aggregates.groups.noSignature.collapses.value",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "0f1b019e-20261001-1/seat_gpt.json#H-c5-gpt0f1b-003/observations[2]",
+   "path": "aggregates.groups.noSignature.aheadThenLost.numerator",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "0f1b019e-20261001-1/seat_gpt.json#H-c5-gpt0f1b-003/observations[3]",
+   "path": "aggregates.groups.noSignature.aheadThenLost.denominator",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "0f1b019e-20261001-1/seat_gpt.json#H-c5-gpt0f1b-004/observations[0]",
+   "path": "aggregates.groups.other.games.value",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "0f1b019e-20261001-1/seat_gpt.json#H-c5-gpt0f1b-004/observations[1]",
+   "path": "aggregates.groups.other.collapses.value",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "0f1b019e-20261001-1/seat_gpt.json#H-c5-gpt0f1b-004/observations[2]",
+   "path": "aggregates.groups.other.aheadThenLost.numerator",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "0f1b019e-20261001-1/seat_gpt.json#H-c5-gpt0f1b-004/observations[3]",
+   "path": "aggregates.groups.other.aheadThenLost.denominator",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "0f1b019e-20261001-1/seat_gpt.json#H-c5-gpt0f1b-004/observations[4]",
+   "path": "aggregates.groups.core.aheadThenLost.numerator",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "0f1b019e-20261001-1/seat_gpt.json#H-c5-gpt0f1b-004/observations[5]",
+   "path": "aggregates.groups.core.aheadThenLost.denominator",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "0f1b019e-20261001-1/seat_gpt.json#H-c5-gpt0f1b-005/observations[0]",
+   "path": "facts.recognition.rows[3].signatureClass",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "0f1b019e-20261001-1/seat_gpt.json#H-c5-gpt0f1b-005/observations[1]",
+   "path": "facts.recognition.rows[3].selfRecognized",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "0f1b019e-20261001-1/seat_gpt.json#H-c5-gpt0f1b-005/observations[2]",
+   "path": "facts.recognition.rows[3].reviewStatus",
+   "ok": false,
+   "kind": "not_found"
+  },
+  {
+   "id": "0f1b019e-20261001-1/seat_gpt.json#H-c5-gpt0f1b-006/observations[0]",
+   "path": "aggregates.groups.other.games.value",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "0f1b019e-20261001-1/seat_gpt.json#H-c5-gpt0f1b-007/observations[0]",
+   "path": "aggregates.groups.other.games.value",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "268dac98-20260930-1/seat_claude.json#H-c5-claude268d-001/observations[0]",
+   "path": "aggregates.groups.core.games.value",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "268dac98-20260930-1/seat_claude.json#H-c5-claude268d-001/observations[1]",
+   "path": "aggregates.groups.other.games.value",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "268dac98-20260930-1/seat_claude.json#H-c5-claude268d-001/observations[2]",
+   "path": "aggregates.groups.noSignature.games.value",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "268dac98-20260930-1/seat_claude.json#H-c5-claude268d-002/observations[0]",
+   "path": "aggregates.groups.core.collapses.value",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "268dac98-20260930-1/seat_claude.json#H-c5-claude268d-002/observations[1]",
+   "path": "aggregates.groups.other.collapses.value",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "268dac98-20260930-1/seat_claude.json#H-c5-claude268d-002/observations[2]",
+   "path": "aggregates.groups.noSignature.collapses.value",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "268dac98-20260930-1/seat_claude.json#H-c5-claude268d-003/observations[0]",
+   "path": "aggregates.groups.core.aheadThenLost.numerator",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "268dac98-20260930-1/seat_claude.json#H-c5-claude268d-003/observations[1]",
+   "path": "aggregates.groups.core.aheadThenLost.denominator",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "268dac98-20260930-1/seat_claude.json#H-c5-claude268d-003/observations[2]",
+   "path": "aggregates.groups.other.aheadThenLost.numerator",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "268dac98-20260930-1/seat_claude.json#H-c5-claude268d-003/observations[3]",
+   "path": "aggregates.groups.other.aheadThenLost.denominator",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "268dac98-20260930-1/seat_claude.json#H-c5-claude268d-003/observations[4]",
+   "path": "aggregates.groups.noSignature.aheadThenLost.numerator",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "268dac98-20260930-1/seat_claude.json#H-c5-claude268d-003/observations[5]",
+   "path": "aggregates.groups.noSignature.aheadThenLost.denominator",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "268dac98-20260930-1/seat_claude.json#H-c5-claude268d-004/observations[0]",
+   "path": "aggregates.groups.other.aheadThenLost.numerator",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "268dac98-20260930-1/seat_claude.json#H-c5-claude268d-004/observations[1]",
+   "path": "aggregates.groups.other.aheadThenLost.denominator",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "268dac98-20260930-1/seat_claude.json#H-c5-claude268d-004/observations[2]",
+   "path": "aggregates.groups.core.aheadThenLost.numerator",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "268dac98-20260930-1/seat_claude.json#H-c5-claude268d-004/observations[3]",
+   "path": "aggregates.groups.core.aheadThenLost.denominator",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "268dac98-20260930-1/seat_claude.json#H-c5-claude268d-005/observations[0]",
+   "path": "aggregates.groups.other.games.value",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "268dac98-20260930-1/seat_claude.json#H-c5-claude268d-005/observations[1]",
+   "path": "facts.recognition.rows[3].names",
+   "ok": false,
+   "kind": "value_mismatch"
+  },
+  {
+   "id": "268dac98-20260930-1/seat_claude.json#H-c5-claude268d-005/observations[2]",
+   "path": "facts.recognition.rows[12].names",
+   "ok": false,
+   "kind": "value_mismatch"
+  },
+  {
+   "id": "268dac98-20260930-1/seat_claude.json#H-c5-claude268d-005/observations[3]",
+   "path": "facts.recognition.rows[16].names",
+   "ok": false,
+   "kind": "value_mismatch"
+  },
+  {
+   "id": "268dac98-20260930-1/seat_claude.json#H-c5-claude268d-005/observations[4]",
+   "path": "facts.recognition.rows[23].names",
+   "ok": false,
+   "kind": "value_mismatch"
+  },
+  {
+   "id": "268dac98-20260930-1/seat_claude.json#H-c5-claude268d-006/observations[0]",
+   "path": "aggregates.branches.total.value",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "268dac98-20260930-1/seat_claude.json#H-c5-claude268d-006/observations[1]",
+   "path": "aggregates.branches.shallowVisible.value",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "268dac98-20260930-1/seat_claude.json#H-c5-claude268d-006/observations[2]",
+   "path": "aggregates.branches.shallowVisibleGames.value",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "268dac98-20260930-1/seat_claude.json#H-c5-claude268d-007/observations[0]",
+   "path": "aggregates.longThink.total.value",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "268dac98-20260930-1/seat_claude.json#H-c5-claude268d-007/observations[1]",
+   "path": "aggregates.longThink.fork.value",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "268dac98-20260930-1/seat_claude.json#H-c5-claude268d-007/observations[2]",
+   "path": "aggregates.longThink.opposite.value",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "268dac98-20260930-1/seat_claude.json#H-c5-claude268d-008/observations[0]",
+   "path": "aggregates.sideMatch.attack.numerator",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "268dac98-20260930-1/seat_claude.json#H-c5-claude268d-008/observations[1]",
+   "path": "aggregates.sideMatch.attack.denominator",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "268dac98-20260930-1/seat_claude.json#H-c5-claude268d-008/observations[2]",
+   "path": "aggregates.sideMatch.defense.numerator",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "268dac98-20260930-1/seat_claude.json#H-c5-claude268d-008/observations[3]",
+   "path": "aggregates.sideMatch.defense.denominator",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "268dac98-20260930-1/seat_claude.json#H-c5-claude268d-008/observations[4]",
+   "path": "aggregates.sideMatch.oppositeAll.numerator",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "268dac98-20260930-1/seat_claude.json#H-c5-claude268d-008/observations[5]",
+   "path": "aggregates.sideMatch.oppositeAll.denominator",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "268dac98-20260930-1/seat_claude.json#H-c5-claude268d-009/observations[0]",
+   "path": "aggregates.groups.other.games.value",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "268dac98-20260930-1/seat_claude.json#H-c5-claude268d-009/observations[1]",
+   "path": "aggregates.groups.noSignature.games.value",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "268dac98-20260930-1/seat_claude.json#H-c5-claude268d-010/observations[0]",
+   "path": "aggregates.branches.shallowVisibleGames.value",
+   "ok": false,
+   "kind": "value_mismatch"
+  },
+  {
+   "id": "268dac98-20260930-1/seat_claude.json#H-c5-claude268d-011/observations[0]",
+   "path": "facts.time[11].remainingSec",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "268dac98-20260930-1/seat_claude.json#H-c5-claude268d-011/observations[1]",
+   "path": "facts.time[11].timeUpLoss",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "268dac98-20260930-1/seat_claude.json#H-c5-claude268d-011/observations[2]",
+   "path": "facts.time[11].longThinkCount",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "52ae3745-20261001-1/seat_claude.json#H-c5-claude52ae-001/observations[0]",
+   "path": "aggregates.groups.core.games.value",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "52ae3745-20261001-1/seat_claude.json#H-c5-claude52ae-001/observations[1]",
+   "path": "aggregates.groups.other.games.value",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "52ae3745-20261001-1/seat_claude.json#H-c5-claude52ae-001/observations[2]",
+   "path": "aggregates.groups.noSignature.games.value",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "52ae3745-20261001-1/seat_claude.json#H-c5-claude52ae-002/observations[0]",
+   "path": "aggregates.collapse.total.value",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "52ae3745-20261001-1/seat_claude.json#H-c5-claude52ae-002/observations[1]",
+   "path": "aggregates.groups.core.collapses.value",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "52ae3745-20261001-1/seat_claude.json#H-c5-claude52ae-002/observations[2]",
+   "path": "aggregates.groups.other.collapses.value",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "52ae3745-20261001-1/seat_claude.json#H-c5-claude52ae-002/observations[3]",
+   "path": "aggregates.groups.noSignature.collapses.value",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "52ae3745-20261001-1/seat_claude.json#H-c5-claude52ae-003/observations[0]",
+   "path": "aggregates.aheadThenLost.numerator",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "52ae3745-20261001-1/seat_claude.json#H-c5-claude52ae-003/observations[1]",
+   "path": "aggregates.aheadThenLost.denominator",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "52ae3745-20261001-1/seat_claude.json#H-c5-claude52ae-003/observations[2]",
+   "path": "aggregates.groups.core.aheadThenLost.numerator",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "52ae3745-20261001-1/seat_claude.json#H-c5-claude52ae-003/observations[3]",
+   "path": "aggregates.groups.core.aheadThenLost.denominator",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "52ae3745-20261001-1/seat_claude.json#H-c5-claude52ae-003/observations[4]",
+   "path": "aggregates.groups.other.aheadThenLost.numerator",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "52ae3745-20261001-1/seat_claude.json#H-c5-claude52ae-003/observations[5]",
+   "path": "aggregates.groups.other.aheadThenLost.denominator",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "52ae3745-20261001-1/seat_claude.json#H-c5-claude52ae-003/observations[6]",
+   "path": "aggregates.groups.noSignature.aheadThenLost.numerator",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "52ae3745-20261001-1/seat_claude.json#H-c5-claude52ae-003/observations[7]",
+   "path": "aggregates.groups.noSignature.aheadThenLost.denominator",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "52ae3745-20261001-1/seat_claude.json#H-c5-claude52ae-004/observations[0]",
+   "path": "aggregates.groups.other.aheadThenLost.numerator",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "52ae3745-20261001-1/seat_claude.json#H-c5-claude52ae-004/observations[1]",
+   "path": "aggregates.groups.other.aheadThenLost.denominator",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "52ae3745-20261001-1/seat_claude.json#H-c5-claude52ae-004/observations[2]",
+   "path": "aggregates.groups.core.aheadThenLost.numerator",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "52ae3745-20261001-1/seat_claude.json#H-c5-claude52ae-004/observations[3]",
+   "path": "aggregates.groups.core.aheadThenLost.denominator",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "52ae3745-20261001-1/seat_claude.json#H-c5-claude52ae-005/observations[0]",
+   "path": "aggregates.branches.total.value",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "52ae3745-20261001-1/seat_claude.json#H-c5-claude52ae-005/observations[1]",
+   "path": "aggregates.branches.shallowVisible.value",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "52ae3745-20261001-1/seat_claude.json#H-c5-claude52ae-005/observations[2]",
+   "path": "aggregates.branches.shallowVisibleGames.value",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "52ae3745-20261001-1/seat_claude.json#H-c5-claude52ae-006/observations[0]",
+   "path": "aggregates.sideMatch.attack.numerator",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "52ae3745-20261001-1/seat_claude.json#H-c5-claude52ae-006/observations[1]",
+   "path": "aggregates.sideMatch.attack.denominator",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "52ae3745-20261001-1/seat_claude.json#H-c5-claude52ae-006/observations[2]",
+   "path": "aggregates.sideMatch.defense.numerator",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "52ae3745-20261001-1/seat_claude.json#H-c5-claude52ae-006/observations[3]",
+   "path": "aggregates.sideMatch.defense.denominator",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "52ae3745-20261001-1/seat_claude.json#H-c5-claude52ae-006/observations[4]",
+   "path": "aggregates.sideMatch.oppositeAll.numerator",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "52ae3745-20261001-1/seat_claude.json#H-c5-claude52ae-006/observations[5]",
+   "path": "aggregates.sideMatch.oppositeAll.denominator",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "52ae3745-20261001-1/seat_claude.json#H-c5-claude52ae-007/observations[0]",
+   "path": "aggregates.longThink.total.value",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "52ae3745-20261001-1/seat_claude.json#H-c5-claude52ae-007/observations[1]",
+   "path": "aggregates.longThink.fork.value",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "52ae3745-20261001-1/seat_claude.json#H-c5-claude52ae-007/observations[2]",
+   "path": "aggregates.longThink.opposite.value",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "52ae3745-20261001-1/seat_claude.json#H-c5-claude52ae-008/observations[0]",
+   "path": "facts.time[11].remainingSec",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "52ae3745-20261001-1/seat_claude.json#H-c5-claude52ae-008/observations[1]",
+   "path": "facts.time[11].timeUpLoss",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "52ae3745-20261001-1/seat_claude.json#H-c5-claude52ae-008/observations[2]",
+   "path": "facts.time[17].remainingSec",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "52ae3745-20261001-1/seat_claude.json#H-c5-claude52ae-008/observations[3]",
+   "path": "facts.time[17].timeUpLoss",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "52ae3745-20261001-1/seat_claude.json#H-c5-claude52ae-009/observations[0]",
+   "path": "facts.recognition.rows[0].names",
+   "ok": false,
+   "kind": "value_mismatch"
+  },
+  {
+   "id": "52ae3745-20261001-1/seat_claude.json#H-c5-claude52ae-009/observations[1]",
+   "path": "facts.recognition.rows[3].names",
+   "ok": false,
+   "kind": "value_mismatch"
+  },
+  {
+   "id": "52ae3745-20261001-1/seat_claude.json#H-c5-claude52ae-009/observations[2]",
+   "path": "facts.recognition.rows[12].names",
+   "ok": false,
+   "kind": "value_mismatch"
+  },
+  {
+   "id": "52ae3745-20261001-1/seat_claude.json#H-c5-claude52ae-009/observations[3]",
+   "path": "facts.recognition.rows[23].names",
+   "ok": false,
+   "kind": "value_mismatch"
+  },
+  {
+   "id": "52ae3745-20261001-1/seat_claude.json#H-c5-claude52ae-010/observations[0]",
+   "path": "aggregates.groups.core.collapses.value",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "52ae3745-20261001-1/seat_claude.json#H-c5-claude52ae-010/observations[1]",
+   "path": "aggregates.groups.other.collapses.value",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "558b8a81-20261001-2/seat_claude.json#H-c5-claude558b-001/observations[0]",
+   "path": "aggregates.groups.core.games.value",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "558b8a81-20261001-2/seat_claude.json#H-c5-claude558b-001/observations[1]",
+   "path": "aggregates.groups.other.games.value",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "558b8a81-20261001-2/seat_claude.json#H-c5-claude558b-001/observations[2]",
+   "path": "aggregates.groups.noSignature.games.value",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "558b8a81-20261001-2/seat_claude.json#H-c5-claude558b-002/observations[0]",
+   "path": "aggregates.collapse.total.value",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "558b8a81-20261001-2/seat_claude.json#H-c5-claude558b-002/observations[1]",
+   "path": "aggregates.groups.core.collapses.value",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "558b8a81-20261001-2/seat_claude.json#H-c5-claude558b-002/observations[2]",
+   "path": "aggregates.groups.other.collapses.value",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "558b8a81-20261001-2/seat_claude.json#H-c5-claude558b-002/observations[3]",
+   "path": "aggregates.groups.noSignature.collapses.value",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "558b8a81-20261001-2/seat_claude.json#H-c5-claude558b-003/observations[0]",
+   "path": "aggregates.aheadThenLost.numerator",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "558b8a81-20261001-2/seat_claude.json#H-c5-claude558b-003/observations[1]",
+   "path": "aggregates.aheadThenLost.denominator",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "558b8a81-20261001-2/seat_claude.json#H-c5-claude558b-003/observations[2]",
+   "path": "aggregates.groups.core.aheadThenLost.numerator",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "558b8a81-20261001-2/seat_claude.json#H-c5-claude558b-003/observations[3]",
+   "path": "aggregates.groups.core.aheadThenLost.denominator",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "558b8a81-20261001-2/seat_claude.json#H-c5-claude558b-003/observations[4]",
+   "path": "aggregates.groups.other.aheadThenLost.numerator",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "558b8a81-20261001-2/seat_claude.json#H-c5-claude558b-003/observations[5]",
+   "path": "aggregates.groups.other.aheadThenLost.denominator",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "558b8a81-20261001-2/seat_claude.json#H-c5-claude558b-003/observations[6]",
+   "path": "aggregates.groups.noSignature.aheadThenLost.numerator",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "558b8a81-20261001-2/seat_claude.json#H-c5-claude558b-003/observations[7]",
+   "path": "aggregates.groups.noSignature.aheadThenLost.denominator",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "558b8a81-20261001-2/seat_claude.json#H-c5-claude558b-004/observations[0]",
+   "path": "facts.recognition.rows[3].names",
+   "ok": false,
+   "kind": "value_mismatch"
+  },
+  {
+   "id": "558b8a81-20261001-2/seat_claude.json#H-c5-claude558b-004/observations[1]",
+   "path": "facts.recognition.rows[12].names",
+   "ok": false,
+   "kind": "value_mismatch"
+  },
+  {
+   "id": "558b8a81-20261001-2/seat_claude.json#H-c5-claude558b-004/observations[2]",
+   "path": "facts.recognition.rows[16].names",
+   "ok": false,
+   "kind": "value_mismatch"
+  },
+  {
+   "id": "558b8a81-20261001-2/seat_claude.json#H-c5-claude558b-004/observations[3]",
+   "path": "facts.recognition.rows[23].names",
+   "ok": false,
+   "kind": "value_mismatch"
+  },
+  {
+   "id": "558b8a81-20261001-2/seat_claude.json#H-c5-claude558b-004/observations[4]",
+   "path": "aggregates.groups.other.games.value",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "558b8a81-20261001-2/seat_claude.json#H-c5-claude558b-004/observations[5]",
+   "path": "aggregates.groups.other.aheadThenLost.denominator",
+   "ok": false,
+   "kind": "value_mismatch"
+  },
+  {
+   "id": "558b8a81-20261001-2/seat_claude.json#H-c5-claude558b-005/observations[0]",
+   "path": "aggregates.groups.other.aheadThenLost.numerator",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "558b8a81-20261001-2/seat_claude.json#H-c5-claude558b-005/observations[1]",
+   "path": "aggregates.groups.other.aheadThenLost.denominator",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "558b8a81-20261001-2/seat_claude.json#H-c5-claude558b-005/observations[2]",
+   "path": "aggregates.groups.core.aheadThenLost.numerator",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "558b8a81-20261001-2/seat_claude.json#H-c5-claude558b-005/observations[3]",
+   "path": "aggregates.groups.core.aheadThenLost.denominator",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "558b8a81-20261001-2/seat_claude.json#H-c5-claude558b-006/observations[0]",
+   "path": "aggregates.branches.total.value",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "558b8a81-20261001-2/seat_claude.json#H-c5-claude558b-006/observations[1]",
+   "path": "aggregates.branches.shallowVisible.value",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "558b8a81-20261001-2/seat_claude.json#H-c5-claude558b-006/observations[2]",
+   "path": "aggregates.branches.shallowVisibleGames.value",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "558b8a81-20261001-2/seat_claude.json#H-c5-claude558b-007/observations[0]",
+   "path": "aggregates.sideMatch.oppositeAll.numerator",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "558b8a81-20261001-2/seat_claude.json#H-c5-claude558b-007/observations[1]",
+   "path": "aggregates.sideMatch.oppositeAll.denominator",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "558b8a81-20261001-2/seat_claude.json#H-c5-claude558b-007/observations[2]",
+   "path": "aggregates.sideMatch.attackToDefense.numerator",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "558b8a81-20261001-2/seat_claude.json#H-c5-claude558b-007/observations[3]",
+   "path": "aggregates.sideMatch.attackToDefense.denominator",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "558b8a81-20261001-2/seat_claude.json#H-c5-claude558b-007/observations[4]",
+   "path": "aggregates.sideMatch.defenseToAttack.numerator",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "558b8a81-20261001-2/seat_claude.json#H-c5-claude558b-007/observations[5]",
+   "path": "aggregates.sideMatch.defenseToAttack.denominator",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "558b8a81-20261001-2/seat_claude.json#H-c5-claude558b-008/observations[0]",
+   "path": "aggregates.longThink.total.value",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "558b8a81-20261001-2/seat_claude.json#H-c5-claude558b-008/observations[1]",
+   "path": "aggregates.longThink.fork.value",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "558b8a81-20261001-2/seat_claude.json#H-c5-claude558b-008/observations[2]",
+   "path": "aggregates.longThink.opposite.value",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "558b8a81-20261001-2/seat_claude.json#H-c5-claude558b-008/observations[3]",
+   "path": "facts.time[11].timeUpLoss",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "558b8a81-20261001-2/seat_claude.json#H-c5-claude558b-008/observations[4]",
+   "path": "facts.time[11].remainingSec",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "558b8a81-20261001-2/seat_claude.json#H-c5-claude558b-009/observations[0]",
+   "path": "aggregates.groups.other.games.value",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "558b8a81-20261001-2/seat_claude.json#H-c5-claude558b-009/observations[1]",
+   "path": "facts.recognition.definitions[3].reviewStatus",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "558b8a81-20261001-2/seat_claude.json#H-c5-claude558b-010/observations[0]",
+   "path": "aggregates.groups.core.collapses.value",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "558b8a81-20261001-2/seat_claude.json#H-c5-claude558b-010/observations[1]",
+   "path": "aggregates.groups.other.collapses.value",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "558b8a81-20261001-2/seat_claude.json#H-c5-claude558b-011/observations[0]",
+   "path": "facts.games[0].timeLimitSec",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "558b8a81-20261001-2/seat_claude.json#H-c5-claude558b-011/observations[1]",
+   "path": "facts.games[24].timeLimitSec",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "558b8a81-20261001-2/seat_claude.json#H-c5-claude558b-012/observations[0]",
+   "path": "aggregates.groups.core.games.value",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "558b8a81-20261001-2/seat_claude.json#H-c5-claude558b-012/observations[1]",
+   "path": "aggregates.groups.core.collapses.value",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "558b8a81-20261001-2/seat_claude.json#H-c5-claude558b-012/observations[2]",
+   "path": "aggregates.groups.other.games.value",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "558b8a81-20261001-2/seat_claude.json#H-c5-claude558b-012/observations[3]",
+   "path": "aggregates.groups.other.collapses.value",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "558b8a81-20261001-2/seat_claude.json#H-c5-claude558b-012/observations[4]",
+   "path": "aggregates.groups.noSignature.games.value",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "558b8a81-20261001-2/seat_claude.json#H-c5-claude558b-012/observations[5]",
+   "path": "aggregates.groups.noSignature.collapses.value",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "558b8a81-20261001-2/seat_gpt.json#H-c5-gpt558b-001/observations[0]",
+   "path": "aggregates.groups.core.games.value",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "558b8a81-20261001-2/seat_gpt.json#H-c5-gpt558b-001/observations[1]",
+   "path": "aggregates.groups.other.games.value",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "558b8a81-20261001-2/seat_gpt.json#H-c5-gpt558b-001/observations[2]",
+   "path": "aggregates.groups.noSignature.games.value",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "558b8a81-20261001-2/seat_gpt.json#H-c5-gpt558b-002/observations[0]",
+   "path": "aggregates.groups.core.collapses.value",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "558b8a81-20261001-2/seat_gpt.json#H-c5-gpt558b-002/observations[1]",
+   "path": "aggregates.groups.other.collapses.value",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "558b8a81-20261001-2/seat_gpt.json#H-c5-gpt558b-002/observations[2]",
+   "path": "aggregates.groups.noSignature.collapses.value",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "558b8a81-20261001-2/seat_gpt.json#H-c5-gpt558b-003/observations[0]",
+   "path": "aggregates.groups.core.aheadThenLost.numerator",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "558b8a81-20261001-2/seat_gpt.json#H-c5-gpt558b-003/observations[1]",
+   "path": "aggregates.groups.core.aheadThenLost.denominator",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "558b8a81-20261001-2/seat_gpt.json#H-c5-gpt558b-003/observations[2]",
+   "path": "aggregates.groups.other.aheadThenLost.numerator",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "558b8a81-20261001-2/seat_gpt.json#H-c5-gpt558b-003/observations[3]",
+   "path": "aggregates.groups.other.aheadThenLost.denominator",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "558b8a81-20261001-2/seat_gpt.json#H-c5-gpt558b-003/observations[4]",
+   "path": "aggregates.groups.noSignature.aheadThenLost.numerator",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "558b8a81-20261001-2/seat_gpt.json#H-c5-gpt558b-003/observations[5]",
+   "path": "aggregates.groups.noSignature.aheadThenLost.denominator",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "558b8a81-20261001-2/seat_gpt.json#H-c5-gpt558b-004/observations[0]",
+   "path": "aggregates.groups.other.aheadThenLost.numerator",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "558b8a81-20261001-2/seat_gpt.json#H-c5-gpt558b-004/observations[1]",
+   "path": "aggregates.groups.other.aheadThenLost.denominator",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "558b8a81-20261001-2/seat_gpt.json#H-c5-gpt558b-004/observations[2]",
+   "path": "aggregates.groups.core.aheadThenLost.numerator",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "558b8a81-20261001-2/seat_gpt.json#H-c5-gpt558b-004/observations[3]",
+   "path": "aggregates.groups.core.aheadThenLost.denominator",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "558b8a81-20261001-2/seat_gpt.json#H-c5-gpt558b-005/observations[0]",
+   "path": "facts.recognition.rows[0].signatureClass",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "558b8a81-20261001-2/seat_gpt.json#H-c5-gpt558b-005/observations[1]",
+   "path": "facts.recognition.rows[0].names",
+   "ok": false,
+   "kind": "value_mismatch"
+  },
+  {
+   "id": "558b8a81-20261001-2/seat_gpt.json#H-c5-gpt558b-006/observations[0]",
+   "path": "facts.recognition.rows[0].names",
+   "ok": false,
+   "kind": "value_mismatch"
+  },
+  {
+   "id": "558b8a81-20261001-2/seat_gpt.json#H-c5-gpt558b-007/observations[0]",
+   "path": "facts.recognition.rows[0].signatureClass",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "f37561e1-20260930-2/seat_claude.json#H-c5-claudef375-001/observations[0]",
+   "path": "aggregates.groups.core.games.value",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "f37561e1-20260930-2/seat_claude.json#H-c5-claudef375-001/observations[1]",
+   "path": "aggregates.groups.other.games.value",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "f37561e1-20260930-2/seat_claude.json#H-c5-claudef375-001/observations[2]",
+   "path": "aggregates.groups.noSignature.games.value",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "f37561e1-20260930-2/seat_claude.json#H-c5-claudef375-002/observations[0]",
+   "path": "aggregates.groups.core.collapses.value",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "f37561e1-20260930-2/seat_claude.json#H-c5-claudef375-002/observations[1]",
+   "path": "aggregates.groups.other.collapses.value",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "f37561e1-20260930-2/seat_claude.json#H-c5-claudef375-002/observations[2]",
+   "path": "aggregates.groups.noSignature.collapses.value",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "f37561e1-20260930-2/seat_claude.json#H-c5-claudef375-002/observations[3]",
+   "path": "aggregates.collapse.total.value",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "f37561e1-20260930-2/seat_claude.json#H-c5-claudef375-003/observations[0]",
+   "path": "aggregates.groups.core.aheadThenLost.numerator",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "f37561e1-20260930-2/seat_claude.json#H-c5-claudef375-003/observations[1]",
+   "path": "aggregates.groups.core.aheadThenLost.denominator",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "f37561e1-20260930-2/seat_claude.json#H-c5-claudef375-003/observations[2]",
+   "path": "aggregates.groups.other.aheadThenLost.numerator",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "f37561e1-20260930-2/seat_claude.json#H-c5-claudef375-003/observations[3]",
+   "path": "aggregates.groups.other.aheadThenLost.denominator",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "f37561e1-20260930-2/seat_claude.json#H-c5-claudef375-003/observations[4]",
+   "path": "aggregates.groups.noSignature.aheadThenLost.numerator",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "f37561e1-20260930-2/seat_claude.json#H-c5-claudef375-003/observations[5]",
+   "path": "aggregates.groups.noSignature.aheadThenLost.denominator",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "f37561e1-20260930-2/seat_claude.json#H-c5-claudef375-004/observations[0]",
+   "path": "aggregates.groups.other.aheadThenLost.numerator",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "f37561e1-20260930-2/seat_claude.json#H-c5-claudef375-004/observations[1]",
+   "path": "aggregates.groups.other.aheadThenLost.denominator",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "f37561e1-20260930-2/seat_claude.json#H-c5-claudef375-004/observations[2]",
+   "path": "aggregates.groups.core.aheadThenLost.numerator",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "f37561e1-20260930-2/seat_claude.json#H-c5-claudef375-004/observations[3]",
+   "path": "aggregates.groups.core.aheadThenLost.denominator",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "f37561e1-20260930-2/seat_claude.json#H-c5-claudef375-005/observations[0]",
+   "path": "facts.recognition.rows[3].names",
+   "ok": false,
+   "kind": "value_mismatch"
+  },
+  {
+   "id": "f37561e1-20260930-2/seat_claude.json#H-c5-claudef375-005/observations[1]",
+   "path": "facts.recognition.rows[12].names",
+   "ok": false,
+   "kind": "value_mismatch"
+  },
+  {
+   "id": "f37561e1-20260930-2/seat_claude.json#H-c5-claudef375-005/observations[2]",
+   "path": "facts.recognition.rows[16].names",
+   "ok": false,
+   "kind": "value_mismatch"
+  },
+  {
+   "id": "f37561e1-20260930-2/seat_claude.json#H-c5-claudef375-005/observations[3]",
+   "path": "facts.recognition.rows[23].names",
+   "ok": false,
+   "kind": "value_mismatch"
+  },
+  {
+   "id": "f37561e1-20260930-2/seat_claude.json#H-c5-claudef375-006/observations[0]",
+   "path": "aggregates.longThink.total.value",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "f37561e1-20260930-2/seat_claude.json#H-c5-claudef375-006/observations[1]",
+   "path": "aggregates.longThink.fork.value",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "f37561e1-20260930-2/seat_claude.json#H-c5-claudef375-006/observations[2]",
+   "path": "aggregates.longThink.opposite.value",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "f37561e1-20260930-2/seat_claude.json#H-c5-claudef375-007/observations[0]",
+   "path": "aggregates.branches.total.value",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "f37561e1-20260930-2/seat_claude.json#H-c5-claudef375-007/observations[1]",
+   "path": "aggregates.branches.shallowVisible.value",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "f37561e1-20260930-2/seat_claude.json#H-c5-claudef375-007/observations[2]",
+   "path": "aggregates.branches.shallowVisibleGames.value",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "f37561e1-20260930-2/seat_claude.json#H-c5-claudef375-008/observations[0]",
+   "path": "aggregates.sideMatch.attack.numerator",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "f37561e1-20260930-2/seat_claude.json#H-c5-claudef375-008/observations[1]",
+   "path": "aggregates.sideMatch.attack.denominator",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "f37561e1-20260930-2/seat_claude.json#H-c5-claudef375-008/observations[2]",
+   "path": "aggregates.sideMatch.defense.numerator",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "f37561e1-20260930-2/seat_claude.json#H-c5-claudef375-008/observations[3]",
+   "path": "aggregates.sideMatch.defense.denominator",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "f37561e1-20260930-2/seat_claude.json#H-c5-claudef375-008/observations[4]",
+   "path": "aggregates.sideMatch.oppositeAll.numerator",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "f37561e1-20260930-2/seat_claude.json#H-c5-claudef375-008/observations[5]",
+   "path": "aggregates.sideMatch.oppositeAll.denominator",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "f37561e1-20260930-2/seat_claude.json#H-c5-claudef375-009/observations[0]",
+   "path": "facts.games[0].timeLimitSec",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "f37561e1-20260930-2/seat_claude.json#H-c5-claudef375-009/observations[1]",
+   "path": "facts.games[24].timeLimitSec",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "f37561e1-20260930-2/seat_claude.json#H-c5-claudef375-010/observations[0]",
+   "path": "aggregates.groups.core.games.value",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "f37561e1-20260930-2/seat_claude.json#H-c5-claudef375-010/observations[1]",
+   "path": "aggregates.groups.other.games.value",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "f37561e1-20260930-2/seat_claude.json#H-c5-claudef375-011/observations[0]",
+   "path": "aggregates.groups.other.games.value",
+   "ok": true,
+   "kind": "ok"
+  },
+  {
+   "id": "f37561e1-20260930-2/seat_claude.json#H-c5-claudef375-011/observations[1]",
+   "path": "aggregates.groups.other.collapses.value",
+   "ok": true,
+   "kind": "ok"
+  }
+ ],
+ "tally": {
+  "total": 213,
+  "ok": 192,
+  "by_kind": {
+   "ok": 192,
+   "not_found": 1,
+   "value_mismatch": 20
+  }
+ }
+}

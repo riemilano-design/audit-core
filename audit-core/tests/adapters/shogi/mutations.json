@@ -1,0 +1,50 @@
+[
+  {
+    "id": "S-R1-comparator-bypasses-canonical-json",
+    "file": "comparators.py",
+    "old": "        match=(expected_canonical == actual_canonical),\n",
+    "new": "        match=(expected == actual_raw),\n",
+    "predicted": "red",
+    "note": "canonical_json_equals が canonicalJson を使わず生の == で比べる。test_comparators.py::test_bool_is_not_confused_with_number_one(expected=1, actual=True)が 1==True で誤って match になる。"
+  },
+  {
+    "id": "S-R2-facts-ref-re-index-optional",
+    "file": "packet_ref.py",
+    "old": "    r\"\\[\\d+\\](?:\\.[A-Za-z0-9_]+(?:\\[\\d+\\])?)+$\"\n",
+    "new": "    r\"(?:\\[\\d+\\])?(?:\\.[A-Za-z0-9_]+(?:\\[\\d+\\])?)+$\"\n",
+    "predicted": "red",
+    "note": "facts.<列> の直後の添字を任意にする(文法を緩める)。test_packet_ref.py::test_facts_missing_bracket_entirely_rejected(\"facts.moves.usi\")が通ってしまい red。"
+  },
+  {
+    "id": "S-R3-no-row-reason-not-registered",
+    "file": "registry_setup.py",
+    "old": "    RV.NO_ROW,\n",
+    "new": "",
+    "predicted": "red",
+    "note": "resolve.NO_ROW を POINTER_NOT_FOUND として登録しない。test_end_to_end.py::test_pointer_not_found_result と test_registry_setup.py::test_five_pointer_not_found_reasons が core.UnknownRegistration で落ちる。"
+  },
+  {
+    "id": "S-R4-resolver-index-bound-check-removed",
+    "file": "resolve.py",
+    "old": "            if step >= len(current):\n",
+    "new": "            if False:\n",
+    "predicted": "red",
+    "note": "配列添字の範囲チェックを外す。test_resolve.py::test_index_out_of_range が IndexError で落ちる(current[step] が範囲外を直接引く)。"
+  },
+  {
+    "id": "S-R5-counter-evidence-not-forced-unverifiable",
+    "file": "recipes.py",
+    "old": "    return core.Recipe(claim=claim, pointers=(), contract=None, unverifiable_reason=NO_PACKET_REF_REASON)\n",
+    "new": "    return core.Recipe(claim=claim, pointers=(), contract=None, unverifiable_reason=None)\n",
+    "predicted": "red",
+    "note": "反証の観測を UNVERIFIABLE にしない。pointers が空のまま Core に渡るので state が POINTER_NOT_FOUND(reason=no_pointer)に変わり、test_recipes.py::test_counter_evidence_is_always_unverifiable と test_end_to_end.py::test_unverifiable_result が落ちる。"
+  },
+  {
+    "id": "S-G1-recipes-docstring-wording",
+    "file": "recipes.py",
+    "old": "never read here, matching C-2 plan",
+    "new": "never consulted here, matching C-2 plan",
+    "predicted": "green",
+    "note": "docstring の言い回しのみの変更(対照)。"
+  }
+]
