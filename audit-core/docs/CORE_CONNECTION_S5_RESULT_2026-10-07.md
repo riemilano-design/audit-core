@@ -92,3 +92,23 @@ S-4 の gpt の封筒が残っているので、(c)(d) の効き目は**金を�
 ## 8. この文書がしないこと
 
 Golden の書き直し(⑦ は人間)。入金・費用上限の判断。§5 の規則の変更。実 run の結果の主張(まだ回していない)。Core の変更。営業の実証範囲の更新。
+
+## 9. 追記(2026-10-07、同日。実 run の開始条件が揃った ― まだ回していない)
+
+**人間の決定**: Anthropic API への**入金が完了**。S-5 の実 run の**費用上限は計画どおり 5 USD**。ただし **実 run は司令塔の開始の合図まで開始しない**(人間の指示)。開始したら**封じた計画・予測を変更せず、1 回だけ**回す。
+
+**司令塔が読むだけで確かめた前提**(鍵の値は出していない):
+
+| # | 前提 | 実測 |
+|---|---|---|
+| 1 | `.env` に鍵と上限の名前が在る | `OPENAI_API_KEY`・`ANTHROPIC_API_KEY`・`GEMINI_API_KEY`・`SEAT_COST_CAP_USD` 各 1 行 |
+| 2 | 出力先 `scripts/playtest/out/c5/llm-seats-s5/` が**まだ無い** | 無い(上書きの恐れなし) |
+| 3 | 指示文 v1.4 の sha が `FIXED_INSTRUCTION_SHA256` の値と一致 | `8bd603ef…` = `8bd603ef…` |
+| 4 | c5 の packet と request が在る | `observation-packet.json`・`observation-request.json` |
+| 5 | 木がきれい・HEAD | 変更 0 件・`b1d61f3` |
+| 6 | Golden c5 `--expect` | **rc=0**(S-5 の現状で固定済み) |
+| 7 | 実装が監査 GO の凍結(r3)と同一 | 4 ファイルの sha 一致(非 OK 0) |
+
+**回すときの手順(封 §2.4 のとおり。1 回だけ)**: `--dry-run` 1 回で見込みを記録し **(f) の上限の配線が `countTokens` を壊していないことを金が動く前に確かめる** → `SEAT_COST_CAP_USD=5` を**コマンドの環境変数で**渡して実 run 1 回(`--out-dir scripts/playtest/out/c5/llm-seats-s5`・`--runs 1`・`--hold-back-seat gemini`・v1.4・整理役 v1。`.env` は不変)→ `run_summary.json` から席ごとの実費 → 事後の照合(`seatOutputCheck --packet` 各席・`integrationCheck --packet`・`exitSelect --draft` 単体で `--out` は scratchpad・`run_core_path_shogi.py --seats-dir llm-seats-s5`・Golden c5 `--expect`)→ §3 の r1〜r12・t3 と項目別に照合 → **この文書に日付つきの追記**。
+
+**司令塔の推し(順番の訂正)**: 人間の最終判定では「次の封に終端境界の変異を相乗り → Golden 再照合 → 実 run」の順だったが、**終端境界の変異は実 run の後に回したい**。理由: (i) 試験だけの追加なので実 run の結果に 1 ビットも寄与しない、(ii) 3 役の 1 周ぶんの手間がかかる、(iii) **金が動く計測の直前に木を変えると、`run_summary.json` の `gitHead` が監査 GO の `3a766cc` と違う commit を指し**、後から読む人が「差は試験だけ」を自分で確かめ直す必要が出る。**実 run までは木を凍結したままにしたい。** 判断は人間。
