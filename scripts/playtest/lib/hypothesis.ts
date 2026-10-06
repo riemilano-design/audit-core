@@ -222,7 +222,7 @@ export function loadObsRegistry(mdPath: string, extraIds: Iterable<string> = def
   return ids;
 }
 
-export type HypothesisCheckName = "schema" | "H-1" | "H-2" | "H-3" | "H-4" | "H-5" | "H-6" | "H-7" | "H-8" | "H-9" | "H-10" | "H-11";
+export type HypothesisCheckName = "schema" | "H-1" | "H-2" | "H-3" | "H-4" | "H-5" | "H-6" | "H-7" | "H-8" | "H-9" | "H-10" | "H-11" | "H-12";
 
 export interface CheckResult {
   check: HypothesisCheckName;
@@ -290,6 +290,12 @@ function asStringArray(value: unknown): string[] {
 function isV04OrLater(line: unknown): boolean {
   const version = asString(get(line, ["schemaVersion"]));
   return version !== undefined && isKnownHypothesisSchemaVersion(version) && version >= "0.4";
+}
+
+/** 0.5 以上の行か(H-12 の分岐はここだけ。版の一覧に無い版は false) */
+function isV05OrLater(line: unknown): boolean {
+  const version = asString(get(line, ["schemaVersion"]));
+  return version !== undefined && isKnownHypothesisSchemaVersion(version) && version >= "0.5";
 }
 
 /** 0.4 の行の kind(無ければ hypothesis ― 司令塔の判断 2026-09-30) */
@@ -979,8 +985,43 @@ function checkH11(line: unknown, packet: unknown): CheckResult {
   return result;
 }
 
+// ---- H-12: 観測 0 件を kind で許す(STEP S-4、契約 hypothesis.v0.5。audit-core/docs/CORE_CONNECTION_S4_PLAN_2026-10-06.md §2.1(b)) ----
+
+/** 観測 0 件が許される kind(答えられない・追加の観測。この 2 つだけ ― neededObservation を書く代わりに観測を免除する) */
+const KINDS_WITHOUT_OBSERVATION = new Set(["unanswerable", "needed_observation"]);
+const NEEDED_OBSERVATION_FIELDS = ["what", "whyNotInPacket", "howToMeasure"] as const;
+
 /**
- * スキーマ照合 + H-1〜H-11 を全部回して全部返す(最初で止めない)。スキーマが落ちても H は回す。
+ * **0.5 以上の行だけ走る**(0.4 以下は skip で ok ― 既存の記録と Golden を動かさない)。
+ * `kind` が `unanswerable` / `needed_observation` なら `observations` が 0 件でもよい代わりに、
+ * `neededObservation` の 3 欄(what・whyNotInPacket・howToMeasure)が空でない文字列であることを要る。
+ * それ以外の `kind` は `observations` が 1 件以上要る(0.4 までの schema の minItems と同じ規則を、0.5 では kind で見る)。
+ */
+function checkH12(line: unknown): CheckResult {
+  if (!isV05OrLater(line)) {
+    return { check: "H-12", ok: true, skipped: true, messages: ["未照合: schemaVersion が 0.5 未満(H-12 は 0.5 以上だけ見る)"] };
+  }
+  const messages: string[] = [];
+  const kind = kindOf(line);
+  const observations = asArray(get(line, ["observations"]));
+  if (KINDS_WITHOUT_OBSERVATION.has(kind)) {
+    const needed = get(line, ["neededObservation"]);
+    if (!isRecord(needed)) {
+      messages.push(`neededObservation が無い(kind ${kind} には要る)`);
+    } else {
+      for (const field of NEEDED_OBSERVATION_FIELDS) {
+        const value = needed[field];
+        if (typeof value !== "string" || value === "") messages.push(`neededObservation.${field} が空`);
+      }
+    }
+  } else if (observations.length === 0) {
+    messages.push(`observations が 0 件(kind ${kind} には 1 件以上要る)`);
+  }
+  return { check: "H-12", ok: messages.length === 0, messages };
+}
+
+/**
+ * スキーマ照合 + H-1〜H-12 を全部回して全部返す(最初で止めない)。スキーマが落ちても H は回す。
  *
  * `opts.bannedWords` は H-5 の一覧の差し替え口(試験用)。渡されなければ
  * `data/governance/banned_words.json` の `words` を読む(STEP H5-SYNC → Audit Core T-3)。
@@ -1004,5 +1045,6 @@ export function validateHypothesisLine(
     checkH9(line, opts.packet),
     checkH10(line, opts.packet),
     checkH11(line, opts.packet),
+    checkH12(line),
   ];
 }

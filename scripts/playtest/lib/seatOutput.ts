@@ -14,7 +14,8 @@ import { normalizeLastKey, type SeatInputMeta } from "./seatInput.js";
 
 export const SEAT_OUTPUT_CONTRACT = "seat-output" as const;
 export const SEAT_OUTPUT_SCHEMA_VERSION = "0.1" as const;
-export const SEAT_HYPOTHESIS_SCHEMA_VERSION = "0.4" as const;
+/** STEP S-4(audit-core/docs/CORE_CONNECTION_S4_PLAN_2026-10-06.md §2.1(b))で 0.5 に上げた(hypothesis.v0.5 の observations の minItems 無しを使う) */
+export const SEAT_HYPOTHESIS_SCHEMA_VERSION = "0.5" as const;
 export type Seat = "gpt" | "gemini" | "claude";
 /** 席の行の provenance.excludedInputs(現行ルートの出力は席に渡していない ― H-6 の盲検の記録) */
 export const SEAT_EXCLUDED_INPUTS: readonly string[] = ["answer_menu.json", "exit_candidates.json", "9_本編.md"];
@@ -33,7 +34,7 @@ export function loadSeatOutputSchema(): JsonSchema {
   return JSON.parse(readFileSync(new URL("../schemas/seat-output.v0.1.schema.json", import.meta.url), "utf-8")) as JsonSchema;
 }
 export function loadSeatOutputLlmSchema(): JsonSchema {
-  return JSON.parse(readFileSync(new URL("../schemas/seat-output.llm.v0.1.schema.json", import.meta.url), "utf-8")) as JsonSchema;
+  return JSON.parse(readFileSync(new URL("../schemas/seat-output.llm.v0.2.schema.json", import.meta.url), "utf-8")) as JsonSchema;
 }
 
 /**

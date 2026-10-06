@@ -50,5 +50,9 @@ export const KNOWN_DIAGNOSIS_REPORT_SCHEMA_VERSIONS = ["0.1"] as const;
  * こちらも書く側の既定は変えない ― 行の `schemaVersion` が版を選ぶ仕組みはそのまま。
  */
 export const HYPOTHESIS_SCHEMA_VERSION = "0.1" as const;
-/** 0.4 は STEP R2(docs/STEP_LLM_SEATS_R2_CONTRACT_2026-09-30.md): 席の出力の欄(kind・packetRef・internal …)を足した版。既定は据え置き */
-export const KNOWN_HYPOTHESIS_SCHEMA_VERSIONS = ["0.1", "0.2", "0.3", "0.4"] as const;
+/**
+ * 0.4 は STEP R2(docs/STEP_LLM_SEATS_R2_CONTRACT_2026-09-30.md): 席の出力の欄(kind・packetRef・internal …)を足した版。既定は据え置き。
+ * 0.5 は STEP S-4(audit-core/docs/CORE_CONNECTION_S4_PLAN_2026-10-06.md §2.1(b)): `observations` の `minItems` を外した版
+ * (`kind` が `unanswerable`・`needed_observation` の行は観測 0 件でよい ― H-12 が kind で見る)。既定は据え置き。
+ */
+export const KNOWN_HYPOTHESIS_SCHEMA_VERSIONS = ["0.1", "0.2", "0.3", "0.4", "0.5"] as const;

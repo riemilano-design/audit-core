@@ -283,6 +283,101 @@ describe("⑤ 候補の一覧(S-2)", () => {
   });
 });
 
+describe("STEP S-4: 観測 0 件の候補は aggregateIds: [] で下書きに入り、採用の門が落とす", () => {
+  // 【なぜここで測るか】H-12(hypothesis.ts)が観測 0 件を kind で許したので、下書き(buildSelectionDraft)は
+  // 検証を通った候補として受け取る。この候補は観測の packetRef を 1 つも持たないので aggregateIds は空になる
+  // ― 下書き自体はそれを止めない(検証を通った/落ちたの振り分けだけが仕事)。**止めるのは採用の契約の側**
+  // (answer-selection.v0.1 の p1[].aggregateIds は minItems 1。計画 §2.2・事実 10)。
+  it("u15 kind: unanswerable・observations: 0 件の代表は、検証を通れば aggregateIds: [] で items に入る", () => {
+    const draft = buildSelectionDraft(
+      materials({
+        validate: () => OK, // H-12 を含め検証を通った、という想定(H-12 自体の判定は hypothesis.test.ts が見る)
+        integration: {
+          runId: "r1",
+          clusters: [
+            {
+              itemRefs: [{ seatIndex: 1, hypothesisId: "I-1-003" }],
+              representative: {
+                schemaVersion: "0.5",
+                hypothesisId: "I-1-003",
+                kind: "unanswerable",
+                statement: "束に判定が無いため、この問いには答えられない。",
+                observations: [],
+                neededObservation: { what: "局ごとの型の判定", whyNotInPacket: "定義が下書き", howToMeasure: "承認してから判定し直す" },
+              },
+            },
+          ],
+          answersByQuestion: [],
+        },
+      }),
+    );
+    expect(draft.rejected).toEqual([]);
+    expect(draft.items).toHaveLength(1);
+    expect(draft.items[0]!.aggregateIds).toEqual([]);
+    expect(draft.items[0]!.boardRefs).toEqual([]);
+  });
+
+  it("u16 その候補の aggregateIds: [] を p1 にそのまま使うと、採用の門(answer-selection)が落とす", () => {
+    const draft = buildSelectionDraft(
+      materials({
+        validate: () => OK,
+        integration: {
+          runId: "r1",
+          clusters: [
+            {
+              itemRefs: [{ seatIndex: 1, hypothesisId: "I-1-003" }],
+              representative: {
+                schemaVersion: "0.5",
+                hypothesisId: "I-1-003",
+                kind: "unanswerable",
+                statement: "束に判定が無いため、この問いには答えられない。",
+                observations: [],
+                neededObservation: { what: "局ごとの型の判定", whyNotInPacket: "定義が下書き", howToMeasure: "承認してから判定し直す" },
+              },
+            },
+          ],
+          answersByQuestion: [],
+        },
+      }),
+    );
+    const item = draft.items[0]!;
+    expect(item.aggregateIds).toEqual([]); // u15 で確かめた前提
+
+    // 人が(誤って)この候補を p1 の 1 本に採ったとする ― 他の 2 本は通常の候補で埋める。
+    const itemRef = () => ({ seatIndex: 1, hypothesisId: "I-1-003" });
+    const selection = {
+      contract: "answer-selection",
+      schemaVersion: "0.1",
+      customerRef: "c5",
+      packetId: "22aee8fe696d0262",
+      runId: "r1",
+      runChoiceReason: "試験用の最小の選択(観測 0 件の候補が門を通るかだけを見る)",
+      lead: { itemRef: itemRef(), statementSource: "integration.representative" },
+      p1: [
+        { slot: "p1.1", aggregateIds: item.aggregateIds, itemRef: itemRef(), readingRequired: false },
+        { slot: "p1.2", aggregateIds: ["groups.core.games"], itemRef: itemRef(), readingRequired: false },
+        { slot: "p1.3", aggregateIds: ["branches.total"], itemRef: itemRef(), readingRequired: false },
+      ],
+      answers: [],
+      boards: [
+        { slot: "p2.1", gameId: "g01", ply: 48, packetRef: "facts.engine[0]" },
+        { slot: "p2.2", gameId: "g07", ply: 62, packetRef: "facts.engine[31]" },
+      ],
+      actions: [] as unknown[],
+      humanQueue: [] as unknown[],
+      adoptedBy: { who: "commander", at: "2026-10-06T00:00:00Z", basis: "試験: 観測 0 件の候補を p1 に採ったときの門の挙動" },
+    };
+    const problems = validateAnswerSelection(selection);
+    expect(problems.length).toBeGreaterThan(0);
+    expect(problems.some((p) => p.includes("p1[0]") && p.includes("aggregateIds") && p.includes("要素が 0 個")), problems.join("\n")).toBe(true);
+
+    // 対照: aggregateIds が 1 件以上あれば、この欄では落ちない(空だから落ちていることの裏)。
+    const fixed = { ...selection, p1: [{ ...selection.p1[0]!, aggregateIds: ["groups.core.games"] }, selection.p1[1]!, selection.p1[2]!] };
+    const fixedProblems = validateAnswerSelection(fixed);
+    expect(fixedProblems.some((p) => p.includes("p1[0]") && p.includes("aggregateIds"))).toBe(false);
+  });
+});
+
 describe("⑤ の門(S-9)", () => {
   /** 契約に合い、`adoptedBy` も埋まっている選択(形だけ ― 契約の検査は差し替える) */
   function filled() {

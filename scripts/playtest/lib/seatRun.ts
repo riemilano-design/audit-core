@@ -44,6 +44,8 @@ export const FIXED_INSTRUCTION_SHA256: Readonly<Record<string, string>> = {
   "LLM_SEATS_INSTRUCTION_v1.2_2026-10-01.md": "2870e1baa288f9a067d29d81d1d95f878f89508432e9e8b2aa0e9931684aec56",
   // v1.3(2026-10-06・S-3): 埋め草禁止・配列はそのまま配列で写す の 2 文を足した(版名の行以外は 1 バイトも変えていない)
   "LLM_SEATS_INSTRUCTION_v1.3_2026-10-06.md": "284f24a900502ef2278b81d60d00eba6c7536c8b035a84edf2f9894433fee96b",
+  // v1.4(2026-10-06・S-4 §2.1(c1)): observations 0 件の書き方・itemId の形・最上位の鍵は 5 つだけ の 4 ブロックを変えた(他は 1 バイトも変えていない)
+  "LLM_SEATS_INSTRUCTION_v1.4_2026-10-06.md": "8bd603efcc6ec4ae0c040becee2a126700ea520d8ad606a921d87bd4ba9e5774",
   "LLM_SEATS_INTEGRATOR_INSTRUCTION_v1_2026-09-30.md": "5118a6949862a104942f6975191dd3d16b00ca834f18b4bba5807aeaf2d7d94a",
 };
 
@@ -147,10 +149,17 @@ function isRecord(x: unknown): x is Rec {
   return x !== null && typeof x === "object" && !Array.isArray(x);
 }
 
+/**
+ * 落ちた欄以外は変えないでほしい、の 1 文(STEP S-4 §2.1(c2))。累積した理由の一覧の**前**に置く。
+ * **字で固定**(試験が字で留める)。2026-10-06 の S-3 の実 run で claude 席が `items2` ↔ `items` の文字列化を往復した
+ * ― 落ちた欄を直す過程で、落ちていない欄の形も変えてしまったため。
+ */
+export const RETRY_UNCHANGED_FIELDS_NOTICE = "落ちた欄以外は形が合っていました。直すのはここに挙げた欄だけで、他の欄の形・鍵の名前・配列の形は変えないでください。余計な鍵を足さない・配列を文字列にしない。" as const;
+
 /** 前回落ちた理由を足した 1 通(会話にしない。**前の出力は渡さない** ― 直させるのではなく、同じ束から書き直させる) */
 export function retryUserText(baseUser: string, problems: readonly string[]): string {
   const lines = problems.slice(0, 20).map((p) => `- ${p}`).join("\n");
-  return `${baseUser}\n\n---\n(前回の返答は次の欄で形が合わず受け取れませんでした。同じ束から、同じ形でもう一度書いてください。前回の返答そのものは渡していません ― 下は機械の検査が落とした欄と理由です。)\n${lines}\n`;
+  return `${baseUser}\n\n---\n(前回の返答は次の欄で形が合わず受け取れませんでした。同じ束から、同じ形でもう一度書いてください。前回の返答そのものは渡していません ― 下は機械の検査が落とした欄と理由です。)\n${RETRY_UNCHANGED_FIELDS_NOTICE}\n${lines}\n`;
 }
 
 /**
@@ -481,7 +490,7 @@ export async function runAll(cfg: RunAllConfig, deps: SlotDeps): Promise<RunAllR
 
 /** 整理役の正本 schema(写しを作るためだけに読む。判定は integration.ts の validateIntegrationLlm) */
 function loadIntegrationLlmSchema(): Rec {
-  return JSON.parse(readFileSync(new URL("../schemas/integration.llm.v0.1.schema.json", import.meta.url), "utf-8")) as Rec;
+  return JSON.parse(readFileSync(new URL("../schemas/integration.llm.v0.2.schema.json", import.meta.url), "utf-8")) as Rec;
 }
 
 function summaryOf(args: {

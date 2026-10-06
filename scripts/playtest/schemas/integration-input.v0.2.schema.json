@@ -1,0 +1,681 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "integration-input.v0.1.schema.json",
+  "title": "Integration Input v0.1",
+  "description": "STEP R3(docs/STEP_LLM_SEATS_R3_INTEGRATION_2026-09-30.md §2)。整理役(LLM)に渡す器。席の名前は持たない(seatIndex だけ。対応表は run のログ = seatOrderRef)。**internal の欄を持たない**(additionalProperties: false で存在自体を拒む ― 人間の決定 2026-09-30「参照できない」)。席の行の写しは許した欄だけ(origin.seat・subject・knowledge・provenance・status も無い)。packetDigest は packet の写し(線の組・集計 37 行・局の表だけ。facts の大きい表は渡さない ― 司令塔 GO)。空席は present: false と理由で残し、他の席で埋めない。",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "contract",
+    "schemaVersion",
+    "runId",
+    "packetId",
+    "requestSha256",
+    "seats",
+    "packetDigest",
+    "request",
+    "seatOrderRef"
+  ],
+  "properties": {
+    "contract": {
+      "const": "integration-input"
+    },
+    "schemaVersion": {
+      "const": "0.1"
+    },
+    "runId": {
+      "type": "string"
+    },
+    "packetId": {
+      "type": "string"
+    },
+    "requestSha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "seats": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "seatIndex": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "present": {
+            "type": "boolean"
+          },
+          "reason": {
+            "type": "string"
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "hypothesisId": {
+                  "type": "string"
+                },
+                "kind": {
+                  "enum": [
+                    "finding",
+                    "hypothesis",
+                    "answer_candidate",
+                    "action_candidate",
+                    "unanswerable",
+                    "needed_observation"
+                  ]
+                },
+                "factOrHypothesis": {
+                  "enum": [
+                    "fact",
+                    "hypothesis"
+                  ]
+                },
+                "lane": {
+                  "enum": [
+                    "time",
+                    "side",
+                    "shape",
+                    "prior",
+                    "alternative",
+                    "reply",
+                    "fork"
+                  ]
+                },
+                "statement": {
+                  "type": "string"
+                },
+                "observations": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "obsId": {
+                        "type": "string"
+                      },
+                      "path": {
+                        "type": "string"
+                      },
+                      "value": {
+                        "oneOf": [
+                          {
+                            "type": "number"
+                          },
+                          {
+                            "type": "string"
+                          },
+                          {
+                            "type": "boolean"
+                          },
+                          {
+                            "type": "null"
+                          },
+                          {
+                            "type": "object"
+                          },
+                          {
+                            "type": "array"
+                          }
+                        ]
+                      },
+                      "unit": {
+                        "type": "string"
+                      },
+                      "derived": {
+                        "type": "object",
+                        "properties": {
+                          "kind": {
+                            "enum": [
+                              "percent",
+                              "share10",
+                              "ratio"
+                            ]
+                          },
+                          "numerator": {
+                            "type": "object",
+                            "properties": {
+                              "obsId": {
+                                "type": "string"
+                              },
+                              "value": {
+                                "type": "number"
+                              }
+                            },
+                            "required": [
+                              "obsId",
+                              "value"
+                            ],
+                            "additionalProperties": false
+                          },
+                          "denominator": {
+                            "type": "object",
+                            "properties": {
+                              "obsId": {
+                                "type": "string"
+                              },
+                              "value": {
+                                "type": "number"
+                              }
+                            },
+                            "required": [
+                              "obsId",
+                              "value"
+                            ],
+                            "additionalProperties": false
+                          }
+                        },
+                        "required": [
+                          "kind",
+                          "numerator",
+                          "denominator"
+                        ],
+                        "additionalProperties": false
+                      },
+                      "packetRef": {
+                        "type": "object",
+                        "properties": {
+                          "path": {
+                            "type": "string"
+                          },
+                          "provenanceId": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "path"
+                        ],
+                        "additionalProperties": false
+                      }
+                    },
+                    "required": [
+                      "obsId",
+                      "path",
+                      "value",
+                      "packetRef"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "counterEvidence": {
+                  "type": "object",
+                  "properties": {
+                    "attempted": {
+                      "type": "boolean"
+                    },
+                    "items": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "kind": {
+                            "enum": [
+                              "counterexample",
+                              "denominator",
+                              "alternative"
+                            ]
+                          },
+                          "text": {
+                            "type": "string"
+                          },
+                          "observations": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "obsId": {
+                                  "type": "string"
+                                },
+                                "path": {
+                                  "type": "string"
+                                },
+                                "value": {
+                                  "oneOf": [
+                                    {
+                                      "type": "number"
+                                    },
+                                    {
+                                      "type": "string"
+                                    },
+                                    {
+                                      "type": "boolean"
+                                    },
+                                    {
+                                      "type": "null"
+                                    },
+                                    {
+                                      "type": "object"
+                                    },
+                                    {
+                                      "type": "array"
+                                    }
+                                  ]
+                                },
+                                "unit": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "obsId",
+                                "value"
+                              ],
+                              "additionalProperties": false
+                            }
+                          }
+                        },
+                        "required": [
+                          "kind",
+                          "text",
+                          "observations"
+                        ],
+                        "additionalProperties": false
+                      }
+                    },
+                    "result": {
+                      "enum": [
+                        "stands",
+                        "weakened",
+                        "refuted",
+                        "none_found"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "attempted",
+                    "items",
+                    "result"
+                  ],
+                  "additionalProperties": false
+                },
+                "prediction": {
+                  "type": "object",
+                  "properties": {
+                    "writtenAt": {
+                      "type": "string"
+                    },
+                    "window": {
+                      "type": "string"
+                    },
+                    "metric": {
+                      "type": "string"
+                    },
+                    "comparator": {
+                      "enum": [
+                        "<=",
+                        "<",
+                        ">=",
+                        ">",
+                        "=="
+                      ]
+                    },
+                    "value": {
+                      "type": "number"
+                    },
+                    "alsoRequires": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "metric": {
+                            "type": "string"
+                          },
+                          "comparator": {
+                            "enum": [
+                              "<=",
+                              "<",
+                              ">=",
+                              ">",
+                              "=="
+                            ]
+                          },
+                          "value": {
+                            "type": "number"
+                          }
+                        },
+                        "required": [
+                          "metric",
+                          "comparator",
+                          "value"
+                        ],
+                        "additionalProperties": false
+                      }
+                    }
+                  },
+                  "required": [
+                    "writtenAt",
+                    "window",
+                    "metric",
+                    "comparator",
+                    "value",
+                    "alsoRequires"
+                  ],
+                  "additionalProperties": false
+                },
+                "requestRef": {
+                  "type": "object",
+                  "properties": {
+                    "questionId": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "questionId"
+                  ],
+                  "additionalProperties": false
+                },
+                "actionCandidate": {
+                  "type": "object",
+                  "properties": {
+                    "text": {
+                      "type": "string"
+                    },
+                    "derivedFrom": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "menuMatch": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "text",
+                    "derivedFrom",
+                    "menuMatch"
+                  ],
+                  "additionalProperties": false
+                },
+                "neededObservation": {
+                  "type": "object",
+                  "properties": {
+                    "what": {
+                      "type": "string"
+                    },
+                    "whyNotInPacket": {
+                      "type": "string"
+                    },
+                    "howToMeasure": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "what",
+                    "whyNotInPacket",
+                    "howToMeasure"
+                  ],
+                  "additionalProperties": false
+                },
+                "origin": {
+                  "type": "object",
+                  "properties": {
+                    "itemId": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [],
+                  "additionalProperties": false
+                }
+              },
+              "required": [
+                "hypothesisId",
+                "kind",
+                "factOrHypothesis",
+                "lane",
+                "statement",
+                "observations",
+                "counterEvidence"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "answers": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "questionId": {
+                  "type": "string"
+                },
+                "status": {
+                  "enum": [
+                    "answered",
+                    "partial",
+                    "unanswerable"
+                  ]
+                },
+                "itemIds": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "reason": {
+                  "type": "string"
+                },
+                "missing": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "what": {
+                        "type": "string"
+                      },
+                      "howToMeasure": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "what",
+                      "howToMeasure"
+                    ],
+                    "additionalProperties": false
+                  }
+                }
+              },
+              "required": [
+                "questionId",
+                "status",
+                "itemIds",
+                "missing"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "omissions": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "selfComputedNumbers": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "value": {
+                  "type": "number"
+                },
+                "how": {
+                  "type": "string"
+                },
+                "fromPaths": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "note": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "value",
+                "how",
+                "fromPaths"
+              ],
+              "additionalProperties": false
+            }
+          }
+        },
+        "required": [
+          "seatIndex",
+          "present"
+        ],
+        "additionalProperties": false
+      },
+      "minItems": 1
+    },
+    "packetDigest": {
+      "type": "object",
+      "properties": {
+        "thresholds": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "value": {
+                "type": "number"
+              },
+              "unit": {
+                "type": "string"
+              },
+              "from": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "id",
+              "value",
+              "unit",
+              "from"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "aggregates": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "packetRef": {
+                "type": "string"
+              },
+              "value": {
+                "type": "number"
+              },
+              "unit": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "packetRef",
+              "value",
+              "unit"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "games": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "gameId": {
+                "type": "string"
+              },
+              "side": {
+                "type": "string"
+              },
+              "result": {
+                "type": "string"
+              },
+              "totalPlyCount": {
+                "type": "integer"
+              }
+            },
+            "required": [
+              "gameId",
+              "side",
+              "result",
+              "totalPlyCount"
+            ],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": [
+        "thresholds",
+        "aggregates",
+        "games"
+      ],
+      "additionalProperties": false
+    },
+    "request": {
+      "type": "object",
+      "properties": {
+        "customerQuestions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "text": {
+                "type": "string"
+              },
+              "askedAt": {
+                "type": "string"
+              },
+              "via": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "id",
+              "text"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "requestedScope": {
+          "type": "object",
+          "properties": {
+            "games": {
+              "type": "integer"
+            },
+            "timeLimitSec": {
+              "type": "integer"
+            },
+            "note": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "games",
+            "timeLimitSec"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "customerQuestions",
+        "requestedScope"
+      ],
+      "additionalProperties": false
+    },
+    "seatOrderRef": {
+      "type": "string"
+    }
+  }
+}

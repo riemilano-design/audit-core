@@ -10,7 +10,7 @@ import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import { OBSERVATION_PACKET_CONTRACT, OBSERVATION_PACKET_SCHEMA_VERSION, OBSERVATION_REQUEST_CONTRACT, packetIdOf } from "./observationPacket.js";
 import { renderSeatInput, type SeatInputMeta } from "./seatInput.js";
-import { FIXED_INSTRUCTION_SHA256, fixedShaProblems, parseHoldBack, runAll, retryUserText, seatsMissingPrices, type RunAllConfig, type SeatConfig } from "./seatRun.js";
+import { FIXED_INSTRUCTION_SHA256, RETRY_UNCHANGED_FIELDS_NOTICE, fixedShaProblems, parseHoldBack, runAll, retryUserText, seatsMissingPrices, type RunAllConfig, type SeatConfig } from "./seatRun.js";
 
 const INSTRUCTION = readFileSync(new URL("../../../docs/LLM_SEATS_INSTRUCTION_v1_2026-09-30.md", import.meta.url));
 const INTEGRATOR_INSTRUCTION = "あなたは整理役です。席の名前は知りません。";
@@ -298,6 +298,16 @@ describe("1 回の実行が通る(3 席 + 整理役)", () => {
     for (const text of seatUsers) expect(text).toContain("束はここまで");
     for (const text of seatUsers) expect(text).not.toMatch(/H-c5-/);
   });
+  it("整理役に送る schema は integration.llm.v0.2(observations の minItems が無い。STEP S-4 §2.1(b))", async () => {
+    // 【なぜここで見るか】`loadIntegrationLlmSchema`(seatRun.ts)は非公開の関数で、観測できる場所は
+    // 実際に整理役(anthropic)へ送る request body の `tools[0].input_schema` だけ ― Anthropic の写しは
+    // 「正本のまま($schema/$id/title/description だけ外す)」なので、minItems の有無がそのまま出る。
+    const { api } = await run();
+    const integratorBody = api.calls.find((c) => c.role === "integrator")!.body as any;
+    const observationsNode = integratorBody.tools[0].input_schema.properties.clusters.items.properties.representative.properties.observations;
+    expect(observationsNode.minItems, JSON.stringify(observationsNode)).toBeUndefined();
+    expect(observationsNode.type).toBe("array"); // 外した先がそもそも違う欄になっていない
+  });
 });
 
 describe("空席(止まる条件)は他の席で埋めない", () => {
@@ -491,6 +501,16 @@ describe("再依頼の文", () => {
     expect(text).toContain("- items[0]: itemId が形と違う");
     expect(text).toContain("前回の返答そのものは渡していません");
   });
+  it("r1(STEP S-4 §2.1(c2)): 落ちた欄以外は変えないでほしい、の固定の 1 文が、累積した理由の一覧の前に入る", () => {
+    const text = retryUserText("束の本文", ["items[0]: itemId が形と違う", "answers が空"]);
+    expect(text).toContain(RETRY_UNCHANGED_FIELDS_NOTICE);
+    // **一覧の前**(理由の 1 件目より前に出る)
+    expect(text.indexOf(RETRY_UNCHANGED_FIELDS_NOTICE)).toBeLessThan(text.indexOf("- items[0]: itemId が形と違う"));
+    // 字で固定(1 字変われば赤くなる)
+    expect(RETRY_UNCHANGED_FIELDS_NOTICE).toBe(
+      "落ちた欄以外は形が合っていました。直すのはここに挙げた欄だけで、他の欄の形・鍵の名前・配列の形は変えないでください。余計な鍵を足さない・配列を文字列にしない。",
+    );
+  });
 });
 
 describe("固定した指示文の sha(司令塔 2026-09-30)", () => {
@@ -513,13 +533,44 @@ describe("固定した指示文の sha(司令塔 2026-09-30)", () => {
     expect(problems.length).toBe(1);
     expect(problems[0]).toContain("固定されていない");
   });
-  it("5 本(席 v1・v1.1・v1.2・**v1.3**・整理役 v1)が表に在る", () => {
-    expect(Object.keys(FIXED_INSTRUCTION_SHA256).length).toBe(5);
+  it("6 本(席 v1・v1.1・v1.2・v1.3・**v1.4**・整理役 v1)が表に在る", () => {
+    expect(Object.keys(FIXED_INSTRUCTION_SHA256).length).toBe(6);
     // 古い版を消さない ― v1.1 で回した 3 周と比べられるようにする(版名を上げても前の sha は残す)
     expect(Object.keys(FIXED_INSTRUCTION_SHA256)).toContain("LLM_SEATS_INSTRUCTION_v1.1_2026-09-30.md");
     expect(Object.keys(FIXED_INSTRUCTION_SHA256)).toContain("LLM_SEATS_INSTRUCTION_v1.2_2026-10-01.md");
     // S-3(2026-10-06): 埋め草禁止・配列はそのまま配列で写す の 2 文を足した v1.3
     expect(Object.keys(FIXED_INSTRUCTION_SHA256)).toContain("LLM_SEATS_INSTRUCTION_v1.3_2026-10-06.md");
+    // S-4(2026-10-06 §2.1(c1)): observations 0 件の書き方・itemId の形・最上位の鍵は 5 つだけ の 4 ブロックを変えた v1.4
+    expect(Object.keys(FIXED_INSTRUCTION_SHA256)).toContain("LLM_SEATS_INSTRUCTION_v1.4_2026-10-06.md");
+  });
+  it("v1.4 は v1.3 と 4 ブロックだけ違う(STEP S-4 §2.1(c1)。それ以外は 1 バイトも変えていない)", () => {
+    const v13 = readFileSync(new URL("../../../docs/LLM_SEATS_INSTRUCTION_v1.3_2026-10-06.md", import.meta.url), "utf-8").split("\n");
+    const v14 = readFileSync(new URL("../../../docs/LLM_SEATS_INSTRUCTION_v1.4_2026-10-06.md", import.meta.url), "utf-8").split("\n");
+    // 同じ行数(足したのは既存行の後ろへの挿入。削った行は無い)
+    expect(v14.length).toBe(v13.length + 2);
+    // (1) 版名の行(1 行目)
+    expect(v13[0]).toContain("指示文 v1.3");
+    expect(v14[0]).toContain("指示文 v1.4");
+    expect(v14[0]).toBe(v13[0]!.replace("v1.3", "v1.4"));
+    // (2) 21 行目(埋め草禁止の行)の末尾の文を置き換えた
+    expect(v13[20]).toContain("根拠が束に無い項目は `kind` を `unanswerable` にして `neededObservation` を書く。");
+    expect(v14[20]).toContain("根拠が束に無い項目は `kind` を `unanswerable` か `needed_observation` にし");
+    expect(v14[20]).toContain("それ以外の `kind` の項目は `observations` を 1 件以上写す。");
+    // (3)(4) 22 行目(配列の行)はそのまま、その後ろに 2 行足した
+    expect(v14[21]).toBe(v13[21]);
+    expect(v14[22]).toContain("itemId");
+    expect(v14[22]).toContain("S-001");
+    expect(v14[23]).toContain("items2");
+    expect(v14[23]).toContain("5 つだけ");
+    // 以降(24 行目〜末尾)は v1.3 の 22 行目〜末尾とそのまま同じ(新しい行の後ろで 1 バイトもずれていない)
+    expect(v14.slice(24)).toEqual(v13.slice(22));
+    // 冒頭(1〜22 行目)は、版名の行(0)と置き換えた行(20)以外は全部一致
+    // (21 行目(index 21)は既に上で比べた。22 行目より後ろは挿入で位置がずれるので、上の slice 比較に任せる)
+    const changedLines = new Set([0, 20]);
+    for (let i = 0; i < 22; i += 1) {
+      if (changedLines.has(i)) continue;
+      expect(v14[i], `行 ${i + 1}`).toBe(v13[i]);
+    }
   });
 });
 

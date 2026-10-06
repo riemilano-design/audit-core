@@ -243,3 +243,49 @@ describe("写しの形で返った JSON は、null の後始末を通せば正�
     expect(cleaned.items[0].itemId).toBe("S-001");
   });
 });
+
+// ---------------------------------------------------------------------------
+// STEP S-4(2026-10-06、audit-core/docs/CORE_CONNECTION_S4_PLAN_2026-10-06.md §2.1(b)):
+// seat-output.llm.v0.2・integration.llm.v0.2 は v0.1 の複製 + observations の minItems を外した**だけ**
+// (構造で比べる)。写し(adaptSchema/forbiddenKeywords)は版が上がっても今までどおり緑であることを見る
+// ― 2 つの契約は別々の node に minItems が在るので、まとめて 1 つの describe にする。
+// ---------------------------------------------------------------------------
+const SEAT_SCHEMA_V02 = loadSchema("seat-output.llm.v0.2.schema.json");
+const INTEG_SCHEMA_V02 = loadSchema("integration.llm.v0.2.schema.json");
+
+describe("版 0.2(observations の minItems を外す。STEP S-4)", () => {
+  it("seat-output.llm.v0.2 は v0.1 の複製 + observations.minItems を外した**だけ**(構造で比べる)", () => {
+    const restored = JSON.parse(JSON.stringify(SEAT_SCHEMA_V02)) as any;
+    restored.properties.items.items.properties.observations.minItems = 1;
+    expect(restored).toEqual(SEAT_SCHEMA);
+    expect(SEAT_SCHEMA_V02).not.toEqual(SEAT_SCHEMA);
+  });
+  it("integration.llm.v0.2 は v0.1 の複製 + clusters[].representative.observations.minItems を外した**だけ**(構造で比べる。他の minItems は手を付けていない)", () => {
+    const restored = JSON.parse(JSON.stringify(INTEG_SCHEMA_V02)) as any;
+    restored.properties.clusters.items.properties.representative.properties.observations.minItems = 1;
+    expect(restored).toEqual(INTEG_SCHEMA);
+    expect(INTEG_SCHEMA_V02).not.toEqual(INTEG_SCHEMA);
+    // 観測以外の minItems(packetRefs・itemRefs・contradictions)は 0.1 と同じ値のまま
+    expect((INTEG_SCHEMA_V02 as any).properties.clusters.items.properties.packetRefs.minItems).toBe(1);
+    expect((INTEG_SCHEMA_V02 as any).properties.clusters.items.properties.itemRefs.minItems).toBe(1);
+    expect((INTEG_SCHEMA_V02 as any).properties.contradictions.items.properties.itemRefs.minItems).toBe(2);
+    expect((INTEG_SCHEMA_V02 as any).properties.contradictions.items.properties.packetRefs.minItems).toBe(1);
+  });
+  it("写し(forbiddenKeywords・自由形の節)は v0.2 でも緑のまま", () => {
+    for (const provider of ["openai", "gemini", "anthropic"] as const) {
+      for (const schema of [SEAT_SCHEMA_V02, INTEG_SCHEMA_V02]) {
+        const adapted = adaptSchema(provider, schema);
+        expect(forbiddenKeywords(provider, adapted), provider).toEqual([]);
+        expect(freeFormNodes(adapted), provider).toEqual([]);
+      }
+    }
+  });
+  it("items[].observations が 0 件の封筒は v0.2 の schema を通る(v0.1 では minItems で落ちるはず)", () => {
+    const zeroObs = seatLlm();
+    (zeroObs.items as Rec[])[0]!.observations = [];
+    expect(validateSeatOutputLlm(zeroObs, SEAT_SCHEMA_V02 as any)).toEqual([]);
+    const v01Problems = validateSeatOutputLlm(zeroObs, SEAT_SCHEMA as any);
+    expect(v01Problems.length).toBeGreaterThan(0);
+    expect(v01Problems.join(" / ")).toContain("足りない");
+  });
+});

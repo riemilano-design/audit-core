@@ -86,7 +86,7 @@ describe("席が書く形 → 封筒(completeSeatOutput は決定的で数を作
     expect((env.items[1]!.prediction as { writtenAt: string }).writtenAt).toBe(TODAY);
     expect((env.items[1]!.provenance as { inputs: string[] }).inputs).toEqual([`${SEAT_INPUT_PROVENANCE_PREFIX}${SHA_IN}`]);
     expect(env.items[0]!.subject).toEqual({ customer: "c5", groups: ["180 秒"], gamesCount: 25 });
-    expect(env.items[0]!.schemaVersion).toBe("0.4");
+    expect(env.items[0]!.schemaVersion).toBe("0.5"); // STEP S-4(§2.1(b))で SEAT_HYPOTHESIS_SCHEMA_VERSION を 0.5 に上げた
   });
   it("同じ入力で 2 回 → 同じ封筒。封筒は席の object を参照で持たない", () => {
     expect(envelope()).toEqual(envelope());

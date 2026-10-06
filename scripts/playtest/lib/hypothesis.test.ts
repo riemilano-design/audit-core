@@ -95,17 +95,19 @@ describe("H-3 反証を試みたことの記録", () => {
 });
 
 describe("H-4 予測は数で、測る前に書く", () => {
-  it("通る: today 2026-09-25 で基準の例は 12/12 通る(writtenAt(2026-09-25) <= today)", () => {
+  it("通る: today 2026-09-25 で基準の例は 13/13 通る(writtenAt(2026-09-25) <= today)", () => {
     const results = checksOf(BASE_LINE);
-    // **検査の本数は 12**(schema + H-1〜H-11)。H-9(packet の照合)・H-10(名前の照合)・
+    // **検査の本数は 13**(schema + H-1〜H-12)。H-9(packet の照合)・H-10(名前の照合)・
     // H-11(名前の段の印)は 2026-09-30 に足した ― packet を渡していないので 3 つとも
-    // `skipped` の印が付く(**ok だが緑ではない**)
-    expect(results).toHaveLength(12);
+    // `skipped` の印が付く(**ok だが緑ではない**)。H-12(STEP S-4)は schemaVersion が 0.5 未満
+    // (基準の例は 0.1)なので skipped
+    expect(results).toHaveLength(13);
     for (const result of results) expect(result, `${result.check}: ${result.messages.join(" / ")}`).toMatchObject({ ok: true });
     for (const check of ["H-9", "H-10", "H-11"] as const) {
       const result = results.find((candidate) => candidate.check === check)!;
       expect(result.skipped, `${check}: packet を渡していないのに未照合の印が無い`).toBe(true);
     }
+    expect(results.find((candidate) => candidate.check === "H-12")!.skipped, "H-12: schemaVersion が 0.5 未満なのに未照合の印が無い").toBe(true);
   });
 
   it("落ちる: writtenAt を 2026-09-26 にすると H-4 だけ落ちる(他 8 は通る)", () => {
@@ -269,7 +271,7 @@ describe("版 0.2(expired)", () => {
       const line = JSON.parse(readFileSync(join(RECORDS_DIR, file), "utf-8")) as Json;
       expect(line.schemaVersion, file).toBe("0.1");
       const results = checksByVersion(line);
-      expect(results, file).toHaveLength(12); // H-9・H-10・H-11 を足した(2026-09-30)
+      expect(results, file).toHaveLength(13); // H-9・H-10・H-11 を足した(2026-09-30)+ H-12 を足した(STEP S-4)
       expect(
         results.filter((r) => !r.ok).map((r) => r.check),
         `${file} の NG の並び`,
@@ -361,6 +363,46 @@ describe("版 0.3(lane に reply・fork)", () => {
     expect(result.ok).toBe(false);
     expect(result.messages.join(" ")).toContain("lane");
     expect(result.messages.join(" ")).toContain("unknown");
+  });
+});
+
+// ---------------------------------------------------------------------------
+// STEP S-4(2026-10-06、audit-core/docs/CORE_CONNECTION_S4_PLAN_2026-10-06.md §2.1(b)):
+// observations の minItems を外した版(0.5)。v0.4 の複製 + schemaVersion の const + minItems を外した**だけ**
+// であることを構造で比べる(minItems を足し戻し const を 0.4 に戻すと v0.4 と同一)。
+// ---------------------------------------------------------------------------
+describe("版 0.5(observations の minItems を外す。STEP S-4)", () => {
+  it("v0.4 の複製 + schemaVersion の const + observations.minItems を外した**だけ**(構造で比べる)", () => {
+    const v05 = loadHypothesisSchema("0.5") as Json;
+    const v04 = loadHypothesisSchema("0.4") as Json;
+    const restored = clone(v05);
+    const properties = restored.properties as Json;
+    properties.observations = { ...(properties.observations as Json), minItems: 1 };
+    properties.schemaVersion = { const: "0.4" };
+    expect(restored).toEqual(v04);
+    // 直さずに比べると違う(「何もしなくても同じ」を緑にしていないことの裏)
+    expect(v05).not.toEqual(v04);
+  });
+
+  it("通る: v0.3 の既存の記録(obs-3/p4-min3-r2 の 6 本)は schemaVersion を 0.5 にしても schema ok", () => {
+    for (const file of V02_EXISTING_FILES) {
+      const line = clone(JSON.parse(readFileSync(join(V02_EXISTING_RECORDS_DIR, file), "utf-8")) as Json);
+      line.schemaVersion = "0.5";
+      const schemaResult = checksByVersion(line).find((r) => r.check === "schema")!;
+      expect(schemaResult.ok, `${file}: ${schemaResult.messages.join(" / ")}`).toBe(true);
+    }
+  });
+
+  it("落ちる: 0.5 で kind finding かつ observations が空だと schema は通るが H-12 が落とす", () => {
+    const line = clone(V02_LINE);
+    line.schemaVersion = "0.5";
+    line.kind = "finding";
+    line.observations = [];
+    const results = checksByVersion(line);
+    expect(results.find((r) => r.check === "schema")!.ok, "0.5 は minItems が無いので schema は落ちないはず").toBe(true);
+    const h12 = results.find((r) => r.check === "H-12")!;
+    expect(h12.ok).toBe(false);
+    expect(h12.messages.join(" / ")).toContain("observations が 0 件");
   });
 });
 
@@ -510,6 +552,66 @@ describe("H-5 事実の行に読みの語を混ぜない(接続設計案 ③(d)�
     // 0.4 より前の版は分岐の外(factOrHypothesis を書いても読みの形を求める)
     const old = h5({ schemaVersion: "0.1", factOrHypothesis: "fact", statement: "崩れは 79 回だった。" });
     expect(old.ok, "0.4 より前の行が事実の行として扱われた").toBe(false);
+  });
+});
+
+describe("H-12 観測 0 件を kind で許す(STEP S-4 §2.1(b)、契約 hypothesis.v0.5)", () => {
+  // 【なぜここに足すか】判定は H-12(lib/hypothesis.ts)が持つ。**schema の minItems ではなく kind で見る**
+  //   (0.5 で observations の minItems を外したので、ここが唯一の下限の守り)。
+  // 【schema は通らなくてよい】H-12 は schema が落ちても回る(他の H と同じ作り)。見るのは H-12 の結果だけ。
+  const h12 = (line: unknown): CheckResult =>
+    validateHypothesisLine(line, { today: TODAY, registry: new Set<string>() }).find((r) => r.check === "H-12")!;
+
+  const NEEDED = { what: "局ごとの型の判定", whyNotInPacket: "定義が下書き", howToMeasure: "定義を承認してから判定し直す" };
+
+  it("0.4 以下は版によらず skip(既存の記録と Golden を動かさない)", () => {
+    for (const version of ["0.1", "0.2", "0.3", "0.4"] as const) {
+      for (const kind of ["finding", "hypothesis", "unanswerable", "needed_observation"] as const) {
+        const result = h12({ schemaVersion: version, kind, observations: [] });
+        expect(result, `${version}/${kind}`).toMatchObject({ ok: true, skipped: true });
+      }
+    }
+  });
+
+  // kind 4 通り × 観測 0/1(版は 0.5 固定 ― 0.4 以下の skip は上の試験で見た)
+  it("通常の kind(finding・hypothesis)は観測 1 件以上を要る", () => {
+    for (const kind of ["finding", "hypothesis"] as const) {
+      const zero = h12({ schemaVersion: "0.5", kind, observations: [] });
+      expect(zero.ok, `${kind}: 観測 0 件が通ってしまった`).toBe(false);
+      expect(zero.skipped).toBeUndefined();
+      expect(zero.messages.join(" / ")).toBe(`observations が 0 件(kind ${kind} には 1 件以上要る)`);
+
+      const one = h12({ schemaVersion: "0.5", kind, observations: [{ obsId: "obs.x", path: "facts.x", value: 1 }] });
+      expect(one, one.messages.join(" / ")).toMatchObject({ ok: true });
+    }
+  });
+
+  it("unanswerable・needed_observation は観測 0 件でも neededObservation があれば通る", () => {
+    for (const kind of ["unanswerable", "needed_observation"] as const) {
+      const zero = h12({ schemaVersion: "0.5", kind, observations: [], neededObservation: NEEDED });
+      expect(zero, zero.messages.join(" / ")).toMatchObject({ ok: true });
+
+      // 観測が 1 件あっても構わない(免除は「無くてよい」で「無いこと」を強制しない)
+      const one = h12({ schemaVersion: "0.5", kind, observations: [{ obsId: "obs.x", path: "facts.x", value: 1 }], neededObservation: NEEDED });
+      expect(one, one.messages.join(" / ")).toMatchObject({ ok: true });
+    }
+  });
+
+  it("unanswerable・needed_observation は neededObservation が無ければ落ちる", () => {
+    for (const kind of ["unanswerable", "needed_observation"] as const) {
+      const result = h12({ schemaVersion: "0.5", kind, observations: [] });
+      expect(result.ok, kind).toBe(false);
+      expect(result.messages.join(" / ")).toBe(`neededObservation が無い(kind ${kind} には要る)`);
+    }
+  });
+
+  it("neededObservation の 3 欄が 1 つずつ空だと、その欄だけ落ちる(片方だけ見る変異が黙らない)", () => {
+    for (const field of ["what", "whyNotInPacket", "howToMeasure"] as const) {
+      const needed = { ...NEEDED, [field]: "" };
+      const result = h12({ schemaVersion: "0.5", kind: "unanswerable", observations: [], neededObservation: needed });
+      expect(result.ok, field).toBe(false);
+      expect(result.messages, field).toEqual([`neededObservation.${field} が空`]);
+    }
   });
 });
 

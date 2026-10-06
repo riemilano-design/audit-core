@@ -4,11 +4,17 @@
 // 【packet を読まない】integration.ts が observationPacket* を import しないことを試験が見る。packetDigest は呼び出し側が渡す packet の写し。
 import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
+import { validate } from "./eventSchema.js";
 import {
   answersByQuestionOf, buildIntegrationInput, canonicalJson, completeIntegration, copySeatItem, integrationProblems, seatPermutation, validateIntegrationInput, validateIntegrationLlm,
 } from "./integration.js";
 import type { SeatInputMeta } from "./seatInput.js";
 import { completeSeatOutput } from "./seatOutput.js";
+
+/** 生の schema ファイル(版の比較のためだけに読む。判定は integration.ts の validateIntegrationInput) */
+function loadRawSchema(name: string): Record<string, unknown> {
+  return JSON.parse(readFileSync(new URL(`../schemas/${name}`, import.meta.url), "utf-8")) as Record<string, unknown>;
+}
 
 const TODAY = "2026-09-30";
 const RUN = "run20260930abc";
@@ -283,5 +289,33 @@ describe("I-4: 呼び出し側の packet をそのまま渡す(STEP S-2。integr
     rep.observations[0]!.value = 999;
     const withPacket = integrationProblems(shifted, input, { today: TODAY, registry: new Set<string>(), packet: packet() });
     expect(withPacket).toContain("I-4: C-001 の representative H-9: observations[0]: value が packet と違う(行 999 / packet 65)");
+  });
+});
+
+describe("版 0.2(observations の minItems を外す。STEP S-4 §2.1(b))", () => {
+  it("integration-input.v0.2 は v0.1 の複製 + seats[].items[].observations.minItems を外した**だけ**(構造で比べる。seats 自体の minItems は手を付けていない)", () => {
+    const v01 = loadRawSchema("integration-input.v0.1.schema.json") as any;
+    const v02 = loadRawSchema("integration-input.v0.2.schema.json") as any;
+    const restored = JSON.parse(JSON.stringify(v02)) as any;
+    restored.properties.seats.items.properties.items.items.properties.observations.minItems = 1;
+    expect(restored).toEqual(v01);
+    expect(v02).not.toEqual(v01);
+    // seats 自体の minItems(「席は 1 件以上」)は 0.1 と同じ値のまま
+    expect(v02.properties.seats.minItems).toBe(1);
+  });
+
+  it("validateIntegrationInput(既定で v0.2)は、観測 0 件の項目(kind unanswerable)を通す", () => {
+    const { input } = build();
+    const seat = (input.seats as { present: boolean; items?: Record<string, unknown>[] }[]).find((s) => s.present)!;
+    const unItem = seat.items!.find((it) => it.kind === "unanswerable")!;
+    unItem.observations = [];
+    unItem.neededObservation = { what: "局ごとの型の判定", whyNotInPacket: "定義が下書き", howToMeasure: "承認済みの定義で判定し直す" };
+    expect(validateIntegrationInput(input)).toEqual([]);
+
+    // 同じ入力を v0.1 の生 schema に通すと、minItems で落ちる(v0.1 では今までどおり塞がれている)。
+    const v01 = loadRawSchema("integration-input.v0.1.schema.json");
+    const v01Problems = validate(input, v01);
+    expect(v01Problems.length).toBeGreaterThan(0);
+    expect(v01Problems.some((p) => p.includes("足りない"))).toBe(true);
   });
 });

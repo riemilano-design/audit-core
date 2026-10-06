@@ -1,0 +1,534 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "seat-output.llm.v0.1.schema.json",
+  "title": "Seat Output (LLM-facing) v0.1",
+  "description": "STEP R2 §4.1。席(LLM)が書く形 = 封筒の部分集合。provenance・subject・knowledge・hypothesisId・status・schemaVersion・obsId・prediction.writtenAt・run は道具が後から埋める(lib/seatOutput.ts completeSeatOutput)。LLM に数を作らせない: observations[].value は packet の写し(実在は H-9)。各社の strict モード用の変換(任意の欄の nullable 化など)は R3 の仕事で、この schema は「席が返した JSON がこの形か」を見る。",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "reach",
+    "items",
+    "answers",
+    "selfComputedNumbers",
+    "omissions"
+  ],
+  "properties": {
+    "reach": {
+      "type": "object",
+      "properties": {
+        "passphrase": {
+          "type": "string"
+        },
+        "sections": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "section": {
+                "type": "string"
+              },
+              "lastKey": {
+                "type": "string"
+              },
+              "seal": {
+                "type": "string",
+                "description": "その節の封印語(節の最後の行に印字した語をそのまま写す)。到達の判定はこの語で行う"
+              }
+            },
+            "required": [
+              "section",
+              "lastKey",
+              "seal"
+            ],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": [
+        "passphrase",
+        "sections"
+      ],
+      "additionalProperties": false
+    },
+    "items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "itemId": {
+            "type": "string",
+            "pattern": "^S-[0-9]{3}$"
+          },
+          "kind": {
+            "enum": [
+              "finding",
+              "hypothesis",
+              "answer_candidate",
+              "action_candidate",
+              "unanswerable",
+              "needed_observation"
+            ]
+          },
+          "factOrHypothesis": {
+            "enum": [
+              "fact",
+              "hypothesis"
+            ]
+          },
+          "lane": {
+            "enum": [
+              "time",
+              "side",
+              "shape",
+              "prior",
+              "alternative",
+              "reply",
+              "fork"
+            ]
+          },
+          "statement": {
+            "type": "string"
+          },
+          "observations": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "path": {
+                  "type": "string"
+                },
+                "value": {
+                  "oneOf": [
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "boolean"
+                    },
+                    {
+                      "type": "null"
+                    },
+                    {
+                      "type": "object"
+                    },
+                    {
+                      "type": "array"
+                    }
+                  ]
+                },
+                "unit": {
+                  "type": "string"
+                },
+                "derived": {
+                  "type": "object",
+                  "properties": {
+                    "kind": {
+                      "enum": [
+                        "percent",
+                        "share10",
+                        "ratio"
+                      ]
+                    },
+                    "numerator": {
+                      "type": "object",
+                      "properties": {
+                        "path": {
+                          "type": "string"
+                        },
+                        "value": {
+                          "type": "number"
+                        }
+                      },
+                      "required": [
+                        "path",
+                        "value"
+                      ],
+                      "additionalProperties": false
+                    },
+                    "denominator": {
+                      "type": "object",
+                      "properties": {
+                        "path": {
+                          "type": "string"
+                        },
+                        "value": {
+                          "type": "number"
+                        }
+                      },
+                      "required": [
+                        "path",
+                        "value"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "required": [
+                    "kind",
+                    "numerator",
+                    "denominator"
+                  ],
+                  "additionalProperties": false
+                },
+                "packetRef": {
+                  "type": "object",
+                  "properties": {
+                    "path": {
+                      "type": "string"
+                    },
+                    "provenanceId": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "path"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "required": [
+                "value",
+                "packetRef"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "counterEvidence": {
+            "type": "object",
+            "properties": {
+              "attempted": {
+                "type": "boolean"
+              },
+              "items": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "kind": {
+                      "enum": [
+                        "counterexample",
+                        "denominator",
+                        "alternative"
+                      ]
+                    },
+                    "text": {
+                      "type": "string"
+                    },
+                    "observations": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "path": {
+                            "type": "string"
+                          },
+                          "value": {
+                            "oneOf": [
+                              {
+                                "type": "number"
+                              },
+                              {
+                                "type": "string"
+                              },
+                              {
+                                "type": "boolean"
+                              },
+                              {
+                                "type": "null"
+                              },
+                              {
+                                "type": "object"
+                              },
+                              {
+                                "type": "array"
+                              }
+                            ]
+                          },
+                          "unit": {
+                            "type": "string"
+                          },
+                          "packetRef": {
+                            "type": "object",
+                            "properties": {
+                              "path": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "path"
+                            ],
+                            "additionalProperties": false
+                          }
+                        },
+                        "required": [
+                          "value",
+                          "packetRef"
+                        ],
+                        "additionalProperties": false
+                      }
+                    }
+                  },
+                  "required": [
+                    "kind",
+                    "text",
+                    "observations"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "result": {
+                "enum": [
+                  "stands",
+                  "weakened",
+                  "refuted",
+                  "none_found"
+                ]
+              }
+            },
+            "required": [
+              "attempted",
+              "items",
+              "result"
+            ],
+            "additionalProperties": false
+          },
+          "prediction": {
+            "type": "object",
+            "properties": {
+              "window": {
+                "type": "string"
+              },
+              "metric": {
+                "type": "string"
+              },
+              "comparator": {
+                "enum": [
+                  "<=",
+                  "<",
+                  ">=",
+                  ">",
+                  "=="
+                ]
+              },
+              "value": {
+                "type": "number"
+              },
+              "alsoRequires": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "metric": {
+                      "type": "string"
+                    },
+                    "comparator": {
+                      "enum": [
+                        "<=",
+                        "<",
+                        ">=",
+                        ">",
+                        "=="
+                      ]
+                    },
+                    "value": {
+                      "type": "number"
+                    }
+                  },
+                  "required": [
+                    "metric",
+                    "comparator",
+                    "value"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            },
+            "required": [
+              "window",
+              "metric",
+              "comparator",
+              "value",
+              "alsoRequires"
+            ],
+            "additionalProperties": false
+          },
+          "requestRef": {
+            "type": "object",
+            "properties": {
+              "questionId": {
+                "type": "string",
+                "pattern": "^q[0-9]+$"
+              }
+            },
+            "required": [
+              "questionId"
+            ],
+            "additionalProperties": false
+          },
+          "actionCandidate": {
+            "type": "object",
+            "properties": {
+              "text": {
+                "type": "string"
+              },
+              "derivedFrom": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "menuMatch": {
+                "type": "null"
+              }
+            },
+            "required": [
+              "text",
+              "derivedFrom",
+              "menuMatch"
+            ],
+            "additionalProperties": false
+          },
+          "neededObservation": {
+            "type": "object",
+            "properties": {
+              "what": {
+                "type": "string"
+              },
+              "whyNotInPacket": {
+                "type": "string"
+              },
+              "howToMeasure": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "what",
+              "whyNotInPacket",
+              "howToMeasure"
+            ],
+            "additionalProperties": false
+          },
+          "internal": {
+            "type": "object",
+            "properties": {
+              "reasoning": {
+                "type": "string"
+              },
+              "namesOutsideVocabulary": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "required": [
+              "reasoning"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "itemId",
+          "kind",
+          "factOrHypothesis",
+          "lane",
+          "statement",
+          "observations",
+          "counterEvidence"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "answers": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "questionId": {
+            "type": "string",
+            "pattern": "^q[0-9]+$"
+          },
+          "status": {
+            "enum": [
+              "answered",
+              "partial",
+              "unanswerable"
+            ]
+          },
+          "itemIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "reason": {
+            "type": "string"
+          },
+          "missing": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "what": {
+                  "type": "string"
+                },
+                "howToMeasure": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "what",
+                "howToMeasure"
+              ],
+              "additionalProperties": false
+            }
+          }
+        },
+        "required": [
+          "questionId",
+          "status",
+          "itemIds",
+          "missing"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "selfComputedNumbers": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "number"
+          },
+          "how": {
+            "type": "string"
+          },
+          "fromPaths": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "note": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "value",
+          "how",
+          "fromPaths"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "omissions": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  }
+}

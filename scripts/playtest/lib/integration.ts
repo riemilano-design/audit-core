@@ -66,13 +66,13 @@ function loadSchema(name: string): JsonSchema {
   return JSON.parse(readFileSync(new URL(`../schemas/${name}`, import.meta.url), "utf-8")) as JsonSchema;
 }
 export function validateIntegrationInput(input: unknown): string[] {
-  return validate(input, loadSchema("integration-input.v0.1.schema.json"));
+  return validate(input, loadSchema("integration-input.v0.2.schema.json"));
 }
 export function validateIntegration(output: unknown): string[] {
   return validate(output, loadSchema("integration.v0.1.schema.json"));
 }
 export function validateIntegrationLlm(json: unknown): string[] {
-  return validate(json, loadSchema("integration.llm.v0.1.schema.json"));
+  return validate(json, loadSchema("integration.llm.v0.2.schema.json"));
 }
 
 // ---- 席の順(runId から決定的。司令塔の判断 2026-09-30) ----
