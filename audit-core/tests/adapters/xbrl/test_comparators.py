@@ -250,6 +250,159 @@ class DiffAbEqualsWithinTest(unittest.TestCase):
         self.assertEqual(result.recomputed, 4000000.0)
 
 
+class EqualsWithinFlowSignTest(unittest.TestCase):
+    """Core 接続 C-1g §1-2(profile P6 のみ): ``equals_within`` の新しい分岐
+    (``flow_convention``/``claim_direction`` が params にあるとき)。P1/P5F は
+    これらの鍵を一度も渡さないので、既存の ``EqualsWithinLadderTest`` の
+    挙動(abs を落とさない梯子)に触れない。
+    """
+
+    def test_sign_and_magnitude_both_match(self):
+        # fact は -802,686,000(DecreaseIncreaseIn 系、規約 -1 = 減少)。
+        # claim は「増加額 802,686,000」(claim_direction=+1)。
+        # sign(fact)=-1, -1 * -1 = +1 == +1 の claim_direction と一致する。
+        evidence = (_resolved(-802686000.0),)
+        claim = _claim(value=802686000.0, unit="円")
+        contract = _contract(
+            "equals_within", unit_scale=1.0, claim_scale=1000.0,
+            flow_convention=-1, claim_direction=1,
+        )
+        result = C.equals_within(evidence, claim, contract)
+        self.assertTrue(result.match)
+        self.assertEqual(result.detail["normalization"], "round")
+
+    def test_sign_mismatch_with_matching_magnitude(self):
+        # 同じ magnitude だが claim_direction が逆(減少額のつもり)。
+        evidence = (_resolved(-802686000.0),)
+        claim = _claim(value=802686000.0, unit="円")
+        contract = _contract(
+            "equals_within", unit_scale=1.0, claim_scale=1000.0,
+            flow_convention=-1, claim_direction=-1,
+        )
+        result = C.equals_within(evidence, claim, contract)
+        self.assertFalse(result.match)
+        self.assertEqual(result.detail["normalization"], "round")
+
+    def test_normalization_drops_abs_prefix(self):
+        # 梯子は abs を落とした "round"/"truncate" のどちらかで、
+        # "abs+round"/"abs+truncate" にはならない(§1-2)。
+        evidence = (_resolved(-802686700.0),)
+        claim = _claim(value=802686000.0, unit="円")
+        contract = _contract(
+            "equals_within", unit_scale=1.0, claim_scale=1000.0,
+            flow_convention=-1, claim_direction=1,
+        )
+        result = C.equals_within(evidence, claim, contract)
+        self.assertTrue(result.match)
+        self.assertEqual(result.detail["normalization"], "truncate")
+
+    def test_fact_value_zero_sign_matches_no_direction(self):
+        evidence = (_resolved(0.0),)
+        claim = _claim(value=0.0, unit="円")
+        contract = _contract(
+            "equals_within", unit_scale=1.0, claim_scale=1000.0,
+            flow_convention=1, claim_direction=1,
+        )
+        result = C.equals_within(evidence, claim, contract)
+        self.assertFalse(result.match)
+        self.assertEqual(result.detail["fact_sign"], 0)
+
+    def test_without_flow_params_behaves_as_before(self):
+        # flow_convention/claim_direction が無ければ従来どおり abs 付きの
+        # 梯子(回帰確認、既存の EqualsWithinLadderTest と同じ入力)。
+        evidence = (_resolved(-38064274000.0),)
+        claim = _claim(value=38064.0, unit="百万円")
+        contract = _contract("equals_within", unit_scale=1e6, claim_scale=1e6)
+        result = C.equals_within(evidence, claim, contract)
+        self.assertTrue(result.match)
+        self.assertEqual(result.detail["normalization"], "abs+round")
+
+
+class BuiltinFlowSignDirectionTest(unittest.TestCase):
+    """Core 接続 C-1g §1-2: ``builtin:flow_sign(cur)==direction``。evidence
+    は当期の fact 1 件だけ。
+    """
+
+    def test_increase_matches_positive_direction(self):
+        evidence = (_resolved(786000000.0),)
+        claim = _claim()
+        contract = _contract("builtin:flow_sign(cur)==direction", direction=1, flow_convention=1)
+        result = C.builtin_flow_sign_direction(evidence, claim, contract)
+        self.assertTrue(result.match)
+        self.assertEqual(result.recomputed, 786000000.0)
+
+    def test_decrease_convention_with_negative_fact_matches_increase_direction(self):
+        # DecreaseIncreaseIn 系(規約 -1)の fact が負 -> 実質「増加」。
+        evidence = (_resolved(-802686000.0),)
+        claim = _claim()
+        contract = _contract("builtin:flow_sign(cur)==direction", direction=1, flow_convention=-1)
+        result = C.builtin_flow_sign_direction(evidence, claim, contract)
+        self.assertTrue(result.match)
+
+    def test_mismatch(self):
+        evidence = (_resolved(61270000.0),)
+        claim = _claim()
+        contract = _contract("builtin:flow_sign(cur)==direction", direction=1, flow_convention=-1)
+        result = C.builtin_flow_sign_direction(evidence, claim, contract)
+        self.assertFalse(result.match)
+        self.assertEqual(result.detail["actual"], -1)
+
+    def test_zero_value_matches_no_direction(self):
+        evidence = (_resolved(0.0),)
+        claim = _claim()
+        contract = _contract("builtin:flow_sign(cur)==direction", direction=1, flow_convention=1)
+        result = C.builtin_flow_sign_direction(evidence, claim, contract)
+        self.assertFalse(result.match)
+        self.assertEqual(result.detail["actual"], 0)
+        contract_neg = _contract("builtin:flow_sign(cur)==direction", direction=-1, flow_convention=1)
+        self.assertFalse(C.builtin_flow_sign_direction(evidence, claim, contract_neg).match)
+
+
+class DiffAbPure100Test(unittest.TestCase):
+    """Core 接続 C-1g §1-3: ``diff(a-b)(pure*100)``(ポイント差)。"""
+
+    def test_match_positive_point_increase(self):
+        evidence = (_resolved(0.525), _resolved(0.495))
+        claim = _claim(value=2.9, unit="ポイント")
+        contract = _contract("diff(a-b)(pure*100)", tolerance=0.15)
+        result = C.diff_ab_pure100(evidence, claim, contract)
+        self.assertTrue(result.match)
+        self.assertEqual(result.recomputed, 3.0)
+
+    def test_match_negative_point_decrease(self):
+        evidence = (_resolved(0.061), _resolved(0.073))
+        claim = _claim(value=-1.2, unit="ポイント")
+        contract = _contract("diff(a-b)(pure*100)", tolerance=0.15)
+        result = C.diff_ab_pure100(evidence, claim, contract)
+        self.assertTrue(result.match)
+        self.assertEqual(result.recomputed, -1.2)
+
+    def test_mismatch(self):
+        evidence = (_resolved(0.10), _resolved(0.05))
+        claim = _claim(value=1.0, unit="ポイント")
+        contract = _contract("diff(a-b)(pure*100)", tolerance=0.15)
+        result = C.diff_ab_pure100(evidence, claim, contract)
+        self.assertFalse(result.match)
+        self.assertEqual(result.recomputed, 5.0)
+
+    def test_tolerance_boundary(self):
+        evidence = (_resolved(0.10), _resolved(0.0985))
+        claim = _claim(value=0.0, unit="ポイント")
+        contract = _contract("diff(a-b)(pure*100)", tolerance=0.15)
+        result = C.diff_ab_pure100(evidence, claim, contract)
+        self.assertTrue(result.match)
+
+    def test_mismatch_just_outside_015_tolerance(self):
+        # diff == 1.0 point: mismatches the real tolerance (0.15) but would
+        # wrongly match a hardcoded 1.5 (mutations.json: G-R3).
+        evidence = (_resolved(0.50), _resolved(0.49))
+        claim = _claim(value=0.0, unit="ポイント")
+        contract = _contract("diff(a-b)(pure*100)", tolerance=0.15)
+        result = C.diff_ab_pure100(evidence, claim, contract)
+        self.assertFalse(result.match)
+        self.assertEqual(result.recomputed, 1.0)
+
+
 class BuiltinSignDirectionTest(unittest.TestCase):
     def test_increase_matches_positive_direction(self):
         evidence = (_resolved(1200.0), _resolved(1000.0))

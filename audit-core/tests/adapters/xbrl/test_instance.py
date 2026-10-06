@@ -78,6 +78,76 @@ class FactsForTest(unittest.TestCase):
         self.assertEqual(I.facts_for(["NetSales"], facts, contexts), [])
 
 
+class SegmentMemberDenominatorTest(unittest.TestCase):
+    """Core 接続 C-1g §1-4(人間の承認、2026-10-06): 事業 member だけを数える
+    分母。凍結の ``member_denominator``(全部数える)との対照で、標準の
+    名前空間の member(株主資本等変動計算書の member・役員区分など)を除く。
+    """
+
+    def test_standard_namespace_members_are_excluded(self):
+        contexts = {
+            "CurrentYearDuration_CapitalStockMember": {
+                "start": "2025-04-01", "end": "2026-03-31",
+                "members": ["jppfs_cor:CapitalStockMember"],
+            },
+        }
+        self.assertEqual(I.segment_member_denominator(contexts), [])
+        # The frozen member_denominator still counts it (contrast).
+        self.assertEqual(I.member_denominator(contexts), ["jppfs_cor:CapitalStockMember"])
+
+    def test_company_extension_members_are_included(self):
+        contexts = {
+            "CurrentYearDuration_FooSegmentMember": {
+                "start": "2025-04-01", "end": "2026-03-31",
+                "members": ["jpcrp030000-asr_E05055-000:FooReportableSegmentMember"],
+            },
+        }
+        self.assertEqual(
+            I.segment_member_denominator(contexts),
+            ["jpcrp030000-asr_E05055-000:FooReportableSegmentMember"],
+        )
+
+    def test_mixed_standard_and_extension_members(self):
+        contexts = {
+            "CurrentYearDuration_CapitalStockMember": {
+                "start": "2025-04-01", "end": "2026-03-31",
+                "members": ["jppfs_cor:CapitalStockMember"],
+            },
+            "CurrentYearDuration_FooSegmentMember": {
+                "start": "2025-04-01", "end": "2026-03-31",
+                "members": ["jpcrp030000-asr_E05055-000:FooReportableSegmentMember"],
+            },
+            "Prior1YearDuration_BarSegmentMember": {
+                "start": "2024-04-01", "end": "2025-03-31",
+                "members": ["jpcrp030000-asr_E05055-000:BarReportableSegmentMember"],
+            },
+        }
+        self.assertEqual(
+            I.segment_member_denominator(contexts),
+            [
+                "jpcrp030000-asr_E05055-000:BarReportableSegmentMember",
+                "jpcrp030000-asr_E05055-000:FooReportableSegmentMember",
+            ],
+        )
+        self.assertEqual(len(I.member_denominator(contexts)), 3)
+
+    def test_non_consolidated_and_instant_only_contexts_excluded(self):
+        contexts = {
+            "CurrentYearDuration_NonConsolidatedMember_FooSegmentMember": {
+                "start": "2025-04-01", "end": "2026-03-31",
+                "members": ["jpcrp030000-asr_E05055-000:FooReportableSegmentMember"],
+            },
+            "CurrentYearInstant_FooSegmentMember": {
+                "instant": "2026-03-31",
+                "members": ["jpcrp030000-asr_E05055-000:FooReportableSegmentMember"],
+            },
+        }
+        self.assertEqual(I.segment_member_denominator(contexts), [])
+
+    def test_no_members_is_empty(self):
+        self.assertEqual(I.segment_member_denominator({}), [])
+
+
 class SelectMdnaTest(unittest.TestCase):
     def test_prefers_management_analysis_text_block(self):
         tbs = {

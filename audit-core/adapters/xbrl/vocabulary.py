@@ -10,6 +10,7 @@ loaded with ``importlib`` so that any drift is caught by the lineage
 test rather than relying on this comment.
 """
 
+import re
 from dataclasses import dataclass
 from typing import List, Optional, Sequence, Tuple
 
@@ -90,6 +91,25 @@ SUBJECTS_73 = SUBJECTS_RUN_B_EXTRA_34 + SUBJECTS_BASE_39
 VOCAB4 = ("セグメント利益", ["OperatingIncome"])
 SUBJECTS_74 = [VOCAB4] + SUBJECTS_73
 
+# ---------------------------------------------------------------------------
+# Core 接続 C-1g §1-1(人間の承認、2026-10-06): profile P6 だけの語彙 7 行
+# (3 社目の結果文書 §5 XP-3rd-2/XP-3rd-4 に出た語彙の穴)。P6 の語彙の先頭に足す。
+# ---------------------------------------------------------------------------
+SUBJECTS_P6_EXTRA_7 = [
+    ("流動負債", ["CurrentLiabilities"]),
+    ("固定負債", ["NoncurrentLiabilities"]),
+    ("投資有価証券の取得による支出", ["PurchaseOfInvestmentSecurities"]),
+    ("1年内返済予定の長期借入金", ["CurrentPortionOfLongTermLoansPayable", "CurrentPortionOfLongTermBorrowings"]),
+    ("持分法による投資利益", [
+        "ShareOfProfitOfEntitiesAccountedForUsingEquityMethod",
+        "ShareOfProfitLossOfEntitiesAccountedForUsingEquityMethod",
+        "EquityInEarningsOfAffiliates",
+    ]),
+    ("ROE", ["RateOfReturnOnEquity"]),
+    ("退職給付に係る負債", ["RetirementBenefitLiability"]),
+]
+SUBJECTS_P6 = tuple(SUBJECTS_P6_EXTRA_7) + tuple(SUBJECTS_74)
+
 PROFIT_SUBJECTS = ("利益", "損失")
 
 UNIT_SCALE = {"百万円": 1e6, "千円": 1e3, "億円": 1e8, "兆円": 1e12, "円": 1}
@@ -119,6 +139,30 @@ def match_value(fact_value, target, unit):
     return None
 
 
+# ---------------------------------------------------------------------------
+# Core 接続 C-1g §1-2(人間の決定、2026-10-06、CF 流量項目の符号の規約 b)。
+# 要素の局所名(接頭辞を除いた部分。会社拡張でも同じ判定)が
+# DecreaseIncreaseIn… なら正 = 減少(規約 -1)、IncreaseDecreaseIn…
+# (NetIncreaseDecreaseIn… を含む)なら正 = 増加(規約 +1)。該当しなければ
+# None(流量項目ではない)。
+# ---------------------------------------------------------------------------
+_FLOW_DECREASE_INCREASE_RE = re.compile(r"^(?:Net)?DecreaseIncreaseIn")
+_FLOW_INCREASE_DECREASE_RE = re.compile(r"^(?:Net)?IncreaseDecreaseIn")
+
+
+def flow_convention(element_name):
+    """CF 流量項目の符号の規約(C-1g §1-2)。``element_name`` は
+    ``prefix:Local`` でも局所名だけでもよい(``:`` で分けて末尾を使う)。
+    """
+
+    local = element_name.split(":")[-1]
+    if _FLOW_INCREASE_DECREASE_RE.match(local):
+        return 1
+    if _FLOW_DECREASE_INCREASE_RE.match(local):
+        return -1
+    return None
+
+
 @dataclass(frozen=True)
 class Profile:
     """A named bundle of Adapter settings (Adapter-only knowledge; the Core
@@ -130,6 +174,12 @@ class Profile:
     member_on: bool
     claim_level_member: bool
     run3: Optional[str]
+    # Core 接続 C-1g §1(人間の承認、2026-10-06): P6 だけの 3 つのフラグ。
+    # P1・P5F はこれらの既定値 False のまま変わらない(定義そのものを書き
+    # 換えていない)。
+    flow_sign: bool = False
+    point_diff: bool = False
+    segment_denominator: bool = False
 
 
 P1 = Profile(
@@ -148,4 +198,15 @@ P5F = Profile(
     run3="L",
 )
 
-PROFILES = {"P1": P1, "P5F": P5F}
+P6 = Profile(
+    name="P6",
+    subjects=SUBJECTS_P6,
+    member_on=True,
+    claim_level_member=True,
+    run3="L",
+    flow_sign=True,
+    point_diff=True,
+    segment_denominator=True,
+)
+
+PROFILES = {"P1": P1, "P5F": P5F, "P6": P6}

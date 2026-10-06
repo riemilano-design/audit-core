@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
-"""The six comparators C-1d §3.1 fixes, registered under ``register_all``
-(see :mod:`registry_setup`).
+"""The six comparators C-1d §3.1 fixes (plus two more added by Core 接続
+C-1g §1-2/§1-3 for profile P6 only: ``builtin_flow_sign_direction`` /
+``diff_ab_pure100``), all registered under ``register_all`` (see
+:mod:`registry_setup`).
 
 Each comparator reads only the already-resolved ``evidence`` (a tuple of
 Core ``Resolved`` objects, in the order the Recipe's ``xbrl:`` pointers
@@ -54,13 +56,22 @@ def _match_value(fact_value, target, unit):
 
 
 def equals_within(evidence, claim, contract):
-    """C-1d §3.1 row 1. Two branches, chosen by which param is present:
+    """C-1d §3.1 row 1. Three branches, chosen by which params are present:
 
     - ``abs_tolerance`` set (direct_value claims in units 名/人; not
       exercised by the 224-claim material -- 0 such claims bind a
       pointer): match = |fact - claim.value| <= abs_tolerance.
-    - otherwise (money claims): match = ``_match_value(fact,
-      claim.value * unit_scale, claim_scale)`` is not None.
+    - ``flow_convention``/``claim_direction`` both set (Core 接続 C-1g
+      §1-2, profile P6 only; P1/P5F never set these params, so this
+      branch is unreached for them): the magnitude is matched on the
+      *unsigned* round/truncate ladder (dropping the "abs+" prefix,
+      since both operands are already made non-negative here), and the
+      sign is checked separately: match = (ladder match) and
+      (sign(fact) * flow_convention == claim_direction). A fact value
+      of exactly 0 has sign 0, which matches no non-zero direction.
+    - otherwise (money claims, the original behaviour): match =
+      ``_match_value(fact, claim.value * unit_scale, claim_scale)`` is
+      not None.
 
     ``recomputed`` is always the fact's raw (unrounded) value.
     """
@@ -74,6 +85,15 @@ def equals_within(evidence, claim, contract):
         return core.Comparison(match=match, recomputed=fact.value, depth="value_match", detail=detail)
     unit_scale = params["unit_scale"]
     claim_scale = params["claim_scale"]
+    flow_convention = params.get("flow_convention")
+    claim_direction = params.get("claim_direction")
+    if flow_convention is not None and claim_direction is not None:
+        target_abs = abs(claim.value) * unit_scale
+        how = _match_value(abs(fact.value), target_abs, claim_scale)
+        fact_sign = 0 if fact.value == 0 else (1 if fact.value > 0 else -1)
+        sign_ok = (fact_sign * flow_convention) == claim_direction
+        detail = {"normalization": how, "flow_convention": flow_convention, "claim_direction": claim_direction, "fact_sign": fact_sign}
+        return core.Comparison(match=(how is not None and sign_ok), recomputed=fact.value, depth="value_match", detail=detail)
     target = claim.value * unit_scale
     how = _match_value(fact.value, target, claim_scale)
     detail = {"normalization": how}
@@ -184,3 +204,44 @@ def builtin_sign_direction(evidence, claim, contract):
     actual = 0 if diff == 0 else (1 if diff > 0 else -1)
     detail = {"direction": direction, "actual": actual}
     return core.Comparison(match=(actual == direction), recomputed=diff, depth="value_match", detail=detail)
+
+
+def builtin_flow_sign_direction(evidence, claim, contract):
+    """Core 接続 C-1g §1-2 (``builtin:flow_sign(cur)==direction``, profile
+    P6 only). evidence = (cur,) -- the current-year fact alone (no prior
+    year; the CF flow item's own value already represents the period's
+    movement, per ``vocabulary.flow_convention``'s docstring).
+
+    actual = 0 if cur.value == 0 else (1 if cur.value * flow_convention
+    > 0 else -1). match = actual == direction (params["direction"], an
+    Adapter-resolved +1/-1). recomputed = cur.value (raw).
+    """
+
+    params = contract.params or {}
+    direction = params["direction"]
+    flow_convention = params["flow_convention"]
+    cur = evidence[0]
+    actual = 0 if cur.value == 0 else (1 if cur.value * flow_convention > 0 else -1)
+    detail = {"direction": direction, "flow_convention": flow_convention, "actual": actual}
+    return core.Comparison(match=(actual == direction), recomputed=cur.value, depth="value_match", detail=detail)
+
+
+def diff_ab_pure100(evidence, claim, contract):
+    """Core 接続 C-1g §1-3 (``diff(a-b)(pure*100)``, profile P6 only, the
+    ``XP-3rd-1`` point-difference form). evidence = (a, b) -- the current
+    and prior year "pure" (ratio) facts.
+
+    recomputed = round((a.value - b.value) * 100, 2) (raw difference of
+    the two ratios, rescaled to percentage points). match = |recomputed -
+    claim.value| <= tolerance (params["tolerance"]; claim.value is
+    signed -- the Adapter attaches the direction word's sign when it
+    builds the point-difference Claim, see ``recipes.py``).
+    """
+
+    params = contract.params or {}
+    tolerance = params["tolerance"]
+    a, b = evidence[0], evidence[1]
+    recomputed = round((a.value - b.value) * 100, 2)
+    match = abs(recomputed - claim.value) <= tolerance
+    detail = {"tolerance": tolerance}
+    return core.Comparison(match=match, recomputed=recomputed, depth="value_match", detail=detail)

@@ -45,6 +45,9 @@ UNBOUND_REASON_STATE = {
     "ambiguous(elements)": "UNVERIFIABLE",
     "state_word(no line)": "UNVERIFIABLE",
     "prior is 0": "UNVERIFIABLE",
+    # Core 接続 C-1g §1-3(人間の決定、2026-10-06、profile P6 のみ)。既存 9 件
+    # の写し元(frozen の C-0 §2)は変えず、新しい理由を 1 件だけ足す。
+    "no_element(point without prior phrase)": "POINTER_NOT_FOUND",
 }
 
 
@@ -95,6 +98,99 @@ def _pointer_list(raw_pointer):
 _MONEY_UNIT_RE_AFTER = re.compile(r"(増加|減少|増|減)")
 _MONEY_DIFF_PHRASE_RE = re.compile(r"(増加額|減少額|比べて)")
 _PREV_YEAR_PHRASE = "前連結会計年度は"
+
+# ---------------------------------------------------------------------------
+# Core 接続 C-1g §1-2(人間の決定、2026-10-06): CF 流量項目の符号の規約。
+# profile.flow_sign が真のときだけ使う(P1/P5F は常に偽で、この一群は呼ばれ
+# ない)。
+# ---------------------------------------------------------------------------
+_FLOW_DIRECTION_RE = re.compile(r"増加額|減少額|増加|減少")
+
+
+def _flow_direction_word(s, subj, a, b):
+    """主語の終わりから数の開始(a)まで、または数の終わり(b)の直後 4 字に
+    増加額/減少額/増加/減少 があれば +1/-1、無ければ None。
+    """
+
+    if not subj:
+        return None
+    head_end = s[:a].rfind(subj)
+    if head_end < 0:
+        return None
+    window1 = s[head_end + len(subj):a]
+    window2 = s[b:b + 4]
+    for window in (window1, window2):
+        m = _FLOW_DIRECTION_RE.search(window)
+        if m:
+            return 1 if m.group(0).startswith("増") else -1
+    return None
+
+
+def _apply_flow_sign(claim, s, a, b):
+    """§1-2。直接値の Claim が CF 流量項目の 1 件の fact に束縛されていて、
+    向きの語があるときだけ、claim["flow_convention"]/["claim_direction"] を
+    足し、normalization の札を abs を落とした梯子(round/truncate)に直す。
+    derived diff(pointer がリスト)や value_only(subject 無し)には触れない。
+    """
+
+    if not claim.get("bound") or not claim.get("subject"):
+        return
+    pointer = claim.get("pointer")
+    if not isinstance(pointer, str) or not pointer.startswith("xbrl:"):
+        return
+    name = pointer[5:].split("@")[0]
+    conv = V.flow_convention(name)
+    if conv is None:
+        return
+    direction = _flow_direction_word(s, claim["subject"], a, b)
+    if direction is None:
+        return
+    claim["flow_convention"] = conv
+    claim["claim_direction"] = direction
+    target_abs = abs(claim["value"]) * claim["unit_scale"]
+    how = V.match_value(abs(claim["recomputed"]), target_abs, claim["claim_scale"])
+    if how is not None:
+        claim["match"] = how
+
+
+# ---------------------------------------------------------------------------
+# Core 接続 C-1g §1-3(人間の決定、2026-10-06): ポイント差の derived form。
+# profile.point_diff が真のときだけ使う。
+# ---------------------------------------------------------------------------
+_POINT_PRIOR_PHRASE_RE = re.compile(r"前期比|前連結会計年度|前年")
+_POINT_DIRECTION_RE = re.compile(r"増加|増|減少|減|下回")
+
+
+def _build_point_diff_claim(claim, s, a, b, elems, member, facts, contexts, num):
+    """単位 ポイント・主語あり(呼び出し側の条件)の Claim を、前期の比率
+    との derived diff として組む。前期の語が無ければ新しい理由
+    ``no_element(point without prior phrase)``、前期の語があっても当期・
+    前期の pure の対が見つからなければ ``no_element``。
+    """
+
+    window = s[max(0, a - 25):a]
+    if not _POINT_PRIOR_PHRASE_RE.search(window):
+        claim["reason"] = "no_element(point without prior phrase)"
+        return
+    dm = _POINT_DIRECTION_RE.search(s[b:b + 10])
+    sign = -1 if (dm and dm.group(0) in ("減少", "減", "下回")) else 1
+    cur = [f for f in I.facts_for(elems, facts, contexts, member)
+           if f["context"].startswith("CurrentYear") and (f["unit"] or "").lower().startswith("pure")]
+    pri = [f for f in I.facts_for(elems, facts, contexts, member)
+           if f["context"].startswith("Prior1Year") and (f["unit"] or "").lower().startswith("pure")]
+    pairs = [(c, p) for c in cur for p in pri
+             if c["name"] == p["name"] and c["context"].replace("CurrentYear", "") == p["context"].replace("Prior1Year", "")]
+    if not pairs:
+        claim["reason"] = "no_element"
+        return
+    c, p = pairs[0]
+    claim["form"] = "derived_value"
+    claim["value"] = sign * num
+    claim["pointer"] = ["xbrl:%s@%s" % (c["name"], c["context"]), "xbrl:%s@%s" % (p["name"], p["context"]), "formula:a-b(pure)"]
+    claim["bound"] = True
+    recomputed = round((c["value"] - p["value"]) * 100, 2)
+    claim["recomputed"] = recomputed
+    claim["result"] = "GROUNDED" if abs(recomputed - claim["value"]) <= 0.15 else "VALUE_MISMATCH"
 
 
 def _direct_value_claim(claim, s, a, b, sign, num, unit, prec, subj, elems, member, facts, contexts):
@@ -251,9 +347,13 @@ def _build_raw_num_claims(sentences, facts, contexts, profile, claim_member):
             elif unit in V.UNIT_SCALE:
                 claim["form"] = "direct_value"
                 _direct_value_claim(claim, s, a, b, sign, num, unit, prec, subj, elems, member, facts, contexts)
+                if profile.flow_sign:
+                    _apply_flow_sign(claim, s, a, b)
             elif unit in ("％", "%", "ポイント"):
                 claim["form"] = "direct_value"
-                if subj and any((f["unit"] or "").lower().startswith("pure") for f in I.facts_for(elems, facts, contexts, member)):
+                if profile.point_diff and unit == "ポイント" and subj:
+                    _build_point_diff_claim(claim, s, a, b, elems, member, facts, contexts, num)
+                elif subj and any((f["unit"] or "").lower().startswith("pure") for f in I.facts_for(elems, facts, contexts, member)):
                     cur = [f for f in I.facts_for(elems, facts, contexts, member) if f["context"].startswith("CurrentYear") and (f["unit"] or "").lower().startswith("pure")]
                     if cur:
                         fv = cur[0]["value"]
@@ -306,7 +406,29 @@ def _build_raw_text_claims(sentences, facts, contexts, profile, claim_member):
                     "form": "threshold", "pointer": None, "bound": False, "result": None, "reason": None,
                     "direction": sg,
                 }
-                if subj:
+                flow_conv = None
+                if subj and profile.flow_sign:
+                    for e in elems:
+                        c = V.flow_convention(e)
+                        if c is not None:
+                            flow_conv = c
+                            break
+                if subj and flow_conv is not None:
+                    # Core 接続 C-1g §1-2: 主語が CF 流量項目なら、前期との
+                    # 対でなく当期 1 件の fact + builtin:flow_sign(cur)==direction
+                    # で束縛する(値そのものが増減を表すので前期は要らない)。
+                    cur = [f for f in I.facts_for(elems, facts, contexts, member) if f["context"].startswith("CurrentYear") and f["unit"] and f["unit"].upper().startswith("JPY")]
+                    if cur:
+                        c = cur[0]
+                        claim["pointer"] = ["xbrl:%s@%s" % (c["name"], c["context"]), "builtin:flow_sign(cur)==direction"]
+                        claim["bound"] = True
+                        claim["flow_convention"] = flow_conv
+                        actual = 0 if c["value"] == 0 else (1 if c["value"] * flow_conv > 0 else -1)
+                        claim["result"] = "GROUNDED" if actual == sg else "VALUE_MISMATCH"
+                        claim["recomputed"] = c["value"]
+                    else:
+                        claim["reason"] = "no_element"
+                elif subj:
                     cur = [f for f in I.facts_for(elems, facts, contexts, member) if f["context"].startswith("CurrentYear") and f["unit"] and f["unit"].upper().startswith("JPY")]
                     pri = [f for f in I.facts_for(elems, facts, contexts, member) if f["context"].startswith("Prior1Year")]
                     pairs = [(c, p) for c in cur for p in pri if c["name"] == p["name"] and c["context"].replace("CurrentYear", "") == p["context"].replace("Prior1Year", "")]
@@ -341,7 +463,12 @@ def _member_material(zb, inst, text, sentences, profile):
     if not profile.member_on:
         return [(None, None)] * len(sentences), {}
     z = zipfile.ZipFile(io.BytesIO(zb))
-    members = I.member_denominator(inst["contexts"])
+    if profile.segment_denominator:
+        # Core 接続 C-1g §1-4(人間の承認、2026-10-06): P6 だけ事業 member に
+        # 限った分母を使う(凍結の member_denominator は系譜の試験のため不変)。
+        members = I.segment_member_denominator(inst["contexts"])
+    else:
+        members = I.member_denominator(inst["contexts"])
     id2label = I.labels_from_zip(z, inst["names"])
     ntext = unicodedata.normalize("NFKC", text)
     reg, _rows, _hand = E.build_registry(members, id2label, ntext, profile.run3)
@@ -426,8 +553,15 @@ def claim_to_recipe(raw, kind):
     contract = None
     if ptrs:
         if kind == "text":
-            comparator = "builtin:sign(cur-prior)==direction"
-            params = {"direction": raw.get("direction")}
+            # Core 接続 C-1g §1-2: 主語が CF 流量項目の text claim は 2 本の
+            # pointer(当期 fact + builtin:flow_sign(cur)==direction)。それ以外
+            # は従来どおり当期・前期の 2 本 + builtin:sign(cur-prior)。
+            if raw.get("flow_convention") is not None:
+                comparator = "builtin:flow_sign(cur)==direction"
+                params = {"direction": raw.get("direction"), "flow_convention": raw.get("flow_convention")}
+            else:
+                comparator = "builtin:sign(cur-prior)==direction"
+                params = {"direction": raw.get("direction")}
         elif form_name == "direct_value":
             if raw.get("unit") not in ("%", "％", "ポイント"):
                 comparator = "equals_within"
@@ -435,6 +569,11 @@ def claim_to_recipe(raw, kind):
                     params = {"abs_tolerance": raw.get("abs_tolerance")}
                 else:
                     params = {"unit_scale": raw.get("unit_scale"), "claim_scale": raw.get("claim_scale")}
+                    # Core 接続 C-1g §1-2: CF 流量項目で向きの語がある場合だけ、
+                    # equals_within に符号つきの判定を足す params を渡す。
+                    if raw.get("flow_convention") is not None:
+                        params["flow_convention"] = raw["flow_convention"]
+                        params["claim_direction"] = raw["claim_direction"]
             else:
                 comparator = "equals_within(pure*100)"
                 params = {"tolerance": 0.15, "pure_threshold": 1.5}
@@ -443,6 +582,8 @@ def claim_to_recipe(raw, kind):
             comparator = {
                 "formula:cur/prior*100": "ratio*100",
                 "formula:a-b": "diff(a-b) equals_within",
+                # Core 接続 C-1g §1-3: ポイント差の derived diff。
+                "formula:a-b(pure)": "diff(a-b)(pure*100)",
             }.get(f, "pct_change(cur,prior)")
             if comparator == "diff(a-b) equals_within":
                 params = {"unit_scale": raw.get("unit_scale"), "claim_scale": raw.get("claim_scale")}

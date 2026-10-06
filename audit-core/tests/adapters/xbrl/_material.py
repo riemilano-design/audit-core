@@ -24,6 +24,13 @@ DOC_5 = {
     "docID": "S100Z4B6",
     "sha256": "d617b6e1807c8aa6d2b1269f6b25ff57a6a71dbf683020f1859d2d4a04c02d26",
 }
+# Core 接続 C-1g: 3 社目(S100YMFV、2026-09-28 提出)。profile P6 の 3 書類計測
+# (tests/golden/test_p6_smoke.py)だけが使う。P1/P5F の既存の門はこの定数を
+# 読まない。
+DOC_3RD = {
+    "docID": "S100YMFV",
+    "sha256": "4a5982e7447d6e0614c6ad12e7c091d462ca61a0128c2ce2af957a8bdfe1d52c",
+}
 
 
 def load_zip_bytes(doc_id, expected_sha256):

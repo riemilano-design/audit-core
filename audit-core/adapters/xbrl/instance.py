@@ -174,6 +174,33 @@ def member_denominator(contexts):
     return sorted(ms)
 
 
+_STANDARD_MEMBER_NAMESPACE_PREFIXES = ("jppfs_cor", "jpcrp_cor", "jpigp_cor", "jpdei_cor")
+
+
+def segment_member_denominator(contexts):
+    """Core 接続 C-1g §1-4(人間の承認、2026-10-06): 事業 member だけを数える
+    分母。凍結の ``member_denominator`` と同じ対象 context(連結・当期または
+    前期・期間/時点を問わず start/end を持つ)から、接頭辞が標準の名前空間
+    (jppfs_cor・jpcrp_cor・jpigp_cor・jpdei_cor)でない member だけを集める。
+    P6 だけがこちらを使う(``member_denominator`` 自体は系譜の試験のため
+    変えない)。
+    """
+
+    ms = set()
+    for cid, c in contexts.items():
+        if not (c.get("start") and c.get("end")):
+            continue
+        if "NonConsolidated" in cid:
+            continue
+        if not (cid.startswith("CurrentYear") or cid.startswith("Prior1Year")):
+            continue
+        for m in c.get("members") or []:
+            prefix = m.split(":", 1)[0] if ":" in m else None
+            if prefix not in _STANDARD_MEMBER_NAMESPACE_PREFIXES:
+                ms.add(m)
+    return sorted(ms)
+
+
 def labels_from_zip(z, names):
     """xbrl_probe3.py: labels_from_zip の写し。"""
 

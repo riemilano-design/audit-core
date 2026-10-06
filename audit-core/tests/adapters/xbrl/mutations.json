@@ -210,5 +210,61 @@
     "new": "\"\"\"The Adapter's pointer resolver (C-1d prediction §3.2): converts one",
     "predicted": "green",
     "note": "C-1d 予測 §3.6 D-G2(対照)。docstring の言い回しのみの変更。"
+  },
+  {
+    "id": "G-R1-flow-convention-sign-reversed",
+    "file": "vocabulary.py",
+    "old": "    if _FLOW_INCREASE_DECREASE_RE.match(local):\n        return 1\n    if _FLOW_DECREASE_INCREASE_RE.match(local):\n        return -1",
+    "new": "    if _FLOW_INCREASE_DECREASE_RE.match(local):\n        return -1\n    if _FLOW_DECREASE_INCREASE_RE.match(local):\n        return 1",
+    "predicted": "red",
+    "note": "C-1g 予測 §1-2(人間の決定、2026-10-06)。CF 流量項目の符号の規約(b)を反転する。tests/adapters/xbrl/test_vocabulary.py::FlowConventionTest の各ケース(DecreaseIncreaseIn=-1 / IncreaseDecreaseIn=+1 / Net…/会社拡張)が入れ替わって落ちる。P1/P5F はこの関数を一度も呼ばないので 224 件の門(test_claim_layer・test_instrument3)は無言。"
+  },
+  {
+    "id": "G-R2-flow-sign-zero-counts-as-match",
+    "file": "comparators.py",
+    "old": "    actual = 0 if cur.value == 0 else (1 if cur.value * flow_convention > 0 else -1)",
+    "new": "    actual = 1 if cur.value * flow_convention >= 0 else -1",
+    "predicted": "red",
+    "note": "C-1g 予測 §1-2。builtin:flow_sign(cur)==direction の差 0(fact 値 0)を「増加」扱いにする。tests/adapters/xbrl/test_comparators.py::BuiltinFlowSignDirectionTest::test_zero_value_matches_no_direction が落ちる(actual が 0 でなく 1 になり、direction=1 と match してしまう)。"
+  },
+  {
+    "id": "G-R3-point-diff-tolerance-1.5",
+    "file": "comparators.py",
+    "old": "    match = abs(recomputed - claim.value) <= tolerance",
+    "new": "    match = abs(recomputed - claim.value) <= 1.5",
+    "predicted": "red",
+    "note": "C-1g 予測 §1-3。diff(a-b)(pure*100) の許容を params の 0.15 でなく 1.5 に固定する。既存の 4 本(match/mismatch/boundary)は差が 0〜0.15 か 4.0 なので 1.5 でも結果が変わらず無言(本文に記録する点)。tests/adapters/xbrl/test_comparators.py::DiffAbPure100Test::test_mismatch_just_outside_015_tolerance(差 1.0 -- 0.15 では mismatch・1.5 なら誤って match になる)を専用に追加して red にする。"
+  },
+  {
+    "id": "G-R4-segment-denominator-namespace-check-removed",
+    "file": "instance.py",
+    "old": "            prefix = m.split(\":\", 1)[0] if \":\" in m else None\n            if prefix not in _STANDARD_MEMBER_NAMESPACE_PREFIXES:\n                ms.add(m)",
+    "new": "            prefix = m.split(\":\", 1)[0] if \":\" in m else None\n            ms.add(m)",
+    "predicted": "red",
+    "note": "C-1g 予測 §1-4(人間の承認、2026-10-06)。segment_member_denominator の名前空間判定を外し、member_denominator と同じ(全部数える)挙動に戻す。tests/adapters/xbrl/test_instance.py::SegmentMemberDenominatorTest(標準 member を除く 3 本)が落ちる。"
+  },
+  {
+    "id": "G-R5-vocab-line-removed-current-liabilities",
+    "file": "vocabulary.py",
+    "old": "    (\"流動負債\", [\"CurrentLiabilities\"]),\n    (\"固定負債\", [\"NoncurrentLiabilities\"]),",
+    "new": "    (\"固定負債\", [\"NoncurrentLiabilities\"]),",
+    "predicted": "red",
+    "note": "C-1g 予測 §1-1。P6 だけの語彙 7 行から「流動負債」を 1 行消す。tests/adapters/xbrl/test_vocabulary.py::P6ProfileTest::test_subjects_p6_extra_7_count/test_subjects_p6_extra_7_words/test_subjects_p6_is_extra_7_plus_74_in_order が落ちる。"
+  },
+  {
+    "id": "G-G1-diff-ab-pure100-docstring-wording",
+    "file": "comparators.py",
+    "old": "``XP-3rd-1`` point-difference form). evidence = (a, b) -- the current",
+    "new": "``XP-3rd-1`` point-difference shape). evidence = (a, b) -- the current",
+    "predicted": "green",
+    "note": "C-1g 予測 §1(対照)。docstring の言い回しのみの変更。"
+  },
+  {
+    "id": "G-G2-flow-convention-docstring-wording",
+    "file": "vocabulary.py",
+    "old": "def flow_convention(element_name):\n    \"\"\"CF 流量項目の符号の規約(C-1g §1-2)。``element_name`` は",
+    "new": "def flow_convention(element_name):\n    \"\"\"CF 流量項目の符号の規約(C-1g §1-2 の決定)。``element_name`` は",
+    "predicted": "green",
+    "note": "C-1g 予測 §1(対照)。docstring の言い回しのみの変更。"
   }
 ]

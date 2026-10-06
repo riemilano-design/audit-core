@@ -82,6 +82,83 @@ class ProfileTest(unittest.TestCase):
         self.assertEqual(V.PROFILES["P1"], V.P1)
         self.assertEqual(V.PROFILES["P5F"], V.P5F)
 
+    def test_p1_and_p5f_flags_are_all_off(self):
+        # Core 接続 C-1g §1: P1・P5F の定義は不変(3 つの新フラグは既定 False)。
+        for profile in (V.P1, V.P5F):
+            self.assertFalse(profile.flow_sign)
+            self.assertFalse(profile.point_diff)
+            self.assertFalse(profile.segment_denominator)
+
+
+class P6ProfileTest(unittest.TestCase):
+    """Core 接続 C-1g §1(人間の承認、2026-10-06): profile P6 の語彙 7 行と
+    3 つのフラグ。P1/P5F はこれらに触れない。
+    """
+
+    def test_p6_flags_all_on(self):
+        self.assertTrue(V.P6.flow_sign)
+        self.assertTrue(V.P6.point_diff)
+        self.assertTrue(V.P6.segment_denominator)
+        self.assertTrue(V.P6.member_on)
+        self.assertTrue(V.P6.claim_level_member)
+        self.assertEqual(V.P6.run3, "L")
+
+    def test_p6_in_profiles_registry(self):
+        self.assertEqual(V.PROFILES["P6"], V.P6)
+        self.assertEqual(sorted(V.PROFILES.keys()), ["P1", "P5F", "P6"])
+
+    def test_subjects_p6_extra_7_count(self):
+        self.assertEqual(len(V.SUBJECTS_P6_EXTRA_7), 7)
+
+    def test_subjects_p6_extra_7_words(self):
+        words = [w for w, _elems in V.SUBJECTS_P6_EXTRA_7]
+        self.assertEqual(
+            words,
+            [
+                "流動負債", "固定負債", "投資有価証券の取得による支出",
+                "1年内返済予定の長期借入金", "持分法による投資利益", "ROE", "退職給付に係る負債",
+            ],
+        )
+
+    def test_subjects_p6_is_extra_7_plus_74_in_order(self):
+        self.assertEqual(len(V.SUBJECTS_P6), 81)
+        self.assertEqual(V.SUBJECTS_P6[:7], tuple(V.SUBJECTS_P6_EXTRA_7))
+        self.assertEqual(V.SUBJECTS_P6[7:], tuple(V.SUBJECTS_74))
+        self.assertEqual(V.P6.subjects, V.SUBJECTS_P6)
+
+    def test_extra_7_words_absent_from_p1_and_p5f(self):
+        p1_words = {w for w, _e in V.P1.subjects}
+        p5f_words = {w for w, _e in V.P5F.subjects}
+        for word, _elems in V.SUBJECTS_P6_EXTRA_7:
+            self.assertNotIn(word, p1_words)
+            self.assertNotIn(word, p5f_words)
+
+
+class FlowConventionTest(unittest.TestCase):
+    """Core 接続 C-1g §1-2: CF 流量項目の符号の規約(b、人間の決定、
+    2026-10-06)。
+    """
+
+    def test_decrease_increase_prefix_is_minus_one(self):
+        self.assertEqual(V.flow_convention("DecreaseIncreaseInNotesAndAccountsReceivableTrade"), -1)
+
+    def test_increase_decrease_prefix_is_plus_one(self):
+        self.assertEqual(V.flow_convention("IncreaseDecreaseInNotesAndAccountsPayableTrade"), 1)
+
+    def test_net_increase_decrease_prefix_is_plus_one(self):
+        self.assertEqual(V.flow_convention("NetIncreaseDecreaseInCashAndCashEquivalents"), 1)
+
+    def test_net_decrease_increase_prefix_is_minus_one(self):
+        self.assertEqual(V.flow_convention("NetDecreaseIncreaseInSomething"), -1)
+
+    def test_company_extension_prefix_uses_local_name_only(self):
+        self.assertEqual(V.flow_convention("e01234-asr_E00001-000:IncreaseDecreaseInProvisionForWarranties"), 1)
+        self.assertEqual(V.flow_convention("e01234-asr_E00001-000:DecreaseIncreaseInTradeReceivables"), -1)
+
+    def test_non_flow_element_is_none(self):
+        self.assertIsNone(V.flow_convention("NetSales"))
+        self.assertIsNone(V.flow_convention("jppfs_cor:CurrentLiabilities"))
+
 
 if __name__ == "__main__":
     unittest.main()

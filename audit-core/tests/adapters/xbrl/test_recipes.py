@@ -79,6 +79,86 @@ class ClaimToRecipeDirectValueTest(unittest.TestCase):
         self.assertEqual(len(recipe.pointers), 2)
 
 
+class ClaimToRecipeFlowSignTest(unittest.TestCase):
+    """Core 接続 C-1g §1-2: flow_convention/claim_direction が raw claim に
+    乗っているときの Contract(profile P6 のみが作る raw claim の形)。
+    """
+
+    def test_direct_value_with_flow_convention_uses_signed_params(self):
+        raw = {
+            "id": "N030", "sentence": 0, "span": "x", "value": 300297000.0, "unit": "円",
+            "subject": "業務未払金", "form": "direct_value",
+            "pointer": "xbrl:jppfs_cor:IncreaseDecreaseInAccountsPayableOther@CurrentYearDuration",
+            "bound": True, "reason": None, "result": "GROUNDED", "recomputed": -300297000.0,
+            "match": "round", "unit_scale": 1.0, "claim_scale": 1000.0,
+            "flow_convention": 1, "claim_direction": -1,
+        }
+        recipe = R.claim_to_recipe(raw, "num")
+        self.assertEqual(recipe.contract.comparator, "equals_within")
+        self.assertEqual(recipe.contract.params["flow_convention"], 1)
+        self.assertEqual(recipe.contract.params["claim_direction"], -1)
+        self.assertEqual(recipe.contract.params["unit_scale"], 1.0)
+        self.assertEqual(recipe.contract.params["claim_scale"], 1000.0)
+
+    def test_direct_value_without_flow_convention_has_no_extra_params(self):
+        raw = {
+            "id": "N031", "value": 100.0, "unit": "円", "subject": "資産合計", "form": "direct_value",
+            "pointer": "xbrl:jppfs_cor:Assets@CurrentYearInstant", "bound": True,
+            "reason": None, "result": "GROUNDED", "recomputed": 100.0,
+            "unit_scale": 1.0, "claim_scale": 1000.0,
+        }
+        recipe = R.claim_to_recipe(raw, "num")
+        self.assertNotIn("flow_convention", recipe.contract.params)
+        self.assertNotIn("claim_direction", recipe.contract.params)
+
+    def test_text_claim_with_flow_convention_uses_flow_sign_comparator(self):
+        raw = {
+            "id": "T026", "word": "増加", "subject": "売上債権", "form": "threshold",
+            "pointer": ["xbrl:jppfs_cor:DecreaseIncreaseInNotesAndAccountsReceivableTrade@CurrentYearDuration",
+                        "builtin:flow_sign(cur)==direction"],
+            "bound": True, "reason": None, "result": "GROUNDED", "recomputed": -802686000.0,
+            "direction": 1, "flow_convention": -1,
+        }
+        recipe = R.claim_to_recipe(raw, "text")
+        self.assertEqual(recipe.contract.comparator, "builtin:flow_sign(cur)==direction")
+        self.assertEqual(recipe.contract.params["direction"], 1)
+        self.assertEqual(recipe.contract.params["flow_convention"], -1)
+        self.assertEqual(len(recipe.pointers), 2)
+
+    def test_text_claim_without_flow_convention_uses_sign_comparator(self):
+        raw = {
+            "id": "T002", "word": "増収", "subject": "売上高", "form": "threshold",
+            "pointer": ["xbrl:a@CurrentYearDuration", "xbrl:a@Prior1YearDuration", "builtin:sign(cur-prior)"],
+            "bound": True, "reason": None, "result": "GROUNDED", "recomputed": 10.0, "direction": 1,
+        }
+        recipe = R.claim_to_recipe(raw, "text")
+        self.assertEqual(recipe.contract.comparator, "builtin:sign(cur-prior)==direction")
+        self.assertNotIn("flow_convention", recipe.contract.params)
+
+
+class ClaimToRecipePointDiffTest(unittest.TestCase):
+    """Core 接続 C-1g §1-3: ポイント差の derived_value(``formula:a-b(pure)``)。"""
+
+    def test_point_diff_formula_uses_diff_pure100_comparator(self):
+        raw = {
+            "id": "N066", "value": 2.9, "unit": "ポイント", "subject": "自己資本比率", "form": "derived_value",
+            "pointer": ["xbrl:jpcrp_cor:EquityToAssetRatio@CurrentYearInstant",
+                        "xbrl:jpcrp_cor:EquityToAssetRatio@Prior1YearInstant", "formula:a-b(pure)"],
+            "bound": True, "reason": None, "result": "GROUNDED", "recomputed": 3.0,
+        }
+        recipe = R.claim_to_recipe(raw, "num")
+        self.assertEqual(recipe.contract.comparator, "diff(a-b)(pure*100)")
+        self.assertEqual(recipe.contract.params["tolerance"], 0.15)
+        self.assertEqual(recipe.claim.modifiers.time_range, ("CurrentYear/Instant", "Prior1Year/Instant"))
+
+    def test_point_without_prior_phrase_is_pointer_not_found(self):
+        raw = {"id": "N088", "value": 1.3, "unit": "ポイント", "subject": "ROE", "form": "direct_value",
+               "pointer": None, "bound": False, "reason": "no_element(point without prior phrase)", "result": None}
+        recipe = R.claim_to_recipe(raw, "num")
+        self.assertEqual(recipe.not_found_reason, "no_element(point without prior phrase)")
+        self.assertIsNone(recipe.unverifiable_reason)
+
+
 class ClaimToRecipeDerivedValueTest(unittest.TestCase):
     def test_ratio_formula_uses_ratio100_comparator(self):
         raw = {

@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
-"""C-1d §G: unit tests for ``adapters/xbrl/registry_setup.py``'s
-``register_all`` -- the 21 registrations (2 schemes + 6 comparators + 4
-normalizations + 9 reasons) and the two states a duplicate registration
-must raise in (``builtin`` is Core's own, already registered by
-``Registry.default()``).
+"""C-1d §G (extended by Core 接続 C-1g §1-5, 2026-10-06): unit tests for
+``adapters/xbrl/registry_setup.py``'s ``register_all`` -- the 24
+registrations (2 schemes + 8 comparators + 4 normalizations + 10
+reasons; C-1d's 21 plus C-1g's 2 P6-only comparators and 1 P6-only
+reason) and the two states a duplicate registration must raise in
+(``builtin`` is Core's own, already registered by ``Registry.default()``).
 """
 
 import unittest
@@ -33,7 +34,7 @@ class RegisterAllTest(unittest.TestCase):
         with self.assertRaises(ValueError):
             self.registry.register_scheme("builtin", kind="operator", trust="structural")
 
-    def test_six_comparators_registered_and_callable(self):
+    def test_eight_comparators_registered_and_callable(self):
         names = (
             "equals_within",
             "equals_within(pure*100)",
@@ -41,8 +42,10 @@ class RegisterAllTest(unittest.TestCase):
             "pct_change(cur,prior)",
             "diff(a-b) equals_within",
             "builtin:sign(cur-prior)==direction",
+            "builtin:flow_sign(cur)==direction",
+            "diff(a-b)(pure*100)",
         )
-        self.assertEqual(len(names), 6)
+        self.assertEqual(len(names), 8)
         for name in names:
             fn = self.registry.comparator(name)
             self.assertTrue(callable(fn))
@@ -58,17 +61,22 @@ class RegisterAllTest(unittest.TestCase):
         self.assertIs(
             self.registry.comparator("builtin:sign(cur-prior)==direction"), C.builtin_sign_direction
         )
+        self.assertIs(
+            self.registry.comparator("builtin:flow_sign(cur)==direction"), C.builtin_flow_sign_direction
+        )
+        self.assertIs(self.registry.comparator("diff(a-b)(pure*100)"), C.diff_ab_pure100)
 
     def test_four_normalizations_registered(self):
         for name in ("round", "truncate", "abs+round", "abs+truncate"):
             self.assertEqual(self.registry.normalization(name), name)
 
-    def test_nine_reasons_registered_with_correct_states(self):
+    def test_ten_reasons_registered_with_correct_states(self):
         pointer_not_found = (
             "no_element",
             "no_element(unit not in XBRL)",
             "no_element(ratio without fact)",
             "no_prior_member_context",
+            "no_element(point without prior phrase)",
         )
         unverifiable = (
             "no_subject",
@@ -77,7 +85,7 @@ class RegisterAllTest(unittest.TestCase):
             "state_word(no line)",
             "prior is 0",
         )
-        self.assertEqual(len(pointer_not_found) + len(unverifiable), 9)
+        self.assertEqual(len(pointer_not_found) + len(unverifiable), 10)
         for name in pointer_not_found:
             self.assertEqual(self.registry.reason_state(name), core.State.POINTER_NOT_FOUND)
         for name in unverifiable:
