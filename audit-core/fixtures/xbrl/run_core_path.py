@@ -49,7 +49,7 @@ def main(argv=None):
             "ambiguous_count": dict(C(r["provenance"].get("ambiguous_count") for r in rows if r["provenance"].get("ambiguous_count"))),
             "mdna_sentences": None}
     out = {"tool": "run_core_path", "doc": a.doc, "profile": a.profile, "zip_sha256": sha, "facts_total": len(inst["facts"]), "contexts_total": len(inst["contexts"]),
-           "registry": {"comparators": 6, "schemes": 3, "normalizations": 4, "reasons": 9}, "tally": tall, "claims": rows}
+           "registry": {"comparators": len(registry._comparators), "schemes": len(registry._schemes), "normalizations": len(registry._normalizations), "reasons": len(registry._reasons), "note": "register_all 後の登録簿を数えた値(builtin scheme と equals 比較子を含む)"}, "tally": tall, "claims": rows}
     gate = None
     if a.gate:
         exp = json.load(open(a.gate, encoding="utf-8"))["claims"]
