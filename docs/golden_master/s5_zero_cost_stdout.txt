@@ -1,0 +1,38 @@
+# S-5 の 0 円の計測(司令塔が凍結の時点で回した。2026-10-07。工程の直しの初回適用)
+
+鍵は出力されない道具の stdout をそのまま写した。3 便(1 便目 → REVISE → 2 便目 → REVISE → 3 便目 → GO)の各回で同じ 4 本を回し、記録の面が動かないことを確かめた。
+
+## 1 便目(凍結 r1、sha 1bd67174…)
+### seatOutputCheck --packet(S-4 の gpt の封筒)
+席 gpt(gpt-5.5) 項目 6 本・答え 1 行
+問題なし(封筒の schema・E-1〜E-7・各行の H-1〜H-8。packet の実在は見ていない = H-9)
+
+### Golden c5 --expect(差 38 件。全文は s5_zero_cost_golden_diff.txt と同一)
+★期待値と違う(38 件):
+- g9.hypothesisCheck.0f1b019e-20261001-1/seat_gpt.json.items[5].lines[3]: 期待 "H-3 NG counterEvidence.attempted が true でない" / 実測 "H-3 ok"
+- g9.hypothesisCheck.268dac98-20260930-1/seat_claude.json.items[4].lines[1]: 期待 "H-1 NG statement: 数「5」が observations の値に無い" / 実測 "H-1 ok"
+  …(38 件)
+
+## 2 便目(凍結 r2、sha 30cd9e58…)
+席 gpt(gpt-5.5) 項目 6 本・答え 1 行
+問題なし(封筒の schema・E-1〜E-7・各行の H-1〜H-8。packet の実在は見ていない = H-9)
+Golden: rc=1・差 38 件・1 便目とバイト一致
+既存 6 封筒: H-1 のメッセージ 31 / H-1 NG 13 / H-3 NG 13
+
+## 3 便目(凍結 r3、sha 1c606131…。監査 GO)
+seatOutputCheck --packet(S-4 の gpt): 問題なし・rc=0
+Golden c5: rc=1・差 38 件(hypothesisCheck 5 + integrationCheck 33)・status/return_code の差 0・1 便目とバイト一致
+既存 6 封筒: H-1 のメッセージ 31 / H-1 NG 13 / H-3 NG 13
+Core の経路(--seats-dir llm-seats-s4): claims の JSON が S-4 の記録(s4_first_run_core.json)と完全一致
+
+## 消えた I-4 の行(3 本だけ。増えた行は 4 周とも 0)
+0f1b019e-20261001-1: I-4: C-006 の representative H-3: counterEvidence.attempted が true でない
+268dac98-20260930-1: I-4: C-005 の representative H-1: statement: 数「5」が observations の値に無い
+558b8a81-20261001-2: I-4: C-008 の representative H-1: statement: 数「5」が observations の値に無い
+
+## 変わった hypothesisCheck の 5 項目
+g9.hypothesisCheck.0f1b019e-20261001-1/seat_gpt.json.items[5].lines[3]
+g9.hypothesisCheck.268dac98-20260930-1/seat_claude.json.items[4].lines[1]
+g9.hypothesisCheck.52ae3745-20261001-1/seat_claude.json.items[9].lines[3]
+g9.hypothesisCheck.558b8a81-20261001-2/seat_claude.json.items[3].lines[1]
+g9.hypothesisCheck.558b8a81-20261001-2/seat_gpt.json.items[5].lines[3]
