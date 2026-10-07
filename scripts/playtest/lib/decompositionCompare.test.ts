@@ -172,4 +172,98 @@ describe("compareClaimDecomposition", () => {
     expect(result.span).toEqual({ intersection: [], expectedOnly: [], actualOnly: [] });
     expect(result.uncovered.actualOnly).toEqual([]); // original_text が無い実測は coverageReport 的に空の母集団
   });
+
+  // 独立監査(D-2b-0 GO、推奨 2 件)への対応。audit-core/docs/CLAIM_DECOMPOSITION_D2B0_RESULT_2026-10-07.md §4。
+  // 監査が当てた 14 本の変異のうち 3 本が黙った(span 側 .sort() 除去・uncovered 側 .sort() 除去・spanKey の
+  // 区切り文字除去)。記録済みの数値は汚染していないが、「黙る」=「測っていない」ので試験で留める。
+  //
+  // 並び順の根拠(コードを読んで確かめた。文書化された契約が無いため、ここで実際の挙動を固定する):
+  // - `span.*`(intersection/expectedOnly/actualOnly)は `compareSpansBySort`(span[0] 昇順 → tie は
+  //   span[1] 昇順)で明示的に `.sort()` される(decompositionCompare.ts の `intersection.sort(...)` 等)。
+  // - `uncovered.*` は引数無しの `.sort()`(文字列の既定の辞書順 = UTF-16 コード単位の昇順)で返る
+  //   (`uncoveredIntersection.sort()` 等)。
+  it("span の多重集合(intersection/expectedOnly/actualOnly)は、入力順を乱しても span[0] 昇順(tie は span[1] 昇順)で返る", () => {
+    // 交わり(両方にある): [1,2] [5,6] [10,11] / 正解のみ: [3,4] [8,9] / 実測のみ: [13,14] [20,21]
+    // 入力配列はどれも昇順ではない順番で書く(入力順のまま返しても緑になる試験にしない)。
+    const actualDoc = {
+      schemaVersion: "0.1",
+      original_text: "x",
+      claims: [
+        baseClaim({ claim_id: "a-f", span: [20, 21], value: "F" }), // 実測のみ
+        baseClaim({ claim_id: "a-c", span: [10, 11], value: 1 }), // 交わり
+        baseClaim({ claim_id: "a-g", span: [13, 14], value: "G" }), // 実測のみ
+        baseClaim({ claim_id: "a-a", span: [1, 2], value: 1 }), // 交わり
+        baseClaim({ claim_id: "a-b", span: [5, 6], value: 1 }), // 交わり
+      ],
+    };
+    const gold = {
+      original_text: "x",
+      expected_claims: [
+        baseClaim({ claim_id: "g-c", span: [10, 11], value: 1 }), // 交わり
+        baseClaim({ claim_id: "g-a", span: [1, 2], value: 1 }), // 交わり
+        baseClaim({ claim_id: "g-e", span: [8, 9], value: "E" }), // 正解のみ
+        baseClaim({ claim_id: "g-b", span: [5, 6], value: 1 }), // 交わり
+        baseClaim({ claim_id: "g-d", span: [3, 4], value: "D" }), // 正解のみ
+      ],
+      expected_uncovered_number_sentences: [],
+    };
+    const result = compareClaimDecomposition(actualDoc, gold);
+    // 入力順のまま(.sort() 無し)だと [[10,11],[1,2],[5,6]] のような未整列の並びになるはず
+    // ―このテストは昇順そのものを固定するので、.sort() が外れれば必ず赤くなる。
+    expect(result.span.intersection).toEqual([
+      [1, 2],
+      [5, 6],
+      [10, 11],
+    ]);
+    expect(result.span.expectedOnly).toEqual([
+      [3, 4],
+      [8, 9],
+    ]);
+    expect(result.span.actualOnly).toEqual([
+      [13, 14],
+      [20, 21],
+    ]);
+  });
+
+  it("uncovered の集合(intersection/expectedOnly/actualOnly)は、入力順(= 文の出現順)を乱しても文字列の昇順で返る", () => {
+    // 原文の文の出現順をあえて数の昇順と不一致にする: 3,1,2,9,0(claims は空なので全部 uncovered)。
+    const text = "3 手目。1 手目。2 手目。9 手目。0 手目。";
+    const actualDoc = { schemaVersion: "0.1", original_text: text, claims: [] };
+    const gold = {
+      original_text: text,
+      expected_claims: [],
+      // 正解側の配列順も数の昇順と不一致にする: 3,8,1,4(「8 手目。」「4 手目。」は実測に無い正解のみ)。
+      expected_uncovered_number_sentences: ["3 手目。", "8 手目。", "1 手目。", "4 手目。"],
+    };
+    const result = compareClaimDecomposition(actualDoc, gold);
+    // 交わり: "1 手目。"/"3 手目。" が両方にある → 昇順なら ["1 手目。","3 手目。"]
+    // 正解のみ: "4 手目。"/"8 手目。" → 昇順なら ["4 手目。","8 手目。"]
+    // 実測のみ: "0 手目。"/"2 手目。"/"9 手目。" → 昇順なら ["0 手目。","2 手目。","9 手目。"]
+    // 入力順のまま(.sort() 無し)だとどの配列も上記の昇順とは一致しない並びになる。
+    expect(result.uncovered.intersection).toEqual(["1 手目。", "3 手目。"]);
+    expect(result.uncovered.expectedOnly).toEqual(["4 手目。", "8 手目。"]);
+    expect(result.uncovered.actualOnly).toEqual(["0 手目。", "2 手目。", "9 手目。"]);
+  });
+
+  it("spanKey の区切り文字(カンマ)が無いと [1,23] と [12,3] が衝突する ― 区切り文字は別の span として扱うために在る", () => {
+    // 区切り文字(カンマ)が無いと `${span[0]}${span[1]}` は両方 \"123\" になり同一の span と誤認される。
+    // 区切り文字がある現在の実装では、[1,23] と [12,3] は別の span として扱われる ―
+    // すなわち value・form が一致していても「交わり」にはならず、それぞれ expectedOnly / actualOnly になる。
+    const actualDoc = {
+      schemaVersion: "0.1",
+      original_text: "x",
+      claims: [baseClaim({ span: [12, 3], value: 1, form: "direct_value" })],
+    };
+    const gold = {
+      original_text: "x",
+      expected_claims: [baseClaim({ span: [1, 23], value: 1, form: "direct_value" })],
+      expected_uncovered_number_sentences: [],
+    };
+    const result = compareClaimDecomposition(actualDoc, gold);
+    expect(result.span.intersection).toEqual([]);
+    expect(result.span.expectedOnly).toEqual([[1, 23]]);
+    expect(result.span.actualOnly).toEqual([[12, 3]]);
+    expect(result.spanMatchedCount).toBe(0);
+    expect(result.valueMatchCount).toBe(0);
+  });
 });
