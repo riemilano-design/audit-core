@@ -101,8 +101,17 @@ const PROVIDER_SEATS: Record<"gpt" | "gemini" | "claude", { provider: Provider; 
   claude: { provider: "anthropic", modelName: ENV_NAMES.models.claude, keyName: ENV_NAMES.keys.anthropic, priceNames: ENV_NAMES.prices.claude, limitName: ENV_NAMES.inputLimits.claude },
 };
 
+// D-2b-2(audit-core/docs/CLAIM_DECOMPOSITION_D2B2_PLAN_2026-10-08.md §2(a)・実測は
+// ..._D2B1_RESULT_2026-10-08.md §2 の表): `reserveOutputTokens` を 4_000 → 16_000 に上げる。
+// 試行 1(取り置き 4,000)は推論だけで取り置きを食い切り、答えが 0 トークン(本文 0 バイト)で切れた。
+// 試行 2(取り置き 6,000)は推論 5,272 トークン(まだ終わっていない)+ 答え 728 トークン(2,426 バイト、
+// JSON 途中)で切れた。必要な取り置きは「推論 5,272 以上 + 答え 800〜900」= 最低 6,200、安全側で
+// 12,000〜16,000。**人間の決定で 16,000(計画 §1(1))。旗にしない**(計画 §2: 旗にすると
+// 「通るまで動かす」道ができる)。本番側(`productionConfigOf`)と下見側(`dryRunConfigsOf`)の
+// 両方を同時に直す ― 下見は本番と同じ配線を通す約束があるため(片方だけ変えると約束が破れる)。
+
 /** 本番: `.env` から 1 社分の設定を読む(`runSeats.ts` の `pricesOf`/`seatConfigs` と同じ考え方の小さい写し)。 */
-function productionConfigOf(seatName: "gpt" | "gemini" | "claude", capUsd: number, warnings: string[]): DecomposeConfig {
+export function productionConfigOf(seatName: "gpt" | "gemini" | "claude", capUsd: number, warnings: string[]): DecomposeConfig {
   const seat = PROVIDER_SEATS[seatName];
   const apiKey = readEnv(seat.keyName) ?? "";
   const model = readEnv(seat.modelName) ?? "";
@@ -112,18 +121,18 @@ function productionConfigOf(seatName: "gpt" | "gemini" | "claude", capUsd: numbe
   const prices: Prices = { inPerMillion, outPerMillion };
   const limit = readEnvNumber(seat.limitName);
   return {
-    provider: seat.provider, model, apiKey, prices, reserveOutputTokens: 4_000, temperature: 0, capUsd,
+    provider: seat.provider, model, apiKey, prices, reserveOutputTokens: 16_000, temperature: 0, capUsd,
     ...(limit === undefined ? {} : { inputLimit: limit }),
   };
 }
 
 /** 下見: 3 社分のダミー設定(鍵を使わない。`.env` を読まない)。 */
-function dryRunConfigsOf(capUsd: number): Array<{ seat: "gpt" | "gemini" | "claude"; cfg: DecomposeConfig }> {
+export function dryRunConfigsOf(capUsd: number): Array<{ seat: "gpt" | "gemini" | "claude"; cfg: DecomposeConfig }> {
   return (["gpt", "gemini", "claude"] as const).map((seat) => ({
     seat,
     cfg: {
       provider: PROVIDER_SEATS[seat].provider, model: "dry-run-model", apiKey: "dry-run-key",
-      prices: { inPerMillion: 1, outPerMillion: 1 }, reserveOutputTokens: 4_000, temperature: 0, capUsd,
+      prices: { inPerMillion: 1, outPerMillion: 1 }, reserveOutputTokens: 16_000, temperature: 0, capUsd,
     },
   }));
 }

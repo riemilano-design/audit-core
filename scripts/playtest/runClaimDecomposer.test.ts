@@ -14,7 +14,7 @@ import { tmpdir } from "node:os";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
 import { ENV_NAMES } from "./lib/env.js";
-import { main, numericArg, selectGoldFixtures } from "./runClaimDecomposer.js";
+import { dryRunConfigsOf, main, numericArg, productionConfigOf, selectGoldFixtures } from "./runClaimDecomposer.js";
 
 describe("numericArg(--max-retries・--attempt-timeout-ms の読み取り)", () => {
   it("旗が無ければ undefined(既定の挙動のまま)", () => {
@@ -140,5 +140,46 @@ describe("D-2b-1 §7 決-3: productionConfigOf → assertPricesPresent の結線
     } finally {
       rmSync(outDir, { recursive: true, force: true });
     }
+  });
+});
+
+// ---------------------------------------------------------------------------
+// D-2b-2(audit-core/docs/CLAIM_DECOMPOSITION_D2B2_PLAN_2026-10-08.md §2(a)): `reserveOutputTokens` を
+// 4_000 → 16_000 に上げた。**本番側(`productionConfigOf`)と下見側(`dryRunConfigsOf`)の両方**を直す
+// 約束なので、2 本の試験を分けて置く ― それぞれ片方の関数の戻り値だけを見る(1 本の試験が両方を覆うと、
+// 片方だけ戻す変異が黙る。計画の指示)。字の比較(リテラル `16_000`)で、共有の定数からは作らない。
+// 【productionConfigOf は鍵を使わない】単価だけ環境変数で与えて戻り値を見る ― `.env` は読み込ませない
+// (`loadDotEnv` を呼ばない)。鍵・モデル名の環境変数は `withIsolatedEnv` で退避・削除し、ambient な
+// process.env の実鍵を拾わない。fetch は一度も呼ばれない(この関数自体が同期・純粋で、送信は無い)。
+// ---------------------------------------------------------------------------
+describe("D-2b-2: reserveOutputTokens は 16_000(本番側・下見側の両方。字で留める)", () => {
+  const RESERVE_ISOLATED_ENV_KEYS = [ENV_NAMES.prices.gpt[0], ENV_NAMES.prices.gpt[1], ENV_NAMES.keys.openai, ENV_NAMES.models.gpt, ENV_NAMES.inputLimits.gpt] as const;
+
+  function withIsolatedPriceEnv<T>(overrides: Record<string, string>, fn: () => T): T {
+    const saved = new Map<string, string | undefined>();
+    for (const k of RESERVE_ISOLATED_ENV_KEYS) saved.set(k, process.env[k]);
+    try {
+      for (const k of RESERVE_ISOLATED_ENV_KEYS) delete process.env[k];
+      for (const [k, v] of Object.entries(overrides)) process.env[k] = v;
+      return fn();
+    } finally {
+      for (const k of RESERVE_ISOLATED_ENV_KEYS) {
+        const prev = saved.get(k);
+        if (prev === undefined) delete process.env[k]; else process.env[k] = prev;
+      }
+    }
+  }
+
+  it("本番側: productionConfigOf の戻り値の reserveOutputTokens は 16_000", () => {
+    withIsolatedPriceEnv({ [ENV_NAMES.prices.gpt[0]]: "5", [ENV_NAMES.prices.gpt[1]]: "30" }, () => {
+      const cfg = productionConfigOf("gpt", 1, []);
+      expect(cfg.reserveOutputTokens).toBe(16_000);
+    });
+  });
+
+  it("下見側: dryRunConfigsOf の戻り値(3 社すべて)の reserveOutputTokens は 16_000", () => {
+    const configs = dryRunConfigsOf(1000);
+    expect(configs).toHaveLength(3);
+    for (const { seat, cfg } of configs) expect(cfg.reserveOutputTokens, `seat=${seat}`).toBe(16_000);
   });
 });
