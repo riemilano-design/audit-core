@@ -112,3 +112,93 @@ Golden の書き直し(⑦ は人間)。入金・費用上限の判断。§5 の
 **回すときの手順(封 §2.4 のとおり。1 回だけ)**: `--dry-run` 1 回で見込みを記録し **(f) の上限の配線が `countTokens` を壊していないことを金が動く前に確かめる** → `SEAT_COST_CAP_USD=5` を**コマンドの環境変数で**渡して実 run 1 回(`--out-dir scripts/playtest/out/c5/llm-seats-s5`・`--runs 1`・`--hold-back-seat gemini`・v1.4・整理役 v1。`.env` は不変)→ `run_summary.json` から席ごとの実費 → 事後の照合(`seatOutputCheck --packet` 各席・`integrationCheck --packet`・`exitSelect --draft` 単体で `--out` は scratchpad・`run_core_path_shogi.py --seats-dir llm-seats-s5`・Golden c5 `--expect`)→ §3 の r1〜r12・t3 と項目別に照合 → **この文書に日付つきの追記**。
 
 **司令塔の推し(順番の訂正)**: 人間の最終判定では「次の封に終端境界の変異を相乗り → Golden 再照合 → 実 run」の順だったが、**終端境界の変異は実 run の後に回したい**。理由: (i) 試験だけの追加なので実 run の結果に 1 ビットも寄与しない、(ii) 3 役の 1 周ぶんの手間がかかる、(iii) **金が動く計測の直前に木を変えると、`run_summary.json` の `gitHead` が監査 GO の `3a766cc` と違う commit を指し**、後から読む人が「差は試験だけ」を自分で確かめ直す必要が出る。**実 run までは木を凍結したままにしたい。** 判断は人間。
+
+## 10. 追記(2026-10-07、同日。**実 run を 1 回だけ回した** ― 人間の「はじめて」の合図)
+
+**run**: `43f8b69c-20261007-1`(`scripts/playtest/out/c5/llm-seats-s5/`、gitignore)。**09:30:56 → 09:34:02 = 3 分 6 秒**(S-4 は 52 分)。`gitHead` = `e109ba3`(監査 GO の `3a766cc` からの差は**文書と Golden だけ**)。下見 1 回の後に実 run 1 回。`.env` は不変、上限は環境変数。**走っている間にコードも木も触っていない。**
+
+### 10.1 席と費用
+
+| | gpt(gpt-5.5) | gemini | claude(claude-opus-5) | 整理役(claude-opus-5) | 合計 |
+|---|---|---|---|---|---|
+| 下見の見込み | 1.2470 | 保留 | 1.0970 | 0.8470 | **3.19** |
+| 結果 | **項目 6・試行 1 で通過** | 送っていない | **項目 8・試行 1 で通過** | **束 8** | ― |
+| 実費(USD) | **0.8085** | 0 | **0.9055** | **0.2910** | **2.0050**(上限 5・`capReached: false`) |
+| 所要 | **50,768 ms** | ― | **74,394 ms** | ― | 3 分 6 秒 |
+| HTTP の試行 | 1 回 | ― | 1 回 | 1 回 | ― |
+| 検査の指摘 | 4 | 0 | 8 | 15 | ― |
+
+**(f) の上限が効いた。** S-4 では claude の 1 試行が 50.8 分・HTTP 4 回だったが、今回は 1 回・74 秒。全体も 52 分 → **3 分 6 秒**。
+
+### 10.2 測れた物
+
+| 照合 | 結果 |
+|---|---|
+| 封印語(E-1) | **両席 12/12 一致** |
+| H-9(自前の再導出、観測 46 件) | **GROUNDED 46・VM 0・PNF 0** |
+| Core の経路([s5_real_run_core.json](../fixtures/shogi/s5_real_run_core.json)) | Claim **68** = 観測 46 GROUNDED + counterEvidence の観測 22 UNVERIFIABLE。自前の再導出と **46/46 一致・不一致 0** |
+| 配列のまま GROUNDED | **8 件**(両席が認識の表の `names` を配列で引いた) |
+| 観測 0 の `needed_observation` | **3 件**(H-12 の NG 0、他の kind の濫用 0) |
+| `seatOutputCheck --packet` | gpt 4 件・claude 8 件。**checks.json と一致** |
+| `integrationCheck --packet` | 15 件。**checks.json と一致** |
+| `exitSelect --draft` | 通過 **7**・落ちた **7**(H-1 が 4・**schema が 3**)・`adoptedBy: null`。通った 7 件は全部 `aggregateIds` が 1 件以上 |
+| Golden c5 `--expect` | **rc=0 のまま**(新 run は `llm-seats-s5/` で Golden は拾わない) |
+| 整理役 | 束 8・`forVerification` 4・`heldBack` 4・`dropped` 0・**I-1 の行 0**(全項目がちょうど 1 回) |
+
+### 10.3 予測との照合(実 run の 15 欄)
+
+| # | 予測 | 実測 | 判定 |
+|---|---|---|---|
+| r1 | claude が封筒を返す | 返った(試行 1) | 当たり |
+| r2 | `items2` / `items` の文字列化が無い | 無い | 当たり |
+| r3 | 連続する試行で同じ理由の繰り返し 0 | **再試行が 1 度も起きず測れない**(先に書いた) | **未測** |
+| r4 | 整理役が走り I-1 を通る | I-1 の行 0 | 当たり |
+| r5 | 代表に観測 0 の束が出たときの H-12 NG 0 | 0 | **当たりだが空振り**(§10.4 の (A)) |
+| r6 | draft が出る・`adoptedBy: null` | 出た | 当たり |
+| r7 | `aggregateIds` が空の候補 0〜3 | **0**(観測 0 の 2 束は schema で落ちて `rejected` 側へ) | 当たり |
+| r8 | rejected 0〜50% | **50%**(7/14) | 当たり(上端) |
+| r9 | H-9 の VM+PNF 0〜4 | 0 | 当たり |
+| r10 | 配列のまま GROUNDED 1 件以上 | **8 件** | 当たり |
+| r11 | 実費 2.3〜4.8 | **2.0050** | **外れ**(下に) |
+| r12 | 上限で止まらない / 超えない | そのとおり | 当たり |
+| t3 | 1 席の所要 60〜400 秒 | gpt **50.8 秒**・claude 74.4 秒 | **外れ**(gpt が下に出た) |
+| g4 | 冊子の変わるページ 0 | 0(Golden rc=0・g8 不変) | 当たり |
+| g5 | 違う 0/1 の欄 0〜3 | 0 | 当たり |
+
+**実 run: 当たり 12・外れ 2・未測 1。** 外れ 2 つは**どちらも下側**で、同じ原因: **両席が 1 回の試行で通ったので、再試行の分の金と時間がかからなかった。** S-3 と S-4 の実績(再試行あり)から幅を引いたため、下を切った。
+
+**0 円の分と合わせた全体**: 封 §3 は **31 欄**(p1〜p11 の 11・t1〜t3 の 3・r1〜r12 の 12・g1〜g5 の 5。計画の commit に「33 欄」と書いたのは私の数え違いで、予測の中身は変えていない)。**当たり 25・外れ 5**(p3・p4・p6・r11・t3)**・未測 1**(r3)。
+
+### 10.4 予測の外で見えた物
+
+**(A) S-4 の契約の直しが、整理役の出力の代表に届いていない(4 つ目の面)。** 観測 0 の代表 `C-007`・`C-008` の `schemaVersion` は **0.4** だった(`completeIntegration` が書く版)。だから `validateHypothesisLine` は `hypothesis.v0.4` を選び、**`observations` の minItems 1 で schema が落ちる**:
+
+```
+I-4: C-007 の representative schema: $.observations: 要素が 0 個で、1 個に足りない
+I-4: C-008 の representative schema: $.observations: 要素が 0 個で、1 個に足りない
+```
+
+H-12 は 0.5 未満なので skip、よって NG 0 ― **r5 の「H-12 NG 0」は当たりだが中身が無い**(S-2・S-3 の E-3 と同じ「門が黙っている」型)。S-4 で 4 本の契約を新版にしたが、**席(0.5)・器・整理役の入力(v0.2)まで届いて、整理役の出力の代表(0.4)に届いていなかった**。面の数え上げが 1 つ足りなかった。
+
+**(B) `gameId` の数字が H-1 に数えられる(新しい安全側の誤り。直すのは指示文側)。** claude の項目 4 は認識の表の `names` を 4 件正しく引いたが、文に **`g04`・`g17`・`g13`・`g24`** と局の符号を書いたため、H-1 が `4`・`04`・`17`・`13`・`24` を「observations の値に無い」と落とした(5 件)。**packet の認識の行には `gameId` 欄が在る**(`rows[3].gameId = "g04"`)。**席が `facts.recognition.rows[3].gameId` を観測に引いていれば、値 `"g04"` が検証済みの文字列になり、S-5 の覆いが `04` を許す。** つまり**規則を変える必要はなく、指示文で「局を符号で書くなら `gameId` も観測に引く」と言えば済む**(v1.5 の候補)。
+
+**(C) 整理役が文法に合わない束の根を作った。** `I-2: C-007 の packetRefs: packetRef.path「facts.recognition.rows」が文法に合わない`(添字と欄名が無い)+ その根を成員が持たない 2 行。I-2 が捕まえた。
+
+**(D) 両席が試行 1 で通った。** v1.4 の `itemId` の形と「最上位の鍵は 5 つ・`items` は 1 つ」が効いた可能性があるが、**1 回では揺れと区別できないので効き目とは断定しない**(封のとおり)。
+
+### 10.5 人間の判断(実 run の後)
+
+| # | 問い | 司令塔の推し |
+|---|---|---|
+| (a) | この run を `llm-seats/` に移して Golden に入れるか | **移す。** 558b8a81 以来初めて **2 席 + 整理役が全部そろった** run で、E-3 も I-4 も packet つきで走り、契約も現行。移すと Golden の `seatOutputCheck` の面が**生きる**(今まで死んでいた門が差を隠していた ― §3)。次に規則を触ると差が 3 面に出ることを承知で移すのが筋 |
+| (b) | **(A) 代表の `schemaVersion`** を 0.5 に上げるか | 直す。`completeIntegration` の 1 か所だが契約なので**先に封じる**。これが直るまで、観測 0 の項目は draft の `rejected` に落ち続ける |
+| (c) | **(B) 指示文 v1.5**(局を符号で書くなら `gameId` も観測に引く) | 次の実 run の前に。**規則は触らない**(S-5 の覆いがそのまま効く) |
+| (d) | 終端境界の変異(S-5 §6 の (e)) | **今やる。**(b)(c) と同じ封に相乗りでよい |
+| (e) | S-4 の draft が `heldBack` を読むか・E-5 の字面 | 据え置き。今回も整理役が `heldBack` にした 4 束が draft の候補に並んでいる(C-005〜C-008 のうち H を通ったもの) |
+
+### 10.6 手順との記録
+
+1. 下見 1 回 → 実 run 1 回。**途中で何も直していない**(席の落ち・整理役の指摘を見ても規則もコードも触らず完走させた)。上限は環境変数、`.env` は不変。
+2. `exitSelect --draft` の `--out` は scratchpad に向け、`out/c5/exit/` には書いていない。
+3. 証跡: [docs/golden_master/s5_real_run_stdout.txt](../../docs/golden_master/s5_real_run_stdout.txt)(下見・実 run・CLI 4 本・Golden。鍵は含まない)・[s5_real_run_compare.json](../../docs/golden_master/s5_real_run_compare.json)・[s5_real_run_answer_selection.draft.json](../../docs/golden_master/s5_real_run_answer_selection.draft.json)・[fixtures/shogi/s5_real_run_core.json](../fixtures/shogi/s5_real_run_core.json)。
+4. **営業の実証範囲はまだ更新しない**(人間の判断 (a)〜(c) の後)。今言えるのは「将棋側で、契約・描画・規則を直した状態で 2 席 + 整理役が 1 回そろって回り、観測 46 件が H-9 で全部 GROUNDED・Core と 46/46 一致した」まで。

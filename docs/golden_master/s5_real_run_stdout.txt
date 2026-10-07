@@ -1,0 +1,67 @@
+# S-5 の実 run(司令塔、2026-10-07 09:30:56 → 09:34:02。1 回だけ。SEAT_COST_CAP_USD=5 を環境変数で)
+
+## --dry-run(09:30:47)
+.env: /Users/midoriko/Desktop/sgogi-coach/.env から 17 個の名前を読んだ(値は出さない)
+  指示文の例: 5 本中 5 本が引けて値も入っている
+下見: 束 227212 B・208217 字・概算 69406 トークン(chars/3)・sha cf7e8faf8cf8…
+  gpt        gpt-5.5                    見込み 1.2470 ドル / 累計 1.2470 ドル 
+  gemini     gemini-3.1-pro-preview     送っていない(S-5: 費用上限と S-3/S-4 と同条件)
+  claude     claude-opus-5              見込み 1.0970 ドル / 累計 2.3441 ドル 
+  integrator claude-opus-5              見込み 0.8470 ドル / 累計 3.1911 ドル 
+  1 回の見込み 約 3.19 ドル(上限 5 ドル)
+
+## 実 run
+2026-10-07 09:30:56 start
+.env: /Users/midoriko/Desktop/sgogi-coach/.env から 17 個の名前を読んだ(値は出さない)
+  指示文の例: 5 本中 5 本が引けて値も入っている
+
+== 43f8b69c-20261007-1(packetId 22aee8fe696d0262・束 227212 B・概算 69406 トークン)
+  gpt     gpt-5.5                    項目 6 件・検査の指摘 4 件 / 実費 0.8085 ドル・50768 ms
+  gemini  gemini-3.1-pro-preview     送っていない(S-5: 費用上限と S-3/S-4 と同条件) / 実費 0 ドル・0 ms
+  claude  claude-opus-5              項目 8 件・検査の指摘 8 件 / 実費 0.9055 ドル・74394 ms
+  整理役  claude-opus-5              束 8 件・検査の指摘 15 件 / 実費 0.291 ドル
+  この実行の累計の実費 2.005 ドル(上限 5 ドル・上限に達した: false)
+
+書いた: scripts/playtest/out/c5/llm-seats-s5(43f8b69c-20261007-1)・この実行の累計 2.0050 ドル
+rc=0
+2026-10-07 09:34:02 end
+
+## seatOutputCheck --packet(gpt)
+席 gpt(gpt-5.5) 項目 6 本・答え 1 行
+問題 4 件:
+  - E-3: items[0] H-3: counterEvidence.attempted が true でない
+  - E-3: items[3] H-3: counterEvidence.attempted が true でない
+  - E-3: items[5] H-5: statement が「という読みです」「可能性があります」の形でない
+  - E-5: selfComputedNumbers[2] の値「0」が statement / answers の文に出ている(隔離欄の数を文に持ち込まない)
+
+## seatOutputCheck --packet(claude)
+席 claude(claude-opus-5) 項目 8 本・答え 1 行
+問題 8 件:
+  - E-3: items[0] H-1: counterEvidence.items[0].text: 数「25」が observations の値に無い
+  - E-3: items[4] H-1: statement: 数「4」が observations の値に無い
+  - E-3: items[4] H-1: statement: 数「04」が observations の値に無い
+  - E-3: items[4] H-1: statement: 数「17」が observations の値に無い
+  - E-3: items[4] H-1: statement: 数「13」が observations の値に無い
+  - E-3: items[4] H-1: statement: 数「24」が observations の値に無い
+  - E-3: items[4] H-1: counterEvidence.items[0].text: 数「22」が observations の値に無い
+  - E-3: items[4] H-1: counterEvidence.items[0].text: 数「20」が observations の値に無い
+
+## integrationCheck --packet
+束 8・落とした項目 0・外した束 4・検証へ 4
+問題 15 件:
+  - I-4: C-001 の representative H-1: counterEvidence.items[0].text: 数「25」が observations の値に無い
+  - I-4: C-005 の representative H-1: statement: 数「4」が observations の値に無い
+  - I-4: C-005 の representative H-1: statement: 数「3」が observations の値に無い
+  - I-4: C-005 の representative H-1: statement: 数「16」が observations の値に無い
+  - I-4: C-005 の representative H-1: statement: 数「12」が observations の値に無い
+  - I-4: C-005 の representative H-1: statement: 数「23」が observations の値に無い
+  - I-4: C-005 の representative H-1: counterEvidence.items[0].text: 数「21」が observations の値に無い
+  - I-4: C-005 の representative H-1: counterEvidence.items[0].text: 数「19」が observations の値に無い
+
+## exitSelect --draft(単体、--out は scratchpad)
+書いた: /private/tmp/claude-501/-Users-midoriko-Desktop-sgogi-coach/a72242fb-5410-47e1-abfe-434113310424/scratchpad/s5_answer_selection.draft.json(通った候補 7 件・落ちた候補 7 件・問い 1 件・行動の表 9 件)
+採用の印(adoptedBy)は空のままです ― 採用は司令塔か人間が付けます。
+
+## Golden c5 --expect(実 run の後)
+期待値のとおり(docs/golden_master/c5_expectation.json)
+  packet 22aee8fe696d0262・門 6 種・冊子 4 冊・入力 47 ファイル

@@ -1,0 +1,357 @@
+{
+ "a1_schema_pass_per_seat": {
+  "claude": {
+   "schema_lines": 0,
+   "sections_with_seal": 12
+  },
+  "gpt": {
+   "schema_lines": 0,
+   "sections_with_seal": 12
+  }
+ },
+ "a2_E1_seal_mismatch_per_seat": {
+  "claude": 0,
+  "gpt": 0
+ },
+ "a3_E3_runs": {
+  "claude": {
+   "E3_lines": 8,
+   "E3_H_lines": 8,
+   "E3_H9_lines": 0
+  },
+  "gpt": {
+   "E3_lines": 3,
+   "E3_H_lines": 3,
+   "E3_H9_lines": 0
+  }
+ },
+ "a4_empty_seats": [],
+ "h9_own_tally": {
+  "G": 46
+ },
+ "b1_plus_flatten_VM": 0,
+ "b2_removed_column_PNF": 0,
+ "b3_nashi_PNF": [],
+ "b4_residual_VM_PNF": [],
+ "b5_array_grounded": 8,
+ "b7_seat_input_bytes": 227212,
+ "c1_obs_per_item_median": 3.0,
+ "c2_filler_signature": [],
+ "c3_unanswerable": 0,
+ "e1_H9_skip_lines": 0,
+ "e2_I4_H9_lines": [],
+ "e4_core_vs_own": {
+  "agree": 46,
+  "disagree": []
+ },
+ "d1_draft": {
+  "exists": true,
+  "adoptedBy": null,
+  "items": 7,
+  "rejected": 7,
+  "questions": 1
+ },
+ "d2_rejected_ratio": 0.5,
+ "d3_rejected_by_H9_only": [],
+ "f1_actual_cost_total": 2.005,
+ "f1_per_seat": {
+  "gpt": 0.8085,
+  "gemini": 0,
+  "claude": 0.9055
+ },
+ "f1_integrator": 0.291,
+ "f2_capReached": false,
+ "capUsd": 5,
+ "h9_rows_non_G": [],
+ "b3_zero_obs_items": [
+  {
+   "seat": "claude",
+   "itemId": null,
+   "hid": "H-c5-claude43f8-007",
+   "kind": "needed_observation",
+   "neededObservation": {
+    "what": "局ごとの、その形が本人の過去の対局群でどれだけ採られたかの印",
+    "whyNotInPacket": "束の認識の表は局ごとの署名と名前と群だけを持ち、過去の採用の多さを持たない",
+    "howToMeasure": "認識の表に、過去の対局群での採用回数と採用割合の欄を足し、低い側に印を付けて集計の母集団に使う"
+   }
+  },
+  {
+   "seat": "claude",
+   "itemId": null,
+   "hid": "H-c5-claude43f8-008",
+   "kind": "needed_observation",
+   "neededObservation": {
+    "what": "群ごとの分かれ道の局面数・浅い読みで差が見えた局面数・長く考えた手数",
+    "whyNotInPacket": "束の集計は群ごとには局数・崩れの手数・優勢から負けた局しか持たない",
+    "howToMeasure": "分かれ道と時間の集計に、群の分けを条件に加えた行を足して、群ごとの分子と分母を出す"
+   }
+  },
+  {
+   "seat": "gpt",
+   "itemId": null,
+   "hid": "H-c5-gpt43f8-006",
+   "kind": "needed_observation",
+   "neededObservation": {
+    "what": "普段指さない戦型に当たる局ごとの印",
+    "whyNotInPacket": "束には機械認識の群と名前はあるが、本人の普段性を示す印は無い。",
+    "howToMeasure": "本人または既存の対局履歴から通常採用する戦型を定義し、今回の各局に通常か通常外かの印を付ける。"
+   }
+  }
+ ],
+ "b3_zero_obs_by_kind": {
+  "needed_observation": 3
+ },
+ "b5_zero_obs_other_kinds": [],
+ "kinds_by_seat": {
+  "claude": {
+   "finding": 5,
+   "hypothesis": 1,
+   "needed_observation": 2
+  },
+  "gpt": {
+   "finding": 4,
+   "answer_candidate": 1,
+   "needed_observation": 1
+  }
+ },
+ "schemaVersions": [
+  "0.5"
+ ],
+ "g1_H12_lines": [],
+ "all_problem_lines": {
+  "seats": {
+   "gpt": [
+    "E-3: items[0] H-3: counterEvidence.attempted が true でない",
+    "E-3: items[3] H-3: counterEvidence.attempted が true でない",
+    "E-3: items[5] H-5: statement が「という読みです」「可能性があります」の形でない",
+    "E-5: selfComputedNumbers[2] の値「0」が statement / answers の文に出ている(隔離欄の数を文に持ち込まない)"
+   ],
+   "gemini": [],
+   "claude": [
+    "E-3: items[0] H-1: counterEvidence.items[0].text: 数「25」が observations の値に無い",
+    "E-3: items[4] H-1: statement: 数「4」が observations の値に無い",
+    "E-3: items[4] H-1: statement: 数「04」が observations の値に無い",
+    "E-3: items[4] H-1: statement: 数「17」が observations の値に無い",
+    "E-3: items[4] H-1: statement: 数「13」が observations の値に無い",
+    "E-3: items[4] H-1: statement: 数「24」が observations の値に無い",
+    "E-3: items[4] H-1: counterEvidence.items[0].text: 数「22」が observations の値に無い",
+    "E-3: items[4] H-1: counterEvidence.items[0].text: 数「20」が observations の値に無い"
+   ]
+  },
+  "integration": [
+   "I-4: C-001 の representative H-1: counterEvidence.items[0].text: 数「25」が observations の値に無い",
+   "I-4: C-005 の representative H-1: statement: 数「4」が observations の値に無い",
+   "I-4: C-005 の representative H-1: statement: 数「3」が observations の値に無い",
+   "I-4: C-005 の representative H-1: statement: 数「16」が observations の値に無い",
+   "I-4: C-005 の representative H-1: statement: 数「12」が observations の値に無い",
+   "I-4: C-005 の representative H-1: statement: 数「23」が observations の値に無い",
+   "I-4: C-005 の representative H-1: counterEvidence.items[0].text: 数「21」が observations の値に無い",
+   "I-4: C-005 の representative H-1: counterEvidence.items[0].text: 数「19」が observations の値に無い",
+   "I-2: C-007 の packetRefs: packetRef.path「facts.recognition.rows」が文法(aggregates.<id>.numerator|denominator|value / facts.<列>[添字].欄名)に合わない",
+   "I-2: C-007 の成員「1:I-1-007」が束の根(facts.recognition.rows)を根拠に持たない",
+   "I-2: C-007 の成員「2:I-2-006」が束の根(facts.recognition.rows)を根拠に持たない",
+   "I-4: C-007 の representative schema: $.observations: 要素が 0 個で、1 個に足りない",
+   "I-2: C-008 の成員「1:I-1-008」が束の根(aggregates.branches.total.value, aggregates.longThink.total.value)を根拠に持たない",
+   "I-4: C-008 の representative schema: $.observations: 要素が 0 個で、1 個に足りない",
+   "I-6: selfComputedNumbers[5] の値「0」が代表の文・矛盾・注に出ている"
+  ]
+ },
+ "c9_answers_status": {
+  "claude": [
+   [
+    "q1",
+    "partial"
+   ]
+  ],
+  "gpt": [
+   [
+    "q1",
+    "partial"
+   ]
+  ]
+ },
+ "c5_seal_match": {
+  "claude": "12/12",
+  "gpt": "12/12"
+ },
+ "attempts": {
+  "gpt": {
+   "attempts_recorded": [
+    {
+     "attempt": 1,
+     "kind": "first",
+     "httpStatus": 200,
+     "finishReason": "completed",
+     "problems": 0
+    }
+   ],
+   "problem_files": [],
+   "raw_files": 1,
+   "c3_items2_or_string": [],
+   "r2_consecutive_repeats": 0,
+   "c1_attempt1_passed": true
+  },
+  "claude": {
+   "attempts_recorded": [
+    {
+     "attempt": 1,
+     "kind": "first",
+     "httpStatus": 200,
+     "finishReason": "tool_use",
+     "problems": 0
+    }
+   ],
+   "problem_files": [],
+   "raw_files": 1,
+   "c3_items2_or_string": [],
+   "r2_consecutive_repeats": 0,
+   "c1_attempt1_passed": true
+  },
+  "gemini": {
+   "attempts_recorded": [],
+   "problem_files": [],
+   "raw_files": 0,
+   "c3_items2_or_string": [],
+   "r2_consecutive_repeats": 0,
+   "c1_attempt1_passed": false
+  }
+ },
+ "c7_VM_PNF_total": 0,
+ "b7_draft_items_empty_aggregateIds": [],
+ "draft_rejected_detail": [
+  {
+   "itemRef": {
+    "seatIndex": 1,
+    "hypothesisId": "I-1-001"
+   },
+   "failedChecks": [
+    "H-1"
+   ]
+  },
+  {
+   "itemRef": {
+    "seatIndex": 2,
+    "hypothesisId": "I-2-001"
+   },
+   "failedChecks": [
+    "H-1"
+   ]
+  },
+  {
+   "itemRef": {
+    "seatIndex": 1,
+    "hypothesisId": "I-1-005"
+   },
+   "failedChecks": [
+    "H-1"
+   ]
+  },
+  {
+   "itemRef": {
+    "seatIndex": 2,
+    "hypothesisId": "I-2-004"
+   },
+   "failedChecks": [
+    "H-1"
+   ]
+  },
+  {
+   "itemRef": {
+    "seatIndex": 1,
+    "hypothesisId": "I-1-007"
+   },
+   "failedChecks": [
+    "schema"
+   ]
+  },
+  {
+   "itemRef": {
+    "seatIndex": 2,
+    "hypothesisId": "I-2-006"
+   },
+   "failedChecks": [
+    "schema"
+   ]
+  },
+  {
+   "itemRef": {
+    "seatIndex": 1,
+    "hypothesisId": "I-1-008"
+   },
+   "failedChecks": [
+    "schema"
+   ]
+  }
+ ],
+ "integration": {
+  "clusters": 8,
+  "forVerification": [
+   "C-001",
+   "C-002",
+   "C-003",
+   "C-004"
+  ],
+  "heldBack": [
+   {
+    "clusterId": "C-005",
+    "reason": "根拠にしている場所(認識の表の names)は形の名前の写しであり、問いの『普段指さない』に対応する印が束に無い。反証でも同じ名前が別の群の行にも出ることが示されており、名前と群の対応が一対一でないため、検証に回す前に印の定義が要る。"
+   },
+   {
+    "clusterId": "C-006",
+    "reason": "根拠の場所(分かれ道・浅い読みの集計)は群の分けを含まない全体の数であり、問いの対象である群ごとの分母に割り当てられない。"
+   },
+   {
+    "clusterId": "C-007",
+    "reason": "束に無いものを求める項目であり、現在の束の中に検証に回せる根拠の場所が無い。"
+   },
+   {
+    "clusterId": "C-008",
+    "reason": "束に無いものを求める項目であり、群ごとの分かれ道・時間の分子と分母が束に存在しないため回せない。"
+   }
+  ],
+  "dropped": [],
+  "rep_zero_obs": [
+   "C-007",
+   "C-008"
+  ],
+  "members_per_cluster": {
+   "C-001": 2,
+   "C-002": 2,
+   "C-003": 2,
+   "C-004": 2,
+   "C-005": 2,
+   "C-006": 1,
+   "C-007": 2,
+   "C-008": 1
+  }
+ },
+ "t3_elapsed_ms_per_seat": {
+  "gpt": 50768,
+  "gemini": 0,
+  "claude": 74394
+ },
+ "t3_http_attempts_per_seat": {
+  "gpt": [
+   1
+  ],
+  "gemini": [],
+  "claude": [
+   1
+  ]
+ },
+ "r1_seats_present": [
+  "gpt",
+  "claude"
+ ],
+ "r1_absent_reason": {
+  "gemini": "held_back"
+ },
+ "r4_I1_lines": [],
+ "r5_H12_lines_on_integration": [],
+ "r5_zero_obs_representatives": [
+  "C-007",
+  "C-008"
+ ],
+ "r5_H12_lines_for_zero_reps": [],
+ "r7_zero_rep_clusters": 2
+}

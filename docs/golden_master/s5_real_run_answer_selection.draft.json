@@ -1,0 +1,183 @@
+{
+  "note": "これは候補の一覧であって採用ではない。採用の印(adoptedBy)は司令塔か人間が付ける。",
+  "customerRef": "c5",
+  "packetId": "22aee8fe696d0262",
+  "runId": "43f8b69c-20261007-1",
+  "items": [
+    {
+      "itemRef": {
+        "seatIndex": 1,
+        "hypothesisId": "I-1-002"
+      },
+      "statement": "評価の区分が下がった手は、群「多数の核」で56、群「それ以外」で18、群「署名なし」で5だった(対局群全体では79)。",
+      "aggregateIds": [
+        "groups.core.collapses",
+        "groups.other.collapses",
+        "groups.noSignature.collapses",
+        "collapse.total"
+      ],
+      "boardRefs": []
+    },
+    {
+      "itemRef": {
+        "seatIndex": 2,
+        "hypothesisId": "I-2-002"
+      },
+      "statement": "評価の区分が下がった手は、群「多数の核」で56、群「それ以外」で18、群「署名なし」で5だった(対局群全体では79)。",
+      "aggregateIds": [
+        "groups.core.collapses",
+        "groups.other.collapses",
+        "groups.noSignature.collapses",
+        "collapse.total"
+      ],
+      "boardRefs": []
+    },
+    {
+      "itemRef": {
+        "seatIndex": 1,
+        "hypothesisId": "I-1-003"
+      },
+      "statement": "一度は優勢になった局のうち負けた局は、群「多数の核」で分子3・分母12、群「それ以外」で分子3・分母4、群「署名なし」で分子0・分母2だった。",
+      "aggregateIds": [
+        "groups.core.aheadThenLost",
+        "groups.other.aheadThenLost",
+        "groups.noSignature.aheadThenLost"
+      ],
+      "boardRefs": []
+    },
+    {
+      "itemRef": {
+        "seatIndex": 2,
+        "hypothesisId": "I-2-003"
+      },
+      "statement": "一度は優勢になった局のうち負けた局は、群「多数の核」で分子3・分母12、群「それ以外」で分子3・分母4、群「署名なし」で分子0・分母2だった。",
+      "aggregateIds": [
+        "groups.core.aheadThenLost",
+        "groups.other.aheadThenLost",
+        "groups.noSignature.aheadThenLost"
+      ],
+      "boardRefs": []
+    },
+    {
+      "itemRef": {
+        "seatIndex": 1,
+        "hypothesisId": "I-1-004"
+      },
+      "statement": "群「それ以外」では一度は優勢になった局の分母が4でそのうち負けた局が3、群「多数の核」では分母が12で負けた局が3だったため、群によって優勢から負けに至った局の出方が違う可能性がありますが、分母が小さいため読みにとどまります。",
+      "aggregateIds": [
+        "groups.other.aheadThenLost",
+        "groups.core.aheadThenLost"
+      ],
+      "boardRefs": []
+    },
+    {
+      "itemRef": {
+        "seatIndex": 2,
+        "hypothesisId": "I-2-005"
+      },
+      "statement": "群「それ以外」では一度は優勢になった局の分母が4でそのうち負けた局が3、群「多数の核」では分母が12で負けた局が3だったため、群によって優勢から負けに至った局の出方が違う可能性がありますが、分母が小さいため読みにとどまります。",
+      "aggregateIds": [
+        "groups.other.aheadThenLost",
+        "groups.core.aheadThenLost"
+      ],
+      "boardRefs": []
+    },
+    {
+      "itemRef": {
+        "seatIndex": 1,
+        "hypothesisId": "I-1-006"
+      },
+      "statement": "分かれ道として読んだ局面は404で、そのうち浅い読みで差が見えた局面は103、それが出てきた局は24だった。",
+      "aggregateIds": [
+        "branches.total",
+        "branches.shallowVisible",
+        "branches.shallowVisibleGames"
+      ],
+      "boardRefs": []
+    }
+  ],
+  "rejected": [
+    {
+      "itemRef": {
+        "seatIndex": 1,
+        "hypothesisId": "I-1-001"
+      },
+      "failedChecks": [
+        "H-1"
+      ]
+    },
+    {
+      "itemRef": {
+        "seatIndex": 2,
+        "hypothesisId": "I-2-001"
+      },
+      "failedChecks": [
+        "H-1"
+      ]
+    },
+    {
+      "itemRef": {
+        "seatIndex": 1,
+        "hypothesisId": "I-1-005"
+      },
+      "failedChecks": [
+        "H-1"
+      ]
+    },
+    {
+      "itemRef": {
+        "seatIndex": 2,
+        "hypothesisId": "I-2-004"
+      },
+      "failedChecks": [
+        "H-1"
+      ]
+    },
+    {
+      "itemRef": {
+        "seatIndex": 1,
+        "hypothesisId": "I-1-007"
+      },
+      "failedChecks": [
+        "schema"
+      ]
+    },
+    {
+      "itemRef": {
+        "seatIndex": 2,
+        "hypothesisId": "I-2-006"
+      },
+      "failedChecks": [
+        "schema"
+      ]
+    },
+    {
+      "itemRef": {
+        "seatIndex": 1,
+        "hypothesisId": "I-1-008"
+      },
+      "failedChecks": [
+        "schema"
+      ]
+    }
+  ],
+  "questions": [
+    {
+      "questionId": "q1",
+      "text": "3 切れは練習対局のイメージで、何局かは普段指さない戦型を採用している。どのような影響があるのか興味がある",
+      "machineSummary": "partial"
+    }
+  ],
+  "menuIds": [
+    "M1",
+    "M2",
+    "M3",
+    "M4",
+    "M5",
+    "M6",
+    "M7",
+    "M8",
+    "M9"
+  ],
+  "adoptedBy": null
+}
