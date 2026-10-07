@@ -1,0 +1,112 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "claim-decomposition.v0.1.schema.json",
+  "title": "Claim Decomposition v0.1",
+  "description": "D-1(audit-core/docs/CLAIM_DECOMPOSITION_D1_PLAN_2026-10-07.md §4(a))。原文(original_text)を、どの部分が(span)どの Claim として構造化されたか(claims)に分解した結果の 1 文書。分解層の目的は『正しい Claim を作ること』ではなく『どの部分がどう構造化されたかを明示すること』(同計画 §3)。正しさの判定は Core が行い、分解の正しさ(span が原文に実在すること・被覆)は scripts/playtest/lib/claimDecomposition.ts が独立に測る。evidence_pointer は D-1 では null を許す(束縛は後の段、同計画 §4(a))。この検証器(lib/eventSchema.ts)は $ref・$defs・prefixItems・maxItems・anyOf・allOf を扱わない(知らないキーワードは例外)ため、span を『長さちょうど 2』までは schema で縛れない ― その分は lib/claimDecomposition.ts の decompositionProblems が確かめる。",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "original_text",
+    "claims"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "0.1"
+    },
+    "original_text": {
+      "type": "string",
+      "description": "分解の対象になった原文(席が出した文字列そのもの)"
+    },
+    "claims": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "claim_id",
+          "span",
+          "form",
+          "subject",
+          "value",
+          "modifiers",
+          "evidence_pointer"
+        ],
+        "properties": {
+          "claim_id": {
+            "type": "string",
+            "minLength": 1,
+            "description": "文書内で一意(一意性は schema では確かめられない。機械検査は lib/claimDecomposition.ts の decompositionProblems が行う)"
+          },
+          "span": {
+            "type": "array",
+            "minItems": 2,
+            "items": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "description": "original_text の文字位置 [start, end)。end は排他。長さちょうど 2・範囲・サロゲート分断の確認は decompositionProblems が行う"
+          },
+          "form": {
+            "enum": [
+              "direct_value",
+              "derived_value",
+              "aggregate",
+              "threshold"
+            ]
+          },
+          "subject": {
+            "type": "string",
+            "minLength": 1
+          },
+          "value": {
+            "oneOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "modifiers": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "period",
+              "unit",
+              "population"
+            ],
+            "properties": {
+              "period": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "unit": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "population": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            }
+          },
+          "evidence_pointer": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "D-1 では null を許す(束縛は後の段。同計画 §4(a))"
+          }
+        }
+      }
+    }
+  }
+}
