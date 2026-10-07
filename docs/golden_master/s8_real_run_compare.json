@@ -1,0 +1,87 @@
+{
+ "p_I2_lines": [
+  "I-2: C-001 の成員「2:I-2-003」が束の根(aggregates.groups.core.games.value, aggregates.groups.other.games.value, aggregates.groups.noSignature.games.value)を根拠に持たない"
+ ],
+ "p_schema_lines": [],
+ "p_I6_lines": [],
+ "p_gameId_H1_lines": [
+  "I-4: C-008 の representative H-1: statement: 数「10」が observations の値に無い",
+  "E-3: items[6] H-1: statement: 数「10」が observations の値に無い"
+ ],
+ "p_gameId_H1_about_gamecode": [],
+ "p_empty_packetRefs": [
+  "C-004",
+  "C-005"
+ ],
+ "rep_versions": [
+  "0.5"
+ ],
+ "rep_zero_obs": [
+  "C-004",
+  "C-005"
+ ],
+ "cost_total": null,
+ "per_seat": {
+  "gpt": {
+   "attempts": 1,
+   "cost": 0.7883,
+   "ms": 46148,
+   "items": 4
+  },
+  "gemini": {
+   "attempts": 0,
+   "cost": 0,
+   "ms": 0,
+   "items": null
+  },
+  "claude": {
+   "attempts": 1,
+   "cost": 0.9491,
+   "ms": 93570,
+   "items": 9
+  }
+ },
+ "integrator": {},
+ "attempt_files": [
+  "integrator_attempt_1_problems.txt",
+  "integrator_attempt_2_problems.txt"
+ ],
+ "integrator_attempt_count": 3,
+ "seat_problem_kinds": {
+  "gpt": {
+   "E-3": 3
+  },
+  "gemini": {},
+  "claude": {
+   "E-3": 2
+  }
+ },
+ "integration_problem_kinds": {
+  "I-2": 1,
+  "I-4": 1
+ },
+ "core_tally": {
+  "GROUNDED": 58,
+  "UNVERIFIABLE": 17
+ },
+ "core_claims": 75,
+ "gameId_citations_by_seat": {
+  "2": 7
+ },
+ "items_by_seat": {
+  "1": 4,
+  "2": 9
+ },
+ "kinds_by_seat": {
+  "1": {
+   "finding": 2,
+   "answer_candidate": 1,
+   "needed_observation": 1
+  },
+  "2": {
+   "finding": 6,
+   "hypothesis": 1,
+   "needed_observation": 2
+  }
+ }
+}
