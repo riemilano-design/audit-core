@@ -1,0 +1,19 @@
+# S-7 の下見(司令塔、2026-10-07 11:46:15。1 回だけ。鍵は使わない)
+.env: /Users/midoriko/Desktop/sgogi-coach/.env から 17 個の名前を読んだ(値は出さない)
+  指示文の例: 6 本中 5 本が引けて値も入っている
+  指示文の例: 1 本中 0 本が引けて値も入っている
+/Users/midoriko/Desktop/sgogi-coach/scripts/playtest/runSeats.ts:184
+  if (exampleErrors.length > 0) throw new Error(`指示文の例が実物の packet で引けない(${exampleErrors.length} 件)― 席は例をまねるので送らない:\n${exampleErrors.map((l) => `  - ${l}`).join("\n")}`);
+                                      ^
+
+Error: 指示文の例が実物の packet で引けない(2 件)― 席は例をまねるので送らない:
+  - 席の指示文(LLM_SEATS_INSTRUCTION_v1.5_2026-10-07.md): 例「facts.recognition.rows[n].gameId」が引けない ― packetRef.path「facts.recognition.rows[n].gameId」が文法(aggregates.<id>.numerator|denominator|value / facts.<列>[添字].欄名)に合わない
+  - 整理役の指示文: 例「facts.recognition.rows」が引けない ― packetRef.path「facts.recognition.rows」が文法(aggregates.<id>.numerator|denominator|value / facts.<列>[添字].欄名)に合わない
+    at main (/Users/midoriko/Desktop/sgogi-coach/scripts/playtest/runSeats.ts:184:39)
+    at <anonymous> (/Users/midoriko/Desktop/sgogi-coach/scripts/playtest/runSeats.ts:249:7)
+    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)
+    at async node:internal/modules/esm/loader:647:26
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)
+
+Node.js v24.20.0
+rc=1
