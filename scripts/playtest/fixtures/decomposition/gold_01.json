@@ -13,10 +13,11 @@
       "form": "direct_value",
       "subject": "診断の対象になった局数",
       "value": 20,
+      "unit": "局",
       "modifiers": {
-        "period": "2026 年 9 月",
-        "unit": "局",
-        "population": null
+        "population": null,
+        "time_range": "2026 年 9 月",
+        "normalization": null
       },
       "evidence_pointer": null
     },
@@ -29,10 +30,11 @@
       "form": "derived_value",
       "subject": "1 局あたりの平均手数",
       "value": 84,
+      "unit": "手",
       "modifiers": {
-        "period": null,
-        "unit": "手",
-        "population": "直近 20 局"
+        "population": "直近 20 局",
+        "time_range": null,
+        "normalization": null
       },
       "evidence_pointer": null
     },
@@ -45,10 +47,11 @@
       "form": "derived_value",
       "subject": "前半 10 局と後半 10 局の平均手数の差",
       "value": 16,
+      "unit": "手",
       "modifiers": {
-        "period": null,
-        "unit": "手",
-        "population": "前半 10 局と後半 10 局"
+        "population": "前半 10 局と後半 10 局",
+        "time_range": null,
+        "normalization": null
       },
       "evidence_pointer": null
     },
@@ -61,10 +64,11 @@
       "form": "aggregate",
       "subject": "序盤で先に有利になった局数",
       "value": 9,
+      "unit": "局",
       "modifiers": {
-        "period": null,
-        "unit": "局",
-        "population": "対象 20 局"
+        "population": "対象 20 局",
+        "time_range": null,
+        "normalization": null
       },
       "evidence_pointer": null
     },
@@ -77,10 +81,11 @@
       "form": "aggregate",
       "subject": "相手の飛車先に備えない形になった局数",
       "value": 9,
+      "unit": "局",
       "modifiers": {
-        "period": null,
-        "unit": "局",
-        "population": null
+        "population": null,
+        "time_range": null,
+        "normalization": null
       },
       "evidence_pointer": null
     },
@@ -93,10 +98,11 @@
       "form": "aggregate",
       "subject": "互角のまま中盤に入った局数",
       "value": 3,
+      "unit": "局",
       "modifiers": {
-        "period": null,
-        "unit": "局",
-        "population": null
+        "population": null,
+        "time_range": null,
+        "normalization": null
       },
       "evidence_pointer": null
     },
@@ -109,10 +115,11 @@
       "form": "derived_value",
       "subject": "序盤で先に有利になった局と互角のまま中盤に入った局の合計",
       "value": 12,
+      "unit": "局",
       "modifiers": {
-        "period": null,
-        "unit": "局",
-        "population": null
+        "population": null,
+        "time_range": null,
+        "normalization": null
       },
       "evidence_pointer": null
     },
@@ -125,10 +132,11 @@
       "form": "aggregate",
       "subject": "有利になったのに負けた局数",
       "value": 5,
+      "unit": "局",
       "modifiers": {
-        "period": null,
-        "unit": "局",
-        "population": "最初の 10 局"
+        "population": "最初の 10 局",
+        "time_range": null,
+        "normalization": null
       },
       "evidence_pointer": null
     },
@@ -141,10 +149,11 @@
       "form": "aggregate",
       "subject": "分かれ道が 3 回以上あった局数",
       "value": 6,
+      "unit": "局",
       "modifiers": {
-        "period": null,
-        "unit": "局",
-        "population": "対象 20 局(分かれ道が 3 回以上あった局を数える)"
+        "population": "対象 20 局(分かれ道が 3 回以上あった局を数える)",
+        "time_range": null,
+        "normalization": null
       },
       "evidence_pointer": null
     }

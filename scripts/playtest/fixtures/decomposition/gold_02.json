@@ -1,0 +1,165 @@
+{
+  "id": "gold-02",
+  "author": "独立作成(実装・他の正解集合を見ていない)",
+  "note": "狙いは導出値 ― 合計・差分・比率・率と、分母が文中にしか書かれていない主張を厚くすること。c4 は両辺(7 回・11 回)が原文に在る合計、c5 は両辺の数が原文に無い差分、c6 と c8 は分母(「指し手全体」「それ以外の局面」)が文中の語だけで数を持たない比率、c9 は値(平均)が原文に無く線だけが書かれた threshold である。span は Python で機械的に求めた: 各断片について original_text.count(断片) == 1 と original_text[start:end] == 断片 を assert し、さらに 9 件の span が互いに重ならないこと、form が 4 語のいずれかであること、禁止語が原文と Claim に無いことも assert した(rc=0)。",
+  "original_text": "今回の 20 局について、時間の使い方と指し手の内訳をまとめました。\n\n序盤で 1 手に 30 秒以上かけた場面は 7 回、中盤では 11 回でした。\nあわせて 18 回が、1 手に 30 秒以上かけた場面の合計です。\n玉の近くを動かした手と、飛車先を動かした手の差は 6 手でした。\n駒を取る手は、指し手全体の 15.0 % を占めます。\n後手が同じ場所へ 2 回続けて駒を動かした局は、20 局のうち 4 局です。\n同じ形が続いた局面では、1 手に使った時間が、それ以外の局面の 2.4 倍でした。\n1 手あたりに使った時間の平均は、区切りの 30 秒を下回りました。\n\n区切りの決め方は 10 ページ目に、集計の手順は 12 ページ目に載せています。\nこの内訳の表は、左から 3 列目までが序盤の欄です。\n\n盤面の左側の使い方については、まだ読み取れていない部分があります。",
+  "expected_claims": [
+    {
+      "claim_id": "c1",
+      "span": [
+        0,
+        8
+      ],
+      "form": "direct_value",
+      "subject": "今回のレポートがまとめた対局数",
+      "value": 20,
+      "unit": "局",
+      "modifiers": {
+        "population": null,
+        "time_range": "今回",
+        "normalization": null
+      },
+      "evidence_pointer": null
+    },
+    {
+      "claim_id": "c2",
+      "span": [
+        36,
+        61
+      ],
+      "form": "aggregate",
+      "subject": "序盤で 1 手に 30 秒以上かけた場面の数",
+      "value": 7,
+      "unit": "回",
+      "modifiers": {
+        "population": "今回の 20 局の序盤の指し手",
+        "time_range": "今回の 20 局",
+        "normalization": null
+      },
+      "evidence_pointer": null
+    },
+    {
+      "claim_id": "c3",
+      "span": [
+        62,
+        74
+      ],
+      "form": "aggregate",
+      "subject": "中盤で 1 手に 30 秒以上かけた場面の数",
+      "value": 11,
+      "unit": "回",
+      "modifiers": {
+        "population": "今回の 20 局の中盤の指し手",
+        "time_range": "今回の 20 局",
+        "normalization": null
+      },
+      "evidence_pointer": null
+    },
+    {
+      "claim_id": "c4",
+      "span": [
+        76,
+        109
+      ],
+      "form": "derived_value",
+      "subject": "序盤と中盤で 1 手に 30 秒以上かけた場面の合計",
+      "value": 18,
+      "unit": "回",
+      "modifiers": {
+        "population": "今回の 20 局の序盤と中盤の指し手",
+        "time_range": "今回の 20 局",
+        "normalization": null
+      },
+      "evidence_pointer": null
+    },
+    {
+      "claim_id": "c5",
+      "span": [
+        110,
+        142
+      ],
+      "form": "derived_value",
+      "subject": "玉の近くを動かした手の数と飛車先を動かした手の数の差",
+      "value": 6,
+      "unit": "手",
+      "modifiers": {
+        "population": "今回の 20 局の自分の指し手",
+        "time_range": "今回の 20 局",
+        "normalization": null
+      },
+      "evidence_pointer": null
+    },
+    {
+      "claim_id": "c6",
+      "span": [
+        143,
+        170
+      ],
+      "form": "aggregate",
+      "subject": "指し手全体のうち駒を取る手の割合",
+      "value": 15.0,
+      "unit": "%",
+      "modifiers": {
+        "population": "今回の 20 局の指し手全体(分母は文中の「指し手全体」だけで、数は原文に無い)",
+        "time_range": "今回の 20 局",
+        "normalization": null
+      },
+      "evidence_pointer": null
+    },
+    {
+      "claim_id": "c7",
+      "span": [
+        171,
+        209
+      ],
+      "form": "aggregate",
+      "subject": "後手が同じ場所へ 2 回続けて駒を動かした局の数",
+      "value": 4,
+      "unit": "局",
+      "modifiers": {
+        "population": "今回の 20 局",
+        "time_range": "今回の 20 局",
+        "normalization": null
+      },
+      "evidence_pointer": null
+    },
+    {
+      "claim_id": "c8",
+      "span": [
+        210,
+        251
+      ],
+      "form": "derived_value",
+      "subject": "同じ形が続いた局面の 1 手あたりの時間と、それ以外の局面の 1 手あたりの時間の比",
+      "value": 2.4,
+      "unit": "倍",
+      "modifiers": {
+        "population": "同じ形が続いた局面 と それ以外の局面(どちらの 1 手あたりの秒数も原文に無い)",
+        "time_range": "今回の 20 局",
+        "normalization": null
+      },
+      "evidence_pointer": null
+    },
+    {
+      "claim_id": "c9",
+      "span": [
+        252,
+        286
+      ],
+      "form": "threshold",
+      "subject": "1 手あたりに使った時間の平均が区切りの 30 秒を下回ること",
+      "value": true,
+      "unit": "秒",
+      "modifiers": {
+        "population": "今回の 20 局の指し手全体",
+        "time_range": "今回の 20 局",
+        "normalization": null
+      },
+      "evidence_pointer": null
+    }
+  ],
+  "expected_uncovered_number_sentences": [
+    "区切りの決め方は 10 ページ目に、集計の手順は 12 ページ目に載せています。",
+    "この内訳の表は、左から 3 列目までが序盤の欄です。"
+  ]
+}

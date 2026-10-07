@@ -29,6 +29,7 @@
           "form",
           "subject",
           "value",
+          "unit",
           "modifiers",
           "evidence_pointer"
         ],
@@ -37,6 +38,13 @@
             "type": "string",
             "minLength": 1,
             "description": "文書内で一意(一意性は schema では確かめられない。機械検査は lib/claimDecomposition.ts の decompositionProblems が行う)"
+          },
+          "unit": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "司令塔の訂正(2026-10-07。D-2a 作業中)。CLAIM_CONTRACT_SPEC_v0.2.md §2.3 の欄の表には無いが、Core の実測(audit-core/fixtures/shogi/s8_real_run_core.json の claims[0])で modifiers ではなく claim 直下にある(例: \"games\")。Core の実測の形を正とする(司令塔の指示)。"
           },
           "span": {
             "type": "array",
@@ -60,37 +68,43 @@
             "minLength": 1
           },
           "value": {
+            "description": "司令塔の決定(決-5、2026-10-07)。CLAIM_CONTRACT_SPEC_v0.2.md §2.1 の threshold は value が真偽(比較子は書かない)。number・string に boolean を加える。",
             "oneOf": [
               {
                 "type": "number"
               },
               {
                 "type": "string"
+              },
+              {
+                "type": "boolean"
               }
             ]
           },
           "modifiers": {
             "type": "object",
             "additionalProperties": false,
+            "description": "司令塔の訂正(2026-10-07)。CLAIM_CONTRACT_SPEC_v0.2.md §2.2 の修飾 3 つ(population / time_range / normalization)に合わせる。D-1 時点の {period, unit, population} は司令塔の誤りだった(period は無く、unit は claim 直下)。",
             "required": [
-              "period",
-              "unit",
-              "population"
+              "population",
+              "time_range",
+              "normalization"
             ],
             "properties": {
-              "period": {
-                "type": [
-                  "string",
-                  "null"
-                ]
-              },
-              "unit": {
-                "type": [
-                  "string",
-                  "null"
-                ]
-              },
               "population": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "time_range": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "description": "司令塔の決定(決-4、2026-10-07。前便の『Core の実測(配列)を正とする』は誤りだったための訂正)。Core の `time_range: []` は束縛の段で解決した後の形。分解層が記録するのは原文が時について述べた語そのもの(例: \"2026 年 9 月\")であって、解決済みの範囲ではない ― D-1 §11 決-2 で `subject` を packet のパスでなく日本語の主語句とした決定と同じ理屈(層が違う)。配列への解決は束縛の段(D-2b 以降)の仕事。"
+              },
+              "normalization": {
                 "type": [
                   "string",
                   "null"

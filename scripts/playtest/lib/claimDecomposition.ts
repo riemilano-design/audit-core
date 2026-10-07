@@ -183,6 +183,16 @@ interface SentenceSpan {
  * 1 文として扱う)。読点「、」・改行では切らない ― 被覆判定の単位(「1 文の中に数があるか」)を、
  * 読点でこまぎれにして過剰に `uncovered` を出さないため、句点だけを切れ目にする(このファイルの決定。
  * 計画 §4(d) は切り方を指定していない)。
+ *
+ * **直前の句点に続く改行は、次の文の一部にしない。** 原文は段落の区切りに改行(1 個または連続した複数個)を
+ * 使うが、改行そのものは文の内容ではなく空白の区切りである。句点を見つけて次の文の開始位置を定めるとき、
+ * そこに続く「\n」を読み飛ばしてから次の文の `start` を確定する(「改行で文を切らない」=「改行を区切り文字
+ * として扱わない」ことと、「改行を次の文の文字列に含めない」ことは別の決定であり、ここでは後者も行う)。
+ * これは境界そのものの決定であり、呼び出し側で出力文字列を `.trim()` して吸収する話ではない ―
+ * gold fixture(`fixtures/decomposition/gold_01.json` の note)は「span は文そのものの区間(句点を含み、
+ * 改行は含まない)」という取り決めで claim の span を書いており、この関数が返す `sentence.start`/`text` も
+ * 同じ取り決めに合わせる必要がある(そうしないと、この関数が返す sentence の境界と、独立に作られた正解
+ * 集合の span の境界が食い違ったままになる)。
  */
 function splitIntoSentences(text: string): SentenceSpan[] {
   const sentences: SentenceSpan[] = [];
@@ -191,6 +201,7 @@ function splitIntoSentences(text: string): SentenceSpan[] {
     if (text[i] === "。") {
       sentences.push({ text: text.slice(start, i + 1), start, end: i + 1 });
       start = i + 1;
+      while (text[start] === "\n") start++;
     }
   }
   if (start < text.length) sentences.push({ text: text.slice(start), start, end: text.length });

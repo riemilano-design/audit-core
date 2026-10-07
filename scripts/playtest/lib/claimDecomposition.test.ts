@@ -2,7 +2,7 @@
 // **LLM は 1 回も呼ばない。費用 0 円。** 試験の正解は実装が使う表・定数から作らない(手で書いた原文 + 手で
 // 数えた期待値)。退化値(空の claims・空の original_text・空の span)も当てる。
 
-import { readFileSync } from "node:fs";
+import { readdirSync, readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import { validate } from "./eventSchema.js";
 import { checkClaimDecomposition, coverageReport, decompositionProblems, loadClaimDecompositionSchema } from "./claimDecomposition.js";
@@ -20,7 +20,8 @@ describe("claim-decomposition schema v0.1", () => {
           form: "direct_value",
           subject: "売上",
           value: 100,
-          modifiers: { period: null, unit: "億円", population: null },
+          unit: "億円",
+          modifiers: { population: null, time_range: null, normalization: null },
           evidence_pointer: null,
         },
       ],
@@ -40,7 +41,8 @@ describe("claim-decomposition schema v0.1", () => {
           form: "direct_value",
           subject: "s",
           value: "v",
-          modifiers: { period: null, unit: null, population: null },
+          unit: null,
+          modifiers: { population: null, time_range: null, normalization: null },
           evidence_pointer: null,
         },
       ],
@@ -72,7 +74,8 @@ describe("claim-decomposition schema v0.1", () => {
             form,
             subject: "s",
             value: 1,
-            modifiers: { period: null, unit: null, population: null },
+            unit: null,
+            modifiers: { population: null, time_range: null, normalization: null },
             evidence_pointer: null,
           },
         ],
@@ -93,7 +96,8 @@ describe("claim-decomposition schema v0.1", () => {
           form: "not_a_real_form",
           subject: "s",
           value: 1,
-          modifiers: { period: null, unit: null, population: null },
+          unit: null,
+          modifiers: { population: null, time_range: null, normalization: null },
           evidence_pointer: null,
         },
       ],
@@ -109,7 +113,8 @@ function baseClaim(overrides: Record<string, unknown> = {}): Record<string, unkn
     form: "direct_value",
     subject: "s",
     value: 1,
-    modifiers: { period: null, unit: null, population: null },
+    unit: null,
+    modifiers: { population: null, time_range: null, normalization: null },
     evidence_pointer: null,
     ...overrides,
   };
@@ -317,6 +322,26 @@ describe("coverageReport", () => {
     expect(report.uncovered).toEqual([]);
   });
 
+  it("小数(12.5)を 2 つの別々の claim が整数部・小数部に分けて覆っても、どちらの claim 単独も「12.5」全体を覆っていなければ uncovered(独立監査 REVISE M3 への対応 ― 数の正規表現が小数点を跨いで 1 つの数として扱うことを確かめる試験。これが無いと、数の正規表現を `\\d+(?:\\.\\d+)?` から `\\d+` に壊して小数点を扱えなくしても、既存の 46 本がすべて緑のまま可視化されなかった)", () => {
+    const text = "売上は12.5億円だった。";
+    const idx = text.indexOf("1");
+    expect(text.slice(idx, idx + 4)).toBe("12.5");
+    const doc = {
+      schemaVersion: "0.1",
+      original_text: text,
+      claims: [
+        baseClaim({ claim_id: "c1", span: [idx, idx + 2] }), // "12" だけ(整数部のみ)
+        baseClaim({ claim_id: "c2", span: [idx + 3, idx + 4] }), // "5" だけ(小数点を挟んだ別の claim の小数部のみ)
+      ],
+    };
+    const report = coverageReport(doc);
+    expect(report.numberSentences).toEqual([text]);
+    // "12.5" は 1 つの数として扱われるべきで、整数部と小数部を 2 つの別々の claim が分け合っても、
+    // どちらの claim も単独で "12.5" 全体を覆っていない以上、uncovered のまま。
+    expect(report.uncovered).toEqual([text]);
+    expect(report.bindingRate).toBe(0);
+  });
+
   it("門を通らない span(範囲外)は覆っている扱いにしない(被覆の測定は門を通った span だけを信用する)", () => {
     const text = "売上は100億円だった。";
     const doc = {
@@ -395,15 +420,29 @@ describe("checkClaimDecomposition(唯一の入口。schema 照合と decompositi
   });
 });
 
-describe("gold_01 fixture(独立作成の正解集合。実装側に合わせて書き換えない)", () => {
-  function loadGold01(): Record<string, unknown> {
-    return JSON.parse(
-      readFileSync(new URL("../fixtures/decomposition/gold_01.json", import.meta.url), "utf-8"),
-    ) as Record<string, unknown>;
+describe("gold_*.json fixtures(独立作成の正解集合。実装側に合わせて書き換えない。glob で全部拾う ― D-2a §1(d))", () => {
+  // D-2a 計画(audit-core/docs/CLAIM_DECOMPOSITION_D2A_PLAN_2026-10-07.md §1(d))。
+  // gold_02/gold_03/gold_04 を別の独立した席が同時に書いているため、ここでは glob で拾う仕組みだけを作る
+  // (1 本も無くても gold_01 だけで動く)。新しい fixture がこの試験に対して落ちるなら、それは発見であり、
+  // 試験側を緩めて通す対象ではない。
+  const FIXTURES_DIR = new URL("../fixtures/decomposition/", import.meta.url);
+
+  function goldFixtureNames(): string[] {
+    return readdirSync(FIXTURES_DIR)
+      .filter((name) => /^gold_.*\.json$/.test(name))
+      .sort();
   }
 
-  it("gold_01.expected_claims は schema v0.1 に通る(0 件落ちる ― 直す前は form の enum 不一致で 3 件落ちていた)", () => {
-    const gold = loadGold01();
+  function loadGold(name: string): Record<string, unknown> {
+    return JSON.parse(readFileSync(new URL(name, FIXTURES_DIR), "utf-8")) as Record<string, unknown>;
+  }
+
+  it("gold_*.json が少なくとも 1 本見つかる(glob が空を拾って静かに 0 件通過しない)", () => {
+    expect(goldFixtureNames().length).toBeGreaterThan(0);
+  });
+
+  it.each(goldFixtureNames())("%s: expected_claims は schema v0.1 に通り、decompositionProblems も 0 件", (name) => {
+    const gold = loadGold(name);
     const doc = {
       schemaVersion: "0.1",
       original_text: gold["original_text"],
@@ -414,8 +453,8 @@ describe("gold_01 fixture(独立作成の正解集合。実装側に合わせて
     expect(result.decompositionProblems).toEqual([]);
   });
 
-  it("coverageReport(gold_01.expected_claims) の uncovered は、gold_01.expected_uncovered_number_sentences と集合として一致する(先頭の改行は trim して比較する ― この決定をここで固定する)", () => {
-    const gold = loadGold01();
+  it.each(goldFixtureNames())("%s: coverageReport(expected_claims) の uncovered は expected_uncovered_number_sentences と集合として一致する", (name) => {
+    const gold = loadGold(name);
     const doc = {
       schemaVersion: "0.1",
       original_text: gold["original_text"],
@@ -423,18 +462,15 @@ describe("gold_01 fixture(独立作成の正解集合。実装側に合わせて
     };
     const report = coverageReport(doc);
 
-    // 決定: splitIntoSentences は句点を切れ目にするが改行では切らないため、2 文目以降の sentence.text は
-    // 直前の文の末尾の句点に続く改行をそのまま先頭に含む(例: "\n手数は、…数えたものです。")。
-    // gold_01 の expected_uncovered_number_sentences は改行を含まない形で書かれている(fixture の note の
-    // (ii) は claim の span についての取り決めで、uncovered の文字列の形までは縛っていない)。
-    // この試験では「先頭の改行の有無」は被覆判定の中身(uncovered に入るかどうか)とは無関係な表記の違いと
-    // みなし、両辺を `.trim()` してから比べる(trim しない場合、重なりが 0 件になることを別途確認済み)。
-    const actual = [...new Set(report.uncovered.map((s) => s.trim()))].sort();
-    const expected = [...new Set((gold["expected_uncovered_number_sentences"] as string[]).map((s) => s.trim()))].sort();
+    // splitIntoSentences が句点に続く改行を次の文に含めないよう本番側で直したため、ここでは文字列を
+    // 加工しない(trim などで吸収しない)。両辺をそのまま集合として比べる。
+    const actual = [...new Set(report.uncovered)].sort();
+    const expectedList = gold["expected_uncovered_number_sentences"] as string[];
+    const expected = [...new Set(expectedList)].sort();
 
-    // 件数だけでなく中身そのものを比べる(trim 後の文字列の集合として一致するか)。
+    // 件数だけでなく中身そのものを比べる(集合として一致するか)。
     expect(actual).toEqual(expected);
-    // trim によって異なる文が同一視されて件数が減っていないことの確認(退化防止)。
-    expect(actual.length).toBe((gold["expected_uncovered_number_sentences"] as string[]).length);
+    // 重複の同一視で件数が減っていないことの確認(退化防止)。
+    expect(actual.length).toBe(expectedList.length);
   });
 });

@@ -1,0 +1,269 @@
+{
+  "id": "gold-03",
+  "author": "独立作成(実装・他の正解集合を見ていない)",
+  "note": "狙いは「期間と母集団のずれ」。同じ指標(一致した手の数・30 秒を超えた手の数・1 手あたりの平均の考慮時間・1 局の最長の考慮時間)を、9 月と 10 月という別の期間と、全局と後手番 10 局という別の母集団で繰り返し出し、別の主語なのに値が同じになる組を 4 組(c1/c2 = 20、c5/c8 = 64、c6/c9 = 48、c14/c15 = 96。加えて c12/c13 は真偽が同じ)仕込んだので、参照先を取り違えても値だけは一致してしまう。期間や母集団が文中にしか無い主張(c7・c10・c11・c13・c15)を入れ、c11 は直前の文の「10 月・後手番」を引き継ぐ形、c13・c15 は指標そのものを前文から引き継ぐ形にした。span は Python で original_text を組み立てたうえで、各 span の文字列について original_text.count(s) == 1 と original_text[start:end] == s を assert し、さらに expected_uncovered_number_sentences の各文がどの claim の span とも重ならないことと、禁止語が原文に無いことを assert した(いずれも AssertionError 無しで終了、rc=0)。",
+  "original_text": "今回の診断は、お預かりした棋譜のうち 9 月の 20 局と 10 月の 20 局を対象にしています。\n数え方の決まりを先に書きます。ある手が「一致」かどうかは、エンジンが挙げた上位 3 手に入っているかで判定しました。長考の数え方は、1 手に 30 秒を超えたかどうかです。30 秒という線は、今回の集計のために置いた仮の目安で、将棋のルールとは関係がありません。\nまず、一致した手の数を見ます。9 月の 20 局では 112 手でした。10 月の 20 局では 128 手でした。\nここから母集団を後手番に絞ります。10 月の後手番 10 局では、一致した手は 64 手でした。9 月の後手番 10 局では、一致した手は 48 手でした。\n2 か月を合わせると、一致した手は 240 手になります。\n次に、長考の数を見ます。9 月の 20 局では 64 手ありました。10 月の 20 局では 48 手ありました。\n同じ 10 月で、後手番 10 局だけに絞ると 21 手です。この条件のままで、先手番との差は 6 手でした。\n考慮時間の平均も見ました。9 月の 20 局では、1 手あたりの平均が 10 秒を超えていました。後手番 10 局だけに限っても、同じ 9 月で 10 秒を超えていました。\n9 月の 1 局目で、最も長く考えた 1 手は 96 秒でした。10 月の 1 局目では、同じ値が 96 秒でした。\n局ごとの内訳は、この冊子の 12 ページからの表に入れました。",
+  "expected_claims": [
+    {
+      "claim_id": "c1",
+      "span": [
+        0,
+        50
+      ],
+      "form": "aggregate",
+      "subject": "診断の対象になった 9 月の局数",
+      "value": 20,
+      "unit": "局",
+      "modifiers": {
+        "population": "お預かりした棋譜のうち 9 月分(先手番・後手番の両方)",
+        "time_range": "9 月",
+        "normalization": null
+      },
+      "evidence_pointer": null
+    },
+    {
+      "claim_id": "c2",
+      "span": [
+        0,
+        50
+      ],
+      "form": "aggregate",
+      "subject": "診断の対象になった 10 月の局数",
+      "value": 20,
+      "unit": "局",
+      "modifiers": {
+        "population": "お預かりした棋譜のうち 10 月分(先手番・後手番の両方)",
+        "time_range": "10 月",
+        "normalization": null
+      },
+      "evidence_pointer": null
+    },
+    {
+      "claim_id": "c3",
+      "span": [
+        198,
+        219
+      ],
+      "form": "aggregate",
+      "subject": "9 月の 20 局で、エンジンの上位 3 手に入っていた指し手の数",
+      "value": 112,
+      "unit": "手",
+      "modifiers": {
+        "population": "9 月の 20 局(先手番・後手番の両方)",
+        "time_range": "9 月",
+        "normalization": null
+      },
+      "evidence_pointer": null
+    },
+    {
+      "claim_id": "c4",
+      "span": [
+        219,
+        241
+      ],
+      "form": "aggregate",
+      "subject": "10 月の 20 局で、エンジンの上位 3 手に入っていた指し手の数",
+      "value": 128,
+      "unit": "手",
+      "modifiers": {
+        "population": "10 月の 20 局(先手番・後手番の両方)",
+        "time_range": "10 月",
+        "normalization": null
+      },
+      "evidence_pointer": null
+    },
+    {
+      "claim_id": "c5",
+      "span": [
+        259,
+        290
+      ],
+      "form": "aggregate",
+      "subject": "10 月の後手番 10 局で、エンジンの上位 3 手に入っていた指し手の数",
+      "value": 64,
+      "unit": "手",
+      "modifiers": {
+        "population": "10 月の後手番 10 局",
+        "time_range": "10 月",
+        "normalization": null
+      },
+      "evidence_pointer": null
+    },
+    {
+      "claim_id": "c6",
+      "span": [
+        290,
+        320
+      ],
+      "form": "aggregate",
+      "subject": "9 月の後手番 10 局で、エンジンの上位 3 手に入っていた指し手の数",
+      "value": 48,
+      "unit": "手",
+      "modifiers": {
+        "population": "9 月の後手番 10 局",
+        "time_range": "9 月",
+        "normalization": null
+      },
+      "evidence_pointer": null
+    },
+    {
+      "claim_id": "c7",
+      "span": [
+        321,
+        350
+      ],
+      "form": "derived_value",
+      "subject": "9 月と 10 月を合わせた 40 局で、エンジンの上位 3 手に入っていた指し手の数",
+      "value": 240,
+      "unit": "手",
+      "modifiers": {
+        "population": "9 月の 20 局と 10 月の 20 局の合計(先手番・後手番の両方)",
+        "time_range": "9 月と 10 月",
+        "normalization": null
+      },
+      "evidence_pointer": null
+    },
+    {
+      "claim_id": "c8",
+      "span": [
+        363,
+        385
+      ],
+      "form": "aggregate",
+      "subject": "9 月の 20 局で、1 手に 30 秒を超えた指し手の数",
+      "value": 64,
+      "unit": "手",
+      "modifiers": {
+        "population": "9 月の 20 局(先手番・後手番の両方)",
+        "time_range": "9 月",
+        "normalization": null
+      },
+      "evidence_pointer": null
+    },
+    {
+      "claim_id": "c9",
+      "span": [
+        385,
+        408
+      ],
+      "form": "aggregate",
+      "subject": "10 月の 20 局で、1 手に 30 秒を超えた指し手の数",
+      "value": 48,
+      "unit": "手",
+      "modifiers": {
+        "population": "10 月の 20 局(先手番・後手番の両方)",
+        "time_range": "10 月",
+        "normalization": null
+      },
+      "evidence_pointer": null
+    },
+    {
+      "claim_id": "c10",
+      "span": [
+        409,
+        440
+      ],
+      "form": "aggregate",
+      "subject": "10 月の後手番 10 局で、1 手に 30 秒を超えた指し手の数",
+      "value": 21,
+      "unit": "手",
+      "modifiers": {
+        "population": "10 月の後手番 10 局",
+        "time_range": "10 月",
+        "normalization": null
+      },
+      "evidence_pointer": null
+    },
+    {
+      "claim_id": "c11",
+      "span": [
+        440,
+        464
+      ],
+      "form": "derived_value",
+      "subject": "10 月の先手番 10 局と後手番 10 局で、1 手に 30 秒を超えた指し手の数の差",
+      "value": 6,
+      "unit": "手",
+      "modifiers": {
+        "population": "10 月の先手番 10 局と後手番 10 局",
+        "time_range": "10 月",
+        "normalization": null
+      },
+      "evidence_pointer": null
+    },
+    {
+      "claim_id": "c12",
+      "span": [
+        478,
+        514
+      ],
+      "form": "threshold",
+      "subject": "9 月の 20 局の 1 手あたりの平均の考慮時間",
+      "value": true,
+      "unit": "秒",
+      "modifiers": {
+        "population": "9 月の 20 局(先手番・後手番の両方)",
+        "time_range": "9 月",
+        "normalization": null
+      },
+      "evidence_pointer": null
+    },
+    {
+      "claim_id": "c13",
+      "span": [
+        514,
+        551
+      ],
+      "form": "threshold",
+      "subject": "9 月の後手番 10 局の 1 手あたりの平均の考慮時間",
+      "value": true,
+      "unit": "秒",
+      "modifiers": {
+        "population": "9 月の後手番 10 局",
+        "time_range": "9 月",
+        "normalization": null
+      },
+      "evidence_pointer": null
+    },
+    {
+      "claim_id": "c14",
+      "span": [
+        552,
+        584
+      ],
+      "form": "direct_value",
+      "subject": "9 月の 1 局目で最も長く考えた 1 手の考慮時間",
+      "value": 96,
+      "unit": "秒",
+      "modifiers": {
+        "population": "9 月の 1 局目の 1 局",
+        "time_range": "9 月の 1 局目",
+        "normalization": null
+      },
+      "evidence_pointer": null
+    },
+    {
+      "claim_id": "c15",
+      "span": [
+        584,
+        610
+      ],
+      "form": "direct_value",
+      "subject": "10 月の 1 局目で最も長く考えた 1 手の考慮時間",
+      "value": 96,
+      "unit": "秒",
+      "modifiers": {
+        "population": "10 月の 1 局目の 1 局",
+        "time_range": "10 月の 1 局目",
+        "normalization": null
+      },
+      "evidence_pointer": null
+    }
+  ],
+  "expected_uncovered_number_sentences": [
+    "ある手が「一致」かどうかは、エンジンが挙げた上位 3 手に入っているかで判定しました。",
+    "長考の数え方は、1 手に 30 秒を超えたかどうかです。",
+    "30 秒という線は、今回の集計のために置いた仮の目安で、将棋のルールとは関係がありません。",
+    "局ごとの内訳は、この冊子の 12 ページからの表に入れました。"
+  ]
+}
