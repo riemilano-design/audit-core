@@ -8,6 +8,7 @@ import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import { checkInstructionExample, instructionExamplePaths, instructionExampleReport } from "./instructionExamples.js";
 import { packetRefPathProblems } from "./packetRef.js";
+import { FIXED_INSTRUCTION_SHA256 } from "./seatRun.js";
 
 function packet(over: { timeRows?: unknown[]; names?: unknown; aggregates?: unknown[] } = {}): Record<string, unknown> {
   return {
@@ -133,5 +134,27 @@ describe("指示文 v1.1 の実文", () => {
   });
   it("v1 の例は文法を通らない(v1.1 で直した理由。ここが緑に戻ったら v1 を見直す合図)", () => {
     expect(packetRefPathProblems("facts.time.bySpent[3].collapsed").length).toBe(1);
+  });
+});
+
+// S-8 (k): 下見(runSeats)の「例が実物の packet で引けない」エラーのうち、**文法**の半分だけは packet 無しで 0 円で測れる
+// (packetRefPathProblems が packet を読まないため)。**これは門の文法の半分だけを閉じる。実在(表の名前・欄名・行番号・
+// 値の空)は実物の packet が要るので下見に残る。この試験が緑でも下見は要る。**
+describe("表の 8 本(FIXED_INSTRUCTION_SHA256)の場所の例は、文法だけなら通る(実在は下見に残る)", () => {
+  // 既知の例外: 最古の v1(過去の run が使った版なので直さない)だけ、文法に合わない例が 2 本ある。他の 7 本は 0 本。
+  const KNOWN_GRAMMAR_FAILURES: Readonly<Record<string, number>> = {
+    "LLM_SEATS_INSTRUCTION_v1_2026-09-30.md": 2,
+  };
+
+  it("表の全キーについて、例の文法に合わないものの本数が既知の例外どおりである", () => {
+    const names = Object.keys(FIXED_INSTRUCTION_SHA256);
+    expect(names.length).toBe(8);
+    for (const name of names) {
+      const text = readFileSync(new URL(`../../../docs/${name}`, import.meta.url), "utf-8");
+      const paths = instructionExamplePaths(text);
+      const bad = paths.filter((path) => packetRefPathProblems(path).length > 0);
+      const expected = KNOWN_GRAMMAR_FAILURES[name] ?? 0;
+      expect(bad.length, `${name}: ${bad.join(", ")}`).toBe(expected);
+    }
   });
 });

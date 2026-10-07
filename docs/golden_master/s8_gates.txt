@@ -1,0 +1,35 @@
+# S-8 の門の計測(2026-10-07。司令塔が数を書く直前に 1 回ずつ回した)
+
+## 凍結 sha(3 周目。変わったのは seatRun.test.ts だけ)
+0f85c6503e266929b5569842563ef85cfae36c7d2fc77d2725cfd3a079dff2cd  docs/LLM_SEATS_INSTRUCTION_v1.5_2026-10-07.md
+1820b9f6416cdbaf16aae860543b317cae2e9fa55322fc8e3f9f18665f67b508  docs/LLM_SEATS_INTEGRATOR_INSTRUCTION_v1.1_2026-10-07.md
+6d1caad66b7c5951874c34c6935e41d2b3d86827d8877209875c7948a189a313  scripts/playtest/lib/instructionExamples.test.ts
+16b5f22d9b47932c8d16d8f457d227333fe185f84b462e1b742622d8e58215c8  scripts/playtest/lib/seatRun.test.ts
+6ea01d3c2b030d8b5638c0d152a2c0cc5344586076a390f9e99db91eeb050ba3  scripts/playtest/lib/seatRun.ts
+
+## npx vitest run scripts/playtest --exclude '**/.claude/worktrees/**'
+ Test Files  118 passed (118)
+      Tests  2387 passed (2387)
+
+## npm run typecheck:scripts(error TS。全部 scripts/playtest/out/ の生成物)
+   2 scripts/playtest/out/cond-draft/conds/c1_king_escapes_decrease.ts
+   2 scripts/playtest/out/cond-draft/conds/c2_king_escapes_decrease_under_reach.ts
+   2 scripts/playtest/out/cond-draft/conds/c3_king_escapes_decrease_with_capture.ts
+   2 scripts/playtest/out/cond-draft/conds/c4_gote_reach_on_own_king_zone_increase.ts
+   1 scripts/playtest/out/report-template-v6/inputs/sfens.ts
+   1 scripts/playtest/out/report5/sfens.ts
+
+## npx tsx scripts/playtest/goldenMasterCheck.ts --expect docs/golden_master/c5_expectation.json
+rc=0・差 0 件
+
+## 表の指示文 8 本の場所の例(文法だけ。packet は読まない)
+# 表の指示文 8 本の「場所の例」を文法だけで検める(packet は読まない)
+LLM_SEATS_INSTRUCTION_v1_2026-09-30.md: 例 2 本 / 文法に合わない 2 本 → facts.time.bySpent[3].collapsed, facts.recognition
+LLM_SEATS_INSTRUCTION_v1.1_2026-09-30.md: 例 5 本 / 文法に合わない 0 本
+LLM_SEATS_INSTRUCTION_v1.2_2026-10-01.md: 例 5 本 / 文法に合わない 0 本
+LLM_SEATS_INSTRUCTION_v1.3_2026-10-06.md: 例 5 本 / 文法に合わない 0 本
+LLM_SEATS_INSTRUCTION_v1.4_2026-10-06.md: 例 5 本 / 文法に合わない 0 本
+LLM_SEATS_INSTRUCTION_v1.5_2026-10-07.md: 例 6 本 / 文法に合わない 1 本 → facts.recognition.rows[n].gameId
+LLM_SEATS_INTEGRATOR_INSTRUCTION_v1_2026-09-30.md: 例 0 本 / 文法に合わない 0 本
+LLM_SEATS_INTEGRATOR_INSTRUCTION_v1.1_2026-10-07.md: 例 1 本 / 文法に合わない 1 本 → facts.recognition.rows
+合計 文法に合わない例: 4 本

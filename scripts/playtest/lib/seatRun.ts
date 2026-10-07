@@ -47,10 +47,12 @@ export const FIXED_INSTRUCTION_SHA256: Readonly<Record<string, string>> = {
   // v1.4(2026-10-06・S-4 §2.1(c1)): observations 0 件の書き方・itemId の形・最上位の鍵は 5 つだけ の 4 ブロックを変えた(他は 1 バイトも変えていない)
   "LLM_SEATS_INSTRUCTION_v1.4_2026-10-06.md": "8bd603efcc6ec4ae0c040becee2a126700ea520d8ad606a921d87bd4ba9e5774",
   // v1.5(2026-10-07・S-6 (c)): 局を符号で呼ぶときは facts.recognition.rows[n].gameId を観測に引く、の 1 ブロックを足した(版名の行以外は 1 バイトも変えていない)
-  "LLM_SEATS_INSTRUCTION_v1.5_2026-10-07.md": "0dd9ed25b0dfb7219e432cea2f319c973dc4dfac2f414b8c8d463c1cc029cec4",
+  // v1.5(2026-10-07・S-8 (i)): 例 facts.recognition.rows[n].gameId の添字が文法(\d+)に合わず下見で落ちたため [3] に直し、添字を置き換える旨の 1 文を足した(版は増やさず現物を直した)
+  "LLM_SEATS_INSTRUCTION_v1.5_2026-10-07.md": "0f85c6503e266929b5569842563ef85cfae36c7d2fc77d2725cfd3a079dff2cd",
   "LLM_SEATS_INTEGRATOR_INSTRUCTION_v1_2026-09-30.md": "5118a6949862a104942f6975191dd3d16b00ca834f18b4bba5807aeaf2d7d94a",
   // v1.1(2026-10-07・S-7 (g)): 束ねた項目がどれも観測を持たないときは packetRefs を空の配列にする・根を作らない の 1 ブロックを足した(版名の行以外は 1 バイトも変えていない)
-  "LLM_SEATS_INTEGRATOR_INSTRUCTION_v1.1_2026-10-07.md": "e6aba85e36b08c622b5a67c61b1b970f2daf9fef5992da11bf72a7686a3da61b",
+  // v1.1(2026-10-07・S-8 (j)): 否定の例 facts.recognition.rows が肯定の例と区別されず下見で落ちたため facts.<列>.<表> に直した(版は増やさず現物を直した)
+  "LLM_SEATS_INTEGRATOR_INSTRUCTION_v1.1_2026-10-07.md": "1820b9f6416cdbaf16aae860543b317cae2e9fa55322fc8e3f9f18665f67b508",
 };
 
 /** 指示文 1 本の sha を固定値と照合する。**表に無い名前も誤り**(固定していない文で席に聞かない) */
