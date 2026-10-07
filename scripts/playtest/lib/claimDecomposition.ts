@@ -9,9 +9,10 @@
 // - `coverageReport(doc)`: 被覆の測定(§4(d))。原文のうち「数が書いてあるのに、どの claim の span にも
 //   覆われていない文」を数える。
 // - `checkClaimDecomposition(doc)`: schema 照合(`loadClaimDecompositionSchema` + `validate`)と
-//   `decompositionProblems` の両方を必ず呼ぶ唯一の入口(独立監査 REVISE への対応)。呼び出し側がどちらか
-//   一方だけを呼んで schema 照合を省略できる経路を残さないため、将来この文書を検査するコードは
-//   `decompositionProblems` を直接呼ぶのではなくこちらを呼ぶ。
+//   `decompositionProblems` の両方を必ず呼ぶ唯一の入口(独立監査 REVISE への対応)。
+//   `decompositionProblems` はこのファイルの外へ export しない(D-2b-0 §2(a))。
+//   規約(コメント)ではなく構造で強制する ― 呼び出し側は `checkClaimDecomposition` の
+//   `decompositionProblems` 欄を読む以外に、この検査結果へ到達する経路が無い。
 //
 // 【このファイルが絶対にやらないこと】
 // - Claim が「正しいか」の判断(§3「正しさの判定は Core が行い、分解の正しさは独立に測る」)。
@@ -75,7 +76,7 @@ function spanRealityProblem(span: readonly [number, number], text: string): stri
  * span の門(計画 §4(b))。`doc` の `claims[]` を全部見て、見つかった問題を全部返す(1 件で止めない)。
  * `doc` は schema 照合を経ていない可能性がある値として扱う(防御的に型を確かめる)。
  */
-export function decompositionProblems(doc: unknown): string[] {
+function decompositionProblems(doc: unknown): string[] {
   const problems: string[] = [];
   if (!isRecord(doc)) {
     problems.push("doc がオブジェクトではない");
@@ -194,7 +195,7 @@ interface SentenceSpan {
  * 同じ取り決めに合わせる必要がある(そうしないと、この関数が返す sentence の境界と、独立に作られた正解
  * 集合の span の境界が食い違ったままになる)。
  */
-function splitIntoSentences(text: string): SentenceSpan[] {
+export function splitIntoSentences(text: string): SentenceSpan[] {
   const sentences: SentenceSpan[] = [];
   let start = 0;
   for (let i = 0; i < text.length; i++) {

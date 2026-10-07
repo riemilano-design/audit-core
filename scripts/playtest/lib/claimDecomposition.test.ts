@@ -5,7 +5,7 @@
 import { readdirSync, readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import { validate } from "./eventSchema.js";
-import { checkClaimDecomposition, coverageReport, decompositionProblems, loadClaimDecompositionSchema } from "./claimDecomposition.js";
+import { checkClaimDecomposition, coverageReport, loadClaimDecompositionSchema } from "./claimDecomposition.js";
 
 describe("claim-decomposition schema v0.1", () => {
   it("この検証器(lib/eventSchema.ts)が扱えるキーワードだけで書かれている(読み込みと照合が例外を投げない)", () => {
@@ -127,54 +127,54 @@ describe("decompositionProblems", () => {
       original_text: "売上は100億円だった。",
       claims: [baseClaim({ span: [3, 6] })], // "100" の 3 文字
     };
-    expect(decompositionProblems(doc)).toEqual([]);
+    expect(checkClaimDecomposition(doc).decompositionProblems).toEqual([]);
   });
 
   it("退化値: claims が空配列でも問題無し(0 件。空は失敗ではない)", () => {
     const doc = { schemaVersion: "0.1", original_text: "売上は100億円だった。", claims: [] };
-    expect(decompositionProblems(doc)).toEqual([]);
+    expect(checkClaimDecomposition(doc).decompositionProblems).toEqual([]);
   });
 
   it("退化値: original_text が空文字列で、claims も空なら問題無し", () => {
     const doc = { schemaVersion: "0.1", original_text: "", claims: [] };
-    expect(decompositionProblems(doc)).toEqual([]);
+    expect(checkClaimDecomposition(doc).decompositionProblems).toEqual([]);
   });
 
   it("退化値: span が [0, 0](空区間)は end<=start で落ちる(original_text は空でも非空でも)", () => {
     const doc1 = { schemaVersion: "0.1", original_text: "", claims: [baseClaim({ span: [0, 0] })] };
     const doc2 = { schemaVersion: "0.1", original_text: "abc", claims: [baseClaim({ span: [0, 0] })] };
-    expect(decompositionProblems(doc1).some((m) => m.includes("空か逆転している"))).toBe(true);
-    expect(decompositionProblems(doc2).some((m) => m.includes("空か逆転している"))).toBe(true);
+    expect(checkClaimDecomposition(doc1).decompositionProblems.some((m) => m.includes("空か逆転している"))).toBe(true);
+    expect(checkClaimDecomposition(doc2).decompositionProblems.some((m) => m.includes("空か逆転している"))).toBe(true);
   });
 
   it("span の end が start を下回る(逆転)は問題として出る", () => {
     const doc = { schemaVersion: "0.1", original_text: "abcdef", claims: [baseClaim({ span: [4, 2] })] };
-    expect(decompositionProblems(doc).some((m) => m.includes("逆転している"))).toBe(true);
+    expect(checkClaimDecomposition(doc).decompositionProblems.some((m) => m.includes("逆転している"))).toBe(true);
   });
 
   it("span の end が original_text の長さを超えると問題として出る(索引だけの比較で見つかる)", () => {
     const doc = { schemaVersion: "0.1", original_text: "abc", claims: [baseClaim({ span: [0, 10] })] };
-    expect(decompositionProblems(doc).some((m) => m.includes("長さ") && m.includes("超えている"))).toBe(true);
+    expect(checkClaimDecomposition(doc).decompositionProblems.some((m) => m.includes("長さ") && m.includes("超えている"))).toBe(true);
   });
 
   it("span の start が負だと問題として出る", () => {
     const doc = { schemaVersion: "0.1", original_text: "abc", claims: [baseClaim({ span: [-1, 2] })] };
-    expect(decompositionProblems(doc).some((m) => m.includes("start が負"))).toBe(true);
+    expect(checkClaimDecomposition(doc).decompositionProblems.some((m) => m.includes("start が負"))).toBe(true);
   });
 
   it("span の要素が整数でない(小数)と問題として出る(型だけの検査では見逃す例)", () => {
     const doc = { schemaVersion: "0.1", original_text: "abcdef", claims: [baseClaim({ span: [1.5, 3] })] };
-    expect(decompositionProblems(doc).some((m) => m.includes("整数ではない"))).toBe(true);
+    expect(checkClaimDecomposition(doc).decompositionProblems.some((m) => m.includes("整数ではない"))).toBe(true);
   });
 
   it("span が長さ 2 でない配列は問題として出る(長さ 1)", () => {
     const doc = { schemaVersion: "0.1", original_text: "abc", claims: [baseClaim({ span: [1] })] };
-    expect(decompositionProblems(doc).some((m) => m.includes("長さ 2 の配列ではない"))).toBe(true);
+    expect(checkClaimDecomposition(doc).decompositionProblems.some((m) => m.includes("長さ 2 の配列ではない"))).toBe(true);
   });
 
   it("span が長さ 2 でない配列は問題として出る(長さ 3)", () => {
     const doc = { schemaVersion: "0.1", original_text: "abcdef", claims: [baseClaim({ span: [1, 2, 3] })] };
-    expect(decompositionProblems(doc).some((m) => m.includes("長さ 2 の配列ではない"))).toBe(true);
+    expect(checkClaimDecomposition(doc).decompositionProblems.some((m) => m.includes("長さ 2 の配列ではない"))).toBe(true);
   });
 
   it("サロゲートペア(絵文字など)の内側を start/end が指すと問題として出る(索引の数字は範囲内でも内容が割れる例)", () => {
@@ -184,12 +184,12 @@ describe("decompositionProblems", () => {
     // start=1 はサロゲートペアの内側(high と low の間)を指す ― end=3 なら文字自体は壊れていないが、
     // start=2 なら low サロゲート単体を切り出すことになり壊れる。
     const docStart = { schemaVersion: "0.1", original_text: text, claims: [baseClaim({ span: [2, 4] })] };
-    expect(decompositionProblems(docStart).some((m) => m.includes("サロゲートペアの中"))).toBe(true);
+    expect(checkClaimDecomposition(docStart).decompositionProblems.some((m) => m.includes("サロゲートペアの中"))).toBe(true);
     const docEnd = { schemaVersion: "0.1", original_text: text, claims: [baseClaim({ span: [0, 2] })] };
-    expect(decompositionProblems(docEnd).some((m) => m.includes("サロゲートペアの中"))).toBe(true);
+    expect(checkClaimDecomposition(docEnd).decompositionProblems.some((m) => m.includes("サロゲートペアの中"))).toBe(true);
     // 境界を割らない span(絵文字を含めて丸ごと、または含めない)は問題無し。
     const docWhole = { schemaVersion: "0.1", original_text: text, claims: [baseClaim({ span: [1, 3] })] };
-    expect(decompositionProblems(docWhole)).toEqual([]);
+    expect(checkClaimDecomposition(docWhole).decompositionProblems).toEqual([]);
   });
 
   it("claim_id の重複は問題として出る", () => {
@@ -198,12 +198,12 @@ describe("decompositionProblems", () => {
       original_text: "abcdef",
       claims: [baseClaim({ claim_id: "dup", span: [0, 1] }), baseClaim({ claim_id: "dup", span: [1, 2] })],
     };
-    expect(decompositionProblems(doc).some((m) => m.includes('"dup"') && m.includes("重複"))).toBe(true);
+    expect(checkClaimDecomposition(doc).decompositionProblems.some((m) => m.includes('"dup"') && m.includes("重複"))).toBe(true);
   });
 
   it("claim_id が空文字列は問題として出る", () => {
     const doc = { schemaVersion: "0.1", original_text: "abc", claims: [baseClaim({ claim_id: "" })] };
-    expect(decompositionProblems(doc).some((m) => m.includes("claim_id が無い"))).toBe(true);
+    expect(checkClaimDecomposition(doc).decompositionProblems.some((m) => m.includes("claim_id が無い"))).toBe(true);
   });
 
   it("短絡しない: 2 件の claim がそれぞれ別の問題を持つとき、両方が報告される", () => {
@@ -212,29 +212,29 @@ describe("decompositionProblems", () => {
       original_text: "abcdef",
       claims: [baseClaim({ claim_id: "a", span: [-1, 1] }), baseClaim({ claim_id: "b", span: [0, 100] })],
     };
-    const problems = decompositionProblems(doc);
+    const problems = checkClaimDecomposition(doc).decompositionProblems;
     expect(problems.some((m) => m.startsWith("claims[0]:") && m.includes("start が負"))).toBe(true);
     expect(problems.some((m) => m.startsWith("claims[1]:") && m.includes("超えている"))).toBe(true);
     expect(problems.length).toBe(2);
   });
 
   it("doc がオブジェクトでないときは問題として出る(落ちない)", () => {
-    expect(decompositionProblems(null)).toEqual(["doc がオブジェクトではない"]);
-    expect(decompositionProblems("x")).toEqual(["doc がオブジェクトではない"]);
-    expect(decompositionProblems([])).toEqual(["doc がオブジェクトではない"]);
+    expect(checkClaimDecomposition(null).decompositionProblems).toEqual(["doc がオブジェクトではない"]);
+    expect(checkClaimDecomposition("x").decompositionProblems).toEqual(["doc がオブジェクトではない"]);
+    expect(checkClaimDecomposition([]).decompositionProblems).toEqual(["doc がオブジェクトではない"]);
   });
 
   it("original_text が文字列でないときは問題として出る", () => {
-    expect(decompositionProblems({ original_text: 1, claims: [] })).toEqual(["original_text が文字列ではない"]);
+    expect(checkClaimDecomposition({ original_text: 1, claims: [] }).decompositionProblems).toEqual(["original_text が文字列ではない"]);
   });
 
   it("claims が配列でないときは問題として出る", () => {
-    expect(decompositionProblems({ original_text: "x", claims: "not-array" })).toEqual(["claims が配列ではない"]);
+    expect(checkClaimDecomposition({ original_text: "x", claims: "not-array" }).decompositionProblems).toEqual(["claims が配列ではない"]);
   });
 
   it("claim がオブジェクトでないときは問題として出る(落ちない)", () => {
     const doc = { original_text: "x", claims: [null, 1, "x"] };
-    const problems = decompositionProblems(doc);
+    const problems = checkClaimDecomposition(doc).decompositionProblems;
     expect(problems.length).toBe(3);
     expect(problems.every((m) => m.includes("claim がオブジェクトではない"))).toBe(true);
   });
@@ -350,7 +350,7 @@ describe("coverageReport", () => {
       // end が original_text の長さを超えている(decompositionProblems で問題になる)不正な span。
       claims: [baseClaim({ span: [3, 999] })],
     };
-    expect(decompositionProblems(doc).length).toBeGreaterThan(0); // 前提: この span は門で落ちる
+    expect(checkClaimDecomposition(doc).decompositionProblems.length).toBeGreaterThan(0); // 前提: この span は門で落ちる
     const report = coverageReport(doc);
     expect(report.uncovered).toEqual([text]); // 門を通らない span は被覆として数えない
   });

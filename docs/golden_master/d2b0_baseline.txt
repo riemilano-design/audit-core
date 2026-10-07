@@ -1,0 +1,163 @@
+D-2b-0 §2(d) 基準線の実測(2026-10-07)
+計画: audit-core/docs/CLAIM_DECOMPOSITION_D2B0_PLAN_2026-10-07.md
+分解器: scripts/playtest/lib/decompositionBaseline.ts(baselineDecompose。規則ベース、LLM 呼び出し 0 回)
+照合器: scripts/playtest/lib/decompositionCompare.ts(compareClaimDecomposition)
+正解集合: scripts/playtest/fixtures/decomposition/gold_01.json 〜 gold_04.json(1 バイトも変更していない)
+費用: 0.00 USD(LLM の API を 1 回も呼んでいない)
+
+== gold_01.json ==
+  expected claims: 9, actual(baseline) claims: 12
+  span: intersection=0 expectedOnly=9 actualOnly=12
+  spanMatchedCount: 0
+  valueMatchCount: 0
+  formMatchCount: 0
+  formBreakdown: {}
+  uncovered: intersection=0 expectedOnly=3 actualOnly=6
+    uncovered.intersection: []
+    uncovered.expectedOnly: ["ここからは、観測項目 M4(攻めの速さ)の数だけを並べます。","この冊子では、評価値の差が 300 点以上ひらいた局面を「分かれ道」と呼びます。","手数は、投了までの指し手の総数を 1 手単位で数えたものです。"]
+    uncovered.actualOnly: ["分かれ道が 3 回以上あった局は、20 局のうち 6 局でした。","前半 10 局と後半 10 局を比べると、平均手数の差は 16 手でした。","対局後診断レポート(抜粋)\n\n対象は、2026 年 9 月に指された 20 局です。","序盤で先に有利になった局は 20 局のうち 9 局でした。","最初の 10 局に限ると、有利になったのに負けた局は 5 局でした。","直近 20 局では、1 局あたりの平均手数は 84 手でした。"]
+
+== gold_02.json ==
+  expected claims: 9, actual(baseline) claims: 10
+  span: intersection=0 expectedOnly=9 actualOnly=10
+  spanMatchedCount: 0
+  valueMatchCount: 0
+  formMatchCount: 0
+  formBreakdown: {}
+  uncovered: intersection=1 expectedOnly=1 actualOnly=5
+    uncovered.intersection: ["区切りの決め方は 10 ページ目に、集計の手順は 12 ページ目に載せています。"]
+    uncovered.expectedOnly: ["この内訳の表は、左から 3 列目までが序盤の欄です。"]
+    uncovered.actualOnly: ["1 手あたりに使った時間の平均は、区切りの 30 秒を下回りました。","あわせて 18 回が、1 手に 30 秒以上かけた場面の合計です。","同じ形が続いた局面では、1 手に使った時間が、それ以外の局面の 2.4 倍でした。","序盤で 1 手に 30 秒以上かけた場面は 7 回、中盤では 11 回でした。","後手が同じ場所へ 2 回続けて駒を動かした局は、20 局のうち 4 局です。"]
+
+== gold_03.json ==
+  expected claims: 15, actual(baseline) claims: 18
+  span: intersection=0 expectedOnly=15 actualOnly=18
+  spanMatchedCount: 0
+  valueMatchCount: 0
+  formMatchCount: 0
+  formBreakdown: {}
+  uncovered: intersection=1 expectedOnly=3 actualOnly=13
+    uncovered.intersection: ["長考の数え方は、1 手に 30 秒を超えたかどうかです。"]
+    uncovered.expectedOnly: ["30 秒という線は、今回の集計のために置いた仮の目安で、将棋のルールとは関係がありません。","ある手が「一致」かどうかは、エンジンが挙げた上位 3 手に入っているかで判定しました。","局ごとの内訳は、この冊子の 12 ページからの表に入れました。"]
+    uncovered.actualOnly: ["10 月の 1 局目では、同じ値が 96 秒でした。","10 月の 20 局では 128 手でした。","10 月の 20 局では 48 手ありました。","10 月の後手番 10 局では、一致した手は 64 手でした。","2 か月を合わせると、一致した手は 240 手になります。","9 月の 1 局目で、最も長く考えた 1 手は 96 秒でした。","9 月の 20 局では 112 手でした。","9 月の 20 局では 64 手ありました。","9 月の 20 局では、1 手あたりの平均が 10 秒を超えていました。","9 月の後手番 10 局では、一致した手は 48 手でした。","今回の診断は、お預かりした棋譜のうち 9 月の 20 局と 10 月の 20 局を対象にしています。","同じ 10 月で、後手番 10 局だけに絞ると 21 手です。","後手番 10 局だけに限っても、同じ 9 月で 10 秒を超えていました。"]
+
+== gold_04.json ==
+  expected claims: 4, actual(baseline) claims: 13
+  span: intersection=0 expectedOnly=4 actualOnly=13
+  spanMatchedCount: 0
+  valueMatchCount: 0
+  formMatchCount: 0
+  formBreakdown: {}
+  uncovered: intersection=3 expectedOnly=6 actualOnly=3
+    uncovered.intersection: ["この冊子は、2026 年 9 月 18 日から 10 月 2 日までに記録された対局をもとに組み立てています。","観測項目 12「自玉側 3 マスへの着手」は、玉の周囲 3 マスの範囲に指した手を数える項目です。","観測項目 5 の定義は 21 ページを見てください。"]
+    uncovered.expectedOnly: ["1 つ目の観点は、分かれ道が現れるまでの手数です。","2 つ目の観点は、分かれ道の後に指した手が、攻め側と自玉側のどちらに寄っていたかです。","3 つ目の観点は、同じ形が別の局で繰り返し現れたかどうかです。","以下では、評価値が 300 点以上ひらいた局面を「分かれ道」と呼びます。","手数は 1 手単位で数えたものであり、両者の着手を合わせた通算の数です。","項目ごとの内訳は 14 ページの表に載せています。"]
+    uncovered.actualOnly: ["20 局のうち、分かれ道が現れた局は 7 局でした。","分かれ道が最も早く現れたのは 3 局目の 23 手目でした。","分かれ道の 7 局で、そこから 10 手以内に取る手を指した回数は 4 回でした。"]
+
+== 合計(gold 4 本) ==
+  expectedClaims: 37
+  actualClaims: 53
+  span: intersection=0 expectedOnly=37 actualOnly=53
+  valueMatchCount(合計): 0
+  formMatchCount(合計): 0
+  formBreakdown(合計): {}
+  uncovered: intersection=5 expectedOnly=13 actualOnly=27
+
+読み方の注記(実装担当):
+- span の交わりが 4 本すべてで 0 件。基準線の claim の span は「拾った数字そのものの位置」
+  (例: "100" の 3 文字)であり、正解集合の span は「その主張を述べる文・節全体」(例: gold_01 の note
+  「span は文そのものの区間」)である。**この 2 つは最初から比べる粒度が違う** ― 基準線がどれだけ
+  正しい数字を拾えていても、span が一致しない設計なので value 一致・form 一致は常に 0/0 になる
+  (spanMatchedCount が分母のため)。これは基準線の実装の誤りではなく、「素朴な規則」が claim の
+  範囲をどう決めるかという、計画の目安(「数のある文を1 claim として」)が確定していない点に起因する
+  ― 下で「思いついたが実装しなかった工夫」として報告する。
+- uncovered(被覆されない数字入りの文)は、この粒度の違いの影響を受けない(claim の span が原文の
+  どの数字トークンを覆っているかを coverageReport が独立に測るため)。この欄は意味のある実測値になっている:
+  実測の方が正解より uncovered が多い(actualOnly が 27 件)のは、基準線が項目名(M4)・閾値の定義
+  (300 点)・ページ番号などの「数字はあるが主張ではない文」も区別なく拾ってしまい、逆に 1 文に複数の
+  数字がある場合は 2 件目以降を無視するため、正解が claim にした文の一部を基準線が覆えていないことを示す。
+
+== 2 回目(司令塔の仕様の誤りを直した後。2026-10-07)==
+直した点: (1) claim の span を「文そのものの区間」にした(以前は「拾った数字の位置」だった ― 司令塔の
+仕様の誤り)。(2) span を文の区間にするにあたり `lib/claimDecomposition.ts` の `splitIntoSentences`
+を共有する(司令塔の判断: 文の切り方は共有してよい。測るのは「どの文が claim になるか」であって
+「文の切り方」ではない)。あわせて `splitIntoSentences` を export した(挙動は変えていない)。
+**1 回目の上の記録は書き換えていない。1 回目の採点の確定値はそのまま。これは「直した後にどうなるか」
+を別に記録したもの。**
+分解器: scripts/playtest/lib/decompositionBaseline.ts(baselineDecompose。splitIntoSentences 利用。
+LLM 呼び出し 0 回)
+照合器: scripts/playtest/lib/decompositionCompare.ts(compareClaimDecomposition。変更なし)
+正解集合: gold_01.json 〜 gold_04.json(1 バイトも変更していない。sha256 は作業前後で不変 ― 実装担当の
+報告 §7 を見る)
+費用: 0.00 USD
+
+== gold_01.json(2 回目) ==
+  expected claims: 9, actual(baseline) claims: 12
+  span: intersection=8 expectedOnly=1 actualOnly=4
+  spanMatchedCount: 8
+  valueMatchCount: 3
+  formMatchCount: 0
+  formBreakdown: {"derived_value":{"total":3,"matched":0},"aggregate":{"total":5,"matched":0}}
+  uncovered: intersection=0 expectedOnly=3 actualOnly=0
+    uncovered.intersection: []
+    uncovered.expectedOnly: ["ここからは、観測項目 M4(攻めの速さ)の数だけを並べます。","この冊子では、評価値の差が 300 点以上ひらいた局面を「分かれ道」と呼びます。","手数は、投了までの指し手の総数を 1 手単位で数えたものです。"]
+    uncovered.actualOnly: []
+
+== gold_02.json(2 回目) ==
+  expected claims: 9, actual(baseline) claims: 10
+  span: intersection=6 expectedOnly=3 actualOnly=4
+  spanMatchedCount: 6
+  valueMatchCount: 3
+  formMatchCount: 0
+  formBreakdown: {"derived_value":{"total":3,"matched":0},"aggregate":{"total":2,"matched":0},"threshold":{"total":1,"matched":0}}
+  uncovered: intersection=0 expectedOnly=2 actualOnly=0
+    uncovered.intersection: []
+    uncovered.expectedOnly: ["この内訳の表は、左から 3 列目までが序盤の欄です。","区切りの決め方は 10 ページ目に、集計の手順は 12 ページ目に載せています。"]
+    uncovered.actualOnly: []
+
+== gold_03.json(2 回目) ==
+  expected claims: 15, actual(baseline) claims: 18
+  span: intersection=14 expectedOnly=1 actualOnly=4
+  spanMatchedCount: 14
+  valueMatchCount: 1
+  formMatchCount: 2
+  formBreakdown: {"aggregate":{"total":8,"matched":0},"derived_value":{"total":2,"matched":0},"threshold":{"total":2,"matched":0},"direct_value":{"total":2,"matched":2}}
+  uncovered: intersection=0 expectedOnly=4 actualOnly=0
+    uncovered.intersection: []
+    uncovered.expectedOnly: ["30 秒という線は、今回の集計のために置いた仮の目安で、将棋のルールとは関係がありません。","ある手が「一致」かどうかは、エンジンが挙げた上位 3 手に入っているかで判定しました。","局ごとの内訳は、この冊子の 12 ページからの表に入れました。","長考の数え方は、1 手に 30 秒を超えたかどうかです。"]
+    uncovered.actualOnly: []
+
+== gold_04.json(2 回目) ==
+  expected claims: 4, actual(baseline) claims: 13
+  span: intersection=4 expectedOnly=0 actualOnly=9
+  spanMatchedCount: 4
+  valueMatchCount: 1
+  formMatchCount: 1
+  formBreakdown: {"aggregate":{"total":2,"matched":0},"derived_value":{"total":1,"matched":0},"direct_value":{"total":1,"matched":1}}
+  uncovered: intersection=0 expectedOnly=9 actualOnly=0
+    uncovered.intersection: []
+    uncovered.expectedOnly: ["1 つ目の観点は、分かれ道が現れるまでの手数です。","2 つ目の観点は、分かれ道の後に指した手が、攻め側と自玉側のどちらに寄っていたかです。","3 つ目の観点は、同じ形が別の局で繰り返し現れたかどうかです。","この冊子は、2026 年 9 月 18 日から 10 月 2 日までに記録された対局をもとに組み立てています。","以下では、評価値が 300 点以上ひらいた局面を「分かれ道」と呼びます。","手数は 1 手単位で数えたものであり、両者の着手を合わせた通算の数です。","観測項目 12「自玉側 3 マスへの着手」は、玉の周囲 3 マスの範囲に指した手を数える項目です。","観測項目 5 の定義は 21 ページを見てください。","項目ごとの内訳は 14 ページの表に載せています。"]
+    uncovered.actualOnly: []
+
+== 合計(gold 4 本、2 回目) ==
+  expectedClaims: 37
+  actualClaims: 53
+  span: intersection=32 expectedOnly=5 actualOnly=21
+  valueMatchCount(合計): 8
+  formMatchCount(合計): 3
+  formBreakdown(合計): {"derived_value":{"total":9,"matched":0},"aggregate":{"total":17,"matched":0},"threshold":{"total":3,"matched":0},"direct_value":{"total":3,"matched":3}}
+  uncovered: intersection=0 expectedOnly=18 actualOnly=0
+
+読み方の注記(実装担当・2 回目):
+- span の交わりが 37 件中 32 件に上がった(1 回目は 0 件)。残る expectedOnly=5 の主な原因は、
+  原文の先頭(見出し + 空行の直後、まだ 1 つ目の句点が現れていない部分)。`splitIntoSentences` は
+  句点でしか文を切らないため、1 つ目の句点より前の全体(見出し・空行を含む)が「1 つの文」として
+  扱われる。たとえば gold_01 の正解 c1 の span([15, 42])は見出し部分を含まない「対象は、…20 局です。」
+  だけを指すが、基準線の最初の claim の span は原文の先頭([0, 42])になり、見出しを含む分だけ長さが
+  違って一致しない。これは「原文の最初の文の前に見出しがある」という構造の話であり、句点の扱い
+  (直した箇所)とは別の既知の限界 ― 直さずに報告する(「賢くしない」決定どおり)。
+- uncovered.actualOnly が 4 本すべてで 0 件になった(1 回目は合計 27 件)。これは正しい改善ではなく、
+  span を文全体に広げたことの副作用: 1 文に複数の数字があっても、その文に 1 つでも claim ができれば
+  文全体が span で覆われ、同じ文の中の 2 件目以降の数字も(値としては無視していても)coverageReport
+  上は「覆われている」ことになる。したがって uncovered の基準で測ると基準線はほぼ何も見逃さなく
+  見えるが、これは claim の質(value や form の正しさ)とは無関係で、span の粒度を文単位にした
+  ことの形の上の結果である。
