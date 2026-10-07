@@ -202,3 +202,12 @@ H-12 は 0.5 未満なので skip、よって NG 0 ― **r5 の「H-12 NG 0」�
 2. `exitSelect --draft` の `--out` は scratchpad に向け、`out/c5/exit/` には書いていない。
 3. 証跡: [docs/golden_master/s5_real_run_stdout.txt](../../docs/golden_master/s5_real_run_stdout.txt)(下見・実 run・CLI 4 本・Golden。鍵は含まない)・[s5_real_run_compare.json](../../docs/golden_master/s5_real_run_compare.json)・[s5_real_run_answer_selection.draft.json](../../docs/golden_master/s5_real_run_answer_selection.draft.json)・[fixtures/shogi/s5_real_run_core.json](../fixtures/shogi/s5_real_run_core.json)。
 4. **営業の実証範囲はまだ更新しない**(人間の判断 (a)〜(c) の後)。今言えるのは「将棋側で、契約・描画・規則を直した状態で 2 席 + 整理役が 1 回そろって回り、観測 46 件が H-9 で全部 GROUNDED・Core と 46/46 一致した」まで。
+
+## §11 追記(2026-10-07・S-6 (a) の後) ― run の置き場が変わった
+
+この文書が `scripts/playtest/out/c5/llm-seats-s5/43f8b69c-20261007-1/` と書いている run は、**S-6 (a) で `scripts/playtest/out/c5/llm-seats/43f8b69c-20261007-1/` へ移した**(人間の「着手して」2026-10-07、計画 `CORE_CONNECTION_S6_PLAN_2026-10-07.md`、コミット `4188d31`)。
+
+- 移したのは run のディレクトリ 1 つだけ。`llm-seats-s5/` 直下の `pair_summary.json`・`seat_input.md`・`seat_input.meta.json` はその場に残っている。
+- 移す前の 15 ファイルの sha256 は `docs/golden_master/s6_move_files.sha`、移した後に `shasum -c` で全一致を確かめた。
+- §8 の「Golden c5 は rc=0 のまま(新 run は `llm-seats-s5/` で Golden は拾わない)」は**この時点で終わった**。移した直後の差は rc=1・25 件(`docs/golden_master/s6_move_golden_diff.txt`)で、その後 `--write` して現状を固定した。
+- §10.4 の発見 (A)(整理役の代表の版が `0.4` のまま)は Golden の `g9.integrationCheck` に 2 行として固定され、S-6 (b) で直す。発見 (B)(`gameId` の数字)は S-6 (c) の指示文 v1.5 で直す。
