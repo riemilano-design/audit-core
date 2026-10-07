@@ -1,7 +1,7 @@
 {
  "golden_master": "c5",
- "base_commit": "3a766cc",
- "note": "Audit Core T-1(docs/AUDIT_CORE_EXTRACTION_PLAN.md §5 G-2/G-8/G-9)。実物(scripts/playtest/out/c5)は git に無い。ここにあるのは入力の sha256・packet の封・門の判定・PDF の 3 つの数だけ。測り方・比べ方は scripts/playtest/goldenMasterCheck.ts(--expect で照合、--write で書き直し)。sha256 は「同じファイルか」を言うだけで、実行環境の決定論性を保証するものではない。PDF はバイト一致を求めない(/CreationDate が動く)― G-8 は compare_render.py --seal の意味比較。 2026-10-06 S-1(人間の決定): g9.hypothesisCheck の H-9/H-10/H-11 を packet つきで測るようにし、H-9 NG 8 件(VM 20・PNF 1)を「現状」として固定した。これは判定ではなく記録。書き直す前の 1 回目の差の一覧は docs/golden_master/s1_first_run_diff.txt、Core の経路との照合は同 s1_first_run_compare.json。 2026-10-06 S-2(人間の決定): g9.seatOutputCheck / integrationCheck にも packet を渡し、I-4 の H-9 行 17 件(6 束、VM 16・PNF 1)を「現状」として固定した。E-3 は 6 封筒とも封筒の schema(seal 欠落)で早期 return しており実物で走っていない。これは正しい状態の主張ではなく、次の S-3(実 run 1 周)と比べるための記録。差の一覧は docs/golden_master/s2_first_run_diff.txt、照合は同 s2_first_run_compare.json。 2026-10-07 S-4(人間の決定): 新しい検査 H-12(観測 0 件を kind で許す。版 0.5 以上だけ見る)を足したため、既存 6 封筒の 58 項目すべてで lines の末尾に「H-12 skip 未照合: schemaVersion が 0.5 未満(H-12 は 0.5 以上だけ見る)」の 1 行が増えた。**落ちてはいない(skip)が、行としては必ず現れる** ― この 1 行を現状として固定する。書き直す前の 1 回目の差の一覧は docs/golden_master/s4_first_run_golden_diff.txt(58 件)、照合は同 s4_first_run_compare.json、Core の経路は audit-core/fixtures/shogi/s4_first_run_core.json。skip の行を Golden から落とさない理由: S-1 で見つけた穴(H-9 が packet 無しで黙って skip していた)は、まさにこの行が在ることで見える。正しい状態の主張ではなく、次の S-5(H-1 の覆い・H-3 の kind 免除)と比べるための記録。 2026-10-07 S-5(人間の決定): H-1 の覆い(検証済みの文字列 = 観測の値そのものが文にそのまま出ている所の内側の数字を、文の中の数として数えない)と H-3 の kind 免除(unanswerable・needed_observation は counterEvidence.attempted を求めない。action_candidate は免除しない)を入れた。差 38 件の内訳: g9.hypothesisCheck の 5 項目で H-1/H-3 の行が NG → ok(0f1b/gpt items[5]・268d/claude items[4]・52ae/claude items[9]・558b/claude items[3]・558b/gpt items[5])、g9.integrationCheck の problems が 3 周で 1 本ずつ減った(3→2・17→16・22→21。消えたのは上の 5 項目のうち束の代表になっていた 3 項目の反射で、増えた行は 0。f375 は変化なし)。status/return_code は 6 封筒とも不変。書き直す前の差の一覧は docs/golden_master/s5_zero_cost_golden_diff.txt(38 件の全文)、0 円の計測 3 便分は同 s5_zero_cost_stdout.txt。**この 38 件は「意味の上の効き目 5 項目」が記録の 2 つの面に射影された結果**で、予測は 5 件と書いて外した(同じ型 4 回目。結果文書 §3)。正しい状態の主張ではなく、次の段と比べるための記録。",
+ "base_commit": "d8c9ae5",
+ "note": "Audit Core T-1(docs/AUDIT_CORE_EXTRACTION_PLAN.md §5 G-2/G-8/G-9)。実物(scripts/playtest/out/c5)は git に無い。ここにあるのは入力の sha256・packet の封・門の判定・PDF の 3 つの数だけ。測り方・比べ方は scripts/playtest/goldenMasterCheck.ts(--expect で照合、--write で書き直し)。sha256 は「同じファイルか」を言うだけで、実行環境の決定論性を保証するものではない。PDF はバイト一致を求めない(/CreationDate が動く)― G-8 は compare_render.py --seal の意味比較。 2026-10-06 S-1(人間の決定): g9.hypothesisCheck の H-9/H-10/H-11 を packet つきで測るようにし、H-9 NG 8 件(VM 20・PNF 1)を「現状」として固定した。これは判定ではなく記録。書き直す前の 1 回目の差の一覧は docs/golden_master/s1_first_run_diff.txt、Core の経路との照合は同 s1_first_run_compare.json。 2026-10-06 S-2(人間の決定): g9.seatOutputCheck / integrationCheck にも packet を渡し、I-4 の H-9 行 17 件(6 束、VM 16・PNF 1)を「現状」として固定した。E-3 は 6 封筒とも封筒の schema(seal 欠落)で早期 return しており実物で走っていない。これは正しい状態の主張ではなく、次の S-3(実 run 1 周)と比べるための記録。差の一覧は docs/golden_master/s2_first_run_diff.txt、照合は同 s2_first_run_compare.json。 2026-10-07 S-4(人間の決定): 新しい検査 H-12(観測 0 件を kind で許す。版 0.5 以上だけ見る)を足したため、既存 6 封筒の 58 項目すべてで lines の末尾に「H-12 skip 未照合: schemaVersion が 0.5 未満(H-12 は 0.5 以上だけ見る)」の 1 行が増えた。**落ちてはいない(skip)が、行としては必ず現れる** ― この 1 行を現状として固定する。書き直す前の 1 回目の差の一覧は docs/golden_master/s4_first_run_golden_diff.txt(58 件)、照合は同 s4_first_run_compare.json、Core の経路は audit-core/fixtures/shogi/s4_first_run_core.json。skip の行を Golden から落とさない理由: S-1 で見つけた穴(H-9 が packet 無しで黙って skip していた)は、まさにこの行が在ることで見える。正しい状態の主張ではなく、次の S-5(H-1 の覆い・H-3 の kind 免除)と比べるための記録。 2026-10-07 S-5(人間の決定): H-1 の覆い(検証済みの文字列 = 観測の値そのものが文にそのまま出ている所の内側の数字を、文の中の数として数えない)と H-3 の kind 免除(unanswerable・needed_observation は counterEvidence.attempted を求めない。action_candidate は免除しない)を入れた。差 38 件の内訳: g9.hypothesisCheck の 5 項目で H-1/H-3 の行が NG → ok(0f1b/gpt items[5]・268d/claude items[4]・52ae/claude items[9]・558b/claude items[3]・558b/gpt items[5])、g9.integrationCheck の problems が 3 周で 1 本ずつ減った(3→2・17→16・22→21。消えたのは上の 5 項目のうち束の代表になっていた 3 項目の反射で、増えた行は 0。f375 は変化なし)。status/return_code は 6 封筒とも不変。書き直す前の差の一覧は docs/golden_master/s5_zero_cost_golden_diff.txt(38 件の全文)、0 円の計測 3 便分は同 s5_zero_cost_stdout.txt。**この 38 件は「意味の上の効き目 5 項目」が記録の 2 つの面に射影された結果**で、予測は 5 件と書いて外した(同じ型 4 回目。結果文書 §3)。正しい状態の主張ではなく、次の段と比べるための記録。 2026-10-07 S-6(人間の「着手して」): 実 run 43f8b69c-20261007-1 を llm-seats-s5/ から llm-seats/ へ移し、この記録をその run を含む現状で固定した。**移す前に --write なしで 1 回測り**、rc=1・差 25 件(identity 5 / seat_runs 15 / g9 5)を docs/golden_master/s6_move_golden_diff.txt に残してから書き直した。移した 15 ファイルの sha256 は同 s6_move_files.sha。この run で初めて E-3 が実際に回った(封が 12/12 揃っているため。gpt 4 行・claude 8 行)。integrationCheck の 15 行のうち C-007・C-008 の representative の schema NG 2 行は、整理役が書く代表の版が 0.4 に据え置かれているために出ているもので、S-6 (b) で直す。これは正しい状態の主張ではなく記録である。",
  "inputs": {
   "customer_dir": "scripts/playtest/out/c5",
   "packet": "packet/observation-packet.json",
@@ -137,6 +137,26 @@
    "sha256": "9d8fc179fc2aa1affaba07c6f5d72aef133a95c3d257f22dd81583c3b9966ad5",
    "bytes": 3779
   },
+  "scripts/playtest/out/c5/llm-seats/43f8b69c-20261007-1/integration.json": {
+   "sha256": "56bfab99c80a082ac75cebbea9c0c39e8fc7d7042f439a71c45f78fdd052ef7a",
+   "bytes": 34723
+  },
+  "scripts/playtest/out/c5/llm-seats/43f8b69c-20261007-1/integration_input.json": {
+   "sha256": "f09f6e3baf2c882bffa5719ed23fb3dfe39b92efdb29d607d8e93a394a61f72e",
+   "bytes": 47296
+  },
+  "scripts/playtest/out/c5/llm-seats/43f8b69c-20261007-1/seat_claude.json": {
+   "sha256": "d6cf93a27f7d0b38327b6bcd32c1206627c015b8ffd12a896380e64706f7fa31",
+   "bytes": 28577
+  },
+  "scripts/playtest/out/c5/llm-seats/43f8b69c-20261007-1/seat_gpt.json": {
+   "sha256": "20c4fad2e2c39dc2be3dbc4a860689c775d79b747f1ba8f39507efb744719f0c",
+   "bytes": 23036
+  },
+  "scripts/playtest/out/c5/llm-seats/43f8b69c-20261007-1/seat_input.meta.json": {
+   "sha256": "7966b4803431ab5164fbf1d9d955ffb8ee0602809e85b4402287c44e7c160a3b",
+   "bytes": 4326
+  },
   "scripts/playtest/out/c5/llm-seats/52ae3745-20261001-1/seat_claude.json": {
    "sha256": "974e1383e19a2d7190cd64b92fff2022b323861c08c39d8c2cde64bf74e50f2e",
    "bytes": 37140
@@ -243,6 +263,15 @@
    "today": "2026-09-30",
    "seat_files": [
     "seat_claude.json"
+   ],
+   "integration": true
+  },
+  {
+   "run_id": "43f8b69c-20261007-1",
+   "today": "2026-10-07",
+   "seat_files": [
+    "seat_claude.json",
+    "seat_gpt.json"
    ],
    "integration": true
   },
@@ -655,6 +684,288 @@
        "H-10 ok",
        "H-11 ok",
        "H-12 skip 未照合: schemaVersion が 0.5 未満(H-12 は 0.5 以上だけ見る)"
+      ]
+     }
+    ]
+   },
+   "43f8b69c-20261007-1/seat_claude.json": {
+    "status": "fail",
+    "return_code": 1,
+    "items": [
+     {
+      "hypothesis_id": "H-c5-claude43f8-001",
+      "lines": [
+       "schema ok",
+       "H-1 NG counterEvidence.items[0].text: 数「25」が observations の値に無い",
+       "H-2 ok",
+       "H-3 ok",
+       "H-4 ok",
+       "H-5 ok",
+       "H-6 ok",
+       "H-7 ok",
+       "H-8 ok",
+       "H-9 ok",
+       "H-10 ok",
+       "H-11 ok",
+       "H-12 ok"
+      ]
+     },
+     {
+      "hypothesis_id": "H-c5-claude43f8-002",
+      "lines": [
+       "schema ok",
+       "H-1 ok",
+       "H-2 ok",
+       "H-3 ok",
+       "H-4 ok",
+       "H-5 ok",
+       "H-6 ok",
+       "H-7 ok",
+       "H-8 ok",
+       "H-9 ok",
+       "H-10 ok",
+       "H-11 ok",
+       "H-12 ok"
+      ]
+     },
+     {
+      "hypothesis_id": "H-c5-claude43f8-003",
+      "lines": [
+       "schema ok",
+       "H-1 ok",
+       "H-2 ok",
+       "H-3 ok",
+       "H-4 ok",
+       "H-5 ok",
+       "H-6 ok",
+       "H-7 ok",
+       "H-8 ok",
+       "H-9 ok",
+       "H-10 ok",
+       "H-11 ok",
+       "H-12 ok"
+      ]
+     },
+     {
+      "hypothesis_id": "H-c5-claude43f8-004",
+      "lines": [
+       "schema ok",
+       "H-1 ok",
+       "H-2 ok",
+       "H-3 ok",
+       "H-4 ok",
+       "H-5 ok",
+       "H-6 ok",
+       "H-7 ok",
+       "H-8 ok",
+       "H-9 ok",
+       "H-10 ok",
+       "H-11 ok",
+       "H-12 ok"
+      ]
+     },
+     {
+      "hypothesis_id": "H-c5-claude43f8-005",
+      "lines": [
+       "schema ok",
+       "H-1 NG statement: 数「4」が observations の値に無い / statement: 数「04」が observations の値に無い / statement: 数「17」が observations の値に無い / statement: 数「13」が observations の値に無い / statement: 数「24」が observations の値に無い / counterEvidence.items[0].text: 数「22」が observations の値に無い / counterEvidence.items[0].text: 数「20」が observations の値に無い",
+       "H-2 ok",
+       "H-3 ok",
+       "H-4 ok",
+       "H-5 ok",
+       "H-6 ok",
+       "H-7 ok",
+       "H-8 ok",
+       "H-9 ok",
+       "H-10 ok",
+       "H-11 ok",
+       "  (報告) statement: 名前「英ちゃん流中飛車」に承認済みの定義が無い(顧客に出すなら「〜のような形」か群の呼び名に落とす)",
+       "  (報告) statement: 名前「5筋位取り中飛車」に承認済みの定義が無い(顧客に出すなら「〜のような形」か群の呼び名に落とす)",
+       "  (報告) statement: 名前「角換わり腰掛け銀」に承認済みの定義が無い(顧客に出すなら「〜のような形」か群の呼び名に落とす)",
+       "  (報告) statement: 名前「忍者銀」に承認済みの定義が無い(顧客に出すなら「〜のような形」か群の呼び名に落とす)",
+       "  (報告) statement: 名前「早繰り銀」に承認済みの定義が無い(顧客に出すなら「〜のような形」か群の呼び名に落とす)",
+       "  (報告) statement: 名前「4六銀左戦法」に承認済みの定義が無い(顧客に出すなら「〜のような形」か群の呼び名に落とす)",
+       "  (報告) counterEvidence.items[0].text: 名前「角換わり腰掛け銀」に承認済みの定義が無い(顧客に出すなら「〜のような形」か群の呼び名に落とす)",
+       "  (報告) counterEvidence.items[0].text: 名前「早繰り銀」に承認済みの定義が無い(顧客に出すなら「〜のような形」か群の呼び名に落とす)",
+       "  (報告) counterEvidence.items[0].text: 名前「4六銀左戦法」に承認済みの定義が無い(顧客に出すなら「〜のような形」か群の呼び名に落とす)",
+       "H-12 ok"
+      ]
+     },
+     {
+      "hypothesis_id": "H-c5-claude43f8-006",
+      "lines": [
+       "schema ok",
+       "H-1 ok",
+       "H-2 ok",
+       "H-3 ok",
+       "H-4 ok",
+       "H-5 ok",
+       "H-6 ok",
+       "H-7 ok",
+       "H-8 ok",
+       "H-9 ok",
+       "H-10 ok",
+       "H-11 ok",
+       "H-12 ok"
+      ]
+     },
+     {
+      "hypothesis_id": "H-c5-claude43f8-007",
+      "lines": [
+       "schema ok",
+       "H-1 ok",
+       "H-2 ok",
+       "H-3 ok",
+       "H-4 ok",
+       "H-5 ok",
+       "H-6 ok",
+       "H-7 ok",
+       "H-8 ok",
+       "H-9 ok",
+       "H-10 ok",
+       "H-11 ok",
+       "H-12 ok"
+      ]
+     },
+     {
+      "hypothesis_id": "H-c5-claude43f8-008",
+      "lines": [
+       "schema ok",
+       "H-1 ok",
+       "H-2 ok",
+       "H-3 ok",
+       "H-4 ok",
+       "H-5 ok",
+       "H-6 ok",
+       "H-7 ok",
+       "H-8 ok",
+       "H-9 ok",
+       "H-10 ok",
+       "H-11 ok",
+       "H-12 ok"
+      ]
+     }
+    ]
+   },
+   "43f8b69c-20261007-1/seat_gpt.json": {
+    "status": "fail",
+    "return_code": 1,
+    "items": [
+     {
+      "hypothesis_id": "H-c5-gpt43f8-001",
+      "lines": [
+       "schema ok",
+       "H-1 ok",
+       "H-2 ok",
+       "H-3 NG counterEvidence.attempted が true でない",
+       "H-4 ok",
+       "H-5 ok",
+       "H-6 ok",
+       "H-7 ok",
+       "H-8 ok",
+       "H-9 ok",
+       "H-10 ok",
+       "H-11 ok",
+       "H-12 ok"
+      ]
+     },
+     {
+      "hypothesis_id": "H-c5-gpt43f8-002",
+      "lines": [
+       "schema ok",
+       "H-1 ok",
+       "H-2 ok",
+       "H-3 ok",
+       "H-4 ok",
+       "H-5 ok",
+       "H-6 ok",
+       "H-7 ok",
+       "H-8 ok",
+       "H-9 ok",
+       "H-10 ok",
+       "H-11 ok",
+       "H-12 ok"
+      ]
+     },
+     {
+      "hypothesis_id": "H-c5-gpt43f8-003",
+      "lines": [
+       "schema ok",
+       "H-1 ok",
+       "H-2 ok",
+       "H-3 ok",
+       "H-4 ok",
+       "H-5 ok",
+       "H-6 ok",
+       "H-7 ok",
+       "H-8 ok",
+       "H-9 ok",
+       "H-10 ok",
+       "H-11 ok",
+       "H-12 ok"
+      ]
+     },
+     {
+      "hypothesis_id": "H-c5-gpt43f8-004",
+      "lines": [
+       "schema ok",
+       "H-1 ok",
+       "H-2 ok",
+       "H-3 NG counterEvidence.attempted が true でない",
+       "H-4 ok",
+       "H-5 ok",
+       "H-6 ok",
+       "H-7 ok",
+       "H-8 ok",
+       "H-9 ok",
+       "H-10 ok",
+       "H-11 ok",
+       "  (報告) statement: 名前「英ちゃん流中飛車」に承認済みの定義が無い(顧客に出すなら「〜のような形」か群の呼び名に落とす)",
+       "  (報告) statement: 名前「5筋位取り中飛車」に承認済みの定義が無い(顧客に出すなら「〜のような形」か群の呼び名に落とす)",
+       "  (報告) statement: 名前「角換わり腰掛け銀」に承認済みの定義が無い(顧客に出すなら「〜のような形」か群の呼び名に落とす)",
+       "  (報告) statement: 名前「忍者銀」に承認済みの定義が無い(顧客に出すなら「〜のような形」か群の呼び名に落とす)",
+       "  (報告) statement: 名前「英ちゃん流中飛車」に承認済みの定義が無い(顧客に出すなら「〜のような形」か群の呼び名に落とす)",
+       "  (報告) statement: 名前「5筋位取り中飛車」に承認済みの定義が無い(顧客に出すなら「〜のような形」か群の呼び名に落とす)",
+       "  (報告) statement: 名前「角換わり腰掛け銀」に承認済みの定義が無い(顧客に出すなら「〜のような形」か群の呼び名に落とす)",
+       "  (報告) statement: 名前「早繰り銀」に承認済みの定義が無い(顧客に出すなら「〜のような形」か群の呼び名に落とす)",
+       "  (報告) statement: 名前「4六銀左戦法」に承認済みの定義が無い(顧客に出すなら「〜のような形」か群の呼び名に落とす)",
+       "H-12 ok"
+      ]
+     },
+     {
+      "hypothesis_id": "H-c5-gpt43f8-005",
+      "lines": [
+       "schema ok",
+       "H-1 ok",
+       "H-2 ok",
+       "H-3 ok",
+       "H-4 ok",
+       "H-5 ok",
+       "H-6 ok",
+       "H-7 ok",
+       "H-8 ok",
+       "H-9 ok",
+       "H-10 ok",
+       "H-11 ok",
+       "H-12 ok"
+      ]
+     },
+     {
+      "hypothesis_id": "H-c5-gpt43f8-006",
+      "lines": [
+       "schema ok",
+       "H-1 ok",
+       "H-2 ok",
+       "H-3 ok",
+       "H-4 ok",
+       "H-5 NG statement が「という読みです」「可能性があります」の形でない",
+       "H-6 ok",
+       "H-7 ok",
+       "H-8 ok",
+       "H-9 ok",
+       "H-10 ok",
+       "H-11 ok",
+       "H-12 ok"
       ]
      }
     ]
@@ -1462,6 +1773,30 @@
      "schema: $.reach.sections[12]: 必須の欄「seal」が無い"
     ]
    },
+   "43f8b69c-20261007-1/seat_claude.json": {
+    "status": "fail",
+    "return_code": 1,
+    "problems": [
+     "E-3: items[0] H-1: counterEvidence.items[0].text: 数「25」が observations の値に無い",
+     "E-3: items[4] H-1: statement: 数「4」が observations の値に無い",
+     "E-3: items[4] H-1: statement: 数「04」が observations の値に無い",
+     "E-3: items[4] H-1: statement: 数「17」が observations の値に無い",
+     "E-3: items[4] H-1: statement: 数「13」が observations の値に無い",
+     "E-3: items[4] H-1: statement: 数「24」が observations の値に無い",
+     "E-3: items[4] H-1: counterEvidence.items[0].text: 数「22」が observations の値に無い",
+     "E-3: items[4] H-1: counterEvidence.items[0].text: 数「20」が observations の値に無い"
+    ]
+   },
+   "43f8b69c-20261007-1/seat_gpt.json": {
+    "status": "fail",
+    "return_code": 1,
+    "problems": [
+     "E-3: items[0] H-3: counterEvidence.attempted が true でない",
+     "E-3: items[3] H-3: counterEvidence.attempted が true でない",
+     "E-3: items[5] H-5: statement が「という読みです」「可能性があります」の形でない",
+     "E-5: selfComputedNumbers[2] の値「0」が statement / answers の文に出ている(隔離欄の数を文に持ち込まない)"
+    ]
+   },
    "52ae3745-20261001-1/seat_claude.json": {
     "status": "fail",
     "return_code": 1,
@@ -1565,6 +1900,27 @@
      "I-4: C-011 の representative H-1: statement: 数「12」が observations の値に無い",
      "I-4: C-011 の representative H-1: counterEvidence.items[0].text: 数「18」が observations の値に無い",
      "I-3: heldBack[2] の理由が一致の数を参照している(seatCount は理由にしない)"
+    ]
+   },
+   "43f8b69c-20261007-1": {
+    "status": "fail",
+    "return_code": 1,
+    "problems": [
+     "I-4: C-001 の representative H-1: counterEvidence.items[0].text: 数「25」が observations の値に無い",
+     "I-4: C-005 の representative H-1: statement: 数「4」が observations の値に無い",
+     "I-4: C-005 の representative H-1: statement: 数「3」が observations の値に無い",
+     "I-4: C-005 の representative H-1: statement: 数「16」が observations の値に無い",
+     "I-4: C-005 の representative H-1: statement: 数「12」が observations の値に無い",
+     "I-4: C-005 の representative H-1: statement: 数「23」が observations の値に無い",
+     "I-4: C-005 の representative H-1: counterEvidence.items[0].text: 数「21」が observations の値に無い",
+     "I-4: C-005 の representative H-1: counterEvidence.items[0].text: 数「19」が observations の値に無い",
+     "I-2: C-007 の packetRefs: packetRef.path「facts.recognition.rows」が文法(aggregates.<id>.numerator|denominator|value / facts.<列>[添字].欄名)に合わない",
+     "I-2: C-007 の成員「1:I-1-007」が束の根(facts.recognition.rows)を根拠に持たない",
+     "I-2: C-007 の成員「2:I-2-006」が束の根(facts.recognition.rows)を根拠に持たない",
+     "I-4: C-007 の representative schema: $.observations: 要素が 0 個で、1 個に足りない",
+     "I-2: C-008 の成員「1:I-1-008」が束の根(aggregates.branches.total.value, aggregates.longThink.total.value)を根拠に持たない",
+     "I-4: C-008 の representative schema: $.observations: 要素が 0 個で、1 個に足りない",
+     "I-6: selfComputedNumbers[5] の値「0」が代表の文・矛盾・注に出ている"
     ]
    },
    "558b8a81-20261001-2": {

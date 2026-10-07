@@ -1,0 +1,26 @@
+★期待値と違う(25 件):
+- identity.scripts/playtest/out/c5/llm-seats/43f8b69c-20261007-1/integration.json: 期待に無い
+- identity.scripts/playtest/out/c5/llm-seats/43f8b69c-20261007-1/integration_input.json: 期待に無い
+- identity.scripts/playtest/out/c5/llm-seats/43f8b69c-20261007-1/seat_claude.json: 期待に無い
+- identity.scripts/playtest/out/c5/llm-seats/43f8b69c-20261007-1/seat_gpt.json: 期待に無い
+- identity.scripts/playtest/out/c5/llm-seats/43f8b69c-20261007-1/seat_input.meta.json: 期待に無い
+- seat_runs: 長さ 期待 7 / 実測 8
+- seat_runs[3].run_id: 期待 "52ae3745-20261001-1" / 実測 "43f8b69c-20261007-1"
+- seat_runs[3].today: 期待 "2026-10-01" / 実測 "2026-10-07"
+- seat_runs[3].seat_files: 長さ 期待 1 / 実測 2
+- seat_runs[3].integration: 期待 false / 実測 true
+- seat_runs[4].run_id: 期待 "558b8a81-20261001-2" / 実測 "52ae3745-20261001-1"
+- seat_runs[4].seat_files: 長さ 期待 2 / 実測 1
+- seat_runs[4].integration: 期待 true / 実測 false
+- seat_runs[5].run_id: 期待 "b3d860a7-20260930-1" / 実測 "558b8a81-20261001-2"
+- seat_runs[5].today: 期待 "2026-09-30" / 実測 "2026-10-01"
+- seat_runs[5].seat_files: 長さ 期待 0 / 実測 2
+- seat_runs[5].integration: 期待 false / 実測 true
+- seat_runs[6].run_id: 期待 "f37561e1-20260930-2" / 実測 "b3d860a7-20260930-1"
+- seat_runs[6].seat_files: 長さ 期待 1 / 実測 0
+- seat_runs[6].integration: 期待 true / 実測 false
+- g9.hypothesisCheck.43f8b69c-20261007-1/seat_claude.json: 期待に無い
+- g9.hypothesisCheck.43f8b69c-20261007-1/seat_gpt.json: 期待に無い
+- g9.seatOutputCheck.43f8b69c-20261007-1/seat_claude.json: 期待に無い
+- g9.seatOutputCheck.43f8b69c-20261007-1/seat_gpt.json: 期待に無い
+- g9.integrationCheck.43f8b69c-20261007-1: 期待に無い
