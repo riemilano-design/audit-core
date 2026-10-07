@@ -5,7 +5,7 @@
 // 【要点 3】429・5xx・接続の失敗は 1・4・16 秒で再送し、4 回目で諦めること(sleep は差し替えて待たない)。
 import { describe, expect, it } from "vitest";
 import { redactSecrets } from "./env.js";
-import { HTTP_ATTEMPT_TIMEOUT_MS, LlmHttpError, SENDS_TEMPERATURE, callStructured, countTokens, parseStructuredResponse, type ClientDeps, type StructuredRequest } from "./llmClient.js";
+import { HTTP_ATTEMPT_TIMEOUT_MS, LlmHttpError, LlmTimeoutError, SENDS_TEMPERATURE, callStructured, countTokens, parseStructuredResponse, type ClientDeps, type StructuredRequest } from "./llmClient.js";
 
 const KEY = "sk-test-0123456789abcdefKEYVALUE";
 const SCHEMA = { type: "object", properties: { a: { type: "number" } }, required: ["a"], additionalProperties: false } as const;
@@ -191,7 +191,12 @@ describe("所要の上限(S-5 §2.1(f))", () => {
     expect((calls[0]!.init.signal as AbortSignal).aborted).toBe(false);
   });
 
-  it("時間切れ(AbortSignal の中断)は接続の失敗と同じ扱いで再送し、4 回目で諦める", async () => {
+  // 【契約の更新】この試験が守っていた S-5 §2.1(f) の契約(「中断は接続の失敗と同じ扱いで再送し、
+  // 4 回目で諦める」)は、2026-10-08 の人間の決定(audit-core/docs/CLAIM_DECOMPOSITION_D2B1_PLAN_2026-10-08.md
+  // §3(b))で更新された ― 中断の時点で生成はおそらく完了して課金された可能性が高いので、再送すると
+  // 同じ仕事に 2 回払うことになる。消さずに、新しい契約(「中断は再送せず 1 回で LlmTimeoutError を
+  // 投げる」)を主張する形に書き換える(消すと挙動が変わった理由が読めなくなる)。
+  it("時間切れ(AbortSignal の中断)は再送せず、1 回で LlmTimeoutError を投げる(旧契約 S-5 §2.1(f) は D-2b-1 §3(b) で更新された)", async () => {
     // attemptTimeoutMs を 0 に上書き(実物の AbortSignal.timeout をそのまま使い、5 分は待たない)。
     const sleeps: number[] = [];
     const calls: Array<{ signal: AbortSignal }> = [];
@@ -204,9 +209,16 @@ describe("所要の上限(S-5 §2.1(f))", () => {
       });
     }) as unknown as typeof fetch;
     const d: ClientDeps = { fetch: fetchImpl, apiKey: KEY, sleep: async (ms: number) => { sleeps.push(ms); }, attemptTimeoutMs: 0 };
-    await expect(callStructured(req("openai"), d)).rejects.toThrow(LlmHttpError);
-    expect(calls.length).toBe(4);
-    expect(sleeps).toEqual([1000, 4000, 16000]);
+    let caught: unknown;
+    try {
+      await callStructured(req("openai"), d);
+    } catch (err) {
+      caught = err;
+    }
+    expect(caught).toBeInstanceOf(LlmTimeoutError);
+    expect(caught).not.toBeInstanceOf(LlmHttpError);
+    expect(calls.length).toBe(1); // 旧契約は 4(再送していた)。新契約は再送しないので 1。
+    expect(sleeps).toEqual([]); // 旧契約は [1000, 4000, 16000]。新契約はどれも待たない。
     for (const c of calls) expect(c.signal).toBeInstanceOf(AbortSignal);
   });
 
@@ -274,5 +286,59 @@ describe("送る前の数え", () => {
     const n = await countTokens({ provider: "openai", model: "m", system: "s", user: "u" }, deps(f));
     expect(n).toBeUndefined();
     expect(calls.length).toBe(0);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// D-2b-1(audit-core/docs/CLAIM_DECOMPOSITION_D2B1_PLAN_2026-10-08.md §3(b)): 中断(タイムアウト)は
+// 他の失敗(429/5xx/接続エラー)と見分け、**再送しない**。中断の時点で生成はおそらく完了して課金された
+// 可能性が高いので、再送は同じ仕事に 2 回払うことになる。429/5xx/接続エラーは今のまま再送する(別の describe で確認済み)。
+// 実測(2026-10-08): Node の `AbortSignal.timeout` による中断は `err.name === "TimeoutError"`(`DOMException`)で、
+// `"AbortError"` ではない(封じた予測 H-2 どおり)。
+// 【重なりの整理(司令塔の決-1)】「TimeoutError の中断は再送せず 1 回で LlmTimeoutError を投げる」ことは、
+// 上の「所要の上限(S-5 §2.1(f))」の書き換えた試験がすでに守っている。ここでは**別の角度**だけを見る ―
+// (i) TimeoutError 以外の名前の中断を誤って広く拾っていないか、(ii) maxRetries の転送(中断とは無関係の軸)。
+// ---------------------------------------------------------------------------
+describe("中断(タイムアウト)は再送しない(D-2b-1 §3(b))", () => {
+  /** 実物の AbortSignal.timeout と同じ形(DOMException, name)で中断する fetch 差し替え */
+  function abortingFetch(name: "TimeoutError" | "AbortError"): { fetch: typeof fetch; calls: Array<{ signal: AbortSignal }> } {
+    const calls: Array<{ signal: AbortSignal }> = [];
+    const fetchImpl = (async (_url: string, init: RequestInit) => {
+      const signal = init.signal as AbortSignal;
+      calls.push({ signal });
+      return await new Promise<Response>((_resolve, reject) => {
+        signal.addEventListener("abort", () => reject(new DOMException("aborted", name)));
+      });
+    }) as unknown as typeof fetch;
+    return { fetch: fetchImpl, calls };
+  }
+
+  it("AbortError という名前の中断(TimeoutError ではない)は、この区別に当たらず接続の失敗として再送する", async () => {
+    // 他のどこかが AbortController.abort() を呼んだ場合などを想定 ― 今の配線では起きないが、
+    // 「名前で中断を見分ける」実装が TimeoutError 以外まで広げて中断扱いしていないかを確かめる。
+    // **実物の `err.name` が本当に "TimeoutError"(`"AbortError"` ではない)かは、鍵もネットワークも使わない
+    // ローカルの確認で別途実測した(H-2。この試験は「AbortError という名前なら中断扱いしない」ことだけを守る)。
+    const sleeps: number[] = [];
+    const { fetch: f, calls } = abortingFetch("AbortError");
+    const d: ClientDeps = { fetch: f, apiKey: KEY, sleep: async (ms: number) => { sleeps.push(ms); }, attemptTimeoutMs: 0 };
+    let caught: unknown;
+    try {
+      await callStructured(req("openai"), d);
+    } catch (err) {
+      caught = err;
+    }
+    expect(caught).toBeInstanceOf(LlmHttpError);
+    expect(caught).not.toBeInstanceOf(LlmTimeoutError);
+    expect(calls.length).toBe(4); // 再送している(1・4・16 秒の後、4 回目で諦める ― 既存の接続失敗と同じ扱い)
+    expect(sleeps).toEqual([1000, 4000, 16000]);
+  });
+
+  it("maxRetries を 0 に渡すと、429 でも再送せず 1 回で諦める(ClientDeps の maxRetries が効く)", async () => {
+    const sleeps: number[] = [];
+    const { fetch: f, calls } = fakeFetch([{ status: 429, body: { error: "rate" } }]);
+    const d: ClientDeps = { fetch: f, apiKey: KEY, sleep: async (ms: number) => { sleeps.push(ms); }, maxRetries: 0 };
+    await expect(callStructured(req("openai"), d)).rejects.toThrow(LlmHttpError);
+    expect(calls.length).toBe(1);
+    expect(sleeps).toEqual([]);
   });
 });

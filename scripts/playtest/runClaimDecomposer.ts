@@ -18,6 +18,13 @@
 // 使い方(本番。司令塔が 1 回だけ行う):
 //   npx tsx scripts/playtest/runClaimDecomposer.ts --gold-dir scripts/playtest/fixtures/decomposition \
 //     --out-dir <dir> [--env .env] [--instruction audit-core/docs/CLAIM_DECOMPOSER_INSTRUCTION_v1_2026-10-07.md]
+//     [--only <goldId>] [--max-retries <n>] [--attempt-timeout-ms <n>]
+//
+// 【D-2b-1(audit-core/docs/CLAIM_DECOMPOSITION_D2B1_PLAN_2026-10-08.md §3(c))】
+// `--only`・`--max-retries`・`--attempt-timeout-ms` を足した。3 つとも**旗が無ければ今と完全に同じ挙動**
+// (`undefined` のまま `SlotDeps`/golds へ渡す)。`main` は `argv` を引数に取り、`process.argv` を直接読まない
+// ― このファイルは実行してはいけない縛りがあるため(司令塔の指示)、`exitSelect.ts`・`compare.ts` と同じ
+// isMainModule の形にして、試験が `main` を呼ばずに `numericArg`・`selectGoldFixtures` だけを確かめられるようにする。
 import { mkdirSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import {
@@ -36,19 +43,31 @@ const DEFAULT_GOLD_DIR = "scripts/playtest/fixtures/decomposition";
 const DECOMPOSE_PROVIDER_ENV = "DECOMPOSE_PROVIDER";
 const DECOMPOSE_COST_CAP_ENV = "DECOMPOSE_COST_CAP_USD";
 
-function argOf(name: string): string | undefined {
-  const index = process.argv.indexOf(`--${name}`);
+function argOf(argv: readonly string[], name: string): string | undefined {
+  const index = argv.indexOf(`--${name}`);
   if (index < 0) return undefined;
-  const value = process.argv[index + 1];
+  const value = argv[index + 1];
   return value === undefined || value.startsWith("--") ? undefined : value;
 }
-function flag(name: string): boolean {
-  return process.argv.includes(`--${name}`);
+function flag(argv: readonly string[], name: string): boolean {
+  return argv.includes(`--${name}`);
 }
-function requiredArg(name: string): string {
-  const value = argOf(name);
+function requiredArg(argv: readonly string[], name: string): string {
+  const value = argOf(argv, name);
   if (value === undefined) throw new Error(`--${name} が要る`);
   return value;
+}
+/**
+ * D-2b-1 §3(c): `--max-retries`・`--attempt-timeout-ms` の読み取り。**不正な値(数にならない)は投げる**
+ * ― 黙って既定値に落とすと「上書きしたつもり」のまま既定(300 秒・3 回)で回り、測れない。
+ * 旗が無ければ `undefined`(既定の挙動のまま)。
+ */
+export function numericArg(argv: readonly string[], name: string): number | undefined {
+  const raw = argOf(argv, name);
+  if (raw === undefined) return undefined;
+  const n = Number(raw);
+  if (!Number.isFinite(n)) throw new Error(`--${name} の値が数ではない(${raw})`);
+  return n;
 }
 function resolveRepoPath(p: string): string {
   return path.isAbsolute(p) ? p : path.join(REPO_ROOT, p);
@@ -60,6 +79,20 @@ function loadGoldFixtures(dir: string): GoldFixtureFile[] {
     const json = JSON.parse(readFileSync(path.join(dir, f), "utf-8")) as Record<string, unknown>;
     return { id: f.replace(/\.json$/, ""), ...json } as GoldFixtureFile;
   });
+}
+
+/**
+ * D-2b-1 §3(c): `--only <goldId>` で gold を 1 本に絞る。**一致するものが無ければ投げる**
+ * ― 黙って 0 本で回すと、何も送らずに終わって「測った」の証跡が空になる(司令塔の指示)。
+ * `onlyId` が `undefined` なら全部をそのまま返す(既定の挙動のまま)。
+ */
+export function selectGoldFixtures<T extends { id: string }>(golds: readonly T[], onlyId: string | undefined): T[] {
+  if (onlyId === undefined) return [...golds];
+  const selected = golds.filter((g) => g.id === onlyId);
+  if (selected.length === 0) {
+    throw new Error(`--only ${onlyId} に一致する gold が無い(ある id: ${golds.map((g) => g.id).join(", ")})`);
+  }
+  return selected;
 }
 
 const PROVIDER_SEATS: Record<"gpt" | "gemini" | "claude", { provider: Provider; modelName: string; keyName: string; priceNames: readonly [string, string]; limitName: string }> = {
@@ -120,24 +153,33 @@ async function runOneConfig(label: string, cfg: DecomposeConfig, instruction: st
   printTotals(`${label} 合計(${compares.length}/${golds.length} 本が照合まで進んだ)`, totals);
 }
 
-async function main(): Promise<void> {
-  const goldDir = resolveRepoPath(argOf("gold-dir") ?? DEFAULT_GOLD_DIR);
-  const instructionPath = resolveRepoPath(argOf("instruction") ?? DEFAULT_INSTRUCTION);
-  const outDir = resolveRepoPath(requiredArg("out-dir"));
+export async function main(argv: readonly string[]): Promise<void> {
+  const goldDir = resolveRepoPath(argOf(argv, "gold-dir") ?? DEFAULT_GOLD_DIR);
+  const instructionPath = resolveRepoPath(argOf(argv, "instruction") ?? DEFAULT_INSTRUCTION);
+  const outDir = resolveRepoPath(requiredArg(argv, "out-dir"));
   const instruction = readFileSync(instructionPath, "utf-8");
 
   // 送る前の門: 指示文の sha を固定値と照合する(下見・本番どちらも通る ― 鍵を使わない門)。
   const shaProblems = decomposerInstructionShaProblems(path.basename(instructionPath), instruction);
   if (shaProblems.length > 0) throw new Error(`指示文の sha が固定値と合わない:\n${shaProblems.map((l) => `  - ${l}`).join("\n")}`);
 
-  const golds = loadGoldFixtures(goldDir);
-  console.log(`gold: ${goldDir} から ${golds.length} 本(${golds.map((g) => g.id).join(", ")})`);
+  const allGolds = loadGoldFixtures(goldDir);
+  const onlyId = argOf(argv, "only");
+  const golds = selectGoldFixtures(allGolds, onlyId);
+  console.log(`gold: ${goldDir} から ${golds.length}/${allGolds.length} 本${onlyId === undefined ? "" : `(--only ${onlyId})`}(${golds.map((g) => g.id).join(", ")})`);
   mkdirSync(outDir, { recursive: true });
 
-  if (flag("dry-run")) {
+  const maxRetries = numericArg(argv, "max-retries");
+  const attemptTimeoutMs = numericArg(argv, "attempt-timeout-ms");
+
+  if (flag(argv, "dry-run")) {
     console.log(`下見: .env を読まない・鍵を使わない。指示文 ${path.basename(instructionPath)} の sha は固定値 ${DECOMPOSER_INSTRUCTION_SHA256[path.basename(instructionPath)]?.slice(0, 12)}… と一致。`);
     const { fetch: dryFetch, log } = buildDryRunFetch();
-    const deps: SlotDeps = { fetch: dryFetch, sleep: async () => {} };
+    const deps: SlotDeps = {
+      fetch: dryFetch, sleep: async () => {},
+      ...(maxRetries === undefined ? {} : { maxRetries }),
+      ...(attemptTimeoutMs === undefined ? {} : { attemptTimeoutMs }),
+    };
     for (const { seat, cfg } of dryRunConfigsOf(1000)) {
       await runOneConfig(seat, cfg, instruction, golds, deps, outDir, []);
     }
@@ -145,7 +187,7 @@ async function main(): Promise<void> {
     return;
   }
 
-  const envPath = resolveRepoPath(argOf("env") ?? ".env");
+  const envPath = resolveRepoPath(argOf(argv, "env") ?? ".env");
   loadDotEnv(envPath);
   const seatName = readEnv(DECOMPOSE_PROVIDER_ENV) as "gpt" | "gemini" | "claude" | undefined;
   if (seatName === undefined || !(seatName in PROVIDER_SEATS)) {
@@ -160,8 +202,14 @@ async function main(): Promise<void> {
   assertPricesPresent(seatName, warnings);
   if (cfg.apiKey === "" || cfg.model === "") throw new Error(`${seatName}: 鍵かモデル名が .env に無い`);
   const secrets = [readEnv(ENV_NAMES.keys.openai), readEnv(ENV_NAMES.keys.gemini), readEnv(ENV_NAMES.keys.anthropic)];
-  const deps: SlotDeps = { fetch };
+  const deps: SlotDeps = {
+    fetch,
+    ...(maxRetries === undefined ? {} : { maxRetries }),
+    ...(attemptTimeoutMs === undefined ? {} : { attemptTimeoutMs }),
+  };
   await runOneConfig(seatName, cfg, instruction, golds, deps, outDir, secrets);
 }
 
-await main();
+if (process.argv[1] !== undefined && import.meta.url.endsWith(path.basename(process.argv[1]))) {
+  await main(process.argv.slice(2));
+}

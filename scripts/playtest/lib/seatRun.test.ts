@@ -10,7 +10,7 @@ import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import { OBSERVATION_PACKET_CONTRACT, OBSERVATION_PACKET_SCHEMA_VERSION, OBSERVATION_REQUEST_CONTRACT, packetIdOf } from "./observationPacket.js";
 import { renderSeatInput, type SeatInputMeta } from "./seatInput.js";
-import { FIXED_INSTRUCTION_SHA256, RETRY_UNCHANGED_FIELDS_NOTICE, fixedShaProblems, parseHoldBack, runAll, retryUserText, seatsMissingPrices, type RunAllConfig, type SeatConfig } from "./seatRun.js";
+import { FIXED_INSTRUCTION_SHA256, RETRY_UNCHANGED_FIELDS_NOTICE, fixedShaProblems, parseHoldBack, runAll, runSlot, retryUserText, seatsMissingPrices, type RunAllConfig, type SeatConfig, type SlotDeps } from "./seatRun.js";
 
 const INSTRUCTION = readFileSync(new URL("../../../docs/LLM_SEATS_INSTRUCTION_v1_2026-09-30.md", import.meta.url));
 const INTEGRATOR_INSTRUCTION = "あなたは整理役です。席の名前は知りません。";
@@ -843,5 +843,103 @@ describe("S-3 (e): packet を H-9 へ渡す", () => {
     const result = await runAll(config(), { fetch: api2.fetch, ...DEPS });
     const problems = result.checks.integration?.problems ?? [];
     expect(problems.some((p) => p.includes("H-9")), JSON.stringify(problems)).toBe(true);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// D-2b-1(audit-core/docs/CLAIM_DECOMPOSITION_D2B1_PLAN_2026-10-08.md §3(a)(d))。
+// (a) `SlotDeps.maxRetries`・`SlotDeps.attemptTimeoutMs` が `ClientDeps` まで届くこと(S-5 で足した
+//     `attemptTimeoutMs` が CLI/SlotDeps から届いていなかった ― ここがその配線)。
+// (d) 中断(タイムアウト)で落ちた試行は `timedOut` として機械で数えられる形に残り、run_summary からも読める。
+// ---------------------------------------------------------------------------
+describe("D-2b-1 §3(a): SlotDeps.maxRetries・attemptTimeoutMs の転送", () => {
+  const MIN_SCHEMA = { type: "object", properties: { a: { type: "number" } }, required: ["a"], additionalProperties: false };
+  function slotCtx(): { label: string; system: string; user: string; canonicalSchema: Rec; schemaName: string; validateLlm: (json: unknown) => string[]; capUsd: number; cumulativeCostUsd: number } {
+    return { label: "seat_test", system: "sys", user: "usr", canonicalSchema: MIN_SCHEMA, schemaName: "submit_x", validateLlm: () => [], capUsd: 10, cumulativeCostUsd: 0 };
+  }
+  function slotCfg(): { provider: "openai"; model: string; apiKey: string; prices: { inPerMillion: number; outPerMillion: number }; reserveOutputTokens: number } {
+    return { provider: "openai", model: "m", apiKey: "sk-test-key", prices: { inPerMillion: 1, outPerMillion: 1 }, reserveOutputTokens: 1000 };
+  }
+
+  it("maxRetries: 0 が ClientDeps まで届けば、503 でも再送せず 1 回で http_failed になる", async () => {
+    let calls = 0;
+    const fetchImpl = (async () => {
+      calls += 1;
+      return { status: 503, ok: false, text: async () => JSON.stringify({ error: "unavailable" }) } as unknown as Response;
+    }) as unknown as typeof fetch;
+    const deps: SlotDeps = { fetch: fetchImpl, sleep: async () => {}, maxRetries: 0 };
+    const result = await runSlot(slotCfg(), slotCtx(), deps);
+    expect(result.present).toBe(false);
+    expect(result.absentReason).toBe("http_failed");
+    // 転送が効いていなければ既定(3 回まで再送 = 4 回叩く)になり、この数が合わない
+    expect(calls).toBe(1);
+    expect(result.attempts[0]!.httpAttempts).toBe(1);
+  });
+
+  it("attemptTimeoutMs: 0 が ClientDeps まで届けば、即座に中断して 1 回で http_failed になる", async () => {
+    const calls: Array<{ signal: AbortSignal }> = [];
+    const fetchImpl = (async (_url: string, init: RequestInit) => {
+      const signal = init.signal as AbortSignal;
+      calls.push({ signal });
+      return await new Promise<Response>((_resolve, reject) => {
+        signal.addEventListener("abort", () => reject(new DOMException("aborted", "TimeoutError")));
+      });
+    }) as unknown as typeof fetch;
+    const deps: SlotDeps = { fetch: fetchImpl, sleep: async () => {}, attemptTimeoutMs: 0 };
+    // 転送が効いていなければ既定(5 分)で中断せず、この試験自体がタイムアウトして落ちる。
+    const result = await runSlot(slotCfg(), slotCtx(), deps);
+    expect(result.present).toBe(false);
+    expect(result.absentReason).toBe("http_failed");
+    expect(calls.length).toBe(1);
+  });
+});
+
+describe("D-2b-1 §3(d): 中断で落ちた試行は timedOut として残る(機械で数えられる)", () => {
+  const MIN_SCHEMA = { type: "object", properties: { a: { type: "number" } }, required: ["a"], additionalProperties: false };
+
+  it("runSlot: attempts[].timedOut === true になり、*_attempt_1_error.txt にも「中断」の字が残る", async () => {
+    const fetchImpl = (async (_url: string, init: RequestInit) => {
+      const signal = init.signal as AbortSignal;
+      return await new Promise<Response>((_resolve, reject) => {
+        signal.addEventListener("abort", () => reject(new DOMException("aborted", "TimeoutError")));
+      });
+    }) as unknown as typeof fetch;
+    const deps: SlotDeps = { fetch: fetchImpl, sleep: async () => {}, attemptTimeoutMs: 0 };
+    const cfg = { provider: "openai" as const, model: "m", apiKey: "sk-test-key", prices: { inPerMillion: 1, outPerMillion: 1 }, reserveOutputTokens: 1000 };
+    const ctx = { label: "seat_gpt", system: "sys", user: "usr", canonicalSchema: MIN_SCHEMA, schemaName: "submit_x", validateLlm: () => [] as string[], capUsd: 10, cumulativeCostUsd: 0 };
+    const result = await runSlot(cfg, ctx, deps);
+    expect(result.attempts[0]!.timedOut).toBe(true);
+    const errorFile = result.files.find((f) => f.name === "seat_gpt_attempt_1_error.txt");
+    expect(errorFile).toBeDefined();
+    expect(errorFile!.content).toMatch(/中断/);
+  });
+
+  it("runAll: gpt が中断で落ちても gemini・claude は present のまま、run_summary の seats[0].attempts[0].timedOut が true", async () => {
+    const meta = metaOf();
+    const geminiBody = geminiOk(seatLlm(meta)).body;
+    const anthropicBody = anthropicOk(seatLlm(meta)).body;
+    const fetchImpl = (async (url: string, init: RequestInit) => {
+      const u = String(url);
+      if (u.includes("generativelanguage")) {
+        if (u.includes(":countTokens")) return { status: 200, ok: true, text: async () => JSON.stringify({ totalTokens: 70_000 }) } as unknown as Response;
+        return { status: 200, ok: true, text: async () => JSON.stringify(geminiBody) } as unknown as Response;
+      }
+      if (u.includes("api.anthropic.com")) {
+        if (u.endsWith("/count_tokens")) return { status: 200, ok: true, text: async () => JSON.stringify({ input_tokens: 70_000 }) } as unknown as Response;
+        return { status: 200, ok: true, text: async () => JSON.stringify(anthropicBody) } as unknown as Response;
+      }
+      // openai(gpt 席)は中断する(countTokens は openai では呼ばれない ― llmClient.ts)
+      const signal = init.signal as AbortSignal;
+      return await new Promise<Response>((_resolve, reject) => {
+        signal.addEventListener("abort", () => reject(new DOMException("aborted", "TimeoutError")));
+      });
+    }) as unknown as typeof fetch;
+    const result = await runAll(config({ integrator: undefined }), { fetch: fetchImpl, ...DEPS, attemptTimeoutMs: 0 });
+    expect(result.seats[0]!.seat).toBe("gpt");
+    expect(result.seats[0]!.absentReason).toBe("http_failed");
+    expect(result.seats.filter((s) => s.present).map((s) => s.seat)).toEqual(["gemini", "claude"]);
+    const summarySeats = (result.summary as any).seats;
+    expect(summarySeats[0].attempts[0].timedOut).toBe(true);
+    expect(summarySeats[1].attempts[0].timedOut).toBeUndefined();
   });
 });

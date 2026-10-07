@@ -9,7 +9,7 @@
 import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
 import { redactSecrets } from "./env.js";
-import { LlmHttpError, SENDS_TEMPERATURE, callStructured, countTokens, type ClientDeps, type Provider, type StructuredResponse } from "./llmClient.js";
+import { LlmHttpError, LlmTimeoutError, SENDS_TEMPERATURE, callStructured, countTokens, type ClientDeps, type Provider, type StructuredResponse } from "./llmClient.js";
 import {
   buildIntegrationInput, canonicalJson, completeIntegration, integrationProblems, validateIntegrationLlm,
   type ItemMapRow, type SeatSlot,
@@ -108,6 +108,12 @@ export interface AttemptRecord {
   problems: string[];
   /** 送れなかったとき(HTTP の失敗)の理由。鍵は redact 済み */
   error?: string;
+  /**
+   * D-2b-1 §3(d): この試行が**中断(タイムアウト)で落ちたか**。機械で数えられる形で残す
+   * ― 費用の数え落ち(中断の時点で生成はおそらく完了して課金された可能性が高いのに、
+   * こちら側の見込みに乗らない)が後から読めるようにするため。再送しない(llmClient.ts の `LlmTimeoutError`)。
+   */
+  timedOut?: boolean;
 }
 
 export interface SavedFile {
@@ -143,6 +149,12 @@ export interface SlotDeps {
   sleep?: (ms: number) => Promise<void>;
   /** 時刻(試験で固定する) */
   now?: () => Date;
+  /**
+   * D-2b-1 §3(a): `ClientDeps` へ転送する 2 欄。CLI から渡せるようにする(S-5 で `attemptTimeoutMs` を
+   * `ClientDeps` に足したが、`SlotDeps`・CLI まで届いていなかった)。既定(undefined)は今と同じ挙動。
+   */
+  maxRetries?: number;
+  attemptTimeoutMs?: number;
 }
 
 function nowOf(deps: SlotDeps): Date {
@@ -202,7 +214,13 @@ export async function runSlot(
   if (cfg.apiKey === undefined || cfg.apiKey.length === 0) return absent("no_key", `${ctx.label}: 鍵が .env に無い`, { inputTokens: 0, method: "chars/3" }, 0);
   if (cfg.model === undefined || cfg.model.length === 0) return absent("no_model", `${ctx.label}: モデル名が .env に無い`, { inputTokens: 0, method: "chars/3" }, 0);
 
-  const clientDeps: ClientDeps = { fetch: deps.fetch, apiKey: cfg.apiKey, ...(cfg.baseUrl === undefined ? {} : { baseUrl: cfg.baseUrl }), ...(deps.sleep === undefined ? {} : { sleep: deps.sleep }) };
+  const clientDeps: ClientDeps = {
+    fetch: deps.fetch, apiKey: cfg.apiKey,
+    ...(cfg.baseUrl === undefined ? {} : { baseUrl: cfg.baseUrl }),
+    ...(deps.sleep === undefined ? {} : { sleep: deps.sleep }),
+    ...(deps.maxRetries === undefined ? {} : { maxRetries: deps.maxRetries }),
+    ...(deps.attemptTimeoutMs === undefined ? {} : { attemptTimeoutMs: deps.attemptTimeoutMs }),
+  };
   const schema = adaptSchema(cfg.provider, ctx.canonicalSchema);
 
   // 送る前の数え(Anthropic・Gemini は API、OpenAI は chars/3)
@@ -255,6 +273,8 @@ export async function runSlot(
     } catch (err) {
       record.httpAttempts = err instanceof LlmHttpError ? err.attempts : 1;
       if (err instanceof LlmHttpError) record.httpStatus = err.status;
+      // D-2b-1 §3(d): 中断(タイムアウト)で落ちたことを機械で数えられる形で残す(費用の数え落ちが後から読めるように)。
+      if (err instanceof LlmTimeoutError) record.timedOut = true;
       record.error = redactSecrets(err instanceof LlmHttpError ? `HTTP ${err.status}: ${err.bodyText}` : (err as Error).message, [cfg.apiKey]);
       attempts.push(record);
       files.push({ name: `${ctx.label}_attempt_${attempt}_error.txt`, content: record.error });
@@ -524,7 +544,7 @@ function summaryOf(args: {
       valueShape: valueShapeOf(cfg.seats.find((c) => c.seat === s.seat)),
       ...(s.modelVersion === undefined ? {} : { modelVersion: s.modelVersion }),
       estimate: s.estimate, estimatedCostUsd: round4(s.estimatedCostUsd), actualCostUsd: round4(s.actualCostUsd), usage: s.usage,
-      attempts: s.attempts.map((a) => ({ attempt: a.attempt, kind: a.kind, httpAttempts: a.httpAttempts, ...(a.httpStatus === undefined ? {} : { httpStatus: a.httpStatus }), ...(a.finishReasonRaw === undefined ? {} : { finishReason: a.finishReasonRaw }), reserveOutputTokens: a.reserveOutputTokens, problems: a.problems.length, ...(a.error === undefined ? {} : { error: a.error }) })),
+      attempts: s.attempts.map((a) => ({ attempt: a.attempt, kind: a.kind, httpAttempts: a.httpAttempts, ...(a.httpStatus === undefined ? {} : { httpStatus: a.httpStatus }), ...(a.finishReasonRaw === undefined ? {} : { finishReason: a.finishReasonRaw }), reserveOutputTokens: a.reserveOutputTokens, problems: a.problems.length, ...(a.error === undefined ? {} : { error: a.error }), ...(a.timedOut === undefined ? {} : { timedOut: a.timedOut }) })),
       elapsedMs: s.elapsedMs,
       items: s.envelope === undefined ? null : (s.envelope.items as unknown[]).length,
       checkProblems: checks.seats.find((c) => c.seat === s.seat)?.problems.length ?? null,

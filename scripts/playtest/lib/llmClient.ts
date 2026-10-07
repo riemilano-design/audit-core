@@ -5,6 +5,11 @@
 // 【構造化】OpenAI = text.format json_schema(strict)/ Gemini = responseSchema / Anthropic = tool_use の input_schema で強制。
 //   返った JSON は**必ず正本の検証器で見直す**(呼び出し側)。ここは取り出すだけ。
 // 【再試行】429 / 5xx / 接続の失敗は 1・4・16 秒の後に同じ入力で最大 3 回(sleep は差し替え可)。schema 不通過・途中切れの再試行は seatRun の側。
+// 【D-2b-1(audit-core/docs/CLAIM_DECOMPOSITION_D2B1_PLAN_2026-10-08.md §3(b))】`AbortSignal.timeout` による
+//   中断(`err.name === "TimeoutError"`)は**再送しない**(`LlmTimeoutError` を投げる)。中断の時点で生成は
+//   おそらく完了しており課金された可能性が高いので、同じ入力を再送すると同じ仕事に 2 回払うことになる。
+//   2026-10-07 の実測では 1 本につき最大 4 回ぶんがこちら側の費用の数え上げに乗らないまま課金され得た。
+//   429 / 5xx / それ以外の接続エラーは今のまま再送する(挙動は変えない)。
 import { redactSecrets } from "./env.js";
 
 export type Provider = "openai" | "gemini" | "anthropic";
@@ -56,6 +61,20 @@ export interface ClientDeps {
   attemptTimeoutMs?: number;
 }
 
+/**
+ * `AbortSignal.timeout` による中断(D-2b-1 §3(b))。**再送しない** ― 中断の時点で生成はおそらく完了して
+ * 課金された可能性が高く、再送は同じ仕事に 2 回払うことになる。429/5xx/それ以外の接続エラー(`LlmHttpError`
+ * や通常の network error)とは別の型にして、呼び出し側(`seatRun.ts`)が中断だったことを区別できるようにする。
+ */
+export class LlmTimeoutError extends Error {
+  readonly attemptTimeoutMs: number;
+  constructor(attemptTimeoutMs: number) {
+    super(`fetch が ${attemptTimeoutMs}ms で中断した(AbortSignal.timeout ― TimeoutError)。生成はおそらく完了して課金された可能性が高いので、同じ入力を再送しない`);
+    this.name = "LlmTimeoutError";
+    this.attemptTimeoutMs = attemptTimeoutMs;
+  }
+}
+
 export class LlmHttpError extends Error {
   readonly status: number;
   readonly bodyText: string;
@@ -96,6 +115,10 @@ async function fetchWithRetry(deps: ClientDeps, url: string, init: RequestInit):
     try {
       res = await deps.fetch(url, { ...init, signal: AbortSignal.timeout(attemptTimeoutMs) });
     } catch (err) {
+      // 中断(タイムアウト)は他の接続失敗と見分け、再送せずに投げる(D-2b-1 §3(b)。上のファイル冒頭コメント参照)。
+      // 実測(2026-10-08): Node の `AbortSignal.timeout` による中断は `err.name === "TimeoutError"`
+      // (`DOMException`)で、`"AbortError"` ではない ― それ以外の中断・接続失敗は今のまま再送する。
+      if ((err as Error).name === "TimeoutError") throw new LlmTimeoutError(attemptTimeoutMs);
       networkError = redactSecrets((err as Error).message, [deps.apiKey]);
     }
     if (res !== undefined && !isRetryable(res.status)) {
