@@ -533,8 +533,8 @@ describe("固定した指示文の sha(司令塔 2026-09-30)", () => {
     expect(problems.length).toBe(1);
     expect(problems[0]).toContain("固定されていない");
   });
-  it("7 本(席 v1・v1.1・v1.2・v1.3・v1.4・**v1.5**・整理役 v1)が表に在る", () => {
-    expect(Object.keys(FIXED_INSTRUCTION_SHA256).length).toBe(7);
+  it("8 本(席 v1・v1.1・v1.2・v1.3・v1.4・v1.5・整理役 v1・**整理役 v1.1**)が表に在る", () => {
+    expect(Object.keys(FIXED_INSTRUCTION_SHA256).length).toBe(8);
     // 古い版を消さない ― v1.1 で回した 3 周と比べられるようにする(版名を上げても前の sha は残す)
     expect(Object.keys(FIXED_INSTRUCTION_SHA256)).toContain("LLM_SEATS_INSTRUCTION_v1.1_2026-09-30.md");
     expect(Object.keys(FIXED_INSTRUCTION_SHA256)).toContain("LLM_SEATS_INSTRUCTION_v1.2_2026-10-01.md");
@@ -544,6 +544,8 @@ describe("固定した指示文の sha(司令塔 2026-09-30)", () => {
     expect(Object.keys(FIXED_INSTRUCTION_SHA256)).toContain("LLM_SEATS_INSTRUCTION_v1.4_2026-10-06.md");
     // S-6(2026-10-07 (c)): 局を符号で呼ぶときは gameId を観測に引く、の 1 ブロックを足した v1.5
     expect(Object.keys(FIXED_INSTRUCTION_SHA256)).toContain("LLM_SEATS_INSTRUCTION_v1.5_2026-10-07.md");
+    // S-7(2026-10-07 (g)): 束ねた項目がどれも観測を持たないときは packetRefs を空の配列にする、の 1 ブロックを足した整理役 v1.1
+    expect(Object.keys(FIXED_INSTRUCTION_SHA256)).toContain("LLM_SEATS_INTEGRATOR_INSTRUCTION_v1.1_2026-10-07.md");
   });
   it("v1.4 は v1.3 と 4 ブロックだけ違う(STEP S-4 §2.1(c1)。それ以外は 1 バイトも変えていない)", () => {
     const v13 = readFileSync(new URL("../../../docs/LLM_SEATS_INSTRUCTION_v1.3_2026-10-06.md", import.meta.url), "utf-8").split("\n");
@@ -592,6 +594,28 @@ describe("固定した指示文の sha(司令塔 2026-09-30)", () => {
     // 冒頭(1〜21 行目、index 0〜20)は版名の行(index 0)以外は全部一致
     for (let i = 1; i < 21; i += 1) {
       expect(v15[i], `行 ${i + 1}`).toBe(v14[i]);
+    }
+  });
+  // t9(STEP S-7 計画 A4)。整理役の指示文は v1 から一度も改訂されていなかった(初めての版上げ)。
+  it("整理役 v1.1 は v1 と版名の行 + 1 ブロックだけ違う(STEP S-7 (g)。それ以外は 1 バイトも変えていない)", () => {
+    const v1 = readFileSync(new URL("../../../docs/LLM_SEATS_INTEGRATOR_INSTRUCTION_v1_2026-09-30.md", import.meta.url), "utf-8").split("\n");
+    const v11 = readFileSync(new URL("../../../docs/LLM_SEATS_INTEGRATOR_INSTRUCTION_v1.1_2026-10-07.md", import.meta.url), "utf-8").split("\n");
+    // 足したのは既存行の後ろへの挿入 1 行だけ(削った行は無い)
+    expect(v11.length).toBe(v1.length + 1);
+    // (1) 版名の行(1 行目)
+    expect(v1[0]).toContain("指示文 v1");
+    expect(v1[0]).not.toContain("指示文 v1.1");
+    expect(v11[0]).toContain("指示文 v1.1");
+    expect(v11[0]).toBe(v1[0]!.replace("v1)", "v1.1)"));
+    // (2) 21 行目(index 20)に新しいブロックを挿入した(観測 0 件の束は packetRefs を空の配列に)
+    expect(v11[20]).toContain("packetRefs");
+    expect(v11[20]).toContain("空の配列");
+    expect(v11[20]).toContain("根を作らない");
+    // (3) 以降(22 行目〜末尾、index 21〜)は v1 の 21 行目〜末尾(index 20〜)とそのまま同じ(新しい行の後ろで 1 バイトもずれていない)
+    expect(v11.slice(21)).toEqual(v1.slice(20));
+    // 冒頭(1〜20 行目、index 0〜19)は版名の行(index 0)以外は全部一致
+    for (let i = 1; i < 20; i += 1) {
+      expect(v11[i], `行 ${i + 1}`).toBe(v1[i]);
     }
   });
 });

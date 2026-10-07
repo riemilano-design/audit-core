@@ -14,12 +14,23 @@ import { validate, type JsonSchema } from "./eventSchema.js";
 import { loadObsRegistry, validateHypothesisLine } from "./hypothesis.js";
 import { aggregateRef, packetObsIdOf, packetRefPathProblems } from "./packetRef.js";
 import { Prng } from "./prng.js";
-import { SEAT_HYPOTHESIS_SCHEMA_VERSION } from "./schemaVersions.js";
+import { INTEGRATION_SCHEMA_VERSION, KNOWN_INTEGRATION_SCHEMA_VERSIONS, SEAT_HYPOTHESIS_SCHEMA_VERSION } from "./schemaVersions.js";
 import type { Seat } from "./seatOutput.js";
+
+// 版の定数は schemaVersions.ts の 1 か所に置く(定義は 2 か所に持たない)。このファイルは輸入して再輸出する。
+export { INTEGRATION_SCHEMA_VERSION, KNOWN_INTEGRATION_SCHEMA_VERSIONS };
+export type IntegrationSchemaVersion = (typeof KNOWN_INTEGRATION_SCHEMA_VERSIONS)[number];
 
 export const INTEGRATION_INPUT_CONTRACT = "integration-input" as const;
 export const INTEGRATION_CONTRACT = "integration" as const;
-export const INTEGRATION_SCHEMA_VERSION = "0.1" as const;
+/**
+ * `integration-input` の中身の `schemaVersion`(整理役に渡す器の欄)。`integration-input.v0.2.schema.json` は
+ * ファイル名が 0.2 でも、中身の `schemaVersion` は `const "0.1"` のまま(S-4 でファイルを足したのは
+ * `observations` の `minItems` を外すためで、器の版の字は変えていない)。STEP S-7 (e) で `INTEGRATION_SCHEMA_VERSION`
+ * を整理役の**出力**(`integration`)の版に使うため、入力(`integration-input`)の版はここで分けて持つ
+ * (発見: 直す前はこの 1 つの定数を両方の契約で共有していた)。
+ */
+const INTEGRATION_INPUT_SCHEMA_VERSION = "0.1" as const;
 /**
  * 代表の行の provenance.inputs の形: `seat_item:<seatIndex>:<匿名 id>`(束の成員そのもの)。
  * 「integration_input:<sha>」にすると H-6(盲検: 反証の側に統合の出力を渡さない)の禁止語「integrat」に当たる ― 代表は席の項目から
@@ -34,6 +45,11 @@ export const INTEGRATOR_EXCLUDED_INPUTS: readonly string[] = ["answer_menu.json"
 export const SEAT_NAME_RE = /gpt|gemini|claude|openai|anthropic|google/i;
 /** heldBack の理由が一致の数を参照していないことを見る */
 export const SEAT_COUNT_REFERENCE_RE = /seatCount|一致|[0-9０-９]\s*席|複数の席|全席|三席|二席/;
+
+// hypothesis.ts の KINDS_WITHOUT_OBSERVATION と同じ意味(観測 0 件が許される kind)。
+// hypothesis.ts はこの封(STEP S-7)では編集しない対象で、かつその定数は export されていないため、ここに同じ 2 語を字で持つ。
+// ずれたら両方を直す。
+const KINDS_WITHOUT_OBSERVATION = new Set(["unanswerable", "needed_observation"]);
 
 export class IntegrationError extends Error {
   readonly problems: readonly string[];
@@ -69,11 +85,25 @@ function loadSchema(name: string): JsonSchema {
 export function validateIntegrationInput(input: unknown): string[] {
   return validate(input, loadSchema("integration-input.v0.2.schema.json"));
 }
+/** 行の `schemaVersion` がスキーマのファイルがある版かどうか(未知の版は照合の相手を選べない)。lib/hypothesis.ts の isKnownHypothesisSchemaVersion と同じ考え方。 */
+export function isKnownIntegrationSchemaVersion(value: unknown): value is IntegrationSchemaVersion {
+  return typeof value === "string" && (KNOWN_INTEGRATION_SCHEMA_VERSIONS as readonly string[]).includes(value);
+}
+/**
+ * `validateIntegration` は**記録自身の `schemaVersion` で版を解決する**(STEP S-7 (e)。lib/hypothesis.ts の
+ * resolveSchema と同じ考え方)。`"0.1"` → `integration.v0.1`(緩和前。`clusters[].packetRefs` に `minItems: 1`)、
+ * `"0.2"` → `integration.v0.2`(緩和後)。知らない版・版が無い・文字列でない場合は、例外を投げず 1 行で返す
+ * (保存済みの記録はすべて `schemaVersion: "0.1"` で、この形なら 1 行も動かない)。
+ */
 export function validateIntegration(output: unknown): string[] {
-  return validate(output, loadSchema("integration.v0.1.schema.json"));
+  const version = isRecord(output) ? output.schemaVersion : undefined;
+  if (!isKnownIntegrationSchemaVersion(version)) {
+    return [`schemaVersion が版の一覧(${KNOWN_INTEGRATION_SCHEMA_VERSIONS.join(" / ")})に無い: ${JSON.stringify(version)}`];
+  }
+  return validate(output, loadSchema(`integration.v${version}.schema.json`));
 }
 export function validateIntegrationLlm(json: unknown): string[] {
-  return validate(json, loadSchema("integration.llm.v0.2.schema.json"));
+  return validate(json, loadSchema("integration.llm.v0.3.schema.json"));
 }
 
 // ---- 席の順(runId から決定的。司令塔の判断 2026-09-30) ----
@@ -206,7 +236,7 @@ export function buildIntegrationInput(slots: SeatSlot[], ctx: BuildInputContext)
   const request = ctx.request;
   const input: Rec = {
     contract: INTEGRATION_INPUT_CONTRACT,
-    schemaVersion: INTEGRATION_SCHEMA_VERSION,
+    schemaVersion: INTEGRATION_INPUT_SCHEMA_VERSION,
     runId: ctx.runId,
     packetId: String(ctx.packet.packetId),
     requestSha256: sha256Of(request),
@@ -415,8 +445,16 @@ export function integrationProblems(output: unknown, input: unknown, opts: Integ
     const roots = asArray(c.packetRefs).map(String);
     for (const root of roots) for (const p of packetRefPathProblems(root)) problems.push(`I-2: ${cid} の packetRefs: ${p}`);
     const members = (asArray(c.itemRefs) as Rec[]).map((r) => itemsByKey.get(refKey(r))).filter((m): m is NonNullable<typeof m> => m !== undefined);
-    for (const m of members) {
-      if (!roots.some((root) => m.paths.has(root))) problems.push(`I-2: ${cid} の成員「${m.seatIndex}:${String(m.item.hypothesisId)}」が束の根(${roots.join(", ")})を根拠に持たない`);
+    // STEP S-7 (f)(audit-core/docs/CORE_CONNECTION_S7_PLAN_2026-10-07.md)。成員が**全員**観測 0 件を許される kind
+    // (unanswerable / needed_observation)なら、「成員が束の根を根拠に持て」の行を出さない ― 観測が 0 件の項目は
+    // どんな根を書いても roots.some(...) を満たせない(S-4 の H-12 と同じ「kind が 0 件を含意する」矛盾が
+    // packetRefs にもあった)。成員に 1 件でも観測を持てる kind が混ざっていれば、規則はそのまま効く。
+    // members が空(itemsByKey に無い)場合は exemptAll が false になり、振る舞いは変わらない。
+    const exemptAll = members.length > 0 && members.every((m) => KINDS_WITHOUT_OBSERVATION.has(String(m.item.kind ?? "hypothesis")));
+    if (!exemptAll) {
+      for (const m of members) {
+        if (!roots.some((root) => m.paths.has(root))) problems.push(`I-2: ${cid} の成員「${m.seatIndex}:${String(m.item.hypothesisId)}」が束の根(${roots.join(", ")})を根拠に持たない`);
+      }
     }
     const distinct = new Set(members.map((m) => m.seatIndex)).size;
     const sc = c.seatCount as Rec;

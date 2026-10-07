@@ -1,0 +1,29 @@
+# S-7 (e)(f)(g) の門の計測(2026-10-07。司令塔が数を書く直前に 1 回ずつ回した)
+
+## 凍結 sha の再照合(作業の最後)
+scripts/playtest/lib/integration.ts: OK
+scripts/playtest/lib/integration.test.ts: OK
+scripts/playtest/lib/schemaVersions.ts: OK
+scripts/playtest/lib/seatRun.ts: OK
+scripts/playtest/lib/seatRun.test.ts: OK
+docs/LLM_SEATS_INTEGRATOR_INSTRUCTION_v1.1_2026-10-07.md: OK
+scripts/playtest/schemas/integration.llm.v0.3.schema.json: OK
+scripts/playtest/schemas/integration.v0.2.schema.json: OK
+
+## npx vitest run scripts/playtest --exclude '**/.claude/**'
+ Test Files  118 passed (118)
+      Tests  2386 passed (2386)
+
+## npm run typecheck:scripts(error TS。全部 scripts/playtest/out/ の生成物)
+   2 scripts/playtest/out/cond-draft/conds/c1_king_escapes_decrease.ts
+   2 scripts/playtest/out/cond-draft/conds/c2_king_escapes_decrease_under_reach.ts
+   2 scripts/playtest/out/cond-draft/conds/c3_king_escapes_decrease_with_capture.ts
+   2 scripts/playtest/out/cond-draft/conds/c4_gote_reach_on_own_king_zone_increase.ts
+   1 scripts/playtest/out/report-template-v6/inputs/sfens.ts
+   1 scripts/playtest/out/report5/sfens.ts
+
+## FIXED_INSTRUCTION_SHA256 の鍵
+8
+
+## Golden c5(書き直す前。差の全文は s7_gate_diff.txt)
+rc=1・差 4 件

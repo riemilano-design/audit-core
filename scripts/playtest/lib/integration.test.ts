@@ -7,7 +7,7 @@ import { describe, expect, it } from "vitest";
 import { validate } from "./eventSchema.js";
 import { validateHypothesisLine } from "./hypothesis.js";
 import {
-  answersByQuestionOf, buildIntegrationInput, canonicalJson, completeIntegration, copySeatItem, integrationProblems, seatPermutation, validateIntegrationInput, validateIntegrationLlm,
+  answersByQuestionOf, buildIntegrationInput, canonicalJson, completeIntegration, copySeatItem, integrationProblems, seatPermutation, validateIntegration, validateIntegrationInput, validateIntegrationLlm,
 } from "./integration.js";
 import type { SeatInputMeta } from "./seatInput.js";
 import { completeSeatOutput, SEAT_HYPOTHESIS_SCHEMA_VERSION } from "./seatOutput.js";
@@ -353,5 +353,145 @@ describe("版の統一(b): 整理役の代表は SEAT_HYPOTHESIS_SCHEMA_VERSION 
     expect((rep.observations as unknown[]).length).toBe(0);
     const results = validateHypothesisLine(rep, { today: TODAY, registry: new Set<string>() });
     expect(results.find((r) => r.check === "schema")!.ok).toBe(true);
+  });
+});
+
+// STEP S-7(audit-core/docs/CORE_CONNECTION_S7_PLAN_2026-10-07.md (e)(f))。
+// (e) 契約: clusters[].packetRefs の minItems を外した新しい版(integration.v0.2 / integration.llm.v0.3)。
+//     validateIntegration は記録自身の schemaVersion で版を解決する ― 保存済みの v0.1 は緩和前のまま。
+// (f) 門: I-2 の成員の規則に kind の免除を入れた(成員が全員 unanswerable / needed_observation なら「束の根を
+//     根拠に持て」の行を出さない)。
+/** 版の解決だけを見る schema レベルの最小記録(業務の整合は見ない ― clusters[].representative は type object のみ要求) */
+function minimalIntegrationRecord(schemaVersion: string, packetRefs: string[]): Record<string, unknown> {
+  return {
+    contract: "integration",
+    schemaVersion,
+    runId: "run-s7-min",
+    seatOrderRef: "seat_order.json",
+    run: { model: "m", inputSha256: "0".repeat(64), requestedAt: "2026-10-07T00:00:00Z", usage: { inputTokens: 1, outputTokens: 1 }, finishReason: "stop", attempts: 1 },
+    clusters: [{ clusterId: "C-001", packetRefs, itemRefs: [{ seatIndex: 1, hypothesisId: "H-x" }], seatCount: { value: 1, evidence: false }, representative: {} }],
+    contradictions: [],
+    dropped: [],
+    heldBack: [],
+    forVerification: [],
+    answersByQuestion: [],
+    selfComputedNumbers: [],
+  };
+}
+
+describe("STEP S-7 (e): 契約の版の解決(記録自身の schemaVersion で版を選ぶ)", () => {
+  it("t1: schemaVersion 0.2 を名乗る記録は packetRefs: [] を通す", () => {
+    expect(validateIntegration(minimalIntegrationRecord("0.2", []))).toEqual([]);
+  });
+  it("t2: schemaVersion 0.1 を名乗る記録は packetRefs: [] で落ちる(古い契約は緩めていない)", () => {
+    const out = validateIntegration(minimalIntegrationRecord("0.1", []));
+    expect(out.length).toBeGreaterThan(0);
+    expect(out.some((p) => p.includes("足りない"))).toBe(true);
+  });
+  it("t3: 知らない版(9.9)は例外を投げず 1 行で返す", () => {
+    const out = validateIntegration(minimalIntegrationRecord("9.9", ["x.value"]));
+    expect(out).toHaveLength(1);
+    expect(out[0]).toContain("版の一覧");
+    expect(out[0]).toContain("9.9");
+  });
+  it("t7: completeIntegration の出力の schemaVersion は字で 0.2", () => {
+    const { output } = full();
+    expect(output.schemaVersion).toBe("0.2");
+  });
+});
+
+describe("STEP S-7 (f): I-2 の成員の規則に kind の免除", () => {
+  type MetaShape = ReturnType<typeof meta>;
+  function metaFor(): MetaShape {
+    return meta();
+  }
+  const S7_PACKET = { packetId: "22aee8fe696d0262", customerRef: "c5", facts: { games: [] }, aggregates: [{ id: "branches.total", value: 404, unit: "positions", name: "x" }], provenance: { thresholds: [] } };
+  const S7_REQUEST = { contract: "observation-request", schemaVersion: "0.1", customerRef: "c5", customerQuestions: [], requestedScope: { games: 25, timeLimitSec: 180 } };
+
+  it("t4: 成員が全員 needed_observation(観測 0 件)の束は I-2 の成員の行が出ない", () => {
+    const need = {
+      itemId: "S-001", kind: "needed_observation", factOrHypothesis: "fact", lane: "shape",
+      statement: "局ごとの型の承認済みの判定が束に無いため、この問いには答えられない。",
+      observations: [] as unknown[],
+      counterEvidence: { attempted: true, items: [], result: "none_found" },
+      neededObservation: { what: "局ごとの型の判定", whyNotInPacket: "定義が下書き", howToMeasure: "承認済みの定義で判定し直す" },
+    };
+    const envelope = completeSeatOutput(
+      { reach: { passphrase: "run20260", sections: [{ section: "2", lastKey: "aggregates.branches.total.value", seal: "s2" }] }, items: [need], answers: [], selfComputedNumbers: [], omissions: [] },
+      { runId: "run20260930abc", seat: "gpt", model: "gpt-test", meta: metaFor(), today: TODAY, gitHead: "0000000", usage: { inputTokens: 1, outputTokens: 1 }, finishReason: "stop", attempts: 1, requestedAt: "2026-09-30T00:00:00Z" },
+    );
+    const built = buildIntegrationInput([{ seat: "gpt", envelope }], { runId: "run20260930abc", packet: S7_PACKET, request: S7_REQUEST, seatOrderRef: "seat_order.json" });
+    const s1 = (built.input.seats as { present: boolean; seatIndex: number; items?: { hypothesisId: string }[] }[]).find((s) => s.present)!;
+    const idNeed = { seatIndex: s1.seatIndex, hypothesisId: s1.items![0]!.hypothesisId };
+    const llm = {
+      clusters: [{
+        clusterId: "C-001", packetRefs: ["aggregates.branches.total.value"], itemRefs: [idNeed],
+        representative: {
+          kind: "needed_observation", factOrHypothesis: "fact", lane: "shape",
+          statement: "局ごとの型の承認済みの判定が束に無いため、この問いには答えられない。",
+          observations: [], counterEvidence: { attempted: true, items: [], result: "none_found" },
+          neededObservation: { what: "局ごとの型の判定", whyNotInPacket: "定義が下書き", howToMeasure: "承認済みの定義で判定し直す" },
+        },
+      }],
+      contradictions: [], dropped: [],
+      heldBack: [{ clusterId: "C-001", reason: "観測を持たない項目だけの束のため、検証に回さず保留する。" }],
+      forVerification: [],
+    };
+    const output = completeIntegration(llm, ctxOf(built.input));
+    expect(integrationProblems(output, built.input, { today: TODAY, registry: new Set<string>() })).toEqual([]);
+  });
+
+  it("t5: 成員に finding(観測を持てる kind)が 1 つ混ざれば I-2 の成員の行が出る(緩めすぎていない)", () => {
+    const need = {
+      itemId: "S-001", kind: "needed_observation", factOrHypothesis: "fact", lane: "shape",
+      statement: "局ごとの型の承認済みの判定が束に無いため、この問いには答えられない。",
+      observations: [] as unknown[],
+      counterEvidence: { attempted: true, items: [], result: "none_found" },
+      neededObservation: { what: "局ごとの型の判定", whyNotInPacket: "定義が下書き", howToMeasure: "承認済みの定義で判定し直す" },
+    };
+    const finding = {
+      itemId: "S-002", kind: "finding", factOrHypothesis: "fact", lane: "fork",
+      statement: "分かれ道の総数は 404 だった。",
+      observations: [{ value: 404, unit: "positions", packetRef: { path: "aggregates.branches.total.value" } }],
+      counterEvidence: { attempted: true, items: [], result: "none_found" },
+    };
+    const envelope = completeSeatOutput(
+      { reach: { passphrase: "run20260", sections: [{ section: "2", lastKey: "aggregates.branches.total.value", seal: "s2" }] }, items: [need, finding], answers: [], selfComputedNumbers: [], omissions: [] },
+      { runId: "run20260930abc", seat: "gpt", model: "gpt-test", meta: metaFor(), today: TODAY, gitHead: "0000000", usage: { inputTokens: 1, outputTokens: 1 }, finishReason: "stop", attempts: 1, requestedAt: "2026-09-30T00:00:00Z" },
+    );
+    const built = buildIntegrationInput([{ seat: "gpt", envelope }], { runId: "run20260930abc", packet: S7_PACKET, request: S7_REQUEST, seatOrderRef: "seat_order.json" });
+    const s1 = (built.input.seats as { present: boolean; seatIndex: number; items?: { hypothesisId: string }[] }[]).find((s) => s.present)!;
+    const idNeed = { seatIndex: s1.seatIndex, hypothesisId: s1.items![0]!.hypothesisId };
+    const idFinding = { seatIndex: s1.seatIndex, hypothesisId: s1.items![1]!.hypothesisId };
+    const llm = {
+      // 束の根を numerator にし、finding の観測(value の path は .value)が根を持たないようにする ― 全員が免除の kind
+      // でなければ規則が今までどおり効くことを見る(免除の対象は need の 1 件だけ)。
+      clusters: [{
+        clusterId: "C-001", packetRefs: ["aggregates.branches.total.numerator"], itemRefs: [idNeed, idFinding],
+        representative: {
+          kind: "needed_observation", factOrHypothesis: "fact", lane: "shape",
+          statement: "局ごとの型の承認済みの判定が束に無いため、この問いには答えられない。",
+          observations: [], counterEvidence: { attempted: true, items: [], result: "none_found" },
+          neededObservation: { what: "局ごとの型の判定", whyNotInPacket: "定義が下書き", howToMeasure: "承認済みの定義で判定し直す" },
+        },
+      }],
+      contradictions: [], dropped: [],
+      heldBack: [{ clusterId: "C-001", reason: "観測の場所が食い違う項目を含むため、検証に回さず保留する。" }],
+      forVerification: [],
+    };
+    const output = completeIntegration(llm, ctxOf(built.input));
+    const out = integrationProblems(output, built.input, { today: TODAY, registry: new Set<string>() });
+    const memberLines = out.filter((p) => p.startsWith("I-2:") && p.includes("根拠に持たない"));
+    expect(memberLines).toHaveLength(2); // need(1)・finding(1) の両方で出る(免除は「全員」のときだけ)
+    expect(memberLines.some((p) => p.includes("I-1-001"))).toBe(true);
+    expect(memberLines.some((p) => p.includes("I-1-002"))).toBe(true);
+  });
+
+  it("t6: 文法の検査は不変(facts.recognition.rows を根に書けば、免除の対象でも今までどおり落ちる)", () => {
+    const { input, output } = full();
+    const c = (output.clusters as Record<string, unknown>[])[0]!;
+    c.packetRefs = ["facts.recognition.rows"];
+    const out = problems(output, input);
+    expect(out.some((p) => p.startsWith("I-2:") && p.includes("packetRefs"))).toBe(true);
   });
 });

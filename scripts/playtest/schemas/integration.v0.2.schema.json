@@ -1,0 +1,371 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "integration.v0.1.schema.json",
+  "title": "Integration v0.1",
+  "description": "STEP R3 §3。整理役の出力(道具が保存する形)。clusters[].representative は hypothesis.v0.4 の行(origin.seat = integrator。中身は lib/hypothesis.ts が 1 行ずつ見る)。seatCount.evidence は const false(一致は証拠でない ― 規則 8 (2))。forVerification から外した束は heldBack に理由つきで置く(理由は seatCount を参照しない ― 司令塔 2026-09-30)。internal の欄はどこにも無い。検査 I-1〜I-8 は lib/integration.ts。packet を読まない。",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "contract",
+    "schemaVersion",
+    "runId",
+    "seatOrderRef",
+    "run",
+    "clusters",
+    "contradictions",
+    "dropped",
+    "heldBack",
+    "forVerification",
+    "answersByQuestion",
+    "selfComputedNumbers"
+  ],
+  "properties": {
+    "contract": {
+      "const": "integration"
+    },
+    "schemaVersion": {
+      "const": "0.2"
+    },
+    "runId": {
+      "type": "string"
+    },
+    "seatOrderRef": {
+      "type": "string"
+    },
+    "run": {
+      "type": "object",
+      "properties": {
+        "model": {
+          "type": "string"
+        },
+        "modelVersion": {
+          "type": "string"
+        },
+        "inputSha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "requestedAt": {
+          "type": "string"
+        },
+        "usage": {
+          "type": "object",
+          "properties": {
+            "inputTokens": {
+              "type": "integer"
+            },
+            "outputTokens": {
+              "type": "integer"
+            }
+          },
+          "required": [
+            "inputTokens",
+            "outputTokens"
+          ],
+          "additionalProperties": false
+        },
+        "finishReason": {
+          "type": "string"
+        },
+        "attempts": {
+          "type": "integer",
+          "minimum": 1
+        }
+      },
+      "required": [
+        "model",
+        "inputSha256",
+        "requestedAt",
+        "usage",
+        "finishReason",
+        "attempts"
+      ],
+      "additionalProperties": false
+    },
+    "clusters": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "clusterId": {
+            "type": "string",
+            "pattern": "^C-[0-9]{3}$"
+          },
+          "packetRefs": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "itemRefs": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "seatIndex": {
+                  "type": "integer"
+                },
+                "hypothesisId": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "seatIndex",
+                "hypothesisId"
+              ],
+              "additionalProperties": false
+            },
+            "minItems": 1
+          },
+          "seatCount": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "integer"
+              },
+              "evidence": {
+                "const": false
+              }
+            },
+            "required": [
+              "value",
+              "evidence"
+            ],
+            "additionalProperties": false
+          },
+          "representative": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "clusterId",
+          "packetRefs",
+          "itemRefs",
+          "seatCount",
+          "representative"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "contradictions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "clusterIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "itemRefs": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "seatIndex": {
+                  "type": "integer"
+                },
+                "hypothesisId": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "seatIndex",
+                "hypothesisId"
+              ],
+              "additionalProperties": false
+            },
+            "minItems": 2
+          },
+          "packetRefs": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "minItems": 1
+          },
+          "text": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "clusterIds",
+          "itemRefs",
+          "packetRefs",
+          "text"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "dropped": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "itemRef": {
+            "type": "object",
+            "properties": {
+              "seatIndex": {
+                "type": "integer"
+              },
+              "hypothesisId": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "seatIndex",
+              "hypothesisId"
+            ],
+            "additionalProperties": false
+          },
+          "reason": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "itemRef",
+          "reason"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "heldBack": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "clusterId": {
+            "type": "string"
+          },
+          "reason": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "clusterId",
+          "reason"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "forVerification": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "answersByQuestion": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "questionId": {
+            "type": "string"
+          },
+          "bySeat": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "seatIndex": {
+                  "type": "integer"
+                },
+                "status": {
+                  "enum": [
+                    "answered",
+                    "partial",
+                    "unanswerable"
+                  ]
+                },
+                "itemRefs": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "missing": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "what": {
+                        "type": "string"
+                      },
+                      "howToMeasure": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "what",
+                      "howToMeasure"
+                    ],
+                    "additionalProperties": false
+                  }
+                }
+              },
+              "required": [
+                "seatIndex",
+                "status",
+                "itemRefs",
+                "missing"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "summary": {
+            "enum": [
+              "answered",
+              "partial",
+              "unanswerable",
+              "mixed",
+              "no_seat"
+            ]
+          },
+          "note": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "questionId",
+          "bySeat",
+          "summary"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "selfComputedNumbers": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "seatIndex": {
+            "type": "integer"
+          },
+          "value": {
+            "type": "number"
+          },
+          "how": {
+            "type": "string"
+          },
+          "fromPaths": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "note": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "seatIndex",
+          "value",
+          "how",
+          "fromPaths"
+        ],
+        "additionalProperties": false
+      }
+    }
+  }
+}

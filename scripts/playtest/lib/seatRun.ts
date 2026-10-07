@@ -49,6 +49,8 @@ export const FIXED_INSTRUCTION_SHA256: Readonly<Record<string, string>> = {
   // v1.5(2026-10-07・S-6 (c)): 局を符号で呼ぶときは facts.recognition.rows[n].gameId を観測に引く、の 1 ブロックを足した(版名の行以外は 1 バイトも変えていない)
   "LLM_SEATS_INSTRUCTION_v1.5_2026-10-07.md": "0dd9ed25b0dfb7219e432cea2f319c973dc4dfac2f414b8c8d463c1cc029cec4",
   "LLM_SEATS_INTEGRATOR_INSTRUCTION_v1_2026-09-30.md": "5118a6949862a104942f6975191dd3d16b00ca834f18b4bba5807aeaf2d7d94a",
+  // v1.1(2026-10-07・S-7 (g)): 束ねた項目がどれも観測を持たないときは packetRefs を空の配列にする・根を作らない の 1 ブロックを足した(版名の行以外は 1 バイトも変えていない)
+  "LLM_SEATS_INTEGRATOR_INSTRUCTION_v1.1_2026-10-07.md": "e6aba85e36b08c622b5a67c61b1b970f2daf9fef5992da11bf72a7686a3da61b",
 };
 
 /** 指示文 1 本の sha を固定値と照合する。**表に無い名前も誤り**(固定していない文で席に聞かない) */
@@ -492,7 +494,7 @@ export async function runAll(cfg: RunAllConfig, deps: SlotDeps): Promise<RunAllR
 
 /** 整理役の正本 schema(写しを作るためだけに読む。判定は integration.ts の validateIntegrationLlm) */
 function loadIntegrationLlmSchema(): Rec {
-  return JSON.parse(readFileSync(new URL("../schemas/integration.llm.v0.2.schema.json", import.meta.url), "utf-8")) as Rec;
+  return JSON.parse(readFileSync(new URL("../schemas/integration.llm.v0.3.schema.json", import.meta.url), "utf-8")) as Rec;
 }
 
 function summaryOf(args: {

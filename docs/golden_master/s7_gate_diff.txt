@@ -1,0 +1,5 @@
+★期待値と違う(4 件):
+- g9.integrationCheck.43f8b69c-20261007-1.problems: 長さ 期待 15 / 実測 12
+- g9.integrationCheck.43f8b69c-20261007-1.problems[9]: 期待 "I-2: C-007 の成員「1:I-1-007」が束の根(facts.recognition.rows)を根拠に持たない" / 実測 "I-4: C-007 の representative schema: $.observations: 要素が 0 個で、1 個に足りない"
+- g9.integrationCheck.43f8b69c-20261007-1.problems[10]: 期待 "I-2: C-007 の成員「2:I-2-006」が束の根(facts.recognition.rows)を根拠に持たない" / 実測 "I-4: C-008 の representative schema: $.observations: 要素が 0 個で、1 個に足りない"
+- g9.integrationCheck.43f8b69c-20261007-1.problems[11]: 期待 "I-4: C-007 の representative schema: $.observations: 要素が 0 個で、1 個に足りない" / 実測 "I-6: selfComputedNumbers[5] の値「0」が代表の文・矛盾・注に出ている"

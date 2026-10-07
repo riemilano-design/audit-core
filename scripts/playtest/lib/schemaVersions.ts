@@ -64,3 +64,13 @@ export const KNOWN_HYPOTHESIS_SCHEMA_VERSIONS = ["0.1", "0.2", "0.3", "0.4", "0.
  * 観測 0 件の代表が schema で落ちていた)。`lib/seatOutput.ts` はこの値を再輸出する ― 定義は 2 か所に置かない。
  */
 export const SEAT_HYPOTHESIS_SCHEMA_VERSION = "0.5" as const;
+
+/**
+ * STEP S-7(audit-core/docs/CORE_CONNECTION_S7_PLAN_2026-10-07.md (e))。契約 integration(整理役の出力。道具が保存する形)の
+ * 今の版と、スキーマのファイルがある版(末尾に独立して置く)。0.2 は `clusters[].packetRefs` の `minItems` を外した版
+ * (観測 0 件だけの成員で束んだとき、整理役が根を作らずに済むようにする)。**保存済みの記録はすべて `schemaVersion: "0.1"` で、
+ * `validateIntegration` は記録自身の `schemaVersion` で版を解決するため、既存の記録は 1 行も動かない。**
+ */
+export const INTEGRATION_SCHEMA_VERSION = "0.2" as const;
+/** integration のスキーマのファイルがある版(古い版のファイルは消さない) */
+export const KNOWN_INTEGRATION_SCHEMA_VERSIONS = ["0.1", "0.2"] as const;
