@@ -533,8 +533,8 @@ describe("固定した指示文の sha(司令塔 2026-09-30)", () => {
     expect(problems.length).toBe(1);
     expect(problems[0]).toContain("固定されていない");
   });
-  it("6 本(席 v1・v1.1・v1.2・v1.3・**v1.4**・整理役 v1)が表に在る", () => {
-    expect(Object.keys(FIXED_INSTRUCTION_SHA256).length).toBe(6);
+  it("7 本(席 v1・v1.1・v1.2・v1.3・v1.4・**v1.5**・整理役 v1)が表に在る", () => {
+    expect(Object.keys(FIXED_INSTRUCTION_SHA256).length).toBe(7);
     // 古い版を消さない ― v1.1 で回した 3 周と比べられるようにする(版名を上げても前の sha は残す)
     expect(Object.keys(FIXED_INSTRUCTION_SHA256)).toContain("LLM_SEATS_INSTRUCTION_v1.1_2026-09-30.md");
     expect(Object.keys(FIXED_INSTRUCTION_SHA256)).toContain("LLM_SEATS_INSTRUCTION_v1.2_2026-10-01.md");
@@ -542,6 +542,8 @@ describe("固定した指示文の sha(司令塔 2026-09-30)", () => {
     expect(Object.keys(FIXED_INSTRUCTION_SHA256)).toContain("LLM_SEATS_INSTRUCTION_v1.3_2026-10-06.md");
     // S-4(2026-10-06 §2.1(c1)): observations 0 件の書き方・itemId の形・最上位の鍵は 5 つだけ の 4 ブロックを変えた v1.4
     expect(Object.keys(FIXED_INSTRUCTION_SHA256)).toContain("LLM_SEATS_INSTRUCTION_v1.4_2026-10-06.md");
+    // S-6(2026-10-07 (c)): 局を符号で呼ぶときは gameId を観測に引く、の 1 ブロックを足した v1.5
+    expect(Object.keys(FIXED_INSTRUCTION_SHA256)).toContain("LLM_SEATS_INSTRUCTION_v1.5_2026-10-07.md");
   });
   it("v1.4 は v1.3 と 4 ブロックだけ違う(STEP S-4 §2.1(c1)。それ以外は 1 バイトも変えていない)", () => {
     const v13 = readFileSync(new URL("../../../docs/LLM_SEATS_INSTRUCTION_v1.3_2026-10-06.md", import.meta.url), "utf-8").split("\n");
@@ -570,6 +572,26 @@ describe("固定した指示文の sha(司令塔 2026-09-30)", () => {
     for (let i = 0; i < 22; i += 1) {
       if (changedLines.has(i)) continue;
       expect(v14[i], `行 ${i + 1}`).toBe(v13[i]);
+    }
+  });
+  it("v1.5 は v1.4 と版名の行 + 1 ブロックだけ違う(STEP S-6 (c)。それ以外は 1 バイトも変えていない)", () => {
+    const v14 = readFileSync(new URL("../../../docs/LLM_SEATS_INSTRUCTION_v1.4_2026-10-06.md", import.meta.url), "utf-8").split("\n");
+    const v15 = readFileSync(new URL("../../../docs/LLM_SEATS_INSTRUCTION_v1.5_2026-10-07.md", import.meta.url), "utf-8").split("\n");
+    // 足したのは既存行の後ろへの挿入 1 行だけ(削った行は無い)
+    expect(v15.length).toBe(v14.length + 1);
+    // (1) 版名の行(1 行目)
+    expect(v14[0]).toContain("指示文 v1.4");
+    expect(v15[0]).toContain("指示文 v1.5");
+    expect(v15[0]).toBe(v14[0]!.replace("v1.4", "v1.5"));
+    // (2) 22 行目(index 21)に新しいブロックを挿入した(局の符号を観測に引く)
+    expect(v15[21]).toContain("facts.recognition.rows[n].gameId");
+    expect(v15[21]).toContain("H-1");
+    expect(v15[21]).toContain("埋め草を写さない");
+    // (3) 以降(23 行目〜末尾、index 22〜)は v1.4 の 22 行目〜末尾(index 21〜)とそのまま同じ(新しい行の後ろで 1 バイトもずれていない)
+    expect(v15.slice(22)).toEqual(v14.slice(21));
+    // 冒頭(1〜21 行目、index 0〜20)は版名の行(index 0)以外は全部一致
+    for (let i = 1; i < 21; i += 1) {
+      expect(v15[i], `行 ${i + 1}`).toBe(v14[i]);
     }
   });
 });

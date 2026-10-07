@@ -844,6 +844,24 @@ describe("H-1 検証済みの文字列の中の数字を数えない(S-5 §2.1(c
     expect(result.messages[1]).toContain("50");
     expect(result.messages[1]).toContain("derived");
   });
+
+  // S-6 計画(d)(audit-core/docs/CORE_CONNECTION_S6_PLAN_2026-10-07.md)。isFullyCoveredBySpan の端の境界
+  // `end <= e` を worktree の変異 m2(`end <= e` → `end < e`)で測ったところ、既存の試験では黙った
+  // (赤くなる試験が無かった)。「数の右端が検証済みの文字列の右端とちょうど同じ位置で終わる」ときを
+  // 名指しで固定する(両方とも同じ位置で止まる境界は「見逃す」が正しい ― 1 文字でも超えたら見逃さない、を
+  // 左端(s <= start)の等号だけでなく右端(end <= e)の等号でも見る)。
+  it("数の右端が検証済みの文字列の右端とちょうど同じ位置で終わるときも見逃す(right 境界の等号。m2 を名指しで固定)", () => {
+    const line = {
+      schemaVersion: "0.4",
+      // 検証済みの文字列「g04」の範囲は index [0,3)。数字部分「04」は index [1,3) ― 右端(3)がちょうど
+      // 「g04」の右端(3)と同じ位置。allowed の数には 4 を入れない(string の "g04" からは数を取らないので
+      // 「覆い」だけが通る理由になる ― allowed 経由で通ってしまうと境界を測れない)。
+      statement: "g04の結果でした。という読みです。",
+      observations: [{ obsId: "obs.a", path: "a", value: "g04" }],
+      counterEvidence: { attempted: true, items: [], result: "none_found" },
+    };
+    expect(h1(line)).toMatchObject({ ok: true, messages: [] });
+  });
 });
 
 // ---------------------------------------------------------------------------

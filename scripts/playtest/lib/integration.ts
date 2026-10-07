@@ -14,6 +14,7 @@ import { validate, type JsonSchema } from "./eventSchema.js";
 import { loadObsRegistry, validateHypothesisLine } from "./hypothesis.js";
 import { aggregateRef, packetObsIdOf, packetRefPathProblems } from "./packetRef.js";
 import { Prng } from "./prng.js";
+import { SEAT_HYPOTHESIS_SCHEMA_VERSION } from "./schemaVersions.js";
 import type { Seat } from "./seatOutput.js";
 
 export const INTEGRATION_INPUT_CONTRACT = "integration-input" as const;
@@ -279,7 +280,9 @@ export function completeIntegration(llm: unknown, ctx: CompleteIntegrationContex
     const rep = c.representative as Rec;
     const inputs = (asArray(c.itemRefs) as Rec[]).map((r) => seatItemRef(r.seatIndex, r.hypothesisId));
     const line: Rec = {
-      schemaVersion: "0.4",
+      // STEP S-6 (b): 席(seatOutput.ts)と同じ 1 つの定数を読む(定義は schemaVersions.ts)。
+      // 直書きの "0.4" だったときは hypothesis.v0.4 の observations.minItems:1 で、観測 0 件の代表(kind: unanswerable / needed_observation)が schema で落ちていた。
+      schemaVersion: SEAT_HYPOTHESIS_SCHEMA_VERSION,
       hypothesisId: `H-${ctx.customerRef}-${runToken}-${String(i + 1).padStart(3, "0")}`,
       subject: { customer: ctx.customerRef, groups: [`${ctx.timeLimitSec} 秒`], gamesCount: ctx.games },
       scope: "this_user",

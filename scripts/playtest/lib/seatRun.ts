@@ -46,6 +46,8 @@ export const FIXED_INSTRUCTION_SHA256: Readonly<Record<string, string>> = {
   "LLM_SEATS_INSTRUCTION_v1.3_2026-10-06.md": "284f24a900502ef2278b81d60d00eba6c7536c8b035a84edf2f9894433fee96b",
   // v1.4(2026-10-06・S-4 §2.1(c1)): observations 0 件の書き方・itemId の形・最上位の鍵は 5 つだけ の 4 ブロックを変えた(他は 1 バイトも変えていない)
   "LLM_SEATS_INSTRUCTION_v1.4_2026-10-06.md": "8bd603efcc6ec4ae0c040becee2a126700ea520d8ad606a921d87bd4ba9e5774",
+  // v1.5(2026-10-07・S-6 (c)): 局を符号で呼ぶときは facts.recognition.rows[n].gameId を観測に引く、の 1 ブロックを足した(版名の行以外は 1 バイトも変えていない)
+  "LLM_SEATS_INSTRUCTION_v1.5_2026-10-07.md": "0dd9ed25b0dfb7219e432cea2f319c973dc4dfac2f414b8c8d463c1cc029cec4",
   "LLM_SEATS_INTEGRATOR_INSTRUCTION_v1_2026-09-30.md": "5118a6949862a104942f6975191dd3d16b00ca834f18b4bba5807aeaf2d7d94a",
 };
 

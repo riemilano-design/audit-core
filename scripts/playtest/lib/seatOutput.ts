@@ -11,11 +11,15 @@ import { validate, type JsonSchema } from "./eventSchema.js";
 import { loadObsRegistry, validateHypothesisLine, type CheckResult } from "./hypothesis.js";
 import { packetObsIdOf, packetRefPathProblems } from "./packetRef.js";
 import { normalizeLastKey, type SeatInputMeta } from "./seatInput.js";
+import { SEAT_HYPOTHESIS_SCHEMA_VERSION } from "./schemaVersions.js";
 
 export const SEAT_OUTPUT_CONTRACT = "seat-output" as const;
 export const SEAT_OUTPUT_SCHEMA_VERSION = "0.1" as const;
-/** STEP S-4(audit-core/docs/CORE_CONNECTION_S4_PLAN_2026-10-06.md §2.1(b))で 0.5 に上げた(hypothesis.v0.5 の observations の minItems 無しを使う) */
-export const SEAT_HYPOTHESIS_SCHEMA_VERSION = "0.5" as const;
+/**
+ * STEP S-4(audit-core/docs/CORE_CONNECTION_S4_PLAN_2026-10-06.md §2.1(b))で 0.5 に上げた(hypothesis.v0.5 の observations の minItems 無しを使う)。
+ * **定義は `schemaVersions.ts` の 1 か所**(S-6 計画 (b))。ここは再輸出だけ ― 整理役(`lib/integration.ts`)も同じ定数を読む。
+ */
+export { SEAT_HYPOTHESIS_SCHEMA_VERSION };
 export type Seat = "gpt" | "gemini" | "claude";
 /** 席の行の provenance.excludedInputs(現行ルートの出力は席に渡していない ― H-6 の盲検の記録) */
 export const SEAT_EXCLUDED_INPUTS: readonly string[] = ["answer_menu.json", "exit_candidates.json", "9_本編.md"];

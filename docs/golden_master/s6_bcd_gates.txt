@@ -1,0 +1,29 @@
+# S-6 (b)(c)(d) の門の計測(2026-10-07。司令塔が数を書く直前に 1 回ずつ回した)
+
+## 凍結 sha の再照合(作業の最後)
+scripts/playtest/lib/hypothesis.test.ts: OK
+scripts/playtest/lib/integration.test.ts: OK
+scripts/playtest/lib/integration.ts: OK
+scripts/playtest/lib/schemaVersions.ts: OK
+scripts/playtest/lib/seatOutput.ts: OK
+scripts/playtest/lib/seatRun.test.ts: OK
+scripts/playtest/lib/seatRun.ts: OK
+docs/LLM_SEATS_INSTRUCTION_v1.5_2026-10-07.md: OK
+
+## npx vitest run scripts/playtest --exclude '**/.claude/**'
+ Test Files  118 passed (118)
+      Tests  2378 passed (2378)
+   Duration  45.40s (tests 90%, import 7%, transform 2%)
+
+## npm run typecheck:scripts(error TS 10 件。全部 scripts/playtest/out/ の生成物)
+   2 scripts/playtest/out/cond-draft/conds/c1_king_escapes_decrease.ts
+   2 scripts/playtest/out/cond-draft/conds/c2_king_escapes_decrease_under_reach.ts
+   2 scripts/playtest/out/cond-draft/conds/c3_king_escapes_decrease_with_capture.ts
+   2 scripts/playtest/out/cond-draft/conds/c4_gote_reach_on_own_king_zone_increase.ts
+   1 scripts/playtest/out/report-template-v6/inputs/sfens.ts
+   1 scripts/playtest/out/report5/sfens.ts
+
+## npx tsx scripts/playtest/goldenMasterCheck.ts --expect docs/golden_master/c5_expectation.json
+期待値のとおり(docs/golden_master/c5_expectation.json)
+  packet 22aee8fe696d0262・門 6 種・冊子 4 冊・入力 52 ファイル
+rc=0・差 0 件

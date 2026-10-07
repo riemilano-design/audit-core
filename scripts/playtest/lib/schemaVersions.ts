@@ -56,3 +56,11 @@ export const HYPOTHESIS_SCHEMA_VERSION = "0.1" as const;
  * (`kind` が `unanswerable`・`needed_observation` の行は観測 0 件でよい ― H-12 が kind で見る)。既定は据え置き。
  */
 export const KNOWN_HYPOTHESIS_SCHEMA_VERSIONS = ["0.1", "0.2", "0.3", "0.4", "0.5"] as const;
+
+/**
+ * 席(`lib/seatOutput.ts`)と整理役(`lib/integration.ts`)が書く hypothesis 行の `schemaVersion` は
+ * **この 1 つの定数**を読む(S-6 計画 `audit-core/docs/CORE_CONNECTION_S6_PLAN_2026-10-07.md` (b)。
+ * S-5 の結果 §10.4 発見 (A): S-4 で契約を 0.5 に上げたのに整理役側だけ 0.4 を直書きしていて、
+ * 観測 0 件の代表が schema で落ちていた)。`lib/seatOutput.ts` はこの値を再輸出する ― 定義は 2 か所に置かない。
+ */
+export const SEAT_HYPOTHESIS_SCHEMA_VERSION = "0.5" as const;

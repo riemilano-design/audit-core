@@ -5,11 +5,12 @@
 import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import { validate } from "./eventSchema.js";
+import { validateHypothesisLine } from "./hypothesis.js";
 import {
   answersByQuestionOf, buildIntegrationInput, canonicalJson, completeIntegration, copySeatItem, integrationProblems, seatPermutation, validateIntegrationInput, validateIntegrationLlm,
 } from "./integration.js";
 import type { SeatInputMeta } from "./seatInput.js";
-import { completeSeatOutput } from "./seatOutput.js";
+import { completeSeatOutput, SEAT_HYPOTHESIS_SCHEMA_VERSION } from "./seatOutput.js";
 
 /** 生の schema ファイル(版の比較のためだけに読む。判定は integration.ts の validateIntegrationInput) */
 function loadRawSchema(name: string): Record<string, unknown> {
@@ -317,5 +318,40 @@ describe("版 0.2(observations の minItems を外す。STEP S-4 §2.1(b))", () 
     const v01Problems = validate(input, v01);
     expect(v01Problems.length).toBeGreaterThan(0);
     expect(v01Problems.some((p) => p.includes("足りない"))).toBe(true);
+  });
+});
+
+// STEP S-6(audit-core/docs/CORE_CONNECTION_S6_PLAN_2026-10-07.md (b))。
+// S-5 の結果 §10.4 発見 (A): 席(seatOutput.ts)は契約 hypothesis.v0.5 を使うのに、整理役が書く代表の行だけ
+// "0.4" が直書きされ、観測 0 件の代表(kind: unanswerable / needed_observation)が schema で落ちていた。
+// 定数は schemaVersions.ts の 1 か所に移し、席と整理役が同じ定数を読む形にした。
+describe("版の統一(b): 整理役の代表は SEAT_HYPOTHESIS_SCHEMA_VERSION を使う", () => {
+  it("定数は字で 0.5", () => {
+    expect(SEAT_HYPOTHESIS_SCHEMA_VERSION).toBe("0.5");
+  });
+  it("completeIntegration の出力の clusters[].representative.schemaVersion は字で 0.5", () => {
+    const { output } = full();
+    const clusters = output.clusters as { representative: { schemaVersion: string } }[];
+    expect(clusters[0]!.representative.schemaVersion).toBe("0.5");
+  });
+  it("効き目: 観測 0 件・kind needed_observation の代表を completeIntegration に通しても schema は ok(直す前の 0.4 は minItems:1 で落ちていた)", () => {
+    const { input } = build();
+    const llm = llmOf(input) as { clusters: Record<string, unknown>[] };
+    llm.clusters[0]!.representative = {
+      kind: "needed_observation",
+      factOrHypothesis: "fact",
+      lane: "shape",
+      statement: "局ごとの型を分ける承認済みの判定が束に無いため、この問いには答えられない。",
+      observations: [],
+      counterEvidence: { attempted: true, items: [], result: "none_found" },
+      neededObservation: { what: "局ごとの型の判定(承認済み)", whyNotInPacket: "定義が下書き", howToMeasure: "承認済みの定義で判定し直す" },
+    };
+    expect(validateIntegrationLlm(llm)).toEqual([]);
+    const output = completeIntegration(llm, ctxOf(input));
+    const rep = (output.clusters as { representative: Record<string, unknown> }[])[0]!.representative;
+    expect(rep.schemaVersion).toBe("0.5");
+    expect((rep.observations as unknown[]).length).toBe(0);
+    const results = validateHypothesisLine(rep, { today: TODAY, registry: new Set<string>() });
+    expect(results.find((r) => r.check === "schema")!.ok).toBe(true);
   });
 });
