@@ -1,0 +1,157 @@
+{
+  "id": "gold-01",
+  "author": "独立作成(実装を見ていない)",
+  "note": "実装担当とは独立の席が、分解層の実装(claimDecomposition.ts・その試験・v0.1 schema)と D-1 計画 §8 以降を一度も読まずに書いた。原文は実在の納品物の写しではなく、対局後診断の出口の言い回し(控えめな断定・局数の分数・暦の期間)を模した自作である。狙いは 4 つの難所を 1 本に同居させること: (1) 数があるのに主張でない文 3 つ(単位の定義・閾値の定義・項目名 M4)、(2) 別の主語で同じ値 9 が出る組(c4 と c5)、(3) 期間・単位・母集団が文中にしか無い主張(c1 の暦、c2・c3 の「手」、c2・c8 の母集団)、(4) 出どころを指しにくい合計と差分(c7 の 12 局、c3 の 16 手)。span は文そのものの区間(句点を含み、改行は含まない)で統一した。確かめ方: 組み立て時に python で original_text.count(文) == 1 と original_text[start:end] == 文 を assert し、さらに書き出した JSON を別の script で読み直して 6 つを機械で照合した ― (i) span が範囲内かつ一意、(ii) span の字が句点で終わり改行を含まない、(iii) value の数字が span の字の中に在る、(iv) uncovered の 3 文が一意・数字を含み・どの claim の span とも重ならない、(v) claim の span どうしが重ならない、(vi) 数字を含む文のうち claim にも uncovered にも入っていないものが 0 件。全件一致した。modifiers の取り決め: period は暦の表現だけに使い、局の集合は population に入れる。文に書かれていない母集団は、推測で 20 局を補わず null にした(c5・c6・c7)。evidence_pointer は、人は packet を見ていないので指せない。全件 null であり、この欄はこの正解集合では何も試験していない。",
+  "original_text": "対局後診断レポート(抜粋)\n\n対象は、2026 年 9 月に指された 20 局です。\n手数は、投了までの指し手の総数を 1 手単位で数えたものです。\nこの冊子では、評価値の差が 300 点以上ひらいた局面を「分かれ道」と呼びます。\n\n直近 20 局では、1 局あたりの平均手数は 84 手でした。\n前半 10 局と後半 10 局を比べると、平均手数の差は 16 手でした。\n\n序盤で先に有利になった局は 20 局のうち 9 局でした。\n相手の飛車先に備えない形になった局も 9 局あります。\n互角のまま中盤に入った局は 3 局でした。\n序盤で先に有利になった局と、互角のまま中盤に入った局を合わせると 12 局になります。\n最初の 10 局に限ると、有利になったのに負けた局は 5 局でした。\n分かれ道が 3 回以上あった局は、20 局のうち 6 局でした。\n\nここからは、観測項目 M4(攻めの速さ)の数だけを並べます。\nこの傾向は、攻めの形を作る前に相手の攻めが届いていた可能性を示します。",
+  "expected_claims": [
+    {
+      "claim_id": "c1",
+      "span": [
+        15,
+        42
+      ],
+      "form": "direct_value",
+      "subject": "診断の対象になった局数",
+      "value": 20,
+      "modifiers": {
+        "period": "2026 年 9 月",
+        "unit": "局",
+        "population": null
+      },
+      "evidence_pointer": null
+    },
+    {
+      "claim_id": "c2",
+      "span": [
+        117,
+        148
+      ],
+      "form": "derived_value",
+      "subject": "1 局あたりの平均手数",
+      "value": 84,
+      "modifiers": {
+        "period": null,
+        "unit": "手",
+        "population": "直近 20 局"
+      },
+      "evidence_pointer": null
+    },
+    {
+      "claim_id": "c3",
+      "span": [
+        149,
+        186
+      ],
+      "form": "derived_value",
+      "subject": "前半 10 局と後半 10 局の平均手数の差",
+      "value": 16,
+      "modifiers": {
+        "period": null,
+        "unit": "手",
+        "population": "前半 10 局と後半 10 局"
+      },
+      "evidence_pointer": null
+    },
+    {
+      "claim_id": "c4",
+      "span": [
+        188,
+        217
+      ],
+      "form": "aggregate",
+      "subject": "序盤で先に有利になった局数",
+      "value": 9,
+      "modifiers": {
+        "period": null,
+        "unit": "局",
+        "population": "対象 20 局"
+      },
+      "evidence_pointer": null
+    },
+    {
+      "claim_id": "c5",
+      "span": [
+        218,
+        245
+      ],
+      "form": "aggregate",
+      "subject": "相手の飛車先に備えない形になった局数",
+      "value": 9,
+      "modifiers": {
+        "period": null,
+        "unit": "局",
+        "population": null
+      },
+      "evidence_pointer": null
+    },
+    {
+      "claim_id": "c6",
+      "span": [
+        246,
+        267
+      ],
+      "form": "aggregate",
+      "subject": "互角のまま中盤に入った局数",
+      "value": 3,
+      "modifiers": {
+        "period": null,
+        "unit": "局",
+        "population": null
+      },
+      "evidence_pointer": null
+    },
+    {
+      "claim_id": "c7",
+      "span": [
+        268,
+        311
+      ],
+      "form": "derived_value",
+      "subject": "序盤で先に有利になった局と互角のまま中盤に入った局の合計",
+      "value": 12,
+      "modifiers": {
+        "period": null,
+        "unit": "局",
+        "population": null
+      },
+      "evidence_pointer": null
+    },
+    {
+      "claim_id": "c8",
+      "span": [
+        312,
+        346
+      ],
+      "form": "aggregate",
+      "subject": "有利になったのに負けた局数",
+      "value": 5,
+      "modifiers": {
+        "period": null,
+        "unit": "局",
+        "population": "最初の 10 局"
+      },
+      "evidence_pointer": null
+    },
+    {
+      "claim_id": "c9",
+      "span": [
+        347,
+        379
+      ],
+      "form": "aggregate",
+      "subject": "分かれ道が 3 回以上あった局数",
+      "value": 6,
+      "modifiers": {
+        "period": null,
+        "unit": "局",
+        "population": "対象 20 局(分かれ道が 3 回以上あった局を数える)"
+      },
+      "evidence_pointer": null
+    }
+  ],
+  "expected_uncovered_number_sentences": [
+    "手数は、投了までの指し手の総数を 1 手単位で数えたものです。",
+    "この冊子では、評価値の差が 300 点以上ひらいた局面を「分かれ道」と呼びます。",
+    "ここからは、観測項目 M4(攻めの速さ)の数だけを並べます。"
+  ]
+}
