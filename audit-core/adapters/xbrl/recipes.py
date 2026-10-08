@@ -214,14 +214,20 @@ def _direct_value_claim(claim, s, a, b, sign, num, unit, prec, subj, elems, memb
     if hits and not (is_diff and subj):
         fams = sorted({f["name"] for f, _ in hits})
         if subj or len(fams) == 1:
-            f, how = hits[0]
-            claim["pointer"] = "xbrl:%s@%s" % (f["name"], f["context"])
-            claim["bound"] = True
-            claim["result"] = "GROUNDED"
-            claim["recomputed"] = f["value"]
-            claim["match"] = how
-            if not subj:
-                claim["reason"] = "value_only(no subject)"
+            if subj:
+                f, how = hits[0]
+                claim["pointer"] = "xbrl:%s@%s" % (f["name"], f["context"])
+                claim["bound"] = True
+                claim["result"] = "GROUNDED"
+                claim["recomputed"] = f["value"]
+                claim["match"] = how
+            else:
+                # 封 BINDING_FIX_PLAN_2026-10-08(案ア、人間の決定 2026-10-08)。
+                # subject が取れていない数の主張は、候補事実の家族が 1 つに
+                # 絞れても束縛しない。pointer/bound/recomputed を立てず、
+                # reason="no_subject" のまま返す(UNBOUND_REASON_STATE により
+                # UNVERIFIABLE になる)。
+                claim["reason"] = "no_subject"
         else:
             # C-1d §3.3: the registered reason name is the count-free
             # `ambiguous(elements)` (so a 3rd document's different element
