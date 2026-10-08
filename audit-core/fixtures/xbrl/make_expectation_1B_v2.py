@@ -16,7 +16,13 @@ V1 = os.path.join(HERE, "core_expectation_1B.json")
 RUN = os.path.join(HERE, "c1g_first_run_1B_P6.json")
 OUT = os.path.join(HERE, "core_expectation_1B_v2.json")
 SEALED_IDS = ("N030", "N048", "N050", "T026", "T028")
-V1_SHA = "f8a45ecce18a3d98181061a6943449c75a0fbb850e09ec0b71808a45a70fd820"
+V1_SHA = "31818f183290febe4caaad50eca503bd9379122cb261afa8cacaf1ecf0ae1325"
+# 封 BINDING_FIX_PLAN_2026-10-08(人間の承認 2026-10-09)。主語の無い数の主張を
+# 束縛しない直しで、v1 側が封じた新しい仕様へ変わった ID。1 回目の記録
+# c1g_first_run_1B_P6.json は直す前の測定なので、この ID は 1 回目との照合ではなく
+# **封じた仕様そのもの**と照合する(門を緩めるのではなく置き換える)。
+# 1 回目の記録は 1 byte も変えない。
+RESPEC_IDS = ("N042",)
 RUN_SHA = "e4b3795204dc0c18"  # 先頭 16 桁(C-1g の結果 §3)
 
 
@@ -54,14 +60,25 @@ def main():
             row["result"]["recomputed"] = r["recomputed"]
             row["result"]["script_reason"] = r["reason"]
             changed.append(row["id"])
-        # 4 欄の照合(91 件すべて)
+        # 4 欄の照合(91 件すべて)。RESPEC_IDS だけは封じた仕様と照合する。
         bad = []
-        if row["result"]["state"] != r["state"]: bad.append("state")
-        if list(row["evidence"]["pointers"]) != list(r["pointers"]): bad.append("pointers")
-        if row["result"]["recomputed"] != r["recomputed"]: bad.append("recomputed")
-        if row["modifiers"]["normalization"] != r["modifiers"]["normalization"]: bad.append("normalization")
-        if bad:
-            print("1 回目の JSON と違う:", row["id"], bad); return 3
+        if row["id"] in RESPEC_IDS:
+            if row["result"]["state"] != "UNVERIFIABLE": bad.append("state")
+            if list(row["evidence"]["pointers"]) != []: bad.append("pointers")
+            if row["result"]["recomputed"] is not None: bad.append("recomputed")
+            if row["result"]["script_reason"] != "no_subject": bad.append("script_reason")
+            if row["modifiers"]["normalization"] is not None: bad.append("normalization")
+            if row["modifiers"]["population"] is not None: bad.append("population")
+            if row["modifiers"]["time_range"] is not None: bad.append("time_range")
+            if bad:
+                print("封じた仕様と違う:", row["id"], bad); return 3
+        else:
+            if row["result"]["state"] != r["state"]: bad.append("state")
+            if list(row["evidence"]["pointers"]) != list(r["pointers"]): bad.append("pointers")
+            if row["result"]["recomputed"] != r["recomputed"]: bad.append("recomputed")
+            if row["modifiers"]["normalization"] != r["modifiers"]["normalization"]: bad.append("normalization")
+            if bad:
+                print("1 回目の JSON と違う:", row["id"], bad); return 3
         out["claims"].append(row)
     if changed != list(SEALED_IDS):
         print("更新した ID が封じた集合と違う:", changed); return 3

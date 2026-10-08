@@ -89,13 +89,13 @@ class Instrument3GateTest(unittest.TestCase):
 
     def test_p1_against_1B(self):
         n, normalized, pointer_metas = self._run_one("1B", M.DOC_1, V.P1, "core_expectation_1B.json", 91)
-        self.assertEqual(normalized, 44)
-        self._assert_no_ambiguity("1B", pointer_metas, 60)
+        self.assertEqual(normalized, 43)
+        self._assert_no_ambiguity("1B", pointer_metas, 59)
 
     def test_p5f_against_5F(self):
         n, normalized, pointer_metas = self._run_one("5F", M.DOC_5, V.P5F, "core_expectation_5F.json", 133)
-        self.assertEqual(normalized, 33)
-        self._assert_no_ambiguity("5F", pointer_metas, 39)
+        self.assertEqual(normalized, 28)
+        self._assert_no_ambiguity("5F", pointer_metas, 34)
 
     def test_total_224(self):
         n1 = len(INS.load_expectation("core_expectation_1B.json")["claims"])
@@ -105,7 +105,7 @@ class Instrument3GateTest(unittest.TestCase):
     def test_normalization_total_77(self):
         _, normalized_1b, _ = self._run_one("1B", M.DOC_1, V.P1, "core_expectation_1B.json", 91)
         _, normalized_5f, _ = self._run_one("5F", M.DOC_5, V.P5F, "core_expectation_5F.json", 133)
-        self.assertEqual(normalized_1b + normalized_5f, 77)
+        self.assertEqual(normalized_1b + normalized_5f, 71)
 
     def _assert_no_ambiguity(self, tag, pointer_metas, expected_pointer_count):
         self.assertEqual(len(pointer_metas), expected_pointer_count, "%s: distinct pointers resolved" % (tag,))

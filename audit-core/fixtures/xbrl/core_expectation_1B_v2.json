@@ -1,7 +1,7 @@
 {
  "source": "core_expectation_1B.json + c1g_first_run_1B_P6.json",
  "source_sha256": {
-  "core_expectation_1B.json": "f8a45ecce18a3d98181061a6943449c75a0fbb850e09ec0b71808a45a70fd820",
+  "core_expectation_1B.json": "31818f183290febe4caaad50eca503bd9379122cb261afa8cacaf1ecf0ae1325",
   "c1g_first_run_1B_P6.json": "e4b3795204dc0c18fe2508fc92b0984f4e60a84d3771c81b5aa66ed5cec04376"
  },
  "document": "S100Z4Q1",
@@ -1614,35 +1614,24 @@
    "unit": "円",
    "word": null,
    "modifiers": {
-    "population": "consolidated",
-    "time_range": [
-     [
-      "CurrentYear",
-      "Duration"
-     ]
-    ],
-    "normalization": "abs+round"
+    "population": null,
+    "time_range": null,
+    "normalization": null
    },
    "evidence": {
-    "schemes": [
-     "xbrl"
-    ],
-    "pointers": [
-     "xbrl:jppfs_cor:NetIncreaseDecreaseInCashAndCashEquivalents@CurrentYearDuration"
-    ]
+    "schemes": [],
+    "pointers": []
    },
    "contract": {
-    "comparator": "equals_within",
-    "tolerance": "max(decimals, claim_scale/2)"
+    "comparator": null,
+    "tolerance": null
    },
    "result": {
-    "state": "GROUNDED",
-    "recomputed": -293189000.0,
-    "script_reason": "value_only(no subject)"
+    "state": "UNVERIFIABLE",
+    "recomputed": null,
+    "script_reason": "no_subject"
    },
-   "provenance": [
-    "value_only"
-   ]
+   "provenance": []
   },
   {
    "id": "N043",

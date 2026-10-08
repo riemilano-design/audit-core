@@ -23,10 +23,10 @@ _AUDIT_CORE = os.path.abspath(os.path.join(_HERE, "..", ".."))
 _FIXTURES_XBRL = os.path.join(_AUDIT_CORE, "fixtures", "xbrl")
 
 _EXPECTATION_SHA256 = {
-    "core_expectation_1B.json": "f8a45ecce18a3d98181061a6943449c75a0fbb850e09ec0b71808a45a70fd820",
-    "core_expectation_5F.json": "a19f3419e1a6e1a0cc87df92ae7717c48049b2fcca89d7e8d7ae0161b994adc4",
+    "core_expectation_1B.json": "31818f183290febe4caaad50eca503bd9379122cb261afa8cacaf1ecf0ae1325",
+    "core_expectation_5F.json": "13e7dac1ddb8c935305767e7202b90eb6c677fab98e187267d90b7da91c3a752",
     # C-1g §8: P6 x 1B (v1 + the 5 sealed IDs from c1g_first_run_1B_P6.json). Instrument 3b.
-    "core_expectation_1B_v2.json": "dfe1f954b417fae664eefb28b7213ab9082bfa47c0353b3aba6c6d5bdaa3f88f",
+    "core_expectation_1B_v2.json": "06cb9e2ad6a692be07380440407c3a6ed5fa525995700727f7305f89bef3c1d9",
 }
 
 # C-1d §3.3: the registered reason that replaces the script's dynamic

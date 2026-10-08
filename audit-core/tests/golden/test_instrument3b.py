@@ -65,7 +65,7 @@ class Instrument3bTest(unittest.TestCase):
         mismatches, checked = _mismatches("1B/P6", results_by_id, rows)
         self.assertEqual(mismatches, [], "\n".join(mismatches))
         # v2 has 3 fewer abs+ labels than v1 (N030/N048/N050) but the same number of normalized rows.
-        self.assertEqual(checked, 44)
+        self.assertEqual(checked, 43)
 
     def test_v2_differs_from_v1_only_in_the_5_sealed_ids(self):
         v1 = {r["id"]: r for r in INS.load_expectation("core_expectation_1B.json")["claims"]}

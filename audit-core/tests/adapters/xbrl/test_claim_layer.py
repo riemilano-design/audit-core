@@ -18,8 +18,8 @@ _HERE = os.path.dirname(os.path.abspath(__file__))
 _FIXTURES_XBRL = os.path.abspath(os.path.join(_HERE, "..", "..", "..", "fixtures", "xbrl"))
 
 _EXPECTATION_SHA256 = {
-    "core_expectation_1B.json": "f8a45ecce18a3d98181061a6943449c75a0fbb850e09ec0b71808a45a70fd820",
-    "core_expectation_5F.json": "a19f3419e1a6e1a0cc87df92ae7717c48049b2fcca89d7e8d7ae0161b994adc4",
+    "core_expectation_1B.json": "31818f183290febe4caaad50eca503bd9379122cb261afa8cacaf1ecf0ae1325",
+    "core_expectation_5F.json": "13e7dac1ddb8c935305767e7202b90eb6c677fab98e187267d90b7da91c3a752",
 }
 
 _COMPARED_FIELDS = ("id", "form", "subject", "value", "unit", "population", "time_range", "normalization", "pointers")

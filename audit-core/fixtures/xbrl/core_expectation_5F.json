@@ -1835,35 +1835,24 @@
    "unit": "千円",
    "word": null,
    "modifiers": {
-    "population": "consolidated",
-    "time_range": [
-     [
-      "CurrentYear",
-      "Duration"
-     ]
-    ],
-    "normalization": "abs+round"
+    "population": null,
+    "time_range": null,
+    "normalization": null
    },
    "evidence": {
-    "schemes": [
-     "xbrl"
-    ],
-    "pointers": [
-     "xbrl:jppfs_cor:IncomeBeforeIncomeTaxes@CurrentYearDuration"
-    ]
+    "schemes": [],
+    "pointers": []
    },
    "contract": {
-    "comparator": "equals_within",
-    "tolerance": "max(decimals, claim_scale/2)"
+    "comparator": null,
+    "tolerance": null
    },
    "result": {
-    "state": "GROUNDED",
-    "recomputed": -102694000.0,
-    "script_reason": "value_only(no subject)"
+    "state": "UNVERIFIABLE",
+    "recomputed": null,
+    "script_reason": "no_subject"
    },
-   "provenance": [
-    "value_only"
-   ]
+   "provenance": []
   },
   {
    "id": "N053",
@@ -2282,35 +2271,24 @@
    "unit": "千円",
    "word": null,
    "modifiers": {
-    "population": "consolidated",
-    "time_range": [
-     [
-      "CurrentYear",
-      "Duration"
-     ]
-    ],
-    "normalization": "round"
+    "population": null,
+    "time_range": null,
+    "normalization": null
    },
    "evidence": {
-    "schemes": [
-     "xbrl"
-    ],
-    "pointers": [
-     "xbrl:jppfs_cor:IncreaseDecreaseInShortTermLoansPayableFinCF@CurrentYearDuration"
-    ]
+    "schemes": [],
+    "pointers": []
    },
    "contract": {
-    "comparator": "equals_within",
-    "tolerance": "max(decimals, claim_scale/2)"
+    "comparator": null,
+    "tolerance": null
    },
    "result": {
-    "state": "GROUNDED",
-    "recomputed": 150000000.0,
-    "script_reason": "value_only(no subject)"
+    "state": "UNVERIFIABLE",
+    "recomputed": null,
+    "script_reason": "no_subject"
    },
-   "provenance": [
-    "value_only"
-   ]
+   "provenance": []
   },
   {
    "id": "N066",
@@ -2569,35 +2547,24 @@
    "unit": "千円",
    "word": null,
    "modifiers": {
-    "population": "consolidated",
-    "time_range": [
-     [
-      "CurrentYear",
-      "Duration"
-     ]
-    ],
-    "normalization": "round"
+    "population": null,
+    "time_range": null,
+    "normalization": null
    },
    "evidence": {
-    "schemes": [
-     "xbrl"
-    ],
-    "pointers": [
-     "xbrl:jppfs_cor:CostOfSales@CurrentYearDuration"
-    ]
+    "schemes": [],
+    "pointers": []
    },
    "contract": {
-    "comparator": "equals_within",
-    "tolerance": "max(decimals, claim_scale/2)"
+    "comparator": null,
+    "tolerance": null
    },
    "result": {
-    "state": "GROUNDED",
-    "recomputed": 1377499000.0,
-    "script_reason": "value_only(no subject)"
+    "state": "UNVERIFIABLE",
+    "recomputed": null,
+    "script_reason": "no_subject"
    },
-   "provenance": [
-    "value_only"
-   ]
+   "provenance": []
   },
   {
    "id": "N074",
@@ -2853,35 +2820,24 @@
    "unit": "千円",
    "word": null,
    "modifiers": {
-    "population": "consolidated",
-    "time_range": [
-     [
-      "CurrentYear",
-      "Duration"
-     ]
-    ],
-    "normalization": "round"
+    "population": null,
+    "time_range": null,
+    "normalization": null
    },
    "evidence": {
-    "schemes": [
-     "xbrl"
-    ],
-    "pointers": [
-     "xbrl:jppfs_cor:NonOperatingIncome@CurrentYearDuration"
-    ]
+    "schemes": [],
+    "pointers": []
    },
    "contract": {
-    "comparator": "equals_within",
-    "tolerance": "max(decimals, claim_scale/2)"
+    "comparator": null,
+    "tolerance": null
    },
    "result": {
-    "state": "GROUNDED",
-    "recomputed": 4171000.0,
-    "script_reason": "value_only(no subject)"
+    "state": "UNVERIFIABLE",
+    "recomputed": null,
+    "script_reason": "no_subject"
    },
-   "provenance": [
-    "value_only"
-   ]
+   "provenance": []
   },
   {
    "id": "N081",
@@ -2892,35 +2848,24 @@
    "unit": "千円",
    "word": null,
    "modifiers": {
-    "population": "consolidated",
-    "time_range": [
-     [
-      "CurrentYear",
-      "Duration"
-     ]
-    ],
-    "normalization": "round"
+    "population": null,
+    "time_range": null,
+    "normalization": null
    },
    "evidence": {
-    "schemes": [
-     "xbrl"
-    ],
-    "pointers": [
-     "xbrl:jppfs_cor:NonOperatingExpenses@CurrentYearDuration"
-    ]
+    "schemes": [],
+    "pointers": []
    },
    "contract": {
-    "comparator": "equals_within",
-    "tolerance": "max(decimals, claim_scale/2)"
+    "comparator": null,
+    "tolerance": null
    },
    "result": {
-    "state": "GROUNDED",
-    "recomputed": 50551000.0,
-    "script_reason": "value_only(no subject)"
+    "state": "UNVERIFIABLE",
+    "recomputed": null,
+    "script_reason": "no_subject"
    },
-   "provenance": [
-    "value_only"
-   ]
+   "provenance": []
   },
   {
    "id": "N082",
