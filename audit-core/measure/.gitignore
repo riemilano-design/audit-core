@@ -1,0 +1,12 @@
+out/
+
+# material/ holds derived or customer data (XBRL ZIP caches, prepared
+# document text, reference-number lists, the shogi booklet/packet) that
+# must never be committed. Only the sha256 anchors are tracked -- this is
+# an allow-list, not a deny-list of specific filenames (human decision
+# 2026-10-08): everything under material/ is ignored by default, and only
+# SOURCE.sha256 / observed_t5.json are let back in, by name, at any depth.
+material/**
+!material/**/
+!material/**/SOURCE.sha256
+!material/**/observed_t5.json

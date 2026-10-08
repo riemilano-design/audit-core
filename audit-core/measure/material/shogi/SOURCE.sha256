@@ -1,0 +1,6 @@
+# 顧客のデータ(将棋の冊子とその packet)。2026-10-08 司令塔の判断でリポジトリの外に出した
+# (混入の記録 ~/.audit-core-measure/injection-records/ と同じ考え方)。実物は
+# ~/.audit-core-measure/material/shogi/ に置く。確認するには:
+#   cd ~/.audit-core-measure/material/shogi && shasum -a 256 -c <このファイルの絶対パス>
+1c43582b568757613497b6fae9d5038b7a5f27c03baf2e81db209fbdc9a7fbc7  c5_observation_packet.json
+53971eb4d74eb8f5292b775f47320d77c0c7239519856b6152b4e962d2563418  c5_round5_booklet.md
