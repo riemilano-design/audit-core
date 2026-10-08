@@ -59,6 +59,16 @@ CONFIGS = [
     # XBRL 直し §7(2026-10-08): 書類のラベルで主語を引く語彙。
     ("fix7_label_vocab", {"drop_state_words_only": True, "label_vocabulary": True}),
     ("all7", "P11"),  # = V.PROFILES["P11"](P10 + ラベルの語彙)
+    # XBRL 直し §7a/§7b/§7c/§8(2026-10-08 の人間の判断): ここからは
+    # **`P11` を土台に 1 つずつ**足して測る(正本からの差が読めるように)。
+    ("fix7a_stmt_rows", ("P11", {"label_statement_rows_only": True})),
+    ("fix7b_dead_hand", ("P11", {"label_overrides_dead_hand": True})),
+    ("fix7c_hand_fixed", ("P11", {"subjects": V.SUBJECTS_P12})),
+    ("all7abc", "P12"),  # = V.PROFILES["P12"](P10 + ラベル + 7a + 7b + 7c)
+    # 書類のラベルを使わず、標準タクソノミのラベルだけを足した版。
+    ("fix8_taxonomy_only", ("P10", {"subjects": V.SUBJECTS_P12, "taxonomy_labels": True})),
+    ("all8", "P13"),  # = V.PROFILES["P13"](P12 + 標準タクソノミのラベル)
+    ("all8_allns", "P14"),  # **参考専用**。jppfs の限定を外した版
 ]
 
 ROW_FIELDS = ("state", "pointers", "recomputed", "reason", "comparator", "normalization")
@@ -69,6 +79,10 @@ def profile_of(name, over):
         return V.PROFILES["P8"]
     if isinstance(over, str):
         return V.PROFILES[over]
+    if isinstance(over, tuple):
+        # ("土台の profile の名前", {フラグ}) ― §7a 以降は P11・P10 を土台にする。
+        base_name, kw = over
+        return dataclasses.replace(V.PROFILES[base_name], name=base_name + "+" + name, **kw)
     base = V.PROFILES["P7"]
     return base if not over else dataclasses.replace(base, name="P7+" + name, **over)
 
@@ -175,14 +189,18 @@ def main(argv=None):
         else:
             d = diff_against(base_rows, rows)
         out["configs"][name] = {"tally": tally, "info": info, "diff": d}
-        if name in ("base", "all", "all6", "all6n", "all7"):
+        if name in ("base", "all", "all6", "all6n", "all7",
+                    "fix7a_stmt_rows", "fix7b_dead_hand", "fix7c_hand_fixed",
+                    "all7abc", "fix8_taxonomy_only", "all8", "all8_allns"):
             # 行の全表は「直す前」と「5 つとも入れた後」の 2 つだけ置く。
             # 1 つずつの構成は base との差分(全件)で足りる。
             out["configs"][name]["rows"] = {"%s|%d" % k: v for k, v in rows.items()}
-        print("%-18s claims=%3d  stopped=%2d  state=%s  changed=%2d gone=%d new=%d  rounding=%s" % (
+        print("%-18s claims=%3d  stopped=%2d  state=%s  changed=%2d gone=%d new=%d  rounding=%s  words=%s  overrides=%s" % (
             name, tally["claims"], tally["stopped"],
             {k[0] + k[-1]: v for k, v in sorted(tally["state"].items())},
-            len(d["changed"]), len(d["gone"]), len(d["new"]), info.get("rounding")))
+            len(d["changed"]), len(d["gone"]), len(d["new"]), info.get("rounding"),
+            info.get("label_subjects_added"),
+            [o["word"] for o in info.get("label_overrides", [])]))
 
     os.makedirs(a.out, exist_ok=True)
     p = os.path.join(a.out, "measure_xbrl_fix5_%s.json" % (a.doc,))

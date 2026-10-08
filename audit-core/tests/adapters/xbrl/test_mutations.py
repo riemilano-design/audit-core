@@ -96,7 +96,12 @@ _GATE_ONLY_BEHAVIOR_TEST_FILENAMES = ("test_claim_layer.py",)
 _GOLDEN_TEST_FILENAMES = ("test_instrument3.py",)
 _GOLDEN_SUPPORT_FILENAMES = ("_instrument.py",)
 
-_EXPECTATION_FILENAMES = ("core_expectation_1B.json", "core_expectation_5F.json")
+_EXPECTATION_FILENAMES = ("core_expectation_1B.json", "core_expectation_5F.json",
+                          # XBRL 直し §8(2026-10-08): 標準タクソノミのラベルの sha256 の記録。
+                          # test_instance がコードの字面と突き合わせるので砂場にも写す
+                          # (写さないと**全部の変異が同じ理由で赤くなり**、変異の測定が死ぬ ―
+                          # 1 回これで 8 本の green の予測を赤にした)。
+                          "taxonomy_labels_sha256.txt")
 
 
 def _scope_for(mutation):

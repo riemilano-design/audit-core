@@ -11,9 +11,12 @@ originals; compared against them value-for-value by
 ``tests/adapters/xbrl/test_lineage.py``.
 """
 
+import hashlib
 import html
 import io
+import os
 import re
+import unicodedata
 import zipfile
 import xml.etree.ElementTree as ET
 from html.parser import HTMLParser
@@ -286,16 +289,69 @@ def _row_label(row):
     return None
 
 
-def inline_labels(z, names):
-    """``{日本語の勘定科目名: [要素の局所名, ...]}``。除く名前は適用済み。"""
+# ---------------------------------------------------------------------------
+# XBRL 直し §7a(人間の判断、2026-10-08): ラベルを**計算書の行から来たものだけ**に
+# 限る。原因が分かっている悪化 2 件のうち 1 件(2 社目 T009 の主語が 売上高 →
+# 美容室支援事業(セグメント名)に移った)を消すため。
+#
+# 4 つの規則を測って比べた結果(docs/XBRL_LABEL_VOCAB2_PLAN_2026-10-08.md §1.1):
+#
+#   - member の付かない行だけ   -> セグメント名は消えるが「連結子会社」は残る
+#   - jppfs_cor の要素だけ      -> 「連結子会社」(監査報酬の表 = jpcrp_cor)は消える
+#   - **両方**                  -> 2 つの型が別々の条件で落ち、残ってほしい語
+#                                  (売上原価・利益剰余金・短期借入金)は残る
+#
+# セグメント名は member つきの context を持つ行に、会社名・役員名・株主名は
+# jpcrp_cor の要素に付いている。だから **両方**を要求する。
+# ---------------------------------------------------------------------------
+_IX_TAG_RE = re.compile(r"<ix:non(?:Fraction|Numeric)[^>]*>", re.I)
+_IX_ATTR_NAME_RE = re.compile(r'\bname="([^"]+)"')
+_IX_ATTR_CTX_RE = re.compile(r'\bcontextRef="([^"]+)"')
 
+# 財務諸表タクソノミの接頭辞(字で書く)。計算書の行の要素はこれで付いている。
+STATEMENT_PREFIX = "jppfs_cor"
+
+
+def _row_elements(row, statement_only, contexts):
+    """その ``<tr>`` から採る要素名(接頭辞つき)の一覧。
+
+    ``statement_only`` が偽なら、今までどおり行の中の ix の ``name`` を全部採る。
+    真なら §7a の規則を当てる ― 行の ix の context に member が **1 つも**
+    付いていないこと、かつ要素が ``jppfs_cor`` のものだけを採る。
+    どちらも満たさない行は空の一覧を返し、呼び出し側が行ごと捨てる。
+    """
+
+    if not statement_only:
+        return _IX_NAME_RE.findall(row)
+    pairs = []
+    for tag in _IX_TAG_RE.findall(row):
+        name = _IX_ATTR_NAME_RE.search(tag)
+        if not name:
+            continue
+        ctx = _IX_ATTR_CTX_RE.search(tag)
+        pairs.append((name.group(1), ctx.group(1) if ctx else ""))
+    for _name, cid in pairs:
+        if (contexts.get(cid) or {}).get("members"):
+            return []
+    return [name for name, _cid in pairs if name.split(":")[0] == STATEMENT_PREFIX]
+
+
+def inline_labels(z, names, statement_only=False, contexts=None):
+    """``{日本語の勘定科目名: [要素の局所名, ...]}``。除く名前は適用済み。
+
+    ``statement_only`` は §7a。真のときは ``contexts``
+    (``load_instance`` の ``contexts``)が要る ― member が付いているかを見るため。
+    """
+
+    if statement_only and contexts is None:
+        raise ValueError("inline_labels(statement_only=True) needs contexts")
     found = {}
     for n in names:
         if not n.endswith("_ixbrl.htm"):
             continue
         text = z.read(n).decode("utf-8", "replace")
         for row in _TR_RE.findall(text):
-            elements = _IX_NAME_RE.findall(row)
+            elements = _row_elements(row, statement_only, contexts or {})
             if not elements:
                 continue
             label = _row_label(row)
@@ -308,4 +364,123 @@ def inline_labels(z, names):
                 local = e.split(":")[-1]
                 if local not in bucket:
                     bucket.append(local)
+    return found
+
+
+# ---------------------------------------------------------------------------
+# XBRL 直し §8(人間の許可、2026-10-08): 標準タクソノミ(jppfs・jpcrp の
+# 2025-11-01 版)の**日本語の標準ラベル**で勘定科目を引く。
+#
+# ラベルの本体は**このリポジトリの外**に在る(人間の指示: 「取得したファイルは
+# リポジトリの外に置いて sha256 だけを残す」)。置き場と取り方は
+# fixtures/xbrl/TAXONOMY_LABELS_README.md、照合用の sha256 は
+# fixtures/xbrl/taxonomy_labels_sha256.txt。
+#
+# **読む前に毎回 sha256 を照合し、無ければ・違えば落ちる。** 黙って 0 件を返すと
+# 「効かなかった」と読み違える(同じ型の誤りを前に 4 回踏んでいる)。
+#
+# 要素は ``fact_locals``(その書類に fact が在る要素)に限る ― タクソノミ全体は
+# 6,495 要素で、全部を主語の一覧にすると誤った一致が増える。
+# ---------------------------------------------------------------------------
+TAXONOMY_VERSION = "2025-11-01"
+TAXONOMY_DIR_DEFAULT = os.path.join(os.path.expanduser("~"), ".cache", "audit-core",
+                                    "edinet-taxonomy", TAXONOMY_VERSION)
+
+# (名前空間, ファイル名, sha256)。**字で書く。**
+TAXONOMY_LABEL_FILES = (
+    ("jppfs", "jppfs_2025-11-01_lab.xml",
+     "bf56ea1585afe426b398a9053ec4de4dbeafc211a53675b5d6d19453e4e04bf4"),
+    ("jpcrp", "jpcrp_2025-11-01_lab.xml",
+     "df9c23764ec9a63cb65b5ef62e79a2907c590523797421442ea2a60e334cd684"),
+)
+
+# 採るのは**標準ラベル**の role だけ。``totalLabel`` は「流動資産合計」のように
+# 合計行の言い回しで、本文の「流動資産は…」とは別物なので採らない。
+STANDARD_LABEL_ROLE = "http://www.xbrl.org/2003/role/label"
+
+_TAXONOMY_CACHE = {}
+
+
+def taxonomy_dir():
+    """ラベルの置き場。環境変数 ``EDINET_TAXONOMY_DIR`` で上書きできる。"""
+
+    return os.environ.get("EDINET_TAXONOMY_DIR") or TAXONOMY_DIR_DEFAULT
+
+
+def parse_label_linkbase(data, role=STANDARD_LABEL_ROLE):
+    """ラベル linkbase から ``{loc の指す id: 日本語ラベル}``。
+
+    ``loc`` -> ``labelArc`` -> ``label`` の 3 つを辿る(``label_XXX`` という
+    名前から要素名を推測することはしない。``labels_from_zip`` と同じ流儀)。
+    """
+
+    root = ET.fromstring(data)
+    loc_id, lab_text, arcs = {}, {}, []
+    for el in root.iter():
+        tag = el.tag.split("}")[-1]
+        if tag == "loc":
+            href = el.get(XLINK + "href") or ""
+            loc_id[el.get(XLINK + "label")] = href.split("#")[-1]
+        elif tag == "label":
+            if (el.get(XLINK + "role") or "") != role:
+                continue
+            if not (el.get(XML_NS + "lang") or "").startswith("ja"):
+                continue
+            lab_text[el.get(XLINK + "label")] = el.text or ""
+        elif tag == "labelArc":
+            arcs.append((el.get(XLINK + "from"), el.get(XLINK + "to")))
+    out = {}
+    for a, b in arcs:
+        if a in loc_id and b in lab_text:
+            out[loc_id[a]] = unicodedata.normalize("NFKC", lab_text[b].strip())
+    return out
+
+
+def _read_taxonomy_file(directory, filename, expected_sha256):
+    path = os.path.join(directory, filename)
+    if not os.path.exists(path):
+        raise FileNotFoundError(
+            "no taxonomy label file at %s (see fixtures/xbrl/TAXONOMY_LABELS_README.md)" % (path,))
+    data = open(path, "rb").read()
+    actual = hashlib.sha256(data).hexdigest()
+    if actual != expected_sha256:
+        raise ValueError("taxonomy label sha256 mismatch for %s: expected %s, got %s"
+                         % (filename, expected_sha256, actual))
+    return data, actual
+
+
+def taxonomy_label_map(namespaces=("jppfs",), directory=None):
+    """``{要素の局所名: 日本語の標準ラベル}``。``namespaces`` が ``None`` なら全部。"""
+
+    directory = directory or taxonomy_dir()
+    out = {}
+    for ns, filename, sha in TAXONOMY_LABEL_FILES:
+        if namespaces is not None and ns not in namespaces:
+            continue
+        key = (os.path.join(directory, filename), sha)
+        if key not in _TAXONOMY_CACHE:
+            data, _actual = _read_taxonomy_file(directory, filename, sha)
+            _TAXONOMY_CACHE[key] = parse_label_linkbase(data)
+        for full, word in _TAXONOMY_CACHE[key].items():
+            local = full.split("_cor_")[-1] if "_cor_" in full else full
+            out[local] = word
+    return out
+
+
+def taxonomy_labels(fact_locals, namespaces=("jppfs",), directory=None):
+    """``{日本語の標準ラベル: [要素の局所名, ...]}``。
+
+    ``fact_locals`` に在る要素だけを採り、``inline_labels`` と同じ除く名前
+    (長さ・``LABEL_DENY``・``【】``)を当てる。並びは要素名の順(決めておく)。
+    """
+
+    labels = taxonomy_label_map(namespaces, directory)
+    found = {}
+    for local in sorted(fact_locals):
+        word = labels.get(local)
+        if not word or len(word) < LABEL_MIN_LEN or word in LABEL_DENY:
+            continue
+        if "【" in word or "】" in word:
+            continue
+        found.setdefault(word, []).append(local)
     return found

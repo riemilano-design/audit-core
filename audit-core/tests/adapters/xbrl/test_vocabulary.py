@@ -191,7 +191,8 @@ class P7ProfileTest(unittest.TestCase):
         self.assertEqual(V.PROFILES["P7"], V.P7)
         # XBRL 直し(2026-10-08)で P8 を足した。P1/P5F/P6/P7 の 4 つが在ること
         # と、P8 がこの 4 つに加わっていることを両方見る。
-        self.assertEqual(sorted(V.PROFILES.keys()), ["P1", "P10", "P11", "P5F", "P6", "P7", "P8", "P9"])
+        self.assertEqual(sorted(V.PROFILES.keys()),
+                         ["P1", "P10", "P11", "P12", "P13", "P14", "P5F", "P6", "P7", "P8", "P9"])
 
     def test_p7_subjects_same_as_p6(self):
         self.assertEqual(V.P7.subjects, V.P6.subjects)
@@ -373,3 +374,75 @@ class P8ProfileTest(unittest.TestCase):
     def test_p8_uses_the_p8_subjects(self):
         self.assertEqual(V.P8.subjects, V.SUBJECTS_P8)
         self.assertEqual(V.P7.subjects, V.SUBJECTS_P6)
+
+
+class SubjectsP12Test(unittest.TestCase):
+    """XBRL 直し §7c(人間の判断、2026-10-08): 手書きの語彙そのものを直す。
+
+    直すのは 2 語だけ。標準タクソノミ(jppfs 2025-11-01)で機械確認した結果、
+    「要素が実在しない + 同じ日本語ラベルの実在の要素が在る + 3 書類とも fact 0」
+    の 3 つを同時に満たすのがこの 2 語しかなかった。
+    """
+
+    def test_the_two_words_gain_the_element_that_actually_exists(self):
+        d = dict(V.SUBJECTS_P12)
+        self.assertEqual(d["退職給付に係る資産"], ["RetirementBenefitAsset", "NetDefinedBenefitAsset"])
+        self.assertEqual(d["退職給付に係る負債"], ["RetirementBenefitLiability", "NetDefinedBenefitLiability"])
+
+    def test_the_old_name_is_kept_not_replaced(self):
+        # 会社拡張が古い名前を使っている書類がありうるので**消さずに足す**。
+        for word, elems in V.SUBJECTS_P12_FIXES.items():
+            self.assertEqual(elems[0], dict(V.SUBJECTS_P8)[word][0], word)
+            self.assertGreater(len(elems), len(dict(V.SUBJECTS_P8)[word]))
+
+    def test_p6_and_p8_are_not_touched(self):
+        """**ここが動くと P7(「直す前」)と P10 の既に測った数が黙って動く。**
+
+        ``dict(...)`` は使わない ― 一覧には同じ語が 2 行在ることがあり
+        (``資産合計`` は P6 で 2 行)、``dict`` は**最後**を返すのに
+        ``subject_of`` は**先**を採る。前にこの取り違えで試験を 1 本間違えた。
+        """
+
+        def first(subjects, word):
+            return next(e for w, e in subjects if w == word)
+
+        self.assertEqual(first(V.SUBJECTS_P8, "退職給付に係る負債"), ["RetirementBenefitLiability"])
+        self.assertEqual(first(V.SUBJECTS_P6, "退職給付に係る負債"), ["RetirementBenefitLiability"])
+        self.assertEqual(first(V.SUBJECTS_P8, "退職給付に係る資産"), ["RetirementBenefitAsset"])
+        self.assertEqual(first(V.SUBJECTS_P6, "退職給付に係る資産"), ["RetirementBenefitAsset"])
+        # §1a で足した 資産合計 の 1 行目は P6 では ["Assets"] のまま。
+        self.assertEqual(first(V.SUBJECTS_P6, "資産合計"), ["Assets"])
+
+    def test_only_the_two_words_differ_from_p8(self):
+        self.assertEqual(len(V.SUBJECTS_P12), len(V.SUBJECTS_P8))
+        differ = [a[0] for a, b in zip(V.SUBJECTS_P12, V.SUBJECTS_P8) if a != b]
+        self.assertEqual(sorted(set(differ)), ["退職給付に係る負債", "退職給付に係る資産"])
+
+    def test_the_word_order_is_unchanged(self):
+        self.assertEqual([w for w, _e in V.SUBJECTS_P12], [w for w, _e in V.SUBJECTS_P8])
+
+
+class P12P13P14ProfileTest(unittest.TestCase):
+    """XBRL 直し §7a/§7b/§7c/§8 の profile。既存の定義は 1 行も書き換えない。"""
+
+    def test_p13_is_p12_plus_only_the_taxonomy_flag(self):
+        import dataclasses
+        a = dataclasses.replace(V.P12, name="x", taxonomy_labels=True)
+        self.assertEqual(a, dataclasses.replace(V.P13, name="x"))
+
+    def test_p14_is_p13_plus_only_the_namespace_flag(self):
+        import dataclasses
+        a = dataclasses.replace(V.P13, name="x", taxonomy_labels_all_ns=True)
+        self.assertEqual(a, dataclasses.replace(V.P14, name="x"))
+
+    def test_p12_to_p14_use_the_fixed_hand_vocabulary(self):
+        for p in (V.P12, V.P13, V.P14):
+            self.assertIs(p.subjects, V.SUBJECTS_P12, p.name)
+        for p in (V.P8, V.P9, V.P10, V.P11):
+            self.assertIs(p.subjects, V.SUBJECTS_P8, p.name)
+
+    def test_profiles_registry_lists_every_profile(self):
+        self.assertEqual(sorted(V.PROFILES),
+                         ["P1", "P10", "P11", "P12", "P13", "P14", "P5F", "P6", "P7", "P8", "P9"])
+        for name, p in V.PROFILES.items():
+            self.assertEqual(p.name, name)

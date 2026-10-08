@@ -124,6 +124,40 @@ SUBJECTS_P8 = tuple(
     for (w, e) in SUBJECTS_P6
 )
 
+# ---------------------------------------------------------------------------
+# XBRL 直し §7c(人間の判断、2026-10-08): 「手書きの語彙が存在しない要素を指して
+# いたと分かった分は、手書きの語彙そのものも直す。」
+#
+# 直すのは**この 2 語だけ**。許可された標準タクソノミ(jppfs 2025-11-01)で
+# 機械確認した結果、次の 3 つを同時に満たすのがこの 2 語しかなかった:
+#
+#   (i)   手書きが指す要素名が 2025-11-01 の標準タクソノミに**実在しない**
+#   (ii)  **同じ日本語の標準ラベル**を持つ実在の要素が在る
+#   (iii) 3 書類とも手書きの要素では fact を 1 件も引けない
+#
+# 手書き 78 語のうち 43 語は「要素名のどれか 1 つが標準タクソノミに無い」が、
+# ``facts_for`` の部分一致が ``PurchaseOfInvestmentSecurities`` ->
+# ``PurchaseOfInvestmentSecuritiesInvCF`` のような接尾の族を吸収しているので
+# 実際には引けている。**「名前が無い」だけでは直す理由にしない。**
+# ``長期借入金の返済``(複数形 ``Repayments…``)は 3 書類とも fact 0 だが、
+# 同じ日本語ラベルの要素が無い(ラベルは ``長期借入金の返済による支出``)ので
+# ここでは直さず、§8 が**語として足す**側で解く。
+#
+# **古い要素名は消さずに足す**(会社拡張がその名前を使っている書類がありうる)。
+# **``SUBJECTS_P6``・``SUBJECTS_P8`` は 1 文字も変えない** ― 変えると
+# ``P7``(「直す前」)と ``P10`` の既に測った数が黙って動き、これまでの全部の
+# 比較の土台が崩れる。直しは**新しい版**として入れる。
+# 根拠は docs/XBRL_LABEL_VOCAB2_PLAN_2026-10-08.md §1.3。
+# ---------------------------------------------------------------------------
+SUBJECTS_P12_FIXES = {
+    "退職給付に係る資産": ["RetirementBenefitAsset", "NetDefinedBenefitAsset"],
+    "退職給付に係る負債": ["RetirementBenefitLiability", "NetDefinedBenefitLiability"],
+}
+SUBJECTS_P12 = tuple(
+    (w, list(SUBJECTS_P12_FIXES[w])) if w in SUBJECTS_P12_FIXES else (w, e)
+    for (w, e) in SUBJECTS_P8
+)
+
 PROFIT_SUBJECTS = ("利益", "損失")
 
 UNIT_SCALE = {"百万円": 1e6, "千円": 1e3, "億円": 1e8, "兆円": 1e12, "円": 1}
@@ -268,6 +302,12 @@ class Profile:
     # XBRL 直し §7(人間の指示、2026-10-08)。P11 だけ。書類自身のインライン
     # XBRL から「日本語の勘定科目名 → 要素」を取って語彙の後ろに足す。
     label_vocabulary: bool = False       # §7 書類のラベルで主語を引く
+    # XBRL 直し §7a・§7b・§8(人間の判断、2026-10-08)。P12 以降だけ。
+    # P1〜P11 はこれらの既定値 False のまま変わらない(定義そのものを書き換えていない)。
+    label_statement_rows_only: bool = False   # §7a 計算書の行から来たラベルだけ使う
+    label_overrides_dead_hand: bool = False   # §7b 手書きが fact を引けない語はラベルで引く
+    taxonomy_labels: bool = False             # §8  標準タクソノミの日本語ラベルで引く
+    taxonomy_labels_all_ns: bool = False      # §8  **参考専用**。jppfs の限定を外す
 
 
 P1 = Profile(
@@ -400,4 +440,87 @@ P11 = Profile(
     label_vocabulary=True,
 )
 
-PROFILES = {"P1": P1, "P5F": P5F, "P6": P6, "P7": P7, "P8": P8, "P9": P9, "P10": P10, "P11": P11}
+# XBRL 直し §7a/§7b/§7c(人間の判断、2026-10-08): P11 の悪化 2 件のうち原因が
+# 分かっている 1 件を消し(§7a)、手書きが fact を引けない語をラベルで引き(§7b)、
+# 手書きの語彙そのものを直した版(§7c = SUBJECTS_P12)。
+# P10・P11 の定義は書き換えない。
+P12 = Profile(
+    name="P12",
+    subjects=SUBJECTS_P12,
+    member_on=True,
+    claim_level_member=True,
+    run3="L",
+    flow_sign=True,
+    point_diff=True,
+    segment_denominator=True,
+    expenditure_sign=True,
+    target_word=True,
+    text_reason_split=True,
+    prior2_required=True,
+    doc_rounding=True,
+    target_both=True,
+    paren_sentence=True,
+    drop_qualitative=False,
+    text_prior_year_paren=True,
+    drop_state_words_only=True,
+    label_vocabulary=True,
+    label_statement_rows_only=True,
+    label_overrides_dead_hand=True,
+)
+
+# XBRL 直し §8(人間の許可、2026-10-08): P12 + 標準タクソノミの日本語ラベル。
+P13 = Profile(
+    name="P13",
+    subjects=SUBJECTS_P12,
+    member_on=True,
+    claim_level_member=True,
+    run3="L",
+    flow_sign=True,
+    point_diff=True,
+    segment_denominator=True,
+    expenditure_sign=True,
+    target_word=True,
+    text_reason_split=True,
+    prior2_required=True,
+    doc_rounding=True,
+    target_both=True,
+    paren_sentence=True,
+    drop_qualitative=False,
+    text_prior_year_paren=True,
+    drop_state_words_only=True,
+    label_vocabulary=True,
+    label_statement_rows_only=True,
+    label_overrides_dead_hand=True,
+    taxonomy_labels=True,
+)
+
+# **参考専用**。P13 から名前空間の限定(jppfs だけ)を外した版。
+# 「jppfs に限って何を失ったか」を数で言えるようにするためだけに在る。
+P14 = Profile(
+    name="P14",
+    subjects=SUBJECTS_P12,
+    member_on=True,
+    claim_level_member=True,
+    run3="L",
+    flow_sign=True,
+    point_diff=True,
+    segment_denominator=True,
+    expenditure_sign=True,
+    target_word=True,
+    text_reason_split=True,
+    prior2_required=True,
+    doc_rounding=True,
+    target_both=True,
+    paren_sentence=True,
+    drop_qualitative=False,
+    text_prior_year_paren=True,
+    drop_state_words_only=True,
+    label_vocabulary=True,
+    label_statement_rows_only=True,
+    label_overrides_dead_hand=True,
+    taxonomy_labels=True,
+    taxonomy_labels_all_ns=True,
+)
+
+PROFILES = {"P1": P1, "P5F": P5F, "P6": P6, "P7": P7, "P8": P8, "P9": P9, "P10": P10, "P11": P11,
+            "P12": P12, "P13": P13, "P14": P14}

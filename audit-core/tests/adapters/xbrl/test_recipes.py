@@ -991,7 +991,7 @@ class LabelSubjectsTest(unittest.TestCase):
         from adapters.xbrl import edinet as _E, instance as _I
         zb = open(_E.cache_path("S100Z4Q1"), "rb").read()
         inst = _I.load_instance(zb)
-        added = R._label_subjects(zb, inst, V.P11)
+        _hand_rows, added, _overrides = R._label_subjects(zb, inst, V.P11)
         hand = {w for w, _e in V.P11.subjects}
         self.assertTrue(added)
         for word, _elems in added:
@@ -1003,3 +1003,139 @@ class LabelSubjectsTest(unittest.TestCase):
         self.assertNotIn("資産合計", [w for w, _e in added])
         # 並びは長い名前が先(決定的)。
         self.assertEqual([len(w) for w, _e in added], sorted([len(w) for w, _e in added], reverse=True))
+
+
+class LabelStatementRowsOnlyTest(unittest.TestCase):
+    """XBRL 直し §7a(人間の判断、2026-10-08): ラベルを計算書の行から来たものだけに限る。"""
+
+    def test_p12_is_p10_plus_four_things_and_nothing_else(self):
+        import dataclasses
+        a = dataclasses.replace(V.P10, name="x", subjects=V.SUBJECTS_P12,
+                                label_vocabulary=True, label_statement_rows_only=True,
+                                label_overrides_dead_hand=True)
+        self.assertEqual(a, dataclasses.replace(V.P12, name="x"))
+
+    def test_p1_to_p11_keep_the_three_new_flags_off(self):
+        for p in (V.P1, V.P5F, V.P6, V.P7, V.P8, V.P9, V.P10, V.P11):
+            self.assertFalse(p.label_statement_rows_only, p.name)
+            self.assertFalse(p.label_overrides_dead_hand, p.name)
+            self.assertFalse(p.taxonomy_labels, p.name)
+            self.assertFalse(p.taxonomy_labels_all_ns, p.name)
+
+    def test_segment_name_is_gone_but_the_account_names_stay(self):
+        """2 社目の悪化 `T009`(売上高 -> 美容室支援事業)の原因を消すことと、
+        前回「良い向き」と確かめた語が残ることを**同じ試験で**見る。
+        """
+
+        import io as _io
+        import zipfile as _zipfile
+        from adapters.xbrl import edinet as _E, instance as _I
+        zb = open(_E.cache_path("S100Z4B6"), "rb").read()
+        inst = _I.load_instance(zb)
+        z = _zipfile.ZipFile(_io.BytesIO(zb))
+        wide = _I.inline_labels(z, inst["names"])
+        narrow = _I.inline_labels(z, inst["names"], statement_only=True, contexts=inst["contexts"])
+        self.assertIn("美容室支援事業", wide)
+        self.assertNotIn("美容室支援事業", narrow)
+        self.assertIn("連結子会社", wide)
+        self.assertNotIn("連結子会社", narrow)
+        for word in ("売上原価", "短期借入金", "利益剰余金", "差入保証金"):
+            self.assertIn(word, narrow, word)
+        self.assertLess(len(narrow), len(wide))
+
+
+class LabelOverridesDeadHandTest(unittest.TestCase):
+    """XBRL 直し §7b: 手書きが fact を引けない語だけ、ラベルの要素に差し替える。"""
+
+    DOC_LABELS = {"甲勘定": ["RealElement"], "乙勘定": ["AlsoMissing"]}
+
+    def _inst(self):
+        return {"facts": [{"name": "jppfs_cor:RealElement", "context": "CurrentYearInstant",
+                           "value": "1", "unit": "JPY", "decimals": "0"}],
+                "contexts": {"CurrentYearInstant": {"instant": "2026-06-30", "members": []}},
+                "names": []}
+
+    def _profile(self, subjects, **kw):
+        import dataclasses
+        return dataclasses.replace(V.P10, name="x", subjects=tuple(subjects), **kw)
+
+    def _run(self, subjects, **kw):
+        inst = self._inst()
+        profile = self._profile(subjects, **kw)
+        orig = R._label_tables
+        R._label_tables = lambda zb, i, p: (dict(self.DOC_LABELS), {})
+        try:
+            return R._label_subjects(b"", inst, profile)
+        finally:
+            R._label_tables = orig
+
+    def test_a_dead_hand_entry_is_replaced_and_recorded(self):
+        hand, _added, overrides = self._run([("甲勘定", ["DoesNotExist"])],
+                                            label_vocabulary=True, label_overrides_dead_hand=True)
+        self.assertEqual(hand, [("甲勘定", ["RealElement"])])
+        self.assertEqual(len(overrides), 1)
+        self.assertEqual(overrides[0]["word"], "甲勘定")
+        self.assertEqual(overrides[0]["hand"], ["DoesNotExist"])
+        self.assertEqual(overrides[0]["label"], ["RealElement"])
+        self.assertEqual(overrides[0]["source"], "document")
+
+    def test_nothing_is_replaced_when_the_flag_is_off(self):
+        hand, _added, overrides = self._run([("甲勘定", ["DoesNotExist"])], label_vocabulary=True)
+        self.assertEqual(hand, [("甲勘定", ["DoesNotExist"])])
+        self.assertEqual(overrides, [])
+
+    def test_a_label_that_also_resolves_nothing_is_not_used(self):
+        """2 社目の `繰延税金負債` の型 ― 手書きもラベルも fact を引けない。
+        ここで差し替えると、**同じ何も引けない名前に入れ替えるだけ**になる。
+        """
+
+        hand, _added, overrides = self._run([("乙勘定", ["DoesNotExist"])],
+                                            label_vocabulary=True, label_overrides_dead_hand=True)
+        self.assertEqual(hand, [("乙勘定", ["DoesNotExist"])])
+        self.assertEqual(overrides, [])
+
+    def test_a_hand_entry_that_resolves_is_left_alone(self):
+        hand, _added, overrides = self._run([("甲勘定", ["RealElement"])],
+                                            label_vocabulary=True, label_overrides_dead_hand=True)
+        self.assertEqual(hand, [("甲勘定", ["RealElement"])])
+        self.assertEqual(overrides, [])
+
+    def test_the_order_and_the_count_of_the_hand_rows_never_change(self):
+        rows = [("甲勘定", ["DoesNotExist"]), ("丙勘定", ["X"]), ("甲勘定", ["Y"])]
+        hand, _added, _ov = self._run(rows, label_vocabulary=True, label_overrides_dead_hand=True)
+        self.assertEqual([w for w, _e in hand], ["甲勘定", "丙勘定", "甲勘定"])
+
+
+class TaxonomyLabelSubjectsTest(unittest.TestCase):
+    """XBRL 直し §8: 標準タクソノミのラベルは、書類のラベルで足りない語だけを埋める。"""
+
+    def _run(self, doc_labels, tax_labels, subjects=(), **kw):
+        import dataclasses
+        inst = {"facts": [], "contexts": {}, "names": []}
+        profile = dataclasses.replace(V.P10, name="x", subjects=tuple(subjects), **kw)
+        orig = R._label_tables
+        R._label_tables = lambda zb, i, p: (dict(doc_labels), dict(tax_labels))
+        try:
+            return R._label_subjects(b"", inst, profile)
+        finally:
+            R._label_tables = orig
+
+    def test_the_document_label_wins_for_the_same_word(self):
+        _h, added, _o = self._run({"甲勘定": ["FromDocument"]}, {"甲勘定": ["FromTaxonomy"]},
+                                  label_vocabulary=True, taxonomy_labels=True)
+        self.assertEqual(added, [("甲勘定", ["FromDocument"])])
+
+    def test_the_taxonomy_fills_a_word_the_document_does_not_have(self):
+        _h, added, _o = self._run({"甲勘定": ["FromDocument"]}, {"流動資産": ["CurrentAssets"]},
+                                  label_vocabulary=True, taxonomy_labels=True)
+        self.assertEqual(dict(added), {"甲勘定": ["FromDocument"], "流動資産": ["CurrentAssets"]})
+
+    def test_hand_words_are_not_added_from_the_taxonomy_either(self):
+        _h, added, _o = self._run({}, {"甲勘定": ["FromTaxonomy"]}, subjects=[("甲勘定", ["Hand"])],
+                                  taxonomy_labels=True)
+        self.assertEqual(added, [])
+
+    def test_longer_words_come_first(self):
+        _h, added, _o = self._run({}, {"流動資産": ["A"], "長期借入金の返済による支出": ["B"], "のれん": ["C"]},
+                                  taxonomy_labels=True)
+        self.assertEqual([w for w, _e in added], ["長期借入金の返済による支出", "流動資産", "のれん"])

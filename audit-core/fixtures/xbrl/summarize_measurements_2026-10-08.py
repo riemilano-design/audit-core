@@ -46,6 +46,13 @@ CONFIG_LABELS = [
     ("all6n", "6 つとも・狭い版(P10)★正本"),
     ("fix7_label_vocab", "7 ラベルの語彙だけ"),
     ("all7", "P10 + ラベルの語彙(P11)"),
+    ("fix7a_stmt_rows", "7a 計算書の行だけ"),
+    ("fix7b_dead_hand", "7b 死んだ手書きの代わり"),
+    ("fix7c_hand_fixed", "7c 手書きの語彙を直す"),
+    ("all7abc", "P11 + 7a + 7b + 7c(P12)"),
+    ("fix8_taxonomy_only", "8 標準タクソノミだけ"),
+    ("all8", "P12 + 標準タクソノミ(P13)★"),
+    ("all8_allns", "P13 + 名前空間の限定なし(参考)"),
 ]
 
 

@@ -721,22 +721,79 @@ def _member_material(zb, inst, text, sentences, profile):
     return sent_member, reg
 
 
-def _label_subjects(zb, inst, profile):
-    """XBRL 直し §7: 書類自身のインライン XBRL から取った
-    「日本語の勘定科目名 → 要素」を、主語の一覧の**行**にして返す。
-
-    - **手書きの語彙に既に在る語は足さない**(手書きが正本。件数も意味が
-      はっきりする)。
-    - 並びは**長い名前が先**(``subject_of`` は同じ終わり位置・同じ長さなら
-      先に在る方を採るので、並べる順を決めておく)。
+def _label_tables(zb, inst, profile):
+    """ラベルの表を 2 つ返す ― 書類自身のインライン XBRL から(§7)と、
+    標準タクソノミの日本語標準ラベルから(§8)。使わない設定なら空の辞書。
     """
 
-    z = zipfile.ZipFile(io.BytesIO(zb))
-    labels = I.inline_labels(z, inst["names"])
+    doc_labels = {}
+    if profile.label_vocabulary:
+        z = zipfile.ZipFile(io.BytesIO(zb))
+        doc_labels = I.inline_labels(
+            z, inst["names"],
+            statement_only=profile.label_statement_rows_only,
+            contexts=inst["contexts"] if profile.label_statement_rows_only else None)
+    tax_labels = {}
+    if profile.taxonomy_labels:
+        # §8 の名前空間の限定。``taxonomy_labels_all_ns`` は**参考専用**。
+        namespaces = None if profile.taxonomy_labels_all_ns else ("jppfs",)
+        locals_ = {f["name"].split(":")[-1] for f in inst["facts"]}
+        tax_labels = I.taxonomy_labels(locals_, namespaces=namespaces)
+    return doc_labels, tax_labels
+
+
+def _label_subjects(zb, inst, profile):
+    """XBRL 直し §7・§7b・§8: ラベルから取った「日本語の勘定科目名 → 要素」を
+    主語の一覧の**行**にして返す。
+
+    返すのは 3 つ。
+
+    ``hand_rows``
+        手書きの語彙の行(順も件数もそのまま)。``label_overrides_dead_hand``
+        (§7b)が真のときだけ、**手書きの要素で fact を 1 件も引けず、かつ
+        ラベル側の要素が 1 件以上引ける**語の要素をラベルのものに差し替える。
+        引けないラベルには差し替えない(2 社目の ``繰延税金負債`` のように、
+        手書きもラベルも同じ名前で両方引けない語が在る)。
+    ``added``
+        **手書きの語彙に無い語**の行。書類のラベルを先に、足りない語を標準
+        タクソノミで埋める(会社自身の表の言葉が本文の言い回しに近いので先)。
+        並びは**長い名前が先**(``subject_of`` は同じ終わり位置・同じ長さなら
+        先に在る方を採るので、並べる順を決めておく)。
+    ``overrides``
+        §7b で差し替えた語の記録(人間の指示: 「(b) でラベルに切り替わった
+        ときは記録に残し、件数と該当の語を報告する」)。
+    """
+
+    doc_labels, tax_labels = _label_tables(zb, inst, profile)
+    facts, contexts = inst["facts"], inst["contexts"]
+
+    def resolves(elems):
+        return bool(I.facts_for(list(elems), facts, contexts))
+
+    hand_rows, overrides = [], []
+    for w, elems in profile.subjects:
+        replaced = None
+        if profile.label_overrides_dead_hand and not resolves(elems):
+            for source, table in (("document", doc_labels), ("taxonomy", tax_labels)):
+                cand = table.get(w)
+                if cand and resolves(cand):
+                    replaced = (source, list(cand))
+                    break
+        if replaced is None:
+            hand_rows.append((w, list(elems)))
+            continue
+        source, cand = replaced
+        overrides.append({"word": w, "hand": list(elems), "label": cand, "source": source})
+        hand_rows.append((w, cand))
+
     hand = {w for w, _e in profile.subjects}
-    rows = [(w, list(elems)) for w, elems in labels.items() if w not in hand]
-    rows.sort(key=lambda r: (-len(r[0]), r[0]))
-    return rows
+    added = {}
+    for table in (doc_labels, tax_labels):
+        for w, elems in table.items():
+            if w not in hand and w not in added:
+                added[w] = list(elems)
+    rows = sorted(added.items(), key=lambda r: (-len(r[0]), r[0]))
+    return hand_rows, [(w, list(elems)) for w, elems in rows], overrides
 
 
 def build_raw_claims(zb, profile, info=None):
@@ -748,13 +805,14 @@ def build_raw_claims(zb, profile, info=None):
     """
 
     inst = I.load_instance(zb)
-    if profile.label_vocabulary:
-        # XBRL 直し §7: 主語の一覧にラベルの行を足した profile で以降を回す
+    if profile.label_vocabulary or profile.taxonomy_labels:
+        # XBRL 直し §7/§7b/§8: 主語の一覧をラベルで直した profile で以降を回す
         # (``subject_of`` も他の関数も 1 行も変えない)。
-        added = _label_subjects(zb, inst, profile)
-        profile = dataclasses.replace(profile, subjects=tuple(profile.subjects) + tuple(added))
+        hand_rows, added, overrides = _label_subjects(zb, inst, profile)
+        profile = dataclasses.replace(profile, subjects=tuple(hand_rows) + tuple(added))
         if info is not None:
             info["label_subjects_added"] = len(added)
+            info["label_overrides"] = overrides
     facts, contexts, tbs = inst["facts"], inst["contexts"], inst["textblocks"]
     mdna_name = I.select_mdna(tbs)
     text = I.strip_html(tbs[mdna_name]) if mdna_name else ""

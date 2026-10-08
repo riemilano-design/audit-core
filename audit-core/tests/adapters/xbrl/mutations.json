@@ -438,10 +438,10 @@
   {
     "id": "X-R7b-label-subjects-placed-before-the-hand-vocabulary",
     "file": "recipes.py",
-    "old": "        profile = dataclasses.replace(profile, subjects=tuple(profile.subjects) + tuple(added))",
-    "new": "        profile = dataclasses.replace(profile, subjects=tuple(added) + tuple(profile.subjects))",
+    "old": "        profile = dataclasses.replace(profile, subjects=tuple(hand_rows) + tuple(added))",
+    "new": "        profile = dataclasses.replace(profile, subjects=tuple(added) + tuple(hand_rows))",
     "predicted": "red",
-    "note": "XBRL 直し §7 でラベルの語彙を手書きの語彙の**前**に置く。予測は red、1 回目の実測は **green**(外れとして固定する)。原因: _label_subjects が『手書きに在る語はラベルに足さない』で除外しているため、同じ語が両方に在ることがなく、**順序が等価変異になる**。司令塔が予測を書くときにこの除外を数えていなかった。本当の不変条件は『手書きに在る語を足さない』ことなので、そちらを test_recipes.LabelSubjectsTest.test_hand_words_are_not_added_again で留めた。scope を狭めて green にしたのではなく、予測の外れとして記録している。",
+    "note": "XBRL 直し §7 でラベルの語彙を手書きの語彙の**前**に置く。予測は red、1 回目の実測は **green**(外れとして固定する)。原因: _label_subjects が『手書きに在る語はラベルに足さない』で除外しているため、同じ語が両方に在ることがなく、**順序が等価変異になる**。司令塔が予測を書くときにこの除外を数えていなかった。本当の不変条件は『手書きに在る語を足さない』ことなので、そちらを test_recipes.LabelSubjectsTest.test_hand_words_are_not_added_again で留めた。scope を狭めて green にしたのではなく、予測の外れとして記録している。 **当て直し(2026-10-08、§7b の実装で行が変わった)**: 同じ性質(ラベルを手書きの前に置く)を新しい行に当て直した。§7b で手書きの行を差し替えるようになっても、ラベルから足すのは手書きに無い語だけなので**順序は等価のまま**であり、予測の外れは解消していない(scope は狭めない)。",
     "prediction_miss": true,
     "actual_first_measurement": "green"
   },
@@ -452,5 +452,69 @@
     "new": "            if not label:",
     "predicted": "red",
     "note": "XBRL 直し §7 の除く名前(長さ 3 未満・その他/合計/計 等)を外す。「計」が監査報酬の 4 要素に当たるなど、勘定科目を一意に指さない語が主語になる。test_instance.InlineLabelsTest.test_short_names_are_dropped_at_the_written_threshold と test_denied_names_are_dropped が捕まえる。"
+  },
+  {
+    "id": "X-R7a2-statement-rows-member-check-removed",
+    "file": "instance.py",
+    "old": "    for _name, cid in pairs:\n        if (contexts.get(cid) or {}).get(\"members\"):\n            return []",
+    "new": "    for _name, cid in pairs:\n        if (contexts.get(cid) or {}).get(\"members\"):\n            continue",
+    "predicted": "red",
+    "note": "XBRL 直し §7a の 2 つの条件のうち **member の検査**を外す(行ごと捨てるのをやめる)。2 社目のセグメント名「美容室支援事業」がラベルに戻り、悪化 T009 の原因が復活する。test_instance.RowElementsStatementOnlyTest.test_a_member_on_any_fact_in_the_row_drops_the_whole_row と test_recipes.LabelStatementRowsOnlyTest.test_segment_name_is_gone_but_the_account_names_stay が捕まえる。"
+  },
+  {
+    "id": "X-R7a3-statement-prefix-filter-removed",
+    "file": "instance.py",
+    "old": "    return [name for name, _cid in pairs if name.split(\":\")[0] == STATEMENT_PREFIX]",
+    "new": "    return [name for name, _cid in pairs]",
+    "predicted": "red",
+    "note": "XBRL 直し §7a の 2 つの条件のうち **財務諸表タクソノミの接頭辞の検査**を外す。監査報酬の表(jpcrp_cor)の「連結子会社」がラベルに戻る ― member が付いていないので member の検査では落ちない型。test_instance.RowElementsStatementOnlyTest.test_only_the_statement_taxonomy_elements_are_taken と test_recipes の 連結子会社 の行が捕まえる。**2 つの条件を別々の変異にしているのは、どちらか 1 つでは消えない型が 2 つ在るからである。**"
+  },
+  {
+    "id": "X-R7b2-dead-hand-override-without-checking-the-label-resolves",
+    "file": "recipes.py",
+    "old": "                if cand and resolves(cand):",
+    "new": "                if cand:",
+    "predicted": "red",
+    "note": "XBRL 直し §7b の「ラベル側が fact を 1 件以上引けるときだけ差し替える」を外す。2 社目の 繰延税金負債(手書きもラベルも DeferredTaxLiabilities で両方引けない)が「切り替えた」と記録され、人間に報告する件数が嘘になる。test_recipes.LabelOverridesDeadHandTest.test_a_label_that_also_resolves_nothing_is_not_used が捕まえる。"
+  },
+  {
+    "id": "X-R7c-hand-vocabulary-fix-not-applied",
+    "file": "vocabulary.py",
+    "old": "    (w, list(SUBJECTS_P12_FIXES[w])) if w in SUBJECTS_P12_FIXES else (w, e)",
+    "new": "    (w, e)",
+    "predicted": "red",
+    "note": "XBRL 直し §7c の手書きの語彙の直しを当てない(SUBJECTS_P12 が SUBJECTS_P8 と同じになる)。1 社目 N021/T011・3 社目 T040(退職給付に係る資産・負債)が束縛できなくなる。test_vocabulary.SubjectsP12Test.test_the_two_words_gain_the_element_that_actually_exists と test_only_the_two_words_differ_from_p8 が捕まえる。"
+  },
+  {
+    "id": "X-R8a-taxonomy-total-label-instead-of-the-standard-label",
+    "file": "instance.py",
+    "old": "STANDARD_LABEL_ROLE = \"http://www.xbrl.org/2003/role/label\"",
+    "new": "STANDARD_LABEL_ROLE = \"http://www.xbrl.org/2003/role/totalLabel\"",
+    "predicted": "red",
+    "note": "XBRL 直し §8 で採る role を標準ラベルから **totalLabel** に替える。CurrentAssets の語が「流動資産」から「流動資産合計」に変わり、本文の「流動資産は…」と一致しなくなる(3 社目 T029/T032・N052/N054 が束縛できなくなる)。**この 1 行が §8 の効き目のほぼ全部である。** test_instance.ParseLabelLinkbaseTest.test_only_the_standard_label_role_is_taken と TaxonomyLabelsTest.test_the_real_files_give_the_two_words_the_document_labels_could_not が捕まえる。"
+  },
+  {
+    "id": "X-R8b-taxonomy-sha256-not-checked",
+    "file": "instance.py",
+    "old": "    if actual != expected_sha256:",
+    "new": "    if False:",
+    "predicted": "red",
+    "note": "XBRL 直し §8 の sha256 の照合を外す。人間の指示「取得したファイルはリポジトリの外に置いて sha256 だけを残す」の**残した側**が効かなくなり、別の版のラベルを黙って読む。test_instance.TaxonomyLabelFilesTest.test_a_wrong_sha256_raises が捕まえる。"
+  },
+  {
+    "id": "X-R8c-taxonomy-not-restricted-to-the-document-facts",
+    "file": "instance.py",
+    "old": "    for local in sorted(fact_locals):",
+    "new": "    for local in sorted(labels):",
+    "predicted": "red",
+    "note": "XBRL 直し §8 の「この書類に fact が在る要素だけ」を外し、タクソノミ全体 6,495 要素を語にする。「受注高」のように書類に無い語が主語になり、元データに無いことの裏取りが崩れる。test_instance.TaxonomyLabelsTest.test_only_elements_with_a_fact_become_words が捕まえる。"
+  },
+  {
+    "id": "X-R8d-taxonomy-namespace-filter-removed",
+    "file": "instance.py",
+    "old": "        if namespaces is not None and ns not in namespaces:",
+    "new": "        if False:",
+    "predicted": "red",
+    "note": "XBRL 直し §8 の名前空間の限定(jppfs だけ)を外す。**3 書類では P13 と P14(限定なし)が 1 行も違わなかった = 実物では差が出ない**ので、この分岐は実物の門では黙る。だから test_instance.TaxonomyLabelsTest.test_the_namespace_filter_keeps_jpcrp_out で仕組みを直に留めてある(「正常な入力では発火しない守りは、故障を作って当てないと測れない」の型)。"
   }
 ]
