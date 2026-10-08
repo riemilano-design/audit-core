@@ -260,6 +260,8 @@ class Profile:
     target_both: bool = False          # §3  目標・見通しを数と文字の両方に
     paren_sentence: bool = False       # §4  括弧の中の句点では切らない
     drop_qualitative: bool = False     # §5  定性的な語を主張にしない
+    # XBRL 直し §6(人間の決定、2026-10-08)。P9 だけ。P1〜P8 は既定の False。
+    text_prior_year_paren: bool = False  # §6 括弧内の前期の方向語を前期−前々期に
 
 
 P1 = Profile(
@@ -322,4 +324,26 @@ P8 = Profile(
     drop_qualitative=True,
 )
 
-PROFILES = {"P1": P1, "P5F": P5F, "P6": P6, "P7": P7, "P8": P8}
+# XBRL 直し §6(人間の決定、2026-10-08): 6 つ目の直しを足した profile。
+# P8 の定義は書き換えない(5 つと 6 つの差が読めるように両方残す)。
+P9 = Profile(
+    name="P9",
+    subjects=SUBJECTS_P8,
+    member_on=True,
+    claim_level_member=True,
+    run3="L",
+    flow_sign=True,
+    point_diff=True,
+    segment_denominator=True,
+    expenditure_sign=True,
+    target_word=True,
+    text_reason_split=True,
+    prior2_required=True,
+    doc_rounding=True,
+    target_both=True,
+    paren_sentence=True,
+    drop_qualitative=True,
+    text_prior_year_paren=True,
+)
+
+PROFILES = {"P1": P1, "P5F": P5F, "P6": P6, "P7": P7, "P8": P8, "P9": P9}

@@ -442,6 +442,54 @@ def _dispatch_num_claim(claim, s, a, b, sign, num, unit, prec, subj, elems, memb
         claim["reason"] = "no_element(unit not in XBRL)"
 
 
+# ---------------------------------------------------------------------------
+# XBRL 直し §6(人間の決定、2026-10-08): 括弧内の前期の方向語。
+# profile.text_prior_year_paren が真のときだけ使う。
+#
+# 「…22 億 8 千 1 百万円増加(前連結会計年度は 14 億 7 千 5 百万円増加)し、…」の
+# 括弧の中の「増加」は**前期の**増加であって、当期 − 前期ではなく前期 − 前々期を
+# 指す。数の主張の側には同じ扱いが既にある(_direct_value_claim の
+# prev_year_phrase、窓 15 字)。その文字版が無いのが T008・T022 の誤りの機構。
+#
+# 判定は**文字の窓ではなく括弧の深さ**で行う ― 「前連結会計年度は」(8 字)+ 金額
+# (8 字以上)で 16 字以上になり、数の側の窓 15 字では前の字に届かないため。
+# ---------------------------------------------------------------------------
+PAREN_OPEN_CHARS = "(（"
+PAREN_CLOSE_CHARS = ")）"
+
+
+def _enclosing_paren(s, pos, open_chars=PAREN_OPEN_CHARS, close_chars=PAREN_CLOSE_CHARS):
+    """``pos`` を囲む、いちばん内側の丸括弧の ``(開きの位置, 閉じの位置)``。
+    囲んでいなければ ``None``。閉じていない括弧は行末までを範囲とする
+    (内側の括弧は外側より先に閉じるので、最初に見つかった「囲んでいる対」が
+    いちばん内側になる)。
+    """
+
+    stack = []
+    for i, ch in enumerate(s):
+        if ch in open_chars:
+            stack.append(i)
+        elif ch in close_chars:
+            if stack:
+                o = stack.pop()
+                if o < pos < i:
+                    return (o, i)
+    if stack and stack[-1] < pos:
+        return (stack[-1], len(s))
+    return None
+
+
+def _in_prior_year_paren(s, pos):
+    """``pos`` が、「前連結会計年度は」を含む丸括弧の中にあるか。
+    語そのものは数の側と同じ ``_PREV_YEAR_PHRASE`` を使う(1 か所で持つ)。
+    """
+
+    span = _enclosing_paren(s, pos)
+    if span is None:
+        return False
+    return _PREV_YEAR_PHRASE in s[span[0]:span[1]]
+
+
 def _build_raw_num_claims(sentences, facts, contexts, profile, claim_member, rounding=None):
     num_claims = []
     for si, s in enumerate(sentences):
@@ -572,9 +620,14 @@ def _build_raw_text_claims(sentences, facts, contexts, profile, claim_member):
                     else:
                         claim["reason"] = _text_unbound_reason(profile, member, cur, elems, facts, contexts)
                 elif subj:
-                    cur = [f for f in I.facts_for(elems, facts, contexts, member) if f["context"].startswith("CurrentYear") and f["unit"] and f["unit"].upper().startswith("JPY")]
-                    pri = [f for f in I.facts_for(elems, facts, contexts, member) if f["context"].startswith("Prior1Year")]
-                    pairs = [(c, p) for c in cur for p in pri if c["name"] == p["name"] and c["context"].replace("CurrentYear", "") == p["context"].replace("Prior1Year", "")]
+                    # XBRL 直し §6: 括弧の中の前期の方向語は、当期・前期ではなく
+                    # 前期・前々期の対に結ぶ。期の組だけを差し替え、以降の
+                    # 判定(符号の向き・理由)は同じ 1 か所を通す。
+                    prior_paren = profile.text_prior_year_paren and _in_prior_year_paren(s, m.start())
+                    a_pre, b_pre = ("Prior1Year", "Prior2Year") if prior_paren else ("CurrentYear", "Prior1Year")
+                    cur = [f for f in I.facts_for(elems, facts, contexts, member) if f["context"].startswith(a_pre) and f["unit"] and f["unit"].upper().startswith("JPY")]
+                    pri = [f for f in I.facts_for(elems, facts, contexts, member) if f["context"].startswith(b_pre)]
+                    pairs = [(c, p) for c in cur for p in pri if c["name"] == p["name"] and c["context"].replace(a_pre, "") == p["context"].replace(b_pre, "")]
                     if pairs:
                         c, p = pairs[0]
                         claim["pointer"] = ["xbrl:%s@%s" % (c["name"], c["context"]), "xbrl:%s@%s" % (p["name"], p["context"]), "builtin:sign(cur-prior)"]
@@ -582,6 +635,10 @@ def _build_raw_text_claims(sentences, facts, contexts, profile, claim_member):
                         actual = 1 if c["value"] - p["value"] > 0 else -1
                         claim["result"] = "GROUNDED" if actual == sg else "VALUE_MISMATCH"
                         claim["recomputed"] = c["value"] - p["value"]
+                    elif prior_paren:
+                        # 前々期が無いときは代用せず止める(数の側の §1b と同じ
+                        # 原因なので同じ理由の名前を使う。登録簿は増やさない)。
+                        claim["reason"] = "no_element(no prior2 for prior-year diff)"
                     else:
                         claim["reason"] = _text_unbound_reason(profile, member, cur, elems, facts, contexts)
                 else:

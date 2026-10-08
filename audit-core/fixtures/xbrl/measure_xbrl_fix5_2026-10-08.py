@@ -48,7 +48,11 @@ CONFIGS = [
     ("fix3_target", {"target_both": True}),
     ("fix4_paren", {"paren_sentence": True}),
     ("fix5_qualitative", {"drop_qualitative": True}),
-    ("all", None),  # = V.PROFILES["P8"]
+    ("all", None),  # = V.PROFILES["P8"](5 つとも。6 つ目は入っていない)
+    # XBRL 直し §6(2026-10-08 の追加の指示): 6 つ目を単独と組み合わせの両方で測る。
+    ("fix6_prior_paren", {"text_prior_year_paren": True}),
+    ("fix6_with_vocab", {"text_prior_year_paren": True, "subjects": V.SUBJECTS_P8}),
+    ("all6", "P9"),  # = V.PROFILES["P9"](6 つとも)
 ]
 
 ROW_FIELDS = ("state", "pointers", "recomputed", "reason", "comparator", "normalization")
@@ -57,6 +61,8 @@ ROW_FIELDS = ("state", "pointers", "recomputed", "reason", "comparator", "normal
 def profile_of(name, over):
     if over is None:
         return V.PROFILES["P8"]
+    if isinstance(over, str):
+        return V.PROFILES[over]
     base = V.PROFILES["P7"]
     return base if not over else dataclasses.replace(base, name="P7+" + name, **over)
 
@@ -163,7 +169,7 @@ def main(argv=None):
         else:
             d = diff_against(base_rows, rows)
         out["configs"][name] = {"tally": tally, "info": info, "diff": d}
-        if name in ("base", "all"):
+        if name in ("base", "all", "all6"):
             # 行の全表は「直す前」と「5 つとも入れた後」の 2 つだけ置く。
             # 1 つずつの構成は base との差分(全件)で足りる。
             out["configs"][name]["rows"] = {"%s|%d" % k: v for k, v in rows.items()}

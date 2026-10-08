@@ -744,3 +744,134 @@ class DropQualitativeTest(unittest.TestCase):
         s = "その他は293百万円減少しました。"
         got = R._build_raw_num_claims([s], [], {}, V.P8, self._claim_member)
         self.assertEqual(len(got), 1)
+
+
+class EnclosingParenTest(unittest.TestCase):
+    """XBRL 直し §6(2026-10-08): 括弧の深さで囲みを見る(文字の窓では届かない)。"""
+
+    def test_position_inside_the_parenthesis(self):
+        s = "あ(前連結会計年度は1億円増加)し"
+        self.assertEqual(R._enclosing_paren(s, s.index("増加")), (1, s.index(")")))
+
+    def test_position_outside_returns_none(self):
+        s = "あ(前連結会計年度は1億円増加)し"
+        self.assertIsNone(R._enclosing_paren(s, 0))
+        self.assertIsNone(R._enclosing_paren(s, len(s) - 1))
+
+    def test_innermost_pair_wins(self):
+        s = "あ(い(う)え)お"   # 0 あ / 1 ( / 2 い / 3 ( / 4 う / 5 ) / 6 え / 7 ) / 8 お
+        self.assertEqual(R._enclosing_paren(s, s.index("う")), (3, 5))
+        self.assertEqual(R._enclosing_paren(s, s.index("え")), (1, 7))
+
+    def test_unclosed_paren_runs_to_the_end(self):
+        s = "あ(いう"
+        self.assertEqual(R._enclosing_paren(s, 3), (1, len(s)))
+
+    def test_fullwidth_parens(self):
+        s = "あ（前連結会計年度は1億円増加）し"
+        self.assertIsNotNone(R._enclosing_paren(s, s.index("増加")))
+
+    def test_in_prior_year_paren_needs_both_the_paren_and_the_phrase(self):
+        self.assertTrue(R._in_prior_year_paren("あ(前連結会計年度は1億円増加)し", 12))
+        # 括弧の中だが語が無い
+        self.assertFalse(R._in_prior_year_paren("あ(当期は1億円増加)し", 8))
+        # 語はあるが括弧の外
+        self.assertFalse(R._in_prior_year_paren("前連結会計年度は1億円増加した", 10))
+
+    def test_the_phrase_is_the_same_literal_the_num_side_uses(self):
+        # 語を 2 か所に書かない(1 か所で持つ)。
+        self.assertEqual(R._PREV_YEAR_PHRASE, "前連結会計年度は")
+
+    def test_the_phrase_is_further_than_the_num_side_window(self):
+        # 数の側の窓(15 字)では届かないことを数で残す ― これが括弧の深さで
+        # 見る理由である。「前連結会計年度は」8 字 + 金額 8 字 = 16 字。
+        s = "比べて22億8千1百万円増加(前連結会計年度は14億7千5百万円増加)し"
+        pos = s.rindex("増加")
+        self.assertNotIn(R._PREV_YEAR_PHRASE, s[max(0, pos - R._TARGET_WINDOW):pos])
+        self.assertNotIn(R._PREV_YEAR_PHRASE, s[max(0, pos - 15):pos])
+        self.assertTrue(R._in_prior_year_paren(s, pos))
+
+
+class TextPriorYearParenTest(unittest.TestCase):
+    """XBRL 直し §6: 括弧内の前期の方向語を前期 − 前々期に結ぶ。
+
+    1 社目 `T008`/`T022` の機構(同じ文の 2 つの「増加」が同じ相手に結ばれる)を
+    合成の文で再現する。
+    """
+
+    @staticmethod
+    def _claim_member(si, pos):
+        return (None, None)
+
+    SENT = ("当連結会計年度末における資産合計は、前連結会計年度末と比べて22億8千1百万円増加"
+            "(前連結会計年度は14億7千5百万円増加)しました。")
+    NAME = "jppfs_cor:Assets"
+    CUR, PRI1, PRI2 = 27836421000.0, 25554675000.0, 24079430000.0
+
+    def _facts(self, with_prior2):
+        rows = [{"name": self.NAME, "context": "CurrentYearInstant", "unit": "JPY", "value": self.CUR},
+                {"name": self.NAME, "context": "Prior1YearInstant", "unit": "JPY", "value": self.PRI1}]
+        if with_prior2:
+            rows.append({"name": self.NAME, "context": "Prior2YearInstant", "unit": "JPY", "value": self.PRI2})
+        return rows
+
+    def _contexts(self, with_prior2):
+        c = {"CurrentYearInstant": {"members": []}, "Prior1YearInstant": {"members": []}}
+        if with_prior2:
+            c["Prior2YearInstant"] = {"members": []}
+        return c
+
+    def _claims(self, profile, with_prior2=True):
+        return R._build_raw_text_claims([self.SENT], self._facts(with_prior2), self._contexts(with_prior2),
+                                        profile, self._claim_member)
+
+    def test_p8_binds_both_increases_to_the_same_pair(self):
+        # 直す前(誤りの側)を固定する: 2 つの「増加」の pointer と recomputed が同一。
+        got = self._claims(V.P8)
+        self.assertEqual(len(got), 2)
+        self.assertEqual(got[0]["pointer"], got[1]["pointer"])
+        self.assertEqual(got[0]["recomputed"], got[1]["recomputed"])
+        self.assertEqual(got[1]["recomputed"], self.CUR - self.PRI1)
+
+    def test_p9_binds_the_paren_one_to_the_prior_pair(self):
+        got = self._claims(V.P9)
+        self.assertEqual(len(got), 2)
+        outside, inside = got[0], got[1]
+        self.assertEqual(outside["recomputed"], self.CUR - self.PRI1)
+        self.assertEqual(inside["recomputed"], self.PRI1 - self.PRI2)
+        self.assertNotEqual(outside["pointer"], inside["pointer"])
+        self.assertEqual(inside["pointer"][0], "xbrl:%s@Prior1YearInstant" % self.NAME)
+        self.assertEqual(inside["pointer"][1], "xbrl:%s@Prior2YearInstant" % self.NAME)
+        self.assertEqual(inside["result"], "GROUNDED")
+
+    def test_p9_stops_when_the_prior2_fact_is_absent(self):
+        got = self._claims(V.P9, with_prior2=False)
+        inside = got[1]
+        self.assertEqual(inside["reason"], "no_element(no prior2 for prior-year diff)")
+        self.assertIsNone(inside["pointer"])
+        self.assertEqual(R._state_of(inside["reason"], inside["result"]), "POINTER_NOT_FOUND")
+
+    def test_p9_does_not_stop_the_claim_outside_the_paren(self):
+        got = self._claims(V.P9, with_prior2=False)
+        self.assertEqual(got[0]["result"], "GROUNDED")
+        self.assertEqual(got[0]["recomputed"], self.CUR - self.PRI1)
+
+    def test_direction_is_still_checked_against_the_new_pair(self):
+        # 前期 − 前々期 が負なら、括弧の中の「増加」は不一致になる。
+        facts = [{"name": self.NAME, "context": "CurrentYearInstant", "unit": "JPY", "value": self.CUR},
+                 {"name": self.NAME, "context": "Prior1YearInstant", "unit": "JPY", "value": 1000.0},
+                 {"name": self.NAME, "context": "Prior2YearInstant", "unit": "JPY", "value": 9000.0}]
+        got = R._build_raw_text_claims([self.SENT], facts, self._contexts(True), V.P9, self._claim_member)
+        self.assertEqual(got[1]["result"], "VALUE_MISMATCH")
+        self.assertEqual(got[1]["recomputed"], -8000.0)
+
+    def test_p1_to_p8_keep_the_flag_off(self):
+        for p in (V.P1, V.P5F, V.P6, V.P7, V.P8):
+            self.assertFalse(p.text_prior_year_paren, p.name)
+        self.assertTrue(V.P9.text_prior_year_paren)
+
+    def test_p9_is_p8_plus_only_this_flag(self):
+        import dataclasses
+        a = dataclasses.replace(V.P8, name="x", text_prior_year_paren=True)
+        b = dataclasses.replace(V.P9, name="x")
+        self.assertEqual(a, b)

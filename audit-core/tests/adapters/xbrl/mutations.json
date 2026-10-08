@@ -386,5 +386,29 @@
     "new": "    # 5 つを 1 つのフラグに束ねていない(1 つずつ独立に測れるようにするため)。",
     "predicted": "green",
     "note": "コメントの字句だけの変更(A-G/D-G/G-G/H-G1 と同型の対照)。挙動は変わらないので green。"
+  },
+  {
+    "id": "X-R6a-prior-paren-detection-disabled",
+    "file": "recipes.py",
+    "old": "                    prior_paren = profile.text_prior_year_paren and _in_prior_year_paren(s, m.start())",
+    "new": "                    prior_paren = False and profile.text_prior_year_paren and _in_prior_year_paren(s, m.start())",
+    "predicted": "red",
+    "note": "XBRL 直し §6 を戻す(括弧内の前期の方向語を当期−前期に結ぶ)。test_recipes.TextPriorYearParenTest.test_p9_binds_the_paren_one_to_the_prior_pair が捕まえる。"
+  },
+  {
+    "id": "X-R6b-prior-pair-replaced-by-current-pair",
+    "file": "recipes.py",
+    "old": "                    a_pre, b_pre = (\"Prior1Year\", \"Prior2Year\") if prior_paren else (\"CurrentYear\", \"Prior1Year\")",
+    "new": "                    a_pre, b_pre = (\"CurrentYear\", \"Prior1Year\")",
+    "predicted": "red",
+    "note": "XBRL 直し §6 の期の組の差し替えだけを潰す(判定は通るが結ぶ相手が元のまま)。同じ試験が捕まえる。"
+  },
+  {
+    "id": "X-R6c-prior-paren-stop-falls-back",
+    "file": "recipes.py",
+    "old": "                    elif prior_paren:\n                        # 前々期が無いときは代用せず止める(数の側の §1b と同じ\n                        # 原因なので同じ理由の名前を使う。登録簿は増やさない)。\n                        claim[\"reason\"] = \"no_element(no prior2 for prior-year diff)\"",
+    "new": "                    elif False:\n                        # 前々期が無いときは代用せず止める(数の側の §1b と同じ\n                        # 原因なので同じ理由の名前を使う。登録簿は増やさない)。\n                        claim[\"reason\"] = \"no_element(no prior2 for prior-year diff)\"",
+    "predicted": "red",
+    "note": "XBRL 直し §6 の「前々期が無ければ止める」を外す(_text_unbound_reason の既定の理由に落ちる)。test_recipes.TextPriorYearParenTest.test_p9_stops_when_the_prior2_fact_is_absent が捕まえる。"
   }
 ]
