@@ -26,7 +26,12 @@ import os
 import sys
 
 # 接続部分(adapters/xbrl)の設計・語彙・境界を決めるのに使った書類。字で書く。
-DEVELOPMENT_DOCS = ("S100Z4Q1", "S100Z4B6", "S100YMFV")
+#
+# 人間の判断(2026-10-08): **`S100Z37J` は、主語の規則の誤りの原因調査に使ったので
+# 今後は開発用の書類として扱う。** いちど holdout として測った数
+# (`P7` 51.9% -> `P13` 38.0%)は `XBRL_HOLDOUT_RESULT_2026-10-08.md` に残るが、
+# **これ以降この書類の数を「効果の値」として報告しない。**
+DEVELOPMENT_DOCS = ("S100Z4Q1", "S100Z4B6", "S100YMFV", "S100Z37J")
 
 # 印字する構成の順と見出し。
 CONFIG_LABELS = [
