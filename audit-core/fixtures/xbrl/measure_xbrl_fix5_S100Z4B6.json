@@ -1,0 +1,5721 @@
+{
+ "tool": "measure_xbrl_fix5",
+ "doc": "S100Z4B6",
+ "zip_sha256": "d617b6e1807c8aa6d2b1269f6b25ff57a6a71dbf683020f1859d2d4a04c02d26",
+ "configs": {
+  "base": {
+   "tally": {
+    "claims": 133,
+    "num": 91,
+    "text": 42,
+    "state": {
+     "POINTER_NOT_FOUND": 22,
+     "VALUE_MISMATCH": 14,
+     "UNVERIFIABLE": 42,
+     "GROUNDED": 55
+    },
+    "stopped": 78,
+    "reason": {
+     "no_element": 7,
+     "ambiguous(member)": 5,
+     "no_element(unit not in XBRL)": 15,
+     "ambiguous(elements)": 10,
+     "no_subject": 17,
+     "state_word(no line)": 10
+    },
+    "normalization": {
+     "round": 20,
+     "abs+round": 13
+    },
+    "comparator": {
+     "equals_within": 39,
+     "pct_change(cur,prior)": 14,
+     "diff(a-b) equals_within": 4,
+     "builtin:sign(cur-prior)==direction": 12
+    }
+   },
+   "info": {
+    "sentences": 136,
+    "mdna_chars": 7730,
+    "rounding": null
+   },
+   "diff": {
+    "changed": [],
+    "gone": [],
+    "new": []
+   },
+   "rows": {
+    "num|688": {
+     "id": "N001",
+     "kind": "num",
+     "state": "POINTER_NOT_FOUND",
+     "pointers": [],
+     "recomputed": null,
+     "reason": "no_element",
+     "comparator": null,
+     "normalization": null,
+     "subject": null,
+     "value": 1000000000.0,
+     "unit": "円",
+     "word": null,
+     "span": "これにより2026年7月に新株式発行によって約10億円の資金調達を実施して",
+     "dropped": null
+    },
+    "num|720": {
+     "id": "N002",
+     "kind": "num",
+     "state": "POINTER_NOT_FOUND",
+     "pointers": [],
+     "recomputed": null,
+     "reason": "no_element",
+     "comparator": null,
+     "normalization": null,
+     "subject": null,
+     "value": 3500000000.0,
+     "unit": "円",
+     "word": null,
+     "span": "億円の資金調達を実施しており、今後、新株予約権の行使による約35億円の資金調達を見込んで",
+     "dropped": null
+    },
+    "num|1495": {
+     "id": "N003",
+     "kind": "num",
+     "state": "VALUE_MISMATCH",
+     "pointers": [
+      "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration"
+     ],
+     "recomputed": -52196000.0,
+     "reason": null,
+     "comparator": "equals_within",
+     "normalization": null,
+     "subject": "営業損失",
+     "value": 48190.0,
+     "unit": "千円",
+     "word": null,
+     "span": "新株式発行及び第2回新株予約権の発行に係る諸費用を株式交付費48,190千円として営業外費用とし",
+     "dropped": null
+    },
+    "num|1632": {
+     "id": "N004",
+     "kind": "num",
+     "state": "UNVERIFIABLE",
+     "pointers": [],
+     "recomputed": null,
+     "reason": "ambiguous(member)",
+     "comparator": null,
+     "normalization": null,
+     "subject": "経常損失",
+     "value": 3758.0,
+     "unit": "千円",
+     "word": null,
+     "span": "ロン運営事業及びヘアメイク事業に係る固定資産について減損損失3,758千円を特別損失として計上",
+     "dropped": null
+    },
+    "num|1704": {
+     "id": "N005",
+     "kind": "num",
+     "state": "GROUNDED",
+     "pointers": [
+      "xbrl:jpcrp_cor:NetSalesSummaryOfBusinessResults@CurrentYearDuration"
+     ],
+     "recomputed": 1850502000.0,
+     "reason": null,
+     "comparator": "equals_within",
+     "normalization": "round",
+     "subject": "売上高",
+     "value": 1850502.0,
+     "unit": "千円",
+     "word": null,
+     "span": "以上の結果、当連結会計年度の業績は、売上高1,850,502千円(前期比0.3%増)",
+     "dropped": null
+    },
+    "num|1719": {
+     "id": "N006",
+     "kind": "num",
+     "state": "GROUNDED",
+     "pointers": [
+      "xbrl:jpcrp_cor:NetSalesSummaryOfBusinessResults@CurrentYearDuration",
+      "xbrl:jpcrp_cor:NetSalesSummaryOfBusinessResults@Prior1YearDuration"
+     ],
+     "recomputed": 0.35,
+     "reason": null,
+     "comparator": "pct_change(cur,prior)",
+     "normalization": null,
+     "subject": "売上高",
+     "value": 0.3,
+     "unit": "%",
+     "word": null,
+     "span": "当連結会計年度の業績は、売上高1,850,502千円(前期比0.3%増)、営業損失52,",
+     "dropped": null
+    },
+    "num|1730": {
+     "id": "N007",
+     "kind": "num",
+     "state": "GROUNDED",
+     "pointers": [
+      "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration"
+     ],
+     "recomputed": -52196000.0,
+     "reason": null,
+     "comparator": "equals_within",
+     "normalization": "abs+round",
+     "subject": "営業損失",
+     "value": 52196.0,
+     "unit": "千円",
+     "word": null,
+     "span": "、売上高1,850,502千円(前期比0.3%増)、営業損失52,196千円(前期は営業損失9,",
+     "dropped": null
+    },
+    "num|1746": {
+     "id": "N008",
+     "kind": "num",
+     "state": "GROUNDED",
+     "pointers": [
+      "xbrl:jppfs_cor:OperatingIncome@Prior1YearDuration"
+     ],
+     "recomputed": -9709000.0,
+     "reason": null,
+     "comparator": "equals_within",
+     "normalization": "abs+round",
+     "subject": "営業損失",
+     "value": 9709.0,
+     "unit": "千円",
+     "word": null,
+     "span": "前期比0.3%増)、営業損失52,196千円(前期は営業損失9,709千円)、経常損失98,5",
+     "dropped": null
+    },
+    "num|1759": {
+     "id": "N009",
+     "kind": "num",
+     "state": "GROUNDED",
+     "pointers": [
+      "xbrl:jpcrp_cor:OrdinaryIncomeLossSummaryOfBusinessResults@CurrentYearDuration"
+     ],
+     "recomputed": -98576000.0,
+     "reason": null,
+     "comparator": "equals_within",
+     "normalization": "abs+round",
+     "subject": "経常損失",
+     "value": 98576.0,
+     "unit": "千円",
+     "word": null,
+     "span": "失52,196千円(前期は営業損失9,709千円)、経常損失98,576千円(前期は経常損失7,",
+     "dropped": null
+    },
+    "num|1775": {
+     "id": "N010",
+     "kind": "num",
+     "state": "GROUNDED",
+     "pointers": [
+      "xbrl:jpcrp_cor:OrdinaryIncomeLossSummaryOfBusinessResults@Prior1YearDuration"
+     ],
+     "recomputed": -7091000.0,
+     "reason": null,
+     "comparator": "equals_within",
+     "normalization": "abs+round",
+     "subject": "経常損失",
+     "value": 7091.0,
+     "unit": "千円",
+     "word": null,
+     "span": "失9,709千円)、経常損失98,576千円(前期は経常損失7,091千円)、親会社株主に帰属",
+     "dropped": null
+    },
+    "num|1799": {
+     "id": "N011",
+     "kind": "num",
+     "state": "VALUE_MISMATCH",
+     "pointers": [
+      "xbrl:jpcrp_cor:OrdinaryIncomeLossSummaryOfBusinessResults@CurrentYearDuration"
+     ],
+     "recomputed": -98576000.0,
+     "reason": null,
+     "comparator": "equals_within",
+     "normalization": null,
+     "subject": "経常損失",
+     "value": 105873.0,
+     "unit": "千円",
+     "word": null,
+     "span": "期は経常損失7,091千円)、親会社株主に帰属する当期純損失105,873千円(前期は親会社株主に",
+     "dropped": null
+    },
+    "num|1827": {
+     "id": "N012",
+     "kind": "num",
+     "state": "VALUE_MISMATCH",
+     "pointers": [
+      "xbrl:jpcrp_cor:OrdinaryIncomeLossSummaryOfBusinessResults@CurrentYearDuration"
+     ],
+     "recomputed": -98576000.0,
+     "reason": null,
+     "comparator": "equals_within",
+     "normalization": null,
+     "subject": "経常損失",
+     "value": 17621.0,
+     "unit": "千円",
+     "word": null,
+     "span": "損失105,873千円(前期は親会社株主に帰属する当期純損失17,621千円)となりました。",
+     "dropped": null
+    },
+    "num|1950": {
+     "id": "N013",
+     "kind": "num",
+     "state": "POINTER_NOT_FOUND",
+     "pointers": [],
+     "recomputed": null,
+     "reason": "no_element(unit not in XBRL)",
+     "comparator": null,
+     "normalization": null,
+     "subject": null,
+     "value": 11.0,
+     "unit": "店舗",
+     "word": null,
+     "span": "フラッグシップサロンとして、首都圏主要地域を中心に直営サロン11店舗(モッズ・ヘアサロン",
+     "dropped": null
+    },
+    "num|1964": {
+     "id": "N014",
+     "kind": "num",
+     "state": "POINTER_NOT_FOUND",
+     "pointers": [],
+     "recomputed": null,
+     "reason": "no_element(unit not in XBRL)",
+     "comparator": null,
+     "normalization": null,
+     "subject": null,
+     "value": 9.0,
+     "unit": "店舗",
+     "word": null,
+     "span": "首都圏主要地域を中心に直営サロン11店舗(モッズ・ヘアサロン9店舗、美容室セラヴィ1店",
+     "dropped": null
+    },
+    "num|1975": {
+     "id": "N015",
+     "kind": "num",
+     "state": "POINTER_NOT_FOUND",
+     "pointers": [],
+     "recomputed": null,
+     "reason": "no_element(unit not in XBRL)",
+     "comparator": null,
+     "normalization": null,
+     "subject": null,
+     "value": 1.0,
+     "unit": "店舗",
+     "word": null,
+     "span": "直営サロン11店舗(モッズ・ヘアサロン9店舗、美容室セラヴィ1店舗、エテルネサロン1店",
+     "dropped": null
+    },
+    "num|1986": {
+     "id": "N016",
+     "kind": "num",
+     "state": "POINTER_NOT_FOUND",
+     "pointers": [],
+     "recomputed": null,
+     "reason": "no_element(unit not in XBRL)",
+     "comparator": null,
+     "normalization": null,
+     "subject": null,
+     "value": 1.0,
+     "unit": "店舗",
+     "word": null,
+     "span": "ッズ・ヘアサロン9店舗、美容室セラヴィ1店舗、エテルネサロン1店舗)及びモッズ・ヘアア",
+     "dropped": null
+    },
+    "num|2520": {
+     "id": "N017",
+     "kind": "num",
+     "state": "GROUNDED",
+     "pointers": [
+      "xbrl:jppfs_cor:NetSales@CurrentYearDuration_jpcrp030000-asr_E05055-000DirectSalonReportableSegmentMember"
+     ],
+     "recomputed": 958229000.0,
+     "reason": null,
+     "comparator": "equals_within",
+     "normalization": "round",
+     "subject": "売上高",
+     "value": 958229.0,
+     "unit": "千円",
+     "word": null,
+     "span": "当連結会計年度の直営サロン運営事業の業績は、売上高958,229千円(前期比3.3%増)",
+     "dropped": null
+    },
+    "num|2533": {
+     "id": "N018",
+     "kind": "num",
+     "state": "GROUNDED",
+     "pointers": [
+      "xbrl:jppfs_cor:NetSales@CurrentYearDuration_jpcrp030000-asr_E05055-000DirectSalonReportableSegmentMember",
+      "xbrl:jppfs_cor:NetSales@Prior1YearDuration_jpcrp030000-asr_E05055-000DirectSalonReportableSegmentMember"
+     ],
+     "recomputed": 3.3,
+     "reason": null,
+     "comparator": "pct_change(cur,prior)",
+     "normalization": null,
+     "subject": "売上高",
+     "value": 3.3,
+     "unit": "%",
+     "word": null,
+     "span": "直営サロン運営事業の業績は、売上高958,229千円(前期比3.3%増)、セグメント利益",
+     "dropped": null
+    },
+    "num|2547": {
+     "id": "N019",
+     "kind": "num",
+     "state": "GROUNDED",
+     "pointers": [
+      "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration_jpcrp030000-asr_E05055-000DirectSalonReportableSegmentMember"
+     ],
+     "recomputed": 32925000.0,
+     "reason": null,
+     "comparator": "equals_within",
+     "normalization": "round",
+     "subject": "セグメント利益",
+     "value": 32925.0,
+     "unit": "千円",
+     "word": null,
+     "span": "売上高958,229千円(前期比3.3%増)、セグメント利益32,925千円(前期比42.5%減",
+     "dropped": null
+    },
+    "num|2559": {
+     "id": "N020",
+     "kind": "num",
+     "state": "GROUNDED",
+     "pointers": [
+      "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration_jpcrp030000-asr_E05055-000DirectSalonReportableSegmentMember",
+      "xbrl:jppfs_cor:OperatingIncome@Prior1YearDuration_jpcrp030000-asr_E05055-000DirectSalonReportableSegmentMember"
+     ],
+     "recomputed": -42.54,
+     "reason": null,
+     "comparator": "pct_change(cur,prior)",
+     "normalization": null,
+     "subject": "セグメント利益",
+     "value": -42.5,
+     "unit": "%",
+     "word": null,
+     "span": "(前期比3.3%増)、セグメント利益32,925千円(前期比42.5%減)となりました。",
+     "dropped": null
+    },
+    "num|2696": {
+     "id": "N021",
+     "kind": "num",
+     "state": "POINTER_NOT_FOUND",
+     "pointers": [],
+     "recomputed": null,
+     "reason": "no_element(unit not in XBRL)",
+     "comparator": null,
+     "normalization": null,
+     "subject": null,
+     "value": 5.0,
+     "unit": "店舗",
+     "word": null,
+     "span": "当連結会計年度の店舗数の異動は国内の閉店5店舗、韓国の閉店2店舗、",
+     "dropped": null
+    },
+    "num|2705": {
+     "id": "N022",
+     "kind": "num",
+     "state": "POINTER_NOT_FOUND",
+     "pointers": [],
+     "recomputed": null,
+     "reason": "no_element(unit not in XBRL)",
+     "comparator": null,
+     "normalization": null,
+     "subject": null,
+     "value": 2.0,
+     "unit": "店舗",
+     "word": null,
+     "span": "当連結会計年度の店舗数の異動は国内の閉店5店舗、韓国の閉店2店舗、台湾の出店1店舗、",
+     "dropped": null
+    },
+    "num|2714": {
+     "id": "N023",
+     "kind": "num",
+     "state": "POINTER_NOT_FOUND",
+     "pointers": [],
+     "recomputed": null,
+     "reason": "no_element(unit not in XBRL)",
+     "comparator": null,
+     "normalization": null,
+     "subject": null,
+     "value": 1.0,
+     "unit": "店舗",
+     "word": null,
+     "span": "店舗数の異動は国内の閉店5店舗、韓国の閉店2店舗、台湾の出店1店舗、中国の出店1店舗及",
+     "dropped": null
+    },
+    "num|2723": {
+     "id": "N024",
+     "kind": "num",
+     "state": "POINTER_NOT_FOUND",
+     "pointers": [],
+     "recomputed": null,
+     "reason": "no_element(unit not in XBRL)",
+     "comparator": null,
+     "normalization": null,
+     "subject": null,
+     "value": 1.0,
+     "unit": "店舗",
+     "word": null,
+     "span": "の閉店5店舗、韓国の閉店2店舗、台湾の出店1店舗、中国の出店1店舗及び閉店4店舗であり",
+     "dropped": null
+    },
+    "num|2730": {
+     "id": "N025",
+     "kind": "num",
+     "state": "POINTER_NOT_FOUND",
+     "pointers": [],
+     "recomputed": null,
+     "reason": "no_element(unit not in XBRL)",
+     "comparator": null,
+     "normalization": null,
+     "subject": null,
+     "value": 4.0,
+     "unit": "店舗",
+     "word": null,
+     "span": "韓国の閉店2店舗、台湾の出店1店舗、中国の出店1店舗及び閉店4店舗であり、当連結会計年",
+     "dropped": null
+    },
+    "num|2757": {
+     "id": "N026",
+     "kind": "num",
+     "state": "POINTER_NOT_FOUND",
+     "pointers": [],
+     "recomputed": null,
+     "reason": "no_element(unit not in XBRL)",
+     "comparator": null,
+     "normalization": null,
+     "subject": null,
+     "value": 33.0,
+     "unit": "店舗",
+     "word": null,
+     "span": "び閉店4店舗であり、当連結会計年度末日現在におきまして、国内33店舗、韓国7店舗、台湾4",
+     "dropped": null
+    },
+    "num|2764": {
+     "id": "N027",
+     "kind": "num",
+     "state": "POINTER_NOT_FOUND",
+     "pointers": [],
+     "recomputed": null,
+     "reason": "no_element(unit not in XBRL)",
+     "comparator": null,
+     "normalization": null,
+     "subject": null,
+     "value": 7.0,
+     "unit": "店舗",
+     "word": null,
+     "span": "あり、当連結会計年度末日現在におきまして、国内33店舗、韓国7店舗、台湾4店舗及び中国",
+     "dropped": null
+    },
+    "num|2770": {
+     "id": "N028",
+     "kind": "num",
+     "state": "POINTER_NOT_FOUND",
+     "pointers": [],
+     "recomputed": null,
+     "reason": "no_element(unit not in XBRL)",
+     "comparator": null,
+     "normalization": null,
+     "subject": null,
+     "value": 4.0,
+     "unit": "店舗",
+     "word": null,
+     "span": "会計年度末日現在におきまして、国内33店舗、韓国7店舗、台湾4店舗及び中国2店舗の計4",
+     "dropped": null
+    },
+    "num|2777": {
+     "id": "N029",
+     "kind": "num",
+     "state": "POINTER_NOT_FOUND",
+     "pointers": [],
+     "recomputed": null,
+     "reason": "no_element(unit not in XBRL)",
+     "comparator": null,
+     "normalization": null,
+     "subject": null,
+     "value": 2.0,
+     "unit": "店舗",
+     "word": null,
+     "span": "在におきまして、国内33店舗、韓国7店舗、台湾4店舗及び中国2店舗の計46店舗となって",
+     "dropped": null
+    },
+    "num|2782": {
+     "id": "N030",
+     "kind": "num",
+     "state": "POINTER_NOT_FOUND",
+     "pointers": [],
+     "recomputed": null,
+     "reason": "no_element(unit not in XBRL)",
+     "comparator": null,
+     "normalization": null,
+     "subject": null,
+     "value": 46.0,
+     "unit": "店舗",
+     "word": null,
+     "span": "して、国内33店舗、韓国7店舗、台湾4店舗及び中国2店舗の計46店舗となっております。",
+     "dropped": null
+    },
+    "num|3160": {
+     "id": "N031",
+     "kind": "num",
+     "state": "GROUNDED",
+     "pointers": [
+      "xbrl:jppfs_cor:NetSales@CurrentYearDuration_jpcrp030000-asr_E05055-000FranchiseReportableSegmentMember"
+     ],
+     "recomputed": 221898000.0,
+     "reason": null,
+     "comparator": "equals_within",
+     "normalization": "round",
+     "subject": "売上高",
+     "value": 221898.0,
+     "unit": "千円",
+     "word": null,
+     "span": "当連結会計年度のBSサロン運営事業の業績は、売上高221,898千円(前期比2.7%減)",
+     "dropped": null
+    },
+    "num|3173": {
+     "id": "N032",
+     "kind": "num",
+     "state": "GROUNDED",
+     "pointers": [
+      "xbrl:jppfs_cor:NetSales@CurrentYearDuration_jpcrp030000-asr_E05055-000FranchiseReportableSegmentMember",
+      "xbrl:jppfs_cor:NetSales@Prior1YearDuration_jpcrp030000-asr_E05055-000FranchiseReportableSegmentMember"
+     ],
+     "recomputed": -2.68,
+     "reason": null,
+     "comparator": "pct_change(cur,prior)",
+     "normalization": null,
+     "subject": "売上高",
+     "value": -2.7,
+     "unit": "%",
+     "word": null,
+     "span": "BSサロン運営事業の業績は、売上高221,898千円(前期比2.7%減)、セグメント利益",
+     "dropped": null
+    },
+    "num|3187": {
+     "id": "N033",
+     "kind": "num",
+     "state": "GROUNDED",
+     "pointers": [
+      "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration_jpcrp030000-asr_E05055-000FranchiseReportableSegmentMember"
+     ],
+     "recomputed": 62407000.0,
+     "reason": null,
+     "comparator": "equals_within",
+     "normalization": "round",
+     "subject": "セグメント利益",
+     "value": 62407.0,
+     "unit": "千円",
+     "word": null,
+     "span": "売上高221,898千円(前期比2.7%減)、セグメント利益62,407千円(前期比11.8%減",
+     "dropped": null
+    },
+    "num|3199": {
+     "id": "N034",
+     "kind": "num",
+     "state": "GROUNDED",
+     "pointers": [
+      "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration_jpcrp030000-asr_E05055-000FranchiseReportableSegmentMember",
+      "xbrl:jppfs_cor:OperatingIncome@Prior1YearDuration_jpcrp030000-asr_E05055-000FranchiseReportableSegmentMember"
+     ],
+     "recomputed": -11.76,
+     "reason": null,
+     "comparator": "pct_change(cur,prior)",
+     "normalization": null,
+     "subject": "セグメント利益",
+     "value": -11.8,
+     "unit": "%",
+     "word": null,
+     "span": "(前期比2.7%減)、セグメント利益62,407千円(前期比11.8%減)となりました。",
+     "dropped": null
+    },
+    "num|3399": {
+     "id": "N035",
+     "kind": "num",
+     "state": "POINTER_NOT_FOUND",
+     "pointers": [],
+     "recomputed": null,
+     "reason": "no_element(unit not in XBRL)",
+     "comparator": null,
+     "normalization": null,
+     "subject": null,
+     "value": 2000.0,
+     "unit": "件",
+     "word": null,
+     "span": "コレクション」などへの参加や、CM・ファッション雑誌など年間2,000件を超える媒体を手掛け",
+     "dropped": null
+    },
+    "num|3518": {
+     "id": "N036",
+     "kind": "num",
+     "state": "GROUNDED",
+     "pointers": [
+      "xbrl:jppfs_cor:NetSales@CurrentYearDuration_jpcrp030000-asr_E05055-000HairMakeReportableSegmentMember"
+     ],
+     "recomputed": 382711000.0,
+     "reason": null,
+     "comparator": "equals_within",
+     "normalization": "round",
+     "subject": "売上高",
+     "value": 382711.0,
+     "unit": "千円",
+     "word": null,
+     "span": "方、人件費は増加したものの全体のコストが減少した結果、売上高382,711千円(前期比2.2%増)",
+     "dropped": null
+    },
+    "num|3531": {
+     "id": "N037",
+     "kind": "num",
+     "state": "GROUNDED",
+     "pointers": [
+      "xbrl:jppfs_cor:NetSales@CurrentYearDuration_jpcrp030000-asr_E05055-000HairMakeReportableSegmentMember",
+      "xbrl:jppfs_cor:NetSales@Prior1YearDuration_jpcrp030000-asr_E05055-000HairMakeReportableSegmentMember"
+     ],
+     "recomputed": 2.17,
+     "reason": null,
+     "comparator": "pct_change(cur,prior)",
+     "normalization": null,
+     "subject": "売上高",
+     "value": 2.2,
+     "unit": "%",
+     "word": null,
+     "span": "全体のコストが減少した結果、売上高382,711千円(前期比2.2%増)、セグメント利益",
+     "dropped": null
+    },
+    "num|3545": {
+     "id": "N038",
+     "kind": "num",
+     "state": "GROUNDED",
+     "pointers": [
+      "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration_jpcrp030000-asr_E05055-000HairMakeReportableSegmentMember"
+     ],
+     "recomputed": 14953000.0,
+     "reason": null,
+     "comparator": "equals_within",
+     "normalization": "round",
+     "subject": "セグメント利益",
+     "value": 14953.0,
+     "unit": "千円",
+     "word": null,
+     "span": "売上高382,711千円(前期比2.2%増)、セグメント利益14,953千円(前期比19.2%増",
+     "dropped": null
+    },
+    "num|3557": {
+     "id": "N039",
+     "kind": "num",
+     "state": "GROUNDED",
+     "pointers": [
+      "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration_jpcrp030000-asr_E05055-000HairMakeReportableSegmentMember",
+      "xbrl:jppfs_cor:OperatingIncome@Prior1YearDuration_jpcrp030000-asr_E05055-000HairMakeReportableSegmentMember"
+     ],
+     "recomputed": 19.17,
+     "reason": null,
+     "comparator": "pct_change(cur,prior)",
+     "normalization": null,
+     "subject": "セグメント利益",
+     "value": 19.2,
+     "unit": "%",
+     "word": null,
+     "span": "(前期比2.2%増)、セグメント利益14,953千円(前期比19.2%増)となりました。",
+     "dropped": null
+    },
+    "num|3956": {
+     "id": "N040",
+     "kind": "num",
+     "state": "GROUNDED",
+     "pointers": [
+      "xbrl:jppfs_cor:NetSales@CurrentYearDuration_jpcrp030000-asr_E05055-000BeautyBusinessSupportBusinessReportableSegmentMember"
+     ],
+     "recomputed": 122230000.0,
+     "reason": null,
+     "comparator": "equals_within",
+     "normalization": "round",
+     "subject": "売上高",
+     "value": 122230.0,
+     "unit": "千円",
+     "word": null,
+     "span": "となりましたが、人件費の増加等により僅かに減益となり、売上高122,230千円(前期比1.1%増)",
+     "dropped": null
+    },
+    "num|3969": {
+     "id": "N041",
+     "kind": "num",
+     "state": "GROUNDED",
+     "pointers": [
+      "xbrl:jppfs_cor:NetSales@CurrentYearDuration_jpcrp030000-asr_E05055-000BeautyBusinessSupportBusinessReportableSegmentMember",
+      "xbrl:jppfs_cor:NetSales@Prior1YearDuration_jpcrp030000-asr_E05055-000BeautyBusinessSupportBusinessReportableSegmentMember"
+     ],
+     "recomputed": 1.12,
+     "reason": null,
+     "comparator": "pct_change(cur,prior)",
+     "normalization": null,
+     "subject": "売上高",
+     "value": 1.1,
+     "unit": "%",
+     "word": null,
+     "span": "加等により僅かに減益となり、売上高122,230千円(前期比1.1%増)、セグメント利益",
+     "dropped": null
+    },
+    "num|3983": {
+     "id": "N042",
+     "kind": "num",
+     "state": "GROUNDED",
+     "pointers": [
+      "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration_jpcrp030000-asr_E05055-000BeautyBusinessSupportBusinessReportableSegmentMember"
+     ],
+     "recomputed": 76608000.0,
+     "reason": null,
+     "comparator": "equals_within",
+     "normalization": "round",
+     "subject": "セグメント利益",
+     "value": 76608.0,
+     "unit": "千円",
+     "word": null,
+     "span": "売上高122,230千円(前期比1.1%増)、セグメント利益76,608千円(前期比2.2%減)",
+     "dropped": null
+    },
+    "num|3995": {
+     "id": "N043",
+     "kind": "num",
+     "state": "GROUNDED",
+     "pointers": [
+      "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration_jpcrp030000-asr_E05055-000BeautyBusinessSupportBusinessReportableSegmentMember",
+      "xbrl:jppfs_cor:OperatingIncome@Prior1YearDuration_jpcrp030000-asr_E05055-000BeautyBusinessSupportBusinessReportableSegmentMember"
+     ],
+     "recomputed": -2.17,
+     "reason": null,
+     "comparator": "pct_change(cur,prior)",
+     "normalization": null,
+     "subject": "セグメント利益",
+     "value": -2.2,
+     "unit": "%",
+     "word": null,
+     "span": "(前期比1.1%増)、セグメント利益76,608千円(前期比2.2%減)となりました。",
+     "dropped": null
+    },
+    "num|4251": {
+     "id": "N044",
+     "kind": "num",
+     "state": "GROUNDED",
+     "pointers": [
+      "xbrl:jppfs_cor:NetSales@CurrentYearDuration_jpcrp030000-asr_E05055-000CareerDesignReportableSegmentMember"
+     ],
+     "recomputed": 253763000.0,
+     "reason": null,
+     "comparator": "equals_within",
+     "normalization": "round",
+     "subject": "売上高",
+     "value": 253763.0,
+     "unit": "千円",
+     "word": null,
+     "span": "数が前期に比べ減少する一方、コスト削減効果も相まって、売上高253,763千円(前期比8.6%減)",
+     "dropped": null
+    },
+    "num|4264": {
+     "id": "N045",
+     "kind": "num",
+     "state": "GROUNDED",
+     "pointers": [
+      "xbrl:jppfs_cor:NetSales@CurrentYearDuration_jpcrp030000-asr_E05055-000CareerDesignReportableSegmentMember",
+      "xbrl:jppfs_cor:NetSales@Prior1YearDuration_jpcrp030000-asr_E05055-000CareerDesignReportableSegmentMember"
+     ],
+     "recomputed": -8.64,
+     "reason": null,
+     "comparator": "pct_change(cur,prior)",
+     "normalization": null,
+     "subject": "売上高",
+     "value": -8.6,
+     "unit": "%",
+     "word": null,
+     "span": "、コスト削減効果も相まって、売上高253,763千円(前期比8.6%減)、セグメント利益",
+     "dropped": null
+    },
+    "num|4278": {
+     "id": "N046",
+     "kind": "num",
+     "state": "GROUNDED",
+     "pointers": [
+      "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration_jpcrp030000-asr_E05055-000CareerDesignReportableSegmentMember"
+     ],
+     "recomputed": 14224000.0,
+     "reason": null,
+     "comparator": "equals_within",
+     "normalization": "round",
+     "subject": "セグメント利益",
+     "value": 14224.0,
+     "unit": "千円",
+     "word": null,
+     "span": "売上高253,763千円(前期比8.6%減)、セグメント利益14,224千円(前期比7.6%増)",
+     "dropped": null
+    },
+    "num|4290": {
+     "id": "N047",
+     "kind": "num",
+     "state": "GROUNDED",
+     "pointers": [
+      "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration_jpcrp030000-asr_E05055-000CareerDesignReportableSegmentMember",
+      "xbrl:jppfs_cor:OperatingIncome@Prior1YearDuration_jpcrp030000-asr_E05055-000CareerDesignReportableSegmentMember"
+     ],
+     "recomputed": 7.62,
+     "reason": null,
+     "comparator": "pct_change(cur,prior)",
+     "normalization": null,
+     "subject": "セグメント利益",
+     "value": 7.6,
+     "unit": "%",
+     "word": null,
+     "span": "(前期比8.6%減)、セグメント利益14,224千円(前期比7.6%増)となりました。",
+     "dropped": null
+    },
+    "num|4438": {
+     "id": "N048",
+     "kind": "num",
+     "state": "VALUE_MISMATCH",
+     "pointers": [
+      "xbrl:jpcrp_cor:NetCashProvidedByUsedInFinancingActivitiesSummaryOfBusinessResults@CurrentYearDuration"
+     ],
+     "recomputed": 131757000.0,
+     "reason": null,
+     "comparator": "equals_within",
+     "normalization": null,
+     "subject": "財務活動によるキャッシュ・フロー",
+     "value": 505066.0,
+     "unit": "千円",
+     "word": null,
+     "span": "となる一方、財務活動によるキャッシュ・フローがプラスとなり、505,066千円(前連結会計年度比1",
+     "dropped": null
+    },
+    "num|4456": {
+     "id": "N049",
+     "kind": "num",
+     "state": "VALUE_MISMATCH",
+     "pointers": [
+      "xbrl:jpcrp_cor:NetCashProvidedByUsedInFinancingActivitiesSummaryOfBusinessResults@CurrentYearDuration",
+      "xbrl:jpcrp_cor:NetCashProvidedByUsedInFinancingActivitiesSummaryOfBusinessResults@Prior1YearDuration"
+     ],
+     "recomputed": 379.19,
+     "reason": null,
+     "comparator": "pct_change(cur,prior)",
+     "normalization": null,
+     "subject": "財務活動によるキャッシュ・フロー",
+     "value": -11.9,
+     "unit": "%",
+     "word": null,
+     "span": "・フローがプラスとなり、505,066千円(前連結会計年度比11.9%減)となりました。",
+     "dropped": null
+    },
+    "num|4556": {
+     "id": "N050",
+     "kind": "num",
+     "state": "UNVERIFIABLE",
+     "pointers": [],
+     "recomputed": null,
+     "reason": "ambiguous(elements)",
+     "comparator": null,
+     "normalization": null,
+     "subject": null,
+     "value": 71459.0,
+     "unit": "千円",
+     "word": null,
+     "span": "営業活動の結果、使用した資金は71,459千円(前連結会計年度は獲",
+     "dropped": null
+    },
+    "num|4579": {
+     "id": "N051",
+     "kind": "num",
+     "state": "UNVERIFIABLE",
+     "pointers": [],
+     "recomputed": null,
+     "reason": "ambiguous(elements)",
+     "comparator": null,
+     "normalization": null,
+     "subject": null,
+     "value": 29377.0,
+     "unit": "千円",
+     "word": null,
+     "span": "使用した資金は71,459千円(前連結会計年度は獲得した資金29,377千円)となりました。",
+     "dropped": null
+    },
+    "num|4611": {
+     "id": "N052",
+     "kind": "num",
+     "state": "GROUNDED",
+     "pointers": [
+      "xbrl:jppfs_cor:IncomeBeforeIncomeTaxes@CurrentYearDuration"
+     ],
+     "recomputed": -102694000.0,
+     "reason": null,
+     "comparator": "equals_within",
+     "normalization": "abs+round",
+     "subject": null,
+     "value": 102694.0,
+     "unit": "千円",
+     "word": null,
+     "span": "これは主に税金等調整前当期純損失102,694千円、減価償却費14,4",
+     "dropped": null
+    },
+    "num|4626": {
+     "id": "N053",
+     "kind": "num",
+     "state": "GROUNDED",
+     "pointers": [
+      "xbrl:jppfs_cor:DepreciationAndAmortizationOpeCF@CurrentYearDuration"
+     ],
+     "recomputed": 14423000.0,
+     "reason": null,
+     "comparator": "equals_within",
+     "normalization": "round",
+     "subject": "減価償却費",
+     "value": 14423.0,
+     "unit": "千円",
+     "word": null,
+     "span": "れは主に税金等調整前当期純損失102,694千円、減価償却費14,423千円、のれん償却額7,1",
+     "dropped": null
+    },
+    "num|4641": {
+     "id": "N054",
+     "kind": "num",
+     "state": "VALUE_MISMATCH",
+     "pointers": [
+      "xbrl:jppfs_cor:DepreciationAndAmortizationOpeCF@CurrentYearDuration"
+     ],
+     "recomputed": 14423000.0,
+     "reason": null,
+     "comparator": "equals_within",
+     "normalization": null,
+     "subject": "減価償却費",
+     "value": 7199.0,
+     "unit": "千円",
+     "word": null,
+     "span": "102,694千円、減価償却費14,423千円、のれん償却額7,199千円、株式交付費48,1",
+     "dropped": null
+    },
+    "num|4654": {
+     "id": "N055",
+     "kind": "num",
+     "state": "VALUE_MISMATCH",
+     "pointers": [
+      "xbrl:jppfs_cor:DepreciationAndAmortizationOpeCF@CurrentYearDuration"
+     ],
+     "recomputed": 14423000.0,
+     "reason": null,
+     "comparator": "equals_within",
+     "normalization": null,
+     "subject": "減価償却費",
+     "value": 48190.0,
+     "unit": "千円",
+     "word": null,
+     "span": "却費14,423千円、のれん償却額7,199千円、株式交付費48,190千円、棚卸資産の増加額2",
+     "dropped": null
+    },
+    "num|4671": {
+     "id": "N056",
+     "kind": "num",
+     "state": "VALUE_MISMATCH",
+     "pointers": [
+      "xbrl:jppfs_cor:DepreciationAndAmortizationOpeCF@CurrentYearDuration"
+     ],
+     "recomputed": 14423000.0,
+     "reason": null,
+     "comparator": "equals_within",
+     "normalization": null,
+     "subject": "減価償却費",
+     "value": 23262.0,
+     "unit": "千円",
+     "word": null,
+     "span": "7,199千円、株式交付費48,190千円、棚卸資産の増加額23,262千円、未払消費税等の減少",
+     "dropped": null
+    },
+    "num|4690": {
+     "id": "N057",
+     "kind": "num",
+     "state": "VALUE_MISMATCH",
+     "pointers": [
+      "xbrl:jppfs_cor:DepreciationAndAmortizationOpeCF@CurrentYearDuration"
+     ],
+     "recomputed": 14423000.0,
+     "reason": null,
+     "comparator": "equals_within",
+     "normalization": null,
+     "subject": "減価償却費",
+     "value": 14472.0,
+     "unit": "千円",
+     "word": null,
+     "span": "千円、棚卸資産の増加額23,262千円、未払消費税等の減少額14,472千円などによるものであり",
+     "dropped": null
+    },
+    "num|4753": {
+     "id": "N058",
+     "kind": "num",
+     "state": "UNVERIFIABLE",
+     "pointers": [],
+     "recomputed": null,
+     "reason": "ambiguous(elements)",
+     "comparator": null,
+     "normalization": null,
+     "subject": null,
+     "value": 129331.0,
+     "unit": "千円",
+     "word": null,
+     "span": "投資活動の結果、使用した資金は129,331千円(前連結会計年度は使",
+     "dropped": null
+    },
+    "num|4777": {
+     "id": "N059",
+     "kind": "num",
+     "state": "UNVERIFIABLE",
+     "pointers": [],
+     "recomputed": null,
+     "reason": "ambiguous(elements)",
+     "comparator": null,
+     "normalization": null,
+     "subject": null,
+     "value": 10892.0,
+     "unit": "千円",
+     "word": null,
+     "span": "用した資金は129,331千円(前連結会計年度は使用した資金10,892千円)となりました。",
+     "dropped": null
+    },
+    "num|4812": {
+     "id": "N060",
+     "kind": "num",
+     "state": "GROUNDED",
+     "pointers": [
+      "xbrl:jppfs_cor:PurchaseOfPropertyPlantAndEquipmentInvCF@CurrentYearDuration"
+     ],
+     "recomputed": -30073000.0,
+     "reason": null,
+     "comparator": "equals_within",
+     "normalization": "abs+round",
+     "subject": "有形固定資産の取得による支出",
+     "value": 30073.0,
+     "unit": "千円",
+     "word": null,
+     "span": "これは主に有形固定資産の取得による支出30,073千円、差入保証金の差入に",
+     "dropped": null
+    },
+    "num|4834": {
+     "id": "N061",
+     "kind": "num",
+     "state": "VALUE_MISMATCH",
+     "pointers": [
+      "xbrl:jppfs_cor:PurchaseOfPropertyPlantAndEquipmentInvCF@CurrentYearDuration"
+     ],
+     "recomputed": -30073000.0,
+     "reason": null,
+     "comparator": "equals_within",
+     "normalization": null,
+     "subject": "有形固定資産の取得による支出",
+     "value": 44746.0,
+     "unit": "千円",
+     "word": null,
+     "span": "の取得による支出30,073千円、差入保証金の差入による支出44,746千円、短期貸付による支出",
+     "dropped": null
+    },
+    "num|4852": {
+     "id": "N062",
+     "kind": "num",
+     "state": "VALUE_MISMATCH",
+     "pointers": [
+      "xbrl:jppfs_cor:PurchaseOfPropertyPlantAndEquipmentInvCF@CurrentYearDuration"
+     ],
+     "recomputed": -30073000.0,
+     "reason": null,
+     "comparator": "equals_within",
+     "normalization": null,
+     "subject": "有形固定資産の取得による支出",
+     "value": 50000.0,
+     "unit": "千円",
+     "word": null,
+     "span": "入保証金の差入による支出44,746千円、短期貸付による支出50,000千円などによるものであり",
+     "dropped": null
+    },
+    "num|4915": {
+     "id": "N063",
+     "kind": "num",
+     "state": "UNVERIFIABLE",
+     "pointers": [],
+     "recomputed": null,
+     "reason": "ambiguous(elements)",
+     "comparator": null,
+     "normalization": null,
+     "subject": null,
+     "value": 131757.0,
+     "unit": "千円",
+     "word": null,
+     "span": "財務活動の結果、獲得した資金は131,757千円(前連結会計年度は使",
+     "dropped": null
+    },
+    "num|4939": {
+     "id": "N064",
+     "kind": "num",
+     "state": "UNVERIFIABLE",
+     "pointers": [],
+     "recomputed": null,
+     "reason": "ambiguous(elements)",
+     "comparator": null,
+     "normalization": null,
+     "subject": null,
+     "value": 47193.0,
+     "unit": "千円",
+     "word": null,
+     "span": "得した資金は131,757千円(前連結会計年度は使用した資金47,193千円)となりました。",
+     "dropped": null
+    },
+    "num|4969": {
+     "id": "N065",
+     "kind": "num",
+     "state": "GROUNDED",
+     "pointers": [
+      "xbrl:jppfs_cor:IncreaseDecreaseInShortTermLoansPayableFinCF@CurrentYearDuration"
+     ],
+     "recomputed": 150000000.0,
+     "reason": null,
+     "comparator": "equals_within",
+     "normalization": "round",
+     "subject": null,
+     "value": 150000.0,
+     "unit": "千円",
+     "word": null,
+     "span": "これは主に短期借入金の増加額150,000千円、長期借入金の返済に",
+     "dropped": null
+    },
+    "num|4992": {
+     "id": "N066",
+     "kind": "num",
+     "state": "POINTER_NOT_FOUND",
+     "pointers": [],
+     "recomputed": null,
+     "reason": "no_element",
+     "comparator": null,
+     "normalization": null,
+     "subject": "長期借入金の返済",
+     "value": 12471.0,
+     "unit": "千円",
+     "word": null,
+     "span": "借入金の増加額150,000千円、長期借入金の返済による支出12,471千円、配当金の支払額5,",
+     "dropped": null
+    },
+    "num|5008": {
+     "id": "N067",
+     "kind": "num",
+     "state": "GROUNDED",
+     "pointers": [
+      "xbrl:jppfs_cor:CashDividendsPaidFinCF@CurrentYearDuration"
+     ],
+     "recomputed": -5771000.0,
+     "reason": null,
+     "comparator": "equals_within",
+     "normalization": "abs+round",
+     "subject": "配当金の支払額",
+     "value": 5771.0,
+     "unit": "千円",
+     "word": null,
+     "span": "、長期借入金の返済による支出12,471千円、配当金の支払額5,771千円によるものであります",
+     "dropped": null
+    },
+    "num|5994": {
+     "id": "N068",
+     "kind": "num",
+     "state": "GROUNDED",
+     "pointers": [
+      "xbrl:jpcrp_cor:NetSalesSummaryOfBusinessResults@CurrentYearDuration"
+     ],
+     "recomputed": 1850502000.0,
+     "reason": null,
+     "comparator": "equals_within",
+     "normalization": "round",
+     "subject": "売上高",
+     "value": 1850502.0,
+     "unit": "千円",
+     "word": null,
+     "span": "売上高は、1,850,502千円と前連結会計年度に比",
+     "dropped": null
+    },
+    "num|6016": {
+     "id": "N069",
+     "kind": "num",
+     "state": "GROUNDED",
+     "pointers": [
+      "xbrl:jpcrp_cor:NetSalesSummaryOfBusinessResults@CurrentYearDuration",
+      "xbrl:jpcrp_cor:NetSalesSummaryOfBusinessResults@Prior1YearDuration",
+      "formula:a-b"
+     ],
+     "recomputed": 6442000.0,
+     "reason": null,
+     "comparator": "diff(a-b) equals_within",
+     "normalization": "round",
+     "subject": "売上高",
+     "value": 6442.0,
+     "unit": "千円",
+     "word": null,
+     "span": "売上高は、1,850,502千円と前連結会計年度に比べ6,442千円増加(前連結会計年度",
+     "dropped": null
+    },
+    "num|6034": {
+     "id": "N070",
+     "kind": "num",
+     "state": "GROUNDED",
+     "pointers": [
+      "xbrl:jpcrp_cor:NetSalesSummaryOfBusinessResults@CurrentYearDuration",
+      "xbrl:jpcrp_cor:NetSalesSummaryOfBusinessResults@Prior1YearDuration"
+     ],
+     "recomputed": 0.35,
+     "reason": null,
+     "comparator": "pct_change(cur,prior)",
+     "normalization": null,
+     "subject": "売上高",
+     "value": 0.3,
+     "unit": "%",
+     "word": null,
+     "span": "円と前連結会計年度に比べ6,442千円増加(前連結会計年度比0.3%増)いたしました。",
+     "dropped": null
+    },
+    "num|6165": {
+     "id": "N071",
+     "kind": "num",
+     "state": "POINTER_NOT_FOUND",
+     "pointers": [],
+     "recomputed": null,
+     "reason": "no_element",
+     "comparator": null,
+     "normalization": null,
+     "subject": null,
+     "value": 30950.0,
+     "unit": "千円",
+     "word": null,
+     "span": "売上原価は30,950千円増加(前連結会計年度",
+     "dropped": null
+    },
+    "num|6184": {
+     "id": "N072",
+     "kind": "num",
+     "state": "UNVERIFIABLE",
+     "pointers": [],
+     "recomputed": null,
+     "reason": "no_subject",
+     "comparator": null,
+     "normalization": null,
+     "subject": null,
+     "value": 2.3,
+     "unit": "%",
+     "word": null,
+     "span": "売上原価は30,950千円増加(前連結会計年度比2.3%増)し、1,377,",
+     "dropped": null
+    },
+    "num|6192": {
+     "id": "N073",
+     "kind": "num",
+     "state": "GROUNDED",
+     "pointers": [
+      "xbrl:jppfs_cor:CostOfSales@CurrentYearDuration"
+     ],
+     "recomputed": 1377499000.0,
+     "reason": null,
+     "comparator": "equals_within",
+     "normalization": "round",
+     "subject": null,
+     "value": 1377499.0,
+     "unit": "千円",
+     "word": null,
+     "span": "原価は30,950千円増加(前連結会計年度比2.3%増)し、1,377,499千円となり、販売費及び一",
+     "dropped": null
+    },
+    "num|6225": {
+     "id": "N074",
+     "kind": "num",
+     "state": "GROUNDED",
+     "pointers": [
+      "xbrl:jppfs_cor:SellingGeneralAndAdministrativeExpenses@CurrentYearDuration",
+      "xbrl:jppfs_cor:SellingGeneralAndAdministrativeExpenses@Prior1YearDuration",
+      "formula:a-b"
+     ],
+     "recomputed": 17979000.0,
+     "reason": null,
+     "comparator": "diff(a-b) equals_within",
+     "normalization": "round",
+     "subject": "販売費及び一般管理費",
+     "value": 17979.0,
+     "unit": "千円",
+     "word": null,
+     "span": "77,499千円となり、販売費及び一般管理費につきましては、17,979千円増加(前連結会計年度",
+     "dropped": null
+    },
+    "num|6244": {
+     "id": "N075",
+     "kind": "num",
+     "state": "GROUNDED",
+     "pointers": [
+      "xbrl:jppfs_cor:SellingGeneralAndAdministrativeExpenses@CurrentYearDuration",
+      "xbrl:jppfs_cor:SellingGeneralAndAdministrativeExpenses@Prior1YearDuration"
+     ],
+     "recomputed": 3.54,
+     "reason": null,
+     "comparator": "pct_change(cur,prior)",
+     "normalization": null,
+     "subject": "販売費及び一般管理費",
+     "value": 3.5,
+     "unit": "%",
+     "word": null,
+     "span": "管理費につきましては、17,979千円増加(前連結会計年度比3.5%増)し、525,20",
+     "dropped": null
+    },
+    "num|6252": {
+     "id": "N076",
+     "kind": "num",
+     "state": "GROUNDED",
+     "pointers": [
+      "xbrl:jppfs_cor:SellingGeneralAndAdministrativeExpenses@CurrentYearDuration"
+     ],
+     "recomputed": 525200000.0,
+     "reason": null,
+     "comparator": "equals_within",
+     "normalization": "round",
+     "subject": "販売費及び一般管理費",
+     "value": 525200.0,
+     "unit": "千円",
+     "word": null,
+     "span": "ては、17,979千円増加(前連結会計年度比3.5%増)し、525,200千円となりました。",
+     "dropped": null
+    },
+    "num|6284": {
+     "id": "N077",
+     "kind": "num",
+     "state": "GROUNDED",
+     "pointers": [
+      "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration"
+     ],
+     "recomputed": -52196000.0,
+     "reason": null,
+     "comparator": "equals_within",
+     "normalization": "abs+round",
+     "subject": "営業損失",
+     "value": 52196.0,
+     "unit": "千円",
+     "word": null,
+     "span": "営業損益につきましては、営業損失52,196千円と前連結会計年度に比",
+     "dropped": null
+    },
+    "num|6303": {
+     "id": "N078",
+     "kind": "num",
+     "state": "GROUNDED",
+     "pointers": [
+      "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration",
+      "xbrl:jppfs_cor:OperatingIncome@Prior1YearDuration",
+      "formula:a-b"
+     ],
+     "recomputed": -42487000.0,
+     "reason": null,
+     "comparator": "diff(a-b) equals_within",
+     "normalization": "abs+round",
+     "subject": "営業損失",
+     "value": 42487.0,
+     "unit": "千円",
+     "word": null,
+     "span": "つきましては、営業損失52,196千円と前連結会計年度に比べ42,487千円(前連結会計年度は営",
+     "dropped": null
+    },
+    "num|6324": {
+     "id": "N079",
+     "kind": "num",
+     "state": "GROUNDED",
+     "pointers": [
+      "xbrl:jppfs_cor:OperatingIncome@Prior1YearDuration"
+     ],
+     "recomputed": -9709000.0,
+     "reason": null,
+     "comparator": "equals_within",
+     "normalization": "abs+round",
+     "subject": "営業損失",
+     "value": 9709.0,
+     "unit": "千円",
+     "word": null,
+     "span": "連結会計年度に比べ42,487千円(前連結会計年度は営業損失9,709千円)の減益となりました",
+     "dropped": null
+    },
+    "num|6363": {
+     "id": "N080",
+     "kind": "num",
+     "state": "GROUNDED",
+     "pointers": [
+      "xbrl:jppfs_cor:NonOperatingIncome@CurrentYearDuration"
+     ],
+     "recomputed": 4171000.0,
+     "reason": null,
+     "comparator": "equals_within",
+     "normalization": "round",
+     "subject": null,
+     "value": 4171.0,
+     "unit": "千円",
+     "word": null,
+     "span": "営業外損益におきましては、営業外収益4,171千円、営業外費用50,5",
+     "dropped": null
+    },
+    "num|6376": {
+     "id": "N081",
+     "kind": "num",
+     "state": "GROUNDED",
+     "pointers": [
+      "xbrl:jppfs_cor:NonOperatingExpenses@CurrentYearDuration"
+     ],
+     "recomputed": 50551000.0,
+     "reason": null,
+     "comparator": "equals_within",
+     "normalization": "round",
+     "subject": null,
+     "value": 50551.0,
+     "unit": "千円",
+     "word": null,
+     "span": "業外損益におきましては、営業外収益4,171千円、営業外費用50,551千円を計上し、経常損失9",
+     "dropped": null
+    },
+    "num|6393": {
+     "id": "N082",
+     "kind": "num",
+     "state": "GROUNDED",
+     "pointers": [
+      "xbrl:jpcrp_cor:OrdinaryIncomeLossSummaryOfBusinessResults@CurrentYearDuration"
+     ],
+     "recomputed": -98576000.0,
+     "reason": null,
+     "comparator": "equals_within",
+     "normalization": "abs+round",
+     "subject": "経常損失",
+     "value": 98576.0,
+     "unit": "千円",
+     "word": null,
+     "span": "4,171千円、営業外費用50,551千円を計上し、経常損失98,576千円と前連結会計年度に比",
+     "dropped": null
+    },
+    "num|6412": {
+     "id": "N083",
+     "kind": "num",
+     "state": "GROUNDED",
+     "pointers": [
+      "xbrl:jpcrp_cor:OrdinaryIncomeLossSummaryOfBusinessResults@CurrentYearDuration",
+      "xbrl:jpcrp_cor:OrdinaryIncomeLossSummaryOfBusinessResults@Prior1YearDuration",
+      "formula:a-b"
+     ],
+     "recomputed": -91485000.0,
+     "reason": null,
+     "comparator": "diff(a-b) equals_within",
+     "normalization": "abs+round",
+     "subject": "経常損失",
+     "value": 91485.0,
+     "unit": "千円",
+     "word": null,
+     "span": "千円を計上し、経常損失98,576千円と前連結会計年度に比べ91,485千円(前連結会計年度は経",
+     "dropped": null
+    },
+    "num|6433": {
+     "id": "N084",
+     "kind": "num",
+     "state": "GROUNDED",
+     "pointers": [
+      "xbrl:jpcrp_cor:OrdinaryIncomeLossSummaryOfBusinessResults@Prior1YearDuration"
+     ],
+     "recomputed": -7091000.0,
+     "reason": null,
+     "comparator": "equals_within",
+     "normalization": "abs+round",
+     "subject": "経常損失",
+     "value": 7091.0,
+     "unit": "千円",
+     "word": null,
+     "span": "連結会計年度に比べ91,485千円(前連結会計年度は経常損失7,091千円)の減益となりました",
+     "dropped": null
+    },
+    "num|6492": {
+     "id": "N085",
+     "kind": "num",
+     "state": "UNVERIFIABLE",
+     "pointers": [],
+     "recomputed": null,
+     "reason": "ambiguous(elements)",
+     "comparator": null,
+     "normalization": null,
+     "subject": null,
+     "value": 48190.0,
+     "unit": "千円",
+     "word": null,
+     "span": "新株式発行及び第2回新株予約権の発行に係る諸費用を株式交付費48,190千円として営業外費用に計",
+     "dropped": null
+    },
+    "num|6535": {
+     "id": "N086",
+     "kind": "num",
+     "state": "UNVERIFIABLE",
+     "pointers": [],
+     "recomputed": null,
+     "reason": "ambiguous(elements)",
+     "comparator": null,
+     "normalization": null,
+     "subject": null,
+     "value": 3758.0,
+     "unit": "千円",
+     "word": null,
+     "span": "また、特別損失として減損損失3,758千円を計上したことにより",
+     "dropped": null
+    },
+    "num|6568": {
+     "id": "N087",
+     "kind": "num",
+     "state": "UNVERIFIABLE",
+     "pointers": [],
+     "recomputed": null,
+     "reason": "ambiguous(elements)",
+     "comparator": null,
+     "normalization": null,
+     "subject": null,
+     "value": 105873.0,
+     "unit": "千円",
+     "word": null,
+     "span": "58千円を計上したことにより、親会社株主に帰属する当期純損失105,873千円と前連結会計年度に比",
+     "dropped": null
+    },
+    "num|6588": {
+     "id": "N088",
+     "kind": "num",
+     "state": "POINTER_NOT_FOUND",
+     "pointers": [],
+     "recomputed": null,
+     "reason": "no_element",
+     "comparator": null,
+     "normalization": null,
+     "subject": null,
+     "value": 88251.0,
+     "unit": "千円",
+     "word": null,
+     "span": "に帰属する当期純損失105,873千円と前連結会計年度に比べ88,251千円(前連結会計年度は親",
+     "dropped": null
+    },
+    "num|6620": {
+     "id": "N089",
+     "kind": "num",
+     "state": "UNVERIFIABLE",
+     "pointers": [],
+     "recomputed": null,
+     "reason": "ambiguous(elements)",
+     "comparator": null,
+     "normalization": null,
+     "subject": null,
+     "value": 17621.0,
+     "unit": "千円",
+     "word": null,
+     "span": ",251千円(前連結会計年度は親会社株主に帰属する当期純損失17,621千円)の減益となりました",
+     "dropped": null
+    },
+    "num|7079": {
+     "id": "N090",
+     "kind": "num",
+     "state": "POINTER_NOT_FOUND",
+     "pointers": [],
+     "recomputed": null,
+     "reason": "no_element",
+     "comparator": null,
+     "normalization": null,
+     "subject": null,
+     "value": 1000000000.0,
+     "unit": "円",
+     "word": null,
+     "span": "これにより2026年7月に新株式発行によって約10億円の資金調達を実施して",
+     "dropped": null
+    },
+    "num|7111": {
+     "id": "N091",
+     "kind": "num",
+     "state": "POINTER_NOT_FOUND",
+     "pointers": [],
+     "recomputed": null,
+     "reason": "no_element",
+     "comparator": null,
+     "normalization": null,
+     "subject": null,
+     "value": 3500000000.0,
+     "unit": "円",
+     "word": null,
+     "span": "億円の資金調達を実施しており、今後、新株予約権の行使による約35億円の資金調達を見込んで",
+     "dropped": null
+    },
+    "text|205": {
+     "id": "T001",
+     "kind": "text",
+     "state": "UNVERIFIABLE",
+     "pointers": [],
+     "recomputed": null,
+     "reason": "no_subject",
+     "comparator": null,
+     "normalization": null,
+     "subject": null,
+     "value": null,
+     "unit": null,
+     "word": "拡大",
+     "span": "国経済は、企業収益や雇用・所得環境の改善、インバウンド需要の拡大等、国内景",
+     "dropped": null
+    },
+    "text|193": {
+     "id": "T002",
+     "kind": "text",
+     "state": "UNVERIFIABLE",
+     "pointers": [],
+     "recomputed": null,
+     "reason": "no_subject",
+     "comparator": null,
+     "normalization": null,
+     "subject": null,
+     "value": null,
+     "unit": null,
+     "word": "改善",
+     "span": "連結会計年度におけるわが国経済は、企業収益や雇用・所得環境の改善、インバウ",
+     "dropped": null
+    },
+    "text|218": {
+     "id": "T003",
+     "kind": "text",
+     "state": "UNVERIFIABLE",
+     "pointers": [],
+     "recomputed": null,
+     "reason": "state_word(no line)",
+     "comparator": null,
+     "normalization": null,
+     "subject": null,
+     "value": null,
+     "unit": null,
+     "word": "回復",
+     "span": "所得環境の改善、インバウンド需要の拡大等、国内景気は緩やかな回復基調で推移",
+     "dropped": null
+    },
+    "text|292": {
+     "id": "T004",
+     "kind": "text",
+     "state": "UNVERIFIABLE",
+     "pointers": [],
+     "recomputed": null,
+     "reason": "state_word(no line)",
+     "comparator": null,
+     "normalization": null,
+     "subject": null,
+     "value": null,
+     "unit": null,
+     "word": "不透明",
+     "span": "騰、通商政策など米国の政策動向による影響等、依然として先行き不透明な状況が続",
+     "dropped": null
+    },
+    "text|335": {
+     "id": "T005",
+     "kind": "text",
+     "state": "UNVERIFIABLE",
+     "pointers": [],
+     "recomputed": null,
+     "reason": "state_word(no line)",
+     "comparator": null,
+     "normalization": null,
+     "subject": null,
+     "value": null,
+     "unit": null,
+     "word": "持ち直し",
+     "span": "また、消費環境におきましては、個人消費が緩やかに持ち直してきたもの",
+     "dropped": null
+    },
+    "text|1007": {
+     "id": "T006",
+     "kind": "text",
+     "state": "UNVERIFIABLE",
+     "pointers": [],
+     "recomputed": null,
+     "reason": "no_subject",
+     "comparator": null,
+     "normalization": null,
+     "subject": null,
+     "value": null,
+     "unit": null,
+     "word": "拡大",
+     "span": "また、2026年7月に当社グループの更なる事業の拡大及び円滑な",
+     "dropped": null
+    },
+    "text|1024": {
+     "id": "T007",
+     "kind": "text",
+     "state": "UNVERIFIABLE",
+     "pointers": [],
+     "recomputed": null,
+     "reason": "no_subject",
+     "comparator": null,
+     "normalization": null,
+     "subject": null,
+     "value": null,
+     "unit": null,
+     "word": "改善",
+     "span": "当社グループの更なる事業の拡大及び円滑な組織運営、執務環境の改善に伴う効率",
+     "dropped": null
+    },
+    "text|1222": {
+     "id": "T008",
+     "kind": "text",
+     "state": "UNVERIFIABLE",
+     "pointers": [],
+     "recomputed": null,
+     "reason": "ambiguous(member)",
+     "comparator": null,
+     "normalization": null,
+     "subject": "売上高",
+     "value": null,
+     "unit": null,
+     "word": "増収",
+     "span": "事業、ヘアメイク事業、美容室支援事業が堅調に推移し前期に比べ増収となり、全",
+     "dropped": null
+    },
+    "text|1234": {
+     "id": "T009",
+     "kind": "text",
+     "state": "GROUNDED",
+     "pointers": [
+      "xbrl:jpcrp_cor:NetSalesSummaryOfBusinessResults@CurrentYearDuration",
+      "xbrl:jpcrp_cor:NetSalesSummaryOfBusinessResults@Prior1YearDuration",
+      "builtin:sign(cur-prior)"
+     ],
+     "recomputed": 6442000.0,
+     "reason": null,
+     "comparator": "builtin:sign(cur-prior)==direction",
+     "normalization": null,
+     "subject": "売上高",
+     "value": null,
+     "unit": null,
+     "word": "増収",
+     "span": "容室支援事業が堅調に推移し前期に比べ増収となり、全社としても増収となりまし",
+     "dropped": null
+    },
+    "text|1177": {
+     "id": "T010",
+     "kind": "text",
+     "state": "UNVERIFIABLE",
+     "pointers": [],
+     "recomputed": null,
+     "reason": "ambiguous(member)",
+     "comparator": null,
+     "normalization": null,
+     "subject": "売上高",
+     "value": null,
+     "unit": null,
+     "word": "減少",
+     "span": "ては、BSサロン運営事業及びキャリアデザイン事業が前期に比べ減少しましたが",
+     "dropped": null
+    },
+    "text|1211": {
+     "id": "T011",
+     "kind": "text",
+     "state": "UNVERIFIABLE",
+     "pointers": [],
+     "recomputed": null,
+     "reason": "state_word(no line)",
+     "comparator": null,
+     "normalization": null,
+     "subject": null,
+     "value": null,
+     "unit": null,
+     "word": "堅調",
+     "span": "したが、直営サロン運営事業、ヘアメイク事業、美容室支援事業が堅調に推移し前",
+     "dropped": null
+    },
+    "text|1300": {
+     "id": "T012",
+     "kind": "text",
+     "state": "UNVERIFIABLE",
+     "pointers": [],
+     "recomputed": null,
+     "reason": "no_subject",
+     "comparator": null,
+     "normalization": null,
+     "subject": null,
+     "value": null,
+     "unit": null,
+     "word": "増加",
+     "span": "原材料価格の高騰や人件費、物流費をはじめとした諸経費のコスト増加、本社の移",
+     "dropped": null
+    },
+    "text|2336": {
+     "id": "T013",
+     "kind": "text",
+     "state": "GROUNDED",
+     "pointers": [
+      "xbrl:jpcrp_cor:NetSalesSummaryOfBusinessResults@CurrentYearDuration",
+      "xbrl:jpcrp_cor:NetSalesSummaryOfBusinessResults@Prior1YearDuration",
+      "builtin:sign(cur-prior)"
+     ],
+     "recomputed": 6442000.0,
+     "reason": null,
+     "comparator": "builtin:sign(cur-prior)==direction",
+     "normalization": null,
+     "subject": "売上高",
+     "value": null,
+     "unit": null,
+     "word": "増収",
+     "span": "店舗出店及びアカデミー開設に係る費用の発生等により前期に比べ増収減益となり",
+     "dropped": null
+    },
+    "text|2299": {
+     "id": "T014",
+     "kind": "text",
+     "state": "GROUNDED",
+     "pointers": [
+      "xbrl:jpcrp_cor:NetSalesSummaryOfBusinessResults@CurrentYearDuration",
+      "xbrl:jpcrp_cor:NetSalesSummaryOfBusinessResults@Prior1YearDuration",
+      "builtin:sign(cur-prior)"
+     ],
+     "recomputed": 6442000.0,
+     "reason": null,
+     "comparator": "builtin:sign(cur-prior)==direction",
+     "normalization": null,
+     "subject": "売上高",
+     "value": null,
+     "unit": null,
+     "word": "増加",
+     "span": "は、売上高は堅調に推移したものの、原材料価格の高騰や人件費の増加の影響、新",
+     "dropped": null
+    },
+    "text|2338": {
+     "id": "T015",
+     "kind": "text",
+     "state": "VALUE_MISMATCH",
+     "pointers": [
+      "xbrl:jpcrp_cor:NetSalesSummaryOfBusinessResults@CurrentYearDuration",
+      "xbrl:jpcrp_cor:NetSalesSummaryOfBusinessResults@Prior1YearDuration",
+      "builtin:sign(cur-prior)"
+     ],
+     "recomputed": 6442000.0,
+     "reason": null,
+     "comparator": "builtin:sign(cur-prior)==direction",
+     "normalization": null,
+     "subject": "売上高",
+     "value": null,
+     "unit": null,
+     "word": "減益",
+     "span": "出店及びアカデミー開設に係る費用の発生等により前期に比べ増収減益となりまし",
+     "dropped": null
+    },
+    "text|2275": {
+     "id": "T016",
+     "kind": "text",
+     "state": "UNVERIFIABLE",
+     "pointers": [],
+     "recomputed": null,
+     "reason": "state_word(no line)",
+     "comparator": null,
+     "normalization": null,
+     "subject": null,
+     "value": null,
+     "unit": null,
+     "word": "堅調",
+     "span": "当連結会計年度の業績につきましては、売上高は堅調に推移した",
+     "dropped": null
+    },
+    "text|2896": {
+     "id": "T017",
+     "kind": "text",
+     "state": "UNVERIFIABLE",
+     "pointers": [],
+     "recomputed": null,
+     "reason": "no_subject",
+     "comparator": null,
+     "normalization": null,
+     "subject": null,
+     "value": null,
+     "unit": null,
+     "word": "減収",
+     "span": "ものの、前期に比べBSサロンの稼働店舗数が減少したことに伴い減収減益となり",
+     "dropped": null
+    },
+    "text|2898": {
+     "id": "T018",
+     "kind": "text",
+     "state": "UNVERIFIABLE",
+     "pointers": [],
+     "recomputed": null,
+     "reason": "no_subject",
+     "comparator": null,
+     "normalization": null,
+     "subject": null,
+     "value": null,
+     "unit": null,
+     "word": "減益",
+     "span": "の、前期に比べBSサロンの稼働店舗数が減少したことに伴い減収減益となりまし",
+     "dropped": null
+    },
+    "text|2887": {
+     "id": "T019",
+     "kind": "text",
+     "state": "UNVERIFIABLE",
+     "pointers": [],
+     "recomputed": null,
+     "reason": "no_subject",
+     "comparator": null,
+     "normalization": null,
+     "subject": null,
+     "value": null,
+     "unit": null,
+     "word": "減少",
+     "span": "堅調に推移しているものの、前期に比べBSサロンの稼働店舗数が減少したことに",
+     "dropped": null
+    },
+    "text|2857": {
+     "id": "T020",
+     "kind": "text",
+     "state": "UNVERIFIABLE",
+     "pointers": [],
+     "recomputed": null,
+     "reason": "state_word(no line)",
+     "comparator": null,
+     "normalization": null,
+     "subject": null,
+     "value": null,
+     "unit": null,
+     "word": "堅調",
+     "span": "B商品)をはじめとした商品販売に注力しており、PB商品売上は堅調に推移して",
+     "dropped": null
+    },
+    "text|2917": {
+     "id": "T021",
+     "kind": "text",
+     "state": "UNVERIFIABLE",
+     "pointers": [],
+     "recomputed": null,
+     "reason": "state_word(no line)",
+     "comparator": null,
+     "normalization": null,
+     "subject": null,
+     "value": null,
+     "unit": null,
+     "word": "堅調",
+     "span": "商品販売については、堅調に推移して",
+     "dropped": null
+    },
+    "text|3480": {
+     "id": "T022",
+     "kind": "text",
+     "state": "UNVERIFIABLE",
+     "pointers": [],
+     "recomputed": null,
+     "reason": "no_subject",
+     "comparator": null,
+     "normalization": null,
+     "subject": null,
+     "value": null,
+     "unit": null,
+     "word": "増収",
+     "span": "きましては、スタジオ、ブライダル、メディア各部門が前期に比べ増収で推移した",
+     "dropped": null
+    },
+    "text|3494": {
+     "id": "T023",
+     "kind": "text",
+     "state": "UNVERIFIABLE",
+     "pointers": [],
+     "recomputed": null,
+     "reason": "no_subject",
+     "comparator": null,
+     "normalization": null,
+     "subject": null,
+     "value": null,
+     "unit": null,
+     "word": "増加",
+     "span": "ダル、メディア各部門が前期に比べ増収で推移した一方、人件費は増加したものの",
+     "dropped": null
+    },
+    "text|3508": {
+     "id": "T024",
+     "kind": "text",
+     "state": "UNVERIFIABLE",
+     "pointers": [],
+     "recomputed": null,
+     "reason": "no_subject",
+     "comparator": null,
+     "normalization": null,
+     "subject": null,
+     "value": null,
+     "unit": null,
+     "word": "減少",
+     "span": "比べ増収で推移した一方、人件費は増加したものの全体のコストが減少した結果、",
+     "dropped": null
+    },
+    "text|3938": {
+     "id": "T025",
+     "kind": "text",
+     "state": "GROUNDED",
+     "pointers": [
+      "xbrl:jppfs_cor:NetSales@CurrentYearDuration_jpcrp030000-asr_E05055-000BeautyBusinessSupportBusinessReportableSegmentMember",
+      "xbrl:jppfs_cor:NetSales@Prior1YearDuration_jpcrp030000-asr_E05055-000BeautyBusinessSupportBusinessReportableSegmentMember",
+      "builtin:sign(cur-prior)"
+     ],
+     "recomputed": 1355000.0,
+     "reason": null,
+     "comparator": "builtin:sign(cur-prior)==direction",
+     "normalization": null,
+     "subject": "売上高",
+     "value": null,
+     "unit": null,
+     "word": "増加",
+     "span": "堅調に推移し、売上高は前期に比べ微増となりましたが、人件費の増加等により僅",
+     "dropped": null
+    },
+    "text|3947": {
+     "id": "T026",
+     "kind": "text",
+     "state": "VALUE_MISMATCH",
+     "pointers": [
+      "xbrl:jppfs_cor:NetSales@CurrentYearDuration_jpcrp030000-asr_E05055-000BeautyBusinessSupportBusinessReportableSegmentMember",
+      "xbrl:jppfs_cor:NetSales@Prior1YearDuration_jpcrp030000-asr_E05055-000BeautyBusinessSupportBusinessReportableSegmentMember",
+      "builtin:sign(cur-prior)"
+     ],
+     "recomputed": 1355000.0,
+     "reason": null,
+     "comparator": "builtin:sign(cur-prior)==direction",
+     "normalization": null,
+     "subject": "売上高",
+     "value": null,
+     "unit": null,
+     "word": "減益",
+     "span": "高は前期に比べ微増となりましたが、人件費の増加等により僅かに減益となり、売",
+     "dropped": null
+    },
+    "text|3908": {
+     "id": "T027",
+     "kind": "text",
+     "state": "UNVERIFIABLE",
+     "pointers": [],
+     "recomputed": null,
+     "reason": "state_word(no line)",
+     "comparator": null,
+     "normalization": null,
+     "subject": null,
+     "value": null,
+     "unit": null,
+     "word": "堅調",
+     "span": "手数料率の競争の激化が進む厳しい環境ではあるものの契約件数は堅調に推移し、",
+     "dropped": null
+    },
+    "text|3891": {
+     "id": "T028",
+     "kind": "text",
+     "state": "UNVERIFIABLE",
+     "pointers": [],
+     "recomputed": null,
+     "reason": "state_word(no line)",
+     "comparator": null,
+     "normalization": null,
+     "subject": null,
+     "value": null,
+     "unit": null,
+     "word": "厳しい",
+     "span": "あるクレジット決済代行サービスは、手数料率の競争の激化が進む厳しい環境ではあ",
+     "dropped": null
+    },
+    "text|4228": {
+     "id": "T029",
+     "kind": "text",
+     "state": "UNVERIFIABLE",
+     "pointers": [],
+     "recomputed": null,
+     "reason": "no_subject",
+     "comparator": null,
+     "normalization": null,
+     "subject": null,
+     "value": null,
+     "unit": null,
+     "word": "減少",
+     "span": "におきましては、人材不足によりスタッフの派遣件数が前期に比べ減少する一方、",
+     "dropped": null
+    },
+    "text|4668": {
+     "id": "T030",
+     "kind": "text",
+     "state": "GROUNDED",
+     "pointers": [
+      "xbrl:jppfs_cor:DepreciationAndAmortizationOpeCF@CurrentYearDuration",
+      "xbrl:jppfs_cor:DepreciationAndAmortizationOpeCF@Prior1YearDuration",
+      "builtin:sign(cur-prior)"
+     ],
+     "recomputed": 236000.0,
+     "reason": null,
+     "comparator": "builtin:sign(cur-prior)==direction",
+     "normalization": null,
+     "subject": "減価償却費",
+     "value": null,
+     "unit": null,
+     "word": "増加",
+     "span": "償却額7,199千円、株式交付費48,190千円、棚卸資産の増加額23,2",
+     "dropped": null
+    },
+    "text|4687": {
+     "id": "T031",
+     "kind": "text",
+     "state": "VALUE_MISMATCH",
+     "pointers": [
+      "xbrl:jppfs_cor:DepreciationAndAmortizationOpeCF@CurrentYearDuration",
+      "xbrl:jppfs_cor:DepreciationAndAmortizationOpeCF@Prior1YearDuration",
+      "builtin:sign(cur-prior)"
+     ],
+     "recomputed": 236000.0,
+     "reason": null,
+     "comparator": "builtin:sign(cur-prior)==direction",
+     "normalization": null,
+     "subject": "減価償却費",
+     "value": null,
+     "unit": null,
+     "word": "減少",
+     "span": "190千円、棚卸資産の増加額23,262千円、未払消費税等の減少額14,4",
+     "dropped": null
+    },
+    "text|4966": {
+     "id": "T032",
+     "kind": "text",
+     "state": "UNVERIFIABLE",
+     "pointers": [],
+     "recomputed": null,
+     "reason": "no_subject",
+     "comparator": null,
+     "normalization": null,
+     "subject": null,
+     "value": null,
+     "unit": null,
+     "word": "増加",
+     "span": "これは主に短期借入金の増加額150,",
+     "dropped": null
+    },
+    "text|6023": {
+     "id": "T033",
+     "kind": "text",
+     "state": "GROUNDED",
+     "pointers": [
+      "xbrl:jpcrp_cor:NetSalesSummaryOfBusinessResults@CurrentYearDuration",
+      "xbrl:jpcrp_cor:NetSalesSummaryOfBusinessResults@Prior1YearDuration",
+      "builtin:sign(cur-prior)"
+     ],
+     "recomputed": 6442000.0,
+     "reason": null,
+     "comparator": "builtin:sign(cur-prior)==direction",
+     "normalization": null,
+     "subject": "売上高",
+     "value": null,
+     "unit": null,
+     "word": "増加",
+     "span": "、1,850,502千円と前連結会計年度に比べ6,442千円増加(前連結会",
+     "dropped": null
+    },
+    "text|6131": {
+     "id": "T034",
+     "kind": "text",
+     "state": "UNVERIFIABLE",
+     "pointers": [],
+     "recomputed": null,
+     "reason": "ambiguous(member)",
+     "comparator": null,
+     "normalization": null,
+     "subject": null,
+     "value": null,
+     "unit": null,
+     "word": "増収",
+     "span": "業、ヘアメイク事業及び美容室支援事業が堅調に推移し前期と比べ増収となったこ",
+     "dropped": null
+    },
+    "text|6148": {
+     "id": "T035",
+     "kind": "text",
+     "state": "UNVERIFIABLE",
+     "pointers": [],
+     "recomputed": null,
+     "reason": "no_subject",
+     "comparator": null,
+     "normalization": null,
+     "subject": null,
+     "value": null,
+     "unit": null,
+     "word": "増収",
+     "span": "業が堅調に推移し前期と比べ増収となったことから、全社としても増収となりまし",
+     "dropped": null
+    },
+    "text|6083": {
+     "id": "T036",
+     "kind": "text",
+     "state": "UNVERIFIABLE",
+     "pointers": [],
+     "recomputed": null,
+     "reason": "ambiguous(member)",
+     "comparator": null,
+     "normalization": null,
+     "subject": null,
+     "value": null,
+     "unit": null,
+     "word": "減収",
+     "span": "ては、BSサロン運営事業及びキャリアデザイン事業が前期に比べ減収となりまし",
+     "dropped": null
+    },
+    "text|6120": {
+     "id": "T037",
+     "kind": "text",
+     "state": "UNVERIFIABLE",
+     "pointers": [],
+     "recomputed": null,
+     "reason": "state_word(no line)",
+     "comparator": null,
+     "normalization": null,
+     "subject": null,
+     "value": null,
+     "unit": null,
+     "word": "堅調",
+     "span": "たが、直営サロン運営事業、ヘアメイク事業及び美容室支援事業が堅調に推移し前",
+     "dropped": null
+    },
+    "text|6173": {
+     "id": "T038",
+     "kind": "text",
+     "state": "UNVERIFIABLE",
+     "pointers": [],
+     "recomputed": null,
+     "reason": "no_subject",
+     "comparator": null,
+     "normalization": null,
+     "subject": null,
+     "value": null,
+     "unit": null,
+     "word": "増加",
+     "span": "売上原価は30,950千円増加(前連結会",
+     "dropped": null
+    },
+    "text|6233": {
+     "id": "T039",
+     "kind": "text",
+     "state": "GROUNDED",
+     "pointers": [
+      "xbrl:jppfs_cor:SellingGeneralAndAdministrativeExpenses@CurrentYearDuration",
+      "xbrl:jppfs_cor:SellingGeneralAndAdministrativeExpenses@Prior1YearDuration",
+      "builtin:sign(cur-prior)"
+     ],
+     "recomputed": 17979000.0,
+     "reason": null,
+     "comparator": "builtin:sign(cur-prior)==direction",
+     "normalization": null,
+     "subject": "販売費及び一般管理費",
+     "value": null,
+     "unit": null,
+     "word": "増加",
+     "span": "となり、販売費及び一般管理費につきましては、17,979千円増加(前連結会",
+     "dropped": null
+    },
+    "text|6333": {
+     "id": "T040",
+     "kind": "text",
+     "state": "GROUNDED",
+     "pointers": [
+      "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration",
+      "xbrl:jppfs_cor:OperatingIncome@Prior1YearDuration",
+      "builtin:sign(cur-prior)"
+     ],
+     "recomputed": -42487000.0,
+     "reason": null,
+     "comparator": "builtin:sign(cur-prior)==direction",
+     "normalization": null,
+     "subject": "営業損失",
+     "value": null,
+     "unit": null,
+     "word": "減益",
+     "span": "42,487千円(前連結会計年度は営業損失9,709千円)の減益となりまし",
+     "dropped": null
+    },
+    "text|6442": {
+     "id": "T041",
+     "kind": "text",
+     "state": "GROUNDED",
+     "pointers": [
+      "xbrl:jpcrp_cor:OrdinaryIncomeLossSummaryOfBusinessResults@CurrentYearDuration",
+      "xbrl:jpcrp_cor:OrdinaryIncomeLossSummaryOfBusinessResults@Prior1YearDuration",
+      "builtin:sign(cur-prior)"
+     ],
+     "recomputed": -91485000.0,
+     "reason": null,
+     "comparator": "builtin:sign(cur-prior)==direction",
+     "normalization": null,
+     "subject": "経常損失",
+     "value": null,
+     "unit": null,
+     "word": "減益",
+     "span": "91,485千円(前連結会計年度は経常損失7,091千円)の減益となりまし",
+     "dropped": null
+    },
+    "text|6630": {
+     "id": "T042",
+     "kind": "text",
+     "state": "UNVERIFIABLE",
+     "pointers": [],
+     "recomputed": null,
+     "reason": "no_subject",
+     "comparator": null,
+     "normalization": null,
+     "subject": null,
+     "value": null,
+     "unit": null,
+     "word": "減益",
+     "span": "会計年度は親会社株主に帰属する当期純損失17,621千円)の減益となりまし",
+     "dropped": null
+    }
+   }
+  },
+  "fix1a_vocab": {
+   "tally": {
+    "claims": 133,
+    "num": 91,
+    "text": 42,
+    "state": {
+     "POINTER_NOT_FOUND": 22,
+     "VALUE_MISMATCH": 14,
+     "UNVERIFIABLE": 42,
+     "GROUNDED": 55
+    },
+    "stopped": 78,
+    "reason": {
+     "no_element": 7,
+     "ambiguous(member)": 5,
+     "no_element(unit not in XBRL)": 15,
+     "ambiguous(elements)": 10,
+     "no_subject": 17,
+     "state_word(no line)": 10
+    },
+    "normalization": {
+     "round": 20,
+     "abs+round": 13
+    },
+    "comparator": {
+     "equals_within": 39,
+     "pct_change(cur,prior)": 14,
+     "diff(a-b) equals_within": 4,
+     "builtin:sign(cur-prior)==direction": 12
+    }
+   },
+   "info": {
+    "sentences": 136,
+    "mdna_chars": 7730,
+    "rounding": null
+   },
+   "diff": {
+    "changed": [],
+    "gone": [],
+    "new": []
+   }
+  },
+  "fix1b_stop": {
+   "tally": {
+    "claims": 133,
+    "num": 91,
+    "text": 42,
+    "state": {
+     "POINTER_NOT_FOUND": 22,
+     "VALUE_MISMATCH": 14,
+     "UNVERIFIABLE": 42,
+     "GROUNDED": 55
+    },
+    "stopped": 78,
+    "reason": {
+     "no_element": 7,
+     "ambiguous(member)": 5,
+     "no_element(unit not in XBRL)": 15,
+     "ambiguous(elements)": 10,
+     "no_subject": 17,
+     "state_word(no line)": 10
+    },
+    "normalization": {
+     "round": 20,
+     "abs+round": 13
+    },
+    "comparator": {
+     "equals_within": 39,
+     "pct_change(cur,prior)": 14,
+     "diff(a-b) equals_within": 4,
+     "builtin:sign(cur-prior)==direction": 12
+    }
+   },
+   "info": {
+    "sentences": 136,
+    "mdna_chars": 7730,
+    "rounding": null
+   },
+   "diff": {
+    "changed": [],
+    "gone": [],
+    "new": []
+   }
+  },
+  "fix1_both": {
+   "tally": {
+    "claims": 133,
+    "num": 91,
+    "text": 42,
+    "state": {
+     "POINTER_NOT_FOUND": 22,
+     "VALUE_MISMATCH": 14,
+     "UNVERIFIABLE": 42,
+     "GROUNDED": 55
+    },
+    "stopped": 78,
+    "reason": {
+     "no_element": 7,
+     "ambiguous(member)": 5,
+     "no_element(unit not in XBRL)": 15,
+     "ambiguous(elements)": 10,
+     "no_subject": 17,
+     "state_word(no line)": 10
+    },
+    "normalization": {
+     "round": 20,
+     "abs+round": 13
+    },
+    "comparator": {
+     "equals_within": 39,
+     "pct_change(cur,prior)": 14,
+     "diff(a-b) equals_within": 4,
+     "builtin:sign(cur-prior)==direction": 12
+    }
+   },
+   "info": {
+    "sentences": 136,
+    "mdna_chars": 7730,
+    "rounding": null
+   },
+   "diff": {
+    "changed": [],
+    "gone": [],
+    "new": []
+   }
+  },
+  "fix2_rounding": {
+   "tally": {
+    "claims": 133,
+    "num": 91,
+    "text": 42,
+    "state": {
+     "POINTER_NOT_FOUND": 22,
+     "VALUE_MISMATCH": 14,
+     "UNVERIFIABLE": 42,
+     "GROUNDED": 55
+    },
+    "stopped": 78,
+    "reason": {
+     "no_element": 7,
+     "ambiguous(member)": 5,
+     "no_element(unit not in XBRL)": 15,
+     "ambiguous(elements)": 10,
+     "no_subject": 17,
+     "state_word(no line)": 10
+    },
+    "normalization": {
+     "round": 20,
+     "abs+round": 13
+    },
+    "comparator": {
+     "equals_within": 39,
+     "pct_change(cur,prior)": 14,
+     "diff(a-b) equals_within": 4,
+     "builtin:sign(cur-prior)==direction": 12
+    }
+   },
+   "info": {
+    "rounding_round_only": 0,
+    "rounding_truncate_only": 0,
+    "sentences": 136,
+    "mdna_chars": 7730,
+    "rounding": "round"
+   },
+   "diff": {
+    "changed": [],
+    "gone": [],
+    "new": []
+   }
+  },
+  "fix3_target": {
+   "tally": {
+    "claims": 133,
+    "num": 91,
+    "text": 42,
+    "state": {
+     "POINTER_NOT_FOUND": 20,
+     "UNVERIFIABLE": 44,
+     "VALUE_MISMATCH": 14,
+     "GROUNDED": 55
+    },
+    "stopped": 78,
+    "reason": {
+     "no_element": 5,
+     "target_or_plan": 2,
+     "ambiguous(member)": 5,
+     "no_element(unit not in XBRL)": 15,
+     "ambiguous(elements)": 10,
+     "no_subject": 17,
+     "state_word(no line)": 10
+    },
+    "normalization": {
+     "round": 20,
+     "abs+round": 13
+    },
+    "comparator": {
+     "equals_within": 39,
+     "pct_change(cur,prior)": 14,
+     "diff(a-b) equals_within": 4,
+     "builtin:sign(cur-prior)==direction": 12
+    }
+   },
+   "info": {
+    "sentences": 136,
+    "mdna_chars": 7730,
+    "rounding": null
+   },
+   "diff": {
+    "changed": [
+     {
+      "base_id": "N002",
+      "id": "N002",
+      "key_pos": 720,
+      "kind": "num",
+      "subject": null,
+      "value": 3500000000.0,
+      "unit": "円",
+      "word": null,
+      "span": "億円の資金調達を実施しており、今後、新株予約権の行使による約35億円の資金調達を見込んで",
+      "changed": {
+       "state": [
+        "POINTER_NOT_FOUND",
+        "UNVERIFIABLE"
+       ],
+       "reason": [
+        "no_element",
+        "target_or_plan"
+       ]
+      }
+     },
+     {
+      "base_id": "N091",
+      "id": "N091",
+      "key_pos": 7111,
+      "kind": "num",
+      "subject": null,
+      "value": 3500000000.0,
+      "unit": "円",
+      "word": null,
+      "span": "億円の資金調達を実施しており、今後、新株予約権の行使による約35億円の資金調達を見込んで",
+      "changed": {
+       "state": [
+        "POINTER_NOT_FOUND",
+        "UNVERIFIABLE"
+       ],
+       "reason": [
+        "no_element",
+        "target_or_plan"
+       ]
+      }
+     }
+    ],
+    "gone": [],
+    "new": []
+   }
+  },
+  "fix4_paren": {
+   "tally": {
+    "claims": 133,
+    "num": 91,
+    "text": 42,
+    "state": {
+     "POINTER_NOT_FOUND": 22,
+     "VALUE_MISMATCH": 14,
+     "UNVERIFIABLE": 42,
+     "GROUNDED": 55
+    },
+    "stopped": 78,
+    "reason": {
+     "no_element": 7,
+     "ambiguous(member)": 5,
+     "no_element(unit not in XBRL)": 15,
+     "ambiguous(elements)": 10,
+     "no_subject": 17,
+     "state_word(no line)": 10
+    },
+    "normalization": {
+     "round": 20,
+     "abs+round": 13
+    },
+    "comparator": {
+     "equals_within": 39,
+     "pct_change(cur,prior)": 14,
+     "diff(a-b) equals_within": 4,
+     "builtin:sign(cur-prior)==direction": 12
+    }
+   },
+   "info": {
+    "sentences": 132,
+    "mdna_chars": 7730,
+    "rounding": null
+   },
+   "diff": {
+    "changed": [],
+    "gone": [],
+    "new": []
+   }
+  },
+  "fix5_qualitative": {
+   "tally": {
+    "claims": 105,
+    "num": 91,
+    "text": 14,
+    "state": {
+     "POINTER_NOT_FOUND": 22,
+     "VALUE_MISMATCH": 14,
+     "UNVERIFIABLE": 14,
+     "GROUNDED": 55
+    },
+    "stopped": 50,
+    "reason": {
+     "no_element": 7,
+     "ambiguous(member)": 3,
+     "no_element(unit not in XBRL)": 15,
+     "ambiguous(elements)": 10,
+     "no_subject": 1
+    },
+    "normalization": {
+     "round": 20,
+     "abs+round": 13
+    },
+    "comparator": {
+     "equals_within": 39,
+     "pct_change(cur,prior)": 14,
+     "diff(a-b) equals_within": 4,
+     "builtin:sign(cur-prior)==direction": 12
+    }
+   },
+   "info": {
+    "sentences": 136,
+    "mdna_chars": 7730,
+    "rounding": null
+   },
+   "diff": {
+    "changed": [],
+    "gone": [
+     {
+      "key_pos": 193,
+      "base": {
+       "id": "T002",
+       "kind": "text",
+       "state": "UNVERIFIABLE",
+       "pointers": [],
+       "recomputed": null,
+       "reason": "no_subject",
+       "comparator": null,
+       "normalization": null,
+       "subject": null,
+       "value": null,
+       "unit": null,
+       "word": "改善",
+       "span": "連結会計年度におけるわが国経済は、企業収益や雇用・所得環境の改善、インバウ",
+       "dropped": null
+      }
+     },
+     {
+      "key_pos": 205,
+      "base": {
+       "id": "T001",
+       "kind": "text",
+       "state": "UNVERIFIABLE",
+       "pointers": [],
+       "recomputed": null,
+       "reason": "no_subject",
+       "comparator": null,
+       "normalization": null,
+       "subject": null,
+       "value": null,
+       "unit": null,
+       "word": "拡大",
+       "span": "国経済は、企業収益や雇用・所得環境の改善、インバウンド需要の拡大等、国内景",
+       "dropped": null
+      }
+     },
+     {
+      "key_pos": 218,
+      "base": {
+       "id": "T003",
+       "kind": "text",
+       "state": "UNVERIFIABLE",
+       "pointers": [],
+       "recomputed": null,
+       "reason": "state_word(no line)",
+       "comparator": null,
+       "normalization": null,
+       "subject": null,
+       "value": null,
+       "unit": null,
+       "word": "回復",
+       "span": "所得環境の改善、インバウンド需要の拡大等、国内景気は緩やかな回復基調で推移",
+       "dropped": null
+      }
+     },
+     {
+      "key_pos": 292,
+      "base": {
+       "id": "T004",
+       "kind": "text",
+       "state": "UNVERIFIABLE",
+       "pointers": [],
+       "recomputed": null,
+       "reason": "state_word(no line)",
+       "comparator": null,
+       "normalization": null,
+       "subject": null,
+       "value": null,
+       "unit": null,
+       "word": "不透明",
+       "span": "騰、通商政策など米国の政策動向による影響等、依然として先行き不透明な状況が続",
+       "dropped": null
+      }
+     },
+     {
+      "key_pos": 335,
+      "base": {
+       "id": "T005",
+       "kind": "text",
+       "state": "UNVERIFIABLE",
+       "pointers": [],
+       "recomputed": null,
+       "reason": "state_word(no line)",
+       "comparator": null,
+       "normalization": null,
+       "subject": null,
+       "value": null,
+       "unit": null,
+       "word": "持ち直し",
+       "span": "また、消費環境におきましては、個人消費が緩やかに持ち直してきたもの",
+       "dropped": null
+      }
+     },
+     {
+      "key_pos": 1007,
+      "base": {
+       "id": "T006",
+       "kind": "text",
+       "state": "UNVERIFIABLE",
+       "pointers": [],
+       "recomputed": null,
+       "reason": "no_subject",
+       "comparator": null,
+       "normalization": null,
+       "subject": null,
+       "value": null,
+       "unit": null,
+       "word": "拡大",
+       "span": "また、2026年7月に当社グループの更なる事業の拡大及び円滑な",
+       "dropped": null
+      }
+     },
+     {
+      "key_pos": 1024,
+      "base": {
+       "id": "T007",
+       "kind": "text",
+       "state": "UNVERIFIABLE",
+       "pointers": [],
+       "recomputed": null,
+       "reason": "no_subject",
+       "comparator": null,
+       "normalization": null,
+       "subject": null,
+       "value": null,
+       "unit": null,
+       "word": "改善",
+       "span": "当社グループの更なる事業の拡大及び円滑な組織運営、執務環境の改善に伴う効率",
+       "dropped": null
+      }
+     },
+     {
+      "key_pos": 1211,
+      "base": {
+       "id": "T011",
+       "kind": "text",
+       "state": "UNVERIFIABLE",
+       "pointers": [],
+       "recomputed": null,
+       "reason": "state_word(no line)",
+       "comparator": null,
+       "normalization": null,
+       "subject": null,
+       "value": null,
+       "unit": null,
+       "word": "堅調",
+       "span": "したが、直営サロン運営事業、ヘアメイク事業、美容室支援事業が堅調に推移し前",
+       "dropped": null
+      }
+     },
+     {
+      "key_pos": 1300,
+      "base": {
+       "id": "T012",
+       "kind": "text",
+       "state": "UNVERIFIABLE",
+       "pointers": [],
+       "recomputed": null,
+       "reason": "no_subject",
+       "comparator": null,
+       "normalization": null,
+       "subject": null,
+       "value": null,
+       "unit": null,
+       "word": "増加",
+       "span": "原材料価格の高騰や人件費、物流費をはじめとした諸経費のコスト増加、本社の移",
+       "dropped": null
+      }
+     },
+     {
+      "key_pos": 2275,
+      "base": {
+       "id": "T016",
+       "kind": "text",
+       "state": "UNVERIFIABLE",
+       "pointers": [],
+       "recomputed": null,
+       "reason": "state_word(no line)",
+       "comparator": null,
+       "normalization": null,
+       "subject": null,
+       "value": null,
+       "unit": null,
+       "word": "堅調",
+       "span": "当連結会計年度の業績につきましては、売上高は堅調に推移した",
+       "dropped": null
+      }
+     },
+     {
+      "key_pos": 2857,
+      "base": {
+       "id": "T020",
+       "kind": "text",
+       "state": "UNVERIFIABLE",
+       "pointers": [],
+       "recomputed": null,
+       "reason": "state_word(no line)",
+       "comparator": null,
+       "normalization": null,
+       "subject": null,
+       "value": null,
+       "unit": null,
+       "word": "堅調",
+       "span": "B商品)をはじめとした商品販売に注力しており、PB商品売上は堅調に推移して",
+       "dropped": null
+      }
+     },
+     {
+      "key_pos": 2887,
+      "base": {
+       "id": "T019",
+       "kind": "text",
+       "state": "UNVERIFIABLE",
+       "pointers": [],
+       "recomputed": null,
+       "reason": "no_subject",
+       "comparator": null,
+       "normalization": null,
+       "subject": null,
+       "value": null,
+       "unit": null,
+       "word": "減少",
+       "span": "堅調に推移しているものの、前期に比べBSサロンの稼働店舗数が減少したことに",
+       "dropped": null
+      }
+     },
+     {
+      "key_pos": 2896,
+      "base": {
+       "id": "T017",
+       "kind": "text",
+       "state": "UNVERIFIABLE",
+       "pointers": [],
+       "recomputed": null,
+       "reason": "no_subject",
+       "comparator": null,
+       "normalization": null,
+       "subject": null,
+       "value": null,
+       "unit": null,
+       "word": "減収",
+       "span": "ものの、前期に比べBSサロンの稼働店舗数が減少したことに伴い減収減益となり",
+       "dropped": null
+      }
+     },
+     {
+      "key_pos": 2898,
+      "base": {
+       "id": "T018",
+       "kind": "text",
+       "state": "UNVERIFIABLE",
+       "pointers": [],
+       "recomputed": null,
+       "reason": "no_subject",
+       "comparator": null,
+       "normalization": null,
+       "subject": null,
+       "value": null,
+       "unit": null,
+       "word": "減益",
+       "span": "の、前期に比べBSサロンの稼働店舗数が減少したことに伴い減収減益となりまし",
+       "dropped": null
+      }
+     },
+     {
+      "key_pos": 2917,
+      "base": {
+       "id": "T021",
+       "kind": "text",
+       "state": "UNVERIFIABLE",
+       "pointers": [],
+       "recomputed": null,
+       "reason": "state_word(no line)",
+       "comparator": null,
+       "normalization": null,
+       "subject": null,
+       "value": null,
+       "unit": null,
+       "word": "堅調",
+       "span": "商品販売については、堅調に推移して",
+       "dropped": null
+      }
+     },
+     {
+      "key_pos": 3480,
+      "base": {
+       "id": "T022",
+       "kind": "text",
+       "state": "UNVERIFIABLE",
+       "pointers": [],
+       "recomputed": null,
+       "reason": "no_subject",
+       "comparator": null,
+       "normalization": null,
+       "subject": null,
+       "value": null,
+       "unit": null,
+       "word": "増収",
+       "span": "きましては、スタジオ、ブライダル、メディア各部門が前期に比べ増収で推移した",
+       "dropped": null
+      }
+     },
+     {
+      "key_pos": 3494,
+      "base": {
+       "id": "T023",
+       "kind": "text",
+       "state": "UNVERIFIABLE",
+       "pointers": [],
+       "recomputed": null,
+       "reason": "no_subject",
+       "comparator": null,
+       "normalization": null,
+       "subject": null,
+       "value": null,
+       "unit": null,
+       "word": "増加",
+       "span": "ダル、メディア各部門が前期に比べ増収で推移した一方、人件費は増加したものの",
+       "dropped": null
+      }
+     },
+     {
+      "key_pos": 3508,
+      "base": {
+       "id": "T024",
+       "kind": "text",
+       "state": "UNVERIFIABLE",
+       "pointers": [],
+       "recomputed": null,
+       "reason": "no_subject",
+       "comparator": null,
+       "normalization": null,
+       "subject": null,
+       "value": null,
+       "unit": null,
+       "word": "減少",
+       "span": "比べ増収で推移した一方、人件費は増加したものの全体のコストが減少した結果、",
+       "dropped": null
+      }
+     },
+     {
+      "key_pos": 3891,
+      "base": {
+       "id": "T028",
+       "kind": "text",
+       "state": "UNVERIFIABLE",
+       "pointers": [],
+       "recomputed": null,
+       "reason": "state_word(no line)",
+       "comparator": null,
+       "normalization": null,
+       "subject": null,
+       "value": null,
+       "unit": null,
+       "word": "厳しい",
+       "span": "あるクレジット決済代行サービスは、手数料率の競争の激化が進む厳しい環境ではあ",
+       "dropped": null
+      }
+     },
+     {
+      "key_pos": 3908,
+      "base": {
+       "id": "T027",
+       "kind": "text",
+       "state": "UNVERIFIABLE",
+       "pointers": [],
+       "recomputed": null,
+       "reason": "state_word(no line)",
+       "comparator": null,
+       "normalization": null,
+       "subject": null,
+       "value": null,
+       "unit": null,
+       "word": "堅調",
+       "span": "手数料率の競争の激化が進む厳しい環境ではあるものの契約件数は堅調に推移し、",
+       "dropped": null
+      }
+     },
+     {
+      "key_pos": 4228,
+      "base": {
+       "id": "T029",
+       "kind": "text",
+       "state": "UNVERIFIABLE",
+       "pointers": [],
+       "recomputed": null,
+       "reason": "no_subject",
+       "comparator": null,
+       "normalization": null,
+       "subject": null,
+       "value": null,
+       "unit": null,
+       "word": "減少",
+       "span": "におきましては、人材不足によりスタッフの派遣件数が前期に比べ減少する一方、",
+       "dropped": null
+      }
+     },
+     {
+      "key_pos": 4966,
+      "base": {
+       "id": "T032",
+       "kind": "text",
+       "state": "UNVERIFIABLE",
+       "pointers": [],
+       "recomputed": null,
+       "reason": "no_subject",
+       "comparator": null,
+       "normalization": null,
+       "subject": null,
+       "value": null,
+       "unit": null,
+       "word": "増加",
+       "span": "これは主に短期借入金の増加額150,",
+       "dropped": null
+      }
+     },
+     {
+      "key_pos": 6083,
+      "base": {
+       "id": "T036",
+       "kind": "text",
+       "state": "UNVERIFIABLE",
+       "pointers": [],
+       "recomputed": null,
+       "reason": "ambiguous(member)",
+       "comparator": null,
+       "normalization": null,
+       "subject": null,
+       "value": null,
+       "unit": null,
+       "word": "減収",
+       "span": "ては、BSサロン運営事業及びキャリアデザイン事業が前期に比べ減収となりまし",
+       "dropped": null
+      }
+     },
+     {
+      "key_pos": 6120,
+      "base": {
+       "id": "T037",
+       "kind": "text",
+       "state": "UNVERIFIABLE",
+       "pointers": [],
+       "recomputed": null,
+       "reason": "state_word(no line)",
+       "comparator": null,
+       "normalization": null,
+       "subject": null,
+       "value": null,
+       "unit": null,
+       "word": "堅調",
+       "span": "たが、直営サロン運営事業、ヘアメイク事業及び美容室支援事業が堅調に推移し前",
+       "dropped": null
+      }
+     },
+     {
+      "key_pos": 6131,
+      "base": {
+       "id": "T034",
+       "kind": "text",
+       "state": "UNVERIFIABLE",
+       "pointers": [],
+       "recomputed": null,
+       "reason": "ambiguous(member)",
+       "comparator": null,
+       "normalization": null,
+       "subject": null,
+       "value": null,
+       "unit": null,
+       "word": "増収",
+       "span": "業、ヘアメイク事業及び美容室支援事業が堅調に推移し前期と比べ増収となったこ",
+       "dropped": null
+      }
+     },
+     {
+      "key_pos": 6148,
+      "base": {
+       "id": "T035",
+       "kind": "text",
+       "state": "UNVERIFIABLE",
+       "pointers": [],
+       "recomputed": null,
+       "reason": "no_subject",
+       "comparator": null,
+       "normalization": null,
+       "subject": null,
+       "value": null,
+       "unit": null,
+       "word": "増収",
+       "span": "業が堅調に推移し前期と比べ増収となったことから、全社としても増収となりまし",
+       "dropped": null
+      }
+     },
+     {
+      "key_pos": 6173,
+      "base": {
+       "id": "T038",
+       "kind": "text",
+       "state": "UNVERIFIABLE",
+       "pointers": [],
+       "recomputed": null,
+       "reason": "no_subject",
+       "comparator": null,
+       "normalization": null,
+       "subject": null,
+       "value": null,
+       "unit": null,
+       "word": "増加",
+       "span": "売上原価は30,950千円増加(前連結会",
+       "dropped": null
+      }
+     },
+     {
+      "key_pos": 6630,
+      "base": {
+       "id": "T042",
+       "kind": "text",
+       "state": "UNVERIFIABLE",
+       "pointers": [],
+       "recomputed": null,
+       "reason": "no_subject",
+       "comparator": null,
+       "normalization": null,
+       "subject": null,
+       "value": null,
+       "unit": null,
+       "word": "減益",
+       "span": "会計年度は親会社株主に帰属する当期純損失17,621千円)の減益となりまし",
+       "dropped": null
+      }
+     }
+    ],
+    "new": []
+   }
+  },
+  "all": {
+   "tally": {
+    "claims": 105,
+    "num": 91,
+    "text": 14,
+    "state": {
+     "POINTER_NOT_FOUND": 20,
+     "UNVERIFIABLE": 16,
+     "VALUE_MISMATCH": 14,
+     "GROUNDED": 55
+    },
+    "stopped": 50,
+    "reason": {
+     "no_element": 5,
+     "target_or_plan": 2,
+     "ambiguous(member)": 3,
+     "no_element(unit not in XBRL)": 15,
+     "ambiguous(elements)": 10,
+     "no_subject": 1
+    },
+    "normalization": {
+     "round": 20,
+     "abs+round": 13
+    },
+    "comparator": {
+     "equals_within": 39,
+     "pct_change(cur,prior)": 14,
+     "diff(a-b) equals_within": 4,
+     "builtin:sign(cur-prior)==direction": 12
+    }
+   },
+   "info": {
+    "rounding_round_only": 0,
+    "rounding_truncate_only": 0,
+    "sentences": 132,
+    "mdna_chars": 7730,
+    "rounding": "round"
+   },
+   "diff": {
+    "changed": [
+     {
+      "base_id": "N002",
+      "id": "N002",
+      "key_pos": 720,
+      "kind": "num",
+      "subject": null,
+      "value": 3500000000.0,
+      "unit": "円",
+      "word": null,
+      "span": "億円の資金調達を実施しており、今後、新株予約権の行使による約35億円の資金調達を見込んで",
+      "changed": {
+       "state": [
+        "POINTER_NOT_FOUND",
+        "UNVERIFIABLE"
+       ],
+       "reason": [
+        "no_element",
+        "target_or_plan"
+       ]
+      }
+     },
+     {
+      "base_id": "N091",
+      "id": "N091",
+      "key_pos": 7111,
+      "kind": "num",
+      "subject": null,
+      "value": 3500000000.0,
+      "unit": "円",
+      "word": null,
+      "span": "億円の資金調達を実施しており、今後、新株予約権の行使による約35億円の資金調達を見込んで",
+      "changed": {
+       "state": [
+        "POINTER_NOT_FOUND",
+        "UNVERIFIABLE"
+       ],
+       "reason": [
+        "no_element",
+        "target_or_plan"
+       ]
+      }
+     }
+    ],
+    "gone": [
+     {
+      "key_pos": 193,
+      "base": {
+       "id": "T002",
+       "kind": "text",
+       "state": "UNVERIFIABLE",
+       "pointers": [],
+       "recomputed": null,
+       "reason": "no_subject",
+       "comparator": null,
+       "normalization": null,
+       "subject": null,
+       "value": null,
+       "unit": null,
+       "word": "改善",
+       "span": "連結会計年度におけるわが国経済は、企業収益や雇用・所得環境の改善、インバウ",
+       "dropped": null
+      }
+     },
+     {
+      "key_pos": 205,
+      "base": {
+       "id": "T001",
+       "kind": "text",
+       "state": "UNVERIFIABLE",
+       "pointers": [],
+       "recomputed": null,
+       "reason": "no_subject",
+       "comparator": null,
+       "normalization": null,
+       "subject": null,
+       "value": null,
+       "unit": null,
+       "word": "拡大",
+       "span": "国経済は、企業収益や雇用・所得環境の改善、インバウンド需要の拡大等、国内景",
+       "dropped": null
+      }
+     },
+     {
+      "key_pos": 218,
+      "base": {
+       "id": "T003",
+       "kind": "text",
+       "state": "UNVERIFIABLE",
+       "pointers": [],
+       "recomputed": null,
+       "reason": "state_word(no line)",
+       "comparator": null,
+       "normalization": null,
+       "subject": null,
+       "value": null,
+       "unit": null,
+       "word": "回復",
+       "span": "所得環境の改善、インバウンド需要の拡大等、国内景気は緩やかな回復基調で推移",
+       "dropped": null
+      }
+     },
+     {
+      "key_pos": 292,
+      "base": {
+       "id": "T004",
+       "kind": "text",
+       "state": "UNVERIFIABLE",
+       "pointers": [],
+       "recomputed": null,
+       "reason": "state_word(no line)",
+       "comparator": null,
+       "normalization": null,
+       "subject": null,
+       "value": null,
+       "unit": null,
+       "word": "不透明",
+       "span": "騰、通商政策など米国の政策動向による影響等、依然として先行き不透明な状況が続",
+       "dropped": null
+      }
+     },
+     {
+      "key_pos": 335,
+      "base": {
+       "id": "T005",
+       "kind": "text",
+       "state": "UNVERIFIABLE",
+       "pointers": [],
+       "recomputed": null,
+       "reason": "state_word(no line)",
+       "comparator": null,
+       "normalization": null,
+       "subject": null,
+       "value": null,
+       "unit": null,
+       "word": "持ち直し",
+       "span": "また、消費環境におきましては、個人消費が緩やかに持ち直してきたもの",
+       "dropped": null
+      }
+     },
+     {
+      "key_pos": 1007,
+      "base": {
+       "id": "T006",
+       "kind": "text",
+       "state": "UNVERIFIABLE",
+       "pointers": [],
+       "recomputed": null,
+       "reason": "no_subject",
+       "comparator": null,
+       "normalization": null,
+       "subject": null,
+       "value": null,
+       "unit": null,
+       "word": "拡大",
+       "span": "また、2026年7月に当社グループの更なる事業の拡大及び円滑な",
+       "dropped": null
+      }
+     },
+     {
+      "key_pos": 1024,
+      "base": {
+       "id": "T007",
+       "kind": "text",
+       "state": "UNVERIFIABLE",
+       "pointers": [],
+       "recomputed": null,
+       "reason": "no_subject",
+       "comparator": null,
+       "normalization": null,
+       "subject": null,
+       "value": null,
+       "unit": null,
+       "word": "改善",
+       "span": "当社グループの更なる事業の拡大及び円滑な組織運営、執務環境の改善に伴う効率",
+       "dropped": null
+      }
+     },
+     {
+      "key_pos": 1211,
+      "base": {
+       "id": "T011",
+       "kind": "text",
+       "state": "UNVERIFIABLE",
+       "pointers": [],
+       "recomputed": null,
+       "reason": "state_word(no line)",
+       "comparator": null,
+       "normalization": null,
+       "subject": null,
+       "value": null,
+       "unit": null,
+       "word": "堅調",
+       "span": "したが、直営サロン運営事業、ヘアメイク事業、美容室支援事業が堅調に推移し前",
+       "dropped": null
+      }
+     },
+     {
+      "key_pos": 1300,
+      "base": {
+       "id": "T012",
+       "kind": "text",
+       "state": "UNVERIFIABLE",
+       "pointers": [],
+       "recomputed": null,
+       "reason": "no_subject",
+       "comparator": null,
+       "normalization": null,
+       "subject": null,
+       "value": null,
+       "unit": null,
+       "word": "増加",
+       "span": "原材料価格の高騰や人件費、物流費をはじめとした諸経費のコスト増加、本社の移",
+       "dropped": null
+      }
+     },
+     {
+      "key_pos": 2275,
+      "base": {
+       "id": "T016",
+       "kind": "text",
+       "state": "UNVERIFIABLE",
+       "pointers": [],
+       "recomputed": null,
+       "reason": "state_word(no line)",
+       "comparator": null,
+       "normalization": null,
+       "subject": null,
+       "value": null,
+       "unit": null,
+       "word": "堅調",
+       "span": "当連結会計年度の業績につきましては、売上高は堅調に推移した",
+       "dropped": null
+      }
+     },
+     {
+      "key_pos": 2857,
+      "base": {
+       "id": "T020",
+       "kind": "text",
+       "state": "UNVERIFIABLE",
+       "pointers": [],
+       "recomputed": null,
+       "reason": "state_word(no line)",
+       "comparator": null,
+       "normalization": null,
+       "subject": null,
+       "value": null,
+       "unit": null,
+       "word": "堅調",
+       "span": "B商品)をはじめとした商品販売に注力しており、PB商品売上は堅調に推移して",
+       "dropped": null
+      }
+     },
+     {
+      "key_pos": 2887,
+      "base": {
+       "id": "T019",
+       "kind": "text",
+       "state": "UNVERIFIABLE",
+       "pointers": [],
+       "recomputed": null,
+       "reason": "no_subject",
+       "comparator": null,
+       "normalization": null,
+       "subject": null,
+       "value": null,
+       "unit": null,
+       "word": "減少",
+       "span": "堅調に推移しているものの、前期に比べBSサロンの稼働店舗数が減少したことに",
+       "dropped": null
+      }
+     },
+     {
+      "key_pos": 2896,
+      "base": {
+       "id": "T017",
+       "kind": "text",
+       "state": "UNVERIFIABLE",
+       "pointers": [],
+       "recomputed": null,
+       "reason": "no_subject",
+       "comparator": null,
+       "normalization": null,
+       "subject": null,
+       "value": null,
+       "unit": null,
+       "word": "減収",
+       "span": "ものの、前期に比べBSサロンの稼働店舗数が減少したことに伴い減収減益となり",
+       "dropped": null
+      }
+     },
+     {
+      "key_pos": 2898,
+      "base": {
+       "id": "T018",
+       "kind": "text",
+       "state": "UNVERIFIABLE",
+       "pointers": [],
+       "recomputed": null,
+       "reason": "no_subject",
+       "comparator": null,
+       "normalization": null,
+       "subject": null,
+       "value": null,
+       "unit": null,
+       "word": "減益",
+       "span": "の、前期に比べBSサロンの稼働店舗数が減少したことに伴い減収減益となりまし",
+       "dropped": null
+      }
+     },
+     {
+      "key_pos": 2917,
+      "base": {
+       "id": "T021",
+       "kind": "text",
+       "state": "UNVERIFIABLE",
+       "pointers": [],
+       "recomputed": null,
+       "reason": "state_word(no line)",
+       "comparator": null,
+       "normalization": null,
+       "subject": null,
+       "value": null,
+       "unit": null,
+       "word": "堅調",
+       "span": "商品販売については、堅調に推移して",
+       "dropped": null
+      }
+     },
+     {
+      "key_pos": 3480,
+      "base": {
+       "id": "T022",
+       "kind": "text",
+       "state": "UNVERIFIABLE",
+       "pointers": [],
+       "recomputed": null,
+       "reason": "no_subject",
+       "comparator": null,
+       "normalization": null,
+       "subject": null,
+       "value": null,
+       "unit": null,
+       "word": "増収",
+       "span": "きましては、スタジオ、ブライダル、メディア各部門が前期に比べ増収で推移した",
+       "dropped": null
+      }
+     },
+     {
+      "key_pos": 3494,
+      "base": {
+       "id": "T023",
+       "kind": "text",
+       "state": "UNVERIFIABLE",
+       "pointers": [],
+       "recomputed": null,
+       "reason": "no_subject",
+       "comparator": null,
+       "normalization": null,
+       "subject": null,
+       "value": null,
+       "unit": null,
+       "word": "増加",
+       "span": "ダル、メディア各部門が前期に比べ増収で推移した一方、人件費は増加したものの",
+       "dropped": null
+      }
+     },
+     {
+      "key_pos": 3508,
+      "base": {
+       "id": "T024",
+       "kind": "text",
+       "state": "UNVERIFIABLE",
+       "pointers": [],
+       "recomputed": null,
+       "reason": "no_subject",
+       "comparator": null,
+       "normalization": null,
+       "subject": null,
+       "value": null,
+       "unit": null,
+       "word": "減少",
+       "span": "比べ増収で推移した一方、人件費は増加したものの全体のコストが減少した結果、",
+       "dropped": null
+      }
+     },
+     {
+      "key_pos": 3891,
+      "base": {
+       "id": "T028",
+       "kind": "text",
+       "state": "UNVERIFIABLE",
+       "pointers": [],
+       "recomputed": null,
+       "reason": "state_word(no line)",
+       "comparator": null,
+       "normalization": null,
+       "subject": null,
+       "value": null,
+       "unit": null,
+       "word": "厳しい",
+       "span": "あるクレジット決済代行サービスは、手数料率の競争の激化が進む厳しい環境ではあ",
+       "dropped": null
+      }
+     },
+     {
+      "key_pos": 3908,
+      "base": {
+       "id": "T027",
+       "kind": "text",
+       "state": "UNVERIFIABLE",
+       "pointers": [],
+       "recomputed": null,
+       "reason": "state_word(no line)",
+       "comparator": null,
+       "normalization": null,
+       "subject": null,
+       "value": null,
+       "unit": null,
+       "word": "堅調",
+       "span": "手数料率の競争の激化が進む厳しい環境ではあるものの契約件数は堅調に推移し、",
+       "dropped": null
+      }
+     },
+     {
+      "key_pos": 4228,
+      "base": {
+       "id": "T029",
+       "kind": "text",
+       "state": "UNVERIFIABLE",
+       "pointers": [],
+       "recomputed": null,
+       "reason": "no_subject",
+       "comparator": null,
+       "normalization": null,
+       "subject": null,
+       "value": null,
+       "unit": null,
+       "word": "減少",
+       "span": "におきましては、人材不足によりスタッフの派遣件数が前期に比べ減少する一方、",
+       "dropped": null
+      }
+     },
+     {
+      "key_pos": 4966,
+      "base": {
+       "id": "T032",
+       "kind": "text",
+       "state": "UNVERIFIABLE",
+       "pointers": [],
+       "recomputed": null,
+       "reason": "no_subject",
+       "comparator": null,
+       "normalization": null,
+       "subject": null,
+       "value": null,
+       "unit": null,
+       "word": "増加",
+       "span": "これは主に短期借入金の増加額150,",
+       "dropped": null
+      }
+     },
+     {
+      "key_pos": 6083,
+      "base": {
+       "id": "T036",
+       "kind": "text",
+       "state": "UNVERIFIABLE",
+       "pointers": [],
+       "recomputed": null,
+       "reason": "ambiguous(member)",
+       "comparator": null,
+       "normalization": null,
+       "subject": null,
+       "value": null,
+       "unit": null,
+       "word": "減収",
+       "span": "ては、BSサロン運営事業及びキャリアデザイン事業が前期に比べ減収となりまし",
+       "dropped": null
+      }
+     },
+     {
+      "key_pos": 6120,
+      "base": {
+       "id": "T037",
+       "kind": "text",
+       "state": "UNVERIFIABLE",
+       "pointers": [],
+       "recomputed": null,
+       "reason": "state_word(no line)",
+       "comparator": null,
+       "normalization": null,
+       "subject": null,
+       "value": null,
+       "unit": null,
+       "word": "堅調",
+       "span": "たが、直営サロン運営事業、ヘアメイク事業及び美容室支援事業が堅調に推移し前",
+       "dropped": null
+      }
+     },
+     {
+      "key_pos": 6131,
+      "base": {
+       "id": "T034",
+       "kind": "text",
+       "state": "UNVERIFIABLE",
+       "pointers": [],
+       "recomputed": null,
+       "reason": "ambiguous(member)",
+       "comparator": null,
+       "normalization": null,
+       "subject": null,
+       "value": null,
+       "unit": null,
+       "word": "増収",
+       "span": "業、ヘアメイク事業及び美容室支援事業が堅調に推移し前期と比べ増収となったこ",
+       "dropped": null
+      }
+     },
+     {
+      "key_pos": 6148,
+      "base": {
+       "id": "T035",
+       "kind": "text",
+       "state": "UNVERIFIABLE",
+       "pointers": [],
+       "recomputed": null,
+       "reason": "no_subject",
+       "comparator": null,
+       "normalization": null,
+       "subject": null,
+       "value": null,
+       "unit": null,
+       "word": "増収",
+       "span": "業が堅調に推移し前期と比べ増収となったことから、全社としても増収となりまし",
+       "dropped": null
+      }
+     },
+     {
+      "key_pos": 6173,
+      "base": {
+       "id": "T038",
+       "kind": "text",
+       "state": "UNVERIFIABLE",
+       "pointers": [],
+       "recomputed": null,
+       "reason": "no_subject",
+       "comparator": null,
+       "normalization": null,
+       "subject": null,
+       "value": null,
+       "unit": null,
+       "word": "増加",
+       "span": "売上原価は30,950千円増加(前連結会",
+       "dropped": null
+      }
+     },
+     {
+      "key_pos": 6630,
+      "base": {
+       "id": "T042",
+       "kind": "text",
+       "state": "UNVERIFIABLE",
+       "pointers": [],
+       "recomputed": null,
+       "reason": "no_subject",
+       "comparator": null,
+       "normalization": null,
+       "subject": null,
+       "value": null,
+       "unit": null,
+       "word": "減益",
+       "span": "会計年度は親会社株主に帰属する当期純損失17,621千円)の減益となりまし",
+       "dropped": null
+      }
+     }
+    ],
+    "new": []
+   },
+   "rows": {
+    "num|688": {
+     "id": "N001",
+     "kind": "num",
+     "state": "POINTER_NOT_FOUND",
+     "pointers": [],
+     "recomputed": null,
+     "reason": "no_element",
+     "comparator": null,
+     "normalization": null,
+     "subject": null,
+     "value": 1000000000.0,
+     "unit": "円",
+     "word": null,
+     "span": "これにより2026年7月に新株式発行によって約10億円の資金調達を実施して",
+     "dropped": null
+    },
+    "num|720": {
+     "id": "N002",
+     "kind": "num",
+     "state": "UNVERIFIABLE",
+     "pointers": [],
+     "recomputed": null,
+     "reason": "target_or_plan",
+     "comparator": null,
+     "normalization": null,
+     "subject": null,
+     "value": 3500000000.0,
+     "unit": "円",
+     "word": null,
+     "span": "億円の資金調達を実施しており、今後、新株予約権の行使による約35億円の資金調達を見込んで",
+     "dropped": null
+    },
+    "num|1495": {
+     "id": "N003",
+     "kind": "num",
+     "state": "VALUE_MISMATCH",
+     "pointers": [
+      "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration"
+     ],
+     "recomputed": -52196000.0,
+     "reason": null,
+     "comparator": "equals_within",
+     "normalization": null,
+     "subject": "営業損失",
+     "value": 48190.0,
+     "unit": "千円",
+     "word": null,
+     "span": "新株式発行及び第2回新株予約権の発行に係る諸費用を株式交付費48,190千円として営業外費用とし",
+     "dropped": null
+    },
+    "num|1632": {
+     "id": "N004",
+     "kind": "num",
+     "state": "UNVERIFIABLE",
+     "pointers": [],
+     "recomputed": null,
+     "reason": "ambiguous(member)",
+     "comparator": null,
+     "normalization": null,
+     "subject": "経常損失",
+     "value": 3758.0,
+     "unit": "千円",
+     "word": null,
+     "span": "ロン運営事業及びヘアメイク事業に係る固定資産について減損損失3,758千円を特別損失として計上",
+     "dropped": null
+    },
+    "num|1704": {
+     "id": "N005",
+     "kind": "num",
+     "state": "GROUNDED",
+     "pointers": [
+      "xbrl:jpcrp_cor:NetSalesSummaryOfBusinessResults@CurrentYearDuration"
+     ],
+     "recomputed": 1850502000.0,
+     "reason": null,
+     "comparator": "equals_within",
+     "normalization": "round",
+     "subject": "売上高",
+     "value": 1850502.0,
+     "unit": "千円",
+     "word": null,
+     "span": "以上の結果、当連結会計年度の業績は、売上高1,850,502千円(前期比0.3%増)",
+     "dropped": null
+    },
+    "num|1719": {
+     "id": "N006",
+     "kind": "num",
+     "state": "GROUNDED",
+     "pointers": [
+      "xbrl:jpcrp_cor:NetSalesSummaryOfBusinessResults@CurrentYearDuration",
+      "xbrl:jpcrp_cor:NetSalesSummaryOfBusinessResults@Prior1YearDuration"
+     ],
+     "recomputed": 0.35,
+     "reason": null,
+     "comparator": "pct_change(cur,prior)",
+     "normalization": null,
+     "subject": "売上高",
+     "value": 0.3,
+     "unit": "%",
+     "word": null,
+     "span": "当連結会計年度の業績は、売上高1,850,502千円(前期比0.3%増)、営業損失52,",
+     "dropped": null
+    },
+    "num|1730": {
+     "id": "N007",
+     "kind": "num",
+     "state": "GROUNDED",
+     "pointers": [
+      "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration"
+     ],
+     "recomputed": -52196000.0,
+     "reason": null,
+     "comparator": "equals_within",
+     "normalization": "abs+round",
+     "subject": "営業損失",
+     "value": 52196.0,
+     "unit": "千円",
+     "word": null,
+     "span": "、売上高1,850,502千円(前期比0.3%増)、営業損失52,196千円(前期は営業損失9,",
+     "dropped": null
+    },
+    "num|1746": {
+     "id": "N008",
+     "kind": "num",
+     "state": "GROUNDED",
+     "pointers": [
+      "xbrl:jppfs_cor:OperatingIncome@Prior1YearDuration"
+     ],
+     "recomputed": -9709000.0,
+     "reason": null,
+     "comparator": "equals_within",
+     "normalization": "abs+round",
+     "subject": "営業損失",
+     "value": 9709.0,
+     "unit": "千円",
+     "word": null,
+     "span": "前期比0.3%増)、営業損失52,196千円(前期は営業損失9,709千円)、経常損失98,5",
+     "dropped": null
+    },
+    "num|1759": {
+     "id": "N009",
+     "kind": "num",
+     "state": "GROUNDED",
+     "pointers": [
+      "xbrl:jpcrp_cor:OrdinaryIncomeLossSummaryOfBusinessResults@CurrentYearDuration"
+     ],
+     "recomputed": -98576000.0,
+     "reason": null,
+     "comparator": "equals_within",
+     "normalization": "abs+round",
+     "subject": "経常損失",
+     "value": 98576.0,
+     "unit": "千円",
+     "word": null,
+     "span": "失52,196千円(前期は営業損失9,709千円)、経常損失98,576千円(前期は経常損失7,",
+     "dropped": null
+    },
+    "num|1775": {
+     "id": "N010",
+     "kind": "num",
+     "state": "GROUNDED",
+     "pointers": [
+      "xbrl:jpcrp_cor:OrdinaryIncomeLossSummaryOfBusinessResults@Prior1YearDuration"
+     ],
+     "recomputed": -7091000.0,
+     "reason": null,
+     "comparator": "equals_within",
+     "normalization": "abs+round",
+     "subject": "経常損失",
+     "value": 7091.0,
+     "unit": "千円",
+     "word": null,
+     "span": "失9,709千円)、経常損失98,576千円(前期は経常損失7,091千円)、親会社株主に帰属",
+     "dropped": null
+    },
+    "num|1799": {
+     "id": "N011",
+     "kind": "num",
+     "state": "VALUE_MISMATCH",
+     "pointers": [
+      "xbrl:jpcrp_cor:OrdinaryIncomeLossSummaryOfBusinessResults@CurrentYearDuration"
+     ],
+     "recomputed": -98576000.0,
+     "reason": null,
+     "comparator": "equals_within",
+     "normalization": null,
+     "subject": "経常損失",
+     "value": 105873.0,
+     "unit": "千円",
+     "word": null,
+     "span": "期は経常損失7,091千円)、親会社株主に帰属する当期純損失105,873千円(前期は親会社株主に",
+     "dropped": null
+    },
+    "num|1827": {
+     "id": "N012",
+     "kind": "num",
+     "state": "VALUE_MISMATCH",
+     "pointers": [
+      "xbrl:jpcrp_cor:OrdinaryIncomeLossSummaryOfBusinessResults@CurrentYearDuration"
+     ],
+     "recomputed": -98576000.0,
+     "reason": null,
+     "comparator": "equals_within",
+     "normalization": null,
+     "subject": "経常損失",
+     "value": 17621.0,
+     "unit": "千円",
+     "word": null,
+     "span": "損失105,873千円(前期は親会社株主に帰属する当期純損失17,621千円)となりました。",
+     "dropped": null
+    },
+    "num|1950": {
+     "id": "N013",
+     "kind": "num",
+     "state": "POINTER_NOT_FOUND",
+     "pointers": [],
+     "recomputed": null,
+     "reason": "no_element(unit not in XBRL)",
+     "comparator": null,
+     "normalization": null,
+     "subject": null,
+     "value": 11.0,
+     "unit": "店舗",
+     "word": null,
+     "span": "フラッグシップサロンとして、首都圏主要地域を中心に直営サロン11店舗(モッズ・ヘアサロン",
+     "dropped": null
+    },
+    "num|1964": {
+     "id": "N014",
+     "kind": "num",
+     "state": "POINTER_NOT_FOUND",
+     "pointers": [],
+     "recomputed": null,
+     "reason": "no_element(unit not in XBRL)",
+     "comparator": null,
+     "normalization": null,
+     "subject": null,
+     "value": 9.0,
+     "unit": "店舗",
+     "word": null,
+     "span": "首都圏主要地域を中心に直営サロン11店舗(モッズ・ヘアサロン9店舗、美容室セラヴィ1店",
+     "dropped": null
+    },
+    "num|1975": {
+     "id": "N015",
+     "kind": "num",
+     "state": "POINTER_NOT_FOUND",
+     "pointers": [],
+     "recomputed": null,
+     "reason": "no_element(unit not in XBRL)",
+     "comparator": null,
+     "normalization": null,
+     "subject": null,
+     "value": 1.0,
+     "unit": "店舗",
+     "word": null,
+     "span": "直営サロン11店舗(モッズ・ヘアサロン9店舗、美容室セラヴィ1店舗、エテルネサロン1店",
+     "dropped": null
+    },
+    "num|1986": {
+     "id": "N016",
+     "kind": "num",
+     "state": "POINTER_NOT_FOUND",
+     "pointers": [],
+     "recomputed": null,
+     "reason": "no_element(unit not in XBRL)",
+     "comparator": null,
+     "normalization": null,
+     "subject": null,
+     "value": 1.0,
+     "unit": "店舗",
+     "word": null,
+     "span": "ッズ・ヘアサロン9店舗、美容室セラヴィ1店舗、エテルネサロン1店舗)及びモッズ・ヘアア",
+     "dropped": null
+    },
+    "num|2520": {
+     "id": "N017",
+     "kind": "num",
+     "state": "GROUNDED",
+     "pointers": [
+      "xbrl:jppfs_cor:NetSales@CurrentYearDuration_jpcrp030000-asr_E05055-000DirectSalonReportableSegmentMember"
+     ],
+     "recomputed": 958229000.0,
+     "reason": null,
+     "comparator": "equals_within",
+     "normalization": "round",
+     "subject": "売上高",
+     "value": 958229.0,
+     "unit": "千円",
+     "word": null,
+     "span": "当連結会計年度の直営サロン運営事業の業績は、売上高958,229千円(前期比3.3%増)",
+     "dropped": null
+    },
+    "num|2533": {
+     "id": "N018",
+     "kind": "num",
+     "state": "GROUNDED",
+     "pointers": [
+      "xbrl:jppfs_cor:NetSales@CurrentYearDuration_jpcrp030000-asr_E05055-000DirectSalonReportableSegmentMember",
+      "xbrl:jppfs_cor:NetSales@Prior1YearDuration_jpcrp030000-asr_E05055-000DirectSalonReportableSegmentMember"
+     ],
+     "recomputed": 3.3,
+     "reason": null,
+     "comparator": "pct_change(cur,prior)",
+     "normalization": null,
+     "subject": "売上高",
+     "value": 3.3,
+     "unit": "%",
+     "word": null,
+     "span": "直営サロン運営事業の業績は、売上高958,229千円(前期比3.3%増)、セグメント利益",
+     "dropped": null
+    },
+    "num|2547": {
+     "id": "N019",
+     "kind": "num",
+     "state": "GROUNDED",
+     "pointers": [
+      "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration_jpcrp030000-asr_E05055-000DirectSalonReportableSegmentMember"
+     ],
+     "recomputed": 32925000.0,
+     "reason": null,
+     "comparator": "equals_within",
+     "normalization": "round",
+     "subject": "セグメント利益",
+     "value": 32925.0,
+     "unit": "千円",
+     "word": null,
+     "span": "売上高958,229千円(前期比3.3%増)、セグメント利益32,925千円(前期比42.5%減",
+     "dropped": null
+    },
+    "num|2559": {
+     "id": "N020",
+     "kind": "num",
+     "state": "GROUNDED",
+     "pointers": [
+      "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration_jpcrp030000-asr_E05055-000DirectSalonReportableSegmentMember",
+      "xbrl:jppfs_cor:OperatingIncome@Prior1YearDuration_jpcrp030000-asr_E05055-000DirectSalonReportableSegmentMember"
+     ],
+     "recomputed": -42.54,
+     "reason": null,
+     "comparator": "pct_change(cur,prior)",
+     "normalization": null,
+     "subject": "セグメント利益",
+     "value": -42.5,
+     "unit": "%",
+     "word": null,
+     "span": "(前期比3.3%増)、セグメント利益32,925千円(前期比42.5%減)となりました。",
+     "dropped": null
+    },
+    "num|2696": {
+     "id": "N021",
+     "kind": "num",
+     "state": "POINTER_NOT_FOUND",
+     "pointers": [],
+     "recomputed": null,
+     "reason": "no_element(unit not in XBRL)",
+     "comparator": null,
+     "normalization": null,
+     "subject": null,
+     "value": 5.0,
+     "unit": "店舗",
+     "word": null,
+     "span": "当連結会計年度の店舗数の異動は国内の閉店5店舗、韓国の閉店2店舗、",
+     "dropped": null
+    },
+    "num|2705": {
+     "id": "N022",
+     "kind": "num",
+     "state": "POINTER_NOT_FOUND",
+     "pointers": [],
+     "recomputed": null,
+     "reason": "no_element(unit not in XBRL)",
+     "comparator": null,
+     "normalization": null,
+     "subject": null,
+     "value": 2.0,
+     "unit": "店舗",
+     "word": null,
+     "span": "当連結会計年度の店舗数の異動は国内の閉店5店舗、韓国の閉店2店舗、台湾の出店1店舗、",
+     "dropped": null
+    },
+    "num|2714": {
+     "id": "N023",
+     "kind": "num",
+     "state": "POINTER_NOT_FOUND",
+     "pointers": [],
+     "recomputed": null,
+     "reason": "no_element(unit not in XBRL)",
+     "comparator": null,
+     "normalization": null,
+     "subject": null,
+     "value": 1.0,
+     "unit": "店舗",
+     "word": null,
+     "span": "店舗数の異動は国内の閉店5店舗、韓国の閉店2店舗、台湾の出店1店舗、中国の出店1店舗及",
+     "dropped": null
+    },
+    "num|2723": {
+     "id": "N024",
+     "kind": "num",
+     "state": "POINTER_NOT_FOUND",
+     "pointers": [],
+     "recomputed": null,
+     "reason": "no_element(unit not in XBRL)",
+     "comparator": null,
+     "normalization": null,
+     "subject": null,
+     "value": 1.0,
+     "unit": "店舗",
+     "word": null,
+     "span": "の閉店5店舗、韓国の閉店2店舗、台湾の出店1店舗、中国の出店1店舗及び閉店4店舗であり",
+     "dropped": null
+    },
+    "num|2730": {
+     "id": "N025",
+     "kind": "num",
+     "state": "POINTER_NOT_FOUND",
+     "pointers": [],
+     "recomputed": null,
+     "reason": "no_element(unit not in XBRL)",
+     "comparator": null,
+     "normalization": null,
+     "subject": null,
+     "value": 4.0,
+     "unit": "店舗",
+     "word": null,
+     "span": "韓国の閉店2店舗、台湾の出店1店舗、中国の出店1店舗及び閉店4店舗であり、当連結会計年",
+     "dropped": null
+    },
+    "num|2757": {
+     "id": "N026",
+     "kind": "num",
+     "state": "POINTER_NOT_FOUND",
+     "pointers": [],
+     "recomputed": null,
+     "reason": "no_element(unit not in XBRL)",
+     "comparator": null,
+     "normalization": null,
+     "subject": null,
+     "value": 33.0,
+     "unit": "店舗",
+     "word": null,
+     "span": "び閉店4店舗であり、当連結会計年度末日現在におきまして、国内33店舗、韓国7店舗、台湾4",
+     "dropped": null
+    },
+    "num|2764": {
+     "id": "N027",
+     "kind": "num",
+     "state": "POINTER_NOT_FOUND",
+     "pointers": [],
+     "recomputed": null,
+     "reason": "no_element(unit not in XBRL)",
+     "comparator": null,
+     "normalization": null,
+     "subject": null,
+     "value": 7.0,
+     "unit": "店舗",
+     "word": null,
+     "span": "あり、当連結会計年度末日現在におきまして、国内33店舗、韓国7店舗、台湾4店舗及び中国",
+     "dropped": null
+    },
+    "num|2770": {
+     "id": "N028",
+     "kind": "num",
+     "state": "POINTER_NOT_FOUND",
+     "pointers": [],
+     "recomputed": null,
+     "reason": "no_element(unit not in XBRL)",
+     "comparator": null,
+     "normalization": null,
+     "subject": null,
+     "value": 4.0,
+     "unit": "店舗",
+     "word": null,
+     "span": "会計年度末日現在におきまして、国内33店舗、韓国7店舗、台湾4店舗及び中国2店舗の計4",
+     "dropped": null
+    },
+    "num|2777": {
+     "id": "N029",
+     "kind": "num",
+     "state": "POINTER_NOT_FOUND",
+     "pointers": [],
+     "recomputed": null,
+     "reason": "no_element(unit not in XBRL)",
+     "comparator": null,
+     "normalization": null,
+     "subject": null,
+     "value": 2.0,
+     "unit": "店舗",
+     "word": null,
+     "span": "在におきまして、国内33店舗、韓国7店舗、台湾4店舗及び中国2店舗の計46店舗となって",
+     "dropped": null
+    },
+    "num|2782": {
+     "id": "N030",
+     "kind": "num",
+     "state": "POINTER_NOT_FOUND",
+     "pointers": [],
+     "recomputed": null,
+     "reason": "no_element(unit not in XBRL)",
+     "comparator": null,
+     "normalization": null,
+     "subject": null,
+     "value": 46.0,
+     "unit": "店舗",
+     "word": null,
+     "span": "して、国内33店舗、韓国7店舗、台湾4店舗及び中国2店舗の計46店舗となっております。",
+     "dropped": null
+    },
+    "num|3160": {
+     "id": "N031",
+     "kind": "num",
+     "state": "GROUNDED",
+     "pointers": [
+      "xbrl:jppfs_cor:NetSales@CurrentYearDuration_jpcrp030000-asr_E05055-000FranchiseReportableSegmentMember"
+     ],
+     "recomputed": 221898000.0,
+     "reason": null,
+     "comparator": "equals_within",
+     "normalization": "round",
+     "subject": "売上高",
+     "value": 221898.0,
+     "unit": "千円",
+     "word": null,
+     "span": "当連結会計年度のBSサロン運営事業の業績は、売上高221,898千円(前期比2.7%減)",
+     "dropped": null
+    },
+    "num|3173": {
+     "id": "N032",
+     "kind": "num",
+     "state": "GROUNDED",
+     "pointers": [
+      "xbrl:jppfs_cor:NetSales@CurrentYearDuration_jpcrp030000-asr_E05055-000FranchiseReportableSegmentMember",
+      "xbrl:jppfs_cor:NetSales@Prior1YearDuration_jpcrp030000-asr_E05055-000FranchiseReportableSegmentMember"
+     ],
+     "recomputed": -2.68,
+     "reason": null,
+     "comparator": "pct_change(cur,prior)",
+     "normalization": null,
+     "subject": "売上高",
+     "value": -2.7,
+     "unit": "%",
+     "word": null,
+     "span": "BSサロン運営事業の業績は、売上高221,898千円(前期比2.7%減)、セグメント利益",
+     "dropped": null
+    },
+    "num|3187": {
+     "id": "N033",
+     "kind": "num",
+     "state": "GROUNDED",
+     "pointers": [
+      "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration_jpcrp030000-asr_E05055-000FranchiseReportableSegmentMember"
+     ],
+     "recomputed": 62407000.0,
+     "reason": null,
+     "comparator": "equals_within",
+     "normalization": "round",
+     "subject": "セグメント利益",
+     "value": 62407.0,
+     "unit": "千円",
+     "word": null,
+     "span": "売上高221,898千円(前期比2.7%減)、セグメント利益62,407千円(前期比11.8%減",
+     "dropped": null
+    },
+    "num|3199": {
+     "id": "N034",
+     "kind": "num",
+     "state": "GROUNDED",
+     "pointers": [
+      "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration_jpcrp030000-asr_E05055-000FranchiseReportableSegmentMember",
+      "xbrl:jppfs_cor:OperatingIncome@Prior1YearDuration_jpcrp030000-asr_E05055-000FranchiseReportableSegmentMember"
+     ],
+     "recomputed": -11.76,
+     "reason": null,
+     "comparator": "pct_change(cur,prior)",
+     "normalization": null,
+     "subject": "セグメント利益",
+     "value": -11.8,
+     "unit": "%",
+     "word": null,
+     "span": "(前期比2.7%減)、セグメント利益62,407千円(前期比11.8%減)となりました。",
+     "dropped": null
+    },
+    "num|3399": {
+     "id": "N035",
+     "kind": "num",
+     "state": "POINTER_NOT_FOUND",
+     "pointers": [],
+     "recomputed": null,
+     "reason": "no_element(unit not in XBRL)",
+     "comparator": null,
+     "normalization": null,
+     "subject": null,
+     "value": 2000.0,
+     "unit": "件",
+     "word": null,
+     "span": "コレクション」などへの参加や、CM・ファッション雑誌など年間2,000件を超える媒体を手掛け",
+     "dropped": null
+    },
+    "num|3518": {
+     "id": "N036",
+     "kind": "num",
+     "state": "GROUNDED",
+     "pointers": [
+      "xbrl:jppfs_cor:NetSales@CurrentYearDuration_jpcrp030000-asr_E05055-000HairMakeReportableSegmentMember"
+     ],
+     "recomputed": 382711000.0,
+     "reason": null,
+     "comparator": "equals_within",
+     "normalization": "round",
+     "subject": "売上高",
+     "value": 382711.0,
+     "unit": "千円",
+     "word": null,
+     "span": "方、人件費は増加したものの全体のコストが減少した結果、売上高382,711千円(前期比2.2%増)",
+     "dropped": null
+    },
+    "num|3531": {
+     "id": "N037",
+     "kind": "num",
+     "state": "GROUNDED",
+     "pointers": [
+      "xbrl:jppfs_cor:NetSales@CurrentYearDuration_jpcrp030000-asr_E05055-000HairMakeReportableSegmentMember",
+      "xbrl:jppfs_cor:NetSales@Prior1YearDuration_jpcrp030000-asr_E05055-000HairMakeReportableSegmentMember"
+     ],
+     "recomputed": 2.17,
+     "reason": null,
+     "comparator": "pct_change(cur,prior)",
+     "normalization": null,
+     "subject": "売上高",
+     "value": 2.2,
+     "unit": "%",
+     "word": null,
+     "span": "全体のコストが減少した結果、売上高382,711千円(前期比2.2%増)、セグメント利益",
+     "dropped": null
+    },
+    "num|3545": {
+     "id": "N038",
+     "kind": "num",
+     "state": "GROUNDED",
+     "pointers": [
+      "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration_jpcrp030000-asr_E05055-000HairMakeReportableSegmentMember"
+     ],
+     "recomputed": 14953000.0,
+     "reason": null,
+     "comparator": "equals_within",
+     "normalization": "round",
+     "subject": "セグメント利益",
+     "value": 14953.0,
+     "unit": "千円",
+     "word": null,
+     "span": "売上高382,711千円(前期比2.2%増)、セグメント利益14,953千円(前期比19.2%増",
+     "dropped": null
+    },
+    "num|3557": {
+     "id": "N039",
+     "kind": "num",
+     "state": "GROUNDED",
+     "pointers": [
+      "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration_jpcrp030000-asr_E05055-000HairMakeReportableSegmentMember",
+      "xbrl:jppfs_cor:OperatingIncome@Prior1YearDuration_jpcrp030000-asr_E05055-000HairMakeReportableSegmentMember"
+     ],
+     "recomputed": 19.17,
+     "reason": null,
+     "comparator": "pct_change(cur,prior)",
+     "normalization": null,
+     "subject": "セグメント利益",
+     "value": 19.2,
+     "unit": "%",
+     "word": null,
+     "span": "(前期比2.2%増)、セグメント利益14,953千円(前期比19.2%増)となりました。",
+     "dropped": null
+    },
+    "num|3956": {
+     "id": "N040",
+     "kind": "num",
+     "state": "GROUNDED",
+     "pointers": [
+      "xbrl:jppfs_cor:NetSales@CurrentYearDuration_jpcrp030000-asr_E05055-000BeautyBusinessSupportBusinessReportableSegmentMember"
+     ],
+     "recomputed": 122230000.0,
+     "reason": null,
+     "comparator": "equals_within",
+     "normalization": "round",
+     "subject": "売上高",
+     "value": 122230.0,
+     "unit": "千円",
+     "word": null,
+     "span": "となりましたが、人件費の増加等により僅かに減益となり、売上高122,230千円(前期比1.1%増)",
+     "dropped": null
+    },
+    "num|3969": {
+     "id": "N041",
+     "kind": "num",
+     "state": "GROUNDED",
+     "pointers": [
+      "xbrl:jppfs_cor:NetSales@CurrentYearDuration_jpcrp030000-asr_E05055-000BeautyBusinessSupportBusinessReportableSegmentMember",
+      "xbrl:jppfs_cor:NetSales@Prior1YearDuration_jpcrp030000-asr_E05055-000BeautyBusinessSupportBusinessReportableSegmentMember"
+     ],
+     "recomputed": 1.12,
+     "reason": null,
+     "comparator": "pct_change(cur,prior)",
+     "normalization": null,
+     "subject": "売上高",
+     "value": 1.1,
+     "unit": "%",
+     "word": null,
+     "span": "加等により僅かに減益となり、売上高122,230千円(前期比1.1%増)、セグメント利益",
+     "dropped": null
+    },
+    "num|3983": {
+     "id": "N042",
+     "kind": "num",
+     "state": "GROUNDED",
+     "pointers": [
+      "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration_jpcrp030000-asr_E05055-000BeautyBusinessSupportBusinessReportableSegmentMember"
+     ],
+     "recomputed": 76608000.0,
+     "reason": null,
+     "comparator": "equals_within",
+     "normalization": "round",
+     "subject": "セグメント利益",
+     "value": 76608.0,
+     "unit": "千円",
+     "word": null,
+     "span": "売上高122,230千円(前期比1.1%増)、セグメント利益76,608千円(前期比2.2%減)",
+     "dropped": null
+    },
+    "num|3995": {
+     "id": "N043",
+     "kind": "num",
+     "state": "GROUNDED",
+     "pointers": [
+      "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration_jpcrp030000-asr_E05055-000BeautyBusinessSupportBusinessReportableSegmentMember",
+      "xbrl:jppfs_cor:OperatingIncome@Prior1YearDuration_jpcrp030000-asr_E05055-000BeautyBusinessSupportBusinessReportableSegmentMember"
+     ],
+     "recomputed": -2.17,
+     "reason": null,
+     "comparator": "pct_change(cur,prior)",
+     "normalization": null,
+     "subject": "セグメント利益",
+     "value": -2.2,
+     "unit": "%",
+     "word": null,
+     "span": "(前期比1.1%増)、セグメント利益76,608千円(前期比2.2%減)となりました。",
+     "dropped": null
+    },
+    "num|4251": {
+     "id": "N044",
+     "kind": "num",
+     "state": "GROUNDED",
+     "pointers": [
+      "xbrl:jppfs_cor:NetSales@CurrentYearDuration_jpcrp030000-asr_E05055-000CareerDesignReportableSegmentMember"
+     ],
+     "recomputed": 253763000.0,
+     "reason": null,
+     "comparator": "equals_within",
+     "normalization": "round",
+     "subject": "売上高",
+     "value": 253763.0,
+     "unit": "千円",
+     "word": null,
+     "span": "数が前期に比べ減少する一方、コスト削減効果も相まって、売上高253,763千円(前期比8.6%減)",
+     "dropped": null
+    },
+    "num|4264": {
+     "id": "N045",
+     "kind": "num",
+     "state": "GROUNDED",
+     "pointers": [
+      "xbrl:jppfs_cor:NetSales@CurrentYearDuration_jpcrp030000-asr_E05055-000CareerDesignReportableSegmentMember",
+      "xbrl:jppfs_cor:NetSales@Prior1YearDuration_jpcrp030000-asr_E05055-000CareerDesignReportableSegmentMember"
+     ],
+     "recomputed": -8.64,
+     "reason": null,
+     "comparator": "pct_change(cur,prior)",
+     "normalization": null,
+     "subject": "売上高",
+     "value": -8.6,
+     "unit": "%",
+     "word": null,
+     "span": "、コスト削減効果も相まって、売上高253,763千円(前期比8.6%減)、セグメント利益",
+     "dropped": null
+    },
+    "num|4278": {
+     "id": "N046",
+     "kind": "num",
+     "state": "GROUNDED",
+     "pointers": [
+      "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration_jpcrp030000-asr_E05055-000CareerDesignReportableSegmentMember"
+     ],
+     "recomputed": 14224000.0,
+     "reason": null,
+     "comparator": "equals_within",
+     "normalization": "round",
+     "subject": "セグメント利益",
+     "value": 14224.0,
+     "unit": "千円",
+     "word": null,
+     "span": "売上高253,763千円(前期比8.6%減)、セグメント利益14,224千円(前期比7.6%増)",
+     "dropped": null
+    },
+    "num|4290": {
+     "id": "N047",
+     "kind": "num",
+     "state": "GROUNDED",
+     "pointers": [
+      "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration_jpcrp030000-asr_E05055-000CareerDesignReportableSegmentMember",
+      "xbrl:jppfs_cor:OperatingIncome@Prior1YearDuration_jpcrp030000-asr_E05055-000CareerDesignReportableSegmentMember"
+     ],
+     "recomputed": 7.62,
+     "reason": null,
+     "comparator": "pct_change(cur,prior)",
+     "normalization": null,
+     "subject": "セグメント利益",
+     "value": 7.6,
+     "unit": "%",
+     "word": null,
+     "span": "(前期比8.6%減)、セグメント利益14,224千円(前期比7.6%増)となりました。",
+     "dropped": null
+    },
+    "num|4438": {
+     "id": "N048",
+     "kind": "num",
+     "state": "VALUE_MISMATCH",
+     "pointers": [
+      "xbrl:jpcrp_cor:NetCashProvidedByUsedInFinancingActivitiesSummaryOfBusinessResults@CurrentYearDuration"
+     ],
+     "recomputed": 131757000.0,
+     "reason": null,
+     "comparator": "equals_within",
+     "normalization": null,
+     "subject": "財務活動によるキャッシュ・フロー",
+     "value": 505066.0,
+     "unit": "千円",
+     "word": null,
+     "span": "となる一方、財務活動によるキャッシュ・フローがプラスとなり、505,066千円(前連結会計年度比1",
+     "dropped": null
+    },
+    "num|4456": {
+     "id": "N049",
+     "kind": "num",
+     "state": "VALUE_MISMATCH",
+     "pointers": [
+      "xbrl:jpcrp_cor:NetCashProvidedByUsedInFinancingActivitiesSummaryOfBusinessResults@CurrentYearDuration",
+      "xbrl:jpcrp_cor:NetCashProvidedByUsedInFinancingActivitiesSummaryOfBusinessResults@Prior1YearDuration"
+     ],
+     "recomputed": 379.19,
+     "reason": null,
+     "comparator": "pct_change(cur,prior)",
+     "normalization": null,
+     "subject": "財務活動によるキャッシュ・フロー",
+     "value": -11.9,
+     "unit": "%",
+     "word": null,
+     "span": "・フローがプラスとなり、505,066千円(前連結会計年度比11.9%減)となりました。",
+     "dropped": null
+    },
+    "num|4556": {
+     "id": "N050",
+     "kind": "num",
+     "state": "UNVERIFIABLE",
+     "pointers": [],
+     "recomputed": null,
+     "reason": "ambiguous(elements)",
+     "comparator": null,
+     "normalization": null,
+     "subject": null,
+     "value": 71459.0,
+     "unit": "千円",
+     "word": null,
+     "span": "営業活動の結果、使用した資金は71,459千円(前連結会計年度は獲",
+     "dropped": null
+    },
+    "num|4579": {
+     "id": "N051",
+     "kind": "num",
+     "state": "UNVERIFIABLE",
+     "pointers": [],
+     "recomputed": null,
+     "reason": "ambiguous(elements)",
+     "comparator": null,
+     "normalization": null,
+     "subject": null,
+     "value": 29377.0,
+     "unit": "千円",
+     "word": null,
+     "span": "使用した資金は71,459千円(前連結会計年度は獲得した資金29,377千円)となりました。",
+     "dropped": null
+    },
+    "num|4611": {
+     "id": "N052",
+     "kind": "num",
+     "state": "GROUNDED",
+     "pointers": [
+      "xbrl:jppfs_cor:IncomeBeforeIncomeTaxes@CurrentYearDuration"
+     ],
+     "recomputed": -102694000.0,
+     "reason": null,
+     "comparator": "equals_within",
+     "normalization": "abs+round",
+     "subject": null,
+     "value": 102694.0,
+     "unit": "千円",
+     "word": null,
+     "span": "これは主に税金等調整前当期純損失102,694千円、減価償却費14,4",
+     "dropped": null
+    },
+    "num|4626": {
+     "id": "N053",
+     "kind": "num",
+     "state": "GROUNDED",
+     "pointers": [
+      "xbrl:jppfs_cor:DepreciationAndAmortizationOpeCF@CurrentYearDuration"
+     ],
+     "recomputed": 14423000.0,
+     "reason": null,
+     "comparator": "equals_within",
+     "normalization": "round",
+     "subject": "減価償却費",
+     "value": 14423.0,
+     "unit": "千円",
+     "word": null,
+     "span": "れは主に税金等調整前当期純損失102,694千円、減価償却費14,423千円、のれん償却額7,1",
+     "dropped": null
+    },
+    "num|4641": {
+     "id": "N054",
+     "kind": "num",
+     "state": "VALUE_MISMATCH",
+     "pointers": [
+      "xbrl:jppfs_cor:DepreciationAndAmortizationOpeCF@CurrentYearDuration"
+     ],
+     "recomputed": 14423000.0,
+     "reason": null,
+     "comparator": "equals_within",
+     "normalization": null,
+     "subject": "減価償却費",
+     "value": 7199.0,
+     "unit": "千円",
+     "word": null,
+     "span": "102,694千円、減価償却費14,423千円、のれん償却額7,199千円、株式交付費48,1",
+     "dropped": null
+    },
+    "num|4654": {
+     "id": "N055",
+     "kind": "num",
+     "state": "VALUE_MISMATCH",
+     "pointers": [
+      "xbrl:jppfs_cor:DepreciationAndAmortizationOpeCF@CurrentYearDuration"
+     ],
+     "recomputed": 14423000.0,
+     "reason": null,
+     "comparator": "equals_within",
+     "normalization": null,
+     "subject": "減価償却費",
+     "value": 48190.0,
+     "unit": "千円",
+     "word": null,
+     "span": "却費14,423千円、のれん償却額7,199千円、株式交付費48,190千円、棚卸資産の増加額2",
+     "dropped": null
+    },
+    "num|4671": {
+     "id": "N056",
+     "kind": "num",
+     "state": "VALUE_MISMATCH",
+     "pointers": [
+      "xbrl:jppfs_cor:DepreciationAndAmortizationOpeCF@CurrentYearDuration"
+     ],
+     "recomputed": 14423000.0,
+     "reason": null,
+     "comparator": "equals_within",
+     "normalization": null,
+     "subject": "減価償却費",
+     "value": 23262.0,
+     "unit": "千円",
+     "word": null,
+     "span": "7,199千円、株式交付費48,190千円、棚卸資産の増加額23,262千円、未払消費税等の減少",
+     "dropped": null
+    },
+    "num|4690": {
+     "id": "N057",
+     "kind": "num",
+     "state": "VALUE_MISMATCH",
+     "pointers": [
+      "xbrl:jppfs_cor:DepreciationAndAmortizationOpeCF@CurrentYearDuration"
+     ],
+     "recomputed": 14423000.0,
+     "reason": null,
+     "comparator": "equals_within",
+     "normalization": null,
+     "subject": "減価償却費",
+     "value": 14472.0,
+     "unit": "千円",
+     "word": null,
+     "span": "千円、棚卸資産の増加額23,262千円、未払消費税等の減少額14,472千円などによるものであり",
+     "dropped": null
+    },
+    "num|4753": {
+     "id": "N058",
+     "kind": "num",
+     "state": "UNVERIFIABLE",
+     "pointers": [],
+     "recomputed": null,
+     "reason": "ambiguous(elements)",
+     "comparator": null,
+     "normalization": null,
+     "subject": null,
+     "value": 129331.0,
+     "unit": "千円",
+     "word": null,
+     "span": "投資活動の結果、使用した資金は129,331千円(前連結会計年度は使",
+     "dropped": null
+    },
+    "num|4777": {
+     "id": "N059",
+     "kind": "num",
+     "state": "UNVERIFIABLE",
+     "pointers": [],
+     "recomputed": null,
+     "reason": "ambiguous(elements)",
+     "comparator": null,
+     "normalization": null,
+     "subject": null,
+     "value": 10892.0,
+     "unit": "千円",
+     "word": null,
+     "span": "用した資金は129,331千円(前連結会計年度は使用した資金10,892千円)となりました。",
+     "dropped": null
+    },
+    "num|4812": {
+     "id": "N060",
+     "kind": "num",
+     "state": "GROUNDED",
+     "pointers": [
+      "xbrl:jppfs_cor:PurchaseOfPropertyPlantAndEquipmentInvCF@CurrentYearDuration"
+     ],
+     "recomputed": -30073000.0,
+     "reason": null,
+     "comparator": "equals_within",
+     "normalization": "abs+round",
+     "subject": "有形固定資産の取得による支出",
+     "value": 30073.0,
+     "unit": "千円",
+     "word": null,
+     "span": "これは主に有形固定資産の取得による支出30,073千円、差入保証金の差入に",
+     "dropped": null
+    },
+    "num|4834": {
+     "id": "N061",
+     "kind": "num",
+     "state": "VALUE_MISMATCH",
+     "pointers": [
+      "xbrl:jppfs_cor:PurchaseOfPropertyPlantAndEquipmentInvCF@CurrentYearDuration"
+     ],
+     "recomputed": -30073000.0,
+     "reason": null,
+     "comparator": "equals_within",
+     "normalization": null,
+     "subject": "有形固定資産の取得による支出",
+     "value": 44746.0,
+     "unit": "千円",
+     "word": null,
+     "span": "の取得による支出30,073千円、差入保証金の差入による支出44,746千円、短期貸付による支出",
+     "dropped": null
+    },
+    "num|4852": {
+     "id": "N062",
+     "kind": "num",
+     "state": "VALUE_MISMATCH",
+     "pointers": [
+      "xbrl:jppfs_cor:PurchaseOfPropertyPlantAndEquipmentInvCF@CurrentYearDuration"
+     ],
+     "recomputed": -30073000.0,
+     "reason": null,
+     "comparator": "equals_within",
+     "normalization": null,
+     "subject": "有形固定資産の取得による支出",
+     "value": 50000.0,
+     "unit": "千円",
+     "word": null,
+     "span": "入保証金の差入による支出44,746千円、短期貸付による支出50,000千円などによるものであり",
+     "dropped": null
+    },
+    "num|4915": {
+     "id": "N063",
+     "kind": "num",
+     "state": "UNVERIFIABLE",
+     "pointers": [],
+     "recomputed": null,
+     "reason": "ambiguous(elements)",
+     "comparator": null,
+     "normalization": null,
+     "subject": null,
+     "value": 131757.0,
+     "unit": "千円",
+     "word": null,
+     "span": "財務活動の結果、獲得した資金は131,757千円(前連結会計年度は使",
+     "dropped": null
+    },
+    "num|4939": {
+     "id": "N064",
+     "kind": "num",
+     "state": "UNVERIFIABLE",
+     "pointers": [],
+     "recomputed": null,
+     "reason": "ambiguous(elements)",
+     "comparator": null,
+     "normalization": null,
+     "subject": null,
+     "value": 47193.0,
+     "unit": "千円",
+     "word": null,
+     "span": "得した資金は131,757千円(前連結会計年度は使用した資金47,193千円)となりました。",
+     "dropped": null
+    },
+    "num|4969": {
+     "id": "N065",
+     "kind": "num",
+     "state": "GROUNDED",
+     "pointers": [
+      "xbrl:jppfs_cor:IncreaseDecreaseInShortTermLoansPayableFinCF@CurrentYearDuration"
+     ],
+     "recomputed": 150000000.0,
+     "reason": null,
+     "comparator": "equals_within",
+     "normalization": "round",
+     "subject": null,
+     "value": 150000.0,
+     "unit": "千円",
+     "word": null,
+     "span": "これは主に短期借入金の増加額150,000千円、長期借入金の返済に",
+     "dropped": null
+    },
+    "num|4992": {
+     "id": "N066",
+     "kind": "num",
+     "state": "POINTER_NOT_FOUND",
+     "pointers": [],
+     "recomputed": null,
+     "reason": "no_element",
+     "comparator": null,
+     "normalization": null,
+     "subject": "長期借入金の返済",
+     "value": 12471.0,
+     "unit": "千円",
+     "word": null,
+     "span": "借入金の増加額150,000千円、長期借入金の返済による支出12,471千円、配当金の支払額5,",
+     "dropped": null
+    },
+    "num|5008": {
+     "id": "N067",
+     "kind": "num",
+     "state": "GROUNDED",
+     "pointers": [
+      "xbrl:jppfs_cor:CashDividendsPaidFinCF@CurrentYearDuration"
+     ],
+     "recomputed": -5771000.0,
+     "reason": null,
+     "comparator": "equals_within",
+     "normalization": "abs+round",
+     "subject": "配当金の支払額",
+     "value": 5771.0,
+     "unit": "千円",
+     "word": null,
+     "span": "、長期借入金の返済による支出12,471千円、配当金の支払額5,771千円によるものであります",
+     "dropped": null
+    },
+    "num|5994": {
+     "id": "N068",
+     "kind": "num",
+     "state": "GROUNDED",
+     "pointers": [
+      "xbrl:jpcrp_cor:NetSalesSummaryOfBusinessResults@CurrentYearDuration"
+     ],
+     "recomputed": 1850502000.0,
+     "reason": null,
+     "comparator": "equals_within",
+     "normalization": "round",
+     "subject": "売上高",
+     "value": 1850502.0,
+     "unit": "千円",
+     "word": null,
+     "span": "売上高は、1,850,502千円と前連結会計年度に比",
+     "dropped": null
+    },
+    "num|6016": {
+     "id": "N069",
+     "kind": "num",
+     "state": "GROUNDED",
+     "pointers": [
+      "xbrl:jpcrp_cor:NetSalesSummaryOfBusinessResults@CurrentYearDuration",
+      "xbrl:jpcrp_cor:NetSalesSummaryOfBusinessResults@Prior1YearDuration",
+      "formula:a-b"
+     ],
+     "recomputed": 6442000.0,
+     "reason": null,
+     "comparator": "diff(a-b) equals_within",
+     "normalization": "round",
+     "subject": "売上高",
+     "value": 6442.0,
+     "unit": "千円",
+     "word": null,
+     "span": "売上高は、1,850,502千円と前連結会計年度に比べ6,442千円増加(前連結会計年度",
+     "dropped": null
+    },
+    "num|6034": {
+     "id": "N070",
+     "kind": "num",
+     "state": "GROUNDED",
+     "pointers": [
+      "xbrl:jpcrp_cor:NetSalesSummaryOfBusinessResults@CurrentYearDuration",
+      "xbrl:jpcrp_cor:NetSalesSummaryOfBusinessResults@Prior1YearDuration"
+     ],
+     "recomputed": 0.35,
+     "reason": null,
+     "comparator": "pct_change(cur,prior)",
+     "normalization": null,
+     "subject": "売上高",
+     "value": 0.3,
+     "unit": "%",
+     "word": null,
+     "span": "円と前連結会計年度に比べ6,442千円増加(前連結会計年度比0.3%増)いたしました。",
+     "dropped": null
+    },
+    "num|6165": {
+     "id": "N071",
+     "kind": "num",
+     "state": "POINTER_NOT_FOUND",
+     "pointers": [],
+     "recomputed": null,
+     "reason": "no_element",
+     "comparator": null,
+     "normalization": null,
+     "subject": null,
+     "value": 30950.0,
+     "unit": "千円",
+     "word": null,
+     "span": "売上原価は30,950千円増加(前連結会計年度",
+     "dropped": null
+    },
+    "num|6184": {
+     "id": "N072",
+     "kind": "num",
+     "state": "UNVERIFIABLE",
+     "pointers": [],
+     "recomputed": null,
+     "reason": "no_subject",
+     "comparator": null,
+     "normalization": null,
+     "subject": null,
+     "value": 2.3,
+     "unit": "%",
+     "word": null,
+     "span": "売上原価は30,950千円増加(前連結会計年度比2.3%増)し、1,377,",
+     "dropped": null
+    },
+    "num|6192": {
+     "id": "N073",
+     "kind": "num",
+     "state": "GROUNDED",
+     "pointers": [
+      "xbrl:jppfs_cor:CostOfSales@CurrentYearDuration"
+     ],
+     "recomputed": 1377499000.0,
+     "reason": null,
+     "comparator": "equals_within",
+     "normalization": "round",
+     "subject": null,
+     "value": 1377499.0,
+     "unit": "千円",
+     "word": null,
+     "span": "原価は30,950千円増加(前連結会計年度比2.3%増)し、1,377,499千円となり、販売費及び一",
+     "dropped": null
+    },
+    "num|6225": {
+     "id": "N074",
+     "kind": "num",
+     "state": "GROUNDED",
+     "pointers": [
+      "xbrl:jppfs_cor:SellingGeneralAndAdministrativeExpenses@CurrentYearDuration",
+      "xbrl:jppfs_cor:SellingGeneralAndAdministrativeExpenses@Prior1YearDuration",
+      "formula:a-b"
+     ],
+     "recomputed": 17979000.0,
+     "reason": null,
+     "comparator": "diff(a-b) equals_within",
+     "normalization": "round",
+     "subject": "販売費及び一般管理費",
+     "value": 17979.0,
+     "unit": "千円",
+     "word": null,
+     "span": "77,499千円となり、販売費及び一般管理費につきましては、17,979千円増加(前連結会計年度",
+     "dropped": null
+    },
+    "num|6244": {
+     "id": "N075",
+     "kind": "num",
+     "state": "GROUNDED",
+     "pointers": [
+      "xbrl:jppfs_cor:SellingGeneralAndAdministrativeExpenses@CurrentYearDuration",
+      "xbrl:jppfs_cor:SellingGeneralAndAdministrativeExpenses@Prior1YearDuration"
+     ],
+     "recomputed": 3.54,
+     "reason": null,
+     "comparator": "pct_change(cur,prior)",
+     "normalization": null,
+     "subject": "販売費及び一般管理費",
+     "value": 3.5,
+     "unit": "%",
+     "word": null,
+     "span": "管理費につきましては、17,979千円増加(前連結会計年度比3.5%増)し、525,20",
+     "dropped": null
+    },
+    "num|6252": {
+     "id": "N076",
+     "kind": "num",
+     "state": "GROUNDED",
+     "pointers": [
+      "xbrl:jppfs_cor:SellingGeneralAndAdministrativeExpenses@CurrentYearDuration"
+     ],
+     "recomputed": 525200000.0,
+     "reason": null,
+     "comparator": "equals_within",
+     "normalization": "round",
+     "subject": "販売費及び一般管理費",
+     "value": 525200.0,
+     "unit": "千円",
+     "word": null,
+     "span": "ては、17,979千円増加(前連結会計年度比3.5%増)し、525,200千円となりました。",
+     "dropped": null
+    },
+    "num|6284": {
+     "id": "N077",
+     "kind": "num",
+     "state": "GROUNDED",
+     "pointers": [
+      "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration"
+     ],
+     "recomputed": -52196000.0,
+     "reason": null,
+     "comparator": "equals_within",
+     "normalization": "abs+round",
+     "subject": "営業損失",
+     "value": 52196.0,
+     "unit": "千円",
+     "word": null,
+     "span": "営業損益につきましては、営業損失52,196千円と前連結会計年度に比",
+     "dropped": null
+    },
+    "num|6303": {
+     "id": "N078",
+     "kind": "num",
+     "state": "GROUNDED",
+     "pointers": [
+      "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration",
+      "xbrl:jppfs_cor:OperatingIncome@Prior1YearDuration",
+      "formula:a-b"
+     ],
+     "recomputed": -42487000.0,
+     "reason": null,
+     "comparator": "diff(a-b) equals_within",
+     "normalization": "abs+round",
+     "subject": "営業損失",
+     "value": 42487.0,
+     "unit": "千円",
+     "word": null,
+     "span": "つきましては、営業損失52,196千円と前連結会計年度に比べ42,487千円(前連結会計年度は営",
+     "dropped": null
+    },
+    "num|6324": {
+     "id": "N079",
+     "kind": "num",
+     "state": "GROUNDED",
+     "pointers": [
+      "xbrl:jppfs_cor:OperatingIncome@Prior1YearDuration"
+     ],
+     "recomputed": -9709000.0,
+     "reason": null,
+     "comparator": "equals_within",
+     "normalization": "abs+round",
+     "subject": "営業損失",
+     "value": 9709.0,
+     "unit": "千円",
+     "word": null,
+     "span": "連結会計年度に比べ42,487千円(前連結会計年度は営業損失9,709千円)の減益となりました",
+     "dropped": null
+    },
+    "num|6363": {
+     "id": "N080",
+     "kind": "num",
+     "state": "GROUNDED",
+     "pointers": [
+      "xbrl:jppfs_cor:NonOperatingIncome@CurrentYearDuration"
+     ],
+     "recomputed": 4171000.0,
+     "reason": null,
+     "comparator": "equals_within",
+     "normalization": "round",
+     "subject": null,
+     "value": 4171.0,
+     "unit": "千円",
+     "word": null,
+     "span": "営業外損益におきましては、営業外収益4,171千円、営業外費用50,5",
+     "dropped": null
+    },
+    "num|6376": {
+     "id": "N081",
+     "kind": "num",
+     "state": "GROUNDED",
+     "pointers": [
+      "xbrl:jppfs_cor:NonOperatingExpenses@CurrentYearDuration"
+     ],
+     "recomputed": 50551000.0,
+     "reason": null,
+     "comparator": "equals_within",
+     "normalization": "round",
+     "subject": null,
+     "value": 50551.0,
+     "unit": "千円",
+     "word": null,
+     "span": "業外損益におきましては、営業外収益4,171千円、営業外費用50,551千円を計上し、経常損失9",
+     "dropped": null
+    },
+    "num|6393": {
+     "id": "N082",
+     "kind": "num",
+     "state": "GROUNDED",
+     "pointers": [
+      "xbrl:jpcrp_cor:OrdinaryIncomeLossSummaryOfBusinessResults@CurrentYearDuration"
+     ],
+     "recomputed": -98576000.0,
+     "reason": null,
+     "comparator": "equals_within",
+     "normalization": "abs+round",
+     "subject": "経常損失",
+     "value": 98576.0,
+     "unit": "千円",
+     "word": null,
+     "span": "4,171千円、営業外費用50,551千円を計上し、経常損失98,576千円と前連結会計年度に比",
+     "dropped": null
+    },
+    "num|6412": {
+     "id": "N083",
+     "kind": "num",
+     "state": "GROUNDED",
+     "pointers": [
+      "xbrl:jpcrp_cor:OrdinaryIncomeLossSummaryOfBusinessResults@CurrentYearDuration",
+      "xbrl:jpcrp_cor:OrdinaryIncomeLossSummaryOfBusinessResults@Prior1YearDuration",
+      "formula:a-b"
+     ],
+     "recomputed": -91485000.0,
+     "reason": null,
+     "comparator": "diff(a-b) equals_within",
+     "normalization": "abs+round",
+     "subject": "経常損失",
+     "value": 91485.0,
+     "unit": "千円",
+     "word": null,
+     "span": "千円を計上し、経常損失98,576千円と前連結会計年度に比べ91,485千円(前連結会計年度は経",
+     "dropped": null
+    },
+    "num|6433": {
+     "id": "N084",
+     "kind": "num",
+     "state": "GROUNDED",
+     "pointers": [
+      "xbrl:jpcrp_cor:OrdinaryIncomeLossSummaryOfBusinessResults@Prior1YearDuration"
+     ],
+     "recomputed": -7091000.0,
+     "reason": null,
+     "comparator": "equals_within",
+     "normalization": "abs+round",
+     "subject": "経常損失",
+     "value": 7091.0,
+     "unit": "千円",
+     "word": null,
+     "span": "連結会計年度に比べ91,485千円(前連結会計年度は経常損失7,091千円)の減益となりました",
+     "dropped": null
+    },
+    "num|6492": {
+     "id": "N085",
+     "kind": "num",
+     "state": "UNVERIFIABLE",
+     "pointers": [],
+     "recomputed": null,
+     "reason": "ambiguous(elements)",
+     "comparator": null,
+     "normalization": null,
+     "subject": null,
+     "value": 48190.0,
+     "unit": "千円",
+     "word": null,
+     "span": "新株式発行及び第2回新株予約権の発行に係る諸費用を株式交付費48,190千円として営業外費用に計",
+     "dropped": null
+    },
+    "num|6535": {
+     "id": "N086",
+     "kind": "num",
+     "state": "UNVERIFIABLE",
+     "pointers": [],
+     "recomputed": null,
+     "reason": "ambiguous(elements)",
+     "comparator": null,
+     "normalization": null,
+     "subject": null,
+     "value": 3758.0,
+     "unit": "千円",
+     "word": null,
+     "span": "また、特別損失として減損損失3,758千円を計上したことにより",
+     "dropped": null
+    },
+    "num|6568": {
+     "id": "N087",
+     "kind": "num",
+     "state": "UNVERIFIABLE",
+     "pointers": [],
+     "recomputed": null,
+     "reason": "ambiguous(elements)",
+     "comparator": null,
+     "normalization": null,
+     "subject": null,
+     "value": 105873.0,
+     "unit": "千円",
+     "word": null,
+     "span": "58千円を計上したことにより、親会社株主に帰属する当期純損失105,873千円と前連結会計年度に比",
+     "dropped": null
+    },
+    "num|6588": {
+     "id": "N088",
+     "kind": "num",
+     "state": "POINTER_NOT_FOUND",
+     "pointers": [],
+     "recomputed": null,
+     "reason": "no_element",
+     "comparator": null,
+     "normalization": null,
+     "subject": null,
+     "value": 88251.0,
+     "unit": "千円",
+     "word": null,
+     "span": "に帰属する当期純損失105,873千円と前連結会計年度に比べ88,251千円(前連結会計年度は親",
+     "dropped": null
+    },
+    "num|6620": {
+     "id": "N089",
+     "kind": "num",
+     "state": "UNVERIFIABLE",
+     "pointers": [],
+     "recomputed": null,
+     "reason": "ambiguous(elements)",
+     "comparator": null,
+     "normalization": null,
+     "subject": null,
+     "value": 17621.0,
+     "unit": "千円",
+     "word": null,
+     "span": ",251千円(前連結会計年度は親会社株主に帰属する当期純損失17,621千円)の減益となりました",
+     "dropped": null
+    },
+    "num|7079": {
+     "id": "N090",
+     "kind": "num",
+     "state": "POINTER_NOT_FOUND",
+     "pointers": [],
+     "recomputed": null,
+     "reason": "no_element",
+     "comparator": null,
+     "normalization": null,
+     "subject": null,
+     "value": 1000000000.0,
+     "unit": "円",
+     "word": null,
+     "span": "これにより2026年7月に新株式発行によって約10億円の資金調達を実施して",
+     "dropped": null
+    },
+    "num|7111": {
+     "id": "N091",
+     "kind": "num",
+     "state": "UNVERIFIABLE",
+     "pointers": [],
+     "recomputed": null,
+     "reason": "target_or_plan",
+     "comparator": null,
+     "normalization": null,
+     "subject": null,
+     "value": 3500000000.0,
+     "unit": "円",
+     "word": null,
+     "span": "億円の資金調達を実施しており、今後、新株予約権の行使による約35億円の資金調達を見込んで",
+     "dropped": null
+    },
+    "text|1222": {
+     "id": "T008",
+     "kind": "text",
+     "state": "UNVERIFIABLE",
+     "pointers": [],
+     "recomputed": null,
+     "reason": "ambiguous(member)",
+     "comparator": null,
+     "normalization": null,
+     "subject": "売上高",
+     "value": null,
+     "unit": null,
+     "word": "増収",
+     "span": "事業、ヘアメイク事業、美容室支援事業が堅調に推移し前期に比べ増収となり、全",
+     "dropped": null
+    },
+    "text|1234": {
+     "id": "T009",
+     "kind": "text",
+     "state": "GROUNDED",
+     "pointers": [
+      "xbrl:jpcrp_cor:NetSalesSummaryOfBusinessResults@CurrentYearDuration",
+      "xbrl:jpcrp_cor:NetSalesSummaryOfBusinessResults@Prior1YearDuration",
+      "builtin:sign(cur-prior)"
+     ],
+     "recomputed": 6442000.0,
+     "reason": null,
+     "comparator": "builtin:sign(cur-prior)==direction",
+     "normalization": null,
+     "subject": "売上高",
+     "value": null,
+     "unit": null,
+     "word": "増収",
+     "span": "容室支援事業が堅調に推移し前期に比べ増収となり、全社としても増収となりまし",
+     "dropped": null
+    },
+    "text|1177": {
+     "id": "T010",
+     "kind": "text",
+     "state": "UNVERIFIABLE",
+     "pointers": [],
+     "recomputed": null,
+     "reason": "ambiguous(member)",
+     "comparator": null,
+     "normalization": null,
+     "subject": "売上高",
+     "value": null,
+     "unit": null,
+     "word": "減少",
+     "span": "ては、BSサロン運営事業及びキャリアデザイン事業が前期に比べ減少しましたが",
+     "dropped": null
+    },
+    "text|2336": {
+     "id": "T013",
+     "kind": "text",
+     "state": "GROUNDED",
+     "pointers": [
+      "xbrl:jpcrp_cor:NetSalesSummaryOfBusinessResults@CurrentYearDuration",
+      "xbrl:jpcrp_cor:NetSalesSummaryOfBusinessResults@Prior1YearDuration",
+      "builtin:sign(cur-prior)"
+     ],
+     "recomputed": 6442000.0,
+     "reason": null,
+     "comparator": "builtin:sign(cur-prior)==direction",
+     "normalization": null,
+     "subject": "売上高",
+     "value": null,
+     "unit": null,
+     "word": "増収",
+     "span": "店舗出店及びアカデミー開設に係る費用の発生等により前期に比べ増収減益となり",
+     "dropped": null
+    },
+    "text|2299": {
+     "id": "T014",
+     "kind": "text",
+     "state": "GROUNDED",
+     "pointers": [
+      "xbrl:jpcrp_cor:NetSalesSummaryOfBusinessResults@CurrentYearDuration",
+      "xbrl:jpcrp_cor:NetSalesSummaryOfBusinessResults@Prior1YearDuration",
+      "builtin:sign(cur-prior)"
+     ],
+     "recomputed": 6442000.0,
+     "reason": null,
+     "comparator": "builtin:sign(cur-prior)==direction",
+     "normalization": null,
+     "subject": "売上高",
+     "value": null,
+     "unit": null,
+     "word": "増加",
+     "span": "は、売上高は堅調に推移したものの、原材料価格の高騰や人件費の増加の影響、新",
+     "dropped": null
+    },
+    "text|2338": {
+     "id": "T015",
+     "kind": "text",
+     "state": "VALUE_MISMATCH",
+     "pointers": [
+      "xbrl:jpcrp_cor:NetSalesSummaryOfBusinessResults@CurrentYearDuration",
+      "xbrl:jpcrp_cor:NetSalesSummaryOfBusinessResults@Prior1YearDuration",
+      "builtin:sign(cur-prior)"
+     ],
+     "recomputed": 6442000.0,
+     "reason": null,
+     "comparator": "builtin:sign(cur-prior)==direction",
+     "normalization": null,
+     "subject": "売上高",
+     "value": null,
+     "unit": null,
+     "word": "減益",
+     "span": "出店及びアカデミー開設に係る費用の発生等により前期に比べ増収減益となりまし",
+     "dropped": null
+    },
+    "text|3938": {
+     "id": "T025",
+     "kind": "text",
+     "state": "GROUNDED",
+     "pointers": [
+      "xbrl:jppfs_cor:NetSales@CurrentYearDuration_jpcrp030000-asr_E05055-000BeautyBusinessSupportBusinessReportableSegmentMember",
+      "xbrl:jppfs_cor:NetSales@Prior1YearDuration_jpcrp030000-asr_E05055-000BeautyBusinessSupportBusinessReportableSegmentMember",
+      "builtin:sign(cur-prior)"
+     ],
+     "recomputed": 1355000.0,
+     "reason": null,
+     "comparator": "builtin:sign(cur-prior)==direction",
+     "normalization": null,
+     "subject": "売上高",
+     "value": null,
+     "unit": null,
+     "word": "増加",
+     "span": "堅調に推移し、売上高は前期に比べ微増となりましたが、人件費の増加等により僅",
+     "dropped": null
+    },
+    "text|3947": {
+     "id": "T026",
+     "kind": "text",
+     "state": "VALUE_MISMATCH",
+     "pointers": [
+      "xbrl:jppfs_cor:NetSales@CurrentYearDuration_jpcrp030000-asr_E05055-000BeautyBusinessSupportBusinessReportableSegmentMember",
+      "xbrl:jppfs_cor:NetSales@Prior1YearDuration_jpcrp030000-asr_E05055-000BeautyBusinessSupportBusinessReportableSegmentMember",
+      "builtin:sign(cur-prior)"
+     ],
+     "recomputed": 1355000.0,
+     "reason": null,
+     "comparator": "builtin:sign(cur-prior)==direction",
+     "normalization": null,
+     "subject": "売上高",
+     "value": null,
+     "unit": null,
+     "word": "減益",
+     "span": "高は前期に比べ微増となりましたが、人件費の増加等により僅かに減益となり、売",
+     "dropped": null
+    },
+    "text|4668": {
+     "id": "T030",
+     "kind": "text",
+     "state": "GROUNDED",
+     "pointers": [
+      "xbrl:jppfs_cor:DepreciationAndAmortizationOpeCF@CurrentYearDuration",
+      "xbrl:jppfs_cor:DepreciationAndAmortizationOpeCF@Prior1YearDuration",
+      "builtin:sign(cur-prior)"
+     ],
+     "recomputed": 236000.0,
+     "reason": null,
+     "comparator": "builtin:sign(cur-prior)==direction",
+     "normalization": null,
+     "subject": "減価償却費",
+     "value": null,
+     "unit": null,
+     "word": "増加",
+     "span": "償却額7,199千円、株式交付費48,190千円、棚卸資産の増加額23,2",
+     "dropped": null
+    },
+    "text|4687": {
+     "id": "T031",
+     "kind": "text",
+     "state": "VALUE_MISMATCH",
+     "pointers": [
+      "xbrl:jppfs_cor:DepreciationAndAmortizationOpeCF@CurrentYearDuration",
+      "xbrl:jppfs_cor:DepreciationAndAmortizationOpeCF@Prior1YearDuration",
+      "builtin:sign(cur-prior)"
+     ],
+     "recomputed": 236000.0,
+     "reason": null,
+     "comparator": "builtin:sign(cur-prior)==direction",
+     "normalization": null,
+     "subject": "減価償却費",
+     "value": null,
+     "unit": null,
+     "word": "減少",
+     "span": "190千円、棚卸資産の増加額23,262千円、未払消費税等の減少額14,4",
+     "dropped": null
+    },
+    "text|6023": {
+     "id": "T033",
+     "kind": "text",
+     "state": "GROUNDED",
+     "pointers": [
+      "xbrl:jpcrp_cor:NetSalesSummaryOfBusinessResults@CurrentYearDuration",
+      "xbrl:jpcrp_cor:NetSalesSummaryOfBusinessResults@Prior1YearDuration",
+      "builtin:sign(cur-prior)"
+     ],
+     "recomputed": 6442000.0,
+     "reason": null,
+     "comparator": "builtin:sign(cur-prior)==direction",
+     "normalization": null,
+     "subject": "売上高",
+     "value": null,
+     "unit": null,
+     "word": "増加",
+     "span": "、1,850,502千円と前連結会計年度に比べ6,442千円増加(前連結会",
+     "dropped": null
+    },
+    "text|6233": {
+     "id": "T039",
+     "kind": "text",
+     "state": "GROUNDED",
+     "pointers": [
+      "xbrl:jppfs_cor:SellingGeneralAndAdministrativeExpenses@CurrentYearDuration",
+      "xbrl:jppfs_cor:SellingGeneralAndAdministrativeExpenses@Prior1YearDuration",
+      "builtin:sign(cur-prior)"
+     ],
+     "recomputed": 17979000.0,
+     "reason": null,
+     "comparator": "builtin:sign(cur-prior)==direction",
+     "normalization": null,
+     "subject": "販売費及び一般管理費",
+     "value": null,
+     "unit": null,
+     "word": "増加",
+     "span": "となり、販売費及び一般管理費につきましては、17,979千円増加(前連結会",
+     "dropped": null
+    },
+    "text|6333": {
+     "id": "T040",
+     "kind": "text",
+     "state": "GROUNDED",
+     "pointers": [
+      "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration",
+      "xbrl:jppfs_cor:OperatingIncome@Prior1YearDuration",
+      "builtin:sign(cur-prior)"
+     ],
+     "recomputed": -42487000.0,
+     "reason": null,
+     "comparator": "builtin:sign(cur-prior)==direction",
+     "normalization": null,
+     "subject": "営業損失",
+     "value": null,
+     "unit": null,
+     "word": "減益",
+     "span": "42,487千円(前連結会計年度は営業損失9,709千円)の減益となりまし",
+     "dropped": null
+    },
+    "text|6442": {
+     "id": "T041",
+     "kind": "text",
+     "state": "GROUNDED",
+     "pointers": [
+      "xbrl:jpcrp_cor:OrdinaryIncomeLossSummaryOfBusinessResults@CurrentYearDuration",
+      "xbrl:jpcrp_cor:OrdinaryIncomeLossSummaryOfBusinessResults@Prior1YearDuration",
+      "builtin:sign(cur-prior)"
+     ],
+     "recomputed": -91485000.0,
+     "reason": null,
+     "comparator": "builtin:sign(cur-prior)==direction",
+     "normalization": null,
+     "subject": "経常損失",
+     "value": null,
+     "unit": null,
+     "word": "減益",
+     "span": "91,485千円(前連結会計年度は経常損失7,091千円)の減益となりまし",
+     "dropped": null
+    }
+   }
+  }
+ }
+}
