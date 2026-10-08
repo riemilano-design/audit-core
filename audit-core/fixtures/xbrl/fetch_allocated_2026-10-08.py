@@ -94,12 +94,16 @@ def main(argv=None):
             # 再現しない。記録としてだけ残す。
             "zip_sha256": hashlib.sha256(body).hexdigest(),
             # 再現する。封に使えるのはこちら。
-            "content_digest": content_digest(body),
+            # ``content_digest`` は **(印, 目録の数) の対**を返す。
+            # 記録の形は変えない(``allocation``・結果文書が [印, 数] の並びで
+            # 引いている)。印字だけ対として扱う。
+            "content_digest": list(content_digest(body)),
         }
         out.append(rec)
-        print("  %-10s %-28s %8d bytes  zip=%s…  中身の印=%s…  (%s)" % (
+        digest, members = rec["content_digest"]
+        print("  %-10s %-28s %8d bytes  zip=%s…  中身の印=%s…(目録 %d 本)  (%s)" % (
             rec["docID"], (rec["filerName"] or "")[:28], rec["bytes"],
-            rec["zip_sha256"][:16], rec["content_digest"][:16], how))
+            rec["zip_sha256"][:16], digest[:16], members, how))
 
     with open(a.out, "w", encoding="utf-8") as fh:
         json.dump({"tool": "fetch_allocated_2026-10-08", "roles": list(FETCHABLE_ROLES),
