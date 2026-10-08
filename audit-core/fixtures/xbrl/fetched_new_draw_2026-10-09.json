@@ -1,0 +1,29 @@
+{
+  "tool": "fetch_new_draw_2026-10-09.py",
+  "fetched": [
+    {
+      "docID": "S100Z3CO",
+      "filerName": "株式会社ナガオカ",
+      "seal": "A1 封(① 差の許容幅)",
+      "bytes": 529197,
+      "zip_sha256": "45a71507465dbf9c1cbf82f23d378aca7a0330f78809c403ac23c82f9c7d8d06",
+      "content_digest": [
+        "047783d986a71f95acc124849c1142f2a8843db2ee8685ab087e5f87926855c6",
+        31
+      ],
+      "how": "取った"
+    },
+    {
+      "docID": "S100Z4PA",
+      "filerName": "株式会社インサイト",
+      "seal": "A1 封(① 差の許容幅)",
+      "bytes": 577305,
+      "zip_sha256": "e4d7621bd1f65b451037db3bde4c5cb23297e59a7f9ba830b3bfcf5b62f8b3c7",
+      "content_digest": [
+        "a7b67989cf81d5459ed1bfededf9edfc1a440950027f36879d5177c72b8de77d",
+        33
+      ],
+      "how": "取った"
+    }
+  ]
+}
