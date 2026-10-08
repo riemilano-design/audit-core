@@ -20,6 +20,7 @@ short-circuit reasons on ``Recipe`` is a transcription of
 C-0 fixed for turning script output into the Core's expectation JSON.
 """
 
+import dataclasses
 import io
 import re
 import unicodedata
@@ -720,6 +721,24 @@ def _member_material(zb, inst, text, sentences, profile):
     return sent_member, reg
 
 
+def _label_subjects(zb, inst, profile):
+    """XBRL 直し §7: 書類自身のインライン XBRL から取った
+    「日本語の勘定科目名 → 要素」を、主語の一覧の**行**にして返す。
+
+    - **手書きの語彙に既に在る語は足さない**(手書きが正本。件数も意味が
+      はっきりする)。
+    - 並びは**長い名前が先**(``subject_of`` は同じ終わり位置・同じ長さなら
+      先に在る方を採るので、並べる順を決めておく)。
+    """
+
+    z = zipfile.ZipFile(io.BytesIO(zb))
+    labels = I.inline_labels(z, inst["names"])
+    hand = {w for w, _e in profile.subjects}
+    rows = [(w, list(elems)) for w, elems in labels.items() if w not in hand]
+    rows.sort(key=lambda r: (-len(r[0]), r[0]))
+    return rows
+
+
 def build_raw_claims(zb, profile, info=None):
     """1 文書・1 profile ぶんの、原本と同じ形(辞書)の num_claims / text_claims
     を作る。recipes.to_recipes の前段(確認・再現がしやすいように分けておく)。
@@ -729,6 +748,13 @@ def build_raw_claims(zb, profile, info=None):
     """
 
     inst = I.load_instance(zb)
+    if profile.label_vocabulary:
+        # XBRL 直し §7: 主語の一覧にラベルの行を足した profile で以降を回す
+        # (``subject_of`` も他の関数も 1 行も変えない)。
+        added = _label_subjects(zb, inst, profile)
+        profile = dataclasses.replace(profile, subjects=tuple(profile.subjects) + tuple(added))
+        if info is not None:
+            info["label_subjects_added"] = len(added)
     facts, contexts, tbs = inst["facts"], inst["contexts"], inst["textblocks"]
     mdna_name = I.select_mdna(tbs)
     text = I.strip_html(tbs[mdna_name]) if mdna_name else ""

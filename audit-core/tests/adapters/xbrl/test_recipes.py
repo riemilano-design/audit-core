@@ -946,3 +946,60 @@ class DropStateWordsOnlyTest(unittest.TestCase):
         a = dataclasses.replace(V.P9, name="x", drop_qualitative=False, drop_state_words_only=True)
         b = dataclasses.replace(V.P10, name="x")
         self.assertEqual(a, b)
+
+
+class LabelSubjectsTest(unittest.TestCase):
+    """XBRL 直し §7: ラベルの語彙を主語の一覧の後ろに足す。"""
+
+    def test_p11_is_p10_plus_only_the_label_flag(self):
+        import dataclasses
+        a = dataclasses.replace(V.P10, name="x", label_vocabulary=True)
+        b = dataclasses.replace(V.P11, name="x")
+        self.assertEqual(a, b)
+
+    def test_p1_to_p10_keep_the_label_flag_off(self):
+        for p in (V.P1, V.P5F, V.P6, V.P7, V.P8, V.P9, V.P10):
+            self.assertFalse(p.label_vocabulary, p.name)
+        self.assertTrue(V.P11.label_vocabulary)
+
+    def test_hand_vocabulary_wins_a_tie(self):
+        # 同じ終わり位置・同じ長さなら、一覧の**先に在る方**を採る。
+        # ラベルの語彙は後ろに足すので、手書きが勝つ。
+        from adapters.xbrl import extract as X
+        hand = (("売上高", ["NetSales"]),)
+        label = (("売上高", ["WrongElement"]),)
+        s = "売上高は100千円"
+        _w, elems = X.subject_of(s, s.index("100"), hand + label)
+        self.assertEqual(elems, ["NetSales"])
+
+    def test_longer_label_wins_over_a_shorter_one_at_the_same_end(self):
+        from adapters.xbrl import extract as X
+        subjects = (("長期借入金の返済による支出", ["RepaymentOfLongTermLoansPayableFinCF"]),
+                    ("長期借入金の返済", ["RepaymentsOfLongTermLoansPayable"]))
+        s = "長期借入金の返済による支出332百万円"
+        _w, elems = X.subject_of(s, s.index("332"), subjects)
+        self.assertEqual(elems, ["RepaymentOfLongTermLoansPayableFinCF"])
+
+    def test_hand_words_are_not_added_again(self):
+        """XBRL 直し §7 の本当の不変条件 ― 手書きの語彙に在る語をラベルから
+        足さない。変異 `X-R7b`(ラベルを前に置く)が **green** だったのは
+        この除外のためで、除外が在る限り順序は等価である。
+        """
+
+        import io as _io
+        import zipfile as _zipfile
+        from adapters.xbrl import edinet as _E, instance as _I
+        zb = open(_E.cache_path("S100Z4Q1"), "rb").read()
+        inst = _I.load_instance(zb)
+        added = R._label_subjects(zb, inst, V.P11)
+        hand = {w for w, _e in V.P11.subjects}
+        self.assertTrue(added)
+        for word, _elems in added:
+            self.assertNotIn(word, hand, word)
+        # 手書きに在る語(ラベルにも在る)は足されていない。
+        labels = _I.inline_labels(_zipfile.ZipFile(_io.BytesIO(zb)), inst["names"])
+        self.assertIn("資産合計", labels)
+        self.assertIn("資産合計", hand)
+        self.assertNotIn("資産合計", [w for w, _e in added])
+        # 並びは長い名前が先(決定的)。
+        self.assertEqual([len(w) for w, _e in added], sorted([len(w) for w, _e in added], reverse=True))

@@ -426,5 +426,31 @@
     "new": "                if profile.drop_qualitative:",
     "predicted": "red",
     "note": "XBRL 直し §5' の印を付ける側を狭い版から外す(狭い版が状態語を落とさなくなる)。同じ試験が捕まえる。落とす側と印の側の 2 か所を別の変異にしてあるのは、片方だけ直っていても緑にならないことを見るため。"
+  },
+  {
+    "id": "X-R7a-entity-not-unescaped",
+    "file": "instance.py",
+    "old": "        text = html.unescape(_TAG_RE.sub(\"\", cell))",
+    "new": "        text = _TAG_RE.sub(\"\", cell)",
+    "predicted": "red",
+    "note": "XBRL 直し §7 の実体参照の復号を外す(空のセルの &#160; が 6 文字の科目名として拾われる。最初の実装の誤りそのもの。1 社目では取れた名前が 226→105 に落ちるが、2 社目・3 社目は本物の nbsp なので落ちない = 1 書類だけでは気づかない型)。test_instance.InlineLabelsTest.test_numeric_entity_for_an_empty_cell_is_decoded_not_taken_as_a_name が捕まえる。"
+  },
+  {
+    "id": "X-R7b-label-subjects-placed-before-the-hand-vocabulary",
+    "file": "recipes.py",
+    "old": "        profile = dataclasses.replace(profile, subjects=tuple(profile.subjects) + tuple(added))",
+    "new": "        profile = dataclasses.replace(profile, subjects=tuple(added) + tuple(profile.subjects))",
+    "predicted": "red",
+    "note": "XBRL 直し §7 でラベルの語彙を手書きの語彙の**前**に置く。予測は red、1 回目の実測は **green**(外れとして固定する)。原因: _label_subjects が『手書きに在る語はラベルに足さない』で除外しているため、同じ語が両方に在ることがなく、**順序が等価変異になる**。司令塔が予測を書くときにこの除外を数えていなかった。本当の不変条件は『手書きに在る語を足さない』ことなので、そちらを test_recipes.LabelSubjectsTest.test_hand_words_are_not_added_again で留めた。scope を狭めて green にしたのではなく、予測の外れとして記録している。",
+    "prediction_miss": true,
+    "actual_first_measurement": "green"
+  },
+  {
+    "id": "X-R7c-label-deny-and-length-filter-disabled",
+    "file": "instance.py",
+    "old": "            if not label or len(label) < LABEL_MIN_LEN or label in LABEL_DENY:",
+    "new": "            if not label:",
+    "predicted": "red",
+    "note": "XBRL 直し §7 の除く名前(長さ 3 未満・その他/合計/計 等)を外す。「計」が監査報酬の 4 要素に当たるなど、勘定科目を一意に指さない語が主語になる。test_instance.InlineLabelsTest.test_short_names_are_dropped_at_the_written_threshold と test_denied_names_are_dropped が捕まえる。"
   }
 ]

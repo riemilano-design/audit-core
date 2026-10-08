@@ -265,6 +265,9 @@ class Profile:
     # XBRL 直し §5 を狭める(人間の指示で確かめた結果、2026-10-08)。P10 だけ。
     # 広い版 drop_qualitative は消さずに残し、両方を測って並べる。
     drop_state_words_only: bool = False  # §5' 状態語だけを落とす(向きの語は残す)
+    # XBRL 直し §7(人間の指示、2026-10-08)。P11 だけ。書類自身のインライン
+    # XBRL から「日本語の勘定科目名 → 要素」を取って語彙の後ろに足す。
+    label_vocabulary: bool = False       # §7 書類のラベルで主語を引く
 
 
 P1 = Profile(
@@ -373,4 +376,28 @@ P10 = Profile(
     drop_state_words_only=True,
 )
 
-PROFILES = {"P1": P1, "P5F": P5F, "P6": P6, "P7": P7, "P8": P8, "P9": P9, "P10": P10}
+# XBRL 直し §7(人間の指示、2026-10-08): P10(正本)+ ラベルの語彙。
+# P10 の定義は書き換えない。
+P11 = Profile(
+    name="P11",
+    subjects=SUBJECTS_P8,
+    member_on=True,
+    claim_level_member=True,
+    run3="L",
+    flow_sign=True,
+    point_diff=True,
+    segment_denominator=True,
+    expenditure_sign=True,
+    target_word=True,
+    text_reason_split=True,
+    prior2_required=True,
+    doc_rounding=True,
+    target_both=True,
+    paren_sentence=True,
+    drop_qualitative=False,
+    text_prior_year_paren=True,
+    drop_state_words_only=True,
+    label_vocabulary=True,
+)
+
+PROFILES = {"P1": P1, "P5F": P5F, "P6": P6, "P7": P7, "P8": P8, "P9": P9, "P10": P10, "P11": P11}

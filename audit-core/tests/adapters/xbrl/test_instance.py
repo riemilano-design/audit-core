@@ -176,3 +176,78 @@ class LoadInstanceOnRealMaterialTest(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class InlineLabelsTest(unittest.TestCase):
+    """XBRL 直し §7(2026-10-08): 書類自身のインライン XBRL から
+    「日本語の勘定科目名 → 要素の局所名」を取る。
+    """
+
+    ROW = ('<tr><td><p>%s</p></td>'
+           '<td><p>%s</p></td>'
+           '<td><p><ix:nonFraction contextRef="CurrentYearInstant" name="%s">1,234</ix:nonFraction></p></td>'
+           '</tr>')
+
+    class _Zip(object):
+        """``zipfile.ZipFile`` の代わり(``read(name)`` だけ使う)。"""
+
+        def __init__(self, files):
+            self._files = files
+
+        def read(self, name):
+            return self._files[name].encode("utf-8")
+
+    def _labels(self, rows, name="x_ixbrl.htm"):
+        html = "<html><body><table>" + "".join(rows) + "</table></body></html>"
+        return I.inline_labels(self._Zip({name: html}), [name])
+
+    def test_label_and_element_are_paired_from_the_same_row(self):
+        got = self._labels([self.ROW % ("&#160;", "資産合計", "jppfs_cor:Assets")])
+        self.assertEqual(got, {"資産合計": ["Assets"]})
+
+    def test_numeric_entity_for_an_empty_cell_is_decoded_not_taken_as_a_name(self):
+        # 最初の実装は ``&#160;`` を実体参照のまま 6 文字の名前として拾い、
+        # 1 社目の取れた名前を 226 → 105 に落としていた。
+        # 2 社目・3 社目は本物の nbsp 文字なので落ちず、**1 書類だけで測って
+        # いたら気づかない型の誤り**だった。字面で留める。
+        got = self._labels([self.ROW % ("&#160;", "売上原価", "jppfs_cor:CostOfSales")])
+        self.assertNotIn("&#160;", got)
+        self.assertEqual(got, {"売上原価": ["CostOfSales"]})
+
+    def test_real_nbsp_character_is_also_skipped(self):
+        got = self._labels([self.ROW % (" ", "売上原価", "jppfs_cor:CostOfSales")])
+        self.assertEqual(got, {"売上原価": ["CostOfSales"]})
+
+    def test_numeric_only_cell_is_not_a_name(self):
+        got = self._labels([self.ROW % ("1,234", "△5.8", "jppfs_cor:Assets")])
+        self.assertEqual(got, {})
+
+    def test_rows_without_a_fact_are_ignored(self):
+        html = "<table><tr><td><p>資産合計</p></td></tr></table>"
+        self.assertEqual(I.inline_labels(self._Zip({"a_ixbrl.htm": html}), ["a_ixbrl.htm"]), {})
+
+    def test_two_elements_in_one_row_both_attach_to_the_name(self):
+        row = ('<tr><td><p>&#160;</p></td><td><p>売上高</p></td>'
+               '<td><p><ix:nonFraction name="jppfs_cor:NetSales">1</ix:nonFraction></p></td>'
+               '<td><p><ix:nonFraction name="jpcrp_cor:NetSalesSummaryOfBusinessResults">1</ix:nonFraction></p></td>'
+               '</tr>')
+        self.assertEqual(self._labels([row]), {"売上高": ["NetSales", "NetSalesSummaryOfBusinessResults"]})
+
+    def test_short_names_are_dropped_at_the_written_threshold(self):
+        self.assertEqual(I.LABEL_MIN_LEN, 3)
+        self.assertEqual(self._labels([self.ROW % ("&#160;", "資産", "jppfs_cor:Assets")]), {})
+        self.assertEqual(self._labels([self.ROW % ("&#160;", "資産合計", "jppfs_cor:Assets")]),
+                         {"資産合計": ["Assets"]})
+
+    def test_denied_names_are_dropped(self):
+        for word in ("その他", "合計", "前連結会計年度"):
+            self.assertIn(word, I.LABEL_DENY)
+            self.assertEqual(self._labels([self.ROW % ("&#160;", word, "jppfs_cor:OtherCA")]), {}, word)
+
+    def test_cover_page_items_in_brackets_are_dropped(self):
+        got = self._labels([self.ROW % ("&#160;", "【電話番号】", "jpcrp_cor:TelephoneNumberCoverPage")])
+        self.assertEqual(got, {})
+
+    def test_only_ixbrl_files_are_read(self):
+        html = "<table>" + (self.ROW % ("&#160;", "資産合計", "jppfs_cor:Assets")) + "</table>"
+        self.assertEqual(I.inline_labels(self._Zip({"a.htm": html}), ["a.htm"]), {})

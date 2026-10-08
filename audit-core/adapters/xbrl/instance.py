@@ -237,3 +237,75 @@ def select_mdna(textblocks):
     if name is None:
         name = next((n for n in textblocks if "AnalysisOfFinancialPosition" in n or "OverviewOfBusinessResults" in n), None)
     return name
+
+
+# ---------------------------------------------------------------------------
+# XBRL 直し §7(人間の指示、2026-10-08): 書類自身のインライン XBRL から
+# 「日本語の勘定科目名 → 要素の局所名」を取る。``profile.label_vocabulary`` が
+# 真のときだけ使う。
+#
+# 財務諸表は ``*_ixbrl.htm``(インライン XBRL)で、表の 1 つの ``<tr>`` の中に
+# 日本語の科目名(テキストの ``<td>``)とその行の数値に付いた要素名
+# (``<ix:nonFraction name="jppfs_cor:Assets">``)が並んでいる。**順番の推測では
+# なく同じ行に在ること**で対にする(行をまたいだ対応づけはしない)。
+#
+# 標準タクソノミ(jppfs/jpcrp)の日本語ラベルは書類の ZIP には入っていない
+# (ZIP に在るのは会社拡張の ``_lab.xml`` だけ)。それを使うには
+# ``disclosure.edinet-fsa.go.jp`` からの取得が要る ― この関数は取得しない。
+# 経緯は docs/XBRL_LABEL_VOCAB_PLAN_2026-10-08.md §1-2。
+# ---------------------------------------------------------------------------
+_TR_RE = re.compile(r"<tr[\s>].*?</tr>", re.S | re.I)
+_TD_SPLIT_RE = re.compile(r"</td>", re.I)
+_IX_NAME_RE = re.compile(r'<ix:non(?:Fraction|Numeric)[^>]*\bname="([^"]+)"', re.I)
+_TAG_RE = re.compile(r"<[^>]+>")
+_NUMERIC_ONLY_RE = re.compile(r"^[\d,.\-△▲%()−\s]+$")
+
+# 除く名前(字で書く)。勘定科目を一意に指さない語と、表紙の項目。
+LABEL_MIN_LEN = 3
+LABEL_DENY = ("その他", "合計", "小計", "計", "区分", "千円", "百万円", "円",
+              "前連結会計年度", "当連結会計年度", "前事業年度", "当事業年度")
+
+
+def _row_label(row):
+    """``<tr>`` の中の、勘定科目名として読めるテキスト。
+    数字だけ・空のセルは捨て、**最初の読めるセル**を採る(科目名は行の左端に
+    在るため)。1 文字のセルが先頭に来ることがあるので、2 文字未満なら次を見る。
+    """
+
+    for cell in _TD_SPLIT_RE.split(row):
+        # 実体参照を先に戻す ― この書類の HTML は空のセルに ``&#160;`` を
+        # **文字列のまま**置いており、戻さずにタグだけ外すと "&#160;" という
+        # 6 文字が科目名として拾われる(最初の実装がこれで 1 社目の名前を
+        # 226 → 105 に落としていた。2 社目・3 社目は本物の nbsp 文字なので
+        # 落ちず、1 書類だけで測っていたら気づかない型の誤りだった)。
+        text = html.unescape(_TAG_RE.sub("", cell))
+        text = re.sub(r"\s+", "", text.replace("\u00a0", " "))
+        if not text or _NUMERIC_ONLY_RE.match(text) or len(text) < 2:
+            continue
+        return text
+    return None
+
+
+def inline_labels(z, names):
+    """``{日本語の勘定科目名: [要素の局所名, ...]}``。除く名前は適用済み。"""
+
+    found = {}
+    for n in names:
+        if not n.endswith("_ixbrl.htm"):
+            continue
+        text = z.read(n).decode("utf-8", "replace")
+        for row in _TR_RE.findall(text):
+            elements = _IX_NAME_RE.findall(row)
+            if not elements:
+                continue
+            label = _row_label(row)
+            if not label or len(label) < LABEL_MIN_LEN or label in LABEL_DENY:
+                continue
+            if "【" in label or "】" in label:
+                continue
+            bucket = found.setdefault(label, [])
+            for e in elements:
+                local = e.split(":")[-1]
+                if local not in bucket:
+                    bucket.append(local)
+    return found
