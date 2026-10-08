@@ -487,3 +487,63 @@ class BuiltinSignDirectionTest(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class RoundingParamTest(unittest.TestCase):
+    """XBRL 直し §2(2026-10-08): ``Contract.params["rounding"]`` を渡すと、
+    検証するときも書類単位で決めた 1 つの丸め方だけを使う。
+
+    **この効き目は 1 社目の実データ 91 件では 1 件も現れない**(S100Z4Q1 は
+    44 件すべて差 ≥ 0 で、負の側の帯を使っている主張が無い)。だから合成の
+    値で当てる ― 「実物で測れない直しは、実物が緑でも測れていない」。
+    """
+
+    @staticmethod
+    def _ev(value):
+        return (_resolved(value),)
+
+    @staticmethod
+    def _claim(value):
+        return core.Claim(id="N900", form=core.Form.DIRECT_VALUE, subject="売上高", value=value, unit="百万円",
+                          modifiers=core.Modifiers(), provenance={})
+
+    def _run(self, fact, rounding):
+        params = {"unit_scale": 1e6, "claim_scale": 1e6}
+        if rounding is not None:
+            params["rounding"] = rounding
+        contract = core.Contract(comparator="equals_within", params=params)
+        return C.equals_within(self._ev(fact), self._claim(437.0), contract)
+
+    def test_negative_side_passes_with_the_frozen_ladder(self):
+        # 437 百万円の主張に対し fact が 436,600,000(差 -400,000 = -0.4 桁)。
+        got = self._run(436600000.0, None)
+        self.assertTrue(got.match)
+        self.assertEqual(got.detail["normalization"], "round")
+
+    def test_negative_side_is_refused_when_the_document_truncates(self):
+        got = self._run(436600000.0, "truncate")
+        self.assertFalse(got.match)
+        self.assertIsNone(got.detail["normalization"])
+
+    def test_truncate_side_is_refused_when_the_document_rounds(self):
+        # fact が 437,900,000(差 +900,000 = +0.9 桁)。
+        self.assertTrue(self._run(437900000.0, None).match)
+        self.assertTrue(self._run(437900000.0, "truncate").match)
+        self.assertFalse(self._run(437900000.0, "round").match)
+
+    def test_overlap_band_passes_under_either_mode(self):
+        for mode in (None, "round", "truncate"):
+            self.assertTrue(self._run(437200000.0, mode).match, mode)
+
+    def test_diff_comparator_reads_the_same_param(self):
+        ev = (_resolved(1_436_600_000.0), _resolved(1_000_000_000.0))
+        params = {"unit_scale": 1e6, "claim_scale": 1e6, "rounding": "truncate"}
+        contract = core.Contract(comparator="diff(a-b) equals_within", params=params)
+        got = C.diff_ab_equals_within(ev, self._claim(437.0), contract)
+        self.assertFalse(got.match)
+        contract2 = core.Contract(comparator="diff(a-b) equals_within", params={"unit_scale": 1e6, "claim_scale": 1e6})
+        self.assertTrue(C.diff_ab_equals_within(ev, self._claim(437.0), contract2).match)
+
+    def test_absent_param_is_the_frozen_behaviour(self):
+        # 恒例: params に rounding が無いときは写し元のまま(P1/P5F/P6/P7)。
+        self.assertEqual(self._run(436600000.0, None).detail["normalization"], "round")

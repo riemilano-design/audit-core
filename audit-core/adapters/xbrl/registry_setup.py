@@ -3,13 +3,13 @@
 C-1h §3.4-c, 2026-10-06): registers this Adapter's schemes, comparators,
 normalizations and reasons on top of ``audit_core.Registry.default()``.
 
-28 registrations: 2 schemes (``xbrl``, ``formula`` -- ``builtin`` is
+29 registrations: 2 schemes (``xbrl``, ``formula`` -- ``builtin`` is
 already registered by ``Registry.default()`` and is *not* re-registered
 here) + 9 comparators (:mod:`comparators`; 6 from C-1d + 2 from C-1g's
 profile P6 + 1 from C-1h's profile P7) + 4 normalizations (the
 ``_match_value`` ladder's four ``how`` strings; unchanged -- P6's
 flow-sign branch of ``equals_within`` reuses the existing
-"round"/"truncate" names, see ``comparators.py``) + 13 reasons (7
+"round"/"truncate" names, see ``comparators.py``) + 14 reasons (7
 POINTER_NOT_FOUND + 6 UNVERIFIABLE; C-1d's 9, matching
 ``recipes.UNBOUND_REASON_STATE`` plus the count-free
 ``ambiguous(elements)``, plus C-1g's one new POINTER_NOT_FOUND reason
@@ -52,6 +52,10 @@ _POINTER_NOT_FOUND_REASONS = (
     # Core 接続 C-1h §1-3(profile P7 のみ)。
     "no_element(text needs money fact)",
     "no_element(no prior for text)",
+    # XBRL 直し §1b(人間の決定、2026-10-08、profile P8 のみ)。前々期の値が
+    # 無いときに代用せず止める理由。P1/P5F/P6/P7 はこの理由を作らないので、
+    # 登録簿に在ること自体は彼らに対して無害(既存の理由は 1 つも消していない)。
+    "no_element(no prior2 for prior-year diff)",
 )
 
 _UNVERIFIABLE_REASONS = (

@@ -2,18 +2,18 @@
   {
     "id": "A-R1-remove-truncate",
     "file": "vocabulary.py",
-    "old": "        if 0 <= fv - t < unit:\n            return (sign_mode + \"+truncate\").strip(\"+\")",
-    "new": "        if False:\n            return (sign_mode + \"+truncate\").strip(\"+\")",
+    "old": "        if mode in (None, \"truncate\") and 0 <= fv - t < unit:\n            return (sign_mode + \"+truncate\").strip(\"+\")",
+    "new": "        if False and 0 <= fv - t < unit:\n            return (sign_mode + \"+truncate\").strip(\"+\")",
     "predicted": "red",
-    "note": "match_value の truncate 判定を外す(予測 §6 の候補のひとつ)。1B に truncate 一致が 13 件ある。"
+    "note": "match_value の truncate 判定を外す(予測 §6 の候補のひとつ)。1B に truncate 一致が 13 件ある。 2026-10-08 の XBRL 直し §2 で match_value に mode 引数が付いたため、同じ 2 行に当て直した(変異が外す性質 = truncate 判定そのもの、は変えていない)。"
   },
   {
     "id": "A-R2-round-disabled-falls-through-to-truncate-label",
     "file": "vocabulary.py",
-    "old": "        if abs(fv - t) <= unit / 2:",
-    "new": "        if False:",
+    "old": "        if mode in (None, \"round\") and abs(fv - t) <= unit / 2:",
+    "new": "        if False and abs(fv - t) <= unit / 2:",
     "predicted": "red",
-    "note": "最初の試みは round の境界を <= から < に変えるだけだったが実測で green(実データに境界値ぴったりの差が無く等価変異だった、本文に記録)。round 判定を丸ごと外すと、差が 0 の完全一致も truncate 分岐(0<=diff<unit)で捕まり normalization のラベルが round→truncate に変わるため red になる。"
+    "note": "最初の試みは round の境界を <= から < に変えるだけだったが実測で green(実データに境界値ぴったりの差が無く等価変異だった、本文に記録)。round 判定を丸ごと外すと、差が 0 の完全一致も truncate 分岐(0<=diff<unit)で捕まり normalization のラベルが round→truncate に変わるため red になる。 2026-10-08 の XBRL 直し §2 で同じ行に mode の条件が付いたため当て直した(外す性質 = round 判定そのもの、は不変)。"
   },
   {
     "id": "A-G1-tolof-max-arg-order",
@@ -82,10 +82,10 @@
   {
     "id": "D-R1-remove-truncate-from-comparators",
     "file": "comparators.py",
-    "old": "        if 0 <= fv - t < unit:\n            return (sign_mode + \"+truncate\").strip(\"+\")",
-    "new": "        if False:\n            return (sign_mode + \"+truncate\").strip(\"+\")",
+    "old": "        if mode in (None, \"truncate\") and 0 <= fv - t < unit:\n            return (sign_mode + \"+truncate\").strip(\"+\")",
+    "new": "        if False and 0 <= fv - t < unit:\n            return (sign_mode + \"+truncate\").strip(\"+\")",
     "predicted": "red",
-    "note": "C-1d 予測 §3.6 D-R1。1B に truncate 13 件 + abs+truncate 6 件(本日既知)。"
+    "note": "C-1d 予測 §3.6 D-R1。1B に truncate 13 件 + abs+truncate 6 件(本日既知)。 2026-10-08 の XBRL 直し §2 で当て直した(外す性質は不変)。"
   },
   {
     "id": "D-R2-pct-change-signed-denominator",
@@ -278,10 +278,10 @@
   {
     "id": "H-R2-target-word-window-disabled",
     "file": "recipes.py",
-    "old": "            if profile.target_word and _TARGET_RE.search(s[max(0, a - _TARGET_WINDOW):a]):",
-    "new": "            if False and profile.target_word and _TARGET_RE.search(s[max(0, a - _TARGET_WINDOW):a]):",
+    "old": "    if profile.target_word:\n        return bool(_TARGET_RE.search(s[max(0, a - _TARGET_WINDOW):a]))",
+    "new": "    if profile.target_word:\n        return False and bool(_TARGET_RE.search(s[max(0, a - _TARGET_WINDOW):a]))",
     "predicted": "red",
-    "note": "C-1h §1-2(封じた規則)。目標値・計画値の窓判定を外すと、test_recipes.TargetOrPlanWindowTest の reason が target_or_plan にならなくなる。"
+    "note": "C-1h §1-2(封じた規則)。目標値・計画値の窓判定を外すと、test_recipes.TargetOrPlanWindowTest の reason が target_or_plan にならなくなる。 2026-10-08 の XBRL 直し §3 で判定が _target_or_plan に出たため、P7 の枝(手前 10 字・目標|計画)に当て直した。外す性質は不変。"
   },
   {
     "id": "H-R3-text-reason-split-disabled",
@@ -314,5 +314,77 @@
     "new": "    # Core 接続 C-1h §1-1(P7 のみが参照する、比較子 1 件)。",
     "predicted": "green",
     "note": "コメントの字句だけの変更(C-1g の D-G1/D-G2/G-G1/G-G2 と同型)。挙動は変わらないので green のまま。"
+  },
+  {
+    "id": "X-R1a-total-assets-vocab-reverted",
+    "file": "vocabulary.py",
+    "old": "    (\"資産合計\", [\"Assets\", \"TotalAssets\"]) if w == \"資産合計\" else (w, e)",
+    "new": "    (w, e) if w == \"資産合計\" else (w, e)",
+    "predicted": "red",
+    "note": "XBRL 直し §1a を戻す(SUBJECTS_P8 の「資産合計」を P6 と同じ ['Assets'] に)。test_vocabulary.SubjectsP8Test と計器(P8 では N016 が業績概要の要素に届かなくなる)が捕まえる。"
+  },
+  {
+    "id": "X-R1b-prior2-stop-disabled",
+    "file": "recipes.py",
+    "old": "                if prev_year_phrase and profile is not None and profile.prior2_required:",
+    "new": "                if False and prev_year_phrase and profile is not None and profile.prior2_required:",
+    "predicted": "red",
+    "note": "XBRL 直し §1b を戻す(前々期が無いときの代用に落ちる)。test_recipes.Prior2RequiredTest.test_p8_stops_instead が捕まえる。 2026-10-08 の 2 社目の実測で枝を狭めた(代用の枝だけ)ため当て直した。外す性質は不変。"
+  },
+  {
+    "id": "X-R2a-decide-rounding-always-default",
+    "file": "vocabulary.py",
+    "old": "    return ((\"truncate\" if t > r else DOC_ROUNDING_DEFAULT), r, t)",
+    "new": "    return (DOC_ROUNDING_DEFAULT, r, t)",
+    "predicted": "red",
+    "note": "XBRL 直し §2 の決め方を潰す(証拠を見ずに既定の round にする)。test_vocabulary.DecideRoundingTest.test_truncate_when_truncate_only_evidence_wins が捕まえる。"
+  },
+  {
+    "id": "X-R2b-comparator-ignores-the-rounding-param",
+    "file": "comparators.py",
+    "old": "    how = _match_value(fact.value, target, claim_scale, params.get(\"rounding\"))",
+    "new": "    how = _match_value(fact.value, target, claim_scale, None)",
+    "predicted": "red",
+    "note": "XBRL 直し §2 で組むときと検証するときの丸め方を揃えた所を外す(検証だけ梯子に戻る)。test_comparators.RoundingParamTest.test_negative_side_is_refused_when_the_document_truncates が捕まえる。実データ 91 件では 1 件も動かないので、この変異が赤くなるのは合成の単体試験だけ(記録事項)。"
+  },
+  {
+    "id": "X-R3a-target-after-window-disabled",
+    "file": "recipes.py",
+    "old": "        after = s[b:b + _TARGET_AFTER_WINDOW]",
+    "new": "        after = \"\"",
+    "predicted": "red",
+    "note": "XBRL 直し §3 の「数の後ろ」の窓を外す。test_recipes.TargetOrPlanBothSidesTest.test_target_fifteen_chars_after_the_number_is_caught(N013 型)が捕まえる。"
+  },
+  {
+    "id": "X-R3b-after-window-not-cut-at-the-clause-end",
+    "file": "recipes.py",
+    "old": "        if cut is not None:\n            after = after[:cut.start()]",
+    "new": "        if False:\n            after = after[:cut.start()]",
+    "predicted": "red",
+    "note": "XBRL 直し §3 の「節の中だけ」を外す(後ろ 20 字を節をまたいで見る)。test_recipes.TargetOrPlanBothSidesTest.test_after_window_stops_at_a_comma(N014 型 = 実績の数を止めてしまう側)が捕まえる。"
+  },
+  {
+    "id": "X-R4-paren-aware-split-disabled",
+    "file": "extract.py",
+    "old": "        pieces = split_after_kuten_outside_parens(para) if paren_aware else re.split(r\"(?<=。)\", para)",
+    "new": "        pieces = re.split(r\"(?<=。)\", para)",
+    "predicted": "red",
+    "note": "XBRL 直し §4 を戻す(括弧の中の句点で切る)。test_extract.ParenSentenceSplitTest.test_paren_aware_split_keeps_the_sentence_whole が捕まえる。"
+  },
+  {
+    "id": "X-R5-drop-qualitative-disabled",
+    "file": "recipes.py",
+    "old": "    if profile.drop_qualitative:\n        text_claims = [c for c in text_claims if not c.get(\"dropped\")]",
+    "new": "    if False:\n        text_claims = [c for c in text_claims if not c.get(\"dropped\")]",
+    "predicted": "red",
+    "note": "XBRL 直し §5 を戻す(印は付くが落とさない)。test_recipes.DropQualitativeTest.test_state_word_claim_is_dropped が捕まえる。"
+  },
+  {
+    "id": "X-G1-fix5-comment-wording",
+    "file": "vocabulary.py",
+    "old": "    # 1 つずつ独立に測れるように、5 つを 1 つのフラグに束ねていない。",
+    "new": "    # 5 つを 1 つのフラグに束ねていない(1 つずつ独立に測れるようにするため)。",
+    "predicted": "green",
+    "note": "コメントの字句だけの変更(A-G/D-G/G-G/H-G1 と同型の対照)。挙動は変わらないので green。"
   }
 ]

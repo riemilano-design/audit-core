@@ -161,3 +161,70 @@ class ClaimMemberBTest(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class ParenSentenceSplitTest(unittest.TestCase):
+    """XBRL 直し §4(2026-10-08): 丸括弧の中の句点では文を切らない。
+
+    ``paren_aware`` が偽のときは凍結の切り方(``re.split(r"(?<=。)|\n")``)と
+    1 文字も変わらないことを、同じ入力で両方当てて確かめる。
+    """
+
+    PAREN = "当連結会計年度末における現金及び現金同等物(以下「資金」という。)は、2億9千3百万円減少しました。"
+
+    def test_frozen_split_breaks_inside_the_parenthesis(self):
+        # 直す前の振る舞い(主語を失う側)を固定する。
+        got = E.split_sentences(self.PAREN)
+        self.assertEqual(len(got), 2)
+        self.assertTrue(got[1].startswith(")は、"))
+        self.assertNotIn("現金及び現金同等物", got[1])
+
+    def test_paren_aware_split_keeps_the_sentence_whole(self):
+        got = E.split_sentences(self.PAREN, True)
+        self.assertEqual(len(got), 1)
+        self.assertIn("現金及び現金同等物", got[0])
+        self.assertIn("減少しました。", got[0])
+
+    def test_newline_still_splits_and_resets_the_paren_depth(self):
+        # 改行では切る(段落の構造は改行が決める)。括弧の深さは行をまたいで
+        # 持ち越さないので、2 行目の 。 は守られない ― 既知の帰結として固定する。
+        got = E.split_sentences("あ(以下「資\n金」という。)は減った。", True)
+        self.assertEqual(got, ["あ(以下「資", "金」という。", ")は減った。"])
+
+    def test_fullwidth_and_halfwidth_parens_both_count(self):
+        for op, cl in (("(", ")"), ("（", "）")):
+            got = E.split_sentences("あ%sいう。%sは減った。" % (op, cl), True)
+            self.assertEqual(len(got), 1, (op, cl))
+
+    def test_kuten_outside_the_parenthesis_still_splits(self):
+        got = E.split_sentences("あ(い)。うえ。", True)
+        self.assertEqual(len(got), 2)
+
+    def test_nested_parens_are_counted_by_depth(self):
+        got = E.split_sentences("あ(い(う。)え。)お。", True)
+        self.assertEqual(len(got), 1)
+
+    def test_stray_closing_paren_does_not_collapse_the_rest(self):
+        # 深さは 0 より下げない。閉じ括弧が余っていても後ろの文は切れる。
+        self.assertEqual(E.split_after_kuten_outside_parens(")あ。い。"), [")あ。", "い。", ""])
+
+    def test_unclosed_opening_paren_swallows_the_rest(self):
+        # 開いたまま閉じない括弧は、その行の終わりまで 1 文になる(既知の帰結)。
+        got = E.split_sentences("あ(い。う。", True)
+        self.assertEqual(len(got), 1)
+
+    def test_text_without_parens_is_split_identically_both_ways(self):
+        # 不変: 括弧が無い本文では 2 つの切り方が同じ列を返す。
+        t = "一つめ。二つめ。\n三つめ。"
+        self.assertEqual(E.split_sentences(t), E.split_sentences(t, True))
+
+    def test_paragraph_index_agrees_with_each_split(self):
+        t = "あ(以下「資金」という。)は減った。\n次の段落。"
+        self.assertEqual(E.paragraph_index(t, E.split_sentences(t)), [0, 0, 1])
+        self.assertEqual(E.paragraph_index(t, E.split_sentences(t, True), True), [0, 1])
+
+    def test_paragraph_index_refuses_a_mismatched_sentence_list(self):
+        # 文の列と段落の数え方がずれたら黙らずに落ちる。
+        t = "あ(以下「資金」という。)は減った。"
+        with self.assertRaises(AssertionError):
+            E.paragraph_index(t, E.split_sentences(t), True)

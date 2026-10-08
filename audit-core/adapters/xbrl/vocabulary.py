@@ -110,6 +110,20 @@ SUBJECTS_P6_EXTRA_7 = [
 ]
 SUBJECTS_P6 = tuple(SUBJECTS_P6_EXTRA_7) + tuple(SUBJECTS_74)
 
+# ---------------------------------------------------------------------------
+# XBRL 直し §1a(人間の決定、2026-10-08): 「資産合計」の要素に ``TotalAssets``
+# を足す。``instance.facts_for`` は ``要素名 + "SummaryOfBusinessResults"`` を
+# 完全一致に数えるので、これで業績概要の要素
+# ``jpcrp_cor:TotalAssetsSummaryOfBusinessResults``(前々期まで在る)が引ける。
+# 「純資産合計」は ``["NetAssets"]`` のまま
+# ``NetAssetsSummaryOfBusinessResults`` が引けていた ― その非対称を直すだけで、
+# 新しい主語は 1 つも足していない。P6 の語彙(``SUBJECTS_P6``)は不変。
+# ---------------------------------------------------------------------------
+SUBJECTS_P8 = tuple(
+    ("資産合計", ["Assets", "TotalAssets"]) if w == "資産合計" else (w, e)
+    for (w, e) in SUBJECTS_P6
+)
+
 PROFIT_SUBJECTS = ("利益", "損失")
 
 UNIT_SCALE = {"百万円": 1e6, "千円": 1e3, "億円": 1e8, "兆円": 1e12, "円": 1}
@@ -127,16 +141,48 @@ def tol_of(fact, claim_scale):
     return 0.5 * claim_scale
 
 
-def match_value(fact_value, target, unit):
-    """xbrl_probe.py: match_value の写し(round / truncate / abs の組)。"""
+def match_value(fact_value, target, unit, mode=None):
+    """xbrl_probe.py: match_value の写し(round / truncate / abs の組)。
+
+    ``mode`` は XBRL 直し §2(人間の決定、2026-10-08)で足した省略可能な引数。
+    ``None`` のとき、この関数は写し元と 1 行も違わない振る舞いをする
+    (P1/P5F/P6/P7 はすべて ``None`` で呼ぶ)。``"round"`` / ``"truncate"``
+    のときは**その 1 つだけ**を試す ― 主張ごとに 4 つの梯子を順に試すのを
+    やめ、書類単位で決めた 1 つの丸め方で照合するため。許容幅は
+    ``mode=None`` の実質 ``-unit/2 .. +unit`` から、``"round"`` なら
+    ``-unit/2 .. +unit/2``、``"truncate"`` なら ``0 .. +unit`` に狭まる。
+    """
 
     for sign_mode, fv in (("", fact_value), ("abs", abs(fact_value))):
         t = abs(target) if sign_mode else target
-        if abs(fv - t) <= unit / 2:
+        if mode in (None, "round") and abs(fv - t) <= unit / 2:
             return (sign_mode + "+round").strip("+")
-        if 0 <= fv - t < unit:
+        if mode in (None, "truncate") and 0 <= fv - t < unit:
             return (sign_mode + "+truncate").strip("+")
     return None
+
+
+# ---------------------------------------------------------------------------
+# XBRL 直し §2(人間の決定、2026-10-08): 書類単位の丸め方。``profile.doc_rounding``
+# が真のときだけ使う。既定の札(どちらとも言えないとき)は字で書く。
+# ---------------------------------------------------------------------------
+DOC_ROUNDING_DEFAULT = "round"
+ROUNDING_MODES = ("round", "truncate")
+
+
+def decide_rounding(evidence):
+    """書類の丸め方を 1 つに決める。``evidence`` は ``(diff, unit)`` の列
+    (``diff`` は照合が実際に使った軸での fact − 目標、``unit`` は主張の桁)。
+
+    ``R`` = round しか説明できない件数(``diff < 0``)。
+    ``T`` = truncate しか説明できない件数(``diff > unit/2``)。
+    ``T > R`` なら ``"truncate"``、そうでなければ ``DOC_ROUNDING_DEFAULT``。
+    戻り値は ``(mode, R, T)`` ― 決めた根拠の数も一緒に返す(記録に残すため)。
+    """
+
+    r = sum(1 for d, u in evidence if d < 0)
+    t = sum(1 for d, u in evidence if d > u / 2.0)
+    return (("truncate" if t > r else DOC_ROUNDING_DEFAULT), r, t)
 
 
 # ---------------------------------------------------------------------------
@@ -206,6 +252,14 @@ class Profile:
     expenditure_sign: bool = False
     target_word: bool = False
     text_reason_split: bool = False
+    # XBRL 直し(人間の決定、2026-10-08): P8 だけの 5 つのフラグ。
+    # P1・P5F・P6・P7 はこれらの既定値 False のまま変わらない。
+    # 1 つずつ独立に測れるように、5 つを 1 つのフラグに束ねていない。
+    prior2_required: bool = False      # §1b 前々期が無ければ代用せず止める
+    doc_rounding: bool = False         # §2  丸め方は書類単位で 1 つ
+    target_both: bool = False          # §3  目標・見通しを数と文字の両方に
+    paren_sentence: bool = False       # §4  括弧の中の句点では切らない
+    drop_qualitative: bool = False     # §5  定性的な語を主張にしない
 
 
 P1 = Profile(
@@ -249,4 +303,23 @@ P7 = Profile(
     text_reason_split=True,
 )
 
-PROFILES = {"P1": P1, "P5F": P5F, "P6": P6, "P7": P7}
+P8 = Profile(
+    name="P8",
+    subjects=SUBJECTS_P8,
+    member_on=True,
+    claim_level_member=True,
+    run3="L",
+    flow_sign=True,
+    point_diff=True,
+    segment_denominator=True,
+    expenditure_sign=True,
+    target_word=True,
+    text_reason_split=True,
+    prior2_required=True,
+    doc_rounding=True,
+    target_both=True,
+    paren_sentence=True,
+    drop_qualitative=True,
+)
+
+PROFILES = {"P1": P1, "P5F": P5F, "P6": P6, "P7": P7, "P8": P8}

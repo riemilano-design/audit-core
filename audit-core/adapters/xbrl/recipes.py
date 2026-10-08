@@ -52,6 +52,9 @@ UNBOUND_REASON_STATE = {
     "target_or_plan": "UNVERIFIABLE",
     "no_element(text needs money fact)": "POINTER_NOT_FOUND",
     "no_element(no prior for text)": "POINTER_NOT_FOUND",
+    # XBRL 直し §1b(人間の決定、2026-10-08、profile P8 のみ)。前々期の値が
+    # 無いとき、当期の残高や偶然一致した fact で代用せず止める。
+    "no_element(no prior2 for prior-year diff)": "POINTER_NOT_FOUND",
 }
 
 
@@ -130,7 +133,7 @@ def _flow_direction_word(s, subj, a, b):
     return None
 
 
-def _apply_flow_sign(claim, s, a, b):
+def _apply_flow_sign(claim, s, a, b, rounding=None):
     """§1-2。直接値の Claim が CF 流量項目の 1 件の fact に束縛されていて、
     向きの語があるときだけ、claim["flow_convention"]/["claim_direction"] を
     足し、normalization の札を abs を落とした梯子(round/truncate)に直す。
@@ -152,7 +155,7 @@ def _apply_flow_sign(claim, s, a, b):
     claim["flow_convention"] = conv
     claim["claim_direction"] = direction
     target_abs = abs(claim["value"]) * claim["unit_scale"]
-    how = V.match_value(abs(claim["recomputed"]), target_abs, claim["claim_scale"])
+    how = V.match_value(abs(claim["recomputed"]), target_abs, claim["claim_scale"], rounding)
     if how is not None:
         claim["match"] = how
 
@@ -197,7 +200,8 @@ def _build_point_diff_claim(claim, s, a, b, elems, member, facts, contexts, num)
     claim["result"] = "GROUNDED" if abs(recomputed - claim["value"]) <= 0.15 else "VALUE_MISMATCH"
 
 
-def _direct_value_claim(claim, s, a, b, sign, num, unit, prec, subj, elems, member, facts, contexts):
+def _direct_value_claim(claim, s, a, b, sign, num, unit, prec, subj, elems, member, facts, contexts,
+                        profile=None, rounding=None):
     scale = prec if unit == "円" else V.UNIT_SCALE[unit]
     unit_scale = 1.0 if unit == "円" else V.UNIT_SCALE[unit]
     target = sign * num * unit_scale
@@ -209,7 +213,7 @@ def _direct_value_claim(claim, s, a, b, sign, num, unit, prec, subj, elems, memb
     pool = I.facts_for(elems, facts, contexts, member) if subj else [f for f in facts if I.ctx_ok(f["context"], contexts, member)]
     pool = [f for f in pool if f["unit"] and f["unit"].upper().startswith("JPY")]
     is_diff = bool(_MONEY_UNIT_RE_AFTER.search(s[b:b + 4])) or bool(_MONEY_DIFF_PHRASE_RE.search(s[max(0, a - 25):a]))
-    hits = [(f, V.match_value(f["value"], target, scale)) for f in pool]
+    hits = [(f, V.match_value(f["value"], target, scale, rounding)) for f in pool]
     hits = [(f, how) for f, how in hits if how]
     if hits and not (is_diff and subj):
         fams = sorted({f["name"] for f, _ in hits})
@@ -244,7 +248,7 @@ def _direct_value_claim(claim, s, a, b, sign, num, unit, prec, subj, elems, memb
             for pa, pb in pairs:
                 fa, fb = ctx(pa), ctx(pb)
                 if fa and fb:
-                    how = V.match_value(fa["value"] - fb["value"], target, scale)
+                    how = V.match_value(fa["value"] - fb["value"], target, scale, rounding)
                     if how:
                         found = (fa, fb, how)
                         break
@@ -269,6 +273,19 @@ def _direct_value_claim(claim, s, a, b, sign, num, unit, prec, subj, elems, memb
         else:
             cur = [f for f in fs if f["context"].startswith("CurrentYear")]
             if cur:
+                if prev_year_phrase and profile is not None and profile.prior2_required:
+                    # XBRL 直し §1b: 「前連結会計年度は…」= 前期と前々期の差を
+                    # 言う主張で、その対が引けなかったとき、**当期の残高**に
+                    # 結び直すのが代用である。代用せずここで止める。
+                    #
+                    # 止めるのはこの枝だけにする。1 つ上の ``elif hits:`` は
+                    # 主張の数と**値が実際に一致した** fact に結ぶ枝で、代用では
+                    # ない(2 社目 S100Z4B6 の N079「前連結会計年度は営業損失
+                    # 9,709千円」= 前期の実額が、まさにこの枝で前期の fact に
+                    # 正しく結ばれている)。2026-10-08 の 2 社目の実測で、
+                    # 最初の実装がその 2 件を誤って止めたので枝を狭めた。
+                    claim["reason"] = "no_element(no prior2 for prior-year diff)"
+                    return
                 claim["pointer"] = "xbrl:%s@%s" % (cur[0]["name"], cur[0]["context"])
                 claim["bound"] = True
                 claim["result"] = "VALUE_MISMATCH"
@@ -288,8 +305,46 @@ def _direct_value_claim(claim, s, a, b, sign, num, unit, prec, subj, elems, memb
 _TARGET_WINDOW = 10
 _TARGET_RE = re.compile(r"目標|計画")
 
+# ---------------------------------------------------------------------------
+# XBRL 直し §3(人間の決定、2026-10-08): 目標・見通しの判定を、数の主張と
+# 文字の主張の両方に掛ける。語を広げ、数(または向きの語)の**後ろ**に来る
+# 文型も拾う。後ろの窓は同じ節の中だけを見る(``、``・``。``・括弧で打ち切る)
+# ― 「5.8% となり、目標を達成することができませんでした」のような、実績の数の
+# 後ろに目標の語が別の節で来る文を止めてしまわないため。
+# 窓の幅は字で書く(定数から土台を作らない)。
+# ---------------------------------------------------------------------------
+_TARGET_AFTER_WINDOW = 20
+_TARGET_BOTH_RE = re.compile(r"目標|計画|見込|見通")
+_CLAUSE_END_RE = re.compile(r"[、。()（）]")
 
-def _dispatch_num_claim(claim, s, a, b, sign, num, unit, prec, subj, elems, member, facts, contexts, profile):
+
+def _target_or_plan(s, a, b, profile):
+    """``a`` は数(または向きの語)の開始、``b`` は終わりの位置。
+
+    ``profile.target_both`` が真: 手前 10 字 + 後ろ 20 字(節の中だけ)に
+    ``目標|計画|見込|見通``。
+    偽で ``profile.target_word`` が真(P7): 手前 10 字に ``目標|計画`` だけ
+    (C-1h の挙動そのまま)。
+    どちらも偽(P1/P5F/P6): 常に偽。
+    """
+
+    if profile is None:
+        return False
+    if profile.target_both:
+        if _TARGET_BOTH_RE.search(s[max(0, a - _TARGET_WINDOW):a]):
+            return True
+        after = s[b:b + _TARGET_AFTER_WINDOW]
+        cut = _CLAUSE_END_RE.search(after)
+        if cut is not None:
+            after = after[:cut.start()]
+        return bool(_TARGET_BOTH_RE.search(after))
+    if profile.target_word:
+        return bool(_TARGET_RE.search(s[max(0, a - _TARGET_WINDOW):a]))
+    return False
+
+
+def _dispatch_num_claim(claim, s, a, b, sign, num, unit, prec, subj, elems, member, facts, contexts, profile,
+                        rounding=None):
     """§1-2 の目標値判定を通らなかった数の Claim の、既存の単位ごとの振り分け
     (C-1d/C-1g と不変)。"""
 
@@ -346,9 +401,10 @@ def _dispatch_num_claim(claim, s, a, b, sign, num, unit, prec, subj, elems, memb
             claim["reason"] = "no_subject"
     elif unit in V.UNIT_SCALE:
         claim["form"] = "direct_value"
-        _direct_value_claim(claim, s, a, b, sign, num, unit, prec, subj, elems, member, facts, contexts)
+        _direct_value_claim(claim, s, a, b, sign, num, unit, prec, subj, elems, member, facts, contexts,
+                            profile, rounding)
         if profile.flow_sign:
-            _apply_flow_sign(claim, s, a, b)
+            _apply_flow_sign(claim, s, a, b, rounding)
     elif unit in ("％", "%", "ポイント"):
         claim["form"] = "direct_value"
         if profile.point_diff and unit == "ポイント" and subj:
@@ -386,7 +442,7 @@ def _dispatch_num_claim(claim, s, a, b, sign, num, unit, prec, subj, elems, memb
         claim["reason"] = "no_element(unit not in XBRL)"
 
 
-def _build_raw_num_claims(sentences, facts, contexts, profile, claim_member):
+def _build_raw_num_claims(sentences, facts, contexts, profile, claim_member, rounding=None):
     num_claims = []
     for si, s in enumerate(sentences):
         for (a, b, signed, unit, prec) in E.iter_numbers(s):
@@ -400,17 +456,24 @@ def _build_raw_num_claims(sentences, facts, contexts, profile, claim_member):
             subj, elems = E.subject_of(s, a, profile.subjects)
             claim = {
                 "id": "N%03d" % (len(num_claims) + 1,), "sentence": si, "span": s[max(0, a - 30):b + 10],
+                # XBRL 直し(2026-10-08): 文の中の位置。文の切り方を変える直し
+                # (§4)の前後で主張を 1 対 1 に対応づけるためだけに使う計器で、
+                # Claim・Recipe には写らない(claim_to_recipe は読まない)。
+                "pos": a,
                 "value": sign * num, "unit": unit, "subject": subj, "form": None, "pointer": None,
                 "bound": False, "reason": None, "result": None, "recomputed": None,
             }
-            if profile.target_word and _TARGET_RE.search(s[max(0, a - _TARGET_WINDOW):a]):
-                # Core 接続 C-1h §1-2: 数の手前 10 字以内に 目標|計画 があれば
-                # UNVERIFIABLE。数の後ろの語・文章 Claim は見ない。
+            if _target_or_plan(s, a, b, profile):
+                # Core 接続 C-1h §1-2(P7)+ XBRL 直し §3(P8): 目標・計画・
+                # 見込み・見通しの数は UNVERIFIABLE。
                 claim["form"] = "direct_value"
                 claim["result"] = "UNVERIFIABLE"
                 claim["reason"] = "target_or_plan"
             else:
-                _dispatch_num_claim(claim, s, a, b, sign, num, unit, prec, subj, elems, member, facts, contexts, profile)
+                _dispatch_num_claim(claim, s, a, b, sign, num, unit, prec, subj, elems, member, facts, contexts,
+                                    profile, rounding)
+            if rounding is not None and claim.get("unit_scale") is not None:
+                claim["rounding"] = rounding
             if profile.member_on:
                 if msrc == "ambiguous" and not claim["bound"]:
                     claim["reason"] = "ambiguous(member)"
@@ -449,7 +512,7 @@ def _build_raw_text_claims(sentences, facts, contexts, profile, claim_member):
                 subj, elems = E.subject_of(s, m.start(), profile.subjects)
                 claim = {
                     "id": "T%03d" % (len(text_claims) + 1,), "sentence": si, "word": w,
-                    "span": s[max(0, m.start() - 30):m.end() + 5], "subject": subj,
+                    "span": s[max(0, m.start() - 30):m.end() + 5], "subject": subj, "pos": m.start(),
                     "form": "threshold", "pointer": None, "bound": False, "result": None, "reason": None,
                     "direction": sg,
                 }
@@ -468,7 +531,13 @@ def _build_raw_text_claims(sentences, facts, contexts, profile, claim_member):
                         if V.expenditure_convention(e):
                             expend_conv = True
                             break
-                if subj and flow_conv is not None:
+                if _target_or_plan(s, m.start(), m.end(), profile):
+                    # XBRL 直し §3: 向きの語の手前 10 字・後ろ 20 字(節の中)に
+                    # 目標|計画|見込|見通 があれば、盤面の事実ではなく将来の
+                    # 見通しなので束縛しない(「売上高の拡大を見込みます」)。
+                    claim["result"] = "UNVERIFIABLE"
+                    claim["reason"] = "target_or_plan"
+                elif subj and flow_conv is not None:
                     # Core 接続 C-1g §1-2: 主語が CF 流量項目なら、前期との
                     # 対でなく当期 1 件の fact + builtin:flow_sign(cur)==direction
                     # で束縛する(値そのものが増減を表すので前期は要らない)。
@@ -522,15 +591,48 @@ def _build_raw_text_claims(sentences, facts, contexts, profile, claim_member):
                         claim["reason"] = "ambiguous(member)"
                     claim["member"] = None if member == E.AMBIG else member
                     claim["member_source"] = msrc
+                if profile.drop_qualitative and not claim.get("subject"):
+                    # XBRL 直し §5: 主語が語彙に引けない向きの語は、景気や
+                    # 業界についての定性的な言い回し(「わが国経済は…改善」
+                    # 「役割は…拡大しております」)であって、どの行とも
+                    # 照合できない。主張にしない。
+                    claim["dropped"] = "qualitative(no subject)"
                 text_claims.append(claim)
         for w in E.STATE_WORDS:
             for m in re.finditer(w, s):
-                text_claims.append({
+                st = {
                     "id": "T%03d" % (len(text_claims) + 1,), "sentence": si, "word": w,
-                    "span": s[max(0, m.start() - 30):m.end() + 5], "subject": None, "form": "threshold",
+                    "span": s[max(0, m.start() - 30):m.end() + 5], "subject": None, "pos": m.start(), "form": "threshold",
                     "pointer": None, "bound": False, "result": "UNVERIFIABLE", "reason": "state_word(no line)",
-                })
+                }
+                if profile.drop_qualitative:
+                    # XBRL 直し §5: 状態語(堅調・不透明・回復…)は構造上どの
+                    # 行にも束縛されない(``state_word(no line)``)。主張にしない。
+                    st["dropped"] = "qualitative(state word)"
+                text_claims.append(st)
+    # 番号を振った**後に**落とす ― ID は欠番になるが、直す前との対応づけが
+    # ずれない(落とした件数と ID を結果に書けるようにするため)。
+    if profile.drop_qualitative:
+        text_claims = [c for c in text_claims if not c.get("dropped")]
     return text_claims
+
+
+def _rounding_evidence(num_claims):
+    """XBRL 直し §2: 丸め方を決める根拠。束縛できた金額の主張ごとに
+    ``(差, 桁)`` を返す。差は**その主張の照合が実際に使った軸**で測る
+    (``abs+`` の札が付いたもの・CF 流量項目は絶対値の軸)。
+    """
+
+    rows = []
+    for c in num_claims:
+        how = c.get("match")
+        if not how or c.get("unit_scale") is None or c.get("recomputed") is None:
+            continue
+        on_abs = how.startswith("abs+") or c.get("flow_convention") is not None
+        target = (abs(c["value"]) if on_abs else c["value"]) * c["unit_scale"]
+        fact = abs(c["recomputed"]) if on_abs else c["recomputed"]
+        rows.append((fact - target, c["claim_scale"]))
+    return rows
 
 
 def _member_material(zb, inst, text, sentences, profile):
@@ -546,21 +648,24 @@ def _member_material(zb, inst, text, sentences, profile):
     id2label = I.labels_from_zip(z, inst["names"])
     ntext = unicodedata.normalize("NFKC", text)
     reg, _rows, _hand = E.build_registry(members, id2label, ntext, profile.run3)
-    paras = E.paragraph_index(text, sentences)
+    paras = E.paragraph_index(text, sentences, profile.paren_sentence)
     sent_member = E.resolve_members(sentences, paras, reg)
     return sent_member, reg
 
 
-def build_raw_claims(zb, profile):
+def build_raw_claims(zb, profile, info=None):
     """1 文書・1 profile ぶんの、原本と同じ形(辞書)の num_claims / text_claims
     を作る。recipes.to_recipes の前段(確認・再現がしやすいように分けておく)。
+
+    ``info`` に辞書を渡すと、測るのに要る数(文の数・決めた丸め方とその根拠)
+    をそこに書き込む。渡さなければ何もしない(既存の呼び出しは不変)。
     """
 
     inst = I.load_instance(zb)
     facts, contexts, tbs = inst["facts"], inst["contexts"], inst["textblocks"]
     mdna_name = I.select_mdna(tbs)
     text = I.strip_html(tbs[mdna_name]) if mdna_name else ""
-    sentences = E.split_sentences(text)
+    sentences = E.split_sentences(text, profile.paren_sentence)
     sent_member, reg = _member_material(zb, inst, text, sentences, profile)
 
     def claim_member(si, pos):
@@ -569,7 +674,20 @@ def build_raw_claims(zb, profile):
         return E.claim_member_B(sentences[si], pos, reg, sent_member[si])
 
     num_claims = _build_raw_num_claims(sentences, facts, contexts, profile, claim_member)
+    rounding = None
+    if profile.doc_rounding:
+        # XBRL 直し §2: 1 周目(今までの梯子)で根拠を数え、書類の丸め方を
+        # 1 つに決め、2 周目はその 1 つだけで照合し直す。
+        rounding, r_only, t_only = V.decide_rounding(_rounding_evidence(num_claims))
+        num_claims = _build_raw_num_claims(sentences, facts, contexts, profile, claim_member, rounding)
+        if info is not None:
+            info["rounding_round_only"] = r_only
+            info["rounding_truncate_only"] = t_only
     text_claims = _build_raw_text_claims(sentences, facts, contexts, profile, claim_member)
+    if info is not None:
+        info["sentences"] = len(sentences)
+        info["mdna_chars"] = len(text)
+        info["rounding"] = rounding
     return num_claims, text_claims
 
 
@@ -654,6 +772,9 @@ def claim_to_recipe(raw, kind):
                     if raw.get("flow_convention") is not None:
                         params["flow_convention"] = raw["flow_convention"]
                         params["claim_direction"] = raw["claim_direction"]
+                    # XBRL 直し §2: 書類単位で決めた丸め方を検証時にも使う。
+                    if raw.get("rounding") is not None:
+                        params["rounding"] = raw["rounding"]
             else:
                 comparator = "equals_within(pure*100)"
                 params = {"tolerance": 0.15, "pure_threshold": 1.5}
@@ -667,6 +788,9 @@ def claim_to_recipe(raw, kind):
             }.get(f, "pct_change(cur,prior)")
             if comparator == "diff(a-b) equals_within":
                 params = {"unit_scale": raw.get("unit_scale"), "claim_scale": raw.get("claim_scale")}
+                # XBRL 直し §2: 書類単位で決めた丸め方を検証時にも使う。
+                if raw.get("rounding") is not None:
+                    params["rounding"] = raw["rounding"]
             else:
                 params = {"tolerance": 0.15}
         contract = core.Contract(comparator=comparator, params=params)
@@ -694,12 +818,12 @@ def claim_to_recipe(raw, kind):
     )
 
 
-def build_recipes(zb, profile):
+def build_recipes(zb, profile, info=None):
     """1 文書・1 profile ぶんの Core Recipe の列(num の後に text。原本の
-    num_claims + text_claims の順のまま)。
+    num_claims + text_claims の順のまま)。``info`` は build_raw_claims へ素通し。
     """
 
-    num_claims, text_claims = build_raw_claims(zb, profile)
+    num_claims, text_claims = build_raw_claims(zb, profile, info)
     recipes = [claim_to_recipe(c, "num") for c in num_claims]
     recipes += [claim_to_recipe(c, "text") for c in text_claims]
     return recipes

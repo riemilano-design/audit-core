@@ -535,3 +535,212 @@ class WindowBoundaryTest(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class TargetOrPlanBothSidesTest(unittest.TestCase):
+    """XBRL 直し §3(2026-10-08): 目標・見通しの判定を数と文字の両方に掛け、
+    数(または向きの語)の**後ろ**の文型も拾う。後ろの窓は同じ節の中だけ。
+
+    窓の幅 10 / 20 は字で書いた定数なので、境界の両側で当てる。
+    """
+
+    @staticmethod
+    def _claim_member(si, pos):
+        return (None, None)
+
+    FACTS = [{"name": "jpcrp_cor:NetSalesSummaryOfBusinessResults", "context": "CurrentYearDuration",
+              "unit": "JPY", "value": 200.0},
+             {"name": "jpcrp_cor:NetSalesSummaryOfBusinessResults", "context": "Prior1YearDuration",
+              "unit": "JPY", "value": 100.0}]
+    CONTEXTS = {"CurrentYearDuration": {"members": []}, "Prior1YearDuration": {"members": []}}
+
+    def _num(self, s, profile):
+        claims = R._build_raw_num_claims([s], [], {}, profile, self._claim_member)
+        self.assertEqual(len(claims), 1, s)
+        return claims[0]
+
+    def _text(self, s, profile):
+        claims = R._build_raw_text_claims([s], self.FACTS, self.CONTEXTS, profile, self._claim_member)
+        self.assertTrue(claims, s)
+        return claims[0]
+
+    # ---- 数の主張、後ろの窓 --------------------------------------------
+    def test_target_fifteen_chars_after_the_number_is_caught(self):
+        # 1 社目 N013 型。P7 では捕まらず、P8 で捕まる(向きが両方 ある)。
+        s = "株主資本利益率(ROE)10%以上を安定的に達成できることを目標に掲げております。"
+        self.assertNotEqual(self._num(s, V.P7)["reason"], "target_or_plan")
+        self.assertEqual(self._num(s, V.P8)["reason"], "target_or_plan")
+        self.assertEqual(self._num(s, V.P8)["result"], "UNVERIFIABLE")
+
+    def test_word_at_the_last_char_of_the_after_window_is_caught(self):
+        # 「目標」の 2 字が窓 20 字にちょうど収まる = 18 字あけて置く。
+        self.assertEqual(R._TARGET_AFTER_WINDOW, 20)
+        s = "売上高は8.6%" + ("x" * 18) + "目標"
+        self.assertEqual(self._num(s, V.P8)["reason"], "target_or_plan")
+
+    def test_word_one_char_past_the_after_window_is_not_caught(self):
+        s = "売上高は8.6%" + ("x" * 19) + "目標"
+        self.assertNotEqual(self._num(s, V.P8)["reason"], "target_or_plan")
+
+    def test_after_window_stops_at_a_comma(self):
+        # 1 社目 N014 型: 実績の数の後ろに、別の節として目標の語が来る文。
+        # ここを止めてしまうと正しい主張を落とす。
+        s = "株主資本利益率(ROE)は5.8%となり、目標を達成することができませんでした。"
+        c = self._num(s, V.P8)
+        self.assertNotEqual(c["reason"], "target_or_plan")
+
+    def test_after_window_stops_at_a_parenthesis(self):
+        s = "売上高は8.6%(前期は目標)"
+        self.assertNotEqual(self._num(s, V.P8)["reason"], "target_or_plan")
+
+    # ---- 数の主張、手前の窓(P7 の 10 字は動かさない)-------------------
+    def test_before_window_is_still_ten_chars(self):
+        self.assertEqual(R._TARGET_WINDOW, 10)
+        s = "目標" + ("x" * 8) + "8.6%にした。"
+        self.assertEqual(self._num(s, V.P8)["reason"], "target_or_plan")
+        s11 = "目標" + ("x" * 9) + "8.6%にした。"
+        self.assertNotEqual(self._num(s11, V.P8)["reason"], "target_or_plan")
+
+    # ---- 語を広げた分 --------------------------------------------------
+    def test_new_words_are_caught_and_only_under_p8(self):
+        for w in ("見込", "見通"):
+            s = "売上高は8.6%を" + w + "みます。"
+            self.assertEqual(self._num(s, V.P8)["reason"], "target_or_plan", w)
+            self.assertNotEqual(self._num(s, V.P7)["reason"], "target_or_plan", w)
+
+    def test_old_words_are_still_caught(self):
+        for w in ("目標", "計画"):
+            s = w + "として8.6%にする。"
+            self.assertEqual(self._num(s, V.P8)["reason"], "target_or_plan", w)
+
+    # ---- 文字の主張 ----------------------------------------------------
+    def test_text_claim_is_caught_under_p8(self):
+        # 1 社目 T031 型: 「売上高の拡大を見込みます」。
+        s = "経営資源を重点的に配分することによって受注高、売上高の拡大を見込みます。"
+        c7 = self._text(s, V.P7)
+        self.assertEqual(c7["result"], "GROUNDED")
+        c8 = self._text(s, V.P8)
+        self.assertEqual(c8["reason"], "target_or_plan")
+        self.assertEqual(c8["result"], "UNVERIFIABLE")
+        self.assertIsNone(c8["pointer"])
+
+    def test_text_claim_without_a_target_word_still_binds_under_p8(self):
+        # 不変: 目標の語が無ければ P8 でも今までどおり束縛する。
+        s = "売上高は増加しました。"
+        c = self._text(s, V.P8)
+        self.assertEqual(c["result"], "GROUNDED")
+
+    def test_p6_never_sees_a_target_word(self):
+        s = "目標として8.6%にする。"
+        self.assertNotEqual(self._num(s, V.P6)["reason"], "target_or_plan")
+
+    def test_target_or_plan_helper_is_false_without_a_profile(self):
+        self.assertFalse(R._target_or_plan("目標8.6%", 2, 6, None))
+
+
+class Prior2RequiredTest(unittest.TestCase):
+    """XBRL 直し §1b(2026-10-08): 「前連結会計年度は…」の差を言う主張で、
+    前期と前々期の対が引けないときは代用せず止める。
+    """
+
+    @staticmethod
+    def _claim_member(si, pos):
+        return (None, None)
+
+    # 「前連結会計年度は 537 百万円減少」= 前期と前々期の差。要素には当期と
+    # 前期しか無く(前々期が無い)、当期の残高 10,670 百万円だけが在る。
+    SENT = ("当連結会計年度末における負債合計は、前連結会計年度末と比べて614百万円増加"
+            "(前連結会計年度は537百万円減少)しました。")
+    FACTS = [{"name": "jppfs_cor:Liabilities", "context": "CurrentYearInstant", "unit": "JPY", "value": 10670476000.0},
+             {"name": "jppfs_cor:Liabilities", "context": "Prior1YearInstant", "unit": "JPY", "value": 10055000000.0}]
+    CONTEXTS = {"CurrentYearInstant": {"members": []}, "Prior1YearInstant": {"members": []}}
+
+    def _claims(self, profile):
+        return R._build_raw_num_claims([self.SENT], self.FACTS, self.CONTEXTS, profile, self._claim_member)
+
+    def _prior_year_claim(self, profile):
+        got = [c for c in self._claims(profile) if c["value"] == 537000000.0]
+        self.assertEqual(len(got), 1)
+        return got[0]
+
+    def test_p7_substitutes_the_current_balance(self):
+        # 直す前(代用する側)を固定する。
+        c = self._prior_year_claim(V.P7)
+        self.assertEqual(c["result"], "VALUE_MISMATCH")
+        self.assertEqual(c["pointer"], "xbrl:jppfs_cor:Liabilities@CurrentYearInstant")
+        self.assertEqual(c["recomputed"], 10670476000.0)
+
+    def test_p8_stops_instead(self):
+        c = self._prior_year_claim(V.P8)
+        self.assertEqual(c["reason"], "no_element(no prior2 for prior-year diff)")
+        self.assertIsNone(c["pointer"])
+        self.assertIsNone(c["result"])
+        self.assertEqual(R._state_of(c["reason"], c["result"]), "POINTER_NOT_FOUND")
+
+    def test_p8_does_not_stop_when_the_prior2_fact_exists(self):
+        facts = self.FACTS + [{"name": "jppfs_cor:Liabilities", "context": "Prior2YearInstant",
+                               "unit": "JPY", "value": 10592000000.0}]
+        contexts = dict(self.CONTEXTS, Prior2YearInstant={"members": []})
+        got = [c for c in R._build_raw_num_claims([self.SENT], facts, contexts, V.P8, self._claim_member)
+               if c["value"] == 537000000.0]
+        self.assertEqual(len(got), 1)
+        self.assertEqual(got[0]["result"], "GROUNDED")
+        self.assertEqual(got[0]["recomputed"], 10055000000.0 - 10592000000.0)
+
+    def test_the_stop_only_applies_to_the_prior_year_phrase(self):
+        # 不変: 「前連結会計年度は」が無い差の主張は、この枝に来ない。
+        s = "当連結会計年度末における負債合計は、前連結会計年度末と比べて9999百万円増加しました。"
+        got = R._build_raw_num_claims([s], self.FACTS, self.CONTEXTS, V.P8, self._claim_member)
+        self.assertEqual(len(got), 1)
+        self.assertNotEqual(got[0]["reason"], "no_element(no prior2 for prior-year diff)")
+
+
+class DropQualitativeTest(unittest.TestCase):
+    """XBRL 直し §5(2026-10-08): 景気や業界の定性的な語を主張にしない。
+    番号を振った**後に**落とすので、残る主張の ID はずれない。
+    """
+
+    @staticmethod
+    def _claim_member(si, pos):
+        return (None, None)
+
+    FACTS = [{"name": "jpcrp_cor:NetSalesSummaryOfBusinessResults", "context": "CurrentYearDuration",
+              "unit": "JPY", "value": 200.0},
+             {"name": "jpcrp_cor:NetSalesSummaryOfBusinessResults", "context": "Prior1YearDuration",
+              "unit": "JPY", "value": 100.0}]
+    CONTEXTS = {"CurrentYearDuration": {"members": []}, "Prior1YearDuration": {"members": []}}
+
+    def _text(self, sentences, profile):
+        return R._build_raw_text_claims(sentences, self.FACTS, self.CONTEXTS, profile, self._claim_member)
+
+    def test_state_word_claim_is_dropped(self):
+        s = "国内の公共事業を取り巻く環境は堅調に推移しております。"
+        self.assertEqual([c["reason"] for c in self._text([s], V.P7)], ["state_word(no line)"])
+        self.assertEqual(self._text([s], V.P8), [])
+
+    def test_direction_word_without_a_subject_is_dropped(self):
+        s = "わが国経済は、雇用・所得環境の改善により回復しました。"
+        p7 = self._text([s], V.P7)
+        self.assertTrue(any(c["reason"] == "no_subject" for c in p7))
+        self.assertEqual(self._text([s], V.P8), [])
+
+    def test_direction_word_with_a_subject_is_kept(self):
+        s = "売上高は増加しました。"
+        got = self._text([s], V.P8)
+        self.assertEqual(len(got), 1)
+        self.assertEqual(got[0]["result"], "GROUNDED")
+
+    def test_ids_of_the_kept_claims_do_not_shift(self):
+        # 2 文目に落とす主張、3 文目に残す主張。残る主張の ID は P7 と同じ。
+        sentences = ["売上高は増加しました。", "環境は堅調に推移しました。", "売上高は拡大しました。"]
+        p7 = {c["id"]: c["word"] for c in self._text(sentences, V.P7)}
+        p8 = {c["id"]: c["word"] for c in self._text(sentences, V.P8)}
+        self.assertEqual(sorted(p8), ["T001", "T003"])
+        for i in p8:
+            self.assertEqual(p8[i], p7[i])
+
+    def test_num_claims_are_not_touched(self):
+        # 数の主張には掛けない(主語が引けない数の主張も残す)。
+        s = "その他は293百万円減少しました。"
+        got = R._build_raw_num_claims([s], [], {}, V.P8, self._claim_member)
+        self.assertEqual(len(got), 1)

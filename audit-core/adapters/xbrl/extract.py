@@ -116,25 +116,72 @@ def own_sign_match(window, num):
     return None
 
 
-def paragraph_index(text, sentences):
-    """凍結の文の切り方(re.split(r"(?<=。)|\\n"))と同じ列になることを確かめ
-    ながら、文ごとの段落番号を作る。xbrl_probe3.py: paragraph_index の写し。
+# ---------------------------------------------------------------------------
+# XBRL 直し §4(人間の決定、2026-10-08): 括弧の中の句点では文を切らない。
+# ``profile.paren_sentence`` が真のときだけ使う(P1/P5F/P6/P7 は偽で、
+# 凍結の切り方 ``re.split(r"(?<=。)|\n")`` のまま 1 文字も変わらない)。
+# 開き括弧・閉じ括弧の字は字で書く(定数から土台を作らない)。
+# ---------------------------------------------------------------------------
+PAREN_OPEN = "(（"
+PAREN_CLOSE = ")）"
+
+
+def split_after_kuten_outside_parens(line, paren_open=PAREN_OPEN, paren_close=PAREN_CLOSE):
+    """1 行を 。 の直後で切る。ただし丸括弧の中の 。 では切らない。
+
+    「(以下「資金」という。)は、…減少し、26 億 5 百万円となりました。」が
+    2 つに切れて主語を失うのを防ぐのが目的(``N043``/``T025``)。
+    閉じ括弧が余っていても深さは 0 より下げない(壊れた括弧で全体が
+    1 文に潰れないため)。
+    """
+
+    out, depth, start = [], 0, 0
+    for i, ch in enumerate(line):
+        if ch in paren_open:
+            depth += 1
+        elif ch in paren_close:
+            depth = depth - 1 if depth > 0 else 0
+        elif ch == "。" and depth == 0:
+            out.append(line[start:i + 1])
+            start = i + 1
+    out.append(line[start:])
+    return out
+
+
+def _split_lines(text, paren_aware):
+    """段落(``\n`` で切った 1 行)ごとの文の列。段落の番号を数えるのと
+    文の列を作るのが同じ 1 か所から出るようにしておく。
+    """
+
+    for pi, para in enumerate(text.split("\n")):
+        pieces = split_after_kuten_outside_parens(para) if paren_aware else re.split(r"(?<=。)", para)
+        for s in pieces:
+            if s and s.strip():
+                yield pi, unicodedata.normalize("NFKC", s.strip())
+
+
+def paragraph_index(text, sentences, paren_aware=False):
+    """文の切り方(``paren_aware`` が偽なら凍結の ``re.split(r"(?<=。)|\\n")``)
+    と同じ列になることを確かめながら、文ごとの段落番号を作る。
+    xbrl_probe3.py: paragraph_index の写し(``paren_aware`` の枝だけが新しい)。
     """
 
     paras, check = [], []
-    for pi, para in enumerate(text.split("\n")):
-        for s in re.split(r"(?<=。)", para):
-            if s and s.strip():
-                paras.append(pi)
-                check.append(unicodedata.normalize("NFKC", s.strip()))
-    assert check == sentences, "paragraph split diverged from frozen sentence split"
+    for pi, s in _split_lines(text, paren_aware):
+        paras.append(pi)
+        check.append(s)
+    assert check == sentences, "paragraph split diverged from the sentence split"
     return paras
 
 
-def split_sentences(text):
-    """xbrl_probe.py main(): NFKC + 文の切り方(re.split(r"(?<=。)|\\n"))の写し。"""
+def split_sentences(text, paren_aware=False):
+    """xbrl_probe.py main(): NFKC + 文の切り方(``re.split(r"(?<=。)|\\n")``)の
+    写し。``paren_aware`` が真のときだけ、丸括弧の中の 。 では切らない(§4)。
+    """
 
-    return [unicodedata.normalize("NFKC", s.strip()) for s in re.split(r"(?<=。)|\n", text) if s and s.strip()]
+    if not paren_aware:
+        return [unicodedata.normalize("NFKC", s.strip()) for s in re.split(r"(?<=。)|\n", text) if s and s.strip()]
+    return [s for _pi, s in _split_lines(text, True)]
 
 
 def build_registry(members, id2label, text, run3, registry_path=None):

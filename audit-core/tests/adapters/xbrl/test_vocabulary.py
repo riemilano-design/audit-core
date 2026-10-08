@@ -189,7 +189,9 @@ class P7ProfileTest(unittest.TestCase):
 
     def test_p7_in_profiles_registry(self):
         self.assertEqual(V.PROFILES["P7"], V.P7)
-        self.assertEqual(sorted(V.PROFILES.keys()), ["P1", "P5F", "P6", "P7"])
+        # XBRL 直し(2026-10-08)で P8 を足した。P1/P5F/P6/P7 の 4 つが在ること
+        # と、P8 がこの 4 つに加わっていることを両方見る。
+        self.assertEqual(sorted(V.PROFILES.keys()), ["P1", "P5F", "P6", "P7", "P8"])
 
     def test_p7_subjects_same_as_p6(self):
         self.assertEqual(V.P7.subjects, V.P6.subjects)
@@ -245,3 +247,129 @@ class ExpenditureConventionTest(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class MatchValueModeTest(unittest.TestCase):
+    """XBRL 直し §2(2026-10-08): ``match_value`` の ``mode``。
+
+    桁 ``unit`` を 1.0、目標を 100.0 に固定して、3 つの帯を両側から当てる。
+    ``-0.4`` は round だけ・``+0.9`` は truncate だけが通る帯であり、
+    ``mode=None``(既存)は**両方**通す = 許容幅が実質 1.5 倍であることを数で残す。
+    """
+
+    def test_mode_none_accepts_both_sides(self):
+        self.assertEqual(V.match_value(99.6, 100.0, 1.0), "round")
+        self.assertEqual(V.match_value(100.9, 100.0, 1.0), "truncate")
+
+    def test_round_only_rejects_the_truncate_side(self):
+        self.assertEqual(V.match_value(99.6, 100.0, 1.0, "round"), "round")
+        self.assertIsNone(V.match_value(100.9, 100.0, 1.0, "round"))
+
+    def test_truncate_only_rejects_the_negative_side(self):
+        self.assertEqual(V.match_value(100.9, 100.0, 1.0, "truncate"), "truncate")
+        self.assertIsNone(V.match_value(99.6, 100.0, 1.0, "truncate"))
+
+    def test_truncate_only_still_labels_the_overlap_as_truncate(self):
+        # 差が 0 以上 unit/2 以下の重なりの帯は、梯子では round の札が付くが、
+        # 書類の丸め方を truncate に決めたら truncate の札になる。
+        self.assertEqual(V.match_value(100.0, 100.0, 1.0), "round")
+        self.assertEqual(V.match_value(100.0, 100.0, 1.0, "truncate"), "truncate")
+
+    def test_abs_prefix_survives_each_mode(self):
+        self.assertEqual(V.match_value(-100.9, 100.0, 1.0, "truncate"), "abs+truncate")
+        self.assertEqual(V.match_value(-99.6, 100.0, 1.0, "round"), "abs+round")
+
+    def test_mode_none_is_identical_to_the_frozen_ladder(self):
+        # 恒等: mode を渡さないことと None を渡すことが同じ。
+        for fv in (99.4, 99.6, 100.0, 100.4, 100.9, 101.2, -100.0, 0.0):
+            self.assertEqual(V.match_value(fv, 100.0, 1.0), V.match_value(fv, 100.0, 1.0, None))
+
+
+class DecideRoundingTest(unittest.TestCase):
+    """XBRL 直し §2: 書類単位の丸め方の決め方。``(差, 桁)`` の列から決める。"""
+
+    def test_truncate_when_truncate_only_evidence_wins(self):
+        self.assertEqual(V.decide_rounding([(0.9, 1.0), (0.8, 1.0), (-0.3, 1.0)]), ("truncate", 1, 2))
+
+    def test_round_when_round_only_evidence_wins(self):
+        self.assertEqual(V.decide_rounding([(-0.3, 1.0), (-0.2, 1.0), (0.9, 1.0)]), ("round", 2, 1))
+
+    def test_tie_falls_back_to_the_written_default(self):
+        self.assertEqual(V.DOC_ROUNDING_DEFAULT, "round")
+        self.assertEqual(V.decide_rounding([(0.9, 1.0), (-0.3, 1.0)]), ("round", 1, 1))
+
+    def test_no_evidence_falls_back_to_the_written_default(self):
+        self.assertEqual(V.decide_rounding([]), ("round", 0, 0))
+
+    def test_overlap_band_is_evidence_for_neither(self):
+        # 差が 0..unit/2 の重なりの帯は、どちらの丸め方でも説明できるので
+        # R にも T にも数えない。
+        self.assertEqual(V.decide_rounding([(0.0, 1.0), (0.4, 1.0), (0.5, 1.0)]), ("round", 0, 0))
+
+    def test_unit_is_read_per_row(self):
+        # 桁は行ごと。0.9 は桁 1.0 なら truncate だけの帯だが、桁 10.0 なら重なり。
+        self.assertEqual(V.decide_rounding([(0.9, 1.0)]), ("truncate", 0, 1))
+        self.assertEqual(V.decide_rounding([(0.9, 10.0)]), ("round", 0, 0))
+
+
+class SubjectsP8Test(unittest.TestCase):
+    """XBRL 直し §1a(2026-10-08): 「資産合計」に ``TotalAssets`` を足す。
+    主語の数は増やしていない・P6 の語彙は不変。
+    """
+
+    def test_same_number_of_subjects_as_p6(self):
+        self.assertEqual(len(V.SUBJECTS_P8), len(V.SUBJECTS_P6))
+
+    def test_only_the_total_assets_rows_differ_from_p6(self):
+        differ = [(a, b) for a, b in zip(V.SUBJECTS_P6, V.SUBJECTS_P8) if a != b]
+        self.assertTrue(differ)
+        for a, b in differ:
+            self.assertEqual(a[0], "資産合計")
+            self.assertEqual(b, ("資産合計", ["Assets", "TotalAssets"]))
+
+    def test_p6_total_assets_is_still_assets_only_somewhere(self):
+        # 直す前の非対称(「純資産合計」は Summary が引けるのに「資産合計」は
+        # 引けない)が P6 に残っていることを固定する。
+        self.assertIn(("資産合計", ["Assets"]), list(V.SUBJECTS_P6))
+        self.assertIn(("純資産合計", ["NetAssets"]), list(V.SUBJECTS_P6))
+
+    def test_p8_total_assets_can_reach_the_summary_element(self):
+        # 語彙には「資産合計」の行が 2 つある(RUN=="B" の 34 語と基礎の 39 語)。
+        # ``subject_of`` は同じ語・同じ長さなら**先に来た行**を採るので、
+        # ``dict()`` で引くと(後の行が勝って)実際とは違う答えになる。
+        # そこで実際に主語を引く経路で見る。
+        # ``facts_for`` は 要素名 + "SummaryOfBusinessResults" を完全一致に数える。
+        from adapters.xbrl import extract as X
+        s = "当連結会計年度末における資産合計は、278億円となりました。"
+        pos = s.index("278")
+        _w8, elems8 = X.subject_of(s, pos, V.SUBJECTS_P8)
+        _w6, elems6 = X.subject_of(s, pos, V.SUBJECTS_P6)
+        self.assertEqual(elems8, ["Assets", "TotalAssets"])
+        self.assertEqual(elems6, ["Assets"])
+        self.assertIn("TotalAssetsSummaryOfBusinessResults", [e + "SummaryOfBusinessResults" for e in elems8])
+        self.assertNotIn("TotalAssetsSummaryOfBusinessResults", [e + "SummaryOfBusinessResults" for e in elems6])
+
+
+class P8ProfileTest(unittest.TestCase):
+    """XBRL 直し(2026-10-08): P8 = P7 + 5 つのフラグ。既存 profile は不変。"""
+
+    FLAGS = ("prior2_required", "doc_rounding", "target_both", "paren_sentence", "drop_qualitative")
+
+    def test_p8_turns_all_five_on(self):
+        for f in self.FLAGS:
+            self.assertTrue(getattr(V.P8, f), f)
+
+    def test_existing_profiles_keep_all_five_off(self):
+        for p in (V.P1, V.P5F, V.P6, V.P7):
+            for f in self.FLAGS:
+                self.assertFalse(getattr(p, f), "%s.%s" % (p.name, f))
+
+    def test_p8_keeps_every_p7_flag(self):
+        for f in ("member_on", "claim_level_member", "flow_sign", "point_diff", "segment_denominator",
+                  "expenditure_sign", "target_word", "text_reason_split"):
+            self.assertEqual(getattr(V.P8, f), getattr(V.P7, f), f)
+        self.assertEqual(V.P8.run3, V.P7.run3)
+
+    def test_p8_uses_the_p8_subjects(self):
+        self.assertEqual(V.P8.subjects, V.SUBJECTS_P8)
+        self.assertEqual(V.P7.subjects, V.SUBJECTS_P6)
