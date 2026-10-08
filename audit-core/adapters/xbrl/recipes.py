@@ -649,10 +649,19 @@ def _build_raw_text_claims(sentences, facts, contexts, profile, claim_member):
                     claim["member"] = None if member == E.AMBIG else member
                     claim["member_source"] = msrc
                 if profile.drop_qualitative and not claim.get("subject"):
-                    # XBRL 直し §5: 主語が語彙に引けない向きの語は、景気や
-                    # 業界についての定性的な言い回し(「わが国経済は…改善」
-                    # 「役割は…拡大しております」)であって、どの行とも
-                    # 照合できない。主張にしない。
+                    # XBRL 直し §5(広い版): 主語が語彙に引けない向きの語を
+                    # 主張にしない。
+                    #
+                    # **2026-10-08 の実測で、この枝は広すぎることが分かった。**
+                    # 1 社目では景気の語(「わが国経済は…改善」)だったが、
+                    # 2 社目・3 社目では実在の勘定科目が混ざっていた ―
+                    # 「売上原価は 30,950 千円増加」「流動資産は…37 百万円減少」
+                    # 「固定資産は…239 百万円増加」など、**語彙に主語が無いだけ**の
+                    # 主張を黙って分母から消していた(3 書類で 3 / 18 / 20 件)。
+                    # 狭い版(``drop_state_words_only``、profile P10)はこの枝を
+                    # 通らず、向きの語は ``no_subject`` のまま残す ― その件数が
+                    # 語彙の穴の大きさを指す計器になる。
+                    # 経緯は docs/XBRL_FIX5_NARROW_PLAN_2026-10-08.md。
                     claim["dropped"] = "qualitative(no subject)"
                 text_claims.append(claim)
         for w in E.STATE_WORDS:
@@ -662,14 +671,15 @@ def _build_raw_text_claims(sentences, facts, contexts, profile, claim_member):
                     "span": s[max(0, m.start() - 30):m.end() + 5], "subject": None, "pos": m.start(), "form": "threshold",
                     "pointer": None, "bound": False, "result": "UNVERIFIABLE", "reason": "state_word(no line)",
                 }
-                if profile.drop_qualitative:
+                if profile.drop_qualitative or profile.drop_state_words_only:
                     # XBRL 直し §5: 状態語(堅調・不透明・回復…)は構造上どの
                     # 行にも束縛されない(``state_word(no line)``)。主張にしない。
+                    # 狭い版(§5')が落とすのはこの群**だけ**である。
                     st["dropped"] = "qualitative(state word)"
                 text_claims.append(st)
     # 番号を振った**後に**落とす ― ID は欠番になるが、直す前との対応づけが
     # ずれない(落とした件数と ID を結果に書けるようにするため)。
-    if profile.drop_qualitative:
+    if profile.drop_qualitative or profile.drop_state_words_only:
         text_claims = [c for c in text_claims if not c.get("dropped")]
     return text_claims
 

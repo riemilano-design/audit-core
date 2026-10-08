@@ -262,6 +262,9 @@ class Profile:
     drop_qualitative: bool = False     # §5  定性的な語を主張にしない
     # XBRL 直し §6(人間の決定、2026-10-08)。P9 だけ。P1〜P8 は既定の False。
     text_prior_year_paren: bool = False  # §6 括弧内の前期の方向語を前期−前々期に
+    # XBRL 直し §5 を狭める(人間の指示で確かめた結果、2026-10-08)。P10 だけ。
+    # 広い版 drop_qualitative は消さずに残し、両方を測って並べる。
+    drop_state_words_only: bool = False  # §5' 状態語だけを落とす(向きの語は残す)
 
 
 P1 = Profile(
@@ -346,4 +349,28 @@ P9 = Profile(
     text_prior_year_paren=True,
 )
 
-PROFILES = {"P1": P1, "P5F": P5F, "P6": P6, "P7": P7, "P8": P8, "P9": P9}
+# XBRL 直し §5' (人間の指示で確かめた結果、2026-10-08): 直し 5 を状態語だけに
+# 狭めた版。P9 との差は drop_qualitative → drop_state_words_only の 1 つだけ。
+# P9 の定義は書き換えない(広い版の数の照合ができるように両方残す)。
+P10 = Profile(
+    name="P10",
+    subjects=SUBJECTS_P8,
+    member_on=True,
+    claim_level_member=True,
+    run3="L",
+    flow_sign=True,
+    point_diff=True,
+    segment_denominator=True,
+    expenditure_sign=True,
+    target_word=True,
+    text_reason_split=True,
+    prior2_required=True,
+    doc_rounding=True,
+    target_both=True,
+    paren_sentence=True,
+    drop_qualitative=False,
+    text_prior_year_paren=True,
+    drop_state_words_only=True,
+)
+
+PROFILES = {"P1": P1, "P5F": P5F, "P6": P6, "P7": P7, "P8": P8, "P9": P9, "P10": P10}

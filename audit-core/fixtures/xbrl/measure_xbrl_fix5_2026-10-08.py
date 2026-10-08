@@ -52,7 +52,10 @@ CONFIGS = [
     # XBRL 直し §6(2026-10-08 の追加の指示): 6 つ目を単独と組み合わせの両方で測る。
     ("fix6_prior_paren", {"text_prior_year_paren": True}),
     ("fix6_with_vocab", {"text_prior_year_paren": True, "subjects": V.SUBJECTS_P8}),
-    ("all6", "P9"),  # = V.PROFILES["P9"](6 つとも)
+    ("all6", "P9"),  # = V.PROFILES["P9"](6 つとも・直し 5 は広い版)
+    # XBRL 直し §5' (2026-10-08): 直し 5 を状態語だけに狭めた版も並べて測る。
+    ("fix5n_state_only", {"drop_state_words_only": True}),
+    ("all6n", "P10"),  # = V.PROFILES["P10"](6 つとも・直し 5 は狭い版)
 ]
 
 ROW_FIELDS = ("state", "pointers", "recomputed", "reason", "comparator", "normalization")
@@ -169,7 +172,7 @@ def main(argv=None):
         else:
             d = diff_against(base_rows, rows)
         out["configs"][name] = {"tally": tally, "info": info, "diff": d}
-        if name in ("base", "all", "all6"):
+        if name in ("base", "all", "all6", "all6n"):
             # 行の全表は「直す前」と「5 つとも入れた後」の 2 つだけ置く。
             # 1 つずつの構成は base との差分(全件)で足りる。
             out["configs"][name]["rows"] = {"%s|%d" % k: v for k, v in rows.items()}

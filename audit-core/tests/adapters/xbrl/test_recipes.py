@@ -875,3 +875,74 @@ class TextPriorYearParenTest(unittest.TestCase):
         a = dataclasses.replace(V.P8, name="x", text_prior_year_paren=True)
         b = dataclasses.replace(V.P9, name="x")
         self.assertEqual(a, b)
+
+
+class DropStateWordsOnlyTest(unittest.TestCase):
+    """XBRL 直し §5'(2026-10-08 の実測の結果): 直し 5 を状態語だけに狭める。
+
+    広い版(`drop_qualitative`)は、主語が引けない向きの語も落としていた。
+    2 社目・3 社目の実測で、そこに**実在の勘定科目**(「売上原価は 30,950 千円増加」
+    「流動資産は…37 百万円減少」)が混ざっていた ― 語彙の穴を分母から消していた。
+    狭い版は向きの語を落とさず、`no_subject` のまま残す。
+    """
+
+    @staticmethod
+    def _claim_member(si, pos):
+        return (None, None)
+
+    FACTS = [{"name": "jpcrp_cor:NetSalesSummaryOfBusinessResults", "context": "CurrentYearDuration",
+              "unit": "JPY", "value": 200.0},
+             {"name": "jpcrp_cor:NetSalesSummaryOfBusinessResults", "context": "Prior1YearDuration",
+              "unit": "JPY", "value": 100.0}]
+    CONTEXTS = {"CurrentYearDuration": {"members": []}, "Prior1YearDuration": {"members": []}}
+
+    STATE = "国内の公共事業を取り巻く環境は堅調に推移しております。"
+    # 語彙に「売上原価」が無いので主語が引けない = 2 社目 T038 と同じ型。
+    NO_SUBJ = "売上原価は30,950千円増加しました。"
+    WITH_SUBJ = "売上高は増加しました。"
+
+    def _text(self, sentences, profile):
+        return R._build_raw_text_claims(sentences, self.FACTS, self.CONTEXTS, profile, self._claim_member)
+
+    def test_narrow_drops_the_state_word(self):
+        self.assertEqual(self._text([self.STATE], V.P10), [])
+        self.assertEqual(self._text([self.STATE], V.P9), [])
+
+    def test_narrow_keeps_the_subjectless_direction_word(self):
+        got = self._text([self.NO_SUBJ], V.P10)
+        self.assertEqual(len(got), 1)
+        self.assertIsNone(got[0]["subject"])
+        self.assertEqual(got[0]["reason"], "no_subject")
+        self.assertEqual(R._state_of(got[0]["reason"], got[0]["result"]), "UNVERIFIABLE")
+
+    def test_wide_drops_the_subjectless_direction_word(self):
+        # 広い版の振る舞い(消す側)を固定する ― 狭い版との差がこれだけであること。
+        self.assertEqual(self._text([self.NO_SUBJ], V.P9), [])
+
+    def test_both_keep_a_claim_whose_subject_resolves(self):
+        for p in (V.P9, V.P10):
+            got = self._text([self.WITH_SUBJ], p)
+            self.assertEqual(len(got), 1, p.name)
+            self.assertEqual(got[0]["result"], "GROUNDED", p.name)
+
+    def test_narrow_and_wide_differ_only_in_the_subjectless_group(self):
+        sentences = [self.STATE, self.NO_SUBJ, self.WITH_SUBJ]
+        wide = [c["id"] for c in self._text(sentences, V.P9)]
+        narrow = [c["id"] for c in self._text(sentences, V.P10)]
+        self.assertEqual(wide, ["T003"])
+        self.assertEqual(narrow, ["T002", "T003"])
+
+    def test_p1_to_p9_keep_the_narrow_flag_off(self):
+        for p in (V.P1, V.P5F, V.P6, V.P7, V.P8, V.P9):
+            self.assertFalse(p.drop_state_words_only, p.name)
+        self.assertTrue(V.P10.drop_state_words_only)
+
+    def test_p10_turns_the_wide_flag_off(self):
+        self.assertTrue(V.P9.drop_qualitative)
+        self.assertFalse(V.P10.drop_qualitative)
+
+    def test_p10_is_p9_with_only_the_drop_swapped(self):
+        import dataclasses
+        a = dataclasses.replace(V.P9, name="x", drop_qualitative=False, drop_state_words_only=True)
+        b = dataclasses.replace(V.P10, name="x")
+        self.assertEqual(a, b)

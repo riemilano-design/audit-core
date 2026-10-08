@@ -374,10 +374,10 @@
   {
     "id": "X-R5-drop-qualitative-disabled",
     "file": "recipes.py",
-    "old": "    if profile.drop_qualitative:\n        text_claims = [c for c in text_claims if not c.get(\"dropped\")]",
-    "new": "    if False:\n        text_claims = [c for c in text_claims if not c.get(\"dropped\")]",
+    "old": "                if profile.drop_qualitative and not claim.get(\"subject\"):",
+    "new": "                if False and profile.drop_qualitative and not claim.get(\"subject\"):",
     "predicted": "red",
-    "note": "XBRL 直し §5 を戻す(印は付くが落とさない)。test_recipes.DropQualitativeTest.test_state_word_claim_is_dropped が捕まえる。"
+    "note": "XBRL 直し §5(広い版)の「主語が引けない向きの語を落とす」枝を外す。test_recipes.DropQualitativeTest.test_direction_word_without_a_subject_is_dropped が捕まえる。2026-10-08 に §5' の狭い版を足して落とす側の条件が共有になったため、広い版だけの性質(主語なしの枝)に当て直した。狭い版の 2 本(X-R5n-*)とは別の性質を外している。"
   },
   {
     "id": "X-G1-fix5-comment-wording",
@@ -410,5 +410,21 @@
     "new": "                    elif False:\n                        # 前々期が無いときは代用せず止める(数の側の §1b と同じ\n                        # 原因なので同じ理由の名前を使う。登録簿は増やさない)。\n                        claim[\"reason\"] = \"no_element(no prior2 for prior-year diff)\"",
     "predicted": "red",
     "note": "XBRL 直し §6 の「前々期が無ければ止める」を外す(_text_unbound_reason の既定の理由に落ちる)。test_recipes.TextPriorYearParenTest.test_p9_stops_when_the_prior2_fact_is_absent が捕まえる。"
+  },
+  {
+    "id": "X-R5n-narrow-drop-filter-disabled",
+    "file": "recipes.py",
+    "old": "    if profile.drop_qualitative or profile.drop_state_words_only:\n        text_claims = [c for c in text_claims if not c.get(\"dropped\")]",
+    "new": "    if profile.drop_qualitative:\n        text_claims = [c for c in text_claims if not c.get(\"dropped\")]",
+    "predicted": "red",
+    "note": "XBRL 直し §5' の落とす側を狭い版から外す(印は付くが落ちない)。test_recipes.DropStateWordsOnlyTest.test_narrow_drops_the_state_word が捕まえる。"
+  },
+  {
+    "id": "X-R5n-narrow-mark-disabled",
+    "file": "recipes.py",
+    "old": "                if profile.drop_qualitative or profile.drop_state_words_only:",
+    "new": "                if profile.drop_qualitative:",
+    "predicted": "red",
+    "note": "XBRL 直し §5' の印を付ける側を狭い版から外す(狭い版が状態語を落とさなくなる)。同じ試験が捕まえる。落とす側と印の側の 2 か所を別の変異にしてあるのは、片方だけ直っていても緑にならないことを見るため。"
   }
 ]

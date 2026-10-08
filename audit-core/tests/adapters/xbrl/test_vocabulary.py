@@ -191,7 +191,7 @@ class P7ProfileTest(unittest.TestCase):
         self.assertEqual(V.PROFILES["P7"], V.P7)
         # XBRL 直し(2026-10-08)で P8 を足した。P1/P5F/P6/P7 の 4 つが在ること
         # と、P8 がこの 4 つに加わっていることを両方見る。
-        self.assertEqual(sorted(V.PROFILES.keys()), ["P1", "P5F", "P6", "P7", "P8", "P9"])
+        self.assertEqual(sorted(V.PROFILES.keys()), ["P1", "P10", "P5F", "P6", "P7", "P8", "P9"])
 
     def test_p7_subjects_same_as_p6(self):
         self.assertEqual(V.P7.subjects, V.P6.subjects)
