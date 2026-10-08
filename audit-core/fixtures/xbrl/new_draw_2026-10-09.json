@@ -1,0 +1,41 @@
+{
+  "tool": "new_draw_2026-10-09.py",
+  "seed_source": "本線 749c12b(Golden 更新)",
+  "rng_label_without_the_seed": "<種>|new-draw-2026-10-09|truncate+A1|2026-09-04|2026-09-30",
+  "python": "3.9.6",
+  "candidates_total": 186,
+  "excluded_names": 20,
+  "excluded_present_in_candidates": 20,
+  "pool": 166,
+  "picked": [
+    {
+      "order": 1,
+      "docID": "S100Z3JY",
+      "filerName": "株式会社総医研ホールディングス",
+      "date": "2026-09-24",
+      "seal": "本線の truncate 封"
+    },
+    {
+      "order": 2,
+      "docID": "S100Z35K",
+      "filerName": "株式会社オープンアップグループ",
+      "date": "2026-09-18",
+      "seal": "本線の truncate 封"
+    },
+    {
+      "order": 3,
+      "docID": "S100Z3CO",
+      "filerName": "株式会社ナガオカ",
+      "date": "2026-09-24",
+      "seal": "A1 封(① 差の許容幅)"
+    },
+    {
+      "order": 4,
+      "docID": "S100Z4PA",
+      "filerName": "株式会社インサイト",
+      "date": "2026-09-29",
+      "seal": "A1 封(① 差の許容幅)"
+    }
+  ],
+  "zips_fetched": false
+}
