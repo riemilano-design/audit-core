@@ -547,3 +547,94 @@ class RoundingParamTest(unittest.TestCase):
     def test_absent_param_is_the_frozen_behaviour(self):
         # 恒例: params に rounding が無いときは写し元のまま(P1/P5F/P6/P7)。
         self.assertEqual(self._run(436600000.0, None).detail["normalization"], "round")
+
+
+class BuiltinSignDirectionWithAmountTest(unittest.TestCase):
+    """A1(主語の規則の直し、人間の追加指示、2026-10-08)。
+    **向きだけの比較器より厳しい側にしか動かない**ことを両方向で当てる。
+    答えの数は、この束の他の試験で使っていない数にする。
+    """
+
+    def _c(self, **kw):
+        kw.setdefault("direction", 1)
+        kw.setdefault("unit_scale", 1.0)
+        kw.setdefault("claim_scale", 1e6)
+        return _contract("builtin:sign(cur-prior)==direction&amount", **kw)
+
+    def test_sign_and_amount_both_agree(self):
+        # 148億86百万円 増加。実物(S100Z37J T008)と同じ型の数。
+        evidence = (_resolved(68634000000.0), _resolved(53747051000.0))
+        result = C.builtin_sign_direction_with_amount(evidence, _claim(value=14886000000.0, unit="円"), self._c())
+        self.assertTrue(result.match)
+        self.assertEqual(result.recomputed, 14886949000.0)
+        self.assertEqual(result.detail["normalization"], "truncate")
+
+    def test_sign_agrees_but_amount_does_not(self):
+        # 8億96百万円 と書いてあるのに差は 4億48百万円(実物 T020 の型)。
+        evidence = (_resolved(1448100000.0), _resolved(1000000000.0))
+        result = C.builtin_sign_direction_with_amount(evidence, _claim(value=896000000.0, unit="円"), self._c())
+        self.assertFalse(result.match)
+        self.assertEqual(result.recomputed, 448100000.0)
+        self.assertIsNone(result.detail["normalization"])
+
+    def test_amount_agrees_but_sign_does_not(self):
+        # 金額が合っても向きが逆なら一致しない(向きだけの判定を緩めない)。
+        evidence = (_resolved(1000000000.0), _resolved(1212000000.0))
+        result = C.builtin_sign_direction_with_amount(evidence, _claim(value=212000000.0, unit="円"), self._c())
+        self.assertFalse(result.match)
+        self.assertEqual(result.detail["actual"], -1)
+
+    def test_zero_difference_matches_neither_direction(self):
+        evidence = (_resolved(431000000.0), _resolved(431000000.0))
+        result = C.builtin_sign_direction_with_amount(evidence, _claim(value=0.0, unit="円"), self._c())
+        self.assertFalse(result.match)
+        self.assertEqual(result.detail["actual"], 0)
+
+    def test_the_amount_is_compared_on_the_magnitude_of_the_difference(self):
+        # 「減少」の主張。差は負だが、書かれている金額は大きさである。
+        evidence = (_resolved(700000000.0), _resolved(1037000000.0))
+        result = C.builtin_sign_direction_with_amount(evidence, _claim(value=337000000.0, unit="円"),
+                                                      self._c(direction=-1))
+        self.assertTrue(result.match)
+        self.assertEqual(result.recomputed, -337000000.0)
+
+    def test_rounding_mode_is_honoured(self):
+        # 差 1,000 円・桁 1,000 円。truncate なら梯子に乗らず(0 <= 1000 < 1000
+        # が偽)、round でも乗らない(1000 > 500)。実物 T038 の型。
+        evidence = (_resolved(130951000.0), _resolved(100000000.0))
+        claim = _claim(value=30950.0, unit="千円")
+        for mode in ("round", "truncate"):
+            result = C.builtin_sign_direction_with_amount(
+                evidence, claim, self._c(unit_scale=1e3, claim_scale=1e3, rounding=mode))
+            self.assertFalse(result.match, mode)
+
+    def test_truncate_accepts_a_difference_inside_one_unit(self):
+        evidence = (_resolved(130950400.0), _resolved(100000000.0))
+        claim = _claim(value=30950.0, unit="千円")
+        result = C.builtin_sign_direction_with_amount(
+            evidence, claim, self._c(unit_scale=1e3, claim_scale=1e3, rounding="truncate"))
+        self.assertTrue(result.match)
+        self.assertEqual(result.detail["normalization"], "truncate")
+
+    def test_it_is_never_looser_than_the_sign_only_comparator(self):
+        # 同じ evidence・同じ direction で、符号だけの比較器が不一致なら
+        # こちらも必ず不一致である(金額が合っていても)。
+        pairs = ((900.0, 1000.0), (1000.0, 1000.0), (1100.0, 1000.0))
+        for cur, prior in pairs:
+            evidence = (_resolved(cur), _resolved(prior))
+            claim = _claim(value=abs(cur - prior), unit="円")
+            sign_only = C.builtin_sign_direction(
+                evidence, claim, _contract("builtin:sign(cur-prior)==direction", direction=1))
+            both = C.builtin_sign_direction_with_amount(
+                evidence, claim, self._c(claim_scale=1.0))
+            if not sign_only.match:
+                self.assertFalse(both.match, (cur, prior))
+
+    def test_recomputed_is_the_same_raw_difference_as_the_sign_only_comparator(self):
+        evidence = (_resolved(2281746000.0), _resolved(1000000000.0))
+        claim = _claim(value=1281746000.0, unit="円")
+        a = C.builtin_sign_direction(evidence, claim,
+                                     _contract("builtin:sign(cur-prior)==direction", direction=1))
+        b = C.builtin_sign_direction_with_amount(evidence, claim, self._c(claim_scale=1.0))
+        self.assertEqual(a.recomputed, b.recomputed)
+        self.assertEqual(b.depth, "value_match")

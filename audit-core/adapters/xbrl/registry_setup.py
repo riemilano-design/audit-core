@@ -33,6 +33,9 @@ _COMPARATORS = (
     ("pct_change(cur,prior)", C.pct_change),
     ("diff(a-b) equals_within", C.diff_ab_equals_within),
     ("builtin:sign(cur-prior)==direction", C.builtin_sign_direction),
+    # A1(主語の規則の直し、人間の追加指示、2026-10-08): 符号 **と** 金額。
+    # 理由コードは増やさない(合わなければ既存の VALUE_MISMATCH)。
+    ("builtin:sign(cur-prior)==direction&amount", C.builtin_sign_direction_with_amount),
     # Core 接続 C-1g §1-2/§1-3(profile P6 のみが参照する)。
     ("builtin:flow_sign(cur)==direction", C.builtin_flow_sign_direction),
     ("diff(a-b)(pure*100)", C.diff_ab_pure100),

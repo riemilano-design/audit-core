@@ -1139,3 +1139,312 @@ class TaxonomyLabelSubjectsTest(unittest.TestCase):
         _h, added, _o = self._run({}, {"流動資産": ["A"], "長期借入金の返済による支出": ["B"], "のれん": ["C"]},
                                   taxonomy_labels=True)
         self.assertEqual([w for w, _e in added], ["長期借入金の返済による支出", "流動資産", "のれん"])
+
+
+# ---------------------------------------------------------------------------
+# 主語の規則の直し(人間の判断 1、2026-10-08)。
+# 実物の 4 書類で**名指しした主張**に当たる。測った結果は
+# docs/XBRL_SUBJECT_RULE_RESULT_2026-10-08.md。
+# ---------------------------------------------------------------------------
+
+
+# (書類, profile) ごとに 1 回だけ組む。**変異試験はこの束を 81 回回す**ので、
+# 組み直すと 1 回の計測が数十分になる(素で測って止めた)。
+# 返す辞書は読むだけ ― ここの試験は 1 つも書き換えない。
+_RAW_CACHE = {}
+
+
+def _raw_by_id(doc, profile):
+    """1 書類・1 profile の原本形式の主張を ``{id: claim}`` で返す。"""
+
+    import dataclasses
+    fields = dataclasses.asdict(profile)
+    key = (doc, profile.name,
+           tuple(sorted((k, v) for k, v in fields.items() if isinstance(v, bool))))
+    if key not in _RAW_CACHE:
+        from adapters.xbrl import edinet as _E
+        with open(_E.cache_path(doc), "rb") as fh:
+            zb = fh.read()
+        num, txt = R.build_raw_claims(zb, profile)
+        _RAW_CACHE[key] = {c["id"]: c for c in num + txt}
+    return _RAW_CACHE[key]
+
+
+def _with(profile_name, **flags):
+    import dataclasses
+    return dataclasses.replace(V.PROFILES[profile_name], **flags)
+
+
+class ElementsForWordTest(unittest.TestCase):
+    def test_the_first_duplicate_row_wins_not_the_last(self):
+        # ``dict(subjects)`` は**最後**を採る。``subject_of`` は一覧の早い方を
+        # 採るので、ここも早い方に揃える(揃えないと S2・S4 が
+        # ``subject_of`` と別の要素に結ぶ)。
+        subjects = (("売上高", ["First"]), ("売上高", ["Second"]))
+        self.assertEqual(R._elements_for_word(subjects, "売上高"), ["First"])
+        self.assertEqual(dict(subjects)["売上高"], ["Second"])
+
+    def test_a_word_not_in_the_vocabulary_is_none(self):
+        self.assertIsNone(R._elements_for_word((("売上高", ["A"]),), "利益"))
+
+
+class SubjectSkipS1Test(unittest.TestCase):
+    """S1。``S100Z37J`` の N063・N069 を直し、**N068 は動かさない。**"""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.p13 = _raw_by_id("S100Z37J", V.PROFILES["P13"])
+        cls.s1 = _raw_by_id("S100Z37J", _with("P13", subject_skip_coordinated_cause=True))
+
+    def test_n063_moves_from_the_coordinated_member_to_the_topic(self):
+        self.assertEqual(self.p13["N063"]["subject"], "支払手数料")
+        self.assertEqual(self.p13["N063"]["result"], "VALUE_MISMATCH")
+        self.assertEqual(self.s1["N063"]["subject"], "販売費及び一般管理費")
+        self.assertEqual(self.s1["N063"]["result"], "GROUNDED")
+        self.assertEqual(self.s1["N063"]["recomputed"], 718870000.0)
+
+    def test_n069_moves_from_the_coordinated_member_to_the_topic(self):
+        self.assertEqual(self.p13["N069"]["subject"], "減損損失")
+        self.assertEqual(self.s1["N069"]["subject"], "特別損失")
+        self.assertEqual(self.s1["N069"]["result"], "GROUNDED")
+        self.assertEqual(self.s1["N069"]["recomputed"], 25847000.0)
+
+    def test_n068_in_the_same_sentence_is_untouched(self):
+        # 同じ文の「特別利益は固定資産売却益による19百万円」は並立が無い。
+        # **ここが動いたら S1 は広すぎる。**
+        for field in ("subject", "result", "recomputed"):
+            self.assertEqual(self.s1["N068"][field], self.p13["N068"][field], field)
+        self.assertEqual(self.s1["N068"]["subject"], "固定資産売却益")
+        self.assertEqual(self.s1["N068"]["result"], "GROUNDED")
+
+    def test_the_claim_count_does_not_change(self):
+        # S1 は主張を落とさない(主語を選び直すだけ)。
+        self.assertEqual(len(self.s1), len(self.p13))
+
+
+class SubjectSkipS3Test(unittest.TestCase):
+    """S3。「資本金及び資本剰余金の合計」の成分に結ばない。"""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.p13 = _raw_by_id("S100Z37J", V.PROFILES["P13"])
+        cls.s3 = _raw_by_id("S100Z37J", _with("P13", subject_not_part_of_aggregate=True))
+
+    def test_t020_stops_instead_of_binding_a_component(self):
+        self.assertEqual(self.p13["T020"]["subject"], "資本剰余金")
+        self.assertEqual(self.p13["T020"]["result"], "GROUNDED")
+        self.assertNotEqual(self.s3["T020"]["subject"], "資本剰余金")
+        self.assertFalse(self.s3["T020"]["bound"])
+
+    def test_n045_stops_instead_of_binding_a_component(self):
+        self.assertEqual(self.p13["N045"]["subject"], "資本剰余金")
+        self.assertFalse(self.s3["N045"]["bound"])
+
+    def test_the_other_component_of_the_same_sentence_is_untouched(self):
+        # 同じ文の「利益剰余金についても…12億89百万円増加」は合計の成分では
+        # ないので動かない。
+        self.assertEqual(self.s3["T021"]["subject"], self.p13["T021"]["subject"])
+
+
+class SubjectDirectionObjectS2Test(unittest.TestCase):
+    """S2。「利益を増加させて」は 法人税等調整額 の主張ではない。"""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.p13 = _raw_by_id("S100Z37J", V.PROFILES["P13"])
+        cls.s2 = _raw_by_id("S100Z37J", _with("P13", subject_direction_object=True))
+
+    def test_t046_and_t047_are_dropped(self):
+        self.assertEqual(self.p13["T046"]["subject"], "法人税等調整額")
+        self.assertEqual(self.p13["T046"]["result"], "GROUNDED")
+        self.assertNotIn("T046", self.s2)
+        self.assertNotIn("T047", self.s2)
+
+    def test_exactly_two_claims_are_dropped(self):
+        self.assertEqual(len(self.p13) - len(self.s2), 2)
+
+    def test_a_direction_word_with_no_object_is_untouched(self):
+        self.assertEqual(self.s2["T008"]["subject"], "流動資産")
+        self.assertEqual(self.s2["T008"]["result"], "GROUNDED")
+
+
+class DirectionWordLexiconS4Test(unittest.TestCase):
+    """S4。増収→売上高系・増益→利益系。0 個も 2 個以上も主張にしない。"""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.a13 = _raw_by_id("S100Z4Q1", V.PROFILES["P13"])
+        cls.a15 = _raw_by_id("S100Z4Q1", _with("P13", direction_word_lexicon=True))
+        cls.b13 = _raw_by_id("S100Z4B6", V.PROFILES["P13"])
+        cls.b15 = _raw_by_id("S100Z4B6", _with("P13", direction_word_lexicon=True))
+
+    def test_zoshu_with_no_revenue_word_is_dropped(self):
+        self.assertEqual(self.a13["T005"]["word"], "増収")
+        self.assertNotIn("T005", self.a15)
+
+    def test_zogen_with_three_profit_words_is_dropped(self):
+        self.assertEqual(self.a13["T006"]["result"], "GROUNDED")
+        self.assertNotIn("T006", self.a15)
+
+    def test_zoshu_with_one_revenue_word_keeps_it(self):
+        self.assertEqual(self.b13["T013"]["subject"], "売上高")
+        self.assertEqual(self.b15["T013"]["subject"], "売上高")
+        self.assertEqual(self.b15["T013"]["result"], self.b13["T013"]["result"])
+
+    def test_gen_eki_with_no_profit_word_is_dropped(self):
+        self.assertEqual(self.b13["T015"]["subject"], "売上高")
+        self.assertNotIn("T015", self.b15)
+
+    def test_a_no_subject_direction_word_becomes_bound(self):
+        self.assertIsNone(self.b13["T022"]["subject"])
+        self.assertEqual(self.b13["T022"]["reason"], "no_subject")
+        self.assertEqual(self.b15["T022"]["subject"], "売上高")
+        self.assertEqual(self.b15["T022"]["result"], "GROUNDED")
+
+    def test_the_wrong_subject_is_replaced_by_the_segment_profit(self):
+        self.assertEqual(self.b13["T026"]["subject"], "売上高")
+        self.assertEqual(self.b13["T026"]["result"], "VALUE_MISMATCH")
+        self.assertEqual(self.b15["T026"]["subject"], "セグメント利益")
+        self.assertEqual(self.b15["T026"]["result"], "GROUNDED")
+
+    def test_an_already_correct_profit_subject_is_untouched(self):
+        for cid in ("T040", "T041"):
+            self.assertEqual(self.b15[cid]["subject"], self.b13[cid]["subject"], cid)
+            self.assertEqual(self.b15[cid]["result"], self.b13[cid]["result"], cid)
+
+    def test_a_lexicon_word_without_a_subject_entry_is_dropped(self):
+        # T042 の文に在る利益系の語は「親会社株主に帰属する当期純損失」だけで、
+        # それは主語の語彙に無い。**だから結ばずに落とす**(「減損損失」に
+        # 結んでいた旧版が通ってしまう型)。
+        self.assertEqual(self.b13["T042"]["subject"], "減損損失")
+        self.assertNotIn("T042", self.b15)
+
+    def test_the_lexicon_leaves_plain_direction_words_alone(self):
+        plain = [c for c in self.b13.values()
+                 if c.get("word") in ("増加", "減少") and c["id"] in self.b15]
+        self.assertTrue(plain)
+        for c in plain:
+            self.assertEqual(self.b15[c["id"]]["subject"], c["subject"], c["id"])
+
+
+class DirectionAmountCheckA1Test(unittest.TestCase):
+    """A1。向きの語に**直に付いた**金額だけを照合する。"""
+
+    def _claim(self, result="GROUNDED", recomputed=100000000.0):
+        return {"result": result, "recomputed": recomputed}
+
+    def test_the_amount_right_before_the_direction_word_is_taken(self):
+        s = "流動資産は、前連結会計年度末に比べ148億86百万円増加し、686億34百万円となりました。"
+        c = self._claim(recomputed=14886949000.0)
+        R._direction_amount_check(c, s, s.index("増加"), s.index("増加") + 2, "truncate")
+        self.assertEqual(c["amount_in_clause"], 14886000000.0)
+        self.assertEqual(c["result"], "GROUNDED")
+        self.assertEqual(c["amount_match"], "truncate")
+
+    def test_one_no_between_the_amount_and_the_word_is_allowed(self):
+        s = "配当金支払による8億40百万円の減少がありました。"
+        c = self._claim(recomputed=-840000000.0)
+        R._direction_amount_check(c, s, s.index("減少"), s.index("減少") + 2, "truncate")
+        self.assertEqual(c["amount_in_clause"], 840000000.0)
+        self.assertEqual(c["result"], "GROUNDED")
+
+    def test_a_difference_noun_before_the_amount_is_allowed(self):
+        s = "未払消費税等の減少額14,472千円、棚卸資産の増加額23,262千円。"
+        c = self._claim(recomputed=-14472000.0)
+        R._direction_amount_check(c, s, s.index("減少"), s.index("減少") + 2, "round")
+        self.assertEqual(c["amount_in_clause"], 14472000.0)
+        self.assertEqual(c["result"], "GROUNDED")
+
+    def test_a_level_amount_after_the_direction_word_is_not_taken(self):
+        # 「…38.1%増加し253百万円となりました」 ― 253百万円は水準であって
+        # 増減ではない。**1 回目の実測でこれを拾って正しい主張を止めた。**
+        s = "営業利益は、前連結会計年度に比べて38.1%増加し253百万円となりました。"
+        c = self._claim(recomputed=69976000.0)
+        R._direction_amount_check(c, s, s.index("増加"), s.index("増加") + 2, "truncate")
+        self.assertEqual(c["amount_in_clause_count"], 0)
+        self.assertNotIn("amount_in_clause", c)
+        self.assertEqual(c["result"], "GROUNDED")
+
+    def test_an_amount_in_another_clause_is_not_taken(self):
+        s = "売上高は393億94百万円となり、営業利益は増加しました。"
+        c = self._claim(recomputed=1.0)
+        R._direction_amount_check(c, s, s.index("増加"), s.index("増加") + 2, None)
+        self.assertEqual(c["amount_in_clause_count"], 0)
+        self.assertEqual(c["result"], "GROUNDED")
+
+    def test_a_mismatching_amount_downgrades_grounded(self):
+        s = "資本金及び資本剰余金の合計が8億96百万円増加し、"
+        c = self._claim(recomputed=448100000.0)
+        R._direction_amount_check(c, s, s.index("増加"), s.index("増加") + 2, "truncate")
+        self.assertEqual(c["result"], "VALUE_MISMATCH")
+        self.assertIsNone(c["amount_match"])
+
+    def test_it_never_upgrades_a_value_mismatch(self):
+        s = "流動資産は148億86百万円増加し、"
+        c = self._claim(result="VALUE_MISMATCH", recomputed=14886949000.0)
+        R._direction_amount_check(c, s, s.index("増加"), s.index("増加") + 2, "truncate")
+        self.assertEqual(c["result"], "VALUE_MISMATCH")
+
+    def test_a_percentage_is_not_a_money_amount(self):
+        s = "営業利益は38.1%増加し、"
+        c = self._claim(recomputed=69976000.0)
+        R._direction_amount_check(c, s, s.index("増加"), s.index("増加") + 2, None)
+        self.assertEqual(c["amount_in_clause_count"], 0)
+
+
+class DirectionAmountCheckOnRealDocumentsTest(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.p13 = _raw_by_id("S100Z37J", V.PROFILES["P13"])
+        cls.a1 = _raw_by_id("S100Z37J", _with("P13", direction_amount_check=True))
+
+    def test_t008_keeps_its_grounded_state_because_the_amount_agrees(self):
+        self.assertEqual(self.a1["T008"]["result"], "GROUNDED")
+        self.assertEqual(self.a1["T008"]["amount_in_clause"], 14886000000.0)
+
+    def test_t020_is_stopped_by_the_amount_alone(self):
+        # S3 を切って A1 単独で測る(S3 を入れると先に主語で止まる)。
+        self.assertEqual(self.p13["T020"]["result"], "GROUNDED")
+        self.assertEqual(self.a1["T020"]["result"], "VALUE_MISMATCH")
+        self.assertEqual(self.a1["T020"]["amount_in_clause"], 896000000.0)
+
+    def test_a1_never_turns_a_stopped_claim_into_a_grounded_one(self):
+        # **封じた合格条件**: A1 で GROUNDED が増えたら実装の誤りである。
+        for cid, before in self.p13.items():
+            after = self.a1.get(cid)
+            if after is None:
+                continue
+            if before["result"] != "GROUNDED":
+                self.assertNotEqual(after["result"], "GROUNDED", cid)
+
+    def test_a1_does_not_change_the_claim_count(self):
+        self.assertEqual(len(self.a1), len(self.p13))
+
+    def test_the_comparator_changes_only_for_claims_that_found_an_amount(self):
+        for cid, c in self.a1.items():
+            if c.get("form") != "threshold" or not c.get("bound"):
+                continue
+            recipe = R.claim_to_recipe(c, "text")
+            expected = ("builtin:sign(cur-prior)==direction&amount"
+                        if c.get("amount_in_clause") is not None else None)
+            if expected is not None:
+                self.assertEqual(recipe.contract.comparator, expected, cid)
+                self.assertEqual(recipe.contract.params["claim_scale"], c["claim_scale"], cid)
+            elif c.get("flow_convention") is None and not c.get("expenditure_convention"):
+                self.assertEqual(recipe.contract.comparator,
+                                 "builtin:sign(cur-prior)==direction", cid)
+
+
+class P13IsUnchangedByTheNewFlagsTest(unittest.TestCase):
+    """**P13 の数が黙って動いていない**ことの錠(4 書類)。"""
+
+    def test_p13_and_p15_differ_only_where_the_result_records_it(self):
+        # P15 で動いた主張の数を書類ごとに留める。実測は
+        # docs/XBRL_SUBJECT_RULE_RESULT_2026-10-08.md の表と同じ数。
+        expected = {"S100Z4Q1": (86, 2), "S100Z4B6": (116, 7),
+                    "S100YMFV": (133, 0), "S100Z37J": (127, 2)}
+        for doc, (n15, dropped) in expected.items():
+            p13 = _raw_by_id(doc, V.PROFILES["P13"])
+            p15 = _raw_by_id(doc, V.PROFILES["P15"])
+            self.assertEqual(len(p15), n15, doc)
+            self.assertEqual(len(p13) - len(p15), dropped, doc)

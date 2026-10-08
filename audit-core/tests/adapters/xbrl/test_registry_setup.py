@@ -107,12 +107,14 @@ class RegisterAllTest(unittest.TestCase):
         数える(RS モジュールの private なタプルの長さと一致することを確認)。
         """
 
-        self.assertEqual(len(RS._COMPARATORS), 9)
+        # 主語の規則の直し A1(2026-10-08)で比較器が 1 つ増えて 10。
+        # 理由コードは増やさない(金額が合わなければ既存の VALUE_MISMATCH)。
+        self.assertEqual(len(RS._COMPARATORS), 10)
         self.assertEqual(len(RS._NORMALIZATIONS), 4)
         self.assertEqual(len(RS._POINTER_NOT_FOUND_REASONS), 8)
         self.assertEqual(len(RS._UNVERIFIABLE_REASONS), 6)
         total = 2 + len(RS._COMPARATORS) + len(RS._NORMALIZATIONS) + len(RS._POINTER_NOT_FOUND_REASONS) + len(RS._UNVERIFIABLE_REASONS)
-        self.assertEqual(total, 29)
+        self.assertEqual(total, 30)
 
     def test_registering_a_reason_twice_raises(self):
         with self.assertRaises(ValueError):

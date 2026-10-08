@@ -263,6 +263,63 @@ def expenditure_convention(element_name):
     return bool(_EXPENDITURE_RE.match(local))
 
 
+# ---------------------------------------------------------------------------
+# S4(主語の規則の直し、人間の判断 1、2026-10-08): 向きの語そのものが主語の
+# 範囲を決める 2 つの族。**語は字で書く。**
+#
+# 「増収」は収益の増、「増益」は利益の増である ― これは手書きの知識
+# (CLAUDE.md の区分では記述的知識)なので、既定 False のフラグ
+# ``direction_word_lexicon`` の下にだけ置く。
+#
+# **部分一致では決めない。** 「減損損失」は「損失」を含むが利益の族ではない。
+# だから「利益」「損失」の部分一致ではなく、**この一覧の語そのもの**を文の
+# 中から探す(入れ子になった出現は長い方だけを採る ― 「当期純損失」は
+# 「親会社株主に帰属する当期純損失」の中にあるので 1 件と数える)。
+# ---------------------------------------------------------------------------
+REVENUE_WORDS = ("売上高", "営業収益", "売上収益")
+PROFIT_WORDS = ("営業利益", "営業損失", "経常利益", "経常損失",
+                "当期純利益", "当期純損失",
+                "親会社株主に帰属する当期純利益", "親会社株主に帰属する当期純損失",
+                "セグメント利益", "税引前利益")
+
+# 向きの語 → 探す族。ここに無い向きの語(増加・減少・拡大…)には S4 を当てない
+# (「増加」が何の増加かは語そのものからは決まらない)。
+DIRECTION_WORD_FAMILY = {
+    "増収": REVENUE_WORDS, "減収": REVENUE_WORDS,
+    "増益": PROFIT_WORDS, "減益": PROFIT_WORDS,
+}
+
+
+def direction_family_words(sentence, word):
+    """S4。向きの語 ``word`` の族の語のうち、``sentence`` に**現れるもの**。
+    入れ子の出現は長い方だけを採る。戻りは (語, 出現位置) の列(文の左から)。
+    族が無い向きの語なら ``None``(「当てない」と「0 件」を言い分ける)。
+    """
+
+    family = DIRECTION_WORD_FAMILY.get(word)
+    if family is None:
+        return None
+    spans = []
+    for w in family:
+        start = 0
+        while True:
+            i = sentence.find(w, start)
+            if i < 0:
+                break
+            spans.append((i, i + len(w), w))
+            start = i + 1
+    kept = [(i, j, w) for (i, j, w) in spans
+            if not any((a <= i and j <= b and (b - a) > (j - i)) for (a, b, _x) in spans)]
+    kept.sort()
+    out, seen = [], set()
+    for (i, _j, w) in kept:
+        if w in seen:
+            continue
+        seen.add(w)
+        out.append((w, i))
+    return out
+
+
 @dataclass(frozen=True)
 class Profile:
     """A named bundle of Adapter settings (Adapter-only knowledge; the Core
@@ -308,6 +365,14 @@ class Profile:
     label_overrides_dead_hand: bool = False   # §7b 手書きが fact を引けない語はラベルで引く
     taxonomy_labels: bool = False             # §8  標準タクソノミの日本語ラベルで引く
     taxonomy_labels_all_ns: bool = False      # §8  **参考専用**。jppfs の限定を外す
+    # 主語の規則の直し(人間の判断 1、2026-10-08)。P15 以降だけ。
+    # P1〜P14 はこれらの既定値 False のまま変わらない(定義そのものを書き換えていない)。
+    # 計画と予測は docs/XBRL_SUBJECT_RULE_PLAN_2026-10-08.md(実装前に封じた)。
+    subject_skip_coordinated_cause: bool = False  # S1 「A及びBによる/により」の成分を採らない
+    subject_direction_object: bool = False        # S2 「<名詞>を増加/減少」の目的語に向きが掛かる
+    subject_not_part_of_aggregate: bool = False   # S3 「A及びBの合計」の成分を採らない
+    direction_word_lexicon: bool = False          # S4 増収→売上高系・増益→利益系
+    direction_amount_check: bool = False          # A1 向きの語と同じ節の金額も照合する
 
 
 P1 = Profile(
@@ -522,5 +587,37 @@ P14 = Profile(
     taxonomy_labels_all_ns=True,
 )
 
+# 主語の規則の直し(人間の判断 1、2026-10-08): P13 + S1・S2・S3・S4・A1。
+# **P13 の定義は 1 行も書き換えない**(直す前と直した後を並べて測るため)。
+P15 = Profile(
+    name="P15",
+    subjects=SUBJECTS_P12,
+    member_on=True,
+    claim_level_member=True,
+    run3="L",
+    flow_sign=True,
+    point_diff=True,
+    segment_denominator=True,
+    expenditure_sign=True,
+    target_word=True,
+    text_reason_split=True,
+    prior2_required=True,
+    doc_rounding=True,
+    target_both=True,
+    paren_sentence=True,
+    drop_qualitative=False,
+    text_prior_year_paren=True,
+    drop_state_words_only=True,
+    label_vocabulary=True,
+    label_statement_rows_only=True,
+    label_overrides_dead_hand=True,
+    taxonomy_labels=True,
+    subject_skip_coordinated_cause=True,
+    subject_direction_object=True,
+    subject_not_part_of_aggregate=True,
+    direction_word_lexicon=True,
+    direction_amount_check=True,
+)
+
 PROFILES = {"P1": P1, "P5F": P5F, "P6": P6, "P7": P7, "P8": P8, "P9": P9, "P10": P10, "P11": P11,
-            "P12": P12, "P13": P13, "P14": P14}
+            "P12": P12, "P13": P13, "P14": P14, "P15": P15}

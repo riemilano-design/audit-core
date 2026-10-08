@@ -264,6 +264,34 @@ def builtin_sign_abs_diff_direction(evidence, claim, contract):
     return core.Comparison(match=(direction == actual), recomputed=magnitude_diff, depth="value_match", detail=detail)
 
 
+def builtin_sign_direction_with_amount(evidence, claim, contract):
+    """A1(主語の規則の直し、人間の追加指示、2026-10-08)。
+    ``builtin:sign(cur-prior)==direction&amount``。
+
+    evidence = (cur, prior)。向きの判定は ``builtin_sign_direction`` と同じ
+    (差がちょうど 0 ならどちらの方向にも一致しない)。**そのうえで**、
+    Adapter が向きの語と同じ節から読んだ金額 (``claim.value``) を
+    ``|cur - prior|`` と照合する: ``_match_value(|diff|, |claim.value| *
+    unit_scale, claim_scale, rounding)``。
+
+    match = (向きが一致) **かつ** (金額が一致)。``recomputed`` は
+    ``builtin_sign_direction`` と同じ生の差。**この比較器は向きだけの
+    比較器より厳しい側にしか動かない** ― 向きが合っていても金額が合わなければ
+    一致しない。
+    """
+
+    params = contract.params or {}
+    direction = params["direction"]
+    cur, prior = evidence[0], evidence[1]
+    difference = cur.value - prior.value
+    sign_now = 0 if difference == 0 else (1 if difference > 0 else -1)
+    target_amount = abs(claim.value) * params["unit_scale"]
+    ladder = _match_value(abs(difference), target_amount, params["claim_scale"], params.get("rounding"))
+    detail = {"direction": direction, "actual": sign_now, "normalization": ladder}
+    agree = (sign_now == direction) and (ladder is not None)
+    return core.Comparison(match=agree, recomputed=difference, depth="value_match", detail=detail)
+
+
 def diff_ab_pure100(evidence, claim, contract):
     """Core 接続 C-1g §1-3 (``diff(a-b)(pure*100)``, profile P6 only, the
     ``XP-3rd-1`` point-difference form). evidence = (a, b) -- the current

@@ -414,8 +414,8 @@
   {
     "id": "X-R5n-narrow-drop-filter-disabled",
     "file": "recipes.py",
-    "old": "    if profile.drop_qualitative or profile.drop_state_words_only:\n        text_claims = [c for c in text_claims if not c.get(\"dropped\")]",
-    "new": "    if profile.drop_qualitative:\n        text_claims = [c for c in text_claims if not c.get(\"dropped\")]",
+    "old": "    if (profile.drop_qualitative or profile.drop_state_words_only\n            or profile.subject_direction_object or profile.direction_word_lexicon):",
+    "new": "    if (profile.drop_qualitative\n            or profile.subject_direction_object or profile.direction_word_lexicon):",
     "predicted": "red",
     "note": "XBRL 直し §5' の落とす側を狭い版から外す(印は付くが落ちない)。test_recipes.DropStateWordsOnlyTest.test_narrow_drops_the_state_word が捕まえる。"
   },
@@ -516,5 +516,141 @@
     "new": "        if False:",
     "predicted": "red",
     "note": "XBRL 直し §8 の名前空間の限定(jppfs だけ)を外す。**3 書類では P13 と P14(限定なし)が 1 行も違わなかった = 実物では差が出ない**ので、この分岐は実物の門では黙る。だから test_instance.TaxonomyLabelsTest.test_the_namespace_filter_keeps_jpcrp_out で仕組みを直に留めてある(「正常な入力では発火しない守りは、故障を作って当てないと測れない」の型)。"
+  },
+  {
+    "id": "X-S1a-cause-requirement-removed",
+    "file": "extract.py",
+    "old": "    _left, right = clause_span(sentence, start, end)\n    tail = sentence[end:right]\n    return any(suffix in tail for suffix in CAUSE_SUFFIXES)",
+    "new": "    _left, right = clause_span(sentence, start, end)\n    tail = sentence[end:right]\n    return True",
+    "predicted": "red",
+    "note": "S1 の「による/により が後に在る」要件を外し、並立の成分なら無条件に飛ばす。test_extract.SkipCoordinatedCauseTest.test_a_coordination_without_a_cause_is_kept が捕まえる。"
+  },
+  {
+    "id": "X-S1b-coordination-requirement-removed",
+    "file": "extract.py",
+    "old": "    end = start + len(word)\n    if not _is_coordinated(sentence, start, end):\n        return False\n    _left, right = clause_span(sentence, start, end)\n    tail = sentence[end:right]\n    return any(suffix in tail for suffix in CAUSE_SUFFIXES)",
+    "new": "    end = start + len(word)\n    _left, right = clause_span(sentence, start, end)\n    tail = sentence[end:right]\n    return any(suffix in tail for suffix in CAUSE_SUFFIXES)",
+    "predicted": "red",
+    "note": "S1 の「並立の成分である」要件を外す。N069 の「特別損失」まで落ちる(主語が無くなり N069 が GROUNDED にならない)。test_extract.SkipCoordinatedCauseTest.test_n069_keeps_the_topic_and_drops_both_sides_of_the_coordination と test_recipes.SubjectSkipS1Test.test_n069_moves_from_the_coordinated_member_to_the_topic が捕まえる。"
+  },
+  {
+    "id": "X-S1c-substring-arm-removed",
+    "file": "extract.py",
+    "old": "    _left, right = clause_span(sentence, start, end)\n    tail = sentence[end:right]\n    first = None\n    for token in COORDINATORS + PARTICLES:",
+    "new": "    return False\n    _left, right = clause_span(sentence, start, end)\n    tail = sentence[end:right]\n    first = None\n    for token in COORDINATORS + PARTICLES:",
+    "predicted": "red",
+    "note": "_is_coordinated の (b)(右へ進んで最初が並立の接続語)を外す。**1 回目の実装がこの形で、N069 が「固定資産」に結んで封じた予測を外した。** test_extract.SkipCoordinatedCauseTest.test_a_substring_of_a_dropped_member_is_dropped_too が捕まえる。"
+  },
+  {
+    "id": "X-S1d-particles-emptied",
+    "file": "extract.py",
+    "old": "PARTICLES = (\"は\", \"が\", \"を\", \"に\")",
+    "new": "PARTICLES = ()",
+    "predicted": "red",
+    "note": "句の切れ目と見なす助詞を空にする。「特別損失は固定資産除却損及び…」の「特別損失」が並立の成分と見なされて落ちる。test_extract.SkipCoordinatedCauseTest.test_n069_keeps_the_topic_and_drops_both_sides_of_the_coordination が捕まえる。"
+  },
+  {
+    "id": "X-S1e-clause-becomes-the-whole-sentence",
+    "file": "extract.py",
+    "old": "    left = 0\n    for k in range(start - 1, -1, -1):\n        if sentence[k] in CLAUSE_BREAKS:\n            left = k + 1\n            break",
+    "new": "    left = 0\n    for k in range(start - 1, -1, -1):\n        if False:\n            left = k + 1\n            break",
+    "predicted": "red",
+    "note": "節の左端を見ずに文頭にする。A1 が別の節の金額を拾い、S1 も節を越える。test_extract.ClauseSpanTest.test_bounded_by_the_japanese_comma が捕まえる。"
+  },
+  {
+    "id": "X-S2a-missing-object-binds-instead-of-dropping",
+    "file": "recipes.py",
+    "old": "                        if oelems is None:\n                            claim[\"dropped\"] = \"direction_object(no subject: %s)\" % obj",
+    "new": "                        if oelems is None:\n                            pass",
+    "predicted": "red",
+    "note": "S2 で目的語が語彙に無いとき、主張にしないのをやめる(たまたま近くの語に結んだまま通る)。test_recipes.SubjectDirectionObjectS2Test.test_t046_and_t047_are_dropped が捕まえる。"
+  },
+  {
+    "id": "X-S3a-aggregate-suffix-narrowed",
+    "file": "extract.py",
+    "old": "AGGREGATE_SUFFIXES = (\"の合計\", \"の合計額\")",
+    "new": "AGGREGATE_SUFFIXES = (\"の合計額\",)",
+    "predicted": "red",
+    "note": "S3 の「の合計」を落として「の合計額」だけにする。T020 の「資本金及び資本剰余金の合計」が拾えなくなる。test_extract.SkipPartOfAggregateTest.test_t020_drops_both_components_and_keeps_the_others が捕まえる。"
+  },
+  {
+    "id": "X-S4a-two-or-more-candidates-takes-the-first",
+    "file": "recipes.py",
+    "old": "                        if len(fam) != 1:\n                            claim[\"dropped\"] = \"direction_word(%d in the sentence)\" % len(fam)",
+    "new": "                        if len(fam) < 1:\n                            claim[\"dropped\"] = \"direction_word(%d in the sentence)\" % len(fam)",
+    "predicted": "red",
+    "note": "S4 で候補が 2 個以上でも先頭を採る(どれを指すか決められないのに決める)。T006(利益系 3 個)が落ちなくなる。test_recipes.DirectionWordLexiconS4Test.test_zogen_with_three_profit_words_is_dropped が捕まえる。"
+  },
+  {
+    "id": "X-S4b-nested-occurrence-not-collapsed",
+    "file": "vocabulary.py",
+    "old": "    kept = [(i, j, w) for (i, j, w) in spans\n            if not any((a <= i and j <= b and (b - a) > (j - i)) for (a, b, _x) in spans)]",
+    "new": "    kept = list(spans)",
+    "predicted": "red",
+    "note": "入れ子の出現を畳まない。「当期純損失」と「親会社株主に帰属する当期純損失」が 2 件になり、T042 が「決められない」ではなく別の理由で落ちる(数が変わる)。test_vocabulary.DirectionFamilyWordsTest.test_a_nested_occurrence_counts_once_as_the_longer_word が捕まえる。"
+  },
+  {
+    "id": "X-S4c-family-built-from-substrings",
+    "file": "vocabulary.py",
+    "old": "PROFIT_WORDS = (\"営業利益\", \"営業損失\", \"経常利益\", \"経常損失\",",
+    "new": "PROFIT_WORDS = (\"利益\", \"損失\", \"経常利益\", \"経常損失\",",
+    "predicted": "red",
+    "note": "利益系の語を部分一致の「利益」「損失」で作る。「減損損失」が利益系に入る。test_vocabulary.DirectionFamilyWordsTest.test_the_two_families_are_written_out_literally が捕まえる。"
+  },
+  {
+    "id": "X-A1a-attachment-requirement-removed",
+    "file": "recipes.py",
+    "old": "        if not (attached_after or attached_before):\n            continue",
+    "new": "        if False:\n            continue",
+    "predicted": "red",
+    "note": "A1 の「向きの語に直に付いた金額」要件を外し、節の中でいちばん近い金額を採る。**封を狭める前の形で、正しい主張を 3 件止めた。** test_recipes.DirectionAmountCheckA1Test.test_a_level_amount_after_the_direction_word_is_not_taken が捕まえる。"
+  },
+  {
+    "id": "X-A1b-amount-can-upgrade-a-mismatch",
+    "file": "recipes.py",
+    "old": "    if how is None and claim[\"result\"] == \"GROUNDED\":\n        claim[\"result\"] = \"VALUE_MISMATCH\"",
+    "new": "    if how is not None:\n        claim[\"result\"] = \"GROUNDED\"",
+    "predicted": "red",
+    "note": "A1 を「金額が合えば通す」側に反転させる。封じた合格条件(A1 で GROUNDED は増えない)が破れる。test_recipes.DirectionAmountCheckA1Test.test_it_never_upgrades_a_value_mismatch が捕まえる。"
+  },
+  {
+    "id": "X-A1c-comparator-ignores-the-amount",
+    "file": "comparators.py",
+    "old": "    agree = (sign_now == direction) and (ladder is not None)",
+    "new": "    agree = (sign_now == direction)",
+    "predicted": "red",
+    "note": "A1 の比較器が金額を見ない(向きだけの比較器と同じになる)。test_comparators.BuiltinSignDirectionWithAmountTest.test_sign_agrees_but_amount_does_not が捕まえる。"
+  },
+  {
+    "id": "X-A1d-comparator-ignores-the-sign",
+    "file": "comparators.py",
+    "old": "    detail = {\"direction\": direction, \"actual\": sign_now, \"normalization\": ladder}\n    agree = (sign_now == direction) and (ladder is not None)",
+    "new": "    detail = {\"direction\": direction, \"actual\": sign_now, \"normalization\": ladder}\n    agree = (ladder is not None)",
+    "predicted": "red",
+    "note": "A1 の比較器が向きを見ない(金額だけ)。test_comparators.BuiltinSignDirectionWithAmountTest.test_amount_agrees_but_sign_does_not が捕まえる。"
+  },
+  {
+    "id": "X-S2b-elements-for-word-uses-dict",
+    "file": "recipes.py",
+    "old": "    for w, elems in subjects:\n        if w == word:\n            return elems\n    return None",
+    "new": "    return dict(subjects).get(word)",
+    "predicted": "red",
+    "note": "語 -> 要素の引きを dict にする。同じ語が 2 回在る語彙で **最後**を採り、subject_of(早い方)と違う要素に結ぶ。test_recipes.ElementsForWordTest.test_the_first_duplicate_row_wins_not_the_last が捕まえる。"
+  },
+  {
+    "id": "X-S0a-subject-of-tie-goes-to-the-last-row",
+    "file": "extract.py",
+    "old": "        ranked.append((-(i + len(word)), -len(word), order, i, word, elems))",
+    "new": "        ranked.append((-(i + len(word)), -len(word), -order, i, word, elems))",
+    "predicted": "red",
+    "note": "同じ終わり・同じ長さのときに**一覧の遅い方**を採る。写し元は早い方を採る。test_extract.SubjectOfSkipNoneIsUnchangedTest.test_ties_go_to_the_earlier_row_of_the_list が捕まえる。"
+  },
+  {
+    "id": "X-S0b-subject-of-prefers-the-shorter-word",
+    "file": "extract.py",
+    "old": "        ranked.append((-(i + len(word)), -len(word), order, i, word, elems))",
+    "new": "        ranked.append((-(i + len(word)), len(word), order, i, word, elems))",
+    "predicted": "red",
+    "note": "同じ終わりのときに短い語を採る(「資産合計」>「純資産合計」)。test_extract.SubjectOfSkipNoneIsUnchangedTest.test_longer_word_wins_at_the_same_end が捕まえる。"
   }
 ]

@@ -192,7 +192,7 @@ class P7ProfileTest(unittest.TestCase):
         # XBRL 直し(2026-10-08)で P8 を足した。P1/P5F/P6/P7 の 4 つが在ること
         # と、P8 がこの 4 つに加わっていることを両方見る。
         self.assertEqual(sorted(V.PROFILES.keys()),
-                         ["P1", "P10", "P11", "P12", "P13", "P14", "P5F", "P6", "P7", "P8", "P9"])
+                         ["P1", "P10", "P11", "P12", "P13", "P14", "P15", "P5F", "P6", "P7", "P8", "P9"])
 
     def test_p7_subjects_same_as_p6(self):
         self.assertEqual(V.P7.subjects, V.P6.subjects)
@@ -443,6 +443,101 @@ class P12P13P14ProfileTest(unittest.TestCase):
 
     def test_profiles_registry_lists_every_profile(self):
         self.assertEqual(sorted(V.PROFILES),
-                         ["P1", "P10", "P11", "P12", "P13", "P14", "P5F", "P6", "P7", "P8", "P9"])
+                         ["P1", "P10", "P11", "P12", "P13", "P14", "P15", "P5F", "P6", "P7", "P8", "P9"])
         for name, p in V.PROFILES.items():
             self.assertEqual(p.name, name)
+
+
+# ---------------------------------------------------------------------------
+# 主語の規則の直し S4(人間の判断 1、2026-10-08)。
+# ---------------------------------------------------------------------------
+
+SENT_T006 = ("一方で利益面におきましては、当社連結子会社である大日本ダイヤコンサルタント株式会社が"
+             "実施した複数の橋梁耐震補強設計業務において、期末に設計の一部に誤りが判明し、"
+             "完成業務補償引当金繰入額を計上したため、営業利益は14億6千5百万円(同54.0%)、"
+             "経常利益は14億5千7百万円(同53.8%)、最終の親会社株主に帰属する当期純利益は"
+             "9億4千5百万円(同49.2%)となり、前連結会計年度に比べ増収減益となりました。")
+SENT_T015 = ("当連結会計年度の業績につきましては、売上高は堅調に推移したものの、"
+             "原材料価格の高騰や人件費の増加の影響、新店舗出店及びアカデミー開設に係る"
+             "費用の発生等により前期に比べ増収減益となりました。")
+SENT_T042 = ("また、特別損失として減損損失3,758千円を計上したことにより、"
+             "親会社株主に帰属する当期純損失105,873千円と前連結会計年度に比べ"
+             "88,251千円(前連結会計年度は親会社株主に帰属する当期純損失17,621千円)の"
+             "減益となりました。")
+SENT_T040 = ("営業損益につきましては、営業損失52,196千円と前連結会計年度に比べ"
+             "42,487千円(前連結会計年度は営業損失9,709千円)の減益となりました。")
+
+
+class DirectionFamilyWordsTest(unittest.TestCase):
+    def test_the_two_families_are_written_out_literally(self):
+        # **部分一致で作っていない**こと(「利益」「損失」から作ると
+        # 「減損損失」が入ってしまう)。
+        self.assertEqual(V.REVENUE_WORDS, ("売上高", "営業収益", "売上収益"))
+        self.assertEqual(len(V.PROFIT_WORDS), 10)
+        self.assertIn("親会社株主に帰属する当期純損失", V.PROFIT_WORDS)
+        self.assertNotIn("減損損失", V.PROFIT_WORDS)
+
+    def test_a_direction_word_without_a_family_is_not_touched(self):
+        # 「当てない」と「0 件」を言い分ける ― ここが None でないと
+        # 「増加」の主張まで S4 が触ってしまう。
+        for w in ("増加", "減少", "拡大", "上回", "改善"):
+            self.assertIsNone(V.direction_family_words("売上高は100円増加しました。", w), w)
+
+    def test_zero_candidates_is_an_empty_list_not_none(self):
+        self.assertEqual(V.direction_family_words("前期に比べ増収となりました。", "増収"), [])
+
+    def test_t006_three_profit_words_in_one_sentence(self):
+        got = V.direction_family_words(SENT_T006, "減益")
+        self.assertEqual([w for w, _i in got], ["営業利益", "経常利益", "親会社株主に帰属する当期純利益"])
+
+    def test_t006_has_no_revenue_word_although_it_says_zoshu(self):
+        self.assertEqual(V.direction_family_words(SENT_T006, "増収"), [])
+
+    def test_t015_has_one_revenue_word_and_no_profit_word(self):
+        self.assertEqual([w for w, _i in V.direction_family_words(SENT_T015, "増収")], ["売上高"])
+        self.assertEqual(V.direction_family_words(SENT_T015, "減益"), [])
+
+    def test_a_nested_occurrence_counts_once_as_the_longer_word(self):
+        # 「当期純損失」は「親会社株主に帰属する当期純損失」の中に在る。
+        # 2 件と数えると「決められない」になってしまうので 1 件に畳む。
+        got = V.direction_family_words(SENT_T042, "減益")
+        self.assertEqual([w for w, _i in got], ["親会社株主に帰属する当期純損失"])
+
+    def test_the_same_word_twice_counts_once(self):
+        got = V.direction_family_words(SENT_T040, "減益")
+        self.assertEqual([w for w, _i in got], ["営業損失"])
+
+    def test_eigyogai_shueki_is_not_a_revenue_word(self):
+        # 「営業外収益」は「営業収益」を含まない(字が違う)。
+        self.assertEqual(V.direction_family_words("営業外収益4,171千円を計上し増収となりました。", "増収"), [])
+
+
+class P15ProfileTest(unittest.TestCase):
+    FLAGS = ("subject_skip_coordinated_cause", "subject_direction_object",
+             "subject_not_part_of_aggregate", "direction_word_lexicon",
+             "direction_amount_check")
+
+    def test_p15_turns_on_all_five(self):
+        for f in self.FLAGS:
+            self.assertTrue(getattr(V.P15, f), f)
+
+    def test_every_earlier_profile_has_all_five_off(self):
+        # **P13 の定義を 1 行も書き換えていない**ことの錠。
+        for name, p in V.PROFILES.items():
+            if name == "P15":
+                continue
+            for f in self.FLAGS:
+                self.assertFalse(getattr(p, f), (name, f))
+
+    def test_p15_differs_from_p13_in_exactly_those_five_fields(self):
+        import dataclasses
+        a, b = dataclasses.asdict(V.P13), dataclasses.asdict(V.P15)
+        differ = sorted(k for k in a if a[k] != b[k])
+        self.assertEqual(differ, sorted(("name",) + self.FLAGS))
+
+    def test_p15_is_in_the_registry_and_names_itself(self):
+        self.assertIs(V.PROFILES["P15"], V.P15)
+        self.assertEqual(V.P15.name, "P15")
+
+    def test_p15_uses_the_same_hand_vocabulary_as_p13(self):
+        self.assertEqual(V.P15.subjects, V.P13.subjects)

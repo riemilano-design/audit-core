@@ -86,22 +86,179 @@ def _iter_numbers(s):
         yield m.start(), m.end(), sign * num, unit, (V.UNIT_SCALE.get(unit) or 1.0)
 
 
-def subject_of(sentence, pos, subjects):
+def subject_of(sentence, pos, subjects, skip=None):
     """数の直前(同じ文)でいちばん近い主語。終わりの位置が最も右のものを取り、
     同じなら長い語(「純資産合計」>「資産合計」)。道具の直し P-3。xbrl_probe.py: subject_of の写し
     (差分は固定の SUBJECTS グローバルの代わりに引数で受け取るだけ)。
+
+    ``skip``(主語の規則の直し、人間の判断 1、2026-10-08)は
+    ``skip(sentence, i, word) -> bool`` の関数で、真を返した候補は**採らずに
+    次の候補へ進む。** 順位の付け方(終わりがいちばん右 → 長い語 → 一覧の
+    早い方)は**変えない** ― 変えるのは「その候補を採ってはいけない形」を
+    足すところだけである。
+
+    ``skip`` が ``None`` のとき、返す値は写し元と 1 つも変わらない
+    (P1〜P14 はすべて ``None``)。順位どおりに並べて先頭を採るのは、
+    写し元の「``end > best`` か(``end ==`` かつ長い)で置き換える」と同じ
+    勝ち方である ― 同じ終わり・同じ長さなら**一覧の早い方**が勝つ。
+    これは ``tests/adapters/xbrl/test_lineage.py`` が実物の 2 書類の全部の文で
+    写し元と照合しており、``test_extract.py`` が 4 書類 × P13 の語彙で
+    写し元の書き方そのものと照合する。
     """
 
     head = sentence[:pos]
-    best = None
-    for word, elems in subjects:
+    ranked = []
+    for order, (word, elems) in enumerate(subjects):
         i = head.rfind(word)
         if i < 0:
             continue
-        end = i + len(word)
-        if best is None or end > best[0] or (end == best[0] and len(word) > len(best[1])):
-            best = (end, word, elems)
-    return (best[1], best[2]) if best else (None, None)
+        ranked.append((-(i + len(word)), -len(word), order, i, word, elems))
+    ranked.sort()
+    for (_e, _l, _o, i, word, elems) in ranked:
+        if skip is not None and skip(sentence, i, word):
+            continue
+        return (word, elems)
+    return (None, None)
+
+
+# ---------------------------------------------------------------------------
+# 主語の規則の直し(人間の判断 1、2026-10-08)― **採ってはいけない形**。
+# 広い規則(「は」が付く語を優先する)は 4 書類で測って却下した
+# (docs/XBRL_SUBJECT_RULE_PLAN_2026-10-08.md §0)。ここに在るのは
+# ``subject_of`` の順位を変えずに**候補を 2 つの形で拒否する**規則だけである。
+#
+# 字は字で書く(定数から土台を作らない)。
+# ---------------------------------------------------------------------------
+COORDINATORS = ("及び", "並びに")       # S1・S3 の並立の接続語
+CAUSE_SUFFIXES = ("による", "により")   # S1 の原因の言い方
+AGGREGATE_SUFFIXES = ("の合計", "の合計額")  # S3 の「合計」の言い方
+CLAUSE_BREAKS = "、。，（）()"           # 節の切れ目
+
+
+def clause_span(sentence, start, end):
+    """``sentence[start:end]`` を含む**節**の範囲 ``(左, 右)``。
+    節の切れ目は ``、。``・全角半角の丸括弧。文に区切りが無ければ文全体。
+
+    節に限るのは、**文に限ると列挙の文で他の項目の材料を拾う**からである。
+    """
+
+    left = 0
+    for k in range(start - 1, -1, -1):
+        if sentence[k] in CLAUSE_BREAKS:
+            left = k + 1
+            break
+    right = len(sentence)
+    for k in range(end, len(sentence)):
+        if sentence[k] in CLAUSE_BREAKS:
+            right = k
+            break
+    return left, right
+
+
+# 並立の成分かどうかを見るときに「ここで句が切れる」と見なす助詞。字で書く。
+# 「特別損失**は**固定資産除却損及び…」の「特別損失」を並立の成分に
+# 数えないために要る。
+PARTICLES = ("は", "が", "を", "に")
+
+
+def _is_coordinated(sentence, start, end):
+    """候補の語が並立の成分か。次のどちらかなら真。
+
+    (a) 並立の接続語に**直に**隣り合っている(前でも後ろでもよい)。
+    (b) 候補の終わりから節の終わりへ右に進んだとき、**最初に当たるのが
+        並立の接続語**である(助詞 ``は``/``が``/``を``/``に`` が先に来たら偽)。
+
+    (b) が要るのは、(a) だけだと**飛ばした語の部分文字列が残る**からである ―
+    「特別損失は固定資産除却損及び減損損失による25百万円」で
+    「減損損失」と「固定資産除却損」を飛ばしても、語彙に在る「固定資産」が
+    「固定資産除却損」の中に残り、「特別損失」より右で終わるので勝ってしまう
+    (**1 回目の実測でこれが起きた。** 封じた予測「N069 が GROUNDED」は
+    この穴で外れた)。(b) は「固定資産」の右が「除却損及び」= 助詞より先に
+    並立の接続語なので真になり、部分文字列も一緒に飛ぶ。
+
+    「特別損失」の右は ``は`` なので (b) は偽 ― **落ちない。**
+    """
+
+    for c in COORDINATORS:
+        if sentence[max(0, start - len(c)):start] == c:
+            return True
+        if sentence[end:end + len(c)] == c:
+            return True
+    _left, right = clause_span(sentence, start, end)
+    tail = sentence[end:right]
+    first = None
+    for token in COORDINATORS + PARTICLES:
+        i = tail.find(token)
+        if i < 0:
+            continue
+        if first is None or i < first[0]:
+            first = (i, token)
+    return first is not None and first[1] in COORDINATORS
+
+
+def skip_coordinated_cause(sentence, start, word):
+    """S1。候補が並立の成分で、その先(同じ節の中)に ``による``/``により`` が
+    在るなら採らない。名指しされているのは**原因の並び**であって、
+    その文の数の持ち主ではない。
+    """
+
+    end = start + len(word)
+    if not _is_coordinated(sentence, start, end):
+        return False
+    _left, right = clause_span(sentence, start, end)
+    tail = sentence[end:right]
+    return any(suffix in tail for suffix in CAUSE_SUFFIXES)
+
+
+def skip_part_of_aggregate(sentence, start, word):
+    """S3。候補が並立の成分で、その先(同じ節の中)に ``の合計``/``の合計額`` が
+    在るなら採らない。名指しされているのは**合計**であって成分ではない。
+    """
+
+    end = start + len(word)
+    if not _is_coordinated(sentence, start, end):
+        return False
+    _left, right = clause_span(sentence, start, end)
+    tail = sentence[end:right]
+    return any(suffix in tail for suffix in AGGREGATE_SUFFIXES)
+
+
+# S2(主語の規則の直し): 「<名詞>を増加/減少」。向きが掛かっているのは
+# **その目的語**である。節を跨がないように ``[^、。]`` で区切る。
+# 向きの語は字で書く(``DIRECTION_WORDS`` から土台を作らない ― この形を採る
+# のは「他動詞として使える向きの語」だけで、`拡大`・`伸び` は入れない)。
+DIRECTION_OBJECT_RE = re.compile(r"([^、。]{2,12})を(増加|減少|改善|悪化|押し上げ|押し下げ)")
+
+
+def direction_object(sentence, pos):
+    """S2。``sentence`` の ``pos`` から始まる向きの語が「<名詞>を」の形の
+    他動詞として使われていれば、その名詞。そうでなければ ``None``。
+    """
+
+    for m in DIRECTION_OBJECT_RE.finditer(sentence):
+        if m.start(2) == pos:
+            return m.group(1)
+    return None
+
+
+def subject_skip_for(profile):
+    """profile の 2 つのフラグから ``subject_of`` に渡す ``skip`` を作る。
+    どちらも偽なら ``None`` を返す ― **P1〜P14 はここで ``None`` になり、
+    ``subject_of`` の振る舞いが 1 つも変わらない。**
+    """
+
+    rules = []
+    if getattr(profile, "subject_skip_coordinated_cause", False):
+        rules.append(skip_coordinated_cause)
+    if getattr(profile, "subject_not_part_of_aggregate", False):
+        rules.append(skip_part_of_aggregate)
+    if not rules:
+        return None
+
+    def skip(sentence, start, word):
+        return any(rule(sentence, start, word) for rule in rules)
+
+    return skip
 
 
 def own_sign_match(window, num):

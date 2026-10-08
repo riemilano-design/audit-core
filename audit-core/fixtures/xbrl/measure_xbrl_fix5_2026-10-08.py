@@ -69,6 +69,14 @@ CONFIGS = [
     ("fix8_taxonomy_only", ("P10", {"subjects": V.SUBJECTS_P12, "taxonomy_labels": True})),
     ("all8", "P13"),  # = V.PROFILES["P13"](P12 + 標準タクソノミのラベル)
     ("all8_allns", "P14"),  # **参考専用**。jppfs の限定を外した版
+    # 主語の規則の直し(人間の判断 1、2026-10-08): **P13 を土台に 1 つずつ**。
+    # A1 は S3 が先に T020 を止めるので、**単独の欄が無いと測れない**。
+    ("fixS1_coord", ("P13", {"subject_skip_coordinated_cause": True})),
+    ("fixS2_object", ("P13", {"subject_direction_object": True})),
+    ("fixS3_aggregate", ("P13", {"subject_not_part_of_aggregate": True})),
+    ("fixS4_lexicon", ("P13", {"direction_word_lexicon": True})),
+    ("fixA1_amount", ("P13", {"direction_amount_check": True})),
+    ("all9", "P15"),  # = V.PROFILES["P15"](P13 + S1 + S2 + S3 + S4 + A1)
 ]
 
 ROW_FIELDS = ("state", "pointers", "recomputed", "reason", "comparator", "normalization")
@@ -191,7 +199,13 @@ def main(argv=None):
         out["configs"][name] = {"tally": tally, "info": info, "diff": d}
         if name in ("base", "all", "all6", "all6n", "all7",
                     "fix7a_stmt_rows", "fix7b_dead_hand", "fix7c_hand_fixed",
-                    "all7abc", "fix8_taxonomy_only", "all8", "all8_allns"):
+                    "all7abc", "fix8_taxonomy_only", "all8", "all8_allns",
+                    # 主語の規則の直し: **1 つずつの構成も全表を置く** ―
+                    # 直した所が狙った主張に当たったかを件ごとに読むため。
+                    # base との差分では P13 からの差が読めない(P13 自体が
+                    # base から 200 件以上動いている)。
+                    "fixS1_coord", "fixS2_object", "fixS3_aggregate",
+                    "fixS4_lexicon", "fixA1_amount", "all9"):
             # 行の全表は「直す前」と「5 つとも入れた後」の 2 つだけ置く。
             # 1 つずつの構成は base との差分(全件)で足りる。
             out["configs"][name]["rows"] = {"%s|%d" % k: v for k, v in rows.items()}
