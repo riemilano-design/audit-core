@@ -5,7 +5,7 @@
 import { readdirSync, readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import { validate } from "./eventSchema.js";
-import { checkClaimDecomposition, coverageReport, loadClaimDecompositionSchema } from "./claimDecomposition.js";
+import { checkClaimDecomposition, coverageReport, loadClaimDecompositionSchema, splitIntoSentences } from "./claimDecomposition.js";
 
 describe("claim-decomposition schema v0.1", () => {
   it("この検証器(lib/eventSchema.ts)が扱えるキーワードだけで書かれている(読み込みと照合が例外を投げない)", () => {
@@ -119,6 +119,71 @@ function baseClaim(overrides: Record<string, unknown> = {}): Record<string, unkn
     ...overrides,
   };
 }
+
+describe("splitIntoSentences(②'' audit-core/docs/CLAIM_SENTENCE_SPLIT_FIX_PLAN_2026-10-08.md §2。文は「。」または行の終わりのどちらか早い方で終わる)", () => {
+  it("句点で終わらない行(見出し)は、その行だけで 1 単位になる", () => {
+    const text = "対局後診断レポート(抜粋)\n売上は100億円だった。";
+    const sentences = splitIntoSentences(text);
+    expect(sentences.length).toBe(2);
+    expect(sentences[0]?.text).toBe("対局後診断レポート(抜粋)");
+    expect(sentences[0]?.start).toBe(0);
+    expect(sentences[0]?.end).toBe("対局後診断レポート(抜粋)".length);
+    expect(sentences[1]?.text).toBe("売上は100億円だった。");
+  });
+
+  it("1 行に 2 文あれば句点ごとに 2 単位になる(行の終わりでの切りを新しく足しても、句点ごとの切りはそのまま生きている)", () => {
+    const text = "晴れだった。売上は100億円だった。"; // 改行なし・1 行に 2 文
+    const sentences = splitIntoSentences(text);
+    expect(sentences.length).toBe(2);
+    expect(sentences[0]?.text).toBe("晴れだった。");
+    expect(sentences[1]?.text).toBe("売上は100億円だった。");
+  });
+
+  it("空行は単位にならない(連続する改行の間に単位が挟まらない)", () => {
+    const text = "見出し\n\n売上は100億円だった。"; // 見出し行の後に空行が 1 つ挟まる
+    const sentences = splitIntoSentences(text);
+    expect(sentences.length).toBe(2); // 空行の分の単位は増えない
+    expect(sentences.some((s) => s.text === "")).toBe(false);
+    expect(sentences.some((s) => s.text.trim() === "" && s.text !== "")).toBe(false);
+    expect(sentences[0]?.text).toBe("見出し");
+    expect(sentences[1]?.text).toBe("売上は100億円だった。");
+  });
+
+  it("退化値: 原文そのものが改行で始まる(先頭が空行)ときも、空の単位を作らない", () => {
+    // 先頭の "\n" は、直前の境界(start=0)からその場(i=0)までに文字が無い、最も素直な「空行」の形。
+    const text = "\n見出し\n\n売上は100億円だった。";
+    const sentences = splitIntoSentences(text);
+    expect(sentences.every((s) => s.text !== "")).toBe(true);
+    expect(sentences.length).toBe(2);
+    expect(sentences[0]?.text).toBe("見出し");
+    expect(sentences[1]?.text).toBe("売上は100億円だった。");
+  });
+
+  it("句点の直後の改行は次の単位の start に含まれない(新しい規則の下でも成り立つ。見出し行を挟んだ直後の文でも確認する)", () => {
+    const text = "見出し\n晴れだった。\n売上は100億円だった。";
+    const sentences = splitIntoSentences(text);
+    expect(sentences.length).toBe(3);
+    expect(sentences[0]?.text).toBe("見出し");
+    expect(sentences[1]?.text).toBe("晴れだった。");
+    expect(sentences[2]?.text).toBe("売上は100億円だった。");
+    // 句点「晴れだった。」の直後の改行が、3 番目の単位の先頭に紛れ込んでいない。
+    expect(sentences[2]?.text.startsWith("\n")).toBe(false);
+    expect(sentences[2]?.start).toBe(text.indexOf("売上"));
+  });
+
+  it("gold_01 の先頭(見出し + 空行 + 本文)から、c1 の正解 span [15,42] がそのまま切り出される(実際の fixture で確かめる)", () => {
+    const gold = JSON.parse(readFileSync(new URL("../fixtures/decomposition/gold_01.json", import.meta.url), "utf-8")) as Record<string, unknown>;
+    const originalText = gold["original_text"] as string;
+    const sentences = splitIntoSentences(originalText);
+    const c1 = sentences.find((s) => s.start === 15 && s.end === 42);
+    expect(c1).toBeDefined();
+    expect(c1?.text).toBe("対象は、2026 年 9 月に指された 20 局です。");
+    // 見出し行(句点が無い)が、それより前の別の単位として切り出されていることも確認する。
+    const heading = sentences.find((s) => s.text === "対局後診断レポート(抜粋)");
+    expect(heading).toBeDefined();
+    expect(heading?.end).toBeLessThan(15);
+  });
+});
 
 describe("decompositionProblems", () => {
   it("正しい span は問題無し(0 件)", () => {
