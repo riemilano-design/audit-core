@@ -27,6 +27,7 @@ by :func:`human_sites` and handed to a person.
 import re
 
 from . import numbers as N
+from . import scales as SC
 
 TOL = 1e-9
 
@@ -52,17 +53,35 @@ POPULATION_PHRASES = {
 }
 
 
+def _scaled(value, unit):
+    """``value`` as written in plain 円 (or in whatever base ``unit``'s
+    family uses), via :mod:`lib.scales`.
+
+    直し 2026-10-08(封 第 2 部): before this, a token's digits and a
+    reference's raw value were compared with no multiplier at all, so
+    "短期貸付による支出 50,000千円"(5 千万円)matched a reference actually
+    holding 50,000 **円** -- 1000 倍違う値が一致した(measured: 29 件の
+    正しい結びを落とし、誤った 1 件だけを採っていた)。Applying the same
+    lookup to both sides keeps it symmetric: a reference's own unit is
+    never 千円/百万円/億円/兆円 in this material (measured: always 円 or
+    円/株), so :func:`lib.scales.scaled_value` is a no-op there.
+    """
+    return SC.scaled_value(value, unit)
+
+
 def _value_index(refs):
     """value -> list of refs with that value (exact float equality is wrong
-    for floats, so this buckets on a rounded key and confirms with TOL)."""
+    for floats, so this buckets on a rounded key and confirms with TOL).
+
+    Keyed on the *scaled* value (see :func:`_scaled`), not the raw one."""
     idx = {}
     for r in refs:
-        idx.setdefault(round(r["value"], 6), []).append(r)
+        idx.setdefault(round(_scaled(r["value"], r.get("unit")), 6), []).append(r)
     return idx
 
 
-def _matches(value, vindex):
-    return vindex.get(round(value, 6), [])
+def _matches(value, unit, vindex):
+    return vindex.get(round(_scaled(value, unit), 6), [])
 
 
 def _unit_compatible(token_unit, ref_unit):
@@ -105,7 +124,7 @@ def data_bearing_sites(text, refs):
     for t in N.scan(text):
         if not N.is_quantity(text, t):
             continue
-        cands = [r for r in _matches(t.value, vindex) if _unit_compatible(t.unit, r.get("unit"))]
+        cands = [r for r in _matches(t.value, t.unit, vindex) if _unit_compatible(t.unit, r.get("unit"))]
         if cands:
             out.append((t, cands))
     return out
@@ -134,7 +153,7 @@ def identified_sites(text, refs):
     for t in N.scan(text):
         if not N.is_quantity(text, t):
             continue
-        cands = [r for r in _matches(t.value, vindex) if _unit_compatible(t.unit, r.get("unit"))]
+        cands = [r for r in _matches(t.value, t.unit, vindex) if _unit_compatible(t.unit, r.get("unit"))]
         by_key = {r["key"]: r for r in cands}
         if len(by_key) != 1:
             continue

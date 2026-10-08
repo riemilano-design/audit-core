@@ -17,13 +17,17 @@ NUM_RE = re.compile(r"(?<![0-9.,])(\d{1,3}(?:,\d{3})+|\d+)(\.\d+)?(?![0-9])")
 # Unit families. A unit may only ever be swapped for another member of its
 # own family (型 2 単位のずれ). Order inside a family is significant only in
 # that the first element is treated as the family's canonical name.
+#
+# "兆円" added 2026-10-08 (封 第 2 部): real filings carry amounts written
+# in 兆円 ("1兆円"), and lib/scales.py's scale table pairs with this family,
+# so a 兆円 token must be recognised as a money quantity like its siblings.
 UNIT_FAMILIES = {
     "count_move": ["手"],
     "count_game": ["局"],
     "count_position": ["局面"],
     "count_times": ["回"],
     "count_item": ["件"],
-    "money": ["円", "千円", "百万円", "億円"],
+    "money": ["円", "千円", "百万円", "億円", "兆円"],
     "ratio": ["%", "％", "ポイント"],  # ％ is an alias of %, see UNIT_ALIASES
     "time": ["秒", "分", "時間"],
     "point": ["点"],

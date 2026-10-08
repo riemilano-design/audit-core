@@ -141,6 +141,26 @@ def strip_html(s):
     return p.text()
 
 
+# 直し 2026-10-08(封 第 2 部): "1 株当たりの金額" と "総額" は同じ族で
+# あってはならない。両方とも unitRef が "JPY" で始まるため、元の
+# ``.upper().startswith("JPY")`` 判定は "JPYPerShares" も "円" に丸めて
+# いた(実測: 3 書類に 41/40/41 件)。これにより、スケールを掛けた総額の
+# トークンが、別の事実である 1 株当たり指標に偶然一致しうる経路が生まれる。
+# ``JPYPerShares`` を先に見分け、総額の "円" とは異なる単位名にする。
+# 他の unitRef 変種は実測していない(今回の 3 書類には "JPY" と
+# "JPYPerShares" の 2 つしか無い)。
+PER_SHARE_UNIT_LABEL = "円/株"
+
+
+def _money_unit_label(unit):
+    u = (unit or "").upper()
+    if u == "JPYPERSHARES":
+        return PER_SHARE_UNIT_LABEL
+    if u.startswith("JPY"):
+        return "円"
+    return unit or None
+
+
 # The opening tag's attribute string is captured once (group 2), and
 # ``contextRef=`` / ``unitRef=`` are each located inside it with a separate
 # ``re.search``. Matching both attributes with one pattern and a greedy
@@ -212,7 +232,7 @@ def prepare_xbrl(args):
             "key": key,
             "source_key": elem,
             "label": elem,
-            "unit": "円" if (unit or "").upper().startswith("JPY") else (unit or None),
+            "unit": _money_unit_label(unit),
             "value": v,
             "role": "value",
             "context": ctx,

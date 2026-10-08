@@ -42,6 +42,7 @@ import inject  # noqa: E402
 import prepare_material  # noqa: E402
 from lib import numbers as N  # noqa: E402
 from lib import sites as S  # noqa: E402
+from lib import scales as SC  # noqa: E402
 
 TEXT = (
     "今回の 25 局を調べました。\n"
@@ -649,8 +650,17 @@ class TestIdentification(unittest.TestCase):
         self.assertEqual(S.t5_sites(text, refs), [])
 
     def test_a_reference_in_the_same_unit_family_does_identify(self):
+        """直し 2026-10-08(封 第 2 部)でこのフィクスチャの ``value`` を
+        149.0 から 149000000.0 に変えた。149.0 のままだと、この試験自体が
+        ``_matches``/``_value_index`` に倍率を掛ける前の欠陥(「149百万円」
+        が素の 149 円に結ばれる)をそのまま固定してしまう ― ちょうど同じ
+        数字が「149百万円の資金減少が従業員数149人に一致」の実例
+        (INJECTION_TOOL_AUDIT3_RESULT_2026-10-08.md §1)として記録されて
+        いる、避けるべきコインシデンスそのものだった。この試験の本来の
+        主旨(ref が同じ族の明示的な単位を持てば identify される)は、
+        倍率を正しく掛けた値どうしの一致で確かめても変わらない。"""
         text = "資金は 149 百万円 減少しました。\n"
-        refs = [{"key": "cash", "label": "現金及び現金同等物", "unit": "円", "value": 149.0, "role": "value"}]
+        refs = [{"key": "cash", "label": "現金及び現金同等物", "unit": "円", "value": 149000000.0, "role": "value"}]
         got = S.identified_sites(text, refs)
         self.assertEqual(len(got), 1)
         self.assertEqual(got[0][1]["key"], "cash")
@@ -700,6 +710,99 @@ class TestMoneyUnitIsQuantity(unittest.TestCase):
         for digits in ("394", "1", "9"):
             tok = next(x for x in N.scan(t) if x.text == digits)
             self.assertFalse(N.is_quantity(t, tok), "%r (%r) was taken as a standalone quantity" % (text, digits))
+
+
+class TestMoneyScaleTable(unittest.TestCase):
+    """直し 2026-10-08(封 第 2 部, DETECTION_T2_PLAN_2026-10-08.md 第 2 部)。
+
+    欠陥: ``lib/sites.py`` の ``_matches()`` / ``_value_index()`` が、千円・
+    百万円・億円という接尾辞の倍率を一切掛けずに、原文の数字リテラルと
+    XBRL の生の値(素の円)を直接比べていた。実測(INJECTION_TOOL_AUDIT3_
+    RESULT_2026-10-08.md §2): ``S100Z4B6`` で「短期貸付による支出
+    50,000千円」(5千万円)が「その他の流動負債 50,000 円」に結ばれ、正しく
+    結べる 29 件を落として誤って結んだ 1 件だけを採っていた。
+
+    この表は ``lib/scales.py`` の倍率そのものを、実際の書類にある表現で
+    固定する。倍率表は ``adapters/xbrl/vocabulary.py`` を写さず・読まず
+    独立に書いた(測定が循環しないように)。
+
+    必須の 9 行(人間の指示そのまま、DETECTION_T2_PLAN_2026-10-08.md 第 2
+    部)のうち 5 行は material/xbrl/*.original.txt に実在する文字列である
+    (grep で確認済み、行は下の注記に書く)。残り 4 行は人間が指示した代表
+    例で、この 3 書類には実在しない(実在しないことも grep で確認済み ―
+    「1兆円」「△」+金額単位の組はいずれも 0 件)。追加の行は自分で探し、
+    実在を grep で確認したものだけを足す。
+    """
+
+    # (原文の数値+単位の表記, 期待する倍率を掛けた後の値, 出どころ)
+    REQUIRED_ROWS = [
+        # 人間の指示の 9 行(そのまま)。
+        ("105,873千円", 105873000.0, "実在: S100Z4B6.original.txt:27 (親会社株主に帰属する当期純損失)"),
+        ("235百万円", 235000000.0, "実在: S100YMFV.original.txt:49,243 (親会社株主に帰属する当期純利益)"),
+        ("10億円", 1000000000.0, "実在: S100Z4B6.original.txt:15,237 (新株式発行による資金調達、約10億円)"),
+        ("69.64円", 69.64, "実在: S100YMFV.original.txt:243 (1株当たり当期純利益)。unit=\"円\" のまま"
+                            "(scale_of は money table に無いので no-op、69.64 は不変)"),
+        ("50,000千円", 50000000.0, "実在: S100Z4B6.original.txt:97 (短期貸付による支出)"),
+        ("2,281百万円", 2281000000.0,
+         "人間の指示による代表例。この 3 書類には実在しない(grep で 0 件を確認済み)"),
+        ("1兆円", 1000000000000.0,
+         "人間の指示による代表例。この 3 書類に「兆円」は 0 件(grep で確認済み)"),
+        ("△1,234千円", -1234000.0,
+         "人間の指示による代表例。△ は会計の負号(-1,234,000 になる)。"
+         "この 3 書類の MD&A 本文に △ は 4 件あるが、すべて % の値で金額には付かない"
+         "(grep で確認済み ― S100Z4B6 の △4.8/△8.6、S100YMFV の △5.0/△1.5)"),
+        ("1,475百万円", 1475000000.0,
+         "人間の指示による代表例。この 3 書類には実在しない(grep で 0 件を確認済み)"),
+    ]
+
+    # 自分で探し、grep で実在を確認した追加の行(必須 9 行の外)。
+    ADDITIONAL_REAL_ROWS = [
+        ("1,850,502千円", 1850502000.0, "実在: S100Z4B6.original.txt:27,221 (売上高)"),
+        ("35億円", 3500000000.0, "実在: S100Z4B6.original.txt:15,237 (新株予約権の行使による資金調達見込み)"),
+        ("3億円", 300000000.0, "実在: S100Z4Q1.original.txt:15,23 (業務未払金の減少)"),
+        ("8,294百万円", 8294000000.0, "実在: S100YMFV.original.txt:49,227 (売上高)"),
+    ]
+
+    _DIGITS_RE = re.compile(r"[0-9,]+(?:\.[0-9]+)?")
+
+    def test_scale_table_rows(self):
+        for digits, expected, why in self.REQUIRED_ROWS + self.ADDITIONAL_REAL_ROWS:
+            text = N.normalize_digits("%sの額である。" % digits)
+            signed = digits.startswith("△")
+            digits_literal = self._DIGITS_RE.search(digits).group(0)
+            tok = next(x for x in N.scan(text) if x.text == digits_literal)
+            got = SC.signed_scaled_value(text, tok) if signed else SC.scaled_value(tok.value, tok.unit)
+            self.assertEqual(got, expected, "%r (%s) -> %r (expected %r)" % (digits, why, got, expected))
+
+    def test_negative_mark_flips_the_sign_only_when_it_immediately_precedes_the_digits(self):
+        text = N.normalize_digits("前期は1,234千円であり、今期は△1,234千円であった。")
+        toks = [t for t in N.scan(text) if t.text == "1,234"]
+        self.assertEqual(len(toks), 2)
+        positive, negative = toks
+        self.assertFalse(SC.is_negative_mark(text, positive.start))
+        self.assertTrue(SC.is_negative_mark(text, negative.start))
+        self.assertEqual(SC.signed_scaled_value(text, positive), 1234000.0)
+        self.assertEqual(SC.signed_scaled_value(text, negative), -1234000.0)
+
+    def test_units_without_a_scale_pass_through_unchanged(self):
+        """``scale_of`` は money table に無い単位(円/株・pure・shares・局・
+        秒 など)に対して ``None`` を返し、``scaled_value`` は値をそのまま
+        通す ― 掛け算の対象ではないことの固定。"""
+        self.assertIsNone(SC.scale_of("円/株"))
+        self.assertIsNone(SC.scale_of(None))
+        self.assertIsNone(SC.scale_of("局"))
+        self.assertEqual(SC.scaled_value(69.64, "円/株"), 69.64)
+        self.assertEqual(SC.scaled_value(107.0, None), 107.0)
+
+    def test_the_table_is_pinned_literally_not_derived(self):
+        """人が決めた数は字で留める(2026-10-08 の人間の指示)。各行は独立
+        した整数であり、他の行の掛け算から作られていないことを確かめる
+        ― 1 行を壊す変異が他の行に伝播しないことの土台。"""
+        self.assertEqual(SC.MONEY_SCALE["円"], 1)
+        self.assertEqual(SC.MONEY_SCALE["千円"], 1000)
+        self.assertEqual(SC.MONEY_SCALE["百万円"], 1000000)
+        self.assertEqual(SC.MONEY_SCALE["億円"], 100000000)
+        self.assertEqual(SC.MONEY_SCALE["兆円"], 1000000000000)
 
 
 class TestCandidateFunctionsShareTheQuantityScreen(unittest.TestCase):
@@ -1132,6 +1235,74 @@ class TestXBRLUnitRefExtraction(unittest.TestCase):
                 refs = json.load(fh)["refs"]
             ys = [r for r in refs if r["source_key"] == "Y"]
             self.assertEqual(ys[0]["unit"], "円")
+
+
+class TestPerShareUnitIsSeparateFromMoney(unittest.TestCase):
+    """直し 2026-10-08(封 第 2 部, 司令塔の追加)。``prepare_material.py``
+    の ``"円" if (unit or "").upper().startswith("JPY") else ...`` は、
+    実在する ``unitRef="JPYPerShares"``(1 株当たりの金額)も「円」に丸めて
+    いた(実測: 3 書類に 41/40/41 件)。これをやらないと、倍率を掛けた
+    「総額」のトークンが、別の事実である「1 株当たり」の参照に ``money``
+    族の一致で結びうる。``JPYPerShares`` は ``JPY`` とは異なる文字列
+    (``円/株``)にし、``lib/numbers.py`` の ``UNIT_FAMILIES`` には登録しない
+    ことで、``unit_family("円/株")`` が ``None`` になり、``money`` 族の
+    どの金額とも家族が一致しないようにする。"""
+
+    def test_jpy_per_shares_becomes_a_distinct_label_not_yen(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            zpath = os.path.join(tmp, "pershare.zip")
+            _make_xbrl_zip(
+                zpath,
+                "XBRL/PublicDoc/pershare.xbrl",
+                _instance([
+                    '<x:EPS contextRef="C" unitRef="JPYPerShares">69.64</x:EPS>',
+                    '<x:NetSales contextRef="C" unitRef="JPY">6379051000</x:NetSales>',
+                ]),
+            )
+            args = argparse.Namespace(zip=zpath, doc="pershare", out=tmp)
+            prepare_material.prepare_xbrl(args)
+            with io.open(os.path.join(tmp, "pershare.reference_numbers.json"), encoding="utf-8") as fh:
+                refs = json.load(fh)["refs"]
+            eps = next(r for r in refs if r["source_key"] == "EPS")
+            sales = next(r for r in refs if r["source_key"] == "NetSales")
+            self.assertEqual(eps["unit"], prepare_material.PER_SHARE_UNIT_LABEL)
+            self.assertNotEqual(eps["unit"], "円")
+            self.assertEqual(sales["unit"], "円")
+
+    def test_the_distinct_label_does_not_share_a_family_with_money(self):
+        """``円/株`` は ``lib/numbers.py`` の ``money`` family に登録され
+        ていないので、``unit_family`` は ``None`` を返し、どの金額の単位
+        とも家族が一致しない。"""
+        self.assertIsNone(N.unit_family(prepare_material.PER_SHARE_UNIT_LABEL))
+        for money_unit in N.UNIT_FAMILIES["money"]:
+            self.assertNotEqual(N.unit_family(money_unit), N.unit_family(prepare_material.PER_SHARE_UNIT_LABEL))
+
+    def test_a_plain_yen_token_does_not_identify_against_a_per_share_reference(self):
+        """「69.64円」(1 株当たりの表現が平文の「円」で書かれた文)は、真の
+        参照の単位が ``円/株`` に分かれたことで、明示的な単位どうしの家族
+        一致を要求する ``identified_sites`` からは外れる(S-6 の実測の
+        固定 ― 69.64 の identify は消え、別の「400百万円」が新たに
+        identify された。STEP 報告の表に詳細)。"""
+        text = "1株当たり当期純利益は69.64円となりました。\n"
+        refs = [{
+            "key": "eps@C", "source_key": "EPS",
+            "label": "EPS", "unit": prepare_material.PER_SHARE_UNIT_LABEL,
+            "value": 69.64, "role": "value",
+        }]
+        self.assertEqual(S.identified_sites(text, refs), [])
+        self.assertEqual(S.data_bearing_sites(text, refs), [])
+
+    def test_scale_applies_before_the_family_check_so_identification_resolves_the_total(self):
+        """倍率を掛けたうえで家族も一致するとき(総額どうし)は identify
+        される ― 「50,000千円」が 50,000,000 円の参照に結ばれる実物の形。"""
+        text = "短期貸付による支出50,000千円によるものであります。\n"
+        refs = [{
+            "key": "loan@C", "source_key": "ShortTermLoansReceivable",
+            "label": "短期貸付金", "unit": "円", "value": 50000000.0, "role": "value",
+        }]
+        got = S.identified_sites(text, refs)
+        self.assertEqual(len(got), 1)
+        self.assertEqual(got[0][1]["key"], "loan@C")
 
 
 class TestXBRLInlineVsPlainInstance(unittest.TestCase):
