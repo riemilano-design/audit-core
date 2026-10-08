@@ -1,0 +1,34 @@
+{
+ "tool": "fetch_allocated_2026-10-08",
+ "roles": [
+  "B-verify"
+ ],
+ "fetched": [
+  {
+   "docID": "S100Z3BW",
+   "filerName": "株式会社クレステック",
+   "periodEnd": "2026-06-30",
+   "role": "B-verify",
+   "draw_order": 1,
+   "bytes": 584874,
+   "zip_sha256": "57a1433e56905297735294f5e48795e48eba1ccbe29e5ea54000d58bf3c80b7c",
+   "content_digest": [
+    "d297cc8e77c07a90159ef3e74b608f9086caeeb50e78842c76fd8f2143a4e8e3",
+    31
+   ]
+  },
+  {
+   "docID": "S100Z4DE",
+   "filerName": "工藤建設株式会社",
+   "periodEnd": "2026-06-30",
+   "role": "B-verify",
+   "draw_order": 2,
+   "bytes": 633283,
+   "zip_sha256": "5f154b2a5ba081abe7495fabc2cf6aae795cf92b1ad02808954d2befe424aa43",
+   "content_digest": [
+    "58af737b0697f46bc50428c5007e4e1c5388d876421212ef2aa0749c17fe7480",
+    36
+   ]
+  }
+ ]
+}
