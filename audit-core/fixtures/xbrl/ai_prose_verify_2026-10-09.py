@@ -66,7 +66,9 @@ def gate8():
 
 
 def states(results_by_id):
-    return collections.Counter(r.state for r in results_by_id.values())
+    # **state は enum。** 文字列と比べると全部 False になり、
+    # 4 状態が全部 0 件に見える(2026-10-09 に実際に踏んだ)。.value で取る。
+    return collections.Counter(r.state.value for r in results_by_id.values())
 
 
 def main():
@@ -115,7 +117,7 @@ def main():
         mark = (by_id.get(cid) or {}).get("札")
         if mark is None:
             unlabelled.append(cid); continue
-        passed = res.state == "GROUNDED"
+        passed = res.state.value == "GROUNDED"
         if mark == "判定不能":
             cell["判定不能・通過" if passed else "判定不能・停止"] += 1
             continue
@@ -133,7 +135,7 @@ def main():
                 "根拠": (by_id.get(cid) or {}).get("根拠"),
             })
         if mark == "真" and not passed:
-            miss_stop.append({"id": cid, "state": res.state, "reason": res.reason})
+            miss_stop.append({"id": cid, "state": res.state.value, "reason": str(res.reason)})
 
     n_true = cell["真・通過"] + cell["真・停止"]
     n_false = cell["偽・通過"] + cell["偽・停止"]
@@ -149,7 +151,7 @@ def main():
     # 予測の判定
     def num_bound_grounded(recs, res):
         nb = [r for r in recs if r.claim.id.startswith("N") and r.claim.subject is not None]
-        g = sum(1 for r in nb if res[r.claim.id].state == "GROUNDED")
+        g = sum(1 for r in nb if res[r.claim.id].state.value == "GROUNDED")
         return g, len(nb), (g / float(len(nb)) if nb else 0.0)
     hg, hn, hr = num_bound_grounded(h_recipes, h_res)
     ag, an_, ar = num_bound_grounded(a_recipes, a_res)
