@@ -1,0 +1,38 @@
+{
+ "tool": "redraw_b_2026-10-09.py",
+ "seal": "docs/XBRL_REDRAW_B_SEAL_2026-10-09.md",
+ "reason": "封B の旧 2 件(S100Z3CO・S100Z4PA)が封印の 4 分前に別の席に取得され非盲検になったため(追記 862ce7a)。封B の予測 4f9bd14 は変更しない。",
+ "candidate_source": {
+  "path": "candidates_2026-09.json",
+  "rows": 186,
+  "sha256": "7117b8af4ef412b8b7220a95a09ea18d907e05293ccbd0e0c53ff89e62151568",
+  "source_commit": "bee2999"
+ },
+ "seed_source": "別の席のコミット d427df6(本線が選べない値)",
+ "rng_label_without_the_seed": "<種>|redraw-B-2026-10-09|sign-axis|2026-09-04|2026-09-30",
+ "python": "3.9.6",
+ "excluded_named": 24,
+ "excluded_by_cache": 12,
+ "cache_manifest_sha256": "5ccbdebfd45bc8f4f0b490e5ce977296c30c38bf076c87fad4b52a353af01c0c",
+ "live_cache_equals_manifest": true,
+ "pool": 162,
+ "zips_fetched": false,
+ "picked": [
+  {
+   "order": 1,
+   "docID": "S100Z3V1",
+   "filerName": "サンネクスタグループ株式会社",
+   "date": "2026-09-25",
+   "seal": "封B(符号)",
+   "in_cache_at_draw": false
+  },
+  {
+   "order": 2,
+   "docID": "S100Z3HP",
+   "filerName": "株式会社ハンズマン",
+   "date": "2026-09-24",
+   "seal": "封B(符号)",
+   "in_cache_at_draw": false
+  }
+ ]
+}
