@@ -49,6 +49,23 @@ FROZEN_BUNDLE_GENERATIONS = (
 # 字で留めるのは**いまの世代**。--expect を値なしで渡したときの既定。
 FROZEN_BUNDLE_SHA = FROZEN_BUNDLE_GENERATIONS[-1][0]
 
+# **この枝そのものの既知の値。**
+#
+# 上の世代は**本線の**保護面の値である。作業用の枝は保護面を**意図して**変えて
+# いるので、--expect を回すと毎回「不一致」が出る。それを放置すると
+# **警報に慣れてしまい、本当のずれを読み飛ばす**(2026-10-09 に 1 回、
+# 宣言された遷移を「凍結の束が動いた」と誤って書いた)。
+#
+# だから枝の値も名前つきで持つ。意味が逆であることに注意 ―
+# 本線の値は「**変わっていないこと**」を確かめる値、
+# 枝の値は「**意図した変更のぶんだけ変わっていること**」を確かめる値。
+KNOWN_BRANCH_BUNDLES = {
+    "5873ac7803adfa9de22195943b552e5f9d829611e1404f247a2397e629734f3d":
+        "feature/audit-core-xbrl-fix5 ― 主語の規則の直し(S1〜S4)と A1 の実装を"
+        "含む。本線 490888d4… から意図して分かれている。合流は truncate の封と"
+        "監査の後に rebase 1 回(本線の席と合意、2026-10-09)",
+}
+
 
 def _git(args):
     out = subprocess.run(["git"] + args, capture_output=True)
@@ -78,6 +95,16 @@ def bundle(rev=None):
     rows = [(f, file_sha(f, rev)) for f in files]
     text = "".join("%s  %s\n" % (sha, f) for f, sha in rows)
     return hashlib.sha256(text.encode("utf-8")).hexdigest(), rows
+
+
+def _dirty_count():
+    """凍結対象のうち**未コミット**のファイル数。0 でなければ測った値は作業中のもの。"""
+
+    try:
+        out = _git(["status", "--porcelain", "--"] + list(FROZEN_PATHS))
+    except SystemExit:
+        return -1
+    return len([l for l in out.decode("utf-8", "replace").splitlines() if l.strip()])
 
 
 def main(argv=None):
@@ -112,7 +139,13 @@ def main(argv=None):
     if a.verbose:
         for f, s in rows:
             print("  %s  %s" % (s, f))
-    print("束ねた sha: %s" % sha)
+    # **sha を単独で印字しない。**(本線の席の形、2026-10-09)
+    # 「sha が出たから測れた」と読める行を作らない ― 1 行を記録に写したときに
+    # **何を何本測った値なのかが一緒に付いてくる**ようにする。
+    # こちらは本数が合わなければ上で rc=2 で止めるが、**止まらなかったときに
+    # 本数を読む習慣**は、同じ行に並んでいないと身につかない。
+    print("束ねた sha: %s  (対象 %d 本 / %s / 未コミット %d 件)"
+          % (sha, len(rows), where, _dirty_count()))
     if a.expect is None:
         return 0
     if sha == a.expect:
@@ -127,9 +160,16 @@ def main(argv=None):
             print("(測った対象が古いコミット・古い枝なら、これが正しい。"
                   "本線の現状を測ったのにこれが出たなら、そのときは調べる)")
             return 1
+    if sha in KNOWN_BRANCH_BUNDLES:
+        print("**この枝の既知の値と一致**(本線の基準とは意図して違う): %s"
+              % KNOWN_BRANCH_BUNDLES[sha])
+        print("  本線のいまの世代は %s" % FROZEN_BUNDLE_GENERATIONS[-1][0])
+        print("  (枝の値は『変わっていないこと』ではなく"
+              "『意図した変更のぶんだけ変わっていること』を確かめる値)")
+        return 0
     print("不一致: 期待 %s" % a.expect)
-    print("(既知の世代のどれにも当たらない。記録と突き合わせる前に、"
-          "どのファイルが違うかを下で見る)")
+    print("(既知の世代にも、この枝の既知の値にも当たらない。"
+          "記録と突き合わせる前に、どのファイルが違うかを下で見る)")
     base = os.environ.get("FROZEN_BASE_REV", "0d54c9a")
     try:
         _, base_rows = bundle(base)
