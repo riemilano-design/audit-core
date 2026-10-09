@@ -1,0 +1,47 @@
+{
+ "identity": {
+  "head": "d5da7ae68e38037f1de313aedb7178dfa8648f29",
+  "experiment_result_commit": "ab7d132",
+  "profile": "P7",
+  "document": "S100Z4Q1",
+  "modified_zip_sha256": "03521437be23c8e2a02d85b4bc29a215646803582e9101fdf185521041174799",
+  "modified_zip_tracked": false,
+  "modified_zip_reproducible": "fixtures/xbrl/ai_prose_claims_2026-10-09.py の build_modified_zip で byte 同一に再生成できることを確認済み",
+  "labels_sha256": "7eac1450c40c68e0a25bf7f56c32db4ee6dad226e55df7efdb8019764a71173b",
+  "prose_sha256": "898ff5c54d94c746118cc997dd360c497702386b25d461924bbc4290edc26bbb",
+  "protected_surface_sha256": "490888d46d034ca9eaae8e4b4d01f494919abf21a8b057e87c835d25256d7116",
+  "protected_surface_files": 22,
+  "protected_surface_uncommitted": 0
+ },
+ "by_label_and_state": {
+  "真": {
+   "GROUNDED": 177,
+   "VALUE_MISMATCH": 33,
+   "UNVERIFIABLE": 124,
+   "POINTER_NOT_FOUND": 57
+  },
+  "判定不能": {
+   "POINTER_NOT_FOUND": 5,
+   "GROUNDED": 7,
+   "UNVERIFIABLE": 11
+  },
+  "偽": {
+   "POINTER_NOT_FOUND": 1
+  }
+ },
+ "checks": {
+  "true_total": 391,
+  "true_total_expected": 391,
+  "true_stopped": 214,
+  "true_stopped_expected": 214,
+  "unlabelled": []
+ },
+ "stopped_breakdown_meaning": {
+  "VALUE_MISMATCH": "真の誤停止(正しい Claim を値不一致として止めた)",
+  "POINTER_NOT_FOUND": "照合範囲の問題(元データから該当 Evidence を辿れない)",
+  "UNVERIFIABLE": "照合範囲の問題(決定論的に照合できない)"
+ },
+ "false_claim_states": {
+  "T087": "POINTER_NOT_FOUND"
+ }
+}
