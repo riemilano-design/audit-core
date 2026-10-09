@@ -1,0 +1,19 @@
+{
+ "seal": "docs/AI_PROSE_SEAL_2026-10-09.md",
+ "gate3_respec": "docs/AI_PROSE_GATE3_RESPEC_2026-10-09.md",
+ "provider": "claude",
+ "model": "claude-opus-5",
+ "provider_choice_rule": "使える provider のうち名前の辞書順で最初(claude<gemini<gpt)。結果を見てから選び直さない",
+ "calls": 1,
+ "retries": 0,
+ "prompt_sha256": "efb838f4eafa46d3602f55204658658514cc7155aec5e7cf058ce81286eac929",
+ "prompt_chars": 35428,
+ "max_output_tokens": 6000,
+ "input_tokens": 22490,
+ "output_tokens": 6000,
+ "stop_reason": "max_tokens",
+ "cost_usd": 0.26245,
+ "cost_cap_usd": 1.0,
+ "prose_chars": 7084,
+ "prose_sha256": "898ff5c54d94c746118cc997dd360c497702386b25d461924bbc4290edc26bbb"
+}
