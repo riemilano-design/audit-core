@@ -1,0 +1,422 @@
+あなたは上場企業の開示を担当しています。
+
+以下は当社の当事業年度の財務数値です。会計システムから機械的に出力したものです。
+
+| 項目 | 値 | 単位 | 期間 |
+|---|---|---|---|
+| 契約資産の増減額(△は増加) | 161030000 | JPY | 2025-07-01〜2026-06-30 |
+| 契約資産の増減額(△は増加) | 189984000 | JPY | 2024-07-01〜2025-06-30 |
+| 完成業務補償引当金の増減額(△は減少) | 786000000 | JPY | 2025-07-01〜2026-06-30 |
+| 完成業務補償引当金の増減額(△は減少) | -55970000 | JPY | 2024-07-01〜2025-06-30 |
+| 退職給付に係る調整累計額の増減額(△は減少) | 1586567000 | JPY | 2025-07-01〜2026-06-30 |
+| 退職給付に係る調整累計額の増減額(△は減少) | 698505000 | JPY | 2024-07-01〜2025-06-30 |
+| 完成業務補償引当金 | 991000000 | JPY | 2026-06-30 時点 |
+| 完成業務補償引当金 | 205000000 | JPY | 2025-06-30 時点 |
+| jpcrp_cor:AuditFeesConsolidatedSubsidiaries | 49298000 | JPY | 2025-07-01〜2026-06-30 |
+| jpcrp_cor:AuditFeesConsolidatedSubsidiaries | 45454000 | JPY | 2024-07-01〜2025-06-30 |
+| jpcrp_cor:AuditFeesConsolidatedSubsidiariesNetworkFirms | 2158000 | JPY | 2025-07-01〜2026-06-30 |
+| jpcrp_cor:AuditFeesConsolidatedSubsidiariesNetworkFirms | 1930000 | JPY | 2024-07-01〜2025-06-30 |
+| jpcrp_cor:AuditFeesReportingCompany | 18488000 | JPY | 2025-07-01〜2026-06-30 |
+| jpcrp_cor:AuditFeesReportingCompany | 23379000 | JPY | 2024-07-01〜2025-06-30 |
+| jpcrp_cor:AuditFeesTotal | 67786000 | JPY | 2025-07-01〜2026-06-30 |
+| jpcrp_cor:AuditFeesTotal | 68833000 | JPY | 2024-07-01〜2025-06-30 |
+| jpcrp_cor:AuditFeesTotalNetworkFirms | 2158000 | JPY | 2025-07-01〜2026-06-30 |
+| jpcrp_cor:AuditFeesTotalNetworkFirms | 1930000 | JPY | 2024-07-01〜2025-06-30 |
+| jpcrp_cor:AverageNumberOfTemporaryWorkers | 409 | pure | 2026-06-30 時点 |
+| jpcrp_cor:AverageNumberOfTemporaryWorkers | 409 | pure | 2026-06-30 時点 |
+| jpcrp_cor:AverageNumberOfTemporaryWorkers | 393 | pure | 2025-06-30 時点 |
+| jpcrp_cor:AverageNumberOfTemporaryWorkers | 392 | pure | 2024-06-30 時点 |
+| jpcrp_cor:AverageNumberOfTemporaryWorkers | 300 | pure | 2023-06-30 時点 |
+| jpcrp_cor:AverageNumberOfTemporaryWorkers | 294 | pure | 2022-06-30 時点 |
+| jpcrp_cor:BasicEarningsLossPerShareSummaryOfBusinessResults | 115.43 | JPYPerShares | 2025-07-01〜2026-06-30 |
+| jpcrp_cor:BasicEarningsLossPerShareSummaryOfBusinessResults | 236.28 | JPYPerShares | 2024-07-01〜2025-06-30 |
+| jpcrp_cor:BasicEarningsLossPerShareSummaryOfBusinessResults | 192.81 | JPYPerShares | 2023-07-01〜2024-06-30 |
+| jpcrp_cor:BasicEarningsLossPerShareSummaryOfBusinessResults | 218.71 | JPYPerShares | 2022-07-01〜2023-06-30 |
+| jpcrp_cor:BasicEarningsLossPerShareSummaryOfBusinessResults | 188.44 | JPYPerShares | 2021-07-01〜2022-06-30 |
+| jpcrp_cor:CapitalExpendituresOverviewOfCapitalExpendituresEtc | 341000000 | JPY | 2025-07-01〜2026-06-30 |
+| jpcrp_cor:CarryingAmountSharesNotListedInvestmentSharesHeldForPurposesOtherThanPureInvestmentLargestHoldingCompany | 97510000 | JPY | 2026-06-30 時点 |
+| jpcrp_cor:CarryingAmountSharesOtherThanThoseNotListedInvestmentSharesHeldForPurposesOtherThanPureInvestmentLargestHoldingCompany | 1029864000 | JPY | 2026-06-30 時点 |
+| jpcrp_cor:CashAndCashEquivalentsSummaryOfBusinessResults | 2605950000 | JPY | 2026-06-30 時点 |
+| jpcrp_cor:CashAndCashEquivalentsSummaryOfBusinessResults | 2899140000 | JPY | 2025-06-30 時点 |
+| jpcrp_cor:CashAndCashEquivalentsSummaryOfBusinessResults | 2116895000 | JPY | 2024-06-30 時点 |
+| jpcrp_cor:CashAndCashEquivalentsSummaryOfBusinessResults | 4266911000 | JPY | 2023-06-30 時点 |
+| jpcrp_cor:CashAndCashEquivalentsSummaryOfBusinessResults | 4604749000 | JPY | 2022-06-30 時点 |
+| jpcrp_cor:ComprehensiveIncomeSummaryOfBusinessResults | 2256683000 | JPY | 2025-07-01〜2026-06-30 |
+| jpcrp_cor:ComprehensiveIncomeSummaryOfBusinessResults | 2451498000 | JPY | 2024-07-01〜2025-06-30 |
+| jpcrp_cor:ComprehensiveIncomeSummaryOfBusinessResults | 2117822000 | JPY | 2023-07-01〜2024-06-30 |
+| jpcrp_cor:ComprehensiveIncomeSummaryOfBusinessResults | 2432741000 | JPY | 2022-07-01〜2023-06-30 |
+| jpcrp_cor:ComprehensiveIncomeSummaryOfBusinessResults | 1316892000 | JPY | 2021-07-01〜2022-06-30 |
+| jpcrp_cor:DilutedEarningsPerShareSummaryOfBusinessResults | 235.76 | JPYPerShares | 2024-07-01〜2025-06-30 |
+| jpcrp_cor:DilutedEarningsPerShareSummaryOfBusinessResults | 192.19 | JPYPerShares | 2023-07-01〜2024-06-30 |
+| jpcrp_cor:DilutedEarningsPerShareSummaryOfBusinessResults | 218.01 | JPYPerShares | 2022-07-01〜2023-06-30 |
+| jpcrp_cor:DilutedEarningsPerShareSummaryOfBusinessResults | 187.39 | JPYPerShares | 2021-07-01〜2022-06-30 |
+| jpcrp_cor:EquityToAssetRatioSummaryOfBusinessResults | 0.617 | pure | 2026-06-30 時点 |
+| jpcrp_cor:EquityToAssetRatioSummaryOfBusinessResults | 0.606 | pure | 2025-06-30 時点 |
+| jpcrp_cor:EquityToAssetRatioSummaryOfBusinessResults | 0.559 | pure | 2024-06-30 時点 |
+| jpcrp_cor:EquityToAssetRatioSummaryOfBusinessResults | 0.563 | pure | 2023-06-30 時点 |
+| jpcrp_cor:EquityToAssetRatioSummaryOfBusinessResults | 0.506 | pure | 2022-06-30 時点 |
+| jpcrp_cor:NetAssetsPerShareSummaryOfBusinessResults | 2096.83 | JPYPerShares | 2026-06-30 時点 |
+| jpcrp_cor:NetAssetsPerShareSummaryOfBusinessResults | 1897.74 | JPYPerShares | 2025-06-30 時点 |
+| jpcrp_cor:NetAssetsPerShareSummaryOfBusinessResults | 1663.52 | JPYPerShares | 2024-06-30 時点 |
+| jpcrp_cor:NetAssetsPerShareSummaryOfBusinessResults | 1471.35 | JPYPerShares | 2023-06-30 時点 |
+| jpcrp_cor:NetAssetsPerShareSummaryOfBusinessResults | 1240.16 | JPYPerShares | 2022-06-30 時点 |
+| jpcrp_cor:NetAssetsSummaryOfBusinessResults | 17165944000 | JPY | 2026-06-30 時点 |
+| jpcrp_cor:NetAssetsSummaryOfBusinessResults | 15498746000 | JPY | 2025-06-30 時点 |
+| jpcrp_cor:NetAssetsSummaryOfBusinessResults | 13486462000 | JPY | 2024-06-30 時点 |
+| jpcrp_cor:NetAssetsSummaryOfBusinessResults | 11856211000 | JPY | 2023-06-30 時点 |
+| jpcrp_cor:NetAssetsSummaryOfBusinessResults | 9946463000 | JPY | 2022-06-30 時点 |
+| jpcrp_cor:NetCashProvidedByUsedInFinancingActivitiesSummaryOfBusinessResults | -1073010000 | JPY | 2025-07-01〜2026-06-30 |
+| jpcrp_cor:NetCashProvidedByUsedInFinancingActivitiesSummaryOfBusinessResults | -1740057000 | JPY | 2024-07-01〜2025-06-30 |
+| jpcrp_cor:NetCashProvidedByUsedInFinancingActivitiesSummaryOfBusinessResults | -111022000 | JPY | 2023-07-01〜2024-06-30 |
+| jpcrp_cor:NetCashProvidedByUsedInFinancingActivitiesSummaryOfBusinessResults | -788839000 | JPY | 2022-07-01〜2023-06-30 |
+| jpcrp_cor:NetCashProvidedByUsedInFinancingActivitiesSummaryOfBusinessResults | -606209000 | JPY | 2021-07-01〜2022-06-30 |
+| jpcrp_cor:NetCashProvidedByUsedInInvestingActivitiesSummaryOfBusinessResults | -259037000 | JPY | 2025-07-01〜2026-06-30 |
+| jpcrp_cor:NetCashProvidedByUsedInInvestingActivitiesSummaryOfBusinessResults | -506793000 | JPY | 2024-07-01〜2025-06-30 |
+| jpcrp_cor:NetCashProvidedByUsedInInvestingActivitiesSummaryOfBusinessResults | -127557000 | JPY | 2023-07-01〜2024-06-30 |
+| jpcrp_cor:NetCashProvidedByUsedInInvestingActivitiesSummaryOfBusinessResults | -347380000 | JPY | 2022-07-01〜2023-06-30 |
+| jpcrp_cor:NetCashProvidedByUsedInInvestingActivitiesSummaryOfBusinessResults | -978204000 | JPY | 2021-07-01〜2022-06-30 |
+| jpcrp_cor:NetCashProvidedByUsedInOperatingActivitiesSummaryOfBusinessResults | 1032971000 | JPY | 2025-07-01〜2026-06-30 |
+| jpcrp_cor:NetCashProvidedByUsedInOperatingActivitiesSummaryOfBusinessResults | 3029245000 | JPY | 2024-07-01〜2025-06-30 |
+| jpcrp_cor:NetCashProvidedByUsedInOperatingActivitiesSummaryOfBusinessResults | -1916505000 | JPY | 2023-07-01〜2024-06-30 |
+| jpcrp_cor:NetCashProvidedByUsedInOperatingActivitiesSummaryOfBusinessResults | 793985000 | JPY | 2022-07-01〜2023-06-30 |
+| jpcrp_cor:NetCashProvidedByUsedInOperatingActivitiesSummaryOfBusinessResults | 608102000 | JPY | 2021-07-01〜2022-06-30 |
+| jpcrp_cor:NetSalesSummaryOfBusinessResults | 38064274000 | JPY | 2025-07-01〜2026-06-30 |
+| jpcrp_cor:NetSalesSummaryOfBusinessResults | 36975577000 | JPY | 2024-07-01〜2025-06-30 |
+| jpcrp_cor:NetSalesSummaryOfBusinessResults | 34131911000 | JPY | 2023-07-01〜2024-06-30 |
+| jpcrp_cor:NetSalesSummaryOfBusinessResults | 32580164000 | JPY | 2022-07-01〜2023-06-30 |
+| jpcrp_cor:NetSalesSummaryOfBusinessResults | 32112770000 | JPY | 2021-07-01〜2022-06-30 |
+| jpcrp_cor:NonAuditFeesReportingCompanyNetworkFirms | 400000 | JPY | 2025-07-01〜2026-06-30 |
+| jpcrp_cor:NonAuditFeesReportingCompanyNetworkFirms | 1200000 | JPY | 2024-07-01〜2025-06-30 |
+| jpcrp_cor:NonAuditFeesTotalNetworkFirms | 400000 | JPY | 2025-07-01〜2026-06-30 |
+| jpcrp_cor:NonAuditFeesTotalNetworkFirms | 1200000 | JPY | 2024-07-01〜2025-06-30 |
+| jpcrp_cor:NumberOfConsolidatedSubsidiaries | 5 | pure | 2026-06-30 時点 |
+| jpcrp_cor:NumberOfEmployees | 1462 | pure | 2026-06-30 時点 |
+| jpcrp_cor:NumberOfEmployees | 1462 | pure | 2026-06-30 時点 |
+| jpcrp_cor:NumberOfEmployees | 1447 | pure | 2025-06-30 時点 |
+| jpcrp_cor:NumberOfEmployees | 1453 | pure | 2024-06-30 時点 |
+| jpcrp_cor:NumberOfEmployees | 1393 | pure | 2023-06-30 時点 |
+| jpcrp_cor:NumberOfEmployees | 1359 | pure | 2022-06-30 時点 |
+| jpcrp_cor:NumberOfFemaleDirectorsAndOtherOfficers | 1 | pure | 2026-09-30 時点 |
+| jpcrp_cor:NumberOfIssuedSharesAsOfFilingDateIssuedSharesTotalNumberOfSharesEtc | 8420000 | shares | 2026-09-30 時点 |
+| jpcrp_cor:NumberOfIssuedSharesAsOfFiscalYearEndIssuedSharesTotalNumberOfSharesEtc | 8420000 | shares | 2026-09-30 時点 |
+| jpcrp_cor:NumberOfIssuesSharesNotListedInvestmentSharesHeldForPurposesOtherThanPureInvestmentLargestHoldingCompany | 7 | pure | 2026-06-30 時点 |
+| jpcrp_cor:NumberOfIssuesSharesOtherThanThoseNotListedInvestmentSharesHeldForPurposesOtherThanPureInvestmentLargestHoldingCompany | 4 | pure | 2026-06-30 時点 |
+| jpcrp_cor:NumberOfIssuesWhoseNumberOfSharesIncreasedSharesOtherThanThoseNotListedInvestmentSharesHeldForPurposesOtherThanPureInvestmentLargestHoldingCompany | 1 | pure | 2025-07-01〜2026-06-30 |
+| jpcrp_cor:NumberOfMaleDirectorsAndOtherOfficers | 5 | pure | 2026-09-30 時点 |
+| jpcrp_cor:NumberOfSharesHeld | 3359000 | shares | 2026-06-30 時点 |
+| jpcrp_cor:NumberOfSharesHeldInOwnNameTreasurySharesEtc | 233300 | shares | 2026-06-30 時点 |
+| jpcrp_cor:NumberOfSharesHeldOrdinarySharesInformationAboutDirectorsAndCorporateAuditors | 70000 | shares | 2026-09-30 時点 |
+| jpcrp_cor:NumberOfSharesIssuedSharesVotingRights | 8420000 | shares | 2026-06-30 時点 |
+| jpcrp_cor:NumberOfVotingRightsIssuedSharesVotingRights | 81771 | pure | 2026-06-30 時点 |
+| jpcrp_cor:OrdinaryIncomeLossSummaryOfBusinessResults | 1457848000 | JPY | 2025-07-01〜2026-06-30 |
+| jpcrp_cor:OrdinaryIncomeLossSummaryOfBusinessResults | 2709051000 | JPY | 2024-07-01〜2025-06-30 |
+| jpcrp_cor:OrdinaryIncomeLossSummaryOfBusinessResults | 1988988000 | JPY | 2023-07-01〜2024-06-30 |
+| jpcrp_cor:OrdinaryIncomeLossSummaryOfBusinessResults | 2353255000 | JPY | 2022-07-01〜2023-06-30 |
+| jpcrp_cor:OrdinaryIncomeLossSummaryOfBusinessResults | 2202760000 | JPY | 2021-07-01〜2022-06-30 |
+| jpcrp_cor:PriceEarningsRatioSummaryOfBusinessResults | 15.48 | pure | 2025-07-01〜2026-06-30 |
+| jpcrp_cor:PriceEarningsRatioSummaryOfBusinessResults | 8.76 | pure | 2024-07-01〜2025-06-30 |
+| jpcrp_cor:PriceEarningsRatioSummaryOfBusinessResults | 8.43 | pure | 2023-07-01〜2024-06-30 |
+| jpcrp_cor:PriceEarningsRatioSummaryOfBusinessResults | 6.32 | pure | 2022-07-01〜2023-06-30 |
+| jpcrp_cor:PriceEarningsRatioSummaryOfBusinessResults | 5.65 | pure | 2021-07-01〜2022-06-30 |
+| jpcrp_cor:ProfitLossAttributableToOwnersOfParentSummaryOfBusinessResults | 945793000 | JPY | 2025-07-01〜2026-06-30 |
+| jpcrp_cor:ProfitLossAttributableToOwnersOfParentSummaryOfBusinessResults | 1922581000 | JPY | 2024-07-01〜2025-06-30 |
+| jpcrp_cor:ProfitLossAttributableToOwnersOfParentSummaryOfBusinessResults | 1557407000 | JPY | 2023-07-01〜2024-06-30 |
+| jpcrp_cor:ProfitLossAttributableToOwnersOfParentSummaryOfBusinessResults | 1756203000 | JPY | 2022-07-01〜2023-06-30 |
+| jpcrp_cor:ProfitLossAttributableToOwnersOfParentSummaryOfBusinessResults | 1505103000 | JPY | 2021-07-01〜2022-06-30 |
+| jpcrp_cor:RateOfReturnOnEquitySummaryOfBusinessResults | 0.058 | pure | 2025-07-01〜2026-06-30 |
+| jpcrp_cor:RateOfReturnOnEquitySummaryOfBusinessResults | 0.133 | pure | 2024-07-01〜2025-06-30 |
+| jpcrp_cor:RateOfReturnOnEquitySummaryOfBusinessResults | 0.123 | pure | 2023-07-01〜2024-06-30 |
+| jpcrp_cor:RateOfReturnOnEquitySummaryOfBusinessResults | 0.161 | pure | 2022-07-01〜2023-06-30 |
+| jpcrp_cor:RateOfReturnOnEquitySummaryOfBusinessResults | 0.152 | pure | 2021-07-01〜2022-06-30 |
+| jpcrp_cor:RatioOfFemaleDirectorsAndOtherOfficers | 0.167 | pure | 2026-09-30 時点 |
+| jpcrp_cor:ResearchAndDevelopmentExpensesResearchAndDevelopmentActivities | 255000000 | JPY | 2025-07-01〜2026-06-30 |
+| jpcrp_cor:ShareholdingRatio | 0.4103 | pure | 2026-06-30 時点 |
+| jpcrp_cor:ShareholdingRatioTreasurySharesEtc | 0.0277 | pure | 2026-06-30 時点 |
+| jpcrp_cor:TotalAcquisitionCostForIncreasedSharesSharesOtherThanThoseNotListedInvestmentSharesHeldForPurposesOtherThanPureInvestmentLargestHoldingCompany | 3000000 | JPY | 2025-07-01〜2026-06-30 |
+| jpcrp_cor:TotalAssetsSummaryOfBusinessResults | 27836421000 | JPY | 2026-06-30 時点 |
+| jpcrp_cor:TotalAssetsSummaryOfBusinessResults | 25554675000 | JPY | 2025-06-30 時点 |
+| jpcrp_cor:TotalAssetsSummaryOfBusinessResults | 24079430000 | JPY | 2024-06-30 時点 |
+| jpcrp_cor:TotalAssetsSummaryOfBusinessResults | 21025185000 | JPY | 2023-06-30 時点 |
+| jpcrp_cor:TotalAssetsSummaryOfBusinessResults | 19585553000 | JPY | 2022-06-30 時点 |
+| jpcrp_cor:TotalNumberOfSharesHeldTreasurySharesEtc | 233300 | shares | 2026-06-30 時点 |
+| jpdei_cor:NumberOfSubmissionDEI | 1 | pure | 2026-09-30 時点 |
+| jppfs_cor:AccountsPayableOperatingSpecific | 1757446000 | JPY | 2026-06-30 時点 |
+| jppfs_cor:AccountsPayableOperatingSpecific | 2057744000 | JPY | 2025-06-30 時点 |
+| jppfs_cor:AccountsReceivableTrade | 2516152000 | JPY | 2026-06-30 時点 |
+| jppfs_cor:AccountsReceivableTrade | 1751723000 | JPY | 2025-06-30 時点 |
+| jppfs_cor:AccruedConsumptionTaxes | 1490580000 | JPY | 2026-06-30 時点 |
+| jppfs_cor:AccruedConsumptionTaxes | 1191514000 | JPY | 2025-06-30 時点 |
+| jppfs_cor:AccumulatedDepreciationBuildingsAndStructures | -1301414000 | JPY | 2026-06-30 時点 |
+| jppfs_cor:AccumulatedDepreciationBuildingsAndStructures | -1314815000 | JPY | 2025-06-30 時点 |
+| jppfs_cor:AccumulatedDepreciationOtherPPE | -2131974000 | JPY | 2026-06-30 時点 |
+| jppfs_cor:AccumulatedDepreciationOtherPPE | -2128713000 | JPY | 2025-06-30 時点 |
+| jppfs_cor:AccumulatedImpairmentLossBuildingsAndStructures | -107728000 | JPY | 2026-06-30 時点 |
+| jppfs_cor:AccumulatedImpairmentLossBuildingsAndStructures | -106825000 | JPY | 2025-06-30 時点 |
+| jppfs_cor:AccumulatedImpairmentLossOtherPPE | -29050000 | JPY | 2026-06-30 時点 |
+| jppfs_cor:AccumulatedImpairmentLossOtherPPE | -30531000 | JPY | 2025-06-30 時点 |
+| jppfs_cor:AmortizationOfGoodwillOpeCF | 53256000 | JPY | 2025-07-01〜2026-06-30 |
+| jppfs_cor:AmortizationOfGoodwillOpeCF | 53256000 | JPY | 2024-07-01〜2025-06-30 |
+| jppfs_cor:AssetRetirementObligationsNCL | 215469000 | JPY | 2026-06-30 時点 |
+| jppfs_cor:AssetRetirementObligationsNCL | 198269000 | JPY | 2025-06-30 時点 |
+| jppfs_cor:Assets | 27836421000 | JPY | 2026-06-30 時点 |
+| jppfs_cor:Assets | 25554675000 | JPY | 2025-06-30 時点 |
+| jppfs_cor:BuildingsAndStructures | 2362912000 | JPY | 2026-06-30 時点 |
+| jppfs_cor:BuildingsAndStructures | 2359827000 | JPY | 2025-06-30 時点 |
+| jppfs_cor:BuildingsAndStructuresNet | 953770000 | JPY | 2026-06-30 時点 |
+| jppfs_cor:BuildingsAndStructuresNet | 938187000 | JPY | 2025-06-30 時点 |
+| jppfs_cor:CapitalStock | 2000000000 | JPY | 2026-06-30 時点 |
+| jppfs_cor:CapitalStock | 2000000000 | JPY | 2025-06-30 時点 |
+| jppfs_cor:CapitalSurplus | 1766366000 | JPY | 2026-06-30 時点 |
+| jppfs_cor:CapitalSurplus | 1696099000 | JPY | 2025-06-30 時点 |
+| jppfs_cor:CashAndCashEquivalents | 2605950000 | JPY | 2026-06-30 時点 |
+| jppfs_cor:CashAndCashEquivalents | 2899140000 | JPY | 2025-06-30 時点 |
+| jppfs_cor:CashAndCashEquivalents | 2899140000 | JPY | 2025-06-30 時点 |
+| jppfs_cor:CashAndCashEquivalents | 2116895000 | JPY | 2024-06-30 時点 |
+| jppfs_cor:CashAndDeposits | 2605950000 | JPY | 2026-06-30 時点 |
+| jppfs_cor:CashAndDeposits | 2899140000 | JPY | 2025-06-30 時点 |
+| jppfs_cor:CashDividendsPaidFinCF | -651749000 | JPY | 2025-07-01〜2026-06-30 |
+| jppfs_cor:CashDividendsPaidFinCF | -529177000 | JPY | 2024-07-01〜2025-06-30 |
+| jppfs_cor:ComprehensiveIncome | 2256683000 | JPY | 2025-07-01〜2026-06-30 |
+| jppfs_cor:ComprehensiveIncome | 2451498000 | JPY | 2024-07-01〜2025-06-30 |
+| jppfs_cor:ComprehensiveIncomeAttributableToOwnersOfTheParent | 2256683000 | JPY | 2025-07-01〜2026-06-30 |
+| jppfs_cor:ComprehensiveIncomeAttributableToOwnersOfTheParent | 2451498000 | JPY | 2024-07-01〜2025-06-30 |
+| jppfs_cor:ContractAssets | 11267515000 | JPY | 2026-06-30 時点 |
+| jppfs_cor:ContractAssets | 11428545000 | JPY | 2025-06-30 時点 |
+| jppfs_cor:ContractLiabilities | 1500638000 | JPY | 2026-06-30 時点 |
+| jppfs_cor:ContractLiabilities | 1594084000 | JPY | 2025-06-30 時点 |
+| jppfs_cor:CostOfSales | 26729616000 | JPY | 2025-07-01〜2026-06-30 |
+| jppfs_cor:CostOfSales | 24956639000 | JPY | 2024-07-01〜2025-06-30 |
+| jppfs_cor:CurrentAssets | 16943470000 | JPY | 2026-06-30 時点 |
+| jppfs_cor:CurrentAssets | 16533523000 | JPY | 2025-06-30 時点 |
+| jppfs_cor:CurrentLiabilities | 8041190000 | JPY | 2026-06-30 時点 |
+| jppfs_cor:CurrentLiabilities | 7642406000 | JPY | 2025-06-30 時点 |
+| jppfs_cor:CurrentPortionOfLongTermLoansPayable | 234864000 | JPY | 2026-06-30 時点 |
+| jppfs_cor:CurrentPortionOfLongTermLoansPayable | 332864000 | JPY | 2025-06-30 時点 |
+| jppfs_cor:DecreaseIncreaseInNotesAndAccountsReceivableTradeOpeCF | -802686000 | JPY | 2025-07-01〜2026-06-30 |
+| jppfs_cor:DecreaseIncreaseInNotesAndAccountsReceivableTradeOpeCF | 209659000 | JPY | 2024-07-01〜2025-06-30 |
+| jppfs_cor:DeferredGainsOrLossesOnHedges | 4992000 | JPY | 2026-06-30 時点 |
+| jppfs_cor:DeferredGainsOrLossesOnHedgesNetOfTaxOCI | 4992000 | JPY | 2025-07-01〜2026-06-30 |
+| jppfs_cor:DeferredTaxAssets | 50548000 | JPY | 2026-06-30 時点 |
+| jppfs_cor:DeferredTaxAssets | 85173000 | JPY | 2025-06-30 時点 |
+| jppfs_cor:DeferredTaxLiabilities | 1738948000 | JPY | 2026-06-30 時点 |
+| jppfs_cor:DeferredTaxLiabilities | 1290441000 | JPY | 2025-06-30 時点 |
+| jppfs_cor:DepreciationAndAmortizationOpeCF | 452168000 | JPY | 2025-07-01〜2026-06-30 |
+| jppfs_cor:DepreciationAndAmortizationOpeCF | 592014000 | JPY | 2024-07-01〜2025-06-30 |
+| jppfs_cor:DisposalOfTreasuryStock | 74635000 | JPY | 2025-07-01〜2026-06-30 |
+| jppfs_cor:DisposalOfTreasuryStock | 92671000 | JPY | 2024-07-01〜2025-06-30 |
+| jppfs_cor:DividendsFromSurplus | -652881000 | JPY | 2025-07-01〜2026-06-30 |
+| jppfs_cor:DividendsFromSurplus | -526317000 | JPY | 2024-07-01〜2025-06-30 |
+| jppfs_cor:DividendsIncomeNOI | 25567000 | JPY | 2025-07-01〜2026-06-30 |
+| jppfs_cor:DividendsIncomeNOI | 20161000 | JPY | 2024-07-01〜2025-06-30 |
+| jppfs_cor:EffectOfExchangeRateChangeOnCashAndCashEquivalents | 5886000 | JPY | 2025-07-01〜2026-06-30 |
+| jppfs_cor:EffectOfExchangeRateChangeOnCashAndCashEquivalents | -149000 | JPY | 2024-07-01〜2025-06-30 |
+| jppfs_cor:EmployeesSalariesAndAllowancesSGA | 3559936000 | JPY | 2025-07-01〜2026-06-30 |
+| jppfs_cor:EmployeesSalariesAndAllowancesSGA | 3441694000 | JPY | 2024-07-01〜2025-06-30 |
+| jppfs_cor:ExtraordinaryIncome | 1232000 | JPY | 2025-07-01〜2026-06-30 |
+| jppfs_cor:ExtraordinaryIncome | 12000 | JPY | 2024-07-01〜2025-06-30 |
+| jppfs_cor:ExtraordinaryLoss | 7068000 | JPY | 2025-07-01〜2026-06-30 |
+| jppfs_cor:ExtraordinaryLoss | 1192000 | JPY | 2024-07-01〜2025-06-30 |
+| jppfs_cor:ForeignCurrencyTranslationAdjustment | -16146000 | JPY | 2026-06-30 時点 |
+| jppfs_cor:ForeignCurrencyTranslationAdjustment | -19064000 | JPY | 2025-06-30 時点 |
+| jppfs_cor:ForeignCurrencyTranslationAdjustmentNetOfTaxOCI | 2918000 | JPY | 2025-07-01〜2026-06-30 |
+| jppfs_cor:ForeignCurrencyTranslationAdjustmentNetOfTaxOCI | -3621000 | JPY | 2024-07-01〜2025-06-30 |
+| jppfs_cor:GainOnSalesOfNoncurrentAssetsEI | 1232000 | JPY | 2025-07-01〜2026-06-30 |
+| jppfs_cor:GainOnSalesOfNoncurrentAssetsEI | 12000 | JPY | 2024-07-01〜2025-06-30 |
+| jppfs_cor:Goodwill | 159768000 | JPY | 2026-06-30 時点 |
+| jppfs_cor:Goodwill | 213025000 | JPY | 2025-06-30 時点 |
+| jppfs_cor:GrossProfit | 11334658000 | JPY | 2025-07-01〜2026-06-30 |
+| jppfs_cor:GrossProfit | 12018937000 | JPY | 2024-07-01〜2025-06-30 |
+| jppfs_cor:ImpairmentLossEL | 903000 | JPY | 2025-07-01〜2026-06-30 |
+| jppfs_cor:ImpairmentLossEL | 1192000 | JPY | 2024-07-01〜2025-06-30 |
+| jppfs_cor:ImpairmentLossOpeCF | 903000 | JPY | 2025-07-01〜2026-06-30 |
+| jppfs_cor:ImpairmentLossOpeCF | 1192000 | JPY | 2024-07-01〜2025-06-30 |
+| jppfs_cor:IncomeBeforeIncomeTaxes | 1452012000 | JPY | 2025-07-01〜2026-06-30 |
+| jppfs_cor:IncomeBeforeIncomeTaxes | 1452012000 | JPY | 2025-07-01〜2026-06-30 |
+| jppfs_cor:IncomeBeforeIncomeTaxes | 2707871000 | JPY | 2024-07-01〜2025-06-30 |
+| jppfs_cor:IncomeBeforeIncomeTaxes | 2707871000 | JPY | 2024-07-01〜2025-06-30 |
+| jppfs_cor:IncomeTaxes | 506218000 | JPY | 2025-07-01〜2026-06-30 |
+| jppfs_cor:IncomeTaxes | 785289000 | JPY | 2024-07-01〜2025-06-30 |
+| jppfs_cor:IncomeTaxesCurrent | 626340000 | JPY | 2025-07-01〜2026-06-30 |
+| jppfs_cor:IncomeTaxesCurrent | 812567000 | JPY | 2024-07-01〜2025-06-30 |
+| jppfs_cor:IncomeTaxesDeferred | -120121000 | JPY | 2025-07-01〜2026-06-30 |
+| jppfs_cor:IncomeTaxesDeferred | -27278000 | JPY | 2024-07-01〜2025-06-30 |
+| jppfs_cor:IncomeTaxesPaidOpeCF | -780243000 | JPY | 2025-07-01〜2026-06-30 |
+| jppfs_cor:IncomeTaxesPaidOpeCF | -1003704000 | JPY | 2024-07-01〜2025-06-30 |
+| jppfs_cor:IncomeTaxesPayable | 579515000 | JPY | 2026-06-30 時点 |
+| jppfs_cor:IncomeTaxesPayable | 687368000 | JPY | 2025-06-30 時点 |
+| jppfs_cor:IncreaseDecreaseInContractLiabilitiesOpeCF | -93465000 | JPY | 2025-07-01〜2026-06-30 |
+| jppfs_cor:IncreaseDecreaseInContractLiabilitiesOpeCF | 483375000 | JPY | 2024-07-01〜2025-06-30 |
+| jppfs_cor:IncreaseDecreaseInNetDefinedBenefitAssetOpeCF | -1828838000 | JPY | 2025-07-01〜2026-06-30 |
+| jppfs_cor:IncreaseDecreaseInNetDefinedBenefitAssetOpeCF | -890115000 | JPY | 2024-07-01〜2025-06-30 |
+| jppfs_cor:IncreaseDecreaseInNetDefinedBenefitLiabilityOpeCF | 4699000 | JPY | 2025-07-01〜2026-06-30 |
+| jppfs_cor:IncreaseDecreaseInNetDefinedBenefitLiabilityOpeCF | -3708000 | JPY | 2024-07-01〜2025-06-30 |
+| jppfs_cor:IncreaseDecreaseInNotesAndAccountsPayableTradeOpeCF | -300297000 | JPY | 2025-07-01〜2026-06-30 |
+| jppfs_cor:IncreaseDecreaseInNotesAndAccountsPayableTradeOpeCF | 156604000 | JPY | 2024-07-01〜2025-06-30 |
+| jppfs_cor:IncreaseDecreaseInProvisionForDirectorsRetirementBenefitsOpeCF | 1151000 | JPY | 2025-07-01〜2026-06-30 |
+| jppfs_cor:IncreaseDecreaseInProvisionForDirectorsRetirementBenefitsOpeCF | 182000 | JPY | 2024-07-01〜2025-06-30 |
+| jppfs_cor:IncreaseDecreaseInProvisionForLossOnOrderReceivedOpeCF | 1180000 | JPY | 2025-07-01〜2026-06-30 |
+| jppfs_cor:IncreaseDecreaseInProvisionForLossOnOrderReceivedOpeCF | 14500000 | JPY | 2024-07-01〜2025-06-30 |
+| jppfs_cor:IncreaseDecreaseInProvisionForShareBasedRemunerationForDirectorsAndOtherOfficersOpeCF | -62018000 | JPY | 2025-07-01〜2026-06-30 |
+| jppfs_cor:IncreaseDecreaseInProvisionForShareBasedRemunerationForDirectorsAndOtherOfficersOpeCF | 10357000 | JPY | 2024-07-01〜2025-06-30 |
+| jppfs_cor:IntangibleAssets | 371901000 | JPY | 2026-06-30 時点 |
+| jppfs_cor:IntangibleAssets | 528971000 | JPY | 2025-06-30 時点 |
+| jppfs_cor:InterestAndDividendsIncomeOpeCF | -35078000 | JPY | 2025-07-01〜2026-06-30 |
+| jppfs_cor:InterestAndDividendsIncomeOpeCF | -22063000 | JPY | 2024-07-01〜2025-06-30 |
+| jppfs_cor:InterestAndDividendsIncomeReceivedOpeCFInvCF | 35005000 | JPY | 2025-07-01〜2026-06-30 |
+| jppfs_cor:InterestAndDividendsIncomeReceivedOpeCFInvCF | 21982000 | JPY | 2024-07-01〜2025-06-30 |
+| jppfs_cor:InterestExpensesNOE | 80579000 | JPY | 2025-07-01〜2026-06-30 |
+| jppfs_cor:InterestExpensesNOE | 58689000 | JPY | 2024-07-01〜2025-06-30 |
+| jppfs_cor:InterestExpensesOpeCF | 80579000 | JPY | 2025-07-01〜2026-06-30 |
+| jppfs_cor:InterestExpensesOpeCF | 58689000 | JPY | 2024-07-01〜2025-06-30 |
+| jppfs_cor:InterestExpensesPaidOpeCFFinCF | -80414000 | JPY | 2025-07-01〜2026-06-30 |
+| jppfs_cor:InterestExpensesPaidOpeCFFinCF | -58766000 | JPY | 2024-07-01〜2025-06-30 |
+| jppfs_cor:InterestIncomeNOI | 9510000 | JPY | 2025-07-01〜2026-06-30 |
+| jppfs_cor:InterestIncomeNOI | 1901000 | JPY | 2024-07-01〜2025-06-30 |
+| jppfs_cor:InvestmentSecurities | 1203225000 | JPY | 2026-06-30 時点 |
+| jppfs_cor:InvestmentSecurities | 901714000 | JPY | 2025-06-30 時点 |
+| jppfs_cor:InvestmentsAndOtherAssets | 8428859000 | JPY | 2026-06-30 時点 |
+| jppfs_cor:InvestmentsAndOtherAssets | 6409114000 | JPY | 2025-06-30 時点 |
+| jppfs_cor:Land | 573156000 | JPY | 2026-06-30 時点 |
+| jppfs_cor:Land | 573156000 | JPY | 2025-06-30 時点 |
+| jppfs_cor:Liabilities | 10670476000 | JPY | 2026-06-30 時点 |
+| jppfs_cor:Liabilities | 10055929000 | JPY | 2025-06-30 時点 |
+| jppfs_cor:LiabilitiesAndNetAssets | 27836421000 | JPY | 2026-06-30 時点 |
+| jppfs_cor:LiabilitiesAndNetAssets | 25554675000 | JPY | 2025-06-30 時点 |
+| jppfs_cor:LongTermLoansPayable | 275773000 | JPY | 2026-06-30 時点 |
+| jppfs_cor:LongTermLoansPayable | 510637000 | JPY | 2025-06-30 時点 |
+| jppfs_cor:LossGainOnSalesOfStocksOfSubsidiariesAndAffiliatesOpeCF | 6165000 | JPY | 2025-07-01〜2026-06-30 |
+| jppfs_cor:LossOnSalesOfStocksOfSubsidiariesAndAffiliatesEL | 6165000 | JPY | 2025-07-01〜2026-06-30 |
+| jppfs_cor:NetAssets | 17165944000 | JPY | 2026-06-30 時点 |
+| jppfs_cor:NetAssets | 17165944000 | JPY | 2026-06-30 時点 |
+| jppfs_cor:NetAssets | 15498746000 | JPY | 2025-06-30 時点 |
+| jppfs_cor:NetAssets | 15498746000 | JPY | 2025-06-30 時点 |
+| jppfs_cor:NetAssets | 15498746000 | JPY | 2025-06-30 時点 |
+| jppfs_cor:NetAssets | 13486462000 | JPY | 2024-06-30 時点 |
+| jppfs_cor:NetCashProvidedByUsedInFinancingActivities | -1073010000 | JPY | 2025-07-01〜2026-06-30 |
+| jppfs_cor:NetCashProvidedByUsedInFinancingActivities | -1740057000 | JPY | 2024-07-01〜2025-06-30 |
+| jppfs_cor:NetCashProvidedByUsedInInvestmentActivities | -259037000 | JPY | 2025-07-01〜2026-06-30 |
+| jppfs_cor:NetCashProvidedByUsedInInvestmentActivities | -506793000 | JPY | 2024-07-01〜2025-06-30 |
+| jppfs_cor:NetCashProvidedByUsedInOperatingActivities | 1032971000 | JPY | 2025-07-01〜2026-06-30 |
+| jppfs_cor:NetCashProvidedByUsedInOperatingActivities | 3029245000 | JPY | 2024-07-01〜2025-06-30 |
+| jppfs_cor:NetChangesOfItemsOtherThanShareholdersEquity | 1299650000 | JPY | 2025-07-01〜2026-06-30 |
+| jppfs_cor:NetChangesOfItemsOtherThanShareholdersEquity | 523501000 | JPY | 2024-07-01〜2025-06-30 |
+| jppfs_cor:NetDefinedBenefitAsset | 6174228000 | JPY | 2026-06-30 時点 |
+| jppfs_cor:NetDefinedBenefitAsset | 4345389000 | JPY | 2025-06-30 時点 |
+| jppfs_cor:NetDefinedBenefitLiability | 155095000 | JPY | 2026-06-30 時点 |
+| jppfs_cor:NetDefinedBenefitLiability | 149601000 | JPY | 2025-06-30 時点 |
+| jppfs_cor:NetIncreaseDecreaseInCashAndCashEquivalents | -293189000 | JPY | 2025-07-01〜2026-06-30 |
+| jppfs_cor:NetIncreaseDecreaseInCashAndCashEquivalents | 782245000 | JPY | 2024-07-01〜2025-06-30 |
+| jppfs_cor:NetIncreaseDecreaseInShortTermLoansPayableFinCF | -905889000 | JPY | 2024-07-01〜2025-06-30 |
+| jppfs_cor:NetSales | 38064274000 | JPY | 2025-07-01〜2026-06-30 |
+| jppfs_cor:NetSales | 36975577000 | JPY | 2024-07-01〜2025-06-30 |
+| jppfs_cor:NonOperatingExpenses | 95075000 | JPY | 2025-07-01〜2026-06-30 |
+| jppfs_cor:NonOperatingExpenses | 79560000 | JPY | 2024-07-01〜2025-06-30 |
+| jppfs_cor:NonOperatingIncome | 87537000 | JPY | 2025-07-01〜2026-06-30 |
+| jppfs_cor:NonOperatingIncome | 72687000 | JPY | 2024-07-01〜2025-06-30 |
+| jppfs_cor:NoncurrentAssets | 10892950000 | JPY | 2026-06-30 時点 |
+| jppfs_cor:NoncurrentAssets | 9021152000 | JPY | 2025-06-30 時点 |
+| jppfs_cor:NoncurrentLiabilities | 2629286000 | JPY | 2026-06-30 時点 |
+| jppfs_cor:NoncurrentLiabilities | 2413522000 | JPY | 2025-06-30 時点 |
+| jppfs_cor:NotesAndAccountsReceivableTrade | 2556498000 | JPY | 2026-06-30 時点 |
+| jppfs_cor:NotesAndAccountsReceivableTrade | 2556498000 | JPY | 2026-06-30 時点 |
+| jppfs_cor:NotesAndAccountsReceivableTrade | 1751723000 | JPY | 2025-06-30 時点 |
+| jppfs_cor:NotesAndAccountsReceivableTrade | 1751723000 | JPY | 2025-06-30 時点 |
+| jppfs_cor:NotesReceivableTrade | 40346000 | JPY | 2026-06-30 時点 |
+| jppfs_cor:OperatingIncome | 1465387000 | JPY | 2025-07-01〜2026-06-30 |
+| jppfs_cor:OperatingIncome | 2715924000 | JPY | 2024-07-01〜2025-06-30 |
+| jppfs_cor:OrdinaryIncome | 1457848000 | JPY | 2025-07-01〜2026-06-30 |
+| jppfs_cor:OrdinaryIncome | 2709051000 | JPY | 2024-07-01〜2025-06-30 |
+| jppfs_cor:OtherCA | 513505000 | JPY | 2026-06-30 時点 |
+| jppfs_cor:OtherCA | 454114000 | JPY | 2025-06-30 時点 |
+| jppfs_cor:OtherCL | 1460138000 | JPY | 2026-06-30 時点 |
+| jppfs_cor:OtherCL | 1485985000 | JPY | 2025-06-30 時点 |
+| jppfs_cor:OtherComprehensiveIncome | 1310889000 | JPY | 2025-07-01〜2026-06-30 |
+| jppfs_cor:OtherComprehensiveIncome | 528917000 | JPY | 2024-07-01〜2025-06-30 |
+| jppfs_cor:OtherIA | 212132000 | JPY | 2026-06-30 時点 |
+| jppfs_cor:OtherIA | 315946000 | JPY | 2025-06-30 時点 |
+| jppfs_cor:OtherIOA | 1000857000 | JPY | 2026-06-30 時点 |
+| jppfs_cor:OtherIOA | 1076837000 | JPY | 2025-06-30 時点 |
+| jppfs_cor:OtherNCL | 242590000 | JPY | 2026-06-30 時点 |
+| jppfs_cor:OtherNCL | 264316000 | JPY | 2025-06-30 時点 |
+| jppfs_cor:OtherNOE | 14496000 | JPY | 2025-07-01〜2026-06-30 |
+| jppfs_cor:OtherNOE | 20871000 | JPY | 2024-07-01〜2025-06-30 |
+| jppfs_cor:OtherNOI | 37144000 | JPY | 2025-07-01〜2026-06-30 |
+| jppfs_cor:OtherNOI | 35328000 | JPY | 2024-07-01〜2025-06-30 |
+| jppfs_cor:OtherNetFinCF | -7981000 | JPY | 2025-07-01〜2026-06-30 |
+| jppfs_cor:OtherNetFinCF | -16145000 | JPY | 2024-07-01〜2025-06-30 |
+| jppfs_cor:OtherNetInvCF | 47439000 | JPY | 2025-07-01〜2026-06-30 |
+| jppfs_cor:OtherNetInvCF | -75019000 | JPY | 2024-07-01〜2025-06-30 |
+| jppfs_cor:OtherNetOpeCF | 349884000 | JPY | 2025-07-01〜2026-06-30 |
+| jppfs_cor:OtherNetOpeCF | -171385000 | JPY | 2024-07-01〜2025-06-30 |
+| jppfs_cor:OtherNetPPE | 565262000 | JPY | 2026-06-30 時点 |
+| jppfs_cor:OtherNetPPE | 571722000 | JPY | 2025-06-30 時点 |
+| jppfs_cor:OtherPPE | 2726287000 | JPY | 2026-06-30 時点 |
+| jppfs_cor:OtherPPE | 2730967000 | JPY | 2025-06-30 時点 |
+| jppfs_cor:OtherSGA | 5962566000 | JPY | 2025-07-01〜2026-06-30 |
+| jppfs_cor:OtherSGA | 5407575000 | JPY | 2024-07-01〜2025-06-30 |
+| jppfs_cor:ProceedsFromSalesOfStocksOfSubsidiariesAndAffiliatesInvCF | 9834000 | JPY | 2025-07-01〜2026-06-30 |
+| jppfs_cor:ProfitLoss | 945793000 | JPY | 2025-07-01〜2026-06-30 |
+| jppfs_cor:ProfitLoss | 945793000 | JPY | 2025-07-01〜2026-06-30 |
+| jppfs_cor:ProfitLoss | 1922581000 | JPY | 2024-07-01〜2025-06-30 |
+| jppfs_cor:ProfitLoss | 1922581000 | JPY | 2024-07-01〜2025-06-30 |
+| jppfs_cor:ProfitLossAttributableToOwnersOfParent | 945793000 | JPY | 2025-07-01〜2026-06-30 |
+| jppfs_cor:ProfitLossAttributableToOwnersOfParent | 945793000 | JPY | 2025-07-01〜2026-06-30 |
+| jppfs_cor:ProfitLossAttributableToOwnersOfParent | 1922581000 | JPY | 2024-07-01〜2025-06-30 |
+| jppfs_cor:ProfitLossAttributableToOwnersOfParent | 1922581000 | JPY | 2024-07-01〜2025-06-30 |
+| jppfs_cor:PropertyPlantAndEquipment | 2092189000 | JPY | 2026-06-30 時点 |
+| jppfs_cor:PropertyPlantAndEquipment | 2083066000 | JPY | 2025-06-30 時点 |
+| jppfs_cor:ProvisionForDirectorsRetirementBenefits | 1408000 | JPY | 2026-06-30 時点 |
+| jppfs_cor:ProvisionForDirectorsRetirementBenefits | 257000 | JPY | 2025-06-30 時点 |
+| jppfs_cor:ProvisionForDirectorsRetirementBenefitsSGA | 1151000 | JPY | 2025-07-01〜2026-06-30 |
+| jppfs_cor:ProvisionForDirectorsRetirementBenefitsSGA | 182000 | JPY | 2024-07-01〜2025-06-30 |
+| jppfs_cor:ProvisionForLossOnOrderReceivedCL | 19680000 | JPY | 2026-06-30 時点 |
+| jppfs_cor:ProvisionForLossOnOrderReceivedCL | 18500000 | JPY | 2025-06-30 時点 |
+| jppfs_cor:ProvisionForShareBasedRemunerationForDirectorsAndOtherOfficersCL | 7326000 | JPY | 2026-06-30 時点 |
+| jppfs_cor:ProvisionForShareBasedRemunerationForDirectorsAndOtherOfficersCL | 69345000 | JPY | 2025-06-30 時点 |
+| jppfs_cor:ProvisionForShareBasedRemunerationForDirectorsAndOtherOfficersSGA | -28619000 | JPY | 2025-07-01〜2026-06-30 |
+| jppfs_cor:ProvisionForShareBasedRemunerationForDirectorsAndOtherOfficersSGA | 58499000 | JPY | 2024-07-01〜2025-06-30 |
+| jppfs_cor:PurchaseOfIntangibleAssetsInvCF | -44037000 | JPY | 2025-07-01〜2026-06-30 |
+| jppfs_cor:PurchaseOfIntangibleAssetsInvCF | -52919000 | JPY | 2024-07-01〜2025-06-30 |
+| jppfs_cor:PurchaseOfPropertyPlantAndEquipmentInvCF | -307279000 | JPY | 2025-07-01〜2026-06-30 |
+| jppfs_cor:PurchaseOfPropertyPlantAndEquipmentInvCF | -400837000 | JPY | 2024-07-01〜2025-06-30 |
+| jppfs_cor:PurchaseOfTreasuryStock | -153000 | JPY | 2024-07-01〜2025-06-30 |
+| jppfs_cor:RealEstateRentNOI | 15315000 | JPY | 2025-07-01〜2026-06-30 |
+| jppfs_cor:RealEstateRentNOI | 15296000 | JPY | 2024-07-01〜2025-06-30 |
+| jppfs_cor:RemeasurementsOfDefinedBenefitPlans | 2287023000 | JPY | 2026-06-30 時点 |
+| jppfs_cor:RemeasurementsOfDefinedBenefitPlans | 1201534000 | JPY | 2025-06-30 時点 |
+| jppfs_cor:RemeasurementsOfDefinedBenefitPlansNetOfTaxOCI | 1085488000 | JPY | 2025-07-01〜2026-06-30 |
+| jppfs_cor:RemeasurementsOfDefinedBenefitPlansNetOfTaxOCI | 470303000 | JPY | 2024-07-01〜2025-06-30 |
+| jppfs_cor:RepaymentOfLongTermLoansPayableFinCF | -332864000 | JPY | 2025-07-01〜2026-06-30 |
+| jppfs_cor:RepaymentOfLongTermLoansPayableFinCF | -230079000 | JPY | 2024-07-01〜2025-06-30 |
+| jppfs_cor:ResearchAndDevelopmentExpensesSGA | 255928000 | JPY | 2025-07-01〜2026-06-30 |
+| jppfs_cor:ResearchAndDevelopmentExpensesSGA | 255928000 | JPY | 2025-07-01〜2026-06-30 |
+| jppfs_cor:ResearchAndDevelopmentExpensesSGA | 257810000 | JPY | 2024-07-01〜2025-06-30 |
+| jppfs_cor:ResearchAndDevelopmentExpensesSGA | 257810000 | JPY | 2024-07-01〜2025-06-30 |
+| jppfs_cor:RetainedEarnings | 10510398000 | JPY | 2026-06-30 時点 |
+| jppfs_cor:RetainedEarnings | 10217485000 | JPY | 2025-06-30 時点 |
+| jppfs_cor:RetirementBenefitExpensesSGA | 118308000 | JPY | 2025-07-01〜2026-06-30 |
+| jppfs_cor:RetirementBenefitExpensesSGA | 137251000 | JPY | 2024-07-01〜2025-06-30 |
+| jppfs_cor:SellingGeneralAndAdministrativeExpenses | 9869271000 | JPY | 2025-07-01〜2026-06-30 |
+| jppfs_cor:SellingGeneralAndAdministrativeExpenses | 9303013000 | JPY | 2024-07-01〜2025-06-30 |
+| jppfs_cor:ShareholdersEquity | 14258142000 | JPY | 2026-06-30 時点 |
+| jppfs_cor:ShareholdersEquity | 13890595000 | JPY | 2025-06-30 時点 |
+| jppfs_cor:SubscriptionRightsToShares | 11239000 | JPY | 2025-06-30 時点 |
+| jppfs_cor:SubtotalOpeCF | 1813214000 | JPY | 2025-07-01〜2026-06-30 |
+| jppfs_cor:SubtotalOpeCF | 4032950000 | JPY | 2024-07-01〜2025-06-30 |
+| jppfs_cor:TotalChangesOfItemsDuringThePeriod | 1667198000 | JPY | 2025-07-01〜2026-06-30 |
+| jppfs_cor:TotalChangesOfItemsDuringThePeriod | 2012283000 | JPY | 2024-07-01〜2025-06-30 |
+| jppfs_cor:TreasuryStock | -18621000 | JPY | 2026-06-30 時点 |
+| jppfs_cor:TreasuryStock | -22989000 | JPY | 2025-06-30 時点 |
+| jppfs_cor:ValuationAndTranslationAdjustments | 2907801000 | JPY | 2026-06-30 時点 |
+| jppfs_cor:ValuationAndTranslationAdjustments | 1596911000 | JPY | 2025-06-30 時点 |
+| jppfs_cor:ValuationDifferenceOnAvailableForSaleSecurities | 631931000 | JPY | 2026-06-30 時点 |
+| jppfs_cor:ValuationDifferenceOnAvailableForSaleSecurities | 414441000 | JPY | 2025-06-30 時点 |
+| jppfs_cor:ValuationDifferenceOnAvailableForSaleSecuritiesNetOfTaxOCI | 217490000 | JPY | 2025-07-01〜2026-06-30 |
+| jppfs_cor:ValuationDifferenceOnAvailableForSaleSecuritiesNetOfTaxOCI | 62235000 | JPY | 2024-07-01〜2025-06-30 |
+
+この数値をもとに、有価証券報告書の「経営者による財政状態、経営成績及びキャッシュ・フローの状況の分析」に掲載する文章を、日本語で書いてください。
+
+- 分量は 5,000 字程度。
+- 経営成績(売上高・各段階の利益)、財政状態(資産・負債・純資産)、キャッシュ・フローの状況に触れてください。
+- 読み手は個人投資家です。具体的な数値を示しながら、前期からの増減とその背景を説明してください。
+- 適切な見出しを付けて構成してください。

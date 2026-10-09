@@ -1,0 +1,19 @@
+{
+ "seal": "docs/AI_PROSE_SEAL_2026-10-09.md",
+ "document": "S100Z4Q1",
+ "instance_source": "XBRL/PublicDoc/jpcrp030000-asr-001_E36539-000_2026-06-30_01_2026-09-30.xbrl",
+ "template_sha256": "eeca4a1474f427538ff76ce536a84ab6c1e9a245fd5b8a8a73df916dd58b23d4",
+ "facts_total_in_instance": 863,
+ "facts_used_plain_context": 409,
+ "facts_rule": "member を持たない素の context の fact を全件・(要素名, context id) の昇順・ラベル/値/単位/期間の 4 欄・間引きなし",
+ "prompt_chars": 35428,
+ "prompt_sha256": "efb838f4eafa46d3602f55204658658514cc7155aec5e7cf058ce81286eac929",
+ "human_mdna_chars": 5192,
+ "human_mdna_sha256": "4e9dd890aae77f282725e8d04125afe233050f0f6d8503c8c365a7d9e780f68d",
+ "gate3_respec": "docs/AI_PROSE_GATE3_RESPEC_2026-10-09.md(人間の裁定 GO:(a))",
+ "gate3_substring_length": 20,
+ "gate3a_hits_in_generated_facts_table": 0,
+ "gate3b_template_sha_recomputed_at_runtime": "eeca4a1474f427538ff76ce536a84ab6c1e9a245fd5b8a8a73df916dd58b23d4",
+ "gate3c_prompt_equals_template_plus_table": true,
+ "llm_called": false
+}
