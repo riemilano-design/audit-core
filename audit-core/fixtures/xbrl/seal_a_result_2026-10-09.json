@@ -1,0 +1,654 @@
+{
+ "S100Z3JY": {
+  "claims": 138,
+  "rows": [
+   {
+    "id": "N007",
+    "how": "round",
+    "mode": "符号そのまま",
+    "comparator": "equals_within",
+    "residual": 0.268,
+    "band": "(0,0.5]",
+    "claim_scale": 1000000.0,
+    "decimals": "-3"
+   },
+   {
+    "id": "N009",
+    "how": "round",
+    "mode": "符号そのまま",
+    "comparator": "equals_within",
+    "residual": 0.009,
+    "band": "(0,0.5]",
+    "claim_scale": 1000000.0,
+    "decimals": "-3"
+   },
+   {
+    "id": "N015",
+    "how": "truncate",
+    "mode": "符号そのまま",
+    "comparator": "equals_within",
+    "residual": 0.731,
+    "band": "(0.5,1)",
+    "claim_scale": 1000000.0,
+    "decimals": "-3"
+   },
+   {
+    "id": "N017",
+    "how": "round",
+    "mode": "符号そのまま",
+    "comparator": "equals_within",
+    "residual": 0.2,
+    "band": "(0,0.5]",
+    "claim_scale": 1000000.0,
+    "decimals": "-3"
+   },
+   {
+    "id": "N025",
+    "how": "round",
+    "mode": "符号そのまま",
+    "comparator": "equals_within",
+    "residual": 0.335,
+    "band": "(0,0.5]",
+    "claim_scale": 1000000.0,
+    "decimals": "-3"
+   },
+   {
+    "id": "N029",
+    "how": "truncate",
+    "mode": "符号そのまま",
+    "comparator": "equals_within",
+    "residual": 0.544,
+    "band": "(0.5,1)",
+    "claim_scale": 1000000.0,
+    "decimals": "-3"
+   },
+   {
+    "id": "N033",
+    "how": "truncate",
+    "mode": "符号そのまま",
+    "comparator": "equals_within",
+    "residual": 0.892,
+    "band": "(0.5,1)",
+    "claim_scale": 1000000.0,
+    "decimals": "-3"
+   },
+   {
+    "id": "N034",
+    "how": "abs+round",
+    "mode": "符号を落とし検査なし",
+    "comparator": "equals_within",
+    "residual": 0.487,
+    "band": "(0,0.5]",
+    "claim_scale": 1000000.0,
+    "decimals": "-3"
+   },
+   {
+    "id": "N037",
+    "how": "round",
+    "mode": "符号そのまま",
+    "comparator": "equals_within",
+    "residual": 0.358,
+    "band": "(0,0.5]",
+    "claim_scale": 1000000.0,
+    "decimals": "-3"
+   },
+   {
+    "id": "N039",
+    "how": "truncate",
+    "mode": "符号そのまま",
+    "comparator": "equals_within",
+    "residual": 0.698,
+    "band": "(0.5,1)",
+    "claim_scale": 1000000.0,
+    "decimals": "-3"
+   },
+   {
+    "id": "N040",
+    "how": "abs+truncate",
+    "mode": "符号を落とし検査なし",
+    "comparator": "equals_within",
+    "residual": 0.54,
+    "band": "(0.5,1)",
+    "claim_scale": 1000000.0,
+    "decimals": "-3"
+   },
+   {
+    "id": "N041",
+    "how": "truncate",
+    "mode": "符号そのまま",
+    "comparator": "equals_within",
+    "residual": 0.886,
+    "band": "(0.5,1)",
+    "claim_scale": 1000000.0,
+    "decimals": "-3"
+   },
+   {
+    "id": "N042",
+    "how": "abs+round",
+    "mode": "符号を落とし検査なし",
+    "comparator": "equals_within",
+    "residual": 0.012,
+    "band": "(0,0.5]",
+    "claim_scale": 1000000.0,
+    "decimals": "-3"
+   },
+   {
+    "id": "N046",
+    "how": "round",
+    "mode": "符号そのまま",
+    "comparator": "equals_within",
+    "residual": 0.359,
+    "band": "(0,0.5]",
+    "claim_scale": 1000000.0,
+    "decimals": "-3"
+   },
+   {
+    "id": "N047",
+    "how": "abs+round",
+    "mode": "符号を落とし検査なし",
+    "comparator": "equals_within",
+    "residual": 0.392,
+    "band": "(0,0.5]",
+    "claim_scale": 1000000.0,
+    "decimals": "-3"
+   },
+   {
+    "id": "N048",
+    "how": "round",
+    "mode": "符号そのまま",
+    "comparator": "equals_within",
+    "residual": 0.289,
+    "band": "(0,0.5]",
+    "claim_scale": 1000000.0,
+    "decimals": "-3"
+   },
+   {
+    "id": "N049",
+    "how": "abs+truncate",
+    "mode": "符号を落とし検査なし",
+    "comparator": "equals_within",
+    "residual": 0.696,
+    "band": "(0.5,1)",
+    "claim_scale": 1000000.0,
+    "decimals": "-3"
+   },
+   {
+    "id": "N050",
+    "how": "round",
+    "mode": "符号そのまま",
+    "comparator": "diff(a-b) equals_within",
+    "residual": 0.031,
+    "band": "(0,0.5]",
+    "claim_scale": 1000000.0,
+    "decimals": "-3"
+   },
+   {
+    "id": "N052",
+    "how": "truncate",
+    "mode": "符号そのまま",
+    "comparator": "equals_within",
+    "residual": 0.93,
+    "band": "(0.5,1)",
+    "claim_scale": 1000000.0,
+    "decimals": "-3"
+   },
+   {
+    "id": "N055",
+    "how": "round",
+    "mode": "符号そのまま",
+    "comparator": "diff(a-b) equals_within",
+    "residual": 0.445,
+    "band": "(0,0.5]",
+    "claim_scale": 1000000.0,
+    "decimals": "-3"
+   },
+   {
+    "id": "N057",
+    "how": "abs+truncate",
+    "mode": "符号を落とし検査なし",
+    "comparator": "diff(a-b) equals_within",
+    "residual": 0.681,
+    "band": "(0.5,1)",
+    "claim_scale": 1000000.0,
+    "decimals": "-3"
+   },
+   {
+    "id": "N059",
+    "how": "round",
+    "mode": "符号そのまま",
+    "comparator": "equals_within",
+    "residual": 0.476,
+    "band": "(0,0.5]",
+    "claim_scale": 1000000.0,
+    "decimals": "-3"
+   },
+   {
+    "id": "N060",
+    "how": "truncate",
+    "mode": "符号そのまま",
+    "comparator": "diff(a-b) equals_within",
+    "residual": 0.75,
+    "band": "(0.5,1)",
+    "claim_scale": 1000000.0,
+    "decimals": "-3"
+   },
+   {
+    "id": "N061",
+    "how": "truncate",
+    "mode": "符号そのまま",
+    "comparator": "diff(a-b) equals_within",
+    "residual": 0.789,
+    "band": "(0.5,1)",
+    "claim_scale": 1000000.0,
+    "decimals": "-3"
+   },
+   {
+    "id": "N064",
+    "how": "truncate",
+    "mode": "符号そのまま",
+    "comparator": "diff(a-b) equals_within",
+    "residual": 0.713,
+    "band": "(0.5,1)",
+    "claim_scale": 1000000.0,
+    "decimals": "-3"
+   },
+   {
+    "id": "N066",
+    "how": "round",
+    "mode": "符号そのまま",
+    "comparator": "equals_within",
+    "residual": 0.454,
+    "band": "(0,0.5]",
+    "claim_scale": 1000000.0,
+    "decimals": "-3"
+   },
+   {
+    "id": "N068",
+    "how": "round",
+    "mode": "符号そのまま",
+    "comparator": "equals_within",
+    "residual": 0.289,
+    "band": "(0,0.5]",
+    "claim_scale": 1000000.0,
+    "decimals": "-3"
+   },
+   {
+    "id": "N074",
+    "how": "round",
+    "mode": "符号そのまま",
+    "comparator": "equals_within",
+    "residual": 0.359,
+    "band": "(0,0.5]",
+    "claim_scale": 1000000.0,
+    "decimals": "-3"
+   },
+   {
+    "id": "N076",
+    "how": "truncate",
+    "mode": "符号そのまま",
+    "comparator": "diff(a-b) equals_within",
+    "residual": 0.75,
+    "band": "(0.5,1)",
+    "claim_scale": 1000000.0,
+    "decimals": "-3"
+   },
+   {
+    "id": "N077",
+    "how": "round",
+    "mode": "向きを別に検査",
+    "comparator": "equals_within",
+    "residual": 0.145,
+    "band": "(0,0.5]",
+    "claim_scale": 1000000.0,
+    "decimals": "-3"
+   },
+   {
+    "id": "N082",
+    "how": "abs+round",
+    "mode": "符号を落とし検査なし",
+    "comparator": "equals_within",
+    "residual": -0.236,
+    "band": "負",
+    "claim_scale": 1000000.0,
+    "decimals": "-3"
+   },
+   {
+    "id": "N083",
+    "how": "abs+truncate",
+    "mode": "符号を落とし検査なし",
+    "comparator": "equals_within",
+    "residual": 0.8,
+    "band": "(0.5,1)",
+    "claim_scale": 1000000.0,
+    "decimals": "-3"
+   },
+   {
+    "id": "N084",
+    "how": "round",
+    "mode": "符号そのまま",
+    "comparator": "equals_within",
+    "residual": -0.214,
+    "band": "負",
+    "claim_scale": 1000000.0,
+    "decimals": "-3"
+   },
+   {
+    "id": "N085",
+    "how": "abs+truncate",
+    "mode": "符号を落とし検査なし",
+    "comparator": "equals_within",
+    "residual": 0.975,
+    "band": "(0.5,1)",
+    "claim_scale": 1000000.0,
+    "decimals": "-3"
+   },
+   {
+    "id": "N087",
+    "how": "round",
+    "mode": "符号そのまま",
+    "comparator": "equals_within",
+    "residual": 0.358,
+    "band": "(0,0.5]",
+    "claim_scale": 1000000.0,
+    "decimals": "-3"
+   },
+   {
+    "id": "N088",
+    "how": "truncate",
+    "mode": "符号そのまま",
+    "comparator": "equals_within",
+    "residual": 0.698,
+    "band": "(0.5,1)",
+    "claim_scale": 1000000.0,
+    "decimals": "-3"
+   },
+   {
+    "id": "N089",
+    "how": "truncate",
+    "mode": "符号そのまま",
+    "comparator": "equals_within",
+    "residual": 0.886,
+    "band": "(0.5,1)",
+    "claim_scale": 1000000.0,
+    "decimals": "-3"
+   },
+   {
+    "id": "N090",
+    "how": "round",
+    "mode": "符号そのまま",
+    "comparator": "equals_within",
+    "residual": 0.289,
+    "band": "(0,0.5]",
+    "claim_scale": 1000000.0,
+    "decimals": "-3"
+   },
+   {
+    "id": "N091",
+    "how": "round",
+    "mode": "符号そのまま",
+    "comparator": "equals_within",
+    "residual": 0.268,
+    "band": "(0,0.5]",
+    "claim_scale": 1000000.0,
+    "decimals": "-3"
+   },
+   {
+    "id": "N093",
+    "how": "truncate",
+    "mode": "符号そのまま",
+    "comparator": "equals_within",
+    "residual": 0.731,
+    "band": "(0.5,1)",
+    "claim_scale": 1000000.0,
+    "decimals": "-3"
+   },
+   {
+    "id": "N102",
+    "how": "truncate",
+    "mode": "符号そのまま",
+    "comparator": "equals_within",
+    "residual": 0.691,
+    "band": "(0.5,1)",
+    "claim_scale": 1000000.0,
+    "decimals": "-3"
+   },
+   {
+    "id": "N104",
+    "how": "truncate",
+    "mode": "符号そのまま",
+    "comparator": "equals_within",
+    "residual": 0.698,
+    "band": "(0.5,1)",
+    "claim_scale": 1000000.0,
+    "decimals": "-3"
+   },
+   {
+    "id": "N105",
+    "how": "abs+truncate",
+    "mode": "符号を落とし検査なし",
+    "comparator": "equals_within",
+    "residual": 0.54,
+    "band": "(0.5,1)",
+    "claim_scale": 1000000.0,
+    "decimals": "-3"
+   },
+   {
+    "id": "N111",
+    "how": "round",
+    "mode": "符号そのまま",
+    "comparator": "equals_within",
+    "residual": 0.289,
+    "band": "(0,0.5]",
+    "claim_scale": 1000000.0,
+    "decimals": "-3"
+   },
+   {
+    "id": "N112",
+    "how": "abs+truncate",
+    "mode": "符号を落とし検査なし",
+    "comparator": "equals_within",
+    "residual": 0.696,
+    "band": "(0.5,1)",
+    "claim_scale": 1000000.0,
+    "decimals": "-3"
+   }
+  ],
+  "skipped": {
+   "比較子が梯子を呼ばない:pct_change(cur,prior)": 13,
+   "比較子が梯子を呼ばない:builtin:sign(cur-prior)==direction": 9,
+   "比較子が梯子を呼ばない:builtin:flow_sign(cur)==direction": 1
+  },
+  "bands": {
+   "(0,0.5]": 21,
+   "(0.5,1)": 22,
+   "負": 2
+  },
+  "modes": {
+   "符号そのまま": 33,
+   "符号を落とし検査なし": 11,
+   "向きを別に検査": 1
+  },
+  "hows": {
+   "round": 19,
+   "truncate": 15,
+   "abs+round": 4,
+   "abs+truncate": 7
+  },
+  "decimals": {
+   "-3": 45
+  }
+ },
+ "S100Z35K": {
+  "claims": 138,
+  "rows": [
+   {
+    "id": "N004",
+    "how": "round",
+    "mode": "符号そのまま",
+    "comparator": "equals_within",
+    "residual": 0.0,
+    "band": "0",
+    "claim_scale": 1000000.0,
+    "decimals": "-6"
+   },
+   {
+    "id": "N008",
+    "how": "round",
+    "mode": "符号そのまま",
+    "comparator": "equals_within",
+    "residual": 0.0,
+    "band": "0",
+    "claim_scale": 1000000.0,
+    "decimals": "-6"
+   },
+   {
+    "id": "N038",
+    "how": "round",
+    "mode": "符号そのまま",
+    "comparator": "diff(a-b) equals_within",
+    "residual": 0.0,
+    "band": "0",
+    "claim_scale": 1000000.0,
+    "decimals": "-6"
+   },
+   {
+    "id": "N040",
+    "how": "round",
+    "mode": "符号そのまま",
+    "comparator": "equals_within",
+    "residual": 0.0,
+    "band": "0",
+    "claim_scale": 1000000.0,
+    "decimals": "-6"
+   },
+   {
+    "id": "N042",
+    "how": "round",
+    "mode": "符号そのまま",
+    "comparator": "equals_within",
+    "residual": 0.0,
+    "band": "0",
+    "claim_scale": 1000000.0,
+    "decimals": "-6"
+   },
+   {
+    "id": "N043",
+    "how": "abs+round",
+    "mode": "符号を落とし検査なし",
+    "comparator": "diff(a-b) equals_within",
+    "residual": 0.0,
+    "band": "0",
+    "claim_scale": 1000000.0,
+    "decimals": "-6"
+   },
+   {
+    "id": "N056",
+    "how": "round",
+    "mode": "符号そのまま",
+    "comparator": "equals_within",
+    "residual": 0.0,
+    "band": "0",
+    "claim_scale": 1000000.0,
+    "decimals": "-6"
+   },
+   {
+    "id": "N057",
+    "how": "round",
+    "mode": "符号そのまま",
+    "comparator": "equals_within",
+    "residual": 0.0,
+    "band": "0",
+    "claim_scale": 1000000.0,
+    "decimals": "-6"
+   },
+   {
+    "id": "N059",
+    "how": "round",
+    "mode": "符号そのまま",
+    "comparator": "equals_within",
+    "residual": 0.0,
+    "band": "0",
+    "claim_scale": 1000000.0,
+    "decimals": "-6"
+   },
+   {
+    "id": "N062",
+    "how": "abs+round",
+    "mode": "符号を落とし検査なし",
+    "comparator": "equals_within",
+    "residual": 0.0,
+    "band": "0",
+    "claim_scale": 1000000.0,
+    "decimals": "-6"
+   },
+   {
+    "id": "N063",
+    "how": "abs+round",
+    "mode": "符号を落とし検査なし",
+    "comparator": "equals_within",
+    "residual": 0.0,
+    "band": "0",
+    "claim_scale": 1000000.0,
+    "decimals": "-6"
+   },
+   {
+    "id": "N066",
+    "how": "abs+round",
+    "mode": "符号を落とし検査なし",
+    "comparator": "equals_within",
+    "residual": 0.0,
+    "band": "0",
+    "claim_scale": 1000000.0,
+    "decimals": "-6"
+   },
+   {
+    "id": "N067",
+    "how": "abs+round",
+    "mode": "符号を落とし検査なし",
+    "comparator": "equals_within",
+    "residual": 0.0,
+    "band": "0",
+    "claim_scale": 1000000.0,
+    "decimals": "-6"
+   },
+   {
+    "id": "N068",
+    "how": "abs+round",
+    "mode": "符号を落とし検査なし",
+    "comparator": "equals_within",
+    "residual": 0.0,
+    "band": "0",
+    "claim_scale": 1000000.0,
+    "decimals": "-6"
+   },
+   {
+    "id": "N077",
+    "how": "round",
+    "mode": "符号そのまま",
+    "comparator": "equals_within",
+    "residual": 0.0,
+    "band": "0",
+    "claim_scale": 1000000.0,
+    "decimals": "-6"
+   }
+  ],
+  "skipped": {
+   "比較子が梯子を呼ばない:pct_change(cur,prior)": 3,
+   "比較子が梯子を呼ばない:builtin:sign(cur-prior)==direction": 3
+  },
+  "bands": {
+   "0": 15
+  },
+  "modes": {
+   "符号そのまま": 9,
+   "符号を落とし検査なし": 6
+  },
+  "hows": {
+   "round": 9,
+   "abs+round": 6
+  },
+  "decimals": {
+   "-6": 15
+  }
+ }
+}
