@@ -1,0 +1,20 @@
+{
+ "tool": "手で生成(redraw_b_2026-10-09 の封 §3)",
+ "purpose": "抽選の直前にローカルのキャッシュに在る docID を固定する。抽選器はこの一覧と実機を照合し、違えば止まる。",
+ "cache_dir": "~/.cache/audit-core/edinet",
+ "count": 12,
+ "docIDs": [
+  "S100YMFV",
+  "S100Z1WR",
+  "S100Z37J",
+  "S100Z39P",
+  "S100Z3BW",
+  "S100Z3CO",
+  "S100Z433",
+  "S100Z4B6",
+  "S100Z4DE",
+  "S100Z4N9",
+  "S100Z4PA",
+  "S100Z4Q1"
+ ]
+}
