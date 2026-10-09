@@ -1,0 +1,192 @@
+{
+ "S100Z3V1": {
+  "flow": [],
+  "abs": [
+   {
+    "doc": "S100Z3V1",
+    "id": "N043",
+    "how": "abs+truncate",
+    "comparator": "diff(a-b) equals_within",
+    "subject": "固定負債",
+    "value": 126000000.0,
+    "recomputed": -126504000.0,
+    "word": null,
+    "span": "固定負債は、前連結会計年度末に比べ1億26百万円減少し、3億57百万",
+    "pointers": [
+     "xbrl:jppfs_cor:NoncurrentLiabilities@CurrentYearInstant",
+     "xbrl:jppfs_cor:NoncurrentLiabilities@Prior1YearInstant",
+     "formula:a-b"
+    ],
+    "span_dir": -1,
+    "span_word": "減少"
+   },
+   {
+    "doc": "S100Z3V1",
+    "id": "N045",
+    "how": "abs+round",
+    "comparator": "diff(a-b) equals_within",
+    "subject": "長期借入金",
+    "value": 104000000.0,
+    "recomputed": -104500000.0,
+    "word": null,
+    "span": "これは主に、長期借入金の減少1億4百万円によるものであります",
+    "pointers": [
+     "xbrl:jppfs_cor:LongTermLoansPayable@CurrentYearInstant",
+     "xbrl:jppfs_cor:LongTermLoansPayable@Prior1YearInstant",
+     "formula:a-b"
+    ],
+    "span_dir": -1,
+    "span_word": "減少"
+   },
+   {
+    "doc": "S100Z3V1",
+    "id": "N059",
+    "how": "abs+truncate",
+    "comparator": "equals_within",
+    "subject": "投資有価証券の取得による支出",
+    "value": 74000000.0,
+    "recomputed": -74880000.0,
+    "word": null,
+    "span": "期預金の払戻による収入20億円、投資有価証券の取得による支出74百万円によるものであります",
+    "pointers": [
+     "xbrl:jppfs_cor:PurchaseOfInvestmentSecuritiesInvCF@CurrentYearDuration"
+    ],
+    "span_dir": null,
+    "span_word": null
+   },
+   {
+    "doc": "S100Z3V1",
+    "id": "N062",
+    "how": "abs+round",
+    "comparator": "equals_within",
+    "subject": "配当金の支払額",
+    "value": 399000000.0,
+    "recomputed": -399222000.0,
+    "word": null,
+    "span": "これは主として、配当金の支払額3億99百万円、長期借入金の返済に",
+    "pointers": [
+     "xbrl:jppfs_cor:CashDividendsPaidFinCF@CurrentYearDuration"
+    ],
+    "span_dir": null,
+    "span_word": null
+   }
+  ],
+  "with_word": [
+   {
+    "doc": "S100Z3V1",
+    "id": "N043",
+    "how": "abs+truncate",
+    "comparator": "diff(a-b) equals_within",
+    "subject": "固定負債",
+    "value": 126000000.0,
+    "recomputed": -126504000.0,
+    "word": null,
+    "span": "固定負債は、前連結会計年度末に比べ1億26百万円減少し、3億57百万",
+    "pointers": [
+     "xbrl:jppfs_cor:NoncurrentLiabilities@CurrentYearInstant",
+     "xbrl:jppfs_cor:NoncurrentLiabilities@Prior1YearInstant",
+     "formula:a-b"
+    ],
+    "span_dir": -1,
+    "span_word": "減少"
+   },
+   {
+    "doc": "S100Z3V1",
+    "id": "N045",
+    "how": "abs+round",
+    "comparator": "diff(a-b) equals_within",
+    "subject": "長期借入金",
+    "value": 104000000.0,
+    "recomputed": -104500000.0,
+    "word": null,
+    "span": "これは主に、長期借入金の減少1億4百万円によるものであります",
+    "pointers": [
+     "xbrl:jppfs_cor:LongTermLoansPayable@CurrentYearInstant",
+     "xbrl:jppfs_cor:LongTermLoansPayable@Prior1YearInstant",
+     "formula:a-b"
+    ],
+    "span_dir": -1,
+    "span_word": "減少"
+   }
+  ],
+  "no_word": [
+   {
+    "doc": "S100Z3V1",
+    "id": "N059",
+    "how": "abs+truncate",
+    "comparator": "equals_within",
+    "subject": "投資有価証券の取得による支出",
+    "value": 74000000.0,
+    "recomputed": -74880000.0,
+    "word": null,
+    "span": "期預金の払戻による収入20億円、投資有価証券の取得による支出74百万円によるものであります",
+    "pointers": [
+     "xbrl:jppfs_cor:PurchaseOfInvestmentSecuritiesInvCF@CurrentYearDuration"
+    ],
+    "span_dir": null,
+    "span_word": null
+   },
+   {
+    "doc": "S100Z3V1",
+    "id": "N062",
+    "how": "abs+round",
+    "comparator": "equals_within",
+    "subject": "配当金の支払額",
+    "value": 399000000.0,
+    "recomputed": -399222000.0,
+    "word": null,
+    "span": "これは主として、配当金の支払額3億99百万円、長期借入金の返済に",
+    "pointers": [
+     "xbrl:jppfs_cor:CashDividendsPaidFinCF@CurrentYearDuration"
+    ],
+    "span_dir": null,
+    "span_word": null
+   }
+  ],
+  "disagreements": [],
+  "polarity_justified": [
+   {
+    "doc": "S100Z3V1",
+    "id": "N059",
+    "how": "abs+truncate",
+    "comparator": "equals_within",
+    "subject": "投資有価証券の取得による支出",
+    "value": 74000000.0,
+    "recomputed": -74880000.0,
+    "word": null,
+    "span": "期預金の払戻による収入20億円、投資有価証券の取得による支出74百万円によるものであります",
+    "pointers": [
+     "xbrl:jppfs_cor:PurchaseOfInvestmentSecuritiesInvCF@CurrentYearDuration"
+    ],
+    "span_dir": null,
+    "span_word": null
+   },
+   {
+    "doc": "S100Z3V1",
+    "id": "N062",
+    "how": "abs+round",
+    "comparator": "equals_within",
+    "subject": "配当金の支払額",
+    "value": 399000000.0,
+    "recomputed": -399222000.0,
+    "word": null,
+    "span": "これは主として、配当金の支払額3億99百万円、長期借入金の返済に",
+    "pointers": [
+     "xbrl:jppfs_cor:CashDividendsPaidFinCF@CurrentYearDuration"
+    ],
+    "span_dir": null,
+    "span_word": null
+   }
+  ],
+  "claims": 112
+ },
+ "S100Z3HP": {
+  "flow": [],
+  "abs": [],
+  "with_word": [],
+  "no_word": [],
+  "disagreements": [],
+  "polarity_justified": [],
+  "claims": 64
+ }
+}
