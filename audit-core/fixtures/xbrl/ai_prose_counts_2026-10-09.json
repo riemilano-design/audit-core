@@ -1,0 +1,36 @@
+{
+ "seal": "docs/AI_PROSE_SEAL_2026-10-09.md",
+ "profile": "P7",
+ "same_execution": true,
+ "verify_run": false,
+ "document": "S100Z4Q1",
+ "mdna_element": "jpcrp_cor:ManagementAnalysisOfFinancialPositionOperatingResultsAndCashFlowsTextBlock",
+ "instance": "XBRL/PublicDoc/jpcrp030000-asr-001_E36539-000_2026-06-30_01_2026-09-30.xbrl",
+ "modified_zip_sha256": "03521437be23c8e2a02d85b4bc29a215646803582e9101fdf185521041174799",
+ "prose_sha256": "898ff5c54d94c746118cc997dd360c497702386b25d461924bbc4290edc26bbb",
+ "gate1_facts_identical": true,
+ "gate2_only_mdna_changed": true,
+ "gate7_roundtrip": true,
+ "arms": [
+  {
+   "arm": "人間の文",
+   "chars": 5348,
+   "claims": 91,
+   "num_claims": 60,
+   "text_claims": 31,
+   "bound_subject_not_none": 83,
+   "bound_rate": 0.9121,
+   "num_claims_per_1000_chars": 11.22
+  },
+  {
+   "arm": "AI の文",
+   "chars": 7089,
+   "claims": 415,
+   "num_claims": 304,
+   "text_claims": 111,
+   "bound_subject_not_none": 268,
+   "bound_rate": 0.6458,
+   "num_claims_per_1000_chars": 42.88
+  }
+ ]
+}
