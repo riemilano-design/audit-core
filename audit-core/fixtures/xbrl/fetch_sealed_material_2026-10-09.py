@@ -49,6 +49,33 @@ import urllib.parse
 import urllib.request
 import zipfile
 
+# --------------------------------------------------------------------------
+# **印字で落ちないようにする。**
+#
+# 端末の encoding が ascii のとき、日本語(社名・封の名)の print は
+# UnicodeEncodeError で落ちる(2026-10-09 実測)。**落ちる場所が取得の後・
+# 記録の前**なので、ZIP だけキャッシュに入って「取った」の記録が消える ―
+# 門⑥ が守ろうとした事実そのものが、ただの端末の設定で失われる。
+# だから入口で stdout を UTF-8 に寄せ、さらに印字を try で囲んで
+# **印字の失敗が記録を止めない**ようにする。
+for _stream in (sys.stdout, sys.stderr):
+    try:
+        _stream.reconfigure(encoding="utf-8", errors="replace")
+    except Exception:
+        pass
+
+
+def say(msg):
+    """印字が失敗しても処理を止めない。"""
+    try:
+        print(msg)
+    except Exception:
+        try:
+            sys.stdout.write(msg.encode("utf-8", "replace").decode("latin-1") + "\n")
+        except Exception:
+            pass
+# --------------------------------------------------------------------------
+
 HERE = os.path.dirname(os.path.abspath(__file__))   # audit-core/fixtures/xbrl
 ROOT = os.path.dirname(os.path.dirname(HERE))       # audit-core/
 REPO = os.path.dirname(ROOT)                        # repo の根
@@ -191,22 +218,22 @@ def main(argv=None):
     for name, bad in (("門①", gate1_sources_unmodified()),
                       ("門②", gate2_records_match_literal())):
         if bad:
-            print("止まる %s:" % name)
+            say("止まる %s:" % name)
             for b in bad:
-                print("  " + b)
-            print("  1 件も取っていない。記録の側を直してから回すこと。")
+                say("  " + b)
+            say("  1 件も取っていない。記録の側を直してから回すこと。")
             return 3
-    print("門①② 通過 ― 出典 2 本は HEAD と一致、封じた 4 件は記録と字の一覧で一致")
+    say("門①② 通過 ― 出典 2 本は HEAD と一致、封じた 4 件は記録と字の一覧で一致")
 
     rows = [r for r in SEALED if a.seal is None or r[1] == "封" + a.seal]
-    print("対象 %d 件%s" % (len(rows), "" if a.seal is None else "(封%s のみ)" % a.seal))
+    say("対象 %d 件%s" % (len(rows), "" if a.seal is None else "(封%s のみ)" % a.seal))
 
     if a.dry_run:
         for doc, seal, filer, date in rows:
-            print("  %-10s %-4s %-22s %s  キャッシュ: %s"
+            say("  %-10s %-4s %-22s %s  キャッシュ: %s"
                   % (doc, seal, filer[:22], date,
                      "在る" if os.path.exists(cache_path(doc)) else "無い"))
-        print("--dry-run なので 1 件も取っていない。")
+        say("--dry-run なので 1 件も取っていない。")
         return 0
 
     out = []
@@ -225,16 +252,16 @@ def main(argv=None):
                     "zip_sha256": hashlib.sha256(body).hexdigest(),
                     "listing_digest": digest, "listing_members": members,
                     "how": how})
-        print("  %-10s %-4s %9d bytes  zip=%s…  目録の印=%s…(%d 本)  (%s)"
+        say("  %-10s %-4s %9d bytes  zip=%s…  目録の印=%s…(%d 本)  (%s)"
               % (doc, seal, len(body), out[-1]["zip_sha256"][:12],
                  digest[:12], members, how))
 
     # 門⑥ 記録は上書きしない。
     if os.path.exists(OUT_RECORD):
-        print("記録は既にある -> %s(**上書きしない**)" % OUT_RECORD)
-        print("  今回の実行で取った件数: %d(0 なら全部すでに手元に在った)"
+        say("記録は既にある -> %s(**上書きしない**)" % OUT_RECORD)
+        say("  今回の実行で取った件数: %d(0 なら全部すでに手元に在った)"
               % sum(1 for r in out if r["how"] == "取った"))
-        print("  作り直すなら、先に古い記録を自分で退避すること。")
+        say("  作り直すなら、先に古い記録を自分で退避すること。")
         return 0
     with io.open(OUT_RECORD, "w", encoding="utf-8") as fh:
         json.dump({"tool": os.path.basename(__file__),
@@ -245,7 +272,7 @@ def main(argv=None):
                    "note": "中身は読んでいない。目録の印は ZIP のファイル名とサイズだけから作っている。",
                    "fetched": out}, fh, ensure_ascii=False, indent=1)
         fh.write(u"\n")
-    print("記録 -> %s  **中身は読んでいない**" % OUT_RECORD)
+    say("記録 -> %s  **中身は読んでいない**" % OUT_RECORD)
     return 0
 
 
