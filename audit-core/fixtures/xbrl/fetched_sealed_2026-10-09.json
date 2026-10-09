@@ -1,0 +1,58 @@
+{
+ "tool": "fetch_sealed_material_2026-10-09.py",
+ "seals": {
+  "A": "docs/NORMALIZATION_SEAL_A_2026-10-09.md",
+  "B": "docs/SIGN_SEAL_B_2026-10-09.md"
+ },
+ "sources": {
+  "封A": "docs/XBRL_REALLOCATION_SEAL_2026-10-09.md",
+  "封B": "fixtures/xbrl/redraw_b_2026-10-09.json"
+ },
+ "note": "中身は読んでいない。目録の印は ZIP のファイル名とサイズだけから作っている。",
+ "fetched": [
+  {
+   "docID": "S100Z3JY",
+   "seal": "封A",
+   "filerName": "株式会社総医研ホールディングス",
+   "date": "2026-09-24",
+   "bytes": 492290,
+   "zip_sha256": "5851a52ff80044bbb31f622f847461b1fccb5fc802a555dba868fd983372efbf",
+   "listing_digest": "533a5b77cc843ce756df3d33492bcd259c4a13b1dcc52dc10f1ef5ed9ab73f4b",
+   "listing_members": 30,
+   "how": "取った"
+  },
+  {
+   "docID": "S100Z35K",
+   "seal": "封A",
+   "filerName": "株式会社オープンアップグループ",
+   "date": "2026-09-18",
+   "bytes": 1194809,
+   "zip_sha256": "53991c2cc3021f050fac8ff1f1c16a3b7f3c2c8cd1a923706977f0d1f4a403ed",
+   "listing_digest": "3add2bfd7790d916a0bfc33cf290bd8a23e61aa6f0c9614f15538308b3259b5e",
+   "listing_members": 39,
+   "how": "取った"
+  },
+  {
+   "docID": "S100Z3V1",
+   "seal": "封B",
+   "filerName": "サンネクスタグループ株式会社",
+   "date": "2026-09-25",
+   "bytes": 790674,
+   "zip_sha256": "79ae06b59b670e21bcd00883d58dc37399d06a5d27490e04d7bf75f6dd55cbf6",
+   "listing_digest": "d44fb18c48bbb7806b2e7c19f528fd0e55d0d9f605479d731b8c57e4836ae64d",
+   "listing_members": 36,
+   "how": "取った"
+  },
+  {
+   "docID": "S100Z3HP",
+   "seal": "封B",
+   "filerName": "株式会社ハンズマン",
+   "date": "2026-09-24",
+   "bytes": 315742,
+   "zip_sha256": "a3170c66ce46185f02e8f5274c9d4f646ef97b089d13e6f7f4e65539e8d69719",
+   "listing_digest": "2601be5b5ebd25b7464bb4749daf66dec4746ecc65821dca0366e6712288fce0",
+   "listing_members": 30,
+   "how": "取った"
+  }
+ ]
+}
