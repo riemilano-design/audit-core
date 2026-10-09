@@ -17,6 +17,10 @@ import json
 import os
 import sys
 import urllib.request
+import os as _os_gate
+import sys as _sys_gate
+_sys_gate.path.insert(0, _os_gate.path.dirname(_os_gate.path.abspath(__file__)))
+from sealed_material import refuse_if_sealed  # noqa: E402  **取る直前に呼ぶ**
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.dirname(os.path.dirname(HERE)))
@@ -38,14 +42,7 @@ FETCHABLE_SEAL = "A1 封(① 差の許容幅)"
 # 抽選記録に何と書いてあっても、引数に何を渡しても**取らない。**
 #
 # 外すときは、**その封を持っている席からの依頼**と、外す理由を行に書くこと。
-OTHER_SEATS_SEALED = {
-    # 本線 封A(正規化方式 round/truncate)の独立確認の材料 ― 抽選 341e079
-    "S100Z3JY": "本線 封A(正規化方式)",
-    "S100Z35K": "本線 封A(正規化方式)",
-    # 本線 封B(符号 abs)の独立確認の材料 ― 引き直し後。抽選 0fc7ec1
-    "S100Z3V1": "本線 封B(符号・引き直し後)",
-    "S100Z3HP": "本線 封B(符号・引き直し後)",
-}
+from sealed_material import SEALED_DOCS as OTHER_SEATS_SEALED  # 一覧は関門が持つ
 # ---------------------------------------------------------------------------
 API = "https://api.edinet-fsa.go.jp/api/v2/documents/%s?type=1&Subscription-Key=%s"
 
@@ -80,6 +77,7 @@ def main():
         path = E.cache_path(doc)
         had = os.path.exists(path)
         if not had:
+            refuse_if_sealed(doc_id=doc, where="fetch_new_draw.main")   # **取る直前**
             with urllib.request.urlopen(API % (doc, key), timeout=120) as r:
                 data = r.read()
             os.makedirs(os.path.dirname(path), exist_ok=True)

@@ -101,7 +101,17 @@ _EXPECTATION_FILENAMES = ("core_expectation_1B.json", "core_expectation_5F.json"
                           # test_instance がコードの字面と突き合わせるので砂場にも写す
                           # (写さないと**全部の変異が同じ理由で赤くなり**、変異の測定が死ぬ ―
                           # 1 回これで 8 本の green の予測を赤にした)。
-                          "taxonomy_labels_sha256.txt")
+                          "taxonomy_labels_sha256.txt",
+                          # 封じた材料への関門(2026-10-09)。test_fetch_gate が
+                          # **木を歩いて「urlopen の在る道具が関門を呼んでいるか」**を
+                          # 照合するので、関門と取得の道具を砂場にも写す。
+                          # 写さないと全部の変異が同じ理由で赤くなり、変異の測定が死ぬ
+                          # (2026-10-08 に taxonomy_labels_sha256.txt で 1 回やった)。
+                          "sealed_material.py",
+                          "xbrl_probe.py",
+                          "select_third_2026-10-01.py",
+                          "fetch_allocated_2026-10-08.py",
+                          "fetch_new_draw_2026-10-09.py")
 
 
 def _scope_for(mutation):

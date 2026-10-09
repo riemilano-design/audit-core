@@ -92,7 +92,23 @@ def main(argv=None):
     where = a.rev or "(作業ツリー)"
     print("対象 %d 本 @ %s" % (len(rows), where))
     if len(rows) != FROZEN_COUNT:
-        print("警告: 本数が %d 本で、凍結時の %d 本と違う" % (len(rows), FROZEN_COUNT))
+        # **本数が違うときは束ねた sha を印字しない。**
+        #
+        # 2026-10-09 に実測した穴: ``audit-core/`` の中から回すと
+        # ``git ls-files audit-core/core/py audit-core/adapters`` が **0 本**を返し、
+        # それでも「束ねた sha: e3b0c442…」(= 空文字列の sha256)を印字していた。
+        # **0 本の測定の sha は、記録に写せる形で画面に出てはいけない** ―
+        # 「保護面が変わった」と読める値が、ただの cwd の誤りから生まれる。
+        # (本線の席も同じ型を踏みかけた。あちらは相対の道で ``shasum`` が
+        #  各行に道を印字するため、中身が同じでも別の値になる形だった。)
+        print("**止まる**: 本数が %d 本で、凍結時の %d 本と違う。束ねた sha は印字しない。"
+              % (len(rows), FROZEN_COUNT))
+        if not rows:
+            print("  0 本なら、ほぼ cwd の誤り ― **repo の根から回すこと**"
+                  "(この道具は repo 相対の道で git に問うので、"
+                  "audit-core/ の中から回すと 0 本になる)。")
+        print("  いまの cwd: %s" % os.getcwd())
+        return 2
     if a.verbose:
         for f, s in rows:
             print("  %s  %s" % (s, f))

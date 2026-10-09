@@ -32,6 +32,10 @@ import os
 import sys
 import urllib.parse
 import urllib.request
+import os as _os_gate
+import sys as _sys_gate
+_sys_gate.path.insert(0, _os_gate.path.dirname(_os_gate.path.abspath(__file__)))
+from sealed_material import refuse_if_sealed  # noqa: E402  **取る直前に呼ぶ**
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.dirname(os.path.dirname(HERE)))
@@ -60,6 +64,7 @@ def allowed_rows(allocation_path):
 
 
 def fetch_zip(doc_id):
+    refuse_if_sealed(doc_id=doc_id, where="fetch_allocated.fetch_zip")   # **取る直前**
     q = {"type": 1, "Subscription-Key": _key()}
     url = API + "documents/%s?" % urllib.parse.quote(doc_id) + urllib.parse.urlencode(q)
     with urllib.request.urlopen(url, timeout=300) as r:
