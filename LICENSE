@@ -1,0 +1,28 @@
+Copyright (c) 2026 Yushi Yamanaka. All rights reserved.
+
+このリポジトリに含まれるソフトウェア・文書・データ(以下「本成果物」)の著作権は
+Yushi Yamanaka に帰属します。本成果物は専有(proprietary)であり、オープンソース
+ライセンスの下では提供されていません。著作権者の書面による事前の許諾なく、
+本成果物の全部または一部を複製・改変・頒布・公衆送信・リバースエンジニアリング
+することはできません。
+
+第三者の素材について:
+- 金融庁 EDINET の開示書類は PDL1.0(公共データ利用規約)に従い出典を明記して
+  利用しています(audit-core/README.md「出典」)。開示書類そのものはリポジトリに
+  含めていません。
+- 依存するライブラリは各自のライセンスに従います(一覧は別途整備)。
+
+---
+
+The software, documents and data in this repository (the "Work") are
+Copyright (c) 2026 Yushi Yamanaka. All rights reserved.
+
+The Work is proprietary and is NOT provided under any open-source license.
+No part of the Work may be reproduced, modified, distributed, publicly
+transmitted or reverse-engineered without the prior written permission of
+the copyright holder.
+
+Third-party material: EDINET disclosure documents (Financial Services Agency,
+Japan) are used under PDL1.0 with attribution (see audit-core/README.md);
+the documents themselves are not included in this repository. Dependencies
+are subject to their own licenses (inventory to follow).
