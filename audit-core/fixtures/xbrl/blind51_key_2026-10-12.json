@@ -1,0 +1,593 @@
+{
+ "note": "司令塔のみ。行の鍵 → 書類・id・対象かどうか。鍵は乱数で、id から計算できない",
+ "map": {
+  "R-021": {
+   "docID": "S100Z4Q1",
+   "profile": "1B",
+   "id": "N005",
+   "対象": true
+  },
+  "R-199": {
+   "docID": "S100Z4Q1",
+   "profile": "1B",
+   "id": "N009",
+   "対象": true
+  },
+  "R-027": {
+   "docID": "S100Z4Q1",
+   "profile": "1B",
+   "id": "N011",
+   "対象": true
+  },
+  "R-080": {
+   "docID": "S100Z4Q1",
+   "profile": "1B",
+   "id": "N016",
+   "対象": true
+  },
+  "R-086": {
+   "docID": "S100Z4Q1",
+   "profile": "1B",
+   "id": "N018",
+   "対象": true
+  },
+  "R-103": {
+   "docID": "S100Z4Q1",
+   "profile": "1B",
+   "id": "N019",
+   "対象": true
+  },
+  "R-250": {
+   "docID": "S100Z4Q1",
+   "profile": "1B",
+   "id": "N020",
+   "対象": true
+  },
+  "R-112": {
+   "docID": "S100Z4Q1",
+   "profile": "1B",
+   "id": "N022",
+   "対象": true
+  },
+  "R-157": {
+   "docID": "S100Z4Q1",
+   "profile": "1B",
+   "id": "N023",
+   "対象": true
+  },
+  "R-283": {
+   "docID": "S100Z4Q1",
+   "profile": "1B",
+   "id": "N025",
+   "対象": true
+  },
+  "R-292": {
+   "docID": "S100Z4Q1",
+   "profile": "1B",
+   "id": "N027",
+   "対象": true
+  },
+  "R-254": {
+   "docID": "S100Z4Q1",
+   "profile": "1B",
+   "id": "N028",
+   "対象": true
+  },
+  "R-116": {
+   "docID": "S100Z4Q1",
+   "profile": "1B",
+   "id": "N029",
+   "対象": true
+  },
+  "R-009": {
+   "docID": "S100Z4Q1",
+   "profile": "1B",
+   "id": "N030",
+   "対象": true
+  },
+  "R-257": {
+   "docID": "S100Z4Q1",
+   "profile": "1B",
+   "id": "N031",
+   "対象": true
+  },
+  "R-130": {
+   "docID": "S100Z4Q1",
+   "profile": "1B",
+   "id": "N032",
+   "対象": true
+  },
+  "R-224": {
+   "docID": "S100Z4Q1",
+   "profile": "1B",
+   "id": "N033",
+   "対象": true
+  },
+  "R-012": {
+   "docID": "S100Z4Q1",
+   "profile": "1B",
+   "id": "N034",
+   "対象": true
+  },
+  "R-156": {
+   "docID": "S100Z4Q1",
+   "profile": "1B",
+   "id": "N035",
+   "対象": true
+  },
+  "R-276": {
+   "docID": "S100Z4Q1",
+   "profile": "1B",
+   "id": "N036",
+   "対象": true
+  },
+  "R-001": {
+   "docID": "S100Z4Q1",
+   "profile": "1B",
+   "id": "N038",
+   "対象": true
+  },
+  "R-202": {
+   "docID": "S100Z4Q1",
+   "profile": "1B",
+   "id": "N039",
+   "対象": true
+  },
+  "R-271": {
+   "docID": "S100Z4Q1",
+   "profile": "1B",
+   "id": "N040",
+   "対象": true
+  },
+  "R-193": {
+   "docID": "S100Z4Q1",
+   "profile": "1B",
+   "id": "N044",
+   "対象": true
+  },
+  "R-256": {
+   "docID": "S100Z4Q1",
+   "profile": "1B",
+   "id": "N045",
+   "対象": true
+  },
+  "R-036": {
+   "docID": "S100Z4Q1",
+   "profile": "1B",
+   "id": "N046",
+   "対象": true
+  },
+  "R-190": {
+   "docID": "S100Z4Q1",
+   "profile": "1B",
+   "id": "N048",
+   "対象": true
+  },
+  "R-030": {
+   "docID": "S100Z4Q1",
+   "profile": "1B",
+   "id": "N050",
+   "対象": true
+  },
+  "R-184": {
+   "docID": "S100Z4Q1",
+   "profile": "1B",
+   "id": "N052",
+   "対象": true
+  },
+  "R-240": {
+   "docID": "S100Z4Q1",
+   "profile": "1B",
+   "id": "N054",
+   "対象": true
+  },
+  "R-234": {
+   "docID": "S100Z4Q1",
+   "profile": "1B",
+   "id": "N057",
+   "対象": true
+  },
+  "R-140": {
+   "docID": "S100Z4Q1",
+   "profile": "1B",
+   "id": "N058",
+   "対象": true
+  },
+  "R-108": {
+   "docID": "S100Z4Q1",
+   "profile": "1B",
+   "id": "N037",
+   "対象": false
+  },
+  "R-223": {
+   "docID": "S100Z4Q1",
+   "profile": "1B",
+   "id": "N002",
+   "対象": false
+  },
+  "R-047": {
+   "docID": "S100Z4Q1",
+   "profile": "1B",
+   "id": "N051",
+   "対象": false
+  },
+  "R-209": {
+   "docID": "S100Z4Q1",
+   "profile": "1B",
+   "id": "N017",
+   "対象": false
+  },
+  "R-177": {
+   "docID": "S100Z4Q1",
+   "profile": "1B",
+   "id": "N055",
+   "対象": false
+  },
+  "R-070": {
+   "docID": "S100Z4Q1",
+   "profile": "1B",
+   "id": "N041",
+   "対象": false
+  },
+  "R-273": {
+   "docID": "S100Z4Q1",
+   "profile": "1B",
+   "id": "N012",
+   "対象": false
+  },
+  "R-208": {
+   "docID": "S100Z4Q1",
+   "profile": "1B",
+   "id": "N014",
+   "対象": false
+  },
+  "R-285": {
+   "docID": "S100Z4Q1",
+   "profile": "1B",
+   "id": "N001",
+   "対象": false
+  },
+  "R-085": {
+   "docID": "S100Z4Q1",
+   "profile": "1B",
+   "id": "N004",
+   "対象": false
+  },
+  "R-195": {
+   "docID": "S100Z4Q1",
+   "profile": "1B",
+   "id": "N013",
+   "対象": false
+  },
+  "R-191": {
+   "docID": "S100Z4Q1",
+   "profile": "1B",
+   "id": "N053",
+   "対象": false
+  },
+  "R-267": {
+   "docID": "S100Z4Q1",
+   "profile": "1B",
+   "id": "N008",
+   "対象": false
+  },
+  "R-005": {
+   "docID": "S100Z4Q1",
+   "profile": "1B",
+   "id": "N060",
+   "対象": false
+  },
+  "R-165": {
+   "docID": "S100Z4Q1",
+   "profile": "1B",
+   "id": "N056",
+   "対象": false
+  },
+  "R-286": {
+   "docID": "S100Z4Q1",
+   "profile": "1B",
+   "id": "N021",
+   "対象": false
+  },
+  "R-052": {
+   "docID": "S100Z4Q1",
+   "profile": "1B",
+   "id": "N059",
+   "対象": false
+  },
+  "R-041": {
+   "docID": "S100Z4Q1",
+   "profile": "1B",
+   "id": "N047",
+   "対象": false
+  },
+  "R-287": {
+   "docID": "S100Z4Q1",
+   "profile": "1B",
+   "id": "N010",
+   "対象": false
+  },
+  "R-065": {
+   "docID": "S100Z4Q1",
+   "profile": "1B",
+   "id": "N007",
+   "対象": false
+  },
+  "R-046": {
+   "docID": "S100Z4Q1",
+   "profile": "1B",
+   "id": "N015",
+   "対象": false
+  },
+  "R-043": {
+   "docID": "S100Z4Q1",
+   "profile": "1B",
+   "id": "N003",
+   "対象": false
+  },
+  "R-194": {
+   "docID": "S100Z4Q1",
+   "profile": "1B",
+   "id": "N024",
+   "対象": false
+  },
+  "R-104": {
+   "docID": "S100Z4Q1",
+   "profile": "1B",
+   "id": "N042",
+   "対象": false
+  },
+  "R-096": {
+   "docID": "S100Z4Q1",
+   "profile": "1B",
+   "id": "N006",
+   "対象": false
+  },
+  "R-179": {
+   "docID": "S100Z4Q1",
+   "profile": "1B",
+   "id": "N043",
+   "対象": false
+  },
+  "R-217": {
+   "docID": "S100Z4Q1",
+   "profile": "1B",
+   "id": "N049",
+   "対象": false
+  },
+  "R-178": {
+   "docID": "S100Z4Q1",
+   "profile": "1B",
+   "id": "N026",
+   "対象": false
+  },
+  "R-168": {
+   "docID": "S100Z4B6",
+   "profile": "5F",
+   "id": "N003",
+   "対象": true
+  },
+  "R-213": {
+   "docID": "S100Z4B6",
+   "profile": "5F",
+   "id": "N005",
+   "対象": true
+  },
+  "R-132": {
+   "docID": "S100Z4B6",
+   "profile": "5F",
+   "id": "N007",
+   "対象": true
+  },
+  "R-056": {
+   "docID": "S100Z4B6",
+   "profile": "5F",
+   "id": "N008",
+   "対象": true
+  },
+  "R-099": {
+   "docID": "S100Z4B6",
+   "profile": "5F",
+   "id": "N009",
+   "対象": true
+  },
+  "R-073": {
+   "docID": "S100Z4B6",
+   "profile": "5F",
+   "id": "N010",
+   "対象": true
+  },
+  "R-246": {
+   "docID": "S100Z4B6",
+   "profile": "5F",
+   "id": "N011",
+   "対象": true
+  },
+  "R-277": {
+   "docID": "S100Z4B6",
+   "profile": "5F",
+   "id": "N012",
+   "対象": true
+  },
+  "R-150": {
+   "docID": "S100Z4B6",
+   "profile": "5F",
+   "id": "N048",
+   "対象": true
+  },
+  "R-039": {
+   "docID": "S100Z4B6",
+   "profile": "5F",
+   "id": "N056",
+   "対象": true
+  },
+  "R-066": {
+   "docID": "S100Z4B6",
+   "profile": "5F",
+   "id": "N057",
+   "対象": true
+  },
+  "R-068": {
+   "docID": "S100Z4B6",
+   "profile": "5F",
+   "id": "N068",
+   "対象": true
+  },
+  "R-097": {
+   "docID": "S100Z4B6",
+   "profile": "5F",
+   "id": "N069",
+   "対象": true
+  },
+  "R-146": {
+   "docID": "S100Z4B6",
+   "profile": "5F",
+   "id": "N077",
+   "対象": true
+  },
+  "R-207": {
+   "docID": "S100Z4B6",
+   "profile": "5F",
+   "id": "N078",
+   "対象": true
+  },
+  "R-038": {
+   "docID": "S100Z4B6",
+   "profile": "5F",
+   "id": "N079",
+   "対象": true
+  },
+  "R-180": {
+   "docID": "S100Z4B6",
+   "profile": "5F",
+   "id": "N082",
+   "対象": true
+  },
+  "R-127": {
+   "docID": "S100Z4B6",
+   "profile": "5F",
+   "id": "N083",
+   "対象": true
+  },
+  "R-268": {
+   "docID": "S100Z4B6",
+   "profile": "5F",
+   "id": "N084",
+   "対象": true
+  },
+  "R-089": {
+   "docID": "S100Z4B6",
+   "profile": "5F",
+   "id": "N004",
+   "対象": false
+  },
+  "R-094": {
+   "docID": "S100Z4B6",
+   "profile": "5F",
+   "id": "N018",
+   "対象": false
+  },
+  "R-015": {
+   "docID": "S100Z4B6",
+   "profile": "5F",
+   "id": "N087",
+   "対象": false
+  },
+  "R-166": {
+   "docID": "S100Z4B6",
+   "profile": "5F",
+   "id": "N016",
+   "対象": false
+  },
+  "R-233": {
+   "docID": "S100Z4B6",
+   "profile": "5F",
+   "id": "N020",
+   "対象": false
+  },
+  "R-200": {
+   "docID": "S100Z4B6",
+   "profile": "5F",
+   "id": "N062",
+   "対象": false
+  },
+  "R-258": {
+   "docID": "S100Z4B6",
+   "profile": "5F",
+   "id": "N065",
+   "対象": false
+  },
+  "R-131": {
+   "docID": "S100Z4B6",
+   "profile": "5F",
+   "id": "N013",
+   "対象": false
+  },
+  "R-120": {
+   "docID": "S100Z4B6",
+   "profile": "5F",
+   "id": "N074",
+   "対象": false
+  },
+  "R-023": {
+   "docID": "S100Z4B6",
+   "profile": "5F",
+   "id": "N050",
+   "対象": false
+  },
+  "R-051": {
+   "docID": "S100Z4B6",
+   "profile": "5F",
+   "id": "N090",
+   "対象": false
+  },
+  "R-230": {
+   "docID": "S100Z4B6",
+   "profile": "5F",
+   "id": "N052",
+   "対象": false
+  },
+  "R-078": {
+   "docID": "S100Z4B6",
+   "profile": "5F",
+   "id": "N066",
+   "対象": false
+  },
+  "R-059": {
+   "docID": "S100Z4B6",
+   "profile": "5F",
+   "id": "N035",
+   "対象": false
+  },
+  "R-058": {
+   "docID": "S100Z4B6",
+   "profile": "5F",
+   "id": "N029",
+   "対象": false
+  },
+  "R-018": {
+   "docID": "S100Z4B6",
+   "profile": "5F",
+   "id": "N067",
+   "対象": false
+  },
+  "R-290": {
+   "docID": "S100Z4B6",
+   "profile": "5F",
+   "id": "N026",
+   "対象": false
+  },
+  "R-017": {
+   "docID": "S100Z4B6",
+   "profile": "5F",
+   "id": "N034",
+   "対象": false
+  },
+  "R-081": {
+   "docID": "S100Z4B6",
+   "profile": "5F",
+   "id": "N023",
+   "対象": false
+  }
+ }
+}
