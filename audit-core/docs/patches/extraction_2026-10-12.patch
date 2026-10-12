@@ -1,0 +1,245 @@
+diff --git a/audit-core/adapters/xbrl/recipes.py b/audit-core/adapters/xbrl/recipes.py
+index b9db9b2..a91be17 100644
+--- a/audit-core/adapters/xbrl/recipes.py
++++ b/audit-core/adapters/xbrl/recipes.py
+@@ -102,6 +102,51 @@ def _pointer_list(raw_pointer):
+ _MONEY_UNIT_RE_AFTER = re.compile(r"(増加|減少|増|減)")
+ _MONEY_DIFF_PHRASE_RE = re.compile(r"(増加額|減少額|比べて)")
+ _PREV_YEAR_PHRASE = "前連結会計年度は"
++# 封 EXTRACTION_SEAL_2026-10-12 §3。値は一切使わない。
++_DIFF_AFTER_WINDOW = 12          # B-1: 増減語を探す数の後ろの窓(字)。同じ文の中(s は 1 文)
++_PRIOR_CUE_RE = re.compile(r"(前期末|前期|前連結会計年度)")   # A-1
++_SAME_CUE_RE = re.compile(r"同")                               # A-1: 直前の数と同じ期間
++_PRIOR_CUE_WINDOW = 15           # A-1: 数の手前の窓(字)
++_PAREN_PRIOR_RE = re.compile(r"[(（]\s*(前連結会計年度は|前期は|同)")  # B-2: 括弧で前期を併記する形
++
++
++def _number_spans(s):
++    """同じ文の数の span 一覧(位置順)。A-2 の「手がかりと数の間に別の数があるか」に使う。"""
++    return [(a, b) for (a, b, _v, _u, _p) in E.iter_numbers(s)]
++
++
++def _inside_prior_paren(s, a):
++    """B-2: 数 a が「(前連結会計年度は…)」「(前期は…)」「(同…)」の括弧の中にあるか。"""
++    open_pos = max(s.rfind("(", 0, a), s.rfind("（", 0, a))
++    if open_pos < 0:
++        return False
++    close_pos = min(x for x in (s.find(")", open_pos), s.find("）", open_pos)) if x >= 0) if any(x >= 0 for x in (s.find(")", open_pos), s.find("）", open_pos))) else len(s)
++    if not (open_pos < a < close_pos):
++        return False
++    return bool(_PAREN_PRIOR_RE.match(s, open_pos))
++
++
++def _period_of_number(s, a, spans):
++    """A-1/A-2: 数 a の期間("CurrentYear" か "Prior1Year")を、文の語だけで決める。
++    手がかり(前期・前期末・前連結会計年度)が数の手前 15 字以内にあり、その手がかりと数の間に
++    別の数が無ければ前期。「同」は直前の数と同じ期間。どれも無ければ当期(既定値)。"""
++    if _inside_prior_paren(s, a):   # B-2: 「(前連結会計年度は…)」「(前期は…)」「(同…)」の中の数は前期の水準
++        return "Prior1Year"
++    idx = next((i for i, (x, _y) in enumerate(spans) if x == a), None)
++    left = s[max(0, a - _PRIOR_CUE_WINDOW):a]
++    base = max(0, a - _PRIOR_CUE_WINDOW)
++    prev_end = spans[idx - 1][1] if (idx is not None and idx > 0) else -1
++    for m in _PRIOR_CUE_RE.finditer(left):
++        cue_end = base + m.end()
++        if prev_end >= cue_end:      # A-2: 手がかりの後に別の数がある → その数のもの
++            continue
++        return "Prior1Year"
++    if idx is not None and idx > 0:
++        between = s[spans[idx - 1][1]:a]
++        if _SAME_CUE_RE.search(between) and not _PRIOR_CUE_RE.search(between):
++            return _period_of_number(s, spans[idx - 1][0], spans)   # 「同」= 直前の数と同じ期間
++    return "CurrentYear"
++
+ 
+ # ---------------------------------------------------------------------------
+ # Core 接続 C-1g §1-2(人間の決定、2026-10-06): CF 流量項目の符号の規約。
+@@ -197,6 +242,23 @@ def _build_point_diff_claim(claim, s, a, b, elems, member, facts, contexts, num)
+     claim["result"] = "GROUNDED" if abs(recomputed - claim["value"]) <= 0.15 else "VALUE_MISMATCH"
+ 
+ 
++
++def _collapse_candidates(pool):
++    """封 CANDIDATE_DEFINITION_SEAL_2026-10-12 §2(設計 Y)。
++    同じ Claim の elems に当たった fact のうち (context, 値, 単位) が同じものを
++    1 つの候補として数える。返すのは候補の群の一覧(文書順)。
++    **Claim の値・target は参照しない**(成功条件 e)。fact 同士の値だけを見る。
++    """
++    groups = []
++    seen = {}
++    for f in pool:
++        k = (f["context"], f["value"], f["unit"])
++        if k not in seen:
++            seen[k] = []
++            groups.append(seen[k])
++        seen[k].append(f)
++    return groups
++
+ def _direct_value_claim(claim, s, a, b, sign, num, unit, prec, subj, elems, member, facts, contexts):
+     scale = prec if unit == "円" else V.UNIT_SCALE[unit]
+     unit_scale = 1.0 if unit == "円" else V.UNIT_SCALE[unit]
+@@ -206,84 +268,91 @@ def _direct_value_claim(claim, s, a, b, sign, num, unit, prec, subj, elems, memb
+     # reproduce this function's own `scale`/`target` at verify time.
+     claim["unit_scale"] = unit_scale
+     claim["claim_scale"] = scale
+-    pool = I.facts_for(elems, facts, contexts, member) if subj else [f for f in facts if I.ctx_ok(f["context"], contexts, member)]
+-    pool = [f for f in pool if f["unit"] and f["unit"].upper().startswith("JPY")]
+-    is_diff = bool(_MONEY_UNIT_RE_AFTER.search(s[b:b + 4])) or bool(_MONEY_DIFF_PHRASE_RE.search(s[max(0, a - 25):a]))
+-    hits = [(f, V.match_value(f["value"], target, scale)) for f in pool]
+-    hits = [(f, how) for f, how in hits if how]
+-    if hits and not (is_diff and subj):
+-        fams = sorted({f["name"] for f, _ in hits})
+-        if subj or len(fams) == 1:
+-            if subj:
+-                f, how = hits[0]
+-                claim["pointer"] = "xbrl:%s@%s" % (f["name"], f["context"])
+-                claim["bound"] = True
+-                claim["result"] = "GROUNDED"
+-                claim["recomputed"] = f["value"]
+-                claim["match"] = how
+-            else:
+-                # 封 BINDING_FIX_PLAN_2026-10-08(案ア、人間の決定 2026-10-08)。
+-                # subject が取れていない数の主張は、候補事実の家族が 1 つに
+-                # 絞れても束縛しない。pointer/bound/recomputed を立てず、
+-                # reason="no_subject" のまま返す(UNBOUND_REASON_STATE により
+-                # UNVERIFIABLE になる)。
++    # B-1: 後ろ 12 字(同じ文の中)。B-2: 括弧で前期を併記する形は差の主張ではない。
++    is_diff = bool(_MONEY_UNIT_RE_AFTER.search(s[b:b + _DIFF_AFTER_WINDOW])) or bool(_MONEY_DIFF_PHRASE_RE.search(s[max(0, a - 25):a]))
++    if is_diff and _inside_prior_paren(s, a):
++        is_diff = False
++    spans = _number_spans(s)
++    period = _period_of_number(s, a, spans)   # A-1/A-2
++
++    if not subj:
++        # 封 BINDING_FIX_PLAN_2026-10-08(案ア、人間の決定 2026-10-08)のまま
++        # 不変: subject が取れていない数の主張は束縛しない。ここは候補を
++        # 「どれに束縛するか」選ぶ経路ではなく、診断用の reason
++        # (no_subject / ambiguous(elements) / no_element)を選ぶだけで、
++        # bound/pointer/recomputed は一度も立たない。封
++        # BINDING_ORDER_SEAL_2026-10-12 §3 の規則 3・4(値による再探索・
++        # 値による候補選択の禁止)は「束縛」に対する規則であり、ここには
++        # 適用対象が無い。
++        pool = [f for f in facts if I.ctx_ok(f["context"], contexts, member)]
++        pool = [f for f in pool if f["unit"] and f["unit"].upper().startswith("JPY")]
++        hits = [(f, V.match_value(f["value"], target, scale)) for f in pool]
++        hits = [(f, how) for f, how in hits if how]
++        if hits:
++            fams = sorted({f["name"] for f, _ in hits})
++            if len(fams) == 1:
+                 claim["reason"] = "no_subject"
++            else:
++                # C-1d §3.3: the registered reason name is the count-free
++                # `ambiguous(elements)`; the count moves to
++                # Claim.provenance["ambiguous_count"] (see claim_to_recipe).
++                claim["reason"] = "ambiguous(elements)"
++                claim["ambiguous_count"] = len(fams)
+         else:
+-            # C-1d §3.3: the registered reason name is the count-free
+-            # `ambiguous(elements)` (so a 3rd document's different element
+-            # count does not require a new registration); the count itself
+-            # moves to Claim.provenance["ambiguous_count"] (see claim_to_recipe).
++            claim["reason"] = "no_element"
++        return
++
++    # 封 BINDING_ORDER_SEAL_2026-10-12 §3(規則 1〜6。subj が取れている場合)。
++    # 候補集合を概念(elems)と期間(want_ctx)で先に絞り、値では絞らない
++    # (規則 1)。候補が 0 件/複数件なら値を使わずに停止する(規則 3・4)。
++    # 候補が 1 件のときだけ pointer を確定し、値の比較はその pointer に
++    # 対してのみ行う(規則 5・6)。対の形(is_diff)へ進むのは文に増減の語
++    # があるときだけで、単一 fact が値に一致しなかったことを理由に対の形
++    # へ落ちる経路は無い(いまの `N289` の誤りの経路)。
++    if is_diff:
++        want_a, want_b = ("Prior1Year", "Prior2Year") if period == "Prior1Year" else ("CurrentYear", "Prior1Year")
++        pool_a = [f for f in I.facts_for(elems, facts, contexts, member, want_ctx=want_a)
++                  if f["unit"] and f["unit"].upper().startswith("JPY")]
++        pool_b = [f for f in I.facts_for(elems, facts, contexts, member, want_ctx=want_b)
++                  if f["unit"] and f["unit"].upper().startswith("JPY")]
++        if not pool_a or not pool_b:
++            claim["reason"] = "no_element"
++            return
++        groups_a, groups_b = _collapse_candidates(pool_a), _collapse_candidates(pool_b)
++        if len(groups_a) > 1 or len(groups_b) > 1:
+             claim["reason"] = "ambiguous(elements)"
+-            claim["ambiguous_count"] = len(fams)
+-    elif subj:
+-        fs = I.facts_for(elems, facts, contexts, member)
+-        fs = [f for f in fs if f["unit"] and f["unit"].upper().startswith("JPY")]
+-        by = {}
+-        for f in fs:
+-            by.setdefault(f["name"], {})[f["context"]] = f
+-        found = None
+-        prev_year_phrase = _PREV_YEAR_PHRASE in s[max(0, a - 15):a]
+-        for name, ctxs in by.items():
+-            def ctx(prefix):
+-                return next((v for k, v in ctxs.items() if k.startswith(prefix)), None)
+-            pairs = [("Prior1Year", "Prior2Year")] if prev_year_phrase else [("CurrentYear", "Prior1Year")]
+-            for pa, pb in pairs:
+-                fa, fb = ctx(pa), ctx(pb)
+-                if fa and fb:
+-                    how = V.match_value(fa["value"] - fb["value"], target, scale)
+-                    if how:
+-                        found = (fa, fb, how)
+-                        break
+-            if found:
+-                break
+-        if found:
+-            fa, fb, how = found
+-            claim["form"] = "derived_value"
+-            claim["pointer"] = ["xbrl:%s@%s" % (fa["name"], fa["context"]), "xbrl:%s@%s" % (fb["name"], fb["context"]), "formula:a-b"]
+-            claim["bound"] = True
+-            claim["result"] = "GROUNDED"
+-            claim["recomputed"] = fa["value"] - fb["value"]
+-            claim["match"] = how
+-        elif hits:
+-            f, how = hits[0]
+-            claim["pointer"] = "xbrl:%s@%s" % (f["name"], f["context"])
+-            claim["bound"] = True
+-            claim["result"] = "GROUNDED"
+-            claim["recomputed"] = f["value"]
++            claim["ambiguous_count"] = max(len(groups_a), len(groups_b))  # 畳んだ後の候補数(封 §5)
++            return
++        fa, fb = groups_a[0][0], groups_b[0][0]  # 畳んだ群の文書順の先頭
++        claim["form"] = "derived_value"
++        claim["pointer"] = ["xbrl:%s@%s" % (fa["name"], fa["context"]), "xbrl:%s@%s" % (fb["name"], fb["context"]), "formula:a-b"]
++        claim["bound"] = True
++        recomputed = fa["value"] - fb["value"]
++        claim["recomputed"] = recomputed
++        how = V.match_value(recomputed, target, scale)
++        claim["result"] = "GROUNDED" if how else "VALUE_MISMATCH"
++        if how:
+             claim["match"] = how
+-            claim["reason"] = "diff phrase but value matched a fact"
+-        else:
+-            cur = [f for f in fs if f["context"].startswith("CurrentYear")]
+-            if cur:
+-                claim["pointer"] = "xbrl:%s@%s" % (cur[0]["name"], cur[0]["context"])
+-                claim["bound"] = True
+-                claim["result"] = "VALUE_MISMATCH"
+-                claim["recomputed"] = cur[0]["value"]
+-                claim["reason"] = "value differs(segment/other period?)"
+-            else:
+-                claim["reason"] = "no_element"
+-    else:
++        return
++
++    pool = [f for f in I.facts_for(elems, facts, contexts, member, want_ctx=period)
++            if f["unit"] and f["unit"].upper().startswith("JPY")]
++    if not pool:
+         claim["reason"] = "no_element"
++        return
++    groups = _collapse_candidates(pool)
++    if len(groups) > 1:
++        claim["reason"] = "ambiguous(elements)"
++        claim["ambiguous_count"] = len(groups)  # 畳んだ後の候補数(封 §5)
++        return
++    f = groups[0][0]  # 畳んだ群の文書順の先頭
++    how = V.match_value(f["value"], target, scale)
++    claim["pointer"] = "xbrl:%s@%s" % (f["name"], f["context"])
++    claim["bound"] = True
++    claim["recomputed"] = f["value"]
++    claim["result"] = "GROUNDED" if how else "VALUE_MISMATCH"
++    if how:
++        claim["match"] = how
+ 
+ 
+ # ---------------------------------------------------------------------------

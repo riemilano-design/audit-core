@@ -1,0 +1,1865 @@
+{
+ "label": "代表選択",
+ "targets_only": false,
+ "counts": {
+  "正答": 24,
+  "判定不能": 41,
+  "形が違う(対 vs 単一)": 11,
+  "誤停止(束縛も違う)": 21,
+  "誤った束縛": 1
+ },
+ "decided": 57,
+ "detail": [
+  {
+   "行の鍵": "R-001",
+   "docID": "S100Z4Q1",
+   "id": "N038",
+   "対象": true,
+   "分類": "正答",
+   "補足": null,
+   "独立判定": [
+    "jppfs_cor:ProfitLossAttributableToOwnersOfParent",
+    "CurrentYearDuration"
+   ],
+   "エンジン": [
+    "GROUNDED",
+    [
+     "xbrl:jppfs_cor:ProfitLossAttributableToOwnersOfParent@CurrentYearDuration"
+    ]
+   ],
+   "判定者": "席2(記憶なし)"
+  },
+  {
+   "行の鍵": "R-005",
+   "docID": "S100Z4Q1",
+   "id": "N060",
+   "対象": false,
+   "分類": "正答",
+   "補足": null,
+   "独立判定": [
+    "jppfs_cor:CashDividendsPaidFinCF",
+    "CurrentYearDuration"
+   ],
+   "エンジン": [
+    "GROUNDED",
+    [
+     "xbrl:jppfs_cor:CashDividendsPaidFinCF@CurrentYearDuration"
+    ]
+   ],
+   "判定者": "席3(記憶なし)"
+  },
+  {
+   "行の鍵": "R-009",
+   "docID": "S100Z4Q1",
+   "id": "N030",
+   "対象": true,
+   "分類": "判定不能",
+   "補足": null,
+   "独立判定": [
+    null,
+    null
+   ],
+   "エンジン": [
+    "UNVERIFIABLE",
+    []
+   ],
+   "判定者": "席3(記憶なし)"
+  },
+  {
+   "行の鍵": "R-012",
+   "docID": "S100Z4Q1",
+   "id": "N034",
+   "対象": true,
+   "分類": "形が違う(対 vs 単一)",
+   "補足": "不一致",
+   "独立判定": [
+    "jppfs_cor:TotalChangesOfItemsDuringThePeriod",
+    "Prior1YearDuration"
+   ],
+   "エンジン": [
+    "GROUNDED",
+    [
+     "xbrl:jppfs_cor:NetAssets@Prior1YearInstant",
+     "xbrl:jppfs_cor:NetAssets@Prior2YearInstant",
+     "formula:a-b"
+    ]
+   ],
+   "判定者": "席1(記憶なし)"
+  },
+  {
+   "行の鍵": "R-015",
+   "docID": "S100Z4B6",
+   "id": "N087",
+   "対象": false,
+   "分類": "誤停止(束縛も違う)",
+   "補足": "ambiguous(elements)",
+   "独立判定": [
+    "jppfs_cor:ProfitLossAttributableToOwnersOfParent",
+    "CurrentYearDuration"
+   ],
+   "エンジン": [
+    "UNVERIFIABLE",
+    []
+   ],
+   "判定者": "席2(記憶なし)"
+  },
+  {
+   "行の鍵": "R-017",
+   "docID": "S100Z4B6",
+   "id": "N034",
+   "対象": false,
+   "分類": "判定不能",
+   "補足": null,
+   "独立判定": [
+    null,
+    null
+   ],
+   "エンジン": [
+    "GROUNDED",
+    [
+     "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration_jpcrp030000-asr_E05055-000FranchiseReportableSegmentMember",
+     "xbrl:jppfs_cor:OperatingIncome@Prior1YearDuration_jpcrp030000-asr_E05055-000FranchiseReportableSegmentMember"
+    ]
+   ],
+   "判定者": "席2(記憶なし)"
+  },
+  {
+   "行の鍵": "R-018",
+   "docID": "S100Z4B6",
+   "id": "N067",
+   "対象": false,
+   "分類": "正答",
+   "補足": null,
+   "独立判定": [
+    "jppfs_cor:CashDividendsPaidFinCF",
+    "CurrentYearDuration"
+   ],
+   "エンジン": [
+    "GROUNDED",
+    [
+     "xbrl:jppfs_cor:CashDividendsPaidFinCF@CurrentYearDuration"
+    ]
+   ],
+   "判定者": "席3(記憶なし)"
+  },
+  {
+   "行の鍵": "R-021",
+   "docID": "S100Z4Q1",
+   "id": "N005",
+   "対象": true,
+   "分類": "正答",
+   "補足": null,
+   "独立判定": [
+    "jppfs_cor:NetSales",
+    "CurrentYearDuration"
+   ],
+   "エンジン": [
+    "GROUNDED",
+    [
+     "xbrl:jppfs_cor:NetSales@CurrentYearDuration"
+    ]
+   ],
+   "判定者": "席1(記憶なし)"
+  },
+  {
+   "行の鍵": "R-023",
+   "docID": "S100Z4B6",
+   "id": "N050",
+   "対象": false,
+   "分類": "誤停止(束縛も違う)",
+   "補足": "ambiguous(elements)",
+   "独立判定": [
+    "jppfs_cor:NetCashProvidedByUsedInOperatingActivities",
+    "CurrentYearDuration"
+   ],
+   "エンジン": [
+    "UNVERIFIABLE",
+    []
+   ],
+   "判定者": "席1(記憶なし)"
+  },
+  {
+   "行の鍵": "R-027",
+   "docID": "S100Z4Q1",
+   "id": "N011",
+   "対象": true,
+   "分類": "正答",
+   "補足": null,
+   "独立判定": [
+    "jppfs_cor:ProfitLossAttributableToOwnersOfParent",
+    "CurrentYearDuration"
+   ],
+   "エンジン": [
+    "GROUNDED",
+    [
+     "xbrl:jppfs_cor:ProfitLossAttributableToOwnersOfParent@CurrentYearDuration"
+    ]
+   ],
+   "判定者": "席2(記憶なし)"
+  },
+  {
+   "行の鍵": "R-030",
+   "docID": "S100Z4Q1",
+   "id": "N050",
+   "対象": true,
+   "分類": "形が違う(対 vs 単一)",
+   "補足": "先頭一致",
+   "独立判定": [
+    "jppfs_cor:IncreaseDecreaseInNotesAndAccountsPayableTradeOpeCF",
+    "CurrentYearDuration"
+   ],
+   "エンジン": [
+    "VALUE_MISMATCH",
+    [
+     "xbrl:jppfs_cor:IncreaseDecreaseInNotesAndAccountsPayableTradeOpeCF@CurrentYearDuration",
+     "xbrl:jppfs_cor:IncreaseDecreaseInNotesAndAccountsPayableTradeOpeCF@Prior1YearDuration",
+     "formula:a-b"
+    ]
+   ],
+   "判定者": "席3(記憶なし)"
+  },
+  {
+   "行の鍵": "R-036",
+   "docID": "S100Z4Q1",
+   "id": "N046",
+   "対象": true,
+   "分類": "形が違う(対 vs 単一)",
+   "補足": "先頭一致",
+   "独立判定": [
+    "jppfs_cor:IncomeBeforeIncomeTaxes",
+    "CurrentYearDuration"
+   ],
+   "エンジン": [
+    "VALUE_MISMATCH",
+    [
+     "xbrl:jppfs_cor:IncomeBeforeIncomeTaxes@CurrentYearDuration",
+     "xbrl:jppfs_cor:IncomeBeforeIncomeTaxes@Prior1YearDuration",
+     "formula:a-b"
+    ]
+   ],
+   "判定者": "席3(記憶なし)"
+  },
+  {
+   "行の鍵": "R-038",
+   "docID": "S100Z4B6",
+   "id": "N079",
+   "対象": true,
+   "分類": "誤停止(束縛も違う)",
+   "補足": "no_element",
+   "独立判定": [
+    "jppfs_cor:OperatingIncome",
+    "Prior1YearDuration"
+   ],
+   "エンジン": [
+    "POINTER_NOT_FOUND",
+    []
+   ],
+   "判定者": "席1(記憶なし)"
+  },
+  {
+   "行の鍵": "R-039",
+   "docID": "S100Z4B6",
+   "id": "N056",
+   "対象": true,
+   "分類": "形が違う(対 vs 単一)",
+   "補足": "不一致",
+   "独立判定": [
+    "jppfs_cor:DecreaseIncreaseInInventoriesOpeCF",
+    "CurrentYearDuration"
+   ],
+   "エンジン": [
+    "VALUE_MISMATCH",
+    [
+     "xbrl:jppfs_cor:DepreciationAndAmortizationOpeCF@CurrentYearDuration",
+     "xbrl:jppfs_cor:DepreciationAndAmortizationOpeCF@Prior1YearDuration",
+     "formula:a-b"
+    ]
+   ],
+   "判定者": "席1(記憶なし)"
+  },
+  {
+   "行の鍵": "R-041",
+   "docID": "S100Z4Q1",
+   "id": "N047",
+   "対象": false,
+   "分類": "正答",
+   "補足": null,
+   "独立判定": [
+    "jppfs_cor:DepreciationAndAmortizationOpeCF",
+    "CurrentYearDuration"
+   ],
+   "エンジン": [
+    "GROUNDED",
+    [
+     "xbrl:jppfs_cor:DepreciationAndAmortizationOpeCF@CurrentYearDuration"
+    ]
+   ],
+   "判定者": "席2(記憶なし)"
+  },
+  {
+   "行の鍵": "R-043",
+   "docID": "S100Z4Q1",
+   "id": "N003",
+   "対象": false,
+   "分類": "判定不能",
+   "補足": null,
+   "独立判定": [
+    null,
+    null
+   ],
+   "エンジン": [
+    "POINTER_NOT_FOUND",
+    []
+   ],
+   "判定者": "席1(記憶なし)"
+  },
+  {
+   "行の鍵": "R-046",
+   "docID": "S100Z4Q1",
+   "id": "N015",
+   "対象": false,
+   "分類": "判定不能",
+   "補足": null,
+   "独立判定": [
+    null,
+    null
+   ],
+   "エンジン": [
+    "GROUNDED",
+    [
+     "xbrl:jppfs_cor:Assets@CurrentYearInstant",
+     "xbrl:jppfs_cor:Assets@Prior1YearInstant",
+     "formula:a-b"
+    ]
+   ],
+   "判定者": "席2(記憶なし)"
+  },
+  {
+   "行の鍵": "R-047",
+   "docID": "S100Z4Q1",
+   "id": "N051",
+   "対象": false,
+   "分類": "形が違う(対 vs 単一)",
+   "補足": "不一致",
+   "独立判定": [
+    "jppfs_cor:IncreaseDecreaseInContractLiabilitiesOpeCF",
+    "CurrentYearDuration"
+   ],
+   "エンジン": [
+    "GROUNDED",
+    [
+     "xbrl:jppfs_cor:ContractLiabilities@CurrentYearInstant",
+     "xbrl:jppfs_cor:ContractLiabilities@Prior1YearInstant",
+     "formula:a-b"
+    ]
+   ],
+   "判定者": "席1(記憶なし)"
+  },
+  {
+   "行の鍵": "R-051",
+   "docID": "S100Z4B6",
+   "id": "N090",
+   "対象": false,
+   "分類": "判定不能",
+   "補足": null,
+   "独立判定": [
+    null,
+    null
+   ],
+   "エンジン": [
+    "POINTER_NOT_FOUND",
+    []
+   ],
+   "判定者": "席3(記憶なし)"
+  },
+  {
+   "行の鍵": "R-052",
+   "docID": "S100Z4Q1",
+   "id": "N059",
+   "対象": false,
+   "分類": "誤停止(束縛も違う)",
+   "補足": "no_element",
+   "独立判定": [
+    "jppfs_cor:RepaymentOfLongTermLoansPayableFinCF",
+    "CurrentYearDuration"
+   ],
+   "エンジン": [
+    "POINTER_NOT_FOUND",
+    []
+   ],
+   "判定者": "席2(記憶なし)"
+  },
+  {
+   "行の鍵": "R-056",
+   "docID": "S100Z4B6",
+   "id": "N008",
+   "対象": true,
+   "分類": "誤停止(束縛も違う)",
+   "補足": null,
+   "独立判定": [
+    "jppfs_cor:OperatingIncome",
+    "Prior1YearDuration"
+   ],
+   "エンジン": [
+    "VALUE_MISMATCH",
+    [
+     "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration"
+    ]
+   ],
+   "判定者": "席1(記憶なし)"
+  },
+  {
+   "行の鍵": "R-058",
+   "docID": "S100Z4B6",
+   "id": "N029",
+   "対象": false,
+   "分類": "判定不能",
+   "補足": null,
+   "独立判定": [
+    null,
+    null
+   ],
+   "エンジン": [
+    "POINTER_NOT_FOUND",
+    []
+   ],
+   "判定者": "席1(記憶なし)"
+  },
+  {
+   "行の鍵": "R-059",
+   "docID": "S100Z4B6",
+   "id": "N035",
+   "対象": false,
+   "分類": "判定不能",
+   "補足": null,
+   "独立判定": [
+    null,
+    null
+   ],
+   "エンジン": [
+    "POINTER_NOT_FOUND",
+    []
+   ],
+   "判定者": "席3(記憶なし)"
+  },
+  {
+   "行の鍵": "R-065",
+   "docID": "S100Z4Q1",
+   "id": "N007",
+   "対象": false,
+   "分類": "正答",
+   "補足": null,
+   "独立判定": [
+    "jppfs_cor:OperatingIncome",
+    "CurrentYearDuration"
+   ],
+   "エンジン": [
+    "GROUNDED",
+    [
+     "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration"
+    ]
+   ],
+   "判定者": "席3(記憶なし)"
+  },
+  {
+   "行の鍵": "R-066",
+   "docID": "S100Z4B6",
+   "id": "N057",
+   "対象": true,
+   "分類": "形が違う(対 vs 単一)",
+   "補足": "不一致",
+   "独立判定": [
+    "jppfs_cor:IncreaseDecreaseInAccruedConsumptionTaxesOpeCF",
+    "CurrentYearDuration"
+   ],
+   "エンジン": [
+    "VALUE_MISMATCH",
+    [
+     "xbrl:jppfs_cor:DepreciationAndAmortizationOpeCF@CurrentYearDuration",
+     "xbrl:jppfs_cor:DepreciationAndAmortizationOpeCF@Prior1YearDuration",
+     "formula:a-b"
+    ]
+   ],
+   "判定者": "席2(記憶なし)"
+  },
+  {
+   "行の鍵": "R-068",
+   "docID": "S100Z4B6",
+   "id": "N068",
+   "対象": true,
+   "分類": "正答",
+   "補足": null,
+   "独立判定": [
+    "jppfs_cor:NetSales",
+    "CurrentYearDuration"
+   ],
+   "エンジン": [
+    "GROUNDED",
+    [
+     "xbrl:jppfs_cor:NetSales@CurrentYearDuration"
+    ]
+   ],
+   "判定者": "席3(記憶なし)"
+  },
+  {
+   "行の鍵": "R-070",
+   "docID": "S100Z4Q1",
+   "id": "N041",
+   "対象": false,
+   "分類": "正答",
+   "補足": null,
+   "独立判定": [
+    "jpcrp_cor:EquityToAssetRatioSummaryOfBusinessResults",
+    "CurrentYearInstant"
+   ],
+   "エンジン": [
+    "GROUNDED",
+    [
+     "xbrl:jpcrp_cor:EquityToAssetRatioSummaryOfBusinessResults@CurrentYearInstant"
+    ]
+   ],
+   "判定者": "席3(記憶なし)"
+  },
+  {
+   "行の鍵": "R-073",
+   "docID": "S100Z4B6",
+   "id": "N010",
+   "対象": true,
+   "分類": "誤停止(束縛も違う)",
+   "補足": null,
+   "独立判定": [
+    "jppfs_cor:OrdinaryIncome",
+    "Prior1YearDuration"
+   ],
+   "エンジン": [
+    "VALUE_MISMATCH",
+    [
+     "xbrl:jppfs_cor:OrdinaryIncome@CurrentYearDuration"
+    ]
+   ],
+   "判定者": "席2(記憶なし)"
+  },
+  {
+   "行の鍵": "R-078",
+   "docID": "S100Z4B6",
+   "id": "N066",
+   "対象": false,
+   "分類": "誤停止(束縛も違う)",
+   "補足": "no_element",
+   "独立判定": [
+    "jppfs_cor:RepaymentOfLongTermLoansPayableFinCF",
+    "CurrentYearDuration"
+   ],
+   "エンジン": [
+    "POINTER_NOT_FOUND",
+    []
+   ],
+   "判定者": "席3(記憶なし)"
+  },
+  {
+   "行の鍵": "R-080",
+   "docID": "S100Z4Q1",
+   "id": "N016",
+   "対象": true,
+   "分類": "判定不能",
+   "補足": null,
+   "独立判定": [
+    null,
+    null
+   ],
+   "エンジン": [
+    "UNVERIFIABLE",
+    []
+   ],
+   "判定者": "席1(記憶なし)"
+  },
+  {
+   "行の鍵": "R-081",
+   "docID": "S100Z4B6",
+   "id": "N023",
+   "対象": false,
+   "分類": "判定不能",
+   "補足": null,
+   "独立判定": [
+    null,
+    null
+   ],
+   "エンジン": [
+    "POINTER_NOT_FOUND",
+    []
+   ],
+   "判定者": "席3(記憶なし)"
+  },
+  {
+   "行の鍵": "R-085",
+   "docID": "S100Z4Q1",
+   "id": "N004",
+   "対象": false,
+   "分類": "判定不能",
+   "補足": null,
+   "独立判定": [
+    null,
+    null
+   ],
+   "エンジン": [
+    "POINTER_NOT_FOUND",
+    []
+   ],
+   "判定者": "席1(記憶なし)"
+  },
+  {
+   "行の鍵": "R-086",
+   "docID": "S100Z4Q1",
+   "id": "N018",
+   "対象": true,
+   "分類": "誤停止(束縛も違う)",
+   "補足": null,
+   "独立判定": [
+    "jppfs_cor:Assets",
+    "Prior1YearInstant"
+   ],
+   "エンジン": [
+    "VALUE_MISMATCH",
+    [
+     "xbrl:jppfs_cor:Assets@CurrentYearInstant"
+    ]
+   ],
+   "判定者": "席1(記憶なし)"
+  },
+  {
+   "行の鍵": "R-089",
+   "docID": "S100Z4B6",
+   "id": "N004",
+   "対象": false,
+   "分類": "誤停止(束縛も違う)",
+   "補足": "ambiguous(member)",
+   "独立判定": [
+    "jppfs_cor:ImpairmentLossEL",
+    "CurrentYearDuration"
+   ],
+   "エンジン": [
+    "UNVERIFIABLE",
+    []
+   ],
+   "判定者": "席3(記憶なし)"
+  },
+  {
+   "行の鍵": "R-094",
+   "docID": "S100Z4B6",
+   "id": "N018",
+   "対象": false,
+   "分類": "判定不能",
+   "補足": null,
+   "独立判定": [
+    null,
+    null
+   ],
+   "エンジン": [
+    "GROUNDED",
+    [
+     "xbrl:jppfs_cor:NetSales@CurrentYearDuration_jpcrp030000-asr_E05055-000DirectSalonReportableSegmentMember",
+     "xbrl:jppfs_cor:NetSales@Prior1YearDuration_jpcrp030000-asr_E05055-000DirectSalonReportableSegmentMember"
+    ]
+   ],
+   "判定者": "席2(記憶なし)"
+  },
+  {
+   "行の鍵": "R-096",
+   "docID": "S100Z4Q1",
+   "id": "N006",
+   "対象": false,
+   "分類": "判定不能",
+   "補足": null,
+   "独立判定": [
+    null,
+    null
+   ],
+   "エンジン": [
+    "GROUNDED",
+    [
+     "xbrl:jpcrp_cor:NetSalesSummaryOfBusinessResults@CurrentYearDuration",
+     "xbrl:jpcrp_cor:NetSalesSummaryOfBusinessResults@Prior1YearDuration",
+     "formula:cur/prior*100"
+    ]
+   ],
+   "判定者": "席1(記憶なし)"
+  },
+  {
+   "行の鍵": "R-097",
+   "docID": "S100Z4B6",
+   "id": "N069",
+   "対象": true,
+   "分類": "判定不能",
+   "補足": null,
+   "独立判定": [
+    null,
+    null
+   ],
+   "エンジン": [
+    "GROUNDED",
+    [
+     "xbrl:jppfs_cor:NetSales@CurrentYearDuration",
+     "xbrl:jppfs_cor:NetSales@Prior1YearDuration",
+     "formula:a-b"
+    ]
+   ],
+   "判定者": "席3(記憶なし)"
+  },
+  {
+   "行の鍵": "R-099",
+   "docID": "S100Z4B6",
+   "id": "N009",
+   "対象": true,
+   "分類": "正答",
+   "補足": null,
+   "独立判定": [
+    "jppfs_cor:OrdinaryIncome",
+    "CurrentYearDuration"
+   ],
+   "エンジン": [
+    "GROUNDED",
+    [
+     "xbrl:jppfs_cor:OrdinaryIncome@CurrentYearDuration"
+    ]
+   ],
+   "判定者": "席3(記憶なし)"
+  },
+  {
+   "行の鍵": "R-103",
+   "docID": "S100Z4Q1",
+   "id": "N019",
+   "対象": true,
+   "分類": "判定不能",
+   "補足": null,
+   "独立判定": [
+    null,
+    null
+   ],
+   "エンジン": [
+    "VALUE_MISMATCH",
+    [
+     "xbrl:jppfs_cor:NotesAndAccountsReceivableTrade@CurrentYearInstant"
+    ]
+   ],
+   "判定者": "席2(記憶なし)"
+  },
+  {
+   "行の鍵": "R-104",
+   "docID": "S100Z4Q1",
+   "id": "N042",
+   "対象": false,
+   "分類": "判定不能",
+   "補足": null,
+   "独立判定": [
+    null,
+    null
+   ],
+   "エンジン": [
+    "UNVERIFIABLE",
+    []
+   ],
+   "判定者": "席2(記憶なし)"
+  },
+  {
+   "行の鍵": "R-108",
+   "docID": "S100Z4Q1",
+   "id": "N037",
+   "対象": false,
+   "分類": "正答",
+   "補足": null,
+   "独立判定": [
+    "jppfs_cor:DividendsFromSurplus",
+    "CurrentYearDuration"
+   ],
+   "エンジン": [
+    "GROUNDED",
+    [
+     "xbrl:jppfs_cor:DividendsFromSurplus@CurrentYearDuration"
+    ]
+   ],
+   "判定者": "席2(記憶なし)"
+  },
+  {
+   "行の鍵": "R-112",
+   "docID": "S100Z4Q1",
+   "id": "N022",
+   "対象": true,
+   "分類": "判定不能",
+   "補足": null,
+   "独立判定": [
+    null,
+    null
+   ],
+   "エンジン": [
+    "VALUE_MISMATCH",
+    [
+     "xbrl:jppfs_cor:CashAndDeposits@CurrentYearInstant"
+    ]
+   ],
+   "判定者": "席1(記憶なし)"
+  },
+  {
+   "行の鍵": "R-116",
+   "docID": "S100Z4Q1",
+   "id": "N029",
+   "対象": true,
+   "分類": "判定不能",
+   "補足": null,
+   "独立判定": [
+    null,
+    null
+   ],
+   "エンジン": [
+    "VALUE_MISMATCH",
+    [
+     "xbrl:jppfs_cor:DeferredTaxLiabilities@CurrentYearInstant"
+    ]
+   ],
+   "判定者": "席1(記憶なし)"
+  },
+  {
+   "行の鍵": "R-120",
+   "docID": "S100Z4B6",
+   "id": "N074",
+   "対象": false,
+   "分類": "判定不能",
+   "補足": null,
+   "独立判定": [
+    null,
+    null
+   ],
+   "エンジン": [
+    "GROUNDED",
+    [
+     "xbrl:jppfs_cor:SellingGeneralAndAdministrativeExpenses@CurrentYearDuration",
+     "xbrl:jppfs_cor:SellingGeneralAndAdministrativeExpenses@Prior1YearDuration",
+     "formula:a-b"
+    ]
+   ],
+   "判定者": "席1(記憶なし)"
+  },
+  {
+   "行の鍵": "R-127",
+   "docID": "S100Z4B6",
+   "id": "N083",
+   "対象": true,
+   "分類": "判定不能",
+   "補足": null,
+   "独立判定": [
+    null,
+    null
+   ],
+   "エンジン": [
+    "VALUE_MISMATCH",
+    [
+     "xbrl:jppfs_cor:OrdinaryIncome@CurrentYearDuration"
+    ]
+   ],
+   "判定者": "席2(記憶なし)"
+  },
+  {
+   "行の鍵": "R-130",
+   "docID": "S100Z4Q1",
+   "id": "N032",
+   "対象": true,
+   "分類": "判定不能",
+   "補足": null,
+   "独立判定": [
+    null,
+    null
+   ],
+   "エンジン": [
+    "VALUE_MISMATCH",
+    [
+     "xbrl:jppfs_cor:LongTermLoansPayable@CurrentYearInstant"
+    ]
+   ],
+   "判定者": "席1(記憶なし)"
+  },
+  {
+   "行の鍵": "R-131",
+   "docID": "S100Z4B6",
+   "id": "N013",
+   "対象": false,
+   "分類": "判定不能",
+   "補足": null,
+   "独立判定": [
+    null,
+    null
+   ],
+   "エンジン": [
+    "POINTER_NOT_FOUND",
+    []
+   ],
+   "判定者": "席1(記憶なし)"
+  },
+  {
+   "行の鍵": "R-132",
+   "docID": "S100Z4B6",
+   "id": "N007",
+   "対象": true,
+   "分類": "正答",
+   "補足": null,
+   "独立判定": [
+    "jppfs_cor:OperatingIncome",
+    "CurrentYearDuration"
+   ],
+   "エンジン": [
+    "GROUNDED",
+    [
+     "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration"
+    ]
+   ],
+   "判定者": "席1(記憶なし)"
+  },
+  {
+   "行の鍵": "R-140",
+   "docID": "S100Z4Q1",
+   "id": "N058",
+   "対象": true,
+   "分類": "誤停止(束縛も違う)",
+   "補足": null,
+   "独立判定": [
+    "jppfs_cor:NetCashProvidedByUsedInFinancingActivities",
+    "Prior1YearDuration"
+   ],
+   "エンジン": [
+    "VALUE_MISMATCH",
+    [
+     "xbrl:jppfs_cor:NetCashProvidedByUsedInFinancingActivities@CurrentYearDuration"
+    ]
+   ],
+   "判定者": "席1(記憶なし)"
+  },
+  {
+   "行の鍵": "R-146",
+   "docID": "S100Z4B6",
+   "id": "N077",
+   "対象": true,
+   "分類": "正答",
+   "補足": null,
+   "独立判定": [
+    "jppfs_cor:OperatingIncome",
+    "CurrentYearDuration"
+   ],
+   "エンジン": [
+    "GROUNDED",
+    [
+     "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration"
+    ]
+   ],
+   "判定者": "席2(記憶なし)"
+  },
+  {
+   "行の鍵": "R-150",
+   "docID": "S100Z4B6",
+   "id": "N048",
+   "対象": true,
+   "分類": "誤停止(束縛も違う)",
+   "補足": null,
+   "独立判定": [
+    "jppfs_cor:CashAndCashEquivalents",
+    "CurrentYearInstant"
+   ],
+   "エンジン": [
+    "VALUE_MISMATCH",
+    [
+     "xbrl:jppfs_cor:NetCashProvidedByUsedInFinancingActivities@CurrentYearDuration"
+    ]
+   ],
+   "判定者": "席2(記憶なし)"
+  },
+  {
+   "行の鍵": "R-156",
+   "docID": "S100Z4Q1",
+   "id": "N035",
+   "対象": true,
+   "分類": "正答",
+   "補足": null,
+   "独立判定": [
+    "jppfs_cor:NetAssets",
+    "CurrentYearInstant"
+   ],
+   "エンジン": [
+    "GROUNDED",
+    [
+     "xbrl:jppfs_cor:NetAssets@CurrentYearInstant"
+    ]
+   ],
+   "判定者": "席1(記憶なし)"
+  },
+  {
+   "行の鍵": "R-157",
+   "docID": "S100Z4Q1",
+   "id": "N023",
+   "対象": true,
+   "分類": "判定不能",
+   "補足": null,
+   "独立判定": [
+    null,
+    null
+   ],
+   "エンジン": [
+    "VALUE_MISMATCH",
+    [
+     "xbrl:jppfs_cor:ContractAssets@CurrentYearInstant"
+    ]
+   ],
+   "判定者": "席1(記憶なし)"
+  },
+  {
+   "行の鍵": "R-165",
+   "docID": "S100Z4Q1",
+   "id": "N056",
+   "対象": false,
+   "分類": "正答",
+   "補足": null,
+   "独立判定": [
+    "jppfs_cor:PurchaseOfIntangibleAssetsInvCF",
+    "CurrentYearDuration"
+   ],
+   "エンジン": [
+    "GROUNDED",
+    [
+     "xbrl:jppfs_cor:PurchaseOfIntangibleAssetsInvCF@CurrentYearDuration"
+    ]
+   ],
+   "判定者": "席1(記憶なし)"
+  },
+  {
+   "行の鍵": "R-166",
+   "docID": "S100Z4B6",
+   "id": "N016",
+   "対象": false,
+   "分類": "判定不能",
+   "補足": null,
+   "独立判定": [
+    null,
+    null
+   ],
+   "エンジン": [
+    "POINTER_NOT_FOUND",
+    []
+   ],
+   "判定者": "席3(記憶なし)"
+  },
+  {
+   "行の鍵": "R-168",
+   "docID": "S100Z4B6",
+   "id": "N003",
+   "対象": true,
+   "分類": "誤停止(束縛も違う)",
+   "補足": null,
+   "独立判定": [
+    "jppfs_cor:StockIssuanceCostNOE",
+    "CurrentYearDuration"
+   ],
+   "エンジン": [
+    "VALUE_MISMATCH",
+    [
+     "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration"
+    ]
+   ],
+   "判定者": "席1(記憶なし)"
+  },
+  {
+   "行の鍵": "R-177",
+   "docID": "S100Z4Q1",
+   "id": "N055",
+   "対象": false,
+   "分類": "正答",
+   "補足": null,
+   "独立判定": [
+    "jppfs_cor:PurchaseOfPropertyPlantAndEquipmentInvCF",
+    "CurrentYearDuration"
+   ],
+   "エンジン": [
+    "GROUNDED",
+    [
+     "xbrl:jppfs_cor:PurchaseOfPropertyPlantAndEquipmentInvCF@CurrentYearDuration"
+    ]
+   ],
+   "判定者": "席1(記憶なし)"
+  },
+  {
+   "行の鍵": "R-178",
+   "docID": "S100Z4Q1",
+   "id": "N026",
+   "対象": false,
+   "分類": "正答",
+   "補足": null,
+   "独立判定": [
+    "jppfs_cor:Liabilities",
+    "CurrentYearInstant"
+   ],
+   "エンジン": [
+    "GROUNDED",
+    [
+     "xbrl:jppfs_cor:Liabilities@CurrentYearInstant"
+    ]
+   ],
+   "判定者": "席2(記憶なし)"
+  },
+  {
+   "行の鍵": "R-179",
+   "docID": "S100Z4Q1",
+   "id": "N043",
+   "対象": false,
+   "分類": "判定不能",
+   "補足": null,
+   "独立判定": [
+    null,
+    null
+   ],
+   "エンジン": [
+    "UNVERIFIABLE",
+    []
+   ],
+   "判定者": "席2(記憶なし)"
+  },
+  {
+   "行の鍵": "R-180",
+   "docID": "S100Z4B6",
+   "id": "N082",
+   "対象": true,
+   "分類": "正答",
+   "補足": null,
+   "独立判定": [
+    "jppfs_cor:OrdinaryIncome",
+    "CurrentYearDuration"
+   ],
+   "エンジン": [
+    "GROUNDED",
+    [
+     "xbrl:jppfs_cor:OrdinaryIncome@CurrentYearDuration"
+    ]
+   ],
+   "判定者": "席2(記憶なし)"
+  },
+  {
+   "行の鍵": "R-184",
+   "docID": "S100Z4Q1",
+   "id": "N052",
+   "対象": true,
+   "分類": "形が違う(対 vs 単一)",
+   "補足": "先頭一致",
+   "独立判定": [
+    "jppfs_cor:IncomeTaxesPaidOpeCF",
+    "CurrentYearDuration"
+   ],
+   "エンジン": [
+    "VALUE_MISMATCH",
+    [
+     "xbrl:jppfs_cor:IncomeTaxesPaidOpeCF@CurrentYearDuration",
+     "xbrl:jppfs_cor:IncomeTaxesPaidOpeCF@Prior1YearDuration",
+     "formula:a-b"
+    ]
+   ],
+   "判定者": "席3(記憶なし)"
+  },
+  {
+   "行の鍵": "R-190",
+   "docID": "S100Z4Q1",
+   "id": "N048",
+   "対象": true,
+   "分類": "形が違う(対 vs 単一)",
+   "補足": "先頭一致",
+   "独立判定": [
+    "jppfs_cor:DecreaseIncreaseInNotesAndAccountsReceivableTradeOpeCF",
+    "CurrentYearDuration"
+   ],
+   "エンジン": [
+    "VALUE_MISMATCH",
+    [
+     "xbrl:jppfs_cor:DecreaseIncreaseInNotesAndAccountsReceivableTradeOpeCF@CurrentYearDuration",
+     "xbrl:jppfs_cor:DecreaseIncreaseInNotesAndAccountsReceivableTradeOpeCF@Prior1YearDuration",
+     "formula:a-b"
+    ]
+   ],
+   "判定者": "席1(記憶なし)"
+  },
+  {
+   "行の鍵": "R-191",
+   "docID": "S100Z4Q1",
+   "id": "N053",
+   "対象": false,
+   "分類": "誤った束縛",
+   "補足": "engine=jpcrp_cor:NetCashProvidedByUsedInInvestingActivitiesSummaryOfBusinessResults@CurrentYearDuration",
+   "独立判定": [
+    "jppfs_cor:NetCashProvidedByUsedInInvestmentActivities",
+    "CurrentYearDuration"
+   ],
+   "エンジン": [
+    "GROUNDED",
+    [
+     "xbrl:jpcrp_cor:NetCashProvidedByUsedInInvestingActivitiesSummaryOfBusinessResults@CurrentYearDuration"
+    ]
+   ],
+   "判定者": "席3(記憶なし)"
+  },
+  {
+   "行の鍵": "R-193",
+   "docID": "S100Z4Q1",
+   "id": "N044",
+   "対象": true,
+   "分類": "正答",
+   "補足": null,
+   "独立判定": [
+    "jppfs_cor:NetCashProvidedByUsedInOperatingActivities",
+    "CurrentYearDuration"
+   ],
+   "エンジン": [
+    "GROUNDED",
+    [
+     "xbrl:jppfs_cor:NetCashProvidedByUsedInOperatingActivities@CurrentYearDuration"
+    ]
+   ],
+   "判定者": "席2(記憶なし)"
+  },
+  {
+   "行の鍵": "R-194",
+   "docID": "S100Z4Q1",
+   "id": "N024",
+   "対象": false,
+   "分類": "判定不能",
+   "補足": null,
+   "独立判定": [
+    null,
+    null
+   ],
+   "エンジン": [
+    "GROUNDED",
+    [
+     "xbrl:jppfs_cor:Liabilities@CurrentYearInstant",
+     "xbrl:jppfs_cor:Liabilities@Prior1YearInstant",
+     "formula:a-b"
+    ]
+   ],
+   "判定者": "席3(記憶なし)"
+  },
+  {
+   "行の鍵": "R-195",
+   "docID": "S100Z4Q1",
+   "id": "N013",
+   "対象": false,
+   "分類": "判定不能",
+   "補足": null,
+   "独立判定": [
+    null,
+    null
+   ],
+   "エンジン": [
+    "VALUE_MISMATCH",
+    [
+     "xbrl:jpcrp_cor:RateOfReturnOnEquitySummaryOfBusinessResults@CurrentYearDuration"
+    ]
+   ],
+   "判定者": "席2(記憶なし)"
+  },
+  {
+   "行の鍵": "R-199",
+   "docID": "S100Z4Q1",
+   "id": "N009",
+   "対象": true,
+   "分類": "正答",
+   "補足": null,
+   "独立判定": [
+    "jppfs_cor:OrdinaryIncome",
+    "CurrentYearDuration"
+   ],
+   "エンジン": [
+    "GROUNDED",
+    [
+     "xbrl:jppfs_cor:OrdinaryIncome@CurrentYearDuration"
+    ]
+   ],
+   "判定者": "席1(記憶なし)"
+  },
+  {
+   "行の鍵": "R-200",
+   "docID": "S100Z4B6",
+   "id": "N062",
+   "対象": false,
+   "分類": "誤停止(束縛も違う)",
+   "補足": null,
+   "独立判定": [
+    "jppfs_cor:DecreaseIncreaseInShortTermLoansReceivableInvCF",
+    "CurrentYearDuration"
+   ],
+   "エンジン": [
+    "VALUE_MISMATCH",
+    [
+     "xbrl:jppfs_cor:PurchaseOfPropertyPlantAndEquipmentInvCF@CurrentYearDuration"
+    ]
+   ],
+   "判定者": "席3(記憶なし)"
+  },
+  {
+   "行の鍵": "R-202",
+   "docID": "S100Z4Q1",
+   "id": "N039",
+   "対象": true,
+   "分類": "判定不能",
+   "補足": null,
+   "独立判定": [
+    null,
+    null
+   ],
+   "エンジン": [
+    "VALUE_MISMATCH",
+    [
+     "xbrl:jppfs_cor:ValuationDifferenceOnAvailableForSaleSecurities@CurrentYearInstant"
+    ]
+   ],
+   "判定者": "席3(記憶なし)"
+  },
+  {
+   "行の鍵": "R-207",
+   "docID": "S100Z4B6",
+   "id": "N078",
+   "対象": true,
+   "分類": "判定不能",
+   "補足": null,
+   "独立判定": [
+    null,
+    null
+   ],
+   "エンジン": [
+    "VALUE_MISMATCH",
+    [
+     "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration"
+    ]
+   ],
+   "判定者": "席3(記憶なし)"
+  },
+  {
+   "行の鍵": "R-208",
+   "docID": "S100Z4Q1",
+   "id": "N014",
+   "対象": false,
+   "分類": "正答",
+   "補足": null,
+   "独立判定": [
+    "jpcrp_cor:RateOfReturnOnEquitySummaryOfBusinessResults",
+    "CurrentYearDuration"
+   ],
+   "エンジン": [
+    "GROUNDED",
+    [
+     "xbrl:jpcrp_cor:RateOfReturnOnEquitySummaryOfBusinessResults@CurrentYearDuration"
+    ]
+   ],
+   "判定者": "席3(記憶なし)"
+  },
+  {
+   "行の鍵": "R-209",
+   "docID": "S100Z4Q1",
+   "id": "N017",
+   "対象": false,
+   "分類": "正答",
+   "補足": null,
+   "独立判定": [
+    "jppfs_cor:Assets",
+    "CurrentYearInstant"
+   ],
+   "エンジン": [
+    "GROUNDED",
+    [
+     "xbrl:jppfs_cor:Assets@CurrentYearInstant"
+    ]
+   ],
+   "判定者": "席1(記憶なし)"
+  },
+  {
+   "行の鍵": "R-213",
+   "docID": "S100Z4B6",
+   "id": "N005",
+   "対象": true,
+   "分類": "正答",
+   "補足": null,
+   "独立判定": [
+    "jppfs_cor:NetSales",
+    "CurrentYearDuration"
+   ],
+   "エンジン": [
+    "GROUNDED",
+    [
+     "xbrl:jppfs_cor:NetSales@CurrentYearDuration"
+    ]
+   ],
+   "判定者": "席1(記憶なし)"
+  },
+  {
+   "行の鍵": "R-217",
+   "docID": "S100Z4Q1",
+   "id": "N049",
+   "対象": false,
+   "分類": "形が違う(対 vs 単一)",
+   "補足": "不一致",
+   "独立判定": [
+    "jpcrp030000-asr_E36539-000:DecreaseIncreaseInContractAssetsOpeCF",
+    "CurrentYearDuration"
+   ],
+   "エンジン": [
+    "GROUNDED",
+    [
+     "xbrl:jppfs_cor:ContractAssets@CurrentYearInstant",
+     "xbrl:jppfs_cor:ContractAssets@Prior1YearInstant",
+     "formula:a-b"
+    ]
+   ],
+   "判定者": "席2(記憶なし)"
+  },
+  {
+   "行の鍵": "R-223",
+   "docID": "S100Z4Q1",
+   "id": "N002",
+   "対象": false,
+   "分類": "判定不能",
+   "補足": null,
+   "独立判定": [
+    null,
+    null
+   ],
+   "エンジン": [
+    "POINTER_NOT_FOUND",
+    []
+   ],
+   "判定者": "席1(記憶なし)"
+  },
+  {
+   "行の鍵": "R-224",
+   "docID": "S100Z4Q1",
+   "id": "N033",
+   "対象": true,
+   "分類": "形が違う(対 vs 単一)",
+   "補足": "不一致",
+   "独立判定": [
+    "jppfs_cor:TotalChangesOfItemsDuringThePeriod",
+    "CurrentYearDuration"
+   ],
+   "エンジン": [
+    "GROUNDED",
+    [
+     "xbrl:jppfs_cor:NetAssets@CurrentYearInstant",
+     "xbrl:jppfs_cor:NetAssets@Prior1YearInstant",
+     "formula:a-b"
+    ]
+   ],
+   "判定者": "席3(記憶なし)"
+  },
+  {
+   "行の鍵": "R-230",
+   "docID": "S100Z4B6",
+   "id": "N052",
+   "対象": false,
+   "分類": "誤停止(束縛も違う)",
+   "補足": "no_subject",
+   "独立判定": [
+    "jppfs_cor:IncomeBeforeIncomeTaxes",
+    "CurrentYearDuration"
+   ],
+   "エンジン": [
+    "UNVERIFIABLE",
+    []
+   ],
+   "判定者": "席3(記憶なし)"
+  },
+  {
+   "行の鍵": "R-233",
+   "docID": "S100Z4B6",
+   "id": "N020",
+   "対象": false,
+   "分類": "判定不能",
+   "補足": null,
+   "独立判定": [
+    null,
+    null
+   ],
+   "エンジン": [
+    "GROUNDED",
+    [
+     "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration_jpcrp030000-asr_E05055-000DirectSalonReportableSegmentMember",
+     "xbrl:jppfs_cor:OperatingIncome@Prior1YearDuration_jpcrp030000-asr_E05055-000DirectSalonReportableSegmentMember"
+    ]
+   ],
+   "判定者": "席2(記憶なし)"
+  },
+  {
+   "行の鍵": "R-234",
+   "docID": "S100Z4Q1",
+   "id": "N057",
+   "対象": true,
+   "分類": "正答",
+   "補足": null,
+   "独立判定": [
+    "jppfs_cor:NetCashProvidedByUsedInFinancingActivities",
+    "CurrentYearDuration"
+   ],
+   "エンジン": [
+    "GROUNDED",
+    [
+     "xbrl:jppfs_cor:NetCashProvidedByUsedInFinancingActivities@CurrentYearDuration"
+    ]
+   ],
+   "判定者": "席2(記憶なし)"
+  },
+  {
+   "行の鍵": "R-240",
+   "docID": "S100Z4Q1",
+   "id": "N054",
+   "対象": true,
+   "分類": "誤停止(束縛も違う)",
+   "補足": null,
+   "独立判定": [
+    "jppfs_cor:NetCashProvidedByUsedInInvestmentActivities",
+    "Prior1YearDuration"
+   ],
+   "エンジン": [
+    "VALUE_MISMATCH",
+    [
+     "xbrl:jpcrp_cor:NetCashProvidedByUsedInInvestingActivitiesSummaryOfBusinessResults@CurrentYearDuration"
+    ]
+   ],
+   "判定者": "席2(記憶なし)"
+  },
+  {
+   "行の鍵": "R-246",
+   "docID": "S100Z4B6",
+   "id": "N011",
+   "対象": true,
+   "分類": "誤停止(束縛も違う)",
+   "補足": null,
+   "独立判定": [
+    "jppfs_cor:ProfitLossAttributableToOwnersOfParent",
+    "CurrentYearDuration"
+   ],
+   "エンジン": [
+    "VALUE_MISMATCH",
+    [
+     "xbrl:jppfs_cor:OrdinaryIncome@CurrentYearDuration"
+    ]
+   ],
+   "判定者": "席2(記憶なし)"
+  },
+  {
+   "行の鍵": "R-250",
+   "docID": "S100Z4Q1",
+   "id": "N020",
+   "対象": true,
+   "分類": "判定不能",
+   "補足": null,
+   "独立判定": [
+    null,
+    null
+   ],
+   "エンジン": [
+    "VALUE_MISMATCH",
+    [
+     "xbrl:jppfs_cor:InvestmentSecurities@CurrentYearInstant"
+    ]
+   ],
+   "判定者": "席1(記憶なし)"
+  },
+  {
+   "行の鍵": "R-254",
+   "docID": "S100Z4Q1",
+   "id": "N028",
+   "対象": true,
+   "分類": "判定不能",
+   "補足": null,
+   "独立判定": [
+    null,
+    null
+   ],
+   "エンジン": [
+    "UNVERIFIABLE",
+    []
+   ],
+   "判定者": "席2(記憶なし)"
+  },
+  {
+   "行の鍵": "R-256",
+   "docID": "S100Z4Q1",
+   "id": "N045",
+   "対象": true,
+   "分類": "誤停止(束縛も違う)",
+   "補足": null,
+   "独立判定": [
+    "jppfs_cor:NetCashProvidedByUsedInOperatingActivities",
+    "Prior1YearDuration"
+   ],
+   "エンジン": [
+    "VALUE_MISMATCH",
+    [
+     "xbrl:jppfs_cor:NetCashProvidedByUsedInOperatingActivities@CurrentYearDuration"
+    ]
+   ],
+   "判定者": "席1(記憶なし)"
+  },
+  {
+   "行の鍵": "R-257",
+   "docID": "S100Z4Q1",
+   "id": "N031",
+   "対象": true,
+   "分類": "判定不能",
+   "補足": null,
+   "独立判定": [
+    null,
+    null
+   ],
+   "エンジン": [
+    "VALUE_MISMATCH",
+    [
+     "xbrl:jppfs_cor:IncomeTaxesPayable@CurrentYearInstant"
+    ]
+   ],
+   "判定者": "席3(記憶なし)"
+  },
+  {
+   "行の鍵": "R-258",
+   "docID": "S100Z4B6",
+   "id": "N065",
+   "対象": false,
+   "分類": "誤停止(束縛も違う)",
+   "補足": "no_subject",
+   "独立判定": [
+    "jppfs_cor:IncreaseDecreaseInShortTermLoansPayableFinCF",
+    "CurrentYearDuration"
+   ],
+   "エンジン": [
+    "UNVERIFIABLE",
+    []
+   ],
+   "判定者": "席2(記憶なし)"
+  },
+  {
+   "行の鍵": "R-267",
+   "docID": "S100Z4Q1",
+   "id": "N008",
+   "対象": false,
+   "分類": "判定不能",
+   "補足": null,
+   "独立判定": [
+    null,
+    null
+   ],
+   "エンジン": [
+    "GROUNDED",
+    [
+     "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration",
+     "xbrl:jppfs_cor:OperatingIncome@Prior1YearDuration",
+     "formula:cur/prior*100"
+    ]
+   ],
+   "判定者": "席3(記憶なし)"
+  },
+  {
+   "行の鍵": "R-268",
+   "docID": "S100Z4B6",
+   "id": "N084",
+   "対象": true,
+   "分類": "形が違う(対 vs 単一)",
+   "補足": "先頭一致",
+   "独立判定": [
+    "jppfs_cor:OrdinaryIncome",
+    "Prior1YearDuration"
+   ],
+   "エンジン": [
+    "VALUE_MISMATCH",
+    [
+     "xbrl:jppfs_cor:OrdinaryIncome@Prior1YearDuration",
+     "xbrl:jpcrp_cor:OrdinaryIncomeLossSummaryOfBusinessResults@Prior2YearDuration",
+     "formula:a-b"
+    ]
+   ],
+   "判定者": "席2(記憶なし)"
+  },
+  {
+   "行の鍵": "R-271",
+   "docID": "S100Z4Q1",
+   "id": "N040",
+   "対象": true,
+   "分類": "判定不能",
+   "補足": null,
+   "独立判定": [
+    null,
+    null
+   ],
+   "エンジン": [
+    "VALUE_MISMATCH",
+    [
+     "xbrl:jppfs_cor:RemeasurementsOfDefinedBenefitPlans@CurrentYearInstant"
+    ]
+   ],
+   "判定者": "席3(記憶なし)"
+  },
+  {
+   "行の鍵": "R-273",
+   "docID": "S100Z4Q1",
+   "id": "N012",
+   "対象": false,
+   "分類": "判定不能",
+   "補足": null,
+   "独立判定": [
+    null,
+    null
+   ],
+   "エンジン": [
+    "GROUNDED",
+    [
+     "xbrl:jpcrp_cor:ProfitLossAttributableToOwnersOfParentSummaryOfBusinessResults@CurrentYearDuration",
+     "xbrl:jpcrp_cor:ProfitLossAttributableToOwnersOfParentSummaryOfBusinessResults@Prior1YearDuration",
+     "formula:cur/prior*100"
+    ]
+   ],
+   "判定者": "席2(記憶なし)"
+  },
+  {
+   "行の鍵": "R-276",
+   "docID": "S100Z4Q1",
+   "id": "N036",
+   "対象": true,
+   "分類": "誤停止(束縛も違う)",
+   "補足": null,
+   "独立判定": [
+    "jppfs_cor:NetAssets",
+    "Prior1YearInstant"
+   ],
+   "エンジン": [
+    "VALUE_MISMATCH",
+    [
+     "xbrl:jppfs_cor:NetAssets@CurrentYearInstant"
+    ]
+   ],
+   "判定者": "席2(記憶なし)"
+  },
+  {
+   "行の鍵": "R-277",
+   "docID": "S100Z4B6",
+   "id": "N012",
+   "対象": true,
+   "分類": "誤停止(束縛も違う)",
+   "補足": null,
+   "独立判定": [
+    "jppfs_cor:ProfitLossAttributableToOwnersOfParent",
+    "Prior1YearDuration"
+   ],
+   "エンジン": [
+    "VALUE_MISMATCH",
+    [
+     "xbrl:jppfs_cor:OrdinaryIncome@CurrentYearDuration"
+    ]
+   ],
+   "判定者": "席3(記憶なし)"
+  },
+  {
+   "行の鍵": "R-283",
+   "docID": "S100Z4Q1",
+   "id": "N025",
+   "対象": true,
+   "分類": "判定不能",
+   "補足": null,
+   "独立判定": [
+    null,
+    null
+   ],
+   "エンジン": [
+    "POINTER_NOT_FOUND",
+    []
+   ],
+   "判定者": "席1(記憶なし)"
+  },
+  {
+   "行の鍵": "R-285",
+   "docID": "S100Z4Q1",
+   "id": "N001",
+   "対象": false,
+   "分類": "判定不能",
+   "補足": null,
+   "独立判定": [
+    null,
+    null
+   ],
+   "エンジン": [
+    "POINTER_NOT_FOUND",
+    []
+   ],
+   "判定者": "席3(記憶なし)"
+  },
+  {
+   "行の鍵": "R-286",
+   "docID": "S100Z4Q1",
+   "id": "N021",
+   "対象": false,
+   "分類": "判定不能",
+   "補足": null,
+   "独立判定": [
+    null,
+    null
+   ],
+   "エンジン": [
+    "POINTER_NOT_FOUND",
+    []
+   ],
+   "判定者": "席3(記憶なし)"
+  },
+  {
+   "行の鍵": "R-287",
+   "docID": "S100Z4Q1",
+   "id": "N010",
+   "対象": false,
+   "分類": "判定不能",
+   "補足": null,
+   "独立判定": [
+    null,
+    null
+   ],
+   "エンジン": [
+    "GROUNDED",
+    [
+     "xbrl:jpcrp_cor:OrdinaryIncomeLossSummaryOfBusinessResults@CurrentYearDuration",
+     "xbrl:jpcrp_cor:OrdinaryIncomeLossSummaryOfBusinessResults@Prior1YearDuration",
+     "formula:cur/prior*100"
+    ]
+   ],
+   "判定者": "席3(記憶なし)"
+  },
+  {
+   "行の鍵": "R-290",
+   "docID": "S100Z4B6",
+   "id": "N026",
+   "対象": false,
+   "分類": "判定不能",
+   "補足": null,
+   "独立判定": [
+    null,
+    null
+   ],
+   "エンジン": [
+    "POINTER_NOT_FOUND",
+    []
+   ],
+   "判定者": "席2(記憶なし)"
+  },
+  {
+   "行の鍵": "R-292",
+   "docID": "S100Z4Q1",
+   "id": "N027",
+   "対象": true,
+   "分類": "誤停止(束縛も違う)",
+   "補足": null,
+   "独立判定": [
+    "jppfs_cor:Liabilities",
+    "Prior1YearInstant"
+   ],
+   "エンジン": [
+    "VALUE_MISMATCH",
+    [
+     "xbrl:jppfs_cor:Liabilities@CurrentYearInstant"
+    ]
+   ],
+   "判定者": "席2(記憶なし)"
+  }
+ ]
+}
