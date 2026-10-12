@@ -97,7 +97,7 @@
 |---|---|
 | 保護面 | **22 ファイル**・束ねた sha `490888d46d034ca9eaae8e4b4d01f494919abf21a8b057e87c835d25256d7116` |
 | 再現コマンド | repo の根で `git ls-files audit-core/core/py audit-core/adapters \| sort \| xargs shasum -a 256 \| shasum -a 256` |
-| 試験 | `audit-core/` で `python3 -m unittest discover -s tests -t .` = **490**、`python3 -m pytest -q` = **586**(2026-10-12 実測) |
+| 試験 | `audit-core/` で `python3 -m unittest discover -s tests -t .` = **493**、`python3 -m pytest -q` = **589**(2026-10-12 実測。比較器強制の恒久の門 3 本を足して 490/586 → 493/589。**全部緑**) |
 | 製品線 | **`main`**(`D-001`)。`fix5` の数(47.1 → 34.4%)は**台帳に載せない** |
 | 言ってはいけないこと | sha を「測れた」の証拠として単独で出すこと(**何を何本測ったかと一緒でなければ意味を持たない**) |
 
@@ -114,3 +114,30 @@
 | 出どころ | `fixtures/xbrl/binding_order_diag_2026-10-12.json`・`audit-core/docs/BINDING_ORDER_DIAG_2026-10-12.md`(コミットは本行と同じ) |
 | 再現コマンド | `audit-core/fixtures/xbrl/value_independence_2026-10-12.py`(`V.match_value` を差し替えて 304 件の pointer を照合)・`audit-core/fixtures/xbrl/diag_old_hits_2026-10-12.py`。どちらも `python3 <script> <audit-core の道>` で、`AC_ZIP`・`AC_LABELS`・`AC_OUT` を環境変数で渡す |
 | 言ってはいけないこと | **「98 件が誤った束縛だった」**。測ったのは**値に依存して pointer が決まっていた件数**であって、**その束縛が誤りだったかは別**である(封の 60 件での誤りは L-003 の 5/60)。また**旧コードでこの数は一度も測られていなかった** ― 「以前から分かっていた弱点」と言わない |
+
+## L-010 期間の既定値による**誤停止 8 件**(既知の弱点。抽出の封まで保持)
+
+| | |
+|---|---|
+| 数 | **8 件** ― 独立監査が `correct` と判定した束縛が、期間の既定値(当期)によって**前期を指す pointer から当期だけの pointer に移り**、`VALUE_MISMATCH` で停止する |
+| id | `N026`・`N063`・`N066`・`N089`・`N130`・`N175`・`N179`・`N191` |
+| 分母 | 封 `1500958` の 60 件(独立監査の札つき)。うち前期を含む pointer から当期だけの pointer に移ったのは 10 件で、**8 件が `correct`・2 件が `wrong_binding`(`N219`・`N289`)** |
+| 性質 | **安全側の停止**(状態は `VALUE_MISMATCH` なので偽通過を作らない)。**ただし正しい Claim を止め、停止の理由として誤った fact を提示する** |
+| 原因 | 期間の手がかり(「前期」「前期末」「同」)が**数ごとに結び付いていない**。`N191` は「同」で前文を指す |
+| 範囲の限定 | **1 書類(`S100Z4Q1`)・profile P7・AI 文の Claim。** 実書類の Claim では測っていない |
+| 行き先 | **抽出の封**(`D-010` で成功条件を先に登録済み: この 12 件を値の探索なしで回復する) |
+| 出どころ | `audit-core/docs/BINDING_ORDER_DIAG_2026-10-12.md` §条件 4・`fixtures/xbrl/binding_order_diag_2026-10-12.json` |
+| 言ってはいけないこと | **「安全側だから問題ない」。** 正しい Claim を 8 件止めた事実は消さない。また**この 8 件の妥当性は独立席でまだ確認していない**(2026-10-12 時点) |
+
+## L-011 比較器を強制しても pointer の選択が動かないか(**測定範囲内**の独立性)
+
+| | |
+|---|---|
+| 主張 | **`S100Z4Q1` の 304 件において、比較器の強制による判定変化は新しい規則で 0/304、旧エンジンでは 68〜98/304。測定範囲内で pointer 選択と比較結果の独立性を確認した。** |
+| 実書類での同じ測定(**恒久の門**) | 旧エンジン: **1B/P1 60 件中 23(常に不一致)/ 37(常に一致)**、**5F/P5F 91 件中 8 / 34** |
+| 門 | `audit-core/tests/adapters/xbrl/test_comparator_independence.py`(3 本)。件数と**動いた id の一覧の sha256**を字で固定し、**両方向に赤くなる** |
+| 門が失敗を検出することの確認 | 変異 3 本で全部赤 ― (A) `facts_for` の並びを反転、(B) `hits[0]` → `hits[-1]`、(C) 値で絞らず `pool[0]` を採る。戻すと緑 |
+| 一般化しない | **測ったのは 2 書類・2 profile の数の Claim 151 件と、AI 文 1 書類の 304 件だけ。** 「すべての入力・すべての経路で成立する」は**測っていない** |
+| 新しい規則の 0/304 の出どころ | **まだ main に入っていない patch での測定**(`audit-core/docs/patches/binding_order_2026-10-12.patch`・`..._no_rule4_...`)。**製品の現在の数ではない** |
+| 再現コマンド | `audit-core/` で `python3 -m unittest tests.adapters.xbrl.test_comparator_independence`。AI 文の 304 件は `fixtures/xbrl/value_independence_2026-10-12.py` |
+| 言ってはいけないこと | **「値に依存しない束縛を実装した」。** 実装は main に入っていない。現在の製品は**旧エンジン(値が pointer を決める)**である。恒久の門が留めているのは**いまの依存の大きさ**で、0 ではない |
