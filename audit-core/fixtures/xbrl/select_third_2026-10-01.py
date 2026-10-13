@@ -11,6 +11,10 @@ import hashlib, json, os, sys, urllib.parse, urllib.request
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.dirname(os.path.dirname(HERE)))          # audit-core/
 from adapters.xbrl import instance as I, edinet as E
+import os as _os_gate
+import sys as _sys_gate
+_sys_gate.path.insert(0, _os_gate.path.dirname(_os_gate.path.abspath(__file__)))
+from sealed_material import refuse_if_sealed  # noqa: E402  **取る直前に呼ぶ**
 
 DATES = ["2026-10-01", "2026-10-02", "2026-10-05", "2026-09-28", "2026-09-25"]   # 封じた日 + 追記で決めた予備の順(土日を除く)
 API = "https://api.edinet-fsa.go.jp/api/v2/"
@@ -21,6 +25,9 @@ def api(path, **params):
     if not key:
         print("EDINET_API_KEY が環境に無い"); sys.exit(2)
     params["Subscription-Key"] = key
+    # **封じた材料への関門。**この道具は日付で選び、**共有キャッシュに書く。**
+    if path.startswith("documents/") and not path.endswith(".json"):
+        refuse_if_sealed(doc_id=path.split("/", 1)[1], where="select_third.api")
     return urllib.request.urlopen(API + path + "?" + urllib.parse.urlencode(params), timeout=120).read()
 
 

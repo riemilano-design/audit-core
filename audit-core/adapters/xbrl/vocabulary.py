@@ -110,6 +110,54 @@ SUBJECTS_P6_EXTRA_7 = [
 ]
 SUBJECTS_P6 = tuple(SUBJECTS_P6_EXTRA_7) + tuple(SUBJECTS_74)
 
+# ---------------------------------------------------------------------------
+# XBRL 直し §1a(人間の決定、2026-10-08): 「資産合計」の要素に ``TotalAssets``
+# を足す。``instance.facts_for`` は ``要素名 + "SummaryOfBusinessResults"`` を
+# 完全一致に数えるので、これで業績概要の要素
+# ``jpcrp_cor:TotalAssetsSummaryOfBusinessResults``(前々期まで在る)が引ける。
+# 「純資産合計」は ``["NetAssets"]`` のまま
+# ``NetAssetsSummaryOfBusinessResults`` が引けていた ― その非対称を直すだけで、
+# 新しい主語は 1 つも足していない。P6 の語彙(``SUBJECTS_P6``)は不変。
+# ---------------------------------------------------------------------------
+SUBJECTS_P8 = tuple(
+    ("資産合計", ["Assets", "TotalAssets"]) if w == "資産合計" else (w, e)
+    for (w, e) in SUBJECTS_P6
+)
+
+# ---------------------------------------------------------------------------
+# XBRL 直し §7c(人間の判断、2026-10-08): 「手書きの語彙が存在しない要素を指して
+# いたと分かった分は、手書きの語彙そのものも直す。」
+#
+# 直すのは**この 2 語だけ**。許可された標準タクソノミ(jppfs 2025-11-01)で
+# 機械確認した結果、次の 3 つを同時に満たすのがこの 2 語しかなかった:
+#
+#   (i)   手書きが指す要素名が 2025-11-01 の標準タクソノミに**実在しない**
+#   (ii)  **同じ日本語の標準ラベル**を持つ実在の要素が在る
+#   (iii) 3 書類とも手書きの要素では fact を 1 件も引けない
+#
+# 手書き 78 語のうち 43 語は「要素名のどれか 1 つが標準タクソノミに無い」が、
+# ``facts_for`` の部分一致が ``PurchaseOfInvestmentSecurities`` ->
+# ``PurchaseOfInvestmentSecuritiesInvCF`` のような接尾の族を吸収しているので
+# 実際には引けている。**「名前が無い」だけでは直す理由にしない。**
+# ``長期借入金の返済``(複数形 ``Repayments…``)は 3 書類とも fact 0 だが、
+# 同じ日本語ラベルの要素が無い(ラベルは ``長期借入金の返済による支出``)ので
+# ここでは直さず、§8 が**語として足す**側で解く。
+#
+# **古い要素名は消さずに足す**(会社拡張がその名前を使っている書類がありうる)。
+# **``SUBJECTS_P6``・``SUBJECTS_P8`` は 1 文字も変えない** ― 変えると
+# ``P7``(「直す前」)と ``P10`` の既に測った数が黙って動き、これまでの全部の
+# 比較の土台が崩れる。直しは**新しい版**として入れる。
+# 根拠は docs/XBRL_LABEL_VOCAB2_PLAN_2026-10-08.md §1.3。
+# ---------------------------------------------------------------------------
+SUBJECTS_P12_FIXES = {
+    "退職給付に係る資産": ["RetirementBenefitAsset", "NetDefinedBenefitAsset"],
+    "退職給付に係る負債": ["RetirementBenefitLiability", "NetDefinedBenefitLiability"],
+}
+SUBJECTS_P12 = tuple(
+    (w, list(SUBJECTS_P12_FIXES[w])) if w in SUBJECTS_P12_FIXES else (w, e)
+    for (w, e) in SUBJECTS_P8
+)
+
 PROFIT_SUBJECTS = ("利益", "損失")
 
 UNIT_SCALE = {"百万円": 1e6, "千円": 1e3, "億円": 1e8, "兆円": 1e12, "円": 1}
@@ -127,16 +175,48 @@ def tol_of(fact, claim_scale):
     return 0.5 * claim_scale
 
 
-def match_value(fact_value, target, unit):
-    """xbrl_probe.py: match_value の写し(round / truncate / abs の組)。"""
+def match_value(fact_value, target, unit, mode=None):
+    """xbrl_probe.py: match_value の写し(round / truncate / abs の組)。
+
+    ``mode`` は XBRL 直し §2(人間の決定、2026-10-08)で足した省略可能な引数。
+    ``None`` のとき、この関数は写し元と 1 行も違わない振る舞いをする
+    (P1/P5F/P6/P7 はすべて ``None`` で呼ぶ)。``"round"`` / ``"truncate"``
+    のときは**その 1 つだけ**を試す ― 主張ごとに 4 つの梯子を順に試すのを
+    やめ、書類単位で決めた 1 つの丸め方で照合するため。許容幅は
+    ``mode=None`` の実質 ``-unit/2 .. +unit`` から、``"round"`` なら
+    ``-unit/2 .. +unit/2``、``"truncate"`` なら ``0 .. +unit`` に狭まる。
+    """
 
     for sign_mode, fv in (("", fact_value), ("abs", abs(fact_value))):
         t = abs(target) if sign_mode else target
-        if abs(fv - t) <= unit / 2:
+        if mode in (None, "round") and abs(fv - t) <= unit / 2:
             return (sign_mode + "+round").strip("+")
-        if 0 <= fv - t < unit:
+        if mode in (None, "truncate") and 0 <= fv - t < unit:
             return (sign_mode + "+truncate").strip("+")
     return None
+
+
+# ---------------------------------------------------------------------------
+# XBRL 直し §2(人間の決定、2026-10-08): 書類単位の丸め方。``profile.doc_rounding``
+# が真のときだけ使う。既定の札(どちらとも言えないとき)は字で書く。
+# ---------------------------------------------------------------------------
+DOC_ROUNDING_DEFAULT = "round"
+ROUNDING_MODES = ("round", "truncate")
+
+
+def decide_rounding(evidence):
+    """書類の丸め方を 1 つに決める。``evidence`` は ``(diff, unit)`` の列
+    (``diff`` は照合が実際に使った軸での fact − 目標、``unit`` は主張の桁)。
+
+    ``R`` = round しか説明できない件数(``diff < 0``)。
+    ``T`` = truncate しか説明できない件数(``diff > unit/2``)。
+    ``T > R`` なら ``"truncate"``、そうでなければ ``DOC_ROUNDING_DEFAULT``。
+    戻り値は ``(mode, R, T)`` ― 決めた根拠の数も一緒に返す(記録に残すため)。
+    """
+
+    r = sum(1 for d, u in evidence if d < 0)
+    t = sum(1 for d, u in evidence if d > u / 2.0)
+    return (("truncate" if t > r else DOC_ROUNDING_DEFAULT), r, t)
 
 
 # ---------------------------------------------------------------------------
@@ -183,6 +263,63 @@ def expenditure_convention(element_name):
     return bool(_EXPENDITURE_RE.match(local))
 
 
+# ---------------------------------------------------------------------------
+# S4(主語の規則の直し、人間の判断 1、2026-10-08): 向きの語そのものが主語の
+# 範囲を決める 2 つの族。**語は字で書く。**
+#
+# 「増収」は収益の増、「増益」は利益の増である ― これは手書きの知識
+# (CLAUDE.md の区分では記述的知識)なので、既定 False のフラグ
+# ``direction_word_lexicon`` の下にだけ置く。
+#
+# **部分一致では決めない。** 「減損損失」は「損失」を含むが利益の族ではない。
+# だから「利益」「損失」の部分一致ではなく、**この一覧の語そのもの**を文の
+# 中から探す(入れ子になった出現は長い方だけを採る ― 「当期純損失」は
+# 「親会社株主に帰属する当期純損失」の中にあるので 1 件と数える)。
+# ---------------------------------------------------------------------------
+REVENUE_WORDS = ("売上高", "営業収益", "売上収益")
+PROFIT_WORDS = ("営業利益", "営業損失", "経常利益", "経常損失",
+                "当期純利益", "当期純損失",
+                "親会社株主に帰属する当期純利益", "親会社株主に帰属する当期純損失",
+                "セグメント利益", "税引前利益")
+
+# 向きの語 → 探す族。ここに無い向きの語(増加・減少・拡大…)には S4 を当てない
+# (「増加」が何の増加かは語そのものからは決まらない)。
+DIRECTION_WORD_FAMILY = {
+    "増収": REVENUE_WORDS, "減収": REVENUE_WORDS,
+    "増益": PROFIT_WORDS, "減益": PROFIT_WORDS,
+}
+
+
+def direction_family_words(sentence, word):
+    """S4。向きの語 ``word`` の族の語のうち、``sentence`` に**現れるもの**。
+    入れ子の出現は長い方だけを採る。戻りは (語, 出現位置) の列(文の左から)。
+    族が無い向きの語なら ``None``(「当てない」と「0 件」を言い分ける)。
+    """
+
+    family = DIRECTION_WORD_FAMILY.get(word)
+    if family is None:
+        return None
+    spans = []
+    for w in family:
+        start = 0
+        while True:
+            i = sentence.find(w, start)
+            if i < 0:
+                break
+            spans.append((i, i + len(w), w))
+            start = i + 1
+    kept = [(i, j, w) for (i, j, w) in spans
+            if not any((a <= i and j <= b and (b - a) > (j - i)) for (a, b, _x) in spans)]
+    kept.sort()
+    out, seen = [], set()
+    for (i, _j, w) in kept:
+        if w in seen:
+            continue
+        seen.add(w)
+        out.append((w, i))
+    return out
+
+
 @dataclass(frozen=True)
 class Profile:
     """A named bundle of Adapter settings (Adapter-only knowledge; the Core
@@ -206,6 +343,36 @@ class Profile:
     expenditure_sign: bool = False
     target_word: bool = False
     text_reason_split: bool = False
+    # XBRL 直し(人間の決定、2026-10-08): P8 だけの 5 つのフラグ。
+    # P1・P5F・P6・P7 はこれらの既定値 False のまま変わらない。
+    # 1 つずつ独立に測れるように、5 つを 1 つのフラグに束ねていない。
+    prior2_required: bool = False      # §1b 前々期が無ければ代用せず止める
+    doc_rounding: bool = False         # §2  丸め方は書類単位で 1 つ
+    target_both: bool = False          # §3  目標・見通しを数と文字の両方に
+    paren_sentence: bool = False       # §4  括弧の中の句点では切らない
+    drop_qualitative: bool = False     # §5  定性的な語を主張にしない
+    # XBRL 直し §6(人間の決定、2026-10-08)。P9 だけ。P1〜P8 は既定の False。
+    text_prior_year_paren: bool = False  # §6 括弧内の前期の方向語を前期−前々期に
+    # XBRL 直し §5 を狭める(人間の指示で確かめた結果、2026-10-08)。P10 だけ。
+    # 広い版 drop_qualitative は消さずに残し、両方を測って並べる。
+    drop_state_words_only: bool = False  # §5' 状態語だけを落とす(向きの語は残す)
+    # XBRL 直し §7(人間の指示、2026-10-08)。P11 だけ。書類自身のインライン
+    # XBRL から「日本語の勘定科目名 → 要素」を取って語彙の後ろに足す。
+    label_vocabulary: bool = False       # §7 書類のラベルで主語を引く
+    # XBRL 直し §7a・§7b・§8(人間の判断、2026-10-08)。P12 以降だけ。
+    # P1〜P11 はこれらの既定値 False のまま変わらない(定義そのものを書き換えていない)。
+    label_statement_rows_only: bool = False   # §7a 計算書の行から来たラベルだけ使う
+    label_overrides_dead_hand: bool = False   # §7b 手書きが fact を引けない語はラベルで引く
+    taxonomy_labels: bool = False             # §8  標準タクソノミの日本語ラベルで引く
+    taxonomy_labels_all_ns: bool = False      # §8  **参考専用**。jppfs の限定を外す
+    # 主語の規則の直し(人間の判断 1、2026-10-08)。P15 以降だけ。
+    # P1〜P14 はこれらの既定値 False のまま変わらない(定義そのものを書き換えていない)。
+    # 計画と予測は docs/XBRL_SUBJECT_RULE_PLAN_2026-10-08.md(実装前に封じた)。
+    subject_skip_coordinated_cause: bool = False  # S1 「A及びBによる/により」の成分を採らない
+    subject_direction_object: bool = False        # S2 「<名詞>を増加/減少」の目的語に向きが掛かる
+    subject_not_part_of_aggregate: bool = False   # S3 「A及びBの合計」の成分を採らない
+    direction_word_lexicon: bool = False          # S4 増収→売上高系・増益→利益系
+    direction_amount_check: bool = False          # A1 向きの語と同じ節の金額も照合する
 
 
 P1 = Profile(
@@ -249,4 +416,208 @@ P7 = Profile(
     text_reason_split=True,
 )
 
-PROFILES = {"P1": P1, "P5F": P5F, "P6": P6, "P7": P7}
+P8 = Profile(
+    name="P8",
+    subjects=SUBJECTS_P8,
+    member_on=True,
+    claim_level_member=True,
+    run3="L",
+    flow_sign=True,
+    point_diff=True,
+    segment_denominator=True,
+    expenditure_sign=True,
+    target_word=True,
+    text_reason_split=True,
+    prior2_required=True,
+    doc_rounding=True,
+    target_both=True,
+    paren_sentence=True,
+    drop_qualitative=True,
+)
+
+# XBRL 直し §6(人間の決定、2026-10-08): 6 つ目の直しを足した profile。
+# P8 の定義は書き換えない(5 つと 6 つの差が読めるように両方残す)。
+P9 = Profile(
+    name="P9",
+    subjects=SUBJECTS_P8,
+    member_on=True,
+    claim_level_member=True,
+    run3="L",
+    flow_sign=True,
+    point_diff=True,
+    segment_denominator=True,
+    expenditure_sign=True,
+    target_word=True,
+    text_reason_split=True,
+    prior2_required=True,
+    doc_rounding=True,
+    target_both=True,
+    paren_sentence=True,
+    drop_qualitative=True,
+    text_prior_year_paren=True,
+)
+
+# XBRL 直し §5' (人間の指示で確かめた結果、2026-10-08): 直し 5 を状態語だけに
+# 狭めた版。P9 との差は drop_qualitative → drop_state_words_only の 1 つだけ。
+# P9 の定義は書き換えない(広い版の数の照合ができるように両方残す)。
+P10 = Profile(
+    name="P10",
+    subjects=SUBJECTS_P8,
+    member_on=True,
+    claim_level_member=True,
+    run3="L",
+    flow_sign=True,
+    point_diff=True,
+    segment_denominator=True,
+    expenditure_sign=True,
+    target_word=True,
+    text_reason_split=True,
+    prior2_required=True,
+    doc_rounding=True,
+    target_both=True,
+    paren_sentence=True,
+    drop_qualitative=False,
+    text_prior_year_paren=True,
+    drop_state_words_only=True,
+)
+
+# XBRL 直し §7(人間の指示、2026-10-08): P10(正本)+ ラベルの語彙。
+# P10 の定義は書き換えない。
+P11 = Profile(
+    name="P11",
+    subjects=SUBJECTS_P8,
+    member_on=True,
+    claim_level_member=True,
+    run3="L",
+    flow_sign=True,
+    point_diff=True,
+    segment_denominator=True,
+    expenditure_sign=True,
+    target_word=True,
+    text_reason_split=True,
+    prior2_required=True,
+    doc_rounding=True,
+    target_both=True,
+    paren_sentence=True,
+    drop_qualitative=False,
+    text_prior_year_paren=True,
+    drop_state_words_only=True,
+    label_vocabulary=True,
+)
+
+# XBRL 直し §7a/§7b/§7c(人間の判断、2026-10-08): P11 の悪化 2 件のうち原因が
+# 分かっている 1 件を消し(§7a)、手書きが fact を引けない語をラベルで引き(§7b)、
+# 手書きの語彙そのものを直した版(§7c = SUBJECTS_P12)。
+# P10・P11 の定義は書き換えない。
+P12 = Profile(
+    name="P12",
+    subjects=SUBJECTS_P12,
+    member_on=True,
+    claim_level_member=True,
+    run3="L",
+    flow_sign=True,
+    point_diff=True,
+    segment_denominator=True,
+    expenditure_sign=True,
+    target_word=True,
+    text_reason_split=True,
+    prior2_required=True,
+    doc_rounding=True,
+    target_both=True,
+    paren_sentence=True,
+    drop_qualitative=False,
+    text_prior_year_paren=True,
+    drop_state_words_only=True,
+    label_vocabulary=True,
+    label_statement_rows_only=True,
+    label_overrides_dead_hand=True,
+)
+
+# XBRL 直し §8(人間の許可、2026-10-08): P12 + 標準タクソノミの日本語ラベル。
+P13 = Profile(
+    name="P13",
+    subjects=SUBJECTS_P12,
+    member_on=True,
+    claim_level_member=True,
+    run3="L",
+    flow_sign=True,
+    point_diff=True,
+    segment_denominator=True,
+    expenditure_sign=True,
+    target_word=True,
+    text_reason_split=True,
+    prior2_required=True,
+    doc_rounding=True,
+    target_both=True,
+    paren_sentence=True,
+    drop_qualitative=False,
+    text_prior_year_paren=True,
+    drop_state_words_only=True,
+    label_vocabulary=True,
+    label_statement_rows_only=True,
+    label_overrides_dead_hand=True,
+    taxonomy_labels=True,
+)
+
+# **参考専用**。P13 から名前空間の限定(jppfs だけ)を外した版。
+# 「jppfs に限って何を失ったか」を数で言えるようにするためだけに在る。
+P14 = Profile(
+    name="P14",
+    subjects=SUBJECTS_P12,
+    member_on=True,
+    claim_level_member=True,
+    run3="L",
+    flow_sign=True,
+    point_diff=True,
+    segment_denominator=True,
+    expenditure_sign=True,
+    target_word=True,
+    text_reason_split=True,
+    prior2_required=True,
+    doc_rounding=True,
+    target_both=True,
+    paren_sentence=True,
+    drop_qualitative=False,
+    text_prior_year_paren=True,
+    drop_state_words_only=True,
+    label_vocabulary=True,
+    label_statement_rows_only=True,
+    label_overrides_dead_hand=True,
+    taxonomy_labels=True,
+    taxonomy_labels_all_ns=True,
+)
+
+# 主語の規則の直し(人間の判断 1、2026-10-08): P13 + S1・S2・S3・S4・A1。
+# **P13 の定義は 1 行も書き換えない**(直す前と直した後を並べて測るため)。
+P15 = Profile(
+    name="P15",
+    subjects=SUBJECTS_P12,
+    member_on=True,
+    claim_level_member=True,
+    run3="L",
+    flow_sign=True,
+    point_diff=True,
+    segment_denominator=True,
+    expenditure_sign=True,
+    target_word=True,
+    text_reason_split=True,
+    prior2_required=True,
+    doc_rounding=True,
+    target_both=True,
+    paren_sentence=True,
+    drop_qualitative=False,
+    text_prior_year_paren=True,
+    drop_state_words_only=True,
+    label_vocabulary=True,
+    label_statement_rows_only=True,
+    label_overrides_dead_hand=True,
+    taxonomy_labels=True,
+    subject_skip_coordinated_cause=True,
+    subject_direction_object=True,
+    subject_not_part_of_aggregate=True,
+    direction_word_lexicon=True,
+    direction_amount_check=True,
+)
+
+PROFILES = {"P1": P1, "P5F": P5F, "P6": P6, "P7": P7, "P8": P8, "P9": P9, "P10": P10, "P11": P11,
+            "P12": P12, "P13": P13, "P14": P14, "P15": P15}
