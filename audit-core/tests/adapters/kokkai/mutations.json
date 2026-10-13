@@ -94,5 +94,13 @@
     "new": "         \"時間\", \"基\",",
     "predicted": "red",
     "note": "2 回目 U1: 隻 を一覧から消す。test_numerals::test_u1_units_from_round1_holes と test_comparators::test_forty_five_ships が赤。"
+  },
+  {
+    "id": "K-R11-unit-order-not-longest-first",
+    "file": "numerals.py",
+    "old": "_UNIT_RE = \"|\".join(sorted((re.escape(u) for u in UNITS), key=len, reverse=True))\n",
+    "new": "_UNIT_RE = \"|\".join(sorted((re.escape(u) for u in UNITS), key=len))\n",
+    "predicted": "red",
+    "note": "監査の REVISE(2 回目): 単位の並びを短い順にすると接頭辞の単位(世帯/人/か月…)が先に当たる。test_numerals::LongestUnitWinsTest が赤。監査席の変異 1 本目はこの試験が無くて緑だった。"
   }
 ]

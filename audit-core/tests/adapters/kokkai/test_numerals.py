@@ -75,3 +75,31 @@ class Round2UnitsTest(unittest.TestCase):
     def test_round1_tokens_are_unchanged(self):
         toks = N.number_tokens("三百億円で一五パーセント、二カ月で三案。")
         self.assertEqual([(v, u) for v, u, _ in toks], [(3e10, "円"), (15.0, "％"), (2.0, "か月"), (3.0, "案")])
+
+
+class LongestUnitWinsTest(unittest.TestCase):
+    """監査の REVISE(2 回目、2026-10-14): 短い単位が長い単位の接頭辞になる組(人/人分、世帯/世帯分、
+    か月/か月分、年/年度、市/市町村、社/社員、項/項目、トン/トン分、キロ/キロメートル・キロワット)は
+    2 回目で初めて生まれた。長い方が勝つことを 1 組ずつ留める。"""
+
+    CASES = (
+        ("五十世帯分を対象に", (50.0, "世帯分")),
+        ("百人分の食料", (100.0, "人分")),
+        ("三か月分の備蓄", (3.0, "か月分")),
+        ("令和八年度の予算", (8.0, "年度")),
+        ("千七百十八市町村", (1718.0, "市町村")),
+        ("二百社員が", (200.0, "社員")),
+        ("五項目の要望", (5.0, "項目")),
+        ("十トン分の燃料", (10.0, "トン分")),
+        ("三キロメートル先", (3.0, "キロメートル")),
+        ("二十キロワットの発電", (20.0, "キロワット")),
+    )
+
+    def test_longest_unit_wins_over_its_prefix(self):
+        for text, expected in self.CASES:
+            toks = [(v, u) for v, u, _ in N.number_tokens(text)]
+            self.assertEqual(toks[:1], [expected], text)
+
+    def test_short_unit_still_works_alone(self):
+        self.assertEqual([(v, u) for v, u, _ in N.number_tokens("五十世帯が")], [(50.0, "世帯")])
+        self.assertEqual([(v, u) for v, u, _ in N.number_tokens("八年が")], [(8.0, "年")])
