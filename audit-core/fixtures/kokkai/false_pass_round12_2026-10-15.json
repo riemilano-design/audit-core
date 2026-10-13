@@ -217,7 +217,7 @@
    "text": "三十四万人",
    "unit": "人",
    "value": 340000,
-   "step": 1.0,
+   "step": 10000.0,
    "after": "VALUE_MISMATCH"
   },
   {

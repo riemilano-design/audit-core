@@ -46,6 +46,14 @@ class MinWrittenStepTest(unittest.TestCase):
         ("二・五兆円", 1e11),
         ("二七・七％", 0.1),
         ("1.25%", 0.01),
+        # **複合単位**(``UNITS`` の 万人・億人)― 単位に含まれる位の字は桁として残す
+        # (2026-10-15 の監査が実データ K-034「三十四万人」で見つけた誤り)
+        ("三十四万人", 1e4),
+        ("二億人", 1e8),
+        ("百二十三万人", 1e4),
+        # 接頭辞つき(剥がさなくても位の字でない字は読み飛ばされる)
+        ("約三十四万人", 1e4),
+        ("およそ二七・七％", 0.1),
         # 位取りの字を使わない並び
         ("一五％", 1.0),
         ("15%", 1.0),
@@ -70,6 +78,31 @@ class MinWrittenStepTest(unittest.TestCase):
         self.assertIsNone(FP.min_written_step("数十"[0:0]))
         self.assertIsNone(FP.min_written_step(None))
         self.assertIsNone(FP.min_written_step("円"))
+
+    def test_every_unit_containing_a_place_char_keeps_that_place(self):
+        """**不変条件**: ``UNITS`` の単位に位の字(十百千万億兆)が含まれていたら、
+        その字は桁として残る。字で 2 件を並べるのではなく、単位の一覧を全部当てる
+        (``UNITS`` が増えたときに同じ誤りが戻らないように)。"""
+
+        from adapters.kokkai import numerals as N
+        place = {"十": 10.0, "百": 100.0, "千": 1000.0, "万": 1e4, "億": 1e8, "兆": 1e12}
+        checked = 0
+        for u in sorted(N.UNITS):
+            chars = [ch for ch in u if ch in place]
+            if not chars:
+                continue
+            checked += 1
+            want = min(place[ch] for ch in chars)
+            got = FP.min_written_step("三" + u)
+            self.assertIsNotNone(got, u)
+            self.assertAlmostEqual(got, want, delta=1e-9 * want, msg=u)
+        self.assertGreaterEqual(checked, 2, "複合単位が 1 件も無い ― 一覧の読み方が違う")
+
+    def test_the_real_row_that_the_audit_found(self):
+        """**実データの 1 行を字で留める。**(記憶でなく試験で縛る)"""
+
+        self.assertAlmostEqual(FP.min_written_step("三十四万人"), 1e4, delta=1e-6)
+        self.assertNotEqual(FP.min_written_step("三十四万人"), 1.0)
 
     def test_unit_is_stripped_longest_first(self):
         """単位は長いものから剥がす(``numerals`` と同じ向き)。"""
