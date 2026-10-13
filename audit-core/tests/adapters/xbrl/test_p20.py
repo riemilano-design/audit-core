@@ -279,6 +279,109 @@ class BehaviourTest(unittest.TestCase):
         self.assertEqual(a, b)
 
 
+class DegenerateInputTest(unittest.TestCase):
+    """崩れた入力・端の入力。**変異が全部赤でも退化値の穴は残る**ので、
+    変異に頼らず自分で探す(2026-10-01 の記録)。
+    """
+
+    def test_contexts_without_a_members_key(self):
+        """``members`` の欄が**無い**枠(``get`` が None を返す)。"""
+
+        c = {"CurrentYearInstant": {"instant": "2026-03-31"}}
+        on = I.with_nonconsolidated_fallback(c, facts(), True)
+        self.assertTrue(I.plain_context("CurrentYearInstant", on))
+        self.assertFalse(I._nonconsolidated_only("CurrentYearInstant", on))
+
+    def test_contexts_with_members_none(self):
+        c = {"X_NonConsolidatedMember": {"members": None}}
+        on = I.with_nonconsolidated_fallback(c, facts(), True)
+        self.assertFalse(I.plain_context("X_NonConsolidatedMember", on))
+
+    def test_contexts_with_an_empty_members_list(self):
+        """member が空の枠は、名前に NonConsolidated が入っていなければ素。"""
+
+        c = ctxs(CurrentYearInstant=(), X_NonConsolidatedMember=())
+        on = I.with_nonconsolidated_fallback(c, facts(), True)
+        self.assertTrue(I.plain_context("CurrentYearInstant", on))
+        # 名前に NonConsolidated が在るが member が空 ― 単体の member だけではないので落とさない。
+        self.assertFalse(I.plain_context("X_NonConsolidatedMember", on))
+
+    def test_empty_contexts_and_empty_facts(self):
+        on = I.with_nonconsolidated_fallback({}, [], True)
+        self.assertTrue(on.nonconsolidated_ok)
+        self.assertEqual({}, dict(on))
+
+    def test_an_undeclared_context_id_is_treated_as_plain(self):
+        """**P16 からの既存の緩さを、変えずに留める。**
+
+        ``contexts`` に無い cid は「member が無い」と見えるので素の枠として通る
+        (``plain_context`` は P16 のときからこう振る舞う)。**P20 はこれを変えない。**
+
+        実物で発火していないことを測った: 直し用 8 書類の fact **6,555 件すべて**が
+        宣言済みの枠を指しており、**宣言の無い枠を指す fact は 0 件**(入口は 8 件とも
+        ``.xbrl``。iXBRL の入口では測っていない)。
+        **直す対象ではあるが、この封の範囲外**(直すと実物の件数が動きうるので、
+        予測と合格線を別に立ててから当てる)。申し送りに記録した。
+        """
+
+        on = I.with_nonconsolidated_fallback({}, [], True)
+        self.assertTrue(I.plain_context("anything", on))
+        self.assertTrue(I.plain_context("anything", {}))
+        # 名前に NonConsolidated が在る宣言の無い cid は、落とし込みの側でも通らない。
+        self.assertFalse(I.plain_context("NoSuch_NonConsolidatedMember", on))
+
+    def test_a_fact_without_a_name(self):
+        """``name`` が無い / None の fact で落ちない。"""
+
+        for bad in ({"context": "CurrentYearInstant"},
+                    {"name": None, "context": "CurrentYearInstant"}):
+            self.assertEqual(0, I.consolidated_element_count([bad]))
+
+    def test_a_fact_without_a_context(self):
+        self.assertEqual(0, I.consolidated_element_count([{"name": "jppfs_cor:Assets"}]))
+
+    def test_wrapping_twice_keeps_one_decision(self):
+        """二重に包んでも決定は 1 つ。中身も増えない。"""
+
+        c = ctxs(X_NonConsolidatedMember=("jppfs_cor:NonConsolidatedMember",))
+        once = I.with_nonconsolidated_fallback(c, facts(), True)
+        twice = I.with_nonconsolidated_fallback(once, facts(), True)
+        self.assertTrue(twice.nonconsolidated_ok)
+        self.assertEqual(dict(once), dict(twice))
+        self.assertEqual(dict(c), dict(twice))
+
+    def test_wrapping_a_decided_document_with_the_flag_off_returns_it_unchanged(self):
+        """旗が偽なら、既に決まっている入れ物も**そのまま**返る(決定を消さない)。
+
+        消す側に倒すと「同じ書類の途中で決定が変わる」ので、消さないのが正。
+        """
+
+        c = ctxs(X_NonConsolidatedMember=("jppfs_cor:NonConsolidatedMember",))
+        once = I.with_nonconsolidated_fallback(c, facts(), True)
+        again = I.with_nonconsolidated_fallback(once, facts(), False)
+        self.assertIs(once, again)
+        self.assertTrue(again.nonconsolidated_ok)
+
+    def test_exactly_one_consolidated_element_blocks_the_fallback(self):
+        """**ちょうど 1 種**でも連結在りに分類する(境界)。"""
+
+        c = ctxs(X_NonConsolidatedMember=("jppfs_cor:NonConsolidatedMember",))
+        f = facts(("jppfs_cor:Assets", "CurrentYearInstant"))
+        self.assertIs(c, I.with_nonconsolidated_fallback(c, f, True))
+
+    def test_a_context_named_nonconsolidated_without_the_member(self):
+        """名前に NonConsolidated が在るのに member が別物 ― 落とさない。"""
+
+        c = ctxs(CurrentYearInstant_NonConsolidatedMember=("m:Parking",))
+        on = I.with_nonconsolidated_fallback(c, facts(), True)
+        self.assertFalse(I.plain_context("CurrentYearInstant_NonConsolidatedMember", on))
+
+    def test_plain_period_contexts_constant_covers_the_four_names(self):
+        self.assertEqual(("CurrentYearInstant", "CurrentYearDuration",
+                          "Prior1YearInstant", "Prior1YearDuration"),
+                         I.PLAIN_PERIOD_CONTEXTS)
+
+
 class ProfileShapeTest(unittest.TestCase):
     def test_p20_is_p16_plus_one_flag(self):
         p16, p20 = V.P16, V.P20
