@@ -12,6 +12,14 @@ GROUNDED になった**数の主張**の数字を 1 つずつわざと変え(V1 
 標本に入るかどうかも、割り当てに左右された(2026-10-14 に実測。順番で割り振った版 →
 id で決める版 → 両方当てる版と直した)。
 
+**``--batch 1`` が正**(2026-10-15 に実測した 3 つ目の欠陥)。1 回の検証で 25 件まとめて
+変えると、**変えた数そのものが「書類の丸め方」の根拠に入り**(``profile.doc_rounding``)、
+書類単位の決定が round / truncate で入れ替わることがある。入れ替わると、同じ束の他の
+主張の照合の帯が変わる ― つまり**変えた件数が互いの結果を汚す**。実測: ``S100Z4Q1`` を
+P19 で 25 件ずつ変えると、原文では truncate だった決定が変えた後は round に入れ替わり、
+末尾 +1 の誤りが 22 件通った。``--batch 1`` でも 1 件分の汚染は残る(0 にはできない ―
+文章を変えずに誤りを混ぜることはできない)。
+
 使い方::  python3 -B measure/false_pass_2026-10-14.py [--docs A,B] [--profiles P16,P17] [--tag x]
 出力: fixtures/xbrl/p17/false_pass_2026-10-14<tag>.json
 """
@@ -34,7 +42,7 @@ from adapters.xbrl import vocabulary as V  # noqa: E402
 
 CACHE = os.path.join(os.path.expanduser("~"), ".cache", "audit-core", "edinet")
 OUT = os.path.join(ROOT, "fixtures", "xbrl", "p17")
-BATCH = 25
+BATCH = 25   # --batch で変える。**1 が正**(下の注)
 
 
 def mdna_text(zb):
@@ -113,7 +121,7 @@ def expected_value(site, new_raw):
     return vals[0] if len(vals) == 1 else None
 
 
-def run_doc(doc, profile_name, zb, text0, kind=None):
+def run_doc(doc, profile_name, zb, text0, kind=None, batch_size=None):
     profile = V.PROFILES[profile_name]
     base = VD.verify_document(zb, profile_name, text0)
     orig = VD.verify_document(zb, profile_name, None)
@@ -129,8 +137,9 @@ def run_doc(doc, profile_name, zb, text0, kind=None):
     while pending:
         batch, used_si = [], set()
         rest = []
+        cap = batch_size or BATCH
         for s in pending:
-            if len(batch) < BATCH and s["si"] not in used_si:
+            if len(batch) < cap and s["si"] not in used_si:
                 batch.append(s); used_si.add(s["si"])
             else:
                 rest.append(s)
@@ -175,7 +184,7 @@ def run_doc(doc, profile_name, zb, text0, kind=None):
     counts = {}
     for r in rows:
         counts[r["outcome"]] = counts.get(r["outcome"], 0) + 1
-    return {"doc": doc, "profile": profile_name, "kind": kind or "by_id", "baseline_claims": base["document"]["claims"],
+    return {"doc": doc, "profile": profile_name, "kind": kind or "by_id", "batch": batch_size or BATCH, "baseline_claims": base["document"]["claims"],
             "original_claims": orig["document"]["claims"], "baseline_states": base["document"]["states"],
             "original_states": orig["document"]["states"], "sites": len(sites), "id_mismatch_in_baseline": len(mismatched),
             "targets": len(targets), "counts": counts, "rows": rows}
@@ -186,12 +195,15 @@ def main(argv=None):
     docs = ["S100Z39P", "S100Z4N9", "S100Z4Q1"]
     profiles = ["P16", "P17"]
     kinds = ["V1", "V2"]
+    batch_size = None
     tag = ""
     while argv:
         if argv[0] == "--docs":
             docs = argv[1].split(","); argv = argv[2:]
         elif argv[0] == "--profiles":
             profiles = argv[1].split(","); argv = argv[2:]
+        elif argv[0] == "--batch":
+            batch_size = int(argv[1]); argv = argv[2:]
         elif argv[0] == "--kinds":
             kinds = argv[1].split(","); argv = argv[2:]
         elif argv[0] == "--tag":
@@ -204,7 +216,7 @@ def main(argv=None):
         text0 = mdna_text(zb)
         for pn in profiles:
             for kind in kinds:
-                r = run_doc(doc, pn, zb, text0, None if kind == "by_id" else kind)
+                r = run_doc(doc, pn, zb, text0, None if kind == "by_id" else kind, batch_size)
                 rep.append(r)
                 print("%s %s %s targets %d -> %s" % (
                     doc, pn, kind, r["targets"], json.dumps(r["counts"], ensure_ascii=False)))
