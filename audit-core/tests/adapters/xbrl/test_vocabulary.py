@@ -192,7 +192,7 @@ class P7ProfileTest(unittest.TestCase):
         # XBRL 直し(2026-10-08)で P8 を足した。P1/P5F/P6/P7 の 4 つが在ること
         # と、P8 がこの 4 つに加わっていることを両方見る。
         self.assertEqual(sorted(V.PROFILES.keys()),
-                         ["P1", "P10", "P11", "P12", "P13", "P14", "P15", "P16", "P17", "P18", "P19", "P5F", "P6", "P7", "P8", "P9"])
+                         ["P1", "P10", "P11", "P12", "P13", "P14", "P15", "P16", "P17", "P18", "P19", "P20", "P5F", "P6", "P7", "P8", "P9"])
 
     def test_p7_subjects_same_as_p6(self):
         self.assertEqual(V.P7.subjects, V.P6.subjects)
@@ -443,7 +443,7 @@ class P12P13P14ProfileTest(unittest.TestCase):
 
     def test_profiles_registry_lists_every_profile(self):
         self.assertEqual(sorted(V.PROFILES),
-                         ["P1", "P10", "P11", "P12", "P13", "P14", "P15", "P16", "P17", "P18", "P19", "P5F", "P6", "P7", "P8", "P9"])
+                         ["P1", "P10", "P11", "P12", "P13", "P14", "P15", "P16", "P17", "P18", "P19", "P20", "P5F", "P6", "P7", "P8", "P9"])
         for name, p in V.PROFILES.items():
             self.assertEqual(p.name, name)
 
