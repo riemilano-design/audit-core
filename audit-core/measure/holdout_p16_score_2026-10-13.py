@@ -131,7 +131,8 @@ def _run(doc, prof):
     for r in rl:
         x = res[r.claim.id]
         c = raw.get(r.claim.id, {})
-        out[r.claim.id] = {"state": x.state.name, "pointers": [p.scheme + ":" + p.locator for p in x.pointers],
+        ptrs = [(q if isinstance(q, str) else q.scheme + ":" + q.locator) for q in x.pointers]
+        out[r.claim.id] = {"state": x.state.name, "pointers": ptrs,
                            "subject": r.claim.subject, "span": r.claim.provenance.get("span"), "reason": x.reason,
                            "ckey": "%s|%s|%s" % (c.get("span"), c.get("value"), c.get("word"))}
     return out
