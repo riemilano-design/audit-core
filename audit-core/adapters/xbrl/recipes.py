@@ -175,7 +175,23 @@ _POINT_PRIOR_PHRASE_RE = re.compile(r"前期比|前連結会計年度|前年")
 _POINT_DIRECTION_RE = re.compile(r"増加|増|減少|減|下回")
 
 
-def _build_point_diff_claim(claim, s, a, b, elems, member, facts, contexts, num):
+PCT_TOLERANCE_DEFAULT = 0.15   # P1〜P17 の % の許容(字で留める)
+_DECIMALS_RE = re.compile(r"\d+(?:[.．](\d+))?")
+
+
+def pct_tolerance(profile, s, a, b):
+    """P18: % の主張の許容。旗が偽なら ``PCT_TOLERANCE_DEFAULT``。真なら、数の字
+    ``s[a:b]`` に書かれた小数の桁 d から ``0.5 * 10**(-d) + 0.01``
+    (1 桁 → 0.06、0 桁 → 0.51、2 桁 → 0.015)。"""
+
+    if profile is None or not getattr(profile, "pct_tolerance_from_decimals", False):
+        return PCT_TOLERANCE_DEFAULT
+    m = _DECIMALS_RE.search(s[a:b])
+    d = len(m.group(1)) if (m and m.group(1)) else 0
+    return 0.5 * (10 ** (-d)) + 0.01
+
+
+def _build_point_diff_claim(claim, s, a, b, elems, member, facts, contexts, num, tol=PCT_TOLERANCE_DEFAULT):
     """単位 ポイント・主語あり(呼び出し側の条件)の Claim を、前期の比率
     との derived diff として組む。前期の語が無ければ新しい理由
     ``no_element(point without prior phrase)``、前期の語があっても当期・
@@ -204,7 +220,7 @@ def _build_point_diff_claim(claim, s, a, b, elems, member, facts, contexts, num)
     claim["bound"] = True
     recomputed = round((c["value"] - p["value"]) * 100, 2)
     claim["recomputed"] = recomputed
-    claim["result"] = "GROUNDED" if abs(recomputed - claim["value"]) <= 0.15 else "VALUE_MISMATCH"
+    claim["result"] = "GROUNDED" if abs(recomputed - claim["value"]) <= tol else "VALUE_MISMATCH"
 
 
 def _direct_value_claim(claim, s, a, b, sign, num, unit, prec, subj, elems, member, facts, contexts,
@@ -375,6 +391,9 @@ def _dispatch_num_claim(claim, s, a, b, sign, num, unit, prec, subj, elems, memb
                         rounding=None, flow_base=None):
     """§1-2 の目標値判定を通らなかった数の Claim の、既存の単位ごとの振り分け
     (C-1d/C-1g と不変)。"""
+    tol = pct_tolerance(profile, s, a, b)   # P18(偽なら 0.15 のまま)
+    if tol != PCT_TOLERANCE_DEFAULT:
+        claim["pct_tolerance"] = tol
 
     window_pm = s[max(0, a - 25):b + 6]
     pm = E.PCT_DIR_RE.search(window_pm) if unit in ("％", "%") else None
@@ -396,13 +415,13 @@ def _dispatch_num_claim(claim, s, a, b, sign, num, unit, prec, subj, elems, memb
             pri = [f for f in I.facts_for(elems, facts, contexts, member) if f["context"].startswith("Prior1Year")]
             pairs = [(c, p) for c in cur for p in pri if c["name"] == p["name"] and c["context"].replace("CurrentYear", "") == p["context"].replace("Prior1Year", "")]
             if pairs:
-                c, p = _first_matching_pair(pairs, lambda c, p: p["value"] != 0 and abs(c["value"] / p["value"] * 100 - num) <= 0.15, profile)
+                c, p = _first_matching_pair(pairs, lambda c, p: p["value"] != 0 and abs(c["value"] / p["value"] * 100 - num) <= tol, profile)
                 claim["pointer"] = ["xbrl:%s@%s" % (c["name"], c["context"]), "xbrl:%s@%s" % (p["name"], p["context"]), "formula:cur/prior*100"]
                 claim["bound"] = True
                 if p["value"] != 0:
                     ratio = c["value"] / p["value"] * 100
                     claim["recomputed"] = round(ratio, 2)
-                    claim["result"] = "GROUNDED" if abs(ratio - num) <= 0.15 else "VALUE_MISMATCH"
+                    claim["result"] = "GROUNDED" if abs(ratio - num) <= tol else "VALUE_MISMATCH"
                 else:
                     claim["result"] = "UNVERIFIABLE"
                     claim["reason"] = "prior is 0"
@@ -421,13 +440,13 @@ def _dispatch_num_claim(claim, s, a, b, sign, num, unit, prec, subj, elems, memb
             pri = [f for f in I.facts_for(elems, facts, contexts, member) if f["context"].startswith("Prior1Year")]
             pairs = [(c, p) for c in cur for p in pri if c["name"] == p["name"] and c["context"].replace("CurrentYear", "") == p["context"].replace("Prior1Year", "")]
             if pairs:
-                c, p = _first_matching_pair(pairs, lambda c, p: p["value"] != 0 and abs((c["value"] - p["value"]) / abs(p["value"]) * 100 - claim["value"]) <= 0.15, profile)
+                c, p = _first_matching_pair(pairs, lambda c, p: p["value"] != 0 and abs((c["value"] - p["value"]) / abs(p["value"]) * 100 - claim["value"]) <= tol, profile)
                 claim["pointer"] = ["xbrl:%s@%s" % (c["name"], c["context"]), "xbrl:%s@%s" % (p["name"], p["context"])]
                 claim["bound"] = True
                 if p["value"] != 0:
                     pct = (c["value"] - p["value"]) / abs(p["value"]) * 100
                     claim["recomputed"] = round(pct, 2)
-                    claim["result"] = "GROUNDED" if abs(pct - claim["value"]) <= 0.15 else "VALUE_MISMATCH"
+                    claim["result"] = "GROUNDED" if abs(pct - claim["value"]) <= tol else "VALUE_MISMATCH"
                 else:
                     claim["result"] = "UNVERIFIABLE"
                     claim["reason"] = "prior is 0"
@@ -444,7 +463,7 @@ def _dispatch_num_claim(claim, s, a, b, sign, num, unit, prec, subj, elems, memb
     elif unit in ("％", "%", "ポイント"):
         claim["form"] = "direct_value"
         if profile.point_diff and unit == "ポイント" and subj:
-            _build_point_diff_claim(claim, s, a, b, elems, member, facts, contexts, num)
+            _build_point_diff_claim(claim, s, a, b, elems, member, facts, contexts, num, tol)
         elif profile.ratio_table and _ratio_word_before(s, a) is not None:
             # C5: 「売上総利益率は32.5%」― 率そのものの fact が無くても、分子/分母の
             # 2 fact(同じ期)で 分子/分母*100 を照合する。
@@ -462,7 +481,7 @@ def _dispatch_num_claim(claim, s, a, b, sign, num, unit, prec, subj, elems, memb
                 claim["bound"] = True
                 ratio = n["value"] / d["value"] * 100
                 claim["recomputed"] = round(ratio, 2)
-                claim["result"] = "GROUNDED" if abs(ratio - num) <= 0.15 else "VALUE_MISMATCH"
+                claim["result"] = "GROUNDED" if abs(ratio - num) <= tol else "VALUE_MISMATCH"
             else:
                 claim["reason"] = "no_element(ratio without fact)"
         elif subj and any((f["unit"] or "").lower().startswith("pure") for f in I.facts_for(elems, facts, contexts, member)):
@@ -474,7 +493,7 @@ def _dispatch_num_claim(claim, s, a, b, sign, num, unit, prec, subj, elems, memb
                 claim["pointer"] = "xbrl:%s@%s" % (cur[0]["name"], cur[0]["context"])
                 claim["bound"] = True
                 claim["recomputed"] = round(fvp, 2)
-                claim["result"] = "GROUNDED" if abs(fvp - num) <= 0.15 else "VALUE_MISMATCH"
+                claim["result"] = "GROUNDED" if abs(fvp - num) <= tol else "VALUE_MISMATCH"
             else:
                 claim["reason"] = "no_element"
         else:
@@ -1342,7 +1361,7 @@ def claim_to_recipe(raw, kind):
                         params["rounding"] = raw["rounding"]
             else:
                 comparator = "equals_within(pure*100)"
-                params = {"tolerance": 0.15, "pure_threshold": 1.5}
+                params = {"tolerance": raw.get("pct_tolerance", PCT_TOLERANCE_DEFAULT), "pure_threshold": 1.5}
         else:
             f = others[0] if others else ""
             comparator = {
@@ -1358,7 +1377,7 @@ def claim_to_recipe(raw, kind):
                 if raw.get("rounding") is not None:
                     params["rounding"] = raw["rounding"]
             else:
-                params = {"tolerance": 0.15}
+                params = {"tolerance": raw.get("pct_tolerance", PCT_TOLERANCE_DEFAULT)}
         contract = core.Contract(comparator=comparator, params=params)
 
     provenance = {

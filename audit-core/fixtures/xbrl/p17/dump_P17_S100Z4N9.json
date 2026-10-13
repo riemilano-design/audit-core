@@ -595,10 +595,10 @@
   "reason": null
  },
  "S100Z4N9:H-064": {
-  "state": "VALUE_MISMATCH",
+  "state": "GROUNDED",
   "pointers": [
-   "xbrl:jppfs_cor:NetSales@CurrentYearDuration_jpcrp030000-asr_E27464-000ParkingReportableSegmentsMember",
-   "xbrl:jppfs_cor:NetSales@Prior1YearDuration_jpcrp030000-asr_E27464-000ParkingReportableSegmentsMember"
+   "xbrl:jpcrp_cor:RevenuesFromExternalCustomers@CurrentYearDuration_jpcrp030000-asr_E27464-000ParkingReportableSegmentsMember",
+   "xbrl:jpcrp_cor:RevenuesFromExternalCustomers@Prior1YearDuration_jpcrp030000-asr_E27464-000ParkingReportableSegmentsMember"
   ],
   "subject": "売上高",
   "span": "以上の結果、売上高7,056,648千円(前年同期比0.8%増)、営業利益294",
@@ -651,10 +651,10 @@
   "reason": null
  },
  "S100Z4N9:H-070": {
-  "state": "VALUE_MISMATCH",
+  "state": "GROUNDED",
   "pointers": [
-   "xbrl:jppfs_cor:NetSales@CurrentYearDuration",
-   "xbrl:jppfs_cor:NetSales@Prior1YearDuration"
+   "xbrl:jppfs_cor:NetSales@CurrentYearDuration_jpcrp030000-asr_E27464-000MedicalReportableSegmentsMember",
+   "xbrl:jppfs_cor:NetSales@Prior1YearDuration_jpcrp030000-asr_E27464-000MedicalReportableSegmentsMember"
   ],
   "subject": "売上高",
   "span": "以上の結果、売上高259,831千円(前年同期比6.3%減)、営業損失715",
@@ -788,10 +788,10 @@
   "reason": "no_element(point without prior phrase)"
  },
  "S100Z4N9:H-085": {
-  "state": "VALUE_MISMATCH",
+  "state": "GROUNDED",
   "pointers": [
-   "xbrl:jppfs_cor:NetSales@CurrentYearDuration_jpcrp030000-asr_E27464-000ParkingReportableSegmentsMember",
-   "xbrl:jppfs_cor:NetSales@Prior1YearDuration_jpcrp030000-asr_E27464-000ParkingReportableSegmentsMember"
+   "xbrl:jpcrp_cor:RevenuesFromExternalCustomers@CurrentYearDuration_jpcrp030000-asr_E27464-000ParkingReportableSegmentsMember",
+   "xbrl:jpcrp_cor:RevenuesFromExternalCustomers@Prior1YearDuration_jpcrp030000-asr_E27464-000ParkingReportableSegmentsMember"
   ],
   "subject": "売上高",
   "span": "場の活性化に注力した結果、売上高は7,056,648千円(同0.8%増)となりました。",
@@ -1056,10 +1056,10 @@
   "reason": "no_subject"
  },
  "S100Z4N9:H-113": {
-  "state": "VALUE_MISMATCH",
+  "state": "GROUNDED",
   "pointers": [
-   "xbrl:jppfs_cor:NetSales@CurrentYearDuration_jpcrp030000-asr_E27464-000SecuritiesRetailingBusinessReportableSegmentsMember",
-   "xbrl:jppfs_cor:NetSales@Prior1YearDuration_jpcrp030000-asr_E27464-000SecuritiesRetailingBusinessReportableSegmentsMember"
+   "xbrl:jpcrp_cor:RevenuesFromExternalCustomers@CurrentYearDuration_jpcrp030000-asr_E27464-000SecuritiesRetailingBusinessReportableSegmentsMember",
+   "xbrl:jpcrp_cor:RevenuesFromExternalCustomers@Prior1YearDuration_jpcrp030000-asr_E27464-000SecuritiesRetailingBusinessReportableSegmentsMember"
   ],
   "subject": "売上高",
   "span": "以上の結果、売上高525,423千円(前年同期比15.1%減)、営業利益25,",
@@ -1122,9 +1122,9 @@
   "reason": "no_element"
  },
  "S100Z4N9:H-120": {
-  "state": "VALUE_MISMATCH",
+  "state": "GROUNDED",
   "pointers": [
-   "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration"
+   "xbrl:jppfs_cor:OperatingIncome@Prior1YearDuration_jpcrp030000-asr_E27464-000MedicalReportableSegmentsMember"
   ],
   "subject": "営業損失",
   "span": "年同期比6.3%減)、営業損失715,890千円(前年同期は83,351千円の営業利益)となりま",
@@ -1239,9 +1239,9 @@
   "reason": null
  },
  "S100Z4N9:H-133": {
-  "state": "VALUE_MISMATCH",
+  "state": "GROUNDED",
   "pointers": [
-   "xbrl:jppfs_cor:NetSales@CurrentYearDuration"
+   "xbrl:jppfs_cor:NetSales@CurrentYearDuration_jpcrp030000-asr_E27464-000MedicalReportableSegmentsMember"
   ],
   "subject": "売上高",
   "span": "以上の結果、売上高259,831千円(前年同期比6.3%",
@@ -1299,10 +1299,10 @@
   "reason": null
  },
  "S100Z4N9:H-139": {
-  "state": "VALUE_MISMATCH",
+  "state": "GROUNDED",
   "pointers": [
-   "xbrl:jppfs_cor:NetSales@CurrentYearDuration_jpcrp030000-asr_E27464-000PropertiesDevelopmentAndSalesReportableSegmentsMember",
-   "xbrl:jppfs_cor:NetSales@Prior1YearDuration_jpcrp030000-asr_E27464-000PropertiesDevelopmentAndSalesReportableSegmentsMember"
+   "xbrl:jpcrp_cor:RevenuesFromExternalCustomers@CurrentYearDuration_jpcrp030000-asr_E27464-000PropertiesDevelopmentAndSalesReportableSegmentsMember",
+   "xbrl:jpcrp_cor:RevenuesFromExternalCustomers@Prior1YearDuration_jpcrp030000-asr_E27464-000PropertiesDevelopmentAndSalesReportableSegmentsMember"
   ],
   "subject": "売上高",
   "span": "戸の引渡しを実施した結果、売上高は2,523,449千円(同27.6%減)となりました。",
@@ -1354,9 +1354,9 @@
   "reason": "no_subject"
  },
  "S100Z4N9:H-145": {
-  "state": "VALUE_MISMATCH",
+  "state": "GROUNDED",
   "pointers": [
-   "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration"
+   "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration_jpcrp030000-asr_E27464-000MedicalReportableSegmentsMember"
   ],
   "subject": "営業損失",
   "span": "、売上高259,831千円(前年同期比6.3%減)、営業損失715,890千円(前年同期は83,3",

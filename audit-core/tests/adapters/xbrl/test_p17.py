@@ -25,7 +25,7 @@ class ProfileShapeTest(unittest.TestCase):
 
     def test_p1_to_p16_keep_the_five_flags_off(self):
         for name, p in V.PROFILES.items():
-            if name == "P17":
+            if name in ("P17", "P18"):
                 continue
             self.assertFalse(p.segment_carry_to_result_sentence or p.external_revenue_for_sales
                              or p.subject_skip_before_cause_marker or p.loss_variants or p.prefer_net_when_labelled, name)
@@ -184,3 +184,33 @@ class AugmentSubjectRowsTest(unittest.TestCase):
         h, a = R.augment_subject_rows(self.HAND, self.ADDED, self.LABELS, lambda e: True, V.P17)
         self.assertIsNot(h, self.HAND)
         self.assertEqual(self.HAND[0], ("売上高", ["NetSales"]))
+
+
+class PctToleranceTest(unittest.TestCase):
+    def test_p18_is_p17_plus_the_tolerance_flag(self):
+        self.assertTrue(V.P18.pct_tolerance_from_decimals)
+        self.assertEqual(dataclasses.replace(V.P18, name="P17", pct_tolerance_from_decimals=False), V.P17)
+        for name, p in V.PROFILES.items():
+            if name != "P18":
+                self.assertFalse(p.pct_tolerance_from_decimals, name)
+
+    def test_default_is_015_for_flag_off(self):
+        s = "売上高(前期比2.3%増)"
+        a, b = s.index("2.3"), s.index("2.3") + 4
+        self.assertEqual(R.pct_tolerance(V.P17, s, a, b), 0.15)
+        self.assertEqual(R.pct_tolerance(None, s, a, b), 0.15)
+        self.assertEqual(R.PCT_TOLERANCE_DEFAULT, 0.15)
+
+    def test_one_decimal_gives_006(self):
+        s = "売上高(前期比2.3%増)"
+        a, b = s.index("2.3"), s.index("2.3") + 4
+        self.assertAlmostEqual(R.pct_tolerance(V.P18, s, a, b), 0.06)
+
+    def test_zero_decimals_gives_051_and_two_decimals_0015(self):
+        s = "比率は15%で、利益率は3.25%"
+        self.assertAlmostEqual(R.pct_tolerance(V.P18, s, s.index("15"), s.index("15") + 3), 0.51)
+        self.assertAlmostEqual(R.pct_tolerance(V.P18, s, s.index("3.25"), s.index("3.25") + 5), 0.015)
+
+    def test_a_tenth_of_a_point_change_is_outside_the_p18_tolerance(self):
+        self.assertGreater(abs(2.4 - 2.3), R.pct_tolerance(V.P18, "2.3%", 0, 4))
+        self.assertLessEqual(abs(2.4 - 2.3), R.PCT_TOLERANCE_DEFAULT)

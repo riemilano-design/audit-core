@@ -34,7 +34,7 @@ TRAIN_DOCS = ("S100Z39P", "S100Z4N9")
 DEV_DOC = "S100Z4Q1"
 DEV_ZIP_SHA = "0731a291f10af5dd207e05d54df8e2b5dc34e79a84de94af1c1a5d4e207228f6"
 DEV_MOD_SHA = "03521437be23c8e2a02d85b4bc29a215646803582e9101fdf185521041174799"
-PROFS = ("P16", "P17")
+PROFS = ["P16", "P17"]   # --base/--new で差し替え
 
 
 def _load(name, path):
@@ -121,8 +121,8 @@ def all_docs_diff(docs):
     out = {}
     for doc in docs:
         zb = open(os.path.join(CACHE, doc + ".zip"), "rb").read()
-        a = run(zb, doc, V.PROFILES["P16"])
-        b = run(zb, doc, V.PROFILES["P17"])
+        a = run(zb, doc, V.PROFILES[PROFS[0]])
+        b = run(zb, doc, V.PROFILES[PROFS[1]])
         same_ids = set(a) == set(b)
         trans = collections.Counter()
         ex = []
@@ -152,13 +152,18 @@ def main(argv=None):
             docs = argv[1].split(","); argv = argv[2:]
         elif argv[0] == "--tag":
             tag = "_" + argv[1]; argv = argv[2:]
+        elif argv[0] == "--base":
+            PROFS[0] = argv[1]; argv = argv[2:]
+        elif argv[0] == "--new":
+            PROFS[1] = argv[1]; argv = argv[2:]
         else:
             raise SystemExit("unknown arg %r" % argv[0])
     rep = {"train": train_scores(), "dev": dev_scores(), "all_docs": all_docs_diff(docs)}
     g_lost = sum(sum(v for k, v in d["transitions"].items() if k.startswith("GROUNDED->")) for d in rep["all_docs"].values())
     rep["summary"] = {
-        "train_P16": rep["train"]["P16"]["all"], "train_P17": rep["train"]["P17"]["all"],
-        "dev_P16": rep["dev"]["P16"]["all"], "dev_P17": rep["dev"]["P17"]["all"],
+        "profiles": list(PROFS),
+        "train_base": rep["train"][PROFS[0]]["all"], "train_new": rep["train"][PROFS[1]]["all"],
+        "dev_base": rep["dev"][PROFS[0]]["all"], "dev_new": rep["dev"][PROFS[1]]["all"],
         "grounded_to_non_grounded_total": g_lost,
     }
     p = save("score_2026-10-14%s.json" % tag, rep)
