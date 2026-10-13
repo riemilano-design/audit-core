@@ -33,12 +33,22 @@ import sealed_material as G  # noqa: E402
 GATE = "refuse_if_sealed"
 
 # **字で留める。**封を持っている席からの依頼が無いのに消えたら赤くなる。
-SEALED_DOC_IDS = ("S100Z3JY", "S100Z35K", "S100Z3V1", "S100Z3HP")
-SEALED_DATE_STRINGS = ("2026-09-24", "2026-09-25")
+# 2026-10-13(merge の整合): 2026-10-09 の封A/封B 4 件は main 側で開封済み
+# (NORMALIZATION_SEAL_A_RESULT / SIGN_SEAL_B_RESULT)。いまの封は D-002 の手順 4 専用 2 件。
+# 正本は fixtures/xbrl/holdout_reserved_2026-10-12.json(下の試験で突き合わせる)。
+SEALED_DOC_IDS = ("S100Z39P", "S100Z4N9")
+SEALED_DATE_STRINGS = ("2026-09-24", "2026-09-28")   # candidates_2026-09.json の date
+FORMER_SEALED_DOC_IDS = ("S100Z3JY", "S100Z35K", "S100Z3V1", "S100Z3HP")
+RESERVED_RECORD = "holdout_reserved_2026-10-12.json"
 
-# 取る入口(2026-10-09 に数えた 4 本)。**字で書く。**
+# 取る入口(2026-10-09 に数えた 4 本 + main 側の人間が回す道具 1 本、2026-10-13)。**字で書く。**
 FETCHING_TOOLS = ("xbrl_probe.py", "select_third_2026-10-01.py",
-                  "fetch_allocated_2026-10-08.py", "fetch_new_draw_2026-10-09.py")
+                  "fetch_allocated_2026-10-08.py", "fetch_new_draw_2026-10-09.py",
+                  "fetch_sealed_material_2026-10-09.py")
+# urlopen を呼ぶが EDINET ではない(LLM の端点)。関門の対象外。**字で書き、host を試験で確かめる。**
+NON_EDINET_OPENERS = ("ai_prose_generate_2026-10-09.py",)
+# urlopen を呼ぶが取る道具ではない(割当の記録を作る)。2026-10-09 から一覧に在る。
+OTHER_OPENERS = ("allocate_documents_2026-10-08.py",)
 
 
 def _tree(name):
@@ -59,9 +69,25 @@ def _called_names(tree):
 
 
 class SealedListsTest(unittest.TestCase):
-    def test_the_four_sealed_doc_ids_are_listed(self):
+    def test_the_sealed_doc_ids_are_listed(self):
         for doc in SEALED_DOC_IDS:
             self.assertIn(doc, G.SEALED_DOCS, doc)
+
+    def test_the_gate_matches_the_reservation_record_exactly(self):
+        """関門の字の一覧 == 正本(D-002 の予約記録)の docID。片方だけ変えたら赤くなる。"""
+        import json
+        with open(os.path.join(_FIXTURES_XBRL_DIR, RESERVED_RECORD), encoding="utf-8") as fh:
+            rec = json.load(fh)
+        reserved = sorted(r["docID"] for r in rec["reserved"])
+        self.assertEqual(sorted(G.SEALED_DOCS), reserved)
+        self.assertEqual(sorted(SEALED_DOC_IDS), reserved)
+
+    def test_the_former_seals_are_history_not_refused(self):
+        """2026-10-09 の封 4 件は開封済み(main の RESULT 文書)。関門は止めない・履歴には残す。"""
+        for doc in FORMER_SEALED_DOC_IDS:
+            self.assertIn(doc, G.OPENED_FORMER_SEALS, doc)
+            self.assertNotIn(doc, G.SEALED_DOCS, doc)
+            self.assertIsNone(G.refuse_if_sealed(doc_id=doc, where="試験"))
 
     def test_the_two_sealed_dates_are_listed(self):
         for d in SEALED_DATE_STRINGS:
@@ -127,8 +153,36 @@ class EveryFetchingToolCallsTheGateTest(unittest.TestCase):
                 continue
             if "urlopen" in _called_names(tree):
                 opens.append(fn)
-        self.assertEqual(sorted(opens), sorted(FETCHING_TOOLS + ("allocate_documents_2026-10-08.py",)),
+        self.assertEqual(sorted(opens), sorted(FETCHING_TOOLS + OTHER_OPENERS + NON_EDINET_OPENERS),
                          "urlopen を呼ぶ fixtures が一覧と違う: %s" % opens)
+
+    def test_non_edinet_openers_really_do_not_name_edinet(self):
+        """関門の対象外にした道具は、字の中に EDINET の host を 1 つも持たない。"""
+        for name in NON_EDINET_OPENERS:
+            consts = [n.value for n in ast.walk(_tree(name))
+                      if isinstance(n, ast.Constant) and isinstance(n.value, str)]
+            self.assertFalse([c for c in consts if "edinet" in c.lower()], name)
+            self.assertTrue([c for c in consts if "api.anthropic.com" in c], name)
+
+    def test_the_human_run_tool_hits_the_gate_before_reading_the_key(self):
+        """fetch_sealed_material の fetch_zip は、字の一覧(門③)を通っても他の席の封で止まる。
+        **故障を作って当てる**: 字の一覧に封じた docID を足し、鍵を消して呼ぶ。
+        関門が鍵より前に在れば SealedMaterial、無ければ鍵の SystemExit が先に出る。"""
+        import importlib.util
+        from unittest import mock
+        path = os.path.join(_FIXTURES_XBRL_DIR, "fetch_sealed_material_2026-10-09.py")
+        spec = importlib.util.spec_from_file_location("fetch_sealed_material_for_test", path)
+        mod = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(mod)
+        sealed = SEALED_DOC_IDS[0]
+        faulted = mod.SEALED + ((sealed, "封X", "試験", "2026-09-24"), ("S100ZZZZ", "封X", "試験", "2026-01-01"))
+        env = {k: v for k, v in os.environ.items() if k != "EDINET_API_KEY"}
+        with mock.patch.object(mod, "SEALED", faulted), mock.patch.dict(os.environ, env, clear=True):
+            with self.assertRaises(G.SealedMaterial):
+                mod.fetch_zip(sealed)
+            # 対照: 封じていない id は関門を通り、鍵が無いので SystemExit で止まる(通信しない)
+            with self.assertRaises(SystemExit):
+                mod.fetch_zip("S100ZZZZ")
 
 
 if __name__ == "__main__":
