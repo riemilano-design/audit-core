@@ -1,0 +1,2917 @@
+{
+ "判定者": "席1(記憶なし・S100Z39P)",
+ "読んだファイル": [
+  "/private/tmp/claude-501/wt-concept/audit-core/fixtures/xbrl/holdout_p16/seat/material_S100Z39P.json",
+  "/private/tmp/claude-501/wt-concept/audit-core/fixtures/xbrl/holdout_p16/seat/facts_S100Z39P.json",
+  "/private/tmp/claude-501/wt-concept/audit-core/fixtures/xbrl/holdout_p16/seat/contexts_S100Z39P.json"
+ ],
+ "行": [
+  {
+   "行の鍵": "H-001",
+   "判定": "独立判定",
+   "形": "差(当期−前期)",
+   "fact": [
+    {
+     "役割": "当期側",
+     "要素": "jppfs_cor:Assets",
+     "context": "CurrentYearInstant",
+     "期間": "2026-06-30",
+     "値": 47968715000.0,
+     "単位": "JPY"
+    },
+    {
+     "役割": "前期側",
+     "要素": "jppfs_cor:Assets",
+     "context": "Prior1YearInstant",
+     "期間": "2025-06-30",
+     "値": 46922658000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "47,968,715,000−46,922,658,000=1,046,057,000 円 → 1,046.057 百万円(文は 1,046 百万円)",
+   "文が述べている単位": "百万円",
+   "母集団": "連結",
+   "値は一致するか": "一致(切り捨て)",
+   "同値の他の候補": [
+    {
+     "要素": "jpcrp_cor:TotalAssetsSummaryOfBusinessResults",
+     "context": "CurrentYearInstant"
+    },
+    {
+     "要素": "jpcrp_cor:TotalAssetsSummaryOfBusinessResults",
+     "context": "Prior1YearInstant"
+    }
+   ],
+   "判定の理由": "「総資産」=連結貸借対照表の資産合計(jppfs_cor:Assets)。「増加し」は前期末との差。同じ段落の他文が「前連結会計年度末に比べ」と述べる構造なので当期末−前期末。母集団は「連結会計年度」の文脈から連結",
+   "迷った点": "jpcrp_cor:TotalAssetsSummaryOfBusinessResults(主要な経営指標)も同値だが、本文は財政状態の説明で財務諸表の科目を使っているので本表側を選んだ"
+  },
+  {
+   "行の鍵": "H-002",
+   "判定": "独立判定",
+   "形": "符号・方向",
+   "fact": [
+    {
+     "役割": "当期側",
+     "要素": "jppfs_cor:NetSales",
+     "context": "CurrentYearDuration_jpcrp030000-asr_E05239-000MarketingSupportConsumerGoodsAndServicesReportableSegmentsMember",
+     "期間": "2025-07-01..2026-06-30",
+     "値": 47149287000.0,
+     "単位": "JPY"
+    },
+    {
+     "役割": "前期側",
+     "要素": "jppfs_cor:NetSales",
+     "context": "Prior1YearDuration_jpcrp030000-asr_E05239-000MarketingSupportConsumerGoodsAndServicesReportableSegmentsMember",
+     "期間": "2024-07-01..2025-06-30",
+     "値": 45344450000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "47,149,287,000−45,344,450,000=1,804,837,000 円(正) → 「増収」",
+   "文が述べている単位": "(方向の語:増収)",
+   "母集団": "連結(セグメント: マーケティング支援(消費財・サービス))",
+   "値は一致するか": "一致(方向)",
+   "同値の他の候補": [
+    {
+     "要素": "jpcrp_cor:RevenuesFromExternalCustomers",
+     "context": "CurrentYearDuration_jpcrp030000-asr_E05239-000MarketingSupportConsumerGoodsAndServicesReportableSegmentsMember"
+    },
+    {
+     "要素": "jpcrp_cor:RevenuesFromExternalCustomers",
+     "context": "Prior1YearDuration_jpcrp030000-asr_E05239-000MarketingSupportConsumerGoodsAndServicesReportableSegmentsMember"
+    }
+   ],
+   "判定の理由": "対象は抜粋末尾の「増収増益」の先頭「増収」。「売上高」=セグメント情報の jppfs_cor:NetSales(消費財・サービス member)。当期と前期の比較",
+   "迷った点": "抜粋が「増収増益」を含み、H-017 と同じ文。抜粋の位置(末尾 7 字)から本行は「増収」、H-017 は「増益」と読んだ。もし本行が「増収増益」全体を指すなら売上高と営業利益の 2 つの方向を同時に受け、1 つに決められない。jpcrp_cor:RevenuesFromExternalCustomers(同 member)も同値"
+  },
+  {
+   "行の鍵": "H-003",
+   "判定": "独立判定",
+   "形": "単一",
+   "fact": [
+    {
+     "役割": "単一",
+     "要素": "jppfs_cor:NetCashProvidedByUsedInOperatingActivities",
+     "context": "CurrentYearDuration",
+     "期間": "2025-07-01..2026-06-30",
+     "値": 4075011000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "4,075,011,000 円 → 4,075.011 百万円(文は 4,075 百万円)",
+   "文が述べている単位": "百万円",
+   "母集団": "連結",
+   "値は一致するか": "一致(切り捨て)",
+   "同値の他の候補": [
+    {
+     "要素": "jpcrp_cor:NetCashProvidedByUsedInOperatingActivitiesSummaryOfBusinessResults",
+     "context": "CurrentYearDuration"
+    }
+   ],
+   "判定の理由": "「営業活動によるキャッシュ・フロー」「純収入」=連結 CF 計算書の営業 CF(正の値)。当連結会計年度",
+   "迷った点": "jpcrp_cor:NetCashProvidedByUsedInOperatingActivitiesSummaryOfBusinessResults も同値。本文は CF の状況の説明なので本表側を選んだ"
+  },
+  {
+   "行の鍵": "H-004",
+   "判定": "独立判定",
+   "形": "単一",
+   "fact": [
+    {
+     "役割": "単一",
+     "要素": "jppfs_cor:OperatingIncome",
+     "context": "CurrentYearDuration_jpcrp030000-asr_E05239-000BusinessIntelligenceReportableSegmentsMember",
+     "期間": "2025-07-01..2026-06-30",
+     "値": 635554000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "635,554,000 円 → 635.554 百万円(文は 635 百万円)",
+   "文が述べている単位": "百万円(対象の数は円換算済み 635,000,000)",
+   "母集団": "連結(セグメント: ビジネスインテリジェンス)",
+   "値は一致するか": "一致(切り捨て)",
+   "同値の他の候補": [],
+   "判定の理由": "「ビジネスインテリジェンス事業の連結業績」「営業利益」=セグメント情報の jppfs_cor:OperatingIncome(BI member)、当期",
+   "迷った点": "対象の数は機械が円に換算した 635,000,000 だが文の表記は 635 百万円。実額 635,554,000 の切り捨てで一致"
+  },
+  {
+   "行の鍵": "H-005",
+   "判定": "独立判定",
+   "形": "差(当期−前期)",
+   "fact": [
+    {
+     "役割": "当期側",
+     "要素": "jppfs_cor:NoncurrentAssets",
+     "context": "CurrentYearInstant",
+     "期間": "2026-06-30",
+     "値": 15498686000.0,
+     "単位": "JPY"
+    },
+    {
+     "役割": "前期側",
+     "要素": "jppfs_cor:NoncurrentAssets",
+     "context": "Prior1YearInstant",
+     "期間": "2025-06-30",
+     "値": 16389313000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "15,498,686,000−16,389,313,000=-890,627,000 円 → -890.627 百万円(文は 890 百万円)",
+   "文が述べている単位": "百万円(対象の数は円換算済み)",
+   "母集団": "連結",
+   "値は一致するか": "一致(切り捨て)",
+   "同値の他の候補": [],
+   "判定の理由": "「固定資産」「前連結会計年度末に比べ…減少」=連結 BS の固定資産合計、当期末−前期末",
+   "迷った点": "差は −890,627,000 円で文の「890 百万円減少」は絶対値の切り捨て"
+  },
+  {
+   "行の鍵": "H-006",
+   "判定": "独立判定",
+   "形": "差(当期−前期)",
+   "fact": [
+    {
+     "役割": "当期側",
+     "要素": "jppfs_cor:NoncurrentLiabilities",
+     "context": "CurrentYearInstant",
+     "期間": "2026-06-30",
+     "値": 1090875000.0,
+     "単位": "JPY"
+    },
+    {
+     "役割": "前期側",
+     "要素": "jppfs_cor:NoncurrentLiabilities",
+     "context": "Prior1YearInstant",
+     "期間": "2025-06-30",
+     "値": 1034470000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "1,090,875,000−1,034,470,000=56,405,000 円 → 56.405 百万円(文は 56 百万円)",
+   "文が述べている単位": "百万円(対象の数は円換算済み)",
+   "母集団": "連結",
+   "値は一致するか": "一致(切り捨て)",
+   "同値の他の候補": [],
+   "判定の理由": "「固定負債」「前連結会計年度末に比べ…増加」=連結 BS の固定負債合計、当期末−前期末",
+   "迷った点": "特になし(56,405,000 円の切り捨て)"
+  },
+  {
+   "行の鍵": "H-007",
+   "判定": "判定不能",
+   "形": null,
+   "fact": [],
+   "計算": null,
+   "文が述べている単位": "(方向の語: 増収効果)",
+   "母集団": "不明",
+   "値は一致するか": "確かめていない",
+   "同値の他の候補": [],
+   "判定の理由": "対象は「パネル調査・カスタムリサーチの増収効果」。パネル調査・カスタムリサーチはセグメントより細かい事業単位で、元データにその粒度の売上高 fact は無い。文中にセグメント名も無い",
+   "迷った点": "文脈上は消費財・サービス事業の説明と思われるが、文の語では決められず、事業単位の fact も無いので判定不能"
+  },
+  {
+   "行の鍵": "H-008",
+   "判定": "独立判定",
+   "形": "単一",
+   "fact": [
+    {
+     "役割": "単一",
+     "要素": "jppfs_cor:CashAndCashEquivalents",
+     "context": "CurrentYearInstant",
+     "期間": "2026-06-30",
+     "値": 17336927000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "17,336,927,000 円 → 17,336.927 百万円(文は 17,336 百万円)",
+   "文が述べている単位": "百万円",
+   "母集団": "連結",
+   "値は一致するか": "一致(切り捨て)",
+   "同値の他の候補": [
+    {
+     "要素": "jpcrp_cor:CashAndCashEquivalentsSummaryOfBusinessResults",
+     "context": "CurrentYearInstant"
+    }
+   ],
+   "判定の理由": "「当連結会計年度末における現金及び現金同等物」=連結 CF 計算書の期末残高(jppfs_cor:CashAndCashEquivalents、当期末 instant)",
+   "迷った点": "jpcrp_cor:CashAndCashEquivalentsSummaryOfBusinessResults も同値。本表側を選んだ"
+  },
+  {
+   "行の鍵": "H-009",
+   "判定": "独立判定",
+   "形": "単一",
+   "fact": [
+    {
+     "役割": "単一",
+     "要素": "jppfs_cor:NetCashProvidedByUsedInFinancingActivities",
+     "context": "CurrentYearDuration",
+     "期間": "2025-07-01..2026-06-30",
+     "値": -2026734000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "-2,026,734,000 円 → 2,026.734 百万円(文は 2,026 百万円)",
+   "文が述べている単位": "百万円",
+   "母集団": "連結",
+   "値は一致するか": "一致(切り捨て)",
+   "同値の他の候補": [
+    {
+     "要素": "jpcrp_cor:NetCashProvidedByUsedInFinancingActivitiesSummaryOfBusinessResults",
+     "context": "CurrentYearDuration"
+    }
+   ],
+   "判定の理由": "「財務活動によるキャッシュ・フロー」「純支出」=連結 CF 計算書の財務 CF(負の値 −2,026,734,000)。文の 2,026 は絶対値",
+   "迷った点": "jpcrp_cor:NetCashProvidedByUsedInFinancingActivitiesSummaryOfBusinessResults も同値。本表側を選んだ"
+  },
+  {
+   "行の鍵": "H-010",
+   "判定": "独立判定",
+   "形": "符号・方向",
+   "fact": [
+    {
+     "役割": "単一",
+     "要素": "jppfs_cor:NetCashProvidedByUsedInInvestmentActivities",
+     "context": "CurrentYearDuration",
+     "期間": "2025-07-01..2026-06-30",
+     "値": -1410777000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "-1,410,777,000 円 の符号(負) → 「上回った」",
+   "文が述べている単位": "(方向の語:上回った)",
+   "母集団": "連結",
+   "値は一致するか": "一致(方向)",
+   "同値の他の候補": [
+    {
+     "要素": "jpcrp_cor:NetCashProvidedByUsedInInvestingActivitiesSummaryOfBusinessResults",
+     "context": "CurrentYearDuration"
+    }
+   ],
+   "判定の理由": "対象は「支出額が…収入額を上回った」。投資活動の支出合計が収入合計を上回る=投資 CF が負。これを決めるのは投資 CF の純額(jppfs_cor:NetCashProvidedByUsedInInvestmentActivities、当期)の符号",
+   "迷った点": "厳密には支出項目の和と収入項目の和の比較だが、純額の符号がその結果そのもの。2 期の比較ではなく当期内の符号なので「単一」で書いた。Summary 側も同値"
+  },
+  {
+   "行の鍵": "H-011",
+   "判定": "独立判定",
+   "形": "差(当期−前期)",
+   "fact": [
+    {
+     "役割": "当期側",
+     "要素": "jppfs_cor:AccountsPayableTrade",
+     "context": "CurrentYearInstant",
+     "期間": "2026-06-30",
+     "値": 2412844000.0,
+     "単位": "JPY"
+    },
+    {
+     "役割": "前期側",
+     "要素": "jppfs_cor:AccountsPayableTrade",
+     "context": "Prior1YearInstant",
+     "期間": "2025-06-30",
+     "値": 2703933000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "2,412,844,000−2,703,933,000=-291,089,000 円 → -291.089 百万円(文は 291 百万円)",
+   "文が述べている単位": "百万円(対象の数は円換算済み)",
+   "母集団": "連結",
+   "値は一致するか": "一致(切り捨て)",
+   "同値の他の候補": [],
+   "判定の理由": "「買掛金が…減少」=連結 BS の買掛金、当期末−前期末。文は流動負債の内訳説明",
+   "迷った点": "CF の仕入債務の増減額(IncreaseDecreaseInNotesAndAccountsPayableTradeOpeCF)は −331 百万円で一致しないため候補外。差 −291,089,000 の絶対値切り捨て"
+  },
+  {
+   "行の鍵": "H-012",
+   "判定": "判定不能",
+   "形": null,
+   "fact": [],
+   "計算": null,
+   "文が述べている単位": "%",
+   "母集団": "不明",
+   "値は一致するか": "確かめていない",
+   "同値の他の候補": [],
+   "判定の理由": "「DOE(純資産配当率)5.0%を下限」は中期経営計画の目標値(下限)であり、元データに DOE の fact は無い(RateOfReturnOnEquity 等の実績値のいずれも 5.0% ではない)",
+   "迷った点": "目標値なので fact に当たらないのは自然。実績の配当・純資産から DOE を計算することは文が求めていない"
+  },
+  {
+   "行の鍵": "H-013",
+   "判定": "判定不能",
+   "形": null,
+   "fact": [],
+   "計算": null,
+   "文が述べている単位": "(方向の語: 増益)",
+   "母集団": "不明",
+   "値は一致するか": "確かめていない",
+   "同値の他の候補": [],
+   "判定の理由": "対象は「増益」。文中にセグメント名が無く(「また利益面においても…リサーチ事業やパネル事業」)、どのセグメントの営業利益かを文の語で決められない。連結・3 セグメントのうち消費財・ヘルスケア・連結はいずれも増益で、値では絞れない",
+   "迷った点": "前後の文脈(インテージヘルスケアのリサーチ事業)からはマーケティング支援(ヘルスケア)事業の営業利益(2,133,946,000 → 2,683,513,000)の可能性が高いが、文の語だけでは決められないので判定不能とした"
+  },
+  {
+   "行の鍵": "H-014",
+   "判定": "独立判定",
+   "形": "単一",
+   "fact": [
+    {
+     "役割": "単一",
+     "要素": "jppfs_cor:OperatingIncome",
+     "context": "CurrentYearDuration_jpcrp030000-asr_E05239-000MarketingSupportConsumerGoodsAndServicesReportableSegmentsMember",
+     "期間": "2025-07-01..2026-06-30",
+     "値": 2433653000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "2,433,653,000 円 → 2,433.653 百万円(文は 2,433 百万円)",
+   "文が述べている単位": "百万円",
+   "母集団": "連結(セグメント: マーケティング支援(消費財・サービス))",
+   "値は一致するか": "一致(切り捨て)",
+   "同値の他の候補": [],
+   "判定の理由": "「マーケティング支援(消費財・サービス)事業の連結業績」「営業利益」=セグメント情報の OperatingIncome(消費財・サービス member)、当期",
+   "迷った点": "2,433,653,000 の切り捨て"
+  },
+  {
+   "行の鍵": "H-015",
+   "判定": "独立判定",
+   "形": "符号・方向",
+   "fact": [
+    {
+     "役割": "単一",
+     "要素": "jppfs_cor:DecreaseIncreaseInNotesAndAccountsReceivableTradeOpeCF",
+     "context": "CurrentYearDuration",
+     "期間": "2025-07-01..2026-06-30",
+     "値": -626871000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "-626,871,000 円 の符号(負) → 「増加額」",
+   "文が述べている単位": "(方向の語:増加額)",
+   "母集団": "連結",
+   "値は一致するか": "一致(方向)",
+   "同値の他の候補": [
+    {
+     "要素": "jppfs_cor:AccountsReceivableTrade",
+     "context": "CurrentYearInstant"
+    },
+    {
+     "要素": "jppfs_cor:AccountsReceivableTrade",
+     "context": "Prior1YearInstant"
+    }
+   ],
+   "判定の理由": "対象は「売上債権の増加額」(抜粋の末尾位置から、退職給付に係る資産ではなく売上債権の方)。営業 CF の説明なので CF 計算書の「売上債権の増減額」(負の値=増加)",
+   "迷った点": "抜粋末尾 7 字が「増加額、」で、文中に「増加額」が 2 回ある。位置計算では 2 回目(売上債権)。BS の売掛金の差(+772 百万円)でも方向は同じだが、CF の文なので CF 項目を選んだ。CF の −626,871,000 と BS 差 772,604,000 は値が違う(契約資産等の差)"
+  },
+  {
+   "行の鍵": "H-016",
+   "判定": "独立判定",
+   "形": "符号・方向",
+   "fact": [
+    {
+     "役割": "当期側",
+     "要素": "jppfs_cor:NetSales",
+     "context": "CurrentYearDuration_jpcrp030000-asr_E05239-000MarketingSupportHealthcareReportableSegmentsMember",
+     "期間": "2025-07-01..2026-06-30",
+     "値": 12593814000.0,
+     "単位": "JPY"
+    },
+    {
+     "役割": "前期側",
+     "要素": "jppfs_cor:NetSales",
+     "context": "Prior1YearDuration_jpcrp030000-asr_E05239-000MarketingSupportHealthcareReportableSegmentsMember",
+     "期間": "2024-07-01..2025-06-30",
+     "値": 12432050000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "12,593,814,000−12,432,050,000=161,764,000 円(正) → 「増収」",
+   "文が述べている単位": "(方向の語:増収)",
+   "母集団": "連結(セグメント: マーケティング支援(ヘルスケア))",
+   "値は一致するか": "一致(方向)",
+   "同値の他の候補": [
+    {
+     "要素": "jpcrp_cor:RevenuesFromExternalCustomers",
+     "context": "CurrentYearDuration_jpcrp030000-asr_E05239-000MarketingSupportHealthcareReportableSegmentsMember"
+    },
+    {
+     "要素": "jpcrp_cor:RevenuesFromExternalCustomers",
+     "context": "Prior1YearDuration_jpcrp030000-asr_E05239-000MarketingSupportHealthcareReportableSegmentsMember"
+    }
+   ],
+   "判定の理由": "対象は「増収増益」の先頭「増収」。「売上高」=セグメント情報の NetSales(ヘルスケア member)、当期と前期",
+   "迷った点": "H-053 と同じ文。抜粋位置から本行は「増収」、H-053 は「増益」と読んだ。RevenuesFromExternalCustomers も同値"
+  },
+  {
+   "行の鍵": "H-017",
+   "判定": "独立判定",
+   "形": "符号・方向",
+   "fact": [
+    {
+     "役割": "当期側",
+     "要素": "jppfs_cor:OperatingIncome",
+     "context": "CurrentYearDuration_jpcrp030000-asr_E05239-000MarketingSupportConsumerGoodsAndServicesReportableSegmentsMember",
+     "期間": "2025-07-01..2026-06-30",
+     "値": 2433653000.0,
+     "単位": "JPY"
+    },
+    {
+     "役割": "前期側",
+     "要素": "jppfs_cor:OperatingIncome",
+     "context": "Prior1YearDuration_jpcrp030000-asr_E05239-000MarketingSupportConsumerGoodsAndServicesReportableSegmentsMember",
+     "期間": "2024-07-01..2025-06-30",
+     "値": 1435072000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "2,433,653,000−1,435,072,000=998,581,000 円(正) → 「増益」",
+   "文が述べている単位": "(方向の語:増益)",
+   "母集団": "連結(セグメント: マーケティング支援(消費財・サービス))",
+   "値は一致するか": "一致(方向)",
+   "同値の他の候補": [],
+   "判定の理由": "対象は「増収増益」の「増益」。「営業利益」=セグメント情報の OperatingIncome(消費財・サービス member)、当期と前期",
+   "迷った点": "H-002 と同じ文。抜粋の末尾 7 字が「増益となりまし」なので本行は「増益」"
+  },
+  {
+   "行の鍵": "H-018",
+   "判定": "独立判定",
+   "形": "差(当期−前期)",
+   "fact": [
+    {
+     "役割": "当期側",
+     "要素": "jppfs_cor:CurrentAssets",
+     "context": "CurrentYearInstant",
+     "期間": "2026-06-30",
+     "値": 32470028000.0,
+     "単位": "JPY"
+    },
+    {
+     "役割": "前期側",
+     "要素": "jppfs_cor:CurrentAssets",
+     "context": "Prior1YearInstant",
+     "期間": "2025-06-30",
+     "値": 30533345000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "32,470,028,000−30,533,345,000=1,936,683,000 円 → 1,936.683 百万円(文は 1,936 百万円)",
+   "文が述べている単位": "百万円",
+   "母集団": "連結",
+   "値は一致するか": "一致(切り捨て)",
+   "同値の他の候補": [],
+   "判定の理由": "「流動資産」「前連結会計年度末に比べ…増加」=連結 BS の流動資産合計、当期末−前期末",
+   "迷った点": "特になし(1,936,683,000 の切り捨て)"
+  },
+  {
+   "行の鍵": "H-019",
+   "判定": "独立判定",
+   "形": "差(当期−前期)",
+   "fact": [
+    {
+     "役割": "当期側",
+     "要素": "jppfs_cor:Liabilities",
+     "context": "CurrentYearInstant",
+     "期間": "2026-06-30",
+     "値": 13771141000.0,
+     "単位": "JPY"
+    },
+    {
+     "役割": "前期側",
+     "要素": "jppfs_cor:Liabilities",
+     "context": "Prior1YearInstant",
+     "期間": "2025-06-30",
+     "値": 13601605000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "13,771,141,000−13,601,605,000=169,536,000 円 → 169.536 百万円(文は 169 百万円)",
+   "文が述べている単位": "百万円(対象の数は円換算済み)",
+   "母集団": "連結",
+   "値は一致するか": "一致(切り捨て)",
+   "同値の他の候補": [],
+   "判定の理由": "「負債合計」「増加」=連結 BS の負債合計、当期末−前期末",
+   "迷った点": "特になし(169,536,000 の切り捨て)"
+  },
+  {
+   "行の鍵": "H-020",
+   "判定": "独立判定",
+   "形": "差(当期−前期)",
+   "fact": [
+    {
+     "役割": "当期側",
+     "要素": "jppfs_cor:NetDefinedBenefitLiability",
+     "context": "CurrentYearInstant",
+     "期間": "2026-06-30",
+     "値": 307325000.0,
+     "単位": "JPY"
+    },
+    {
+     "役割": "前期側",
+     "要素": "jppfs_cor:NetDefinedBenefitLiability",
+     "context": "Prior1YearInstant",
+     "期間": "2025-06-30",
+     "値": 294355000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "307,325,000−294,355,000=12,970,000 円 → 12.970 百万円(文は 12 百万円)",
+   "文が述べている単位": "百万円(対象の数は円換算済み)",
+   "母集団": "連結",
+   "値は一致するか": "一致(切り捨て)",
+   "同値の他の候補": [],
+   "判定の理由": "「退職給付に係る負債が 12 百万円…増加」=連結 BS の退職給付に係る負債、当期末−前期末。固定負債の内訳説明",
+   "迷った点": "リース債務(流動)の差も絶対値 12 百万円(−12,063,000)だが、文の語「退職給付に係る負債」で決めた。CF の退職給付に係る負債の増減額は 9 百万円で不一致。差 12,970,000 の切り捨て"
+  },
+  {
+   "行の鍵": "H-021",
+   "判定": "独立判定",
+   "形": "率(比)",
+   "fact": [
+    {
+     "役割": "分子",
+     "要素": "jppfs_cor:NetSales",
+     "context": "CurrentYearDuration_jpcrp030000-asr_E05239-000MarketingSupportConsumerGoodsAndServicesReportableSegmentsMember",
+     "期間": "2025-07-01..2026-06-30",
+     "値": 47149287000.0,
+     "単位": "JPY"
+    },
+    {
+     "役割": "分母",
+     "要素": "jppfs_cor:NetSales",
+     "context": "Prior1YearDuration_jpcrp030000-asr_E05239-000MarketingSupportConsumerGoodsAndServicesReportableSegmentsMember",
+     "期間": "2024-07-01..2025-06-30",
+     "値": 45344450000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "(47,149,287,000/45,344,450,000−1)×100=3.980% → 4.0%(四捨五入)",
+   "文が述べている単位": "%",
+   "母集団": "連結(セグメント: マーケティング支援(消費財・サービス))",
+   "値は一致するか": "一致(四捨五入)",
+   "同値の他の候補": [
+    {
+     "要素": "jpcrp_cor:RevenuesFromExternalCustomers",
+     "context": "CurrentYearDuration_jpcrp030000-asr_E05239-000MarketingSupportConsumerGoodsAndServicesReportableSegmentsMember"
+    },
+    {
+     "要素": "jpcrp_cor:RevenuesFromExternalCustomers",
+     "context": "Prior1YearDuration_jpcrp030000-asr_E05239-000MarketingSupportConsumerGoodsAndServicesReportableSegmentsMember"
+    }
+   ],
+   "判定の理由": "「売上高…(前期比 4.0% 増)」=消費財・サービス事業の売上高の当期/前期。分子=当期、分母=前期のセグメント NetSales",
+   "迷った点": "RevenuesFromExternalCustomers(同 member)も同値で同じ率になる。3.98%→4.0 は四捨五入"
+  },
+  {
+   "行の鍵": "H-022",
+   "判定": "独立判定",
+   "形": "符号・方向",
+   "fact": [
+    {
+     "役割": "当期側",
+     "要素": "jppfs_cor:OtherNCL",
+     "context": "CurrentYearInstant",
+     "期間": "2026-06-30",
+     "値": 104438000.0,
+     "単位": "JPY"
+    },
+    {
+     "役割": "前期側",
+     "要素": "jppfs_cor:OtherNCL",
+     "context": "Prior1YearInstant",
+     "期間": "2025-06-30",
+     "値": 91139000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "104,438,000−91,139,000=13,299,000 円(正) → 「増加」",
+   "文が述べている単位": "(方向の語:増加)",
+   "母集団": "連結",
+   "値は一致するか": "一致(方向)",
+   "同値の他の候補": [],
+   "判定の理由": "対象は「その他が 13 百万円増加した」の「増加」。固定負債の内訳説明なので「その他」=固定負債のその他(jppfs_cor:OtherNCL)、当期末と前期末",
+   "迷った点": "「その他」は流動負債にもある(OtherCL)が、この文は固定負債(リース債務・退職給付に係る負債)の内訳なので NCL。値も 13,299,000 で一致"
+  },
+  {
+   "行の鍵": "H-023",
+   "判定": "独立判定",
+   "形": "符号・方向",
+   "fact": [
+    {
+     "役割": "当期側",
+     "要素": "jppfs_cor:NetAssets",
+     "context": "CurrentYearInstant",
+     "期間": "2026-06-30",
+     "値": 34197573000.0,
+     "単位": "JPY"
+    },
+    {
+     "役割": "前期側",
+     "要素": "jppfs_cor:NetAssets",
+     "context": "Prior1YearInstant",
+     "期間": "2025-06-30",
+     "値": 33321053000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "34,197,573,000−33,321,053,000=876,520,000 円(正) → 「増加」",
+   "文が述べている単位": "(方向の語:増加)",
+   "母集団": "連結",
+   "値は一致するか": "一致(方向)",
+   "同値の他の候補": [
+    {
+     "要素": "jpcrp_cor:NetAssetsSummaryOfBusinessResults",
+     "context": "CurrentYearInstant"
+    },
+    {
+     "要素": "jpcrp_cor:NetAssetsSummaryOfBusinessResults",
+     "context": "Prior1YearInstant"
+    },
+    {
+     "要素": "jppfs_cor:TotalChangesOfItemsDuringThePeriod",
+     "context": "CurrentYearDuration"
+    }
+   ],
+   "判定の理由": "対象は「876 百万円増加し」の「増加」。「純資産合計」「前連結会計年度末に比べ」=連結 BS の純資産合計、当期末と前期末",
+   "迷った点": "NetAssets の当期末 fact は同じ値で 2 件(BS と株主資本等変動計算書)ある。株主資本等変動計算書の当期変動額合計(TotalChangesOfItemsDuringThePeriod、876,520,000)も同じ方向を示す"
+  },
+  {
+   "行の鍵": "H-024",
+   "判定": "独立判定",
+   "形": "単一",
+   "fact": [
+    {
+     "役割": "単一",
+     "要素": "jppfs_cor:OperatingIncome",
+     "context": "CurrentYearDuration_jpcrp030000-asr_E05239-000MarketingSupportHealthcareReportableSegmentsMember",
+     "期間": "2025-07-01..2026-06-30",
+     "値": 2683513000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "2,683,513,000 円 → 2,683.513 百万円(文は 2,683 百万円)",
+   "文が述べている単位": "百万円",
+   "母集団": "連結(セグメント: マーケティング支援(ヘルスケア))",
+   "値は一致するか": "一致(切り捨て)",
+   "同値の他の候補": [],
+   "判定の理由": "「マーケティング支援(ヘルスケア)事業の連結業績」「営業利益」=セグメント情報の OperatingIncome(ヘルスケア member)、当期",
+   "迷った点": "2,683,513,000 の切り捨て"
+  },
+  {
+   "行の鍵": "H-025",
+   "判定": "判定不能",
+   "形": null,
+   "fact": [],
+   "計算": null,
+   "文が述べている単位": "(方向の語: 改善)",
+   "母集団": "不明",
+   "値は一致するか": "確かめていない",
+   "同値の他の候補": [],
+   "判定の理由": "対象は「収益性は改善しました」の「改善」。「収益性」は元データの fact ではなく(利益率の fact は無い)、文中にセグメント名も無い",
+   "迷った点": "文脈上はビジネスインテリジェンス事業の説明と思われるが、文の語では決められない。収益性を営業利益率と読み替えても BI の営業利益率は 8.62%→8.64% でほぼ横ばいであり、「改善」を機械で確かめられない"
+  },
+  {
+   "行の鍵": "H-026",
+   "判定": "独立判定",
+   "形": "差(当期−前期)",
+   "fact": [
+    {
+     "役割": "当期側",
+     "要素": "jppfs_cor:RemeasurementsOfDefinedBenefitPlans",
+     "context": "CurrentYearInstant",
+     "期間": "2026-06-30",
+     "値": 274214000.0,
+     "単位": "JPY"
+    },
+    {
+     "役割": "前期側",
+     "要素": "jppfs_cor:RemeasurementsOfDefinedBenefitPlans",
+     "context": "Prior1YearInstant",
+     "期間": "2025-06-30",
+     "値": -360639000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "274,214,000−-360,639,000=634,853,000 円 → 634.853 百万円(文は 634 百万円)",
+   "文が述べている単位": "百万円(対象の数は円換算済み)",
+   "母集団": "連結",
+   "値は一致するか": "一致(切り捨て)",
+   "同値の他の候補": [
+    {
+     "要素": "jppfs_cor:TotalChangesOfItemsDuringThePeriod",
+     "context": "CurrentYearDuration_RemeasurementsOfDefinedBenefitPlansMember"
+    },
+    {
+     "要素": "jppfs_cor:NetChangesOfItemsOtherThanShareholdersEquity",
+     "context": "CurrentYearDuration_RemeasurementsOfDefinedBenefitPlansMember"
+    }
+   ],
+   "判定の理由": "「退職給付に係る調整累計額が 634 百万円…増加」=連結 BS の退職給付に係る調整累計額、当期末−前期末。純資産の内訳説明",
+   "迷った点": "株主資本等変動計算書の当期変動額(TotalChangesOfItemsDuringThePeriod / NetChangesOfItemsOtherThanShareholdersEquity の RemeasurementsOfDefinedBenefitPlansMember、634,853,000)も同値で単一 fact として当たる。「増加」は前期末との比較なので BS の差を選び、変動計算書側は同値の候補に挙げた。−360,639,000 → 274,214,000 で差 634,853,000 の切り捨て"
+  },
+  {
+   "行の鍵": "H-027",
+   "判定": "独立判定",
+   "形": "差(当期−前期)",
+   "fact": [
+    {
+     "役割": "当期側",
+     "要素": "jppfs_cor:NetAssets",
+     "context": "CurrentYearInstant",
+     "期間": "2026-06-30",
+     "値": 34197573000.0,
+     "単位": "JPY"
+    },
+    {
+     "役割": "前期側",
+     "要素": "jppfs_cor:NetAssets",
+     "context": "Prior1YearInstant",
+     "期間": "2025-06-30",
+     "値": 33321053000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "34,197,573,000−33,321,053,000=876,520,000 円 → 876.520 百万円(文は 876 百万円)",
+   "文が述べている単位": "百万円(対象の数は円換算済み)",
+   "母集団": "連結",
+   "値は一致するか": "一致(切り捨て)",
+   "同値の他の候補": [
+    {
+     "要素": "jppfs_cor:TotalChangesOfItemsDuringThePeriod",
+     "context": "CurrentYearDuration"
+    },
+    {
+     "要素": "jpcrp_cor:NetAssetsSummaryOfBusinessResults",
+     "context": "CurrentYearInstant"
+    },
+    {
+     "要素": "jpcrp_cor:NetAssetsSummaryOfBusinessResults",
+     "context": "Prior1YearInstant"
+    }
+   ],
+   "判定の理由": "「純資産合計」「前連結会計年度末に比べ 876 百万円増加」=連結 BS の純資産合計、当期末−前期末",
+   "迷った点": "株主資本等変動計算書の当期変動額合計(TotalChangesOfItemsDuringThePeriod、876,520,000)も同値の単一 fact。本文は「前連結会計年度末に比べ」なので BS の差を選んだ。NetAssets は同値の fact が重複登録されている"
+  },
+  {
+   "行の鍵": "H-028",
+   "判定": "判定不能",
+   "形": null,
+   "fact": [],
+   "計算": null,
+   "文が述べている単位": "(方向の語: 上回る)",
+   "母集団": "不明",
+   "値は一致するか": "確かめていない",
+   "同値の他の候補": [],
+   "判定の理由": "対象は「マーケティングソリューション領域も前年を上回る水準」の「上回る」。「マーケティングソリューション領域」はセグメントより細かい事業領域で、元データにその粒度の fact は無い",
+   "迷った点": "何の数が前年を上回ったのか(売上か利益か)も文に無い"
+  },
+  {
+   "行の鍵": "H-029",
+   "判定": "独立判定",
+   "形": "符号・方向",
+   "fact": [
+    {
+     "役割": "当期側",
+     "要素": "jppfs_cor:CashAndCashEquivalents",
+     "context": "CurrentYearInstant",
+     "期間": "2026-06-30",
+     "値": 17336927000.0,
+     "単位": "JPY"
+    },
+    {
+     "役割": "前期側",
+     "要素": "jppfs_cor:CashAndCashEquivalents",
+     "context": "Prior1YearInstant",
+     "期間": "2025-06-30",
+     "値": 16492126000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "17,336,927,000−16,492,126,000=844,801,000 円(正) → 「増加」",
+   "文が述べている単位": "(方向の語:増加)",
+   "母集団": "連結",
+   "値は一致するか": "一致(方向)",
+   "同値の他の候補": [
+    {
+     "要素": "jppfs_cor:NetIncreaseDecreaseInCashAndCashEquivalents",
+     "context": "CurrentYearDuration"
+    },
+    {
+     "要素": "jpcrp_cor:CashAndCashEquivalentsSummaryOfBusinessResults",
+     "context": "CurrentYearInstant"
+    },
+    {
+     "要素": "jpcrp_cor:CashAndCashEquivalentsSummaryOfBusinessResults",
+     "context": "Prior1YearInstant"
+    }
+   ],
+   "判定の理由": "対象は「844 百万円増加し」の「増加」。「現金及び現金同等物」「前連結会計年度末に比べ」=CF 計算書の期末残高、当期末と前期末",
+   "迷った点": "CF 計算書の「現金及び現金同等物の増減額」(NetIncreaseDecreaseInCashAndCashEquivalents、844,800,000)も単一 fact として同じ方向を示す。前期末 fact は同値で 2 件ある"
+  },
+  {
+   "行の鍵": "H-030",
+   "判定": "判定不能",
+   "形": null,
+   "fact": [],
+   "計算": null,
+   "文が述べている単位": "(方向の語: 改善)",
+   "母集団": "不明",
+   "値は一致するか": "確かめていない",
+   "同値の他の候補": [],
+   "判定の理由": "対象は「雇用・所得環境が改善する」の「改善」。わが国経済の一般的な記述で、提出会社の fact ではない",
+   "迷った点": "特になし"
+  },
+  {
+   "行の鍵": "H-031",
+   "判定": "独立判定",
+   "形": "単一",
+   "fact": [
+    {
+     "役割": "単一",
+     "要素": "jppfs_cor:NetSales",
+     "context": "CurrentYearDuration_jpcrp030000-asr_E05239-000BusinessIntelligenceReportableSegmentsMember",
+     "期間": "2025-07-01..2026-06-30",
+     "値": 7356808000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "7,356,808,000 円 → 7,356.808 百万円(文は 7,356 百万円)",
+   "文が述べている単位": "百万円",
+   "母集団": "連結(セグメント: ビジネスインテリジェンス)",
+   "値は一致するか": "一致(切り捨て)",
+   "同値の他の候補": [
+    {
+     "要素": "jpcrp_cor:RevenuesFromExternalCustomers",
+     "context": "CurrentYearDuration_jpcrp030000-asr_E05239-000BusinessIntelligenceReportableSegmentsMember"
+    }
+   ],
+   "判定の理由": "「ビジネスインテリジェンス事業の連結業績」「売上高」=セグメント情報の NetSales(BI member)、当期",
+   "迷った点": "RevenuesFromExternalCustomers(BI member)も同値。本文の科目名「売上高」に合わせ NetSales を選んだ。7,356,808,000 の切り捨て"
+  },
+  {
+   "行の鍵": "H-032",
+   "判定": "独立判定",
+   "形": "差(当期−前期)",
+   "fact": [
+    {
+     "役割": "当期側",
+     "要素": "jppfs_cor:IncomeTaxesPayable",
+     "context": "CurrentYearInstant",
+     "期間": "2026-06-30",
+     "値": 1545653000.0,
+     "単位": "JPY"
+    },
+    {
+     "役割": "前期側",
+     "要素": "jppfs_cor:IncomeTaxesPayable",
+     "context": "Prior1YearInstant",
+     "期間": "2025-06-30",
+     "値": 1231767000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "1,545,653,000−1,231,767,000=313,886,000 円 → 313.886 百万円(文は 313 百万円)",
+   "文が述べている単位": "百万円(対象の数は円換算済み)",
+   "母集団": "連結",
+   "値は一致するか": "一致(切り捨て)",
+   "同値の他の候補": [],
+   "判定の理由": "「未払法人税等が 313 百万円…増加」=連結 BS の未払法人税等、当期末−前期末",
+   "迷った点": "特になし(313,886,000 の切り捨て)"
+  },
+  {
+   "行の鍵": "H-033",
+   "判定": "独立判定",
+   "形": "単一",
+   "fact": [
+    {
+     "役割": "単一",
+     "要素": "jppfs_cor:Assets",
+     "context": "CurrentYearInstant",
+     "期間": "2026-06-30",
+     "値": 47968715000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "47,968,715,000 円 → 47,968.715 百万円(文は 47,968 百万円)",
+   "文が述べている単位": "百万円",
+   "母集団": "連結",
+   "値は一致するか": "一致(切り捨て)",
+   "同値の他の候補": [
+    {
+     "要素": "jpcrp_cor:TotalAssetsSummaryOfBusinessResults",
+     "context": "CurrentYearInstant"
+    }
+   ],
+   "判定の理由": "「総資産は…47,968 百万円となりました」=連結 BS の資産合計、当期末",
+   "迷った点": "TotalAssetsSummaryOfBusinessResults も同値。本表側を選んだ。LiabilitiesAndNetAssets も同値だが概念が違う(負債純資産合計)ので候補外。47,968,715,000 の切り捨て"
+  },
+  {
+   "行の鍵": "H-034",
+   "判定": "独立判定",
+   "形": "差(当期−前期)",
+   "fact": [
+    {
+     "役割": "当期側",
+     "要素": "jppfs_cor:ForeignCurrencyTranslationAdjustment",
+     "context": "CurrentYearInstant",
+     "期間": "2026-06-30",
+     "値": 872781000.0,
+     "単位": "JPY"
+    },
+    {
+     "役割": "前期側",
+     "要素": "jppfs_cor:ForeignCurrencyTranslationAdjustment",
+     "context": "Prior1YearInstant",
+     "期間": "2025-06-30",
+     "値": 700872000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "872,781,000−700,872,000=171,909,000 円 → 171.909 百万円(文は 171 百万円)",
+   "文が述べている単位": "百万円(対象の数は円換算済み)",
+   "母集団": "連結",
+   "値は一致するか": "一致(切り捨て)",
+   "同値の他の候補": [
+    {
+     "要素": "jppfs_cor:TotalChangesOfItemsDuringThePeriod",
+     "context": "CurrentYearDuration_ForeignCurrencyTranslationAdjustmentMember"
+    },
+    {
+     "要素": "jppfs_cor:NetChangesOfItemsOtherThanShareholdersEquity",
+     "context": "CurrentYearDuration_ForeignCurrencyTranslationAdjustmentMember"
+    }
+   ],
+   "判定の理由": "「為替換算調整勘定が 171 百万円…増加」=連結 BS の為替換算調整勘定、当期末−前期末",
+   "迷った点": "株主資本等変動計算書の当期変動額(ForeignCurrencyTranslationAdjustmentMember、171,909,000)も同値の単一 fact。前期末比の文なので BS の差を選んだ"
+  },
+  {
+   "行の鍵": "H-035",
+   "判定": "独立判定",
+   "形": "率(比)",
+   "fact": [
+    {
+     "役割": "分子",
+     "要素": "jppfs_cor:OperatingIncome",
+     "context": "CurrentYearDuration_jpcrp030000-asr_E05239-000BusinessIntelligenceReportableSegmentsMember",
+     "期間": "2025-07-01..2026-06-30",
+     "値": 635554000.0,
+     "単位": "JPY"
+    },
+    {
+     "役割": "分母",
+     "要素": "jppfs_cor:OperatingIncome",
+     "context": "Prior1YearDuration_jpcrp030000-asr_E05239-000BusinessIntelligenceReportableSegmentsMember",
+     "期間": "2024-07-01..2025-06-30",
+     "値": 672152000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "(635,554,000/672,152,000−1)×100=-5.445% → -5.4%(四捨五入)",
+   "文が述べている単位": "%",
+   "母集団": "連結(セグメント: ビジネスインテリジェンス)",
+   "値は一致するか": "一致(四捨五入)",
+   "同値の他の候補": [],
+   "判定の理由": "「営業利益 635 百万円(同 5.4% 減)」の「同」=前期比。BI セグメントの営業利益の当期/前期",
+   "迷った点": "−5.44%→−5.4 は四捨五入"
+  },
+  {
+   "行の鍵": "H-036",
+   "判定": "独立判定",
+   "形": "単一",
+   "fact": [
+    {
+     "役割": "単一",
+     "要素": "jppfs_cor:ProfitLossAttributableToOwnersOfParent",
+     "context": "CurrentYearDuration",
+     "期間": "2025-07-01..2026-06-30",
+     "値": 1703213000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "1,703,213,000 円 → 1,703.213 百万円(文は 1,703 百万円)",
+   "文が述べている単位": "百万円",
+   "母集団": "連結",
+   "値は一致するか": "一致(切り捨て)",
+   "同値の他の候補": [
+    {
+     "要素": "jpcrp_cor:ProfitLossAttributableToOwnersOfParentSummaryOfBusinessResults",
+     "context": "CurrentYearDuration"
+    }
+   ],
+   "判定の理由": "「親会社株主に帰属する当期純利益は 1,703 百万円」=連結 PL の同科目、当期",
+   "迷った点": "ProfitLossAttributableToOwnersOfParentSummaryOfBusinessResults も同値。本表の fact は同値で 2 件登録(PL と株主資本等変動計算書)。本表側を選んだ。1,703,213,000 の切り捨て"
+  },
+  {
+   "行の鍵": "H-037",
+   "判定": "判定不能",
+   "形": null,
+   "fact": [],
+   "計算": null,
+   "文が述べている単位": "(方向の語: 拡大)",
+   "母集団": "不明",
+   "値は一致するか": "確かめていない",
+   "同値の他の候補": [],
+   "判定の理由": "対象は「新領域への事業拡大を図る」の「拡大」。方針の記述で、数の fact を指していない",
+   "迷った点": "特になし"
+  },
+  {
+   "行の鍵": "H-038",
+   "判定": "独立判定",
+   "形": "符号・方向",
+   "fact": [
+    {
+     "役割": "当期側",
+     "要素": "jppfs_cor:NetSales",
+     "context": "CurrentYearDuration_jpcrp030000-asr_E05239-000BusinessIntelligenceReportableSegmentsMember",
+     "期間": "2025-07-01..2026-06-30",
+     "値": 7356808000.0,
+     "単位": "JPY"
+    },
+    {
+     "役割": "前期側",
+     "要素": "jppfs_cor:NetSales",
+     "context": "Prior1YearDuration_jpcrp030000-asr_E05239-000BusinessIntelligenceReportableSegmentsMember",
+     "期間": "2024-07-01..2025-06-30",
+     "値": 7794586000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "7,356,808,000−7,794,586,000=-437,778,000 円(負) → 「減収」",
+   "文が述べている単位": "(方向の語:減収)",
+   "母集団": "連結(セグメント: ビジネスインテリジェンス)",
+   "値は一致するか": "一致(方向)",
+   "同値の他の候補": [
+    {
+     "要素": "jpcrp_cor:RevenuesFromExternalCustomers",
+     "context": "CurrentYearDuration_jpcrp030000-asr_E05239-000BusinessIntelligenceReportableSegmentsMember"
+    },
+    {
+     "要素": "jpcrp_cor:RevenuesFromExternalCustomers",
+     "context": "Prior1YearDuration_jpcrp030000-asr_E05239-000BusinessIntelligenceReportableSegmentsMember"
+    }
+   ],
+   "判定の理由": "対象は「減収減益」の先頭「減収」。BI セグメントの売上高、当期と前期",
+   "迷った点": "H-073 と同じ文。抜粋位置から本行は「減収」、H-073 は「減益」。RevenuesFromExternalCustomers も同値"
+  },
+  {
+   "行の鍵": "H-039",
+   "判定": "独立判定",
+   "形": "符号・方向",
+   "fact": [
+    {
+     "役割": "当期側",
+     "要素": "jppfs_cor:Liabilities",
+     "context": "CurrentYearInstant",
+     "期間": "2026-06-30",
+     "値": 13771141000.0,
+     "単位": "JPY"
+    },
+    {
+     "役割": "前期側",
+     "要素": "jppfs_cor:Liabilities",
+     "context": "Prior1YearInstant",
+     "期間": "2025-06-30",
+     "値": 13601605000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "13,771,141,000−13,601,605,000=169,536,000 円(正) → 「増加」",
+   "文が述べている単位": "(方向の語:増加)",
+   "母集団": "連結",
+   "値は一致するか": "一致(方向)",
+   "同値の他の候補": [],
+   "判定の理由": "対象は「169 百万円増加し」の「増加」。「負債合計」=連結 BS の負債合計、当期末と前期末",
+   "迷った点": "特になし"
+  },
+  {
+   "行の鍵": "H-040",
+   "判定": "独立判定",
+   "形": "率(比)",
+   "fact": [
+    {
+     "役割": "分子",
+     "要素": "jppfs_cor:OperatingIncome",
+     "context": "CurrentYearDuration_jpcrp030000-asr_E05239-000MarketingSupportHealthcareReportableSegmentsMember",
+     "期間": "2025-07-01..2026-06-30",
+     "値": 2683513000.0,
+     "単位": "JPY"
+    },
+    {
+     "役割": "分母",
+     "要素": "jppfs_cor:OperatingIncome",
+     "context": "Prior1YearDuration_jpcrp030000-asr_E05239-000MarketingSupportHealthcareReportableSegmentsMember",
+     "期間": "2024-07-01..2025-06-30",
+     "値": 2133946000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "(2,683,513,000/2,133,946,000−1)×100=25.754% → 25.8%(四捨五入)",
+   "文が述べている単位": "%",
+   "母集団": "連結(セグメント: マーケティング支援(ヘルスケア))",
+   "値は一致するか": "一致(四捨五入)",
+   "同値の他の候補": [],
+   "判定の理由": "「営業利益 2,683 百万円(同 25.8% 増)」の「同」=前期比。ヘルスケアセグメントの営業利益の当期/前期",
+   "迷った点": "25.75%→25.8 は四捨五入"
+  },
+  {
+   "行の鍵": "H-041",
+   "判定": "独立判定",
+   "形": "率(比)",
+   "fact": [
+    {
+     "役割": "分子",
+     "要素": "jppfs_cor:NetSales",
+     "context": "CurrentYearDuration_jpcrp030000-asr_E05239-000BusinessIntelligenceReportableSegmentsMember",
+     "期間": "2025-07-01..2026-06-30",
+     "値": 7356808000.0,
+     "単位": "JPY"
+    },
+    {
+     "役割": "分母",
+     "要素": "jppfs_cor:NetSales",
+     "context": "Prior1YearDuration_jpcrp030000-asr_E05239-000BusinessIntelligenceReportableSegmentsMember",
+     "期間": "2024-07-01..2025-06-30",
+     "値": 7794586000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "(7,356,808,000/7,794,586,000−1)×100=-5.616% → -5.6%(四捨五入)",
+   "文が述べている単位": "%",
+   "母集団": "連結(セグメント: ビジネスインテリジェンス)",
+   "値は一致するか": "一致(四捨五入)",
+   "同値の他の候補": [
+    {
+     "要素": "jpcrp_cor:RevenuesFromExternalCustomers",
+     "context": "CurrentYearDuration_jpcrp030000-asr_E05239-000BusinessIntelligenceReportableSegmentsMember"
+    },
+    {
+     "要素": "jpcrp_cor:RevenuesFromExternalCustomers",
+     "context": "Prior1YearDuration_jpcrp030000-asr_E05239-000BusinessIntelligenceReportableSegmentsMember"
+    }
+   ],
+   "判定の理由": "「売上高 7,356 百万円(前期比 5.6% 減)」=BI セグメントの売上高の当期/前期",
+   "迷った点": "RevenuesFromExternalCustomers も同値。−5.62%→−5.6 は四捨五入"
+  },
+  {
+   "行の鍵": "H-042",
+   "判定": "独立判定",
+   "形": "差(当期−前期)",
+   "fact": [
+    {
+     "役割": "前期側",
+     "要素": "jppfs_cor:CurrentPortionOfLongTermLoansPayable",
+     "context": "Prior1YearInstant",
+     "期間": "2025-06-30",
+     "値": 100000000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "当期末の fact 無し(0 と読む)−100,000,000=−100,000,000 円 → 100 百万円減少(文は 100 百万円)",
+   "文が述べている単位": "百万円(対象の数は円換算済み)",
+   "母集団": "連結",
+   "値は一致するか": "一致(完全)",
+   "同値の他の候補": [
+    {
+     "要素": "jppfs_cor:RepaymentOfLongTermLoansPayableFinCF",
+     "context": "CurrentYearDuration"
+    }
+   ],
+   "判定の理由": "「1 年内返済予定の長期借入金が 100 百万円減少」=連結 BS の同科目。前期末 100,000,000 円の fact があり、当期末の fact は元データに無い(残高ゼロで表示されないと読む)。差は 0−100,000,000",
+   "迷った点": "当期側 fact が存在しないため「差」の形だが fact は前期側 1 件のみ。CF 計算書の長期借入金の返済による支出(RepaymentOfLongTermLoansPayableFinCF、−100,000,000)も同値だが概念が違う(BS 残高の減少 vs 返済額)ので候補に留めた"
+  },
+  {
+   "行の鍵": "H-043",
+   "判定": "独立判定",
+   "形": "率(比)",
+   "fact": [
+    {
+     "役割": "分子",
+     "要素": "jppfs_cor:OperatingIncome",
+     "context": "CurrentYearDuration_jpcrp030000-asr_E05239-000MarketingSupportConsumerGoodsAndServicesReportableSegmentsMember",
+     "期間": "2025-07-01..2026-06-30",
+     "値": 2433653000.0,
+     "単位": "JPY"
+    },
+    {
+     "役割": "分母",
+     "要素": "jppfs_cor:OperatingIncome",
+     "context": "Prior1YearDuration_jpcrp030000-asr_E05239-000MarketingSupportConsumerGoodsAndServicesReportableSegmentsMember",
+     "期間": "2024-07-01..2025-06-30",
+     "値": 1435072000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "(2,433,653,000/1,435,072,000−1)×100=69.584% → 69.6%(四捨五入)",
+   "文が述べている単位": "%",
+   "母集団": "連結(セグメント: マーケティング支援(消費財・サービス))",
+   "値は一致するか": "一致(四捨五入)",
+   "同値の他の候補": [],
+   "判定の理由": "「営業利益 2,433 百万円(同 69.6% 増)」の「同」=前期比。消費財・サービスセグメントの営業利益の当期/前期",
+   "迷った点": "69.58%→69.6 は四捨五入"
+  },
+  {
+   "行の鍵": "H-044",
+   "判定": "独立判定",
+   "形": "差(当期−前期)",
+   "fact": [
+    {
+     "役割": "当期側",
+     "要素": "jppfs_cor:RetainedEarnings",
+     "context": "CurrentYearInstant",
+     "期間": "2026-06-30",
+     "値": 31873469000.0,
+     "単位": "JPY"
+    },
+    {
+     "役割": "前期側",
+     "要素": "jppfs_cor:RetainedEarnings",
+     "context": "Prior1YearInstant",
+     "期間": "2025-06-30",
+     "値": 31961063000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "31,873,469,000−31,961,063,000=-87,594,000 円 → -87.594 百万円(文は 87 百万円)",
+   "文が述べている単位": "百万円(対象の数は円換算済み)",
+   "母集団": "連結",
+   "値は一致するか": "一致(切り捨て)",
+   "同値の他の候補": [
+    {
+     "要素": "jppfs_cor:TotalChangesOfItemsDuringThePeriod",
+     "context": "CurrentYearDuration_RetainedEarningsMember"
+    }
+   ],
+   "判定の理由": "「利益剰余金が 87 百万円減少」=連結 BS の利益剰余金、当期末−前期末。純資産の内訳説明",
+   "迷った点": "株主資本等変動計算書の当期変動額合計(TotalChangesOfItemsDuringThePeriod、RetainedEarningsMember、−87,594,000)も同値の単一 fact。前期末比の文なので BS の差を選んだ。差 −87,594,000 の絶対値切り捨て"
+  },
+  {
+   "行の鍵": "H-045",
+   "判定": "独立判定",
+   "形": "符号・方向",
+   "fact": [
+    {
+     "役割": "当期側",
+     "要素": "jppfs_cor:InvestmentSecurities",
+     "context": "CurrentYearInstant",
+     "期間": "2026-06-30",
+     "値": 1658782000.0,
+     "単位": "JPY"
+    },
+    {
+     "役割": "前期側",
+     "要素": "jppfs_cor:InvestmentSecurities",
+     "context": "Prior1YearInstant",
+     "期間": "2025-06-30",
+     "値": 2561762000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "1,658,782,000−2,561,762,000=-902,980,000 円(負) → 「減少」",
+   "文が述べている単位": "(方向の語:減少)",
+   "母集団": "連結",
+   "値は一致するか": "一致(方向)",
+   "同値の他の候補": [],
+   "判定の理由": "対象は「投資有価証券が 902 百万円減少した」の「減少」。連結 BS の投資有価証券、当期末と前期末",
+   "迷った点": "特になし"
+  },
+  {
+   "行の鍵": "H-046",
+   "判定": "独立判定",
+   "形": "符号・方向",
+   "fact": [
+    {
+     "役割": "当期側",
+     "要素": "jppfs_cor:CurrentAssets",
+     "context": "CurrentYearInstant",
+     "期間": "2026-06-30",
+     "値": 32470028000.0,
+     "単位": "JPY"
+    },
+    {
+     "役割": "前期側",
+     "要素": "jppfs_cor:CurrentAssets",
+     "context": "Prior1YearInstant",
+     "期間": "2025-06-30",
+     "値": 30533345000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "32,470,028,000−30,533,345,000=1,936,683,000 円(正) → 「増加」",
+   "文が述べている単位": "(方向の語:増加)",
+   "母集団": "連結",
+   "値は一致するか": "一致(方向)",
+   "同値の他の候補": [],
+   "判定の理由": "対象は「1,936 百万円増加し」の「増加」。「流動資産」「前連結会計年度末に比べ」=連結 BS の流動資産合計、当期末と前期末",
+   "迷った点": "特になし"
+  },
+  {
+   "行の鍵": "H-047",
+   "判定": "独立判定",
+   "形": "符号・方向",
+   "fact": [
+    {
+     "役割": "当期側",
+     "要素": "jppfs_cor:ProvisionForBonuses",
+     "context": "CurrentYearInstant",
+     "期間": "2026-06-30",
+     "値": 2470897000.0,
+     "単位": "JPY"
+    },
+    {
+     "役割": "前期側",
+     "要素": "jppfs_cor:ProvisionForBonuses",
+     "context": "Prior1YearInstant",
+     "期間": "2025-06-30",
+     "値": 2315670000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "2,470,897,000−2,315,670,000=155,227,000 円(正) → 「増加」",
+   "文が述べている単位": "(方向の語:増加)",
+   "母集団": "連結",
+   "値は一致するか": "一致(方向)",
+   "同値の他の候補": [],
+   "判定の理由": "対象は「賞与引当金が 155 百万円増加した」の「増加」。連結 BS の賞与引当金、当期末と前期末",
+   "迷った点": "CF の賞与引当金の増減額(117,080,000)も正だが値が違う(155 と不一致)ので BS の差で判定"
+  },
+  {
+   "行の鍵": "H-048",
+   "判定": "独立判定",
+   "形": "率(比)",
+   "fact": [
+    {
+     "役割": "分子",
+     "要素": "jppfs_cor:NetSales",
+     "context": "CurrentYearDuration_jpcrp030000-asr_E05239-000MarketingSupportHealthcareReportableSegmentsMember",
+     "期間": "2025-07-01..2026-06-30",
+     "値": 12593814000.0,
+     "単位": "JPY"
+    },
+    {
+     "役割": "分母",
+     "要素": "jppfs_cor:NetSales",
+     "context": "Prior1YearDuration_jpcrp030000-asr_E05239-000MarketingSupportHealthcareReportableSegmentsMember",
+     "期間": "2024-07-01..2025-06-30",
+     "値": 12432050000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "(12,593,814,000/12,432,050,000−1)×100=1.301% → 1.3%(四捨五入)",
+   "文が述べている単位": "%",
+   "母集団": "連結(セグメント: マーケティング支援(ヘルスケア))",
+   "値は一致するか": "一致(四捨五入)",
+   "同値の他の候補": [
+    {
+     "要素": "jpcrp_cor:RevenuesFromExternalCustomers",
+     "context": "CurrentYearDuration_jpcrp030000-asr_E05239-000MarketingSupportHealthcareReportableSegmentsMember"
+    },
+    {
+     "要素": "jpcrp_cor:RevenuesFromExternalCustomers",
+     "context": "Prior1YearDuration_jpcrp030000-asr_E05239-000MarketingSupportHealthcareReportableSegmentsMember"
+    }
+   ],
+   "判定の理由": "「売上高 12,593 百万円(前期比 1.3% 増)」=ヘルスケアセグメントの売上高の当期/前期",
+   "迷った点": "RevenuesFromExternalCustomers も同値。1.30%→1.3 は四捨五入(切り捨てでも一致)"
+  },
+  {
+   "行の鍵": "H-049",
+   "判定": "独立判定",
+   "形": "単一",
+   "fact": [
+    {
+     "役割": "単一",
+     "要素": "jppfs_cor:NetAssets",
+     "context": "CurrentYearInstant",
+     "期間": "2026-06-30",
+     "値": 34197573000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "34,197,573,000 円 → 34,197.573 百万円(文は 34,197 百万円)",
+   "文が述べている単位": "百万円",
+   "母集団": "連結",
+   "値は一致するか": "一致(切り捨て)",
+   "同値の他の候補": [
+    {
+     "要素": "jpcrp_cor:NetAssetsSummaryOfBusinessResults",
+     "context": "CurrentYearInstant"
+    }
+   ],
+   "判定の理由": "「純資産合計は…34,197 百万円となりました」=連結 BS の純資産合計、当期末",
+   "迷った点": "NetAssetsSummaryOfBusinessResults も同値。NetAssets の当期末 fact は同値で 2 件登録。本表側を選んだ。34,197,573,000 の切り捨て"
+  },
+  {
+   "行の鍵": "H-050",
+   "判定": "独立判定",
+   "形": "単一",
+   "fact": [
+    {
+     "役割": "単一",
+     "要素": "jppfs_cor:CurrentLiabilities",
+     "context": "CurrentYearInstant",
+     "期間": "2026-06-30",
+     "値": 12680266000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "12,680,266,000 円 → 12,680.266 百万円(文は 12,680 百万円)",
+   "文が述べている単位": "百万円",
+   "母集団": "連結",
+   "値は一致するか": "一致(切り捨て)",
+   "同値の他の候補": [],
+   "判定の理由": "「流動負債は…12,680 百万円となりました」=連結 BS の流動負債合計、当期末",
+   "迷った点": "特になし(12,680,266,000 の切り捨て)"
+  },
+  {
+   "行の鍵": "H-051",
+   "判定": "判定不能",
+   "形": null,
+   "fact": [],
+   "計算": null,
+   "文が述べている単位": "%",
+   "母集団": "不明",
+   "値は一致するか": "確かめていない",
+   "同値の他の候補": [],
+   "判定の理由": "「ROE(自己資本利益率)12% の達成に向けた」は目標値。元データの ROE 実績(RateOfReturnOnEquitySummaryOfBusinessResults)は連結 5.07%(当期)・10.73%(前期)などで 12% に当たる fact は無い",
+   "迷った点": "目標値なので fact に当たらないのは自然"
+  },
+  {
+   "行の鍵": "H-052",
+   "判定": "独立判定",
+   "形": "単一",
+   "fact": [
+    {
+     "役割": "単一",
+     "要素": "jppfs_cor:OperatingIncome",
+     "context": "CurrentYearDuration",
+     "期間": "2025-07-01..2026-06-30",
+     "値": 5752721000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "5,752,721,000 円 → 5,752.721 百万円(文は 5,752 百万円)",
+   "文が述べている単位": "百万円",
+   "母集団": "連結",
+   "値は一致するか": "一致(切り捨て)",
+   "同値の他の候補": [],
+   "判定の理由": "「当社グループの当連結会計年度の業績」「営業利益 5,752 百万円」=連結 PL の営業利益、当期",
+   "迷った点": "OperatingIncome の当期 fact は同値で 2 件登録(PL とセグメント情報の合計)。5,752,721,000 の切り捨て"
+  },
+  {
+   "行の鍵": "H-053",
+   "判定": "独立判定",
+   "形": "符号・方向",
+   "fact": [
+    {
+     "役割": "当期側",
+     "要素": "jppfs_cor:OperatingIncome",
+     "context": "CurrentYearDuration_jpcrp030000-asr_E05239-000MarketingSupportHealthcareReportableSegmentsMember",
+     "期間": "2025-07-01..2026-06-30",
+     "値": 2683513000.0,
+     "単位": "JPY"
+    },
+    {
+     "役割": "前期側",
+     "要素": "jppfs_cor:OperatingIncome",
+     "context": "Prior1YearDuration_jpcrp030000-asr_E05239-000MarketingSupportHealthcareReportableSegmentsMember",
+     "期間": "2024-07-01..2025-06-30",
+     "値": 2133946000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "2,683,513,000−2,133,946,000=549,567,000 円(正) → 「増益」",
+   "文が述べている単位": "(方向の語:増益)",
+   "母集団": "連結(セグメント: マーケティング支援(ヘルスケア))",
+   "値は一致するか": "一致(方向)",
+   "同値の他の候補": [],
+   "判定の理由": "対象は「増収増益」の「増益」。ヘルスケアセグメントの営業利益、当期と前期",
+   "迷った点": "H-016 と同じ文。抜粋の末尾 7 字が「増益となりまし」なので本行は「増益」"
+  },
+  {
+   "行の鍵": "H-054",
+   "判定": "独立判定",
+   "形": "単一",
+   "fact": [
+    {
+     "役割": "単一",
+     "要素": "jppfs_cor:NetSales",
+     "context": "CurrentYearDuration_jpcrp030000-asr_E05239-000MarketingSupportHealthcareReportableSegmentsMember",
+     "期間": "2025-07-01..2026-06-30",
+     "値": 12593814000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "12,593,814,000 円 → 12,593.814 百万円(文は 12,593 百万円)",
+   "文が述べている単位": "百万円",
+   "母集団": "連結(セグメント: マーケティング支援(ヘルスケア))",
+   "値は一致するか": "一致(切り捨て)",
+   "同値の他の候補": [
+    {
+     "要素": "jpcrp_cor:RevenuesFromExternalCustomers",
+     "context": "CurrentYearDuration_jpcrp030000-asr_E05239-000MarketingSupportHealthcareReportableSegmentsMember"
+    }
+   ],
+   "判定の理由": "「マーケティング支援(ヘルスケア)事業の連結業績」「売上高 12,593 百万円」=セグメント情報の NetSales(ヘルスケア member)、当期",
+   "迷った点": "RevenuesFromExternalCustomers も同値。本文の科目名「売上高」に合わせ NetSales。12,593,814,000 の切り捨て"
+  },
+  {
+   "行の鍵": "H-055",
+   "判定": "独立判定",
+   "形": "単一",
+   "fact": [
+    {
+     "役割": "単一",
+     "要素": "jppfs_cor:OrdinaryIncome",
+     "context": "CurrentYearDuration",
+     "期間": "2025-07-01..2026-06-30",
+     "値": 5753864000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "5,753,864,000 円 → 5,753.864 百万円(文は 5,753 百万円)",
+   "文が述べている単位": "百万円",
+   "母集団": "連結",
+   "値は一致するか": "一致(切り捨て)",
+   "同値の他の候補": [
+    {
+     "要素": "jpcrp_cor:OrdinaryIncomeLossSummaryOfBusinessResults",
+     "context": "CurrentYearDuration"
+    }
+   ],
+   "判定の理由": "「経常利益 5,753 百万円」=連結 PL の経常利益、当期",
+   "迷った点": "OrdinaryIncomeLossSummaryOfBusinessResults も同値。本表側を選んだ。5,753,864,000 の切り捨て"
+  },
+  {
+   "行の鍵": "H-056",
+   "判定": "独立判定",
+   "形": "単一",
+   "fact": [
+    {
+     "役割": "単一",
+     "要素": "jppfs_cor:Liabilities",
+     "context": "CurrentYearInstant",
+     "期間": "2026-06-30",
+     "値": 13771141000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "13,771,141,000 円 → 13,771.141 百万円(文は 13,771 百万円)",
+   "文が述べている単位": "百万円",
+   "母集団": "連結",
+   "値は一致するか": "一致(切り捨て)",
+   "同値の他の候補": [],
+   "判定の理由": "「負債合計は…13,771 百万円」=連結 BS の負債合計、当期末",
+   "迷った点": "特になし(13,771,141,000 の切り捨て)"
+  },
+  {
+   "行の鍵": "H-057",
+   "判定": "判定不能",
+   "形": null,
+   "fact": [],
+   "計算": null,
+   "文が述べている単位": "(方向の語: 減益要因)",
+   "母集団": "不明",
+   "値は一致するか": "確かめていない",
+   "同値の他の候補": [],
+   "判定の理由": "対象は「一時費用の発生が減益要因となりました」の「減益要因」。長野事業所統合移転に伴う一時費用は元データに fact が無く、「減益要因」は要因の記述で 2 期の fact の方向を直接述べていない。文中にセグメント名も無い",
+   "迷った点": "文脈上は BI 事業の営業利益(672→635 百万円、減益)に関係するが、文の語は「一時費用が減益の要因」であり、営業利益の減少そのものを対象にしているとは読み切れない"
+  },
+  {
+   "行の鍵": "H-058",
+   "判定": "判定不能",
+   "形": null,
+   "fact": [],
+   "計算": null,
+   "文が述べている単位": "(方向の語: 増益)",
+   "母集団": "不明",
+   "値は一致するか": "確かめていない",
+   "同値の他の候補": [],
+   "判定の理由": "対象は「増益となりました」の「増益」。文中にセグメント名が無く(「利益面では、パネル調査・カスタムリサーチの増収効果に加え…」)、どのセグメントの営業利益かを文の語で決められない。消費財・サービス、ヘルスケア、連結はいずれも増益で値でも絞れない",
+   "迷った点": "文脈上は消費財・サービス事業の営業利益(1,435,072,000 → 2,433,653,000)の可能性が高いが、文の語だけでは決められないので判定不能とした"
+  },
+  {
+   "行の鍵": "H-059",
+   "判定": "独立判定",
+   "形": "差(当期−前期)",
+   "fact": [
+    {
+     "役割": "当期側",
+     "要素": "jppfs_cor:InvestmentSecurities",
+     "context": "CurrentYearInstant",
+     "期間": "2026-06-30",
+     "値": 1658782000.0,
+     "単位": "JPY"
+    },
+    {
+     "役割": "前期側",
+     "要素": "jppfs_cor:InvestmentSecurities",
+     "context": "Prior1YearInstant",
+     "期間": "2025-06-30",
+     "値": 2561762000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "1,658,782,000−2,561,762,000=-902,980,000 円 → -902.980 百万円(文は 902 百万円)",
+   "文が述べている単位": "百万円(対象の数は円換算済み)",
+   "母集団": "連結",
+   "値は一致するか": "一致(切り捨て)",
+   "同値の他の候補": [],
+   "判定の理由": "「投資有価証券が 902 百万円減少」=連結 BS の投資有価証券、当期末−前期末。固定資産の内訳説明",
+   "迷った点": "差 −902,980,000 の絶対値切り捨て"
+  },
+  {
+   "行の鍵": "H-060",
+   "判定": "独立判定",
+   "形": "差(当期−前期)",
+   "fact": [
+    {
+     "役割": "当期側",
+     "要素": "jppfs_cor:NetDefinedBenefitAsset",
+     "context": "CurrentYearInstant",
+     "期間": "2026-06-30",
+     "値": 2169554000.0,
+     "単位": "JPY"
+    },
+    {
+     "役割": "前期側",
+     "要素": "jppfs_cor:NetDefinedBenefitAsset",
+     "context": "Prior1YearInstant",
+     "期間": "2025-06-30",
+     "値": 1111165000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "2,169,554,000−1,111,165,000=1,058,389,000 円 → 1,058.389 百万円(文は 1,058 百万円)",
+   "文が述べている単位": "百万円",
+   "母集団": "連結",
+   "値は一致するか": "一致(切り捨て)",
+   "同値の他の候補": [
+    {
+     "要素": "jppfs_cor:IncreaseDecreaseInNetDefinedBenefitAssetOpeCF",
+     "context": "CurrentYearDuration"
+    }
+   ],
+   "判定の理由": "「退職給付に係る資産が 1,058 百万円増加」=連結 BS の退職給付に係る資産、当期末−前期末。固定資産の内訳説明",
+   "迷った点": "CF 計算書の退職給付に係る資産の増減額(IncreaseDecreaseInNetDefinedBenefitAssetOpeCF、−1,058,388,000)も絶対値が同値。BS の内訳説明なので BS の差を選んだ(差 1,058,389,000 と CF 1,058,388,000 は千円の丸めで 1 違う)"
+  },
+  {
+   "行の鍵": "H-061",
+   "判定": "独立判定",
+   "形": "差(当期−前期)",
+   "fact": [
+    {
+     "役割": "当期側",
+     "要素": "jppfs_cor:LeaseObligationsNCL",
+     "context": "CurrentYearInstant",
+     "期間": "2026-06-30",
+     "値": 137003000.0,
+     "単位": "JPY"
+    },
+    {
+     "役割": "前期側",
+     "要素": "jppfs_cor:LeaseObligationsNCL",
+     "context": "Prior1YearInstant",
+     "期間": "2025-06-30",
+     "値": 118887000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "137,003,000−118,887,000=18,116,000 円 → 18.116 百万円(文は 18 百万円)",
+   "文が述べている単位": "百万円(対象の数は円換算済み)",
+   "母集団": "連結",
+   "値は一致するか": "一致(切り捨て)",
+   "同値の他の候補": [],
+   "判定の理由": "「リース債務が 18 百万円…増加」。固定負債の内訳説明なので固定負債のリース債務(LeaseObligationsNCL)、当期末−前期末",
+   "迷った点": "リース債務は流動(LeaseObligationsCL)にもあるが、流動側は −12 百万円で不一致。固定負債の文なので NCL。差 18,116,000 の切り捨て"
+  },
+  {
+   "行の鍵": "H-062",
+   "判定": "独立判定",
+   "形": "差(当期−前期)",
+   "fact": [
+    {
+     "役割": "当期側",
+     "要素": "jppfs_cor:ProvisionForBonuses",
+     "context": "CurrentYearInstant",
+     "期間": "2026-06-30",
+     "値": 2470897000.0,
+     "単位": "JPY"
+    },
+    {
+     "役割": "前期側",
+     "要素": "jppfs_cor:ProvisionForBonuses",
+     "context": "Prior1YearInstant",
+     "期間": "2025-06-30",
+     "値": 2315670000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "2,470,897,000−2,315,670,000=155,227,000 円 → 155.227 百万円(文は 155 百万円)",
+   "文が述べている単位": "百万円(対象の数は円換算済み)",
+   "母集団": "連結",
+   "値は一致するか": "一致(切り捨て)",
+   "同値の他の候補": [],
+   "判定の理由": "「賞与引当金が 155 百万円増加」=連結 BS の賞与引当金、当期末−前期末。流動負債の内訳説明",
+   "迷った点": "CF の賞与引当金の増減額は 117 百万円で不一致のため候補外。差 155,227,000 の切り捨て"
+  },
+  {
+   "行の鍵": "H-063",
+   "判定": "独立判定",
+   "形": "単一",
+   "fact": [
+    {
+     "役割": "単一",
+     "要素": "jppfs_cor:NoncurrentLiabilities",
+     "context": "CurrentYearInstant",
+     "期間": "2026-06-30",
+     "値": 1090875000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "1,090,875,000 円 → 1,090.875 百万円(文は 1,090 百万円)",
+   "文が述べている単位": "百万円",
+   "母集団": "連結",
+   "値は一致するか": "一致(切り捨て)",
+   "同値の他の候補": [],
+   "判定の理由": "「固定負債は…1,090 百万円となりました」=連結 BS の固定負債合計、当期末",
+   "迷った点": "特になし(1,090,875,000 の切り捨て)"
+  },
+  {
+   "行の鍵": "H-064",
+   "判定": "独立判定",
+   "形": "符号・方向",
+   "fact": [
+    {
+     "役割": "単一",
+     "要素": "jppfs_cor:IncreaseDecreaseInNetDefinedBenefitAssetOpeCF",
+     "context": "CurrentYearDuration",
+     "期間": "2025-07-01..2026-06-30",
+     "値": -1058388000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "-1,058,388,000 円 の符号(負) → 「増加額」",
+   "文が述べている単位": "(方向の語:増加額)",
+   "母集団": "連結",
+   "値は一致するか": "一致(方向)",
+   "同値の他の候補": [
+    {
+     "要素": "jppfs_cor:NetDefinedBenefitAsset",
+     "context": "CurrentYearInstant"
+    },
+    {
+     "要素": "jppfs_cor:NetDefinedBenefitAsset",
+     "context": "Prior1YearInstant"
+    }
+   ],
+   "判定の理由": "対象は「退職給付に係る資産の増加額」(抜粋の末尾位置から 1 回目の「増加額」)。営業 CF の説明なので CF 計算書の「退職給付に係る資産の増減額」(負の値=資産の増加=支出)",
+   "迷った点": "文中に「増加額」が 2 回あり、位置計算で 1 回目(退職給付に係る資産)。BS の退職給付に係る資産の差(+1,058 百万円)でも同じ方向"
+  },
+  {
+   "行の鍵": "H-065",
+   "判定": "独立判定",
+   "形": "単一",
+   "fact": [
+    {
+     "役割": "単一",
+     "要素": "jppfs_cor:CurrentAssets",
+     "context": "CurrentYearInstant",
+     "期間": "2026-06-30",
+     "値": 32470028000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "32,470,028,000 円 → 32,470.028 百万円(文は 32,470 百万円)",
+   "文が述べている単位": "百万円",
+   "母集団": "連結",
+   "値は一致するか": "一致(切り捨て)",
+   "同値の他の候補": [],
+   "判定の理由": "「流動資産は…32,470 百万円となりました」=連結 BS の流動資産合計、当期末",
+   "迷った点": "特になし(32,470,028,000 の切り捨て)"
+  },
+  {
+   "行の鍵": "H-066",
+   "判定": "独立判定",
+   "形": "符号・方向",
+   "fact": [
+    {
+     "役割": "当期側",
+     "要素": "jppfs_cor:NoncurrentLiabilities",
+     "context": "CurrentYearInstant",
+     "期間": "2026-06-30",
+     "値": 1090875000.0,
+     "単位": "JPY"
+    },
+    {
+     "役割": "前期側",
+     "要素": "jppfs_cor:NoncurrentLiabilities",
+     "context": "Prior1YearInstant",
+     "期間": "2025-06-30",
+     "値": 1034470000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "1,090,875,000−1,034,470,000=56,405,000 円(正) → 「増加」",
+   "文が述べている単位": "(方向の語:増加)",
+   "母集団": "連結",
+   "値は一致するか": "一致(方向)",
+   "同値の他の候補": [],
+   "判定の理由": "対象は「56 百万円増加し」の「増加」。「固定負債」「前連結会計年度末に比べ」=連結 BS の固定負債合計、当期末と前期末",
+   "迷った点": "特になし"
+  },
+  {
+   "行の鍵": "H-067",
+   "判定": "独立判定",
+   "形": "符号・方向",
+   "fact": [
+    {
+     "役割": "単一",
+     "要素": "jppfs_cor:NetCashProvidedByUsedInOperatingActivities",
+     "context": "CurrentYearDuration",
+     "期間": "2025-07-01..2026-06-30",
+     "値": 4075011000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "4,075,011,000 円 の符号(正) → 「上回った」",
+   "文が述べている単位": "(方向の語:上回った)",
+   "母集団": "連結",
+   "値は一致するか": "一致(方向)",
+   "同値の他の候補": [
+    {
+     "要素": "jpcrp_cor:NetCashProvidedByUsedInOperatingActivitiesSummaryOfBusinessResults",
+     "context": "CurrentYearDuration"
+    }
+   ],
+   "判定の理由": "対象は「収入額が…支出額を上回った」。営業活動の収入が支出を上回る=営業 CF が正。これを決めるのは営業 CF の純額(当期)の符号",
+   "迷った点": "厳密には収入項目の和と支出項目の和の比較だが、純額の符号がその結果そのもの。当期内の符号なので「単一」。Summary 側も同値"
+  },
+  {
+   "行の鍵": "H-068",
+   "判定": "独立判定",
+   "形": "単一",
+   "fact": [
+    {
+     "役割": "単一",
+     "要素": "jppfs_cor:NetSales",
+     "context": "CurrentYearDuration",
+     "期間": "2025-07-01..2026-06-30",
+     "値": 67099910000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "67,099,910,000 円 → 67,099.910 百万円(文は 67,099 百万円)",
+   "文が述べている単位": "百万円",
+   "母集団": "連結",
+   "値は一致するか": "一致(切り捨て)",
+   "同値の他の候補": [
+    {
+     "要素": "jpcrp_cor:NetSalesSummaryOfBusinessResults",
+     "context": "CurrentYearDuration"
+    },
+    {
+     "要素": "jpcrp_cor:RevenuesFromExternalCustomers",
+     "context": "CurrentYearDuration"
+    }
+   ],
+   "判定の理由": "「当社グループの当連結会計年度の業績」「売上高 67,099 百万円」=連結 PL の売上高、当期",
+   "迷った点": "NetSalesSummaryOfBusinessResults、RevenuesFromExternalCustomers(member 無し)も同値。NetSales の当期 fact は同値で 2 件登録。本表側を選んだ。67,099,910,000 の切り捨て"
+  },
+  {
+   "行の鍵": "H-069",
+   "判定": "独立判定",
+   "形": "符号・方向",
+   "fact": [
+    {
+     "役割": "当期側",
+     "要素": "jppfs_cor:RetainedEarnings",
+     "context": "CurrentYearInstant",
+     "期間": "2026-06-30",
+     "値": 31873469000.0,
+     "単位": "JPY"
+    },
+    {
+     "役割": "前期側",
+     "要素": "jppfs_cor:RetainedEarnings",
+     "context": "Prior1YearInstant",
+     "期間": "2025-06-30",
+     "値": 31961063000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "31,873,469,000−31,961,063,000=-87,594,000 円(負) → 「減少」",
+   "文が述べている単位": "(方向の語:減少)",
+   "母集団": "連結",
+   "値は一致するか": "一致(方向)",
+   "同値の他の候補": [
+    {
+     "要素": "jppfs_cor:TotalChangesOfItemsDuringThePeriod",
+     "context": "CurrentYearDuration_RetainedEarningsMember"
+    }
+   ],
+   "判定の理由": "対象は「利益剰余金が 87 百万円減少した」の「減少」。連結 BS の利益剰余金、当期末と前期末",
+   "迷った点": "株主資本等変動計算書の当期変動額合計(RetainedEarningsMember、−87,594,000)も同じ方向を示す"
+  },
+  {
+   "行の鍵": "H-070",
+   "判定": "独立判定",
+   "形": "符号・方向",
+   "fact": [
+    {
+     "役割": "当期側",
+     "要素": "jppfs_cor:RemeasurementsOfDefinedBenefitPlans",
+     "context": "CurrentYearInstant",
+     "期間": "2026-06-30",
+     "値": 274214000.0,
+     "単位": "JPY"
+    },
+    {
+     "役割": "前期側",
+     "要素": "jppfs_cor:RemeasurementsOfDefinedBenefitPlans",
+     "context": "Prior1YearInstant",
+     "期間": "2025-06-30",
+     "値": -360639000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "274,214,000−-360,639,000=634,853,000 円(正) → 「増加」",
+   "文が述べている単位": "(方向の語:増加)",
+   "母集団": "連結",
+   "値は一致するか": "一致(方向)",
+   "同値の他の候補": [
+    {
+     "要素": "jppfs_cor:TotalChangesOfItemsDuringThePeriod",
+     "context": "CurrentYearDuration_RemeasurementsOfDefinedBenefitPlansMember"
+    }
+   ],
+   "判定の理由": "対象は「退職給付に係る調整累計額が 634 百万円増加した」の「増加」。連結 BS の同科目、当期末と前期末",
+   "迷った点": "株主資本等変動計算書の当期変動額(RemeasurementsOfDefinedBenefitPlansMember、634,853,000)も同じ方向"
+  },
+  {
+   "行の鍵": "H-071",
+   "判定": "独立判定",
+   "形": "差(当期−前期)",
+   "fact": [
+    {
+     "役割": "当期側",
+     "要素": "jppfs_cor:CashAndDeposits",
+     "context": "CurrentYearInstant",
+     "期間": "2026-06-30",
+     "値": 11557541000.0,
+     "単位": "JPY"
+    },
+    {
+     "役割": "前期側",
+     "要素": "jppfs_cor:CashAndDeposits",
+     "context": "Prior1YearInstant",
+     "期間": "2025-06-30",
+     "値": 15269232000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "11,557,541,000−15,269,232,000=-3,711,691,000 円 → -3,711.691 百万円(文は 3,711 百万円)",
+   "文が述べている単位": "百万円",
+   "母集団": "連結",
+   "値は一致するか": "一致(切り捨て)",
+   "同値の他の候補": [],
+   "判定の理由": "「現金及び預金が 3,711 百万円減少」=連結 BS の現金及び預金、当期末−前期末。流動資産の内訳説明",
+   "迷った点": "「現金及び現金同等物」(CF)とは別概念で、そちらは +844 百万円。差 −3,711,691,000 の絶対値切り捨て"
+  },
+  {
+   "行の鍵": "H-072",
+   "判定": "独立判定",
+   "形": "符号・方向",
+   "fact": [
+    {
+     "役割": "当期側",
+     "要素": "jppfs_cor:CashAndDeposits",
+     "context": "CurrentYearInstant",
+     "期間": "2026-06-30",
+     "値": 11557541000.0,
+     "単位": "JPY"
+    },
+    {
+     "役割": "前期側",
+     "要素": "jppfs_cor:CashAndDeposits",
+     "context": "Prior1YearInstant",
+     "期間": "2025-06-30",
+     "値": 15269232000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "11,557,541,000−15,269,232,000=-3,711,691,000 円(負) → 「減少」",
+   "文が述べている単位": "(方向の語:減少)",
+   "母集団": "連結",
+   "値は一致するか": "一致(方向)",
+   "同値の他の候補": [],
+   "判定の理由": "対象は「現金及び預金が 3,711 百万円減少した」の「減少」。連結 BS の現金及び預金、当期末と前期末",
+   "迷った点": "特になし"
+  },
+  {
+   "行の鍵": "H-073",
+   "判定": "独立判定",
+   "形": "符号・方向",
+   "fact": [
+    {
+     "役割": "当期側",
+     "要素": "jppfs_cor:OperatingIncome",
+     "context": "CurrentYearDuration_jpcrp030000-asr_E05239-000BusinessIntelligenceReportableSegmentsMember",
+     "期間": "2025-07-01..2026-06-30",
+     "値": 635554000.0,
+     "単位": "JPY"
+    },
+    {
+     "役割": "前期側",
+     "要素": "jppfs_cor:OperatingIncome",
+     "context": "Prior1YearDuration_jpcrp030000-asr_E05239-000BusinessIntelligenceReportableSegmentsMember",
+     "期間": "2024-07-01..2025-06-30",
+     "値": 672152000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "635,554,000−672,152,000=-36,598,000 円(負) → 「減益」",
+   "文が述べている単位": "(方向の語:減益)",
+   "母集団": "連結(セグメント: ビジネスインテリジェンス)",
+   "値は一致するか": "一致(方向)",
+   "同値の他の候補": [],
+   "判定の理由": "対象は「減収減益」の「減益」。BI セグメントの営業利益、当期と前期",
+   "迷った点": "H-038 と同じ文。抜粋の末尾 7 字が「減益となりまし」なので本行は「減益」"
+  },
+  {
+   "行の鍵": "H-074",
+   "判定": "独立判定",
+   "形": "差(当期−前期)",
+   "fact": [
+    {
+     "役割": "当期側",
+     "要素": "jppfs_cor:Goodwill",
+     "context": "CurrentYearInstant",
+     "期間": "2026-06-30",
+     "値": 1801284000.0,
+     "単位": "JPY"
+    },
+    {
+     "役割": "前期側",
+     "要素": "jppfs_cor:Goodwill",
+     "context": "Prior1YearInstant",
+     "期間": "2025-06-30",
+     "値": 2568963000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "1,801,284,000−2,568,963,000=-767,679,000 円 → -767.679 百万円(文は 767 百万円)",
+   "文が述べている単位": "百万円(対象の数は円換算済み)",
+   "母集団": "連結",
+   "値は一致するか": "一致(切り捨て)",
+   "同値の他の候補": [],
+   "判定の理由": "「のれんが 767 百万円減少」=連結 BS ののれん(member 無し)、当期末−前期末。固定資産の内訳説明",
+   "迷った点": "Goodwill はセグメント別(消費財・サービス、ヘルスケア)の fact もあるが、文は連結 BS の固定資産の説明なので合計を選んだ。合計の fact は同値で 2 件登録。差 −767,679,000 の絶対値切り捨て"
+  },
+  {
+   "行の鍵": "H-075",
+   "判定": "独立判定",
+   "形": "差(当期−前期)",
+   "fact": [
+    {
+     "役割": "当期側",
+     "要素": "jppfs_cor:OtherNCL",
+     "context": "CurrentYearInstant",
+     "期間": "2026-06-30",
+     "値": 104438000.0,
+     "単位": "JPY"
+    },
+    {
+     "役割": "前期側",
+     "要素": "jppfs_cor:OtherNCL",
+     "context": "Prior1YearInstant",
+     "期間": "2025-06-30",
+     "値": 91139000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "104,438,000−91,139,000=13,299,000 円 → 13.299 百万円(文は 13 百万円)",
+   "文が述べている単位": "百万円(対象の数は円換算済み)",
+   "母集団": "連結",
+   "値は一致するか": "一致(切り捨て)",
+   "同値の他の候補": [],
+   "判定の理由": "「その他が 13 百万円増加」。固定負債の内訳説明なので固定負債の「その他」(OtherNCL)、当期末−前期末",
+   "迷った点": "「その他」は流動負債(OtherCL)等にもあるが、固定負債の文なので NCL。差 13,299,000 の切り捨て"
+  },
+  {
+   "行の鍵": "H-076",
+   "判定": "独立判定",
+   "形": "単一",
+   "fact": [
+    {
+     "役割": "単一",
+     "要素": "jppfs_cor:NetSales",
+     "context": "CurrentYearDuration_jpcrp030000-asr_E05239-000MarketingSupportConsumerGoodsAndServicesReportableSegmentsMember",
+     "期間": "2025-07-01..2026-06-30",
+     "値": 47149287000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "47,149,287,000 円 → 47,149.287 百万円(文は 47,149 百万円)",
+   "文が述べている単位": "百万円",
+   "母集団": "連結(セグメント: マーケティング支援(消費財・サービス))",
+   "値は一致するか": "一致(切り捨て)",
+   "同値の他の候補": [
+    {
+     "要素": "jpcrp_cor:RevenuesFromExternalCustomers",
+     "context": "CurrentYearDuration_jpcrp030000-asr_E05239-000MarketingSupportConsumerGoodsAndServicesReportableSegmentsMember"
+    }
+   ],
+   "判定の理由": "「マーケティング支援(消費財・サービス)事業の連結業績」「売上高 47,149 百万円」=セグメント情報の NetSales(消費財・サービス member)、当期",
+   "迷った点": "RevenuesFromExternalCustomers も同値。科目名「売上高」に合わせ NetSales。47,149,287,000 の切り捨て"
+  },
+  {
+   "行の鍵": "H-077",
+   "判定": "独立判定",
+   "形": "差(当期−前期)",
+   "fact": [
+    {
+     "役割": "当期側",
+     "要素": "jppfs_cor:CurrentLiabilities",
+     "context": "CurrentYearInstant",
+     "期間": "2026-06-30",
+     "値": 12680266000.0,
+     "単位": "JPY"
+    },
+    {
+     "役割": "前期側",
+     "要素": "jppfs_cor:CurrentLiabilities",
+     "context": "Prior1YearInstant",
+     "期間": "2025-06-30",
+     "値": 12567135000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "12,680,266,000−12,567,135,000=113,131,000 円 → 113.131 百万円(文は 113 百万円)",
+   "文が述べている単位": "百万円(対象の数は円換算済み)",
+   "母集団": "連結",
+   "値は一致するか": "一致(切り捨て)",
+   "同値の他の候補": [],
+   "判定の理由": "「流動負債」「前連結会計年度末に比べ 113 百万円増加」=連結 BS の流動負債合計、当期末−前期末",
+   "迷った点": "特になし(113,131,000 の切り捨て)"
+  },
+  {
+   "行の鍵": "H-078",
+   "判定": "判定不能",
+   "形": null,
+   "fact": [],
+   "計算": null,
+   "文が述べている単位": "(方向の語: 下回る)",
+   "母集団": "不明",
+   "値は一致するか": "確かめていない",
+   "同値の他の候補": [],
+   "判定の理由": "対象は「前年を下回る水準」の「下回る」。「利益面では…前年を下回る」だが文中にセグメント名が無く、どのセグメントの営業利益かを文の語で決められない",
+   "迷った点": "3 セグメントのうち前年を下回ったのは BI の営業利益(672→635 百万円)だけで、値からは BI に絞れるが、値だけで選ばない規則に従い判定不能とした"
+  },
+  {
+   "行の鍵": "H-079",
+   "判定": "独立判定",
+   "形": "差(当期−前期)",
+   "fact": [
+    {
+     "役割": "当期側",
+     "要素": "jppfs_cor:AccountsReceivableTrade",
+     "context": "CurrentYearInstant",
+     "期間": "2026-06-30",
+     "値": 10307278000.0,
+     "単位": "JPY"
+    },
+    {
+     "役割": "前期側",
+     "要素": "jppfs_cor:AccountsReceivableTrade",
+     "context": "Prior1YearInstant",
+     "期間": "2025-06-30",
+     "値": 9534674000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "10,307,278,000−9,534,674,000=772,604,000 円 → 772.604 百万円(文は 772 百万円)",
+   "文が述べている単位": "百万円(対象の数は円換算済み)",
+   "母集団": "連結",
+   "値は一致するか": "一致(切り捨て)",
+   "同値の他の候補": [],
+   "判定の理由": "「売掛金が 772 百万円…増加」=連結 BS の売掛金、当期末−前期末。流動資産の内訳説明",
+   "迷った点": "CF の売上債権の増減額(−626,871,000)は値が違うので候補外。差 772,604,000 の切り捨て"
+  },
+  {
+   "行の鍵": "H-080",
+   "判定": "判定不能",
+   "形": null,
+   "fact": [],
+   "計算": null,
+   "文が述べている単位": "(方向の語: 減少)",
+   "母集団": "不明",
+   "値は一致するか": "確かめていない",
+   "同値の他の候補": [],
+   "判定の理由": "対象は「投資費用が減少した」の「減少」。「投資費用」は元データに fact が無い(販管費の内訳にも該当科目無し)。文中にセグメント名も無い",
+   "迷った点": "特になし"
+  },
+  {
+   "行の鍵": "H-081",
+   "判定": "独立判定",
+   "形": "符号・方向",
+   "fact": [
+    {
+     "役割": "当期側",
+     "要素": "jppfs_cor:NoncurrentAssets",
+     "context": "CurrentYearInstant",
+     "期間": "2026-06-30",
+     "値": 15498686000.0,
+     "単位": "JPY"
+    },
+    {
+     "役割": "前期側",
+     "要素": "jppfs_cor:NoncurrentAssets",
+     "context": "Prior1YearInstant",
+     "期間": "2025-06-30",
+     "値": 16389313000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "15,498,686,000−16,389,313,000=-890,627,000 円(負) → 「減少」",
+   "文が述べている単位": "(方向の語:減少)",
+   "母集団": "連結",
+   "値は一致するか": "一致(方向)",
+   "同値の他の候補": [],
+   "判定の理由": "対象は「890 百万円減少し」の「減少」。「固定資産」「前連結会計年度末に比べ」=連結 BS の固定資産合計、当期末と前期末",
+   "迷った点": "特になし"
+  },
+  {
+   "行の鍵": "H-082",
+   "判定": "独立判定",
+   "形": "率(比)",
+   "fact": [
+    {
+     "役割": "分子",
+     "要素": "jppfs_cor:ProfitLossAttributableToOwnersOfParent",
+     "context": "CurrentYearDuration",
+     "期間": "2025-07-01..2026-06-30",
+     "値": 1703213000.0,
+     "単位": "JPY"
+    },
+    {
+     "役割": "分母",
+     "要素": "jppfs_cor:ProfitLossAttributableToOwnersOfParent",
+     "context": "Prior1YearDuration",
+     "期間": "2024-07-01..2025-06-30",
+     "値": 3505060000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "(1,703,213,000/3,505,060,000−1)×100=-51.407% → -51.4%(四捨五入)",
+   "文が述べている単位": "%",
+   "母集団": "連結",
+   "値は一致するか": "一致(四捨五入)",
+   "同値の他の候補": [
+    {
+     "要素": "jpcrp_cor:ProfitLossAttributableToOwnersOfParentSummaryOfBusinessResults",
+     "context": "CurrentYearDuration"
+    },
+    {
+     "要素": "jpcrp_cor:ProfitLossAttributableToOwnersOfParentSummaryOfBusinessResults",
+     "context": "Prior1YearDuration"
+    }
+   ],
+   "判定の理由": "「親会社株主に帰属する当期純利益は 1,703 百万円(同 51.4% 減)」の「同」=前期比。連結 PL の同科目の当期/前期",
+   "迷った点": "Summary 側(ProfitLossAttributableToOwnersOfParentSummaryOfBusinessResults)も同値。本表の fact は同値で 2 件登録。−51.41%→−51.4 は四捨五入"
+  },
+  {
+   "行の鍵": "H-083",
+   "判定": "判定不能",
+   "形": null,
+   "fact": [],
+   "計算": null,
+   "文が述べている単位": "(方向の語: 拡大)",
+   "母集団": "不明",
+   "値は一致するか": "確かめていない",
+   "同値の他の候補": [],
+   "判定の理由": "対象は「データ統合基盤・活用ビジネスの継続拡大」の「拡大」。重点課題(方針)の記述で、数の fact を指していない",
+   "迷った点": "特になし"
+  },
+  {
+   "行の鍵": "H-084",
+   "判定": "独立判定",
+   "形": "差(当期−前期)",
+   "fact": [
+    {
+     "役割": "当期側",
+     "要素": "jppfs_cor:BuildingsAndStructuresNet",
+     "context": "CurrentYearInstant",
+     "期間": "2026-06-30",
+     "値": 955595000.0,
+     "単位": "JPY"
+    },
+    {
+     "役割": "前期側",
+     "要素": "jppfs_cor:BuildingsAndStructuresNet",
+     "context": "Prior1YearInstant",
+     "期間": "2025-06-30",
+     "値": 1326190000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "955,595,000−1,326,190,000=-370,595,000 円 → -370.595 百万円(文は 370 百万円)",
+   "文が述べている単位": "百万円(対象の数は円換算済み)",
+   "母集団": "連結",
+   "値は一致するか": "一致(切り捨て)",
+   "同値の他の候補": [],
+   "判定の理由": "「建物及び構築物(純額)が 370 百万円…減少」=連結 BS の建物及び構築物(純額)、当期末−前期末。固定資産の内訳説明",
+   "迷った点": "総額(BuildingsAndStructures)ではなく「(純額)」と明記されているので Net。差 −370,595,000 の絶対値切り捨て"
+  },
+  {
+   "行の鍵": "H-085",
+   "判定": "独立判定",
+   "形": "符号・方向",
+   "fact": [
+    {
+     "役割": "前期側",
+     "要素": "jppfs_cor:CurrentPortionOfLongTermLoansPayable",
+     "context": "Prior1YearInstant",
+     "期間": "2025-06-30",
+     "値": 100000000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "当期末の fact 無し(0 と読む)−100,000,000=−100,000,000 円(負) → 「減少」",
+   "文が述べている単位": "(方向の語: 減少)",
+   "母集団": "連結",
+   "値は一致するか": "一致(方向)",
+   "同値の他の候補": [
+    {
+     "要素": "jppfs_cor:RepaymentOfLongTermLoansPayableFinCF",
+     "context": "CurrentYearDuration"
+    }
+   ],
+   "判定の理由": "対象は「1 年内返済予定の長期借入金が 100 百万円減少した」の「減少」。連結 BS の同科目は前期末 100,000,000 円の fact があり、当期末の fact は無い(残高ゼロと読む)ので方向は減少",
+   "迷った点": "当期側 fact が存在しないため fact は前期側 1 件のみ。CF の長期借入金の返済による支出(−100,000,000)も減少を裏づけるが別概念"
+  },
+  {
+   "行の鍵": "H-086",
+   "判定": "独立判定",
+   "形": "符号・方向",
+   "fact": [
+    {
+     "役割": "当期側",
+     "要素": "jppfs_cor:NetDefinedBenefitAsset",
+     "context": "CurrentYearInstant",
+     "期間": "2026-06-30",
+     "値": 2169554000.0,
+     "単位": "JPY"
+    },
+    {
+     "役割": "前期側",
+     "要素": "jppfs_cor:NetDefinedBenefitAsset",
+     "context": "Prior1YearInstant",
+     "期間": "2025-06-30",
+     "値": 1111165000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "2,169,554,000−1,111,165,000=1,058,389,000 円(正) → 「増加」",
+   "文が述べている単位": "(方向の語:増加)",
+   "母集団": "連結",
+   "値は一致するか": "一致(方向)",
+   "同値の他の候補": [
+    {
+     "要素": "jppfs_cor:IncreaseDecreaseInNetDefinedBenefitAssetOpeCF",
+     "context": "CurrentYearDuration"
+    }
+   ],
+   "判定の理由": "対象は「退職給付に係る資産が 1,058 百万円増加した」の「増加」。連結 BS の同科目、当期末と前期末",
+   "迷った点": "CF の退職給付に係る資産の増減額(−1,058,388,000、負=増加)も同じ方向"
+  },
+  {
+   "行の鍵": "H-087",
+   "判定": "独立判定",
+   "形": "符号・方向",
+   "fact": [
+    {
+     "役割": "当期側",
+     "要素": "jppfs_cor:CurrentLiabilities",
+     "context": "CurrentYearInstant",
+     "期間": "2026-06-30",
+     "値": 12680266000.0,
+     "単位": "JPY"
+    },
+    {
+     "役割": "前期側",
+     "要素": "jppfs_cor:CurrentLiabilities",
+     "context": "Prior1YearInstant",
+     "期間": "2025-06-30",
+     "値": 12567135000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "12,680,266,000−12,567,135,000=113,131,000 円(正) → 「増加」",
+   "文が述べている単位": "(方向の語:増加)",
+   "母集団": "連結",
+   "値は一致するか": "一致(方向)",
+   "同値の他の候補": [],
+   "判定の理由": "対象は「113 百万円増加し」の「増加」。「流動負債」「前連結会計年度末に比べ」=連結 BS の流動負債合計、当期末と前期末",
+   "迷った点": "特になし"
+  },
+  {
+   "行の鍵": "H-088",
+   "判定": "判定不能",
+   "形": null,
+   "fact": [],
+   "計算": null,
+   "文が述べている単位": "(方向の語: 減少)",
+   "母集団": "不明",
+   "値は一致するか": "確かめていない",
+   "同値の他の候補": [],
+   "判定の理由": "対象は「売上減少と一時費用発生の影響」の「売上減少」の「減少」。文中にセグメント名が無く、どのセグメントの売上高かを文の語で決められない",
+   "迷った点": "3 セグメントのうち売上高が減少したのは BI だけ(7,794→7,356 百万円)で、値からは BI に絞れるが、値だけで選ばない規則に従い判定不能とした"
+  },
+  {
+   "行の鍵": "H-089",
+   "判定": "独立判定",
+   "形": "符号・方向",
+   "fact": [
+    {
+     "役割": "当期側",
+     "要素": "jppfs_cor:Assets",
+     "context": "CurrentYearInstant",
+     "期間": "2026-06-30",
+     "値": 47968715000.0,
+     "単位": "JPY"
+    },
+    {
+     "役割": "前期側",
+     "要素": "jppfs_cor:Assets",
+     "context": "Prior1YearInstant",
+     "期間": "2025-06-30",
+     "値": 46922658000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "47,968,715,000−46,922,658,000=1,046,057,000 円(正) → 「増加」",
+   "文が述べている単位": "(方向の語:増加)",
+   "母集団": "連結",
+   "値は一致するか": "一致(方向)",
+   "同値の他の候補": [
+    {
+     "要素": "jpcrp_cor:TotalAssetsSummaryOfBusinessResults",
+     "context": "CurrentYearInstant"
+    },
+    {
+     "要素": "jpcrp_cor:TotalAssetsSummaryOfBusinessResults",
+     "context": "Prior1YearInstant"
+    }
+   ],
+   "判定の理由": "対象は「1,046 百万円増加し」の「増加」。「総資産」=連結 BS の資産合計、当期末と前期末",
+   "迷った点": "TotalAssetsSummaryOfBusinessResults も同値"
+  },
+  {
+   "行の鍵": "H-090",
+   "判定": "独立判定",
+   "形": "符号・方向",
+   "fact": [
+    {
+     "役割": "当期側",
+     "要素": "jppfs_cor:DepositsPaid",
+     "context": "CurrentYearInstant",
+     "期間": "2026-06-30",
+     "値": 5804670000.0,
+     "単位": "JPY"
+    },
+    {
+     "役割": "前期側",
+     "要素": "jppfs_cor:DepositsPaid",
+     "context": "Prior1YearInstant",
+     "期間": "2025-06-30",
+     "値": 1250791000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "5,804,670,000−1,250,791,000=4,553,879,000 円(正) → 「増加」",
+   "文が述べている単位": "(方向の語:増加)",
+   "母集団": "連結",
+   "値は一致するか": "一致(方向)",
+   "同値の他の候補": [],
+   "判定の理由": "対象は「預け金が 4,553 百万円増加した」の「増加」。連結 BS の預け金、当期末と前期末",
+   "迷った点": "特になし"
+  },
+  {
+   "行の鍵": "H-091",
+   "判定": "独立判定",
+   "形": "符号・方向",
+   "fact": [
+    {
+     "役割": "当期側",
+     "要素": "jppfs_cor:NetSales",
+     "context": "CurrentYearDuration_jpcrp030000-asr_E05239-000MarketingSupportHealthcareReportableSegmentsMember",
+     "期間": "2025-07-01..2026-06-30",
+     "値": 12593814000.0,
+     "単位": "JPY"
+    },
+    {
+     "役割": "前期側",
+     "要素": "jppfs_cor:NetSales",
+     "context": "Prior1YearDuration_jpcrp030000-asr_E05239-000MarketingSupportHealthcareReportableSegmentsMember",
+     "期間": "2024-07-01..2025-06-30",
+     "値": 12432050000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "12,593,814,000−12,432,050,000=161,764,000 円(正) → 「増収」",
+   "文が述べている単位": "(方向の語:増収)",
+   "母集団": "連結(セグメント: マーケティング支援(ヘルスケア))",
+   "値は一致するか": "一致(方向)",
+   "同値の他の候補": [
+    {
+     "要素": "jpcrp_cor:RevenuesFromExternalCustomers",
+     "context": "CurrentYearDuration_jpcrp030000-asr_E05239-000MarketingSupportHealthcareReportableSegmentsMember"
+    },
+    {
+     "要素": "jpcrp_cor:RevenuesFromExternalCustomers",
+     "context": "Prior1YearDuration_jpcrp030000-asr_E05239-000MarketingSupportHealthcareReportableSegmentsMember"
+    }
+   ],
+   "判定の理由": "対象は「全体として増収となりました」の「増収」。「当事業」はセグメント名を直接言わないが、文中の「株式会社インテージヘルスケア」「株式会社インテージリアルワールド」(ヘルスケア関連子会社)と「CRO 事業売却」からマーケティング支援(ヘルスケア)事業と読み、そのセグメント売上高の当期と前期",
+   "迷った点": "セグメント名は文に無く、子会社名からの推定。文の語だけで決めたと言い切れない点が弱い。RevenuesFromExternalCustomers も同値"
+  },
+  {
+   "行の鍵": "H-092",
+   "判定": "独立判定",
+   "形": "差(当期−前期)",
+   "fact": [
+    {
+     "役割": "当期側",
+     "要素": "jppfs_cor:ValuationDifferenceOnAvailableForSaleSecurities",
+     "context": "CurrentYearInstant",
+     "期間": "2026-06-30",
+     "値": 132520000.0,
+     "単位": "JPY"
+    },
+    {
+     "役割": "前期側",
+     "要素": "jppfs_cor:ValuationDifferenceOnAvailableForSaleSecurities",
+     "context": "Prior1YearInstant",
+     "期間": "2025-06-30",
+     "値": -12747000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "132,520,000−-12,747,000=145,267,000 円 → 145.267 百万円(文は 145 百万円)",
+   "文が述べている単位": "百万円(対象の数は円換算済み)",
+   "母集団": "連結",
+   "値は一致するか": "一致(切り捨て)",
+   "同値の他の候補": [
+    {
+     "要素": "jppfs_cor:TotalChangesOfItemsDuringThePeriod",
+     "context": "CurrentYearDuration_ValuationDifferenceOnAvailableForSaleSecuritiesMember"
+    },
+    {
+     "要素": "jppfs_cor:NetChangesOfItemsOtherThanShareholdersEquity",
+     "context": "CurrentYearDuration_ValuationDifferenceOnAvailableForSaleSecuritiesMember"
+    }
+   ],
+   "判定の理由": "「その他有価証券評価差額金が 145 百万円…増加」=連結 BS の同科目、当期末−前期末。純資産の内訳説明",
+   "迷った点": "株主資本等変動計算書の当期変動額(ValuationDifferenceOnAvailableForSaleSecuritiesMember、145,267,000)も同値の単一 fact。前期末比の文なので BS の差を選んだ。−12,747,000 → 132,520,000"
+  },
+  {
+   "行の鍵": "H-093",
+   "判定": "独立判定",
+   "形": "単一",
+   "fact": [
+    {
+     "役割": "単一",
+     "要素": "jppfs_cor:NetCashProvidedByUsedInInvestmentActivities",
+     "context": "CurrentYearDuration",
+     "期間": "2025-07-01..2026-06-30",
+     "値": -1410777000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "-1,410,777,000 円 → 1,410.777 百万円(文は 1,410 百万円)",
+   "文が述べている単位": "百万円",
+   "母集団": "連結",
+   "値は一致するか": "一致(切り捨て)",
+   "同値の他の候補": [
+    {
+     "要素": "jpcrp_cor:NetCashProvidedByUsedInInvestingActivitiesSummaryOfBusinessResults",
+     "context": "CurrentYearDuration"
+    }
+   ],
+   "判定の理由": "「投資活動によるキャッシュ・フロー」「純支出」=連結 CF 計算書の投資 CF(負の値 −1,410,777,000)。文の 1,410 は絶対値",
+   "迷った点": "Summary 側も同値。本表側を選んだ"
+  },
+  {
+   "行の鍵": "H-094",
+   "判定": "判定不能",
+   "形": null,
+   "fact": [],
+   "計算": null,
+   "文が述べている単位": "(方向の語: 減収)",
+   "母集団": "不明",
+   "値は一致するか": "確かめていない",
+   "同値の他の候補": [],
+   "判定の理由": "対象は「株式会社インテージリサーチは…減収となりました」の「減収」。個別子会社の売上高は元データに fact が無い",
+   "迷った点": "特になし"
+  },
+  {
+   "行の鍵": "H-095",
+   "判定": "独立判定",
+   "形": "差(当期−前期)",
+   "fact": [
+    {
+     "役割": "当期側",
+     "要素": "jppfs_cor:WorkInProcess",
+     "context": "CurrentYearInstant",
+     "期間": "2026-06-30",
+     "値": 2011541000.0,
+     "単位": "JPY"
+    },
+    {
+     "役割": "前期側",
+     "要素": "jppfs_cor:WorkInProcess",
+     "context": "Prior1YearInstant",
+     "期間": "2025-06-30",
+     "値": 1773681000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "2,011,541,000−1,773,681,000=237,860,000 円 → 237.860 百万円(文は 237 百万円)",
+   "文が述べている単位": "百万円(対象の数は円換算済み)",
+   "母集団": "連結",
+   "値は一致するか": "一致(切り捨て)",
+   "同値の他の候補": [],
+   "判定の理由": "「仕掛品が 237 百万円…増加」=連結 BS の仕掛品、当期末−前期末。流動資産の内訳説明",
+   "迷った点": "CF の棚卸資産の増減額(−231,134,000)は値が違うので候補外。差 237,860,000 の切り捨て"
+  },
+  {
+   "行の鍵": "H-096",
+   "判定": "判定不能",
+   "形": null,
+   "fact": [],
+   "計算": null,
+   "文が述べている単位": "(方向の語: 下回る)",
+   "母集団": "不明",
+   "値は一致するか": "確かめていない",
+   "同値の他の候補": [],
+   "判定の理由": "対象は「株式会社ビルドシステムにおいて…前年を下回る売上水準」の「下回る」。個別子会社の売上高は元データに fact が無い",
+   "迷った点": "特になし"
+  },
+  {
+   "行の鍵": "H-097",
+   "判定": "独立判定",
+   "形": "率(比)",
+   "fact": [
+    {
+     "役割": "分子",
+     "要素": "jppfs_cor:OperatingIncome",
+     "context": "CurrentYearDuration",
+     "期間": "2025-07-01..2026-06-30",
+     "値": 5752721000.0,
+     "単位": "JPY"
+    },
+    {
+     "役割": "分母",
+     "要素": "jppfs_cor:OperatingIncome",
+     "context": "Prior1YearDuration",
+     "期間": "2024-07-01..2025-06-30",
+     "値": 4241171000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "(5,752,721,000/4,241,171,000−1)×100=35.640% → 35.6%(四捨五入)",
+   "文が述べている単位": "%",
+   "母集団": "連結",
+   "値は一致するか": "一致(四捨五入)",
+   "同値の他の候補": [],
+   "判定の理由": "「営業利益 5,752 百万円(同 35.6% 増)」の「同」=前期比。連結 PL の営業利益の当期/前期",
+   "迷った点": "本表の fact は同値で 2 件登録。35.64%→35.6 は四捨五入"
+  },
+  {
+   "行の鍵": "H-098",
+   "判定": "独立判定",
+   "形": "率(比)",
+   "fact": [
+    {
+     "役割": "分子",
+     "要素": "jppfs_cor:OrdinaryIncome",
+     "context": "CurrentYearDuration",
+     "期間": "2025-07-01..2026-06-30",
+     "値": 5753864000.0,
+     "単位": "JPY"
+    },
+    {
+     "役割": "分母",
+     "要素": "jppfs_cor:OrdinaryIncome",
+     "context": "Prior1YearDuration",
+     "期間": "2024-07-01..2025-06-30",
+     "値": 4131017000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "(5,753,864,000/4,131,017,000−1)×100=39.284% → 39.3%(四捨五入)",
+   "文が述べている単位": "%",
+   "母集団": "連結",
+   "値は一致するか": "一致(四捨五入)",
+   "同値の他の候補": [
+    {
+     "要素": "jpcrp_cor:OrdinaryIncomeLossSummaryOfBusinessResults",
+     "context": "CurrentYearDuration"
+    },
+    {
+     "要素": "jpcrp_cor:OrdinaryIncomeLossSummaryOfBusinessResults",
+     "context": "Prior1YearDuration"
+    }
+   ],
+   "判定の理由": "「経常利益 5,753 百万円(同 39.3% 増)」の「同」=前期比。連結 PL の経常利益の当期/前期",
+   "迷った点": "Summary 側も同値。39.28%→39.3 は四捨五入"
+  },
+  {
+   "行の鍵": "H-099",
+   "判定": "独立判定",
+   "形": "率(比)",
+   "fact": [
+    {
+     "役割": "分子",
+     "要素": "jppfs_cor:NetSales",
+     "context": "CurrentYearDuration",
+     "期間": "2025-07-01..2026-06-30",
+     "値": 67099910000.0,
+     "単位": "JPY"
+    },
+    {
+     "役割": "分母",
+     "要素": "jppfs_cor:NetSales",
+     "context": "Prior1YearDuration",
+     "期間": "2024-07-01..2025-06-30",
+     "値": 65571087000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "(67,099,910,000/65,571,087,000−1)×100=2.332% → 2.3%(四捨五入)",
+   "文が述べている単位": "%",
+   "母集団": "連結",
+   "値は一致するか": "一致(四捨五入)",
+   "同値の他の候補": [
+    {
+     "要素": "jpcrp_cor:NetSalesSummaryOfBusinessResults",
+     "context": "CurrentYearDuration"
+    },
+    {
+     "要素": "jpcrp_cor:NetSalesSummaryOfBusinessResults",
+     "context": "Prior1YearDuration"
+    },
+    {
+     "要素": "jpcrp_cor:RevenuesFromExternalCustomers",
+     "context": "CurrentYearDuration"
+    },
+    {
+     "要素": "jpcrp_cor:RevenuesFromExternalCustomers",
+     "context": "Prior1YearDuration"
+    }
+   ],
+   "判定の理由": "「売上高 67,099 百万円(前期比 2.3% 増)」=連結 PL の売上高の当期/前期",
+   "迷った点": "Summary 側・RevenuesFromExternalCustomers も同値。2.33%→2.3 は四捨五入(切り捨てでも一致)"
+  },
+  {
+   "行の鍵": "H-100",
+   "判定": "判定不能",
+   "形": null,
+   "fact": [],
+   "計算": null,
+   "文が述べている単位": "(方向の語: 拡大)",
+   "母集団": "不明",
+   "値は一致するか": "確かめていない",
+   "同値の他の候補": [],
+   "判定の理由": "対象は「事業領域の拡大を推進し」の「拡大」。経営方針の記述で、数の fact を指していない",
+   "迷った点": "特になし"
+  },
+  {
+   "行の鍵": "H-101",
+   "判定": "独立判定",
+   "形": "差(当期−前期)",
+   "fact": [
+    {
+     "役割": "当期側",
+     "要素": "jppfs_cor:CashAndCashEquivalents",
+     "context": "CurrentYearInstant",
+     "期間": "2026-06-30",
+     "値": 17336927000.0,
+     "単位": "JPY"
+    },
+    {
+     "役割": "前期側",
+     "要素": "jppfs_cor:CashAndCashEquivalents",
+     "context": "Prior1YearInstant",
+     "期間": "2025-06-30",
+     "値": 16492126000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "17,336,927,000−16,492,126,000=844,801,000 円 → 844.801 百万円(文は 844 百万円)",
+   "文が述べている単位": "百万円(対象の数は円換算済み)",
+   "母集団": "連結",
+   "値は一致するか": "一致(切り捨て)",
+   "同値の他の候補": [
+    {
+     "要素": "jppfs_cor:NetIncreaseDecreaseInCashAndCashEquivalents",
+     "context": "CurrentYearDuration"
+    },
+    {
+     "要素": "jpcrp_cor:CashAndCashEquivalentsSummaryOfBusinessResults",
+     "context": "CurrentYearInstant"
+    },
+    {
+     "要素": "jpcrp_cor:CashAndCashEquivalentsSummaryOfBusinessResults",
+     "context": "Prior1YearInstant"
+    }
+   ],
+   "判定の理由": "「現金及び現金同等物は前連結会計年度末に比べ 844 百万円増加」=CF 計算書の期末残高、当期末−前期末",
+   "迷った点": "CF 計算書の「現金及び現金同等物の増減額」(NetIncreaseDecreaseInCashAndCashEquivalents、844,800,000)が単一 fact として同値で、こちらを選ぶ読みも成り立つ。文が「前連結会計年度末に比べ」なので残高の差を選んだ。差 844,801,000 と増減額 844,800,000 は千円の丸めで 1 違う。前期末 fact は同値で 2 件登録"
+  },
+  {
+   "行の鍵": "H-102",
+   "判定": "独立判定",
+   "形": "差(当期−前期)",
+   "fact": [
+    {
+     "役割": "当期側",
+     "要素": "jppfs_cor:DepositsPaid",
+     "context": "CurrentYearInstant",
+     "期間": "2026-06-30",
+     "値": 5804670000.0,
+     "単位": "JPY"
+    },
+    {
+     "役割": "前期側",
+     "要素": "jppfs_cor:DepositsPaid",
+     "context": "Prior1YearInstant",
+     "期間": "2025-06-30",
+     "値": 1250791000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "5,804,670,000−1,250,791,000=4,553,879,000 円 → 4,553.879 百万円(文は 4,553 百万円)",
+   "文が述べている単位": "百万円",
+   "母集団": "連結",
+   "値は一致するか": "一致(切り捨て)",
+   "同値の他の候補": [],
+   "判定の理由": "「預け金が 4,553 百万円増加」=連結 BS の預け金、当期末−前期末。流動資産の内訳説明",
+   "迷った点": "特になし(4,553,879,000 の切り捨て)"
+  },
+  {
+   "行の鍵": "H-103",
+   "判定": "独立判定",
+   "形": "単一",
+   "fact": [
+    {
+     "役割": "単一",
+     "要素": "jppfs_cor:NoncurrentAssets",
+     "context": "CurrentYearInstant",
+     "期間": "2026-06-30",
+     "値": 15498686000.0,
+     "単位": "JPY"
+    }
+   ],
+   "計算": "15,498,686,000 円 → 15,498.686 百万円(文は 15,498 百万円)",
+   "文が述べている単位": "百万円",
+   "母集団": "連結",
+   "値は一致するか": "一致(切り捨て)",
+   "同値の他の候補": [],
+   "判定の理由": "「固定資産は…15,498 百万円となりました」=連結 BS の固定資産合計、当期末",
+   "迷った点": "特になし(15,498,686,000 の切り捨て)"
+  }
+ ]
+}
