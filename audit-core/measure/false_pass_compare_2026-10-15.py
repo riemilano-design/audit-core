@@ -6,7 +6,9 @@
 
     (1) 分母   ― どちらの規則セットで「一致」と言った行を変えたか。集合として一致するか、
                   一方が他方の部分集合か。部分集合なら**共通の行だけ**で比べ、増えた行は
-                  別に数える(増えた行で通した件数を隠さない)。
+                  別に数える(増えた行で通した件数を隠さない)。**どちらの部分集合でもない
+                  （交差するだけ）なら比べない** ― 両側に相手に無い行が在ると、どちらの率も
+                  自分の母集団の一部しか見ていない。共通の行が 0 件でも比べない。
     (2) 誤りの種類 ― 同じ行に同じ変え方(V1 = 10 倍 / V2 = 末尾の桁 +1)が当たっているか。
                   当たっていなければ件数は比べられない(2026-10-14 に実測した 1 つ目の欠陥)。
     (3) 評価条件 ― 同じ書類・同じ土台の文章・**1 回の検証で 1 件だけ変える**(batch=1)か。
@@ -93,9 +95,36 @@ def check_comparable(by, docs, a, b):
                 if ra[cid].get("new") != rb[cid].get("new"):
                     problems.append("%s %s: 変えた字が違う(%r != %r)"
                                     % (doc, cid, ra[cid].get("new"), rb[cid].get("new")))
+        # (1) の続き: **どちらの部分集合でもない場合を落とす。**
+        # 交差するだけの集合では「共通の行で比べて、増えた行を別に数える」が成り立たない
+        # （a にだけ在る行が分母の外へ消え、どちらの率も自分の母集団の一部しか見ない）。
+        # 2026-10-15 の監査が実測: この分岐が無く、交差するだけの入力が無警告で通った。
+        if not (ia <= ib or ib <= ia):
+            problems.append("%s: 行の集合がどちらの部分集合でもない（%s だけ %d 行 / %s だけ %d 行）"
+                            % (doc, a, len(ia - ib), b, len(ib - ia)))
+        # **共通の行が 0 件なら率を出す分母が無い。**（率の計算で 0 除算になる）
+        if not common:
+            problems.append("%s: 共通の行が 0 件（比べる分母が無い）" % doc)
         detail[doc] = {"rows_a": len(ia), "rows_b": len(ib), "common": len(common),
                        "a_subset_of_b": ia <= ib, "b_subset_of_a": ib <= ia}
     return (not problems), problems, detail
+
+
+def pct(n, d):
+    """``n/d`` の百分率。``d`` が 0 なら ``None``（**0 除算で落ちない**）。
+
+    検査が先に落とすので本来ここには来ないが、**落ちる道具は「比較できない」と言えない**。
+    同じ型の欠陷を 3 回出した（行の集合・欠けた欄・0 除算）ので、計算の側にも置く。
+    """
+
+    if not d:
+        return None
+    return 100.0 * n / d
+
+
+def fmt_rate(n, d):
+    r = pct(n, d)
+    return "%d/%d = ―" % (n, d) if r is None else "%d/%d = %.1f%%" % (n, d, r)
 
 
 def tally(by, docs, a, b, detail):
@@ -157,10 +186,8 @@ def main(argv=None):
     print()
     print("**分母を揃えた比較**(共通の行 × %d 通りの変え方 = %d 回):"
           % (len(KINDS), acc["common_n"]))
-    print("  %s %d/%d = %.1f%%" % (a, acc["a_common"], acc["common_n"],
-                                   100.0 * acc["a_common"] / acc["common_n"]))
-    print("  %s %d/%d = %.1f%%" % (b, acc["b_common"], acc["common_n"],
-                                   100.0 * acc["b_common"] / acc["common_n"]))
+    print("  %s %s" % (a, fmt_rate(acc["a_common"], acc["common_n"])))
+    print("  %s %s" % (b, fmt_rate(acc["b_common"], acc["common_n"])))
     print("参考(それぞれの全部の行): %s %d/%d / %s %d/%d"
           % (a, acc["a_all"], acc["a_all_n"], b, acc["b_all"], acc["b_all_n"]))
     print("**%s で新たに「一致」と言うようになった行**(%d 回)での通過: %d 件"

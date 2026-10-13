@@ -111,6 +111,50 @@ class ComparableTest(unittest.TestCase):
         self.assertFalse(ok)
         self.assertTrue(any("run が無い" in p for p in problems), problems)
 
+    def test_neither_is_a_subset_is_refused(self):
+        """**交差するだけの集合は比べない。**
+        両側に相手に無い行が在ると、どちらの率も自分の母集団の一部しか見ていない
+        （2026-10-15 の監査が実測: この入力が無警告で通っていた）。"""
+
+        by = CMP.index(_report(["N1", "N2"], ["N1", "N3"]))
+        ok, problems, detail = CMP.check_comparable(by, ["D1"], "P16", "P18")
+        self.assertFalse(ok)
+        self.assertTrue(any("どちらの部分集合でもない" in x for x in problems), problems)
+        self.assertFalse(detail["D1"]["a_subset_of_b"])
+        self.assertFalse(detail["D1"]["b_subset_of_a"])
+
+    def test_zero_common_rows_is_refused(self):
+        """**共通の行が 0 件なら率を出す分母が無い。**
+        落ちる（0 除算）のでなく、「比較できない」と言う
+        （2026-10-15 の監査が ZeroDivisionError を実測。同じ型の 3 件目）。"""
+
+        by = CMP.index(_report([], []))
+        ok, problems, _ = CMP.check_comparable(by, ["D1"], "P16", "P18")
+        self.assertFalse(ok)
+        self.assertTrue(any("共通の行が 0 件" in x for x in problems), problems)
+
+    def test_main_does_not_raise_on_zero_common_rows(self):
+        """**CLI ごと当てても落ちない。**（監査は CLI で ZeroDivisionError を見た）"""
+
+        import json
+        import tempfile
+        with tempfile.NamedTemporaryFile("w", suffix=".json", delete=False,
+                                         encoding="utf-8") as fh:
+            json.dump(_report([], []), fh, ensure_ascii=False)
+            path = fh.name
+        try:
+            self.assertEqual(CMP.main(["--in", path]), 1)
+        finally:
+            os.unlink(path)
+
+    def test_pct_returns_none_instead_of_dividing_by_zero(self):
+        """計算の側にも守りを置く（検査が先に落とすが、同じ型を 3 回出した）。"""
+
+        self.assertIsNone(CMP.pct(1, 0))
+        self.assertAlmostEqual(CMP.pct(1, 4), 25.0)
+        self.assertIn("―", CMP.fmt_rate(1, 0))
+        self.assertIn("25.0%", CMP.fmt_rate(1, 4))
+
 class TallyTest(unittest.TestCase):
     def test_counts_common_and_extra_separately(self):
         """**増えた行で通した件数を、揃えた分母の中に混ぜない。**"""
