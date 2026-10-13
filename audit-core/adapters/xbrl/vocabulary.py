@@ -381,6 +381,14 @@ class Profile:
     flow_item_from_label: bool = False    # C3 「Xの増加/減少(額)」は X の CF 増減項目に結ぶ(ラベルで引く)
     pct_change_phrase: bool = False       # C4 「46.0%の大幅減益」も % の増減(当期/前期の対)として読む
     ratio_table: bool = False             # C5 「売上総利益率」などを分子/分母の 2 fact で照合する(RATIO_TABLE)
+    # P17(2026-10-14 夜、人間の委任「任せる、承認いらない」。計画 docs/P17_PLAN_2026-10-14.md)。
+    # 未使用 2 書類の VALUE_MISMATCH 44 件の型(HOLDOUT_P16_RESULT §11)から作った旗 5 つ。
+    # P1〜P16 はこれらの既定値 False のまま変わらない。
+    segment_carry_to_result_sentence: bool = False  # A' 事業名は段落をまたいで「結果の文」にだけ引き継ぐ(A は棄却、計画 §5)
+    external_revenue_for_sales: bool = False      # A2 「売上高」に RevenuesFromExternalCustomers を足す(fact が在れば)
+    subject_skip_before_cause_marker: bool = False  # B1 候補と数の間に「により/による」が在り、前に「〜は」の候補が在れば飛ばす
+    loss_variants: bool = False                   # B2 「〜利益」の語に「〜損失」を同じ要素で足す
+    prefer_net_when_labelled: bool = False        # C  ラベルに「W(純額)」が在れば、その要素を W の先頭に置く
 
 
 P1 = Profile(
@@ -647,8 +655,13 @@ P16 = dataclasses.replace(P13, name="P16", taxonomy_labels_all_ns=True, statemen
                           period_cue=True, flow_item_from_label=True, pct_change_phrase=True,
                           ratio_table=True)
 
+# P17 = P16 + 未使用 2 書類で読んだ型の規則 5 つ(計画と予測は docs/P17_PLAN_2026-10-14.md)。
+# 既定 profile ではない(未使用の書類で確認するまで)。
+P17 = dataclasses.replace(P16, name="P17", segment_carry_to_result_sentence=True, external_revenue_for_sales=True,
+                          subject_skip_before_cause_marker=True, loss_variants=True, prefer_net_when_labelled=True)
+
 PROFILES = {"P1": P1, "P5F": P5F, "P6": P6, "P7": P7, "P8": P8, "P9": P9, "P10": P10, "P11": P11,
-            "P12": P12, "P13": P13, "P14": P14, "P15": P15, "P16": P16}
+            "P12": P12, "P13": P13, "P14": P14, "P15": P15, "P16": P16, "P17": P17}
 
 # **既定 profile(人間の決定 2026-10-13、第 2 段階)。字で留める。**
 # 測定で採用候補にした P16(開発書類 183 件で 146/8/29、未使用 2 書類 217 件で E1' 66.8% / E2 8.2% / E3 27.2%)。

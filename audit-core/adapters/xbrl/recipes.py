@@ -630,7 +630,8 @@ def _build_raw_num_claims(sentences, facts, contexts, profile, claim_member, rou
                 continue
             sign = -1 if signed < 0 else 1
             num = abs(signed)
-            subj, elems = E.subject_of(s, a, profile.subjects, E.subject_skip_for(profile))
+            subj, elems = E.subject_of(s, a, profile.subjects, E.subject_skip_for(profile),
+                                       cause_topic=profile.subject_skip_before_cause_marker)
             felems = _flow_elems_for(s, subj, a, flow_base, cf_ctx[si]) if flow_base else None
             orig_elems = elems
             if felems is not None:
@@ -703,7 +704,8 @@ def _build_raw_text_claims(sentences, facts, contexts, profile, claim_member, ro
         for w, sg in E.DIRECTION_WORDS.items():
             for m in re.finditer(w, s):
                 member, msrc = claim_member(si, m.start())
-                subj, elems = E.subject_of(s, m.start(), profile.subjects, E.subject_skip_for(profile))
+                subj, elems = E.subject_of(s, m.start(), profile.subjects, E.subject_skip_for(profile),
+                                           cause_topic=profile.subject_skip_before_cause_marker)
                 felems = _flow_elems_for(s, subj, m.start(), flow_base, cf_ctx[si]) if (flow_base and w in ("増加", "減少")) else None
                 if felems is not None:
                     elems = felems  # C3: 「Xの減少」は X の CF 増減項目(flow_sign の経路へ)
@@ -909,7 +911,11 @@ def _member_material(zb, inst, text, sentences, profile):
     ntext = unicodedata.normalize("NFKC", text)
     reg, _rows, _hand = E.build_registry(members, id2label, ntext, profile.run3)
     paras = E.paragraph_index(text, sentences, profile.paren_sentence)
-    sent_member = E.resolve_members(sentences, paras, reg)
+    if profile.segment_carry_to_result_sentence:
+        # P17 A': 段落をまたいで「結果の文」にだけ引き継ぐ。
+        sent_member = E.resolve_members_to_result_sentence(sentences, reg)
+    else:
+        sent_member = E.resolve_members(sentences, paras, reg)
     return sent_member, reg
 
 
@@ -1120,7 +1126,56 @@ def _label_subjects(zb, inst, profile):
             if w not in hand and w not in added:
                 added[w] = list(elems)
     rows = sorted(added.items(), key=lambda r: (-len(r[0]), r[0]))
-    return hand_rows, [(w, list(elems)) for w, elems in rows], overrides
+    added_rows = [(w, list(elems)) for w, elems in rows]
+    hand_rows, added_rows = augment_subject_rows(hand_rows, added_rows, doc_labels, resolves, profile)
+    return hand_rows, added_rows, overrides
+
+
+# P17 A2・B2・C(計画 docs/P17_PLAN_2026-10-14.md §1)。純粋関数(試験のため)。
+_EXTERNAL_REVENUE = "RevenuesFromExternalCustomers"
+_SALES_WORD = "売上高"
+_NET_SUFFIXES = ("(純額)", "（純額）")
+
+
+def augment_subject_rows(hand_rows, added_rows, doc_labels, resolves, profile):
+    """主語の行(手書き・ラベル由来)に P17 の 3 つの旗を当てる。旗が全部偽なら
+    1 つも変えない(同じ内容の新しい list を返す)。
+
+    - ``external_revenue_for_sales``: 「売上高」の要素の末尾に外部顧客への売上高を足す
+      (書類にその fact が引けるときだけ)。
+    - ``loss_variants``: 「〜利益」の語に「〜損失」が無ければ同じ要素で足す(added の末尾)。
+    - ``prefer_net_when_labelled``: 書類のラベルに「W(純額)」が在れば、その要素を W の先頭に。
+    """
+
+    hand = [(w, list(e)) for w, e in hand_rows]
+    added = [(w, list(e)) for w, e in added_rows]
+    if getattr(profile, "external_revenue_for_sales", False) and resolves([_EXTERNAL_REVENUE]):
+        for rows in (hand, added):
+            for k, (w, e) in enumerate(rows):
+                if w == _SALES_WORD and _EXTERNAL_REVENUE not in e:
+                    rows[k] = (w, e + [_EXTERNAL_REVENUE])
+    if getattr(profile, "prefer_net_when_labelled", False):
+        for rows in (hand, added):
+            for k, (w, e) in enumerate(rows):
+                net = None
+                for suf in _NET_SUFFIXES:
+                    net = doc_labels.get(w + suf)
+                    if net:
+                        break
+                if net:
+                    net = list(net)
+                    rows[k] = (w, net + [x for x in e if x not in net])
+    if getattr(profile, "loss_variants", False):
+        words = {w for w, _e in hand} | {w for w, _e in added}
+        extra = []
+        for w, e in hand + added:
+            if w.endswith("利益"):
+                v = w[:-2] + "損失"
+                if v not in words:
+                    words.add(v)
+                    extra.append((v, list(e)))
+        added = added + extra
+    return hand, added
 
 
 def build_raw_claims(zb, profile, info=None):

@@ -86,7 +86,17 @@ def _iter_numbers(s):
         yield m.start(), m.end(), sign * num, unit, (V.UNIT_SCALE.get(unit) or 1.0)
 
 
-def subject_of(sentence, pos, subjects, skip=None):
+# P17 B1(計画 docs/P17_PLAN_2026-10-14.md §1): 原因の印。字で書く。
+CAUSE_MARK_RE = re.compile(r"により|による|によって")
+
+
+def _is_topic(sentence, i, word):
+    """語の直後が「は」(「営業外費用は、」)なら、その語は文の主題。"""
+
+    return sentence[i + len(word):i + len(word) + 1] == "は"
+
+
+def subject_of(sentence, pos, subjects, skip=None, cause_topic=False):
     """数の直前(同じ文)でいちばん近い主語。終わりの位置が最も右のものを取り、
     同じなら長い語(「純資産合計」>「資産合計」)。道具の直し P-3。xbrl_probe.py: subject_of の写し
     (差分は固定の SUBJECTS グローバルの代わりに引数で受け取るだけ)。
@@ -114,8 +124,14 @@ def subject_of(sentence, pos, subjects, skip=None):
             continue
         ranked.append((-(i + len(word)), -len(word), order, i, word, elems))
     ranked.sort()
+    # P17 B1: ``cause_topic`` が真のときだけ。候補と数の間に原因の印が在り、
+    # その候補より前に「〜は」の候補が在れば、その候補を飛ばす(主題の候補
+    # 自身は、それより前に主題が無い限り飛ばさない)。偽なら 1 つも変わらない。
+    topic_starts = [i for (_e, _l, _o, i, word, _el) in ranked if _is_topic(sentence, i, word)] if cause_topic else []
     for (_e, _l, _o, i, word, elems) in ranked:
         if skip is not None and skip(sentence, i, word):
+            continue
+        if cause_topic and any(t < i for t in topic_starts) and CAUSE_MARK_RE.search(sentence[i + len(word):pos]):
             continue
         return (word, elems)
     return (None, None)
@@ -389,6 +405,46 @@ def resolve_members(sentences, paras, reg, carry_back=CARRY_BACK):
                     found = res[sj][0]
                     break
             res.append((found, "carried" if found else None))
+    return res
+
+
+# P17 A'(計画 docs/P17_PLAN_2026-10-14.md §5。A は 16 書類で GROUNDED を 71 件失って棄却):
+# 事業名の引き継ぎを、段落をまたいでも「結果の文」にだけ行う。印は字で書く。
+TOPIC_MARK_RE = re.compile(r"につきましては")
+RESULT_HEAD_RE = re.compile(r"^(以上の結果|この結果|その結果|結果として)")
+CONSOL_WORDS = ("当社グループ", "連結", "全社")
+
+
+def resolve_members_to_result_sentence(sentences, reg, carry_back=CARRY_BACK, topic_re=TOPIC_MARK_RE,
+                                       result_re=RESULT_HEAD_RE, consol_words=CONSOL_WORDS):
+    """P17 A'。``resolve_members`` と同じ (member, source) の列を返すが、
+    事業名の無い文のうち**結果の文**(「以上の結果」などで始まり、連結の語を
+    含まない)だけが、段落に関係なく ``carry_back`` 文以内の直前の「文の事業名」
+    (source == "sentence")を引き継ぐ。途中の文に新しい話題の印(``topic_re``)
+    が在るか、途中の文が曖昧(2 事業)なら引き継がない。それ以外の文は引き継がない
+    (段落の中の従来の引き継ぎもしない ― この関数は従来の規則の置き換えではなく、
+    P17 でだけ使う)。"""
+
+    res = []
+    for si, s in enumerate(sentences):
+        hits = sorted({m for m, name in reg.items() if name and name in s})
+        if len(hits) == 1:
+            res.append((hits[0], "sentence"))
+            continue
+        if len(hits) >= 2:
+            res.append((AMBIG, "ambiguous"))
+            continue
+        found = None
+        if result_re.search(s) and not any(w in s for w in consol_words):
+            for sj in range(si - 1, max(-1, si - 1 - carry_back), -1):
+                if res[sj][1] == "sentence":
+                    found = res[sj][0]
+                    break
+                if res[sj][1] == "ambiguous":
+                    break
+                if topic_re.search(sentences[sj]) or any(w in sentences[sj] for w in consol_words):
+                    break
+        res.append((found, "carried" if found else None))
     return res
 
 
