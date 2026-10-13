@@ -15,7 +15,7 @@ _ADAPTER = os.path.join(_AUDIT_CORE, "adapters", "kokkai")
 
 MODULE_LEVEL_CORE_IMPORTERS = ("recipes.py", "registry_setup.py", "verify_meeting.py")
 FUNCTION_LEVEL_ONLY = ("comparators.py", "resolve.py")
-NEVER = ("__init__.py", "load.py", "numerals.py")
+NEVER = ("__init__.py", "load.py", "numerals.py", "report_meeting.py")
 
 
 def _core_imports(path):
