@@ -34,7 +34,21 @@ _FORBIDDEN_TO_IMPORT_CORE = ("edinet.py", "instance.py", "extract.py", "vocabula
 # are checked for that specifically in test_lineage.py /
 # C1D_PREDICTION.md §A/§3.2's "pure" requirement); they do legitimately
 # import audit_core itself.
-_ALLOWED_TO_IMPORT_CORE = ("recipes.py", "run.py", "comparators.py", "resolve.py", "registry_setup.py")
+# 2026-10-13(第 3 段階、稼働の入口): ``verify_document.py`` を足した。
+# この規則が守っているのは「**データの層が Core に触らない**」こと
+# (``_FORBIDDEN_TO_IMPORT_CORE`` の 5 本は 0 件のまま)。入口と C-1d の
+# 接続部は Core を呼ぶのが仕事なので、許可の側に名前が増える。
+# ただし入口は Core の名前を 2 つしか使ってよくない
+# (``_ENTRY_CORE_ATTRS``。下の ``EntryCoreUsageTest`` が字で留める)。
+_ALLOWED_TO_IMPORT_CORE = (
+    "recipes.py", "run.py", "comparators.py", "resolve.py", "registry_setup.py",
+    "verify_document.py",
+)
+
+# 入口が Core から使ってよい名前(人間の決定した実装範囲
+# 「既存の関数を既定の順序で呼び出す」の字での表現)。
+_ENTRY_FILE = "verify_document.py"
+_ENTRY_CORE_ATTRS = ("Registry", "verify_all")
 
 
 def _py_files(directory):
@@ -108,6 +122,32 @@ def _calls_matching(path, names):
             if name and any(name == n or name.endswith("." + n) for n in names):
                 hits.append(name)
     return hits
+
+
+def _core_attrs_used(path):
+    """AST scan: the set of ``audit_core`` attribute names this file reads
+    through its ``import audit_core as <alias>`` alias (e.g. ``{"Registry",
+    "verify_all"}``). ``from audit_core import X`` counts as ``X``.
+    """
+
+    with open(path, "r", encoding="utf-8") as handle:
+        tree = ast.parse(handle.read(), filename=path)
+    aliases = set()
+    used = set()
+    for node in ast.walk(tree):
+        if isinstance(node, ast.Import):
+            for alias in node.names:
+                if alias.name.split(".")[0] == "audit_core":
+                    aliases.add(alias.asname or alias.name)
+        elif isinstance(node, ast.ImportFrom):
+            if node.module and node.module.split(".")[0] == "audit_core":
+                for alias in node.names:
+                    used.add(alias.name)
+    for node in ast.walk(tree):
+        if isinstance(node, ast.Attribute) and isinstance(node.value, ast.Name):
+            if node.value.id in aliases:
+                used.add(node.attr)
+    return used
 
 
 class CoreImportBoundaryTest(unittest.TestCase):
@@ -211,3 +251,34 @@ class NoNetworkInTestsTest(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class EntryCoreUsageTest(unittest.TestCase):
+    """第 3 段階の入口(``verify_document.py``)が Core に触る範囲を字で留める。
+
+    ``_ALLOWED_TO_IMPORT_CORE`` に名前を足したので、「Core を import して
+    よい」が「Core を何にでも使ってよい」に広がらないようにする。入口の
+    仕事は既存の関数を既定の順序で呼ぶことなので、Core から要るのは
+    ``Registry``(既定の registry)と ``verify_all``(判定)の 2 つだけ。
+    """
+
+    def test_the_allow_list_is_pinned_literally(self):
+        self.assertEqual(
+            _ALLOWED_TO_IMPORT_CORE,
+            ("recipes.py", "run.py", "comparators.py", "resolve.py",
+             "registry_setup.py", "verify_document.py"),
+        )
+
+    def test_the_entry_uses_only_the_two_pinned_core_names(self):
+        path = os.path.join(_ADAPTERS_XBRL_DIR, _ENTRY_FILE)
+        self.assertTrue(os.path.exists(path))
+        self.assertEqual(sorted(_core_attrs_used(path)), sorted(_ENTRY_CORE_ATTRS))
+
+    def test_the_data_layer_is_still_forbidden(self):
+        # 許可の一覧が増えても、禁止の一覧は減っていない。
+        self.assertEqual(
+            _FORBIDDEN_TO_IMPORT_CORE,
+            ("edinet.py", "instance.py", "extract.py", "vocabulary.py", "__init__.py"),
+        )
+        self.assertEqual(
+            [n for n in _FORBIDDEN_TO_IMPORT_CORE if n in _ALLOWED_TO_IMPORT_CORE], [])
