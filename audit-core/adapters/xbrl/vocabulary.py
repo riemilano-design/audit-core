@@ -10,6 +10,7 @@ loaded with ``importlib`` so that any drift is caught by the lineage
 test rather than relying on this comment.
 """
 
+import dataclasses
 import re
 from dataclasses import dataclass
 from typing import List, Optional, Sequence, Tuple
@@ -373,6 +374,13 @@ class Profile:
     subject_not_part_of_aggregate: bool = False   # S3 「A及びBの合計」の成分を採らない
     direction_word_lexicon: bool = False          # S4 増収→売上高系・増益→利益系
     direction_amount_check: bool = False          # A1 向きの語と同じ節の金額も照合する
+    # 概念で結ぶ直し(2026-10-13、人間の指示「根本課題を解決し、システムとして稼働させる」)。
+    # P16 だけ。P1〜P15 はこれらの既定値 False のまま変わらない。
+    statement_facts_first: bool = False   # C1 同じ値の候補が複数なら計算書(jppfs_cor)の fact を先に置く
+    period_cue: bool = False              # C2 数の直前の「前期」「(同」などで前期の context を選ぶ
+    flow_item_from_label: bool = False    # C3 「Xの増加/減少(額)」は X の CF 増減項目に結ぶ(ラベルで引く)
+    pct_change_phrase: bool = False       # C4 「46.0%の大幅減益」も % の増減(当期/前期の対)として読む
+    ratio_table: bool = False             # C5 「売上総利益率」などを分子/分母の 2 fact で照合する(RATIO_TABLE)
 
 
 P1 = Profile(
@@ -619,5 +627,25 @@ P15 = Profile(
     direction_amount_check=True,
 )
 
+# ---------------------------------------------------------------------------
+# P16 = P13(標準タクソノミのラベルで主語を引く)+ 概念で結ぶ直し C1・C2・C3。
+# 独立ラベル 183 件(docs/research/e2_labels)で根拠の正しさを測って選ぶ。
+# P15 の S1〜S4・A1 は含めない(別に測る)。
+# ---------------------------------------------------------------------------
+# C5 の表(記述的知識。CLAUDE.md 4 番の区分では承認の要る判断的知識ではなく、率の定義)。
+# 語は本文の言い回し、値は (分子の要素, 分母の要素)。同じ期の 2 fact で 分子/分母*100。
+RATIO_TABLE = {
+    "売上総利益率": ("GrossProfit", "NetSales"),
+    "売上原価率": ("CostOfSales", "NetSales"),
+    "売上高営業利益率": ("OperatingIncome", "NetSales"),
+    "営業利益率": ("OperatingIncome", "NetSales"),
+    "売上高経常利益率": ("OrdinaryIncome", "NetSales"),
+    "経常利益率": ("OrdinaryIncome", "NetSales"),
+}
+
+P16 = dataclasses.replace(P13, name="P16", taxonomy_labels_all_ns=True, statement_facts_first=True,
+                          period_cue=True, flow_item_from_label=True, pct_change_phrase=True,
+                          ratio_table=True)
+
 PROFILES = {"P1": P1, "P5F": P5F, "P6": P6, "P7": P7, "P8": P8, "P9": P9, "P10": P10, "P11": P11,
-            "P12": P12, "P13": P13, "P14": P14, "P15": P15}
+            "P12": P12, "P13": P13, "P14": P14, "P15": P15, "P16": P16}

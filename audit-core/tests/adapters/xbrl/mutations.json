@@ -390,8 +390,8 @@
   {
     "id": "X-R6a-prior-paren-detection-disabled",
     "file": "recipes.py",
-    "old": "                    prior_paren = profile.text_prior_year_paren and _in_prior_year_paren(s, m.start())",
-    "new": "                    prior_paren = False and profile.text_prior_year_paren and _in_prior_year_paren(s, m.start())",
+    "old": "                    prior_paren = (profile.text_prior_year_paren and _in_prior_year_paren(s, m.start())) or \\",
+    "new": "                    prior_paren = (False and profile.text_prior_year_paren and _in_prior_year_paren(s, m.start())) or \\",
     "predicted": "red",
     "note": "XBRL 直し §6 を戻す(括弧内の前期の方向語を当期−前期に結ぶ)。test_recipes.TextPriorYearParenTest.test_p9_binds_the_paren_one_to_the_prior_pair が捕まえる。"
   },

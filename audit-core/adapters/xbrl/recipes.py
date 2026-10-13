@@ -140,7 +140,7 @@ def _flow_direction_word(s, subj, a, b):
     return None
 
 
-def _apply_flow_sign(claim, s, a, b, rounding=None):
+def _apply_flow_sign(claim, s, a, b, rounding=None, flow_base=None):
     """§1-2。直接値の Claim が CF 流量項目の 1 件の fact に束縛されていて、
     向きの語があるときだけ、claim["flow_convention"]/["claim_direction"] を
     足し、normalization の札を abs を落とした梯子(round/truncate)に直す。
@@ -153,7 +153,7 @@ def _apply_flow_sign(claim, s, a, b, rounding=None):
     if not isinstance(pointer, str) or not pointer.startswith("xbrl:"):
         return
     name = pointer[5:].split("@")[0]
-    conv = V.flow_convention(name)
+    conv = _flow_sign_of(name, flow_base)
     if conv is None:
         return
     direction = _flow_direction_word(s, claim["subject"], a, b)
@@ -222,6 +222,9 @@ def _direct_value_claim(claim, s, a, b, sign, num, unit, prec, subj, elems, memb
     is_diff = bool(_MONEY_UNIT_RE_AFTER.search(s[b:b + 4])) or bool(_MONEY_DIFF_PHRASE_RE.search(s[max(0, a - 25):a]))
     hits = [(f, V.match_value(f["value"], target, scale, rounding)) for f in pool]
     hits = [(f, how) for f, how in hits if how]
+    if profile is not None and profile.period_cue and _prior_cue(s, a, b):
+        # C2: 当期・前期で同じ値のとき、「(同」「前期」の直後の数は前期の fact を先に。
+        hits = sorted(hits, key=lambda fh: 0 if fh[0]["context"].startswith("Prior1Year") else 1)
     if hits and not (is_diff and subj):
         fams = sorted({f["name"] for f, _ in hits})
         if subj or len(fams) == 1:
@@ -357,7 +360,7 @@ def _target_or_plan(s, a, b, profile):
 
 
 def _dispatch_num_claim(claim, s, a, b, sign, num, unit, prec, subj, elems, member, facts, contexts, profile,
-                        rounding=None):
+                        rounding=None, flow_base=None):
     """§1-2 の目標値判定を通らなかった数の Claim の、既存の単位ごとの振り分け
     (C-1d/C-1g と不変)。"""
 
@@ -367,6 +370,13 @@ def _dispatch_num_claim(claim, s, a, b, sign, num, unit, prec, subj, elems, memb
         pm = E.own_sign_match(window_pm, num)  # P-8 (always applied; P1 is unaffected, see §6)
     window_pr = s[max(0, a - 12):b + 3]
     pr = E.PCT_RATIO_RE.search(window_pr) if unit in ("％", "%") and not pm else None
+    pct_phrase = None
+    if unit in ("％", "%") and not pm and not pr and profile.pct_change_phrase:
+        # C4: 「46.0%の大幅減益」「20.7%の大幅増加」― % と向きの語の間に の/大幅 が挟まる形。
+        for mm in _PCT_PHRASE_RE.finditer(window_pm):
+            if abs(float(mm.group(1)) - num) < 1e-9:
+                pct_phrase = mm
+                break
     if unit in ("％", "%") and pr:
         claim["form"] = "derived_value"
         if subj:
@@ -388,11 +398,12 @@ def _dispatch_num_claim(claim, s, a, b, sign, num, unit, prec, subj, elems, memb
                 claim["reason"] = "no_prior_member_context" if (member and member != E.AMBIG and cur) else "no_element"
         else:
             claim["reason"] = "no_subject"
-    elif unit in ("％", "%") and pm and (pm.group(4) or pm.group(7)):
+    elif unit in ("％", "%") and ((pm and (pm.group(4) or pm.group(7))) or pct_phrase):
         claim["form"] = "derived_value"
-        sgn = 1 if (pm.group(4) or pm.group(7)) in ("増", "増加") else -1
+        tok = (pm.group(4) or pm.group(7)) if pm else pct_phrase.group(3)
+        sgn = 1 if tok in ("増", "増加", "増益", "増収") else -1
         claim["value"] = sgn * num
-        claim["sign_token"] = pm.group(0)
+        claim["sign_token"] = (pm or pct_phrase).group(0)
         if subj:
             cur = [f for f in I.facts_for(elems, facts, contexts, member) if f["context"].startswith("CurrentYear")]
             pri = [f for f in I.facts_for(elems, facts, contexts, member) if f["context"].startswith("Prior1Year")]
@@ -417,13 +428,34 @@ def _dispatch_num_claim(claim, s, a, b, sign, num, unit, prec, subj, elems, memb
         _direct_value_claim(claim, s, a, b, sign, num, unit, prec, subj, elems, member, facts, contexts,
                             profile, rounding)
         if profile.flow_sign:
-            _apply_flow_sign(claim, s, a, b, rounding)
+            _apply_flow_sign(claim, s, a, b, rounding, flow_base)
     elif unit in ("％", "%", "ポイント"):
         claim["form"] = "direct_value"
         if profile.point_diff and unit == "ポイント" and subj:
             _build_point_diff_claim(claim, s, a, b, elems, member, facts, contexts, num)
+        elif profile.ratio_table and _ratio_word_before(s, a) is not None:
+            # C5: 「売上総利益率は32.5%」― 率そのものの fact が無くても、分子/分母の
+            # 2 fact(同じ期)で 分子/分母*100 を照合する。
+            rword = _ratio_word_before(s, a)
+            num_e, den_e = V.RATIO_TABLE[rword]
+            want = "Prior1Year" if (profile.period_cue and _prior_cue(s, a, b)) else "CurrentYear"
+            nf = [f for f in I.facts_for([num_e], facts, contexts, member) if f["context"].startswith(want) and f["unit"] and f["unit"].upper().startswith("JPY")]
+            df = [f for f in I.facts_for([den_e], facts, contexts, member) if f["context"].startswith(want) and f["unit"] and f["unit"].upper().startswith("JPY")]
+            claim["subject"] = rword
+            claim["subject_from"] = "ratio_table"
+            if nf and df and df[0]["value"] != 0:
+                n, d = nf[0], df[0]
+                claim["form"] = "derived_value"
+                claim["pointer"] = ["xbrl:%s@%s" % (n["name"], n["context"]), "xbrl:%s@%s" % (d["name"], d["context"]), "formula:a/b*100"]
+                claim["bound"] = True
+                ratio = n["value"] / d["value"] * 100
+                claim["recomputed"] = round(ratio, 2)
+                claim["result"] = "GROUNDED" if abs(ratio - num) <= 0.15 else "VALUE_MISMATCH"
+            else:
+                claim["reason"] = "no_element(ratio without fact)"
         elif subj and any((f["unit"] or "").lower().startswith("pure") for f in I.facts_for(elems, facts, contexts, member)):
-            cur = [f for f in I.facts_for(elems, facts, contexts, member) if f["context"].startswith("CurrentYear") and (f["unit"] or "").lower().startswith("pure")]
+            want = "Prior1Year" if (profile.period_cue and _prior_cue(s, a, b)) else "CurrentYear"  # C2
+            cur = [f for f in I.facts_for(elems, facts, contexts, member) if f["context"].startswith(want) and (f["unit"] or "").lower().startswith("pure")]
             if cur:
                 fv = cur[0]["value"]
                 fvp = fv * 100 if abs(fv) <= 1.5 else fv
@@ -586,8 +618,9 @@ def _direction_amount_check(claim, s, word_start, word_end, rounding):
         claim["result"] = "VALUE_MISMATCH"
 
 
-def _build_raw_num_claims(sentences, facts, contexts, profile, claim_member, rounding=None):
+def _build_raw_num_claims(sentences, facts, contexts, profile, claim_member, rounding=None, flow_base=None):
     num_claims = []
+    cf_ctx = _cf_context_flags(sentences) if flow_base else None
     for si, s in enumerate(sentences):
         for (a, b, signed, unit, prec) in E.iter_numbers(s):
             member, msrc = claim_member(si, a)
@@ -598,6 +631,10 @@ def _build_raw_num_claims(sentences, facts, contexts, profile, claim_member, rou
             sign = -1 if signed < 0 else 1
             num = abs(signed)
             subj, elems = E.subject_of(s, a, profile.subjects, E.subject_skip_for(profile))
+            felems = _flow_elems_for(s, subj, a, flow_base, cf_ctx[si]) if flow_base else None
+            orig_elems = elems
+            if felems is not None:
+                elems = felems  # C3: 「Xの増加額 N円」は X の CF 増減項目
             claim = {
                 "id": "N%03d" % (len(num_claims) + 1,), "sentence": si, "span": s[max(0, a - 30):b + 10],
                 # XBRL 直し(2026-10-08): 文の中の位置。文の切り方を変える直し
@@ -607,6 +644,9 @@ def _build_raw_num_claims(sentences, facts, contexts, profile, claim_member, rou
                 "value": sign * num, "unit": unit, "subject": subj, "form": None, "pointer": None,
                 "bound": False, "reason": None, "result": None, "recomputed": None,
             }
+            if felems is not None:
+                claim["subject_from"] = "flow_item"
+            base_claim = dict(claim)
             if _target_or_plan(s, a, b, profile):
                 # Core 接続 C-1h §1-2(P7)+ XBRL 直し §3(P8): 目標・計画・
                 # 見込み・見通しの数は UNVERIFIABLE。
@@ -615,7 +655,16 @@ def _build_raw_num_claims(sentences, facts, contexts, profile, claim_member, rou
                 claim["reason"] = "target_or_plan"
             else:
                 _dispatch_num_claim(claim, s, a, b, sign, num, unit, prec, subj, elems, member, facts, contexts,
-                                    profile, rounding)
+                                    profile, rounding, flow_base)
+                if felems is not None and claim.get("result") != "GROUNDED":
+                    # C3 の fall back: CF 増減項目で裏が取れなければ、元の要素(残高)で
+                    # もう 1 度だけ試し、そちらが GROUNDED ならそれを採る。
+                    retry = dict(base_claim)
+                    retry.pop("subject_from", None)
+                    _dispatch_num_claim(retry, s, a, b, sign, num, unit, prec, subj, orig_elems, member, facts, contexts,
+                                        profile, rounding, None)
+                    if retry.get("result") == "GROUNDED":
+                        claim = retry
             if rounding is not None and claim.get("unit_scale") is not None:
                 claim["rounding"] = rounding
             if profile.member_on:
@@ -647,19 +696,25 @@ def _text_unbound_reason(profile, member, cur, elems, facts, contexts):
     return "no_element(no prior for text)"
 
 
-def _build_raw_text_claims(sentences, facts, contexts, profile, claim_member, rounding=None):
+def _build_raw_text_claims(sentences, facts, contexts, profile, claim_member, rounding=None, flow_base=None):
     text_claims = []
+    cf_ctx = _cf_context_flags(sentences) if flow_base else None
     for si, s in enumerate(sentences):
         for w, sg in E.DIRECTION_WORDS.items():
             for m in re.finditer(w, s):
                 member, msrc = claim_member(si, m.start())
                 subj, elems = E.subject_of(s, m.start(), profile.subjects, E.subject_skip_for(profile))
+                felems = _flow_elems_for(s, subj, m.start(), flow_base, cf_ctx[si]) if (flow_base and w in ("増加", "減少")) else None
+                if felems is not None:
+                    elems = felems  # C3: 「Xの減少」は X の CF 増減項目(flow_sign の経路へ)
                 claim = {
                     "id": "T%03d" % (len(text_claims) + 1,), "sentence": si, "word": w,
                     "span": s[max(0, m.start() - 30):m.end() + 5], "subject": subj, "pos": m.start(),
                     "form": "threshold", "pointer": None, "bound": False, "result": None, "reason": None,
                     "direction": sg,
                 }
+                if felems is not None:
+                    claim["subject_from"] = "flow_item"
                 if profile.subject_direction_object:
                     # S2: 「<名詞>を増加/減少」なら、向きが掛かっているのは
                     # **その目的語**である。語彙に在ればそれを主語にし、
@@ -694,7 +749,7 @@ def _build_raw_text_claims(sentences, facts, contexts, profile, claim_member, ro
                 flow_conv = None
                 if subj and profile.flow_sign:
                     for e in elems:
-                        c = V.flow_convention(e)
+                        c = _flow_sign_of(e, flow_base)
                         if c is not None:
                             flow_conv = c
                             break
@@ -720,7 +775,9 @@ def _build_raw_text_claims(sentences, facts, contexts, profile, claim_member, ro
                     # Core 接続 C-1g §1-2: 主語が CF 流量項目なら、前期との
                     # 対でなく当期 1 件の fact + builtin:flow_sign(cur)==direction
                     # で束縛する(値そのものが増減を表すので前期は要らない)。
-                    cur = [f for f in I.facts_for(elems, facts, contexts, member) if f["context"].startswith("CurrentYear") and f["unit"] and f["unit"].upper().startswith("JPY")]
+                    # C2: 同じ節に「前期は」が在れば前期の CF fact。
+                    cf_pre = "Prior1Year" if (profile.period_cue and _prior_cue_clause(s, m.start())) else "CurrentYear"
+                    cur = [f for f in I.facts_for(elems, facts, contexts, member) if f["context"].startswith(cf_pre) and f["unit"] and f["unit"].upper().startswith("JPY")]
                     if cur:
                         c = cur[0]
                         claim["pointer"] = ["xbrl:%s@%s" % (c["name"], c["context"]), "builtin:flow_sign(cur)==direction"]
@@ -754,7 +811,8 @@ def _build_raw_text_claims(sentences, facts, contexts, profile, claim_member, ro
                     # XBRL 直し §6: 括弧の中の前期の方向語は、当期・前期ではなく
                     # 前期・前々期の対に結ぶ。期の組だけを差し替え、以降の
                     # 判定(符号の向き・理由)は同じ 1 か所を通す。
-                    prior_paren = profile.text_prior_year_paren and _in_prior_year_paren(s, m.start())
+                    prior_paren = (profile.text_prior_year_paren and _in_prior_year_paren(s, m.start())) or \
+                        (profile.period_cue and _prior_cue_clause(s, m.start()))  # C2
                     a_pre, b_pre = ("Prior1Year", "Prior2Year") if prior_paren else ("CurrentYear", "Prior1Year")
                     cur = [f for f in I.facts_for(elems, facts, contexts, member) if f["context"].startswith(a_pre) and f["unit"] and f["unit"].upper().startswith("JPY")]
                     pri = [f for f in I.facts_for(elems, facts, contexts, member) if f["context"].startswith(b_pre)]
@@ -876,6 +934,141 @@ def _label_tables(zb, inst, profile):
     return doc_labels, tax_labels
 
 
+# ---------------------------------------------------------------------------
+# 概念で結ぶ直し(2026-10-13)。C2: 期の手がかり。C3: CF 増減項目をラベルで引く。
+# どれも profile のフラグ(P16)が真のときだけ呼ばれる。
+# ---------------------------------------------------------------------------
+_PRIOR_CUE_RE = re.compile(r"(前期末|前期|前連結会計年度末|前連結会計年度|前事業年度末|前事業年度|前年同期)(は|には|の|、)?$")
+_PRIOR_PAREN_RE = re.compile(r"[(（]\s*同\s*$")
+_PRIOR_CLAUSE_RE = re.compile(r"(前期|前連結会計年度|前事業年度|前年同期)(は|には)")
+
+
+def _prior_cue(s, a, b=None):
+    """C2: 数の直前(12 字)が「前期」「前期末」「(同」などで終わるか、数の直後が
+    「から」(「32.5%から29.8%へ」の前の数)か。「前期比 2.9%増」の 前期比 は当期の
+    主張なので当たらない(末尾が 比)。"""
+
+    w = s[max(0, a - 12):a]
+    if _PRIOR_CUE_RE.search(w) or _PRIOR_PAREN_RE.search(w):
+        return True
+    return b is not None and s[b:b + 2] == "から"
+
+
+def _prior_cue_clause(s, pos):
+    """C2(向きの語): 同じ節(直前の読点・句点より後)に「前期は」などが在るか。"""
+
+    # 閉じた括弧の中(「(前連結会計年度は営業損失9,709千円)の減益」の括弧)は別の節なので除く。
+    seg = re.sub(r"[(（][^()（）]*[)）]", "", s[:pos])
+    cut = max(seg.rfind("、"), seg.rfind("。"))
+    return bool(_PRIOR_CLAUSE_RE.search(seg[cut + 1:]))
+
+
+_PCT_PHRASE_RE = re.compile(r"(\d+(?:\.\d+)?)\s*(％|%)\s*の?(?:大幅な?)?(増加|減少|増益|減益|増収|減収|増|減)")
+# 語と数の間に許すもの: 助詞、「前期の」、そして「32.5%から」(AからBへ の A)。
+_RATIO_PARTICLE_RE = re.compile(r"^(は|が|を|も|の|、|\s)*(前期(末)?の)?(\d+(?:\.\d+)?\s*[％%]から)?$")
+
+
+def _ratio_word_before(s, a):
+    """C5: 数の手前 24 字に RATIO_TABLE の語が在り、語と数の間が助詞(と「前期の」「NN%から」)だけなら、その語
+    (いちばん長いもの)。無ければ None。"""
+
+    head = s[max(0, a - 24):a]
+    best = None
+    for w in V.RATIO_TABLE:
+        i = head.rfind(w)
+        if i < 0 or not _RATIO_PARTICLE_RE.match(head[i + len(w):]):
+            continue
+        if best is None or len(w) > len(best):
+            best = w
+    return best
+
+
+_FLOW_LABEL_RE = re.compile(r"^(.+?)の(増減額|増加額|減少額|増減|増加|減少)")
+_FLOW_TAIL_RE = re.compile(r"^の(増加額|減少額|増加|減少)")
+# C3 を掛けるのはキャッシュ・フローの説明の文だけ。貸借対照表の説明(「純資産の増加は…
+# 退職給付に係る調整累計額の増加10億8千5百万円による」)の「Xの増加」は残高の 2 時点が正しい。
+_CF_CONTEXT_RE = re.compile(r"キャッシュ・フロー|資金|営業活動|投資活動|財務活動|収入|支出")
+
+
+def _flow_items_by_base(zb, inst, profile):
+    """C3: ``{勘定科目の語: [CF 増減項目の局所名, ...]}``。書類のラベルと標準タクソノミの
+    ラベルのうち「Xの増減額(△は…)」の形で、要素が ``flow_convention`` を持つものだけ。
+    """
+
+    doc_labels, tax_labels = _label_tables(zb, inst, profile)
+    # 会社拡張の要素(例 jpcrp030000-asr_E36539-000:DecreaseIncreaseInContractAssetsOpeCF)の
+    # ラベルは書類の ZIP の _lab.xml にだけ在る。id は <prefix>_<Local> の形。
+    z = zipfile.ZipFile(io.BytesIO(zb))
+    ext_labels = {}
+    for eid, label in I.labels_from_zip(z, inst["names"]).items():
+        ext_labels.setdefault(label, []).append(eid.rsplit("_", 1)[-1])
+    base, sign = {}, {}
+    for table in (doc_labels, tax_labels, ext_labels):
+        for label, locals_ in table.items():
+            m = _FLOW_LABEL_RE.match(label)
+            if not m:
+                continue
+            flows = [e for e in locals_ if V.flow_convention(e) is not None]
+            if not flows:
+                continue
+            bucket = base.setdefault(m.group(1), [])
+            for e in flows:
+                if e not in bucket:
+                    bucket.append(e)
+                # 符号の規約はラベルの括弧が正本: 「(△は増加)」= 負が増加 = -1、
+                # 「(△は減少)」= 負が減少 = +1。無ければ要素名の規約(flow_convention)。
+                if "△は増加" in label:
+                    sign[e] = -1
+                elif "△は減少" in label:
+                    sign[e] = 1
+    return {"base": base, "sign": sign}
+
+
+def statement_facts_first(facts):
+    """C1: 計算書(jppfs_cor)の fact を先に置いた新しい列(安定な並べ替え。中身は同じ)。"""
+
+    return sorted(facts, key=lambda f: 0 if f["name"].startswith(I.STATEMENT_PREFIX + ":") else 1)
+
+
+def _flow_sign_of(element_name, flow_base):
+    """C3: CF 増減項目の符号の規約。ラベルの括弧から取れたものを優先し、
+    無ければ ``vocabulary.flow_convention``(要素名)に落とす。"""
+
+    local = element_name.split(":")[-1]
+    if flow_base and local in flow_base.get("sign", {}):
+        return flow_base["sign"][local]
+    return V.flow_convention(element_name)
+
+
+def _cf_context_flags(sentences, back=2):
+    """C3: 文ごとに「この文か直前 ``back`` 文にキャッシュ・フローの手がかり語が在るか」。
+    AI 文は理由を番号つきで文に分けるので、手がかり語が 1〜2 文前に在ることがある。"""
+
+    hit = [bool(_CF_CONTEXT_RE.search(s)) for s in sentences]
+    return [any(hit[max(0, i - back):i + 1]) for i in range(len(sentences))]
+
+
+def _flow_elems_for(s, subj, pos, flow_base, cf_context=None):
+    """C3: 主語の直後が「の増加/減少(額)」(向きの語なら「の」だけ)で、その語の
+    CF 増減項目がラベルで引けるなら、その要素の一覧。引けなければ ``None``。"""
+
+    table = (flow_base or {}).get("base") or {}
+    if not subj or subj not in table:
+        return None
+    if cf_context is None:
+        cf_context = bool(_CF_CONTEXT_RE.search(s))
+    if not cf_context:
+        return None
+    head = s[:pos]
+    i = head.rfind(subj)
+    if i < 0:
+        return None
+    tail = s[i + len(subj):pos]
+    if tail == "の" or _FLOW_TAIL_RE.match(tail):
+        return list(table[subj])
+    return None
+
+
 def _label_subjects(zb, inst, profile):
     """XBRL 直し §7・§7b・§8: ラベルから取った「日本語の勘定科目名 → 要素」を
     主語の一覧の**行**にして返す。
@@ -948,6 +1141,14 @@ def build_raw_claims(zb, profile, info=None):
             info["label_subjects_added"] = len(added)
             info["label_overrides"] = overrides
     facts, contexts, tbs = inst["facts"], inst["contexts"], inst["textblocks"]
+    if profile.statement_facts_first:
+        # C1: 計算書(jppfs_cor)の fact を先に置く(安定な並べ替え)。「最初の候補」を
+        # 採る既存の全箇所が、業績概要(jpcrp_cor:…SummaryOfBusinessResults)より
+        # 本表を先に見るようになる。fact の中身は変えない。
+        facts = statement_facts_first(facts)
+    flow_base = _flow_items_by_base(zb, inst, profile) if profile.flow_item_from_label else None
+    if info is not None and flow_base is not None:
+        info["flow_items"] = len(flow_base["base"])
     mdna_name = I.select_mdna(tbs)
     text = I.strip_html(tbs[mdna_name]) if mdna_name else ""
     sentences = E.split_sentences(text, profile.paren_sentence)
@@ -958,17 +1159,17 @@ def build_raw_claims(zb, profile, info=None):
             return sent_member[si]
         return E.claim_member_B(sentences[si], pos, reg, sent_member[si])
 
-    num_claims = _build_raw_num_claims(sentences, facts, contexts, profile, claim_member)
+    num_claims = _build_raw_num_claims(sentences, facts, contexts, profile, claim_member, flow_base=flow_base)
     rounding = None
     if profile.doc_rounding:
         # XBRL 直し §2: 1 周目(今までの梯子)で根拠を数え、書類の丸め方を
         # 1 つに決め、2 周目はその 1 つだけで照合し直す。
         rounding, r_only, t_only = V.decide_rounding(_rounding_evidence(num_claims))
-        num_claims = _build_raw_num_claims(sentences, facts, contexts, profile, claim_member, rounding)
+        num_claims = _build_raw_num_claims(sentences, facts, contexts, profile, claim_member, rounding, flow_base=flow_base)
         if info is not None:
             info["rounding_round_only"] = r_only
             info["rounding_truncate_only"] = t_only
-    text_claims = _build_raw_text_claims(sentences, facts, contexts, profile, claim_member, rounding)
+    text_claims = _build_raw_text_claims(sentences, facts, contexts, profile, claim_member, rounding, flow_base=flow_base)
     if info is not None:
         info["sentences"] = len(sentences)
         info["mdna_chars"] = len(text)
@@ -1075,6 +1276,7 @@ def claim_to_recipe(raw, kind):
             f = others[0] if others else ""
             comparator = {
                 "formula:cur/prior*100": "ratio*100",
+                "formula:a/b*100": "ratio*100",  # C5(分子/分母*100。評価器は同じ)
                 "formula:a-b": "diff(a-b) equals_within",
                 # Core 接続 C-1g §1-3: ポイント差の derived diff。
                 "formula:a-b(pure)": "diff(a-b)(pure*100)",
