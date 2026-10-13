@@ -1,0 +1,3539 @@
+{
+ "train": {
+  "P17": {
+   "all": {
+    "L": 217,
+    "G": 189,
+    "E1_strict": 173,
+    "E2_strict": 16,
+    "E2_v0": 16,
+    "E3": 28,
+    "MISSING": 0
+   },
+   "value_form": {
+    "L": 156,
+    "G": 139,
+    "E1_strict": 132,
+    "E2_strict": 7,
+    "E2_v0": 7,
+    "E3": 17,
+    "MISSING": 0
+   },
+   "direction_form": {
+    "L": 61,
+    "G": 50,
+    "E1_strict": 41,
+    "E2_strict": 9,
+    "E2_v0": 9,
+    "E3": 11,
+    "MISSING": 0
+   },
+   "S100Z39P": {
+    "L": 86,
+    "G": 83,
+    "E1_strict": 76,
+    "E2_strict": 7,
+    "E2_v0": 7,
+    "E3": 3,
+    "MISSING": 0
+   },
+   "S100Z4N9": {
+    "L": 131,
+    "G": 106,
+    "E1_strict": 97,
+    "E2_strict": 9,
+    "E2_v0": 9,
+    "E3": 25,
+    "MISSING": 0
+   },
+   "rows": {
+    "S100Z39P:H-001": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-002": {
+     "state": "GROUNDED",
+     "strict": false
+    },
+    "S100Z39P:H-003": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-004": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-005": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-006": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-008": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-009": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-010": {
+     "state": "GROUNDED",
+     "strict": false
+    },
+    "S100Z39P:H-011": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-014": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-015": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-016": {
+     "state": "GROUNDED",
+     "strict": false
+    },
+    "S100Z39P:H-017": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-018": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-019": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-020": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-021": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-022": {
+     "state": "GROUNDED",
+     "strict": false
+    },
+    "S100Z39P:H-023": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-024": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-026": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-027": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-029": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-031": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-032": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-033": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-034": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-035": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-036": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-038": {
+     "state": "GROUNDED",
+     "strict": false
+    },
+    "S100Z39P:H-039": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-040": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-041": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-042": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-043": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-044": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-045": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-046": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-047": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-048": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-049": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-050": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-052": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-053": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-054": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-055": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-056": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-059": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-060": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-061": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-062": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-063": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-064": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-065": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-066": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-067": {
+     "state": "GROUNDED",
+     "strict": false
+    },
+    "S100Z39P:H-068": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-069": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-070": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-071": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-072": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-073": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-074": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-075": {
+     "state": "VALUE_MISMATCH",
+     "strict": false
+    },
+    "S100Z39P:H-076": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-077": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-079": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-081": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-082": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-084": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-085": {
+     "state": "POINTER_NOT_FOUND",
+     "strict": false
+    },
+    "S100Z39P:H-086": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-087": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-089": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-090": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-091": {
+     "state": "UNVERIFIABLE",
+     "strict": false
+    },
+    "S100Z39P:H-092": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-093": {
+     "state": "GROUNDED",
+     "strict": false
+    },
+    "S100Z39P:H-095": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-097": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-098": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-099": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-101": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-102": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-103": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-001": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-002": {
+     "state": "GROUNDED",
+     "strict": false
+    },
+    "S100Z4N9:H-003": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-004": {
+     "state": "UNVERIFIABLE",
+     "strict": false
+    },
+    "S100Z4N9:H-005": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-006": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-007": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-008": {
+     "state": "UNVERIFIABLE",
+     "strict": false
+    },
+    "S100Z4N9:H-009": {
+     "state": "UNVERIFIABLE",
+     "strict": false
+    },
+    "S100Z4N9:H-010": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-011": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-012": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-013": {
+     "state": "GROUNDED",
+     "strict": false
+    },
+    "S100Z4N9:H-014": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-015": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-016": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-018": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-019": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-020": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-021": {
+     "state": "VALUE_MISMATCH",
+     "strict": false
+    },
+    "S100Z4N9:H-022": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-023": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-024": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-026": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-027": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-028": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-030": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-033": {
+     "state": "GROUNDED",
+     "strict": false
+    },
+    "S100Z4N9:H-034": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-035": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-036": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-037": {
+     "state": "VALUE_MISMATCH",
+     "strict": false
+    },
+    "S100Z4N9:H-038": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-039": {
+     "state": "VALUE_MISMATCH",
+     "strict": false
+    },
+    "S100Z4N9:H-040": {
+     "state": "VALUE_MISMATCH",
+     "strict": false
+    },
+    "S100Z4N9:H-041": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-043": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-044": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-045": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-046": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-047": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-048": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-049": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-050": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-051": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-052": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-053": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-054": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-055": {
+     "state": "VALUE_MISMATCH",
+     "strict": false
+    },
+    "S100Z4N9:H-056": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-057": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-058": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-060": {
+     "state": "VALUE_MISMATCH",
+     "strict": false
+    },
+    "S100Z4N9:H-061": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-062": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-063": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-064": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-066": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-067": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-069": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-070": {
+     "state": "GROUNDED",
+     "strict": false
+    },
+    "S100Z4N9:H-071": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-072": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-074": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-075": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-076": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-077": {
+     "state": "VALUE_MISMATCH",
+     "strict": false
+    },
+    "S100Z4N9:H-078": {
+     "state": "VALUE_MISMATCH",
+     "strict": false
+    },
+    "S100Z4N9:H-079": {
+     "state": "UNVERIFIABLE",
+     "strict": false
+    },
+    "S100Z4N9:H-080": {
+     "state": "VALUE_MISMATCH",
+     "strict": false
+    },
+    "S100Z4N9:H-081": {
+     "state": "VALUE_MISMATCH",
+     "strict": false
+    },
+    "S100Z4N9:H-082": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-083": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-084": {
+     "state": "POINTER_NOT_FOUND",
+     "strict": false
+    },
+    "S100Z4N9:H-085": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-086": {
+     "state": "UNVERIFIABLE",
+     "strict": false
+    },
+    "S100Z4N9:H-087": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-088": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-089": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-091": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-093": {
+     "state": "GROUNDED",
+     "strict": false
+    },
+    "S100Z4N9:H-094": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-095": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-096": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-097": {
+     "state": "GROUNDED",
+     "strict": false
+    },
+    "S100Z4N9:H-098": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-099": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-100": {
+     "state": "GROUNDED",
+     "strict": false
+    },
+    "S100Z4N9:H-101": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-102": {
+     "state": "VALUE_MISMATCH",
+     "strict": false
+    },
+    "S100Z4N9:H-103": {
+     "state": "GROUNDED",
+     "strict": false
+    },
+    "S100Z4N9:H-104": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-106": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-107": {
+     "state": "VALUE_MISMATCH",
+     "strict": false
+    },
+    "S100Z4N9:H-108": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-109": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-110": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-111": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-113": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-114": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-116": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-117": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-118": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-120": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-121": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-122": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-123": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-124": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-125": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-126": {
+     "state": "UNVERIFIABLE",
+     "strict": false
+    },
+    "S100Z4N9:H-128": {
+     "state": "UNVERIFIABLE",
+     "strict": false
+    },
+    "S100Z4N9:H-129": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-130": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-131": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-132": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-133": {
+     "state": "GROUNDED",
+     "strict": false
+    },
+    "S100Z4N9:H-134": {
+     "state": "VALUE_MISMATCH",
+     "strict": false
+    },
+    "S100Z4N9:H-135": {
+     "state": "VALUE_MISMATCH",
+     "strict": false
+    },
+    "S100Z4N9:H-136": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-137": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-138": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-139": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-140": {
+     "state": "VALUE_MISMATCH",
+     "strict": true
+    },
+    "S100Z4N9:H-141": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-142": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-143": {
+     "state": "UNVERIFIABLE",
+     "strict": false
+    },
+    "S100Z4N9:H-145": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-147": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-148": {
+     "state": "POINTER_NOT_FOUND",
+     "strict": false
+    },
+    "S100Z4N9:H-149": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-150": {
+     "state": "GROUNDED",
+     "strict": true
+    }
+   }
+  },
+  "P18": {
+   "all": {
+    "L": 217,
+    "G": 189,
+    "E1_strict": 173,
+    "E2_strict": 16,
+    "E2_v0": 16,
+    "E3": 28,
+    "MISSING": 0
+   },
+   "value_form": {
+    "L": 156,
+    "G": 139,
+    "E1_strict": 132,
+    "E2_strict": 7,
+    "E2_v0": 7,
+    "E3": 17,
+    "MISSING": 0
+   },
+   "direction_form": {
+    "L": 61,
+    "G": 50,
+    "E1_strict": 41,
+    "E2_strict": 9,
+    "E2_v0": 9,
+    "E3": 11,
+    "MISSING": 0
+   },
+   "S100Z39P": {
+    "L": 86,
+    "G": 83,
+    "E1_strict": 76,
+    "E2_strict": 7,
+    "E2_v0": 7,
+    "E3": 3,
+    "MISSING": 0
+   },
+   "S100Z4N9": {
+    "L": 131,
+    "G": 106,
+    "E1_strict": 97,
+    "E2_strict": 9,
+    "E2_v0": 9,
+    "E3": 25,
+    "MISSING": 0
+   },
+   "rows": {
+    "S100Z39P:H-001": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-002": {
+     "state": "GROUNDED",
+     "strict": false
+    },
+    "S100Z39P:H-003": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-004": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-005": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-006": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-008": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-009": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-010": {
+     "state": "GROUNDED",
+     "strict": false
+    },
+    "S100Z39P:H-011": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-014": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-015": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-016": {
+     "state": "GROUNDED",
+     "strict": false
+    },
+    "S100Z39P:H-017": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-018": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-019": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-020": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-021": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-022": {
+     "state": "GROUNDED",
+     "strict": false
+    },
+    "S100Z39P:H-023": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-024": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-026": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-027": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-029": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-031": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-032": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-033": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-034": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-035": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-036": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-038": {
+     "state": "GROUNDED",
+     "strict": false
+    },
+    "S100Z39P:H-039": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-040": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-041": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-042": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-043": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-044": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-045": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-046": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-047": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-048": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-049": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-050": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-052": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-053": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-054": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-055": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-056": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-059": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-060": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-061": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-062": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-063": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-064": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-065": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-066": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-067": {
+     "state": "GROUNDED",
+     "strict": false
+    },
+    "S100Z39P:H-068": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-069": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-070": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-071": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-072": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-073": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-074": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-075": {
+     "state": "VALUE_MISMATCH",
+     "strict": false
+    },
+    "S100Z39P:H-076": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-077": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-079": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-081": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-082": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-084": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-085": {
+     "state": "POINTER_NOT_FOUND",
+     "strict": false
+    },
+    "S100Z39P:H-086": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-087": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-089": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-090": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-091": {
+     "state": "UNVERIFIABLE",
+     "strict": false
+    },
+    "S100Z39P:H-092": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-093": {
+     "state": "GROUNDED",
+     "strict": false
+    },
+    "S100Z39P:H-095": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-097": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-098": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-099": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-101": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-102": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-103": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-001": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-002": {
+     "state": "GROUNDED",
+     "strict": false
+    },
+    "S100Z4N9:H-003": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-004": {
+     "state": "UNVERIFIABLE",
+     "strict": false
+    },
+    "S100Z4N9:H-005": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-006": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-007": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-008": {
+     "state": "UNVERIFIABLE",
+     "strict": false
+    },
+    "S100Z4N9:H-009": {
+     "state": "UNVERIFIABLE",
+     "strict": false
+    },
+    "S100Z4N9:H-010": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-011": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-012": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-013": {
+     "state": "GROUNDED",
+     "strict": false
+    },
+    "S100Z4N9:H-014": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-015": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-016": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-018": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-019": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-020": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-021": {
+     "state": "VALUE_MISMATCH",
+     "strict": false
+    },
+    "S100Z4N9:H-022": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-023": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-024": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-026": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-027": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-028": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-030": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-033": {
+     "state": "GROUNDED",
+     "strict": false
+    },
+    "S100Z4N9:H-034": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-035": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-036": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-037": {
+     "state": "VALUE_MISMATCH",
+     "strict": false
+    },
+    "S100Z4N9:H-038": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-039": {
+     "state": "VALUE_MISMATCH",
+     "strict": false
+    },
+    "S100Z4N9:H-040": {
+     "state": "VALUE_MISMATCH",
+     "strict": false
+    },
+    "S100Z4N9:H-041": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-043": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-044": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-045": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-046": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-047": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-048": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-049": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-050": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-051": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-052": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-053": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-054": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-055": {
+     "state": "VALUE_MISMATCH",
+     "strict": false
+    },
+    "S100Z4N9:H-056": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-057": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-058": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-060": {
+     "state": "VALUE_MISMATCH",
+     "strict": false
+    },
+    "S100Z4N9:H-061": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-062": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-063": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-064": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-066": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-067": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-069": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-070": {
+     "state": "GROUNDED",
+     "strict": false
+    },
+    "S100Z4N9:H-071": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-072": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-074": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-075": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-076": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-077": {
+     "state": "VALUE_MISMATCH",
+     "strict": false
+    },
+    "S100Z4N9:H-078": {
+     "state": "VALUE_MISMATCH",
+     "strict": false
+    },
+    "S100Z4N9:H-079": {
+     "state": "UNVERIFIABLE",
+     "strict": false
+    },
+    "S100Z4N9:H-080": {
+     "state": "VALUE_MISMATCH",
+     "strict": false
+    },
+    "S100Z4N9:H-081": {
+     "state": "VALUE_MISMATCH",
+     "strict": false
+    },
+    "S100Z4N9:H-082": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-083": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-084": {
+     "state": "POINTER_NOT_FOUND",
+     "strict": false
+    },
+    "S100Z4N9:H-085": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-086": {
+     "state": "UNVERIFIABLE",
+     "strict": false
+    },
+    "S100Z4N9:H-087": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-088": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-089": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-091": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-093": {
+     "state": "GROUNDED",
+     "strict": false
+    },
+    "S100Z4N9:H-094": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-095": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-096": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-097": {
+     "state": "GROUNDED",
+     "strict": false
+    },
+    "S100Z4N9:H-098": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-099": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-100": {
+     "state": "GROUNDED",
+     "strict": false
+    },
+    "S100Z4N9:H-101": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-102": {
+     "state": "VALUE_MISMATCH",
+     "strict": false
+    },
+    "S100Z4N9:H-103": {
+     "state": "GROUNDED",
+     "strict": false
+    },
+    "S100Z4N9:H-104": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-106": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-107": {
+     "state": "VALUE_MISMATCH",
+     "strict": false
+    },
+    "S100Z4N9:H-108": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-109": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-110": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-111": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-113": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-114": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-116": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-117": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-118": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-120": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-121": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-122": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-123": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-124": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-125": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-126": {
+     "state": "UNVERIFIABLE",
+     "strict": false
+    },
+    "S100Z4N9:H-128": {
+     "state": "UNVERIFIABLE",
+     "strict": false
+    },
+    "S100Z4N9:H-129": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-130": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-131": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-132": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-133": {
+     "state": "GROUNDED",
+     "strict": false
+    },
+    "S100Z4N9:H-134": {
+     "state": "VALUE_MISMATCH",
+     "strict": false
+    },
+    "S100Z4N9:H-135": {
+     "state": "VALUE_MISMATCH",
+     "strict": false
+    },
+    "S100Z4N9:H-136": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-137": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-138": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-139": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-140": {
+     "state": "VALUE_MISMATCH",
+     "strict": true
+    },
+    "S100Z4N9:H-141": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-142": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-143": {
+     "state": "UNVERIFIABLE",
+     "strict": false
+    },
+    "S100Z4N9:H-145": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-147": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-148": {
+     "state": "POINTER_NOT_FOUND",
+     "strict": false
+    },
+    "S100Z4N9:H-149": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-150": {
+     "state": "GROUNDED",
+     "strict": true
+    }
+   }
+  }
+ },
+ "dev": {
+  "P17": {
+   "all": {
+    "L": 183,
+    "G": 155,
+    "E1_strict": 147,
+    "E2_strict": 8,
+    "E2_v0": 7,
+    "E3": 28,
+    "MISSING": 0
+   },
+   "value_form": {
+    "L": 145,
+    "G": 121,
+    "E1_strict": 119,
+    "E2_strict": 2,
+    "E2_v0": 2,
+    "E3": 24,
+    "MISSING": 0
+   },
+   "rows": {
+    "N296": {
+     "state": "UNVERIFIABLE",
+     "strict": false
+    },
+    "N217": {
+     "state": "POINTER_NOT_FOUND",
+     "strict": false
+    },
+    "N290": {
+     "state": "VALUE_MISMATCH",
+     "strict": false
+    },
+    "N244": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N010": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N148": {
+     "state": "POINTER_NOT_FOUND",
+     "strict": false
+    },
+    "N285": {
+     "state": "UNVERIFIABLE",
+     "strict": false
+    },
+    "N242": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N093": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N099": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "T075": {
+     "state": "UNVERIFIABLE",
+     "strict": false
+    },
+    "N168": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N186": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "T038": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N208": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "T053": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N158": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "T058": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N243": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N105": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N281": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N135": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N061": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N038": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "T018": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N236": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N279": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N073": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "T076": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N175": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "T095": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N067": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N028": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N054": {
+     "state": "UNVERIFIABLE",
+     "strict": false
+    },
+    "N036": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N193": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N050": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N153": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "T036": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "T001": {
+     "state": "UNVERIFIABLE",
+     "strict": false
+    },
+    "N287": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N075": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N303": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "T073": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N202": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "T085": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "T037": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N101": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N233": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "T022": {
+     "state": "GROUNDED",
+     "strict": false
+    },
+    "N021": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N024": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N053": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N220": {
+     "state": "VALUE_MISMATCH",
+     "strict": false
+    },
+    "N080": {
+     "state": "VALUE_MISMATCH",
+     "strict": false
+    },
+    "N245": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N100": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N126": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "T103": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N103": {
+     "state": "POINTER_NOT_FOUND",
+     "strict": false
+    },
+    "N144": {
+     "state": "VALUE_MISMATCH",
+     "strict": false
+    },
+    "N116": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "T110": {
+     "state": "UNVERIFIABLE",
+     "strict": false
+    },
+    "T088": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N214": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "T039": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N259": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "T080": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "T084": {
+     "state": "GROUNDED",
+     "strict": false
+    },
+    "N146": {
+     "state": "VALUE_MISMATCH",
+     "strict": false
+    },
+    "T054": {
+     "state": "GROUNDED",
+     "strict": false
+    },
+    "N178": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N231": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "T071": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N215": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "T108": {
+     "state": "UNVERIFIABLE",
+     "strict": false
+    },
+    "N282": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N079": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N204": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N122": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N113": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N237": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N035": {
+     "state": "POINTER_NOT_FOUND",
+     "strict": false
+    },
+    "T011": {
+     "state": "GROUNDED",
+     "strict": false
+    },
+    "N198": {
+     "state": "UNVERIFIABLE",
+     "strict": false
+    },
+    "N088": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N205": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N046": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N072": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N123": {
+     "state": "GROUNDED",
+     "strict": false
+    },
+    "N076": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N239": {
+     "state": "VALUE_MISMATCH",
+     "strict": false
+    },
+    "N273": {
+     "state": "UNVERIFIABLE",
+     "strict": false
+    },
+    "N249": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N169": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N187": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N261": {
+     "state": "UNVERIFIABLE",
+     "strict": false
+    },
+    "N302": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N006": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N037": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N247": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N277": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N120": {
+     "state": "VALUE_MISMATCH",
+     "strict": false
+    },
+    "N005": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N152": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N216": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N142": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N013": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N115": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N252": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "T017": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N222": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N020": {
+     "state": "UNVERIFIABLE",
+     "strict": false
+    },
+    "N297": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N014": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N129": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N031": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N174": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N119": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N264": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N278": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N304": {
+     "state": "POINTER_NOT_FOUND",
+     "strict": false
+    },
+    "N029": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N058": {
+     "state": "POINTER_NOT_FOUND",
+     "strict": false
+    },
+    "N108": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N130": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N091": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N164": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N063": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N089": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "T020": {
+     "state": "GROUNDED",
+     "strict": false
+    },
+    "N289": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "T070": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N011": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "T027": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "T023": {
+     "state": "GROUNDED",
+     "strict": false
+    },
+    "N131": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N077": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N192": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N112": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N218": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "T066": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N003": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "T102": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "T026": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "T068": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N200": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N066": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N137": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N157": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N143": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N009": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N191": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "T050": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N154": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N081": {
+     "state": "VALUE_MISMATCH",
+     "strict": false
+    },
+    "N026": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N170": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "T049": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N219": {
+     "state": "GROUNDED",
+     "strict": false
+    },
+    "N201": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N291": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "T086": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N232": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N102": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N172": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "T044": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N181": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "T072": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N179": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N298": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N085": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N138": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N057": {
+     "state": "UNVERIFIABLE",
+     "strict": false
+    },
+    "N087": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N056": {
+     "state": "UNVERIFIABLE",
+     "strict": false
+    },
+    "N262": {
+     "state": "UNVERIFIABLE",
+     "strict": false
+    },
+    "N034": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N267": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N092": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N288": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "T059": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N241": {
+     "state": "GROUNDED",
+     "strict": true
+    }
+   }
+  },
+  "P18": {
+   "all": {
+    "L": 183,
+    "G": 155,
+    "E1_strict": 147,
+    "E2_strict": 8,
+    "E2_v0": 7,
+    "E3": 28,
+    "MISSING": 0
+   },
+   "value_form": {
+    "L": 145,
+    "G": 121,
+    "E1_strict": 119,
+    "E2_strict": 2,
+    "E2_v0": 2,
+    "E3": 24,
+    "MISSING": 0
+   },
+   "rows": {
+    "N296": {
+     "state": "UNVERIFIABLE",
+     "strict": false
+    },
+    "N217": {
+     "state": "POINTER_NOT_FOUND",
+     "strict": false
+    },
+    "N290": {
+     "state": "VALUE_MISMATCH",
+     "strict": false
+    },
+    "N244": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N010": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N148": {
+     "state": "POINTER_NOT_FOUND",
+     "strict": false
+    },
+    "N285": {
+     "state": "UNVERIFIABLE",
+     "strict": false
+    },
+    "N242": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N093": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N099": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "T075": {
+     "state": "UNVERIFIABLE",
+     "strict": false
+    },
+    "N168": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N186": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "T038": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N208": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "T053": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N158": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "T058": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N243": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N105": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N281": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N135": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N061": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N038": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "T018": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N236": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N279": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N073": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "T076": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N175": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "T095": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N067": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N028": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N054": {
+     "state": "UNVERIFIABLE",
+     "strict": false
+    },
+    "N036": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N193": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N050": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N153": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "T036": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "T001": {
+     "state": "UNVERIFIABLE",
+     "strict": false
+    },
+    "N287": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N075": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N303": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "T073": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N202": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "T085": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "T037": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N101": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N233": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "T022": {
+     "state": "GROUNDED",
+     "strict": false
+    },
+    "N021": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N024": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N053": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N220": {
+     "state": "VALUE_MISMATCH",
+     "strict": false
+    },
+    "N080": {
+     "state": "VALUE_MISMATCH",
+     "strict": false
+    },
+    "N245": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N100": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N126": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "T103": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N103": {
+     "state": "POINTER_NOT_FOUND",
+     "strict": false
+    },
+    "N144": {
+     "state": "VALUE_MISMATCH",
+     "strict": false
+    },
+    "N116": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "T110": {
+     "state": "UNVERIFIABLE",
+     "strict": false
+    },
+    "T088": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N214": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "T039": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N259": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "T080": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "T084": {
+     "state": "GROUNDED",
+     "strict": false
+    },
+    "N146": {
+     "state": "VALUE_MISMATCH",
+     "strict": false
+    },
+    "T054": {
+     "state": "GROUNDED",
+     "strict": false
+    },
+    "N178": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N231": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "T071": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N215": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "T108": {
+     "state": "UNVERIFIABLE",
+     "strict": false
+    },
+    "N282": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N079": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N204": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N122": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N113": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N237": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N035": {
+     "state": "POINTER_NOT_FOUND",
+     "strict": false
+    },
+    "T011": {
+     "state": "GROUNDED",
+     "strict": false
+    },
+    "N198": {
+     "state": "UNVERIFIABLE",
+     "strict": false
+    },
+    "N088": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N205": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N046": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N072": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N123": {
+     "state": "GROUNDED",
+     "strict": false
+    },
+    "N076": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N239": {
+     "state": "VALUE_MISMATCH",
+     "strict": false
+    },
+    "N273": {
+     "state": "UNVERIFIABLE",
+     "strict": false
+    },
+    "N249": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N169": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N187": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N261": {
+     "state": "UNVERIFIABLE",
+     "strict": false
+    },
+    "N302": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N006": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N037": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N247": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N277": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N120": {
+     "state": "VALUE_MISMATCH",
+     "strict": false
+    },
+    "N005": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N152": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N216": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N142": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N013": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N115": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N252": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "T017": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N222": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N020": {
+     "state": "UNVERIFIABLE",
+     "strict": false
+    },
+    "N297": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N014": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N129": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N031": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N174": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N119": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N264": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N278": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N304": {
+     "state": "POINTER_NOT_FOUND",
+     "strict": false
+    },
+    "N029": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N058": {
+     "state": "POINTER_NOT_FOUND",
+     "strict": false
+    },
+    "N108": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N130": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N091": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N164": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N063": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N089": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "T020": {
+     "state": "GROUNDED",
+     "strict": false
+    },
+    "N289": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "T070": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N011": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "T027": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "T023": {
+     "state": "GROUNDED",
+     "strict": false
+    },
+    "N131": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N077": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N192": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N112": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N218": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "T066": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N003": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "T102": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "T026": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "T068": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N200": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N066": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N137": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N157": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N143": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N009": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N191": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "T050": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N154": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N081": {
+     "state": "VALUE_MISMATCH",
+     "strict": false
+    },
+    "N026": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N170": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "T049": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N219": {
+     "state": "GROUNDED",
+     "strict": false
+    },
+    "N201": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N291": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "T086": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N232": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N102": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N172": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "T044": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N181": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "T072": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N179": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N298": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N085": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N138": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N057": {
+     "state": "UNVERIFIABLE",
+     "strict": false
+    },
+    "N087": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N056": {
+     "state": "UNVERIFIABLE",
+     "strict": false
+    },
+    "N262": {
+     "state": "UNVERIFIABLE",
+     "strict": false
+    },
+    "N034": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N267": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N092": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N288": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "T059": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N241": {
+     "state": "GROUNDED",
+     "strict": true
+    }
+   }
+  }
+ },
+ "all_docs": {
+  "S100YMFV": {
+   "claims_p16": 133,
+   "claims_p17": 133,
+   "same_ids": true,
+   "transitions": {
+    "GROUNDED->VALUE_MISMATCH": 1
+   },
+   "grounded_lost_or_rebound": [
+    {
+     "id": "N066",
+     "span": "あり、当連結会計年度末の自己資本比率は、前連結会計年度末から2.9ポイント増加し52.5%とな",
+     "p16": [
+      "xbrl:jpcrp_cor:EquityToAssetRatioSummaryOfBusinessResults@CurrentYearInstant",
+      "xbrl:jpcrp_cor:EquityToAssetRatioSummaryOfBusinessResults@Prior1YearInstant",
+      "formula:a-b(pure)"
+     ],
+     "p17": [
+      "xbrl:jpcrp_cor:EquityToAssetRatioSummaryOfBusinessResults@CurrentYearInstant",
+      "xbrl:jpcrp_cor:EquityToAssetRatioSummaryOfBusinessResults@Prior1YearInstant",
+      "formula:a-b(pure)"
+     ],
+     "p17_state": "VALUE_MISMATCH"
+    }
+   ]
+  },
+  "S100Z1WR": {
+   "claims_p16": 91,
+   "claims_p17": 91,
+   "same_ids": true,
+   "transitions": {
+    "GROUNDED->VALUE_MISMATCH": 1
+   },
+   "grounded_lost_or_rebound": [
+    {
+     "id": "N013",
+     "span": "年同期比4.6%増)、営業利益は4,610百万円(前年同期比43.9%増)、経常利益は4,",
+     "p16": [
+      "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration",
+      "xbrl:jppfs_cor:OperatingIncome@Prior1YearDuration"
+     ],
+     "p17": [
+      "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration",
+      "xbrl:jppfs_cor:OperatingIncome@Prior1YearDuration"
+     ],
+     "p17_state": "VALUE_MISMATCH"
+    }
+   ]
+  },
+  "S100Z35K": {
+   "claims_p16": 133,
+   "claims_p17": 133,
+   "same_ids": true,
+   "transitions": {},
+   "grounded_lost_or_rebound": []
+  },
+  "S100Z37J": {
+   "claims_p16": 129,
+   "claims_p17": 129,
+   "same_ids": true,
+   "transitions": {},
+   "grounded_lost_or_rebound": []
+  },
+  "S100Z39P": {
+   "claims_p16": 103,
+   "claims_p17": 103,
+   "same_ids": true,
+   "transitions": {},
+   "grounded_lost_or_rebound": []
+  },
+  "S100Z3BW": {
+   "claims_p16": 145,
+   "claims_p17": 145,
+   "same_ids": true,
+   "transitions": {},
+   "grounded_lost_or_rebound": []
+  },
+  "S100Z3CO": {
+   "claims_p16": 143,
+   "claims_p17": 143,
+   "same_ids": true,
+   "transitions": {},
+   "grounded_lost_or_rebound": []
+  },
+  "S100Z3HP": {
+   "claims_p16": 62,
+   "claims_p17": 62,
+   "same_ids": true,
+   "transitions": {},
+   "grounded_lost_or_rebound": []
+  },
+  "S100Z3JY": {
+   "claims_p16": 135,
+   "claims_p17": 135,
+   "same_ids": true,
+   "transitions": {},
+   "grounded_lost_or_rebound": []
+  },
+  "S100Z3V1": {
+   "claims_p16": 109,
+   "claims_p17": 109,
+   "same_ids": true,
+   "transitions": {},
+   "grounded_lost_or_rebound": []
+  },
+  "S100Z433": {
+   "claims_p16": 87,
+   "claims_p17": 87,
+   "same_ids": true,
+   "transitions": {},
+   "grounded_lost_or_rebound": []
+  },
+  "S100Z4B6": {
+   "claims_p16": 123,
+   "claims_p17": 123,
+   "same_ids": true,
+   "transitions": {},
+   "grounded_lost_or_rebound": []
+  },
+  "S100Z4DE": {
+   "claims_p16": 117,
+   "claims_p17": 117,
+   "same_ids": true,
+   "transitions": {},
+   "grounded_lost_or_rebound": []
+  },
+  "S100Z4N9": {
+   "claims_p16": 186,
+   "claims_p17": 186,
+   "same_ids": true,
+   "transitions": {},
+   "grounded_lost_or_rebound": []
+  },
+  "S100Z4PA": {
+   "claims_p16": 125,
+   "claims_p17": 125,
+   "same_ids": true,
+   "transitions": {},
+   "grounded_lost_or_rebound": []
+  },
+  "S100Z4Q1": {
+   "claims_p16": 88,
+   "claims_p17": 88,
+   "same_ids": true,
+   "transitions": {},
+   "grounded_lost_or_rebound": []
+  }
+ },
+ "summary": {
+  "profiles": [
+   "P17",
+   "P18"
+  ],
+  "train_base": {
+   "L": 217,
+   "G": 189,
+   "E1_strict": 173,
+   "E2_strict": 16,
+   "E2_v0": 16,
+   "E3": 28,
+   "MISSING": 0
+  },
+  "train_new": {
+   "L": 217,
+   "G": 189,
+   "E1_strict": 173,
+   "E2_strict": 16,
+   "E2_v0": 16,
+   "E3": 28,
+   "MISSING": 0
+  },
+  "dev_base": {
+   "L": 183,
+   "G": 155,
+   "E1_strict": 147,
+   "E2_strict": 8,
+   "E2_v0": 7,
+   "E3": 28,
+   "MISSING": 0
+  },
+  "dev_new": {
+   "L": 183,
+   "G": 155,
+   "E1_strict": 147,
+   "E2_strict": 8,
+   "E2_v0": 7,
+   "E3": 28,
+   "MISSING": 0
+  },
+  "grounded_to_non_grounded_total": 2
+ }
+}
