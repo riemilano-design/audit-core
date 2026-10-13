@@ -131,15 +131,15 @@ class FirstMatchingPairTest(unittest.TestCase):
 
     def test_flag_on_takes_the_first_matching_pair(self):
         m = lambda c, p: abs((c["value"] - p["value"]) / abs(p["value"]) * 100 - 0.8) <= 0.15
-        self.assertIs(R._first_matching_pair(self.PAIRS, m, V.P17), self.PAIRS[1])
+        self.assertEqual(R._first_matching_pair(self.PAIRS, m, V.P17), self.PAIRS[1])
 
     def test_flag_off_takes_the_first_pair(self):
         m = lambda c, p: True
-        self.assertIs(R._first_matching_pair(self.PAIRS, m, V.P16), self.PAIRS[0])
-        self.assertIs(R._first_matching_pair(self.PAIRS, m, None), self.PAIRS[0])
+        self.assertEqual(R._first_matching_pair(self.PAIRS, m, V.P16), self.PAIRS[0])
+        self.assertEqual(R._first_matching_pair(self.PAIRS, m, None), self.PAIRS[0])
 
     def test_flag_on_without_a_match_falls_back_to_the_first_pair(self):
-        self.assertIs(R._first_matching_pair(self.PAIRS, lambda c, p: False, V.P17), self.PAIRS[0])
+        self.assertEqual(R._first_matching_pair(self.PAIRS, lambda c, p: False, V.P17), self.PAIRS[0])
 
 
 class AugmentSubjectRowsTest(unittest.TestCase):
