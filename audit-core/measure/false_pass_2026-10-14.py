@@ -7,6 +7,11 @@ GROUNDED になった**数の主張**の数字を 1 つずつわざと変え(V1 
 数は文の中の位置で同定し、主張の id は数の並び順で付くので、変えた前後で同じ id を
 突き合わせる(変えた後の値が期待どおりでない行は「id がずれた」として別に数える)。
 
+**既定は全部の行に 2 通りの変え方を両方当てる**(``--kinds V1,V2``)。1 行に 1 通りだけ
+当てる版は、どの行にどちらが当たるかで標本が変わり、profile 間の比較も、限界の型が
+標本に入るかどうかも、割り当てに左右された(2026-10-14 に実測。順番で割り振った版 →
+id で決める版 → 両方当てる版と直した)。
+
 使い方::  python3 -B measure/false_pass_2026-10-14.py [--docs A,B] [--profiles P16,P17] [--tag x]
 出力: fixtures/xbrl/p17/false_pass_2026-10-14<tag>.json
 """
@@ -67,6 +72,16 @@ def _digits_part(raw):
     return raw[:i], raw[i:j], raw[j:]
 
 
+def mutation_kind(claim_id):
+    """**変え方は claim の id で決める。**(profile や並び順で変わらない ― profile 間で
+    同じ文に同じ変え方が当たらないと、通した件数を比べられない。2026-10-14 に
+    順番で割り振っていた版を直した: 170 件のうち同じ変え方だったのは 96 件だけだった。)
+    id は ``N###`` / ``T###``。番号が偶数なら V1(10 倍)、奇数なら V2(末尾の桁 +1)。"""
+
+    digits = "".join(ch for ch in claim_id if ch.isdigit())
+    return "V1" if (int(digits or 0) % 2 == 0) else "V2"
+
+
 def mutate(raw, how):
     pre, num, post = _digits_part(raw)
     if not num or not any(ch.isdigit() for ch in num):
@@ -98,7 +113,7 @@ def expected_value(site, new_raw):
     return vals[0] if len(vals) == 1 else None
 
 
-def run_doc(doc, profile_name, zb, text0):
+def run_doc(doc, profile_name, zb, text0, kind=None):
     profile = V.PROFILES[profile_name]
     base = VD.verify_document(zb, profile_name, text0)
     orig = VD.verify_document(zb, profile_name, None)
@@ -110,7 +125,6 @@ def run_doc(doc, profile_name, zb, text0):
     targets = [s for s in sites if s["id"] in by_id and by_id[s["id"]]["state"] == "GROUNDED" and s["id"] not in mismatched]
     rows = []
     # 1 文に 1 つずつ、BATCH 件ずつ変える
-    k = 0
     pending = list(targets)
     while pending:
         batch, used_si = [], set()
@@ -124,8 +138,7 @@ def run_doc(doc, profile_name, zb, text0):
         new_sents = list(sentences)
         plan = []
         for s in batch:
-            how = "V1" if (k % 2 == 0) else "V2"
-            k += 1
+            how = kind or mutation_kind(s["id"])
             new_raw = mutate(s["raw"], how)
             if new_raw is None:
                 rows.append({"id": s["id"], "doc": doc, "how": how, "raw": s["raw"], "outcome": "unmutable"})
@@ -162,7 +175,7 @@ def run_doc(doc, profile_name, zb, text0):
     counts = {}
     for r in rows:
         counts[r["outcome"]] = counts.get(r["outcome"], 0) + 1
-    return {"doc": doc, "profile": profile_name, "baseline_claims": base["document"]["claims"],
+    return {"doc": doc, "profile": profile_name, "kind": kind or "by_id", "baseline_claims": base["document"]["claims"],
             "original_claims": orig["document"]["claims"], "baseline_states": base["document"]["states"],
             "original_states": orig["document"]["states"], "sites": len(sites), "id_mismatch_in_baseline": len(mismatched),
             "targets": len(targets), "counts": counts, "rows": rows}
@@ -172,12 +185,15 @@ def main(argv=None):
     argv = list(sys.argv[1:] if argv is None else argv)
     docs = ["S100Z39P", "S100Z4N9", "S100Z4Q1"]
     profiles = ["P16", "P17"]
+    kinds = ["V1", "V2"]
     tag = ""
     while argv:
         if argv[0] == "--docs":
             docs = argv[1].split(","); argv = argv[2:]
         elif argv[0] == "--profiles":
             profiles = argv[1].split(","); argv = argv[2:]
+        elif argv[0] == "--kinds":
+            kinds = argv[1].split(","); argv = argv[2:]
         elif argv[0] == "--tag":
             tag = "_" + argv[1]; argv = argv[2:]
         else:
@@ -187,10 +203,11 @@ def main(argv=None):
         zb = open(os.path.join(CACHE, doc + ".zip"), "rb").read()
         text0 = mdna_text(zb)
         for pn in profiles:
-            r = run_doc(doc, pn, zb, text0)
-            rep.append(r)
-            print("%s %s targets %d -> %s (baseline %s vs original %s claims)" % (
-                doc, pn, r["targets"], json.dumps(r["counts"], ensure_ascii=False), r["baseline_claims"], r["original_claims"]))
+            for kind in kinds:
+                r = run_doc(doc, pn, zb, text0, None if kind == "by_id" else kind)
+                rep.append(r)
+                print("%s %s %s targets %d -> %s" % (
+                    doc, pn, kind, r["targets"], json.dumps(r["counts"], ensure_ascii=False)))
     os.makedirs(OUT, exist_ok=True)
     p = os.path.join(OUT, "false_pass_2026-10-14%s.json" % tag)
     with io.open(p, "w", encoding="utf-8") as fh:
