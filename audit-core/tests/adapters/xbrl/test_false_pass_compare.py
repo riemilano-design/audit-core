@@ -268,6 +268,15 @@ class DegenerateInputTest(unittest.TestCase):
         rep[0]["rows"][0] = "N1"
         cases.append(("行が辞書でない", rep, "辞書でない"))
 
+        rep = base()
+        dup = dict(rep[0])
+        dup["rows"] = [_row("N1", "N1V1", "PASSED"), _row("N2", "N2V1", "detected:VALUE_MISMATCH")]
+        rep.append(dup)
+        cases.append(("同じ run が 2 回", rep, "が 2 回在る"))
+
+        cases.append(("報告が list でない", {"doc": "D1"}, "list でない"))
+        cases.append(("run が辞書でない", ["D1"], "辞書でない"))
+
         rep = _report(["N1", "N2"], ["N1", "N3"])
         cases.append(("どちらの部分集合でもない", rep, "どちらの部分集合でもない"))
 
@@ -342,3 +351,25 @@ class DegenerateInputTest(unittest.TestCase):
         ok, problems, _detail = CMP.check_comparable(by, [], "P16", "P18")
         self.assertFalse(ok)
         self.assertTrue(any("書類が 0 件" in p for p in problems), problems)
+
+    def test_duplicate_run_is_refused(self):
+        """**同じ ``(書類, 規則セット, 変え方)`` の run が 2 回在る入力を落とす。**
+
+        ``index`` は辞書に詰めるので後勝ちで黙って上書きし、**上書きされた側の結果が
+        消えてずれた率が出る**。2026-10-15 の監査が実測した 8 件目 ― 真の run だけなら
+        0/4 なのに、後から来た run で 1/4 = 25% に化けた。行の ``id`` の重複と対になる、
+        run の層の重複。測定の出力を手で連結すると現実に起きる。
+        """
+
+        rep = _report(["N1", "N2"], ["N1", "N2"])
+        dup = None
+        for r in rep:
+            if r["profile"] == "P16" and r["kind"] == "V1":
+                dup = {"doc": r["doc"], "profile": r["profile"], "kind": r["kind"],
+                       "batch": 1, "rows": [_row("N1", "N1V1", "PASSED"),
+                                            _row("N2", "N2V1", "detected:VALUE_MISMATCH")]}
+        rep.append(dup)
+        ok, problems, _detail, _docs, _by = CMP.analyze(rep, "P16", "P18")
+        self.assertFalse(ok)
+        self.assertTrue(any("2 回在る" in p and "変え方" in p for p in problems), problems)
+

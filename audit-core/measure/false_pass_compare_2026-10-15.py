@@ -50,8 +50,9 @@ def load(path):
 def check_shape(report):
     """**報告の形を 1 か所で確かめる。** 問題の一覧を返す(空なら形は整っている)。
 
-    ここで落とすもの: 報告が空 / run の欄の欠落 / ``rows`` が list でない /
-    行の欄の欠落 / **同じ run の中に同じ ``id`` が 2 回**。
+    ここで落とすもの: 報告が list でない / 報告が空 / run が辞書でない / run の欄の欠落 /
+    **同じ ``(書類, 規則セット, 変え方)`` の run が 2 回** / ``rows`` が list でない /
+    行が辞書でない / 行の欄の欠落 / **同じ run の中に同じ ``id`` が 2 回**。
 
     最後のものは、辞書に入れると後勝ちで黙って 1 件に潰れ、**件数がずれた分母で
     率が出る**(2026-10-15 の監査が実測。「黙って嘘の率を出す」型)。
@@ -62,6 +63,7 @@ def check_shape(report):
         return ["報告が list でない(%s)" % type(report).__name__]
     if not report:
         return ["報告が空(比べる対象が無い)"]
+    seen_runs = set()
     for i, run in enumerate(report):
         if not isinstance(run, dict):
             problems.append("run[%d] が辞書でない(%s)" % (i, type(run).__name__))
@@ -69,6 +71,16 @@ def check_shape(report):
         for field in RUN_FIELDS:
             if field not in run:
                 problems.append("run[%d]: 欄 %s が無い" % (i, field))
+        # **run そのものの重複を落とす。** ``index`` は辞書に詰めるので後勝ちで黙って
+        # 上書きし、**上書きされた側の結果が消えてずれた率が出る**(2026-10-15 の監査が
+        # 実測した 8 件目: 真の run が 0/4 なのに、後から来た run で 1/4 = 25% になった)。
+        # 行の ``id`` の重複と対になる、run の層の重複の検査。測定の出力を手で連結すると
+        # 現実に起きる(この project は実際に 4 回測り直して別の file に書いている)。
+        key = (run.get("doc"), run.get("profile"), run.get("kind"))
+        if key in seen_runs:
+            problems.append("run[%d]: (書類, 規則セット, 変え方) = %r が 2 回在る(分母がずれる)"
+                            % (i, key))
+        seen_runs.add(key)
         rows = run.get("rows")
         if not isinstance(rows, list):
             if "rows" in run:
