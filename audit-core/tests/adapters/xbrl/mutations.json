@@ -2,10 +2,10 @@
   {
     "id": "A-R1-remove-truncate",
     "file": "vocabulary.py",
-    "old": "        if mode in (None, \"truncate\") and 0 <= fv - t < unit:\n            return (sign_mode + \"+truncate\").strip(\"+\")",
-    "new": "        if False and 0 <= fv - t < unit:\n            return (sign_mode + \"+truncate\").strip(\"+\")",
+    "old": "        if mode in (None, \"truncate\"):\n            # P19(``magnitude_truncate``、計画 docs/P17_PLAN_2026-10-14.md §8):\n            # 切り捨ての帯を**絶対値で**当てる。符号つきのまま当てると、負の値で\n            # 「実際より絶対値が 1 単位大きい額」を通す(実測 2 件: fact −300,297,000 に\n            # 対して「4億円」)。偽なら写し元と 1 行も違わない。\n            lo, hi = ((abs(fv), abs(t)) if magnitude_truncate else (fv, t))\n            if 0 <= lo - hi < unit:\n                return (sign_mode + \"+truncate\").strip(\"+\")\n",
+    "new": "\n",
     "predicted": "red",
-    "note": "match_value の truncate 判定を外す(予測 §6 の候補のひとつ)。1B に truncate 一致が 13 件ある。 2026-10-08 の XBRL 直し §2 で match_value に mode 引数が付いたため、同じ 2 行に当て直した(変異が外す性質 = truncate 判定そのもの、は変えていない)。"
+    "note": "match_value の truncate 判定を外す(予測 §6 の候補のひとつ)。1B に truncate 一致が 13 件ある。 2026-10-08 の XBRL 直し §2 で match_value に mode 引数が付いたため、同じ 2 行に当て直した(変異が外す性質 = truncate 判定そのもの、は変えていない)。 / 2026-10-15: P19 で枝の書き方が変わったので old を合わせた(狙いは同じ ― 切り捨ての枝を消す)。"
   },
   {
     "id": "A-R2-round-disabled-falls-through-to-truncate-label",
@@ -82,10 +82,10 @@
   {
     "id": "D-R1-remove-truncate-from-comparators",
     "file": "comparators.py",
-    "old": "        if mode in (None, \"truncate\") and 0 <= fv - t < unit:\n            return (sign_mode + \"+truncate\").strip(\"+\")",
-    "new": "        if False and 0 <= fv - t < unit:\n            return (sign_mode + \"+truncate\").strip(\"+\")",
+    "old": "        if mode in (None, \"truncate\"):\n            # P19(``magnitude_truncate``、params 経由で渡る): 切り捨ての帯を絶対値で。\n            lo, hi = ((abs(fv), abs(t)) if magnitude_truncate else (fv, t))\n            if 0 <= lo - hi < unit:\n                return (sign_mode + \"+truncate\").strip(\"+\")\n",
+    "new": "\n",
     "predicted": "red",
-    "note": "C-1d 予測 §3.6 D-R1。1B に truncate 13 件 + abs+truncate 6 件(本日既知)。 2026-10-08 の XBRL 直し §2 で当て直した(外す性質は不変)。"
+    "note": "C-1d 予測 §3.6 D-R1。1B に truncate 13 件 + abs+truncate 6 件(本日既知)。 2026-10-08 の XBRL 直し §2 で当て直した(外す性質は不変)。 / 2026-10-15: 同上(写しの側)。"
   },
   {
     "id": "D-R2-pct-change-signed-denominator",
@@ -342,10 +342,10 @@
   {
     "id": "X-R2b-comparator-ignores-the-rounding-param",
     "file": "comparators.py",
-    "old": "    how = _match_value(fact.value, target, claim_scale, params.get(\"rounding\"))",
-    "new": "    how = _match_value(fact.value, target, claim_scale, None)",
+    "old": "    how = _match_value(fact.value, target, claim_scale, params.get(\"rounding\"), params.get(\"magnitude_truncate\", False))",
+    "new": "    how = _match_value(fact.value, target, claim_scale, None, params.get(\"magnitude_truncate\", False))",
     "predicted": "red",
-    "note": "XBRL 直し §2 で組むときと検証するときの丸め方を揃えた所を外す(検証だけ梯子に戻る)。test_comparators.RoundingParamTest.test_negative_side_is_refused_when_the_document_truncates が捕まえる。実データ 91 件では 1 件も動かないので、この変異が赤くなるのは合成の単体試験だけ(記録事項)。"
+    "note": "XBRL 直し §2 で組むときと検証するときの丸め方を揃えた所を外す(検証だけ梯子に戻る)。test_comparators.RoundingParamTest.test_negative_side_is_refused_when_the_document_truncates が捕まえる。実データ 91 件では 1 件も動かないので、この変異が赤くなるのは合成の単体試験だけ(記録事項)。 / 2026-10-15: P19 で引数が 1 つ増えたので old/new を合わせた(狙いは同じ ― rounding の param を無視させる)。"
   },
   {
     "id": "X-R3a-target-after-window-disabled",
