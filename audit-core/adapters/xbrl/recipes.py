@@ -140,7 +140,7 @@ def _flow_direction_word(s, subj, a, b):
     return None
 
 
-def _apply_flow_sign(claim, s, a, b, rounding=None, flow_base=None):
+def _apply_flow_sign(claim, s, a, b, rounding=None, flow_base=None, mag_trunc=False):
     """§1-2。直接値の Claim が CF 流量項目の 1 件の fact に束縛されていて、
     向きの語があるときだけ、claim["flow_convention"]/["claim_direction"] を
     足し、normalization の札を abs を落とした梯子(round/truncate)に直す。
@@ -162,7 +162,7 @@ def _apply_flow_sign(claim, s, a, b, rounding=None, flow_base=None):
     claim["flow_convention"] = conv
     claim["claim_direction"] = direction
     target_abs = abs(claim["value"]) * claim["unit_scale"]
-    how = V.match_value(abs(claim["recomputed"]), target_abs, claim["claim_scale"], rounding)
+    how = V.match_value(abs(claim["recomputed"]), target_abs, claim["claim_scale"], rounding, mag_trunc)
     if how is not None:
         claim["match"] = how
 
@@ -227,6 +227,9 @@ def _direct_value_claim(claim, s, a, b, sign, num, unit, prec, subj, elems, memb
                         profile=None, rounding=None):
     scale = prec if unit == "円" else V.UNIT_SCALE[unit]
     unit_scale = 1.0 if unit == "円" else V.UNIT_SCALE[unit]
+    mag_trunc = bool(profile is not None and getattr(profile, "truncate_on_magnitude", False))
+    if mag_trunc:
+        claim["magnitude_truncate"] = True
     target = sign * num * unit_scale
     # C-1d §3.1 (comparators.py reads only evidence/claim.value/contract.params):
     # carry the two numbers the equals_within / diff(a-b) comparators need to
@@ -236,7 +239,7 @@ def _direct_value_claim(claim, s, a, b, sign, num, unit, prec, subj, elems, memb
     pool = I.facts_for(elems, facts, contexts, member) if subj else [f for f in facts if I.ctx_ok(f["context"], contexts, member)]
     pool = [f for f in pool if f["unit"] and f["unit"].upper().startswith("JPY")]
     is_diff = bool(_MONEY_UNIT_RE_AFTER.search(s[b:b + 4])) or bool(_MONEY_DIFF_PHRASE_RE.search(s[max(0, a - 25):a]))
-    hits = [(f, V.match_value(f["value"], target, scale, rounding)) for f in pool]
+    hits = [(f, V.match_value(f["value"], target, scale, rounding, mag_trunc)) for f in pool]
     hits = [(f, how) for f, how in hits if how]
     if profile is not None and profile.period_cue and _prior_cue(s, a, b):
         # C2: 当期・前期で同じ値のとき、「(同」「前期」の直後の数は前期の fact を先に。
@@ -280,7 +283,7 @@ def _direct_value_claim(claim, s, a, b, sign, num, unit, prec, subj, elems, memb
             for pa, pb in pairs:
                 fa, fb = ctx(pa), ctx(pb)
                 if fa and fb:
-                    how = V.match_value(fa["value"] - fb["value"], target, scale, rounding)
+                    how = V.match_value(fa["value"] - fb["value"], target, scale, rounding, mag_trunc)
                     if how:
                         found = (fa, fb, how)
                         break
@@ -391,6 +394,7 @@ def _dispatch_num_claim(claim, s, a, b, sign, num, unit, prec, subj, elems, memb
                         rounding=None, flow_base=None):
     """§1-2 の目標値判定を通らなかった数の Claim の、既存の単位ごとの振り分け
     (C-1d/C-1g と不変)。"""
+    mag_trunc = bool(profile is not None and getattr(profile, "truncate_on_magnitude", False))   # P19
     tol = pct_tolerance(profile, s, a, b)   # P18(偽なら 0.15 のまま)
     if tol != PCT_TOLERANCE_DEFAULT:
         claim["pct_tolerance"] = tol
@@ -459,7 +463,7 @@ def _dispatch_num_claim(claim, s, a, b, sign, num, unit, prec, subj, elems, memb
         _direct_value_claim(claim, s, a, b, sign, num, unit, prec, subj, elems, member, facts, contexts,
                             profile, rounding)
         if profile.flow_sign:
-            _apply_flow_sign(claim, s, a, b, rounding, flow_base)
+            _apply_flow_sign(claim, s, a, b, rounding, flow_base, mag_trunc)
     elif unit in ("％", "%", "ポイント"):
         claim["form"] = "direct_value"
         if profile.point_diff and unit == "ポイント" and subj:
@@ -586,7 +590,7 @@ def _elements_for_word(subjects, word):
     return None
 
 
-def _direction_amount_check(claim, s, word_start, word_end, rounding):
+def _direction_amount_check(claim, s, word_start, word_end, rounding, mag_trunc=False):
     """A1(人間の追加指示、2026-10-08): 向きの語と**同じ節**に金額が在れば、
     向きだけでなく金額も ``|当期 − 前期|`` と照合する。
 
@@ -642,7 +646,7 @@ def _direction_amount_check(claim, s, word_start, word_end, rounding):
     claim["amount_in_clause"] = abs(signed) * unit_scale
     if rounding is not None:
         claim["rounding"] = rounding
-    how = V.match_value(abs(claim["recomputed"]), abs(signed) * unit_scale, claim_scale, rounding)
+    how = V.match_value(abs(claim["recomputed"]), abs(signed) * unit_scale, claim_scale, rounding, mag_trunc)
     claim["amount_match"] = how
     claim["match"] = how
     if how is None and claim["result"] == "GROUNDED":
@@ -859,7 +863,8 @@ def _build_raw_text_claims(sentences, facts, contexts, profile, claim_member, ro
                         claim["recomputed"] = c["value"] - p["value"]
                         if profile.direction_amount_check:
                             # A1(人間の追加指示): 同じ節に金額が在れば金額も照合する。
-                            _direction_amount_check(claim, s, m.start(), m.end(), rounding)
+                            _direction_amount_check(claim, s, m.start(), m.end(), rounding,
+                                                    getattr(profile, "truncate_on_magnitude", False))
                     elif prior_paren:
                         # 前々期が無いときは代用せず止める(数の側の §1b と同じ
                         # 原因なので同じ理由の名前を使う。登録簿は増やさない)。
@@ -1344,6 +1349,8 @@ def claim_to_recipe(raw, kind):
                     params["claim_scale"] = raw.get("claim_scale")
                     if raw.get("rounding") is not None:
                         params["rounding"] = raw["rounding"]
+                    if raw.get("magnitude_truncate"):
+                        params["magnitude_truncate"] = True
         elif form_name == "direct_value":
             if raw.get("unit") not in ("%", "％", "ポイント"):
                 comparator = "equals_within"
@@ -1351,6 +1358,8 @@ def claim_to_recipe(raw, kind):
                     params = {"abs_tolerance": raw.get("abs_tolerance")}
                 else:
                     params = {"unit_scale": raw.get("unit_scale"), "claim_scale": raw.get("claim_scale")}
+                    if raw.get("magnitude_truncate"):
+                        params["magnitude_truncate"] = True
                     # Core 接続 C-1g §1-2: CF 流量項目で向きの語がある場合だけ、
                     # equals_within に符号つきの判定を足す params を渡す。
                     if raw.get("flow_convention") is not None:
@@ -1376,6 +1385,8 @@ def claim_to_recipe(raw, kind):
                 # XBRL 直し §2: 書類単位で決めた丸め方を検証時にも使う。
                 if raw.get("rounding") is not None:
                     params["rounding"] = raw["rounding"]
+                if raw.get("magnitude_truncate"):
+                    params["magnitude_truncate"] = True
             else:
                 params = {"tolerance": raw.get("pct_tolerance", PCT_TOLERANCE_DEFAULT)}
         contract = core.Contract(comparator=comparator, params=params)

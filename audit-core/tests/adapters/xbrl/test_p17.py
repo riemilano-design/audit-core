@@ -25,7 +25,7 @@ class ProfileShapeTest(unittest.TestCase):
 
     def test_p1_to_p16_keep_the_five_flags_off(self):
         for name, p in V.PROFILES.items():
-            if name in ("P17", "P18"):
+            if name in ("P17", "P18", "P19"):
                 continue
             self.assertFalse(p.segment_carry_to_result_sentence or p.external_revenue_for_sales
                              or p.subject_skip_before_cause_marker or p.loss_variants or p.prefer_net_when_labelled, name)
@@ -191,7 +191,7 @@ class PctToleranceTest(unittest.TestCase):
         self.assertTrue(V.P18.pct_tolerance_from_decimals)
         self.assertEqual(dataclasses.replace(V.P18, name="P17", pct_tolerance_from_decimals=False), V.P17)
         for name, p in V.PROFILES.items():
-            if name != "P18":
+            if name not in ("P18", "P19"):
                 self.assertFalse(p.pct_tolerance_from_decimals, name)
 
     def test_default_is_015_for_flag_off(self):
@@ -214,3 +214,56 @@ class PctToleranceTest(unittest.TestCase):
     def test_a_tenth_of_a_point_change_is_outside_the_p18_tolerance(self):
         self.assertGreater(abs(2.4 - 2.3), R.pct_tolerance(V.P18, "2.3%", 0, 4))
         self.assertLessEqual(abs(2.4 - 2.3), R.PCT_TOLERANCE_DEFAULT)
+
+
+class MagnitudeTruncateTest(unittest.TestCase):
+    """P19(計画 §8): 切り捨ての帯を絶対値で当てる。負の値で「実際より絶対値が 1 単位
+    大きい額」を通さない(実測 2 件 ― fact −300,297,000 に対して「4億円」)。"""
+
+    FACT = -300297000.0        # 業務未払金の減少(S100Z4Q1)
+    UNIT = 1e8                 # 「億円」で書かれた主張の桁
+
+    def test_p19_is_p18_plus_the_flag(self):
+        self.assertTrue(V.P19.truncate_on_magnitude)
+        self.assertEqual(dataclasses.replace(V.P19, name="P18", truncate_on_magnitude=False), V.P18)
+        for name, p in V.PROFILES.items():
+            if name != "P19":
+                self.assertFalse(p.truncate_on_magnitude, name)
+
+    def test_wrong_bigger_magnitude_is_rejected_only_with_the_flag(self):
+        self.assertEqual(V.match_value(self.FACT, -4e8, self.UNIT, "truncate", False), "truncate")
+        self.assertIsNone(V.match_value(self.FACT, -4e8, self.UNIT, "truncate", True))
+
+    def test_the_right_value_still_matches(self):
+        # 旗が偽のときは符号つきの枝が外れて絶対値の枝で当たる("abs+truncate")。
+        # 旗が真のときは最初の枝が絶対値で当たる("truncate")。**どちらも一致**。
+        self.assertEqual(V.match_value(self.FACT, -3e8, self.UNIT, "truncate", False), "abs+truncate")
+        self.assertEqual(V.match_value(self.FACT, -3e8, self.UNIT, "truncate", True), "truncate")
+
+    def test_legitimate_truncation_of_a_negative_value_still_matches(self):
+        # fact −3.9 億を「3億円」と書く(絶対値を切り捨てる書き方)。旗の有無で札は違うが両方一致。
+        self.assertIsNotNone(V.match_value(-390000000.0, -3e8, self.UNIT, "truncate", False))
+        self.assertEqual(V.match_value(-390000000.0, -3e8, self.UNIT, "truncate", True), "truncate")
+
+    def test_positive_values_are_unchanged(self):
+        for flag in (False, True):
+            self.assertEqual(V.match_value(390000000.0, 3e8, self.UNIT, "truncate", flag), "truncate", flag)
+            self.assertIsNone(V.match_value(300297000.0, 4e8, self.UNIT, "truncate", flag), flag)
+
+    def test_round_branch_is_untouched(self):
+        for flag in (False, True):
+            self.assertEqual(V.match_value(-360000000.0, -4e8, self.UNIT, "round", flag), "round", flag)
+
+    def test_comparators_copy_takes_the_same_argument(self):
+        from adapters.xbrl import comparators as C
+        self.assertEqual(C._match_value(self.FACT, -4e8, self.UNIT, "truncate", False), "truncate")
+        self.assertIsNone(C._match_value(self.FACT, -4e8, self.UNIT, "truncate", True))
+
+    def test_the_two_copies_agree_on_a_grid(self):
+        from adapters.xbrl import comparators as C
+        for fv in (-4e8, -3.9e8, -3.003e8, -3e8, 0.0, 3e8, 3.003e8, 3.9e8, 4e8):
+            for t in (-4e8, -3e8, 3e8, 4e8):
+                for mode in (None, "round", "truncate"):
+                    for flag in (False, True):
+                        self.assertEqual(V.match_value(fv, t, self.UNIT, mode, flag),
+                                         C._match_value(fv, t, self.UNIT, mode, flag), (fv, t, mode, flag))

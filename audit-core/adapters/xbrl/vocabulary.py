@@ -176,7 +176,7 @@ def tol_of(fact, claim_scale):
     return 0.5 * claim_scale
 
 
-def match_value(fact_value, target, unit, mode=None):
+def match_value(fact_value, target, unit, mode=None, magnitude_truncate=False):
     """xbrl_probe.py: match_value の写し(round / truncate / abs の組)。
 
     ``mode`` は XBRL 直し §2(人間の決定、2026-10-08)で足した省略可能な引数。
@@ -192,8 +192,14 @@ def match_value(fact_value, target, unit, mode=None):
         t = abs(target) if sign_mode else target
         if mode in (None, "round") and abs(fv - t) <= unit / 2:
             return (sign_mode + "+round").strip("+")
-        if mode in (None, "truncate") and 0 <= fv - t < unit:
-            return (sign_mode + "+truncate").strip("+")
+        if mode in (None, "truncate"):
+            # P19(``magnitude_truncate``、計画 docs/P17_PLAN_2026-10-14.md §8):
+            # 切り捨ての帯を**絶対値で**当てる。符号つきのまま当てると、負の値で
+            # 「実際より絶対値が 1 単位大きい額」を通す(実測 2 件: fact −300,297,000 に
+            # 対して「4億円」)。偽なら写し元と 1 行も違わない。
+            lo, hi = ((abs(fv), abs(t)) if magnitude_truncate else (fv, t))
+            if 0 <= lo - hi < unit:
+                return (sign_mode + "+truncate").strip("+")
     return None
 
 
@@ -393,6 +399,9 @@ class Profile:
     # % の照合の許容を、書かれた桁の半分(1 桁なら ±0.05、0 桁なら ±0.5)+ 0.01 にする。
     # 偽なら従来どおり ±0.15(P1〜P17 は変わらない)。
     pct_tolerance_from_decimals: bool = False
+    # P19(2026-10-15 未明、誤りを通す率の網羅の測定で見つけた金額の許容の符号の欠陥)。
+    # 切り捨ての帯を絶対値で当てる。P1〜P18 は False のまま(振る舞いは 1 行も変わらない)。
+    truncate_on_magnitude: bool = False
 
 
 P1 = Profile(
@@ -668,8 +677,12 @@ P17 = dataclasses.replace(P16, name="P17", segment_carry_to_result_sentence=True
 # ずれが ±0.15 の許容を通っていた。計画 docs/P17_PLAN_2026-10-14.md §7)。
 P18 = dataclasses.replace(P17, name="P18", pct_tolerance_from_decimals=True)
 
+# P19 = P18 + 切り捨ての帯を絶対値で当てる(計画 docs/P17_PLAN_2026-10-14.md §8)。
+P19 = dataclasses.replace(P18, name="P19", truncate_on_magnitude=True)
+
 PROFILES = {"P1": P1, "P5F": P5F, "P6": P6, "P7": P7, "P8": P8, "P9": P9, "P10": P10, "P11": P11,
-            "P12": P12, "P13": P13, "P14": P14, "P15": P15, "P16": P16, "P17": P17, "P18": P18}
+            "P12": P12, "P13": P13, "P14": P14, "P15": P15, "P16": P16, "P17": P17, "P18": P18,
+            "P19": P19}
 
 # **既定 profile(人間の決定 2026-10-13、第 2 段階)。字で留める。**
 # 測定で採用候補にした P16(開発書類 183 件で 146/8/29、未使用 2 書類 217 件で E1' 66.8% / E2 8.2% / E3 27.2%)。
