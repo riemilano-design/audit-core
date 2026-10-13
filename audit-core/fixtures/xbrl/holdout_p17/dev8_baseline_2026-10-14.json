@@ -1,0 +1,126 @@
+[
+ {
+  "doc": "S100Z55N",
+  "claims": 121,
+  "states": {
+   "GROUNDED": 82,
+   "POINTER_NOT_FOUND": 14,
+   "UNVERIFIABLE": 13,
+   "VALUE_MISMATCH": 12
+  },
+  "plain": 117,
+  "nonconsolidated": 71,
+  "std": [
+   "jppfs"
+  ],
+  "doc_unverifiable": false
+ },
+ {
+  "doc": "S100YZ4E",
+  "claims": 98,
+  "states": {
+   "GROUNDED": 61,
+   "POINTER_NOT_FOUND": 5,
+   "UNVERIFIABLE": 19,
+   "VALUE_MISMATCH": 13
+  },
+  "plain": 117,
+  "nonconsolidated": 75,
+  "std": [
+   "jppfs"
+  ],
+  "doc_unverifiable": false
+ },
+ {
+  "doc": "S100YUHC",
+  "claims": 156,
+  "states": {
+   "GROUNDED": 72,
+   "POINTER_NOT_FOUND": 28,
+   "UNVERIFIABLE": 25,
+   "VALUE_MISMATCH": 31
+  },
+  "plain": 156,
+  "nonconsolidated": 63,
+  "std": [
+   "jppfs"
+  ],
+  "doc_unverifiable": false
+ },
+ {
+  "doc": "S100Z3PS",
+  "claims": 93,
+  "states": {
+   "GROUNDED": 60,
+   "POINTER_NOT_FOUND": 1,
+   "UNVERIFIABLE": 26,
+   "VALUE_MISMATCH": 6
+  },
+  "plain": 124,
+  "nonconsolidated": 104,
+  "std": [
+   "jppfs"
+  ],
+  "doc_unverifiable": false
+ },
+ {
+  "doc": "S100YXGH",
+  "claims": 129,
+  "states": {
+   "POINTER_NOT_FOUND": 110,
+   "UNVERIFIABLE": 19
+  },
+  "plain": 0,
+  "nonconsolidated": 122,
+  "std": [
+   "jppfs"
+  ],
+  "doc_unverifiable": true
+ },
+ {
+  "doc": "S100YYOS",
+  "claims": 81,
+  "states": {
+   "GROUNDED": 29,
+   "POINTER_NOT_FOUND": 15,
+   "UNVERIFIABLE": 13,
+   "VALUE_MISMATCH": 24
+  },
+  "plain": 157,
+  "nonconsolidated": 109,
+  "std": [
+   "jppfs"
+  ],
+  "doc_unverifiable": false
+ },
+ {
+  "doc": "S100Z3FB",
+  "claims": 148,
+  "states": {
+   "GROUNDED": 81,
+   "POINTER_NOT_FOUND": 17,
+   "UNVERIFIABLE": 21,
+   "VALUE_MISMATCH": 29
+  },
+  "plain": 146,
+  "nonconsolidated": 96,
+  "std": [
+   "jppfs"
+  ],
+  "doc_unverifiable": false
+ },
+ {
+  "doc": "S100Z5CH",
+  "claims": 107,
+  "states": {
+   "POINTER_NOT_FOUND": 104,
+   "UNVERIFIABLE": 3
+  },
+  "plain": 0,
+  "nonconsolidated": 131,
+  "std": [
+   "jppfs"
+  ],
+  "doc_unverifiable": true
+ }
+]
