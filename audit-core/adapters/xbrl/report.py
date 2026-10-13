@@ -128,6 +128,11 @@ def render_markdown(out):
     L.append("")
     L.append("規則(字のまま): %s" % cell(doc.get("rule")))
     L.append("")
+    L.append("凡例: 「文」は主張の周りの**抜粋(窓)**で全文ではない(語の途中で切れることがある)。"
+             "「―」はその欄が**無い**状態(根拠が無い・理由が無い)、空欄は値が空。"
+             "「理由」は判定を止めた状態(POINTER_NOT_FOUND・UNVERIFIABLE)にだけ付くので、"
+             "VALUE_MISMATCH と GROUNDED の節では常に「―」になる。")
+    L.append("")
 
     by = {st: [] for st in STATE_ORDER}
     other = []

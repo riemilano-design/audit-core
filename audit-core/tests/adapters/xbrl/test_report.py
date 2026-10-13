@@ -24,8 +24,8 @@ CASES = (
 )
 # golden の sha256 を字で留める(記法を変えたら必ず赤くなる)
 GOLDEN_SHA256 = {
-    "report_golden_S100Z4N9_original_2026-10-13.md": "22e7a984cefeeb5d1f95c76cfacc3751cb92010d5a6d9dd08f5b4f4e6528b308",
-    "report_golden_S100Z4Q1_ai_prose_2026-10-13.md": "c31ed3fb51642b3a2e2516dbf99f47bd6a695218a6cd4864246659a0fc7a2b7b",
+    "report_golden_S100Z4N9_original_2026-10-13.md": "dfa347925c84de4be763c43cbd5d54db13a636b52a367fff3ec37bd91ad0c763",
+    "report_golden_S100Z4Q1_ai_prose_2026-10-13.md": "ead08b97484551a36ffa53c7a28d51e477c89ce3aa2ef4ed3cf5f22103d2c11e",
 }
 
 _ROW = re.compile(r"^\| ([NT]\d{3}) \|", re.M)
@@ -97,6 +97,12 @@ class NoReclassificationTest(unittest.TestCase):
                 self.assertEqual(int(m.group(1).replace(",", "")), out["document"]["states"].get(st, 0), st)
                 # 件数の表の行
                 self.assertIn("| %s | %s |" % (label, RP.fmt_num(out["document"]["states"].get(st, 0))), md_text)
+
+    def test_the_legend_explains_window_dash_and_reason(self):
+        md = RP.render_markdown(_load(CASES[0][0]))
+        self.assertIn("凡例:", md)
+        for word in ("抜粋(窓)", "「―」", "理由"):
+            self.assertIn(word, md)
 
     def test_the_rule_text_is_printed_verbatim(self):
         out = _load(CASES[0][0])

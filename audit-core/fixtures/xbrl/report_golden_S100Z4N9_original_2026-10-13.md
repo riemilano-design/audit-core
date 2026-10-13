@@ -19,6 +19,8 @@
 
 規則(字のまま): Claim 件数が 0 件の場合、書類レベルを UNVERIFIABLE とする。Claim 件数が 1 件以上の場合、GROUNDED 件数が 0 件、かつ POINTER_NOT_FOUND 件数 ÷ 全 Claim 件数が 0.5 を超える場合、書類レベルを UNVERIFIABLE とする。それ以外は、この規則によって UNVERIFIABLE とは判定しない。Claim 個別の state は変更しない。
 
+凡例: 「文」は主張の周りの**抜粋(窓)**で全文ではない(語の途中で切れることがある)。「―」はその欄が**無い**状態(根拠が無い・理由が無い)、空欄は値が空。「理由」は判定を止めた状態(POINTER_NOT_FOUND・UNVERIFIABLE)にだけ付くので、VALUE_MISMATCH と GROUNDED の節では常に「―」になる。
+
 ## 値が違う(VALUE_MISMATCH) ― 53 件
 
 根拠は見つかったが、文の値と根拠の値が違う。文の誤りか、結び先の誤りかは、この表では決めない。
