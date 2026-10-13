@@ -1,0 +1,81 @@
+{
+ "seal": "docs/HOLDOUT_P17_SEAL_2026-10-14.md",
+ "seed_hex": "6a24d72",
+ "pool": 256,
+ "order_head": [
+  "S100YYQX",
+  "S100Z3LJ",
+  "S100Z3IZ",
+  "S100Z3H2",
+  "S100YXLE",
+  "S100Z3L6",
+  "S100Z55N",
+  "S100YZ4E",
+  "S100YUHC",
+  "S100Z3PS",
+  "S100YXGH",
+  "S100YYOS"
+ ],
+ "drawn": [
+  {
+   "docID": "S100YYQX",
+   "sha256": "a0313840d8ecc13e8470e34f54451a0207c5510ffd0a9c3860e50c9640a9cdf0",
+   "bytes": 1126463,
+   "mdna_element": "jpcrp_cor:ManagementAnalysisOfFinancialPositionOperatingResultsAndCashFlowsTextBlock",
+   "filerName": "グロービング株式会社",
+   "date": "2026-08-26",
+   "periodEnd": "2026-05-31"
+  },
+  {
+   "docID": "S100Z3LJ",
+   "sha256": "4876a2b52b30706b7c38ee925108dbb1eb8e5f3b8fd0dc33031aeb54349ef051",
+   "bytes": 737631,
+   "mdna_element": "jpcrp_cor:ManagementAnalysisOfFinancialPositionOperatingResultsAndCashFlowsTextBlock",
+   "filerName": "梅乃宿酒造株式会社",
+   "date": "2026-09-24",
+   "periodEnd": "2026-06-30"
+  },
+  {
+   "docID": "S100Z3IZ",
+   "sha256": "d3183747336ee1ab3fd80b2114046f3cf15e5130c2cddd7110132b644075e0bb",
+   "bytes": 624223,
+   "mdna_element": "jpcrp_cor:ManagementAnalysisOfFinancialPositionOperatingResultsAndCashFlowsTextBlock",
+   "filerName": "株式会社テー・オー・ダブリュー",
+   "date": "2026-09-24",
+   "periodEnd": "2026-06-30"
+  },
+  {
+   "docID": "S100Z3H2",
+   "sha256": "946b4a8fa94cffe2120dff46be0df296adb2f7a60b42e769398bb7fbefcebd3b",
+   "bytes": 1030649,
+   "mdna_element": "jpcrp_cor:ManagementAnalysisOfFinancialPositionOperatingResultsAndCashFlowsTextBlock",
+   "filerName": "アクモス株式会社",
+   "date": "2026-09-24",
+   "periodEnd": "2026-06-30"
+  },
+  {
+   "docID": "S100YXLE",
+   "sha256": "906951be808f0ebbe406c2689b577b6f198d68d0677d84ff2a9d59e226793d20",
+   "bytes": 495861,
+   "mdna_element": "jpcrp_cor:ManagementAnalysisOfFinancialPositionOperatingResultsAndCashFlowsTextBlock",
+   "filerName": "株式会社ドーン",
+   "date": "2026-08-21",
+   "periodEnd": "2026-05-31"
+  },
+  {
+   "docID": "S100Z3L6",
+   "sha256": "8ecaed66f2f15d9251f3daf14ff53dd6e2c2d248db8fc691bf5bc63cfd73f12d",
+   "bytes": 1179097,
+   "mdna_element": "jpcrp_cor:ManagementAnalysisOfFinancialPositionOperatingResultsAndCashFlowsTextBlock",
+   "filerName": "第一カッター興業株式会社",
+   "date": "2026-09-28",
+   "periodEnd": "2026-06-30"
+  }
+ ],
+ "labeled": [
+  "S100YYQX",
+  "S100Z3LJ",
+  "S100Z3IZ"
+ ],
+ "skipped": []
+}

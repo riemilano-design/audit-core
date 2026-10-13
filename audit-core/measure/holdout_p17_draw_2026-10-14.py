@@ -33,13 +33,20 @@ SEED_HEX = "6a24d72"          # main の HEAD。**封の字のまま**
 N_DRAWN = 6
 N_LABELED = 3
 OUT = os.path.join(ROOT, "fixtures", "xbrl", "holdout_p17")
-POOL = os.path.join(OUT, "pool_meta_2026-10-14.json")
+# **第 2 版の母集団**(封 §9-1)。第 1 版は ``pool_meta_2026-10-14.json`` の 215 件だったが、
+# docTypeCode=120 に投資信託の有報(jpsps070000、経営分析の節が無い)が混ざっていて
+# 214 件が外れた。第 2 版は ordinanceCode=010 / formCode=030000 で絞った 256 件。
+POOL = os.path.join(OUT, "pool2_clean_2026-10-14.json")
+POOL_META = os.path.join(OUT, "pool2_meta_2026-10-14.json")
+DRAW_OUT = "drawn2_2026-10-14.json"
 
 
 def pool_ids():
     with io.open(POOL, encoding="utf-8") as fh:
+        clean = json.load(fh)
+    with io.open(POOL_META, encoding="utf-8") as fh:
         meta = json.load(fh)
-    return sorted({r["docID"] for r in meta["rows"]}), meta
+    return sorted(clean["pool_clean"]), meta
 
 
 def order_of(ids):
@@ -93,7 +100,7 @@ def run():
            "pool": len(ids), "order_head": order[:12],
            "drawn": drawn, "labeled": [d["docID"] for d in drawn[:N_LABELED]],
            "skipped": skipped}
-    p = os.path.join(OUT, "drawn_2026-10-14.json")
+    p = os.path.join(OUT, DRAW_OUT)
     with io.open(p, "w", encoding="utf-8") as fh:
         json.dump(rec, fh, ensure_ascii=False, indent=1)
     print("\n引いた 6 件:", [d["docID"] for d in drawn])
