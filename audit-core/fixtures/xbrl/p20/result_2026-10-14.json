@@ -1,0 +1,1241 @@
+{
+ "seal": "docs/CONSOLIDATION_P20_PLAN_2026-10-14.md",
+ "base": "P16",
+ "new": "P20",
+ "docs": [
+  "S100Z55N",
+  "S100YZ4E",
+  "S100YUHC",
+  "S100Z3PS",
+  "S100YXGH",
+  "S100YYOS",
+  "S100Z3FB",
+  "S100Z5CH"
+ ],
+ "per_document": [
+  {
+   "doc": "S100Z55N",
+   "consolidated_elements": 117,
+   "consolidated": true,
+   "claims_base": 121,
+   "claims_new": 121,
+   "dup_keys_base": 0,
+   "dup_keys_new": 0,
+   "common_rows": 121,
+   "grounded_base": 82,
+   "grounded_new": 82,
+   "changed_rows": 0,
+   "changed_detail": [],
+   "only_base": 0,
+   "only_new": 0,
+   "only_base_without_form": 0,
+   "only_new_without_form": 0,
+   "changed_rows_without_form": 0
+  },
+  {
+   "doc": "S100YZ4E",
+   "consolidated_elements": 117,
+   "consolidated": true,
+   "claims_base": 93,
+   "claims_new": 93,
+   "dup_keys_base": 5,
+   "dup_keys_new": 5,
+   "common_rows": 93,
+   "grounded_base": 60,
+   "grounded_new": 60,
+   "changed_rows": 0,
+   "changed_detail": [],
+   "only_base": 0,
+   "only_new": 0,
+   "only_base_without_form": 0,
+   "only_new_without_form": 0,
+   "changed_rows_without_form": 0
+  },
+  {
+   "doc": "S100YUHC",
+   "consolidated_elements": 156,
+   "consolidated": true,
+   "claims_base": 151,
+   "claims_new": 151,
+   "dup_keys_base": 5,
+   "dup_keys_new": 5,
+   "common_rows": 151,
+   "grounded_base": 72,
+   "grounded_new": 72,
+   "changed_rows": 0,
+   "changed_detail": [],
+   "only_base": 0,
+   "only_new": 0,
+   "only_base_without_form": 0,
+   "only_new_without_form": 0,
+   "changed_rows_without_form": 0
+  },
+  {
+   "doc": "S100Z3PS",
+   "consolidated_elements": 124,
+   "consolidated": true,
+   "claims_base": 93,
+   "claims_new": 93,
+   "dup_keys_base": 0,
+   "dup_keys_new": 0,
+   "common_rows": 93,
+   "grounded_base": 60,
+   "grounded_new": 60,
+   "changed_rows": 0,
+   "changed_detail": [],
+   "only_base": 0,
+   "only_new": 0,
+   "only_base_without_form": 0,
+   "only_new_without_form": 0,
+   "changed_rows_without_form": 0
+  },
+  {
+   "doc": "S100YXGH",
+   "consolidated_elements": 0,
+   "consolidated": false,
+   "claims_base": 124,
+   "claims_new": 124,
+   "dup_keys_base": 5,
+   "dup_keys_new": 5,
+   "common_rows": 118,
+   "grounded_base": 0,
+   "grounded_new": 69,
+   "changed_rows": 84,
+   "changed_detail": [
+    {
+     "key": [
+      "num",
+      "derived_value",
+      "売上高",
+      -0.9,
+      "%",
+      null,
+      "高総利益率は30.8%となり、190,827千円(前年同期比0.9%減)を計上いたしまし"
+     ],
+     "from": "POINTER_NOT_FOUND",
+     "to": "VALUE_MISMATCH"
+    },
+    {
+     "key": [
+      "num",
+      "derived_value",
+      "売上高",
+      -3.6,
+      "%",
+      null,
+      "、「ITサービス」の売上高は、474,564千円(前年同期比3.6%減)となりました。"
+     ],
+     "from": "POINTER_NOT_FOUND",
+     "to": "VALUE_MISMATCH"
+    },
+    {
+     "key": [
+      "num",
+      "derived_value",
+      "売上高",
+      -44.3,
+      "%",
+      null,
+      "以上により、売上高620,129千円(前年同期比44.3%減)、営業利益20,"
+     ],
+     "from": "POINTER_NOT_FOUND",
+     "to": "GROUNDED"
+    },
+    {
+     "key": [
+      "num",
+      "derived_value",
+      "売上高",
+      -76.6,
+      "%",
+      null,
+      "製品調達代行サービスの売上高は145,564千円(前年同期比76.6%減)となりました。"
+     ],
+     "from": "POINTER_NOT_FOUND",
+     "to": "VALUE_MISMATCH"
+    },
+    {
+     "key": [
+      "num",
+      "derived_value",
+      "当期純利益",
+      534.6,
+      "%",
+      null,
+      "当期純利益は、59,141千円(前年同期比534.6%)を計上いたしました"
+     ],
+     "from": "POINTER_NOT_FOUND",
+     "to": "VALUE_MISMATCH"
+    },
+    {
+     "key": [
+      "num",
+      "derived_value",
+      "当期純利益",
+      534.6,
+      "%",
+      null,
+      "期比265.9%増)、当期純利益59,141千円(前年同期比534.6%増)を計上しました。"
+     ],
+     "from": "POINTER_NOT_FOUND",
+     "to": "GROUNDED"
+    },
+    {
+     "key": [
+      "num",
+      "derived_value",
+      "経常利益",
+      265.9,
+      "%",
+      null,
+      "その結果、経常利益は82,900千円(前年同期比265.9%増)を計上いたしまし"
+     ],
+     "from": "POINTER_NOT_FOUND",
+     "to": "GROUNDED"
+    },
+    {
+     "key": [
+      "num",
+      "derived_value",
+      "経常利益",
+      265.9,
+      "%",
+      null,
+      "損失11,682千円)、経常利益82,900千円(前年同期比265.9%増)、当期純利益59"
+     ],
+     "from": "POINTER_NOT_FOUND",
+     "to": "GROUNDED"
+    },
+    {
+     "key": [
+      "num",
+      "derived_value",
+      "販売費及び一般管理費",
+      -16.8,
+      "%",
+      null,
+      "管理費は、委託費の減少等により169,867千円(前年同期比16.8%減)となりました。"
+     ],
+     "from": "POINTER_NOT_FOUND",
+     "to": "GROUNDED"
+    },
+    {
+     "key": [
+      "num",
+      "direct_value",
+      "リース投資資産",
+      29617.0,
+      "千円",
+      null,
+      "千円、売上債権の減少額7,025千円、リース投資資産の減少額29,617千円、前払費用の減少額2"
+     ],
+     "from": "POINTER_NOT_FOUND",
+     "to": "GROUNDED"
+    },
+    {
+     "key": [
+      "num",
+      "direct_value",
+      "前受金",
+      30778.0,
+      "千円",
+      null,
+      "これは主に、棚卸資産の増加額21,073千円、前受金の減少額30,778千円、法人税等の支払額9"
+     ],
+     "from": "POINTER_NOT_FOUND",
+     "to": "GROUNDED"
+    },
+    {
+     "key": [
+      "num",
+      "direct_value",
+      "前払費用",
+      21351.0,
+      "千円",
+      null,
+      "円、リース投資資産の減少額29,617千円、前払費用の減少額21,351千円等によるものです。"
+     ],
+     "from": "POINTER_NOT_FOUND",
+     "to": "GROUNDED"
+    },
+    {
+     "key": [
+      "num",
+      "direct_value",
+      "受取手数料",
+      67959.0,
+      "千円",
+      null,
+      "営業外収益は、受取利息及び受取手数料の計上等により、67,959千円となりました。"
+     ],
+     "from": "POINTER_NOT_FOUND",
+     "to": "VALUE_MISMATCH"
+    },
+    {
+     "key": [
+      "num",
+      "direct_value",
+      "営業利益",
+      20960.0,
+      "千円",
+      null,
+      "売上高620,129千円(前年同期比44.3%減)、営業利益20,960千円(前年同期は営業損失"
+     ],
+     "from": "POINTER_NOT_FOUND",
+     "to": "GROUNDED"
+    },
+    {
+     "key": [
+      "num",
+      "direct_value",
+      "営業損失",
+      11682.0,
+      "千円",
+      null,
+      "44.3%減)、営業利益20,960千円(前年同期は営業損失11,682千円)、経常利益82,9"
+     ],
+     "from": "POINTER_NOT_FOUND",
+     "to": "GROUNDED"
+    },
+    {
+     "key": [
+      "num",
+      "direct_value",
+      "営業損失",
+      11682.0,
+      "千円",
+      null,
+      "一般管理費の減少により、20,960千円(前年同期は営業損失11,682千円)を計上いたしました"
+     ],
+     "from": "POINTER_NOT_FOUND",
+     "to": "GROUNDED"
+    },
+    {
+     "key": [
+      "num",
+      "direct_value",
+      "固定負債",
+      224298.0,
+      "千円",
+      null,
+      "債は前事業年度末と比較して8,556千円(3.7%)減少し、224,298千円となりました。"
+     ],
+     "from": "POINTER_NOT_FOUND",
+     "to": "GROUNDED"
+    },
+    {
+     "key": [
+      "num",
+      "direct_value",
+      "固定資産",
+      226927.0,
+      "千円",
+      null,
+      "、前事業年度末に比べて85,868千円(60.9%)増加し、226,927千円となりました。"
+     ],
+     "from": "POINTER_NOT_FOUND",
+     "to": "GROUNDED"
+    },
+    {
+     "key": [
+      "num",
+      "direct_value",
+      "固定資産",
+      85868.0,
+      "千円",
+      null,
+      "固定資産は、前事業年度末に比べて85,868千円(60.9%)増加し"
+     ],
+     "from": "POINTER_NOT_FOUND",
+     "to": "VALUE_MISMATCH"
+    },
+    {
+     "key": [
+      "num",
+      "direct_value",
+      "売上債権",
+      7025.0,
+      "千円",
+      null,
+      "900千円の計上、減価償却費1,992千円、売上債権の減少額7,025千円、リース投資資産の減"
+     ],
+     "from": "POINTER_NOT_FOUND",
+     "to": "GROUNDED"
+    },
+    {
+     "key": [
+      "num",
+      "direct_value",
+      "売上高",
+      145564.0,
+      "千円",
+      null,
+      "その結果、製品調達代行サービスの売上高は145,564千円(前年同期比76.6"
+     ],
+     "from": "POINTER_NOT_FOUND",
+     "to": "VALUE_MISMATCH"
+    },
+    {
+     "key": [
+      "num",
+      "direct_value",
+      "売上高",
+      190827.0,
+      "千円",
+      null,
+      "売上高総利益率は30.8%となり、190,827千円(前年同期比0.9%"
+     ],
+     "from": "POINTER_NOT_FOUND",
+     "to": "VALUE_MISMATCH"
+    },
+    {
+     "key": [
+      "num",
+      "direct_value",
+      "売上高",
+      474564.0,
+      "千円",
+      null,
+      "その結果、「ITサービス」の売上高は、474,564千円(前年同期比3.6%"
+     ],
+     "from": "POINTER_NOT_FOUND",
+     "to": "VALUE_MISMATCH"
+    },
+    {
+     "key": [
+      "num",
+      "direct_value",
+      "売上高",
+      620129.0,
+      "千円",
+      null,
+      "以上により、売上高620,129千円(前年同期比44.3"
+     ],
+     "from": "POINTER_NOT_FOUND",
+     "to": "GROUNDED"
+    },
+    {
+     "key": [
+      "num",
+      "direct_value",
+      "当期純利益",
+      59141.0,
+      "千円",
+      null,
+      "利益82,900千円(前年同期比265.9%増)、当期純利益59,141千円(前年同期比534."
+     ],
+     "from": "POINTER_NOT_FOUND",
+     "to": "GROUNDED"
+    },
+    {
+     "key": [
+      "num",
+      "direct_value",
+      "当期純利益",
+      59141.0,
+      "千円",
+      null,
+      "当期純利益は、59,141千円(前年同期比534."
+     ],
+     "from": "POINTER_NOT_FOUND",
+     "to": "GROUNDED"
+    },
+    {
+     "key": [
+      "num",
+      "direct_value",
+      "投資活動の結果使用した資金",
+      118813.0,
+      "千円",
+      null,
+      "当事業年度において投資活動の結果使用した資金は118,813千円(前事業年度は18,"
+     ],
+     "from": "POINTER_NOT_FOUND",
+     "to": "GROUNDED"
+    },
+    {
+     "key": [
+      "num",
+      "direct_value",
+      "投資活動の結果使用した資金",
+      18969.0,
+      "千円",
+      null,
+      "投資活動の結果使用した資金は118,813千円(前事業年度は18,969千円の使用)となりました"
+     ],
+     "from": "POINTER_NOT_FOUND",
+     "to": "GROUNDED"
+    },
+    {
+     "key": [
+      "num",
+      "direct_value",
+      "法人税等の支払額",
+      9381.0,
+      "千円",
+      null,
+      "073千円、前受金の減少額30,778千円、法人税等の支払額9,381千円等があったものの、税"
+     ],
+     "from": "POINTER_NOT_FOUND",
+     "to": "GROUNDED"
+    },
+    {
+     "key": [
+      "num",
+      "direct_value",
+      "流動負債",
+      257326.0,
+      "千円",
+      null,
+      "は、前事業年度末と比較して7,056千円(2.7%)減少し、257,326千円となりました。"
+     ],
+     "from": "POINTER_NOT_FOUND",
+     "to": "GROUNDED"
+    },
+    {
+     "key": [
+      "num",
+      "direct_value",
+      "流動負債",
+      7056.0,
+      "千円",
+      null,
+      "流動負債は、前事業年度末と比較して7,056千円(2.7%)減少し、"
+     ],
+     "from": "POINTER_NOT_FOUND",
+     "to": "VALUE_MISMATCH"
+    },
+    {
+     "key": [
+      "num",
+      "direct_value",
+      "流動資産",
+      40580.0,
+      "千円",
+      null,
+      "流動資産は、前事業年度末に比べて40,580千円(6.1%)減少し、"
+     ],
+     "from": "POINTER_NOT_FOUND",
+     "to": "VALUE_MISMATCH"
+    },
+    {
+     "key": [
+      "num",
+      "direct_value",
+      "流動資産",
+      627400.0,
+      "千円",
+      null,
+      "は、前事業年度末に比べて40,580千円(6.1%)減少し、627,400千円となりました。"
+     ],
+     "from": "POINTER_NOT_FOUND",
+     "to": "GROUNDED"
+    },
+    {
+     "key": [
+      "num",
+      "direct_value",
+      "減価償却費",
+      1992.0,
+      "千円",
+      null,
+      "たものの、税引前当期純利益82,900千円の計上、減価償却費1,992千円、売上債権の減少額7"
+     ],
+     "from": "POINTER_NOT_FOUND",
+     "to": "GROUNDED"
+    },
+    {
+     "key": [
+      "num",
+      "direct_value",
+      "現金及び現金同等物",
+      34768.0,
+      "千円",
+      null,
+      "当事業年度末における現金及び現金同等物は前事業年度末に比べ34,768千円減少し、348,01"
+     ],
+     "from": "POINTER_NOT_FOUND",
+     "to": "VALUE_MISMATCH"
+    },
+    {
+     "key": [
+      "num",
+      "direct_value",
+      "現金及び現金同等物",
+      348012.0,
+      "千円",
+      null,
+      "金及び現金同等物は前事業年度末に比べ34,768千円減少し、348,012千円となりました。"
+     ],
+     "from": "POINTER_NOT_FOUND",
+     "to": "GROUNDED"
+    },
+    {
+     "key": [
+      "num",
+      "direct_value",
+      "現金及び現金同等物の残高",
+      348012.0,
+      "千円",
+      null,
+      "また、当事業年度末における現金及び現金同等物の残高は348,012千円となっております。"
+     ],
+     "from": "POINTER_NOT_FOUND",
+     "to": "GROUNDED"
+    },
+    {
+     "key": [
+      "num",
+      "direct_value",
+      "税引前当期純利益",
+      82900.0,
+      "千円",
+      null,
+      "税等の支払額9,381千円等があったものの、税引前当期純利益82,900千円の計上、減価償却費1"
+     ],
+     "from": "POINTER_NOT_FOUND",
+     "to": "GROUNDED"
+    },
+    {
+     "key": [
+      "num",
+      "direct_value",
+      "純資産",
+      372703.0,
+      "千円",
+      null,
+      "前事業年度末と比較して60,901千円(19.5%)増加し、372,703千円となりました。"
+     ],
+     "from": "POINTER_NOT_FOUND",
+     "to": "GROUNDED"
+    },
+    {
+     "key": [
+      "num",
+      "direct_value",
+      "純資産合計",
+      372703.0,
+      "千円",
+      null,
+      "前事業年度末と比較して60,901千円(19.5%)増加し、372,703千円となりました。"
+     ],
+     "from": "POINTER_NOT_FOUND",
+     "to": "GROUNDED"
+    }
+   ],
+   "only_base": 6,
+   "only_new": 6,
+   "only_base_without_form": 0,
+   "only_new_without_form": 0,
+   "changed_rows_without_form": 90
+  },
+  {
+   "doc": "S100YYOS",
+   "consolidated_elements": 157,
+   "consolidated": true,
+   "claims_base": 81,
+   "claims_new": 81,
+   "dup_keys_base": 0,
+   "dup_keys_new": 0,
+   "common_rows": 81,
+   "grounded_base": 29,
+   "grounded_new": 29,
+   "changed_rows": 0,
+   "changed_detail": [],
+   "only_base": 0,
+   "only_new": 0,
+   "only_base_without_form": 0,
+   "only_new_without_form": 0,
+   "changed_rows_without_form": 0
+  },
+  {
+   "doc": "S100Z3FB",
+   "consolidated_elements": 146,
+   "consolidated": true,
+   "claims_base": 148,
+   "claims_new": 148,
+   "dup_keys_base": 0,
+   "dup_keys_new": 0,
+   "common_rows": 148,
+   "grounded_base": 81,
+   "grounded_new": 81,
+   "changed_rows": 0,
+   "changed_detail": [],
+   "only_base": 0,
+   "only_new": 0,
+   "only_base_without_form": 0,
+   "only_new_without_form": 0,
+   "changed_rows_without_form": 0
+  },
+  {
+   "doc": "S100Z5CH",
+   "consolidated_elements": 0,
+   "consolidated": false,
+   "claims_base": 107,
+   "claims_new": 107,
+   "dup_keys_base": 0,
+   "dup_keys_new": 0,
+   "common_rows": 98,
+   "grounded_base": 0,
+   "grounded_new": 81,
+   "changed_rows": 92,
+   "changed_detail": [
+    {
+     "key": [
+      "num",
+      "derived_value",
+      "営業利益",
+      -66.7,
+      "%",
+      null,
+      "32千円(対前期比4.6%増)、営業利益224千円(対前期比66.7%減)、当期純利益1,"
+     ],
+     "from": "POINTER_NOT_FOUND",
+     "to": "GROUNDED"
+    },
+    {
+     "key": [
+      "num",
+      "derived_value",
+      "売上原価",
+      2.6,
+      "%",
+      null,
+      "(対前期比3.0%増)、売上原価152,816千円(対前期比2.6%増)、販売費及び一般"
+     ],
+     "from": "POINTER_NOT_FOUND",
+     "to": "GROUNDED"
+    },
+    {
+     "key": [
+      "num",
+      "derived_value",
+      "売上高",
+      3.0,
+      "%",
+      null,
+      "当事業年度における売上高は217,173千円(対前期比3.0%増)、売上原価152"
+     ],
+     "from": "POINTER_NOT_FOUND",
+     "to": "GROUNDED"
+    },
+    {
+     "key": [
+      "num",
+      "derived_value",
+      "当期純利益",
+      30.1,
+      "%",
+      null,
+      "(対前期比66.7%減)、当期純利益1,425千円(対前期比30.1%増)と前期比増益にな"
+     ],
+     "from": "POINTER_NOT_FOUND",
+     "to": "GROUNDED"
+    },
+    {
+     "key": [
+      "num",
+      "derived_value",
+      "販売費及び一般管理費",
+      4.6,
+      "%",
+      null,
+      ".6%増)、販売費及び一般管理費は64,132千円(対前期比4.6%増)、営業利益224"
+     ],
+     "from": "POINTER_NOT_FOUND",
+     "to": "GROUNDED"
+    },
+    {
+     "key": [
+      "num",
+      "direct_value",
+      "営業利益",
+      224000.0,
+      "円",
+      null,
+      "一般管理費は64,132千円(対前期比4.6%増)、営業利益224千円(対前期比66.7%"
+     ],
+     "from": "POINTER_NOT_FOUND",
+     "to": "GROUNDED"
+    },
+    {
+     "key": [
+      "num",
+      "direct_value",
+      "営業利益",
+      224000.0,
+      "円",
+      null,
+      "円)と前事業年度に比べ2,839千円増加したため、営業利益は224千円(前年同期673千円"
+     ],
+     "from": "POINTER_NOT_FOUND",
+     "to": "GROUNDED"
+    },
+    {
+     "key": [
+      "num",
+      "direct_value",
+      "営業利益",
+      673000.0,
+      "円",
+      null,
+      "べ2,839千円増加したため、営業利益は224千円(前年同期673千円)となりました。"
+     ],
+     "from": "POINTER_NOT_FOUND",
+     "to": "GROUNDED"
+    },
+    {
+     "key": [
+      "num",
+      "direct_value",
+      "営業活動によるキャッシュ・フロー",
+      23401.0,
+      "千円",
+      null,
+      "以下「資金」という。)は、営業活動によるキャッシュ・フローが23,401千円収入、投資活動による"
+     ],
+     "from": "POINTER_NOT_FOUND",
+     "to": "GROUNDED"
+    },
+    {
+     "key": [
+      "num",
+      "direct_value",
+      "営業活動の結果獲得した資金",
+      23401.0,
+      "千円",
+      null,
+      "当事業年度において営業活動の結果獲得した資金は23,401千円(前年同期は24,9"
+     ],
+     "from": "POINTER_NOT_FOUND",
+     "to": "GROUNDED"
+    },
+    {
+     "key": [
+      "num",
+      "direct_value",
+      "営業活動の結果獲得した資金",
+      24936.0,
+      "千円",
+      null,
+      "いて営業活動の結果獲得した資金は23,401千円(前年同期は24,936千円の獲得)となりました"
+     ],
+     "from": "POINTER_NOT_FOUND",
+     "to": "GROUNDED"
+    },
+    {
+     "key": [
+      "num",
+      "direct_value",
+      "固定負債",
+      19913.0,
+      "千円",
+      null,
+      "当事業年度末における固定負債の残高は、19,913千円(前事業年度は36,"
+     ],
+     "from": "POINTER_NOT_FOUND",
+     "to": "GROUNDED"
+    },
+    {
+     "key": [
+      "num",
+      "direct_value",
+      "固定負債",
+      36816.0,
+      "千円",
+      null,
+      "度末における固定負債の残高は、19,913千円(前事業年度は36,816千円)となり、16,90"
+     ],
+     "from": "POINTER_NOT_FOUND",
+     "to": "GROUNDED"
+    },
+    {
+     "key": [
+      "num",
+      "direct_value",
+      "固定資産",
+      938107.0,
+      "千円",
+      null,
+      "当事業年度末における固定資産の残高は、938,107千円(前事業年度は959"
+     ],
+     "from": "POINTER_NOT_FOUND",
+     "to": "GROUNDED"
+    },
+    {
+     "key": [
+      "num",
+      "direct_value",
+      "固定資産",
+      959011.0,
+      "千円",
+      null,
+      "末における固定資産の残高は、938,107千円(前事業年度は959,011千円)となり、20,90"
+     ],
+     "from": "POINTER_NOT_FOUND",
+     "to": "GROUNDED"
+    },
+    {
+     "key": [
+      "num",
+      "direct_value",
+      "売上原価",
+      148893.0,
+      "千円",
+      null,
+      "13千円の増収となり、売上原価は152,816千円(前年同期148,893千円)で3,922千円の"
+     ],
+     "from": "POINTER_NOT_FOUND",
+     "to": "GROUNDED"
+    },
+    {
+     "key": [
+      "num",
+      "direct_value",
+      "売上原価",
+      152816.0,
+      "千円",
+      null,
+      "210,859千円)で6,313千円の増収となり、売上原価は152,816千円(前年同期148,8"
+     ],
+     "from": "POINTER_NOT_FOUND",
+     "to": "GROUNDED"
+    },
+    {
+     "key": [
+      "num",
+      "direct_value",
+      "売上原価",
+      152816.0,
+      "千円",
+      null,
+      "る売上高は217,173千円(対前期比3.0%増)、売上原価152,816千円(対前期比2.6%増"
+     ],
+     "from": "POINTER_NOT_FOUND",
+     "to": "GROUNDED"
+    },
+    {
+     "key": [
+      "num",
+      "direct_value",
+      "売上原価",
+      3922.0,
+      "千円",
+      null,
+      "売上原価は152,816千円(前年同期148,893千円)で3,922千円の増加、販売費及び一"
+     ],
+     "from": "POINTER_NOT_FOUND",
+     "to": "VALUE_MISMATCH"
+    },
+    {
+     "key": [
+      "num",
+      "direct_value",
+      "売上高",
+      210859.0,
+      "千円",
+      null,
+      "売上高は217,173千円(前年同期210,859千円)で6,313千円の"
+     ],
+     "from": "POINTER_NOT_FOUND",
+     "to": "GROUNDED"
+    },
+    {
+     "key": [
+      "num",
+      "direct_value",
+      "売上高",
+      210859.0,
+      "千円",
+      null,
+      "当事業年度の売上高は217,173千円(前年同期210,859千円)で6,313千円の"
+     ],
+     "from": "POINTER_NOT_FOUND",
+     "to": "GROUNDED"
+    },
+    {
+     "key": [
+      "num",
+      "direct_value",
+      "売上高",
+      217173.0,
+      "千円",
+      null,
+      "売上高は217,173千円(前年同期210,8"
+     ],
+     "from": "POINTER_NOT_FOUND",
+     "to": "GROUNDED"
+    },
+    {
+     "key": [
+      "num",
+      "direct_value",
+      "売上高",
+      217173.0,
+      "千円",
+      null,
+      "当事業年度における売上高は217,173千円(対前期比3.0%増"
+     ],
+     "from": "POINTER_NOT_FOUND",
+     "to": "GROUNDED"
+    },
+    {
+     "key": [
+      "num",
+      "direct_value",
+      "売上高",
+      217173.0,
+      "千円",
+      null,
+      "当事業年度の売上高は217,173千円(前年同期210,8"
+     ],
+     "from": "POINTER_NOT_FOUND",
+     "to": "GROUNDED"
+    },
+    {
+     "key": [
+      "num",
+      "direct_value",
+      "売上高",
+      6313.0,
+      "千円",
+      null,
+      "の売上高は217,173千円(前年同期210,859千円)で6,313千円の増収となり、売上原"
+     ],
+     "from": "POINTER_NOT_FOUND",
+     "to": "VALUE_MISMATCH"
+    },
+    {
+     "key": [
+      "num",
+      "direct_value",
+      "売上高",
+      6313.0,
+      "千円",
+      null,
+      "売上高は217,173千円(前年同期210,859千円)で6,313千円の増加となり、当期純"
+     ],
+     "from": "POINTER_NOT_FOUND",
+     "to": "VALUE_MISMATCH"
+    },
+    {
+     "key": [
+      "num",
+      "direct_value",
+      "定期預金の預入による支出",
+      15610.0,
+      "千円",
+      null,
+      "これは、定期預金の預入による支出15,610千円、有形固定資産の取得"
+     ],
+     "from": "POINTER_NOT_FOUND",
+     "to": "GROUNDED"
+    },
+    {
+     "key": [
+      "num",
+      "direct_value",
+      "当期純利益",
+      1095.0,
+      "千円",
+      null,
+      "313千円の増加となり、当期純利益は1,425千円(前年同期1,095千円)の計上となりました"
+     ],
+     "from": "POINTER_NOT_FOUND",
+     "to": "GROUNDED"
+    },
+    {
+     "key": [
+      "num",
+      "direct_value",
+      "当期純利益",
+      1095.0,
+      "千円",
+      null,
+      "年同期1,621千円)、当期純利益は1,425千円(前年同期1,095千円)となりました。"
+     ],
+     "from": "POINTER_NOT_FOUND",
+     "to": "GROUNDED"
+    },
+    {
+     "key": [
+      "num",
+      "direct_value",
+      "当期純利益",
+      1425.0,
+      "千円",
+      null,
+      "10,859千円)で6,313千円の増加となり、当期純利益は1,425千円(前年同期1,095"
+     ],
+     "from": "POINTER_NOT_FOUND",
+     "to": "GROUNDED"
+    },
+    {
+     "key": [
+      "num",
+      "direct_value",
+      "当期純利益",
+      1425.0,
+      "千円",
+      null,
+      "利益は1,719千円(前年同期1,621千円)、当期純利益は1,425千円(前年同期1,095"
+     ],
+     "from": "POINTER_NOT_FOUND",
+     "to": "GROUNDED"
+    },
+    {
+     "key": [
+      "num",
+      "direct_value",
+      "当期純利益",
+      1425.0,
+      "千円",
+      null,
+      "増)、営業利益224千円(対前期比66.7%減)、当期純利益1,425千円(対前期比30.1%"
+     ],
+     "from": "POINTER_NOT_FOUND",
+     "to": "GROUNDED"
+    },
+    {
+     "key": [
+      "num",
+      "direct_value",
+      "投資活動によるキャッシュ・フロー",
+      12343.0,
+      "千円",
+      null,
+      "ーが23,401千円収入、投資活動によるキャッシュ・フローが12,343千円支出し、財務活動によ"
+     ],
+     "from": "POINTER_NOT_FOUND",
+     "to": "GROUNDED"
+    },
+    {
+     "key": [
+      "num",
+      "direct_value",
+      "投資活動の結果使用した資金",
+      12343.0,
+      "千円",
+      null,
+      "当事業年度において投資活動の結果使用した資金は12,343千円(前年同期は7,05"
+     ],
+     "from": "POINTER_NOT_FOUND",
+     "to": "GROUNDED"
+    },
+    {
+     "key": [
+      "num",
+      "direct_value",
+      "投資活動の結果使用した資金",
+      7056.0,
+      "千円",
+      null,
+      "いて投資活動の結果使用した資金は12,343千円(前年同期は7,056千円の使用)となりました"
+     ],
+     "from": "POINTER_NOT_FOUND",
+     "to": "GROUNDED"
+    },
+    {
+     "key": [
+      "num",
+      "direct_value",
+      "有形固定資産",
+      8733.0,
+      "千円",
+      null,
+      "この要因として、新規に有形固定資産を8,733千円取得した一方で、減価"
+     ],
+     "from": "POINTER_NOT_FOUND",
+     "to": "VALUE_MISMATCH"
+    },
+    {
+     "key": [
+      "num",
+      "direct_value",
+      "有形固定資産の取得による支出",
+      8733.0,
+      "千円",
+      null,
+      "預入による支出15,610千円、有形固定資産の取得による支出8,733千円により資金が流出した"
+     ],
+     "from": "POINTER_NOT_FOUND",
+     "to": "GROUNDED"
+    },
+    {
+     "key": [
+      "num",
+      "direct_value",
+      "未払費用",
+      3699.0,
+      "千円",
+      null,
+      "加え、前事業年度に車両運搬具の購入に伴い発生していた未払費用3,699千円が当事業年度には発生"
+     ],
+     "from": "POINTER_NOT_FOUND",
+     "to": "VALUE_MISMATCH"
+    },
+    {
+     "key": [
+      "num",
+      "direct_value",
+      "流動負債",
+      48777.0,
+      "千円",
+      null,
+      "当事業年度末における流動負債の残高は48,777千円(前事業年度末は53"
+     ],
+     "from": "POINTER_NOT_FOUND",
+     "to": "GROUNDED"
+    },
+    {
+     "key": [
+      "num",
+      "direct_value",
+      "流動負債",
+      53676.0,
+      "千円",
+      null,
+      "度末における流動負債の残高は48,777千円(前事業年度末は53,676千円)となり、前事業年度"
+     ],
+     "from": "POINTER_NOT_FOUND",
+     "to": "GROUNDED"
+    }
+   ],
+   "only_base": 9,
+   "only_new": 9,
+   "only_base_without_form": 0,
+   "only_new_without_form": 0,
+   "changed_rows_without_form": 101
+  }
+ ],
+ "consolidated_docs": 6,
+ "nonconsolidated_docs": 2,
+ "C1_changed_rows_on_consolidated": 0,
+ "C1_unpaired_rows_on_consolidated": 0,
+ "C1_changed_rows_without_form_on_consolidated": 0,
+ "C1_pass": true,
+ "C2_grounded_on_nonconsolidated": 150,
+ "C2_claims_on_nonconsolidated": 231,
+ "C2_rate": 64.9,
+ "C2_pass": true,
+ "C3": [
+  {
+   "doc": "S100YXGH",
+   "grounded_new": 69,
+   "lifted": true
+  },
+  {
+   "doc": "S100Z5CH",
+   "grounded_new": 81,
+   "lifted": true
+  }
+ ],
+ "C3_pass": true,
+ "C4_grounded_base": 384,
+ "C4_grounded_new": 534,
+ "C4_claims_base": 918,
+ "C4_claims_new": 918,
+ "C4_rate_base": 41.8,
+ "C4_rate_new": 58.2,
+ "C4_pass": true
+}

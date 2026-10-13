@@ -126,9 +126,91 @@ def load_instance(zbytes):
     return {"source": src, "facts": facts, "contexts": contexts, "textblocks": textblocks, "names": names}
 
 
+# ---------------------------------------------------------------------------
+# 連結・単体の落とし込み(P20。封 docs/CONSOLIDATION_P20_PLAN_2026-10-14.md)
+#
+# 人間の指示(2026-10-14):「単純に『連結が見つからなければ単体を使う』とすれば
+# よいわけではない。**検出件数を増やすより、違う対象の数値を正しい根拠として
+# 扱わないことが重要。**」
+#
+# 守りは 3 つ。
+#   (1) **書類レベルで 1 度だけ決める。** 決定は ``DocumentContexts`` に 1 つだけ
+#       持たせる(主張ごとに決めると同じ書類で連結と単体が混ざる)。
+#   (2) **連結の枠に財務の要素が 1 種でも在れば落とさない。** 少数しか無い書類も
+#       落とさない(判断できない場合は止まる = 保留)。
+#   (3) **落とすのは member の付かない素の枠を探しているときだけ。** セグメントの
+#       member を指定した引き(``ctx_ok`` の member あり)は 1 行も変えない。
+#
+# 財務の接頭辞は **日本基準と IFRS の両方**。``jppfs_cor`` だけで数えると
+# **IFRS の会社が「連結を作っていない」に見える**(2026-10-14 に S100YYQX を実際に
+# そう誤分類した。封 §1-1)。
+# ---------------------------------------------------------------------------
+FINANCIAL_PREFIXES = ("jppfs_cor:", "jpigp_cor:")
+PLAIN_PERIOD_CONTEXTS = ("CurrentYearInstant", "CurrentYearDuration",
+                         "Prior1YearInstant", "Prior1YearDuration")
+NONCONSOLIDATED_MEMBER = "NonConsolidatedMember"
+
+
+def consolidated_element_count(facts):
+    """連結の枠に在る**財務の要素の種類数**。0 なら連結財務諸表が無い。
+
+    封 §2 の式そのまま。``facts`` は :func:`load_instance` の ``facts``。
+    """
+
+    names = set()
+    for fact in facts:
+        name = fact.get("name") or ""
+        if name.startswith(FINANCIAL_PREFIXES) and fact.get("context") in PLAIN_PERIOD_CONTEXTS:
+            names.add(name)
+    return len(names)
+
+
+class DocumentContexts(dict):
+    """context の辞書に**書類レベルの決定を 1 つだけ**持たせる入れ物。
+
+    中身は元の辞書と同じ(``items()`` の形も変えない)。足すのは属性 1 つだけなので、
+    ``contexts`` を回している既存の関数(``member_denominator`` など)は 1 行も変わらない。
+    """
+
+    nonconsolidated_ok = False
+
+
+def with_nonconsolidated_fallback(contexts, facts, enabled):
+    """**書類ごとに 1 度だけ呼ぶ。** 旗が真で、連結の枠に財務の要素が 1 種も
+    無いときだけ、単体の枠を素の枠として扱う ``DocumentContexts`` を返す。
+    それ以外は元の ``contexts`` をそのまま返す(振る舞いは 1 行も変わらない)。
+    """
+
+    if not enabled or consolidated_element_count(facts) != 0:
+        return contexts
+    wrapped = DocumentContexts(contexts)
+    wrapped.nonconsolidated_ok = True
+    return wrapped
+
+
+def _nonconsolidated_only(cid, contexts):
+    """``cid`` が「単体の member **だけ**を持つ素の期間」か。
+
+    member の値は ``jppfs_cor:NonConsolidatedMember`` のように**接頭辞つき**で入って
+    いる(裸の局所名で比べると 1 件も当たらず、「0 件だから効かない」と読み違える。
+    2026-10-14 に実際にそう読み違えた)。接頭辞は会社によって変わりうるので、
+    **コロンの後の局所名**で比べる。
+
+    member が 2 つ以上ある枠(資本金・自己株式などの内訳)は**当たらない**。
+    内訳を素の枠として扱うと、本文の合計の数が内訳の数に結びついてしまう。
+    """
+
+    c = contexts.get(cid) or {}
+    locals_ = [m.split(":")[-1] for m in (c.get("members") or [])]
+    return locals_ == [NONCONSOLIDATED_MEMBER]
+
+
 def plain_context(cid, contexts):
     c = contexts.get(cid) or {}
-    return not c.get("members") and "NonConsolidated" not in cid
+    if not c.get("members") and "NonConsolidated" not in cid:
+        return True
+    # P20: 連結財務諸表が無い書類でだけ、**単体の member だけ**を持つ枠を素として扱う。
+    return bool(getattr(contexts, "nonconsolidated_ok", False)) and _nonconsolidated_only(cid, contexts)
 
 
 def ctx_ok(cid, contexts, member=None):
