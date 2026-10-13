@@ -1,0 +1,1955 @@
+{
+ "dates": [
+  "2026-10-01",
+  "2026-10-02",
+  "2026-10-03",
+  "2026-10-04",
+  "2026-10-05",
+  "2026-10-06",
+  "2026-10-07",
+  "2026-10-08",
+  "2026-10-09",
+  "2026-10-10",
+  "2026-10-11",
+  "2026-10-12",
+  "2026-10-13"
+ ],
+ "errors": [],
+ "rows": [
+  {
+   "date": "2026-10-02",
+   "docID": "S100Z2SU",
+   "filerName": "大和アセットマネジメント株式会社",
+   "edinetCode": "E06748",
+   "periodEnd": "2026-07-10",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-02",
+   "docID": "S100Z2SW",
+   "filerName": "大和アセットマネジメント株式会社",
+   "edinetCode": "E06748",
+   "periodEnd": "2026-07-10",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-02",
+   "docID": "S100Z04X",
+   "filerName": "しんきんアセットマネジメント投信株式会社",
+   "edinetCode": "E12422",
+   "periodEnd": "2026-07-06",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-02",
+   "docID": "S100Z2SZ",
+   "filerName": "大和アセットマネジメント株式会社",
+   "edinetCode": "E06748",
+   "periodEnd": "2026-07-10",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-02",
+   "docID": "S100Z2TB",
+   "filerName": "大和アセットマネジメント株式会社",
+   "edinetCode": "E06748",
+   "periodEnd": "2026-07-10",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-02",
+   "docID": "S100Z2T1",
+   "filerName": "大和アセットマネジメント株式会社",
+   "edinetCode": "E06748",
+   "periodEnd": "2026-07-10",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-02",
+   "docID": "S100Z04K",
+   "filerName": "しんきんアセットマネジメント投信株式会社",
+   "edinetCode": "E12422",
+   "periodEnd": "2026-07-06",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-02",
+   "docID": "S100Z400",
+   "filerName": "大和アセットマネジメント株式会社",
+   "edinetCode": "E06748",
+   "periodEnd": "2026-07-10",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-02",
+   "docID": "S100Z3AN",
+   "filerName": "大和アセットマネジメント株式会社",
+   "edinetCode": "E06748",
+   "periodEnd": "2026-07-10",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-02",
+   "docID": "S100Z55E",
+   "filerName": "Ｇｌｏｂａｌ　Ｘ　Ｊａｐａｎ株式会社",
+   "edinetCode": "E35933",
+   "periodEnd": "2026-07-10",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-02",
+   "docID": "S100Z2T4",
+   "filerName": "大和アセットマネジメント株式会社",
+   "edinetCode": "E06748",
+   "periodEnd": "2026-07-10",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-02",
+   "docID": "S100Z55H",
+   "filerName": "Ｇｌｏｂａｌ　Ｘ　Ｊａｐａｎ株式会社",
+   "edinetCode": "E35933",
+   "periodEnd": "2026-07-10",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-02",
+   "docID": "S100Z2T6",
+   "filerName": "大和アセットマネジメント株式会社",
+   "edinetCode": "E06748",
+   "periodEnd": "2026-07-10",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-02",
+   "docID": "S100Z2T8",
+   "filerName": "大和アセットマネジメント株式会社",
+   "edinetCode": "E06748",
+   "periodEnd": "2026-07-13",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-05",
+   "docID": "S100YWFS",
+   "filerName": "アモーヴァ・アセットマネジメント株式会社",
+   "edinetCode": "E12430",
+   "periodEnd": "2026-07-06",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-05",
+   "docID": "S100YWFU",
+   "filerName": "アモーヴァ・アセットマネジメント株式会社",
+   "edinetCode": "E12430",
+   "periodEnd": "2026-07-06",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-05",
+   "docID": "S100Z1X9",
+   "filerName": "三井住友ＤＳアセットマネジメント株式会社",
+   "edinetCode": "E08957",
+   "periodEnd": "2026-07-08",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-05",
+   "docID": "S100Z1XB",
+   "filerName": "三井住友ＤＳアセットマネジメント株式会社",
+   "edinetCode": "E08957",
+   "periodEnd": "2026-07-08",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-05",
+   "docID": "S100Z1XE",
+   "filerName": "三井住友ＤＳアセットマネジメント株式会社",
+   "edinetCode": "E08957",
+   "periodEnd": "2026-07-08",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-05",
+   "docID": "S100Z659",
+   "filerName": "ゴールドマン・サックス・アセット・マネジメント株式会社",
+   "edinetCode": "E12457",
+   "periodEnd": "2026-07-06",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-05",
+   "docID": "S100Z0CT",
+   "filerName": "三菱ＵＦＪアセットマネジメント株式会社",
+   "edinetCode": "E11518",
+   "periodEnd": "2026-07-06",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-06",
+   "docID": "S100Z2VA",
+   "filerName": "三井住友トラスト・アセットマネジメント株式会社",
+   "edinetCode": "E12444",
+   "periodEnd": "2026-07-06",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-06",
+   "docID": "S100YWFZ",
+   "filerName": "アモーヴァ・アセットマネジメント株式会社",
+   "edinetCode": "E12430",
+   "periodEnd": "2026-07-06",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-06",
+   "docID": "S100Z06L",
+   "filerName": "三菱ＵＦＪアセットマネジメント株式会社",
+   "edinetCode": "E11518",
+   "periodEnd": "2026-07-07",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-06",
+   "docID": "S100YWG3",
+   "filerName": "アモーヴァ・アセットマネジメント株式会社",
+   "edinetCode": "E12430",
+   "periodEnd": "2026-07-06",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-06",
+   "docID": "S100Z406",
+   "filerName": "大和アセットマネジメント株式会社",
+   "edinetCode": "E06748",
+   "periodEnd": "2026-07-13",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-06",
+   "docID": "S100YWG6",
+   "filerName": "アモーヴァ・アセットマネジメント株式会社",
+   "edinetCode": "E12430",
+   "periodEnd": "2026-07-06",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-06",
+   "docID": "S100Z6B9",
+   "filerName": "大和アセットマネジメント株式会社",
+   "edinetCode": "E06748",
+   "periodEnd": "2026-07-13",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-06",
+   "docID": "S100YRHD",
+   "filerName": "ＳＢＩ岡三アセットマネジメント株式会社",
+   "edinetCode": "E12441",
+   "periodEnd": "2026-07-07",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-06",
+   "docID": "S100Z0EO",
+   "filerName": "三菱ＵＦＪアセットマネジメント株式会社",
+   "edinetCode": "E11518",
+   "periodEnd": "2026-07-07",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-06",
+   "docID": "S100Z0EP",
+   "filerName": "三菱ＵＦＪアセットマネジメント株式会社",
+   "edinetCode": "E11518",
+   "periodEnd": "2026-07-07",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-07",
+   "docID": "S100YZP1",
+   "filerName": "野村アセットマネジメント株式会社",
+   "edinetCode": "E12460",
+   "periodEnd": "2026-07-08",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-07",
+   "docID": "S100Z3OE",
+   "filerName": "インベスコ・アセット・マネジメント株式会社",
+   "edinetCode": "E06479",
+   "periodEnd": "2026-07-10",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-07",
+   "docID": "S100Z3VK",
+   "filerName": "三井住友トラスト・アセットマネジメント株式会社",
+   "edinetCode": "E12444",
+   "periodEnd": "2026-07-07",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-07",
+   "docID": "S100Z3QY",
+   "filerName": "インベスコ・アセット・マネジメント株式会社",
+   "edinetCode": "E06479",
+   "periodEnd": "2026-07-10",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-07",
+   "docID": "S100Z4SF",
+   "filerName": "東京海上アセットマネジメント株式会社",
+   "edinetCode": "E06433",
+   "periodEnd": "2026-07-07",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-07",
+   "docID": "S100Z2VQ",
+   "filerName": "三井住友トラスト・アセットマネジメント株式会社",
+   "edinetCode": "E12444",
+   "periodEnd": "2026-07-07",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-07",
+   "docID": "S100Z4SL",
+   "filerName": "東京海上アセットマネジメント株式会社",
+   "edinetCode": "E06433",
+   "periodEnd": "2026-07-07",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-07",
+   "docID": "S100Z3R3",
+   "filerName": "インベスコ・アセット・マネジメント株式会社",
+   "edinetCode": "E06479",
+   "periodEnd": "2026-07-10",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-07",
+   "docID": "S100Z602",
+   "filerName": "フィデリティ投信株式会社",
+   "edinetCode": "E12481",
+   "periodEnd": "2026-07-10",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-07",
+   "docID": "S100Z3R7",
+   "filerName": "インベスコ・アセット・マネジメント株式会社",
+   "edinetCode": "E06479",
+   "periodEnd": "2026-07-10",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-07",
+   "docID": "S100Z3RF",
+   "filerName": "インベスコ・アセット・マネジメント株式会社",
+   "edinetCode": "E06479",
+   "periodEnd": "2026-07-10",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-07",
+   "docID": "S100Z6K4",
+   "filerName": "インベスコ・アセット・マネジメント株式会社",
+   "edinetCode": "E06479",
+   "periodEnd": "2026-07-10",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-07",
+   "docID": "S100Z6L6",
+   "filerName": "インベスコ・アセット・マネジメント株式会社",
+   "edinetCode": "E06479",
+   "periodEnd": "2026-07-10",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-07",
+   "docID": "S100Z6M0",
+   "filerName": "インベスコ・アセット・マネジメント株式会社",
+   "edinetCode": "E06479",
+   "periodEnd": "2026-07-10",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-07",
+   "docID": "S100Z6LS",
+   "filerName": "インベスコ・アセット・マネジメント株式会社",
+   "edinetCode": "E06479",
+   "periodEnd": "2026-07-10",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-07",
+   "docID": "S100Z5PS",
+   "filerName": "インベスコ・アセット・マネジメント株式会社",
+   "edinetCode": "E06479",
+   "periodEnd": "2026-07-10",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-07",
+   "docID": "S100Z5Q8",
+   "filerName": "インベスコ・アセット・マネジメント株式会社",
+   "edinetCode": "E06479",
+   "periodEnd": "2026-07-10",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-08",
+   "docID": "S100Z0WA",
+   "filerName": "野村アセットマネジメント株式会社",
+   "edinetCode": "E12460",
+   "periodEnd": "2026-07-13",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-08",
+   "docID": "S100YTYH",
+   "filerName": "明治安田アセットマネジメント株式会社",
+   "edinetCode": "E12448",
+   "periodEnd": "2026-07-09",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-08",
+   "docID": "S100Z4EL",
+   "filerName": "大和アセットマネジメント株式会社",
+   "edinetCode": "E06748",
+   "periodEnd": "2026-07-15",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-08",
+   "docID": "S100YUAS",
+   "filerName": "明治安田アセットマネジメント株式会社",
+   "edinetCode": "E12448",
+   "periodEnd": "2026-07-09",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-08",
+   "docID": "S100Z5D8",
+   "filerName": "アセットマネジメントＯｎｅ株式会社",
+   "edinetCode": "E10677",
+   "periodEnd": "2026-07-08",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-08",
+   "docID": "S100YWOO",
+   "filerName": "イーストスプリング・インベストメンツ株式会社",
+   "edinetCode": "E12566",
+   "periodEnd": "2026-07-10",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-08",
+   "docID": "S100Z5A8",
+   "filerName": "アセットマネジメントＯｎｅ株式会社",
+   "edinetCode": "E10677",
+   "periodEnd": "2026-07-08",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-08",
+   "docID": "S100Z5EE",
+   "filerName": "アセットマネジメントＯｎｅ株式会社",
+   "edinetCode": "E10677",
+   "periodEnd": "2026-07-08",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-08",
+   "docID": "S100Z3AW",
+   "filerName": "大和アセットマネジメント株式会社",
+   "edinetCode": "E06748",
+   "periodEnd": "2026-07-15",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-08",
+   "docID": "S100YWOT",
+   "filerName": "イーストスプリング・インベストメンツ株式会社",
+   "edinetCode": "E12566",
+   "periodEnd": "2026-07-10",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-08",
+   "docID": "S100Z50K",
+   "filerName": "アセットマネジメントＯｎｅ株式会社",
+   "edinetCode": "E10677",
+   "periodEnd": "2026-07-08",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-08",
+   "docID": "S100YWPU",
+   "filerName": "シンプレクス・アセット・マネジメント株式会社",
+   "edinetCode": "E14415",
+   "periodEnd": "2026-07-08",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-08",
+   "docID": "S100Z4UY",
+   "filerName": "アセットマネジメントＯｎｅ株式会社",
+   "edinetCode": "E10677",
+   "periodEnd": "2026-07-08",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-08",
+   "docID": "S100Z0WM",
+   "filerName": "三菱ＵＦＪアセットマネジメント株式会社",
+   "edinetCode": "E11518",
+   "periodEnd": "2026-07-09",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-08",
+   "docID": "S100Z2UR",
+   "filerName": "大和アセットマネジメント株式会社",
+   "edinetCode": "E06748",
+   "periodEnd": "2026-07-15",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-08",
+   "docID": "S100YWPW",
+   "filerName": "シンプレクス・アセット・マネジメント株式会社",
+   "edinetCode": "E14415",
+   "periodEnd": "2026-07-08",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-08",
+   "docID": "S100Z2ZQ",
+   "filerName": "三井住友ＤＳアセットマネジメント株式会社",
+   "edinetCode": "E08957",
+   "periodEnd": "2026-07-13",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-08",
+   "docID": "S100YWPZ",
+   "filerName": "シンプレクス・アセット・マネジメント株式会社",
+   "edinetCode": "E14415",
+   "periodEnd": "2026-07-08",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-08",
+   "docID": "S100YWQ1",
+   "filerName": "シンプレクス・アセット・マネジメント株式会社",
+   "edinetCode": "E14415",
+   "periodEnd": "2026-07-08",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-08",
+   "docID": "S100Z2YH",
+   "filerName": "大和アセットマネジメント株式会社",
+   "edinetCode": "E06748",
+   "periodEnd": "2026-07-15",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-08",
+   "docID": "S100Z3QB",
+   "filerName": "朝日ライフ　アセットマネジメント株式会社",
+   "edinetCode": "E12447",
+   "periodEnd": "2026-07-09",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-08",
+   "docID": "S100Z2ZU",
+   "filerName": "三井住友ＤＳアセットマネジメント株式会社",
+   "edinetCode": "E08957",
+   "periodEnd": "2026-07-13",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-08",
+   "docID": "S100Z2ZS",
+   "filerName": "三井住友ＤＳアセットマネジメント株式会社",
+   "edinetCode": "E08957",
+   "periodEnd": "2026-07-13",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-08",
+   "docID": "S100YWVG",
+   "filerName": "楽天投信投資顧問株式会社",
+   "edinetCode": "E15787",
+   "periodEnd": "2026-07-10",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-08",
+   "docID": "S100YWVI",
+   "filerName": "楽天投信投資顧問株式会社",
+   "edinetCode": "E15787",
+   "periodEnd": "2026-07-10",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-08",
+   "docID": "S100Z5AI",
+   "filerName": "アセットマネジメントＯｎｅ株式会社",
+   "edinetCode": "E10677",
+   "periodEnd": "2026-07-08",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-08",
+   "docID": "S100Z2ZY",
+   "filerName": "三井住友ＤＳアセットマネジメント株式会社",
+   "edinetCode": "E08957",
+   "periodEnd": "2026-07-15",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-08",
+   "docID": "S100Z50B",
+   "filerName": "アセットマネジメントＯｎｅ株式会社",
+   "edinetCode": "E10677",
+   "periodEnd": "2026-07-08",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-08",
+   "docID": "S100YWG8",
+   "filerName": "アモーヴァ・アセットマネジメント株式会社",
+   "edinetCode": "E12430",
+   "periodEnd": "2026-07-08",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-08",
+   "docID": "S100YWGB",
+   "filerName": "アモーヴァ・アセットマネジメント株式会社",
+   "edinetCode": "E12430",
+   "periodEnd": "2026-07-08",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-08",
+   "docID": "S100Z304",
+   "filerName": "三井住友ＤＳアセットマネジメント株式会社",
+   "edinetCode": "E08957",
+   "periodEnd": "2026-07-15",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-08",
+   "docID": "S100Z2ZW",
+   "filerName": "三井住友ＤＳアセットマネジメント株式会社",
+   "edinetCode": "E08957",
+   "periodEnd": "2026-07-13",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-08",
+   "docID": "S100YWGE",
+   "filerName": "アモーヴァ・アセットマネジメント株式会社",
+   "edinetCode": "E12430",
+   "periodEnd": "2026-07-08",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-08",
+   "docID": "S100Z5HI",
+   "filerName": "アセットマネジメントＯｎｅ株式会社",
+   "edinetCode": "E10677",
+   "periodEnd": "2026-07-08",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-08",
+   "docID": "S100YWGG",
+   "filerName": "アモーヴァ・アセットマネジメント株式会社",
+   "edinetCode": "E12430",
+   "periodEnd": "2026-07-08",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-08",
+   "docID": "S100YWGJ",
+   "filerName": "アモーヴァ・アセットマネジメント株式会社",
+   "edinetCode": "E12430",
+   "periodEnd": "2026-07-08",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-08",
+   "docID": "S100Z5KN",
+   "filerName": "アセットマネジメントＯｎｅ株式会社",
+   "edinetCode": "E10677",
+   "periodEnd": "2026-07-08",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-08",
+   "docID": "S100YWGL",
+   "filerName": "アモーヴァ・アセットマネジメント株式会社",
+   "edinetCode": "E12430",
+   "periodEnd": "2026-07-08",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-08",
+   "docID": "S100YWGP",
+   "filerName": "アモーヴァ・アセットマネジメント株式会社",
+   "edinetCode": "E12430",
+   "periodEnd": "2026-07-08",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-08",
+   "docID": "S100Z2PN",
+   "filerName": "朝日ライフ　アセットマネジメント株式会社",
+   "edinetCode": "E12447",
+   "periodEnd": "2026-07-09",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-08",
+   "docID": "S100YWGS",
+   "filerName": "アモーヴァ・アセットマネジメント株式会社",
+   "edinetCode": "E12430",
+   "periodEnd": "2026-07-08",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-08",
+   "docID": "S100YWGW",
+   "filerName": "アモーヴァ・アセットマネジメント株式会社",
+   "edinetCode": "E12430",
+   "periodEnd": "2026-07-08",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-08",
+   "docID": "S100YWH2",
+   "filerName": "アモーヴァ・アセットマネジメント株式会社",
+   "edinetCode": "E12430",
+   "periodEnd": "2026-07-08",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-08",
+   "docID": "S100YWH7",
+   "filerName": "アモーヴァ・アセットマネジメント株式会社",
+   "edinetCode": "E12430",
+   "periodEnd": "2026-07-08",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-08",
+   "docID": "S100YWHB",
+   "filerName": "アモーヴァ・アセットマネジメント株式会社",
+   "edinetCode": "E12430",
+   "periodEnd": "2026-07-08",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-08",
+   "docID": "S100YWHE",
+   "filerName": "アモーヴァ・アセットマネジメント株式会社",
+   "edinetCode": "E12430",
+   "periodEnd": "2026-07-08",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-08",
+   "docID": "S100YWHJ",
+   "filerName": "アモーヴァ・アセットマネジメント株式会社",
+   "edinetCode": "E12430",
+   "periodEnd": "2026-07-08",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-08",
+   "docID": "S100YWHM",
+   "filerName": "アモーヴァ・アセットマネジメント株式会社",
+   "edinetCode": "E12430",
+   "periodEnd": "2026-07-08",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-08",
+   "docID": "S100YWHP",
+   "filerName": "アモーヴァ・アセットマネジメント株式会社",
+   "edinetCode": "E12430",
+   "periodEnd": "2026-07-08",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-08",
+   "docID": "S100YWHV",
+   "filerName": "アモーヴァ・アセットマネジメント株式会社",
+   "edinetCode": "E12430",
+   "periodEnd": "2026-07-08",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-08",
+   "docID": "S100YWI2",
+   "filerName": "アモーヴァ・アセットマネジメント株式会社",
+   "edinetCode": "E12430",
+   "periodEnd": "2026-07-08",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-08",
+   "docID": "S100YWI6",
+   "filerName": "アモーヴァ・アセットマネジメント株式会社",
+   "edinetCode": "E12430",
+   "periodEnd": "2026-07-08",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-08",
+   "docID": "S100YWI9",
+   "filerName": "アモーヴァ・アセットマネジメント株式会社",
+   "edinetCode": "E12430",
+   "periodEnd": "2026-07-08",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-08",
+   "docID": "S100YWID",
+   "filerName": "アモーヴァ・アセットマネジメント株式会社",
+   "edinetCode": "E12430",
+   "periodEnd": "2026-07-08",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-09",
+   "docID": "S100YZOY",
+   "filerName": "野村アセットマネジメント株式会社",
+   "edinetCode": "E12460",
+   "periodEnd": "2026-07-14",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-09",
+   "docID": "S100Z0VM",
+   "filerName": "野村アセットマネジメント株式会社",
+   "edinetCode": "E12460",
+   "periodEnd": "2026-07-17",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-09",
+   "docID": "S100Z3OW",
+   "filerName": "三井住友トラスト・アセットマネジメント株式会社",
+   "edinetCode": "E12444",
+   "periodEnd": "2026-07-10",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-09",
+   "docID": "S100Z1EF",
+   "filerName": "ピクテ・ジャパン株式会社",
+   "edinetCode": "E10439",
+   "periodEnd": "2026-07-10",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-09",
+   "docID": "S100Z5BJ",
+   "filerName": "アセットマネジメントＯｎｅ株式会社",
+   "edinetCode": "E10677",
+   "periodEnd": "2026-07-10",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-09",
+   "docID": "S100Z43R",
+   "filerName": "農林中金全共連アセットマネジメント株式会社",
+   "edinetCode": "E12882",
+   "periodEnd": "2026-07-10",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-09",
+   "docID": "S100Z4FE",
+   "filerName": "三井住友トラスト・アセットマネジメント株式会社",
+   "edinetCode": "E12444",
+   "periodEnd": "2026-07-10",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-09",
+   "docID": "S100Z5NI",
+   "filerName": "アセットマネジメントＯｎｅ株式会社",
+   "edinetCode": "E10677",
+   "periodEnd": "2026-07-10",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-09",
+   "docID": "S100YZAD",
+   "filerName": "野村アセットマネジメント株式会社",
+   "edinetCode": "E12460",
+   "periodEnd": "2026-07-17",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-09",
+   "docID": "S100Z0VU",
+   "filerName": "野村アセットマネジメント株式会社",
+   "edinetCode": "E12460",
+   "periodEnd": "2026-07-17",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-09",
+   "docID": "S100Z5YO",
+   "filerName": "アセットマネジメントＯｎｅ株式会社",
+   "edinetCode": "E10677",
+   "periodEnd": "2026-07-10",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-09",
+   "docID": "S100Z0WU",
+   "filerName": "三菱ＵＦＪアセットマネジメント株式会社",
+   "edinetCode": "E11518",
+   "periodEnd": "2026-07-10",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-09",
+   "docID": "S100YZ6U",
+   "filerName": "野村アセットマネジメント株式会社",
+   "edinetCode": "E12460",
+   "periodEnd": "2026-07-17",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-09",
+   "docID": "S100Z4Z9",
+   "filerName": "三井住友トラスト・アセットマネジメント株式会社",
+   "edinetCode": "E12444",
+   "periodEnd": "2026-07-10",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-09",
+   "docID": "S100Z02Q",
+   "filerName": "野村アセットマネジメント株式会社",
+   "edinetCode": "E12460",
+   "periodEnd": "2026-07-21",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-09",
+   "docID": "S100YWTS",
+   "filerName": "シンプレクス・アセット・マネジメント株式会社",
+   "edinetCode": "E14415",
+   "periodEnd": "2026-07-12",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-09",
+   "docID": "S100Z1EQ",
+   "filerName": "ピクテ・ジャパン株式会社",
+   "edinetCode": "E10439",
+   "periodEnd": "2026-07-10",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-09",
+   "docID": "S100Z5NM",
+   "filerName": "アセットマネジメントＯｎｅ株式会社",
+   "edinetCode": "E10677",
+   "periodEnd": "2026-07-10",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-09",
+   "docID": "S100Z5GV",
+   "filerName": "ブラックロック・ジャパン株式会社",
+   "edinetCode": "E09096",
+   "periodEnd": "2026-07-11",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-09",
+   "docID": "S100Z5QX",
+   "filerName": "ブラックロック・ジャパン株式会社",
+   "edinetCode": "E09096",
+   "periodEnd": "2026-07-11",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-09",
+   "docID": "S100Z6DZ",
+   "filerName": "ステート・ストリート・グローバル・アドバイザーズ株式会社",
+   "edinetCode": "E12963",
+   "periodEnd": "2026-07-10",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-09",
+   "docID": "S100YZAT",
+   "filerName": "野村アセットマネジメント株式会社",
+   "edinetCode": "E12460",
+   "periodEnd": "2026-07-21",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-09",
+   "docID": "S100Z0VZ",
+   "filerName": "野村アセットマネジメント株式会社",
+   "edinetCode": "E12460",
+   "periodEnd": "2026-07-21",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-09",
+   "docID": "S100Z0X9",
+   "filerName": "野村アセットマネジメント株式会社",
+   "edinetCode": "E12460",
+   "periodEnd": "2026-07-17",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-09",
+   "docID": "S100YWTV",
+   "filerName": "シンプレクス・アセット・マネジメント株式会社",
+   "edinetCode": "E14415",
+   "periodEnd": "2026-07-12",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-09",
+   "docID": "S100Z5RC",
+   "filerName": "ブラックロック・ジャパン株式会社",
+   "edinetCode": "E09096",
+   "periodEnd": "2026-07-11",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-09",
+   "docID": "S100Z1EX",
+   "filerName": "ピクテ・ジャパン株式会社",
+   "edinetCode": "E10439",
+   "periodEnd": "2026-07-10",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-09",
+   "docID": "S100Z6HA",
+   "filerName": "ニッセイアセットマネジメント株式会社",
+   "edinetCode": "E12453",
+   "periodEnd": "2026-07-10",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-09",
+   "docID": "S100YZ6W",
+   "filerName": "野村アセットマネジメント株式会社",
+   "edinetCode": "E12460",
+   "periodEnd": "2026-07-17",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-09",
+   "docID": "S100Z0UR",
+   "filerName": "野村アセットマネジメント株式会社",
+   "edinetCode": "E12460",
+   "periodEnd": "2026-07-17",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-09",
+   "docID": "S100YZZY",
+   "filerName": "野村アセットマネジメント株式会社",
+   "edinetCode": "E12460",
+   "periodEnd": "2026-07-21",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-09",
+   "docID": "S100Z4DH",
+   "filerName": "三井住友トラスト・アセットマネジメント株式会社",
+   "edinetCode": "E12444",
+   "periodEnd": "2026-07-10",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-09",
+   "docID": "S100Z4TS",
+   "filerName": "三井住友トラスト・アセットマネジメント株式会社",
+   "edinetCode": "E12444",
+   "periodEnd": "2026-07-10",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-09",
+   "docID": "S100YWTY",
+   "filerName": "シンプレクス・アセット・マネジメント株式会社",
+   "edinetCode": "E14415",
+   "periodEnd": "2026-07-12",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-09",
+   "docID": "S100Z4ZU",
+   "filerName": "三井住友トラスト・アセットマネジメント株式会社",
+   "edinetCode": "E12444",
+   "periodEnd": "2026-07-10",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-09",
+   "docID": "S100YZBI",
+   "filerName": "野村アセットマネジメント株式会社",
+   "edinetCode": "E12460",
+   "periodEnd": "2026-07-17",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-09",
+   "docID": "S100YRHF",
+   "filerName": "ＳＢＩ岡三アセットマネジメント株式会社",
+   "edinetCode": "E12441",
+   "periodEnd": "2026-07-13",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-09",
+   "docID": "S100Z5Q7",
+   "filerName": "ブラックロック・ジャパン株式会社",
+   "edinetCode": "E09096",
+   "periodEnd": "2026-07-11",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-09",
+   "docID": "S100Z5S3",
+   "filerName": "ブラックロック・ジャパン株式会社",
+   "edinetCode": "E09096",
+   "periodEnd": "2026-07-11",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-09",
+   "docID": "S100Z0W2",
+   "filerName": "野村アセットマネジメント株式会社",
+   "edinetCode": "E12460",
+   "periodEnd": "2026-07-17",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-09",
+   "docID": "S100Z0UV",
+   "filerName": "野村アセットマネジメント株式会社",
+   "edinetCode": "E12460",
+   "periodEnd": "2026-07-17",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-09",
+   "docID": "S100YZ71",
+   "filerName": "野村アセットマネジメント株式会社",
+   "edinetCode": "E12460",
+   "periodEnd": "2026-07-17",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-09",
+   "docID": "S100Z3SG",
+   "filerName": "三井住友トラスト・アセットマネジメント株式会社",
+   "edinetCode": "E12444",
+   "periodEnd": "2026-07-11",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-09",
+   "docID": "S100Z6HC",
+   "filerName": "ニッセイアセットマネジメント株式会社",
+   "edinetCode": "E12453",
+   "periodEnd": "2026-07-10",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-09",
+   "docID": "S100YZ9X",
+   "filerName": "ＵＢＳアセット・マネジメント株式会社",
+   "edinetCode": "E12473",
+   "periodEnd": "2026-07-10",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-09",
+   "docID": "S100Z2UV",
+   "filerName": "三井住友トラスト・アセットマネジメント株式会社",
+   "edinetCode": "E12444",
+   "periodEnd": "2026-07-10",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-09",
+   "docID": "S100Z5S7",
+   "filerName": "ブラックロック・ジャパン株式会社",
+   "edinetCode": "E09096",
+   "periodEnd": "2026-07-11",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-09",
+   "docID": "S100Z5GH",
+   "filerName": "ＪＰモルガン・アセット・マネジメント株式会社",
+   "edinetCode": "E06264",
+   "periodEnd": "2026-07-13",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-09",
+   "docID": "S100Z4FY",
+   "filerName": "三井住友トラスト・アセットマネジメント株式会社",
+   "edinetCode": "E12444",
+   "periodEnd": "2026-07-11",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-09",
+   "docID": "S100Z0V4",
+   "filerName": "野村アセットマネジメント株式会社",
+   "edinetCode": "E12460",
+   "periodEnd": "2026-07-21",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-09",
+   "docID": "S100Z124",
+   "filerName": "野村アセットマネジメント株式会社",
+   "edinetCode": "E12460",
+   "periodEnd": "2026-07-21",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-09",
+   "docID": "S100Z5QS",
+   "filerName": "ブラックロック・ジャパン株式会社",
+   "edinetCode": "E09096",
+   "periodEnd": "2026-07-11",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-09",
+   "docID": "S100YZA0",
+   "filerName": "ＵＢＳアセット・マネジメント株式会社",
+   "edinetCode": "E12473",
+   "periodEnd": "2026-07-10",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-09",
+   "docID": "S100Z0WG",
+   "filerName": "野村アセットマネジメント株式会社",
+   "edinetCode": "E12460",
+   "periodEnd": "2026-07-15",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-09",
+   "docID": "S100Z3YY",
+   "filerName": "三井住友トラスト・アセットマネジメント株式会社",
+   "edinetCode": "E12444",
+   "periodEnd": "2026-07-10",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-09",
+   "docID": "S100Z0V9",
+   "filerName": "野村アセットマネジメント株式会社",
+   "edinetCode": "E12460",
+   "periodEnd": "2026-07-17",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-09",
+   "docID": "S100Z5RO",
+   "filerName": "ブラックロック・ジャパン株式会社",
+   "edinetCode": "E09096",
+   "periodEnd": "2026-07-11",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-09",
+   "docID": "S100YZA4",
+   "filerName": "ＵＢＳアセット・マネジメント株式会社",
+   "edinetCode": "E12473",
+   "periodEnd": "2026-07-10",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-09",
+   "docID": "S100YZ6Y",
+   "filerName": "野村アセットマネジメント株式会社",
+   "edinetCode": "E12460",
+   "periodEnd": "2026-07-21",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-09",
+   "docID": "S100Z4U2",
+   "filerName": "三井住友トラスト・アセットマネジメント株式会社",
+   "edinetCode": "E12444",
+   "periodEnd": "2026-07-10",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-09",
+   "docID": "S100Z5RZ",
+   "filerName": "ブラックロック・ジャパン株式会社",
+   "edinetCode": "E09096",
+   "periodEnd": "2026-07-11",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-09",
+   "docID": "S100Z5QZ",
+   "filerName": "ブラックロック・ジャパン株式会社",
+   "edinetCode": "E09096",
+   "periodEnd": "2026-07-11",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-09",
+   "docID": "S100Z4G7",
+   "filerName": "三井住友トラスト・アセットマネジメント株式会社",
+   "edinetCode": "E12444",
+   "periodEnd": "2026-07-11",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-09",
+   "docID": "S100YWIG",
+   "filerName": "アモーヴァ・アセットマネジメント株式会社",
+   "edinetCode": "E12430",
+   "periodEnd": "2026-07-10",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-09",
+   "docID": "S100Z4ZJ",
+   "filerName": "三井住友トラスト・アセットマネジメント株式会社",
+   "edinetCode": "E12444",
+   "periodEnd": "2026-07-10",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-09",
+   "docID": "S100Z6A4",
+   "filerName": "ちばぎんアセットマネジメント株式会社",
+   "edinetCode": "E31678",
+   "periodEnd": "2026-07-10",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-09",
+   "docID": "S100Z5I8",
+   "filerName": "ブラックロック・ジャパン株式会社",
+   "edinetCode": "E09096",
+   "periodEnd": "2026-07-11",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-09",
+   "docID": "S100YWIK",
+   "filerName": "アモーヴァ・アセットマネジメント株式会社",
+   "edinetCode": "E12430",
+   "periodEnd": "2026-07-10",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-09",
+   "docID": "S100Z1UM",
+   "filerName": "しんきんアセットマネジメント投信株式会社",
+   "edinetCode": "E12422",
+   "periodEnd": "2026-07-21",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-09",
+   "docID": "S100YXUR",
+   "filerName": "ブラックロック・ジャパン株式会社",
+   "edinetCode": "E09096",
+   "periodEnd": "2026-07-11",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-09",
+   "docID": "S100Z5PB",
+   "filerName": "ブラックロック・ジャパン株式会社",
+   "edinetCode": "E09096",
+   "periodEnd": "2026-07-11",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-09",
+   "docID": "S100YWIO",
+   "filerName": "アモーヴァ・アセットマネジメント株式会社",
+   "edinetCode": "E12430",
+   "periodEnd": "2026-07-10",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-09",
+   "docID": "S100Z51Q",
+   "filerName": "三井住友トラスト・アセットマネジメント株式会社",
+   "edinetCode": "E12444",
+   "periodEnd": "2026-07-11",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-09",
+   "docID": "S100Z5PG",
+   "filerName": "ブラックロック・ジャパン株式会社",
+   "edinetCode": "E09096",
+   "periodEnd": "2026-07-11",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-09",
+   "docID": "S100YWIR",
+   "filerName": "アモーヴァ・アセットマネジメント株式会社",
+   "edinetCode": "E12430",
+   "periodEnd": "2026-07-10",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-09",
+   "docID": "S100Z4XA",
+   "filerName": "ニッセイアセットマネジメント株式会社",
+   "edinetCode": "E12453",
+   "periodEnd": "2026-07-10",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-09",
+   "docID": "S100YXUW",
+   "filerName": "ブラックロック・ジャパン株式会社",
+   "edinetCode": "E09096",
+   "periodEnd": "2026-07-11",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-09",
+   "docID": "S100Z5PY",
+   "filerName": "ブラックロック・ジャパン株式会社",
+   "edinetCode": "E09096",
+   "periodEnd": "2026-07-11",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-09",
+   "docID": "S100YWIV",
+   "filerName": "アモーヴァ・アセットマネジメント株式会社",
+   "edinetCode": "E12430",
+   "periodEnd": "2026-07-10",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-09",
+   "docID": "S100Z2ER",
+   "filerName": "ＳＢＩアセットマネジメント株式会社",
+   "edinetCode": "E13447",
+   "periodEnd": "2026-07-10",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-09",
+   "docID": "S100Z5Q5",
+   "filerName": "ブラックロック・ジャパン株式会社",
+   "edinetCode": "E09096",
+   "periodEnd": "2026-07-11",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-09",
+   "docID": "S100YWJ0",
+   "filerName": "アモーヴァ・アセットマネジメント株式会社",
+   "edinetCode": "E12430",
+   "periodEnd": "2026-07-10",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-09",
+   "docID": "S100YXUY",
+   "filerName": "ブラックロック・ジャパン株式会社",
+   "edinetCode": "E09096",
+   "periodEnd": "2026-07-11",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-09",
+   "docID": "S100Z5QG",
+   "filerName": "ブラックロック・ジャパン株式会社",
+   "edinetCode": "E09096",
+   "periodEnd": "2026-07-11",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-09",
+   "docID": "S100Z4M1",
+   "filerName": "ニッセイアセットマネジメント株式会社",
+   "edinetCode": "E12453",
+   "periodEnd": "2026-07-10",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-09",
+   "docID": "S100Z2BQ",
+   "filerName": "ＳＢＩアセットマネジメント株式会社",
+   "edinetCode": "E13447",
+   "periodEnd": "2026-07-10",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-09",
+   "docID": "S100YY17",
+   "filerName": "ブラックロック・ジャパン株式会社",
+   "edinetCode": "E09096",
+   "periodEnd": "2026-07-11",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-09",
+   "docID": "S100YWJ6",
+   "filerName": "アモーヴァ・アセットマネジメント株式会社",
+   "edinetCode": "E12430",
+   "periodEnd": "2026-07-10",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-09",
+   "docID": "S100YY19",
+   "filerName": "ブラックロック・ジャパン株式会社",
+   "edinetCode": "E09096",
+   "periodEnd": "2026-07-11",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-09",
+   "docID": "S100Z4WN",
+   "filerName": "ＳＢＩアセットマネジメント株式会社",
+   "edinetCode": "E13447",
+   "periodEnd": "2026-07-10",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-09",
+   "docID": "S100Z6AU",
+   "filerName": "ちばぎんアセットマネジメント株式会社",
+   "edinetCode": "E31678",
+   "periodEnd": "2026-07-10",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-09",
+   "docID": "S100YWJG",
+   "filerName": "アモーヴァ・アセットマネジメント株式会社",
+   "edinetCode": "E12430",
+   "periodEnd": "2026-07-10",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-09",
+   "docID": "S100YWJM",
+   "filerName": "アモーヴァ・アセットマネジメント株式会社",
+   "edinetCode": "E12430",
+   "periodEnd": "2026-07-10",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-09",
+   "docID": "S100YWJP",
+   "filerName": "アモーヴァ・アセットマネジメント株式会社",
+   "edinetCode": "E12430",
+   "periodEnd": "2026-07-10",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-09",
+   "docID": "S100YWJS",
+   "filerName": "アモーヴァ・アセットマネジメント株式会社",
+   "edinetCode": "E12430",
+   "periodEnd": "2026-07-10",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-09",
+   "docID": "S100YWJU",
+   "filerName": "アモーヴァ・アセットマネジメント株式会社",
+   "edinetCode": "E12430",
+   "periodEnd": "2026-07-10",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-09",
+   "docID": "S100Z2IZ",
+   "filerName": "スカイオーシャン・アセットマネジメント株式会社",
+   "edinetCode": "E31533",
+   "periodEnd": "2026-07-10",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-09",
+   "docID": "S100Z6XO",
+   "filerName": "株式会社内田洋行",
+   "edinetCode": "E02515",
+   "periodEnd": "2026-07-20",
+   "secCode": "80570",
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-13",
+   "docID": "S100Z05M",
+   "filerName": "野村アセットマネジメント株式会社",
+   "edinetCode": "E12460",
+   "periodEnd": "2026-07-21",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-13",
+   "docID": "S100Z6RJ",
+   "filerName": "フィデリティ投信株式会社",
+   "edinetCode": "E12481",
+   "periodEnd": "2026-07-15",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-13",
+   "docID": "S100YWU8",
+   "filerName": "いちよしアセットマネジメント株式会社",
+   "edinetCode": "E30994",
+   "periodEnd": "2026-07-13",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-13",
+   "docID": "S100Z1W4",
+   "filerName": "野村アセットマネジメント株式会社",
+   "edinetCode": "E12460",
+   "periodEnd": "2026-07-21",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-13",
+   "docID": "S100Z5Q3",
+   "filerName": "アセットマネジメントＯｎｅ株式会社",
+   "edinetCode": "E10677",
+   "periodEnd": "2026-07-13",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-13",
+   "docID": "S100Z1WB",
+   "filerName": "野村アセットマネジメント株式会社",
+   "edinetCode": "E12460",
+   "periodEnd": "2026-07-21",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-13",
+   "docID": "S100Z5IR",
+   "filerName": "ＳＯＭＰＯアセットマネジメント株式会社",
+   "edinetCode": "E12434",
+   "periodEnd": "2026-07-14",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-13",
+   "docID": "S100Z5XM",
+   "filerName": "アセットマネジメントＯｎｅ株式会社",
+   "edinetCode": "E10677",
+   "periodEnd": "2026-07-13",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-13",
+   "docID": "S100Z5JY",
+   "filerName": "ＳＢＩアセットマネジメント株式会社",
+   "edinetCode": "E13447",
+   "periodEnd": "2026-07-13",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-13",
+   "docID": "S100Z5O6",
+   "filerName": "アセットマネジメントＯｎｅ株式会社",
+   "edinetCode": "E10677",
+   "periodEnd": "2026-07-13",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-13",
+   "docID": "S100Z5MJ",
+   "filerName": "アセットマネジメントＯｎｅ株式会社",
+   "edinetCode": "E10677",
+   "periodEnd": "2026-07-13",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-13",
+   "docID": "S100Z5MS",
+   "filerName": "アセットマネジメントＯｎｅ株式会社",
+   "edinetCode": "E10677",
+   "periodEnd": "2026-07-13",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-13",
+   "docID": "S100Z2ZB",
+   "filerName": "ＳＢＩアセットマネジメント株式会社",
+   "edinetCode": "E13447",
+   "periodEnd": "2026-07-13",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-13",
+   "docID": "S100Z4WY",
+   "filerName": "ＳＢＩアセットマネジメント株式会社",
+   "edinetCode": "E13447",
+   "periodEnd": "2026-07-13",
+   "secCode": null,
+   "docTypeCode": "120"
+  },
+  {
+   "date": "2026-10-13",
+   "docID": "S100Z33D",
+   "filerName": "アムンディ・ジャパン株式会社",
+   "edinetCode": "E09666",
+   "periodEnd": "2026-07-13",
+   "secCode": null,
+   "docTypeCode": "120"
+  }
+ ]
+}
