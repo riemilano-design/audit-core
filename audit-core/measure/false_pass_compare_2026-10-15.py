@@ -7,7 +7,7 @@
     (1) 分母   ― どちらの規則セットで「一致」と言った行を変えたか。集合として一致するか、
                   一方が他方の部分集合か。部分集合なら**共通の行だけ**で比べ、増えた行は
                   別に数える(増えた行で通した件数を隠さない)。**どちらの部分集合でもない
-                  （交差するだけ）なら比べない** ― 両側に相手に無い行が在ると、どちらの率も
+                  (交差するだけ)なら比べない** ― 両側に相手に無い行が在ると、どちらの率も
                   自分の母集団の一部しか見ていない。共通の行が 0 件でも比べない。
     (2) 誤りの種類 ― 同じ行に同じ変え方(V1 = 10 倍 / V2 = 末尾の桁 +1)が当たっているか。
                   当たっていなければ件数は比べられない(2026-10-14 に実測した 1 つ目の欠陥)。
@@ -15,6 +15,13 @@
                   まとめて変えると書類の丸めの判定が動いて互いを汚す(3 つ目の欠陥)。
 
 どれかが崩れていたら、**率を並べずに崩れている所を印字する**。
+
+**形の検査は 1 か所にまとめる(``check_shape``)。** 2026-10-15 に独立監査が退化値で
+**7 件**の欠陥を出した ― 行の集合が崩れた入力・``kind`` の欄が無い入力・共通 0 件での
+0 除算・``doc`` の欄が無い入力・``outcome`` の欄が無い入力・空の報告が「すべて通った」と
+言う・同じ ``id`` が 2 行在って**黙って嘘の率**を出す。最初の 3 件を 1 か所ずつ塞いだら
+4 件目〜7 件目が別の経路で出た。**1 か所ずつ塞ぐのをやめ、報告の形を先に 1 回で検査する。**
+欄の欠落・重複・空は全部ここで落ち、以降の計算は形が整っていることを前提にできる。
 
 使い方::  python3 -B measure/false_pass_compare_2026-10-15.py [--in <json>] [--a P16] [--b P18]
 入力は ``measure/false_pass_2026-10-14.py --batch 1 --kinds V1,V2`` の出力。通信しない。
@@ -30,19 +37,63 @@ ROOT = os.path.dirname(HERE)
 DEFAULT_IN = os.path.join(ROOT, "fixtures", "xbrl", "p17", "false_pass_2026-10-14_batch1.json")
 KINDS = ("V1", "V2")
 
+# 報告の 1 件(run)と 1 行に在るべき欄。**字で固定する。**
+RUN_FIELDS = ("doc", "profile", "kind", "batch", "rows")
+ROW_FIELDS = ("id", "new", "outcome")
+
 
 def load(path):
     with io.open(path, encoding="utf-8") as fh:
         return json.load(fh)
 
 
+def check_shape(report):
+    """**報告の形を 1 か所で確かめる。** 問題の一覧を返す(空なら形は整っている)。
+
+    ここで落とすもの: 報告が空 / run の欄の欠落 / ``rows`` が list でない /
+    行の欄の欠落 / **同じ run の中に同じ ``id`` が 2 回**。
+
+    最後のものは、辞書に入れると後勝ちで黙って 1 件に潰れ、**件数がずれた分母で
+    率が出る**(2026-10-15 の監査が実測。「黙って嘘の率を出す」型)。
+    """
+
+    problems = []
+    if not isinstance(report, list):
+        return ["報告が list でない(%s)" % type(report).__name__]
+    if not report:
+        return ["報告が空(比べる対象が無い)"]
+    for i, run in enumerate(report):
+        if not isinstance(run, dict):
+            problems.append("run[%d] が辞書でない(%s)" % (i, type(run).__name__))
+            continue
+        for field in RUN_FIELDS:
+            if field not in run:
+                problems.append("run[%d]: 欄 %s が無い" % (i, field))
+        rows = run.get("rows")
+        if not isinstance(rows, list):
+            if "rows" in run:
+                problems.append("run[%d]: rows が list でない(%s)" % (i, type(rows).__name__))
+            continue
+        seen = set()
+        for j, row in enumerate(rows):
+            if not isinstance(row, dict):
+                problems.append("run[%d] の行[%d] が辞書でない" % (i, j))
+                continue
+            for field in ROW_FIELDS:
+                if field not in row:
+                    problems.append("run[%d] の行[%d]: 欄 %s が無い" % (i, j, field))
+            cid = row.get("id")
+            if cid in seen:
+                problems.append("run[%d]: id %r が 2 回在る(分母がずれる)" % (i, cid))
+            seen.add(cid)
+    return problems
+
+
 def index(report):
     """``(書類, 規則セット, 変え方)`` で引ける形にする。
 
-    **欠けた欄で例外を投げない。**古い出力(``--kinds`` を足す前の版)には ``kind`` が
-    無い。例外を投げる道具は「比較できない」と言えず、何も印字せずに落ちる
-    (2026-10-15 に実測。同じ型を上の層で直した直後に、ここで 2 か所目が出た)。
-    欄が欠けている run は ``kind=None`` で入れ、検査が「run が無い」として落とす。
+    欠けた欄で例外を投げない(``check_shape`` が先に落とすが、落ちる道具は
+    「比較できない」と言えない)。
     """
 
     out = {}
@@ -51,14 +102,27 @@ def index(report):
     return out
 
 
+def docs_of(report):
+    """報告に在る書類の一覧。欠けた欄で例外を投げない。"""
+
+    return sorted(set(r.get("doc") for r in report if isinstance(r, dict)))
+
+
 def rows_of(by, doc, profile, kind):
-    return {x["id"]: x for x in by[(doc, profile, kind)]["rows"]}
+    return {x.get("id"): x for x in by[(doc, profile, kind)].get("rows", [])}
 
 
 def check_comparable(by, docs, a, b):
-    """``(ok, 問題の一覧, 内訳)``。問題が 1 件でもあれば率を並べない。"""
+    """``(ok, 問題の一覧, 内訳)``。問題が 1 件でもあれば率を並べない。
+
+    **形の検査(``check_shape``)を先に通した報告を前提にする。**
+    """
 
     problems, detail = [], {}
+    if a == b:
+        problems.append("同じ規則セットを比べようとしている(%s と %s)" % (a, b))
+    if not docs:
+        problems.append("書類が 0 件(比べる対象が無い)")
     for doc in docs:
         for kind in KINDS:
             for pn in (a, b):
@@ -85,9 +149,7 @@ def check_comparable(by, docs, a, b):
         common = ia & ib
         for kind in KINDS:
             ra, rb = rows_of(by, doc, a, kind), rows_of(by, doc, b, kind)
-            for cid in sorted(common):
-                # 上の (1) で行の集合の崩れは既に記録済み。ここで落ちない
-                # (崩れた入力で例外を投げる道具は、崩れを「比較できない」と言えない)。
+            for cid in sorted(common, key=lambda v: (v is None, v)):
                 if cid not in ra or cid not in rb:
                     problems.append("%s %s %s: %s にこの行が無い"
                                     % (doc, cid, kind, a if cid not in ra else b))
@@ -96,26 +158,31 @@ def check_comparable(by, docs, a, b):
                     problems.append("%s %s: 変えた字が違う(%r != %r)"
                                     % (doc, cid, ra[cid].get("new"), rb[cid].get("new")))
         # (1) の続き: **どちらの部分集合でもない場合を落とす。**
-        # 交差するだけの集合では「共通の行で比べて、増えた行を別に数える」が成り立たない
-        # （a にだけ在る行が分母の外へ消え、どちらの率も自分の母集団の一部しか見ない）。
-        # 2026-10-15 の監査が実測: この分岐が無く、交差するだけの入力が無警告で通った。
         if not (ia <= ib or ib <= ia):
-            problems.append("%s: 行の集合がどちらの部分集合でもない（%s だけ %d 行 / %s だけ %d 行）"
+            problems.append("%s: 行の集合がどちらの部分集合でもない(%s だけ %d 行 / %s だけ %d 行)"
                             % (doc, a, len(ia - ib), b, len(ib - ia)))
-        # **共通の行が 0 件なら率を出す分母が無い。**（率の計算で 0 除算になる）
+        # **共通の行が 0 件なら率を出す分母が無い。**
         if not common:
-            problems.append("%s: 共通の行が 0 件（比べる分母が無い）" % doc)
+            problems.append("%s: 共通の行が 0 件(比べる分母が無い)" % doc)
         detail[doc] = {"rows_a": len(ia), "rows_b": len(ib), "common": len(common),
                        "a_subset_of_b": ia <= ib, "b_subset_of_a": ib <= ia}
     return (not problems), problems, detail
 
 
-def pct(n, d):
-    """``n/d`` の百分率。``d`` が 0 なら ``None``（**0 除算で落ちない**）。
+def analyze(report, a="P16", b="P18"):
+    """**形 → 構造の順に 1 本で検査する入口。** ``(ok, 問題, 内訳, 書類, 索引)``。"""
 
-    検査が先に落とすので本来ここには来ないが、**落ちる道具は「比較できない」と言えない**。
-    同じ型の欠陷を 3 回出した（行の集合・欠けた欄・0 除算）ので、計算の側にも置く。
-    """
+    shape = check_shape(report)
+    if shape:
+        return False, shape, {}, [], {}
+    docs = docs_of(report)
+    by = index(report)
+    ok, problems, detail = check_comparable(by, docs, a, b)
+    return ok, problems, detail, docs, by
+
+
+def pct(n, d):
+    """``n/d`` の百分率。``d`` が 0 なら ``None``(**0 除算で落ちない**)。"""
 
     if not d:
         return None
@@ -134,22 +201,23 @@ def tally(by, docs, a, b, detail):
         ia = set(rows_of(by, doc, a, "V1"))
         ib = set(rows_of(by, doc, b, "V1"))
         common = ia & ib
+        extra = ib - ia
         acc["common_n"] += len(common) * len(KINDS)
         acc["a_all_n"] += len(ia) * len(KINDS)
         acc["b_all_n"] += len(ib) * len(KINDS)
-        acc["b_extra_n"] += len(ib - ia) * len(KINDS)
+        acc["b_extra_n"] += len(extra) * len(KINDS)
         for kind in KINDS:
             for cid, x in rows_of(by, doc, a, kind).items():
-                if x["outcome"] == "PASSED":
+                if x.get("outcome") == "PASSED":
                     acc["a_all"] += 1
                     if cid in common:
                         acc["a_common"] += 1
             for cid, x in rows_of(by, doc, b, kind).items():
-                if x["outcome"] == "PASSED":
+                if x.get("outcome") == "PASSED":
                     acc["b_all"] += 1
                     if cid in common:
                         acc["b_common"] += 1
-                    if cid in (ib - ia):
+                    if cid in extra:
                         acc["b_extra"] += 1
     return acc
 
@@ -167,18 +235,16 @@ def main(argv=None):
         else:
             raise SystemExit("unknown arg %r" % argv[0])
     rep = load(path)
-    by = index(rep)
-    docs = sorted(set(r["doc"] for r in rep))
-    ok, problems, detail = check_comparable(by, docs, a, b)
+    ok, problems, detail, docs, by = analyze(rep, a, b)
     print("入力: %s" % path)
-    print("書類: %s" % ", ".join(docs))
+    print("書類: %s" % ", ".join(str(d) for d in docs))
     if not ok:
         print("**比較できない。** 率は並べない。崩れている所:")
         for p in problems:
             print("  -", p)
         return 1
     acc = tally(by, docs, a, b, detail)
-    print("比較可能の確認: 分母の集合・変えた字・batch=1 すべて通った")
+    print("比較可能の確認: 報告の形・分母の集合・変えた字・batch=1 すべて通った")
     for doc in docs:
         d = detail[doc]
         print("  %s: %s %d 行 / %s %d 行 / 共通 %d 行 (%s ⊆ %s: %s)"

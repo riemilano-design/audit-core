@@ -219,3 +219,126 @@ class RealInputTest(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class DegenerateInputTest(unittest.TestCase):
+    """**崩れた入力を表で網羅する。**
+
+    2026-10-15 の独立監査が退化値で **7 件**の欠陥を出した。最初の 3 件を 1 か所ずつ
+    塞いだら 4 件目〜7 件目が別の経路で出た(``doc`` の欄・``outcome`` の欄・空の報告が
+    「すべて通った」と言う・同じ ``id`` が 2 行で**黙って嘘の率**)。1 件ずつ試験を足すのを
+    やめ、**崩し方を表にして、落ちないこと と 拒否すること を両方当てる**。
+
+    ここで当てるのは 2 つ。(a) ``analyze`` が ``ok=False`` を返し、問題の文に目印が入る。
+    (b) ``main`` が**例外を投げずに** 1 を返す(落ちる道具は「比較できない」と言えない)。
+    """
+
+    def _broken(self):
+        """``(名前, 報告, 問題の文に入るべき目印)`` の表。"""
+
+        def base():
+            return _report(["N1", "N2"], ["N1", "N2"])
+
+        cases = [("報告が空", [], "報告が空")]
+
+        rep = base()
+        for r in rep:
+            del r["doc"]
+        cases.append(("doc の欄が無い", rep, "欄 doc が無い"))
+
+        for field in ("profile", "kind", "batch", "rows"):
+            rep = base()
+            del rep[0][field]
+            cases.append(("%s の欄が無い" % field, rep, "欄 %s が無い" % field))
+
+        for field in ("id", "new", "outcome"):
+            rep = base()
+            del rep[0]["rows"][0][field]
+            cases.append(("行の %s の欄が無い" % field, rep, "欄 %s が無い" % field))
+
+        rep = base()
+        rep[0]["rows"].append(dict(rep[0]["rows"][0]))
+        cases.append(("同じ id が 2 行", rep, "2 回在る"))
+
+        rep = base()
+        rep[0]["rows"] = {"N1": {}}
+        cases.append(("rows が list でない", rep, "rows が list でない"))
+
+        rep = base()
+        rep[0]["rows"][0] = "N1"
+        cases.append(("行が辞書でない", rep, "辞書でない"))
+
+        rep = _report(["N1", "N2"], ["N1", "N3"])
+        cases.append(("どちらの部分集合でもない", rep, "どちらの部分集合でもない"))
+
+        rep = _report([], [])
+        cases.append(("共通の行が 0 件", rep, "共通の行が 0 件"))
+
+        rep = base()
+        for r in rep:
+            r["batch"] = 25
+        cases.append(("batch が 1 でない", rep, "batch が 1 でない"))
+
+        rep = base()
+        rep = [r for r in rep if not (r["profile"] == "P18" and r["kind"] == "V2")]
+        cases.append(("run が欠けている", rep, "run が無い"))
+
+        rep = base()
+        for r in rep:
+            if r["profile"] == "P18" and r["kind"] == "V1":
+                r["rows"][0]["new"] = "ちがう字"
+        cases.append(("変えた字が違う", rep, "変えた字が違う"))
+
+        return cases
+
+    def test_every_broken_shape_is_refused_without_raising(self):
+        for name, rep, mark in self._broken():
+            ok, problems, _detail, _docs, _by = CMP.analyze(rep, "P16", "P18")
+            self.assertFalse(ok, name)
+            self.assertTrue(any(mark in p for p in problems),
+                            "%s: 目印 %r が無い -> %r" % (name, mark, problems))
+
+    def test_main_returns_one_on_every_broken_shape(self):
+        import json
+        import tempfile
+        for name, rep, _mark in self._broken():
+            with tempfile.NamedTemporaryFile("w", suffix=".json", delete=False,
+                                             encoding="utf-8") as fh:
+                json.dump(rep, fh, ensure_ascii=False)
+                path = fh.name
+            try:
+                self.assertEqual(CMP.main(["--in", path]), 1, name)
+            finally:
+                os.unlink(path)
+
+    def test_comparing_a_profile_with_itself_is_refused(self):
+        """同じ規則セット同士は比べない(誤用。率は矛盾しないが意味が無い)。"""
+
+        ok, problems, _d, _docs, _by = CMP.analyze(_report(["N1"], ["N1"]), "P16", "P16")
+        self.assertFalse(ok)
+        self.assertTrue(any("同じ規則セット" in p for p in problems), problems)
+
+    def test_the_real_measurement_still_passes_every_check(self):
+        """**崩れた入力を落とす検査が、正しい入力を落としていないこと。**"""
+
+        if not os.path.exists(CMP.DEFAULT_IN):
+            self.skipTest("測定の出力が無い")
+        ok, problems, detail, docs, by = CMP.analyze(CMP.load(CMP.DEFAULT_IN), "P16", "P18")
+        self.assertTrue(ok, problems)
+        acc = CMP.tally(by, docs, "P16", "P18", detail)
+        self.assertEqual((acc["common_n"], acc["a_common"], acc["b_common"], acc["b_extra"]),
+                         (340, 21, 4, 0))
+
+    def test_check_comparable_refuses_an_empty_document_list(self):
+        """``check_comparable`` を**直に**呼ぶ入口も守る。
+
+        ``analyze`` 経由では ``check_shape`` が空の報告を先に落とすので、この分岐には
+        到達しない ― 2026-10-15 に変異を当てたらこの検査を外しても黙った。**到達する
+        入口から当てる**(試験が届いていない守りは、在っても守りにならない)。
+        書類の一覧が空のまま通すと、ループが 1 回も回らず ``ok=True`` の空虚な真になる。
+        """
+
+        by = CMP.index(_report(["N1"], ["N1"]))
+        ok, problems, _detail = CMP.check_comparable(by, [], "P16", "P18")
+        self.assertFalse(ok)
+        self.assertTrue(any("書類が 0 件" in p for p in problems), problems)
