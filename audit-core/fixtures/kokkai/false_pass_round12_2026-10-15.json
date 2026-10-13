@@ -1,0 +1,458 @@
+{
+ "purpose": "議事録の誤りを通す率(書かれた最小の桁 1 つ分の誤り)。1 件ずつ別の検証。",
+ "n": 49,
+ "passed": 1,
+ "passed_rows": [
+  {
+   "doc": "meeting_122105261X01220260330.json",
+   "id": "K-019",
+   "text": "二兆円",
+   "unit": "円",
+   "value": 2000000000000,
+   "step": 1000000000000.0
+  }
+ ],
+ "rows": [
+  {
+   "doc": "meeting_122105261X01220260330.json",
+   "id": "K-001",
+   "text": "八兆五千六百四十一億円",
+   "unit": "円",
+   "value": 8564100000000,
+   "step": 100000000.0,
+   "after": "VALUE_MISMATCH"
+  },
+  {
+   "doc": "meeting_122105261X01220260330.json",
+   "id": "K-002",
+   "text": "三十億円",
+   "unit": "円",
+   "value": 3000000000,
+   "step": 1000000000.0,
+   "after": "VALUE_MISMATCH"
+  },
+  {
+   "doc": "meeting_122105261X01220260330.json",
+   "id": "K-006",
+   "text": "〇・七五％",
+   "unit": "％",
+   "value": 0.75,
+   "step": 0.01,
+   "after": "VALUE_MISMATCH"
+  },
+  {
+   "doc": "meeting_122105261X01220260330.json",
+   "id": "K-008",
+   "text": "二・三八五％",
+   "unit": "％",
+   "value": 2.385,
+   "step": 0.001,
+   "after": "VALUE_MISMATCH"
+  },
+  {
+   "doc": "meeting_122105261X01220260330.json",
+   "id": "K-009",
+   "text": "四千百億円",
+   "unit": "円",
+   "value": 410000000000,
+   "step": 10000000000.0,
+   "after": "VALUE_MISMATCH"
+  },
+  {
+   "doc": "meeting_122105261X01220260330.json",
+   "id": "K-010",
+   "text": "三十五億円",
+   "unit": "円",
+   "value": 3500000000,
+   "step": 100000000.0,
+   "after": "VALUE_MISMATCH"
+  },
+  {
+   "doc": "meeting_122105261X01220260330.json",
+   "id": "K-011",
+   "text": "百七十七・七円",
+   "unit": "円",
+   "value": 177.7,
+   "step": 0.1,
+   "after": "VALUE_MISMATCH"
+  },
+  {
+   "doc": "meeting_122105261X01220260330.json",
+   "id": "K-012",
+   "text": "七千九百四十八億円",
+   "unit": "円",
+   "value": 794800000000,
+   "step": 100000000.0,
+   "after": "VALUE_MISMATCH"
+  },
+  {
+   "doc": "meeting_122105261X01220260330.json",
+   "id": "K-013",
+   "text": "四兆円",
+   "unit": "円",
+   "value": 4000000000000,
+   "step": 1000000000000.0,
+   "after": "VALUE_MISMATCH"
+  },
+  {
+   "doc": "meeting_122105261X01220260330.json",
+   "id": "K-015",
+   "text": "三十六か国",
+   "unit": "か国",
+   "value": 36,
+   "step": 1.0,
+   "after": "VALUE_MISMATCH"
+  },
+  {
+   "doc": "meeting_122105261X01220260330.json",
+   "id": "K-016",
+   "text": "二回",
+   "unit": "回",
+   "value": 2,
+   "step": 1.0,
+   "after": "VALUE_MISMATCH"
+  },
+  {
+   "doc": "meeting_122105261X01220260330.json",
+   "id": "K-019",
+   "text": "二兆円",
+   "unit": "円",
+   "value": 2000000000000,
+   "step": 1000000000000.0,
+   "after": "GROUNDED"
+  },
+  {
+   "doc": "meeting_122105261X01220260330.json",
+   "id": "K-021",
+   "text": "二百五十四日分",
+   "unit": "日",
+   "value": 254,
+   "step": 1.0,
+   "after": "VALUE_MISMATCH"
+  },
+  {
+   "doc": "meeting_122105261X01220260330.json",
+   "id": "K-022",
+   "text": "四十五隻",
+   "unit": "隻",
+   "value": 45,
+   "step": 1.0,
+   "after": "VALUE_MISMATCH"
+  },
+  {
+   "doc": "meeting_122105261X01220260330.json",
+   "id": "K-023",
+   "text": "二十人",
+   "unit": "人",
+   "value": 20,
+   "step": 10.0,
+   "after": "VALUE_MISMATCH"
+  },
+  {
+   "doc": "meeting_122105261X01220260330.json",
+   "id": "K-024",
+   "text": "約八割",
+   "unit": "％",
+   "value": 80,
+   "step": 1.0,
+   "after": "VALUE_MISMATCH"
+  },
+  {
+   "doc": "meeting_122105261X01220260330.json",
+   "id": "K-026",
+   "text": "五千万円",
+   "unit": "円",
+   "value": 50000000,
+   "step": 10000000.0,
+   "after": "VALUE_MISMATCH"
+  },
+  {
+   "doc": "meeting_122105261X01220260330.json",
+   "id": "K-027",
+   "text": "五十九時間",
+   "unit": "時間",
+   "value": 59,
+   "step": 1.0,
+   "after": "VALUE_MISMATCH"
+  },
+  {
+   "doc": "meeting_122105261X01220260330.json",
+   "id": "K-028",
+   "text": "八十三名",
+   "unit": "人",
+   "value": 83,
+   "step": 1.0,
+   "after": "VALUE_MISMATCH"
+  },
+  {
+   "doc": "meeting_122105261X01220260330.json",
+   "id": "K-029",
+   "text": "二百八十六円",
+   "unit": "円",
+   "value": 286,
+   "step": 1.0,
+   "after": "VALUE_MISMATCH"
+  },
+  {
+   "doc": "meeting_122105261X01220260330.json",
+   "id": "K-030",
+   "text": "三百億円",
+   "unit": "円",
+   "value": 30000000000,
+   "step": 10000000000.0,
+   "after": "VALUE_MISMATCH"
+  },
+  {
+   "doc": "meeting_122105261X01220260330.json",
+   "id": "K-032",
+   "text": "四百八十億円",
+   "unit": "円",
+   "value": 48000000000,
+   "step": 1000000000.0,
+   "after": "VALUE_MISMATCH"
+  },
+  {
+   "doc": "meeting_122105261X01220260330.json",
+   "id": "K-034",
+   "text": "三十四万人",
+   "unit": "人",
+   "value": 340000,
+   "step": 10000.0,
+   "after": "VALUE_MISMATCH"
+  },
+  {
+   "doc": "meeting_122105261X01220260330.json",
+   "id": "K-037",
+   "text": "十二基",
+   "unit": "基",
+   "value": 12,
+   "step": 1.0,
+   "after": "VALUE_MISMATCH"
+  },
+  {
+   "doc": "meeting_122105261X01220260330.json",
+   "id": "K-038",
+   "text": "五十五億円",
+   "unit": "円",
+   "value": 5500000000,
+   "step": 100000000.0,
+   "after": "VALUE_MISMATCH"
+  },
+  {
+   "doc": "meeting_122115261X00820260330.json",
+   "id": "K-002",
+   "text": "八兆五千六百四十一億円",
+   "unit": "円",
+   "value": 8564100000000,
+   "step": 100000000.0,
+   "after": "VALUE_MISMATCH"
+  },
+  {
+   "doc": "meeting_122115261X00820260330.json",
+   "id": "K-003",
+   "text": "六百四十四億円",
+   "unit": "円",
+   "value": 64400000000,
+   "step": 100000000.0,
+   "after": "VALUE_MISMATCH"
+  },
+  {
+   "doc": "meeting_122115261X00820260330.json",
+   "id": "K-007",
+   "text": "約八千億円",
+   "unit": "円",
+   "value": 800000000000,
+   "step": 100000000000.0,
+   "after": "VALUE_MISMATCH"
+  },
+  {
+   "doc": "meeting_122115261X00820260330.json",
+   "id": "K-008",
+   "text": "一兆円",
+   "unit": "円",
+   "value": 1000000000000,
+   "step": 1000000000000.0,
+   "after": "VALUE_MISMATCH"
+  },
+  {
+   "doc": "meeting_122115261X00820260330.json",
+   "id": "K-010",
+   "text": "二百四十四時間",
+   "unit": "時間",
+   "value": 244,
+   "step": 1.0,
+   "after": "VALUE_MISMATCH"
+  },
+  {
+   "doc": "meeting_122115261X00820260330.json",
+   "id": "K-011",
+   "text": "二七・七％",
+   "unit": "％",
+   "value": 27.7,
+   "step": 0.1,
+   "after": "VALUE_MISMATCH"
+  },
+  {
+   "doc": "meeting_122115261X00820260330.json",
+   "id": "K-014",
+   "text": "百三十万円",
+   "unit": "円",
+   "value": 1300000,
+   "step": 100000.0,
+   "after": "VALUE_MISMATCH"
+  },
+  {
+   "doc": "meeting_122115261X00820260330.json",
+   "id": "K-015",
+   "text": "七十五万円",
+   "unit": "円",
+   "value": 750000,
+   "step": 10000.0,
+   "after": "VALUE_MISMATCH"
+  },
+  {
+   "doc": "meeting_122115261X00820260330.json",
+   "id": "K-016",
+   "text": "二千五百円",
+   "unit": "円",
+   "value": 2500,
+   "step": 100.0,
+   "after": "VALUE_MISMATCH"
+  },
+  {
+   "doc": "meeting_122115261X00820260330.json",
+   "id": "K-019",
+   "text": "五十九隻",
+   "unit": "隻",
+   "value": 59,
+   "step": 1.0,
+   "after": "VALUE_MISMATCH"
+  },
+  {
+   "doc": "meeting_122115261X00820260330.json",
+   "id": "K-020",
+   "text": "四十五隻",
+   "unit": "隻",
+   "value": 45,
+   "step": 1.0,
+   "after": "VALUE_MISMATCH"
+  },
+  {
+   "doc": "meeting_122115261X00820260330.json",
+   "id": "K-021",
+   "text": "百一ドル",
+   "unit": "ドル",
+   "value": 101,
+   "step": 1.0,
+   "after": "VALUE_MISMATCH"
+  },
+  {
+   "doc": "meeting_122115261X00820260330.json",
+   "id": "K-022",
+   "text": "百七十七・七円",
+   "unit": "円",
+   "value": 177.7,
+   "step": 0.1,
+   "after": "VALUE_MISMATCH"
+  },
+  {
+   "doc": "meeting_122115261X00820260330.json",
+   "id": "K-023",
+   "text": "約三百件",
+   "unit": "件",
+   "value": 300,
+   "step": 100.0,
+   "after": "VALUE_MISMATCH"
+  },
+  {
+   "doc": "meeting_122115261X00820260330.json",
+   "id": "K-024",
+   "text": "千六百七十二円",
+   "unit": "円",
+   "value": 1672,
+   "step": 1.0,
+   "after": "VALUE_MISMATCH"
+  },
+  {
+   "doc": "meeting_122115261X00820260330.json",
+   "id": "K-025",
+   "text": "九百六十円",
+   "unit": "円",
+   "value": 960,
+   "step": 10.0,
+   "after": "VALUE_MISMATCH"
+  },
+  {
+   "doc": "meeting_122115261X00820260330.json",
+   "id": "K-026",
+   "text": "四時間",
+   "unit": "時間",
+   "value": 4,
+   "step": 1.0,
+   "after": "VALUE_MISMATCH"
+  },
+  {
+   "doc": "meeting_122115261X00820260330.json",
+   "id": "K-027",
+   "text": "二兆円",
+   "unit": "円",
+   "value": 2000000000000,
+   "step": 1000000000000.0,
+   "after": "VALUE_MISMATCH"
+  },
+  {
+   "doc": "meeting_122115261X00820260330.json",
+   "id": "K-028",
+   "text": "四八・九％",
+   "unit": "％",
+   "value": 48.9,
+   "step": 0.1,
+   "after": "VALUE_MISMATCH"
+  },
+  {
+   "doc": "meeting_122115261X00820260330.json",
+   "id": "K-029",
+   "text": "六・九％",
+   "unit": "％",
+   "value": 6.9,
+   "step": 0.1,
+   "after": "VALUE_MISMATCH"
+  },
+  {
+   "doc": "meeting_122115261X00820260330.json",
+   "id": "K-031",
+   "text": "十一年",
+   "unit": "年",
+   "value": 11,
+   "step": 1.0,
+   "after": "VALUE_MISMATCH"
+  },
+  {
+   "doc": "meeting_122115261X00820260330.json",
+   "id": "K-034",
+   "text": "二年",
+   "unit": "年",
+   "value": 2,
+   "step": 1.0,
+   "after": "VALUE_MISMATCH"
+  },
+  {
+   "doc": "meeting_122115261X00820260330.json",
+   "id": "K-035",
+   "text": "三百億円",
+   "unit": "円",
+   "value": 30000000000,
+   "step": 10000000000.0,
+   "after": "VALUE_MISMATCH"
+  },
+  {
+   "doc": "meeting_122115261X00820260330.json",
+   "id": "K-037",
+   "text": "八％",
+   "unit": "％",
+   "value": 8,
+   "step": 1.0,
+   "after": "VALUE_MISMATCH"
+  }
+ ]
+}
