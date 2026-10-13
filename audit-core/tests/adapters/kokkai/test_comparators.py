@@ -86,3 +86,26 @@ class NumberInSpeechTest(unittest.TestCase):
     def test_none_claim_value_does_not_match(self):
         r = C.number_in_speech(_ev("x", self.SPEECH), _claim(None, "円"), core.Contract("number_in_speech", {}))
         self.assertFalse(r.match)
+
+
+class Round2NumberInSpeechTest(unittest.TestCase):
+    def test_eighty_percent_matches_hachiwari(self):
+        r = C.number_in_speech(_ev("x", "ＬＮＧは輸入量の約八割を長期契約で"), _claim(80.0, "％"), core.Contract("number_in_speech", {}))
+        self.assertTrue(r.match)
+        self.assertEqual(r.detail["matched_raw"], "八割")
+
+    def test_eight_wari_claim_also_matches(self):
+        r = C.number_in_speech(_ev("x", "約八割を"), _claim(8.0, "割"), core.Contract("number_in_speech", {}))
+        self.assertTrue(r.match)
+
+    def test_eighty_three_people_matches_mei(self):
+        r = C.number_in_speech(_ev("x", "合計八十三名を派遣"), _claim(83.0, "人"), core.Contract("number_in_speech", {}))
+        self.assertTrue(r.match)
+
+    def test_forty_five_ships(self):
+        r = C.number_in_speech(_ev("x", "四十五隻が入域"), _claim(45.0, "隻"), core.Contract("number_in_speech", {}))
+        self.assertTrue(r.match)
+
+    def test_wari_does_not_make_eight_percent_match(self):
+        r = C.number_in_speech(_ev("x", "約八割を"), _claim(8.0, "％"), core.Contract("number_in_speech", {}))
+        self.assertFalse(r.match)

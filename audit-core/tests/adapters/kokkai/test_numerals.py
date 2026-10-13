@@ -54,3 +54,24 @@ class NumberTokensTest(unittest.TestCase):
         self.assertEqual(N.normalize_unit(" 円 "), "円")
         self.assertIsNone(N.normalize_unit(""))
         self.assertIsNone(N.normalize_unit(None))
+
+
+class Round2UnitsTest(unittest.TestCase):
+    """2 回目(計画 KOKKAI_DEMO_ROUND2_PLAN §1)の U1・U2。"""
+
+    def test_u1_units_from_round1_holes(self):
+        toks = N.number_tokens("四十五隻が入域し、五十九時間の審議、十二基の原発。")
+        self.assertEqual([(v, u) for v, u, _ in toks], [(45.0, "隻"), (59.0, "時間"), (12.0, "基")])
+
+    def test_u2_wari_is_also_percent(self):
+        toks = N.number_tokens("約八割を長期契約で")
+        self.assertEqual([(v, u) for v, u, _ in toks], [(8.0, "割"), (80.0, "％")])
+
+    def test_u2_mei_is_hito(self):
+        self.assertEqual(N.normalize_unit("名"), "人")
+        toks = N.number_tokens("八十三名を派遣")
+        self.assertEqual([(v, u) for v, u, _ in toks], [(83.0, "人")])
+
+    def test_round1_tokens_are_unchanged(self):
+        toks = N.number_tokens("三百億円で一五パーセント、二カ月で三案。")
+        self.assertEqual([(v, u) for v, u, _ in toks], [(3e10, "円"), (15.0, "％"), (2.0, "か月"), (3.0, "案")])
