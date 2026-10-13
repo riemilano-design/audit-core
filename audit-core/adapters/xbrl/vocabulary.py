@@ -649,3 +649,8 @@ P16 = dataclasses.replace(P13, name="P16", taxonomy_labels_all_ns=True, statemen
 
 PROFILES = {"P1": P1, "P5F": P5F, "P6": P6, "P7": P7, "P8": P8, "P9": P9, "P10": P10, "P11": P11,
             "P12": P12, "P13": P13, "P14": P14, "P15": P15, "P16": P16}
+
+# **既定 profile(人間の決定 2026-10-13、第 2 段階)。字で留める。**
+# 測定で採用候補にした P16(開発書類 183 件で 146/8/29、未使用 2 書類 217 件で E1' 66.8% / E2 8.2% / E3 27.2%)。
+# 明示的に P7・P13 などを渡す既存の呼び出しは変えない。変えるときは人間の決定と DECISION_LOG の項目が要る。
+DEFAULT_PROFILE = "P16"

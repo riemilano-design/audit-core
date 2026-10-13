@@ -6,6 +6,7 @@ same key shape as the C-0 expectation files.
 
 Usage::
 
+    python3 -m adapters.xbrl.run --doc S100Z4B6 --out out.json            # 既定 profile(vocabulary.DEFAULT_PROFILE)
     python3 -m adapters.xbrl.run --doc S100Z4B6 --profile P5F --out out.json
 """
 
@@ -66,7 +67,8 @@ def build_claim_layer(doc_id, profile_name, expected_sha256=None):
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--doc", required=True, help="EDINET docID (ZIP must already be cached locally)")
-    parser.add_argument("--profile", required=True, choices=sorted(V.PROFILES.keys()))
+    parser.add_argument("--profile", default=V.DEFAULT_PROFILE, choices=sorted(V.PROFILES.keys()),
+                        help="profile name (default: %s = vocabulary.DEFAULT_PROFILE)" % V.DEFAULT_PROFILE)
     parser.add_argument("--zip-sha256", default=None, help="optional expected sha256 of the cached ZIP")
     parser.add_argument("--out", required=True)
     args = parser.parse_args(argv)
