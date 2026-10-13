@@ -16,11 +16,16 @@ _FIX = os.path.join(_HERE, "..", "..", "..", "fixtures", "kokkai")
 CASES = (
     ("out_seat_2026-10-14.json", "report_seat_2026-10-14.md"),
     ("out_injected_2026-10-14.json", "report_injected_2026-10-14.md"),
+    # 2 回目(参議院 予算委員会 第8号)
+    ("out_seat_round2_2026-10-14.json", "report_seat_round2_2026-10-14.md"),
+    ("out_injected_round2_2026-10-14.json", "report_injected_round2_2026-10-14.md"),
 )
 # **字で固定。** 報告の byte を変える変更はここも変える(= 人が見る)。
 GOLDEN_SHA256 = {
     "report_seat_2026-10-14.md": "12a9897da08fb73c1be9f161739f62090d9ed1cecdcc29f8d3fbfc0c8c03100d",
     "report_injected_2026-10-14.md": "f3a61ce9adfd2ff7fb0e428f0108a9278870c42f3f82c6785faa9b9353845352",
+    "report_seat_round2_2026-10-14.md": "81cc218df4a935a2b0470610eda3539d89501965d91d9f72f104ae3133692e68",
+    "report_injected_round2_2026-10-14.md": "d8d28d11d3cd109b29b5c064164b884c63792ac91bf2960ec7c74c05ef9607df",
 }
 
 
