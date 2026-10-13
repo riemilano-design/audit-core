@@ -359,6 +359,18 @@ def _target_or_plan(s, a, b, profile):
     return False
 
 
+def _first_matching_pair(pairs, matches, profile):
+    """P17 A2'(計画 §6): ``external_revenue_for_sales`` が真のときだけ、率の対は
+    「合う対」を先に採る(同じ語の要素の一覧の中で。無ければ従来どおり先頭)。
+    偽なら従来どおり ``pairs[0]``。"""
+
+    if profile is not None and getattr(profile, "external_revenue_for_sales", False):
+        for c, p in pairs:
+            if matches(c, p):
+                return c, p
+    return pairs[0]
+
+
 def _dispatch_num_claim(claim, s, a, b, sign, num, unit, prec, subj, elems, member, facts, contexts, profile,
                         rounding=None, flow_base=None):
     """§1-2 の目標値判定を通らなかった数の Claim の、既存の単位ごとの振り分け
@@ -384,7 +396,7 @@ def _dispatch_num_claim(claim, s, a, b, sign, num, unit, prec, subj, elems, memb
             pri = [f for f in I.facts_for(elems, facts, contexts, member) if f["context"].startswith("Prior1Year")]
             pairs = [(c, p) for c in cur for p in pri if c["name"] == p["name"] and c["context"].replace("CurrentYear", "") == p["context"].replace("Prior1Year", "")]
             if pairs:
-                c, p = pairs[0]
+                c, p = _first_matching_pair(pairs, lambda c, p: p["value"] != 0 and abs(c["value"] / p["value"] * 100 - num) <= 0.15, profile)
                 claim["pointer"] = ["xbrl:%s@%s" % (c["name"], c["context"]), "xbrl:%s@%s" % (p["name"], p["context"]), "formula:cur/prior*100"]
                 claim["bound"] = True
                 if p["value"] != 0:
@@ -409,7 +421,7 @@ def _dispatch_num_claim(claim, s, a, b, sign, num, unit, prec, subj, elems, memb
             pri = [f for f in I.facts_for(elems, facts, contexts, member) if f["context"].startswith("Prior1Year")]
             pairs = [(c, p) for c in cur for p in pri if c["name"] == p["name"] and c["context"].replace("CurrentYear", "") == p["context"].replace("Prior1Year", "")]
             if pairs:
-                c, p = pairs[0]
+                c, p = _first_matching_pair(pairs, lambda c, p: p["value"] != 0 and abs((c["value"] - p["value"]) / abs(p["value"]) * 100 - claim["value"]) <= 0.15, profile)
                 claim["pointer"] = ["xbrl:%s@%s" % (c["name"], c["context"]), "xbrl:%s@%s" % (p["name"], p["context"])]
                 claim["bound"] = True
                 if p["value"] != 0:
@@ -912,8 +924,8 @@ def _member_material(zb, inst, text, sentences, profile):
     reg, _rows, _hand = E.build_registry(members, id2label, ntext, profile.run3)
     paras = E.paragraph_index(text, sentences, profile.paren_sentence)
     if profile.segment_carry_to_result_sentence:
-        # P17 A': 段落をまたいで「結果の文」にだけ引き継ぐ。
-        sent_member = E.resolve_members_to_result_sentence(sentences, reg)
+        # P17 A'': 従来の段落内の引き継ぎ + 「結果の文」への段落またぎの引き継ぎ。
+        sent_member = E.resolve_members_to_result_sentence(sentences, paras, reg)
     else:
         sent_member = E.resolve_members(sentences, paras, reg)
     return sent_member, reg
@@ -1103,6 +1115,10 @@ def _label_subjects(zb, inst, profile):
     def resolves(elems):
         return bool(I.facts_for(list(elems), facts, contexts))
 
+    def exists_any_context(elem):
+        # P17 A2': member 付きの context にしか無い要素(セグメントの外部売上高)も「在る」と数える。
+        return any(f["name"].split(":")[-1] == elem for f in facts)
+
     hand_rows, overrides = [], []
     for w, elems in profile.subjects:
         replaced = None
@@ -1127,7 +1143,7 @@ def _label_subjects(zb, inst, profile):
                 added[w] = list(elems)
     rows = sorted(added.items(), key=lambda r: (-len(r[0]), r[0]))
     added_rows = [(w, list(elems)) for w, elems in rows]
-    hand_rows, added_rows = augment_subject_rows(hand_rows, added_rows, doc_labels, resolves, profile)
+    hand_rows, added_rows = augment_subject_rows(hand_rows, added_rows, doc_labels, exists_any_context, profile)
     return hand_rows, added_rows, overrides
 
 
@@ -1137,19 +1153,19 @@ _SALES_WORD = "売上高"
 _NET_SUFFIXES = ("(純額)", "（純額）")
 
 
-def augment_subject_rows(hand_rows, added_rows, doc_labels, resolves, profile):
+def augment_subject_rows(hand_rows, added_rows, doc_labels, exists, profile):
     """主語の行(手書き・ラベル由来)に P17 の 3 つの旗を当てる。旗が全部偽なら
     1 つも変えない(同じ内容の新しい list を返す)。
 
     - ``external_revenue_for_sales``: 「売上高」の要素の末尾に外部顧客への売上高を足す
-      (書類にその fact が引けるときだけ)。
+      (書類にその要素の fact が、どの context であれ 1 件でも在るときだけ ― ``exists(elem)``)。
     - ``loss_variants``: 「〜利益」の語に「〜損失」が無ければ同じ要素で足す(added の末尾)。
     - ``prefer_net_when_labelled``: 書類のラベルに「W(純額)」が在れば、その要素を W の先頭に。
     """
 
     hand = [(w, list(e)) for w, e in hand_rows]
     added = [(w, list(e)) for w, e in added_rows]
-    if getattr(profile, "external_revenue_for_sales", False) and resolves([_EXTERNAL_REVENUE]):
+    if getattr(profile, "external_revenue_for_sales", False) and exists(_EXTERNAL_REVENUE):
         for rows in (hand, added):
             for k, (w, e) in enumerate(rows):
                 if w == _SALES_WORD and _EXTERNAL_REVENUE not in e:

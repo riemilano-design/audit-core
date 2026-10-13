@@ -546,11 +546,15 @@
   "reason": null
  },
  "S100Z4N9:H-059": {
-  "state": "POINTER_NOT_FOUND",
-  "pointers": [],
+  "state": "VALUE_MISMATCH",
+  "pointers": [
+   "xbrl:jppfs_cor:OperatingLoansCA@CurrentYearInstant",
+   "xbrl:jppfs_cor:OperatingLoansCA@Prior1YearInstant",
+   "builtin:sign(cur-prior)"
+  ],
   "subject": "営業貸付金",
   "span": "、当該医療法人の経営改善の遅れにより、回収可能額が見積り額を下回る可能性が",
-  "reason": "no_element"
+  "reason": null
  },
  "S100Z4N9:H-060": {
   "state": "VALUE_MISMATCH",
@@ -647,10 +651,10 @@
   "reason": null
  },
  "S100Z4N9:H-070": {
-  "state": "GROUNDED",
+  "state": "VALUE_MISMATCH",
   "pointers": [
-   "xbrl:jppfs_cor:NetSales@CurrentYearDuration_jpcrp030000-asr_E27464-000MedicalReportableSegmentsMember",
-   "xbrl:jppfs_cor:NetSales@Prior1YearDuration_jpcrp030000-asr_E27464-000MedicalReportableSegmentsMember"
+   "xbrl:jppfs_cor:NetSales@CurrentYearDuration",
+   "xbrl:jppfs_cor:NetSales@Prior1YearDuration"
   ],
   "subject": "売上高",
   "span": "以上の結果、売上高259,831千円(前年同期比6.3%減)、営業損失715",
@@ -1118,9 +1122,9 @@
   "reason": "no_element"
  },
  "S100Z4N9:H-120": {
-  "state": "GROUNDED",
+  "state": "VALUE_MISMATCH",
   "pointers": [
-   "xbrl:jppfs_cor:OperatingIncome@Prior1YearDuration_jpcrp030000-asr_E27464-000MedicalReportableSegmentsMember"
+   "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration"
   ],
   "subject": "営業損失",
   "span": "年同期比6.3%減)、営業損失715,890千円(前年同期は83,351千円の営業利益)となりま",
@@ -1235,9 +1239,9 @@
   "reason": null
  },
  "S100Z4N9:H-133": {
-  "state": "GROUNDED",
+  "state": "VALUE_MISMATCH",
   "pointers": [
-   "xbrl:jppfs_cor:NetSales@CurrentYearDuration_jpcrp030000-asr_E27464-000MedicalReportableSegmentsMember"
+   "xbrl:jppfs_cor:NetSales@CurrentYearDuration"
   ],
   "subject": "売上高",
   "span": "以上の結果、売上高259,831千円(前年同期比6.3%",
@@ -1350,9 +1354,9 @@
   "reason": "no_subject"
  },
  "S100Z4N9:H-145": {
-  "state": "GROUNDED",
+  "state": "VALUE_MISMATCH",
   "pointers": [
-   "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration_jpcrp030000-asr_E27464-000MedicalReportableSegmentsMember"
+   "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration"
   ],
   "subject": "営業損失",
   "span": "、売上高259,831千円(前年同期比6.3%減)、営業損失715,890千円(前年同期は83,3",

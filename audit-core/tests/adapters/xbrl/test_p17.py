@@ -37,49 +37,58 @@ class ProfileShapeTest(unittest.TestCase):
 class SegmentCarryTest(unittest.TestCase):
     def test_carry_across_paragraphs_to_the_result_sentence(self):
         sents = ["駐車場事業につきましては、開発に注力しました。", "既存の活性化も進めました。", "以上の結果、売上高7,056,648千円となりました。"]
-        res = E.resolve_members_to_result_sentence(sents, REG)
+        res = E.resolve_members_to_result_sentence(sents, list(range(len(sents))), REG)
         self.assertEqual(res, [("m:Parking", "sentence"), (None, None), ("m:Parking", "carried")])
 
     def test_old_rule_does_not_carry_across_paragraphs(self):
         sents = ["駐車場事業につきましては、開発に注力しました。", "以上の結果、売上高7,056,648千円となりました。"]
         self.assertEqual(E.resolve_members(sents, [0, 1], REG)[1], (None, None))
 
+    def test_in_paragraph_carry_of_the_old_rule_is_kept(self):
+        sents = ["駐車場事業につきましては、開発に注力しました。", "売上高は40億62百万円となりました。"]
+        self.assertEqual(E.resolve_members_to_result_sentence(sents, [0, 0], REG)[1], ("m:Parking", "carried"))
+
+    def test_consolidated_word_between_in_the_segment_paragraph_does_not_stop(self):
+        sents = ["メディカル事業につきましては、賃貸を行いました。", "当連結会計年度におきましては、賃貸収入が堅調でした。", "以上の結果、売上高259,831千円となりました。"]
+        reg = {"m:Med": "メディカル事業"}
+        self.assertEqual(E.resolve_members_to_result_sentence(sents, [0, 1, 2], reg)[2], ("m:Med", "carried"))
+
     def test_non_result_sentence_is_not_carried_into(self):
         sents = ["駐車場事業につきましては、開発に注力しました。", "総資産が前連結会計年度末に比べ167億円増加しました。"]
-        self.assertEqual(E.resolve_members_to_result_sentence(sents, REG)[1], (None, None))
+        self.assertEqual(E.resolve_members_to_result_sentence(sents, list(range(len(sents))), REG)[1], (None, None))
 
     def test_result_sentence_with_consolidated_word_is_not_carried_into(self):
         for s2 in ("この結果、当社グループの業績は売上高67,099百万円となりました。",
                    "以上の結果、総資産は10,232,043千円となり、前連結会計年度末に比べ増加しました。",
                    "以上の結果、全社の営業利益は29,431千円となりました。"):
             sents = ["駐車場事業につきましては、開発に注力しました。", s2]
-            self.assertEqual(E.resolve_members_to_result_sentence(sents, REG)[1], (None, None), s2)
+            self.assertEqual(E.resolve_members_to_result_sentence(sents, list(range(len(sents))), REG)[1], (None, None), s2)
 
     def test_new_topic_marker_in_between_stops_the_carry(self):
         sents = ["駐車場事業につきましては、開発に注力しました。", "また、その他につきましては販売を進めました。", "以上の結果、営業利益29,431千円となりました。"]
-        res = E.resolve_members_to_result_sentence(sents, REG)
+        res = E.resolve_members_to_result_sentence(sents, list(range(len(sents))), REG)
         self.assertEqual(res[1], (None, None))
         self.assertEqual(res[2], (None, None))
 
-    def test_consolidated_word_in_between_stops_the_carry(self):
+    def test_group_word_in_between_stops_the_carry(self):
         sents = ["駐車場事業につきましては、開発に注力しました。", "当社グループ全体では費用が増えました。", "以上の結果、営業損失521,333千円となりました。"]
-        self.assertEqual(E.resolve_members_to_result_sentence(sents, REG)[2], (None, None))
+        self.assertEqual(E.resolve_members_to_result_sentence(sents, list(range(len(sents))), REG)[2], (None, None))
 
     def test_ambiguous_sentence_stops_the_carry(self):
         sents = ["駐車場事業につきましては、開発に注力しました。", "駐車場事業と不動産事業の両方で増収でした。", "以上の結果、売上高100千円となりました。"]
-        res = E.resolve_members_to_result_sentence(sents, REG)
+        res = E.resolve_members_to_result_sentence(sents, list(range(len(sents))), REG)
         self.assertEqual(res[1], (E.AMBIG, "ambiguous"))
         self.assertEqual(res[2], (None, None))
 
     def test_carry_is_limited_to_five_sentences(self):
         sents = ["不動産事業につきましては、竣工しました。"] + ["販売も進みました。"] * 5 + ["以上の結果、売上高2,523,449千円となりました。"]
-        self.assertEqual(E.resolve_members_to_result_sentence(sents, REG)[6], (None, None))
+        self.assertEqual(E.resolve_members_to_result_sentence(sents, list(range(len(sents))), REG)[6], (None, None))
         sents = ["不動産事業につきましては、竣工しました。"] + ["販売も進みました。"] * 4 + ["以上の結果、売上高2,523,449千円となりました。"]
-        self.assertEqual(E.resolve_members_to_result_sentence(sents, REG)[5], ("m:Props", "carried"))
+        self.assertEqual(E.resolve_members_to_result_sentence(sents, list(range(len(sents))), REG)[5], ("m:Props", "carried"))
 
     def test_a_later_segment_sentence_wins_over_an_earlier_one(self):
         sents = ["駐車場事業につきましては、開発しました。", "不動産事業につきましては、竣工しました。", "以上の結果、売上高2,523,449千円となりました。"]
-        self.assertEqual(E.resolve_members_to_result_sentence(sents, REG)[2], ("m:Props", "carried"))
+        self.assertEqual(E.resolve_members_to_result_sentence(sents, list(range(len(sents))), REG)[2], ("m:Props", "carried"))
 
 
 SUBJECTS = (("営業外費用", ["NonOperatingExpenses"]), ("支払利息", ["InterestExpensesNOE"]),
@@ -117,6 +126,22 @@ def _profile(**kw):
     return dataclasses.replace(V.P16, name="T", **kw)
 
 
+class FirstMatchingPairTest(unittest.TestCase):
+    PAIRS = [({"value": 7106655.0}, {"value": 7004381.0}), ({"value": 7056648.0}, {"value": 7002314.0})]
+
+    def test_flag_on_takes_the_first_matching_pair(self):
+        m = lambda c, p: abs((c["value"] - p["value"]) / abs(p["value"]) * 100 - 0.8) <= 0.15
+        self.assertIs(R._first_matching_pair(self.PAIRS, m, V.P17), self.PAIRS[1])
+
+    def test_flag_off_takes_the_first_pair(self):
+        m = lambda c, p: True
+        self.assertIs(R._first_matching_pair(self.PAIRS, m, V.P16), self.PAIRS[0])
+        self.assertIs(R._first_matching_pair(self.PAIRS, m, None), self.PAIRS[0])
+
+    def test_flag_on_without_a_match_falls_back_to_the_first_pair(self):
+        self.assertIs(R._first_matching_pair(self.PAIRS, lambda c, p: False, V.P17), self.PAIRS[0])
+
+
 class AugmentSubjectRowsTest(unittest.TestCase):
     HAND = [("売上高", ["NetSales"]), ("営業利益", ["OperatingIncome"]), ("営業損失", ["OperatingIncome"]), ("建物及び構築物", ["BuildingsAndStructures"])]
     ADDED = [("経常利益", ["OrdinaryIncome"])]
@@ -127,7 +152,7 @@ class AugmentSubjectRowsTest(unittest.TestCase):
         self.assertEqual((h, a), (self.HAND, self.ADDED))
 
     def test_external_revenue_appended_only_when_fact_exists(self):
-        h, _ = R.augment_subject_rows(self.HAND, self.ADDED, {}, lambda e: e == ["RevenuesFromExternalCustomers"],
+        h, _ = R.augment_subject_rows(self.HAND, self.ADDED, {}, lambda e: e == "RevenuesFromExternalCustomers",
                                       _profile(external_revenue_for_sales=True))
         self.assertEqual(dict(h)["売上高"], ["NetSales", "RevenuesFromExternalCustomers"])
         h2, _ = R.augment_subject_rows(self.HAND, self.ADDED, {}, lambda e: False, _profile(external_revenue_for_sales=True))

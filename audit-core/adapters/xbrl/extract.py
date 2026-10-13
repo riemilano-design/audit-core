@@ -408,43 +408,41 @@ def resolve_members(sentences, paras, reg, carry_back=CARRY_BACK):
     return res
 
 
-# P17 A'(計画 docs/P17_PLAN_2026-10-14.md §5。A は 16 書類で GROUNDED を 71 件失って棄却):
-# 事業名の引き継ぎを、段落をまたいでも「結果の文」にだけ行う。印は字で書く。
+# P17 A''(計画 docs/P17_PLAN_2026-10-14.md §5・§6。A は 16 書類で GROUNDED を 71 件失って棄却、
+# A' は従来の段落内の引き継ぎを消していて 3 件失った): 従来の引き継ぎ(同じ段落で 5 文以内)は
+# そのままに、**結果の文**にだけ段落をまたいだ引き継ぎを足す。印は字で書く。
 TOPIC_MARK_RE = re.compile(r"につきましては")
 RESULT_HEAD_RE = re.compile(r"^(以上の結果|この結果|その結果|結果として)")
-CONSOL_WORDS = ("当社グループ", "連結", "全社")
+CONSOL_WORDS_IN_RESULT = ("当社グループ", "連結", "全社")   # 結果の文自身に在れば引き継がない
+CONSOL_WORDS_BETWEEN = ("当社グループ", "全社")             # 途中の文に在れば引き継がない(「連結」は途中では印にしない: 「当連結会計年度におきましては」が事業の段落の中に在る)
 
 
-def resolve_members_to_result_sentence(sentences, reg, carry_back=CARRY_BACK, topic_re=TOPIC_MARK_RE,
-                                       result_re=RESULT_HEAD_RE, consol_words=CONSOL_WORDS):
-    """P17 A'。``resolve_members`` と同じ (member, source) の列を返すが、
-    事業名の無い文のうち**結果の文**(「以上の結果」などで始まり、連結の語を
-    含まない)だけが、段落に関係なく ``carry_back`` 文以内の直前の「文の事業名」
-    (source == "sentence")を引き継ぐ。途中の文に新しい話題の印(``topic_re``)
-    が在るか、途中の文が曖昧(2 事業)なら引き継がない。それ以外の文は引き継がない
-    (段落の中の従来の引き継ぎもしない ― この関数は従来の規則の置き換えではなく、
-    P17 でだけ使う)。"""
+def resolve_members_to_result_sentence(sentences, paras, reg, carry_back=CARRY_BACK, topic_re=TOPIC_MARK_RE,
+                                       result_re=RESULT_HEAD_RE, consol_in_result=CONSOL_WORDS_IN_RESULT,
+                                       consol_between=CONSOL_WORDS_BETWEEN):
+    """P17 A''。``resolve_members``(段落内の引き継ぎ)の結果を土台に、事業名が
+    付かなかった**結果の文**(``result_re`` で始まり ``consol_in_result`` を含まない)
+    にだけ、段落に関係なく ``carry_back`` 文以内の直前の「文の事業名」
+    (source == "sentence")を引き継ぐ。途中の文に新しい話題の印(``topic_re``)・
+    ``consol_between`` の語が在るか、途中の文が曖昧(2 事業)なら引き継がない。"""
 
-    res = []
+    res = list(resolve_members(sentences, paras, reg, carry_back))
     for si, s in enumerate(sentences):
-        hits = sorted({m for m, name in reg.items() if name and name in s})
-        if len(hits) == 1:
-            res.append((hits[0], "sentence"))
+        if res[si][1] is not None:
             continue
-        if len(hits) >= 2:
-            res.append((AMBIG, "ambiguous"))
+        if not (result_re.search(s) and not any(w in s for w in consol_in_result)):
             continue
         found = None
-        if result_re.search(s) and not any(w in s for w in consol_words):
-            for sj in range(si - 1, max(-1, si - 1 - carry_back), -1):
-                if res[sj][1] == "sentence":
-                    found = res[sj][0]
-                    break
-                if res[sj][1] == "ambiguous":
-                    break
-                if topic_re.search(sentences[sj]) or any(w in sentences[sj] for w in consol_words):
-                    break
-        res.append((found, "carried" if found else None))
+        for sj in range(si - 1, max(-1, si - 1 - carry_back), -1):
+            if res[sj][1] == "sentence":
+                found = res[sj][0]
+                break
+            if res[sj][1] == "ambiguous":
+                break
+            if topic_re.search(sentences[sj]) or any(w in sentences[sj] for w in consol_between):
+                break
+        if found:
+            res[si] = (found, "carried")
     return res
 
 

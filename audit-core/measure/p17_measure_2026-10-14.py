@@ -146,8 +146,14 @@ def all_docs_diff(docs):
 def main(argv=None):
     argv = list(sys.argv[1:] if argv is None else argv)
     docs = sorted(n[:-4] for n in os.listdir(CACHE) if n.endswith(".zip"))
-    if argv[:1] == ["--docs"]:
-        docs = argv[1].split(",")
+    tag = ""
+    while argv:
+        if argv[0] == "--docs":
+            docs = argv[1].split(","); argv = argv[2:]
+        elif argv[0] == "--tag":
+            tag = "_" + argv[1]; argv = argv[2:]
+        else:
+            raise SystemExit("unknown arg %r" % argv[0])
     rep = {"train": train_scores(), "dev": dev_scores(), "all_docs": all_docs_diff(docs)}
     g_lost = sum(sum(v for k, v in d["transitions"].items() if k.startswith("GROUNDED->")) for d in rep["all_docs"].values())
     rep["summary"] = {
@@ -155,7 +161,7 @@ def main(argv=None):
         "dev_P16": rep["dev"]["P16"]["all"], "dev_P17": rep["dev"]["P17"]["all"],
         "grounded_to_non_grounded_total": g_lost,
     }
-    p = save("score_2026-10-14.json", rep)
+    p = save("score_2026-10-14%s.json" % tag, rep)
     print(json.dumps(rep["summary"], ensure_ascii=False, indent=1))
     print("->", p)
 

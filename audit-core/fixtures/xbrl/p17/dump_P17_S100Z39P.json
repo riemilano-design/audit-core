@@ -342,11 +342,13 @@
   "reason": null
  },
  "S100Z39P:H-036": {
-  "state": "POINTER_NOT_FOUND",
-  "pointers": [],
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:ProfitLossAttributableToOwnersOfParent@CurrentYearDuration"
+  ],
   "subject": "親会社株主に帰属する当期純利益",
   "span": "3百万円(同39.3%増)、親会社株主に帰属する当期純利益は1,703百万円(同51.4%減)と",
-  "reason": "no_element"
+  "reason": null
  },
  "S100Z39P:H-037": {
   "state": "UNVERIFIABLE",
@@ -498,9 +500,9 @@
   "reason": null
  },
  "S100Z39P:H-052": {
-  "state": "VALUE_MISMATCH",
+  "state": "GROUNDED",
   "pointers": [
-   "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration_jpcrp030000-asr_E05239-000BusinessIntelligenceReportableSegmentsMember"
+   "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration"
   ],
   "subject": "営業利益",
   "span": "績は、売上高67,099百万円(前期比2.3%増)、営業利益5,752百万円(同35.6%増)、",
@@ -527,11 +529,13 @@
   "reason": null
  },
  "S100Z39P:H-055": {
-  "state": "POINTER_NOT_FOUND",
-  "pointers": [],
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:OrdinaryIncome@CurrentYearDuration"
+  ],
   "subject": "経常利益",
   "span": "%増)、営業利益5,752百万円(同35.6%増)、経常利益5,753百万円(同39.3%増)、",
-  "reason": "no_element"
+  "reason": null
  },
  "S100Z39P:H-056": {
   "state": "GROUNDED",
@@ -651,9 +655,9 @@
   "reason": null
  },
  "S100Z39P:H-068": {
-  "state": "VALUE_MISMATCH",
+  "state": "GROUNDED",
   "pointers": [
-   "xbrl:jppfs_cor:NetSales@CurrentYearDuration_jpcrp030000-asr_E05239-000BusinessIntelligenceReportableSegmentsMember"
+   "xbrl:jppfs_cor:NetSales@CurrentYearDuration"
   ],
   "subject": "売上高",
   "span": "この結果、当社グループの当連結会計年度の業績は、売上高67,099百万円(前期比2.3%増)",
@@ -791,11 +795,14 @@
   "reason": null
  },
  "S100Z39P:H-082": {
-  "state": "POINTER_NOT_FOUND",
-  "pointers": [],
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:ProfitLossAttributableToOwnersOfParent@CurrentYearDuration",
+   "xbrl:jppfs_cor:ProfitLossAttributableToOwnersOfParent@Prior1YearDuration"
+  ],
   "subject": "親会社株主に帰属する当期純利益",
   "span": "%増)、親会社株主に帰属する当期純利益は1,703百万円(同51.4%減)となりました。",
-  "reason": "no_element"
+  "reason": null
  },
  "S100Z39P:H-083": {
   "state": "UNVERIFIABLE",
@@ -926,27 +933,30 @@
   "reason": "no_subject"
  },
  "S100Z39P:H-097": {
-  "state": "VALUE_MISMATCH",
+  "state": "GROUNDED",
   "pointers": [
-   "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration_jpcrp030000-asr_E05239-000BusinessIntelligenceReportableSegmentsMember",
-   "xbrl:jppfs_cor:OperatingIncome@Prior1YearDuration_jpcrp030000-asr_E05239-000BusinessIntelligenceReportableSegmentsMember"
+   "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration",
+   "xbrl:jppfs_cor:OperatingIncome@Prior1YearDuration"
   ],
   "subject": "営業利益",
   "span": "99百万円(前期比2.3%増)、営業利益5,752百万円(同35.6%増)、経常利益5,7",
   "reason": null
  },
  "S100Z39P:H-098": {
-  "state": "POINTER_NOT_FOUND",
-  "pointers": [],
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:OrdinaryIncome@CurrentYearDuration",
+   "xbrl:jppfs_cor:OrdinaryIncome@Prior1YearDuration"
+  ],
   "subject": "経常利益",
   "span": "752百万円(同35.6%増)、経常利益5,753百万円(同39.3%増)、親会社株主に帰",
-  "reason": "no_element"
+  "reason": null
  },
  "S100Z39P:H-099": {
-  "state": "VALUE_MISMATCH",
+  "state": "GROUNDED",
   "pointers": [
-   "xbrl:jppfs_cor:NetSales@CurrentYearDuration_jpcrp030000-asr_E05239-000BusinessIntelligenceReportableSegmentsMember",
-   "xbrl:jppfs_cor:NetSales@Prior1YearDuration_jpcrp030000-asr_E05239-000BusinessIntelligenceReportableSegmentsMember"
+   "xbrl:jppfs_cor:NetSales@CurrentYearDuration",
+   "xbrl:jppfs_cor:NetSales@Prior1YearDuration"
   ],
   "subject": "売上高",
   "span": "プの当連結会計年度の業績は、売上高67,099百万円(前期比2.3%増)、営業利益5,7",
