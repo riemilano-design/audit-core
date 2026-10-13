@@ -1,0 +1,6580 @@
+{
+ "purpose": "限定確認の確定ラベル(2 席 memoryless、同値類 v0 で集合一致した行だけ)",
+ "conditions": "docs/HOLDOUT_P16_CONDITIONS_2026-10-13.md",
+ "sources_sha256": {
+  "S100Z39P": {
+   "seat1": "c8367c7b51e7ce40dbfbf75b64d0ae8ee9c4c395fa516ddf6402365cb032247e",
+   "seat2": "f98caf6a31331ffc1891bf62519f503bee17dadd40223c102ce20f7f861ea55a"
+  },
+  "S100Z4N9": {
+   "seat1": "20de72e5753fc3a907ffb871c7c13a62fa741ee03de3c13530af456d8897706a",
+   "seat2": "fa1b0e2babfb249f119e5fcad7beed44b3e135c518a55df123d43b04e748af43"
+  }
+ },
+ "counts": {
+  "S100Z39P|判定不能(両側)": 17,
+  "S100Z39P|確定(同値類v0)": 86,
+  "S100Z4N9|不一致": 3,
+  "S100Z4N9|判定不能(両側)": 16,
+  "S100Z4N9|確定(同値類v0)": 131
+ },
+ "labels": [
+  {
+   "id": "S100Z39P:H-001",
+   "docID": "S100Z39P",
+   "鍵": "H-001",
+   "形": [
+    "差(当期−前期)",
+    "差(当期−前期)"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "Assets",
+     "CurrentYearInstant"
+    ],
+    [
+     "Assets",
+     "Prior1YearInstant"
+    ]
+   ],
+   "同値の他の候補": [
+    [
+     "jpcrp_cor:TotalAssetsSummaryOfBusinessResults",
+     "CurrentYearInstant"
+    ],
+    [
+     "jpcrp_cor:TotalAssetsSummaryOfBusinessResults",
+     "Prior1YearInstant"
+    ],
+    [
+     "jpcrp_cor:TotalAssetsSummaryOfBusinessResults",
+     "CurrentYearInstant"
+    ],
+    [
+     "jppfs_cor:LiabilitiesAndNetAssets",
+     "CurrentYearInstant"
+    ],
+    [
+     "jpcrp_cor:TotalAssetsSummaryOfBusinessResults",
+     "Prior1YearInstant"
+    ],
+    [
+     "jppfs_cor:LiabilitiesAndNetAssets",
+     "Prior1YearInstant"
+    ]
+   ]
+  },
+  {
+   "id": "S100Z39P:H-002",
+   "docID": "S100Z39P",
+   "鍵": "H-002",
+   "形": [
+    "符号・方向",
+    "符号・方向"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "NetSales",
+     "CurrentYearDuration_jpcrp030000-asr_E05239-000MarketingSupportConsumerGoodsAndServicesReportableSegmentsMember"
+    ],
+    [
+     "NetSales",
+     "Prior1YearDuration_jpcrp030000-asr_E05239-000MarketingSupportConsumerGoodsAndServicesReportableSegmentsMember"
+    ]
+   ],
+   "同値の他の候補": [
+    [
+     "jpcrp_cor:RevenuesFromExternalCustomers",
+     "CurrentYearDuration_jpcrp030000-asr_E05239-000MarketingSupportConsumerGoodsAndServicesReportableSegmentsMember"
+    ],
+    [
+     "jpcrp_cor:RevenuesFromExternalCustomers",
+     "Prior1YearDuration_jpcrp030000-asr_E05239-000MarketingSupportConsumerGoodsAndServicesReportableSegmentsMember"
+    ],
+    [
+     "jpcrp_cor:RevenuesFromExternalCustomers",
+     "CurrentYearDuration_jpcrp030000-asr_E05239-000MarketingSupportConsumerGoodsAndServicesReportableSegmentsMember"
+    ],
+    [
+     "jpcrp_cor:RevenuesFromExternalCustomers",
+     "Prior1YearDuration_jpcrp030000-asr_E05239-000MarketingSupportConsumerGoodsAndServicesReportableSegmentsMember"
+    ]
+   ]
+  },
+  {
+   "id": "S100Z39P:H-003",
+   "docID": "S100Z39P",
+   "鍵": "H-003",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "NetCashProvidedByUsedInOperatingActivities",
+     "CurrentYearDuration"
+    ]
+   ],
+   "同値の他の候補": [
+    [
+     "jpcrp_cor:NetCashProvidedByUsedInOperatingActivitiesSummaryOfBusinessResults",
+     "CurrentYearDuration"
+    ],
+    [
+     "jpcrp_cor:NetCashProvidedByUsedInOperatingActivitiesSummaryOfBusinessResults",
+     "CurrentYearDuration"
+    ]
+   ]
+  },
+  {
+   "id": "S100Z39P:H-004",
+   "docID": "S100Z39P",
+   "鍵": "H-004",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "OperatingIncome",
+     "CurrentYearDuration_jpcrp030000-asr_E05239-000BusinessIntelligenceReportableSegmentsMember"
+    ]
+   ],
+   "同値の他の候補": []
+  },
+  {
+   "id": "S100Z39P:H-005",
+   "docID": "S100Z39P",
+   "鍵": "H-005",
+   "形": [
+    "差(当期−前期)",
+    "差(当期−前期)"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "NoncurrentAssets",
+     "CurrentYearInstant"
+    ],
+    [
+     "NoncurrentAssets",
+     "Prior1YearInstant"
+    ]
+   ],
+   "同値の他の候補": []
+  },
+  {
+   "id": "S100Z39P:H-006",
+   "docID": "S100Z39P",
+   "鍵": "H-006",
+   "形": [
+    "差(当期−前期)",
+    "差(当期−前期)"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "NoncurrentLiabilities",
+     "CurrentYearInstant"
+    ],
+    [
+     "NoncurrentLiabilities",
+     "Prior1YearInstant"
+    ]
+   ],
+   "同値の他の候補": []
+  },
+  {
+   "id": "S100Z39P:H-007",
+   "docID": "S100Z39P",
+   "鍵": "H-007",
+   "形": [
+    null,
+    null
+   ],
+   "分類": "判定不能(両側)"
+  },
+  {
+   "id": "S100Z39P:H-008",
+   "docID": "S100Z39P",
+   "鍵": "H-008",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "CashAndCashEquivalents",
+     "CurrentYearInstant"
+    ]
+   ],
+   "同値の他の候補": [
+    [
+     "jpcrp_cor:CashAndCashEquivalentsSummaryOfBusinessResults",
+     "CurrentYearInstant"
+    ],
+    [
+     "jpcrp_cor:CashAndCashEquivalentsSummaryOfBusinessResults",
+     "CurrentYearInstant"
+    ]
+   ]
+  },
+  {
+   "id": "S100Z39P:H-009",
+   "docID": "S100Z39P",
+   "鍵": "H-009",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "NetCashProvidedByUsedInFinancingActivities",
+     "CurrentYearDuration"
+    ]
+   ],
+   "同値の他の候補": [
+    [
+     "jpcrp_cor:NetCashProvidedByUsedInFinancingActivitiesSummaryOfBusinessResults",
+     "CurrentYearDuration"
+    ],
+    [
+     "jpcrp_cor:NetCashProvidedByUsedInFinancingActivitiesSummaryOfBusinessResults",
+     "CurrentYearDuration"
+    ]
+   ]
+  },
+  {
+   "id": "S100Z39P:H-010",
+   "docID": "S100Z39P",
+   "鍵": "H-010",
+   "形": [
+    "符号・方向",
+    "符号・方向"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "NetCashProvidedByUsedInInvestmentActivities",
+     "CurrentYearDuration"
+    ]
+   ],
+   "同値の他の候補": [
+    [
+     "jpcrp_cor:NetCashProvidedByUsedInInvestingActivitiesSummaryOfBusinessResults",
+     "CurrentYearDuration"
+    ],
+    [
+     "jpcrp_cor:NetCashProvidedByUsedInInvestingActivitiesSummaryOfBusinessResults",
+     "CurrentYearDuration"
+    ]
+   ]
+  },
+  {
+   "id": "S100Z39P:H-011",
+   "docID": "S100Z39P",
+   "鍵": "H-011",
+   "形": [
+    "差(当期−前期)",
+    "差(当期−前期)"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "AccountsPayableTrade",
+     "CurrentYearInstant"
+    ],
+    [
+     "AccountsPayableTrade",
+     "Prior1YearInstant"
+    ]
+   ],
+   "同値の他の候補": []
+  },
+  {
+   "id": "S100Z39P:H-012",
+   "docID": "S100Z39P",
+   "鍵": "H-012",
+   "形": [
+    null,
+    null
+   ],
+   "分類": "判定不能(両側)"
+  },
+  {
+   "id": "S100Z39P:H-013",
+   "docID": "S100Z39P",
+   "鍵": "H-013",
+   "形": [
+    null,
+    null
+   ],
+   "分類": "判定不能(両側)"
+  },
+  {
+   "id": "S100Z39P:H-014",
+   "docID": "S100Z39P",
+   "鍵": "H-014",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "OperatingIncome",
+     "CurrentYearDuration_jpcrp030000-asr_E05239-000MarketingSupportConsumerGoodsAndServicesReportableSegmentsMember"
+    ]
+   ],
+   "同値の他の候補": []
+  },
+  {
+   "id": "S100Z39P:H-015",
+   "docID": "S100Z39P",
+   "鍵": "H-015",
+   "形": [
+    "符号・方向",
+    "符号・方向"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "DecreaseIncreaseInNotesAndAccountsReceivableTradeOpeCF",
+     "CurrentYearDuration"
+    ]
+   ],
+   "同値の他の候補": [
+    [
+     "jppfs_cor:AccountsReceivableTrade",
+     "CurrentYearInstant"
+    ],
+    [
+     "jppfs_cor:AccountsReceivableTrade",
+     "Prior1YearInstant"
+    ]
+   ]
+  },
+  {
+   "id": "S100Z39P:H-016",
+   "docID": "S100Z39P",
+   "鍵": "H-016",
+   "形": [
+    "符号・方向",
+    "符号・方向"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "NetSales",
+     "CurrentYearDuration_jpcrp030000-asr_E05239-000MarketingSupportHealthcareReportableSegmentsMember"
+    ],
+    [
+     "NetSales",
+     "Prior1YearDuration_jpcrp030000-asr_E05239-000MarketingSupportHealthcareReportableSegmentsMember"
+    ]
+   ],
+   "同値の他の候補": [
+    [
+     "jpcrp_cor:RevenuesFromExternalCustomers",
+     "CurrentYearDuration_jpcrp030000-asr_E05239-000MarketingSupportHealthcareReportableSegmentsMember"
+    ],
+    [
+     "jpcrp_cor:RevenuesFromExternalCustomers",
+     "Prior1YearDuration_jpcrp030000-asr_E05239-000MarketingSupportHealthcareReportableSegmentsMember"
+    ],
+    [
+     "jpcrp_cor:RevenuesFromExternalCustomers",
+     "CurrentYearDuration_jpcrp030000-asr_E05239-000MarketingSupportHealthcareReportableSegmentsMember"
+    ],
+    [
+     "jpcrp_cor:RevenuesFromExternalCustomers",
+     "Prior1YearDuration_jpcrp030000-asr_E05239-000MarketingSupportHealthcareReportableSegmentsMember"
+    ]
+   ]
+  },
+  {
+   "id": "S100Z39P:H-017",
+   "docID": "S100Z39P",
+   "鍵": "H-017",
+   "形": [
+    "符号・方向",
+    "符号・方向"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "OperatingIncome",
+     "CurrentYearDuration_jpcrp030000-asr_E05239-000MarketingSupportConsumerGoodsAndServicesReportableSegmentsMember"
+    ],
+    [
+     "OperatingIncome",
+     "Prior1YearDuration_jpcrp030000-asr_E05239-000MarketingSupportConsumerGoodsAndServicesReportableSegmentsMember"
+    ]
+   ],
+   "同値の他の候補": []
+  },
+  {
+   "id": "S100Z39P:H-018",
+   "docID": "S100Z39P",
+   "鍵": "H-018",
+   "形": [
+    "差(当期−前期)",
+    "差(当期−前期)"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "CurrentAssets",
+     "CurrentYearInstant"
+    ],
+    [
+     "CurrentAssets",
+     "Prior1YearInstant"
+    ]
+   ],
+   "同値の他の候補": []
+  },
+  {
+   "id": "S100Z39P:H-019",
+   "docID": "S100Z39P",
+   "鍵": "H-019",
+   "形": [
+    "差(当期−前期)",
+    "差(当期−前期)"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "Liabilities",
+     "CurrentYearInstant"
+    ],
+    [
+     "Liabilities",
+     "Prior1YearInstant"
+    ]
+   ],
+   "同値の他の候補": []
+  },
+  {
+   "id": "S100Z39P:H-020",
+   "docID": "S100Z39P",
+   "鍵": "H-020",
+   "形": [
+    "差(当期−前期)",
+    "差(当期−前期)"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "NetDefinedBenefitLiability",
+     "CurrentYearInstant"
+    ],
+    [
+     "NetDefinedBenefitLiability",
+     "Prior1YearInstant"
+    ]
+   ],
+   "同値の他の候補": []
+  },
+  {
+   "id": "S100Z39P:H-021",
+   "docID": "S100Z39P",
+   "鍵": "H-021",
+   "形": [
+    "率(比)",
+    "率(比)"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "NetSales",
+     "CurrentYearDuration_jpcrp030000-asr_E05239-000MarketingSupportConsumerGoodsAndServicesReportableSegmentsMember"
+    ],
+    [
+     "NetSales",
+     "Prior1YearDuration_jpcrp030000-asr_E05239-000MarketingSupportConsumerGoodsAndServicesReportableSegmentsMember"
+    ]
+   ],
+   "同値の他の候補": [
+    [
+     "jpcrp_cor:RevenuesFromExternalCustomers",
+     "CurrentYearDuration_jpcrp030000-asr_E05239-000MarketingSupportConsumerGoodsAndServicesReportableSegmentsMember"
+    ],
+    [
+     "jpcrp_cor:RevenuesFromExternalCustomers",
+     "Prior1YearDuration_jpcrp030000-asr_E05239-000MarketingSupportConsumerGoodsAndServicesReportableSegmentsMember"
+    ],
+    [
+     "jpcrp_cor:RevenuesFromExternalCustomers",
+     "CurrentYearDuration_jpcrp030000-asr_E05239-000MarketingSupportConsumerGoodsAndServicesReportableSegmentsMember"
+    ],
+    [
+     "jpcrp_cor:RevenuesFromExternalCustomers",
+     "Prior1YearDuration_jpcrp030000-asr_E05239-000MarketingSupportConsumerGoodsAndServicesReportableSegmentsMember"
+    ]
+   ]
+  },
+  {
+   "id": "S100Z39P:H-022",
+   "docID": "S100Z39P",
+   "鍵": "H-022",
+   "形": [
+    "符号・方向",
+    "符号・方向"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "OtherNCL",
+     "CurrentYearInstant"
+    ],
+    [
+     "OtherNCL",
+     "Prior1YearInstant"
+    ]
+   ],
+   "同値の他の候補": []
+  },
+  {
+   "id": "S100Z39P:H-023",
+   "docID": "S100Z39P",
+   "鍵": "H-023",
+   "形": [
+    "符号・方向",
+    "符号・方向"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "NetAssets",
+     "CurrentYearInstant"
+    ],
+    [
+     "NetAssets",
+     "Prior1YearInstant"
+    ]
+   ],
+   "同値の他の候補": [
+    [
+     "jpcrp_cor:NetAssetsSummaryOfBusinessResults",
+     "CurrentYearInstant"
+    ],
+    [
+     "jpcrp_cor:NetAssetsSummaryOfBusinessResults",
+     "Prior1YearInstant"
+    ],
+    [
+     "jppfs_cor:TotalChangesOfItemsDuringThePeriod",
+     "CurrentYearDuration"
+    ],
+    [
+     "jpcrp_cor:NetAssetsSummaryOfBusinessResults",
+     "CurrentYearInstant"
+    ],
+    [
+     "jpcrp_cor:NetAssetsSummaryOfBusinessResults",
+     "Prior1YearInstant"
+    ],
+    [
+     "jppfs_cor:RestatedBalance",
+     "Prior1YearInstant"
+    ]
+   ]
+  },
+  {
+   "id": "S100Z39P:H-024",
+   "docID": "S100Z39P",
+   "鍵": "H-024",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "OperatingIncome",
+     "CurrentYearDuration_jpcrp030000-asr_E05239-000MarketingSupportHealthcareReportableSegmentsMember"
+    ]
+   ],
+   "同値の他の候補": []
+  },
+  {
+   "id": "S100Z39P:H-025",
+   "docID": "S100Z39P",
+   "鍵": "H-025",
+   "形": [
+    null,
+    null
+   ],
+   "分類": "判定不能(両側)"
+  },
+  {
+   "id": "S100Z39P:H-026",
+   "docID": "S100Z39P",
+   "鍵": "H-026",
+   "形": [
+    "差(当期−前期)",
+    "差(当期−前期)"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "RemeasurementsOfDefinedBenefitPlans",
+     "CurrentYearInstant"
+    ],
+    [
+     "RemeasurementsOfDefinedBenefitPlans",
+     "Prior1YearInstant"
+    ]
+   ],
+   "同値の他の候補": [
+    [
+     "jppfs_cor:TotalChangesOfItemsDuringThePeriod",
+     "CurrentYearDuration_RemeasurementsOfDefinedBenefitPlansMember"
+    ],
+    [
+     "jppfs_cor:NetChangesOfItemsOtherThanShareholdersEquity",
+     "CurrentYearDuration_RemeasurementsOfDefinedBenefitPlansMember"
+    ],
+    [
+     "jppfs_cor:NetAssets",
+     "CurrentYearInstant_RemeasurementsOfDefinedBenefitPlansMember"
+    ],
+    [
+     "jppfs_cor:NetAssets",
+     "Prior1YearInstant_RemeasurementsOfDefinedBenefitPlansMember"
+    ],
+    [
+     "jppfs_cor:RestatedBalance",
+     "Prior1YearInstant_RemeasurementsOfDefinedBenefitPlansMember"
+    ]
+   ]
+  },
+  {
+   "id": "S100Z39P:H-027",
+   "docID": "S100Z39P",
+   "鍵": "H-027",
+   "形": [
+    "差(当期−前期)",
+    "差(当期−前期)"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "NetAssets",
+     "CurrentYearInstant"
+    ],
+    [
+     "NetAssets",
+     "Prior1YearInstant"
+    ]
+   ],
+   "同値の他の候補": [
+    [
+     "jppfs_cor:TotalChangesOfItemsDuringThePeriod",
+     "CurrentYearDuration"
+    ],
+    [
+     "jpcrp_cor:NetAssetsSummaryOfBusinessResults",
+     "CurrentYearInstant"
+    ],
+    [
+     "jpcrp_cor:NetAssetsSummaryOfBusinessResults",
+     "Prior1YearInstant"
+    ],
+    [
+     "jpcrp_cor:NetAssetsSummaryOfBusinessResults",
+     "CurrentYearInstant"
+    ],
+    [
+     "jpcrp_cor:NetAssetsSummaryOfBusinessResults",
+     "Prior1YearInstant"
+    ],
+    [
+     "jppfs_cor:RestatedBalance",
+     "Prior1YearInstant"
+    ]
+   ]
+  },
+  {
+   "id": "S100Z39P:H-028",
+   "docID": "S100Z39P",
+   "鍵": "H-028",
+   "形": [
+    null,
+    null
+   ],
+   "分類": "判定不能(両側)"
+  },
+  {
+   "id": "S100Z39P:H-029",
+   "docID": "S100Z39P",
+   "鍵": "H-029",
+   "形": [
+    "符号・方向",
+    "符号・方向"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "CashAndCashEquivalents",
+     "CurrentYearInstant"
+    ],
+    [
+     "CashAndCashEquivalents",
+     "Prior1YearInstant"
+    ]
+   ],
+   "同値の他の候補": [
+    [
+     "jppfs_cor:NetIncreaseDecreaseInCashAndCashEquivalents",
+     "CurrentYearDuration"
+    ],
+    [
+     "jpcrp_cor:CashAndCashEquivalentsSummaryOfBusinessResults",
+     "CurrentYearInstant"
+    ],
+    [
+     "jpcrp_cor:CashAndCashEquivalentsSummaryOfBusinessResults",
+     "Prior1YearInstant"
+    ],
+    [
+     "jpcrp_cor:CashAndCashEquivalentsSummaryOfBusinessResults",
+     "CurrentYearInstant"
+    ],
+    [
+     "jpcrp_cor:CashAndCashEquivalentsSummaryOfBusinessResults",
+     "Prior1YearInstant"
+    ]
+   ]
+  },
+  {
+   "id": "S100Z39P:H-030",
+   "docID": "S100Z39P",
+   "鍵": "H-030",
+   "形": [
+    null,
+    null
+   ],
+   "分類": "判定不能(両側)"
+  },
+  {
+   "id": "S100Z39P:H-031",
+   "docID": "S100Z39P",
+   "鍵": "H-031",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "NetSales",
+     "CurrentYearDuration_jpcrp030000-asr_E05239-000BusinessIntelligenceReportableSegmentsMember"
+    ]
+   ],
+   "同値の他の候補": [
+    [
+     "jpcrp_cor:RevenuesFromExternalCustomers",
+     "CurrentYearDuration_jpcrp030000-asr_E05239-000BusinessIntelligenceReportableSegmentsMember"
+    ],
+    [
+     "jpcrp_cor:RevenuesFromExternalCustomers",
+     "CurrentYearDuration_jpcrp030000-asr_E05239-000BusinessIntelligenceReportableSegmentsMember"
+    ]
+   ]
+  },
+  {
+   "id": "S100Z39P:H-032",
+   "docID": "S100Z39P",
+   "鍵": "H-032",
+   "形": [
+    "差(当期−前期)",
+    "差(当期−前期)"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "IncomeTaxesPayable",
+     "CurrentYearInstant"
+    ],
+    [
+     "IncomeTaxesPayable",
+     "Prior1YearInstant"
+    ]
+   ],
+   "同値の他の候補": []
+  },
+  {
+   "id": "S100Z39P:H-033",
+   "docID": "S100Z39P",
+   "鍵": "H-033",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "Assets",
+     "CurrentYearInstant"
+    ]
+   ],
+   "同値の他の候補": [
+    [
+     "jpcrp_cor:TotalAssetsSummaryOfBusinessResults",
+     "CurrentYearInstant"
+    ],
+    [
+     "jpcrp_cor:TotalAssetsSummaryOfBusinessResults",
+     "CurrentYearInstant"
+    ],
+    [
+     "jppfs_cor:LiabilitiesAndNetAssets",
+     "CurrentYearInstant"
+    ]
+   ]
+  },
+  {
+   "id": "S100Z39P:H-034",
+   "docID": "S100Z39P",
+   "鍵": "H-034",
+   "形": [
+    "差(当期−前期)",
+    "差(当期−前期)"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "ForeignCurrencyTranslationAdjustment",
+     "CurrentYearInstant"
+    ],
+    [
+     "ForeignCurrencyTranslationAdjustment",
+     "Prior1YearInstant"
+    ]
+   ],
+   "同値の他の候補": [
+    [
+     "jppfs_cor:TotalChangesOfItemsDuringThePeriod",
+     "CurrentYearDuration_ForeignCurrencyTranslationAdjustmentMember"
+    ],
+    [
+     "jppfs_cor:NetChangesOfItemsOtherThanShareholdersEquity",
+     "CurrentYearDuration_ForeignCurrencyTranslationAdjustmentMember"
+    ],
+    [
+     "jppfs_cor:NetAssets",
+     "CurrentYearInstant_ForeignCurrencyTranslationAdjustmentMember"
+    ],
+    [
+     "jppfs_cor:NetAssets",
+     "Prior1YearInstant_ForeignCurrencyTranslationAdjustmentMember"
+    ],
+    [
+     "jppfs_cor:RestatedBalance",
+     "Prior1YearInstant_ForeignCurrencyTranslationAdjustmentMember"
+    ]
+   ]
+  },
+  {
+   "id": "S100Z39P:H-035",
+   "docID": "S100Z39P",
+   "鍵": "H-035",
+   "形": [
+    "率(比)",
+    "率(比)"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "OperatingIncome",
+     "CurrentYearDuration_jpcrp030000-asr_E05239-000BusinessIntelligenceReportableSegmentsMember"
+    ],
+    [
+     "OperatingIncome",
+     "Prior1YearDuration_jpcrp030000-asr_E05239-000BusinessIntelligenceReportableSegmentsMember"
+    ]
+   ],
+   "同値の他の候補": []
+  },
+  {
+   "id": "S100Z39P:H-036",
+   "docID": "S100Z39P",
+   "鍵": "H-036",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "ProfitLossAttributableToOwnersOfParent",
+     "CurrentYearDuration"
+    ]
+   ],
+   "同値の他の候補": [
+    [
+     "jpcrp_cor:ProfitLossAttributableToOwnersOfParentSummaryOfBusinessResults",
+     "CurrentYearDuration"
+    ],
+    [
+     "jpcrp_cor:ProfitLossAttributableToOwnersOfParentSummaryOfBusinessResults",
+     "CurrentYearDuration"
+    ],
+    [
+     "jppfs_cor:ProfitLossAttributableToOwnersOfParent",
+     "CurrentYearDuration_RetainedEarningsMember"
+    ],
+    [
+     "jppfs_cor:ProfitLossAttributableToOwnersOfParent",
+     "CurrentYearDuration_ShareholdersEquityMember"
+    ]
+   ]
+  },
+  {
+   "id": "S100Z39P:H-037",
+   "docID": "S100Z39P",
+   "鍵": "H-037",
+   "形": [
+    null,
+    null
+   ],
+   "分類": "判定不能(両側)"
+  },
+  {
+   "id": "S100Z39P:H-038",
+   "docID": "S100Z39P",
+   "鍵": "H-038",
+   "形": [
+    "符号・方向",
+    "符号・方向"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "NetSales",
+     "CurrentYearDuration_jpcrp030000-asr_E05239-000BusinessIntelligenceReportableSegmentsMember"
+    ],
+    [
+     "NetSales",
+     "Prior1YearDuration_jpcrp030000-asr_E05239-000BusinessIntelligenceReportableSegmentsMember"
+    ]
+   ],
+   "同値の他の候補": [
+    [
+     "jpcrp_cor:RevenuesFromExternalCustomers",
+     "CurrentYearDuration_jpcrp030000-asr_E05239-000BusinessIntelligenceReportableSegmentsMember"
+    ],
+    [
+     "jpcrp_cor:RevenuesFromExternalCustomers",
+     "Prior1YearDuration_jpcrp030000-asr_E05239-000BusinessIntelligenceReportableSegmentsMember"
+    ],
+    [
+     "jpcrp_cor:RevenuesFromExternalCustomers",
+     "CurrentYearDuration_jpcrp030000-asr_E05239-000BusinessIntelligenceReportableSegmentsMember"
+    ],
+    [
+     "jpcrp_cor:RevenuesFromExternalCustomers",
+     "Prior1YearDuration_jpcrp030000-asr_E05239-000BusinessIntelligenceReportableSegmentsMember"
+    ]
+   ]
+  },
+  {
+   "id": "S100Z39P:H-039",
+   "docID": "S100Z39P",
+   "鍵": "H-039",
+   "形": [
+    "符号・方向",
+    "符号・方向"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "Liabilities",
+     "CurrentYearInstant"
+    ],
+    [
+     "Liabilities",
+     "Prior1YearInstant"
+    ]
+   ],
+   "同値の他の候補": []
+  },
+  {
+   "id": "S100Z39P:H-040",
+   "docID": "S100Z39P",
+   "鍵": "H-040",
+   "形": [
+    "率(比)",
+    "率(比)"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "OperatingIncome",
+     "CurrentYearDuration_jpcrp030000-asr_E05239-000MarketingSupportHealthcareReportableSegmentsMember"
+    ],
+    [
+     "OperatingIncome",
+     "Prior1YearDuration_jpcrp030000-asr_E05239-000MarketingSupportHealthcareReportableSegmentsMember"
+    ]
+   ],
+   "同値の他の候補": []
+  },
+  {
+   "id": "S100Z39P:H-041",
+   "docID": "S100Z39P",
+   "鍵": "H-041",
+   "形": [
+    "率(比)",
+    "率(比)"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "NetSales",
+     "CurrentYearDuration_jpcrp030000-asr_E05239-000BusinessIntelligenceReportableSegmentsMember"
+    ],
+    [
+     "NetSales",
+     "Prior1YearDuration_jpcrp030000-asr_E05239-000BusinessIntelligenceReportableSegmentsMember"
+    ]
+   ],
+   "同値の他の候補": [
+    [
+     "jpcrp_cor:RevenuesFromExternalCustomers",
+     "CurrentYearDuration_jpcrp030000-asr_E05239-000BusinessIntelligenceReportableSegmentsMember"
+    ],
+    [
+     "jpcrp_cor:RevenuesFromExternalCustomers",
+     "Prior1YearDuration_jpcrp030000-asr_E05239-000BusinessIntelligenceReportableSegmentsMember"
+    ],
+    [
+     "jpcrp_cor:RevenuesFromExternalCustomers",
+     "CurrentYearDuration_jpcrp030000-asr_E05239-000BusinessIntelligenceReportableSegmentsMember"
+    ],
+    [
+     "jpcrp_cor:RevenuesFromExternalCustomers",
+     "Prior1YearDuration_jpcrp030000-asr_E05239-000BusinessIntelligenceReportableSegmentsMember"
+    ]
+   ]
+  },
+  {
+   "id": "S100Z39P:H-042",
+   "docID": "S100Z39P",
+   "鍵": "H-042",
+   "形": [
+    "差(当期−前期)",
+    "差(当期−前期)"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "CurrentPortionOfLongTermLoansPayable",
+     "Prior1YearInstant"
+    ]
+   ],
+   "同値の他の候補": [
+    [
+     "jppfs_cor:RepaymentOfLongTermLoansPayableFinCF",
+     "CurrentYearDuration"
+    ],
+    [
+     "jppfs_cor:CurrentPortionOfLongTermLoansPayable",
+     "Prior1YearInstant_NonConsolidatedMember"
+    ]
+   ]
+  },
+  {
+   "id": "S100Z39P:H-043",
+   "docID": "S100Z39P",
+   "鍵": "H-043",
+   "形": [
+    "率(比)",
+    "率(比)"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "OperatingIncome",
+     "CurrentYearDuration_jpcrp030000-asr_E05239-000MarketingSupportConsumerGoodsAndServicesReportableSegmentsMember"
+    ],
+    [
+     "OperatingIncome",
+     "Prior1YearDuration_jpcrp030000-asr_E05239-000MarketingSupportConsumerGoodsAndServicesReportableSegmentsMember"
+    ]
+   ],
+   "同値の他の候補": []
+  },
+  {
+   "id": "S100Z39P:H-044",
+   "docID": "S100Z39P",
+   "鍵": "H-044",
+   "形": [
+    "差(当期−前期)",
+    "差(当期−前期)"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "RetainedEarnings",
+     "CurrentYearInstant"
+    ],
+    [
+     "RetainedEarnings",
+     "Prior1YearInstant"
+    ]
+   ],
+   "同値の他の候補": [
+    [
+     "jppfs_cor:TotalChangesOfItemsDuringThePeriod",
+     "CurrentYearDuration_RetainedEarningsMember"
+    ],
+    [
+     "jppfs_cor:NetAssets",
+     "CurrentYearInstant_RetainedEarningsMember"
+    ],
+    [
+     "jppfs_cor:NetAssets",
+     "Prior1YearInstant_RetainedEarningsMember"
+    ],
+    [
+     "jppfs_cor:RestatedBalance",
+     "Prior1YearInstant_RetainedEarningsMember"
+    ]
+   ]
+  },
+  {
+   "id": "S100Z39P:H-045",
+   "docID": "S100Z39P",
+   "鍵": "H-045",
+   "形": [
+    "符号・方向",
+    "符号・方向"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "InvestmentSecurities",
+     "CurrentYearInstant"
+    ],
+    [
+     "InvestmentSecurities",
+     "Prior1YearInstant"
+    ]
+   ],
+   "同値の他の候補": []
+  },
+  {
+   "id": "S100Z39P:H-046",
+   "docID": "S100Z39P",
+   "鍵": "H-046",
+   "形": [
+    "符号・方向",
+    "符号・方向"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "CurrentAssets",
+     "CurrentYearInstant"
+    ],
+    [
+     "CurrentAssets",
+     "Prior1YearInstant"
+    ]
+   ],
+   "同値の他の候補": []
+  },
+  {
+   "id": "S100Z39P:H-047",
+   "docID": "S100Z39P",
+   "鍵": "H-047",
+   "形": [
+    "符号・方向",
+    "符号・方向"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "ProvisionForBonuses",
+     "CurrentYearInstant"
+    ],
+    [
+     "ProvisionForBonuses",
+     "Prior1YearInstant"
+    ]
+   ],
+   "同値の他の候補": []
+  },
+  {
+   "id": "S100Z39P:H-048",
+   "docID": "S100Z39P",
+   "鍵": "H-048",
+   "形": [
+    "率(比)",
+    "率(比)"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "NetSales",
+     "CurrentYearDuration_jpcrp030000-asr_E05239-000MarketingSupportHealthcareReportableSegmentsMember"
+    ],
+    [
+     "NetSales",
+     "Prior1YearDuration_jpcrp030000-asr_E05239-000MarketingSupportHealthcareReportableSegmentsMember"
+    ]
+   ],
+   "同値の他の候補": [
+    [
+     "jpcrp_cor:RevenuesFromExternalCustomers",
+     "CurrentYearDuration_jpcrp030000-asr_E05239-000MarketingSupportHealthcareReportableSegmentsMember"
+    ],
+    [
+     "jpcrp_cor:RevenuesFromExternalCustomers",
+     "Prior1YearDuration_jpcrp030000-asr_E05239-000MarketingSupportHealthcareReportableSegmentsMember"
+    ],
+    [
+     "jpcrp_cor:RevenuesFromExternalCustomers",
+     "CurrentYearDuration_jpcrp030000-asr_E05239-000MarketingSupportHealthcareReportableSegmentsMember"
+    ],
+    [
+     "jpcrp_cor:RevenuesFromExternalCustomers",
+     "Prior1YearDuration_jpcrp030000-asr_E05239-000MarketingSupportHealthcareReportableSegmentsMember"
+    ]
+   ]
+  },
+  {
+   "id": "S100Z39P:H-049",
+   "docID": "S100Z39P",
+   "鍵": "H-049",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "NetAssets",
+     "CurrentYearInstant"
+    ]
+   ],
+   "同値の他の候補": [
+    [
+     "jpcrp_cor:NetAssetsSummaryOfBusinessResults",
+     "CurrentYearInstant"
+    ],
+    [
+     "jpcrp_cor:NetAssetsSummaryOfBusinessResults",
+     "CurrentYearInstant"
+    ]
+   ]
+  },
+  {
+   "id": "S100Z39P:H-050",
+   "docID": "S100Z39P",
+   "鍵": "H-050",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "CurrentLiabilities",
+     "CurrentYearInstant"
+    ]
+   ],
+   "同値の他の候補": []
+  },
+  {
+   "id": "S100Z39P:H-051",
+   "docID": "S100Z39P",
+   "鍵": "H-051",
+   "形": [
+    null,
+    null
+   ],
+   "分類": "判定不能(両側)"
+  },
+  {
+   "id": "S100Z39P:H-052",
+   "docID": "S100Z39P",
+   "鍵": "H-052",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "OperatingIncome",
+     "CurrentYearDuration"
+    ]
+   ],
+   "同値の他の候補": []
+  },
+  {
+   "id": "S100Z39P:H-053",
+   "docID": "S100Z39P",
+   "鍵": "H-053",
+   "形": [
+    "符号・方向",
+    "符号・方向"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "OperatingIncome",
+     "CurrentYearDuration_jpcrp030000-asr_E05239-000MarketingSupportHealthcareReportableSegmentsMember"
+    ],
+    [
+     "OperatingIncome",
+     "Prior1YearDuration_jpcrp030000-asr_E05239-000MarketingSupportHealthcareReportableSegmentsMember"
+    ]
+   ],
+   "同値の他の候補": []
+  },
+  {
+   "id": "S100Z39P:H-054",
+   "docID": "S100Z39P",
+   "鍵": "H-054",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "NetSales",
+     "CurrentYearDuration_jpcrp030000-asr_E05239-000MarketingSupportHealthcareReportableSegmentsMember"
+    ]
+   ],
+   "同値の他の候補": [
+    [
+     "jpcrp_cor:RevenuesFromExternalCustomers",
+     "CurrentYearDuration_jpcrp030000-asr_E05239-000MarketingSupportHealthcareReportableSegmentsMember"
+    ],
+    [
+     "jpcrp_cor:RevenuesFromExternalCustomers",
+     "CurrentYearDuration_jpcrp030000-asr_E05239-000MarketingSupportHealthcareReportableSegmentsMember"
+    ]
+   ]
+  },
+  {
+   "id": "S100Z39P:H-055",
+   "docID": "S100Z39P",
+   "鍵": "H-055",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "OrdinaryIncome",
+     "CurrentYearDuration"
+    ]
+   ],
+   "同値の他の候補": [
+    [
+     "jpcrp_cor:OrdinaryIncomeLossSummaryOfBusinessResults",
+     "CurrentYearDuration"
+    ],
+    [
+     "jpcrp_cor:OrdinaryIncomeLossSummaryOfBusinessResults",
+     "CurrentYearDuration"
+    ]
+   ]
+  },
+  {
+   "id": "S100Z39P:H-056",
+   "docID": "S100Z39P",
+   "鍵": "H-056",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "Liabilities",
+     "CurrentYearInstant"
+    ]
+   ],
+   "同値の他の候補": []
+  },
+  {
+   "id": "S100Z39P:H-057",
+   "docID": "S100Z39P",
+   "鍵": "H-057",
+   "形": [
+    null,
+    null
+   ],
+   "分類": "判定不能(両側)"
+  },
+  {
+   "id": "S100Z39P:H-058",
+   "docID": "S100Z39P",
+   "鍵": "H-058",
+   "形": [
+    null,
+    null
+   ],
+   "分類": "判定不能(両側)"
+  },
+  {
+   "id": "S100Z39P:H-059",
+   "docID": "S100Z39P",
+   "鍵": "H-059",
+   "形": [
+    "差(当期−前期)",
+    "差(当期−前期)"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "InvestmentSecurities",
+     "CurrentYearInstant"
+    ],
+    [
+     "InvestmentSecurities",
+     "Prior1YearInstant"
+    ]
+   ],
+   "同値の他の候補": []
+  },
+  {
+   "id": "S100Z39P:H-060",
+   "docID": "S100Z39P",
+   "鍵": "H-060",
+   "形": [
+    "差(当期−前期)",
+    "差(当期−前期)"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "NetDefinedBenefitAsset",
+     "CurrentYearInstant"
+    ],
+    [
+     "NetDefinedBenefitAsset",
+     "Prior1YearInstant"
+    ]
+   ],
+   "同値の他の候補": [
+    [
+     "jppfs_cor:IncreaseDecreaseInNetDefinedBenefitAssetOpeCF",
+     "CurrentYearDuration"
+    ]
+   ]
+  },
+  {
+   "id": "S100Z39P:H-061",
+   "docID": "S100Z39P",
+   "鍵": "H-061",
+   "形": [
+    "差(当期−前期)",
+    "差(当期−前期)"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "LeaseObligationsNCL",
+     "CurrentYearInstant"
+    ],
+    [
+     "LeaseObligationsNCL",
+     "Prior1YearInstant"
+    ]
+   ],
+   "同値の他の候補": []
+  },
+  {
+   "id": "S100Z39P:H-062",
+   "docID": "S100Z39P",
+   "鍵": "H-062",
+   "形": [
+    "差(当期−前期)",
+    "差(当期−前期)"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "ProvisionForBonuses",
+     "CurrentYearInstant"
+    ],
+    [
+     "ProvisionForBonuses",
+     "Prior1YearInstant"
+    ]
+   ],
+   "同値の他の候補": []
+  },
+  {
+   "id": "S100Z39P:H-063",
+   "docID": "S100Z39P",
+   "鍵": "H-063",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "NoncurrentLiabilities",
+     "CurrentYearInstant"
+    ]
+   ],
+   "同値の他の候補": []
+  },
+  {
+   "id": "S100Z39P:H-064",
+   "docID": "S100Z39P",
+   "鍵": "H-064",
+   "形": [
+    "符号・方向",
+    "符号・方向"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "IncreaseDecreaseInNetDefinedBenefitAssetOpeCF",
+     "CurrentYearDuration"
+    ]
+   ],
+   "同値の他の候補": [
+    [
+     "jppfs_cor:NetDefinedBenefitAsset",
+     "CurrentYearInstant"
+    ],
+    [
+     "jppfs_cor:NetDefinedBenefitAsset",
+     "Prior1YearInstant"
+    ]
+   ]
+  },
+  {
+   "id": "S100Z39P:H-065",
+   "docID": "S100Z39P",
+   "鍵": "H-065",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "CurrentAssets",
+     "CurrentYearInstant"
+    ]
+   ],
+   "同値の他の候補": []
+  },
+  {
+   "id": "S100Z39P:H-066",
+   "docID": "S100Z39P",
+   "鍵": "H-066",
+   "形": [
+    "符号・方向",
+    "符号・方向"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "NoncurrentLiabilities",
+     "CurrentYearInstant"
+    ],
+    [
+     "NoncurrentLiabilities",
+     "Prior1YearInstant"
+    ]
+   ],
+   "同値の他の候補": []
+  },
+  {
+   "id": "S100Z39P:H-067",
+   "docID": "S100Z39P",
+   "鍵": "H-067",
+   "形": [
+    "符号・方向",
+    "符号・方向"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "NetCashProvidedByUsedInOperatingActivities",
+     "CurrentYearDuration"
+    ]
+   ],
+   "同値の他の候補": [
+    [
+     "jpcrp_cor:NetCashProvidedByUsedInOperatingActivitiesSummaryOfBusinessResults",
+     "CurrentYearDuration"
+    ],
+    [
+     "jpcrp_cor:NetCashProvidedByUsedInOperatingActivitiesSummaryOfBusinessResults",
+     "CurrentYearDuration"
+    ]
+   ]
+  },
+  {
+   "id": "S100Z39P:H-068",
+   "docID": "S100Z39P",
+   "鍵": "H-068",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "NetSales",
+     "CurrentYearDuration"
+    ]
+   ],
+   "同値の他の候補": [
+    [
+     "jpcrp_cor:NetSalesSummaryOfBusinessResults",
+     "CurrentYearDuration"
+    ],
+    [
+     "jpcrp_cor:RevenuesFromExternalCustomers",
+     "CurrentYearDuration"
+    ],
+    [
+     "jpcrp_cor:NetSalesSummaryOfBusinessResults",
+     "CurrentYearDuration"
+    ],
+    [
+     "jpcrp_cor:RevenuesFromExternalCustomers",
+     "CurrentYearDuration"
+    ]
+   ]
+  },
+  {
+   "id": "S100Z39P:H-069",
+   "docID": "S100Z39P",
+   "鍵": "H-069",
+   "形": [
+    "符号・方向",
+    "符号・方向"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "RetainedEarnings",
+     "CurrentYearInstant"
+    ],
+    [
+     "RetainedEarnings",
+     "Prior1YearInstant"
+    ]
+   ],
+   "同値の他の候補": [
+    [
+     "jppfs_cor:TotalChangesOfItemsDuringThePeriod",
+     "CurrentYearDuration_RetainedEarningsMember"
+    ],
+    [
+     "jppfs_cor:NetAssets",
+     "CurrentYearInstant_RetainedEarningsMember"
+    ],
+    [
+     "jppfs_cor:NetAssets",
+     "Prior1YearInstant_RetainedEarningsMember"
+    ],
+    [
+     "jppfs_cor:RestatedBalance",
+     "Prior1YearInstant_RetainedEarningsMember"
+    ]
+   ]
+  },
+  {
+   "id": "S100Z39P:H-070",
+   "docID": "S100Z39P",
+   "鍵": "H-070",
+   "形": [
+    "符号・方向",
+    "符号・方向"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "RemeasurementsOfDefinedBenefitPlans",
+     "CurrentYearInstant"
+    ],
+    [
+     "RemeasurementsOfDefinedBenefitPlans",
+     "Prior1YearInstant"
+    ]
+   ],
+   "同値の他の候補": [
+    [
+     "jppfs_cor:TotalChangesOfItemsDuringThePeriod",
+     "CurrentYearDuration_RemeasurementsOfDefinedBenefitPlansMember"
+    ],
+    [
+     "jppfs_cor:NetAssets",
+     "CurrentYearInstant_RemeasurementsOfDefinedBenefitPlansMember"
+    ],
+    [
+     "jppfs_cor:NetAssets",
+     "Prior1YearInstant_RemeasurementsOfDefinedBenefitPlansMember"
+    ],
+    [
+     "jppfs_cor:RestatedBalance",
+     "Prior1YearInstant_RemeasurementsOfDefinedBenefitPlansMember"
+    ]
+   ]
+  },
+  {
+   "id": "S100Z39P:H-071",
+   "docID": "S100Z39P",
+   "鍵": "H-071",
+   "形": [
+    "差(当期−前期)",
+    "差(当期−前期)"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "CashAndDeposits",
+     "CurrentYearInstant"
+    ],
+    [
+     "CashAndDeposits",
+     "Prior1YearInstant"
+    ]
+   ],
+   "同値の他の候補": []
+  },
+  {
+   "id": "S100Z39P:H-072",
+   "docID": "S100Z39P",
+   "鍵": "H-072",
+   "形": [
+    "符号・方向",
+    "符号・方向"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "CashAndDeposits",
+     "CurrentYearInstant"
+    ],
+    [
+     "CashAndDeposits",
+     "Prior1YearInstant"
+    ]
+   ],
+   "同値の他の候補": []
+  },
+  {
+   "id": "S100Z39P:H-073",
+   "docID": "S100Z39P",
+   "鍵": "H-073",
+   "形": [
+    "符号・方向",
+    "符号・方向"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "OperatingIncome",
+     "CurrentYearDuration_jpcrp030000-asr_E05239-000BusinessIntelligenceReportableSegmentsMember"
+    ],
+    [
+     "OperatingIncome",
+     "Prior1YearDuration_jpcrp030000-asr_E05239-000BusinessIntelligenceReportableSegmentsMember"
+    ]
+   ],
+   "同値の他の候補": []
+  },
+  {
+   "id": "S100Z39P:H-074",
+   "docID": "S100Z39P",
+   "鍵": "H-074",
+   "形": [
+    "差(当期−前期)",
+    "差(当期−前期)"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "Goodwill",
+     "CurrentYearInstant"
+    ],
+    [
+     "Goodwill",
+     "Prior1YearInstant"
+    ]
+   ],
+   "同値の他の候補": []
+  },
+  {
+   "id": "S100Z39P:H-075",
+   "docID": "S100Z39P",
+   "鍵": "H-075",
+   "形": [
+    "差(当期−前期)",
+    "差(当期−前期)"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "OtherNCL",
+     "CurrentYearInstant"
+    ],
+    [
+     "OtherNCL",
+     "Prior1YearInstant"
+    ]
+   ],
+   "同値の他の候補": []
+  },
+  {
+   "id": "S100Z39P:H-076",
+   "docID": "S100Z39P",
+   "鍵": "H-076",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "NetSales",
+     "CurrentYearDuration_jpcrp030000-asr_E05239-000MarketingSupportConsumerGoodsAndServicesReportableSegmentsMember"
+    ]
+   ],
+   "同値の他の候補": [
+    [
+     "jpcrp_cor:RevenuesFromExternalCustomers",
+     "CurrentYearDuration_jpcrp030000-asr_E05239-000MarketingSupportConsumerGoodsAndServicesReportableSegmentsMember"
+    ],
+    [
+     "jpcrp_cor:RevenuesFromExternalCustomers",
+     "CurrentYearDuration_jpcrp030000-asr_E05239-000MarketingSupportConsumerGoodsAndServicesReportableSegmentsMember"
+    ]
+   ]
+  },
+  {
+   "id": "S100Z39P:H-077",
+   "docID": "S100Z39P",
+   "鍵": "H-077",
+   "形": [
+    "差(当期−前期)",
+    "差(当期−前期)"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "CurrentLiabilities",
+     "CurrentYearInstant"
+    ],
+    [
+     "CurrentLiabilities",
+     "Prior1YearInstant"
+    ]
+   ],
+   "同値の他の候補": []
+  },
+  {
+   "id": "S100Z39P:H-078",
+   "docID": "S100Z39P",
+   "鍵": "H-078",
+   "形": [
+    null,
+    null
+   ],
+   "分類": "判定不能(両側)"
+  },
+  {
+   "id": "S100Z39P:H-079",
+   "docID": "S100Z39P",
+   "鍵": "H-079",
+   "形": [
+    "差(当期−前期)",
+    "差(当期−前期)"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "AccountsReceivableTrade",
+     "CurrentYearInstant"
+    ],
+    [
+     "AccountsReceivableTrade",
+     "Prior1YearInstant"
+    ]
+   ],
+   "同値の他の候補": []
+  },
+  {
+   "id": "S100Z39P:H-080",
+   "docID": "S100Z39P",
+   "鍵": "H-080",
+   "形": [
+    null,
+    null
+   ],
+   "分類": "判定不能(両側)"
+  },
+  {
+   "id": "S100Z39P:H-081",
+   "docID": "S100Z39P",
+   "鍵": "H-081",
+   "形": [
+    "符号・方向",
+    "符号・方向"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "NoncurrentAssets",
+     "CurrentYearInstant"
+    ],
+    [
+     "NoncurrentAssets",
+     "Prior1YearInstant"
+    ]
+   ],
+   "同値の他の候補": []
+  },
+  {
+   "id": "S100Z39P:H-082",
+   "docID": "S100Z39P",
+   "鍵": "H-082",
+   "形": [
+    "率(比)",
+    "率(比)"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "ProfitLossAttributableToOwnersOfParent",
+     "CurrentYearDuration"
+    ],
+    [
+     "ProfitLossAttributableToOwnersOfParent",
+     "Prior1YearDuration"
+    ]
+   ],
+   "同値の他の候補": [
+    [
+     "jpcrp_cor:ProfitLossAttributableToOwnersOfParentSummaryOfBusinessResults",
+     "CurrentYearDuration"
+    ],
+    [
+     "jpcrp_cor:ProfitLossAttributableToOwnersOfParentSummaryOfBusinessResults",
+     "Prior1YearDuration"
+    ],
+    [
+     "jpcrp_cor:ProfitLossAttributableToOwnersOfParentSummaryOfBusinessResults",
+     "CurrentYearDuration"
+    ],
+    [
+     "jppfs_cor:ProfitLossAttributableToOwnersOfParent",
+     "CurrentYearDuration_RetainedEarningsMember"
+    ],
+    [
+     "jppfs_cor:ProfitLossAttributableToOwnersOfParent",
+     "CurrentYearDuration_ShareholdersEquityMember"
+    ],
+    [
+     "jpcrp_cor:ProfitLossAttributableToOwnersOfParentSummaryOfBusinessResults",
+     "Prior1YearDuration"
+    ],
+    [
+     "jppfs_cor:ProfitLossAttributableToOwnersOfParent",
+     "Prior1YearDuration_RetainedEarningsMember"
+    ],
+    [
+     "jppfs_cor:ProfitLossAttributableToOwnersOfParent",
+     "Prior1YearDuration_ShareholdersEquityMember"
+    ]
+   ]
+  },
+  {
+   "id": "S100Z39P:H-083",
+   "docID": "S100Z39P",
+   "鍵": "H-083",
+   "形": [
+    null,
+    null
+   ],
+   "分類": "判定不能(両側)"
+  },
+  {
+   "id": "S100Z39P:H-084",
+   "docID": "S100Z39P",
+   "鍵": "H-084",
+   "形": [
+    "差(当期−前期)",
+    "差(当期−前期)"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "BuildingsAndStructuresNet",
+     "CurrentYearInstant"
+    ],
+    [
+     "BuildingsAndStructuresNet",
+     "Prior1YearInstant"
+    ]
+   ],
+   "同値の他の候補": []
+  },
+  {
+   "id": "S100Z39P:H-085",
+   "docID": "S100Z39P",
+   "鍵": "H-085",
+   "形": [
+    "符号・方向",
+    "符号・方向"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "CurrentPortionOfLongTermLoansPayable",
+     "Prior1YearInstant"
+    ]
+   ],
+   "同値の他の候補": [
+    [
+     "jppfs_cor:RepaymentOfLongTermLoansPayableFinCF",
+     "CurrentYearDuration"
+    ],
+    [
+     "jppfs_cor:CurrentPortionOfLongTermLoansPayable",
+     "Prior1YearInstant_NonConsolidatedMember"
+    ]
+   ]
+  },
+  {
+   "id": "S100Z39P:H-086",
+   "docID": "S100Z39P",
+   "鍵": "H-086",
+   "形": [
+    "符号・方向",
+    "符号・方向"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "NetDefinedBenefitAsset",
+     "CurrentYearInstant"
+    ],
+    [
+     "NetDefinedBenefitAsset",
+     "Prior1YearInstant"
+    ]
+   ],
+   "同値の他の候補": [
+    [
+     "jppfs_cor:IncreaseDecreaseInNetDefinedBenefitAssetOpeCF",
+     "CurrentYearDuration"
+    ]
+   ]
+  },
+  {
+   "id": "S100Z39P:H-087",
+   "docID": "S100Z39P",
+   "鍵": "H-087",
+   "形": [
+    "符号・方向",
+    "符号・方向"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "CurrentLiabilities",
+     "CurrentYearInstant"
+    ],
+    [
+     "CurrentLiabilities",
+     "Prior1YearInstant"
+    ]
+   ],
+   "同値の他の候補": []
+  },
+  {
+   "id": "S100Z39P:H-088",
+   "docID": "S100Z39P",
+   "鍵": "H-088",
+   "形": [
+    null,
+    null
+   ],
+   "分類": "判定不能(両側)"
+  },
+  {
+   "id": "S100Z39P:H-089",
+   "docID": "S100Z39P",
+   "鍵": "H-089",
+   "形": [
+    "符号・方向",
+    "符号・方向"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "Assets",
+     "CurrentYearInstant"
+    ],
+    [
+     "Assets",
+     "Prior1YearInstant"
+    ]
+   ],
+   "同値の他の候補": [
+    [
+     "jpcrp_cor:TotalAssetsSummaryOfBusinessResults",
+     "CurrentYearInstant"
+    ],
+    [
+     "jpcrp_cor:TotalAssetsSummaryOfBusinessResults",
+     "Prior1YearInstant"
+    ],
+    [
+     "jpcrp_cor:TotalAssetsSummaryOfBusinessResults",
+     "CurrentYearInstant"
+    ],
+    [
+     "jppfs_cor:LiabilitiesAndNetAssets",
+     "CurrentYearInstant"
+    ],
+    [
+     "jpcrp_cor:TotalAssetsSummaryOfBusinessResults",
+     "Prior1YearInstant"
+    ],
+    [
+     "jppfs_cor:LiabilitiesAndNetAssets",
+     "Prior1YearInstant"
+    ]
+   ]
+  },
+  {
+   "id": "S100Z39P:H-090",
+   "docID": "S100Z39P",
+   "鍵": "H-090",
+   "形": [
+    "符号・方向",
+    "符号・方向"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "DepositsPaid",
+     "CurrentYearInstant"
+    ],
+    [
+     "DepositsPaid",
+     "Prior1YearInstant"
+    ]
+   ],
+   "同値の他の候補": []
+  },
+  {
+   "id": "S100Z39P:H-091",
+   "docID": "S100Z39P",
+   "鍵": "H-091",
+   "形": [
+    "符号・方向",
+    "符号・方向"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "NetSales",
+     "CurrentYearDuration_jpcrp030000-asr_E05239-000MarketingSupportHealthcareReportableSegmentsMember"
+    ],
+    [
+     "NetSales",
+     "Prior1YearDuration_jpcrp030000-asr_E05239-000MarketingSupportHealthcareReportableSegmentsMember"
+    ]
+   ],
+   "同値の他の候補": [
+    [
+     "jpcrp_cor:RevenuesFromExternalCustomers",
+     "CurrentYearDuration_jpcrp030000-asr_E05239-000MarketingSupportHealthcareReportableSegmentsMember"
+    ],
+    [
+     "jpcrp_cor:RevenuesFromExternalCustomers",
+     "Prior1YearDuration_jpcrp030000-asr_E05239-000MarketingSupportHealthcareReportableSegmentsMember"
+    ],
+    [
+     "jpcrp_cor:RevenuesFromExternalCustomers",
+     "CurrentYearDuration_jpcrp030000-asr_E05239-000MarketingSupportHealthcareReportableSegmentsMember"
+    ],
+    [
+     "jpcrp_cor:RevenuesFromExternalCustomers",
+     "Prior1YearDuration_jpcrp030000-asr_E05239-000MarketingSupportHealthcareReportableSegmentsMember"
+    ]
+   ]
+  },
+  {
+   "id": "S100Z39P:H-092",
+   "docID": "S100Z39P",
+   "鍵": "H-092",
+   "形": [
+    "差(当期−前期)",
+    "差(当期−前期)"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "ValuationDifferenceOnAvailableForSaleSecurities",
+     "CurrentYearInstant"
+    ],
+    [
+     "ValuationDifferenceOnAvailableForSaleSecurities",
+     "Prior1YearInstant"
+    ]
+   ],
+   "同値の他の候補": [
+    [
+     "jppfs_cor:TotalChangesOfItemsDuringThePeriod",
+     "CurrentYearDuration_ValuationDifferenceOnAvailableForSaleSecuritiesMember"
+    ],
+    [
+     "jppfs_cor:NetChangesOfItemsOtherThanShareholdersEquity",
+     "CurrentYearDuration_ValuationDifferenceOnAvailableForSaleSecuritiesMember"
+    ],
+    [
+     "jppfs_cor:NetAssets",
+     "CurrentYearInstant_ValuationDifferenceOnAvailableForSaleSecuritiesMember"
+    ],
+    [
+     "jppfs_cor:NetAssets",
+     "Prior1YearInstant_ValuationDifferenceOnAvailableForSaleSecuritiesMember"
+    ],
+    [
+     "jppfs_cor:RestatedBalance",
+     "Prior1YearInstant_ValuationDifferenceOnAvailableForSaleSecuritiesMember"
+    ]
+   ]
+  },
+  {
+   "id": "S100Z39P:H-093",
+   "docID": "S100Z39P",
+   "鍵": "H-093",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "NetCashProvidedByUsedInInvestmentActivities",
+     "CurrentYearDuration"
+    ]
+   ],
+   "同値の他の候補": [
+    [
+     "jpcrp_cor:NetCashProvidedByUsedInInvestingActivitiesSummaryOfBusinessResults",
+     "CurrentYearDuration"
+    ],
+    [
+     "jpcrp_cor:NetCashProvidedByUsedInInvestingActivitiesSummaryOfBusinessResults",
+     "CurrentYearDuration"
+    ]
+   ]
+  },
+  {
+   "id": "S100Z39P:H-094",
+   "docID": "S100Z39P",
+   "鍵": "H-094",
+   "形": [
+    null,
+    null
+   ],
+   "分類": "判定不能(両側)"
+  },
+  {
+   "id": "S100Z39P:H-095",
+   "docID": "S100Z39P",
+   "鍵": "H-095",
+   "形": [
+    "差(当期−前期)",
+    "差(当期−前期)"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "WorkInProcess",
+     "CurrentYearInstant"
+    ],
+    [
+     "WorkInProcess",
+     "Prior1YearInstant"
+    ]
+   ],
+   "同値の他の候補": []
+  },
+  {
+   "id": "S100Z39P:H-096",
+   "docID": "S100Z39P",
+   "鍵": "H-096",
+   "形": [
+    null,
+    null
+   ],
+   "分類": "判定不能(両側)"
+  },
+  {
+   "id": "S100Z39P:H-097",
+   "docID": "S100Z39P",
+   "鍵": "H-097",
+   "形": [
+    "率(比)",
+    "率(比)"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "OperatingIncome",
+     "CurrentYearDuration"
+    ],
+    [
+     "OperatingIncome",
+     "Prior1YearDuration"
+    ]
+   ],
+   "同値の他の候補": []
+  },
+  {
+   "id": "S100Z39P:H-098",
+   "docID": "S100Z39P",
+   "鍵": "H-098",
+   "形": [
+    "率(比)",
+    "率(比)"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "OrdinaryIncome",
+     "CurrentYearDuration"
+    ],
+    [
+     "OrdinaryIncome",
+     "Prior1YearDuration"
+    ]
+   ],
+   "同値の他の候補": [
+    [
+     "jpcrp_cor:OrdinaryIncomeLossSummaryOfBusinessResults",
+     "CurrentYearDuration"
+    ],
+    [
+     "jpcrp_cor:OrdinaryIncomeLossSummaryOfBusinessResults",
+     "Prior1YearDuration"
+    ],
+    [
+     "jpcrp_cor:OrdinaryIncomeLossSummaryOfBusinessResults",
+     "CurrentYearDuration"
+    ],
+    [
+     "jpcrp_cor:OrdinaryIncomeLossSummaryOfBusinessResults",
+     "Prior1YearDuration"
+    ]
+   ]
+  },
+  {
+   "id": "S100Z39P:H-099",
+   "docID": "S100Z39P",
+   "鍵": "H-099",
+   "形": [
+    "率(比)",
+    "率(比)"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "NetSales",
+     "CurrentYearDuration"
+    ],
+    [
+     "NetSales",
+     "Prior1YearDuration"
+    ]
+   ],
+   "同値の他の候補": [
+    [
+     "jpcrp_cor:NetSalesSummaryOfBusinessResults",
+     "CurrentYearDuration"
+    ],
+    [
+     "jpcrp_cor:NetSalesSummaryOfBusinessResults",
+     "Prior1YearDuration"
+    ],
+    [
+     "jpcrp_cor:RevenuesFromExternalCustomers",
+     "CurrentYearDuration"
+    ],
+    [
+     "jpcrp_cor:RevenuesFromExternalCustomers",
+     "Prior1YearDuration"
+    ],
+    [
+     "jpcrp_cor:NetSalesSummaryOfBusinessResults",
+     "CurrentYearDuration"
+    ],
+    [
+     "jpcrp_cor:RevenuesFromExternalCustomers",
+     "CurrentYearDuration"
+    ],
+    [
+     "jpcrp_cor:NetSalesSummaryOfBusinessResults",
+     "Prior1YearDuration"
+    ],
+    [
+     "jpcrp_cor:RevenuesFromExternalCustomers",
+     "Prior1YearDuration"
+    ]
+   ]
+  },
+  {
+   "id": "S100Z39P:H-100",
+   "docID": "S100Z39P",
+   "鍵": "H-100",
+   "形": [
+    null,
+    null
+   ],
+   "分類": "判定不能(両側)"
+  },
+  {
+   "id": "S100Z39P:H-101",
+   "docID": "S100Z39P",
+   "鍵": "H-101",
+   "形": [
+    "差(当期−前期)",
+    "差(当期−前期)"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "CashAndCashEquivalents",
+     "CurrentYearInstant"
+    ],
+    [
+     "CashAndCashEquivalents",
+     "Prior1YearInstant"
+    ]
+   ],
+   "同値の他の候補": [
+    [
+     "jppfs_cor:NetIncreaseDecreaseInCashAndCashEquivalents",
+     "CurrentYearDuration"
+    ],
+    [
+     "jpcrp_cor:CashAndCashEquivalentsSummaryOfBusinessResults",
+     "CurrentYearInstant"
+    ],
+    [
+     "jpcrp_cor:CashAndCashEquivalentsSummaryOfBusinessResults",
+     "Prior1YearInstant"
+    ],
+    [
+     "jpcrp_cor:CashAndCashEquivalentsSummaryOfBusinessResults",
+     "CurrentYearInstant"
+    ],
+    [
+     "jpcrp_cor:CashAndCashEquivalentsSummaryOfBusinessResults",
+     "Prior1YearInstant"
+    ]
+   ]
+  },
+  {
+   "id": "S100Z39P:H-102",
+   "docID": "S100Z39P",
+   "鍵": "H-102",
+   "形": [
+    "差(当期−前期)",
+    "差(当期−前期)"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "DepositsPaid",
+     "CurrentYearInstant"
+    ],
+    [
+     "DepositsPaid",
+     "Prior1YearInstant"
+    ]
+   ],
+   "同値の他の候補": []
+  },
+  {
+   "id": "S100Z39P:H-103",
+   "docID": "S100Z39P",
+   "鍵": "H-103",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "NoncurrentAssets",
+     "CurrentYearInstant"
+    ]
+   ],
+   "同値の他の候補": []
+  },
+  {
+   "id": "S100Z4N9:H-001",
+   "docID": "S100Z4N9",
+   "鍵": "H-001",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "RevenuesFromExternalCustomers",
+     "CurrentYearDuration_jpcrp030000-asr_E27464-000PropertiesDevelopmentAndSalesReportableSegmentsMember"
+    ]
+   ],
+   "同値の他の候補": []
+  },
+  {
+   "id": "S100Z4N9:H-002",
+   "docID": "S100Z4N9",
+   "鍵": "H-002",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "RevenuesFromExternalCustomers",
+     "CurrentYearDuration_jpcrp030000-asr_E27464-000MedicalReportableSegmentsMember"
+    ]
+   ],
+   "同値の他の候補": [
+    [
+     "jppfs_cor:NetSales",
+     "CurrentYearDuration_jpcrp030000-asr_E27464-000MedicalReportableSegmentsMember"
+    ],
+    [
+     "jppfs_cor:NetSales",
+     "CurrentYearDuration_jpcrp030000-asr_E27464-000MedicalReportableSegmentsMember"
+    ]
+   ]
+  },
+  {
+   "id": "S100Z4N9:H-003",
+   "docID": "S100Z4N9",
+   "鍵": "H-003",
+   "形": [
+    "符号・方向",
+    "符号・方向"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "IncreaseDecreaseInAllowanceForDoubtfulAccountsOpeCF",
+     "CurrentYearDuration"
+    ]
+   ],
+   "同値の他の候補": [
+    [
+     "jppfs_cor:ProvisionOfAllowanceForDoubtfulAccountsSGA",
+     "CurrentYearDuration"
+    ]
+   ]
+  },
+  {
+   "id": "S100Z4N9:H-004",
+   "docID": "S100Z4N9",
+   "鍵": "H-004",
+   "形": [
+    "符号・方向",
+    "符号・方向"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "BuildingsAndStructuresNet",
+     "CurrentYearInstant"
+    ],
+    [
+     "BuildingsAndStructuresNet",
+     "Prior1YearInstant"
+    ]
+   ],
+   "同値の他の候補": []
+  },
+  {
+   "id": "S100Z4N9:H-005",
+   "docID": "S100Z4N9",
+   "鍵": "H-005",
+   "形": [
+    "差(当期−前期)",
+    "差(当期−前期)"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "CashAndDeposits",
+     "CurrentYearInstant"
+    ],
+    [
+     "CashAndDeposits",
+     "Prior1YearInstant"
+    ]
+   ],
+   "同値の他の候補": [
+    [
+     "jppfs_cor:CashAndCashEquivalents",
+     "CurrentYearInstant"
+    ],
+    [
+     "jppfs_cor:CashAndCashEquivalents",
+     "Prior1YearInstant"
+    ],
+    [
+     "jppfs_cor:NetIncreaseDecreaseInCashAndCashEquivalents",
+     "CurrentYearDuration"
+    ],
+    [
+     "jppfs_cor:NetIncreaseDecreaseInCashAndCashEquivalents",
+     "CurrentYearDuration"
+    ]
+   ]
+  },
+  {
+   "id": "S100Z4N9:H-006",
+   "docID": "S100Z4N9",
+   "鍵": "H-006",
+   "形": [
+    "符号・方向",
+    "符号・方向"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "NoncurrentLiabilities",
+     "CurrentYearInstant"
+    ],
+    [
+     "NoncurrentLiabilities",
+     "Prior1YearInstant"
+    ]
+   ],
+   "同値の他の候補": []
+  },
+  {
+   "id": "S100Z4N9:H-007",
+   "docID": "S100Z4N9",
+   "鍵": "H-007",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "DividendsFromSurplus",
+     "CurrentYearDuration"
+    ]
+   ],
+   "同値の他の候補": [
+    [
+     "jppfs_cor:DividendsFromSurplus",
+     "CurrentYearDuration_RetainedEarningsMember"
+    ],
+    [
+     "jppfs_cor:DividendsFromSurplus",
+     "CurrentYearDuration_ShareholdersEquityMember"
+    ],
+    [
+     "jppfs_cor:DividendsFromSurplus",
+     "CurrentYearDuration_NonConsolidatedMember"
+    ],
+    [
+     "jppfs_cor:DividendsFromSurplus",
+     "CurrentYearDuration_NonConsolidatedMember_RetainedEarningsMember"
+    ],
+    [
+     "jppfs_cor:DividendsFromSurplus",
+     "CurrentYearDuration_NonConsolidatedMember_RetainedEarningsBroughtForwardMember"
+    ],
+    [
+     "jppfs_cor:DividendsFromSurplus",
+     "CurrentYearDuration_NonConsolidatedMember_ShareholdersEquityMember"
+    ],
+    [
+     "jppfs_cor:DividendsFromSurplus",
+     "CurrentYearDuration_RetainedEarningsMember"
+    ],
+    [
+     "jppfs_cor:DividendsFromSurplus",
+     "CurrentYearDuration_ShareholdersEquityMember"
+    ]
+   ]
+  },
+  {
+   "id": "S100Z4N9:H-008",
+   "docID": "S100Z4N9",
+   "鍵": "H-008",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "OrdinaryIncome",
+     "CurrentYearDuration"
+    ]
+   ],
+   "同値の他の候補": [
+    [
+     "jpcrp_cor:OrdinaryIncomeLossSummaryOfBusinessResults",
+     "CurrentYearDuration"
+    ],
+    [
+     "jpcrp_cor:OrdinaryIncomeLossSummaryOfBusinessResults",
+     "CurrentYearDuration"
+    ]
+   ]
+  },
+  {
+   "id": "S100Z4N9:H-009",
+   "docID": "S100Z4N9",
+   "鍵": "H-009",
+   "形": [
+    "符号・方向",
+    "符号・方向"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "LongTermLoansPayable",
+     "CurrentYearInstant"
+    ],
+    [
+     "LongTermLoansPayable",
+     "Prior1YearInstant"
+    ]
+   ],
+   "同値の他の候補": []
+  },
+  {
+   "id": "S100Z4N9:H-010",
+   "docID": "S100Z4N9",
+   "鍵": "H-010",
+   "形": [
+    "差(当期−前期)",
+    "差(当期−前期)"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "AccountsPayableTrade",
+     "CurrentYearInstant"
+    ],
+    [
+     "AccountsPayableTrade",
+     "Prior1YearInstant"
+    ]
+   ],
+   "同値の他の候補": [
+    [
+     "jppfs_cor:IncreaseDecreaseInNotesAndAccountsPayableTradeOpeCF",
+     "CurrentYearDuration"
+    ],
+    [
+     "jppfs_cor:IncreaseDecreaseInNotesAndAccountsPayableTradeOpeCF",
+     "CurrentYearDuration"
+    ]
+   ]
+  },
+  {
+   "id": "S100Z4N9:H-011",
+   "docID": "S100Z4N9",
+   "鍵": "H-011",
+   "形": [
+    "差(当期−前期)",
+    "差(当期−前期)"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "MachineryEquipmentAndVehiclesNet",
+     "CurrentYearInstant"
+    ],
+    [
+     "MachineryEquipmentAndVehiclesNet",
+     "Prior1YearInstant"
+    ]
+   ],
+   "同値の他の候補": []
+  },
+  {
+   "id": "S100Z4N9:H-012",
+   "docID": "S100Z4N9",
+   "鍵": "H-012",
+   "形": [
+    "符号・方向",
+    "符号・方向"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "RealEstateForSale",
+     "CurrentYearInstant"
+    ],
+    [
+     "RealEstateForSale",
+     "Prior1YearInstant"
+    ]
+   ],
+   "同値の他の候補": []
+  },
+  {
+   "id": "S100Z4N9:H-013",
+   "docID": "S100Z4N9",
+   "鍵": "H-013",
+   "形": [
+    "率(比)",
+    "率(比)"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "RevenuesFromExternalCustomers",
+     "CurrentYearDuration_jpcrp030000-asr_E27464-000RVReportableSegmentsMember"
+    ],
+    [
+     "RevenuesFromExternalCustomers",
+     "Prior1YearDuration_jpcrp030000-asr_E27464-000RVReportableSegmentsMember"
+    ]
+   ],
+   "同値の他の候補": [
+    [
+     "jppfs_cor:NetSales",
+     "CurrentYearDuration_jpcrp030000-asr_E27464-000RVReportableSegmentsMember"
+    ],
+    [
+     "jppfs_cor:NetSales",
+     "Prior1YearDuration_jpcrp030000-asr_E27464-000RVReportableSegmentsMember"
+    ],
+    [
+     "jppfs_cor:NetSales",
+     "CurrentYearDuration_jpcrp030000-asr_E27464-000RVReportableSegmentsMember"
+    ],
+    [
+     "jppfs_cor:NetSales",
+     "Prior1YearDuration_jpcrp030000-asr_E27464-000RVReportableSegmentsMember"
+    ]
+   ]
+  },
+  {
+   "id": "S100Z4N9:H-014",
+   "docID": "S100Z4N9",
+   "鍵": "H-014",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "NetSales",
+     "CurrentYearDuration"
+    ]
+   ],
+   "同値の他の候補": [
+    [
+     "jpcrp_cor:NetSalesSummaryOfBusinessResults",
+     "CurrentYearDuration"
+    ],
+    [
+     "jpcrp_cor:RevenuesFromExternalCustomers",
+     "CurrentYearDuration"
+    ],
+    [
+     "jpcrp_cor:RevenuesFromExternalCustomers",
+     "CurrentYearDuration_TotalOfReportableSegmentsAndOthersMember"
+    ],
+    [
+     "jpcrp_cor:NetSalesSummaryOfBusinessResults",
+     "CurrentYearDuration"
+    ],
+    [
+     "jpcrp_cor:RevenuesFromExternalCustomers",
+     "CurrentYearDuration"
+    ],
+    [
+     "jpcrp_cor:RevenuesFromExternalCustomers",
+     "CurrentYearDuration_TotalOfReportableSegmentsAndOthersMember"
+    ]
+   ]
+  },
+  {
+   "id": "S100Z4N9:H-015",
+   "docID": "S100Z4N9",
+   "鍵": "H-015",
+   "形": [
+    "差(当期−前期)",
+    "差(当期−前期)"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "CurrentPortionOfLongTermLoansPayable",
+     "CurrentYearInstant"
+    ],
+    [
+     "CurrentPortionOfLongTermLoansPayable",
+     "Prior1YearInstant"
+    ]
+   ],
+   "同値の他の候補": []
+  },
+  {
+   "id": "S100Z4N9:H-016",
+   "docID": "S100Z4N9",
+   "鍵": "H-016",
+   "形": [
+    "率(比)",
+    "率(比)"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "SellingGeneralAndAdministrativeExpenses",
+     "CurrentYearDuration"
+    ],
+    [
+     "SellingGeneralAndAdministrativeExpenses",
+     "Prior1YearDuration"
+    ]
+   ],
+   "同値の他の候補": []
+  },
+  {
+   "id": "S100Z4N9:H-017",
+   "docID": "S100Z4N9",
+   "鍵": "H-017",
+   "形": [
+    null,
+    null
+   ],
+   "分類": "判定不能(両側)"
+  },
+  {
+   "id": "S100Z4N9:H-018",
+   "docID": "S100Z4N9",
+   "鍵": "H-018",
+   "形": [
+    "差(当期−前期)",
+    "差(当期−前期)"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "LeaseObligationsNCL",
+     "CurrentYearInstant"
+    ],
+    [
+     "LeaseObligationsNCL",
+     "Prior1YearInstant"
+    ]
+   ],
+   "同値の他の候補": []
+  },
+  {
+   "id": "S100Z4N9:H-019",
+   "docID": "S100Z4N9",
+   "鍵": "H-019",
+   "形": [
+    "符号・方向",
+    "符号・方向"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "Assets",
+     "CurrentYearInstant"
+    ],
+    [
+     "Assets",
+     "Prior1YearInstant"
+    ]
+   ],
+   "同値の他の候補": [
+    [
+     "jpcrp_cor:TotalAssetsSummaryOfBusinessResults",
+     "CurrentYearInstant"
+    ],
+    [
+     "jpcrp_cor:TotalAssetsSummaryOfBusinessResults",
+     "Prior1YearInstant"
+    ],
+    [
+     "jppfs_cor:LiabilitiesAndNetAssets",
+     "CurrentYearInstant"
+    ],
+    [
+     "jppfs_cor:LiabilitiesAndNetAssets",
+     "Prior1YearInstant"
+    ],
+    [
+     "jpcrp_cor:TotalAssetsSummaryOfBusinessResults",
+     "CurrentYearInstant"
+    ],
+    [
+     "jppfs_cor:LiabilitiesAndNetAssets",
+     "CurrentYearInstant"
+    ]
+   ]
+  },
+  {
+   "id": "S100Z4N9:H-020",
+   "docID": "S100Z4N9",
+   "鍵": "H-020",
+   "形": [
+    "符号・方向",
+    "符号・方向"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "ShortTermLoansPayable",
+     "CurrentYearInstant"
+    ],
+    [
+     "ShortTermLoansPayable",
+     "Prior1YearInstant"
+    ]
+   ],
+   "同値の他の候補": [
+    [
+     "jppfs_cor:NetIncreaseDecreaseInShortTermLoansPayableFinCF",
+     "CurrentYearDuration"
+    ],
+    [
+     "jppfs_cor:NetIncreaseDecreaseInShortTermLoansPayableFinCF",
+     "CurrentYearDuration"
+    ]
+   ]
+  },
+  {
+   "id": "S100Z4N9:H-021",
+   "docID": "S100Z4N9",
+   "鍵": "H-021",
+   "形": [
+    "符号・方向",
+    "符号・方向"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "DecreaseIncreaseInInventoriesOpeCF",
+     "CurrentYearDuration"
+    ]
+   ],
+   "同値の他の候補": []
+  },
+  {
+   "id": "S100Z4N9:H-022",
+   "docID": "S100Z4N9",
+   "鍵": "H-022",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "OrdinaryIncome",
+     "Prior1YearDuration"
+    ]
+   ],
+   "同値の他の候補": [
+    [
+     "jpcrp_cor:OrdinaryIncomeLossSummaryOfBusinessResults",
+     "Prior1YearDuration"
+    ],
+    [
+     "jpcrp_cor:OrdinaryIncomeLossSummaryOfBusinessResults",
+     "Prior1YearDuration"
+    ]
+   ]
+  },
+  {
+   "id": "S100Z4N9:H-023",
+   "docID": "S100Z4N9",
+   "鍵": "H-023",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "NetSales",
+     "CurrentYearDuration"
+    ]
+   ],
+   "同値の他の候補": [
+    [
+     "jpcrp_cor:NetSalesSummaryOfBusinessResults",
+     "CurrentYearDuration"
+    ],
+    [
+     "jpcrp_cor:RevenuesFromExternalCustomers",
+     "CurrentYearDuration"
+    ],
+    [
+     "jpcrp_cor:RevenuesFromExternalCustomers",
+     "CurrentYearDuration_TotalOfReportableSegmentsAndOthersMember"
+    ],
+    [
+     "jpcrp_cor:NetSalesSummaryOfBusinessResults",
+     "CurrentYearDuration"
+    ],
+    [
+     "jpcrp_cor:RevenuesFromExternalCustomers",
+     "CurrentYearDuration"
+    ],
+    [
+     "jpcrp_cor:RevenuesFromExternalCustomers",
+     "CurrentYearDuration_TotalOfReportableSegmentsAndOthersMember"
+    ]
+   ]
+  },
+  {
+   "id": "S100Z4N9:H-024",
+   "docID": "S100Z4N9",
+   "鍵": "H-024",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "PurchaseOfPropertyPlantAndEquipmentInvCF",
+     "CurrentYearDuration"
+    ]
+   ],
+   "同値の他の候補": []
+  },
+  {
+   "id": "S100Z4N9:H-025",
+   "docID": "S100Z4N9",
+   "鍵": "H-025",
+   "形": [
+    null,
+    null
+   ],
+   "分類": "判定不能(両側)"
+  },
+  {
+   "id": "S100Z4N9:H-026",
+   "docID": "S100Z4N9",
+   "鍵": "H-026",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "NetCashProvidedByUsedInOperatingActivities",
+     "CurrentYearDuration"
+    ]
+   ],
+   "同値の他の候補": [
+    [
+     "jpcrp_cor:NetCashProvidedByUsedInOperatingActivitiesSummaryOfBusinessResults",
+     "CurrentYearDuration"
+    ],
+    [
+     "jpcrp_cor:NetCashProvidedByUsedInOperatingActivitiesSummaryOfBusinessResults",
+     "CurrentYearDuration"
+    ]
+   ]
+  },
+  {
+   "id": "S100Z4N9:H-027",
+   "docID": "S100Z4N9",
+   "鍵": "H-027",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "RedemptionOfBondsFinCF",
+     "CurrentYearDuration"
+    ]
+   ],
+   "同値の他の候補": [
+    [
+     "jppfs_cor:CurrentPortionOfBonds",
+     "Prior1YearInstant"
+    ],
+    [
+     "jppfs_cor:CurrentPortionOfBonds",
+     "Prior1YearInstant_NonConsolidatedMember"
+    ]
+   ]
+  },
+  {
+   "id": "S100Z4N9:H-028",
+   "docID": "S100Z4N9",
+   "鍵": "H-028",
+   "形": [
+    "符号・方向",
+    "符号・方向"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "CurrentAssets",
+     "CurrentYearInstant"
+    ],
+    [
+     "CurrentAssets",
+     "Prior1YearInstant"
+    ]
+   ],
+   "同値の他の候補": []
+  },
+  {
+   "id": "S100Z4N9:H-029",
+   "docID": "S100Z4N9",
+   "鍵": "H-029",
+   "形": [
+    null,
+    null
+   ],
+   "分類": "判定不能(両側)"
+  },
+  {
+   "id": "S100Z4N9:H-030",
+   "docID": "S100Z4N9",
+   "鍵": "H-030",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "InsuranceIncomeNOI",
+     "CurrentYearDuration"
+    ]
+   ],
+   "同値の他の候補": []
+  },
+  {
+   "id": "S100Z4N9:H-031",
+   "docID": "S100Z4N9",
+   "鍵": "H-031",
+   "形": [
+    null,
+    null
+   ],
+   "分類": "判定不能(両側)"
+  },
+  {
+   "id": "S100Z4N9:H-032",
+   "docID": "S100Z4N9",
+   "鍵": "H-032",
+   "形": [
+    null,
+    null
+   ],
+   "分類": "判定不能(両側)"
+  },
+  {
+   "id": "S100Z4N9:H-033",
+   "docID": "S100Z4N9",
+   "鍵": "H-033",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "RevenuesFromExternalCustomers",
+     "CurrentYearDuration_jpcrp030000-asr_E27464-000RVReportableSegmentsMember"
+    ]
+   ],
+   "同値の他の候補": [
+    [
+     "jppfs_cor:NetSales",
+     "CurrentYearDuration_jpcrp030000-asr_E27464-000RVReportableSegmentsMember"
+    ],
+    [
+     "jppfs_cor:NetSales",
+     "CurrentYearDuration_jpcrp030000-asr_E27464-000RVReportableSegmentsMember"
+    ]
+   ]
+  },
+  {
+   "id": "S100Z4N9:H-034",
+   "docID": "S100Z4N9",
+   "鍵": "H-034",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "EquityToAssetRatioSummaryOfBusinessResults",
+     "Prior1YearInstant"
+    ]
+   ],
+   "同値の他の候補": []
+  },
+  {
+   "id": "S100Z4N9:H-035",
+   "docID": "S100Z4N9",
+   "鍵": "H-035",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "NonOperatingExpenses",
+     "CurrentYearDuration"
+    ]
+   ],
+   "同値の他の候補": []
+  },
+  {
+   "id": "S100Z4N9:H-036",
+   "docID": "S100Z4N9",
+   "鍵": "H-036",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "NetAssets",
+     "CurrentYearInstant"
+    ]
+   ],
+   "同値の他の候補": [
+    [
+     "jpcrp_cor:NetAssetsSummaryOfBusinessResults",
+     "CurrentYearInstant"
+    ],
+    [
+     "jpcrp_cor:NetAssetsSummaryOfBusinessResults",
+     "CurrentYearInstant"
+    ]
+   ]
+  },
+  {
+   "id": "S100Z4N9:H-037",
+   "docID": "S100Z4N9",
+   "鍵": "H-037",
+   "形": [
+    "差(当期−前期)",
+    "差(当期−前期)"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "SellingGeneralAndAdministrativeExpenses",
+     "CurrentYearDuration"
+    ],
+    [
+     "SellingGeneralAndAdministrativeExpenses",
+     "Prior1YearDuration"
+    ]
+   ],
+   "同値の他の候補": []
+  },
+  {
+   "id": "S100Z4N9:H-038",
+   "docID": "S100Z4N9",
+   "鍵": "H-038",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "RepaymentOfLongTermLoansPayableFinCF",
+     "CurrentYearDuration"
+    ]
+   ],
+   "同値の他の候補": []
+  },
+  {
+   "id": "S100Z4N9:H-039",
+   "docID": "S100Z4N9",
+   "鍵": "H-039",
+   "形": [
+    "差(当期−前期)",
+    "差(当期−前期)"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "RealEstateForSale",
+     "CurrentYearInstant"
+    ],
+    [
+     "RealEstateForSale",
+     "Prior1YearInstant"
+    ]
+   ],
+   "同値の他の候補": []
+  },
+  {
+   "id": "S100Z4N9:H-040",
+   "docID": "S100Z4N9",
+   "鍵": "H-040",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "RevenuesFromExternalCustomers",
+     "CurrentYearDuration_OperatingSegmentsNotIncludedInReportableSegmentsAndOtherRevenueGeneratingBusinessActivitiesMember"
+    ]
+   ],
+   "同値の他の候補": []
+  },
+  {
+   "id": "S100Z4N9:H-041",
+   "docID": "S100Z4N9",
+   "鍵": "H-041",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "NoncurrentLiabilities",
+     "CurrentYearInstant"
+    ]
+   ],
+   "同値の他の候補": []
+  },
+  {
+   "id": "S100Z4N9:H-042",
+   "docID": "S100Z4N9",
+   "鍵": "H-042",
+   "形": [
+    null,
+    null
+   ],
+   "分類": "判定不能(両側)"
+  },
+  {
+   "id": "S100Z4N9:H-043",
+   "docID": "S100Z4N9",
+   "鍵": "H-043",
+   "形": [
+    "率(比)",
+    "率(比)"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "ExtraordinaryLoss",
+     "CurrentYearDuration"
+    ],
+    [
+     "ExtraordinaryLoss",
+     "Prior1YearDuration"
+    ]
+   ],
+   "同値の他の候補": []
+  },
+  {
+   "id": "S100Z4N9:H-044",
+   "docID": "S100Z4N9",
+   "鍵": "H-044",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "NetCashProvidedByUsedInOperatingActivities",
+     "Prior1YearDuration"
+    ]
+   ],
+   "同値の他の候補": [
+    [
+     "jpcrp_cor:NetCashProvidedByUsedInOperatingActivitiesSummaryOfBusinessResults",
+     "Prior1YearDuration"
+    ],
+    [
+     "jpcrp_cor:NetCashProvidedByUsedInOperatingActivitiesSummaryOfBusinessResults",
+     "Prior1YearDuration"
+    ]
+   ]
+  },
+  {
+   "id": "S100Z4N9:H-045",
+   "docID": "S100Z4N9",
+   "鍵": "H-045",
+   "形": [
+    "符号・方向",
+    "符号・方向"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "GrossProfit",
+     "CurrentYearDuration"
+    ],
+    [
+     "GrossProfit",
+     "Prior1YearDuration"
+    ]
+   ],
+   "同値の他の候補": []
+  },
+  {
+   "id": "S100Z4N9:H-046",
+   "docID": "S100Z4N9",
+   "鍵": "H-046",
+   "形": [
+    "符号・方向",
+    "符号・方向"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "IncreaseDecreaseInNotesAndAccountsPayableTradeOpeCF",
+     "CurrentYearDuration"
+    ]
+   ],
+   "同値の他の候補": [
+    [
+     "jppfs_cor:AccountsPayableTrade",
+     "CurrentYearInstant"
+    ]
+   ]
+  },
+  {
+   "id": "S100Z4N9:H-047",
+   "docID": "S100Z4N9",
+   "鍵": "H-047",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "OperatingIncome",
+     "CurrentYearDuration_jpcrp030000-asr_E27464-000PropertiesDevelopmentAndSalesReportableSegmentsMember"
+    ]
+   ],
+   "同値の他の候補": []
+  },
+  {
+   "id": "S100Z4N9:H-048",
+   "docID": "S100Z4N9",
+   "鍵": "H-048",
+   "形": [
+    "符号・方向",
+    "符号・方向"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "NoncurrentAssets",
+     "CurrentYearInstant"
+    ],
+    [
+     "NoncurrentAssets",
+     "Prior1YearInstant"
+    ]
+   ],
+   "同値の他の候補": []
+  },
+  {
+   "id": "S100Z4N9:H-049",
+   "docID": "S100Z4N9",
+   "鍵": "H-049",
+   "形": [
+    "差(当期−前期)",
+    "差(当期−前期)"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "BuildingsAndStructuresNet",
+     "CurrentYearInstant"
+    ],
+    [
+     "BuildingsAndStructuresNet",
+     "Prior1YearInstant"
+    ]
+   ],
+   "同値の他の候補": []
+  },
+  {
+   "id": "S100Z4N9:H-050",
+   "docID": "S100Z4N9",
+   "鍵": "H-050",
+   "形": [
+    "符号・方向",
+    "符号・方向"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "CurrentPortionOfLongTermLoansPayable",
+     "CurrentYearInstant"
+    ],
+    [
+     "CurrentPortionOfLongTermLoansPayable",
+     "Prior1YearInstant"
+    ]
+   ],
+   "同値の他の候補": []
+  },
+  {
+   "id": "S100Z4N9:H-051",
+   "docID": "S100Z4N9",
+   "鍵": "H-051",
+   "形": [
+    "差(当期−前期)",
+    "差(当期−前期)"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "ShortTermLoansPayable",
+     "CurrentYearInstant"
+    ],
+    [
+     "ShortTermLoansPayable",
+     "Prior1YearInstant"
+    ]
+   ],
+   "同値の他の候補": [
+    [
+     "jppfs_cor:NetIncreaseDecreaseInShortTermLoansPayableFinCF",
+     "CurrentYearDuration"
+    ],
+    [
+     "jppfs_cor:NetIncreaseDecreaseInShortTermLoansPayableFinCF",
+     "CurrentYearDuration"
+    ]
+   ]
+  },
+  {
+   "id": "S100Z4N9:H-052",
+   "docID": "S100Z4N9",
+   "鍵": "H-052",
+   "形": [
+    "差(当期−前期)",
+    "差(当期−前期)"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "NoncurrentAssets",
+     "CurrentYearInstant"
+    ],
+    [
+     "NoncurrentAssets",
+     "Prior1YearInstant"
+    ]
+   ],
+   "同値の他の候補": []
+  },
+  {
+   "id": "S100Z4N9:H-053",
+   "docID": "S100Z4N9",
+   "鍵": "H-053",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "RevenuesFromExternalCustomers",
+     "CurrentYearDuration_jpcrp030000-asr_E27464-000PropertiesDevelopmentAndSalesReportableSegmentsMember"
+    ]
+   ],
+   "同値の他の候補": []
+  },
+  {
+   "id": "S100Z4N9:H-054",
+   "docID": "S100Z4N9",
+   "鍵": "H-054",
+   "形": [
+    "符号・方向",
+    "符号・方向"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "Liabilities",
+     "CurrentYearInstant"
+    ],
+    [
+     "Liabilities",
+     "Prior1YearInstant"
+    ]
+   ],
+   "同値の他の候補": []
+  },
+  {
+   "id": "S100Z4N9:H-055",
+   "docID": "S100Z4N9",
+   "鍵": "H-055",
+   "形": [
+    "率(比)",
+    "率(比)"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "OperatingIncome",
+     "CurrentYearDuration_OperatingSegmentsNotIncludedInReportableSegmentsAndOtherRevenueGeneratingBusinessActivitiesMember"
+    ],
+    [
+     "OperatingIncome",
+     "Prior1YearDuration_OperatingSegmentsNotIncludedInReportableSegmentsAndOtherRevenueGeneratingBusinessActivitiesMember"
+    ]
+   ],
+   "同値の他の候補": []
+  },
+  {
+   "id": "S100Z4N9:H-056",
+   "docID": "S100Z4N9",
+   "鍵": "H-056",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "OperatingIncome",
+     "CurrentYearDuration_jpcrp030000-asr_E27464-000ParkingReportableSegmentsMember"
+    ]
+   ],
+   "同値の他の候補": []
+  },
+  {
+   "id": "S100Z4N9:H-057",
+   "docID": "S100Z4N9",
+   "鍵": "H-057",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "SellingGeneralAndAdministrativeExpenses",
+     "CurrentYearDuration"
+    ]
+   ],
+   "同値の他の候補": []
+  },
+  {
+   "id": "S100Z4N9:H-058",
+   "docID": "S100Z4N9",
+   "鍵": "H-058",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "GrossProfit",
+     "CurrentYearDuration"
+    ]
+   ],
+   "同値の他の候補": []
+  },
+  {
+   "id": "S100Z4N9:H-059",
+   "docID": "S100Z4N9",
+   "鍵": "H-059",
+   "形": [
+    null,
+    null
+   ],
+   "分類": "判定不能(両側)"
+  },
+  {
+   "id": "S100Z4N9:H-060",
+   "docID": "S100Z4N9",
+   "鍵": "H-060",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "DecreaseIncreaseInInventoriesOpeCF",
+     "CurrentYearDuration"
+    ]
+   ],
+   "同値の他の候補": []
+  },
+  {
+   "id": "S100Z4N9:H-061",
+   "docID": "S100Z4N9",
+   "鍵": "H-061",
+   "形": [
+    "符号・方向",
+    "符号・方向"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "NetSales",
+     "CurrentYearDuration"
+    ],
+    [
+     "NetSales",
+     "Prior1YearDuration"
+    ]
+   ],
+   "同値の他の候補": [
+    [
+     "jpcrp_cor:NetSalesSummaryOfBusinessResults",
+     "CurrentYearDuration"
+    ],
+    [
+     "jpcrp_cor:NetSalesSummaryOfBusinessResults",
+     "Prior1YearDuration"
+    ],
+    [
+     "jpcrp_cor:RevenuesFromExternalCustomers",
+     "CurrentYearDuration"
+    ],
+    [
+     "jpcrp_cor:RevenuesFromExternalCustomers",
+     "Prior1YearDuration"
+    ],
+    [
+     "jpcrp_cor:NetSalesSummaryOfBusinessResults",
+     "CurrentYearDuration"
+    ],
+    [
+     "jpcrp_cor:NetSalesSummaryOfBusinessResults",
+     "Prior1YearDuration"
+    ]
+   ]
+  },
+  {
+   "id": "S100Z4N9:H-062",
+   "docID": "S100Z4N9",
+   "鍵": "H-062",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "RevenuesFromExternalCustomers",
+     "CurrentYearDuration_jpcrp030000-asr_E27464-000SecuritiesRetailingBusinessReportableSegmentsMember"
+    ]
+   ],
+   "同値の他の候補": []
+  },
+  {
+   "id": "S100Z4N9:H-063",
+   "docID": "S100Z4N9",
+   "鍵": "H-063",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "DecreaseIncreaseInOperatingLoansReceivableOpeCF",
+     "CurrentYearDuration"
+    ]
+   ],
+   "同値の他の候補": []
+  },
+  {
+   "id": "S100Z4N9:H-064",
+   "docID": "S100Z4N9",
+   "鍵": "H-064",
+   "形": [
+    "率(比)",
+    "率(比)"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "RevenuesFromExternalCustomers",
+     "CurrentYearDuration_jpcrp030000-asr_E27464-000ParkingReportableSegmentsMember"
+    ],
+    [
+     "RevenuesFromExternalCustomers",
+     "Prior1YearDuration_jpcrp030000-asr_E27464-000ParkingReportableSegmentsMember"
+    ]
+   ],
+   "同値の他の候補": []
+  },
+  {
+   "id": "S100Z4N9:H-065",
+   "docID": "S100Z4N9",
+   "鍵": "H-065",
+   "形": [
+    "符号・方向",
+    "符号・方向"
+   ],
+   "分類": "不一致",
+   "fact": null,
+   "同値の他の候補": [
+    [
+     "jppfs_cor:RetainedEarnings",
+     "CurrentYearInstant"
+    ],
+    [
+     "jppfs_cor:RetainedEarnings",
+     "Prior1YearInstant"
+    ],
+    [
+     "jppfs_cor:ProfitLossAttributableToOwnersOfParent",
+     "CurrentYearDuration"
+    ],
+    [
+     "jppfs_cor:ProfitLossAttributableToOwnersOfParent",
+     "CurrentYearDuration_RetainedEarningsMember"
+    ],
+    [
+     "jppfs_cor:ProfitLossAttributableToOwnersOfParent",
+     "CurrentYearDuration_ShareholdersEquityMember"
+    ],
+    [
+     "jppfs_cor:ProfitLoss",
+     "CurrentYearDuration"
+    ],
+    [
+     "jpcrp_cor:ProfitLossAttributableToOwnersOfParentSummaryOfBusinessResults",
+     "CurrentYearDuration"
+    ]
+   ],
+   "席1": [
+    [
+     "ProfitLossAttributableToOwnersOfParent",
+     "CurrentYearDuration_RetainedEarningsMember"
+    ]
+   ],
+   "席2": [
+    [
+     "ProfitLossAttributableToOwnersOfParent",
+     "CurrentYearDuration"
+    ]
+   ]
+  },
+  {
+   "id": "S100Z4N9:H-066",
+   "docID": "S100Z4N9",
+   "鍵": "H-066",
+   "形": [
+    "率(比)",
+    "率(比)"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "OperatingIncome",
+     "CurrentYearDuration_jpcrp030000-asr_E27464-000SecuritiesRetailingBusinessReportableSegmentsMember"
+    ],
+    [
+     "OperatingIncome",
+     "Prior1YearDuration_jpcrp030000-asr_E27464-000SecuritiesRetailingBusinessReportableSegmentsMember"
+    ]
+   ],
+   "同値の他の候補": []
+  },
+  {
+   "id": "S100Z4N9:H-067",
+   "docID": "S100Z4N9",
+   "鍵": "H-067",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "OperatingIncome",
+     "Prior1YearDuration_jpcrp030000-asr_E27464-000PropertiesDevelopmentAndSalesReportableSegmentsMember"
+    ]
+   ],
+   "同値の他の候補": []
+  },
+  {
+   "id": "S100Z4N9:H-068",
+   "docID": "S100Z4N9",
+   "鍵": "H-068",
+   "形": [
+    null,
+    null
+   ],
+   "分類": "判定不能(両側)"
+  },
+  {
+   "id": "S100Z4N9:H-069",
+   "docID": "S100Z4N9",
+   "鍵": "H-069",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "OrdinaryIncome",
+     "Prior1YearDuration"
+    ]
+   ],
+   "同値の他の候補": [
+    [
+     "jpcrp_cor:OrdinaryIncomeLossSummaryOfBusinessResults",
+     "Prior1YearDuration"
+    ],
+    [
+     "jpcrp_cor:OrdinaryIncomeLossSummaryOfBusinessResults",
+     "Prior1YearDuration"
+    ]
+   ]
+  },
+  {
+   "id": "S100Z4N9:H-070",
+   "docID": "S100Z4N9",
+   "鍵": "H-070",
+   "形": [
+    "率(比)",
+    "率(比)"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "RevenuesFromExternalCustomers",
+     "CurrentYearDuration_jpcrp030000-asr_E27464-000MedicalReportableSegmentsMember"
+    ],
+    [
+     "RevenuesFromExternalCustomers",
+     "Prior1YearDuration_jpcrp030000-asr_E27464-000MedicalReportableSegmentsMember"
+    ]
+   ],
+   "同値の他の候補": [
+    [
+     "jppfs_cor:NetSales",
+     "CurrentYearDuration_jpcrp030000-asr_E27464-000MedicalReportableSegmentsMember"
+    ],
+    [
+     "jppfs_cor:NetSales",
+     "Prior1YearDuration_jpcrp030000-asr_E27464-000MedicalReportableSegmentsMember"
+    ],
+    [
+     "jppfs_cor:NetSales",
+     "CurrentYearDuration_jpcrp030000-asr_E27464-000MedicalReportableSegmentsMember"
+    ],
+    [
+     "jppfs_cor:NetSales",
+     "Prior1YearDuration_jpcrp030000-asr_E27464-000MedicalReportableSegmentsMember"
+    ]
+   ]
+  },
+  {
+   "id": "S100Z4N9:H-071",
+   "docID": "S100Z4N9",
+   "鍵": "H-071",
+   "形": [
+    "率(比)",
+    "率(比)"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "OperatingIncome",
+     "CurrentYearDuration_jpcrp030000-asr_E27464-000ParkingReportableSegmentsMember"
+    ],
+    [
+     "OperatingIncome",
+     "Prior1YearDuration_jpcrp030000-asr_E27464-000ParkingReportableSegmentsMember"
+    ]
+   ],
+   "同値の他の候補": []
+  },
+  {
+   "id": "S100Z4N9:H-072",
+   "docID": "S100Z4N9",
+   "鍵": "H-072",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "ExtraordinaryLoss",
+     "CurrentYearDuration"
+    ]
+   ],
+   "同値の他の候補": []
+  },
+  {
+   "id": "S100Z4N9:H-073",
+   "docID": "S100Z4N9",
+   "鍵": "H-073",
+   "形": [
+    null,
+    null
+   ],
+   "分類": "判定不能(両側)"
+  },
+  {
+   "id": "S100Z4N9:H-074",
+   "docID": "S100Z4N9",
+   "鍵": "H-074",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "NonOperatingIncome",
+     "CurrentYearDuration"
+    ]
+   ],
+   "同値の他の候補": []
+  },
+  {
+   "id": "S100Z4N9:H-075",
+   "docID": "S100Z4N9",
+   "鍵": "H-075",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "NetCashProvidedByUsedInFinancingActivities",
+     "Prior1YearDuration"
+    ]
+   ],
+   "同値の他の候補": [
+    [
+     "jpcrp_cor:NetCashProvidedByUsedInFinancingActivitiesSummaryOfBusinessResults",
+     "Prior1YearDuration"
+    ],
+    [
+     "jpcrp_cor:NetCashProvidedByUsedInFinancingActivitiesSummaryOfBusinessResults",
+     "Prior1YearDuration"
+    ]
+   ]
+  },
+  {
+   "id": "S100Z4N9:H-076",
+   "docID": "S100Z4N9",
+   "鍵": "H-076",
+   "形": [
+    "率(比)",
+    "率(比)"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "NonOperatingIncome",
+     "CurrentYearDuration"
+    ],
+    [
+     "NonOperatingIncome",
+     "Prior1YearDuration"
+    ]
+   ],
+   "同値の他の候補": []
+  },
+  {
+   "id": "S100Z4N9:H-077",
+   "docID": "S100Z4N9",
+   "鍵": "H-077",
+   "形": [
+    "差(当期−前期)",
+    "差(当期−前期)"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "LeaseAssetsNetPPE",
+     "CurrentYearInstant"
+    ],
+    [
+     "LeaseAssetsNetPPE",
+     "Prior1YearInstant"
+    ]
+   ],
+   "同値の他の候補": []
+  },
+  {
+   "id": "S100Z4N9:H-078",
+   "docID": "S100Z4N9",
+   "鍵": "H-078",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "RevenuesFromExternalCustomers",
+     "CurrentYearDuration_OperatingSegmentsNotIncludedInReportableSegmentsAndOtherRevenueGeneratingBusinessActivitiesMember"
+    ]
+   ],
+   "同値の他の候補": []
+  },
+  {
+   "id": "S100Z4N9:H-079",
+   "docID": "S100Z4N9",
+   "鍵": "H-079",
+   "形": [
+    "符号・方向",
+    "符号・方向"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "OperatingIncome",
+     "CurrentYearDuration_jpcrp030000-asr_E27464-000RVReportableSegmentsMember"
+    ],
+    [
+     "OperatingIncome",
+     "Prior1YearDuration_jpcrp030000-asr_E27464-000RVReportableSegmentsMember"
+    ]
+   ],
+   "同値の他の候補": [
+    [
+     "jpcrp_cor:RevenuesFromExternalCustomers",
+     "CurrentYearDuration_jpcrp030000-asr_E27464-000RVReportableSegmentsMember"
+    ],
+    [
+     "jpcrp_cor:RevenuesFromExternalCustomers",
+     "Prior1YearDuration_jpcrp030000-asr_E27464-000RVReportableSegmentsMember"
+    ]
+   ]
+  },
+  {
+   "id": "S100Z4N9:H-080",
+   "docID": "S100Z4N9",
+   "鍵": "H-080",
+   "形": [
+    "率(比)",
+    "率(比)"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "RevenuesFromExternalCustomers",
+     "CurrentYearDuration_OperatingSegmentsNotIncludedInReportableSegmentsAndOtherRevenueGeneratingBusinessActivitiesMember"
+    ],
+    [
+     "RevenuesFromExternalCustomers",
+     "Prior1YearDuration_OperatingSegmentsNotIncludedInReportableSegmentsAndOtherRevenueGeneratingBusinessActivitiesMember"
+    ]
+   ],
+   "同値の他の候補": []
+  },
+  {
+   "id": "S100Z4N9:H-081",
+   "docID": "S100Z4N9",
+   "鍵": "H-081",
+   "形": [
+    "差(当期−前期)",
+    "差(当期−前期)"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "Land",
+     "CurrentYearInstant"
+    ],
+    [
+     "Land",
+     "Prior1YearInstant"
+    ]
+   ],
+   "同値の他の候補": []
+  },
+  {
+   "id": "S100Z4N9:H-082",
+   "docID": "S100Z4N9",
+   "鍵": "H-082",
+   "形": [
+    "符号・方向",
+    "符号・方向"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "NetAssets",
+     "CurrentYearInstant"
+    ],
+    [
+     "NetAssets",
+     "Prior1YearInstant"
+    ]
+   ],
+   "同値の他の候補": [
+    [
+     "jpcrp_cor:NetAssetsSummaryOfBusinessResults",
+     "CurrentYearInstant"
+    ],
+    [
+     "jpcrp_cor:NetAssetsSummaryOfBusinessResults",
+     "Prior1YearInstant"
+    ],
+    [
+     "jppfs_cor:TotalChangesOfItemsDuringThePeriod",
+     "CurrentYearDuration"
+    ],
+    [
+     "jppfs_cor:TotalChangesOfItemsDuringThePeriod",
+     "CurrentYearDuration"
+    ],
+    [
+     "jpcrp_cor:NetAssetsSummaryOfBusinessResults",
+     "CurrentYearInstant"
+    ],
+    [
+     "jpcrp_cor:NetAssetsSummaryOfBusinessResults",
+     "Prior1YearInstant"
+    ]
+   ]
+  },
+  {
+   "id": "S100Z4N9:H-083",
+   "docID": "S100Z4N9",
+   "鍵": "H-083",
+   "形": [
+    "差(当期−前期)",
+    "差(当期−前期)"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "CurrentLiabilities",
+     "CurrentYearInstant"
+    ],
+    [
+     "CurrentLiabilities",
+     "Prior1YearInstant"
+    ]
+   ],
+   "同値の他の候補": []
+  },
+  {
+   "id": "S100Z4N9:H-084",
+   "docID": "S100Z4N9",
+   "鍵": "H-084",
+   "形": [
+    "ポイント差",
+    "ポイント差"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "GrossProfit",
+     "CurrentYearDuration"
+    ],
+    [
+     "GrossProfit",
+     "Prior1YearDuration"
+    ],
+    [
+     "NetSales",
+     "CurrentYearDuration"
+    ],
+    [
+     "NetSales",
+     "Prior1YearDuration"
+    ]
+   ],
+   "同値の他の候補": [
+    [
+     "jpcrp_cor:NetSalesSummaryOfBusinessResults",
+     "CurrentYearDuration"
+    ],
+    [
+     "jpcrp_cor:NetSalesSummaryOfBusinessResults",
+     "Prior1YearDuration"
+    ]
+   ]
+  },
+  {
+   "id": "S100Z4N9:H-085",
+   "docID": "S100Z4N9",
+   "鍵": "H-085",
+   "形": [
+    "率(比)",
+    "率(比)"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "RevenuesFromExternalCustomers",
+     "CurrentYearDuration_jpcrp030000-asr_E27464-000ParkingReportableSegmentsMember"
+    ],
+    [
+     "RevenuesFromExternalCustomers",
+     "Prior1YearDuration_jpcrp030000-asr_E27464-000ParkingReportableSegmentsMember"
+    ]
+   ],
+   "同値の他の候補": []
+  },
+  {
+   "id": "S100Z4N9:H-086",
+   "docID": "S100Z4N9",
+   "鍵": "H-086",
+   "形": [
+    "符号・方向",
+    "符号・方向"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "LeaseObligationsNCL",
+     "CurrentYearInstant"
+    ],
+    [
+     "LeaseObligationsNCL",
+     "Prior1YearInstant"
+    ]
+   ],
+   "同値の他の候補": []
+  },
+  {
+   "id": "S100Z4N9:H-087",
+   "docID": "S100Z4N9",
+   "鍵": "H-087",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "Liabilities",
+     "CurrentYearInstant"
+    ]
+   ],
+   "同値の他の候補": []
+  },
+  {
+   "id": "S100Z4N9:H-088",
+   "docID": "S100Z4N9",
+   "鍵": "H-088",
+   "形": [
+    "符号・方向",
+    "符号・方向"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "AccountsPayableTrade",
+     "CurrentYearInstant"
+    ],
+    [
+     "AccountsPayableTrade",
+     "Prior1YearInstant"
+    ]
+   ],
+   "同値の他の候補": [
+    [
+     "jppfs_cor:IncreaseDecreaseInNotesAndAccountsPayableTradeOpeCF",
+     "CurrentYearDuration"
+    ],
+    [
+     "jppfs_cor:IncreaseDecreaseInNotesAndAccountsPayableTradeOpeCF",
+     "CurrentYearDuration"
+    ]
+   ]
+  },
+  {
+   "id": "S100Z4N9:H-089",
+   "docID": "S100Z4N9",
+   "鍵": "H-089",
+   "形": [
+    "符号・方向",
+    "符号・方向"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "CashAndCashEquivalents",
+     "CurrentYearInstant"
+    ],
+    [
+     "CashAndCashEquivalents",
+     "Prior1YearInstant"
+    ]
+   ],
+   "同値の他の候補": [
+    [
+     "jpcrp_cor:CashAndCashEquivalentsSummaryOfBusinessResults",
+     "CurrentYearInstant"
+    ],
+    [
+     "jpcrp_cor:CashAndCashEquivalentsSummaryOfBusinessResults",
+     "Prior1YearInstant"
+    ],
+    [
+     "jppfs_cor:NetIncreaseDecreaseInCashAndCashEquivalents",
+     "CurrentYearDuration"
+    ],
+    [
+     "jppfs_cor:NetIncreaseDecreaseInCashAndCashEquivalents",
+     "CurrentYearDuration"
+    ],
+    [
+     "jpcrp_cor:CashAndCashEquivalentsSummaryOfBusinessResults",
+     "CurrentYearInstant"
+    ],
+    [
+     "jpcrp_cor:CashAndCashEquivalentsSummaryOfBusinessResults",
+     "Prior1YearInstant"
+    ]
+   ]
+  },
+  {
+   "id": "S100Z4N9:H-090",
+   "docID": "S100Z4N9",
+   "鍵": "H-090",
+   "形": [
+    null,
+    null
+   ],
+   "分類": "判定不能(両側)"
+  },
+  {
+   "id": "S100Z4N9:H-091",
+   "docID": "S100Z4N9",
+   "鍵": "H-091",
+   "形": [
+    "差(当期−前期)",
+    "差(当期−前期)"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "LongTermLoansPayable",
+     "CurrentYearInstant"
+    ],
+    [
+     "LongTermLoansPayable",
+     "Prior1YearInstant"
+    ]
+   ],
+   "同値の他の候補": []
+  },
+  {
+   "id": "S100Z4N9:H-092",
+   "docID": "S100Z4N9",
+   "鍵": "H-092",
+   "形": [
+    null,
+    null
+   ],
+   "分類": "判定不能(両側)"
+  },
+  {
+   "id": "S100Z4N9:H-093",
+   "docID": "S100Z4N9",
+   "鍵": "H-093",
+   "形": [
+    "符号・方向",
+    "符号・方向"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "LeaseObligationsNCL",
+     "CurrentYearInstant"
+    ],
+    [
+     "LeaseObligationsNCL",
+     "Prior1YearInstant"
+    ]
+   ],
+   "同値の他の候補": []
+  },
+  {
+   "id": "S100Z4N9:H-094",
+   "docID": "S100Z4N9",
+   "鍵": "H-094",
+   "形": [
+    "差(当期−前期)",
+    "差(当期−前期)"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "Liabilities",
+     "CurrentYearInstant"
+    ],
+    [
+     "Liabilities",
+     "Prior1YearInstant"
+    ]
+   ],
+   "同値の他の候補": []
+  },
+  {
+   "id": "S100Z4N9:H-095",
+   "docID": "S100Z4N9",
+   "鍵": "H-095",
+   "形": [
+    "率(比)",
+    "率(比)"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "GrossProfit",
+     "CurrentYearDuration"
+    ],
+    [
+     "GrossProfit",
+     "Prior1YearDuration"
+    ]
+   ],
+   "同値の他の候補": []
+  },
+  {
+   "id": "S100Z4N9:H-096",
+   "docID": "S100Z4N9",
+   "鍵": "H-096",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "CurrentLiabilities",
+     "CurrentYearInstant"
+    ]
+   ],
+   "同値の他の候補": []
+  },
+  {
+   "id": "S100Z4N9:H-097",
+   "docID": "S100Z4N9",
+   "鍵": "H-097",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "NetCashProvidedByUsedInInvestmentActivities",
+     "CurrentYearDuration"
+    ]
+   ],
+   "同値の他の候補": [
+    [
+     "jpcrp_cor:NetCashProvidedByUsedInInvestingActivitiesSummaryOfBusinessResults",
+     "CurrentYearDuration"
+    ],
+    [
+     "jpcrp_cor:NetCashProvidedByUsedInInvestingActivitiesSummaryOfBusinessResults",
+     "CurrentYearDuration"
+    ]
+   ]
+  },
+  {
+   "id": "S100Z4N9:H-098",
+   "docID": "S100Z4N9",
+   "鍵": "H-098",
+   "形": [
+    "差(当期−前期)",
+    "差(当期−前期)"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "NoncurrentLiabilities",
+     "CurrentYearInstant"
+    ],
+    [
+     "NoncurrentLiabilities",
+     "Prior1YearInstant"
+    ]
+   ],
+   "同値の他の候補": []
+  },
+  {
+   "id": "S100Z4N9:H-099",
+   "docID": "S100Z4N9",
+   "鍵": "H-099",
+   "形": [
+    "率(比)",
+    "率(比)"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "NetSales",
+     "CurrentYearDuration"
+    ],
+    [
+     "NetSales",
+     "Prior1YearDuration"
+    ]
+   ],
+   "同値の他の候補": [
+    [
+     "jpcrp_cor:NetSalesSummaryOfBusinessResults",
+     "CurrentYearDuration"
+    ],
+    [
+     "jpcrp_cor:NetSalesSummaryOfBusinessResults",
+     "Prior1YearDuration"
+    ],
+    [
+     "jpcrp_cor:RevenuesFromExternalCustomers",
+     "CurrentYearDuration"
+    ],
+    [
+     "jpcrp_cor:RevenuesFromExternalCustomers",
+     "Prior1YearDuration"
+    ],
+    [
+     "jpcrp_cor:NetSalesSummaryOfBusinessResults",
+     "CurrentYearDuration"
+    ],
+    [
+     "jpcrp_cor:NetSalesSummaryOfBusinessResults",
+     "Prior1YearDuration"
+    ],
+    [
+     "jpcrp_cor:RevenuesFromExternalCustomers",
+     "CurrentYearDuration"
+    ],
+    [
+     "jpcrp_cor:RevenuesFromExternalCustomers",
+     "Prior1YearDuration"
+    ]
+   ]
+  },
+  {
+   "id": "S100Z4N9:H-100",
+   "docID": "S100Z4N9",
+   "鍵": "H-100",
+   "形": [
+    "符号・方向",
+    "符号・方向"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "NetIncreaseDecreaseInShortTermLoansPayableFinCF",
+     "CurrentYearDuration"
+    ]
+   ],
+   "同値の他の候補": [
+    [
+     "jppfs_cor:ShortTermLoansPayable",
+     "CurrentYearInstant"
+    ],
+    [
+     "jppfs_cor:ShortTermLoansPayable",
+     "Prior1YearInstant"
+    ],
+    [
+     "jppfs_cor:ShortTermLoansPayable",
+     "CurrentYearInstant"
+    ]
+   ]
+  },
+  {
+   "id": "S100Z4N9:H-101",
+   "docID": "S100Z4N9",
+   "鍵": "H-101",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "SellingGeneralAndAdministrativeExpenses",
+     "Prior1YearDuration"
+    ]
+   ],
+   "同値の他の候補": []
+  },
+  {
+   "id": "S100Z4N9:H-102",
+   "docID": "S100Z4N9",
+   "鍵": "H-102",
+   "形": [
+    "差(当期−前期)",
+    "差(当期−前期)"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "OperatingLoansCA",
+     "CurrentYearInstant"
+    ],
+    [
+     "OperatingLoansCA",
+     "Prior1YearInstant"
+    ]
+   ],
+   "同値の他の候補": [
+    [
+     "jppfs_cor:DecreaseIncreaseInOperatingLoansReceivableOpeCF",
+     "CurrentYearDuration"
+    ],
+    [
+     "jppfs_cor:DecreaseIncreaseInOperatingLoansReceivableOpeCF",
+     "CurrentYearDuration"
+    ]
+   ]
+  },
+  {
+   "id": "S100Z4N9:H-103",
+   "docID": "S100Z4N9",
+   "鍵": "H-103",
+   "形": [
+    "符号・方向",
+    "符号・方向"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "MachineryEquipmentAndVehiclesNet",
+     "CurrentYearInstant"
+    ],
+    [
+     "MachineryEquipmentAndVehiclesNet",
+     "Prior1YearInstant"
+    ]
+   ],
+   "同値の他の候補": []
+  },
+  {
+   "id": "S100Z4N9:H-104",
+   "docID": "S100Z4N9",
+   "鍵": "H-104",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "CurrentAssets",
+     "CurrentYearInstant"
+    ]
+   ],
+   "同値の他の候補": []
+  },
+  {
+   "id": "S100Z4N9:H-105",
+   "docID": "S100Z4N9",
+   "鍵": "H-105",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "分類": "不一致",
+   "fact": null,
+   "同値の他の候補": [
+    [
+     "jppfs_cor:ProfitLossAttributableToOwnersOfParent",
+     "CurrentYearDuration"
+    ],
+    [
+     "jppfs_cor:ProfitLossAttributableToOwnersOfParent",
+     "CurrentYearDuration_ShareholdersEquityMember"
+    ],
+    [
+     "jpcrp_cor:ProfitLossAttributableToOwnersOfParentSummaryOfBusinessResults",
+     "CurrentYearDuration"
+    ],
+    [
+     "jppfs_cor:ProfitLoss",
+     "CurrentYearDuration"
+    ],
+    [
+     "jppfs_cor:ProfitLossAttributableToOwnersOfParent",
+     "CurrentYearDuration_RetainedEarningsMember"
+    ],
+    [
+     "jppfs_cor:ProfitLossAttributableToOwnersOfParent",
+     "CurrentYearDuration_ShareholdersEquityMember"
+    ],
+    [
+     "jppfs_cor:ProfitLoss",
+     "CurrentYearDuration"
+    ],
+    [
+     "jpcrp_cor:ProfitLossAttributableToOwnersOfParentSummaryOfBusinessResults",
+     "CurrentYearDuration"
+    ]
+   ],
+   "席1": [
+    [
+     "ProfitLossAttributableToOwnersOfParent",
+     "CurrentYearDuration_RetainedEarningsMember"
+    ]
+   ],
+   "席2": [
+    [
+     "ProfitLossAttributableToOwnersOfParent",
+     "CurrentYearDuration"
+    ]
+   ]
+  },
+  {
+   "id": "S100Z4N9:H-106",
+   "docID": "S100Z4N9",
+   "鍵": "H-106",
+   "形": [
+    "差(当期−前期)",
+    "差(当期−前期)"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "RealEstateForSaleInProcess",
+     "CurrentYearInstant"
+    ],
+    [
+     "RealEstateForSaleInProcess",
+     "Prior1YearInstant"
+    ]
+   ],
+   "同値の他の候補": []
+  },
+  {
+   "id": "S100Z4N9:H-107",
+   "docID": "S100Z4N9",
+   "鍵": "H-107",
+   "形": [
+    "差(当期−前期)",
+    "差(当期−前期)"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "AllowanceForDoubtfulAccountsCA",
+     "CurrentYearInstant"
+    ],
+    [
+     "AllowanceForDoubtfulAccountsCA",
+     "Prior1YearInstant"
+    ]
+   ],
+   "同値の他の候補": [
+    [
+     "jppfs_cor:IncreaseDecreaseInAllowanceForDoubtfulAccountsOpeCF",
+     "CurrentYearDuration"
+    ],
+    [
+     "jppfs_cor:ProvisionOfAllowanceForDoubtfulAccountsSGA",
+     "CurrentYearDuration"
+    ],
+    [
+     "jppfs_cor:IncreaseDecreaseInAllowanceForDoubtfulAccountsOpeCF",
+     "CurrentYearDuration"
+    ],
+    [
+     "jppfs_cor:ProvisionOfAllowanceForDoubtfulAccountsSGA",
+     "CurrentYearDuration"
+    ]
+   ]
+  },
+  {
+   "id": "S100Z4N9:H-108",
+   "docID": "S100Z4N9",
+   "鍵": "H-108",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "CashAndCashEquivalents",
+     "CurrentYearInstant"
+    ]
+   ],
+   "同値の他の候補": [
+    [
+     "jpcrp_cor:CashAndCashEquivalentsSummaryOfBusinessResults",
+     "CurrentYearInstant"
+    ],
+    [
+     "jpcrp_cor:CashAndCashEquivalentsSummaryOfBusinessResults",
+     "CurrentYearInstant"
+    ]
+   ]
+  },
+  {
+   "id": "S100Z4N9:H-109",
+   "docID": "S100Z4N9",
+   "鍵": "H-109",
+   "形": [
+    "符号・方向",
+    "符号・方向"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "DecreaseIncreaseInOperatingLoansReceivableOpeCF",
+     "CurrentYearDuration"
+    ]
+   ],
+   "同値の他の候補": [
+    [
+     "jppfs_cor:OperatingLoansCA",
+     "CurrentYearInstant"
+    ]
+   ]
+  },
+  {
+   "id": "S100Z4N9:H-110",
+   "docID": "S100Z4N9",
+   "鍵": "H-110",
+   "形": [
+    "符号・方向",
+    "符号・方向"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "OperatingLoansCA",
+     "CurrentYearInstant"
+    ],
+    [
+     "OperatingLoansCA",
+     "Prior1YearInstant"
+    ]
+   ],
+   "同値の他の候補": [
+    [
+     "jppfs_cor:DecreaseIncreaseInOperatingLoansReceivableOpeCF",
+     "CurrentYearDuration"
+    ],
+    [
+     "jppfs_cor:DecreaseIncreaseInOperatingLoansReceivableOpeCF",
+     "CurrentYearDuration"
+    ]
+   ]
+  },
+  {
+   "id": "S100Z4N9:H-111",
+   "docID": "S100Z4N9",
+   "鍵": "H-111",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "IncreaseDecreaseInAllowanceForDoubtfulAccountsOpeCF",
+     "CurrentYearDuration"
+    ]
+   ],
+   "同値の他の候補": [
+    [
+     "jppfs_cor:ProvisionOfAllowanceForDoubtfulAccountsSGA",
+     "CurrentYearDuration"
+    ],
+    [
+     "jppfs_cor:ProvisionOfAllowanceForDoubtfulAccountsSGA",
+     "CurrentYearDuration"
+    ]
+   ]
+  },
+  {
+   "id": "S100Z4N9:H-112",
+   "docID": "S100Z4N9",
+   "鍵": "H-112",
+   "形": [
+    null,
+    null
+   ],
+   "分類": "判定不能(両側)"
+  },
+  {
+   "id": "S100Z4N9:H-113",
+   "docID": "S100Z4N9",
+   "鍵": "H-113",
+   "形": [
+    "率(比)",
+    "率(比)"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "RevenuesFromExternalCustomers",
+     "CurrentYearDuration_jpcrp030000-asr_E27464-000SecuritiesRetailingBusinessReportableSegmentsMember"
+    ],
+    [
+     "RevenuesFromExternalCustomers",
+     "Prior1YearDuration_jpcrp030000-asr_E27464-000SecuritiesRetailingBusinessReportableSegmentsMember"
+    ]
+   ],
+   "同値の他の候補": []
+  },
+  {
+   "id": "S100Z4N9:H-114",
+   "docID": "S100Z4N9",
+   "鍵": "H-114",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "ProfitLossAttributableToOwnersOfParent",
+     "CurrentYearDuration"
+    ]
+   ],
+   "同値の他の候補": [
+    [
+     "jpcrp_cor:ProfitLossAttributableToOwnersOfParentSummaryOfBusinessResults",
+     "CurrentYearDuration"
+    ],
+    [
+     "jppfs_cor:ProfitLoss",
+     "CurrentYearDuration"
+    ],
+    [
+     "jppfs_cor:ProfitLossAttributableToOwnersOfParent",
+     "CurrentYearDuration_RetainedEarningsMember"
+    ],
+    [
+     "jppfs_cor:ProfitLossAttributableToOwnersOfParent",
+     "CurrentYearDuration_ShareholdersEquityMember"
+    ],
+    [
+     "jppfs_cor:ProfitLossAttributableToOwnersOfParent",
+     "CurrentYearDuration_RetainedEarningsMember"
+    ],
+    [
+     "jppfs_cor:ProfitLossAttributableToOwnersOfParent",
+     "CurrentYearDuration_ShareholdersEquityMember"
+    ],
+    [
+     "jppfs_cor:ProfitLoss",
+     "CurrentYearDuration"
+    ],
+    [
+     "jpcrp_cor:ProfitLossAttributableToOwnersOfParentSummaryOfBusinessResults",
+     "CurrentYearDuration"
+    ]
+   ]
+  },
+  {
+   "id": "S100Z4N9:H-115",
+   "docID": "S100Z4N9",
+   "鍵": "H-115",
+   "形": [
+    "符号・方向",
+    "符号・方向"
+   ],
+   "分類": "不一致",
+   "fact": null,
+   "同値の他の候補": [],
+   "席1": [
+    [
+     "LeaseAssetsNetPPE",
+     "CurrentYearInstant"
+    ],
+    [
+     "LeaseAssetsNetPPE",
+     "Prior1YearInstant"
+    ]
+   ],
+   "席2": [
+    [
+     "Land",
+     "CurrentYearInstant"
+    ],
+    [
+     "Land",
+     "Prior1YearInstant"
+    ]
+   ]
+  },
+  {
+   "id": "S100Z4N9:H-116",
+   "docID": "S100Z4N9",
+   "鍵": "H-116",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "OrdinaryIncome",
+     "CurrentYearDuration"
+    ]
+   ],
+   "同値の他の候補": [
+    [
+     "jpcrp_cor:OrdinaryIncomeLossSummaryOfBusinessResults",
+     "CurrentYearDuration"
+    ],
+    [
+     "jpcrp_cor:OrdinaryIncomeLossSummaryOfBusinessResults",
+     "CurrentYearDuration"
+    ]
+   ]
+  },
+  {
+   "id": "S100Z4N9:H-117",
+   "docID": "S100Z4N9",
+   "鍵": "H-117",
+   "形": [
+    "差(当期−前期)",
+    "差(当期−前期)"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "Assets",
+     "CurrentYearInstant"
+    ],
+    [
+     "Assets",
+     "Prior1YearInstant"
+    ]
+   ],
+   "同値の他の候補": [
+    [
+     "jpcrp_cor:TotalAssetsSummaryOfBusinessResults",
+     "CurrentYearInstant"
+    ],
+    [
+     "jpcrp_cor:TotalAssetsSummaryOfBusinessResults",
+     "Prior1YearInstant"
+    ],
+    [
+     "jppfs_cor:LiabilitiesAndNetAssets",
+     "CurrentYearInstant"
+    ],
+    [
+     "jppfs_cor:LiabilitiesAndNetAssets",
+     "Prior1YearInstant"
+    ],
+    [
+     "jpcrp_cor:TotalAssetsSummaryOfBusinessResults",
+     "CurrentYearInstant"
+    ],
+    [
+     "jpcrp_cor:TotalAssetsSummaryOfBusinessResults",
+     "Prior1YearInstant"
+    ],
+    [
+     "jppfs_cor:LiabilitiesAndNetAssets",
+     "CurrentYearInstant"
+    ],
+    [
+     "jppfs_cor:LiabilitiesAndNetAssets",
+     "Prior1YearInstant"
+    ]
+   ]
+  },
+  {
+   "id": "S100Z4N9:H-118",
+   "docID": "S100Z4N9",
+   "鍵": "H-118",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "IncreaseDecreaseInNotesAndAccountsPayableTradeOpeCF",
+     "CurrentYearDuration"
+    ]
+   ],
+   "同値の他の候補": [
+    [
+     "jppfs_cor:AccountsPayableTrade",
+     "CurrentYearInstant"
+    ],
+    [
+     "jppfs_cor:AccountsPayableTrade",
+     "Prior1YearInstant"
+    ],
+    [
+     "jppfs_cor:AccountsPayableTrade",
+     "CurrentYearInstant"
+    ]
+   ]
+  },
+  {
+   "id": "S100Z4N9:H-119",
+   "docID": "S100Z4N9",
+   "鍵": "H-119",
+   "形": [
+    null,
+    null
+   ],
+   "分類": "判定不能(両側)"
+  },
+  {
+   "id": "S100Z4N9:H-120",
+   "docID": "S100Z4N9",
+   "鍵": "H-120",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "OperatingIncome",
+     "Prior1YearDuration_jpcrp030000-asr_E27464-000MedicalReportableSegmentsMember"
+    ]
+   ],
+   "同値の他の候補": []
+  },
+  {
+   "id": "S100Z4N9:H-121",
+   "docID": "S100Z4N9",
+   "鍵": "H-121",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "NetSales",
+     "Prior1YearDuration"
+    ]
+   ],
+   "同値の他の候補": [
+    [
+     "jpcrp_cor:NetSalesSummaryOfBusinessResults",
+     "Prior1YearDuration"
+    ],
+    [
+     "jpcrp_cor:RevenuesFromExternalCustomers",
+     "Prior1YearDuration"
+    ],
+    [
+     "jpcrp_cor:RevenuesFromExternalCustomers",
+     "Prior1YearDuration_TotalOfReportableSegmentsAndOthersMember"
+    ],
+    [
+     "jpcrp_cor:NetSalesSummaryOfBusinessResults",
+     "Prior1YearDuration"
+    ],
+    [
+     "jpcrp_cor:RevenuesFromExternalCustomers",
+     "Prior1YearDuration"
+    ],
+    [
+     "jpcrp_cor:RevenuesFromExternalCustomers",
+     "Prior1YearDuration_TotalOfReportableSegmentsAndOthersMember"
+    ]
+   ]
+  },
+  {
+   "id": "S100Z4N9:H-122",
+   "docID": "S100Z4N9",
+   "鍵": "H-122",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "OperatingIncome",
+     "Prior1YearDuration_jpcrp030000-asr_E27464-000RVReportableSegmentsMember"
+    ]
+   ],
+   "同値の他の候補": []
+  },
+  {
+   "id": "S100Z4N9:H-123",
+   "docID": "S100Z4N9",
+   "鍵": "H-123",
+   "形": [
+    "率(比)",
+    "率(比)"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "GrossProfit",
+     "CurrentYearDuration"
+    ],
+    [
+     "NetSales",
+     "CurrentYearDuration"
+    ]
+   ],
+   "同値の他の候補": [
+    [
+     "jpcrp_cor:NetSalesSummaryOfBusinessResults",
+     "CurrentYearDuration"
+    ],
+    [
+     "jpcrp_cor:NetSalesSummaryOfBusinessResults",
+     "CurrentYearDuration"
+    ]
+   ]
+  },
+  {
+   "id": "S100Z4N9:H-124",
+   "docID": "S100Z4N9",
+   "鍵": "H-124",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "ProfitLossAttributableToOwnersOfParent",
+     "Prior1YearDuration"
+    ]
+   ],
+   "同値の他の候補": [
+    [
+     "jpcrp_cor:ProfitLossAttributableToOwnersOfParentSummaryOfBusinessResults",
+     "Prior1YearDuration"
+    ],
+    [
+     "jppfs_cor:ProfitLoss",
+     "Prior1YearDuration"
+    ],
+    [
+     "jppfs_cor:ProfitLossAttributableToOwnersOfParent",
+     "Prior1YearDuration_RetainedEarningsMember"
+    ],
+    [
+     "jppfs_cor:ProfitLossAttributableToOwnersOfParent",
+     "Prior1YearDuration_ShareholdersEquityMember"
+    ],
+    [
+     "jppfs_cor:ProfitLossAttributableToOwnersOfParent",
+     "Prior1YearDuration_RetainedEarningsMember"
+    ],
+    [
+     "jppfs_cor:ProfitLossAttributableToOwnersOfParent",
+     "Prior1YearDuration_ShareholdersEquityMember"
+    ],
+    [
+     "jppfs_cor:ProfitLoss",
+     "Prior1YearDuration"
+    ],
+    [
+     "jpcrp_cor:ProfitLossAttributableToOwnersOfParentSummaryOfBusinessResults",
+     "Prior1YearDuration"
+    ]
+   ]
+  },
+  {
+   "id": "S100Z4N9:H-125",
+   "docID": "S100Z4N9",
+   "鍵": "H-125",
+   "形": [
+    "符号・方向",
+    "符号・方向"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "LongTermLoansPayable",
+     "CurrentYearInstant"
+    ],
+    [
+     "LongTermLoansPayable",
+     "Prior1YearInstant"
+    ]
+   ],
+   "同値の他の候補": []
+  },
+  {
+   "id": "S100Z4N9:H-126",
+   "docID": "S100Z4N9",
+   "鍵": "H-126",
+   "形": [
+    "符号・方向",
+    "符号・方向"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "CurrentPortionOfBonds",
+     "Prior1YearInstant"
+    ]
+   ],
+   "同値の他の候補": [
+    [
+     "jppfs_cor:RedemptionOfBondsFinCF",
+     "CurrentYearDuration"
+    ],
+    [
+     "jppfs_cor:RedemptionOfBondsFinCF",
+     "CurrentYearDuration"
+    ]
+   ]
+  },
+  {
+   "id": "S100Z4N9:H-127",
+   "docID": "S100Z4N9",
+   "鍵": "H-127",
+   "形": [
+    null,
+    null
+   ],
+   "分類": "判定不能(両側)"
+  },
+  {
+   "id": "S100Z4N9:H-128",
+   "docID": "S100Z4N9",
+   "鍵": "H-128",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "ProfitLossAttributableToOwnersOfParent",
+     "CurrentYearDuration"
+    ]
+   ],
+   "同値の他の候補": [
+    [
+     "jpcrp_cor:ProfitLossAttributableToOwnersOfParentSummaryOfBusinessResults",
+     "CurrentYearDuration"
+    ],
+    [
+     "jppfs_cor:ProfitLoss",
+     "CurrentYearDuration"
+    ],
+    [
+     "jppfs_cor:ProfitLossAttributableToOwnersOfParent",
+     "CurrentYearDuration_RetainedEarningsMember"
+    ],
+    [
+     "jppfs_cor:ProfitLossAttributableToOwnersOfParent",
+     "CurrentYearDuration_ShareholdersEquityMember"
+    ],
+    [
+     "jppfs_cor:ProfitLossAttributableToOwnersOfParent",
+     "CurrentYearDuration_RetainedEarningsMember"
+    ],
+    [
+     "jppfs_cor:ProfitLossAttributableToOwnersOfParent",
+     "CurrentYearDuration_ShareholdersEquityMember"
+    ],
+    [
+     "jppfs_cor:ProfitLoss",
+     "CurrentYearDuration"
+    ],
+    [
+     "jpcrp_cor:ProfitLossAttributableToOwnersOfParentSummaryOfBusinessResults",
+     "CurrentYearDuration"
+    ]
+   ]
+  },
+  {
+   "id": "S100Z4N9:H-129",
+   "docID": "S100Z4N9",
+   "鍵": "H-129",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "OperatingIncome",
+     "CurrentYearDuration"
+    ]
+   ],
+   "同値の他の候補": []
+  },
+  {
+   "id": "S100Z4N9:H-130",
+   "docID": "S100Z4N9",
+   "鍵": "H-130",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "InterestExpensesNOE",
+     "CurrentYearDuration"
+    ]
+   ],
+   "同値の他の候補": []
+  },
+  {
+   "id": "S100Z4N9:H-131",
+   "docID": "S100Z4N9",
+   "鍵": "H-131",
+   "形": [
+    "差(当期−前期)",
+    "差(当期−前期)"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "NetAssets",
+     "CurrentYearInstant"
+    ],
+    [
+     "NetAssets",
+     "Prior1YearInstant"
+    ]
+   ],
+   "同値の他の候補": [
+    [
+     "jppfs_cor:TotalChangesOfItemsDuringThePeriod",
+     "CurrentYearDuration"
+    ],
+    [
+     "jpcrp_cor:NetAssetsSummaryOfBusinessResults",
+     "CurrentYearInstant"
+    ],
+    [
+     "jpcrp_cor:NetAssetsSummaryOfBusinessResults",
+     "Prior1YearInstant"
+    ],
+    [
+     "jppfs_cor:TotalChangesOfItemsDuringThePeriod",
+     "CurrentYearDuration"
+    ],
+    [
+     "jpcrp_cor:NetAssetsSummaryOfBusinessResults",
+     "CurrentYearInstant"
+    ],
+    [
+     "jpcrp_cor:NetAssetsSummaryOfBusinessResults",
+     "Prior1YearInstant"
+    ]
+   ]
+  },
+  {
+   "id": "S100Z4N9:H-132",
+   "docID": "S100Z4N9",
+   "鍵": "H-132",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "OperatingIncome",
+     "Prior1YearDuration"
+    ]
+   ],
+   "同値の他の候補": []
+  },
+  {
+   "id": "S100Z4N9:H-133",
+   "docID": "S100Z4N9",
+   "鍵": "H-133",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "RevenuesFromExternalCustomers",
+     "CurrentYearDuration_jpcrp030000-asr_E27464-000MedicalReportableSegmentsMember"
+    ]
+   ],
+   "同値の他の候補": [
+    [
+     "jppfs_cor:NetSales",
+     "CurrentYearDuration_jpcrp030000-asr_E27464-000MedicalReportableSegmentsMember"
+    ],
+    [
+     "jppfs_cor:NetSales",
+     "CurrentYearDuration_jpcrp030000-asr_E27464-000MedicalReportableSegmentsMember"
+    ]
+   ]
+  },
+  {
+   "id": "S100Z4N9:H-134",
+   "docID": "S100Z4N9",
+   "鍵": "H-134",
+   "形": [
+    "差(当期−前期)",
+    "差(当期−前期)"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "GrossProfit",
+     "CurrentYearDuration"
+    ],
+    [
+     "GrossProfit",
+     "Prior1YearDuration"
+    ]
+   ],
+   "同値の他の候補": []
+  },
+  {
+   "id": "S100Z4N9:H-135",
+   "docID": "S100Z4N9",
+   "鍵": "H-135",
+   "形": [
+    "符号・方向",
+    "符号・方向"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "BuildingsAndStructuresNet",
+     "CurrentYearInstant"
+    ],
+    [
+     "BuildingsAndStructuresNet",
+     "Prior1YearInstant"
+    ]
+   ],
+   "同値の他の候補": []
+  },
+  {
+   "id": "S100Z4N9:H-136",
+   "docID": "S100Z4N9",
+   "鍵": "H-136",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "Assets",
+     "CurrentYearInstant"
+    ]
+   ],
+   "同値の他の候補": [
+    [
+     "jpcrp_cor:TotalAssetsSummaryOfBusinessResults",
+     "CurrentYearInstant"
+    ],
+    [
+     "jppfs_cor:LiabilitiesAndNetAssets",
+     "CurrentYearInstant"
+    ],
+    [
+     "jpcrp_cor:TotalAssetsSummaryOfBusinessResults",
+     "CurrentYearInstant"
+    ],
+    [
+     "jppfs_cor:LiabilitiesAndNetAssets",
+     "CurrentYearInstant"
+    ]
+   ]
+  },
+  {
+   "id": "S100Z4N9:H-137",
+   "docID": "S100Z4N9",
+   "鍵": "H-137",
+   "形": [
+    "符号・方向",
+    "符号・方向"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "CurrentLiabilities",
+     "CurrentYearInstant"
+    ],
+    [
+     "CurrentLiabilities",
+     "Prior1YearInstant"
+    ]
+   ],
+   "同値の他の候補": []
+  },
+  {
+   "id": "S100Z4N9:H-138",
+   "docID": "S100Z4N9",
+   "鍵": "H-138",
+   "形": [
+    "差(当期−前期)",
+    "差(当期−前期)"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "NetSales",
+     "CurrentYearDuration"
+    ],
+    [
+     "NetSales",
+     "Prior1YearDuration"
+    ]
+   ],
+   "同値の他の候補": [
+    [
+     "jpcrp_cor:NetSalesSummaryOfBusinessResults",
+     "CurrentYearDuration"
+    ],
+    [
+     "jpcrp_cor:NetSalesSummaryOfBusinessResults",
+     "Prior1YearDuration"
+    ],
+    [
+     "jpcrp_cor:RevenuesFromExternalCustomers",
+     "CurrentYearDuration"
+    ],
+    [
+     "jpcrp_cor:RevenuesFromExternalCustomers",
+     "Prior1YearDuration"
+    ],
+    [
+     "jpcrp_cor:NetSalesSummaryOfBusinessResults",
+     "CurrentYearDuration"
+    ],
+    [
+     "jpcrp_cor:NetSalesSummaryOfBusinessResults",
+     "Prior1YearDuration"
+    ],
+    [
+     "jpcrp_cor:RevenuesFromExternalCustomers",
+     "CurrentYearDuration"
+    ],
+    [
+     "jpcrp_cor:RevenuesFromExternalCustomers",
+     "Prior1YearDuration"
+    ]
+   ]
+  },
+  {
+   "id": "S100Z4N9:H-139",
+   "docID": "S100Z4N9",
+   "鍵": "H-139",
+   "形": [
+    "率(比)",
+    "率(比)"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "RevenuesFromExternalCustomers",
+     "CurrentYearDuration_jpcrp030000-asr_E27464-000PropertiesDevelopmentAndSalesReportableSegmentsMember"
+    ],
+    [
+     "RevenuesFromExternalCustomers",
+     "Prior1YearDuration_jpcrp030000-asr_E27464-000PropertiesDevelopmentAndSalesReportableSegmentsMember"
+    ]
+   ],
+   "同値の他の候補": []
+  },
+  {
+   "id": "S100Z4N9:H-140",
+   "docID": "S100Z4N9",
+   "鍵": "H-140",
+   "形": [
+    "符号・方向",
+    "符号・方向"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "AllowanceForDoubtfulAccountsCA",
+     "CurrentYearInstant"
+    ],
+    [
+     "AllowanceForDoubtfulAccountsCA",
+     "Prior1YearInstant"
+    ]
+   ],
+   "同値の他の候補": [
+    [
+     "jppfs_cor:IncreaseDecreaseInAllowanceForDoubtfulAccountsOpeCF",
+     "CurrentYearDuration"
+    ],
+    [
+     "jppfs_cor:IncreaseDecreaseInAllowanceForDoubtfulAccountsOpeCF",
+     "CurrentYearDuration"
+    ],
+    [
+     "jppfs_cor:ProvisionOfAllowanceForDoubtfulAccountsSGA",
+     "CurrentYearDuration"
+    ]
+   ]
+  },
+  {
+   "id": "S100Z4N9:H-141",
+   "docID": "S100Z4N9",
+   "鍵": "H-141",
+   "形": [
+    "符号・方向",
+    "符号・方向"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "RealEstateForSaleInProcess",
+     "CurrentYearInstant"
+    ],
+    [
+     "RealEstateForSaleInProcess",
+     "Prior1YearInstant"
+    ]
+   ],
+   "同値の他の候補": []
+  },
+  {
+   "id": "S100Z4N9:H-142",
+   "docID": "S100Z4N9",
+   "鍵": "H-142",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "OperatingIncome",
+     "CurrentYearDuration_jpcrp030000-asr_E27464-000SecuritiesRetailingBusinessReportableSegmentsMember"
+    ]
+   ],
+   "同値の他の候補": []
+  },
+  {
+   "id": "S100Z4N9:H-143",
+   "docID": "S100Z4N9",
+   "鍵": "H-143",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "OperatingIncome",
+     "CurrentYearDuration"
+    ]
+   ],
+   "同値の他の候補": []
+  },
+  {
+   "id": "S100Z4N9:H-144",
+   "docID": "S100Z4N9",
+   "鍵": "H-144",
+   "形": [
+    null,
+    null
+   ],
+   "分類": "判定不能(両側)"
+  },
+  {
+   "id": "S100Z4N9:H-145",
+   "docID": "S100Z4N9",
+   "鍵": "H-145",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "OperatingIncome",
+     "CurrentYearDuration_jpcrp030000-asr_E27464-000MedicalReportableSegmentsMember"
+    ]
+   ],
+   "同値の他の候補": []
+  },
+  {
+   "id": "S100Z4N9:H-146",
+   "docID": "S100Z4N9",
+   "鍵": "H-146",
+   "形": [
+    null,
+    null
+   ],
+   "分類": "判定不能(両側)"
+  },
+  {
+   "id": "S100Z4N9:H-147",
+   "docID": "S100Z4N9",
+   "鍵": "H-147",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "OperatingIncome",
+     "CurrentYearDuration_jpcrp030000-asr_E27464-000RVReportableSegmentsMember"
+    ]
+   ],
+   "同値の他の候補": []
+  },
+  {
+   "id": "S100Z4N9:H-148",
+   "docID": "S100Z4N9",
+   "鍵": "H-148",
+   "形": [
+    "符号・方向",
+    "符号・方向"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "CurrentPortionOfBonds",
+     "Prior1YearInstant"
+    ]
+   ],
+   "同値の他の候補": [
+    [
+     "jppfs_cor:RedemptionOfBondsFinCF",
+     "CurrentYearDuration"
+    ],
+    [
+     "jppfs_cor:RedemptionOfBondsFinCF",
+     "CurrentYearDuration"
+    ]
+   ]
+  },
+  {
+   "id": "S100Z4N9:H-149",
+   "docID": "S100Z4N9",
+   "鍵": "H-149",
+   "形": [
+    "符号・方向",
+    "符号・方向"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "SellingGeneralAndAdministrativeExpenses",
+     "CurrentYearDuration"
+    ],
+    [
+     "SellingGeneralAndAdministrativeExpenses",
+     "Prior1YearDuration"
+    ]
+   ],
+   "同値の他の候補": []
+  },
+  {
+   "id": "S100Z4N9:H-150",
+   "docID": "S100Z4N9",
+   "鍵": "H-150",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "分類": "確定(同値類v0)",
+   "厳密一致": true,
+   "v0_only": false,
+   "fact": [
+    [
+     "OperatingIncome",
+     "Prior1YearDuration"
+    ]
+   ],
+   "同値の他の候補": []
+  }
+ ]
+}

@@ -1,0 +1,1269 @@
+{
+ "S100Z4N9:H-001": {
+  "state": "VALUE_MISMATCH",
+  "pointers": [
+   "xbrl:jpcrp_cor:NetSalesSummaryOfBusinessResults@CurrentYearDuration"
+  ],
+  "subject": "売上高",
+  "span": "以上の結果、売上高2,523,449千円(前年同期比27.6",
+  "reason": null
+ },
+ "S100Z4N9:H-002": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:NetSales@CurrentYearDuration_jpcrp030000-asr_E27464-000MedicalReportableSegmentsMember"
+  ],
+  "subject": "売上高",
+  "span": "、医療機関等からの賃貸収入を中心に売上を計上した結果、売上高259,831千円(同6.3%減)とな",
+  "reason": null
+ },
+ "S100Z4N9:H-003": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:IncreaseDecreaseInNotesAndAccountsPayableTradeOpeCF@CurrentYearDuration",
+   "builtin:flow_sign(cur)==direction"
+  ],
+  "subject": "仕入債務",
+  "span": "185千円、仕入債務の増加額853,794千円、貸倒引当金の増加699,5",
+  "reason": null
+ },
+ "S100Z4N9:H-004": {
+  "state": "UNVERIFIABLE",
+  "pointers": [],
+  "subject": null,
+  "span": "一方、主な減少要因は、建",
+  "reason": "no_subject"
+ },
+ "S100Z4N9:H-005": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:CashAndDeposits@CurrentYearInstant",
+   "xbrl:jppfs_cor:CashAndDeposits@Prior1YearInstant",
+   "formula:a-b"
+  ],
+  "subject": "現金及び預金",
+  "span": "販売用不動産の増加1,463,505千円、現金及び預金の増加302,764千円、営業貸付金の増加2",
+  "reason": null
+ },
+ "S100Z4N9:H-006": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:NoncurrentLiabilities@CurrentYearInstant",
+   "xbrl:jppfs_cor:NoncurrentLiabilities@Prior1YearInstant",
+   "builtin:sign(cur-prior)"
+  ],
+  "subject": "固定負債",
+  "span": "固定負債は前連結会計年度末と比較して618,771千円減少し、2,5",
+  "reason": null
+ },
+ "S100Z4N9:H-007": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:DividendsFromSurplus@CurrentYearDuration"
+  ],
+  "subject": "剰余金の配当",
+  "span": "の計上による利益剰余金の減少711,406千円、剰余金の配当82,796千円であります。",
+  "reason": null
+ },
+ "S100Z4N9:H-008": {
+  "state": "UNVERIFIABLE",
+  "pointers": [],
+  "subject": null,
+  "span": "以上の結果、当連結会計年度は639,811千円の経常損失(前年同期",
+  "reason": "ambiguous(elements)"
+ },
+ "S100Z4N9:H-009": {
+  "state": "UNVERIFIABLE",
+  "pointers": [],
+  "subject": null,
+  "span": "一方、主な減少要因は、長",
+  "reason": "no_subject"
+ },
+ "S100Z4N9:H-010": {
+  "state": "UNVERIFIABLE",
+  "pointers": [],
+  "subject": null,
+  "span": "要因は、短期借入金の増加1,696,000千円、買掛金の増加853,794千円、1年内返済予定の長",
+  "reason": "no_subject"
+ },
+ "S100Z4N9:H-011": {
+  "state": "POINTER_NOT_FOUND",
+  "pointers": [],
+  "subject": null,
+  "span": "0千円、土地の増加60,121千円、機械装置及び運搬具の増加28,909千円であります。",
+  "reason": "no_element"
+ },
+ "S100Z4N9:H-012": {
+  "state": "UNVERIFIABLE",
+  "pointers": [],
+  "subject": null,
+  "span": "主な増加要因は、販売用不動産の増加1,463",
+  "reason": "no_subject"
+ },
+ "S100Z4N9:H-013": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:NetSales@CurrentYearDuration_jpcrp030000-asr_E27464-000RVReportableSegmentsMember",
+   "xbrl:jppfs_cor:NetSales@Prior1YearDuration_jpcrp030000-asr_E27464-000RVReportableSegmentsMember"
+  ],
+  "subject": "売上高",
+  "span": "リノベーション等に注力した結果、売上高392,735千円(同21.8%減)となりました。",
+  "reason": null
+ },
+ "S100Z4N9:H-014": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jpcrp_cor:NetSalesSummaryOfBusinessResults@CurrentYearDuration"
+  ],
+  "subject": "売上高",
+  "span": "以上の結果、売上高11,804,911千円(前年同期比8.4%",
+  "reason": null
+ },
+ "S100Z4N9:H-015": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:CurrentPortionOfLongTermLoansPayable@CurrentYearInstant",
+   "xbrl:jppfs_cor:CurrentPortionOfLongTermLoansPayable@Prior1YearInstant",
+   "formula:a-b"
+  ],
+  "subject": "1年内返済予定の長期借入金",
+  "span": "金の増加853,794千円、1年内返済予定の長期借入金の増加431,011千円であります。",
+  "reason": null
+ },
+ "S100Z4N9:H-016": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:SellingGeneralAndAdministrativeExpenses@CurrentYearDuration",
+   "xbrl:jppfs_cor:SellingGeneralAndAdministrativeExpenses@Prior1YearDuration"
+  ],
+  "subject": "販売費及び一般管理費",
+  "span": "計年度の1,983,060千円から773,361千円増加(同39.0%増)しました。",
+  "reason": null
+ },
+ "S100Z4N9:H-017": {
+  "state": "UNVERIFIABLE",
+  "pointers": [],
+  "subject": null,
+  "span": "主な増加要因は、販",
+  "reason": "no_subject"
+ },
+ "S100Z4N9:H-018": {
+  "state": "POINTER_NOT_FOUND",
+  "pointers": [],
+  "subject": null,
+  "span": "主な増加要因は、リース債務の増加60,982千円であります。",
+  "reason": "no_element"
+ },
+ "S100Z4N9:H-019": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jpcrp_cor:TotalAssetsSummaryOfBusinessResults@CurrentYearInstant",
+   "xbrl:jpcrp_cor:TotalAssetsSummaryOfBusinessResults@Prior1YearInstant",
+   "builtin:sign(cur-prior)"
+  ],
+  "subject": "総資産",
+  "span": "43千円となり、前連結会計年度末に比べ1,501,089千円増加しました。",
+  "reason": null
+ },
+ "S100Z4N9:H-020": {
+  "state": "UNVERIFIABLE",
+  "pointers": [],
+  "subject": null,
+  "span": "主な増加要因は、短期借入金の増加1,696",
+  "reason": "no_subject"
+ },
+ "S100Z4N9:H-021": {
+  "state": "UNVERIFIABLE",
+  "pointers": [],
+  "subject": null,
+  "span": "は主に、税金等調整前当期純損失672,709千円、棚卸資産の増加額1,32",
+  "reason": "no_subject"
+ },
+ "S100Z4N9:H-022": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jpcrp_cor:OrdinaryIncomeLossSummaryOfBusinessResults@Prior1YearDuration"
+  ],
+  "subject": "経常損失",
+  "span": "76千円の営業利益)、経常損失639,811千円(前年同期は474,675千円の経常利益)、親会社",
+  "reason": null
+ },
+ "S100Z4N9:H-023": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jpcrp_cor:NetSalesSummaryOfBusinessResults@CurrentYearDuration"
+  ],
+  "subject": "売上高",
+  "span": "当連結会計年度の売上高は、11,804,911千円となり前連結会計年度",
+  "reason": null
+ },
+ "S100Z4N9:H-024": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:PurchaseOfPropertyPlantAndEquipmentInvCF@CurrentYearDuration"
+  ],
+  "subject": "有形固定資産の取得による支出",
+  "span": "これは主に、有形固定資産の取得による支出348,590千円によるものであります",
+  "reason": null
+ },
+ "S100Z4N9:H-025": {
+  "state": "UNVERIFIABLE",
+  "pointers": [],
+  "subject": null,
+  "span": "主な増加要因は、短",
+  "reason": "no_subject"
+ },
+ "S100Z4N9:H-026": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jpcrp_cor:NetCashProvidedByUsedInOperatingActivitiesSummaryOfBusinessResults@CurrentYearDuration"
+  ],
+  "subject": "営業活動によるキャッシュ・フロー",
+  "span": "営業活動によるキャッシュ・フローは、259,597千円のマイナス(前年同期",
+  "reason": null
+ },
+ "S100Z4N9:H-027": {
+  "state": "POINTER_NOT_FOUND",
+  "pointers": [],
+  "subject": "長期借入金の返済",
+  "span": "借入れによる収入1,175,000千円、社債の償還による支出300,000千円によるものであります",
+  "reason": "no_element"
+ },
+ "S100Z4N9:H-028": {
+  "state": "UNVERIFIABLE",
+  "pointers": [],
+  "subject": null,
+  "span": "流動資産は、前連結会計年度末と比較して1,376,654千円増加し、7,0",
+  "reason": "no_subject"
+ },
+ "S100Z4N9:H-029": {
+  "state": "UNVERIFIABLE",
+  "pointers": [],
+  "subject": null,
+  "span": "の情報収集や営業体制の強化により開発が順調に推移し、車室数が増加いたしまし",
+  "reason": "no_subject"
+ },
+ "S100Z4N9:H-030": {
+  "state": "UNVERIFIABLE",
+  "pointers": [],
+  "subject": null,
+  "span": "当連結会計年度の営業外収益は、受取保険金11,337千円、受取利息4,309",
+  "reason": "no_subject"
+ },
+ "S100Z4N9:H-031": {
+  "state": "UNVERIFIABLE",
+  "pointers": [],
+  "subject": null,
+  "span": "本契約に基づく当連結会計年度末の借入実行残高は20億円であります。",
+  "reason": "ambiguous(elements)"
+ },
+ "S100Z4N9:H-032": {
+  "state": "UNVERIFIABLE",
+  "pointers": [],
+  "subject": null,
+  "span": "おける「トラストパートナーズ」の販売拡大の他、各種事業の収益改善等に注力し",
+  "reason": "no_subject"
+ },
+ "S100Z4N9:H-033": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:NetSales@CurrentYearDuration_jpcrp030000-asr_E27464-000RVReportableSegmentsMember"
+  ],
+  "subject": "売上高",
+  "span": "の製造、販売及び修理・リノベーション等に注力した結果、売上高392,735千円(同21.8%減)と",
+  "reason": null
+ },
+ "S100Z4N9:H-034": {
+  "state": "VALUE_MISMATCH",
+  "pointers": [
+   "xbrl:jpcrp_cor:EquityToAssetRatioSummaryOfBusinessResults@CurrentYearInstant"
+  ],
+  "subject": "自己資本比率",
+  "span": "以上の結果、自己資本比率は4.4%(前連結会計年度末は13.9%)となりました。",
+  "reason": null
+ },
+ "S100Z4N9:H-035": {
+  "state": "UNVERIFIABLE",
+  "pointers": [],
+  "subject": null,
+  "span": "また、営業外費用は、支払利息138,206千円等の計上により158,783千円(同26.5%増)と",
+  "reason": "no_subject"
+ },
+ "S100Z4N9:H-036": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jpcrp_cor:NetAssetsSummaryOfBusinessResults@CurrentYearInstant"
+  ],
+  "subject": "純資産",
+  "span": "資産は、前連結会計年度末と比較して763,861千円減少し、453,994千円となりました。",
+  "reason": null
+ },
+ "S100Z4N9:H-037": {
+  "state": "VALUE_MISMATCH",
+  "pointers": [
+   "xbrl:jppfs_cor:SellingGeneralAndAdministrativeExpenses@CurrentYearDuration"
+  ],
+  "subject": "販売費及び一般管理費",
+  "span": ",422千円となり前連結会計年度の1,983,060千円から773,361千円増加(同39.0%増",
+  "reason": null
+ },
+ "S100Z4N9:H-038": {
+  "state": "POINTER_NOT_FOUND",
+  "pointers": [],
+  "subject": "長期借入金の返済",
+  "span": "金の増加額1,696,000千円、長期借入金の返済による支出1,416,863千円、長期借入れによる収",
+  "reason": "no_element"
+ },
+ "S100Z4N9:H-039": {
+  "state": "POINTER_NOT_FOUND",
+  "pointers": [],
+  "subject": null,
+  "span": "主な増加要因は、販売用不動産の増加1,463,505千円、現金及び預金の増加",
+  "reason": "no_element"
+ },
+ "S100Z4N9:H-040": {
+  "state": "VALUE_MISMATCH",
+  "pointers": [
+   "xbrl:jpcrp_cor:NetSalesSummaryOfBusinessResults@CurrentYearDuration"
+  ],
+  "subject": "売上高",
+  "span": "また、その他につきましては売上高1,046,823千円(同4.6%増)とな",
+  "reason": null
+ },
+ "S100Z4N9:H-041": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:NoncurrentLiabilities@CurrentYearInstant"
+  ],
+  "subject": "固定負債",
+  "span": "定負債は前連結会計年度末と比較して618,771千円減少し、2,599,500千円となりました。",
+  "reason": null
+ },
+ "S100Z4N9:H-042": {
+  "state": "POINTER_NOT_FOUND",
+  "pointers": [],
+  "subject": null,
+  "span": "パートナーズ第38号(神奈川県藤沢市、大分県別府市、販売総額155,000千円)」、「トラストパー",
+  "reason": "no_element"
+ },
+ "S100Z4N9:H-043": {
+  "state": "UNVERIFIABLE",
+  "pointers": [],
+  "subject": null,
+  "span": "除却損8,000千円の計上により32,898千円(前年同期比90.7%増)となりました。",
+  "reason": "no_subject"
+ },
+ "S100Z4N9:H-044": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jpcrp_cor:NetCashProvidedByUsedInOperatingActivitiesSummaryOfBusinessResults@Prior1YearDuration"
+  ],
+  "subject": "営業活動によるキャッシュ・フロー",
+  "span": "ャッシュ・フローは、259,597千円のマイナス(前年同期は737,785千円のマイナス)となりま",
+  "reason": null
+ },
+ "S100Z4N9:H-045": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:GrossProfit@CurrentYearDuration",
+   "xbrl:jppfs_cor:GrossProfit@Prior1YearDuration",
+   "builtin:sign(cur-prior)"
+  ],
+  "subject": "売上総利益",
+  "span": "前連結会計年度の2,513,037千円から277,948千円減少(前年同期",
+  "reason": null
+ },
+ "S100Z4N9:H-046": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:IncreaseDecreaseInNotesAndAccountsPayableTradeOpeCF@CurrentYearDuration",
+   "builtin:flow_sign(cur)==direction"
+  ],
+  "subject": "仕入債務",
+  "span": "09千円、棚卸資産の増加額1,323,185千円、仕入債務の増加額853,",
+  "reason": null
+ },
+ "S100Z4N9:H-047": {
+  "state": "VALUE_MISMATCH",
+  "pointers": [
+   "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration"
+  ],
+  "subject": "営業損失",
+  "span": "高2,523,449千円(前年同期比27.6%減)、営業損失135,305千円(前年同期は124,",
+  "reason": null
+ },
+ "S100Z4N9:H-048": {
+  "state": "UNVERIFIABLE",
+  "pointers": [],
+  "subject": null,
+  "span": "固定資産は前連結会計年度末と比較して124,435千円増加し、3,1",
+  "reason": "no_subject"
+ },
+ "S100Z4N9:H-049": {
+  "state": "POINTER_NOT_FOUND",
+  "pointers": [],
+  "subject": null,
+  "span": "一方、主な減少要因は、建物及び構築物の減少43,136千円であります。",
+  "reason": "no_element"
+ },
+ "S100Z4N9:H-050": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:CurrentPortionOfLongTermLoansPayable@CurrentYearInstant",
+   "xbrl:jppfs_cor:CurrentPortionOfLongTermLoansPayable@Prior1YearInstant",
+   "builtin:sign(cur-prior)"
+  ],
+  "subject": "1年内返済予定の長期借入金",
+  "span": "買掛金の増加853,794千円、1年内返済予定の長期借入金の増加431,0",
+  "reason": null
+ },
+ "S100Z4N9:H-051": {
+  "state": "UNVERIFIABLE",
+  "pointers": [],
+  "subject": null,
+  "span": "主な増加要因は、短期借入金の増加1,696,000千円、買掛金の増加853",
+  "reason": "no_subject"
+ },
+ "S100Z4N9:H-052": {
+  "state": "POINTER_NOT_FOUND",
+  "pointers": [],
+  "subject": null,
+  "span": "固定資産は前連結会計年度末と比較して124,435千円増加し、3,183,",
+  "reason": "no_element"
+ },
+ "S100Z4N9:H-053": {
+  "state": "VALUE_MISMATCH",
+  "pointers": [
+   "xbrl:jppfs_cor:NetSales@CurrentYearDuration_jpcrp030000-asr_E27464-000PropertiesDevelopmentAndSalesReportableSegmentsMember"
+  ],
+  "subject": "売上高",
+  "span": "、既竣工物件と合わせて68戸の引渡しを実施した結果、売上高は2,523,449千円(同27.6%減)と",
+  "reason": null
+ },
+ "S100Z4N9:H-054": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:Liabilities@CurrentYearInstant",
+   "xbrl:jppfs_cor:Liabilities@Prior1YearInstant",
+   "builtin:sign(cur-prior)"
+  ],
+  "subject": "負債合計",
+  "span": "49千円となり、前連結会計年度末に比べ2,264,951千円増加しました。",
+  "reason": null
+ },
+ "S100Z4N9:H-055": {
+  "state": "VALUE_MISMATCH",
+  "pointers": [
+   "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration",
+   "xbrl:jppfs_cor:OperatingIncome@Prior1YearDuration"
+  ],
+  "subject": "営業利益",
+  "span": "3千円(前年同期比4.6%増)、営業利益29,431千円(同388.6%増)となりました。",
+  "reason": null
+ },
+ "S100Z4N9:H-056": {
+  "state": "VALUE_MISMATCH",
+  "pointers": [
+   "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration"
+  ],
+  "subject": "営業利益",
+  "span": "上高7,056,648千円(前年同期比0.8%増)、営業利益294,099千円(同11.8%増)と",
+  "reason": null
+ },
+ "S100Z4N9:H-057": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:SellingGeneralAndAdministrativeExpenses@CurrentYearDuration"
+  ],
+  "subject": "販売費及び一般管理費",
+  "span": "一方、販売費及び一般管理費は、2,756,422千円となり前連結会計年度",
+  "reason": null
+ },
+ "S100Z4N9:H-058": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:GrossProfit@CurrentYearDuration"
+  ],
+  "subject": "売上総利益",
+  "span": "当連結会計年度の売上総利益は、2,235,088千円となり前連結会計年度",
+  "reason": null
+ },
+ "S100Z4N9:H-059": {
+  "state": "UNVERIFIABLE",
+  "pointers": [],
+  "subject": null,
+  "span": "、当該医療法人の経営改善の遅れにより、回収可能額が見積り額を下回る可能性が",
+  "reason": "no_subject"
+ },
+ "S100Z4N9:H-060": {
+  "state": "UNVERIFIABLE",
+  "pointers": [],
+  "subject": null,
+  "span": "、税金等調整前当期純損失672,709千円、棚卸資産の増加額1,323,185千円、仕入債務の増加額8",
+  "reason": "no_subject"
+ },
+ "S100Z4N9:H-061": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jpcrp_cor:NetSalesSummaryOfBusinessResults@CurrentYearDuration",
+   "xbrl:jpcrp_cor:NetSalesSummaryOfBusinessResults@Prior1YearDuration",
+   "builtin:sign(cur-prior)"
+  ],
+  "subject": "売上高",
+  "span": "計年度の12,887,524千円から1,082,613千円の減少(前年同期",
+  "reason": null
+ },
+ "S100Z4N9:H-062": {
+  "state": "VALUE_MISMATCH",
+  "pointers": [
+   "xbrl:jpcrp_cor:NetSalesSummaryOfBusinessResults@CurrentYearDuration"
+  ],
+  "subject": "売上高",
+  "span": "以上の結果、売上高525,423千円(前年同期比15.1",
+  "reason": null
+ },
+ "S100Z4N9:H-063": {
+  "state": "VALUE_MISMATCH",
+  "pointers": [
+   "xbrl:jppfs_cor:DepreciationAndAmortizationOpeCF@CurrentYearDuration"
+  ],
+  "subject": "減価償却費",
+  "span": "508千円、減価償却費425,020千円、営業貸付金の増加額275,052千円によるものであります",
+  "reason": null
+ },
+ "S100Z4N9:H-064": {
+  "state": "VALUE_MISMATCH",
+  "pointers": [
+   "xbrl:jpcrp_cor:NetSalesSummaryOfBusinessResults@CurrentYearDuration",
+   "xbrl:jpcrp_cor:NetSalesSummaryOfBusinessResults@Prior1YearDuration"
+  ],
+  "subject": "売上高",
+  "span": "以上の結果、売上高7,056,648千円(前年同期比0.8%増)、営業利益294",
+  "reason": null
+ },
+ "S100Z4N9:H-065": {
+  "state": "UNVERIFIABLE",
+  "pointers": [],
+  "subject": null,
+  "span": "因は、親会社株主に帰属する当期純損失の計上による利益剰余金の減少711,4",
+  "reason": "no_subject"
+ },
+ "S100Z4N9:H-066": {
+  "state": "VALUE_MISMATCH",
+  "pointers": [
+   "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration",
+   "xbrl:jppfs_cor:OperatingIncome@Prior1YearDuration"
+  ],
+  "subject": "営業利益",
+  "span": "千円(前年同期比15.1%減)、営業利益25,666千円(同32.2%減)となりました。",
+  "reason": null
+ },
+ "S100Z4N9:H-067": {
+  "state": "VALUE_MISMATCH",
+  "pointers": [
+   "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration"
+  ],
+  "subject": "営業損失",
+  "span": "同期比27.6%減)、営業損失135,305千円(前年同期は124,763千円の営業利益)となりま",
+  "reason": null
+ },
+ "S100Z4N9:H-068": {
+  "state": "POINTER_NOT_FOUND",
+  "pointers": [],
+  "subject": null,
+  "span": "(長崎県長崎市、山口県下関市、広島県呉市及び尾道市、販売総額147,000千円)」及び「トラストパ",
+  "reason": "no_element"
+ },
+ "S100Z4N9:H-069": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jpcrp_cor:OrdinaryIncomeLossSummaryOfBusinessResults@Prior1YearDuration"
+  ],
+  "subject": "経常損失",
+  "span": "果、当連結会計年度は639,811千円の経常損失(前年同期は474,675千円の経常利益)となりま",
+  "reason": null
+ },
+ "S100Z4N9:H-070": {
+  "state": "VALUE_MISMATCH",
+  "pointers": [
+   "xbrl:jpcrp_cor:NetSalesSummaryOfBusinessResults@CurrentYearDuration",
+   "xbrl:jpcrp_cor:NetSalesSummaryOfBusinessResults@Prior1YearDuration"
+  ],
+  "subject": "売上高",
+  "span": "以上の結果、売上高259,831千円(前年同期比6.3%減)、営業損失715",
+  "reason": null
+ },
+ "S100Z4N9:H-071": {
+  "state": "VALUE_MISMATCH",
+  "pointers": [
+   "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration",
+   "xbrl:jppfs_cor:OperatingIncome@Prior1YearDuration"
+  ],
+  "subject": "営業利益",
+  "span": "千円(前年同期比0.8%増)、営業利益294,099千円(同11.8%増)となりました。",
+  "reason": null
+ },
+ "S100Z4N9:H-072": {
+  "state": "UNVERIFIABLE",
+  "pointers": [],
+  "subject": null,
+  "span": "失24,898千円、固定資産除却損8,000千円の計上により32,898千円(前年同期比90.7",
+  "reason": "no_subject"
+ },
+ "S100Z4N9:H-073": {
+  "state": "UNVERIFIABLE",
+  "pointers": [],
+  "subject": null,
+  "span": "ション等に注力しましたが、新車・中古車ともに販売台数が計画を下回り、前年同",
+  "reason": "target_or_plan"
+ },
+ "S100Z4N9:H-074": {
+  "state": "POINTER_NOT_FOUND",
+  "pointers": [],
+  "subject": "配当",
+  "span": "取利息4,309千円、受取配当金3,332千円等の計上により40,305千円(前年同期比42.6",
+  "reason": "no_element"
+ },
+ "S100Z4N9:H-075": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jpcrp_cor:NetCashProvidedByUsedInFinancingActivitiesSummaryOfBusinessResults@Prior1YearDuration"
+  ],
+  "subject": "財務活動によるキャッシュ・フロー",
+  "span": "キャッシュ・フローは、908,092千円のプラス(前年同期は64,115千円のマイナス)となりま",
+  "reason": null
+ },
+ "S100Z4N9:H-076": {
+  "state": "POINTER_NOT_FOUND",
+  "pointers": [],
+  "subject": "配当",
+  "span": "当金3,332千円等の計上により40,305千円(前年同期比42.6%減)となりました。",
+  "reason": "no_element"
+ },
+ "S100Z4N9:H-077": {
+  "state": "POINTER_NOT_FOUND",
+  "pointers": [],
+  "subject": null,
+  "span": "主な増加要因は、リース資産の増加79,550千円、土地の増加60,1",
+  "reason": "no_element"
+ },
+ "S100Z4N9:H-078": {
+  "state": "VALUE_MISMATCH",
+  "pointers": [
+   "xbrl:jpcrp_cor:NetSalesSummaryOfBusinessResults@CurrentYearDuration"
+  ],
+  "subject": "売上高",
+  "span": "以上の結果、売上高1,046,823千円(前年同期比4.6%",
+  "reason": null
+ },
+ "S100Z4N9:H-079": {
+  "state": "UNVERIFIABLE",
+  "pointers": [],
+  "subject": null,
+  "span": "新車・中古車ともに販売台数が計画を下回り、前年同期比で減収・減益となりまし",
+  "reason": "no_subject"
+ },
+ "S100Z4N9:H-080": {
+  "state": "VALUE_MISMATCH",
+  "pointers": [
+   "xbrl:jpcrp_cor:NetSalesSummaryOfBusinessResults@CurrentYearDuration",
+   "xbrl:jpcrp_cor:NetSalesSummaryOfBusinessResults@Prior1YearDuration"
+  ],
+  "subject": "売上高",
+  "span": "また、その他につきましては売上高1,046,823千円(同4.6%増)となりました。",
+  "reason": null
+ },
+ "S100Z4N9:H-081": {
+  "state": "POINTER_NOT_FOUND",
+  "pointers": [],
+  "subject": null,
+  "span": "主な増加要因は、リース資産の増加79,550千円、土地の増加60,121千円、機械装置及び運搬具",
+  "reason": "no_element"
+ },
+ "S100Z4N9:H-082": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jpcrp_cor:NetAssetsSummaryOfBusinessResults@CurrentYearInstant",
+   "xbrl:jpcrp_cor:NetAssetsSummaryOfBusinessResults@Prior1YearInstant",
+   "builtin:sign(cur-prior)"
+  ],
+  "subject": "純資産",
+  "span": "おける純資産は、前連結会計年度末と比較して763,861千円減少し、453",
+  "reason": null
+ },
+ "S100Z4N9:H-083": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:CurrentLiabilities@CurrentYearInstant",
+   "xbrl:jppfs_cor:CurrentLiabilities@Prior1YearInstant",
+   "formula:a-b"
+  ],
+  "subject": "流動負債",
+  "span": "連結会計年度末における流動負債は、前連結会計年度末と比較して2,883,722千円増加し、7,178,",
+  "reason": null
+ },
+ "S100Z4N9:H-084": {
+  "state": "POINTER_NOT_FOUND",
+  "pointers": [],
+  "subject": "売上総利益",
+  "span": "年同期比11.1%減)した結果、売上総利益率は18.9%(同0.5ポイント減)となりました。",
+  "reason": "no_element(point without prior phrase)"
+ },
+ "S100Z4N9:H-085": {
+  "state": "VALUE_MISMATCH",
+  "pointers": [
+   "xbrl:jppfs_cor:NetSales@CurrentYearDuration_jpcrp030000-asr_E27464-000ParkingReportableSegmentsMember",
+   "xbrl:jppfs_cor:NetSales@Prior1YearDuration_jpcrp030000-asr_E27464-000ParkingReportableSegmentsMember"
+  ],
+  "subject": "売上高",
+  "span": "場の活性化に注力した結果、売上高は7,056,648千円(同0.8%増)となりました。",
+  "reason": null
+ },
+ "S100Z4N9:H-087": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:Liabilities@CurrentYearInstant"
+  ],
+  "subject": "負債合計",
+  "span": "以上の結果、負債合計は9,778,049千円となり、前連結会計年",
+  "reason": null
+ },
+ "S100Z4N9:H-088": {
+  "state": "UNVERIFIABLE",
+  "pointers": [],
+  "subject": null,
+  "span": "増加要因は、短期借入金の増加1,696,000千円、買掛金の増加853,7",
+  "reason": "no_subject"
+ },
+ "S100Z4N9:H-089": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jpcrp_cor:CashAndCashEquivalentsSummaryOfBusinessResults@CurrentYearInstant",
+   "xbrl:jpcrp_cor:CashAndCashEquivalentsSummaryOfBusinessResults@Prior1YearInstant",
+   "builtin:sign(cur-prior)"
+  ],
+  "subject": "現金及び現金同等物",
+  "span": "金及び現金同等物は、前連結会計年度末と比べ302,764千円増加し、2,0",
+  "reason": null
+ },
+ "S100Z4N9:H-090": {
+  "state": "UNVERIFIABLE",
+  "pointers": [],
+  "subject": null,
+  "span": "の高止まり、住宅ローンの金利上昇の影響による消費者マインドの低下等により、",
+  "reason": "no_subject"
+ },
+ "S100Z4N9:H-091": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:LongTermLoansPayable@CurrentYearInstant",
+   "xbrl:jppfs_cor:LongTermLoansPayable@Prior1YearInstant",
+   "formula:a-b"
+  ],
+  "subject": "長期借入金",
+  "span": "一方、主な減少要因は、長期借入金の減少672,874千円であります。",
+  "reason": null
+ },
+ "S100Z4N9:H-092": {
+  "state": "UNVERIFIABLE",
+  "pointers": [],
+  "subject": null,
+  "span": "による消費者マインドの低下等により、引渡し実績は計画を大幅に下回る68戸(",
+  "reason": "target_or_plan"
+ },
+ "S100Z4N9:H-093": {
+  "state": "UNVERIFIABLE",
+  "pointers": [],
+  "subject": null,
+  "span": "主な増加要因は、リース債務の増加60,98",
+  "reason": "no_subject"
+ },
+ "S100Z4N9:H-094": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:Liabilities@CurrentYearInstant",
+   "xbrl:jppfs_cor:Liabilities@Prior1YearInstant",
+   "formula:a-b"
+  ],
+  "subject": "負債合計",
+  "span": "債合計は9,778,049千円となり、前連結会計年度末に比べ2,264,951千円増加しました。",
+  "reason": null
+ },
+ "S100Z4N9:H-095": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:GrossProfit@CurrentYearDuration",
+   "xbrl:jppfs_cor:GrossProfit@Prior1YearDuration"
+  ],
+  "subject": "売上総利益",
+  "span": "2,513,037千円から277,948千円減少(前年同期比11.1%減)した結果、売上総",
+  "reason": null
+ },
+ "S100Z4N9:H-096": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:CurrentLiabilities@CurrentYearInstant"
+  ],
+  "subject": "流動負債",
+  "span": "は、前連結会計年度末と比較して2,883,722千円増加し、7,178,548千円となりました。",
+  "reason": null
+ },
+ "S100Z4N9:H-097": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jpcrp_cor:NetCashProvidedByUsedInInvestingActivitiesSummaryOfBusinessResults@CurrentYearDuration"
+  ],
+  "subject": "投資活動によるキャッシュ・フロー",
+  "span": "投資活動によるキャッシュ・フローは、345,731千円のマイナス(前年同期",
+  "reason": null
+ },
+ "S100Z4N9:H-098": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:NoncurrentLiabilities@CurrentYearInstant",
+   "xbrl:jppfs_cor:NoncurrentLiabilities@Prior1YearInstant",
+   "formula:a-b"
+  ],
+  "subject": "固定負債",
+  "span": "固定負債は前連結会計年度末と比較して618,771千円減少し、2,599,",
+  "reason": null
+ },
+ "S100Z4N9:H-099": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jpcrp_cor:NetSalesSummaryOfBusinessResults@CurrentYearDuration",
+   "xbrl:jpcrp_cor:NetSalesSummaryOfBusinessResults@Prior1YearDuration"
+  ],
+  "subject": "売上高",
+  "span": "以上の結果、売上高11,804,911千円(前年同期比8.4%減)、営業損失521",
+  "reason": null
+ },
+ "S100Z4N9:H-100": {
+  "state": "UNVERIFIABLE",
+  "pointers": [],
+  "subject": null,
+  "span": "これは主に、短期借入金の増加額1,69",
+  "reason": "no_subject"
+ },
+ "S100Z4N9:H-101": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:SellingGeneralAndAdministrativeExpenses@Prior1YearDuration"
+  ],
+  "subject": "販売費及び一般管理費",
+  "span": "び一般管理費は、2,756,422千円となり前連結会計年度の1,983,060千円から773,361千",
+  "reason": null
+ },
+ "S100Z4N9:H-102": {
+  "state": "VALUE_MISMATCH",
+  "pointers": [
+   "xbrl:jppfs_cor:CashAndDeposits@CurrentYearInstant"
+  ],
+  "subject": "現金及び預金",
+  "span": "千円、現金及び預金の増加302,764千円、営業貸付金の増加275,052千円であります。",
+  "reason": null
+ },
+ "S100Z4N9:H-103": {
+  "state": "UNVERIFIABLE",
+  "pointers": [],
+  "subject": null,
+  "span": "550千円、土地の増加60,121千円、機械装置及び運搬具の増加28,90",
+  "reason": "no_subject"
+ },
+ "S100Z4N9:H-104": {
+  "state": "UNVERIFIABLE",
+  "pointers": [],
+  "subject": null,
+  "span": "は、前連結会計年度末と比較して1,376,654千円増加し、7,048,162千円となりました。",
+  "reason": "no_subject"
+ },
+ "S100Z4N9:H-105": {
+  "state": "UNVERIFIABLE",
+  "pointers": [],
+  "subject": null,
+  "span": "、親会社株主に帰属する当期純損失の計上による利益剰余金の減少711,406千円、剰余金の配当82,",
+  "reason": "ambiguous(elements)"
+ },
+ "S100Z4N9:H-106": {
+  "state": "POINTER_NOT_FOUND",
+  "pointers": [],
+  "subject": null,
+  "span": "、貸倒引当金の増加699,508千円、仕掛販売用不動産の減少179,082千円であります。",
+  "reason": "no_element"
+ },
+ "S100Z4N9:H-107": {
+  "state": "UNVERIFIABLE",
+  "pointers": [],
+  "subject": null,
+  "span": "一方、主な減少要因は、貸倒引当金の増加699,508千円、仕掛販売用不動産の",
+  "reason": "ambiguous(elements)"
+ },
+ "S100Z4N9:H-108": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jpcrp_cor:CashAndCashEquivalentsSummaryOfBusinessResults@CurrentYearInstant"
+  ],
+  "subject": "現金及び現金同等物",
+  "span": "金同等物は、前連結会計年度末と比べ302,764千円増加し、2,014,581千円となりました。",
+  "reason": null
+ },
+ "S100Z4N9:H-109": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:DepreciationAndAmortizationOpeCF@CurrentYearDuration",
+   "xbrl:jppfs_cor:DepreciationAndAmortizationOpeCF@Prior1YearDuration",
+   "builtin:sign(cur-prior)"
+  ],
+  "subject": "減価償却費",
+  "span": "99,508千円、減価償却費425,020千円、営業貸付金の増加額275,",
+  "reason": null
+ },
+ "S100Z4N9:H-110": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:CashAndDeposits@CurrentYearInstant",
+   "xbrl:jppfs_cor:CashAndDeposits@Prior1YearInstant",
+   "builtin:sign(cur-prior)"
+  ],
+  "subject": "現金及び預金",
+  "span": "05千円、現金及び預金の増加302,764千円、営業貸付金の増加275,0",
+  "reason": null
+ },
+ "S100Z4N9:H-111": {
+  "state": "VALUE_MISMATCH",
+  "pointers": [
+   "xbrl:jppfs_cor:IncreaseDecreaseInNotesAndAccountsPayableTradeOpeCF@CurrentYearDuration"
+  ],
+  "subject": "仕入債務",
+  "span": "5千円、仕入債務の増加額853,794千円、貸倒引当金の増加699,508千円、減価償却費425,",
+  "reason": null
+ },
+ "S100Z4N9:H-113": {
+  "state": "VALUE_MISMATCH",
+  "pointers": [
+   "xbrl:jpcrp_cor:NetSalesSummaryOfBusinessResults@CurrentYearDuration",
+   "xbrl:jpcrp_cor:NetSalesSummaryOfBusinessResults@Prior1YearDuration"
+  ],
+  "subject": "売上高",
+  "span": "以上の結果、売上高525,423千円(前年同期比15.1%減)、営業利益25,",
+  "reason": null
+ },
+ "S100Z4N9:H-114": {
+  "state": "VALUE_MISMATCH",
+  "pointers": [
+   "xbrl:jpcrp_cor:OrdinaryIncomeLossSummaryOfBusinessResults@CurrentYearDuration"
+  ],
+  "subject": "経常利益",
+  "span": "74,675千円の経常利益)、親会社株主に帰属する当期純損失711,406千円(前年同期は345,",
+  "reason": null
+ },
+ "S100Z4N9:H-115": {
+  "state": "UNVERIFIABLE",
+  "pointers": [],
+  "subject": null,
+  "span": "主な増加要因は、リース資産の増加79,550千円、土地の増加60,12",
+  "reason": "no_subject"
+ },
+ "S100Z4N9:H-116": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jpcrp_cor:OrdinaryIncomeLossSummaryOfBusinessResults@CurrentYearDuration"
+  ],
+  "subject": "経常損失",
+  "span": "33千円(前年同期は529,976千円の営業利益)、経常損失639,811千円(前年同期は474,",
+  "reason": null
+ },
+ "S100Z4N9:H-117": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jpcrp_cor:TotalAssetsSummaryOfBusinessResults@CurrentYearInstant",
+   "xbrl:jpcrp_cor:TotalAssetsSummaryOfBusinessResults@Prior1YearInstant",
+   "formula:a-b"
+  ],
+  "subject": "総資産",
+  "span": "資産は10,232,043千円となり、前連結会計年度末に比べ1,501,089千円増加しました。",
+  "reason": null
+ },
+ "S100Z4N9:H-118": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:IncreaseDecreaseInNotesAndAccountsPayableTradeOpeCF@CurrentYearDuration"
+  ],
+  "subject": "仕入債務",
+  "span": "円、棚卸資産の増加額1,323,185千円、仕入債務の増加額853,794千円、貸倒引当金の増加6",
+  "reason": null
+ },
+ "S100Z4N9:H-119": {
+  "state": "POINTER_NOT_FOUND",
+  "pointers": [],
+  "subject": null,
+  "span": "ートナーズ第40号(鹿児島県鹿児島市、高知県高知市、販売総額137,000千円)」を組成、完売いた",
+  "reason": "no_element"
+ },
+ "S100Z4N9:H-120": {
+  "state": "VALUE_MISMATCH",
+  "pointers": [
+   "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration"
+  ],
+  "subject": "営業損失",
+  "span": "年同期比6.3%減)、営業損失715,890千円(前年同期は83,351千円の営業利益)となりま",
+  "reason": null
+ },
+ "S100Z4N9:H-121": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jpcrp_cor:NetSalesSummaryOfBusinessResults@Prior1YearDuration"
+  ],
+  "subject": "売上高",
+  "span": "度の売上高は、11,804,911千円となり前連結会計年度の12,887,524千円から1,082,61",
+  "reason": null
+ },
+ "S100Z4N9:H-122": {
+  "state": "VALUE_MISMATCH",
+  "pointers": [
+   "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration"
+  ],
+  "subject": "営業損失",
+  "span": "年同期比21.8%減)、営業損失38,212千円(前年同期は27,398千円の営業利益)となりま",
+  "reason": null
+ },
+ "S100Z4N9:H-123": {
+  "state": "POINTER_NOT_FOUND",
+  "pointers": [],
+  "subject": "売上総利益",
+  "span": "8千円減少(前年同期比11.1%減)した結果、売上総利益率は18.9%(同0.5ポイント減",
+  "reason": "no_element(ratio without fact)"
+ },
+ "S100Z4N9:H-124": {
+  "state": "VALUE_MISMATCH",
+  "pointers": [
+   "xbrl:jpcrp_cor:OrdinaryIncomeLossSummaryOfBusinessResults@CurrentYearDuration"
+  ],
+  "subject": "経常利益",
+  "span": "親会社株主に帰属する当期純損失711,406千円(前年同期は345,951千円の親会社株主に帰属す",
+  "reason": null
+ },
+ "S100Z4N9:H-125": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:LongTermLoansPayable@CurrentYearInstant",
+   "xbrl:jppfs_cor:LongTermLoansPayable@Prior1YearInstant",
+   "builtin:sign(cur-prior)"
+  ],
+  "subject": "長期借入金",
+  "span": "一方、主な減少要因は、長期借入金の減少672,8",
+  "reason": null
+ },
+ "S100Z4N9:H-126": {
+  "state": "UNVERIFIABLE",
+  "pointers": [],
+  "subject": null,
+  "span": "一方、主な減少要因は、1",
+  "reason": "no_subject"
+ },
+ "S100Z4N9:H-127": {
+  "state": "UNVERIFIABLE",
+  "pointers": [],
+  "subject": null,
+  "span": "及び駐車場等小口化事業における「トラストパートナーズ」の販売拡大の他、各種",
+  "reason": "no_subject"
+ },
+ "S100Z4N9:H-128": {
+  "state": "UNVERIFIABLE",
+  "pointers": [],
+  "subject": null,
+  "span": "以上の結果、当連結会計年度は711,406千円の親会社株主に帰属す",
+  "reason": "ambiguous(elements)"
+ },
+ "S100Z4N9:H-129": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration"
+  ],
+  "subject": "営業損失",
+  "span": "高11,804,911千円(前年同期比8.4%減)、営業損失521,333千円(前年同期は529,",
+  "reason": null
+ },
+ "S100Z4N9:H-130": {
+  "state": "UNVERIFIABLE",
+  "pointers": [],
+  "subject": null,
+  "span": "また、営業外費用は、支払利息138,206千円等の計上により158",
+  "reason": "no_subject"
+ },
+ "S100Z4N9:H-131": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jpcrp_cor:NetAssetsSummaryOfBusinessResults@CurrentYearInstant",
+   "xbrl:jpcrp_cor:NetAssetsSummaryOfBusinessResults@Prior1YearInstant",
+   "formula:a-b"
+  ],
+  "subject": "純資産",
+  "span": "当連結会計年度末における純資産は、前連結会計年度末と比較して763,861千円減少し、453,99",
+  "reason": null
+ },
+ "S100Z4N9:H-132": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:OperatingIncome@Prior1YearDuration"
+  ],
+  "subject": "営業損失",
+  "span": "年同期比8.4%減)、営業損失521,333千円(前年同期は529,976千円の営業利益)、経常損",
+  "reason": null
+ },
+ "S100Z4N9:H-133": {
+  "state": "VALUE_MISMATCH",
+  "pointers": [
+   "xbrl:jpcrp_cor:NetSalesSummaryOfBusinessResults@CurrentYearDuration"
+  ],
+  "subject": "売上高",
+  "span": "以上の結果、売上高259,831千円(前年同期比6.3%",
+  "reason": null
+ },
+ "S100Z4N9:H-134": {
+  "state": "VALUE_MISMATCH",
+  "pointers": [
+   "xbrl:jppfs_cor:GrossProfit@CurrentYearDuration"
+  ],
+  "subject": "売上総利益",
+  "span": ",088千円となり前連結会計年度の2,513,037千円から277,948千円減少(前年同期比11",
+  "reason": null
+ },
+ "S100Z4N9:H-135": {
+  "state": "UNVERIFIABLE",
+  "pointers": [],
+  "subject": null,
+  "span": "一方、主な減少要因は、建物及び構築物の減少43,13",
+  "reason": "no_subject"
+ },
+ "S100Z4N9:H-136": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jpcrp_cor:TotalAssetsSummaryOfBusinessResults@CurrentYearInstant"
+  ],
+  "subject": "総資産",
+  "span": "以上の結果、総資産は10,232,043千円となり、前連結会計年",
+  "reason": null
+ },
+ "S100Z4N9:H-137": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:CurrentLiabilities@CurrentYearInstant",
+   "xbrl:jppfs_cor:CurrentLiabilities@Prior1YearInstant",
+   "builtin:sign(cur-prior)"
+  ],
+  "subject": "流動負債",
+  "span": "流動負債は、前連結会計年度末と比較して2,883,722千円増加し、7,1",
+  "reason": null
+ },
+ "S100Z4N9:H-138": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jpcrp_cor:NetSalesSummaryOfBusinessResults@CurrentYearDuration",
+   "xbrl:jpcrp_cor:NetSalesSummaryOfBusinessResults@Prior1YearDuration",
+   "formula:a-b"
+  ],
+  "subject": "売上高",
+  "span": "911千円となり前連結会計年度の12,887,524千円から1,082,613千円の減少(前年同期比8",
+  "reason": null
+ },
+ "S100Z4N9:H-139": {
+  "state": "VALUE_MISMATCH",
+  "pointers": [
+   "xbrl:jppfs_cor:NetSales@CurrentYearDuration_jpcrp030000-asr_E27464-000PropertiesDevelopmentAndSalesReportableSegmentsMember",
+   "xbrl:jppfs_cor:NetSales@Prior1YearDuration_jpcrp030000-asr_E27464-000PropertiesDevelopmentAndSalesReportableSegmentsMember"
+  ],
+  "subject": "売上高",
+  "span": "戸の引渡しを実施した結果、売上高は2,523,449千円(同27.6%減)となりました。",
+  "reason": null
+ },
+ "S100Z4N9:H-140": {
+  "state": "UNVERIFIABLE",
+  "pointers": [],
+  "subject": null,
+  "span": "一方、主な減少要因は、貸倒引当金の増加699,5",
+  "reason": "no_subject"
+ },
+ "S100Z4N9:H-141": {
+  "state": "UNVERIFIABLE",
+  "pointers": [],
+  "subject": null,
+  "span": "因は、貸倒引当金の増加699,508千円、仕掛販売用不動産の減少179,0",
+  "reason": "no_subject"
+ },
+ "S100Z4N9:H-142": {
+  "state": "VALUE_MISMATCH",
+  "pointers": [
+   "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration"
+  ],
+  "subject": "営業利益",
+  "span": "売上高525,423千円(前年同期比15.1%減)、営業利益25,666千円(同32.2%減)と",
+  "reason": null
+ },
+ "S100Z4N9:H-143": {
+  "state": "UNVERIFIABLE",
+  "pointers": [],
+  "subject": null,
+  "span": "以上の結果、当連結会計年度は521,333千円の営業損失(前年同期",
+  "reason": "no_subject"
+ },
+ "S100Z4N9:H-144": {
+  "state": "UNVERIFIABLE",
+  "pointers": [],
+  "subject": null,
+  "span": "当連結会計年度における我が国経済は、雇用・所得環境の改善などにより",
+  "reason": "no_subject"
+ },
+ "S100Z4N9:H-145": {
+  "state": "VALUE_MISMATCH",
+  "pointers": [
+   "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration"
+  ],
+  "subject": "営業損失",
+  "span": "、売上高259,831千円(前年同期比6.3%減)、営業損失715,890千円(前年同期は83,3",
+  "reason": null
+ },
+ "S100Z4N9:H-146": {
+  "state": "UNVERIFIABLE",
+  "pointers": [],
+  "subject": null,
+  "span": "主な減少要因は、親",
+  "reason": "no_subject"
+ },
+ "S100Z4N9:H-147": {
+  "state": "VALUE_MISMATCH",
+  "pointers": [
+   "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration"
+  ],
+  "subject": "営業損失",
+  "span": "売上高392,735千円(前年同期比21.8%減)、営業損失38,212千円(前年同期は27,3",
+  "reason": null
+ },
+ "S100Z4N9:H-148": {
+  "state": "UNVERIFIABLE",
+  "pointers": [],
+  "subject": null,
+  "span": "一方、主な減少要因は、1年内償還予定の社債の減少300,0",
+  "reason": "no_subject"
+ },
+ "S100Z4N9:H-149": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:SellingGeneralAndAdministrativeExpenses@CurrentYearDuration",
+   "xbrl:jppfs_cor:SellingGeneralAndAdministrativeExpenses@Prior1YearDuration",
+   "builtin:sign(cur-prior)"
+  ],
+  "subject": "販売費及び一般管理費",
+  "span": "前連結会計年度の1,983,060千円から773,361千円増加(同39.",
+  "reason": null
+ },
+ "S100Z4N9:H-150": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:OperatingIncome@Prior1YearDuration"
+  ],
+  "subject": "営業損失",
+  "span": "果、当連結会計年度は521,333千円の営業損失(前年同期は529,976千円の営業利益)となりま",
+  "reason": null
+ }
+}

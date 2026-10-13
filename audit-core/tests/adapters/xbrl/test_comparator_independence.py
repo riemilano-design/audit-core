@@ -63,9 +63,9 @@ def _forced(zb, profile, mode):
     original = V.match_value
     try:
         if mode == "never":
-            V.match_value = lambda fact_value, target, unit: None
+            V.match_value = lambda fact_value, target, unit, *rest: None
         elif mode == "always":
-            V.match_value = lambda fact_value, target, unit: "forced"
+            V.match_value = lambda fact_value, target, unit, *rest: "forced"
         else:
             raise AssertionError("mode")
         return _snapshot(zb, profile)

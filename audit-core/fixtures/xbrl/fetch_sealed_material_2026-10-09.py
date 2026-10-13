@@ -48,6 +48,10 @@ import urllib.error
 import urllib.parse
 import urllib.request
 import zipfile
+import os as _os_gate
+import sys as _sys_gate
+_sys_gate.path.insert(0, _os_gate.path.dirname(_os_gate.path.abspath(__file__)))
+from sealed_material import refuse_if_sealed  # noqa: E402  **取る直前に呼ぶ**(他の席の封。2026-10-13 merge で接続)
 
 # --------------------------------------------------------------------------
 # **印字で落ちないようにする。**
@@ -181,6 +185,9 @@ def fetch_zip(doc_id):
         raise SystemExit("門④: %s は取らない ― %s" % (doc_id, NEVER_FETCH[doc_id]))
     if doc_id not in {d for d, _s, _f, _dt in SEALED}:
         raise SystemExit("門③: %s は封じた一覧に無い ― 取らない" % doc_id)
+    # 他の席の封(sealed_material.SEALED_DOCS)。この道具の字の一覧(門③)とは別の錠。
+    # 鍵を読む前・urlopen の前に当てる(鍵が無くても試験で発火を測れる)。2026-10-13 merge の整合。
+    refuse_if_sealed(doc_id=doc_id, where="fetch_sealed_material.fetch_zip")   # **取る直前**
     key = os.environ.get("EDINET_API_KEY")
     if not key:
         raise SystemExit("環境変数 EDINET_API_KEY が無い。鍵の値はこの道具に書かない。")
