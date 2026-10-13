@@ -34,5 +34,32 @@ class BuildClaimLayerTest(unittest.TestCase):
             self.assertEqual(len(data["claims"]), 133)
 
 
+class DefaultProfileTest(unittest.TestCase):
+    """第 2 段階(人間の決定 2026-10-13): 既定 profile は P16。字で留める。"""
+
+    def test_default_profile_is_p16_literally(self):
+        from adapters.xbrl import vocabulary as V
+        self.assertEqual(V.DEFAULT_PROFILE, "P16")
+        self.assertIn(V.DEFAULT_PROFILE, V.PROFILES)
+
+    def test_cli_without_profile_uses_p16(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            out_path = os.path.join(tmp, "out.json")
+            rc = RUN.main(["--doc", M.DOC_5["docID"], "--zip-sha256", M.DOC_5["sha256"], "--out", out_path])
+            self.assertEqual(rc, 0)
+            with open(out_path, encoding="utf-8") as handle:
+                data = json.load(handle)
+            self.assertEqual(data["profile"], "P16")
+            explicit = RUN.build_claim_layer(M.DOC_5["docID"], "P16", expected_sha256=M.DOC_5["sha256"])
+            self.assertEqual(data["claims"], explicit["claims"])
+
+    def test_explicit_profile_still_wins(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            out_path = os.path.join(tmp, "out.json")
+            RUN.main(["--doc", M.DOC_5["docID"], "--profile", "P5F", "--zip-sha256", M.DOC_5["sha256"], "--out", out_path])
+            with open(out_path, encoding="utf-8") as handle:
+                self.assertEqual(json.load(handle)["profile"], "P5F")
+
+
 if __name__ == "__main__":
     unittest.main()
