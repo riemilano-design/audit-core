@@ -92,3 +92,7 @@ VALUE_MISMATCH 44 は S3 の外れではないので条件 §3 の直しの対�
 - engine の出力: `fixtures/xbrl/holdout_p16/commander_only/dump_<profile>_<doc>.json`(9 profile × 2 書類)。採点: `commander_only/score_report_2026-10-13.json`。
 - 再現: `cd audit-core && python3 measure/holdout_p16_score_2026-10-13.py score`(dumps を作り直すなら先に `dumps`。labels は上書きしない)。
 - 2 書類の zip sha256 は開封前と同じ。
+
+## 9. 独立監査(2026-10-13、1 回)
+
+判定 **GO**。監査席が自分で再現したもの: commit の時刻順(条件 → 材料 → 採点器 → 回答 → ラベル → 結果)、ラベル(sha256 `4ff620322bb84c93` 一致、内訳一致)、採点(verdict と書類別・形別の数が一致。dump・labels は実行後も sha 不変)、閾値が script と条件で同じで結果後に動いていないこと、帰属 13 件すべて P13 以前(C1 を落とすと E2 49、C3 を落とすと 15)、席に見せた 6 ファイルに engine の語が無いこと、2 書類の zip sha256 が鍵・予約記録と三者一致、`git diff 285713e ff45fa9 -- audit-core/adapters/` が 0 行(engine 不変)。所見(GO を変えない): P7・P13 の L は MISSING 1 件で 216(条件 §1 の仕様どおり)。S100Z4N9 単独の E3 40.5% は §2 に明記済みで判定は合算の規定どおり。
