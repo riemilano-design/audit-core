@@ -431,6 +431,78 @@ class WiringTest(unittest.TestCase):
         self.assertIn("profile.nonconsolidated_fallback", src)
 
 
+class SuiteEvidenceTest(unittest.TestCase):
+    """**結果文書に書いた試験の本数が、完走した run の数と一致すること。**
+
+    2026-10-14 に**同じ日に 2 回**、測った数を手で書き写す所で間違えた。
+    (1) 監査へ渡した依頼書に古い `pytest 1027` を残した。
+    (2) 報告していた `1039` が `tests/` だけの数で、`measure/tests/` の 96 本が抜けていた。
+    C-1〜C-4 は json から読んでいるので 1 回も間違えていない。**間違えたのは手で書き写した
+    数だけ**なので、同じ仕組みを試験の本数にも掛ける(2026-10-08 の人間の指示
+    「対策は記憶でなく実行前に赤くなる試験にする」)。
+
+    数の出どころ: `measure/parse_suite_evidence.py` が完走したログから取り出し、
+    `fixtures/xbrl/p20/suite_evidence_2026-10-14.json` に書いたもの。
+    """
+
+    @classmethod
+    def setUpClass(cls):
+        with io.open(os.path.join(ROOT, "fixtures", "xbrl", "p20",
+                                  "suite_evidence_2026-10-14.json"), encoding="utf-8") as fh:
+            cls.ev = json.load(fh)
+        with io.open(os.path.join(ROOT, "docs",
+                                  "CONSOLIDATION_P20_RESULT_2026-10-14.md"), encoding="utf-8") as fh:
+            cls.doc = fh.read()
+
+    def test_the_document_states_every_measured_number(self):
+        for label, value in (("pytest", self.ev["pytest_passed"]),
+                             ("discover", self.ev["discover_ran"]),
+                             ("変異の予測一致", self.ev["mutation_predicted"])):
+            self.assertIn("%d" % (value,), self.doc,
+                          "%s の数 %d が結果文書に無い(書き写しが古い)" % (label, value))
+
+    def _results_table(self):
+        """結果を**今の数として示している表**だけを切り出す。
+
+        文書の全文に古い数が在るかを見る版を最初に書いたが、**訂正の経緯を書いた表**に
+        古い数が在るのは正しいので誤って落ちた(同じ日に、登録表の試験でも
+        「P1 を含むなら全部の一覧」という推測の規則で誤判定している)。
+        **推測で全文を探すのをやめ、見出しで範囲を区切る。**
+        """
+
+        start = self.doc.index("**完走した 1 本の run の数**")
+        end = self.doc.index("### 5-2a.", start)
+        return self.doc[start:end]
+
+    def test_the_results_table_states_no_superseded_number(self):
+        """**捨てた run の数を、今の数の表に残さない。**
+
+        1027(依頼書に残した古い値)・1039・1030(`tests/` だけの狭い数)は、
+        訂正の経緯(§5-2a・§7-1)でだけ使ってよい。
+        """
+
+        table = self._results_table()
+        for stale in ("1027", "1039", "1030"):
+            self.assertNotIn(stale, table, "今の数の表に古い数 %s が残っている" % (stale,))
+
+    def test_the_results_table_states_the_measured_numbers(self):
+        table = self._results_table()
+        for label, value in (("pytest", self.ev["pytest_passed"]),
+                             ("discover", self.ev["discover_ran"]),
+                             ("変異の予測一致", self.ev["mutation_predicted"])):
+            self.assertIn("%d" % (value,), table,
+                          "%s の数 %d が今の数の表に無い" % (label, value))
+
+    def test_the_frozen_head_is_the_one_the_document_names(self):
+        self.assertIn(self.ev["head"], self.doc,
+                      "凍結した HEAD %s が結果文書に無い" % (self.ev["head"],))
+
+    def test_the_run_was_all_green(self):
+        self.assertEqual(1, self.ev["mutation_misses"])
+        self.assertEqual(89, self.ev["mutation_predicted"] + self.ev["mutation_misses"])
+        self.assertEqual(5, self.ev["mutation_test_methods"])
+
+
 class MeasuredResultTest(unittest.TestCase):
     """封 §3 の 4 つの合格線に対する**実測**を字で留める。"""
 

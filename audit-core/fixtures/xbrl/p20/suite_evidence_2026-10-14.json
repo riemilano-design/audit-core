@@ -1,0 +1,8 @@
+{
+ "head": "24580c0",
+ "pytest_passed": 1141,
+ "discover_ran": 1036,
+ "mutation_test_methods": 5,
+ "mutation_predicted": 88,
+ "mutation_misses": 1
+}
