@@ -1,0 +1,1520 @@
+{
+ "purpose": "欠陥 A の修正の before/after(封 §3)。合否は結果文書に書く",
+ "seal": "docs/DEFECT_A_EVAL_SEAL_2026-10-14.md",
+ "docs": [
+  "S100Z448",
+  "S100Z492",
+  "S100YYS4",
+  "S100YZ31",
+  "S100Z48T",
+  "S100Z5DN",
+  "S100YYDI",
+  "S100YYK8"
+ ],
+ "result": {
+  "P20": {
+   "moved": [
+    {
+     "id": "S100YYDI:N020",
+     "docID": "S100YYDI",
+     "kind": "num",
+     "unit": "百万円",
+     "before": {
+      "result": "VALUE_MISMATCH",
+      "pointer": [
+       "xbrl:jppfs_cor:AccountsReceivableOther@CurrentYearInstant"
+      ],
+      "recomputed": 19267000000.0,
+      "form": "direct_value"
+     },
+     "after": {
+      "result": "GROUNDED",
+      "pointer": [
+       "xbrl:jppfs_cor:AccountsReceivableOther@CurrentYearInstant",
+       "xbrl:jppfs_cor:AccountsReceivableOther@Prior1YearInstant",
+       "formula:a-b"
+      ],
+      "recomputed": 7788000000.0,
+      "form": "derived_value"
+     }
+    },
+    {
+     "id": "S100YYDI:N022",
+     "docID": "S100YYDI",
+     "kind": "num",
+     "unit": "百万円",
+     "before": {
+      "result": "VALUE_MISMATCH",
+      "pointer": [
+       "xbrl:jppfs_cor:CashAndDeposits@CurrentYearInstant"
+      ],
+      "recomputed": 61341000000.0,
+      "form": "direct_value"
+     },
+     "after": {
+      "result": "GROUNDED",
+      "pointer": [
+       "xbrl:jppfs_cor:CashAndDeposits@CurrentYearInstant",
+       "xbrl:jppfs_cor:CashAndDeposits@Prior1YearInstant",
+       "formula:a-b"
+      ],
+      "recomputed": 4303000000.0,
+      "form": "derived_value"
+     }
+    },
+    {
+     "id": "S100YYDI:N029",
+     "docID": "S100YYDI",
+     "kind": "num",
+     "unit": "百万円",
+     "before": {
+      "result": "VALUE_MISMATCH",
+      "pointer": [
+       "xbrl:jppfs_cor:AccountsPayableTrade@CurrentYearInstant"
+      ],
+      "recomputed": 195796000000.0,
+      "form": "direct_value"
+     },
+     "after": {
+      "result": "GROUNDED",
+      "pointer": [
+       "xbrl:jppfs_cor:AccountsPayableTrade@CurrentYearInstant",
+       "xbrl:jppfs_cor:AccountsPayableTrade@Prior1YearInstant",
+       "formula:a-b"
+      ],
+      "recomputed": 18671000000.0,
+      "form": "derived_value"
+     }
+    },
+    {
+     "id": "S100YYDI:N039",
+     "docID": "S100YYDI",
+     "kind": "num",
+     "unit": "百万円",
+     "before": {
+      "result": "VALUE_MISMATCH",
+      "pointer": [
+       "xbrl:jppfs_cor:RetainedEarnings@CurrentYearInstant"
+      ],
+      "recomputed": 274411000000.0,
+      "form": "direct_value"
+     },
+     "after": {
+      "result": "GROUNDED",
+      "pointer": [
+       "xbrl:jppfs_cor:RetainedEarnings@CurrentYearInstant",
+       "xbrl:jppfs_cor:RetainedEarnings@Prior1YearInstant",
+       "formula:a-b"
+      ],
+      "recomputed": 26102000000.0,
+      "form": "derived_value"
+     }
+    },
+    {
+     "id": "S100YYDI:N095",
+     "docID": "S100YYDI",
+     "kind": "num",
+     "unit": "百万円",
+     "before": {
+      "result": "VALUE_MISMATCH",
+      "pointer": [
+       "xbrl:jppfs_cor:RetainedEarnings@CurrentYearInstant"
+      ],
+      "recomputed": 274411000000.0,
+      "form": "direct_value"
+     },
+     "after": {
+      "result": "GROUNDED",
+      "pointer": [
+       "xbrl:jppfs_cor:RetainedEarnings@CurrentYearInstant",
+       "xbrl:jppfs_cor:RetainedEarnings@Prior1YearInstant",
+       "formula:a-b"
+      ],
+      "recomputed": 26102000000.0,
+      "form": "derived_value"
+     }
+    },
+    {
+     "id": "S100YYK8:N024",
+     "docID": "S100YYK8",
+     "kind": "num",
+     "unit": "千円",
+     "before": {
+      "result": "VALUE_MISMATCH",
+      "pointer": [
+       "xbrl:jppfs_cor:CurrentAssets@CurrentYearInstant"
+      ],
+      "recomputed": 6079104000.0,
+      "form": "direct_value"
+     },
+     "after": {
+      "result": "GROUNDED",
+      "pointer": [
+       "xbrl:jppfs_cor:CurrentAssets@CurrentYearInstant",
+       "xbrl:jppfs_cor:CurrentAssets@Prior1YearInstant",
+       "formula:a-b"
+      ],
+      "recomputed": 424478000.0,
+      "form": "derived_value"
+     }
+    },
+    {
+     "id": "S100YYK8:N025",
+     "docID": "S100YYK8",
+     "kind": "num",
+     "unit": "千円",
+     "before": {
+      "result": "VALUE_MISMATCH",
+      "pointer": [
+       "xbrl:jppfs_cor:AccountsReceivableTrade@CurrentYearInstant"
+      ],
+      "recomputed": 1738208000.0,
+      "form": "direct_value"
+     },
+     "after": {
+      "result": "GROUNDED",
+      "pointer": [
+       "xbrl:jppfs_cor:AccountsReceivableTrade@CurrentYearInstant",
+       "xbrl:jppfs_cor:AccountsReceivableTrade@Prior1YearInstant",
+       "formula:a-b"
+      ],
+      "recomputed": 490330000.0,
+      "form": "derived_value"
+     }
+    },
+    {
+     "id": "S100YYK8:N029",
+     "docID": "S100YYK8",
+     "kind": "num",
+     "unit": "千円",
+     "before": {
+      "result": "VALUE_MISMATCH",
+      "pointer": [
+       "xbrl:jppfs_cor:IntangibleAssets@CurrentYearInstant"
+      ],
+      "recomputed": 2607520000.0,
+      "form": "direct_value"
+     },
+     "after": {
+      "result": "GROUNDED",
+      "pointer": [
+       "xbrl:jppfs_cor:IntangibleAssets@CurrentYearInstant",
+       "xbrl:jppfs_cor:IntangibleAssets@Prior1YearInstant",
+       "formula:a-b"
+      ],
+      "recomputed": -202114000.0,
+      "form": "derived_value"
+     }
+    },
+    {
+     "id": "S100YYK8:N030",
+     "docID": "S100YYK8",
+     "kind": "num",
+     "unit": "千円",
+     "before": {
+      "result": "VALUE_MISMATCH",
+      "pointer": [
+       "xbrl:jppfs_cor:PropertyPlantAndEquipment@CurrentYearInstant"
+      ],
+      "recomputed": 153599000.0,
+      "form": "direct_value"
+     },
+     "after": {
+      "result": "GROUNDED",
+      "pointer": [
+       "xbrl:jppfs_cor:PropertyPlantAndEquipment@CurrentYearInstant",
+       "xbrl:jppfs_cor:PropertyPlantAndEquipment@Prior1YearInstant",
+       "formula:a-b"
+      ],
+      "recomputed": -6397000.0,
+      "form": "derived_value"
+     }
+    },
+    {
+     "id": "S100YYK8:N032",
+     "docID": "S100YYK8",
+     "kind": "num",
+     "unit": "千円",
+     "before": {
+      "result": "VALUE_MISMATCH",
+      "pointer": [
+       "xbrl:jppfs_cor:CurrentLiabilities@CurrentYearInstant"
+      ],
+      "recomputed": 5685696000.0,
+      "form": "direct_value"
+     },
+     "after": {
+      "result": "GROUNDED",
+      "pointer": [
+       "xbrl:jppfs_cor:CurrentLiabilities@CurrentYearInstant",
+       "xbrl:jppfs_cor:CurrentLiabilities@Prior1YearInstant",
+       "formula:a-b"
+      ],
+      "recomputed": 922874000.0,
+      "form": "derived_value"
+     }
+    },
+    {
+     "id": "S100YYK8:N033",
+     "docID": "S100YYK8",
+     "kind": "num",
+     "unit": "千円",
+     "before": {
+      "result": "VALUE_MISMATCH",
+      "pointer": [
+       "xbrl:jppfs_cor:AccountsPayableTrade@CurrentYearInstant"
+      ],
+      "recomputed": 1197429000.0,
+      "form": "direct_value"
+     },
+     "after": {
+      "result": "GROUNDED",
+      "pointer": [
+       "xbrl:jppfs_cor:AccountsPayableTrade@CurrentYearInstant",
+       "xbrl:jppfs_cor:AccountsPayableTrade@Prior1YearInstant",
+       "formula:a-b"
+      ],
+      "recomputed": 84995000.0,
+      "form": "derived_value"
+     }
+    },
+    {
+     "id": "S100YYK8:N034",
+     "docID": "S100YYK8",
+     "kind": "num",
+     "unit": "千円",
+     "before": {
+      "result": "VALUE_MISMATCH",
+      "pointer": [
+       "xbrl:jppfs_cor:ShortTermLoansPayable@CurrentYearInstant"
+      ],
+      "recomputed": 2106770000.0,
+      "form": "direct_value"
+     },
+     "after": {
+      "result": "GROUNDED",
+      "pointer": [
+       "xbrl:jppfs_cor:ShortTermLoansPayable@CurrentYearInstant",
+       "xbrl:jppfs_cor:ShortTermLoansPayable@Prior1YearInstant",
+       "formula:a-b"
+      ],
+      "recomputed": 815204000.0,
+      "form": "derived_value"
+     }
+    },
+    {
+     "id": "S100YYK8:N037",
+     "docID": "S100YYK8",
+     "kind": "num",
+     "unit": "千円",
+     "before": {
+      "result": "VALUE_MISMATCH",
+      "pointer": [
+       "xbrl:jppfs_cor:AccountsPayableOther@CurrentYearInstant"
+      ],
+      "recomputed": 565950000.0,
+      "form": "direct_value"
+     },
+     "after": {
+      "result": "GROUNDED",
+      "pointer": [
+       "xbrl:jppfs_cor:AccountsPayableOther@CurrentYearInstant",
+       "xbrl:jppfs_cor:AccountsPayableOther@Prior1YearInstant",
+       "formula:a-b"
+      ],
+      "recomputed": -187719000.0,
+      "form": "derived_value"
+     }
+    },
+    {
+     "id": "S100YYK8:N042",
+     "docID": "S100YYK8",
+     "kind": "num",
+     "unit": "千円",
+     "before": {
+      "result": "VALUE_MISMATCH",
+      "pointer": [
+       "xbrl:jppfs_cor:LeaseObligationsCL@CurrentYearInstant"
+      ],
+      "recomputed": 10582000.0,
+      "form": "direct_value"
+     },
+     "after": {
+      "result": "GROUNDED",
+      "pointer": [
+       "xbrl:jppfs_cor:LeaseObligationsNCL@CurrentYearInstant",
+       "xbrl:jppfs_cor:LeaseObligationsNCL@Prior1YearInstant",
+       "formula:a-b"
+      ],
+      "recomputed": -7829000.0,
+      "form": "derived_value"
+     }
+    },
+    {
+     "id": "S100YYK8:N043",
+     "docID": "S100YYK8",
+     "kind": "num",
+     "unit": "千円",
+     "before": {
+      "result": "VALUE_MISMATCH",
+      "pointer": [
+       "xbrl:jppfs_cor:DeferredTaxLiabilities@CurrentYearInstant"
+      ],
+      "recomputed": 298100000.0,
+      "form": "direct_value"
+     },
+     "after": {
+      "result": "GROUNDED",
+      "pointer": [
+       "xbrl:jppfs_cor:DeferredTaxLiabilities@CurrentYearInstant",
+       "xbrl:jppfs_cor:DeferredTaxLiabilities@Prior1YearInstant",
+       "formula:a-b"
+      ],
+      "recomputed": -94928000.0,
+      "form": "derived_value"
+     }
+    },
+    {
+     "id": "S100YYK8:N045",
+     "docID": "S100YYK8",
+     "kind": "num",
+     "unit": "千円",
+     "before": {
+      "result": "VALUE_MISMATCH",
+      "pointer": [
+       "xbrl:jppfs_cor:NetAssets@CurrentYearInstant"
+      ],
+      "recomputed": 1534079000.0,
+      "form": "direct_value"
+     },
+     "after": {
+      "result": "GROUNDED",
+      "pointer": [
+       "xbrl:jppfs_cor:NetAssets@CurrentYearInstant",
+       "xbrl:jppfs_cor:NetAssets@Prior1YearInstant",
+       "formula:a-b"
+      ],
+      "recomputed": -480196000.0,
+      "form": "derived_value"
+     }
+    },
+    {
+     "id": "S100YYK8:N049",
+     "docID": "S100YYK8",
+     "kind": "num",
+     "unit": "千円",
+     "before": {
+      "result": "VALUE_MISMATCH",
+      "pointer": [
+       "xbrl:jppfs_cor:ValuationDifferenceOnAvailableForSaleSecurities@CurrentYearInstant"
+      ],
+      "recomputed": -18754000.0,
+      "form": "direct_value"
+     },
+     "after": {
+      "result": "GROUNDED",
+      "pointer": [
+       "xbrl:jppfs_cor:ValuationDifferenceOnAvailableForSaleSecurities@CurrentYearInstant",
+       "xbrl:jppfs_cor:ValuationDifferenceOnAvailableForSaleSecurities@Prior1YearInstant",
+       "formula:a-b"
+      ],
+      "recomputed": -14529000.0,
+      "form": "derived_value"
+     }
+    },
+    {
+     "id": "S100YYK8:N050",
+     "docID": "S100YYK8",
+     "kind": "num",
+     "unit": "千円",
+     "before": {
+      "result": "VALUE_MISMATCH",
+      "pointer": [
+       "xbrl:jppfs_cor:NonControllingInterests@CurrentYearInstant"
+      ],
+      "recomputed": 305574000.0,
+      "form": "direct_value"
+     },
+     "after": {
+      "result": "GROUNDED",
+      "pointer": [
+       "xbrl:jppfs_cor:NonControllingInterests@CurrentYearInstant",
+       "xbrl:jppfs_cor:NonControllingInterests@Prior1YearInstant",
+       "formula:a-b"
+      ],
+      "recomputed": -302483000.0,
+      "form": "derived_value"
+     }
+    },
+    {
+     "id": "S100YYS4:N058",
+     "docID": "S100YYS4",
+     "kind": "num",
+     "unit": "千円",
+     "before": {
+      "result": "VALUE_MISMATCH",
+      "pointer": [
+       "xbrl:jppfs_cor:Assets@CurrentYearInstant"
+      ],
+      "recomputed": 4568668000.0,
+      "form": "direct_value"
+     },
+     "after": {
+      "result": "GROUNDED",
+      "pointer": [
+       "xbrl:jppfs_cor:Assets@CurrentYearInstant",
+       "xbrl:jppfs_cor:Assets@Prior1YearInstant",
+       "formula:a-b"
+      ],
+      "recomputed": 488206000.0,
+      "form": "derived_value"
+     }
+    },
+    {
+     "id": "S100YYS4:N062",
+     "docID": "S100YYS4",
+     "kind": "num",
+     "unit": "千円",
+     "before": {
+      "result": "VALUE_MISMATCH",
+      "pointer": [
+       "xbrl:jppfs_cor:Liabilities@CurrentYearInstant"
+      ],
+      "recomputed": 2503036000.0,
+      "form": "direct_value"
+     },
+     "after": {
+      "result": "GROUNDED",
+      "pointer": [
+       "xbrl:jppfs_cor:Liabilities@CurrentYearInstant",
+       "xbrl:jppfs_cor:Liabilities@Prior1YearInstant",
+       "formula:a-b"
+      ],
+      "recomputed": 191365000.0,
+      "form": "derived_value"
+     }
+    },
+    {
+     "id": "S100YYS4:N068",
+     "docID": "S100YYS4",
+     "kind": "num",
+     "unit": "千円",
+     "before": {
+      "result": "VALUE_MISMATCH",
+      "pointer": [
+       "xbrl:jppfs_cor:NetAssets@CurrentYearInstant"
+      ],
+      "recomputed": 2065632000.0,
+      "form": "direct_value"
+     },
+     "after": {
+      "result": "GROUNDED",
+      "pointer": [
+       "xbrl:jppfs_cor:NetAssets@CurrentYearInstant",
+       "xbrl:jppfs_cor:NetAssets@Prior1YearInstant",
+       "formula:a-b"
+      ],
+      "recomputed": 296841000.0,
+      "form": "derived_value"
+     }
+    },
+    {
+     "id": "S100YYS4:N073",
+     "docID": "S100YYS4",
+     "kind": "num",
+     "unit": "千円",
+     "before": {
+      "result": "VALUE_MISMATCH",
+      "pointer": [
+       "xbrl:jppfs_cor:TreasuryStock@CurrentYearInstant"
+      ],
+      "recomputed": -400228000.0,
+      "form": "direct_value"
+     },
+     "after": {
+      "result": "GROUNDED",
+      "pointer": [
+       "xbrl:jppfs_cor:TreasuryStock@CurrentYearInstant",
+       "xbrl:jppfs_cor:TreasuryStock@Prior1YearInstant",
+       "formula:a-b"
+      ],
+      "recomputed": 143467000.0,
+      "form": "derived_value"
+     }
+    },
+    {
+     "id": "S100YZ31:N002",
+     "docID": "S100YZ31",
+     "kind": "num",
+     "unit": "百万円",
+     "before": {
+      "result": "VALUE_MISMATCH",
+      "pointer": [
+       "xbrl:jppfs_cor:NetSales@CurrentYearDuration"
+      ],
+      "recomputed": 23353000000.0,
+      "form": "direct_value"
+     },
+     "after": {
+      "result": "GROUNDED",
+      "pointer": [
+       "xbrl:jppfs_cor:NetSales@CurrentYearDuration",
+       "xbrl:jppfs_cor:NetSales@Prior1YearDuration",
+       "formula:a-b"
+      ],
+      "recomputed": -1609000000.0,
+      "form": "derived_value"
+     }
+    },
+    {
+     "id": "S100YZ31:N042",
+     "docID": "S100YZ31",
+     "kind": "num",
+     "unit": "円",
+     "before": {
+      "result": "VALUE_MISMATCH",
+      "pointer": [
+       "xbrl:jppfs_cor:GuaranteeDepositsIOA@CurrentYearInstant"
+      ],
+      "recomputed": 1149000000.0,
+      "form": "direct_value"
+     },
+     "after": {
+      "result": "GROUNDED",
+      "pointer": [
+       "xbrl:jppfs_cor:GuaranteeDepositsIOA@CurrentYearInstant",
+       "xbrl:jppfs_cor:GuaranteeDepositsIOA@Prior1YearInstant",
+       "formula:a-b"
+      ],
+      "recomputed": -125000000.0,
+      "form": "derived_value"
+     }
+    },
+    {
+     "id": "S100YZ31:N047",
+     "docID": "S100YZ31",
+     "kind": "num",
+     "unit": "円",
+     "before": {
+      "result": "VALUE_MISMATCH",
+      "pointer": [
+       "xbrl:jppfs_cor:AccountsPayableTrade@CurrentYearInstant"
+      ],
+      "recomputed": 3052000000.0,
+      "form": "direct_value"
+     },
+     "after": {
+      "result": "GROUNDED",
+      "pointer": [
+       "xbrl:jppfs_cor:AccountsPayableTrade@CurrentYearInstant",
+       "xbrl:jppfs_cor:AccountsPayableTrade@Prior1YearInstant",
+       "formula:a-b"
+      ],
+      "recomputed": 343000000.0,
+      "form": "derived_value"
+     }
+    },
+    {
+     "id": "S100YZ31:N048",
+     "docID": "S100YZ31",
+     "kind": "num",
+     "unit": "円",
+     "before": {
+      "result": "VALUE_MISMATCH",
+      "pointer": [
+       "xbrl:jppfs_cor:CurrentPortionOfLongTermLoansPayable@CurrentYearInstant"
+      ],
+      "recomputed": 3360000000.0,
+      "form": "direct_value"
+     },
+     "after": {
+      "result": "GROUNDED",
+      "pointer": [
+       "xbrl:jppfs_cor:CurrentPortionOfLongTermLoansPayable@CurrentYearInstant",
+       "xbrl:jppfs_cor:CurrentPortionOfLongTermLoansPayable@Prior1YearInstant",
+       "formula:a-b"
+      ],
+      "recomputed": 609000000.0,
+      "form": "derived_value"
+     }
+    },
+    {
+     "id": "S100YZ31:N054",
+     "docID": "S100YZ31",
+     "kind": "num",
+     "unit": "円",
+     "before": {
+      "result": "VALUE_MISMATCH",
+      "pointer": [
+       "xbrl:jppfs_cor:NetAssets@CurrentYearInstant"
+      ],
+      "recomputed": 2589000000.0,
+      "form": "direct_value"
+     },
+     "after": {
+      "result": "GROUNDED",
+      "pointer": [
+       "xbrl:jppfs_cor:NetAssets@CurrentYearInstant",
+       "xbrl:jppfs_cor:NetAssets@Prior1YearInstant",
+       "formula:a-b"
+      ],
+      "recomputed": 717000000.0,
+      "form": "derived_value"
+     }
+    },
+    {
+     "id": "S100YZ31:N056",
+     "docID": "S100YZ31",
+     "kind": "num",
+     "unit": "円",
+     "before": {
+      "result": "VALUE_MISMATCH",
+      "pointer": [
+       "xbrl:jppfs_cor:RetainedEarnings@CurrentYearInstant"
+      ],
+      "recomputed": -3512000000.0,
+      "form": "direct_value"
+     },
+     "after": {
+      "result": "GROUNDED",
+      "pointer": [
+       "xbrl:jppfs_cor:RetainedEarnings@CurrentYearInstant",
+       "xbrl:jppfs_cor:RetainedEarnings@Prior1YearInstant",
+       "formula:a-b"
+      ],
+      "recomputed": 737000000.0,
+      "form": "derived_value"
+     }
+    },
+    {
+     "id": "S100Z5DN:N002",
+     "docID": "S100Z5DN",
+     "kind": "num",
+     "unit": "千円",
+     "before": {
+      "result": "VALUE_MISMATCH",
+      "pointer": [
+       "xbrl:jppfs_cor:CurrentAssets@CurrentYearInstant_NonConsolidatedMember"
+      ],
+      "recomputed": 2428940000.0,
+      "form": "direct_value"
+     },
+     "after": {
+      "result": "GROUNDED",
+      "pointer": [
+       "xbrl:jppfs_cor:CurrentAssets@CurrentYearInstant_NonConsolidatedMember",
+       "xbrl:jppfs_cor:CurrentAssets@Prior1YearInstant_NonConsolidatedMember",
+       "formula:a-b"
+      ],
+      "recomputed": 80580000.0,
+      "form": "derived_value"
+     }
+    },
+    {
+     "id": "S100Z5DN:N004",
+     "docID": "S100Z5DN",
+     "kind": "num",
+     "unit": "千円",
+     "before": {
+      "result": "VALUE_MISMATCH",
+      "pointer": [
+       "xbrl:jppfs_cor:AccountsReceivableTrade@CurrentYearInstant_NonConsolidatedMember"
+      ],
+      "recomputed": 508883000.0,
+      "form": "direct_value"
+     },
+     "after": {
+      "result": "GROUNDED",
+      "pointer": [
+       "xbrl:jppfs_cor:AccountsReceivableTrade@CurrentYearInstant_NonConsolidatedMember",
+       "xbrl:jppfs_cor:AccountsReceivableTrade@Prior1YearInstant_NonConsolidatedMember",
+       "formula:a-b"
+      ],
+      "recomputed": 27182000.0,
+      "form": "derived_value"
+     }
+    },
+    {
+     "id": "S100Z5DN:N010",
+     "docID": "S100Z5DN",
+     "kind": "num",
+     "unit": "千円",
+     "before": {
+      "result": "VALUE_MISMATCH",
+      "pointer": [
+       "xbrl:jppfs_cor:Assets@CurrentYearInstant_NonConsolidatedMember"
+      ],
+      "recomputed": 2635474000.0,
+      "form": "direct_value"
+     },
+     "after": {
+      "result": "GROUNDED",
+      "pointer": [
+       "xbrl:jppfs_cor:Assets@CurrentYearInstant_NonConsolidatedMember",
+       "xbrl:jppfs_cor:Assets@Prior1YearInstant_NonConsolidatedMember",
+       "formula:a-b"
+      ],
+      "recomputed": 189829000.0,
+      "form": "derived_value"
+     }
+    },
+    {
+     "id": "S100Z5DN:N013",
+     "docID": "S100Z5DN",
+     "kind": "num",
+     "unit": "千円",
+     "before": {
+      "result": "VALUE_MISMATCH",
+      "pointer": [
+       "xbrl:jppfs_cor:AccountsPayableOther@CurrentYearInstant_NonConsolidatedMember"
+      ],
+      "recomputed": 339186000.0,
+      "form": "direct_value"
+     },
+     "after": {
+      "result": "GROUNDED",
+      "pointer": [
+       "xbrl:jppfs_cor:AccountsPayableOther@CurrentYearInstant_NonConsolidatedMember",
+       "xbrl:jppfs_cor:AccountsPayableOther@Prior1YearInstant_NonConsolidatedMember",
+       "formula:a-b"
+      ],
+      "recomputed": 20098000.0,
+      "form": "derived_value"
+     }
+    },
+    {
+     "id": "S100Z5DN:N017",
+     "docID": "S100Z5DN",
+     "kind": "num",
+     "unit": "千円",
+     "before": {
+      "result": "VALUE_MISMATCH",
+      "pointer": [
+       "xbrl:jppfs_cor:NoncurrentLiabilities@CurrentYearInstant_NonConsolidatedMember"
+      ],
+      "recomputed": 302911000.0,
+      "form": "direct_value"
+     },
+     "after": {
+      "result": "GROUNDED",
+      "pointer": [
+       "xbrl:jppfs_cor:NoncurrentLiabilities@CurrentYearInstant_NonConsolidatedMember",
+       "xbrl:jppfs_cor:NoncurrentLiabilities@Prior1YearInstant_NonConsolidatedMember",
+       "formula:a-b"
+      ],
+      "recomputed": 1784000.0,
+      "form": "derived_value"
+     }
+    },
+    {
+     "id": "S100Z5DN:N021",
+     "docID": "S100Z5DN",
+     "kind": "num",
+     "unit": "千円",
+     "before": {
+      "result": "VALUE_MISMATCH",
+      "pointer": [
+       "xbrl:jppfs_cor:NetAssets@CurrentYearInstant_NonConsolidatedMember"
+      ],
+      "recomputed": 1711852000.0,
+      "form": "direct_value"
+     },
+     "after": {
+      "result": "GROUNDED",
+      "pointer": [
+       "xbrl:jppfs_cor:NetAssets@CurrentYearInstant_NonConsolidatedMember",
+       "xbrl:jppfs_cor:NetAssets@Prior1YearInstant_NonConsolidatedMember",
+       "formula:a-b"
+      ],
+      "recomputed": 424043000.0,
+      "form": "derived_value"
+     }
+    }
+   ],
+   "other": [],
+   "claims": 862,
+   "L_A": 34,
+   "F3": 0
+  },
+  "P16": {
+   "moved": [
+    {
+     "id": "S100YYDI:N020",
+     "docID": "S100YYDI",
+     "kind": "num",
+     "unit": "百万円",
+     "before": {
+      "result": "VALUE_MISMATCH",
+      "pointer": [
+       "xbrl:jppfs_cor:AccountsReceivableOther@CurrentYearInstant"
+      ],
+      "recomputed": 19267000000.0,
+      "form": "direct_value"
+     },
+     "after": {
+      "result": "GROUNDED",
+      "pointer": [
+       "xbrl:jppfs_cor:AccountsReceivableOther@CurrentYearInstant",
+       "xbrl:jppfs_cor:AccountsReceivableOther@Prior1YearInstant",
+       "formula:a-b"
+      ],
+      "recomputed": 7788000000.0,
+      "form": "derived_value"
+     }
+    },
+    {
+     "id": "S100YYDI:N022",
+     "docID": "S100YYDI",
+     "kind": "num",
+     "unit": "百万円",
+     "before": {
+      "result": "VALUE_MISMATCH",
+      "pointer": [
+       "xbrl:jppfs_cor:CashAndDeposits@CurrentYearInstant"
+      ],
+      "recomputed": 61341000000.0,
+      "form": "direct_value"
+     },
+     "after": {
+      "result": "GROUNDED",
+      "pointer": [
+       "xbrl:jppfs_cor:CashAndDeposits@CurrentYearInstant",
+       "xbrl:jppfs_cor:CashAndDeposits@Prior1YearInstant",
+       "formula:a-b"
+      ],
+      "recomputed": 4303000000.0,
+      "form": "derived_value"
+     }
+    },
+    {
+     "id": "S100YYDI:N029",
+     "docID": "S100YYDI",
+     "kind": "num",
+     "unit": "百万円",
+     "before": {
+      "result": "VALUE_MISMATCH",
+      "pointer": [
+       "xbrl:jppfs_cor:AccountsPayableTrade@CurrentYearInstant"
+      ],
+      "recomputed": 195796000000.0,
+      "form": "direct_value"
+     },
+     "after": {
+      "result": "GROUNDED",
+      "pointer": [
+       "xbrl:jppfs_cor:AccountsPayableTrade@CurrentYearInstant",
+       "xbrl:jppfs_cor:AccountsPayableTrade@Prior1YearInstant",
+       "formula:a-b"
+      ],
+      "recomputed": 18671000000.0,
+      "form": "derived_value"
+     }
+    },
+    {
+     "id": "S100YYDI:N039",
+     "docID": "S100YYDI",
+     "kind": "num",
+     "unit": "百万円",
+     "before": {
+      "result": "VALUE_MISMATCH",
+      "pointer": [
+       "xbrl:jppfs_cor:RetainedEarnings@CurrentYearInstant"
+      ],
+      "recomputed": 274411000000.0,
+      "form": "direct_value"
+     },
+     "after": {
+      "result": "GROUNDED",
+      "pointer": [
+       "xbrl:jppfs_cor:RetainedEarnings@CurrentYearInstant",
+       "xbrl:jppfs_cor:RetainedEarnings@Prior1YearInstant",
+       "formula:a-b"
+      ],
+      "recomputed": 26102000000.0,
+      "form": "derived_value"
+     }
+    },
+    {
+     "id": "S100YYDI:N095",
+     "docID": "S100YYDI",
+     "kind": "num",
+     "unit": "百万円",
+     "before": {
+      "result": "VALUE_MISMATCH",
+      "pointer": [
+       "xbrl:jppfs_cor:RetainedEarnings@CurrentYearInstant"
+      ],
+      "recomputed": 274411000000.0,
+      "form": "direct_value"
+     },
+     "after": {
+      "result": "GROUNDED",
+      "pointer": [
+       "xbrl:jppfs_cor:RetainedEarnings@CurrentYearInstant",
+       "xbrl:jppfs_cor:RetainedEarnings@Prior1YearInstant",
+       "formula:a-b"
+      ],
+      "recomputed": 26102000000.0,
+      "form": "derived_value"
+     }
+    },
+    {
+     "id": "S100YYK8:N024",
+     "docID": "S100YYK8",
+     "kind": "num",
+     "unit": "千円",
+     "before": {
+      "result": "VALUE_MISMATCH",
+      "pointer": [
+       "xbrl:jppfs_cor:CurrentAssets@CurrentYearInstant"
+      ],
+      "recomputed": 6079104000.0,
+      "form": "direct_value"
+     },
+     "after": {
+      "result": "GROUNDED",
+      "pointer": [
+       "xbrl:jppfs_cor:CurrentAssets@CurrentYearInstant",
+       "xbrl:jppfs_cor:CurrentAssets@Prior1YearInstant",
+       "formula:a-b"
+      ],
+      "recomputed": 424478000.0,
+      "form": "derived_value"
+     }
+    },
+    {
+     "id": "S100YYK8:N025",
+     "docID": "S100YYK8",
+     "kind": "num",
+     "unit": "千円",
+     "before": {
+      "result": "VALUE_MISMATCH",
+      "pointer": [
+       "xbrl:jppfs_cor:AccountsReceivableTrade@CurrentYearInstant"
+      ],
+      "recomputed": 1738208000.0,
+      "form": "direct_value"
+     },
+     "after": {
+      "result": "GROUNDED",
+      "pointer": [
+       "xbrl:jppfs_cor:AccountsReceivableTrade@CurrentYearInstant",
+       "xbrl:jppfs_cor:AccountsReceivableTrade@Prior1YearInstant",
+       "formula:a-b"
+      ],
+      "recomputed": 490330000.0,
+      "form": "derived_value"
+     }
+    },
+    {
+     "id": "S100YYK8:N029",
+     "docID": "S100YYK8",
+     "kind": "num",
+     "unit": "千円",
+     "before": {
+      "result": "VALUE_MISMATCH",
+      "pointer": [
+       "xbrl:jppfs_cor:IntangibleAssets@CurrentYearInstant"
+      ],
+      "recomputed": 2607520000.0,
+      "form": "direct_value"
+     },
+     "after": {
+      "result": "GROUNDED",
+      "pointer": [
+       "xbrl:jppfs_cor:IntangibleAssets@CurrentYearInstant",
+       "xbrl:jppfs_cor:IntangibleAssets@Prior1YearInstant",
+       "formula:a-b"
+      ],
+      "recomputed": -202114000.0,
+      "form": "derived_value"
+     }
+    },
+    {
+     "id": "S100YYK8:N030",
+     "docID": "S100YYK8",
+     "kind": "num",
+     "unit": "千円",
+     "before": {
+      "result": "VALUE_MISMATCH",
+      "pointer": [
+       "xbrl:jppfs_cor:PropertyPlantAndEquipment@CurrentYearInstant"
+      ],
+      "recomputed": 153599000.0,
+      "form": "direct_value"
+     },
+     "after": {
+      "result": "GROUNDED",
+      "pointer": [
+       "xbrl:jppfs_cor:PropertyPlantAndEquipment@CurrentYearInstant",
+       "xbrl:jppfs_cor:PropertyPlantAndEquipment@Prior1YearInstant",
+       "formula:a-b"
+      ],
+      "recomputed": -6397000.0,
+      "form": "derived_value"
+     }
+    },
+    {
+     "id": "S100YYK8:N032",
+     "docID": "S100YYK8",
+     "kind": "num",
+     "unit": "千円",
+     "before": {
+      "result": "VALUE_MISMATCH",
+      "pointer": [
+       "xbrl:jppfs_cor:CurrentLiabilities@CurrentYearInstant"
+      ],
+      "recomputed": 5685696000.0,
+      "form": "direct_value"
+     },
+     "after": {
+      "result": "GROUNDED",
+      "pointer": [
+       "xbrl:jppfs_cor:CurrentLiabilities@CurrentYearInstant",
+       "xbrl:jppfs_cor:CurrentLiabilities@Prior1YearInstant",
+       "formula:a-b"
+      ],
+      "recomputed": 922874000.0,
+      "form": "derived_value"
+     }
+    },
+    {
+     "id": "S100YYK8:N033",
+     "docID": "S100YYK8",
+     "kind": "num",
+     "unit": "千円",
+     "before": {
+      "result": "VALUE_MISMATCH",
+      "pointer": [
+       "xbrl:jppfs_cor:AccountsPayableTrade@CurrentYearInstant"
+      ],
+      "recomputed": 1197429000.0,
+      "form": "direct_value"
+     },
+     "after": {
+      "result": "GROUNDED",
+      "pointer": [
+       "xbrl:jppfs_cor:AccountsPayableTrade@CurrentYearInstant",
+       "xbrl:jppfs_cor:AccountsPayableTrade@Prior1YearInstant",
+       "formula:a-b"
+      ],
+      "recomputed": 84995000.0,
+      "form": "derived_value"
+     }
+    },
+    {
+     "id": "S100YYK8:N034",
+     "docID": "S100YYK8",
+     "kind": "num",
+     "unit": "千円",
+     "before": {
+      "result": "VALUE_MISMATCH",
+      "pointer": [
+       "xbrl:jppfs_cor:ShortTermLoansPayable@CurrentYearInstant"
+      ],
+      "recomputed": 2106770000.0,
+      "form": "direct_value"
+     },
+     "after": {
+      "result": "GROUNDED",
+      "pointer": [
+       "xbrl:jppfs_cor:ShortTermLoansPayable@CurrentYearInstant",
+       "xbrl:jppfs_cor:ShortTermLoansPayable@Prior1YearInstant",
+       "formula:a-b"
+      ],
+      "recomputed": 815204000.0,
+      "form": "derived_value"
+     }
+    },
+    {
+     "id": "S100YYK8:N037",
+     "docID": "S100YYK8",
+     "kind": "num",
+     "unit": "千円",
+     "before": {
+      "result": "VALUE_MISMATCH",
+      "pointer": [
+       "xbrl:jppfs_cor:AccountsPayableOther@CurrentYearInstant"
+      ],
+      "recomputed": 565950000.0,
+      "form": "direct_value"
+     },
+     "after": {
+      "result": "GROUNDED",
+      "pointer": [
+       "xbrl:jppfs_cor:AccountsPayableOther@CurrentYearInstant",
+       "xbrl:jppfs_cor:AccountsPayableOther@Prior1YearInstant",
+       "formula:a-b"
+      ],
+      "recomputed": -187719000.0,
+      "form": "derived_value"
+     }
+    },
+    {
+     "id": "S100YYK8:N042",
+     "docID": "S100YYK8",
+     "kind": "num",
+     "unit": "千円",
+     "before": {
+      "result": "VALUE_MISMATCH",
+      "pointer": [
+       "xbrl:jppfs_cor:LeaseObligationsCL@CurrentYearInstant"
+      ],
+      "recomputed": 10582000.0,
+      "form": "direct_value"
+     },
+     "after": {
+      "result": "GROUNDED",
+      "pointer": [
+       "xbrl:jppfs_cor:LeaseObligationsNCL@CurrentYearInstant",
+       "xbrl:jppfs_cor:LeaseObligationsNCL@Prior1YearInstant",
+       "formula:a-b"
+      ],
+      "recomputed": -7829000.0,
+      "form": "derived_value"
+     }
+    },
+    {
+     "id": "S100YYK8:N043",
+     "docID": "S100YYK8",
+     "kind": "num",
+     "unit": "千円",
+     "before": {
+      "result": "VALUE_MISMATCH",
+      "pointer": [
+       "xbrl:jppfs_cor:DeferredTaxLiabilities@CurrentYearInstant"
+      ],
+      "recomputed": 298100000.0,
+      "form": "direct_value"
+     },
+     "after": {
+      "result": "GROUNDED",
+      "pointer": [
+       "xbrl:jppfs_cor:DeferredTaxLiabilities@CurrentYearInstant",
+       "xbrl:jppfs_cor:DeferredTaxLiabilities@Prior1YearInstant",
+       "formula:a-b"
+      ],
+      "recomputed": -94928000.0,
+      "form": "derived_value"
+     }
+    },
+    {
+     "id": "S100YYK8:N045",
+     "docID": "S100YYK8",
+     "kind": "num",
+     "unit": "千円",
+     "before": {
+      "result": "VALUE_MISMATCH",
+      "pointer": [
+       "xbrl:jppfs_cor:NetAssets@CurrentYearInstant"
+      ],
+      "recomputed": 1534079000.0,
+      "form": "direct_value"
+     },
+     "after": {
+      "result": "GROUNDED",
+      "pointer": [
+       "xbrl:jppfs_cor:NetAssets@CurrentYearInstant",
+       "xbrl:jppfs_cor:NetAssets@Prior1YearInstant",
+       "formula:a-b"
+      ],
+      "recomputed": -480196000.0,
+      "form": "derived_value"
+     }
+    },
+    {
+     "id": "S100YYK8:N049",
+     "docID": "S100YYK8",
+     "kind": "num",
+     "unit": "千円",
+     "before": {
+      "result": "VALUE_MISMATCH",
+      "pointer": [
+       "xbrl:jppfs_cor:ValuationDifferenceOnAvailableForSaleSecurities@CurrentYearInstant"
+      ],
+      "recomputed": -18754000.0,
+      "form": "direct_value"
+     },
+     "after": {
+      "result": "GROUNDED",
+      "pointer": [
+       "xbrl:jppfs_cor:ValuationDifferenceOnAvailableForSaleSecurities@CurrentYearInstant",
+       "xbrl:jppfs_cor:ValuationDifferenceOnAvailableForSaleSecurities@Prior1YearInstant",
+       "formula:a-b"
+      ],
+      "recomputed": -14529000.0,
+      "form": "derived_value"
+     }
+    },
+    {
+     "id": "S100YYK8:N050",
+     "docID": "S100YYK8",
+     "kind": "num",
+     "unit": "千円",
+     "before": {
+      "result": "VALUE_MISMATCH",
+      "pointer": [
+       "xbrl:jppfs_cor:NonControllingInterests@CurrentYearInstant"
+      ],
+      "recomputed": 305574000.0,
+      "form": "direct_value"
+     },
+     "after": {
+      "result": "GROUNDED",
+      "pointer": [
+       "xbrl:jppfs_cor:NonControllingInterests@CurrentYearInstant",
+       "xbrl:jppfs_cor:NonControllingInterests@Prior1YearInstant",
+       "formula:a-b"
+      ],
+      "recomputed": -302483000.0,
+      "form": "derived_value"
+     }
+    },
+    {
+     "id": "S100YYS4:N058",
+     "docID": "S100YYS4",
+     "kind": "num",
+     "unit": "千円",
+     "before": {
+      "result": "VALUE_MISMATCH",
+      "pointer": [
+       "xbrl:jppfs_cor:Assets@CurrentYearInstant"
+      ],
+      "recomputed": 4568668000.0,
+      "form": "direct_value"
+     },
+     "after": {
+      "result": "GROUNDED",
+      "pointer": [
+       "xbrl:jppfs_cor:Assets@CurrentYearInstant",
+       "xbrl:jppfs_cor:Assets@Prior1YearInstant",
+       "formula:a-b"
+      ],
+      "recomputed": 488206000.0,
+      "form": "derived_value"
+     }
+    },
+    {
+     "id": "S100YYS4:N062",
+     "docID": "S100YYS4",
+     "kind": "num",
+     "unit": "千円",
+     "before": {
+      "result": "VALUE_MISMATCH",
+      "pointer": [
+       "xbrl:jppfs_cor:Liabilities@CurrentYearInstant"
+      ],
+      "recomputed": 2503036000.0,
+      "form": "direct_value"
+     },
+     "after": {
+      "result": "GROUNDED",
+      "pointer": [
+       "xbrl:jppfs_cor:Liabilities@CurrentYearInstant",
+       "xbrl:jppfs_cor:Liabilities@Prior1YearInstant",
+       "formula:a-b"
+      ],
+      "recomputed": 191365000.0,
+      "form": "derived_value"
+     }
+    },
+    {
+     "id": "S100YYS4:N068",
+     "docID": "S100YYS4",
+     "kind": "num",
+     "unit": "千円",
+     "before": {
+      "result": "VALUE_MISMATCH",
+      "pointer": [
+       "xbrl:jppfs_cor:NetAssets@CurrentYearInstant"
+      ],
+      "recomputed": 2065632000.0,
+      "form": "direct_value"
+     },
+     "after": {
+      "result": "GROUNDED",
+      "pointer": [
+       "xbrl:jppfs_cor:NetAssets@CurrentYearInstant",
+       "xbrl:jppfs_cor:NetAssets@Prior1YearInstant",
+       "formula:a-b"
+      ],
+      "recomputed": 296841000.0,
+      "form": "derived_value"
+     }
+    },
+    {
+     "id": "S100YYS4:N073",
+     "docID": "S100YYS4",
+     "kind": "num",
+     "unit": "千円",
+     "before": {
+      "result": "VALUE_MISMATCH",
+      "pointer": [
+       "xbrl:jppfs_cor:TreasuryStock@CurrentYearInstant"
+      ],
+      "recomputed": -400228000.0,
+      "form": "direct_value"
+     },
+     "after": {
+      "result": "GROUNDED",
+      "pointer": [
+       "xbrl:jppfs_cor:TreasuryStock@CurrentYearInstant",
+       "xbrl:jppfs_cor:TreasuryStock@Prior1YearInstant",
+       "formula:a-b"
+      ],
+      "recomputed": 143467000.0,
+      "form": "derived_value"
+     }
+    },
+    {
+     "id": "S100YZ31:N002",
+     "docID": "S100YZ31",
+     "kind": "num",
+     "unit": "百万円",
+     "before": {
+      "result": "VALUE_MISMATCH",
+      "pointer": [
+       "xbrl:jppfs_cor:NetSales@CurrentYearDuration"
+      ],
+      "recomputed": 23353000000.0,
+      "form": "direct_value"
+     },
+     "after": {
+      "result": "GROUNDED",
+      "pointer": [
+       "xbrl:jppfs_cor:NetSales@CurrentYearDuration",
+       "xbrl:jppfs_cor:NetSales@Prior1YearDuration",
+       "formula:a-b"
+      ],
+      "recomputed": -1609000000.0,
+      "form": "derived_value"
+     }
+    },
+    {
+     "id": "S100YZ31:N042",
+     "docID": "S100YZ31",
+     "kind": "num",
+     "unit": "円",
+     "before": {
+      "result": "VALUE_MISMATCH",
+      "pointer": [
+       "xbrl:jppfs_cor:GuaranteeDepositsIOA@CurrentYearInstant"
+      ],
+      "recomputed": 1149000000.0,
+      "form": "direct_value"
+     },
+     "after": {
+      "result": "GROUNDED",
+      "pointer": [
+       "xbrl:jppfs_cor:GuaranteeDepositsIOA@CurrentYearInstant",
+       "xbrl:jppfs_cor:GuaranteeDepositsIOA@Prior1YearInstant",
+       "formula:a-b"
+      ],
+      "recomputed": -125000000.0,
+      "form": "derived_value"
+     }
+    },
+    {
+     "id": "S100YZ31:N047",
+     "docID": "S100YZ31",
+     "kind": "num",
+     "unit": "円",
+     "before": {
+      "result": "VALUE_MISMATCH",
+      "pointer": [
+       "xbrl:jppfs_cor:AccountsPayableTrade@CurrentYearInstant"
+      ],
+      "recomputed": 3052000000.0,
+      "form": "direct_value"
+     },
+     "after": {
+      "result": "GROUNDED",
+      "pointer": [
+       "xbrl:jppfs_cor:AccountsPayableTrade@CurrentYearInstant",
+       "xbrl:jppfs_cor:AccountsPayableTrade@Prior1YearInstant",
+       "formula:a-b"
+      ],
+      "recomputed": 343000000.0,
+      "form": "derived_value"
+     }
+    },
+    {
+     "id": "S100YZ31:N048",
+     "docID": "S100YZ31",
+     "kind": "num",
+     "unit": "円",
+     "before": {
+      "result": "VALUE_MISMATCH",
+      "pointer": [
+       "xbrl:jppfs_cor:CurrentPortionOfLongTermLoansPayable@CurrentYearInstant"
+      ],
+      "recomputed": 3360000000.0,
+      "form": "direct_value"
+     },
+     "after": {
+      "result": "GROUNDED",
+      "pointer": [
+       "xbrl:jppfs_cor:CurrentPortionOfLongTermLoansPayable@CurrentYearInstant",
+       "xbrl:jppfs_cor:CurrentPortionOfLongTermLoansPayable@Prior1YearInstant",
+       "formula:a-b"
+      ],
+      "recomputed": 609000000.0,
+      "form": "derived_value"
+     }
+    },
+    {
+     "id": "S100YZ31:N054",
+     "docID": "S100YZ31",
+     "kind": "num",
+     "unit": "円",
+     "before": {
+      "result": "VALUE_MISMATCH",
+      "pointer": [
+       "xbrl:jppfs_cor:NetAssets@CurrentYearInstant"
+      ],
+      "recomputed": 2589000000.0,
+      "form": "direct_value"
+     },
+     "after": {
+      "result": "GROUNDED",
+      "pointer": [
+       "xbrl:jppfs_cor:NetAssets@CurrentYearInstant",
+       "xbrl:jppfs_cor:NetAssets@Prior1YearInstant",
+       "formula:a-b"
+      ],
+      "recomputed": 717000000.0,
+      "form": "derived_value"
+     }
+    },
+    {
+     "id": "S100YZ31:N056",
+     "docID": "S100YZ31",
+     "kind": "num",
+     "unit": "円",
+     "before": {
+      "result": "VALUE_MISMATCH",
+      "pointer": [
+       "xbrl:jppfs_cor:RetainedEarnings@CurrentYearInstant"
+      ],
+      "recomputed": -3512000000.0,
+      "form": "direct_value"
+     },
+     "after": {
+      "result": "GROUNDED",
+      "pointer": [
+       "xbrl:jppfs_cor:RetainedEarnings@CurrentYearInstant",
+       "xbrl:jppfs_cor:RetainedEarnings@Prior1YearInstant",
+       "formula:a-b"
+      ],
+      "recomputed": 737000000.0,
+      "form": "derived_value"
+     }
+    }
+   ],
+   "other": [],
+   "claims": 862,
+   "L_A": 28,
+   "F3": 0
+  }
+ }
+}
