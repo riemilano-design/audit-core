@@ -462,27 +462,37 @@ class SuiteEvidenceTest(unittest.TestCase):
                           "%s の数 %d が結果文書に無い(書き写しが古い)" % (label, value))
 
     def _results_table(self):
-        """結果を**今の数として示している表**だけを切り出す。
+        """結果を**今の数として示している表の行だけ**を返す(``|`` で始まる行)。
 
-        文書の全文に古い数が在るかを見る版を最初に書いたが、**訂正の経緯を書いた表**に
-        古い数が在るのは正しいので誤って落ちた(同じ日に、登録表の試験でも
-        「P1 を含むなら全部の一覧」という推測の規則で誤判定している)。
-        **推測で全文を探すのをやめ、見出しで範囲を区切る。**
+        範囲の絞り方を**同じ日に 2 回**間違えた。
+        1 回目: 文書の全文を探し、**訂正の経緯を書いた表**に当たって誤って落ちた。
+        2 回目: 見出しで節に絞ったが、**その節の中の自分の説明文**(「捨てた run の数
+        1027・1039… がこの表に出ていないこと」)に当たった ―
+        **字面の試験は自分の説明文に当たる**(2026-09-29 の記録。今日 4 回目)。
+
+        だから**散文を一切含めず、表の行だけ**を見る。
         """
 
         start = self.doc.index("**完走した 1 本の run の数**")
         end = self.doc.index("### 5-2a.", start)
-        return self.doc[start:end]
+        return "\n".join(line for line in self.doc[start:end].split("\n")
+                          if line.strip().startswith("|"))
+
+    def test_the_results_table_is_not_empty(self):
+        """**0 行なら「通った」ではなく「届いていない」。**"""
+
+        rows = [r for r in self._results_table().split("\n") if r.strip()]
+        self.assertGreaterEqual(len(rows), 4, "表の行が取れていない(見出しの字が変わった?)")
 
     def test_the_results_table_states_no_superseded_number(self):
         """**捨てた run の数を、今の数の表に残さない。**
 
-        1027(依頼書に残した古い値)・1039・1030(`tests/` だけの狭い数)は、
-        訂正の経緯(§5-2a・§7-1)でだけ使ってよい。
+        1027(依頼書に残した古い値)・1039・1030(`tests/` だけの狭い数)・
+        1141・1036(1 つ前の run の数)は、訂正の経緯や説明文でだけ使ってよい。
         """
 
         table = self._results_table()
-        for stale in ("1027", "1039", "1030"):
+        for stale in ("1027", "1039", "1030", "1141", "1036"):
             self.assertNotIn(stale, table, "今の数の表に古い数 %s が残っている" % (stale,))
 
     def test_the_results_table_states_the_measured_numbers(self):

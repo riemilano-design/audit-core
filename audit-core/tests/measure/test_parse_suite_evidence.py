@@ -11,6 +11,7 @@ import importlib.util
 import io
 import json
 import os
+import re
 import unittest
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -106,25 +107,39 @@ class BrokenLogTest(unittest.TestCase):
 
 
 class WrittenEvidenceTest(unittest.TestCase):
-    """記録した json が、**この run の形で**取り出されたものであること。"""
+    """記録した json が、**記録したログから道具で取り出したものと一致すること**。
 
-    def test_the_committed_json_matches_what_the_parser_produces(self):
-        path = os.path.join(ROOT, "fixtures", "xbrl", "p20", "suite_evidence_2026-10-14.json")
-        with io.open(path, encoding="utf-8") as fh:
+    **本数を字で固定するのはやめた。** 固定すると自己参照になって終わらない ―
+    この試験を足すと試験の本数そのものが増えるので、固定した数を直す → 撮り直す →
+    また直す、が無限に続く(2026-10-14 に実際に 1141 → 1151 で踏んだ)。
+
+    代わりに**ログそのものを材料として記録し、道具を通した結果と json を突き合わせる**。
+    これで json を手で書き換えることができなくなる(ログと食い違うので落ちる)。
+    どの commit を測ったかはログの中に在り、結果文書との一致は
+    `test_p20.SuiteEvidenceTest` が見る。
+    """
+
+    LOG = os.path.join(ROOT, "fixtures", "xbrl", "p20", "evidence_2026-10-14.txt")
+    JSON = os.path.join(ROOT, "fixtures", "xbrl", "p20", "suite_evidence_2026-10-14.json")
+
+    def test_the_json_is_what_the_tool_gets_from_the_recorded_log(self):
+        with io.open(self.LOG, encoding="utf-8") as fh:
+            from_log = P.parse(fh.read())
+        with io.open(self.JSON, encoding="utf-8") as fh:
             saved = json.load(fh)
-        self.assertEqual(sorted(P.parse(GOOD)), sorted(saved), "欄の形が変わっている")
-        # **HEAD の値は字で固定しない。** 固定すると、文書を 1 行直すたびに
-        # 「撮り直す → 試験の字を直す → また撮り直す」で終わらない(2026-10-14 に気づいた)。
-        # 固定するのは**書き写しで間違えた数**だけにして、HEAD は形だけ見る。
-        # どの commit を測ったかは json と結果文書の両方に在り、
-        # `test_p20.SuiteEvidenceTest.test_the_frozen_head_is_the_one_the_document_names`
-        # が 2 つの一致を見る。
-        self.assertRegex(saved["head"], r"^[0-9a-f]{7,40}$")
-        # 2026-10-14 の完走した 1 本の数(手で書き写していない)。
-        self.assertEqual(1141, saved["pytest_passed"])
-        self.assertEqual(1036, saved["discover_ran"])
-        self.assertEqual(88, saved["mutation_predicted"])
-        self.assertEqual(1, saved["mutation_misses"])
+        self.assertEqual(from_log, saved, "json がログと食い違っている(手で書き換えた?)")
+
+    def test_the_recorded_log_shows_the_tree_did_not_move(self):
+        """ログに run の**前後の HEAD** が在り、同じであること。"""
+
+        with io.open(self.LOG, encoding="utf-8") as fh:
+            text = fh.read()
+        heads = re.findall(r"^([0-9a-f]{7,40}) ", text, re.M)
+        self.assertEqual(2, len(heads), "前後の HEAD が 2 件でない")
+        self.assertEqual(heads[0], heads[1], "測定中に HEAD が動いている")
+
+    def test_the_recorded_log_has_the_shape_the_parser_requires(self):
+        self.assertEqual(sorted(P.parse(GOOD)), sorted(json.load(io.open(self.JSON, encoding="utf-8"))))
 
 
 if __name__ == "__main__":
