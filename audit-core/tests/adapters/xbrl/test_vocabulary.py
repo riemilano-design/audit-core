@@ -1,7 +1,135 @@
 # -*- coding: utf-8 -*-
+import ast
+import glob
+import io
+import os
 import unittest
 
 from adapters.xbrl import vocabulary as V
+
+
+_TESTS_XBRL_DIR = os.path.dirname(os.path.abspath(__file__))
+
+
+def _literal_names(node):
+    """``["P1", "P2"]`` のような**文字列だけの並び**なら名前の list、でなければ None。"""
+
+    if not isinstance(node, (ast.List, ast.Tuple, ast.Set)):
+        return None
+    names = []
+    for element in node.elts:
+        if not (isinstance(element, ast.Constant) and isinstance(element.value, str)):
+            return None
+        names.append(element.value)
+    return names
+
+
+def _is_registry_expr(node):
+    """``sorted(V.PROFILES)`` / ``sorted(V.PROFILES.keys())`` か。"""
+
+    if not (isinstance(node, ast.Call) and isinstance(node.func, ast.Name)
+            and node.func.id == "sorted" and len(node.args) == 1):
+        return False
+    arg = node.args[0]
+    if isinstance(arg, ast.Call) and isinstance(arg.func, ast.Attribute) and arg.func.attr == "keys":
+        arg = arg.func.value
+    return (isinstance(arg, ast.Attribute) and arg.attr == "PROFILES"
+            and isinstance(arg.value, ast.Name) and arg.value.id == "V")
+
+
+def registry_pins(source):
+    """``assertEqual`` で ``sorted(V.PROFILES)`` と**字で並べた一覧**を比べている所。
+
+    返すのは ``(行番号, 名前の並び)``。
+
+    **「P1 を含むか」のような推測では判定しない。** 最初そう書いて、意図的な抜き取り
+    6 件(``test_concept_binding.ProfileFlagsTest``)を誤って捕まえた。ここで見るのは
+    **「登録表そのものと比べている」という構造**だけなので、抜き取りの並びには当たらない。
+    """
+
+    out = []
+    for node in ast.walk(ast.parse(source)):
+        if not (isinstance(node, ast.Call) and isinstance(node.func, ast.Attribute)
+                and node.func.attr == "assertEqual" and len(node.args) >= 2):
+            continue
+        sides = node.args[:2]
+        if not any(_is_registry_expr(side) for side in sides):
+            continue
+        for side in sides:
+            names = _literal_names(side)
+            if names is not None:
+                out.append((getattr(side, "lineno", getattr(node, "lineno", 0)), names))
+    return out
+
+
+class ProfileListPinsAreSelfCheckedTest(unittest.TestCase):
+    """**登録表に 1 件足したときに、一覧を字で固定した所が黙って食い違わないようにする。**
+
+    2026-10-14 に実際にこれで事故った: ``PROFILES`` に ``P20`` を足したのに、一覧を
+    字で並べている試験 2 本を直し忘れた。**新しく書いた試験 39 本は全部緑**で、
+    変異 89 本を回して初めて出た ― しかも等価変異 8 本が同じ理由で赤くなり、
+    **変異の測定そのものが汚染された**(run を 1 本捨てた)。
+
+    対策を記憶ではなく**実行前に赤くなる試験**にする(2026-10-08 の人間の指示)。
+
+    判定は**構造で**行う: ``assertEqual`` の片側が ``sorted(V.PROFILES)`` で、もう片側が
+    字で並べた一覧なら、それは**登録表の全部についての主張**なので一致を要求する。
+    個別の旗を見るための抜き取りの並びには当たらない。
+    """
+
+    def test_every_registry_pin_matches_the_registry(self):
+        expected = sorted(V.PROFILES)
+        found = 0
+        for path in sorted(glob.glob(os.path.join(_TESTS_XBRL_DIR, "test_*.py"))):
+            with io.open(path, encoding="utf-8") as fh:
+                source = fh.read()
+            for lineno, names in registry_pins(source):
+                found += 1
+                self.assertEqual(
+                    expected, sorted(names),
+                    "%s:%d の一覧が PROFILES と食い違っている(登録表に足したらここも直す)"
+                    % (os.path.basename(path), lineno))
+        # **0 件だったら「通った」ではなく「届いていない」**(2026-10-07 の記録)。
+        self.assertGreaterEqual(found, 2, "登録表と比べている一覧が見つからない(走査が壊れている)")
+
+    def test_the_scanner_finds_a_diverging_pin(self):
+        """**試験そのものが効くことを当てる。**1 件足りない一覧を検出するか。"""
+
+        short = [n for n in sorted(V.PROFILES) if n != "P20"]
+        source = ("class T:\n    def t(self):\n"
+                  "        self.assertEqual(sorted(V.PROFILES), %r)\n" % (short,))
+        found = registry_pins(source)
+        self.assertEqual(1, len(found))
+        self.assertNotEqual(sorted(V.PROFILES), sorted(found[0][1]))
+
+    def test_the_scanner_finds_the_pin_on_either_side(self):
+        source = ("class T:\n    def t(self):\n"
+                  '        self.assertEqual(["P1"], sorted(V.PROFILES.keys()))\n')
+        self.assertEqual([["P1"]], [names for _, names in registry_pins(source)])
+
+    def test_the_scanner_ignores_a_sampled_list(self):
+        """個別の旗を見るための抜き取り(登録表と比べていない)には当たらない。
+
+        最初の版は「P1 を含むなら全部の一覧」という**推測の規則**で判定し、
+        ``test_concept_binding`` の抜き取り 6 件を誤って捕まえた。
+        """
+
+        source = ("class T:\n    def t(self):\n"
+                  '        for name in ("P1", "P5F", "P6", "P7", "P13", "P15"):\n'
+                  "            self.assertFalse(V.PROFILES[name].x, name)\n")
+        self.assertEqual([], registry_pins(source))
+
+    def test_the_scanner_ignores_other_assert_equals(self):
+        source = ("class T:\n    def t(self):\n"
+                  '        self.assertEqual(["P1", "P2"], something_else)\n'
+                  "        self.assertEqual(sorted(V.SUBJECTS), [1, 2])\n")
+        self.assertEqual([], registry_pins(source))
+
+    def test_the_scanner_reads_the_tree_not_the_text(self):
+        """説明文の中の一覧には当たらない(字面の試験の失敗の型)。"""
+
+        source = '"""説明: self.assertEqual(sorted(V.PROFILES), [\'P1\'])"""\nX = 1\n'
+        self.assertEqual([], registry_pins(source))
 
 
 class SubjectsTest(unittest.TestCase):
