@@ -402,9 +402,13 @@ class Profile:
     # P19(2026-10-15 未明、誤りを通す率の網羅の測定で見つけた金額の許容の符号の欠陥)。
     # 切り捨ての帯を絶対値で当てる。P1〜P18 は False のまま(振る舞いは 1 行も変わらない)。
     truncate_on_magnitude: bool = False
-    # P20: 連結財務諸表が**無い**書類で、単体(NonConsolidatedMember)の枠を使う。
-    # 書類レベルで 1 度だけ決め、素の context を先に引いて見つからないときだけ単体を見る
-    # (封 docs/CONSOLIDATION_P20_PLAN_2026-10-14.md §2。実装は resolve.make_resolver)。
+    # P20: 連結財務諸表が**無い**書類で、単体(NonConsolidatedMember)の枠を素の枠として
+    # 扱う。書類レベルで 1 度だけ決め、連結の枠に財務の要素が 1 種でも在れば落とさない
+    # (封 docs/CONSOLIDATION_P20_PLAN_2026-10-14.md §2)。
+    # 実装は instance.with_nonconsolidated_fallback / instance.plain_context で、
+    # 呼ぶのは recipes.build_raw_claims の 1 か所。**resolve.make_resolver ではない** ―
+    # 最初そこに置いたが、止める判定はもっと上流(facts_for → ctx_ok → plain_context)に
+    # 在り、変更 0 件と検出 0 件が同時に出た(結果 §1)。
     nonconsolidated_fallback: bool = False
 
 
