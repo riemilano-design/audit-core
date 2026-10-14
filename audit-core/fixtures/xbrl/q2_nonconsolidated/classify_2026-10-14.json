@@ -1,0 +1,22 @@
+{
+ "rule": "instance.consolidated_element_count(facts) == 0 なら B(連結なし)。engine と同じ規則",
+ "k": 2,
+ "docs": [
+  {
+   "docID": "S100Z40G",
+   "zip_sha256": "4cfd8ff692f81692cf79f9acfc71af0265e161dd4852755e01d84ebdd934c322",
+   "consolidated_element_count": 0,
+   "group": "B",
+   "facts": 613,
+   "contexts": 127
+  },
+  {
+   "docID": "S100YYIA",
+   "zip_sha256": "c37346d3285f33377d82e103a5192d496c85da7dada60754b1a7a0ee1968bf42",
+   "consolidated_element_count": 0,
+   "group": "B",
+   "facts": 573,
+   "contexts": 115
+  }
+ ]
+}

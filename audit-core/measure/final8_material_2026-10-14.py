@@ -14,6 +14,7 @@ P16 の限定確認の材料 script(holdout_p16_material_2026-10-13.py)を 8 書
 環境変数で差し替えられるのは下見のためだけ(本番は既定のまま):
   FINAL8_BASE  出力先(既定 fixtures/xbrl/final8)
   FINAL8_DOCS  docID をカンマ区切り(既定 split の final_eval_sealed)
+  FINAL8_SEED  抽出の種(既定 20261016。Q2 の封 §3 は 20261017 を指定している)
 通信しない。engine の state・pointer は材料に書かない。
 """
 
@@ -33,7 +34,7 @@ from adapters.xbrl import vocabulary as V, instance as I, recipes as R, extract 
 
 SPLIT = os.path.join(ROOT, "fixtures", "xbrl", "holdout_p17", "split_2026-10-14.json")
 DATE = "2026-10-14"
-SEED = 20261016
+SEED = int(os.environ.get("FINAL8_SEED") or 20261016)   # Q2 の封は 20261017(封 §3)
 CAP = 100
 PROFILE = "P16"
 BASE = os.environ.get("FINAL8_BASE") or os.path.join(ROOT, "fixtures", "xbrl", "final8")
