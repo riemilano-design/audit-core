@@ -19,6 +19,9 @@
      "docID": "S100YYDI",
      "kind": "num",
      "unit": "百万円",
+     "value": 7787.0,
+     "claim_scale": 1000000.0,
+     "span": "これは主に、未収入金が7,787百万円、商品が6,681百",
      "before": {
       "result": "VALUE_MISMATCH",
       "pointer": [
@@ -43,6 +46,9 @@
      "docID": "S100YYDI",
      "kind": "num",
      "unit": "百万円",
+     "value": 4302.0,
+     "claim_scale": 1000000.0,
+     "span": "金が7,787百万円、商品が6,681百万円、現金及び預金が4,302百万円増加したこと等による",
      "before": {
       "result": "VALUE_MISMATCH",
       "pointer": [
@@ -67,6 +73,9 @@
      "docID": "S100YYDI",
      "kind": "num",
      "unit": "百万円",
+     "value": 18670.0,
+     "claim_scale": 1000000.0,
+     "span": "これは主に、買掛金が18,670百万円、1年内返済予定の長",
      "before": {
       "result": "VALUE_MISMATCH",
       "pointer": [
@@ -91,6 +100,9 @@
      "docID": "S100YYDI",
      "kind": "num",
      "unit": "百万円",
+     "value": 26101.0,
+     "claim_scale": 1000000.0,
+     "span": "これは主に、利益剰余金が26,101百万円増加したこと等による",
      "before": {
       "result": "VALUE_MISMATCH",
       "pointer": [
@@ -115,6 +127,9 @@
      "docID": "S100YYDI",
      "kind": "num",
      "unit": "百万円",
+     "value": 26101.0,
+     "claim_scale": 1000000.0,
+     "span": "純資産合計は、利益剰余金が26,101百万円増加したこと等により",
      "before": {
       "result": "VALUE_MISMATCH",
       "pointer": [
@@ -139,6 +154,9 @@
      "docID": "S100YYK8",
      "kind": "num",
      "unit": "千円",
+     "value": 424477.0,
+     "claim_scale": 1000.0,
+     "span": "残高は、6,079,104千円となり、前連結会計年度末に比べ424,477千円の増加となりました。",
      "before": {
       "result": "VALUE_MISMATCH",
       "pointer": [
@@ -163,6 +181,9 @@
      "docID": "S100YYK8",
      "kind": "num",
      "unit": "千円",
+     "value": 490329.0,
+     "claim_scale": 1000.0,
+     "span": "これは主に、売掛金が490,329千円増加したことによるも",
      "before": {
       "result": "VALUE_MISMATCH",
       "pointer": [
@@ -187,6 +208,9 @@
      "docID": "S100YYK8",
      "kind": "num",
      "unit": "千円",
+     "value": 202113.0,
+     "claim_scale": 1000.0,
+     "span": "その他の資産が196,603千円増加した一方、無形固定資産が202,113千円、有形固定資産が6,",
      "before": {
       "result": "VALUE_MISMATCH",
       "pointer": [
@@ -211,6 +235,9 @@
      "docID": "S100YYK8",
      "kind": "num",
      "unit": "千円",
+     "value": 6396.0,
+     "claim_scale": 1000.0,
+     "span": "加した一方、無形固定資産が202,113千円、有形固定資産が6,396千円それぞれ減少したこと",
      "before": {
       "result": "VALUE_MISMATCH",
       "pointer": [
@@ -235,6 +262,9 @@
      "docID": "S100YYK8",
      "kind": "num",
      "unit": "千円",
+     "value": 922873.0,
+     "claim_scale": 1000.0,
+     "span": "残高は、5,685,696千円となり、前連結会計年度末に比べ922,873千円の増加となりました。",
      "before": {
       "result": "VALUE_MISMATCH",
       "pointer": [
@@ -259,6 +289,9 @@
      "docID": "S100YYK8",
      "kind": "num",
      "unit": "千円",
+     "value": 84994.0,
+     "claim_scale": 1000.0,
+     "span": "これは主に、買掛金が84,994千円、短期借入金が815",
      "before": {
       "result": "VALUE_MISMATCH",
       "pointer": [
@@ -283,6 +316,9 @@
      "docID": "S100YYK8",
      "kind": "num",
      "unit": "千円",
+     "value": 815203.0,
+     "claim_scale": 1000.0,
+     "span": "これは主に、買掛金が84,994千円、短期借入金が815,203千円、未払法人税等が99",
      "before": {
       "result": "VALUE_MISMATCH",
       "pointer": [
@@ -307,6 +343,9 @@
      "docID": "S100YYK8",
      "kind": "num",
      "unit": "千円",
+     "value": 187718.0,
+     "claim_scale": 1000.0,
+     "span": "千円、前受金が96,329千円それぞれ増加した一方、未払金が187,718千円減少したことによるも",
      "before": {
       "result": "VALUE_MISMATCH",
       "pointer": [
@@ -331,6 +370,9 @@
      "docID": "S100YYK8",
      "kind": "num",
      "unit": "千円",
+     "value": 7828.0,
+     "claim_scale": 1000.0,
+     "span": "440千円増加した一方、社債が20,000千円、リース債務が7,828千円、繰延税金負債が94",
      "before": {
       "result": "VALUE_MISMATCH",
       "pointer": [
@@ -355,6 +397,9 @@
      "docID": "S100YYK8",
      "kind": "num",
      "unit": "千円",
+     "value": 94927.0,
+     "claim_scale": 1000.0,
+     "span": "20,000千円、リース債務が7,828千円、繰延税金負債が94,927千円それぞれ減少したこと",
      "before": {
       "result": "VALUE_MISMATCH",
       "pointer": [
@@ -379,6 +424,9 @@
      "docID": "S100YYK8",
      "kind": "num",
      "unit": "千円",
+     "value": 480195.0,
+     "claim_scale": 1000.0,
+     "span": "残高は、1,534,079千円となり、前連結会計年度末に比べ480,195千円の減少となりました。",
      "before": {
       "result": "VALUE_MISMATCH",
       "pointer": [
@@ -403,6 +451,9 @@
      "docID": "S100YYK8",
      "kind": "num",
      "unit": "千円",
+     "value": 14528.0,
+     "claim_scale": 1000.0,
+     "span": "る利益剰余金が321,314千円、その他有価証券評価差額金が14,528千円、非支配株主持分が3",
      "before": {
       "result": "VALUE_MISMATCH",
       "pointer": [
@@ -427,6 +478,9 @@
      "docID": "S100YYK8",
      "kind": "num",
      "unit": "千円",
+     "value": 302482.0,
+     "claim_scale": 1000.0,
+     "span": "その他有価証券評価差額金が14,528千円、非支配株主持分が302,482千円それぞれ減少したこと",
      "before": {
       "result": "VALUE_MISMATCH",
       "pointer": [
@@ -451,6 +505,9 @@
      "docID": "S100YYS4",
      "kind": "num",
      "unit": "千円",
+     "value": 488205.0,
+     "claim_scale": 1000.0,
+     "span": "資産合計は、前連結会計年度末に比べ488,205千円増(前連結会計年度末",
      "before": {
       "result": "VALUE_MISMATCH",
       "pointer": [
@@ -475,6 +532,9 @@
      "docID": "S100YYS4",
      "kind": "num",
      "unit": "千円",
+     "value": 191364.0,
+     "claim_scale": 1000.0,
+     "span": "負債合計は、前連結会計年度末に比べ191,364千円増(前連結会計年度末",
      "before": {
       "result": "VALUE_MISMATCH",
       "pointer": [
@@ -499,6 +559,9 @@
      "docID": "S100YYS4",
      "kind": "num",
      "unit": "千円",
+     "value": 296840.0,
+     "claim_scale": 1000.0,
+     "span": "純資産合計は、前連結会計年度末に比べ296,840千円増(前連結会計年度末",
      "before": {
       "result": "VALUE_MISMATCH",
       "pointer": [
@@ -523,6 +586,9 @@
      "docID": "S100YYS4",
      "kind": "num",
      "unit": "千円",
+     "value": 143466.0,
+     "claim_scale": 1000.0,
+     "span": "処分先とする第三者割当による自己株式の処分等に伴い自己株式が 143,466千円減少し、資本剰余金が",
      "before": {
       "result": "VALUE_MISMATCH",
       "pointer": [
@@ -547,6 +613,9 @@
      "docID": "S100YZ31",
      "kind": "num",
      "unit": "百万円",
+     "value": 1608.0,
+     "claim_scale": 1000000.0,
+     "span": "会計年度の売上高は、23,353百万円と前連結会計年度と比べ1,608百万円の減収(6.4%減)",
      "before": {
       "result": "VALUE_MISMATCH",
       "pointer": [
@@ -571,6 +640,9 @@
      "docID": "S100YZ31",
      "kind": "num",
      "unit": "円",
+     "value": 124000000.0,
+     "claim_scale": 1000000.0,
+     "span": "(純額)が28百万円、ソフトウエアが21百万円、差入保証金が124百万円減少したことなどによ",
      "before": {
       "result": "VALUE_MISMATCH",
       "pointer": [
@@ -595,6 +667,9 @@
      "docID": "S100YZ31",
      "kind": "num",
      "unit": "円",
+     "value": 342000000.0,
+     "claim_scale": 1000000.0,
+     "span": "これは、買掛金が342百万円、1年内返済予定の長",
      "before": {
       "result": "VALUE_MISMATCH",
       "pointer": [
@@ -619,6 +694,9 @@
      "docID": "S100YZ31",
      "kind": "num",
      "unit": "円",
+     "value": 608000000.0,
+     "claim_scale": 1000000.0,
+     "span": "これは、買掛金が342百万円、1年内返済予定の長期借入金が608百万円増加したことなどによ",
      "before": {
       "result": "VALUE_MISMATCH",
       "pointer": [
@@ -643,6 +721,9 @@
      "docID": "S100YZ31",
      "kind": "num",
      "unit": "円",
+     "value": 716000000.0,
+     "claim_scale": 1000000.0,
+     "span": "純資産合計は、前連結会計年度末に比べて716百万円増加し、2,589百",
      "before": {
       "result": "VALUE_MISMATCH",
       "pointer": [
@@ -667,6 +748,9 @@
      "docID": "S100YZ31",
      "kind": "num",
      "unit": "円",
+     "value": 736000000.0,
+     "claim_scale": 1000000.0,
+     "span": "これは、利益剰余金が736百万円増加したことなどによ",
      "before": {
       "result": "VALUE_MISMATCH",
       "pointer": [
@@ -691,6 +775,9 @@
      "docID": "S100Z5DN",
      "kind": "num",
      "unit": "千円",
+     "value": 80579.0,
+     "claim_scale": 1000.0,
+     "span": "る流動資産は2,428,940千円となり、前事業年度末に比べ80,579千円増加いたしました。",
      "before": {
       "result": "VALUE_MISMATCH",
       "pointer": [
@@ -715,6 +802,9 @@
      "docID": "S100Z5DN",
      "kind": "num",
      "unit": "千円",
+     "value": 27181.0,
+     "claim_scale": 1000.0,
+     "span": "伴い現金及び預金が82,188千円、売上の拡大に伴い売掛金が27,181千円増加した一方で、オフ",
      "before": {
       "result": "VALUE_MISMATCH",
       "pointer": [
@@ -739,6 +829,9 @@
      "docID": "S100Z5DN",
      "kind": "num",
      "unit": "千円",
+     "value": 189828.0,
+     "claim_scale": 1000.0,
+     "span": "果、総資産は2,635,474千円となり、前事業年度末に比べ189,828千円増加いたしました。",
      "before": {
       "result": "VALUE_MISMATCH",
       "pointer": [
@@ -763,6 +856,9 @@
      "docID": "S100Z5DN",
      "kind": "num",
      "unit": "千円",
+     "value": 20097.0,
+     "claim_scale": 1000.0,
+     "span": "これは主に未払金が20,097千円増加した一方で、1年",
      "before": {
       "result": "VALUE_MISMATCH",
       "pointer": [
@@ -787,6 +883,9 @@
      "docID": "S100Z5DN",
      "kind": "num",
      "unit": "千円",
+     "value": 1783.0,
+     "claim_scale": 1000.0,
+     "span": "固定負債は302,911千円となり、前事業年度末に比べ1,783千円増加いたしました。",
      "before": {
       "result": "VALUE_MISMATCH",
       "pointer": [
@@ -811,6 +910,9 @@
      "docID": "S100Z5DN",
      "kind": "num",
      "unit": "千円",
+     "value": 424042.0,
+     "claim_scale": 1000.0,
+     "span": "純資産合計は1,711,852千円となり、前事業年度末に比べ424,042千円増加いたしました。",
      "before": {
       "result": "VALUE_MISMATCH",
       "pointer": [
@@ -843,6 +945,9 @@
      "docID": "S100YYDI",
      "kind": "num",
      "unit": "百万円",
+     "value": 7787.0,
+     "claim_scale": 1000000.0,
+     "span": "これは主に、未収入金が7,787百万円、商品が6,681百",
      "before": {
       "result": "VALUE_MISMATCH",
       "pointer": [
@@ -867,6 +972,9 @@
      "docID": "S100YYDI",
      "kind": "num",
      "unit": "百万円",
+     "value": 4302.0,
+     "claim_scale": 1000000.0,
+     "span": "金が7,787百万円、商品が6,681百万円、現金及び預金が4,302百万円増加したこと等による",
      "before": {
       "result": "VALUE_MISMATCH",
       "pointer": [
@@ -891,6 +999,9 @@
      "docID": "S100YYDI",
      "kind": "num",
      "unit": "百万円",
+     "value": 18670.0,
+     "claim_scale": 1000000.0,
+     "span": "これは主に、買掛金が18,670百万円、1年内返済予定の長",
      "before": {
       "result": "VALUE_MISMATCH",
       "pointer": [
@@ -915,6 +1026,9 @@
      "docID": "S100YYDI",
      "kind": "num",
      "unit": "百万円",
+     "value": 26101.0,
+     "claim_scale": 1000000.0,
+     "span": "これは主に、利益剰余金が26,101百万円増加したこと等による",
      "before": {
       "result": "VALUE_MISMATCH",
       "pointer": [
@@ -939,6 +1053,9 @@
      "docID": "S100YYDI",
      "kind": "num",
      "unit": "百万円",
+     "value": 26101.0,
+     "claim_scale": 1000000.0,
+     "span": "純資産合計は、利益剰余金が26,101百万円増加したこと等により",
      "before": {
       "result": "VALUE_MISMATCH",
       "pointer": [
@@ -963,6 +1080,9 @@
      "docID": "S100YYK8",
      "kind": "num",
      "unit": "千円",
+     "value": 424477.0,
+     "claim_scale": 1000.0,
+     "span": "残高は、6,079,104千円となり、前連結会計年度末に比べ424,477千円の増加となりました。",
      "before": {
       "result": "VALUE_MISMATCH",
       "pointer": [
@@ -987,6 +1107,9 @@
      "docID": "S100YYK8",
      "kind": "num",
      "unit": "千円",
+     "value": 490329.0,
+     "claim_scale": 1000.0,
+     "span": "これは主に、売掛金が490,329千円増加したことによるも",
      "before": {
       "result": "VALUE_MISMATCH",
       "pointer": [
@@ -1011,6 +1134,9 @@
      "docID": "S100YYK8",
      "kind": "num",
      "unit": "千円",
+     "value": 202113.0,
+     "claim_scale": 1000.0,
+     "span": "その他の資産が196,603千円増加した一方、無形固定資産が202,113千円、有形固定資産が6,",
      "before": {
       "result": "VALUE_MISMATCH",
       "pointer": [
@@ -1035,6 +1161,9 @@
      "docID": "S100YYK8",
      "kind": "num",
      "unit": "千円",
+     "value": 6396.0,
+     "claim_scale": 1000.0,
+     "span": "加した一方、無形固定資産が202,113千円、有形固定資産が6,396千円それぞれ減少したこと",
      "before": {
       "result": "VALUE_MISMATCH",
       "pointer": [
@@ -1059,6 +1188,9 @@
      "docID": "S100YYK8",
      "kind": "num",
      "unit": "千円",
+     "value": 922873.0,
+     "claim_scale": 1000.0,
+     "span": "残高は、5,685,696千円となり、前連結会計年度末に比べ922,873千円の増加となりました。",
      "before": {
       "result": "VALUE_MISMATCH",
       "pointer": [
@@ -1083,6 +1215,9 @@
      "docID": "S100YYK8",
      "kind": "num",
      "unit": "千円",
+     "value": 84994.0,
+     "claim_scale": 1000.0,
+     "span": "これは主に、買掛金が84,994千円、短期借入金が815",
      "before": {
       "result": "VALUE_MISMATCH",
       "pointer": [
@@ -1107,6 +1242,9 @@
      "docID": "S100YYK8",
      "kind": "num",
      "unit": "千円",
+     "value": 815203.0,
+     "claim_scale": 1000.0,
+     "span": "これは主に、買掛金が84,994千円、短期借入金が815,203千円、未払法人税等が99",
      "before": {
       "result": "VALUE_MISMATCH",
       "pointer": [
@@ -1131,6 +1269,9 @@
      "docID": "S100YYK8",
      "kind": "num",
      "unit": "千円",
+     "value": 187718.0,
+     "claim_scale": 1000.0,
+     "span": "千円、前受金が96,329千円それぞれ増加した一方、未払金が187,718千円減少したことによるも",
      "before": {
       "result": "VALUE_MISMATCH",
       "pointer": [
@@ -1155,6 +1296,9 @@
      "docID": "S100YYK8",
      "kind": "num",
      "unit": "千円",
+     "value": 7828.0,
+     "claim_scale": 1000.0,
+     "span": "440千円増加した一方、社債が20,000千円、リース債務が7,828千円、繰延税金負債が94",
      "before": {
       "result": "VALUE_MISMATCH",
       "pointer": [
@@ -1179,6 +1323,9 @@
      "docID": "S100YYK8",
      "kind": "num",
      "unit": "千円",
+     "value": 94927.0,
+     "claim_scale": 1000.0,
+     "span": "20,000千円、リース債務が7,828千円、繰延税金負債が94,927千円それぞれ減少したこと",
      "before": {
       "result": "VALUE_MISMATCH",
       "pointer": [
@@ -1203,6 +1350,9 @@
      "docID": "S100YYK8",
      "kind": "num",
      "unit": "千円",
+     "value": 480195.0,
+     "claim_scale": 1000.0,
+     "span": "残高は、1,534,079千円となり、前連結会計年度末に比べ480,195千円の減少となりました。",
      "before": {
       "result": "VALUE_MISMATCH",
       "pointer": [
@@ -1227,6 +1377,9 @@
      "docID": "S100YYK8",
      "kind": "num",
      "unit": "千円",
+     "value": 14528.0,
+     "claim_scale": 1000.0,
+     "span": "る利益剰余金が321,314千円、その他有価証券評価差額金が14,528千円、非支配株主持分が3",
      "before": {
       "result": "VALUE_MISMATCH",
       "pointer": [
@@ -1251,6 +1404,9 @@
      "docID": "S100YYK8",
      "kind": "num",
      "unit": "千円",
+     "value": 302482.0,
+     "claim_scale": 1000.0,
+     "span": "その他有価証券評価差額金が14,528千円、非支配株主持分が302,482千円それぞれ減少したこと",
      "before": {
       "result": "VALUE_MISMATCH",
       "pointer": [
@@ -1275,6 +1431,9 @@
      "docID": "S100YYS4",
      "kind": "num",
      "unit": "千円",
+     "value": 488205.0,
+     "claim_scale": 1000.0,
+     "span": "資産合計は、前連結会計年度末に比べ488,205千円増(前連結会計年度末",
      "before": {
       "result": "VALUE_MISMATCH",
       "pointer": [
@@ -1299,6 +1458,9 @@
      "docID": "S100YYS4",
      "kind": "num",
      "unit": "千円",
+     "value": 191364.0,
+     "claim_scale": 1000.0,
+     "span": "負債合計は、前連結会計年度末に比べ191,364千円増(前連結会計年度末",
      "before": {
       "result": "VALUE_MISMATCH",
       "pointer": [
@@ -1323,6 +1485,9 @@
      "docID": "S100YYS4",
      "kind": "num",
      "unit": "千円",
+     "value": 296840.0,
+     "claim_scale": 1000.0,
+     "span": "純資産合計は、前連結会計年度末に比べ296,840千円増(前連結会計年度末",
      "before": {
       "result": "VALUE_MISMATCH",
       "pointer": [
@@ -1347,6 +1512,9 @@
      "docID": "S100YYS4",
      "kind": "num",
      "unit": "千円",
+     "value": 143466.0,
+     "claim_scale": 1000.0,
+     "span": "処分先とする第三者割当による自己株式の処分等に伴い自己株式が 143,466千円減少し、資本剰余金が",
      "before": {
       "result": "VALUE_MISMATCH",
       "pointer": [
@@ -1371,6 +1539,9 @@
      "docID": "S100YZ31",
      "kind": "num",
      "unit": "百万円",
+     "value": 1608.0,
+     "claim_scale": 1000000.0,
+     "span": "会計年度の売上高は、23,353百万円と前連結会計年度と比べ1,608百万円の減収(6.4%減)",
      "before": {
       "result": "VALUE_MISMATCH",
       "pointer": [
@@ -1395,6 +1566,9 @@
      "docID": "S100YZ31",
      "kind": "num",
      "unit": "円",
+     "value": 124000000.0,
+     "claim_scale": 1000000.0,
+     "span": "(純額)が28百万円、ソフトウエアが21百万円、差入保証金が124百万円減少したことなどによ",
      "before": {
       "result": "VALUE_MISMATCH",
       "pointer": [
@@ -1419,6 +1593,9 @@
      "docID": "S100YZ31",
      "kind": "num",
      "unit": "円",
+     "value": 342000000.0,
+     "claim_scale": 1000000.0,
+     "span": "これは、買掛金が342百万円、1年内返済予定の長",
      "before": {
       "result": "VALUE_MISMATCH",
       "pointer": [
@@ -1443,6 +1620,9 @@
      "docID": "S100YZ31",
      "kind": "num",
      "unit": "円",
+     "value": 608000000.0,
+     "claim_scale": 1000000.0,
+     "span": "これは、買掛金が342百万円、1年内返済予定の長期借入金が608百万円増加したことなどによ",
      "before": {
       "result": "VALUE_MISMATCH",
       "pointer": [
@@ -1467,6 +1647,9 @@
      "docID": "S100YZ31",
      "kind": "num",
      "unit": "円",
+     "value": 716000000.0,
+     "claim_scale": 1000000.0,
+     "span": "純資産合計は、前連結会計年度末に比べて716百万円増加し、2,589百",
      "before": {
       "result": "VALUE_MISMATCH",
       "pointer": [
@@ -1491,6 +1674,9 @@
      "docID": "S100YZ31",
      "kind": "num",
      "unit": "円",
+     "value": 736000000.0,
+     "claim_scale": 1000000.0,
+     "span": "これは、利益剰余金が736百万円増加したことなどによ",
      "before": {
       "result": "VALUE_MISMATCH",
       "pointer": [

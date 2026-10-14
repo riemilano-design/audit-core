@@ -79,6 +79,7 @@ def compare(before, after):
             if same:
                 continue
             rec = {"id": cid, "docID": x["docID"], "kind": x["kind"], "unit": x["unit"],
+                   "value": x["value"], "claim_scale": x["claim_scale"], "span": x["span"],
                    "before": {k: x[k] for k in ("result", "pointer", "recomputed", "form")},
                    "after": {k: y[k] for k in ("result", "pointer", "recomputed", "form")}}
             if x["result"] == "VALUE_MISMATCH" and y["result"] == "GROUNDED":
