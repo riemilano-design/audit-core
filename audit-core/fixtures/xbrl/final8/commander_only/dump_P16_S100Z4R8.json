@@ -1,0 +1,755 @@
+{
+ "S100Z4R8:H-001": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:RepaymentOfLongTermLoansPayableFinCF@CurrentYearDuration"
+  ],
+  "subject": "長期借入金の返済による支出",
+  "span": "に短期借入金の純減額100百万円、長期借入金の返済による支出40百万円、配当金の支払額10",
+  "reason": null
+ },
+ "S100Z4R8:H-002": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:NetDefinedBenefitLiability@CurrentYearInstant",
+   "xbrl:jppfs_cor:NetDefinedBenefitLiability@Prior1YearInstant",
+   "builtin:sign(cur-prior)"
+  ],
+  "subject": "退職給付に係る負債",
+  "span": "この主たる要因は、退職給付に係る負債の減少によるもの",
+  "reason": null
+ },
+ "S100Z4R8:H-003": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:OrdinaryIncome@CurrentYearDuration",
+   "xbrl:jppfs_cor:OrdinaryIncome@Prior1YearDuration",
+   "formula:a-b"
+  ],
+  "subject": "経常利益",
+  "span": "2,802百万円となり、営業外損益を算入した経常利益は前期比245百万円増の2,989百万円",
+  "reason": null
+ },
+ "S100Z4R8:H-004": {
+  "state": "UNVERIFIABLE",
+  "pointers": [],
+  "subject": null,
+  "span": "よる「連結中期経営計画2028」にもとづき、「産業物流業務の拡大」「物流品",
+  "reason": "no_subject"
+ },
+ "S100Z4R8:H-005": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:Assets@CurrentYearInstant",
+   "xbrl:jppfs_cor:Assets@Prior1YearInstant",
+   "builtin:sign(cur-prior)"
+  ],
+  "subject": "総資産",
+  "span": "は46,172百万円と前連結会計年度末から2,943百万円の増加となりまし",
+  "reason": null
+ },
+ "S100Z4R8:H-006": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:NetSales@CurrentYearDuration",
+   "xbrl:jppfs_cor:NetSales@Prior1YearDuration",
+   "formula:a-b"
+  ],
+  "subject": "売上高",
+  "span": "会計年度の売上高は、53,021百万円と前連結会計年度に比べ849百万円の増加となりました。",
+  "reason": null
+ },
+ "S100Z4R8:H-007": {
+  "state": "POINTER_NOT_FOUND",
+  "pointers": [],
+  "subject": "セグメント利益",
+  "span": ",909百万円となり、セグメント利益は947百万円(同利益率19.3%)となりました。",
+  "reason": "no_element(ratio without fact)"
+ },
+ "S100Z4R8:H-008": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:NetAssets@CurrentYearInstant",
+   "xbrl:jppfs_cor:NetAssets@Prior1YearInstant",
+   "formula:a-b"
+  ],
+  "subject": "純資産",
+  "span": "純資産は、31,047百万円で前連結会計年度末に比べ2,515百万円増となりました。",
+  "reason": null
+ },
+ "S100Z4R8:H-009": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:CurrentLiabilities@CurrentYearInstant",
+   "xbrl:jppfs_cor:CurrentLiabilities@Prior1YearInstant",
+   "builtin:sign(cur-prior)"
+  ],
+  "subject": "流動負債",
+  "span": "この主たる要因は買掛金、その他流動負債等の増加によるもの",
+  "reason": null
+ },
+ "S100Z4R8:H-010": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:NetSales@CurrentYearDuration"
+  ],
+  "subject": "売上高",
+  "span": "昇分の運賃転嫁を進めたこともあり、売上高は前期比1.6%増の53,021百万円となりました。",
+  "reason": null
+ },
+ "S100Z4R8:H-011": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:PurchaseOfPropertyPlantAndEquipmentInvCF@CurrentYearDuration"
+  ],
+  "subject": "有形固定資産の取得による支出",
+  "span": "これは主に有形固定資産の取得による支出5,019百万円等があったことによる",
+  "reason": null
+ },
+ "S100Z4R8:H-012": {
+  "state": "VALUE_MISMATCH",
+  "pointers": [
+   "xbrl:jppfs_cor:ShortTermLoansPayable@CurrentYearInstant"
+  ],
+  "subject": "短期借入金",
+  "span": "これは主に短期借入金の純減額100百万円、長期借入金の返済に",
+  "reason": null
+ },
+ "S100Z4R8:H-013": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:Assets@CurrentYearInstant",
+   "xbrl:jppfs_cor:Assets@Prior1YearInstant",
+   "formula:a-b"
+  ],
+  "subject": "総資産",
+  "span": "会計年度末の総資産は46,172百万円と前連結会計年度末から2,943百万円の増加となりました。",
+  "reason": null
+ },
+ "S100Z4R8:H-014": {
+  "state": "POINTER_NOT_FOUND",
+  "pointers": [],
+  "subject": "セグメント利益",
+  "span": "は前期比4.1%増の2,730百万円となり、セグメント利益は676百万円(同利益率24.8%",
+  "reason": "no_element"
+ },
+ "S100Z4R8:H-015": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:NetAssets@CurrentYearInstant"
+  ],
+  "subject": "純資産",
+  "span": "純資産は、31,047百万円で前連結会計年度末に",
+  "reason": null
+ },
+ "S100Z4R8:H-016": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:OrdinaryIncome@CurrentYearDuration"
+  ],
+  "subject": "経常利益",
+  "span": "となり、営業外損益を算入した経常利益は前期比245百万円増の2,989百万円、親会社株主に帰属す",
+  "reason": null
+ },
+ "S100Z4R8:H-017": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:NoncurrentAssets@CurrentYearInstant",
+   "xbrl:jppfs_cor:NoncurrentAssets@Prior1YearInstant",
+   "formula:a-b"
+  ],
+  "subject": "固定資産",
+  "span": "固定資産は、34,136百万円で前連結会計年度末に比べ2,539百万円増となりました。",
+  "reason": null
+ },
+ "S100Z4R8:H-018": {
+  "state": "VALUE_MISMATCH",
+  "pointers": [
+   "xbrl:jppfs_cor:NetCashProvidedByUsedInFinancingActivities@CurrentYearDuration",
+   "xbrl:jppfs_cor:NetCashProvidedByUsedInFinancingActivities@Prior1YearDuration",
+   "builtin:sign(cur-prior)"
+  ],
+  "subject": "財務活動の結果使用した資金",
+  "span": "使用した資金は260百万円(前連結会計年度比 721百万円の減少)となりま",
+  "reason": null
+ },
+ "S100Z4R8:H-019": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:NetCashProvidedByUsedInFinancingActivities@CurrentYearDuration",
+   "xbrl:jppfs_cor:NetCashProvidedByUsedInFinancingActivities@Prior1YearDuration",
+   "formula:a-b"
+  ],
+  "subject": "財務活動の結果使用した資金",
+  "span": "財務活動の結果使用した資金は260百万円(前連結会計年度比 721百万円の減少)となりました",
+  "reason": null
+ },
+ "S100Z4R8:H-020": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:PersonalExpensesSGA@CurrentYearDuration",
+   "xbrl:jppfs_cor:PersonalExpensesSGA@Prior1YearDuration",
+   "builtin:sign(cur-prior)"
+  ],
+  "subject": "人件費",
+  "span": "た、費用につきましては、ドライバー人件費や、車両代替コストの増加などがあり",
+  "reason": null
+ },
+ "S100Z4R8:H-021": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:InvestmentSecurities@CurrentYearInstant",
+   "xbrl:jppfs_cor:InvestmentSecurities@Prior1YearInstant",
+   "builtin:sign(cur-prior)"
+  ],
+  "subject": "投資有価証券",
+  "span": "この主たる要因は機械装置及び運搬具、投資有価証券等の増加によるもの",
+  "reason": null
+ },
+ "S100Z4R8:H-022": {
+  "state": "VALUE_MISMATCH",
+  "pointers": [
+   "xbrl:jppfs_cor:CostOfSales@CurrentYearDuration"
+  ],
+  "subject": "売上原価",
+  "span": "、売上原価と一般管理費を合わせた総経費は、前期比1.2%増の50,218百万円となりました。",
+  "reason": null
+ },
+ "S100Z4R8:H-023": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:CashAndCashEquivalents@CurrentYearInstant"
+  ],
+  "subject": "現金及び現金同等物",
+  "span": "結会計年度末に比べ235百万円増加し、当連結会計年度末には、5,738百万円となりました。",
+  "reason": null
+ },
+ "S100Z4R8:H-024": {
+  "state": "VALUE_MISMATCH",
+  "pointers": [
+   "xbrl:jpcrp_cor:NetCashProvidedByUsedInInvestingActivitiesSummaryOfBusinessResults@CurrentYearDuration",
+   "xbrl:jpcrp_cor:NetCashProvidedByUsedInInvestingActivitiesSummaryOfBusinessResults@Prior1YearDuration",
+   "builtin:sign(cur-prior)"
+  ],
+  "subject": "投資活動の結果使用した資金",
+  "span": "資金は5,144百万円(前連結会計年度比 1,857百万円の増加)となりま",
+  "reason": null
+ },
+ "S100Z4R8:H-025": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:CurrentAssets@CurrentYearInstant"
+  ],
+  "subject": "流動資産",
+  "span": "流動資産は、12,035百万円で前連結会計年度末に",
+  "reason": null
+ },
+ "S100Z4R8:H-026": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:NoncurrentAssets@CurrentYearInstant"
+  ],
+  "subject": "固定資産",
+  "span": "固定資産は、34,136百万円で前連結会計年度末に",
+  "reason": null
+ },
+ "S100Z4R8:H-027": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:ProfitLossAttributableToOwnersOfParent@CurrentYearDuration",
+   "xbrl:jppfs_cor:ProfitLossAttributableToOwnersOfParent@Prior1YearDuration",
+   "builtin:sign(cur-prior)"
+  ],
+  "subject": "親会社株主に帰属する当期純利益",
+  "span": "期純利益は、1,822百万円と前連結会計年度に比べ68百万円増加しておりま",
+  "reason": null
+ },
+ "S100Z4R8:H-028": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration",
+   "xbrl:jppfs_cor:OperatingIncome@Prior1YearDuration",
+   "formula:a-b"
+  ],
+  "subject": "営業利益",
+  "span": "以上により、営業利益は前期比239百万円増の2,802百万円",
+  "reason": null
+ },
+ "S100Z4R8:H-029": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jpcrp_cor:NetCashProvidedByUsedInInvestingActivitiesSummaryOfBusinessResults@CurrentYearDuration",
+   "xbrl:jpcrp_cor:NetCashProvidedByUsedInInvestingActivitiesSummaryOfBusinessResults@Prior1YearDuration",
+   "formula:a-b"
+  ],
+  "subject": "投資活動の結果使用した資金",
+  "span": "資活動の結果使用した資金は5,144百万円(前連結会計年度比 1,857百万円の増加)となりました",
+  "reason": null
+ },
+ "S100Z4R8:H-030": {
+  "state": "POINTER_NOT_FOUND",
+  "pointers": [],
+  "subject": "セグメント利益",
+  "span": "前期比1.8%増の45,382百万円となり、セグメント利益は3,283百万円(同利益率7.2%)",
+  "reason": "no_element"
+ },
+ "S100Z4R8:H-031": {
+  "state": "VALUE_MISMATCH",
+  "pointers": [
+   "xbrl:jppfs_cor:NetSales@CurrentYearDuration"
+  ],
+  "subject": "売上高",
+  "span": "ては、燃料油販売の需要減等により、売上高は前期比1.1%減の4,909百万円となり、セグメント利",
+  "reason": null
+ },
+ "S100Z4R8:H-032": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:NoncurrentLiabilities@CurrentYearInstant"
+  ],
+  "subject": "固定負債",
+  "span": "固定負債は、5,924百万円で前連結会計年度末に",
+  "reason": null
+ },
+ "S100Z4R8:H-033": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:NoncurrentLiabilities@CurrentYearInstant",
+   "xbrl:jppfs_cor:NoncurrentLiabilities@Prior1YearInstant",
+   "formula:a-b"
+  ],
+  "subject": "固定負債",
+  "span": "固定負債は、5,924百万円で前連結会計年度末に比べ193百万円減となりました。",
+  "reason": null
+ },
+ "S100Z4R8:H-034": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:ProfitLossAttributableToOwnersOfParent@CurrentYearDuration",
+   "xbrl:jppfs_cor:ProfitLossAttributableToOwnersOfParent@Prior1YearDuration",
+   "formula:a-b"
+  ],
+  "subject": "親会社株主に帰属する当期純利益",
+  "span": "百万円、親会社株主に帰属する当期純利益につきましては、前期比68百万円増加し1,822百万",
+  "reason": null
+ },
+ "S100Z4R8:H-035": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jpcrp_cor:NetCashProvidedByUsedInInvestingActivitiesSummaryOfBusinessResults@CurrentYearDuration"
+  ],
+  "subject": "投資活動の結果使用した資金",
+  "span": "投資活動の結果使用した資金は5,144百万円(前連結会計年度比 ",
+  "reason": null
+ },
+ "S100Z4R8:H-036": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:IncreaseDecreaseInNetDefinedBenefitLiabilityOpeCF@CurrentYearDuration"
+  ],
+  "subject": "退職給付に係る負債",
+  "span": "主に法人税等の支払額873百万円、退職給付に係る負債の減少額333百万円、リース投資資産の増",
+  "reason": null
+ },
+ "S100Z4R8:H-037": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:LeaseReceivablesAndInvestmentAssetsCA@CurrentYearInstant",
+   "xbrl:jppfs_cor:LeaseReceivablesAndInvestmentAssetsCA@Prior1YearInstant",
+   "builtin:sign(cur-prior)"
+  ],
+  "subject": "リース債権及びリース投資資産",
+  "span": "の主たる要因は現金及び預金、リース債権及びリース投資資産等の増加によるもの",
+  "reason": null
+ },
+ "S100Z4R8:H-038": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:Assets@CurrentYearInstant",
+   "xbrl:jppfs_cor:Assets@Prior1YearInstant",
+   "formula:a-b"
+  ],
+  "subject": "総資産",
+  "span": "会計年度末の総資産は46,172百万円と前連結会計年度末から2,943百万円の増となりました。",
+  "reason": null
+ },
+ "S100Z4R8:H-039": {
+  "state": "VALUE_MISMATCH",
+  "pointers": [
+   "xbrl:jppfs_cor:CostOfSales@CurrentYearDuration",
+   "xbrl:jppfs_cor:CostOfSales@Prior1YearDuration"
+  ],
+  "subject": "売上原価",
+  "span": "加などがあり、売上原価と一般管理費を合わせた総経費は、前期比1.2%増の50,218百万",
+  "reason": null
+ },
+ "S100Z4R8:H-040": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:CashAndCashEquivalents@CurrentYearInstant"
+  ],
+  "subject": "現金及び現金同等物の残高",
+  "span": "また、当連結会計年度末における現金及び現金同等物の残高は5,738百万円となっており、充分な",
+  "reason": null
+ },
+ "S100Z4R8:H-041": {
+  "state": "VALUE_MISMATCH",
+  "pointers": [
+   "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration"
+  ],
+  "subject": "セグメント利益",
+  "span": "は前期比1.1%減の4,909百万円となり、セグメント利益は947百万円(同利益率19.3%",
+  "reason": null
+ },
+ "S100Z4R8:H-042": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:CurrentAssets@CurrentYearInstant",
+   "xbrl:jppfs_cor:CurrentAssets@Prior1YearInstant",
+   "formula:a-b"
+  ],
+  "subject": "流動資産",
+  "span": "流動資産は、12,035百万円で前連結会計年度末に比べ404百万円増となりました。",
+  "reason": null
+ },
+ "S100Z4R8:H-043": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:IncreaseDecreaseInNotesAndAccountsPayableTradeOpeCF@CurrentYearDuration",
+   "builtin:flow_sign(cur)==direction"
+  ],
+  "subject": "仕入債務",
+  "span": "リース投資資産の増加額302百万円があったものの、仕入債務の増加額448百",
+  "reason": null
+ },
+ "S100Z4R8:H-044": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:NetSales@CurrentYearDuration"
+  ],
+  "subject": "売上高",
+  "span": "当社グループの当連結会計年度の売上高は、53,021百万円と前連結会計年度に比",
+  "reason": null
+ },
+ "S100Z4R8:H-045": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:CashDividendsPaidFinCF@CurrentYearDuration"
+  ],
+  "subject": "配当金の支払額",
+  "span": "百万円、長期借入金の返済による支出40百万円、配当金の支払額100百万円等によるものです。",
+  "reason": null
+ },
+ "S100Z4R8:H-046": {
+  "state": "VALUE_MISMATCH",
+  "pointers": [
+   "xbrl:jppfs_cor:NetSales@CurrentYearDuration_jpcrp030000-asr_E04189-000OnSiteOperationsAndWarehouseReportableSegmentsMember"
+  ],
+  "subject": "売上高",
+  "span": "ンテナデポ事業の取扱い増等により、売上高は前期比4.1%増の2,730百万円となり、セグメント利",
+  "reason": null
+ },
+ "S100Z4R8:H-047": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:ValuationDifferenceOnAvailableForSaleSecurities@CurrentYearInstant",
+   "xbrl:jppfs_cor:ValuationDifferenceOnAvailableForSaleSecurities@Prior1YearInstant",
+   "builtin:sign(cur-prior)"
+  ],
+  "subject": "その他有価証券評価差額金",
+  "span": "この主たる要因は利益剰余金、その他有価証券評価差額金の増加によるもの",
+  "reason": null
+ },
+ "S100Z4R8:H-048": {
+  "state": "UNVERIFIABLE",
+  "pointers": [],
+  "subject": null,
+  "span": "物流事業につきましては、産業物流分野の拡大、賃金をは",
+  "reason": "no_subject"
+ },
+ "S100Z4R8:H-049": {
+  "state": "POINTER_NOT_FOUND",
+  "pointers": [],
+  "subject": "セグメント利益",
+  "span": "82百万円となり、セグメント利益は3,283百万円(同利益率7.2%)となりました。",
+  "reason": "no_element(ratio without fact)"
+ },
+ "S100Z4R8:H-050": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:IncreaseDecreaseInNetDefinedBenefitLiabilityOpeCF@CurrentYearDuration",
+   "builtin:flow_sign(cur)==direction"
+  ],
+  "subject": "退職給付に係る負債",
+  "span": "これは主に法人税等の支払額873百万円、退職給付に係る負債の減少額333百",
+  "reason": null
+ },
+ "S100Z4R8:H-051": {
+  "state": "VALUE_MISMATCH",
+  "pointers": [
+   "xbrl:jppfs_cor:NetSales@CurrentYearDuration_jpcrp030000-asr_E04189-000PhysicalDistributionReportableSegmentsMember"
+  ],
+  "subject": "売上高",
+  "span": "昇分の運賃転嫁を進めたことにより、売上高は前期比1.8%増の45,382百万円となり、セグメント利",
+  "reason": null
+ },
+ "S100Z4R8:H-052": {
+  "state": "VALUE_MISMATCH",
+  "pointers": [
+   "xbrl:jppfs_cor:IncreaseDecreaseInNetDefinedBenefitLiabilityOpeCF@CurrentYearDuration"
+  ],
+  "subject": "退職給付に係る負債",
+  "span": "職給付に係る負債の減少額333百万円、リース投資資産の増加額302百万円があったものの、仕入",
+  "reason": null
+ },
+ "S100Z4R8:H-053": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:IncreaseDecreaseInNotesAndAccountsPayableTradeOpeCF@CurrentYearDuration"
+  ],
+  "subject": "仕入債務",
+  "span": "投資資産の増加額302百万円があったものの、仕入債務の増加額448百万円、減価償却費3,54",
+  "reason": null
+ },
+ "S100Z4R8:H-054": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:DepreciationAndAmortizationOpeCF@CurrentYearDuration"
+  ],
+  "subject": "減価償却費",
+  "span": "万円があったものの、仕入債務の増加額448百万円、減価償却費3,543百万円、税金等調整前当期純",
+  "reason": null
+ },
+ "S100Z4R8:H-055": {
+  "state": "VALUE_MISMATCH",
+  "pointers": [
+   "xbrl:jppfs_cor:NetSales@CurrentYearDuration_jpcrp030000-asr_E04189-000OnSiteOperationsAndWarehouseReportableSegmentsMember",
+   "xbrl:jppfs_cor:NetSales@Prior1YearDuration_jpcrp030000-asr_E04189-000OnSiteOperationsAndWarehouseReportableSegmentsMember"
+  ],
+  "subject": "売上高",
+  "span": "ましては、コンテナデポ事業の取扱い増等により、売上高は前期比4.1%増の2,730百万円",
+  "reason": null
+ },
+ "S100Z4R8:H-056": {
+  "state": "UNVERIFIABLE",
+  "pointers": [],
+  "subject": null,
+  "span": "営業活動の結果得られた資金は5,639百万円(前連結会計年度比 ",
+  "reason": "ambiguous(elements)"
+ },
+ "S100Z4R8:H-057": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:NetSales@CurrentYearDuration",
+   "xbrl:jppfs_cor:NetSales@Prior1YearDuration",
+   "builtin:sign(cur-prior)"
+  ],
+  "subject": "売上高",
+  "span": "高は、53,021百万円と前連結会計年度に比べ849百万円の増加となりまし",
+  "reason": null
+ },
+ "S100Z4R8:H-058": {
+  "state": "VALUE_MISMATCH",
+  "pointers": [
+   "xbrl:jppfs_cor:NetSales@CurrentYearDuration",
+   "xbrl:jppfs_cor:NetSales@Prior1YearDuration"
+  ],
+  "subject": "売上高",
+  "span": "業につきましては、燃料油販売の需要減等により、売上高は前期比1.1%減の4,909百万円",
+  "reason": null
+ },
+ "S100Z4R8:H-059": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:IncomeTaxesPaidOpeCF@CurrentYearDuration"
+  ],
+  "subject": "法人税等の支払額",
+  "span": "これは主に法人税等の支払額873百万円、退職給付に係る負債",
+  "reason": null
+ },
+ "S100Z4R8:H-060": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:ProfitLossAttributableToOwnersOfParent@CurrentYearDuration",
+   "xbrl:jppfs_cor:ProfitLossAttributableToOwnersOfParent@Prior1YearDuration",
+   "formula:a-b"
+  ],
+  "subject": "親会社株主に帰属する当期純利益",
+  "span": "帰属する当期純利益は、1,822百万円と前連結会計年度に比べ68百万円増加しております。",
+  "reason": null
+ },
+ "S100Z4R8:H-061": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:NetCashProvidedByUsedInFinancingActivities@CurrentYearDuration"
+  ],
+  "subject": "財務活動の結果使用した資金",
+  "span": "財務活動の結果使用した資金は260百万円(前連結会計年度比 ",
+  "reason": null
+ },
+ "S100Z4R8:H-062": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:Assets@CurrentYearInstant"
+  ],
+  "subject": "総資産",
+  "span": "当社グループの当連結会計年度末の総資産は46,172百万円と前連結会計年度末か",
+  "reason": null
+ },
+ "S100Z4R8:H-063": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:IncomeBeforeIncomeTaxes@CurrentYearDuration"
+  ],
+  "subject": "税金等調整前当期純利益",
+  "span": "8百万円、減価償却費3,543百万円、税金等調整前当期純利益2,920百万円等があったことによる",
+  "reason": null
+ },
+ "S100Z4R8:H-064": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:CurrentLiabilities@CurrentYearInstant",
+   "xbrl:jppfs_cor:CurrentLiabilities@Prior1YearInstant",
+   "formula:a-b"
+  ],
+  "subject": "流動負債",
+  "span": "流動負債は、9,200百万円で前連結会計年度末に比べ621百万円増となりました。",
+  "reason": null
+ },
+ "S100Z4R8:H-065": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:ProfitLossAttributableToOwnersOfParent@CurrentYearDuration"
+  ],
+  "subject": "親会社株主に帰属する当期純利益",
+  "span": "主に帰属する当期純利益につきましては、前期比68百万円増加し1,822百万円となりました。",
+  "reason": null
+ },
+ "S100Z4R8:H-066": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:CurrentLiabilities@CurrentYearInstant"
+  ],
+  "subject": "流動負債",
+  "span": "流動負債は、9,200百万円で前連結会計年度末に",
+  "reason": null
+ },
+ "S100Z4R8:H-067": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:CashAndCashEquivalents@CurrentYearInstant",
+   "xbrl:jppfs_cor:CashAndCashEquivalents@Prior1YearInstant",
+   "formula:a-b"
+  ],
+  "subject": "現金及び現金同等物",
+  "span": "現金同等物(以下「資金」という。)は、前連結会計年度末に比べ235百万円増加し、当連結会計年",
+  "reason": null
+ },
+ "S100Z4R8:H-068": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:CashAndCashEquivalents@CurrentYearInstant",
+   "xbrl:jppfs_cor:CashAndCashEquivalents@Prior1YearInstant",
+   "builtin:sign(cur-prior)"
+  ],
+  "subject": "現金及び現金同等物",
+  "span": "以下「資金」という。)は、前連結会計年度末に比べ235百万円増加し、当連結",
+  "reason": null
+ },
+ "S100Z4R8:H-069": {
+  "state": "POINTER_NOT_FOUND",
+  "pointers": [],
+  "subject": "セグメント利益",
+  "span": ",730百万円となり、セグメント利益は676百万円(同利益率24.8%)となりました。",
+  "reason": "no_element(ratio without fact)"
+ },
+ "S100Z4R8:H-070": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:ProfitLossAttributableToOwnersOfParent@CurrentYearDuration",
+   "xbrl:jppfs_cor:ProfitLossAttributableToOwnersOfParent@Prior1YearDuration",
+   "builtin:sign(cur-prior)"
+  ],
+  "subject": "親会社株主に帰属する当期純利益",
+  "span": "会社株主に帰属する当期純利益につきましては、前期比68百万円増加し1,82",
+  "reason": null
+ },
+ "S100Z4R8:H-071": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:NetSales@CurrentYearDuration",
+   "xbrl:jppfs_cor:NetSales@Prior1YearDuration"
+  ],
+  "subject": "売上高",
+  "span": "た諸コスト上昇分の運賃転嫁を進めたこともあり、売上高は前期比1.6%増の53,021百万",
+  "reason": null
+ },
+ "S100Z4R8:H-072": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:NetSales@CurrentYearDuration_jpcrp030000-asr_E04189-000PhysicalDistributionReportableSegmentsMember",
+   "xbrl:jppfs_cor:NetSales@Prior1YearDuration_jpcrp030000-asr_E04189-000PhysicalDistributionReportableSegmentsMember"
+  ],
+  "subject": "売上高",
+  "span": "た諸コスト上昇分の運賃転嫁を進めたことにより、売上高は前期比1.8%増の45,382百万",
+  "reason": null
+ },
+ "S100Z4R8:H-073": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:ProfitLossAttributableToOwnersOfParent@CurrentYearDuration"
+  ],
+  "subject": "親会社株主に帰属する当期純利益",
+  "span": "また、親会社株主に帰属する当期純利益は、1,822百万円と前連結会計年度に比",
+  "reason": null
+ },
+ "S100Z4R8:H-074": {
+  "state": "POINTER_NOT_FOUND",
+  "pointers": [],
+  "subject": null,
+  "span": "業活動の結果得られた資金は5,639百万円(前連結会計年度比 1,460百万円の増加)となりました",
+  "reason": "no_element"
+ },
+ "S100Z4R8:H-075": {
+  "state": "UNVERIFIABLE",
+  "pointers": [],
+  "subject": null,
+  "span": "資金は5,639百万円(前連結会計年度比 1,460百万円の増加)となりま",
+  "reason": "no_subject"
+ },
+ "S100Z4R8:H-076": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:Assets@CurrentYearInstant"
+  ],
+  "subject": "総資産",
+  "span": "当社グループの当連結会計年度末の総資産は46,172百万円と前連結会計年度末か",
+  "reason": null
+ },
+ "S100Z4R8:H-077": {
+  "state": "UNVERIFIABLE",
+  "pointers": [],
+  "subject": null,
+  "span": "各産業物流分野や、コンテナデポ事業の取扱いがそれぞれに底堅く伸びたことに加",
+  "reason": "no_subject"
+ },
+ "S100Z4R8:H-078": {
+  "state": "VALUE_MISMATCH",
+  "pointers": [
+   "xbrl:jppfs_cor:IncreaseDecreaseInNetDefinedBenefitLiabilityOpeCF@CurrentYearDuration",
+   "builtin:flow_sign(cur)==direction"
+  ],
+  "subject": "退職給付に係る負債",
+  "span": "円、退職給付に係る負債の減少額333百万円、リース投資資産の増加額302百",
+  "reason": null
+ },
+ "S100Z4R8:H-079": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration"
+  ],
+  "subject": "営業利益",
+  "span": "以上により、営業利益は前期比239百万円増の2,802百万円となり、営業外損益を",
+  "reason": null
+ }
+}

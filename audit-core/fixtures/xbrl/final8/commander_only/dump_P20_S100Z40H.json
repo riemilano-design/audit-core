@@ -1,0 +1,943 @@
+{
+ "S100Z40H:H-001": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:ProfitLossAttributableToOwnersOfParent@CurrentYearDuration",
+   "xbrl:jppfs_cor:ProfitLossAttributableToOwnersOfParent@Prior1YearDuration",
+   "builtin:sign(cur-prior)"
+  ],
+  "subject": "親会社株主に帰属する当期純利益",
+  "span": "ROE)は、親会社株主に帰属する当期純利益が前期比23.2%減少したこと等",
+  "reason": null
+ },
+ "S100Z40H:H-002": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:NetSales@CurrentYearDuration",
+   "xbrl:jppfs_cor:NetSales@Prior1YearDuration",
+   "builtin:sign(cur-prior)"
+  ],
+  "subject": "売上高",
+  "span": "らの結果、車輌売上高合計は47,468百万円(前期比4.9%増加)となりま",
+  "reason": null
+ },
+ "S100Z40H:H-003": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration_jpcrp030000-asr_E32181-000ImportedCarDealerReportableSegmentMember",
+   "xbrl:jppfs_cor:OperatingIncome@Prior1YearDuration_jpcrp030000-asr_E32181-000ImportedCarDealerReportableSegmentMember",
+   "builtin:sign(cur-prior)"
+  ],
+  "subject": "セグメント利益",
+  "span": "M&A及び新規出店等に伴う費用の増加により、セグメント利益は減少しました。",
+  "reason": null
+ },
+ "S100Z40H:H-004": {
+  "state": "VALUE_MISMATCH",
+  "pointers": [
+   "xbrl:jppfs_cor:NetSales@CurrentYearDuration"
+  ],
+  "subject": "売上高",
+  "span": "し販売を推進した結果、販売台数は前期を大きく上回り、売上高は16,872百万円(前期比13.6%増",
+  "reason": null
+ },
+ "S100Z40H:H-005": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:InterestExpensesNOE@CurrentYearDuration",
+   "xbrl:jppfs_cor:InterestExpensesNOE@Prior1YearDuration",
+   "builtin:sign(cur-prior)"
+  ],
+  "subject": "支払利息",
+  "span": "A資金の調達に伴う借入金の増加及び金利上昇等により支払利息が増加し、197",
+  "reason": null
+ },
+ "S100Z40H:H-006": {
+  "state": "VALUE_MISMATCH",
+  "pointers": [
+   "xbrl:jppfs_cor:LongTermLoansPayable@CurrentYearInstant",
+   "xbrl:jppfs_cor:LongTermLoansPayable@Prior1YearInstant",
+   "builtin:sign(cur-prior)"
+  ],
+  "subject": "長期借入金",
+  "span": "これは、長期借入金の増加が2,70",
+  "reason": null
+ },
+ "S100Z40H:H-007": {
+  "state": "VALUE_MISMATCH",
+  "pointers": [
+   "xbrl:jppfs_cor:NetSales@CurrentYearDuration"
+  ],
+  "subject": "売上高",
+  "span": "と位置付けていた車種の販売不振などの要因により、海外売上高は2,971百万円(前年同期比45.9",
+  "reason": null
+ },
+ "S100Z40H:H-008": {
+  "state": "UNVERIFIABLE",
+  "pointers": [],
+  "subject": null,
+  "span": "Aにかかる各種DD(デューデリジェンス)費用の発生、店舗数の増加に伴う地代",
+  "reason": "no_subject"
+ },
+ "S100Z40H:H-009": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:ProfitLossAttributableToOwnersOfParent@CurrentYearDuration",
+   "xbrl:jppfs_cor:ProfitLossAttributableToOwnersOfParent@Prior1YearDuration"
+  ],
+  "subject": "親会社株主に帰属する当期純利益",
+  "span": "本利益率(ROE)は、親会社株主に帰属する当期純利益が前期比23.2%減少したこと等により",
+  "reason": null
+ },
+ "S100Z40H:H-010": {
+  "state": "UNVERIFIABLE",
+  "pointers": [],
+  "subject": null,
+  "span": "2026年6月30日)における我が国経済は、雇用・所得環境の改善等を背景と",
+  "reason": "no_subject"
+ },
+ "S100Z40H:H-011": {
+  "state": "UNVERIFIABLE",
+  "pointers": [],
+  "subject": null,
+  "span": "伴う体制強化のためのマネジメント層の事前採用等に伴い人件費が増加し、当連結",
+  "reason": "no_subject"
+ },
+ "S100Z40H:H-012": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:NetSales@CurrentYearDuration_jpcrp030000-asr_E32181-000UsedCarExportBusinessReportableSegmentMember",
+   "xbrl:jppfs_cor:NetSales@Prior1YearDuration_jpcrp030000-asr_E32181-000UsedCarExportBusinessReportableSegmentMember",
+   "builtin:sign(cur-prior)"
+  ],
+  "subject": "売上高",
+  "span": ",839百万円(前期比9.3%増加)となり、事業規模は着実に拡大いたしまし",
+  "reason": null
+ },
+ "S100Z40H:H-013": {
+  "state": "VALUE_MISMATCH",
+  "pointers": [
+   "xbrl:jppfs_cor:NetSales@CurrentYearDuration",
+   "xbrl:jppfs_cor:NetSales@Prior1YearDuration",
+   "builtin:sign(cur-prior)"
+  ],
+  "subject": "売上高",
+  "span": "ィーラー全体の新車売上高は24,760百万円(前期比1.7%減少)となりま",
+  "reason": null
+ },
+ "S100Z40H:H-014": {
+  "state": "VALUE_MISMATCH",
+  "pointers": [
+   "xbrl:jppfs_cor:CashAndCashEquivalents@CurrentYearInstant",
+   "xbrl:jppfs_cor:CashAndCashEquivalents@Prior1YearInstant",
+   "formula:cur/prior*100"
+  ],
+  "subject": "現金及び現金同等物",
+  "span": "」という。)は、前連結会計年度末より2,211百万円(前期比26.9%)増加し、10,44",
+  "reason": null
+ },
+ "S100Z40H:H-015": {
+  "state": "UNVERIFIABLE",
+  "pointers": [],
+  "subject": null,
+  "span": "売状況に差がみられ、当社取扱いブランドの新車登録台数は前期を下回っており、",
+  "reason": "no_subject"
+ },
+ "S100Z40H:H-016": {
+  "state": "UNVERIFIABLE",
+  "pointers": [],
+  "subject": null,
+  "span": "当社グループとなった連結子会社における人員増加及び事業規模の拡大に伴う体制",
+  "reason": "no_subject"
+ },
+ "S100Z40H:H-017": {
+  "state": "VALUE_MISMATCH",
+  "pointers": [
+   "xbrl:jppfs_cor:ImpairmentLossEL@CurrentYearDuration",
+   "xbrl:jppfs_cor:ImpairmentLossEL@Prior1YearDuration"
+  ],
+  "subject": "減損損失",
+  "span": "株式報酬制度終了に伴う費用の計上等により167百万円(前期比35.6%減少)となりました。",
+  "reason": null
+ },
+ "S100Z40H:H-018": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:NetSales@CurrentYearDuration",
+   "xbrl:jppfs_cor:NetSales@Prior1YearDuration",
+   "builtin:sign(cur-prior)"
+  ],
+  "subject": "売上高",
+  "span": "より堅調に推移し、売上高は9,821百万円(前期比19.8%増加)となりま",
+  "reason": null
+ },
+ "S100Z40H:H-019": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration",
+   "xbrl:jppfs_cor:OperatingIncome@Prior1YearDuration",
+   "builtin:sign(cur-prior)"
+  ],
+  "subject": "セグメント利益",
+  "span": "下したものの、セグメント利益は376百万円(前期比13.3%減少)となりま",
+  "reason": null
+ },
+ "S100Z40H:H-020": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:DepreciationAndAmortizationOpeCF@CurrentYearDuration",
+   "xbrl:jppfs_cor:DepreciationAndAmortizationOpeCF@Prior1YearDuration",
+   "builtin:sign(cur-prior)"
+  ],
+  "subject": "減価償却費",
+  "span": "関連費用、販売促進費及び減価償却費等が増加し、これらの費用の増加が売上総利",
+  "reason": null
+ },
+ "S100Z40H:H-021": {
+  "state": "VALUE_MISMATCH",
+  "pointers": [
+   "xbrl:jppfs_cor:NetSales@CurrentYearDuration",
+   "xbrl:jppfs_cor:NetSales@Prior1YearDuration",
+   "builtin:sign(cur-prior)"
+  ],
+  "subject": "売上高",
+  "span": "1百万円(前年同期比45.9%減少)となり、前年同期を大きく下回りました。",
+  "reason": null
+ },
+ "S100Z40H:H-022": {
+  "state": "UNVERIFIABLE",
+  "pointers": [],
+  "subject": null,
+  "span": "ビスネットワークの拡充に加え、継続してお取引いただくお客様の増加等により堅",
+  "reason": "no_subject"
+ },
+ "S100Z40H:H-023": {
+  "state": "UNVERIFIABLE",
+  "pointers": [],
+  "subject": null,
+  "span": "時点におけるグループ全体の社用車のうち低炭素車が占める割合は28.9%となりました。",
+  "reason": "no_subject"
+ },
+ "S100Z40H:H-024": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:GrossProfit@CurrentYearDuration",
+   "xbrl:jppfs_cor:GrossProfit@Prior1YearDuration",
+   "builtin:sign(cur-prior)"
+  ],
+  "subject": "売上総利益",
+  "span": "販売費及び一般管理費の増加率が売上総利益の増加率を上回っ",
+  "reason": null
+ },
+ "S100Z40H:H-025": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:NetCashProvidedByUsedInOperatingActivities@Prior1YearDuration"
+  ],
+  "subject": "営業活動によるキャッシュ・フロー",
+  "span": "ャッシュ・フローは764百万円の収入となり、前連結会計年度の1,303百万円の支出から改善しまし",
+  "reason": null
+ },
+ "S100Z40H:H-026": {
+  "state": "UNVERIFIABLE",
+  "pointers": [],
+  "subject": null,
+  "span": "のの、その影響は大きく、保険手数料収入は477百万円(前期比8.7%増加)と、成長率は限",
+  "reason": "no_subject"
+ },
+ "S100Z40H:H-027": {
+  "state": "UNVERIFIABLE",
+  "pointers": [],
+  "subject": null,
+  "span": "度は、M&A及び新規出店による販売ネットワーク及び顧客基盤の拡大に加え、輸",
+  "reason": "ambiguous(member)"
+ },
+ "S100Z40H:H-028": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:NetSales@CurrentYearDuration",
+   "xbrl:jppfs_cor:NetSales@Prior1YearDuration",
+   "builtin:sign(cur-prior)"
+  ],
+  "subject": "売上高",
+  "span": "上高と業販売上高の合計は38,709百万円(前期比12.7%増加)と前期を",
+  "reason": null
+ },
+ "S100Z40H:H-029": {
+  "state": "UNVERIFIABLE",
+  "pointers": [],
+  "subject": null,
+  "span": "財務活動により獲得した資金は4,454百万円(前連結会計年度は2",
+  "reason": "ambiguous(elements)"
+ },
+ "S100Z40H:H-030": {
+  "state": "UNVERIFIABLE",
+  "pointers": [],
+  "subject": null,
+  "span": "一方、M&A及び事業規模の拡大に伴う人員",
+  "reason": "no_subject"
+ },
+ "S100Z40H:H-031": {
+  "state": "POINTER_NOT_FOUND",
+  "pointers": [],
+  "subject": null,
+  "span": "しては、当連結会計年度における国内の新車(乗用車)登録台数は2,543,647台(前期比2.7%減少",
+  "reason": "no_element(unit not in XBRL)"
+ },
+ "S100Z40H:H-032": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:IncomeBeforeIncomeTaxes@CurrentYearDuration"
+  ],
+  "subject": "税金等調整前当期純利益",
+  "span": "これは、税金等調整前当期純利益が1,645百万円、減価償却費が2,2",
+  "reason": null
+ },
+ "S100Z40H:H-033": {
+  "state": "VALUE_MISMATCH",
+  "pointers": [
+   "xbrl:jppfs_cor:NetSales@CurrentYearDuration",
+   "xbrl:jppfs_cor:NetSales@Prior1YearDuration",
+   "builtin:sign(cur-prior)"
+  ],
+  "subject": "売上高",
+  "span": "上高は前年同期を下回り、2,544百万円(前年同期比3.9%減少)となりま",
+  "reason": null
+ },
+ "S100Z40H:H-034": {
+  "state": "UNVERIFIABLE",
+  "pointers": [],
+  "subject": null,
+  "span": "一方で中古車粗利率の低下に加え、新",
+  "reason": "no_subject"
+ },
+ "S100Z40H:H-035": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:CurrentAssets@CurrentYearInstant",
+   "xbrl:jppfs_cor:CurrentAssets@Prior1YearInstant",
+   "builtin:sign(cur-prior)"
+  ],
+  "subject": "流動資産",
+  "span": "これは、主としてM&Aに伴う商品等の流動資産の増加及び店舗等",
+  "reason": null
+ },
+ "S100Z40H:H-036": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:CashAndCashEquivalents@CurrentYearInstant"
+  ],
+  "subject": "現金及び現金同等物",
+  "span": "この結果、当連結会計年度末の現金及び現金同等物は10,445百万円となりました。",
+  "reason": null
+ },
+ "S100Z40H:H-037": {
+  "state": "UNVERIFIABLE",
+  "pointers": [],
+  "subject": null,
+  "span": "車販売につきましては、M&Aによる新規獲得ブランドや店舗数が増加したものの",
+  "reason": "no_subject"
+ },
+ "S100Z40H:H-038": {
+  "state": "VALUE_MISMATCH",
+  "pointers": [
+   "xbrl:jppfs_cor:InterestExpensesNOE@CurrentYearDuration"
+  ],
+  "subject": "支払利息",
+  "span": "調達に伴う借入金の増加及び金利上昇等により支払利息が増加し、197百万円(前期比56.2%増",
+  "reason": null
+ },
+ "S100Z40H:H-039": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jpcrp_cor:NetCashProvidedByUsedInInvestingActivitiesSummaryOfBusinessResults@CurrentYearDuration"
+  ],
+  "subject": "投資活動によるキャッシュ・フロー",
+  "span": "形固定資産の取得等により、投資活動によるキャッシュ・フローは3,007百万円の支出となりました。",
+  "reason": null
+ },
+ "S100Z40H:H-040": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:NetSales@CurrentYearDuration_jpcrp030000-asr_E32181-000UsedCarExportBusinessReportableSegmentMember",
+   "xbrl:jppfs_cor:NetSales@Prior1YearDuration_jpcrp030000-asr_E32181-000UsedCarExportBusinessReportableSegmentMember",
+   "builtin:sign(cur-prior)"
+  ],
+  "subject": "売上高",
+  "span": "る中古車販売及び中古車輸出関連事業における国内業販が売上高の増加に寄与しま",
+  "reason": null
+ },
+ "S100Z40H:H-041": {
+  "state": "VALUE_MISMATCH",
+  "pointers": [
+   "xbrl:jppfs_cor:LeaseAndGuaranteeDeposits@CurrentYearInstant"
+  ],
+  "subject": "敷金及び保証金",
+  "span": "形固定資産の取得が1,668百万円、敷金及び保証金の支払額が156百万円、事業譲受による支出",
+  "reason": null
+ },
+ "S100Z40H:H-042": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:NonOperatingIncome@CurrentYearDuration",
+   "xbrl:jppfs_cor:NonOperatingIncome@Prior1YearDuration"
+  ],
+  "subject": "営業外収益",
+  "span": "業外収益は充電設備導入促進補助金等により198百万円(前期比13.6%増加)となりました。",
+  "reason": null
+ },
+ "S100Z40H:H-043": {
+  "state": "UNVERIFIABLE",
+  "pointers": [],
+  "subject": null,
+  "span": "、「店舗への再生可能エネルギーの導入」及び「低炭素車の取扱い拡大」に取り組",
+  "reason": "no_subject"
+ },
+ "S100Z40H:H-044": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration",
+   "xbrl:jppfs_cor:OperatingIncome@Prior1YearDuration"
+  ],
+  "subject": "営業利益",
+  "span": "益の増加率を上回った結果、営業利益は1,426百万円(前期比22.9%減少)となりました。",
+  "reason": null
+ },
+ "S100Z40H:H-045": {
+  "state": "VALUE_MISMATCH",
+  "pointers": [
+   "xbrl:jppfs_cor:NetSales@CurrentYearDuration_jpcrp030000-asr_E32181-000UsedCarExportBusinessReportableSegmentMember",
+   "xbrl:jppfs_cor:NetSales@Prior1YearDuration_jpcrp030000-asr_E32181-000UsedCarExportBusinessReportableSegmentMember"
+  ],
+  "subject": "売上高",
+  "span": "業販が伸長したことにより、売上高は96,839百万円(前期比9.3%増加)となり、事業規",
+  "reason": null
+ },
+ "S100Z40H:H-046": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:GrossProfit@CurrentYearDuration",
+   "xbrl:jppfs_cor:GrossProfit@Prior1YearDuration",
+   "builtin:sign(cur-prior)"
+  ],
+  "subject": "売上総利益",
+  "span": "減価償却費等が増加し、これらの費用の増加が売上総利益の増加を上回ったことか",
+  "reason": null
+ },
+ "S100Z40H:H-047": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:ProfitLossAttributableToOwnersOfParent@CurrentYearDuration",
+   "xbrl:jppfs_cor:ProfitLossAttributableToOwnersOfParent@Prior1YearDuration"
+  ],
+  "subject": "親会社株主に帰属する当期純利益",
+  "span": "果、親会社株主に帰属する当期純利益は1,108百万円(前期比23.2%減少)となりました。",
+  "reason": null
+ },
+ "S100Z40H:H-048": {
+  "state": "UNVERIFIABLE",
+  "pointers": [],
+  "subject": null,
+  "span": "して、M&A及び新規出店による販売ネットワーク及び顧客基盤の拡大、取扱いブ",
+  "reason": "no_subject"
+ },
+ "S100Z40H:H-049": {
+  "state": "UNVERIFIABLE",
+  "pointers": [],
+  "subject": null,
+  "span": "今後は、拡大した事業基",
+  "reason": "no_subject"
+ },
+ "S100Z40H:H-050": {
+  "state": "VALUE_MISMATCH",
+  "pointers": [
+   "xbrl:jppfs_cor:NetSales@CurrentYearDuration"
+  ],
+  "subject": "売上高",
+  "span": "これらの結果、車輌売上高合計は47,468百万円(前期比4.9%増加",
+  "reason": null
+ },
+ "S100Z40H:H-051": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:GrossProfit@CurrentYearDuration",
+   "xbrl:jppfs_cor:GrossProfit@Prior1YearDuration"
+  ],
+  "subject": "売上総利益",
+  "span": "会社の収益改善等により売上総利益は13,135百万円(前期比5.7%増加)となりました。",
+  "reason": null
+ },
+ "S100Z40H:H-052": {
+  "state": "UNVERIFIABLE",
+  "pointers": [],
+  "subject": null,
+  "span": "車輌整備につきましては、店舗数の増加やサービス",
+  "reason": "no_subject"
+ },
+ "S100Z40H:H-053": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:GainOnSalesOfNoncurrentAssetsEI@CurrentYearDuration",
+   "xbrl:jppfs_cor:GainOnSalesOfNoncurrentAssetsEI@Prior1YearDuration",
+   "builtin:sign(cur-prior)"
+  ],
+  "subject": "固定資産売却益",
+  "span": "クに伴う固定資産売却益等により385百万円(前期比25.2%増加)となりま",
+  "reason": null
+ },
+ "S100Z40H:H-054": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:ImpairmentLossEL@CurrentYearDuration",
+   "xbrl:jppfs_cor:ImpairmentLossEL@Prior1YearDuration",
+   "builtin:sign(cur-prior)"
+  ],
+  "subject": "減損損失",
+  "span": "度終了に伴う費用の計上等により167百万円(前期比35.6%減少)となりま",
+  "reason": null
+ },
+ "S100Z40H:H-055": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:SellingGeneralAndAdministrativeExpenses@CurrentYearDuration",
+   "xbrl:jppfs_cor:SellingGeneralAndAdministrativeExpenses@Prior1YearDuration",
+   "builtin:sign(cur-prior)"
+  ],
+  "subject": "販売費及び一般管理費",
+  "span": "販売費及び一般管理費の増加率が売上総",
+  "reason": null
+ },
+ "S100Z40H:H-056": {
+  "state": "VALUE_MISMATCH",
+  "pointers": [
+   "xbrl:jppfs_cor:NetSales@CurrentYearDuration",
+   "xbrl:jppfs_cor:NetSales@Prior1YearDuration"
+  ],
+  "subject": "売上高",
+  "span": "なお、保険手数料収入を含むその他売上高は821百万円(前期比8.2%増加)となりました。",
+  "reason": null
+ },
+ "S100Z40H:H-057": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:ProfitLossAttributableToOwnersOfParent@CurrentYearDuration",
+   "xbrl:jppfs_cor:ProfitLossAttributableToOwnersOfParent@Prior1YearDuration",
+   "builtin:sign(cur-prior)"
+  ],
+  "subject": "親会社株主に帰属する当期純利益",
+  "span": "株主に帰属する当期純利益は1,108百万円(前期比23.2%減少)となりま",
+  "reason": null
+ },
+ "S100Z40H:H-058": {
+  "state": "UNVERIFIABLE",
+  "pointers": [],
+  "subject": null,
+  "span": "商品回転率を重視し販売を推進した結果、販売台数は前期を大きく上回り、売上高",
+  "reason": "no_subject"
+ },
+ "S100Z40H:H-059": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:CashDividendsPaidFinCF@CurrentYearDuration"
+  ],
+  "subject": "配当金の支払額",
+  "span": "で、長期借入金の約定返済が2,780百万円、配当金の支払額が438百万円あったこと等によるも",
+  "reason": null
+ },
+ "S100Z40H:H-060": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:NetCashProvidedByUsedInOperatingActivities@CurrentYearDuration"
+  ],
+  "subject": "営業活動によるキャッシュ・フロー",
+  "span": "営業活動によるキャッシュ・フローは764百万円の収入となり、前連結",
+  "reason": null
+ },
+ "S100Z40H:H-061": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:Assets@CurrentYearInstant"
+  ],
+  "subject": "総資産",
+  "span": "当連結会計年度末の総資産は、43,917百万円となり、前連結会計年",
+  "reason": null
+ },
+ "S100Z40H:H-062": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:ShortTermLoansPayable@CurrentYearInstant",
+   "xbrl:jppfs_cor:ShortTermLoansPayable@Prior1YearInstant",
+   "builtin:sign(cur-prior)"
+  ],
+  "subject": "短期借入金",
+  "span": "期借入金の増加により、前連結会計年度末に比べ5,997百万円増加し、31,",
+  "reason": null
+ },
+ "S100Z40H:H-063": {
+  "state": "POINTER_NOT_FOUND",
+  "pointers": [],
+  "subject": null,
+  "span": "定への対応が進んだものの、その影響は大きく、保険手数料収入は477百万円(前期比8.7%増加",
+  "reason": "no_element"
+ },
+ "S100Z40H:H-064": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:Liabilities@CurrentYearInstant"
+  ],
+  "subject": "負債合計",
+  "span": "一方、負債合計は、31,023百万円となり、M&A等の成",
+  "reason": null
+ },
+ "S100Z40H:H-065": {
+  "state": "UNVERIFIABLE",
+  "pointers": [],
+  "subject": null,
+  "span": "26.6%",
+  "reason": "no_subject"
+ },
+ "S100Z40H:H-066": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:NetSales@CurrentYearDuration",
+   "xbrl:jppfs_cor:NetSales@Prior1YearDuration",
+   "builtin:sign(cur-prior)"
+  ],
+  "subject": "売上高",
+  "span": "においては、第3四半期連結会計期間での現地への供給量が急激に増加した反動を",
+  "reason": null
+ },
+ "S100Z40H:H-067": {
+  "state": "VALUE_MISMATCH",
+  "pointers": [
+   "xbrl:jppfs_cor:NetSales@CurrentYearDuration",
+   "xbrl:jppfs_cor:NetSales@Prior1YearDuration"
+  ],
+  "subject": "売上高",
+  "span": "結果、当連結会計年度の海外売上高は10,208百万円(前期比21.9%減少)となりました。",
+  "reason": null
+ },
+ "S100Z40H:H-068": {
+  "state": "UNVERIFIABLE",
+  "pointers": [],
+  "subject": null,
+  "span": "存店舗及びM&Aにより取得した店舗の収益力向上、商品回転率の改善、適正な人",
+  "reason": "no_subject"
+ },
+ "S100Z40H:H-069": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:DepreciationAndAmortizationOpeCF@CurrentYearDuration",
+   "xbrl:jppfs_cor:DepreciationAndAmortizationOpeCF@Prior1YearDuration",
+   "builtin:sign(cur-prior)"
+  ],
+  "subject": "減価償却費",
+  "span": "が2,227百万円等の資金増加要因があった一方で、棚卸資産の増加が2,67",
+  "reason": null
+ },
+ "S100Z40H:H-070": {
+  "state": "VALUE_MISMATCH",
+  "pointers": [
+   "xbrl:jppfs_cor:NetSales@CurrentYearDuration",
+   "xbrl:jppfs_cor:NetSales@Prior1YearDuration"
+  ],
+  "subject": "売上高",
+  "span": "台数は前期を大きく上回り、売上高は16,872百万円(前期比13.6%増加)となりました。",
+  "reason": null
+ },
+ "S100Z40H:H-071": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:NonOperatingIncome@CurrentYearDuration",
+   "xbrl:jppfs_cor:NonOperatingIncome@Prior1YearDuration",
+   "builtin:sign(cur-prior)"
+  ],
+  "subject": "営業外収益",
+  "span": "充電設備導入促進補助金等により198百万円(前期比13.6%増加)となりま",
+  "reason": null
+ },
+ "S100Z40H:H-072": {
+  "state": "VALUE_MISMATCH",
+  "pointers": [
+   "xbrl:jppfs_cor:NetSales@CurrentYearDuration_jpcrp030000-asr_E32181-000ImportedCarDealerReportableSegmentMember"
+  ],
+  "subject": "売上高",
+  "span": "これらの結果、輸入車ディーラー事業の売上高は58,110百万円(前期比7.2%増加",
+  "reason": null
+ },
+ "S100Z40H:H-073": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:OrdinaryIncome@CurrentYearDuration",
+   "xbrl:jppfs_cor:OrdinaryIncome@Prior1YearDuration"
+  ],
+  "subject": "経常利益",
+  "span": "この結果、経常利益は1,427百万円(前期比24.8%減少)となりました。",
+  "reason": null
+ },
+ "S100Z40H:H-074": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:NetSales@CurrentYearDuration_jpcrp030000-asr_E32181-000UsedCarExportBusinessReportableSegmentMember",
+   "xbrl:jppfs_cor:NetSales@Prior1YearDuration_jpcrp030000-asr_E32181-000UsedCarExportBusinessReportableSegmentMember",
+   "builtin:sign(cur-prior)"
+  ],
+  "subject": "売上高",
+  "span": "じた事業基盤の拡大が売上高の成長につながった一方、事業規模の拡大に伴う先行",
+  "reason": null
+ },
+ "S100Z40H:H-075": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:DepreciationAndAmortizationOpeCF@CurrentYearDuration",
+   "xbrl:jppfs_cor:DepreciationAndAmortizationOpeCF@Prior1YearDuration",
+   "builtin:sign(cur-prior)"
+  ],
+  "subject": "減価償却費",
+  "span": "発生、店舗数の増加に伴う地代家賃、店舗維持費及び減価償却費の増加並びに販売",
+  "reason": null
+ },
+ "S100Z40H:H-076": {
+  "state": "VALUE_MISMATCH",
+  "pointers": [
+   "xbrl:jppfs_cor:NetSales@CurrentYearDuration"
+  ],
+  "subject": "売上高",
+  "span": "量が急激に増加した反動を受け、海外売上高は前年同期を下回り、2,544百万円(前年同期比3.9%",
+  "reason": null
+ },
+ "S100Z40H:H-077": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:DepreciationAndAmortizationOpeCF@CurrentYearDuration",
+   "xbrl:jppfs_cor:DepreciationAndAmortizationOpeCF@Prior1YearDuration",
+   "builtin:sign(cur-prior)"
+  ],
+  "subject": "減価償却費",
+  "span": "店舗数の増加に伴う店舗関連費用及び減価償却費、販売促進費等が増加したことか",
+  "reason": null
+ },
+ "S100Z40H:H-078": {
+  "state": "VALUE_MISMATCH",
+  "pointers": [
+   "xbrl:jppfs_cor:NetSales@CurrentYearDuration",
+   "xbrl:jppfs_cor:NetSales@Prior1YearDuration",
+   "builtin:sign(cur-prior)"
+  ],
+  "subject": "売上高",
+  "span": "への供給量が急激に増加した反動を受け、海外売上高は前年同期を下回り、2,5",
+  "reason": null
+ },
+ "S100Z40H:H-079": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:NetSales@CurrentYearDuration",
+   "xbrl:jppfs_cor:NetSales@Prior1YearDuration",
+   "builtin:sign(cur-prior)"
+  ],
+  "subject": "売上高",
+  "span": "高の合計は38,709百万円(前期比12.7%増加)と前期を上回りました。",
+  "reason": null
+ },
+ "S100Z40H:H-080": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:ShortTermLoansPayable@CurrentYearInstant",
+   "xbrl:jppfs_cor:ShortTermLoansPayable@Prior1YearInstant",
+   "builtin:sign(cur-prior)"
+  ],
+  "subject": "短期借入金",
+  "span": "入金等の増加により、前連結会計年度末に比べ、5,997百万円増加しました。",
+  "reason": null
+ },
+ "S100Z40H:H-081": {
+  "state": "VALUE_MISMATCH",
+  "pointers": [
+   "xbrl:jppfs_cor:NetSales@CurrentYearDuration_jpcrp030000-asr_E32181-000UsedCarExportBusinessReportableSegmentMember"
+  ],
+  "subject": "売上高",
+  "span": "車輸出関連事業における国内業販が伸長したことにより、売上高は96,839百万円(前期比9.3%増加",
+  "reason": null
+ },
+ "S100Z40H:H-082": {
+  "state": "VALUE_MISMATCH",
+  "pointers": [
+   "xbrl:jppfs_cor:NetSales@CurrentYearDuration"
+  ],
+  "subject": "売上高",
+  "span": "してお取引いただくお客様の増加等により堅調に推移し、売上高は9,821百万円(前期比19.8%増",
+  "reason": null
+ },
+ "S100Z40H:H-083": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:PaymentsForTransferOfBusiness2InvCF@CurrentYearDuration"
+  ],
+  "subject": "事業譲受による支出",
+  "span": "、敷金及び保証金の支払額が156百万円、事業譲受による支出が2,261百万円あった一方で、有形固",
+  "reason": null
+ },
+ "S100Z40H:H-084": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:NetSales@CurrentYearDuration",
+   "xbrl:jppfs_cor:NetSales@Prior1YearDuration"
+  ],
+  "subject": "売上高",
+  "span": "この結果、連結売上高は96,839百万円(前期比9.3%増加)、前連結会計年",
+  "reason": null
+ },
+ "S100Z40H:H-085": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:DepreciationAndAmortizationOpeCF@CurrentYearDuration",
+   "xbrl:jppfs_cor:DepreciationAndAmortizationOpeCF@Prior1YearDuration",
+   "builtin:sign(cur-prior)"
+  ],
+  "subject": "減価償却費",
+  "span": "う地代家賃、店舗維持費及び減価償却費の増加並びに販売促進費の増加等により、",
+  "reason": null
+ },
+ "S100Z40H:H-086": {
+  "state": "VALUE_MISMATCH",
+  "pointers": [
+   "xbrl:jppfs_cor:ProfitLossAttributableToOwnersOfParent@CurrentYearDuration",
+   "xbrl:jppfs_cor:ProfitLossAttributableToOwnersOfParent@Prior1YearDuration",
+   "builtin:sign(cur-prior)"
+  ],
+  "subject": "親会社株主に帰属する当期純利益",
+  "span": "当期純利益の計上等により、前連結会計年度末に比べ688百万円増加し、12,",
+  "reason": null
+ },
+ "S100Z40H:H-087": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:OrdinaryIncome@CurrentYearDuration",
+   "xbrl:jppfs_cor:OrdinaryIncome@Prior1YearDuration",
+   "builtin:sign(cur-prior)"
+  ],
+  "subject": "経常利益",
+  "span": "この結果、経常利益は1,427百万円(前期比24.8%減少)となりま",
+  "reason": null
+ },
+ "S100Z40H:H-088": {
+  "state": "VALUE_MISMATCH",
+  "pointers": [
+   "xbrl:jppfs_cor:NetSales@CurrentYearDuration_jpcrp030000-asr_E32181-000UsedCarExportBusinessReportableSegmentMember",
+   "xbrl:jppfs_cor:NetSales@Prior1YearDuration_jpcrp030000-asr_E32181-000UsedCarExportBusinessReportableSegmentMember",
+   "builtin:sign(cur-prior)"
+  ],
+  "subject": "売上高",
+  "span": "、事業規模の拡大に伴う先行的な費用負担に加え、中古車粗利率の低下や中古車輸",
+  "reason": null
+ },
+ "S100Z40H:H-089": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration"
+  ],
+  "subject": "営業利益",
+  "span": "び一般管理費の増加率が売上総利益の増加率を上回り、営業利益は1,426百万円(前期比22.9%減",
+  "reason": null
+ },
+ "S100Z40H:H-090": {
+  "state": "VALUE_MISMATCH",
+  "pointers": [
+   "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration"
+  ],
+  "subject": "セグメント利益",
+  "span": "の増加が売上総利益の増加を上回ったことから、セグメント利益は2,243百万円(前期比10.8%減",
+  "reason": null
+ },
+ "S100Z40H:H-091": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:GrossProfit@CurrentYearDuration",
+   "xbrl:jppfs_cor:GrossProfit@Prior1YearDuration",
+   "builtin:sign(cur-prior)"
+  ],
+  "subject": "売上総利益",
+  "span": "益改善等により売上総利益は13,135百万円(前期比5.7%増加)となりま",
+  "reason": null
+ },
+ "S100Z40H:H-092": {
+  "state": "VALUE_MISMATCH",
+  "pointers": [
+   "xbrl:jppfs_cor:NetSales@CurrentYearDuration",
+   "xbrl:jppfs_cor:NetSales@Prior1YearDuration"
+  ],
+  "subject": "売上高",
+  "span": "これらの結果、車輌売上高合計は47,468百万円(前期比4.9%増加)となりました。",
+  "reason": null
+ },
+ "S100Z40H:H-093": {
+  "state": "VALUE_MISMATCH",
+  "pointers": [
+   "xbrl:jppfs_cor:ShortTermLoansPayable@CurrentYearInstant"
+  ],
+  "subject": "短期借入金",
+  "span": "の増加により、前連結会計年度末に比べ5,997百万円増加し、31,023百万円となりました。",
+  "reason": null
+ },
+ "S100Z40H:H-094": {
+  "state": "POINTER_NOT_FOUND",
+  "pointers": [],
+  "subject": null,
+  "span": "その結果、当連結会計年度末時点では、急速充電器44台を含む計149台とな",
+  "reason": "no_element(unit not in XBRL)"
+ },
+ "S100Z40H:H-095": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:IncomeTaxesPaidOpeCF@CurrentYearDuration"
+  ],
+  "subject": "法人税等の支払額",
+  "span": "一方で、棚卸資産の増加が2,679百万円、法人税等の支払額が682百万円等の資金減少要因があ",
+  "reason": null
+ },
+ "S100Z40H:H-096": {
+  "state": "UNVERIFIABLE",
+  "pointers": [],
+  "subject": null,
+  "span": "管、拠点・事務所の整理・統合等により効率化を図り、販管費率は低下したものの",
+  "reason": "no_subject"
+ },
+ "S100Z40H:H-097": {
+  "state": "GROUNDED",
+  "pointers": [
+   "xbrl:jppfs_cor:InterestExpensesNOE@CurrentYearDuration",
+   "xbrl:jppfs_cor:InterestExpensesNOE@Prior1YearDuration",
+   "builtin:sign(cur-prior)"
+  ],
+  "subject": "支払利息",
+  "span": "A資金の調達に伴う借入金の増加及び金利上昇等により支払利息が増加したことか",
+  "reason": null
+ },
+ "S100Z40H:H-098": {
+  "state": "UNVERIFIABLE",
+  "pointers": [],
+  "subject": null,
+  "span": "また、M&A資金の調達に伴う借入金の増加及び金利上",
+  "reason": "no_subject"
+ },
+ "S100Z40H:H-099": {
+  "state": "VALUE_MISMATCH",
+  "pointers": [
+   "xbrl:jppfs_cor:NetSales@CurrentYearDuration",
+   "xbrl:jppfs_cor:NetSales@Prior1YearDuration",
+   "builtin:sign(cur-prior)"
+  ],
+  "subject": "売上高",
+  "span": "従来利益率の高い海外売上高の減少に加え、仕",
+  "reason": null
+ },
+ "S100Z40H:H-100": {
+  "state": "VALUE_MISMATCH",
+  "pointers": [
+   "xbrl:jppfs_cor:PropertyPlantAndEquipment@CurrentYearInstant"
+  ],
+  "subject": "有形固定資産",
+  "span": "これは有形固定資産の取得が1,668百万円、敷金及び保証金の支",
+  "reason": null
+ }
+}
