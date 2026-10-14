@@ -52,9 +52,16 @@ ROBUSTNESS_P16 = {
 }
 # 書類レベルの旗が真になる書類(3 profile とも GROUNDED 0 件・PNF が大半)
 DOC_UNVERIFIABLE_DOCS = ("S100Z3HP", "S100Z433")
+# 2026-10-14 の実測: 既定を P16 -> P20 にして止めた件数が動いた書類と、その P20 の止めた件数。
+# 14 書類のうちこの 2 書類だけが動く(どちらも連結の要素が 0 件 = 連結財務諸表を作っていない会社)。
+ROBUSTNESS_P20_MOVED = {"S100Z3HP": 19, "S100Z433": 30}
 # 出力の byte を字で留める値(engine の指紋を除いた本体の sha256)。
 # 下の test_one_documents_output_sha256_is_pinned_literally が使う。
-_PINNED_BODY_SHA256_S100Z4B6 = "dbc1da2a504f346766297800b1056509fdf3a9b4c0809260bd6b85d5b92dfbd5"
+# 2026-10-14: 既定が P16 -> P20 になり、この値が動いた。**動いたのは profile 欄の字だけ**で、
+# profile 欄を除いた本体は P16 と P20 で byte 単位に同一・行の差 0 件(S100Z4B6 は連結要素 147 の
+# 連結あり書類なので P20 の落とし込みは発火しない)。古い値は P16 のときの
+# dbc1da2a504f346766297800b1056509fdf3a9b4c0809260bd6b85d5b92dfbd5。
+_PINNED_BODY_SHA256_S100Z4B6 = "413aaeab69b472ebdc60d9a4291d6845a62f457635ac56747e739b8c5696aa54"
 
 
 def _zip(doc):
@@ -126,14 +133,30 @@ class DocumentLevelRuleTest(unittest.TestCase):
         self.assertEqual(VD.document_level({"VALUE_MISMATCH": 9, "POINTER_NOT_FOUND": 1}, 10)[0], False)
 
     @unittest.skipUnless(all(_have(d) for d in DOC_UNVERIFIABLE_DOCS), "材料が無い")
-    def test_the_two_structurally_failing_documents_are_flagged(self):
+    def test_the_two_structurally_failing_documents_are_flagged_under_p16(self):
+        """**P16 のときの事実。**記録を書き換えず、profile を明示して留める
+        (2026-10-14 に既定が P20 になり、既定で回すと旗が立たなくなった)。"""
+
         for doc in DOC_UNVERIFIABLE_DOCS:
-            out = VD.verify_document(_read(doc))
+            out = VD.verify_document(_read(doc), profile_name="P16")
             self.assertTrue(out["document"]["unverifiable"], doc)
             self.assertEqual(out["document"]["states"].get("GROUNDED", 0), 0, doc)
             self.assertEqual(out["document"]["rule"], VD.DOC_UNVERIFIABLE_RULE)
             # Claim 個別の state は旗で変わらない
             self.assertEqual(sum(out["document"]["states"].values()), out["document"]["claims"])
+
+    def test_the_two_documents_are_no_longer_flagged_under_the_default(self):
+        """**2026-10-14 の既定(P20)の事実。**この 2 書類は連結財務諸表を作っていない会社で、
+        P16 は 1 件も結べず書類ごと UNVERIFIABLE にしていた。P20 はこれを直す ―
+        **既定の経路でそれが起きていることを門にする**(字の試験ではなく振る舞いで)。"""
+
+        for doc in DOC_UNVERIFIABLE_DOCS:
+            out = VD.verify_document(_read(doc))
+            self.assertEqual(out["profile"], "P20", doc)
+            self.assertFalse(out["document"]["unverifiable"], doc)
+            self.assertGreater(out["document"]["states"].get("GROUNDED", 0), 0, doc)
+            # 旗が外れても Claim 個別の state の合計は全件のまま
+            self.assertEqual(sum(out["document"]["states"].values()), out["document"]["claims"], doc)
 
     @unittest.skipUnless(all(_have(d) for d in HOLDOUT_DOCS), "材料が無い")
     def test_the_holdout_documents_are_not_flagged(self):
@@ -276,7 +299,10 @@ class SemanticMatchAgainstTheHoldoutMeasurementTest(unittest.TestCase):
 
 
 class RobustnessTableTest(unittest.TestCase):
-    """14 書類の止めた件数が、記録した表(§2-3 の P16 の列)と同じ。"""
+    """14 書類の止めた件数が、記録した表(§2-3 の P16 の列)と同じ。
+
+    2026-10-14 に既定が P20 になったが、**この表は P16 の測定の記録なので数は書き換えない。**
+    profile を明示して回す。既定(P20)で動く 2 書類は下の ROBUSTNESS_P20_MOVED で別に留める。"""
 
     def test_the_recorded_stop_counts_are_reproduced(self):
         docs = [d for d in sorted(ROBUSTNESS_P16) if _have(d)]
@@ -284,11 +310,32 @@ class RobustnessTableTest(unittest.TestCase):
             raise unittest.SkipTest("材料が足りない(%d 書類)" % len(docs))
         for doc in docs:
             want_stopped, want_total = ROBUSTNESS_P16[doc]
-            out = VD.verify_document(_read(doc))
+            out = VD.verify_document(_read(doc), profile_name="P16")
             total = out["document"]["claims"]
             grounded = out["document"]["states"].get("GROUNDED", 0)
             self.assertEqual(total, want_total, doc)
             self.assertEqual(total - grounded, want_stopped, doc)
+
+    def test_only_the_two_nonconsolidated_documents_move_under_the_default(self):
+        """**既定を P16 -> P20 にして動いたのは、連結財務諸表の無い 2 書類だけ**
+        (2026-10-14 の実測。14 書類中 12 書類は 1 件も動かない)。
+        動いた 2 書類の P20 の止めた件数も字で留める。"""
+
+        docs = [d for d in sorted(ROBUSTNESS_P16) if _have(d)]
+        if len(docs) < 10:
+            raise unittest.SkipTest("材料が足りない(%d 書類)" % len(docs))
+        moved = []
+        for doc in docs:
+            want_stopped, want_total = ROBUSTNESS_P16[doc]
+            out = VD.verify_document(_read(doc))          # 既定 = P20
+            total = out["document"]["claims"]
+            stopped = total - out["document"]["states"].get("GROUNDED", 0)
+            self.assertEqual(total, want_total, doc)      # Claim の切り方は profile で変わらない
+            if stopped != want_stopped:
+                moved.append(doc)
+                self.assertEqual(stopped, ROBUSTNESS_P20_MOVED[doc], doc)
+        self.assertEqual(sorted(moved), sorted(ROBUSTNESS_P20_MOVED),
+                         "既定で動く書類の集合が記録と違う")
 
 
 if __name__ == "__main__":
