@@ -174,15 +174,18 @@ class ReadingRecordTest(unittest.TestCase):
         with tempfile.NamedTemporaryFile("w", suffix=".json", delete=False, encoding="utf-8") as fh:
             json.dump(bad, fh, ensure_ascii=False)
             p = fh.name
-        keep = T.READING
+        keep, keep_out = T.READING, T.OUT
+        import tempfile as _tf
+        with _tf.NamedTemporaryFile(suffix=".json", delete=False) as fh2:
+            tmp_out = fh2.name
         try:
-            T.READING = p
+            T.READING, T.OUT = p, tmp_out
             with self.assertRaises(AssertionError):
                 T.stage_build()
         finally:
-            T.READING = keep
+            T.READING, T.OUT = keep, keep_out
             os.unlink(p)
-            T.stage_build()  # fixture を元に戻す
+            os.unlink(tmp_out)
 
     def test_every_verdict_is_in_the_enum(self):
         for rid, rd in self.reading.items():
@@ -245,10 +248,21 @@ class RecordedCountsTest(unittest.TestCase):
         self.assertEqual(self.rec["seat2_direction_rows"], 11)
 
     def test_the_fixture_is_what_the_script_builds_now(self):
+        """**本物の fixture には書かせない。**変異を回したときに記録が上書きされるため
+        (2026-10-14 に実際に汚した)。出力先を一時ファイルへ向けて比べる。"""
         import contextlib
-        buf = io.StringIO()
-        with contextlib.redirect_stdout(buf):
-            out = T.stage_build()
+        import tempfile
+        keep = T.OUT
+        with tempfile.NamedTemporaryFile(suffix=".json", delete=False) as fh:
+            tmp = fh.name
+        try:
+            T.OUT = tmp
+            buf = io.StringIO()
+            with contextlib.redirect_stdout(buf):
+                out = T.stage_build()
+        finally:
+            T.OUT = keep
+            os.unlink(tmp)
         self.assertEqual(json.loads(json.dumps(out, ensure_ascii=False)), self.rec)
 
 

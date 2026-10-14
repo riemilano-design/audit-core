@@ -1,0 +1,5585 @@
+{
+ "purpose": "方向の形で GROUNDED になった 52 行の、同じ文・同じ fact の金額の主張(兄弟)",
+ "profile": "P16",
+ "how": "取得済み ZIP から build_raw_claims を回し直した。通信しない",
+ "rows": [
+  {
+   "id": "S100Z38F:H-010",
+   "docID": "S100Z38F",
+   "claim_id": "T045",
+   "e2": true,
+   "subject": "資本剰余金",
+   "member": null,
+   "word": "減少",
+   "direction_pointers": [
+    "xbrl:jppfs_cor:CapitalSurplus@CurrentYearInstant",
+    "xbrl:jppfs_cor:CapitalSurplus@Prior1YearInstant"
+   ],
+   "direction_elements": [
+    "CapitalSurplus"
+   ],
+   "direction_delta": 147050000.0,
+   "money_siblings": [
+    {
+     "id": "N066",
+     "unit": "円",
+     "result": "VALUE_MISMATCH",
+     "subject": "資本剰余金",
+     "stated": 135000000.0,
+     "recomputed": 270367000.0
+    }
+   ]
+  },
+  {
+   "id": "S100Z38F:H-052",
+   "docID": "S100Z38F",
+   "claim_id": "T022",
+   "e2": true,
+   "subject": "売上高",
+   "member": "jpcrp030000-asr_E05663-000:ManagementSolutionsBusinessReportableSegmentMember",
+   "word": "増収",
+   "direction_pointers": [
+    "xbrl:jppfs_cor:NetSales@CurrentYearDuration_jpcrp030000-asr_E05663-000ManagementSolutionsBusinessReportableSegmentMember",
+    "xbrl:jppfs_cor:NetSales@Prior1YearDuration_jpcrp030000-asr_E05663-000ManagementSolutionsBusinessReportableSegmentMember"
+   ],
+   "direction_elements": [
+    "NetSales"
+   ],
+   "direction_delta": 164702000.0,
+   "money_siblings": [
+    {
+     "id": "N040",
+     "unit": "百万円",
+     "result": "VALUE_MISMATCH",
+     "subject": "売上高",
+     "stated": 9648000000.0,
+     "recomputed": 9685274000.0
+    }
+   ]
+  },
+  {
+   "id": "S100Z38F:H-071",
+   "docID": "S100Z38F",
+   "claim_id": "T042",
+   "e2": false,
+   "subject": "現金及び預金",
+   "member": null,
+   "word": "減少",
+   "direction_pointers": [
+    "xbrl:jppfs_cor:CashAndDeposits@CurrentYearInstant",
+    "xbrl:jppfs_cor:CashAndDeposits@Prior1YearInstant"
+   ],
+   "direction_elements": [
+    "CashAndDeposits"
+   ],
+   "direction_delta": 1778092000.0,
+   "money_siblings": [
+    {
+     "id": "N054",
+     "unit": "百万円",
+     "result": "GROUNDED",
+     "subject": "現金及び預金",
+     "stated": 1778000000.0,
+     "recomputed": -1778092000.0
+    }
+   ]
+  },
+  {
+   "id": "S100Z38F:H-078",
+   "docID": "S100Z38F",
+   "claim_id": "T052",
+   "e2": true,
+   "subject": "契約資産",
+   "member": null,
+   "word": "増加",
+   "direction_pointers": [
+    "xbrl:jppfs_cor:ContractAssets@CurrentYearInstant",
+    "xbrl:jppfs_cor:ContractAssets@Prior1YearInstant"
+   ],
+   "direction_elements": [
+    "ContractAssets"
+   ],
+   "direction_delta": 392187000.0,
+   "money_siblings": [
+    {
+     "id": "N081",
+     "unit": "円",
+     "result": "VALUE_MISMATCH",
+     "subject": "契約資産",
+     "stated": 135000000.0,
+     "recomputed": 1133992000.0
+    }
+   ]
+  },
+  {
+   "id": "S100Z38F:H-080",
+   "docID": "S100Z38F",
+   "claim_id": "T028",
+   "e2": false,
+   "subject": "売上高",
+   "member": "jpcrp030000-asr_E05663-000:DigitalTransformationPromotionBusinessReportableSegmentMember",
+   "word": "増収",
+   "direction_pointers": [
+    "xbrl:jppfs_cor:NetSales@CurrentYearDuration_jpcrp030000-asr_E05663-000DigitalTransformationPromotionBusinessReportableSegmentMember",
+    "xbrl:jppfs_cor:NetSales@Prior1YearDuration_jpcrp030000-asr_E05663-000DigitalTransformationPromotionBusinessReportableSegmentMember"
+   ],
+   "direction_elements": [
+    "NetSales"
+   ],
+   "direction_delta": 703968000.0,
+   "money_siblings": [
+    {
+     "id": "N044",
+     "unit": "百万円",
+     "result": "GROUNDED",
+     "subject": "売上高",
+     "stated": 11022000000.0,
+     "recomputed": 11022227000.0
+    }
+   ]
+  },
+  {
+   "id": "S100Z38F:H-081",
+   "docID": "S100Z38F",
+   "claim_id": "T023",
+   "e2": true,
+   "subject": "営業利益",
+   "member": null,
+   "word": "増益",
+   "direction_pointers": [
+    "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration",
+    "xbrl:jppfs_cor:OperatingIncome@Prior1YearDuration"
+   ],
+   "direction_elements": [
+    "OperatingIncome"
+   ],
+   "direction_delta": 93617000.0,
+   "money_siblings": [
+    {
+     "id": "N042",
+     "unit": "百万円",
+     "result": "VALUE_MISMATCH",
+     "subject": "営業利益",
+     "stated": 2923000000.0,
+     "recomputed": 4697766000.0
+    }
+   ]
+  },
+  {
+   "id": "S100Z3DU:H-027",
+   "docID": "S100Z3DU",
+   "claim_id": "T018",
+   "e2": false,
+   "subject": "純資産",
+   "member": null,
+   "word": "減少",
+   "direction_pointers": [
+    "xbrl:jppfs_cor:NetAssets@CurrentYearInstant",
+    "xbrl:jppfs_cor:NetAssets@Prior1YearInstant"
+   ],
+   "direction_elements": [
+    "NetAssets"
+   ],
+   "direction_delta": 258000000.0,
+   "money_siblings": [
+    {
+     "id": "N027",
+     "unit": "円",
+     "result": "VALUE_MISMATCH",
+     "subject": "純資産",
+     "stated": 257000000.0,
+     "recomputed": 62000000.0
+    },
+    {
+     "id": "N028",
+     "unit": "円",
+     "result": "GROUNDED",
+     "subject": "純資産",
+     "stated": 62000000.0,
+     "recomputed": 62000000.0
+    }
+   ]
+  },
+  {
+   "id": "S100Z3DU:H-036",
+   "docID": "S100Z3DU",
+   "claim_id": "T014",
+   "e2": false,
+   "subject": "負債",
+   "member": null,
+   "word": "増加",
+   "direction_pointers": [
+    "xbrl:jppfs_cor:Liabilities@CurrentYearInstant",
+    "xbrl:jppfs_cor:Liabilities@Prior1YearInstant"
+   ],
+   "direction_elements": [
+    "Liabilities"
+   ],
+   "direction_delta": 260000000.0,
+   "money_siblings": [
+    {
+     "id": "N022",
+     "unit": "円",
+     "result": "VALUE_MISMATCH",
+     "subject": "負債",
+     "stated": 259000000.0,
+     "recomputed": 2369000000.0
+    },
+    {
+     "id": "N023",
+     "unit": "円",
+     "result": "GROUNDED",
+     "subject": "負債",
+     "stated": 2369000000.0,
+     "recomputed": 2369000000.0
+    }
+   ]
+  },
+  {
+   "id": "S100Z3DU:H-052",
+   "docID": "S100Z3DU",
+   "claim_id": "T030",
+   "e2": false,
+   "subject": "純資産",
+   "member": null,
+   "word": "減少",
+   "direction_pointers": [
+    "xbrl:jppfs_cor:NetAssets@CurrentYearInstant",
+    "xbrl:jppfs_cor:NetAssets@Prior1YearInstant"
+   ],
+   "direction_elements": [
+    "NetAssets"
+   ],
+   "direction_delta": 258000000.0,
+   "money_siblings": [
+    {
+     "id": "N062",
+     "unit": "円",
+     "result": "VALUE_MISMATCH",
+     "subject": "純資産",
+     "stated": 257000000.0,
+     "recomputed": 62000000.0
+    },
+    {
+     "id": "N063",
+     "unit": "円",
+     "result": "GROUNDED",
+     "subject": "純資産",
+     "stated": 62000000.0,
+     "recomputed": 62000000.0
+    }
+   ]
+  },
+  {
+   "id": "S100Z3DU:H-057",
+   "docID": "S100Z3DU",
+   "claim_id": "T026",
+   "e2": false,
+   "subject": "負債",
+   "member": null,
+   "word": "増加",
+   "direction_pointers": [
+    "xbrl:jppfs_cor:Liabilities@CurrentYearInstant",
+    "xbrl:jppfs_cor:Liabilities@Prior1YearInstant"
+   ],
+   "direction_elements": [
+    "Liabilities"
+   ],
+   "direction_delta": 260000000.0,
+   "money_siblings": [
+    {
+     "id": "N057",
+     "unit": "円",
+     "result": "VALUE_MISMATCH",
+     "subject": "負債",
+     "stated": 259000000.0,
+     "recomputed": 2369000000.0
+    },
+    {
+     "id": "N058",
+     "unit": "円",
+     "result": "GROUNDED",
+     "subject": "負債",
+     "stated": 2369000000.0,
+     "recomputed": 2369000000.0
+    }
+   ]
+  },
+  {
+   "id": "S100Z3DU:H-080",
+   "docID": "S100Z3DU",
+   "claim_id": "T008",
+   "e2": false,
+   "subject": "売上高",
+   "member": null,
+   "word": "増加",
+   "direction_pointers": [
+    "xbrl:jppfs_cor:NetSales@CurrentYearDuration",
+    "xbrl:jppfs_cor:NetSales@Prior1YearDuration"
+   ],
+   "direction_elements": [
+    "NetSales"
+   ],
+   "direction_delta": 891000000.0,
+   "money_siblings": [
+    {
+     "id": "N008",
+     "unit": "円",
+     "result": "GROUNDED",
+     "subject": "売上高",
+     "stated": 10570000000.0,
+     "recomputed": 10570000000.0
+    }
+   ]
+  },
+  {
+   "id": "S100Z40H:H-003",
+   "docID": "S100Z40H",
+   "claim_id": "T115",
+   "e2": false,
+   "subject": "セグメント利益",
+   "member": "jpcrp030000-asr_E32181-000:ImportedCarDealerReportableSegmentMember",
+   "word": "減少",
+   "direction_pointers": [
+    "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration_jpcrp030000-asr_E32181-000ImportedCarDealerReportableSegmentMember",
+    "xbrl:jppfs_cor:OperatingIncome@Prior1YearDuration_jpcrp030000-asr_E32181-000ImportedCarDealerReportableSegmentMember"
+   ],
+   "direction_elements": [
+    "OperatingIncome"
+   ],
+   "direction_delta": 272331000.0,
+   "money_siblings": []
+  },
+  {
+   "id": "S100Z40H:H-005",
+   "docID": "S100Z40H",
+   "claim_id": "T031",
+   "e2": false,
+   "subject": "支払利息",
+   "member": null,
+   "word": "増加",
+   "direction_pointers": [
+    "xbrl:jppfs_cor:InterestExpensesNOE@CurrentYearDuration",
+    "xbrl:jppfs_cor:InterestExpensesNOE@Prior1YearDuration"
+   ],
+   "direction_elements": [
+    "InterestExpensesNOE"
+   ],
+   "direction_delta": 61549000.0,
+   "money_siblings": [
+    {
+     "id": "N017",
+     "unit": "円",
+     "result": "VALUE_MISMATCH",
+     "subject": "支払利息",
+     "stated": 197000000.0,
+     "recomputed": 173211000.0
+    }
+   ]
+  },
+  {
+   "id": "S100Z40H:H-019",
+   "docID": "S100Z40H",
+   "claim_id": "T073",
+   "e2": true,
+   "subject": "セグメント利益",
+   "member": null,
+   "word": "減少",
+   "direction_pointers": [
+    "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration",
+    "xbrl:jppfs_cor:OperatingIncome@Prior1YearDuration"
+   ],
+   "direction_elements": [
+    "OperatingIncome"
+   ],
+   "direction_delta": 422768000.0,
+   "money_siblings": [
+    {
+     "id": "N053",
+     "unit": "円",
+     "result": "VALUE_MISMATCH",
+     "subject": "セグメント利益",
+     "stated": 376000000.0,
+     "recomputed": 1426838000.0
+    }
+   ]
+  },
+  {
+   "id": "S100Z40H:H-024",
+   "docID": "S100Z40H",
+   "claim_id": "T026",
+   "e2": true,
+   "subject": "売上総利益",
+   "member": null,
+   "word": "増加",
+   "direction_pointers": [
+    "xbrl:jppfs_cor:GrossProfit@CurrentYearDuration",
+    "xbrl:jppfs_cor:GrossProfit@Prior1YearDuration"
+   ],
+   "direction_elements": [
+    "GrossProfit"
+   ],
+   "direction_delta": 703498000.0,
+   "money_siblings": []
+  },
+  {
+   "id": "S100Z40H:H-053",
+   "docID": "S100Z40H",
+   "claim_id": "T034",
+   "e2": true,
+   "subject": "固定資産売却益",
+   "member": null,
+   "word": "増加",
+   "direction_pointers": [
+    "xbrl:jppfs_cor:GainOnSalesOfNoncurrentAssetsEI@CurrentYearDuration",
+    "xbrl:jppfs_cor:GainOnSalesOfNoncurrentAssetsEI@Prior1YearDuration"
+   ],
+   "direction_elements": [
+    "GainOnSalesOfNoncurrentAssetsEI"
+   ],
+   "direction_delta": 382282000.0,
+   "money_siblings": [
+    {
+     "id": "N021",
+     "unit": "円",
+     "result": "VALUE_MISMATCH",
+     "subject": "固定資産売却益",
+     "stated": 385000000.0,
+     "recomputed": 382286000.0
+    }
+   ]
+  },
+  {
+   "id": "S100Z40H:H-055",
+   "docID": "S100Z40H",
+   "claim_id": "T025",
+   "e2": true,
+   "subject": "販売費及び一般管理費",
+   "member": null,
+   "word": "増加",
+   "direction_pointers": [
+    "xbrl:jppfs_cor:SellingGeneralAndAdministrativeExpenses@CurrentYearDuration",
+    "xbrl:jppfs_cor:SellingGeneralAndAdministrativeExpenses@Prior1YearDuration"
+   ],
+   "direction_elements": [
+    "SellingGeneralAndAdministrativeExpenses"
+   ],
+   "direction_delta": 1126266000.0,
+   "money_siblings": []
+  },
+  {
+   "id": "S100Z40H:H-057",
+   "docID": "S100Z40H",
+   "claim_id": "T106",
+   "e2": false,
+   "subject": "親会社株主に帰属する当期純利益",
+   "member": null,
+   "word": "減少",
+   "direction_pointers": [
+    "xbrl:jppfs_cor:ProfitLossAttributableToOwnersOfParent@CurrentYearDuration",
+    "xbrl:jppfs_cor:ProfitLossAttributableToOwnersOfParent@Prior1YearDuration"
+   ],
+   "direction_elements": [
+    "ProfitLossAttributableToOwnersOfParent"
+   ],
+   "direction_delta": 334996000.0,
+   "money_siblings": [
+    {
+     "id": "N097",
+     "unit": "百万円",
+     "result": "GROUNDED",
+     "subject": "親会社株主に帰属する当期純利益",
+     "stated": 1108000000.0,
+     "recomputed": 1108515000.0
+    }
+   ]
+  },
+  {
+   "id": "S100Z40H:H-069",
+   "docID": "S100Z40H",
+   "claim_id": "T084",
+   "e2": true,
+   "subject": "減価償却費",
+   "member": null,
+   "word": "増加",
+   "direction_pointers": [
+    "xbrl:jppfs_cor:DepreciationAndAmortizationOpeCF@CurrentYearDuration",
+    "xbrl:jppfs_cor:DepreciationAndAmortizationOpeCF@Prior1YearDuration"
+   ],
+   "direction_elements": [
+    "DepreciationAndAmortizationOpeCF"
+   ],
+   "direction_delta": 257561000.0,
+   "money_siblings": [
+    {
+     "id": "N074",
+     "unit": "百万円",
+     "result": "GROUNDED",
+     "subject": "減価償却費",
+     "stated": 2227000000.0,
+     "recomputed": 2227566000.0
+    },
+    {
+     "id": "N075",
+     "unit": "百万円",
+     "result": "VALUE_MISMATCH",
+     "subject": "減価償却費",
+     "stated": 2679000000.0,
+     "recomputed": 2227566000.0
+    }
+   ]
+  },
+  {
+   "id": "S100Z40H:H-071",
+   "docID": "S100Z40H",
+   "claim_id": "T029",
+   "e2": false,
+   "subject": "営業外収益",
+   "member": null,
+   "word": "増加",
+   "direction_pointers": [
+    "xbrl:jppfs_cor:NonOperatingIncome@CurrentYearDuration",
+    "xbrl:jppfs_cor:NonOperatingIncome@Prior1YearDuration"
+   ],
+   "direction_elements": [
+    "NonOperatingIncome"
+   ],
+   "direction_delta": 23765000.0,
+   "money_siblings": [
+    {
+     "id": "N015",
+     "unit": "円",
+     "result": "GROUNDED",
+     "subject": "営業外収益",
+     "stated": 198000000.0,
+     "recomputed": 198196000.0
+    }
+   ]
+  },
+  {
+   "id": "S100Z40H:H-074",
+   "docID": "S100Z40H",
+   "claim_id": "T108",
+   "e2": true,
+   "subject": "売上高",
+   "member": "jpcrp030000-asr_E32181-000:UsedCarExportBusinessReportableSegmentMember",
+   "word": "拡大",
+   "direction_pointers": [
+    "xbrl:jppfs_cor:NetSales@CurrentYearDuration_jpcrp030000-asr_E32181-000UsedCarExportBusinessReportableSegmentMember",
+    "xbrl:jppfs_cor:NetSales@Prior1YearDuration_jpcrp030000-asr_E32181-000UsedCarExportBusinessReportableSegmentMember"
+   ],
+   "direction_elements": [
+    "NetSales"
+   ],
+   "direction_delta": 4341941000.0,
+   "money_siblings": []
+  },
+  {
+   "id": "S100Z40H:H-087",
+   "docID": "S100Z40H",
+   "claim_id": "T033",
+   "e2": false,
+   "subject": "経常利益",
+   "member": null,
+   "word": "減少",
+   "direction_pointers": [
+    "xbrl:jppfs_cor:OrdinaryIncome@CurrentYearDuration",
+    "xbrl:jppfs_cor:OrdinaryIncome@Prior1YearDuration"
+   ],
+   "direction_elements": [
+    "OrdinaryIncome"
+   ],
+   "direction_delta": 470112000.0,
+   "money_siblings": [
+    {
+     "id": "N019",
+     "unit": "百万円",
+     "result": "GROUNDED",
+     "subject": "経常利益",
+     "stated": 1427000000.0,
+     "recomputed": 1427511000.0
+    }
+   ]
+  },
+  {
+   "id": "S100Z40H:H-091",
+   "docID": "S100Z40H",
+   "claim_id": "T093",
+   "e2": false,
+   "subject": "売上総利益",
+   "member": null,
+   "word": "増加",
+   "direction_pointers": [
+    "xbrl:jppfs_cor:GrossProfit@CurrentYearDuration",
+    "xbrl:jppfs_cor:GrossProfit@Prior1YearDuration"
+   ],
+   "direction_elements": [
+    "GrossProfit"
+   ],
+   "direction_delta": 703498000.0,
+   "money_siblings": [
+    {
+     "id": "N091",
+     "unit": "百万円",
+     "result": "GROUNDED",
+     "subject": "売上総利益",
+     "stated": 13135000000.0,
+     "recomputed": 13135727000.0
+    }
+   ]
+  },
+  {
+   "id": "S100Z40H:H-097",
+   "docID": "S100Z40H",
+   "claim_id": "T104",
+   "e2": false,
+   "subject": "支払利息",
+   "member": null,
+   "word": "増加",
+   "direction_pointers": [
+    "xbrl:jppfs_cor:InterestExpensesNOE@CurrentYearDuration",
+    "xbrl:jppfs_cor:InterestExpensesNOE@Prior1YearDuration"
+   ],
+   "direction_elements": [
+    "InterestExpensesNOE"
+   ],
+   "direction_delta": 61549000.0,
+   "money_siblings": []
+  },
+  {
+   "id": "S100Z461:H-001",
+   "docID": "S100Z461",
+   "claim_id": "T016",
+   "e2": false,
+   "subject": "売上総利益",
+   "member": null,
+   "word": "増加",
+   "direction_pointers": [
+    "xbrl:jppfs_cor:GrossProfit@CurrentYearDuration",
+    "xbrl:jppfs_cor:GrossProfit@Prior1YearDuration"
+   ],
+   "direction_elements": [
+    "GrossProfit"
+   ],
+   "direction_delta": 578718000.0,
+   "money_siblings": [
+    {
+     "id": "N007",
+     "unit": "千円",
+     "result": "VALUE_MISMATCH",
+     "subject": "売上総利益",
+     "stated": 640909000.0,
+     "recomputed": 2918001000.0
+    }
+   ]
+  },
+  {
+   "id": "S100Z461:H-007",
+   "docID": "S100Z461",
+   "claim_id": "T012",
+   "e2": true,
+   "subject": "売上高",
+   "member": "jpcrp030000-asr_E37175-000:AISolutionReportableSegmentsMember",
+   "word": "増益",
+   "direction_pointers": [
+    "xbrl:jppfs_cor:NetSales@CurrentYearDuration_jpcrp030000-asr_E37175-000AISolutionReportableSegmentsMember",
+    "xbrl:jppfs_cor:NetSales@Prior1YearDuration_jpcrp030000-asr_E37175-000AISolutionReportableSegmentsMember"
+   ],
+   "direction_elements": [
+    "NetSales"
+   ],
+   "direction_delta": 1664142000.0,
+   "money_siblings": []
+  },
+  {
+   "id": "S100Z461:H-015",
+   "docID": "S100Z461",
+   "claim_id": "T017",
+   "e2": false,
+   "subject": "投資事業組合運用益",
+   "member": null,
+   "word": "増加",
+   "direction_pointers": [
+    "xbrl:jppfs_cor:GainOnInvestmentsInPartnershipNOI@CurrentYearDuration",
+    "xbrl:jppfs_cor:GainOnInvestmentsInPartnershipNOI@Prior1YearDuration"
+   ],
+   "direction_elements": [
+    "GainOnInvestmentsInPartnershipNOI"
+   ],
+   "direction_delta": 255432000.0,
+   "money_siblings": [
+    {
+     "id": "N009",
+     "unit": "千円",
+     "result": "VALUE_MISMATCH",
+     "subject": "投資事業組合運用益",
+     "stated": 853527000.0,
+     "recomputed": 268448000.0
+    }
+   ]
+  },
+  {
+   "id": "S100Z461:H-030",
+   "docID": "S100Z461",
+   "claim_id": "T011",
+   "e2": true,
+   "subject": "売上高",
+   "member": "jpcrp030000-asr_E37175-000:AISolutionReportableSegmentsMember",
+   "word": "増収",
+   "direction_pointers": [
+    "xbrl:jppfs_cor:NetSales@CurrentYearDuration_jpcrp030000-asr_E37175-000AISolutionReportableSegmentsMember",
+    "xbrl:jppfs_cor:NetSales@Prior1YearDuration_jpcrp030000-asr_E37175-000AISolutionReportableSegmentsMember"
+   ],
+   "direction_elements": [
+    "NetSales"
+   ],
+   "direction_delta": 1664142000.0,
+   "money_siblings": []
+  },
+  {
+   "id": "S100Z46V:H-016",
+   "docID": "S100Z46V",
+   "claim_id": "T004",
+   "e2": false,
+   "subject": "仕入債務",
+   "member": null,
+   "word": "増加",
+   "direction_pointers": [
+    "xbrl:jppfs_cor:IncreaseDecreaseInNotesAndAccountsPayableTradeOpeCF@CurrentYearDuration"
+   ],
+   "direction_elements": [
+    "IncreaseDecreaseInNotesAndAccountsPayableTradeOpeCF"
+   ],
+   "direction_delta": null,
+   "money_siblings": [
+    {
+     "id": "N037",
+     "unit": "千円",
+     "result": "GROUNDED",
+     "subject": "仕入債務",
+     "stated": 220445000.0,
+     "recomputed": 220445000.0
+    }
+   ]
+  },
+  {
+   "id": "S100Z46V:H-049",
+   "docID": "S100Z46V",
+   "claim_id": "T007",
+   "e2": false,
+   "subject": "契約負債",
+   "member": null,
+   "word": "減少",
+   "direction_pointers": [
+    "xbrl:jppfs_cor:IncreaseDecreaseInContractLiabilitiesOpeCF@CurrentYearDuration"
+   ],
+   "direction_elements": [
+    "IncreaseDecreaseInContractLiabilitiesOpeCF"
+   ],
+   "direction_delta": null,
+   "money_siblings": [
+    {
+     "id": "N039",
+     "unit": "千円",
+     "result": "GROUNDED",
+     "subject": "契約負債",
+     "stated": 19158000.0,
+     "recomputed": -19158000.0
+    }
+   ]
+  },
+  {
+   "id": "S100Z4LC:H-002",
+   "docID": "S100Z4LC",
+   "claim_id": "T026",
+   "e2": false,
+   "subject": "売上高",
+   "member": null,
+   "word": "減少",
+   "direction_pointers": [
+    "xbrl:jppfs_cor:NetSales@CurrentYearDuration",
+    "xbrl:jppfs_cor:NetSales@Prior1YearDuration"
+   ],
+   "direction_elements": [
+    "NetSales"
+   ],
+   "direction_delta": 24679000.0,
+   "money_siblings": [
+    {
+     "id": "N057",
+     "unit": "千円",
+     "result": "GROUNDED",
+     "subject": "売上高",
+     "stated": 294383000.0,
+     "recomputed": 294383000.0
+    },
+    {
+     "id": "N058",
+     "unit": "千円",
+     "result": "GROUNDED",
+     "subject": "売上高",
+     "stated": 24679000.0,
+     "recomputed": -24679000.0
+    }
+   ]
+  },
+  {
+   "id": "S100Z4LC:H-007",
+   "docID": "S100Z4LC",
+   "claim_id": "T029",
+   "e2": false,
+   "subject": "営業外収益",
+   "member": null,
+   "word": "増加",
+   "direction_pointers": [
+    "xbrl:jppfs_cor:NonOperatingIncome@CurrentYearDuration",
+    "xbrl:jppfs_cor:NonOperatingIncome@Prior1YearDuration"
+   ],
+   "direction_elements": [
+    "NonOperatingIncome"
+   ],
+   "direction_delta": 14817000.0,
+   "money_siblings": [
+    {
+     "id": "N074",
+     "unit": "千円",
+     "result": "GROUNDED",
+     "subject": "営業外収益",
+     "stated": 15988000.0,
+     "recomputed": 15988000.0
+    },
+    {
+     "id": "N075",
+     "unit": "千円",
+     "result": "VALUE_MISMATCH",
+     "subject": "営業外収益",
+     "stated": 14816000.0,
+     "recomputed": 15988000.0
+    },
+    {
+     "id": "N076",
+     "unit": "千円",
+     "result": "GROUNDED",
+     "subject": "営業外収益",
+     "stated": 1171000.0,
+     "recomputed": 1171000.0
+    }
+   ]
+  },
+  {
+   "id": "S100Z4LC:H-017",
+   "docID": "S100Z4LC",
+   "claim_id": "T023",
+   "e2": true,
+   "subject": "前渡金",
+   "member": null,
+   "word": "増加",
+   "direction_pointers": [
+    "xbrl:jppfs_cor:DecreaseIncreaseInAdvancePaymentsOpeCF@CurrentYearDuration"
+   ],
+   "direction_elements": [
+    "DecreaseIncreaseInAdvancePaymentsOpeCF"
+   ],
+   "direction_delta": null,
+   "money_siblings": [
+    {
+     "id": "N046",
+     "unit": "千円",
+     "result": "GROUNDED",
+     "subject": "前渡金",
+     "stated": 225925000.0,
+     "recomputed": -225925000.0
+    }
+   ]
+  },
+  {
+   "id": "S100Z4LC:H-018",
+   "docID": "S100Z4LC",
+   "claim_id": "T017",
+   "e2": false,
+   "subject": "純資産合計",
+   "member": null,
+   "word": "増加",
+   "direction_pointers": [
+    "xbrl:jppfs_cor:NetAssets@CurrentYearInstant",
+    "xbrl:jppfs_cor:NetAssets@Prior1YearInstant"
+   ],
+   "direction_elements": [
+    "NetAssets"
+   ],
+   "direction_delta": 473405000.0,
+   "money_siblings": [
+    {
+     "id": "N034",
+     "unit": "千円",
+     "result": "GROUNDED",
+     "subject": "純資産合計",
+     "stated": 728441000.0,
+     "recomputed": 728441000.0
+    },
+    {
+     "id": "N035",
+     "unit": "千円",
+     "result": "GROUNDED",
+     "subject": "純資産合計",
+     "stated": 473405000.0,
+     "recomputed": 473405000.0
+    }
+   ]
+  },
+  {
+   "id": "S100Z4LC:H-026",
+   "docID": "S100Z4LC",
+   "claim_id": "T014",
+   "e2": false,
+   "subject": "負債合計",
+   "member": null,
+   "word": "減少",
+   "direction_pointers": [
+    "xbrl:jppfs_cor:Liabilities@CurrentYearInstant",
+    "xbrl:jppfs_cor:Liabilities@Prior1YearInstant"
+   ],
+   "direction_elements": [
+    "Liabilities"
+   ],
+   "direction_delta": 549670000.0,
+   "money_siblings": [
+    {
+     "id": "N029",
+     "unit": "千円",
+     "result": "GROUNDED",
+     "subject": "負債合計",
+     "stated": 1082258000.0,
+     "recomputed": 1082258000.0
+    },
+    {
+     "id": "N030",
+     "unit": "千円",
+     "result": "GROUNDED",
+     "subject": "負債合計",
+     "stated": 549670000.0,
+     "recomputed": -549670000.0
+    }
+   ]
+  },
+  {
+   "id": "S100Z4LC:H-031",
+   "docID": "S100Z4LC",
+   "claim_id": "T024",
+   "e2": true,
+   "subject": "預り金",
+   "member": null,
+   "word": "減少",
+   "direction_pointers": [
+    "xbrl:jppfs_cor:IncreaseDecreaseInDepositsReceivedOpeCF@CurrentYearDuration"
+   ],
+   "direction_elements": [
+    "IncreaseDecreaseInDepositsReceivedOpeCF"
+   ],
+   "direction_delta": null,
+   "money_siblings": [
+    {
+     "id": "N047",
+     "unit": "千円",
+     "result": "GROUNDED",
+     "subject": "預り金",
+     "stated": 499121000.0,
+     "recomputed": -499121000.0
+    }
+   ]
+  },
+  {
+   "id": "S100Z4LC:H-032",
+   "docID": "S100Z4LC",
+   "claim_id": "T010",
+   "e2": false,
+   "subject": "資産合計",
+   "member": null,
+   "word": "減少",
+   "direction_pointers": [
+    "xbrl:jppfs_cor:Assets@CurrentYearInstant",
+    "xbrl:jppfs_cor:Assets@Prior1YearInstant"
+   ],
+   "direction_elements": [
+    "Assets"
+   ],
+   "direction_delta": 76265000.0,
+   "money_siblings": [
+    {
+     "id": "N020",
+     "unit": "千円",
+     "result": "GROUNDED",
+     "subject": "資産合計",
+     "stated": 1810699000.0,
+     "recomputed": 1810699000.0
+    },
+    {
+     "id": "N021",
+     "unit": "千円",
+     "result": "VALUE_MISMATCH",
+     "subject": "資産合計",
+     "stated": 76264000.0,
+     "recomputed": 1810699000.0
+    }
+   ]
+  },
+  {
+   "id": "S100Z4LC:H-043",
+   "docID": "S100Z4LC",
+   "claim_id": "T022",
+   "e2": false,
+   "subject": "貸倒引当金",
+   "member": null,
+   "word": "増加",
+   "direction_pointers": [
+    "xbrl:jppfs_cor:IncreaseDecreaseInAllowanceForDoubtfulAccountsOpeCF@CurrentYearDuration"
+   ],
+   "direction_elements": [
+    "IncreaseDecreaseInAllowanceForDoubtfulAccountsOpeCF"
+   ],
+   "direction_delta": null,
+   "money_siblings": [
+    {
+     "id": "N044",
+     "unit": "千円",
+     "result": "GROUNDED",
+     "subject": "貸倒引当金",
+     "stated": 701895000.0,
+     "recomputed": 701895000.0
+    },
+    {
+     "id": "N045",
+     "unit": "千円",
+     "result": "VALUE_MISMATCH",
+     "subject": "貸倒引当金",
+     "stated": 214611000.0,
+     "recomputed": 701895000.0
+    }
+   ]
+  },
+  {
+   "id": "S100Z4LC:H-058",
+   "docID": "S100Z4LC",
+   "claim_id": "T028",
+   "e2": false,
+   "subject": "販売費及び一般管理費",
+   "member": null,
+   "word": "増加",
+   "direction_pointers": [
+    "xbrl:jppfs_cor:SellingGeneralAndAdministrativeExpenses@CurrentYearDuration",
+    "xbrl:jppfs_cor:SellingGeneralAndAdministrativeExpenses@Prior1YearDuration"
+   ],
+   "direction_elements": [
+    "SellingGeneralAndAdministrativeExpenses"
+   ],
+   "direction_delta": 84145000.0,
+   "money_siblings": [
+    {
+     "id": "N066",
+     "unit": "千円",
+     "result": "GROUNDED",
+     "subject": "販売費及び一般管理費",
+     "stated": 664004000.0,
+     "recomputed": 664004000.0
+    },
+    {
+     "id": "N067",
+     "unit": "千円",
+     "result": "VALUE_MISMATCH",
+     "subject": "販売費及び一般管理費",
+     "stated": 84144000.0,
+     "recomputed": 664004000.0
+    }
+   ]
+  },
+  {
+   "id": "S100Z4LC:H-068",
+   "docID": "S100Z4LC",
+   "claim_id": "T027",
+   "e2": false,
+   "subject": "売上原価",
+   "member": null,
+   "word": "増加",
+   "direction_pointers": [
+    "xbrl:jppfs_cor:CostOfSales@CurrentYearDuration",
+    "xbrl:jppfs_cor:CostOfSales@Prior1YearDuration"
+   ],
+   "direction_elements": [
+    "CostOfSales"
+   ],
+   "direction_delta": 155657000.0,
+   "money_siblings": [
+    {
+     "id": "N060",
+     "unit": "千円",
+     "result": "GROUNDED",
+     "subject": "売上原価",
+     "stated": 456074000.0,
+     "recomputed": 456074000.0
+    },
+    {
+     "id": "N061",
+     "unit": "千円",
+     "result": "VALUE_MISMATCH",
+     "subject": "売上原価",
+     "stated": 155656000.0,
+     "recomputed": 456074000.0
+    }
+   ]
+  },
+  {
+   "id": "S100Z4LC:H-084",
+   "docID": "S100Z4LC",
+   "claim_id": "T030",
+   "e2": false,
+   "subject": "営業外費用",
+   "member": null,
+   "word": "増加",
+   "direction_pointers": [
+    "xbrl:jppfs_cor:NonOperatingExpenses@CurrentYearDuration",
+    "xbrl:jppfs_cor:NonOperatingExpenses@Prior1YearDuration"
+   ],
+   "direction_elements": [
+    "NonOperatingExpenses"
+   ],
+   "direction_delta": 618475000.0,
+   "money_siblings": [
+    {
+     "id": "N077",
+     "unit": "千円",
+     "result": "GROUNDED",
+     "subject": "営業外費用",
+     "stated": 742962000.0,
+     "recomputed": 742962000.0
+    },
+    {
+     "id": "N078",
+     "unit": "千円",
+     "result": "GROUNDED",
+     "subject": "営業外費用",
+     "stated": 618475000.0,
+     "recomputed": 618475000.0
+    }
+   ]
+  },
+  {
+   "id": "S100Z4LC:H-095",
+   "docID": "S100Z4LC",
+   "claim_id": "T020",
+   "e2": false,
+   "subject": "現金及び現金同等物",
+   "member": null,
+   "word": "減少",
+   "direction_pointers": [
+    "xbrl:jppfs_cor:CashAndCashEquivalents@CurrentYearInstant",
+    "xbrl:jppfs_cor:CashAndCashEquivalents@Prior1YearInstant"
+   ],
+   "direction_elements": [
+    "CashAndCashEquivalents"
+   ],
+   "direction_delta": 1358008000.0,
+   "money_siblings": [
+    {
+     "id": "N039",
+     "unit": "千円",
+     "result": "GROUNDED",
+     "subject": "現金及び現金同等物",
+     "stated": 1358008000.0,
+     "recomputed": -1358008000.0
+    },
+    {
+     "id": "N040",
+     "unit": "千円",
+     "result": "GROUNDED",
+     "subject": "現金及び現金同等物",
+     "stated": 370190000.0,
+     "recomputed": 370190000.0
+    }
+   ]
+  },
+  {
+   "id": "S100Z4R8:H-002",
+   "docID": "S100Z4R8",
+   "claim_id": "T004",
+   "e2": false,
+   "subject": "退職給付に係る負債",
+   "member": null,
+   "word": "減少",
+   "direction_pointers": [
+    "xbrl:jppfs_cor:NetDefinedBenefitLiability@CurrentYearInstant",
+    "xbrl:jppfs_cor:NetDefinedBenefitLiability@Prior1YearInstant"
+   ],
+   "direction_elements": [
+    "NetDefinedBenefitLiability"
+   ],
+   "direction_delta": 219778000.0,
+   "money_siblings": []
+  },
+  {
+   "id": "S100Z4R8:H-005",
+   "docID": "S100Z4R8",
+   "claim_id": "T019",
+   "e2": false,
+   "subject": "総資産",
+   "member": null,
+   "word": "増加",
+   "direction_pointers": [
+    "xbrl:jppfs_cor:Assets@CurrentYearInstant",
+    "xbrl:jppfs_cor:Assets@Prior1YearInstant"
+   ],
+   "direction_elements": [
+    "Assets"
+   ],
+   "direction_delta": 2943806000.0,
+   "money_siblings": [
+    {
+     "id": "N053",
+     "unit": "百万円",
+     "result": "GROUNDED",
+     "subject": "総資産",
+     "stated": 46172000000.0,
+     "recomputed": 46172055000.0
+    },
+    {
+     "id": "N054",
+     "unit": "百万円",
+     "result": "GROUNDED",
+     "subject": "総資産",
+     "stated": 2943000000.0,
+     "recomputed": 2943806000.0
+    }
+   ]
+  },
+  {
+   "id": "S100Z4R8:H-009",
+   "docID": "S100Z4R8",
+   "claim_id": "T003",
+   "e2": true,
+   "subject": "流動負債",
+   "member": null,
+   "word": "増加",
+   "direction_pointers": [
+    "xbrl:jppfs_cor:CurrentLiabilities@CurrentYearInstant",
+    "xbrl:jppfs_cor:CurrentLiabilities@Prior1YearInstant"
+   ],
+   "direction_elements": [
+    "CurrentLiabilities"
+   ],
+   "direction_delta": 621854000.0,
+   "money_siblings": []
+  },
+  {
+   "id": "S100Z4R8:H-021",
+   "docID": "S100Z4R8",
+   "claim_id": "T002",
+   "e2": true,
+   "subject": "投資有価証券",
+   "member": null,
+   "word": "増加",
+   "direction_pointers": [
+    "xbrl:jppfs_cor:InvestmentSecurities@CurrentYearInstant",
+    "xbrl:jppfs_cor:InvestmentSecurities@Prior1YearInstant"
+   ],
+   "direction_elements": [
+    "InvestmentSecurities"
+   ],
+   "direction_delta": 1329029000.0,
+   "money_siblings": []
+  },
+  {
+   "id": "S100Z4R8:H-027",
+   "docID": "S100Z4R8",
+   "claim_id": "T021",
+   "e2": false,
+   "subject": "親会社株主に帰属する当期純利益",
+   "member": null,
+   "word": "増加",
+   "direction_pointers": [
+    "xbrl:jppfs_cor:ProfitLossAttributableToOwnersOfParent@CurrentYearDuration",
+    "xbrl:jppfs_cor:ProfitLossAttributableToOwnersOfParent@Prior1YearDuration"
+   ],
+   "direction_elements": [
+    "ProfitLossAttributableToOwnersOfParent"
+   ],
+   "direction_delta": 68117000.0,
+   "money_siblings": [
+    {
+     "id": "N057",
+     "unit": "百万円",
+     "result": "GROUNDED",
+     "subject": "親会社株主に帰属する当期純利益",
+     "stated": 1822000000.0,
+     "recomputed": 1822348000.0
+    },
+    {
+     "id": "N058",
+     "unit": "円",
+     "result": "GROUNDED",
+     "subject": "親会社株主に帰属する当期純利益",
+     "stated": 68000000.0,
+     "recomputed": 68117000.0
+    }
+   ]
+  },
+  {
+   "id": "S100Z4R8:H-037",
+   "docID": "S100Z4R8",
+   "claim_id": "T001",
+   "e2": true,
+   "subject": "リース債権及びリース投資資産",
+   "member": null,
+   "word": "増加",
+   "direction_pointers": [
+    "xbrl:jppfs_cor:LeaseReceivablesAndInvestmentAssetsCA@CurrentYearInstant",
+    "xbrl:jppfs_cor:LeaseReceivablesAndInvestmentAssetsCA@Prior1YearInstant"
+   ],
+   "direction_elements": [
+    "LeaseReceivablesAndInvestmentAssetsCA"
+   ],
+   "direction_delta": 302034000.0,
+   "money_siblings": []
+  },
+  {
+   "id": "S100Z4R8:H-047",
+   "docID": "S100Z4R8",
+   "claim_id": "T005",
+   "e2": true,
+   "subject": "その他有価証券評価差額金",
+   "member": null,
+   "word": "増加",
+   "direction_pointers": [
+    "xbrl:jppfs_cor:ValuationDifferenceOnAvailableForSaleSecurities@CurrentYearInstant",
+    "xbrl:jppfs_cor:ValuationDifferenceOnAvailableForSaleSecurities@Prior1YearInstant"
+   ],
+   "direction_elements": [
+    "ValuationDifferenceOnAvailableForSaleSecurities"
+   ],
+   "direction_delta": 849937000.0,
+   "money_siblings": []
+  },
+  {
+   "id": "S100Z4R8:H-057",
+   "docID": "S100Z4R8",
+   "claim_id": "T020",
+   "e2": true,
+   "subject": "売上高",
+   "member": null,
+   "word": "増加",
+   "direction_pointers": [
+    "xbrl:jppfs_cor:NetSales@CurrentYearDuration",
+    "xbrl:jppfs_cor:NetSales@Prior1YearDuration"
+   ],
+   "direction_elements": [
+    "NetSales"
+   ],
+   "direction_delta": 849534000.0,
+   "money_siblings": [
+    {
+     "id": "N055",
+     "unit": "百万円",
+     "result": "GROUNDED",
+     "subject": "売上高",
+     "stated": 53021000000.0,
+     "recomputed": 53021694000.0
+    },
+    {
+     "id": "N056",
+     "unit": "円",
+     "result": "GROUNDED",
+     "subject": "売上高",
+     "stated": 849000000.0,
+     "recomputed": 849534000.0
+    }
+   ]
+  },
+  {
+   "id": "S100Z4R8:H-068",
+   "docID": "S100Z4R8",
+   "claim_id": "T012",
+   "e2": true,
+   "subject": "現金及び現金同等物",
+   "member": null,
+   "word": "増加",
+   "direction_pointers": [
+    "xbrl:jppfs_cor:CashAndCashEquivalents@CurrentYearInstant",
+    "xbrl:jppfs_cor:CashAndCashEquivalents@Prior1YearInstant"
+   ],
+   "direction_elements": [
+    "CashAndCashEquivalents"
+   ],
+   "direction_delta": 235092000.0,
+   "money_siblings": [
+    {
+     "id": "N035",
+     "unit": "円",
+     "result": "GROUNDED",
+     "subject": "現金及び現金同等物",
+     "stated": 235000000.0,
+     "recomputed": 235092000.0
+    },
+    {
+     "id": "N036",
+     "unit": "百万円",
+     "result": "GROUNDED",
+     "subject": "現金及び現金同等物",
+     "stated": 5738000000.0,
+     "recomputed": 5738810000.0
+    }
+   ]
+  },
+  {
+   "id": "S100Z4R8:H-070",
+   "docID": "S100Z4R8",
+   "claim_id": "T010",
+   "e2": false,
+   "subject": "親会社株主に帰属する当期純利益",
+   "member": null,
+   "word": "増加",
+   "direction_pointers": [
+    "xbrl:jppfs_cor:ProfitLossAttributableToOwnersOfParent@CurrentYearDuration",
+    "xbrl:jppfs_cor:ProfitLossAttributableToOwnersOfParent@Prior1YearDuration"
+   ],
+   "direction_elements": [
+    "ProfitLossAttributableToOwnersOfParent"
+   ],
+   "direction_delta": 68117000.0,
+   "money_siblings": [
+    {
+     "id": "N021",
+     "unit": "円",
+     "result": "GROUNDED",
+     "subject": "親会社株主に帰属する当期純利益",
+     "stated": 68000000.0,
+     "recomputed": 68117000.0
+    },
+    {
+     "id": "N022",
+     "unit": "百万円",
+     "result": "GROUNDED",
+     "subject": "親会社株主に帰属する当期純利益",
+     "stated": 1822000000.0,
+     "recomputed": 1822348000.0
+    }
+   ]
+  }
+ ],
+ "money_claim_census": [
+  {
+   "docID": "S100Z4LC",
+   "id": "N001",
+   "result": "GROUNDED",
+   "stated": 294383000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:NetSales@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z4LC",
+   "id": "N003",
+   "result": "GROUNDED",
+   "stated": 825695000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z4LC",
+   "id": "N004",
+   "result": "GROUNDED",
+   "stated": 561214000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:OperatingIncome@Prior1YearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z4LC",
+   "id": "N005",
+   "result": "GROUNDED",
+   "stated": 1552670000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:OrdinaryIncome@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z4LC",
+   "id": "N006",
+   "result": "GROUNDED",
+   "stated": 684530000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:OrdinaryIncome@Prior1YearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z4LC",
+   "id": "N007",
+   "result": "VALUE_MISMATCH",
+   "stated": 1525543000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:OrdinaryIncome@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z4LC",
+   "id": "N008",
+   "result": "VALUE_MISMATCH",
+   "stated": 715849000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:OrdinaryIncome@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z4LC",
+   "id": "N009",
+   "result": "VALUE_MISMATCH",
+   "stated": 205104000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:NetSales@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z4LC",
+   "id": "N011",
+   "result": "VALUE_MISMATCH",
+   "stated": 266354000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:NetSales@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z4LC",
+   "id": "N012",
+   "result": null,
+   "stated": 40590000.0,
+   "pointers": []
+  },
+  {
+   "docID": "S100Z4LC",
+   "id": "N013",
+   "result": null,
+   "stated": 100000000000.0,
+   "pointers": []
+  },
+  {
+   "docID": "S100Z4LC",
+   "id": "N014",
+   "result": "VALUE_MISMATCH",
+   "stated": 915000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:NetSales@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z4LC",
+   "id": "N016",
+   "result": "VALUE_MISMATCH",
+   "stated": 51169000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:NetSales@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z4LC",
+   "id": "N017",
+   "result": null,
+   "stated": 225666000.0,
+   "pointers": []
+  },
+  {
+   "docID": "S100Z4LC",
+   "id": "N018",
+   "result": "VALUE_MISMATCH",
+   "stated": 88363000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:NetSales@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z4LC",
+   "id": "N019",
+   "result": "VALUE_MISMATCH",
+   "stated": 4572000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z4LC",
+   "id": "N020",
+   "result": "GROUNDED",
+   "stated": 1810699000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:Assets@CurrentYearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z4LC",
+   "id": "N021",
+   "result": "VALUE_MISMATCH",
+   "stated": 76264000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:Assets@CurrentYearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z4LC",
+   "id": "N022",
+   "result": "VALUE_MISMATCH",
+   "stated": 116611000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:CostsOnUncompletedServices@CurrentYearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z4LC",
+   "id": "N023",
+   "result": "GROUNDED",
+   "stated": 225925000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:AdvancePaymentsTrade@CurrentYearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z4LC",
+   "id": "N024",
+   "result": "GROUNDED",
+   "stated": 609999000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:ShortTermLoansReceivable@CurrentYearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z4LC",
+   "id": "N025",
+   "result": "GROUNDED",
+   "stated": 115651000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:AccountsReceivableOther@CurrentYearInstant",
+    "xbrl:jppfs_cor:AccountsReceivableOther@Prior1YearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z4LC",
+   "id": "N026",
+   "result": "GROUNDED",
+   "stated": 614635000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:ConstructionInProgress@CurrentYearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z4LC",
+   "id": "N027",
+   "result": "GROUNDED",
+   "stated": 1358008000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:CashAndDeposits@CurrentYearInstant",
+    "xbrl:jppfs_cor:CashAndDeposits@Prior1YearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z4LC",
+   "id": "N028",
+   "result": "VALUE_MISMATCH",
+   "stated": 682019000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:AllowanceForDoubtfulAccountsCA@CurrentYearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z4LC",
+   "id": "N029",
+   "result": "GROUNDED",
+   "stated": 1082258000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:Liabilities@CurrentYearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z4LC",
+   "id": "N030",
+   "result": "GROUNDED",
+   "stated": 549670000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:Liabilities@CurrentYearInstant",
+    "xbrl:jppfs_cor:Liabilities@Prior1YearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z4LC",
+   "id": "N031",
+   "result": "GROUNDED",
+   "stated": 137190000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:ProvisionForLossOnOrderReceivedCL@CurrentYearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z4LC",
+   "id": "N032",
+   "result": "VALUE_MISMATCH",
+   "stated": 499121000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:DepositsReceived@CurrentYearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z4LC",
+   "id": "N033",
+   "result": "GROUNDED",
+   "stated": 126040000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:LongTermLoansPayable@CurrentYearInstant",
+    "xbrl:jppfs_cor:LongTermLoansPayable@Prior1YearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z4LC",
+   "id": "N034",
+   "result": "GROUNDED",
+   "stated": 728441000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:NetAssets@CurrentYearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z4LC",
+   "id": "N035",
+   "result": "GROUNDED",
+   "stated": 473405000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:NetAssets@CurrentYearInstant",
+    "xbrl:jppfs_cor:NetAssets@Prior1YearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z4LC",
+   "id": "N036",
+   "result": "VALUE_MISMATCH",
+   "stated": 1525543000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:RetainedEarnings@CurrentYearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z4LC",
+   "id": "N037",
+   "result": "GROUNDED",
+   "stated": 1011861000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:CapitalStock@CurrentYearInstant",
+    "xbrl:jppfs_cor:CapitalStock@Prior1YearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z4LC",
+   "id": "N038",
+   "result": "GROUNDED",
+   "stated": 1011861000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:CapitalSurplus@CurrentYearInstant",
+    "xbrl:jppfs_cor:CapitalSurplus@Prior1YearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z4LC",
+   "id": "N039",
+   "result": "GROUNDED",
+   "stated": 1358008000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:CashAndCashEquivalents@CurrentYearInstant",
+    "xbrl:jppfs_cor:CashAndCashEquivalents@Prior1YearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z4LC",
+   "id": "N040",
+   "result": "GROUNDED",
+   "stated": 370190000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:CashAndCashEquivalents@CurrentYearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z4LC",
+   "id": "N041",
+   "result": "GROUNDED",
+   "stated": 1806988000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:NetCashProvidedByUsedInOperatingActivities@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z4LC",
+   "id": "N042",
+   "result": "GROUNDED",
+   "stated": 296053000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:NetCashProvidedByUsedInOperatingActivities@Prior1YearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z4LC",
+   "id": "N043",
+   "result": null,
+   "stated": 1523258000.0,
+   "pointers": []
+  },
+  {
+   "docID": "S100Z4LC",
+   "id": "N044",
+   "result": "GROUNDED",
+   "stated": 701895000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:IncreaseDecreaseInAllowanceForDoubtfulAccountsOpeCF@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z4LC",
+   "id": "N045",
+   "result": "VALUE_MISMATCH",
+   "stated": 214611000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:IncreaseDecreaseInAllowanceForDoubtfulAccountsOpeCF@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z4LC",
+   "id": "N046",
+   "result": "GROUNDED",
+   "stated": 225925000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:DecreaseIncreaseInAdvancePaymentsOpeCF@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z4LC",
+   "id": "N047",
+   "result": "GROUNDED",
+   "stated": 499121000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:IncreaseDecreaseInDepositsReceivedOpeCF@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z4LC",
+   "id": "N048",
+   "result": "GROUNDED",
+   "stated": 1254976000.0,
+   "pointers": [
+    "xbrl:jpcrp_cor:NetCashProvidedByUsedInInvestingActivitiesSummaryOfBusinessResults@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z4LC",
+   "id": "N049",
+   "result": "GROUNDED",
+   "stated": 18503000.0,
+   "pointers": [
+    "xbrl:jpcrp_cor:NetCashProvidedByUsedInInvestingActivitiesSummaryOfBusinessResults@Prior1YearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z4LC",
+   "id": "N050",
+   "result": "GROUNDED",
+   "stated": 704635000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:PurchaseOfPropertyPlantAndEquipmentInvCF@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z4LC",
+   "id": "N051",
+   "result": "GROUNDED",
+   "stated": 911971000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:PaymentsOfLoansReceivableInvCF@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z4LC",
+   "id": "N052",
+   "result": "GROUNDED",
+   "stated": 301972000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:CollectionOfLoansReceivableInvCF@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z4LC",
+   "id": "N053",
+   "result": "GROUNDED",
+   "stated": 1703956000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:NetCashProvidedByUsedInFinancingActivities@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z4LC",
+   "id": "N054",
+   "result": "GROUNDED",
+   "stated": 1889904000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:NetCashProvidedByUsedInFinancingActivities@Prior1YearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z4LC",
+   "id": "N055",
+   "result": "GROUNDED",
+   "stated": 221874000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:RepaymentOfLongTermLoansPayableFinCF@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z4LC",
+   "id": "N056",
+   "result": "GROUNDED",
+   "stated": 1993905000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:ProceedsFromIssuanceOfCommonStockFinCF@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z4LC",
+   "id": "N057",
+   "result": "GROUNDED",
+   "stated": 294383000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:NetSales@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z4LC",
+   "id": "N058",
+   "result": "GROUNDED",
+   "stated": 24679000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:NetSales@CurrentYearDuration",
+    "xbrl:jppfs_cor:NetSales@Prior1YearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z4LC",
+   "id": "N060",
+   "result": "GROUNDED",
+   "stated": 456074000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:CostOfSales@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z4LC",
+   "id": "N061",
+   "result": "VALUE_MISMATCH",
+   "stated": 155656000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:CostOfSales@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z4LC",
+   "id": "N063",
+   "result": null,
+   "stated": 161691000.0,
+   "pointers": []
+  },
+  {
+   "docID": "S100Z4LC",
+   "id": "N064",
+   "result": "GROUNDED",
+   "stated": 18645000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:GrossProfit@Prior1YearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z4LC",
+   "id": "N065",
+   "result": "GROUNDED",
+   "stated": 137190000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:ProvisionForLossOnOrderReceivedCL@CurrentYearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z4LC",
+   "id": "N066",
+   "result": "GROUNDED",
+   "stated": 664004000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:SellingGeneralAndAdministrativeExpenses@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z4LC",
+   "id": "N067",
+   "result": "VALUE_MISMATCH",
+   "stated": 84144000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:SellingGeneralAndAdministrativeExpenses@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z4LC",
+   "id": "N069",
+   "result": "GROUNDED",
+   "stated": 229561000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:BusinessConsignmentExpensesSGA@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z4LC",
+   "id": "N070",
+   "result": "GROUNDED",
+   "stated": 84555000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:PayrollAndAllowancesSGA@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z4LC",
+   "id": "N071",
+   "result": "GROUNDED",
+   "stated": 81102000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:ProvisionOfAllowanceForDoubtfulAccountsSGA@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z4LC",
+   "id": "N072",
+   "result": "GROUNDED",
+   "stated": 825695000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z4LC",
+   "id": "N073",
+   "result": "GROUNDED",
+   "stated": 561214000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:OperatingIncome@Prior1YearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z4LC",
+   "id": "N074",
+   "result": "GROUNDED",
+   "stated": 15988000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:NonOperatingIncome@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z4LC",
+   "id": "N075",
+   "result": "VALUE_MISMATCH",
+   "stated": 14816000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:NonOperatingIncome@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z4LC",
+   "id": "N076",
+   "result": "GROUNDED",
+   "stated": 1171000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:NonOperatingIncome@Prior1YearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z4LC",
+   "id": "N077",
+   "result": "GROUNDED",
+   "stated": 742962000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:NonOperatingExpenses@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z4LC",
+   "id": "N078",
+   "result": "GROUNDED",
+   "stated": 618475000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:NonOperatingExpenses@CurrentYearDuration",
+    "xbrl:jppfs_cor:NonOperatingExpenses@Prior1YearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z4LC",
+   "id": "N080",
+   "result": "GROUNDED",
+   "stated": 620792000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:ProvisionOfAllowanceForDoubtfulAccountsNOE@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z4LC",
+   "id": "N081",
+   "result": "GROUNDED",
+   "stated": 1552670000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:OrdinaryIncome@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z4LC",
+   "id": "N082",
+   "result": "GROUNDED",
+   "stated": 684530000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:OrdinaryIncome@Prior1YearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z4LC",
+   "id": "N083",
+   "result": null,
+   "stated": 1525543000.0,
+   "pointers": []
+  },
+  {
+   "docID": "S100Z4LC",
+   "id": "N084",
+   "result": null,
+   "stated": 715849000.0,
+   "pointers": []
+  },
+  {
+   "docID": "S100Z4LC",
+   "id": "N085",
+   "result": "GROUNDED",
+   "stated": 63288000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:GainOnSalesOfInvestmentSecuritiesEI@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z4LC",
+   "id": "N086",
+   "result": "GROUNDED",
+   "stated": 33875000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:ProvisionForLossOnLitigationEL@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z40H",
+   "id": "N007",
+   "result": "GROUNDED",
+   "stated": 96839000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:NetSales@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z40H",
+   "id": "N009",
+   "result": "GROUNDED",
+   "stated": 13135000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:GrossProfit@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z40H",
+   "id": "N011",
+   "result": "GROUNDED",
+   "stated": 11708000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:SellingGeneralAndAdministrativeExpenses@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z40H",
+   "id": "N013",
+   "result": "GROUNDED",
+   "stated": 1426000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z40H",
+   "id": "N015",
+   "result": "GROUNDED",
+   "stated": 198000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:NonOperatingIncome@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z40H",
+   "id": "N017",
+   "result": "VALUE_MISMATCH",
+   "stated": 197000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:InterestExpensesNOE@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z40H",
+   "id": "N019",
+   "result": "GROUNDED",
+   "stated": 1427000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:OrdinaryIncome@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z40H",
+   "id": "N021",
+   "result": "VALUE_MISMATCH",
+   "stated": 385000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:GainOnSalesOfNoncurrentAssetsEI@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z40H",
+   "id": "N023",
+   "result": "VALUE_MISMATCH",
+   "stated": 167000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:ImpairmentLossEL@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z40H",
+   "id": "N025",
+   "result": "GROUNDED",
+   "stated": 1108000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:ProfitLossAttributableToOwnersOfParent@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z40H",
+   "id": "N027",
+   "result": "VALUE_MISMATCH",
+   "stated": 24760000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:NetSales@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z40H",
+   "id": "N029",
+   "result": "VALUE_MISMATCH",
+   "stated": 16872000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:NetSales@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z40H",
+   "id": "N031",
+   "result": "VALUE_MISMATCH",
+   "stated": 47468000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:NetSales@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z40H",
+   "id": "N033",
+   "result": "VALUE_MISMATCH",
+   "stated": 9821000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:NetSales@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z40H",
+   "id": "N035",
+   "result": null,
+   "stated": 477000000.0,
+   "pointers": []
+  },
+  {
+   "docID": "S100Z40H",
+   "id": "N037",
+   "result": "VALUE_MISMATCH",
+   "stated": 821000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:NetSales@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z40H",
+   "id": "N039",
+   "result": "VALUE_MISMATCH",
+   "stated": 58110000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:NetSales@CurrentYearDuration_jpcrp030000-asr_E32181-000ImportedCarDealerReportableSegmentMember"
+   ]
+  },
+  {
+   "docID": "S100Z40H",
+   "id": "N041",
+   "result": "VALUE_MISMATCH",
+   "stated": 2243000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z40H",
+   "id": "N043",
+   "result": "VALUE_MISMATCH",
+   "stated": 2971000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:NetSales@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z40H",
+   "id": "N045",
+   "result": "VALUE_MISMATCH",
+   "stated": 2544000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:NetSales@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z40H",
+   "id": "N047",
+   "result": "VALUE_MISMATCH",
+   "stated": 10208000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:NetSales@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z40H",
+   "id": "N049",
+   "result": "VALUE_MISMATCH",
+   "stated": 28501000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:NetSales@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z40H",
+   "id": "N051",
+   "result": "VALUE_MISMATCH",
+   "stated": 38709000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:NetSales@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z40H",
+   "id": "N053",
+   "result": "VALUE_MISMATCH",
+   "stated": 376000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z40H",
+   "id": "N062",
+   "result": "VALUE_MISMATCH",
+   "stated": 6686000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:PropertyPlantAndEquipment@CurrentYearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z40H",
+   "id": "N063",
+   "result": "VALUE_MISMATCH",
+   "stated": 43917000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:PropertyPlantAndEquipment@CurrentYearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z40H",
+   "id": "N064",
+   "result": "VALUE_MISMATCH",
+   "stated": 5997000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:ShortTermLoansPayable@CurrentYearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z40H",
+   "id": "N065",
+   "result": "VALUE_MISMATCH",
+   "stated": 31023000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:ShortTermLoansPayable@CurrentYearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z40H",
+   "id": "N066",
+   "result": "VALUE_MISMATCH",
+   "stated": 688000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:ProfitLossAttributableToOwnersOfParent@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z40H",
+   "id": "N067",
+   "result": "VALUE_MISMATCH",
+   "stated": 12893000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:ProfitLossAttributableToOwnersOfParent@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z40H",
+   "id": "N068",
+   "result": "GROUNDED",
+   "stated": 2211000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:CashAndCashEquivalents@CurrentYearInstant",
+    "xbrl:jppfs_cor:CashAndCashEquivalents@Prior1YearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z40H",
+   "id": "N070",
+   "result": "GROUNDED",
+   "stated": 10445000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:CashAndCashEquivalents@CurrentYearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z40H",
+   "id": "N071",
+   "result": null,
+   "stated": 764000000.0,
+   "pointers": []
+  },
+  {
+   "docID": "S100Z40H",
+   "id": "N072",
+   "result": null,
+   "stated": 1303000000.0,
+   "pointers": []
+  },
+  {
+   "docID": "S100Z40H",
+   "id": "N073",
+   "result": "GROUNDED",
+   "stated": 1645000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:IncomeBeforeIncomeTaxes@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z40H",
+   "id": "N074",
+   "result": "GROUNDED",
+   "stated": 2227000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:DepreciationAndAmortizationOpeCF@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z40H",
+   "id": "N075",
+   "result": "VALUE_MISMATCH",
+   "stated": 2679000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:DepreciationAndAmortizationOpeCF@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z40H",
+   "id": "N076",
+   "result": "GROUNDED",
+   "stated": 682000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:IncomeTaxesPaidOpeCF@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z40H",
+   "id": "N077",
+   "result": null,
+   "stated": 3007000000.0,
+   "pointers": []
+  },
+  {
+   "docID": "S100Z40H",
+   "id": "N078",
+   "result": null,
+   "stated": 545000000.0,
+   "pointers": []
+  },
+  {
+   "docID": "S100Z40H",
+   "id": "N079",
+   "result": "VALUE_MISMATCH",
+   "stated": 1668000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:PropertyPlantAndEquipment@CurrentYearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z40H",
+   "id": "N080",
+   "result": "VALUE_MISMATCH",
+   "stated": 156000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:LeaseAndGuaranteeDeposits@CurrentYearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z40H",
+   "id": "N081",
+   "result": "GROUNDED",
+   "stated": 2261000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:PaymentsForTransferOfBusiness2InvCF@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z40H",
+   "id": "N082",
+   "result": "GROUNDED",
+   "stated": 1038000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:ProceedsFromSalesOfPropertyPlantAndEquipmentInvCF@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z40H",
+   "id": "N083",
+   "result": null,
+   "stated": 4454000000.0,
+   "pointers": []
+  },
+  {
+   "docID": "S100Z40H",
+   "id": "N084",
+   "result": null,
+   "stated": 2578000000.0,
+   "pointers": []
+  },
+  {
+   "docID": "S100Z40H",
+   "id": "N085",
+   "result": "VALUE_MISMATCH",
+   "stated": 2700000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:LongTermLoansPayable@CurrentYearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z40H",
+   "id": "N086",
+   "result": "GROUNDED",
+   "stated": 5100000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:ShortTermLoansPayable@CurrentYearInstant",
+    "xbrl:jppfs_cor:ShortTermLoansPayable@Prior1YearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z40H",
+   "id": "N087",
+   "result": "VALUE_MISMATCH",
+   "stated": 2780000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:LongTermLoansPayable@CurrentYearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z40H",
+   "id": "N088",
+   "result": "GROUNDED",
+   "stated": 438000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:CashDividendsPaidFinCF@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z40H",
+   "id": "N089",
+   "result": "VALUE_MISMATCH",
+   "stated": 96839000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:NetSales@CurrentYearDuration_jpcrp030000-asr_E32181-000UsedCarExportBusinessReportableSegmentMember"
+   ]
+  },
+  {
+   "docID": "S100Z40H",
+   "id": "N091",
+   "result": "GROUNDED",
+   "stated": 13135000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:GrossProfit@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z40H",
+   "id": "N093",
+   "result": "GROUNDED",
+   "stated": 1426000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z40H",
+   "id": "N095",
+   "result": "GROUNDED",
+   "stated": 1427000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:OrdinaryIncome@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z40H",
+   "id": "N097",
+   "result": "GROUNDED",
+   "stated": 1108000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:ProfitLossAttributableToOwnersOfParent@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z40H",
+   "id": "N099",
+   "result": "GROUNDED",
+   "stated": 43917000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:Assets@CurrentYearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z40H",
+   "id": "N100",
+   "result": "GROUNDED",
+   "stated": 6686000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:Assets@CurrentYearInstant",
+    "xbrl:jppfs_cor:Assets@Prior1YearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z40H",
+   "id": "N101",
+   "result": "GROUNDED",
+   "stated": 31023000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:Liabilities@CurrentYearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z40H",
+   "id": "N102",
+   "result": "VALUE_MISMATCH",
+   "stated": 5997000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:ShortTermLoansPayable@CurrentYearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z40H",
+   "id": "N103",
+   "result": "VALUE_MISMATCH",
+   "stated": 12893000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:ProfitLossAttributableToOwnersOfParent@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z40H",
+   "id": "N104",
+   "result": "GROUNDED",
+   "stated": 764000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:NetCashProvidedByUsedInOperatingActivities@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z40H",
+   "id": "N105",
+   "result": "GROUNDED",
+   "stated": 1303000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:NetCashProvidedByUsedInOperatingActivities@Prior1YearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z40H",
+   "id": "N106",
+   "result": "GROUNDED",
+   "stated": 3007000000.0,
+   "pointers": [
+    "xbrl:jpcrp_cor:NetCashProvidedByUsedInInvestingActivitiesSummaryOfBusinessResults@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z40H",
+   "id": "N107",
+   "result": "GROUNDED",
+   "stated": 4454000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:NetCashProvidedByUsedInFinancingActivities@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z40H",
+   "id": "N108",
+   "result": "GROUNDED",
+   "stated": 10445000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:CashAndCashEquivalents@CurrentYearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z46V",
+   "id": "N001",
+   "result": "GROUNDED",
+   "stated": 4879542000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:NetSales@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z46V",
+   "id": "N002",
+   "result": "GROUNDED",
+   "stated": 424591000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z46V",
+   "id": "N003",
+   "result": "GROUNDED",
+   "stated": 432920000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:OrdinaryIncome@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z46V",
+   "id": "N004",
+   "result": "GROUNDED",
+   "stated": 330138000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:ProfitLossAttributableToOwnersOfParent@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z46V",
+   "id": "N005",
+   "result": "VALUE_MISMATCH",
+   "stated": 4415940000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:NetSales@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z46V",
+   "id": "N008",
+   "result": "VALUE_MISMATCH",
+   "stated": 25090000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:NetSales@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z46V",
+   "id": "N010",
+   "result": "GROUNDED",
+   "stated": 4188155000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:Assets@CurrentYearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z46V",
+   "id": "N011",
+   "result": "GROUNDED",
+   "stated": 3283977000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:CurrentAssets@CurrentYearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z46V",
+   "id": "N012",
+   "result": "GROUNDED",
+   "stated": 2301594000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:CashAndDeposits@CurrentYearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z46V",
+   "id": "N013",
+   "result": "GROUNDED",
+   "stated": 812829000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:AccountsReceivableTradeAndContractAssets@CurrentYearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z46V",
+   "id": "N014",
+   "result": "GROUNDED",
+   "stated": 35581000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:Inventories@CurrentYearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z46V",
+   "id": "N015",
+   "result": "GROUNDED",
+   "stated": 904177000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:NoncurrentAssets@CurrentYearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z46V",
+   "id": "N016",
+   "result": "GROUNDED",
+   "stated": 620638000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:IntangibleAssets@CurrentYearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z46V",
+   "id": "N017",
+   "result": "GROUNDED",
+   "stated": 497003000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:Goodwill@CurrentYearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z46V",
+   "id": "N018",
+   "result": "GROUNDED",
+   "stated": 115737000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:SoftwareInProgress@CurrentYearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z46V",
+   "id": "N019",
+   "result": "GROUNDED",
+   "stated": 283538000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:InvestmentsAndOtherAssets@CurrentYearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z46V",
+   "id": "N020",
+   "result": "GROUNDED",
+   "stated": 164775000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:DeferredTaxAssets@CurrentYearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z46V",
+   "id": "N021",
+   "result": "GROUNDED",
+   "stated": 50000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:InvestmentSecurities@CurrentYearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z46V",
+   "id": "N022",
+   "result": "GROUNDED",
+   "stated": 1822349000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:Liabilities@CurrentYearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z46V",
+   "id": "N023",
+   "result": "GROUNDED",
+   "stated": 1234849000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:CurrentLiabilities@CurrentYearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z46V",
+   "id": "N024",
+   "result": "GROUNDED",
+   "stated": 591636000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:AccountsPayableTrade@CurrentYearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z46V",
+   "id": "N025",
+   "result": "GROUNDED",
+   "stated": 150000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:CurrentPortionOfLongTermLoansPayable@CurrentYearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z46V",
+   "id": "N026",
+   "result": "GROUNDED",
+   "stated": 80912000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:IncomeTaxesPayable@CurrentYearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z46V",
+   "id": "N027",
+   "result": "GROUNDED",
+   "stated": 76981000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:ContractLiabilities@CurrentYearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z46V",
+   "id": "N028",
+   "result": "GROUNDED",
+   "stated": 587500000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:LongTermLoansPayable@CurrentYearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z46V",
+   "id": "N029",
+   "result": "GROUNDED",
+   "stated": 2365805000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:NetAssets@CurrentYearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z46V",
+   "id": "N030",
+   "result": "GROUNDED",
+   "stated": 49269000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:CapitalStock@CurrentYearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z46V",
+   "id": "N031",
+   "result": "GROUNDED",
+   "stated": 1433301000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:CapitalSurplus@CurrentYearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z46V",
+   "id": "N032",
+   "result": "GROUNDED",
+   "stated": 883153000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:RetainedEarnings@CurrentYearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z46V",
+   "id": "N033",
+   "result": "GROUNDED",
+   "stated": 155000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:EffectOfExchangeRateChangeOnCashAndCashEquivalents@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z46V",
+   "id": "N034",
+   "result": "VALUE_MISMATCH",
+   "stated": 2301594000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:EffectOfExchangeRateChangeOnCashAndCashEquivalents@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z46V",
+   "id": "N035",
+   "result": null,
+   "stated": 327743000.0,
+   "pointers": []
+  },
+  {
+   "docID": "S100Z46V",
+   "id": "N036",
+   "result": "GROUNDED",
+   "stated": 432920000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:IncomeBeforeIncomeTaxes@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z46V",
+   "id": "N037",
+   "result": "GROUNDED",
+   "stated": 220445000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:IncreaseDecreaseInNotesAndAccountsPayableTradeOpeCF@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z46V",
+   "id": "N038",
+   "result": "VALUE_MISMATCH",
+   "stated": 122530000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:ContractAssets@CurrentYearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z46V",
+   "id": "N039",
+   "result": "GROUNDED",
+   "stated": 19158000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:IncreaseDecreaseInContractLiabilitiesOpeCF@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z46V",
+   "id": "N040",
+   "result": "GROUNDED",
+   "stated": 131274000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:IncomeTaxesPaidOpeCF@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z46V",
+   "id": "N041",
+   "result": null,
+   "stated": 599341000.0,
+   "pointers": []
+  },
+  {
+   "docID": "S100Z46V",
+   "id": "N042",
+   "result": "GROUNDED",
+   "stated": 434044000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:PurchaseOfInvestmentsInSubsidiariesResultingInChangeInScopeOfConsolidationInvCF@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z46V",
+   "id": "N043",
+   "result": "GROUNDED",
+   "stated": 113025000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:PurchaseOfIntangibleAssetsInvCF@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z46V",
+   "id": "N044",
+   "result": "GROUNDED",
+   "stated": 52272000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:PaymentsForLeaseAndGuaranteeDepositsInvCF@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z46V",
+   "id": "N045",
+   "result": null,
+   "stated": 741519000.0,
+   "pointers": []
+  },
+  {
+   "docID": "S100Z46V",
+   "id": "N046",
+   "result": "GROUNDED",
+   "stated": 750000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:ProceedsFromLongTermLoansPayableFinCF@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z46V",
+   "id": "N047",
+   "result": "GROUNDED",
+   "stated": 3582000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:DisposalOfTreasuryStock@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z46V",
+   "id": "N048",
+   "result": "GROUNDED",
+   "stated": 12500000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:RepaymentOfLongTermLoansPayableFinCF@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z38F",
+   "id": "N004",
+   "result": "UNVERIFIABLE",
+   "stated": 45000000000.0,
+   "pointers": []
+  },
+  {
+   "docID": "S100Z38F",
+   "id": "N006",
+   "result": null,
+   "stated": 30481000000.0,
+   "pointers": []
+  },
+  {
+   "docID": "S100Z38F",
+   "id": "N009",
+   "result": "GROUNDED",
+   "stated": 2985000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:ProfitLossAttributableToOwnersOfParent@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z38F",
+   "id": "N013",
+   "result": "UNVERIFIABLE",
+   "stated": 4300000.0,
+   "pointers": []
+  },
+  {
+   "docID": "S100Z38F",
+   "id": "N015",
+   "result": "VALUE_MISMATCH",
+   "stated": 2600000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z38F",
+   "id": "N018",
+   "result": "UNVERIFIABLE",
+   "stated": 6000000000.0,
+   "pointers": []
+  },
+  {
+   "docID": "S100Z38F",
+   "id": "N019",
+   "result": "VALUE_MISMATCH",
+   "stated": 2957000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:Software@CurrentYearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z38F",
+   "id": "N020",
+   "result": "VALUE_MISMATCH",
+   "stated": 133000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:Software@CurrentYearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z38F",
+   "id": "N026",
+   "result": "UNVERIFIABLE",
+   "stated": 51.0,
+   "pointers": []
+  },
+  {
+   "docID": "S100Z38F",
+   "id": "N028",
+   "result": null,
+   "stated": 7.0,
+   "pointers": []
+  },
+  {
+   "docID": "S100Z38F",
+   "id": "N029",
+   "result": null,
+   "stated": 32.0,
+   "pointers": []
+  },
+  {
+   "docID": "S100Z38F",
+   "id": "N031",
+   "result": null,
+   "stated": 30481000000.0,
+   "pointers": []
+  },
+  {
+   "docID": "S100Z38F",
+   "id": "N033",
+   "result": "GROUNDED",
+   "stated": 4697000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z38F",
+   "id": "N035",
+   "result": "GROUNDED",
+   "stated": 4573000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:OrdinaryIncome@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z38F",
+   "id": "N037",
+   "result": "GROUNDED",
+   "stated": 2985000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:ProfitLossAttributableToOwnersOfParent@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z38F",
+   "id": "N040",
+   "result": "VALUE_MISMATCH",
+   "stated": 9648000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:NetSales@CurrentYearDuration_jpcrp030000-asr_E05663-000ManagementSolutionsBusinessReportableSegmentMember"
+   ]
+  },
+  {
+   "docID": "S100Z38F",
+   "id": "N042",
+   "result": "VALUE_MISMATCH",
+   "stated": 2923000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z38F",
+   "id": "N044",
+   "result": "GROUNDED",
+   "stated": 11022000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:NetSales@CurrentYearDuration_jpcrp030000-asr_E05663-000DigitalTransformationPromotionBusinessReportableSegmentMember"
+   ]
+  },
+  {
+   "docID": "S100Z38F",
+   "id": "N046",
+   "result": "GROUNDED",
+   "stated": 1717000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration_jpcrp030000-asr_E05663-000DigitalTransformationPromotionBusinessReportableSegmentMember"
+   ]
+  },
+  {
+   "docID": "S100Z38F",
+   "id": "N048",
+   "result": "VALUE_MISMATCH",
+   "stated": 9685000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:NetSales@CurrentYearDuration_jpcrp030000-asr_E05663-000ConsolidatedFinancialDisclosureBusinessReportableSegmentMember"
+   ]
+  },
+  {
+   "docID": "S100Z38F",
+   "id": "N050",
+   "result": "VALUE_MISMATCH",
+   "stated": 1129000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z38F",
+   "id": "N052",
+   "result": "GROUNDED",
+   "stated": 24147000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:Assets@CurrentYearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z38F",
+   "id": "N053",
+   "result": "GROUNDED",
+   "stated": 225000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:Assets@CurrentYearInstant",
+    "xbrl:jppfs_cor:Assets@Prior1YearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z38F",
+   "id": "N054",
+   "result": "GROUNDED",
+   "stated": 1778000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:CashAndDeposits@CurrentYearInstant",
+    "xbrl:jppfs_cor:CashAndDeposits@Prior1YearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z38F",
+   "id": "N055",
+   "result": "GROUNDED",
+   "stated": 135000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:NotesAndAccountsReceivableTradeAndContractAssets@CurrentYearInstant",
+    "xbrl:jppfs_cor:NotesAndAccountsReceivableTradeAndContractAssets@Prior1YearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z38F",
+   "id": "N056",
+   "result": "GROUNDED",
+   "stated": 325000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:PrepaidExpenses@CurrentYearInstant",
+    "xbrl:jppfs_cor:PrepaidExpenses@Prior1YearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z38F",
+   "id": "N057",
+   "result": "VALUE_MISMATCH",
+   "stated": 579000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:PrepaidExpenses@CurrentYearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z38F",
+   "id": "N058",
+   "result": "GROUNDED",
+   "stated": 386000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:StocksOfSubsidiariesAndAffiliates@CurrentYearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z38F",
+   "id": "N059",
+   "result": "GROUNDED",
+   "stated": 166000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:LongTermLoansReceivable@CurrentYearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z38F",
+   "id": "N060",
+   "result": "GROUNDED",
+   "stated": 9577000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:Liabilities@CurrentYearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z38F",
+   "id": "N061",
+   "result": "GROUNDED",
+   "stated": 802000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:Liabilities@CurrentYearInstant",
+    "xbrl:jppfs_cor:Liabilities@Prior1YearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z38F",
+   "id": "N062",
+   "result": "GROUNDED",
+   "stated": 436000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:ContractLiabilities@CurrentYearInstant",
+    "xbrl:jppfs_cor:ContractLiabilities@Prior1YearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z38F",
+   "id": "N063",
+   "result": "GROUNDED",
+   "stated": 246000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:AssetRetirementObligationsNCL@CurrentYearInstant",
+    "xbrl:jppfs_cor:AssetRetirementObligationsNCL@Prior1YearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z38F",
+   "id": "N064",
+   "result": "GROUNDED",
+   "stated": 2985000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:ProfitLossAttributableToOwnersOfParent@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z38F",
+   "id": "N065",
+   "result": "GROUNDED",
+   "stated": 930000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:DividendsFromSurplus@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z38F",
+   "id": "N066",
+   "result": "VALUE_MISMATCH",
+   "stated": 135000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:CapitalSurplus@CurrentYearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z38F",
+   "id": "N067",
+   "result": "VALUE_MISMATCH",
+   "stated": 3095000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:RetainedEarnings@CurrentYearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z38F",
+   "id": "N068",
+   "result": "VALUE_MISMATCH",
+   "stated": 14570000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:RetainedEarnings@CurrentYearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z38F",
+   "id": "N069",
+   "result": "VALUE_MISMATCH",
+   "stated": 1027000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:RetainedEarnings@CurrentYearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z38F",
+   "id": "N073",
+   "result": "GROUNDED",
+   "stated": 1779000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:CashAndCashEquivalents@CurrentYearInstant",
+    "xbrl:jppfs_cor:CashAndCashEquivalents@Prior1YearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z38F",
+   "id": "N074",
+   "result": "GROUNDED",
+   "stated": 13382000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:CashAndCashEquivalents@CurrentYearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z38F",
+   "id": "N075",
+   "result": "GROUNDED",
+   "stated": 3790000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:NetCashProvidedByUsedInOperatingActivities@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z38F",
+   "id": "N076",
+   "result": null,
+   "stated": 4469000000.0,
+   "pointers": []
+  },
+  {
+   "docID": "S100Z38F",
+   "id": "N077",
+   "result": "GROUNDED",
+   "stated": 4505000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:IncomeBeforeIncomeTaxes@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z38F",
+   "id": "N078",
+   "result": "GROUNDED",
+   "stated": 417000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:DepreciationAndAmortizationOpeCF@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z38F",
+   "id": "N079",
+   "result": "GROUNDED",
+   "stated": 238000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:IncreaseDecreaseInProvisionForLossOnOrderReceivedOpeCF@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z38F",
+   "id": "N080",
+   "result": "GROUNDED",
+   "stated": 436000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:IncreaseDecreaseInContractLiabilitiesOpeCF@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z38F",
+   "id": "N081",
+   "result": "VALUE_MISMATCH",
+   "stated": 135000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:ContractAssets@CurrentYearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z38F",
+   "id": "N082",
+   "result": "GROUNDED",
+   "stated": 322000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:DecreaseIncreaseInPrepaidExpensesOpeCF@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z38F",
+   "id": "N083",
+   "result": "GROUNDED",
+   "stated": 1565000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:IncomeTaxesPaidOpeCF@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z38F",
+   "id": "N084",
+   "result": "GROUNDED",
+   "stated": 1338000000.0,
+   "pointers": [
+    "xbrl:jpcrp_cor:NetCashProvidedByUsedInInvestingActivitiesSummaryOfBusinessResults@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z38F",
+   "id": "N085",
+   "result": null,
+   "stated": 201000000.0,
+   "pointers": []
+  },
+  {
+   "docID": "S100Z38F",
+   "id": "N086",
+   "result": "GROUNDED",
+   "stated": 597000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:PurchaseOfPropertyPlantAndEquipmentInvCF@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z38F",
+   "id": "N087",
+   "result": "GROUNDED",
+   "stated": 146000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:PurchaseOfInvestmentSecuritiesInvCF@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z38F",
+   "id": "N088",
+   "result": "GROUNDED",
+   "stated": 420000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:PurchaseOfStocksOfSubsidiariesAndAffiliatesInvCF@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z38F",
+   "id": "N089",
+   "result": "GROUNDED",
+   "stated": 158000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:PaymentsOfLongTermLoansReceivableInvCF@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z38F",
+   "id": "N090",
+   "result": "GROUNDED",
+   "stated": 4257000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:NetCashProvidedByUsedInFinancingActivities@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z38F",
+   "id": "N091",
+   "result": null,
+   "stated": 1036000000.0,
+   "pointers": []
+  },
+  {
+   "docID": "S100Z38F",
+   "id": "N092",
+   "result": "GROUNDED",
+   "stated": 3231000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:PurchaseOfTreasuryStockFinCF@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z38F",
+   "id": "N093",
+   "result": "GROUNDED",
+   "stated": 930000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:CashDividendsPaidFinCF@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z38F",
+   "id": "N094",
+   "result": null,
+   "stated": 3500000000.0,
+   "pointers": []
+  },
+  {
+   "docID": "S100Z38F",
+   "id": "N095",
+   "result": "GROUNDED",
+   "stated": 12815000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:CashAndDeposits@CurrentYearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z3DU",
+   "id": "N008",
+   "result": "GROUNDED",
+   "stated": 10570000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:NetSales@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z3DU",
+   "id": "N010",
+   "result": "GROUNDED",
+   "stated": 635000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z3DU",
+   "id": "N011",
+   "result": "GROUNDED",
+   "stated": 666000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:OperatingIncome@Prior1YearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z3DU",
+   "id": "N012",
+   "result": "GROUNDED",
+   "stated": 618000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:OrdinaryIncome@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z3DU",
+   "id": "N013",
+   "result": "GROUNDED",
+   "stated": 647000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:OrdinaryIncome@Prior1YearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z3DU",
+   "id": "N014",
+   "result": "VALUE_MISMATCH",
+   "stated": 793000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:OrdinaryIncome@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z3DU",
+   "id": "N015",
+   "result": "VALUE_MISMATCH",
+   "stated": 816000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:OrdinaryIncome@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z3DU",
+   "id": "N016",
+   "result": null,
+   "stated": 1000000.0,
+   "pointers": []
+  },
+  {
+   "docID": "S100Z3DU",
+   "id": "N017",
+   "result": null,
+   "stated": 2431000000.0,
+   "pointers": []
+  },
+  {
+   "docID": "S100Z3DU",
+   "id": "N018",
+   "result": "VALUE_MISMATCH",
+   "stated": 27000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:AccountsReceivableTrade@CurrentYearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z3DU",
+   "id": "N019",
+   "result": "GROUNDED",
+   "stated": 18000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:Goodwill@CurrentYearInstant",
+    "xbrl:jppfs_cor:Goodwill@Prior1YearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z3DU",
+   "id": "N020",
+   "result": "GROUNDED",
+   "stated": 20000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:GuaranteeDepositsIOA@CurrentYearInstant",
+    "xbrl:jppfs_cor:GuaranteeDepositsIOA@Prior1YearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z3DU",
+   "id": "N021",
+   "result": "GROUNDED",
+   "stated": 66000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:BuildingsAndStructuresNet@CurrentYearInstant",
+    "xbrl:jppfs_cor:BuildingsAndStructuresNet@Prior1YearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z3DU",
+   "id": "N022",
+   "result": "VALUE_MISMATCH",
+   "stated": 259000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:Liabilities@CurrentYearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z3DU",
+   "id": "N023",
+   "result": "GROUNDED",
+   "stated": 2369000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:Liabilities@CurrentYearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z3DU",
+   "id": "N024",
+   "result": "VALUE_MISMATCH",
+   "stated": 247000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:SubscriptionRightsToShares@CurrentYearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z3DU",
+   "id": "N025",
+   "result": "GROUNDED",
+   "stated": 61000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:AccountsPayableOther@CurrentYearInstant",
+    "xbrl:jppfs_cor:AccountsPayableOther@Prior1YearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z3DU",
+   "id": "N026",
+   "result": "GROUNDED",
+   "stated": 78000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:ShortTermLoansPayable@CurrentYearInstant",
+    "xbrl:jppfs_cor:ShortTermLoansPayable@Prior1YearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z3DU",
+   "id": "N027",
+   "result": "VALUE_MISMATCH",
+   "stated": 257000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:NetAssets@CurrentYearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z3DU",
+   "id": "N028",
+   "result": "GROUNDED",
+   "stated": 62000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:NetAssets@CurrentYearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z3DU",
+   "id": "N029",
+   "result": null,
+   "stated": 793000000.0,
+   "pointers": []
+  },
+  {
+   "docID": "S100Z3DU",
+   "id": "N030",
+   "result": "VALUE_MISMATCH",
+   "stated": 543000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:ShareholdersEquity@CurrentYearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z3DU",
+   "id": "N031",
+   "result": "GROUNDED",
+   "stated": 2000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:CashAndCashEquivalents@CurrentYearInstant",
+    "xbrl:jppfs_cor:CashAndCashEquivalents@Prior1YearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z3DU",
+   "id": "N032",
+   "result": "GROUNDED",
+   "stated": 626000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:CashAndCashEquivalents@CurrentYearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z3DU",
+   "id": "N033",
+   "result": null,
+   "stated": 535000000.0,
+   "pointers": []
+  },
+  {
+   "docID": "S100Z3DU",
+   "id": "N034",
+   "result": null,
+   "stated": 585000000.0,
+   "pointers": []
+  },
+  {
+   "docID": "S100Z3DU",
+   "id": "N035",
+   "result": "GROUNDED",
+   "stated": 75000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:DepreciationAndAmortizationOpeCF@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z3DU",
+   "id": "N036",
+   "result": "GROUNDED",
+   "stated": 137000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:ImpairmentLossEL@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z3DU",
+   "id": "N037",
+   "result": "VALUE_MISMATCH",
+   "stated": 771000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:ImpairmentLossEL@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z3DU",
+   "id": "N038",
+   "result": null,
+   "stated": 160000000.0,
+   "pointers": []
+  },
+  {
+   "docID": "S100Z3DU",
+   "id": "N039",
+   "result": null,
+   "stated": 52000000.0,
+   "pointers": []
+  },
+  {
+   "docID": "S100Z3DU",
+   "id": "N040",
+   "result": "GROUNDED",
+   "stated": 71000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:PurchaseOfPropertyPlantAndEquipmentInvCF@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z3DU",
+   "id": "N041",
+   "result": "GROUNDED",
+   "stated": 64000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:PaymentsForGuaranteeDepositsInvCF@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z3DU",
+   "id": "N042",
+   "result": "GROUNDED",
+   "stated": 693000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:NetCashProvidedByUsedInFinancingActivities@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z3DU",
+   "id": "N043",
+   "result": "GROUNDED",
+   "stated": 822000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:NetCashProvidedByUsedInFinancingActivities@Prior1YearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z3DU",
+   "id": "N044",
+   "result": "GROUNDED",
+   "stated": 300000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:ProceedsFromIssuanceOfBondsWithSubscriptionRightsToSharesFinCF@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z3DU",
+   "id": "N045",
+   "result": "GROUNDED",
+   "stated": 244000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:ProceedsFromIssuanceOfStockResultingFromExerciseOfSubscriptionRightsToSharesFinCF@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z3DU",
+   "id": "N046",
+   "result": "GROUNDED",
+   "stated": 158000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:ProceedsFromIssuanceOfCommonStockFinCF@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z3DU",
+   "id": "N047",
+   "result": "GROUNDED",
+   "stated": 10570000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:NetSales@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z3DU",
+   "id": "N048",
+   "result": "GROUNDED",
+   "stated": 635000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z3DU",
+   "id": "N049",
+   "result": "GROUNDED",
+   "stated": 618000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:OrdinaryIncome@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z3DU",
+   "id": "N050",
+   "result": "VALUE_MISMATCH",
+   "stated": 793000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:OrdinaryIncome@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z3DU",
+   "id": "N051",
+   "result": null,
+   "stated": 1000000.0,
+   "pointers": []
+  },
+  {
+   "docID": "S100Z3DU",
+   "id": "N052",
+   "result": null,
+   "stated": 2431000000.0,
+   "pointers": []
+  },
+  {
+   "docID": "S100Z3DU",
+   "id": "N053",
+   "result": "VALUE_MISMATCH",
+   "stated": 27000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:AccountsReceivableTrade@CurrentYearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z3DU",
+   "id": "N054",
+   "result": "GROUNDED",
+   "stated": 18000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:Goodwill@CurrentYearInstant",
+    "xbrl:jppfs_cor:Goodwill@Prior1YearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z3DU",
+   "id": "N055",
+   "result": "GROUNDED",
+   "stated": 20000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:GuaranteeDepositsIOA@CurrentYearInstant",
+    "xbrl:jppfs_cor:GuaranteeDepositsIOA@Prior1YearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z3DU",
+   "id": "N056",
+   "result": "GROUNDED",
+   "stated": 66000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:BuildingsAndStructuresNet@CurrentYearInstant",
+    "xbrl:jppfs_cor:BuildingsAndStructuresNet@Prior1YearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z3DU",
+   "id": "N057",
+   "result": "VALUE_MISMATCH",
+   "stated": 259000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:Liabilities@CurrentYearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z3DU",
+   "id": "N058",
+   "result": "GROUNDED",
+   "stated": 2369000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:Liabilities@CurrentYearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z3DU",
+   "id": "N059",
+   "result": "VALUE_MISMATCH",
+   "stated": 247000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:SubscriptionRightsToShares@CurrentYearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z3DU",
+   "id": "N060",
+   "result": "GROUNDED",
+   "stated": 61000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:AccountsPayableOther@CurrentYearInstant",
+    "xbrl:jppfs_cor:AccountsPayableOther@Prior1YearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z3DU",
+   "id": "N061",
+   "result": "GROUNDED",
+   "stated": 78000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:ShortTermLoansPayable@CurrentYearInstant",
+    "xbrl:jppfs_cor:ShortTermLoansPayable@Prior1YearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z3DU",
+   "id": "N062",
+   "result": "VALUE_MISMATCH",
+   "stated": 257000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:NetAssets@CurrentYearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z3DU",
+   "id": "N063",
+   "result": "GROUNDED",
+   "stated": 62000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:NetAssets@CurrentYearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z3DU",
+   "id": "N064",
+   "result": null,
+   "stated": 793000000.0,
+   "pointers": []
+  },
+  {
+   "docID": "S100Z3DU",
+   "id": "N065",
+   "result": "VALUE_MISMATCH",
+   "stated": 543000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:ShareholdersEquity@CurrentYearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z4R8",
+   "id": "N001",
+   "result": "GROUNDED",
+   "stated": 46172000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:Assets@CurrentYearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z4R8",
+   "id": "N002",
+   "result": "GROUNDED",
+   "stated": 2943000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:Assets@CurrentYearInstant",
+    "xbrl:jppfs_cor:Assets@Prior1YearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z4R8",
+   "id": "N003",
+   "result": "GROUNDED",
+   "stated": 12035000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:CurrentAssets@CurrentYearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z4R8",
+   "id": "N004",
+   "result": "GROUNDED",
+   "stated": 404000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:CurrentAssets@CurrentYearInstant",
+    "xbrl:jppfs_cor:CurrentAssets@Prior1YearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z4R8",
+   "id": "N005",
+   "result": "GROUNDED",
+   "stated": 34136000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:NoncurrentAssets@CurrentYearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z4R8",
+   "id": "N006",
+   "result": "GROUNDED",
+   "stated": 2539000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:NoncurrentAssets@CurrentYearInstant",
+    "xbrl:jppfs_cor:NoncurrentAssets@Prior1YearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z4R8",
+   "id": "N007",
+   "result": "GROUNDED",
+   "stated": 9200000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:CurrentLiabilities@CurrentYearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z4R8",
+   "id": "N008",
+   "result": "GROUNDED",
+   "stated": 621000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:CurrentLiabilities@CurrentYearInstant",
+    "xbrl:jppfs_cor:CurrentLiabilities@Prior1YearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z4R8",
+   "id": "N009",
+   "result": "GROUNDED",
+   "stated": 5924000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:NoncurrentLiabilities@CurrentYearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z4R8",
+   "id": "N010",
+   "result": "GROUNDED",
+   "stated": 193000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:NoncurrentLiabilities@CurrentYearInstant",
+    "xbrl:jppfs_cor:NoncurrentLiabilities@Prior1YearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z4R8",
+   "id": "N011",
+   "result": "GROUNDED",
+   "stated": 31047000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:NetAssets@CurrentYearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z4R8",
+   "id": "N012",
+   "result": "GROUNDED",
+   "stated": 2515000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:NetAssets@CurrentYearInstant",
+    "xbrl:jppfs_cor:NetAssets@Prior1YearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z4R8",
+   "id": "N014",
+   "result": "GROUNDED",
+   "stated": 53021000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:NetSales@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z4R8",
+   "id": "N016",
+   "result": "VALUE_MISMATCH",
+   "stated": 50218000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:CostOfSales@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z4R8",
+   "id": "N017",
+   "result": "GROUNDED",
+   "stated": 239000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration",
+    "xbrl:jppfs_cor:OperatingIncome@Prior1YearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z4R8",
+   "id": "N018",
+   "result": "GROUNDED",
+   "stated": 2802000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z4R8",
+   "id": "N019",
+   "result": "GROUNDED",
+   "stated": 245000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:OrdinaryIncome@CurrentYearDuration",
+    "xbrl:jppfs_cor:OrdinaryIncome@Prior1YearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z4R8",
+   "id": "N020",
+   "result": "GROUNDED",
+   "stated": 2989000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:OrdinaryIncome@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z4R8",
+   "id": "N021",
+   "result": "GROUNDED",
+   "stated": 68000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:ProfitLossAttributableToOwnersOfParent@CurrentYearDuration",
+    "xbrl:jppfs_cor:ProfitLossAttributableToOwnersOfParent@Prior1YearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z4R8",
+   "id": "N022",
+   "result": "GROUNDED",
+   "stated": 1822000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:ProfitLossAttributableToOwnersOfParent@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z4R8",
+   "id": "N024",
+   "result": "VALUE_MISMATCH",
+   "stated": 45382000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:NetSales@CurrentYearDuration_jpcrp030000-asr_E04189-000PhysicalDistributionReportableSegmentsMember"
+   ]
+  },
+  {
+   "docID": "S100Z4R8",
+   "id": "N025",
+   "result": null,
+   "stated": 3283000000.0,
+   "pointers": []
+  },
+  {
+   "docID": "S100Z4R8",
+   "id": "N028",
+   "result": "VALUE_MISMATCH",
+   "stated": 2730000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:NetSales@CurrentYearDuration_jpcrp030000-asr_E04189-000OnSiteOperationsAndWarehouseReportableSegmentsMember"
+   ]
+  },
+  {
+   "docID": "S100Z4R8",
+   "id": "N029",
+   "result": null,
+   "stated": 676000000.0,
+   "pointers": []
+  },
+  {
+   "docID": "S100Z4R8",
+   "id": "N032",
+   "result": "VALUE_MISMATCH",
+   "stated": 4909000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:NetSales@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z4R8",
+   "id": "N033",
+   "result": "VALUE_MISMATCH",
+   "stated": 947000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z4R8",
+   "id": "N035",
+   "result": "GROUNDED",
+   "stated": 235000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:CashAndCashEquivalents@CurrentYearInstant",
+    "xbrl:jppfs_cor:CashAndCashEquivalents@Prior1YearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z4R8",
+   "id": "N036",
+   "result": "GROUNDED",
+   "stated": 5738000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:CashAndCashEquivalents@CurrentYearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z4R8",
+   "id": "N037",
+   "result": null,
+   "stated": 5639000000.0,
+   "pointers": []
+  },
+  {
+   "docID": "S100Z4R8",
+   "id": "N038",
+   "result": null,
+   "stated": 1460000000.0,
+   "pointers": []
+  },
+  {
+   "docID": "S100Z4R8",
+   "id": "N039",
+   "result": "GROUNDED",
+   "stated": 873000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:IncomeTaxesPaidOpeCF@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z4R8",
+   "id": "N040",
+   "result": "GROUNDED",
+   "stated": 333000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:IncreaseDecreaseInNetDefinedBenefitLiabilityOpeCF@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z4R8",
+   "id": "N041",
+   "result": "VALUE_MISMATCH",
+   "stated": 302000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:IncreaseDecreaseInNetDefinedBenefitLiabilityOpeCF@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z4R8",
+   "id": "N042",
+   "result": "GROUNDED",
+   "stated": 448000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:IncreaseDecreaseInNotesAndAccountsPayableTradeOpeCF@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z4R8",
+   "id": "N043",
+   "result": "GROUNDED",
+   "stated": 3543000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:DepreciationAndAmortizationOpeCF@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z4R8",
+   "id": "N044",
+   "result": "GROUNDED",
+   "stated": 2920000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:IncomeBeforeIncomeTaxes@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z4R8",
+   "id": "N045",
+   "result": "GROUNDED",
+   "stated": 5144000000.0,
+   "pointers": [
+    "xbrl:jpcrp_cor:NetCashProvidedByUsedInInvestingActivitiesSummaryOfBusinessResults@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z4R8",
+   "id": "N046",
+   "result": "GROUNDED",
+   "stated": 1857000000.0,
+   "pointers": [
+    "xbrl:jpcrp_cor:NetCashProvidedByUsedInInvestingActivitiesSummaryOfBusinessResults@CurrentYearDuration",
+    "xbrl:jpcrp_cor:NetCashProvidedByUsedInInvestingActivitiesSummaryOfBusinessResults@Prior1YearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z4R8",
+   "id": "N047",
+   "result": "GROUNDED",
+   "stated": 5019000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:PurchaseOfPropertyPlantAndEquipmentInvCF@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z4R8",
+   "id": "N048",
+   "result": "GROUNDED",
+   "stated": 260000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:NetCashProvidedByUsedInFinancingActivities@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z4R8",
+   "id": "N049",
+   "result": "GROUNDED",
+   "stated": 721000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:NetCashProvidedByUsedInFinancingActivities@CurrentYearDuration",
+    "xbrl:jppfs_cor:NetCashProvidedByUsedInFinancingActivities@Prior1YearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z4R8",
+   "id": "N050",
+   "result": "VALUE_MISMATCH",
+   "stated": 100000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:ShortTermLoansPayable@CurrentYearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z4R8",
+   "id": "N051",
+   "result": "GROUNDED",
+   "stated": 40000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:RepaymentOfLongTermLoansPayableFinCF@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z4R8",
+   "id": "N052",
+   "result": "GROUNDED",
+   "stated": 100000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:CashDividendsPaidFinCF@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z4R8",
+   "id": "N053",
+   "result": "GROUNDED",
+   "stated": 46172000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:Assets@CurrentYearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z4R8",
+   "id": "N054",
+   "result": "GROUNDED",
+   "stated": 2943000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:Assets@CurrentYearInstant",
+    "xbrl:jppfs_cor:Assets@Prior1YearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z4R8",
+   "id": "N055",
+   "result": "GROUNDED",
+   "stated": 53021000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:NetSales@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z4R8",
+   "id": "N056",
+   "result": "GROUNDED",
+   "stated": 849000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:NetSales@CurrentYearDuration",
+    "xbrl:jppfs_cor:NetSales@Prior1YearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z4R8",
+   "id": "N057",
+   "result": "GROUNDED",
+   "stated": 1822000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:ProfitLossAttributableToOwnersOfParent@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z4R8",
+   "id": "N058",
+   "result": "GROUNDED",
+   "stated": 68000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:ProfitLossAttributableToOwnersOfParent@CurrentYearDuration",
+    "xbrl:jppfs_cor:ProfitLossAttributableToOwnersOfParent@Prior1YearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z4R8",
+   "id": "N059",
+   "result": "GROUNDED",
+   "stated": 5738000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:CashAndCashEquivalents@CurrentYearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z3CI",
+   "id": "N001",
+   "result": "GROUNDED",
+   "stated": 18427753000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:NetSales@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z3CI",
+   "id": "N003",
+   "result": "VALUE_MISMATCH",
+   "stated": 248000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:RetirementBenefitExpensesSGA@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z3CI",
+   "id": "N004",
+   "result": "GROUNDED",
+   "stated": 996178000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z3CI",
+   "id": "N006",
+   "result": "GROUNDED",
+   "stated": 1033196000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:OrdinaryIncome@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z3CI",
+   "id": "N008",
+   "result": "GROUNDED",
+   "stated": 679803000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:ProfitLossAttributableToOwnersOfParent@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z3CI",
+   "id": "N010",
+   "result": "GROUNDED",
+   "stated": 10334926000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:NetSales@CurrentYearDuration_jpcrp030000-asr_E30164-000LearningDesignSegmentReportableSegmentMember"
+   ]
+  },
+  {
+   "docID": "S100Z3CI",
+   "id": "N012",
+   "result": "GROUNDED",
+   "stated": 2179800000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration_jpcrp030000-asr_E30164-000LearningDesignSegmentReportableSegmentMember"
+   ]
+  },
+  {
+   "docID": "S100Z3CI",
+   "id": "N014",
+   "result": "GROUNDED",
+   "stated": 8092827000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:NetSales@CurrentYearDuration_jpcrp030000-asr_E30164-000TimeDesignSegmentReportableSegmentMember"
+   ]
+  },
+  {
+   "docID": "S100Z3CI",
+   "id": "N016",
+   "result": "GROUNDED",
+   "stated": 469565000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration_jpcrp030000-asr_E30164-000TimeDesignSegmentReportableSegmentMember"
+   ]
+  },
+  {
+   "docID": "S100Z3CI",
+   "id": "N018",
+   "result": "VALUE_MISMATCH",
+   "stated": 380642000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:CashAndCashEquivalents@CurrentYearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z3CI",
+   "id": "N019",
+   "result": "GROUNDED",
+   "stated": 2040490000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:CashAndCashEquivalents@CurrentYearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z3CI",
+   "id": "N020",
+   "result": null,
+   "stated": 188924000.0,
+   "pointers": []
+  },
+  {
+   "docID": "S100Z3CI",
+   "id": "N021",
+   "result": null,
+   "stated": 576072000.0,
+   "pointers": []
+  },
+  {
+   "docID": "S100Z3CI",
+   "id": "N022",
+   "result": "GROUNDED",
+   "stated": 981945000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:IncomeBeforeIncomeTaxes@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z3CI",
+   "id": "N023",
+   "result": "GROUNDED",
+   "stated": 642880000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:DepreciationAndAmortizationOpeCF@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z3CI",
+   "id": "N024",
+   "result": "GROUNDED",
+   "stated": 3336000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:IncreaseDecreaseInProvisionForBonusesOpeCF@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z3CI",
+   "id": "N025",
+   "result": "GROUNDED",
+   "stated": -294434000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:IncreaseDecreaseInNetDefinedBenefitLiabilityOpeCF@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z3CI",
+   "id": "N026",
+   "result": "GROUNDED",
+   "stated": -372447000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:DecreaseIncreaseInNotesAndAccountsReceivableTradeOpeCF@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z3CI",
+   "id": "N027",
+   "result": "VALUE_MISMATCH",
+   "stated": -419590000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:DecreaseIncreaseInNotesAndAccountsReceivableTradeOpeCF@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z3CI",
+   "id": "N028",
+   "result": "GROUNDED",
+   "stated": -73093000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:IncreaseDecreaseInNotesAndAccountsPayableTradeOpeCF@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z3CI",
+   "id": "N029",
+   "result": "GROUNDED",
+   "stated": -101781000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:IncomeTaxesPaidRefundOpeCF@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z3CI",
+   "id": "N030",
+   "result": null,
+   "stated": 629754000.0,
+   "pointers": []
+  },
+  {
+   "docID": "S100Z3CI",
+   "id": "N031",
+   "result": null,
+   "stated": 724528000.0,
+   "pointers": []
+  },
+  {
+   "docID": "S100Z3CI",
+   "id": "N032",
+   "result": "GROUNDED",
+   "stated": -79179000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:PurchaseOfPropertyPlantAndEquipmentInvCF@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z3CI",
+   "id": "N033",
+   "result": "GROUNDED",
+   "stated": -531134000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:PurchaseOfIntangibleAssetsInvCF@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z3CI",
+   "id": "N034",
+   "result": null,
+   "stated": 58600000.0,
+   "pointers": []
+  },
+  {
+   "docID": "S100Z3CI",
+   "id": "N035",
+   "result": null,
+   "stated": 37459000.0,
+   "pointers": []
+  },
+  {
+   "docID": "S100Z3CI",
+   "id": "N036",
+   "result": "GROUNDED",
+   "stated": 3600000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:IncreaseInShortTermLoansPayableFinCF@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z3CI",
+   "id": "N037",
+   "result": "GROUNDED",
+   "stated": -3400000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:DecreaseInShortTermLoansPayableFinCF@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z3CI",
+   "id": "N038",
+   "result": "GROUNDED",
+   "stated": -62650000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:CashDividendsPaidFinCF@Prior1YearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z3CI",
+   "id": "N040",
+   "result": "VALUE_MISMATCH",
+   "stated": 405148000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:Assets@CurrentYearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z3CI",
+   "id": "N041",
+   "result": "GROUNDED",
+   "stated": 12105074000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:Assets@CurrentYearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z3CI",
+   "id": "N042",
+   "result": "VALUE_MISMATCH",
+   "stated": 497959000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:CurrentAssets@CurrentYearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z3CI",
+   "id": "N043",
+   "result": "GROUNDED",
+   "stated": 7291560000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:CurrentAssets@CurrentYearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z3CI",
+   "id": "N044",
+   "result": "VALUE_MISMATCH",
+   "stated": 379380000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:CashAndDeposits@CurrentYearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z3CI",
+   "id": "N045",
+   "result": "VALUE_MISMATCH",
+   "stated": 75324000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:RawMaterialsAndSupplies@CurrentYearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z3CI",
+   "id": "N046",
+   "result": "GROUNDED",
+   "stated": 365114000.0,
+   "pointers": [
+    "xbrl:jpcrp030000-asr_E30164-000:AccountsReceivableTradeCA@CurrentYearInstant",
+    "xbrl:jpcrp030000-asr_E30164-000:AccountsReceivableTradeCA@Prior1YearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z3CI",
+   "id": "N047",
+   "result": "GROUNDED",
+   "stated": 419246000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:WorkInProcess@CurrentYearInstant",
+    "xbrl:jppfs_cor:WorkInProcess@Prior1YearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z3CI",
+   "id": "N048",
+   "result": "GROUNDED",
+   "stated": 92811000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:NoncurrentAssets@CurrentYearInstant",
+    "xbrl:jppfs_cor:NoncurrentAssets@Prior1YearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z3CI",
+   "id": "N049",
+   "result": "GROUNDED",
+   "stated": 4813513000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:NoncurrentAssets@CurrentYearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z3CI",
+   "id": "N050",
+   "result": "VALUE_MISMATCH",
+   "stated": 28243000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:Software@CurrentYearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z3CI",
+   "id": "N051",
+   "result": "VALUE_MISMATCH",
+   "stated": 150277000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:DeferredTaxAssets@CurrentYearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z3CI",
+   "id": "N052",
+   "result": "VALUE_MISMATCH",
+   "stated": 7457000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:AccumulatedDepreciationMachineryEquipmentAndVehicles@CurrentYearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z3CI",
+   "id": "N053",
+   "result": "VALUE_MISMATCH",
+   "stated": 215273000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:Liabilities@CurrentYearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z3CI",
+   "id": "N054",
+   "result": "GROUNDED",
+   "stated": 7651955000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:Liabilities@CurrentYearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z3CI",
+   "id": "N055",
+   "result": "VALUE_MISMATCH",
+   "stated": 151848000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:CurrentLiabilities@CurrentYearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z3CI",
+   "id": "N056",
+   "result": "GROUNDED",
+   "stated": 5105793000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:CurrentLiabilities@CurrentYearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z3CI",
+   "id": "N057",
+   "result": "GROUNDED",
+   "stated": 201256000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:NotesAndAccountsPayableTrade@CurrentYearInstant",
+    "xbrl:jppfs_cor:NotesAndAccountsPayableTrade@Prior1YearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z3CI",
+   "id": "N058",
+   "result": "GROUNDED",
+   "stated": 200000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:ShortTermLoansPayable@CurrentYearInstant",
+    "xbrl:jppfs_cor:ShortTermLoansPayable@Prior1YearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z3CI",
+   "id": "N059",
+   "result": "VALUE_MISMATCH",
+   "stated": 77000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:LongTermLoansPayable@CurrentYearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z3CI",
+   "id": "N060",
+   "result": "VALUE_MISMATCH",
+   "stated": 21927000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:AccountsPayableOther@CurrentYearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z3CI",
+   "id": "N061",
+   "result": "VALUE_MISMATCH",
+   "stated": 3336000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:ProvisionForBonuses@CurrentYearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z3CI",
+   "id": "N062",
+   "result": "GROUNDED",
+   "stated": 274345000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:ElectronicallyRecordedObligationsOperatingCL@CurrentYearInstant",
+    "xbrl:jppfs_cor:ElectronicallyRecordedObligationsOperatingCL@Prior1YearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z3CI",
+   "id": "N063",
+   "result": "VALUE_MISMATCH",
+   "stated": 367122000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:NoncurrentLiabilities@CurrentYearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z3CI",
+   "id": "N064",
+   "result": "GROUNDED",
+   "stated": 2546161000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:NoncurrentLiabilities@CurrentYearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z3CI",
+   "id": "N065",
+   "result": "GROUNDED",
+   "stated": 119720000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:LongTermLoansPayable@CurrentYearInstant",
+    "xbrl:jppfs_cor:LongTermLoansPayable@Prior1YearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z3CI",
+   "id": "N066",
+   "result": "VALUE_MISMATCH",
+   "stated": 294434000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:NetDefinedBenefitLiability@CurrentYearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z3CI",
+   "id": "N067",
+   "result": "GROUNDED",
+   "stated": 620422000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:NetAssets@CurrentYearInstant",
+    "xbrl:jppfs_cor:NetAssets@Prior1YearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z3CI",
+   "id": "N068",
+   "result": "GROUNDED",
+   "stated": 4453118000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:NetAssets@CurrentYearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z3CI",
+   "id": "N069",
+   "result": "GROUNDED",
+   "stated": 617153000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:RetainedEarnings@CurrentYearInstant",
+    "xbrl:jppfs_cor:RetainedEarnings@Prior1YearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z3CI",
+   "id": "N070",
+   "result": "GROUNDED",
+   "stated": 18427753000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:NetSales@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z3CI",
+   "id": "N072",
+   "result": null,
+   "stated": 10280472000.0,
+   "pointers": []
+  },
+  {
+   "docID": "S100Z3CI",
+   "id": "N074",
+   "result": "GROUNDED",
+   "stated": 9284294000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:SellingGeneralAndAdministrativeExpenses@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z3CI",
+   "id": "N076",
+   "result": "GROUNDED",
+   "stated": 2546148000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:SalariesAndAllowancesSGA@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z3CI",
+   "id": "N077",
+   "result": "VALUE_MISMATCH",
+   "stated": 446773000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:ProvisionForBonuses@CurrentYearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z3CI",
+   "id": "N078",
+   "result": "GROUNDED",
+   "stated": 731815000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:SubcontractExpensesSGA@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z3CI",
+   "id": "N079",
+   "result": "GROUNDED",
+   "stated": 996178000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z3CI",
+   "id": "N081",
+   "result": "GROUNDED",
+   "stated": 56105000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:NonOperatingIncome@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z3CI",
+   "id": "N083",
+   "result": "GROUNDED",
+   "stated": 12609000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:RentIncomeNOI@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z3CI",
+   "id": "N084",
+   "result": "VALUE_MISMATCH",
+   "stated": 15250000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:RentIncomeNOI@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z3CI",
+   "id": "N085",
+   "result": "GROUNDED",
+   "stated": 19087000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:NonOperatingExpenses@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z3CI",
+   "id": "N087",
+   "result": "GROUNDED",
+   "stated": 13043000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:InterestExpensesNOE@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z3CI",
+   "id": "N088",
+   "result": "VALUE_MISMATCH",
+   "stated": 6000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:InterestExpensesNOE@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z3CI",
+   "id": "N089",
+   "result": "GROUNDED",
+   "stated": 1033196000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:OrdinaryIncome@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z3CI",
+   "id": "N091",
+   "result": "GROUNDED",
+   "stated": 51260000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:ExtraordinaryLoss@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z3CI",
+   "id": "N093",
+   "result": "GROUNDED",
+   "stated": 19745000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:ImpairmentLossEL@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z3CI",
+   "id": "N094",
+   "result": "GROUNDED",
+   "stated": 981945000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:IncomeBeforeIncomeTaxes@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z3CI",
+   "id": "N096",
+   "result": null,
+   "stated": 302141000.0,
+   "pointers": []
+  },
+  {
+   "docID": "S100Z3CI",
+   "id": "N097",
+   "result": null,
+   "stated": 127095000.0,
+   "pointers": []
+  },
+  {
+   "docID": "S100Z3CI",
+   "id": "N098",
+   "result": "GROUNDED",
+   "stated": 679803000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:ProfitLossAttributableToOwnersOfParent@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z461",
+   "id": "N003",
+   "result": "VALUE_MISMATCH",
+   "stated": 22833889000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:NetSales@CurrentYearDuration_jpcrp030000-asr_E37175-000MarketingBusinessMember"
+   ]
+  },
+  {
+   "docID": "S100Z461",
+   "id": "N005",
+   "result": null,
+   "stated": 2918001000.0,
+   "pointers": []
+  },
+  {
+   "docID": "S100Z461",
+   "id": "N007",
+   "result": "VALUE_MISMATCH",
+   "stated": 640909000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:GrossProfit@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z461",
+   "id": "N009",
+   "result": "VALUE_MISMATCH",
+   "stated": 853527000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:GainOnInvestmentsInPartnershipNOI@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z461",
+   "id": "N011",
+   "result": "VALUE_MISMATCH",
+   "stated": 809482000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:GainOnSalesOfSubsidiariesAndAffiliatesStocksEI@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z461",
+   "id": "N013",
+   "result": "GROUNDED",
+   "stated": 10637868000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:Assets@CurrentYearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z461",
+   "id": "N015",
+   "result": "VALUE_MISMATCH",
+   "stated": 2350665000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:CashAndDeposits@CurrentYearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z461",
+   "id": "N016",
+   "result": "GROUNDED",
+   "stated": 3880271000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:Liabilities@CurrentYearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z461",
+   "id": "N018",
+   "result": "GROUNDED",
+   "stated": 254436000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:LongTermLoansPayable@CurrentYearInstant",
+    "xbrl:jppfs_cor:LongTermLoansPayable@Prior1YearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z461",
+   "id": "N019",
+   "result": "GROUNDED",
+   "stated": 6757597000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:NetAssets@CurrentYearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z461",
+   "id": "N021",
+   "result": "GROUNDED",
+   "stated": 2011519000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:CapitalSurplus@CurrentYearInstant",
+    "xbrl:jppfs_cor:CapitalSurplus@Prior1YearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z461",
+   "id": "N022",
+   "result": "GROUNDED",
+   "stated": 809482000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:RetainedEarnings@CurrentYearInstant",
+    "xbrl:jppfs_cor:RetainedEarnings@Prior1YearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z461",
+   "id": "N023",
+   "result": "GROUNDED",
+   "stated": 5127904000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:CashAndCashEquivalents@CurrentYearInstant"
+   ]
+  },
+  {
+   "docID": "S100Z461",
+   "id": "N025",
+   "result": null,
+   "stated": 52592000.0,
+   "pointers": []
+  },
+  {
+   "docID": "S100Z461",
+   "id": "N026",
+   "result": null,
+   "stated": 893477000.0,
+   "pointers": []
+  },
+  {
+   "docID": "S100Z461",
+   "id": "N027",
+   "result": "GROUNDED",
+   "stated": 950508000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:IncomeBeforeIncomeTaxes@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z461",
+   "id": "N028",
+   "result": "GROUNDED",
+   "stated": 509570000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:DecreaseIncreaseInNotesAndAccountsReceivableTradeOpeCF@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z461",
+   "id": "N029",
+   "result": "GROUNDED",
+   "stated": 315538000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:IncomeTaxesPaidOpeCF@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z461",
+   "id": "N030",
+   "result": null,
+   "stated": 474989000.0,
+   "pointers": []
+  },
+  {
+   "docID": "S100Z461",
+   "id": "N031",
+   "result": null,
+   "stated": 114435000.0,
+   "pointers": []
+  },
+  {
+   "docID": "S100Z461",
+   "id": "N032",
+   "result": "GROUNDED",
+   "stated": 300000000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:ProceedsFromSalesOfStocksOfSubsidiariesAndAffiliatesInvCF@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z461",
+   "id": "N033",
+   "result": "GROUNDED",
+   "stated": 305599000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:ProceedsFromDistributionOfInvestmentInPartnershipsInvCF@CurrentYearDuration"
+   ]
+  },
+  {
+   "docID": "S100Z461",
+   "id": "N034",
+   "result": null,
+   "stated": 1928268000.0,
+   "pointers": []
+  },
+  {
+   "docID": "S100Z461",
+   "id": "N035",
+   "result": null,
+   "stated": 299589000.0,
+   "pointers": []
+  },
+  {
+   "docID": "S100Z461",
+   "id": "N036",
+   "result": "GROUNDED",
+   "stated": 1997660000.0,
+   "pointers": [
+    "xbrl:jppfs_cor:ProceedsFromIssuanceOfCommonStockFinCF@CurrentYearDuration"
+   ]
+  }
+ ]
+}
