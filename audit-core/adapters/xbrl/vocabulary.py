@@ -402,6 +402,14 @@ class Profile:
     # P19(2026-10-15 未明、誤りを通す率の網羅の測定で見つけた金額の許容の符号の欠陥)。
     # 切り捨ての帯を絶対値で当てる。P1〜P18 は False のまま(振る舞いは 1 行も変わらない)。
     truncate_on_magnitude: bool = False
+    # P20: 連結財務諸表が**無い**書類で、単体(NonConsolidatedMember)の枠を素の枠として
+    # 扱う。書類レベルで 1 度だけ決め、連結の枠に財務の要素が 1 種でも在れば落とさない
+    # (封 docs/CONSOLIDATION_P20_PLAN_2026-10-14.md §2)。
+    # 実装は instance.with_nonconsolidated_fallback / instance.plain_context で、
+    # 呼ぶのは recipes.build_raw_claims の 1 か所。**resolve.make_resolver ではない** ―
+    # 最初そこに置いたが、止める判定はもっと上流(facts_for → ctx_ok → plain_context)に
+    # 在り、変更 0 件と検出 0 件が同時に出た(結果 §1)。
+    nonconsolidated_fallback: bool = False
 
 
 P1 = Profile(
@@ -680,9 +688,14 @@ P18 = dataclasses.replace(P17, name="P18", pct_tolerance_from_decimals=True)
 # P19 = P18 + 切り捨ての帯を絶対値で当てる(計画 docs/P17_PLAN_2026-10-14.md §8)。
 P19 = dataclasses.replace(P18, name="P19", truncate_on_magnitude=True)
 
+# P20 = P16 + 連結財務諸表が無い書類で単体の枠を使う(封 docs/CONSOLIDATION_P20_PLAN_2026-10-14.md)。
+# **P17〜P19 の上には積まない。**P17 は未使用の 6 書類で効果 +0.0 ポイントだった
+# (docs/HOLDOUT_P17_RESULT_2026-10-14.md)ので、P16 を土台にする。
+P20 = dataclasses.replace(P16, name="P20", nonconsolidated_fallback=True)
+
 PROFILES = {"P1": P1, "P5F": P5F, "P6": P6, "P7": P7, "P8": P8, "P9": P9, "P10": P10, "P11": P11,
             "P12": P12, "P13": P13, "P14": P14, "P15": P15, "P16": P16, "P17": P17, "P18": P18,
-            "P19": P19}
+            "P19": P19, "P20": P20}
 
 # **既定 profile(人間の決定 2026-10-13、第 2 段階)。字で留める。**
 # 測定で採用候補にした P16(開発書類 183 件で 146/8/29、未使用 2 書類 217 件で E1' 66.8% / E2 8.2% / E3 27.2%)。

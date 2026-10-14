@@ -92,6 +92,9 @@ _DEFAULT_NEW_BEHAVIOR_TEST_FILENAMES = _LEGACY_BEHAVIOR_TEST_FILENAMES + (
     "test_registry_setup.py",
 )
 _GATE_ONLY_BEHAVIOR_TEST_FILENAMES = ("test_claim_layer.py",)
+# "p20" scope: P20(連結・単体の落とし込み)の 8 本だけが使う。**既定の scope には
+# 足さない** ― 足すと既存 81 本の確定した赤・緑が、新しい試験の都合で動きうる。
+_P20_BEHAVIOR_TEST_FILENAMES = ("test_p20.py",)
 
 _GOLDEN_TEST_FILENAMES = ("test_instrument3.py",)
 _GOLDEN_SUPPORT_FILENAMES = ("_instrument.py",)
@@ -111,7 +114,12 @@ _EXPECTATION_FILENAMES = ("core_expectation_1B.json", "core_expectation_5F.json"
                           "xbrl_probe.py",
                           "select_third_2026-10-01.py",
                           "fetch_allocated_2026-10-08.py",
-                          "fetch_new_draw_2026-10-09.py")
+                          "fetch_new_draw_2026-10-09.py",
+                          # P20(2026-10-14): test_p20.MeasuredResultTest が封の合格線に
+                          # 対する実測を読み、開いた書類が封じた「直し用 8 件」である
+                          # ことも照合する。
+                          "p20/result_2026-10-14.json",
+                          "holdout_p17/split_2026-10-14.json")
 
 
 def _scope_for(mutation):
@@ -125,6 +133,8 @@ def _scope_for(mutation):
     scope = mutation.get("scope", "default")
     if scope == "gate_only":
         return _GATE_ONLY_BEHAVIOR_TEST_FILENAMES, _GOLDEN_TEST_FILENAMES
+    if scope == "p20":
+        return _P20_BEHAVIOR_TEST_FILENAMES, ()
     if scope == "default":
         return _DEFAULT_NEW_BEHAVIOR_TEST_FILENAMES, _GOLDEN_TEST_FILENAMES
     raise ValueError("mutation %r: unknown scope %r" % (mutation["id"], scope))
@@ -163,7 +173,11 @@ def _build_tree(temp_root, behavior_filenames, golden_filenames):
     fixtures_dir = os.path.join(temp_root, "fixtures", "xbrl")
     os.makedirs(fixtures_dir)
     for name in _EXPECTATION_FILENAMES:
-        shutil.copyfile(os.path.join(_FIXTURES_XBRL_DIR, name), os.path.join(fixtures_dir, name))
+        dst = os.path.join(fixtures_dir, name)
+        # 下の階層("p20/result_....json" など)も写せるようにする。写さないと
+        # **全部の変異が「材料が無い」で同じ理由の赤になり、変異の測定が死ぬ**。
+        os.makedirs(os.path.dirname(dst), exist_ok=True)
+        shutil.copyfile(os.path.join(_FIXTURES_XBRL_DIR, name), dst)
 
     tests_dir = os.path.join(temp_root, "tests")
     os.makedirs(tests_dir)

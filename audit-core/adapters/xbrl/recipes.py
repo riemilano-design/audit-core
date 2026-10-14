@@ -1227,6 +1227,17 @@ def build_raw_claims(zb, profile, info=None):
     """
 
     inst = I.load_instance(zb)
+    # P20(封 docs/CONSOLIDATION_P20_PLAN_2026-10-14.md): 連結財務諸表が無い書類では、
+    # 単体の枠を素の枠として扱う。**判定はここで書類ごとに 1 度だけ行い、以降の全段が
+    # 同じ決定を見る**(主張ごとに決めると同じ書類で連結と単体が混ざる)。語彙の組み立て
+    # (``_label_subjects``・``_flow_items_by_base``)も素の枠で足切りするので、
+    # **それより前**に置かないと旗が半分しか効かない。
+    # 旗が偽か、連結の枠に財務の要素が 1 種でも在る書類では同じ辞書がそのまま返るので、
+    # 振る舞いは 1 行も変わらない。context の id は**書き換えない**(pointer が名乗る枠と
+    # 値の出どころを一致させる。別名を張ると「違う対象の数値を正しい根拠として扱う」に
+    # なる ― 2026-10-14 の人間の指示)。
+    inst["contexts"] = I.with_nonconsolidated_fallback(
+        inst["contexts"], inst["facts"], profile.nonconsolidated_fallback)
     if profile.label_vocabulary or profile.taxonomy_labels:
         # XBRL 直し §7/§7b/§8: 主語の一覧をラベルで直した profile で以降を回す
         # (``subject_of`` も他の関数も 1 行も変えない)。

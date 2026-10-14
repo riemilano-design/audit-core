@@ -1,0 +1,8 @@
+{
+ "head": "bf96cdb",
+ "pytest_passed": 1151,
+ "discover_ran": 1041,
+ "mutation_test_methods": 5,
+ "mutation_predicted": 88,
+ "mutation_misses": 1
+}

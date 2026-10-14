@@ -1,0 +1,34 @@
+{
+ "seal": "docs/HOLDOUT_SPLIT_SEAL_2026-10-14.md",
+ "seed_hex": "6a24d72",
+ "pool": 256,
+ "used": [
+  "S100YYQX",
+  "S100Z3LJ",
+  "S100Z3IZ",
+  "S100Z3H2",
+  "S100YXLE",
+  "S100Z3L6"
+ ],
+ "development": [
+  "S100Z55N",
+  "S100YZ4E",
+  "S100YUHC",
+  "S100Z3PS",
+  "S100YXGH",
+  "S100YYOS",
+  "S100Z3FB",
+  "S100Z5CH"
+ ],
+ "final_eval_sealed": [
+  "S100Z4LC",
+  "S100Z40H",
+  "S100Z46V",
+  "S100Z38F",
+  "S100Z3DU",
+  "S100Z4R8",
+  "S100Z3CI",
+  "S100Z461"
+ ],
+ "reserve_n": 234
+}
