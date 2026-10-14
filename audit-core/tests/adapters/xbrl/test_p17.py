@@ -30,8 +30,10 @@ class ProfileShapeTest(unittest.TestCase):
             self.assertFalse(p.segment_carry_to_result_sentence or p.external_revenue_for_sales
                              or p.subject_skip_before_cause_marker or p.loss_variants or p.prefer_net_when_labelled, name)
 
-    def test_default_profile_is_still_p16(self):
-        self.assertEqual(V.DEFAULT_PROFILE, "P16")
+    def test_default_profile_is_p20(self):
+        """2026-10-14 の人間の決定で P16 -> P20。"""
+
+        self.assertEqual(V.DEFAULT_PROFILE, "P20")
 
 
 class SegmentCarryTest(unittest.TestCase):

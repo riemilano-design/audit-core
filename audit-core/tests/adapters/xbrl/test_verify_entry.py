@@ -193,7 +193,7 @@ class OutputStabilityTest(unittest.TestCase):
             self.assertEqual(on_disk, VD.dumps(VD.verify_document(_read("S100Z4B6"))))
             data = json.loads(on_disk)
             self.assertEqual(data["profile"], V.DEFAULT_PROFILE)
-            self.assertEqual(data["profile"], "P16")
+            self.assertEqual(data["profile"], "P20")
 
 
 class SemanticMatchAgainstTheDevelopmentMeasurementTest(unittest.TestCase):

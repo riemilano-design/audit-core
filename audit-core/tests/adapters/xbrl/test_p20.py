@@ -396,10 +396,15 @@ class ProfileShapeTest(unittest.TestCase):
                 continue
             self.assertFalse(p.nonconsolidated_fallback, name)
 
-    def test_default_profile_is_still_p16(self):
-        """既定を変えるのは人間の決定(CLAUDE.md の委任されないもの)。"""
+    def test_default_profile_is_p20(self):
+        """既定を変えるのは人間の決定(CLAUDE.md の委任されないもの)。
 
-        self.assertEqual("P16", V.DEFAULT_PROFILE)
+        2026-10-14 に人間が P16 -> P20 を決めた。根拠は Q1・Q2・Q3 の 3 つの測定と独立監査 GO 2 回
+        (docs/FINAL_EVAL_8_RESULT_2026-10-14.md・docs/Q2_NONCONSOLIDATED_RESULT_2026-10-14.md)。
+        **engine 全体の品質合格ではない**(同じ 8 書類で E2/G = 11.6%、合格線 10% 未達)。
+        """
+
+        self.assertEqual("P20", V.DEFAULT_PROFILE)
 
 
 class WiringTest(unittest.TestCase):
