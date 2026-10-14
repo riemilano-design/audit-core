@@ -113,8 +113,14 @@ class WrittenEvidenceTest(unittest.TestCase):
         with io.open(path, encoding="utf-8") as fh:
             saved = json.load(fh)
         self.assertEqual(sorted(P.parse(GOOD)), sorted(saved), "欄の形が変わっている")
+        # **HEAD の値は字で固定しない。** 固定すると、文書を 1 行直すたびに
+        # 「撮り直す → 試験の字を直す → また撮り直す」で終わらない(2026-10-14 に気づいた)。
+        # 固定するのは**書き写しで間違えた数**だけにして、HEAD は形だけ見る。
+        # どの commit を測ったかは json と結果文書の両方に在り、
+        # `test_p20.SuiteEvidenceTest.test_the_frozen_head_is_the_one_the_document_names`
+        # が 2 つの一致を見る。
+        self.assertRegex(saved["head"], r"^[0-9a-f]{7,40}$")
         # 2026-10-14 の完走した 1 本の数(手で書き写していない)。
-        self.assertEqual("24580c0", saved["head"])
         self.assertEqual(1141, saved["pytest_passed"])
         self.assertEqual(1036, saved["discover_ran"])
         self.assertEqual(88, saved["mutation_predicted"])
