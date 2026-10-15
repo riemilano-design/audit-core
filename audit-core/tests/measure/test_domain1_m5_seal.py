@@ -162,7 +162,9 @@ class BreakDetectionTest(unittest.TestCase):
         self.doc = text(DOC)
 
     def test_the_rows_that_must_keep_working_are_named(self):
-        hit = [l for l in self.doc.splitlines() if "agree_6` で一致しなくなったら" in l]
+        # **§5 の表の行そのもの**を見る(追記が同じ字を引用するので、表の行に絞る)
+        hit = [l for l in self.doc.splitlines()
+               if l.startswith("|") and "agree_6` で一致しなくなったら" in l]
         self.assertEqual(len(hit), 1, hit)
         row = hit[0]
         for cid in MUST_KEEP:
