@@ -213,7 +213,7 @@ def main():
     if missing:
         print("席の回答が無い主張:", missing)
 
-    rec = {"purpose": "段 5 の採点(封 §7)。閾値は封じたもので、結果を見て変えていない",
+    rec = {"purpose": "段 6 の採点(封 §7)。閾値は封じたもので、結果を見て変えていない",
            "seal": "docs/DOMAIN1_M6_SEAL_2026-10-15.md",
            "scorable": n, "seats_agree_6": agree, "hold_total": hold_total,
            "E2_誤受理": e2, "lines": lines, "overall": overall,

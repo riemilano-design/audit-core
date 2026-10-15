@@ -102,7 +102,7 @@ def main():
                                           len(out["alias"]["unconfirmed"])))
     print("一意でない階層:", out["duplication"]["levels_not_unique"])
 
-    rec = {"purpose": "段 5 の接続の結果。**合否は採点の script で出す**",
+    rec = {"purpose": "段 6 の接続の結果。**合否は採点の script で出す**",
            "seal": "docs/DOMAIN1_M6_SEAL_2026-10-15.md",
            "engine": "measure/sheet_m5_engine_2026-10-15.py",
            "applied_times": 1,
