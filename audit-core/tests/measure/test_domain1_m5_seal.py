@@ -271,5 +271,88 @@ class FrozenTest(unittest.TestCase):
         self.assertIn("再採点しない", doc)
 
 
+class MaterialTest(unittest.TestCase):
+    """段 5 の材料。**生成の前に commit する**(封 §6・追記 2 の E)。"""
+
+    M5 = os.path.join(ROOT, "fixtures", "sheet", "m5_material_2026-10-15.json")
+    M4 = os.path.join(ROOT, "fixtures", "sheet", "m4_material_2026-10-15.json")
+
+    def setUp(self):
+        self.a = json.load(io.open(self.M4, encoding="utf-8"))
+        self.b = json.load(io.open(self.M5, encoding="utf-8"))
+
+    def test_the_instruction_text_is_identical_to_stage_four(self):
+        """**指示文の字は 1 文字も変えない。**変わるのは抜粋だけ。"""
+        mark = "----- 表(ここから) -----"
+        self.assertEqual(self.a["prompt"].split(mark)[0],
+                         self.b["prompt"].split(mark)[0])
+        self.assertTrue(self.b["prompt_identical_to_stage4"])
+
+    def test_the_extract_is_not_identical(self):
+        self.assertNotEqual(self.a["prompt"], self.b["prompt"])
+
+    def test_the_rule_is_mechanical_and_recorded(self):
+        self.assertIn("61 件目から 120 件目", self.b["rule"])
+        self.assertIn("内容で選ばない", self.b["rule"])
+
+    def test_the_same_whole_rows_are_still_included(self):
+        self.assertEqual(self.b["counts"]["表1_行"], self.a["counts"]["表1_行"])
+        self.assertEqual(self.b["counts"]["表2_行"], self.a["counts"]["表2_行"])
+        self.assertEqual(self.b["counts"]["表3_行"], 60)
+
+    def test_the_slice_accounts_are_recorded_before_generating(self):
+        self.assertEqual(self.b["counts"]["表3_の会計"], ["東京都一般会計"])
+
+    def test_the_limits_are_unchanged(self):
+        self.assertEqual(self.b["limits"], self.a["limits"])
+        self.assertLessEqual(self.b["extract_chars"], self.b["limits"]["extract_chars"])
+
+    def test_the_engine_side_is_still_withheld(self):
+        for w in ("engine の判定", "合否ラベル", "封の内容"):
+            self.assertIn(w, self.b["withheld"], w)
+
+    def test_one_run_only(self):
+        self.assertEqual(self.b["runs"], 1)
+
+
+class Addendum2Test(unittest.TestCase):
+    """追記 2 ― 人間が念押しした 3 点が、字で残っていること。"""
+
+    def setUp(self):
+        self.doc = text(DOC)
+
+    def test_the_experiment_measures_the_trade(self):
+        self.assertIn("誤接続を避ける代わりにどれだけ保留を増やすのか", self.doc)
+        self.assertIn("この 2 つを切り離して良い方だけを書かない", self.doc)
+
+    def test_a_short_denominator_is_not_rescued(self):
+        sec = section(self.doc, "### B.", "### C.")
+        self.assertIn("20 件未満なら「判定不能」", sec)
+        self.assertIn("**閾値や対象範囲を変更して救済しない。**", sec)
+        self.assertIn("母数を増やすために", sec)
+
+    def test_the_three_counts_are_reported_separately(self):
+        sec = section(self.doc, "### C.", "### D.")
+        for s in ("**接続数**", "**保留数**", "**対象外数**",
+                  "理由別の内訳を必ず付ける",
+                  "「E2 が 0 件だった」を単独で結論に書かない",
+                  "誤接続はしないが、ほとんど確かめられない道具"):
+            self.assertIn(s, sec, s)
+
+    def test_the_novelty_condition_is_kept(self):
+        sec = section(self.doc, "### D.", "### E.")
+        self.assertIn("`新規` が 10 件未満なら", sec)
+        self.assertIn("別の報告文で独立に確認した」とは表現しない", sec)
+        self.assertIn("同じ材料・似た報告文での再測定", sec)
+        self.assertIn("事後に報告文を作り直さない", sec)
+
+    def test_only_the_extract_range_moved_and_the_prompt_did_not(self):
+        sec = section(self.doc, "### E.")
+        self.assertIn("**指示文の字は 1 文字も変えない。**", sec)
+        self.assertIn("**61 件目から 120 件目**", sec)
+        self.assertIn("行を手で選ばない", sec)
+        self.assertIn("生成の前に commit する", sec)
+
+
 if __name__ == "__main__":
     unittest.main()
