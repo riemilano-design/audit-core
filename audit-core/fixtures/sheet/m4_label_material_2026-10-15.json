@@ -1,0 +1,62 @@
+{
+ "seal": "docs/DOMAIN1_M4_SEAL_2026-10-15.md",
+ "claims": 24,
+ "question": "以下に (A) 自治体の令和６年度決算の表の抜粋と、(B) ある報告文から抜き出した金額の一覧があります。\n(B) の各行について、その金額が (A) の表のどこの数かを答えてください。\n\n答える欄は 4 つです。\n  会計   … 表 1 の「会計別」、表 2・表 3 の「会計」に在る名前(例: 一般会計)\n  階層   … 会計 / 款 / 項 / 目 / 合計 のどれか\n  科目名 … 款名・項名・目名(会計そのものの数なら空欄)\n  列     … 歳入決算額 / 歳出決算額 / 差額 / 予算現額 / 支出済額 / 翌年度繰越額 / 不用額 / 計 のどれか\n\n表のどこの数とも決められない場合は、次のどちらかを書いてください。\n  根拠なし   … その金額が表に見当たらない\n  判定不能   … 文からはどれを指すか決められない(複数に当たる など)\n\n出力は JSON の配列だけにしてください。説明や前置きは書かないこと。各要素は次の形です。\n  {\"id\": \"R001\", \"会計\": \"一般会計\", \"階層\": \"会計\", \"科目名\": \"\", \"列\": \"歳出決算額\"}\n  {\"id\": \"R002\", \"verdict\": \"根拠なし\"}\n",
+ "banned_checked": [
+  "GROUNDED",
+  "VALUE_MISMATCH",
+  "UNVERIFIABLE",
+  "POINTER_NOT_FOUND",
+  "pointer",
+  "R-1",
+  "R-3",
+  "R-4",
+  "range_identified",
+  "value_match",
+  "封",
+  "合格",
+  "不合格",
+  "engine",
+  "照合結果",
+  "判定結果",
+  "正解"
+ ],
+ "seats": [
+  {
+   "seat": "seat1",
+   "model": "claude-sonnet-4-5",
+   "order": "そのまま"
+  },
+  {
+   "seat": "seat2",
+   "model": "claude-haiku-4-5",
+   "order": "逆順"
+  }
+ ],
+ "files": [
+  {
+   "seat": "seat1",
+   "path": "/private/tmp/claude-501/-Users-midoriko-Desktop-sgogi-coach/9b3d86ea-ed3b-407c-837e-4c2262a5b8e1/scratchpad/m4_label_seat1/task.txt",
+   "chars": 11783,
+   "first_id": "R001",
+   "last_id": "R024"
+  },
+  {
+   "seat": "seat2",
+   "path": "/private/tmp/claude-501/-Users-midoriko-Desktop-sgogi-coach/9b3d86ea-ed3b-407c-837e-4c2262a5b8e1/scratchpad/m4_label_seat2/task.txt",
+   "chars": 11783,
+   "first_id": "R024",
+   "last_id": "R001"
+  }
+ ],
+ "withheld": [
+  "engine の判定",
+  "pointer",
+  "状態",
+  "ルート",
+  "切り出した主語・列の手がかり",
+  "封",
+  "仕様",
+  "段 3 の結果"
+ ]
+}
