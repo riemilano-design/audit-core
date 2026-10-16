@@ -20,6 +20,7 @@ import importlib.util
 import io
 import json
 import os
+import subprocess
 import unittest
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -349,12 +350,48 @@ class OpportunityTest(unittest.TestCase):
 
 
 class BeforeGenerationTest(unittest.TestCase):
-    def test_20_no_report_yet(self):
-        for f in ("m9_report_2026-10-16.json", "m9_binds_2026-10-16.json",
-                  "m9_answers_seat1_2026-10-16.json",
-                  "m9_score_2026-10-16.json"):
-            self.assertFalse(os.path.exists(os.path.join(FX, f)),
-                             "生成より先に %s が在る" % f)
+    """**材料と機会が生成より先に commit されたこと。**
+
+    最初はこれを「報告文の file がまだ無い」で確かめていたが、**その性質は
+    生成した瞬間に偽になる**(実際に落ちた。同じ型を 1 セッションで 2 回)。
+    順序は **commit の順**で見る。
+    """
+
+    def _added_in(self, rel):
+        out = subprocess.check_output(
+            ["git", "log", "--diff-filter=A", "--format=%H", "--", rel],
+            cwd=ROOT).decode().split()
+        return out[-1] if out else None
+
+    def test_20_material_and_opportunity_came_before_the_report(self):
+        mats = [self._added_in("fixtures/sheet/m9_material_2026-10-16.json"),
+                self._added_in("fixtures/sheet/m9_opportunity_2026-10-16.json")]
+        self.assertTrue(all(mats), "材料・機会がまだ commit されていない")
+        for rel in ("fixtures/sheet/m9_report_2026-10-16.json",
+                    "fixtures/sheet/m9_binds_2026-10-16.json",
+                    "fixtures/sheet/m9_answers_seat1_2026-10-16.json",
+                    "fixtures/sheet/m9_score_2026-10-16.json"):
+            later = self._added_in(rel)
+            if later is None:
+                continue
+            for m in mats:
+                if m == later:
+                    self.fail("%s が材料と同じ commit に在る" % rel)
+                self.assertEqual(subprocess.call(
+                    ["git", "merge-base", "--is-ancestor", m, later], cwd=ROOT), 0,
+                    "%s が材料より先に commit されている" % rel)
+
+    def test_26_the_order_gate_has_teeth(self):
+        """**逆向きが偽であること。**両向きが真ならこの門は何も言っていない。"""
+        mat = self._added_in("fixtures/sheet/m9_material_2026-10-16.json")
+        rep = self._added_in("fixtures/sheet/m9_report_2026-10-16.json")
+        if mat is None or rep is None:
+            self.skipTest("まだ両方の工程が済んでいない")
+        self.assertEqual(subprocess.call(
+            ["git", "merge-base", "--is-ancestor", mat, rep], cwd=ROOT), 0)
+        self.assertNotEqual(subprocess.call(
+            ["git", "merge-base", "--is-ancestor", rep, mat], cwd=ROOT), 0,
+            "両向きが真 ― この門は順序を見ていない")
 
 
 if __name__ == "__main__":
