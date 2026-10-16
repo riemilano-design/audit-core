@@ -32,18 +32,18 @@
 
 ## §2 測った事実 ― **変更前**(試験は走らせず、収集だけ数えた)
 
-### §2-1 ディスク上の試験 file: **106 本**(**いまの数**。門を足すと増える)
+### §2-1 ディスク上の試験 file: **107 本**(**いまの数**。門を足すと増える)
 
 | ディレクトリ | file |
 |---|---|
-| `tests/measure` | 46 |
-| `tests/adapters/xbrl` | 23 |
+| `measure/tests` | 1 |
 | `tests/adapters/kokkai` | 11 |
 | `tests/adapters/shogi` | 8 |
+| `tests/adapters/xbrl` | 23 |
 | `tests/core` | 5 |
 | `tests/fixtures/xbrl` | 4 |
 | `tests/golden` | 4 |
-| `measure/tests` | 1 |
+| `tests/measure` | 51 |
 
 **この節だけは「いま」の数である**(門 `DocTest` が記録と突き合わせる)。
 下の §2-2 は**変更前の実測**で、後の記録と結び付けない。
