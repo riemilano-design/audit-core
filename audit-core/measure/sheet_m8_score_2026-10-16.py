@@ -191,8 +191,12 @@ def main():
     # 封 §4-1 の X-1〜X-4。**X-2 に入った主張が全部誤受理になる**という予測の照合。
     OPP = _mod("opp8_for_score", "sheet_m8_opportunity_2026-10-16.py")
     mat = json.load(io.open(MAT, encoding="utf-8"))
-    in_extract = {(norm(c["scope"]), norm(c["level"]), norm(c["parent"]),
-                   norm(c["name"]))
+    # **両側に同じ正規化を掛ける。**`norm(None)` は `None` を返すので、
+    # 空欄を `""` に畳んでから比べる(engine 側の鍵は空欄を `""` で持つ)。
+    def _k(scope, level, parent, name):
+        return tuple(norm(x) or "" for x in (scope, level, parent, name))
+
+    in_extract = {_k(c["scope"], c["level"], c["parent"], c["name"])
                   for c in OPP.cells_of(OPP.extract_of(mat))}
     x1 = x2 = x3 = x4 = 0
     x_detail = []
@@ -200,7 +204,7 @@ def main():
         if r["state"] != "GROUNDED" or r["engine_key6"] is None:
             continue
         k = r["engine_key6"][1]
-        inside = (k[0], k[1], k[2], k[3]) in in_extract
+        inside = _k(k[0], k[1], k[2], k[3]) in in_extract
         wrong = r["verdict"] in ("誤接続", "根拠なし/判定不能なのに接続した")
         if inside:
             x1 += 1
