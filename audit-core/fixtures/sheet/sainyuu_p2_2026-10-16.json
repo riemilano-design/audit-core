@@ -1,0 +1,595 @@
+{
+ "seal": "docs/DOMAIN1_SAIIRU_SEAL_2026-10-16.md",
+ "step": "P-2・P-3・P-4",
+ "min_independent": 3,
+ "rule": "款の行だけを数える。項・目・節は 6b(代数的に決まる)で落ちる ― その根拠の `款 = Σ項` を**この段で測った**",
+ "P-2 値の重複(6a で落ちた件数の合計)": 99,
+ "P-3 歳入側の款の数の分布": {
+  "5": 4,
+  "4": 9,
+  "9": 1,
+  "3": 3,
+  "8": 1
+ },
+ "P-4 3 本に達する会計": {
+  "count": 18,
+  "of": 18,
+  "accounts": [
+   "東京都と場会計",
+   "東京都中小企業設備導入等資金会計",
+   "東京都公債費会計",
+   "東京都国民健康保険事業会計",
+   "東京都地方消費税清算会計",
+   "東京都地方独立行政法人東京都立病院機構貸付等事業会計 ",
+   "東京都小笠原諸島生活再建資金会計",
+   "東京都工業用水道事業清算会計",
+   "東京都心身障害者扶養年金会計",
+   "東京都林業・木材産業改善資金助成会計",
+   "東京都母子父子福祉貸付資金会計",
+   "東京都沿岸漁業改善資金助成会計",
+   "東京都特別区財政調整会計",
+   "東京都用地会計",
+   "東京都臨海都市基盤整備事業会計",
+   "東京都都営住宅等事業会計",
+   "東京都都営住宅等保証金会計",
+   "東京都都市開発資金会計"
+  ]
+ },
+ "本数の分布(6 を当てたあと)": {
+  "5": 5,
+  "10": 1,
+  "4": 7,
+  "3": 2,
+  "6": 2,
+  "9": 1
+ },
+ "6b 列ごとの参考": {
+  "調定額": {
+   "holds": 91,
+   "checked": 96,
+   "drop": false
+  },
+  "予算現額と収入済額との比較": {
+   "holds": 57,
+   "checked": 96,
+   "drop": false
+  }
+ },
+ "6b 行ごとに落とした件数": {
+  "調定額 を検査": 96,
+  "調定額 を落とした": 91,
+  "比較 を検査": 96,
+  "比較 を落とした": 57
+ },
+ "6b 款 = Σ項": {
+  "holds": 480,
+  "checked": 480,
+  "all": true
+ },
+ "per_account": {
+  "東京都と場会計": {
+   "canonical": "と場会計",
+   "kan_count_sainyuu": 5,
+   "kan_count_saisyutu_side_existing": 1,
+   "sainyuu_hits_before_6": 20,
+   "sainyuu_kan_names": [
+    "使用料及手数料",
+    "繰入金",
+    "繰越金",
+    "諸収入",
+    "都債"
+   ],
+   "sainyuu_independent_new": 4,
+   "new_columns": [
+    "予算現額"
+   ],
+   "dropped_why": {
+    "6a 歳出側の値と一致": 6,
+    "決算書に同じ行が無い": 5,
+    "6b 代数的に決まる(行ごと)": 5,
+    "6d 値を持つ正本が 2 つ以上": 1
+   },
+   "i_dedup_dropped": [],
+   "existing_values": [
+    6423890408
+   ],
+   "merged_independent_total": 5,
+   "reaches_min": true
+  },
+  "東京都中小企業設備導入等資金会計": {
+   "canonical": "中小企業設備導入等資金会計",
+   "kan_count_sainyuu": 4,
+   "kan_count_saisyutu_side_existing": 1,
+   "sainyuu_hits_before_6": 16,
+   "sainyuu_kan_names": [
+    "事業収入",
+    "繰入金",
+    "繰越金",
+    "諸収入"
+   ],
+   "sainyuu_independent_new": 4,
+   "new_columns": [
+    "不納欠損額",
+    "予算現額",
+    "収入済額"
+   ],
+   "dropped_why": {
+    "決算書に同じ行が無い": 4,
+    "6b 代数的に決まる(行ごと)": 4,
+    "6a 歳出側の値と一致": 3,
+    "6d 値を持つ正本が 2 つ以上": 1
+   },
+   "i_dedup_dropped": [],
+   "existing_values": [
+    163193819
+   ],
+   "merged_independent_total": 5,
+   "reaches_min": true
+  },
+  "東京都公債費会計": {
+   "canonical": "公債費会計",
+   "kan_count_sainyuu": 4,
+   "kan_count_saisyutu_side_existing": 1,
+   "sainyuu_hits_before_6": 16,
+   "sainyuu_kan_names": [
+    "繰入金",
+    "諸収入",
+    "財産収入",
+    "都債"
+   ],
+   "sainyuu_independent_new": 4,
+   "new_columns": [
+    "予算現額"
+   ],
+   "dropped_why": {
+    "6a 歳出側の値と一致": 4,
+    "決算書に同じ行が無い": 4,
+    "6b 代数的に決まる(行ごと)": 4
+   },
+   "i_dedup_dropped": [],
+   "existing_values": [
+    1228850945405
+   ],
+   "merged_independent_total": 5,
+   "reaches_min": true
+  },
+  "東京都国民健康保険事業会計": {
+   "canonical": "国民健康保険事業会計",
+   "kan_count_sainyuu": 9,
+   "kan_count_saisyutu_side_existing": 1,
+   "sainyuu_hits_before_6": 36,
+   "sainyuu_kan_names": [
+    "共同事業交付金",
+    "出産育児交付金",
+    "分担金及負担金",
+    "前期高齢者交付金",
+    "国庫支出金",
+    "繰入金",
+    "繰越金",
+    "諸収入",
+    "財産収入"
+   ],
+   "sainyuu_independent_new": 9,
+   "new_columns": [
+    "予算現額"
+   ],
+   "dropped_why": {
+    "6a 歳出側の値と一致": 9,
+    "決算書に同じ行が無い": 9,
+    "6b 代数的に決まる(行ごと)": 9
+   },
+   "i_dedup_dropped": [],
+   "existing_values": [
+    1059438545244
+   ],
+   "merged_independent_total": 10,
+   "reaches_min": true
+  },
+  "東京都地方消費税清算会計": {
+   "canonical": "地方消費税清算会計",
+   "kan_count_sainyuu": 3,
+   "kan_count_saisyutu_side_existing": 1,
+   "sainyuu_hits_before_6": 12,
+   "sainyuu_kan_names": [
+    "地方消費税",
+    "繰越金",
+    "諸収入"
+   ],
+   "sainyuu_independent_new": 3,
+   "new_columns": [
+    "予算現額"
+   ],
+   "dropped_why": {
+    "6a 歳出側の値と一致": 3,
+    "決算書に同じ行が無い": 3,
+    "6b 代数的に決まる(行ごと)": 3
+   },
+   "i_dedup_dropped": [],
+   "existing_values": [
+    2550518428236
+   ],
+   "merged_independent_total": 4,
+   "reaches_min": true
+  },
+  "東京都地方独立行政法人東京都立病院機構貸付等事業会計 ": {
+   "canonical": "地方独立行政法人東京都立病院機構貸付等事業会計",
+   "kan_count_sainyuu": 4,
+   "kan_count_saisyutu_side_existing": 1,
+   "sainyuu_hits_before_6": 16,
+   "sainyuu_kan_names": [
+    "事業収入",
+    "繰入金",
+    "諸収入",
+    "都債"
+   ],
+   "sainyuu_independent_new": 2,
+   "new_columns": [
+    "予算現額"
+   ],
+   "dropped_why": {
+    "6a 歳出側の値と一致": 8,
+    "決算書に同じ行が無い": 4,
+    "6b 代数的に決まる(行ごと)": 4
+   },
+   "i_dedup_dropped": [],
+   "existing_values": [
+    28176442826
+   ],
+   "merged_independent_total": 3,
+   "reaches_min": true
+  },
+  "東京都小笠原諸島生活再建資金会計": {
+   "canonical": "小笠原諸島生活再建資金会計",
+   "kan_count_sainyuu": 3,
+   "kan_count_saisyutu_side_existing": 1,
+   "sainyuu_hits_before_6": 12,
+   "sainyuu_kan_names": [
+    "事業収入",
+    "繰越金",
+    "諸収入"
+   ],
+   "sainyuu_independent_new": 3,
+   "new_columns": [
+    "予算現額"
+   ],
+   "dropped_why": {
+    "6a 歳出側の値と一致": 3,
+    "決算書に同じ行が無い": 3,
+    "6b 代数的に決まる(行ごと)": 3
+   },
+   "i_dedup_dropped": [],
+   "existing_values": [
+    0
+   ],
+   "merged_independent_total": 4,
+   "reaches_min": true
+  },
+  "東京都工業用水道事業清算会計": {
+   "canonical": "工業用水道事業清算会計",
+   "kan_count_sainyuu": 4,
+   "kan_count_saisyutu_side_existing": 1,
+   "sainyuu_hits_before_6": 16,
+   "sainyuu_kan_names": [
+    "使用料及手数料",
+    "繰越金",
+    "諸収入",
+    "財産収入"
+   ],
+   "sainyuu_independent_new": 3,
+   "new_columns": [
+    "予算現額"
+   ],
+   "dropped_why": {
+    "6a 歳出側の値と一致": 6,
+    "6d 値を持つ正本が 2 つ以上": 1,
+    "決算書に同じ行が無い": 4,
+    "6b 代数的に決まる(行ごと)": 4
+   },
+   "i_dedup_dropped": [],
+   "existing_values": [
+    3643799407
+   ],
+   "merged_independent_total": 4,
+   "reaches_min": true
+  },
+  "東京都心身障害者扶養年金会計": {
+   "canonical": "心身障害者扶養年金会計",
+   "kan_count_sainyuu": 4,
+   "kan_count_saisyutu_side_existing": 1,
+   "sainyuu_hits_before_6": 16,
+   "sainyuu_kan_names": [
+    "繰入金",
+    "繰越金",
+    "諸収入",
+    "財産収入"
+   ],
+   "sainyuu_independent_new": 3,
+   "new_columns": [
+    "予算現額",
+    "収入済額"
+   ],
+   "dropped_why": {
+    "6a 歳出側の値と一致": 5,
+    "決算書に同じ行が無い": 4,
+    "6b 代数的に決まる(行ごと)": 4,
+    "6d 値を持つ正本が 2 つ以上": 2
+   },
+   "i_dedup_dropped": [],
+   "existing_values": [
+    2866560633
+   ],
+   "merged_independent_total": 4,
+   "reaches_min": true
+  },
+  "東京都林業・木材産業改善資金助成会計": {
+   "canonical": "林業・木材産業改善資金助成会計",
+   "kan_count_sainyuu": 4,
+   "kan_count_saisyutu_side_existing": 1,
+   "sainyuu_hits_before_6": 16,
+   "sainyuu_kan_names": [
+    "事業収入",
+    "繰入金",
+    "繰越金",
+    "諸収入"
+   ],
+   "sainyuu_independent_new": 3,
+   "new_columns": [
+    "予算現額",
+    "収入済額"
+   ],
+   "dropped_why": {
+    "6a 歳出側の値と一致": 6,
+    "決算書に同じ行が無い": 4,
+    "6b 代数的に決まる(行ごと)": 4,
+    "6d 値を持つ正本が 2 つ以上": 2
+   },
+   "i_dedup_dropped": [],
+   "existing_values": [
+    55500000
+   ],
+   "merged_independent_total": 4,
+   "reaches_min": true
+  },
+  "東京都母子父子福祉貸付資金会計": {
+   "canonical": "母子父子福祉貸付資金会計",
+   "kan_count_sainyuu": 4,
+   "kan_count_saisyutu_side_existing": 1,
+   "sainyuu_hits_before_6": 16,
+   "sainyuu_kan_names": [
+    "事業収入",
+    "繰入金",
+    "繰越金",
+    "諸収入"
+   ],
+   "sainyuu_independent_new": 4,
+   "new_columns": [
+    "不納欠損額",
+    "予算現額"
+   ],
+   "dropped_why": {
+    "決算書に同じ行が無い": 4,
+    "6b 代数的に決まる(行ごと)": 4,
+    "6a 歳出側の値と一致": 3
+   },
+   "i_dedup_dropped": [],
+   "existing_values": [
+    6690674399
+   ],
+   "merged_independent_total": 5,
+   "reaches_min": true
+  },
+  "東京都沿岸漁業改善資金助成会計": {
+   "canonical": "沿岸漁業改善資金助成会計",
+   "kan_count_sainyuu": 4,
+   "kan_count_saisyutu_side_existing": 1,
+   "sainyuu_hits_before_6": 16,
+   "sainyuu_kan_names": [
+    "事業収入",
+    "繰入金",
+    "繰越金",
+    "諸収入"
+   ],
+   "sainyuu_independent_new": 3,
+   "new_columns": [
+    "予算現額",
+    "収入済額"
+   ],
+   "dropped_why": {
+    "6a 歳出側の値と一致": 5,
+    "決算書に同じ行が無い": 4,
+    "6b 代数的に決まる(行ごと)": 4,
+    "6d 値を持つ正本が 2 つ以上": 2
+   },
+   "i_dedup_dropped": [],
+   "existing_values": [
+    44385
+   ],
+   "merged_independent_total": 4,
+   "reaches_min": true
+  },
+  "東京都特別区財政調整会計": {
+   "canonical": "特別区財政調整会計",
+   "kan_count_sainyuu": 3,
+   "kan_count_saisyutu_side_existing": 1,
+   "sainyuu_hits_before_6": 12,
+   "sainyuu_kan_names": [
+    "繰入金",
+    "繰越金",
+    "諸収入"
+   ],
+   "sainyuu_independent_new": 2,
+   "new_columns": [
+    "予算現額"
+   ],
+   "dropped_why": {
+    "6a 歳出側の値と一致": 6,
+    "決算書に同じ行が無い": 3,
+    "6b 代数的に決まる(行ごと)": 3
+   },
+   "i_dedup_dropped": [
+    {
+     "name": "諸収入",
+     "why": "同じ値 10000 を既に数えている"
+    }
+   ],
+   "existing_values": [
+    1259932193000
+   ],
+   "merged_independent_total": 3,
+   "reaches_min": true
+  },
+  "東京都用地会計": {
+   "canonical": "用地会計",
+   "kan_count_sainyuu": 5,
+   "kan_count_saisyutu_side_existing": 1,
+   "sainyuu_hits_before_6": 20,
+   "sainyuu_kan_names": [
+    "繰入金",
+    "繰越金",
+    "諸収入",
+    "財産収入",
+    "都債"
+   ],
+   "sainyuu_independent_new": 5,
+   "new_columns": [
+    "予算現額"
+   ],
+   "dropped_why": {
+    "6a 歳出側の値と一致": 5,
+    "決算書に同じ行が無い": 5,
+    "6b 代数的に決まる(行ごと)": 5
+   },
+   "i_dedup_dropped": [],
+   "existing_values": [
+    4772227806
+   ],
+   "merged_independent_total": 6,
+   "reaches_min": true
+  },
+  "東京都臨海都市基盤整備事業会計": {
+   "canonical": "臨海都市基盤整備事業会計",
+   "kan_count_sainyuu": 5,
+   "kan_count_saisyutu_side_existing": 1,
+   "sainyuu_hits_before_6": 20,
+   "sainyuu_kan_names": [
+    "使用料及手数料",
+    "分担金及負担金",
+    "繰入金",
+    "繰越金",
+    "諸収入"
+   ],
+   "sainyuu_independent_new": 4,
+   "new_columns": [
+    "予算現額",
+    "収入済額"
+   ],
+   "dropped_why": {
+    "6a 歳出側の値と一致": 7,
+    "6d 値を持つ正本が 2 つ以上": 1,
+    "決算書に同じ行が無い": 5,
+    "6b 代数的に決まる(行ごと)": 5
+   },
+   "i_dedup_dropped": [],
+   "existing_values": [
+    405774394
+   ],
+   "merged_independent_total": 5,
+   "reaches_min": true
+  },
+  "東京都都営住宅等事業会計": {
+   "canonical": "都営住宅等事業会計",
+   "kan_count_sainyuu": 8,
+   "kan_count_saisyutu_side_existing": 1,
+   "sainyuu_hits_before_6": 32,
+   "sainyuu_kan_names": [
+    "使用料及手数料",
+    "分担金及負担金",
+    "国庫支出金",
+    "繰入金",
+    "繰越金",
+    "諸収入",
+    "財産収入",
+    "都債"
+   ],
+   "sainyuu_independent_new": 8,
+   "new_columns": [
+    "不納欠損額",
+    "予算現額"
+   ],
+   "dropped_why": {
+    "決算書に同じ行が無い": 8,
+    "6a 歳出側の値と一致": 6,
+    "6b 代数的に決まる(行ごと)": 6
+   },
+   "i_dedup_dropped": [],
+   "existing_values": [
+    161510462350
+   ],
+   "merged_independent_total": 9,
+   "reaches_min": true
+  },
+  "東京都都営住宅等保証金会計": {
+   "canonical": "都営住宅等保証金会計",
+   "kan_count_sainyuu": 4,
+   "kan_count_saisyutu_side_existing": 2,
+   "sainyuu_hits_before_6": 16,
+   "sainyuu_kan_names": [
+    "保証金収入",
+    "繰入金",
+    "繰越金",
+    "諸収入"
+   ],
+   "sainyuu_independent_new": 4,
+   "new_columns": [
+    "予算現額",
+    "収入済額"
+   ],
+   "dropped_why": {
+    "6a 歳出側の値と一致": 5,
+    "決算書に同じ行が無い": 4,
+    "6b 代数的に決まる(行ごと)": 4
+   },
+   "i_dedup_dropped": [],
+   "existing_values": [
+    553070343,
+    2000000000
+   ],
+   "merged_independent_total": 6,
+   "reaches_min": true
+  },
+  "東京都都市開発資金会計": {
+   "canonical": "都市開発資金会計",
+   "kan_count_sainyuu": 5,
+   "kan_count_saisyutu_side_existing": 1,
+   "sainyuu_hits_before_6": 20,
+   "sainyuu_kan_names": [
+    "繰入金",
+    "繰越金",
+    "諸収入",
+    "財産収入",
+    "都債"
+   ],
+   "sainyuu_independent_new": 3,
+   "new_columns": [
+    "予算現額"
+   ],
+   "dropped_why": {
+    "6a 歳出側の値と一致": 9,
+    "決算書に同じ行が無い": 5,
+    "6b 代数的に決まる(行ごと)": 5,
+    "6d 値を持つ正本が 2 つ以上": 1
+   },
+   "i_dedup_dropped": [],
+   "existing_values": [
+    5990312855
+   ],
+   "merged_independent_total": 4,
+   "reaches_min": true
+  }
+ },
+ "limits": [
+  "**款の行だけを数えた。**項・目・節は 6b で落ちる(`款 = Σ項` を測った)",
+  "**6e は P-1 で 0 件**(書類の表題 19+19 を除いた上での 0)",
+  "**これは独立した証拠経路が成立するかの判定であり、別名規則の安全性が改善したという主張ではない**"
+ ]
+}
