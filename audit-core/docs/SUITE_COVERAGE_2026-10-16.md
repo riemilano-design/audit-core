@@ -32,11 +32,11 @@
 
 ## §2 測った事実 ― **変更前**(試験は走らせず、収集だけ数えた)
 
-### §2-1 ディスク上の試験 file: **101 本**(**いまの数**。門を足すと増える)
+### §2-1 ディスク上の試験 file: **102 本**(**いまの数**。門を足すと増える)
 
 | ディレクトリ | file |
 |---|---|
-| `tests/measure` | 45 |
+| `tests/measure` | 46 |
 | `tests/adapters/xbrl` | 23 |
 | `tests/adapters/kokkai` | 11 |
 | `tests/adapters/shogi` | 8 |
