@@ -114,40 +114,20 @@
 
 ---
 
-## §3-2 共有ツリーに入れた後の実測
+## §3-2 共有ツリーに入れた後の覆い
 
-| 走らせ方 | 本数 | 収集する file |
-|---|---|---|
-| `pytest -q`(path 指定なし) | **2,260** | **101 / 101** |
-| `unittest discover`(ルートから) | **2,164** | **100 / 101** |
+| 走らせ方 | 覆い |
+|---|---|
+| `pytest -q`(path 指定なし) | **全部**(漏れ 0 本) |
+| `unittest discover`(ルートから) | **1 本だけ漏れる**(`measure/tests/test_inject.py`) |
+
+**本数はこの文書に書かない。**正本は `fixtures/suite_coverage_2026-10-16.json` で、
+**覆いの検査が記録と現実の食い違いで落ちる**(`--write` で更新する)。
+**文に書いた数は古くなる** ― 2026-10-16 に実際それで共有ツリーの完走が落ちた(§3-3)。
 
 **残る 1 本は `measure/tests/test_inject.py`(96 本)で、`pytest` でしか走らない。**
 `measure/__init__.py` を足せば discover にも入るが、**それは案 B で崩れる**(§3)。
 
-### §3-3 **共有ツリーでの初回の完走は落ちた ― 検証が自分の記録を書き換えていた**
-
-この整備を commit したあと `run_tests.sh` を共有ツリーで通したら、**落ちた**。
-
-```
-1 failed, 2215 passed, 1 skipped in 1204.69s (0:20:04)
-FAILED tests/measure/test_suite_coverage.py::DocTest::test_27_counts_match_the_record
-```
-
-**原因は私の設計である。**1 段目の覆いの検査が記録 file を**書き換え**、
-その新しい数(2,217 / 2,121)が文書の数(2,215 / 2,119)と合わなくなり、
-2 段目の `pytest` が赤くなった。`set -e` なので 3 段目は走っていない。
-
-**つまり「標準の検証を走らせた事自体で、緑の木が赤くなる」。**
-記録の数が古かったのも事実である ― commit した記録は門を 2 本足す前に作ったもので、
-**file 数(100/100)を見る門は通り、本数のずれは誰も見ていなかった。**
-
-**直した。**覆いの検査は**既定では記録を読むだけ**にし、
-**食い違いが在れば落ちる**(`--write` を付けたときだけ更新する)。
-門 `RecordIsStableAndReadOnlyTest`(37〜39)で、
-**既定の実行が記録を書き換えないこと**・**記録を 1 か所壊すと落ちること**・
-**`run_tests.sh` が `--write` を渡さないこと**を固定した。
-あわせて `_by_dir` が鍵を並べて返すようにした(鍵の順が実行ごとに変わり、
-**中身が同じでも git の差分が出ていた**)。
 
 ---
 
@@ -162,7 +142,7 @@ FAILED tests/measure/test_suite_coverage.py::DocTest::test_27_counts_match_the_r
    標準コマンドの字は**この file 1 か所**に書く(`COMMANDS`)。
 2. **`run_tests.sh`** ― 覆いの検査 → `pytest`(全数)→ `unittest discover` の順に走らせ、
    1 つでも落ちたら全体を落とす。`COMMANDS` の字が runner に在ることを門で確かめる。
-3. **`tests/measure/test_suite_coverage.py`** ― **39 本**の門。
+3. **`tests/measure/test_suite_coverage.py`** ― 門(**本数はここに書かない**)。
    記録と突き合わせるだけでなく、**その場で測り直して漏れ 0 を要求する**
    (`LiveCoverageTest`)。記録を更新し忘れても漏れを見逃さない。
    判定は `judge()` に切り出し、**壊した入力を食わせて赤になることを確かめた。**
@@ -173,9 +153,30 @@ FAILED tests/measure/test_suite_coverage.py::DocTest::test_27_counts_match_the_r
 
 ## §5 言えないこと
 
-- **「収集された」と「緑だった」は別である。**§3-2 の 2,260 / 2,164 は**収集の数**である。
-  共有ツリーでの完走は §6 に書く。
+- **「収集された」と「緑だった」は別である。**§3-2 は**覆い**の話で、
+  完走したかは §6 の 1 本の run だけが示す。
 - **1 つのコマンドで全部走るわけではない。**`run_tests.sh` が 2 つの runner を順に走らせる。
-- **`unittest discover` は案 A を入れても 99 / 100 file である。**
-  残る 1 本は `pytest` でしか走らない。
+- **`unittest discover` は案 A を入れても全部は覆わない。**
+  残る 1 本(`measure/tests/test_inject.py`)は `pytest` でしか走らない。
 - この整備は**試験の数を増やしていない。**漏れを検出できるようにしただけである。
+
+---
+
+## §6 共有ツリーでの完走(**2026-10-16 の 1 本。これが唯一の証跡**)
+
+commit `e9b2165` の木で `sh run_tests.sh` を 1 本通した。**rc=0。**
+
+| 段 | 結果 | 所要 |
+|---|---|---|
+| 1/3 覆いの検査 | **漏れ 0 本**(どの試験 file も標準のコマンドに収集されている) | 約 1 分 |
+| 2/3 `pytest -q`(全数) | **2,257 passed / 3 skipped** | **20 分 16 秒** |
+| 3/3 `unittest discover` | **Ran 2,164 / OK (skipped=3)** | **20 分 18 秒** |
+| 合計 | **全部通った(rc=0)** | **18:59:35 → 19:40:11(約 40 分 36 秒)** |
+
+**この数は 1 本の run の記録であり、更新しない。**次に測ったら別の節に書く
+(記憶 `evidence-file-must-be-the-completed-run`)。
+
+**所要の大半は `tests/adapters/xbrl/test_mutations.py` である。**
+変異 **89 件**がそれぞれ**隔離した一時の木**で `unittest discover -s tests -t .` を
+走らせる(写すのは `tests/adapters/xbrl` と `tests/golden` だけで、
+`tests/measure` は写さない)。**この整備で増えた負荷ではない。**

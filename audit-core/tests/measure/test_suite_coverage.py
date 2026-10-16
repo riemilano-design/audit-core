@@ -293,16 +293,29 @@ class DocTest(unittest.TestCase):
                       "文書も直すこと")
         for d, n in self.rec["by_directory"].items():
             self.assertIn("| `%s` | %d |" % (d, n), self.t, d)
-        # §2-2 は変更前の歴史的な実測。**いまの数は §3-2 と突き合わせる**
-        p = self.rec["commands"]["pytest"]
-        d2 = self.rec["commands"]["discover"]
-        self.assertIn("| `pytest -q`(path 指定なし) | **%s** | **%d / %d** |"
-                      % ("{:,}".format(p["tests"]), p["collected_files"],
-                         self.rec["test_files_on_disk"]), self.t)
-        self.assertIn("| `unittest discover`(ルートから) | **%s** | **%d / %d** |"
-                      % ("{:,}".format(d2["tests"]), d2["collected_files"],
-                         self.rec["test_files_on_disk"]), self.t)
         self.assertIn("**この節は変更前の実測で、後の記録と結び付けない**", self.t)
+
+    def test_27b_the_doc_does_not_carry_live_test_counts(self):
+        """**生きている本数を文書に書かない。**書けば古くなる(2026-10-16 の §3-3)。
+
+        §3-2 は**覆い**(漏れ 0 / 1 本)だけを書き、本数は記録を正本にする。
+        """
+        block = self.t.split("## §3-2")[1].split("\n---\n")[0]
+        self.assertIn("**本数はこの文書に書かない。**", block)
+        self.assertIn("fixtures/suite_coverage_2026-10-16.json", block)
+        for cid in ("pytest", "discover"):
+            n = "{:,}".format(self.rec["commands"][cid]["tests"])
+            self.assertNotIn(n, block,
+                             "§3-2 に生きている本数(%s)が書かれている" % n)
+
+    def test_27c_the_completed_run_is_recorded_once(self):
+        """**完走した 1 本の run** が §6 に在ること(収集の数と混ぜない)。"""
+        block = self.t.split("## §6")[1]
+        self.assertIn("**rc=0。**", block)
+        self.assertIn("**2,257 passed / 3 skipped**", block)
+        self.assertIn("Ran 2,164 / OK (skipped=3)", block)
+        self.assertIn("**この数は 1 本の run の記録であり、更新しない。**", block)
+        self.assertIn("**この整備で増えた負荷ではない。**", block)
 
     def test_28_option_b_is_recorded_as_rejected(self):
         self.assertIn("### 案 B `measure/__init__.py` も足す → **却下**", self.t)
@@ -328,10 +341,24 @@ class DocTest(unittest.TestCase):
         self.assertIn("**2,087 OK**", self.t)
 
     def test_33_full_runs_are_recorded(self):
-        """**完走の数が記録に在ること。**収集が通っただけで緑と書かない。"""
+        """**完走の数が記録に在ること。**収集が通っただけで緑と書かない。
+
+        worktree の 1 本は §3-1、共有ツリーの 1 本は §6。**どちらも日付つきの
+        歴史的な実測**で、記録 file とは突き合わせない(更新もしない)。
+        """
         self.assertIn("**2,182 passed / 1 skipped**(rc=0・21 分 00 秒)", self.t)
         self.assertIn("**2,087 OK**(skip 1・20 分 56 秒)", self.t)
-        self.assertIn("## §3-2 共有ツリーに入れた後の実測", self.t)
+        self.assertIn("## §3-2 共有ツリーに入れた後の覆い", self.t)
+        self.assertIn("## §6 共有ツリーでの完走", self.t)
+
+    def test_33b_the_doc_carries_no_other_live_count(self):
+        """**門の本数も「99 / 100 file」も文書に書かない。**書けば古くなる。"""
+        self.assertIn("門(**本数はここに書かない**)", self.t)
+        self.assertNotIn("99 / 100 file", self.t)
+        for cid in ("pytest", "discover"):
+            n = "{:,}".format(self.rec["commands"][cid]["tests"])
+            self.assertNotIn(n, self.t.split("## §6")[0],
+                             "§6 より前に生きている本数(%s)が在る" % n)
 
     def test_34_option_a_is_applied_with_its_reason(self):
         init = os.path.join(ROOT, "tests", "measure", "__init__.py")
