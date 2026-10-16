@@ -21,6 +21,7 @@ import importlib.util
 import io
 import json
 import os
+import subprocess
 import unittest
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -355,6 +356,69 @@ class MyErrorTest(unittest.TestCase):
         self.assertIn("「全体 1,065 OK」と報告していたが", t)
         self.assertIn("tests/measure", t)
         self.assertIn("measure/tests", t)
+
+
+class RecordIsStableAndReadOnlyTest(unittest.TestCase):
+    """**標準の検証が記録を書き換えないこと。**
+
+    2026-10-16 実測。共有ツリーでの初回の完走が落ちた ―
+    `run_tests.sh` の 1 段目が記録を**書き換え**、2 段目の `pytest` が
+    「記録と文書が合わない」で赤くなった。**検証を走らせた事自体で緑の木が赤くなる。**
+    だから既定は**読むだけ**にし、更新は `--write` のときだけにした。
+
+    あわせて、記録の鍵の順が実行ごとに変わっていた(`main` が set を渡しており
+    文字列の hash が実行ごとに違う)。中身が同じでも git の差分が出るので
+    **差分が意味を失う。**`_by_dir` が鍵を並べて返すことを固定する。
+    """
+
+    def test_35_by_directory_keys_are_sorted(self):
+        m = mod()
+        d = m._by_dir(set(m.test_files()))
+        self.assertEqual(list(d), sorted(d), "鍵が並んでいない")
+        rec = load(OUT)["by_directory"]
+        self.assertEqual(list(rec), sorted(rec),
+                         "記録の鍵が並んでいない。--write で更新すること")
+
+    def test_36_two_builds_agree_on_order(self):
+        """**順まで同じ**(dict の等号は順を見ないので、別に見る)。"""
+        m = mod()
+        a = list(m._by_dir(set(m.test_files())))
+        b = list(m._by_dir(set(m.test_files())))
+        self.assertEqual(a, b)
+
+    def test_37_the_default_run_does_not_write_the_record(self):
+        before = io.open(OUT, "rb").read()
+        r = subprocess.run(["python3", "-B", SRC], capture_output=True, text=True)
+        self.assertEqual(io.open(OUT, "rb").read(), before,
+                         "**既定の実行が記録を書き換えた**")
+        self.assertIn("読むだけ", r.stdout)
+        self.assertEqual(r.returncode, 0, r.stdout[-400:])
+
+    def test_38_a_stale_record_fails_and_write_fixes_it(self):
+        """**歯。**記録を 1 か所壊すと落ち、`--write` で直ること。"""
+        before = io.open(OUT, "rb").read()
+        rec = json.loads(before.decode("utf-8"))
+        rec["commands"]["pytest"]["tests"] = -1
+        io.open(OUT, "w", encoding="utf-8").write(
+            json.dumps(rec, ensure_ascii=False, indent=1))
+        try:
+            r = subprocess.run(["python3", "-B", SRC],
+                               capture_output=True, text=True)
+            self.assertEqual(r.returncode, 1, "古い記録で落ちていない")
+            self.assertIn("**記録が古い**", r.stdout)
+            w = subprocess.run(["python3", "-B", SRC, "--write"],
+                               capture_output=True, text=True)
+            self.assertEqual(w.returncode, 0, w.stdout[-400:])
+            self.assertNotEqual(io.open(OUT, "rb").read(),
+                                json.dumps(rec, ensure_ascii=False,
+                                           indent=1).encode("utf-8"))
+        finally:
+            io.open(OUT, "wb").write(before)
+
+    def test_39_the_runner_does_not_pass_write(self):
+        """`run_tests.sh` が `--write` を渡さないこと(渡したら 37 の意味が消える)。"""
+        self.assertNotIn("--write", text(SH))
+        self.assertIn("python3 -B measure/suite_coverage_2026-10-16.py", text(SH))
 
 
 if __name__ == "__main__":

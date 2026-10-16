@@ -119,7 +119,7 @@ def judge(per, uncovered):
     return fail
 
 
-def main():
+def main(write=False):
     files = set(test_files())
     uni, uni_mods, uni_n = collected_by_unittest()
     per = {}
@@ -159,7 +159,18 @@ def main():
                "`measure/tests/` に解決させる**。実測で `tests.core` など 5 つが "
                "ImportError になり、収集が 2,087 本から 101 本に崩れた。**だから足さない**"),
            }
-    json.dump(rec, io.open(OUT, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
+    # **既定では記録を書かない。**標準の検証(`run_tests.sh`)がこの file を
+    # 書き換えてしまうと、**検証を走らせた事自体で緑の木が赤くなる**
+    # (2026-10-16 実測。共有ツリーの初回の完走がこれで落ちた)。
+    # 記録を更新するのは `--write` を付けたときだけにする。
+    stale = _stale(rec)
+    if write:
+        json.dump(rec, io.open(OUT, "w", encoding="utf-8"),
+                  ensure_ascii=False, indent=1)
+    elif stale:
+        fail = list(fail) + [
+            "**記録が古い**(%s)。`python3 measure/suite_coverage_2026-10-16.py "
+            "--write` で更新し、文書の数も直すこと" % "・".join(stale)]
 
     print("=== 試験の覆いの検査(人間の指示 2026-10-16)===")
     print("ディスク上の試験 file: %d 本" % len(files))
@@ -181,18 +192,42 @@ def main():
             print("  - %s" % f)
     else:
         print("**どの試験 file も標準のコマンドに収集されている。**")
-    print("->", OUT)
+    print("->", OUT if write else "%s(読むだけ)" % OUT)
     if fail:
         sys.exit(1)
 
 
+def _stale(rec):
+    """記録とこの場の実測が食い違っている欄を並べる(**書き換えずに**比べる)。"""
+    try:
+        old = json.load(io.open(OUT, encoding="utf-8"))
+    except Exception as e:                                   # 記録が無い・壊れた
+        return ["記録を読めない: %s" % e]
+    out = []
+    if old.get("test_files_on_disk") != rec["test_files_on_disk"]:
+        out.append("試験 file %s -> %s"
+                   % (old.get("test_files_on_disk"), rec["test_files_on_disk"]))
+    if old.get("by_directory") != rec["by_directory"]:
+        out.append("ディレクトリごとの内訳")
+    for cid, p in rec["commands"].items():
+        o = (old.get("commands") or {}).get(cid) or {}
+        if o.get("tests") != p["tests"]:
+            out.append("%s の本数 %s -> %s" % (cid, o.get("tests"), p["tests"]))
+        if o.get("collected_files") != p["collected_files"]:
+            out.append("%s の file 数 %s -> %s"
+                       % (cid, o.get("collected_files"), p["collected_files"]))
+    return out
+
+
 def _by_dir(files):
+    """**鍵を並べて返す。**`main` が set を渡すので、並べないと記録の鍵の順が
+    実行ごとに変わり、**中身が同じでも git の差分が出る**(2026-10-16 実測)。"""
     out = {}
     for f in files:
         d = os.path.dirname(f) or "."
         out[d] = out.get(d, 0) + 1
-    return out
+    return dict(sorted(out.items()))
 
 
 if __name__ == "__main__":
-    main()
+    main(write="--write" in sys.argv[1:])
