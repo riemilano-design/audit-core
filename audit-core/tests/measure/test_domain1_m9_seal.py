@@ -21,6 +21,7 @@ import io
 import json
 import os
 import re
+import subprocess
 import unittest
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -416,13 +417,69 @@ class SealNumbersMatchMeasurementTest(unittest.TestCase):
 
 
 class SealIsFirstTest(unittest.TestCase):
-    def test_24_no_material_or_report_yet(self):
-        """**封より先に材料や報告文が在ってはいけない。**"""
-        for f in ("m9_material_2026-10-16.json", "m9_report_2026-10-16.json",
-                  "m9_binds_2026-10-16.json", "m9_score_2026-10-16.json",
-                  "m9_answers_seat1_2026-10-16.json"):
-            self.assertFalse(os.path.exists(os.path.join(FX, f)),
-                             "封より先に %s が在る" % f)
+    """**封が材料・生成より先に commit されたこと。**
+
+    最初はこれを「材料の file がまだ無い」で確かめていたが、**その性質は
+    材料を作った瞬間に偽になる**(実際に落ちた)。順序は**commit の順**で見る。
+    記憶 `metric-must-not-fall-when-component-works.md` と同じ型 ―
+    **工程が進むと落ちる門を書いてはいけない。**
+    """
+
+    def _added_in(self, rel):
+        out = subprocess.check_output(
+            ["git", "log", "--diff-filter=A", "--format=%H", "--", rel],
+            cwd=ROOT).decode().split()
+        return out[-1] if out else None
+
+    def test_24_seal_was_committed_before_the_material(self):
+        seal = self._added_in("docs/DOMAIN1_M9_SEAL_2026-10-16.md")
+        self.assertTrue(seal, "封がまだ commit されていない")
+        for rel in ("fixtures/sheet/m9_material_2026-10-16.json",
+                    "fixtures/sheet/m9_opportunity_2026-10-16.json",
+                    "fixtures/sheet/m9_report_2026-10-16.json",
+                    "fixtures/sheet/m9_binds_2026-10-16.json",
+                    "fixtures/sheet/m9_score_2026-10-16.json"):
+            later = self._added_in(rel)
+            if later is None:
+                continue                      # まだ無い工程は何も言わない
+            if later == seal:
+                self.fail("%s が封と同じ commit に入っている" % rel)
+            rc = subprocess.call(
+                ["git", "merge-base", "--is-ancestor", seal, later], cwd=ROOT)
+            self.assertEqual(rc, 0, "%s が封より先に commit されている" % rel)
+
+    def test_27_the_order_gate_has_teeth(self):
+        """**逆向きが偽であること。**両向きが真なら、この門は何も言っていない
+        (記憶 `prediction-must-be-able-to-fail.md`)。
+        """
+        seal = self._added_in("docs/DOMAIN1_M9_SEAL_2026-10-16.md")
+        mat = self._added_in("fixtures/sheet/m9_material_2026-10-16.json")
+        if seal is None or mat is None:
+            self.skipTest("まだ両方の工程が済んでいない")
+        self.assertEqual(subprocess.call(
+            ["git", "merge-base", "--is-ancestor", seal, mat], cwd=ROOT), 0)
+        self.assertNotEqual(subprocess.call(
+            ["git", "merge-base", "--is-ancestor", mat, seal], cwd=ROOT), 0,
+            "両向きが真 ― この門は順序を見ていない")
+
+    def test_25_material_was_committed_before_the_report(self):
+        mat = self._added_in("fixtures/sheet/m9_material_2026-10-16.json")
+        rep = self._added_in("fixtures/sheet/m9_report_2026-10-16.json")
+        if mat is None or rep is None:
+            self.skipTest("まだ両方の工程が済んでいない")
+        self.assertNotEqual(mat, rep, "材料と報告文が同じ commit に在る")
+        self.assertEqual(subprocess.call(
+            ["git", "merge-base", "--is-ancestor", mat, rep], cwd=ROOT), 0,
+            "報告文が材料より先に commit されている")
+
+    def test_26_scorer_was_committed_before_the_labels(self):
+        sc = self._added_in("measure/sheet_m9_score_2026-10-16.py")
+        lab = self._added_in("fixtures/sheet/m9_answers_seat1_2026-10-16.json")
+        if sc is None or lab is None:
+            self.skipTest("まだ両方の工程が済んでいない")
+        self.assertEqual(subprocess.call(
+            ["git", "merge-base", "--is-ancestor", sc, lab], cwd=ROOT), 0,
+            "ラベルが採点器より先に commit されている")
 
 
 if __name__ == "__main__":
