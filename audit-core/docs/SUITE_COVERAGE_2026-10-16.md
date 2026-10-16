@@ -15,7 +15,7 @@
 
 | 漏れていた場所 | file | 本数 | なぜ |
 |---|---|---|---|
-| `tests/measure` | 48 | 1,022 | `tests` は package なのに `tests/measure` に `__init__.py` が無い。**unittest の探索は package でない下位ディレクトリを飛ばす** |
+| `tests/measure` | 49 | 1,022 | `tests` は package なのに `tests/measure` に `__init__.py` が無い。**unittest の探索は package でない下位ディレクトリを飛ばす** |
 | `measure/tests` | 1 | 96 | `measure/` が package でないので**丸ごと飛ぶ** |
 
 `tests/measure` は `-s tests/measure` で毎回別に走らせていたので**測り落としは無かった**。
@@ -32,7 +32,7 @@
 
 ## §2 測った事実 ― **変更前**(試験は走らせず、収集だけ数えた)
 
-### §2-1 ディスク上の試験 file: **104 本**(**いまの数**。門を足すと増える)
+### §2-1 ディスク上の試験 file: **105 本**(**いまの数**。門を足すと増える)
 
 | ディレクトリ | file |
 |---|---|
