@@ -32,8 +32,12 @@ ROOT = os.path.dirname(os.path.dirname(HERE))
 MEASURE = os.path.join(ROOT, "measure")
 FX = os.path.join(ROOT, "fixtures", "sheet")
 SEAL = os.path.join(ROOT, "docs", "DOMAIN1_M10_SEAL_2026-10-16.md")
-SEAL_REL = "audit-core/docs/DOMAIN1_M10_SEAL_2026-10-16.md"
-M10_ENGINE_REL = "audit-core/measure/sheet_m10_engine_2026-10-16.py"
+# **`cwd=ROOT`(= audit-core/)から git を呼ぶので、道は ROOT からの相対で書く。**
+# repo のルートからの道(`audit-core/...`)を渡すと pathspec が当たらず、
+# `--diff-filter=A` が空を返して「まだ commit されていない」に見える
+# ― 2026-10-16 に実際にこれで誤判定した(commit の有無ではなく私の道の誤り)。
+SEAL_REL = "docs/DOMAIN1_M10_SEAL_2026-10-16.md"
+M10_ENGINE_REL = "measure/sheet_m10_engine_2026-10-16.py"
 
 COLS = ("支出済額", "不用額")
 PASSING = "東京都都営住宅等保証金会計"
@@ -452,9 +456,25 @@ class CommitOrderTest(unittest.TestCase):
         return subprocess.run(["git", "merge-base", "--is-ancestor", a, b],
                               cwd=ROOT, capture_output=True).returncode == 0
 
+    @staticmethod
+    def _tracked(rel):
+        out = subprocess.run(["git", "ls-files", "--error-unmatch", rel],
+                             cwd=ROOT, capture_output=True)
+        return out.returncode == 0
+
     def test_30_seal_is_committed(self):
+        # **先に道が当たっていることを確かめる。**空振りを「未 commit」と読まない。
+        self.assertTrue(self._tracked(SEAL_REL),
+                        "道が git に当たっていない(pathspec の誤り)")
         self.assertIsNotNone(self._added(SEAL_REL),
                              "封がまだ commit されていない")
+
+    def test_30b_a_wrong_pathspec_is_detected_not_read_as_uncommitted(self):
+        """**歯。**repo ルートからの道を渡すと `_added` は空を返す ―
+        そのとき `_tracked` が偽になるので、未 commit と読み違えない。"""
+        wrong = "audit-core/" + SEAL_REL
+        self.assertIsNone(self._added(wrong))
+        self.assertFalse(self._tracked(wrong))
 
     def test_31_seal_precedes_the_m10_engine(self):
         seal = self._added(SEAL_REL)

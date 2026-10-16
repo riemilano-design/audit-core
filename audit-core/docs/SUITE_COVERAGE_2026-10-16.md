@@ -118,8 +118,8 @@
 
 | 走らせ方 | 本数 | 収集する file |
 |---|---|---|
-| `pytest -q`(path 指定なし) | **2,259** | **101 / 101** |
-| `unittest discover`(ルートから) | **2,163** | **100 / 101** |
+| `pytest -q`(path 指定なし) | **2,260** | **101 / 101** |
+| `unittest discover`(ルートから) | **2,164** | **100 / 101** |
 
 **残る 1 本は `measure/tests/test_inject.py`(96 本)で、`pytest` でしか走らない。**
 `measure/__init__.py` を足せば discover にも入るが、**それは案 B で崩れる**(§3)。
@@ -173,7 +173,7 @@ FAILED tests/measure/test_suite_coverage.py::DocTest::test_27_counts_match_the_r
 
 ## §5 言えないこと
 
-- **「収集された」と「緑だった」は別である。**§3-2 の 2,259 / 2,163 は**収集の数**である。
+- **「収集された」と「緑だった」は別である。**§3-2 の 2,260 / 2,164 は**収集の数**である。
   共有ツリーでの完走は §6 に書く。
 - **1 つのコマンドで全部走るわけではない。**`run_tests.sh` が 2 つの runner を順に走らせる。
 - **`unittest discover` は案 A を入れても 99 / 100 file である。**
