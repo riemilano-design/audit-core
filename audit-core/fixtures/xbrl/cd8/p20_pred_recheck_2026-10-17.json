@@ -1,0 +1,155 @@
+{
+ "seal": "docs/XBRL_P20_SEAL_2026-10-17.md",
+ "step": "**照合器の欠陥の記録。先の記録は書き換えない。0 USD**",
+ "**何が起きたか**": "照合 1 は予測の欄が「正解」で始まるかだけを見ていた。**`N007` の予測は参照先を字で書いていたので、その字が正解と一致する行まで「正解ではない」に分類された。**予測が外れたのではなく、**私の照合器が外れに数えた**",
+ "照合 1(先の記録・そのまま残す)": {
+  "当たり": 9,
+  "外れ": 1
+ },
+ "**照合 2(字で書いた参照先で比べる)**": {
+  "当たり": 10,
+  "外れ": 0
+ },
+ "**2 つの数え方で違った行**": [
+  {
+   "doc": "S100YZEV",
+   "主張 id": "N007",
+   "行": "R011",
+   "予測の欄": "operatingincome@currentyearduration_nonconsolidatedmember",
+   "比べ方": "字で書いた参照先",
+   "予測した値": "operatingincome@currentyearduration_nonconsolidatedmember",
+   "実測の参照先": "operatingincome@currentyearduration_nonconsolidatedmember",
+   "正解": "operatingincome@currentyearduration_nonconsolidatedmember",
+   "照合 1(先の記録)": false,
+   "**照合 2**": true
+  }
+ ],
+ "rows": [
+  {
+   "doc": "S100YZEV",
+   "主張 id": "N014",
+   "行": "R018",
+   "予測の欄": "正解(currentassets@currentyearinstant_nonconsolidatedmember)",
+   "比べ方": "字で書いた参照先",
+   "予測した値": "currentassets@currentyearinstant_nonconsolidatedmember",
+   "実測の参照先": "currentassets@currentyearinstant_nonconsolidatedmember",
+   "正解": "currentassets@currentyearinstant_nonconsolidatedmember",
+   "照合 1(先の記録)": true,
+   "**照合 2**": true
+  },
+  {
+   "doc": "S100YZEV",
+   "主張 id": "N017",
+   "行": "R019",
+   "予測の欄": "正解(noncurrentassets@currentyearinstant_nonconsolidatedmember)",
+   "比べ方": "字で書いた参照先",
+   "予測した値": "noncurrentassets@currentyearinstant_nonconsolidatedmember",
+   "実測の参照先": "noncurrentassets@currentyearinstant_nonconsolidatedmember",
+   "正解": "noncurrentassets@currentyearinstant_nonconsolidatedmember",
+   "照合 1(先の記録)": true,
+   "**照合 2**": true
+  },
+  {
+   "doc": "S100YZEV",
+   "主張 id": "N007",
+   "行": "R011",
+   "予測の欄": "operatingincome@currentyearduration_nonconsolidatedmember",
+   "比べ方": "字で書いた参照先",
+   "予測した値": "operatingincome@currentyearduration_nonconsolidatedmember",
+   "実測の参照先": "operatingincome@currentyearduration_nonconsolidatedmember",
+   "正解": "operatingincome@currentyearduration_nonconsolidatedmember",
+   "照合 1(先の記録)": false,
+   "**照合 2**": true
+  },
+  {
+   "doc": "S100YZEV",
+   "主張 id": "N007",
+   "行": "R020",
+   "予測の欄": "operatingincome@currentyearduration_nonconsolidatedmember",
+   "比べ方": "字で書いた参照先",
+   "予測した値": "operatingincome@currentyearduration_nonconsolidatedmember",
+   "実測の参照先": "operatingincome@currentyearduration_nonconsolidatedmember",
+   "正解": "increasedecreaseinaccountspayableotheropecf@currentyearduration_nonconsolidatedmember",
+   "照合 1(先の記録)": true,
+   "**照合 2**": true
+  },
+  {
+   "doc": "S100YZ7E",
+   "主張 id": "N066",
+   "行": "R023",
+   "予測の欄": "**正解ではない**(素の `Assets` 系が先に当たると見る)",
+   "比べ方": "正解かどうか",
+   "予測した値": "正解ではない",
+   "実測の参照先": "assets@currentyearinstant_nonconsolidatedmember",
+   "正解": "totalassetssummaryofbusinessresults@currentyearinstant_nonconsolidatedmember",
+   "照合 1(先の記録)": true,
+   "**照合 2**": true
+  },
+  {
+   "doc": "S100YZ7E",
+   "主張 id": "N070",
+   "行": "R024",
+   "予測の欄": "**正解ではない**(素の `NetAssets` 系が先に当たると見る)",
+   "比べ方": "正解かどうか",
+   "予測した値": "正解ではない",
+   "実測の参照先": "netassets@currentyearinstant_nonconsolidatedmember",
+   "正解": "netassetssummaryofbusinessresults@currentyearinstant_nonconsolidatedmember",
+   "照合 1(先の記録)": true,
+   "**照合 2**": true
+  },
+  {
+   "doc": "S100YZ7E",
+   "主張 id": "N022",
+   "行": "R017",
+   "予測の欄": "**正解ではない**(4 行の正解は営業収益2・経常利益・現金・投資CF で互いに違う。1 つの主張が 4 行に張り付いている)",
+   "比べ方": "正解かどうか",
+   "予測した値": "正解ではない",
+   "実測の参照先": "unearnedrevenue@currentyearinstant_nonconsolidatedmember",
+   "正解": "operatingrevenue2summaryofbusinessresults@currentyearduration_nonconsolidatedmember",
+   "照合 1(先の記録)": true,
+   "**照合 2**": true
+  },
+  {
+   "doc": "S100YZ7E",
+   "主張 id": "N022",
+   "行": "R018",
+   "予測の欄": "**正解ではない**(4 行の正解は営業収益2・経常利益・現金・投資CF で互いに違う。1 つの主張が 4 行に張り付いている)",
+   "比べ方": "正解かどうか",
+   "予測した値": "正解ではない",
+   "実測の参照先": "unearnedrevenue@currentyearinstant_nonconsolidatedmember",
+   "正解": "ordinaryincomelosssummaryofbusinessresults@currentyearduration_nonconsolidatedmember",
+   "照合 1(先の記録)": true,
+   "**照合 2**": true
+  },
+  {
+   "doc": "S100YZ7E",
+   "主張 id": "N022",
+   "行": "R019",
+   "予測の欄": "**正解ではない**(4 行の正解は営業収益2・経常利益・現金・投資CF で互いに違う。1 つの主張が 4 行に張り付いている)",
+   "比べ方": "正解かどうか",
+   "予測した値": "正解ではない",
+   "実測の参照先": "unearnedrevenue@currentyearinstant_nonconsolidatedmember",
+   "正解": "cashandcashequivalentssummaryofbusinessresults@currentyearinstant_nonconsolidatedmember",
+   "照合 1(先の記録)": true,
+   "**照合 2**": true
+  },
+  {
+   "doc": "S100YZ7E",
+   "主張 id": "N022",
+   "行": "R020",
+   "予測の欄": "**正解ではない**(4 行の正解は営業収益2・経常利益・現金・投資CF で互いに違う。1 つの主張が 4 行に張り付いている)",
+   "比べ方": "正解かどうか",
+   "予測した値": "正解ではない",
+   "実測の参照先": "unearnedrevenue@currentyearinstant_nonconsolidatedmember",
+   "正解": "netcashprovidedbyusedininvestingactivitiessummaryofbusinessresults@currentyearduration_nonconsolidatedmember",
+   "照合 1(先の記録)": true,
+   "**照合 2**": true
+  }
+ ],
+ "limits": [
+  "**照合器を結果の後で足した。**だから**両方の数を残す**。片方だけ残せば「結果を見て緩めた」のと同じである",
+  "**予測の file は編集していない**(封 §3。sha256 を門で固定)",
+  "**実測の数(M-1〜M-6)は 1 つも変えていない。**変えたのは「予測と実測が一致したか」の数え方だけである",
+  "**照合 2 でも、予測が当たったことは「Core が良くなった」ではない。**同じ便で誤認定が 7 行増えている"
+ ]
+}

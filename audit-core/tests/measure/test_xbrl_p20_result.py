@@ -1,0 +1,164 @@
+# -*- coding: utf-8 -*-
+"""P20 の結果(docs/XBRL_P20_RESULT_2026-10-17.md)の門。
+
+**数は 2 つの記録を正本に突き合わせる。**
+**予測の file が動いていないこと**と**engine が動いていないこと**を固定する。
+"""
+import hashlib
+import io
+import json
+import os
+import subprocess
+import unittest
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+ROOT = os.path.dirname(os.path.dirname(HERE))
+FX = os.path.join(ROOT, "fixtures", "xbrl", "cd8")
+DOC = os.path.join(ROOT, "docs", "XBRL_P20_RESULT_2026-10-17.md")
+RUN = os.path.join(FX, "p20_rerun_2026-10-17.json")
+RECHECK = os.path.join(FX, "p20_pred_recheck_2026-10-17.json")
+PRED_REL = "fixtures/xbrl/cd8/branch_a_predictions_2026-10-17.json"
+ENGINE_SHA = {"adapters/xbrl/recipes.py": "e2bda6aee13880ff",
+              "adapters/xbrl/resolve.py": "a41043763c1d4073",
+              "adapters/xbrl/verify_document.py": "67e7639de3f5f2ad",
+              "adapters/xbrl/vocabulary.py": "bcf559308bda0cc6"}
+
+
+def text(p):
+    with io.open(p, encoding="utf-8") as fh:
+        return fh.read()
+
+
+def rec(p):
+    return json.load(io.open(p, encoding="utf-8"))
+
+
+def pct(v):
+    return u"%s%%(%s/%s)" % (v[u"率"], v[u"分子"], v[u"分母"])
+
+
+class ResultTest(unittest.TestCase):
+    def setUp(self):
+        self.t = text(DOC)
+        self.r = rec(RUN)
+
+    def test_1_all_six_fields_hit_and_the_doc_says_so(self):
+        ch = self.r[u"**予測との照合**"]
+        self.assertEqual(len(ch[u"欄ごと"]), 6)
+        self.assertEqual(ch[u"外れ"], 0)
+        self.assertEqual(ch[u"当たり"], 6)
+        self.assertIn(u"**当たり %d / 外れ %d。**" % (ch[u"当たり"], ch[u"外れ"]),
+                      self.t)
+        for c in ch[u"欄ごと"]:
+            self.assertIn(c[u"欄"], self.t, c[u"欄"])
+
+    def test_2_the_identification_numbers_are_from_the_record(self):
+        m2 = self.r[u"M-2 特定"]
+        self.assertIn(u"| Core 自身の特定(T5 全部の行) | %s | **%s** |"
+                      % (pct(m2[u"全部の行"]["P16"]), pct(m2[u"全部の行"]["P20"])),
+                      self.t)
+        self.assertIn(u"| Core 自身の特定(1 対 1 の行だけ) | %s | **%s** |"
+                      % (pct(m2[u"1 対 1 の行だけ"]["P16"]),
+                         pct(m2[u"1 対 1 の行だけ"]["P20"])), self.t)
+        self.assertEqual(m2[u"全部の行"]["P20"][u"分子"], 18)
+        self.assertEqual(m2[u"1 対 1 の行だけ"]["P20"][u"分子"], 15)
+
+    def test_3_the_cost_is_printed_next_to_the_gain(self):
+        m3 = self.r[u"M-3 名指して正解でない行"]
+        self.assertIn(u"| **うち正解でなかった行** | %d | **%d** |"
+                      % (m3["P16"][u"分子"], m3["P20"][u"分子"]), self.t)
+        self.assertEqual(m3["P20"][u"分子"] - m3["P16"][u"分子"], 7)
+        self.assertIn(u"**特定は 3 行増え、誤認定は 7 行増えた。**", self.t)
+        self.assertIn(u"**これを「改善」と書かない。**", self.t)
+
+    def test_4_the_six_documents_did_not_move(self):
+        six = self.r[u"M-4 6 書類の動き"]
+        self.assertEqual(len(six), 6)
+        self.assertTrue(all(v == 0 for v in six.values()), six)
+        self.assertIn(u"| 連結ありの 6 書類で動いた主張 | ― | **0 件** |", self.t)
+
+    def test_5_the_alpha_ceiling_did_not_move(self):
+        self.assertEqual(self.r[u"M-5 α の天井"]["P16"], "0/7")
+        self.assertEqual(self.r[u"M-5 α の天井"]["P20"], "0/7")
+        self.assertIn(u"**α の天井は 0/7 のまま。**", self.t)
+        self.assertIn(u"**製品価値の側は、この設定変更では動かない。**", self.t)
+
+    def test_6_every_one_of_the_ten_rows_is_in_the_table(self):
+        ten = self.r[u"M-1 10 行の state"][u"明細"]
+        self.assertEqual(len(ten), 10)
+        for x in ten:
+            self.assertNotEqual(x["P20"][u"state"], "POINTER_NOT_FOUND", x[u"id"])
+            self.assertIn(u"| `%s` | %s |" % (x[u"doc"], x[u"id"]),
+                          self.t.split(u"### §2-2")[1], x[u"id"])
+        self.assertEqual(self.r[u"M-1 10 行の state"][u"POINTER_NOT_FOUND の数"],
+                         {"P16": 10, "P20": 0})
+
+
+class ComparatorDefectTest(unittest.TestCase):
+    def setUp(self):
+        self.t = text(DOC)
+        self.k = rec(RECHECK)
+
+    def test_7_both_tallies_are_kept(self):
+        a = self.k[u"照合 1(先の記録・そのまま残す)"][u"当たり"]
+        b = self.k[u"**照合 2(字で書いた参照先で比べる)**"][u"当たり"]
+        self.assertEqual((a, b), (9, 10))
+        self.assertIn(u"| 照合 1(先の記録。そのまま残す) | **%d/10** |" % a, self.t)
+        self.assertIn(u"| **照合 2(字で書いた参照先で比べる)** | **%d/10** |" % b,
+                      self.t)
+        self.assertIn(u"**両方を残す。**", self.t)
+        self.assertIn(u"**実測の数(M-1〜M-6)は 1 つも変えていない。**", self.t)
+
+    def test_8_the_one_differing_row_is_named(self):
+        d = self.k[u"**2 つの数え方で違った行**"]
+        self.assertEqual(len(d), 1)
+        self.assertEqual((d[0][u"doc"], d[0][u"行"]), ("S100YZEV", "R011"))
+        self.assertEqual(d[0][u"実測の参照先"], d[0][u"正解"])
+        self.assertIn(u"`R011`", self.t)
+
+    def test_9_the_first_record_was_not_rewritten(self):
+        """**先の記録の主張ごとの数が 9/10 のまま**であること。"""
+        run = rec(RUN)
+        ch = run[u"**予測との照合**"]
+        self.assertEqual(ch[u"主張ごとの当たり"], 9)
+        self.assertEqual(ch[u"主張ごとの外れ"], 1)
+
+
+class DisciplineTest(unittest.TestCase):
+    def setUp(self):
+        self.t = text(DOC)
+
+    def test_10_prediction_file_is_unchanged_since_its_commit(self):
+        out = subprocess.run(["git", "show", "cf4f5c9:./" + PRED_REL],
+                             cwd=ROOT, capture_output=True)
+        self.assertEqual(out.returncode, 0)
+        now = io.open(os.path.join(ROOT, PRED_REL), "rb").read()
+        self.assertEqual(hashlib.sha256(out.stdout).hexdigest(),
+                         hashlib.sha256(now).hexdigest(),
+                         u"**予測の file が動いている**")
+
+    def test_11_engine_is_untouched(self):
+        for rel, want in ENGINE_SHA.items():
+            with io.open(os.path.join(ROOT, rel), "rb") as fh:
+                got = hashlib.sha256(fh.read()).hexdigest()[:16]
+            self.assertEqual(got, want, u"**%s が動いている**" % rel)
+        self.assertIn(u"**profile を P16 → P20 にしただけ。"
+                      u"engine のコードは 1 行も変えていない。0 USD・席は呼んでいない。**",
+                      self.t)
+
+    def test_12_it_does_not_claim_product_value(self):
+        b = self.t[self.t.index(u"## §5"):]
+        self.assertIn(u"**性能の証明ではない**", b)
+        self.assertIn(u"**A 対 C′(LLM + Core が LLM 単体より正確か)"
+                      u"はこの封では測っていない。**", b)
+        self.assertIn(u"**「P20 にすべき」とは書かない。**", b)
+        self.assertIn(u"**測っていない。**", b)
+
+    def test_13_next_steps_are_the_humans(self):
+        b = self.t[self.t.index(u"## §6"):]
+        self.assertIn(u"独立監査の GO が要る", b)
+        self.assertIn(u"**先に Core 側の特定を上げないと α は 0 のままである。**", b)
+
+
+if __name__ == "__main__":
+    unittest.main()

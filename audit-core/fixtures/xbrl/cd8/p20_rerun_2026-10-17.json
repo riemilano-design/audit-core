@@ -1,0 +1,7882 @@
+{
+ "seal": "docs/XBRL_P20_SEAL_2026-10-17.md",
+ "step": "**封の実測。profile だけ P16 → P20。0 USD・席なし**",
+ "**1 変数の確認**": {
+  "profile の差": [
+   "name",
+   "nonconsolidated_fallback"
+  ],
+  "注": "`name` と `nonconsolidated_fallback` だけ"
+ },
+ "**P16 の再現**": "**8 書類 192 行すべてで材料の記録と一致**(違えば止めた)",
+ "数": {
+  "T5": 50,
+  "T5(1 対 1)": 26,
+  "特定 P16": 15,
+  "特定(1 対 1) P16": 13,
+  "名指した P16": 40,
+  "特定 P20": 18,
+  "特定(1 対 1) P20": 15,
+  "名指した P20": 50,
+  "名指して正解でない P16": 25,
+  "名指して正解でない P20": 32,
+  "席が外した行": 7,
+  "そこで Core が正解を持つ P16": 0,
+  "そこで Core が正解を持つ P20": 0
+ },
+ "M-1 10 行の state": {
+  "POINTER_NOT_FOUND の数": {
+   "P16": 10,
+   "P20": 0
+  },
+  "明細": [
+   {
+    "doc": "S100YZ7E",
+    "id": "R017",
+    "P16": {
+     "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+     "参照先": null,
+     "state": "POINTER_NOT_FOUND"
+    },
+    "P20": {
+     "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+     "参照先": "unearnedrevenue@currentyearinstant_nonconsolidatedmember",
+     "state": "VALUE_MISMATCH"
+    },
+    "正解": "operatingrevenue2summaryofbusinessresults@currentyearduration_nonconsolidatedmember"
+   },
+   {
+    "doc": "S100YZ7E",
+    "id": "R018",
+    "P16": {
+     "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+     "参照先": null,
+     "state": "POINTER_NOT_FOUND"
+    },
+    "P20": {
+     "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+     "参照先": "unearnedrevenue@currentyearinstant_nonconsolidatedmember",
+     "state": "VALUE_MISMATCH"
+    },
+    "正解": "ordinaryincomelosssummaryofbusinessresults@currentyearduration_nonconsolidatedmember"
+   },
+   {
+    "doc": "S100YZ7E",
+    "id": "R019",
+    "P16": {
+     "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+     "参照先": null,
+     "state": "POINTER_NOT_FOUND"
+    },
+    "P20": {
+     "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+     "参照先": "unearnedrevenue@currentyearinstant_nonconsolidatedmember",
+     "state": "VALUE_MISMATCH"
+    },
+    "正解": "cashandcashequivalentssummaryofbusinessresults@currentyearinstant_nonconsolidatedmember"
+   },
+   {
+    "doc": "S100YZ7E",
+    "id": "R020",
+    "P16": {
+     "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+     "参照先": null,
+     "state": "POINTER_NOT_FOUND"
+    },
+    "P20": {
+     "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+     "参照先": "unearnedrevenue@currentyearinstant_nonconsolidatedmember",
+     "state": "VALUE_MISMATCH"
+    },
+    "正解": "netcashprovidedbyusedininvestingactivitiessummaryofbusinessresults@currentyearduration_nonconsolidatedmember"
+   },
+   {
+    "doc": "S100YZ7E",
+    "id": "R023",
+    "P16": {
+     "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+     "参照先": null,
+     "state": "POINTER_NOT_FOUND"
+    },
+    "P20": {
+     "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+     "参照先": "assets@currentyearinstant_nonconsolidatedmember",
+     "state": "VALUE_MISMATCH"
+    },
+    "正解": "totalassetssummaryofbusinessresults@currentyearinstant_nonconsolidatedmember"
+   },
+   {
+    "doc": "S100YZ7E",
+    "id": "R024",
+    "P16": {
+     "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+     "参照先": null,
+     "state": "POINTER_NOT_FOUND"
+    },
+    "P20": {
+     "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+     "参照先": "netassets@currentyearinstant_nonconsolidatedmember",
+     "state": "VALUE_MISMATCH"
+    },
+    "正解": "netassetssummaryofbusinessresults@currentyearinstant_nonconsolidatedmember"
+   },
+   {
+    "doc": "S100YZEV",
+    "id": "R011",
+    "P16": {
+     "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+     "参照先": null,
+     "state": "POINTER_NOT_FOUND"
+    },
+    "P20": {
+     "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+     "参照先": "operatingincome@currentyearduration_nonconsolidatedmember",
+     "state": "VALUE_MISMATCH"
+    },
+    "正解": "operatingincome@currentyearduration_nonconsolidatedmember"
+   },
+   {
+    "doc": "S100YZEV",
+    "id": "R018",
+    "P16": {
+     "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+     "参照先": null,
+     "state": "POINTER_NOT_FOUND"
+    },
+    "P20": {
+     "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+     "参照先": "currentassets@currentyearinstant_nonconsolidatedmember",
+     "state": "VALUE_MISMATCH"
+    },
+    "正解": "currentassets@currentyearinstant_nonconsolidatedmember"
+   },
+   {
+    "doc": "S100YZEV",
+    "id": "R019",
+    "P16": {
+     "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+     "参照先": null,
+     "state": "POINTER_NOT_FOUND"
+    },
+    "P20": {
+     "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+     "参照先": "noncurrentassets@currentyearinstant_nonconsolidatedmember",
+     "state": "VALUE_MISMATCH"
+    },
+    "正解": "noncurrentassets@currentyearinstant_nonconsolidatedmember"
+   },
+   {
+    "doc": "S100YZEV",
+    "id": "R020",
+    "P16": {
+     "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+     "参照先": null,
+     "state": "POINTER_NOT_FOUND"
+    },
+    "P20": {
+     "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+     "参照先": "operatingincome@currentyearduration_nonconsolidatedmember",
+     "state": "VALUE_MISMATCH"
+    },
+    "正解": "increasedecreaseinaccountspayableotheropecf@currentyearduration_nonconsolidatedmember"
+   }
+  ]
+ },
+ "M-2 特定": {
+  "全部の行": {
+   "P16": {
+    "分子": 15,
+    "分母": 50,
+    "率": 30.0
+   },
+   "P20": {
+    "分子": 18,
+    "分母": 50,
+    "率": 36.0
+   }
+  },
+  "1 対 1 の行だけ": {
+   "P16": {
+    "分子": 13,
+    "分母": 26,
+    "率": 50.0
+   },
+   "P20": {
+    "分子": 15,
+    "分母": 26,
+    "率": 57.7
+   }
+  }
+ },
+ "M-3 名指して正解でない行": {
+  "P16": {
+   "分子": 25,
+   "分母": 40,
+   "率": 62.5
+  },
+  "P20": {
+   "分子": 32,
+   "分母": 50,
+   "率": 64.0
+  }
+ },
+ "M-4 6 書類の動き": {
+  "S100YYRG": 0,
+  "S100YXMA": 0,
+  "S100YWGX": 0,
+  "S100YZCT": 0,
+  "S100YYRV": 0,
+  "S100YXF5": 0
+ },
+ "M-5 α の天井": {
+  "P16": "0/7",
+  "P20": "0/7"
+ },
+ "M-6 2 書類の動き": {
+  "S100YZ7E": {
+   "主張(P16)": 89,
+   "主張(P20)": 89,
+   "**state か pointers が動いた主張**": 57,
+   "動いた主張の id": [
+    "N021",
+    "N022",
+    "N023",
+    "N024",
+    "N026",
+    "N027",
+    "N028",
+    "N029",
+    "N030",
+    "N031",
+    "N032",
+    "N033",
+    "N034",
+    "N035",
+    "N036",
+    "N037",
+    "N038",
+    "N039",
+    "N042",
+    "N043"
+   ],
+   "明細": [
+    {
+     "id": "N021",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "GROUNDED",
+      "pointers": [
+       "xbrl:jppfs_cor:OperatingRevenue2@CurrentYearDuration_NonConsolidatedMember",
+       "xbrl:jppfs_cor:OperatingRevenue2@Prior1YearDuration_NonConsolidatedMember",
+       "formula:a-b"
+      ]
+     }
+    },
+    {
+     "id": "N022",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "VALUE_MISMATCH",
+      "pointers": [
+       "xbrl:jppfs_cor:UnearnedRevenue@CurrentYearInstant_NonConsolidatedMember"
+      ]
+     }
+    },
+    {
+     "id": "N023",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "VALUE_MISMATCH",
+      "pointers": [
+       "xbrl:jppfs_cor:ProvisionForLossOnGuaranteesCL@CurrentYearInstant_NonConsolidatedMember"
+      ]
+     }
+    },
+    {
+     "id": "N024",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "VALUE_MISMATCH",
+      "pointers": [
+       "xbrl:jppfs_cor:ProvisionForLossOnGuaranteesCL@CurrentYearInstant_NonConsolidatedMember"
+      ]
+     }
+    },
+    {
+     "id": "N026",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "UNVERIFIABLE",
+      "pointers": []
+     }
+    },
+    {
+     "id": "N027",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "VALUE_MISMATCH",
+      "pointers": [
+       "xbrl:jppfs_cor:InvestmentSecurities@CurrentYearInstant_NonConsolidatedMember"
+      ]
+     }
+    },
+    {
+     "id": "N028",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "GROUNDED",
+      "pointers": [
+       "xbrl:jppfs_cor:RentIncomeNOI@Prior1YearDuration_NonConsolidatedMember"
+      ]
+     }
+    },
+    {
+     "id": "N029",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "VALUE_MISMATCH",
+      "pointers": [
+       "xbrl:jppfs_cor:RentIncomeNOI@CurrentYearDuration_NonConsolidatedMember"
+      ]
+     }
+    },
+    {
+     "id": "N030",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "GROUNDED",
+      "pointers": [
+       "xbrl:jppfs_cor:CostOfLeaseRevenueNOE@CurrentYearDuration_NonConsolidatedMember"
+      ]
+     }
+    },
+    {
+     "id": "N031",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "GROUNDED",
+      "pointers": [
+       "xbrl:jppfs_cor:OrdinaryIncome@CurrentYearDuration_NonConsolidatedMember",
+       "xbrl:jppfs_cor:OrdinaryIncome@Prior1YearDuration_NonConsolidatedMember"
+      ]
+     }
+    },
+    {
+     "id": "N032",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "VALUE_MISMATCH",
+      "pointers": [
+       "xbrl:jppfs_cor:OrdinaryIncome@CurrentYearDuration_NonConsolidatedMember"
+      ]
+     }
+    },
+    {
+     "id": "N033",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "VALUE_MISMATCH",
+      "pointers": [
+       "xbrl:jppfs_cor:ExtraordinaryIncome@CurrentYearDuration_NonConsolidatedMember"
+      ]
+     }
+    },
+    {
+     "id": "N034",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "GROUNDED",
+      "pointers": [
+       "xbrl:jppfs_cor:GainOnSalesOfInvestmentSecuritiesEI@CurrentYearDuration_NonConsolidatedMember"
+      ]
+     }
+    },
+    {
+     "id": "N035",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "GROUNDED",
+      "pointers": [
+       "xbrl:jppfs_cor:LossOnSalesOfInvestmentSecuritiesEL@CurrentYearDuration_NonConsolidatedMember"
+      ]
+     }
+    },
+    {
+     "id": "N036",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "GROUNDED",
+      "pointers": [
+       "xbrl:jppfs_cor:IncomeBeforeIncomeTaxes@CurrentYearDuration_NonConsolidatedMember",
+       "xbrl:jppfs_cor:IncomeBeforeIncomeTaxes@Prior1YearDuration_NonConsolidatedMember"
+      ]
+     }
+    },
+    {
+     "id": "N037",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "GROUNDED",
+      "pointers": [
+       "xbrl:jppfs_cor:IncomeBeforeIncomeTaxes@CurrentYearDuration_NonConsolidatedMember"
+      ]
+     }
+    },
+    {
+     "id": "N038",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "GROUNDED",
+      "pointers": [
+       "xbrl:jppfs_cor:ProfitLoss@CurrentYearDuration_NonConsolidatedMember",
+       "xbrl:jppfs_cor:ProfitLoss@Prior1YearDuration_NonConsolidatedMember"
+      ]
+     }
+    },
+    {
+     "id": "N039",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "GROUNDED",
+      "pointers": [
+       "xbrl:jppfs_cor:ProfitLoss@CurrentYearDuration_NonConsolidatedMember"
+      ]
+     }
+    },
+    {
+     "id": "N042",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "VALUE_MISMATCH",
+      "pointers": [
+       "xbrl:jppfs_cor:NetAssets@CurrentYearInstant_NonConsolidatedMember"
+      ]
+     }
+    },
+    {
+     "id": "N043",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "VALUE_MISMATCH",
+      "pointers": [
+       "xbrl:jppfs_cor:NetAssets@CurrentYearInstant_NonConsolidatedMember"
+      ]
+     }
+    },
+    {
+     "id": "N044",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "VALUE_MISMATCH",
+      "pointers": [
+       "xbrl:jppfs_cor:CashAndCashEquivalents@CurrentYearInstant_NonConsolidatedMember"
+      ]
+     }
+    },
+    {
+     "id": "N045",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "GROUNDED",
+      "pointers": [
+       "xbrl:jppfs_cor:CashAndCashEquivalents@CurrentYearInstant_NonConsolidatedMember",
+       "xbrl:jppfs_cor:CashAndCashEquivalents@Prior1YearInstant_NonConsolidatedMember",
+       "formula:a-b"
+      ]
+     }
+    },
+    {
+     "id": "N046",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "UNVERIFIABLE",
+      "pointers": []
+     }
+    },
+    {
+     "id": "N047",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "GROUNDED",
+      "pointers": [
+       "xbrl:jppfs_cor:OperatingIncomeOpeCF@CurrentYearDuration_NonConsolidatedMember"
+      ]
+     }
+    },
+    {
+     "id": "N048",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "VALUE_MISMATCH",
+      "pointers": [
+       "xbrl:jpcrp_cor:DividendPaidPerShareSummaryOfBusinessResults@CurrentYearDuration_NonConsolidatedMember"
+      ]
+     }
+    },
+    {
+     "id": "N049",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "VALUE_MISMATCH",
+      "pointers": [
+       "xbrl:jpcrp_cor:DividendPaidPerShareSummaryOfBusinessResults@CurrentYearDuration_NonConsolidatedMember"
+      ]
+     }
+    },
+    {
+     "id": "N050",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "VALUE_MISMATCH",
+      "pointers": [
+       "xbrl:jpcrp_cor:DividendPaidPerShareSummaryOfBusinessResults@CurrentYearDuration_NonConsolidatedMember"
+      ]
+     }
+    },
+    {
+     "id": "N051",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "VALUE_MISMATCH",
+      "pointers": [
+       "xbrl:jpcrp_cor:DividendPaidPerShareSummaryOfBusinessResults@CurrentYearDuration_NonConsolidatedMember"
+      ]
+     }
+    },
+    {
+     "id": "N052",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "GROUNDED",
+      "pointers": [
+       "xbrl:jppfs_cor:IncomeTaxesPaidOpeCF@CurrentYearDuration_NonConsolidatedMember"
+      ]
+     }
+    },
+    {
+     "id": "N053",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "GROUNDED",
+      "pointers": [
+       "xbrl:jppfs_cor:PaymentsForPayrollOpeCF@CurrentYearDuration_NonConsolidatedMember"
+      ]
+     }
+    },
+    {
+     "id": "N054",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "GROUNDED",
+      "pointers": [
+       "xbrl:jppfs_cor:PaymentsForOtherOperatingActivityOpeCF@CurrentYearDuration_NonConsolidatedMember"
+      ]
+     }
+    },
+    {
+     "id": "N056",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "GROUNDED",
+      "pointers": [
+       "xbrl:jppfs_cor:ProceedsFromSalesOfInvestmentSecuritiesInvCF@CurrentYearDuration_NonConsolidatedMember"
+      ]
+     }
+    },
+    {
+     "id": "N057",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "VALUE_MISMATCH",
+      "pointers": [
+       "xbrl:jppfs_cor:ShortTermInvestmentSecurities@CurrentYearInstant_NonConsolidatedMember"
+      ]
+     }
+    },
+    {
+     "id": "N058",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "GROUNDED",
+      "pointers": [
+       "xbrl:jppfs_cor:ProceedsFromRentalOfRealEstateForInvestmentInvCF@Prior1YearDuration_NonConsolidatedMember"
+      ]
+     }
+    },
+    {
+     "id": "N059",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "GROUNDED",
+      "pointers": [
+       "xbrl:jppfs_cor:PurchaseOfInvestmentSecuritiesInvCF@CurrentYearDuration_NonConsolidatedMember"
+      ]
+     }
+    },
+    {
+     "id": "N060",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "VALUE_MISMATCH",
+      "pointers": [
+       "xbrl:jppfs_cor:PurchaseOfIntangibleAssetsInvCF@CurrentYearDuration_NonConsolidatedMember"
+      ]
+     }
+    },
+    {
+     "id": "N061",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "VALUE_MISMATCH",
+      "pointers": [
+       "xbrl:jppfs_cor:PurchaseOfIntangibleAssetsInvCF@CurrentYearDuration_NonConsolidatedMember"
+      ]
+     }
+    },
+    {
+     "id": "N062",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "UNVERIFIABLE",
+      "pointers": []
+     }
+    },
+    {
+     "id": "N063",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "VALUE_MISMATCH",
+      "pointers": [
+       "xbrl:jpcrp_cor:DividendPaidPerShareSummaryOfBusinessResults@CurrentYearDuration_NonConsolidatedMember"
+      ]
+     }
+    },
+    {
+     "id": "N066",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "VALUE_MISMATCH",
+      "pointers": [
+       "xbrl:jppfs_cor:Assets@CurrentYearInstant_NonConsolidatedMember"
+      ]
+     }
+    },
+    {
+     "id": "N067",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "GROUNDED",
+      "pointers": [
+       "xbrl:jppfs_cor:Assets@CurrentYearInstant_NonConsolidatedMember",
+       "xbrl:jppfs_cor:Assets@Prior1YearInstant_NonConsolidatedMember",
+       "formula:a-b"
+      ]
+     }
+    },
+    {
+     "id": "N068",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "GROUNDED",
+      "pointers": [
+       "xbrl:jppfs_cor:Liabilities@CurrentYearInstant_NonConsolidatedMember"
+      ]
+     }
+    },
+    {
+     "id": "N069",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "GROUNDED",
+      "pointers": [
+       "xbrl:jppfs_cor:Liabilities@CurrentYearInstant_NonConsolidatedMember",
+       "xbrl:jppfs_cor:Liabilities@Prior1YearInstant_NonConsolidatedMember",
+       "formula:a-b"
+      ]
+     }
+    },
+    {
+     "id": "N070",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "VALUE_MISMATCH",
+      "pointers": [
+       "xbrl:jppfs_cor:NetAssets@CurrentYearInstant_NonConsolidatedMember"
+      ]
+     }
+    },
+    {
+     "id": "N071",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "GROUNDED",
+      "pointers": [
+       "xbrl:jppfs_cor:NetAssets@CurrentYearInstant_NonConsolidatedMember",
+       "xbrl:jppfs_cor:NetAssets@Prior1YearInstant_NonConsolidatedMember",
+       "formula:a-b"
+      ]
+     }
+    },
+    {
+     "id": "N072",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "VALUE_MISMATCH",
+      "pointers": [
+       "xbrl:jppfs_cor:CurrentLiabilities@CurrentYearInstant_NonConsolidatedMember"
+      ]
+     }
+    },
+    {
+     "id": "N073",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "VALUE_MISMATCH",
+      "pointers": [
+       "xbrl:jppfs_cor:InvestmentSecurities@CurrentYearInstant_NonConsolidatedMember"
+      ]
+     }
+    },
+    {
+     "id": "T005",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "VALUE_MISMATCH",
+      "pointers": [
+       "xbrl:jppfs_cor:UnearnedRevenue@CurrentYearInstant_NonConsolidatedMember",
+       "xbrl:jppfs_cor:UnearnedRevenue@Prior1YearInstant_NonConsolidatedMember",
+       "builtin:sign(cur-prior)"
+      ]
+     }
+    },
+    {
+     "id": "T006",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "VALUE_MISMATCH",
+      "pointers": [
+       "xbrl:jppfs_cor:UnearnedRevenue@CurrentYearInstant_NonConsolidatedMember",
+       "xbrl:jppfs_cor:UnearnedRevenue@Prior1YearInstant_NonConsolidatedMember",
+       "builtin:sign(cur-prior)"
+      ]
+     }
+    },
+    {
+     "id": "T007",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "VALUE_MISMATCH",
+      "pointers": [
+       "xbrl:jppfs_cor:UnearnedRevenue@CurrentYearInstant_NonConsolidatedMember",
+       "xbrl:jppfs_cor:UnearnedRevenue@Prior1YearInstant_NonConsolidatedMember",
+       "builtin:sign(cur-prior)"
+      ]
+     }
+    },
+    {
+     "id": "T008",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "VALUE_MISMATCH",
+      "pointers": [
+       "xbrl:jppfs_cor:UnearnedRevenue@CurrentYearInstant_NonConsolidatedMember",
+       "xbrl:jppfs_cor:UnearnedRevenue@Prior1YearInstant_NonConsolidatedMember",
+       "builtin:sign(cur-prior)"
+      ]
+     }
+    },
+    {
+     "id": "T013",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "VALUE_MISMATCH",
+      "pointers": [
+       "xbrl:jppfs_cor:UnearnedRevenue@CurrentYearInstant_NonConsolidatedMember",
+       "xbrl:jppfs_cor:UnearnedRevenue@Prior1YearInstant_NonConsolidatedMember",
+       "builtin:sign(cur-prior)"
+      ]
+     }
+    },
+    {
+     "id": "T014",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "GROUNDED",
+      "pointers": [
+       "xbrl:jppfs_cor:CashAndCashEquivalents@CurrentYearInstant_NonConsolidatedMember",
+       "xbrl:jppfs_cor:CashAndCashEquivalents@Prior1YearInstant_NonConsolidatedMember",
+       "builtin:sign(cur-prior)"
+      ]
+     }
+    },
+    {
+     "id": "T015",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "GROUNDED",
+      "pointers": [
+       "xbrl:jppfs_cor:Assets@CurrentYearInstant_NonConsolidatedMember",
+       "xbrl:jppfs_cor:Assets@Prior1YearInstant_NonConsolidatedMember",
+       "builtin:sign(cur-prior)"
+      ]
+     }
+    },
+    {
+     "id": "T016",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "GROUNDED",
+      "pointers": [
+       "xbrl:jppfs_cor:InvestmentSecurities@CurrentYearInstant_NonConsolidatedMember",
+       "xbrl:jppfs_cor:InvestmentSecurities@Prior1YearInstant_NonConsolidatedMember",
+       "builtin:sign(cur-prior)"
+      ]
+     }
+    },
+    {
+     "id": "T017",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "GROUNDED",
+      "pointers": [
+       "xbrl:jppfs_cor:Liabilities@CurrentYearInstant_NonConsolidatedMember",
+       "xbrl:jppfs_cor:Liabilities@Prior1YearInstant_NonConsolidatedMember",
+       "builtin:sign(cur-prior)"
+      ]
+     }
+    },
+    {
+     "id": "T019",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "GROUNDED",
+      "pointers": [
+       "xbrl:jppfs_cor:NetAssets@CurrentYearInstant_NonConsolidatedMember",
+       "xbrl:jppfs_cor:NetAssets@Prior1YearInstant_NonConsolidatedMember",
+       "builtin:sign(cur-prior)"
+      ]
+     }
+    }
+   ]
+  },
+  "S100YZEV": {
+   "主張(P16)": 80,
+   "主張(P20)": 80,
+   "**state か pointers が動いた主張**": 62,
+   "動いた主張の id": [
+    "N001",
+    "N002",
+    "N005",
+    "N006",
+    "N007",
+    "N008",
+    "N009",
+    "N010",
+    "N011",
+    "N012",
+    "N013",
+    "N014",
+    "N015",
+    "N016",
+    "N017",
+    "N019",
+    "N020",
+    "N021",
+    "N022",
+    "N023"
+   ],
+   "明細": [
+    {
+     "id": "N001",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "VALUE_MISMATCH",
+      "pointers": [
+       "xbrl:jppfs_cor:NetSales@CurrentYearDuration_NonConsolidatedMember"
+      ]
+     }
+    },
+    {
+     "id": "N002",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "VALUE_MISMATCH",
+      "pointers": [
+       "xbrl:jppfs_cor:NetSales@CurrentYearDuration_NonConsolidatedMember"
+      ]
+     }
+    },
+    {
+     "id": "N005",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "GROUNDED",
+      "pointers": [
+       "xbrl:jppfs_cor:NetSales@CurrentYearDuration_NonConsolidatedMember"
+      ]
+     }
+    },
+    {
+     "id": "N006",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "GROUNDED",
+      "pointers": [
+       "xbrl:jppfs_cor:NetSales@CurrentYearDuration_NonConsolidatedMember",
+       "xbrl:jppfs_cor:NetSales@Prior1YearDuration_NonConsolidatedMember"
+      ]
+     }
+    },
+    {
+     "id": "N007",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "VALUE_MISMATCH",
+      "pointers": [
+       "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration_NonConsolidatedMember"
+      ]
+     }
+    },
+    {
+     "id": "N008",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "GROUNDED",
+      "pointers": [
+       "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration_NonConsolidatedMember",
+       "xbrl:jppfs_cor:OperatingIncome@Prior1YearDuration_NonConsolidatedMember"
+      ]
+     }
+    },
+    {
+     "id": "N009",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "GROUNDED",
+      "pointers": [
+       "xbrl:jppfs_cor:OrdinaryIncome@CurrentYearDuration_NonConsolidatedMember"
+      ]
+     }
+    },
+    {
+     "id": "N010",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "GROUNDED",
+      "pointers": [
+       "xbrl:jppfs_cor:OrdinaryIncome@CurrentYearDuration_NonConsolidatedMember",
+       "xbrl:jppfs_cor:OrdinaryIncome@Prior1YearDuration_NonConsolidatedMember"
+      ]
+     }
+    },
+    {
+     "id": "N011",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "GROUNDED",
+      "pointers": [
+       "xbrl:jppfs_cor:ProfitLoss@CurrentYearDuration_NonConsolidatedMember"
+      ]
+     }
+    },
+    {
+     "id": "N012",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "GROUNDED",
+      "pointers": [
+       "xbrl:jppfs_cor:ProfitLoss@CurrentYearDuration_NonConsolidatedMember",
+       "xbrl:jppfs_cor:ProfitLoss@Prior1YearDuration_NonConsolidatedMember"
+      ]
+     }
+    },
+    {
+     "id": "N013",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "GROUNDED",
+      "pointers": [
+       "xbrl:jppfs_cor:CurrentAssets@CurrentYearInstant_NonConsolidatedMember",
+       "xbrl:jppfs_cor:CurrentAssets@Prior1YearInstant_NonConsolidatedMember",
+       "formula:a-b"
+      ]
+     }
+    },
+    {
+     "id": "N014",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "VALUE_MISMATCH",
+      "pointers": [
+       "xbrl:jppfs_cor:CurrentAssets@CurrentYearInstant_NonConsolidatedMember"
+      ]
+     }
+    },
+    {
+     "id": "N015",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "VALUE_MISMATCH",
+      "pointers": [
+       "xbrl:jppfs_cor:CashAndDeposits@CurrentYearInstant_NonConsolidatedMember"
+      ]
+     }
+    },
+    {
+     "id": "N016",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "GROUNDED",
+      "pointers": [
+       "xbrl:jppfs_cor:NoncurrentAssets@CurrentYearInstant_NonConsolidatedMember",
+       "xbrl:jppfs_cor:NoncurrentAssets@Prior1YearInstant_NonConsolidatedMember",
+       "formula:a-b"
+      ]
+     }
+    },
+    {
+     "id": "N017",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "VALUE_MISMATCH",
+      "pointers": [
+       "xbrl:jppfs_cor:NoncurrentAssets@CurrentYearInstant_NonConsolidatedMember"
+      ]
+     }
+    },
+    {
+     "id": "N019",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "VALUE_MISMATCH",
+      "pointers": [
+       "xbrl:jppfs_cor:LeaseAndGuaranteeDeposits@CurrentYearInstant_NonConsolidatedMember"
+      ]
+     }
+    },
+    {
+     "id": "N020",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "GROUNDED",
+      "pointers": [
+       "xbrl:jppfs_cor:CurrentLiabilities@CurrentYearInstant_NonConsolidatedMember",
+       "xbrl:jppfs_cor:CurrentLiabilities@Prior1YearInstant_NonConsolidatedMember",
+       "formula:a-b"
+      ]
+     }
+    },
+    {
+     "id": "N021",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "GROUNDED",
+      "pointers": [
+       "xbrl:jppfs_cor:CurrentLiabilities@CurrentYearInstant_NonConsolidatedMember"
+      ]
+     }
+    },
+    {
+     "id": "N022",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "GROUNDED",
+      "pointers": [
+       "xbrl:jppfs_cor:AccountsPayableOther@CurrentYearInstant_NonConsolidatedMember",
+       "xbrl:jppfs_cor:AccountsPayableOther@Prior1YearInstant_NonConsolidatedMember",
+       "formula:a-b"
+      ]
+     }
+    },
+    {
+     "id": "N023",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "VALUE_MISMATCH",
+      "pointers": [
+       "xbrl:jppfs_cor:AccruedExpenses@CurrentYearInstant_NonConsolidatedMember"
+      ]
+     }
+    },
+    {
+     "id": "N024",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "VALUE_MISMATCH",
+      "pointers": [
+       "xbrl:jppfs_cor:NetAssets@CurrentYearInstant_NonConsolidatedMember"
+      ]
+     }
+    },
+    {
+     "id": "N025",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "GROUNDED",
+      "pointers": [
+       "xbrl:jppfs_cor:NetAssets@CurrentYearInstant_NonConsolidatedMember"
+      ]
+     }
+    },
+    {
+     "id": "N026",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "GROUNDED",
+      "pointers": [
+       "xbrl:jppfs_cor:ProfitLoss@CurrentYearDuration_NonConsolidatedMember"
+      ]
+     }
+    },
+    {
+     "id": "N027",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "GROUNDED",
+      "pointers": [
+       "xbrl:jppfs_cor:DividendsFromSurplus@CurrentYearDuration_NonConsolidatedMember"
+      ]
+     }
+    },
+    {
+     "id": "N028",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "GROUNDED",
+      "pointers": [
+       "xbrl:jppfs_cor:CapitalSurplus@CurrentYearInstant_NonConsolidatedMember",
+       "xbrl:jppfs_cor:CapitalSurplus@Prior1YearInstant_NonConsolidatedMember",
+       "formula:a-b"
+      ]
+     }
+    },
+    {
+     "id": "N029",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "GROUNDED",
+      "pointers": [
+       "xbrl:jppfs_cor:CashAndCashEquivalents@CurrentYearInstant_NonConsolidatedMember"
+      ]
+     }
+    },
+    {
+     "id": "N030",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "GROUNDED",
+      "pointers": [
+       "xbrl:jppfs_cor:CashAndCashEquivalents@CurrentYearInstant_NonConsolidatedMember",
+       "xbrl:jppfs_cor:CashAndCashEquivalents@Prior1YearInstant_NonConsolidatedMember",
+       "formula:a-b"
+      ]
+     }
+    },
+    {
+     "id": "N031",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "UNVERIFIABLE",
+      "pointers": []
+     }
+    },
+    {
+     "id": "N032",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "UNVERIFIABLE",
+      "pointers": []
+     }
+    },
+    {
+     "id": "N033",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "GROUNDED",
+      "pointers": [
+       "xbrl:jppfs_cor:IncomeTaxesPaidOpeCF@CurrentYearDuration_NonConsolidatedMember"
+      ]
+     }
+    },
+    {
+     "id": "N034",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "GROUNDED",
+      "pointers": [
+       "xbrl:jppfs_cor:IncomeBeforeIncomeTaxes@CurrentYearDuration_NonConsolidatedMember"
+      ]
+     }
+    },
+    {
+     "id": "N035",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "VALUE_MISMATCH",
+      "pointers": [
+       "xbrl:jppfs_cor:IncreaseDecreaseInAccountsPayableOtherOpeCF@CurrentYearDuration_NonConsolidatedMember"
+      ]
+     }
+    },
+    {
+     "id": "N036",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "UNVERIFIABLE",
+      "pointers": []
+     }
+    },
+    {
+     "id": "N037",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "UNVERIFIABLE",
+      "pointers": []
+     }
+    },
+    {
+     "id": "N038",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "GROUNDED",
+      "pointers": [
+       "xbrl:jppfs_cor:PaymentsIntoTimeDepositsInvCF@CurrentYearDuration_NonConsolidatedMember"
+      ]
+     }
+    },
+    {
+     "id": "N039",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "UNVERIFIABLE",
+      "pointers": []
+     }
+    },
+    {
+     "id": "N040",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "UNVERIFIABLE",
+      "pointers": []
+     }
+    },
+    {
+     "id": "N041",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "GROUNDED",
+      "pointers": [
+       "xbrl:jppfs_cor:ProceedsFromIssuanceOfCommonStockFinCF@CurrentYearDuration_NonConsolidatedMember"
+      ]
+     }
+    },
+    {
+     "id": "N042",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "GROUNDED",
+      "pointers": [
+       "xbrl:jppfs_cor:CashDividendsPaidFinCF@CurrentYearDuration_NonConsolidatedMember"
+      ]
+     }
+    },
+    {
+     "id": "N043",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "VALUE_MISMATCH",
+      "pointers": [
+       "xbrl:jppfs_cor:NetSales@CurrentYearDuration_NonConsolidatedMember"
+      ]
+     }
+    },
+    {
+     "id": "N048",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "GROUNDED",
+      "pointers": [
+       "xbrl:jppfs_cor:NetSales@CurrentYearDuration_NonConsolidatedMember"
+      ]
+     }
+    },
+    {
+     "id": "N049",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "GROUNDED",
+      "pointers": [
+       "xbrl:jppfs_cor:NetSales@CurrentYearDuration_NonConsolidatedMember",
+       "xbrl:jppfs_cor:NetSales@Prior1YearDuration_NonConsolidatedMember"
+      ]
+     }
+    },
+    {
+     "id": "N050",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "VALUE_MISMATCH",
+      "pointers": [
+       "xbrl:jppfs_cor:NetSales@CurrentYearDuration_NonConsolidatedMember",
+       "xbrl:jppfs_cor:NetSales@Prior1YearDuration_NonConsolidatedMember"
+      ]
+     }
+    },
+    {
+     "id": "N051",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "VALUE_MISMATCH",
+      "pointers": [
+       "xbrl:jppfs_cor:NetSales@CurrentYearDuration_NonConsolidatedMember"
+      ]
+     }
+    },
+    {
+     "id": "N052",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "VALUE_MISMATCH",
+      "pointers": [
+       "xbrl:jppfs_cor:NetSales@CurrentYearDuration_NonConsolidatedMember",
+       "xbrl:jppfs_cor:NetSales@Prior1YearDuration_NonConsolidatedMember"
+      ]
+     }
+    },
+    {
+     "id": "N055",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "VALUE_MISMATCH",
+      "pointers": [
+       "xbrl:jppfs_cor:NetSales@CurrentYearDuration_NonConsolidatedMember",
+       "xbrl:jppfs_cor:NetSales@Prior1YearDuration_NonConsolidatedMember"
+      ]
+     }
+    },
+    {
+     "id": "T006",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "GROUNDED",
+      "pointers": [
+       "xbrl:jppfs_cor:NetSales@CurrentYearDuration_NonConsolidatedMember",
+       "xbrl:jppfs_cor:NetSales@Prior1YearDuration_NonConsolidatedMember",
+       "builtin:sign(cur-prior)"
+      ]
+     }
+    },
+    {
+     "id": "T007",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "GROUNDED",
+      "pointers": [
+       "xbrl:jppfs_cor:CurrentAssets@CurrentYearInstant_NonConsolidatedMember",
+       "xbrl:jppfs_cor:CurrentAssets@Prior1YearInstant_NonConsolidatedMember",
+       "builtin:sign(cur-prior)"
+      ]
+     }
+    },
+    {
+     "id": "T008",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "GROUNDED",
+      "pointers": [
+       "xbrl:jppfs_cor:CashAndDeposits@CurrentYearInstant_NonConsolidatedMember",
+       "xbrl:jppfs_cor:CashAndDeposits@Prior1YearInstant_NonConsolidatedMember",
+       "builtin:sign(cur-prior)"
+      ]
+     }
+    },
+    {
+     "id": "T009",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "GROUNDED",
+      "pointers": [
+       "xbrl:jppfs_cor:NoncurrentAssets@CurrentYearInstant_NonConsolidatedMember",
+       "xbrl:jppfs_cor:NoncurrentAssets@Prior1YearInstant_NonConsolidatedMember",
+       "builtin:sign(cur-prior)"
+      ]
+     }
+    },
+    {
+     "id": "T011",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "GROUNDED",
+      "pointers": [
+       "xbrl:jppfs_cor:LeaseAndGuaranteeDeposits@CurrentYearInstant_NonConsolidatedMember",
+       "xbrl:jppfs_cor:LeaseAndGuaranteeDeposits@Prior1YearInstant_NonConsolidatedMember",
+       "builtin:sign(cur-prior)"
+      ]
+     }
+    },
+    {
+     "id": "T012",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "GROUNDED",
+      "pointers": [
+       "xbrl:jppfs_cor:CurrentLiabilities@CurrentYearInstant_NonConsolidatedMember",
+       "xbrl:jppfs_cor:CurrentLiabilities@Prior1YearInstant_NonConsolidatedMember",
+       "builtin:sign(cur-prior)"
+      ]
+     }
+    },
+    {
+     "id": "T013",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "GROUNDED",
+      "pointers": [
+       "xbrl:jppfs_cor:AccountsPayableOther@CurrentYearInstant_NonConsolidatedMember",
+       "xbrl:jppfs_cor:AccountsPayableOther@Prior1YearInstant_NonConsolidatedMember",
+       "builtin:sign(cur-prior)"
+      ]
+     }
+    },
+    {
+     "id": "T014",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "GROUNDED",
+      "pointers": [
+       "xbrl:jppfs_cor:AccruedExpenses@CurrentYearInstant_NonConsolidatedMember",
+       "xbrl:jppfs_cor:AccruedExpenses@Prior1YearInstant_NonConsolidatedMember",
+       "builtin:sign(cur-prior)"
+      ]
+     }
+    },
+    {
+     "id": "T015",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "GROUNDED",
+      "pointers": [
+       "xbrl:jppfs_cor:NetAssets@CurrentYearInstant_NonConsolidatedMember",
+       "xbrl:jppfs_cor:NetAssets@Prior1YearInstant_NonConsolidatedMember",
+       "builtin:sign(cur-prior)"
+      ]
+     }
+    },
+    {
+     "id": "T016",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "VALUE_MISMATCH",
+      "pointers": [
+       "xbrl:jppfs_cor:ProfitLoss@CurrentYearDuration_NonConsolidatedMember",
+       "xbrl:jppfs_cor:ProfitLoss@Prior1YearDuration_NonConsolidatedMember",
+       "builtin:sign(cur-prior)"
+      ]
+     }
+    },
+    {
+     "id": "T017",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "GROUNDED",
+      "pointers": [
+       "xbrl:jppfs_cor:CapitalSurplus@CurrentYearInstant_NonConsolidatedMember",
+       "xbrl:jppfs_cor:CapitalSurplus@Prior1YearInstant_NonConsolidatedMember",
+       "builtin:sign(cur-prior)"
+      ]
+     }
+    },
+    {
+     "id": "T019",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "GROUNDED",
+      "pointers": [
+       "xbrl:jppfs_cor:CashAndCashEquivalents@CurrentYearInstant_NonConsolidatedMember",
+       "xbrl:jppfs_cor:CashAndCashEquivalents@Prior1YearInstant_NonConsolidatedMember",
+       "builtin:sign(cur-prior)"
+      ]
+     }
+    },
+    {
+     "id": "T020",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "GROUNDED",
+      "pointers": [
+       "xbrl:jppfs_cor:IncreaseDecreaseInAccountsPayableOtherOpeCF@CurrentYearDuration_NonConsolidatedMember",
+       "builtin:flow_sign(cur)==direction"
+      ]
+     }
+    },
+    {
+     "id": "T022",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "VALUE_MISMATCH",
+      "pointers": [
+       "xbrl:jppfs_cor:NetSales@CurrentYearDuration_NonConsolidatedMember",
+       "xbrl:jppfs_cor:NetSales@Prior1YearDuration_NonConsolidatedMember",
+       "builtin:sign(cur-prior)"
+      ]
+     }
+    },
+    {
+     "id": "T023",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "GROUNDED",
+      "pointers": [
+       "xbrl:jppfs_cor:NetSales@CurrentYearDuration_NonConsolidatedMember",
+       "xbrl:jppfs_cor:NetSales@Prior1YearDuration_NonConsolidatedMember",
+       "builtin:sign(cur-prior)"
+      ]
+     }
+    },
+    {
+     "id": "T024",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "GROUNDED",
+      "pointers": [
+       "xbrl:jppfs_cor:NetSales@CurrentYearDuration_NonConsolidatedMember",
+       "xbrl:jppfs_cor:NetSales@Prior1YearDuration_NonConsolidatedMember",
+       "builtin:sign(cur-prior)"
+      ]
+     }
+    }
+   ]
+  }
+ },
+ "書類ごと": {
+  "S100YYRG": {
+   "主張(P16)": 96,
+   "主張(P20)": 96,
+   "**state か pointers が動いた主張**": 0,
+   "動いた主張の id": [],
+   "明細": []
+  },
+  "S100YXMA": {
+   "主張(P16)": 119,
+   "主張(P20)": 119,
+   "**state か pointers が動いた主張**": 0,
+   "動いた主張の id": [],
+   "明細": []
+  },
+  "S100YZ7E": {
+   "主張(P16)": 89,
+   "主張(P20)": 89,
+   "**state か pointers が動いた主張**": 57,
+   "動いた主張の id": [
+    "N021",
+    "N022",
+    "N023",
+    "N024",
+    "N026",
+    "N027",
+    "N028",
+    "N029",
+    "N030",
+    "N031",
+    "N032",
+    "N033",
+    "N034",
+    "N035",
+    "N036",
+    "N037",
+    "N038",
+    "N039",
+    "N042",
+    "N043"
+   ],
+   "明細": [
+    {
+     "id": "N021",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "GROUNDED",
+      "pointers": [
+       "xbrl:jppfs_cor:OperatingRevenue2@CurrentYearDuration_NonConsolidatedMember",
+       "xbrl:jppfs_cor:OperatingRevenue2@Prior1YearDuration_NonConsolidatedMember",
+       "formula:a-b"
+      ]
+     }
+    },
+    {
+     "id": "N022",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "VALUE_MISMATCH",
+      "pointers": [
+       "xbrl:jppfs_cor:UnearnedRevenue@CurrentYearInstant_NonConsolidatedMember"
+      ]
+     }
+    },
+    {
+     "id": "N023",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "VALUE_MISMATCH",
+      "pointers": [
+       "xbrl:jppfs_cor:ProvisionForLossOnGuaranteesCL@CurrentYearInstant_NonConsolidatedMember"
+      ]
+     }
+    },
+    {
+     "id": "N024",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "VALUE_MISMATCH",
+      "pointers": [
+       "xbrl:jppfs_cor:ProvisionForLossOnGuaranteesCL@CurrentYearInstant_NonConsolidatedMember"
+      ]
+     }
+    },
+    {
+     "id": "N026",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "UNVERIFIABLE",
+      "pointers": []
+     }
+    },
+    {
+     "id": "N027",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "VALUE_MISMATCH",
+      "pointers": [
+       "xbrl:jppfs_cor:InvestmentSecurities@CurrentYearInstant_NonConsolidatedMember"
+      ]
+     }
+    },
+    {
+     "id": "N028",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "GROUNDED",
+      "pointers": [
+       "xbrl:jppfs_cor:RentIncomeNOI@Prior1YearDuration_NonConsolidatedMember"
+      ]
+     }
+    },
+    {
+     "id": "N029",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "VALUE_MISMATCH",
+      "pointers": [
+       "xbrl:jppfs_cor:RentIncomeNOI@CurrentYearDuration_NonConsolidatedMember"
+      ]
+     }
+    },
+    {
+     "id": "N030",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "GROUNDED",
+      "pointers": [
+       "xbrl:jppfs_cor:CostOfLeaseRevenueNOE@CurrentYearDuration_NonConsolidatedMember"
+      ]
+     }
+    },
+    {
+     "id": "N031",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "GROUNDED",
+      "pointers": [
+       "xbrl:jppfs_cor:OrdinaryIncome@CurrentYearDuration_NonConsolidatedMember",
+       "xbrl:jppfs_cor:OrdinaryIncome@Prior1YearDuration_NonConsolidatedMember"
+      ]
+     }
+    },
+    {
+     "id": "N032",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "VALUE_MISMATCH",
+      "pointers": [
+       "xbrl:jppfs_cor:OrdinaryIncome@CurrentYearDuration_NonConsolidatedMember"
+      ]
+     }
+    },
+    {
+     "id": "N033",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "VALUE_MISMATCH",
+      "pointers": [
+       "xbrl:jppfs_cor:ExtraordinaryIncome@CurrentYearDuration_NonConsolidatedMember"
+      ]
+     }
+    },
+    {
+     "id": "N034",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "GROUNDED",
+      "pointers": [
+       "xbrl:jppfs_cor:GainOnSalesOfInvestmentSecuritiesEI@CurrentYearDuration_NonConsolidatedMember"
+      ]
+     }
+    },
+    {
+     "id": "N035",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "GROUNDED",
+      "pointers": [
+       "xbrl:jppfs_cor:LossOnSalesOfInvestmentSecuritiesEL@CurrentYearDuration_NonConsolidatedMember"
+      ]
+     }
+    },
+    {
+     "id": "N036",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "GROUNDED",
+      "pointers": [
+       "xbrl:jppfs_cor:IncomeBeforeIncomeTaxes@CurrentYearDuration_NonConsolidatedMember",
+       "xbrl:jppfs_cor:IncomeBeforeIncomeTaxes@Prior1YearDuration_NonConsolidatedMember"
+      ]
+     }
+    },
+    {
+     "id": "N037",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "GROUNDED",
+      "pointers": [
+       "xbrl:jppfs_cor:IncomeBeforeIncomeTaxes@CurrentYearDuration_NonConsolidatedMember"
+      ]
+     }
+    },
+    {
+     "id": "N038",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "GROUNDED",
+      "pointers": [
+       "xbrl:jppfs_cor:ProfitLoss@CurrentYearDuration_NonConsolidatedMember",
+       "xbrl:jppfs_cor:ProfitLoss@Prior1YearDuration_NonConsolidatedMember"
+      ]
+     }
+    },
+    {
+     "id": "N039",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "GROUNDED",
+      "pointers": [
+       "xbrl:jppfs_cor:ProfitLoss@CurrentYearDuration_NonConsolidatedMember"
+      ]
+     }
+    },
+    {
+     "id": "N042",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "VALUE_MISMATCH",
+      "pointers": [
+       "xbrl:jppfs_cor:NetAssets@CurrentYearInstant_NonConsolidatedMember"
+      ]
+     }
+    },
+    {
+     "id": "N043",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "VALUE_MISMATCH",
+      "pointers": [
+       "xbrl:jppfs_cor:NetAssets@CurrentYearInstant_NonConsolidatedMember"
+      ]
+     }
+    },
+    {
+     "id": "N044",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "VALUE_MISMATCH",
+      "pointers": [
+       "xbrl:jppfs_cor:CashAndCashEquivalents@CurrentYearInstant_NonConsolidatedMember"
+      ]
+     }
+    },
+    {
+     "id": "N045",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "GROUNDED",
+      "pointers": [
+       "xbrl:jppfs_cor:CashAndCashEquivalents@CurrentYearInstant_NonConsolidatedMember",
+       "xbrl:jppfs_cor:CashAndCashEquivalents@Prior1YearInstant_NonConsolidatedMember",
+       "formula:a-b"
+      ]
+     }
+    },
+    {
+     "id": "N046",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "UNVERIFIABLE",
+      "pointers": []
+     }
+    },
+    {
+     "id": "N047",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "GROUNDED",
+      "pointers": [
+       "xbrl:jppfs_cor:OperatingIncomeOpeCF@CurrentYearDuration_NonConsolidatedMember"
+      ]
+     }
+    },
+    {
+     "id": "N048",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "VALUE_MISMATCH",
+      "pointers": [
+       "xbrl:jpcrp_cor:DividendPaidPerShareSummaryOfBusinessResults@CurrentYearDuration_NonConsolidatedMember"
+      ]
+     }
+    },
+    {
+     "id": "N049",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "VALUE_MISMATCH",
+      "pointers": [
+       "xbrl:jpcrp_cor:DividendPaidPerShareSummaryOfBusinessResults@CurrentYearDuration_NonConsolidatedMember"
+      ]
+     }
+    },
+    {
+     "id": "N050",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "VALUE_MISMATCH",
+      "pointers": [
+       "xbrl:jpcrp_cor:DividendPaidPerShareSummaryOfBusinessResults@CurrentYearDuration_NonConsolidatedMember"
+      ]
+     }
+    },
+    {
+     "id": "N051",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "VALUE_MISMATCH",
+      "pointers": [
+       "xbrl:jpcrp_cor:DividendPaidPerShareSummaryOfBusinessResults@CurrentYearDuration_NonConsolidatedMember"
+      ]
+     }
+    },
+    {
+     "id": "N052",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "GROUNDED",
+      "pointers": [
+       "xbrl:jppfs_cor:IncomeTaxesPaidOpeCF@CurrentYearDuration_NonConsolidatedMember"
+      ]
+     }
+    },
+    {
+     "id": "N053",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "GROUNDED",
+      "pointers": [
+       "xbrl:jppfs_cor:PaymentsForPayrollOpeCF@CurrentYearDuration_NonConsolidatedMember"
+      ]
+     }
+    },
+    {
+     "id": "N054",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "GROUNDED",
+      "pointers": [
+       "xbrl:jppfs_cor:PaymentsForOtherOperatingActivityOpeCF@CurrentYearDuration_NonConsolidatedMember"
+      ]
+     }
+    },
+    {
+     "id": "N056",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "GROUNDED",
+      "pointers": [
+       "xbrl:jppfs_cor:ProceedsFromSalesOfInvestmentSecuritiesInvCF@CurrentYearDuration_NonConsolidatedMember"
+      ]
+     }
+    },
+    {
+     "id": "N057",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "VALUE_MISMATCH",
+      "pointers": [
+       "xbrl:jppfs_cor:ShortTermInvestmentSecurities@CurrentYearInstant_NonConsolidatedMember"
+      ]
+     }
+    },
+    {
+     "id": "N058",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "GROUNDED",
+      "pointers": [
+       "xbrl:jppfs_cor:ProceedsFromRentalOfRealEstateForInvestmentInvCF@Prior1YearDuration_NonConsolidatedMember"
+      ]
+     }
+    },
+    {
+     "id": "N059",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "GROUNDED",
+      "pointers": [
+       "xbrl:jppfs_cor:PurchaseOfInvestmentSecuritiesInvCF@CurrentYearDuration_NonConsolidatedMember"
+      ]
+     }
+    },
+    {
+     "id": "N060",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "VALUE_MISMATCH",
+      "pointers": [
+       "xbrl:jppfs_cor:PurchaseOfIntangibleAssetsInvCF@CurrentYearDuration_NonConsolidatedMember"
+      ]
+     }
+    },
+    {
+     "id": "N061",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "VALUE_MISMATCH",
+      "pointers": [
+       "xbrl:jppfs_cor:PurchaseOfIntangibleAssetsInvCF@CurrentYearDuration_NonConsolidatedMember"
+      ]
+     }
+    },
+    {
+     "id": "N062",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "UNVERIFIABLE",
+      "pointers": []
+     }
+    },
+    {
+     "id": "N063",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "VALUE_MISMATCH",
+      "pointers": [
+       "xbrl:jpcrp_cor:DividendPaidPerShareSummaryOfBusinessResults@CurrentYearDuration_NonConsolidatedMember"
+      ]
+     }
+    },
+    {
+     "id": "N066",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "VALUE_MISMATCH",
+      "pointers": [
+       "xbrl:jppfs_cor:Assets@CurrentYearInstant_NonConsolidatedMember"
+      ]
+     }
+    },
+    {
+     "id": "N067",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "GROUNDED",
+      "pointers": [
+       "xbrl:jppfs_cor:Assets@CurrentYearInstant_NonConsolidatedMember",
+       "xbrl:jppfs_cor:Assets@Prior1YearInstant_NonConsolidatedMember",
+       "formula:a-b"
+      ]
+     }
+    },
+    {
+     "id": "N068",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "GROUNDED",
+      "pointers": [
+       "xbrl:jppfs_cor:Liabilities@CurrentYearInstant_NonConsolidatedMember"
+      ]
+     }
+    },
+    {
+     "id": "N069",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "GROUNDED",
+      "pointers": [
+       "xbrl:jppfs_cor:Liabilities@CurrentYearInstant_NonConsolidatedMember",
+       "xbrl:jppfs_cor:Liabilities@Prior1YearInstant_NonConsolidatedMember",
+       "formula:a-b"
+      ]
+     }
+    },
+    {
+     "id": "N070",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "VALUE_MISMATCH",
+      "pointers": [
+       "xbrl:jppfs_cor:NetAssets@CurrentYearInstant_NonConsolidatedMember"
+      ]
+     }
+    },
+    {
+     "id": "N071",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "GROUNDED",
+      "pointers": [
+       "xbrl:jppfs_cor:NetAssets@CurrentYearInstant_NonConsolidatedMember",
+       "xbrl:jppfs_cor:NetAssets@Prior1YearInstant_NonConsolidatedMember",
+       "formula:a-b"
+      ]
+     }
+    },
+    {
+     "id": "N072",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "VALUE_MISMATCH",
+      "pointers": [
+       "xbrl:jppfs_cor:CurrentLiabilities@CurrentYearInstant_NonConsolidatedMember"
+      ]
+     }
+    },
+    {
+     "id": "N073",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "VALUE_MISMATCH",
+      "pointers": [
+       "xbrl:jppfs_cor:InvestmentSecurities@CurrentYearInstant_NonConsolidatedMember"
+      ]
+     }
+    },
+    {
+     "id": "T005",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "VALUE_MISMATCH",
+      "pointers": [
+       "xbrl:jppfs_cor:UnearnedRevenue@CurrentYearInstant_NonConsolidatedMember",
+       "xbrl:jppfs_cor:UnearnedRevenue@Prior1YearInstant_NonConsolidatedMember",
+       "builtin:sign(cur-prior)"
+      ]
+     }
+    },
+    {
+     "id": "T006",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "VALUE_MISMATCH",
+      "pointers": [
+       "xbrl:jppfs_cor:UnearnedRevenue@CurrentYearInstant_NonConsolidatedMember",
+       "xbrl:jppfs_cor:UnearnedRevenue@Prior1YearInstant_NonConsolidatedMember",
+       "builtin:sign(cur-prior)"
+      ]
+     }
+    },
+    {
+     "id": "T007",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "VALUE_MISMATCH",
+      "pointers": [
+       "xbrl:jppfs_cor:UnearnedRevenue@CurrentYearInstant_NonConsolidatedMember",
+       "xbrl:jppfs_cor:UnearnedRevenue@Prior1YearInstant_NonConsolidatedMember",
+       "builtin:sign(cur-prior)"
+      ]
+     }
+    },
+    {
+     "id": "T008",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "VALUE_MISMATCH",
+      "pointers": [
+       "xbrl:jppfs_cor:UnearnedRevenue@CurrentYearInstant_NonConsolidatedMember",
+       "xbrl:jppfs_cor:UnearnedRevenue@Prior1YearInstant_NonConsolidatedMember",
+       "builtin:sign(cur-prior)"
+      ]
+     }
+    },
+    {
+     "id": "T013",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "VALUE_MISMATCH",
+      "pointers": [
+       "xbrl:jppfs_cor:UnearnedRevenue@CurrentYearInstant_NonConsolidatedMember",
+       "xbrl:jppfs_cor:UnearnedRevenue@Prior1YearInstant_NonConsolidatedMember",
+       "builtin:sign(cur-prior)"
+      ]
+     }
+    },
+    {
+     "id": "T014",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "GROUNDED",
+      "pointers": [
+       "xbrl:jppfs_cor:CashAndCashEquivalents@CurrentYearInstant_NonConsolidatedMember",
+       "xbrl:jppfs_cor:CashAndCashEquivalents@Prior1YearInstant_NonConsolidatedMember",
+       "builtin:sign(cur-prior)"
+      ]
+     }
+    },
+    {
+     "id": "T015",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "GROUNDED",
+      "pointers": [
+       "xbrl:jppfs_cor:Assets@CurrentYearInstant_NonConsolidatedMember",
+       "xbrl:jppfs_cor:Assets@Prior1YearInstant_NonConsolidatedMember",
+       "builtin:sign(cur-prior)"
+      ]
+     }
+    },
+    {
+     "id": "T016",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "GROUNDED",
+      "pointers": [
+       "xbrl:jppfs_cor:InvestmentSecurities@CurrentYearInstant_NonConsolidatedMember",
+       "xbrl:jppfs_cor:InvestmentSecurities@Prior1YearInstant_NonConsolidatedMember",
+       "builtin:sign(cur-prior)"
+      ]
+     }
+    },
+    {
+     "id": "T017",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "GROUNDED",
+      "pointers": [
+       "xbrl:jppfs_cor:Liabilities@CurrentYearInstant_NonConsolidatedMember",
+       "xbrl:jppfs_cor:Liabilities@Prior1YearInstant_NonConsolidatedMember",
+       "builtin:sign(cur-prior)"
+      ]
+     }
+    },
+    {
+     "id": "T019",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "GROUNDED",
+      "pointers": [
+       "xbrl:jppfs_cor:NetAssets@CurrentYearInstant_NonConsolidatedMember",
+       "xbrl:jppfs_cor:NetAssets@Prior1YearInstant_NonConsolidatedMember",
+       "builtin:sign(cur-prior)"
+      ]
+     }
+    }
+   ]
+  },
+  "S100YWGX": {
+   "主張(P16)": 141,
+   "主張(P20)": 141,
+   "**state か pointers が動いた主張**": 0,
+   "動いた主張の id": [],
+   "明細": []
+  },
+  "S100YZCT": {
+   "主張(P16)": 158,
+   "主張(P20)": 158,
+   "**state か pointers が動いた主張**": 0,
+   "動いた主張の id": [],
+   "明細": []
+  },
+  "S100YYRV": {
+   "主張(P16)": 141,
+   "主張(P20)": 141,
+   "**state か pointers が動いた主張**": 0,
+   "動いた主張の id": [],
+   "明細": []
+  },
+  "S100YZEV": {
+   "主張(P16)": 80,
+   "主張(P20)": 80,
+   "**state か pointers が動いた主張**": 62,
+   "動いた主張の id": [
+    "N001",
+    "N002",
+    "N005",
+    "N006",
+    "N007",
+    "N008",
+    "N009",
+    "N010",
+    "N011",
+    "N012",
+    "N013",
+    "N014",
+    "N015",
+    "N016",
+    "N017",
+    "N019",
+    "N020",
+    "N021",
+    "N022",
+    "N023"
+   ],
+   "明細": [
+    {
+     "id": "N001",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "VALUE_MISMATCH",
+      "pointers": [
+       "xbrl:jppfs_cor:NetSales@CurrentYearDuration_NonConsolidatedMember"
+      ]
+     }
+    },
+    {
+     "id": "N002",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "VALUE_MISMATCH",
+      "pointers": [
+       "xbrl:jppfs_cor:NetSales@CurrentYearDuration_NonConsolidatedMember"
+      ]
+     }
+    },
+    {
+     "id": "N005",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "GROUNDED",
+      "pointers": [
+       "xbrl:jppfs_cor:NetSales@CurrentYearDuration_NonConsolidatedMember"
+      ]
+     }
+    },
+    {
+     "id": "N006",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "GROUNDED",
+      "pointers": [
+       "xbrl:jppfs_cor:NetSales@CurrentYearDuration_NonConsolidatedMember",
+       "xbrl:jppfs_cor:NetSales@Prior1YearDuration_NonConsolidatedMember"
+      ]
+     }
+    },
+    {
+     "id": "N007",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "VALUE_MISMATCH",
+      "pointers": [
+       "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration_NonConsolidatedMember"
+      ]
+     }
+    },
+    {
+     "id": "N008",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "GROUNDED",
+      "pointers": [
+       "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration_NonConsolidatedMember",
+       "xbrl:jppfs_cor:OperatingIncome@Prior1YearDuration_NonConsolidatedMember"
+      ]
+     }
+    },
+    {
+     "id": "N009",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "GROUNDED",
+      "pointers": [
+       "xbrl:jppfs_cor:OrdinaryIncome@CurrentYearDuration_NonConsolidatedMember"
+      ]
+     }
+    },
+    {
+     "id": "N010",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "GROUNDED",
+      "pointers": [
+       "xbrl:jppfs_cor:OrdinaryIncome@CurrentYearDuration_NonConsolidatedMember",
+       "xbrl:jppfs_cor:OrdinaryIncome@Prior1YearDuration_NonConsolidatedMember"
+      ]
+     }
+    },
+    {
+     "id": "N011",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "GROUNDED",
+      "pointers": [
+       "xbrl:jppfs_cor:ProfitLoss@CurrentYearDuration_NonConsolidatedMember"
+      ]
+     }
+    },
+    {
+     "id": "N012",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "GROUNDED",
+      "pointers": [
+       "xbrl:jppfs_cor:ProfitLoss@CurrentYearDuration_NonConsolidatedMember",
+       "xbrl:jppfs_cor:ProfitLoss@Prior1YearDuration_NonConsolidatedMember"
+      ]
+     }
+    },
+    {
+     "id": "N013",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "GROUNDED",
+      "pointers": [
+       "xbrl:jppfs_cor:CurrentAssets@CurrentYearInstant_NonConsolidatedMember",
+       "xbrl:jppfs_cor:CurrentAssets@Prior1YearInstant_NonConsolidatedMember",
+       "formula:a-b"
+      ]
+     }
+    },
+    {
+     "id": "N014",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "VALUE_MISMATCH",
+      "pointers": [
+       "xbrl:jppfs_cor:CurrentAssets@CurrentYearInstant_NonConsolidatedMember"
+      ]
+     }
+    },
+    {
+     "id": "N015",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "VALUE_MISMATCH",
+      "pointers": [
+       "xbrl:jppfs_cor:CashAndDeposits@CurrentYearInstant_NonConsolidatedMember"
+      ]
+     }
+    },
+    {
+     "id": "N016",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "GROUNDED",
+      "pointers": [
+       "xbrl:jppfs_cor:NoncurrentAssets@CurrentYearInstant_NonConsolidatedMember",
+       "xbrl:jppfs_cor:NoncurrentAssets@Prior1YearInstant_NonConsolidatedMember",
+       "formula:a-b"
+      ]
+     }
+    },
+    {
+     "id": "N017",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "VALUE_MISMATCH",
+      "pointers": [
+       "xbrl:jppfs_cor:NoncurrentAssets@CurrentYearInstant_NonConsolidatedMember"
+      ]
+     }
+    },
+    {
+     "id": "N019",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "VALUE_MISMATCH",
+      "pointers": [
+       "xbrl:jppfs_cor:LeaseAndGuaranteeDeposits@CurrentYearInstant_NonConsolidatedMember"
+      ]
+     }
+    },
+    {
+     "id": "N020",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "GROUNDED",
+      "pointers": [
+       "xbrl:jppfs_cor:CurrentLiabilities@CurrentYearInstant_NonConsolidatedMember",
+       "xbrl:jppfs_cor:CurrentLiabilities@Prior1YearInstant_NonConsolidatedMember",
+       "formula:a-b"
+      ]
+     }
+    },
+    {
+     "id": "N021",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "GROUNDED",
+      "pointers": [
+       "xbrl:jppfs_cor:CurrentLiabilities@CurrentYearInstant_NonConsolidatedMember"
+      ]
+     }
+    },
+    {
+     "id": "N022",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "GROUNDED",
+      "pointers": [
+       "xbrl:jppfs_cor:AccountsPayableOther@CurrentYearInstant_NonConsolidatedMember",
+       "xbrl:jppfs_cor:AccountsPayableOther@Prior1YearInstant_NonConsolidatedMember",
+       "formula:a-b"
+      ]
+     }
+    },
+    {
+     "id": "N023",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "VALUE_MISMATCH",
+      "pointers": [
+       "xbrl:jppfs_cor:AccruedExpenses@CurrentYearInstant_NonConsolidatedMember"
+      ]
+     }
+    },
+    {
+     "id": "N024",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "VALUE_MISMATCH",
+      "pointers": [
+       "xbrl:jppfs_cor:NetAssets@CurrentYearInstant_NonConsolidatedMember"
+      ]
+     }
+    },
+    {
+     "id": "N025",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "GROUNDED",
+      "pointers": [
+       "xbrl:jppfs_cor:NetAssets@CurrentYearInstant_NonConsolidatedMember"
+      ]
+     }
+    },
+    {
+     "id": "N026",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "GROUNDED",
+      "pointers": [
+       "xbrl:jppfs_cor:ProfitLoss@CurrentYearDuration_NonConsolidatedMember"
+      ]
+     }
+    },
+    {
+     "id": "N027",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "GROUNDED",
+      "pointers": [
+       "xbrl:jppfs_cor:DividendsFromSurplus@CurrentYearDuration_NonConsolidatedMember"
+      ]
+     }
+    },
+    {
+     "id": "N028",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "GROUNDED",
+      "pointers": [
+       "xbrl:jppfs_cor:CapitalSurplus@CurrentYearInstant_NonConsolidatedMember",
+       "xbrl:jppfs_cor:CapitalSurplus@Prior1YearInstant_NonConsolidatedMember",
+       "formula:a-b"
+      ]
+     }
+    },
+    {
+     "id": "N029",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "GROUNDED",
+      "pointers": [
+       "xbrl:jppfs_cor:CashAndCashEquivalents@CurrentYearInstant_NonConsolidatedMember"
+      ]
+     }
+    },
+    {
+     "id": "N030",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "GROUNDED",
+      "pointers": [
+       "xbrl:jppfs_cor:CashAndCashEquivalents@CurrentYearInstant_NonConsolidatedMember",
+       "xbrl:jppfs_cor:CashAndCashEquivalents@Prior1YearInstant_NonConsolidatedMember",
+       "formula:a-b"
+      ]
+     }
+    },
+    {
+     "id": "N031",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "UNVERIFIABLE",
+      "pointers": []
+     }
+    },
+    {
+     "id": "N032",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "UNVERIFIABLE",
+      "pointers": []
+     }
+    },
+    {
+     "id": "N033",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "GROUNDED",
+      "pointers": [
+       "xbrl:jppfs_cor:IncomeTaxesPaidOpeCF@CurrentYearDuration_NonConsolidatedMember"
+      ]
+     }
+    },
+    {
+     "id": "N034",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "GROUNDED",
+      "pointers": [
+       "xbrl:jppfs_cor:IncomeBeforeIncomeTaxes@CurrentYearDuration_NonConsolidatedMember"
+      ]
+     }
+    },
+    {
+     "id": "N035",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "VALUE_MISMATCH",
+      "pointers": [
+       "xbrl:jppfs_cor:IncreaseDecreaseInAccountsPayableOtherOpeCF@CurrentYearDuration_NonConsolidatedMember"
+      ]
+     }
+    },
+    {
+     "id": "N036",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "UNVERIFIABLE",
+      "pointers": []
+     }
+    },
+    {
+     "id": "N037",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "UNVERIFIABLE",
+      "pointers": []
+     }
+    },
+    {
+     "id": "N038",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "GROUNDED",
+      "pointers": [
+       "xbrl:jppfs_cor:PaymentsIntoTimeDepositsInvCF@CurrentYearDuration_NonConsolidatedMember"
+      ]
+     }
+    },
+    {
+     "id": "N039",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "UNVERIFIABLE",
+      "pointers": []
+     }
+    },
+    {
+     "id": "N040",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "UNVERIFIABLE",
+      "pointers": []
+     }
+    },
+    {
+     "id": "N041",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "GROUNDED",
+      "pointers": [
+       "xbrl:jppfs_cor:ProceedsFromIssuanceOfCommonStockFinCF@CurrentYearDuration_NonConsolidatedMember"
+      ]
+     }
+    },
+    {
+     "id": "N042",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "GROUNDED",
+      "pointers": [
+       "xbrl:jppfs_cor:CashDividendsPaidFinCF@CurrentYearDuration_NonConsolidatedMember"
+      ]
+     }
+    },
+    {
+     "id": "N043",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "VALUE_MISMATCH",
+      "pointers": [
+       "xbrl:jppfs_cor:NetSales@CurrentYearDuration_NonConsolidatedMember"
+      ]
+     }
+    },
+    {
+     "id": "N048",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "GROUNDED",
+      "pointers": [
+       "xbrl:jppfs_cor:NetSales@CurrentYearDuration_NonConsolidatedMember"
+      ]
+     }
+    },
+    {
+     "id": "N049",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "GROUNDED",
+      "pointers": [
+       "xbrl:jppfs_cor:NetSales@CurrentYearDuration_NonConsolidatedMember",
+       "xbrl:jppfs_cor:NetSales@Prior1YearDuration_NonConsolidatedMember"
+      ]
+     }
+    },
+    {
+     "id": "N050",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "VALUE_MISMATCH",
+      "pointers": [
+       "xbrl:jppfs_cor:NetSales@CurrentYearDuration_NonConsolidatedMember",
+       "xbrl:jppfs_cor:NetSales@Prior1YearDuration_NonConsolidatedMember"
+      ]
+     }
+    },
+    {
+     "id": "N051",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "VALUE_MISMATCH",
+      "pointers": [
+       "xbrl:jppfs_cor:NetSales@CurrentYearDuration_NonConsolidatedMember"
+      ]
+     }
+    },
+    {
+     "id": "N052",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "VALUE_MISMATCH",
+      "pointers": [
+       "xbrl:jppfs_cor:NetSales@CurrentYearDuration_NonConsolidatedMember",
+       "xbrl:jppfs_cor:NetSales@Prior1YearDuration_NonConsolidatedMember"
+      ]
+     }
+    },
+    {
+     "id": "N055",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "VALUE_MISMATCH",
+      "pointers": [
+       "xbrl:jppfs_cor:NetSales@CurrentYearDuration_NonConsolidatedMember",
+       "xbrl:jppfs_cor:NetSales@Prior1YearDuration_NonConsolidatedMember"
+      ]
+     }
+    },
+    {
+     "id": "T006",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "GROUNDED",
+      "pointers": [
+       "xbrl:jppfs_cor:NetSales@CurrentYearDuration_NonConsolidatedMember",
+       "xbrl:jppfs_cor:NetSales@Prior1YearDuration_NonConsolidatedMember",
+       "builtin:sign(cur-prior)"
+      ]
+     }
+    },
+    {
+     "id": "T007",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "GROUNDED",
+      "pointers": [
+       "xbrl:jppfs_cor:CurrentAssets@CurrentYearInstant_NonConsolidatedMember",
+       "xbrl:jppfs_cor:CurrentAssets@Prior1YearInstant_NonConsolidatedMember",
+       "builtin:sign(cur-prior)"
+      ]
+     }
+    },
+    {
+     "id": "T008",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "GROUNDED",
+      "pointers": [
+       "xbrl:jppfs_cor:CashAndDeposits@CurrentYearInstant_NonConsolidatedMember",
+       "xbrl:jppfs_cor:CashAndDeposits@Prior1YearInstant_NonConsolidatedMember",
+       "builtin:sign(cur-prior)"
+      ]
+     }
+    },
+    {
+     "id": "T009",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "GROUNDED",
+      "pointers": [
+       "xbrl:jppfs_cor:NoncurrentAssets@CurrentYearInstant_NonConsolidatedMember",
+       "xbrl:jppfs_cor:NoncurrentAssets@Prior1YearInstant_NonConsolidatedMember",
+       "builtin:sign(cur-prior)"
+      ]
+     }
+    },
+    {
+     "id": "T011",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "GROUNDED",
+      "pointers": [
+       "xbrl:jppfs_cor:LeaseAndGuaranteeDeposits@CurrentYearInstant_NonConsolidatedMember",
+       "xbrl:jppfs_cor:LeaseAndGuaranteeDeposits@Prior1YearInstant_NonConsolidatedMember",
+       "builtin:sign(cur-prior)"
+      ]
+     }
+    },
+    {
+     "id": "T012",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "GROUNDED",
+      "pointers": [
+       "xbrl:jppfs_cor:CurrentLiabilities@CurrentYearInstant_NonConsolidatedMember",
+       "xbrl:jppfs_cor:CurrentLiabilities@Prior1YearInstant_NonConsolidatedMember",
+       "builtin:sign(cur-prior)"
+      ]
+     }
+    },
+    {
+     "id": "T013",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "GROUNDED",
+      "pointers": [
+       "xbrl:jppfs_cor:AccountsPayableOther@CurrentYearInstant_NonConsolidatedMember",
+       "xbrl:jppfs_cor:AccountsPayableOther@Prior1YearInstant_NonConsolidatedMember",
+       "builtin:sign(cur-prior)"
+      ]
+     }
+    },
+    {
+     "id": "T014",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "GROUNDED",
+      "pointers": [
+       "xbrl:jppfs_cor:AccruedExpenses@CurrentYearInstant_NonConsolidatedMember",
+       "xbrl:jppfs_cor:AccruedExpenses@Prior1YearInstant_NonConsolidatedMember",
+       "builtin:sign(cur-prior)"
+      ]
+     }
+    },
+    {
+     "id": "T015",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "GROUNDED",
+      "pointers": [
+       "xbrl:jppfs_cor:NetAssets@CurrentYearInstant_NonConsolidatedMember",
+       "xbrl:jppfs_cor:NetAssets@Prior1YearInstant_NonConsolidatedMember",
+       "builtin:sign(cur-prior)"
+      ]
+     }
+    },
+    {
+     "id": "T016",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "VALUE_MISMATCH",
+      "pointers": [
+       "xbrl:jppfs_cor:ProfitLoss@CurrentYearDuration_NonConsolidatedMember",
+       "xbrl:jppfs_cor:ProfitLoss@Prior1YearDuration_NonConsolidatedMember",
+       "builtin:sign(cur-prior)"
+      ]
+     }
+    },
+    {
+     "id": "T017",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "GROUNDED",
+      "pointers": [
+       "xbrl:jppfs_cor:CapitalSurplus@CurrentYearInstant_NonConsolidatedMember",
+       "xbrl:jppfs_cor:CapitalSurplus@Prior1YearInstant_NonConsolidatedMember",
+       "builtin:sign(cur-prior)"
+      ]
+     }
+    },
+    {
+     "id": "T019",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "GROUNDED",
+      "pointers": [
+       "xbrl:jppfs_cor:CashAndCashEquivalents@CurrentYearInstant_NonConsolidatedMember",
+       "xbrl:jppfs_cor:CashAndCashEquivalents@Prior1YearInstant_NonConsolidatedMember",
+       "builtin:sign(cur-prior)"
+      ]
+     }
+    },
+    {
+     "id": "T020",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "GROUNDED",
+      "pointers": [
+       "xbrl:jppfs_cor:IncreaseDecreaseInAccountsPayableOtherOpeCF@CurrentYearDuration_NonConsolidatedMember",
+       "builtin:flow_sign(cur)==direction"
+      ]
+     }
+    },
+    {
+     "id": "T022",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "VALUE_MISMATCH",
+      "pointers": [
+       "xbrl:jppfs_cor:NetSales@CurrentYearDuration_NonConsolidatedMember",
+       "xbrl:jppfs_cor:NetSales@Prior1YearDuration_NonConsolidatedMember",
+       "builtin:sign(cur-prior)"
+      ]
+     }
+    },
+    {
+     "id": "T023",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "GROUNDED",
+      "pointers": [
+       "xbrl:jppfs_cor:NetSales@CurrentYearDuration_NonConsolidatedMember",
+       "xbrl:jppfs_cor:NetSales@Prior1YearDuration_NonConsolidatedMember",
+       "builtin:sign(cur-prior)"
+      ]
+     }
+    },
+    {
+     "id": "T024",
+     "P16": {
+      "state": "POINTER_NOT_FOUND",
+      "pointers": []
+     },
+     "P20": {
+      "state": "GROUNDED",
+      "pointers": [
+       "xbrl:jppfs_cor:NetSales@CurrentYearDuration_NonConsolidatedMember",
+       "xbrl:jppfs_cor:NetSales@Prior1YearDuration_NonConsolidatedMember",
+       "builtin:sign(cur-prior)"
+      ]
+     }
+    }
+   ]
+  },
+  "S100YXF5": {
+   "主張(P16)": 107,
+   "主張(P20)": 107,
+   "**state か pointers が動いた主張**": 0,
+   "動いた主張の id": [],
+   "明細": []
+  }
+ },
+ "**予測との照合**": {
+  "欄ごと": [
+   {
+    "欄": "M-1 10 行の POINTER_NOT_FOUND",
+    "予測": 0,
+    "実測": 0,
+    "当たり": true
+   },
+   {
+    "欄": "M-2 特定(T5 全部の行)",
+    "予測": "18/50",
+    "実測": "18/50",
+    "当たり": true
+   },
+   {
+    "欄": "M-2 特定(1 対 1 の行だけ)",
+    "予測": "15/26",
+    "実測": "15/26",
+    "当たり": true
+   },
+   {
+    "欄": "M-3 名指して正解でない行(P16 より何行増えたか)",
+    "予測": "7 行増える",
+    "実測": "7 行増えた(25 → 32)",
+    "当たり": true
+   },
+   {
+    "欄": "M-4 連結ありの 6 書類が不変",
+    "予測": "24 行すべて不変(1 行でも動けば外れ)",
+    "実測": {
+     "S100YYRG": 0,
+     "S100YXMA": 0,
+     "S100YWGX": 0,
+     "S100YZCT": 0,
+     "S100YYRV": 0,
+     "S100YXF5": 0
+    },
+    "当たり": true
+   },
+   {
+    "欄": "M-5 α の天井",
+    "予測": "0/7(変わらない)",
+    "実測": "0/7",
+    "当たり": true
+   }
+  ],
+  "当たり": 6,
+  "外れ": 0,
+  "主張ごと": [
+   {
+    "doc": "S100YZEV",
+    "主張 id": "N014",
+    "行": "R018",
+    "予測": "正解",
+    "実測の参照先": "currentassets@currentyearinstant_nonconsolidatedmember",
+    "実測の state": "VALUE_MISMATCH",
+    "正解": "currentassets@currentyearinstant_nonconsolidatedmember",
+    "当たり": true
+   },
+   {
+    "doc": "S100YZEV",
+    "主張 id": "N017",
+    "行": "R019",
+    "予測": "正解",
+    "実測の参照先": "noncurrentassets@currentyearinstant_nonconsolidatedmember",
+    "実測の state": "VALUE_MISMATCH",
+    "正解": "noncurrentassets@currentyearinstant_nonconsolidatedmember",
+    "当たり": true
+   },
+   {
+    "doc": "S100YZEV",
+    "主張 id": "N007",
+    "行": "R011",
+    "予測": "正解ではない",
+    "実測の参照先": "operatingincome@currentyearduration_nonconsolidatedmember",
+    "実測の state": "VALUE_MISMATCH",
+    "正解": "operatingincome@currentyearduration_nonconsolidatedmember",
+    "当たり": false
+   },
+   {
+    "doc": "S100YZEV",
+    "主張 id": "N007",
+    "行": "R020",
+    "予測": "正解ではない",
+    "実測の参照先": "operatingincome@currentyearduration_nonconsolidatedmember",
+    "実測の state": "VALUE_MISMATCH",
+    "正解": "increasedecreaseinaccountspayableotheropecf@currentyearduration_nonconsolidatedmember",
+    "当たり": true
+   },
+   {
+    "doc": "S100YZ7E",
+    "主張 id": "N066",
+    "行": "R023",
+    "予測": "正解ではない",
+    "実測の参照先": "assets@currentyearinstant_nonconsolidatedmember",
+    "実測の state": "VALUE_MISMATCH",
+    "正解": "totalassetssummaryofbusinessresults@currentyearinstant_nonconsolidatedmember",
+    "当たり": true
+   },
+   {
+    "doc": "S100YZ7E",
+    "主張 id": "N070",
+    "行": "R024",
+    "予測": "正解ではない",
+    "実測の参照先": "netassets@currentyearinstant_nonconsolidatedmember",
+    "実測の state": "VALUE_MISMATCH",
+    "正解": "netassetssummaryofbusinessresults@currentyearinstant_nonconsolidatedmember",
+    "当たり": true
+   },
+   {
+    "doc": "S100YZ7E",
+    "主張 id": "N022",
+    "行": "R017",
+    "予測": "正解ではない",
+    "実測の参照先": "unearnedrevenue@currentyearinstant_nonconsolidatedmember",
+    "実測の state": "VALUE_MISMATCH",
+    "正解": "operatingrevenue2summaryofbusinessresults@currentyearduration_nonconsolidatedmember",
+    "当たり": true
+   },
+   {
+    "doc": "S100YZ7E",
+    "主張 id": "N022",
+    "行": "R018",
+    "予測": "正解ではない",
+    "実測の参照先": "unearnedrevenue@currentyearinstant_nonconsolidatedmember",
+    "実測の state": "VALUE_MISMATCH",
+    "正解": "ordinaryincomelosssummaryofbusinessresults@currentyearduration_nonconsolidatedmember",
+    "当たり": true
+   },
+   {
+    "doc": "S100YZ7E",
+    "主張 id": "N022",
+    "行": "R019",
+    "予測": "正解ではない",
+    "実測の参照先": "unearnedrevenue@currentyearinstant_nonconsolidatedmember",
+    "実測の state": "VALUE_MISMATCH",
+    "正解": "cashandcashequivalentssummaryofbusinessresults@currentyearinstant_nonconsolidatedmember",
+    "当たり": true
+   },
+   {
+    "doc": "S100YZ7E",
+    "主張 id": "N022",
+    "行": "R020",
+    "予測": "正解ではない",
+    "実測の参照先": "unearnedrevenue@currentyearinstant_nonconsolidatedmember",
+    "実測の state": "VALUE_MISMATCH",
+    "正解": "netcashprovidedbyusedininvestingactivitiessummaryofbusinessresults@currentyearduration_nonconsolidatedmember",
+    "当たり": true
+   }
+  ],
+  "主張ごとの当たり": 9,
+  "主張ごとの外れ": 1,
+  "注": "**予測の file は読むだけ。編集していない**"
+ },
+ "rows": [
+  {
+   "doc": "S100YYRG",
+   "id": "R001",
+   "主張 id(P16)": "N001",
+   "主張 id(P20)": "N001",
+   "正解": null,
+   "席の参照先": null,
+   "P16": {
+    "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+    "参照先": null,
+    "state": "POINTER_NOT_FOUND"
+   },
+   "P20": {
+    "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+    "参照先": null,
+    "state": "POINTER_NOT_FOUND"
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": true
+  },
+  {
+   "doc": "S100YYRG",
+   "id": "R002",
+   "主張 id(P16)": null,
+   "主張 id(P20)": null,
+   "正解": null,
+   "席の参照先": null,
+   "P16": {
+    "言うこと": "対応が付かない",
+    "参照先": null,
+    "state": null
+   },
+   "P20": {
+    "言うこと": "対応が付かない",
+    "参照先": null,
+    "state": null
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": false
+  },
+  {
+   "doc": "S100YYRG",
+   "id": "R003",
+   "主張 id(P16)": "N003",
+   "主張 id(P20)": "N003",
+   "正解": null,
+   "席の参照先": null,
+   "P16": {
+    "言うこと": "一意でない",
+    "参照先": null,
+    "state": "VALUE_MISMATCH"
+   },
+   "P20": {
+    "言うこと": "一意でない",
+    "参照先": null,
+    "state": "VALUE_MISMATCH"
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": true
+  },
+  {
+   "doc": "S100YYRG",
+   "id": "R004",
+   "主張 id(P16)": null,
+   "主張 id(P20)": null,
+   "正解": null,
+   "席の参照先": null,
+   "P16": {
+    "言うこと": "対応が付かない",
+    "参照先": null,
+    "state": null
+   },
+   "P20": {
+    "言うこと": "対応が付かない",
+    "参照先": null,
+    "state": null
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": false
+  },
+  {
+   "doc": "S100YYRG",
+   "id": "R005",
+   "主張 id(P16)": "N004",
+   "主張 id(P20)": "N004",
+   "正解": null,
+   "席の参照先": null,
+   "P16": {
+    "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+    "参照先": "netsales@currentyearduration",
+    "state": "VALUE_MISMATCH"
+   },
+   "P20": {
+    "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+    "参照先": "netsales@currentyearduration",
+    "state": "VALUE_MISMATCH"
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": true
+  },
+  {
+   "doc": "S100YYRG",
+   "id": "R006",
+   "主張 id(P16)": "N005",
+   "主張 id(P20)": "N005",
+   "正解": null,
+   "席の参照先": null,
+   "P16": {
+    "言うこと": "一意でない",
+    "参照先": null,
+    "state": "VALUE_MISMATCH"
+   },
+   "P20": {
+    "言うこと": "一意でない",
+    "参照先": null,
+    "state": "VALUE_MISMATCH"
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": true
+  },
+  {
+   "doc": "S100YYRG",
+   "id": "R007",
+   "主張 id(P16)": "N006",
+   "主張 id(P20)": "N006",
+   "正解": null,
+   "席の参照先": null,
+   "P16": {
+    "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+    "参照先": "grossprofit@currentyearduration",
+    "state": "VALUE_MISMATCH"
+   },
+   "P20": {
+    "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+    "参照先": "grossprofit@currentyearduration",
+    "state": "VALUE_MISMATCH"
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": true
+  },
+  {
+   "doc": "S100YYRG",
+   "id": "R008",
+   "主張 id(P16)": "N007",
+   "主張 id(P20)": "N007",
+   "正解": null,
+   "席の参照先": null,
+   "P16": {
+    "言うこと": "一意でない",
+    "参照先": null,
+    "state": "VALUE_MISMATCH"
+   },
+   "P20": {
+    "言うこと": "一意でない",
+    "参照先": null,
+    "state": "VALUE_MISMATCH"
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": true
+  },
+  {
+   "doc": "S100YYRG",
+   "id": "R009",
+   "主張 id(P16)": "N008",
+   "主張 id(P20)": "N008",
+   "正解": null,
+   "席の参照先": null,
+   "P16": {
+    "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+    "参照先": "netsales@currentyearduration",
+    "state": "VALUE_MISMATCH"
+   },
+   "P20": {
+    "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+    "参照先": "netsales@currentyearduration",
+    "state": "VALUE_MISMATCH"
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": true
+  },
+  {
+   "doc": "S100YYRG",
+   "id": "R010",
+   "主張 id(P16)": "N009",
+   "主張 id(P20)": "N009",
+   "正解": null,
+   "席の参照先": null,
+   "P16": {
+    "言うこと": "一意でない",
+    "参照先": null,
+    "state": "VALUE_MISMATCH"
+   },
+   "P20": {
+    "言うこと": "一意でない",
+    "参照先": null,
+    "state": "VALUE_MISMATCH"
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": true
+  },
+  {
+   "doc": "S100YYRG",
+   "id": "R011",
+   "主張 id(P16)": "N010",
+   "主張 id(P20)": "N010",
+   "正解": null,
+   "席の参照先": null,
+   "P16": {
+    "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+    "参照先": "grossprofit@currentyearduration",
+    "state": "VALUE_MISMATCH"
+   },
+   "P20": {
+    "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+    "参照先": "grossprofit@currentyearduration",
+    "state": "VALUE_MISMATCH"
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": true
+  },
+  {
+   "doc": "S100YYRG",
+   "id": "R012",
+   "主張 id(P16)": null,
+   "主張 id(P20)": null,
+   "正解": null,
+   "席の参照先": null,
+   "P16": {
+    "言うこと": "対応が付かない",
+    "参照先": null,
+    "state": null
+   },
+   "P20": {
+    "言うこと": "対応が付かない",
+    "参照先": null,
+    "state": null
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": false
+  },
+  {
+   "doc": "S100YYRG",
+   "id": "R013",
+   "主張 id(P16)": "N012",
+   "主張 id(P20)": "N012",
+   "正解": null,
+   "席の参照先": null,
+   "P16": {
+    "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+    "参照先": "netsales@currentyearduration",
+    "state": "VALUE_MISMATCH"
+   },
+   "P20": {
+    "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+    "参照先": "netsales@currentyearduration",
+    "state": "VALUE_MISMATCH"
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": true
+  },
+  {
+   "doc": "S100YYRG",
+   "id": "R014",
+   "主張 id(P16)": null,
+   "主張 id(P20)": null,
+   "正解": null,
+   "席の参照先": null,
+   "P16": {
+    "言うこと": "対応が付かない",
+    "参照先": null,
+    "state": null
+   },
+   "P20": {
+    "言うこと": "対応が付かない",
+    "参照先": null,
+    "state": null
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": false
+  },
+  {
+   "doc": "S100YYRG",
+   "id": "R015",
+   "主張 id(P16)": "N014",
+   "主張 id(P20)": "N014",
+   "正解": null,
+   "席の参照先": null,
+   "P16": {
+    "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+    "参照先": "grossprofit@currentyearduration",
+    "state": "VALUE_MISMATCH"
+   },
+   "P20": {
+    "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+    "参照先": "grossprofit@currentyearduration",
+    "state": "VALUE_MISMATCH"
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": true
+  },
+  {
+   "doc": "S100YYRG",
+   "id": "R016",
+   "主張 id(P16)": "N015",
+   "主張 id(P20)": "N015",
+   "正解": null,
+   "席の参照先": null,
+   "P16": {
+    "言うこと": "一意でない",
+    "参照先": null,
+    "state": "VALUE_MISMATCH"
+   },
+   "P20": {
+    "言うこと": "一意でない",
+    "参照先": null,
+    "state": "VALUE_MISMATCH"
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": true
+  },
+  {
+   "doc": "S100YYRG",
+   "id": "R017",
+   "主張 id(P16)": "N018",
+   "主張 id(P20)": "N018",
+   "正解": {
+    "種類": "参照先が在る",
+    "正解": "operatingincome@currentyearduration",
+    "偶然一致する側": "otherca@prior1yearinstant_nonconsolidatedmember"
+   },
+   "席の参照先": "operatingincome@currentyearduration",
+   "P16": {
+    "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+    "参照先": "operatingincome@currentyearduration",
+    "state": "VALUE_MISMATCH"
+   },
+   "P20": {
+    "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+    "参照先": "operatingincome@currentyearduration",
+    "state": "VALUE_MISMATCH"
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": true
+  },
+  {
+   "doc": "S100YYRG",
+   "id": "R018",
+   "主張 id(P16)": "N029",
+   "主張 id(P20)": "N029",
+   "正解": {
+    "種類": "参照先が在る",
+    "正解": "liabilities@currentyearinstant",
+    "偶然一致する側": "increasedecreaseinnetdefinedbenefitliabilityopecf@currentyearduration"
+   },
+   "席の参照先": "liabilities@currentyearinstant",
+   "P16": {
+    "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+    "参照先": "liabilities@currentyearinstant",
+    "state": "VALUE_MISMATCH"
+   },
+   "P20": {
+    "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+    "参照先": "liabilities@currentyearinstant",
+    "state": "VALUE_MISMATCH"
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": true
+  },
+  {
+   "doc": "S100YYRG",
+   "id": "R019",
+   "主張 id(P16)": "N037",
+   "主張 id(P20)": "N037",
+   "正解": {
+    "種類": "参照先が在る",
+    "正解": "netincreasedecreaseincashandcashequivalents@currentyearduration",
+    "偶然一致する側": "rawmaterialsandsupplies@prior1yearinstant_nonconsolidatedmember"
+   },
+   "席の参照先": "netincreasedecreaseincashandcashequivalents@currentyearduration",
+   "P16": {
+    "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+    "参照先": "cashandcashequivalents@currentyearinstant",
+    "state": "VALUE_MISMATCH"
+   },
+   "P20": {
+    "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+    "参照先": "cashandcashequivalents@currentyearinstant",
+    "state": "VALUE_MISMATCH"
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": true
+  },
+  {
+   "doc": "S100YYRG",
+   "id": "R020",
+   "主張 id(P16)": "N041",
+   "主張 id(P20)": "N041",
+   "正解": {
+    "種類": "参照先が在る",
+    "正解": "incomebeforeincometaxes@currentyearduration",
+    "偶然一致する側": "rawmaterialsandsupplies@currentyearinstant"
+   },
+   "席の参照先": "incomebeforeincometaxes@currentyearduration",
+   "P16": {
+    "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+    "参照先": "incomebeforeincometaxes@currentyearduration",
+    "state": "VALUE_MISMATCH"
+   },
+   "P20": {
+    "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+    "参照先": "incomebeforeincometaxes@currentyearduration",
+    "state": "VALUE_MISMATCH"
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": true
+  },
+  {
+   "doc": "S100YYRG",
+   "id": "R021",
+   "主張 id(P16)": "N050",
+   "主張 id(P20)": "N050",
+   "正解": {
+    "種類": "参照先が在る",
+    "正解": "costofsales@currentyearduration",
+    "偶然一致する側": "retirementbenefitexpensessga@currentyearduration_nonconsolidatedmember"
+   },
+   "席の参照先": "costofsales@currentyearduration",
+   "P16": {
+    "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+    "参照先": "costofsales@currentyearduration",
+    "state": "VALUE_MISMATCH"
+   },
+   "P20": {
+    "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+    "参照先": "costofsales@currentyearduration",
+    "state": "VALUE_MISMATCH"
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": true
+  },
+  {
+   "doc": "S100YYRG",
+   "id": "R022",
+   "主張 id(P16)": "N052",
+   "主張 id(P20)": "N052",
+   "正解": {
+    "種類": "参照先が在る",
+    "正解": "sellinggeneralandadministrativeexpenses@currentyearduration",
+    "偶然一致する側": "subsidyincome@prior1yearduration"
+   },
+   "席の参照先": "sellinggeneralandadministrativeexpenses@currentyearduration",
+   "P16": {
+    "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+    "参照先": "sellinggeneralandadministrativeexpenses@currentyearduration",
+    "state": "VALUE_MISMATCH"
+   },
+   "P20": {
+    "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+    "参照先": "sellinggeneralandadministrativeexpenses@currentyearduration",
+    "state": "VALUE_MISMATCH"
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": true
+  },
+  {
+   "doc": "S100YYRG",
+   "id": "R023",
+   "主張 id(P16)": "N056",
+   "主張 id(P20)": "N056",
+   "正解": {
+    "種類": "参照先が在る",
+    "正解": "nonoperatingincome@currentyearduration",
+    "偶然一致する側": "lossoninsurancecancellationnoe@prior1yearduration_nonconsolidatedmember"
+   },
+   "席の参照先": "nonoperatingincome@currentyearduration",
+   "P16": {
+    "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+    "参照先": "nonoperatingincome@currentyearduration",
+    "state": "VALUE_MISMATCH"
+   },
+   "P20": {
+    "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+    "参照先": "nonoperatingincome@currentyearduration",
+    "state": "VALUE_MISMATCH"
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": true
+  },
+  {
+   "doc": "S100YYRG",
+   "id": "R024",
+   "主張 id(P16)": "N060",
+   "主張 id(P20)": "N060",
+   "正解": {
+    "種類": "参照先が在る",
+    "正解": "incometaxes@currentyearduration",
+    "偶然一致する側": "temporarytransferchargesincomenoi@prior1yearduration_nonconsolidatedmember"
+   },
+   "席の参照先": "incometaxes@currentyearduration",
+   "P16": {
+    "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+    "参照先": "incometaxesdeferred@currentyearduration",
+    "state": "VALUE_MISMATCH"
+   },
+   "P20": {
+    "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+    "参照先": "incometaxesdeferred@currentyearduration",
+    "state": "VALUE_MISMATCH"
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": true
+  },
+  {
+   "doc": "S100YXMA",
+   "id": "R001",
+   "主張 id(P16)": "N002",
+   "主張 id(P20)": "N002",
+   "正解": null,
+   "席の参照先": "netsales@currentyearduration",
+   "P16": {
+    "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+    "参照先": "netsales@currentyearduration_jpcrp030000-asr_e05713-000greenenergyreportablesegmentmember",
+    "state": "VALUE_MISMATCH"
+   },
+   "P20": {
+    "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+    "参照先": "netsales@currentyearduration_jpcrp030000-asr_e05713-000greenenergyreportablesegmentmember",
+    "state": "VALUE_MISMATCH"
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": true
+  },
+  {
+   "doc": "S100YXMA",
+   "id": "R002",
+   "主張 id(P16)": "N003",
+   "主張 id(P20)": "N003",
+   "正解": {
+    "種類": "参照先が在る",
+    "正解": "operatingincome@currentyearduration",
+    "偶然一致する側": "securitycodedei@filingdateinstant"
+   },
+   "席の参照先": null,
+   "P16": {
+    "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+    "参照先": "operatingincome@currentyearduration_jpcrp030000-asr_e05713-000greenenergyreportablesegmentmember",
+    "state": "VALUE_MISMATCH"
+   },
+   "P20": {
+    "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+    "参照先": "operatingincome@currentyearduration_jpcrp030000-asr_e05713-000greenenergyreportablesegmentmember",
+    "state": "VALUE_MISMATCH"
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": false
+  },
+  {
+   "doc": "S100YXMA",
+   "id": "R003",
+   "主張 id(P16)": null,
+   "主張 id(P20)": null,
+   "正解": null,
+   "席の参照先": null,
+   "P16": {
+    "言うこと": "対応が付かない",
+    "参照先": null,
+    "state": null
+   },
+   "P20": {
+    "言うこと": "対応が付かない",
+    "参照先": null,
+    "state": null
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": false
+  },
+  {
+   "doc": "S100YXMA",
+   "id": "R004",
+   "主張 id(P16)": "N004",
+   "主張 id(P20)": "N004",
+   "正解": null,
+   "席の参照先": "ordinaryincome@currentyearduration",
+   "P16": {
+    "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+    "参照先": null,
+    "state": "POINTER_NOT_FOUND"
+   },
+   "P20": {
+    "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+    "参照先": null,
+    "state": "POINTER_NOT_FOUND"
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": true
+  },
+  {
+   "doc": "S100YXMA",
+   "id": "R005",
+   "主張 id(P16)": null,
+   "主張 id(P20)": null,
+   "正解": null,
+   "席の参照先": "impairmentlossel@currentyearduration",
+   "P16": {
+    "言うこと": "対応が付かない",
+    "参照先": null,
+    "state": null
+   },
+   "P20": {
+    "言うこと": "対応が付かない",
+    "参照先": null,
+    "state": null
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": false
+  },
+  {
+   "doc": "S100YXMA",
+   "id": "R006",
+   "主張 id(P16)": null,
+   "主張 id(P20)": null,
+   "正解": null,
+   "席の参照先": "correctionrelatedcostel@currentyearduration",
+   "P16": {
+    "言うこと": "対応が付かない",
+    "参照先": null,
+    "state": null
+   },
+   "P20": {
+    "言うこと": "対応が付かない",
+    "参照先": null,
+    "state": null
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": false
+  },
+  {
+   "doc": "S100YXMA",
+   "id": "R007",
+   "主張 id(P16)": null,
+   "主張 id(P20)": null,
+   "正解": null,
+   "席の参照先": "specialinvestigationexpensesel@currentyearduration",
+   "P16": {
+    "言うこと": "対応が付かない",
+    "参照先": null,
+    "state": null
+   },
+   "P20": {
+    "言うこと": "対応が付かない",
+    "参照先": null,
+    "state": null
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": false
+  },
+  {
+   "doc": "S100YXMA",
+   "id": "R008",
+   "主張 id(P16)": null,
+   "主張 id(P20)": null,
+   "正解": null,
+   "席の参照先": null,
+   "P16": {
+    "言うこと": "対応が付かない",
+    "参照先": null,
+    "state": null
+   },
+   "P20": {
+    "言うこと": "対応が付かない",
+    "参照先": null,
+    "state": null
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": false
+  },
+  {
+   "doc": "S100YXMA",
+   "id": "R009",
+   "主張 id(P16)": "N009",
+   "主張 id(P20)": "N009",
+   "正解": null,
+   "席の参照先": "profitlossattributabletoownersofparent@currentyearduration",
+   "P16": {
+    "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+    "参照先": null,
+    "state": "POINTER_NOT_FOUND"
+   },
+   "P20": {
+    "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+    "参照先": null,
+    "state": "POINTER_NOT_FOUND"
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": true
+  },
+  {
+   "doc": "S100YXMA",
+   "id": "R010",
+   "主張 id(P16)": "N010",
+   "主張 id(P20)": "N010",
+   "正解": null,
+   "席の参照先": "netsales@currentyearduration_jpcrp030000-asr_e05713-000solarpanelmanufacturingbusinessreportablesegmentmember",
+   "P16": {
+    "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+    "参照先": "netsales@currentyearduration",
+    "state": "VALUE_MISMATCH"
+   },
+   "P20": {
+    "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+    "参照先": "netsales@currentyearduration",
+    "state": "VALUE_MISMATCH"
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": true
+  },
+  {
+   "doc": "S100YXMA",
+   "id": "R011",
+   "主張 id(P16)": "N011",
+   "主張 id(P20)": "N011",
+   "正解": null,
+   "席の参照先": "operatingincome@currentyearduration_jpcrp030000-asr_e05713-000solarpanelmanufacturingbusinessreportablesegmentmember",
+   "P16": {
+    "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+    "参照先": "operatingincome@currentyearduration",
+    "state": "VALUE_MISMATCH"
+   },
+   "P20": {
+    "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+    "参照先": "operatingincome@currentyearduration",
+    "state": "VALUE_MISMATCH"
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": true
+  },
+  {
+   "doc": "S100YXMA",
+   "id": "R012",
+   "主張 id(P16)": "N012",
+   "主張 id(P20)": "N012",
+   "正解": null,
+   "席の参照先": null,
+   "P16": {
+    "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+    "参照先": null,
+    "state": "POINTER_NOT_FOUND"
+   },
+   "P20": {
+    "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+    "参照先": null,
+    "state": "POINTER_NOT_FOUND"
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": true
+  },
+  {
+   "doc": "S100YXMA",
+   "id": "R013",
+   "主張 id(P16)": "N070",
+   "主張 id(P20)": "N070",
+   "正解": null,
+   "席の参照先": null,
+   "P16": {
+    "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+    "参照先": null,
+    "state": "POINTER_NOT_FOUND"
+   },
+   "P20": {
+    "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+    "参照先": null,
+    "state": "POINTER_NOT_FOUND"
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": true
+  },
+  {
+   "doc": "S100YXMA",
+   "id": "R014",
+   "主張 id(P16)": "N013",
+   "主張 id(P20)": "N013",
+   "正解": null,
+   "席の参照先": null,
+   "P16": {
+    "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+    "参照先": null,
+    "state": "POINTER_NOT_FOUND"
+   },
+   "P20": {
+    "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+    "参照先": null,
+    "state": "POINTER_NOT_FOUND"
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": true
+  },
+  {
+   "doc": "S100YXMA",
+   "id": "R015",
+   "主張 id(P16)": "N014",
+   "主張 id(P20)": "N014",
+   "正解": null,
+   "席の参照先": null,
+   "P16": {
+    "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+    "参照先": null,
+    "state": "POINTER_NOT_FOUND"
+   },
+   "P20": {
+    "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+    "参照先": null,
+    "state": "POINTER_NOT_FOUND"
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": true
+  },
+  {
+   "doc": "S100YXMA",
+   "id": "R016",
+   "主張 id(P16)": "N015",
+   "主張 id(P20)": "N015",
+   "正解": null,
+   "席の参照先": "netsales@currentyearduration_jpcrp030000-asr_e05713-000greenenergyreportablesegmentmember",
+   "P16": {
+    "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+    "参照先": "netsales@currentyearduration",
+    "state": "VALUE_MISMATCH"
+   },
+   "P20": {
+    "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+    "参照先": "netsales@currentyearduration",
+    "state": "VALUE_MISMATCH"
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": true
+  },
+  {
+   "doc": "S100YXMA",
+   "id": "R017",
+   "主張 id(P16)": null,
+   "主張 id(P20)": null,
+   "正解": null,
+   "席の参照先": "operatingincome@currentyearduration_jpcrp030000-asr_e05713-000greenenergyreportablesegmentmember",
+   "P16": {
+    "言うこと": "対応が付かない",
+    "参照先": null,
+    "state": null
+   },
+   "P20": {
+    "言うこと": "対応が付かない",
+    "参照先": null,
+    "state": null
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": false
+  },
+  {
+   "doc": "S100YXMA",
+   "id": "R018",
+   "主張 id(P16)": "N003",
+   "主張 id(P20)": "N003",
+   "正解": {
+    "種類": "参照先が在る",
+    "正解": "incomebeforeincometaxes@currentyearduration",
+    "偶然一致する側": "securitycodedei@filingdateinstant"
+   },
+   "席の参照先": null,
+   "P16": {
+    "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+    "参照先": "operatingincome@currentyearduration_jpcrp030000-asr_e05713-000greenenergyreportablesegmentmember",
+    "state": "VALUE_MISMATCH"
+   },
+   "P20": {
+    "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+    "参照先": "operatingincome@currentyearduration_jpcrp030000-asr_e05713-000greenenergyreportablesegmentmember",
+    "state": "VALUE_MISMATCH"
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": false
+  },
+  {
+   "doc": "S100YXMA",
+   "id": "R019",
+   "主張 id(P16)": "N003",
+   "主張 id(P20)": "N003",
+   "正解": {
+    "種類": "参照先が在る",
+    "正解": "decreaseincreaseinadvancepaymentsopecf@currentyearduration",
+    "偶然一致する側": "securitycodedei@filingdateinstant"
+   },
+   "席の参照先": null,
+   "P16": {
+    "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+    "参照先": "operatingincome@currentyearduration_jpcrp030000-asr_e05713-000greenenergyreportablesegmentmember",
+    "state": "VALUE_MISMATCH"
+   },
+   "P20": {
+    "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+    "参照先": "operatingincome@currentyearduration_jpcrp030000-asr_e05713-000greenenergyreportablesegmentmember",
+    "state": "VALUE_MISMATCH"
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": false
+  },
+  {
+   "doc": "S100YXMA",
+   "id": "R020",
+   "主張 id(P16)": "N003",
+   "主張 id(P20)": "N003",
+   "正解": {
+    "種類": "参照先が在る",
+    "正解": "proceedsfromcollectionofdepositspaidinvcf@currentyearduration",
+    "偶然一致する側": "securitycodedei@filingdateinstant"
+   },
+   "席の参照先": null,
+   "P16": {
+    "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+    "参照先": "operatingincome@currentyearduration_jpcrp030000-asr_e05713-000greenenergyreportablesegmentmember",
+    "state": "VALUE_MISMATCH"
+   },
+   "P20": {
+    "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+    "参照先": "operatingincome@currentyearduration_jpcrp030000-asr_e05713-000greenenergyreportablesegmentmember",
+    "state": "VALUE_MISMATCH"
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": false
+  },
+  {
+   "doc": "S100YXMA",
+   "id": "R021",
+   "主張 id(P16)": "N042",
+   "主張 id(P20)": "N042",
+   "正解": {
+    "種類": "参照先が在る",
+    "正解": "currentassets@currentyearinstant",
+    "偶然一致する側": "leaseobligationsncl@prior1yearinstant_nonconsolidatedmember"
+   },
+   "席の参照先": null,
+   "P16": {
+    "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+    "参照先": "currentassets@currentyearinstant",
+    "state": "VALUE_MISMATCH"
+   },
+   "P20": {
+    "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+    "参照先": "currentassets@currentyearinstant",
+    "state": "VALUE_MISMATCH"
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": true
+  },
+  {
+   "doc": "S100YXMA",
+   "id": "R022",
+   "主張 id(P16)": "N003",
+   "主張 id(P20)": "N003",
+   "正解": {
+    "種類": "参照先が在る",
+    "正解": "currentliabilities@currentyearinstant",
+    "偶然一致する側": "securitycodedei@filingdateinstant"
+   },
+   "席の参照先": null,
+   "P16": {
+    "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+    "参照先": "operatingincome@currentyearduration_jpcrp030000-asr_e05713-000greenenergyreportablesegmentmember",
+    "state": "VALUE_MISMATCH"
+   },
+   "P20": {
+    "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+    "参照先": "operatingincome@currentyearduration_jpcrp030000-asr_e05713-000greenenergyreportablesegmentmember",
+    "state": "VALUE_MISMATCH"
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": false
+  },
+  {
+   "doc": "S100YXMA",
+   "id": "R023",
+   "主張 id(P16)": "N003",
+   "主張 id(P20)": "N003",
+   "正解": {
+    "種類": "参照先が在る",
+    "正解": "noncurrentliabilities@currentyearinstant",
+    "偶然一致する側": "securitycodedei@filingdateinstant"
+   },
+   "席の参照先": null,
+   "P16": {
+    "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+    "参照先": "operatingincome@currentyearduration_jpcrp030000-asr_e05713-000greenenergyreportablesegmentmember",
+    "state": "VALUE_MISMATCH"
+   },
+   "P20": {
+    "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+    "参照先": "operatingincome@currentyearduration_jpcrp030000-asr_e05713-000greenenergyreportablesegmentmember",
+    "state": "VALUE_MISMATCH"
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": false
+  },
+  {
+   "doc": "S100YXMA",
+   "id": "R024",
+   "主張 id(P16)": "N003",
+   "主張 id(P20)": "N003",
+   "正解": {
+    "種類": "参照先が在る",
+    "正解": "totalchangesofitemsduringtheperiod@currentyearduration",
+    "偶然一致する側": "securitycodedei@filingdateinstant"
+   },
+   "席の参照先": null,
+   "P16": {
+    "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+    "参照先": "operatingincome@currentyearduration_jpcrp030000-asr_e05713-000greenenergyreportablesegmentmember",
+    "state": "VALUE_MISMATCH"
+   },
+   "P20": {
+    "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+    "参照先": "operatingincome@currentyearduration_jpcrp030000-asr_e05713-000greenenergyreportablesegmentmember",
+    "state": "VALUE_MISMATCH"
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": false
+  },
+  {
+   "doc": "S100YZ7E",
+   "id": "R001",
+   "主張 id(P16)": "N002",
+   "主張 id(P20)": "N002",
+   "正解": null,
+   "席の参照先": null,
+   "P16": {
+    "言うこと": "参照先を出さない(UNVERIFIABLE)",
+    "参照先": null,
+    "state": "UNVERIFIABLE"
+   },
+   "P20": {
+    "言うこと": "参照先を出さない(UNVERIFIABLE)",
+    "参照先": null,
+    "state": "UNVERIFIABLE"
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": true
+  },
+  {
+   "doc": "S100YZ7E",
+   "id": "R002",
+   "主張 id(P16)": "N003",
+   "主張 id(P20)": "N003",
+   "正解": null,
+   "席の参照先": null,
+   "P16": {
+    "言うこと": "参照先を出さない(UNVERIFIABLE)",
+    "参照先": null,
+    "state": "UNVERIFIABLE"
+   },
+   "P20": {
+    "言うこと": "参照先を出さない(UNVERIFIABLE)",
+    "参照先": null,
+    "state": "UNVERIFIABLE"
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": true
+  },
+  {
+   "doc": "S100YZ7E",
+   "id": "R003",
+   "主張 id(P16)": "N004",
+   "主張 id(P20)": "N004",
+   "正解": null,
+   "席の参照先": null,
+   "P16": {
+    "言うこと": "参照先を出さない(UNVERIFIABLE)",
+    "参照先": null,
+    "state": "UNVERIFIABLE"
+   },
+   "P20": {
+    "言うこと": "参照先を出さない(UNVERIFIABLE)",
+    "参照先": null,
+    "state": "UNVERIFIABLE"
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": true
+  },
+  {
+   "doc": "S100YZ7E",
+   "id": "R004",
+   "主張 id(P16)": "N005",
+   "主張 id(P20)": "N005",
+   "正解": null,
+   "席の参照先": null,
+   "P16": {
+    "言うこと": "参照先を出さない(UNVERIFIABLE)",
+    "参照先": null,
+    "state": "UNVERIFIABLE"
+   },
+   "P20": {
+    "言うこと": "参照先を出さない(UNVERIFIABLE)",
+    "参照先": null,
+    "state": "UNVERIFIABLE"
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": true
+  },
+  {
+   "doc": "S100YZ7E",
+   "id": "R005",
+   "主張 id(P16)": "N006",
+   "主張 id(P20)": "N006",
+   "正解": null,
+   "席の参照先": null,
+   "P16": {
+    "言うこと": "参照先を出さない(UNVERIFIABLE)",
+    "参照先": null,
+    "state": "UNVERIFIABLE"
+   },
+   "P20": {
+    "言うこと": "参照先を出さない(UNVERIFIABLE)",
+    "参照先": null,
+    "state": "UNVERIFIABLE"
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": true
+  },
+  {
+   "doc": "S100YZ7E",
+   "id": "R006",
+   "主張 id(P16)": "N007",
+   "主張 id(P20)": "N007",
+   "正解": null,
+   "席の参照先": null,
+   "P16": {
+    "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+    "参照先": null,
+    "state": "POINTER_NOT_FOUND"
+   },
+   "P20": {
+    "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+    "参照先": null,
+    "state": "POINTER_NOT_FOUND"
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": true
+  },
+  {
+   "doc": "S100YZ7E",
+   "id": "R007",
+   "主張 id(P16)": "N008",
+   "主張 id(P20)": "N008",
+   "正解": null,
+   "席の参照先": null,
+   "P16": {
+    "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+    "参照先": null,
+    "state": "POINTER_NOT_FOUND"
+   },
+   "P20": {
+    "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+    "参照先": null,
+    "state": "POINTER_NOT_FOUND"
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": true
+  },
+  {
+   "doc": "S100YZ7E",
+   "id": "R008",
+   "主張 id(P16)": null,
+   "主張 id(P20)": null,
+   "正解": null,
+   "席の参照先": null,
+   "P16": {
+    "言うこと": "対応が付かない",
+    "参照先": null,
+    "state": null
+   },
+   "P20": {
+    "言うこと": "対応が付かない",
+    "参照先": null,
+    "state": null
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": false
+  },
+  {
+   "doc": "S100YZ7E",
+   "id": "R009",
+   "主張 id(P16)": "N011",
+   "主張 id(P20)": "N011",
+   "正解": null,
+   "席の参照先": null,
+   "P16": {
+    "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+    "参照先": null,
+    "state": "POINTER_NOT_FOUND"
+   },
+   "P20": {
+    "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+    "参照先": null,
+    "state": "POINTER_NOT_FOUND"
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": true
+  },
+  {
+   "doc": "S100YZ7E",
+   "id": "R010",
+   "主張 id(P16)": null,
+   "主張 id(P20)": null,
+   "正解": null,
+   "席の参照先": null,
+   "P16": {
+    "言うこと": "対応が付かない",
+    "参照先": null,
+    "state": null
+   },
+   "P20": {
+    "言うこと": "対応が付かない",
+    "参照先": null,
+    "state": null
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": false
+  },
+  {
+   "doc": "S100YZ7E",
+   "id": "R011",
+   "主張 id(P16)": "N014",
+   "主張 id(P20)": "N014",
+   "正解": null,
+   "席の参照先": null,
+   "P16": {
+    "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+    "参照先": null,
+    "state": "POINTER_NOT_FOUND"
+   },
+   "P20": {
+    "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+    "参照先": null,
+    "state": "POINTER_NOT_FOUND"
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": true
+  },
+  {
+   "doc": "S100YZ7E",
+   "id": "R012",
+   "主張 id(P16)": null,
+   "主張 id(P20)": null,
+   "正解": null,
+   "席の参照先": null,
+   "P16": {
+    "言うこと": "対応が付かない",
+    "参照先": null,
+    "state": null
+   },
+   "P20": {
+    "言うこと": "対応が付かない",
+    "参照先": null,
+    "state": null
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": false
+  },
+  {
+   "doc": "S100YZ7E",
+   "id": "R013",
+   "主張 id(P16)": null,
+   "主張 id(P20)": null,
+   "正解": null,
+   "席の参照先": null,
+   "P16": {
+    "言うこと": "対応が付かない",
+    "参照先": null,
+    "state": null
+   },
+   "P20": {
+    "言うこと": "対応が付かない",
+    "参照先": null,
+    "state": null
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": false
+  },
+  {
+   "doc": "S100YZ7E",
+   "id": "R014",
+   "主張 id(P16)": null,
+   "主張 id(P20)": null,
+   "正解": null,
+   "席の参照先": null,
+   "P16": {
+    "言うこと": "対応が付かない",
+    "参照先": null,
+    "state": null
+   },
+   "P20": {
+    "言うこと": "対応が付かない",
+    "参照先": null,
+    "state": null
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": false
+  },
+  {
+   "doc": "S100YZ7E",
+   "id": "R015",
+   "主張 id(P16)": "N019",
+   "主張 id(P20)": "N019",
+   "正解": null,
+   "席の参照先": null,
+   "P16": {
+    "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+    "参照先": null,
+    "state": "POINTER_NOT_FOUND"
+   },
+   "P20": {
+    "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+    "参照先": null,
+    "state": "POINTER_NOT_FOUND"
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": true
+  },
+  {
+   "doc": "S100YZ7E",
+   "id": "R016",
+   "主張 id(P16)": null,
+   "主張 id(P20)": null,
+   "正解": null,
+   "席の参照先": null,
+   "P16": {
+    "言うこと": "対応が付かない",
+    "参照先": null,
+    "state": null
+   },
+   "P20": {
+    "言うこと": "対応が付かない",
+    "参照先": null,
+    "state": null
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": false
+  },
+  {
+   "doc": "S100YZ7E",
+   "id": "R017",
+   "主張 id(P16)": "N022",
+   "主張 id(P20)": "N022",
+   "正解": {
+    "種類": "参照先が在る",
+    "正解": "operatingrevenue2summaryofbusinessresults@currentyearduration_nonconsolidatedmember",
+    "偶然一致する側": "othercl@prior1yearinstant_nonconsolidatedmember"
+   },
+   "席の参照先": "operatingrevenue2@currentyearduration_nonconsolidatedmember",
+   "P16": {
+    "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+    "参照先": null,
+    "state": "POINTER_NOT_FOUND"
+   },
+   "P20": {
+    "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+    "参照先": "unearnedrevenue@currentyearinstant_nonconsolidatedmember",
+    "state": "VALUE_MISMATCH"
+   },
+   "**10 行の 1 つ**": true,
+   "1 対 1": false
+  },
+  {
+   "doc": "S100YZ7E",
+   "id": "R018",
+   "主張 id(P16)": "N022",
+   "主張 id(P20)": "N022",
+   "正解": {
+    "種類": "参照先が在る",
+    "正解": "ordinaryincomelosssummaryofbusinessresults@currentyearduration_nonconsolidatedmember",
+    "偶然一致する側": "othercl@prior1yearinstant_nonconsolidatedmember"
+   },
+   "席の参照先": "ordinaryincome@currentyearduration_nonconsolidatedmember",
+   "P16": {
+    "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+    "参照先": null,
+    "state": "POINTER_NOT_FOUND"
+   },
+   "P20": {
+    "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+    "参照先": "unearnedrevenue@currentyearinstant_nonconsolidatedmember",
+    "state": "VALUE_MISMATCH"
+   },
+   "**10 行の 1 つ**": true,
+   "1 対 1": false
+  },
+  {
+   "doc": "S100YZ7E",
+   "id": "R019",
+   "主張 id(P16)": "N022",
+   "主張 id(P20)": "N022",
+   "正解": {
+    "種類": "参照先が在る",
+    "正解": "cashandcashequivalentssummaryofbusinessresults@currentyearinstant_nonconsolidatedmember",
+    "偶然一致する側": "othercl@prior1yearinstant_nonconsolidatedmember"
+   },
+   "席の参照先": "cashandcashequivalents@currentyearinstant_nonconsolidatedmember",
+   "P16": {
+    "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+    "参照先": null,
+    "state": "POINTER_NOT_FOUND"
+   },
+   "P20": {
+    "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+    "参照先": "unearnedrevenue@currentyearinstant_nonconsolidatedmember",
+    "state": "VALUE_MISMATCH"
+   },
+   "**10 行の 1 つ**": true,
+   "1 対 1": false
+  },
+  {
+   "doc": "S100YZ7E",
+   "id": "R020",
+   "主張 id(P16)": "N022",
+   "主張 id(P20)": "N022",
+   "正解": {
+    "種類": "参照先が在る",
+    "正解": "netcashprovidedbyusedininvestingactivitiessummaryofbusinessresults@currentyearduration_nonconsolidatedmember",
+    "偶然一致する側": "othercl@prior1yearinstant_nonconsolidatedmember"
+   },
+   "席の参照先": "netcashprovidedbyusedininvestmentactivities@currentyearduration_nonconsolidatedmember",
+   "P16": {
+    "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+    "参照先": null,
+    "state": "POINTER_NOT_FOUND"
+   },
+   "P20": {
+    "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+    "参照先": "unearnedrevenue@currentyearinstant_nonconsolidatedmember",
+    "state": "VALUE_MISMATCH"
+   },
+   "**10 行の 1 つ**": true,
+   "1 対 1": false
+  },
+  {
+   "doc": "S100YZ7E",
+   "id": "R021",
+   "主張 id(P16)": null,
+   "主張 id(P20)": null,
+   "正解": {
+    "種類": "参照先は無い",
+    "正解": null,
+    "偶然一致する側": null
+   },
+   "席の参照先": null,
+   "P16": {
+    "言うこと": "対応が付かない",
+    "参照先": null,
+    "state": null
+   },
+   "P20": {
+    "言うこと": "対応が付かない",
+    "参照先": null,
+    "state": null
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": false
+  },
+  {
+   "doc": "S100YZ7E",
+   "id": "R022",
+   "主張 id(P16)": null,
+   "主張 id(P20)": null,
+   "正解": {
+    "種類": "参照先は無い",
+    "正解": null,
+    "偶然一致する側": null
+   },
+   "席の参照先": null,
+   "P16": {
+    "言うこと": "対応が付かない",
+    "参照先": null,
+    "state": null
+   },
+   "P20": {
+    "言うこと": "対応が付かない",
+    "参照先": null,
+    "state": null
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": false
+  },
+  {
+   "doc": "S100YZ7E",
+   "id": "R023",
+   "主張 id(P16)": "N066",
+   "主張 id(P20)": "N066",
+   "正解": {
+    "種類": "参照先が在る",
+    "正解": "totalassetssummaryofbusinessresults@currentyearinstant_nonconsolidatedmember",
+    "偶然一致する側": "othernetopecfsubtotal@currentyearduration_nonconsolidatedmember"
+   },
+   "席の参照先": "assets@currentyearinstant_nonconsolidatedmember",
+   "P16": {
+    "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+    "参照先": null,
+    "state": "POINTER_NOT_FOUND"
+   },
+   "P20": {
+    "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+    "参照先": "assets@currentyearinstant_nonconsolidatedmember",
+    "state": "VALUE_MISMATCH"
+   },
+   "**10 行の 1 つ**": true,
+   "1 対 1": true
+  },
+  {
+   "doc": "S100YZ7E",
+   "id": "R024",
+   "主張 id(P16)": "N070",
+   "主張 id(P20)": "N070",
+   "正解": {
+    "種類": "参照先が在る",
+    "正解": "netassetssummaryofbusinessresults@currentyearinstant_nonconsolidatedmember",
+    "偶然一致する側": "othernetopecfsubtotal@prior1yearduration_nonconsolidatedmember"
+   },
+   "席の参照先": "netassets@currentyearinstant_nonconsolidatedmember",
+   "P16": {
+    "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+    "参照先": null,
+    "state": "POINTER_NOT_FOUND"
+   },
+   "P20": {
+    "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+    "参照先": "netassets@currentyearinstant_nonconsolidatedmember",
+    "state": "VALUE_MISMATCH"
+   },
+   "**10 行の 1 つ**": true,
+   "1 対 1": true
+  },
+  {
+   "doc": "S100YWGX",
+   "id": "R001",
+   "主張 id(P16)": "N007",
+   "主張 id(P20)": "N007",
+   "正解": null,
+   "席の参照先": null,
+   "P16": {
+    "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+    "参照先": null,
+    "state": "POINTER_NOT_FOUND"
+   },
+   "P20": {
+    "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+    "参照先": null,
+    "state": "POINTER_NOT_FOUND"
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": false
+  },
+  {
+   "doc": "S100YWGX",
+   "id": "R002",
+   "主張 id(P16)": null,
+   "主張 id(P20)": null,
+   "正解": null,
+   "席の参照先": null,
+   "P16": {
+    "言うこと": "対応が付かない",
+    "参照先": null,
+    "state": null
+   },
+   "P20": {
+    "言うこと": "対応が付かない",
+    "参照先": null,
+    "state": null
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": false
+  },
+  {
+   "doc": "S100YWGX",
+   "id": "R003",
+   "主張 id(P16)": "N001",
+   "主張 id(P20)": "N001",
+   "正解": null,
+   "席の参照先": "netsales@currentyearduration",
+   "P16": {
+    "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+    "参照先": "netsales@currentyearduration_jpcrp030000-asr_e34102-000domesticbookoffbusinessreportablesegmentsmember",
+    "state": "VALUE_MISMATCH"
+   },
+   "P20": {
+    "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+    "参照先": "netsales@currentyearduration_jpcrp030000-asr_e34102-000domesticbookoffbusinessreportablesegmentsmember",
+    "state": "VALUE_MISMATCH"
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": true
+  },
+  {
+   "doc": "S100YWGX",
+   "id": "R004",
+   "主張 id(P16)": "N002",
+   "主張 id(P20)": "N002",
+   "正解": null,
+   "席の参照先": "netsales@currentyearduration",
+   "P16": {
+    "言うこと": "一意でない",
+    "参照先": null,
+    "state": "VALUE_MISMATCH"
+   },
+   "P20": {
+    "言うこと": "一意でない",
+    "参照先": null,
+    "state": "VALUE_MISMATCH"
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": true
+  },
+  {
+   "doc": "S100YWGX",
+   "id": "R005",
+   "主張 id(P16)": "N003",
+   "主張 id(P20)": "N003",
+   "正解": null,
+   "席の参照先": "ordinaryincome@currentyearduration",
+   "P16": {
+    "言うこと": "参照先を出さない(UNVERIFIABLE)",
+    "参照先": null,
+    "state": "UNVERIFIABLE"
+   },
+   "P20": {
+    "言うこと": "参照先を出さない(UNVERIFIABLE)",
+    "参照先": null,
+    "state": "UNVERIFIABLE"
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": true
+  },
+  {
+   "doc": "S100YWGX",
+   "id": "R006",
+   "主張 id(P16)": "N004",
+   "主張 id(P20)": "N004",
+   "正解": null,
+   "席の参照先": "ordinaryincome@currentyearduration",
+   "P16": {
+    "言うこと": "参照先を出さない(UNVERIFIABLE)",
+    "参照先": null,
+    "state": "UNVERIFIABLE"
+   },
+   "P20": {
+    "言うこと": "参照先を出さない(UNVERIFIABLE)",
+    "参照先": null,
+    "state": "UNVERIFIABLE"
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": true
+  },
+  {
+   "doc": "S100YWGX",
+   "id": "R007",
+   "主張 id(P16)": "N005",
+   "主張 id(P20)": "N005",
+   "正解": null,
+   "席の参照先": "profitlossattributabletoownersofparent@currentyearduration",
+   "P16": {
+    "言うこと": "参照先を出さない(UNVERIFIABLE)",
+    "参照先": null,
+    "state": "UNVERIFIABLE"
+   },
+   "P20": {
+    "言うこと": "参照先を出さない(UNVERIFIABLE)",
+    "参照先": null,
+    "state": "UNVERIFIABLE"
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": true
+  },
+  {
+   "doc": "S100YWGX",
+   "id": "R008",
+   "主張 id(P16)": "N006",
+   "主張 id(P20)": "N006",
+   "正解": null,
+   "席の参照先": "profitlossattributabletoownersofparent@currentyearduration",
+   "P16": {
+    "言うこと": "参照先を出さない(UNVERIFIABLE)",
+    "参照先": null,
+    "state": "UNVERIFIABLE"
+   },
+   "P20": {
+    "言うこと": "参照先を出さない(UNVERIFIABLE)",
+    "参照先": null,
+    "state": "UNVERIFIABLE"
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": true
+  },
+  {
+   "doc": "S100YWGX",
+   "id": "R009",
+   "主張 id(P16)": "N007",
+   "主張 id(P20)": "N007",
+   "正解": null,
+   "席の参照先": null,
+   "P16": {
+    "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+    "参照先": null,
+    "state": "POINTER_NOT_FOUND"
+   },
+   "P20": {
+    "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+    "参照先": null,
+    "state": "POINTER_NOT_FOUND"
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": false
+  },
+  {
+   "doc": "S100YWGX",
+   "id": "R010",
+   "主張 id(P16)": "N013",
+   "主張 id(P20)": "N013",
+   "正解": {
+    "種類": "参照先が在る",
+    "正解": "revenuesfromexternalcustomers@currentyearduration_jpcrp030000-asr_e34102-000domesticbookoffbusinessreportablesegmentsmember",
+    "偶然一致する側": "totalchangesofitemsduringtheperiod@currentyearduration_nonconsolidatedmember_capitalsurplusmember"
+   },
+   "席の参照先": "revenuesfromexternalcustomers@currentyearduration_jpcrp030000-asr_e34102-000domesticbookoffbusinessreportablesegmentsmember",
+   "P16": {
+    "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+    "参照先": "netsales@currentyearduration",
+    "state": "VALUE_MISMATCH"
+   },
+   "P20": {
+    "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+    "参照先": "netsales@currentyearduration",
+    "state": "VALUE_MISMATCH"
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": true
+  },
+  {
+   "doc": "S100YWGX",
+   "id": "R011",
+   "主張 id(P16)": "N014",
+   "主張 id(P20)": "N014",
+   "正解": null,
+   "席の参照先": "revenuesfromexternalcustomers@currentyearduration_jpcrp030000-asr_e34102-000domesticbookoffbusinessreportablesegmentsmember",
+   "P16": {
+    "言うこと": "一意でない",
+    "参照先": null,
+    "state": "VALUE_MISMATCH"
+   },
+   "P20": {
+    "言うこと": "一意でない",
+    "参照先": null,
+    "state": "VALUE_MISMATCH"
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": true
+  },
+  {
+   "doc": "S100YWGX",
+   "id": "R012",
+   "主張 id(P16)": "N015",
+   "主張 id(P20)": "N015",
+   "正解": null,
+   "席の参照先": "ordinaryincome@currentyearduration_jpcrp030000-asr_e34102-000domesticbookoffbusinessreportablesegmentsmember",
+   "P16": {
+    "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+    "参照先": "operatingincome@currentyearduration",
+    "state": "VALUE_MISMATCH"
+   },
+   "P20": {
+    "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+    "参照先": "operatingincome@currentyearduration",
+    "state": "VALUE_MISMATCH"
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": true
+  },
+  {
+   "doc": "S100YWGX",
+   "id": "R013",
+   "主張 id(P16)": "N016",
+   "主張 id(P20)": "N016",
+   "正解": null,
+   "席の参照先": "ordinaryincome@currentyearduration_jpcrp030000-asr_e34102-000domesticbookoffbusinessreportablesegmentsmember",
+   "P16": {
+    "言うこと": "一意でない",
+    "参照先": null,
+    "state": "VALUE_MISMATCH"
+   },
+   "P20": {
+    "言うこと": "一意でない",
+    "参照先": null,
+    "state": "VALUE_MISMATCH"
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": true
+  },
+  {
+   "doc": "S100YWGX",
+   "id": "R014",
+   "主張 id(P16)": "N019",
+   "主張 id(P20)": "N019",
+   "正解": null,
+   "席の参照先": "revenuesfromexternalcustomers@currentyearduration_jpcrp030000-asr_e34102-000premiumservicebusinessreportablesegmentsmember",
+   "P16": {
+    "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+    "参照先": "netsales@currentyearduration",
+    "state": "VALUE_MISMATCH"
+   },
+   "P20": {
+    "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+    "参照先": "netsales@currentyearduration",
+    "state": "VALUE_MISMATCH"
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": true
+  },
+  {
+   "doc": "S100YWGX",
+   "id": "R015",
+   "主張 id(P16)": "N020",
+   "主張 id(P20)": "N020",
+   "正解": null,
+   "席の参照先": "revenuesfromexternalcustomers@currentyearduration_jpcrp030000-asr_e34102-000premiumservicebusinessreportablesegmentsmember",
+   "P16": {
+    "言うこと": "一意でない",
+    "参照先": null,
+    "state": "VALUE_MISMATCH"
+   },
+   "P20": {
+    "言うこと": "一意でない",
+    "参照先": null,
+    "state": "VALUE_MISMATCH"
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": true
+  },
+  {
+   "doc": "S100YWGX",
+   "id": "R016",
+   "主張 id(P16)": null,
+   "主張 id(P20)": null,
+   "正解": null,
+   "席の参照先": "ordinaryincome@currentyearduration_jpcrp030000-asr_e34102-000premiumservicebusinessreportablesegmentsmember",
+   "P16": {
+    "言うこと": "対応が付かない",
+    "参照先": null,
+    "state": null
+   },
+   "P20": {
+    "言うこと": "対応が付かない",
+    "参照先": null,
+    "state": null
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": false
+  },
+  {
+   "doc": "S100YWGX",
+   "id": "R017",
+   "主張 id(P16)": "N022",
+   "主張 id(P20)": "N022",
+   "正解": null,
+   "席の参照先": "ordinaryincome@currentyearduration_jpcrp030000-asr_e34102-000premiumservicebusinessreportablesegmentsmember",
+   "P16": {
+    "言うこと": "一意でない",
+    "参照先": null,
+    "state": "VALUE_MISMATCH"
+   },
+   "P20": {
+    "言うこと": "一意でない",
+    "参照先": null,
+    "state": "VALUE_MISMATCH"
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": true
+  },
+  {
+   "doc": "S100YWGX",
+   "id": "R018",
+   "主張 id(P16)": "N030",
+   "主張 id(P20)": "N030",
+   "正解": {
+    "種類": "参照先が在る",
+    "正解": "currentassets@currentyearinstant",
+    "偶然一致する側": "securitycodedei@filingdateinstant"
+   },
+   "席の参照先": "currentassets@currentyearinstant",
+   "P16": {
+    "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+    "参照先": "currentassets@currentyearinstant",
+    "state": "VALUE_MISMATCH"
+   },
+   "P20": {
+    "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+    "参照先": "currentassets@currentyearinstant",
+    "state": "VALUE_MISMATCH"
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": false
+  },
+  {
+   "doc": "S100YWGX",
+   "id": "R019",
+   "主張 id(P16)": "N030",
+   "主張 id(P20)": "N030",
+   "正解": {
+    "種類": "参照先が在る",
+    "正解": "currentassets@prior1yearinstant",
+    "偶然一致する側": "securitycodedei@filingdateinstant"
+   },
+   "席の参照先": "currentassets@prior1yearinstant",
+   "P16": {
+    "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+    "参照先": "currentassets@currentyearinstant",
+    "state": "VALUE_MISMATCH"
+   },
+   "P20": {
+    "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+    "参照先": "currentassets@currentyearinstant",
+    "state": "VALUE_MISMATCH"
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": false
+  },
+  {
+   "doc": "S100YWGX",
+   "id": "R020",
+   "主張 id(P16)": "N030",
+   "主張 id(P20)": "N030",
+   "正解": {
+    "種類": "参照先が在る",
+    "正解": "noncurrentassets@prior1yearinstant",
+    "偶然一致する側": "securitycodedei@filingdateinstant"
+   },
+   "席の参照先": "noncurrentassets@prior1yearinstant",
+   "P16": {
+    "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+    "参照先": "currentassets@currentyearinstant",
+    "state": "VALUE_MISMATCH"
+   },
+   "P20": {
+    "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+    "参照先": "currentassets@currentyearinstant",
+    "state": "VALUE_MISMATCH"
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": false
+  },
+  {
+   "doc": "S100YWGX",
+   "id": "R021",
+   "主張 id(P16)": "N030",
+   "主張 id(P20)": "N030",
+   "正解": {
+    "種類": "参照先が在る",
+    "正解": "liabilities@currentyearinstant",
+    "偶然一致する側": "securitycodedei@filingdateinstant"
+   },
+   "席の参照先": "liabilities@currentyearinstant",
+   "P16": {
+    "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+    "参照先": "currentassets@currentyearinstant",
+    "state": "VALUE_MISMATCH"
+   },
+   "P20": {
+    "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+    "参照先": "currentassets@currentyearinstant",
+    "state": "VALUE_MISMATCH"
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": false
+  },
+  {
+   "doc": "S100YWGX",
+   "id": "R022",
+   "主張 id(P16)": "N030",
+   "主張 id(P20)": "N030",
+   "正解": {
+    "種類": "参照先が在る",
+    "正解": "liabilities@prior1yearinstant",
+    "偶然一致する側": "securitycodedei@filingdateinstant"
+   },
+   "席の参照先": "liabilities@prior1yearinstant",
+   "P16": {
+    "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+    "参照先": "currentassets@currentyearinstant",
+    "state": "VALUE_MISMATCH"
+   },
+   "P20": {
+    "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+    "参照先": "currentassets@currentyearinstant",
+    "state": "VALUE_MISMATCH"
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": false
+  },
+  {
+   "doc": "S100YWGX",
+   "id": "R023",
+   "主張 id(P16)": "N030",
+   "主張 id(P20)": "N030",
+   "正解": {
+    "種類": "参照先が在る",
+    "正解": "costofsales@currentyearduration",
+    "偶然一致する側": "securitycodedei@filingdateinstant"
+   },
+   "席の参照先": "costofsales@currentyearduration",
+   "P16": {
+    "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+    "参照先": "currentassets@currentyearinstant",
+    "state": "VALUE_MISMATCH"
+   },
+   "P20": {
+    "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+    "参照先": "currentassets@currentyearinstant",
+    "state": "VALUE_MISMATCH"
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": false
+  },
+  {
+   "doc": "S100YWGX",
+   "id": "R024",
+   "主張 id(P16)": "N030",
+   "主張 id(P20)": "N030",
+   "正解": {
+    "種類": "参照先が在る",
+    "正解": "sellinggeneralandadministrativeexpenses@currentyearduration",
+    "偶然一致する側": "securitycodedei@filingdateinstant"
+   },
+   "席の参照先": "sellinggeneralandadministrativeexpenses@currentyearduration",
+   "P16": {
+    "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+    "参照先": "currentassets@currentyearinstant",
+    "state": "VALUE_MISMATCH"
+   },
+   "P20": {
+    "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+    "参照先": "currentassets@currentyearinstant",
+    "state": "VALUE_MISMATCH"
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": false
+  },
+  {
+   "doc": "S100YZCT",
+   "id": "R001",
+   "主張 id(P16)": "N004",
+   "主張 id(P20)": "N004",
+   "正解": null,
+   "席の参照先": null,
+   "P16": {
+    "言うこと": "一意でない",
+    "参照先": null,
+    "state": "VALUE_MISMATCH"
+   },
+   "P20": {
+    "言うこと": "一意でない",
+    "参照先": null,
+    "state": "VALUE_MISMATCH"
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": false
+  },
+  {
+   "doc": "S100YZCT",
+   "id": "R002",
+   "主張 id(P16)": "N001",
+   "主張 id(P20)": "N001",
+   "正解": null,
+   "席の参照先": "netsalessummaryofbusinessresults@currentyearduration",
+   "P16": {
+    "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+    "参照先": "netsales@currentyearduration_jpcrp030000-asr_e05536-000carerelatedservicesreportablesegmentsmember",
+    "state": "VALUE_MISMATCH"
+   },
+   "P20": {
+    "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+    "参照先": "netsales@currentyearduration_jpcrp030000-asr_e05536-000carerelatedservicesreportablesegmentsmember",
+    "state": "VALUE_MISMATCH"
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": true
+  },
+  {
+   "doc": "S100YZCT",
+   "id": "R003",
+   "主張 id(P16)": "N002",
+   "主張 id(P20)": "N002",
+   "正解": null,
+   "席の参照先": "netsalessummaryofbusinessresults@currentyearduration",
+   "P16": {
+    "言うこと": "一意でない",
+    "参照先": null,
+    "state": "VALUE_MISMATCH"
+   },
+   "P20": {
+    "言うこと": "一意でない",
+    "参照先": null,
+    "state": "VALUE_MISMATCH"
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": true
+  },
+  {
+   "doc": "S100YZCT",
+   "id": "R004",
+   "主張 id(P16)": "N003",
+   "主張 id(P20)": "N003",
+   "正解": {
+    "種類": "参照先が在る",
+    "正解": "operatingincome@currentyearduration",
+    "偶然一致する側": "amortizationofgoodwillopecf@prior1yearduration"
+   },
+   "席の参照先": "operatingincome@currentyearduration",
+   "P16": {
+    "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+    "参照先": "operatingincome@currentyearduration_jpcrp030000-asr_e05536-000carerelatedservicesreportablesegmentsmember",
+    "state": "VALUE_MISMATCH"
+   },
+   "P20": {
+    "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+    "参照先": "operatingincome@currentyearduration_jpcrp030000-asr_e05536-000carerelatedservicesreportablesegmentsmember",
+    "state": "VALUE_MISMATCH"
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": true
+  },
+  {
+   "doc": "S100YZCT",
+   "id": "R005",
+   "主張 id(P16)": "N004",
+   "主張 id(P20)": "N004",
+   "正解": null,
+   "席の参照先": "operatingincome@currentyearduration",
+   "P16": {
+    "言うこと": "一意でない",
+    "参照先": null,
+    "state": "VALUE_MISMATCH"
+   },
+   "P20": {
+    "言うこと": "一意でない",
+    "参照先": null,
+    "state": "VALUE_MISMATCH"
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": false
+  },
+  {
+   "doc": "S100YZCT",
+   "id": "R006",
+   "主張 id(P16)": "N005",
+   "主張 id(P20)": "N005",
+   "正解": null,
+   "席の参照先": "ordinaryincomelosssummaryofbusinessresults@currentyearduration",
+   "P16": {
+    "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+    "参照先": null,
+    "state": "POINTER_NOT_FOUND"
+   },
+   "P20": {
+    "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+    "参照先": null,
+    "state": "POINTER_NOT_FOUND"
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": true
+  },
+  {
+   "doc": "S100YZCT",
+   "id": "R007",
+   "主張 id(P16)": "N006",
+   "主張 id(P20)": "N006",
+   "正解": null,
+   "席の参照先": "ordinaryincomelosssummaryofbusinessresults@currentyearduration",
+   "P16": {
+    "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+    "参照先": null,
+    "state": "POINTER_NOT_FOUND"
+   },
+   "P20": {
+    "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+    "参照先": null,
+    "state": "POINTER_NOT_FOUND"
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": true
+  },
+  {
+   "doc": "S100YZCT",
+   "id": "R008",
+   "主張 id(P16)": "N007",
+   "主張 id(P20)": "N007",
+   "正解": null,
+   "席の参照先": "profitlossattributabletoownersofparentsummaryofbusinessresults@currentyearduration",
+   "P16": {
+    "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+    "参照先": null,
+    "state": "POINTER_NOT_FOUND"
+   },
+   "P20": {
+    "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+    "参照先": null,
+    "state": "POINTER_NOT_FOUND"
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": true
+  },
+  {
+   "doc": "S100YZCT",
+   "id": "R009",
+   "主張 id(P16)": "N008",
+   "主張 id(P20)": "N008",
+   "正解": null,
+   "席の参照先": "profitlossattributabletoownersofparentsummaryofbusinessresults@currentyearduration",
+   "P16": {
+    "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+    "参照先": null,
+    "state": "POINTER_NOT_FOUND"
+   },
+   "P20": {
+    "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+    "参照先": null,
+    "state": "POINTER_NOT_FOUND"
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": false
+  },
+  {
+   "doc": "S100YZCT",
+   "id": "R010",
+   "主張 id(P16)": "N010",
+   "主張 id(P20)": "N010",
+   "正解": null,
+   "席の参照先": null,
+   "P16": {
+    "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+    "参照先": null,
+    "state": "POINTER_NOT_FOUND"
+   },
+   "P20": {
+    "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+    "参照先": null,
+    "state": "POINTER_NOT_FOUND"
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": true
+  },
+  {
+   "doc": "S100YZCT",
+   "id": "R011",
+   "主張 id(P16)": "N011",
+   "主張 id(P20)": "N011",
+   "正解": null,
+   "席の参照先": null,
+   "P16": {
+    "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+    "参照先": null,
+    "state": "POINTER_NOT_FOUND"
+   },
+   "P20": {
+    "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+    "参照先": null,
+    "state": "POINTER_NOT_FOUND"
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": true
+  },
+  {
+   "doc": "S100YZCT",
+   "id": "R012",
+   "主張 id(P16)": "N012",
+   "主張 id(P20)": "N012",
+   "正解": null,
+   "席の参照先": null,
+   "P16": {
+    "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+    "参照先": null,
+    "state": "POINTER_NOT_FOUND"
+   },
+   "P20": {
+    "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+    "参照先": null,
+    "state": "POINTER_NOT_FOUND"
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": true
+  },
+  {
+   "doc": "S100YZCT",
+   "id": "R013",
+   "主張 id(P16)": null,
+   "主張 id(P20)": null,
+   "正解": null,
+   "席の参照先": null,
+   "P16": {
+    "言うこと": "対応が付かない",
+    "参照先": null,
+    "state": null
+   },
+   "P20": {
+    "言うこと": "対応が付かない",
+    "参照先": null,
+    "state": null
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": false
+  },
+  {
+   "doc": "S100YZCT",
+   "id": "R014",
+   "主張 id(P16)": "N008",
+   "主張 id(P20)": "N008",
+   "正解": null,
+   "席の参照先": null,
+   "P16": {
+    "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+    "参照先": null,
+    "state": "POINTER_NOT_FOUND"
+   },
+   "P20": {
+    "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+    "参照先": null,
+    "state": "POINTER_NOT_FOUND"
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": false
+  },
+  {
+   "doc": "S100YZCT",
+   "id": "R015",
+   "主張 id(P16)": null,
+   "主張 id(P20)": null,
+   "正解": null,
+   "席の参照先": null,
+   "P16": {
+    "言うこと": "対応が付かない",
+    "参照先": null,
+    "state": null
+   },
+   "P20": {
+    "言うこと": "対応が付かない",
+    "参照先": null,
+    "state": null
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": false
+  },
+  {
+   "doc": "S100YZCT",
+   "id": "R016",
+   "主張 id(P16)": "N013",
+   "主張 id(P20)": "N013",
+   "正解": null,
+   "席の参照先": null,
+   "P16": {
+    "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+    "参照先": null,
+    "state": "POINTER_NOT_FOUND"
+   },
+   "P20": {
+    "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+    "参照先": null,
+    "state": "POINTER_NOT_FOUND"
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": true
+  },
+  {
+   "doc": "S100YZCT",
+   "id": "R017",
+   "主張 id(P16)": "N014",
+   "主張 id(P20)": "N014",
+   "正解": null,
+   "席の参照先": null,
+   "P16": {
+    "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+    "参照先": null,
+    "state": "POINTER_NOT_FOUND"
+   },
+   "P20": {
+    "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+    "参照先": null,
+    "state": "POINTER_NOT_FOUND"
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": true
+  },
+  {
+   "doc": "S100YZCT",
+   "id": "R018",
+   "主張 id(P16)": "N035",
+   "主張 id(P20)": "N035",
+   "正解": {
+    "種類": "参照先が在る",
+    "正解": "currentassets@currentyearinstant",
+    "偶然一致する側": "commissionfeesga@currentyearduration_nonconsolidatedmember"
+   },
+   "席の参照先": "currentassets@currentyearinstant",
+   "P16": {
+    "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+    "参照先": "currentassets@currentyearinstant",
+    "state": "VALUE_MISMATCH"
+   },
+   "P20": {
+    "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+    "参照先": "currentassets@currentyearinstant",
+    "state": "VALUE_MISMATCH"
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": true
+  },
+  {
+   "doc": "S100YZCT",
+   "id": "R019",
+   "主張 id(P16)": "N053",
+   "主張 id(P20)": "N053",
+   "正解": {
+    "種類": "参照先が在る",
+    "正解": "netincreasedecreaseincashandcashequivalents@currentyearduration",
+    "偶然一致する側": "baseremunerationremunerationetcbycategoryofdirectorsandotherofficers@currentyearduration_directorsappointedasauditandsupervisorycommitteemembersexcludingoutsidedirectorsmember"
+   },
+   "席の参照先": "netincreasedecreaseincashandcashequivalents@currentyearduration",
+   "P16": {
+    "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+    "参照先": "incomebeforeincometaxes@currentyearduration",
+    "state": "VALUE_MISMATCH"
+   },
+   "P20": {
+    "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+    "参照先": "incomebeforeincometaxes@currentyearduration",
+    "state": "VALUE_MISMATCH"
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": true
+  },
+  {
+   "doc": "S100YZCT",
+   "id": "R020",
+   "主張 id(P16)": "N077",
+   "主張 id(P20)": "N077",
+   "正解": {
+    "種類": "参照先が在る",
+    "正解": "netincreasedecreaseincashandcashequivalents@currentyearduration",
+    "偶然一致する側": "totalamountofremunerationetcremunerationetcbycategoryofdirectorsandotherofficers@currentyearduration_outsidedirectorsandotherofficersmember"
+   },
+   "席の参照先": "cashanddeposits@currentyearinstant",
+   "P16": {
+    "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+    "参照先": "cashanddeposits@currentyearinstant",
+    "state": "VALUE_MISMATCH"
+   },
+   "P20": {
+    "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+    "参照先": "cashanddeposits@currentyearinstant",
+    "state": "VALUE_MISMATCH"
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": true
+  },
+  {
+   "doc": "S100YZCT",
+   "id": "R021",
+   "主張 id(P16)": "N082",
+   "主張 id(P20)": "N082",
+   "正解": {
+    "種類": "参照先が在る",
+    "正解": "currentliabilities@currentyearinstant",
+    "偶然一致する側": "otherncl@prior1yearinstant_nonconsolidatedmember"
+   },
+   "席の参照先": "currentliabilities@currentyearinstant",
+   "P16": {
+    "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+    "参照先": "currentliabilities@currentyearinstant",
+    "state": "VALUE_MISMATCH"
+   },
+   "P20": {
+    "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+    "参照先": "currentliabilities@currentyearinstant",
+    "state": "VALUE_MISMATCH"
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": true
+  },
+  {
+   "doc": "S100YZCT",
+   "id": "R022",
+   "主張 id(P16)": "N097",
+   "主張 id(P20)": "N097",
+   "正解": {
+    "種類": "参照先が在る",
+    "正解": "grossprofit@currentyearduration",
+    "偶然一致する側": "impairmentlossel@currentyearduration_jpcrp030000-asr_e05536-000childcarerelatedservicesreportablesegmentsmember"
+   },
+   "席の参照先": "grossprofit@currentyearduration",
+   "P16": {
+    "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+    "参照先": "grossprofit@currentyearduration",
+    "state": "VALUE_MISMATCH"
+   },
+   "P20": {
+    "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+    "参照先": "grossprofit@currentyearduration",
+    "state": "VALUE_MISMATCH"
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": true
+  },
+  {
+   "doc": "S100YZCT",
+   "id": "R023",
+   "主張 id(P16)": "N099",
+   "主張 id(P20)": "N099",
+   "正解": {
+    "種類": "参照先が在る",
+    "正解": "sellinggeneralandadministrativeexpenses@currentyearduration",
+    "偶然一致する側": "depreciationsegmentinformation@currentyearduration_jpcrp030000-asr_e05536-000comprehensivestaffingservicesreportablesegmentsmember"
+   },
+   "席の参照先": "sellinggeneralandadministrativeexpenses@currentyearduration",
+   "P16": {
+    "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+    "参照先": "taxesandduessga@currentyearduration",
+    "state": "VALUE_MISMATCH"
+   },
+   "P20": {
+    "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+    "参照先": "taxesandduessga@currentyearduration",
+    "state": "VALUE_MISMATCH"
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": true
+  },
+  {
+   "doc": "S100YZCT",
+   "id": "R024",
+   "主張 id(P16)": "N103",
+   "主張 id(P20)": "N103",
+   "正解": {
+    "種類": "参照先が在る",
+    "正解": "operatingincome@currentyearduration",
+    "偶然一致する側": "othernetopecf@currentyearduration"
+   },
+   "席の参照先": "operatingincome@currentyearduration",
+   "P16": {
+    "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+    "参照先": "operatingincome@currentyearduration",
+    "state": "VALUE_MISMATCH"
+   },
+   "P20": {
+    "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+    "参照先": "operatingincome@currentyearduration",
+    "state": "VALUE_MISMATCH"
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": true
+  },
+  {
+   "doc": "S100YYRV",
+   "id": "R001",
+   "主張 id(P16)": null,
+   "主張 id(P20)": null,
+   "正解": null,
+   "席の参照先": null,
+   "P16": {
+    "言うこと": "対応が付かない",
+    "参照先": null,
+    "state": null
+   },
+   "P20": {
+    "言うこと": "対応が付かない",
+    "参照先": null,
+    "state": null
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": false
+  },
+  {
+   "doc": "S100YYRV",
+   "id": "R002",
+   "主張 id(P16)": "N002",
+   "主張 id(P20)": "N002",
+   "正解": null,
+   "席の参照先": null,
+   "P16": {
+    "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+    "参照先": null,
+    "state": "POINTER_NOT_FOUND"
+   },
+   "P20": {
+    "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+    "参照先": null,
+    "state": "POINTER_NOT_FOUND"
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": true
+  },
+  {
+   "doc": "S100YYRV",
+   "id": "R003",
+   "主張 id(P16)": "N025",
+   "主張 id(P20)": "N025",
+   "正解": null,
+   "席の参照先": null,
+   "P16": {
+    "言うこと": "一意でない",
+    "参照先": null,
+    "state": "VALUE_MISMATCH"
+   },
+   "P20": {
+    "言うこと": "一意でない",
+    "参照先": null,
+    "state": "VALUE_MISMATCH"
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": true
+  },
+  {
+   "doc": "S100YYRV",
+   "id": "R004",
+   "主張 id(P16)": null,
+   "主張 id(P20)": null,
+   "正解": null,
+   "席の参照先": null,
+   "P16": {
+    "言うこと": "対応が付かない",
+    "参照先": null,
+    "state": null
+   },
+   "P20": {
+    "言うこと": "対応が付かない",
+    "参照先": null,
+    "state": null
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": false
+  },
+  {
+   "doc": "S100YYRV",
+   "id": "R005",
+   "主張 id(P16)": "N006",
+   "主張 id(P20)": "N006",
+   "正解": null,
+   "席の参照先": null,
+   "P16": {
+    "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+    "参照先": null,
+    "state": "POINTER_NOT_FOUND"
+   },
+   "P20": {
+    "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+    "参照先": null,
+    "state": "POINTER_NOT_FOUND"
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": true
+  },
+  {
+   "doc": "S100YYRV",
+   "id": "R006",
+   "主張 id(P16)": null,
+   "主張 id(P20)": null,
+   "正解": null,
+   "席の参照先": null,
+   "P16": {
+    "言うこと": "対応が付かない",
+    "参照先": null,
+    "state": null
+   },
+   "P20": {
+    "言うこと": "対応が付かない",
+    "参照先": null,
+    "state": null
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": false
+  },
+  {
+   "doc": "S100YYRV",
+   "id": "R007",
+   "主張 id(P16)": "N008",
+   "主張 id(P20)": "N008",
+   "正解": null,
+   "席の参照先": null,
+   "P16": {
+    "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+    "参照先": null,
+    "state": "POINTER_NOT_FOUND"
+   },
+   "P20": {
+    "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+    "参照先": null,
+    "state": "POINTER_NOT_FOUND"
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": true
+  },
+  {
+   "doc": "S100YYRV",
+   "id": "R008",
+   "主張 id(P16)": "N009",
+   "主張 id(P20)": "N009",
+   "正解": null,
+   "席の参照先": null,
+   "P16": {
+    "言うこと": "参照先を出さない(UNVERIFIABLE)",
+    "参照先": null,
+    "state": "UNVERIFIABLE"
+   },
+   "P20": {
+    "言うこと": "参照先を出さない(UNVERIFIABLE)",
+    "参照先": null,
+    "state": "UNVERIFIABLE"
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": true
+  },
+  {
+   "doc": "S100YYRV",
+   "id": "R009",
+   "主張 id(P16)": "N010",
+   "主張 id(P20)": "N010",
+   "正解": null,
+   "席の参照先": null,
+   "P16": {
+    "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+    "参照先": null,
+    "state": "POINTER_NOT_FOUND"
+   },
+   "P20": {
+    "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+    "参照先": null,
+    "state": "POINTER_NOT_FOUND"
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": true
+  },
+  {
+   "doc": "S100YYRV",
+   "id": "R010",
+   "主張 id(P16)": "N011",
+   "主張 id(P20)": "N011",
+   "正解": null,
+   "席の参照先": null,
+   "P16": {
+    "言うこと": "参照先を出さない(UNVERIFIABLE)",
+    "参照先": null,
+    "state": "UNVERIFIABLE"
+   },
+   "P20": {
+    "言うこと": "参照先を出さない(UNVERIFIABLE)",
+    "参照先": null,
+    "state": "UNVERIFIABLE"
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": true
+  },
+  {
+   "doc": "S100YYRV",
+   "id": "R011",
+   "主張 id(P16)": "N012",
+   "主張 id(P20)": "N012",
+   "正解": null,
+   "席の参照先": null,
+   "P16": {
+    "言うこと": "参照先を出さない(UNVERIFIABLE)",
+    "参照先": null,
+    "state": "UNVERIFIABLE"
+   },
+   "P20": {
+    "言うこと": "参照先を出さない(UNVERIFIABLE)",
+    "参照先": null,
+    "state": "UNVERIFIABLE"
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": true
+  },
+  {
+   "doc": "S100YYRV",
+   "id": "R012",
+   "主張 id(P16)": "N013",
+   "主張 id(P20)": "N013",
+   "正解": null,
+   "席の参照先": null,
+   "P16": {
+    "言うこと": "参照先を出さない(UNVERIFIABLE)",
+    "参照先": null,
+    "state": "UNVERIFIABLE"
+   },
+   "P20": {
+    "言うこと": "参照先を出さない(UNVERIFIABLE)",
+    "参照先": null,
+    "state": "UNVERIFIABLE"
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": true
+  },
+  {
+   "doc": "S100YYRV",
+   "id": "R013",
+   "主張 id(P16)": "N014",
+   "主張 id(P20)": "N014",
+   "正解": null,
+   "席の参照先": "netsales@currentyearduration",
+   "P16": {
+    "言うこと": "確認済み",
+    "参照先": "netsales@currentyearduration",
+    "state": "GROUNDED"
+   },
+   "P20": {
+    "言うこと": "確認済み",
+    "参照先": "netsales@currentyearduration",
+    "state": "GROUNDED"
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": true
+  },
+  {
+   "doc": "S100YYRV",
+   "id": "R014",
+   "主張 id(P16)": null,
+   "主張 id(P20)": null,
+   "正解": null,
+   "席の参照先": "netsales@currentyearduration",
+   "P16": {
+    "言うこと": "対応が付かない",
+    "参照先": null,
+    "state": null
+   },
+   "P20": {
+    "言うこと": "対応が付かない",
+    "参照先": null,
+    "state": null
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": false
+  },
+  {
+   "doc": "S100YYRV",
+   "id": "R015",
+   "主張 id(P16)": "N016",
+   "主張 id(P20)": "N016",
+   "正解": null,
+   "席の参照先": "ordinaryincome@currentyearduration",
+   "P16": {
+    "言うこと": "確認済み",
+    "参照先": "ordinaryincome@currentyearduration",
+    "state": "GROUNDED"
+   },
+   "P20": {
+    "言うこと": "確認済み",
+    "参照先": "ordinaryincome@currentyearduration",
+    "state": "GROUNDED"
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": true
+  },
+  {
+   "doc": "S100YYRV",
+   "id": "R016",
+   "主張 id(P16)": null,
+   "主張 id(P20)": null,
+   "正解": null,
+   "席の参照先": "ordinaryincome@currentyearduration",
+   "P16": {
+    "言うこと": "対応が付かない",
+    "参照先": null,
+    "state": null
+   },
+   "P20": {
+    "言うこと": "対応が付かない",
+    "参照先": null,
+    "state": null
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": false
+  },
+  {
+   "doc": "S100YYRV",
+   "id": "R017",
+   "主張 id(P16)": "N026",
+   "主張 id(P20)": "N026",
+   "正解": {
+    "種類": "参照先が在る",
+    "正解": "operatingincome@currentyearduration_jpcrp030000-asr_e02480-000publishingbusinessreportablesegmentsmember",
+    "偶然一致する側": "impairmentlossel@prior1yearduration_jpcrp030000-asr_e02480-000pictureproductionbusinessreportablesegmentsmember"
+   },
+   "席の参照先": "operatingincome@currentyearduration_jpcrp030000-asr_e02480-000publishingbusinessreportablesegmentsmember",
+   "P16": {
+    "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+    "参照先": "operatingincome@currentyearduration",
+    "state": "VALUE_MISMATCH"
+   },
+   "P20": {
+    "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+    "参照先": "operatingincome@currentyearduration",
+    "state": "VALUE_MISMATCH"
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": true
+  },
+  {
+   "doc": "S100YYRV",
+   "id": "R018",
+   "主張 id(P16)": "N034",
+   "主張 id(P20)": "N034",
+   "正解": {
+    "種類": "参照先が在る",
+    "正解": "operatingincome@currentyearduration_jpcrp030000-asr_e02480-000productsalesbusinessreportablesegmentsmember",
+    "偶然一致する側": "bonusessga@prior1yearduration_nonconsolidatedmember"
+   },
+   "席の参照先": "operatingincome@currentyearduration_jpcrp030000-asr_e02480-000productsalesbusinessreportablesegmentsmember",
+   "P16": {
+    "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+    "参照先": "operatingincome@currentyearduration",
+    "state": "VALUE_MISMATCH"
+   },
+   "P20": {
+    "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+    "参照先": "operatingincome@currentyearduration",
+    "state": "VALUE_MISMATCH"
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": true
+  },
+  {
+   "doc": "S100YYRV",
+   "id": "R019",
+   "主張 id(P16)": "N045",
+   "主張 id(P20)": "N045",
+   "正解": {
+    "種類": "参照先が在る",
+    "正解": "incomebeforeincometaxes@currentyearduration",
+    "偶然一致する側": "legalretainedearnings@currentyearinstant_nonconsolidatedmember"
+   },
+   "席の参照先": "incomebeforeincometaxes@currentyearduration",
+   "P16": {
+    "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+    "参照先": "incomebeforeincometaxes@currentyearduration",
+    "state": "VALUE_MISMATCH"
+   },
+   "P20": {
+    "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+    "参照先": "incomebeforeincometaxes@currentyearduration",
+    "state": "VALUE_MISMATCH"
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": false
+  },
+  {
+   "doc": "S100YYRV",
+   "id": "R020",
+   "主張 id(P16)": "N045",
+   "主張 id(P20)": "N045",
+   "正解": {
+    "種類": "参照先が在る",
+    "正解": "depreciationandamortizationopecf@currentyearduration",
+    "偶然一致する側": "legalretainedearnings@prior1yearinstant_nonconsolidatedmember"
+   },
+   "席の参照先": "depreciationandamortizationopecf@currentyearduration",
+   "P16": {
+    "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+    "参照先": "incomebeforeincometaxes@currentyearduration",
+    "state": "VALUE_MISMATCH"
+   },
+   "P20": {
+    "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+    "参照先": "incomebeforeincometaxes@currentyearduration",
+    "state": "VALUE_MISMATCH"
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": false
+  },
+  {
+   "doc": "S100YYRV",
+   "id": "R021",
+   "主張 id(P16)": "N062",
+   "主張 id(P20)": "N062",
+   "正解": {
+    "種類": "参照先が在る",
+    "正解": "proceedsoflongtermborrowingsfincf@currentyearduration",
+    "偶然一致する側": "nonoperatingexpenses@currentyearduration_nonconsolidatedmember"
+   },
+   "席の参照先": "proceedsoflongtermborrowingsfincf@currentyearduration",
+   "P16": {
+    "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+    "参照先": "longtermloanspayable@currentyearinstant",
+    "state": "VALUE_MISMATCH"
+   },
+   "P20": {
+    "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+    "参照先": "longtermloanspayable@currentyearinstant",
+    "state": "VALUE_MISMATCH"
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": false
+  },
+  {
+   "doc": "S100YYRV",
+   "id": "R022",
+   "主張 id(P16)": "N073",
+   "主張 id(P20)": "N073",
+   "正解": {
+    "種類": "参照先が在る",
+    "正解": "extraordinaryloss@currentyearduration",
+    "偶然一致する側": "depreciationsegmentinformation@prior1yearduration_jpcrp030000-asr_e02480-000productsalesbusinessreportablesegmentsmember"
+   },
+   "席の参照先": "extraordinaryloss@currentyearduration",
+   "P16": {
+    "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+    "参照先": "extraordinaryloss@currentyearduration",
+    "state": "VALUE_MISMATCH"
+   },
+   "P20": {
+    "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+    "参照先": "extraordinaryloss@currentyearduration",
+    "state": "VALUE_MISMATCH"
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": true
+  },
+  {
+   "doc": "S100YYRV",
+   "id": "R023",
+   "主張 id(P16)": "N091",
+   "主張 id(P20)": "N091",
+   "正解": {
+    "種類": "参照先が在る",
+    "正解": "liabilities@currentyearinstant",
+    "偶然一致する側": "increasedecreaseinnetdefinedbenefitliabilityopecf@prior1yearduration"
+   },
+   "席の参照先": "liabilities@currentyearinstant",
+   "P16": {
+    "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+    "参照先": "liabilities@currentyearinstant",
+    "state": "VALUE_MISMATCH"
+   },
+   "P20": {
+    "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+    "参照先": "liabilities@currentyearinstant",
+    "state": "VALUE_MISMATCH"
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": true
+  },
+  {
+   "doc": "S100YYRV",
+   "id": "R024",
+   "主張 id(P16)": "N062",
+   "主張 id(P20)": "N062",
+   "正解": {
+    "種類": "参照先が在る",
+    "正解": "increasedecreaseinprovisionforlossonorderreceivedopecf@currentyearduration",
+    "偶然一致する側": "interestexpensesnoe@currentyearduration_nonconsolidatedmember"
+   },
+   "席の参照先": "increasedecreaseinprovisionforlossonorderreceivedopecf@currentyearduration",
+   "P16": {
+    "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+    "参照先": "longtermloanspayable@currentyearinstant",
+    "state": "VALUE_MISMATCH"
+   },
+   "P20": {
+    "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+    "参照先": "longtermloanspayable@currentyearinstant",
+    "state": "VALUE_MISMATCH"
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": false
+  },
+  {
+   "doc": "S100YZEV",
+   "id": "R001",
+   "主張 id(P16)": null,
+   "主張 id(P20)": null,
+   "正解": null,
+   "席の参照先": null,
+   "P16": {
+    "言うこと": "対応が付かない",
+    "参照先": null,
+    "state": null
+   },
+   "P20": {
+    "言うこと": "対応が付かない",
+    "参照先": null,
+    "state": null
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": false
+  },
+  {
+   "doc": "S100YZEV",
+   "id": "R002",
+   "主張 id(P16)": "N047",
+   "主張 id(P20)": "N047",
+   "正解": null,
+   "席の参照先": null,
+   "P16": {
+    "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+    "参照先": null,
+    "state": "POINTER_NOT_FOUND"
+   },
+   "P20": {
+    "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+    "参照先": null,
+    "state": "POINTER_NOT_FOUND"
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": true
+  },
+  {
+   "doc": "S100YZEV",
+   "id": "R003",
+   "主張 id(P16)": "N001",
+   "主張 id(P20)": "N001",
+   "正解": null,
+   "席の参照先": null,
+   "P16": {
+    "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+    "参照先": null,
+    "state": "POINTER_NOT_FOUND"
+   },
+   "P20": {
+    "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+    "参照先": "netsales@currentyearduration_nonconsolidatedmember",
+    "state": "VALUE_MISMATCH"
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": true
+  },
+  {
+   "doc": "S100YZEV",
+   "id": "R004",
+   "主張 id(P16)": "N002",
+   "主張 id(P20)": "N002",
+   "正解": null,
+   "席の参照先": null,
+   "P16": {
+    "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+    "参照先": null,
+    "state": "POINTER_NOT_FOUND"
+   },
+   "P20": {
+    "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+    "参照先": "netsales@currentyearduration_nonconsolidatedmember",
+    "state": "VALUE_MISMATCH"
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": true
+  },
+  {
+   "doc": "S100YZEV",
+   "id": "R005",
+   "主張 id(P16)": "N003",
+   "主張 id(P20)": "N003",
+   "正解": null,
+   "席の参照先": null,
+   "P16": {
+    "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+    "参照先": null,
+    "state": "POINTER_NOT_FOUND"
+   },
+   "P20": {
+    "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+    "参照先": null,
+    "state": "POINTER_NOT_FOUND"
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": false
+  },
+  {
+   "doc": "S100YZEV",
+   "id": "R006",
+   "主張 id(P16)": "N004",
+   "主張 id(P20)": "N004",
+   "正解": null,
+   "席の参照先": null,
+   "P16": {
+    "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+    "参照先": null,
+    "state": "POINTER_NOT_FOUND"
+   },
+   "P20": {
+    "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+    "参照先": null,
+    "state": "POINTER_NOT_FOUND"
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": true
+  },
+  {
+   "doc": "S100YZEV",
+   "id": "R007",
+   "主張 id(P16)": "N003",
+   "主張 id(P20)": "N003",
+   "正解": null,
+   "席の参照先": null,
+   "P16": {
+    "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+    "参照先": null,
+    "state": "POINTER_NOT_FOUND"
+   },
+   "P20": {
+    "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+    "参照先": null,
+    "state": "POINTER_NOT_FOUND"
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": false
+  },
+  {
+   "doc": "S100YZEV",
+   "id": "R008",
+   "主張 id(P16)": null,
+   "主張 id(P20)": null,
+   "正解": null,
+   "席の参照先": null,
+   "P16": {
+    "言うこと": "対応が付かない",
+    "参照先": null,
+    "state": null
+   },
+   "P20": {
+    "言うこと": "対応が付かない",
+    "参照先": null,
+    "state": null
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": false
+  },
+  {
+   "doc": "S100YZEV",
+   "id": "R009",
+   "主張 id(P16)": "N005",
+   "主張 id(P20)": "N005",
+   "正解": null,
+   "席の参照先": "netsalessummaryofbusinessresults@currentyearduration_nonconsolidatedmember",
+   "P16": {
+    "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+    "参照先": null,
+    "state": "POINTER_NOT_FOUND"
+   },
+   "P20": {
+    "言うこと": "確認済み",
+    "参照先": "netsales@currentyearduration_nonconsolidatedmember",
+    "state": "GROUNDED"
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": true
+  },
+  {
+   "doc": "S100YZEV",
+   "id": "R010",
+   "主張 id(P16)": null,
+   "主張 id(P20)": null,
+   "正解": null,
+   "席の参照先": "netsalessummaryofbusinessresults@currentyearduration_nonconsolidatedmember",
+   "P16": {
+    "言うこと": "対応が付かない",
+    "参照先": null,
+    "state": null
+   },
+   "P20": {
+    "言うこと": "対応が付かない",
+    "参照先": null,
+    "state": null
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": false
+  },
+  {
+   "doc": "S100YZEV",
+   "id": "R011",
+   "主張 id(P16)": "N007",
+   "主張 id(P20)": "N007",
+   "正解": {
+    "種類": "参照先が在る",
+    "正解": "operatingincome@currentyearduration_nonconsolidatedmember",
+    "偶然一致する側": "nonauditfeesreportingcompany@prior1yearduration"
+   },
+   "席の参照先": "operatingincome@currentyearduration_nonconsolidatedmember",
+   "P16": {
+    "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+    "参照先": null,
+    "state": "POINTER_NOT_FOUND"
+   },
+   "P20": {
+    "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+    "参照先": "operatingincome@currentyearduration_nonconsolidatedmember",
+    "state": "VALUE_MISMATCH"
+   },
+   "**10 行の 1 つ**": true,
+   "1 対 1": false
+  },
+  {
+   "doc": "S100YZEV",
+   "id": "R012",
+   "主張 id(P16)": null,
+   "主張 id(P20)": null,
+   "正解": null,
+   "席の参照先": "operatingincome@currentyearduration_nonconsolidatedmember",
+   "P16": {
+    "言うこと": "対応が付かない",
+    "参照先": null,
+    "state": null
+   },
+   "P20": {
+    "言うこと": "対応が付かない",
+    "参照先": null,
+    "state": null
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": false
+  },
+  {
+   "doc": "S100YZEV",
+   "id": "R013",
+   "主張 id(P16)": "N009",
+   "主張 id(P20)": "N009",
+   "正解": null,
+   "席の参照先": "ordinaryincomelosssummaryofbusinessresults@currentyearduration_nonconsolidatedmember",
+   "P16": {
+    "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+    "参照先": null,
+    "state": "POINTER_NOT_FOUND"
+   },
+   "P20": {
+    "言うこと": "確認済み",
+    "参照先": "ordinaryincome@currentyearduration_nonconsolidatedmember",
+    "state": "GROUNDED"
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": true
+  },
+  {
+   "doc": "S100YZEV",
+   "id": "R014",
+   "主張 id(P16)": null,
+   "主張 id(P20)": null,
+   "正解": null,
+   "席の参照先": "ordinaryincomelosssummaryofbusinessresults@currentyearduration_nonconsolidatedmember",
+   "P16": {
+    "言うこと": "対応が付かない",
+    "参照先": null,
+    "state": null
+   },
+   "P20": {
+    "言うこと": "対応が付かない",
+    "参照先": null,
+    "state": null
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": false
+  },
+  {
+   "doc": "S100YZEV",
+   "id": "R015",
+   "主張 id(P16)": "N011",
+   "主張 id(P20)": "N011",
+   "正解": null,
+   "席の参照先": "netincomelosssummaryofbusinessresults@currentyearduration_nonconsolidatedmember",
+   "P16": {
+    "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+    "参照先": null,
+    "state": "POINTER_NOT_FOUND"
+   },
+   "P20": {
+    "言うこと": "確認済み",
+    "参照先": "profitloss@currentyearduration_nonconsolidatedmember",
+    "state": "GROUNDED"
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": true
+  },
+  {
+   "doc": "S100YZEV",
+   "id": "R016",
+   "主張 id(P16)": null,
+   "主張 id(P20)": null,
+   "正解": null,
+   "席の参照先": "netincomelosssummaryofbusinessresults@currentyearduration_nonconsolidatedmember",
+   "P16": {
+    "言うこと": "対応が付かない",
+    "参照先": null,
+    "state": null
+   },
+   "P20": {
+    "言うこと": "対応が付かない",
+    "参照先": null,
+    "state": null
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": false
+  },
+  {
+   "doc": "S100YZEV",
+   "id": "R017",
+   "主張 id(P16)": "N013",
+   "主張 id(P20)": "N013",
+   "正解": null,
+   "席の参照先": "currentassets@currentyearinstant_nonconsolidatedmember",
+   "P16": {
+    "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+    "参照先": null,
+    "state": "POINTER_NOT_FOUND"
+   },
+   "P20": {
+    "言うこと": "一意でない",
+    "参照先": null,
+    "state": "GROUNDED"
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": true
+  },
+  {
+   "doc": "S100YZEV",
+   "id": "R018",
+   "主張 id(P16)": "N014",
+   "主張 id(P20)": "N014",
+   "正解": {
+    "種類": "参照先が在る",
+    "正解": "currentassets@currentyearinstant_nonconsolidatedmember",
+    "偶然一致する側": "othernoi@currentyearduration_nonconsolidatedmember"
+   },
+   "席の参照先": "currentassets@currentyearinstant_nonconsolidatedmember",
+   "P16": {
+    "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+    "参照先": null,
+    "state": "POINTER_NOT_FOUND"
+   },
+   "P20": {
+    "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+    "参照先": "currentassets@currentyearinstant_nonconsolidatedmember",
+    "state": "VALUE_MISMATCH"
+   },
+   "**10 行の 1 つ**": true,
+   "1 対 1": true
+  },
+  {
+   "doc": "S100YZEV",
+   "id": "R019",
+   "主張 id(P16)": "N017",
+   "主張 id(P20)": "N017",
+   "正解": {
+    "種類": "参照先が在る",
+    "正解": "noncurrentassets@currentyearinstant_nonconsolidatedmember",
+    "偶然一致する側": "copyright@prior1yearinstant_nonconsolidatedmember"
+   },
+   "席の参照先": "noncurrentassets@currentyearinstant_nonconsolidatedmember",
+   "P16": {
+    "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+    "参照先": null,
+    "state": "POINTER_NOT_FOUND"
+   },
+   "P20": {
+    "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+    "参照先": "noncurrentassets@currentyearinstant_nonconsolidatedmember",
+    "state": "VALUE_MISMATCH"
+   },
+   "**10 行の 1 つ**": true,
+   "1 対 1": true
+  },
+  {
+   "doc": "S100YZEV",
+   "id": "R020",
+   "主張 id(P16)": "N007",
+   "主張 id(P20)": "N007",
+   "正解": {
+    "種類": "参照先が在る",
+    "正解": "increasedecreaseinaccountspayableotheropecf@currentyearduration_nonconsolidatedmember",
+    "偶然一致する側": "nonauditfeesreportingcompany@prior1yearduration"
+   },
+   "席の参照先": "increasedecreaseinaccountspayableotheropecf@currentyearduration_nonconsolidatedmember",
+   "P16": {
+    "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+    "参照先": null,
+    "state": "POINTER_NOT_FOUND"
+   },
+   "P20": {
+    "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+    "参照先": "operatingincome@currentyearduration_nonconsolidatedmember",
+    "state": "VALUE_MISMATCH"
+   },
+   "**10 行の 1 つ**": true,
+   "1 対 1": false
+  },
+  {
+   "doc": "S100YZEV",
+   "id": "R021",
+   "主張 id(P16)": null,
+   "主張 id(P20)": null,
+   "正解": {
+    "種類": "参照先は無い",
+    "正解": null,
+    "偶然一致する側": null
+   },
+   "席の参照先": null,
+   "P16": {
+    "言うこと": "対応が付かない",
+    "参照先": null,
+    "state": null
+   },
+   "P20": {
+    "言うこと": "対応が付かない",
+    "参照先": null,
+    "state": null
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": false
+  },
+  {
+   "doc": "S100YZEV",
+   "id": "R022",
+   "主張 id(P16)": null,
+   "主張 id(P20)": null,
+   "正解": {
+    "種類": "参照先は無い",
+    "正解": null,
+    "偶然一致する側": null
+   },
+   "席の参照先": null,
+   "P16": {
+    "言うこと": "対応が付かない",
+    "参照先": null,
+    "state": null
+   },
+   "P20": {
+    "言うこと": "対応が付かない",
+    "参照先": null,
+    "state": null
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": false
+  },
+  {
+   "doc": "S100YZEV",
+   "id": "R023",
+   "主張 id(P16)": null,
+   "主張 id(P20)": null,
+   "正解": {
+    "種類": "参照先は無い",
+    "正解": null,
+    "偶然一致する側": null
+   },
+   "席の参照先": null,
+   "P16": {
+    "言うこと": "対応が付かない",
+    "参照先": null,
+    "state": null
+   },
+   "P20": {
+    "言うこと": "対応が付かない",
+    "参照先": null,
+    "state": null
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": false
+  },
+  {
+   "doc": "S100YZEV",
+   "id": "R024",
+   "主張 id(P16)": null,
+   "主張 id(P20)": null,
+   "正解": {
+    "種類": "参照先は無い",
+    "正解": null,
+    "偶然一致する側": null
+   },
+   "席の参照先": null,
+   "P16": {
+    "言うこと": "対応が付かない",
+    "参照先": null,
+    "state": null
+   },
+   "P20": {
+    "言うこと": "対応が付かない",
+    "参照先": null,
+    "state": null
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": false
+  },
+  {
+   "doc": "S100YXF5",
+   "id": "R001",
+   "主張 id(P16)": null,
+   "主張 id(P20)": null,
+   "正解": null,
+   "席の参照先": null,
+   "P16": {
+    "言うこと": "対応が付かない",
+    "参照先": null,
+    "state": null
+   },
+   "P20": {
+    "言うこと": "対応が付かない",
+    "参照先": null,
+    "state": null
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": false
+  },
+  {
+   "doc": "S100YXF5",
+   "id": "R002",
+   "主張 id(P16)": "N001",
+   "主張 id(P20)": "N001",
+   "正解": null,
+   "席の参照先": null,
+   "P16": {
+    "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+    "参照先": null,
+    "state": "POINTER_NOT_FOUND"
+   },
+   "P20": {
+    "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+    "参照先": null,
+    "state": "POINTER_NOT_FOUND"
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": true
+  },
+  {
+   "doc": "S100YXF5",
+   "id": "R003",
+   "主張 id(P16)": "N002",
+   "主張 id(P20)": "N002",
+   "正解": null,
+   "席の参照先": null,
+   "P16": {
+    "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+    "参照先": null,
+    "state": "POINTER_NOT_FOUND"
+   },
+   "P20": {
+    "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+    "参照先": null,
+    "state": "POINTER_NOT_FOUND"
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": false
+  },
+  {
+   "doc": "S100YXF5",
+   "id": "R004",
+   "主張 id(P16)": "N003",
+   "主張 id(P20)": "N003",
+   "正解": null,
+   "席の参照先": null,
+   "P16": {
+    "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+    "参照先": null,
+    "state": "POINTER_NOT_FOUND"
+   },
+   "P20": {
+    "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+    "参照先": null,
+    "state": "POINTER_NOT_FOUND"
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": true
+  },
+  {
+   "doc": "S100YXF5",
+   "id": "R005",
+   "主張 id(P16)": "N004",
+   "主張 id(P20)": "N004",
+   "正解": null,
+   "席の参照先": null,
+   "P16": {
+    "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+    "参照先": null,
+    "state": "POINTER_NOT_FOUND"
+   },
+   "P20": {
+    "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+    "参照先": null,
+    "state": "POINTER_NOT_FOUND"
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": true
+  },
+  {
+   "doc": "S100YXF5",
+   "id": "R006",
+   "主張 id(P16)": "N005",
+   "主張 id(P20)": "N005",
+   "正解": null,
+   "席の参照先": null,
+   "P16": {
+    "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+    "参照先": null,
+    "state": "POINTER_NOT_FOUND"
+   },
+   "P20": {
+    "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+    "参照先": null,
+    "state": "POINTER_NOT_FOUND"
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": true
+  },
+  {
+   "doc": "S100YXF5",
+   "id": "R007",
+   "主張 id(P16)": "N006",
+   "主張 id(P20)": "N006",
+   "正解": null,
+   "席の参照先": null,
+   "P16": {
+    "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+    "参照先": null,
+    "state": "POINTER_NOT_FOUND"
+   },
+   "P20": {
+    "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+    "参照先": null,
+    "state": "POINTER_NOT_FOUND"
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": true
+  },
+  {
+   "doc": "S100YXF5",
+   "id": "R008",
+   "主張 id(P16)": "N007",
+   "主張 id(P20)": "N007",
+   "正解": null,
+   "席の参照先": null,
+   "P16": {
+    "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+    "参照先": null,
+    "state": "POINTER_NOT_FOUND"
+   },
+   "P20": {
+    "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+    "参照先": null,
+    "state": "POINTER_NOT_FOUND"
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": true
+  },
+  {
+   "doc": "S100YXF5",
+   "id": "R009",
+   "主張 id(P16)": null,
+   "主張 id(P20)": null,
+   "正解": null,
+   "席の参照先": null,
+   "P16": {
+    "言うこと": "対応が付かない",
+    "参照先": null,
+    "state": null
+   },
+   "P20": {
+    "言うこと": "対応が付かない",
+    "参照先": null,
+    "state": null
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": false
+  },
+  {
+   "doc": "S100YXF5",
+   "id": "R010",
+   "主張 id(P16)": null,
+   "主張 id(P20)": null,
+   "正解": null,
+   "席の参照先": null,
+   "P16": {
+    "言うこと": "対応が付かない",
+    "参照先": null,
+    "state": null
+   },
+   "P20": {
+    "言うこと": "対応が付かない",
+    "参照先": null,
+    "state": null
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": false
+  },
+  {
+   "doc": "S100YXF5",
+   "id": "R011",
+   "主張 id(P16)": "N002",
+   "主張 id(P20)": "N002",
+   "正解": null,
+   "席の参照先": null,
+   "P16": {
+    "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+    "参照先": null,
+    "state": "POINTER_NOT_FOUND"
+   },
+   "P20": {
+    "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+    "参照先": null,
+    "state": "POINTER_NOT_FOUND"
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": false
+  },
+  {
+   "doc": "S100YXF5",
+   "id": "R012",
+   "主張 id(P16)": null,
+   "主張 id(P20)": null,
+   "正解": null,
+   "席の参照先": null,
+   "P16": {
+    "言うこと": "対応が付かない",
+    "参照先": null,
+    "state": null
+   },
+   "P20": {
+    "言うこと": "対応が付かない",
+    "参照先": null,
+    "state": null
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": false
+  },
+  {
+   "doc": "S100YXF5",
+   "id": "R013",
+   "主張 id(P16)": null,
+   "主張 id(P20)": null,
+   "正解": null,
+   "席の参照先": null,
+   "P16": {
+    "言うこと": "対応が付かない",
+    "参照先": null,
+    "state": null
+   },
+   "P20": {
+    "言うこと": "対応が付かない",
+    "参照先": null,
+    "state": null
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": false
+  },
+  {
+   "doc": "S100YXF5",
+   "id": "R014",
+   "主張 id(P16)": null,
+   "主張 id(P20)": null,
+   "正解": null,
+   "席の参照先": null,
+   "P16": {
+    "言うこと": "対応が付かない",
+    "参照先": null,
+    "state": null
+   },
+   "P20": {
+    "言うこと": "対応が付かない",
+    "参照先": null,
+    "state": null
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": false
+  },
+  {
+   "doc": "S100YXF5",
+   "id": "R015",
+   "主張 id(P16)": null,
+   "主張 id(P20)": null,
+   "正解": null,
+   "席の参照先": null,
+   "P16": {
+    "言うこと": "対応が付かない",
+    "参照先": null,
+    "state": null
+   },
+   "P20": {
+    "言うこと": "対応が付かない",
+    "参照先": null,
+    "state": null
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": false
+  },
+  {
+   "doc": "S100YXF5",
+   "id": "R016",
+   "主張 id(P16)": null,
+   "主張 id(P20)": null,
+   "正解": null,
+   "席の参照先": null,
+   "P16": {
+    "言うこと": "対応が付かない",
+    "参照先": null,
+    "state": null
+   },
+   "P20": {
+    "言うこと": "対応が付かない",
+    "参照先": null,
+    "state": null
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": false
+  },
+  {
+   "doc": "S100YXF5",
+   "id": "R017",
+   "主張 id(P16)": null,
+   "主張 id(P20)": null,
+   "正解": {
+    "種類": "参照先は無い",
+    "正解": null,
+    "偶然一致する側": null
+   },
+   "席の参照先": "gainonsalesofnoncurrentassetsei@currentyearduration",
+   "P16": {
+    "言うこと": "対応が付かない",
+    "参照先": null,
+    "state": null
+   },
+   "P20": {
+    "言うこと": "対応が付かない",
+    "参照先": null,
+    "state": null
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": false
+  },
+  {
+   "doc": "S100YXF5",
+   "id": "R018",
+   "主張 id(P16)": "N015",
+   "主張 id(P20)": "N015",
+   "正解": {
+    "種類": "値がどこにも無い",
+    "正解": null,
+    "偶然一致する側": null
+   },
+   "席の参照先": null,
+   "P16": {
+    "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+    "参照先": null,
+    "state": "POINTER_NOT_FOUND"
+   },
+   "P20": {
+    "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+    "参照先": null,
+    "state": "POINTER_NOT_FOUND"
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": false
+  },
+  {
+   "doc": "S100YXF5",
+   "id": "R019",
+   "主張 id(P16)": null,
+   "主張 id(P20)": null,
+   "正解": {
+    "種類": "参照先は無い",
+    "正解": null,
+    "偶然一致する側": null
+   },
+   "席の参照先": null,
+   "P16": {
+    "言うこと": "対応が付かない",
+    "参照先": null,
+    "state": null
+   },
+   "P20": {
+    "言うこと": "対応が付かない",
+    "参照先": null,
+    "state": null
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": false
+  },
+  {
+   "doc": "S100YXF5",
+   "id": "R020",
+   "主張 id(P16)": null,
+   "主張 id(P20)": null,
+   "正解": {
+    "種類": "参照先は無い",
+    "正解": null,
+    "偶然一致する側": null
+   },
+   "席の参照先": null,
+   "P16": {
+    "言うこと": "対応が付かない",
+    "参照先": null,
+    "state": null
+   },
+   "P20": {
+    "言うこと": "対応が付かない",
+    "参照先": null,
+    "state": null
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": false
+  },
+  {
+   "doc": "S100YXF5",
+   "id": "R021",
+   "主張 id(P16)": null,
+   "主張 id(P20)": null,
+   "正解": {
+    "種類": "参照先は無い",
+    "正解": null,
+    "偶然一致する側": null
+   },
+   "席の参照先": null,
+   "P16": {
+    "言うこと": "対応が付かない",
+    "参照先": null,
+    "state": null
+   },
+   "P20": {
+    "言うこと": "対応が付かない",
+    "参照先": null,
+    "state": null
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": false
+  },
+  {
+   "doc": "S100YXF5",
+   "id": "R022",
+   "主張 id(P16)": null,
+   "主張 id(P20)": null,
+   "正解": {
+    "種類": "参照先は無い",
+    "正解": null,
+    "偶然一致する側": null
+   },
+   "席の参照先": null,
+   "P16": {
+    "言うこと": "対応が付かない",
+    "参照先": null,
+    "state": null
+   },
+   "P20": {
+    "言うこと": "対応が付かない",
+    "参照先": null,
+    "state": null
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": false
+  },
+  {
+   "doc": "S100YXF5",
+   "id": "R023",
+   "主張 id(P16)": null,
+   "主張 id(P20)": null,
+   "正解": {
+    "種類": "参照先は無い",
+    "正解": null,
+    "偶然一致する側": null
+   },
+   "席の参照先": null,
+   "P16": {
+    "言うこと": "対応が付かない",
+    "参照先": null,
+    "state": null
+   },
+   "P20": {
+    "言うこと": "対応が付かない",
+    "参照先": null,
+    "state": null
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": false
+  },
+  {
+   "doc": "S100YXF5",
+   "id": "R024",
+   "主張 id(P16)": "N015",
+   "主張 id(P20)": "N015",
+   "正解": {
+    "種類": "値がどこにも無い",
+    "正解": null,
+    "偶然一致する側": null
+   },
+   "席の参照先": null,
+   "P16": {
+    "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+    "参照先": null,
+    "state": "POINTER_NOT_FOUND"
+   },
+   "P20": {
+    "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+    "参照先": null,
+    "state": "POINTER_NOT_FOUND"
+   },
+   "**10 行の 1 つ**": false,
+   "1 対 1": false
+  }
+ ],
+ "limits": [
+  "**原因仮説の検証であり、性能の証明ではない**(封 §0)",
+  "**A 対 C′ はこの封では測っていない。**席の答えは使っていない(席が外した行を数えるためだけに読んだ)",
+  "**特定が増えても誤認定が同時に増えるなら、良くなったとは書かない**",
+  "**器の欠陥は残っている。**行 → 主張 は 1 対 1 でないので率は 2 つ並べた",
+  "**fallback の条件は変えていない。**変えるかどうかは人間が決める"
+ ]
+}

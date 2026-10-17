@@ -25,7 +25,7 @@ ENGINE_SHA = {"adapters/xbrl/recipes.py": "e2bda6aee13880ff",
               "adapters/xbrl/resolve.py": "a41043763c1d4073",
               "adapters/xbrl/verify_document.py": "67e7639de3f5f2ad",
               "adapters/xbrl/vocabulary.py": "bcf559308bda0cc6"}
-NOT_YET_MEASURED = "fixtures/xbrl/cd8/p20_rerun_2026-10-17.json"
+NOT_YET_MEASURED = "fixtures/xbrl/cd8/p20_rerun_2026-10-17.json"  # 実測の記録
 
 
 def text(p):
@@ -179,14 +179,34 @@ class PredictionTest(unittest.TestCase):
         self.assertIn(u"**当たっても「Core が良くなった」とは書かない。**", self.t)
 
     def test_13_the_prediction_is_committed_before_the_measurement(self):
-        """**予測より後に測る。**P20 の記録がまだ無いことを要求する。"""
-        self.assertFalse(os.path.exists(os.path.join(ROOT, NOT_YET_MEASURED)),
-                         u"**測る前に予測を commit する規則**")
-        out = subprocess.run(["git", "ls-files", "--error-unmatch",
-                              "fixtures/xbrl/cd8/branch_a_predictions_2026-10-17.json"],
-                             cwd=ROOT, capture_output=True)
-        if out.returncode != 0:
+        """**予測より後に測る。**
+
+        **file の有無では書かない**(測った瞬間に赤くなる門は、正しい手順を
+        罰する。記憶 `order-gate-by-commit-not-file-absence`)。
+        **commit の順**で書く ― 実測の記録が commit されているなら、
+        予測の commit がその**祖先**であることを要求する。
+        """
+        def added(rel):
+            out = subprocess.run(["git", "log", "--diff-filter=A", "--format=%H",
+                                  "--", rel], cwd=ROOT, capture_output=True,
+                                 text=True)
+            shas = [s for s in out.stdout.split() if s]
+            return shas[-1] if shas else None
+
+        pred = added("fixtures/xbrl/cd8/branch_a_predictions_2026-10-17.json")
+        if pred is None:
             self.skipTest(u"予測がまだ commit されていない(この便で commit する)")
+        run = added(NOT_YET_MEASURED)
+        if run is None:
+            return                      # まだ測っていない。順序は破れていない
+        self.assertNotEqual(pred, run, u"**同じ commit に在る**")
+        self.assertTrue(
+            subprocess.run(["git", "merge-base", "--is-ancestor", pred, run],
+                           cwd=ROOT, capture_output=True).returncode == 0,
+            u"**予測が実測より後に commit されている**")
+        self.assertFalse(
+            subprocess.run(["git", "merge-base", "--is-ancestor", run, pred],
+                           cwd=ROOT, capture_output=True).returncode == 0)
 
     def test_14_engine_files_are_untouched(self):
         for rel, want in ENGINE_SHA.items():
