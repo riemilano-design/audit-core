@@ -143,3 +143,74 @@ class OptionsAndLimitsTest(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class CostBreakdownTest(unittest.TestCase):
+    """§5 の追記の数が記録と一致するか(**文書の数を記録の正本と突き合わせる**)。"""
+
+    REC2 = os.path.join(ROOT, "fixtures", "xbrl", "cd8",
+                        "cost_breakdown_2026-10-17.json")
+
+    def setUp(self):
+        self.t = text(DOC)
+        self.b = json.load(io.open(self.REC2, encoding="utf-8"))
+        self.add = self.t[self.t.index("## §5 追記"):]
+
+    def test_12_the_addendum_does_not_touch_the_body(self):
+        """**追記は足すだけ。**本文の判定の数がそのまま在る。"""
+        head = self.t[:self.t.index("## §5 追記")]
+        self.assertIn("**14.67 〜 18.47 USD**", head)
+        self.assertIn("**いいえ(5〜6 倍)**", head)
+        self.assertIn("本文の数は 1 文字も変えていない**", self.add)
+
+    def test_13_loop_and_material_shares_match_the_record(self):
+        d = self.b["2 1 便のトークンの分け方"]
+        self.assertIn("**材料 1 字あたり 0.292 トークン**", self.add)
+        self.assertIn("**席の往復(材料に依らない分)97,860 トークン**", self.add)
+        self.assertEqual(d["**席の往復が占める割合**"], 80.0)
+        self.assertIn("| **席の往復** | **{:,}** | **{}%** |".format(
+            d["**席の往復(材料に依らない分)**"], d["**席の往復が占める割合**"]), self.add)
+
+    def test_14_refs_share_of_a_call_is_stated_separately(self):
+        """**字数の割合と費用の割合を混ぜない**(人間の問いの核)。"""
+        refs = [p for p in self.b["3 材料のどこが大きいか"]["部分ごと"]
+                if "refs" in p["部分"]][0]
+        self.assertEqual(refs["材料に占める割合"], 86.6)
+        self.assertEqual(refs["1 便のトークンに占める割合"], 17.3)
+        self.assertIn("**つまり「材料の 87% が refs」は字数の話であって、"
+                      "1 便の費用の 87% ではない。**", self.add)
+        # **表の行そのものを記録から組んで突き合わせる**
+        # (率を文だけで押さえると、表の数を書き換えても黙る ― 実際に黙った)
+        for p in self.b["3 材料のどこが大きいか"]["部分ごと"]:
+            row = "| {} | {:,} | {}% | {}% |".format(
+                p["部分"], p["字数"], p["材料に占める割合"],
+                p["1 便のトークンに占める割合"]).replace("**", "")
+            self.assertIn(row, self.add.replace("**", ""),
+                          "表の行が記録と違う: %s" % p["部分"])
+
+    def test_15_the_two_views_disagree_and_neither_is_taken(self):
+        c = self.b["3 材料のどこが大きいか"]["検算"]
+        self.assertIn("**{:,}**".format(c["材料のトークン(素朴)"]), self.add)
+        self.assertIn("**{:,}**".format(c["傾きから出した材料のトークン"]), self.add)
+        ratio = c["材料のトークン(素朴)"] / float(c["傾きから出した材料のトークン"])
+        self.assertIn("2 つの見方が %.1f 倍食い違う" % ratio, self.add)
+        self.assertIn("**食い違いを平均しない。**", self.add)
+
+    def test_16_the_lever_is_the_number_of_calls(self):
+        plans = {p["案"]: p for p in self.b["4 削って効くのはどれか"]}
+        base = plans["封のまま(8 書類 × 1 便)"]["上限 USD(全部を出力として)"]
+        half = plans["refs を半分に縮める(8 便)"]["上限 USD(全部を出力として)"]
+        two = plans["書類を 2 件に減らす"]["上限 USD(全部を出力として)"]
+        self.assertIn("**refs を半分にしても %.1f%% しか下がらない。"
+                      "便を 8 → 2 にすると %.0f%% 下がる。**"
+                      % (100 * (base - half) / base, 100 * (base - two) / base),
+                      self.add)
+        for p in self.b["4 削って効くのはどれか"]:
+            self.assertIn("| **%.2f** |" % p["上限 USD(全部を出力として)"], self.add)
+
+    def test_17_the_input_output_split_is_declared_missing(self):
+        self.assertFalse(self.b["**入出力の単価の内訳**"]["私の記録に在るか"])
+        self.assertIn("**だから「14.67〜18.47 USD のどれだけが入力に由来するか」は"
+                      "私も断定できない。**", self.add)
+        self.assertIn("**仮定であり実測ではない**", self.add)
+        self.assertIn("**(オ)**", self.add)
