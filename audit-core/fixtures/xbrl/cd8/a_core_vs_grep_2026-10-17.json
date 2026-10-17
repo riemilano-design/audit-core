@@ -1,0 +1,8589 @@
+{
+ "seal": "docs/XBRL_A_CORE_VS_GREP_SEAL_2026-10-17.md",
+ "step": "**(ア)。0 USD・席を呼ばない・通信しない**",
+ "profile": "P16",
+ "書類": [
+  "S100Z4LC",
+  "S100Z40H",
+  "S100Z46V",
+  "S100Z38F",
+  "S100Z3DU",
+  "S100Z4R8",
+  "S100Z3CI",
+  "S100Z461"
+ ],
+ "材料": "**使用済みの 8 書類**(2026-10-14 開封)。未使用の 8 件は使っていない",
+ "注入の種": {
+  "file": "measure/SEED.json",
+  "sealed_on": null,
+  "note": "**git に追跡され、コミット内容と一致している**"
+ },
+ "注入の件数": {
+  "S100Z4LC": {
+   "T5_COINCIDENT": {
+    "作れる site": 10,
+    "注入した": 10
+   },
+   "T1_VALUE": {
+    "作れる site": 45,
+    "注入した": 5
+   },
+   "T3_ABSENT": {
+    "作れる site": 182,
+    "注入した": 5
+   }
+  },
+  "S100Z40H": {
+   "T5_COINCIDENT": {
+    "作れる site": 2,
+    "注入した": 2
+   },
+   "T1_VALUE": {
+    "作れる site": 16,
+    "注入した": 5
+   },
+   "T3_ABSENT": {
+    "作れる site": 252,
+    "注入した": 5
+   }
+  },
+  "S100Z46V": {
+   "T5_COINCIDENT": {
+    "作れる site": 15,
+    "注入した": 15
+   },
+   "T1_VALUE": {
+    "作れる site": 43,
+    "注入した": 5
+   },
+   "T3_ABSENT": {
+    "作れる site": 96,
+    "注入した": 5
+   }
+  },
+  "S100Z38F": {
+   "T5_COINCIDENT": {
+    "作れる site": 0,
+    "注入した": 0
+   },
+   "T1_VALUE": {
+    "作れる site": 10,
+    "注入した": 5
+   },
+   "T3_ABSENT": {
+    "作れる site": 277,
+    "注入した": 5
+   }
+  },
+  "S100Z3DU": {
+   "T5_COINCIDENT": {
+    "作れる site": 0,
+    "注入した": 0
+   },
+   "T1_VALUE": {
+    "作れる site": 19,
+    "注入した": 5
+   },
+   "T3_ABSENT": {
+    "作れる site": 128,
+    "注入した": 5
+   }
+  },
+  "S100Z4R8": {
+   "T5_COINCIDENT": {
+    "作れる site": 0,
+    "注入した": 0
+   },
+   "T1_VALUE": {
+    "作れる site": 3,
+    "注入した": 3
+   },
+   "T3_ABSENT": {
+    "作れる site": 104,
+    "注入した": 5
+   }
+  },
+  "S100Z3CI": {
+   "T5_COINCIDENT": {
+    "作れる site": 29,
+    "注入した": 29
+   },
+   "T1_VALUE": {
+    "作れる site": 51,
+    "注入した": 5
+   },
+   "T3_ABSENT": {
+    "作れる site": 168,
+    "注入した": 5
+   }
+  },
+  "S100Z461": {
+   "T5_COINCIDENT": {
+    "作れる site": 8,
+    "注入した": 8
+   },
+   "T1_VALUE": {
+    "作れる site": 24,
+    "注入した": 5
+   },
+   "T3_ABSENT": {
+    "作れる site": 134,
+    "注入した": 5
+   }
+  }
+ },
+ "注入の合計": 142,
+ "**対応が付かなかった件**": {
+  "件数": 19,
+  "ids": [
+   "S100Z4LC-T1-05",
+   "S100Z40H-T1-03",
+   "S100Z40H-T1-04",
+   "S100Z46V-T1-04",
+   "S100Z38F-T1-01",
+   "S100Z38F-T1-02",
+   "S100Z38F-T1-03",
+   "S100Z38F-T1-04",
+   "S100Z3DU-T1-01",
+   "S100Z3DU-T1-02",
+   "S100Z3DU-T1-03",
+   "S100Z3DU-T1-04",
+   "S100Z3DU-T1-05",
+   "S100Z4R8-T1-01",
+   "S100Z4R8-T1-02",
+   "S100Z4R8-T1-03",
+   "S100Z3CI-T5-28",
+   "S100Z461-T1-03",
+   "S100Z461-T1-04"
+  ],
+  "note": "**推測で埋めない**"
+ },
+ "正規化": "**norm_pointer を Core・D′・D″・正解の 4 つ全部に掛けた**",
+ "採点": {
+  "Core": {
+   "特定率(分母 = T5 の件数)": {
+    "分子": 0,
+    "分母": 64,
+    "率": 0.0
+   },
+   "誤認定率(分母 = 参照先を出した件)": {
+    "分子": 0,
+    "分母": 0,
+    "率": null
+   },
+   "保留率(分母 = 注入した件)": {
+    "分子": 142,
+    "分母": 142,
+    "率": 100.0
+   },
+   "T1 の通し(値がどこにも無いのに確認済み)": {
+    "分子": 0,
+    "分母": 38,
+    "率": 0.0
+   },
+   "T3 の名指し(参照先が無いのに名指した)": {
+    "分子": 0,
+    "分母": 40,
+    "率": 0.0
+   },
+   "層別(T5)": {
+    "n=1": {
+     "T5 の件数": 17,
+     "特定": 0,
+     "参照先を出した": 0,
+     "誤認定": 0
+    },
+    "n=2〜5": {
+     "T5 の件数": 39,
+     "特定": 0,
+     "参照先を出した": 0,
+     "誤認定": 0
+    },
+    "n>=6": {
+     "T5 の件数": 8,
+     "特定": 0,
+     "参照先を出した": 0,
+     "誤認定": 0
+    }
+   },
+   "偶然一致する側を採った件": 0,
+   "**正解と食い違った対**": []
+  },
+  "Core-P": {
+   "特定率(分母 = T5 の件数)": {
+    "分子": 46,
+    "分母": 64,
+    "率": 71.9
+   },
+   "誤認定率(分母 = 参照先を出した件)": {
+    "分子": 18,
+    "分母": 76,
+    "率": 23.7
+   },
+   "保留率(分母 = 注入した件)": {
+    "分子": 66,
+    "分母": 142,
+    "率": 46.5
+   },
+   "T1 の通し(値がどこにも無いのに確認済み)": {
+    "分子": 0,
+    "分母": 38,
+    "率": 0.0
+   },
+   "T3 の名指し(参照先が無いのに名指した)": {
+    "分子": 6,
+    "分母": 40,
+    "率": 15.0
+   },
+   "層別(T5)": {
+    "n=1": {
+     "T5 の件数": 17,
+     "特定": 12,
+     "参照先を出した": 15,
+     "誤認定": 3
+    },
+    "n=2〜5": {
+     "T5 の件数": 39,
+     "特定": 26,
+     "参照先を出した": 35,
+     "誤認定": 9
+    },
+    "n>=6": {
+     "T5 の件数": 8,
+     "特定": 8,
+     "参照先を出した": 8,
+     "誤認定": 0
+    }
+   },
+   "偶然一致する側を採った件": 0,
+   "**正解と食い違った対**": [
+    {
+     "id": "S100Z4LC-T5-03",
+     "正解": "totalchangesofitemsduringtheperiod@currentyearduration",
+     "この腕の参照先": "netassets@currentyearinstant"
+    },
+    {
+     "id": "S100Z4LC-T5-08",
+     "正解": "provisionofallowancefordoubtfulaccountssga@currentyearduration",
+     "この腕の参照先": "provisionofallowancefordoubtfulaccountsnoe@currentyearduration"
+    },
+    {
+     "id": "S100Z4LC-T5-09",
+     "正解": "operatingincome@currentyearduration_jpcrp030000-asr_e34748-000renewableenergybusinessreportablesegmentsmember",
+     "この腕の参照先": "operatingincome@currentyearduration"
+    },
+    {
+     "id": "S100Z40H-T5-01",
+     "正解": "netincreasedecreaseinshorttermloanspayablefincf@currentyearduration",
+     "この腕の参照先": "shorttermloanspayable@currentyearinstant"
+    },
+    {
+     "id": "S100Z40H-T5-02",
+     "正解": "proceedsfromlongtermloanspayablefincf@currentyearduration",
+     "この腕の参照先": "longtermloanspayable@currentyearinstant"
+    },
+    {
+     "id": "S100Z3CI-T5-01",
+     "正解": "provisionforbonusessga@currentyearduration",
+     "この腕の参照先": "provisionforbonuses@currentyearinstant"
+    },
+    {
+     "id": "S100Z3CI-T5-05",
+     "正解": "incomefromrecylingnoi@currentyearduration",
+     "この腕の参照先": "rentincomenoi@currentyearduration"
+    },
+    {
+     "id": "S100Z3CI-T5-06",
+     "正解": "currentportionoflongtermloanspayable@currentyearinstant",
+     "この腕の参照先": "longtermloanspayable@currentyearinstant"
+    },
+    {
+     "id": "S100Z3CI-T5-18",
+     "正解": "increasedecreaseinprovisionforbonusesopecf@currentyearduration",
+     "この腕の参照先": "provisionforbonuses@currentyearinstant"
+    },
+    {
+     "id": "S100Z3CI-T5-29",
+     "正解": "totalchangesofitemsduringtheperiod@currentyearduration",
+     "この腕の参照先": "netassets@currentyearinstant"
+    },
+    {
+     "id": "S100Z461-T5-03",
+     "正解": "operatingincome@currentyearduration",
+     "この腕の参照先": "grossprofit@currentyearduration"
+    },
+    {
+     "id": "S100Z461-T5-06",
+     "正解": "netincreasedecreaseincashandcashequivalents@currentyearduration",
+     "この腕の参照先": "cashanddeposits@currentyearinstant"
+    }
+   ]
+  },
+  "D′": {
+   "特定率(分母 = T5 の件数)": {
+    "分子": 0,
+    "分母": 64,
+    "率": 0.0
+   },
+   "誤認定率(分母 = 参照先を出した件)": {
+    "分子": 17,
+    "分母": 17,
+    "率": 100.0
+   },
+   "保留率(分母 = 注入した件)": {
+    "分子": 125,
+    "分母": 142,
+    "率": 88.0
+   },
+   "T1 の通し(値がどこにも無いのに確認済み)": {
+    "分子": 0,
+    "分母": 38,
+    "率": 0.0
+   },
+   "T3 の名指し(参照先が無いのに名指した)": {
+    "分子": 0,
+    "分母": 40,
+    "率": 0.0
+   },
+   "層別(T5)": {
+    "n=1": {
+     "T5 の件数": 17,
+     "特定": 0,
+     "参照先を出した": 17,
+     "誤認定": 17
+    },
+    "n=2〜5": {
+     "T5 の件数": 39,
+     "特定": 0,
+     "参照先を出した": 0,
+     "誤認定": 0
+    },
+    "n>=6": {
+     "T5 の件数": 8,
+     "特定": 0,
+     "参照先を出した": 0,
+     "誤認定": 0
+    }
+   },
+   "偶然一致する側を採った件": 17,
+   "**正解と食い違った対**": [
+    {
+     "id": "S100Z40H-T5-01",
+     "正解": "netincreasedecreaseinshorttermloanspayablefincf@currentyearduration",
+     "この腕の参照先": "gainonsalesofnoncurrentassetsei@prior1yearduration"
+    },
+    {
+     "id": "S100Z40H-T5-02",
+     "正解": "proceedsfromlongtermloanspayablefincf@currentyearduration",
+     "この腕の参照先": "gainonsalesofnoncurrentassetsei@prior1yearduration"
+    },
+    {
+     "id": "S100Z46V-T5-07",
+     "正解": "contractliabilities@currentyearinstant",
+     "この腕の参照先": "otheria@currentyearinstant"
+    },
+    {
+     "id": "S100Z3CI-T5-03",
+     "正解": "rentincomenoi@currentyearduration",
+     "この腕の参照先": "provisionofallowancefordoubtfulaccountssga@prior1yearduration"
+    },
+    {
+     "id": "S100Z3CI-T5-07",
+     "正解": "currentassets@currentyearinstant",
+     "この腕の参照先": "unearnedrevenue@prior1yearinstant_nonconsolidatedmember"
+    },
+    {
+     "id": "S100Z3CI-T5-09",
+     "正解": "currentliabilities@currentyearinstant",
+     "この腕の参照先": "incomefromrecylingnoi@prior1yearduration"
+    },
+    {
+     "id": "S100Z3CI-T5-12",
+     "正解": "grossprofit@currentyearduration",
+     "この腕の参照先": "interestanddividendsincomenoi@prior1yearduration_nonconsolidatedmember"
+    },
+    {
+     "id": "S100Z3CI-T5-13",
+     "正解": "operatingincome@currentyearduration_jpcrp030000-asr_e30164-000learningdesignsegmentreportablesegmentmember",
+     "この腕の参照先": "othernoi@currentyearduration_nonconsolidatedmember"
+    },
+    {
+     "id": "S100Z3CI-T5-16",
+     "正解": "incometaxes@currentyearduration",
+     "この腕の参照先": "interestincomenoi@prior1yearduration"
+    },
+    {
+     "id": "S100Z3CI-T5-19",
+     "正解": "operatingincome@currentyearduration_jpcrp030000-asr_e30164-000timedesignsegmentreportablesegmentmember",
+     "この腕の参照先": "proceedsfromcollectionofleaseandguaranteedepositsinvcf@prior1yearduration"
+    },
+    {
+     "id": "S100Z3CI-T5-21",
+     "正解": "incomebeforeincometaxes@currentyearduration",
+     "この腕の参照先": "increasedecreaseinprovisionforbonusesopecf@currentyearduration"
+    },
+    {
+     "id": "S100Z3CI-T5-23",
+     "正解": "sellinggeneralandadministrativeexpenses@currentyearduration",
+     "この腕の参照先": "interestincomenoi@prior1yearduration"
+    },
+    {
+     "id": "S100Z3CI-T5-25",
+     "正解": "liabilities@currentyearinstant",
+     "この腕の参照先": "rentincomenoi@prior1yearduration"
+    },
+    {
+     "id": "S100Z3CI-T5-27",
+     "正解": "noncurrentliabilities@currentyearinstant",
+     "この腕の参照先": "notespayabletrade@prior1yearinstant_nonconsolidatedmember"
+    },
+    {
+     "id": "S100Z461-T5-02",
+     "正解": "liabilities@currentyearinstant",
+     "この腕の参照先": "specialinvestigationrelatedexpensesel@prior1yearduration"
+    },
+    {
+     "id": "S100Z461-T5-06",
+     "正解": "netincreasedecreaseincashandcashequivalents@currentyearduration",
+     "この腕の参照先": "othernetppe@currentyearinstant"
+    },
+    {
+     "id": "S100Z461-T5-08",
+     "正解": "proceedsfromissuanceofcommonstockfincf@currentyearduration",
+     "この腕の参照先": "extraordinaryloss@prior1yearduration"
+    }
+   ]
+  },
+  "D″": {
+   "特定率(分母 = T5 の件数)": {
+    "分子": 0,
+    "分母": 64,
+    "率": 0.0
+   },
+   "誤認定率(分母 = 参照先を出した件)": {
+    "分子": 26,
+    "分母": 26,
+    "率": 100.0
+   },
+   "保留率(分母 = 注入した件)": {
+    "分子": 116,
+    "分母": 142,
+    "率": 81.7
+   },
+   "T1 の通し(値がどこにも無いのに確認済み)": {
+    "分子": 6,
+    "分母": 38,
+    "率": 15.8
+   },
+   "T3 の名指し(参照先が無いのに名指した)": {
+    "分子": 5,
+    "分母": 40,
+    "率": 12.5
+   },
+   "層別(T5)": {
+    "n=1": {
+     "T5 の件数": 17,
+     "特定": 0,
+     "参照先を出した": 15,
+     "誤認定": 15
+    },
+    "n=2〜5": {
+     "T5 の件数": 39,
+     "特定": 0,
+     "参照先を出した": 0,
+     "誤認定": 0
+    },
+    "n>=6": {
+     "T5 の件数": 8,
+     "特定": 0,
+     "参照先を出した": 0,
+     "誤認定": 0
+    }
+   },
+   "偶然一致する側を採った件": 15,
+   "**正解と食い違った対**": [
+    {
+     "id": "S100Z46V-T5-07",
+     "正解": "contractliabilities@currentyearinstant",
+     "この腕の参照先": "otheria@currentyearinstant"
+    },
+    {
+     "id": "S100Z3CI-T5-03",
+     "正解": "rentincomenoi@currentyearduration",
+     "この腕の参照先": "provisionofallowancefordoubtfulaccountssga@prior1yearduration"
+    },
+    {
+     "id": "S100Z3CI-T5-07",
+     "正解": "currentassets@currentyearinstant",
+     "この腕の参照先": "unearnedrevenue@prior1yearinstant_nonconsolidatedmember"
+    },
+    {
+     "id": "S100Z3CI-T5-09",
+     "正解": "currentliabilities@currentyearinstant",
+     "この腕の参照先": "incomefromrecylingnoi@prior1yearduration"
+    },
+    {
+     "id": "S100Z3CI-T5-12",
+     "正解": "grossprofit@currentyearduration",
+     "この腕の参照先": "interestanddividendsincomenoi@prior1yearduration_nonconsolidatedmember"
+    },
+    {
+     "id": "S100Z3CI-T5-13",
+     "正解": "operatingincome@currentyearduration_jpcrp030000-asr_e30164-000learningdesignsegmentreportablesegmentmember",
+     "この腕の参照先": "othernoi@currentyearduration_nonconsolidatedmember"
+    },
+    {
+     "id": "S100Z3CI-T5-16",
+     "正解": "incometaxes@currentyearduration",
+     "この腕の参照先": "interestincomenoi@prior1yearduration"
+    },
+    {
+     "id": "S100Z3CI-T5-19",
+     "正解": "operatingincome@currentyearduration_jpcrp030000-asr_e30164-000timedesignsegmentreportablesegmentmember",
+     "この腕の参照先": "proceedsfromcollectionofleaseandguaranteedepositsinvcf@prior1yearduration"
+    },
+    {
+     "id": "S100Z3CI-T5-21",
+     "正解": "incomebeforeincometaxes@currentyearduration",
+     "この腕の参照先": "increasedecreaseinprovisionforbonusesopecf@currentyearduration"
+    },
+    {
+     "id": "S100Z3CI-T5-23",
+     "正解": "sellinggeneralandadministrativeexpenses@currentyearduration",
+     "この腕の参照先": "interestincomenoi@prior1yearduration"
+    },
+    {
+     "id": "S100Z3CI-T5-25",
+     "正解": "liabilities@currentyearinstant",
+     "この腕の参照先": "rentincomenoi@prior1yearduration"
+    },
+    {
+     "id": "S100Z3CI-T5-27",
+     "正解": "noncurrentliabilities@currentyearinstant",
+     "この腕の参照先": "notespayabletrade@prior1yearinstant_nonconsolidatedmember"
+    },
+    {
+     "id": "S100Z461-T5-02",
+     "正解": "liabilities@currentyearinstant",
+     "この腕の参照先": "specialinvestigationrelatedexpensesel@prior1yearduration"
+    },
+    {
+     "id": "S100Z461-T5-06",
+     "正解": "netincreasedecreaseincashandcashequivalents@currentyearduration",
+     "この腕の参照先": "othernetppe@currentyearinstant"
+    },
+    {
+     "id": "S100Z461-T5-08",
+     "正解": "proceedsfromissuanceofcommonstockfincf@currentyearduration",
+     "この腕の参照先": "extraordinaryloss@prior1yearduration"
+    }
+   ]
+  }
+ },
+ "limits": [
+  "**Core の照合機能の切り分けであって、LLM + Core の優位性の証明ではない**",
+  "**Core 単体の差が小さくても、LLM との相互補完は否定されない**",
+  "**使用済みの書類である。**未使用データでの再現性は測っていない",
+  "**T5 の正解は「改変前の文で値が一意に当たった主張」に偏る**",
+  "**D′・D″ には改変後の値を構成から渡した**(値検索に有利な側に倒してある)",
+  "**正解は `identified_sites`(値の一意性 + 単位・ラベルの手がかり)で作られている。正解そのものが誤りうる** ― 食い違った対を `**正解と食い違った対**` に残したので 1 件ずつ読める"
+ ],
+ "rows": [
+  {
+   "doc": "S100Z4LC",
+   "id": "S100Z4LC-T5-01",
+   "型": "T5_COINCIDENT",
+   "改変後の値": 3933000.0,
+   "同じ値を持つ fact の数 n": 2,
+   "層": "n=2〜5",
+   "正解": {
+    "種類": "参照先が在る",
+    "正解": "proceedsfromissuanceofcommonstockfincf@currentyearduration",
+    "偶然一致する側": "revenuesfromexternalcustomers@prior1yearduration_jpcrp030000-asr_e34748-000exbusinessreportablesegmentsmember"
+   },
+   "対応が付いた": true,
+   "腕": {
+    "Core": {
+     "言うこと": "止めた(VALUE_MISMATCH)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "Core-P": {
+     "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+     "参照先": "proceedsfromissuanceofcommonstockfincf@currentyearduration",
+     "判定": {
+      "参照先を出した": true,
+      "特定": true,
+      "誤認定": false,
+      "保留": false
+     }
+    },
+    "D′": {
+     "言うこと": "一意でない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D″": {
+     "言うこと": "一意でない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    }
+   }
+  },
+  {
+   "doc": "S100Z4LC",
+   "id": "S100Z4LC-T5-02",
+   "型": "T5_COINCIDENT",
+   "改変後の値": 1906000.0,
+   "同じ値を持つ fact の数 n": 6,
+   "層": "n>=6",
+   "正解": {
+    "種類": "参照先が在る",
+    "正解": "increasedecreaseinallowancefordoubtfulaccountsopecf@currentyearduration",
+    "偶然一致する側": "totalchangesofitemsduringtheperiod@currentyearduration_foreigncurrencytranslationadjustmentmember"
+   },
+   "対応が付いた": true,
+   "腕": {
+    "Core": {
+     "言うこと": "止めた(VALUE_MISMATCH)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "Core-P": {
+     "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+     "参照先": "increasedecreaseinallowancefordoubtfulaccountsopecf@currentyearduration",
+     "判定": {
+      "参照先を出した": true,
+      "特定": true,
+      "誤認定": false,
+      "保留": false
+     }
+    },
+    "D′": {
+     "言うこと": "一意でない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D″": {
+     "言うこと": "一意でない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    }
+   }
+  },
+  {
+   "doc": "S100Z4LC",
+   "id": "S100Z4LC-T5-03",
+   "型": "T5_COINCIDENT",
+   "改変後の値": 915000.0,
+   "同じ値を持つ fact の数 n": 2,
+   "層": "n=2〜5",
+   "正解": {
+    "種類": "参照先が在る",
+    "正解": "totalchangesofitemsduringtheperiod@currentyearduration",
+    "偶然一致する側": "revenuesfromexternalcustomers@currentyearduration_jpcrp030000-asr_e34748-000exbusinessreportablesegmentsmember"
+   },
+   "対応が付いた": true,
+   "腕": {
+    "Core": {
+     "言うこと": "止めた(VALUE_MISMATCH)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "Core-P": {
+     "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+     "参照先": "netassets@currentyearinstant",
+     "判定": {
+      "参照先を出した": true,
+      "特定": false,
+      "誤認定": true,
+      "保留": false,
+      "偶然一致する側だった": false
+     }
+    },
+    "D′": {
+     "言うこと": "一意でない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D″": {
+     "言うこと": "一意でない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    }
+   }
+  },
+  {
+   "doc": "S100Z4LC",
+   "id": "S100Z4LC-T5-04",
+   "型": "T5_COINCIDENT",
+   "改変後の値": 3858000.0,
+   "同じ値を持つ fact の数 n": 6,
+   "層": "n>=6",
+   "正解": {
+    "種類": "参照先が在る",
+    "正解": "nonoperatingexpenses@currentyearduration",
+    "偶然一致する側": "foreigncurrencytranslationadjustment@prior1yearinstant"
+   },
+   "対応が付いた": true,
+   "腕": {
+    "Core": {
+     "言うこと": "止めた(VALUE_MISMATCH)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "Core-P": {
+     "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+     "参照先": "nonoperatingexpenses@currentyearduration",
+     "判定": {
+      "参照先を出した": true,
+      "特定": true,
+      "誤認定": false,
+      "保留": false
+     }
+    },
+    "D′": {
+     "言うこと": "一意でない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D″": {
+     "言うこと": "一意でない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    }
+   }
+  },
+  {
+   "doc": "S100Z4LC",
+   "id": "S100Z4LC-T5-05",
+   "型": "T5_COINCIDENT",
+   "改変後の値": 3858000.0,
+   "同じ値を持つ fact の数 n": 6,
+   "層": "n>=6",
+   "正解": {
+    "種類": "参照先が在る",
+    "正解": "liabilities@currentyearinstant",
+    "偶然一致する側": "valuationandtranslationadjustments@prior1yearinstant"
+   },
+   "対応が付いた": true,
+   "腕": {
+    "Core": {
+     "言うこと": "止めた(VALUE_MISMATCH)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "Core-P": {
+     "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+     "参照先": "liabilities@currentyearinstant",
+     "判定": {
+      "参照先を出した": true,
+      "特定": true,
+      "誤認定": false,
+      "保留": false
+     }
+    },
+    "D′": {
+     "言うこと": "一意でない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D″": {
+     "言うこと": "一意でない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    }
+   }
+  },
+  {
+   "doc": "S100Z4LC",
+   "id": "S100Z4LC-T5-06",
+   "型": "T5_COINCIDENT",
+   "改変後の値": 1906000.0,
+   "同じ値を持つ fact の数 n": 6,
+   "層": "n>=6",
+   "正解": {
+    "種類": "参照先が在る",
+    "正解": "collectionofloansreceivableinvcf@currentyearduration",
+    "偶然一致する側": "netchangesofitemsotherthanshareholdersequity@currentyearduration_valuationandtranslationadjustmentsmember"
+   },
+   "対応が付いた": true,
+   "腕": {
+    "Core": {
+     "言うこと": "止めた(VALUE_MISMATCH)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "Core-P": {
+     "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+     "参照先": "collectionofloansreceivableinvcf@currentyearduration",
+     "判定": {
+      "参照先を出した": true,
+      "特定": true,
+      "誤認定": false,
+      "保留": false
+     }
+    },
+    "D′": {
+     "言うこと": "一意でない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D″": {
+     "言うこと": "一意でない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    }
+   }
+  },
+  {
+   "doc": "S100Z4LC",
+   "id": "S100Z4LC-T5-07",
+   "型": "T5_COINCIDENT",
+   "改変後の値": 10000.0,
+   "同じ値を持つ fact の数 n": 3,
+   "層": "n=2〜5",
+   "正解": {
+    "種類": "参照先が在る",
+    "正解": "nonoperatingincome@prior1yearduration",
+    "偶然一致する側": "investmentsincapital@prior1yearinstant_nonconsolidatedmember"
+   },
+   "対応が付いた": true,
+   "腕": {
+    "Core": {
+     "言うこと": "止めた(POINTER_NOT_FOUND)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "Core-P": {
+     "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D′": {
+     "言うこと": "一意でない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D″": {
+     "言うこと": "一意でない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    }
+   }
+  },
+  {
+   "doc": "S100Z4LC",
+   "id": "S100Z4LC-T5-08",
+   "型": "T5_COINCIDENT",
+   "改変後の値": 192000.0,
+   "同じ値を持つ fact の数 n": 2,
+   "層": "n=2〜5",
+   "正解": {
+    "種類": "参照先が在る",
+    "正解": "provisionofallowancefordoubtfulaccountssga@currentyearduration",
+    "偶然一致する側": "interestsubsidiesnoi@prior1yearduration"
+   },
+   "対応が付いた": true,
+   "腕": {
+    "Core": {
+     "言うこと": "止めた(VALUE_MISMATCH)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "Core-P": {
+     "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+     "参照先": "provisionofallowancefordoubtfulaccountsnoe@currentyearduration",
+     "判定": {
+      "参照先を出した": true,
+      "特定": false,
+      "誤認定": true,
+      "保留": false,
+      "偶然一致する側だった": false
+     }
+    },
+    "D′": {
+     "言うこと": "一意でない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D″": {
+     "言うこと": "一意でない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    }
+   }
+  },
+  {
+   "doc": "S100Z4LC",
+   "id": "S100Z4LC-T5-09",
+   "型": "T5_COINCIDENT",
+   "改変後の値": 10000.0,
+   "同じ値を持つ fact の数 n": 3,
+   "層": "n=2〜5",
+   "正解": {
+    "種類": "参照先が在る",
+    "正解": "operatingincome@currentyearduration_jpcrp030000-asr_e34748-000renewableenergybusinessreportablesegmentsmember",
+    "偶然一致する側": "otherioa@prior1yearinstant"
+   },
+   "対応が付いた": true,
+   "腕": {
+    "Core": {
+     "言うこと": "止めた(VALUE_MISMATCH)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "Core-P": {
+     "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+     "参照先": "operatingincome@currentyearduration",
+     "判定": {
+      "参照先を出した": true,
+      "特定": false,
+      "誤認定": true,
+      "保留": false,
+      "偶然一致する側だった": false
+     }
+    },
+    "D′": {
+     "言うこと": "一意でない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D″": {
+     "言うこと": "一意でない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    }
+   }
+  },
+  {
+   "doc": "S100Z4LC",
+   "id": "S100Z4LC-T5-10",
+   "型": "T5_COINCIDENT",
+   "改変後の値": 1906000.0,
+   "同じ値を持つ fact の数 n": 6,
+   "層": "n>=6",
+   "正解": {
+    "種類": "参照先が在る",
+    "正解": "sellinggeneralandadministrativeexpenses@currentyearduration",
+    "偶然一致する側": "othercomprehensiveincome@currentyearduration"
+   },
+   "対応が付いた": true,
+   "腕": {
+    "Core": {
+     "言うこと": "止めた(VALUE_MISMATCH)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "Core-P": {
+     "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+     "参照先": "sellinggeneralandadministrativeexpenses@currentyearduration",
+     "判定": {
+      "参照先を出した": true,
+      "特定": true,
+      "誤認定": false,
+      "保留": false
+     }
+    },
+    "D′": {
+     "言うこと": "一意でない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D″": {
+     "言うこと": "一意でない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    }
+   }
+  },
+  {
+   "doc": "S100Z4LC",
+   "id": "S100Z4LC-T1-01",
+   "型": "T1_VALUE",
+   "改変後の値": 137192.0,
+   "同じ値を持つ fact の数 n": 0,
+   "層": "n=2〜5",
+   "正解": {
+    "種類": "値がどこにも無い",
+    "正解": null,
+    "偶然一致する側": null
+   },
+   "対応が付いた": true,
+   "腕": {
+    "Core": {
+     "言うこと": "止めた(VALUE_MISMATCH)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "Core-P": {
+     "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+     "参照先": "provisionforlossonorderreceivedcl@currentyearinstant",
+     "判定": {
+      "参照先を出した": true,
+      "特定": null,
+      "誤認定": false,
+      "保留": false
+     }
+    },
+    "D′": {
+     "言うこと": "原資料と一致しない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D″": {
+     "言うこと": "原資料と一致しない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    }
+   }
+  },
+  {
+   "doc": "S100Z4LC",
+   "id": "S100Z4LC-T1-02",
+   "型": "T1_VALUE",
+   "改変後の値": 15990.0,
+   "同じ値を持つ fact の数 n": 0,
+   "層": "n=2〜5",
+   "正解": {
+    "種類": "値がどこにも無い",
+    "正解": null,
+    "偶然一致する側": null
+   },
+   "対応が付いた": true,
+   "腕": {
+    "Core": {
+     "言うこと": "止めた(VALUE_MISMATCH)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "Core-P": {
+     "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+     "参照先": "nonoperatingincome@currentyearduration",
+     "判定": {
+      "参照先を出した": true,
+      "特定": null,
+      "誤認定": false,
+      "保留": false
+     }
+    },
+    "D′": {
+     "言うこと": "原資料と一致しない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D″": {
+     "言うこと": "原資料と一致しない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    }
+   }
+  },
+  {
+   "doc": "S100Z4LC",
+   "id": "S100Z4LC-T1-03",
+   "型": "T1_VALUE",
+   "改変後の値": 301974.0,
+   "同じ値を持つ fact の数 n": 0,
+   "層": "n=2〜5",
+   "正解": {
+    "種類": "値がどこにも無い",
+    "正解": null,
+    "偶然一致する側": null
+   },
+   "対応が付いた": true,
+   "腕": {
+    "Core": {
+     "言うこと": "止めた(VALUE_MISMATCH)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "Core-P": {
+     "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+     "参照先": "collectionofloansreceivableinvcf@currentyearduration",
+     "判定": {
+      "参照先を出した": true,
+      "特定": null,
+      "誤認定": false,
+      "保留": false
+     }
+    },
+    "D′": {
+     "言うこと": "原資料と一致しない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D″": {
+     "言うこと": "原資料と一致しない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    }
+   }
+  },
+  {
+   "doc": "S100Z4LC",
+   "id": "S100Z4LC-T1-04",
+   "型": "T1_VALUE",
+   "改変後の値": 18647.0,
+   "同じ値を持つ fact の数 n": 0,
+   "層": "n=2〜5",
+   "正解": {
+    "種類": "値がどこにも無い",
+    "正解": null,
+    "偶然一致する側": null
+   },
+   "対応が付いた": true,
+   "腕": {
+    "Core": {
+     "言うこと": "止めた(POINTER_NOT_FOUND)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "Core-P": {
+     "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D′": {
+     "言うこと": "原資料と一致しない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D″": {
+     "言うこと": "原資料と一致しない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    }
+   }
+  },
+  {
+   "doc": "S100Z4LC",
+   "id": "S100Z4LC-T1-05",
+   "型": "T1_VALUE",
+   "改変後の値": 917.0,
+   "同じ値を持つ fact の数 n": 0,
+   "層": "n=2〜5",
+   "正解": {
+    "種類": "値がどこにも無い",
+    "正解": null,
+    "偶然一致する側": null
+   },
+   "対応が付いた": false,
+   "腕": {
+    "Core": {
+     "言うこと": "対応が付かない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "Core-P": {
+     "言うこと": "対応が付かない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D′": {
+     "言うこと": "原資料と一致しない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D″": {
+     "言うこと": "原資料と一致しない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    }
+   }
+  },
+  {
+   "doc": "S100Z4LC",
+   "id": "S100Z4LC-T3-01",
+   "型": "T3_ABSENT",
+   "改変後の値": 37.0,
+   "同じ値を持つ fact の数 n": 0,
+   "層": "n=2〜5",
+   "正解": {
+    "種類": "参照先は無い",
+    "正解": null,
+    "偶然一致する側": null
+   },
+   "対応が付いた": true,
+   "腕": {
+    "Core": {
+     "言うこと": "止めた(POINTER_NOT_FOUND)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "Core-P": {
+     "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D′": {
+     "言うこと": "原資料と一致しない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D″": {
+     "言うこと": "原資料と一致しない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    }
+   }
+  },
+  {
+   "doc": "S100Z4LC",
+   "id": "S100Z4LC-T3-02",
+   "型": "T3_ABSENT",
+   "改変後の値": 44.0,
+   "同じ値を持つ fact の数 n": 0,
+   "層": "n=2〜5",
+   "正解": {
+    "種類": "参照先は無い",
+    "正解": null,
+    "偶然一致する側": null
+   },
+   "対応が付いた": true,
+   "腕": {
+    "Core": {
+     "言うこと": "止めた(POINTER_NOT_FOUND)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "Core-P": {
+     "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D′": {
+     "言うこと": "原資料と一致しない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D″": {
+     "言うこと": "原資料と一致しない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    }
+   }
+  },
+  {
+   "doc": "S100Z4LC",
+   "id": "S100Z4LC-T3-03",
+   "型": "T3_ABSENT",
+   "改変後の値": 51.0,
+   "同じ値を持つ fact の数 n": 0,
+   "層": "n=2〜5",
+   "正解": {
+    "種類": "参照先は無い",
+    "正解": null,
+    "偶然一致する側": null
+   },
+   "対応が付いた": true,
+   "腕": {
+    "Core": {
+     "言うこと": "止めた(VALUE_MISMATCH)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "Core-P": {
+     "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+     "参照先": "netsales@currentyearduration",
+     "判定": {
+      "参照先を出した": true,
+      "特定": null,
+      "誤認定": true,
+      "保留": false
+     }
+    },
+    "D′": {
+     "言うこと": "原資料と一致しない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D″": {
+     "言うこと": "一意でない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    }
+   }
+  },
+  {
+   "doc": "S100Z4LC",
+   "id": "S100Z4LC-T3-04",
+   "型": "T3_ABSENT",
+   "改変後の値": 58.0,
+   "同じ値を持つ fact の数 n": 0,
+   "層": "n=2〜5",
+   "正解": {
+    "種類": "参照先は無い",
+    "正解": null,
+    "偶然一致する側": null
+   },
+   "対応が付いた": true,
+   "腕": {
+    "Core": {
+     "言うこと": "止めた(POINTER_NOT_FOUND)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "Core-P": {
+     "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D′": {
+     "言うこと": "原資料と一致しない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D″": {
+     "言うこと": "原資料と一致しない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    }
+   }
+  },
+  {
+   "doc": "S100Z4LC",
+   "id": "S100Z4LC-T3-05",
+   "型": "T3_ABSENT",
+   "改変後の値": 65.0,
+   "同じ値を持つ fact の数 n": 0,
+   "層": "n=2〜5",
+   "正解": {
+    "種類": "参照先は無い",
+    "正解": null,
+    "偶然一致する側": null
+   },
+   "対応が付いた": true,
+   "腕": {
+    "Core": {
+     "言うこと": "止めた(POINTER_NOT_FOUND)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "Core-P": {
+     "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D′": {
+     "言うこと": "原資料と一致しない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D″": {
+     "言うこと": "原資料と一致しない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    }
+   }
+  },
+  {
+   "doc": "S100Z40H",
+   "id": "S100Z40H-T5-01",
+   "型": "T5_COINCIDENT",
+   "改変後の値": 4000.0,
+   "同じ値を持つ fact の数 n": 1,
+   "層": "n=1",
+   "正解": {
+    "種類": "参照先が在る",
+    "正解": "netincreasedecreaseinshorttermloanspayablefincf@currentyearduration",
+    "偶然一致する側": "gainonsalesofnoncurrentassetsei@prior1yearduration"
+   },
+   "対応が付いた": true,
+   "腕": {
+    "Core": {
+     "言うこと": "止めた(VALUE_MISMATCH)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "Core-P": {
+     "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+     "参照先": "shorttermloanspayable@currentyearinstant",
+     "判定": {
+      "参照先を出した": true,
+      "特定": false,
+      "誤認定": true,
+      "保留": false,
+      "偶然一致する側だった": false
+     }
+    },
+    "D′": {
+     "言うこと": "確認済み",
+     "参照先": "gainonsalesofnoncurrentassetsei@prior1yearduration",
+     "判定": {
+      "参照先を出した": true,
+      "特定": false,
+      "誤認定": true,
+      "保留": false,
+      "偶然一致する側だった": true
+     }
+    },
+    "D″": {
+     "言うこと": "一意でない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    }
+   }
+  },
+  {
+   "doc": "S100Z40H",
+   "id": "S100Z40H-T5-02",
+   "型": "T5_COINCIDENT",
+   "改変後の値": 4000.0,
+   "同じ値を持つ fact の数 n": 1,
+   "層": "n=1",
+   "正解": {
+    "種類": "参照先が在る",
+    "正解": "proceedsfromlongtermloanspayablefincf@currentyearduration",
+    "偶然一致する側": "gainonsalesofnoncurrentassetsei@prior1yearduration"
+   },
+   "対応が付いた": true,
+   "腕": {
+    "Core": {
+     "言うこと": "止めた(VALUE_MISMATCH)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "Core-P": {
+     "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+     "参照先": "longtermloanspayable@currentyearinstant",
+     "判定": {
+      "参照先を出した": true,
+      "特定": false,
+      "誤認定": true,
+      "保留": false,
+      "偶然一致する側だった": false
+     }
+    },
+    "D′": {
+     "言うこと": "確認済み",
+     "参照先": "gainonsalesofnoncurrentassetsei@prior1yearduration",
+     "判定": {
+      "参照先を出した": true,
+      "特定": false,
+      "誤認定": true,
+      "保留": false,
+      "偶然一致する側だった": true
+     }
+    },
+    "D″": {
+     "言うこと": "一意でない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    }
+   }
+  },
+  {
+   "doc": "S100Z40H",
+   "id": "S100Z40H-T1-01",
+   "型": "T1_VALUE",
+   "改変後の値": 27.0,
+   "同じ値を持つ fact の数 n": 0,
+   "層": "n=2〜5",
+   "正解": {
+    "種類": "値がどこにも無い",
+    "正解": null,
+    "偶然一致する側": null
+   },
+   "対応が付いた": true,
+   "腕": {
+    "Core": {
+     "言うこと": "止めた(POINTER_NOT_FOUND)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "Core-P": {
+     "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D′": {
+     "言うこと": "原資料と一致しない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D″": {
+     "言うこと": "確認済み",
+     "参照先": "dividendpersharedividendsofsurplus@filingdateinstant_row2member",
+     "判定": {
+      "参照先を出した": true,
+      "特定": null,
+      "誤認定": true,
+      "保留": false
+     }
+    }
+   }
+  },
+  {
+   "doc": "S100Z40H",
+   "id": "S100Z40H-T1-02",
+   "型": "T1_VALUE",
+   "改変後の値": 27.0,
+   "同じ値を持つ fact の数 n": 0,
+   "層": "n=2〜5",
+   "正解": {
+    "種類": "値がどこにも無い",
+    "正解": null,
+    "偶然一致する側": null
+   },
+   "対応が付いた": true,
+   "腕": {
+    "Core": {
+     "言うこと": "止めた(POINTER_NOT_FOUND)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "Core-P": {
+     "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D′": {
+     "言うこと": "原資料と一致しない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D″": {
+     "言うこと": "確認済み",
+     "参照先": "dividendpersharedividendsofsurplus@filingdateinstant_row2member",
+     "判定": {
+      "参照先を出した": true,
+      "特定": null,
+      "誤認定": true,
+      "保留": false
+     }
+    }
+   }
+  },
+  {
+   "doc": "S100Z40H",
+   "id": "S100Z40H-T1-03",
+   "型": "T1_VALUE",
+   "改変後の値": 8.0,
+   "同じ値を持つ fact の数 n": 0,
+   "層": "n=2〜5",
+   "正解": {
+    "種類": "値がどこにも無い",
+    "正解": null,
+    "偶然一致する側": null
+   },
+   "対応が付いた": false,
+   "腕": {
+    "Core": {
+     "言うこと": "対応が付かない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "Core-P": {
+     "言うこと": "対応が付かない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D′": {
+     "言うこと": "原資料と一致しない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D″": {
+     "言うこと": "一意でない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    }
+   }
+  },
+  {
+   "doc": "S100Z40H",
+   "id": "S100Z40H-T1-04",
+   "型": "T1_VALUE",
+   "改変後の値": 21.0,
+   "同じ値を持つ fact の数 n": 0,
+   "層": "n=2〜5",
+   "正解": {
+    "種類": "値がどこにも無い",
+    "正解": null,
+    "偶然一致する側": null
+   },
+   "対応が付いた": false,
+   "腕": {
+    "Core": {
+     "言うこと": "対応が付かない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "Core-P": {
+     "言うこと": "対応が付かない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D′": {
+     "言うこと": "原資料と一致しない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D″": {
+     "言うこと": "確認済み",
+     "参照先": "averagenumberoftemporaryworkers@prior1yearinstant",
+     "判定": {
+      "参照先を出した": true,
+      "特定": null,
+      "誤認定": true,
+      "保留": false
+     }
+    }
+   }
+  },
+  {
+   "doc": "S100Z40H",
+   "id": "S100Z40H-T1-05",
+   "型": "T1_VALUE",
+   "改変後の値": 27.0,
+   "同じ値を持つ fact の数 n": 0,
+   "層": "n=2〜5",
+   "正解": {
+    "種類": "値がどこにも無い",
+    "正解": null,
+    "偶然一致する側": null
+   },
+   "対応が付いた": true,
+   "腕": {
+    "Core": {
+     "言うこと": "止めた(POINTER_NOT_FOUND)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "Core-P": {
+     "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D′": {
+     "言うこと": "原資料と一致しない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D″": {
+     "言うこと": "確認済み",
+     "参照先": "dividendpersharedividendsofsurplus@filingdateinstant_row2member",
+     "判定": {
+      "参照先を出した": true,
+      "特定": null,
+      "誤認定": true,
+      "保留": false
+     }
+    }
+   }
+  },
+  {
+   "doc": "S100Z40H",
+   "id": "S100Z40H-T3-01",
+   "型": "T3_ABSENT",
+   "改変後の値": 37.0,
+   "同じ値を持つ fact の数 n": 0,
+   "層": "n=2〜5",
+   "正解": {
+    "種類": "参照先は無い",
+    "正解": null,
+    "偶然一致する側": null
+   },
+   "対応が付いた": true,
+   "腕": {
+    "Core": {
+     "言うこと": "止めた(POINTER_NOT_FOUND)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "Core-P": {
+     "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D′": {
+     "言うこと": "原資料と一致しない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D″": {
+     "言うこと": "原資料と一致しない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    }
+   }
+  },
+  {
+   "doc": "S100Z40H",
+   "id": "S100Z40H-T3-02",
+   "型": "T3_ABSENT",
+   "改変後の値": 44.0,
+   "同じ値を持つ fact の数 n": 0,
+   "層": "n=2〜5",
+   "正解": {
+    "種類": "参照先は無い",
+    "正解": null,
+    "偶然一致する側": null
+   },
+   "対応が付いた": true,
+   "腕": {
+    "Core": {
+     "言うこと": "止めた(UNVERIFIABLE)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "Core-P": {
+     "言うこと": "参照先を出さない(UNVERIFIABLE)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D′": {
+     "言うこと": "原資料と一致しない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D″": {
+     "言うこと": "確認済み",
+     "参照先": "ratiooffemaleemployeesinmanagerialpositionsmetricsofconsolidatedsubsidiaries@currentyearinstant_row1member",
+     "判定": {
+      "参照先を出した": true,
+      "特定": null,
+      "誤認定": true,
+      "保留": false
+     }
+    }
+   }
+  },
+  {
+   "doc": "S100Z40H",
+   "id": "S100Z40H-T3-03",
+   "型": "T3_ABSENT",
+   "改変後の値": 51.0,
+   "同じ値を持つ fact の数 n": 0,
+   "層": "n=2〜5",
+   "正解": {
+    "種類": "参照先は無い",
+    "正解": null,
+    "偶然一致する側": null
+   },
+   "対応が付いた": true,
+   "腕": {
+    "Core": {
+     "言うこと": "止めた(POINTER_NOT_FOUND)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "Core-P": {
+     "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D′": {
+     "言うこと": "原資料と一致しない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D″": {
+     "言うこと": "原資料と一致しない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    }
+   }
+  },
+  {
+   "doc": "S100Z40H",
+   "id": "S100Z40H-T3-04",
+   "型": "T3_ABSENT",
+   "改変後の値": 65.0,
+   "同じ値を持つ fact の数 n": 0,
+   "層": "n=2〜5",
+   "正解": {
+    "種類": "参照先は無い",
+    "正解": null,
+    "偶然一致する側": null
+   },
+   "対応が付いた": true,
+   "腕": {
+    "Core": {
+     "言うこと": "止めた(UNVERIFIABLE)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "Core-P": {
+     "言うこと": "参照先を出さない(UNVERIFIABLE)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D′": {
+     "言うこと": "原資料と一致しない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D″": {
+     "言うこと": "原資料と一致しない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    }
+   }
+  },
+  {
+   "doc": "S100Z40H",
+   "id": "S100Z40H-T3-05",
+   "型": "T3_ABSENT",
+   "改変後の値": 79.0,
+   "同じ値を持つ fact の数 n": 0,
+   "層": "n=2〜5",
+   "正解": {
+    "種類": "参照先は無い",
+    "正解": null,
+    "偶然一致する側": null
+   },
+   "対応が付いた": true,
+   "腕": {
+    "Core": {
+     "言うこと": "止めた(UNVERIFIABLE)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "Core-P": {
+     "言うこと": "参照先を出さない(UNVERIFIABLE)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D′": {
+     "言うこと": "原資料と一致しない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D″": {
+     "言うこと": "原資料と一致しない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    }
+   }
+  },
+  {
+   "doc": "S100Z46V",
+   "id": "S100Z46V-T5-01",
+   "型": "T5_COINCIDENT",
+   "改変後の値": 218000.0,
+   "同じ値を持つ fact の数 n": 5,
+   "層": "n=2〜5",
+   "正解": {
+    "種類": "参照先が在る",
+    "正解": "incometaxespayable@currentyearinstant",
+    "偶然一致する側": "issuanceofnewsharesexerciseofsubscriptionrightstoshares@currentyearduration_capitalsurplusmember"
+   },
+   "対応が付いた": true,
+   "腕": {
+    "Core": {
+     "言うこと": "止めた(VALUE_MISMATCH)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "Core-P": {
+     "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+     "参照先": "incometaxespayable@currentyearinstant",
+     "判定": {
+      "参照先を出した": true,
+      "特定": true,
+      "誤認定": false,
+      "保留": false
+     }
+    },
+    "D′": {
+     "言うこと": "一意でない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D″": {
+     "言うこと": "一意でない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    }
+   }
+  },
+  {
+   "doc": "S100Z46V",
+   "id": "S100Z46V-T5-02",
+   "型": "T5_COINCIDENT",
+   "改変後の値": 428000.0,
+   "同じ値を持つ fact の数 n": 2,
+   "層": "n=2〜5",
+   "正解": {
+    "種類": "参照先が在る",
+    "正解": "liabilities@currentyearinstant",
+    "偶然一致する側": "othernoi@currentyearduration_nonconsolidatedmember"
+   },
+   "対応が付いた": true,
+   "腕": {
+    "Core": {
+     "言うこと": "止めた(VALUE_MISMATCH)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "Core-P": {
+     "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+     "参照先": "liabilities@currentyearinstant",
+     "判定": {
+      "参照先を出した": true,
+      "特定": true,
+      "誤認定": false,
+      "保留": false
+     }
+    },
+    "D′": {
+     "言うこと": "一意でない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D″": {
+     "言うこと": "一意でない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    }
+   }
+  },
+  {
+   "doc": "S100Z46V",
+   "id": "S100Z46V-T5-03",
+   "型": "T5_COINCIDENT",
+   "改変後の値": 2080000.0,
+   "同じ値を持つ fact の数 n": 2,
+   "層": "n=2〜5",
+   "正解": {
+    "種類": "参照先が在る",
+    "正解": "accountspayabletrade@currentyearinstant",
+    "偶然一致する側": "disposaloftreasurystock@prior1yearduration_nonconsolidatedmember_shareholdersequitymember"
+   },
+   "対応が付いた": true,
+   "腕": {
+    "Core": {
+     "言うこと": "止めた(VALUE_MISMATCH)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "Core-P": {
+     "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+     "参照先": "accountspayabletrade@currentyearinstant",
+     "判定": {
+      "参照先を出した": true,
+      "特定": true,
+      "誤認定": false,
+      "保留": false
+     }
+    },
+    "D′": {
+     "言うこと": "一意でない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D″": {
+     "言うこと": "一意でない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    }
+   }
+  },
+  {
+   "doc": "S100Z46V",
+   "id": "S100Z46V-T5-04",
+   "型": "T5_COINCIDENT",
+   "改変後の値": 2080000.0,
+   "同じ値を持つ fact の数 n": 2,
+   "層": "n=2〜5",
+   "正解": {
+    "種類": "参照先が在る",
+    "正解": "noncurrentassets@currentyearinstant",
+    "偶然一致する側": "disposaloftreasurystock@prior1yearduration_nonconsolidatedmember"
+   },
+   "対応が付いた": true,
+   "腕": {
+    "Core": {
+     "言うこと": "止めた(VALUE_MISMATCH)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "Core-P": {
+     "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+     "参照先": "noncurrentassets@currentyearinstant",
+     "判定": {
+      "参照先を出した": true,
+      "特定": true,
+      "誤認定": false,
+      "保留": false
+     }
+    },
+    "D′": {
+     "言うこと": "一意でない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D″": {
+     "言うこと": "一意でない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    }
+   }
+  },
+  {
+   "doc": "S100Z46V",
+   "id": "S100Z46V-T5-05",
+   "型": "T5_COINCIDENT",
+   "改変後の値": 1549000.0,
+   "同じ値を持つ fact の数 n": 2,
+   "層": "n=2〜5",
+   "正解": {
+    "種類": "参照先が在る",
+    "正解": "accountsreceivabletradeandcontractassets@currentyearinstant",
+    "偶然一致する側": "interestincomenoi@currentyearduration"
+   },
+   "対応が付いた": true,
+   "腕": {
+    "Core": {
+     "言うこと": "止めた(VALUE_MISMATCH)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "Core-P": {
+     "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+     "参照先": "accountsreceivabletradeandcontractassets@currentyearinstant",
+     "判定": {
+      "参照先を出した": true,
+      "特定": true,
+      "誤認定": false,
+      "保留": false
+     }
+    },
+    "D′": {
+     "言うこと": "一意でない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D″": {
+     "言うこと": "一意でない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    }
+   }
+  },
+  {
+   "doc": "S100Z46V",
+   "id": "S100Z46V-T5-06",
+   "型": "T5_COINCIDENT",
+   "改変後の値": 1959000.0,
+   "同じ値を持つ fact の数 n": 8,
+   "層": "n>=6",
+   "正解": {
+    "種類": "参照先が在る",
+    "正解": "operatingincome@currentyearduration",
+    "偶然一致する側": "subscriptionrightstoshares@currentyearinstant"
+   },
+   "対応が付いた": true,
+   "腕": {
+    "Core": {
+     "言うこと": "止めた(VALUE_MISMATCH)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "Core-P": {
+     "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+     "参照先": "operatingincome@currentyearduration",
+     "判定": {
+      "参照先を出した": true,
+      "特定": true,
+      "誤認定": false,
+      "保留": false
+     }
+    },
+    "D′": {
+     "言うこと": "一意でない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D″": {
+     "言うこと": "一意でない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    }
+   }
+  },
+  {
+   "doc": "S100Z46V",
+   "id": "S100Z46V-T5-07",
+   "型": "T5_COINCIDENT",
+   "改変後の値": 726000.0,
+   "同じ値を持つ fact の数 n": 1,
+   "層": "n=1",
+   "正解": {
+    "種類": "参照先が在る",
+    "正解": "contractliabilities@currentyearinstant",
+    "偶然一致する側": "otheria@currentyearinstant"
+   },
+   "対応が付いた": true,
+   "腕": {
+    "Core": {
+     "言うこと": "止めた(VALUE_MISMATCH)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "Core-P": {
+     "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+     "参照先": "contractliabilities@currentyearinstant",
+     "判定": {
+      "参照先を出した": true,
+      "特定": true,
+      "誤認定": false,
+      "保留": false
+     }
+    },
+    "D′": {
+     "言うこと": "確認済み",
+     "参照先": "otheria@currentyearinstant",
+     "判定": {
+      "参照先を出した": true,
+      "特定": false,
+      "誤認定": true,
+      "保留": false,
+      "偶然一致する側だった": true
+     }
+    },
+    "D″": {
+     "言うこと": "確認済み",
+     "参照先": "otheria@currentyearinstant",
+     "判定": {
+      "参照先を出した": true,
+      "特定": false,
+      "誤認定": true,
+      "保留": false,
+      "偶然一致する側だった": true
+     }
+    }
+   }
+  },
+  {
+   "doc": "S100Z46V",
+   "id": "S100Z46V-T5-08",
+   "型": "T5_COINCIDENT",
+   "改変後の値": 436000.0,
+   "同じ値を持つ fact の数 n": 5,
+   "層": "n=2〜5",
+   "正解": {
+    "種類": "参照先が在る",
+    "正解": "investmentsandotherassets@currentyearinstant",
+    "偶然一致する側": "issuanceofnewsharesexerciseofsubscriptionrightstoshares@currentyearduration_shareholdersequitymember"
+   },
+   "対応が付いた": true,
+   "腕": {
+    "Core": {
+     "言うこと": "止めた(VALUE_MISMATCH)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "Core-P": {
+     "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+     "参照先": "investmentsandotherassets@currentyearinstant",
+     "判定": {
+      "参照先を出した": true,
+      "特定": true,
+      "誤認定": false,
+      "保留": false
+     }
+    },
+    "D′": {
+     "言うこと": "一意でない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D″": {
+     "言うこと": "一意でない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    }
+   }
+  },
+  {
+   "doc": "S100Z46V",
+   "id": "S100Z46V-T5-09",
+   "型": "T5_COINCIDENT",
+   "改変後の値": 3366000.0,
+   "同じ値を持つ fact の数 n": 4,
+   "層": "n=2〜5",
+   "正解": {
+    "種類": "参照先が在る",
+    "正解": "goodwill@currentyearinstant",
+    "偶然一致する側": "disposaloftreasurystock@currentyearduration_capitalsurplusmember"
+   },
+   "対応が付いた": true,
+   "腕": {
+    "Core": {
+     "言うこと": "止めた(VALUE_MISMATCH)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "Core-P": {
+     "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+     "参照先": "goodwill@currentyearinstant",
+     "判定": {
+      "参照先を出した": true,
+      "特定": true,
+      "誤認定": false,
+      "保留": false
+     }
+    },
+    "D′": {
+     "言うこと": "一意でない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D″": {
+     "言うこと": "一意でない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    }
+   }
+  },
+  {
+   "doc": "S100Z46V",
+   "id": "S100Z46V-T5-10",
+   "型": "T5_COINCIDENT",
+   "改変後の値": 1959000.0,
+   "同じ値を持つ fact の数 n": 8,
+   "層": "n>=6",
+   "正解": {
+    "種類": "参照先が在る",
+    "正解": "currentassets@currentyearinstant",
+    "偶然一致する側": "netassets@prior2yearinstant_nonconsolidatedmember_subscriptionrightstosharesmember"
+   },
+   "対応が付いた": true,
+   "腕": {
+    "Core": {
+     "言うこと": "止めた(VALUE_MISMATCH)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "Core-P": {
+     "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+     "参照先": "currentassets@currentyearinstant",
+     "判定": {
+      "参照先を出した": true,
+      "特定": true,
+      "誤認定": false,
+      "保留": false
+     }
+    },
+    "D′": {
+     "言うこと": "一意でない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D″": {
+     "言うこと": "一意でない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    }
+   }
+  },
+  {
+   "doc": "S100Z46V",
+   "id": "S100Z46V-T5-11",
+   "型": "T5_COINCIDENT",
+   "改変後の値": 436000.0,
+   "同じ値を持つ fact の数 n": 5,
+   "層": "n=2〜5",
+   "正解": {
+    "種類": "参照先が在る",
+    "正解": "increasedecreaseinnotesandaccountspayabletradeopecf@currentyearduration",
+    "偶然一致する側": "issuanceofnewsharesexerciseofsubscriptionrightstoshares@currentyearduration_shareholdersequitymember"
+   },
+   "対応が付いた": true,
+   "腕": {
+    "Core": {
+     "言うこと": "止めた(VALUE_MISMATCH)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "Core-P": {
+     "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+     "参照先": "increasedecreaseinnotesandaccountspayabletradeopecf@currentyearduration",
+     "判定": {
+      "参照先を出した": true,
+      "特定": true,
+      "誤認定": false,
+      "保留": false
+     }
+    },
+    "D′": {
+     "言うこと": "一意でない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D″": {
+     "言うこと": "一意でない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    }
+   }
+  },
+  {
+   "doc": "S100Z46V",
+   "id": "S100Z46V-T5-12",
+   "型": "T5_COINCIDENT",
+   "改変後の値": 1549000.0,
+   "同じ値を持つ fact の数 n": 2,
+   "層": "n=2〜5",
+   "正解": {
+    "種類": "参照先が在る",
+    "正解": "deferredtaxassets@currentyearinstant",
+    "偶然一致する側": "interestincomenoi@currentyearduration_nonconsolidatedmember"
+   },
+   "対応が付いた": true,
+   "腕": {
+    "Core": {
+     "言うこと": "止めた(VALUE_MISMATCH)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "Core-P": {
+     "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+     "参照先": "deferredtaxassets@currentyearinstant",
+     "判定": {
+      "参照先を出した": true,
+      "特定": true,
+      "誤認定": false,
+      "保留": false
+     }
+    },
+    "D′": {
+     "言うこと": "一意でない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D″": {
+     "言うこと": "一意でない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    }
+   }
+  },
+  {
+   "doc": "S100Z46V",
+   "id": "S100Z46V-T5-13",
+   "型": "T5_COINCIDENT",
+   "改変後の値": 1549000.0,
+   "同じ値を持つ fact の数 n": 2,
+   "層": "n=2〜5",
+   "正解": {
+    "種類": "参照先が在る",
+    "正解": "proceedsfromlongtermloanspayablefincf@currentyearduration",
+    "偶然一致する側": "interestincomenoi@currentyearduration_nonconsolidatedmember"
+   },
+   "対応が付いた": true,
+   "腕": {
+    "Core": {
+     "言うこと": "止めた(VALUE_MISMATCH)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "Core-P": {
+     "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+     "参照先": "proceedsfromlongtermloanspayablefincf@currentyearduration",
+     "判定": {
+      "参照先を出した": true,
+      "特定": true,
+      "誤認定": false,
+      "保留": false
+     }
+    },
+    "D′": {
+     "言うこと": "一意でない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D″": {
+     "言うこと": "一意でない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    }
+   }
+  },
+  {
+   "doc": "S100Z46V",
+   "id": "S100Z46V-T5-14",
+   "型": "T5_COINCIDENT",
+   "改変後の値": 1959000.0,
+   "同じ値を持つ fact の数 n": 8,
+   "層": "n>=6",
+   "正解": {
+    "種類": "参照先が在る",
+    "正解": "intangibleassets@currentyearinstant",
+    "偶然一致する側": "netassets@prior2yearinstant_nonconsolidatedmember_subscriptionrightstosharesmember"
+   },
+   "対応が付いた": true,
+   "腕": {
+    "Core": {
+     "言うこと": "止めた(VALUE_MISMATCH)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "Core-P": {
+     "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+     "参照先": "intangibleassets@currentyearinstant",
+     "判定": {
+      "参照先を出した": true,
+      "特定": true,
+      "誤認定": false,
+      "保留": false
+     }
+    },
+    "D′": {
+     "言うこと": "一意でない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D″": {
+     "言うこと": "一意でない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    }
+   }
+  },
+  {
+   "doc": "S100Z46V",
+   "id": "S100Z46V-T5-15",
+   "型": "T5_COINCIDENT",
+   "改変後の値": 3582000.0,
+   "同じ値を持つ fact の数 n": 5,
+   "層": "n=2〜5",
+   "正解": {
+    "種類": "参照先が在る",
+    "正解": "currentliabilities@currentyearinstant",
+    "偶然一致する側": "disposaloftreasurystock@currentyearduration_nonconsolidatedmember"
+   },
+   "対応が付いた": true,
+   "腕": {
+    "Core": {
+     "言うこと": "止めた(VALUE_MISMATCH)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "Core-P": {
+     "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+     "参照先": "currentliabilities@currentyearinstant",
+     "判定": {
+      "参照先を出した": true,
+      "特定": true,
+      "誤認定": false,
+      "保留": false
+     }
+    },
+    "D′": {
+     "言うこと": "一意でない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D″": {
+     "言うこと": "一意でない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    }
+   }
+  },
+  {
+   "doc": "S100Z46V",
+   "id": "S100Z46V-T1-01",
+   "型": "T1_VALUE",
+   "改変後の値": 220447.0,
+   "同じ値を持つ fact の数 n": 0,
+   "層": "n=2〜5",
+   "正解": {
+    "種類": "値がどこにも無い",
+    "正解": null,
+    "偶然一致する側": null
+   },
+   "対応が付いた": true,
+   "腕": {
+    "Core": {
+     "言うこと": "止めた(VALUE_MISMATCH)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "Core-P": {
+     "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+     "参照先": "increasedecreaseinnotesandaccountspayabletradeopecf@currentyearduration",
+     "判定": {
+      "参照先を出した": true,
+      "特定": null,
+      "誤認定": false,
+      "保留": false
+     }
+    },
+    "D′": {
+     "言うこと": "原資料と一致しない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D″": {
+     "言うこと": "原資料と一致しない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    }
+   }
+  },
+  {
+   "doc": "S100Z46V",
+   "id": "S100Z46V-T1-02",
+   "型": "T1_VALUE",
+   "改変後の値": 327745.0,
+   "同じ値を持つ fact の数 n": 0,
+   "層": "n=2〜5",
+   "正解": {
+    "種類": "値がどこにも無い",
+    "正解": null,
+    "偶然一致する側": null
+   },
+   "対応が付いた": true,
+   "腕": {
+    "Core": {
+     "言うこと": "止めた(POINTER_NOT_FOUND)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "Core-P": {
+     "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D′": {
+     "言うこと": "原資料と一致しない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D″": {
+     "言うこと": "原資料と一致しない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    }
+   }
+  },
+  {
+   "doc": "S100Z46V",
+   "id": "S100Z46V-T1-03",
+   "型": "T1_VALUE",
+   "改変後の値": 883155.0,
+   "同じ値を持つ fact の数 n": 0,
+   "層": "n=2〜5",
+   "正解": {
+    "種類": "値がどこにも無い",
+    "正解": null,
+    "偶然一致する側": null
+   },
+   "対応が付いた": true,
+   "腕": {
+    "Core": {
+     "言うこと": "止めた(VALUE_MISMATCH)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "Core-P": {
+     "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+     "参照先": "retainedearnings@currentyearinstant",
+     "判定": {
+      "参照先を出した": true,
+      "特定": null,
+      "誤認定": false,
+      "保留": false
+     }
+    },
+    "D′": {
+     "言うこと": "原資料と一致しない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D″": {
+     "言うこと": "原資料と一致しない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    }
+   }
+  },
+  {
+   "doc": "S100Z46V",
+   "id": "S100Z46V-T1-04",
+   "型": "T1_VALUE",
+   "改変後の値": 157.0,
+   "同じ値を持つ fact の数 n": 0,
+   "層": "n=2〜5",
+   "正解": {
+    "種類": "値がどこにも無い",
+    "正解": null,
+    "偶然一致する側": null
+   },
+   "対応が付いた": false,
+   "腕": {
+    "Core": {
+     "言うこと": "対応が付かない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "Core-P": {
+     "言うこと": "対応が付かない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D′": {
+     "言うこと": "原資料と一致しない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D″": {
+     "言うこと": "原資料と一致しない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    }
+   }
+  },
+  {
+   "doc": "S100Z46V",
+   "id": "S100Z46V-T1-05",
+   "型": "T1_VALUE",
+   "改変後の値": 49271.0,
+   "同じ値を持つ fact の数 n": 0,
+   "層": "n=2〜5",
+   "正解": {
+    "種類": "値がどこにも無い",
+    "正解": null,
+    "偶然一致する側": null
+   },
+   "対応が付いた": true,
+   "腕": {
+    "Core": {
+     "言うこと": "止めた(VALUE_MISMATCH)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "Core-P": {
+     "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+     "参照先": "capitalstock@currentyearinstant",
+     "判定": {
+      "参照先を出した": true,
+      "特定": null,
+      "誤認定": false,
+      "保留": false
+     }
+    },
+    "D′": {
+     "言うこと": "原資料と一致しない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D″": {
+     "言うこと": "原資料と一致しない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    }
+   }
+  },
+  {
+   "doc": "S100Z46V",
+   "id": "S100Z46V-T3-01",
+   "型": "T3_ABSENT",
+   "改変後の値": 37.0,
+   "同じ値を持つ fact の数 n": 0,
+   "層": "n=2〜5",
+   "正解": {
+    "種類": "参照先は無い",
+    "正解": null,
+    "偶然一致する側": null
+   },
+   "対応が付いた": true,
+   "腕": {
+    "Core": {
+     "言うこと": "止めた(VALUE_MISMATCH)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "Core-P": {
+     "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+     "参照先": "netsales@currentyearduration",
+     "判定": {
+      "参照先を出した": true,
+      "特定": null,
+      "誤認定": true,
+      "保留": false
+     }
+    },
+    "D′": {
+     "言うこと": "原資料と一致しない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D″": {
+     "言うこと": "一意でない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    }
+   }
+  },
+  {
+   "doc": "S100Z46V",
+   "id": "S100Z46V-T3-02",
+   "型": "T3_ABSENT",
+   "改変後の値": 44.0,
+   "同じ値を持つ fact の数 n": 0,
+   "層": "n=2〜5",
+   "正解": {
+    "種類": "参照先は無い",
+    "正解": null,
+    "偶然一致する側": null
+   },
+   "対応が付いた": true,
+   "腕": {
+    "Core": {
+     "言うこと": "止めた(POINTER_NOT_FOUND)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "Core-P": {
+     "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D′": {
+     "言うこと": "原資料と一致しない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D″": {
+     "言うこと": "一意でない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    }
+   }
+  },
+  {
+   "doc": "S100Z46V",
+   "id": "S100Z46V-T3-03",
+   "型": "T3_ABSENT",
+   "改変後の値": 51.0,
+   "同じ値を持つ fact の数 n": 0,
+   "層": "n=2〜5",
+   "正解": {
+    "種類": "参照先は無い",
+    "正解": null,
+    "偶然一致する側": null
+   },
+   "対応が付いた": true,
+   "腕": {
+    "Core": {
+     "言うこと": "止めた(POINTER_NOT_FOUND)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "Core-P": {
+     "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D′": {
+     "言うこと": "原資料と一致しない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D″": {
+     "言うこと": "一意でない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    }
+   }
+  },
+  {
+   "doc": "S100Z46V",
+   "id": "S100Z46V-T3-04",
+   "型": "T3_ABSENT",
+   "改変後の値": 58.0,
+   "同じ値を持つ fact の数 n": 0,
+   "層": "n=2〜5",
+   "正解": {
+    "種類": "参照先は無い",
+    "正解": null,
+    "偶然一致する側": null
+   },
+   "対応が付いた": true,
+   "腕": {
+    "Core": {
+     "言うこと": "止めた(POINTER_NOT_FOUND)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "Core-P": {
+     "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D′": {
+     "言うこと": "原資料と一致しない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D″": {
+     "言うこと": "確認済み",
+     "参照先": "numberofemployees@prior3yearinstant_nonconsolidatedmember",
+     "判定": {
+      "参照先を出した": true,
+      "特定": null,
+      "誤認定": true,
+      "保留": false
+     }
+    }
+   }
+  },
+  {
+   "doc": "S100Z46V",
+   "id": "S100Z46V-T3-05",
+   "型": "T3_ABSENT",
+   "改変後の値": 65.0,
+   "同じ値を持つ fact の数 n": 0,
+   "層": "n=2〜5",
+   "正解": {
+    "種類": "参照先は無い",
+    "正解": null,
+    "偶然一致する側": null
+   },
+   "対応が付いた": true,
+   "腕": {
+    "Core": {
+     "言うこと": "止めた(POINTER_NOT_FOUND)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "Core-P": {
+     "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D′": {
+     "言うこと": "原資料と一致しない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D″": {
+     "言うこと": "原資料と一致しない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    }
+   }
+  },
+  {
+   "doc": "S100Z38F",
+   "id": "S100Z38F-T1-01",
+   "型": "T1_VALUE",
+   "改変後の値": 5.0,
+   "同じ値を持つ fact の数 n": 0,
+   "層": "n=2〜5",
+   "正解": {
+    "種類": "値がどこにも無い",
+    "正解": null,
+    "偶然一致する側": null
+   },
+   "対応が付いた": false,
+   "腕": {
+    "Core": {
+     "言うこと": "対応が付かない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "Core-P": {
+     "言うこと": "対応が付かない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D′": {
+     "言うこと": "原資料と一致しない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D″": {
+     "言うこと": "一意でない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    }
+   }
+  },
+  {
+   "doc": "S100Z38F",
+   "id": "S100Z38F-T1-02",
+   "型": "T1_VALUE",
+   "改変後の値": 5.0,
+   "同じ値を持つ fact の数 n": 0,
+   "層": "n=2〜5",
+   "正解": {
+    "種類": "値がどこにも無い",
+    "正解": null,
+    "偶然一致する側": null
+   },
+   "対応が付いた": false,
+   "腕": {
+    "Core": {
+     "言うこと": "対応が付かない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "Core-P": {
+     "言うこと": "対応が付かない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D′": {
+     "言うこと": "原資料と一致しない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D″": {
+     "言うこと": "一意でない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    }
+   }
+  },
+  {
+   "doc": "S100Z38F",
+   "id": "S100Z38F-T1-03",
+   "型": "T1_VALUE",
+   "改変後の値": 166.0,
+   "同じ値を持つ fact の数 n": 0,
+   "層": "n=2〜5",
+   "正解": {
+    "種類": "値がどこにも無い",
+    "正解": null,
+    "偶然一致する側": null
+   },
+   "対応が付いた": false,
+   "腕": {
+    "Core": {
+     "言うこと": "対応が付かない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "Core-P": {
+     "言うこと": "対応が付かない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D′": {
+     "言うこと": "原資料と一致しない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D″": {
+     "言うこと": "原資料と一致しない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    }
+   }
+  },
+  {
+   "doc": "S100Z38F",
+   "id": "S100Z38F-T1-04",
+   "型": "T1_VALUE",
+   "改変後の値": 8.0,
+   "同じ値を持つ fact の数 n": 0,
+   "層": "n=2〜5",
+   "正解": {
+    "種類": "値がどこにも無い",
+    "正解": null,
+    "偶然一致する側": null
+   },
+   "対応が付いた": false,
+   "腕": {
+    "Core": {
+     "言うこと": "対応が付かない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "Core-P": {
+     "言うこと": "対応が付かない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D′": {
+     "言うこと": "原資料と一致しない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D″": {
+     "言うこと": "一意でない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    }
+   }
+  },
+  {
+   "doc": "S100Z38F",
+   "id": "S100Z38F-T1-05",
+   "型": "T1_VALUE",
+   "改変後の値": 5.0,
+   "同じ値を持つ fact の数 n": 0,
+   "層": "n=2〜5",
+   "正解": {
+    "種類": "値がどこにも無い",
+    "正解": null,
+    "偶然一致する側": null
+   },
+   "対応が付いた": true,
+   "腕": {
+    "Core": {
+     "言うこと": "止めた(POINTER_NOT_FOUND)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "Core-P": {
+     "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D′": {
+     "言うこと": "原資料と一致しない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D″": {
+     "言うこと": "一意でない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    }
+   }
+  },
+  {
+   "doc": "S100Z38F",
+   "id": "S100Z38F-T3-01",
+   "型": "T3_ABSENT",
+   "改変後の値": 44.0,
+   "同じ値を持つ fact の数 n": 0,
+   "層": "n=2〜5",
+   "正解": {
+    "種類": "参照先は無い",
+    "正解": null,
+    "偶然一致する側": null
+   },
+   "対応が付いた": true,
+   "腕": {
+    "Core": {
+     "言うこと": "止めた(POINTER_NOT_FOUND)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "Core-P": {
+     "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D′": {
+     "言うこと": "原資料と一致しない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D″": {
+     "言うこと": "原資料と一致しない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    }
+   }
+  },
+  {
+   "doc": "S100Z38F",
+   "id": "S100Z38F-T3-02",
+   "型": "T3_ABSENT",
+   "改変後の値": 51.0,
+   "同じ値を持つ fact の数 n": 0,
+   "層": "n=2〜5",
+   "正解": {
+    "種類": "参照先は無い",
+    "正解": null,
+    "偶然一致する側": null
+   },
+   "対応が付いた": true,
+   "腕": {
+    "Core": {
+     "言うこと": "止めた(VALUE_MISMATCH)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "Core-P": {
+     "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+     "参照先": "netsales@currentyearduration",
+     "判定": {
+      "参照先を出した": true,
+      "特定": null,
+      "誤認定": true,
+      "保留": false
+     }
+    },
+    "D′": {
+     "言うこと": "原資料と一致しない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D″": {
+     "言うこと": "原資料と一致しない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    }
+   }
+  },
+  {
+   "doc": "S100Z38F",
+   "id": "S100Z38F-T3-03",
+   "型": "T3_ABSENT",
+   "改変後の値": 58.0,
+   "同じ値を持つ fact の数 n": 0,
+   "層": "n=2〜5",
+   "正解": {
+    "種類": "参照先は無い",
+    "正解": null,
+    "偶然一致する側": null
+   },
+   "対応が付いた": true,
+   "腕": {
+    "Core": {
+     "言うこと": "止めた(UNVERIFIABLE)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "Core-P": {
+     "言うこと": "参照先を出さない(UNVERIFIABLE)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D′": {
+     "言うこと": "原資料と一致しない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D″": {
+     "言うこと": "原資料と一致しない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    }
+   }
+  },
+  {
+   "doc": "S100Z38F",
+   "id": "S100Z38F-T3-04",
+   "型": "T3_ABSENT",
+   "改変後の値": 65.0,
+   "同じ値を持つ fact の数 n": 0,
+   "層": "n=2〜5",
+   "正解": {
+    "種類": "参照先は無い",
+    "正解": null,
+    "偶然一致する側": null
+   },
+   "対応が付いた": true,
+   "腕": {
+    "Core": {
+     "言うこと": "止めた(POINTER_NOT_FOUND)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "Core-P": {
+     "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D′": {
+     "言うこと": "原資料と一致しない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D″": {
+     "言うこと": "原資料と一致しない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    }
+   }
+  },
+  {
+   "doc": "S100Z38F",
+   "id": "S100Z38F-T3-05",
+   "型": "T3_ABSENT",
+   "改変後の値": 72.0,
+   "同じ値を持つ fact の数 n": 0,
+   "層": "n=2〜5",
+   "正解": {
+    "種類": "参照先は無い",
+    "正解": null,
+    "偶然一致する側": null
+   },
+   "対応が付いた": true,
+   "腕": {
+    "Core": {
+     "言うこと": "止めた(POINTER_NOT_FOUND)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "Core-P": {
+     "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D′": {
+     "言うこと": "原資料と一致しない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D″": {
+     "言うこと": "原資料と一致しない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    }
+   }
+  },
+  {
+   "doc": "S100Z3DU",
+   "id": "S100Z3DU-T1-01",
+   "型": "T1_VALUE",
+   "改変後の値": 54.0,
+   "同じ値を持つ fact の数 n": 0,
+   "層": "n=2〜5",
+   "正解": {
+    "種類": "値がどこにも無い",
+    "正解": null,
+    "偶然一致する側": null
+   },
+   "対応が付いた": false,
+   "腕": {
+    "Core": {
+     "言うこと": "対応が付かない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "Core-P": {
+     "言うこと": "対応が付かない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D′": {
+     "言うこと": "原資料と一致しない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D″": {
+     "言うこと": "一意でない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    }
+   }
+  },
+  {
+   "doc": "S100Z3DU",
+   "id": "S100Z3DU-T1-02",
+   "型": "T1_VALUE",
+   "改変後の値": 22.0,
+   "同じ値を持つ fact の数 n": 0,
+   "層": "n=2〜5",
+   "正解": {
+    "種類": "値がどこにも無い",
+    "正解": null,
+    "偶然一致する側": null
+   },
+   "対応が付いた": false,
+   "腕": {
+    "Core": {
+     "言うこと": "対応が付かない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "Core-P": {
+     "言うこと": "対応が付かない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D′": {
+     "言うこと": "原資料と一致しない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D″": {
+     "言うこと": "一意でない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    }
+   }
+  },
+  {
+   "doc": "S100Z3DU",
+   "id": "S100Z3DU-T1-03",
+   "型": "T1_VALUE",
+   "改変後の値": 9.0,
+   "同じ値を持つ fact の数 n": 0,
+   "層": "n=2〜5",
+   "正解": {
+    "種類": "値がどこにも無い",
+    "正解": null,
+    "偶然一致する側": null
+   },
+   "対応が付いた": false,
+   "腕": {
+    "Core": {
+     "言うこと": "対応が付かない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "Core-P": {
+     "言うこと": "対応が付かない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D′": {
+     "言うこと": "原資料と一致しない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D″": {
+     "言うこと": "一意でない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    }
+   }
+  },
+  {
+   "doc": "S100Z3DU",
+   "id": "S100Z3DU-T1-04",
+   "型": "T1_VALUE",
+   "改変後の値": 20.0,
+   "同じ値を持つ fact の数 n": 0,
+   "層": "n=2〜5",
+   "正解": {
+    "種類": "値がどこにも無い",
+    "正解": null,
+    "偶然一致する側": null
+   },
+   "対応が付いた": false,
+   "腕": {
+    "Core": {
+     "言うこと": "対応が付かない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "Core-P": {
+     "言うこと": "対応が付かない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D′": {
+     "言うこと": "原資料と一致しない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D″": {
+     "言うこと": "一意でない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    }
+   }
+  },
+  {
+   "doc": "S100Z3DU",
+   "id": "S100Z3DU-T1-05",
+   "型": "T1_VALUE",
+   "改変後の値": 77.0,
+   "同じ値を持つ fact の数 n": 0,
+   "層": "n=2〜5",
+   "正解": {
+    "種類": "値がどこにも無い",
+    "正解": null,
+    "偶然一致する側": null
+   },
+   "対応が付いた": false,
+   "腕": {
+    "Core": {
+     "言うこと": "対応が付かない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "Core-P": {
+     "言うこと": "対応が付かない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D′": {
+     "言うこと": "原資料と一致しない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D″": {
+     "言うこと": "一意でない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    }
+   }
+  },
+  {
+   "doc": "S100Z3DU",
+   "id": "S100Z3DU-T3-01",
+   "型": "T3_ABSENT",
+   "改変後の値": 37.0,
+   "同じ値を持つ fact の数 n": 0,
+   "層": "n=2〜5",
+   "正解": {
+    "種類": "参照先は無い",
+    "正解": null,
+    "偶然一致する側": null
+   },
+   "対応が付いた": true,
+   "腕": {
+    "Core": {
+     "言うこと": "止めた(UNVERIFIABLE)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "Core-P": {
+     "言うこと": "参照先を出さない(UNVERIFIABLE)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D′": {
+     "言うこと": "原資料と一致しない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D″": {
+     "言うこと": "一意でない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    }
+   }
+  },
+  {
+   "doc": "S100Z3DU",
+   "id": "S100Z3DU-T3-02",
+   "型": "T3_ABSENT",
+   "改変後の値": 44.0,
+   "同じ値を持つ fact の数 n": 0,
+   "層": "n=2〜5",
+   "正解": {
+    "種類": "参照先は無い",
+    "正解": null,
+    "偶然一致する側": null
+   },
+   "対応が付いた": true,
+   "腕": {
+    "Core": {
+     "言うこと": "止めた(UNVERIFIABLE)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "Core-P": {
+     "言うこと": "参照先を出さない(UNVERIFIABLE)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D′": {
+     "言うこと": "原資料と一致しない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D″": {
+     "言うこと": "一意でない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    }
+   }
+  },
+  {
+   "doc": "S100Z3DU",
+   "id": "S100Z3DU-T3-03",
+   "型": "T3_ABSENT",
+   "改変後の値": 51.0,
+   "同じ値を持つ fact の数 n": 0,
+   "層": "n=2〜5",
+   "正解": {
+    "種類": "参照先は無い",
+    "正解": null,
+    "偶然一致する側": null
+   },
+   "対応が付いた": true,
+   "腕": {
+    "Core": {
+     "言うこと": "止めた(POINTER_NOT_FOUND)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "Core-P": {
+     "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D′": {
+     "言うこと": "原資料と一致しない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D″": {
+     "言うこと": "一意でない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    }
+   }
+  },
+  {
+   "doc": "S100Z3DU",
+   "id": "S100Z3DU-T3-04",
+   "型": "T3_ABSENT",
+   "改変後の値": 58.0,
+   "同じ値を持つ fact の数 n": 0,
+   "層": "n=2〜5",
+   "正解": {
+    "種類": "参照先は無い",
+    "正解": null,
+    "偶然一致する側": null
+   },
+   "対応が付いた": true,
+   "腕": {
+    "Core": {
+     "言うこと": "止めた(UNVERIFIABLE)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "Core-P": {
+     "言うこと": "参照先を出さない(UNVERIFIABLE)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D′": {
+     "言うこと": "原資料と一致しない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D″": {
+     "言うこと": "一意でない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    }
+   }
+  },
+  {
+   "doc": "S100Z3DU",
+   "id": "S100Z3DU-T3-05",
+   "型": "T3_ABSENT",
+   "改変後の値": 65.0,
+   "同じ値を持つ fact の数 n": 0,
+   "層": "n=2〜5",
+   "正解": {
+    "種類": "参照先は無い",
+    "正解": null,
+    "偶然一致する側": null
+   },
+   "対応が付いた": true,
+   "腕": {
+    "Core": {
+     "言うこと": "止めた(VALUE_MISMATCH)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "Core-P": {
+     "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+     "参照先": "netsales@currentyearduration",
+     "判定": {
+      "参照先を出した": true,
+      "特定": null,
+      "誤認定": true,
+      "保留": false
+     }
+    },
+    "D′": {
+     "言うこと": "原資料と一致しない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D″": {
+     "言うこと": "一意でない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    }
+   }
+  },
+  {
+   "doc": "S100Z4R8",
+   "id": "S100Z4R8-T1-01",
+   "型": "T1_VALUE",
+   "改変後の値": 3.0,
+   "同じ値を持つ fact の数 n": 0,
+   "層": "n=2〜5",
+   "正解": {
+    "種類": "値がどこにも無い",
+    "正解": null,
+    "偶然一致する側": null
+   },
+   "対応が付いた": false,
+   "腕": {
+    "Core": {
+     "言うこと": "対応が付かない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "Core-P": {
+     "言うこと": "対応が付かない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D′": {
+     "言うこと": "原資料と一致しない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D″": {
+     "言うこと": "原資料と一致しない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    }
+   }
+  },
+  {
+   "doc": "S100Z4R8",
+   "id": "S100Z4R8-T1-02",
+   "型": "T1_VALUE",
+   "改変後の値": 98.0,
+   "同じ値を持つ fact の数 n": 0,
+   "層": "n=2〜5",
+   "正解": {
+    "種類": "値がどこにも無い",
+    "正解": null,
+    "偶然一致する側": null
+   },
+   "対応が付いた": false,
+   "腕": {
+    "Core": {
+     "言うこと": "対応が付かない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "Core-P": {
+     "言うこと": "対応が付かない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D′": {
+     "言うこと": "原資料と一致しない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D″": {
+     "言うこと": "原資料と一致しない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    }
+   }
+  },
+  {
+   "doc": "S100Z4R8",
+   "id": "S100Z4R8-T1-03",
+   "型": "T1_VALUE",
+   "改変後の値": 98.0,
+   "同じ値を持つ fact の数 n": 0,
+   "層": "n=2〜5",
+   "正解": {
+    "種類": "値がどこにも無い",
+    "正解": null,
+    "偶然一致する側": null
+   },
+   "対応が付いた": false,
+   "腕": {
+    "Core": {
+     "言うこと": "対応が付かない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "Core-P": {
+     "言うこと": "対応が付かない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D′": {
+     "言うこと": "原資料と一致しない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D″": {
+     "言うこと": "原資料と一致しない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    }
+   }
+  },
+  {
+   "doc": "S100Z4R8",
+   "id": "S100Z4R8-T3-01",
+   "型": "T3_ABSENT",
+   "改変後の値": 37.0,
+   "同じ値を持つ fact の数 n": 0,
+   "層": "n=2〜5",
+   "正解": {
+    "種類": "参照先は無い",
+    "正解": null,
+    "偶然一致する側": null
+   },
+   "対応が付いた": true,
+   "腕": {
+    "Core": {
+     "言うこと": "止めた(UNVERIFIABLE)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "Core-P": {
+     "言うこと": "参照先を出さない(UNVERIFIABLE)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D′": {
+     "言うこと": "原資料と一致しない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D″": {
+     "言うこと": "確認済み",
+     "参照先": "rateofreturnonequitysummaryofbusinessresults@prior3yearduration_nonconsolidatedmember",
+     "判定": {
+      "参照先を出した": true,
+      "特定": null,
+      "誤認定": true,
+      "保留": false
+     }
+    }
+   }
+  },
+  {
+   "doc": "S100Z4R8",
+   "id": "S100Z4R8-T3-02",
+   "型": "T3_ABSENT",
+   "改変後の値": 44.0,
+   "同じ値を持つ fact の数 n": 0,
+   "層": "n=2〜5",
+   "正解": {
+    "種類": "参照先は無い",
+    "正解": null,
+    "偶然一致する側": null
+   },
+   "対応が付いた": true,
+   "腕": {
+    "Core": {
+     "言うこと": "止めた(POINTER_NOT_FOUND)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "Core-P": {
+     "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D′": {
+     "言うこと": "原資料と一致しない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D″": {
+     "言うこと": "一意でない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    }
+   }
+  },
+  {
+   "doc": "S100Z4R8",
+   "id": "S100Z4R8-T3-03",
+   "型": "T3_ABSENT",
+   "改変後の値": 51.0,
+   "同じ値を持つ fact の数 n": 0,
+   "層": "n=2〜5",
+   "正解": {
+    "種類": "参照先は無い",
+    "正解": null,
+    "偶然一致する側": null
+   },
+   "対応が付いた": true,
+   "腕": {
+    "Core": {
+     "言うこと": "止めた(POINTER_NOT_FOUND)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "Core-P": {
+     "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D′": {
+     "言うこと": "原資料と一致しない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D″": {
+     "言うこと": "一意でない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    }
+   }
+  },
+  {
+   "doc": "S100Z4R8",
+   "id": "S100Z4R8-T3-04",
+   "型": "T3_ABSENT",
+   "改変後の値": 58.0,
+   "同じ値を持つ fact の数 n": 0,
+   "層": "n=2〜5",
+   "正解": {
+    "種類": "参照先は無い",
+    "正解": null,
+    "偶然一致する側": null
+   },
+   "対応が付いた": true,
+   "腕": {
+    "Core": {
+     "言うこと": "止めた(POINTER_NOT_FOUND)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "Core-P": {
+     "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D′": {
+     "言うこと": "原資料と一致しない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D″": {
+     "言うこと": "一意でない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    }
+   }
+  },
+  {
+   "doc": "S100Z4R8",
+   "id": "S100Z4R8-T3-05",
+   "型": "T3_ABSENT",
+   "改変後の値": 65.0,
+   "同じ値を持つ fact の数 n": 0,
+   "層": "n=2〜5",
+   "正解": {
+    "種類": "参照先は無い",
+    "正解": null,
+    "偶然一致する側": null
+   },
+   "対応が付いた": true,
+   "腕": {
+    "Core": {
+     "言うこと": "止めた(VALUE_MISMATCH)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "Core-P": {
+     "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+     "参照先": "netsales@currentyearduration",
+     "判定": {
+      "参照先を出した": true,
+      "特定": null,
+      "誤認定": true,
+      "保留": false
+     }
+    },
+    "D′": {
+     "言うこと": "原資料と一致しない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D″": {
+     "言うこと": "原資料と一致しない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    }
+   }
+  },
+  {
+   "doc": "S100Z3CI",
+   "id": "S100Z3CI-T5-01",
+   "型": "T5_COINCIDENT",
+   "改変後の値": 3268000.0,
+   "同じ値を持つ fact の数 n": 4,
+   "層": "n=2〜5",
+   "正解": {
+    "種類": "参照先が在る",
+    "正解": "provisionforbonusessga@currentyearduration",
+    "偶然一致する側": "netchangesofitemsotherthanshareholdersequity@currentyearduration_valuationandtranslationadjustmentsmember"
+   },
+   "対応が付いた": true,
+   "腕": {
+    "Core": {
+     "言うこと": "止めた(VALUE_MISMATCH)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "Core-P": {
+     "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+     "参照先": "provisionforbonuses@currentyearinstant",
+     "判定": {
+      "参照先を出した": true,
+      "特定": false,
+      "誤認定": true,
+      "保留": false,
+      "偶然一致する側だった": false
+     }
+    },
+    "D′": {
+     "言うこと": "一意でない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D″": {
+     "言うこと": "一意でない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    }
+   }
+  },
+  {
+   "doc": "S100Z3CI",
+   "id": "S100Z3CI-T5-02",
+   "型": "T5_COINCIDENT",
+   "改変後の値": 3283000.0,
+   "同じ値を持つ fact の数 n": 3,
+   "層": "n=2〜5",
+   "正解": {
+    "種類": "参照先が在る",
+    "正解": "incomebeforeincometaxes@currentyearduration",
+    "偶然一致する側": "foreigncurrencytranslationadjustmentnetoftaxoci@currentyearduration"
+   },
+   "対応が付いた": true,
+   "腕": {
+    "Core": {
+     "言うこと": "止めた(VALUE_MISMATCH)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "Core-P": {
+     "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+     "参照先": "incomebeforeincometaxes@currentyearduration",
+     "判定": {
+      "参照先を出した": true,
+      "特定": true,
+      "誤認定": false,
+      "保留": false
+     }
+    },
+    "D′": {
+     "言うこと": "一意でない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D″": {
+     "言うこと": "一意でない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    }
+   }
+  },
+  {
+   "doc": "S100Z3CI",
+   "id": "S100Z3CI-T5-03",
+   "型": "T5_COINCIDENT",
+   "改変後の値": 19000.0,
+   "同じ値を持つ fact の数 n": 1,
+   "層": "n=1",
+   "正解": {
+    "種類": "参照先が在る",
+    "正解": "rentincomenoi@currentyearduration",
+    "偶然一致する側": "provisionofallowancefordoubtfulaccountssga@prior1yearduration"
+   },
+   "対応が付いた": true,
+   "腕": {
+    "Core": {
+     "言うこと": "止めた(VALUE_MISMATCH)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "Core-P": {
+     "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+     "参照先": "rentincomenoi@currentyearduration",
+     "判定": {
+      "参照先を出した": true,
+      "特定": true,
+      "誤認定": false,
+      "保留": false
+     }
+    },
+    "D′": {
+     "言うこと": "確認済み",
+     "参照先": "provisionofallowancefordoubtfulaccountssga@prior1yearduration",
+     "判定": {
+      "参照先を出した": true,
+      "特定": false,
+      "誤認定": true,
+      "保留": false,
+      "偶然一致する側だった": true
+     }
+    },
+    "D″": {
+     "言うこと": "確認済み",
+     "参照先": "provisionofallowancefordoubtfulaccountssga@prior1yearduration",
+     "判定": {
+      "参照先を出した": true,
+      "特定": false,
+      "誤認定": true,
+      "保留": false,
+      "偶然一致する側だった": true
+     }
+    }
+   }
+  },
+  {
+   "doc": "S100Z3CI",
+   "id": "S100Z3CI-T5-04",
+   "型": "T5_COINCIDENT",
+   "改変後の値": 17280000.0,
+   "同じ値を持つ fact の数 n": 2,
+   "層": "n=2〜5",
+   "正解": {
+    "種類": "参照先が在る",
+    "正解": "increaseinshorttermloanspayablefincf@currentyearduration",
+    "偶然一致する側": "longtermaccountspayableother@currentyearinstant"
+   },
+   "対応が付いた": true,
+   "腕": {
+    "Core": {
+     "言うこと": "止めた(VALUE_MISMATCH)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "Core-P": {
+     "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+     "参照先": "increaseinshorttermloanspayablefincf@currentyearduration",
+     "判定": {
+      "参照先を出した": true,
+      "特定": true,
+      "誤認定": false,
+      "保留": false
+     }
+    },
+    "D′": {
+     "言うこと": "一意でない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D″": {
+     "言うこと": "一意でない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    }
+   }
+  },
+  {
+   "doc": "S100Z3CI",
+   "id": "S100Z3CI-T5-05",
+   "型": "T5_COINCIDENT",
+   "改変後の値": 9000.0,
+   "同じ値を持つ fact の数 n": 3,
+   "層": "n=2〜5",
+   "正解": {
+    "種類": "参照先が在る",
+    "正解": "incomefromrecylingnoi@currentyearduration",
+    "偶然一致する側": "extraordinaryincome@currentyearduration"
+   },
+   "対応が付いた": true,
+   "腕": {
+    "Core": {
+     "言うこと": "止めた(VALUE_MISMATCH)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "Core-P": {
+     "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+     "参照先": "rentincomenoi@currentyearduration",
+     "判定": {
+      "参照先を出した": true,
+      "特定": false,
+      "誤認定": true,
+      "保留": false,
+      "偶然一致する側だった": false
+     }
+    },
+    "D′": {
+     "言うこと": "一意でない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D″": {
+     "言うこと": "一意でない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    }
+   }
+  },
+  {
+   "doc": "S100Z3CI",
+   "id": "S100Z3CI-T5-06",
+   "型": "T5_COINCIDENT",
+   "改変後の値": 370000.0,
+   "同じ値を持つ fact の数 n": 2,
+   "層": "n=2〜5",
+   "正解": {
+    "種類": "参照先が在る",
+    "正解": "currentportionoflongtermloanspayable@currentyearinstant",
+    "偶然一致する側": "otheria@prior1yearinstant_nonconsolidatedmember"
+   },
+   "対応が付いた": true,
+   "腕": {
+    "Core": {
+     "言うこと": "止めた(VALUE_MISMATCH)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "Core-P": {
+     "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+     "参照先": "longtermloanspayable@currentyearinstant",
+     "判定": {
+      "参照先を出した": true,
+      "特定": false,
+      "誤認定": true,
+      "保留": false,
+      "偶然一致する側だった": false
+     }
+    },
+    "D′": {
+     "言うこと": "一意でない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D″": {
+     "言うこと": "一意でない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    }
+   }
+  },
+  {
+   "doc": "S100Z3CI",
+   "id": "S100Z3CI-T5-07",
+   "型": "T5_COINCIDENT",
+   "改変後の値": 1310000.0,
+   "同じ値を持つ fact の数 n": 1,
+   "層": "n=1",
+   "正解": {
+    "種類": "参照先が在る",
+    "正解": "currentassets@currentyearinstant",
+    "偶然一致する側": "unearnedrevenue@prior1yearinstant_nonconsolidatedmember"
+   },
+   "対応が付いた": true,
+   "腕": {
+    "Core": {
+     "言うこと": "止めた(VALUE_MISMATCH)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "Core-P": {
+     "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+     "参照先": "currentassets@currentyearinstant",
+     "判定": {
+      "参照先を出した": true,
+      "特定": true,
+      "誤認定": false,
+      "保留": false
+     }
+    },
+    "D′": {
+     "言うこと": "確認済み",
+     "参照先": "unearnedrevenue@prior1yearinstant_nonconsolidatedmember",
+     "判定": {
+      "参照先を出した": true,
+      "特定": false,
+      "誤認定": true,
+      "保留": false,
+      "偶然一致する側だった": true
+     }
+    },
+    "D″": {
+     "言うこと": "確認済み",
+     "参照先": "unearnedrevenue@prior1yearinstant_nonconsolidatedmember",
+     "判定": {
+      "参照先を出した": true,
+      "特定": false,
+      "誤認定": true,
+      "保留": false,
+      "偶然一致する側だった": true
+     }
+    }
+   }
+  },
+  {
+   "doc": "S100Z3CI",
+   "id": "S100Z3CI-T5-08",
+   "型": "T5_COINCIDENT",
+   "改変後の値": 18000.0,
+   "同じ値を持つ fact の数 n": 3,
+   "層": "n=2〜5",
+   "正解": {
+    "種類": "参照先が在る",
+    "正解": "increasedecreaseinprovisionforbonusesopecf@currentyearduration",
+    "偶然一致する側": "longtermprepaidexpenses@currentyearinstant_nonconsolidatedmember"
+   },
+   "対応が付いた": true,
+   "腕": {
+    "Core": {
+     "言うこと": "止めた(VALUE_MISMATCH)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "Core-P": {
+     "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+     "参照先": "increasedecreaseinprovisionforbonusesopecf@currentyearduration",
+     "判定": {
+      "参照先を出した": true,
+      "特定": true,
+      "誤認定": false,
+      "保留": false
+     }
+    },
+    "D′": {
+     "言うこと": "一意でない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D″": {
+     "言うこと": "一意でない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    }
+   }
+  },
+  {
+   "doc": "S100Z3CI",
+   "id": "S100Z3CI-T5-09",
+   "型": "T5_COINCIDENT",
+   "改変後の値": 6323000.0,
+   "同じ値を持つ fact の数 n": 1,
+   "層": "n=1",
+   "正解": {
+    "種類": "参照先が在る",
+    "正解": "currentliabilities@currentyearinstant",
+    "偶然一致する側": "incomefromrecylingnoi@prior1yearduration"
+   },
+   "対応が付いた": true,
+   "腕": {
+    "Core": {
+     "言うこと": "止めた(VALUE_MISMATCH)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "Core-P": {
+     "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+     "参照先": "currentliabilities@currentyearinstant",
+     "判定": {
+      "参照先を出した": true,
+      "特定": true,
+      "誤認定": false,
+      "保留": false
+     }
+    },
+    "D′": {
+     "言うこと": "確認済み",
+     "参照先": "incomefromrecylingnoi@prior1yearduration",
+     "判定": {
+      "参照先を出した": true,
+      "特定": false,
+      "誤認定": true,
+      "保留": false,
+      "偶然一致する側だった": true
+     }
+    },
+    "D″": {
+     "言うこと": "確認済み",
+     "参照先": "incomefromrecylingnoi@prior1yearduration",
+     "判定": {
+      "参照先を出した": true,
+      "特定": false,
+      "誤認定": true,
+      "保留": false,
+      "偶然一致する側だった": true
+     }
+    }
+   }
+  },
+  {
+   "doc": "S100Z3CI",
+   "id": "S100Z3CI-T5-10",
+   "型": "T5_COINCIDENT",
+   "改変後の値": 4511000.0,
+   "同じ値を持つ fact の数 n": 2,
+   "層": "n=2〜5",
+   "正解": {
+    "種類": "参照先が在る",
+    "正解": "subcontractexpensessga@currentyearduration",
+    "偶然一致する側": "investmentsecurities@prior1yearinstant_nonconsolidatedmember"
+   },
+   "対応が付いた": true,
+   "腕": {
+    "Core": {
+     "言うこと": "止めた(VALUE_MISMATCH)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "Core-P": {
+     "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+     "参照先": "subcontractexpensessga@currentyearduration",
+     "判定": {
+      "参照先を出した": true,
+      "特定": true,
+      "誤認定": false,
+      "保留": false
+     }
+    },
+    "D′": {
+     "言うこと": "一意でない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D″": {
+     "言うこと": "一意でない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    }
+   }
+  },
+  {
+   "doc": "S100Z3CI",
+   "id": "S100Z3CI-T5-11",
+   "型": "T5_COINCIDENT",
+   "改変後の値": 3283000.0,
+   "同じ値を持つ fact の数 n": 3,
+   "層": "n=2〜5",
+   "正解": {
+    "種類": "参照先が在る",
+    "正解": "operatingincome@currentyearduration",
+    "偶然一致する側": "netchangesofitemsotherthanshareholdersequity@currentyearduration_foreigncurrencytranslationadjustmentmember"
+   },
+   "対応が付いた": true,
+   "腕": {
+    "Core": {
+     "言うこと": "止めた(VALUE_MISMATCH)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "Core-P": {
+     "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+     "参照先": "operatingincome@currentyearduration",
+     "判定": {
+      "参照先を出した": true,
+      "特定": true,
+      "誤認定": false,
+      "保留": false
+     }
+    },
+    "D′": {
+     "言うこと": "一意でない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D″": {
+     "言うこと": "一意でない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    }
+   }
+  },
+  {
+   "doc": "S100Z3CI",
+   "id": "S100Z3CI-T5-12",
+   "型": "T5_COINCIDENT",
+   "改変後の値": 9024000.0,
+   "同じ値を持つ fact の数 n": 1,
+   "層": "n=1",
+   "正解": {
+    "種類": "参照先が在る",
+    "正解": "grossprofit@currentyearduration",
+    "偶然一致する側": "interestanddividendsincomenoi@prior1yearduration_nonconsolidatedmember"
+   },
+   "対応が付いた": true,
+   "腕": {
+    "Core": {
+     "言うこと": "止めた(UNVERIFIABLE)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "Core-P": {
+     "言うこと": "参照先を出さない(UNVERIFIABLE)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D′": {
+     "言うこと": "確認済み",
+     "参照先": "interestanddividendsincomenoi@prior1yearduration_nonconsolidatedmember",
+     "判定": {
+      "参照先を出した": true,
+      "特定": false,
+      "誤認定": true,
+      "保留": false,
+      "偶然一致する側だった": true
+     }
+    },
+    "D″": {
+     "言うこと": "確認済み",
+     "参照先": "interestanddividendsincomenoi@prior1yearduration_nonconsolidatedmember",
+     "判定": {
+      "参照先を出した": true,
+      "特定": false,
+      "誤認定": true,
+      "保留": false,
+      "偶然一致する側だった": true
+     }
+    }
+   }
+  },
+  {
+   "doc": "S100Z3CI",
+   "id": "S100Z3CI-T5-13",
+   "型": "T5_COINCIDENT",
+   "改変後の値": 12270000.0,
+   "同じ値を持つ fact の数 n": 1,
+   "層": "n=1",
+   "正解": {
+    "種類": "参照先が在る",
+    "正解": "operatingincome@currentyearduration_jpcrp030000-asr_e30164-000learningdesignsegmentreportablesegmentmember",
+    "偶然一致する側": "othernoi@currentyearduration_nonconsolidatedmember"
+   },
+   "対応が付いた": true,
+   "腕": {
+    "Core": {
+     "言うこと": "止めた(VALUE_MISMATCH)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "Core-P": {
+     "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+     "参照先": "operatingincome@currentyearduration_jpcrp030000-asr_e30164-000learningdesignsegmentreportablesegmentmember",
+     "判定": {
+      "参照先を出した": true,
+      "特定": true,
+      "誤認定": false,
+      "保留": false
+     }
+    },
+    "D′": {
+     "言うこと": "確認済み",
+     "参照先": "othernoi@currentyearduration_nonconsolidatedmember",
+     "判定": {
+      "参照先を出した": true,
+      "特定": false,
+      "誤認定": true,
+      "保留": false,
+      "偶然一致する側だった": true
+     }
+    },
+    "D″": {
+     "言うこと": "確認済み",
+     "参照先": "othernoi@currentyearduration_nonconsolidatedmember",
+     "判定": {
+      "参照先を出した": true,
+      "特定": false,
+      "誤認定": true,
+      "保留": false,
+      "偶然一致する側だった": true
+     }
+    }
+   }
+  },
+  {
+   "doc": "S100Z3CI",
+   "id": "S100Z3CI-T5-14",
+   "型": "T5_COINCIDENT",
+   "改変後の値": 7098000.0,
+   "同じ値を持つ fact の数 n": 2,
+   "層": "n=2〜5",
+   "正解": {
+    "種類": "参照先が在る",
+    "正解": "operatingincome@currentyearduration",
+    "偶然一致する側": "netassets@prior1yearinstant_foreigncurrencytranslationadjustmentmember"
+   },
+   "対応が付いた": true,
+   "腕": {
+    "Core": {
+     "言うこと": "止めた(VALUE_MISMATCH)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "Core-P": {
+     "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+     "参照先": "operatingincome@currentyearduration",
+     "判定": {
+      "参照先を出した": true,
+      "特定": true,
+      "誤認定": false,
+      "保留": false
+     }
+    },
+    "D′": {
+     "言うこと": "一意でない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D″": {
+     "言うこと": "一意でない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    }
+   }
+  },
+  {
+   "doc": "S100Z3CI",
+   "id": "S100Z3CI-T5-15",
+   "型": "T5_COINCIDENT",
+   "改変後の値": 6000000.0,
+   "同じ値を持つ fact の数 n": 4,
+   "層": "n=2〜5",
+   "正解": {
+    "種類": "参照先が在る",
+    "正解": "noncurrentassets@currentyearinstant",
+    "偶然一致する側": "donationmoneynoe@currentyearduration_nonconsolidatedmember"
+   },
+   "対応が付いた": true,
+   "腕": {
+    "Core": {
+     "言うこと": "止めた(VALUE_MISMATCH)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "Core-P": {
+     "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+     "参照先": "noncurrentassets@currentyearinstant",
+     "判定": {
+      "参照先を出した": true,
+      "特定": true,
+      "誤認定": false,
+      "保留": false
+     }
+    },
+    "D′": {
+     "言うこと": "一意でない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D″": {
+     "言うこと": "一意でない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    }
+   }
+  },
+  {
+   "doc": "S100Z3CI",
+   "id": "S100Z3CI-T5-16",
+   "型": "T5_COINCIDENT",
+   "改変後の値": 1665000.0,
+   "同じ値を持つ fact の数 n": 1,
+   "層": "n=1",
+   "正解": {
+    "種類": "参照先が在る",
+    "正解": "incometaxes@currentyearduration",
+    "偶然一致する側": "interestincomenoi@prior1yearduration"
+   },
+   "対応が付いた": true,
+   "腕": {
+    "Core": {
+     "言うこと": "止めた(POINTER_NOT_FOUND)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "Core-P": {
+     "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D′": {
+     "言うこと": "確認済み",
+     "参照先": "interestincomenoi@prior1yearduration",
+     "判定": {
+      "参照先を出した": true,
+      "特定": false,
+      "誤認定": true,
+      "保留": false,
+      "偶然一致する側だった": true
+     }
+    },
+    "D″": {
+     "言うこと": "確認済み",
+     "参照先": "interestincomenoi@prior1yearduration",
+     "判定": {
+      "参照先を出した": true,
+      "特定": false,
+      "誤認定": true,
+      "保留": false,
+      "偶然一致する側だった": true
+     }
+    }
+   }
+  },
+  {
+   "doc": "S100Z3CI",
+   "id": "S100Z3CI-T5-17",
+   "型": "T5_COINCIDENT",
+   "改変後の値": 43000.0,
+   "同じ値を持つ fact の数 n": 2,
+   "層": "n=2〜5",
+   "正解": {
+    "種類": "参照先が在る",
+    "正解": "nonoperatingincome@currentyearduration",
+    "偶然一致する側": "othernoe@currentyearduration"
+   },
+   "対応が付いた": true,
+   "腕": {
+    "Core": {
+     "言うこと": "止めた(VALUE_MISMATCH)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "Core-P": {
+     "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+     "参照先": "nonoperatingincome@currentyearduration",
+     "判定": {
+      "参照先を出した": true,
+      "特定": true,
+      "誤認定": false,
+      "保留": false
+     }
+    },
+    "D′": {
+     "言うこと": "一意でない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D″": {
+     "言うこと": "一意でない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    }
+   }
+  },
+  {
+   "doc": "S100Z3CI",
+   "id": "S100Z3CI-T5-18",
+   "型": "T5_COINCIDENT",
+   "改変後の値": 9000.0,
+   "同じ値を持つ fact の数 n": 3,
+   "層": "n=2〜5",
+   "正解": {
+    "種類": "参照先が在る",
+    "正解": "increasedecreaseinprovisionforbonusesopecf@currentyearduration",
+    "偶然一致する側": "gainonsalesofnoncurrentassetsei@currentyearduration"
+   },
+   "対応が付いた": true,
+   "腕": {
+    "Core": {
+     "言うこと": "止めた(VALUE_MISMATCH)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "Core-P": {
+     "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+     "参照先": "provisionforbonuses@currentyearinstant",
+     "判定": {
+      "参照先を出した": true,
+      "特定": false,
+      "誤認定": true,
+      "保留": false,
+      "偶然一致する側だった": false
+     }
+    },
+    "D′": {
+     "言うこと": "一意でない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D″": {
+     "言うこと": "一意でない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    }
+   }
+  },
+  {
+   "doc": "S100Z3CI",
+   "id": "S100Z3CI-T5-19",
+   "型": "T5_COINCIDENT",
+   "改変後の値": 3252000.0,
+   "同じ値を持つ fact の数 n": 1,
+   "層": "n=1",
+   "正解": {
+    "種類": "参照先が在る",
+    "正解": "operatingincome@currentyearduration_jpcrp030000-asr_e30164-000timedesignsegmentreportablesegmentmember",
+    "偶然一致する側": "proceedsfromcollectionofleaseandguaranteedepositsinvcf@prior1yearduration"
+   },
+   "対応が付いた": true,
+   "腕": {
+    "Core": {
+     "言うこと": "止めた(VALUE_MISMATCH)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "Core-P": {
+     "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+     "参照先": "operatingincome@currentyearduration_jpcrp030000-asr_e30164-000timedesignsegmentreportablesegmentmember",
+     "判定": {
+      "参照先を出した": true,
+      "特定": true,
+      "誤認定": false,
+      "保留": false
+     }
+    },
+    "D′": {
+     "言うこと": "確認済み",
+     "参照先": "proceedsfromcollectionofleaseandguaranteedepositsinvcf@prior1yearduration",
+     "判定": {
+      "参照先を出した": true,
+      "特定": false,
+      "誤認定": true,
+      "保留": false,
+      "偶然一致する側だった": true
+     }
+    },
+    "D″": {
+     "言うこと": "確認済み",
+     "参照先": "proceedsfromcollectionofleaseandguaranteedepositsinvcf@prior1yearduration",
+     "判定": {
+      "参照先を出した": true,
+      "特定": false,
+      "誤認定": true,
+      "保留": false,
+      "偶然一致する側だった": true
+     }
+    }
+   }
+  },
+  {
+   "doc": "S100Z3CI",
+   "id": "S100Z3CI-T5-20",
+   "型": "T5_COINCIDENT",
+   "改変後の値": 1925000.0,
+   "同じ値を持つ fact の数 n": 2,
+   "層": "n=2〜5",
+   "正解": {
+    "種類": "参照先が在る",
+    "正解": "salariesandallowancessga@currentyearduration",
+    "偶然一致する側": "otherel@prior1yearduration_nonconsolidatedmember"
+   },
+   "対応が付いた": true,
+   "腕": {
+    "Core": {
+     "言うこと": "止めた(VALUE_MISMATCH)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "Core-P": {
+     "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+     "参照先": "salariesandallowancessga@currentyearduration",
+     "判定": {
+      "参照先を出した": true,
+      "特定": true,
+      "誤認定": false,
+      "保留": false
+     }
+    },
+    "D′": {
+     "言うこと": "一意でない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D″": {
+     "言うこと": "一意でない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    }
+   }
+  },
+  {
+   "doc": "S100Z3CI",
+   "id": "S100Z3CI-T5-21",
+   "型": "T5_COINCIDENT",
+   "改変後の値": 3336000.0,
+   "同じ値を持つ fact の数 n": 1,
+   "層": "n=1",
+   "正解": {
+    "種類": "参照先が在る",
+    "正解": "incomebeforeincometaxes@currentyearduration",
+    "偶然一致する側": "increasedecreaseinprovisionforbonusesopecf@currentyearduration"
+   },
+   "対応が付いた": true,
+   "腕": {
+    "Core": {
+     "言うこと": "止めた(VALUE_MISMATCH)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "Core-P": {
+     "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+     "参照先": "incomebeforeincometaxes@currentyearduration",
+     "判定": {
+      "参照先を出した": true,
+      "特定": true,
+      "誤認定": false,
+      "保留": false
+     }
+    },
+    "D′": {
+     "言うこと": "確認済み",
+     "参照先": "increasedecreaseinprovisionforbonusesopecf@currentyearduration",
+     "判定": {
+      "参照先を出した": true,
+      "特定": false,
+      "誤認定": true,
+      "保留": false,
+      "偶然一致する側だった": true
+     }
+    },
+    "D″": {
+     "言うこと": "確認済み",
+     "参照先": "increasedecreaseinprovisionforbonusesopecf@currentyearduration",
+     "判定": {
+      "参照先を出した": true,
+      "特定": false,
+      "誤認定": true,
+      "保留": false,
+      "偶然一致する側だった": true
+     }
+    }
+   }
+  },
+  {
+   "doc": "S100Z3CI",
+   "id": "S100Z3CI-T5-22",
+   "型": "T5_COINCIDENT",
+   "改変後の値": 9000.0,
+   "同じ値を持つ fact の数 n": 3,
+   "層": "n=2〜5",
+   "正解": {
+    "種類": "参照先が在る",
+    "正解": "nonoperatingexpenses@currentyearduration",
+    "偶然一致する側": "proceedsfromsalesofpropertyplantandequipmentinvcf@currentyearduration"
+   },
+   "対応が付いた": true,
+   "腕": {
+    "Core": {
+     "言うこと": "止めた(VALUE_MISMATCH)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "Core-P": {
+     "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+     "参照先": "nonoperatingexpenses@currentyearduration",
+     "判定": {
+      "参照先を出した": true,
+      "特定": true,
+      "誤認定": false,
+      "保留": false
+     }
+    },
+    "D′": {
+     "言うこと": "一意でない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D″": {
+     "言うこと": "一意でない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    }
+   }
+  },
+  {
+   "doc": "S100Z3CI",
+   "id": "S100Z3CI-T5-23",
+   "型": "T5_COINCIDENT",
+   "改変後の値": 1665000.0,
+   "同じ値を持つ fact の数 n": 1,
+   "層": "n=1",
+   "正解": {
+    "種類": "参照先が在る",
+    "正解": "sellinggeneralandadministrativeexpenses@currentyearduration",
+    "偶然一致する側": "interestincomenoi@prior1yearduration"
+   },
+   "対応が付いた": true,
+   "腕": {
+    "Core": {
+     "言うこと": "止めた(VALUE_MISMATCH)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "Core-P": {
+     "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+     "参照先": "sellinggeneralandadministrativeexpenses@currentyearduration",
+     "判定": {
+      "参照先を出した": true,
+      "特定": true,
+      "誤認定": false,
+      "保留": false
+     }
+    },
+    "D′": {
+     "言うこと": "確認済み",
+     "参照先": "interestincomenoi@prior1yearduration",
+     "判定": {
+      "参照先を出した": true,
+      "特定": false,
+      "誤認定": true,
+      "保留": false,
+      "偶然一致する側だった": true
+     }
+    },
+    "D″": {
+     "言うこと": "確認済み",
+     "参照先": "interestincomenoi@prior1yearduration",
+     "判定": {
+      "参照先を出した": true,
+      "特定": false,
+      "誤認定": true,
+      "保留": false,
+      "偶然一致する側だった": true
+     }
+    }
+   }
+  },
+  {
+   "doc": "S100Z3CI",
+   "id": "S100Z3CI-T5-24",
+   "型": "T5_COINCIDENT",
+   "改変後の値": 1138000.0,
+   "同じ値を持つ fact の数 n": 2,
+   "層": "n=2〜5",
+   "正解": {
+    "種類": "参照先が在る",
+    "正解": "incometaxes@prior1yearduration",
+    "偶然一致する側": "otheria@currentyearinstant"
+   },
+   "対応が付いた": true,
+   "腕": {
+    "Core": {
+     "言うこと": "止めた(POINTER_NOT_FOUND)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "Core-P": {
+     "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D′": {
+     "言うこと": "一意でない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D″": {
+     "言うこと": "一意でない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    }
+   }
+  },
+  {
+   "doc": "S100Z3CI",
+   "id": "S100Z3CI-T5-25",
+   "型": "T5_COINCIDENT",
+   "改変後の値": 11276000.0,
+   "同じ値を持つ fact の数 n": 1,
+   "層": "n=1",
+   "正解": {
+    "種類": "参照先が在る",
+    "正解": "liabilities@currentyearinstant",
+    "偶然一致する側": "rentincomenoi@prior1yearduration"
+   },
+   "対応が付いた": true,
+   "腕": {
+    "Core": {
+     "言うこと": "止めた(VALUE_MISMATCH)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "Core-P": {
+     "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+     "参照先": "liabilities@currentyearinstant",
+     "判定": {
+      "参照先を出した": true,
+      "特定": true,
+      "誤認定": false,
+      "保留": false
+     }
+    },
+    "D′": {
+     "言うこと": "確認済み",
+     "参照先": "rentincomenoi@prior1yearduration",
+     "判定": {
+      "参照先を出した": true,
+      "特定": false,
+      "誤認定": true,
+      "保留": false,
+      "偶然一致する側だった": true
+     }
+    },
+    "D″": {
+     "言うこと": "確認済み",
+     "参照先": "rentincomenoi@prior1yearduration",
+     "判定": {
+      "参照先を出した": true,
+      "特定": false,
+      "誤認定": true,
+      "保留": false,
+      "偶然一致する側だった": true
+     }
+    }
+   }
+  },
+  {
+   "doc": "S100Z3CI",
+   "id": "S100Z3CI-T5-26",
+   "型": "T5_COINCIDENT",
+   "改変後の値": 43000.0,
+   "同じ値を持つ fact の数 n": 2,
+   "層": "n=2〜5",
+   "正解": {
+    "種類": "参照先が在る",
+    "正解": "extraordinaryloss@currentyearduration",
+    "偶然一致する側": "othernoe@currentyearduration"
+   },
+   "対応が付いた": true,
+   "腕": {
+    "Core": {
+     "言うこと": "止めた(VALUE_MISMATCH)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "Core-P": {
+     "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+     "参照先": "extraordinaryloss@currentyearduration",
+     "判定": {
+      "参照先を出した": true,
+      "特定": true,
+      "誤認定": false,
+      "保留": false
+     }
+    },
+    "D′": {
+     "言うこと": "一意でない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D″": {
+     "言うこと": "一意でない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    }
+   }
+  },
+  {
+   "doc": "S100Z3CI",
+   "id": "S100Z3CI-T5-27",
+   "型": "T5_COINCIDENT",
+   "改変後の値": 3928000.0,
+   "同じ値を持つ fact の数 n": 1,
+   "層": "n=1",
+   "正解": {
+    "種類": "参照先が在る",
+    "正解": "noncurrentliabilities@currentyearinstant",
+    "偶然一致する側": "notespayabletrade@prior1yearinstant_nonconsolidatedmember"
+   },
+   "対応が付いた": true,
+   "腕": {
+    "Core": {
+     "言うこと": "止めた(VALUE_MISMATCH)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "Core-P": {
+     "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+     "参照先": "noncurrentliabilities@currentyearinstant",
+     "判定": {
+      "参照先を出した": true,
+      "特定": true,
+      "誤認定": false,
+      "保留": false
+     }
+    },
+    "D′": {
+     "言うこと": "確認済み",
+     "参照先": "notespayabletrade@prior1yearinstant_nonconsolidatedmember",
+     "判定": {
+      "参照先を出した": true,
+      "特定": false,
+      "誤認定": true,
+      "保留": false,
+      "偶然一致する側だった": true
+     }
+    },
+    "D″": {
+     "言うこと": "確認済み",
+     "参照先": "notespayabletrade@prior1yearinstant_nonconsolidatedmember",
+     "判定": {
+      "参照先を出した": true,
+      "特定": false,
+      "誤認定": true,
+      "保留": false,
+      "偶然一致する側だった": true
+     }
+    }
+   }
+  },
+  {
+   "doc": "S100Z3CI",
+   "id": "S100Z3CI-T5-28",
+   "型": "T5_COINCIDENT",
+   "改変後の値": 43000.0,
+   "同じ値を持つ fact の数 n": 2,
+   "層": "n=2〜5",
+   "正解": {
+    "種類": "参照先が在る",
+    "正解": "totalamountofdividendsdividendsofsurplus@filingdateinstant_row1member",
+    "偶然一致する側": "othernoe@currentyearduration"
+   },
+   "対応が付いた": false,
+   "腕": {
+    "Core": {
+     "言うこと": "対応が付かない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "Core-P": {
+     "言うこと": "対応が付かない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D′": {
+     "言うこと": "一意でない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D″": {
+     "言うこと": "一意でない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    }
+   }
+  },
+  {
+   "doc": "S100Z3CI",
+   "id": "S100Z3CI-T5-29",
+   "型": "T5_COINCIDENT",
+   "改変後の値": 1925000.0,
+   "同じ値を持つ fact の数 n": 2,
+   "層": "n=2〜5",
+   "正解": {
+    "種類": "参照先が在る",
+    "正解": "totalchangesofitemsduringtheperiod@currentyearduration",
+    "偶然一致する側": "otherel@prior1yearduration_nonconsolidatedmember"
+   },
+   "対応が付いた": true,
+   "腕": {
+    "Core": {
+     "言うこと": "止めた(VALUE_MISMATCH)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "Core-P": {
+     "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+     "参照先": "netassets@currentyearinstant",
+     "判定": {
+      "参照先を出した": true,
+      "特定": false,
+      "誤認定": true,
+      "保留": false,
+      "偶然一致する側だった": false
+     }
+    },
+    "D′": {
+     "言うこと": "一意でない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D″": {
+     "言うこと": "一意でない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    }
+   }
+  },
+  {
+   "doc": "S100Z3CI",
+   "id": "S100Z3CI-T1-01",
+   "型": "T1_VALUE",
+   "改変後の値": 2546150.0,
+   "同じ値を持つ fact の数 n": 0,
+   "層": "n=2〜5",
+   "正解": {
+    "種類": "値がどこにも無い",
+    "正解": null,
+    "偶然一致する側": null
+   },
+   "対応が付いた": true,
+   "腕": {
+    "Core": {
+     "言うこと": "止めた(VALUE_MISMATCH)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "Core-P": {
+     "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+     "参照先": "salariesandallowancessga@currentyearduration",
+     "判定": {
+      "参照先を出した": true,
+      "特定": null,
+      "誤認定": false,
+      "保留": false
+     }
+    },
+    "D′": {
+     "言うこと": "原資料と一致しない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D″": {
+     "言うこと": "原資料と一致しない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    }
+   }
+  },
+  {
+   "doc": "S100Z3CI",
+   "id": "S100Z3CI-T1-02",
+   "型": "T1_VALUE",
+   "改変後の値": 188926.0,
+   "同じ値を持つ fact の数 n": 0,
+   "層": "n=2〜5",
+   "正解": {
+    "種類": "値がどこにも無い",
+    "正解": null,
+    "偶然一致する側": null
+   },
+   "対応が付いた": true,
+   "腕": {
+    "Core": {
+     "言うこと": "止めた(POINTER_NOT_FOUND)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "Core-P": {
+     "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D′": {
+     "言うこと": "原資料と一致しない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D″": {
+     "言うこと": "原資料と一致しない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    }
+   }
+  },
+  {
+   "doc": "S100Z3CI",
+   "id": "S100Z3CI-T1-03",
+   "型": "T1_VALUE",
+   "改変後の値": 12611.0,
+   "同じ値を持つ fact の数 n": 0,
+   "層": "n=2〜5",
+   "正解": {
+    "種類": "値がどこにも無い",
+    "正解": null,
+    "偶然一致する側": null
+   },
+   "対応が付いた": true,
+   "腕": {
+    "Core": {
+     "言うこと": "止めた(VALUE_MISMATCH)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "Core-P": {
+     "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+     "参照先": "rentincomenoi@currentyearduration",
+     "判定": {
+      "参照先を出した": true,
+      "特定": null,
+      "誤認定": false,
+      "保留": false
+     }
+    },
+    "D′": {
+     "言うこと": "原資料と一致しない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D″": {
+     "言うこと": "原資料と一致しない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    }
+   }
+  },
+  {
+   "doc": "S100Z3CI",
+   "id": "S100Z3CI-T1-04",
+   "型": "T1_VALUE",
+   "改変後の値": 4453120.0,
+   "同じ値を持つ fact の数 n": 0,
+   "層": "n=2〜5",
+   "正解": {
+    "種類": "値がどこにも無い",
+    "正解": null,
+    "偶然一致する側": null
+   },
+   "対応が付いた": true,
+   "腕": {
+    "Core": {
+     "言うこと": "止めた(VALUE_MISMATCH)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "Core-P": {
+     "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+     "参照先": "netassets@currentyearinstant",
+     "判定": {
+      "参照先を出した": true,
+      "特定": null,
+      "誤認定": false,
+      "保留": false
+     }
+    },
+    "D′": {
+     "言うこと": "原資料と一致しない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D″": {
+     "言うこと": "原資料と一致しない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    }
+   }
+  },
+  {
+   "doc": "S100Z3CI",
+   "id": "S100Z3CI-T1-05",
+   "型": "T1_VALUE",
+   "改変後の値": 18427755.0,
+   "同じ値を持つ fact の数 n": 0,
+   "層": "n=2〜5",
+   "正解": {
+    "種類": "値がどこにも無い",
+    "正解": null,
+    "偶然一致する側": null
+   },
+   "対応が付いた": true,
+   "腕": {
+    "Core": {
+     "言うこと": "止めた(VALUE_MISMATCH)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "Core-P": {
+     "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+     "参照先": "netsales@currentyearduration",
+     "判定": {
+      "参照先を出した": true,
+      "特定": null,
+      "誤認定": false,
+      "保留": false
+     }
+    },
+    "D′": {
+     "言うこと": "原資料と一致しない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D″": {
+     "言うこと": "原資料と一致しない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    }
+   }
+  },
+  {
+   "doc": "S100Z3CI",
+   "id": "S100Z3CI-T3-01",
+   "型": "T3_ABSENT",
+   "改変後の値": 37.0,
+   "同じ値を持つ fact の数 n": 0,
+   "層": "n=2〜5",
+   "正解": {
+    "種類": "参照先は無い",
+    "正解": null,
+    "偶然一致する側": null
+   },
+   "対応が付いた": true,
+   "腕": {
+    "Core": {
+     "言うこと": "止めた(UNVERIFIABLE)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "Core-P": {
+     "言うこと": "参照先を出さない(UNVERIFIABLE)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D′": {
+     "言うこと": "原資料と一致しない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D″": {
+     "言うこと": "原資料と一致しない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    }
+   }
+  },
+  {
+   "doc": "S100Z3CI",
+   "id": "S100Z3CI-T3-02",
+   "型": "T3_ABSENT",
+   "改変後の値": 44.0,
+   "同じ値を持つ fact の数 n": 0,
+   "層": "n=2〜5",
+   "正解": {
+    "種類": "参照先は無い",
+    "正解": null,
+    "偶然一致する側": null
+   },
+   "対応が付いた": true,
+   "腕": {
+    "Core": {
+     "言うこと": "止めた(UNVERIFIABLE)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "Core-P": {
+     "言うこと": "参照先を出さない(UNVERIFIABLE)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D′": {
+     "言うこと": "原資料と一致しない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D″": {
+     "言うこと": "一意でない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    }
+   }
+  },
+  {
+   "doc": "S100Z3CI",
+   "id": "S100Z3CI-T3-03",
+   "型": "T3_ABSENT",
+   "改変後の値": 51.0,
+   "同じ値を持つ fact の数 n": 0,
+   "層": "n=2〜5",
+   "正解": {
+    "種類": "参照先は無い",
+    "正解": null,
+    "偶然一致する側": null
+   },
+   "対応が付いた": true,
+   "腕": {
+    "Core": {
+     "言うこと": "止めた(VALUE_MISMATCH)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "Core-P": {
+     "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+     "参照先": "netsales@currentyearduration",
+     "判定": {
+      "参照先を出した": true,
+      "特定": null,
+      "誤認定": true,
+      "保留": false
+     }
+    },
+    "D′": {
+     "言うこと": "原資料と一致しない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D″": {
+     "言うこと": "一意でない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    }
+   }
+  },
+  {
+   "doc": "S100Z3CI",
+   "id": "S100Z3CI-T3-04",
+   "型": "T3_ABSENT",
+   "改変後の値": 58.0,
+   "同じ値を持つ fact の数 n": 0,
+   "層": "n=2〜5",
+   "正解": {
+    "種類": "参照先は無い",
+    "正解": null,
+    "偶然一致する側": null
+   },
+   "対応が付いた": true,
+   "腕": {
+    "Core": {
+     "言うこと": "止めた(UNVERIFIABLE)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "Core-P": {
+     "言うこと": "参照先を出さない(UNVERIFIABLE)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D′": {
+     "言うこと": "原資料と一致しない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D″": {
+     "言うこと": "原資料と一致しない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    }
+   }
+  },
+  {
+   "doc": "S100Z3CI",
+   "id": "S100Z3CI-T3-05",
+   "型": "T3_ABSENT",
+   "改変後の値": 65.0,
+   "同じ値を持つ fact の数 n": 0,
+   "層": "n=2〜5",
+   "正解": {
+    "種類": "参照先は無い",
+    "正解": null,
+    "偶然一致する側": null
+   },
+   "対応が付いた": true,
+   "腕": {
+    "Core": {
+     "言うこと": "止めた(UNVERIFIABLE)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "Core-P": {
+     "言うこと": "参照先を出さない(UNVERIFIABLE)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D′": {
+     "言うこと": "原資料と一致しない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D″": {
+     "言うこと": "確認済み",
+     "参照先": "averagenumberoftemporaryworkers@prior4yearinstant_nonconsolidatedmember",
+     "判定": {
+      "参照先を出した": true,
+      "特定": null,
+      "誤認定": true,
+      "保留": false
+     }
+    }
+   }
+  },
+  {
+   "doc": "S100Z461",
+   "id": "S100Z461-T5-01",
+   "型": "T5_COINCIDENT",
+   "改変後の値": 503000.0,
+   "同じ値を持つ fact の数 n": 4,
+   "層": "n=2〜5",
+   "正解": {
+    "種類": "参照先が在る",
+    "正解": "proceedsfromdistributionofinvestmentinpartnershipsinvcf@currentyearduration",
+    "偶然一致する側": "netassets@currentyearinstant_subscriptionrightstosharesmember"
+   },
+   "対応が付いた": true,
+   "腕": {
+    "Core": {
+     "言うこと": "止めた(VALUE_MISMATCH)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "Core-P": {
+     "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+     "参照先": "proceedsfromdistributionofinvestmentinpartnershipsinvcf@currentyearduration",
+     "判定": {
+      "参照先を出した": true,
+      "特定": true,
+      "誤認定": false,
+      "保留": false
+     }
+    },
+    "D′": {
+     "言うこと": "一意でない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D″": {
+     "言うこと": "一意でない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    }
+   }
+  },
+  {
+   "doc": "S100Z461",
+   "id": "S100Z461-T5-02",
+   "型": "T5_COINCIDENT",
+   "改変後の値": 19486000.0,
+   "同じ値を持つ fact の数 n": 1,
+   "層": "n=1",
+   "正解": {
+    "種類": "参照先が在る",
+    "正解": "liabilities@currentyearinstant",
+    "偶然一致する側": "specialinvestigationrelatedexpensesel@prior1yearduration"
+   },
+   "対応が付いた": true,
+   "腕": {
+    "Core": {
+     "言うこと": "止めた(VALUE_MISMATCH)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "Core-P": {
+     "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+     "参照先": "liabilities@currentyearinstant",
+     "判定": {
+      "参照先を出した": true,
+      "特定": true,
+      "誤認定": false,
+      "保留": false
+     }
+    },
+    "D′": {
+     "言うこと": "確認済み",
+     "参照先": "specialinvestigationrelatedexpensesel@prior1yearduration",
+     "判定": {
+      "参照先を出した": true,
+      "特定": false,
+      "誤認定": true,
+      "保留": false,
+      "偶然一致する側だった": true
+     }
+    },
+    "D″": {
+     "言うこと": "確認済み",
+     "参照先": "specialinvestigationrelatedexpensesel@prior1yearduration",
+     "判定": {
+      "参照先を出した": true,
+      "特定": false,
+      "誤認定": true,
+      "保留": false,
+      "偶然一致する側だった": true
+     }
+    }
+   }
+  },
+  {
+   "doc": "S100Z461",
+   "id": "S100Z461-T5-03",
+   "型": "T5_COINCIDENT",
+   "改変後の値": 176000.0,
+   "同じ値を持つ fact の数 n": 2,
+   "層": "n=2〜5",
+   "正解": {
+    "種類": "参照先が在る",
+    "正解": "operatingincome@currentyearduration",
+    "偶然一致する側": "extraordinaryincome@prior1yearduration"
+   },
+   "対応が付いた": true,
+   "腕": {
+    "Core": {
+     "言うこと": "止めた(VALUE_MISMATCH)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "Core-P": {
+     "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+     "参照先": "grossprofit@currentyearduration",
+     "判定": {
+      "参照先を出した": true,
+      "特定": false,
+      "誤認定": true,
+      "保留": false,
+      "偶然一致する側だった": false
+     }
+    },
+    "D′": {
+     "言うこと": "一意でない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D″": {
+     "言うこと": "一意でない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    }
+   }
+  },
+  {
+   "doc": "S100Z461",
+   "id": "S100Z461-T5-04",
+   "型": "T5_COINCIDENT",
+   "改変後の値": 24456000.0,
+   "同じ値を持つ fact の数 n": 2,
+   "層": "n=2〜5",
+   "正解": {
+    "種類": "参照先が在る",
+    "正解": "grossprofit@currentyearduration",
+    "偶然一致する側": "interestexpensesnoe@prior1yearduration"
+   },
+   "対応が付いた": true,
+   "腕": {
+    "Core": {
+     "言うこと": "止めた(POINTER_NOT_FOUND)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "Core-P": {
+     "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D′": {
+     "言うこと": "一意でない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D″": {
+     "言うこと": "一意でない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    }
+   }
+  },
+  {
+   "doc": "S100Z461",
+   "id": "S100Z461-T5-05",
+   "型": "T5_COINCIDENT",
+   "改変後の値": 4554000.0,
+   "同じ値を持つ fact の数 n": 2,
+   "層": "n=2〜5",
+   "正解": {
+    "種類": "参照先が在る",
+    "正解": "incomebeforeincometaxes@currentyearduration",
+    "偶然一致する側": "stockissuancecostnoe@prior1yearduration_nonconsolidatedmember"
+   },
+   "対応が付いた": true,
+   "腕": {
+    "Core": {
+     "言うこと": "止めた(VALUE_MISMATCH)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "Core-P": {
+     "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+     "参照先": "incomebeforeincometaxes@currentyearduration",
+     "判定": {
+      "参照先を出した": true,
+      "特定": true,
+      "誤認定": false,
+      "保留": false
+     }
+    },
+    "D′": {
+     "言うこと": "一意でない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D″": {
+     "言うこと": "一意でない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    }
+   }
+  },
+  {
+   "doc": "S100Z461",
+   "id": "S100Z461-T5-06",
+   "型": "T5_COINCIDENT",
+   "改変後の値": 1140000.0,
+   "同じ値を持つ fact の数 n": 1,
+   "層": "n=1",
+   "正解": {
+    "種類": "参照先が在る",
+    "正解": "netincreasedecreaseincashandcashequivalents@currentyearduration",
+    "偶然一致する側": "othernetppe@currentyearinstant"
+   },
+   "対応が付いた": true,
+   "腕": {
+    "Core": {
+     "言うこと": "止めた(VALUE_MISMATCH)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "Core-P": {
+     "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+     "参照先": "cashanddeposits@currentyearinstant",
+     "判定": {
+      "参照先を出した": true,
+      "特定": false,
+      "誤認定": true,
+      "保留": false,
+      "偶然一致する側だった": false
+     }
+    },
+    "D′": {
+     "言うこと": "確認済み",
+     "参照先": "othernetppe@currentyearinstant",
+     "判定": {
+      "参照先を出した": true,
+      "特定": false,
+      "誤認定": true,
+      "保留": false,
+      "偶然一致する側だった": true
+     }
+    },
+    "D″": {
+     "言うこと": "確認済み",
+     "参照先": "othernetppe@currentyearinstant",
+     "判定": {
+      "参照先を出した": true,
+      "特定": false,
+      "誤認定": true,
+      "保留": false,
+      "偶然一致する側だった": true
+     }
+    }
+   }
+  },
+  {
+   "doc": "S100Z461",
+   "id": "S100Z461-T5-07",
+   "型": "T5_COINCIDENT",
+   "改変後の値": 460000.0,
+   "同じ値を持つ fact の数 n": 2,
+   "層": "n=2〜5",
+   "正解": {
+    "種類": "参照先が在る",
+    "正解": "proceedsfromsalesofstocksofsubsidiariesandaffiliatesinvcf@currentyearduration",
+    "偶然一致する側": "transactionswithothersegments@currentyearduration_totalofreportablesegmentsandothersmember"
+   },
+   "対応が付いた": true,
+   "腕": {
+    "Core": {
+     "言うこと": "止めた(VALUE_MISMATCH)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "Core-P": {
+     "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+     "参照先": "proceedsfromsalesofstocksofsubsidiariesandaffiliatesinvcf@currentyearduration",
+     "判定": {
+      "参照先を出した": true,
+      "特定": true,
+      "誤認定": false,
+      "保留": false
+     }
+    },
+    "D′": {
+     "言うこと": "一意でない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D″": {
+     "言うこと": "一意でない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    }
+   }
+  },
+  {
+   "doc": "S100Z461",
+   "id": "S100Z461-T5-08",
+   "型": "T5_COINCIDENT",
+   "改変後の値": 19553000.0,
+   "同じ値を持つ fact の数 n": 1,
+   "層": "n=1",
+   "正解": {
+    "種類": "参照先が在る",
+    "正解": "proceedsfromissuanceofcommonstockfincf@currentyearduration",
+    "偶然一致する側": "extraordinaryloss@prior1yearduration"
+   },
+   "対応が付いた": true,
+   "腕": {
+    "Core": {
+     "言うこと": "止めた(VALUE_MISMATCH)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": false,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "Core-P": {
+     "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+     "参照先": "proceedsfromissuanceofcommonstockfincf@currentyearduration",
+     "判定": {
+      "参照先を出した": true,
+      "特定": true,
+      "誤認定": false,
+      "保留": false
+     }
+    },
+    "D′": {
+     "言うこと": "確認済み",
+     "参照先": "extraordinaryloss@prior1yearduration",
+     "判定": {
+      "参照先を出した": true,
+      "特定": false,
+      "誤認定": true,
+      "保留": false,
+      "偶然一致する側だった": true
+     }
+    },
+    "D″": {
+     "言うこと": "確認済み",
+     "参照先": "extraordinaryloss@prior1yearduration",
+     "判定": {
+      "参照先を出した": true,
+      "特定": false,
+      "誤認定": true,
+      "保留": false,
+      "偶然一致する側だった": true
+     }
+    }
+   }
+  },
+  {
+   "doc": "S100Z461",
+   "id": "S100Z461-T1-01",
+   "型": "T1_VALUE",
+   "改変後の値": 950510.0,
+   "同じ値を持つ fact の数 n": 0,
+   "層": "n=2〜5",
+   "正解": {
+    "種類": "値がどこにも無い",
+    "正解": null,
+    "偶然一致する側": null
+   },
+   "対応が付いた": true,
+   "腕": {
+    "Core": {
+     "言うこと": "止めた(VALUE_MISMATCH)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "Core-P": {
+     "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+     "参照先": "incomebeforeincometaxes@currentyearduration",
+     "判定": {
+      "参照先を出した": true,
+      "特定": null,
+      "誤認定": false,
+      "保留": false
+     }
+    },
+    "D′": {
+     "言うこと": "原資料と一致しない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D″": {
+     "言うこと": "原資料と一致しない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    }
+   }
+  },
+  {
+   "doc": "S100Z461",
+   "id": "S100Z461-T1-02",
+   "型": "T1_VALUE",
+   "改変後の値": 3880273.0,
+   "同じ値を持つ fact の数 n": 0,
+   "層": "n=2〜5",
+   "正解": {
+    "種類": "値がどこにも無い",
+    "正解": null,
+    "偶然一致する側": null
+   },
+   "対応が付いた": true,
+   "腕": {
+    "Core": {
+     "言うこと": "止めた(VALUE_MISMATCH)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "Core-P": {
+     "言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)",
+     "参照先": "liabilities@currentyearinstant",
+     "判定": {
+      "参照先を出した": true,
+      "特定": null,
+      "誤認定": false,
+      "保留": false
+     }
+    },
+    "D′": {
+     "言うこと": "原資料と一致しない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D″": {
+     "言うこと": "原資料と一致しない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    }
+   }
+  },
+  {
+   "doc": "S100Z461",
+   "id": "S100Z461-T1-03",
+   "型": "T1_VALUE",
+   "改変後の値": 9.0,
+   "同じ値を持つ fact の数 n": 0,
+   "層": "n=2〜5",
+   "正解": {
+    "種類": "値がどこにも無い",
+    "正解": null,
+    "偶然一致する側": null
+   },
+   "対応が付いた": false,
+   "腕": {
+    "Core": {
+     "言うこと": "対応が付かない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "Core-P": {
+     "言うこと": "対応が付かない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D′": {
+     "言うこと": "原資料と一致しない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D″": {
+     "言うこと": "確認済み",
+     "参照先": "numberofemployees@currentyearinstant_jpcrp030000-asr_e37175-000financialadvisoryreportablesegmentsmember",
+     "判定": {
+      "参照先を出した": true,
+      "特定": null,
+      "誤認定": true,
+      "保留": false
+     }
+    }
+   }
+  },
+  {
+   "doc": "S100Z461",
+   "id": "S100Z461-T1-04",
+   "型": "T1_VALUE",
+   "改変後の値": 9.0,
+   "同じ値を持つ fact の数 n": 0,
+   "層": "n=2〜5",
+   "正解": {
+    "種類": "値がどこにも無い",
+    "正解": null,
+    "偶然一致する側": null
+   },
+   "対応が付いた": false,
+   "腕": {
+    "Core": {
+     "言うこと": "対応が付かない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "Core-P": {
+     "言うこと": "対応が付かない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D′": {
+     "言うこと": "原資料と一致しない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D″": {
+     "言うこと": "確認済み",
+     "参照先": "numberofemployees@currentyearinstant_jpcrp030000-asr_e37175-000financialadvisoryreportablesegmentsmember",
+     "判定": {
+      "参照先を出した": true,
+      "特定": null,
+      "誤認定": true,
+      "保留": false
+     }
+    }
+   }
+  },
+  {
+   "doc": "S100Z461",
+   "id": "S100Z461-T1-05",
+   "型": "T1_VALUE",
+   "改変後の値": 893479.0,
+   "同じ値を持つ fact の数 n": 0,
+   "層": "n=2〜5",
+   "正解": {
+    "種類": "値がどこにも無い",
+    "正解": null,
+    "偶然一致する側": null
+   },
+   "対応が付いた": true,
+   "腕": {
+    "Core": {
+     "言うこと": "止めた(POINTER_NOT_FOUND)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "Core-P": {
+     "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D′": {
+     "言うこと": "原資料と一致しない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D″": {
+     "言うこと": "原資料と一致しない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    }
+   }
+  },
+  {
+   "doc": "S100Z461",
+   "id": "S100Z461-T3-01",
+   "型": "T3_ABSENT",
+   "改変後の値": 37.0,
+   "同じ値を持つ fact の数 n": 0,
+   "層": "n=2〜5",
+   "正解": {
+    "種類": "参照先は無い",
+    "正解": null,
+    "偶然一致する側": null
+   },
+   "対応が付いた": true,
+   "腕": {
+    "Core": {
+     "言うこと": "止めた(UNVERIFIABLE)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "Core-P": {
+     "言うこと": "参照先を出さない(UNVERIFIABLE)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D′": {
+     "言うこと": "原資料と一致しない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D″": {
+     "言うこと": "確認済み",
+     "参照先": "shareholdingratio@currentyearinstant_no4majorshareholdersmember",
+     "判定": {
+      "参照先を出した": true,
+      "特定": null,
+      "誤認定": true,
+      "保留": false
+     }
+    }
+   }
+  },
+  {
+   "doc": "S100Z461",
+   "id": "S100Z461-T3-02",
+   "型": "T3_ABSENT",
+   "改変後の値": 44.0,
+   "同じ値を持つ fact の数 n": 0,
+   "層": "n=2〜5",
+   "正解": {
+    "種類": "参照先は無い",
+    "正解": null,
+    "偶然一致する側": null
+   },
+   "対応が付いた": true,
+   "腕": {
+    "Core": {
+     "言うこと": "止めた(POINTER_NOT_FOUND)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "Core-P": {
+     "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D′": {
+     "言うこと": "原資料と一致しない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D″": {
+     "言うこと": "原資料と一致しない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    }
+   }
+  },
+  {
+   "doc": "S100Z461",
+   "id": "S100Z461-T3-03",
+   "型": "T3_ABSENT",
+   "改変後の値": 51.0,
+   "同じ値を持つ fact の数 n": 0,
+   "層": "n=2〜5",
+   "正解": {
+    "種類": "参照先は無い",
+    "正解": null,
+    "偶然一致する側": null
+   },
+   "対応が付いた": true,
+   "腕": {
+    "Core": {
+     "言うこと": "止めた(UNVERIFIABLE)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "Core-P": {
+     "言うこと": "参照先を出さない(UNVERIFIABLE)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D′": {
+     "言うこと": "原資料と一致しない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D″": {
+     "言うこと": "原資料と一致しない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    }
+   }
+  },
+  {
+   "doc": "S100Z461",
+   "id": "S100Z461-T3-04",
+   "型": "T3_ABSENT",
+   "改変後の値": 65.0,
+   "同じ値を持つ fact の数 n": 0,
+   "層": "n=2〜5",
+   "正解": {
+    "種類": "参照先は無い",
+    "正解": null,
+    "偶然一致する側": null
+   },
+   "対応が付いた": true,
+   "腕": {
+    "Core": {
+     "言うこと": "止めた(POINTER_NOT_FOUND)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "Core-P": {
+     "言うこと": "参照先を出さない(POINTER_NOT_FOUND)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D′": {
+     "言うこと": "原資料と一致しない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D″": {
+     "言うこと": "原資料と一致しない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    }
+   }
+  },
+  {
+   "doc": "S100Z461",
+   "id": "S100Z461-T3-05",
+   "型": "T3_ABSENT",
+   "改変後の値": 72.0,
+   "同じ値を持つ fact の数 n": 0,
+   "層": "n=2〜5",
+   "正解": {
+    "種類": "参照先は無い",
+    "正解": null,
+    "偶然一致する側": null
+   },
+   "対応が付いた": true,
+   "腕": {
+    "Core": {
+     "言うこと": "止めた(UNVERIFIABLE)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "Core-P": {
+     "言うこと": "参照先を出さない(UNVERIFIABLE)",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D′": {
+     "言うこと": "原資料と一致しない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    },
+    "D″": {
+     "言うこと": "原資料と一致しない",
+     "参照先": null,
+     "判定": {
+      "参照先を出した": false,
+      "特定": null,
+      "誤認定": false,
+      "保留": true
+     }
+    }
+   }
+  }
+ ]
+}
