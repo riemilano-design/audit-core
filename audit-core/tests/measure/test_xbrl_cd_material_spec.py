@@ -139,5 +139,25 @@ class MissingRowRuleTest(unittest.TestCase):
         self.assertIn("主比較が壊れる", b)
 
 
+class T5ZeroDocTest(unittest.TestCase):
+    """§8 の追記(再監査の推奨と「未確認」)を固定する。"""
+
+    def setUp(self):
+        self.t = text(SPEC)
+
+    def test_10_the_t5_zero_document_is_named(self):
+        b = sec(self.t, "## §8 追記")
+        self.assertIn("`S100YXF5`", b)
+        self.assertIn("この書類では軸B(参照先の正しさ)が", b)
+        self.assertIn("**書類は引き直さない**", b)
+        self.assertIn("軸B の分母に入った書類が 7 件であることを書く", b)
+
+    def test_11_the_unverified_branch_is_recorded_with_its_remedy(self):
+        b = sec(self.t, "## §8 追記")
+        self.assertIn("実コードパスとして実行されていない", b)
+        self.assertIn("guard-that-only-fires-on-failure", b)
+        self.assertIn("**だから採点器には、欠けを作った入力を食わせて赤くなる門を置く**", b)
+
+
 if __name__ == "__main__":
     unittest.main()
