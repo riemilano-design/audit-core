@@ -1,0 +1,103 @@
+{
+ "seal": "docs/DOMAIN1_ERRDET_SEAL_2026-10-17.md",
+ "step": "封 §8 の 5。**生成より先に commit する**",
+ "**A と C は同じ材料・同じ生成を共有する(入力差ゼロ)**": true,
+ "報告文": {
+  "どれ": "束ねた変種(誤り 8 件)",
+  "字数": 1077,
+  "誤りの id": [
+   "R001",
+   "R004",
+   "R009",
+   "R010",
+   "R012",
+   "R021",
+   "R024",
+   "R030"
+  ]
+ },
+ "問い": {
+  "段 11 の問いの字数": 1512,
+  "足した字数": 401,
+  "全体の字数": 1913,
+  "sha256": "ff3127b84d5d987150665286bb57a6c031624de7f17c54ad2856bea008af6be6",
+  "固定語彙": [
+   "値が原資料に無い",
+   "列の取り違え",
+   "別の科目の値",
+   "親階層の取り違え",
+   "単位・符号の表記",
+   "不明"
+  ],
+  "注": "**この欄を足すことは席に誤りの存在を示唆しうる。****測れるのは「誤りを示唆する問いの下での検出性能」であり、通常の報告文を自然に読む場面のものとは区別する**"
+ },
+ "抜粋": {
+  "字数": 4194,
+  "段 11 と同一": true
+ },
+ "渡していないもの": [
+  "Core の候補一覧",
+  "Core の状態",
+  "正解ラベル",
+  "誤りの件数",
+  "誤りの型の割り当て",
+  "採点基準",
+  "封の内容",
+  "候補範囲実験の結果",
+  "方式 C の結果"
+ ],
+ "banned_checked": [
+  "GROUNDED",
+  "VALUE_MISMATCH",
+  "UNVERIFIABLE",
+  "POINTER_NOT_FOUND",
+  "pointer",
+  "R-1",
+  "R-3",
+  "R-4",
+  "range_identified",
+  "value_match",
+  "封",
+  "合格",
+  "不合格",
+  "engine",
+  "照合結果",
+  "判定結果",
+  "正解",
+  "未確認",
+  "別名",
+  "独立した裏づけ",
+  "誤受理",
+  "agree_",
+  "保留にする",
+  "③",
+  "発火",
+  "A-1",
+  "A-3",
+  "X-2"
+ ],
+ "files": [
+  {
+   "seat": "seat1",
+   "path": "/private/tmp/claude-501/-Users-midoriko-Desktop-sgogi-coach/9b3d86ea-ed3b-407c-837e-4c2262a5b8e1/scratchpad/errdet/errdet_seat1/task.txt",
+   "model": "claude-sonnet-4-5",
+   "order": "そのまま",
+   "字数": 11151,
+   "sha256": "8976343098d3eedee92c6ae4b787366fe4e69cb8f1780877e860c0833efb6020",
+   "段 11 の問いが接頭": true,
+   "先頭の id": "R001",
+   "末尾の id": "R035"
+  },
+  {
+   "seat": "seat2",
+   "path": "/private/tmp/claude-501/-Users-midoriko-Desktop-sgogi-coach/9b3d86ea-ed3b-407c-837e-4c2262a5b8e1/scratchpad/errdet/errdet_seat2/task.txt",
+   "model": "claude-haiku-4-5",
+   "order": "逆順",
+   "字数": 11151,
+   "sha256": "73a7bbffb936697ae5eea016239a83c7766ebbf28ecb6c0c9df296546695351f",
+   "段 11 の問いが接頭": true,
+   "先頭の id": "R035",
+   "末尾の id": "R001"
+  }
+ ]
+}
