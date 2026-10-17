@@ -1,0 +1,171 @@
+# -*- coding: utf-8 -*-
+"""①(実費の記録)と ②(軸3 の定義)の門。
+
+**数は記録 JSON を正本に突き合わせる。**
+**「engine を触っていない」は git と sha で確かめる**(文を信じない)。
+"""
+import hashlib
+import io
+import json
+import os
+import re
+import subprocess
+import unittest
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+ROOT = os.path.dirname(os.path.dirname(HERE))
+FX = os.path.join(ROOT, "fixtures", "xbrl", "cd8")
+DOC = os.path.join(ROOT, "docs", "XBRL_AXIS3_DECISION_2026-10-17.md")
+RECS = os.path.join(FX, "cost_records_2026-10-17.json")
+SPLIT = os.path.join(FX, "cost_split_2026-10-17.json")
+AX = os.path.join(FX, "axis3_decision_2026-10-17.json")
+BASE = "2745dd5"          # 今日の便の起点
+ENGINE_SHA = {"adapters/xbrl/verify_document.py": "67e7639de3f5f2ad",
+              "adapters/xbrl/vocabulary.py": "bcf559308bda0cc6"}
+
+
+def text(p):
+    with io.open(p, encoding="utf-8") as fh:
+        return fh.read()
+
+
+def rec(p):
+    return json.load(io.open(p, encoding="utf-8"))
+
+
+class CostRecordsTest(unittest.TestCase):
+    def setUp(self):
+        self.t = text(DOC)
+        self.r = rec(RECS)
+
+    def test_1_counts_match_the_record(self):
+        c = self.r["内訳"]
+        self.assertIn("| 数えた json | **%d** |" % self.r["数えた file"], self.t)
+        for key, label in (("トークンの記録が在る file", "トークンの記録が在る file"),
+                           ("入出力の内訳が在る file", "**入出力の内訳が在る file**"),
+                           ("合計だけの file", "合計トークンだけの file"),
+                           ("実請求額が在る file", "**実請求額が在る file**")):
+            self.assertIn("| %s | **%d** |" % (label, c[key]), self.t,
+                          "%s の数が違う" % key)
+
+    def test_2_the_breakdown_is_one_file_only(self):
+        self.assertEqual(self.r["内訳"]["入出力の内訳が在る file"], 1)
+        self.assertEqual(self.r["内訳"]["実請求額が在る file"], 0)
+        self.assertIn("**席の記録(sonnet / haiku の 6 本)は全部「合計トークン」"
+                      "だけである。**", self.t)
+
+
+class CostSplitTest(unittest.TestCase):
+    def setUp(self):
+        self.t = text(DOC)
+        self.r = rec(SPLIT)
+
+    def test_3_the_rate_pair_is_unique_and_quoted(self):
+        s = self.r["2 実費を再現する単価の組"]
+        self.assertTrue(s["**解は 1 つか**"], "単価の組が 1 つに決まっていない")
+        h = s["候補"][0]
+        self.assertIn("**入力 %d USD/1M・出力 %d USD/1M(出力は入力の %d 倍)**"
+                      % (h["入力 USD/1M"], h["出力 USD/1M"], h["出力は入力の何倍"]),
+                      self.t)
+
+    def test_4_chars_per_input_token_is_measured(self):
+        v = self.r["1 1 字あたりの入力トークン(実測)"]
+        self.assertIn("**1 字あたりの入力トークン = %s**" % v, self.t)
+        m = self.r["**使った記録**"]
+        self.assertIn("| prompt | **{:,} 字** |".format(m["prompt_chars"]), self.t)
+        self.assertIn("| **入力トークン** | **{:,}** |".format(m["input_tokens"]),
+                      self.t)
+        self.assertIn("| **実費** | **%s USD** |" % m["cost_usd"], self.t)
+
+    def test_5_three_scenarios_with_their_totals(self):
+        for s in self.r["3 8 便 1 席の見積もり(**sonnet の単価は確かめていない**)"]:
+            self.assertIn("| **%.2f USD** |" % s["8 便 USD"], self.t,
+                          "場合の合計が本文に無い: %s" % s["場合"])
+        self.assertIn("推定を実測として扱わない。", self.t)
+        self.assertIn("**実請求額**(課金の画面)。記録に 0 件。", self.t)
+
+
+class Axis3Test(unittest.TestCase):
+    def setUp(self):
+        self.t = text(DOC)
+        self.r = rec(AX)
+
+    def test_6_the_definition_separates_two_axes(self):
+        self.assertIn("**「止めた」ことを軸B の正解に数えない。**", self.t)
+        self.assertIn("**軸A と軸B を掛け合わせた表も必ず出す**", self.t)
+        self.assertIn("**対応が付かない行は軸A の分母から外し、件数を別に書く。**",
+                      self.t)
+        self.assertIn("軸A(停止判定)と軸B(参照先の正しさ)を別に採る",
+                      self.r["決めた読み方"])
+
+    def test_7_the_two_axis_table_matches_the_record(self):
+        for arm, label in (("Core-P", "**Core**"), ("D′", "**D′**"), ("D″", "**D″**")):
+            v = self.r["腕"][arm]
+            a = v["軸A 停止判定"]
+            b = v["軸B 参照先(T5。状態に関わらず読む)"]
+            plain = self.t.replace("**", "")
+            self.assertIn("%s(%d/%d)" % (fmt(a["率"]), a["止めた"],
+                                         a["分母(対応が付いた件)"]), plain,
+                          "%s の軸A が本文と違う" % arm)
+            self.assertIn("| %s | %s | %s | %s |"
+                          % (fmt(b["**名指した率**"]),
+                             fmt(b["**名指したうち正しい率**"]),
+                             fmt(b["**T5 全体での特定率**"]),
+                             ("%d 件" % b["うち値の持ち主を採った"])), plain,
+                          "%s の軸B の行が本文と違う" % arm)
+
+    def test_8_the_cross_table_shows_stopped_but_wrong(self):
+        c = self.r["腕"]["Core-P"]["軸A × 軸B(T5)"]
+        self.assertEqual(c.get("通した × 正解と違う", 0), 0, "Core は 1 件も通していない")
+        self.assertIn("| **Core** | **%d** | **%d** | %d | **0** | %d |"
+                      % (c["止めた × 正解と一致"], c["止めた × 正解と違う"],
+                         c["止めた × 名指さない"], c["対応が付かない × 名指さない"]),
+                      self.t)
+        d = self.r["腕"]["D′"]["軸A × 軸B(T5)"]
+        self.assertIn("| **D′** | 0 | 0 | %d | **%d** | 0 |"
+                      % (d["止めた × 名指さない"], d["通した × 正解と違う"]), self.t)
+        self.assertIn("**誤った参照先も隠れない**", self.t)
+
+    def test_9_the_engine_was_not_touched(self):
+        """**文を信じない。**git と sha で確かめる。"""
+        out = subprocess.run(["git", "log", "--name-only", "--format=",
+                              "%s..HEAD" % BASE, "--", "adapters", "core"],
+                             cwd=ROOT, capture_output=True, text=True)
+        self.assertEqual(out.stdout.strip(), "",
+                         "**adapters/ か core/ を触っている**")
+        for rel, want in ENGINE_SHA.items():
+            with io.open(os.path.join(ROOT, rel), "rb") as fh:
+                self.assertEqual(hashlib.sha256(fh.read()).hexdigest()[:16], want,
+                                 "**%s が動いている**" % rel)
+        self.assertIn("**これは指標の作り直しであって、判定ロジックの修正ではない**",
+                      self.t)
+        self.assertIn("**Core の隣接要素の誤り(12 件)は、指標を変えても消えない。**",
+                      self.t)
+
+    def test_10_what_is_not_done_is_listed(self):
+        b = self.t[self.t.index("# ③ まだやらないこと"):]
+        nums = re.findall(r"(?m)^(\d)\. ", b[:b.index("## §4")])
+        self.assertEqual(nums, ["1", "2", "3", "4"], "やらないことは 4 本")
+        self.assertIn("**本番の封(`XBRL_CD_SEAL_2026-10-17.md`)はまだ 1 文字も"
+                      "直していない。**", b)
+        self.assertIn("**Core 単体で差が出たことは、組み合わせの優位性ではない。**", b)
+        li = b[b.index("## §4"):]
+        self.assertEqual(re.findall(r"(?m)^(\d)\. ", li),
+                         [str(i) for i in range(1, 7)], "限界は 6 本")
+
+    def test_11_the_unused_eight_are_still_untouched(self):
+        cache = os.path.join(os.path.expanduser("~"), ".cache", "audit-core", "edinet")
+        drawn = rec(os.path.join(FX, "draw_2026-10-17.json"))["引いた 8 件"]
+        self.assertIn("**まだ 1 件も取得していない。**", self.t)
+        if os.path.isdir(cache):
+            names = "\n".join(os.listdir(cache))
+            for d in drawn:
+                self.assertNotIn(d, names, "**%s が取得されている**" % d)
+
+
+def fmt(x):
+    return "判定不能" if x is None else "%.1f%%" % x
+
+
+if __name__ == "__main__":
+    unittest.main()
