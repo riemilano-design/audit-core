@@ -85,21 +85,43 @@ def sealed_order():
     return order
 
 
+def seal_commit():
+    """封を足した commit。**「この便で作る file」をここで切る。**"""
+    out = subprocess.run(["git", "log", "--diff-filter=A", "--format=%H", "--",
+                          SEAL_REL], cwd=ROOT, capture_output=True, text=True)
+    shas = [s for s in out.stdout.split() if s]
+    return shas[-1] if shas else None
+
+
 def mentioned_outside_roster():
-    """名簿とこの便の file を除いて、名前が出た docID -> その file。"""
+    """名簿を除いて、**封の commit の時点で**名前が出ていた docID -> その file。
+
+    **封より後に足した file を数えない。**封 §1-2 の「およびこの便で作る file」を
+    **commit の順で**書いた形である(字の一覧で書くと、後から file を足すたびに
+    この門が壊れる ― 2026-10-17 に 2 回壊した)。
+    """
+    sha = seal_commit()
+    assert sha, "封がまだ commit されていない"
+    names = subprocess.run(["git", "ls-tree", "-r", "--name-only", sha],
+                           cwd=ROOT, capture_output=True, text=True).stdout.split()
     out = {}
-    files = subprocess.run(["git", "ls-files"], cwd=ROOT,
-                           capture_output=True, text=True).stdout.split()
-    for f in files:
+    for f in names:
         if f in ROSTER or f in THIS_RUN:
             continue
         if f.endswith((".xlsx", ".zip", ".png", ".pdf")):
             continue
-        try:
-            t = text(os.path.join(ROOT, f))
-        except (IOError, OSError, UnicodeDecodeError):
+        # **`:./path` は cwd から解く。**`sha:path` は repo の根から解くので、
+        # 下位ディレクトリで走らせると 1 件も読めずに「言及 0 件」になる
+        # (2026-10-17 に実際そうなり、引く 8 件が別の 8 件に変わった)
+        blob = subprocess.run(["git", "show", "%s:./%s" % (sha, f)], cwd=ROOT,
+                              capture_output=True)
+        if blob.returncode != 0:
             continue
-        for d in set(DOC_RE.findall(t)):
+        try:
+            body = blob.stdout.decode("utf-8")
+        except UnicodeDecodeError:
+            continue
+        for d in set(DOC_RE.findall(body)):
             out.setdefault(d, f)
     return out
 
