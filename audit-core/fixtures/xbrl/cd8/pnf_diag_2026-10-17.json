@@ -1,0 +1,530 @@
+{
+ "step": "**診断のみ。engine は触っていない。0 USD・席は呼ばない**",
+ "人間の指示": "2026-10-17 の 1 番(POINTER_NOT_FOUND の試行 key を記録する)",
+ "profile": "P16",
+ "**既存の記録で足りなかった理由**": "material の記録は `verify_document` の **結果の** 参照先しか持たない。`POINTER_NOT_FOUND` では結果が空なので、**試した key は記録に無い**",
+ "書類ごと": {
+  "S100YZ7E": {
+   "主張の数": 89,
+   "**配線が verify_document と一致**": true,
+   "材料の sha256 が封の記録と一致": true,
+   "instance の fact 数": 502,
+   "次元つきの context を持つ fact": 497,
+   "text 差し替え": {
+    "element": "jpcrp_cor:ManagementAnalysisOfFinancialPositionOperatingResultsAndCashFlowsTextBlock",
+    "member": "XBRL/PublicDoc/jpcrp030000-asr-001_E04767-000_2026-05-31_01_2026-08-28.xbrl"
+   },
+   "語彙の行": 170,
+   "うちラベル由来": 89
+  },
+  "S100YZEV": {
+   "主張の数": 80,
+   "**配線が verify_document と一致**": true,
+   "材料の sha256 が封の記録と一致": true,
+   "instance の fact 数": 397,
+   "次元つきの context を持つ fact": 385,
+   "text 差し替え": {
+    "element": "jpcrp_cor:ManagementAnalysisOfFinancialPositionOperatingResultsAndCashFlowsTextBlock",
+    "member": "XBRL/PublicDoc/jpcrp030000-asr-001_E37627-000_2026-05-31_01_2026-08-31.xbrl"
+   },
+   "語彙の行": 190,
+   "うちラベル由来": 109
+  }
+ },
+ "**観測**": {
+  "行": 10,
+  "候補 0 の内訳ごと": {
+   "subject に当たった要素に正解が無い": 7,
+   "語彙は正解の要素を持っていた(落ちたのは後段)": 3
+  },
+  "正解の要素が語彙に在った行": 9,
+  "分類ごと": {
+   "候補 0(試した key が 1 本も無い)": 10
+  },
+  "(正解に次元, 試した key に次元)": {
+   "True/False": 10
+  }
+ },
+ "rows": [
+  {
+   "doc": "S100YZ7E",
+   "id": "R017",
+   "値": 11000.0,
+   "数の字面": "11,000",
+   "Core の主張 id": "N022",
+   "Core の state": "POINTER_NOT_FOUND",
+   "Core の reason": "no_element",
+   "**試した key**(生)": [],
+   "**試した key**": [],
+   "試した key の内訳": [],
+   "正解の key": "operatingrevenue2summaryofbusinessresults@currentyearduration_nonconsolidatedmember",
+   "正解の context(生)": "CurrentYearDuration_NonConsolidatedMember",
+   "正解の次元(生の context から)": "NonConsolidatedMember",
+   "正解の (要素名, context) が instance に在る": true,
+   "正解の要素名が instance に在る": true,
+   "Core が見た語": null,
+   "Core が決めた subject": "営業収益",
+   "**候補 0 の内訳**": {
+    "どこで落ちたか": "subject に当たった要素に正解が無い",
+    "正解の要素が語彙に在る": true,
+    "その語に当たった要素": [
+     "OperatingRevenue",
+     "NetSales",
+     "Revenue"
+    ]
+   },
+   "**正解の要素名が在る context**": [
+    [
+     "CurrentYearDuration_NonConsolidatedMember",
+     "NonConsolidatedMember"
+    ],
+    [
+     "Prior1YearDuration_NonConsolidatedMember",
+     "NonConsolidatedMember"
+    ],
+    [
+     "Prior2YearDuration_NonConsolidatedMember",
+     "NonConsolidatedMember"
+    ],
+    [
+     "Prior3YearDuration_NonConsolidatedMember",
+     "NonConsolidatedMember"
+    ],
+    [
+     "Prior4YearDuration_NonConsolidatedMember",
+     "NonConsolidatedMember"
+    ]
+   ],
+   "**正解の要素名に次元なしの context が在るか**": false,
+   "**分類**": "候補 0(試した key が 1 本も無い)",
+   "結果の参照先": []
+  },
+  {
+   "doc": "S100YZ7E",
+   "id": "R018",
+   "値": 11000.0,
+   "数の字面": "11,000",
+   "Core の主張 id": "N022",
+   "Core の state": "POINTER_NOT_FOUND",
+   "Core の reason": "no_element",
+   "**試した key**(生)": [],
+   "**試した key**": [],
+   "試した key の内訳": [],
+   "正解の key": "ordinaryincomelosssummaryofbusinessresults@currentyearduration_nonconsolidatedmember",
+   "正解の context(生)": "CurrentYearDuration_NonConsolidatedMember",
+   "正解の次元(生の context から)": "NonConsolidatedMember",
+   "正解の (要素名, context) が instance に在る": true,
+   "正解の要素名が instance に在る": true,
+   "Core が見た語": null,
+   "Core が決めた subject": "営業収益",
+   "**候補 0 の内訳**": {
+    "どこで落ちたか": "subject に当たった要素に正解が無い",
+    "正解の要素が語彙に在る": true,
+    "その語に当たった要素": [
+     "OperatingRevenue",
+     "NetSales",
+     "Revenue"
+    ]
+   },
+   "**正解の要素名が在る context**": [
+    [
+     "CurrentYearDuration_NonConsolidatedMember",
+     "NonConsolidatedMember"
+    ],
+    [
+     "Prior1YearDuration_NonConsolidatedMember",
+     "NonConsolidatedMember"
+    ],
+    [
+     "Prior2YearDuration_NonConsolidatedMember",
+     "NonConsolidatedMember"
+    ],
+    [
+     "Prior3YearDuration_NonConsolidatedMember",
+     "NonConsolidatedMember"
+    ],
+    [
+     "Prior4YearDuration_NonConsolidatedMember",
+     "NonConsolidatedMember"
+    ]
+   ],
+   "**正解の要素名に次元なしの context が在るか**": false,
+   "**分類**": "候補 0(試した key が 1 本も無い)",
+   "結果の参照先": []
+  },
+  {
+   "doc": "S100YZ7E",
+   "id": "R019",
+   "値": 11000.0,
+   "数の字面": "11,000",
+   "Core の主張 id": "N022",
+   "Core の state": "POINTER_NOT_FOUND",
+   "Core の reason": "no_element",
+   "**試した key**(生)": [],
+   "**試した key**": [],
+   "試した key の内訳": [],
+   "正解の key": "cashandcashequivalentssummaryofbusinessresults@currentyearinstant_nonconsolidatedmember",
+   "正解の context(生)": "CurrentYearInstant_NonConsolidatedMember",
+   "正解の次元(生の context から)": "NonConsolidatedMember",
+   "正解の (要素名, context) が instance に在る": true,
+   "正解の要素名が instance に在る": true,
+   "Core が見た語": null,
+   "Core が決めた subject": "営業収益",
+   "**候補 0 の内訳**": {
+    "どこで落ちたか": "subject に当たった要素に正解が無い",
+    "正解の要素が語彙に在る": true,
+    "その語に当たった要素": [
+     "OperatingRevenue",
+     "NetSales",
+     "Revenue"
+    ]
+   },
+   "**正解の要素名が在る context**": [
+    [
+     "CurrentYearInstant_NonConsolidatedMember",
+     "NonConsolidatedMember"
+    ],
+    [
+     "Prior1YearInstant_NonConsolidatedMember",
+     "NonConsolidatedMember"
+    ],
+    [
+     "Prior2YearInstant_NonConsolidatedMember",
+     "NonConsolidatedMember"
+    ],
+    [
+     "Prior3YearInstant_NonConsolidatedMember",
+     "NonConsolidatedMember"
+    ],
+    [
+     "Prior4YearInstant_NonConsolidatedMember",
+     "NonConsolidatedMember"
+    ]
+   ],
+   "**正解の要素名に次元なしの context が在るか**": false,
+   "**分類**": "候補 0(試した key が 1 本も無い)",
+   "結果の参照先": []
+  },
+  {
+   "doc": "S100YZ7E",
+   "id": "R020",
+   "値": 11000.0,
+   "数の字面": "11,000",
+   "Core の主張 id": "N022",
+   "Core の state": "POINTER_NOT_FOUND",
+   "Core の reason": "no_element",
+   "**試した key**(生)": [],
+   "**試した key**": [],
+   "試した key の内訳": [],
+   "正解の key": "netcashprovidedbyusedininvestingactivitiessummaryofbusinessresults@currentyearduration_nonconsolidatedmember",
+   "正解の context(生)": "CurrentYearDuration_NonConsolidatedMember",
+   "正解の次元(生の context から)": "NonConsolidatedMember",
+   "正解の (要素名, context) が instance に在る": true,
+   "正解の要素名が instance に在る": true,
+   "Core が見た語": null,
+   "Core が決めた subject": "営業収益",
+   "**候補 0 の内訳**": {
+    "どこで落ちたか": "subject に当たった要素に正解が無い",
+    "正解の要素が語彙に在る": false,
+    "その語に当たった要素": [
+     "OperatingRevenue",
+     "NetSales",
+     "Revenue"
+    ]
+   },
+   "**正解の要素名が在る context**": [
+    [
+     "CurrentYearDuration_NonConsolidatedMember",
+     "NonConsolidatedMember"
+    ],
+    [
+     "Prior1YearDuration_NonConsolidatedMember",
+     "NonConsolidatedMember"
+    ],
+    [
+     "Prior2YearDuration_NonConsolidatedMember",
+     "NonConsolidatedMember"
+    ],
+    [
+     "Prior3YearDuration_NonConsolidatedMember",
+     "NonConsolidatedMember"
+    ],
+    [
+     "Prior4YearDuration_NonConsolidatedMember",
+     "NonConsolidatedMember"
+    ]
+   ],
+   "**正解の要素名に次元なしの context が在るか**": false,
+   "**分類**": "候補 0(試した key が 1 本も無い)",
+   "結果の参照先": []
+  },
+  {
+   "doc": "S100YZ7E",
+   "id": "R023",
+   "値": 530000.0,
+   "数の字面": "530,000",
+   "Core の主張 id": "N066",
+   "Core の state": "POINTER_NOT_FOUND",
+   "Core の reason": "no_element",
+   "**試した key**(生)": [],
+   "**試した key**": [],
+   "試した key の内訳": [],
+   "正解の key": "totalassetssummaryofbusinessresults@currentyearinstant_nonconsolidatedmember",
+   "正解の context(生)": "CurrentYearInstant_NonConsolidatedMember",
+   "正解の次元(生の context から)": "NonConsolidatedMember",
+   "正解の (要素名, context) が instance に在る": true,
+   "正解の要素名が instance に在る": true,
+   "Core が見た語": null,
+   "Core が決めた subject": "資産合計",
+   "**候補 0 の内訳**": {
+    "どこで落ちたか": "subject に当たった要素に正解が無い",
+    "正解の要素が語彙に在る": true,
+    "その語に当たった要素": [
+     "Assets",
+     "TotalAssets"
+    ]
+   },
+   "**正解の要素名が在る context**": [
+    [
+     "CurrentYearInstant_NonConsolidatedMember",
+     "NonConsolidatedMember"
+    ],
+    [
+     "Prior1YearInstant_NonConsolidatedMember",
+     "NonConsolidatedMember"
+    ],
+    [
+     "Prior2YearInstant_NonConsolidatedMember",
+     "NonConsolidatedMember"
+    ],
+    [
+     "Prior3YearInstant_NonConsolidatedMember",
+     "NonConsolidatedMember"
+    ],
+    [
+     "Prior4YearInstant_NonConsolidatedMember",
+     "NonConsolidatedMember"
+    ]
+   ],
+   "**正解の要素名に次元なしの context が在るか**": false,
+   "**分類**": "候補 0(試した key が 1 本も無い)",
+   "結果の参照先": []
+  },
+  {
+   "doc": "S100YZ7E",
+   "id": "R024",
+   "値": 98000.0,
+   "数の字面": "98,000",
+   "Core の主張 id": "N070",
+   "Core の state": "POINTER_NOT_FOUND",
+   "Core の reason": "no_element",
+   "**試した key**(生)": [],
+   "**試した key**": [],
+   "試した key の内訳": [],
+   "正解の key": "netassetssummaryofbusinessresults@currentyearinstant_nonconsolidatedmember",
+   "正解の context(生)": "CurrentYearInstant_NonConsolidatedMember",
+   "正解の次元(生の context から)": "NonConsolidatedMember",
+   "正解の (要素名, context) が instance に在る": true,
+   "正解の要素名が instance に在る": true,
+   "Core が見た語": null,
+   "Core が決めた subject": "純資産合計",
+   "**候補 0 の内訳**": {
+    "どこで落ちたか": "subject に当たった要素に正解が無い",
+    "正解の要素が語彙に在る": true,
+    "その語に当たった要素": [
+     "NetAssets"
+    ]
+   },
+   "**正解の要素名が在る context**": [
+    [
+     "CurrentYearInstant_NonConsolidatedMember",
+     "NonConsolidatedMember"
+    ],
+    [
+     "Prior1YearInstant_NonConsolidatedMember",
+     "NonConsolidatedMember"
+    ],
+    [
+     "Prior2YearInstant_NonConsolidatedMember",
+     "NonConsolidatedMember"
+    ],
+    [
+     "Prior3YearInstant_NonConsolidatedMember",
+     "NonConsolidatedMember"
+    ],
+    [
+     "Prior4YearInstant_NonConsolidatedMember",
+     "NonConsolidatedMember"
+    ]
+   ],
+   "**正解の要素名に次元なしの context が在るか**": false,
+   "**分類**": "候補 0(試した key が 1 本も無い)",
+   "結果の参照先": []
+  },
+  {
+   "doc": "S100YZEV",
+   "id": "R011",
+   "値": 1000000.0,
+   "数の字面": "1,000,000",
+   "Core の主張 id": "N007",
+   "Core の state": "POINTER_NOT_FOUND",
+   "Core の reason": "no_element",
+   "**試した key**(生)": [],
+   "**試した key**": [],
+   "試した key の内訳": [],
+   "正解の key": "operatingincome@currentyearduration_nonconsolidatedmember",
+   "正解の context(生)": "CurrentYearDuration_NonConsolidatedMember",
+   "正解の次元(生の context から)": "NonConsolidatedMember",
+   "正解の (要素名, context) が instance に在る": true,
+   "正解の要素名が instance に在る": true,
+   "Core が見た語": null,
+   "Core が決めた subject": "営業利益",
+   "**候補 0 の内訳**": {
+    "どこで落ちたか": "語彙は正解の要素を持っていた(落ちたのは後段)",
+    "正解の要素が語彙に在る": true,
+    "その語に当たった要素": [
+     "OperatingIncome",
+     "OperatingProfit"
+    ]
+   },
+   "**正解の要素名が在る context**": [
+    [
+     "CurrentYearDuration_NonConsolidatedMember",
+     "NonConsolidatedMember"
+    ],
+    [
+     "Prior1YearDuration_NonConsolidatedMember",
+     "NonConsolidatedMember"
+    ]
+   ],
+   "**正解の要素名に次元なしの context が在るか**": false,
+   "**分類**": "候補 0(試した key が 1 本も無い)",
+   "結果の参照先": []
+  },
+  {
+   "doc": "S100YZEV",
+   "id": "R018",
+   "値": 771000.0,
+   "数の字面": "771,000",
+   "Core の主張 id": "N014",
+   "Core の state": "POINTER_NOT_FOUND",
+   "Core の reason": "no_element",
+   "**試した key**(生)": [],
+   "**試した key**": [],
+   "試した key の内訳": [],
+   "正解の key": "currentassets@currentyearinstant_nonconsolidatedmember",
+   "正解の context(生)": "CurrentYearInstant_NonConsolidatedMember",
+   "正解の次元(生の context から)": "NonConsolidatedMember",
+   "正解の (要素名, context) が instance に在る": true,
+   "正解の要素名が instance に在る": true,
+   "Core が見た語": null,
+   "Core が決めた subject": "流動資産",
+   "**候補 0 の内訳**": {
+    "どこで落ちたか": "語彙は正解の要素を持っていた(落ちたのは後段)",
+    "正解の要素が語彙に在る": true,
+    "その語に当たった要素": [
+     "CurrentAssets"
+    ]
+   },
+   "**正解の要素名が在る context**": [
+    [
+     "CurrentYearInstant_NonConsolidatedMember",
+     "NonConsolidatedMember"
+    ],
+    [
+     "Prior1YearInstant_NonConsolidatedMember",
+     "NonConsolidatedMember"
+    ]
+   ],
+   "**正解の要素名に次元なしの context が在るか**": false,
+   "**分類**": "候補 0(試した key が 1 本も無い)",
+   "結果の参照先": []
+  },
+  {
+   "doc": "S100YZEV",
+   "id": "R019",
+   "値": 162000.0,
+   "数の字面": "162,000",
+   "Core の主張 id": "N017",
+   "Core の state": "POINTER_NOT_FOUND",
+   "Core の reason": "no_element",
+   "**試した key**(生)": [],
+   "**試した key**": [],
+   "試した key の内訳": [],
+   "正解の key": "noncurrentassets@currentyearinstant_nonconsolidatedmember",
+   "正解の context(生)": "CurrentYearInstant_NonConsolidatedMember",
+   "正解の次元(生の context から)": "NonConsolidatedMember",
+   "正解の (要素名, context) が instance に在る": true,
+   "正解の要素名が instance に在る": true,
+   "Core が見た語": null,
+   "Core が決めた subject": "固定資産",
+   "**候補 0 の内訳**": {
+    "どこで落ちたか": "語彙は正解の要素を持っていた(落ちたのは後段)",
+    "正解の要素が語彙に在る": true,
+    "その語に当たった要素": [
+     "NoncurrentAssets"
+    ]
+   },
+   "**正解の要素名が在る context**": [
+    [
+     "CurrentYearInstant_NonConsolidatedMember",
+     "NonConsolidatedMember"
+    ],
+    [
+     "Prior1YearInstant_NonConsolidatedMember",
+     "NonConsolidatedMember"
+    ]
+   ],
+   "**正解の要素名に次元なしの context が在るか**": false,
+   "**分類**": "候補 0(試した key が 1 本も無い)",
+   "結果の参照先": []
+  },
+  {
+   "doc": "S100YZEV",
+   "id": "R020",
+   "値": 1000000.0,
+   "数の字面": "1,000,000",
+   "Core の主張 id": "N007",
+   "Core の state": "POINTER_NOT_FOUND",
+   "Core の reason": "no_element",
+   "**試した key**(生)": [],
+   "**試した key**": [],
+   "試した key の内訳": [],
+   "正解の key": "increasedecreaseinaccountspayableotheropecf@currentyearduration_nonconsolidatedmember",
+   "正解の context(生)": "CurrentYearDuration_NonConsolidatedMember",
+   "正解の次元(生の context から)": "NonConsolidatedMember",
+   "正解の (要素名, context) が instance に在る": true,
+   "正解の要素名が instance に在る": true,
+   "Core が見た語": null,
+   "Core が決めた subject": "営業利益",
+   "**候補 0 の内訳**": {
+    "どこで落ちたか": "subject に当たった要素に正解が無い",
+    "正解の要素が語彙に在る": true,
+    "その語に当たった要素": [
+     "OperatingIncome",
+     "OperatingProfit"
+    ]
+   },
+   "**正解の要素名が在る context**": [
+    [
+     "CurrentYearDuration_NonConsolidatedMember",
+     "NonConsolidatedMember"
+    ],
+    [
+     "Prior1YearDuration_NonConsolidatedMember",
+     "NonConsolidatedMember"
+    ]
+   ],
+   "**正解の要素名に次元なしの context が在るか**": false,
+   "**分類**": "候補 0(試した key が 1 本も無い)",
+   "結果の参照先": []
+  }
+ ],
+ "limits": [
+  "**10 行の観測である。**ここから Core 全体の振る舞いを断定しない",
+  "**正規化は両側に同じ関数(`A1.norm_pointer`)を掛けた。**一度これを片側だけに掛けて「正解の要素名が instance に無い」と誤った記録を作った(この記録は掛け直した後の 1 本)",
+  "**原因の分類は、試した key と instance の fact だけから付けた。**なぜその key を選んだか(member の解決・語彙・ラベル)は見ていない",
+  "**直していない。**この記録は改善の提案ではなく観測である",
+  "**2 書類に偏っている**(残る 6 書類では起きていない)。書類差と注入箇所の差は分けていない"
+ ]
+}
