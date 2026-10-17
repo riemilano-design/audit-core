@@ -134,5 +134,68 @@ class LimitsTest(unittest.TestCase):
         self.assertIn(u"測るまで「改善する」と書かない。**", b)
 
 
+class CeilingAddendumTest(unittest.TestCase):
+    """§8 の追記。**数は `ceiling_2026-10-17.json` を正本に突き合わせる。**"""
+
+    def setUp(self):
+        self.t = text(DOC)
+        self.c = json.load(io.open(
+            os.path.join(ROOT, "fixtures", "xbrl", "cd8",
+                         "ceiling_2026-10-17.json"), encoding="utf-8"))
+
+    @staticmethod
+    def _pct(v):
+        return u"%s%%(%s/%s)" % (v[u"率"], v[u"分子"], v[u"分母"])
+
+    def test_10_the_addendum_is_dated_and_keeps_the_body(self):
+        self.assertIn(u"## §8 追記(2026-10-17・α の封を書く前に)", self.t)
+        self.assertIn(u"**本文(§1〜§7)は 1 文字も直していない。**", self.t)
+        self.assertIn(u"**0 USD。席は呼んでいない。**", self.t)
+        self.assertIn(u"ceiling_2026-10-17.json", self.t)
+
+    def test_11_population_numbers_come_from_the_record(self):
+        o = self.c[u"α が検査できる母集団"]
+        for k in (u"席が参照先を名指した行", u"うち Core に主張が対応した行",
+                  u"うち正解が固定できる行(T5)", u"無改変で名指した行"):
+            self.assertIn(u"**%d**" % o[k], self.t, k)
+        self.assertEqual(o[u"席が参照先を名指した行"], 85)
+
+    def test_12_the_correction_ceiling_is_the_records_number(self):
+        c = self.c[u"**α の天井(席が外した行で Core が正解を持っていたか)**"]
+        self.assertIn(u"| 席が参照先を外した行 | **%d** |" % c[u"席が外した行"], self.t)
+        self.assertIn(u"| **うち Core が正解を持っていた** | **%d** |"
+                      % c[u"**Core が正解を持っていた**"], self.t)
+        self.assertIn(u"| Core が参照先を出さなかった | %d |"
+                      % c[u"Core が参照先を出さなかった"], self.t)
+        self.assertIn(u"| Core が席と同じ(誤った)参照先を出した | %d |"
+                      % c[u"Core が席と同じ参照先を出した"], self.t)
+
+    def test_13_both_samples_rates_are_printed_with_denominators(self):
+        r = self.c[u"Core 自身の特定率"]
+        for k in (u"本番(未使用 8 書類)", u"(ア)(別の 8 書類・同じ P16)",
+                  u"席(本番)"):
+            self.assertIn(self._pct(r[k]), self.t, k)
+        # **(ア) の記録の見出しの数は書き換えない**
+        self.assertIn(u"**71.9%(46/64)**", self.t)
+        self.assertIn(u"**その数は書き換えない**", self.t)
+
+    def test_14_strata_and_per_document_spread(self):
+        for s in (u"本番(未使用 8)", u"(ア)(別の 8)"):
+            st = self.c[u"層別"][s]
+            for k in (u"次元つき", u"次元なし"):
+                if st[k][u"率"] is None:
+                    continue
+                self.assertIn(self._pct(st[k]), self.t, (s, k))
+        for d, v in self.c[u"書類ごと(本番)"].items():
+            self.assertIn(u"| `%s` | %s |" % (d, self._pct(v)), self.t, d)
+
+    def test_15_the_addendum_does_not_promise_what_it_did_not_measure(self):
+        b = self.t[self.t.index(u"### §8-5"):]
+        self.assertIn(u"**α の「警告」はまだ測っていない。**", b)
+        self.assertIn(u"**値の照合は「参照先の正しさ」を分けられない。**", b)
+        self.assertIn(u"**「次元を出せない」は仮説であり、測るまで断定しない。**", b)
+        self.assertIn(u"**原因は特定していない。**", b)
+
+
 if __name__ == "__main__":
     unittest.main()

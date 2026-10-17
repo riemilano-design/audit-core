@@ -1,0 +1,212 @@
+{
+ "step": "**α の天井を commit 済みの記録から読む。0 USD・席を呼ばない**",
+ "読んだ記録": [
+  "fixtures/xbrl/cd8/material_2026-10-17.json",
+  "fixtures/xbrl/cd8/score_2026-10-17.json",
+  "fixtures/xbrl/cd8/a_core_vs_grep_2026-10-17.json"
+ ],
+ "**変数は書類だけ**": {
+  "profile": {
+   "本番": "P16",
+   "(ア)": "P16"
+  },
+  "本番の 8 書類": [
+   "S100YYRG",
+   "S100YXMA",
+   "S100YZ7E",
+   "S100YWGX",
+   "S100YZCT",
+   "S100YYRV",
+   "S100YZEV",
+   "S100YXF5"
+  ],
+  "(ア) の 8 書類": [
+   "S100Z4LC",
+   "S100Z40H",
+   "S100Z46V",
+   "S100Z38F",
+   "S100Z3DU",
+   "S100Z4R8",
+   "S100Z3CI",
+   "S100Z461"
+  ],
+  "同じか": false
+ },
+ "α が検査できる母集団": {
+  "席が参照先を名指した行": 85,
+  "うち Core に主張が対応した行": 73,
+  "うち正解が固定できる行(T5)": 42,
+  "無改変で名指した行": 42
+ },
+ "**α の天井(席が外した行で Core が正解を持っていたか)**": {
+  "席が外した行": 7,
+  "**Core が正解を持っていた**": 0,
+  "Core が席と同じ参照先を出した": 1,
+  "Core が参照先を出さなかった": 6,
+  "明細": [
+   {
+    "doc": "S100YZ7E",
+    "id": "R017",
+    "席": "operatingrevenue2@currentyearduration_nonconsolidatedmember",
+    "Core": null,
+    "正解": "operatingrevenue2summaryofbusinessresults@currentyearduration_nonconsolidatedmember",
+    "Core の言うこと": "参照先を出さない(POINTER_NOT_FOUND)"
+   },
+   {
+    "doc": "S100YZ7E",
+    "id": "R018",
+    "席": "ordinaryincome@currentyearduration_nonconsolidatedmember",
+    "Core": null,
+    "正解": "ordinaryincomelosssummaryofbusinessresults@currentyearduration_nonconsolidatedmember",
+    "Core の言うこと": "参照先を出さない(POINTER_NOT_FOUND)"
+   },
+   {
+    "doc": "S100YZ7E",
+    "id": "R019",
+    "席": "cashandcashequivalents@currentyearinstant_nonconsolidatedmember",
+    "Core": null,
+    "正解": "cashandcashequivalentssummaryofbusinessresults@currentyearinstant_nonconsolidatedmember",
+    "Core の言うこと": "参照先を出さない(POINTER_NOT_FOUND)"
+   },
+   {
+    "doc": "S100YZ7E",
+    "id": "R020",
+    "席": "netcashprovidedbyusedininvestmentactivities@currentyearduration_nonconsolidatedmember",
+    "Core": null,
+    "正解": "netcashprovidedbyusedininvestingactivitiessummaryofbusinessresults@currentyearduration_nonconsolidatedmember",
+    "Core の言うこと": "参照先を出さない(POINTER_NOT_FOUND)"
+   },
+   {
+    "doc": "S100YZ7E",
+    "id": "R023",
+    "席": "assets@currentyearinstant_nonconsolidatedmember",
+    "Core": null,
+    "正解": "totalassetssummaryofbusinessresults@currentyearinstant_nonconsolidatedmember",
+    "Core の言うこと": "参照先を出さない(POINTER_NOT_FOUND)"
+   },
+   {
+    "doc": "S100YZ7E",
+    "id": "R024",
+    "席": "netassets@currentyearinstant_nonconsolidatedmember",
+    "Core": null,
+    "正解": "netassetssummaryofbusinessresults@currentyearinstant_nonconsolidatedmember",
+    "Core の言うこと": "参照先を出さない(POINTER_NOT_FOUND)"
+   },
+   {
+    "doc": "S100YZCT",
+    "id": "R020",
+    "席": "cashanddeposits@currentyearinstant",
+    "Core": "cashanddeposits@currentyearinstant",
+    "正解": "netincreasedecreaseincashandcashequivalents@currentyearduration",
+    "Core の言うこと": "止めたが参照先を名指した(VALUE_MISMATCH)"
+   }
+  ]
+ },
+ "Core 自身の特定率": {
+  "本番(未使用 8 書類)": {
+   "分子": 15,
+   "分母": 50,
+   "率": 30.0
+  },
+  "(ア)(別の 8 書類・同じ P16)": {
+   "分子": 46,
+   "分母": 63,
+   "率": 73.0
+  },
+  "席(本番)": {
+   "分子": 35,
+   "分母": 50,
+   "率": 70.0
+  }
+ },
+ "層別": {
+  "本番(未使用 8)": {
+   "次元なし": {
+    "分子": 15,
+    "分母": 37,
+    "率": 40.5
+   },
+   "次元つき": {
+    "分子": 0,
+    "分母": 13,
+    "率": 0.0
+   },
+   "通常要素": {
+    "分子": 15,
+    "分母": 44,
+    "率": 34.1
+   },
+   "summary 要素": {
+    "分子": 0,
+    "分母": 6,
+    "率": 0.0
+   }
+  },
+  "(ア)(別の 8)": {
+   "次元なし": {
+    "分子": 44,
+    "分母": 60,
+    "率": 73.3
+   },
+   "次元つき": {
+    "分子": 2,
+    "分母": 3,
+    "率": 66.7
+   },
+   "通常要素": {
+    "分子": 46,
+    "分母": 63,
+    "率": 73.0
+   },
+   "summary 要素": {
+    "分子": 0,
+    "分母": 0,
+    "率": null
+   }
+  }
+ },
+ "書類ごと(本番)": {
+  "S100YWGX": {
+   "分子": 1,
+   "分母": 8,
+   "率": 12.5
+  },
+  "S100YXMA": {
+   "分子": 1,
+   "分母": 8,
+   "率": 12.5
+  },
+  "S100YYRG": {
+   "分子": 6,
+   "分母": 8,
+   "率": 75.0
+  },
+  "S100YYRV": {
+   "分子": 3,
+   "分母": 8,
+   "率": 37.5
+  },
+  "S100YZ7E": {
+   "分子": 0,
+   "分母": 6,
+   "率": 0.0
+  },
+  "S100YZCT": {
+   "分子": 4,
+   "分母": 8,
+   "率": 50.0
+  },
+  "S100YZEV": {
+   "分子": 0,
+   "分母": 4,
+   "率": 0.0
+  }
+ },
+ "limits": [
+  "**これは新しい実験ではない。**commit 済みの 3 つの記録を読んだだけで、engine も材料も席の答えも触っていない",
+  "**2 つの標本は書類が違う。**profile と関数と正規化は同じだが、**書類差と注入箇所の差が混ざる**ので、差を「劣化」と読んではいけない",
+  "**書類ごとの散らばりが大きい**(下の表)。8 書類 1 標本の率を「Core の性能」として単独で引用しない",
+  "**次元つきの層の 0 件は、原因を特定していない。**Core がどの key を試したかはこの記録に無い(別便で測る)",
+  "**α の天井 0 件は「この標本で」である。**別の標本で 0 になるとは言っていない"
+ ]
+}
