@@ -154,9 +154,26 @@ class Axis3Test(unittest.TestCase):
                          [str(i) for i in range(1, 7)], "限界は 6 本")
 
     def test_11_the_unused_eight_are_still_untouched(self):
+        """**この文はこの便の時点の事実である。**封 v2 の段 2 で取得が済んだ後は、
+        「まだ取得していない」を現在の事実として要求しない(それは記録の改竄になる)。
+        代わりに **取得したのは引いた 8 件そのものである**ことを要求する
+        (穴を開けない。§5 の追記で経緯を残す)。
+        """
         cache = os.path.join(os.path.expanduser("~"), ".cache", "audit-core", "edinet")
         drawn = rec(os.path.join(FX, "draw_2026-10-17.json"))["引いた 8 件"]
         self.assertIn("**まだ 1 件も取得していない。**", self.t)
+        fetched = os.path.join(FX, "fetched_2026-10-17.json")
+        tracked = subprocess.run(
+            ["git", "ls-files", "--error-unmatch",
+             "fixtures/xbrl/cd8/fetched_2026-10-17.json"],
+            cwd=ROOT, capture_output=True).returncode == 0
+        if tracked:
+            got = [d["docID"] for d in rec(fetched)["取得した書類"]]
+            self.assertEqual(sorted(got), sorted(drawn),
+                             "**取得したものが引いた 8 件と違う**")
+            self.assertIn("この節は封 v2 の段 2 で更新された", self.t,
+                          "**取得したのに追記が無い**")
+            return
         if os.path.isdir(cache):
             names = "\n".join(os.listdir(cache))
             for d in drawn:
