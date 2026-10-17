@@ -39,6 +39,10 @@ THIS_RUN = {
     "tests/measure/test_xbrl_cd_seal.py",
     "tests/measure/test_xbrl_cd.py",
     "measure/xbrl_cd_draw_2026-10-17.py",
+    # 下見(封 §1-2 の「およびこの便で作る file」)
+    "measure/xbrl_cd_dryrun_2026-10-17.py",
+    "fixtures/xbrl/cd8/dryrun_2026-10-17.json",
+    "tests/measure/test_xbrl_cd_dryrun.py",
 }
 
 # 封 G-9。**engine と道具が動いたら赤くなる**
