@@ -117,5 +117,27 @@ class CommitOrderTest(unittest.TestCase):
             self.assertTrue(self._ancestor(s, other), rel)
 
 
+class MissingRowRuleTest(unittest.TestCase):
+    """§7 の追記(独立監査の REVISE 指摘 4)を固定する。"""
+
+    def setUp(self):
+        self.t = text(SPEC)
+
+    def test_8_the_missing_row_rule_is_the_same_for_every_arm(self):
+        b = sec(self.t, "## §7 追記")
+        self.assertIn("**§1〜§5 は 1 文字も変えず、この場合分けだけを足す**", b)
+        rows = re.findall(r"(?m)^\| (.+?) \| (.+?) \| (.+?) \| (.+?) \|$", b)
+        data = [r for r in rows if "A" != r[1] or True]
+        self.assertGreaterEqual(len(data), 4, "場合分けの表が無い")
+        self.assertIn("**`欠け`。照合器の結果を足さない**", b)
+        self.assertIn("**欠けた行は 4 腕すべての分母から外し、件数を別に書く。**", b)
+        self.assertIn("欠けは 4 腕で必ず同数になる。門で確かめる**", b)
+
+    def test_9_the_reason_names_the_broken_comparison(self):
+        b = sec(self.t, "## §7 追記")
+        self.assertIn("**C′ だけが「席が答えなかった行」で得をする**", b)
+        self.assertIn("主比較が壊れる", b)
+
+
 if __name__ == "__main__":
     unittest.main()
