@@ -1,0 +1,65 @@
+{
+ "seal": "docs/DOMAIN1_REPRO_SEAL_2026-10-17.md",
+ "dataset": "令和５年度東京都各会計歳入歳出決算書及び東京都各会計歳入歳出決算附属書類等(東京都会計管理局、CC BY 4.0、カタログ t000016d1700000015)",
+ "base": "https://www.opendata.metro.tokyo.lg.jp/kaikeikanri/",
+ "fetched_at": "2026-10-17T02:51:59Z",
+ "repo_head": "4bc5de4",
+ "cache": "/Users/midoriko/.cache/audit-core/sheet",
+ "**生ファイルは repo に置かない**": true,
+ "**取らなかったもの**": [
+  {
+   "label": "実質収支",
+   "name": "op20250114_05kessan_06_jissitusyuusi.xlsx",
+   "why": "歳入と歳出から導出される数。封 §1"
+  }
+ ],
+ "files": [
+  {
+   "label": "総括",
+   "name": "op20250114_05kessan_01_soukatu.xlsx",
+   "result": "fetched",
+   "bytes": 17339,
+   "bytes_matches_seal": true,
+   "expected_bytes": 17339,
+   "sha256": "66f39b7f8cadd7f549de63652022fce634b30be1a769ab5cd1436ee425b8b4a0"
+  },
+  {
+   "label": "決算書 歳入",
+   "name": "op20250114_05kessan_02_sainyuu.xlsx",
+   "result": "fetched",
+   "bytes": 100564,
+   "bytes_matches_seal": true,
+   "expected_bytes": 100564,
+   "sha256": "86d709b1538e1a84a5d683e8217128f702d9d1ce2f7ec814dff9955d9fd65442"
+  },
+  {
+   "label": "決算書 歳出",
+   "name": "op20250114_05kessan_03_saisyutu.xlsx",
+   "result": "fetched",
+   "bytes": 94966,
+   "bytes_matches_seal": true,
+   "expected_bytes": 94966,
+   "sha256": "0bbd03b384c723388c649ca69a848166107fd5a8d8a2f82dfcf06e7459830245"
+  },
+  {
+   "label": "事項別明細 歳入",
+   "name": "op20250114_05kessan_04_jikoubetu_sainyuu.xlsx",
+   "result": "fetched",
+   "bytes": 754510,
+   "bytes_matches_seal": true,
+   "expected_bytes": 754510,
+   "sha256": "99b52d88f80418b0ec53553b9a75e7e3a4b58b3da7da8d98d81acaefe39bdfd4"
+  },
+  {
+   "label": "事項別明細 歳出",
+   "name": "op20250114_05kessan_05_jikoubetu_saisyutu.xlsx",
+   "result": "fetched",
+   "bytes": 2047161,
+   "bytes_matches_seal": true,
+   "expected_bytes": 2047161,
+   "sha256": "05b4dfb57dee2628ff1f0a844e611427d3055fe88fef26dfe46e1faf06a76d56"
+  }
+ ],
+ "全部そろった": true,
+ "バイト数が封と一致": true
+}
