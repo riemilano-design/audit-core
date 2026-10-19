@@ -9,6 +9,9 @@ u"""汎化 C の段 C1-B(封 `docs/XBRL_GENERALITY_SEAL_2026-10-20.md` 追記 1 
   --stage score     ``fixtures/xbrl/gen_c/seat_answers/`` を読み、cd8 と同じ関数で A / C′ / D′ / D″ を採点して
                     ``fixtures/xbrl/gen_c/c1_2026-10-20.json`` に書く。**答えが 8 件そろっていなければ止まる**。
                     ``--with-engine`` を付けると C1-3 も同じ file の ``C1-3`` に入れる。
+                    **段 C1-D(2026-10-20)**: ``--with-engine`` は必須(K-8・K-9 の判定に C1-3 が要る)。同じ file に
+                    K-4・K-5 の数(同じ注入の id の Core-P を c0 の記録から読む)・席の便のトークン(csv)・環境・
+                    engine の留め・対照 K-C1〜K-C3 の再走・予測 K-1〜K-12 の判定(封の幅を字で留めた定数)・cd8 の数を足す。
   --stage engine    C1-3。席 A が参照先を名指した注入の行で、その参照先を
                     ``verify_external(spec, period_pair=True)`` の ``pointers`` に渡して state を数える。
                     ``--answers`` ``--material`` ``--out`` を取る(cd8 の答え + cd8 の材料でも動く)。
@@ -452,6 +455,204 @@ def engine_stage(mat_path, ans_dir, work):
                         u"分母は席が名指した注入の行だけ(欠け・なし は入らない)"]}
 
 
+# ------------------------------------------------------------------ 段 C1-D(採点の後に足す欄。**封の予測 K-1〜K-12 の判定は封の幅を字で留めて行う**)
+GEN_RUNS = os.path.join(GEN, "seat_runs_2026-10-20.csv")
+GEN_C0 = os.path.join(GEN, "c0_2026-10-20.json")
+#: 封 A-4 の幅(字で留める。封の字と合わせてある)
+K2_MIN = 60
+K3_RANGE = (40.0, 70.0)
+K4_MIN_PT = 20.0
+K5_MIN = 40.0
+K7_TOKENS = (900000, 1500000)
+K7_PER_RUN_CAP = 250000
+K7_TOTAL_CAP = 1600000
+K9_MIN = 70.0
+K10_MIN = 30
+
+
+def inj_map(mat, work):
+    u"""``(doc, 行 id) -> 注入の id``。材料の記録と同じ行を本文から再構成して読む(task の sha256 が合わなければ止まる)。"""
+    seed, _meta = MB.IJ.verify_seed_sealed(MB.SEED_FILE)
+    out = {}
+    for p in mat[u"書類ごと"]:
+        rows, _chosen = rebuild_rows(p["docID"], work, seed, p)
+        for m in rows:
+            if m.get(u"**注入**"):
+                out[(p["docID"], m["id"])] = m[u"**注入**"]
+    return out
+
+
+def seat_runs():
+    import csv
+    with io.open(GEN_RUNS, encoding="utf-8", newline="") as fh:
+        rd = list(csv.reader(fh))
+    head, body = rd[0], rd[1:]
+    rows = [{u"docID": r[0], u"model": r[1], u"合計トークン": int(r[2]), u"所要 ms": int(r[3]), u"行数": int(r[4]),
+             u"開始(UTC)": r[5]} for r in body]
+    tok = [r[u"合計トークン"] for r in rows]
+    return {u"file": os.path.relpath(GEN_RUNS, ROOT), u"file の sha256": sha_file(GEN_RUNS), u"列": head,
+            u"便の数": len(rows), u"書類ごと": rows, u"model": sorted({r[u"model"] for r in rows}),
+            u"合計トークン": sum(tok), u"最小": min(tok), u"最大": max(tok),
+            u"1 便が上限を超えた便": sum(1 for t in tok if t > K7_PER_RUN_CAP),
+            u"合計が上限を超えたか": sum(tok) > K7_TOTAL_CAP,
+            u"行数が 24 でない便(= 中断・欠けの疑い)": [r[u"docID"] for r in rows if r[u"行数"] != 24]}
+
+
+def k4_k5(score, mat, c0, imap):
+    u"""K-4・K-5。席 A の T5 の特定を、**同じ注入の id** の Core-P(C0-2 の (ア) の数え方。記録 c0 から読む)と並べる。
+
+    対応は ``imap``(行 id -> 注入の id)で付ける。C0-2 の rows の gold と C1 の gold が**注入ごとに同じ**ことを確かめる
+    (違えば止まる = 「同じ T5 の行」でなくなる)。``次元つき`` の定義は C0 と同じ(gold の ``@`` の後ろに ``_`` を含む)。"""
+    c0rows = {x["id"]: x for x in c0[u"C0-2 rows"]}
+    mat_core = {}
+    for p in mat[u"書類ごと"]:
+        for rid, v in p[u"席の前に出せる分"].items():
+            mat_core[(p["docID"], rid)] = v
+    out, stale = [], []
+    for x in score["rows"]:
+        g = x[u"正解"]
+        if not x[u"注入か"] or (g or {}).get(u"種類") != u"参照先が在る":
+            continue
+        key = (x[u"doc"], x["id"])
+        iid = imap[key]
+        c = c0rows.get(iid)
+        if c is None or c[u"型"] != "T5_COINCIDENT":
+            raise SystemExit(u"**C0-2 の rows に無い T5 の注入: %s。止める**" % iid)
+        if c[u"正解"][u"正解"] != g[u"正解"]:
+            stale.append(iid)
+        a = x[u"腕"]["A"]
+        cp = c[u"腕"]["Core-P"]
+        gold = g[u"正解"]
+        out.append({u"doc": x[u"doc"], u"行 id": x["id"], u"注入の id": iid, u"gold": gold,
+                    u"gold の枠が次元つき": "_" in gold.split("@", 1)[1],
+                    u"gold の枠が Member で終わる": gold.endswith("member"),
+                    u"席 A の判定": a[u"判定"], u"席 A の参照先": a[u"参照先"],
+                    u"席 A が特定": bool(a[u"判定結果"][u"特定"]),
+                    u"Core-P の参照先(C0 の記録)": cp[u"参照先"],
+                    u"Core-P が特定(C0 の記録)": bool(cp[u"判定"][u"特定"]),
+                    u"材料の Core 腕の参照先(C1-B の記録。照合用)": mat_core[key][u"Core"][u"参照先"],
+                    u"材料の Core 腕が特定(照合用)": mat_core[key][u"Core"][u"参照先"] == gold})
+    if stale:
+        raise SystemExit(u"**C0 の gold と C1 の gold が違う注入: %s。止める**" % stale)
+    n = len(out)
+    a_ok = sum(1 for r in out if r[u"席 A が特定"])
+    c_ok = sum(1 for r in out if r[u"Core-P が特定(C0 の記録)"])
+    m_ok = sum(1 for r in out if r[u"材料の Core 腕が特定(照合用)"])
+    dim = [r for r in out if r[u"gold の枠が次元つき"]]
+    nodim = [r for r in out if not r[u"gold の枠が次元つき"]]
+    a_d = sum(1 for r in dim if r[u"席 A が特定"])
+    c_d = sum(1 for r in dim if r[u"Core-P が特定(C0 の記録)"])
+    a_n = sum(1 for r in nodim if r[u"席 A が特定"])
+    c_n = sum(1 for r in nodim if r[u"Core-P が特定(C0 の記録)"])
+    c0_all = c0[u"**C0-2 (ア) の main() の出力**"][u"採点"]["Core-P"][u"特定率(分母 = T5 の件数)"]
+    return {u"中身": u"同じ T5 の注入(注入の id が C0-2 の rows と同じ。gold が注入ごとに一致)で、席 A の特定と Core-P の特定を並べた",
+            u"T5 の行": n, u"gold が C0 と一致した注入": n - len(stale),
+            u"Core-P の数え方": u"C0-2 の rows の 腕/Core-P/判定/特定(止めても pointers を読む腕。厳密一致)",
+            u"席 A の特定": {u"分子": a_ok, u"分母": n, u"率": pct(a_ok, n)},
+            u"Core-P の特定(同じ行)": {u"分子": c_ok, u"分母": n, u"率": pct(c_ok, n)},
+            u"**K-4 差(pt)**": round(pct(a_ok, n) - pct(c_ok, n), 1),
+            u"参考: C0 の Core-P の特定(T5 全 50 件)": c0_all,
+            u"参考: C0 の T5 のうち C1 に入らなかった行の Core-P の特定": {
+                u"分子": c0_all[u"分子"] - c_ok, u"分母": c0_all[u"分母"] - n,
+                u"率": pct(c0_all[u"分子"] - c_ok, c0_all[u"分母"] - n)},
+            u"K-5 次元つき(gold の枠に _…Member)": {
+                u"席 A の特定": {u"分子": a_d, u"分母": len(dim), u"率": pct(a_d, len(dim))},
+                u"Core-P の特定": {u"分子": c_d, u"分母": len(dim), u"率": pct(c_d, len(dim))},
+                u"次元つきの gold が全部 member で終わる": all(r[u"gold の枠が Member で終わる"] for r in dim)},
+            u"次元なし": {u"席 A の特定": {u"分子": a_n, u"分母": len(nodim), u"率": pct(a_n, len(nodim))},
+                       u"Core-P の特定": {u"分子": c_n, u"分母": len(nodim), u"率": pct(c_n, len(nodim))}},
+            u"書類ごと": {d: {u"T5 の行": sum(1 for r in out if r[u"doc"] == d),
+                          u"席 A の特定": sum(1 for r in out if r[u"doc"] == d and r[u"席 A が特定"]),
+                          u"Core-P の特定": sum(1 for r in out if r[u"doc"] == d and r[u"Core-P が特定(C0 の記録)"])}
+                       for d in sorted({r[u"doc"] for r in out})},
+            u"材料の Core 腕(C1-B)と C0 の Core-P の特定が行ごとに一致": all(
+                r[u"材料の Core 腕が特定(照合用)"] == r[u"Core-P が特定(C0 の記録)"] for r in out),
+            u"参考: 材料の Core 腕(席が見た本文 = 8 注入を同時に入れた本文で Core が名指した。C′ が使う腕)の特定": {
+                u"分子": m_ok, u"分母": n, u"率": pct(m_ok, n)},
+            u"参考: 材料の Core 腕と C0 の Core-P で特定が食い違った注入": [
+                r[u"注入の id"] for r in out if r[u"材料の Core 腕が特定(照合用)"] != r[u"Core-P が特定(C0 の記録)"]],
+            u"参考: 材料の Core 腕を使ったときの差(pt)": round(pct(a_ok, n) - pct(m_ok, n), 1),
+            u"rows": out}
+
+
+def c1_predictions(rec, mat, c13, k45, runs, pins, ctrl):
+    u"""封 A-4 の K-1〜K-12 を、封の幅(字で留めた定数)で判定する。K-12 は木の差分の部分だけ(覆い・赤は別に測る)。"""
+    A = rec[u"採点"]["A"]
+    Cp = rec[u"採点"][u"C′"]
+    Dp = rec[u"採点"][u"D′"]
+    k1 = mat[u"**K-1 の数**"][u"集計"]
+    k1f = k1[u"K-1 の各欄(機械の比較。意味づけは結果の席)"]
+    t5 = k45[u"T5 の行"]
+    docs_t5 = sorted({r[u"doc"] for r in k45["rows"]})
+    k1_ok = (all(v for kk, v in k1f.items() if not kk.startswith(u"T5 の行の合計"))
+             and K1_T5_RANGE[0] <= t5 <= K1_T5_RANGE[1] and t5 == k1[u"T5 の行の合計"])
+    p = []
+
+    def add(sym, text, meas, ok, extra=None):
+        d = {u"記号": sym, u"予測": text, u"実測": meas, u"当たり": ok}
+        if extra:
+            d.update(extra)
+        p.append(d)
+    add("K-1", u"下見: 8 書類とも 24 行そろう・見せない字 0 件・問いの sha256 一致。T5 の行は 3 書類で合計 16〜20",
+        {u"材料の記録(C1-B)の各欄": k1f, u"T5 の行": t5, u"T5 の行がある書類": docs_t5}, bool(k1_ok and len(docs_t5) == 3))
+    add("K-2", u"席 A の軸A(注入した行で 確認済み と言わない): 60 / 64 以上",
+        {u"分子": A[u"軸A 停止判定"][u"分子"], u"分母": A[u"軸A 停止判定"][u"分母(注入の件)"],
+         u"率": A[u"軸A 停止判定"][u"率"]}, A[u"軸A 停止判定"][u"分子"] >= K2_MIN)
+    a_rate = k45[u"席 A の特定"][u"率"]
+    add("K-3", u"席 A の T5 の特定率(厳密一致): 40〜70%", k45[u"席 A の特定"],
+        K3_RANGE[0] <= a_rate <= K3_RANGE[1])
+    add("K-4", u"席 A の T5 特定率 − Core-P(同じ行で (ア) の数え方)が +20 pt 以上",
+        {u"席 A": k45[u"席 A の特定"], u"Core-P": k45[u"Core-P の特定(同じ行)"], u"差(pt)": k45[u"**K-4 差(pt)**"]},
+        k45[u"**K-4 差(pt)**"] >= K4_MIN_PT)
+    kd = k45[u"K-5 次元つき(gold の枠に _…Member)"][u"席 A の特定"]
+    add("K-5", u"gold の枠に _…Member が付く T5 行で、席 A の特定率 40% 以上(Core-P は C0 で 0 / 30)",
+        {u"席 A": kd, u"Core-P(同じ行)": k45[u"K-5 次元つき(gold の枠に _…Member)"][u"Core-P の特定"]},
+        kd[u"率"] is not None and kd[u"率"] >= K5_MIN)
+    same = (A[u"誤認定"][u"分子"] == Cp[u"誤認定"][u"分子"] and A[u"正しい参照先の特定"][u"分子"] == Cp[u"正しい参照先の特定"][u"分子"])
+    add("K-6", u"C′ − A = 0(誤認定も特定も件数で同じ)",
+        {u"誤認定": [A[u"誤認定"][u"分子"], Cp[u"誤認定"][u"分子"]], u"特定": [A[u"正しい参照先の特定"][u"分子"], Cp[u"正しい参照先の特定"][u"分子"]],
+         u"(参考。K-6 の字の外)参照先を出した件": [A[u"誤認定"][u"分母(参照先を出した件)"], Cp[u"誤認定"][u"分母(参照先を出した件)"]],
+         u"(参考)保留": [A[u"保留"][u"分子"], Cp[u"保留"][u"分子"]],
+         u"(参考)Core を足した行": [A[u"照合器を足した行"], Cp[u"照合器を足した行"]]}, same)
+    gaps = rec[u"**欠けは 4 腕で同数**"]
+    tot = runs[u"合計トークン"]
+    add("K-7", u"欠け 0 / 192・中断した便 0・合計トークン 0.9M〜1.5M",
+        {u"欠け(4 腕)": gaps, u"中断・欠けの疑いの便": runs[u"行数が 24 でない便(= 中断・欠けの疑い)"],
+         u"合計トークン": tot, u"帯": list(K7_TOKENS), u"1 便が 250,000 を超えた": runs[u"1 便が上限を超えた便"]},
+        all(v == 0 for v in gaps.values()) and not runs[u"行数が 24 でない便(= 中断・欠けの疑い)"]
+        and K7_TOKENS[0] <= tot <= K7_TOKENS[1])
+    t = c13[u"集計"]
+    n = c13[u"席 A が参照先を名指した注入の行(分母)"]
+    gn = t[u"**GROUNDED(誤りを通した)**"][u"件数"]
+    add("K-8", u"C1-3: 席が名指した注入の行で engine が GROUNDED にする件数 0",
+        {u"GROUNDED": gn, u"分母": n, u"ids": t[u"**GROUNDED(誤りを通した)**"][u"ids"]}, gn == 0 and n > 0)
+    vm = t[u"VALUE_MISMATCH"]
+    add("K-9", u"C1-3: 席が名指した注入の行の state は VALUE_MISMATCH 70% 以上",
+        {u"分子": vm[u"件数"], u"分母": n, u"率": vm[u"率"]}, vm[u"率"] is not None and vm[u"率"] >= K9_MIN)
+    add("K-10", u"D′ の偽警報(無改変 128 行で 確認済み の誤った参照先)30 件以上",
+        {u"分子": Dp[u"偽警報(**判定には使わない**)"][u"分子"], u"分母": Dp[u"偽警報(**判定には使わない**)"][u"分母(無改変の件)"],
+         u"率": Dp[u"偽警報(**判定には使わない**)"][u"率"]}, Dp[u"偽警報(**判定には使わない**)"][u"分子"] >= K10_MIN)
+    add("K-11", u"対照 K-C1〜K-C3 が全部期待どおり",
+        {u"K-C1": ctrl[u"K-C1"][u"**一致したか**"], u"K-C2": ctrl[u"K-C2"][u"**一致したか**"],
+         u"K-C3": ctrl[u"K-C3"][u"**一致したか**"]}, bool(ctrl[u"K-11 の入力(3 つとも一致したか)"]))
+    add("K-12", u"木: core/・adapters/ 差分 0 行。覆い +1(C1 の結果の門)",
+        {u"core/・adapters/ の差分 0 行(ac8c3ff・HEAD・作業木)": pins[u"一致"],
+         u"過去の門・覆いの数": u"この script では測らない(pytest と suite_coverage を別に走らせて結果文書に書く)"},
+        None, {u"この script が測った部分": True})
+    return p
+
+
+def cd8_side():
+    s = _load(CD8_SCORE)[u"採点"]
+    A, Cp, Dp = s["A"], s[u"C′"], s[u"D′"]
+    return {u"出どころ": os.path.relpath(CD8_SCORE, ROOT),
+            u"A の誤認定": A[u"誤認定"], u"A の見逃し": A[u"見逃し"], u"A の特定": A[u"正しい参照先の特定"],
+            u"A の保留": A[u"保留"], u"A の軸A": A[u"軸A 停止判定"],
+            u"C′ の誤認定": Cp[u"誤認定"], u"C′ の特定": Cp[u"正しい参照先の特定"], u"C′ の保留": Cp[u"保留"],
+            u"D′ の偽警報": Dp[u"偽警報(**判定には使わない**)"], u"D′ の誤認定": Dp[u"誤認定"],
+            u"D″ の偽警報": s[u"D″"][u"偽警報(**判定には使わない**)"]}
+
+
 # ------------------------------------------------------------------ stage
 def stage_material(a):
     root, work, tasks = base_dirs()
@@ -518,9 +719,10 @@ def stage_material(a):
 
 
 def stage_score(a):
-    no_keys()
+    env = no_keys()
     if os.path.exists(GEN_C1):
         raise SystemExit(u"既に在る: %s(採り直さない)" % GEN_C1)
+    t_start = time.time()
     mat = _load(GEN_MAT)
     missing = [p["docID"] for p in mat[u"書類ごと"]
                if not os.path.exists(os.path.join(GEN_ANS, "%s_answer.json" % p["docID"]))]
@@ -528,14 +730,56 @@ def stage_score(a):
         raise SystemExit(u"**席の答えが無い: %s。止める**(%s)" % (missing, GEN_ANS))
     os.makedirs(base_dirs()[0], exist_ok=True)
     tmpd = tempfile.mkdtemp(prefix="gen_c1_score_", dir=base_dirs()[0])
+    ans_sha = {p["docID"]: sha_file(os.path.join(GEN_ANS, "%s_answer.json" % p["docID"])) for p in mat[u"書類ごと"]}
+    t0 = time.time()
     rec = score_run(GEN_MAT, GEN_ANS, os.path.join(tmpd, "c1.json"))
+    t_score = time.time() - t0
     rec["spec"] = MB.SPEC
     rec["seal"] = SEAL + u" 追記 1"
-    rec["step"] = u"**汎化 C の C1 採点。A 対 C′ が主比較(論点は K-4: 席 A 対 Core-P)**"
+    rec["step"] = u"**汎化 C の C1 採点(段 C1-D)。0 USD・席を呼ばない・通信しない。A 対 C′ が主比較(論点は K-4: 席 A 対 Core-P)**"
     rec[u"軸B の分母の注記"] = u"T5 の行だけ。20 行以下・3 書類。cd8 の 50 行・7 書類と並べるときは分母を書く"
-    if a.with_engine:
-        rec[u"C1-3"] = engine_stage(GEN_MAT, GEN_ANS, base_dirs()[1])
+    rec[u"環境"] = env
+    rec[u"入力の sha256(採点の前後で変えていない。答えは 1 文字も直していない)"] = {
+        u"席の答え": ans_sha, u"材料 material_2026-10-20.json": sha_file(GEN_MAT),
+        u"C0 の記録 c0_2026-10-20.json": sha_file(GEN_C0)}
+    c0 = _load(GEN_C0)
+    t0 = time.time()
+    c13 = engine_stage(GEN_MAT, GEN_ANS, base_dirs()[1]) if a.with_engine else None
+    t_eng = time.time() - t0
+    if c13 is None:
+        raise SystemExit(u"**--with-engine が要る(K-8・K-9 の判定に C1-3 が要る)**")
+    rec[u"C1-3"] = c13
+    imap = inj_map(mat, base_dirs()[1])
+    k45 = k4_k5(rec, mat, c0, imap)
+    rec[u"**K-4・K-5 の数**"] = k45
+    runs = seat_runs()
+    rec[u"**席の便・トークン(実測。Agent tool の usage を csv から読む)**"] = runs
+    rec[u"トークンの見込み(C1-B の下見。実測と並べる)"] = {
+        u"見込み(傾き)の合計": mat[u"**K-1 の数**"][u"集計"][u"合計"][u"トークン見込み(傾き)"],
+        u"見込み(素朴。席の往復を含まない)の合計": mat[u"**K-1 の数**"][u"集計"][u"合計"][u"トークン見込み(素朴)"],
+        u"実測の合計": runs[u"合計トークン"]}
+    pins = G0.engine_pins()
+    rec[u"engine の留め"] = pins
+    t0 = time.time()
+    c_kc1, c_kc2, c_kc3 = kc1(tmpd), kc2(tmpd), kc3(tmpd)
+    t_ctrl = time.time() - t0
+    ctrl = {u"K-C1": c_kc1, u"K-C2": c_kc2, u"K-C3": c_kc3,
+            u"K-11 の入力(3 つとも一致したか)": c_kc1[u"**一致したか**"] and c_kc2[u"**一致したか**"] and c_kc3[u"**一致したか**"]}
+    rec[u"対照"] = ctrl
+    rec[u"**予測 K-1〜K-12**"] = c1_predictions(rec, mat, c13, k45, runs, pins, ctrl)
+    rec[u"cd8 の数(並べる相手。score_2026-10-17.json から読んだ)"] = cd8_side()
+    rec[u"所要秒"] = {u"採点": round(t_score, 1), u"C1-3(engine)": round(t_eng, 1), u"対照 K-C1〜K-C3": round(t_ctrl, 1),
+                  u"全体": round(time.time() - t_start, 1)}
+    rec["limits"] = rec["limits"] + [
+        u"軸B の分母(T5 の行)は 20 行・3 書類。cd8 の 50 行・7 書類と並べるときは分母を書く",
+        u"K-8 の 0 は engine の守りの独立した証拠ではない(T5 の注入は単位込みで一致しない)。席が名指した 25 行のうち T5 が 20、T1 が 5",
+        u"席は 1 席 × 1 便。席の揺れは測らない",
+        u"K-4 の Core-P は C0-2 の記録(profile P16)から読んだ。同じ注入の id の gold が C0 と C1 で一致することを確かめた"]
     _dump(rec, GEN_C1)
+    print("=== C1-D 採点(0 USD)===")
+    for pr in rec[u"**予測 K-1〜K-12**"]:
+        print(u"  %-5s %s" % (pr[u"記号"], {True: u"当たり", False: u"**外れ**", None: u"(別に判定)"}[pr[u"当たり"]]),
+              json.dumps(pr[u"実測"], ensure_ascii=False)[:200])
     print("->", GEN_C1)
     return 0
 
