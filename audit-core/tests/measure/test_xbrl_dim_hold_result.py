@@ -219,5 +219,47 @@ class LimitsTest(unittest.TestCase):
         self.assertIn(u"XBRL_DIM_HOLD_SEAL_2026-10-17.md", self.t)
 
 
+class VerdictWordTest(unittest.TestCase):
+    u"""判定の語(measure/xbrl_dim_hold_2026-10-17.py: verdict_word)。
+
+    **`None`(未測定)を偽として「外れ」と書いた欠陥**を、記憶ではなく門にする
+    (2026-10-19 の再実行の印字で見つけた。記録と文書は正しかった)。
+    """
+
+    def setUp(self):
+        import importlib.util
+        sp = importlib.util.spec_from_file_location(
+            "dim_hold_for_word",
+            os.path.join(ROOT, "measure", "xbrl_dim_hold_2026-10-17.py"))
+        self.M = importlib.util.module_from_spec(sp)
+        sp.loader.exec_module(self.M)
+
+    def test_18_none_is_unmeasured_not_a_miss(self):
+        self.assertEqual(self.M.verdict_word(None), u"**未測定**")
+
+    def test_19_true_and_false_keep_their_words(self):
+        self.assertEqual(self.M.verdict_word(True), u"**当たり**")
+        self.assertEqual(self.M.verdict_word(False), u"**外れ**")
+
+    def test_20_the_three_words_are_distinct(self):
+        words = [self.M.verdict_word(v) for v in (True, None, False)]
+        self.assertEqual(len(set(words)), 3)
+        #: **記録の 3 つの数と同じ語を使っていること**
+        p = rec()[u"**予測との照合**"]
+        self.assertEqual(
+            [sum(1 for x in p[u"欄ごと"]
+                 if self.M.verdict_word(x[u"当たり"]) == w) for w in words],
+            [p[u"当たり"], p[u"**未測定**"], p[u"外れ"]])
+
+    def test_21_values_outside_the_three_states_are_refused(self):
+        u"""**真偽値として緩めると `1` が静かに「当たり」になる。**
+
+        三値以外を拒否することで、`is True` を `if v:` に緩める変異が赤くなる
+        (記憶 `mutations-miss-degenerate-inputs`)。
+        """
+        for bad in (1, 0, "", u"x", [], [1], 1.0):
+            self.assertRaises(ValueError, self.M.verdict_word, bad)
+
+
 if __name__ == "__main__":
     unittest.main()

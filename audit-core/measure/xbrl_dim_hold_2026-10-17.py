@@ -60,6 +60,25 @@ def comparator_accepts(g, claim_value, unit):
     return C._match_value(g["value"], claim_value * scale, scale) is not None
 
 
+def verdict_word(v):
+    u"""判定の語を**1 か所で決める**(`True` / `None` / `False`)。
+
+    **`None` は未測定である。偽として外れに数えない** ―
+    2026-10-19 の再実行の印字でこれを踏んだ(記録と文書は正しく、印字だけが
+    `None` を偽として「外れ」と書いていた)。語を 2 か所に書いたのが原因なので、
+    **所有する 1 か所に寄せる**(記憶 `pin-each-property-in-one-owner`)。
+    """
+    if v is True:
+        return u"**当たり**"
+    if v is None:
+        return u"**未測定**"
+    if v is False:
+        return u"**外れ**"
+    # **三値以外は受けない。**真偽値として緩めると、`1` や `"x"` が
+    # 静かに「当たり」になる(変異がそれで黙った。2026-10-19)
+    raise ValueError(u"判定は True / False / None のどれかである: %r" % (v,))
+
+
 def rate(num, den):
     return {u"分子": num, u"分母": den,
             u"率": (round(100.0 * num / den, 1) if den else None)}
@@ -313,7 +332,7 @@ def main():
     for p in pred:
         print(u"  %-5s %-42s 実測 %-26s %s"
               % (p[u"記号"], p[u"予測"], p[u"実測"],
-                 u"**当たり**" if p[u"当たり"] else u"**外れ**"))
+                 verdict_word(p[u"当たり"])))
     print(u"  当たり %d / 外れ %d / 未測定 %d"
           % (hit, len(pred) - hit - unmeasured, unmeasured))
     print(u"->", OUT)
