@@ -7,7 +7,7 @@
 やること
   1. 引いた 8 件を `fixtures/xbrl/gen_c/draw_2026-10-20.json` から読む(**引き直さない**)
   2. **取得前にキャッシュに無いことを確かめる**(在ったら止める ― 未使用でなくなる)
-  3. 取得して **バイト数と sha256** を記録する
+  3. 取得して **応答が ZIP であることを確かめ**(でなければ消して止まる)、**バイト数と sha256** を記録する
   4. **記録に鍵らしい字が無いことを確かめてから書く**
 
     EDINET_API_KEY=... python3 measure/xbrl_gen_c_fetch_2026-10-20.py
@@ -32,6 +32,7 @@ OUT = os.path.join(FX, "fetched_2026-10-20.json")
 SEAL = "docs/XBRL_GENERALITY_SEAL_2026-10-20.md"
 KEY_NAME = "EDINET_API_KEY"
 KEYISH = re.compile(r"[A-Za-z0-9]{32,}")
+ZIP_MAGIC = b"PK\x03\x04"
 
 
 def main():
@@ -52,6 +53,14 @@ def main():
         path = ED.cache_path(d)
         with io.open(path, "rb") as fh:
             blob = fh.read()
+        if not blob.startswith(ZIP_MAGIC):
+            # 2026-10-20 に実際に起きた: 鍵の所に別の字が入り、8 件とも 139 bytes の
+            # 401 応答(JSON)が ZIP として保存され、記録まで書かれた。応答が ZIP で
+            # なければ **そのキャッシュを消し、記録を書かずに止める**(鍵の値も応答の
+            # 本文も印字しない。先頭 2 bytes と長さだけ)
+            os.remove(path)
+            raise SystemExit("**%s の応答が ZIP でない(先頭 %r・%d bytes)。キャッシュを消して止める。"
+                             "鍵の値を確かめる**" % (d, blob[:2], len(blob)))
         rows.append({"docID": d, "bytes": len(blob),
                      "sha256": hashlib.sha256(blob).hexdigest(),
                      "cache": "~/.cache/audit-core/edinet/%s" % os.path.basename(path)})
