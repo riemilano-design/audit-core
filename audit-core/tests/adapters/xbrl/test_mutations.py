@@ -95,6 +95,10 @@ _GATE_ONLY_BEHAVIOR_TEST_FILENAMES = ("test_claim_layer.py",)
 # "p20" scope: P20(連結・単体の落とし込み)の 8 本だけが使う。**既定の scope には
 # 足さない** ― 足すと既存 81 本の確定した赤・緑が、新しい試験の都合で動きうる。
 _P20_BEHAVIOR_TEST_FILENAMES = ("test_p20.py",)
+# "holds" scope(2026-10-19、封 docs/XBRL_HOLDS_PRODUCT_PATH_SEAL_2026-10-19.md §1 の 6):
+# 保留規則と枠の軸の 3 本(H-)だけが使う。``test_holds.py`` は合成の材料だけで動く
+# (実材料を読む ``test_verify_external.py`` は砂場に ZIP と記録が無いので入れない)。
+_HOLDS_BEHAVIOR_TEST_FILENAMES = ("test_holds.py",)
 
 _GOLDEN_TEST_FILENAMES = ("test_instrument3.py",)
 _GOLDEN_SUPPORT_FILENAMES = ("_instrument.py",)
@@ -135,6 +139,8 @@ def _scope_for(mutation):
         return _GATE_ONLY_BEHAVIOR_TEST_FILENAMES, _GOLDEN_TEST_FILENAMES
     if scope == "p20":
         return _P20_BEHAVIOR_TEST_FILENAMES, ()
+    if scope == "holds":
+        return _HOLDS_BEHAVIOR_TEST_FILENAMES, ()
     if scope == "default":
         return _DEFAULT_NEW_BEHAVIOR_TEST_FILENAMES, _GOLDEN_TEST_FILENAMES
     raise ValueError("mutation %r: unknown scope %r" % (mutation["id"], scope))

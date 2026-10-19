@@ -47,8 +47,18 @@ def strip_html(s):
     return p.text()
 
 
+def _dimension_attr(attrs):
+    """``explicitMember`` の属性文字列から ``dimension`` の値(無ければ None)。"""
+    m = re.search(r'dimension="([^"]+)"', attrs or "")
+    return m.group(1) if m else None
+
+
 def load_instance(zbytes):
-    """xbrl_probe.py: load_instance の写し(.xbrl があればそれ、無ければ iXBRL)。"""
+    """xbrl_probe.py: load_instance の写し(.xbrl があればそれ、無ければ iXBRL)。
+
+    2026-10-19: 各枠に ``axes``(``[[軸, 枠の名], ...]``、``members`` と 1:1)を足した
+    (封 docs/XBRL_HOLDS_PRODUCT_PATH_SEAL_2026-10-19.md)。既存の鍵は変えていない。
+    """
 
     z = zipfile.ZipFile(io.BytesIO(zbytes))
     names = z.namelist()
@@ -70,11 +80,15 @@ def load_instance(zbytes):
             st = per.find(XBRLI + "startDate")
             en = per.find(XBRLI + "endDate")
             members = [m.text for m in c.iter() if m.tag.endswith("explicitMember")]
+            # 軸の保持((e) の準備。封 docs/XBRL_HOLDS_PRODUCT_PATH_SEAL_2026-10-19.md §1 の 1)。
+            # ``members`` と同じ要素から ``dimension`` 属性を取るので、並びと本数は 1:1。
+            axes = [[m.get("dimension"), m.text] for m in c.iter() if m.tag.endswith("explicitMember")]
             contexts[cid] = {
                 "instant": inst.text if inst is not None else None,
                 "start": st.text if st is not None else None,
                 "end": en.text if en is not None else None,
                 "members": members,
+                "axes": axes,
             }
         for el in root:
             tag = el.tag
@@ -122,6 +136,9 @@ def load_instance(zbytes):
                 contexts[m.group(1)] = {
                     "instant": g("instant"), "start": g("startDate"), "end": g("endDate"),
                     "members": re.findall(r"explicitMember[^>]*>([^<]+)<", body),
+                    # 軸の保持(上の .xbrl の経路と同じ 1:1。``dimension`` 属性が無い要素は None)
+                    "axes": [[_dimension_attr(attrs), text_]
+                             for attrs, text_ in re.findall(r"explicitMember([^>]*)>([^<]+)<", body)],
                 }
     return {"source": src, "facts": facts, "contexts": contexts, "textblocks": textblocks, "names": names}
 

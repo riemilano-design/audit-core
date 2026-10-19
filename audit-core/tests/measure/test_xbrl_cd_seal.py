@@ -57,6 +57,14 @@ FROZEN = {
     "measure/SEED.json": "f74146592f68b88d",
 }
 
+# 2026-10-19 追記(封 G-9 の値は消さない)。**宣言された遷移**: 封 `docs/XBRL_HOLDS_PRODUCT_PATH_SEAL_2026-10-19.md`
+# (commit `ae528a4`、独立監査 GO)により `instance.py` に枠の軸 `axes` が足された(既存の鍵は不変)。
+# 上の値は 10-17 の便でのものとして正しい。いまの値はこの表で、**その封が履歴に在るときだけ**受け入れる
+# (`fixtures/frozen_bundle_sha.py` の世代と同じ型: 「ずれ」と「宣言された遷移」を言い分ける)。
+FROZEN_LATER = {
+    "adapters/xbrl/instance.py": ("f2d9e040f19adebf", "docs/XBRL_HOLDS_PRODUCT_PATH_SEAL_2026-10-19.md"),
+}
+
 
 def text(p):
     with io.open(p, encoding="utf-8") as fh:
@@ -260,6 +268,14 @@ class FrozenToolsTest(unittest.TestCase):
         for rel, want in FROZEN.items():
             with io.open(os.path.join(ROOT, rel), "rb") as fh:
                 got = hashlib.sha256(fh.read()).hexdigest()[:16]
+            if got != want and rel in FROZEN_LATER:
+                # 2026-10-19 追記: 宣言された遷移(上の FROZEN_LATER)。封が履歴に在り、値がその封の値のときだけ通す
+                later, seal_rel = FROZEN_LATER[rel]
+                added = subprocess.run(["git", "log", "--diff-filter=A", "--format=%H", "--", seal_rel],
+                                       cwd=ROOT, capture_output=True, text=True).stdout.split()
+                self.assertTrue(added, "**%s が動いているのに、遷移を宣言した封 %s が履歴に無い**" % (rel, seal_rel))
+                self.assertEqual(got, later, "**%s が、宣言された遷移の値とも違う**" % rel)
+                continue
             self.assertEqual(got, want, "**%s が動いている**" % rel)
 
 

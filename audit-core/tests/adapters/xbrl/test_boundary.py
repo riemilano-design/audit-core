@@ -40,10 +40,18 @@ _FORBIDDEN_TO_IMPORT_CORE = ("edinet.py", "instance.py", "extract.py", "vocabula
 # 接続部は Core を呼ぶのが仕事なので、許可の側に名前が増える。
 # ただし入口は Core の名前を 2 つしか使ってよくない
 # (``_ENTRY_CORE_ATTRS``。下の ``EntryCoreUsageTest`` が字で留める)。
+# 2026-10-19(封 docs/XBRL_HOLDS_PRODUCT_PATH_SEAL_2026-10-19.md §1 の 4): 外から渡された
+# 主張を照合する入口 ``verify_external.py`` を足した(contract v1 の入口の写し + 保留規則)。
+# 保留規則そのもの(``holds.py``)はデータの層で、Core を import しない
+# (下の ``HoldsAreDataLayerTest`` が字で留める)。
 _ALLOWED_TO_IMPORT_CORE = (
     "recipes.py", "run.py", "comparators.py", "resolve.py", "registry_setup.py",
-    "verify_document.py",
+    "verify_document.py", "verify_external.py",
 )
+# 外部主張の入口が Core から使ってよい名前(Recipe を組んで verify を 1 回呼ぶだけ)。
+_EXTERNAL_ENTRY_FILE = "verify_external.py"
+_EXTERNAL_ENTRY_CORE_ATTRS = ("Claim", "Contract", "Form", "Modifiers", "Pointer",
+                              "Recipe", "Registry", "verify")
 
 # 入口が Core から使ってよい名前(人間の決定した実装範囲
 # 「既存の関数を既定の順序で呼び出す」の字での表現)。
@@ -266,8 +274,26 @@ class EntryCoreUsageTest(unittest.TestCase):
         self.assertEqual(
             _ALLOWED_TO_IMPORT_CORE,
             ("recipes.py", "run.py", "comparators.py", "resolve.py",
-             "registry_setup.py", "verify_document.py"),
+             "registry_setup.py", "verify_document.py", "verify_external.py"),
         )
+
+    def test_the_external_entry_uses_only_the_pinned_core_names(self):
+        path = os.path.join(_ADAPTERS_XBRL_DIR, _EXTERNAL_ENTRY_FILE)
+        self.assertTrue(os.path.exists(path))
+        self.assertEqual(sorted(_core_attrs_used(path)), sorted(_EXTERNAL_ENTRY_CORE_ATTRS))
+
+
+class HoldsAreDataLayerTest(unittest.TestCase):
+    """保留規則(``holds.py``)は Core にも兄弟の module にも触らない純粋な層。"""
+
+    def test_holds_does_not_import_core(self):
+        self.assertFalse(_imports_audit_core(os.path.join(_ADAPTERS_XBRL_DIR, "holds.py")))
+
+    def test_holds_does_not_import_sibling_modules(self):
+        siblings = ("vocabulary", "instance", "extract", "recipes", "resolve",
+                    "comparators", "registry_setup", "verify_document", "verify_external")
+        self.assertEqual(
+            _imports_sibling_modules(os.path.join(_ADAPTERS_XBRL_DIR, "holds.py"), siblings), [])
 
     def test_the_entry_uses_only_the_two_pinned_core_names(self):
         path = os.path.join(_ADAPTERS_XBRL_DIR, _ENTRY_FILE)

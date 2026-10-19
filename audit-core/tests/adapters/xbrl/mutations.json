@@ -724,5 +724,32 @@
   "predicted": "red",
   "scope": "p20",
   "note": "落とし込みの枝そのものを消す(P16 と同じ振る舞いに戻る)。test_p20.FiresTest.test_single_member_nonconsolidated_contexts_become_plain。"
+ },
+ {
+  "id": "HOLD-R1-holds-move-non-grounded",
+  "file": "holds.py",
+  "old": "    if out.get(\"state\") != GROUNDED or f is None:\n        return out, fired\n    sd = dimension_siblings(facts, f, tol)\n",
+  "new": "    if f is None:\n        return out, fired\n    sd = dimension_siblings(facts, f, tol)\n",
+  "predicted": "red",
+  "scope": "holds",
+  "note": "保留規則が GROUNDED 以外の状態も動かす(封 §3 の表以外の遷移)。test_holds.ApplyHoldsTest.test_non_grounded_states_are_never_moved が赤になるはず。"
+ },
+ {
+  "id": "HOLD-R2-period-ignores-dimension",
+  "file": "holds.py",
+  "old": "        if dim_of(g[\"context\"]) != dim_of(f[\"context\"]):\n            continue                                   # 次元が違う → (d) の仕事\n",
+  "new": "        pass\n",
+  "predicted": "red",
+  "scope": "holds",
+  "note": "P が次元違いの兄弟も拾う(同じ兄弟を (d) と二重に数える)。test_holds.PeriodRuleTest と同値の格子が赤になるはず。"
+ },
+ {
+  "id": "HOLD-R3-axes-not-kept",
+  "file": "instance.py",
+  "old": "                \"members\": members,\n                \"axes\": axes,\n",
+  "new": "                \"members\": members,\n                \"axes\": [],\n",
+  "predicted": "red",
+  "scope": "holds",
+  "note": "枠の軸を記録しない(.xbrl の経路)。test_holds.AxesInInstanceTest.test_xbrl_path_keeps_axes_one_to_one が赤になるはず。"
  }
 ]

@@ -294,18 +294,39 @@ class ReviseRecordTest(unittest.TestCase):
         self.assertIn(u"**逆向きの既存の規則", b)
         self.assertIn(u"人間が決める", b)
 
+    # 2026-10-19 追記(10-17 の封の字は変えない)。**宣言された遷移**: 封
+    # `docs/XBRL_HOLDS_PRODUCT_PATH_SEAL_2026-10-19.md`(commit `ae528a4`、独立監査 GO)により、
+    # v1 の入口の写しが `adapters/xbrl/verify_external.py` に置かれ、境界の一覧に 1 本足された。
+    # 10-17 の主張「入口は measure/ に在り、境界は触っていない」はその便では正しく、
+    # いまは**その封が履歴に在るときだけ**後の形を受け入れる(`fixtures/frozen_bundle_sha.py` の世代と同じ型)。
+    LATER_SEAL = "docs/XBRL_HOLDS_PRODUCT_PATH_SEAL_2026-10-19.md"
+
+    def _later_seal_is_in_history(self):
+        import subprocess
+        out = subprocess.run(["git", "log", "--diff-filter=A", "--format=%H", "--", self.LATER_SEAL],
+                             cwd=ROOT, capture_output=True, text=True)
+        return bool(out.stdout.split())
+
     def test_25_the_allowed_list_was_not_edited(self):
-        """**境界の一覧を書き換えていない**ことを git で確かめる。"""
+        """**境界の一覧を書き換えていない**ことを git で確かめる(2026-10-19 の遷移だけ例外)。"""
         import subprocess
         out = subprocess.run(
             ["git", "diff", "--", "tests/adapters/xbrl/test_boundary.py"],
             cwd=ROOT, capture_output=True, text=True)
-        self.assertEqual(out.stdout.strip(), "",
-                         u"**既存の境界試験に差分が在る**")
+        if out.stdout.strip():
+            self.assertTrue(self._later_seal_is_in_history(),
+                            u"**既存の境界試験に差分が在る**(遷移を宣言した封が履歴に無い)")
+            # 差分で消えた行に、10-17 の一覧(`_FORBIDDEN_TO_IMPORT_CORE` など)の行が無いこと
+            removed = [l for l in out.stdout.splitlines() if l.startswith("-") and not l.startswith("---")]
+            self.assertFalse([l for l in removed if "_FORBIDDEN_TO_IMPORT_CORE" in l or "_ENTRY_CORE_ATTRS" in l],
+                             u"**10-17 の一覧の行が消えている**")
 
     def test_26_the_entry_point_is_not_in_the_adapters_directory(self):
-        self.assertFalse(os.path.exists(os.path.join(
-            ROOT, "adapters", "xbrl", "verify_external.py")))
+        """10-17: adapters/ に入口は無い。2026-10-19 の遷移の後は、封が履歴に在るときだけ在ってよい。"""
+        in_adapters = os.path.exists(os.path.join(ROOT, "adapters", "xbrl", "verify_external.py"))
+        if in_adapters:
+            self.assertTrue(self._later_seal_is_in_history(),
+                            u"**adapters/ に入口が在るのに、遷移を宣言した封が履歴に無い**")
         self.assertTrue(os.path.exists(os.path.join(
             ROOT, "measure", "xbrl_verify_external_v1_2026-10-17.py")))
 

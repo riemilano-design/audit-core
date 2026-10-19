@@ -28,7 +28,11 @@ import subprocess
 import sys
 
 FROZEN_PATHS = ("audit-core/core", "audit-core/adapters")
-FROZEN_COUNT = 22
+# 2026-10-19: 22 → 36。**22 は 2026-10-09 の数で、その後 shogi(2026-10-06 の adapters/shogi 7 本)と
+# kokkai(2026-10-14、adapters/kokkai 9 本)が足されても誰もこの定数を直していなかった**(封
+# docs/XBRL_HOLDS_PRODUCT_PATH_SEAL_2026-10-19.md の予測 F-10「22 → 24」は、この取りこぼしで外れた)。
+# 2026-10-19 に holds.py・verify_external.py を足して 36 本。
+FROZEN_COUNT = 36
 
 # 凍結の基準は**世代で伸びる**。古い値は消さない ― その日の記録はその値で正しい。
 # (本線の共通規則、2026-10-09: 「封じた値は上書きしない。訂正は日付つきの追記で」)
@@ -44,6 +48,10 @@ FROZEN_BUNDLE_GENERATIONS = (
      "2026-10-09 本線 5b0f356(案ア ― 主語の無い数の主張を束縛しない)により移行。"
      "人間の決定 2026-10-08 + 独立監査 GO。本線が独立に 22 本を測って一致。"
      "基準の更新は本線(司令塔)が 2026-10-09 に承認"),
+    ("2617c963207541f69a3f0087916d8c96d483a5dd6ad0db84b143c91601a2d088",
+     "2026-10-19 feature/audit-core-final-eval-8: (d)・P・U を製品の経路へ(adapters/xbrl/holds.py・"
+     "verify_external.py)、instance.py に枠の軸 axes を足した。封 docs/XBRL_HOLDS_PRODUCT_PATH_SEAL_2026-10-19.md。"
+     "対象 36 本(22 本は 2026-10-09 の数。shogi・kokkai の adapter が足されたのに定数が直っていなかった)"),
 )
 
 # 字で留めるのは**いまの世代**。--expect を値なしで渡したときの既定。

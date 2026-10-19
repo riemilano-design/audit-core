@@ -1,0 +1,240 @@
+# -*- coding: utf-8 -*-
+"""外から渡された主張と参照先を、登録済みの規則で照合し、保留規則で止める入口(製品の経路)。
+
+封 `docs/XBRL_HOLDS_PRODUCT_PATH_SEAL_2026-10-19.md`(commit `ae528a4`。実装より先)。
+中身は contract v1 の入口 ``measure/xbrl_verify_external_v1_2026-10-17.py``
+(封 `docs/XBRL_CONTRACT_V1_SEAL_2026-10-17.md`)の**写し**に、保留規則 ``holds.apply_holds``
+((d)・P・U)を足しただけである。**比較の算術は 1 つも新しく書かない**
+(``audit_core`` に登録済みの comparator と :data:`vocabulary.UNIT_SCALE` をそのまま使う)。
+
+役割: **特定は呼び出し側(LLM など)、実証はここ。**この入口は「正しい」を返さない。
+``GROUNDED`` は「存在と値の検査を通過し、保留規則が 1 つも発火しなかった」という意味で、
+:data:`holds.UNCHECKED` の属性は**見ていない**。応答の ``checks`` / ``unchecked`` に毎回入れる。
+
+使い方(library)::
+
+    from adapters.xbrl import instance as I, verify_external as VE
+    inst = I.load_instance(zip_bytes)
+    out = VE.verify_external(
+        {"kind": "single_value", "value": 771000.0, "unit": u"千円",
+         "pointers": ["jppfs_cor:CurrentAssets@CurrentYearInstant"]},
+        inst["facts"], inst["contexts"])
+    out["state"]        # GROUNDED / VALUE_MISMATCH / POINTER_NOT_FOUND / UNPROVABLE
+    out["held"]         # 保留なら True。out["hold_rules"] に ("d","P","U") の部分列
+    out["checks"], out["unchecked"]
+
+使い方(CLI)::
+
+    python3 -m adapters.xbrl.verify_external --doc S100YXMA --claims claims.json --out out.json
+    python3 -m adapters.xbrl.verify_external --zip <書類.zip> --claims claims.json --out out.json
+
+``claims.json`` は ``{"claims": [{"id", "kind", "value", "unit", "pointers"[, "tolerance"]}, ...]}``。
+``kind`` は ``single_value`` / ``difference`` / ``ratio_change``(規則の表 :data:`RULES`)。
+通信しない。EDINET に触らない(ZIP は手元の file だけ)。
+"""
+
+import argparse
+import hashlib
+import io
+import json
+import os
+import sys
+
+import audit_core as core
+
+from . import holds as H
+from . import instance as I
+from . import recipes as R
+from . import registry_setup as RS
+from . import resolve as RV
+from . import vocabulary as V
+
+CACHE_DIR = os.path.join(os.path.expanduser("~"), ".cache", "audit-core", "edinet")
+
+#: 規則の表(contract v1 封 §2)。``(規則の名, 必要な参照先の本数, comparator)``。
+#: **v1 はこの 3 つだけ。増やすなら別の封。**
+RULES = {
+    "single_value": (u"単一の値(金額)", 1, "equals_within"),
+    "difference": (u"差分", 2, "diff(a-b) equals_within"),
+    "ratio_change": (u"変化率", 2, "pct_change(cur,prior)"),
+}
+
+#: 率の単位(``ratio_change`` だけが受ける)。
+RATIO_UNITS = (u"%", u"％")
+
+#: 率の許容。**新しい数を作らない** ― Core が字で留めている既定値を借りる。
+DEFAULT_PCT_TOLERANCE = R.PCT_TOLERANCE_DEFAULT
+
+UNPROVABLE = "UNPROVABLE"
+
+#: **`円`(生の円)は v1 の対象から外す**(contract v1 の入口と同じ理由: 既存コードは `円` に
+#: 書類ごとの丸め精度を使い、`UNIT_SCALE["円"] = 1` を許容幅にすると食い違う)。
+EXCLUDED_MONEY_UNITS = (u"円",)
+
+#: 出力の欄(**並びを字で固定する**。byte の安定のため)
+RESULT_FIELDS = ("id", "kind", "value", "unit", "pointers", "state", "rule", "reason",
+                 "held", "hold_rules", "hold_axes", "recomputed", "comparator",
+                 "checks", "unchecked")
+
+
+def _money_scale(unit):
+    if unit is None or unit in EXCLUDED_MONEY_UNITS:
+        return None
+    return V.UNIT_SCALE.get(unit)
+
+
+def contract_for(kind, unit, n_pointers, tolerance=None):
+    """主張の種類・単位・参照先の本数から contract を作る。作れなければ ``(None, 理由)``。"""
+    rule = RULES.get(kind)
+    if rule is None:
+        return None, u"規則が無い(未知の種類: %r)" % (kind,)
+    name, want, comparator = rule
+    if n_pointers != want:
+        return None, (u"規則 %s は参照先 %d 本を要る(渡されたのは %d 本)"
+                      % (name, want, n_pointers))
+    if kind == "ratio_change":
+        if unit not in RATIO_UNITS:
+            return None, u"規則 %s は率の単位を要る(渡されたのは %r)" % (name, unit)
+        tol = DEFAULT_PCT_TOLERANCE if tolerance is None else float(tolerance)
+        return core.Contract(comparator=comparator, params={"tolerance": tol}), None
+    scale = _money_scale(unit)
+    if scale is None:
+        return None, u"規則 %s は金額の単位を要る(渡されたのは %r)" % (name, unit)
+    return core.Contract(comparator=comparator,
+                         params={"unit_scale": float(scale), "claim_scale": float(scale)}), None
+
+
+def tol_of(unit):
+    """保留規則が使う同額の幅 = 比較器が梯子に渡す幅(``UNIT_SCALE[単位]``)。新しい閾値を作らない。"""
+    return abs(V.UNIT_SCALE.get(unit, 1)) or 1
+
+
+def _claim(spec, claim_id):
+    return core.Claim(id=claim_id, form=core.Form("direct_value"),
+                      subject=spec.get("subject"),
+                      value=float(spec["value"]), unit=spec.get("unit"),
+                      modifiers=core.Modifiers(),
+                      provenance={"source": "external"})
+
+
+def _fact_of(pointers, facts):
+    """参照先 1 本が解けた fact(無ければ None)。
+
+    **resolver と同じ選び方**(``resolve.make_resolver``: 同じ (名, 枠) が複数在れば instance の
+    並びで先頭)。重複の件数と値の揺れは resolver の ``meta`` が持つ。兄弟の判定は枠が同じ fact を
+    除くので、重複のどれを選んでも同じ答えになる。
+    """
+    if len(pointers) != 1:
+        return None
+    name, _, ctx = pointers[0].partition("@")
+    for f in facts:
+        if f["name"] == name and f["context"] == ctx:
+            return f
+    return None
+
+
+def verify_external(spec, facts, contexts=None, registry=None, claim_id="EXT1"):
+    """1 件の外部要求を検証して応答の辞書を返す(**file は書かない**)。
+
+    ``spec`` は ``{"kind", "value", "unit", "pointers"[, "tolerance"]}``。
+    ``facts`` / ``contexts`` は :func:`instance.load_instance` の返り値のもの。
+    規則が無ければ ``UNPROVABLE``(検証しない)。``GROUNDED`` には保留規則を当てる。
+    """
+    pointers = tuple(spec.get("pointers") or ())
+    base = {"pointers": pointers, "kind": spec.get("kind"), "held": False,
+            "hold_rules": (), "hold_axes": [], "checks": H.CHECKS, "unchecked": H.UNCHECKED}
+    contract, why = contract_for(spec.get("kind"), spec.get("unit"), len(pointers),
+                                 spec.get("tolerance"))
+    if contract is None:
+        out = dict(base)
+        out.update({"state": UNPROVABLE, "rule": None, "reason": why,
+                    "recomputed": None, "comparator": None})
+        return out
+    rule_name = RULES[spec["kind"]][0]
+    recipe = core.Recipe(claim=_claim(spec, claim_id),
+                         pointers=tuple(core.Pointer("xbrl", p) for p in pointers),
+                         contract=contract)
+    resolver = RV.make_resolver(facts)
+    registry = registry or RS.register_all(core.Registry.default())
+    res = core.verify(recipe, resolver, registry)
+    out = dict(base)
+    out.update({"state": res.state.name, "rule": rule_name, "reason": res.reason,
+                "recomputed": res.recomputed, "comparator": contract.comparator,
+                "comparison": (res.provenance or {}).get("comparison")})
+    f = _fact_of(pointers, facts)
+    out, _fired = H.apply_holds(out, f, facts, tol_of(spec.get("unit")), spec.get("unit"),
+                                contexts)
+    return out
+
+
+def verify_claims(claims, inst, registry=None):
+    """複数の主張を同じ instance で検証する。返すのは ``RESULT_FIELDS`` の並びの行の一覧。"""
+    registry = registry or RS.register_all(core.Registry.default())
+    rows = []
+    for i, c in enumerate(claims):
+        cid = c.get("id") or ("EXT%d" % (i + 1))
+        out = verify_external(c, inst["facts"], inst.get("contexts"), registry, cid)
+        row = dict(out)
+        row.update({"id": cid, "value": c.get("value"), "unit": c.get("unit"),
+                    "pointers": list(out["pointers"]), "hold_rules": list(out["hold_rules"]),
+                    "checks": list(out["checks"]), "unchecked": list(out["unchecked"])})
+        rows.append({k: row.get(k) for k in RESULT_FIELDS})
+    return rows
+
+
+def sha256_bytes(b):
+    return hashlib.sha256(b).hexdigest()
+
+
+def dumps(out):
+    """**byte を 1 通りに決める。**(同じ入力 -> 同じ byte)"""
+    return json.dumps(out, ensure_ascii=False, indent=1, sort_keys=False) + "\n"
+
+
+def load_zip(path=None, doc=None):
+    if (path is None) == (doc is None):
+        raise ValueError("--zip か --doc のどちらか 1 つを渡す")
+    if path is None:
+        path = os.path.join(CACHE_DIR, "%s.zip" % doc)
+    with open(path, "rb") as fh:
+        return fh.read()
+
+
+def run(zip_bytes, claims):
+    inst = I.load_instance(zip_bytes)
+    rows = verify_claims(claims, inst)
+    states = {}
+    for r in rows:
+        states[r["state"]] = states.get(r["state"], 0) + 1
+    return {
+        "tool": "adapters.xbrl.verify_external",
+        "input": {"zip_sha256": sha256_bytes(zip_bytes), "zip_bytes": len(zip_bytes),
+                  "instance_source": inst["source"], "facts": len(inst["facts"]),
+                  "contexts": len(inst["contexts"]), "claims": len(claims)},
+        "states": {k: states[k] for k in sorted(states)},
+        "held": sum(1 for r in rows if r["held"]),
+        "checks": list(H.CHECKS), "unchecked": list(H.UNCHECKED),
+        "results": rows,
+    }
+
+
+def main(argv=None):
+    ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
+    ap.add_argument("--zip", default=None, help=u"書類の ZIP の道")
+    ap.add_argument("--doc", default=None, help=u"EDINET docID(手元のキャッシュから読む)")
+    ap.add_argument("--claims", required=True, help=u'{"claims": [...]} の JSON file')
+    ap.add_argument("--out", required=True)
+    a = ap.parse_args(argv)
+    zb = load_zip(a.zip, a.doc)
+    with io.open(a.claims, encoding="utf-8") as fh:
+        claims = json.load(fh)["claims"]
+    out = run(zb, claims)
+    with io.open(a.out, "w", encoding="utf-8") as fh:
+        fh.write(dumps(out))
+    print("written: %s  claims=%d  %s  held=%d"
+          % (a.out, out["input"]["claims"], out["states"], out["held"]))
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())
