@@ -19,6 +19,13 @@ u"""QWED と同じ材料で測る ― 封 `docs/QWED_COMPARE_SEAL_2026-10-19.md`
     cd audit-core
     <venv>/bin/python measure/qwed_compare_2026-10-19.py --write
     python3 measure/qwed_compare_2026-10-19.py --set-pytest-log <pytest の log>   # Q-17 の赤の本数を記録に写す
+
+追記 2(2026-10-20、commit db8816f)の E′(**値の字を揃える**。描き方の違いは「値の字」と「換算」だけ):
+    <venv>/bin/python measure/qwed_compare_2026-10-19.py --variant eprime-a --variant eprime-b --write
+      E′a  context の値の字 = claim 側と同じ関数(`scaled_value_str`、換算なし)で両側を揃える。claim は §2 E のまま換算
+      E′b  context は E′a と同じ。claim は**換算しない**(行の `値` を同じ規則で字に)
+      対照 C-2 は E′a で当て直す。W1・S は走らせない。記録は `fixtures/xbrl/cd8/qwed_compare_eprime_2026-10-20.json`
+`--variant` を付けないときの挙動(段 B)は変えない。`--out` で書き先を変えられる(既定は上の 2 本)。
 """
 import argparse
 import collections
@@ -48,6 +55,18 @@ POC_GOLD = os.path.join(FX_SHEET, "poc_gold_2026-10-17.json")
 ERRDET_MAKE = os.path.join(FX_SHEET, "errdet_make_2026-10-17.json")
 ERRDET_CORE = os.path.join(FX_SHEET, "errdet_core_2026-10-17.json")
 OUT = os.path.join(CD8, "qwed_compare_2026-10-19.json")
+#: 追記 2(E′)の記録。段 B の記録(OUT)は書き換えない。
+OUT_EPRIME = os.path.join(CD8, "qwed_compare_eprime_2026-10-20.json")
+SEAL_ADDENDUM2_COMMIT = "db8816f"
+VARIANTS = ("eprime-a", "eprime-b")
+EPRIME_RESULT_SIDE_FILES = ("fixtures/xbrl/cd8/qwed_compare_eprime_2026-10-20.json",
+                            "docs/QWED_COMPARE_EPRIME_RESULT_2026-10-20.md",
+                            "tests/measure/test_qwed_compare_eprime_result.py")
+#: 追記 2 の「実物から描いた 1 行」(S100YXMA R004。記録でこの字になっていることを欄に書く)。
+EPRIME_REAL_LINE = {"doc": "S100YXMA", "id": "R004",
+                    u"context の行": "Fact OrdinaryIncome in CurrentYearDuration equals 12497000000.",
+                    u"claim(E′a)": "Fact OrdinaryIncome in CurrentYearDuration equals 12497000000.",
+                    u"claim(E′b)": "Fact OrdinaryIncome in CurrentYearDuration equals 12497."}
 SEAL_SIDE_FILES = ("docs/QWED_COMPARE_SEAL_2026-10-19.md", "tests/measure/test_qwed_compare_seal.py")
 RESULT_SIDE_FILES = ("measure/qwed_compare_2026-10-19.py", "fixtures/xbrl/cd8/qwed_compare_2026-10-19.json",
                      "docs/QWED_COMPARE_RESULT_2026-10-19.md", "tests/measure/test_qwed_compare_result.py")
@@ -230,8 +249,21 @@ def chunk_lines(lines, limit=CHUNK_MAX):
     return chunks
 
 
-def claim_e(row, ptr, keys, A1, UNIT_SCALE):
-    val = scaled_value_str(row[u"値"], row[u"単位"], UNIT_SCALE)
+def eprime_value_str(val):
+    """追記 2 の E′: context の値の字。**claim 側と同じ関数**(`scaled_value_str`)を換算なしで掛ける
+    (整数なら整数の字 `12497000000`、そうでなければ末尾の 0 を落とした十進の字)。E′b の claim も同じ。"""
+    return scaled_value_str(val, None, {})
+
+
+def fact_lines_eprime(facts):
+    """追記 2 の E′ の context: 形は `fact_lines` と同じ。値の字だけ `eprime_value_str`。"""
+    return ["Fact %s in %s equals %s." % (f["name"].split(":")[-1], f["context"], eprime_value_str(f["value"]))
+            for f in facts]
+
+
+def claim_e(row, ptr, keys, A1, UNIT_SCALE, scale=True):
+    """`scale=False` は E′b(追記 2): 行の `値` を換算せず同じ規則で字にする。段 B の呼び出しは scale=True のまま。"""
+    val = scaled_value_str(row[u"値"], row[u"単位"], UNIT_SCALE) if scale else eprime_value_str(row[u"値"])
     if ptr is None:
         return "Fact equals %s." % val, None, val
     f = keys.get(A1.norm_pointer(ptr))
@@ -327,6 +359,278 @@ def run_xbrl(fv_cls, docs, MB, PR, I, ED, A1, UNIT_SCALE, pu_rows):
     t5_table = [{u"行の単位": k[0], u"借りた ref の単位": k[1], u"行の値(換算なし)が fact の値に在る": k[2], u"件数": n}
                 for k, n in sorted(t5_mech.items(), key=lambda x: -x[1])]
     return w1_rows, e_rows, e_lists, dict(type_count), {u"材料の組み立て": t_mat, "W1": t_w1, "E": t_e}, t5_table
+
+
+# ---------------------------------------------------------------- E′(追記 2)
+def run_eprime(fv_cls, docs, MB, PR, I, ED, A1, UNIT_SCALE, pu_rows, variants):
+    """追記 2 の E′a / E′b。材料の組み立て・参照先の解決・chunk の割り方・行の結果の採り方は E と同じ関数。
+    違いは context の値の字(`fact_lines_eprime`)と、E′b の claim の換算なし(`claim_e(..., scale=False)`)だけ。
+    一覧の字数が封 §1-1 と 8 / 8 一致することは、段 B と同じ描き方(`fact_lines`)で先に確かめる(材料が同じ証拠)。"""
+    pu_by = {(r["doc"], r["id"]): r for r in pu_rows}
+    rows = {v: [] for v in variants}
+    lists = {v: {} for v in variants}
+    secs = {v: 0.0 for v in variants}
+    type_count = collections.Counter()
+    chunks_c2 = {v: None for v in variants}
+    t0 = time.perf_counter()
+    mats = list(material_rows(docs, MB, PR, I, ED))
+    t_mat = time.perf_counter() - t0
+    base_lists = {}
+    for doc, inst, mrows, tampered, chosen, refs in mats:
+        for r in mrows:
+            want = pu_by[(doc, r["id"])]
+            same = (want[u"注入か"] == (u"**注入**" in r) and want[u"値"] == r[u"値"] and want[u"単位"] == r[u"単位"])
+            if not same:
+                raise SystemExit(u"**材料が記録と違う: %s %s %r / %r**" % (doc, r["id"], r, want))
+            t = inject_type(r)
+            if t:
+                type_count[t] += 1
+        facts = inst["facts"]
+        base = fact_lines(facts)
+        base_lists[doc] = (len(facts), len("\n".join(base)))
+        if base_lists[doc] != SEAL_E_LIST[doc]:
+            raise SystemExit(u"**段 B の描き方の一覧が封 §1-1 と違う: %s %r / %r。材料が違う**"
+                             % (doc, base_lists[doc], SEAL_E_LIST[doc]))
+        lines = fact_lines_eprime(facts)
+        chunks = chunk_lines(lines)
+        full = "\n".join(lines)
+        list_nums = set(re.findall(NUM_RE, full))
+        keys = {A1.norm_pointer("xbrl:%s@%s" % (f["name"], f["context"])): f for f in facts}
+        line_of = {id(f): i for i, f in enumerate(facts)}
+        fact_vals = set(round(f["value"], 6) for f in facts)
+        n_dot = sum(1 for ln in lines if "." in ln[:-1].rsplit(" ", 1)[-1])
+        for v in variants:
+            lists[v][doc] = {u"fact(全部が数)": len(facts), u"字数": len(full),
+                             u"段 B の描き方(str(float))の字数": base_lists[doc][1], u"封 §1-1 と一致(段 B の描き方)": True,
+                             u"chunk": [len(c) for c in chunks], u"chunk の数": len(chunks),
+                             u"値の字に '.' が在る行(整数でない値)": n_dot,
+                             u"一覧の数の字で '.' の無いもの(件数)": sum(1 for x in list_nums if "." not in x)}
+            if doc == C2_DOC:
+                chunks_c2[v] = chunks
+            t0 = time.perf_counter()
+            for r in mrows:
+                want = pu_by[(doc, r["id"])]
+                ptr = want[u"席の参照先"]
+                claim, resolved, val = claim_e(r, ptr, keys, A1, UNIT_SCALE, scale=(v == "eprime-a"))
+                per = [verify(fv_cls, claim, c) for c in chunks]
+                bi = best_chunk(per)
+                rd = reading(claim, full)
+                rd.update({u"値の字が一覧の数の字に在る(そのまま)": val in list_nums,
+                           u"claim の値が fact の値に在る(数として)": round(float(Decimal(val)), 6) in fact_vals,
+                           u"行の値(換算なし)が fact の値に在る(数として)": round(float(r[u"値"]), 6) in fact_vals})
+                row = dict({"doc": doc, "id": r["id"], u"注入か": want[u"注入か"], u"注入の型": inject_type(r),
+                            u"席の参照先": ptr, u"参照先の解決": resolved, u"値": r[u"値"], u"単位": r[u"単位"],
+                            u"claim の値の字": val, u"換算": (v == "eprime-a"), "claim": claim,
+                            u"合成の後": want[u"**合成の後**"], u"最終判定(後)": want[u"**最終判定(後)**"],
+                            u"採った chunk": bi},
+                           **per[bi], **{u"分類": classify(per[bi]), u"読み": rd, u"chunk ごと": per})
+                if doc == EPRIME_REAL_LINE["doc"] and r["id"] == EPRIME_REAL_LINE["id"]:
+                    f = keys.get(A1.norm_pointer(ptr)) if ptr else None
+                    row[u"実物の 1 行(追記 2)"] = {
+                        u"context の行": lines[line_of[id(f)]] if f is not None else None,
+                        u"context の行が追記 2 の字": (f is not None and lines[line_of[id(f)]] == EPRIME_REAL_LINE[u"context の行"]),
+                        u"claim が追記 2 の字": claim == EPRIME_REAL_LINE[u"claim(E′a)" if v == "eprime-a" else u"claim(E′b)"]}
+                rows[v].append(row)
+            secs[v] += time.perf_counter() - t0
+    return rows, lists, dict(type_count), t_mat, secs, chunks_c2
+
+
+def run_control_c2_eprime(fv_cls, ea_rows, chunks):
+    """対照 C-2 を E′a で当て直す(追記 2): 換算した値 +1 で `entity_match` が 1.0 から下がるか。"""
+    t0 = time.perf_counter()
+    base = [r for r in ea_rows if r["doc"] == C2_DOC and r["id"] == C2_ID][0]
+    if base[u"合成の後"] != "GROUNDED":
+        raise SystemExit(u"**C-2 の行が GROUNDED でない: %s**" % base[u"合成の後"])
+    val1 = str(int(Decimal(base[u"claim の値の字"]) + 1))
+    claim1 = base["claim"].replace("equals %s." % base[u"claim の値の字"], "equals %s." % val1)
+    if claim1 == base["claim"]:
+        raise SystemExit(u"**C-2 の +1 が claim に入らなかった**")
+    per = [verify(fv_cls, claim1, c) for c in chunks]
+    bi = best_chunk(per)
+    r2 = per[bi]
+    out = {u"期待": u"(E′a)元の行の entity_match 1.0 が、+1 で < 1.0 に下がる(Q-23)", u"元の claim": base["claim"],
+           u"+1 の claim": claim1, u"元の行の結果": {k: base[k] for k in FIELDS}, u"採った chunk": bi,
+           u"chunk ごと": per, u"結果": r2,
+           u"**期待どおり**": bool(base["entity_match"] == 1.0 and r2["entity_match"] is not None and r2["entity_match"] < 1.0)}
+    return out, time.perf_counter() - t0
+
+
+def tally_eprime(rows, ctrl, zero, secs):
+    """追記 2 の予測 Q-18〜Q-24。走らせていない走らせ方に掛かる欄は 未測(None)。"""
+    ea, eb = rows.get("eprime-a"), rows.get("eprime-b")
+    q = []
+
+    def add(sym, pred, actual, hit):
+        q.append({u"記号": sym, u"予測": pred, u"実測": actual, u"当たり": hit})
+
+    def em1(rs):
+        return _cnt(rs, lambda r: r["entity_match"] == 1.0)
+
+    def blocked(rs):
+        return _cnt(rs, lambda r: r["status"] == "BLOCKED")
+
+    def gr(rs):
+        return [r for r in rs if r[u"合成の後"] == "GROUNDED"]
+
+    def inj(rs):
+        return [r for r in rs if r[u"注入か"]]
+
+    def t5(rs):
+        return [r for r in rs if r[u"注入の型"] == "T5_COINCIDENT"]
+
+    if ea is not None:
+        add("Q-18", u"E′a: GROUNDED 18 行の entity_match 1.0 は 18 / 18",
+            {u"GROUNDED の行": len(gr(ea)), u"1.0": em1(gr(ea))}, len(gr(ea)) == 18 and em1(gr(ea)) == 18)
+        add("Q-19", u"E′a: 注入 64 行の entity_match 1.0 は 0〜3",
+            {u"注入の行": len(inj(ea)), u"1.0": em1(inj(ea)),
+             u"型ごとの 1.0": {k: em1([r for r in inj(ea) if r[u"注入の型"] == k]) for k in SEAL_INJECT_TYPES}},
+            len(inj(ea)) == 64 and 0 <= em1(inj(ea)) <= 3)
+    else:
+        add("Q-18", u"E′a: GROUNDED 18 行の entity_match 1.0 は 18 / 18", None, None)
+        add("Q-19", u"E′a: 注入 64 行の entity_match 1.0 は 0〜3", None, None)
+    if eb is not None:
+        add("Q-20", u"E′b: T5 50 行の entity_match 1.0 は 34〜38",
+            {u"T5 の行": len(t5(eb)), u"1.0": em1(t5(eb))}, len(t5(eb)) == 50 and 34 <= em1(t5(eb)) <= 38)
+        pas = _cnt(inj(eb), lambda r: r[u"分類"] == u"通す")
+        add("Q-21", u"E′b: 「QWED が通す」注入は 0〜5 / 64・entity_match 1.0 で数えれば 34 以上 / 64",
+            {u"通す(注入)": pas, u"注入の分類": dict(collections.Counter(r[u"分類"] for r in inj(eb))),
+             u"注入で 1.0": em1(inj(eb))}, 0 <= pas <= 5 and em1(inj(eb)) >= 34)
+    else:
+        add("Q-20", u"E′b: T5 50 行の entity_match 1.0 は 34〜38", None, None)
+        add("Q-21", u"E′b: 「QWED が通す」注入は 0〜5 / 64・entity_match 1.0 で数えれば 34 以上 / 64", None, None)
+    if ea is not None and eb is not None:
+        add("Q-22", u"E′a・E′b とも status BLOCKED(REFUTED)は 55〜70 / 192",
+            {u"E′a": blocked(ea), u"E′b": blocked(eb)}, 55 <= blocked(ea) <= 70 and 55 <= blocked(eb) <= 70)
+    else:
+        add("Q-22", u"E′a・E′b とも status BLOCKED(REFUTED)は 55〜70 / 192", None, None)
+    if ctrl is not None:
+        add("Q-23", u"C-2(E′a): entity_match 1.0 → < 1.0",
+            {u"元": ctrl[u"元の行の結果"]["entity_match"], u"+1": ctrl[u"結果"]["entity_match"],
+             u"verdict": [ctrl[u"元の行の結果"]["deterministic_verdict"], ctrl[u"結果"]["deterministic_verdict"]]},
+            ctrl[u"**期待どおり**"])
+    else:
+        add("Q-23", u"C-2(E′a): entity_match 1.0 → < 1.0", None, None)
+    if eb is not None:
+        add("Q-24", u"E′b: GROUNDED 18 行の entity_match 1.0 は 0〜2",
+            {u"GROUNDED の行": len(gr(eb)), u"1.0": em1(gr(eb))}, len(gr(eb)) == 18 and 0 <= em1(gr(eb)) <= 2)
+    else:
+        add("Q-24", u"E′b: GROUNDED 18 行の entity_match 1.0 は 0〜2", None, None)
+    return q
+
+
+def _counts_eprime(rs):
+    return {u"行": len(rs), "status": dict(collections.Counter(r["status"] for r in rs)),
+            "verdict": dict(collections.Counter(r["deterministic_verdict"] for r in rs)),
+            u"分類": dict(collections.Counter(r[u"分類"] for r in rs)),
+            u"注入の分類": dict(collections.Counter(r[u"分類"] for r in rs if r[u"注入か"])),
+            u"無改変の分類": dict(collections.Counter(r[u"分類"] for r in rs if not r[u"注入か"])),
+            u"entity_match 1.0": _cnt(rs, lambda r: r["entity_match"] == 1.0),
+            u"注入で entity_match 1.0": _cnt(rs, lambda r: r[u"注入か"] and r["entity_match"] == 1.0),
+            u"無改変で entity_match 1.0": _cnt(rs, lambda r: (not r[u"注入か"]) and r["entity_match"] == 1.0),
+            u"GROUNDED で entity_match 1.0": _cnt(rs, lambda r: r[u"合成の後"] == "GROUNDED" and r["entity_match"] == 1.0),
+            u"型ごとの entity_match 1.0": {k: _cnt(rs, lambda r, k=k: r[u"注入の型"] == k and r["entity_match"] == 1.0)
+                                         for k in SEAL_INJECT_TYPES},
+            u"参照先の解決": dict(collections.Counter(str(r[u"参照先の解決"]) for r in rs)),
+            u"通す(注入)": _cnt(rs, lambda r: r[u"注入か"] and r[u"分類"] == u"通す"),
+            u"通す(全体)": _cnt(rs, lambda r: r[u"分類"] == u"通す")}
+
+
+def measure_eprime(variants):
+    zero = check_zero_usd()
+    fv, env = import_qwed()
+    fv_cls = fv.FactVerifier
+    from adapters.xbrl import edinet as ED
+    from adapters.xbrl import instance as I
+    from adapters.xbrl import prose as PR
+    from adapters.xbrl import vocabulary as V
+    MB = _mod("measure/xbrl_cd_material_2026-10-17.py", "cd_material_for_qwed")
+    A1 = MB.A1
+    docs = _load(DRAW)[u"引いた 8 件"]
+    pu_rows = _load(REC_PU)["rows"]
+    if len(pu_rows) != 192:
+        raise SystemExit(u"**記録の行が 192 でない: %d**" % len(pu_rows))
+    print(u"E′ %s ..." % ", ".join(variants))
+    rows, lists, type_count, t_mat, secs_v, chunks_c2 = run_eprime(fv_cls, docs, MB, PR, I, ED, A1, V.UNIT_SCALE,
+                                                                   pu_rows, variants)
+    if type_count != SEAL_INJECT_TYPES:
+        raise SystemExit(u"**注入の型の数が封と違う: %r / %r**" % (type_count, SEAL_INJECT_TYPES))
+    for v in variants:
+        print(u"  %s %d 行 %.1f 秒(材料 %.1f 秒)" % (v, len(rows[v]), secs_v[v], t_mat))
+    ctrl, t_c = (None, 0.0)
+    if "eprime-a" in variants:
+        print(u"対照 C-2(E′a)...")
+        ctrl, t_c = run_control_c2_eprime(fv_cls, rows["eprime-a"], chunks_c2["eprime-a"])
+        print(u"  C-2 %s(%.1f 秒)" % (ctrl[u"**期待どおり**"], t_c))
+    secs = {u"材料の組み立て": round(t_mat, 2), u"対照": round(t_c, 2)}
+    secs.update({v: round(secs_v[v], 2) for v in variants})
+    secs[u"E′ + 対照"] = round(sum(secs_v.values()) + t_c, 2)
+    # Audit Core 側は段 B の記録から写す(再実行しない)。出どころから数え直して一致も見る
+    stage_b = _load(OUT)
+    ac = stage_b[u"**Audit Core 側の写し(再実行しない)**"]
+    if ac != audit_core_copy(pu_rows):
+        raise SystemExit(u"**段 B の記録の Audit Core 側の写しが出どころと違う**")
+    q = tally_eprime(rows, ctrl, zero, secs)
+    real = {v: [r for r in rows[v] if r["doc"] == EPRIME_REAL_LINE["doc"] and r["id"] == EPRIME_REAL_LINE["id"]][0]
+            for v in variants}
+    # 外れの原因の読み(同じ材料を QWED と同じ正規表現・否定語で読んだ数。判定には使わない。QWED は呼んでいない)
+    cause = {}
+    for v in variants:
+        rs = rows[v]
+        one_inj = [r for r in rs if r[u"注入か"] and r["entity_match"] == 1.0]
+        pas_inj = [r for r in one_inj if r[u"分類"] == u"通す"]
+        cause[v] = {
+            u"注入で 1.0 の行": len(one_inj),
+            u"注入で 1.0 の verdict": dict(collections.Counter(r["deterministic_verdict"] for r in one_inj)),
+            u"注入で 1.0 の verdict × claim に否定語の部分一致": [
+                {"verdict": k[0], u"claim に否定語の部分一致": k[1], u"件数": n}
+                for k, n in sorted(collections.Counter(
+                    (r["deterministic_verdict"], bool(r[u"読み"][u"claim の否定語(部分一致)"])) for r in one_inj).items())],
+            u"注入で 1.0 の 分類 × 書類": [{"doc": k[0], u"分類": k[1], u"件数": n} for k, n in sorted(collections.Counter(
+                (r["doc"], r[u"分類"]) for r in one_inj).items())],
+            u"通す(注入)": len(pas_inj),
+            u"通す(注入)で claim に否定語の部分一致が在る": _cnt(pas_inj, lambda r: r[u"読み"][u"claim の否定語(部分一致)"]),
+            u"通す(注入)で claim に否定語の部分一致が無い": _cnt(pas_inj, lambda r: not r[u"読み"][u"claim の否定語(部分一致)"]),
+            u"通す(注入)の明細": [{"doc": r["doc"], "id": r["id"], u"注入の型": r[u"注入の型"], u"参照先の解決": r[u"参照先の解決"],
+                              u"単位": r[u"単位"], u"claim の否定語(部分一致)": r[u"読み"][u"claim の否定語(部分一致)"],
+                              "deterministic_confidence": r["deterministic_confidence"], "citations": r["citations"],
+                              "claim": r["claim"]} for r in pas_inj],
+            u"通す(全体)の 注入か": dict(collections.Counter(str(r[u"注入か"]) for r in rs if r[u"分類"] == u"通す")),
+            u"GROUNDED 18 行の verdict": dict(collections.Counter(r["deterministic_verdict"] for r in rs if r[u"合成の後"] == "GROUNDED")),
+            u"REFUTED の行": _cnt(rs, lambda r: r["deterministic_verdict"] == "REFUTED"),
+            u"REFUTED で claim に否定語の部分一致が無い": _cnt(
+                rs, lambda r: r["deterministic_verdict"] == "REFUTED" and not r[u"読み"][u"claim の否定語(部分一致)"]),
+            u"値の字が一覧の数の字に在る(そのまま)": _cnt(rs, lambda r: r[u"読み"][u"値の字が一覧の数の字に在る(そのまま)"]),
+            u"値の字が一覧に在るのに entity_match < 1.0": _cnt(
+                rs, lambda r: r[u"読み"][u"値の字が一覧の数の字に在る(そのまま)"] and r["entity_match"] != 1.0),
+            u"entity_match 1.0 なのに値の字が一覧に無い": _cnt(
+                rs, lambda r: r["entity_match"] == 1.0 and not r[u"読み"][u"値の字が一覧の数の字に在る(そのまま)"])}
+    tree = tree_state()
+    tree[u"追記 2 の結果側の file(在る)"] = [r for r in EPRIME_RESULT_SIDE_FILES if os.path.exists(os.path.join(ROOT, r))]
+    return {"seal": SEAL, "seal_commit": SEAL_COMMIT, u"追記 2 の commit": SEAL_ADDENDUM2_COMMIT,
+            "step": u"封 追記 2。**E′(値の字を揃える。換算あり E′a / なし E′b)。engine 不変。LLM は呼んでいない。W1・S は走らせていない**",
+            u"走らせた": list(variants), u"0 USD": zero, u"入口": env, u"所要秒": secs,
+            u"分母": {u"注入の型": type_count, u"E′ の一覧": lists,
+                    u"段 B の描き方(str(float))の一覧は封 §1-1 と 8 / 8 一致": True,
+                    u"chunk の数": {v: sum(x[u"chunk の数"] for x in lists[v].values()) for v in variants}},
+            u"実物の 1 行(追記 2)": {u"追記 2 の字": EPRIME_REAL_LINE,
+                                 **{v: {u"context の行": real[v][u"実物の 1 行(追記 2)"][u"context の行"],
+                                        "claim": real[v]["claim"],
+                                        u"context の行が追記 2 の字": real[v][u"実物の 1 行(追記 2)"][u"context の行が追記 2 の字"],
+                                        u"claim が追記 2 の字": real[v][u"実物の 1 行(追記 2)"][u"claim が追記 2 の字"],
+                                        "entity_match": real[v]["entity_match"],
+                                        "deterministic_verdict": real[v]["deterministic_verdict"]} for v in variants}},
+            u"**件数**": {v: _counts_eprime(rows[v]) for v in variants},
+            u"**Audit Core 側の写し(段 B の記録から。再実行しない)**": dict(ac, **{u"写した記録": os.path.relpath(OUT, ROOT)}),
+            u"対照": {"C-2": ctrl} if ctrl is not None else {},
+            u"木": tree,
+            u"**外れの原因の読み**": cause,
+            u"**予測との照合**": summary(q),
+            "rows": rows,
+            "limits": [u"**QWED の 0 USD の決定論の部分だけ**(LLM の経路・Math・GraphFact は測っていない)",
+                       u"**入力の形はこちらが決めた**(E′ は値の字を claim 側と同じ関数で揃え、参照先の解決は Audit Core から渡した)",
+                       u"**W1・S は走らせていない**(追記 2 は E′ だけ)",
+                       u"**同じ 8 書類である。**", u"**qwed 7.3.0 の数である。**",
+                       u"**誤りを通す率(偽陰性)だけを並べる。**"]}
 
 
 # ---------------------------------------------------------------- S
@@ -697,14 +1001,34 @@ def main(argv=None):
     ap = argparse.ArgumentParser()
     ap.add_argument("--write", action="store_true")
     ap.add_argument("--set-pytest-log", help=u"既存の記録に Q-17 の pytest の結果を写す(測定はしない)")
+    ap.add_argument("--variant", action="append", choices=list(VARIANTS),
+                    help=u"追記 2 の E′(eprime-a / eprime-b。繰り返して両方)。付けなければ段 B の 3 本 + 対照")
+    ap.add_argument("--out", help=u"記録の書き先(既定: 段 B は OUT、E′ は OUT_EPRIME)")
     a = ap.parse_args(argv)
+    if a.variant:
+        variants = [v for v in VARIANTS if v in a.variant]
+        rec = measure_eprime(variants)
+        p = rec[u"**予測との照合**"]
+        for x in p[u"欄ごと"]:
+            print(u"%-5s %s  %s" % (x[u"記号"], {True: u"当たり", False: u"外れ", None: u"未測"}[x[u"当たり"]],
+                                   json.dumps(x[u"実測"], ensure_ascii=False)))
+        print(u"当たり %(当たり)d / 外れ %(外れ)d / 未測 %(未測)d" % p)
+        print(u"所要秒 %s" % json.dumps(rec[u"所要秒"], ensure_ascii=False))
+        if a.write:
+            out = a.out or OUT_EPRIME
+            with io.open(out, "w", encoding="utf-8") as fh:
+                json.dump(rec, fh, ensure_ascii=False, indent=1)
+                fh.write("\n")
+            print(u"wrote %s" % out)
+        return 0
+    out = a.out or OUT
     if a.set_pytest_log:
-        rec = _load(OUT)
+        rec = _load(out)
         rec[u"木"] = tree_state()
         rec[u"木"][u"pytest(tests/measure、3.9)"] = parse_pytest_log(a.set_pytest_log)
         q = [x for x in rec[u"**予測との照合**"][u"欄ごと"] if x[u"記号"] != "Q-17"] + [q17_entry(rec[u"木"])]
         rec[u"**予測との照合**"] = summary(q)
-        with io.open(OUT, "w", encoding="utf-8") as fh:
+        with io.open(out, "w", encoding="utf-8") as fh:
             json.dump(rec, fh, ensure_ascii=False, indent=1)
             fh.write("\n")
         print(json.dumps(rec[u"**予測との照合**"][u"欄ごと"][-1], ensure_ascii=False, indent=1))
@@ -718,10 +1042,10 @@ def main(argv=None):
     print(u"当たり %(当たり)d / 外れ %(外れ)d / 未測 %(未測)d" % p)
     print(u"所要秒 %s" % json.dumps(rec[u"所要秒"], ensure_ascii=False))
     if a.write:
-        with io.open(OUT, "w", encoding="utf-8") as fh:
+        with io.open(out, "w", encoding="utf-8") as fh:
             json.dump(rec, fh, ensure_ascii=False, indent=1)
             fh.write("\n")
-        print(u"wrote %s" % OUT)
+        print(u"wrote %s" % out)
     return 0
 
 
