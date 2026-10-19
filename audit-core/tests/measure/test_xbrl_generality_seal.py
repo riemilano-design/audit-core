@@ -198,5 +198,62 @@ class AddendumC1Test(unittest.TestCase):
                                            cwd=ROOT, capture_output=True).returncode == 0, rel)
 
 
+class AddendumP20Test(unittest.TestCase):
+    u"""追記 2(改善 1 ― (ア)の測定を製品の既定 P20 で測り直す)。本文と追記 1 は不変、予測 R-1〜R-11 が測る前に固定されていること。"""
+    AFTER_P20 = ("measure/xbrl_gen_c_p20_2026-10-20.py",
+                 "fixtures/xbrl/gen_c/c0_p20_2026-10-20.json",
+                 "docs/XBRL_GENERALITY_P20_RESULT_2026-10-20.md",
+                 "tests/measure/test_xbrl_generality_p20_result.py")
+
+    def setUp(self):
+        t = text(SEAL)
+        self.before = t[:t.index(u"\n## 追記 2")]
+        self.a = t[t.index(u"\n## 追記 2"):]
+
+    def test_15_body_and_addendum1_precede_and_are_not_repeated(self):
+        for h in ("## §0", "## §6", u"## 追記 1"):
+            self.assertIn("\n" + h, self.before, h)
+            self.assertNotIn("\n" + h, self.a, h)
+        self.assertIn(u"本文(§0〜§6)と追記 1 は 1 文字も直さない**", self.a)
+        self.assertIn(u"**C0 の結果文書と記録は直さない**", self.a)
+
+    def test_16_facts_and_terms_are_literal(self):
+        for s in (u"13 / 50 = 26.0%", u"16 / 20 = 80.0%", u"5 / 20 = 25.0%",
+                  u"`DEFAULT_PROFILE = \"P20\"`", u"**`S100Z4GF` と `S100Z4J8` の 2 件だけ**",
+                  u"**P20 は P16 と 1 件も違わなかった**", u"`measure/SEED.json`",
+                  u"**依ったらその事実を書いて止める**"):
+            self.assertIn(s, self.a, s)
+
+    def test_17_eleven_predictions_each_with_a_failure_mode(self):
+        ids = re.findall(r"(?m)^\| \*\*R-(\d+)\*\* \|", self.a)
+        self.assertEqual(ids, [str(i) for i in range(1, 12)])
+        for line in re.findall(r"(?m)^\| \*\*R-\d+\*\* \|.*$", self.a):
+            cells = [c.strip() for c in line.strip("|").split("|")]
+            self.assertEqual(len(cells), 3, line)
+            self.assertTrue(cells[2], u"外れ方が空: " + line)
+        self.assertEqual(re.findall(r"(?m)^\| \*\*R-C(\d)", self.a), ["1", "2", "3"])
+        self.assertIn(u"**本当に測っているのは R-2〜R-4・R-6 である。**", self.a)
+        self.assertIn(u"これも engine の独立した証拠ではない", self.a)
+
+    def test_18_closed_file_list_and_order(self):
+        for rel in self.AFTER_P20:
+            self.assertIn("`%s`" % rel, self.a, rel)
+        self.assertIn(u"**これ以外に触らない。**", self.a)
+        self.assertIn(u"**数を見てから封・材料・採点・予測を直さない。**", self.a)
+        out = subprocess.run(["git", "log", "-S", u"## 追記 2(2026-10-20)**改善 1", "--format=%H", "--", SEAL_REL],
+                             cwd=ROOT, capture_output=True, text=True)
+        shas = [s for s in out.stdout.split() if s]
+        if not shas:
+            self.skipTest(u"追記 2 がまだ commit されていない")
+        add = shas[-1]
+        for rel in self.AFTER_P20:
+            other = OrderTest._added(rel)
+            if other is None:
+                continue
+            self.assertNotEqual(add, other, rel)
+            self.assertTrue(subprocess.run(["git", "merge-base", "--is-ancestor", add, other],
+                                           cwd=ROOT, capture_output=True).returncode == 0, rel)
+
+
 if __name__ == "__main__":
     unittest.main()
