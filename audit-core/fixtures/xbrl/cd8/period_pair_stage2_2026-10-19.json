@@ -1,0 +1,971 @@
+{
+ "seal": "docs/XBRL_PERIOD_PAIR_SEAL_2026-10-19.md",
+ "seal_commit": "790a5c5",
+ "seal_addendum_commit": "78a04f5",
+ "engine_commit": "ac8c3ff",
+ "step": "**期間の対(PP)の実測。段 2(製品の経路。engine は読むだけ)。0 USD・席は呼ばない**",
+ "head": "ba75d10",
+ "行": {
+  "192 行": 192,
+  "率の主張・参照先 1 本(17 行)": 17,
+  "うち段1 兄弟1本(13)": 13,
+  "うち段1 兄弟2本=重複(4)": 4,
+  "他(175 行)": 175
+ },
+ "**H-12 段1の13行との一致(行ごと)**": [
+  {
+   "doc": "S100YWGX",
+   "id": "R011",
+   "一致": true,
+   "段1": {
+    "state": "GROUNDED",
+    "reason": null,
+    "recomputed": 8.01,
+    "derived_pointers": [
+     "jpcrp_cor:RevenuesFromExternalCustomers@Prior1YearDuration_jpcrp030000-asr_E34102-000DomesticBookoffBusinessReportableSegmentsMember"
+    ],
+    "sign_checked": true
+   },
+   "段2": {
+    "state": "GROUNDED",
+    "reason": null,
+    "recomputed": 8.01,
+    "derived_pointers": [
+     "jpcrp_cor:RevenuesFromExternalCustomers@Prior1YearDuration_jpcrp030000-asr_E34102-000DomesticBookoffBusinessReportableSegmentsMember"
+    ],
+    "direction_checked": true
+   }
+  },
+  {
+   "doc": "S100YWGX",
+   "id": "R013",
+   "一致": true,
+   "段1": {
+    "state": "GROUNDED",
+    "reason": null,
+    "recomputed": 19.11,
+    "derived_pointers": [
+     "jppfs_cor:OrdinaryIncome@Prior1YearDuration_jpcrp030000-asr_E34102-000DomesticBookoffBusinessReportableSegmentsMember"
+    ],
+    "sign_checked": true
+   },
+   "段2": {
+    "state": "GROUNDED",
+    "reason": null,
+    "recomputed": 19.11,
+    "derived_pointers": [
+     "jppfs_cor:OrdinaryIncome@Prior1YearDuration_jpcrp030000-asr_E34102-000DomesticBookoffBusinessReportableSegmentsMember"
+    ],
+    "direction_checked": true
+   }
+  },
+  {
+   "doc": "S100YWGX",
+   "id": "R015",
+   "一致": true,
+   "段1": {
+    "state": "GROUNDED",
+    "reason": null,
+    "recomputed": 18.81,
+    "derived_pointers": [
+     "jpcrp_cor:RevenuesFromExternalCustomers@Prior1YearDuration_jpcrp030000-asr_E34102-000PremiumServiceBusinessReportableSegmentsMember"
+    ],
+    "sign_checked": true
+   },
+   "段2": {
+    "state": "GROUNDED",
+    "reason": null,
+    "recomputed": 18.81,
+    "derived_pointers": [
+     "jpcrp_cor:RevenuesFromExternalCustomers@Prior1YearDuration_jpcrp030000-asr_E34102-000PremiumServiceBusinessReportableSegmentsMember"
+    ],
+    "direction_checked": true
+   }
+  },
+  {
+   "doc": "S100YWGX",
+   "id": "R017",
+   "一致": true,
+   "段1": {
+    "state": "VALUE_MISMATCH",
+    "reason": null,
+    "recomputed": 263.64,
+    "derived_pointers": [
+     "jppfs_cor:OrdinaryIncome@Prior1YearDuration_jpcrp030000-asr_E34102-000PremiumServiceBusinessReportableSegmentsMember"
+    ],
+    "sign_checked": true
+   },
+   "段2": {
+    "state": "VALUE_MISMATCH",
+    "reason": null,
+    "recomputed": 263.64,
+    "derived_pointers": [
+     "jppfs_cor:OrdinaryIncome@Prior1YearDuration_jpcrp030000-asr_E34102-000PremiumServiceBusinessReportableSegmentsMember"
+    ],
+    "direction_checked": true
+   }
+  },
+  {
+   "doc": "S100YZCT",
+   "id": "R003",
+   "一致": true,
+   "段1": {
+    "state": "GROUNDED",
+    "reason": null,
+    "recomputed": 7.99,
+    "derived_pointers": [
+     "jpcrp_cor:NetSalesSummaryOfBusinessResults@Prior1YearDuration"
+    ],
+    "sign_checked": true
+   },
+   "段2": {
+    "state": "GROUNDED",
+    "reason": null,
+    "recomputed": 7.99,
+    "derived_pointers": [
+     "jpcrp_cor:NetSalesSummaryOfBusinessResults@Prior1YearDuration"
+    ],
+    "direction_checked": true
+   }
+  },
+  {
+   "doc": "S100YZCT",
+   "id": "R007",
+   "一致": true,
+   "段1": {
+    "state": "GROUNDED",
+    "reason": null,
+    "recomputed": 4.86,
+    "derived_pointers": [
+     "jpcrp_cor:OrdinaryIncomeLossSummaryOfBusinessResults@Prior1YearDuration"
+    ],
+    "sign_checked": true
+   },
+   "段2": {
+    "state": "GROUNDED",
+    "reason": null,
+    "recomputed": 4.86,
+    "derived_pointers": [
+     "jpcrp_cor:OrdinaryIncomeLossSummaryOfBusinessResults@Prior1YearDuration"
+    ],
+    "direction_checked": true
+   }
+  },
+  {
+   "doc": "S100YZCT",
+   "id": "R009",
+   "一致": true,
+   "段1": {
+    "state": "GROUNDED",
+    "reason": null,
+    "recomputed": 11.03,
+    "derived_pointers": [
+     "jpcrp_cor:ProfitLossAttributableToOwnersOfParentSummaryOfBusinessResults@Prior1YearDuration"
+    ],
+    "sign_checked": true
+   },
+   "段2": {
+    "state": "GROUNDED",
+    "reason": null,
+    "recomputed": 11.03,
+    "derived_pointers": [
+     "jpcrp_cor:ProfitLossAttributableToOwnersOfParentSummaryOfBusinessResults@Prior1YearDuration"
+    ],
+    "direction_checked": true
+   }
+  },
+  {
+   "doc": "S100YYRV",
+   "id": "R014",
+   "一致": false,
+   "段1": {
+    "state": "GROUNDED",
+    "reason": null,
+    "recomputed": -3.66,
+    "derived_pointers": [
+     "jppfs_cor:NetSales@Prior1YearDuration"
+    ],
+    "sign_checked": true
+   },
+   "段2": {
+    "state": "UNPROVABLE",
+    "reason": "ambiguous_dimension:1",
+    "recomputed": -3.66,
+    "derived_pointers": [
+     "jppfs_cor:NetSales@Prior1YearDuration"
+    ],
+    "direction_checked": true
+   }
+  },
+  {
+   "doc": "S100YYRV",
+   "id": "R016",
+   "一致": true,
+   "段1": {
+    "state": "GROUNDED",
+    "reason": null,
+    "recomputed": -35.21,
+    "derived_pointers": [
+     "jppfs_cor:OrdinaryIncome@Prior1YearDuration"
+    ],
+    "sign_checked": true
+   },
+   "段2": {
+    "state": "GROUNDED",
+    "reason": null,
+    "recomputed": -35.21,
+    "derived_pointers": [
+     "jppfs_cor:OrdinaryIncome@Prior1YearDuration"
+    ],
+    "direction_checked": true
+   }
+  },
+  {
+   "doc": "S100YZEV",
+   "id": "R010",
+   "一致": true,
+   "段1": {
+    "state": "GROUNDED",
+    "reason": null,
+    "recomputed": -17.66,
+    "derived_pointers": [
+     "jpcrp_cor:NetSalesSummaryOfBusinessResults@Prior1YearDuration_NonConsolidatedMember"
+    ],
+    "sign_checked": true
+   },
+   "段2": {
+    "state": "GROUNDED",
+    "reason": null,
+    "recomputed": -17.66,
+    "derived_pointers": [
+     "jpcrp_cor:NetSalesSummaryOfBusinessResults@Prior1YearDuration_NonConsolidatedMember"
+    ],
+    "direction_checked": true
+   }
+  },
+  {
+   "doc": "S100YZEV",
+   "id": "R012",
+   "一致": true,
+   "段1": {
+    "state": "GROUNDED",
+    "reason": null,
+    "recomputed": -75.88,
+    "derived_pointers": [
+     "jppfs_cor:OperatingIncome@Prior1YearDuration_NonConsolidatedMember"
+    ],
+    "sign_checked": true
+   },
+   "段2": {
+    "state": "GROUNDED",
+    "reason": null,
+    "recomputed": -75.88,
+    "derived_pointers": [
+     "jppfs_cor:OperatingIncome@Prior1YearDuration_NonConsolidatedMember"
+    ],
+    "direction_checked": true
+   }
+  },
+  {
+   "doc": "S100YZEV",
+   "id": "R014",
+   "一致": true,
+   "段1": {
+    "state": "GROUNDED",
+    "reason": null,
+    "recomputed": -73.75,
+    "derived_pointers": [
+     "jpcrp_cor:OrdinaryIncomeLossSummaryOfBusinessResults@Prior1YearDuration_NonConsolidatedMember"
+    ],
+    "sign_checked": true
+   },
+   "段2": {
+    "state": "GROUNDED",
+    "reason": null,
+    "recomputed": -73.75,
+    "derived_pointers": [
+     "jpcrp_cor:OrdinaryIncomeLossSummaryOfBusinessResults@Prior1YearDuration_NonConsolidatedMember"
+    ],
+    "direction_checked": true
+   }
+  },
+  {
+   "doc": "S100YZEV",
+   "id": "R016",
+   "一致": true,
+   "段1": {
+    "state": "GROUNDED",
+    "reason": null,
+    "recomputed": -72.41,
+    "derived_pointers": [
+     "jpcrp_cor:NetIncomeLossSummaryOfBusinessResults@Prior1YearDuration_NonConsolidatedMember"
+    ],
+    "sign_checked": true
+   },
+   "段2": {
+    "state": "GROUNDED",
+    "reason": null,
+    "recomputed": -72.41,
+    "derived_pointers": [
+     "jpcrp_cor:NetIncomeLossSummaryOfBusinessResults@Prior1YearDuration_NonConsolidatedMember"
+    ],
+    "direction_checked": true
+   }
+  }
+ ],
+ "**H-16/H-17 重複4行の PP-2 後**": [
+  {
+   "doc": "S100YWGX",
+   "id": "R004",
+   "後の兄弟本数(PP-2)": 1,
+   "duplicate_values": false,
+   "1本になった": true
+  },
+  {
+   "doc": "S100YWGX",
+   "id": "R006",
+   "後の兄弟本数(PP-2)": 1,
+   "duplicate_values": false,
+   "1本になった": true
+  },
+  {
+   "doc": "S100YWGX",
+   "id": "R008",
+   "後の兄弟本数(PP-2)": 1,
+   "duplicate_values": false,
+   "1本になった": true
+  },
+  {
+   "doc": "S100YZCT",
+   "id": "R005",
+   "後の兄弟本数(PP-2)": 1,
+   "duplicate_values": false,
+   "1本になった": true
+  }
+ ],
+ "**H-17 重複4行の state 分布**": {
+  "GROUNDED": 3,
+  "UNPROVABLE": 1
+ },
+ "**H-18(task) 他175行と③の一致**": {
+  "一致": 175,
+  "行": 175,
+  "不一致の明細": []
+ },
+ "**H-18(封) 13行はPP-2で変わらない**": [
+  {
+   "doc": "S100YWGX",
+   "id": "R011",
+   "後の兄弟本数(PP-2)": 1,
+   "duplicate_values": false,
+   "変わらない": true
+  },
+  {
+   "doc": "S100YWGX",
+   "id": "R013",
+   "後の兄弟本数(PP-2)": 1,
+   "duplicate_values": false,
+   "変わらない": true
+  },
+  {
+   "doc": "S100YWGX",
+   "id": "R015",
+   "後の兄弟本数(PP-2)": 1,
+   "duplicate_values": false,
+   "変わらない": true
+  },
+  {
+   "doc": "S100YWGX",
+   "id": "R017",
+   "後の兄弟本数(PP-2)": 1,
+   "duplicate_values": false,
+   "変わらない": true
+  },
+  {
+   "doc": "S100YZCT",
+   "id": "R003",
+   "後の兄弟本数(PP-2)": 1,
+   "duplicate_values": false,
+   "変わらない": true
+  },
+  {
+   "doc": "S100YZCT",
+   "id": "R007",
+   "後の兄弟本数(PP-2)": 1,
+   "duplicate_values": false,
+   "変わらない": true
+  },
+  {
+   "doc": "S100YZCT",
+   "id": "R009",
+   "後の兄弟本数(PP-2)": 1,
+   "duplicate_values": false,
+   "変わらない": true
+  },
+  {
+   "doc": "S100YYRV",
+   "id": "R014",
+   "後の兄弟本数(PP-2)": 1,
+   "duplicate_values": false,
+   "変わらない": true
+  },
+  {
+   "doc": "S100YYRV",
+   "id": "R016",
+   "後の兄弟本数(PP-2)": 1,
+   "duplicate_values": false,
+   "変わらない": true
+  },
+  {
+   "doc": "S100YZEV",
+   "id": "R010",
+   "後の兄弟本数(PP-2)": 1,
+   "duplicate_values": false,
+   "変わらない": true
+  },
+  {
+   "doc": "S100YZEV",
+   "id": "R012",
+   "後の兄弟本数(PP-2)": 1,
+   "duplicate_values": false,
+   "変わらない": true
+  },
+  {
+   "doc": "S100YZEV",
+   "id": "R014",
+   "後の兄弟本数(PP-2)": 1,
+   "duplicate_values": false,
+   "変わらない": true
+  },
+  {
+   "doc": "S100YZEV",
+   "id": "R016",
+   "後の兄弟本数(PP-2)": 1,
+   "duplicate_values": false,
+   "変わらない": true
+  }
+ ],
+ "**対照(13行すべて)**": {
+  "値": {
+   "VALUE_MISMATCH": 13
+  },
+  "符号": {
+   "VALUE_MISMATCH": 13
+  },
+  "前期を消す": {
+   "('UNPROVABLE', 'prior_sibling:0')": 13
+  },
+  "前期を増やす(H-19)": {
+   "('UNPROVABLE', 'prior_sibling:2;duplicate_values')": 13
+  }
+ },
+ "**実証できた行**": {
+  "175行(③と同じ組み立て)": 62,
+  "17行(PP。段2)": 15,
+  "192行の合計(段2)": 77,
+  "段1(参考。H-11)": 75,
+  "v1(参考。62のはず)": 62
+ },
+ "**H-13 変異 PP-R1〜R4**": [
+  {
+   "id": "PP-R1-sign-ignored",
+   "rc": 1,
+   "色": "red",
+   "予測": "red"
+  },
+  {
+   "id": "PP-R2-two-siblings-picks-the-first",
+   "rc": 1,
+   "色": "red",
+   "予測": "red"
+  },
+  {
+   "id": "PP-R3-dimension-different-prior-counted",
+   "rc": 1,
+   "色": "red",
+   "予測": "red"
+  },
+  {
+   "id": "PP-R4-duplicate-differing-values-collapsed",
+   "rc": 1,
+   "色": "red",
+   "予測": "red"
+  }
+ ],
+ "rows17": [
+  {
+   "doc": "S100YWGX",
+   "id": "R004",
+   "単位": "％",
+   "値": 9.2,
+   "席の参照先": "netsales@currentyearduration",
+   "段1 兄弟の本数": 2,
+   "state": "GROUNDED",
+   "reason": null,
+   "recomputed": 9.16,
+   "derived_pointers": [
+    "jppfs_cor:NetSales@Prior1YearDuration"
+   ],
+   "direction_checked": true,
+   "held": false,
+   "hold_rules": [],
+   "hold_axes": [],
+   "後の兄弟本数(PP-2)": 1,
+   "duplicate_values": false
+  },
+  {
+   "doc": "S100YWGX",
+   "id": "R006",
+   "単位": "％",
+   "値": 20.9,
+   "席の参照先": "ordinaryincome@currentyearduration",
+   "段1 兄弟の本数": 2,
+   "state": "GROUNDED",
+   "reason": null,
+   "recomputed": 20.93,
+   "derived_pointers": [
+    "jppfs_cor:OrdinaryIncome@Prior1YearDuration"
+   ],
+   "direction_checked": true,
+   "held": false,
+   "hold_rules": [],
+   "hold_axes": [],
+   "後の兄弟本数(PP-2)": 1,
+   "duplicate_values": false
+  },
+  {
+   "doc": "S100YWGX",
+   "id": "R008",
+   "単位": "％",
+   "値": 31.5,
+   "席の参照先": "profitlossattributabletoownersofparent@currentyearduration",
+   "段1 兄弟の本数": 2,
+   "state": "UNPROVABLE",
+   "reason": "ambiguous_dimension:2",
+   "recomputed": 31.51,
+   "derived_pointers": [
+    "jppfs_cor:ProfitLossAttributableToOwnersOfParent@Prior1YearDuration"
+   ],
+   "direction_checked": true,
+   "held": true,
+   "hold_rules": [
+    "d"
+   ],
+   "hold_axes": [
+    "jppfs_cor:ComponentsOfEquityAxis"
+   ],
+   "後の兄弟本数(PP-2)": 1,
+   "duplicate_values": false
+  },
+  {
+   "doc": "S100YWGX",
+   "id": "R011",
+   "単位": "％",
+   "値": 8.0,
+   "席の参照先": "revenuesfromexternalcustomers@currentyearduration_jpcrp030000-asr_e34102-000domesticbookoffbusinessreportablesegmentsmember",
+   "段1 兄弟の本数": 1,
+   "state": "GROUNDED",
+   "reason": null,
+   "recomputed": 8.01,
+   "derived_pointers": [
+    "jpcrp_cor:RevenuesFromExternalCustomers@Prior1YearDuration_jpcrp030000-asr_E34102-000DomesticBookoffBusinessReportableSegmentsMember"
+   ],
+   "direction_checked": true,
+   "held": false,
+   "hold_rules": [],
+   "hold_axes": [],
+   "後の兄弟本数(PP-2)": 1,
+   "duplicate_values": false
+  },
+  {
+   "doc": "S100YWGX",
+   "id": "R013",
+   "単位": "％",
+   "値": 19.1,
+   "席の参照先": "ordinaryincome@currentyearduration_jpcrp030000-asr_e34102-000domesticbookoffbusinessreportablesegmentsmember",
+   "段1 兄弟の本数": 1,
+   "state": "GROUNDED",
+   "reason": null,
+   "recomputed": 19.11,
+   "derived_pointers": [
+    "jppfs_cor:OrdinaryIncome@Prior1YearDuration_jpcrp030000-asr_E34102-000DomesticBookoffBusinessReportableSegmentsMember"
+   ],
+   "direction_checked": true,
+   "held": false,
+   "hold_rules": [],
+   "hold_axes": [],
+   "後の兄弟本数(PP-2)": 1,
+   "duplicate_values": false
+  },
+  {
+   "doc": "S100YWGX",
+   "id": "R015",
+   "単位": "％",
+   "値": 18.8,
+   "席の参照先": "revenuesfromexternalcustomers@currentyearduration_jpcrp030000-asr_e34102-000premiumservicebusinessreportablesegmentsmember",
+   "段1 兄弟の本数": 1,
+   "state": "GROUNDED",
+   "reason": null,
+   "recomputed": 18.81,
+   "derived_pointers": [
+    "jpcrp_cor:RevenuesFromExternalCustomers@Prior1YearDuration_jpcrp030000-asr_E34102-000PremiumServiceBusinessReportableSegmentsMember"
+   ],
+   "direction_checked": true,
+   "held": false,
+   "hold_rules": [],
+   "hold_axes": [],
+   "後の兄弟本数(PP-2)": 1,
+   "duplicate_values": false
+  },
+  {
+   "doc": "S100YWGX",
+   "id": "R017",
+   "単位": "％",
+   "値": 258.0,
+   "席の参照先": "ordinaryincome@currentyearduration_jpcrp030000-asr_e34102-000premiumservicebusinessreportablesegmentsmember",
+   "段1 兄弟の本数": 1,
+   "state": "VALUE_MISMATCH",
+   "reason": null,
+   "recomputed": 263.64,
+   "derived_pointers": [
+    "jppfs_cor:OrdinaryIncome@Prior1YearDuration_jpcrp030000-asr_E34102-000PremiumServiceBusinessReportableSegmentsMember"
+   ],
+   "direction_checked": true,
+   "held": false,
+   "hold_rules": [],
+   "hold_axes": [],
+   "後の兄弟本数(PP-2)": 1,
+   "duplicate_values": false
+  },
+  {
+   "doc": "S100YZCT",
+   "id": "R003",
+   "単位": "％",
+   "値": 8.0,
+   "席の参照先": "netsalessummaryofbusinessresults@currentyearduration",
+   "段1 兄弟の本数": 1,
+   "state": "GROUNDED",
+   "reason": null,
+   "recomputed": 7.99,
+   "derived_pointers": [
+    "jpcrp_cor:NetSalesSummaryOfBusinessResults@Prior1YearDuration"
+   ],
+   "direction_checked": true,
+   "held": false,
+   "hold_rules": [],
+   "hold_axes": [],
+   "後の兄弟本数(PP-2)": 1,
+   "duplicate_values": false
+  },
+  {
+   "doc": "S100YZCT",
+   "id": "R005",
+   "単位": "％",
+   "値": 1.0,
+   "席の参照先": "operatingincome@currentyearduration",
+   "段1 兄弟の本数": 2,
+   "state": "GROUNDED",
+   "reason": null,
+   "recomputed": 1.03,
+   "derived_pointers": [
+    "jppfs_cor:OperatingIncome@Prior1YearDuration"
+   ],
+   "direction_checked": true,
+   "held": false,
+   "hold_rules": [],
+   "hold_axes": [],
+   "後の兄弟本数(PP-2)": 1,
+   "duplicate_values": false
+  },
+  {
+   "doc": "S100YZCT",
+   "id": "R007",
+   "単位": "％",
+   "値": 4.9,
+   "席の参照先": "ordinaryincomelosssummaryofbusinessresults@currentyearduration",
+   "段1 兄弟の本数": 1,
+   "state": "GROUNDED",
+   "reason": null,
+   "recomputed": 4.86,
+   "derived_pointers": [
+    "jpcrp_cor:OrdinaryIncomeLossSummaryOfBusinessResults@Prior1YearDuration"
+   ],
+   "direction_checked": true,
+   "held": false,
+   "hold_rules": [],
+   "hold_axes": [],
+   "後の兄弟本数(PP-2)": 1,
+   "duplicate_values": false
+  },
+  {
+   "doc": "S100YZCT",
+   "id": "R009",
+   "単位": "％",
+   "値": 11.0,
+   "席の参照先": "profitlossattributabletoownersofparentsummaryofbusinessresults@currentyearduration",
+   "段1 兄弟の本数": 1,
+   "state": "GROUNDED",
+   "reason": null,
+   "recomputed": 11.03,
+   "derived_pointers": [
+    "jpcrp_cor:ProfitLossAttributableToOwnersOfParentSummaryOfBusinessResults@Prior1YearDuration"
+   ],
+   "direction_checked": true,
+   "held": false,
+   "hold_rules": [],
+   "hold_axes": [],
+   "後の兄弟本数(PP-2)": 1,
+   "duplicate_values": false
+  },
+  {
+   "doc": "S100YYRV",
+   "id": "R014",
+   "単位": "％",
+   "値": 3.7,
+   "席の参照先": "netsales@currentyearduration",
+   "段1 兄弟の本数": 1,
+   "state": "UNPROVABLE",
+   "reason": "ambiguous_dimension:1",
+   "recomputed": -3.66,
+   "derived_pointers": [
+    "jppfs_cor:NetSales@Prior1YearDuration"
+   ],
+   "direction_checked": true,
+   "held": true,
+   "hold_rules": [
+    "d"
+   ],
+   "hold_axes": [
+    "jpcrp_cor:OperatingSegmentsAxis"
+   ],
+   "後の兄弟本数(PP-2)": 1,
+   "duplicate_values": false
+  },
+  {
+   "doc": "S100YYRV",
+   "id": "R016",
+   "単位": "％",
+   "値": 35.2,
+   "席の参照先": "ordinaryincome@currentyearduration",
+   "段1 兄弟の本数": 1,
+   "state": "GROUNDED",
+   "reason": null,
+   "recomputed": -35.21,
+   "derived_pointers": [
+    "jppfs_cor:OrdinaryIncome@Prior1YearDuration"
+   ],
+   "direction_checked": true,
+   "held": false,
+   "hold_rules": [],
+   "hold_axes": [],
+   "後の兄弟本数(PP-2)": 1,
+   "duplicate_values": false
+  },
+  {
+   "doc": "S100YZEV",
+   "id": "R010",
+   "単位": "％",
+   "値": 17.7,
+   "席の参照先": "netsalessummaryofbusinessresults@currentyearduration_nonconsolidatedmember",
+   "段1 兄弟の本数": 1,
+   "state": "GROUNDED",
+   "reason": null,
+   "recomputed": -17.66,
+   "derived_pointers": [
+    "jpcrp_cor:NetSalesSummaryOfBusinessResults@Prior1YearDuration_NonConsolidatedMember"
+   ],
+   "direction_checked": true,
+   "held": false,
+   "hold_rules": [],
+   "hold_axes": [],
+   "後の兄弟本数(PP-2)": 1,
+   "duplicate_values": false
+  },
+  {
+   "doc": "S100YZEV",
+   "id": "R012",
+   "単位": "％",
+   "値": 75.9,
+   "席の参照先": "operatingincome@currentyearduration_nonconsolidatedmember",
+   "段1 兄弟の本数": 1,
+   "state": "GROUNDED",
+   "reason": null,
+   "recomputed": -75.88,
+   "derived_pointers": [
+    "jppfs_cor:OperatingIncome@Prior1YearDuration_NonConsolidatedMember"
+   ],
+   "direction_checked": true,
+   "held": false,
+   "hold_rules": [],
+   "hold_axes": [],
+   "後の兄弟本数(PP-2)": 1,
+   "duplicate_values": false
+  },
+  {
+   "doc": "S100YZEV",
+   "id": "R014",
+   "単位": "％",
+   "値": 73.8,
+   "席の参照先": "ordinaryincomelosssummaryofbusinessresults@currentyearduration_nonconsolidatedmember",
+   "段1 兄弟の本数": 1,
+   "state": "GROUNDED",
+   "reason": null,
+   "recomputed": -73.75,
+   "derived_pointers": [
+    "jpcrp_cor:OrdinaryIncomeLossSummaryOfBusinessResults@Prior1YearDuration_NonConsolidatedMember"
+   ],
+   "direction_checked": true,
+   "held": false,
+   "hold_rules": [],
+   "hold_axes": [],
+   "後の兄弟本数(PP-2)": 1,
+   "duplicate_values": false
+  },
+  {
+   "doc": "S100YZEV",
+   "id": "R016",
+   "単位": "％",
+   "値": 72.4,
+   "席の参照先": "netincomelosssummaryofbusinessresults@currentyearduration_nonconsolidatedmember",
+   "段1 兄弟の本数": 1,
+   "state": "GROUNDED",
+   "reason": null,
+   "recomputed": -72.41,
+   "derived_pointers": [
+    "jpcrp_cor:NetIncomeLossSummaryOfBusinessResults@Prior1YearDuration_NonConsolidatedMember"
+   ],
+   "direction_checked": true,
+   "held": false,
+   "hold_rules": [],
+   "hold_axes": [],
+   "後の兄弟本数(PP-2)": 1,
+   "duplicate_values": false
+  }
+ ],
+ "**予測との照合**": {
+  "欄ごと": [
+   {
+    "記号": "H-12",
+    "封の字": "段 2(製品の経路)の 192 行再現は段 1 の記録と 192/192 一致・engine の欄以外 byte 同一",
+    "この便で測った範囲": "段 1 の 13 行(行ごとの state・reason・recomputed・derived_pointers・direction_checked)との一致",
+    "実測": "12 / 13",
+    "当たり": false,
+    "commit ac8c3ff 自身の報告(参考・機械で確かめ直したものではない)": "191 / 192"
+   },
+   {
+    "記号": "H-13",
+    "封の字": "PP-R1〜R3 の 3 本とも red(追記 1 で PP-R4 を足し 4 本)",
+    "実測": [
+     {
+      "id": "PP-R1-sign-ignored",
+      "rc": 1,
+      "色": "red",
+      "予測": "red"
+     },
+     {
+      "id": "PP-R2-two-siblings-picks-the-first",
+      "rc": 1,
+      "色": "red",
+      "予測": "red"
+     },
+     {
+      "id": "PP-R3-dimension-different-prior-counted",
+      "rc": 1,
+      "色": "red",
+      "予測": "red"
+     },
+     {
+      "id": "PP-R4-duplicate-differing-values-collapsed",
+      "rc": 1,
+      "色": "red",
+      "予測": "red"
+     }
+    ],
+    "当たり": true
+   },
+   {
+    "記号": "H-14",
+    "封の字": "独立監査は REVISE 1 回 → GO",
+    "実測": "REVISE 0 回 → GO(commit ac8c3ff の trailer `独立監査: GO`。回数は機械で測った数ではなく、司令塔からの引き継ぎの字を写した)",
+    "当たり": false
+   },
+   {
+    "記号": "H-15",
+    "封の字": "run_tests.sh 1 回目で赤くなるのは test_xbrl_axis3_decision.py test_9 だけ。追記の後 2 回目 rc=0",
+    "実測": "全数の log(scratchpad/step5/run_tests_step5.log、1,923 行、ac8c3ff の後・このSTEPの直し前に走らせたもの)で pytest 3327 passed/5 skipped、unittest discover は Ran 3236・FAILED (failures=1, skipped=5)・FAIL は test_9_the_engine_was_not_touched の 1 本だけ。このSTEPで LATER_ENGINE_COMMITS に ac8c3ff を足した後、tests/measure/test_xbrl_axis3_decision.py は 11 passed(2 回目に相当)",
+    "当たり": true
+   },
+   {
+    "記号": "H-16",
+    "封の字(追記1)": "重複の 4 行は値が全部同じで、PP-2 の後は兄弟 1 本になる(4/4)",
+    "実測": [
+     {
+      "doc": "S100YWGX",
+      "id": "R004",
+      "後の兄弟本数(PP-2)": 1,
+      "duplicate_values": false,
+      "1本になった": true
+     },
+     {
+      "doc": "S100YWGX",
+      "id": "R006",
+      "後の兄弟本数(PP-2)": 1,
+      "duplicate_values": false,
+      "1本になった": true
+     },
+     {
+      "doc": "S100YWGX",
+      "id": "R008",
+      "後の兄弟本数(PP-2)": 1,
+      "duplicate_values": false,
+      "1本になった": true
+     },
+     {
+      "doc": "S100YZCT",
+      "id": "R005",
+      "後の兄弟本数(PP-2)": 1,
+      "duplicate_values": false,
+      "1本になった": true
+     }
+    ],
+    "当たり": true
+   },
+   {
+    "記号": "H-17",
+    "封の字(追記1)": "その 4 行の検算は GROUNDED 3〜4・VALUE_MISMATCH 0〜1。実証できた行は 75 → 79",
+    "実測": {
+     "4 行の state": {
+      "GROUNDED": 3,
+      "UNPROVABLE": 1
+     },
+     "実証できた行": "75 → 77"
+    },
+    "当たり": false
+   },
+   {
+    "記号": "H-18",
+    "封の字(追記1)": "段 1 の 13 行の state・reason・recomputed は PP-2 で 1 行も変わらない",
+    "実測(封の字どおり。PP-2 固有の効果のみ)": "13 / 13",
+    "当たり": true,
+    "この STEP の指示(点 2 の 3 つ目)が別に求めた数": "他 175 行が ③ と一致: 175 / 175"
+   },
+   {
+    "記号": "H-19",
+    "封の字(追記1)": "対照「前期を増やす」は PP-2 の後も 13/13 が UNPROVABLE(値が違うので 2 本のまま)",
+    "実測": {
+     "('UNPROVABLE', 'prior_sibling:2;duplicate_values')": 13
+    },
+    "当たり": true
+   }
+  ],
+  "当たり": 5,
+  "外れ": 3
+ },
+ "limits": [
+  "**同じ 8 書類である。**規則 × 標本の積で、新しい書類で同じ数が出る保証は無い。",
+  "H-14 の REVISE の回数は機械の測定ではなく、司令塔からの引き継ぎの字をそのまま写した。",
+  "H-15 の 1 回目の全数ログは scratchpad(session-local。このSTEPの作業の直前に別の作業で走らせたもの)であり、本 repo の追跡対象ではない。",
+  "H-18 は 2 つの異なる定義(この STEP の指示の字/封 追記 1 の字)で別に測った。両方を記録に残す(どちらかを消さない)。",
+  "精度(誤りを通す率)は測っていない(封 §0・§4 と同じ限界)。"
+ ]
+}

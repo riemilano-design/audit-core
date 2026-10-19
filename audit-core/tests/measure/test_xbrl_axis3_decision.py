@@ -27,6 +27,7 @@ ENGINE_SHA = {"adapters/xbrl/verify_document.py": "67e7639de3f5f2ad",
 # 下に名前と封を書いたものだけを受け入れる。封が git 履歴に在ることも要る(fixtures/frozen_bundle_sha.py の世代と同じ型)。
 LATER_ENGINE_COMMITS = {
     "295e636": "docs/XBRL_HOLDS_PRODUCT_PATH_SEAL_2026-10-19.md",   # (d)・P・U を製品の経路へ + 軸の保持 (e)
+    "ac8c3ff": "docs/XBRL_PERIOD_PAIR_SEAL_2026-10-19.md",          # 期間の対 PP 段 2 ― engine
 }
 
 

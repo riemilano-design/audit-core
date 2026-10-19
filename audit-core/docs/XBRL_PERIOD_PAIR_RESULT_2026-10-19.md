@@ -124,3 +124,81 @@
 5. **精度は上げていない。**実証できる行が増えただけで、**誤りを通す率は対照でしか測っていない**
    (13 行すべてで値・符号の注入が `VALUE_MISMATCH` になることは確かめたが、実データで PP が
    誤った参照先を通した件数は測っていない)。
+
+---
+
+## 段 2(engine。2026-10-20)
+
+段 2 の engine 変更そのものは commit `ac8c3ff`(独立監査 GO。報告 `scratchpad/step5/audit_stage2.md`)で
+既に commit 済み。**この節は、その commit の後に行った測定の追記であり、段 1 の本文(上)は 1 字も書き換えない。**
+測定 script `measure/xbrl_period_pair_stage2_2026-10-19.py`、記録 `fixtures/xbrl/cd8/period_pair_stage2_2026-10-19.json`。
+製品の経路(`adapters.xbrl.verify_external.verify_external(..., period_pair=True)`、既定)に ③ と同じ材料の
+組み立て(192 行)を通し、段 1 の記録(13 行・重複 4 行)と ③ の記録(残り 175 行)に突き合わせた。
+**engine は 1 行も変えていない(読むだけ)。**0 USD・席は呼ばない。
+
+### §6 判定(実測)
+
+- **段 1 の 13 行(兄弟 1 本)**: 段 1 の記録(state・reason・recomputed・derived_pointers・sign_checked)
+  との一致は **12 / 13**。不一致の 1 行は `S100YYRV` `R014`
+  (段 1: `GROUNDED`・`recomputed -3.66` → 段 2: `UNPROVABLE`・理由 `ambiguous_dimension:1`)。
+  **原因は段 1 自身が既に記録していた発火** ― §3「13 行で (d)・P・U の発火」で
+  「`d` が発火したのは `S100YYRV R014`」と書かれており、段 1 の測定(`apply_pp` のみ)は
+  その発火を `state` に反映していなかった。段 2(製品の経路)は PP の後に `holds.apply_holds` を
+  当てるため、**同じ発火がそのまま `state` に出た。**挙動の後退ではなく、段 1 が測っていなかった
+  (d) の効果が、engine に統合されて初めて `state` に反映された。
+- **重複 4 行(段 1 で兄弟 2 本。PP-2 の対象)**: 4 / 4 が `holds.prior_siblings` で兄弟 1 本に
+  (`duplicate_values: false`)。検算の `state` は **`GROUNDED` 3・`UNPROVABLE` 1**
+  (`S100YWGX` `R008`、理由 `ambiguous_dimension:2`。(d) の発火)。
+- **他 175 行**(率で参照先なし 20 行 + 金額 155 行): ③ の記録 `period_unit_hold_2026-10-19.json` の
+  `**合成の後**` と **175 / 175 一致**。
+- **対照(13 行すべて。1 回に 1 件)**: 値 +1.0 pt → `VALUE_MISMATCH` 13/13。符号の入替 → `VALUE_MISMATCH` 13/13。
+  前期を消す → `UNPROVABLE` `prior_sibling:0` 13/13。前期を増やす(値 +1 の複製)→
+  `UNPROVABLE` `prior_sibling:2;duplicate_values` 13/13。
+- **実証できた行**(段 1 と同じ定義。`GROUNDED` + `VALUE_MISMATCH`): 175 行で 62、17 行(PP、段 2)で 15
+  (13 行グループ 12 + 重複 4 行グループ 3)。合計 **62 + 15 = 77**(段 1 の 75 から +2。
+  §3 の H-17 が見込んだ +4 ではなく、重複 4 行のうち 1 行が (d) で `UNPROVABLE` になった分だけ少ない)。
+- **変異**: `PP-R1`(符号を見ない)・`PP-R2`(兄弟 2 本でも先頭を選ぶ)・`PP-R3`(次元違いの前期も数える)・
+  `PP-R4`(値の違う重複も 1 本に数める)の **4 本とも red**。
+- **独立監査**: `ac8c3ff` の trailer は `独立監査: GO`。**REVISE の回数は機械で測った数ではなく、
+  司令塔からの引き継ぎの字 `REVISE 0 回 → GO` をそのまま写した。**
+- **`run_tests.sh` 1 回目**: `scratchpad/step5/run_tests_step5.log`(session-local。1,923 行。
+  このSTEPの直し(`LATER_ENGINE_COMMITS` への追記)より前に走らせたもの)で
+  `pytest -q` は `3327 passed, 5 skipped in 1685.15s`、`unittest discover` は
+  `Ran 3236 tests`・`FAILED (failures=1, skipped=5)`、その 1 件は
+  `FAIL: test_9_the_engine_was_not_touched (tests.measure.test_xbrl_axis3_decision.Axis3Test)`
+  だけだった(ログの `grep` で確認)。**このSTEPで `LATER_ENGINE_COMMITS` に `ac8c3ff` を足した後、
+  `tests/measure/test_xbrl_axis3_decision.py` は 11 passed**(2 回目に相当する確認。
+  全数の `run_tests.sh` を 2 回目として回し直してはいない)。
+
+### §7 予測との照合(H-12〜H-19。**封は書き換えない**)
+
+| | 封・追記1 の字 | 実測 | |
+|---|---|---|---|
+| H-12 | 段 2 の 192 行再現は段 1 の記録と 192/192 一致・byte 同一 | 段 1 の 13 行との一致 **12 / 13**(不一致: S100YYRV R014)。commit `ac8c3ff` 自身の報告は 192 行全体で **191 / 192** | **外れ** |
+| H-13 | PP-R1〜R3 の 3 本 red(追記 1 で PP-R4 を足し 4 本) | **4 / 4 red** | 当たり |
+| H-14 | 独立監査は REVISE 1 回 → GO | **REVISE 0 回 → GO**(引き継ぎの字。機械測定ではない) | **外れ** |
+| H-15 | run_tests.sh 1 回目で赤くなるのは test_9 だけ。2 回目 rc=0 | 全数ログで FAIL は test_9 の 1 本だけ。追記後 `test_xbrl_axis3_decision.py` は 11 passed | 当たり |
+| H-16 | 重複の 4 行は値が全部同じで PP-2 の後は兄弟 1 本(4/4) | **4 / 4** | 当たり |
+| H-17 | 4 行の検算は GROUNDED 3〜4・VALUE_MISMATCH 0〜1。実証できた行は 75 → 79 | GROUNDED **3**・**UNPROVABLE 1**(VALUE_MISMATCH ではない)。実証できた行 75 → **77** | **外れ** |
+| H-18 | 段 1 の 13 行の state・reason・recomputed は PP-2 で 1 行も変わらない | **13 / 13**(PP-2 固有の効果だけで見れば不変。(d) の効果は別) | 当たり |
+| H-19 | 対照「前期を増やす」は PP-2 の後も 13/13 が UNPROVABLE | **13 / 13**(理由は `prior_sibling:2;duplicate_values`) | 当たり |
+
+**当たり 5 / 外れ 3(H-12・H-14・H-17)。**
+
+- **H-12 外れ**: 段 1 の 13 行のうち 1 行(S100YYRV R014)が `GROUNDED` から `UNPROVABLE` に変わった。
+  原因は段 1 自身が §3 で記録していた (d) の発火(「13 行で (d)・P・U の発火」の `d` 1 件)が、
+  段 2 で初めて `state` に反映されたこと。**封は直さない。**
+- **H-14 外れ**: 「REVISE 1 回 → GO」と書いたが、実測(引き継ぎの字)は「REVISE 0 回 → GO」。
+  **封は直さない。**
+- **H-17 外れ**: 「GROUNDED 3〜4・VALUE_MISMATCH 0〜1」と書いたが、重複 4 行の 1 行(S100YWGX R008)は
+  `VALUE_MISMATCH` ではなく (d) による `UNPROVABLE` だった。「実証できた行 75 → 79」も外れ(実測 77。
+  +4 ではなく +2。R008 が UNPROVABLE になった分だけ少ない)。**封は直さない。**
+  (※ ac8c3ff の commit 文が「予測の外れ」として先に自己申告していた 3 点
+  (H-12=191/192・H-14=REVISE0回・H-17=UNPROVABLE1を数えていない)と、この節の実測は一致する。)
+
+### §8 言えないこと(追加)
+
+6. **段 1 の「13 行で (d)・P・U の発火は 0」(§3)の H-10 外れは、段 1 の時点では `state` に出ていなかった。**
+   段 2(engine)で PP の後に保留規則を当てたことで、その発火が初めて `state` を変えた。
+   **段 1 と段 2 で「実証できた行」の数え方(GROUNDED+VALUE_MISMATCH)が指す母集団の性質が違う**
+   (段 1 は保留規則を無視した数、段 2 は保留規則を含む数)。75 → 77 の「+2」はこの違いを含む。
