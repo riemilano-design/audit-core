@@ -134,5 +134,69 @@ class OrderTest(unittest.TestCase):
                                            cwd=ROOT, capture_output=True).returncode == 0, rel)
 
 
+class AddendumC1Test(unittest.TestCase):
+    u"""追記 1(C1 ― 席つき 8 便)。本文は不変、席の model・回数・上限・下見、予測 K-1〜K-12 が席を呼ぶ前に固定されていること。"""
+    AFTER_C1 = ("measure/xbrl_gen_c1_2026-10-20.py",
+                "fixtures/xbrl/gen_c/material_2026-10-20.json",
+                "fixtures/xbrl/gen_c/seat_answers",
+                "fixtures/xbrl/gen_c/c1_2026-10-20.json",
+                "docs/XBRL_GENERALITY_C1_RESULT_2026-10-20.md",
+                "tests/measure/test_xbrl_generality_c1_result.py")
+
+    def setUp(self):
+        t = text(SEAL)
+        self.body = t[:t.index(u"\n## 追記 1")]
+        self.a = t[t.index(u"\n## 追記 1"):]
+
+    def test_10_body_is_unchanged_by_the_addendum(self):
+        # 本文の §0〜§6 の見出しは追記の前に全部在り、追記の中に §0〜§6 の見出しは無い
+        for h in ("## §0", "## §1", "## §2", "## §3", "## §4", "## §5", "## §6"):
+            self.assertIn("\n" + h, self.body, h)
+            self.assertNotIn("\n" + h + " ", self.a, h)
+        self.assertIn(u"本文(§0〜§6)は 1 文字も直さない**", self.a)
+
+    def test_11_condition_and_seat_terms_are_literal(self):
+        self.assertIn(u"**G-5 が外れた**(Core-P の特定率 13 / 50 = 26.0%。幅 55〜80%)", self.a)
+        self.assertIn(u"| model | `sonnet`", self.a)
+        self.assertIn(u"| 回数 | **8 便**", self.a)
+        self.assertIn(u"**合計 1,600,000 トークン**", self.a)
+        self.assertIn(u"1 便が 250,000 を超えたらその便を止めて「欠け」", self.a)
+        self.assertIn(u"`4c63022014736bb25de0c3808d227c06bbfcd72856aaf3a2e2dfdf31cb85c0fb`(411 字)", self.a)
+        self.assertIn(u"**下見で止まれば席は呼ばない**", self.a)
+        self.assertIn(u"**8 + 8 + 4 = 20 行以下**", self.a)
+
+    def test_12_twelve_predictions_each_with_a_failure_mode(self):
+        ids = re.findall(r"(?m)^\| \*\*K-(\d+)\*\* \|", self.a)
+        self.assertEqual(ids, [str(i) for i in range(1, 13)])
+        for line in re.findall(r"(?m)^\| \*\*K-\d+\*\* \|.*$", self.a):
+            cells = [c.strip() for c in line.strip("|").split("|")]
+            self.assertEqual(len(cells), 3, line)
+            self.assertTrue(cells[2], u"外れ方が空: " + line)
+        self.assertEqual(re.findall(r"(?m)^\| \*\*K-C(\d)", self.a), ["1", "2", "3"])
+        self.assertIn(u"**本当に測っているのは K-3〜K-6 である。**", self.a)
+        self.assertIn(u"**これも engine の独立した証拠ではない**", self.a)
+
+    def test_13_closed_file_list_and_order(self):
+        for rel in self.AFTER_C1:
+            self.assertIn("`%s" % rel, self.a, rel)
+        self.assertIn(u"**数を見てから封・材料・採点・予測を直さない。**", self.a)
+
+    def test_14_the_addendum_precedes_c1_files(self):
+        # 追記が入った commit より後に C1 の file が足されること(順序の門。cwd 相対)
+        out = subprocess.run(["git", "log", "-S", u"## 追記 1(2026-10-20)**C1", "--format=%H", "--", SEAL_REL],
+                             cwd=ROOT, capture_output=True, text=True)
+        shas = [s for s in out.stdout.split() if s]
+        if not shas:
+            self.skipTest(u"追記がまだ commit されていない")
+        add = shas[-1]
+        for rel in self.AFTER_C1:
+            other = OrderTest._added(rel)
+            if other is None:
+                continue
+            self.assertNotEqual(add, other, rel)
+            self.assertTrue(subprocess.run(["git", "merge-base", "--is-ancestor", add, other],
+                                           cwd=ROOT, capture_output=True).returncode == 0, rel)
+
+
 if __name__ == "__main__":
     unittest.main()
