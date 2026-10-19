@@ -146,9 +146,15 @@ class OrderTest(unittest.TestCase):
                                            cwd=ROOT, capture_output=True).returncode == 0, rel)
 
     def test_11_qwed_is_not_a_dependency_of_the_tree(self):
-        out = subprocess.run(["git", "grep", "-l", "-i", "import qwed", "--", "core", "adapters", "tests", "audit_core.py"],
+        # 字面を 2 つに割る: この file 自身が pattern に当たらないように(memory: source-text-tests-hit-own-prose)
+        pats = ["import " + "qwed", "from " + "qwed"]
+        args = ["git", "grep", "-l", "-i"]
+        for pat in pats:
+            args += ["-e", pat]
+        out = subprocess.run(args + ["--", "core", "adapters", "tests", "measure"],
                              cwd=ROOT, capture_output=True, text=True)
-        self.assertEqual(out.stdout.strip(), "", out.stdout)
+        hits = [h for h in out.stdout.split() if h != "measure/qwed_compare_2026-10-19.py"]
+        self.assertEqual(hits, [], out.stdout)
 
 
 if __name__ == "__main__":
