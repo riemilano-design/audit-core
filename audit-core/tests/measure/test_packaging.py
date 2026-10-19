@@ -31,6 +31,7 @@ README = os.path.join(ROOT, "README.en.md")
 FROZEN_SRC = os.path.join(ROOT, "fixtures", "frozen_bundle_sha.py")
 SUITE_COV_SRC = os.path.join(ROOT, "measure", "suite_coverage_2026-10-16.py")
 SUITE_COV_OUT = os.path.join(ROOT, "fixtures", "suite_coverage_2026-10-16.json")
+PACKAGING_REC = os.path.join(ROOT, "fixtures", "packaging_2026-10-20.json")
 MUTATIONS = os.path.join(ROOT, "tests", "adapters", "xbrl", "mutations.json")
 CORE_DIR = os.path.join(ROOT, "core", "py", "audit_core")
 
@@ -288,13 +289,26 @@ class SuiteCoverageTest(unittest.TestCase):
         self.assertIn("tests/measure/test_packaging_result.py", files)
 
     def test_g5_the_written_record_reflects_plus_two_and_the_one_known_gap(self):
-        rec = load_json(SUITE_COV_OUT)
-        self.assertEqual(rec["test_files_on_disk"], 178)
-        self.assertEqual(rec["by_directory"]["tests/measure"], 120)
-        self.assertEqual(rec["uncovered_files"], [])
-        self.assertEqual(rec["failures"], [])
-        d = rec["commands"]["discover"]
-        self.assertEqual(d["missed_files"], ["measure/tests/test_inject.py"])
+        """**packaging 記録(測った時点の before/after)に縛る。**
+
+        生きた覆いの記録(`fixtures/suite_coverage_2026-10-16.json`)には
+        縛らない ― その記録は後続の封(QWED 段 B など)で本数が進むため、
+        この封(G-5)が固定すべきは「2026-10-20 に測った +2・漏れ 1 本」という
+        **その時点の差分**であり、いまの生きた本数ではない
+        (司令塔の決定 2026-10-20。memory
+        「字で留めた本数は足した人が直さないと黙って古くなる」の型を避ける)。
+        """
+        g5 = load_json(PACKAGING_REC)["G-5"]
+        self.assertEqual(g5["test_files_on_disk_before"], 176)
+        self.assertEqual(g5["test_files_on_disk_after"], 178)
+        self.assertEqual(g5["tests_measure_before"], 118)
+        self.assertEqual(g5["tests_measure_after"], 120)
+        self.assertEqual(g5["uncovered_files_after"], [])
+        self.assertEqual(g5["missed_discover_before"],
+                         ["measure/tests/test_inject.py"])
+        self.assertEqual(g5["missed_discover_after"],
+                         ["measure/tests/test_inject.py"])
+        self.assertTrue(g5["hit"])
 
 
 # ---------------------------------------------------------------------------
