@@ -23,6 +23,12 @@ BASE = "2745dd5"          # 今日の便の起点
 ENGINE_SHA = {"adapters/xbrl/verify_document.py": "67e7639de3f5f2ad",
               "adapters/xbrl/vocabulary.py": "bcf559308bda0cc6"}
 
+# 2026-10-19 追記(10-14 の封の字・値は消さない)。宣言された遷移: BASE 以後に adapters/・core/ を触った commit のうち、
+# 下に名前と封を書いたものだけを受け入れる。封が git 履歴に在ることも要る(fixtures/frozen_bundle_sha.py の世代と同じ型)。
+LATER_ENGINE_COMMITS = {
+    "295e636": "docs/XBRL_HOLDS_PRODUCT_PATH_SEAL_2026-10-19.md",   # (d)・P・U を製品の経路へ + 軸の保持 (e)
+}
+
 
 def text(p):
     with io.open(p, encoding="utf-8") as fh:
@@ -127,12 +133,19 @@ class Axis3Test(unittest.TestCase):
         self.assertIn("**誤った参照先も隠れない**", self.t)
 
     def test_9_the_engine_was_not_touched(self):
-        """**文を信じない。**git と sha で確かめる。"""
-        out = subprocess.run(["git", "log", "--name-only", "--format=",
+        """**文を信じない。**git と sha で確かめる(2026-10-19: 宣言された遷移だけ例外)。"""
+        out = subprocess.run(["git", "log", "--format=%h",
                               "%s..HEAD" % BASE, "--", "adapters", "core"],
                              cwd=ROOT, capture_output=True, text=True)
-        self.assertEqual(out.stdout.strip(), "",
-                         "**adapters/ か core/ を触っている**")
+        commits = [c for c in out.stdout.split() if c]
+        undeclared = [c for c in commits if c not in LATER_ENGINE_COMMITS]
+        self.assertEqual(undeclared, [],
+                         "**adapters/ か core/ を触っている(宣言されていない commit: %s)**" % undeclared)
+        for c in commits:
+            seal = LATER_ENGINE_COMMITS[c]
+            added = subprocess.run(["git", "log", "--diff-filter=A", "--format=%H", "--", seal],
+                                   cwd=ROOT, capture_output=True, text=True).stdout.split()
+            self.assertTrue(added, "**commit %s の宣言された遷移の封 %s が履歴に無い**" % (c, seal))
         for rel, want in ENGINE_SHA.items():
             with io.open(os.path.join(ROOT, rel), "rb") as fh:
                 self.assertEqual(hashlib.sha256(fh.read()).hexdigest()[:16], want,
