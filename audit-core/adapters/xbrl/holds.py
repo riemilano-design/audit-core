@@ -9,6 +9,12 @@
 - P 同額の期間兄弟 / U 単位の種類 ``measure/xbrl_period_unit_hold_rule_2026-10-19.py``
       (封 `docs/XBRL_PERIOD_UNIT_HOLD_SEAL_2026-10-19.md`、結果 `docs/XBRL_PERIOD_UNIT_HOLD_RESULT_2026-10-19.md`)
 
+**PP(期間の対、2026-10-19 段 2)**: 率の主張(参照先 1 本)を前期の兄弟 1 本で検算する規則。
+封 `docs/XBRL_PERIOD_PAIR_SEAL_2026-10-19.md`(commit `790a5c5` + 追記 1 `78a04f5`)。
+段 1(engine 不変)の写し元は ``measure/xbrl_period_pair_rule_2026-10-19.py`` の
+``prior_siblings``。**符号の字面を読む ``sign_from_text`` は engine に入れない**
+(符号は呼び出し側 ``adapters/xbrl/verify_external.py`` が渡す。この file は文字列を読まない)。
+
 **この file は ``audit_core`` を import しない**(データの層。``tests/adapters/xbrl/test_boundary.py``)。
 **規則は減らす方向にしか動かない**: ``GROUNDED`` だけを ``UNPROVABLE`` に下げ、他の状態と参照先は
 1 文字も変えない。**別の fact を正解として選び直さない**(兄弟は件数と軸としてだけ理由に出る)。
@@ -157,3 +163,97 @@ def apply_holds(out, f, facts, tol, claim_unit, contexts=None):
     new["hold_axes"] = differing_axes(contexts, f, sd) if fired["d"] else []
     assert new["pointers"] == out["pointers"], u"参照先を変えてはならない"
     return new, fired
+
+
+# ---------------------------------------------------------------------------
+# PP(期間の対)― 率の主張(参照先 1 本)を前期の兄弟 1 本で検算する(封 §0)。
+# ---------------------------------------------------------------------------
+
+#: PP が保留になったときの理由の字(封 §0 の 2)。**字で留める。**
+PP_REASON_NO_FACT = "no_fact"
+PP_REASON_NOT_CURRENT_YEAR = "not_current_year"
+PP_REASON_SIBLING = "prior_sibling:%d"
+#: PP-2(追記 1): 前期の兄弟が instance 内の重複で、値が 1 つでも違ったときに付く印。
+PP_DUPLICATE_SUFFIX = ";duplicate_values"
+
+
+def period_tag(ctx):
+    u"""枠の期間の札(最初の ``_`` より前)。PP が使う(``dim_of`` が次元の部分を取るのと対)。"""
+    return ctx.split("_", 1)[0]
+
+
+def prior_siblings(facts, f):
+    u"""PP: 前期の兄弟の一覧。
+
+    同じ ``name``・同じ ``dim_of(context)`` で、期間の札が ``CurrentYear`` から
+    ``Prior1Year`` に置き換わった枠の fact を返す。``f`` の期間の札が
+    ``CurrentYear`` で始まらなければ **``None``**(「当てない」。封 §0 の当たらない
+    例の 2 つ目)。
+
+    **PP-2(追記 1)**: 候補が複数(= 同じ ``name``・同じ ``context`` の instance 内の
+    重複)で、値が全部同じなら **1 本に数える**(代表 1 本を返す)。値が 1 つでも
+    違えば本数のまま返す(どれを選ぶかを機械で決めない。封 §0 の「どれを選ぶかを
+    機械で決めない」と同じ趣旨)。
+
+    戻り値: ``None``、または ``(兄弟の fact の一覧, duplicate_values)``。
+    ``duplicate_values`` は「候補が複数在り、値が 1 つでも違った」ときに ``True``。
+    """
+    tag = period_tag(f["context"])
+    if not tag.startswith("CurrentYear"):
+        return None
+    prior_tag = "Prior1Year" + tag[len("CurrentYear"):]
+    dim = dim_of(f["context"])
+    out = []
+    for g in facts:
+        if g is f or g["name"] != f["name"]:
+            continue
+        if dim_of(g["context"]) != dim:
+            continue                                   # 次元が違う前期は数えない(PP-R3)
+        if period_tag(g["context"]) != prior_tag:
+            continue
+        out.append(g)
+    if len(out) > 1:
+        values = {g.get("value") for g in out}
+        if len(values) == 1:                           # PP-2: 重複(値が全部同じ)は 1 本
+            return [out[0]], False
+        return out, True
+    return out, False
+
+
+def pp_pick(facts, f, sign):
+    u"""PP: 前期の兄弟をちょうど 1 本に絞り、どちらの fact で検算するかを決める。
+
+    **比較の算術(pct_change・core.verify)はここでは行わない**(``audit_core`` を
+    import しないデータの層のまま)。符号は呼び出し側(``verify_external.py``)が
+    文を読んで渡した ``+1``/``-1``/``None`` をそのまま受け取るだけで、文字列は
+    一度も読まない。
+
+    戻り値(辞書)::
+
+        {"ok": bool,              # True なら兄弟がちょうど 1 本(検算に進める)
+         "reason": str or None,   # ok が False のときの UNPROVABLE の理由
+         "prior": fact or None,   # ok が True のときの前期の兄弟
+         "direction_checked": bool}  # 符号が +1/-1 として渡されたか
+
+    ``f`` が ``None``(参照先が解けない)なら ``PP_REASON_NO_FACT``。
+    ``f`` が当期でなければ ``PP_REASON_NOT_CURRENT_YEAR``。
+    兄弟がちょうど 1 本でなければ ``PP_REASON_SIBLING % 本数``
+    (``prior_siblings`` の ``duplicate_values`` が True なら ``PP_DUPLICATE_SUFFIX`` を付ける)。
+    """
+    direction_checked = sign in (1, -1)
+    if f is None:
+        return {"ok": False, "reason": PP_REASON_NO_FACT, "prior": None,
+                "direction_checked": direction_checked}
+    sibs = prior_siblings(facts, f)
+    if sibs is None:
+        return {"ok": False, "reason": PP_REASON_NOT_CURRENT_YEAR, "prior": None,
+                "direction_checked": direction_checked}
+    siblings, duplicate_values = sibs
+    if len(siblings) != 1:                             # ちょうど 1 本でなければ選ばない(PP-R2)
+        reason = PP_REASON_SIBLING % len(siblings)
+        if duplicate_values:
+            reason += PP_DUPLICATE_SUFFIX
+        return {"ok": False, "reason": reason, "prior": None,
+                "direction_checked": direction_checked}
+    return {"ok": True, "reason": None, "prior": siblings[0],
+            "direction_checked": direction_checked}

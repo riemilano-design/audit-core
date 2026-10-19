@@ -11,6 +11,15 @@
 ``GROUNDED`` は「存在と値の検査を通過し、保留規則が 1 つも発火しなかった」という意味で、
 :data:`holds.UNCHECKED` の属性は**見ていない**。応答の ``checks`` / ``unchecked`` に毎回入れる。
 
+**PP(期間の対、2026-10-19 段 2)**: 封 `docs/XBRL_PERIOD_PAIR_SEAL_2026-10-19.md`
+(commit `790a5c5` + 追記 1 `78a04f5`)。率の主張(単位 ``％``/``%``・参照先 1 本)で、
+その参照先が解けた fact の期間の札が ``CurrentYear*`` のとき、``holds.pp_pick`` で
+前期の兄弟を 1 本に絞り、既存の ``contract_for("ratio_change", unit, 2)`` と
+``core.verify`` で検算する。**符号は ``spec["sign"]``(``+1``/``-1``/``None``。文を読んで
+決めるのは呼び出し側)で受け取る。**既定で有効(``period_pair=True``)。``period_pair=False``
+を渡すと PP 以前の経路(contract v1 がそのまま参照先 2 本を要求する)に戻る
+(③ `docs/XBRL_HOLDS_PRODUCT_PATH_RESULT_2026-10-19.md` の記録の再現用)。
+
 使い方(library)::
 
     from adapters.xbrl import instance as I, verify_external as VE
@@ -22,14 +31,17 @@
     out["state"]        # GROUNDED / VALUE_MISMATCH / POINTER_NOT_FOUND / UNPROVABLE
     out["held"]         # 保留なら True。out["hold_rules"] に ("d","P","U") の部分列
     out["checks"], out["unchecked"]
+    out["derived_pointers"]   # PP が補った前期の兄弟(席の pointers は変えない)
+    out["direction_checked"]  # PP で符号が +1/-1 として渡されたか
 
 使い方(CLI)::
 
     python3 -m adapters.xbrl.verify_external --doc S100YXMA --claims claims.json --out out.json
     python3 -m adapters.xbrl.verify_external --zip <書類.zip> --claims claims.json --out out.json
 
-``claims.json`` は ``{"claims": [{"id", "kind", "value", "unit", "pointers"[, "tolerance"]}, ...]}``。
+``claims.json`` は ``{"claims": [{"id", "kind", "value", "unit", "pointers"[, "tolerance", "sign"]}, ...]}``。
 ``kind`` は ``single_value`` / ``difference`` / ``ratio_change``(規則の表 :data:`RULES`)。
+``sign`` は任意(``1``/``-1``/``None``。PP の符号。渡さなければ符号不明として絶対値で比較)。
 通信しない。EDINET に触らない(ZIP は手元の file だけ)。
 """
 
@@ -74,7 +86,7 @@ EXCLUDED_MONEY_UNITS = (u"円",)
 #: 出力の欄(**並びを字で固定する**。byte の安定のため)
 RESULT_FIELDS = ("id", "kind", "value", "unit", "pointers", "state", "rule", "reason",
                  "held", "hold_rules", "hold_axes", "recomputed", "comparator",
-                 "checks", "unchecked")
+                 "checks", "unchecked", "derived_pointers", "direction_checked")
 
 
 def _money_scale(unit):
@@ -133,16 +145,77 @@ def _fact_of(pointers, facts):
     return None
 
 
-def verify_external(spec, facts, contexts=None, registry=None, claim_id="EXT1"):
+def _verify_period_pair(spec, facts, contexts, registry, base, claim_id):
+    """PP(期間の対)。``verify_external`` から、率の主張(参照先 1 本)に限って呼ばれる。
+
+    封 `docs/XBRL_PERIOD_PAIR_SEAL_2026-10-19.md` §0。``holds.pp_pick`` が前期の
+    兄弟をちょうど 1 本に絞れたときだけ検算に進む(``contract_for`` と ``core.verify``
+    は既存のものをそのまま使う。新しい比較器は作らない)。絞れないときは
+    ``UNPROVABLE``(理由は ``holds.pp_pick`` のもの)。**常に応答の辞書を返す**
+    (呼び出し側はここで確定。古い経路への fallback は無い)。
+    """
+    f = _fact_of(spec.get("pointers") or (), facts)
+    decision = H.pp_pick(facts, f, spec.get("sign"))
+    rule_name = RULES["ratio_change"][0]
+    out = dict(base)
+    out["direction_checked"] = decision["direction_checked"]
+    if not decision["ok"]:
+        out.update({"state": UNPROVABLE, "rule": rule_name, "reason": decision["reason"],
+                    "recomputed": None, "comparator": None})
+        return out
+    prior = decision["prior"]
+    prior_loc = "%s@%s" % (prior["name"], prior["context"])
+    value = float(spec["value"])
+    claim_value = float(spec["sign"]) * value if decision["direction_checked"] else abs(value)
+    contract, why = contract_for("ratio_change", spec.get("unit"), 2, spec.get("tolerance"))
+    if contract is None:
+        out.update({"state": UNPROVABLE, "rule": rule_name, "reason": why,
+                    "recomputed": None, "comparator": None, "derived_pointers": [prior_loc]})
+        return out
+    cur_loc = "%s@%s" % (f["name"], f["context"])
+    claim = core.Claim(id=claim_id, form=core.Form("direct_value"), subject=spec.get("subject"),
+                       value=claim_value, unit=spec.get("unit"), modifiers=core.Modifiers(),
+                       provenance={"source": "external"})
+    recipe = core.Recipe(claim=claim,
+                         pointers=(core.Pointer("xbrl", cur_loc), core.Pointer("xbrl", prior_loc)),
+                         contract=contract)
+    resolver = RV.make_resolver(facts)
+    res = core.verify(recipe, resolver, registry)
+    out.update({"state": res.state.name, "rule": rule_name, "reason": res.reason,
+                "recomputed": res.recomputed, "comparator": contract.comparator,
+                "derived_pointers": [prior_loc],
+                "comparison": (res.provenance or {}).get("comparison")})
+    # 封 §3(H-10、測定 measure/xbrl_period_pair_2026-10-19.py と同じ呼び方): (d)・P・U は
+    # 当期の fact f に対して **f 自身の単位**で当てる(claim_unit は spec["unit"](％)ではない。
+    # 主張は率だが f は金額の fact なので、spec["unit"] を渡すと単位の種類が必ず不一致になる)。
+    out, _fired = H.apply_holds(out, f, facts, tol_of(f["unit"]), f["unit"], contexts)
+    if not decision["direction_checked"]:
+        # 符号不明(絶対値で比較した): unchecked に「方向」を足す。
+        # CHECKS/UNCHECKED の定数そのものは変えない(封 §5 の 1 通りの実装)。
+        out["unchecked"] = H.UNCHECKED + (u"方向",)
+    return out
+
+
+def verify_external(spec, facts, contexts=None, registry=None, claim_id="EXT1", period_pair=True):
     """1 件の外部要求を検証して応答の辞書を返す(**file は書かない**)。
 
-    ``spec`` は ``{"kind", "value", "unit", "pointers"[, "tolerance"]}``。
+    ``spec`` は ``{"kind", "value", "unit", "pointers"[, "tolerance", "sign"]}``。
     ``facts`` / ``contexts`` は :func:`instance.load_instance` の返り値のもの。
     規則が無ければ ``UNPROVABLE``(検証しない)。``GROUNDED`` には保留規則を当てる。
+
+    ``period_pair``(既定 ``True``): 率の主張(単位 ``％``/``%``・参照先 1 本)を
+    PP(期間の対、封 `docs/XBRL_PERIOD_PAIR_SEAL_2026-10-19.md`)で検算する。
+    ``False`` を渡すと PP 以前の経路(contract v1 がそのまま参照先 2 本を要求する)
+    に戻る(③ の記録の再現用)。
     """
     pointers = tuple(spec.get("pointers") or ())
     base = {"pointers": pointers, "kind": spec.get("kind"), "held": False,
-            "hold_rules": (), "hold_axes": [], "checks": H.CHECKS, "unchecked": H.UNCHECKED}
+            "hold_rules": (), "hold_axes": [], "checks": H.CHECKS, "unchecked": H.UNCHECKED,
+            "derived_pointers": [], "direction_checked": False}
+    if (period_pair and spec.get("kind") == "ratio_change" and len(pointers) == 1
+            and spec.get("unit") in RATIO_UNITS):
+        registry = registry or RS.register_all(core.Registry.default())
+        return _verify_period_pair(spec, facts, contexts, registry, base, claim_id)
     contract, why = contract_for(spec.get("kind"), spec.get("unit"), len(pointers),
                                  spec.get("tolerance"))
     if contract is None:
@@ -167,17 +240,19 @@ def verify_external(spec, facts, contexts=None, registry=None, claim_id="EXT1"):
     return out
 
 
-def verify_claims(claims, inst, registry=None):
+def verify_claims(claims, inst, registry=None, period_pair=True):
     """複数の主張を同じ instance で検証する。返すのは ``RESULT_FIELDS`` の並びの行の一覧。"""
     registry = registry or RS.register_all(core.Registry.default())
     rows = []
     for i, c in enumerate(claims):
         cid = c.get("id") or ("EXT%d" % (i + 1))
-        out = verify_external(c, inst["facts"], inst.get("contexts"), registry, cid)
+        out = verify_external(c, inst["facts"], inst.get("contexts"), registry, cid,
+                              period_pair=period_pair)
         row = dict(out)
         row.update({"id": cid, "value": c.get("value"), "unit": c.get("unit"),
                     "pointers": list(out["pointers"]), "hold_rules": list(out["hold_rules"]),
-                    "checks": list(out["checks"]), "unchecked": list(out["unchecked"])})
+                    "checks": list(out["checks"]), "unchecked": list(out["unchecked"]),
+                    "derived_pointers": list(out["derived_pointers"])})
         rows.append({k: row.get(k) for k in RESULT_FIELDS})
     return rows
 
@@ -200,9 +275,9 @@ def load_zip(path=None, doc=None):
         return fh.read()
 
 
-def run(zip_bytes, claims):
+def run(zip_bytes, claims, period_pair=True):
     inst = I.load_instance(zip_bytes)
-    rows = verify_claims(claims, inst)
+    rows = verify_claims(claims, inst, period_pair=period_pair)
     states = {}
     for r in rows:
         states[r["state"]] = states.get(r["state"], 0) + 1

@@ -52,6 +52,12 @@ FROZEN_BUNDLE_GENERATIONS = (
      "2026-10-19 feature/audit-core-final-eval-8: (d)・P・U を製品の経路へ(adapters/xbrl/holds.py・"
      "verify_external.py)、instance.py に枠の軸 axes を足した。封 docs/XBRL_HOLDS_PRODUCT_PATH_SEAL_2026-10-19.md。"
      "対象 36 本(22 本は 2026-10-09 の数。shogi・kokkai の adapter が足されたのに定数が直っていなかった)"),
+    ("a21202f81a3bc0bc4af64d2b1c0d982185ba9efcb3317b070d4a055ecc5edca3",
+     "2026-10-19 feature/audit-core-final-eval-8(段 2): PP(期間の対)を製品の経路へ。"
+     "adapters/xbrl/holds.py に prior_siblings・pp_pick、verify_external.py に PP の入口分岐"
+     "(derived_pointers・direction_checked・period_pair 引数)を足した。instance.py・core/py は 0 行。"
+     "封 docs/XBRL_PERIOD_PAIR_SEAL_2026-10-19.md(commit 790a5c5 + 追記 1 78a04f5)。対象 36 本(本数は変わらない ―"
+     "ファイルを増やしていない)。独立監査 GO の前に測った値(commit 前)"),
 )
 
 # 字で留めるのは**いまの世代**。--expect を値なしで渡したときの既定。

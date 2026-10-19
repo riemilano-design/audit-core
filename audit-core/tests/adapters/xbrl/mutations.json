@@ -751,5 +751,41 @@
   "predicted": "red",
   "scope": "holds",
   "note": "枠の軸を記録しない(.xbrl の経路)。test_holds.AxesInInstanceTest.test_xbrl_path_keeps_axes_one_to_one が赤になるはず。"
+ },
+ {
+  "id": "PP-R1-sign-ignored",
+  "file": "holds.py",
+  "old": "    direction_checked = sign in (1, -1)\n",
+  "new": "    direction_checked = False\n",
+  "predicted": "red",
+  "scope": "holds",
+  "note": "封 docs/XBRL_PERIOD_PAIR_SEAL_2026-10-19.md §0 の 3(PP、2026-10-19 段 2)。pp_pick が符号を見ない(常に符号不明扱い)。test_holds.PPPickTest.test_exactly_one_sibling_reports_direction_checked_from_the_sign が赤になるはず。"
+ },
+ {
+  "id": "PP-R2-two-siblings-picks-the-first",
+  "file": "holds.py",
+  "old": "    if len(siblings) != 1:                             # ちょうど 1 本でなければ選ばない(PP-R2)\n",
+  "new": "    if len(siblings) < 1:                             # ちょうど 1 本でなければ選ばない(PP-R2)\n",
+  "predicted": "red",
+  "scope": "holds",
+  "note": "封 docs/XBRL_PERIOD_PAIR_SEAL_2026-10-19.md §0 の 2(PP)。兄弟が 2 本以上でも先頭を検算に使う(どれを選ぶかを機械で決めてしまう)。test_holds.PPPickTest.test_two_siblings_is_held_and_does_not_pick_the_first が赤になるはず。"
+ },
+ {
+  "id": "PP-R3-dimension-different-prior-counted",
+  "file": "holds.py",
+  "old": "        if dim_of(g[\"context\"]) != dim:\n            continue                                   # 次元が違う前期は数えない(PP-R3)\n",
+  "new": "        pass\n",
+  "predicted": "red",
+  "scope": "holds",
+  "note": "封 docs/XBRL_PERIOD_PAIR_SEAL_2026-10-19.md §0 の 1(PP)。次元の違う前期も兄弟に数える(当たらない例の 1 つ目を外す)。test_holds.PriorSiblingsTest.test_dimension_different_prior_is_not_counted が赤になるはず。"
+ },
+ {
+  "id": "PP-R4-duplicate-differing-values-collapsed",
+  "file": "holds.py",
+  "old": "        if len(values) == 1:                           # PP-2: 重複(値が全部同じ)は 1 本\n",
+  "new": "        if True:                           # PP-2: 重複(値が全部同じ)は 1 本\n",
+  "predicted": "red",
+  "scope": "holds",
+  "note": "封 docs/XBRL_PERIOD_PAIR_SEAL_2026-10-19.md 追記 1(PP-2)。instance 内の重複で値が 1 つでも違う場合も 1 本に数える(どれを選ぶかを機械で決めてしまう)。test_holds.PriorSiblingsTest.test_duplicate_different_value_keeps_the_count_and_flags_it が赤になるはず。"
  }
 ]

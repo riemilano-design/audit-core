@@ -4,6 +4,11 @@
 封 `docs/XBRL_HOLDS_PRODUCT_PATH_SEAL_2026-10-19.md`。**合成の材料だけで動く**(変異の砂場でも走る)。
 ``measure/`` の規則の試験(``tests/measure/test_dim_hold_rule.py``・``test_period_unit_hold_rule.py``)の写し
 に、軸の記録と「写しが `measure/` の規則と同じ答えを出す」同値の試験を足した。
+
+**PP(期間の対、2026-10-19 段 2)**: 封 `docs/XBRL_PERIOD_PAIR_SEAL_2026-10-19.md`
+(commit `790a5c5` + 追記 1 `78a04f5`)。``holds.prior_siblings``・``holds.pp_pick`` の単体と、
+段 1 の規則 ``measure/xbrl_period_pair_rule_2026-10-19.py`` の ``prior_siblings`` との同値
+(重複の無い格子。PP-2 は段 1 に無いので、重複の有る格子では「差が PP-2 の定義どおり」であることを見る)。
 """
 import copy
 import importlib.util
@@ -236,6 +241,104 @@ class AxesInInstanceTest(unittest.TestCase):
         self.assertEqual(inst["facts"][0]["value"], 100000000.0)
 
 
+class PriorSiblingsTest(unittest.TestCase):
+    """PP: ``holds.prior_siblings``(封 §0・追記 1 の PP-2)。"""
+
+    def test_not_current_year_returns_none(self):
+        f = fact("ns", "Prior1YearDuration", 100.0)
+        self.assertIsNone(H.prior_siblings([f], f))
+        f2 = fact("ns", "CurrentYear3QDuration", 100.0)  # CurrentYear で始まる(当てる)
+        self.assertEqual(H.prior_siblings([f2], f2), ([], False))
+
+    def test_zero_siblings(self):
+        f = fact("ns", "CurrentYearDuration", 100.0)
+        self.assertEqual(H.prior_siblings([f], f), ([], False))
+
+    def test_exactly_one_sibling(self):
+        f = fact("ns", "CurrentYearDuration", 100.0)
+        g = fact("ns", "Prior1YearDuration", 90.0)
+        self.assertEqual(H.prior_siblings([f, g], f), ([g], False))
+        # 次元が揃っていても良い(同じ dim_of)
+        fd = fact("ns", "CurrentYearDuration_Seg", 100.0)
+        gd = fact("ns", "Prior1YearDuration_Seg", 90.0)
+        self.assertEqual(H.prior_siblings([fd, gd], fd), ([gd], False))
+
+    def test_dimension_different_prior_is_not_counted(self):
+        f = fact("ns", "CurrentYearDuration", 100.0)
+        g = fact("ns", "Prior1YearDuration_Seg", 90.0)
+        self.assertEqual(H.prior_siblings([f, g], f), ([], False))
+
+    def test_other_element_or_wrong_period_tag_is_not_counted(self):
+        f = fact("ns", "CurrentYearDuration", 100.0)
+        for g in (fact("other", "Prior1YearDuration", 90.0),
+                  fact("ns", "Prior2YearDuration", 90.0),
+                  fact("ns", "CurrentYearDuration", 90.0)):
+            self.assertEqual(H.prior_siblings([f, g], f), ([], False), g)
+
+    def test_duplicate_same_value_collapses_to_one(self):
+        f = fact("ns", "CurrentYearDuration", 100.0)
+        g1 = fact("ns", "Prior1YearDuration", 90.0)
+        g2 = fact("ns", "Prior1YearDuration", 90.0)
+        siblings, duplicate_values = H.prior_siblings([f, g1, g2], f)
+        self.assertEqual(siblings, [g1])
+        self.assertFalse(duplicate_values)
+
+    def test_duplicate_different_value_keeps_the_count_and_flags_it(self):
+        f = fact("ns", "CurrentYearDuration", 100.0)
+        g1 = fact("ns", "Prior1YearDuration", 90.0)
+        g2 = fact("ns", "Prior1YearDuration", 91.0)
+        siblings, duplicate_values = H.prior_siblings([f, g1, g2], f)
+        self.assertEqual(siblings, [g1, g2])
+        self.assertTrue(duplicate_values)
+
+    def test_period_tag(self):
+        self.assertEqual(H.period_tag("CurrentYearDuration_Seg"), "CurrentYearDuration")
+        self.assertEqual(H.period_tag("CurrentYearDuration"), "CurrentYearDuration")
+
+
+class PPPickTest(unittest.TestCase):
+    """PP: ``holds.pp_pick``(兄弟をちょうど 1 本に絞り、符号の有無を返す。比較の算術はしない)。"""
+
+    def test_no_fact_is_held(self):
+        d = H.pp_pick([], None, 1)
+        self.assertEqual((d["ok"], d["reason"], d["prior"]), (False, H.PP_REASON_NO_FACT, None))
+
+    def test_not_current_year_is_held(self):
+        f = fact("ns", "Prior1YearDuration", 100.0)
+        d = H.pp_pick([f], f, 1)
+        self.assertEqual((d["ok"], d["reason"]), (False, H.PP_REASON_NOT_CURRENT_YEAR))
+
+    def test_zero_siblings_is_held(self):
+        f = fact("ns", "CurrentYearDuration", 100.0)
+        d = H.pp_pick([f], f, 1)
+        self.assertEqual((d["ok"], d["reason"], d["prior"]), (False, "prior_sibling:0", None))
+
+    def test_two_siblings_is_held_and_does_not_pick_the_first(self):
+        f = fact("ns", "CurrentYearDuration", 100.0)
+        g1 = fact("ns", "Prior1YearDuration", 90.0)
+        g2 = fact("ns", "Prior1YearDuration", 95.0)
+        d = H.pp_pick([f, g1, g2], f, 1)
+        self.assertEqual((d["ok"], d["reason"], d["prior"]),
+                         (False, "prior_sibling:2;duplicate_values", None))
+
+    def test_duplicate_same_value_sibling_is_picked(self):
+        f = fact("ns", "CurrentYearDuration", 100.0)
+        g1 = fact("ns", "Prior1YearDuration", 90.0)
+        g2 = fact("ns", "Prior1YearDuration", 90.0)
+        d = H.pp_pick([f, g1, g2], f, 1)
+        self.assertEqual((d["ok"], d["reason"], d["prior"]), (True, None, g1))
+
+    def test_exactly_one_sibling_reports_direction_checked_from_the_sign(self):
+        f = fact("ns", "CurrentYearDuration", 100.0)
+        g = fact("ns", "Prior1YearDuration", 90.0)
+        d = H.pp_pick([f, g], f, 1)
+        self.assertEqual((d["ok"], d["prior"], d["direction_checked"]), (True, g, True))
+        d2 = H.pp_pick([f, g], f, -1)
+        self.assertEqual(d2["direction_checked"], True)
+        d3 = H.pp_pick([f, g], f, None)
+        self.assertEqual((d3["ok"], d3["prior"], d3["direction_checked"]), (True, g, False))
+
+
 class EquivalenceWithMeasureRulesTest(unittest.TestCase):
     """写しが ``measure/`` の規則((d)・P・U)と**同じ答え**を出すことを合成の格子で確かめる。
 
@@ -277,6 +380,63 @@ class EquivalenceWithMeasureRulesTest(unittest.TestCase):
                             self.assertEqual(a.get("reason"), b.get("reason"), (state, unit_f, claim_unit, combo))
                             n += 1
         self.assertGreater(n, 800)
+
+
+class PPEquivalenceWithMeasureRuleTest(unittest.TestCase):
+    """PP: ``holds.prior_siblings`` と段 1 の規則 ``measure/xbrl_period_pair_rule_2026-10-19.py``
+    の ``prior_siblings`` の同値(重複の無い格子)。**PP-2(追記 1)は段 1 に無い規則**なので、
+    重複の有る格子は別に、差が PP-2 の定義どおりであることを見る。
+
+    砂場(変異の試験)には ``measure/`` が無いので、その場合は飛ばす。
+    """
+
+    @classmethod
+    def setUpClass(cls):
+        p = os.path.join(_ROOT, "measure", "xbrl_period_pair_rule_2026-10-19.py")
+        if not os.path.exists(p):
+            raise unittest.SkipTest("measure/ が無い(変異の砂場)")
+        sp = importlib.util.spec_from_file_location("pp_rule_for_equiv", p)
+        cls.R = importlib.util.module_from_spec(sp)
+        sp.loader.exec_module(cls.R)
+
+    def test_grid_without_duplicates(self):
+        candidate_kinds = {
+            "prior_same_dim": fact("ns", "Prior1YearDuration", 90.0),
+            "prior_other_dim": fact("ns", "Prior1YearDuration_Seg", 90.0),
+            "prior2": fact("ns", "Prior2YearDuration", 90.0),
+            "other_name": fact("other", "Prior1YearDuration", 90.0),
+            "current_other": fact("ns", "CurrentYearDuration_Seg", 100.0),
+        }
+        n = 0
+        for period_tag in ("CurrentYearDuration", "Prior1YearDuration"):
+            for dim_suffix in ("", "_Seg"):
+                ctx = period_tag + dim_suffix
+                f = fact("ns", ctx, 100.0)
+                for k in range(0, len(candidate_kinds) + 1):
+                    for combo in itertools.combinations(sorted(candidate_kinds), k):
+                        facts = [f] + [dict(candidate_kinds[c]) for c in combo]
+                        a = H.prior_siblings(facts, f)
+                        b = self.R.prior_siblings(facts, f)
+                        if b is None:
+                            self.assertIsNone(a, (ctx, combo))
+                        else:
+                            self.assertEqual(a, (b, False), (ctx, combo))
+                        n += 1
+        self.assertGreater(n, 60)
+
+    def test_duplicate_grid_differs_exactly_as_pp2_defines(self):
+        f = fact("ns", "CurrentYearDuration", 100.0)
+        same = [fact("ns", "Prior1YearDuration", 90.0), fact("ns", "Prior1YearDuration", 90.0)]
+        diff = [fact("ns", "Prior1YearDuration", 90.0), fact("ns", "Prior1YearDuration", 91.0)]
+        for dup, pp2_collapses in ((same, True), (diff, False)):
+            facts = [f] + dup
+            a = H.prior_siblings(facts, f)
+            b = self.R.prior_siblings(facts, f)
+            self.assertEqual(b, dup)                       # 段 1(PP-2 無し)は常に本数のまま
+            if pp2_collapses:
+                self.assertEqual(a, ([dup[0]], False))      # PP-2: 値が全部同じなら 1 本
+            else:
+                self.assertEqual(a, (dup, True))            # PP-2: 値が違えば本数のまま + 印
 
 
 if __name__ == "__main__":
