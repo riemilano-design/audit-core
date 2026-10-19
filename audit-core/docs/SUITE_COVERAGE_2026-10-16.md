@@ -32,7 +32,7 @@
 
 ## §2 測った事実 ― **変更前**(試験は走らせず、収集だけ数えた)
 
-### §2-1 ディスク上の試験 file: **183 本**(**いまの数**。門を足すと増える)
+### §2-1 ディスク上の試験 file: **184 本**(**いまの数**。門を足すと増える)
 
 | ディレクトリ | file |
 |---|---|
@@ -43,7 +43,7 @@
 | `tests/core` | 5 |
 | `tests/fixtures/xbrl` | 4 |
 | `tests/golden` | 4 |
-| `tests/measure` | 125 |
+| `tests/measure` | 126 |
 
 **2026-10-20 に +2**(`tests/measure/test_packaging.py`・`tests/measure/test_packaging_result.py`。
 包装の封 `docs/PACKAGING_SEAL_2026-10-20.md` の G-5)。176 → 178、`tests/measure` 118 → 120。
@@ -53,6 +53,9 @@
 
 **2026-10-20 に +1**(`tests/measure/test_xbrl_generality_c1_result.py`。
 汎化 C の封 追記 1 `docs/XBRL_GENERALITY_SEAL_2026-10-20.md` の K-12)。C1 の結果の門で 182 → 183(`tests/measure` 124 → 125)。
+
+**2026-10-20 に +1**(`tests/measure/test_xbrl_generality_p20_result.py`。
+汎化 C の封 追記 2 `docs/XBRL_GENERALITY_SEAL_2026-10-20.md` の R-11)。P20 の結果の門で 183 → 184(`tests/measure` 125 → 126)。
 
 **この節だけは「いま」の数である**(門 `DocTest` が記録と突き合わせる)。
 下の §2-2 は**変更前の実測**で、後の記録と結び付けない。
