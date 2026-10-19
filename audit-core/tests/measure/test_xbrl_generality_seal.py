@@ -255,5 +255,63 @@ class AddendumP20Test(unittest.TestCase):
                                            cwd=ROOT, capture_output=True).returncode == 0, rel)
 
 
+class AddendumAlphaTest(unittest.TestCase):
+    u"""追記 3(改善 2 ― α: 席の参照先を Core が検算)。本文・追記 1・2 は不変、予測 S-1〜S-9 が測る前に固定されていること。"""
+    AFTER_ALPHA = ("measure/xbrl_gen_c_alpha_2026-10-20.py",
+                   "fixtures/xbrl/gen_c/alpha_2026-10-20.json",
+                   "docs/XBRL_GENERALITY_ALPHA_RESULT_2026-10-20.md",
+                   "tests/measure/test_xbrl_generality_alpha_result.py")
+
+    def setUp(self):
+        t = text(SEAL)
+        self.before = t[:t.index(u"\n## 追記 3")]
+        self.a = t[t.index(u"\n## 追記 3"):]
+
+    def test_19_earlier_parts_precede_and_are_not_repeated(self):
+        for h in ("## §0", "## §6", u"## 追記 1", u"## 追記 2"):
+            self.assertIn("\n" + h, self.before, h)
+            self.assertNotIn("\n" + h, self.a, h)
+        self.assertIn(u"本文・追記 1・追記 2 は 1 文字も直さない**", self.a)
+        self.assertIn(u"**「教える」は規則として覚え込ませない**", self.a)
+
+    def test_20_facts_and_the_alpha_rule_are_literal(self):
+        for s in (u"**席が `確認済み` と言い参照先を出した行 77**", u"`判定できない` 51",
+                  u"`誤りが在る` + 参照先 25", u"`判定できない` 39",
+                  u"**`判定できない` に下げる(警告。`誤りが在る` に上書きしない)**",
+                  u"21 / 50", u"GROUNDED 0 / 25"):
+            self.assertIn(s, self.a, s)
+        self.assertEqual(re.findall(r"(?m)^\| \*\*α-(\d)", self.a), ["1", "2", "3", "4"])
+
+    def test_21_nine_predictions_each_with_a_failure_mode(self):
+        ids = re.findall(r"(?m)^\| \*\*S-(\d+)\*\* \|", self.a)
+        self.assertEqual(ids, [str(i) for i in range(1, 10)])
+        for line in re.findall(r"(?m)^\| \*\*S-\d+\*\* \|.*$", self.a):
+            cells = [c.strip() for c in line.strip("|").split("|")]
+            self.assertEqual(len(cells), 3, line)
+            self.assertTrue(cells[2], u"外れ方が空: " + line)
+        self.assertEqual(re.findall(r"(?m)^\| \*\*S-C(\d)", self.a), ["1", "2", "3"])
+        self.assertIn(u"**本当に測っているのは S-1〜S-3 である。**", self.a)
+        self.assertIn(u"独立した証拠ではない", self.a)
+
+    def test_22_closed_file_list_and_order(self):
+        for rel in self.AFTER_ALPHA:
+            self.assertIn("`%s`" % rel, self.a, rel)
+        self.assertIn(u"**これ以外に触らない。**", self.a)
+        self.assertIn(u"**数を見てから封・材料・採点・予測を直さない。**", self.a)
+        out = subprocess.run(["git", "log", "-S", u"## 追記 3(2026-10-20)**改善 2", "--format=%H", "--", SEAL_REL],
+                             cwd=ROOT, capture_output=True, text=True)
+        shas = [s for s in out.stdout.split() if s]
+        if not shas:
+            self.skipTest(u"追記 3 がまだ commit されていない")
+        add = shas[-1]
+        for rel in self.AFTER_ALPHA:
+            other = OrderTest._added(rel)
+            if other is None:
+                continue
+            self.assertNotEqual(add, other, rel)
+            self.assertTrue(subprocess.run(["git", "merge-base", "--is-ancestor", add, other],
+                                           cwd=ROOT, capture_output=True).returncode == 0, rel)
+
+
 if __name__ == "__main__":
     unittest.main()
