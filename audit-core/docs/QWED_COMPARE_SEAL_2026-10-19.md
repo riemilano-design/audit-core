@@ -172,3 +172,39 @@ SUPPORTED は 0.7 以上・NEUTRAL は 0.4 以上(下見 §3-2、コード `fact
 - QWED を `audit-core` の依存に足さない(標準ライブラリのみ、を守る)。venv は scratchpad に置く。
 - QWED の答えを Audit Core の 4 状態に写す表(下見 §6 の候補)は**作らない**。並べて数えるだけ。
 - LLM の英訳・LLM fallback・`qwed verify`(CLI。LLM 必須)は呼ばない。
+
+---
+
+## 追記 2(2026-10-20、段 B の結果の後。**本文は書き換えない**)
+
+段 B(`docs/QWED_COMPARE_RESULT_2026-10-19.md`、commit 0bb1301)で予測 17 欄のうち 10 欄が外れた。主因は 2 つとも**この封の入力の描き方**で、QWED の性質ではない。
+
+1. §2 E の「値は instance の字そのまま」は float の字(`12497000000.0`)で、claim の「整数の字」(`12497000000`)と**字が違う**。QWED は数の**字**の集合を突き合わせるので E は 192 / 192 で `entity_match` < 1.0 になった(記録 `**外れの原因の読み**/E`: 値の字に `.0` を付けると 53 / 192 が在り、GROUNDED 18 行は 18 / 18、T3+T1 14 行は 2 / 14)。
+2. §4 Q-8 の「T5 = その数が別の fact に在る」は、T5 の植えた値が**借りた ref の生の円の値を行の単位(千円・百万円)で読ませたもの**だという注入の定義を読まずに書いた。行の単位で換算すると一覧に無く(0 / 50)、換算しなければ 36 / 50 が在る。
+
+**E′(2 本。描き方の違いは「値の字」と「換算」だけ。他は §2 E のまま。chunk・参照先の解決・一覧の並びも同じ)**:
+
+| 走らせ方 | context の値の字 | claim の値 |
+|---|---|---|
+| **E′a** | 整数なら整数の字(`12497000000`)、そうでなければ末尾の 0 を落とした十進の字(claim 側 §2 と同じ規則を両側に掛ける) | §2 E のまま(`UNIT_SCALE` で換算) |
+| **E′b** | E′a と同じ | **換算しない**(行の `値` を同じ規則で字にする。`12497.0` → `12497`) |
+
+**実物から描いた 1 行**(S100YXMA R004。GROUNDED、12,497 百万円、`ordinaryincome@currentyearduration`。段 B の記録の `rows/E` から):
+context の行 `Fact OrdinaryIncome in CurrentYearDuration equals 12497000000.`(段 B では `… equals 12497000000.0.`)/ claim(E′a)`Fact OrdinaryIncome in CurrentYearDuration equals 12497000000.`(段 B と同じ字)/ claim(E′b)`Fact OrdinaryIncome in CurrentYearDuration equals 12497.`
+
+**対照 C-2 は E′a で当て直す**(換算した値 +1 で `entity_match` が 1.0 から下がることを見る。段 B では元から 0.857 で動かなかった)。
+記録の版の欄は `importlib.metadata.version("qwed")` と `qwed_new.__version__`(§6 の `qwed.__version__` という module は無い。段 B の記録どおり)。
+
+| | 予測 | **外れ方** |
+|---|---|---|
+| **Q-18** | E′a: GROUNDED 18 行の `entity_match` 1.0 は **18 / 18**(記録の `.0` の読みと同じ) | 17 以下 |
+| **Q-19** | E′a: 注入 64 行の `entity_match` 1.0 は **0〜3**(T5 は行の単位で換算すると一覧に無い。T3+T1 は記録で 2 / 14 が在る) | 4 以上 |
+| **Q-20** | E′b: T5 50 行の `entity_match` 1.0 は **34〜38**(記録の「換算しなければ 36 / 50」±2) | 幅の外 |
+| **Q-21** | E′b: **「QWED が通す」(SUPPORTED かつ 1.0)注入は 0〜5 / 64**(否定語の部分列検出が一覧の行を refute に分類し、SUPPORTED の条件 `support ≥ refute` が通りにくい)。**`entity_match` 1.0 で数えれば 34 以上 / 64** | 通す 6 以上 / 1.0 が 33 以下 |
+| **Q-22** | E′a・E′b とも `status == BLOCKED`(REFUTED)は **55〜70 / 192**(段 B の 62 と同じ機構。描き方は数の字しか変わらない) | 幅の外 |
+| **Q-23** | C-2(E′a): `entity_match` 1.0 → **< 1.0** | 1.0 のまま |
+| **Q-24** | E′b: GROUNDED 18 行の `entity_match` 1.0 は **0〜2**(換算しない値は一覧に無い。記録 0 / 18) | 3 以上 |
+
+**読み方(先に書く)**: Q-20 と Q-24 が当たれば「同じ 18 行が、換算すれば在り(E′a)、換算しなければ無い(E′b)。T5 はその逆」― QWED の `entity_match` は**単位も参照先も見ない値検索**で、Audit Core は同じ 50 行の T5 を VALUE_MISMATCH / 参照先なし で 0 件通した(§1-1)。これが「QWED は計算、こちらは出所」を数で言う形。Q-21 の「通す」が 0〜5 なら、QWED の verdict は数の一致を映さない(段 B と同じ)。
+
+**順序**: この追記を commit → E′ の測定(段 B の script に `--variant eprime-a|eprime-b` を足す。段 B の記録は書き換えず、新しい記録 `fixtures/xbrl/cd8/qwed_compare_eprime_2026-10-20.json`・結果 `docs/QWED_COMPARE_EPRIME_RESULT_2026-10-20.md`・門 `tests/measure/test_qwed_compare_eprime_result.py`)→ 独立監査 → commit。

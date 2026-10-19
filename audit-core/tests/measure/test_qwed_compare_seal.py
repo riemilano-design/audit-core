@@ -16,7 +16,11 @@ SEAL = os.path.join(ROOT, SEAL_REL)
 AFTER = ("measure/qwed_compare_2026-10-19.py",
          "fixtures/xbrl/cd8/qwed_compare_2026-10-19.json",
          "docs/QWED_COMPARE_RESULT_2026-10-19.md",
-         "tests/measure/test_qwed_compare_result.py")
+         "tests/measure/test_qwed_compare_result.py",
+         # 追記 2(E′)。§6 でなく追記の節に在る
+         "fixtures/xbrl/cd8/qwed_compare_eprime_2026-10-20.json",
+         "docs/QWED_COMPARE_EPRIME_RESULT_2026-10-20.md",
+         "tests/measure/test_qwed_compare_eprime_result.py")
 
 
 def text(p):
@@ -110,8 +114,10 @@ class SealTest(unittest.TestCase):
 
     def test_8_the_file_list_is_closed_and_engine_is_untouched(self):
         b = sec(self.t, "## §6", "## §7")
-        for rel in AFTER:
+        for rel in AFTER[:4]:
             self.assertIn("`%s`" % rel, b, rel)
+        for rel in AFTER[4:]:          # 追記 2(E′)の file は追記の節に在る
+            self.assertIn("`%s`" % rel, self.t, rel)
         self.assertIn(u"**これ以外に触らない。**", b)
         self.assertIn(u"`core/py/` は 0 行、`adapters/` は 0 行", b)
         self.assertIn(u"**変異 3 通り**", b)
@@ -121,6 +127,35 @@ class SealTest(unittest.TestCase):
         b = sec(self.t, "## §7")
         self.assertIn(u"依存に足さない", b)
         self.assertIn(u"**作らない**", b)
+
+
+class Addendum2Test(unittest.TestCase):
+    u"""追記 2(2026-10-20): E′ の描き方と予測 Q-18〜Q-24。本文 §0〜§7 は書き換えない。"""
+    def setUp(self):
+        self.t = text(SEAL)
+        self.b = self.t[self.t.index(u"\n## 追記 2"):]
+
+    def test_12_addendum_does_not_rewrite_the_body(self):
+        body = self.t[:self.t.index(u"\n## 追記 2")]
+        for k in (u"**QWED が通す: 注入 35 以上 / 64**", u"**60〜100**", u"値は instance の字そのまま"):
+            self.assertIn(k, body, k)
+
+    def test_13_eprime_is_defined_with_one_real_line(self):
+        self.assertEqual(re.findall(r"(?m)^\| \*\*E′(a|b)\*\* \|", self.b), ["a", "b"])
+        self.assertIn(u"`Fact OrdinaryIncome in CurrentYearDuration equals 12497000000.`", self.b)
+        self.assertIn(u"`Fact OrdinaryIncome in CurrentYearDuration equals 12497.`", self.b)
+        self.assertIn(u"**換算しない**", self.b)
+
+    def test_14_seven_more_predictions_each_with_a_failure_mode(self):
+        ids = re.findall(r"(?m)^\| \*\*Q-(\d+)\*\* \|", self.b)
+        self.assertEqual(ids, [str(i) for i in range(18, 25)])
+        for line in re.findall(r"(?m)^\| \*\*Q-\d+\*\* \|.*$", self.b):
+            cells = [c.strip() for c in line.strip("|").split("|")]
+            self.assertEqual(len(cells), 3, line)
+            self.assertTrue(cells[2], u"外れ方が空: " + line)
+        self.assertIn(u"**34〜38**", self.b)
+        self.assertIn(u"注入は 0〜5 / 64**", self.b)
+        self.assertIn(u"`fixtures/xbrl/cd8/qwed_compare_eprime_2026-10-20.json`", self.b)
 
 
 class OrderTest(unittest.TestCase):

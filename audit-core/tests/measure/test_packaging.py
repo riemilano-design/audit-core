@@ -396,7 +396,8 @@ class ReadmeTest(unittest.TestCase):
     def test_g6_test_suite_numbers_match_the_record(self):
         rec = load_json(SUITE_COV_OUT)
         self.assertIn(str(rec["test_files_on_disk"]), self.t)
-        self.assertIn(str(rec["commands"]["pytest"]["tests"]), self.t)
+        # 2026-10-20: 収集本数は試験を 1 本足すたびに変わるので README には書かない(記録にだけ在る)
+        self.assertNotIn("collected test cases", self.t)
 
     def test_g6_mutation_count_matches_the_record(self):
         rows = load_json(MUTATIONS)
