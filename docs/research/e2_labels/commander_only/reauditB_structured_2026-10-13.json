@@ -1,0 +1,2343 @@
+{
+ "purpose": "再監査 B 席(独立・engine の状態を見ていない)の根拠欄から (要素, context) を機械で取り出し、実装席の 60 件の束縛判定および main の pointer と突き合わせた表。E2 の独立ラベルの土台。",
+ "source": {
+  "reaudit_B_labels_2026-10-12.json": "461542b91aa9645822a4f8460dab5e1e4077ef9cdb17c5b10c841d963aa4eb31",
+  "grounded_binding_check_2026-10-12.json": "rows 60",
+  "stop_cause_main_material_2026-10-12.json": "03521437be23c8e2a02d85b4bc29a215646803582e9101fdf185521041174799"
+ },
+ "equivalence_rule_v0": "要素名の末尾 SummaryOfBusinessResults を除いた名前が同じなら同値(TotalAssets→Assets の別名を含む)。**案であり人間の承認待ち**。厳密一致の欄も残す。",
+ "shape_note": "形は B の根拠文の語(率/%/ポイント, 差/増/減)からの機械推定。確定ではない。",
+ "counts_60": {
+  "('correct', '同じ', '同じ')": 41,
+  "('correct', '違う', '同じ')": 7,
+  "('correct', '違う', '違う')": 2,
+  "('correct', 'engine pointer なし/未解析', 'engine pointer なし/未解析')": 3,
+  "('wrong_binding', '違う', '違う')": 3,
+  "('ambiguous', '同じ', '同じ')": 1,
+  "('undecidable', '違う', '同じ')": 1,
+  "('wrong_binding', '同じ', '同じ')": 2
+ },
+ "rows": [
+  {
+   "id": "N003",
+   "層(main の状態)": "GROUNDED",
+   "B の札": "真",
+   "B の確信": "高",
+   "B が同定した fact [(要素, context)]": [
+    [
+     "OperatingIncome",
+     "CurrentYearDuration"
+    ]
+   ],
+   "形(B の根拠文からの機械推定・要確認)": "対/変化(候補)",
+   "engine(main) の pointer": [
+    [
+     "OperatingIncome",
+     "CurrentYearDuration"
+    ]
+   ],
+   "実装席の束縛判定(60 件のみ)": "correct",
+   "一致(厳密)": "同じ",
+   "一致(同値類 v0)": "同じ",
+   "B の根拠(原文)": "文の数 1465.0百万円 を OperatingIncome 単体 と同定。実額 1,465,387,000 円 → 百万円表示 1,465(切り捨て/四捨五入一致)。引いた fact: OperatingIncome[ctx=CurrentYearDuration 2025-07-01~2026-06-30] = 1,465,387,000 JPY decimals=-3"
+  },
+  {
+   "id": "N009",
+   "層(main の状態)": "GROUNDED",
+   "B の札": "真",
+   "B の確信": "高",
+   "B が同定した fact [(要素, context)]": [
+    [
+     "Assets",
+     "CurrentYearInstant"
+    ]
+   ],
+   "形(B の根拠文からの機械推定・要確認)": "対/変化(候補)",
+   "engine(main) の pointer": [
+    [
+     "TotalAssetsSummaryOfBusinessResults",
+     "CurrentYearInstant"
+    ]
+   ],
+   "実装席の束縛判定(60 件のみ)": "correct",
+   "一致(厳密)": "違う",
+   "一致(同値類 v0)": "同じ",
+   "B の根拠(原文)": "文の数 27836.0百万円 を Assets 単体 と同定。実額 27,836,421,000 円 → 百万円表示 27,836(切り捨て/四捨五入一致)。引いた fact: Assets[ctx=CurrentYearInstant 2026-06-30] = 27,836,421,000 JPY decimals=-3"
+  },
+  {
+   "id": "N011",
+   "層(main の状態)": "GROUNDED",
+   "B の札": "真",
+   "B の確信": "高",
+   "B が同定した fact [(要素, context)]": [
+    [
+     "EquityToAssetRatioSummaryOfBusinessResults",
+     "CurrentYearInstant"
+    ]
+   ],
+   "形(B の根拠文からの機械推定・要確認)": "率/ポイント(候補)",
+   "engine(main) の pointer": [
+    [
+     "EquityToAssetRatioSummaryOfBusinessResults",
+     "CurrentYearInstant"
+    ]
+   ],
+   "実装席の束縛判定(60 件のみ)": "correct",
+   "一致(厳密)": "同じ",
+   "一致(同値類 v0)": "同じ",
+   "B の根拠(原文)": "文の数 61.7% を EquityToAssetRatioSummaryOfBusinessResults 単体x100 と同定。算出値 61.7000% → 文の 61.7%(小数第1位で四捨五入一致)。引いた fact: EquityToAssetRatioSummaryOfBusinessResults[ctx=CurrentYearInstant 2026-06-30] = 1 pure decimals=3"
+  },
+  {
+   "id": "N014",
+   "層(main の状態)": "GROUNDED",
+   "B の札": "真",
+   "B の確信": "高",
+   "B が同定した fact [(要素, context)]": [
+    [
+     "NetSales",
+     "CurrentYearDuration"
+    ]
+   ],
+   "形(B の根拠文からの機械推定・要確認)": "対/変化(候補)",
+   "engine(main) の pointer": [
+    [
+     "NetSalesSummaryOfBusinessResults",
+     "CurrentYearDuration"
+    ]
+   ],
+   "実装席の束縛判定(60 件のみ)": "correct",
+   "一致(厳密)": "違う",
+   "一致(同値類 v0)": "同じ",
+   "B の根拠(原文)": "文の数 38064.0百万円 を NetSales 単体 と同定。実額 38,064,274,000 円 → 百万円表示 38,064(切り捨て/四捨五入一致)。引いた fact: NetSales[ctx=CurrentYearDuration 2025-07-01~2026-06-30] = 38,064,274,000 JPY decimals=-3"
+  },
+  {
+   "id": "N021",
+   "層(main の状態)": "GROUNDED",
+   "B の札": "真",
+   "B の確信": "高",
+   "B が同定した fact [(要素, context)]": [
+    [
+     "NotesAndAccountsReceivableTrade",
+     "CurrentYearInstant"
+    ]
+   ],
+   "形(B の根拠文からの機械推定・要確認)": "対/変化(候補)",
+   "engine(main) の pointer": [
+    [
+     "NotesAndAccountsReceivableTrade",
+     "CurrentYearInstant"
+    ]
+   ],
+   "実装席の束縛判定(60 件のみ)": "correct",
+   "一致(厳密)": "同じ",
+   "一致(同値類 v0)": "同じ",
+   "B の根拠(原文)": "文の数 2556.0百万円 を NotesAndAccountsReceivableTrade 単体 と同定。実額 2,556,498,000 円 → 百万円表示 2,556(切り捨て/四捨五入一致)。引いた fact: NotesAndAccountsReceivableTrade[ctx=CurrentYearInstant 2026-06-30] = 2,556,498,000 JPY decimals=-3"
+  },
+  {
+   "id": "N024",
+   "層(main の状態)": "GROUNDED",
+   "B の札": "真",
+   "B の確信": "高",
+   "B が同定した fact [(要素, context)]": [
+    [
+     "GrossProfit",
+     "CurrentYearDuration"
+    ]
+   ],
+   "形(B の根拠文からの機械推定・要確認)": "対/変化(候補)",
+   "engine(main) の pointer": [
+    [
+     "GrossProfit",
+     "CurrentYearDuration"
+    ]
+   ],
+   "実装席の束縛判定(60 件のみ)": "correct",
+   "一致(厳密)": "同じ",
+   "一致(同値類 v0)": "同じ",
+   "B の根拠(原文)": "文の数 11334.0百万円 を GrossProfit 単体 と同定。実額 11,334,658,000 円 → 百万円表示 11,334(切り捨て一致)。引いた fact: GrossProfit[ctx=CurrentYearDuration 2025-07-01~2026-06-30] = 11,334,658,000 JPY decimals=-3"
+  },
+  {
+   "id": "N026",
+   "層(main の状態)": "GROUNDED",
+   "B の札": "真",
+   "B の確信": "高",
+   "B が同定した fact [(要素, context)]": [
+    [
+     "GrossProfit",
+     "CurrentYearDuration"
+    ],
+    [
+     "GrossProfit",
+     "Prior1YearDuration"
+    ]
+   ],
+   "形(B の根拠文からの機械推定・要確認)": "対/変化(候補)",
+   "engine(main) の pointer": [
+    [
+     "GrossProfit",
+     "CurrentYearDuration"
+    ]
+   ],
+   "実装席の束縛判定(60 件のみ)": "correct",
+   "一致(厳密)": "同じ",
+   "一致(同値類 v0)": "同じ",
+   "B の根拠(原文)": "文の数 684000000.0円 を GrossProfit 2024-07-01~2025-06-30 - 2025-07-01~2026-06-30 と同定。実額 684,279,000 円 → 百万円表示 684(切り捨て/四捨五入一致)。引いた fact: GrossProfit[ctx=Prior1YearDuration 2024-07-01~2025-06-30] = 12,018,937,000 JPY decimals=-3 / GrossProfit[ctx=CurrentYearDuration 2025-07-01~2026-06-30] = 11,334,658,000 JPY decimals=-3"
+  },
+  {
+   "id": "N029",
+   "層(main の状態)": "UNVERIFIABLE",
+   "B の札": "真",
+   "B の確信": "高",
+   "B が同定した fact [(要素, context)]": [
+    [
+     "CostOfSales",
+     "Prior1YearDuration"
+    ]
+   ],
+   "形(B の根拠文からの機械推定・要確認)": "対/変化(候補)",
+   "engine(main) の pointer": [],
+   "実装席の束縛判定(60 件のみ)": null,
+   "一致(厳密)": "engine pointer なし/未解析",
+   "一致(同値類 v0)": "engine pointer なし/未解析",
+   "B の根拠(原文)": "文の数 24956.0百万円 を CostOfSales 単体 と同定。実額 24,956,639,000 円 → 百万円表示 24,956(切り捨て一致)。引いた fact: CostOfSales[ctx=Prior1YearDuration 2024-07-01~2025-06-30] = 24,956,639,000 JPY decimals=-3"
+  },
+  {
+   "id": "N031",
+   "層(main の状態)": "UNVERIFIABLE",
+   "B の札": "真",
+   "B の確信": "高",
+   "B が同定した fact [(要素, context)]": [
+    [
+     "CostOfSales",
+     "CurrentYearDuration"
+    ],
+    [
+     "CostOfSales",
+     "Prior1YearDuration"
+    ]
+   ],
+   "形(B の根拠文からの機械推定・要確認)": "率/ポイント(候補)",
+   "engine(main) の pointer": [],
+   "実装席の束縛判定(60 件のみ)": null,
+   "一致(厳密)": "engine pointer なし/未解析",
+   "一致(同値類 v0)": "engine pointer なし/未解析",
+   "B の根拠(原文)": "文の数 7.1% を (CostOfSales 当期-前期)/前期 と同定。算出値 7.1042% → 文の 7.1%(小数第1位で四捨五入一致)。引いた fact: CostOfSales[ctx=CurrentYearDuration 2025-07-01~2026-06-30] = 26,729,616,000 JPY decimals=-3 / CostOfSales[ctx=Prior1YearDuration 2024-07-01~2025-06-30] = 24,956,639,000 JPY decimals=-3"
+  },
+  {
+   "id": "N034",
+   "層(main の状態)": "POINTER_NOT_FOUND",
+   "B の札": "真",
+   "B の確信": "高",
+   "B が同定した fact [(要素, context)]": [
+    [
+     "CostOfSales",
+     "CurrentYearDuration"
+    ],
+    [
+     "NetSales",
+     "CurrentYearDuration"
+    ]
+   ],
+   "形(B の根拠文からの機械推定・要確認)": "率/ポイント(候補)",
+   "engine(main) の pointer": [],
+   "実装席の束縛判定(60 件のみ)": null,
+   "一致(厳密)": "engine pointer なし/未解析",
+   "一致(同値類 v0)": "engine pointer なし/未解析",
+   "B の根拠(原文)": "文の数 70.2% を CostOfSales/NetSales 当期 と同定。算出値 70.2223% → 文の 70.2%(小数第1位で四捨五入一致)。引いた fact: CostOfSales[ctx=CurrentYearDuration 2025-07-01~2026-06-30] = 26,729,616,000 JPY decimals=-3 / NetSales[ctx=CurrentYearDuration 2025-07-01~2026-06-30] = 38,064,274,000 JPY decimals=-3"
+  },
+  {
+   "id": "N056",
+   "層(main の状態)": "UNVERIFIABLE",
+   "B の札": "真",
+   "B の確信": "高",
+   "B が同定した fact [(要素, context)]": [
+    [
+     "OtherSGA",
+     "CurrentYearDuration"
+    ]
+   ],
+   "形(B の根拠文からの機械推定・要確認)": "対/変化(候補)",
+   "engine(main) の pointer": [],
+   "実装席の束縛判定(60 件のみ)": null,
+   "一致(厳密)": "engine pointer なし/未解析",
+   "一致(同値類 v0)": "engine pointer なし/未解析",
+   "B の根拠(原文)": "文の数 5962.0百万円 を OtherSGA 単体 と同定。実額 5,962,566,000 円 → 百万円表示 5,962(切り捨て一致)。引いた fact: OtherSGA[ctx=CurrentYearDuration 2025-07-01~2026-06-30] = 5,962,566,000 JPY decimals=-3"
+  },
+  {
+   "id": "N057",
+   "層(main の状態)": "UNVERIFIABLE",
+   "B の札": "真",
+   "B の確信": "高",
+   "B が同定した fact [(要素, context)]": [
+    [
+     "OtherSGA",
+     "Prior1YearDuration"
+    ]
+   ],
+   "形(B の根拠文からの機械推定・要確認)": "対/変化(候補)",
+   "engine(main) の pointer": [],
+   "実装席の束縛判定(60 件のみ)": null,
+   "一致(厳密)": "engine pointer なし/未解析",
+   "一致(同値類 v0)": "engine pointer なし/未解析",
+   "B の根拠(原文)": "文の数 5407.0百万円 を OtherSGA 単体 と同定。実額 5,407,575,000 円 → 百万円表示 5,407(切り捨て一致)。引いた fact: OtherSGA[ctx=Prior1YearDuration 2024-07-01~2025-06-30] = 5,407,575,000 JPY decimals=-3"
+  },
+  {
+   "id": "N058",
+   "層(main の状態)": "POINTER_NOT_FOUND",
+   "B の札": "真",
+   "B の確信": "高",
+   "B が同定した fact [(要素, context)]": [
+    [
+     "OtherSGA",
+     "CurrentYearDuration"
+    ],
+    [
+     "OtherSGA",
+     "Prior1YearDuration"
+    ]
+   ],
+   "形(B の根拠文からの機械推定・要確認)": "対/変化(候補)",
+   "engine(main) の pointer": [],
+   "実装席の束縛判定(60 件のみ)": null,
+   "一致(厳密)": "engine pointer なし/未解析",
+   "一致(同値類 v0)": "engine pointer なし/未解析",
+   "B の根拠(原文)": "文の数 554000000.0円 を OtherSGA 2025-07-01~2026-06-30 - 2024-07-01~2025-06-30 と同定。実額 554,991,000 円 → 百万円表示 554(切り捨て一致)。引いた fact: OtherSGA[ctx=CurrentYearDuration 2025-07-01~2026-06-30] = 5,962,566,000 JPY decimals=-3 / OtherSGA[ctx=Prior1YearDuration 2024-07-01~2025-06-30] = 5,407,575,000 JPY decimals=-3"
+  },
+  {
+   "id": "N062",
+   "層(main の状態)": "UNVERIFIABLE",
+   "B の札": "真",
+   "B の確信": "高",
+   "B が同定した fact [(要素, context)]": [
+    [
+     "IncreaseDecreaseInProvisionForWarrantiesForCompletedOperationOpeCF",
+     "CurrentYearDuration"
+    ]
+   ],
+   "形(B の根拠文からの機械推定・要確認)": "対/変化(候補)",
+   "engine(main) の pointer": [],
+   "実装席の束縛判定(60 件のみ)": null,
+   "一致(厳密)": "engine pointer なし/未解析",
+   "一致(同値類 v0)": "engine pointer なし/未解析",
+   "B の根拠(原文)": "文の数 786000000.0円 を IncreaseDecreaseInProvisionForWarrantiesForCompletedOperationOpeCF 単体 と同定。実額 786,000,000 円 → 百万円表示 786(切り捨て/四捨五入一致)。引いた fact: IncreaseDecreaseInProvisionForWarrantiesForCompletedOperationOpeCF[ctx=CurrentYearDuration 2025-07-01~2026-06-30] = 786,000,000 JPY decimals=-3"
+  },
+  {
+   "id": "N063",
+   "層(main の状態)": "GROUNDED",
+   "B の札": "真",
+   "B の確信": "高",
+   "B が同定した fact [(要素, context)]": [
+    [
+     "OperatingIncome",
+     "CurrentYearDuration"
+    ],
+    [
+     "OperatingIncome",
+     "Prior1YearDuration"
+    ]
+   ],
+   "形(B の根拠文からの機械推定・要確認)": "対/変化(候補)",
+   "engine(main) の pointer": [
+    [
+     "OperatingIncome",
+     "CurrentYearDuration"
+    ]
+   ],
+   "実装席の束縛判定(60 件のみ)": "correct",
+   "一致(厳密)": "同じ",
+   "一致(同値類 v0)": "同じ",
+   "B の根拠(原文)": "文の数 1250.0百万円 を 同上(減益額 1,250。786/1250=0.629 → 約6割) と同定。実額 1,250,537,000 円 → 百万円表示 1,250(切り捨て一致)。引いた fact: OperatingIncome[ctx=CurrentYearDuration 2025-07-01~2026-06-30] = 1,465,387,000 JPY decimals=-3 / OperatingIncome[ctx=Prior1YearDuration 2024-07-01~2025-06-30] = 2,715,924,000 JPY decimals=-3"
+  },
+  {
+   "id": "N066",
+   "層(main の状態)": "GROUNDED",
+   "B の札": "真",
+   "B の確信": "高",
+   "B が同定した fact [(要素, context)]": [
+    [
+     "OperatingIncome",
+     "CurrentYearDuration"
+    ],
+    [
+     "OperatingIncome",
+     "Prior1YearDuration"
+    ]
+   ],
+   "形(B の根拠文からの機械推定・要確認)": "対/変化(候補)",
+   "engine(main) の pointer": [
+    [
+     "OperatingIncome",
+     "CurrentYearDuration"
+    ]
+   ],
+   "実装席の束縛判定(60 件のみ)": "correct",
+   "一致(厳密)": "同じ",
+   "一致(同値類 v0)": "同じ",
+   "B の根拠(原文)": "文の数 1250.0百万円 を OperatingIncome 前期-当期(減益額) と同定。実額 1,250,537,000 円 → 百万円表示 1,250(切り捨て一致)。引いた fact: OperatingIncome[ctx=CurrentYearDuration 2025-07-01~2026-06-30] = 1,465,387,000 JPY decimals=-3 / OperatingIncome[ctx=Prior1YearDuration 2024-07-01~2025-06-30] = 2,715,924,000 JPY decimals=-3"
+  },
+  {
+   "id": "N077",
+   "層(main の状態)": "POINTER_NOT_FOUND",
+   "B の札": "真",
+   "B の確信": "高",
+   "B が同定した fact [(要素, context)]": [
+    [
+     "DividendsIncomeNOI",
+     "Prior1YearDuration"
+    ]
+   ],
+   "形(B の根拠文からの機械推定・要確認)": "対/変化(候補)",
+   "engine(main) の pointer": [],
+   "実装席の束縛判定(60 件のみ)": null,
+   "一致(厳密)": "engine pointer なし/未解析",
+   "一致(同値類 v0)": "engine pointer なし/未解析",
+   "B の根拠(原文)": "文の数 20000000.0円 を DividendsIncomeNOI 単体 と同定。実額 20,161,000 円 → 百万円表示 20(切り捨て/四捨五入一致)。引いた fact: DividendsIncomeNOI[ctx=Prior1YearDuration 2024-07-01~2025-06-30] = 20,161,000 JPY decimals=-3"
+  },
+  {
+   "id": "N080",
+   "層(main の状態)": "POINTER_NOT_FOUND",
+   "B の札": "真",
+   "B の確信": "高",
+   "B が同定した fact [(要素, context)]": [
+    [
+     "OtherNOI",
+     "CurrentYearDuration"
+    ]
+   ],
+   "形(B の根拠文からの機械推定・要確認)": "対/変化(候補)",
+   "engine(main) の pointer": [],
+   "実装席の束縛判定(60 件のみ)": null,
+   "一致(厳密)": "engine pointer なし/未解析",
+   "一致(同値類 v0)": "engine pointer なし/未解析",
+   "B の根拠(原文)": "文の数 37000000.0円 を OtherNOI 単体 と同定。実額 37,144,000 円 → 百万円表示 37(切り捨て/四捨五入一致)。引いた fact: OtherNOI[ctx=CurrentYearDuration 2025-07-01~2026-06-30] = 37,144,000 JPY decimals=-3"
+  },
+  {
+   "id": "N081",
+   "層(main の状態)": "POINTER_NOT_FOUND",
+   "B の札": "真",
+   "B の確信": "高",
+   "B が同定した fact [(要素, context)]": [
+    [
+     "OtherNOI",
+     "Prior1YearDuration"
+    ]
+   ],
+   "形(B の根拠文からの機械推定・要確認)": "対/変化(候補)",
+   "engine(main) の pointer": [],
+   "実装席の束縛判定(60 件のみ)": null,
+   "一致(厳密)": "engine pointer なし/未解析",
+   "一致(同値類 v0)": "engine pointer なし/未解析",
+   "B の根拠(原文)": "文の数 35000000.0円 を OtherNOI 単体 と同定。実額 35,328,000 円 → 百万円表示 35(切り捨て/四捨五入一致)。引いた fact: OtherNOI[ctx=Prior1YearDuration 2024-07-01~2025-06-30] = 35,328,000 JPY decimals=-3"
+  },
+  {
+   "id": "N085",
+   "層(main の状態)": "UNVERIFIABLE",
+   "B の札": "真",
+   "B の確信": "高",
+   "B が同定した fact [(要素, context)]": [
+    [
+     "InterestExpensesNOE",
+     "CurrentYearDuration"
+    ]
+   ],
+   "形(B の根拠文からの機械推定・要確認)": "対/変化(候補)",
+   "engine(main) の pointer": [],
+   "実装席の束縛判定(60 件のみ)": null,
+   "一致(厳密)": "engine pointer なし/未解析",
+   "一致(同値類 v0)": "engine pointer なし/未解析",
+   "B の根拠(原文)": "文の数 80000000.0円 を InterestExpensesNOE 単体 と同定。実額 80,579,000 円 → 百万円表示 80(切り捨て一致)。引いた fact: InterestExpensesNOE[ctx=CurrentYearDuration 2025-07-01~2026-06-30] = 80,579,000 JPY decimals=-3"
+  },
+  {
+   "id": "N087",
+   "層(main の状態)": "UNVERIFIABLE",
+   "B の札": "真",
+   "B の確信": "高",
+   "B が同定した fact [(要素, context)]": [
+    [
+     "InterestExpensesNOE",
+     "CurrentYearDuration"
+    ],
+    [
+     "InterestExpensesNOE",
+     "Prior1YearDuration"
+    ]
+   ],
+   "形(B の根拠文からの機械推定・要確認)": "対/変化(候補)",
+   "engine(main) の pointer": [],
+   "実装席の束縛判定(60 件のみ)": null,
+   "一致(厳密)": "engine pointer なし/未解析",
+   "一致(同値類 v0)": "engine pointer なし/未解析",
+   "B の根拠(原文)": "文の数 21000000.0円 を InterestExpensesNOE 2025-07-01~2026-06-30 - 2024-07-01~2025-06-30 と同定。実額 21,890,000 円 → 百万円表示 21(切り捨て一致)。引いた fact: InterestExpensesNOE[ctx=CurrentYearDuration 2025-07-01~2026-06-30] = 80,579,000 JPY decimals=-3 / InterestExpensesNOE[ctx=Prior1YearDuration 2024-07-01~2025-06-30] = 58,689,000 JPY decimals=-3"
+  },
+  {
+   "id": "N089",
+   "層(main の状態)": "GROUNDED",
+   "B の札": "真",
+   "B の確信": "高",
+   "B が同定した fact [(要素, context)]": [
+    [
+     "OrdinaryIncome",
+     "Prior1YearDuration"
+    ]
+   ],
+   "形(B の根拠文からの機械推定・要確認)": "対/変化(候補)",
+   "engine(main) の pointer": [
+    [
+     "OrdinaryIncomeLossSummaryOfBusinessResults",
+     "Prior1YearDuration"
+    ]
+   ],
+   "実装席の束縛判定(60 件のみ)": "correct",
+   "一致(厳密)": "違う",
+   "一致(同値類 v0)": "違う",
+   "B の根拠(原文)": "文の数 2709.0百万円 を OrdinaryIncome 単体 と同定。実額 2,709,051,000 円 → 百万円表示 2,709(切り捨て/四捨五入一致)。引いた fact: OrdinaryIncome[ctx=Prior1YearDuration 2024-07-01~2025-06-30] = 2,709,051,000 JPY decimals=-3"
+  },
+  {
+   "id": "N091",
+   "層(main の状態)": "POINTER_NOT_FOUND",
+   "B の札": "真",
+   "B の確信": "高",
+   "B が同定した fact [(要素, context)]": [
+    [
+     "OrdinaryIncome",
+     "CurrentYearDuration"
+    ],
+    [
+     "OrdinaryIncome",
+     "Prior1YearDuration"
+    ]
+   ],
+   "形(B の根拠文からの機械推定・要確認)": "率/ポイント(候補)",
+   "engine(main) の pointer": [],
+   "実装席の束縛判定(60 件のみ)": null,
+   "一致(厳密)": "engine pointer なし/未解析",
+   "一致(同値類 v0)": "engine pointer なし/未解析",
+   "B の根拠(原文)": "文の数 46.2% を (OrdinaryIncome 前期-当期)/前期 と同定。算出値 46.1860% → 文の 46.2%(小数第1位で四捨五入一致)。引いた fact: OrdinaryIncome[ctx=CurrentYearDuration 2025-07-01~2026-06-30] = 1,457,848,000 JPY decimals=-3 / OrdinaryIncome[ctx=Prior1YearDuration 2024-07-01~2025-06-30] = 2,709,051,000 JPY decimals=-3"
+  },
+  {
+   "id": "N092",
+   "層(main の状態)": "UNVERIFIABLE",
+   "B の札": "真",
+   "B の確信": "高",
+   "B が同定した fact [(要素, context)]": [
+    [
+     "ExtraordinaryIncome",
+     "CurrentYearDuration"
+    ]
+   ],
+   "形(B の根拠文からの機械推定・要確認)": "対/変化(候補)",
+   "engine(main) の pointer": [],
+   "実装席の束縛判定(60 件のみ)": null,
+   "一致(厳密)": "engine pointer なし/未解析",
+   "一致(同値類 v0)": "engine pointer なし/未解析",
+   "B の根拠(原文)": "文の数 1000000.0円 を ExtraordinaryIncome 単体 と同定。実額 1,232,000 円 → 百万円表示 1(切り捨て/四捨五入一致)。引いた fact: ExtraordinaryIncome[ctx=CurrentYearDuration 2025-07-01~2026-06-30] = 1,232,000 JPY decimals=-3"
+  },
+  {
+   "id": "N093",
+   "層(main の状態)": "UNVERIFIABLE",
+   "B の札": "真",
+   "B の確信": "高",
+   "B が同定した fact [(要素, context)]": [
+    [
+     "GainOnSalesOfNoncurrentAssetsEI",
+     "CurrentYearDuration"
+    ]
+   ],
+   "形(B の根拠文からの機械推定・要確認)": "対/変化(候補)",
+   "engine(main) の pointer": [],
+   "実装席の束縛判定(60 件のみ)": null,
+   "一致(厳密)": "engine pointer なし/未解析",
+   "一致(同値類 v0)": "engine pointer なし/未解析",
+   "B の根拠(原文)": "文の数 1000000.0円 を GainOnSalesOfNoncurrentAssetsEI 単体 と同定。実額 1,232,000 円 → 百万円表示 1(切り捨て/四捨五入一致)。引いた fact: GainOnSalesOfNoncurrentAssetsEI[ctx=CurrentYearDuration 2025-07-01~2026-06-30] = 1,232,000 JPY decimals=-3"
+  },
+  {
+   "id": "N102",
+   "層(main の状態)": "UNVERIFIABLE",
+   "B の札": "真",
+   "B の確信": "高",
+   "B が同定した fact [(要素, context)]": [
+    [
+     "IncomeTaxesDeferred",
+     "CurrentYearDuration"
+    ]
+   ],
+   "形(B の根拠文からの機械推定・要確認)": "対/変化(候補)",
+   "engine(main) の pointer": [],
+   "実装席の束縛判定(60 件のみ)": null,
+   "一致(厳密)": "engine pointer なし/未解析",
+   "一致(同値類 v0)": "engine pointer なし/未解析",
+   "B の根拠(原文)": "文の数 -120000000.0円 を IncomeTaxesDeferred 単体 と同定。実額 120,121,000 円 → 百万円表示 120(切り捨て/四捨五入一致)。引いた fact: IncomeTaxesDeferred[ctx=CurrentYearDuration 2025-07-01~2026-06-30] = -120,121,000 JPY decimals=-3"
+  },
+  {
+   "id": "N103",
+   "層(main の状態)": "POINTER_NOT_FOUND",
+   "B の札": "真",
+   "B の確信": "高",
+   "B が同定した fact [(要素, context)]": [
+    [
+     "IncomeBeforeIncomeTaxes",
+     "CurrentYearDuration"
+    ],
+    [
+     "IncomeTaxes",
+     "CurrentYearDuration"
+    ]
+   ],
+   "形(B の根拠文からの機械推定・要確認)": "率/ポイント(候補)",
+   "engine(main) の pointer": [],
+   "実装席の束縛判定(60 件のみ)": null,
+   "一致(厳密)": "engine pointer なし/未解析",
+   "一致(同値類 v0)": "engine pointer なし/未解析",
+   "B の根拠(原文)": "文の数 34.9% を IncomeTaxes/IncomeBeforeIncomeTaxes 当期 と同定。算出値 34.8632% → 文の 34.9%(小数第1位で四捨五入一致)。引いた fact: IncomeTaxes[ctx=CurrentYearDuration 2025-07-01~2026-06-30] = 506,218,000 JPY decimals=-3 / IncomeBeforeIncomeTaxes[ctx=CurrentYearDuration 2025-07-01~2026-06-30] = 1,452,012,000 JPY decimals=-3"
+  },
+  {
+   "id": "N105",
+   "層(main の状態)": "GROUNDED",
+   "B の札": "真",
+   "B の確信": "高",
+   "B が同定した fact [(要素, context)]": [
+    [
+     "ProfitLossAttributableToOwnersOfParent",
+     "CurrentYearDuration"
+    ]
+   ],
+   "形(B の根拠文からの機械推定・要確認)": "対/変化(候補)",
+   "engine(main) の pointer": [
+    [
+     "ProfitLossAttributableToOwnersOfParentSummaryOfBusinessResults",
+     "CurrentYearDuration"
+    ]
+   ],
+   "実装席の束縛判定(60 件のみ)": "correct",
+   "一致(厳密)": "違う",
+   "一致(同値類 v0)": "同じ",
+   "B の根拠(原文)": "文の数 945000000.0円 を ProfitLossAttributableToOwnersOfParent 単体 と同定。実額 945,793,000 円 → 百万円表示 945(切り捨て一致)。引いた fact: ProfitLossAttributableToOwnersOfParent[ctx=CurrentYearDuration 2025-07-01~2026-06-30] = 945,793,000 JPY decimals=-3"
+  },
+  {
+   "id": "N108",
+   "層(main の状態)": "POINTER_NOT_FOUND",
+   "B の札": "真",
+   "B の確信": "高",
+   "B が同定した fact [(要素, context)]": [
+    [
+     "ProfitLossAttributableToOwnersOfParent",
+     "CurrentYearDuration"
+    ],
+    [
+     "ProfitLossAttributableToOwnersOfParent",
+     "Prior1YearDuration"
+    ]
+   ],
+   "形(B の根拠文からの機械推定・要確認)": "率/ポイント(候補)",
+   "engine(main) の pointer": [],
+   "実装席の束縛判定(60 件のみ)": null,
+   "一致(厳密)": "engine pointer なし/未解析",
+   "一致(同値類 v0)": "engine pointer なし/未解析",
+   "B の根拠(原文)": "文の数 50.8% を (ProfitLossAttributableToOwnersOfParent 前期-当期)/前期 と同定。算出値 50.8061% → 文の 50.8%(小数第1位で四捨五入一致)。引いた fact: ProfitLossAttributableToOwnersOfParent[ctx=CurrentYearDuration 2025-07-01~2026-06-30] = 945,793,000 JPY decimals=-3 / ProfitLossAttributableToOwnersOfParent[ctx=Prior1YearDuration 2024-07-01~2025-06-30] = 1,922,581,000 JPY decimals=-3"
+  },
+  {
+   "id": "N112",
+   "層(main の状態)": "GROUNDED",
+   "B の札": "真",
+   "B の確信": "高",
+   "B が同定した fact [(要素, context)]": [
+    [
+     "RateOfReturnOnEquitySummaryOfBusinessResults",
+     "CurrentYearDuration"
+    ]
+   ],
+   "形(B の根拠文からの機械推定・要確認)": "率/ポイント(候補)",
+   "engine(main) の pointer": [
+    [
+     "RateOfReturnOnEquitySummaryOfBusinessResults",
+     "CurrentYearDuration"
+    ]
+   ],
+   "実装席の束縛判定(60 件のみ)": "correct",
+   "一致(厳密)": "同じ",
+   "一致(同値類 v0)": "同じ",
+   "B の根拠(原文)": "文の数 5.8% を RateOfReturnOnEquitySummaryOfBusinessResults 単体x100 と同定。算出値 5.8000% → 文の 5.8%(小数第1位で四捨五入一致)。引いた fact: RateOfReturnOnEquitySummaryOfBusinessResults[ctx=CurrentYearDuration 2025-07-01~2026-06-30] = 0 pure decimals=3"
+  },
+  {
+   "id": "N119",
+   "層(main の状態)": "UNVERIFIABLE",
+   "B の札": "真",
+   "B の確信": "高",
+   "B が同定した fact [(要素, context)]": [
+    [
+     "OtherComprehensiveIncome",
+     "Prior1YearDuration"
+    ]
+   ],
+   "形(B の根拠文からの機械推定・要確認)": "対/変化(候補)",
+   "engine(main) の pointer": [],
+   "実装席の束縛判定(60 件のみ)": null,
+   "一致(厳密)": "engine pointer なし/未解析",
+   "一致(同値類 v0)": "engine pointer なし/未解析",
+   "B の根拠(原文)": "文の数 528000000.0円 を OtherComprehensiveIncome 単体 と同定。実額 528,917,000 円 → 百万円表示 528(切り捨て一致)。引いた fact: OtherComprehensiveIncome[ctx=Prior1YearDuration 2024-07-01~2025-06-30] = 528,917,000 JPY decimals=-3"
+  },
+  {
+   "id": "N120",
+   "層(main の状態)": "UNVERIFIABLE",
+   "B の札": "真",
+   "B の確信": "中",
+   "B が同定した fact [(要素, context)]": [
+    [
+     "OtherComprehensiveIncome",
+     "CurrentYearDuration"
+    ],
+    [
+     "OtherComprehensiveIncome",
+     "Prior1YearDuration"
+    ]
+   ],
+   "形(B の根拠文からの機械推定・要確認)": "対/変化(候補)",
+   "engine(main) の pointer": [],
+   "実装席の束縛判定(60 件のみ)": null,
+   "一致(厳密)": "engine pointer なし/未解析",
+   "一致(同値類 v0)": "engine pointer なし/未解析",
+   "B の根拠(原文)": "文の数 782000000.0円 を OtherComprehensiveIncome 2025-07-01~2026-06-30 - 2024-07-01~2025-06-30 と同定。実額 781,972,000 円 → 百万円表示 782(四捨五入一致)。引いた fact: OtherComprehensiveIncome[ctx=CurrentYearDuration 2025-07-01~2026-06-30] = 1,310,889,000 JPY decimals=-3 / OtherComprehensiveIncome[ctx=Prior1YearDuration 2024-07-01~2025-06-30] = 528,917,000 JPY decimals=-3【確信中の理由】丸め方が本文の他の箇所(一律 切り捨て)と異なる。実差 781,972 千円の切り捨ては 781。文の 782 は四捨五入(または表示値 1,310-528)で、定義上は一致とみなす"
+  },
+  {
+   "id": "N130",
+   "層(main の状態)": "GROUNDED",
+   "B の札": "真",
+   "B の確信": "高",
+   "B が同定した fact [(要素, context)]": [
+    [
+     "Assets",
+     "CurrentYearInstant"
+    ],
+    [
+     "Assets",
+     "Prior1YearInstant"
+    ]
+   ],
+   "形(B の根拠文からの機械推定・要確認)": "対/変化(候補)",
+   "engine(main) の pointer": [
+    [
+     "TotalAssetsSummaryOfBusinessResults",
+     "CurrentYearInstant"
+    ]
+   ],
+   "実装席の束縛判定(60 件のみ)": "correct",
+   "一致(厳密)": "違う",
+   "一致(同値類 v0)": "同じ",
+   "B の根拠(原文)": "文の数 2281.0百万円 を Assets 2026-06-30 - 2025-06-30 と同定。実額 2,281,746,000 円 → 百万円表示 2,281(切り捨て一致)。引いた fact: Assets[ctx=CurrentYearInstant 2026-06-30] = 27,836,421,000 JPY decimals=-3 / Assets[ctx=Prior1YearInstant 2025-06-30] = 25,554,675,000 JPY decimals=-3"
+  },
+  {
+   "id": "N131",
+   "層(main の状態)": "GROUNDED",
+   "B の札": "真",
+   "B の確信": "高",
+   "B が同定した fact [(要素, context)]": [
+    [
+     "Assets",
+     "CurrentYearInstant"
+    ],
+    [
+     "Assets",
+     "Prior1YearInstant"
+    ]
+   ],
+   "形(B の根拠文からの機械推定・要確認)": "率/ポイント(候補)",
+   "engine(main) の pointer": [
+    [
+     "TotalAssetsSummaryOfBusinessResults",
+     "CurrentYearInstant"
+    ]
+   ],
+   "実装席の束縛判定(60 件のみ)": "correct",
+   "一致(厳密)": "違う",
+   "一致(同値類 v0)": "同じ",
+   "B の根拠(原文)": "文の数 8.9% を (Assets 当期-前期)/前期 と同定。算出値 8.9289% → 文の 8.9%(小数第1位で四捨五入一致)。引いた fact: Assets[ctx=CurrentYearInstant 2026-06-30] = 27,836,421,000 JPY decimals=-3 / Assets[ctx=Prior1YearInstant 2025-06-30] = 25,554,675,000 JPY decimals=-3"
+  },
+  {
+   "id": "N137",
+   "層(main の状態)": "GROUNDED",
+   "B の札": "真",
+   "B の確信": "高",
+   "B が同定した fact [(要素, context)]": [
+    [
+     "CashAndDeposits",
+     "CurrentYearInstant"
+    ],
+    [
+     "CashAndDeposits",
+     "Prior1YearInstant"
+    ]
+   ],
+   "形(B の根拠文からの機械推定・要確認)": "対/変化(候補)",
+   "engine(main) の pointer": [
+    [
+     "CashAndDeposits",
+     "CurrentYearInstant"
+    ]
+   ],
+   "実装席の束縛判定(60 件のみ)": "correct",
+   "一致(厳密)": "同じ",
+   "一致(同値類 v0)": "同じ",
+   "B の根拠(原文)": "文の数 293000000.0円 を CashAndDeposits 2025-06-30 - 2026-06-30 と同定。実額 293,190,000 円 → 百万円表示 293(切り捨て/四捨五入一致)。引いた fact: CashAndDeposits[ctx=Prior1YearInstant 2025-06-30] = 2,899,140,000 JPY decimals=-3 / CashAndDeposits[ctx=CurrentYearInstant 2026-06-30] = 2,605,950,000 JPY decimals=-3"
+  },
+  {
+   "id": "N138",
+   "層(main の状態)": "GROUNDED",
+   "B の札": "真",
+   "B の確信": "高",
+   "B が同定した fact [(要素, context)]": [
+    [
+     "NotesAndAccountsReceivableTrade",
+     "CurrentYearInstant"
+    ]
+   ],
+   "形(B の根拠文からの機械推定・要確認)": "対/変化(候補)",
+   "engine(main) の pointer": [
+    [
+     "NotesAndAccountsReceivableTrade",
+     "CurrentYearInstant"
+    ]
+   ],
+   "実装席の束縛判定(60 件のみ)": "correct",
+   "一致(厳密)": "同じ",
+   "一致(同値類 v0)": "同じ",
+   "B の根拠(原文)": "文の数 2556.0百万円 を NotesAndAccountsReceivableTrade 単体 と同定。実額 2,556,498,000 円 → 百万円表示 2,556(切り捨て/四捨五入一致)。引いた fact: NotesAndAccountsReceivableTrade[ctx=CurrentYearInstant 2026-06-30] = 2,556,498,000 JPY decimals=-3"
+  },
+  {
+   "id": "N143",
+   "層(main の状態)": "GROUNDED",
+   "B の札": "真",
+   "B の確信": "高",
+   "B が同定した fact [(要素, context)]": [
+    [
+     "ContractAssets",
+     "CurrentYearInstant"
+    ],
+    [
+     "ContractAssets",
+     "Prior1YearInstant"
+    ]
+   ],
+   "形(B の根拠文からの機械推定・要確認)": "対/変化(候補)",
+   "engine(main) の pointer": [
+    [
+     "ContractAssets",
+     "CurrentYearInstant"
+    ]
+   ],
+   "実装席の束縛判定(60 件のみ)": "correct",
+   "一致(厳密)": "同じ",
+   "一致(同値類 v0)": "同じ",
+   "B の根拠(原文)": "文の数 161000000.0円 を ContractAssets 2025-06-30 - 2026-06-30 と同定。実額 161,030,000 円 → 百万円表示 161(切り捨て/四捨五入一致)。引いた fact: ContractAssets[ctx=Prior1YearInstant 2025-06-30] = 11,428,545,000 JPY decimals=-3 / ContractAssets[ctx=CurrentYearInstant 2026-06-30] = 11,267,515,000 JPY decimals=-3"
+  },
+  {
+   "id": "N146",
+   "層(main の状態)": "UNVERIFIABLE",
+   "B の札": "真",
+   "B の確信": "高",
+   "B が同定した fact [(要素, context)]": [
+    [
+     "OtherCA",
+     "CurrentYearInstant"
+    ],
+    [
+     "OtherCA",
+     "Prior1YearInstant"
+    ]
+   ],
+   "形(B の根拠文からの機械推定・要確認)": "対/変化(候補)",
+   "engine(main) の pointer": [],
+   "実装席の束縛判定(60 件のみ)": null,
+   "一致(厳密)": "engine pointer なし/未解析",
+   "一致(同値類 v0)": "engine pointer なし/未解析",
+   "B の根拠(原文)": "文の数 59000000.0円 を OtherCA 2026-06-30 - 2025-06-30 と同定。実額 59,391,000 円 → 百万円表示 59(切り捨て/四捨五入一致)。引いた fact: OtherCA[ctx=CurrentYearInstant 2026-06-30] = 513,505,000 JPY decimals=-3 / OtherCA[ctx=Prior1YearInstant 2025-06-30] = 454,114,000 JPY decimals=-3"
+  },
+  {
+   "id": "N152",
+   "層(main の状態)": "UNVERIFIABLE",
+   "B の札": "真",
+   "B の確信": "高",
+   "B が同定した fact [(要素, context)]": [
+    [
+     "NoncurrentAssets",
+     "CurrentYearInstant"
+    ],
+    [
+     "NoncurrentAssets",
+     "Prior1YearInstant"
+    ]
+   ],
+   "形(B の根拠文からの機械推定・要確認)": "率/ポイント(候補)",
+   "engine(main) の pointer": [],
+   "実装席の束縛判定(60 件のみ)": null,
+   "一致(厳密)": "engine pointer なし/未解析",
+   "一致(同値類 v0)": "engine pointer なし/未解析",
+   "B の根拠(原文)": "文の数 20.7% を (NoncurrentAssets 当期-前期)/前期 と同定。算出値 20.7490% → 文の 20.7%(小数第1位で四捨五入一致)。引いた fact: NoncurrentAssets[ctx=CurrentYearInstant 2026-06-30] = 10,892,950,000 JPY decimals=-3 / NoncurrentAssets[ctx=Prior1YearInstant 2025-06-30] = 9,021,152,000 JPY decimals=-3"
+  },
+  {
+   "id": "N154",
+   "層(main の状態)": "UNVERIFIABLE",
+   "B の札": "真",
+   "B の確信": "高",
+   "B が同定した fact [(要素, context)]": [
+    [
+     "PropertyPlantAndEquipment",
+     "Prior1YearInstant"
+    ]
+   ],
+   "形(B の根拠文からの機械推定・要確認)": "対/変化(候補)",
+   "engine(main) の pointer": [],
+   "実装席の束縛判定(60 件のみ)": null,
+   "一致(厳密)": "engine pointer なし/未解析",
+   "一致(同値類 v0)": "engine pointer なし/未解析",
+   "B の根拠(原文)": "文の数 2083.0百万円 を PropertyPlantAndEquipment 単体 と同定。実額 2,083,066,000 円 → 百万円表示 2,083(切り捨て/四捨五入一致)。引いた fact: PropertyPlantAndEquipment[ctx=Prior1YearInstant 2025-06-30] = 2,083,066,000 JPY decimals=-3"
+  },
+  {
+   "id": "N157",
+   "層(main の状態)": "UNVERIFIABLE",
+   "B の札": "真",
+   "B の確信": "高",
+   "B が同定した fact [(要素, context)]": [
+    [
+     "IntangibleAssets",
+     "Prior1YearInstant"
+    ]
+   ],
+   "形(B の根拠文からの機械推定・要確認)": "対/変化(候補)",
+   "engine(main) の pointer": [],
+   "実装席の束縛判定(60 件のみ)": null,
+   "一致(厳密)": "engine pointer なし/未解析",
+   "一致(同値類 v0)": "engine pointer なし/未解析",
+   "B の根拠(原文)": "文の数 528000000.0円 を IntangibleAssets 単体 と同定。実額 528,971,000 円 → 百万円表示 528(切り捨て一致)。引いた fact: IntangibleAssets[ctx=Prior1YearInstant 2025-06-30] = 528,971,000 JPY decimals=-3"
+  },
+  {
+   "id": "N158",
+   "層(main の状態)": "UNVERIFIABLE",
+   "B の札": "真",
+   "B の確信": "高",
+   "B が同定した fact [(要素, context)]": [
+    [
+     "IntangibleAssets",
+     "CurrentYearInstant"
+    ],
+    [
+     "IntangibleAssets",
+     "Prior1YearInstant"
+    ]
+   ],
+   "形(B の根拠文からの機械推定・要確認)": "対/変化(候補)",
+   "engine(main) の pointer": [],
+   "実装席の束縛判定(60 件のみ)": null,
+   "一致(厳密)": "engine pointer なし/未解析",
+   "一致(同値類 v0)": "engine pointer なし/未解析",
+   "B の根拠(原文)": "文の数 157000000.0円 を IntangibleAssets 2025-06-30 - 2026-06-30 と同定。実額 157,070,000 円 → 百万円表示 157(切り捨て/四捨五入一致)。引いた fact: IntangibleAssets[ctx=Prior1YearInstant 2025-06-30] = 528,971,000 JPY decimals=-3 / IntangibleAssets[ctx=CurrentYearInstant 2026-06-30] = 371,901,000 JPY decimals=-3"
+  },
+  {
+   "id": "N164",
+   "層(main の状態)": "POINTER_NOT_FOUND",
+   "B の札": "真",
+   "B の確信": "高",
+   "B が同定した fact [(要素, context)]": [
+    [
+     "InvestmentsAndOtherAssets",
+     "CurrentYearInstant"
+    ],
+    [
+     "InvestmentsAndOtherAssets",
+     "Prior1YearInstant"
+    ]
+   ],
+   "形(B の根拠文からの機械推定・要確認)": "対/変化(候補)",
+   "engine(main) の pointer": [],
+   "実装席の束縛判定(60 件のみ)": null,
+   "一致(厳密)": "engine pointer なし/未解析",
+   "一致(同値類 v0)": "engine pointer なし/未解析",
+   "B の根拠(原文)": "文の数 2019.0百万円 を InvestmentsAndOtherAssets 2026-06-30 - 2025-06-30 と同定。実額 2,019,745,000 円 → 百万円表示 2,019(切り捨て一致)。引いた fact: InvestmentsAndOtherAssets[ctx=CurrentYearInstant 2026-06-30] = 8,428,859,000 JPY decimals=-3 / InvestmentsAndOtherAssets[ctx=Prior1YearInstant 2025-06-30] = 6,409,114,000 JPY decimals=-3"
+  },
+  {
+   "id": "N168",
+   "層(main の状態)": "GROUNDED",
+   "B の札": "真",
+   "B の確信": "高",
+   "B が同定した fact [(要素, context)]": [
+    [
+     "InvestmentSecurities",
+     "CurrentYearInstant"
+    ]
+   ],
+   "形(B の根拠文からの機械推定・要確認)": "対/変化(候補)",
+   "engine(main) の pointer": [
+    [
+     "InvestmentSecurities",
+     "CurrentYearInstant"
+    ]
+   ],
+   "実装席の束縛判定(60 件のみ)": "correct",
+   "一致(厳密)": "同じ",
+   "一致(同値類 v0)": "同じ",
+   "B の根拠(原文)": "文の数 1203.0百万円 を InvestmentSecurities 単体 と同定。実額 1,203,225,000 円 → 百万円表示 1,203(切り捨て/四捨五入一致)。引いた fact: InvestmentSecurities[ctx=CurrentYearInstant 2026-06-30] = 1,203,225,000 JPY decimals=-3"
+  },
+  {
+   "id": "N170",
+   "層(main の状態)": "GROUNDED",
+   "B の札": "真",
+   "B の確信": "高",
+   "B が同定した fact [(要素, context)]": [
+    [
+     "InvestmentSecurities",
+     "CurrentYearInstant"
+    ],
+    [
+     "InvestmentSecurities",
+     "Prior1YearInstant"
+    ]
+   ],
+   "形(B の根拠文からの機械推定・要確認)": "対/変化(候補)",
+   "engine(main) の pointer": [
+    [
+     "InvestmentSecurities",
+     "CurrentYearInstant"
+    ]
+   ],
+   "実装席の束縛判定(60 件のみ)": "correct",
+   "一致(厳密)": "同じ",
+   "一致(同値類 v0)": "同じ",
+   "B の根拠(原文)": "文の数 301000000.0円 を InvestmentSecurities 2026-06-30 - 2025-06-30 と同定。実額 301,511,000 円 → 百万円表示 301(切り捨て一致)。引いた fact: InvestmentSecurities[ctx=CurrentYearInstant 2026-06-30] = 1,203,225,000 JPY decimals=-3 / InvestmentSecurities[ctx=Prior1YearInstant 2025-06-30] = 901,714,000 JPY decimals=-3"
+  },
+  {
+   "id": "N172",
+   "層(main の状態)": "GROUNDED",
+   "B の札": "真",
+   "B の確信": "高",
+   "B が同定した fact [(要素, context)]": [
+    [
+     "ValuationDifferenceOnAvailableForSaleSecurities",
+     "CurrentYearInstant"
+    ]
+   ],
+   "形(B の根拠文からの機械推定・要確認)": "対/変化(候補)",
+   "engine(main) の pointer": [
+    [
+     "ValuationDifferenceOnAvailableForSaleSecurities",
+     "CurrentYearInstant"
+    ]
+   ],
+   "実装席の束縛判定(60 件のみ)": "correct",
+   "一致(厳密)": "同じ",
+   "一致(同値類 v0)": "同じ",
+   "B の根拠(原文)": "文の数 631000000.0円 を ValuationDifferenceOnAvailableForSaleSecurities 単体 と同定。実額 631,931,000 円 → 百万円表示 631(切り捨て一致)。引いた fact: ValuationDifferenceOnAvailableForSaleSecurities[ctx=CurrentYearInstant 2026-06-30] = 631,931,000 JPY decimals=-3"
+  },
+  {
+   "id": "N174",
+   "層(main の状態)": "GROUNDED",
+   "B の札": "真",
+   "B の確信": "高",
+   "B が同定した fact [(要素, context)]": [
+    [
+     "Liabilities",
+     "CurrentYearInstant"
+    ]
+   ],
+   "形(B の根拠文からの機械推定・要確認)": "対/変化(候補)",
+   "engine(main) の pointer": [
+    [
+     "Liabilities",
+     "CurrentYearInstant"
+    ]
+   ],
+   "実装席の束縛判定(60 件のみ)": "correct",
+   "一致(厳密)": "同じ",
+   "一致(同値類 v0)": "同じ",
+   "B の根拠(原文)": "文の数 10670.0百万円 を Liabilities 単体 と同定。実額 10,670,476,000 円 → 百万円表示 10,670(切り捨て/四捨五入一致)。引いた fact: Liabilities[ctx=CurrentYearInstant 2026-06-30] = 10,670,476,000 JPY decimals=-3"
+  },
+  {
+   "id": "N175",
+   "層(main の状態)": "GROUNDED",
+   "B の札": "真",
+   "B の確信": "高",
+   "B が同定した fact [(要素, context)]": [
+    [
+     "Liabilities",
+     "Prior1YearInstant"
+    ]
+   ],
+   "形(B の根拠文からの機械推定・要確認)": "対/変化(候補)",
+   "engine(main) の pointer": [
+    [
+     "Liabilities",
+     "Prior1YearInstant"
+    ]
+   ],
+   "実装席の束縛判定(60 件のみ)": "correct",
+   "一致(厳密)": "同じ",
+   "一致(同値類 v0)": "同じ",
+   "B の根拠(原文)": "文の数 10055.0百万円 を Liabilities 単体 と同定。実額 10,055,929,000 円 → 百万円表示 10,055(切り捨て一致)。引いた fact: Liabilities[ctx=Prior1YearInstant 2025-06-30] = 10,055,929,000 JPY decimals=-3"
+  },
+  {
+   "id": "N178",
+   "層(main の状態)": "GROUNDED",
+   "B の札": "真",
+   "B の確信": "高",
+   "B が同定した fact [(要素, context)]": [
+    [
+     "CurrentLiabilities",
+     "CurrentYearInstant"
+    ]
+   ],
+   "形(B の根拠文からの機械推定・要確認)": "対/変化(候補)",
+   "engine(main) の pointer": [
+    [
+     "CurrentLiabilities",
+     "CurrentYearInstant"
+    ]
+   ],
+   "実装席の束縛判定(60 件のみ)": "correct",
+   "一致(厳密)": "同じ",
+   "一致(同値類 v0)": "同じ",
+   "B の根拠(原文)": "文の数 8041.0百万円 を CurrentLiabilities 単体 と同定。実額 8,041,190,000 円 → 百万円表示 8,041(切り捨て/四捨五入一致)。引いた fact: CurrentLiabilities[ctx=CurrentYearInstant 2026-06-30] = 8,041,190,000 JPY decimals=-3"
+  },
+  {
+   "id": "N179",
+   "層(main の状態)": "GROUNDED",
+   "B の札": "真",
+   "B の確信": "高",
+   "B が同定した fact [(要素, context)]": [
+    [
+     "CurrentLiabilities",
+     "Prior1YearInstant"
+    ]
+   ],
+   "形(B の根拠文からの機械推定・要確認)": "対/変化(候補)",
+   "engine(main) の pointer": [
+    [
+     "CurrentLiabilities",
+     "Prior1YearInstant"
+    ]
+   ],
+   "実装席の束縛判定(60 件のみ)": "correct",
+   "一致(厳密)": "同じ",
+   "一致(同値類 v0)": "同じ",
+   "B の根拠(原文)": "文の数 7642.0百万円 を CurrentLiabilities 単体 と同定。実額 7,642,406,000 円 → 百万円表示 7,642(切り捨て/四捨五入一致)。引いた fact: CurrentLiabilities[ctx=Prior1YearInstant 2025-06-30] = 7,642,406,000 JPY decimals=-3"
+  },
+  {
+   "id": "N181",
+   "層(main の状態)": "GROUNDED",
+   "B の札": "真",
+   "B の確信": "高",
+   "B が同定した fact [(要素, context)]": [
+    [
+     "AccountsPayableOperatingSpecific",
+     "CurrentYearInstant"
+    ]
+   ],
+   "形(B の根拠文からの機械推定・要確認)": "対/変化(候補)",
+   "engine(main) の pointer": [
+    [
+     "AccountsPayableOperatingSpecific",
+     "CurrentYearInstant"
+    ]
+   ],
+   "実装席の束縛判定(60 件のみ)": "correct",
+   "一致(厳密)": "同じ",
+   "一致(同値類 v0)": "同じ",
+   "B の根拠(原文)": "文の数 1757.0百万円 を AccountsPayableOperatingSpecific 単体 と同定。実額 1,757,446,000 円 → 百万円表示 1,757(切り捨て/四捨五入一致)。引いた fact: AccountsPayableOperatingSpecific[ctx=CurrentYearInstant 2026-06-30] = 1,757,446,000 JPY decimals=-3"
+  },
+  {
+   "id": "N187",
+   "層(main の状態)": "GROUNDED",
+   "B の札": "真",
+   "B の確信": "高",
+   "B が同定した fact [(要素, context)]": [
+    [
+     "IncomeTaxesPayable",
+     "CurrentYearInstant"
+    ]
+   ],
+   "形(B の根拠文からの機械推定・要確認)": "対/変化(候補)",
+   "engine(main) の pointer": [
+    [
+     "IncomeTaxesPayable",
+     "CurrentYearInstant"
+    ]
+   ],
+   "実装席の束縛判定(60 件のみ)": "correct",
+   "一致(厳密)": "同じ",
+   "一致(同値類 v0)": "同じ",
+   "B の根拠(原文)": "文の数 579000000.0円 を IncomeTaxesPayable 単体 と同定。実額 579,515,000 円 → 百万円表示 579(切り捨て一致)。引いた fact: IncomeTaxesPayable[ctx=CurrentYearInstant 2026-06-30] = 579,515,000 JPY decimals=-3"
+  },
+  {
+   "id": "N191",
+   "層(main の状態)": "GROUNDED",
+   "B の札": "真",
+   "B の確信": "高",
+   "B が同定した fact [(要素, context)]": [
+    [
+     "ContractLiabilities",
+     "Prior1YearInstant"
+    ]
+   ],
+   "形(B の根拠文からの機械推定・要確認)": "対/変化(候補)",
+   "engine(main) の pointer": [
+    [
+     "ContractLiabilities",
+     "Prior1YearInstant"
+    ]
+   ],
+   "実装席の束縛判定(60 件のみ)": "correct",
+   "一致(厳密)": "同じ",
+   "一致(同値類 v0)": "同じ",
+   "B の根拠(原文)": "文の数 1594.0百万円 を ContractLiabilities 単体 と同定。実額 1,594,084,000 円 → 百万円表示 1,594(切り捨て/四捨五入一致)。引いた fact: ContractLiabilities[ctx=Prior1YearInstant 2025-06-30] = 1,594,084,000 JPY decimals=-3"
+  },
+  {
+   "id": "N192",
+   "層(main の状態)": "GROUNDED",
+   "B の札": "真",
+   "B の確信": "高",
+   "B が同定した fact [(要素, context)]": [
+    [
+     "ContractLiabilities",
+     "CurrentYearInstant"
+    ],
+    [
+     "ContractLiabilities",
+     "Prior1YearInstant"
+    ]
+   ],
+   "形(B の根拠文からの機械推定・要確認)": "対/変化(候補)",
+   "engine(main) の pointer": [
+    [
+     "ContractLiabilities",
+     "CurrentYearInstant"
+    ]
+   ],
+   "実装席の束縛判定(60 件のみ)": "correct",
+   "一致(厳密)": "同じ",
+   "一致(同値類 v0)": "同じ",
+   "B の根拠(原文)": "文の数 93000000.0円 を ContractLiabilities 2025-06-30 - 2026-06-30 と同定。実額 93,446,000 円 → 百万円表示 93(切り捨て/四捨五入一致)。引いた fact: ContractLiabilities[ctx=Prior1YearInstant 2025-06-30] = 1,594,084,000 JPY decimals=-3 / ContractLiabilities[ctx=CurrentYearInstant 2026-06-30] = 1,500,638,000 JPY decimals=-3"
+  },
+  {
+   "id": "N193",
+   "層(main の状態)": "GROUNDED",
+   "B の札": "真",
+   "B の確信": "高",
+   "B が同定した fact [(要素, context)]": [
+    [
+     "CurrentPortionOfLongTermLoansPayable",
+     "CurrentYearInstant"
+    ]
+   ],
+   "形(B の根拠文からの機械推定・要確認)": "対/変化(候補)",
+   "engine(main) の pointer": [
+    [
+     "CurrentPortionOfLongTermLoansPayable",
+     "CurrentYearInstant"
+    ]
+   ],
+   "実装席の束縛判定(60 件のみ)": "correct",
+   "一致(厳密)": "同じ",
+   "一致(同値類 v0)": "同じ",
+   "B の根拠(原文)": "文の数 234000000.0円 を CurrentPortionOfLongTermLoansPayable 単体 と同定。実額 234,864,000 円 → 百万円表示 234(切り捨て一致)。引いた fact: CurrentPortionOfLongTermLoansPayable[ctx=CurrentYearInstant 2026-06-30] = 234,864,000 JPY decimals=-3"
+  },
+  {
+   "id": "N200",
+   "層(main の状態)": "UNVERIFIABLE",
+   "B の札": "真",
+   "B の確信": "高",
+   "B が同定した fact [(要素, context)]": [
+    [
+     "ProvisionForLossOnOrderReceivedCL",
+     "Prior1YearInstant"
+    ]
+   ],
+   "形(B の根拠文からの機械推定・要確認)": "対/変化(候補)",
+   "engine(main) の pointer": [],
+   "実装席の束縛判定(60 件のみ)": null,
+   "一致(厳密)": "engine pointer なし/未解析",
+   "一致(同値類 v0)": "engine pointer なし/未解析",
+   "B の根拠(原文)": "文の数 18000000.0円 を ProvisionForLossOnOrderReceivedCL 単体 と同定。実額 18,500,000 円 → 百万円表示 18(切り捨て/四捨五入一致)。引いた fact: ProvisionForLossOnOrderReceivedCL[ctx=Prior1YearInstant 2025-06-30] = 18,500,000 JPY decimals=-3"
+  },
+  {
+   "id": "N201",
+   "層(main の状態)": "UNVERIFIABLE",
+   "B の札": "真",
+   "B の確信": "高",
+   "B が同定した fact [(要素, context)]": [
+    [
+     "ProvisionForLossOnOrderReceivedCL",
+     "CurrentYearInstant"
+    ],
+    [
+     "ProvisionForLossOnOrderReceivedCL",
+     "Prior1YearInstant"
+    ]
+   ],
+   "形(B の根拠文からの機械推定・要確認)": "対/変化(候補)",
+   "engine(main) の pointer": [],
+   "実装席の束縛判定(60 件のみ)": null,
+   "一致(厳密)": "engine pointer なし/未解析",
+   "一致(同値類 v0)": "engine pointer なし/未解析",
+   "B の根拠(原文)": "文の数 1000000.0円 を ProvisionForLossOnOrderReceivedCL 2026-06-30 - 2025-06-30 と同定。実額 1,180,000 円 → 百万円表示 1(切り捨て/四捨五入一致)。引いた fact: ProvisionForLossOnOrderReceivedCL[ctx=CurrentYearInstant 2026-06-30] = 19,680,000 JPY decimals=-3 / ProvisionForLossOnOrderReceivedCL[ctx=Prior1YearInstant 2025-06-30] = 18,500,000 JPY decimals=-3"
+  },
+  {
+   "id": "N205",
+   "層(main の状態)": "GROUNDED",
+   "B の札": "真",
+   "B の確信": "高",
+   "B が同定した fact [(要素, context)]": [
+    [
+     "DeferredTaxLiabilities",
+     "CurrentYearInstant"
+    ]
+   ],
+   "形(B の根拠文からの機械推定・要確認)": "対/変化(候補)",
+   "engine(main) の pointer": [
+    [
+     "DeferredTaxLiabilities",
+     "CurrentYearInstant"
+    ]
+   ],
+   "実装席の束縛判定(60 件のみ)": "correct",
+   "一致(厳密)": "同じ",
+   "一致(同値類 v0)": "同じ",
+   "B の根拠(原文)": "文の数 1738.0百万円 を DeferredTaxLiabilities 単体 と同定。実額 1,738,948,000 円 → 百万円表示 1,738(切り捨て一致)。引いた fact: DeferredTaxLiabilities[ctx=CurrentYearInstant 2026-06-30] = 1,738,948,000 JPY decimals=-3"
+  },
+  {
+   "id": "N214",
+   "層(main の状態)": "GROUNDED",
+   "B の札": "真",
+   "B の確信": "高",
+   "B が同定した fact [(要素, context)]": [
+    [
+     "ProvisionForWarrantiesForCompletedOperationCL",
+     "CurrentYearInstant"
+    ]
+   ],
+   "形(B の根拠文からの機械推定・要確認)": "対/変化(候補)",
+   "engine(main) の pointer": [],
+   "実装席の束縛判定(60 件のみ)": "correct",
+   "一致(厳密)": "engine pointer なし/未解析",
+   "一致(同値類 v0)": "engine pointer なし/未解析",
+   "B の根拠(原文)": "文の数 991000000.0円 を ProvisionForWarrantiesForCompletedOperationCL 単体 と同定。実額 991,000,000 円 → 百万円表示 991(切り捨て/四捨五入一致)。引いた fact: ProvisionForWarrantiesForCompletedOperationCL[ctx=CurrentYearInstant 2026-06-30] = 991,000,000 JPY decimals=-3"
+  },
+  {
+   "id": "N218",
+   "層(main の状態)": "GROUNDED",
+   "B の札": "真",
+   "B の確信": "高",
+   "B が同定した fact [(要素, context)]": [
+    [
+     "LongTermLoansPayable",
+     "CurrentYearInstant"
+    ]
+   ],
+   "形(B の根拠文からの機械推定・要確認)": "対/変化(候補)",
+   "engine(main) の pointer": [
+    [
+     "LongTermLoansPayable",
+     "CurrentYearInstant"
+    ]
+   ],
+   "実装席の束縛判定(60 件のみ)": "correct",
+   "一致(厳密)": "同じ",
+   "一致(同値類 v0)": "同じ",
+   "B の根拠(原文)": "文の数 275000000.0円 を LongTermLoansPayable 単体 と同定。実額 275,773,000 円 → 百万円表示 275(切り捨て一致)。引いた fact: LongTermLoansPayable[ctx=CurrentYearInstant 2026-06-30] = 275,773,000 JPY decimals=-3"
+  },
+  {
+   "id": "N219",
+   "層(main の状態)": "GROUNDED",
+   "B の札": "真",
+   "B の確信": "高",
+   "B が同定した fact [(要素, context)]": [
+    [
+     "CurrentPortionOfLongTermLoansPayable",
+     "CurrentYearInstant"
+    ],
+    [
+     "LongTermLoansPayable",
+     "CurrentYearInstant"
+    ]
+   ],
+   "形(B の根拠文からの機械推定・要確認)": "対/変化(候補)",
+   "engine(main) の pointer": [
+    [
+     "LongTermLoansPayable",
+     "Prior1YearInstant"
+    ]
+   ],
+   "実装席の束縛判定(60 件のみ)": "wrong_binding",
+   "一致(厳密)": "違う",
+   "一致(同値類 v0)": "違う",
+   "B の根拠(原文)": "文の数 510000000.0円 を CurrentPortionOfLongTermLoansPayable + LongTermLoansPayable と同定。実額 510,637,000 円 → 百万円表示 510(切り捨て一致)。引いた fact: CurrentPortionOfLongTermLoansPayable[ctx=CurrentYearInstant 2026-06-30] = 234,864,000 JPY decimals=-3 / LongTermLoansPayable[ctx=CurrentYearInstant 2026-06-30] = 275,773,000 JPY decimals=-3"
+  },
+  {
+   "id": "N232",
+   "層(main の状態)": "POINTER_NOT_FOUND",
+   "B の札": "真",
+   "B の確信": "高",
+   "B が同定した fact [(要素, context)]": [
+    [
+     "CapitalSurplus",
+     "CurrentYearInstant"
+    ],
+    [
+     "CapitalSurplus",
+     "Prior1YearInstant"
+    ]
+   ],
+   "形(B の根拠文からの機械推定・要確認)": "対/変化(候補)",
+   "engine(main) の pointer": [],
+   "実装席の束縛判定(60 件のみ)": null,
+   "一致(厳密)": "engine pointer なし/未解析",
+   "一致(同値類 v0)": "engine pointer なし/未解析",
+   "B の根拠(原文)": "文の数 70000000.0円 を CapitalSurplus 2026-06-30 - 2025-06-30 と同定。実額 70,267,000 円 → 百万円表示 70(切り捨て/四捨五入一致)。引いた fact: CapitalSurplus[ctx=CurrentYearInstant 2026-06-30] = 1,766,366,000 JPY decimals=-3 / CapitalSurplus[ctx=Prior1YearInstant 2025-06-30] = 1,696,099,000 JPY decimals=-3"
+  },
+  {
+   "id": "N241",
+   "層(main の状態)": "GROUNDED",
+   "B の札": "真",
+   "B の確信": "高",
+   "B が同定した fact [(要素, context)]": [
+    [
+     "ValuationDifferenceOnAvailableForSaleSecurities",
+     "CurrentYearInstant"
+    ]
+   ],
+   "形(B の根拠文からの機械推定・要確認)": "対/変化(候補)",
+   "engine(main) の pointer": [
+    [
+     "ValuationDifferenceOnAvailableForSaleSecurities",
+     "CurrentYearInstant"
+    ]
+   ],
+   "実装席の束縛判定(60 件のみ)": "correct",
+   "一致(厳密)": "同じ",
+   "一致(同値類 v0)": "同じ",
+   "B の根拠(原文)": "文の数 631000000.0円 を ValuationDifferenceOnAvailableForSaleSecurities 単体 と同定。実額 631,931,000 円 → 百万円表示 631(切り捨て一致)。引いた fact: ValuationDifferenceOnAvailableForSaleSecurities[ctx=CurrentYearInstant 2026-06-30] = 631,931,000 JPY decimals=-3"
+  },
+  {
+   "id": "N245",
+   "層(main の状態)": "UNVERIFIABLE",
+   "B の札": "真",
+   "B の確信": "高",
+   "B が同定した fact [(要素, context)]": [
+    [
+     "ForeignCurrencyTranslationAdjustment",
+     "Prior1YearInstant"
+    ]
+   ],
+   "形(B の根拠文からの機械推定・要確認)": "対/変化(候補)",
+   "engine(main) の pointer": [],
+   "実装席の束縛判定(60 件のみ)": null,
+   "一致(厳密)": "engine pointer なし/未解析",
+   "一致(同値類 v0)": "engine pointer なし/未解析",
+   "B の根拠(原文)": "文の数 -19000000.0円 を ForeignCurrencyTranslationAdjustment 単体 と同定。実額 19,064,000 円 → 百万円表示 19(切り捨て/四捨五入一致)。引いた fact: ForeignCurrencyTranslationAdjustment[ctx=Prior1YearInstant 2025-06-30] = -19,064,000 JPY decimals=-3"
+  },
+  {
+   "id": "N249",
+   "層(main の状態)": "GROUNDED",
+   "B の札": "真",
+   "B の確信": "高",
+   "B が同定した fact [(要素, context)]": [
+    [
+     "DividendsFromSurplus",
+     "CurrentYearDuration"
+    ]
+   ],
+   "形(B の根拠文からの機械推定・要確認)": "対/変化(候補)",
+   "engine(main) の pointer": [
+    [
+     "DividendsFromSurplus",
+     "CurrentYearDuration"
+    ]
+   ],
+   "実装席の束縛判定(60 件のみ)": "ambiguous",
+   "一致(厳密)": "同じ",
+   "一致(同値類 v0)": "同じ",
+   "B の根拠(原文)": "文の数 652000000.0円 を DividendsFromSurplus 単体 と同定。実額 652,881,000 円 → 百万円表示 652(切り捨て一致)。引いた fact: DividendsFromSurplus[ctx=CurrentYearDuration 2025-07-01~2026-06-30] = -652,881,000 JPY decimals=-3"
+  },
+  {
+   "id": "N261",
+   "層(main の状態)": "UNVERIFIABLE",
+   "B の札": "真",
+   "B の確信": "高",
+   "B が同定した fact [(要素, context)]": [
+    [
+     "NetCashProvidedByUsedInOperatingActivities",
+     "CurrentYearDuration"
+    ]
+   ],
+   "形(B の根拠文からの機械推定・要確認)": "対/変化(候補)",
+   "engine(main) の pointer": [],
+   "実装席の束縛判定(60 件のみ)": null,
+   "一致(厳密)": "engine pointer なし/未解析",
+   "一致(同値類 v0)": "engine pointer なし/未解析",
+   "B の根拠(原文)": "文の数 1032.0百万円 を NetCashProvidedByUsedInOperatingActivities 単体 と同定。実額 1,032,971,000 円 → 百万円表示 1,032(切り捨て一致)。引いた fact: NetCashProvidedByUsedInOperatingActivities[ctx=CurrentYearDuration 2025-07-01~2026-06-30] = 1,032,971,000 JPY decimals=-3"
+  },
+  {
+   "id": "N262",
+   "層(main の状態)": "UNVERIFIABLE",
+   "B の札": "真",
+   "B の確信": "高",
+   "B が同定した fact [(要素, context)]": [
+    [
+     "NetCashProvidedByUsedInOperatingActivities",
+     "Prior1YearDuration"
+    ]
+   ],
+   "形(B の根拠文からの機械推定・要確認)": "対/変化(候補)",
+   "engine(main) の pointer": [],
+   "実装席の束縛判定(60 件のみ)": null,
+   "一致(厳密)": "engine pointer なし/未解析",
+   "一致(同値類 v0)": "engine pointer なし/未解析",
+   "B の根拠(原文)": "文の数 3029.0百万円 を NetCashProvidedByUsedInOperatingActivities 単体 と同定。実額 3,029,245,000 円 → 百万円表示 3,029(切り捨て/四捨五入一致)。引いた fact: NetCashProvidedByUsedInOperatingActivities[ctx=Prior1YearDuration 2024-07-01~2025-06-30] = 3,029,245,000 JPY decimals=-3"
+  },
+  {
+   "id": "N264",
+   "層(main の状態)": "GROUNDED",
+   "B の札": "真",
+   "B の確信": "高",
+   "B が同定した fact [(要素, context)]": [
+    [
+     "IncomeBeforeIncomeTaxes",
+     "CurrentYearDuration"
+    ]
+   ],
+   "形(B の根拠文からの機械推定・要確認)": "対/変化(候補)",
+   "engine(main) の pointer": [
+    [
+     "IncomeBeforeIncomeTaxes",
+     "CurrentYearDuration"
+    ]
+   ],
+   "実装席の束縛判定(60 件のみ)": "correct",
+   "一致(厳密)": "同じ",
+   "一致(同値類 v0)": "同じ",
+   "B の根拠(原文)": "文の数 1452.0百万円 を IncomeBeforeIncomeTaxes 単体 と同定。実額 1,452,012,000 円 → 百万円表示 1,452(切り捨て/四捨五入一致)。引いた fact: IncomeBeforeIncomeTaxes[ctx=CurrentYearDuration 2025-07-01~2026-06-30] = 1,452,012,000 JPY decimals=-3"
+  },
+  {
+   "id": "N267",
+   "層(main の状態)": "GROUNDED",
+   "B の札": "真",
+   "B の確信": "高",
+   "B が同定した fact [(要素, context)]": [
+    [
+     "IncreaseDecreaseInProvisionForWarrantiesForCompletedOperationOpeCF",
+     "CurrentYearDuration"
+    ]
+   ],
+   "形(B の根拠文からの機械推定・要確認)": "対/変化(候補)",
+   "engine(main) の pointer": [],
+   "実装席の束縛判定(60 件のみ)": "correct",
+   "一致(厳密)": "engine pointer なし/未解析",
+   "一致(同値類 v0)": "engine pointer なし/未解析",
+   "B の根拠(原文)": "文の数 786000000.0円 を IncreaseDecreaseInProvisionForWarrantiesForCompletedOperationOpeCF 単体 と同定。実額 786,000,000 円 → 百万円表示 786(切り捨て/四捨五入一致)。引いた fact: IncreaseDecreaseInProvisionForWarrantiesForCompletedOperationOpeCF[ctx=CurrentYearDuration 2025-07-01~2026-06-30] = 786,000,000 JPY decimals=-3"
+  },
+  {
+   "id": "N273",
+   "層(main の状態)": "UNVERIFIABLE",
+   "B の札": "真",
+   "B の確信": "高",
+   "B が同定した fact [(要素, context)]": [
+    [
+     "SubtotalOpeCF",
+     "CurrentYearDuration"
+    ]
+   ],
+   "形(B の根拠文からの機械推定・要確認)": "対/変化(候補)",
+   "engine(main) の pointer": [],
+   "実装席の束縛判定(60 件のみ)": null,
+   "一致(厳密)": "engine pointer なし/未解析",
+   "一致(同値類 v0)": "engine pointer なし/未解析",
+   "B の根拠(原文)": "文の数 1813.0百万円 を SubtotalOpeCF 単体 と同定。実額 1,813,214,000 円 → 百万円表示 1,813(切り捨て/四捨五入一致)。引いた fact: SubtotalOpeCF[ctx=CurrentYearDuration 2025-07-01~2026-06-30] = 1,813,214,000 JPY decimals=-3"
+  },
+  {
+   "id": "N278",
+   "層(main の状態)": "GROUNDED",
+   "B の札": "真",
+   "B の確信": "高",
+   "B が同定した fact [(要素, context)]": [
+    [
+     "IncomeBeforeIncomeTaxes",
+     "CurrentYearDuration"
+    ],
+    [
+     "IncomeBeforeIncomeTaxes",
+     "Prior1YearDuration"
+    ]
+   ],
+   "形(B の根拠文からの機械推定・要確認)": "対/変化(候補)",
+   "engine(main) の pointer": [
+    [
+     "IncomeBeforeIncomeTaxes",
+     "CurrentYearDuration"
+    ]
+   ],
+   "実装席の束縛判定(60 件のみ)": "correct",
+   "一致(厳密)": "同じ",
+   "一致(同値類 v0)": "同じ",
+   "B の根拠(原文)": "文の数 1255.0百万円 を IncomeBeforeIncomeTaxes 2024-07-01~2025-06-30 - 2025-07-01~2026-06-30 と同定。実額 1,255,859,000 円 → 百万円表示 1,255(切り捨て一致)。引いた fact: IncomeBeforeIncomeTaxes[ctx=Prior1YearDuration 2024-07-01~2025-06-30] = 2,707,871,000 JPY decimals=-3 / IncomeBeforeIncomeTaxes[ctx=CurrentYearDuration 2025-07-01~2026-06-30] = 1,452,012,000 JPY decimals=-3"
+  },
+  {
+   "id": "N282",
+   "層(main の状態)": "GROUNDED",
+   "B の札": "真",
+   "B の確信": "高",
+   "B が同定した fact [(要素, context)]": [
+    [
+     "DecreaseIncreaseInNotesAndAccountsReceivableTradeOpeCF",
+     "Prior1YearDuration"
+    ]
+   ],
+   "形(B の根拠文からの機械推定・要確認)": "対/変化(候補)",
+   "engine(main) の pointer": [
+    [
+     "DecreaseIncreaseInNotesAndAccountsReceivableTradeOpeCF",
+     "Prior1YearDuration"
+    ]
+   ],
+   "実装席の束縛判定(60 件のみ)": "correct",
+   "一致(厳密)": "同じ",
+   "一致(同値類 v0)": "同じ",
+   "B の根拠(原文)": "文の数 209000000.0円 を DecreaseIncreaseInNotesAndAccountsReceivableTradeOpeCF 単体 と同定。実額 209,659,000 円 → 百万円表示 209(切り捨て一致)。引いた fact: DecreaseIncreaseInNotesAndAccountsReceivableTradeOpeCF[ctx=Prior1YearDuration 2024-07-01~2025-06-30] = 209,659,000 JPY decimals=-3"
+  },
+  {
+   "id": "N288",
+   "層(main の状態)": "GROUNDED",
+   "B の札": "真",
+   "B の確信": "高",
+   "B が同定した fact [(要素, context)]": [
+    [
+     "PurchaseOfIntangibleAssetsInvCF",
+     "CurrentYearDuration"
+    ]
+   ],
+   "形(B の根拠文からの機械推定・要確認)": "対/変化(候補)",
+   "engine(main) の pointer": [
+    [
+     "PurchaseOfIntangibleAssetsInvCF",
+     "CurrentYearDuration"
+    ]
+   ],
+   "実装席の束縛判定(60 件のみ)": "correct",
+   "一致(厳密)": "同じ",
+   "一致(同値類 v0)": "同じ",
+   "B の根拠(原文)": "文の数 44000000.0円 を PurchaseOfIntangibleAssetsInvCF 単体 と同定。実額 44,037,000 円 → 百万円表示 44(切り捨て/四捨五入一致)。引いた fact: PurchaseOfIntangibleAssetsInvCF[ctx=CurrentYearDuration 2025-07-01~2026-06-30] = -44,037,000 JPY decimals=-3"
+  },
+  {
+   "id": "N289",
+   "層(main の状態)": "GROUNDED",
+   "B の札": "真",
+   "B の確信": "高",
+   "B が同定した fact [(要素, context)]": [
+    [
+     "ProceedsFromSalesOfStocksOfSubsidiariesAndAffiliatesInvCF",
+     "CurrentYearDuration"
+    ]
+   ],
+   "形(B の根拠文からの機械推定・要確認)": "対/変化(候補)",
+   "engine(main) の pointer": [
+    [
+     "PurchaseOfIntangibleAssetsInvCF",
+     "CurrentYearDuration"
+    ]
+   ],
+   "実装席の束縛判定(60 件のみ)": "wrong_binding",
+   "一致(厳密)": "違う",
+   "一致(同値類 v0)": "違う",
+   "B の根拠(原文)": "文の数 9000000.0円 を ProceedsFromSalesOfStocksOfSubsidiariesAndAffiliatesInvCF 単体 と同定。実額 9,834,000 円 → 百万円表示 9(切り捨て一致)。引いた fact: ProceedsFromSalesOfStocksOfSubsidiariesAndAffiliatesInvCF[ctx=CurrentYearDuration 2025-07-01~2026-06-30] = 9,834,000 JPY decimals=-3"
+  },
+  {
+   "id": "N291",
+   "層(main の状態)": "GROUNDED",
+   "B の札": "真",
+   "B の確信": "高",
+   "B が同定した fact [(要素, context)]": [
+    [
+     "CapitalExpendituresOverviewOfCapitalExpendituresEtc",
+     "CurrentYearDuration"
+    ]
+   ],
+   "形(B の根拠文からの機械推定・要確認)": "対/変化(候補)",
+   "engine(main) の pointer": [
+    [
+     "CapitalExpendituresOverviewOfCapitalExpendituresEtc",
+     "CurrentYearDuration"
+    ]
+   ],
+   "実装席の束縛判定(60 件のみ)": "correct",
+   "一致(厳密)": "同じ",
+   "一致(同値類 v0)": "同じ",
+   "B の根拠(原文)": "文の数 341000000.0円 を CapitalExpendituresOverviewOfCapitalExpendituresEtc 単体 と同定。実額 341,000,000 円 → 百万円表示 341(切り捨て/四捨五入一致)。引いた fact: CapitalExpendituresOverviewOfCapitalExpendituresEtc[ctx=CurrentYearDuration 2025-07-01~2026-06-30] = 341,000,000 JPY decimals=-6"
+  },
+  {
+   "id": "N298",
+   "層(main の状態)": "GROUNDED",
+   "B の札": "真",
+   "B の確信": "高",
+   "B が同定した fact [(要素, context)]": [
+    [
+     "CashDividendsPaidFinCF",
+     "CurrentYearDuration"
+    ]
+   ],
+   "形(B の根拠文からの機械推定・要確認)": "対/変化(候補)",
+   "engine(main) の pointer": [
+    [
+     "CashDividendsPaidFinCF",
+     "CurrentYearDuration"
+    ]
+   ],
+   "実装席の束縛判定(60 件のみ)": "correct",
+   "一致(厳密)": "同じ",
+   "一致(同値類 v0)": "同じ",
+   "B の根拠(原文)": "文の数 651000000.0円 を CashDividendsPaidFinCF 単体 と同定。実額 651,749,000 円 → 百万円表示 651(切り捨て一致)。引いた fact: CashDividendsPaidFinCF[ctx=CurrentYearDuration 2025-07-01~2026-06-30] = -651,749,000 JPY decimals=-3"
+  },
+  {
+   "id": "N303",
+   "層(main の状態)": "GROUNDED",
+   "B の札": "真",
+   "B の確信": "高",
+   "B が同定した fact [(要素, context)]": [
+    [
+     "CashAndDeposits",
+     "CurrentYearInstant"
+    ]
+   ],
+   "形(B の根拠文からの機械推定・要確認)": "対/変化(候補)",
+   "engine(main) の pointer": [
+    [
+     "CashAndDeposits",
+     "CurrentYearInstant"
+    ]
+   ],
+   "実装席の束縛判定(60 件のみ)": "correct",
+   "一致(厳密)": "同じ",
+   "一致(同値類 v0)": "同じ",
+   "B の根拠(原文)": "文の数 2605.0百万円 を CashAndDeposits 単体 と同定。実額 2,605,950,000 円 → 百万円表示 2,605(切り捨て一致)。引いた fact: CashAndDeposits[ctx=CurrentYearInstant 2026-06-30] = 2,605,950,000 JPY decimals=-3"
+  },
+  {
+   "id": "N304",
+   "層(main の状態)": "POINTER_NOT_FOUND",
+   "B の札": "真",
+   "B の確信": "高",
+   "B が同定した fact [(要素, context)]": [
+    [
+     "CurrentPortionOfLongTermLoansPayable",
+     "CurrentYearInstant"
+    ],
+    [
+     "LongTermLoansPayable",
+     "CurrentYearInstant"
+    ]
+   ],
+   "形(B の根拠文からの機械推定・要確認)": "対/変化(候補)",
+   "engine(main) の pointer": [],
+   "実装席の束縛判定(60 件のみ)": null,
+   "一致(厳密)": "engine pointer なし/未解析",
+   "一致(同値類 v0)": "engine pointer なし/未解析",
+   "B の根拠(原文)": "文の数 510000000.0円 を 同上(有利子負債合計) と同定。実額 510,637,000 円 → 百万円表示 510(切り捨て一致)。引いた fact: CurrentPortionOfLongTermLoansPayable[ctx=CurrentYearInstant 2026-06-30] = 234,864,000 JPY decimals=-3 / LongTermLoansPayable[ctx=CurrentYearInstant 2026-06-30] = 275,773,000 JPY decimals=-3"
+  },
+  {
+   "id": "T018",
+   "層(main の状態)": "GROUNDED",
+   "B の札": "判定不能",
+   "B の確信": "中",
+   "B が同定した fact [(要素, context)]": [
+    [
+     "GrossProfit",
+     "CurrentYearDuration"
+    ],
+    [
+     "GrossProfit",
+     "Prior1YearDuration"
+    ],
+    [
+     "NetSales",
+     "CurrentYearDuration"
+    ],
+    [
+     "NetSales",
+     "Prior1YearDuration"
+    ]
+   ],
+   "形(B の根拠文からの機械推定・要確認)": "対/変化(候補)",
+   "engine(main) の pointer": [
+    [
+     "GrossProfit",
+     "CurrentYearDuration"
+    ]
+   ],
+   "実装席の束縛判定(60 件のみ)": "correct",
+   "一致(厳密)": "同じ",
+   "一致(同値類 v0)": "同じ",
+   "B の根拠(原文)": "この行は 数=None・単位=None で、断片中に数字が 1 つも無い(「増収にもかかわらず売上総利益が減少した背景に」)。したがって突き合わせる数が特定できない。なお断片が述べる向き(増収・売上総利益の減少)自体は fact と整合する: NetSales[ctx=CurrentYearDuration 2025-07-01~2026-06-30]=38,064,274,000JPY dec=-3 / NetSales[ctx=Prior1YearDuration 2024-07-01~2025-06-30]=36,975,577,000JPY dec=-3 / GrossProfit[ctx=CurrentYearDuration 2025-07-01~2026-06-30]=11,334,658,000JPY dec=-3 / GrossProfit[ctx=Prior1YearDuration 2024-07-01~2025-06-30]=12,018,937,000JPY dec=-3【確信中の理由】数が無い行"
+  },
+  {
+   "id": "T020",
+   "層(main の状態)": "GROUNDED",
+   "B の札": "真",
+   "B の確信": "高",
+   "B が同定した fact [(要素, context)]": [
+    [
+     "NetSales",
+     "CurrentYearDuration"
+    ],
+    [
+     "NetSales",
+     "Prior1YearDuration"
+    ]
+   ],
+   "形(B の根拠文からの機械推定・要確認)": "率/ポイント(候補)",
+   "engine(main) の pointer": [
+    [
+     "NetSalesSummaryOfBusinessResults",
+     "CurrentYearDuration"
+    ]
+   ],
+   "実装席の束縛判定(60 件のみ)": "undecidable",
+   "一致(厳密)": "違う",
+   "一致(同値類 v0)": "同じ",
+   "B の根拠(原文)": "数=None の行。断片中の数字を 1 つずつ同定して突き合わせた ― 売上高の伸び率2.9%。すべて一致(切り捨てまたは四捨五入、%は小数第1位)。引いた fact: NetSales[ctx=CurrentYearDuration 2025-07-01~2026-06-30]=38,064,274,000JPY dec=-3 / NetSales[ctx=Prior1YearDuration 2024-07-01~2025-06-30]=36,975,577,000JPY dec=-3"
+  },
+  {
+   "id": "T023",
+   "層(main の状態)": "GROUNDED",
+   "B の札": "真",
+   "B の確信": "中",
+   "B が同定した fact [(要素, context)]": [
+    [
+     "CostOfSales",
+     "CurrentYearDuration"
+    ],
+    [
+     "CostOfSales",
+     "Prior1YearDuration"
+    ],
+    [
+     "GrossProfit",
+     "CurrentYearDuration"
+    ],
+    [
+     "GrossProfit",
+     "Prior1YearDuration"
+    ],
+    [
+     "NetSales",
+     "CurrentYearDuration"
+    ],
+    [
+     "NetSales",
+     "Prior1YearDuration"
+    ]
+   ],
+   "形(B の根拠文からの機械推定・要確認)": "率/ポイント(候補)",
+   "engine(main) の pointer": [
+    [
+     "GrossProfit",
+     "CurrentYearDuration"
+    ]
+   ],
+   "実装席の束縛判定(60 件のみ)": "wrong_binding",
+   "一致(厳密)": "同じ",
+   "一致(同値類 v0)": "同じ",
+   "B の根拠(原文)": "数=None の行。断片中の数字を 1 つずつ同定して突き合わせた ― (2.)7ポイント上昇 / 売上総利益率 32.5%→29.8%。すべて一致(切り捨てまたは四捨五入、%は小数第1位)。引いた fact: CostOfSales[ctx=CurrentYearDuration 2025-07-01~2026-06-30]=26,729,616,000JPY dec=-3 / CostOfSales[ctx=Prior1YearDuration 2024-07-01~2025-06-30]=24,956,639,000JPY dec=-3 / GrossProfit[ctx=CurrentYearDuration 2025-07-01~2026-06-30]=11,334,658,000JPY dec=-3 / GrossProfit[ctx=Prior1YearDuration 2024-07-01~2025-06-30]=12,018,937,000JPY dec=-3 / NetSales[ctx=CurrentYearDuration 2025-07-01~2026-06-30]=38,064,274,000JPY dec=-3 / NetSales[ctx=Prior1YearDuration 2024-07-01~2025-06-30]=36,975,577,000JPY dec=-3【確信中の理由】断片の先頭でポイント数の上位桁が切れており(「7ポイント」)、2.7 と同定するには本文全体を要する。32.5%→29.8% は断片内で完結し一致"
+  },
+  {
+   "id": "T026",
+   "層(main の状態)": "GROUNDED",
+   "B の札": "真",
+   "B の確信": "高",
+   "B が同定した fact [(要素, context)]": [
+    [
+     "SellingGeneralAndAdministrativeExpenses",
+     "CurrentYearDuration"
+    ],
+    [
+     "SellingGeneralAndAdministrativeExpenses",
+     "Prior1YearDuration"
+    ]
+   ],
+   "形(B の根拠文からの機械推定・要確認)": "率/ポイント(候補)",
+   "engine(main) の pointer": [
+    [
+     "SellingGeneralAndAdministrativeExpenses",
+     "CurrentYearDuration"
+    ]
+   ],
+   "実装席の束縛判定(60 件のみ)": "correct",
+   "一致(厳密)": "同じ",
+   "一致(同値類 v0)": "同じ",
+   "B の根拠(原文)": "数=None の行。断片中の数字を 1 つずつ同定して突き合わせた ― 販管費 前期9,303百万円 / 566百万円 / 6.1%増。すべて一致(切り捨てまたは四捨五入、%は小数第1位)。引いた fact: SellingGeneralAndAdministrativeExpenses[ctx=CurrentYearDuration 2025-07-01~2026-06-30]=9,869,271,000JPY dec=-3 / SellingGeneralAndAdministrativeExpenses[ctx=Prior1YearDuration 2024-07-01~2025-06-30]=9,303,013,000JPY dec=-3"
+  },
+  {
+   "id": "T027",
+   "層(main の状態)": "POINTER_NOT_FOUND",
+   "B の札": "真",
+   "B の確信": "高",
+   "B が同定した fact [(要素, context)]": [
+    [
+     "EmployeesSalariesAndAllowancesSGA",
+     "CurrentYearDuration"
+    ],
+    [
+     "EmployeesSalariesAndAllowancesSGA",
+     "Prior1YearDuration"
+    ]
+   ],
+   "形(B の根拠文からの機械推定・要確認)": "率/ポイント(候補)",
+   "engine(main) の pointer": [],
+   "実装席の束縛判定(60 件のみ)": null,
+   "一致(厳密)": "engine pointer なし/未解析",
+   "一致(同値類 v0)": "engine pointer なし/未解析",
+   "B の根拠(原文)": "数=None の行。断片中の数字を 1 つずつ同定して突き合わせた ― 従業員給料及び手当 3,559 / 前期3,441 / 118増。すべて一致(切り捨てまたは四捨五入、%は小数第1位)。引いた fact: EmployeesSalariesAndAllowancesSGA[ctx=CurrentYearDuration 2025-07-01~2026-06-30]=3,559,936,000JPY dec=-3 / EmployeesSalariesAndAllowancesSGA[ctx=Prior1YearDuration 2024-07-01~2025-06-30]=3,441,694,000JPY dec=-3"
+  },
+  {
+   "id": "T034",
+   "層(main の状態)": "UNVERIFIABLE",
+   "B の札": "真",
+   "B の確信": "高",
+   "B が同定した fact [(要素, context)]": [
+    [
+     "IncreaseDecreaseInProvisionForWarrantiesForCompletedOperationOpeCF",
+     "CurrentYearDuration"
+    ],
+    [
+     "ProvisionForWarrantiesForCompletedOperationCL",
+     "CurrentYearInstant"
+    ],
+    [
+     "ProvisionForWarrantiesForCompletedOperationCL",
+     "Prior1YearInstant"
+    ]
+   ],
+   "形(B の根拠文からの機械推定・要確認)": "率/ポイント(候補)",
+   "engine(main) の pointer": [],
+   "実装席の束縛判定(60 件のみ)": null,
+   "一致(厳密)": "engine pointer なし/未解析",
+   "一致(同値類 v0)": "engine pointer なし/未解析",
+   "B の根拠(原文)": "数=None の行。断片中の数字を 1 つずつ同定して突き合わせた ― 786百万円の増加。すべて一致(切り捨てまたは四捨五入、%は小数第1位)。引いた fact: IncreaseDecreaseInProvisionForWarrantiesForCompletedOperationOpeCF[ctx=CurrentYearDuration 2025-07-01~2026-06-30]=786,000,000JPY dec=-3 / ProvisionForWarrantiesForCompletedOperationCL[ctx=CurrentYearInstant 2026-06-30]=991,000,000JPY dec=-3 / ProvisionForWarrantiesForCompletedOperationCL[ctx=Prior1YearInstant 2025-06-30]=205,000,000JPY dec=-3"
+  },
+  {
+   "id": "T037",
+   "層(main の状態)": "GROUNDED",
+   "B の札": "真",
+   "B の確信": "高",
+   "B が同定した fact [(要素, context)]": [
+    [
+     "OperatingIncome",
+     "CurrentYearDuration"
+    ],
+    [
+     "OperatingIncome",
+     "Prior1YearDuration"
+    ]
+   ],
+   "形(B の根拠文からの機械推定・要確認)": "率/ポイント(候補)",
+   "engine(main) の pointer": [
+    [
+     "OperatingIncome",
+     "CurrentYearDuration"
+    ]
+   ],
+   "実装席の束縛判定(60 件のみ)": "correct",
+   "一致(厳密)": "同じ",
+   "一致(同値類 v0)": "同じ",
+   "B の根拠(原文)": "数=None の行。断片中の数字を 1 つずつ同定して突き合わせた ― 営業利益 前期2,715 / 1,250減 / 46.0%。すべて一致(切り捨てまたは四捨五入、%は小数第1位)。引いた fact: OperatingIncome[ctx=CurrentYearDuration 2025-07-01~2026-06-30]=1,465,387,000JPY dec=-3 / OperatingIncome[ctx=Prior1YearDuration 2024-07-01~2025-06-30]=2,715,924,000JPY dec=-3"
+  },
+  {
+   "id": "T038",
+   "層(main の状態)": "GROUNDED",
+   "B の札": "真",
+   "B の確信": "高",
+   "B が同定した fact [(要素, context)]": [
+    [
+     "NetSales",
+     "CurrentYearDuration"
+    ],
+    [
+     "NetSales",
+     "Prior1YearDuration"
+    ],
+    [
+     "OperatingIncome",
+     "CurrentYearDuration"
+    ],
+    [
+     "OperatingIncome",
+     "Prior1YearDuration"
+    ]
+   ],
+   "形(B の根拠文からの機械推定・要確認)": "率/ポイント(候補)",
+   "engine(main) の pointer": [
+    [
+     "OperatingIncome",
+     "CurrentYearDuration"
+    ]
+   ],
+   "実装席の束縛判定(60 件のみ)": "wrong_binding",
+   "一致(厳密)": "同じ",
+   "一致(同値類 v0)": "同じ",
+   "B の根拠(原文)": "数=None の行。断片中の数字を 1 つずつ同定して突き合わせた ― 売上高営業利益率 7.3%→3.8% / 3.5pt。すべて一致(切り捨てまたは四捨五入、%は小数第1位)。引いた fact: OperatingIncome[ctx=CurrentYearDuration 2025-07-01~2026-06-30]=1,465,387,000JPY dec=-3 / OperatingIncome[ctx=Prior1YearDuration 2024-07-01~2025-06-30]=2,715,924,000JPY dec=-3 / NetSales[ctx=CurrentYearDuration 2025-07-01~2026-06-30]=38,064,274,000JPY dec=-3 / NetSales[ctx=Prior1YearDuration 2024-07-01~2025-06-30]=36,975,577,000JPY dec=-3"
+  },
+  {
+   "id": "T044",
+   "層(main の状態)": "GROUNDED",
+   "B の札": "真",
+   "B の確信": "高",
+   "B が同定した fact [(要素, context)]": [
+    [
+     "ProfitLossAttributableToOwnersOfParent",
+     "CurrentYearDuration"
+    ],
+    [
+     "ProfitLossAttributableToOwnersOfParent",
+     "Prior1YearDuration"
+    ]
+   ],
+   "形(B の根拠文からの機械推定・要確認)": "率/ポイント(候補)",
+   "engine(main) の pointer": [
+    [
+     "ProfitLossAttributableToOwnersOfParentSummaryOfBusinessResults",
+     "CurrentYearDuration"
+    ]
+   ],
+   "実装席の束縛判定(60 件のみ)": "correct",
+   "一致(厳密)": "違う",
+   "一致(同値類 v0)": "同じ",
+   "B の根拠(原文)": "数=None の行。断片中の数字を 1 つずつ同定して突き合わせた ― 当期純利益 前期1,922 / 976減 / 50.8%。すべて一致(切り捨てまたは四捨五入、%は小数第1位)。引いた fact: ProfitLossAttributableToOwnersOfParent[ctx=CurrentYearDuration 2025-07-01~2026-06-30]=945,793,000JPY dec=-3 / ProfitLossAttributableToOwnersOfParent[ctx=Prior1YearDuration 2024-07-01~2025-06-30]=1,922,581,000JPY dec=-3"
+  },
+  {
+   "id": "T049",
+   "層(main の状態)": "GROUNDED",
+   "B の札": "真",
+   "B の確信": "高",
+   "B が同定した fact [(要素, context)]": [
+    [
+     "Assets",
+     "CurrentYearInstant"
+    ],
+    [
+     "Assets",
+     "Prior1YearInstant"
+    ]
+   ],
+   "形(B の根拠文からの機械推定・要確認)": "率/ポイント(候補)",
+   "engine(main) の pointer": [
+    [
+     "TotalAssetsSummaryOfBusinessResults",
+     "CurrentYearInstant"
+    ]
+   ],
+   "実装席の束縛判定(60 件のみ)": "correct",
+   "一致(厳密)": "違う",
+   "一致(同値類 v0)": "同じ",
+   "B の根拠(原文)": "数=None の行。断片中の数字を 1 つずつ同定して突き合わせた ― 総資産 前期末25,554 / 2,281増 / 8.9%。すべて一致(切り捨てまたは四捨五入、%は小数第1位)。引いた fact: Assets[ctx=CurrentYearInstant 2026-06-30]=27,836,421,000JPY dec=-3 / Assets[ctx=Prior1YearInstant 2025-06-30]=25,554,675,000JPY dec=-3"
+  },
+  {
+   "id": "T050",
+   "層(main の状態)": "UNVERIFIABLE",
+   "B の札": "真",
+   "B の確信": "高",
+   "B が同定した fact [(要素, context)]": [
+    [
+     "CurrentAssets",
+     "CurrentYearInstant"
+    ],
+    [
+     "CurrentAssets",
+     "Prior1YearInstant"
+    ]
+   ],
+   "形(B の根拠文からの機械推定・要確認)": "率/ポイント(候補)",
+   "engine(main) の pointer": [],
+   "実装席の束縛判定(60 件のみ)": null,
+   "一致(厳密)": "engine pointer なし/未解析",
+   "一致(同値類 v0)": "engine pointer なし/未解析",
+   "B の根拠(原文)": "数=None の行。断片中の数字を 1 つずつ同定して突き合わせた ― 流動資産 16,943 / 前期末16,533 / 409増。すべて一致(切り捨てまたは四捨五入、%は小数第1位)。引いた fact: CurrentAssets[ctx=CurrentYearInstant 2026-06-30]=16,943,470,000JPY dec=-3 / CurrentAssets[ctx=Prior1YearInstant 2025-06-30]=16,533,523,000JPY dec=-3"
+  },
+  {
+   "id": "T059",
+   "層(main の状態)": "UNVERIFIABLE",
+   "B の札": "真",
+   "B の確信": "高",
+   "B が同定した fact [(要素, context)]": [
+    [
+     "IntangibleAssets",
+     "CurrentYearInstant"
+    ],
+    [
+     "IntangibleAssets",
+     "Prior1YearInstant"
+    ]
+   ],
+   "形(B の根拠文からの機械推定・要確認)": "率/ポイント(候補)",
+   "engine(main) の pointer": [],
+   "実装席の束縛判定(60 件のみ)": null,
+   "一致(厳密)": "engine pointer なし/未解析",
+   "一致(同値類 v0)": "engine pointer なし/未解析",
+   "B の根拠(原文)": "数=None の行。断片中の数字を 1 つずつ同定して突き合わせた ― 無形固定資産 371 / 同528 / 157減。すべて一致(切り捨てまたは四捨五入、%は小数第1位)。引いた fact: IntangibleAssets[ctx=CurrentYearInstant 2026-06-30]=371,901,000JPY dec=-3 / IntangibleAssets[ctx=Prior1YearInstant 2025-06-30]=528,971,000JPY dec=-3"
+  },
+  {
+   "id": "T066",
+   "層(main の状態)": "GROUNDED",
+   "B の札": "真",
+   "B の確信": "高",
+   "B が同定した fact [(要素, context)]": [
+    [
+     "InvestmentSecurities",
+     "CurrentYearInstant"
+    ],
+    [
+     "InvestmentSecurities",
+     "Prior1YearInstant"
+    ]
+   ],
+   "形(B の根拠文からの機械推定・要確認)": "率/ポイント(候補)",
+   "engine(main) の pointer": [
+    [
+     "InvestmentSecurities",
+     "CurrentYearInstant"
+    ]
+   ],
+   "実装席の束縛判定(60 件のみ)": "correct",
+   "一致(厳密)": "同じ",
+   "一致(同値類 v0)": "同じ",
+   "B の根拠(原文)": "数=None の行。断片中の数字を 1 つずつ同定して突き合わせた ― 投資有価証券 1,203 / 同901 / 301増。すべて一致(切り捨てまたは四捨五入、%は小数第1位)。引いた fact: InvestmentSecurities[ctx=CurrentYearInstant 2026-06-30]=1,203,225,000JPY dec=-3 / InvestmentSecurities[ctx=Prior1YearInstant 2025-06-30]=901,714,000JPY dec=-3"
+  },
+  {
+   "id": "T068",
+   "層(main の状態)": "GROUNDED",
+   "B の札": "真",
+   "B の確信": "高",
+   "B が同定した fact [(要素, context)]": [
+    [
+     "Liabilities",
+     "CurrentYearInstant"
+    ],
+    [
+     "Liabilities",
+     "Prior1YearInstant"
+    ]
+   ],
+   "形(B の根拠文からの機械推定・要確認)": "率/ポイント(候補)",
+   "engine(main) の pointer": [
+    [
+     "Liabilities",
+     "CurrentYearInstant"
+    ]
+   ],
+   "実装席の束縛判定(60 件のみ)": "correct",
+   "一致(厳密)": "同じ",
+   "一致(同値類 v0)": "同じ",
+   "B の根拠(原文)": "数=None の行。断片中の数字を 1 つずつ同定して突き合わせた ― 負債 前期末10,055 / 614増 / 6.1%。すべて一致(切り捨てまたは四捨五入、%は小数第1位)。引いた fact: Liabilities[ctx=CurrentYearInstant 2026-06-30]=10,670,476,000JPY dec=-3 / Liabilities[ctx=Prior1YearInstant 2025-06-30]=10,055,929,000JPY dec=-3"
+  },
+  {
+   "id": "T070",
+   "層(main の状態)": "GROUNDED",
+   "B の札": "真",
+   "B の確信": "高",
+   "B が同定した fact [(要素, context)]": [
+    [
+     "AccountsPayableOperatingSpecific",
+     "CurrentYearInstant"
+    ],
+    [
+     "AccountsPayableOperatingSpecific",
+     "Prior1YearInstant"
+    ]
+   ],
+   "形(B の根拠文からの機械推定・要確認)": "率/ポイント(候補)",
+   "engine(main) の pointer": [
+    [
+     "AccountsPayableOperatingSpecific",
+     "CurrentYearInstant"
+    ]
+   ],
+   "実装席の束縛判定(60 件のみ)": "correct",
+   "一致(厳密)": "同じ",
+   "一致(同値類 v0)": "同じ",
+   "B の根拠(原文)": "数=None の行。断片中の数字を 1 つずつ同定して突き合わせた ― 業務未払金 1,757 / 前期末2,057 / 300減。すべて一致(切り捨てまたは四捨五入、%は小数第1位)。引いた fact: AccountsPayableOperatingSpecific[ctx=CurrentYearInstant 2026-06-30]=1,757,446,000JPY dec=-3 / AccountsPayableOperatingSpecific[ctx=Prior1YearInstant 2025-06-30]=2,057,744,000JPY dec=-3"
+  },
+  {
+   "id": "T071",
+   "層(main の状態)": "UNVERIFIABLE",
+   "B の札": "真",
+   "B の確信": "高",
+   "B が同定した fact [(要素, context)]": [
+    [
+     "AccruedConsumptionTaxes",
+     "CurrentYearInstant"
+    ],
+    [
+     "AccruedConsumptionTaxes",
+     "Prior1YearInstant"
+    ]
+   ],
+   "形(B の根拠文からの機械推定・要確認)": "率/ポイント(候補)",
+   "engine(main) の pointer": [],
+   "実装席の束縛判定(60 件のみ)": null,
+   "一致(厳密)": "engine pointer なし/未解析",
+   "一致(同値類 v0)": "engine pointer なし/未解析",
+   "B の根拠(原文)": "数=None の行。断片中の数字を 1 つずつ同定して突き合わせた ― 未払消費税等 1,490 / 同1,191 / 299増。すべて一致(切り捨てまたは四捨五入、%は小数第1位)。引いた fact: AccruedConsumptionTaxes[ctx=CurrentYearInstant 2026-06-30]=1,490,580,000JPY dec=-3 / AccruedConsumptionTaxes[ctx=Prior1YearInstant 2025-06-30]=1,191,514,000JPY dec=-3"
+  },
+  {
+   "id": "T072",
+   "層(main の状態)": "GROUNDED",
+   "B の札": "真",
+   "B の確信": "高",
+   "B が同定した fact [(要素, context)]": [
+    [
+     "IncomeTaxesPayable",
+     "CurrentYearInstant"
+    ],
+    [
+     "IncomeTaxesPayable",
+     "Prior1YearInstant"
+    ]
+   ],
+   "形(B の根拠文からの機械推定・要確認)": "率/ポイント(候補)",
+   "engine(main) の pointer": [
+    [
+     "IncomeTaxesPayable",
+     "CurrentYearInstant"
+    ]
+   ],
+   "実装席の束縛判定(60 件のみ)": "correct",
+   "一致(厳密)": "同じ",
+   "一致(同値類 v0)": "同じ",
+   "B の根拠(原文)": "数=None の行。断片中の数字を 1 つずつ同定して突き合わせた ― 未払法人税等 579 / 同687 / 107減。すべて一致(切り捨てまたは四捨五入、%は小数第1位)。引いた fact: IncomeTaxesPayable[ctx=CurrentYearInstant 2026-06-30]=579,515,000JPY dec=-3 / IncomeTaxesPayable[ctx=Prior1YearInstant 2025-06-30]=687,368,000JPY dec=-3"
+  },
+  {
+   "id": "T086",
+   "層(main の状態)": "GROUNDED",
+   "B の札": "真",
+   "B の確信": "高",
+   "B が同定した fact [(要素, context)]": [
+    [
+     "NetAssetsPerShareSummaryOfBusinessResults",
+     "CurrentYearInstant"
+    ],
+    [
+     "NetAssetsPerShareSummaryOfBusinessResults",
+     "Prior1YearInstant"
+    ]
+   ],
+   "形(B の根拠文からの機械推定・要確認)": "率/ポイント(候補)",
+   "engine(main) の pointer": [
+    [
+     "NetAssetsSummaryOfBusinessResults",
+     "CurrentYearInstant"
+    ]
+   ],
+   "実装席の束縛判定(60 件のみ)": "wrong_binding",
+   "一致(厳密)": "違う",
+   "一致(同値類 v0)": "違う",
+   "B の根拠(原文)": "数=None の行。断片中の数字を 1 つずつ同定して突き合わせた ― 1株当たり純資産 2,096円83銭 / 同1,897円74銭 / 199円増。すべて一致(切り捨てまたは四捨五入、%は小数第1位)。引いた fact: NetAssetsPerShareSummaryOfBusinessResults[ctx=CurrentYearInstant 2026-06-30]=2,097JPYPerShares dec=2 / NetAssetsPerShareSummaryOfBusinessResults[ctx=Prior1YearInstant 2025-06-30]=1,898JPYPerShares dec=2"
+  },
+  {
+   "id": "T092",
+   "層(main の状態)": "GROUNDED",
+   "B の札": "真",
+   "B の確信": "高",
+   "B が同定した fact [(要素, context)]": [
+    [
+     "AmortizationOfGoodwillOpeCF",
+     "CurrentYearDuration"
+    ],
+    [
+     "DepreciationAndAmortizationOpeCF",
+     "CurrentYearDuration"
+    ],
+    [
+     "IncreaseDecreaseInProvisionForWarrantiesForCompletedOperationOpeCF",
+     "CurrentYearDuration"
+    ]
+   ],
+   "形(B の根拠文からの機械推定・要確認)": "率/ポイント(候補)",
+   "engine(main) の pointer": [],
+   "実装席の束縛判定(60 件のみ)": "correct",
+   "一致(厳密)": "engine pointer なし/未解析",
+   "一致(同値類 v0)": "engine pointer なし/未解析",
+   "B の根拠(原文)": "数=None の行。断片中の数字を 1 つずつ同定して突き合わせた ― 減価償却費452 / のれん償却額53 / 完成業務補償引当金の増加786。すべて一致(切り捨てまたは四捨五入、%は小数第1位)。引いた fact: DepreciationAndAmortizationOpeCF[ctx=CurrentYearDuration 2025-07-01~2026-06-30]=452,168,000JPY dec=-3 / AmortizationOfGoodwillOpeCF[ctx=CurrentYearDuration 2025-07-01~2026-06-30]=53,256,000JPY dec=-3 / IncreaseDecreaseInProvisionForWarrantiesForCompletedOperationOpeCF[ctx=CurrentYearDuration 2025-07-01~2026-06-30]=786,000,000JPY dec=-3"
+  },
+  {
+   "id": "T093",
+   "層(main の状態)": "POINTER_NOT_FOUND",
+   "B の札": "真",
+   "B の確信": "高",
+   "B が同定した fact [(要素, context)]": [
+    [
+     "DecreaseIncreaseInContractAssetsOpeCF",
+     "CurrentYearDuration"
+    ],
+    [
+     "IncreaseDecreaseInNetDefinedBenefitAssetOpeCF",
+     "CurrentYearDuration"
+    ]
+   ],
+   "形(B の根拠文からの機械推定・要確認)": "率/ポイント(候補)",
+   "engine(main) の pointer": [],
+   "実装席の束縛判定(60 件のみ)": null,
+   "一致(厳密)": "engine pointer なし/未解析",
+   "一致(同値類 v0)": "engine pointer なし/未解析",
+   "B の根拠(原文)": "数=None の行。断片中の数字を 1 つずつ同定して突き合わせた ― 契約資産の減少161(収入) / 退職給付に係る資産の増加1,828(支出)。すべて一致(切り捨てまたは四捨五入、%は小数第1位)。引いた fact: DecreaseIncreaseInContractAssetsOpeCF[ctx=CurrentYearDuration 2025-07-01~2026-06-30]=161,030,000JPY dec=-3 / IncreaseDecreaseInNetDefinedBenefitAssetOpeCF[ctx=CurrentYearDuration 2025-07-01~2026-06-30]=-1,828,838,000JPY dec=-3"
+  },
+  {
+   "id": "T097",
+   "層(main の状態)": "GROUNDED",
+   "B の札": "真",
+   "B の確信": "高",
+   "B が同定した fact [(要素, context)]": [
+    [
+     "DecreaseIncreaseInNotesAndAccountsReceivableTradeOpeCF",
+     "CurrentYearDuration"
+    ],
+    [
+     "IncreaseDecreaseInContractLiabilitiesOpeCF",
+     "CurrentYearDuration"
+    ],
+    [
+     "IncreaseDecreaseInNotesAndAccountsPayableTradeOpeCF",
+     "CurrentYearDuration"
+    ]
+   ],
+   "形(B の根拠文からの機械推定・要確認)": "率/ポイント(候補)",
+   "engine(main) の pointer": [
+    [
+     "ContractLiabilities",
+     "CurrentYearInstant"
+    ]
+   ],
+   "実装席の束縛判定(60 件のみ)": "correct",
+   "一致(厳密)": "違う",
+   "一致(同値類 v0)": "違う",
+   "B の根拠(原文)": "数=None の行。断片中の数字を 1 つずつ同定して突き合わせた ― 売上債権の増加802 / 仕入債務の減少300 / 契約負債の減少93。すべて一致(切り捨てまたは四捨五入、%は小数第1位)。引いた fact: DecreaseIncreaseInNotesAndAccountsReceivableTradeOpeCF[ctx=CurrentYearDuration 2025-07-01~2026-06-30]=-802,686,000JPY dec=-3 / IncreaseDecreaseInNotesAndAccountsPayableTradeOpeCF[ctx=CurrentYearDuration 2025-07-01~2026-06-30]=-300,297,000JPY dec=-3 / IncreaseDecreaseInContractLiabilitiesOpeCF[ctx=CurrentYearDuration 2025-07-01~2026-06-30]=-93,465,000JPY dec=-3"
+  },
+  {
+   "id": "T102",
+   "層(main の状態)": "GROUNDED",
+   "B の札": "真",
+   "B の確信": "高",
+   "B が同定した fact [(要素, context)]": [
+    [
+     "IncomeBeforeIncomeTaxes",
+     "CurrentYearDuration"
+    ],
+    [
+     "IncomeBeforeIncomeTaxes",
+     "Prior1YearDuration"
+    ]
+   ],
+   "形(B の根拠文からの機械推定・要確認)": "率/ポイント(候補)",
+   "engine(main) の pointer": [
+    [
+     "IncomeBeforeIncomeTaxes",
+     "CurrentYearDuration"
+    ]
+   ],
+   "実装席の束縛判定(60 件のみ)": "correct",
+   "一致(厳密)": "同じ",
+   "一致(同値類 v0)": "同じ",
+   "B の根拠(原文)": "数=None の行。断片中の数字を 1 つずつ同定して突き合わせた ― 税金等調整前当期純利益が1,255減少。すべて一致(切り捨てまたは四捨五入、%は小数第1位)。引いた fact: IncomeBeforeIncomeTaxes[ctx=CurrentYearDuration 2025-07-01~2026-06-30]=1,452,012,000JPY dec=-3 / IncomeBeforeIncomeTaxes[ctx=Prior1YearDuration 2024-07-01~2025-06-30]=2,707,871,000JPY dec=-3"
+  }
+ ]
+}

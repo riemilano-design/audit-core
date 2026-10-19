@@ -1,0 +1,1297 @@
+{
+ "L": 183,
+ "G": 183,
+ "E2_count_strict": 1,
+ "E2_count_v0": 1,
+ "E2_rate_strict": 0.00546448087431694,
+ "E2_rate_v0": 0.00546448087431694,
+ "E1prime_strict": 182,
+ "rows": [
+  {
+   "id": "N296",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": true
+  },
+  {
+   "id": "N217",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": false
+  },
+  {
+   "id": "N290",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": false
+  },
+  {
+   "id": "N244",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": true
+  },
+  {
+   "id": "N010",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": true
+  },
+  {
+   "id": "N148",
+   "state": "GROUNDED",
+   "strict_match": false,
+   "v0_match": false,
+   "type5_exposure": true
+  },
+  {
+   "id": "N285",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": true
+  },
+  {
+   "id": "N242",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": true
+  },
+  {
+   "id": "N093",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": true
+  },
+  {
+   "id": "N099",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": false
+  },
+  {
+   "id": "T075",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": true
+  },
+  {
+   "id": "N168",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": false
+  },
+  {
+   "id": "N186",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": false
+  },
+  {
+   "id": "T038",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": false
+  },
+  {
+   "id": "N208",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": false
+  },
+  {
+   "id": "T053",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": true
+  },
+  {
+   "id": "N158",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": false
+  },
+  {
+   "id": "T058",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": false
+  },
+  {
+   "id": "N243",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": true
+  },
+  {
+   "id": "N105",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": true
+  },
+  {
+   "id": "N281",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": false
+  },
+  {
+   "id": "N135",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": true
+  },
+  {
+   "id": "N061",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": true
+  },
+  {
+   "id": "N038",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": false
+  },
+  {
+   "id": "T018",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": false
+  },
+  {
+   "id": "N236",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": true
+  },
+  {
+   "id": "N279",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": false
+  },
+  {
+   "id": "N073",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": false
+  },
+  {
+   "id": "T076",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": true
+  },
+  {
+   "id": "N175",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": false
+  },
+  {
+   "id": "T095",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": true
+  },
+  {
+   "id": "N067",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": false
+  },
+  {
+   "id": "N028",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": false
+  },
+  {
+   "id": "N054",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": true
+  },
+  {
+   "id": "N036",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": true
+  },
+  {
+   "id": "N193",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": false
+  },
+  {
+   "id": "N050",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": false
+  },
+  {
+   "id": "N153",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": false
+  },
+  {
+   "id": "T036",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": false
+  },
+  {
+   "id": "T001",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": true
+  },
+  {
+   "id": "N287",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": false
+  },
+  {
+   "id": "N075",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": false
+  },
+  {
+   "id": "N303",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": true
+  },
+  {
+   "id": "T073",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": true
+  },
+  {
+   "id": "N202",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": false
+  },
+  {
+   "id": "T085",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": true
+  },
+  {
+   "id": "T037",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": false
+  },
+  {
+   "id": "N101",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": false
+  },
+  {
+   "id": "N233",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": true
+  },
+  {
+   "id": "T022",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": false
+  },
+  {
+   "id": "N021",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": false
+  },
+  {
+   "id": "N024",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": false
+  },
+  {
+   "id": "N053",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": false
+  },
+  {
+   "id": "N220",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": false
+  },
+  {
+   "id": "N080",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": false
+  },
+  {
+   "id": "N245",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": true
+  },
+  {
+   "id": "N100",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": false
+  },
+  {
+   "id": "N126",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": true
+  },
+  {
+   "id": "T103",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": false
+  },
+  {
+   "id": "N103",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": false
+  },
+  {
+   "id": "N144",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": false
+  },
+  {
+   "id": "N116",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": true
+  },
+  {
+   "id": "T110",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": true
+  },
+  {
+   "id": "T088",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": true
+  },
+  {
+   "id": "N214",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": false
+  },
+  {
+   "id": "T039",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": false
+  },
+  {
+   "id": "N259",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": true
+  },
+  {
+   "id": "T080",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": true
+  },
+  {
+   "id": "T084",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": true
+  },
+  {
+   "id": "N146",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": false
+  },
+  {
+   "id": "T054",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": false
+  },
+  {
+   "id": "N178",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": false
+  },
+  {
+   "id": "N231",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": true
+  },
+  {
+   "id": "T071",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": false
+  },
+  {
+   "id": "N215",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": false
+  },
+  {
+   "id": "T108",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": true
+  },
+  {
+   "id": "N282",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": false
+  },
+  {
+   "id": "N079",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": true
+  },
+  {
+   "id": "N204",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": true
+  },
+  {
+   "id": "N122",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": true
+  },
+  {
+   "id": "N113",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": false
+  },
+  {
+   "id": "N237",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": true
+  },
+  {
+   "id": "N035",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": false
+  },
+  {
+   "id": "T011",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": true
+  },
+  {
+   "id": "N198",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": true
+  },
+  {
+   "id": "N088",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": true
+  },
+  {
+   "id": "N205",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": false
+  },
+  {
+   "id": "N046",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": false
+  },
+  {
+   "id": "N072",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": false
+  },
+  {
+   "id": "N123",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": true
+  },
+  {
+   "id": "N076",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": false
+  },
+  {
+   "id": "N239",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": true
+  },
+  {
+   "id": "N273",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": false
+  },
+  {
+   "id": "N249",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": true
+  },
+  {
+   "id": "N169",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": false
+  },
+  {
+   "id": "N187",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": false
+  },
+  {
+   "id": "N261",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": true
+  },
+  {
+   "id": "N302",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": false
+  },
+  {
+   "id": "N006",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": true
+  },
+  {
+   "id": "N037",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": true
+  },
+  {
+   "id": "N247",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": true
+  },
+  {
+   "id": "N277",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": false
+  },
+  {
+   "id": "N120",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": false
+  },
+  {
+   "id": "N005",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": true
+  },
+  {
+   "id": "N152",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": false
+  },
+  {
+   "id": "N216",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": true
+  },
+  {
+   "id": "N142",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": false
+  },
+  {
+   "id": "N013",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": true
+  },
+  {
+   "id": "N115",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": true
+  },
+  {
+   "id": "N252",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": false
+  },
+  {
+   "id": "T017",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": false
+  },
+  {
+   "id": "N222",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": true
+  },
+  {
+   "id": "N020",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": true
+  },
+  {
+   "id": "N297",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": true
+  },
+  {
+   "id": "N014",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": true
+  },
+  {
+   "id": "N129",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": true
+  },
+  {
+   "id": "N031",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": false
+  },
+  {
+   "id": "N174",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": false
+  },
+  {
+   "id": "N119",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": true
+  },
+  {
+   "id": "N264",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": false
+  },
+  {
+   "id": "N278",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": false
+  },
+  {
+   "id": "N304",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": true
+  },
+  {
+   "id": "N029",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": false
+  },
+  {
+   "id": "N058",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": false
+  },
+  {
+   "id": "N108",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": true
+  },
+  {
+   "id": "N130",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": true
+  },
+  {
+   "id": "N091",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": true
+  },
+  {
+   "id": "N164",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": false
+  },
+  {
+   "id": "N063",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": false
+  },
+  {
+   "id": "N089",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": true
+  },
+  {
+   "id": "T020",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": true
+  },
+  {
+   "id": "N289",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": false
+  },
+  {
+   "id": "T070",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": true
+  },
+  {
+   "id": "N011",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": false
+  },
+  {
+   "id": "T027",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": false
+  },
+  {
+   "id": "T023",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": true
+  },
+  {
+   "id": "N131",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": true
+  },
+  {
+   "id": "N077",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": false
+  },
+  {
+   "id": "N192",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": true
+  },
+  {
+   "id": "N112",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": false
+  },
+  {
+   "id": "N218",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": false
+  },
+  {
+   "id": "T066",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": false
+  },
+  {
+   "id": "N003",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": false
+  },
+  {
+   "id": "T102",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": false
+  },
+  {
+   "id": "T026",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": false
+  },
+  {
+   "id": "T068",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": false
+  },
+  {
+   "id": "N200",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": false
+  },
+  {
+   "id": "N066",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": false
+  },
+  {
+   "id": "N137",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": true
+  },
+  {
+   "id": "N157",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": false
+  },
+  {
+   "id": "N143",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": true
+  },
+  {
+   "id": "N009",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": true
+  },
+  {
+   "id": "N191",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": false
+  },
+  {
+   "id": "T050",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": false
+  },
+  {
+   "id": "N154",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": false
+  },
+  {
+   "id": "N081",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": false
+  },
+  {
+   "id": "N026",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": false
+  },
+  {
+   "id": "N170",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": false
+  },
+  {
+   "id": "T049",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": true
+  },
+  {
+   "id": "N219",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": true
+  },
+  {
+   "id": "N201",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": true
+  },
+  {
+   "id": "N291",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": false
+  },
+  {
+   "id": "T086",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": false
+  },
+  {
+   "id": "N232",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": true
+  },
+  {
+   "id": "N102",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": false
+  },
+  {
+   "id": "N172",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": true
+  },
+  {
+   "id": "T044",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": true
+  },
+  {
+   "id": "N181",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": false
+  },
+  {
+   "id": "T072",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": false
+  },
+  {
+   "id": "N179",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": false
+  },
+  {
+   "id": "N298",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": false
+  },
+  {
+   "id": "N085",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": true
+  },
+  {
+   "id": "N138",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": false
+  },
+  {
+   "id": "N057",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": false
+  },
+  {
+   "id": "N087",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": true
+  },
+  {
+   "id": "N056",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": false
+  },
+  {
+   "id": "N262",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": true
+  },
+  {
+   "id": "N034",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": true
+  },
+  {
+   "id": "N267",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": true
+  },
+  {
+   "id": "N092",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": true
+  },
+  {
+   "id": "N288",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": false
+  },
+  {
+   "id": "T059",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": false
+  },
+  {
+   "id": "N241",
+   "state": "GROUNDED",
+   "strict_match": true,
+   "v0_match": true,
+   "type5_exposure": true
+  }
+ ],
+ "_mutation": {
+  "kind": "drop_one_pointer",
+  "claim_id": "N148",
+  "dropped": "xbrl:jppfs_cor:ContractAssets@CurrentYearInstant"
+ }
+}

@@ -1,0 +1,3444 @@
+{
+ "purpose": "層 P(S100Z4Q1 の AI 散文、真 391 件)から封じた種 20261013 で引いた無作為 120 件の、根拠(要素, context)の独立ラベル。記憶のない独立 2 席の一致でのみ確定。多数決・第 3 席の裁定なし。",
+ "material_sha256": {
+  "e2_material_2026-10-13.json": "931f5b1781683bb061ee7e79087c2a67fcedf5e6142e27b92128563318423fe2",
+  "e2_answer_seat1": "5fde1399a1798f16ff6a452141ea8e6c854504597eb9505d96275c27ef1faacd",
+  "e2_answer_seat2": "b9a5e6c3f52d06d9b2e6789f8f2bc43e9d9f55c910ad0d83c6deb19335d86fc6",
+  "scorer": "0832d33f1ba659fe7d7778497963c9bd697abb9d4a7e30e0b423644a9ce4e28f"
+ },
+ "counts": {
+  "確定(厳密)": 111,
+  "確定(同値類v0)": 111,
+  "不一致": 6,
+  "判定不能(両側)": 3
+ },
+ "note": "不一致 6 件のうち 5 件(N148・N036・N103・N037・N220)は回答の形式差(席 1 が率の分母・和の第 2 項を入れ子にした)で、両席が挙げた fact の集合は同じ。T025 は真の不一致(従業員数 vs 臨時従業員)。封じた定義に従い 6 件とも判定不能のまま残す(読み替えない)。再採点するなら分母の欄を持つ材料で別の封として行う。",
+ "labels": [
+  {
+   "id": "N296",
+   "鍵": "E-001",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "fact(席1)": [
+    [
+     "NetCashProvidedByUsedInFinancingActivities",
+     "Prior1YearDuration"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "NetCashProvidedByUsedInFinancingActivities",
+     "Prior1YearDuration"
+    ]
+   ],
+   "同値の他の候補(和集合)": [
+    [
+     "jpcrp_cor:NetCashProvidedByUsedInFinancingActivitiesSummaryOfBusinessResults",
+     "Prior1YearDuration"
+    ]
+   ]
+  },
+  {
+   "id": "N217",
+   "鍵": "E-002",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "fact(席1)": [
+    [
+     "CurrentPortionOfLongTermLoansPayable",
+     "CurrentYearInstant"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "CurrentPortionOfLongTermLoansPayable",
+     "CurrentYearInstant"
+    ]
+   ],
+   "同値の他の候補(和集合)": []
+  },
+  {
+   "id": "N290",
+   "鍵": "E-003",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "fact(席1)": [
+    [
+     "OtherNetInvCF",
+     "CurrentYearDuration"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "OtherNetInvCF",
+     "CurrentYearDuration"
+    ]
+   ],
+   "同値の他の候補(和集合)": []
+  },
+  {
+   "id": "N244",
+   "鍵": "E-005",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "fact(席1)": [
+    [
+     "ForeignCurrencyTranslationAdjustment",
+     "CurrentYearInstant"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "ForeignCurrencyTranslationAdjustment",
+     "CurrentYearInstant"
+    ]
+   ],
+   "同値の他の候補(和集合)": [
+    [
+     "jppfs_cor:NetAssets",
+     "CurrentYearInstant_ForeignCurrencyTranslationAdjustmentMember"
+    ]
+   ]
+  },
+  {
+   "id": "N010",
+   "鍵": "E-007",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "fact(席1)": [
+    [
+     "NetAssets",
+     "CurrentYearInstant"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "NetAssets",
+     "CurrentYearInstant"
+    ]
+   ],
+   "同値の他の候補(和集合)": [
+    [
+     "jpcrp_cor:NetAssetsSummaryOfBusinessResults",
+     "CurrentYearInstant"
+    ]
+   ]
+  },
+  {
+   "id": "N148",
+   "鍵": "E-009",
+   "分類": "不一致",
+   "形": [
+    "率(比)",
+    "率(比)"
+   ],
+   "fact(席1)": [
+    [
+     "ContractAssets",
+     "CurrentYearInstant"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "Assets",
+     "CurrentYearInstant"
+    ],
+    [
+     "ContractAssets",
+     "CurrentYearInstant"
+    ]
+   ],
+   "同値の他の候補(和集合)": []
+  },
+  {
+   "id": "N285",
+   "鍵": "E-020",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "fact(席1)": [
+    [
+     "NetCashProvidedByUsedInInvestmentActivities",
+     "CurrentYearDuration"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "NetCashProvidedByUsedInInvestmentActivities",
+     "CurrentYearDuration"
+    ]
+   ],
+   "同値の他の候補(和集合)": [
+    [
+     "jpcrp_cor:NetCashProvidedByUsedInInvestingActivitiesSummaryOfBusinessResults",
+     "CurrentYearDuration"
+    ]
+   ]
+  },
+  {
+   "id": "N242",
+   "鍵": "E-025",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "fact(席1)": [
+    [
+     "ValuationDifferenceOnAvailableForSaleSecurities",
+     "Prior1YearInstant"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "ValuationDifferenceOnAvailableForSaleSecurities",
+     "Prior1YearInstant"
+    ]
+   ],
+   "同値の他の候補(和集合)": [
+    [
+     "jppfs_cor:NetAssets",
+     "Prior1YearInstant_ValuationDifferenceOnAvailableForSaleSecuritiesMember"
+    ]
+   ]
+  },
+  {
+   "id": "N093",
+   "鍵": "E-026",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "fact(席1)": [
+    [
+     "GainOnSalesOfNoncurrentAssetsEI",
+     "CurrentYearDuration"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "GainOnSalesOfNoncurrentAssetsEI",
+     "CurrentYearDuration"
+    ]
+   ],
+   "同値の他の候補(和集合)": [
+    [
+     "jppfs_cor:ExtraordinaryIncome",
+     "CurrentYearDuration"
+    ]
+   ],
+   "再監査Bとの比較(記録のみ)": "B と同じ(同値類v0)"
+  },
+  {
+   "id": "N099",
+   "鍵": "E-027",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "fact(席1)": [
+    [
+     "IncomeTaxes",
+     "CurrentYearDuration"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "IncomeTaxes",
+     "CurrentYearDuration"
+    ]
+   ],
+   "同値の他の候補(和集合)": []
+  },
+  {
+   "id": "T075",
+   "鍵": "E-028",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "符号・方向",
+    "符号・方向"
+   ],
+   "fact(席1)": [
+    [
+     "ProvisionForShareBasedRemunerationForDirectorsAndOtherOfficersCL",
+     "CurrentYearInstant"
+    ],
+    [
+     "ProvisionForShareBasedRemunerationForDirectorsAndOtherOfficersCL",
+     "Prior1YearInstant"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "ProvisionForShareBasedRemunerationForDirectorsAndOtherOfficersCL",
+     "CurrentYearInstant"
+    ],
+    [
+     "ProvisionForShareBasedRemunerationForDirectorsAndOtherOfficersCL",
+     "Prior1YearInstant"
+    ]
+   ],
+   "同値の他の候補(和集合)": [
+    [
+     "jppfs_cor:IncreaseDecreaseInProvisionForShareBasedRemunerationForDirectorsAndOtherOfficersOpeCF",
+     "CurrentYearDuration"
+    ],
+    [
+     "jppfs_cor:ProvisionForShareBasedRemunerationForDirectorsAndOtherOfficersCL",
+     "CurrentYearInstant_NonConsolidatedMember"
+    ],
+    [
+     "jppfs_cor:ProvisionForShareBasedRemunerationForDirectorsAndOtherOfficersCL",
+     "Prior1YearInstant_NonConsolidatedMember"
+    ]
+   ]
+  },
+  {
+   "id": "N168",
+   "鍵": "E-030",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "fact(席1)": [
+    [
+     "InvestmentSecurities",
+     "CurrentYearInstant"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "InvestmentSecurities",
+     "CurrentYearInstant"
+    ]
+   ],
+   "同値の他の候補(和集合)": [],
+   "再監査Bとの比較(記録のみ)": "B と同じ(同値類v0)"
+  },
+  {
+   "id": "N186",
+   "鍵": "E-037",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "差(当期−前期)",
+    "差(当期−前期)"
+   ],
+   "fact(席1)": [
+    [
+     "AccruedConsumptionTaxes",
+     "CurrentYearInstant"
+    ],
+    [
+     "AccruedConsumptionTaxes",
+     "Prior1YearInstant"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "AccruedConsumptionTaxes",
+     "CurrentYearInstant"
+    ],
+    [
+     "AccruedConsumptionTaxes",
+     "Prior1YearInstant"
+    ]
+   ],
+   "同値の他の候補(和集合)": []
+  },
+  {
+   "id": "T038",
+   "鍵": "E-038",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "符号・方向",
+    "符号・方向"
+   ],
+   "fact(席1)": [
+    [
+     "OperatingIncome",
+     "CurrentYearDuration"
+    ],
+    [
+     "OperatingIncome",
+     "Prior1YearDuration"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "OperatingIncome",
+     "CurrentYearDuration"
+    ],
+    [
+     "OperatingIncome",
+     "Prior1YearDuration"
+    ]
+   ],
+   "同値の他の候補(和集合)": [],
+   "再監査Bとの比較(記録のみ)": "B と同じ(同値類v0)"
+  },
+  {
+   "id": "N208",
+   "鍵": "E-044",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "fact(席1)": [
+    [
+     "LongTermLoansPayable",
+     "CurrentYearInstant"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "LongTermLoansPayable",
+     "CurrentYearInstant"
+    ]
+   ],
+   "同値の他の候補(和集合)": []
+  },
+  {
+   "id": "T053",
+   "鍵": "E-046",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "符号・方向",
+    "符号・方向"
+   ],
+   "fact(席1)": [
+    [
+     "ContractAssets",
+     "CurrentYearInstant"
+    ],
+    [
+     "ContractAssets",
+     "Prior1YearInstant"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "ContractAssets",
+     "CurrentYearInstant"
+    ],
+    [
+     "ContractAssets",
+     "Prior1YearInstant"
+    ]
+   ],
+   "同値の他の候補(和集合)": [
+    [
+     "jpcrp030000-asr_E36539-000:DecreaseIncreaseInContractAssetsOpeCF",
+     "CurrentYearDuration"
+    ]
+   ]
+  },
+  {
+   "id": "N158",
+   "鍵": "E-048",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "差(当期−前期)",
+    "差(当期−前期)"
+   ],
+   "fact(席1)": [
+    [
+     "IntangibleAssets",
+     "CurrentYearInstant"
+    ],
+    [
+     "IntangibleAssets",
+     "Prior1YearInstant"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "IntangibleAssets",
+     "CurrentYearInstant"
+    ],
+    [
+     "IntangibleAssets",
+     "Prior1YearInstant"
+    ]
+   ],
+   "同値の他の候補(和集合)": [],
+   "再監査Bとの比較(記録のみ)": "B と同じ(同値類v0)"
+  },
+  {
+   "id": "T058",
+   "鍵": "E-049",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "符号・方向",
+    "符号・方向"
+   ],
+   "fact(席1)": [
+    [
+     "PropertyPlantAndEquipment",
+     "CurrentYearInstant"
+    ],
+    [
+     "PropertyPlantAndEquipment",
+     "Prior1YearInstant"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "PropertyPlantAndEquipment",
+     "CurrentYearInstant"
+    ],
+    [
+     "PropertyPlantAndEquipment",
+     "Prior1YearInstant"
+    ]
+   ],
+   "同値の他の候補(和集合)": []
+  },
+  {
+   "id": "N243",
+   "鍵": "E-051",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "fact(席1)": [
+    [
+     "DeferredGainsOrLossesOnHedges",
+     "CurrentYearInstant"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "DeferredGainsOrLossesOnHedges",
+     "CurrentYearInstant"
+    ]
+   ],
+   "同値の他の候補(和集合)": [
+    [
+     "jppfs_cor:DeferredGainsOrLossesOnHedgesNetOfTaxOCI",
+     "CurrentYearDuration"
+    ],
+    [
+     "jppfs_cor:NetAssets",
+     "CurrentYearInstant_DeferredGainsOrLossesOnHedgesMember"
+    ],
+    [
+     "jppfs_cor:NetChangesOfItemsOtherThanShareholdersEquity",
+     "CurrentYearDuration_DeferredGainsOrLossesOnHedgesMember"
+    ],
+    [
+     "jppfs_cor:TotalChangesOfItemsDuringThePeriod",
+     "CurrentYearDuration_DeferredGainsOrLossesOnHedgesMember"
+    ]
+   ]
+  },
+  {
+   "id": "N105",
+   "鍵": "E-060",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "fact(席1)": [
+    [
+     "ProfitLossAttributableToOwnersOfParent",
+     "CurrentYearDuration"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "ProfitLossAttributableToOwnersOfParent",
+     "CurrentYearDuration"
+    ]
+   ],
+   "同値の他の候補(和集合)": [
+    [
+     "jpcrp_cor:ProfitLossAttributableToOwnersOfParentSummaryOfBusinessResults",
+     "CurrentYearDuration"
+    ],
+    [
+     "jppfs_cor:ProfitLoss",
+     "CurrentYearDuration"
+    ],
+    [
+     "jppfs_cor:ProfitLossAttributableToOwnersOfParent",
+     "CurrentYearDuration_RetainedEarningsMember"
+    ],
+    [
+     "jppfs_cor:ProfitLossAttributableToOwnersOfParent",
+     "CurrentYearDuration_ShareholdersEquityMember"
+    ]
+   ],
+   "再監査Bとの比較(記録のみ)": "B と同じ(同値類v0)"
+  },
+  {
+   "id": "N281",
+   "鍵": "E-063",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "差(当期−前期)",
+    "差(当期−前期)"
+   ],
+   "fact(席1)": [
+    [
+     "IncreaseDecreaseInNetDefinedBenefitAssetOpeCF",
+     "CurrentYearDuration"
+    ],
+    [
+     "IncreaseDecreaseInNetDefinedBenefitAssetOpeCF",
+     "Prior1YearDuration"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "IncreaseDecreaseInNetDefinedBenefitAssetOpeCF",
+     "CurrentYearDuration"
+    ],
+    [
+     "IncreaseDecreaseInNetDefinedBenefitAssetOpeCF",
+     "Prior1YearDuration"
+    ]
+   ],
+   "同値の他の候補(和集合)": []
+  },
+  {
+   "id": "N135",
+   "鍵": "E-065",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "fact(席1)": [
+    [
+     "CashAndDeposits",
+     "CurrentYearInstant"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "CashAndDeposits",
+     "CurrentYearInstant"
+    ]
+   ],
+   "同値の他の候補(和集合)": [
+    [
+     "jpcrp_cor:CashAndCashEquivalentsSummaryOfBusinessResults",
+     "CurrentYearInstant"
+    ],
+    [
+     "jppfs_cor:CashAndCashEquivalents",
+     "CurrentYearInstant"
+    ]
+   ]
+  },
+  {
+   "id": "N061",
+   "鍵": "E-066",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "差(当期−前期)",
+    "差(当期−前期)"
+   ],
+   "fact(席1)": [
+    [
+     "ProvisionForWarrantiesForCompletedOperationCL",
+     "CurrentYearInstant"
+    ],
+    [
+     "ProvisionForWarrantiesForCompletedOperationCL",
+     "Prior1YearInstant"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "ProvisionForWarrantiesForCompletedOperationCL",
+     "CurrentYearInstant"
+    ],
+    [
+     "ProvisionForWarrantiesForCompletedOperationCL",
+     "Prior1YearInstant"
+    ]
+   ],
+   "同値の他の候補(和集合)": [
+    [
+     "jpcrp030000-asr_E36539-000:IncreaseDecreaseInProvisionForWarrantiesForCompletedOperationOpeCF",
+     "CurrentYearDuration"
+    ]
+   ]
+  },
+  {
+   "id": "N038",
+   "鍵": "E-068",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "fact(席1)": [
+    [
+     "NumberOfEmployees",
+     "CurrentYearInstant"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "NumberOfEmployees",
+     "CurrentYearInstant"
+    ]
+   ],
+   "同値の他の候補(和集合)": []
+  },
+  {
+   "id": "T018",
+   "鍵": "E-069",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "符号・方向",
+    "符号・方向"
+   ],
+   "fact(席1)": [
+    [
+     "GrossProfit",
+     "CurrentYearDuration"
+    ],
+    [
+     "GrossProfit",
+     "Prior1YearDuration"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "GrossProfit",
+     "CurrentYearDuration"
+    ],
+    [
+     "GrossProfit",
+     "Prior1YearDuration"
+    ]
+   ],
+   "同値の他の候補(和集合)": [],
+   "再監査Bとの比較(記録のみ)": "B と同じ(同値類v0)"
+  },
+  {
+   "id": "N236",
+   "鍵": "E-074",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "fact(席1)": [
+    [
+     "TreasuryStock",
+     "CurrentYearInstant"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "TreasuryStock",
+     "CurrentYearInstant"
+    ]
+   ],
+   "同値の他の候補(和集合)": [
+    [
+     "jppfs_cor:NetAssets",
+     "CurrentYearInstant_TreasuryStockMember"
+    ]
+   ]
+  },
+  {
+   "id": "N279",
+   "鍵": "E-075",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "fact(席1)": [
+    [
+     "IncreaseDecreaseInNetDefinedBenefitAssetOpeCF",
+     "Prior1YearDuration"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "IncreaseDecreaseInNetDefinedBenefitAssetOpeCF",
+     "Prior1YearDuration"
+    ]
+   ],
+   "同値の他の候補(和集合)": []
+  },
+  {
+   "id": "N073",
+   "鍵": "E-076",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "差(当期−前期)",
+    "差(当期−前期)"
+   ],
+   "fact(席1)": [
+    [
+     "NonOperatingIncome",
+     "CurrentYearDuration"
+    ],
+    [
+     "NonOperatingIncome",
+     "Prior1YearDuration"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "NonOperatingIncome",
+     "CurrentYearDuration"
+    ],
+    [
+     "NonOperatingIncome",
+     "Prior1YearDuration"
+    ]
+   ],
+   "同値の他の候補(和集合)": []
+  },
+  {
+   "id": "T076",
+   "鍵": "E-078",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "符号・方向",
+    "符号・方向"
+   ],
+   "fact(席1)": [
+    [
+     "ProvisionForLossOnOrderReceivedCL",
+     "CurrentYearInstant"
+    ],
+    [
+     "ProvisionForLossOnOrderReceivedCL",
+     "Prior1YearInstant"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "ProvisionForLossOnOrderReceivedCL",
+     "CurrentYearInstant"
+    ],
+    [
+     "ProvisionForLossOnOrderReceivedCL",
+     "Prior1YearInstant"
+    ]
+   ],
+   "同値の他の候補(和集合)": [
+    [
+     "jppfs_cor:IncreaseDecreaseInProvisionForLossOnOrderReceivedOpeCF",
+     "CurrentYearDuration"
+    ]
+   ]
+  },
+  {
+   "id": "N175",
+   "鍵": "E-081",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "fact(席1)": [
+    [
+     "Liabilities",
+     "Prior1YearInstant"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "Liabilities",
+     "Prior1YearInstant"
+    ]
+   ],
+   "同値の他の候補(和集合)": [],
+   "再監査Bとの比較(記録のみ)": "B と同じ(同値類v0)"
+  },
+  {
+   "id": "T095",
+   "鍵": "E-088",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "符号・方向",
+    "符号・方向"
+   ],
+   "fact(席1)": [
+    [
+     "DecreaseIncreaseInContractAssetsOpeCF",
+     "CurrentYearDuration"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "DecreaseIncreaseInContractAssetsOpeCF",
+     "CurrentYearDuration"
+    ]
+   ],
+   "同値の他の候補(和集合)": [
+    [
+     "jppfs_cor:ContractAssets",
+     "CurrentYearInstant"
+    ],
+    [
+     "jppfs_cor:ContractAssets",
+     "Prior1YearInstant"
+    ]
+   ]
+  },
+  {
+   "id": "T003",
+   "鍵": "E-089",
+   "分類": "判定不能(両側)",
+   "形": [
+    "符号・方向",
+    "符号・方向"
+   ],
+   "fact(席1)": [],
+   "fact(席2)": [],
+   "同値の他の候補(和集合)": [
+    [
+     "jppfs_cor:OperatingIncome",
+     "CurrentYearDuration"
+    ],
+    [
+     "jppfs_cor:OperatingIncome",
+     "Prior1YearDuration"
+    ],
+    [
+     "jppfs_cor:OrdinaryIncome",
+     "CurrentYearDuration"
+    ],
+    [
+     "jppfs_cor:OrdinaryIncome",
+     "Prior1YearDuration"
+    ],
+    [
+     "jppfs_cor:ProfitLossAttributableToOwnersOfParent",
+     "CurrentYearDuration"
+    ],
+    [
+     "jppfs_cor:ProfitLossAttributableToOwnersOfParent",
+     "Prior1YearDuration"
+    ]
+   ]
+  },
+  {
+   "id": "N067",
+   "鍵": "E-091",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "率(比)",
+    "率(比)"
+   ],
+   "fact(席1)": [
+    [
+     "OperatingIncome",
+     "CurrentYearDuration"
+    ],
+    [
+     "OperatingIncome",
+     "Prior1YearDuration"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "OperatingIncome",
+     "CurrentYearDuration"
+    ],
+    [
+     "OperatingIncome",
+     "Prior1YearDuration"
+    ]
+   ],
+   "同値の他の候補(和集合)": []
+  },
+  {
+   "id": "N028",
+   "鍵": "E-092",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "fact(席1)": [
+    [
+     "CostOfSales",
+     "CurrentYearDuration"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "CostOfSales",
+     "CurrentYearDuration"
+    ]
+   ],
+   "同値の他の候補(和集合)": []
+  },
+  {
+   "id": "T025",
+   "鍵": "E-099",
+   "分類": "不一致",
+   "形": [
+    "符号・方向",
+    "符号・方向"
+   ],
+   "fact(席1)": [
+    [
+     "AverageNumberOfTemporaryWorkers",
+     "CurrentYearInstant"
+    ],
+    [
+     "AverageNumberOfTemporaryWorkers",
+     "Prior1YearInstant"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "NumberOfEmployees",
+     "CurrentYearInstant"
+    ],
+    [
+     "NumberOfEmployees",
+     "Prior1YearInstant"
+    ]
+   ],
+   "同値の他の候補(和集合)": [
+    [
+     "jpcrp_cor:AverageNumberOfTemporaryWorkers",
+     "CurrentYearInstant"
+    ],
+    [
+     "jpcrp_cor:AverageNumberOfTemporaryWorkers",
+     "Prior1YearInstant"
+    ],
+    [
+     "jpcrp_cor:NumberOfEmployees",
+     "CurrentYearInstant"
+    ],
+    [
+     "jpcrp_cor:NumberOfEmployees",
+     "Prior1YearInstant"
+    ]
+   ]
+  },
+  {
+   "id": "N054",
+   "鍵": "E-105",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "fact(席1)": [
+    [
+     "ProvisionForShareBasedRemunerationForDirectorsAndOtherOfficersSGA",
+     "CurrentYearDuration"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "ProvisionForShareBasedRemunerationForDirectorsAndOtherOfficersSGA",
+     "CurrentYearDuration"
+    ]
+   ],
+   "同値の他の候補(和集合)": [
+    [
+     "jppfs_cor:ProvisionForShareBasedRemunerationForDirectorsAndOtherOfficersSGA",
+     "CurrentYearDuration_NonConsolidatedMember"
+    ]
+   ]
+  },
+  {
+   "id": "N036",
+   "鍵": "E-108",
+   "分類": "不一致",
+   "形": [
+    "率(比)",
+    "率(比)"
+   ],
+   "fact(席1)": [
+    [
+     "GrossProfit",
+     "Prior1YearDuration"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "GrossProfit",
+     "Prior1YearDuration"
+    ],
+    [
+     "NetSales",
+     "Prior1YearDuration"
+    ]
+   ],
+   "同値の他の候補(和集合)": []
+  },
+  {
+   "id": "N193",
+   "鍵": "E-112",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "fact(席1)": [
+    [
+     "CurrentPortionOfLongTermLoansPayable",
+     "CurrentYearInstant"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "CurrentPortionOfLongTermLoansPayable",
+     "CurrentYearInstant"
+    ]
+   ],
+   "同値の他の候補(和集合)": [],
+   "再監査Bとの比較(記録のみ)": "B と同じ(同値類v0)"
+  },
+  {
+   "id": "N050",
+   "鍵": "E-114",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "fact(席1)": [
+    [
+     "ResearchAndDevelopmentExpensesSGA",
+     "Prior1YearDuration"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "ResearchAndDevelopmentExpensesSGA",
+     "Prior1YearDuration"
+    ]
+   ],
+   "同値の他の候補(和集合)": []
+  },
+  {
+   "id": "N153",
+   "鍵": "E-115",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "fact(席1)": [
+    [
+     "PropertyPlantAndEquipment",
+     "CurrentYearInstant"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "PropertyPlantAndEquipment",
+     "CurrentYearInstant"
+    ]
+   ],
+   "同値の他の候補(和集合)": []
+  },
+  {
+   "id": "T036",
+   "鍵": "E-117",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "符号・方向",
+    "符号・方向"
+   ],
+   "fact(席1)": [
+    [
+     "OperatingIncome",
+     "CurrentYearDuration"
+    ],
+    [
+     "OperatingIncome",
+     "Prior1YearDuration"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "OperatingIncome",
+     "CurrentYearDuration"
+    ],
+    [
+     "OperatingIncome",
+     "Prior1YearDuration"
+    ]
+   ],
+   "同値の他の候補(和集合)": []
+  },
+  {
+   "id": "T001",
+   "鍵": "E-120",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "符号・方向",
+    "符号・方向"
+   ],
+   "fact(席1)": [
+    [
+     "NetSales",
+     "CurrentYearDuration"
+    ],
+    [
+     "NetSales",
+     "Prior1YearDuration"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "NetSales",
+     "CurrentYearDuration"
+    ],
+    [
+     "NetSales",
+     "Prior1YearDuration"
+    ]
+   ],
+   "同値の他の候補(和集合)": [
+    [
+     "jpcrp_cor:NetSalesSummaryOfBusinessResults",
+     "CurrentYearDuration"
+    ],
+    [
+     "jpcrp_cor:NetSalesSummaryOfBusinessResults",
+     "Prior1YearDuration"
+    ]
+   ]
+  },
+  {
+   "id": "N287",
+   "鍵": "E-130",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "fact(席1)": [
+    [
+     "PurchaseOfPropertyPlantAndEquipmentInvCF",
+     "CurrentYearDuration"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "PurchaseOfPropertyPlantAndEquipmentInvCF",
+     "CurrentYearDuration"
+    ]
+   ],
+   "同値の他の候補(和集合)": []
+  },
+  {
+   "id": "N075",
+   "鍵": "E-137",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "fact(席1)": [
+    [
+     "InterestIncomeNOI",
+     "Prior1YearDuration"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "InterestIncomeNOI",
+     "Prior1YearDuration"
+    ]
+   ],
+   "同値の他の候補(和集合)": []
+  },
+  {
+   "id": "N303",
+   "鍵": "E-142",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "fact(席1)": [
+    [
+     "CashAndDeposits",
+     "CurrentYearInstant"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "CashAndDeposits",
+     "CurrentYearInstant"
+    ]
+   ],
+   "同値の他の候補(和集合)": [
+    [
+     "jpcrp_cor:CashAndCashEquivalentsSummaryOfBusinessResults",
+     "CurrentYearInstant"
+    ],
+    [
+     "jppfs_cor:CashAndCashEquivalents",
+     "CurrentYearInstant"
+    ]
+   ],
+   "再監査Bとの比較(記録のみ)": "B と同じ(同値類v0)"
+  },
+  {
+   "id": "T073",
+   "鍵": "E-143",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "符号・方向",
+    "符号・方向"
+   ],
+   "fact(席1)": [
+    [
+     "ContractLiabilities",
+     "CurrentYearInstant"
+    ],
+    [
+     "ContractLiabilities",
+     "Prior1YearInstant"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "ContractLiabilities",
+     "CurrentYearInstant"
+    ],
+    [
+     "ContractLiabilities",
+     "Prior1YearInstant"
+    ]
+   ],
+   "同値の他の候補(和集合)": [
+    [
+     "jppfs_cor:IncreaseDecreaseInContractLiabilitiesOpeCF",
+     "CurrentYearDuration"
+    ]
+   ]
+  },
+  {
+   "id": "N202",
+   "鍵": "E-146",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "fact(席1)": [
+    [
+     "NoncurrentLiabilities",
+     "CurrentYearInstant"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "NoncurrentLiabilities",
+     "CurrentYearInstant"
+    ]
+   ],
+   "同値の他の候補(和集合)": []
+  },
+  {
+   "id": "T085",
+   "鍵": "E-148",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "符号・方向",
+    "符号・方向"
+   ],
+   "fact(席1)": [
+    [
+     "RetainedEarnings",
+     "CurrentYearInstant"
+    ],
+    [
+     "RetainedEarnings",
+     "Prior1YearInstant"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "RetainedEarnings",
+     "CurrentYearInstant"
+    ],
+    [
+     "RetainedEarnings",
+     "Prior1YearInstant"
+    ]
+   ],
+   "同値の他の候補(和集合)": [
+    [
+     "jppfs_cor:TotalChangesOfItemsDuringThePeriod",
+     "CurrentYearDuration_RetainedEarningsMember"
+    ]
+   ]
+  },
+  {
+   "id": "T037",
+   "鍵": "E-151",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "符号・方向",
+    "符号・方向"
+   ],
+   "fact(席1)": [
+    [
+     "OperatingIncome",
+     "CurrentYearDuration"
+    ],
+    [
+     "OperatingIncome",
+     "Prior1YearDuration"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "OperatingIncome",
+     "CurrentYearDuration"
+    ],
+    [
+     "OperatingIncome",
+     "Prior1YearDuration"
+    ]
+   ],
+   "同値の他の候補(和集合)": [],
+   "再監査Bとの比較(記録のみ)": "B と同じ(同値類v0)"
+  },
+  {
+   "id": "N101",
+   "鍵": "E-160",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "fact(席1)": [
+    [
+     "IncomeTaxesCurrent",
+     "CurrentYearDuration"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "IncomeTaxesCurrent",
+     "CurrentYearDuration"
+    ]
+   ],
+   "同値の他の候補(和集合)": []
+  },
+  {
+   "id": "N233",
+   "鍵": "E-161",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "fact(席1)": [
+    [
+     "RetainedEarnings",
+     "CurrentYearInstant"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "RetainedEarnings",
+     "CurrentYearInstant"
+    ]
+   ],
+   "同値の他の候補(和集合)": [
+    [
+     "jppfs_cor:NetAssets",
+     "CurrentYearInstant_RetainedEarningsMember"
+    ]
+   ]
+  },
+  {
+   "id": "T022",
+   "鍵": "E-166",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "符号・方向",
+    "符号・方向"
+   ],
+   "fact(席1)": [
+    [
+     "CostOfSales",
+     "CurrentYearDuration"
+    ],
+    [
+     "CostOfSales",
+     "Prior1YearDuration"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "CostOfSales",
+     "CurrentYearDuration"
+    ],
+    [
+     "CostOfSales",
+     "Prior1YearDuration"
+    ]
+   ],
+   "同値の他の候補(和集合)": []
+  },
+  {
+   "id": "N021",
+   "鍵": "E-173",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "fact(席1)": [
+    [
+     "NotesAndAccountsReceivableTrade",
+     "CurrentYearInstant"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "NotesAndAccountsReceivableTrade",
+     "CurrentYearInstant"
+    ]
+   ],
+   "同値の他の候補(和集合)": [],
+   "再監査Bとの比較(記録のみ)": "B と同じ(同値類v0)"
+  },
+  {
+   "id": "N024",
+   "鍵": "E-174",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "fact(席1)": [
+    [
+     "GrossProfit",
+     "CurrentYearDuration"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "GrossProfit",
+     "CurrentYearDuration"
+    ]
+   ],
+   "同値の他の候補(和集合)": [],
+   "再監査Bとの比較(記録のみ)": "B と同じ(同値類v0)"
+  },
+  {
+   "id": "N053",
+   "鍵": "E-177",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "差(当期−前期)",
+    "差(当期−前期)"
+   ],
+   "fact(席1)": [
+    [
+     "RetirementBenefitExpensesSGA",
+     "CurrentYearDuration"
+    ],
+    [
+     "RetirementBenefitExpensesSGA",
+     "Prior1YearDuration"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "RetirementBenefitExpensesSGA",
+     "CurrentYearDuration"
+    ],
+    [
+     "RetirementBenefitExpensesSGA",
+     "Prior1YearDuration"
+    ]
+   ],
+   "同値の他の候補(和集合)": []
+  },
+  {
+   "id": "N220",
+   "鍵": "E-178",
+   "分類": "不一致",
+   "形": [
+    null,
+    "和(2 件の合計。規定の選択肢に無いので明記)"
+   ],
+   "fact(席1)": [
+    [
+     "CurrentPortionOfLongTermLoansPayable",
+     "Prior1YearInstant"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "CurrentPortionOfLongTermLoansPayable",
+     "Prior1YearInstant"
+    ],
+    [
+     "LongTermLoansPayable",
+     "Prior1YearInstant"
+    ]
+   ],
+   "同値の他の候補(和集合)": []
+  },
+  {
+   "id": "N080",
+   "鍵": "E-180",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "fact(席1)": [
+    [
+     "OtherNOI",
+     "CurrentYearDuration"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "OtherNOI",
+     "CurrentYearDuration"
+    ]
+   ],
+   "同値の他の候補(和集合)": [],
+   "再監査Bとの比較(記録のみ)": "B と同じ(同値類v0)"
+  },
+  {
+   "id": "N245",
+   "鍵": "E-182",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "fact(席1)": [
+    [
+     "ForeignCurrencyTranslationAdjustment",
+     "Prior1YearInstant"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "ForeignCurrencyTranslationAdjustment",
+     "Prior1YearInstant"
+    ]
+   ],
+   "同値の他の候補(和集合)": [
+    [
+     "jppfs_cor:NetAssets",
+     "Prior1YearInstant_ForeignCurrencyTranslationAdjustmentMember"
+    ]
+   ],
+   "再監査Bとの比較(記録のみ)": "B と同じ(同値類v0)"
+  },
+  {
+   "id": "N100",
+   "鍵": "E-187",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "fact(席1)": [
+    [
+     "IncomeTaxes",
+     "Prior1YearDuration"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "IncomeTaxes",
+     "Prior1YearDuration"
+    ]
+   ],
+   "同値の他の候補(和集合)": []
+  },
+  {
+   "id": "N126",
+   "鍵": "E-193",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "fact(席1)": [
+    [
+     "ForeignCurrencyTranslationAdjustmentNetOfTaxOCI",
+     "Prior1YearDuration"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "ForeignCurrencyTranslationAdjustmentNetOfTaxOCI",
+     "Prior1YearDuration"
+    ]
+   ],
+   "同値の他の候補(和集合)": [
+    [
+     "jppfs_cor:NetChangesOfItemsOtherThanShareholdersEquity",
+     "Prior1YearDuration_ForeignCurrencyTranslationAdjustmentMember"
+    ],
+    [
+     "jppfs_cor:TotalChangesOfItemsDuringThePeriod",
+     "Prior1YearDuration_ForeignCurrencyTranslationAdjustmentMember"
+    ]
+   ]
+  },
+  {
+   "id": "T103",
+   "鍵": "E-199",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "符号・方向",
+    "符号・方向"
+   ],
+   "fact(席1)": [
+    [
+     "DecreaseIncreaseInNotesAndAccountsReceivableTradeOpeCF",
+     "Prior1YearDuration"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "DecreaseIncreaseInNotesAndAccountsReceivableTradeOpeCF",
+     "Prior1YearDuration"
+    ]
+   ],
+   "同値の他の候補(和集合)": []
+  },
+  {
+   "id": "N103",
+   "鍵": "E-201",
+   "分類": "不一致",
+   "形": [
+    "率(比)",
+    "率(比)"
+   ],
+   "fact(席1)": [
+    [
+     "IncomeTaxes",
+     "CurrentYearDuration"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "IncomeBeforeIncomeTaxes",
+     "CurrentYearDuration"
+    ],
+    [
+     "IncomeTaxes",
+     "CurrentYearDuration"
+    ]
+   ],
+   "同値の他の候補(和集合)": [],
+   "再監査Bとの比較(記録のみ)": "未比較(未確定)"
+  },
+  {
+   "id": "N144",
+   "鍵": "E-203",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "fact(席1)": [
+    [
+     "OtherCA",
+     "CurrentYearInstant"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "OtherCA",
+     "CurrentYearInstant"
+    ]
+   ],
+   "同値の他の候補(和集合)": []
+  },
+  {
+   "id": "N116",
+   "鍵": "E-209",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "差(当期−前期)",
+    "差(当期−前期)"
+   ],
+   "fact(席1)": [
+    [
+     "ComprehensiveIncome",
+     "CurrentYearDuration"
+    ],
+    [
+     "ComprehensiveIncome",
+     "Prior1YearDuration"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "ComprehensiveIncome",
+     "CurrentYearDuration"
+    ],
+    [
+     "ComprehensiveIncome",
+     "Prior1YearDuration"
+    ]
+   ],
+   "同値の他の候補(和集合)": [
+    [
+     "jppfs_cor:ComprehensiveIncomeAttributableToOwnersOfTheParent",
+     "CurrentYearDuration"
+    ],
+    [
+     "jppfs_cor:ComprehensiveIncomeAttributableToOwnersOfTheParent",
+     "Prior1YearDuration"
+    ]
+   ]
+  },
+  {
+   "id": "T110",
+   "鍵": "E-215",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "符号・方向",
+    "符号・方向"
+   ],
+   "fact(席1)": [
+    [
+     "NetCashProvidedByUsedInFinancingActivities",
+     "Prior1YearDuration"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "NetCashProvidedByUsedInFinancingActivities",
+     "Prior1YearDuration"
+    ]
+   ],
+   "同値の他の候補(和集合)": [
+    [
+     "jpcrp_cor:NetCashProvidedByUsedInFinancingActivitiesSummaryOfBusinessResults",
+     "Prior1YearDuration"
+    ]
+   ]
+  },
+  {
+   "id": "T088",
+   "鍵": "E-216",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "符号・方向",
+    "符号・方向"
+   ],
+   "fact(席1)": [
+    [
+     "CashAndCashEquivalents",
+     "CurrentYearInstant"
+    ],
+    [
+     "CashAndCashEquivalents",
+     "Prior1YearInstant"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "CashAndCashEquivalents",
+     "CurrentYearInstant"
+    ],
+    [
+     "CashAndCashEquivalents",
+     "Prior1YearInstant"
+    ]
+   ],
+   "同値の他の候補(和集合)": [
+    [
+     "jppfs_cor:CashAndDeposits",
+     "CurrentYearInstant"
+    ],
+    [
+     "jppfs_cor:CashAndDeposits",
+     "Prior1YearInstant"
+    ],
+    [
+     "jppfs_cor:NetIncreaseDecreaseInCashAndCashEquivalents",
+     "CurrentYearDuration"
+    ]
+   ]
+  },
+  {
+   "id": "N214",
+   "鍵": "E-218",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "fact(席1)": [
+    [
+     "ProvisionForWarrantiesForCompletedOperationCL",
+     "CurrentYearInstant"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "ProvisionForWarrantiesForCompletedOperationCL",
+     "CurrentYearInstant"
+    ]
+   ],
+   "同値の他の候補(和集合)": [],
+   "再監査Bとの比較(記録のみ)": "B と同じ(同値類v0)"
+  },
+  {
+   "id": "T039",
+   "鍵": "E-222",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "符号・方向",
+    "符号・方向"
+   ],
+   "fact(席1)": [
+    [
+     "NonOperatingIncome",
+     "CurrentYearDuration"
+    ],
+    [
+     "NonOperatingIncome",
+     "Prior1YearDuration"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "NonOperatingIncome",
+     "CurrentYearDuration"
+    ],
+    [
+     "NonOperatingIncome",
+     "Prior1YearDuration"
+    ]
+   ],
+   "同値の他の候補(和集合)": []
+  },
+  {
+   "id": "N259",
+   "鍵": "E-226",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "fact(席1)": [
+    [
+     "CashAndCashEquivalents",
+     "Prior1YearInstant"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "CashAndCashEquivalents",
+     "Prior1YearInstant"
+    ]
+   ],
+   "同値の他の候補(和集合)": [
+    [
+     "jpcrp_cor:CashAndCashEquivalentsSummaryOfBusinessResults",
+     "Prior1YearInstant"
+    ],
+    [
+     "jppfs_cor:CashAndDeposits",
+     "Prior1YearInstant"
+    ]
+   ]
+  },
+  {
+   "id": "T080",
+   "鍵": "E-238",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "符号・方向",
+    "符号・方向"
+   ],
+   "fact(席1)": [
+    [
+     "ProvisionForWarrantiesForCompletedOperationCL",
+     "CurrentYearInstant"
+    ],
+    [
+     "ProvisionForWarrantiesForCompletedOperationCL",
+     "Prior1YearInstant"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "ProvisionForWarrantiesForCompletedOperationCL",
+     "CurrentYearInstant"
+    ],
+    [
+     "ProvisionForWarrantiesForCompletedOperationCL",
+     "Prior1YearInstant"
+    ]
+   ],
+   "同値の他の候補(和集合)": [
+    [
+     "jpcrp030000-asr_E36539-000:IncreaseDecreaseInProvisionForWarrantiesForCompletedOperationOpeCF",
+     "CurrentYearDuration"
+    ]
+   ]
+  },
+  {
+   "id": "T084",
+   "鍵": "E-243",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "符号・方向",
+    "符号・方向"
+   ],
+   "fact(席1)": [
+    [
+     "ValuationAndTranslationAdjustments",
+     "CurrentYearInstant"
+    ],
+    [
+     "ValuationAndTranslationAdjustments",
+     "Prior1YearInstant"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "ValuationAndTranslationAdjustments",
+     "CurrentYearInstant"
+    ],
+    [
+     "ValuationAndTranslationAdjustments",
+     "Prior1YearInstant"
+    ]
+   ],
+   "同値の他の候補(和集合)": [
+    [
+     "jppfs_cor:OtherComprehensiveIncome",
+     "CurrentYearDuration"
+    ]
+   ]
+  },
+  {
+   "id": "N146",
+   "鍵": "E-245",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "差(当期−前期)",
+    "差(当期−前期)"
+   ],
+   "fact(席1)": [
+    [
+     "OtherCA",
+     "CurrentYearInstant"
+    ],
+    [
+     "OtherCA",
+     "Prior1YearInstant"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "OtherCA",
+     "CurrentYearInstant"
+    ],
+    [
+     "OtherCA",
+     "Prior1YearInstant"
+    ]
+   ],
+   "同値の他の候補(和集合)": [],
+   "再監査Bとの比較(記録のみ)": "B と同じ(同値類v0)"
+  },
+  {
+   "id": "T054",
+   "鍵": "E-247",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "符号・方向",
+    "符号・方向"
+   ],
+   "fact(席1)": [
+    [
+     "OtherCA",
+     "CurrentYearInstant"
+    ],
+    [
+     "OtherCA",
+     "Prior1YearInstant"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "OtherCA",
+     "CurrentYearInstant"
+    ],
+    [
+     "OtherCA",
+     "Prior1YearInstant"
+    ]
+   ],
+   "同値の他の候補(和集合)": []
+  },
+  {
+   "id": "N178",
+   "鍵": "E-249",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "fact(席1)": [
+    [
+     "CurrentLiabilities",
+     "CurrentYearInstant"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "CurrentLiabilities",
+     "CurrentYearInstant"
+    ]
+   ],
+   "同値の他の候補(和集合)": [],
+   "再監査Bとの比較(記録のみ)": "B と同じ(同値類v0)"
+  },
+  {
+   "id": "N231",
+   "鍵": "E-251",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "fact(席1)": [
+    [
+     "CapitalSurplus",
+     "Prior1YearInstant"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "CapitalSurplus",
+     "Prior1YearInstant"
+    ]
+   ],
+   "同値の他の候補(和集合)": [
+    [
+     "jppfs_cor:NetAssets",
+     "Prior1YearInstant_CapitalSurplusMember"
+    ]
+   ]
+  },
+  {
+   "id": "T071",
+   "鍵": "E-252",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "符号・方向",
+    "符号・方向"
+   ],
+   "fact(席1)": [
+    [
+     "AccruedConsumptionTaxes",
+     "CurrentYearInstant"
+    ],
+    [
+     "AccruedConsumptionTaxes",
+     "Prior1YearInstant"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "AccruedConsumptionTaxes",
+     "CurrentYearInstant"
+    ],
+    [
+     "AccruedConsumptionTaxes",
+     "Prior1YearInstant"
+    ]
+   ],
+   "同値の他の候補(和集合)": [],
+   "再監査Bとの比較(記録のみ)": "B と同じ(同値類v0)"
+  },
+  {
+   "id": "N215",
+   "鍵": "E-257",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "fact(席1)": [
+    [
+     "ProvisionForWarrantiesForCompletedOperationCL",
+     "Prior1YearInstant"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "ProvisionForWarrantiesForCompletedOperationCL",
+     "Prior1YearInstant"
+    ]
+   ],
+   "同値の他の候補(和集合)": []
+  },
+  {
+   "id": "T108",
+   "鍵": "E-258",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "符号・方向",
+    "符号・方向"
+   ],
+   "fact(席1)": [
+    [
+     "NetCashProvidedByUsedInInvestmentActivities",
+     "Prior1YearDuration"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "NetCashProvidedByUsedInInvestmentActivities",
+     "Prior1YearDuration"
+    ]
+   ],
+   "同値の他の候補(和集合)": [
+    [
+     "jpcrp_cor:NetCashProvidedByUsedInInvestingActivitiesSummaryOfBusinessResults",
+     "Prior1YearDuration"
+    ]
+   ]
+  },
+  {
+   "id": "N282",
+   "鍵": "E-259",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "fact(席1)": [
+    [
+     "DecreaseIncreaseInNotesAndAccountsReceivableTradeOpeCF",
+     "Prior1YearDuration"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "DecreaseIncreaseInNotesAndAccountsReceivableTradeOpeCF",
+     "Prior1YearDuration"
+    ]
+   ],
+   "同値の他の候補(和集合)": [],
+   "再監査Bとの比較(記録のみ)": "B と同じ(同値類v0)"
+  },
+  {
+   "id": "N079",
+   "鍵": "E-264",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "fact(席1)": [
+    [
+     "RealEstateRentNOI",
+     "Prior1YearDuration"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "RealEstateRentNOI",
+     "Prior1YearDuration"
+    ]
+   ],
+   "同値の他の候補(和集合)": [
+    [
+     "jppfs_cor:RealEstateRentNOI",
+     "CurrentYearDuration"
+    ]
+   ]
+  },
+  {
+   "id": "N204",
+   "鍵": "E-266",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "差(当期−前期)",
+    "差(当期−前期)"
+   ],
+   "fact(席1)": [
+    [
+     "NoncurrentLiabilities",
+     "CurrentYearInstant"
+    ],
+    [
+     "NoncurrentLiabilities",
+     "Prior1YearInstant"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "NoncurrentLiabilities",
+     "CurrentYearInstant"
+    ],
+    [
+     "NoncurrentLiabilities",
+     "Prior1YearInstant"
+    ]
+   ],
+   "同値の他の候補(和集合)": [
+    [
+     "jppfs_cor:AssetRetirementObligationsNCL",
+     "CurrentYearInstant"
+    ]
+   ]
+  },
+  {
+   "id": "N122",
+   "鍵": "E-267",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "fact(席1)": [
+    [
+     "RemeasurementsOfDefinedBenefitPlansNetOfTaxOCI",
+     "Prior1YearDuration"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "RemeasurementsOfDefinedBenefitPlansNetOfTaxOCI",
+     "Prior1YearDuration"
+    ]
+   ],
+   "同値の他の候補(和集合)": [
+    [
+     "jppfs_cor:NetChangesOfItemsOtherThanShareholdersEquity",
+     "Prior1YearDuration_RemeasurementsOfDefinedBenefitPlansMember"
+    ],
+    [
+     "jppfs_cor:TotalChangesOfItemsDuringThePeriod",
+     "Prior1YearDuration_RemeasurementsOfDefinedBenefitPlansMember"
+    ]
+   ]
+  },
+  {
+   "id": "N113",
+   "鍵": "E-271",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "fact(席1)": [
+    [
+     "RateOfReturnOnEquitySummaryOfBusinessResults",
+     "Prior1YearDuration"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "RateOfReturnOnEquitySummaryOfBusinessResults",
+     "Prior1YearDuration"
+    ]
+   ],
+   "同値の他の候補(和集合)": []
+  },
+  {
+   "id": "N237",
+   "鍵": "E-275",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "fact(席1)": [
+    [
+     "TreasuryStock",
+     "Prior1YearInstant"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "TreasuryStock",
+     "Prior1YearInstant"
+    ]
+   ],
+   "同値の他の候補(和集合)": [
+    [
+     "jppfs_cor:NetAssets",
+     "Prior1YearInstant_TreasuryStockMember"
+    ]
+   ]
+  },
+  {
+   "id": "N035",
+   "鍵": "E-277",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "ポイント差",
+    "ポイント差"
+   ],
+   "fact(席1)": [
+    [
+     "CostOfSales",
+     "CurrentYearDuration"
+    ],
+    [
+     "CostOfSales",
+     "Prior1YearDuration"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "CostOfSales",
+     "CurrentYearDuration"
+    ],
+    [
+     "CostOfSales",
+     "Prior1YearDuration"
+    ]
+   ],
+   "同値の他の候補(和集合)": []
+  },
+  {
+   "id": "T011",
+   "鍵": "E-281",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "符号・方向",
+    "符号・方向"
+   ],
+   "fact(席1)": [
+    [
+     "NetSalesSummaryOfBusinessResults",
+     "CurrentYearDuration"
+    ],
+    [
+     "NetSalesSummaryOfBusinessResults",
+     "Prior1YearDuration"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "NetSalesSummaryOfBusinessResults",
+     "CurrentYearDuration"
+    ],
+    [
+     "NetSalesSummaryOfBusinessResults",
+     "Prior1YearDuration"
+    ]
+   ],
+   "同値の他の候補(和集合)": [
+    [
+     "jppfs_cor:NetSales",
+     "CurrentYearDuration"
+    ],
+    [
+     "jppfs_cor:NetSales",
+     "Prior1YearDuration"
+    ]
+   ]
+  },
+  {
+   "id": "N198",
+   "鍵": "E-282",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "差(当期−前期)",
+    "差(当期−前期)"
+   ],
+   "fact(席1)": [
+    [
+     "ProvisionForShareBasedRemunerationForDirectorsAndOtherOfficersCL",
+     "CurrentYearInstant"
+    ],
+    [
+     "ProvisionForShareBasedRemunerationForDirectorsAndOtherOfficersCL",
+     "Prior1YearInstant"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "ProvisionForShareBasedRemunerationForDirectorsAndOtherOfficersCL",
+     "CurrentYearInstant"
+    ],
+    [
+     "ProvisionForShareBasedRemunerationForDirectorsAndOtherOfficersCL",
+     "Prior1YearInstant"
+    ]
+   ],
+   "同値の他の候補(和集合)": [
+    [
+     "jppfs_cor:IncreaseDecreaseInProvisionForShareBasedRemunerationForDirectorsAndOtherOfficersOpeCF",
+     "CurrentYearDuration"
+    ],
+    [
+     "jppfs_cor:ProvisionForShareBasedRemunerationForDirectorsAndOtherOfficersCL",
+     "CurrentYearInstant_NonConsolidatedMember"
+    ],
+    [
+     "jppfs_cor:ProvisionForShareBasedRemunerationForDirectorsAndOtherOfficersCL",
+     "Prior1YearInstant_NonConsolidatedMember"
+    ]
+   ]
+  },
+  {
+   "id": "N088",
+   "鍵": "E-289",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "fact(席1)": [
+    [
+     "OrdinaryIncome",
+     "CurrentYearDuration"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "OrdinaryIncome",
+     "CurrentYearDuration"
+    ]
+   ],
+   "同値の他の候補(和集合)": [
+    [
+     "jpcrp_cor:OrdinaryIncomeLossSummaryOfBusinessResults",
+     "CurrentYearDuration"
+    ]
+   ]
+  },
+  {
+   "id": "N205",
+   "鍵": "E-291",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "fact(席1)": [
+    [
+     "DeferredTaxLiabilities",
+     "CurrentYearInstant"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "DeferredTaxLiabilities",
+     "CurrentYearInstant"
+    ]
+   ],
+   "同値の他の候補(和集合)": [],
+   "再監査Bとの比較(記録のみ)": "B と同じ(同値類v0)"
+  },
+  {
+   "id": "N046",
+   "鍵": "E-299",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "fact(席1)": [
+    [
+     "EmployeesSalariesAndAllowancesSGA",
+     "CurrentYearDuration"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "EmployeesSalariesAndAllowancesSGA",
+     "CurrentYearDuration"
+    ]
+   ],
+   "同値の他の候補(和集合)": []
+  },
+  {
+   "id": "N072",
+   "鍵": "E-301",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "fact(席1)": [
+    [
+     "NonOperatingIncome",
+     "Prior1YearDuration"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "NonOperatingIncome",
+     "Prior1YearDuration"
+    ]
+   ],
+   "同値の他の候補(和集合)": []
+  },
+  {
+   "id": "N123",
+   "鍵": "E-306",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "fact(席1)": [
+    [
+     "ValuationDifferenceOnAvailableForSaleSecuritiesNetOfTaxOCI",
+     "CurrentYearDuration"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "ValuationDifferenceOnAvailableForSaleSecuritiesNetOfTaxOCI",
+     "CurrentYearDuration"
+    ]
+   ],
+   "同値の他の候補(和集合)": [
+    [
+     "jppfs_cor:NetChangesOfItemsOtherThanShareholdersEquity",
+     "CurrentYearDuration_ValuationDifferenceOnAvailableForSaleSecuritiesMember"
+    ],
+    [
+     "jppfs_cor:TotalChangesOfItemsDuringThePeriod",
+     "CurrentYearDuration_ValuationDifferenceOnAvailableForSaleSecuritiesMember"
+    ]
+   ]
+  },
+  {
+   "id": "N076",
+   "鍵": "E-308",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "fact(席1)": [
+    [
+     "DividendsIncomeNOI",
+     "CurrentYearDuration"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "DividendsIncomeNOI",
+     "CurrentYearDuration"
+    ]
+   ],
+   "同値の他の候補(和集合)": []
+  },
+  {
+   "id": "N239",
+   "鍵": "E-309",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "fact(席1)": [
+    [
+     "ValuationAndTranslationAdjustments",
+     "Prior1YearInstant"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "ValuationAndTranslationAdjustments",
+     "Prior1YearInstant"
+    ]
+   ],
+   "同値の他の候補(和集合)": [
+    [
+     "jppfs_cor:NetAssets",
+     "Prior1YearInstant_ValuationAndTranslationAdjustmentsMember"
+    ]
+   ]
+  },
+  {
+   "id": "N273",
+   "鍵": "E-312",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "fact(席1)": [
+    [
+     "SubtotalOpeCF",
+     "CurrentYearDuration"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "SubtotalOpeCF",
+     "CurrentYearDuration"
+    ]
+   ],
+   "同値の他の候補(和集合)": [],
+   "再監査Bとの比較(記録のみ)": "B と同じ(同値類v0)"
+  },
+  {
+   "id": "N249",
+   "鍵": "E-318",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "fact(席1)": [
+    [
+     "DividendsFromSurplus",
+     "CurrentYearDuration"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "DividendsFromSurplus",
+     "CurrentYearDuration"
+    ]
+   ],
+   "同値の他の候補(和集合)": [
+    [
+     "jppfs_cor:DividendsFromSurplus",
+     "CurrentYearDuration_NonConsolidatedMember"
+    ],
+    [
+     "jppfs_cor:DividendsFromSurplus",
+     "CurrentYearDuration_NonConsolidatedMember_RetainedEarningsBroughtForwardMember"
+    ],
+    [
+     "jppfs_cor:DividendsFromSurplus",
+     "CurrentYearDuration_NonConsolidatedMember_RetainedEarningsMember"
+    ],
+    [
+     "jppfs_cor:DividendsFromSurplus",
+     "CurrentYearDuration_NonConsolidatedMember_ShareholdersEquityMember"
+    ],
+    [
+     "jppfs_cor:DividendsFromSurplus",
+     "CurrentYearDuration_RetainedEarningsMember"
+    ],
+    [
+     "jppfs_cor:DividendsFromSurplus",
+     "CurrentYearDuration_ShareholdersEquityMember"
+    ]
+   ],
+   "再監査Bとの比較(記録のみ)": "B と同じ(同値類v0)"
+  },
+  {
+   "id": "N169",
+   "鍵": "E-319",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "fact(席1)": [
+    [
+     "InvestmentSecurities",
+     "Prior1YearInstant"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "InvestmentSecurities",
+     "Prior1YearInstant"
+    ]
+   ],
+   "同値の他の候補(和集合)": []
+  },
+  {
+   "id": "N187",
+   "鍵": "E-321",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "fact(席1)": [
+    [
+     "IncomeTaxesPayable",
+     "CurrentYearInstant"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "IncomeTaxesPayable",
+     "CurrentYearInstant"
+    ]
+   ],
+   "同値の他の候補(和集合)": [],
+   "再監査Bとの比較(記録のみ)": "B と同じ(同値類v0)"
+  },
+  {
+   "id": "N261",
+   "鍵": "E-324",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "fact(席1)": [
+    [
+     "NetCashProvidedByUsedInOperatingActivities",
+     "CurrentYearDuration"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "NetCashProvidedByUsedInOperatingActivities",
+     "CurrentYearDuration"
+    ]
+   ],
+   "同値の他の候補(和集合)": [
+    [
+     "jpcrp_cor:NetCashProvidedByUsedInOperatingActivitiesSummaryOfBusinessResults",
+     "CurrentYearDuration"
+    ]
+   ],
+   "再監査Bとの比較(記録のみ)": "B と同じ(同値類v0)"
+  },
+  {
+   "id": "N302",
+   "鍵": "E-329",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "差(当期−前期)",
+    "差(当期−前期)"
+   ],
+   "fact(席1)": [
+    [
+     "CashDividendsPaidFinCF",
+     "CurrentYearDuration"
+    ],
+    [
+     "CashDividendsPaidFinCF",
+     "Prior1YearDuration"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "CashDividendsPaidFinCF",
+     "CurrentYearDuration"
+    ],
+    [
+     "CashDividendsPaidFinCF",
+     "Prior1YearDuration"
+    ]
+   ],
+   "同値の他の候補(和集合)": []
+  },
+  {
+   "id": "N006",
+   "鍵": "E-335",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "率(比)",
+    "率(比)"
+   ],
+   "fact(席1)": [
+    [
+     "OrdinaryIncome",
+     "CurrentYearDuration"
+    ],
+    [
+     "OrdinaryIncome",
+     "Prior1YearDuration"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "OrdinaryIncome",
+     "CurrentYearDuration"
+    ],
+    [
+     "OrdinaryIncome",
+     "Prior1YearDuration"
+    ]
+   ],
+   "同値の他の候補(和集合)": [
+    [
+     "jpcrp_cor:OrdinaryIncomeLossSummaryOfBusinessResults",
+     "CurrentYearDuration"
+    ],
+    [
+     "jpcrp_cor:OrdinaryIncomeLossSummaryOfBusinessResults",
+     "Prior1YearDuration"
+    ]
+   ]
+  },
+  {
+   "id": "N037",
+   "鍵": "E-336",
+   "分類": "不一致",
+   "形": [
+    "率(比)",
+    "率(比)"
+   ],
+   "fact(席1)": [
+    [
+     "GrossProfit",
+     "CurrentYearDuration"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "GrossProfit",
+     "CurrentYearDuration"
+    ],
+    [
+     "NetSales",
+     "CurrentYearDuration"
+    ]
+   ],
+   "同値の他の候補(和集合)": []
+  },
+  {
+   "id": "N247",
+   "鍵": "E-337",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "fact(席1)": [
+    [
+     "RemeasurementsOfDefinedBenefitPlans",
+     "Prior1YearInstant"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "RemeasurementsOfDefinedBenefitPlans",
+     "Prior1YearInstant"
+    ]
+   ],
+   "同値の他の候補(和集合)": [
+    [
+     "jppfs_cor:NetAssets",
+     "Prior1YearInstant_RemeasurementsOfDefinedBenefitPlansMember"
+    ]
+   ]
+  },
+  {
+   "id": "N277",
+   "鍵": "E-343",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "fact(席1)": [
+    [
+     "IncomeTaxesPaidOpeCF",
+     "CurrentYearDuration"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "IncomeTaxesPaidOpeCF",
+     "CurrentYearDuration"
+    ]
+   ],
+   "同値の他の候補(和集合)": []
+  },
+  {
+   "id": "N120",
+   "鍵": "E-344",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "差(当期−前期)",
+    "差(当期−前期)"
+   ],
+   "fact(席1)": [
+    [
+     "OtherComprehensiveIncome",
+     "CurrentYearDuration"
+    ],
+    [
+     "OtherComprehensiveIncome",
+     "Prior1YearDuration"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "OtherComprehensiveIncome",
+     "CurrentYearDuration"
+    ],
+    [
+     "OtherComprehensiveIncome",
+     "Prior1YearDuration"
+    ]
+   ],
+   "同値の他の候補(和集合)": [],
+   "再監査Bとの比較(記録のみ)": "B と同じ(同値類v0)"
+  },
+  {
+   "id": "N005",
+   "鍵": "E-345",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "fact(席1)": [
+    [
+     "OrdinaryIncome",
+     "CurrentYearDuration"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "OrdinaryIncome",
+     "CurrentYearDuration"
+    ]
+   ],
+   "同値の他の候補(和集合)": [
+    [
+     "jpcrp_cor:OrdinaryIncomeLossSummaryOfBusinessResults",
+     "CurrentYearDuration"
+    ]
+   ]
+  },
+  {
+   "id": "N152",
+   "鍵": "E-346",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "率(比)",
+    "率(比)"
+   ],
+   "fact(席1)": [
+    [
+     "NoncurrentAssets",
+     "CurrentYearInstant"
+    ],
+    [
+     "NoncurrentAssets",
+     "Prior1YearInstant"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "NoncurrentAssets",
+     "CurrentYearInstant"
+    ],
+    [
+     "NoncurrentAssets",
+     "Prior1YearInstant"
+    ]
+   ],
+   "同値の他の候補(和集合)": [],
+   "再監査Bとの比較(記録のみ)": "B と同じ(同値類v0)"
+  },
+  {
+   "id": "N216",
+   "鍵": "E-348",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "差(当期−前期)",
+    "差(当期−前期)"
+   ],
+   "fact(席1)": [
+    [
+     "ProvisionForWarrantiesForCompletedOperationCL",
+     "CurrentYearInstant"
+    ],
+    [
+     "ProvisionForWarrantiesForCompletedOperationCL",
+     "Prior1YearInstant"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "ProvisionForWarrantiesForCompletedOperationCL",
+     "CurrentYearInstant"
+    ],
+    [
+     "ProvisionForWarrantiesForCompletedOperationCL",
+     "Prior1YearInstant"
+    ]
+   ],
+   "同値の他の候補(和集合)": [
+    [
+     "jpcrp030000-asr_E36539-000:IncreaseDecreaseInProvisionForWarrantiesForCompletedOperationOpeCF",
+     "CurrentYearDuration"
+    ]
+   ]
+  },
+  {
+   "id": "T012",
+   "鍵": "E-356",
+   "分類": "判定不能(両側)",
+   "形": [
+    "符号・方向",
+    null
+   ],
+   "fact(席1)": [],
+   "fact(席2)": [],
+   "同値の他の候補(和集合)": []
+  },
+  {
+   "id": "N142",
+   "鍵": "E-362",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "fact(席1)": [
+    [
+     "ContractAssets",
+     "Prior1YearInstant"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "ContractAssets",
+     "Prior1YearInstant"
+    ]
+   ],
+   "同値の他の候補(和集合)": []
+  },
+  {
+   "id": "N013",
+   "鍵": "E-366",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "fact(席1)": [
+    [
+     "ComprehensiveIncome",
+     "CurrentYearDuration"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "ComprehensiveIncome",
+     "CurrentYearDuration"
+    ]
+   ],
+   "同値の他の候補(和集合)": [
+    [
+     "jpcrp_cor:ComprehensiveIncomeSummaryOfBusinessResults",
+     "CurrentYearDuration"
+    ],
+    [
+     "jppfs_cor:ComprehensiveIncomeAttributableToOwnersOfTheParent",
+     "CurrentYearDuration"
+    ]
+   ]
+  },
+  {
+   "id": "N115",
+   "鍵": "E-367",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "fact(席1)": [
+    [
+     "ComprehensiveIncome",
+     "Prior1YearDuration"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "ComprehensiveIncome",
+     "Prior1YearDuration"
+    ]
+   ],
+   "同値の他の候補(和集合)": [
+    [
+     "jpcrp_cor:ComprehensiveIncomeSummaryOfBusinessResults",
+     "Prior1YearDuration"
+    ],
+    [
+     "jppfs_cor:ComprehensiveIncomeAttributableToOwnersOfTheParent",
+     "Prior1YearDuration"
+    ]
+   ]
+  },
+  {
+   "id": "N252",
+   "鍵": "E-369",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "fact(席1)": [
+    [
+     "EquityToAssetRatioSummaryOfBusinessResults",
+     "Prior1YearInstant"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "EquityToAssetRatioSummaryOfBusinessResults",
+     "Prior1YearInstant"
+    ]
+   ],
+   "同値の他の候補(和集合)": []
+  },
+  {
+   "id": "T017",
+   "鍵": "E-373",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "符号・方向",
+    "符号・方向"
+   ],
+   "fact(席1)": [
+    [
+     "CostOfSales",
+     "CurrentYearDuration"
+    ],
+    [
+     "CostOfSales",
+     "Prior1YearDuration"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "CostOfSales",
+     "CurrentYearDuration"
+    ],
+    [
+     "CostOfSales",
+     "Prior1YearDuration"
+    ]
+   ],
+   "同値の他の候補(和集合)": []
+  },
+  {
+   "id": "N222",
+   "鍵": "E-376",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "fact(席1)": [
+    [
+     "NetAssets",
+     "CurrentYearInstant"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "NetAssets",
+     "CurrentYearInstant"
+    ]
+   ],
+   "同値の他の候補(和集合)": [
+    [
+     "jpcrp_cor:NetAssetsSummaryOfBusinessResults",
+     "CurrentYearInstant"
+    ]
+   ]
+  },
+  {
+   "id": "N020",
+   "鍵": "E-385",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "率(比)",
+    "率(比)"
+   ],
+   "fact(席1)": [
+    [
+     "NetSalesSummaryOfBusinessResults",
+     "CurrentYearDuration"
+    ],
+    [
+     "NetSalesSummaryOfBusinessResults",
+     "Prior4YearDuration"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "NetSalesSummaryOfBusinessResults",
+     "CurrentYearDuration"
+    ],
+    [
+     "NetSalesSummaryOfBusinessResults",
+     "Prior4YearDuration"
+    ]
+   ],
+   "同値の他の候補(和集合)": [
+    [
+     "jppfs_cor:NetSales",
+     "CurrentYearDuration"
+    ]
+   ]
+  },
+  {
+   "id": "N297",
+   "鍵": "E-386",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "fact(席1)": [
+    [
+     "RepaymentOfLongTermLoansPayableFinCF",
+     "CurrentYearDuration"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "RepaymentOfLongTermLoansPayableFinCF",
+     "CurrentYearDuration"
+    ]
+   ],
+   "同値の他の候補(和集合)": [
+    [
+     "jppfs_cor:CurrentPortionOfLongTermLoansPayable",
+     "Prior1YearInstant"
+    ]
+   ]
+  },
+  {
+   "id": "N014",
+   "鍵": "E-389",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "fact(席1)": [
+    [
+     "NetSales",
+     "CurrentYearDuration"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "NetSales",
+     "CurrentYearDuration"
+    ]
+   ],
+   "同値の他の候補(和集合)": [
+    [
+     "jpcrp_cor:NetSalesSummaryOfBusinessResults",
+     "CurrentYearDuration"
+    ]
+   ],
+   "再監査Bとの比較(記録のみ)": "B と同じ(同値類v0)"
+  },
+  {
+   "id": "N129",
+   "鍵": "E-390",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "fact(席1)": [
+    [
+     "Assets",
+     "Prior1YearInstant"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "Assets",
+     "Prior1YearInstant"
+    ]
+   ],
+   "同値の他の候補(和集合)": [
+    [
+     "jpcrp_cor:TotalAssetsSummaryOfBusinessResults",
+     "Prior1YearInstant"
+    ],
+    [
+     "jppfs_cor:LiabilitiesAndNetAssets",
+     "Prior1YearInstant"
+    ]
+   ]
+  },
+  {
+   "id": "T002",
+   "鍵": "E-394",
+   "分類": "判定不能(両側)",
+   "形": [
+    "符号・方向",
+    "符号・方向"
+   ],
+   "fact(席1)": [],
+   "fact(席2)": [],
+   "同値の他の候補(和集合)": [
+    [
+     "jppfs_cor:OperatingIncome",
+     "CurrentYearDuration"
+    ],
+    [
+     "jppfs_cor:OperatingIncome",
+     "Prior1YearDuration"
+    ],
+    [
+     "jppfs_cor:OrdinaryIncome",
+     "CurrentYearDuration"
+    ],
+    [
+     "jppfs_cor:OrdinaryIncome",
+     "Prior1YearDuration"
+    ],
+    [
+     "jppfs_cor:ProfitLossAttributableToOwnersOfParent",
+     "CurrentYearDuration"
+    ],
+    [
+     "jppfs_cor:ProfitLossAttributableToOwnersOfParent",
+     "Prior1YearDuration"
+    ]
+   ]
+  }
+ ]
+}
