@@ -354,7 +354,9 @@ def git(*a):
 # 「封の commit から 0 行」を満たしたと数えるのは、(a) 動いた file がこの 2 つだけ、(b) その封が履歴に在る、(c) sha16 が宣言どおり、のときだけ。
 SEAL_PERIOD_BIND = "docs/XBRL_PERIOD_BIND_SEAL_2026-10-20.md"
 ENGINE_LATER = {"adapters/xbrl/recipes.py": ("65a37869f053a60e", SEAL_PERIOD_BIND),
-                "adapters/xbrl/vocabulary.py": ("1fdb48e7e3ba58ce", SEAL_PERIOD_BIND)}
+                # 2026-10-20 追記(段 2): vocabulary.py の sha は 段 1 3320c8c で 1fdb48e7e3ba58ce(残す。測った時点の値)、段 2(DEFAULT_PROFILE を
+                # P21 -> P22 にし、決定の注記を足した。vocabulary.py だけ・recipes.py は 0 行。同じ封 SEAL_PERIOD_BIND の段 2)で 25a3c0992e10daaa。
+                "adapters/xbrl/vocabulary.py": ("25a3c0992e10daaa", SEAL_PERIOD_BIND)}
 
 
 def only_declared_changes(numstat_out, status_out):
@@ -774,6 +776,11 @@ class HeavyRerunTest(Base):
         b = dict(self.rec[u"予測の判定"])
         a.pop("B-4")
         b.pop("B-4")
+        # 2026-10-20(期を縛る P22 の段 2): B-5 は『作業木の git diff HEAD の行数』をその場で数えた値で、測った時点(封の commit)は 0 だった。
+        # engine を宣言された遷移(段 1・段 2。ENGINE_LATER)で変えた木では、commit 前は 0 でなく、commit 後に 0 に戻る ― 走らせ直しの度に
+        # 木の状態で変わる値なので等号の外に置く(engine が封の commit から宣言された遷移だけであることは test_7 の engine_untouched() が sha16 で縛る)。
+        a.pop("B-5")
+        b.pop("B-5")
         self.assertEqual(a, b)
         self.assertLessEqual(out[u"所要秒"][u"全体"], 1800)
 

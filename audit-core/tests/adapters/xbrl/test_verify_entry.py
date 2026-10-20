@@ -83,8 +83,12 @@ HOLDOUT_P21_MOVED = {
 # (S100Z4B6 の 147 の連結要素の書類で、P20 と P21 の claims は 1 行も違わない。profile 欄を除いた本体は同一)。
 # 上の P20 の値は P20 を明示して回した結果として残す(測った時点の字。消さない)。
 # 封 docs/XBRL_NAMING_FIX_SEAL_2026-10-20.md の段 2。
+# 2026-10-20(期を縛る P22 の段 2): 既定が P21 -> P22 になり、既定の値がもう一度動いた。**動いたのは profile 欄の字だけ**
+# (S100Z4B6 は P21 と P22 で claims が 1 行も違わない。profile 欄を除いた本体は同一)。P21 の値は P21 を明示して回した結果として残す
+# (測った時点の字。消さない)。封 docs/XBRL_PERIOD_BIND_SEAL_2026-10-20.md の段 2。
 _PINNED_BODY_SHA256_S100Z4B6_P20 = "413aaeab69b472ebdc60d9a4291d6845a62f457635ac56747e739b8c5696aa54"
-_PINNED_BODY_SHA256_S100Z4B6 = "540a60b75559eab62694a9c690892a8f36e4636de425024912f654112b7fa943"
+_PINNED_BODY_SHA256_S100Z4B6_P21 = "540a60b75559eab62694a9c690892a8f36e4636de425024912f654112b7fa943"
+_PINNED_BODY_SHA256_S100Z4B6 = "b0f5b32496a745526ba5b9107f1cc6856fef0a811c46f4e69679a57887288758"
 
 
 def _zip(doc):
@@ -180,13 +184,24 @@ class DocumentLevelRuleTest(unittest.TestCase):
             self.assertGreater(out["document"]["states"].get("GROUNDED", 0), 0, doc)
             self.assertEqual(sum(out["document"]["states"].values()), out["document"]["claims"], doc)
 
+    def test_the_two_documents_are_no_longer_flagged_under_p21(self):
+        """**P21 のときの事実(2026-10-20 の段 2 から P22 の段 2 の前まで既定だった)。**P21 を明示して、
+        この 2 書類は書類ごと UNVERIFIABLE にならない。P21 は P20 の GROUNDED を動かさない(封の N-4)。"""
+
+        for doc in DOC_UNVERIFIABLE_DOCS:
+            out = VD.verify_document(_read(doc), profile_name="P21")
+            self.assertEqual(out["profile"], "P21", doc)
+            self.assertFalse(out["document"]["unverifiable"], doc)
+            self.assertGreater(out["document"]["states"].get("GROUNDED", 0), 0, doc)
+            self.assertEqual(sum(out["document"]["states"].values()), out["document"]["claims"], doc)
+
     def test_the_two_documents_are_no_longer_flagged_under_the_default(self):
-        """**既定(2026-10-20 から P21)の事実。**既定の経路でも、この 2 書類は書類ごと UNVERIFIABLE に
-        ならない(字の試験ではなく振る舞いで)。P21 は P20 の GROUNDED を動かさない(封の N-4)。"""
+        """**既定(2026-10-20 の期を縛る P22 の段 2 から P22)の事実。**既定の経路でも、この 2 書類は書類ごと
+        UNVERIFIABLE にならない(字の試験ではなく振る舞いで)。"""
 
         for doc in DOC_UNVERIFIABLE_DOCS:
             out = VD.verify_document(_read(doc))
-            self.assertEqual(out["profile"], "P21", doc)
+            self.assertEqual(out["profile"], "P22", doc)
             self.assertFalse(out["document"]["unverifiable"], doc)
             self.assertGreater(out["document"]["states"].get("GROUNDED", 0), 0, doc)
             # 旗が外れても Claim 個別の state の合計は全件のまま
@@ -221,9 +236,21 @@ class OutputStabilityTest(unittest.TestCase):
         out = VD.verify_document(_read("S100Z4B6"))
         del out["engine"]
         body = VD.dumps(out)
-        self.assertEqual(out["profile"], "P21")
+        self.assertEqual(out["profile"], "P22")
         self.assertEqual(hashlib.sha256(body.encode("utf-8")).hexdigest(),
                          "%s" % _PINNED_BODY_SHA256_S100Z4B6)
+
+    @unittest.skipUnless(_have("S100Z4B6"), "材料が無い")
+    def test_one_documents_output_sha256_is_pinned_literally_under_p21(self):
+        """2026-10-20 の名指しの直し 段 2 から期を縛る P22 の段 2 の前までの既定(P21)のときの値を、P21 を**明示して**残す
+        (測った時点の字。消さない)。S100Z4B6 は profile 欄を除いて P21 と P22 で同一。"""
+
+        out = VD.verify_document(_read("S100Z4B6"), profile_name="P21")
+        del out["engine"]
+        body = VD.dumps(out)
+        self.assertEqual(out["profile"], "P21")
+        self.assertEqual(hashlib.sha256(body.encode("utf-8")).hexdigest(),
+                         "%s" % _PINNED_BODY_SHA256_S100Z4B6_P21)
 
     @unittest.skipUnless(_have("S100Z4B6"), "材料が無い")
     def test_one_documents_output_sha256_is_pinned_literally_under_p20(self):
@@ -263,7 +290,7 @@ class OutputStabilityTest(unittest.TestCase):
             self.assertEqual(on_disk, VD.dumps(VD.verify_document(_read("S100Z4B6"))))
             data = json.loads(on_disk)
             self.assertEqual(data["profile"], V.DEFAULT_PROFILE)
-            self.assertEqual(data["profile"], "P21")     # 2026-10-14 は P20、2026-10-20(段 2)から P21
+            self.assertEqual(data["profile"], "P22")     # 2026-10-14 は P20、2026-10-20(段 2)から P21、同日の期を縛る P22 の段 2 から P22
 
 
 class SemanticMatchAgainstTheDevelopmentMeasurementTest(unittest.TestCase):
@@ -350,8 +377,9 @@ class SemanticMatchAgainstTheHoldoutMeasurementTest(unittest.TestCase):
                 checked += 1
             self.assertGreaterEqual(checked, 100, doc)
 
-    def test_the_default_p21_moves_only_the_five_recorded_holdout_rows(self):
-        """**既定(2026-10-20 から P21)で P16 の記録と違う行は、HOLDOUT_P21_MOVED の 5 行だけ。**
+    def test_p21_moves_only_the_five_recorded_holdout_rows(self):
+        """**P21(2026-10-20 の名指しの直し 段 2 から期を縛る P22 の段 2 の前まで既定だった。いまは P21 を明示)で P16 の記録と違う行は、
+        HOLDOUT_P21_MOVED の 5 行だけ。**
         動いた行は新しい state・参照先を字で留め(全部 VALUE_MISMATCH で、元も VALUE_MISMATCH)、
         reason・subject は P16 の記録のまま。それ以外の行は 4 つの欄とも P16 の記録と同一。
         GROUNDED の数も P16 の記録(HOLDOUT_EXPECTED)のまま。封の N-12。"""
@@ -359,7 +387,7 @@ class SemanticMatchAgainstTheHoldoutMeasurementTest(unittest.TestCase):
         moved_seen = {}
         for doc in HOLDOUT_DOCS:
             dump, by_row = self._dump_and_rows(doc)
-            out = VD.verify_document(_read(doc))
+            out = VD.verify_document(_read(doc), profile_name="P21")
             self.assertEqual(out["profile"], "P21", doc)
             got = {c["id"]: c for c in out["claims"]}
             self.assertEqual(len(out["claims"]), HOLDOUT_EXPECTED[doc]["claims"], doc)
@@ -387,6 +415,61 @@ class SemanticMatchAgainstTheHoldoutMeasurementTest(unittest.TestCase):
         self.assertEqual({d: sorted(v) for d, v in moved_seen.items()},
                          {d: sorted(v) for d, v in HOLDOUT_P21_MOVED.items()})
         self.assertEqual(sum(len(v) for v in moved_seen.values()), 5)
+
+    # 2026-10-20(期を縛る P22 の段 2): 既定が P22 になって、未使用 2 書類の P16 の記録(dump_P16)の中で P21 の 5 行のほかに動く行。
+    # 1 行だけ: S100Z39P の H-042(増減の文『1年内返済予定の長期借入金が100百万円減少』の 100 が前期残高と一致する型 = 結果文書の型 A)が
+    # GROUNDED -> POINTER_NOT_FOUND(no_element。参照先なし)。dump に無い行でもう 1 行 GROUNDED が減る(S100Z4N9 の N056『1年内償還予定の社債の減少300,000千円』、型 A)ので、
+    # GROUNDED の数は 80 -> 79(S100Z39P)・99 -> 98(S100Z4N9)。全部 E-2(67 書類)の GROUNDED を離れた 25 行に入る行で、新しく GROUNDED になる行は 0。
+    HOLDOUT_P22_MOVED_FROM_GROUNDED = {"S100Z39P": {"H-042": ("POINTER_NOT_FOUND", [], "no_element")}}
+    HOLDOUT_P22_GROUNDED = {"S100Z39P": 79, "S100Z4N9": 98}
+
+    def test_the_default_p22_moves_the_five_p21_rows_and_leaves_grounded_on_two_rows(self):
+        """**既定(2026-10-20 の期を縛る P22 の段 2 から P22)で P16 の記録と違う行は、P21 の 5 行(HOLDOUT_P21_MOVED。P21 と同じ state・参照先)に
+        H-042 の 1 行(GROUNDED -> POINTER_NOT_FOUND)を足した 6 行だけ。**それ以外の行は 4 つの欄とも P16 の記録と同一。
+        GROUNDED の数は S100Z39P 80 -> 79・S100Z4N9 99 -> 98(後者は dump に無い行)。新しく GROUNDED になる行は無い。"""
+
+        moved_seen = {}
+        for doc in HOLDOUT_DOCS:
+            dump, by_row = self._dump_and_rows(doc)
+            out = VD.verify_document(_read(doc))
+            self.assertEqual(out["profile"], "P22", doc)
+            got = {c["id"]: c for c in out["claims"]}
+            self.assertEqual(len(out["claims"]), HOLDOUT_EXPECTED[doc]["claims"], doc)
+            self.assertEqual(out["document"]["states"]["GROUNDED"], self.HOLDOUT_P22_GROUNDED[doc], doc)
+            self.assertLess(out["document"]["states"]["GROUNDED"], HOLDOUT_EXPECTED[doc]["grounded"], doc)
+            expect_moved = HOLDOUT_P21_MOVED.get(doc, {})
+            expect_left = self.HOLDOUT_P22_MOVED_FROM_GROUNDED.get(doc, {})
+            checked = 0
+            for row_key, want in dump.items():
+                rid = row_key.split(":", 1)[1]
+                g = got[by_row[rid]]
+                if rid in expect_moved:
+                    state, pointers = expect_moved[rid]
+                    self.assertEqual(want["state"], "VALUE_MISMATCH", (doc, rid))
+                    self.assertEqual(g["state"], state, (doc, rid))
+                    self.assertEqual(g["pointers"], pointers, (doc, rid))
+                    self.assertNotEqual(g["pointers"], want["pointers"], (doc, rid))
+                    self.assertEqual(g["reason"], want["reason"], (doc, rid))
+                    self.assertEqual(g["subject"], want["subject"], (doc, rid))
+                    moved_seen.setdefault(doc, []).append(rid)
+                elif rid in expect_left:
+                    state, pointers, reason = expect_left[rid]
+                    self.assertEqual(want["state"], "GROUNDED", (doc, rid))             # 元は GROUNDED
+                    self.assertEqual((g["state"], g["pointers"], g["reason"]), (state, pointers, reason), (doc, rid))
+                    self.assertEqual(g["subject"], want["subject"], (doc, rid))
+                    moved_seen.setdefault(doc, []).append(rid)
+                else:
+                    for f in ("state", "pointers", "reason", "subject"):
+                        self.assertEqual(g[f], want[f], (doc, rid, f))
+                checked += 1
+            self.assertGreaterEqual(checked, 100, doc)
+        want_moved = {}
+        for d, v in HOLDOUT_P21_MOVED.items():
+            want_moved.setdefault(d, []).extend(v)
+        for d, v in self.HOLDOUT_P22_MOVED_FROM_GROUNDED.items():
+            want_moved.setdefault(d, []).extend(v)
+        self.assertEqual({d: sorted(v) for d, v in moved_seen.items()}, {d: sorted(v) for d, v in want_moved.items()})
+        self.assertEqual(sum(len(v) for v in moved_seen.values()), 6)
 
 
 class RobustnessTableTest(unittest.TestCase):
@@ -428,8 +511,8 @@ class RobustnessTableTest(unittest.TestCase):
         self.assertEqual(sorted(moved), sorted(ROBUSTNESS_P20_MOVED),
                          "既定で動く書類の集合が記録と違う")
 
-    def test_the_default_p21_gives_the_same_stop_counts_as_p20(self):
-        """**2026-10-20(段 2)。既定が P21 になっても、14 書類の止めた件数(= 全件 - GROUNDED)は
+    def test_p21_gives_the_same_stop_counts_as_p20(self):
+        """**2026-10-20(名指しの直し 段 2)。P21(その時の既定。いまは P21 を明示)でも、14 書類の止めた件数(= 全件 - GROUNDED)は
         P20 のときと同じ**(P21 は GROUNDED を動かさない。封の N-4)。P16 の表(ROBUSTNESS_P16)から
         動く書類は ROBUSTNESS_P20_MOVED の 2 書類だけで、その数も P20 のまま。"""
 
@@ -439,7 +522,7 @@ class RobustnessTableTest(unittest.TestCase):
         moved = []
         for doc in docs:
             want_stopped, want_total = ROBUSTNESS_P16[doc]
-            out = VD.verify_document(_read(doc))          # 既定 = P21
+            out = VD.verify_document(_read(doc), profile_name="P21")          # 2026-10-20 の名指しの直し 段 2 の既定 = P21(いまは明示)
             self.assertEqual(out["profile"], "P21", doc)
             total = out["document"]["claims"]
             stopped = total - out["document"]["states"].get("GROUNDED", 0)
@@ -448,6 +531,34 @@ class RobustnessTableTest(unittest.TestCase):
                 moved.append(doc)
                 self.assertEqual(stopped, ROBUSTNESS_P20_MOVED[doc], doc)
         self.assertEqual(sorted(moved), sorted(ROBUSTNESS_P20_MOVED))
+
+    # 2026-10-20(期を縛る P22 の段 2): 既定が P22 になって、14 書類の止めた件数(= 全件 - GROUNDED)が P20 のときから増える書類と、その P22 の止めた件数。
+    # 5 書類で合計 +11(E-2 の GROUNDED を離れた 25 行のうち、この 14 書類に入る行)。残りの 9 書類は P16 の表のまま、
+    # P20 で動く 2 書類のうち S100Z3HP は P22 でも P20 のまま(19)、S100Z433 は 30 -> 31。
+    ROBUSTNESS_P22_STOPPED = {"S100Z3CO": 62, "S100Z3JY": 52, "S100Z433": 31, "S100Z4DE": 47, "S100Z4PA": 64}
+
+    def test_the_default_p22_stops_more_on_five_of_the_fourteen_documents(self):
+        """**2026-10-20(期を縛る P22 の段 2)。既定が P22 になって、14 書類の止めた件数が P20・P21 のときより増えるのは
+        ROBUSTNESS_P22_STOPPED の 5 書類だけ**(合計 +11。増えた行は GROUNDED -> 非 GROUNDED で、止めた件数が減る書類は 0)。
+        残りの書類は P16 の表(ROBUSTNESS_P16)か P20 の表(ROBUSTNESS_P20_MOVED)のまま。claim の数は profile で変わらない。"""
+
+        docs = [d for d in sorted(ROBUSTNESS_P16) if _have(d)]
+        if len(docs) < 10:
+            raise unittest.SkipTest("材料が足りない(%d 書類)" % len(docs))
+        more = {}
+        for doc in docs:
+            want_stopped, want_total = ROBUSTNESS_P16[doc]
+            out = VD.verify_document(_read(doc))          # 既定 = P22
+            self.assertEqual(out["profile"], "P22", doc)
+            total = out["document"]["claims"]
+            stopped = total - out["document"]["states"].get("GROUNDED", 0)
+            self.assertEqual(total, want_total, doc)
+            base = ROBUSTNESS_P20_MOVED.get(doc, want_stopped)        # P20・P21 のときの止めた件数
+            self.assertGreaterEqual(stopped, base, doc)
+            if stopped != base:
+                more[doc] = stopped
+        self.assertEqual(more, self.ROBUSTNESS_P22_STOPPED)
+        self.assertEqual(sum(v - ROBUSTNESS_P20_MOVED.get(d, ROBUSTNESS_P16[d][0]) for d, v in more.items()), 11)
 
 
 if __name__ == "__main__":

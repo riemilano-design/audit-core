@@ -76,6 +76,11 @@ FROZEN_BUNDLE_GENERATIONS = (
      "core/py・instance.py・extract.py は 0 行。人間の承認 2026-10-20「君に任せる」、"
      "封 docs/XBRL_PERIOD_BIND_SEAL_2026-10-20.md(commit 4953a4f)。対象 36 本(本数は変わらない)。"
      "独立監査 GO の前に測った値(commit 前)"),
+    ("98862539ac6e61f2fdaeeb7e3965bbfea40064bd8abfffa77662b6a98cf4e950",
+     "2026-10-20 feature/audit-core-final-eval-8(期を縛る P22 の段 2): vocabulary.py の DEFAULT_PROFILE を P21 -> P22 にし、"
+     "決定の注記に日付と根拠を足した(vocabulary.py だけ。recipes.py・他の file は 0 行)。人間の決定 2026-10-20「任せる」"
+     "(段 1 3320c8c の結果と客の席の回し直しを見てから)、封 docs/XBRL_PERIOD_BIND_SEAL_2026-10-20.md の段 2(E-8)。"
+     "対象 36 本(本数は変わらない)。独立監査 GO の前に測った値(commit 前)"),
 )
 
 # 字で留めるのは**いまの世代**。--expect を値なしで渡したときの既定。

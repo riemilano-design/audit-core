@@ -23,8 +23,9 @@ u"""席と Core の一致の信頼(3 群)― 封 ``docs/XBRL_HYBRID_TRUST_SEAL_2
      T2 の注入が「無改変の行」に数えられる。ここでは数 + 単位(``t.start``〜``t.unit_end``)で突き合わせる。他は同じ。
   3. ``MB.A1.gold_of`` ― 新しい型の ``正解``。cd8 の ``gold_of`` は T5/T3 以外を「値がどこにも無い」とする
      (T6 は値が書類に在る)ので、新しい 3 型だけ別の欄を返す。既存の型は元の関数。
-  4. ``MB.PROFILE`` ― 既定 profile(``vocabulary.DEFAULT_PROFILE`` = P21)。段 1 と同じ ``席の前に出せる分``
-     (各行の Core 自身 = 既定 P21 の state と参照先)。
+  4. ``MB.PROFILE`` ― 測った当時の既定 profile = P21(``PROFILE_AT_MEASURE``)。段 1 と同じ ``席の前に出せる分``
+     (各行の Core 自身 = P21 の state と参照先)。2026-10-20 段 2(期を縛る P22。封 ``docs/XBRL_PERIOD_BIND_SEAL_2026-10-20.md``)で
+     ``vocabulary.DEFAULT_PROFILE`` が P22 になったので、記録を再現できるよう測った当時の P21 を字で留める。
 
 見せない字: **封の字の 9 語(``C1.SPEC_BANNED``)を、task file を読み直して 0 件**(P-7 の主の判定。司令塔の決定 2026-10-20)。
 依頼文が足した 5 語(T6・T7・T2・前期・丸め)は封の外で、**補助の欄**に件数だけ残す(「前期」は有価証券報告書の本文の字で、
@@ -67,6 +68,9 @@ HT = _mod("measure/xbrl_hybrid_trust_2026-10-20.py", "hybrid_trust_for_s2")
 C1, MB, G0 = HT.C1, HT.MB, HT.G0
 IJ = MB.IJ
 V = HT.V
+# 記録(hybrid_s2_*.json)を測った時点の既定は P21。2026-10-20 段 2(期を縛る P22)で vocabulary.DEFAULT_PROFILE は P22 になったので、
+# 測った当時の P21 を字で留める(profile を省く経路と、段 2 より前は同じ結果)。
+PROFILE_AT_MEASURE = "P21"
 
 SEAL = "docs/XBRL_HYBRID_TRUST_SEAL_2026-10-20.md"
 SEAL_COMMIT = "4a4df01"
@@ -164,7 +168,7 @@ def gold_s2(inj):
 def patched():
     old = (MB.pick_injections, MB.build_rows, MB.A1.gold_of, MB.PROFILE)
     MB.pick_injections, MB.build_rows, MB.A1.gold_of = pick_s2, build_rows_s2, gold_s2
-    MB.PROFILE = V.DEFAULT_PROFILE
+    MB.PROFILE = PROFILE_AT_MEASURE
     try:
         yield
     finally:
@@ -258,7 +262,7 @@ def build(work, tasks, tmp_rec, docs):
     seed, _meta = IJ.verify_seed_sealed(MB.SEED_FILE)
     with patched():
         rec = C1.run_material(C1.GEN_DRAW, work, tmp_rec, docs)
-        if rec.get("profile") != V.DEFAULT_PROFILE:
+        if rec.get("profile") != PROFILE_AT_MEASURE:
             raise SystemExit(u"**材料の profile が既定でない: %r**" % rec.get("profile"))
         details = {}
         for p in rec[u"書類ごと"]:
@@ -597,8 +601,8 @@ def stage_score(a):
     if os.path.exists(a.out):
         raise SystemExit(u"既に在る: %s(採り直さない)" % a.out)
     mat = C1._load(OUT)
-    if mat.get("profile") != V.DEFAULT_PROFILE or V.DEFAULT_PROFILE != "P21":
-        raise SystemExit(u"**材料の profile / 既定が P21 でない。止める**")
+    if mat.get("profile") != PROFILE_AT_MEASURE or PROFILE_AT_MEASURE != "P21":
+        raise SystemExit(u"**材料の profile が P21 でない(記録を測った当時の profile)。止める**")
     docs = [p["docID"] for p in mat[u"書類ごと"]]
     if len(docs) != 8:
         raise SystemExit(u"**材料の書類が 8 でない**")

@@ -50,11 +50,12 @@ Right after cloning, one command run inside `audit-core/` lets you see by hand w
 python3 measure/ritual_2026-10-20.py --out <output dir>
 ```
 
-- **Passed 17 / 241 = 7.1%**: each number in the management-discussion text is deliberately changed, one per sentence (the last digit changed / +-1 in the last printed unit), and the count is how many the engine still reports as GROUNDED.
-- Stopped 224 / 241 = 92.9% (VALUE_MISMATCH).
-- What the 17 passed are: inside the rounding band (+-1 last unit) 16 (rates 12, amounts and others 4); degenerate (`0` becoming `00` before the unit word: the text changes but the value does not) 1; outside the band 0. Whether these are defects is for the reader to decide.
-- Of the 16 inside the band, 2 (N125, N199) had the injected value match the prior-period fact, so the reference moved from the current period to the prior period and was still reported as GROUNDED (the period is not pinned).
-- Run time 20.9 seconds (the machine that took the record).
+- **Passed 15 / 240 = 6.2%**: each number in the management-discussion text is deliberately changed, one per sentence (the last digit changed / +-1 in the last printed unit), and the count is how many the engine still reports as GROUNDED.
+- Stopped 225 / 240 = 93.8% (VALUE_MISMATCH).
+- What the 15 passed are: inside the rounding band (+-1 last unit) 14 (rates 12, amounts and others 2); degenerate (`0` becoming `00` before the unit word: the text changes but the value does not) 1; outside the band 0. Whether these are defects is for the reader to decide.
+- The default is P22 (the period is pinned; 2026-10-20). Writing a prior-period value as a current-period number now stops: N125, N199, whose injected value matched the prior-period fact under P21 so the reference moved from the current period to the prior period and was still reported as GROUNDED, are stopped (VALUE_MISMATCH) under P22. Passed rows whose reference moved to the prior period: 0.
+- Under P21 (2026-10-20, up to `cb4b497`) it was passed 17 / 241, stopped 224 / 241 (record `fixtures/xbrl/ritual_2026-10-20_p21.json`).
+- Run time 23.2 seconds (the machine that took the record).
 - The input `fixtures/xbrl/ai_prose_instance_2026-10-09.zip` (sha256 `03521437be23c8e2a02d85b4bc29a215646803582e9101fdf185521041174799`, 580,260 bytes) is a public EDINET disclosure document (document ID S100Z4Q1, filer code E36539, DN Holdings Co., Ltd., filed 2026-09-30). **Its management-discussion section was replaced with AI-written text in the 2026-10-09 experiment, so it is not the original text.**
 - No key is used. It reads the bundled filing and the two label files under `~/.cache`, nothing else. To run it on your own filings you need an EDINET key and the filings downloaded.
 

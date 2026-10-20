@@ -287,8 +287,10 @@ def main(argv=None):
         zb = fh.read()
     if hashlib.sha256(zb).hexdigest() != ZIP_SHA256 or len(zb) != ZIP_BYTES:
         raise SystemExit(u"入力の sha256 が封の字と違う: %s。止める" % hashlib.sha256(zb).hexdigest())
-    if V.DEFAULT_PROFILE != "P21":
-        raise SystemExit(u"既定 profile が P21 でない: %r。止める" % V.DEFAULT_PROFILE)
+    # 2026-10-20(期を縛る P22 の段 2): 既定は P21 -> P22。買い手が今の既定で走らせるものなので、記録(ritual_2026-10-20.json)は
+    # P22 で採り直した。P21 のときの記録(17 / 241 = 7.1%)は fixtures/xbrl/ritual_2026-10-20_p21.json と git の履歴(3320c8c まで)に残してある。
+    if V.DEFAULT_PROFILE != "P22":
+        raise SystemExit(u"既定 profile が P22 でない: %r。止める" % V.DEFAULT_PROFILE)
     label_shas, why = check_labels()
     if why:
         print(label_guidance(why), file=sys.stderr)

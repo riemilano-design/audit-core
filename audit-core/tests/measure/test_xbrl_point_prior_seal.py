@@ -19,7 +19,9 @@ sys.path.insert(0, os.path.join(ROOT, "core", "py"))
 
 SEAL_REL = "docs/XBRL_POINT_PRIOR_SEAL_2026-10-20.md"
 SEAL = os.path.join(ROOT, SEAL_REL)
-RITUAL_JSON = os.path.join(ROOT, "fixtures", "xbrl", "ritual_2026-10-20.json")
+# 封が見ているのは P21 のときの儀式の記録(N125・N199 が前期へ移って通した)。2026-10-20 の期を縛る P22 の段 2 で ritual_2026-10-20.json は
+# P22(既定)で採り直したので、同じバイト列の写し ritual_2026-10-20_p21.json に当てる(sha256 dad4c56e…。結果の門が字で留める)。
+RITUAL_JSON = os.path.join(ROOT, "fixtures", "xbrl", "ritual_2026-10-20_p21.json")
 S2_JSON = os.path.join(ROOT, "fixtures", "xbrl", "gen_c", "hybrid_s2_2026-10-20.json")
 CACHE_GLOB = os.path.join(os.path.expanduser("~"), ".cache", "audit-core", "edinet", "*.zip")
 # §4 の file 一覧(この順で書かれている)
@@ -252,13 +254,13 @@ class LiveReproductionTest(unittest.TestCase):
         # 封 §3 の file 名の事実
         self.assertEqual(self.kinds, {(u"文なし", u"jpsps…-asr-"): 214, (u"文あり", u"jpcrp…-asr-"): 67})
 
-    def test_g2_default_verify_on_the_hit_docs_reproduces_the_point_claim_states(self):
+    def test_g2_p21_verify_on_the_hit_docs_reproduces_the_point_claim_states(self):
         self.need_cache()
         from adapters.xbrl.verify_document import verify_document
         states = {}
         total = 0
         for _, zb in self.hit_docs:
-            out = verify_document(zb, None, None)   # profile 省略 = 道具の既定(P21)
+            out = verify_document(zb, "P21", None)   # 封の数は P21 で測った。2026-10-20(段 2)で既定は P22 になったので P21 を明示
             for c in out["claims"]:
                 if c.get("unit") == u"ポイント":
                     total += 1

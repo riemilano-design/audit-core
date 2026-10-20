@@ -52,9 +52,10 @@ class FlagShapeTest(unittest.TestCase):
     def test_only_p22_has_the_flag_on(self):
         self.assertEqual(["P22"], sorted(n for n, p in V.PROFILES.items() if p.period_bind))
 
-    def test_the_default_profile_stays_p21_in_step_1(self):
-        """段 1 では既定にしない(封 §1)。段 2(人間の承認の後)で P22 にする。"""
-        self.assertEqual("P21", V.DEFAULT_PROFILE)
+    def test_the_default_profile_is_p22_from_step_2(self):
+        """段 1(3320c8c)では既定にしなかった(封 §1)。段 2(2026-10-20。人間の決定「任せる」。封の E-8)で P22 にした。"""
+        self.assertEqual("P22", V.DEFAULT_PROFILE)
+        self.assertTrue(V.PROFILES[V.DEFAULT_PROFILE].period_bind)
 
 
 class WithoutCueTest(unittest.TestCase):

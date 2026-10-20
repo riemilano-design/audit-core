@@ -6,9 +6,9 @@ u"""席と Core の一致の信頼(3 群)― 封 ``docs/XBRL_HYBRID_TRUST_SEAL_2
 
 やること
   1. α 型: 席が参照先を出した行の全部(gen_c 102・cd8 85)に ``xbrl_gen_c_alpha_2026-10-20.py`` の ``collect_named``
-     (= ``engine_item``。``verify_external``・``period_pair=True``・profile を省く = 既定 P21)を当てる。写さない。
+     (= ``engine_item``。``verify_external``・``period_pair=True``・profile を取らない経路)を当てる。写さない。
   2. Core 自身: 材料の ``席の前に出せる分`` の ``Core`` を作った経路(``xbrl_cd_material_2026-10-17.py`` の ``main``。
-     ``C1.run_material`` が入出力だけ差し替えて回す)を、既定 profile(``vocabulary.DEFAULT_PROFILE``)で全 192 行 × 2 集合
+     ``C1.run_material`` が入出力だけ差し替えて回す)を、測った当時の既定 profile = P21(``PROFILE_AT_MEASURE``)で全 192 行 × 2 集合
      に当て直す。対照として P16 を明示して同じ経路を回し、記録の材料の ``Core`` と全 384 行を突き合わせる。
   3. 3 群(G1 = 席が確認済み・G2 = G1 のうち Core が GROUNDED・G3 = G1 のうち GROUNDED でない)を α 型(主)と
      Core 自身(副)で作り、大きさ・精度(= 注入でない行 / 群)・G3 の state の内訳を出す。
@@ -54,6 +54,10 @@ AL = _mod("measure/xbrl_gen_c_alpha_2026-10-20.py", "alpha_for_hybrid")
 C1, MB, G0 = AL.C1, AL.MB, AL.G0
 RS, core = AL.RS, AL.core
 from adapters.xbrl import vocabulary as V   # noqa: E402
+
+# 記録(hybrid_trust_*.json)を測った時点の既定は P21。2026-10-20 段 2(期を縛る P22。封 docs/XBRL_PERIOD_BIND_SEAL_2026-10-20.md)で
+# vocabulary.DEFAULT_PROFILE は P22 になったので、測った当時の P21 を字で留める(Core 自身の当て直しは P21 の経路。α 型は profile を取らない経路で不変)。
+PROFILE_AT_MEASURE = "P21"
 
 SEAL = "docs/XBRL_HYBRID_TRUST_SEAL_2026-10-20.md"
 SEAL_COMMIT = "4a4df01"
@@ -158,7 +162,7 @@ def engine_pins():
                 G0.sha256_bytes("\n".join(sorted(rows)).encode("utf-8")),
             u"git diff HEAD --numstat -- core adapters": numstat,
             u"git status --porcelain -- core adapters": status,
-            u"vocabulary.DEFAULT_PROFILE": V.DEFAULT_PROFILE,
+            u"vocabulary.DEFAULT_PROFILE": PROFILE_AT_MEASURE,
             u"一致": (not mism and numstat == "" and status == "")}
 
 
@@ -205,9 +209,9 @@ def main(argv=None):
               "work_gen_p20", "work_cd8_p20"):
         os.makedirs(os.path.join(base, d), exist_ok=True)
     tmpd = tempfile.mkdtemp(prefix="hybrid_", dir=base)
-    default_profile = V.DEFAULT_PROFILE
+    default_profile = PROFILE_AT_MEASURE
     if default_profile != "P21":
-        raise SystemExit(u"**既定 profile が P21 でない: %r。止める**" % default_profile)
+        raise SystemExit(u"**測った当時の profile が P21 でない: %r。止める**" % default_profile)
 
     ans_files = {}
     for name, _rec, _mat, ans, _draw in SETS:

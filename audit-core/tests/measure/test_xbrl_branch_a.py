@@ -41,7 +41,9 @@ ENGINE_LATER = {
     # 受け入れるのは、その封が履歴に在り、値が段 2 の後の値のときだけ。
     # 2026-10-20(期を縛る P22 の段 1): 同じ封で vocabulary.py に旗 period_bind と P22 を足した(DEFAULT_PROFILE は P21 のまま)。
     # sha は 段 1 5eb80a2 で 6c6db4c75e571a6c・名指しの直し 段 2 で 1205b30b496090ef(どちらも残す。測った時点の値)、P22 の段 1 で 1fdb48e7e3ba58ce。
-    "adapters/xbrl/vocabulary.py": ("1fdb48e7e3ba58ce", SEAL_PERIOD_BIND),
+    # 2026-10-20(期を縛る P22 の段 2): 既定を P21 -> P22 にした(vocabulary.py の DEFAULT_PROFILE と決定の注記だけ。封 docs/XBRL_PERIOD_BIND_SEAL_2026-10-20.md の段 2・E-8。人間の承認 2026-10-20「任せる」)。
+    # 段 1 3320c8c の 1fdb48e7e3ba58ce は残す(測った時点の値)、段 2 で 25a3c0992e10daaa。受け入れるのは、その封が履歴に在り、値が段 2 の後の値のときだけ。
+    "adapters/xbrl/vocabulary.py": ("25a3c0992e10daaa", SEAL_PERIOD_BIND),
 }
 
 
@@ -104,7 +106,7 @@ class BranchTest(unittest.TestCase):
         # 記録の事実: 2026-10-17 に測った時点の Core の既定は P20。2026-10-20(段 2)に既定は P21 になった
         # (封 docs/XBRL_NAMING_FIX_SEAL_2026-10-20.md)ので、記録は字で留め、いまのコードの既定は別に確かめる。
         self.assertEqual(p[u"**Core の既定**"], "P20")
-        self.assertEqual(V.DEFAULT_PROFILE, "P21")
+        self.assertEqual(V.DEFAULT_PROFILE, "P22")      # 2026-10-20(期を縛る P22 の段 2)で P21 -> P22。連結の無い書類の落とし込みは P22 でも真
         self.assertTrue(V.PROFILES[V.DEFAULT_PROFILE].nonconsolidated_fallback)
         self.assertEqual(p[u"今回の測定で使った"], "P16")
         self.assertFalse(V.PROFILES["P16"].nonconsolidated_fallback)

@@ -257,3 +257,72 @@ AUDIT_CORE_PERIOD_BIND=1 python3 -m pytest -q tests/measure/test_xbrl_period_bin
 - 四か所目の file は、封の三か所と同じ『登録の一覧の試験』で、P16/P20/P21 の数の試験ではない。
 - **E-7 は外れのまま残す**(予測は封の三か所を直した後の緑、四か所目が要った = 予測の外れ)。
 - 封の末尾に、日付つきの追記を足した(本文 §0〜§4 と予測は一字も変えていない。内容: 既存試験の直しは四か所・封の pin 一覧に無かった二本の宣言・E-2 の外れの意味・独立監査の指摘と主語なしの扱い)。門は封の commit の本文が先頭に残っていることを縛る。
+
+## 14. 段 2(2026-10-20、既定 P21 → P22)
+
+人間の承認は 2026-10-20「任せる」(段 1 `3320c8c` の結果と、客の席 A の回し直し(誤り五件中五件を止め、正しい三十九行の空振りは零。開発側でない客の席の日記。repo の外 = scratchpad、記録なし。司令塔が読んで諮った数)を見てから)。封 `docs/XBRL_PERIOD_BIND_SEAL_2026-10-20.md` の E-8 と §4 の段 2。この節は段 1 の本文(§0〜§13)を 一字も直さない追記で、予測 E-1〜E-7 の判定も直していない。
+
+### 14-1. 既定の字と engine の差分
+
+- `adapters/xbrl/vocabulary.py` の `DEFAULT_PROFILE = "P22"`。字の決定の注記を日付つきで足した(P21 の注記・P20 の注記・P16 の注記は消していない)。
+- engine の差分はこれだけ: `recipes.py` は段 1 の値のまま、`core/` は零行。`vocabulary.py` の sha16 は段 1 の `1fdb48e7e3ba58ce` から `25a3c0992e10daaa` へ(宣言された遷移。段 1 の値は測った当時の値として門に残る)。
+- P21 の字は消していない。P16・P20・P21 を明示した呼び出しと、それを明示した既存試験の数は一つも変えていない。
+
+### 14-2. 動かした試験と測定の一覧
+
+既定の字を見ていた試験(『既定は P22』に直した):
+
+- `tests/adapters/xbrl/test_p17.py`・`test_p20.py`・`test_recipes_p21.py`・`test_recipes_p22.py`・`test_run.py`
+- `tests/adapters/xbrl/test_verify_entry.py`: 既定で P21 の数を見ていた四つの試験(未使用二書類の P16 の記録との差・十四書類の止めた件数・二書類の書類ごとの旗・出力の sha256)は、P21 を明示した試験に名前を変えて数を一つも変えずに残し、既定(P22)の試験を足した。既定の P22 は未使用二書類の P16 の記録の中で P21 の五行のほかに一行(`H-042`)の GROUNDED を離れ、十四書類のうち五書類の止めた件数が増える(型 A の行。数は試験の中に字で留めた)。
+- `tests/measure/test_xbrl_branch_a.py`(Core の既定の事実)・`test_xbrl_naming_fix_result.py`(名指しの直し 段 2 の注記の門)・`test_xbrl_period_bind_seal.py`(封の門)・`test_xbrl_period_bind_result.py`(この節の門)
+
+既定で測った記録を持つ measure と門(測った当時の P21 を明示して字で留めた。記録は一字も変えていない):
+
+- `measure/xbrl_point_prior_2026-10-20.py`・`measure/xbrl_hybrid_s2_2026-10-20.py`・`measure/xbrl_hybrid_trust_2026-10-20.py`(定数 `PROFILE_AT_MEASURE`)
+- `tests/measure/test_xbrl_ritual_seal.py`(封 §0-1 の数は P21 の数)・`tests/measure/test_xbrl_point_prior_seal.py`・`tests/measure/test_xbrl_period_bind_seal.py` の実走の門
+- 段 1 の測定 `measure/xbrl_period_bind_2026-10-20.py` は P21・P22 を明示して比べるので既定がどちらでも同じ数が出る。儀式の対照だけ、P22 で採り直した `ritual_2026-10-20.json` ではなく、同じバイト列の写し `fixtures/xbrl/ritual_2026-10-20_p21.json` を読む。
+- 儀式は買い手が今の既定で走らせるもの: `measure/ritual_2026-10-20.py` の guard を『既定は P22』に直し、記録・README・結果文書の追記を P22 で採り直した(`docs/XBRL_RITUAL_RESULT_2026-10-20.md` の追記)。
+
+pin の遷移の宣言(`vocabulary.py` の新しい sha16 を、この封を根拠に): `test_xbrl_a_core_vs_grep_seal.py`・`test_xbrl_axis3_decision.py`・`test_xbrl_branch_a.py`・`test_xbrl_cd_seal.py`(`FROZEN_LATER`)・`test_xbrl_p20_result.py`・`test_xbrl_pnf_diag.py`・`test_xbrl_point_prior_result.py`・`test_xbrl_ritual_result.py`・`test_xbrl_period_bind_seal.py`(封の門 `test_12`)・この節の門(`ENGINE_LATER`)と、`fixtures/frozen_bundle_sha.py` の新しい世代。**この世代の宣言は、これまでどの門も作業木の束ねた sha と突き合わせていなかった**(変異で新しい世代を消しても全部緑だった = 世代を足し忘れても黙る)ので、この節の門に `test_16`(最新の世代 = いまの作業木の束ねた sha、説明が段 2 の宣言)を足した。**`test_xbrl_axis3_decision.py` の `LATER_ENGINE_COMMITS` は commit の sha が要るので次の便で宣言する**(commit した瞬間に `test_9` が赤になる。名指しの直し 段 2 と同じ扱い)。
+
+### 14-3. 製品の経路(profile 省略)で測り直した数
+
+- **E-1(profile 省略)**: 穴 B の注入 485 件を、profile を省いた `verify_document`(= 既定)で検証し直すと、通した(GROUNDED のまま)は 1 / 485 = 0.2%・止めた(VALUE_MISMATCH)は 482 / 485 = 99.4%・その他は 2 / 485 = 0.4%。段 1 の P22 の欄と 1 行ずつ比べて違った行 0、記録に無い行 0。
+- **E-2(profile 省略)**: 経営分析の文を持つ 67 書類(7799 claim)の無改変を P21 と既定で比べると、動いた行は 36(GROUNDED を離れた 25・新 GROUNDED 0)。段 1 の記録の動いた行 36 と過不足なく同じで、P21・P22 の欄が違った行 0、記録に無い動いた行 0。
+- **E-5(儀式、既定)**: 通した 15 / 240 = 6.2%・止めた 225 / 240 = 93.8%。P21 の記録に段 1 の動いた行・外れた行を当てて作った期待 240 行と 1 行ずつ比べて違った行 0、採り直した儀式の記録と違う欄 0。素の書類 412 claim のうち、既定と P22 明示で違った claim 0。素の書類の state(既定): {"GROUNDED": 329, "POINTER_NOT_FOUND": 16, "UNVERIFIABLE": 41, "VALUE_MISMATCH": 26}。
+- 差のあった行の合計 0(差 0 の行: E-1 485・E-2 36・E-5 240)。
+- 『差 0』が自分の欠陥でないことの対照: `vocabulary.DEFAULT_PROFILE` を実行中だけ P21 に戻して S100YMFV の注入 4 件を同じ比較器に当てると、段 1 の P22 の欄と違った行は 2。
+- 比較は段 1 の記録の P22 の欄(E-1)・動いた行の P21・P22 の欄(E-2)・P21 の儀式の記録に段 1 の E-5 の動いた行・外れた行を当てた期待(E-5)に対して一行ずつ。『差が零』は先に自分の欠陥を疑い、上の対照(既定を P21 に戻す変異)で比較器が差を拾えることを確かめた。
+- 既存試験 `python3 -m pytest -q tests/adapters/xbrl` → rc 0・831 passed, 1 skipped in 1118.43s (0:18:38)。
+
+### 14-4. 儀式の P21 → P22
+
+- 儀式(同梱の 1 書類)の記録: P21 のとき 通した 17 / 241 = 7.1%・止めた 224 / 241 = 92.9% → P22(既定)で 通した 15 / 240 = 6.2%・止めた 225 / 240 = 93.8%。注入の対象 241 → 240。素の書類の GROUNDED 330 → 329・VALUE_MISMATCH 25 → 26。
+- 結果文書 `docs/XBRL_RITUAL_RESULT_2026-10-20.md` の本文は P21 のときの数のまま、末尾に日付つきの追記を足した。README の数は P22 の記録と一対一(P21 の数は一行、日付つきで残した)。
+
+### 14-5. 代価(製品の経路で再掲)
+
+- 代価(製品の経路で再掲): P21 で GROUNDED の 4267 行のうち GROUNDED を離れたのは 25 行(A 13・B 1・C 11)。C は正しい前期の文が不一致になる行(下の表)。参照先だけ動いた 11 行(D 10・E 1)は GROUNDED のまま。
+
+| doc | id | P21 → P22 | 文の抜粋 |
+|---|---|---|---|
+| S100YYS4 | N008 | GROUNDED → VALUE_MISMATCH | 、親会社株主に帰属する当期純利益は137,498千円(前年は68,147 |
+| S100YYS4 | N057 | GROUNDED → VALUE_MISMATCH | 、親会社株主に帰属する当期純利益は137,498千円(前年は68,147 |
+| S100YYVN | N010 | GROUNDED → VALUE_MISMATCH | 期純損失3億40百万円(前期 親会社株主に帰属する当期純利益6億69百万 |
+| S100YYVN | N029 | GROUNDED → VALUE_MISMATCH | どが奏功し、セグメント利益は54百万円(前期 セグメント損失1億24百万 |
+| S100YYVN | N057 | GROUNDED → VALUE_MISMATCH | 円悪化し3億40百万円(前期 親会社株主に帰属する当期純利益6億69百万 |
+| S100Z3JY | N084 | GROUNDED → VALUE_MISMATCH | 使用した資金は、139百万円(前連結会計年度に使用した資金は0百万円)と |
+| S100Z4DE | N030 | GROUNDED → VALUE_MISMATCH | ける流動資産の残高は118億93百万円(前連結会計年度末残高78億51百 |
+| S100Z4DE | N035 | GROUNDED → VALUE_MISMATCH | おける固定資産の残高は99億93百万円(前連結会計年度末残高91億19百 |
+| S100Z4DE | N040 | GROUNDED → VALUE_MISMATCH | ける流動負債の残高は108億59百万円(前連結会計年度末残高67億78百 |
+| S100Z4DE | N045 | GROUNDED → VALUE_MISMATCH | における固定負債の残高は51億7百万円(前連結会計年度末残高48億12百 |
+| S100Z4DE | N050 | GROUNDED → VALUE_MISMATCH | ける純資産の部の残高は59億19百万円(前連結会計年度末残高53億79百 |
+
+- 上の行は段 1 §3-1 の動いた行の C と同じ(製品の経路で一行ずつ一致を確かめた)。正しい前期の文を『不一致』と言う副作用は、既定にした以上、製品の経路に出る。手がかりの字の規則を広げる直しは別の封(封 §3)。
+
+### 14-6. E-8 の判定と限界
+
+- **E-8 の判定**: E-8 の条件(E-1〜E-7 が当たる)は満たされていない(当たり 3 / 外れ 3)。人間の承認(2026-10-20「任せる」)で段 2 に進んだ。全緑の部分だけ成立(tests/measure・tests/adapters/xbrl 緑。axis3 の LATER_ENGINE_COMMITS は commit の直後に赤 1 本 → 次の便で宣言、段 1 と同じ扱い)。記録の 予測の判定.E-8 は『判定しない(段 2)』のまま。
+- `tests/measure` の本数と秒は commit の説明に書く(門の本数は門自身の中に入るので記録に取らない)。
+- 限界(段 1 から変わらない): 手元の cache の書類(無作為でない)での数。前々期の値への置き換えは P22 でも通る。主語の無い数は案ア(2026-10-08)のまま P21 と同一。手がかりの字の規則の外の正しい前期の文は不一致になる。『ポイント』の穴 A は直していない。
+- `adapters/xbrl/verify_document.py` の docstring『既定 P20』は engine の file なので触っていない。HUMAN の残り一点(承認待ち)。

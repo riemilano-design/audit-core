@@ -2,6 +2,10 @@
 u"""10 分の再現の儀式(封 docs/XBRL_RITUAL_SEAL_2026-10-20.md)の結果を縛る門。
 
 記録: ``fixtures/xbrl/ritual_2026-10-20.json``(``measure/ritual_2026-10-20.py --out <dir>`` の ``ritual.json`` と同じ中身)。
+**2026-10-20(期を縛る P22 の段 2)で既定が P21 -> P22 になったので、この記録は P22(既定)で採り直した**(通した 15 / 240)。
+P21 のときの記録(通した 17 / 241。文書の本文 §0〜§5 が縛る数)は ``fixtures/xbrl/ritual_2026-10-20_p21.json``
+(git の履歴 3320c8c の記録と同じバイト列。sha256 を字で留める)。本文の P21 の数は P21 の記録(``rec21``)に、README・追記・走らせ直しは
+P22 の記録(``rec``)に縛る。
 文書: ``docs/XBRL_RITUAL_RESULT_2026-10-20.md``。README の節: ``README.md``・``README.en.md``。
 
 この門がやること(どれも、変異で赤くなることを確かめてから門と呼ぶ。変異は ``MutationTest`` が毎回走らせる):
@@ -33,6 +37,7 @@ import unittest
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(os.path.dirname(HERE))
 REC = os.path.join(ROOT, "fixtures", "xbrl", "ritual_2026-10-20.json")
+REC21 = os.path.join(ROOT, "fixtures", "xbrl", "ritual_2026-10-20_p21.json")
 DOC = os.path.join(ROOT, "docs", "XBRL_RITUAL_RESULT_2026-10-20.md")
 SEAL_REL = "docs/XBRL_RITUAL_SEAL_2026-10-20.md"
 SEAL = os.path.join(ROOT, SEAL_REL)
@@ -44,7 +49,9 @@ FALSE_PASS_REL = "measure/false_pass_2026-10-14.py"
 # 「封の commit から 0 行」を満たしたと数えるのは、(a) 動いた file がこの 2 つだけ、(b) その封が履歴に在る、(c) sha16 が宣言どおり、のときだけ。
 SEAL_PERIOD_BIND = "docs/XBRL_PERIOD_BIND_SEAL_2026-10-20.md"
 ENGINE_LATER = {"adapters/xbrl/recipes.py": ("65a37869f053a60e", SEAL_PERIOD_BIND),
-                "adapters/xbrl/vocabulary.py": ("1fdb48e7e3ba58ce", SEAL_PERIOD_BIND)}
+                # 2026-10-20 追記(段 2): vocabulary.py の sha は 段 1 3320c8c で 1fdb48e7e3ba58ce(残す。測った時点の値)、段 2(DEFAULT_PROFILE を
+                # P21 -> P22 にし、決定の注記を足した。vocabulary.py だけ・recipes.py は 0 行。同じ封 SEAL_PERIOD_BIND の段 2)で 25a3c0992e10daaa。
+                "adapters/xbrl/vocabulary.py": ("25a3c0992e10daaa", SEAL_PERIOD_BIND)}
 
 
 def only_declared_changes(numstat_out, status_out):
@@ -70,7 +77,11 @@ ZIP_SHA256 = "03521437be23c8e2a02d85b4bc29a215646803582e9101fdf185521041174799"
 ZIP_BYTES = 580260
 #: 記録を採ったときの engine(core/・adapters/ の 36 file。__pycache__ を除く)の束ねた sha256。記録の事実として縛る
 #: (いまの作業木との生の比較は置かない ― docstring 1 行の直しで赤くしない)。
-ENGINE_BUNDLE = "5b5f030071188864092d0fba8f655ee1f413c08ebbb1769190511bd8720ccbee"
+ENGINE_BUNDLE = "5b5f030071188864092d0fba8f655ee1f413c08ebbb1769190511bd8720ccbee"        # P21 の記録(文書の本文)を採ったとき
+#: P22(既定)で採り直した記録(2026-10-20 段 2)を採ったときの engine の束ねた sha256。
+ENGINE_BUNDLE22 = "a0c92547a59802172340fa73c1aa97eac4763b1adaac62e8ab57aa5ad6b24e34"
+#: P21 のときの記録の写し(git の履歴 3320c8c の ritual_2026-10-20.json と同じバイト列)の sha256。字で留める。
+REC21_SHA256 = "dad4c56e7aeeadd1c1d07fe6dc3f844f62be2d127a5e7f9cac10df761ecac6d8"
 #: 封 §0-1 の先に測った数(字で留める。R-2・R-5 の中心)
 LABEL_SHAS = {"jppfs_2025-11-01_lab.xml": "bf56ea1585afe426b398a9053ec4de4dbeafc211a53675b5d6d19453e4e04bf4",
               "jpcrp_2025-11-01_lab.xml": "df9c23764ec9a63cb65b5ef62e79a2907c590523797421442ea2a60e334cd684"}
@@ -80,7 +91,10 @@ HEAVY_SKIP_REASON = (u"AUDIT_CORE_RITUAL=1 のときだけ走る(儀式を subpr
 #: 他の席の機械の実測(再現できない。字で留める)。R-7 の判定に使う: tests/measure 全体の所要秒。
 R7_TOTAL_SECONDS = {u"司令塔の機械": (134.2, 140.9), u"監査席の機械": (164.0, 168.0)}
 FACT = {"claims": 412, "states": {"GROUNDED": 330, "POINTER_NOT_FOUND": 16, "UNVERIFIABLE": 41, "VALUE_MISMATCH": 25},
-        "sites": 304, "mismatch": 8, "targets": 241, "detected": 224, "passed": 17, "in_band": 16, "degenerate": 1}
+        "sites": 304, "mismatch": 8, "targets": 241, "detected": 224, "passed": 17, "in_band": 16, "degenerate": 1}      # P21(封 §0-1・文書の本文)
+#: P22(既定)で採り直した記録(2026-10-20 段 2)の先に測った数。素の書類で GROUNDED 1 行が VALUE_MISMATCH になり、注入の対象は 241 -> 240。
+FACT22 = {"claims": 412, "states": {"GROUNDED": 329, "POINTER_NOT_FOUND": 16, "UNVERIFIABLE": 41, "VALUE_MISMATCH": 26},
+          "sites": 304, "mismatch": 8, "targets": 240, "detected": 225, "passed": 15, "in_band": 14, "degenerate": 1}
 
 K_PASSED, K_DETECTED, K_CLASS = u"通した", u"止めた", u"通した の分け方"
 K_MOVED = u"通した のうち参照先が動いた(注入の前後で GROUNDED の参照先が違う)"
@@ -134,8 +148,19 @@ def check_input_bytes(zb):
     assert len(zb) == ZIP_BYTES, u"zip の bytes が違う"
 
 
-def check_record(rec):
-    u"""記録の内部整合。行 241 本から数え直した値と記録の集計、字で留めた先に測った数(封 §0-1)。"""
+def check_record22(rec):
+    u"""P22(既定)で採り直した記録(2026-10-20 段 2)の検査。"""
+    return check_record(rec, FACT22, "P22", ENGINE_BUNDLE22)
+
+
+def check_p21_copy(raw):
+    assert sha_bytes(raw) == REC21_SHA256, u"P21 の記録の写しが履歴のバイト列と違う"
+
+
+def check_record(rec, fact=None, profile="P21", bundle=None):
+    u"""記録の内部整合。行から数え直した値と記録の集計、字で留めた先に測った数(P21 は封 §0-1、P22 は段 2 で採り直した記録)。"""
+    FACT = fact or globals()["FACT"]
+    bundle = bundle or ENGINE_BUNDLE
     rows = rec[u"注入の一覧"]
     assert len(rows) == FACT["targets"], u"注入の行の数"
     passed = [r for r in rows if r[u"結果"] == "PASSED"]
@@ -188,8 +213,8 @@ def check_record(rec):
     assert (inj[u"数の site"], inj[u"土台の不一致"], inj[u"注入の対象(GROUNDED の site)"]) == (FACT["sites"], FACT["mismatch"], FACT["targets"])
     assert inj[u"土台(経営分析の文のまま)の state の分布"] == FACT["states"]
     ib = rec[u"入力"]
-    assert (ib[u"sha256"], ib[u"bytes"], ib[u"path"], ib[u"profile"]) == (ZIP_SHA256, ZIP_BYTES, ZIP_REL, "P21"), u"入力の留め"
-    assert rec[K_ENV][u"engine の束ねた sha256(core/ と adapters/ の file。__pycache__ を除く。repo 相対の path 順)"] == ENGINE_BUNDLE
+    assert (ib[u"sha256"], ib[u"bytes"], ib[u"path"], ib[u"profile"]) == (ZIP_SHA256, ZIP_BYTES, ZIP_REL, profile), u"入力の留め"
+    assert rec[K_ENV][u"engine の束ねた sha256(core/ と adapters/ の file。__pycache__ を除く。repo 相対の path 順)"] == bundle
     assert rec[K_ENV][u"engine の file 数"] == 36
     assert rec[K_ENV][u"ラベル 2 file の sha256(起動時に照合)"] == LABEL_SHAS, u"ラベル 2 file の sha256"
     assert rec[K_ENV][u"通信"].endswith(u"通信は初回のラベル取得だけ"), u"通信の欄"
@@ -211,6 +236,11 @@ def first_degenerate_en(rec):
 
 def moved_ids(rec):
     return [x[u"id"] for x in rec[u"通した の一覧"] if x[u"参照先が動いた"]]
+
+
+def p21_record():
+    u"""P21 のときの記録(README の P21 の 1 行と『P21 で参照先が前期へ移った行』の id の出どころ)。"""
+    return json.loads(jtext(REC21))
 
 
 def render_ja(rec):
@@ -239,8 +269,10 @@ def render_ja(rec):
         u"- 通した %d の中身: 丸めの帯の中(±1 最小単位)%d(率 %d・金額ほか %d)・退化値(%s。字は変わるが値が変わらない)%d・帯の外 %d。これが欠陥でないかは読む人が決める。" % (
             p[u"件"], c[C_IN][u"件"], c[C_IN][u"うち率(単位が %)"], c[C_IN][u"うち金額ほか(単位が % でない)"],
             first_degenerate(rec), c[C_DEG][u"件"], c[C_OUT][u"件"]),
-        u"- 帯の中 %d のうち %d 件(%s)は、注入後の値が前期の fact に合い、参照先が当期から前期へ移ったまま GROUNDED で通した(期間を縛らない弱点)。" % (
-            c[C_IN][u"件"], len(mv), u"・".join(mv)),
+        u"- 既定は P22(期を縛る。2026-10-20)。前期の値を当期の数として書くと止まる: P21 で注入後の値が前期の fact に合い、参照先が当期から前期へ移ったまま GROUNDED で通した %s は、P22 では止める(VALUE_MISMATCH)。通した行のうち参照先が前期へ移った行は %d。" % (
+            u"・".join(moved_ids(p21_record())), len(mv)),
+        u"- P21 のとき(2026-10-20、`cb4b497` まで)は 通した %d / %d、止めた %d / %d(記録 `fixtures/xbrl/ritual_2026-10-20_p21.json`)。" % (
+            p21_record()[K_PASSED][u"件"], p21_record()[K_PASSED][u"分母"], p21_record()[K_DETECTED][u"件"], p21_record()[K_DETECTED][u"分母"]),
         u"- 所要 %s 秒(記録を採った機械の値)。" % rec[K_SEC][u"全体"],
         u"- 入力 `%s`(sha256 `%s`、%s bytes)は EDINET の公開の開示書類(書類 ID %s、提出者コード E36539 ＤＮホールディングス株式会社、提出日 2026-09-30)。"
         u"**経営分析の節は 2026-10-09 の AI 文の実験で AI の文に差し替えてあり、原文ではない。**" % (
@@ -275,14 +307,72 @@ def render_en(rec):
         u"- What the %d passed are: inside the rounding band (+-1 last unit) %d (rates %d, amounts and others %d); degenerate (%s: the text changes but the value does not) %d; outside the band %d. Whether these are defects is for the reader to decide." % (
             p[u"件"], c[C_IN][u"件"], c[C_IN][u"うち率(単位が %)"], c[C_IN][u"うち金額ほか(単位が % でない)"],
             first_degenerate_en(rec), c[C_DEG][u"件"], c[C_OUT][u"件"]),
-        u"- Of the %d inside the band, %d (%s) had the injected value match the prior-period fact, so the reference moved from the current period to the prior period and was still reported as GROUNDED (the period is not pinned)." % (
-            c[C_IN][u"件"], len(mv), u", ".join(mv)),
+        u"- The default is P22 (the period is pinned; 2026-10-20). Writing a prior-period value as a current-period number now stops: %s, whose injected value matched the prior-period fact under P21 so the reference moved from the current period to the prior period and was still reported as GROUNDED, are stopped (VALUE_MISMATCH) under P22. Passed rows whose reference moved to the prior period: %d." % (
+            u", ".join(moved_ids(p21_record())), len(mv)),
+        u"- Under P21 (2026-10-20, up to `cb4b497`) it was passed %d / %d, stopped %d / %d (record `fixtures/xbrl/ritual_2026-10-20_p21.json`)." % (
+            p21_record()[K_PASSED][u"件"], p21_record()[K_PASSED][u"分母"], p21_record()[K_DETECTED][u"件"], p21_record()[K_DETECTED][u"分母"]),
         u"- Run time %s seconds (the machine that took the record)." % rec[K_SEC][u"全体"],
         u"- The input `%s` (sha256 `%s`, %s bytes) is a public EDINET disclosure document (document ID %s, filer code E36539, DN Holdings Co., Ltd., filed 2026-09-30). "
         u"**Its management-discussion section was replaced with AI-written text in the 2026-10-09 experiment, so it is not the original text.**" % (
             ib[u"path"], ib[u"sha256"], u"{:,}".format(ib[u"bytes"]), ib[u"書類ID"]),
         u"- No key is used. It reads the bundled filing and the two label files under `~/.cache`, nothing else. To run it on your own filings you need an EDINET key and the filings downloaded.",
         u""])
+
+
+ADDENDUM_HEAD = u"## 6. 追記(2026-10-20、期を縛る P22 の段 2 ― 既定が P22 になった)"
+STEP1_DOC_COMMIT = "3320c8c"
+
+
+def addendum_facts(rec21, rec22):
+    u"""追記(§6)の数のある文。二本の記録から作る(散文に手で数を書かない)。"""
+    p21, p22 = rec21[K_PASSED], rec22[K_PASSED]
+    d21, d22 = rec21[K_DETECTED], rec22[K_DETECTED]
+    c = rec22[K_CLASS]
+    ids21 = set((x[u"id"], x[u"型"]) for x in rec21[u"注入の一覧"])
+    ids22 = set((x[u"id"], x[u"型"]) for x in rec22[u"注入の一覧"])
+    dropped = sorted(ids21 - ids22)
+    appeared = sorted(ids22 - ids21)
+    mv21, mv22 = moved_ids(rec21), moved_ids(rec22)
+    st21, st22 = rec21[u"素の書類"][u"state の分布"], rec22[u"素の書類"][u"state の分布"]
+    return {
+        "a_head": u"- **通した %s・止めた %s**(P22 = 既定。P21 のときは 通した %s・止めた %s)。" % (p22[u"字"], d22[u"字"], p21[u"字"], d21[u"字"]),
+        "a_split": u"- 通した %d の中身: 丸めの帯の中 %d(率 %d・金額ほか %d)・退化値 %d・帯の外 %d(P21 のときは 帯の中 %d(率 %d・金額ほか %d))。" % (
+            p22[u"件"], c[C_IN][u"件"], c[C_IN][u"うち率(単位が %)"], c[C_IN][u"うち金額ほか(単位が % でない)"], c[C_DEG][u"件"], c[C_OUT][u"件"],
+            rec21[K_CLASS][C_IN][u"件"], rec21[K_CLASS][C_IN][u"うち率(単位が %)"], rec21[K_CLASS][C_IN][u"うち金額ほか(単位が % でない)"]),
+        "a_moved": u"- 参照先が前期へ移って通した行は %d(P21 では %s の %d 行)。前期の値を当期の数として書いた注入は P22 で止まる(VALUE_MISMATCH)。" % (
+            rec22[K_MOVED], u"・".join(mv21), len(mv21)),
+        "a_targets": u"- 注入の対象は %d → %d(素の書類で GROUNDED だった 1 行が VALUE_MISMATCH になり、その site が対象から外れた。外れた行: %s、増えた行: %s)。" % (
+            rec21[u"注入"][u"注入の対象(GROUNDED の site)"], rec22[u"注入"][u"注入の対象(GROUNDED の site)"],
+            u"・".join(u"%s %s" % k for k in dropped) or u"なし", u"・".join(u"%s %s" % k for k in appeared) or u"なし"),
+        "a_plain": u"- 素の書類(claim %d)の state: GROUNDED %d → %d・VALUE_MISMATCH %d → %d(POINTER_NOT_FOUND %d → %d・UNVERIFIABLE %d → %d は不動)。" % (
+            rec22[u"素の書類"][u"claim"], st21["GROUNDED"], st22["GROUNDED"], st21["VALUE_MISMATCH"], st22["VALUE_MISMATCH"],
+            st21["POINTER_NOT_FOUND"], st22["POINTER_NOT_FOUND"], st21["UNVERIFIABLE"], st22["UNVERIFIABLE"]),
+        "a_secs": u"- 所要 %s 秒(P22 の記録を採った機械。P21 のときは %s 秒)。" % (rec22[K_SEC][u"全体"], rec21[K_SEC][u"全体"]),
+        "a_sha": u"- 二本の記録: P21 のとき `fixtures/xbrl/ritual_2026-10-20_p21.json`(sha256 `%s`)、P22(既定)`fixtures/xbrl/ritual_2026-10-20.json`。" % REC21_SHA256,
+    }
+
+
+def check_addendum(rec21, rec22, doc):
+    assert doc.count(ADDENDUM_HEAD) == 1 and doc.index(ADDENDUM_HEAD) > doc.index(u"## 5. 再現"), u"追記が末尾に 1 つ在る"
+    add = doc[doc.index(ADDENDUM_HEAD):]
+    for k, v in addendum_facts(rec21, rec22).items():
+        assert v in add, u"追記に数のある文『%s』(二本の記録から作った字)が無い" % k
+    for lit in (u"本文(§0〜§5)の数は P21 のときの記録", u"1 字も直さない", u"買い手が clone して走らせるのは今の既定", u"README",
+                u"予測 R-1〜R-8 は封の字のまま、判定は P21 のときの記録に対するもの", u"verify_document.py", u"`AUDIT_CORE_RITUAL=1`"):
+        assert lit in add, lit
+    stripped = add
+    for v in addendum_facts(rec21, rec22).values():
+        stripped = stripped.replace(v, u"")
+    stripped = re.sub(r"`[^`]*`", u"", stripped)
+    stripped = re.sub(r"[A-Za-z_][A-Za-z_0-9\-]*\d[A-Za-z_0-9\-]*", u"", stripped)       # P21・P22・R-1・N125・sha 等
+    stripped = re.sub(r"(?m)^## [\d\.]+", u"", stripped)
+    stripped = re.sub(r"§[\d\-〜]+", u"", stripped)
+    stripped = re.sub(r"\d{4}-\d{2}-\d{2}", u"", stripped)
+    stripped = re.sub(r"段 \d", u"", stripped)                          # 工程の名前(段 1・段 2)
+    stripped = re.sub(r"1 字|1 対 1|1 行|1 点", u"", stripped)           # 言い回しの『1』(数の主張ではない。2 以上の数は残る)
+    stripped = stripped.replace(u"0 USD", u"")
+    res = re.findall(r"\d[\d,\.]*", stripped)
+    assert res == [], u"追記の散文に、二本の記録に縛られない数が在る: %s" % res
 
 
 def section(text, head):
@@ -379,12 +469,13 @@ def check_rerun(res, rec):
     assert res["rc"] == 0, (res["rc"], res["stderr"][-300:])
     assert res["json"] is not None, u"ritual.json が出ていない"
     assert strip_volatile(res["json"]) == strip_volatile(rec), u"走らせ直しが記録と違う"
-    assert res["json"][K_ENV][u"engine の束ねた sha256(core/ と adapters/ の file。__pycache__ を除く。repo 相対の path 順)"] == ENGINE_BUNDLE, \
+    assert res["json"][K_ENV][u"engine の束ねた sha256(core/ と adapters/ の file。__pycache__ を除く。repo 相対の path 順)"] == ENGINE_BUNDLE22, \
         u"いまの engine が記録を採ったときの engine と違う(動いたなら記録を採り直す人間の判断)"
-    assert u"**通した 17 / 241 = 7.1%**" in res["md"]
+    # 2026-10-20(段 2): 記録は P22(既定)で採り直した。通した 15 / 240 = 6.2%・止めた 225 / 240 = 93.8%(P21 のときは 17 / 241)
+    assert u"**通した %s**" % rec[K_PASSED][u"字"] in res["md"]
     scr = res["stdout"].strip().splitlines()
     assert len(scr) <= 10, u"画面が 10 行を超えた"
-    assert scr[1].startswith(u"通した 17 / 241 = 7.1%") and scr[2].startswith(u"止めた 224 / 241 = 92.9%"), u"画面の先頭"
+    assert scr[1].startswith(u"通した %s" % rec[K_PASSED][u"字"]) and scr[2].startswith(u"止めた %s" % rec[K_DETECTED][u"字"]), u"画面の先頭"
 
 
 def strip_volatile(rec):
@@ -398,6 +489,7 @@ class Base(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.rec = json.loads(jtext(REC))
+        cls.rec21 = json.loads(jtext(REC21))
         cls.doc = jtext(DOC)
         cls.seal = jtext(SEAL)
         cls.ja = jtext(README_JA)
@@ -414,7 +506,8 @@ class InputTest(Base):
         self.assertEqual(int(m.group(2).replace(",", "")), ZIP_BYTES)
 
     def test_2_record_is_consistent_with_its_rows_and_the_seal_facts(self):
-        check_record(self.rec)
+        check_record(self.rec21)                                                       # P21 のときの記録(封 §0-1・文書の本文)
+        check_record(self.rec, FACT22, "P22", ENGINE_BUNDLE22)                         # P22(既定)で採り直した記録(2026-10-20 段 2)
         # 字で留めた先に測った数は封 §0-1 の字と同じ
         b = self.seal[self.seal.index("## §0-1"):self.seal.index("## §1")]
         self.assertIn(u"claim %d、GROUNDED %d・POINTER_NOT_FOUND %d・UNVERIFIABLE %d・VALUE_MISMATCH %d" % (
@@ -423,10 +516,21 @@ class InputTest(Base):
         self.assertIn(u"site %d、土台の不一致 %d、注入の対象(GROUNDED の site)%d、**止めた %d・通した %d**" % (
             FACT["sites"], FACT["mismatch"], FACT["targets"], FACT["detected"], FACT["passed"]), b)
 
+    def test_3b_the_p21_record_is_the_one_in_history(self):
+        u"""P21 のときの記録の写しは、git の履歴(3320c8c)の ritual_2026-10-20.json と同じバイト列(sha256 を字で留める)。"""
+        check_p21_copy(io.open(REC21, "rb").read())
+        r = subprocess.run(["git", "show", "3320c8c:./fixtures/xbrl/ritual_2026-10-20.json"], cwd=ROOT, capture_output=True)
+        if r.returncode == 0:
+            self.assertEqual(sha_bytes(r.stdout), REC21_SHA256)
+        self.assertNotEqual(sha_bytes(io.open(REC, "rb").read()), REC21_SHA256, u"P22 の記録が P21 の写しと同じ(採り直していない)")
+        self.assertEqual(self.rec21[u"入力"][u"profile"], "P21")
+        self.assertEqual(self.rec[u"入力"][u"profile"], "P22")
+
     def test_3_passed_come_first_in_the_record_and_the_screen(self):
-        keys = list(self.rec.keys())
-        self.assertEqual(keys[1], K_PASSED)
-        self.assertEqual(keys[2], K_DETECTED)
+        for rec in (self.rec21, self.rec):
+            keys = list(rec.keys())
+            self.assertEqual(keys[1], K_PASSED)
+            self.assertEqual(keys[2], K_DETECTED)
         # 画面の先頭(通した が先)は重い走らせ直しの門(RerunTest.test_4)が見る。ここは script の字で先頭の順を見る。
         src = jtext(SCRIPT)
         self.assertLess(src.index(u'print(u"通した %s" % p[u"字"])'), src.index(u'print(u"止めた %s" % d[u"字"])'))
@@ -568,7 +672,7 @@ class PredictionTest(Base):
         return subprocess.run(["git"] + list(a), cwd=ROOT, capture_output=True, text=True)
 
     def judge(self):
-        rec = self.rec
+        rec = self.rec21        # 予測 R-1〜R-8 は封の字 = P21 の記録に対する判定(文書の本文・表)。P22 の数は追記が縛る
         c = rec[K_CLASS]
         out = {}
         bound = int(re.search(r"\*\*(\d+) 秒以内\*\*", self.seal_row("R-1")[1]).group(1))
@@ -581,7 +685,7 @@ class PredictionTest(Base):
         out["R-5"] = (rec[u"素の書類"][u"state の分布"] == FACT["states"] and rec[u"素の書類"][u"claim"] == FACT["claims"]
                       and rec[u"入力"][u"profile"] == "P21")
         try:
-            check_readme(rec, self.ja, self.en)
+            check_readme(self.rec, self.ja, self.en)          # README は P22(既定)の記録と 1 対 1
             out["R-6"] = True
         except AssertionError:
             out["R-6"] = False
@@ -613,7 +717,7 @@ class PredictionTest(Base):
                 self.assertEqual(cells[3], want, h)
 
     def test_9_prediction_table_numbers_come_from_the_record(self):
-        rec = self.rec
+        rec = self.rec21
         r1 = [l for l in self.doc.splitlines() if l.startswith(u"| **R-1** |")][0]
         self.assertIn(u"%s 秒" % rec[K_SEC][u"全体"], r1)
         r2 = [l for l in self.doc.splitlines() if l.startswith(u"| **R-2** |")][0]
@@ -627,7 +731,7 @@ class PredictionTest(Base):
 class DocTest(Base):
     def test_10_passed_table_equals_lines_built_from_the_record(self):
         lines = self.doc.splitlines()
-        for x in self.rec[u"通した の一覧"]:
+        for x in self.rec21[u"通した の一覧"]:
             moved = u"(動いた)" if x[u"参照先が動いた"] else u""
             want = u"| %s | %s | `%s` | `%s` | %s → %s | %s | `%s` → `%s`%s | %s |" % (
                 x[u"id"], x[u"型"], x[u"元の字"], x[u"後の字"], x[u"元の値"], x[u"後の値"], x[u"単位"],
@@ -637,13 +741,14 @@ class DocTest(Base):
         self.assertEqual(n_table, FACT["passed"])
 
     def test_11_every_fraction_is_arithmetic_and_in_the_allowed_set(self):
-        rec = self.rec
-        rows = rec[u"注入の一覧"]
-        allowed = {(rec[K_PASSED][u"件"], 241), (rec[K_DETECTED][u"件"], 241)}
-        for how in ("V1", "V2"):
-            m = [r for r in rows if r[u"型"] == how]
-            allowed.add((sum(1 for r in m if r[u"結果"] == "PASSED"), len(m)))
-            allowed.add((sum(1 for r in m if r[u"結果"] == "detected:VALUE_MISMATCH"), len(m)))
+        allowed = set()
+        for rec in (self.rec21, self.rec):        # 本文は P21 の記録、追記(2026-10-20 段 2)は P22 の記録
+            rows = rec[u"注入の一覧"]
+            allowed |= {(rec[K_PASSED][u"件"], len(rows)), (rec[K_DETECTED][u"件"], len(rows))}
+            for how in ("V1", "V2"):
+                m = [r for r in rows if r[u"型"] == how]
+                allowed.add((sum(1 for r in m if r[u"結果"] == "PASSED"), len(m)))
+                allowed.add((sum(1 for r in m if r[u"結果"] == "detected:VALUE_MISMATCH"), len(m)))
         found = FRAC_RE.findall(self.doc)
         self.assertGreater(len(found), 4)
         for a, b, p in found:
@@ -652,6 +757,18 @@ class DocTest(Base):
             self.assertIn((a_, b_), allowed, (a, b, p))
         self.assertIn(u"通した 17 / 241 = 7.1%", self.doc)
         self.assertIn(u"止めた 224 / 241 = 92.9%", self.doc)
+
+    def test_18_addendum_numbers_equal_what_the_two_records_say(self):
+        check_addendum(self.rec21, self.rec, self.doc)
+
+    def test_19_the_body_is_not_rewritten_since_step_1(self):
+        u"""本文(§0〜§5)は段 1 の commit(3320c8c)のまま。許すのは末尾の日付つきの追記だけ(字を足すだけで、1 字も消さない)。"""
+        r = subprocess.run(["git", "show", STEP1_DOC_COMMIT + ":./docs/XBRL_RITUAL_RESULT_2026-10-20.md"], cwd=ROOT, capture_output=True, text=True, encoding="utf-8")
+        if r.returncode != 0:
+            self.skipTest(u"git の履歴に %s が無い" % STEP1_DOC_COMMIT)
+        self.assertTrue(self.doc.startswith(r.stdout), u"本文が段 1 の commit から変わった")
+        tail = self.doc[len(r.stdout):]
+        self.assertTrue(tail.lstrip(u"\n").startswith(ADDENDUM_HEAD), tail[:60])
 
     def test_12_limits_reproduction_and_wording_exist(self):
         for s in (u"## 0. 結論", u"## 1. 予測 R-1〜R-8", u"## 2. 通した 17 の一覧と読み", u"## 3. 限界", u"## 4. 変異", u"## 5. 再現",
@@ -663,7 +780,7 @@ class DocTest(Base):
                   u"同梱書類で回すにもラベル 2 file が要る(初回 1 回の通信)。自分の書類には鍵が要る",
                   u"「走らせ直し」が縛るのは出力の一致まで",
                   u"2026-10-20 の訂正",
-                  u"原文ではない", u"**縛っていないもの**"):
+                  u"原文ではない", u"**縛っていないもの**", ADDENDUM_HEAD):
             self.assertIn(s, self.doc, s)
         self.assertIn(u"束ねた sha256 `%s`" % ENGINE_BUNDLE, self.doc)
         self.assertIn(u"sha256 `%s`" % ZIP_SHA256, self.doc)
@@ -678,7 +795,9 @@ class MutationTest(Base):
             fn(*a)
 
     def test_m0_the_genuine_samples_pass(self):
-        check_record(self.rec)
+        check_record(self.rec21)
+        check_record22(self.rec)
+        check_p21_copy(io.open(REC21, "rb").read())
         check_readme(self.rec, self.ja, self.en)
         with io.open(ZIP, "rb") as fh:
             check_input_bytes(fh.read())
@@ -688,29 +807,32 @@ class MutationTest(Base):
                             (u"\"元の字\": \"61.7%\"", u"\"元の字\": \"61.6%\""),             # 元の字 1 字(文脈と食い違う)
                             (u"\"sha256\": \"" + ZIP_SHA256[:8], u"\"sha256\": \"" + "f" + ZIP_SHA256[1:8])):
             bad = json.loads(mutate_char(jtext(REC), needle, new))
-            self.red(check_record, bad)
+            self.red(check_record22, bad)
 
     def test_m1b_one_character_of_the_record_is_red_against_the_readme(self):
-        bad = json.loads(mutate_char(jtext(REC), u"\"字\": \"224 / 241 = 92.9%\"", u"\"字\": \"224 / 241 = 92.8%\""))
+        bad = json.loads(mutate_char(jtext(REC), u"\"字\": \"225 / 240 = 93.8%\"", u"\"字\": \"225 / 240 = 93.7%\""))
         self.red(check_readme, bad, self.ja, self.en)
 
     def test_m2_one_character_of_each_readme_is_red(self):
-        self.red(check_readme, self.rec, mutate_char(self.ja, u"224 / 241", u"225 / 241"), self.en)
-        self.red(check_readme, self.rec, self.ja, mutate_char(self.en, u"224 / 241", u"225 / 241"))
-        self.red(check_readme, self.rec, mutate_char(self.ja, u"92.9%", u"92.8%"), self.en)
-        self.red(check_readme, self.rec, self.ja, mutate_char(self.en, u"7.1%", u"7.2%"))
+        self.red(check_readme, self.rec, mutate_char(self.ja, u"225 / 240", u"226 / 240"), self.en)
+        self.red(check_readme, self.rec, self.ja, mutate_char(self.en, u"225 / 240", u"226 / 240"))
+        self.red(check_readme, self.rec, mutate_char(self.ja, u"93.8%", u"93.7%"), self.en)
+        self.red(check_readme, self.rec, self.ja, mutate_char(self.en, u"6.2%", u"6.3%"))
+        # P21 の 1 行(README にだけ在る P21 のときの数)も 1 字で赤
+        self.red(check_readme, self.rec, mutate_char(self.ja, u"通した 17 / 241", u"通した 18 / 241"), self.en)
+        self.red(check_readme, self.rec, self.ja, mutate_char(self.en, u"passed 17 / 241", u"passed 18 / 241"))
 
-    def test_m3_passed_17_to_16_is_red(self):
+    def test_m3_passed_15_to_14_is_red(self):
         bad = copy.deepcopy(self.rec)
-        bad[K_PASSED][u"件"] = 16
-        self.red(check_record, bad)
+        bad[K_PASSED][u"件"] = 14
+        self.red(check_record22, bad)
         bad = copy.deepcopy(self.rec)
-        bad[K_PASSED][u"字"] = u"16 / 241 = 6.6%"
-        self.red(check_record, bad)
+        bad[K_PASSED][u"字"] = u"14 / 240 = 5.8%"
+        self.red(check_record22, bad)
         # 行を 1 本 止めた に書き換えても赤(集計との食い違い)
         bad = copy.deepcopy(self.rec)
         bad[u"注入の一覧"][[i for i, r in enumerate(bad[u"注入の一覧"]) if r[u"結果"] == "PASSED"][0]][u"結果"] = "detected:VALUE_MISMATCH"
-        self.red(check_record, bad)
+        self.red(check_record22, bad)
 
     def test_m7_removing_step_0_or_the_N125_note_from_the_readme_is_red(self):
         def cut(text, start_marker):
@@ -720,13 +842,30 @@ class MutationTest(Base):
 
         self.red(check_readme, self.rec, cut(self.ja, u"**手順 0(初回に 1 回だけ)**"), self.en)
         self.red(check_readme, self.rec, self.ja, cut(self.en, u"**Step 0 (once)**"))
-        self.red(check_readme, self.rec, cut(self.ja, u"- 帯の中 16 のうち"), self.en)
-        self.red(check_readme, self.rec, self.ja, cut(self.en, u"- Of the 16 inside the band"))
-        # 参照先が動いた id(数ではなく id で縛る)
-        self.assertEqual(moved_ids(self.rec), [u"N125", u"N199"])
+        self.red(check_readme, self.rec, cut(self.ja, u"- 既定は P22"), self.en)
+        self.red(check_readme, self.rec, self.ja, cut(self.en, u"- The default is P22"))
+        self.red(check_readme, self.rec, cut(self.ja, u"- P21 のとき"), self.en)
+        self.red(check_readme, self.rec, self.ja, cut(self.en, u"- Under P21"))
+        # P21 で参照先が動いた id(数ではなく id で縛る。P22 の記録では動いた行は 0)
+        self.assertEqual(moved_ids(self.rec21), [u"N125", u"N199"])
+        self.assertEqual(moved_ids(self.rec), [])
         self.red(check_readme, self.rec, mutate_char(self.ja, u"N125・N199", u"N125・N198"), self.en)
         # 鍵と ~/.cache の字も記録とは別に縛られている(節の全文一致)
         self.red(check_readme, self.rec, mutate_char(self.ja, u"ラベル 2 file だけ", u"ラベル 2 file と鍵だけ"), self.en)
+
+    def test_m11_a_number_in_the_addendum_is_red(self):
+        facts = addendum_facts(self.rec21, self.rec)
+        check_addendum(self.rec21, self.rec, self.doc)
+        for k, v in facts.items():
+            self.assertIn(v, self.doc, k)
+            m = re.search(r"\d+", v)
+            mutated = self.doc.replace(v, v[:m.start()] + str(int(m.group(0)) + 7) + v[m.end():], 1)
+            self.assertNotEqual(mutated, self.doc)
+            self.red(check_addendum, self.rec21, self.rec, mutated)
+        # 新しい数の手書き・追記の削除・二重の追記も赤
+        self.red(check_addendum, self.rec21, self.rec, self.doc + u"\n- 影響は 12345 行。\n")
+        self.red(check_addendum, self.rec21, self.rec, self.doc.replace(ADDENDUM_HEAD, u"## 6. 追記", 1))
+        self.red(check_addendum, self.rec21, self.rec, self.doc + u"\n" + ADDENDUM_HEAD + u"\n")
 
     def test_m9_a_changed_url_in_the_guidance_is_red(self):
         readme = jtext(os.path.join(ROOT, "fixtures", "xbrl", "TAXONOMY_LABELS_README.md"))
@@ -740,10 +879,25 @@ class MutationTest(Base):
     def test_m8_a_wrong_communication_or_label_pin_in_the_record_is_red(self):
         bad = copy.deepcopy(self.rec)
         bad[K_ENV][u"通信"] = u"しない"
-        self.red(check_record, bad)
+        self.red(check_record22, bad)
         bad = copy.deepcopy(self.rec)
         bad[K_ENV][u"ラベル 2 file の sha256(起動時に照合)"][u"jppfs_2025-11-01_lab.xml"] = u"0" * 64
+        self.red(check_record22, bad)
+
+    def test_m10_the_p21_copy_and_the_p21_record_are_bound(self):
+        raw = bytearray(io.open(REC21, "rb").read())
+        raw[2000] ^= 1
+        self.red(check_p21_copy, bytes(raw))
+        self.red(check_p21_copy, io.open(REC21, "rb").read()[:-1])
+        self.red(check_p21_copy, io.open(REC, "rb").read())          # P22 の記録を P21 の写しとして置いても赤
+        bad = json.loads(mutate_char(jtext(REC21), u"\"後の字\": \"67.6%\"", u"\"後の字\": \"67.7%\""))
         self.red(check_record, bad)
+        bad = copy.deepcopy(self.rec21)
+        bad[K_PASSED][u"件"] = 16
+        self.red(check_record, bad)
+        # P22 の記録を P21 の FACT で検査すると赤(取り違えを通さない)
+        self.red(check_record, self.rec)
+        self.red(check_record22, self.rec21)
 
     def test_m4_a_changed_zip_is_red(self):
         with io.open(ZIP, "rb") as fh:
@@ -754,7 +908,7 @@ class MutationTest(Base):
             self.red(check_input_bytes, fh.read()[:-1])
         bad = copy.deepcopy(self.rec)
         bad[u"入力"][u"sha256"] = "f" + ZIP_SHA256[1:]   # 先頭は '0' なので '0' への置換は恒等(退化値)になる
-        self.red(check_record, bad)
+        self.red(check_record22, bad)
 
     def test_m5_a_wrong_classification_is_red(self):
         # 帯の外を帯の中に書き換える・退化値を帯の中に書き換える変異(分け方の独立な求め直し)
@@ -764,7 +918,7 @@ class MutationTest(Base):
         for r in bad[u"注入の一覧"]:
             if r[u"id"] == row[u"id"]:
                 r[u"分類"] = C_IN
-        self.red(check_record, bad)
+        self.red(check_record22, bad)
         # 値を 1 つ ±1 より大きく動かした行(帯の外)が在れば、分け方が帯の外にならなければ赤
         bad = copy.deepcopy(self.rec)
         row = [r for r in bad[u"通した の一覧"] if r[u"分類"] == C_IN][0]
@@ -773,7 +927,7 @@ class MutationTest(Base):
         for r in bad[u"注入の一覧"]:
             if r[u"id"] == row[u"id"]:
                 r[u"後の値"] = row[u"後の値"]
-        self.red(check_record, bad)
+        self.red(check_record22, bad)
 
     def test_m6_the_independent_class_function_catches_each_kind(self):
         fake = lambda a, b, v0, v1: {u"元の字": a, u"後の字": b, u"元の値": v0, u"後の値": v1}

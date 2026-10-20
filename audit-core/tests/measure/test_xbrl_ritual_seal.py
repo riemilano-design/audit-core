@@ -141,15 +141,17 @@ class SealTest(unittest.TestCase):
         self.assertEqual(len(self.zb), int(m.group(2).replace(",", "")))
         self.assertEqual(len(self.zb), 580260)
 
-    def test_8_default_run_on_the_bundled_zip_reproduces_section_0_1(self):
+    def test_8_p21_run_on_the_bundled_zip_reproduces_section_0_1(self):
+        # 封 §0-1 の数は P21 で測った数。2026-10-20 の期を縛る P22 の段 2 で既定は P22 になった(素の書類で GROUNDED 1 行が
+        # VALUE_MISMATCH になる)ので、測った当時の P21 を**明示**して再現する(字で留める)。P22 の数は結果の門 test_xbrl_ritual_result.py が記録で縛る。
         self.need_zip()
         b = sec(self.t, "## §0-1", "## §1")
         m = re.search(r"claim (\d+)、GROUNDED (\d+)・POINTER_NOT_FOUND (\d+)・UNVERIFIABLE (\d+)・VALUE_MISMATCH (\d+)", b)
         self.assertIsNotNone(m)
         want = {"GROUNDED": int(m.group(2)), "POINTER_NOT_FOUND": int(m.group(3)),
                 "UNVERIFIABLE": int(m.group(4)), "VALUE_MISMATCH": int(m.group(5))}
-        out = verify_document(self.zb, None, None)  # profile 省略 = 道具の既定
-        self.assertEqual(out["profile"], V.DEFAULT_PROFILE)
+        out = verify_document(self.zb, "P21", None)  # 封 §0-1 を測った当時の profile(2026-10-20 段 2 より前の既定)
+        self.assertEqual(out["profile"], "P21")
         self.assertEqual(out["document"]["claims"], int(m.group(1)))
         self.assertEqual(out["document"]["states"], want)
         self.assertEqual(sum(want.values()), int(m.group(1)))

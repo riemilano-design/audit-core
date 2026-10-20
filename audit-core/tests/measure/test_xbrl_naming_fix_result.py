@@ -676,8 +676,11 @@ class NamingFixStep2Gate(unittest.TestCase):
         if ROOT not in sys.path:
             sys.path.insert(0, ROOT)
         from adapters.xbrl import vocabulary as V
-        self.assertEqual(V.DEFAULT_PROFILE, "P21")
+        # 2026-10-20(期を縛る P22 の段 2): いまの既定は P22。この門が見るのは名指しの直し 段 2 の事実
+        # (P20 -> P21 の切替と、古い注記・P21 の注記の字が消えていないこと)で、P21 の字・注記は残っている。
+        self.assertEqual(V.DEFAULT_PROFILE, "P22")
         self.assertIn("P20", V.PROFILES)                                    # 古い既定は消えていない
+        self.assertIn("P21", V.PROFILES)
         sw = self.s2[u"DEFAULT_PROFILE の切替"]
         self.assertEqual((sw[u"前"], sw[u"後"]), ("P20", "P21"))
         self.assertEqual(sw[u"vocabulary.py の sha256 の先頭 16 桁"][u"段 1 5eb80a2"], ENGINE_AT_MEASURE[u"adapters/xbrl/vocabulary.py"])
@@ -692,7 +695,7 @@ class NamingFixStep2Gate(unittest.TestCase):
                     u"N-4 無改変 40 書類で GROUNDED の行が動いた 0", u"N-5 gen_c 8 書類の VM -> PNF は 7"):
             self.assertIn(lit, note, lit)
         self.assertTrue(note.index(u"# 2026-10-14 の人間の決定で P16 -> P20。") < note.index(u"# 2026-10-20 に P20 -> P21(段 2)。"))
-        self.assertEqual(once(src, r'(?m)^DEFAULT_PROFILE = "(P\d+)"$'), "P21")
+        self.assertEqual(once(src, r'(?m)^DEFAULT_PROFILE = "(P\d+)"$'), "P22")      # 段 2(期を縛る P22)で P21 -> P22。P21 の注記は上で残っている
 
     def test_15_the_body_is_not_rewritten_and_the_addendum_is_added_once(self):
         self.assertEqual(self.doc.count(STEP2_HEAD), 1)

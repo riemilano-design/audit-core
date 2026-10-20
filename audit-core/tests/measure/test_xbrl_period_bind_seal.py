@@ -29,7 +29,9 @@ sys.path.insert(0, os.path.join(ROOT, "core", "py"))
 SEAL_REL = "docs/XBRL_PERIOD_BIND_SEAL_2026-10-20.md"
 SEAL = os.path.join(ROOT, SEAL_REL)
 POINT_PRIOR_JSON = os.path.join(ROOT, "fixtures", "xbrl", "point_prior_2026-10-20.json")
-RITUAL_JSON = os.path.join(ROOT, "fixtures", "xbrl", "ritual_2026-10-20.json")
+# 封が見ているのは P21 のときの儀式の記録(N125・N199 が前期へ移って通した)。2026-10-20 の期を縛る P22 の段 2 で ritual_2026-10-20.json は
+# P22(既定)で採り直したので、同じバイト列の写し ritual_2026-10-20_p21.json に当てる(sha256 dad4c56e…。結果の門が字で留める)。
+RITUAL_JSON = os.path.join(ROOT, "fixtures", "xbrl", "ritual_2026-10-20_p21.json")
 S2_JSON = os.path.join(ROOT, "fixtures", "xbrl", "gen_c", "hybrid_s2_2026-10-20.json")
 NAMING_JSON = os.path.join(ROOT, "fixtures", "xbrl", "naming_fix", "p21_2026-10-20.json")
 CACHE_GLOB = os.path.join(os.path.expanduser("~"), ".cache", "audit-core", "edinet", "*.zip")
@@ -49,8 +51,10 @@ ENGINE_AT_SEAL = {"adapters/xbrl/recipes.py": "2f692bca1eac3cd3",
 # 宣言された遷移(段 1 の commit で足す): {path: (後の sha16, 遷移を宣言した封の path)}。封の commit 時点では空だった。
 # 2026-10-20 追記(上の ENGINE_AT_SEAL は封の commit 時点の値で消さない): 段 1 の実装で recipes.py は +4 行(最初の枝の塊)、
 # vocabulary.py は +4 行・-1 行(旗・P22・PROFILES の登録)。DEFAULT_PROFILE は P21 のまま。
+# 2026-10-20 追記(段 2): vocabulary.py の sha は 段 1 3320c8c で 1fdb48e7e3ba58ce(残す。段 1 の結果の記録が測った時点の値)、
+# 段 2(DEFAULT_PROFILE を P21 -> P22 にし、決定の注記を足した。vocabulary.py だけ・recipes.py は 0 行)で 25a3c0992e10daaa。
 ENGINE_LATER = {"adapters/xbrl/recipes.py": ("65a37869f053a60e", SEAL_REL),
-                "adapters/xbrl/vocabulary.py": ("1fdb48e7e3ba58ce", SEAL_REL)}
+                "adapters/xbrl/vocabulary.py": ("25a3c0992e10daaa", SEAL_REL)}
 
 # §1「過去の門の engine の留め」の一覧(封の字)と、実物の在りか
 PIN_FILES_ENGINE_LATER = ("tests/measure/test_xbrl_branch_a.py", "tests/measure/test_xbrl_role_swap_result.py",
@@ -333,11 +337,13 @@ class EngineAtSealTest(unittest.TestCase):
                 continue
             self.assertEqual(got, want, u"**%s が動いている(段 1 の commit で ENGINE_LATER に遷移を宣言する)**" % rel)
 
-    def test_13_default_stays_p21_and_p22_is_registered_with_the_flag(self):
+    def test_13_default_is_p22_from_step_2_and_p22_is_registered_with_the_flag(self):
         from adapters.xbrl import vocabulary as V
-        self.assertEqual(V.DEFAULT_PROFILE, "P21")
+        # 2026-10-20(段 2): 既定を P21 -> P22 にした(人間の承認 2026-10-20「任せる」)。段 1 3320c8c までは P21 のままだった。
+        self.assertEqual(V.DEFAULT_PROFILE, "P22")
+        self.assertIn("P21", V.PROFILES)      # 古い既定は消えていない(明示で呼べる)
         # 封の commit 時点は「P22 は PROFILES に無い」だった(測った当時の事実)。段 1 の commit で「P22 は PROFILES に在り、
-        # 旗 period_bind が真」に直した(DEFAULT_PROFILE は P21 のまま)。旗は P22 だけ。
+        # 旗 period_bind が真」に直した。旗は P22 だけ。
         self.assertIn("P22", V.PROFILES)
         self.assertTrue(V.PROFILES["P22"].period_bind)
         self.assertEqual(["P22"], sorted(n for n, p in V.PROFILES.items() if p.period_bind))
@@ -345,7 +351,8 @@ class EngineAtSealTest(unittest.TestCase):
 
 class LiveReproductionTest(unittest.TestCase):
     """cache(~/.cache/audit-core/edinet/*.zip)と AUDIT_CORE_PERIOD_BIND=1 のとき、§0 の代価 26・手がかりあり 190・当期 1,726・
-    pointer 1 本の GROUNDED 1,942・全 GROUNDED 4,267 を、67 書類に既定 P21 の verify_document を掛けて数え直す(約 40 秒)。
+    pointer 1 本の GROUNDED 1,942・全 GROUNDED 4,267 を、67 書類に P21 の verify_document を掛けて数え直す(約 40 秒)。
+    §0 の数は P21 で測った数なので、2026-10-20(段 2)に既定が P22 になった後は P21 を**明示**する(字で留める)。
     **既定では走らせない**(重いので。走らせない間も SealTest が封の字と記録を縛る)。"""
 
     CUE = re.compile(u"前期|前年|前連結会計年度|前事業年度|\\(同|（同|前期末|前年度")
@@ -370,7 +377,7 @@ class LiveReproductionTest(unittest.TestCase):
             except KeyError:
                 continue
             docs += 1
-            for c in verify_document(zb, None, None)["claims"]:      # profile 省略 = 道具の既定(P21)
+            for c in verify_document(zb, "P21", None)["claims"]:      # §0 の数は P21 で測った。2026-10-20(段 2)で既定は P22 になったので P21 を明示
                 if c["state"] != "GROUNDED":
                     continue
                 grounded += 1

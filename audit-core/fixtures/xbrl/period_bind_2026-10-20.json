@@ -24567,5 +24567,122 @@
   "内容": "段 1 の実測の後の日付つき追記。司令塔の判断と独立監査の指摘の反映は、E1〜E7 を測り直した記録に入っている。",
   "4 か所目の直し": "tests/adapters/xbrl/test_recipes_p21.py::FlagShapeTest::test_only_p21_has_the_flag_on の期待を [\"P21\"] から [\"P21\", \"P22\"] に一行直した(P22 = P21 + period_bind は last_branch_cues を引き継ぐ。封 XBRL_PERIOD_BIND_SEAL_2026-10-20 の追記)",
   "E-7 の判定": "外れ(封は既存試験の直しを三か所と書き、四か所目が要った = 予測の外れ。四か所目を直した後の tests/adapters/xbrl 全体の結果は E7 欄)"
+ },
+ "stage2_default_2026-10-20": {
+  "step": "**期を縛る P22 の段 2(既定 P21 -> P22)の測定。profile を省いた製品の経路が段 1 の P22 の数と 1 行ずつ一致するか。0 USD・通信なし・engine は測る側から 1 行も変えない**",
+  "封": "docs/XBRL_PERIOD_BIND_SEAL_2026-10-20.md",
+  "HEAD": "cb4b497504910c1685779da1f811be87c2f45fb5",
+  "python": "3.9.6",
+  "engine の束ねた sha256(core/ と adapters/ の file。__pycache__ を除く。repo 相対の path 順)": "a0c92547a59802172340fa73c1aa97eac4763b1adaac62e8ab57aa5ad6b24e34",
+  "engine の file 数": 36,
+  "recipes.py の sha16": "65a37869f053a60e",
+  "vocabulary.py の sha16": "25a3c0992e10daaa",
+  "DEFAULT_PROFILE": "P22",
+  "鍵の名前の有無(値は読まない)": {
+   "ANTHROPIC_API_KEY": false,
+   "ANTHROPIC_AUTH_TOKEN": false,
+   "ANTHROPIC_BASE_URL": true,
+   "EDINET_API_KEY": false,
+   "OPENAI_API_KEY": false
+  },
+  "ラベル 2 file の sha256(起動時に照合)": {
+   "jppfs_2025-11-01_lab.xml": "bf56ea1585afe426b398a9053ec4de4dbeafc211a53675b5d6d19453e4e04bf4",
+   "jpcrp_2025-11-01_lab.xml": "df9c23764ec9a63cb65b5ef62e79a2907c590523797421442ea2a60e334cd684"
+  },
+  "費用": "0 USD",
+  "E1": {
+   "profile": "省略(None = vocabulary.DEFAULT_PROFILE)",
+   "記録(段 1)の行": 485,
+   "今回の行": 485,
+   "記録に無い行": 0,
+   "段 1 の P22 の欄と違った行": 0,
+   "違った行の id": [],
+   "通した(GROUNDED のまま)": {
+    "件": 1,
+    "分母": 485,
+    "率": 0.2
+   },
+   "止めた(VALUE_MISMATCH)": {
+    "件": 482,
+    "分母": 485,
+    "率": 99.4
+   },
+   "その他": {
+    "件": 2,
+    "分母": 485,
+    "率": 0.4
+   },
+   "通した のうち参照先が Prior1Year": {
+    "件": 0,
+    "分母": 485,
+    "率": 0.0
+   }
+  },
+  "E2": {
+   "profile": "省略(None = vocabulary.DEFAULT_PROFILE)",
+   "書類": 67,
+   "claims": 7799,
+   "既定と P21 で動いた行": 36,
+   "記録(段 1)の動いた行": 36,
+   "記録に無い動いた行": 0,
+   "記録の動いた行のうち違った行(P21・P22 の欄)": 0,
+   "違った行": [],
+   "GROUNDED を離れた": 25,
+   "新 GROUNDED": 0
+  },
+  "E5": {
+   "profile": "P22",
+   "通した": {
+    "件": 15,
+    "分母": 240,
+    "率": 6.2,
+    "字": "15 / 240 = 6.2%"
+   },
+   "止めた": {
+    "件": 225,
+    "分母": 240,
+    "率": 93.8,
+    "字": "225 / 240 = 93.8%"
+   },
+   "期待(P21 の記録 + 段 1 の動いた行・外れた行)の行": 240,
+   "今回の行": 240,
+   "期待と違った行": 0,
+   "違った行の id": [],
+   "採り直した儀式の記録(ritual_2026-10-20.json)と違う欄(所要秒・実行環境を除く)": [],
+   "素の書類: 既定と P22 明示で違った claim": 0,
+   "素の書類の claim": 412,
+   "素の書類の state の分布(既定)": {
+    "GROUNDED": 329,
+    "POINTER_NOT_FOUND": 16,
+    "UNVERIFIABLE": 41,
+    "VALUE_MISMATCH": 26
+   }
+  },
+  "対照: 既定を P21 に戻す変異(比較器が差を拾えるか)": {
+   "書類": "S100YMFV",
+   "変異": "vocabulary.DEFAULT_PROFILE を実行中だけ P21 に戻す",
+   "比べた行": 4,
+   "段 1 の P22 の欄と違った行": 2
+  },
+  "既存試験": [
+   {
+    "コマンド": "python3 -m pytest -q tests/adapters/xbrl",
+    "rc": 0,
+    "最後の行": "831 passed, 1 skipped in 1118.43s (0:18:38)",
+    "所要秒": 1118.5
+   }
+  ],
+  "所要秒": {
+   "E1": 128.1,
+   "E2": 63.7,
+   "E5": 23.2,
+   "全体": 1335.2
+  },
+  "差 0 の行数": {
+   "E-1": 485,
+   "E-2": 36,
+   "E-5": 240
+  },
+  "差のあった行の合計": 0
  }
 }

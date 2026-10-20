@@ -8,12 +8,15 @@ u"""穴 2 つ(単位語「ポイント」/ 前期の値を通す)の広さを測
 **0 USD・通信なし・鍵の値は読まない。** 書類は ``~/.cache/audit-core/edinet/*.zip`` の手元の cache だけ(無い書類は取りに行かない)。
 engine(``core/``・``adapters/``)と ``measure/false_pass_2026-10-14.py``・``measure/inject.py`` は 1 行も変えず、import して使う。
 
-A(穴 A): cache の全 zip を 文あり(経営分析の文 ``select_mdna`` を持つ)/ 文なし / 読めない に分け、文ありの書類を既定 P21 の
-  ``verify_document(zb, None, None)`` に掛けて、単位が「ポイント」の claim を全部集める。対照は単位が「％」「%」の claim の state 分布。
+A(穴 A): cache の全 zip を 文あり(経営分析の文 ``select_mdna`` を持つ)/ 文なし / 読めない に分け、文ありの書類を P21 の
+  ``verify_document(zb, "P21", None)`` に掛けて、単位が「ポイント」の claim を全部集める。対照は単位が「％」「%」の claim の state 分布。
 B(穴 B): 同じ文ありの書類で、GROUNDED の claim のうち pointers が 1 本で ``CurrentYear…`` の fact を指し、同じ要素・同じ枠の
   ``Prior1Year…`` の fact が 1 件在り(同じ単位・どちらも正・値が違う)= site。site の数の字を前期の値に(``inject.t6_sites`` と同じ条件:
   単位の倍率に戻して元の字の形で 1 字違わず書ける場合だけ作れる)置き換え、1 文 1 件・25 件 batch(``false_pass`` の ``run_doc`` と同じ型)で
-  ``verify_document(zb, None, text)`` に掛け直し、注入 1 件ごとに 止めた / 通した(前期へ移った・当期の同じ参照先・当期の別要素ほか)/ その他 に分ける。
+  ``verify_document(zb, "P21", text)`` に掛け直し、注入 1 件ごとに 止めた / 通した(前期へ移った・当期の同じ参照先・当期の別要素ほか)/ その他 に分ける。
+
+**記録は P21 で測った。2026-10-20 段 2(期を縛る P22。封 ``docs/XBRL_PERIOD_BIND_SEAL_2026-10-20.md``)で既定 profile が P22 になったので、
+測った当時の P21 を字で留める**(``PROFILE_AT_MEASURE``。profile を省いた呼び出しは P22 の数になり、記録と合わなくなる)。
 """
 from __future__ import print_function
 
@@ -45,6 +48,9 @@ from lib import numbers as N  # noqa: E402  (inject.py と同じ描き方 ``rend
 from lib import scales as SC  # noqa: E402
 
 SEAL = "docs/XBRL_POINT_PRIOR_SEAL_2026-10-20.md"
+# 記録(point_prior_2026-10-20.json)を測った時点の既定は P21。2026-10-20(段 2)で vocabulary.DEFAULT_PROFILE は P22 になったので、
+# 測った当時の P21 を明示して記録を再現できるようにする(profile を省く経路と、段 2 より前は同じ結果)。
+PROFILE_AT_MEASURE = "P21"
 OUT_REL = "fixtures/xbrl/point_prior_2026-10-20.json"
 CACHE = os.path.join(os.path.expanduser("~"), ".cache", "audit-core", "edinet")
 KEY_NAMES = ("ANTHROPIC_API_KEY", "ANTHROPIC_AUTH_TOKEN", "ANTHROPIC_BASE_URL", "EDINET_API_KEY", "OPENAI_API_KEY")
@@ -167,8 +173,8 @@ def mark_pointers(pointers):
 
 def doc_a(doc_id, zb, text0):
     u"""1 書類の A(単位ポイントの claim の行・対照・診断)。"""
-    out = VD.verify_document(zb, None, None)
-    profile = V.PROFILES[V.DEFAULT_PROFILE]
+    out = VD.verify_document(zb, PROFILE_AT_MEASURE, None)
+    profile = V.PROFILES[PROFILE_AT_MEASURE]
     sentences, sites = FP.number_sites(text0, profile)
     by_site = {s["id"]: s for s in sites}
     points, pct_states, pt_states = [], {}, {}
@@ -253,13 +259,13 @@ def render_prior(raw, unit, value, cur_fact, prior_fact):
 
 def find_sites(zb, text0):
     u"""(site の一覧, 絞り込みの各段の件数, 土台の state の分布)。site は作れた/作れないの別つき。"""
-    profile = V.PROFILES[V.DEFAULT_PROFILE]
+    profile = V.PROFILES[PROFILE_AT_MEASURE]
     inst = I.load_instance(zb)
     by_key = {}
     for f in inst["facts"]:
         by_key.setdefault((f["name"], f["context"]), []).append(f)
-    base = VD.verify_document(zb, None, text0)
-    orig = VD.verify_document(zb, None, None)
+    base = VD.verify_document(zb, PROFILE_AT_MEASURE, text0)
+    orig = VD.verify_document(zb, PROFILE_AT_MEASURE, None)
     sentences, sites = FP.number_sites(text0, profile)
     by_id = {c["id"]: c for c in base["claims"]}
     diag = {u"1 数の site": len(sites)}
@@ -330,7 +336,7 @@ def classify_after(site, c):
 
 
 def inject_doc(doc_id, zb, text0, sites, sentences):
-    u"""作れた site を 1 文 1 件・25 件 batch で注入し、verify_document(zb, None, text) で再検証(``run_doc`` と同じ型)。"""
+    u"""作れた site を 1 文 1 件・25 件 batch で注入し、verify_document(zb, "P21", text) で再検証(``run_doc`` と同じ型)。"""
     pending = [s for s in sites if s[u"作れた"]]
     rows = []
     while pending:
@@ -357,7 +363,7 @@ def inject_doc(doc_id, zb, text0, sites, sentences):
                 rows.append(dict(_row(doc_id, s), **{u"結果": K_ELSE, u"結果の細目": u"sentence_not_found"}))
                 continue
             text = text[:pos] + new_sents[s[u"_si"]] + text[pos + len(sentences[s[u"_si"]]):]
-        got = {c["id"]: c for c in VD.verify_document(zb, None, text)["claims"]}
+        got = {c["id"]: c for c in VD.verify_document(zb, PROFILE_AT_MEASURE, text)["claims"]}
         for (s, exp) in plan:
             if any(r[u"id"] == s[u"id"] and r[u"結果の細目"] == u"sentence_not_found" for r in rows if r[u"書類"] == doc_id):
                 continue
@@ -519,7 +525,7 @@ def env_block(ritual):
             u"engine と測定の道具の差(git diff HEAD)": {u"対象": u"core・adapters・measure/false_pass_2026-10-14.py・measure/inject.py",
                                               u"差の行数": lines, u"未追跡・変更の file": [l.strip() for l in stat.splitlines()]},
             u"鍵の名前の有無(値は読まない)": {k: (k in os.environ) for k in KEY_NAMES},
-            u"profile": V.DEFAULT_PROFILE, u"cache": u"~/.cache/audit-core/edinet/*.zip(手元の file だけ。取りに行かない)",
+            u"profile": PROFILE_AT_MEASURE, u"cache": u"~/.cache/audit-core/edinet/*.zip(手元の file だけ。取りに行かない)",
             u"通信": u"この script は urllib・socket・http を import しない。adapters は urllib を import するが接続は起きない",
             u"費用": u"0 USD"}
 
@@ -606,7 +612,7 @@ def main(argv=None):
         json.dump(rec, fh, ensure_ascii=False, indent=1)
         fh.write(u"\n")
     n = rec[u"書類の数"]
-    print(u"=== 穴 2 つの広さ(%s・手元の cache・鍵なし・0 USD)===" % V.DEFAULT_PROFILE)
+    print(u"=== 穴 2 つの広さ(%s・手元の cache・鍵なし・0 USD)===" % PROFILE_AT_MEASURE)
     print(u"書類 %d(文あり %d・文なし %d・読めない %d)" % (n[u"全部"], n[CAT_TEXT], n[CAT_NOTEXT], n[CAT_BAD]))
     for k, v in sorted(rec[u"予測の判定"].items()):
         print(u"%s: %s → %s" % (k, v[u"実測"], v[u"判定"]))

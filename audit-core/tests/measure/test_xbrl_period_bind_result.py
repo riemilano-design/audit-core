@@ -12,12 +12,17 @@ u"""期を縛る直し P22 の段 1 の結果 ― 封 docs/XBRL_PERIOD_BIND_SEAL
   4. 文書の表(予測・E-1 の単位別・E-2 の動いた行 42・E-3 の動いた行・E-4・E-5)を記録から作った字と完全一致させる。
      人の読み(E-2 の動いた行の型 ``READ``)は門が字で持ち、記録の行と過不足なく対応することを縛る(読みそのものは人の読み)。
   5. engine の sha(測った時点の recipes.py・vocabulary.py)を字で留め、いまの engine が同じか宣言された遷移であること。
-     ``core/`` が封の commit から 0 行であること。``DEFAULT_PROFILE`` が P21 のままであること(段 1)。
+     ``core/`` が封の commit から 0 行であること。``DEFAULT_PROFILE`` は段 1 では P21 のままだったが、**段 2(2026-10-20)で P22 になった**。
   6. cache とラベルが在る機械では、軽い走らせ直し(E-1 を 1 書類、E-2 を 2 書類)を script で走らせて記録の該当行と一致。
      全部の走らせ直し(約 10 分)は ``AUDIT_CORE_PERIOD_BIND=1`` のときだけ。
   7. **文書の散文の数**(2026-10-20 独立監査の指摘): 数のある文(結論・E-1〜E-7 の数・代価・部分の判定・所要秒)は ``prose_facts`` が記録から作り、
      文書がその字を含むことを縛る。変異の表は記録の写し(``変異(engine。手で走らせた)``)から作る。それ以外の散文に数字が在れば
      ``residual_numbers`` が見つけて赤にする(コード片・識別子・日付・節の番号は除く)。散文は漢数字で書く。
+  8. **段 2(2026-10-20。既定 P21 -> P22)**: 記録の新欄 ``stage2_default_2026-10-20`` ― profile を省いた製品の経路が段 1 の P22 の数と 1 行ずつ一致する
+     (E-1 の 485 行・E-2 の動いた 36 行・E-5 の 240 行で差 0)― を、段 1 の記録の行から独立に数え直した値と一致させる。
+     文書 §14 の数は ``stage2_facts`` が記録から作った字で縛る。既定が P22 であること・決定の注記が日付つきで在り P21 の注記が消えていないこと・
+     ``vocabulary.py`` の sha が宣言された遷移であること・封の末尾の追記が 1 点だけであることも縛る。変異は ``MutationTest`` が毎回走らせる。
+     儀式の P21 の記録(対照)は ``fixtures/xbrl/ritual_2026-10-20_p21.json``(段 2 で ``ritual_2026-10-20.json`` を P22 で採り直したため)。
 縛っていないもの: 型の読みの正しさ(人の読み)、A〜C の例などの引用文(コード片の中の数)、限界の文の主張(中身は人の読み)、
   変異の手の実測そのもの(表は記録の写しを縛るだけで、変異を走らせ直すのは ``mutate.py`` を手で)、tests/measure 全体の所要。
   漢数字で書いた数(``residual_numbers`` は算用数字だけを探す。散文の数は記録から作った字で縛る約束で、漢数字の数は縛らない ― 2026-10-20 の独立監査の軽い指摘)。
@@ -44,6 +49,13 @@ SEAL = os.path.join(ROOT, SEAL_REL)
 SCRIPT = os.path.join(ROOT, "measure", "xbrl_period_bind_2026-10-20.py")
 CACHE = os.path.join(os.path.expanduser("~"), ".cache", "audit-core", "edinet")
 RUN_HEAVY = os.environ.get("AUDIT_CORE_PERIOD_BIND") == "1"
+VOCAB = os.path.join(ROOT, "adapters", "xbrl", "vocabulary.py")
+RITUAL_P21 = os.path.join(ROOT, "fixtures", "xbrl", "ritual_2026-10-20_p21.json")       # P21 のときの儀式の記録(段 1 の対照)
+RITUAL_P22 = os.path.join(ROOT, "fixtures", "xbrl", "ritual_2026-10-20.json")           # 段 2 で P22(既定)で採り直した儀式の記録
+STAGE2 = u"stage2_default_2026-10-20"
+STAGE2_HEAD = u"## 14. 段 2(2026-10-20、既定 P21 → P22)"
+#: 既定で測った記録を持つ measure。測った当時の P21 を字で留めた(段 2)。vocabulary.DEFAULT_PROFILE を読まない。
+PINNED_P21_SCRIPTS = ("measure/xbrl_point_prior_2026-10-20.py", "measure/xbrl_hybrid_s2_2026-10-20.py", "measure/xbrl_hybrid_trust_2026-10-20.py")
 HEAVY_SKIP_REASON = u"AUDIT_CORE_PERIOD_BIND=1 のときだけ走る(全部の走らせ直し。約 10 分)"
 LIGHT_E1_DOCS = ("S100YMFV",)               # 注入 4 件(P21 では 4 件とも通し、P22 では 4 件とも止める)
 LIGHT_E2_DOCS = ("S100Z4DE", "S100YUHC")    # 手がかりの字の規則に載らない前期の数 5 件・減少額が前期残高と一致 2 件
@@ -52,8 +64,10 @@ LIGHT_E2_DOCS = ("S100Z4DE", "S100YUHC")    # 手がかりの字の規則に載�
 DOCS67_DIGEST = "118ec1015494db404b74dbd65b72bddfd2356459749d6f10dc910e5a1348429f"       # 書類 67 本の docID\tsha256 を sorted で \n 結合した sha256
 DOCS40_DIGEST = "7226d84a9d4ab4e63f982a2638b561a36cccd7a327a3c587f3076b5425eb2ba3"       # 書類 40 本(名指しの直しの無改変の集合)も同じ作り
 ENGINE_AT_MEASURE = {"adapters/xbrl/recipes.py": "65a37869f053a60e", "adapters/xbrl/vocabulary.py": "1fdb48e7e3ba58ce"}
-#: 測った時点の engine を宣言された遷移として受け入れる(段 2 の commit で足す): {path: (後の sha16, 遷移を宣言した封の path)}。いまは空。
-ENGINE_LATER = {}
+#: 測った時点の engine を宣言された遷移として受け入れる: {path: (後の sha16, 遷移を宣言した封の path)}。
+#: 2026-10-20(段 2): vocabulary.py の DEFAULT_PROFILE を P21 -> P22 にし、決定の注記を日付つきで足した(vocabulary.py だけ。recipes.py は 0 行)。
+#: 段 1 の sha(1fdb48e7e3ba58ce)は ENGINE_AT_MEASURE に残す(段 1 の記録が測った時点の値)。受け入れるのは、その封が履歴に在り、値が段 2 の後の値のときだけ。
+ENGINE_LATER = {"adapters/xbrl/vocabulary.py": ("25a3c0992e10daaa", SEAL_REL)}
 FACT = {
     "e1": (485, 1, 482, 2),                    # 注入・P22 で通した・止めた・その他
     "e1_p21": (459, 458),                      # P21(対照)で通した・うち前期へ移った(穴 B の記録と同じ 459・458)
@@ -434,6 +448,7 @@ def render_blocks(rec):
     B["E-2 の型"] = u"\n".join(L)
     ps = rec[u"postscript_2026-10-20"]
     B["追記 2026-10-20"] = u"\n".join([u"- 四か所目の直し: %s" % ps[u"4 か所目の直し"], u"- E-7 の判定: %s" % ps[u"E-7 の判定"]])
+    B.update(stage2_blocks(rec))
     return B
 
 
@@ -547,6 +562,7 @@ def prose_facts(rec):
     P["engine_sha"] = u"- 測った時点の engine: `recipes.py` sha16 `%s`・`vocabulary.py` sha16 `%s`。" % (
         ENGINE_AT_MEASURE["adapters/xbrl/recipes.py"], ENGINE_AT_MEASURE["adapters/xbrl/vocabulary.py"])
     P["secs"] = u"記録の所要秒: %s。" % json.dumps(rec[u"所要秒"], ensure_ascii=False, sort_keys=True)
+    P.update(stage2_facts(rec))      # 段 2(2026-10-20)の節の数
     return P
 
 
@@ -592,6 +608,154 @@ def residual_numbers(doc, rec):
     return re.findall(r"\d[\d,\.]*", t)
 
 
+# ----------------------------------------------------------------------------------------------------------------
+# 段 2(2026-10-20、既定 P21 -> P22)
+def stage2_facts(rec):
+    u"""段 2 の節(§14)の数のある文。記録の新欄 ``stage2_default_2026-10-20`` と二本の儀式の記録から作る(散文に手で数を書かない)。"""
+    s2 = rec[STAGE2]
+    e1, e2, e5, ctrl = s2[u"E1"], s2[u"E2"], s2[u"E5"], s2[u"対照: 既定を P21 に戻す変異(比較器が差を拾えるか)"]
+    P = {}
+    P["s2_e1"] = (u"- **E-1(profile 省略)**: 穴 B の注入 %d 件を、profile を省いた `verify_document`(= 既定)で検証し直すと、通した(GROUNDED のまま)は %s・"
+                  u"止めた(VALUE_MISMATCH)は %s・その他は %s。段 1 の P22 の欄と 1 行ずつ比べて違った行 %d、記録に無い行 %d。") % (
+        e1[u"今回の行"], F(e1[u"通した(GROUNDED のまま)"][u"件"], e1[u"通した(GROUNDED のまま)"][u"分母"]),
+        F(e1[u"止めた(VALUE_MISMATCH)"][u"件"], e1[u"止めた(VALUE_MISMATCH)"][u"分母"]), F(e1[u"その他"][u"件"], e1[u"その他"][u"分母"]),
+        e1[u"段 1 の P22 の欄と違った行"], e1[u"記録に無い行"])
+    P["s2_e2"] = (u"- **E-2(profile 省略)**: 経営分析の文を持つ %d 書類(%d claim)の無改変を P21 と既定で比べると、動いた行は %d(GROUNDED を離れた %d・新 GROUNDED %d)。"
+                  u"段 1 の記録の動いた行 %d と過不足なく同じで、P21・P22 の欄が違った行 %d、記録に無い動いた行 %d。") % (
+        e2[u"書類"], e2[u"claims"], e2[u"既定と P21 で動いた行"], e2[u"GROUNDED を離れた"], e2[u"新 GROUNDED"],
+        e2[u"記録(段 1)の動いた行"], e2[u"記録の動いた行のうち違った行(P21・P22 の欄)"], e2[u"記録に無い動いた行"])
+    P["s2_e5"] = (u"- **E-5(儀式、既定)**: 通した %s・止めた %s。P21 の記録に段 1 の動いた行・外れた行を当てて作った期待 %d 行と 1 行ずつ比べて違った行 %d、"
+                  u"採り直した儀式の記録と違う欄 %d。素の書類 %d claim のうち、既定と P22 明示で違った claim %d。素の書類の state(既定): %s。") % (
+        e5[u"通した"][u"字"], e5[u"止めた"][u"字"], e5[u"期待(P21 の記録 + 段 1 の動いた行・外れた行)の行"], e5[u"期待と違った行"],
+        len(e5[u"採り直した儀式の記録(ritual_2026-10-20.json)と違う欄(所要秒・実行環境を除く)"]), e5[u"素の書類の claim"], e5[u"素の書類: 既定と P22 明示で違った claim"],
+        json.dumps(e5[u"素の書類の state の分布(既定)"], ensure_ascii=False, sort_keys=True))
+    pr = rec[u"予測の判定"]
+    hit = sum(1 for k, v in pr.items() if k != "E-8" and v[u"判定"] == u"当たり")
+    miss = sum(1 for k, v in pr.items() if k != "E-8" and v[u"判定"] == u"外れ")
+    P["s2_e8"] = (u"- **E-8 の判定**: E-8 の条件(E-1〜E-7 が当たる)は満たされていない(当たり %d / 外れ %d)。人間の承認(2026-10-20「任せる」)で段 2 に進んだ。"
+                  u"全緑の部分だけ成立(tests/measure・tests/adapters/xbrl 緑。axis3 の LATER_ENGINE_COMMITS は commit の直後に赤 1 本 → 次の便で宣言、段 1 と同じ扱い)。"
+                  u"記録の 予測の判定.E-8 は『判定しない(段 2)』のまま。") % (hit, miss)
+    P["s2_total"] = u"- 差のあった行の合計 %d(差 0 の行: E-1 %d・E-2 %d・E-5 %d)。" % (
+        s2[u"差のあった行の合計"], s2[u"差 0 の行数"][u"E-1"], s2[u"差 0 の行数"][u"E-2"], s2[u"差 0 の行数"][u"E-5"])
+    P["s2_ctrl"] = (u"- 『差 0』が自分の欠陥でないことの対照: `vocabulary.DEFAULT_PROFILE` を実行中だけ P21 に戻して %s の注入 %d 件を同じ比較器に当てると、"
+                    u"段 1 の P22 の欄と違った行は %d。") % (ctrl[u"書類"], ctrl[u"比べた行"], ctrl[u"段 1 の P22 の欄と違った行"])
+    p21, p22 = jload(RITUAL_P21), jload(RITUAL_P22)
+    P["s2_ritual"] = (u"- 儀式(同梱の 1 書類)の記録: P21 のとき 通した %s・止めた %s → P22(既定)で 通した %s・止めた %s。注入の対象 %d → %d。"
+                      u"素の書類の GROUNDED %d → %d・VALUE_MISMATCH %d → %d。") % (
+        p21[u"通した"][u"字"], p21[u"止めた"][u"字"], p22[u"通した"][u"字"], p22[u"止めた"][u"字"],
+        p21[u"注入"][u"注入の対象(GROUNDED の site)"], p22[u"注入"][u"注入の対象(GROUNDED の site)"],
+        p21[u"素の書類"][u"state の分布"]["GROUNDED"], p22[u"素の書類"][u"state の分布"]["GROUNDED"],
+        p21[u"素の書類"][u"state の分布"]["VALUE_MISMATCH"], p22[u"素の書類"][u"state の分布"]["VALUE_MISMATCH"])
+    tc = tally(rec[u"E2"][u"動いた行"], moved_type)
+    P["s2_cost"] = (u"- 代価(製品の経路で再掲): P21 で GROUNDED の %d 行のうち GROUNDED を離れたのは %d 行(A %d・B %d・C %d)。"
+                    u"C は正しい前期の文が不一致になる行(下の表)。参照先だけ動いた %d 行(D %d・E %d)は GROUNDED のまま。") % (
+        rec[u"E2"][u"集計"][u"P21 の GROUNDED"], e2[u"GROUNDED を離れた"], tc.get(T_A, 0), tc.get(T_B, 0), tc.get(T_C, 0),
+        recount_cmp(rec[u"E2"])[u"参照先だけ動いた"], tc.get(T_D, 0), tc.get(T_E, 0))
+    if u"既存試験" in s2:
+        t = s2[u"既存試験"][0]
+        P["s2_tests"] = u"- 既存試験 `%s` → rc %d・%s。" % (t[u"コマンド"], t[u"rc"], t[u"最後の行"])
+    return P
+
+
+def stage2_blocks(rec):
+    L = [u"| doc | id | P21 → P22 | 文の抜粋 |", u"|---|---|---|---|"]
+    for x in rec[u"E2"][u"動いた行"]:
+        if moved_type(x) == T_C:
+            L.append(u"| %s | %s | %s | %s |" % (x[u"doc"], x[u"id"], x[u"向き"], cell((x[u"span"] or u"")[:36])))
+    return {"段 2 の C 行": u"\n".join(L)}
+
+
+def check_stage2(rec):
+    u"""記録の新欄を、段 1 の記録の行から独立に数え直した値・二本の儀式の記録と突き合わせる。壊した記録で赤くなる。"""
+    s2 = rec[STAGE2]
+    assert s2[u"DEFAULT_PROFILE"] == "P22", u"段 2 の測定は既定が P22 の時点"
+    assert s2[u"recipes.py の sha16"] == ENGINE_AT_MEASURE["adapters/xbrl/recipes.py"], u"recipes.py は段 2 でも 0 行"
+    assert s2[u"vocabulary.py の sha16"] == ENGINE_LATER["adapters/xbrl/vocabulary.py"][0], u"vocabulary.py は宣言された遷移の値"
+    assert s2[u"費用"] == u"0 USD"
+    # E-1: 段 1 の記録の P22 の欄の独立な数え直しと一致
+    c1 = recount_e1(rec[u"E1"][u"行"])
+    e1 = s2[u"E1"]
+    assert e1[u"記録(段 1)の行"] == c1[u"注入"] == e1[u"今回の行"], u"E-1 の行の数"
+    assert e1[u"段 1 の P22 の欄と違った行"] == 0 and e1[u"記録に無い行"] == 0 and e1[u"違った行の id"] == [], u"E-1 は差 0"
+    n = c1[u"注入"]
+    assert e1[u"通した(GROUNDED のまま)"] == {u"件": c1[u"P22"][u"通した"], u"分母": n, u"率": round(100.0 * c1[u"P22"][u"通した"] / n, 1)}
+    assert e1[u"止めた(VALUE_MISMATCH)"] == {u"件": c1[u"P22"][u"止めた"], u"分母": n, u"率": round(100.0 * c1[u"P22"][u"止めた"] / n, 1)}
+    assert e1[u"その他"] == {u"件": c1[u"P22"][u"その他"], u"分母": n, u"率": round(100.0 * c1[u"P22"][u"その他"] / n, 1)}
+    assert e1[u"通した のうち参照先が Prior1Year"][u"件"] == c1[u"P22"][u"Prior1Year へ移った"]
+    # E-2
+    r2 = recount_cmp(rec[u"E2"])
+    e2 = s2[u"E2"]
+    assert e2[u"書類"] == r2[u"書類の数"] and e2[u"claims"] == r2[u"claims"], u"E-2 の書類・claim"
+    assert e2[u"記録(段 1)の動いた行"] == r2[u"動いた"] == e2[u"既定と P21 で動いた行"], u"E-2 の動いた行"
+    assert e2[u"GROUNDED を離れた"] == r2[u"離れた"] and e2[u"新 GROUNDED"] == r2[u"新 GROUNDED"] == 0
+    assert e2[u"記録の動いた行のうち違った行(P21・P22 の欄)"] == 0 and e2[u"記録に無い動いた行"] == 0 and e2[u"違った行"] == [], u"E-2 は差 0"
+    # E-5: 儀式の二本の記録と、段 1 の E-5
+    e5, e5r = s2[u"E5"], rec[u"E5"]
+    p22 = jload(RITUAL_P22)
+    p21 = jload(RITUAL_P21)
+    assert e5[u"通した"] == p22[u"通した"] and e5[u"止めた"] == p22[u"止めた"], u"E-5 は採り直した儀式の記録と同じ数"
+    assert e5[u"通した"][u"件"] == e5r[u"通した P22"][u"件"] and e5[u"止めた"][u"件"] == e5r[u"止めた P22"][u"件"], u"E-5 は段 1 の E-5 の P22 の数と同じ"
+    assert e5[u"今回の行"] == e5[u"期待(P21 の記録 + 段 1 の動いた行・外れた行)の行"] == e5r[u"注入の対象"] == len(p22[u"注入の一覧"]), u"E-5 の行の数"
+    assert len(p21[u"注入の一覧"]) - len(e5r[u"P22 の注入の対象から外れた行(P21 の対象に在った)"]) + len(e5r[u"P22 の注入の対象に増えた行"]) == e5[u"今回の行"]
+    assert e5[u"期待と違った行"] == 0 and e5[u"違った行の id"] == [], u"E-5 は差 0"
+    assert e5[u"採り直した儀式の記録(ritual_2026-10-20.json)と違う欄(所要秒・実行環境を除く)"] == [], u"E-5 は採り直した記録と同じ中身"
+    assert e5[u"素の書類: 既定と P22 明示で違った claim"] == 0 and e5[u"素の書類の claim"] == p22[u"素の書類"][u"claim"]
+    assert e5[u"素の書類の state の分布(既定)"] == p22[u"素の書類"][u"state の分布"] == e5r[u"素の書類 P22"][u"state の分布"]
+    # 合計・差 0 の行
+    assert s2[u"差 0 の行数"] == {u"E-1": e1[u"今回の行"] - e1[u"段 1 の P22 の欄と違った行"], u"E-2": e2[u"記録(段 1)の動いた行"] - e2[u"記録の動いた行のうち違った行(P21・P22 の欄)"],
+                              u"E-5": e5[u"今回の行"] - e5[u"期待と違った行"]}
+    total = (e1[u"段 1 の P22 の欄と違った行"] + e1[u"記録に無い行"] + e2[u"記録の動いた行のうち違った行(P21・P22 の欄)"] + e2[u"記録に無い動いた行"]
+             + e5[u"期待と違った行"] + e5[u"素の書類: 既定と P22 明示で違った claim"] + len(e5[u"採り直した儀式の記録(ritual_2026-10-20.json)と違う欄(所要秒・実行環境を除く)"]))
+    assert s2[u"差のあった行の合計"] == total == 0, u"差のあった行の合計"
+    # 対照: 比較器が差を拾える(『0 件』が自分の欠陥でない)
+    c = s2[u"対照: 既定を P21 に戻す変異(比較器が差を拾えるか)"]
+    want = [r for r in rec[u"E1"][u"行"] if r[u"書類"] == c[u"書類"]]
+    differ = sum(1 for r in want if r[u"P21(対照)"] != r[u"P22"] and (r[u"P21(対照)"][u"state"], r[u"P21(対照)"][u"pointers"]) != (r[u"P22"][u"state"], r[u"P22"][u"pointers"]))
+    assert c[u"比べた行"] == len(want) and c[u"段 1 の P22 の欄と違った行"] > 0, u"対照の変異で差が出ていない(比較器が差を拾えない)"
+    assert c[u"段 1 の P22 の欄と違った行"] == differ, u"対照の違った行の数が、段 1 の記録の P21 の欄と P22 の欄の差と合わない"
+    if u"既存試験" in s2:
+        t = s2[u"既存試験"][0]
+        assert t[u"rc"] == 0 and u" passed" in t[u"最後の行"] and u"failed" not in t[u"最後の行"] and u"error" not in t[u"最後の行"], u"既存試験が緑でない"
+
+
+def check_default_note(src):
+    u"""vocabulary.py の字: 既定が P22・日付つきの決定の注記・P21 以前の注記が消えていない。"""
+    i = src.index("\nDEFAULT_PROFILE = ")
+    note = src[:i][src[:i].index(u"# **既定 profile(人間の決定 2026-10-13、第 2 段階)"):]
+    for lit in (u"# 2026-10-14 の人間の決定で P16 -> P20。", u"# 2026-10-20 に P20 -> P21(段 2)。",
+                u"# 2026-10-20 に P21 -> P22(期を縛る P22 の段 2)。人間の決定 2026-10-20「任せる」。",
+                u"段 1 3320c8c の結果", u"客の席の回し直し", u"**P21 の字は消さず**", u"P21 の既定は 2026-10-20 a516288"):
+        assert lit in note, lit
+    assert note.index(u"# 2026-10-14 の人間の決定で P16 -> P20。") < note.index(u"# 2026-10-20 に P20 -> P21(段 2)。") < note.index(u"# 2026-10-20 に P21 -> P22(期を縛る P22 の段 2)。")
+    found = re.findall(r'(?m)^DEFAULT_PROFILE = "(P\d+)"$', src)
+    assert found == ["P22"], found
+
+
+FROZEN_SRC = os.path.join(ROOT, "fixtures", "frozen_bundle_sha.py")
+
+
+def check_frozen_generation(generations, current):
+    u"""``fixtures/frozen_bundle_sha.py`` の世代: 一番新しい世代がいまの作業木の束ねた sha と一致し、段 2(期を縛る P22)の宣言として書かれている。
+    (世代の追加は pin の遷移の宣言の一つ。これまでどの門も作業木と突き合わせていなかった = 世代を足し忘れても緑 ― 2026-10-20 の段 2 の変異 MUT-7 が黙って見つけた。)"""
+    assert generations, u"世代が無い"
+    sha, why = generations[-1]
+    assert sha == current, u"いまの作業木の束ねた sha が最新の世代と違う(世代を足し忘れている): %s != %s" % (current, sha)
+    assert u"期を縛る P22 の段 2" in why and u"DEFAULT_PROFILE" in why and u"XBRL_PERIOD_BIND_SEAL_2026-10-20" in why, u"最新の世代の説明が段 2 の宣言でない"
+    assert len(set(g[0] for g in generations)) == len(generations), u"世代の sha が重複している"
+
+
+def check_pinned_scripts(read=None):
+    u"""既定で測った記録を持つ measure は測った当時の P21 を字で留める(vocabulary.DEFAULT_PROFILE を読まない)。"""
+    import ast
+    read = read or (lambda rel: jtext(os.path.join(ROOT, rel)))
+    for rel in PINNED_P21_SCRIPTS:
+        tree = ast.parse(read(rel))
+        consts = [n.value.value for n in tree.body if isinstance(n, ast.Assign) and any(isinstance(t, ast.Name) and t.id == "PROFILE_AT_MEASURE" for t in n.targets)
+                  and isinstance(n.value, ast.Constant)]
+        assert consts == ["P21"], (rel, consts)
+        reads = [n for n in ast.walk(tree) if isinstance(n, ast.Attribute) and n.attr == "DEFAULT_PROFILE"]
+        assert not reads, (rel, [n.lineno for n in reads])
+
 def check_doc(rec, doc):
     B = render_blocks(rec)
     for k, v in B.items():
@@ -601,6 +765,11 @@ def check_doc(rec, doc):
     assert mutation_table(rec) in doc, u"文書に変異の表(記録の写し)が無い"
     assert rec[u"変異(engine。手で走らせた)"][u"注記"] in doc
     assert u"判定しない(段 2)" in doc
+    assert doc.count(STAGE2_HEAD) == 1 and doc.index(STAGE2_HEAD) > doc.index(u"## 13. 追記(2026-10-20、司令塔の判断の後)"), u"段 2 の節が末尾に 1 つ在る"
+    sec2 = doc[doc.index(STAGE2_HEAD):]
+    for lit in (u"`DEFAULT_PROFILE = \"P22\"`", u"人間の承認は 2026-10-20「任せる」", u"E-8 の条件(E-1〜E-7 が当たる)は満たされていない", u"`test_xbrl_axis3_decision.py` の `LATER_ENGINE_COMMITS`",
+                u"verify_document.py", u"ritual_2026-10-20_p21.json", u"P21 の字は消していない"):
+        assert lit in sec2, lit
     res = residual_numbers(doc, rec)
     assert res == ALLOWED_RESIDUAL, u"文書の散文に、記録に縛られない数が在る: %s" % res
 
@@ -696,13 +865,16 @@ class RecordTest(unittest.TestCase):
                 continue
             self.assertEqual(got, want, u"**%s が測った時点から動いている(段 2 の commit で ENGINE_LATER に遷移を宣言する)**" % rel)
 
-    def test_9_core_is_untouched_and_default_stays_p21(self):
+    def test_9_core_is_untouched_and_default_is_p22_from_step_2(self):
         out = git("diff", "--numstat", "4953a4f", "--", "core")
         self.assertEqual(out.returncode, 0)
         self.assertEqual(out.stdout.strip(), u"", u"core/ が封の commit から動いている")
         from adapters.xbrl import vocabulary as V
-        self.assertEqual(V.DEFAULT_PROFILE, "P21")
+        # 段 1(3320c8c)では P21 のままだった。2026-10-20 の段 2(人間の決定「任せる」)で P22 になった。
+        self.assertEqual(V.DEFAULT_PROFILE, "P22")
         self.assertTrue(V.PROFILES["P22"].period_bind)
+        self.assertIn("P21", V.PROFILES)
+        self.assertFalse(V.PROFILES["P21"].period_bind)
 
     def test_10_e8_is_not_judged_and_the_seal_was_not_edited(self):
         self.assertEqual(self.rec[u"予測の判定"]["E-8"][u"判定"], u"判定しない(段 2)")
@@ -714,6 +886,10 @@ class RecordTest(unittest.TestCase):
         self.assertTrue(now.startswith(orig.stdout), u"封の本文が封の commit から変わった")
         tail = now[len(orig.stdout):]
         self.assertTrue(tail == u"" or tail.lstrip(u"\n").startswith(u"## 追記(2026-10-20、段 1 の実測の後。本文と予測は不変)"), tail[:80])
+        # 段 2 の追記は 1 点だけ(末尾)。見出しが 2 つ(段 1・段 2)で、段 2 は段 1 の後
+        heads = re.findall(r"(?m)^## 追記\(.*$", tail)
+        self.assertEqual(heads, [u"## 追記(2026-10-20、段 1 の実測の後。本文と予測は不変)", u"## 追記(2026-10-20、段 2。本文と予測は不変)"])
+        self.assertIn(u"`DEFAULT_PROFILE = \"P22\"`", tail)
         self.assertEqual(git("log", "--format=%H", "--", SEAL_REL).stdout.split()[:1] != [], True)
 
     def test_11_cache_inputs_match_the_record(self):
@@ -725,7 +901,52 @@ class RecordTest(unittest.TestCase):
             self.assertEqual(sha_path(os.path.join(CACHE, d + ".zip")), inp[u"書類 67(経営分析の文を持つ)の sha256"][d], d)
         for rel in ("fixtures/xbrl/point_prior_2026-10-20.json", "fixtures/xbrl/ritual_2026-10-20.json", "fixtures/xbrl/naming_fix/p21_2026-10-20.json",
                     "fixtures/xbrl/gen_c/hybrid_s2_material_2026-10-20.json", "fixtures/xbrl/gen_c/hybrid_s2_2026-10-20.json"):
-            self.assertEqual(sha_path(os.path.join(ROOT, rel)), inp[rel], rel)
+            # 段 1 の記録の『ritual_2026-10-20.json』の欄は P21 のときの儀式の記録の sha256。段 2 で ritual_2026-10-20.json は P22 で採り直したので、
+            # 同じバイト列の写し ritual_2026-10-20_p21.json に当てる。
+            real = rel if rel != "fixtures/xbrl/ritual_2026-10-20.json" else "fixtures/xbrl/ritual_2026-10-20_p21.json"
+            self.assertEqual(sha_path(os.path.join(ROOT, real)), inp[rel], rel)
+        self.assertEqual(inp["fixtures/xbrl/ritual_2026-10-20.json"], u"dad4c56e7aeeadd1c1d07fe6dc3f844f62be2d127a5e7f9cac10df761ecac6d8")
+
+
+    def test_12_stage2_record_equals_what_the_stage1_rows_say(self):
+        check_stage2(self.rec)
+
+    def test_13_stage2_default_note_and_pins(self):
+        check_default_note(jtext(VOCAB))
+        check_pinned_scripts()
+
+    def test_14_stage2_changed_only_the_default_in_the_engine(self):
+        u"""段 2 の engine の差分は vocabulary.py の DEFAULT_PROFILE と注記だけ。recipes.py は段 1 の値のまま、core/ は 0 行(test_9)。"""
+        self.assertEqual(sha16("adapters/xbrl/recipes.py"), ENGINE_AT_MEASURE["adapters/xbrl/recipes.py"])
+        self.assertEqual(sha16("adapters/xbrl/vocabulary.py"), ENGINE_LATER["adapters/xbrl/vocabulary.py"][0])
+        a = git("show", "3320c8c:./adapters/xbrl/vocabulary.py")
+        if a.returncode == 0:
+            old = a.stdout.splitlines()
+            new = jtext(VOCAB).splitlines()
+            self.assertEqual(new[:len(old) - 1], old[:-1], u"段 1 の vocabulary.py の行を 1 行も変えない(最後の DEFAULT_PROFILE の行だけ直す)")
+            self.assertEqual(old[-1], u'DEFAULT_PROFILE = "P21"')
+            self.assertEqual(new[-1], u'DEFAULT_PROFILE = "P22"')
+            self.assertTrue(all(l.startswith(u"#") for l in new[len(old) - 1:-1]), u"足した行は注記(#)だけ")
+
+    def test_16_frozen_bundle_last_generation_is_the_working_tree_and_declares_step_2(self):
+        import importlib.util
+        spec = importlib.util.spec_from_file_location("frozen_bundle_sha_for_period_bind", FROZEN_SRC)
+        fz = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(fz)
+        cwd = os.getcwd()
+        os.chdir(os.path.dirname(ROOT))          # frozen_bundle_sha.py は repo の根で git ls-files audit-core/... を数える
+        try:
+            current, _rows = fz.bundle()
+        finally:
+            os.chdir(cwd)
+        check_frozen_generation(fz.FROZEN_BUNDLE_GENERATIONS, current)
+        self.assertEqual(fz.FROZEN_BUNDLE_SHA, fz.FROZEN_BUNDLE_GENERATIONS[-1][0])
+
+    def test_15_p21_ritual_copy_is_the_control_of_stage1(self):
+        self.assertEqual(sha_path(RITUAL_P21), u"dad4c56e7aeeadd1c1d07fe6dc3f844f62be2d127a5e7f9cac10df761ecac6d8")
+        self.assertEqual(sha_path(RITUAL_P21), self.rec[u"入力の sha256"]["fixtures/xbrl/ritual_2026-10-20.json"])
+        self.assertEqual(jload(RITUAL_P21)[u"入力"][u"profile"], "P21")
+        self.assertEqual(jload(RITUAL_P22)[u"入力"][u"profile"], "P22")
 
 
 def run_script(args):
@@ -766,6 +987,72 @@ class RerunTest(unittest.TestCase):
         self.assertEqual(got[u"動いた行"], want)
         self.assertEqual(got[u"書類"], [d for d in self.rec[u"E2"][u"書類"] if d[u"doc"] in LIGHT_E2_DOCS])
 
+    @staticmethod
+    def _script():
+        import importlib.util
+        spec = importlib.util.spec_from_file_location("pb_script_for_stage2", SCRIPT)
+        m = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(m)
+        return m
+
+    @staticmethod
+    def _texts(m, docs):
+        out = {}
+        for d in docs:
+            with open(os.path.join(CACHE, d + ".zip"), "rb") as fh:
+                zb = fh.read()
+            out[d] = (zb, m.PP.classify_doc(zb)[2])
+        return out
+
+    def test_light_stage2_default_e1_matches_the_stage1_p22_rows(self):
+        u"""profile を省いた(= 既定 P22 の)再検証が、段 1 の記録の P22 の欄と 1 行ずつ一致(軽い書類 1 本)。"""
+        self._need(LIGHT_E1_DOCS)
+        m = self._script()
+        got = m.stage2_e1(self._texts(m, LIGHT_E1_DOCS), self.rec)
+        want = [r for r in self.rec[u"E1"][u"行"] if r[u"書類"] in LIGHT_E1_DOCS]
+        self.assertTrue(want)
+        self.assertEqual((got[u"今回の行"], got[u"段 1 の P22 の欄と違った行"], got[u"記録に無い行"]), (len(want), 0, 0))
+
+    def test_light_stage2_default_e2_matches_the_stage1_moved_rows(self):
+        self._need(LIGHT_E2_DOCS)
+        m = self._script()
+        got = m.stage2_e2(self._texts(m, LIGHT_E2_DOCS), self.rec)
+        want = [x for x in self.rec[u"E2"][u"動いた行"] if x[u"doc"] in LIGHT_E2_DOCS]
+        self.assertTrue(want)
+        self.assertEqual((got[u"既定と P21 で動いた行"], got[u"記録の動いた行のうち違った行(P21・P22 の欄)"], got[u"記録に無い動いた行"]), (len(want), 0, 0))
+
+    def test_light_stage2_the_comparator_sees_a_wrong_default(self):
+        u"""対照(変異): 既定を実行中だけ P21 に戻すと、同じ比較器が違った行を拾う(『差 0』が自分の欠陥でない)。"""
+        self._need(LIGHT_E1_DOCS + LIGHT_E2_DOCS)
+        m = self._script()
+        from adapters.xbrl import vocabulary as V
+        old = V.DEFAULT_PROFILE
+        V.DEFAULT_PROFILE = "P21"
+        try:
+            e1 = m.stage2_e1(self._texts(m, LIGHT_E1_DOCS), self.rec)
+            e2 = m.stage2_e2(self._texts(m, LIGHT_E2_DOCS), self.rec)
+        finally:
+            V.DEFAULT_PROFILE = old
+        self.assertEqual(V.DEFAULT_PROFILE, "P22")
+        self.assertGreater(e1[u"段 1 の P22 の欄と違った行"], 0)
+        self.assertGreater(e2[u"記録の動いた行のうち違った行(P21・P22 の欄)"], 0)
+
+    def test_heavy_stage2_default_matches_the_record(self):
+        if not RUN_HEAVY:
+            self.skipTest(HEAVY_SKIP_REASON)
+        self._need(sorted(self.rec[u"入力の sha256"][u"書類 67(経営分析の文を持つ)の sha256"]))
+        m = self._script()
+        label_shas, why = m.RIT.check_labels()
+        self.assertFalse(why)
+        got = m.stage2_default(label_shas)
+        want = self.rec[STAGE2]
+        for k in (u"E1", u"E2", u"対照: 既定を P21 に戻す変異(比較器が差を拾えるか)", u"差 0 の行数", u"差のあった行の合計", u"DEFAULT_PROFILE",
+                  u"recipes.py の sha16", u"vocabulary.py の sha16",
+                  u"engine の束ねた sha256(core/ と adapters/ の file。__pycache__ を除く。repo 相対の path 順)"):
+            self.assertEqual(got[k], want[k], k)
+        strip = lambda d: dict((k, v) for k, v in d.items() if k != u"所要秒")
+        self.assertEqual(strip(got[u"E5"]), strip(want[u"E5"]))
+
     def test_heavy_everything_matches_the_record(self):
         if not RUN_HEAVY:
             self.skipTest(HEAVY_SKIP_REASON)
@@ -798,6 +1085,7 @@ class MutationTest(unittest.TestCase):
             f(*a)
 
     def test_baseline_is_green(self):
+        check_stage2(self.rec)
         check_record(self.rec)
         check_judgments(self.rec, self.seal)
         check_doc(self.rec, self.doc)
@@ -914,6 +1202,97 @@ class MutationTest(unittest.TestCase):
             V.PROFILES["P22"] = old
         self.assertNotEqual(got, want)
         self.assertGreater(sum(1 for x in got if e1_kind(x[u"P22"], x) in PASSED_KINDS), sum(1 for x in want if e1_kind(x[u"P22"], x) in PASSED_KINDS))
+
+    def test_ms1_stage2_a_row_that_differs_is_red(self):
+        for path, newv in (((u"E1", u"段 1 の P22 の欄と違った行"), 1), ((u"E2", u"記録の動いた行のうち違った行(P21・P22 の欄)"), 1),
+                           ((u"E5", u"期待と違った行"), 1), ((u"E5", u"素の書類: 既定と P22 明示で違った claim"), 1),
+                           ((u"E1", u"記録に無い行"), 1), ((u"E2", u"記録に無い動いた行"), 1)):
+            r = copy.deepcopy(self.rec)
+            r[STAGE2][path[0]][path[1]] = newv
+            self._red(check_stage2, r)
+
+    def test_ms2_stage2_a_changed_count_is_red(self):
+        r = copy.deepcopy(self.rec)
+        r[STAGE2][u"E1"][u"通した(GROUNDED のまま)"][u"件"] += 1
+        self._red(check_stage2, r)
+        r = copy.deepcopy(self.rec)
+        r[STAGE2][u"E2"][u"GROUNDED を離れた"] -= 1
+        self._red(check_stage2, r)
+        r = copy.deepcopy(self.rec)
+        r[STAGE2][u"差 0 の行数"][u"E-5"] -= 1
+        self._red(check_stage2, r)
+        r = copy.deepcopy(self.rec)
+        r[STAGE2][u"差のあった行の合計"] = 1
+        self._red(check_stage2, r)
+        r = copy.deepcopy(self.rec)
+        r[STAGE2][u"E5"][u"通した"] = dict(r[STAGE2][u"E5"][u"通した"], 件=16, 字=u"16 / 240 = 6.7%")
+        self._red(check_stage2, r)
+
+    def test_ms3_stage2_a_comparator_that_sees_nothing_is_red(self):
+        r = copy.deepcopy(self.rec)
+        r[STAGE2][u"対照: 既定を P21 に戻す変異(比較器が差を拾えるか)"][u"段 1 の P22 の欄と違った行"] = 0
+        self._red(check_stage2, r)
+
+    def test_ms4_stage2_default_or_engine_sha_wrong_is_red(self):
+        r = copy.deepcopy(self.rec)
+        r[STAGE2][u"DEFAULT_PROFILE"] = "P21"
+        self._red(check_stage2, r)
+        r = copy.deepcopy(self.rec)
+        r[STAGE2][u"vocabulary.py の sha16"] = u"1fdb48e7e3ba58ce"
+        self._red(check_stage2, r)
+        r = copy.deepcopy(self.rec)
+        r[STAGE2][u"recipes.py の sha16"] = u"0" * 16
+        self._red(check_stage2, r)
+
+    def test_ms5_stage2_a_number_in_a_stage2_sentence_is_red(self):
+        P = stage2_facts(self.rec)
+        keys = [k for k in P if k.startswith("s2_")]
+        self.assertGreaterEqual(len(keys), 7)
+        for k in keys:
+            v = P[k]
+            self.assertIn(v, self.doc, k)
+            m = re.search(r"\d+", v)
+            self.assertTrue(m, k)
+            mutated = self.doc.replace(v, v[:m.start()] + str(int(m.group(0)) + 7) + v[m.end():], 1)
+            self.assertNotEqual(mutated, self.doc)
+            self._red(check_doc, self.rec, mutated)
+        b = stage2_blocks(self.rec)["段 2 の C 行"]
+        self.assertIn(b, self.doc)
+        self._red(check_doc, self.rec, self.doc.replace(b, b.replace(u"GROUNDED → VALUE_MISMATCH", u"GROUNDED → POINTER_NOT_FOUND", 1), 1))
+        # 段 2 の節が無い・二つある文書は赤
+        self._red(check_doc, self.rec, self.doc.replace(STAGE2_HEAD, u"## 14. 段 2", 1))
+        self._red(check_doc, self.rec, self.doc + u"\n" + STAGE2_HEAD + u"\n")
+
+    def test_ms6_stage2_default_note_mutations_are_red(self):
+        src = jtext(VOCAB)
+        check_default_note(src)
+        for a, b in ((u'DEFAULT_PROFILE = "P22"', u'DEFAULT_PROFILE = "P21"'),
+                     (u"# 2026-10-20 に P21 -> P22(期を縛る P22 の段 2)。", u"# 2026-10-20 に P21 -> P22(期を縛る P22 の段 1)。"),
+                     (u"**P21 の字は消さず**", u"P21 の字は消し"),
+                     (u"# 2026-10-20 に P20 -> P21(段 2)。", u"# 2026-10-20 に P20 -> P21。")):
+            self.assertEqual(src.count(a), 1, a)
+            self._red(check_default_note, src.replace(a, b, 1))
+
+    def test_ms8_stage2_frozen_generation_mutations_are_red(self):
+        gens = [("a" * 64, u"古い世代"), ("b" * 64, u"2026-10-20 feature/audit-core-final-eval-8(期を縛る P22 の段 2): vocabulary.py の DEFAULT_PROFILE を P21 -> P22 にし、"
+                                              u"封 docs/XBRL_PERIOD_BIND_SEAL_2026-10-20.md の段 2")]
+        check_frozen_generation(gens, "b" * 64)
+        self._red(check_frozen_generation, gens[:-1], "b" * 64)                            # 世代を足し忘れた
+        self._red(check_frozen_generation, gens, "c" * 64)                                 # 作業木が世代と違う
+        self._red(check_frozen_generation, gens[:-1] + [("b" * 64, u"期を縛る P22 の段 1")], "b" * 64)   # 説明が段 2 でない
+        self._red(check_frozen_generation, gens + [("a" * 64, u"期を縛る P22 の段 2 DEFAULT_PROFILE XBRL_PERIOD_BIND_SEAL_2026-10-20")], "a" * 64)   # 重複
+
+    def test_ms7_stage2_unpinned_script_is_red(self):
+        u"""測った当時の P21 を字で留めた measure のどれかが、既定を読むように戻ったら赤。"""
+        check_pinned_scripts()
+        for rel in PINNED_P21_SCRIPTS:
+            src = jtext(os.path.join(ROOT, rel))
+            self.assertEqual(src.count(u'PROFILE_AT_MEASURE = "P21"'), 1, rel)
+            for bad in (src.replace(u'PROFILE_AT_MEASURE = "P21"', u'PROFILE_AT_MEASURE = "P22"', 1),                 # 当時の P21 を P22 に
+                        src + u"\n_DEFAULT_READ = V.DEFAULT_PROFILE\n",                                              # 既定を読み直す
+                        src.replace(u'PROFILE_AT_MEASURE = "P21"', u"", 1)):                                          # 留めを消す
+                self.assertNotEqual(bad, src)
+                self._red(check_pinned_scripts, lambda r, rel=rel, bad=bad: bad if r == rel else jtext(os.path.join(ROOT, r)))
 
     def test_m9_a_spoiled_input_digest_is_red(self):
         r = copy.deepcopy(self.rec)

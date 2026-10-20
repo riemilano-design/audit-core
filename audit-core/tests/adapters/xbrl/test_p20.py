@@ -396,7 +396,7 @@ class ProfileShapeTest(unittest.TestCase):
                 continue
             self.assertFalse(p.nonconsolidated_fallback, name)
 
-    def test_default_profile_is_p21(self):
+    def test_default_profile_is_p22(self):
         """既定を変えるのは人間の決定(CLAUDE.md の委任されないもの)。
 
         2026-10-14 に人間が P16 -> P20 を決めた。根拠は Q1・Q2・Q3 の 3 つの測定と独立監査 GO 2 回
@@ -405,9 +405,11 @@ class ProfileShapeTest(unittest.TestCase):
         2026-10-20(段 2)に P20 -> P21(人間の指示「アダプターの問題か。とにかく精度を改善して。何してもいいから」の
         委任のもと、封 docs/XBRL_NAMING_FIX_SEAL_2026-10-20.md の段 2 の条件 N-4・N-5 が当たった)。
         P21 = P20 + last_branch_cues なので、P20 の連結の無い書類の落とし込みの旗は P21 でも真のまま。
+        2026-10-20(期を縛る P22 の段 2)に P21 -> P22(人間の決定「任せる」。封 docs/XBRL_PERIOD_BIND_SEAL_2026-10-20.md の E-8)。
+        P22 = P21 + period_bind なので、落とし込みの旗は P22 でも真のまま。
         """
 
-        self.assertEqual("P21", V.DEFAULT_PROFILE)
+        self.assertEqual("P22", V.DEFAULT_PROFILE)
         self.assertTrue(V.PROFILES[V.DEFAULT_PROFILE].nonconsolidated_fallback)
 
 
