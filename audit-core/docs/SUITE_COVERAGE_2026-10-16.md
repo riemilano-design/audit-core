@@ -32,7 +32,7 @@
 
 ## §2 測った事実 ― **変更前**(試験は走らせず、収集だけ数えた)
 
-### §2-1 ディスク上の試験 file: **193 本**(**いまの数**。門を足すと増える)
+### §2-1 ディスク上の試験 file: **194 本**(**いまの数**。門を足すと増える)
 
 | ディレクトリ | file |
 |---|---|
@@ -43,7 +43,7 @@
 | `tests/core` | 5 |
 | `tests/fixtures/xbrl` | 4 |
 | `tests/golden` | 4 |
-| `tests/measure` | 134 |
+| `tests/measure` | 135 |
 
 **2026-10-20 に +2**(`tests/measure/test_packaging.py`・`tests/measure/test_packaging_result.py`。
 包装の封 `docs/PACKAGING_SEAL_2026-10-20.md` の G-5)。176 → 178、`tests/measure` 118 → 120。
@@ -80,6 +80,9 @@
 
 **2026-10-20 に +1**(`tests/measure/test_xbrl_hybrid_s2_result.py`。
 席と Core の一致の信頼(3 群)の封 `docs/XBRL_HYBRID_TRUST_SEAL_2026-10-20.md` の段 2 の採点)。192 → 193(`tests/measure` 133 → 134)。
+
+**2026-10-20 に +1**(`tests/measure/test_xbrl_ritual_seal.py`。
+10 分の再現の儀式の封 `docs/XBRL_RITUAL_SEAL_2026-10-20.md` の封の門)。193 → 194(`tests/measure` 134 → 135)。
 
 **この節だけは「いま」の数である**(門 `DocTest` が記録と突き合わせる)。
 下の §2-2 は**変更前の実測**で、後の記録と結び付けない。
