@@ -38,6 +38,26 @@ Existence and value are the checks above. Unit, period, dimension, and duplicate
 are not independently verified by this engine's own path (see the Japanese primary
 documentation and fixtures referenced below for the full breakdown).
 
+## 10-minute reproduction (no API key, 0 USD; no network except the one-time label download)
+
+Right after cloning, one command run inside `audit-core/` lets you see by hand what the engine passes and what it stops when errors are injected (record `fixtures/xbrl/ritual_2026-10-20.json`, result `docs/XBRL_RITUAL_RESULT_2026-10-20.md`).
+
+**Step 0 (once)**: download the two standard-taxonomy label files from EDINET (two curl commands plus a sha256 check, about 8 MB). The steps and sha256 values are in `fixtures/xbrl/TAXONOMY_LABELS_README.md`. They live in `~/.cache/audit-core/edinet-taxonomy/2025-11-01/` (override with the `EDINET_TAXONOMY_DIR` environment variable) and are not in this repository because they carry the Financial Services Agency's copyright notice. Without them the entry point prints instructions and stops (exit code 2).
+
+**Step 1**:
+
+```
+python3 measure/ritual_2026-10-20.py --out <output dir>
+```
+
+- **Passed 17 / 241 = 7.1%**: each number in the management-discussion text is deliberately changed, one per sentence (the last digit changed / +-1 in the last printed unit), and the count is how many the engine still reports as GROUNDED.
+- Stopped 224 / 241 = 92.9% (VALUE_MISMATCH).
+- What the 17 passed are: inside the rounding band (+-1 last unit) 16 (rates 12, amounts and others 4); degenerate (`0` becoming `00` before the unit word: the text changes but the value does not) 1; outside the band 0. Whether these are defects is for the reader to decide.
+- Of the 16 inside the band, 2 (N125, N199) had the injected value match the prior-period fact, so the reference moved from the current period to the prior period and was still reported as GROUNDED (the period is not pinned).
+- Run time 20.9 seconds (the machine that took the record).
+- The input `fixtures/xbrl/ai_prose_instance_2026-10-09.zip` (sha256 `03521437be23c8e2a02d85b4bc29a215646803582e9101fdf185521041174799`, 580,260 bytes) is a public EDINET disclosure document (document ID S100Z4Q1, filer code E36539, DN Holdings Co., Ltd., filed 2026-09-30). **Its management-discussion section was replaced with AI-written text in the 2026-10-09 experiment, so it is not the original text.**
+- No key is used. It reads the bundled filing and the two label files under `~/.cache`, nothing else. To run it on your own filings you need an EDINET key and the filings downloaded.
+
 ## Install (0 cost, no network required at build time)
 
 ```
@@ -57,7 +77,7 @@ detail.
 
 ## Test suite
 
-194 test files (counted by the suite-coverage record; the collected-test count changes with every
+195 test files (counted by the suite-coverage record; the collected-test count changes with every
 added test and is kept in that record, not here), including 96
 adversarial mutations exercised against the XBRL adapter. The core verification engine
 itself is 429 lines (`core/py/audit_core/*.py`): existence and value checks, nothing

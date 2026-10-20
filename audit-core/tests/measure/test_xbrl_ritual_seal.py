@@ -163,10 +163,16 @@ class SealTest(unittest.TestCase):
         self.assertIn(u"人間の同梱の承認 →", sec(self.t, "## §3"))
         self.assertIn(u"git には入っていない(2026-10-20 に封の門の実装席が発見)", sec(self.t, "## §2", "## §3"))
         # 追記(同梱の承認)。本文は変えず、日付つきの追記だけ
-        a = sec(self.t, "## 追記(2026-10-20)同梱の承認")
+        a = sec(self.t, "## 追記(2026-10-20)同梱の承認", "## 追記(2026-10-20)ラベル 2 file への依存の見落とし")
         for s in (u"「任せる進めて」", u"同梱の承認", u"`!fixtures/xbrl/ai_prose_instance_2026-10-09.zip`",
                   u"`S100Z4Q1`", u"E36539", u"**済み**", u"R-1〜R-8 は変えない"):
             self.assertIn(s, a, s)
+        # 追記(ラベル 2 file への依存の見落とし)。本文・上の追記は変えず、日付つきの追記だけ
+        a2 = sec(self.t, "## 追記(2026-10-20)ラベル 2 file への依存の見落とし")
+        for s in (u"ラベル 2 file", u"`TAXONOMY_DIR_DEFAULT`", u"`EDINET_TAXONOMY_DIR`", u"選択肢 2", u"選択肢 1(8 MB の同梱)は人間が望めば後から",
+                  u"2026-10-08 の人間の決定", u"`fixtures/xbrl/TAXONOMY_LABELS_README.md`", u"rc=2", u"R-1 は条件つき",
+                  u"164〜168 秒", u"`AUDIT_CORE_RITUAL=1`", u"R-7 の判定は外れ", u"**予測 R-1〜R-8 は変えない。**"):
+            self.assertIn(s, a2, s)
 
     def test_12_the_zip_is_tracked_in_git(self):
         # 同梱の承認(封の追記)後の門。司令塔が `git add -f` するまでは赤(index に無い)。

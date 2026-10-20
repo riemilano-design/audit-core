@@ -53,3 +53,14 @@
 - **出所**(この repo の記録と zip の表紙から。推測は無い): 書類 ID `S100Z4Q1`(`fixtures/xbrl/ai_prose_counts_2026-10-09.json` の `document`)、提出者コード E36539、提出者 ＤＮホールディングス株式会社(DN HOLDINGS CO., LTD.)、提出日 2026年９月30日・第５期(自 2025年７月１日 至 2026年６月30日)(zip の `0000000_header` の表紙の字)。
 - **やること**: (a) `audit-core/.gitignore` に例外 1 行 `!fixtures/xbrl/ai_prose_instance_2026-10-09.zip` を足す(`*.zip` の行は消さない)。(b) 司令塔が `git add -f` で zip を commit に入れる。(c) README の出所 1 行は儀式の実装のときに書く。(d) 門 `tests/measure/test_xbrl_ritual_seal.py` の test_12: zip が git に追跡され、`.gitignore` に例外行が在り、`git check-ignore` が無視しない。sha256 が封の字と一致することは test_7 が縛る。
 - **予測 R-1〜R-8 は変えない。** 同梱が決まったので、買い手が clone した直後に儀式が動く前提が成り立つ。
+
+## 追記(2026-10-20)ラベル 2 file への依存の見落とし
+
+本文(§0〜§3、予測 R-1〜R-8)と上の追記は 1 字も変えない。以下は日付つきの追記である。
+
+- **見落とし**: 本文 §0 は「この zip 以外の入力を読まない(`~/.cache` を見ない)」と書いたが、engine(`adapters/xbrl/instance.py` の `TAXONOMY_DIR_DEFAULT`)は書類の検証のたびに **標準タクソノミの日本語ラベル 2 file**(jppfs・jpcrp の 2025-11-01 版、計約 8 MB)を `~/.cache/audit-core/edinet-taxonomy/2025-11-01/` から読む(環境変数 `EDINET_TAXONOMY_DIR` で置き場を変えられる)。無いと `FileNotFoundError` で落ちる。**clone 直後の機械では儀式は走らない。**独立監査の席が clone 直後の機械の条件で発見した。
+- **司令塔の決定(選択肢 2)**: ラベルは repo の外のまま置く(2026-10-08 の人間の決定「取得したファイルはリポジトリの外に置いて sha256 だけを残す」を動かさない。金融庁の著作権表示あり)。README の最初の手順に「初回に 1 回だけ EDINET から取る(curl 2 本 + sha256 照合。手順と sha256 は `fixtures/xbrl/TAXONOMY_LABELS_README.md`)」を書き、儀式は起動時にラベル 2 file の存在と sha256 を確かめ、無ければ案内を出して rc=2 で止まる(`FileNotFoundError` を裸で出さない)。選択肢 1(8 MB の同梱)は人間が望めば後から。
+- **R-1 は条件つき**: 「clone 直後の機械で 60 秒以内」は、ラベル 2 file が在る機械での所要である。ラベルの無い clone 直後の機械では走らない。判定は結果文書で『条件つき当たり』とする(予測の字は直さない)。
+- **R-7 は外れ方どおり分ける**: 監査席の機械で `tests/measure` 全体が 164〜168 秒(150 秒超)だった。R-7 の外れ方「150 秒超」に当たるので、外れ方に書いたとおり走らせ直しの門(20 秒超の本)を `AUDIT_CORE_RITUAL=1` のときだけ走る形に分ける。R-7 の判定は外れ(機械依存)として結果文書に残す。
+- **門の直し**: 走らせ直しの門は subprocess で `HOME=<空の dir>`・`EDINET_TAXONOMY_DIR=<実在のラベル dir>`・接続を潰した状態で走らせる(`~/.cache` を黙って読んで緑になる偽の保証を作らない)。
+- **予測 R-1〜R-8 は変えない。**
