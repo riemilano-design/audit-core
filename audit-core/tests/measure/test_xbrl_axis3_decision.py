@@ -58,6 +58,7 @@ LATER_ENGINE_COMMITS = {
     "5eb80a2": "docs/XBRL_NAMING_FIX_SEAL_2026-10-20.md",           # 名指しの直し P21 段 1 ― engine(既定は P20 のまま)
     "a516288": "docs/XBRL_NAMING_FIX_SEAL_2026-10-20.md",           # 名指しの直し P21 段 2 ― 既定 P20 -> P21
     "3320c8c": "docs/XBRL_PERIOD_BIND_SEAL_2026-10-20.md",          # 期間を縛る P22 段 1 ― engine(旗だけ、既定は P21 のまま。宣言 2026-10-20)
+    "d0b544c": "docs/XBRL_PERIOD_BIND_SEAL_2026-10-20.md",          # 期間を縛る P22 段 2 ― 既定 P21 -> P22(宣言 2026-10-21)
 }
 
 
