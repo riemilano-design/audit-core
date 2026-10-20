@@ -38,6 +38,28 @@ SEAL_REL = "docs/XBRL_RITUAL_SEAL_2026-10-20.md"
 SEAL = os.path.join(ROOT, SEAL_REL)
 SCRIPT = os.path.join(ROOT, "measure", "ritual_2026-10-20.py")
 FALSE_PASS_REL = "measure/false_pass_2026-10-14.py"
+
+# 2026-10-20 追記(宣言された遷移): 封 docs/XBRL_PERIOD_BIND_SEAL_2026-10-20.md(期を縛る P22 の段 1。engine を変える。人間の承認 2026-10-20)で
+# adapters/xbrl/recipes.py と vocabulary.py だけが動いた。この門が測った時点(封の commit)の engine は 0 行だった(記録の事実、消さない)。
+# 「封の commit から 0 行」を満たしたと数えるのは、(a) 動いた file がこの 2 つだけ、(b) その封が履歴に在る、(c) sha16 が宣言どおり、のときだけ。
+SEAL_PERIOD_BIND = "docs/XBRL_PERIOD_BIND_SEAL_2026-10-20.md"
+ENGINE_LATER = {"adapters/xbrl/recipes.py": ("65a37869f053a60e", SEAL_PERIOD_BIND),
+                "adapters/xbrl/vocabulary.py": ("1fdb48e7e3ba58ce", SEAL_PERIOD_BIND)}
+
+
+def only_declared_changes(numstat_out, status_out):
+    paths = [l.split("\t")[-1] for l in numstat_out.splitlines() if l.strip()] + [l[3:] for l in status_out.splitlines() if l.strip()]
+    rels = sorted(set(p[len("audit-core/"):] if p.startswith("audit-core/") else p for p in paths))
+    for rel in rels:
+        if rel not in ENGINE_LATER:
+            return False
+        later, seal_rel = ENGINE_LATER[rel]
+        added = subprocess.run(["git", "log", "--diff-filter=A", "--format=%H", "--", seal_rel], cwd=ROOT, capture_output=True, text=True).stdout.split()
+        with io.open(os.path.join(ROOT, rel), "rb") as fh:
+            if not added or hashlib.sha256(fh.read()).hexdigest()[:16] != later:
+                return False
+    return True
+
 ZIP_REL = "fixtures/xbrl/ai_prose_instance_2026-10-09.zip"
 ZIP = os.path.join(ROOT, ZIP_REL)
 README_JA = os.path.join(ROOT, "README.md")
@@ -569,7 +591,7 @@ class PredictionTest(Base):
         base = self.git("log", "--diff-filter=A", "--format=%H", "--", SEAL_REL).stdout.split()[-1]
         d1 = self.git("diff", base, "--numstat", "--", "core", "adapters", FALSE_PASS_REL).stdout
         d2 = self.git("status", "--porcelain", "--", "core", "adapters", FALSE_PASS_REL).stdout
-        out["R-8"] = (d1 == "" and d2 == "")
+        out["R-8"] = (d1 == "" and d2 == "") or only_declared_changes(d1, d2)
         return out
 
     def test_8_judgments_recomputed_equal_the_document_table(self):

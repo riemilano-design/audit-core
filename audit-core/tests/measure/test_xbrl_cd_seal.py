@@ -67,7 +67,9 @@ FROZEN_LATER = {
     # 2026-10-20(段 2): 既定を P20 -> P21 にした(vocabulary.py の DEFAULT_PROFILE と決定の注記。同じ封 docs/XBRL_NAMING_FIX_SEAL_2026-10-20.md の段 2)。
     # vocabulary.py の sha は 段 1 5eb80a2 のとき 6c6db4c75e571a6c(残す。段 1 の結果の記録が測った時点の値)、段 2 で 1205b30b496090ef。
     # 受け入れるのは、その封が履歴に在り、値が段 2 の後の値のときだけ。
-    "adapters/xbrl/vocabulary.py": ("1205b30b496090ef", "docs/XBRL_NAMING_FIX_SEAL_2026-10-20.md"),
+    # 2026-10-20(期を縛る P22 の段 1): 同じ封で vocabulary.py に旗 period_bind と P22 を足した(DEFAULT_PROFILE は P21 のまま)。
+    # sha は 段 1 5eb80a2 で 6c6db4c75e571a6c・名指しの直し 段 2 で 1205b30b496090ef(どちらも残す。測った時点の値)、P22 の段 1 で 1fdb48e7e3ba58ce。
+    "adapters/xbrl/vocabulary.py": ("1fdb48e7e3ba58ce", "docs/XBRL_PERIOD_BIND_SEAL_2026-10-20.md"),
     # 2026-10-20(席と Core の一致の信頼 段 2): measure/inject.py に型 T6_PRIOR・T7_ROUND と select の quota・fallback を足した
     # (既存の型 T1/T2/T3/T5・MACHINE_TYPES・TYPE_POLICY・types を明示しない呼び出しの結果は不変。封 §4。司令塔の承認 2026-10-20)。
     # 封 G-9 の 92d34774c4cc76bb は消さない(10-17 の便の値)。受け入れるのは、その封が履歴に在り、値が足した後の値のときだけ。

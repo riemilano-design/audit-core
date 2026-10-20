@@ -349,6 +349,28 @@ def git(*a):
     return subprocess.run(["git"] + list(a), cwd=ROOT, capture_output=True, text=True)
 
 
+# 2026-10-20 追記(宣言された遷移): 封 docs/XBRL_PERIOD_BIND_SEAL_2026-10-20.md(期を縛る P22 の段 1。engine を変える。人間の承認 2026-10-20)で
+# adapters/xbrl/recipes.py と vocabulary.py だけが動いた。この門が測った時点(封の commit)の engine は 0 行だった(記録の事実、消さない)。
+# 「封の commit から 0 行」を満たしたと数えるのは、(a) 動いた file がこの 2 つだけ、(b) その封が履歴に在る、(c) sha16 が宣言どおり、のときだけ。
+SEAL_PERIOD_BIND = "docs/XBRL_PERIOD_BIND_SEAL_2026-10-20.md"
+ENGINE_LATER = {"adapters/xbrl/recipes.py": ("65a37869f053a60e", SEAL_PERIOD_BIND),
+                "adapters/xbrl/vocabulary.py": ("1fdb48e7e3ba58ce", SEAL_PERIOD_BIND)}
+
+
+def only_declared_changes(numstat_out, status_out):
+    paths = [l.split("\t")[-1] for l in numstat_out.splitlines() if l.strip()] + [l[3:] for l in status_out.splitlines() if l.strip()]
+    rels = sorted(set(p[len("audit-core/"):] if p.startswith("audit-core/") else p for p in paths))
+    for rel in rels:
+        if rel not in ENGINE_LATER:
+            return False
+        later, seal_rel = ENGINE_LATER[rel]
+        added = subprocess.run(["git", "log", "--diff-filter=A", "--format=%H", "--", seal_rel], cwd=ROOT, capture_output=True, text=True).stdout.split()
+        with io.open(os.path.join(ROOT, rel), "rb") as fh:
+            if not added or hashlib.sha256(fh.read()).hexdigest()[:16] != later:
+                return False
+    return True
+
+
 def engine_untouched():
     u"""封が最初に入った commit から、engine・false_pass・inject が 0 行(差も未追跡も無い)。git が使えなければ None。"""
     r = git("log", "--diff-filter=A", "--format=%H", "--", SEAL_REL)
@@ -358,7 +380,7 @@ def engine_untouched():
     base = shas[-1]
     d1 = git("diff", base, "--numstat", "--", *GUARDED)
     d2 = git("status", "--porcelain", "--", *GUARDED)
-    return d1.returncode == 0 and d1.stdout == "" and d2.stdout == ""
+    return d1.returncode == 0 and (d1.stdout == "" and d2.stdout == "" or only_declared_changes(d1.stdout, d2.stdout))
 
 
 def judge_indep(rec, seal):

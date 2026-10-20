@@ -30,12 +30,18 @@ ENGINE_SHA = {"adapters/xbrl/recipes.py": "e2bda6aee13880ff",
 # (名指しの直し P21。engine を変える)で変わった sha。その封が履歴に在り、値がその封の後の値のときだけ受け入れる
 # (tests/measure/test_xbrl_cd_seal.py の FROZEN_LATER と同じ型: 「ずれ」と「宣言された遷移」を言い分ける)。
 SEAL_NAMING_FIX = "docs/XBRL_NAMING_FIX_SEAL_2026-10-20.md"
+SEAL_PERIOD_BIND = "docs/XBRL_PERIOD_BIND_SEAL_2026-10-20.md"    # 2026-10-20 追記: 期を縛る P22 の段 1(下の ENGINE_LATER の recipes.py・vocabulary.py の遷移)
 ENGINE_LATER = {
-    "adapters/xbrl/recipes.py": ("2f692bca1eac3cd3", SEAL_NAMING_FIX),
+    # 2026-10-20(期を縛る P22 の段 1): 封 docs/XBRL_PERIOD_BIND_SEAL_2026-10-20.md(engine を変える。人間の承認 2026-10-20「君に任せる」)で
+    # recipes.py の _direct_value_claim の最初の枝に旗 period_bind の塊(+4 行)を足した。sha は 名指しの直し 段 1 5eb80a2 のとき 2f692bca1eac3cd3(残す。測った時点の値)、
+    # P22 の段 1 で 65a37869f053a60e(独立監査の指摘で subj and を足した後。足す前の中間値 58178740921eaa04 は commit していない)。受け入れるのは、その封が履歴に在り、値が P22 の段 1 の後の値のときだけ。
+    "adapters/xbrl/recipes.py": ("65a37869f053a60e", SEAL_PERIOD_BIND),
     # 2026-10-20(段 2): 既定を P20 -> P21 にした(vocabulary.py の DEFAULT_PROFILE と決定の注記。同じ封 docs/XBRL_NAMING_FIX_SEAL_2026-10-20.md の段 2)。
     # vocabulary.py の sha は 段 1 5eb80a2 のとき 6c6db4c75e571a6c(残す。段 1 の結果の記録が測った時点の値)、段 2 で 1205b30b496090ef。
     # 受け入れるのは、その封が履歴に在り、値が段 2 の後の値のときだけ。
-    "adapters/xbrl/vocabulary.py": ("1205b30b496090ef", SEAL_NAMING_FIX),
+    # 2026-10-20(期を縛る P22 の段 1): 同じ封で vocabulary.py に旗 period_bind と P22 を足した(DEFAULT_PROFILE は P21 のまま)。
+    # sha は 段 1 5eb80a2 で 6c6db4c75e571a6c・名指しの直し 段 2 で 1205b30b496090ef(どちらも残す。測った時点の値)、P22 の段 1 で 1fdb48e7e3ba58ce。
+    "adapters/xbrl/vocabulary.py": ("1fdb48e7e3ba58ce", SEAL_PERIOD_BIND),
 }
 
 

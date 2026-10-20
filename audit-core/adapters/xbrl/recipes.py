@@ -244,6 +244,10 @@ def _direct_value_claim(claim, s, a, b, sign, num, unit, prec, subj, elems, memb
     if profile is not None and profile.period_cue and _prior_cue(s, a, b):
         # C2: 当期・前期で同じ値のとき、「(同」「前期」の直後の数は前期の fact を先に。
         hits = sorted(hits, key=lambda fh: 0 if fh[0]["context"].startswith("Prior1Year") else 1)
+    if profile is not None and getattr(profile, "period_bind", False) and subj and not _prior_cue(s, a, b) and not _prior_cue_clause(s, a):
+        # P22(封 docs/XBRL_PERIOD_BIND_SEAL_2026-10-20.md §1): 前期の手がかりが無い数は、Prior1Year の fact に値だけで結ばない。主語なしは案ア(2026-10-08)のまま = P21 と同一(2026-10-20 独立監査の指摘で subj and)。
+        # 当期の hit が残ればそれで今までどおり。残らなければ値の一致なしとして後続の枝(導出 a-b → 最後の枝)に落とす。
+        hits = [(f, how) for f, how in hits if not f["context"].startswith("Prior1Year")]
     if hits and not (is_diff and subj):
         fams = sorted({f["name"] for f, _ in hits})
         if subj or len(fams) == 1:

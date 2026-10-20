@@ -47,7 +47,8 @@ class FlagShapeTest(unittest.TestCase):
         self.assertFalse(V.P20.last_branch_cues)
 
     def test_only_p21_has_the_flag_on(self):
-        self.assertEqual(["P21"], sorted(n for n, p in V.PROFILES.items() if p.last_branch_cues))
+        # 2026-10-20 P22 = P21 + period_bind は last_branch_cues を引き継ぐ(封 XBRL_PERIOD_BIND_SEAL_2026-10-20 の追記)
+        self.assertEqual(["P21", "P22"], sorted(n for n, p in V.PROFILES.items() if p.last_branch_cues))
 
     def test_the_default_profile_is_p21_from_step_2(self):
         """段 1(5eb80a2)では既定は P20 のままだった。段 2(2026-10-20)で P21 に切り替えた

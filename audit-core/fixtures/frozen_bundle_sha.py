@@ -69,6 +69,13 @@ FROZEN_BUNDLE_GENERATIONS = (
      "決定の注記に日付と根拠を足した(vocabulary.py だけ。他の file は 0 行)。人間の指示(2026-10-20)「アダプターの問題か。"
      "とにかく精度を改善して。何してもいいから」の委任のもと、封 docs/XBRL_NAMING_FIX_SEAL_2026-10-20.md の段 2 の条件"
      "(N-4・N-5)が当たったとき。対象 36 本(本数は変わらない)。独立監査 GO の前に測った値(commit 前)"),
+    ("b71e69601d8c5b4541958072f2b55197125f7d132c1d4ec14771815c9d9e11f6",
+     "2026-10-20 feature/audit-core-final-eval-8(期を縛る P22 の段 1): recipes.py の _direct_value_claim の最初の枝に"
+     "旗 period_bind の塊(+4 行・既存の行は 1 つも変えない。C2 の並べ替えの後ろ・if hits and not (is_diff and subj) の前。条件に subj and を含む = 主語なしは案アのまま。独立監査の指摘で足した)を足し、"
+     "vocabulary.py に旗 1 つ・P22(= P21 + period_bind)・PROFILES の登録を足した(+4 行・-1 行)。DEFAULT_PROFILE は P21 のまま。"
+     "core/py・instance.py・extract.py は 0 行。人間の承認 2026-10-20「君に任せる」、"
+     "封 docs/XBRL_PERIOD_BIND_SEAL_2026-10-20.md(commit 4953a4f)。対象 36 本(本数は変わらない)。"
+     "独立監査 GO の前に測った値(commit 前)"),
 )
 
 # 字で留めるのは**いまの世代**。--expect を値なしで渡したときの既定。

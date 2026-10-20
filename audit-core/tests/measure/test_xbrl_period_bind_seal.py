@@ -46,8 +46,11 @@ AFTER = FILES
 # 封の commit 時点の engine(sha256 の先頭 16 桁)。**ここは宣言された遷移の前の値**で、消さない。
 ENGINE_AT_SEAL = {"adapters/xbrl/recipes.py": "2f692bca1eac3cd3",
                   "adapters/xbrl/vocabulary.py": "1205b30b496090ef"}
-# 宣言された遷移(段 1 の commit で足す): {path: (後の sha16, 遷移を宣言した封の path)}。封の commit 時点では空。
-ENGINE_LATER = {}
+# 宣言された遷移(段 1 の commit で足す): {path: (後の sha16, 遷移を宣言した封の path)}。封の commit 時点では空だった。
+# 2026-10-20 追記(上の ENGINE_AT_SEAL は封の commit 時点の値で消さない): 段 1 の実装で recipes.py は +4 行(最初の枝の塊)、
+# vocabulary.py は +4 行・-1 行(旗・P22・PROFILES の登録)。DEFAULT_PROFILE は P21 のまま。
+ENGINE_LATER = {"adapters/xbrl/recipes.py": ("65a37869f053a60e", SEAL_REL),
+                "adapters/xbrl/vocabulary.py": ("1fdb48e7e3ba58ce", SEAL_REL)}
 
 # §1「過去の門の engine の留め」の一覧(封の字)と、実物の在りか
 PIN_FILES_ENGINE_LATER = ("tests/measure/test_xbrl_branch_a.py", "tests/measure/test_xbrl_role_swap_result.py",
@@ -317,7 +320,7 @@ class SealTest(unittest.TestCase):
 
 
 class EngineAtSealTest(unittest.TestCase):
-    """封の commit 時点の engine を字で留める。段 1 の commit でこの門を「宣言された遷移」に更新する(docstring)。"""
+    """封の commit 時点の engine を字で留め、段 1 の後は「宣言された遷移」の値だけを受け入れる(docstring)。"""
 
     def test_12_engine_sha_is_the_one_at_the_seal_or_a_declared_transition(self):
         for rel, want in sorted(ENGINE_AT_SEAL.items()):
@@ -330,11 +333,14 @@ class EngineAtSealTest(unittest.TestCase):
                 continue
             self.assertEqual(got, want, u"**%s が動いている(段 1 の commit で ENGINE_LATER に遷移を宣言する)**" % rel)
 
-    def test_13_default_stays_p21_and_p22_is_not_registered_yet(self):
+    def test_13_default_stays_p21_and_p22_is_registered_with_the_flag(self):
         from adapters.xbrl import vocabulary as V
         self.assertEqual(V.DEFAULT_PROFILE, "P21")
-        # 封の commit 時点。段 1 の commit で「P22 は PROFILES に在り、旗 period_bind が真」に直す(DEFAULT_PROFILE は P21 のまま)
-        self.assertNotIn("P22", V.PROFILES)
+        # 封の commit 時点は「P22 は PROFILES に無い」だった(測った当時の事実)。段 1 の commit で「P22 は PROFILES に在り、
+        # 旗 period_bind が真」に直した(DEFAULT_PROFILE は P21 のまま)。旗は P22 だけ。
+        self.assertIn("P22", V.PROFILES)
+        self.assertTrue(V.PROFILES["P22"].period_bind)
+        self.assertEqual(["P22"], sorted(n for n, p in V.PROFILES.items() if p.period_bind))
 
 
 class LiveReproductionTest(unittest.TestCase):

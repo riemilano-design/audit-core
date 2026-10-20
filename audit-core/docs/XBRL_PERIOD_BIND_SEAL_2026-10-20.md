@@ -44,3 +44,10 @@
 
 段 1: `adapters/xbrl/vocabulary.py`(P22)・`adapters/xbrl/recipes.py`(最初の枝) → `tests/adapters/xbrl/test_recipes_p22.py` → 既存試験 3 か所(`tests/adapters/xbrl/test_vocabulary.py` の一覧 2 か所・`tests/adapters/xbrl/test_p20.py` の除外 1 か所)に P22 を足す → `measure/xbrl_period_bind_2026-10-20.py`(E-1〜E-6 を測る。穴 B の記録・儀式・段 2 の材料・naming_fix の集合を再利用)→ `fixtures/xbrl/period_bind_2026-10-20.json` → `docs/XBRL_PERIOD_BIND_RESULT_2026-10-20.md` → `tests/measure/test_xbrl_period_bind_result.py` → pin の遷移の宣言 → 覆い。段 2(承認後): `vocabulary.py` の `DEFAULT_PROFILE = "P22"` + 既定の字の試験 + pin。
 順序: 人間の承認(済み、2026-10-20「君に任せる」)→ この封 + 封の門を commit → 段 1 実装(別席)→ 凍結 → 独立監査 → commit → 結果を人間に見せる → 段 2 の承認 → 段 2 → 監査 → commit。
+
+## 追記(2026-10-20、段 1 の実測の後。本文と予測は不変)
+
+- 既存試験の直しは 3 か所でなく 4 か所だった: `tests/adapters/xbrl/test_recipes_p21.py` の `test_only_p21_has_the_flag_on`(P22 は P21 から作るので `last_branch_cues` を引き継ぐ)。1 行直した。E-7 の判定は外れのまま。
+- 段 1 の実装席が封の pin 一覧に無い 2 本を同じ型で宣言した: `tests/measure/test_xbrl_point_prior_result.py` の `engine_untouched()` と `tests/measure/test_xbrl_ritual_result.py` の R-8(生の `git diff` で engine 0 行を見ていた)。測った当時の事実は消していない。
+- E-2 の外れ: 「手がかりあり 190」は span の正規表現の数で、engine の `_prior_cue`・`_prior_cue_clause` より広かった。11 行(「前年は…」「前連結会計年度末残高…」等)が正しい前期の文のまま VALUE_MISMATCH になった。§3 の「手がかりの字の一覧を広げる直しはこの封に含めない」がそのまま代価に出た。段 2 の判断材料。
+- 独立監査(2026-10-20)の指摘: 主語の無い数 5 行で案ア(UNVERIFIABLE)の state が POINTER_NOT_FOUND に動いた。司令塔の判断で P22 の条件に「主語あり」を足し、主語なしは P21 と同一のまま(案アを字のとおり残す)。主語ありの行は 1 つも変わらない。人間が「主語なしも POINTER_NOT_FOUND でよい」と決めるなら別の便。
