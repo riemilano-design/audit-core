@@ -416,6 +416,9 @@ class Profile:
     last_branch_cues: bool = False
     # P22(封 docs/XBRL_PERIOD_BIND_SEAL_2026-10-20.md §1, 2026-10-20): 前期の手がかりが無い数を Prior1Year の fact に値だけで結ばない。偽なら 1 行も変わらない。
     period_bind: bool = False
+    # P23(封 docs/XBRL_ROUNDING_SEAL_2026-10-21.md §1, 2026-10-21): 書類の丸め方が切り捨てと判定されたとき、照合の帯だけを絶対値で片側(0 <= |fact| - |文| < 桁)にする。
+    # ``truncate_on_magnitude``(P19)と違い ``decide_rounding`` の判定の軸は変えない。偽なら 1 行も変わらない。
+    truncate_abs_band: bool = False
 
 
 P1 = Profile(
@@ -703,9 +706,12 @@ P20 = dataclasses.replace(P16, name="P20", nonconsolidated_fallback=True)
 P21 = dataclasses.replace(P20, name="P21", last_branch_cues=True)
 P22 = dataclasses.replace(P21, name="P22", period_bind=True)    # 封 XBRL_PERIOD_BIND_SEAL_2026-10-20。段 1 では既定にしない
 
+# P23 = P22 + 率の帯を書かれた桁から(P18 の旗、既存)+ 切り捨ての帯を絶対値で片側(新しい旗)。**P19 の truncate_on_magnitude は積まない**(判定の軸も変わり 3 書類で金額 55 行が落ちる、封 §0)。段 1 では既定にしない。
+P23 = dataclasses.replace(P22, name="P23", pct_tolerance_from_decimals=True, truncate_abs_band=True)
+
 PROFILES = {"P1": P1, "P5F": P5F, "P6": P6, "P7": P7, "P8": P8, "P9": P9, "P10": P10, "P11": P11,
             "P12": P12, "P13": P13, "P14": P14, "P15": P15, "P16": P16, "P17": P17, "P18": P18,
-            "P19": P19, "P20": P20, "P21": P21, "P22": P22}
+            "P19": P19, "P20": P20, "P21": P21, "P22": P22, "P23": P23}
 
 # **既定 profile(人間の決定 2026-10-13、第 2 段階)。字で留める。**
 # 測定で採用候補にした P16(開発書類 183 件で 146/8/29、未使用 2 書類 217 件で E1' 66.8% / E2 8.2% / E3 27.2%)。

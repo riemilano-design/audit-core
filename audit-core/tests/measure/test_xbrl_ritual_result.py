@@ -48,10 +48,13 @@ FALSE_PASS_REL = "measure/false_pass_2026-10-14.py"
 # adapters/xbrl/recipes.py と vocabulary.py だけが動いた。この門が測った時点(封の commit)の engine は 0 行だった(記録の事実、消さない)。
 # 「封の commit から 0 行」を満たしたと数えるのは、(a) 動いた file がこの 2 つだけ、(b) その封が履歴に在る、(c) sha16 が宣言どおり、のときだけ。
 SEAL_PERIOD_BIND = "docs/XBRL_PERIOD_BIND_SEAL_2026-10-20.md"
-ENGINE_LATER = {"adapters/xbrl/recipes.py": ("65a37869f053a60e", SEAL_PERIOD_BIND),
+# 2026-10-21 追記(丸めの帯 P23 の段 1): 封 docs/XBRL_ROUNDING_SEAL_2026-10-21.md(engine を変える。人間の事前承認 2026-10-21)で vocabulary.py に旗 truncate_abs_band・P23・PROFILES の登録を、
+# recipes.py に _mag_trunc を足した。recipes.py の 65a37869f053a60e・vocabulary.py の 25a3c0992e10daaa は残す(測った時点の値)。受け入れるのは、その封が履歴に在り、値が P23 の段 1 の後の値のときだけ。
+SEAL_ROUNDING = "docs/XBRL_ROUNDING_SEAL_2026-10-21.md"
+ENGINE_LATER = {"adapters/xbrl/recipes.py": ("d5308700eae78c10", SEAL_ROUNDING),
                 # 2026-10-20 追記(段 2): vocabulary.py の sha は 段 1 3320c8c で 1fdb48e7e3ba58ce(残す。測った時点の値)、段 2(DEFAULT_PROFILE を
                 # P21 -> P22 にし、決定の注記を足した。vocabulary.py だけ・recipes.py は 0 行。同じ封 SEAL_PERIOD_BIND の段 2)で 25a3c0992e10daaa。
-                "adapters/xbrl/vocabulary.py": ("25a3c0992e10daaa", SEAL_PERIOD_BIND)}
+                "adapters/xbrl/vocabulary.py": ("f7b8d925eb6787ec", SEAL_ROUNDING)}
 
 
 def only_declared_changes(numstat_out, status_out):

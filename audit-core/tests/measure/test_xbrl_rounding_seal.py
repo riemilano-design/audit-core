@@ -13,7 +13,9 @@ docs/XBRL_ROUNDING_SEAL_2026-10-21.md を固定する。
 段 2(既定 P22 → P23)でもう一度、`DEFAULT_PROFILE` の assert を直す。
 
 **実走(AUDIT_CORE_ROUNDING=1)が数えるのは「率の旗だけを in-process の replace で P22 に積んだ profile」**(= 封 §0 の
-「率の旗だけ」の数。新しい旗はまだ無いので、旗 2 つの P23 そのものは数えられない)。engine の file は書き換えない。"""
+「率の旗だけ」の数。封の commit 時点は新しい旗がまだ無かったので、旗 2 つの P23 そのものは数えられなかった)。engine の file は書き換えない。
+2026-10-21 追記: 段 1 の実装で新しい旗と P23 が在る。P23 そのものの数え直しは rounding_2026-10-21 の結果の門(test_xbrl_rounding_result.py)が持つ。
+この実走は封の §0 の数(率の旗だけ)を数え直す門として変えない。"""
 import contextlib
 import dataclasses
 import glob
@@ -55,8 +57,12 @@ AFTER = FILES
 ENGINE_AT_SEAL = {"adapters/xbrl/vocabulary.py": "25a3c0992e10daaa",
                   "adapters/xbrl/comparators.py": "d8706338325e725b",
                   "adapters/xbrl/recipes.py": "65a37869f053a60e"}
-# 宣言された遷移(段 1 の commit で足す): {path: (後の sha16, 遷移を宣言した封の path)}。封の commit 時点では空。
-ENGINE_LATER = {}
+# 宣言された遷移(段 1 の commit で足す): {path: (後の sha16, 遷移を宣言した封の path)}。封の commit 時点では空だった。
+# 2026-10-21 追記(段 1 の実装): vocabulary.py は旗 truncate_abs_band・P23・PROFILES の登録(+7 行・-1 行)、recipes.py は _mag_trunc(profile, rounding) と
+# 3 か所の呼び出しの置き換え。comparators.py は 0 行(切り捨ての帯の絶対値の枝は P19 で既に入っていて、検証時の照合へは params["magnitude_truncate"] で届く)=
+# 封 §1 が「写しの帯」を comparators.py の変更として数えたのは実物と食い違っていた(結果文書に書く)。DEFAULT_PROFILE は P22 のまま。
+ENGINE_LATER = {"adapters/xbrl/vocabulary.py": ("f7b8d925eb6787ec", SEAL_REL),
+                "adapters/xbrl/recipes.py": ("d5308700eae78c10", SEAL_REL)}
 
 # §1「過去の門の engine の留め」の一覧(封の字)と、実物の在りか
 PIN_FILES_ENGINE_LATER = ("tests/measure/test_xbrl_branch_a.py", "tests/measure/test_xbrl_role_swap_result.py",
@@ -359,22 +365,26 @@ class EngineAtSealTest(unittest.TestCase):
                 continue
             self.assertEqual(got, want, u"**%s が動いている(段 1 の commit で ENGINE_LATER に遷移を宣言する)**" % rel)
 
-    def test_12_flags_exist_default_is_p22_and_the_new_flag_and_p23_do_not_exist_yet(self):
+    def test_12_flags_exist_default_is_p22_and_p23_is_p22_plus_the_two_flags(self):
         from adapters.xbrl import vocabulary as V
         fields = dict((f.name, f) for f in dataclasses.fields(V.Profile))
-        # 既存の旗 2 つ(封 §1)
+        # 既存の旗 2 つ(封 §1)。P20〜P22 には積まれていない(封 §0。2026-10-21 の段 1 で積まれたのは P23 だけ)
         self.assertIn("pct_tolerance_from_decimals", fields)
         self.assertIn("truncate_on_magnitude", fields)
-        self.assertEqual(sorted(n for n, p in V.PROFILES.items() if p.pct_tolerance_from_decimals), ["P18", "P19"])
-        self.assertEqual(sorted(n for n, p in V.PROFILES.items() if p.truncate_on_magnitude), ["P19"])
         for n in ("P20", "P21", "P22"):       # P20〜P22 には積まれていない(封 §0)
             self.assertFalse(V.PROFILES[n].pct_tolerance_from_decimals, n)
             self.assertFalse(V.PROFILES[n].truncate_on_magnitude, n)
-        # 既定は P22 のまま。新しい旗 `truncate_abs_band` はまだ Profile に無い。P23 は PROFILES に無い(封の commit 時点の事実)。
-        # 段 1 の commit で「在る・P23 だけが真・P23 は在り既定は P22 のまま」に直す(docstring)。
+        # 封の commit 時点は「新しい旗 `truncate_abs_band` は Profile に無い・P23 は PROFILES に無い」だった(測った当時の事実)。
+        # 段 1 の commit で「旗は在り P23 だけが真・P23 は在り既定は P22 のまま」に直した(docstring)。
         self.assertEqual(V.DEFAULT_PROFILE, "P22")
-        self.assertNotIn("truncate_abs_band", fields)
-        self.assertNotIn("P23", V.PROFILES)
+        self.assertIn("truncate_abs_band", fields)
+        self.assertFalse(fields["truncate_abs_band"].default)
+        self.assertEqual(["P23"], sorted(n for n, p in V.PROFILES.items() if p.truncate_abs_band))
+        self.assertIn("P23", V.PROFILES)
+        self.assertEqual(V.PROFILES["P23"], dataclasses.replace(V.P22, name="P23", pct_tolerance_from_decimals=True, truncate_abs_band=True))
+        self.assertFalse(V.PROFILES["P23"].truncate_on_magnitude)         # P19 の旗は積まない
+        self.assertEqual(sorted(n for n, p in V.PROFILES.items() if p.pct_tolerance_from_decimals), ["P18", "P19", "P23"])
+        self.assertEqual(sorted(n for n, p in V.PROFILES.items() if p.truncate_on_magnitude), ["P19"])
 
     def test_13_pct_band_is_half_the_written_digit_plus_001(self):
         """封 §0「率の旗の帯は 1 桁で ±0.06」は recipes.pct_tolerance の実物の値である(下調べの V3 の ±0.05 ではない)。"""

@@ -53,8 +53,12 @@ ENGINE_AT_SEAL = {"adapters/xbrl/recipes.py": "2f692bca1eac3cd3",
 # vocabulary.py は +4 行・-1 行(旗・P22・PROFILES の登録)。DEFAULT_PROFILE は P21 のまま。
 # 2026-10-20 追記(段 2): vocabulary.py の sha は 段 1 3320c8c で 1fdb48e7e3ba58ce(残す。段 1 の結果の記録が測った時点の値)、
 # 段 2(DEFAULT_PROFILE を P21 -> P22 にし、決定の注記を足した。vocabulary.py だけ・recipes.py は 0 行)で 25a3c0992e10daaa。
-ENGINE_LATER = {"adapters/xbrl/recipes.py": ("65a37869f053a60e", SEAL_REL),
-                "adapters/xbrl/vocabulary.py": ("25a3c0992e10daaa", SEAL_REL)}
+# 2026-10-21 追記(丸めの帯 P23 の段 1): 封 docs/XBRL_ROUNDING_SEAL_2026-10-21.md(engine を変える。人間の事前承認 2026-10-21)で vocabulary.py に旗 truncate_abs_band・P23・PROFILES の登録を足し
+# (DEFAULT_PROFILE は P22 のまま)、recipes.py に _mag_trunc を足した。recipes.py の 65a37869f053a60e・vocabulary.py の 25a3c0992e10daaa は残す(測った時点の値)。
+# 受け入れるのは、その封が履歴に在り、値が P23 の段 1 の後の値のときだけ(遷移を宣言した封の path は SEAL_ROUNDING)。
+SEAL_ROUNDING = "docs/XBRL_ROUNDING_SEAL_2026-10-21.md"
+ENGINE_LATER = {"adapters/xbrl/recipes.py": ("d5308700eae78c10", SEAL_ROUNDING),
+                "adapters/xbrl/vocabulary.py": ("f7b8d925eb6787ec", SEAL_ROUNDING)}
 
 # §1「過去の門の engine の留め」の一覧(封の字)と、実物の在りか
 PIN_FILES_ENGINE_LATER = ("tests/measure/test_xbrl_branch_a.py", "tests/measure/test_xbrl_role_swap_result.py",
@@ -346,7 +350,8 @@ class EngineAtSealTest(unittest.TestCase):
         # 旗 period_bind が真」に直した。旗は P22 だけ。
         self.assertIn("P22", V.PROFILES)
         self.assertTrue(V.PROFILES["P22"].period_bind)
-        self.assertEqual(["P22"], sorted(n for n, p in V.PROFILES.items() if p.period_bind))
+        # 2026-10-21: P23 = P22 + 率の旗 + truncate_abs_band は period_bind を引き継ぐ(封 XBRL_ROUNDING_SEAL_2026-10-21)
+        self.assertEqual(["P22", "P23"], sorted(n for n, p in V.PROFILES.items() if p.period_bind))
 
 
 class LiveReproductionTest(unittest.TestCase):

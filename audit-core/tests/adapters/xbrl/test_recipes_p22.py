@@ -50,7 +50,8 @@ class FlagShapeTest(unittest.TestCase):
         self.assertFalse(V.P21.period_bind)
 
     def test_only_p22_has_the_flag_on(self):
-        self.assertEqual(["P22"], sorted(n for n, p in V.PROFILES.items() if p.period_bind))
+        # 2026-10-21 P23 = P22 + 率の旗 + truncate_abs_band は period_bind を引き継ぐ(封 XBRL_ROUNDING_SEAL_2026-10-21)
+        self.assertEqual(["P22", "P23"], sorted(n for n, p in V.PROFILES.items() if p.period_bind))
 
     def test_the_default_profile_is_p22_from_step_2(self):
         """段 1(3320c8c)では既定にしなかった(封 §1)。段 2(2026-10-20。人間の決定「任せる」。封の E-8)で P22 にした。"""
@@ -78,7 +79,7 @@ class WithoutCueTest(unittest.TestCase):
 
     def test_every_profile_before_p22_keeps_grounding_the_prior_fact(self):
         for name, p in V.PROFILES.items():
-            if name == "P22":
+            if name in ("P22", "P23"):    # P23 = P22 + 率の旗 + truncate_abs_band は period_bind を引き継ぐ(封 XBRL_ROUNDING_SEAL_2026-10-21)
                 continue
             c = call(name, self.S, "999", "千円", "売上高", [NAME], sales(5000000, 999000))
             self.assertEqual("GROUNDED", c["result"], name)

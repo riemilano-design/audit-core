@@ -81,6 +81,13 @@ FROZEN_BUNDLE_GENERATIONS = (
      "決定の注記に日付と根拠を足した(vocabulary.py だけ。recipes.py・他の file は 0 行)。人間の決定 2026-10-20「任せる」"
      "(段 1 3320c8c の結果と客の席の回し直しを見てから)、封 docs/XBRL_PERIOD_BIND_SEAL_2026-10-20.md の段 2(E-8)。"
      "対象 36 本(本数は変わらない)。独立監査 GO の前に測った値(commit 前)"),
+    ("e308c7f78ee225e2f65d13f07885630969b5e4d86180a2748038036cf3552f04",
+     "2026-10-21 feature/audit-core-final-eval-8(丸めの帯 P23 の段 1): vocabulary.py に旗 truncate_abs_band(書類の丸め方が切り捨てと判定されたとき、"
+     "照合の帯だけを絶対値で片側にする。decide_rounding の判定の軸は変えない)・P23(= P22 + 率の旗 pct_tolerance_from_decimals + truncate_abs_band)・"
+     "PROFILES の登録を足し(+7 行・-1 行)、recipes.py に _mag_trunc(profile, rounding) を足して 3 か所の呼び出しを置き換えた(旗の受け渡しだけ)。"
+     "comparators.py・core/py・instance.py・extract.py は 0 行(切り捨ての帯の絶対値の枝は P19 で入っており、検証時の照合へは params[\"magnitude_truncate\"] で既に届く)。"
+     "DEFAULT_PROFILE は P22 のまま。人間の事前承認 2026-10-21、封 docs/XBRL_ROUNDING_SEAL_2026-10-21.md(commit 5008985)。"
+     "対象 36 本(本数は変わらない)。独立監査 GO の前に測った値(commit 前)"),
 )
 
 # 字で留めるのは**いまの世代**。--expect を値なしで渡したときの既定。

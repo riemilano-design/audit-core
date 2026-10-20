@@ -67,7 +67,14 @@ ENGINE_AT_MEASURE = {"adapters/xbrl/recipes.py": "65a37869f053a60e", "adapters/x
 #: 測った時点の engine を宣言された遷移として受け入れる: {path: (後の sha16, 遷移を宣言した封の path)}。
 #: 2026-10-20(段 2): vocabulary.py の DEFAULT_PROFILE を P21 -> P22 にし、決定の注記を日付つきで足した(vocabulary.py だけ。recipes.py は 0 行)。
 #: 段 1 の sha(1fdb48e7e3ba58ce)は ENGINE_AT_MEASURE に残す(段 1 の記録が測った時点の値)。受け入れるのは、その封が履歴に在り、値が段 2 の後の値のときだけ。
-ENGINE_LATER = {"adapters/xbrl/vocabulary.py": ("25a3c0992e10daaa", SEAL_REL)}
+#: 段 2(d0b544c)の後の engine(段 2 の記録 stage2_default_2026-10-20 が測った時点の値)。消さない。
+ENGINE_AT_STAGE2 = {"adapters/xbrl/recipes.py": "65a37869f053a60e", "adapters/xbrl/vocabulary.py": "25a3c0992e10daaa"}
+#: 2026-10-21 追記(pin の遷移): 封 docs/XBRL_ROUNDING_SEAL_2026-10-21.md(丸めの帯 P23 の段 1。engine を変える。人間の事前承認 2026-10-21)で
+#: vocabulary.py に旗 truncate_abs_band・P23・PROFILES の登録を足し、recipes.py に _mag_trunc を足した(DEFAULT_PROFILE は P22 のまま)。
+#: 上の段 2 の値は ENGINE_AT_STAGE2 に残す。受け入れるのは、その封が履歴に在り、値が P23 の段 1 の後の値のときだけ。
+SEAL_ROUNDING = "docs/XBRL_ROUNDING_SEAL_2026-10-21.md"
+ENGINE_LATER = {"adapters/xbrl/recipes.py": ("d5308700eae78c10", SEAL_ROUNDING),
+                "adapters/xbrl/vocabulary.py": ("f7b8d925eb6787ec", SEAL_ROUNDING)}
 FACT = {
     "e1": (485, 1, 482, 2),                    # 注入・P22 で通した・止めた・その他
     "e1_p21": (459, 458),                      # P21(対照)で通した・うち前期へ移った(穴 B の記録と同じ 459・458)
@@ -669,8 +676,8 @@ def check_stage2(rec):
     u"""記録の新欄を、段 1 の記録の行から独立に数え直した値・二本の儀式の記録と突き合わせる。壊した記録で赤くなる。"""
     s2 = rec[STAGE2]
     assert s2[u"DEFAULT_PROFILE"] == "P22", u"段 2 の測定は既定が P22 の時点"
-    assert s2[u"recipes.py の sha16"] == ENGINE_AT_MEASURE["adapters/xbrl/recipes.py"], u"recipes.py は段 2 でも 0 行"
-    assert s2[u"vocabulary.py の sha16"] == ENGINE_LATER["adapters/xbrl/vocabulary.py"][0], u"vocabulary.py は宣言された遷移の値"
+    assert s2[u"recipes.py の sha16"] == ENGINE_AT_STAGE2["adapters/xbrl/recipes.py"] == ENGINE_AT_MEASURE["adapters/xbrl/recipes.py"], u"recipes.py は段 2 でも 0 行"
+    assert s2[u"vocabulary.py の sha16"] == ENGINE_AT_STAGE2["adapters/xbrl/vocabulary.py"], u"vocabulary.py は宣言された遷移の値(段 2 の後)"
     assert s2[u"費用"] == u"0 USD"
     # E-1: 段 1 の記録の P22 の欄の独立な数え直しと一致
     c1 = recount_e1(rec[u"E1"][u"行"])
@@ -740,6 +747,11 @@ def check_frozen_generation(generations, current):
     assert generations, u"世代が無い"
     sha, why = generations[-1]
     assert sha == current, u"いまの作業木の束ねた sha が最新の世代と違う(世代を足し忘れている): %s != %s" % (current, sha)
+    # 2026-10-21 追記(pin の遷移): 後の封(丸めの帯 P23 の段 1、docs/XBRL_ROUNDING_SEAL_2026-10-21.md)が世代を 1 つ足した後は、段 2 の宣言は
+    # 最新の世代の 1 つ前になる。最新の世代がその後の封の宣言であるときだけ 1 つ前を段 2 として読む(それ以外は従来どおり最新が段 2)。
+    if u"XBRL_ROUNDING_SEAL_2026-10-21" in why:
+        assert len(generations) >= 2, u"後の封の宣言の前に段 2 の世代が無い"
+        sha, why = generations[-2]
     assert u"期を縛る P22 の段 2" in why and u"DEFAULT_PROFILE" in why and u"XBRL_PERIOD_BIND_SEAL_2026-10-20" in why, u"最新の世代の説明が段 2 の宣言でない"
     assert len(set(g[0] for g in generations)) == len(generations), u"世代の sha が重複している"
 
@@ -916,17 +928,24 @@ class RecordTest(unittest.TestCase):
         check_pinned_scripts()
 
     def test_14_stage2_changed_only_the_default_in_the_engine(self):
-        u"""段 2 の engine の差分は vocabulary.py の DEFAULT_PROFILE と注記だけ。recipes.py は段 1 の値のまま、core/ は 0 行(test_9)。"""
-        self.assertEqual(sha16("adapters/xbrl/recipes.py"), ENGINE_AT_MEASURE["adapters/xbrl/recipes.py"])
-        self.assertEqual(sha16("adapters/xbrl/vocabulary.py"), ENGINE_LATER["adapters/xbrl/vocabulary.py"][0])
-        a = git("show", "3320c8c:./adapters/xbrl/vocabulary.py")
-        if a.returncode == 0:
-            old = a.stdout.splitlines()
-            new = jtext(VOCAB).splitlines()
-            self.assertEqual(new[:len(old) - 1], old[:-1], u"段 1 の vocabulary.py の行を 1 行も変えない(最後の DEFAULT_PROFILE の行だけ直す)")
-            self.assertEqual(old[-1], u'DEFAULT_PROFILE = "P21"')
-            self.assertEqual(new[-1], u'DEFAULT_PROFILE = "P22"')
-            self.assertTrue(all(l.startswith(u"#") for l in new[len(old) - 1:-1]), u"足した行は注記(#)だけ")
+        u"""段 2 の engine の差分は vocabulary.py の DEFAULT_PROFILE と注記だけ。recipes.py は段 1 の値のまま、core/ は 0 行(test_9)。
+        2026-10-21 追記(pin の遷移): 後の封(丸めの帯 P23)が作業木の vocabulary.py・recipes.py を動かしたので、段 2 の commit(d0b544c)の
+        **commit された file** と段 1 の commit(3320c8c)を比べる(作業木の engine の留めは test_8 の宣言された遷移)。"""
+        def blob(rev, rel):
+            r = subprocess.run(["git", "show", "%s:./%s" % (rev, rel)], cwd=ROOT, capture_output=True)
+            return r.stdout if r.returncode == 0 else None
+        a_voc, b_voc = blob("3320c8c", "adapters/xbrl/vocabulary.py"), blob("d0b544c", "adapters/xbrl/vocabulary.py")
+        b_rec = blob("d0b544c", "adapters/xbrl/recipes.py")
+        if a_voc is None or b_voc is None or b_rec is None:
+            return
+        self.assertEqual(hashlib.sha256(b_rec).hexdigest()[:16], ENGINE_AT_MEASURE["adapters/xbrl/recipes.py"])
+        self.assertEqual(hashlib.sha256(b_voc).hexdigest()[:16], ENGINE_AT_STAGE2["adapters/xbrl/vocabulary.py"])
+        old = a_voc.decode("utf-8").splitlines()
+        new = b_voc.decode("utf-8").splitlines()
+        self.assertEqual(new[:len(old) - 1], old[:-1], u"段 1 の vocabulary.py の行を 1 行も変えない(最後の DEFAULT_PROFILE の行だけ直す)")
+        self.assertEqual(old[-1], u'DEFAULT_PROFILE = "P21"')
+        self.assertEqual(new[-1], u'DEFAULT_PROFILE = "P22"')
+        self.assertTrue(all(l.startswith(u"#") for l in new[len(old) - 1:-1]), u"足した行は注記(#)だけ")
 
     def test_16_frozen_bundle_last_generation_is_the_working_tree_and_declares_step_2(self):
         import importlib.util
@@ -1281,6 +1300,10 @@ class MutationTest(unittest.TestCase):
         self._red(check_frozen_generation, gens, "c" * 64)                                 # 作業木が世代と違う
         self._red(check_frozen_generation, gens[:-1] + [("b" * 64, u"期を縛る P22 の段 1")], "b" * 64)   # 説明が段 2 でない
         self._red(check_frozen_generation, gens + [("a" * 64, u"期を縛る P22 の段 2 DEFAULT_PROFILE XBRL_PERIOD_BIND_SEAL_2026-10-20")], "a" * 64)   # 重複
+        later = gens + [("d" * 64, u"2026-10-21 丸めの帯 P23 の段 1 docs/XBRL_ROUNDING_SEAL_2026-10-21.md")]
+        check_frozen_generation(later, "d" * 64)                                           # 後の封の世代が足された後も、段 2 の宣言は 1 つ前に在ればよい
+        self._red(check_frozen_generation, later, "b" * 64)                                # 作業木が最新の世代と違う
+        self._red(check_frozen_generation, gens[:-1] + [("d" * 64, u"2026-10-21 丸めの帯 P23 の段 1 docs/XBRL_ROUNDING_SEAL_2026-10-21.md")], "d" * 64)   # 1 つ前が段 2 でない
 
     def test_ms7_stage2_unpinned_script_is_red(self):
         u"""測った当時の P21 を字で留めた measure のどれかが、既定を読むように戻ったら赤。"""

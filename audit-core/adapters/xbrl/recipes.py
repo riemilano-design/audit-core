@@ -140,6 +140,14 @@ def _flow_direction_word(s, subj, a, b):
     return None
 
 
+def _mag_trunc(profile, rounding):
+    """切り捨ての帯を絶対値で当てるか。P19 の旗(``truncate_on_magnitude``)は常に。P23 の旗(``truncate_abs_band``、封
+    docs/XBRL_ROUNDING_SEAL_2026-10-21.md §1)は、書類の丸め方が「切り捨て」と決まった 2 周目だけ ― 1 周目(``rounding`` が None)は
+    ``decide_rounding`` の根拠を数える軸なので P22 のまま。"""
+    return bool(profile is not None and (getattr(profile, "truncate_on_magnitude", False)
+                                         or (getattr(profile, "truncate_abs_band", False) and rounding == "truncate")))
+
+
 def _apply_flow_sign(claim, s, a, b, rounding=None, flow_base=None, mag_trunc=False):
     """§1-2。直接値の Claim が CF 流量項目の 1 件の fact に束縛されていて、
     向きの語があるときだけ、claim["flow_convention"]/["claim_direction"] を
@@ -227,7 +235,7 @@ def _direct_value_claim(claim, s, a, b, sign, num, unit, prec, subj, elems, memb
                         profile=None, rounding=None):
     scale = prec if unit == "円" else V.UNIT_SCALE[unit]
     unit_scale = 1.0 if unit == "円" else V.UNIT_SCALE[unit]
-    mag_trunc = bool(profile is not None and getattr(profile, "truncate_on_magnitude", False))
+    mag_trunc = _mag_trunc(profile, rounding)
     if mag_trunc:
         claim["magnitude_truncate"] = True
     target = sign * num * unit_scale
@@ -428,7 +436,7 @@ def _dispatch_num_claim(claim, s, a, b, sign, num, unit, prec, subj, elems, memb
                         rounding=None, flow_base=None):
     """§1-2 の目標値判定を通らなかった数の Claim の、既存の単位ごとの振り分け
     (C-1d/C-1g と不変)。"""
-    mag_trunc = bool(profile is not None and getattr(profile, "truncate_on_magnitude", False))   # P19
+    mag_trunc = _mag_trunc(profile, rounding)   # P19 の旗・P23 の旗
     tol = pct_tolerance(profile, s, a, b)   # P18(偽なら 0.15 のまま)
     if tol != PCT_TOLERANCE_DEFAULT:
         claim["pct_tolerance"] = tol
@@ -898,7 +906,7 @@ def _build_raw_text_claims(sentences, facts, contexts, profile, claim_member, ro
                         if profile.direction_amount_check:
                             # A1(人間の追加指示): 同じ節に金額が在れば金額も照合する。
                             _direction_amount_check(claim, s, m.start(), m.end(), rounding,
-                                                    getattr(profile, "truncate_on_magnitude", False))
+                                                    _mag_trunc(profile, rounding))
                     elif prior_paren:
                         # 前々期が無いときは代用せず止める(数の側の §1b と同じ
                         # 原因なので同じ理由の名前を使う。登録簿は増やさない)。
