@@ -43,3 +43,13 @@
 `measure/ritual_2026-10-20.py` → `fixtures/xbrl/ritual_2026-10-20.json`(司令塔の機械で 1 回) → `docs/XBRL_RITUAL_RESULT_2026-10-20.md`(予測の表、通した 17 の一覧と読み、限界) → `README.md`・`README.en.md` の節 → `tests/measure/test_xbrl_ritual_result.py`(変異 5 通り)→ 覆いの記録(`--write`、SUITE_COVERAGE §2-1・README.en.md の本数・FACTS §6 A-06〜A-09)。**これ以外に触らない。engine 0 行。0 USD。**
 
 順序: この封 + 封の門(`tests/measure/test_xbrl_ritual_seal.py`: 人間の方針の引用・R-1〜R-8 の存在と外れ方・§2 の HUMAN 2 点・file 一覧・順序)を commit → 人間の同梱の承認 → 実装(別席、0 USD)→ 凍結 → 独立監査 → commit → push。
+
+## 追記(2026-10-20)同梱の承認
+
+本文(§0〜§3、予測 R-1〜R-8)は 1 字も変えない。以下は日付つきの追記である。
+
+- **人間の承認(2026-10-20)**: 同梱の可否(§2 の HUMAN の 1 点目)について、司令塔の意見「公開書類・AI 文に差し替え済み・580 KB、出所を README に明記」を受けて、人間は「任せる進めて」と答えた。これを同梱の承認と扱う。§3 の順序の「人間の同梱の承認」は**済み**。§2 の HUMAN のもう 1 点(`verify_document.py` の docstring 1 行)は**未承認のまま**。
+- **承認の根拠**: (1) 有価証券報告書は EDINET の公開の開示書類である。(2) この zip の経営分析の節は 2026-10-09 の AI 文実験で AI の文に差し替えてあり、原文ではない。(3) 大きさは 580,260 bytes(sha256 `03521437be23c8e2a02d85b4bc29a215646803582e9101fdf185521041174799`)。
+- **出所**(この repo の記録と zip の表紙から。推測は無い): 書類 ID `S100Z4Q1`(`fixtures/xbrl/ai_prose_counts_2026-10-09.json` の `document`)、提出者コード E36539、提出者 ＤＮホールディングス株式会社(DN HOLDINGS CO., LTD.)、提出日 2026年９月30日・第５期(自 2025年７月１日 至 2026年６月30日)(zip の `0000000_header` の表紙の字)。
+- **やること**: (a) `audit-core/.gitignore` に例外 1 行 `!fixtures/xbrl/ai_prose_instance_2026-10-09.zip` を足す(`*.zip` の行は消さない)。(b) 司令塔が `git add -f` で zip を commit に入れる。(c) README の出所 1 行は儀式の実装のときに書く。(d) 門 `tests/measure/test_xbrl_ritual_seal.py` の test_12: zip が git に追跡され、`.gitignore` に例外行が在り、`git check-ignore` が無視しない。sha256 が封の字と一致することは test_7 が縛る。
+- **予測 R-1〜R-8 は変えない。** 同梱が決まったので、買い手が clone した直後に儀式が動く前提が成り立つ。

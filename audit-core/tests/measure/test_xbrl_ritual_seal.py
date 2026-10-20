@@ -162,6 +162,25 @@ class SealTest(unittest.TestCase):
         self.assertIn(u"承認されるまで儀式は実装しない", b)
         self.assertIn(u"人間の同梱の承認 →", sec(self.t, "## §3"))
         self.assertIn(u"git には入っていない(2026-10-20 に封の門の実装席が発見)", sec(self.t, "## §2", "## §3"))
+        # 追記(同梱の承認)。本文は変えず、日付つきの追記だけ
+        a = sec(self.t, "## 追記(2026-10-20)同梱の承認")
+        for s in (u"「任せる進めて」", u"同梱の承認", u"`!fixtures/xbrl/ai_prose_instance_2026-10-09.zip`",
+                  u"`S100Z4Q1`", u"E36539", u"**済み**", u"R-1〜R-8 は変えない"):
+            self.assertIn(s, a, s)
+
+    def test_12_the_zip_is_tracked_in_git(self):
+        # 同梱の承認(封の追記)後の門。司令塔が `git add -f` するまでは赤(index に無い)。
+        run = lambda *a: subprocess.run(["git"] + list(a), cwd=ROOT, capture_output=True, text=True)
+        self.assertEqual(run("ls-files", "--error-unmatch", ZIP_REL).returncode, 0, u"zip が git に追跡されていない")
+
+    def test_13_gitignore_exception_exists_and_the_zip_is_not_ignored(self):
+        run = lambda *a: subprocess.run(["git"] + list(a), cwd=ROOT, capture_output=True, text=True)
+        gi = text(os.path.join(ROOT, ".gitignore")).splitlines()
+        self.assertIn("*.zip", gi)
+        self.assertIn("!" + ZIP_REL, gi)
+        self.assertLess(gi.index("*.zip"), gi.index("!" + ZIP_REL), u"例外は *.zip の後ろ")
+        self.assertEqual(run("check-ignore", "-q", ZIP_REL).returncode, 1, u"zip がまだ無視される")
+        self.assertEqual(run("check-ignore", "-q", "fixtures/xbrl/some_other_file.zip").returncode, 0, u"他の zip は無視されたまま")
 
 
 class OrderTest(unittest.TestCase):

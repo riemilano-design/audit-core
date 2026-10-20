@@ -220,8 +220,8 @@ CLAIM_DECOMPOSITION 系の結果文書は、材料が audit-core の外にあり
 | A-05 | 試験 file の本数(`c740e61` の木) | 188 | 〔git c740e61 . (^¦/)test_[^/]*\.py$ = 188〕 | `python3 measure/facts_check_2026-10-20.py --check --row A-05` |
 | A-06 | 試験 file の本数(いまの木。この 1 冊の門と、後から足した門を含む) | 194 | 〔rec fixtures/suite_coverage_2026-10-16.json#test_files_on_disk = 194〕 | `python3 measure/facts_check_2026-10-20.py --check --row A-06` |
 | A-07 | うち `tests/measure`(いまの木) | 135 | 〔rec fixtures/suite_coverage_2026-10-16.json#by_directory > tests/measure = 135〕 | `python3 measure/facts_check_2026-10-20.py --check --row A-07` |
-| A-08 | pytest の収集本数(いまの木) | 3646 | 〔rec fixtures/suite_coverage_2026-10-16.json#commands > pytest > tests = 3646〕 | `python3 measure/facts_check_2026-10-20.py --check --row A-08` |
-| A-09 | unittest discover の収集本数(いまの木。`measure/tests/test_inject.py` を数え落とす) | 3550 | 〔rec fixtures/suite_coverage_2026-10-16.json#commands > discover > tests = 3550〕 | `python3 measure/facts_check_2026-10-20.py --check --row A-09` |
+| A-08 | pytest の収集本数(いまの木) | 3648 | 〔rec fixtures/suite_coverage_2026-10-16.json#commands > pytest > tests = 3648〕 | `python3 measure/facts_check_2026-10-20.py --check --row A-08` |
+| A-09 | unittest discover の収集本数(いまの木。`measure/tests/test_inject.py` を数え落とす) | 3552 | 〔rec fixtures/suite_coverage_2026-10-16.json#commands > discover > tests = 3552〕 | `python3 measure/facts_check_2026-10-20.py --check --row A-09` |
 | A-10 | XBRL の adapter への変異の本数 | 96 | 〔rec tests/adapters/xbrl/mutations.json# = 96〕 | `python3 measure/facts_check_2026-10-20.py --check --row A-10` |
 | A-11 | Core(`core/py/audit_core/*.py`)の行数 | 429 | 〔wc core/py/audit_core/__init__.py core/py/audit_core/model.py core/py/audit_core/registry.py core/py/audit_core/verify.py = 429〕 | `python3 measure/facts_check_2026-10-20.py --check --row A-11` |
 
