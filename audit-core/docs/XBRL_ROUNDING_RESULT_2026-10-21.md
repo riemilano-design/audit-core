@@ -213,3 +213,7 @@ AUDIT_CORE_ROUNDING=1 python3 -m pytest -q tests/measure/test_xbrl_rounding_resu
 - 残る HUMAN: `verify_document.py` の docstring「既定 P20」(engine のため触っていない)。
 
 記録の所要秒: {"R1": 37.7, "R2": 56.7, "R2b": 80.1, "R3": 174.4, "R5": 10.6, "R6": 1152.6, "全体": 1519.8}。
+
+## 12. 追記(2026-10-21、独立監査 GO の軽い指摘)
+
+- 儀式の素の書類で P22 から P23 へ動いた claim は、第二節の儀式の表とも六十七書類の八行とも別に一件ある: `N054`(「役員株式報酬引当金繰入額は`△28百万円`」)。state は UNVERIFIABLE のままで、reason が `ambiguous(elements)` から `no_subject` に変わる。主語なしの負の金額で、符号つきの切り捨ての帯では候補の要素の二つの家族に一致していたのが、絶対値の帯で一つの家族に絞れ、案ア(主語なし)に落ちる。旗 `truncate_abs_band` だけを積んでも同じ動き(率の旗だけでは動かない、監査の席の手元)。新 GROUNDED は零。この型(主語なし・負の値・理由名の変化)を直接見る試験は無い。
