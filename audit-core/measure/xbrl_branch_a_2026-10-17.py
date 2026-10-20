@@ -174,7 +174,9 @@ def main():
                              V.PROFILES["P16"].nonconsolidated_fallback,
                          u"`P20.nonconsolidated_fallback`":
                              V.PROFILES["P20"].nonconsolidated_fallback,
-                         u"**Core の既定**": V.DEFAULT_PROFILE,
+                         # 2026-10-17 に測った時点のコードの既定(記録の事実)。2026-10-20(段 2)に
+                         # vocabulary.DEFAULT_PROFILE は P21 になったので、字で留めて記録を再現できるようにする。
+                         u"**Core の既定**": "P20",
                          u"**注意**": (
                              u"**(ア) の封は P16 を「既定」と書いたが、"
                              u"コードの既定は P20 である**"

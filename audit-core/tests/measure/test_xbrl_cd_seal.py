@@ -64,7 +64,10 @@ FROZEN = {
 FROZEN_LATER = {
     "adapters/xbrl/instance.py": ("f2d9e040f19adebf", "docs/XBRL_HOLDS_PRODUCT_PATH_SEAL_2026-10-19.md"),
     # 2026-10-20: 封 `docs/XBRL_NAMING_FIX_SEAL_2026-10-20.md`(名指しの直し P21)で vocabulary.py に旗 last_branch_cues と P21 が足された。
-    "adapters/xbrl/vocabulary.py": ("6c6db4c75e571a6c", "docs/XBRL_NAMING_FIX_SEAL_2026-10-20.md"),
+    # 2026-10-20(段 2): 既定を P20 -> P21 にした(vocabulary.py の DEFAULT_PROFILE と決定の注記。同じ封 docs/XBRL_NAMING_FIX_SEAL_2026-10-20.md の段 2)。
+    # vocabulary.py の sha は 段 1 5eb80a2 のとき 6c6db4c75e571a6c(残す。段 1 の結果の記録が測った時点の値)、段 2 で 1205b30b496090ef。
+    # 受け入れるのは、その封が履歴に在り、値が段 2 の後の値のときだけ。
+    "adapters/xbrl/vocabulary.py": ("1205b30b496090ef", "docs/XBRL_NAMING_FIX_SEAL_2026-10-20.md"),
 }
 
 

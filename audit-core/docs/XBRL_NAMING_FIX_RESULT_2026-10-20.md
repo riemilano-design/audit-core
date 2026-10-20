@@ -193,3 +193,22 @@ engine の差分は `adapters/xbrl/recipes.py` と `adapters/xbrl/vocabulary.py`
 - N-6 は幅の両端で当たった。診断席の差し替え実測(2 件)から写した幅の端に実測が乗ったので、『予測が当たった』ことの強さは弱い。
 - (ア) の脚注: 正解は identified_sites(値の一意性 + 単位・ラベル)で作られ、正解そのものが誤りうる。
 - 段 2 はこの文書では決めない。N-4・N-5 は当たったが、既定を P21 にするのは人間の決定(`vocabulary.py` の決定の注記に日付と根拠を足す)で、独立監査 GO の後。
+
+---
+
+## 追記(2026-10-20)段 2
+
+本文(上)は 1 文字も直していない。段 1 の判定『判定しない 2』のうち N-12 を、段 2 で測った。封は 1 文字も直していない(`docs/XBRL_NAMING_FIX_SEAL_2026-10-20.md` の段 2 と §1 と §3 の N-12)。0 USD・席は呼んでいない・通信していない。記録: `fixtures/xbrl/naming_fix/p21_2026-10-20.json` の key `**追記 2026-10-20 段 2(既定 = P21)**`(既存の key・値は直していない)。
+
+- **N-12: 当たり。**動いた行は 5 行(S100Z4N9 の 4 行・S100Z39P の 1 行)、GROUNDED の行 0 行、全部 VALUE_MISMATCH から VALUE_MISMATCH への参照先の移動。封の外れの条件(6 行以上・GROUNDED の行)には当たらなかった。
+- **何と何を比べたか。**`test_p16_matches_the_holdout_dumps` と同じ照合: 未使用 2 書類の P16 の記録(`fixtures/xbrl/holdout_p16/commander_only/dump_P16_<書類>.json`、S100Z39P の 103 行・S100Z4N9 の 150 行、合計 253 行)と、profile を省いた run(既定 = P21)の 4 欄(state・pointers・reason・subject)を行ごとに比べた。違った欄は 5 行とも pointers だけ。
+- **動いた 5 行(型は参照先の字から)。**
+  - S100Z4N9 H-067(N016)・H-120(N027)・H-122(N031): `OperatingIncome@CurrentYearDuration` から `OperatingIncome@Prior1YearDuration`(F1′ 前期の手がかり)。
+  - S100Z4N9 H-124(N008): `OrdinaryIncome@CurrentYearDuration` から `OrdinaryIncome@Prior1YearDuration`(F1′)。
+  - S100Z39P H-075(N045): `NetDefinedBenefitLiability@CurrentYearInstant` の 1 本から、当期・前期の残高の対 `[CurrentYearInstant, Prior1YearInstant, formula:a-b]`(F3b 増減の文は残高の対)。
+- 封 §1 が診断席の実測として挙げた行 id(H-124・H-067・H-120・H-122 と H-075)と、実測の行 id は同じ。段 1 の記録の参考欄(P21 で 4 行と 1 行、P20 で 0 行と 0 行)とも同じ。
+- **既定を切り替えた。**`adapters/xbrl/vocabulary.py` の `DEFAULT_PROFILE` を `"P20"` から `"P21"` に変え、決定の注記に日付(2026-10-20)・人間の指示の委任・封の段 2 の条件(N-4・N-5 が当たった)を足した。既存の注記の字は消していない。engine の差分はこの file だけで、`recipes.py`・`core/` は 0 行。P20 を明示した呼び出しは変わらない。vocabulary.py の sha256 の先頭 16 桁は、段 1(5eb80a2)のとき 6c6db4c75e571a6c、段 2 で 1205b30b496090ef。
+- **未使用 2 書類の P16 の記録で比べられたのは dump に在る行だけ。**S100Z4N9 は主張 186 件のうち dump に在るのは 150 行で、残り 36 件は P16 の記録が無く、この照合では見ていない。GROUNDED の数は 2 書類とも P16 の記録のまま(S100Z39P は 80、S100Z4N9 は 99)。
+  - 独立監査(2026-10-20)の補足: dump に無い 36 件も含めた全主張で P20 と P21(既定)を比べると、S100Z4N9 の N036(CurrentAssets)が F3b の型で動いていた(残高 1 本 → 当期・前期の残高の対、VALUE_MISMATCH → VALUE_MISMATCH)。GROUNDED は 2 書類とも動いていない。つまり 2 書類で動いたのは全主張で 6 行(dump の 5 行 + N036)。N-12 の字(`test_p16_matches_the_holdout_dumps` の照合範囲)では 5 行のまま。
+- **N-12 の当たりは『動いた行が封の挙げた 5 行と同じ』ことで、5 行の新しい参照先が正しいことではない。**新しい参照先に正解は無く、測っていない(段 1 の限界と同じ)。
+- 試験の直し: 既定の字を確かめる試験は P21 にし、既定を測った記録に縛っていた試験は測った時点の字を残して profile を明示する形にした。記録の数は 1 つも書き換えていない。

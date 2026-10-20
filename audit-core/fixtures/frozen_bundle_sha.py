@@ -64,6 +64,11 @@ FROZEN_BUNDLE_GENERATIONS = (
      "P21・PROFILES の登録を足した。DEFAULT_PROFILE は P20 のまま。core/py・instance.py・extract.py は 0 行。"
      "封 docs/XBRL_NAMING_FIX_SEAL_2026-10-20.md(commit 5c267df)。対象 36 本(本数は変わらない)。"
      "独立監査 GO の前に測った値(commit 前)"),
+    ("bb55b75285ec33603985c5cc95dd2b391986e1f86c338aed4a7d54c4e63e69f0",
+     "2026-10-20 feature/audit-core-final-eval-8(名指しの直し P21 の段 2): vocabulary.py の DEFAULT_PROFILE を P20 -> P21 にし、"
+     "決定の注記に日付と根拠を足した(vocabulary.py だけ。他の file は 0 行)。人間の指示(2026-10-20)「アダプターの問題か。"
+     "とにかく精度を改善して。何してもいいから」の委任のもと、封 docs/XBRL_NAMING_FIX_SEAL_2026-10-20.md の段 2 の条件"
+     "(N-4・N-5)が当たったとき。対象 36 本(本数は変わらない)。独立監査 GO の前に測った値(commit 前)"),
 )
 
 # 字で留めるのは**いまの世代**。--expect を値なしで渡したときの既定。

@@ -482,8 +482,10 @@ def main(argv=None):
     timing = {}
     # ---- C0-1(既定の profile = 製品の経路そのまま)と P16(C-2 と (ア) の基準)
     t0 = time.time()
-    per_def = c01(docs, fetched_by, None)
-    default_profile = VD.V.DEFAULT_PROFILE
+    # 2026-10-20(段 2): C0 を測った時点の既定は P20。いまの vocabulary.DEFAULT_PROFILE は P21 なので、
+    # 記録(c0_2026-10-20.json)を再現できるよう、測った時点の P20 を明示する(profile を省く経路と同じ結果)。
+    default_profile = "P20"
+    per_def = c01(docs, fetched_by, default_profile)
     per_p16 = c01(docs, fetched_by, CD8_PROFILE)
     timing[u"C0-1(既定 + P16)秒"] = round(time.time() - t0, 1)
     baseline_p16 = {p[u"doc"]: p["_out"] for p in per_p16}

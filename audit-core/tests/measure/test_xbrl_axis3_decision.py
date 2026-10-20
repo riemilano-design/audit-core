@@ -28,7 +28,10 @@ ENGINE_SHA = {"adapters/xbrl/verify_document.py": "67e7639de3f5f2ad",
 # (tests/measure/test_xbrl_cd_seal.py の FROZEN_LATER と同じ型: 「ずれ」と「宣言された遷移」を言い分ける)。
 SEAL_NAMING_FIX = "docs/XBRL_NAMING_FIX_SEAL_2026-10-20.md"
 ENGINE_LATER = {
-    "adapters/xbrl/vocabulary.py": ("6c6db4c75e571a6c", SEAL_NAMING_FIX),
+    # 2026-10-20(段 2): 既定を P20 -> P21 にした(vocabulary.py の DEFAULT_PROFILE と決定の注記。同じ封 docs/XBRL_NAMING_FIX_SEAL_2026-10-20.md の段 2)。
+    # vocabulary.py の sha は 段 1 5eb80a2 のとき 6c6db4c75e571a6c(残す。段 1 の結果の記録が測った時点の値)、段 2 で 1205b30b496090ef。
+    # 受け入れるのは、その封が履歴に在り、値が段 2 の後の値のときだけ。
+    "adapters/xbrl/vocabulary.py": ("1205b30b496090ef", SEAL_NAMING_FIX),
 }
 
 

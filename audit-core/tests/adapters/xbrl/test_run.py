@@ -35,11 +35,12 @@ class BuildClaimLayerTest(unittest.TestCase):
 
 
 class DefaultProfileTest(unittest.TestCase):
-    """既定 profile。人間の決定 2026-10-13 で P16、**2026-10-14 で P20**。字で留める。"""
+    """既定 profile。人間の決定 2026-10-13 で P16、2026-10-14 で P20、**2026-10-20(段 2)で P21**。字で留める。"""
 
-    def test_default_profile_is_p20_literally(self):
+    def test_default_profile_is_p21_literally(self):
         from adapters.xbrl import vocabulary as V
-        self.assertEqual(V.DEFAULT_PROFILE, "P20")
+        self.assertEqual(V.DEFAULT_PROFILE, "P21")
+        self.assertIn("P20", V.PROFILES)      # 古い既定は消えていない(明示で呼べる)
         self.assertIn(V.DEFAULT_PROFILE, V.PROFILES)
 
     def test_cli_without_profile_uses_the_default(self):
@@ -49,8 +50,8 @@ class DefaultProfileTest(unittest.TestCase):
             self.assertEqual(rc, 0)
             with open(out_path, encoding="utf-8") as handle:
                 data = json.load(handle)
-            self.assertEqual(data["profile"], "P20")
-            explicit = RUN.build_claim_layer(M.DOC_5["docID"], "P20", expected_sha256=M.DOC_5["sha256"])
+            self.assertEqual(data["profile"], "P21")
+            explicit = RUN.build_claim_layer(M.DOC_5["docID"], "P21", expected_sha256=M.DOC_5["sha256"])
             self.assertEqual(data["claims"], explicit["claims"])
 
     def test_explicit_profile_still_wins(self):

@@ -26358,5 +26358,185 @@
   "特定が増えるのは F1′ の 5 件だけ。F2′・F3b は誤った 1 本の名指しをやめる直しで、特定率は 26 / 50 止まり。",
   "M-C2・N-10・N-11 は pytest を別に走らせた結果で、この記録の外(結果文書に書く)。",
   "(ア) の脚注: 正解は identified_sites(値の一意性 + 単位・ラベル)で作られ、正解そのものが誤りうる。"
- ]
+ ],
+ "**追記 2026-10-20 段 2(既定 = P21)**": {
+  "step": "名指しの直し(P21)の段 2。既定の profile を P20 -> P21 にした。0 USD・席を呼ばない・通信しない",
+  "seal": "docs/XBRL_NAMING_FIX_SEAL_2026-10-20.md(段 2 / N-12。封は 1 文字も直していない)",
+  "DEFAULT_PROFILE の切替": {
+   "前": "P20",
+   "後": "P21",
+   "根拠": "人間の指示 2026-10-20「アダプターの問題か。とにかく精度を改善して。何してもいいから」の委任のもと、封の段 2 の条件(N-4 無改変 40 書類で GROUNDED の行が動いた 0・N-5 gen_c の VM -> PNF 7)が当たった",
+   "vocabulary.py の sha256 の先頭 16 桁": {
+    "段 1 5eb80a2": "6c6db4c75e571a6c",
+    "段 2": "1205b30b496090ef"
+   },
+   "git diff --numstat -- adapters core": [
+    "5",
+    "1",
+    "audit-core/adapters/xbrl/vocabulary.py"
+   ],
+   "P20 を明示した呼び出し": "変わらない(PROFILES[\"P20\"] は無変更)"
+  },
+  "N-12 の実測": {
+   "照合": "tests/adapters/xbrl/test_verify_entry.py の test_p16_matches_the_holdout_dumps と同じ照合(未使用 2 書類の P16 の記録 dump_P16 と、profile を省いた run = 既定 = P21 の run の 4 欄 state・pointers・reason・subject を行ごとに比べる)",
+   "比べた行": 253,
+   "書類ごと": {
+    "S100Z39P": {
+     "claims": 103,
+     "dump の行": 103,
+     "動いた行": 1,
+     "GROUNDED の数(P21 の run)": 80,
+     "states(P21 の run)": {
+      "GROUNDED": 80,
+      "POINTER_NOT_FOUND": 2,
+      "UNVERIFIABLE": 16,
+      "VALUE_MISMATCH": 5
+     }
+    },
+    "S100Z4N9": {
+     "claims": 186,
+     "dump の行": 150,
+     "動いた行": 4,
+     "GROUNDED の数(P21 の run)": 99,
+     "states(P21 の run)": {
+      "GROUNDED": 99,
+      "POINTER_NOT_FOUND": 6,
+      "UNVERIFIABLE": 28,
+      "VALUE_MISMATCH": 53
+     }
+    }
+   },
+   "動いた数": 5,
+   "GROUNDED の行で動いた数": 0,
+   "全部 VALUE_MISMATCH -> VALUE_MISMATCH": true,
+   "違った欄は全部 pointers だけ": true,
+   "動いた行 id": {
+    "S100Z39P": [
+     "H-075"
+    ],
+    "S100Z4N9": [
+     "H-067",
+     "H-120",
+     "H-122",
+     "H-124"
+    ]
+   },
+   "動いた行(1 件ずつ)": [
+    {
+     "書類": "S100Z39P",
+     "行の鍵": "S100Z39P:H-075",
+     "行 id": "H-075",
+     "claim_id": "N045",
+     "違った欄": [
+      "pointers"
+     ],
+     "型": "F3b(残高の対)",
+     "P16 の記録": {
+      "state": "VALUE_MISMATCH",
+      "pointers": [
+       "xbrl:jppfs_cor:NetDefinedBenefitLiability@CurrentYearInstant"
+      ]
+     },
+     "P21": {
+      "state": "VALUE_MISMATCH",
+      "pointers": [
+       "xbrl:jppfs_cor:NetDefinedBenefitLiability@CurrentYearInstant",
+       "xbrl:jppfs_cor:NetDefinedBenefitLiability@Prior1YearInstant",
+       "formula:a-b"
+      ]
+     }
+    },
+    {
+     "書類": "S100Z4N9",
+     "行の鍵": "S100Z4N9:H-067",
+     "行 id": "H-067",
+     "claim_id": "N016",
+     "違った欄": [
+      "pointers"
+     ],
+     "型": "F1′(前期の fact)",
+     "P16 の記録": {
+      "state": "VALUE_MISMATCH",
+      "pointers": [
+       "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration"
+      ]
+     },
+     "P21": {
+      "state": "VALUE_MISMATCH",
+      "pointers": [
+       "xbrl:jppfs_cor:OperatingIncome@Prior1YearDuration"
+      ]
+     }
+    },
+    {
+     "書類": "S100Z4N9",
+     "行の鍵": "S100Z4N9:H-120",
+     "行 id": "H-120",
+     "claim_id": "N027",
+     "違った欄": [
+      "pointers"
+     ],
+     "型": "F1′(前期の fact)",
+     "P16 の記録": {
+      "state": "VALUE_MISMATCH",
+      "pointers": [
+       "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration"
+      ]
+     },
+     "P21": {
+      "state": "VALUE_MISMATCH",
+      "pointers": [
+       "xbrl:jppfs_cor:OperatingIncome@Prior1YearDuration"
+      ]
+     }
+    },
+    {
+     "書類": "S100Z4N9",
+     "行の鍵": "S100Z4N9:H-122",
+     "行 id": "H-122",
+     "claim_id": "N031",
+     "違った欄": [
+      "pointers"
+     ],
+     "型": "F1′(前期の fact)",
+     "P16 の記録": {
+      "state": "VALUE_MISMATCH",
+      "pointers": [
+       "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration"
+      ]
+     },
+     "P21": {
+      "state": "VALUE_MISMATCH",
+      "pointers": [
+       "xbrl:jppfs_cor:OperatingIncome@Prior1YearDuration"
+      ]
+     }
+    },
+    {
+     "書類": "S100Z4N9",
+     "行の鍵": "S100Z4N9:H-124",
+     "行 id": "H-124",
+     "claim_id": "N008",
+     "違った欄": [
+      "pointers"
+     ],
+     "型": "F1′(前期の fact)",
+     "P16 の記録": {
+      "state": "VALUE_MISMATCH",
+      "pointers": [
+       "xbrl:jppfs_cor:OrdinaryIncome@CurrentYearDuration"
+      ]
+     },
+     "P21": {
+      "state": "VALUE_MISMATCH",
+      "pointers": [
+       "xbrl:jppfs_cor:OrdinaryIncome@Prior1YearDuration"
+      ]
+     }
+    }
+   ],
+   "当たり": true,
+   "封の外れの条件": "6 行以上 / GROUNDED の行"
+  }
+ }
 }

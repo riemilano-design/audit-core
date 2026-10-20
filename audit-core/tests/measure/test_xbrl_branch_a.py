@@ -32,7 +32,10 @@ ENGINE_SHA = {"adapters/xbrl/recipes.py": "e2bda6aee13880ff",
 SEAL_NAMING_FIX = "docs/XBRL_NAMING_FIX_SEAL_2026-10-20.md"
 ENGINE_LATER = {
     "adapters/xbrl/recipes.py": ("2f692bca1eac3cd3", SEAL_NAMING_FIX),
-    "adapters/xbrl/vocabulary.py": ("6c6db4c75e571a6c", SEAL_NAMING_FIX),
+    # 2026-10-20(段 2): 既定を P20 -> P21 にした(vocabulary.py の DEFAULT_PROFILE と決定の注記。同じ封 docs/XBRL_NAMING_FIX_SEAL_2026-10-20.md の段 2)。
+    # vocabulary.py の sha は 段 1 5eb80a2 のとき 6c6db4c75e571a6c(残す。段 1 の結果の記録が測った時点の値)、段 2 で 1205b30b496090ef。
+    # 受け入れるのは、その封が履歴に在り、値が段 2 の後の値のときだけ。
+    "adapters/xbrl/vocabulary.py": ("1205b30b496090ef", SEAL_NAMING_FIX),
 }
 
 
@@ -92,7 +95,11 @@ class BranchTest(unittest.TestCase):
                       V.PROFILES["P16"].nonconsolidated_fallback)
         self.assertIs(p[u"`P20.nonconsolidated_fallback`"],
                       V.PROFILES["P20"].nonconsolidated_fallback)
-        self.assertEqual(p[u"**Core の既定**"], V.DEFAULT_PROFILE)
+        # 記録の事実: 2026-10-17 に測った時点の Core の既定は P20。2026-10-20(段 2)に既定は P21 になった
+        # (封 docs/XBRL_NAMING_FIX_SEAL_2026-10-20.md)ので、記録は字で留め、いまのコードの既定は別に確かめる。
+        self.assertEqual(p[u"**Core の既定**"], "P20")
+        self.assertEqual(V.DEFAULT_PROFILE, "P21")
+        self.assertTrue(V.PROFILES[V.DEFAULT_PROFILE].nonconsolidated_fallback)
         self.assertEqual(p[u"今回の測定で使った"], "P16")
         self.assertFalse(V.PROFILES["P16"].nonconsolidated_fallback)
         self.assertTrue(V.PROFILES["P20"].nonconsolidated_fallback)

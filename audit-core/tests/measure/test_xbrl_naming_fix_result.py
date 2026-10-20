@@ -586,5 +586,126 @@ class NamingFixResultGate(unittest.TestCase):
             self.assertNotIn(bad, d, bad)
 
 
+STEP2 = u"**追記 2026-10-20 段 2(既定 = P21)**"
+STEP2_HEAD = u"\n## 追記(2026-10-20)段 2"
+HOLDOUT = os.path.join(ROOT, "fixtures", "xbrl", "holdout_p16", "commander_only")
+VOCAB = os.path.join(ROOT, "adapters", "xbrl", "vocabulary.py")
+#: 封 §1・N-12 の 5 行と、P21 での参照先(**ここに字で留める**。記録の値と比べる)。
+STEP2_MOVED = {
+    (u"S100Z39P", u"H-075"): ["xbrl:jppfs_cor:NetDefinedBenefitLiability@CurrentYearInstant",
+                              "xbrl:jppfs_cor:NetDefinedBenefitLiability@Prior1YearInstant", "formula:a-b"],
+    (u"S100Z4N9", u"H-067"): ["xbrl:jppfs_cor:OperatingIncome@Prior1YearDuration"],
+    (u"S100Z4N9", u"H-120"): ["xbrl:jppfs_cor:OperatingIncome@Prior1YearDuration"],
+    (u"S100Z4N9", u"H-122"): ["xbrl:jppfs_cor:OperatingIncome@Prior1YearDuration"],
+    (u"S100Z4N9", u"H-124"): ["xbrl:jppfs_cor:OrdinaryIncome@Prior1YearDuration"],
+}
+
+
+class NamingFixStep2Gate(unittest.TestCase):
+    u"""段 2(既定 = P21)。N-12 の判定と数を、記録の追記の行・P16 の記録(dump)・封の字から**門が数え直す**。"""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.rec = jload(REC)
+        cls.s2 = cls.rec[STEP2]
+        cls.doc = text(DOC)
+        cls.seal = text(SEAL_DOC)
+        i = cls.doc.index(STEP2_HEAD)
+        cls.body, cls.add = cls.doc[:i], cls.doc[i:]
+
+    def _dump(self, doc):
+        return jload(os.path.join(HOLDOUT, "dump_P16_%s.json" % doc))
+
+    def _verdict(self):
+        u"""N-12 を行から判定する(封 §3: 5 行だけ・全部 VALUE_MISMATCH の参照先の移動。6 行以上 / GROUNDED の行は外れ)。"""
+        rows = self.s2[u"N-12 の実測"][u"動いた行(1 件ずつ)"]
+        ids = sorted((m[u"書類"], m[u"行 id"]) for m in rows)
+        g = sum(1 for m in rows if "GROUNDED" in (m[u"P16 の記録"][u"state"], m[u"P21"][u"state"]))
+        vm = all(m[u"P16 の記録"][u"state"] == "VALUE_MISMATCH" and m[u"P21"][u"state"] == "VALUE_MISMATCH" for m in rows)
+        ptr = all(m[u"P16 の記録"][u"pointers"] != m[u"P21"][u"pointers"] for m in rows)
+        return (len(rows) == 5 and g == 0 and vm and ptr and ids == sorted(STEP2_MOVED)), len(rows), g
+
+    def test_12_the_five_rows_are_recounted_from_the_rows_the_seal_and_the_dumps(self):
+        rows = self.s2[u"N-12 の実測"][u"動いた行(1 件ずつ)"]
+        self.assertEqual(len(rows), 5)
+        # 封 §1 の字が挙げた行 id と同じ(封は読むだけ)
+        sec1 = self.seal[self.seal.index("`tests/adapters/xbrl/test_verify_entry.py` の `test_p16_matches_the_holdout_dumps`"):]
+        sec1 = sec1[:sec1.index("\n")]
+        self.assertEqual(sorted(re.findall(r"H-\d+", sec1)), sorted(r_ for (_d, r_) in STEP2_MOVED))
+        for m in rows:
+            key = (m[u"書類"], m[u"行 id"])
+            self.assertIn(key, STEP2_MOVED)
+            self.assertEqual(m[u"P21"][u"pointers"], STEP2_MOVED[key], key)         # 字で留めた P21 の参照先
+            self.assertEqual(m[u"P21"][u"state"], "VALUE_MISMATCH", key)
+            # 記録の P16 の側は、commit 済みの dump_P16(独立した出どころ)の同じ行と同じ
+            w = self._dump(m[u"書類"])[m[u"行の鍵"]]
+            self.assertEqual(m[u"P16 の記録"], {u"state": w["state"], u"pointers": w["pointers"]}, key)
+            self.assertEqual(m[u"違った欄"], ["pointers"], key)
+            self.assertNotEqual(m[u"P16 の記録"][u"pointers"], m[u"P21"][u"pointers"], key)
+        # 型を、P16 / P21 の参照先の字から門が分類し直す(F1′ は前期の fact 1 本・F3b は残高の対)
+        kinds = {}
+        for m in rows:
+            k_ = (u"F3b(残高の対)" if len(m[u"P21"][u"pointers"]) == 3 and m[u"P21"][u"pointers"][2] == "formula:a-b"
+                  else u"F1′(前期の fact)" if len(m[u"P21"][u"pointers"]) == 1 and "@Prior1Year" in m[u"P21"][u"pointers"][0]
+                  else u"その他")
+            kinds[k_] = kinds.get(k_, 0) + 1
+            self.assertEqual(m[u"型"], k_, m[u"行の鍵"])
+        self.assertEqual(kinds, {u"F1′(前期の fact)": 4, u"F3b(残高の対)": 1})
+
+    def test_13_the_verdict_is_agreed_three_ways_record_gate_and_document(self):
+        hit, n, g = self._verdict()
+        rec = self.s2[u"N-12 の実測"]
+        self.assertEqual((rec[u"当たり"], rec[u"動いた数"], rec[u"GROUNDED の行で動いた数"]), (hit, n, g))
+        self.assertEqual(rec[u"動いた行 id"], {"S100Z39P": ["H-075"], "S100Z4N9": ["H-067", "H-120", "H-122", "H-124"]})
+        by_doc = {d: sum(1 for m in rec[u"動いた行(1 件ずつ)"] if m[u"書類"] == d) for d in (u"S100Z4N9", u"S100Z39P")}
+        verdict, a, b, c, gg = once(self.add, r"\*\*N-12: (当たり|外れ)。\*\*動いた行は (\d+) 行\(S100Z4N9 の (\d+) 行・S100Z39P の (\d+) 行\)、GROUNDED の行 (\d+) 行")
+        self.assertEqual((verdict, a, b, c, gg),
+                         (u"当たり" if hit else u"外れ",) + S(n, by_doc[u"S100Z4N9"], by_doc[u"S100Z39P"], g))
+        # 比べた行の数は dump の行数の合計(字で 103 + 150 = 253)
+        self.assertEqual(rec[u"比べた行"], sum(len(self._dump(d)) for d in (u"S100Z39P", u"S100Z4N9")))
+        self.assertEqual(rec[u"比べた行"], 253)
+        self.assertEqual(once(self.add, r"合計 (\d+) 行"), str(rec[u"比べた行"]))
+        for d, x in rec[u"書類ごと"].items():
+            self.assertEqual(x[u"dump の行"], len(self._dump(d)), d)
+            self.assertEqual(x[u"動いた行"], by_doc[d], d)
+        # GROUNDED の数は P16 の記録(結果文書 HOLDOUT_P16_RESULT)のまま
+        self.assertEqual((rec[u"書類ごと"]["S100Z39P"][u"GROUNDED の数(P21 の run)"], rec[u"書類ごと"]["S100Z4N9"][u"GROUNDED の数(P21 の run)"]), (80, 99))
+
+    def test_14_default_profile_is_switched_with_a_dated_note_and_old_text_kept(self):
+        import sys
+        if ROOT not in sys.path:
+            sys.path.insert(0, ROOT)
+        from adapters.xbrl import vocabulary as V
+        self.assertEqual(V.DEFAULT_PROFILE, "P21")
+        self.assertIn("P20", V.PROFILES)                                    # 古い既定は消えていない
+        sw = self.s2[u"DEFAULT_PROFILE の切替"]
+        self.assertEqual((sw[u"前"], sw[u"後"]), ("P20", "P21"))
+        self.assertEqual(sw[u"vocabulary.py の sha256 の先頭 16 桁"][u"段 1 5eb80a2"], ENGINE_AT_MEASURE[u"adapters/xbrl/vocabulary.py"])
+        src = text(VOCAB)
+        i = src.index("\nDEFAULT_PROFILE = ")
+        note = src[:i][src[:i].index(u"# **既定 profile(人間の決定 2026-10-13、第 2 段階)"):]
+        for lit in (u"# 2026-10-14 の人間の決定で P16 -> P20。",                  # 古い注記の字は消えていない
+                    u"# **engine 全体の品質合格ではない**: 同じ 8 書類で E2/G = 11.6%",
+                    u"# 2026-10-20 に P20 -> P21(段 2)。",
+                    u"「アダプターの問題か。とにかく精度を改善して。何してもいいから」",
+                    u"docs/XBRL_NAMING_FIX_SEAL_2026-10-20.md の段 2 の条件が当たったので",
+                    u"N-4 無改変 40 書類で GROUNDED の行が動いた 0", u"N-5 gen_c 8 書類の VM -> PNF は 7"):
+            self.assertIn(lit, note, lit)
+        self.assertTrue(note.index(u"# 2026-10-14 の人間の決定で P16 -> P20。") < note.index(u"# 2026-10-20 に P20 -> P21(段 2)。"))
+        self.assertEqual(once(src, r'(?m)^DEFAULT_PROFILE = "(P\d+)"$'), "P21")
+
+    def test_15_the_body_is_not_rewritten_and_the_addendum_is_added_once(self):
+        self.assertEqual(self.doc.count(STEP2_HEAD), 1)
+        for lit in (u"段 2 はこの文書では決めない", u"既定の profile は P20 のまま", u"## 限界"):
+            self.assertIn(lit, self.body, lit)
+            self.assertNotIn(lit, self.add, lit)
+        # 追記は表の行を持たない(本文の N-n の表・当たり外れの集計に混ざらない)
+        self.assertEqual(re.findall(r"(?m)^\| \*\*N-\d+\*\*", self.add), [])
+        self.assertEqual(len(re.findall(r"(?m)^\| \*\*N-\d+\*\*", self.body)), 12)
+        for bad in (u"改善した。", u"良くなった", u"持ち直した。", u"汎化した"):
+            self.assertNotIn(bad, self.add, bad)
+        self.assertIn(u"0 USD", self.add)
+
+
 if __name__ == "__main__":
     unittest.main()

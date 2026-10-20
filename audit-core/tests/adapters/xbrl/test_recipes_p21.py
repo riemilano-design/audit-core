@@ -49,8 +49,11 @@ class FlagShapeTest(unittest.TestCase):
     def test_only_p21_has_the_flag_on(self):
         self.assertEqual(["P21"], sorted(n for n, p in V.PROFILES.items() if p.last_branch_cues))
 
-    def test_the_default_profile_stays_p20_in_step_1(self):
-        self.assertEqual("P20", V.DEFAULT_PROFILE)
+    def test_the_default_profile_is_p21_from_step_2(self):
+        """段 1(5eb80a2)では既定は P20 のままだった。段 2(2026-10-20)で P21 に切り替えた
+        (封 docs/XBRL_NAMING_FIX_SEAL_2026-10-20.md §0・§5。N-4・N-5 が当たったとき)。"""
+
+        self.assertEqual("P21", V.DEFAULT_PROFILE)
 
 
 class PriorCueTest(unittest.TestCase):
