@@ -1,21 +1,21 @@
 {
  "purpose": "**試験 file が 1 本も標準の検証から漏れていないこと**。人間の指示 2026-10-16。**試験は走らせない。収集だけ数える**",
- "test_files_on_disk": 186,
+ "test_files_on_disk": 188,
  "by_directory": {
   "measure/tests": 1,
   "tests/adapters/kokkai": 11,
   "tests/adapters/shogi": 8,
-  "tests/adapters/xbrl": 25,
+  "tests/adapters/xbrl": 26,
   "tests/core": 5,
   "tests/fixtures/xbrl": 4,
   "tests/golden": 4,
-  "tests/measure": 128
+  "tests/measure": 129
  },
- "unittest_modules": 185,
+ "unittest_modules": 187,
  "commands": {
   "pytest": {
-   "collected_files": 186,
-   "tests": 3491,
+   "collected_files": 188,
+   "tests": 3524,
    "missed_files": [],
    "extra_files": [],
    "collect_rc": 0,
@@ -23,8 +23,8 @@
    "must_cover_everything": true
   },
   "discover": {
-   "collected_files": 185,
-   "tests": 3395,
+   "collected_files": 187,
+   "tests": 3428,
    "missed_files": [
     "measure/tests/test_inject.py"
    ],
