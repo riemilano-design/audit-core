@@ -27,6 +27,10 @@ ENGINE_LATER = {
     # vocabulary.py の sha は 段 1 5eb80a2 のとき 6c6db4c75e571a6c(残す。段 1 の結果の記録が測った時点の値)、段 2 で 1205b30b496090ef。
     # 受け入れるのは、その封が履歴に在り、値が段 2 の後の値のときだけ。
     "adapters/xbrl/vocabulary.py": ("1205b30b496090ef", SEAL_NAMING_FIX),
+    # 2026-10-20(席と Core の一致の信頼 段 2): measure/inject.py に型 T6_PRIOR・T7_ROUND と select の quota・fallback を足した
+    # (既存の型 T1/T2/T3/T5・MACHINE_TYPES・TYPE_POLICY・types を明示しない呼び出しの結果は不変。封 §4。司令塔の承認 2026-10-20)。
+    # 92d34774c4cc76bb は FROZEN に残す(この記録が測った時点の値)。受け入れるのは、封が履歴に在り、値が足した後の値のときだけ。
+    "measure/inject.py": ("211e37d028f46cf7", "docs/XBRL_HYBRID_TRUST_SEAL_2026-10-20.md"),
 }
 
 
