@@ -23,6 +23,14 @@ ENGINE_SHA = {"core/py/audit_core/verify.py": "d29b21dccec8af24",
               "adapters/xbrl/recipes.py": "e2bda6aee13880ff",
               "adapters/xbrl/verify_document.py": "67e7639de3f5f2ad"}
 
+# 2026-10-20 追記(上の ENGINE_SHA は、その記録を測った時点の sha で、消さない)。**宣言された遷移**: 封
+# docs/XBRL_NAMING_FIX_SEAL_2026-10-20.md(名指しの直し P21。engine を変える)で変わった sha。その封が履歴に在り、
+# 値がその封の後の値のときだけ受け入れる(tests/measure/test_xbrl_cd_seal.py の FROZEN_LATER と同じ型)。
+SEAL_NAMING_FIX = "docs/XBRL_NAMING_FIX_SEAL_2026-10-20.md"
+ENGINE_LATER = {
+    "adapters/xbrl/recipes.py": ("2f692bca1eac3cd3", SEAL_NAMING_FIX),
+}
+
 
 def text(p):
     with io.open(p, encoding="utf-8") as fh:
@@ -166,9 +174,15 @@ class DisciplineTest(unittest.TestCase):
     def test_11_engine_untouched(self):
         for rel, want in ENGINE_SHA.items():
             with io.open(os.path.join(ROOT, rel), "rb") as fh:
-                self.assertEqual(
-                    hashlib.sha256(fh.read()).hexdigest()[:16], want,
-                    u"**%s が動いている**" % rel)
+                got = hashlib.sha256(fh.read()).hexdigest()[:16]
+            if got != want and rel in ENGINE_LATER:
+                later, seal_rel = ENGINE_LATER[rel]
+                added = subprocess.run(["git", "log", "--diff-filter=A", "--format=%H", "--", seal_rel],
+                                       cwd=ROOT, capture_output=True, text=True).stdout.split()
+                self.assertTrue(added, u"**%s が動いているのに、遷移を宣言した封 %s が履歴に無い**" % (rel, seal_rel))
+                self.assertEqual(got, later, u"**%s が、宣言された遷移の値とも違う**" % rel)
+                continue
+            self.assertEqual(got, want, u"**%s が動いている**" % rel)
         self.assertIn(u"**engine は 1 行も変えていない。contract を足していない。"
                       u"0 USD・席は呼んでいない。**", self.t)
 

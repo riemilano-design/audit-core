@@ -392,7 +392,7 @@ class ProfileShapeTest(unittest.TestCase):
 
     def test_every_other_profile_keeps_the_flag_off(self):
         for name, p in V.PROFILES.items():
-            if name == "P20":
+            if name in ("P20", "P21"):    # P21 = P20 + last_branch_cues(封 XBRL_NAMING_FIX_SEAL_2026-10-20)
                 continue
             self.assertFalse(p.nonconsolidated_fallback, name)
 

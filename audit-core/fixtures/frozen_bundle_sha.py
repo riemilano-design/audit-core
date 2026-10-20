@@ -58,6 +58,12 @@ FROZEN_BUNDLE_GENERATIONS = (
      "(derived_pointers・direction_checked・period_pair 引数)を足した。instance.py・core/py は 0 行。"
      "封 docs/XBRL_PERIOD_PAIR_SEAL_2026-10-19.md(commit 790a5c5 + 追記 1 78a04f5)。対象 36 本(本数は変わらない ―"
      "ファイルを増やしていない)。独立監査 GO の前に測った値(commit 前)"),
+    ("4e5bc8a8fe7667914c16d7765a6faa0a78cabcf617f29bfb55c65088dc158613",
+     "2026-10-20 feature/audit-core-final-eval-8(名指しの直し P21 の段 1): recipes.py の _direct_value_claim の最後の枝に"
+     "旗 last_branch_cues の後ろの 3 つの直し(F1′・F2′・F3b)を足し(+30 行・既存の行は 1 つも変えない。§1b の止めの後ろ)、vocabulary.py に旗 1 つ・"
+     "P21・PROFILES の登録を足した。DEFAULT_PROFILE は P20 のまま。core/py・instance.py・extract.py は 0 行。"
+     "封 docs/XBRL_NAMING_FIX_SEAL_2026-10-20.md(commit 5c267df)。対象 36 本(本数は変わらない)。"
+     "独立監査 GO の前に測った値(commit 前)"),
 )
 
 # 字で留めるのは**いまの世代**。--expect を値なしで渡したときの既定。

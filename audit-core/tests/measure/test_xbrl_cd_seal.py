@@ -63,6 +63,8 @@ FROZEN = {
 # (`fixtures/frozen_bundle_sha.py` の世代と同じ型: 「ずれ」と「宣言された遷移」を言い分ける)。
 FROZEN_LATER = {
     "adapters/xbrl/instance.py": ("f2d9e040f19adebf", "docs/XBRL_HOLDS_PRODUCT_PATH_SEAL_2026-10-19.md"),
+    # 2026-10-20: 封 `docs/XBRL_NAMING_FIX_SEAL_2026-10-20.md`(名指しの直し P21)で vocabulary.py に旗 last_branch_cues と P21 が足された。
+    "adapters/xbrl/vocabulary.py": ("6c6db4c75e571a6c", "docs/XBRL_NAMING_FIX_SEAL_2026-10-20.md"),
 }
 
 

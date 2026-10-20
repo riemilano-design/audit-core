@@ -321,6 +321,36 @@ def _direct_value_claim(claim, s, a, b, sign, num, unit, prec, subj, elems, memb
                     # 最初の実装がその 2 件を誤って止めたので枝を狭めた。
                     claim["reason"] = "no_element(no prior2 for prior-year diff)"
                     return
+                if profile is not None and getattr(profile, "last_branch_cues", False):
+                    # P21(封 docs/XBRL_NAMING_FIX_SEAL_2026-10-20.md §0)。この枝は従来、CurrentYear の先頭の
+                    # fact を 1 本名指すだけだった。旗が真のときだけ、セグメントの名・期の手がかり・増減の語を
+                    # 先に見る(P1〜P20 は不変)。上の §1b の止め(前々期が無い「前連結会計年度は…」)は
+                    # 人間の決定なので**先に効かせ**、この 3 つはその後に置く(止めた行を名指しに戻さない)。
+                    if subj in ("セグメント利益", "セグメント損失") and member is None:
+                        # F2′: 枠(セグメントの member)が取れていないセグメント利益は全社の fact を名指さない。
+                        # 理由は登録済みの no_element(状態は POINTER_NOT_FOUND)。
+                        claim["reason"] = "no_element"
+                        return
+                    pri = [f for f in fs if f["context"].startswith("Prior1Year")]
+                    if profile.period_cue and not is_diff and pri and _prior_cue(s, a, b):
+                        # F1′: 「前期は…」「(同…」の数は前期の fact を名指す(増減の語が無いときだけ)。
+                        claim["pointer"] = "xbrl:%s@%s" % (pri[0]["name"], pri[0]["context"])
+                        claim["bound"] = True
+                        claim["result"] = "VALUE_MISMATCH"
+                        claim["recomputed"] = pri[0]["value"]
+                        claim["reason"] = "value differs(segment/other period?)"
+                        return
+                    mate = by.get(cur[0]["name"], {}).get(cur[0]["context"].replace("CurrentYear", "Prior1Year", 1))
+                    if is_diff and mate and cur[0]["context"].startswith("CurrentYearInstant"):
+                        # F3b: 増減の文が当期の残高を選んだときは、残高 1 本ではなく残高の対(当期 - 前期)。
+                        claim["form"] = "derived_value"
+                        claim["pointer"] = ["xbrl:%s@%s" % (cur[0]["name"], cur[0]["context"]),
+                                            "xbrl:%s@%s" % (mate["name"], mate["context"]), "formula:a-b"]
+                        claim["bound"] = True
+                        claim["result"] = "VALUE_MISMATCH"
+                        claim["recomputed"] = cur[0]["value"] - mate["value"]
+                        claim["reason"] = "value differs(segment/other period?)"
+                        return
                 claim["pointer"] = "xbrl:%s@%s" % (cur[0]["name"], cur[0]["context"])
                 claim["bound"] = True
                 claim["result"] = "VALUE_MISMATCH"

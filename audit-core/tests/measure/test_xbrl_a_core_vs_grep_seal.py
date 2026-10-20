@@ -18,6 +18,25 @@ FROZEN = {"measure/inject.py": "92d34774c4cc76bb",
           "adapters/xbrl/vocabulary.py": "bcf559308bda0cc6",
           "measure/SEED.json": "f74146592f68b88d"}
 
+# 2026-10-20 追記(上の FROZEN は、その記録を測った時点の sha で、消さない)。**宣言された遷移**: 封 docs/XBRL_NAMING_FIX_SEAL_2026-10-20.md
+# (名指しの直し P21。engine を変える)で変わった sha。その封が履歴に在り、値がその封の後の値のときだけ受け入れる
+# (tests/measure/test_xbrl_cd_seal.py の FROZEN_LATER と同じ型: 「ずれ」と「宣言された遷移」を言い分ける)。
+SEAL_NAMING_FIX = "docs/XBRL_NAMING_FIX_SEAL_2026-10-20.md"
+ENGINE_LATER = {
+    "adapters/xbrl/vocabulary.py": ("6c6db4c75e571a6c", SEAL_NAMING_FIX),
+}
+
+
+def assert_pinned_or_declared(test, rel, got, want):
+    if got != want and rel in ENGINE_LATER:
+        later, seal_rel = ENGINE_LATER[rel]
+        added = subprocess.run(["git", "log", "--diff-filter=A", "--format=%H", "--", seal_rel],
+                               cwd=ROOT, capture_output=True, text=True).stdout.split()
+        test.assertTrue(added, u"**%s が動いているのに、遷移を宣言した封 %s が履歴に無い**" % (rel, seal_rel))
+        test.assertEqual(got, later, u"**%s が、宣言された遷移の値とも違う**" % rel)
+        return
+    test.assertEqual(got, want, u"**%s が動いている**" % rel)
+
 
 def text(p):
     with io.open(p, encoding="utf-8") as fh:
@@ -115,7 +134,7 @@ class FrozenTest(unittest.TestCase):
                 continue
             with io.open(os.path.join(ROOT, rel), "rb") as fh:
                 got = hashlib.sha256(fh.read()).hexdigest()[:16]
-            self.assertEqual(got, want, "**%s が動いている**" % rel)
+            assert_pinned_or_declared(self, rel, got, want)
 
 
 class CommitOrderTest(unittest.TestCase):

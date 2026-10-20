@@ -410,6 +410,10 @@ class Profile:
     # 最初そこに置いたが、止める判定はもっと上流(facts_for → ctx_ok → plain_context)に
     # 在り、変更 0 件と検出 0 件が同時に出た(結果 §1)。
     nonconsolidated_fallback: bool = False
+    # P21(封 docs/XBRL_NAMING_FIX_SEAL_2026-10-20.md §0): 値が一致する fact が無いときの最後の枝
+    # (recipes._direct_value_claim)に、期の手がかり(F1′)・セグメントの枠が無いセグメント利益は
+    # 名指さない(F2′)・増減の文が選んだ当期の残高は残高の対にする(F3b)を足す。偽なら 1 行も変わらない。
+    last_branch_cues: bool = False
 
 
 P1 = Profile(
@@ -693,9 +697,12 @@ P19 = dataclasses.replace(P18, name="P19", truncate_on_magnitude=True)
 # (docs/HOLDOUT_P17_RESULT_2026-10-14.md)ので、P16 を土台にする。
 P20 = dataclasses.replace(P16, name="P20", nonconsolidated_fallback=True)
 
+# P21 = P20 + 最後の枝の 3 つの直し(封 docs/XBRL_NAMING_FIX_SEAL_2026-10-20.md)。段 1 では既定にしない。
+P21 = dataclasses.replace(P20, name="P21", last_branch_cues=True)
+
 PROFILES = {"P1": P1, "P5F": P5F, "P6": P6, "P7": P7, "P8": P8, "P9": P9, "P10": P10, "P11": P11,
             "P12": P12, "P13": P13, "P14": P14, "P15": P15, "P16": P16, "P17": P17, "P18": P18,
-            "P19": P19, "P20": P20}
+            "P19": P19, "P20": P20, "P21": P21}
 
 # **既定 profile(人間の決定 2026-10-13、第 2 段階)。字で留める。**
 # 測定で採用候補にした P16(開発書類 183 件で 146/8/29、未使用 2 書類 217 件で E1' 66.8% / E2 8.2% / E3 27.2%)。

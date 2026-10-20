@@ -23,6 +23,25 @@ BASE = "2745dd5"          # 今日の便の起点
 ENGINE_SHA = {"adapters/xbrl/verify_document.py": "67e7639de3f5f2ad",
               "adapters/xbrl/vocabulary.py": "bcf559308bda0cc6"}
 
+# 2026-10-20 追記(上の ENGINE_SHA は、その記録を測った時点の sha で、消さない)。**宣言された遷移**: 封 docs/XBRL_NAMING_FIX_SEAL_2026-10-20.md
+# (名指しの直し P21。engine を変える)で変わった sha。その封が履歴に在り、値がその封の後の値のときだけ受け入れる
+# (tests/measure/test_xbrl_cd_seal.py の FROZEN_LATER と同じ型: 「ずれ」と「宣言された遷移」を言い分ける)。
+SEAL_NAMING_FIX = "docs/XBRL_NAMING_FIX_SEAL_2026-10-20.md"
+ENGINE_LATER = {
+    "adapters/xbrl/vocabulary.py": ("6c6db4c75e571a6c", SEAL_NAMING_FIX),
+}
+
+
+def assert_pinned_or_declared(test, rel, got, want):
+    if got != want and rel in ENGINE_LATER:
+        later, seal_rel = ENGINE_LATER[rel]
+        added = subprocess.run(["git", "log", "--diff-filter=A", "--format=%H", "--", seal_rel],
+                               cwd=ROOT, capture_output=True, text=True).stdout.split()
+        test.assertTrue(added, u"**%s が動いているのに、遷移を宣言した封 %s が履歴に無い**" % (rel, seal_rel))
+        test.assertEqual(got, later, u"**%s が、宣言された遷移の値とも違う**" % rel)
+        return
+    test.assertEqual(got, want, u"**%s が動いている**" % rel)
+
 # 2026-10-19 追記(10-14 の封の字・値は消さない)。宣言された遷移: BASE 以後に adapters/・core/ を触った commit のうち、
 # 下に名前と封を書いたものだけを受け入れる。封が git 履歴に在ることも要る(fixtures/frozen_bundle_sha.py の世代と同じ型)。
 LATER_ENGINE_COMMITS = {
@@ -149,8 +168,8 @@ class Axis3Test(unittest.TestCase):
             self.assertTrue(added, "**commit %s の宣言された遷移の封 %s が履歴に無い**" % (c, seal))
         for rel, want in ENGINE_SHA.items():
             with io.open(os.path.join(ROOT, rel), "rb") as fh:
-                self.assertEqual(hashlib.sha256(fh.read()).hexdigest()[:16], want,
-                                 "**%s が動いている**" % rel)
+                got = hashlib.sha256(fh.read()).hexdigest()[:16]
+            assert_pinned_or_declared(self, rel, got, want)
         self.assertIn("**これは指標の作り直しであって、判定ロジックの修正ではない**",
                       self.t)
         self.assertIn("**Core の隣接要素の誤り(12 件)は、指標を変えても消えない。**",
