@@ -70,6 +70,7 @@ LATER_ENGINE_COMMITS = {
     "d0b544c": "docs/XBRL_PERIOD_BIND_SEAL_2026-10-20.md",          # 期間を縛る P22 段 2 ― 既定 P21 -> P22(宣言 2026-10-21)
     "7d530cc": "docs/XBRL_ROUNDING_SEAL_2026-10-21.md",             # 丸めの帯 P23 段 1 ― engine(旗だけ、既定は P22 のまま。宣言 2026-10-21)
     "c7ad668": "docs/XBRL_VOCAB_SEAL_2026-10-21.md",                # 語彙の登録と枠の取り直し P24 段 1 ― engine(旗だけ、既定は P22 のまま。宣言 2026-10-21)
+    "9577eab": "docs/XBRL_LASTBRANCH_SEAL_2026-10-21.md",           # 最後の枝の名指し P25 段 1 ― engine(旗だけ、既定は P22 のまま。宣言 2026-10-21)
 }
 
 
