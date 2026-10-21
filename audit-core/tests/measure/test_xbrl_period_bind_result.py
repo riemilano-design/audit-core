@@ -74,12 +74,15 @@ ENGINE_AT_STAGE2 = {"adapters/xbrl/recipes.py": "65a37869f053a60e", "adapters/xb
 #: 上の段 2 の値は ENGINE_AT_STAGE2 に残す。受け入れるのは、その封が履歴に在り、値が P23 の段 1 の後の値のときだけ。
 SEAL_ROUNDING = "docs/XBRL_ROUNDING_SEAL_2026-10-21.md"
 SEAL_VOCAB = "docs/XBRL_VOCAB_SEAL_2026-10-21.md"    # 2026-10-21 追記: 語彙の登録と枠の取り直し P24 の段 1(下の ENGINE_LATER の recipes.py・vocabulary.py の遷移)
+SEAL_LASTBRANCH = "docs/XBRL_LASTBRANCH_SEAL_2026-10-21.md"    # 2026-10-21 追記: 最後の枝 P25 の段 1(下の ENGINE_LATER の遷移)
 # 2026-10-21(語彙の登録と枠の取り直し P24 の段 1): 封 docs/XBRL_VOCAB_SEAL_2026-10-21.md(engine を変える。人間の事前承認 2026-10-21)で recipes.py に旗 vocab_2026_10_21・frame_rebind の塊(+224 行・既存の行は 1 つも書き換えない)を足した(DEFAULT_PROFILE は P22 のまま)。
 # d5308700eae78c10(P23 の段 1)は残す(測った時点の値)、P24 の段 1 で 3461c3f8b7af6675。受け入れるのは、その封が履歴に在り、値が P24 の段 1 の後の値のときだけ。
-ENGINE_LATER = {"adapters/xbrl/recipes.py": ("3461c3f8b7af6675", SEAL_VOCAB),
+# 2026-10-21(最後の枝 P25 の段 1): 封 docs/XBRL_LASTBRANCH_SEAL_2026-10-21.md(engine を変える。人間の事前承認 2026-10-21)で recipes.py に最後の枝の証拠の判定の塊(+72 行・-0 行。既存の行は 1 つも書き換えない)、vocabulary.py に旗 last_branch_names_only_if_evidence・P25・PROFILES の登録(+7 行・-0 行)を足した(DEFAULT_PROFILE は P22 のまま)。
+# recipes.py の 3461c3f8b7af6675・vocabulary.py の 83498c04a7b70396(P24 の段 1)は残す(測った時点の値)。受け入れるのは、その封が履歴に在り、値が P25 の段 1 の後の値のときだけ。
+ENGINE_LATER = {"adapters/xbrl/recipes.py": ("bff243f13429b553", SEAL_LASTBRANCH),
                 # 2026-10-21(語彙の登録と枠の取り直し P24 の段 1): 封 docs/XBRL_VOCAB_SEAL_2026-10-21.md(engine を変える。人間の事前承認 2026-10-21)で vocabulary.py に旗 2 つ・資金の句の表・P24・PROFILES の登録を足した(DEFAULT_PROFILE は P22 のまま)。
                 # f7b8d925eb6787ec(P23 の段 1)は残す(測った時点の値)、P24 の段 1 で 83498c04a7b70396。受け入れるのは、その封が履歴に在り、値が P24 の段 1 の後の値のときだけ。
-                "adapters/xbrl/vocabulary.py": ("83498c04a7b70396", SEAL_VOCAB)}
+                "adapters/xbrl/vocabulary.py": ("27e71e9861fc5aad", SEAL_LASTBRANCH)}
 FACT = {
     "e1": (485, 1, 482, 2),                    # 注入・P22 で通した・止めた・その他
     "e1_p21": (459, 458),                      # P21(対照)で通した・うち前期へ移った(穴 B の記録と同じ 459・458)
@@ -757,7 +760,8 @@ def check_frozen_generation(generations, current):
     # 2026-10-21 追記(pin の遷移): 語彙の登録と枠の取り直し P24 の段 1(docs/XBRL_VOCAB_SEAL_2026-10-21.md)が世代をもう 1 つ足した後は、
     # 段 2 の宣言は最新の世代の 2 つ前になる(後の封の宣言を新しい順に 1 つずつ飛ばして読む)。
     i = len(generations) - 1
-    for later in (u"XBRL_VOCAB_SEAL_2026-10-21", u"XBRL_ROUNDING_SEAL_2026-10-21"):
+    # 2026-10-21 追記(pin の遷移): 最後の枝 P25 の段 1(docs/XBRL_LASTBRANCH_SEAL_2026-10-21.md)が世代をもう 1 つ足した後は、段 2 の宣言は最新の世代の 3 つ前になる。
+    for later in (u"XBRL_LASTBRANCH_SEAL_2026-10-21", u"XBRL_VOCAB_SEAL_2026-10-21", u"XBRL_ROUNDING_SEAL_2026-10-21"):
         if later in generations[i][1]:
             i -= 1
             assert i >= 0, u"後の封の宣言の前に段 2 の世代が無い"

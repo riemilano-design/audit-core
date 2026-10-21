@@ -95,6 +95,13 @@ FROZEN_BUNDLE_GENERATIONS = (
      "registry_setup.py に理由 other_frame を足した(+2 行)。comparators.py・core/py・instance.py・extract.py は 0 行。"
      "DEFAULT_PROFILE は P22 のまま。人間の事前承認 2026-10-21、封 docs/XBRL_VOCAB_SEAL_2026-10-21.md(commit 08987d0)。"
      "対象 36 本(本数は変わらない)。独立監査 GO の前に測った値(commit 前)"),
+    ("8ffdc9177cdc4be7c059e5bd0a6f6e5b8466215918077591eb64371b7c69304a",
+     "2026-10-21 feature/audit-core-final-eval-8(最後の枝 P25 の段 1): vocabulary.py に旗 last_branch_names_only_if_evidence・P25(= P24 + 旗 1 つ)・"
+     "PROFILES の登録を足し(+7 行・-0 行)、recipes.py に最後の枝の証拠の判定の塊を足し(+72 行・-0 行。既存の行は 1 つも書き換えない。"
+     "証拠 (i) 同じ要素・同じ枠の別の期・(ii) 桁の打ち間違い・(iii) 桁・単位の取り違え。無ければ POINTER_NOT_FOUND no_same_value)、"
+     "registry_setup.py に理由 no_same_value を足した(+2 行)。comparators.py・core/py・instance.py・extract.py は 0 行。"
+     "DEFAULT_PROFILE は P22 のまま。人間の事前承認 2026-10-21、封 docs/XBRL_LASTBRANCH_SEAL_2026-10-21.md(commit 80ca08d)。"
+     "対象 36 本(本数は変わらない)。独立監査 GO の前に測った値(commit 前)"),
 )
 
 # 字で留めるのは**いまの世代**。--expect を値なしで渡したときの既定。

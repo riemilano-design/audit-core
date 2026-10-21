@@ -64,8 +64,15 @@ RITUAL_ZIP_SHA = "03521437be23c8e2a02d85b4bc29a215646803582e9101fdf1855210411747
 #: 測った時点の engine(sha256 の先頭 16 桁)。comparators.py は 0 行(封 §1 は comparators.py に触らない)。
 ENGINE_AT_MEASURE = {"adapters/xbrl/vocabulary.py": "83498c04a7b70396", "adapters/xbrl/comparators.py": "d8706338325e725b",
                      "adapters/xbrl/recipes.py": "3461c3f8b7af6675", "adapters/xbrl/registry_setup.py": "9a0b08954cf22639"}
-#: 段 2(既定の切り替え)などで動いたときの宣言された遷移: {path: (後の sha16, 遷移を宣言した封の path)}。段 1 の commit 時点では空。
-ENGINE_LATER = {}
+#: 段 2(既定の切り替え)などで動いたときの宣言された遷移: {path: (後の sha16, 遷移を宣言した封の path)}。段 1 の commit 時点では空だった。
+#: 2026-10-21 追記(pin の遷移): 封 docs/XBRL_LASTBRANCH_SEAL_2026-10-21.md(最後の枝 P25 の段 1。engine を変える。人間の事前承認 2026-10-21)で
+#: vocabulary.py に旗 last_branch_names_only_if_evidence・P25・PROFILES の登録(+7 行)、recipes.py に最後の枝の証拠の判定の塊(+72 行・既存の行は 1 つも書き換えない)、
+#: registry_setup.py に理由 no_same_value(+2 行)を足した(DEFAULT_PROFILE は P22 のまま)。上の ENGINE_AT_MEASURE は残す(測った時点の値)。
+#: 受け入れるのは、その封が履歴に在り、値が P25 の段 1 の後の値のときだけ。
+SEAL_LASTBRANCH = "docs/XBRL_LASTBRANCH_SEAL_2026-10-21.md"
+ENGINE_LATER = {"adapters/xbrl/vocabulary.py": ("27e71e9861fc5aad", SEAL_LASTBRANCH),
+                "adapters/xbrl/recipes.py": ("bff243f13429b553", SEAL_LASTBRANCH),
+                "adapters/xbrl/registry_setup.py": ("f42ffe23aaa7673b", SEAL_LASTBRANCH)}
 
 
 def jtext(p):
@@ -962,15 +969,17 @@ class MutationTest(unittest.TestCase):
         self._red(check_mutation_record, r)
 
     def test_m16_a_wrong_engine_sha_is_red(self):
-        global ENGINE_AT_MEASURE
-        old = dict(ENGINE_AT_MEASURE)
+        global ENGINE_AT_MEASURE, ENGINE_LATER
+        old, old_later = dict(ENGINE_AT_MEASURE), dict(ENGINE_LATER)
         try:
+            # 2026-10-21(pin の遷移): 宣言された遷移が在ると「測った時点と違う sha」は受け入れられてしまうので、この変異では遷移の宣言を外して(空にして)確かめる
+            ENGINE_LATER = {}
             ENGINE_AT_MEASURE = dict(old, **{"adapters/xbrl/recipes.py": "0" * 16})
             self._red(engine_ok)
             ENGINE_AT_MEASURE = dict(old, **{"adapters/xbrl/registry_setup.py": "0" * 16})
             self._red(engine_ok)
         finally:
-            ENGINE_AT_MEASURE = old
+            ENGINE_AT_MEASURE, ENGINE_LATER = old, old_later
         engine_ok()
 
     def test_m17_an_existing_red_of_a_forbidden_kind_makes_w8_a_miss(self):

@@ -65,8 +65,11 @@ ENGINE_AT_SEAL = {"adapters/xbrl/vocabulary.py": "25a3c0992e10daaa",
 # recipes.py に旗 vocab_2026_10_21・frame_rebind の塊(+224 行・既存の行は 1 つも書き換えない)、vocabulary.py に旗 2 つ・資金の句の表・P24・PROFILES の登録を足した(DEFAULT_PROFILE は P22 のまま)。
 # vocabulary.py の f7b8d925eb6787ec・recipes.py の d5308700eae78c10(P23 の段 1)は残す(測った時点の値)。受け入れるのは、その封が履歴に在り、値が P24 の段 1 の後の値のときだけ。
 SEAL_VOCAB = "docs/XBRL_VOCAB_SEAL_2026-10-21.md"
-ENGINE_LATER = {"adapters/xbrl/vocabulary.py": ("83498c04a7b70396", SEAL_VOCAB),
-                "adapters/xbrl/recipes.py": ("3461c3f8b7af6675", SEAL_VOCAB)}
+SEAL_LASTBRANCH = "docs/XBRL_LASTBRANCH_SEAL_2026-10-21.md"    # 2026-10-21 追記: 最後の枝 P25 の段 1(下の ENGINE_LATER の遷移)
+# 2026-10-21(最後の枝 P25 の段 1): 封 docs/XBRL_LASTBRANCH_SEAL_2026-10-21.md(engine を変える。人間の事前承認 2026-10-21)で vocabulary.py に旗 last_branch_names_only_if_evidence・P25・PROFILES の登録(+7 行・-0 行)、recipes.py に最後の枝の証拠の判定の塊(+72 行・-0 行。既存の行は 1 つも書き換えない)を足した(DEFAULT_PROFILE は P22 のまま)。
+# vocabulary.py の 83498c04a7b70396・recipes.py の 3461c3f8b7af6675(P24 の段 1)は残す(測った時点の値)。受け入れるのは、その封が履歴に在り、値が P25 の段 1 の後の値のときだけ。
+ENGINE_LATER = {"adapters/xbrl/vocabulary.py": ("27e71e9861fc5aad", SEAL_LASTBRANCH),
+                "adapters/xbrl/recipes.py": ("bff243f13429b553", SEAL_LASTBRANCH)}
 
 # §1「過去の門の engine の留め」の一覧(封の字)と、実物の在りか
 PIN_FILES_ENGINE_LATER = ("tests/measure/test_xbrl_branch_a.py", "tests/measure/test_xbrl_role_swap_result.py",
@@ -384,11 +387,12 @@ class EngineAtSealTest(unittest.TestCase):
         self.assertIn("truncate_abs_band", fields)
         self.assertFalse(fields["truncate_abs_band"].default)
         # 2026-10-21: P24 = P23 + 旗 2 つ(封 XBRL_VOCAB_SEAL_2026-10-21)は truncate_abs_band・率の旗を引き継ぐ
-        self.assertEqual(["P23", "P24"], sorted(n for n, p in V.PROFILES.items() if p.truncate_abs_band))
+        # 2026-10-21: P25 = P24 + 旗 1 つ(封 XBRL_LASTBRANCH_SEAL_2026-10-21)も引き継ぐ
+        self.assertEqual(["P23", "P24", "P25"], sorted(n for n, p in V.PROFILES.items() if p.truncate_abs_band))
         self.assertIn("P23", V.PROFILES)
         self.assertEqual(V.PROFILES["P23"], dataclasses.replace(V.P22, name="P23", pct_tolerance_from_decimals=True, truncate_abs_band=True))
         self.assertFalse(V.PROFILES["P23"].truncate_on_magnitude)         # P19 の旗は積まない
-        self.assertEqual(sorted(n for n, p in V.PROFILES.items() if p.pct_tolerance_from_decimals), ["P18", "P19", "P23", "P24"])
+        self.assertEqual(sorted(n for n, p in V.PROFILES.items() if p.pct_tolerance_from_decimals), ["P18", "P19", "P23", "P24", "P25"])
         self.assertEqual(sorted(n for n, p in V.PROFILES.items() if p.truncate_on_magnitude), ["P19"])
 
     def test_13_pct_band_is_half_the_written_digit_plus_001(self):

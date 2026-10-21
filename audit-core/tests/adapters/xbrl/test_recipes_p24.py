@@ -128,8 +128,9 @@ class FlagShapeTest(unittest.TestCase):
         fields = {f.name: f for f in dataclasses.fields(V.Profile)}
         self.assertIs(False, fields["vocab_2026_10_21"].default)
         self.assertIs(False, fields["frame_rebind"].default)
-        self.assertEqual(["P24"], sorted(n for n, p in V.PROFILES.items() if p.vocab_2026_10_21))
-        self.assertEqual(["P24"], sorted(n for n, p in V.PROFILES.items() if p.frame_rebind))
+        # 2026-10-21 P25 = P24 + 旗 1 つ(封 XBRL_LASTBRANCH_SEAL_2026-10-21)は P24 の旗 2 つを引き継ぐ
+        self.assertEqual(["P24", "P25"], sorted(n for n, p in V.PROFILES.items() if p.vocab_2026_10_21))
+        self.assertEqual(["P24", "P25"], sorted(n for n, p in V.PROFILES.items() if p.frame_rebind))
 
     def test_with_both_flags_false_p24_is_p23(self):
         self.assertEqual(dataclasses.replace(V.P23, name="P24_OFF"), P24_OFF)
@@ -691,6 +692,23 @@ class FrameRebindTest(unittest.TestCase):
             c = by_value(num_claims(p, self.S_DIRECT, seg_facts(), contexts_for(seg_facts(), CTX), SEG_A), 130123e6)
             self.assertEqual("VALUE_MISMATCH", c["result"])
             self.assertNotIn("frame_rebind", c)
+
+    def test_the_flag_off_keeps_value_mismatch_for_the_pct_forms(self):
+        """率の枠の取り直し (ii) は旗 ``frame_rebind`` が偽なら効かない(P24 の独立監査の軽い指摘 2、2026-10-21)。
+        P24 では UNVERIFIABLE になる 2 つの率の型(前期比 105.3% の比・前期比 5.3% 増の変化率)が、旗を偽にすると VALUE_MISMATCH のまま
+        (取った枠 SegAMember の対で率が合わず、別の枠 SegBMember の対では合う)。両方の型のガードを同じ 1 本で見る。"""
+        cases = [("売上高は前期比105.3%となりました。", 105.3), ("売上高は前期比5.3%増となりました。", 5.3)]
+        for s, v in cases:
+            c24 = seg("P24", s, seg_facts(), v)
+            self.assertEqual("other_frame(CurrentYearDuration_SegBMember)", c24["reason"], s)    # 対照: 旗が真なら効く
+            for p in ("P23", P24_OFF, P24_VOCAB_ONLY):
+                c = seg(p, s, seg_facts(), v)
+                name = p if isinstance(p, str) else p.name
+                self.assertEqual("VALUE_MISMATCH", c["result"], (name, s))
+                self.assertTrue(c["bound"], (name, s))
+                self.assertIsNotNone(c["pointer"], (name, s))
+                self.assertNotIn("frame_rebind", c, (name, s))
+                self.assertNotIn("other_frame", c, (name, s))
 
     def test_a_matching_taken_frame_is_untouched(self):
         c = seg("P24", "売上高は50,000百万円となりました。", seg_facts(), 50000e6)

@@ -59,7 +59,12 @@ ENGINE_AT_SEAL = {"adapters/xbrl/vocabulary.py": "83498c04a7b70396",
                   "adapters/xbrl/recipes.py": "3461c3f8b7af6675",
                   "adapters/xbrl/registry_setup.py": "9a0b08954cf22639"}
 # 宣言された遷移(段 1 の commit で足す): {path: (後の sha16, 遷移を宣言した封の path)}。封の commit 時点では空。
-ENGINE_LATER = {}
+# 2026-10-21 追記(段 1 の実装): vocabulary.py は旗 last_branch_names_only_if_evidence・P25・PROFILES の登録(+7 行・-0 行)、recipes.py は最後の枝の証拠の判定の塊
+# (+72 行・-0 行。既存の行は 1 つも書き換えない)、registry_setup.py は理由 no_same_value(+2 行)。comparators.py・core/ は 0 行。DEFAULT_PROFILE は P22 のまま。
+# ENGINE_AT_SEAL は残す(封の commit 時点の値)。
+ENGINE_LATER = {"adapters/xbrl/vocabulary.py": ("27e71e9861fc5aad", SEAL_REL),
+                "adapters/xbrl/recipes.py": ("bff243f13429b553", SEAL_REL),
+                "adapters/xbrl/registry_setup.py": ("f42ffe23aaa7673b", SEAL_REL)}
 
 # §1「過去の門の engine の留め」の一覧(封の字)と、実物の在りか。
 # ENGINE_LATER を持つ門 14 本 = ENGINE_LATER 系 6 本 + 結果 / 封の門 8 本(point_prior_result・ritual_result・period_bind seal/result・
@@ -586,29 +591,34 @@ class EngineAtSealTest(unittest.TestCase):
                 continue
             self.assertEqual(got, want, u"**%s が動いている(段 1 の commit で ENGINE_LATER に遷移を宣言する)**" % rel)
 
-    def test_14_new_flag_p25_and_no_same_value_do_not_exist_yet(self):
-        """封が実装より先であること。旗 `last_branch_names_only_if_evidence`・profile `P25`・理由 `no_same_value` が engine にまだ無い
-        (測った当時の事実。段 1 の実装の commit で「在る」に直す ― docstring)。core/ には段 1 の後も 1 字も無い。"""
+    def test_14_new_flag_p25_and_no_same_value_exist_now_default_is_p22(self):
+        """封が実装より先であることは、段 1 の実装の commit で「在る」に直した(2026-10-21。封の commit 時点は 旗 `last_branch_names_only_if_evidence`・
+        profile `P25`・理由 `no_same_value` が engine にまだ無かった = 測った当時の事実)。いまは: 旗は Profile に在って既定は偽、真なのは P25 だけ、
+        P25 は PROFILES に在って P24 + 旗 1 つ、既定は P22 のまま、`no_same_value` は registry_setup.py の POINTER_NOT_FOUND の理由に在り、`core/` には 1 字も無い。"""
         from adapters.xbrl import vocabulary as V
-        fields = [f.name for f in dataclasses.fields(V.Profile)]
-        self.assertNotIn("last_branch_names_only_if_evidence", fields)
-        self.assertNotIn("P25", V.PROFILES)
+        fields = dict((f.name, f) for f in dataclasses.fields(V.Profile))
+        flag = "last_branch_names_only_if_evidence"
+        self.assertIn(flag, fields)
+        self.assertIs(fields[flag].default, False)
+        self.assertEqual(sorted(n for n, p in V.PROFILES.items() if getattr(p, flag)), ["P25"])
+        self.assertEqual(V.PROFILES["P25"], dataclasses.replace(V.P24, name="P25", last_branch_names_only_if_evidence=True))
         self.assertEqual(V.DEFAULT_PROFILE, "P22")
         from adapters.xbrl import registry_setup as RS
-        for name in ("_UNVERIFIABLE_REASONS", "_POINTER_NOT_FOUND_REASONS"):
-            if hasattr(RS, name):
-                self.assertNotIn("no_same_value", getattr(RS, name), name)
+        self.assertIn("no_same_value", RS._POINTER_NOT_FOUND_REASONS)
+        self.assertNotIn("no_same_value", RS._UNVERIFIABLE_REASONS)
         for rel in ENGINE_FILES:
             t = text(os.path.join(ROOT, rel))
-            for lit in ("last_branch_names_only_if_evidence", "no_same_value", "LAST_BRANCH_DIGIT_K", "P25"):
-                self.assertNotIn(lit, t, u"%s に %s が在る(封が先)" % (rel, lit))
+            lits = ("no_same_value",) if rel.endswith("registry_setup.py") else ("last_branch_names_only_if_evidence", "P25") if rel.endswith("vocabulary.py") \
+                else ("last_branch_names_only_if_evidence", "no_same_value", "LAST_BRANCH_DIGIT_K")
+            for lit in lits:
+                self.assertIn(lit, t, u"%s に %s が無い" % (rel, lit))
         for p in glob.glob(os.path.join(ROOT, "core", "**", "*.py"), recursive=True):
             t = text(p)
             for lit in ("last_branch_names_only_if_evidence", "no_same_value"):
                 self.assertNotIn(lit, t, u"core/ の %s に %s が在る(core/ は 0 行)" % (os.path.relpath(p, ROOT), lit))
-        # 新規 file も作業木に無い
+        # 新規 file は作業木に在る(段 1 の実装)。履歴の順序は test_15
         for rel in AFTER:
-            self.assertFalse(os.path.exists(os.path.join(ROOT, rel)), u"封より先に在る: " + rel)
+            self.assertTrue(os.path.exists(os.path.join(ROOT, rel)), u"段 1 の file が無い: " + rel)
 
 
 class OrderTest(unittest.TestCase):

@@ -424,6 +424,9 @@ class Profile:
     # VALUE_MISMATCH をやめて UNVERIFIABLE(other_frame / ambiguous(member))。**GROUNDED は作らない。** 偽なら 1 行も変わらない。
     vocab_2026_10_21: bool = False
     frame_rebind: bool = False
+    # P25(封 docs/XBRL_LASTBRANCH_SEAL_2026-10-21.md §1): 最後の枝で名指して VALUE_MISMATCH にするのは、証拠((i) 同じ要素・同じ枠の別の期に同じ値、
+    # (ii) 差が recipes.LAST_BRANCH_DIGIT_K 単位以内、(iii) 桁・単位の取り違え)が在るときだけ。無ければ POINTER_NOT_FOUND(no_same_value)。偽なら 1 行も変わらない。
+    last_branch_names_only_if_evidence: bool = False
 
 
 P1 = Profile(
@@ -756,3 +759,7 @@ PROFILES = {"P1": P1, "P5F": P5F, "P6": P6, "P7": P7, "P8": P8, "P9": P9, "P10":
 # 誤り 5 / 5 止め・正しい 39 行の空振り 0。開発側でない客の席の日記。repo の外 = scratchpad、記録なし。司令塔が読んで諮った数)を見てから。封 docs/XBRL_PERIOD_BIND_SEAL_2026-10-20.md の段 2(E-8)、結果は
 # docs/XBRL_PERIOD_BIND_RESULT_2026-10-20.md。**P21 の字は消さず**、P21 を明示した呼び出しは変えない(P21 の既定は 2026-10-20 a516288)。
 DEFAULT_PROFILE = "P22"
+
+# P25 = P24 + 最後の枝は証拠があるときだけ名指す。段 1 では既定にしない。PROFILES の行(P24 まで)は字を変えず、ここで足す。
+P25 = dataclasses.replace(P24, name="P25", last_branch_names_only_if_evidence=True)
+PROFILES["P25"] = P25

@@ -111,11 +111,12 @@ class RegisterAllTest(unittest.TestCase):
         # 理由コードは増やさない(金額が合わなければ既存の VALUE_MISMATCH)。
         self.assertEqual(len(RS._COMPARATORS), 10)
         self.assertEqual(len(RS._NORMALIZATIONS), 4)
-        self.assertEqual(len(RS._POINTER_NOT_FOUND_REASONS), 8)
+        # 2026-10-21 P25 の段 1: 理由 no_same_value を足して 9(封 XBRL_LASTBRANCH_SEAL_2026-10-21)
+        self.assertEqual(len(RS._POINTER_NOT_FOUND_REASONS), 9)
         # 2026-10-21 P24 の段 1: 理由 other_frame を足して 7(封 XBRL_VOCAB_SEAL_2026-10-21)
         self.assertEqual(len(RS._UNVERIFIABLE_REASONS), 7)
         total = 2 + len(RS._COMPARATORS) + len(RS._NORMALIZATIONS) + len(RS._POINTER_NOT_FOUND_REASONS) + len(RS._UNVERIFIABLE_REASONS)
-        self.assertEqual(total, 31)
+        self.assertEqual(total, 32)
 
     def test_registering_a_reason_twice_raises(self):
         with self.assertRaises(ValueError):

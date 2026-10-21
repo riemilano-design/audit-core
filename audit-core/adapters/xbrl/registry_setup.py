@@ -59,6 +59,8 @@ _POINTER_NOT_FOUND_REASONS = (
     # 無いときに代用せず止める理由。P1/P5F/P6/P7 はこの理由を作らないので、
     # 登録簿に在ること自体は彼らに対して無害(既存の理由は 1 つも消していない)。
     "no_element(no prior2 for prior-year diff)",
+    # P25 last_branch_names_only_if_evidence(封 docs/XBRL_LASTBRANCH_SEAL_2026-10-21.md、profile P25 のみ): 最後の枝で証拠が無く名指さなかった数。名指した fact は provenance。
+    "no_same_value",
 )
 
 _UNVERIFIABLE_REASONS = (

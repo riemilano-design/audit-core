@@ -72,6 +72,9 @@ def _state_of(reason, result):
     if r.startswith("other_frame("):
         # P24 frame_rebind(試作 v3): 同じ要素の別の枠でだけ合った数。結ばない(UNVERIFIABLE)。
         return "UNVERIFIABLE"
+    if r == NO_SAME_VALUE:
+        # P25 last_branch_names_only_if_evidence(封 docs/XBRL_LASTBRANCH_SEAL_2026-10-21.md): 最後の枝で証拠が無く名指さなかった数。
+        return "POINTER_NOT_FOUND"
     raise KeyError(r)
 
 
@@ -413,6 +416,9 @@ def _direct_value_claim(claim, s, a, b, sign, num, unit, prec, subj, elems, memb
                         claim["recomputed"] = cur[0]["value"] - mate["value"]
                         claim["reason"] = "value differs(segment/other period?)"
                         return
+                if getattr(profile, "last_branch_names_only_if_evidence", False) and _last_branch_unname(claim, target, scale, rounding, mag_trunc, cur[0], facts):
+                    # P25(封 docs/XBRL_LASTBRANCH_SEAL_2026-10-21.md): 証拠((i) 同じ要素・同じ枠の別の期に同じ値 / (ii) 差が LAST_BRANCH_DIGIT_K 単位以内 / (iii) 桁・単位の取り違え)が無ければ名指さない。
+                    return
                 claim["pointer"] = "xbrl:%s@%s" % (cur[0]["name"], cur[0]["context"])
                 claim["bound"] = True
                 claim["result"] = "VALUE_MISMATCH"
@@ -1262,6 +1268,70 @@ def _frame_rebind_pct(claim, pairs, facts, contexts, formula, num, tol):
         _unbind_other_frame(claim, found)
 
 
+# ---------------------------------------------------------------------------
+# P25 last_branch_names_only_if_evidence(封 docs/XBRL_LASTBRANCH_SEAL_2026-10-21.md §1、人間の事前承認 2026-10-21)。旗が真のときだけ呼ばれる。
+# 最後の枝(値が合う fact 無し・a-b も合わず → 主語の当期の先頭 fact を名指して VALUE_MISMATCH)で「違う」と言うのは
+# 次のどれかのときだけ: (i) 文の値が名指す fact と同じ要素名・同じ枠(期の接頭辞を除いた context)の別の期の fact と合う
+# (期の取り違えの証拠。帯は vocabulary.match_value で照合と同じ。JPY の fact だけ)、(ii) 名指す fact との差が LAST_BRANCH_DIGIT_K 単位
+# (主張の桁)以内(桁の打ち間違いの証拠)、(iii) 名指す fact の値が 文の値 × 10^-n(n は LAST_BRANCH_SCALE_EXPONENTS)と、
+# 帯「書かれた数の精度 × 10^-n」で合う(桁・単位の取り違えの証拠。符号は問わない)。書かれた数の精度 = 主張の桁 ×
+# 10^(文の値を主張の桁で割った整数の末尾の 0 の数)。
+# どれでもなければ POINTER_NOT_FOUND、reason は登録簿の固定の名前 NO_SAME_VALUE。名指した要素・期・値は provenance に残す。
+# 人間の決定の行(案ア・§1b・C2・P21 の最後の枝・P22 の period_bind・P23 の _mag_trunc・P24 の行)の字は変えない。
+# ---------------------------------------------------------------------------
+LAST_BRANCH_DIGIT_K = 2   # 字で留める(封 §1 (ii))
+LAST_BRANCH_SCALE_EXPONENTS = (1, -1, 2, -2, 3, -3, 6, -6, 9, -9)   # 字で留める(封 §1 (iii))
+NO_SAME_VALUE = "no_same_value"
+
+
+def _written_precision(target, scale):
+    """書かれた数の精度: 主張の桁 × 10^(round(|文の値| / 主張の桁) の末尾の 0 の数)。0 のときは主張の桁。"""
+
+    q = int(round(abs(target) / scale))
+    tz = 0
+    while q and q % 10 == 0:
+        q //= 10
+        tz += 1
+    return scale * 10.0 ** tz
+
+
+def _last_branch_evidence(target, scale, rounding, mag_trunc, named, facts):
+    """(i) なら "same_element:<context>"、(ii) なら "digit_within_k"、(iii) なら "scale_10^<n>"、どれでもなければ None。"""
+
+    frame = _frame_of(named["context"])
+    for f in facts:
+        if f["name"] != named["name"] or f["context"] == named["context"] or _frame_of(f["context"]) != frame:
+            continue
+        if not (f["unit"] and f["unit"].upper().startswith("JPY")):
+            continue
+        if V.match_value(f["value"], target, scale, rounding, mag_trunc):
+            return "same_element:%s" % f["context"]
+    d = min(abs(named["value"] - target), abs(abs(named["value"]) - abs(target)))
+    if d <= LAST_BRANCH_DIGIT_K * scale:
+        return "digit_within_k"
+    prec = _written_precision(target, scale)
+    for n in LAST_BRANCH_SCALE_EXPONENTS:
+        if V.match_value(named["value"], target * 10.0 ** (-n), prec * 10.0 ** (-n), rounding, mag_trunc):
+            return "scale_10^%d" % n
+    return None
+
+
+def _last_branch_unname(claim, target, scale, rounding, mag_trunc, named, facts):
+    """証拠があれば False(呼び出し側が今までどおり名指す)。無ければ claim を POINTER_NOT_FOUND(no_same_value)にして True。"""
+
+    ev = _last_branch_evidence(target, scale, rounding, mag_trunc, named, facts)
+    claim["last_branch_evidence"] = ev
+    if ev is not None:
+        return False
+    claim["pointer"] = None
+    claim["bound"] = False
+    claim["result"] = None
+    claim["recomputed"] = None
+    claim["reason"] = NO_SAME_VALUE
+    claim["no_same_value"] = {"named": "xbrl:%s@%s" % (named["name"], named["context"]), "value": named["value"]}
+    return True
+
+
 _PCT_PHRASE_RE = re.compile(r"(\d+(?:\.\d+)?)\s*(％|%)\s*の?(?:大幅な?)?(増加|減少|増益|減益|増収|減収|増|減)")
 # 語と数の間に許すもの: 助詞、「前期の」、そして「32.5%から」(AからBへ の A)。
 _RATIO_PARTICLE_RE = re.compile(r"^(は|が|を|も|の|、|\s)*(前期(末)?の)?(\d+(?:\.\d+)?\s*[％%]から)?$")
@@ -1680,6 +1750,8 @@ def claim_to_recipe(raw, kind):
     }
     if raw.get("other_frame") is not None:
         provenance["other_frame"] = raw["other_frame"]   # P24 frame_rebind
+    if raw.get("no_same_value") is not None:
+        provenance["no_same_value"] = raw["no_same_value"]   # P25: 名指さなかった当期の fact(要素@期・値)
 
     claim = core.Claim(
         id=raw["id"], form=form, subject=raw.get("subject"), value=raw.get("value"),
