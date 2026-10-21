@@ -1,0 +1,758 @@
+{
+ "seal": "docs/XBRL_FRESH_SAMPLE_SEAL_2026-10-21.md",
+ "rule": "封 §1-2。order[67:] を順に見て、名簿以外の追跡 file(git grep -l -F。repo 全体)に名前が出ている docID と手元の cache(~/.cache/audit-core/edinet/*.zip)に在る docID を飛ばし、先頭 40 件",
+ "seed_hex": "6a24d72",
+ "pool": 256,
+ "開始の位置": 67,
+ "引く件数": 40,
+ "名簿の file(名前が出ていても飛ばさない)": [
+  "fixtures/xbrl/holdout_p17/pool2_clean_2026-10-14.json",
+  "fixtures/xbrl/holdout_p17/fetched_not_read_2026-10-14.json",
+  "fixtures/xbrl/holdout_p17/pool_meta_2026-10-14.json",
+  "fixtures/xbrl/holdout_p17/pool2_meta_2026-10-14.json",
+  "docs/XBRL_FRESH_SAMPLE_*(この封・結果文書)",
+  "fixtures/xbrl/fresh/*(この draw・取得・測定の記録)",
+  "measure/xbrl_fresh_*(取得・測定の script)",
+  "tests/measure/test_xbrl_fresh_*(門)"
+ ],
+ "order の再現": {
+  "確かめたこと": "封 docs/HOLDOUT_SPLIT_SEAL_2026-10-14.md の order[0:6]・[6:14]・[14:22]、fixtures/xbrl/cd8/draw_2026-10-17.json の位置と docID(飛ばした件を含む)、fixtures/xbrl/gen_c/draw_2026-10-20.json の位置 59〜66 が、再現した order と全部一致(門 tests/measure/test_xbrl_fresh_seal.py が毎回確かめる)"
+ },
+ "引いた 40 件": [
+  "S100YXFQ",
+  "S100YZ4M",
+  "S100YYIV",
+  "S100YYHK",
+  "S100YYGF",
+  "S100YYAI",
+  "S100YZ2B",
+  "S100YZFP",
+  "S100YYSK",
+  "S100YYMP",
+  "S100YYKZ",
+  "S100YYUS",
+  "S100YZ57",
+  "S100YYFP",
+  "S100YZ9G",
+  "S100YYMC",
+  "S100YYEO",
+  "S100YXXB",
+  "S100YYVJ",
+  "S100YYQN",
+  "S100YZC8",
+  "S100YYYH",
+  "S100YYF5",
+  "S100YXG0",
+  "S100YXZQ",
+  "S100YY3A",
+  "S100YW7F",
+  "S100YYH7",
+  "S100YYQQ",
+  "S100YX88",
+  "S100YXYC",
+  "S100YXNS",
+  "S100YYNI",
+  "S100YYLT",
+  "S100YYO2",
+  "S100YXXZ",
+  "S100YXSF",
+  "S100YYOW",
+  "S100YYF7",
+  "S100YUI9"
+ ],
+ "位置": [
+  68,
+  70,
+  71,
+  72,
+  76,
+  77,
+  81,
+  82,
+  83,
+  84,
+  86,
+  91,
+  93,
+  95,
+  96,
+  97,
+  99,
+  100,
+  104,
+  115,
+  116,
+  118,
+  119,
+  120,
+  123,
+  124,
+  125,
+  126,
+  127,
+  128,
+  135,
+  137,
+  139,
+  142,
+  148,
+  150,
+  152,
+  157,
+  166,
+  171
+ ],
+ "飛ばした件": [
+  {
+   "位置": 67,
+   "docID": "S100Z3ST",
+   "理由": "名簿以外の追跡 file に名前が出ている",
+   "名前が出た file": [
+    "fixtures/xbrl/candidates_2026-09.json"
+   ],
+   "cache に在る": false
+  },
+  {
+   "位置": 69,
+   "docID": "S100Z42G",
+   "理由": "名簿以外の追跡 file に名前が出ている",
+   "名前が出た file": [
+    "fixtures/xbrl/candidates_2026-09.json"
+   ],
+   "cache に在る": false
+  },
+  {
+   "位置": 73,
+   "docID": "S100Z488",
+   "理由": "名簿以外の追跡 file に名前が出ている",
+   "名前が出た file": [
+    "fixtures/xbrl/candidates_2026-09.json"
+   ],
+   "cache に在る": false
+  },
+  {
+   "位置": 74,
+   "docID": "S100Z4I4",
+   "理由": "名簿以外の追跡 file に名前が出ている",
+   "名前が出た file": [
+    "fixtures/xbrl/candidates_2026-09.json"
+   ],
+   "cache に在る": false
+  },
+  {
+   "位置": 75,
+   "docID": "S100Z3S0",
+   "理由": "名簿以外の追跡 file に名前が出ている",
+   "名前が出た file": [
+    "fixtures/xbrl/candidates_2026-09.json"
+   ],
+   "cache に在る": false
+  },
+  {
+   "位置": 78,
+   "docID": "S100Z429",
+   "理由": "名簿以外の追跡 file に名前が出ている",
+   "名前が出た file": [
+    "fixtures/xbrl/candidates_2026-09.json"
+   ],
+   "cache に在る": false
+  },
+  {
+   "位置": 79,
+   "docID": "S100Z383",
+   "理由": "名簿以外の追跡 file に名前が出ている",
+   "名前が出た file": [
+    "fixtures/xbrl/candidates_2026-09.json"
+   ],
+   "cache に在る": false
+  },
+  {
+   "位置": 80,
+   "docID": "S100Z3O3",
+   "理由": "名簿以外の追跡 file に名前が出ている",
+   "名前が出た file": [
+    "fixtures/xbrl/candidates_2026-09.json"
+   ],
+   "cache に在る": false
+  },
+  {
+   "位置": 85,
+   "docID": "S100Z3SS",
+   "理由": "名簿以外の追跡 file に名前が出ている",
+   "名前が出た file": [
+    "fixtures/xbrl/candidates_2026-09.json"
+   ],
+   "cache に在る": false
+  },
+  {
+   "位置": 87,
+   "docID": "S100Z5HU",
+   "理由": "名簿以外の追跡 file に名前が出ている",
+   "名前が出た file": [
+    "fixtures/xbrl/candidates_2026-09.json"
+   ],
+   "cache に在る": false
+  },
+  {
+   "位置": 88,
+   "docID": "S100Z3E4",
+   "理由": "名簿以外の追跡 file に名前が出ている",
+   "名前が出た file": [
+    "fixtures/xbrl/candidates_2026-09.json"
+   ],
+   "cache に在る": false
+  },
+  {
+   "位置": 89,
+   "docID": "S100Z2KC",
+   "理由": "名簿以外の追跡 file に名前が出ている",
+   "名前が出た file": [
+    "fixtures/xbrl/candidates_2026-09.json"
+   ],
+   "cache に在る": false
+  },
+  {
+   "位置": 90,
+   "docID": "S100Z3DI",
+   "理由": "名簿以外の追跡 file に名前が出ている",
+   "名前が出た file": [
+    "fixtures/xbrl/candidates_2026-09.json"
+   ],
+   "cache に在る": false
+  },
+  {
+   "位置": 92,
+   "docID": "S100Z4H1",
+   "理由": "名簿以外の追跡 file に名前が出ている",
+   "名前が出た file": [
+    "fixtures/xbrl/candidates_2026-09.json"
+   ],
+   "cache に在る": false
+  },
+  {
+   "位置": 94,
+   "docID": "S100Z468",
+   "理由": "名簿以外の追跡 file に名前が出ている",
+   "名前が出た file": [
+    "fixtures/xbrl/candidates_2026-09.json"
+   ],
+   "cache に在る": false
+  },
+  {
+   "位置": 98,
+   "docID": "S100Z35F",
+   "理由": "名簿以外の追跡 file に名前が出ている",
+   "名前が出た file": [
+    "fixtures/xbrl/candidates_2026-09.json"
+   ],
+   "cache に在る": false
+  },
+  {
+   "位置": 101,
+   "docID": "S100Z4FT",
+   "理由": "名簿以外の追跡 file に名前が出ている",
+   "名前が出た file": [
+    "fixtures/xbrl/candidates_2026-09.json"
+   ],
+   "cache に在る": false
+  },
+  {
+   "位置": 102,
+   "docID": "S100Z5AL",
+   "理由": "名簿以外の追跡 file に名前が出ている",
+   "名前が出た file": [
+    "fixtures/xbrl/candidates_2026-09.json"
+   ],
+   "cache に在る": false
+  },
+  {
+   "位置": 103,
+   "docID": "S100Z57M",
+   "理由": "名簿以外の追跡 file に名前が出ている",
+   "名前が出た file": [
+    "fixtures/xbrl/candidates_2026-09.json"
+   ],
+   "cache に在る": false
+  },
+  {
+   "位置": 105,
+   "docID": "S100Z3RZ",
+   "理由": "名簿以外の追跡 file に名前が出ている",
+   "名前が出た file": [
+    "fixtures/xbrl/candidates_2026-09.json"
+   ],
+   "cache に在る": false
+  },
+  {
+   "位置": 106,
+   "docID": "S100Z4KK",
+   "理由": "名簿以外の追跡 file に名前が出ている",
+   "名前が出た file": [
+    "fixtures/xbrl/candidates_2026-09.json"
+   ],
+   "cache に在る": false
+  },
+  {
+   "位置": 107,
+   "docID": "S100Z2Z6",
+   "理由": "名簿以外の追跡 file に名前が出ている",
+   "名前が出た file": [
+    "fixtures/xbrl/candidates_2026-09.json"
+   ],
+   "cache に在る": false
+  },
+  {
+   "位置": 108,
+   "docID": "S100Z59R",
+   "理由": "名簿以外の追跡 file に名前が出ている",
+   "名前が出た file": [
+    "fixtures/xbrl/candidates_2026-09.json"
+   ],
+   "cache に在る": false
+  },
+  {
+   "位置": 109,
+   "docID": "S100Z0JO",
+   "理由": "名簿以外の追跡 file に名前が出ている",
+   "名前が出た file": [
+    "fixtures/xbrl/candidates_2026-09.json"
+   ],
+   "cache に在る": false
+  },
+  {
+   "位置": 110,
+   "docID": "S100Z4J4",
+   "理由": "名簿以外の追跡 file に名前が出ている",
+   "名前が出た file": [
+    "fixtures/xbrl/candidates_2026-09.json"
+   ],
+   "cache に在る": false
+  },
+  {
+   "位置": 111,
+   "docID": "S100Z3IX",
+   "理由": "名簿以外の追跡 file に名前が出ている",
+   "名前が出た file": [
+    "fixtures/xbrl/candidates_2026-09.json",
+    "fixtures/xbrl/probe2B_S100Z4B6.json",
+    "fixtures/xbrl/probe3L_S100Z4B6.json",
+    "fixtures/xbrl/probe4AB_S100Z4B6.json",
+    "fixtures/xbrl/probe4A_S100Z4B6.json",
+    "fixtures/xbrl/probe4B_S100Z4B6.json",
+    "fixtures/xbrl/probe5F_S100Z4B6.json",
+    "fixtures/xbrl/probe5R2_S100Z4B6.json"
+   ],
+   "cache に在る": false
+  },
+  {
+   "位置": 112,
+   "docID": "S100Z37I",
+   "理由": "名簿以外の追跡 file に名前が出ている",
+   "名前が出た file": [
+    "fixtures/xbrl/candidates_2026-09.json"
+   ],
+   "cache に在る": false
+  },
+  {
+   "位置": 113,
+   "docID": "S100Z2BE",
+   "理由": "名簿以外の追跡 file に名前が出ている",
+   "名前が出た file": [
+    "fixtures/xbrl/candidates_2026-09.json"
+   ],
+   "cache に在る": false
+  },
+  {
+   "位置": 114,
+   "docID": "S100Z2G0",
+   "理由": "名簿以外の追跡 file に名前が出ている",
+   "名前が出た file": [
+    "fixtures/xbrl/candidates_2026-09.json"
+   ],
+   "cache に在る": false
+  },
+  {
+   "位置": 117,
+   "docID": "S100Z3TC",
+   "理由": "名簿以外の追跡 file に名前が出ている",
+   "名前が出た file": [
+    "fixtures/xbrl/candidates_2026-09.json"
+   ],
+   "cache に在る": false
+  },
+  {
+   "位置": 121,
+   "docID": "S100Z4LD",
+   "理由": "名簿以外の追跡 file に名前が出ている",
+   "名前が出た file": [
+    "fixtures/xbrl/candidates_2026-09.json"
+   ],
+   "cache に在る": false
+  },
+  {
+   "位置": 122,
+   "docID": "S100Z3YV",
+   "理由": "名簿以外の追跡 file に名前が出ている",
+   "名前が出た file": [
+    "fixtures/xbrl/candidates_2026-09.json"
+   ],
+   "cache に在る": false
+  },
+  {
+   "位置": 129,
+   "docID": "S100Z57K",
+   "理由": "名簿以外の追跡 file に名前が出ている",
+   "名前が出た file": [
+    "fixtures/xbrl/candidates_2026-09.json"
+   ],
+   "cache に在る": false
+  },
+  {
+   "位置": 130,
+   "docID": "S100Z3I1",
+   "理由": "名簿以外の追跡 file に名前が出ている",
+   "名前が出た file": [
+    "fixtures/xbrl/candidates_2026-09.json"
+   ],
+   "cache に在る": false
+  },
+  {
+   "位置": 131,
+   "docID": "S100Z45U",
+   "理由": "名簿以外の追跡 file に名前が出ている",
+   "名前が出た file": [
+    "fixtures/xbrl/candidates_2026-09.json"
+   ],
+   "cache に在る": false
+  },
+  {
+   "位置": 132,
+   "docID": "S100Z46R",
+   "理由": "名簿以外の追跡 file に名前が出ている",
+   "名前が出た file": [
+    "fixtures/xbrl/candidates_2026-09.json"
+   ],
+   "cache に在る": false
+  },
+  {
+   "位置": 133,
+   "docID": "S100Z49G",
+   "理由": "名簿以外の追跡 file に名前が出ている",
+   "名前が出た file": [
+    "fixtures/xbrl/candidates_2026-09.json"
+   ],
+   "cache に在る": false
+  },
+  {
+   "位置": 134,
+   "docID": "S100Z3R0",
+   "理由": "名簿以外の追跡 file に名前が出ている",
+   "名前が出た file": [
+    "fixtures/xbrl/candidates_2026-09.json"
+   ],
+   "cache に在る": false
+  },
+  {
+   "位置": 136,
+   "docID": "S100Z33X",
+   "理由": "名簿以外の追跡 file に名前が出ている",
+   "名前が出た file": [
+    "fixtures/xbrl/candidates_2026-09.json"
+   ],
+   "cache に在る": false
+  },
+  {
+   "位置": 138,
+   "docID": "S100Z50O",
+   "理由": "名簿以外の追跡 file に名前が出ている",
+   "名前が出た file": [
+    "fixtures/xbrl/candidates_2026-09.json"
+   ],
+   "cache に在る": false
+  },
+  {
+   "位置": 140,
+   "docID": "S100Z2YO",
+   "理由": "名簿以外の追跡 file に名前が出ている",
+   "名前が出た file": [
+    "fixtures/xbrl/candidates_2026-09.json"
+   ],
+   "cache に在る": false
+  },
+  {
+   "位置": 141,
+   "docID": "S100Z4WQ",
+   "理由": "名簿以外の追跡 file に名前が出ている",
+   "名前が出た file": [
+    "fixtures/xbrl/candidates_2026-09.json"
+   ],
+   "cache に在る": false
+  },
+  {
+   "位置": 143,
+   "docID": "S100Z44N",
+   "理由": "名簿以外の追跡 file に名前が出ている",
+   "名前が出た file": [
+    "fixtures/xbrl/candidates_2026-09.json"
+   ],
+   "cache に在る": false
+  },
+  {
+   "位置": 144,
+   "docID": "S100Z3WT",
+   "理由": "名簿以外の追跡 file に名前が出ている",
+   "名前が出た file": [
+    "fixtures/xbrl/candidates_2026-09.json"
+   ],
+   "cache に在る": false
+  },
+  {
+   "位置": 145,
+   "docID": "S100Z3VX",
+   "理由": "名簿以外の追跡 file に名前が出ている",
+   "名前が出た file": [
+    "fixtures/xbrl/candidates_2026-09.json"
+   ],
+   "cache に在る": false
+  },
+  {
+   "位置": 146,
+   "docID": "S100Z4J5",
+   "理由": "名簿以外の追跡 file に名前が出ている",
+   "名前が出た file": [
+    "fixtures/xbrl/candidates_2026-09.json"
+   ],
+   "cache に在る": false
+  },
+  {
+   "位置": 147,
+   "docID": "S100Z3JC",
+   "理由": "名簿以外の追跡 file に名前が出ている",
+   "名前が出た file": [
+    "fixtures/xbrl/candidates_2026-09.json"
+   ],
+   "cache に在る": false
+  },
+  {
+   "位置": 149,
+   "docID": "S100YZ8R",
+   "理由": "名簿以外の追跡 file に名前が出ている",
+   "名前が出た file": [
+    "fixtures/xbrl/candidates_2026-09.json"
+   ],
+   "cache に在る": false
+  },
+  {
+   "位置": 151,
+   "docID": "S100Z3UE",
+   "理由": "名簿以外の追跡 file に名前が出ている",
+   "名前が出た file": [
+    "fixtures/xbrl/candidates_2026-09.json"
+   ],
+   "cache に在る": false
+  },
+  {
+   "位置": 153,
+   "docID": "S100Z3L9",
+   "理由": "名簿以外の追跡 file に名前が出ている",
+   "名前が出た file": [
+    "fixtures/xbrl/candidates_2026-09.json"
+   ],
+   "cache に在る": false
+  },
+  {
+   "位置": 154,
+   "docID": "S100Z3TN",
+   "理由": "名簿以外の追跡 file に名前が出ている",
+   "名前が出た file": [
+    "fixtures/xbrl/candidates_2026-09.json"
+   ],
+   "cache に在る": false
+  },
+  {
+   "位置": 155,
+   "docID": "S100Z4KT",
+   "理由": "名簿以外の追跡 file に名前が出ている",
+   "名前が出た file": [
+    "fixtures/xbrl/candidates_2026-09.json"
+   ],
+   "cache に在る": false
+  },
+  {
+   "位置": 156,
+   "docID": "S100Z3XS",
+   "理由": "名簿以外の追跡 file に名前が出ている",
+   "名前が出た file": [
+    "fixtures/xbrl/candidates_2026-09.json"
+   ],
+   "cache に在る": false
+  },
+  {
+   "位置": 158,
+   "docID": "S100Z1RU",
+   "理由": "名簿以外の追跡 file に名前が出ている",
+   "名前が出た file": [
+    "fixtures/xbrl/candidates_2026-09.json"
+   ],
+   "cache に在る": false
+  },
+  {
+   "位置": 159,
+   "docID": "S100Z3D3",
+   "理由": "名簿以外の追跡 file に名前が出ている",
+   "名前が出た file": [
+    "fixtures/xbrl/candidates_2026-09.json"
+   ],
+   "cache に在る": false
+  },
+  {
+   "位置": 160,
+   "docID": "S100Z6XO",
+   "理由": "cache に在る(かつ名前も出ている)",
+   "名前が出た file": [
+    "docs/HOLDOUT_P17_SEAL_2026-10-14.md",
+    "docs/XBRL_LASTBRANCH_RESULT_2026-10-21.md",
+    "docs/XBRL_POINT_PRIOR_RESULT_2026-10-20.md",
+    "docs/XBRL_VOCAB_SEAL_2026-10-21.md",
+    "fixtures/xbrl/customer_report_2026-10-21.json",
+    "fixtures/xbrl/holdout_p17/drawn_2026-10-14.json",
+    "fixtures/xbrl/lastbranch_2026-10-21.json",
+    "fixtures/xbrl/period_bind_2026-10-20.json",
+    "fixtures/xbrl/point_prior_2026-10-20.json",
+    "fixtures/xbrl/rounding_2026-10-21.json",
+    "fixtures/xbrl/vocab_2026-10-21.json",
+    "measure/xbrl_lastbranch_2026-10-21.py",
+    "tests/measure/test_xbrl_point_prior_result.py",
+    "tests/measure/test_xbrl_vocab_seal.py"
+   ],
+   "cache に在る": true
+  },
+  {
+   "位置": 161,
+   "docID": "S100Z4FH",
+   "理由": "名簿以外の追跡 file に名前が出ている",
+   "名前が出た file": [
+    "fixtures/xbrl/candidates_2026-09.json"
+   ],
+   "cache に在る": false
+  },
+  {
+   "位置": 162,
+   "docID": "S100Z4G9",
+   "理由": "名簿以外の追跡 file に名前が出ている",
+   "名前が出た file": [
+    "fixtures/xbrl/candidates_2026-09.json"
+   ],
+   "cache に在る": false
+  },
+  {
+   "位置": 163,
+   "docID": "S100Z3JA",
+   "理由": "名簿以外の追跡 file に名前が出ている",
+   "名前が出た file": [
+    "fixtures/xbrl/candidates_2026-09.json"
+   ],
+   "cache に在る": false
+  },
+  {
+   "位置": 164,
+   "docID": "S100Z50D",
+   "理由": "名簿以外の追跡 file に名前が出ている",
+   "名前が出た file": [
+    "fixtures/xbrl/candidates_2026-09.json"
+   ],
+   "cache に在る": false
+  },
+  {
+   "位置": 165,
+   "docID": "S100Z4XU",
+   "理由": "名簿以外の追跡 file に名前が出ている",
+   "名前が出た file": [
+    "fixtures/xbrl/candidates_2026-09.json"
+   ],
+   "cache に在る": false
+  },
+  {
+   "位置": 167,
+   "docID": "S100Z4HA",
+   "理由": "名簿以外の追跡 file に名前が出ている",
+   "名前が出た file": [
+    "fixtures/xbrl/candidates_2026-09.json"
+   ],
+   "cache に在る": false
+  },
+  {
+   "位置": 168,
+   "docID": "S100Z3SN",
+   "理由": "名簿以外の追跡 file に名前が出ている",
+   "名前が出た file": [
+    "fixtures/xbrl/candidates_2026-09.json"
+   ],
+   "cache に在る": false
+  },
+  {
+   "位置": 169,
+   "docID": "S100Z2XO",
+   "理由": "名簿以外の追跡 file に名前が出ている",
+   "名前が出た file": [
+    "fixtures/xbrl/candidates_2026-09.json"
+   ],
+   "cache に在る": false
+  },
+  {
+   "位置": 170,
+   "docID": "S100Z3O7",
+   "理由": "名簿以外の追跡 file に名前が出ている",
+   "名前が出た file": [
+    "fixtures/xbrl/candidates_2026-09.json"
+   ],
+   "cache に在る": false
+  }
+ ],
+ "飛ばした件の内訳": {
+  "名前が出ている": 64,
+  "cache に在る": 1,
+  "合計": 65
+ },
+ "引いた 40 件の位置の幅": [
+  68,
+  171
+ ],
+ "67 書類と order[:67]": {
+  "67 書類の定義": "手元の cache 281 file のうち measure/xbrl_point_prior_2026-10-20.py の classify_doc が CAT_TEXT(経営分析の文あり)を返す書類(lastbranch の記録の「経営分析の文を持つ 67」と同じ数え方)",
+  "67 書類の数": 67,
+  "order[:67] の中に在る": 50,
+  "母集団 256 の外": 16,
+  "母集団の中で order[67:] に在る": 1,
+  "母集団の外の docID": [
+   "S100YMFV",
+   "S100Z1WR",
+   "S100Z35K",
+   "S100Z37J",
+   "S100Z39P",
+   "S100Z3BW",
+   "S100Z3CO",
+   "S100Z3HP",
+   "S100Z3JY",
+   "S100Z3V1",
+   "S100Z433",
+   "S100Z4B6",
+   "S100Z4DE",
+   "S100Z4N9",
+   "S100Z4PA",
+   "S100Z4Q1"
+  ],
+  "order[67:] に在る(位置)": [
+   {
+    "docID": "S100Z6XO",
+    "位置": 160
+   }
+  ],
+  "note": "67 書類は order[:67] だけから来たのではない(50 + 母集団の外 16 + order[67:] の 1)。order[67:] に在る 1 件は cache に在るので規則で飛ばされる(飛ばした件に記録)"
+ },
+ "**cache に在るか(引いた 40 件)**": {
+  "在った": [],
+  "note": "1 件も無い = 一度も取っていない"
+ },
+ "取得": "**していない**(EDINET_API_KEY は人間が渡す。値は読まない・印字しない・記録しない)"
+}
