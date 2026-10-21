@@ -114,7 +114,8 @@ class RecordTest(unittest.TestCase):
         # 2026-10-21 追記(pin の遷移): 顧客向けの日本語の報告形(封 docs/XBRL_CUSTOMER_REPORT_SEAL_2026-10-21.md)が新しい module report_customer.py を足して 36 → 37 本。
         # この門が測った当時の値(上の 36)は消さない。いまの字は、測った当時の 36 か、宣言された遷移の 37(report_customer.py が追跡されているとき)だけを受け入れる。
         n_now = int(re.search(r"(?m)^FROZEN_COUNT = (\d+)", src).group(1))
-        self.assertIn(n_now, (36, 37))
+        # 2026-10-21 追記(commit c13a746 の後、独立監査の推奨): report_customer.py が commit されたので 37 に締める。
+        self.assertEqual(n_now, 37)
         if n_now == 37:
             self.assertIn(u"audit-core/adapters/xbrl/report_customer.py", subprocess.run(["git", "ls-files", "audit-core/adapters"], cwd=os.path.dirname(ROOT), capture_output=True, text=True).stdout.split())
         self.assertIn(fz[u"いまの束ねた sha"], src)
