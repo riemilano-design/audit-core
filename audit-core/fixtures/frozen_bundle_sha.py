@@ -88,6 +88,13 @@ FROZEN_BUNDLE_GENERATIONS = (
      "comparators.py・core/py・instance.py・extract.py は 0 行(切り捨ての帯の絶対値の枝は P19 で入っており、検証時の照合へは params[\"magnitude_truncate\"] で既に届く)。"
      "DEFAULT_PROFILE は P22 のまま。人間の事前承認 2026-10-21、封 docs/XBRL_ROUNDING_SEAL_2026-10-21.md(commit 5008985)。"
      "対象 36 本(本数は変わらない)。独立監査 GO の前に測った値(commit 前)"),
+    ("a3eef997e567dd5cb41c2a0066c8e7997cbfbf3e90e8b506919183127e2a1284",
+     "2026-10-21 feature/audit-core-final-eval-8(語彙の登録と枠の取り直し P24 の段 1): vocabulary.py に旗 vocab_2026_10_21・frame_rebind・"
+     "資金の主語の句の表 CF_FUND_SUBJECTS_2026_10_21・P24(= P23 + 旗 2 つ)・PROFILES の登録を足し(+27 行・-1 行)、recipes.py に旗 2 つの塊を足し"
+     "(+224 行・-0 行。既存の行は 1 つも書き換えない。ポイントの前期の語・前期の手がかり語・資金の主語の句・CF 合計の符号・枠の取り直しの 5 か所)、"
+     "registry_setup.py に理由 other_frame を足した(+2 行)。comparators.py・core/py・instance.py・extract.py は 0 行。"
+     "DEFAULT_PROFILE は P22 のまま。人間の事前承認 2026-10-21、封 docs/XBRL_VOCAB_SEAL_2026-10-21.md(commit 08987d0)。"
+     "対象 36 本(本数は変わらない)。独立監査 GO の前に測った値(commit 前)"),
 )
 
 # 字で留めるのは**いまの世代**。--expect を値なしで渡したときの既定。

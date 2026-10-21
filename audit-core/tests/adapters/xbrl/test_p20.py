@@ -392,7 +392,7 @@ class ProfileShapeTest(unittest.TestCase):
 
     def test_every_other_profile_keeps_the_flag_off(self):
         for name, p in V.PROFILES.items():
-            if name in ("P20", "P21", "P22", "P23"):    # P23 = P22 + pct_tolerance_from_decimals + truncate_abs_band(封 XBRL_ROUNDING_SEAL_2026-10-21)、P21 = P20 + last_branch_cues(封 XBRL_NAMING_FIX_SEAL_2026-10-20)、P22 = P21 + period_bind(封 XBRL_PERIOD_BIND_SEAL_2026-10-20、2026-10-20)
+            if name in ("P20", "P21", "P22", "P23", "P24"):    # P24 = P23 + vocab_2026_10_21 + frame_rebind(封 XBRL_VOCAB_SEAL_2026-10-21)、P23 = P22 + pct_tolerance_from_decimals + truncate_abs_band(封 XBRL_ROUNDING_SEAL_2026-10-21)、P21 = P20 + last_branch_cues(封 XBRL_NAMING_FIX_SEAL_2026-10-20)、P22 = P21 + period_bind(封 XBRL_PERIOD_BIND_SEAL_2026-10-20、2026-10-20)
                 continue
             self.assertFalse(p.nonconsolidated_fallback, name)
 

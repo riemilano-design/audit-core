@@ -69,6 +69,9 @@ def _state_of(reason, result):
         return UNBOUND_REASON_STATE[r]
     if r.startswith("ambiguous("):
         return "UNVERIFIABLE"
+    if r.startswith("other_frame("):
+        # P24 frame_rebind(試作 v3): 同じ要素の別の枠でだけ合った数。結ばない(UNVERIFIABLE)。
+        return "UNVERIFIABLE"
     raise KeyError(r)
 
 
@@ -180,6 +183,8 @@ def _apply_flow_sign(claim, s, a, b, rounding=None, flow_base=None, mag_trunc=Fa
 # profile.point_diff が真のときだけ使う。
 # ---------------------------------------------------------------------------
 _POINT_PRIOR_PHRASE_RE = re.compile(r"前期比|前連結会計年度|前年")
+# P24 vocab_2026_10_21 (2): ポイントの前期の語に「(同」「前事業年度」「前事業年度末」を足す(窓 25 字は変えない)。旗が偽なら上の字のまま。
+_POINT_PRIOR_PHRASE_RE_2026_10_21 = re.compile(r"前期比|前連結会計年度|前年|[(（]同|前事業年度末|前事業年度")
 _POINT_DIRECTION_RE = re.compile(r"増加|増|減少|減|下回")
 
 
@@ -231,6 +236,36 @@ def _build_point_diff_claim(claim, s, a, b, elems, member, facts, contexts, num,
     claim["result"] = "GROUNDED" if abs(recomputed - claim["value"]) <= tol else "VALUE_MISMATCH"
 
 
+def _build_point_diff_claim_2026_10_21(claim, s, a, b, elems, member, facts, contexts, num, tol=PCT_TOLERANCE_DEFAULT):
+    """P24 vocab_2026_10_21 (2): ``_build_point_diff_claim`` の本体の写し。違いは前期の語が
+    ``_POINT_PRIOR_PHRASE_RE_2026_10_21``(「(同」「前事業年度」「前事業年度末」を足した字)であることだけ。
+    窓 25 字・向きの語・対の作り方・帯は同じ。旗が真で、既存の語では前期の語が無かった数にだけ呼ばれる。"""
+
+    claim["reason"] = None
+    head = s[max(0, a - 25):a]
+    if not _POINT_PRIOR_PHRASE_RE_2026_10_21.search(head):
+        claim["reason"] = "no_element(point without prior phrase)"
+        return
+    dmm = _POINT_DIRECTION_RE.search(s[b:b + 10])
+    sgn = -1 if (dmm and dmm.group(0) in ("減少", "減", "下回")) else 1
+    pool = [f for f in I.facts_for(elems, facts, contexts, member) if (f["unit"] or "").lower().startswith("pure")]
+    cur_pure = [f for f in pool if f["context"].startswith("CurrentYear")]
+    pri_pure = [f for f in pool if f["context"].startswith("Prior1Year")]
+    duo = [(c, p) for c in cur_pure for p in pri_pure
+           if c["name"] == p["name"] and c["context"].replace("CurrentYear", "") == p["context"].replace("Prior1Year", "")]
+    if not duo:
+        claim["reason"] = "no_element"
+        return
+    c, p = duo[0]
+    claim["form"] = "derived_value"
+    claim["value"] = sgn * num
+    claim["pointer"] = ["xbrl:%s@%s" % (c["name"], c["context"]), "xbrl:%s@%s" % (p["name"], p["context"]), "formula:a-b(pure)"]
+    claim["bound"] = True
+    rc = round((c["value"] - p["value"]) * 100, 2)
+    claim["recomputed"] = rc
+    claim["result"] = "GROUNDED" if abs(rc - claim["value"]) <= tol else "VALUE_MISMATCH"
+
+
 def _direct_value_claim(claim, s, a, b, sign, num, unit, prec, subj, elems, member, facts, contexts,
                         profile=None, rounding=None):
     scale = prec if unit == "円" else V.UNIT_SCALE[unit]
@@ -252,10 +287,19 @@ def _direct_value_claim(claim, s, a, b, sign, num, unit, prec, subj, elems, memb
     if profile is not None and profile.period_cue and _prior_cue(s, a, b):
         # C2: 当期・前期で同じ値のとき、「(同」「前期」の直後の数は前期の fact を先に。
         hits = sorted(hits, key=lambda fh: 0 if fh[0]["context"].startswith("Prior1Year") else 1)
+    hits_before_bind = hits   # P24 vocab_2026_10_21 (1): 下の P22 の行(人間の決定、字は不変)で外す前の hits
     if profile is not None and getattr(profile, "period_bind", False) and subj and not _prior_cue(s, a, b) and not _prior_cue_clause(s, a):
         # P22(封 docs/XBRL_PERIOD_BIND_SEAL_2026-10-20.md §1): 前期の手がかりが無い数は、Prior1Year の fact に値だけで結ばない。主語なしは案ア(2026-10-08)のまま = P21 と同一(2026-10-20 独立監査の指摘で subj and)。
         # 当期の hit が残ればそれで今までどおり。残らなければ値の一致なしとして後続の枝(導出 a-b → 最後の枝)に落とす。
         hits = [(f, how) for f, how in hits if not f["context"].startswith("Prior1Year")]
+    if _vocab_flag(profile) and _prior_cue_clause_2026_10_21(s, a):
+        # P24 vocab_2026_10_21 (1): 同じ節に新しい前期の手がかり語(「前連結会計年度末残高」「前年は」「(前期␣」)が在る数は、
+        # P22 の period_bind で Prior1Year を外さない(外す前に戻す)。旗が偽なら通らない。
+        hits = hits_before_bind
+    if _vocab_flag(profile) and subj in _CF_FUND_WORDS_2026_10_21:
+        # P24 vocab_2026_10_21(v3.1、司令塔の決定 5): 新しく登録した資金の主語の句は、当期と Prior1Year の fact にだけ値で結ぶ
+        # (経営指標の要約の Prior2Year 以前には結ばない)。既存 6 句は不変。
+        hits = [(f, how) for f, how in hits if f["context"].startswith(("CurrentYear", "Prior1Year"))]
     if hits and not (is_diff and subj):
         fams = sorted({f["name"] for f, _ in hits})
         if subj or len(fams) == 1:
@@ -343,6 +387,12 @@ def _direct_value_claim(claim, s, a, b, sign, num, unit, prec, subj, elems, memb
                         # 理由は登録済みの no_element(状態は POINTER_NOT_FOUND)。
                         claim["reason"] = "no_element"
                         return
+                    if (getattr(profile, "frame_rebind", False) and not _prior_cue(s, a, b)
+                            and not (_prior_cue_clause_2026_10_21(s, a) if _vocab_flag(profile) else _prior_cue_clause(s, a))):
+                        # P24 frame_rebind(試作 v3): 取った枠で値が合わず、同じ要素の別の枠(当期)で値か a-b が合うなら
+                        # VALUE_MISMATCH をやめて UNVERIFIABLE(結ばない。pointer なし)。前期の手がかりがある数には当てない。
+                        if _frame_rebind_money(claim, target, scale, rounding, mag_trunc, is_diff, fs, cur, facts, contexts):
+                            return
                     pri = [f for f in fs if f["context"].startswith("Prior1Year")]
                     if profile.period_cue and not is_diff and pri and _prior_cue(s, a, b):
                         # F1′: 「前期は…」「(同…」の数は前期の fact を名指す(増減の語が無いときだけ)。
@@ -468,6 +518,8 @@ def _dispatch_num_claim(claim, s, a, b, sign, num, unit, prec, subj, elems, memb
                     ratio = c["value"] / p["value"] * 100
                     claim["recomputed"] = round(ratio, 2)
                     claim["result"] = "GROUNDED" if abs(ratio - num) <= tol else "VALUE_MISMATCH"
+                    if claim["result"] == "VALUE_MISMATCH" and getattr(profile, "frame_rebind", False):
+                        _frame_rebind_pct(claim, pairs, facts, contexts, lambda cv, pv: cv / pv * 100, num, tol)  # P24 (ii)
                 else:
                     claim["result"] = "UNVERIFIABLE"
                     claim["reason"] = "prior is 0"
@@ -493,6 +545,8 @@ def _dispatch_num_claim(claim, s, a, b, sign, num, unit, prec, subj, elems, memb
                     pct = (c["value"] - p["value"]) / abs(p["value"]) * 100
                     claim["recomputed"] = round(pct, 2)
                     claim["result"] = "GROUNDED" if abs(pct - claim["value"]) <= tol else "VALUE_MISMATCH"
+                    if claim["result"] == "VALUE_MISMATCH" and getattr(profile, "frame_rebind", False):
+                        _frame_rebind_pct(claim, pairs, facts, contexts, lambda cv, pv: (cv - pv) / abs(pv) * 100, claim["value"], tol)  # P24 (ii)
                 else:
                     claim["result"] = "UNVERIFIABLE"
                     claim["reason"] = "prior is 0"
@@ -510,6 +564,9 @@ def _dispatch_num_claim(claim, s, a, b, sign, num, unit, prec, subj, elems, memb
         claim["form"] = "direct_value"
         if profile.point_diff and unit == "ポイント" and subj:
             _build_point_diff_claim(claim, s, a, b, elems, member, facts, contexts, num, tol)
+            if _vocab_flag(profile) and claim.get("reason") == "no_element(point without prior phrase)":
+                # P24 vocab_2026_10_21 (2): 既存の語で前期の語が無かった数だけ、足した語で組み直す(上の関数の字は C-1g §1-3 のまま)。
+                _build_point_diff_claim_2026_10_21(claim, s, a, b, elems, member, facts, contexts, num, tol)
         elif profile.ratio_table and _ratio_word_before(s, a) is not None:
             # C5: 「売上総利益率は32.5%」― 率そのものの fact が無くても、分子/分母の
             # 2 fact(同じ期)で 分子/分母*100 を照合する。
@@ -856,6 +913,8 @@ def _build_raw_text_claims(sentences, facts, contexts, profile, claim_member, ro
                     # で束縛する(値そのものが増減を表すので前期は要らない)。
                     # C2: 同じ節に「前期は」が在れば前期の CF fact。
                     cf_pre = "Prior1Year" if (profile.period_cue and _prior_cue_clause(s, m.start())) else "CurrentYear"
+                    if _vocab_flag(profile) and profile.period_cue and _prior_cue_clause_2026_10_21(s, m.start()):
+                        cf_pre = "Prior1Year"   # P24 vocab_2026_10_21 (1)
                     cur = [f for f in I.facts_for(elems, facts, contexts, member) if f["context"].startswith(cf_pre) and f["unit"] and f["unit"].upper().startswith("JPY")]
                     if cur:
                         c = cur[0]
@@ -886,12 +945,20 @@ def _build_raw_text_claims(sentences, facts, contexts, profile, claim_member, ro
                         claim["recomputed"] = diff
                     else:
                         claim["reason"] = _text_unbound_reason(profile, member, cur, elems, facts, contexts)
+                elif (subj and _vocab_flag(profile) and _cf_total_prior_cue(s, m.start(), profile)
+                        and _cf_total_facts(elems, facts, contexts, member)):
+                    # P24 vocab_2026_10_21(試作 v3.1、司令塔の決定 案 B): CF 合計の要素(営業/投資/財務 CF。jppfs と jpcrp の要約)の
+                    # 向きの語は、前期の手がかりがあるときだけ Prior1Year の値そのものの符号で照合する(前期・前々期の対には落とさない)。
+                    # 手がかりが無ければこの枝に入らず、下の P23 の枝(当期・前期の対)のまま。
+                    _cf_total_text_claim(claim, s, m.start(), sg, elems, facts, contexts, member, profile)
                 elif subj:
                     # XBRL 直し §6: 括弧の中の前期の方向語は、当期・前期ではなく
                     # 前期・前々期の対に結ぶ。期の組だけを差し替え、以降の
                     # 判定(符号の向き・理由)は同じ 1 か所を通す。
                     prior_paren = (profile.text_prior_year_paren and _in_prior_year_paren(s, m.start())) or \
                         (profile.period_cue and _prior_cue_clause(s, m.start()))  # C2
+                    if _vocab_flag(profile) and profile.period_cue and _prior_cue_clause_2026_10_21(s, m.start()):
+                        prior_paren = True   # P24 vocab_2026_10_21 (1)
                     a_pre, b_pre = ("Prior1Year", "Prior2Year") if prior_paren else ("CurrentYear", "Prior1Year")
                     cur = [f for f in I.facts_for(elems, facts, contexts, member) if f["context"].startswith(a_pre) and f["unit"] and f["unit"].upper().startswith("JPY")]
                     pri = [f for f in I.facts_for(elems, facts, contexts, member) if f["context"].startswith(b_pre)]
@@ -1045,6 +1112,154 @@ def _prior_cue_clause(s, pos):
     seg = re.sub(r"[(（][^()（）]*[)）]", "", s[:pos])
     cut = max(seg.rfind("、"), seg.rfind("。"))
     return bool(_PRIOR_CLAUSE_RE.search(seg[cut + 1:]))
+
+
+# ---------------------------------------------------------------------------
+# P24(封の下調べ 試作 v3、2026-10-21)。旗 vocab_2026_10_21 / frame_rebind が真のときだけ呼ばれる。
+# 人間の決定の行(案ア・§1b・C2・P21 の最後の枝・P22 の period_bind・``_prior_cue_clause``)の字は変えず、新しい関数で持つ。
+# ---------------------------------------------------------------------------
+# (1) 同じ節の中の前期の手がかり語に「前連結会計年度末残高」「前年は」「(前期␣」を足す(既存の語は全部含む。_prior_cue の 12 字の窓は変えない)。
+# 「前連結会計年度に」は入れない(試作 v1/v2: 「前連結会計年度に比べ」「前連結会計年度にM&Aにより取得」に当たった)。
+_PRIOR_CLAUSE_RE_2026_10_21 = re.compile(r"(前期|前連結会計年度|前事業年度|前年同期)(は|には)|前連結会計年度末残高|前年は|[(（]前期[ 　]")
+
+
+def _prior_cue_clause_2026_10_21(s, pos):
+    """``_prior_cue_clause`` と同じ節の切り方で、(1) の語も見る。"""
+
+    seg = re.sub(r"[(（][^()（）]*[)）]", "", s[:pos])
+    cut = max(seg.rfind("、"), seg.rfind("。"))
+    return bool(_PRIOR_CLAUSE_RE_2026_10_21.search(seg[cut + 1:]))
+
+
+_CF_FUND_WORDS_2026_10_21 = frozenset(w for w, _e in V.CF_FUND_SUBJECTS_2026_10_21)
+
+
+def _vocab_flag(profile):
+    return bool(profile is not None and getattr(profile, "vocab_2026_10_21", False))
+
+
+_CF_TOTAL_RE = re.compile(r"^NetCashProvidedByUsedIn(Operating|Investing|Investment|Financing)Activities(SummaryOfBusinessResults)?$")
+
+
+def _cf_total_facts(elems, facts, contexts, member):
+    """主語の要素の JPY の fact(``facts_for`` の順)の先頭が CF 合計の要素なら、その列。でなければ空。"""
+
+    fs = [f for f in I.facts_for(elems, facts, contexts, member) if f["unit"] and f["unit"].upper().startswith("JPY")]
+    if fs and _CF_TOTAL_RE.match(fs[0]["name"].split(":")[-1]):
+        return fs
+    return []
+
+
+def _cf_total_prior_cue(s, pos, profile):
+    """前期の手がかり(既存の括弧の「前連結会計年度は」・C2 の節の語 + (1) の語)が在るか。"""
+
+    return bool((profile.text_prior_year_paren and _in_prior_year_paren(s, pos))
+                or (profile.period_cue and _prior_cue_clause_2026_10_21(s, pos)))
+
+
+def _cf_total_text_claim(claim, s, pos, sg, elems, facts, contexts, member, profile):
+    """CF 合計の要素の向きの語を、Prior1Year の値そのものの符号(+ = 増加、- = 減少)で照合する。
+    呼ぶのは前期の手がかりがあるときだけ(v3.1)。"""
+
+    pre = "Prior1Year"
+    fs = [f for f in _cf_total_facts(elems, facts, contexts, member) if f["context"].startswith(pre)]
+    claim["cf_total_sign"] = pre
+    if not fs:
+        claim["reason"] = "no_element"
+        return
+    c = fs[0]
+    claim["pointer"] = ["xbrl:%s@%s" % (c["name"], c["context"]), "builtin:flow_sign(cur)==direction"]
+    claim["bound"] = True
+    claim["flow_convention"] = 1
+    actual = 0 if c["value"] == 0 else (1 if c["value"] > 0 else -1)
+    claim["result"] = "GROUNDED" if actual == sg else "VALUE_MISMATCH"
+    claim["recomputed"] = c["value"]
+
+
+# frame_rebind: 枠の取り直し。**GROUNDED を作らない。** 合う枠が 1 つなら reason other_frame(<context>)、2 つ以上なら ambiguous(member)。
+# どちらも UNVERIFIABLE で pointer を付けない(値が合う参照がちょうど 1 つでも同定ではない)。別の要素・前期の枠には広げない。
+_PERIOD_PREFIX_RE = re.compile(r"^(CurrentYear|Prior1Year|Prior2Year)(Duration|Instant)")
+
+
+def _frame_of(ctx):
+    """context id から期の接頭辞を除いた枠の字(素の枠は "")。"""
+
+    m = _PERIOD_PREFIX_RE.match(ctx)
+    return ctx[m.end():] if m else ctx
+
+
+def _other_frame_current_facts(names, facts, contexts, taken_frame, jpy_only=True):
+    """同じ要素(名前の集合)の、取った枠と違う枠の CurrentYear の fact。枠は素か member 1 つだけ(内訳の枠は除く)。"""
+
+    out = []
+    for f in facts:
+        if f["name"] not in names or not f["context"].startswith("CurrentYear"):
+            continue
+        if jpy_only and not (f["unit"] and f["unit"].upper().startswith("JPY")):
+            continue
+        if _frame_of(f["context"]) == taken_frame:
+            continue
+        if len((contexts.get(f["context"]) or {}).get("members") or []) > 1:
+            continue
+        out.append(f)
+    return out
+
+
+def _unbind_other_frame(claim, found):
+    """``found`` = {枠: 合った当期の fact の context}。1 つなら other_frame(<context>)、2 つ以上なら ambiguous(member)。"""
+
+    claim["pointer"] = None
+    claim["bound"] = False
+    claim["recomputed"] = None
+    claim["result"] = None
+    claim.pop("match", None)
+    if len(found) == 1:
+        (ctx,) = found.values()
+        claim["reason"] = "other_frame(%s)" % ctx
+        claim["other_frame"] = ctx
+    else:
+        claim["reason"] = "ambiguous(member)"
+        claim["ambiguous_count"] = len(found)
+    claim["frame_rebind"] = sorted(found.values())
+
+
+def _frame_rebind_money(claim, target, scale, rounding, mag_trunc, is_diff, fs, cur, facts, contexts):
+    """(i) 直接の値・(iii) 増減の a-b。合う枠が在れば claim を UNVERIFIABLE にして True、無ければ False。"""
+
+    names = {f["name"] for f in fs}
+    taken_frame = _frame_of(cur[0]["context"])
+    by_nc = {(f["name"], f["context"]): f for f in facts if f["unit"] and f["unit"].upper().startswith("JPY")}
+    direct, diff = {}, {}
+    for f in _other_frame_current_facts(names, facts, contexts, taken_frame):
+        fr = _frame_of(f["context"])
+        if fr not in direct and V.match_value(f["value"], target, scale, rounding, mag_trunc):
+            direct[fr] = f["context"]
+        mate = by_nc.get((f["name"], f["context"].replace("CurrentYear", "Prior1Year", 1)))
+        if mate is not None and fr not in diff and V.match_value(f["value"] - mate["value"], target, scale, rounding, mag_trunc):
+            diff[fr] = f["context"]
+    for group in ((diff, direct) if is_diff else (direct, diff)):
+        if group:
+            _unbind_other_frame(claim, group)
+            return True
+    return False
+
+
+def _frame_rebind_pct(claim, pairs, facts, contexts, formula, num, tol):
+    """(ii) 取った枠の対で率が合わなかったとき、同じ要素の別の枠の当期・前期の対で合う枠が在れば UNVERIFIABLE。"""
+
+    names = {c["name"] for c, _p in pairs}
+    taken_frame = _frame_of(pairs[0][0]["context"])
+    by_nc = {(f["name"], f["context"]): f for f in facts}
+    found = {}
+    for c in _other_frame_current_facts(names, facts, contexts, taken_frame, jpy_only=False):
+        p = by_nc.get((c["name"], c["context"].replace("CurrentYear", "Prior1Year", 1)))
+        if p is None or p["value"] == 0:
+            continue
+        fr = _frame_of(c["context"])
+        if fr not in found and abs(formula(c["value"], p["value"]) - num) <= tol:
+            found[fr] = c["context"]
+    if found:
+        _unbind_other_frame(claim, found)
 
 
 _PCT_PHRASE_RE = re.compile(r"(\d+(?:\.\d+)?)\s*(％|%)\s*の?(?:大幅な?)?(増加|減少|増益|減益|増収|減収|増|減)")
@@ -1280,6 +1495,9 @@ def build_raw_claims(zb, profile, info=None):
     # なる ― 2026-10-14 の人間の指示)。
     inst["contexts"] = I.with_nonconsolidated_fallback(
         inst["contexts"], inst["facts"], profile.nonconsolidated_fallback)
+    if _vocab_flag(profile):
+        # P24 vocab_2026_10_21 (3): 資金の主語の句 19 通りを主語の一覧の先頭に足す(手書きの行として扱う。偽なら 1 行も変わらない)。
+        profile = dataclasses.replace(profile, subjects=tuple(V.CF_FUND_SUBJECTS_2026_10_21) + tuple(profile.subjects))
     if profile.label_vocabulary or profile.taxonomy_labels:
         # XBRL 直し §7/§7b/§8: 主語の一覧をラベルで直した profile で以降を回す
         # (``subject_of`` も他の関数も 1 行も変えない)。
@@ -1369,6 +1587,10 @@ def claim_to_recipe(raw, kind):
     not_found_reason = None
     if state == "UNVERIFIABLE":
         unverifiable_reason = raw.get("reason")
+        if (unverifiable_reason or "").startswith("other_frame("):
+            # P24: 登録する理由の名は context を含まない ``other_frame``(C-1d §3.3 の ambiguous(elements) と同じ書き方)。
+            # 合った枠の context は Claim.provenance["other_frame"] へ。
+            unverifiable_reason = "other_frame"
     elif state == "POINTER_NOT_FOUND":
         not_found_reason = raw.get("reason")
 
@@ -1456,6 +1678,8 @@ def claim_to_recipe(raw, kind):
         "member_source": raw.get("member_source"),
         "schemes": schemes,
     }
+    if raw.get("other_frame") is not None:
+        provenance["other_frame"] = raw["other_frame"]   # P24 frame_rebind
 
     claim = core.Claim(
         id=raw["id"], form=form, subject=raw.get("subject"), value=raw.get("value"),

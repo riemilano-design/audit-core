@@ -194,7 +194,7 @@ class PctToleranceTest(unittest.TestCase):
         self.assertTrue(V.P18.pct_tolerance_from_decimals)
         self.assertEqual(dataclasses.replace(V.P18, name="P17", pct_tolerance_from_decimals=False), V.P17)
         for name, p in V.PROFILES.items():
-            if name not in ("P18", "P19", "P23"):    # P23 = P22 + 率の旗 + truncate_abs_band(封 XBRL_ROUNDING_SEAL_2026-10-21、2026-10-21)
+            if name not in ("P18", "P19", "P23", "P24"):    # P23 = P22 + 率の旗 + truncate_abs_band(封 XBRL_ROUNDING_SEAL_2026-10-21、2026-10-21)、P24 = P23 + 旗 2 つ(封 XBRL_VOCAB_SEAL_2026-10-21)
                 self.assertFalse(p.pct_tolerance_from_decimals, name)
 
     def test_default_is_015_for_flag_off(self):

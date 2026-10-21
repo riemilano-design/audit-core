@@ -66,7 +66,8 @@ class FlagShapeTest(unittest.TestCase):
         self.assertFalse(V.P22.pct_tolerance_from_decimals)
 
     def test_only_p23_has_the_new_flag_on(self):
-        self.assertEqual(["P23"], sorted(n for n, p in V.PROFILES.items() if p.truncate_abs_band))
+        # 2026-10-21 P24 = P23 + 旗 2 つ(封 XBRL_VOCAB_SEAL_2026-10-21)は truncate_abs_band を引き継ぐ
+        self.assertEqual(["P23", "P24"], sorted(n for n, p in V.PROFILES.items() if p.truncate_abs_band))
 
     def test_p19_flag_is_not_stacked(self):
         """P19 の ``truncate_on_magnitude`` は判定の軸も変えるので P23 には積まない(封 §0)。"""
@@ -189,7 +190,7 @@ class P22UnchangedTest(unittest.TestCase):
 
     def test_every_profile_but_p23_keeps_the_signed_band_under_truncate(self):
         for name, p in V.PROFILES.items():
-            if name in ("P19", "P23"):
+            if name in ("P19", "P23", "P24"):    # P24 = P23 + 旗 2 つ(封 XBRL_VOCAB_SEAL_2026-10-21)は P23 の旗を引き継ぐ
                 continue
             c = call(name, NEG_S, "23", "百万円", "営業損失", ["OperatingIncome"], NEG_FACT, rounding="truncate", sign=-1)
             self.assertEqual("GROUNDED", c["result"], name)

@@ -419,6 +419,11 @@ class Profile:
     # P23(封 docs/XBRL_ROUNDING_SEAL_2026-10-21.md §1, 2026-10-21): 書類の丸め方が切り捨てと判定されたとき、照合の帯だけを絶対値で片側(0 <= |fact| - |文| < 桁)にする。
     # ``truncate_on_magnitude``(P19)と違い ``decide_rounding`` の判定の軸は変えない。偽なら 1 行も変わらない。
     truncate_abs_band: bool = False
+    # P24(封の下調べ 試作 v3、2026-10-21): ``vocab_2026_10_21`` = 語彙の登録 3 種(前期の手がかり語・ポイントの前期の語・資金の主語の句)と
+    # CF 合計の要素の文字の主張を値そのものの符号で照合する。``frame_rebind`` = 取った枠で値が合わず同じ要素の別の枠で合うとき、
+    # VALUE_MISMATCH をやめて UNVERIFIABLE(other_frame / ambiguous(member))。**GROUNDED は作らない。** 偽なら 1 行も変わらない。
+    vocab_2026_10_21: bool = False
+    frame_rebind: bool = False
 
 
 P1 = Profile(
@@ -709,9 +714,30 @@ P22 = dataclasses.replace(P21, name="P22", period_bind=True)    # 封 XBRL_PERIO
 # P23 = P22 + 率の帯を書かれた桁から(P18 の旗、既存)+ 切り捨ての帯を絶対値で片側(新しい旗)。**P19 の truncate_on_magnitude は積まない**(判定の軸も変わり 3 書類で金額 55 行が落ちる、封 §0)。段 1 では既定にしない。
 P23 = dataclasses.replace(P22, name="P23", pct_tolerance_from_decimals=True, truncate_abs_band=True)
 
+# ---------------------------------------------------------------------------
+# P24 vocab_2026_10_21 (3): 資金の主語の句。下調べで件数 2 以上だった 19 通り(助詞「は」を除いた形。既存 6 句
+# 「営業活動の結果獲得した資金」等と同じ書き方)を、同じ要素に結ぶ。旗が真のときだけ recipes.build_raw_claims が
+# 主語の一覧の先頭に足す。P1〜P23 の subjects は不変。
+# ---------------------------------------------------------------------------
+_CF_OPE = ["NetCashProvidedByUsedInOperatingActivities"]
+_CF_INV = ["NetCashProvidedByUsedInInvestingActivities"]
+_CF_FIN = ["NetCashProvidedByUsedInFinancingActivities"]
+CF_FUND_SUBJECTS_2026_10_21 = (
+    ("営業活動の結果得られた資金", _CF_OPE), ("営業活動により得られた資金", _CF_OPE), ("営業活動による資金の増加", _CF_OPE),
+    ("営業活動の結果増加した資金", _CF_OPE), ("営業活動の結果支出した資金", _CF_OPE), ("営業活動による資金の獲得額", _CF_OPE),
+    ("投資活動による資金の減少", _CF_INV), ("投資活動の結果支出した資金", _CF_INV), ("投資活動により使用した資金", _CF_INV),
+    ("投資活動の結果増加した資金", _CF_INV), ("投資活動による資金の支出額", _CF_INV),
+    ("財務活動の結果支出した資金", _CF_FIN), ("財務活動による資金の増加", _CF_FIN), ("財務活動により獲得した資金", _CF_FIN),
+    ("財務活動により使用した資金", _CF_FIN), ("財務活動の結果得られた資金", _CF_FIN), ("財務活動の結果増加した資金", _CF_FIN),
+    ("財務活動により得られた資金", _CF_FIN), ("財務活動による資金の減少", _CF_FIN),
+)
+
+# P24 = P23 + 語彙の登録 + 枠の取り直し(UNVERIFIABLE だけ)。段 1 では既定にしない。
+P24 = dataclasses.replace(P23, name="P24", vocab_2026_10_21=True, frame_rebind=True)
+
 PROFILES = {"P1": P1, "P5F": P5F, "P6": P6, "P7": P7, "P8": P8, "P9": P9, "P10": P10, "P11": P11,
             "P12": P12, "P13": P13, "P14": P14, "P15": P15, "P16": P16, "P17": P17, "P18": P18,
-            "P19": P19, "P20": P20, "P21": P21, "P22": P22, "P23": P23}
+            "P19": P19, "P20": P20, "P21": P21, "P22": P22, "P23": P23, "P24": P24}
 
 # **既定 profile(人間の決定 2026-10-13、第 2 段階)。字で留める。**
 # 測定で採用候補にした P16(開発書類 183 件で 146/8/29、未使用 2 書類 217 件で E1' 66.8% / E2 8.2% / E3 27.2%)。

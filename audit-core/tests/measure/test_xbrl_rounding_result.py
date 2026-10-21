@@ -60,8 +60,13 @@ RITUAL_ZIP_SHA = "03521437be23c8e2a02d85b4bc29a215646803582e9101fdf1855210411747
 #: 測った時点の engine(sha256 の先頭 16 桁)。comparators.py は 0 行(封 §1 は「写しの帯」を変更として数えたが、実物は P19 で入っており変更が要らなかった)。
 ENGINE_AT_MEASURE = {"adapters/xbrl/vocabulary.py": "f7b8d925eb6787ec", "adapters/xbrl/comparators.py": "d8706338325e725b",
                      "adapters/xbrl/recipes.py": "d5308700eae78c10"}
-#: 段 2(既定の切り替え)などで動いたときの宣言された遷移: {path: (後の sha16, 遷移を宣言した封の path)}。段 1 の commit 時点では空。
-ENGINE_LATER = {}
+#: 段 2(既定の切り替え)などで動いたときの宣言された遷移: {path: (後の sha16, 遷移を宣言した封の path)}。段 1 の commit 時点では空だった。
+#: 2026-10-21 追記(pin の遷移): 封 docs/XBRL_VOCAB_SEAL_2026-10-21.md(語彙の登録と枠の取り直し P24 の段 1。engine を変える。人間の事前承認 2026-10-21)で
+#: vocabulary.py に旗 2 つ・資金の句の表・P24・PROFILES の登録、recipes.py に旗 vocab_2026_10_21・frame_rebind の塊を足した(DEFAULT_PROFILE は P22 のまま)。
+#: 上の ENGINE_AT_MEASURE は残す(測った時点の値)。受け入れるのは、その封が履歴に在り、値が P24 の段 1 の後の値のときだけ。
+SEAL_VOCAB = "docs/XBRL_VOCAB_SEAL_2026-10-21.md"
+ENGINE_LATER = {"adapters/xbrl/vocabulary.py": ("83498c04a7b70396", SEAL_VOCAB),
+                "adapters/xbrl/recipes.py": ("3461c3f8b7af6675", SEAL_VOCAB)}
 
 
 def jtext(p):
@@ -796,13 +801,15 @@ class MutationTest(unittest.TestCase):
         self._red(check_mutation_record, r)
 
     def test_m16_a_wrong_engine_sha_is_red(self):
-        global ENGINE_AT_MEASURE
-        old = dict(ENGINE_AT_MEASURE)
+        global ENGINE_AT_MEASURE, ENGINE_LATER
+        old, old_later = dict(ENGINE_AT_MEASURE), dict(ENGINE_LATER)
         try:
             ENGINE_AT_MEASURE = dict(old, **{"adapters/xbrl/recipes.py": "0" * 16})
+            # 2026-10-21(pin の遷移): 宣言された遷移が在ると「測った時点と違う sha」は受け入れられてしまうので、この変異では遷移の宣言を外して(空にして)確かめる
+            ENGINE_LATER = {}
             self._red(engine_ok)
         finally:
-            ENGINE_AT_MEASURE = old
+            ENGINE_AT_MEASURE, ENGINE_LATER = old, old_later
         engine_ok()
 
     def test_m17_flag_made_identity_turns_r1_red(self):

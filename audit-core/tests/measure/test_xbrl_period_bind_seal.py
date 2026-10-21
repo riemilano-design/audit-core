@@ -57,8 +57,13 @@ ENGINE_AT_SEAL = {"adapters/xbrl/recipes.py": "2f692bca1eac3cd3",
 # (DEFAULT_PROFILE は P22 のまま)、recipes.py に _mag_trunc を足した。recipes.py の 65a37869f053a60e・vocabulary.py の 25a3c0992e10daaa は残す(測った時点の値)。
 # 受け入れるのは、その封が履歴に在り、値が P23 の段 1 の後の値のときだけ(遷移を宣言した封の path は SEAL_ROUNDING)。
 SEAL_ROUNDING = "docs/XBRL_ROUNDING_SEAL_2026-10-21.md"
-ENGINE_LATER = {"adapters/xbrl/recipes.py": ("d5308700eae78c10", SEAL_ROUNDING),
-                "adapters/xbrl/vocabulary.py": ("f7b8d925eb6787ec", SEAL_ROUNDING)}
+SEAL_VOCAB = "docs/XBRL_VOCAB_SEAL_2026-10-21.md"    # 2026-10-21 追記: 語彙の登録と枠の取り直し P24 の段 1(下の ENGINE_LATER の recipes.py・vocabulary.py の遷移)
+# 2026-10-21(語彙の登録と枠の取り直し P24 の段 1): 封 docs/XBRL_VOCAB_SEAL_2026-10-21.md(engine を変える。人間の事前承認 2026-10-21)で recipes.py に旗 vocab_2026_10_21・frame_rebind の塊(+224 行・既存の行は 1 つも書き換えない)を足した(DEFAULT_PROFILE は P22 のまま)。
+# d5308700eae78c10(P23 の段 1)は残す(測った時点の値)、P24 の段 1 で 3461c3f8b7af6675。受け入れるのは、その封が履歴に在り、値が P24 の段 1 の後の値のときだけ。
+ENGINE_LATER = {"adapters/xbrl/recipes.py": ("3461c3f8b7af6675", SEAL_VOCAB),
+                # 2026-10-21(語彙の登録と枠の取り直し P24 の段 1): 封 docs/XBRL_VOCAB_SEAL_2026-10-21.md(engine を変える。人間の事前承認 2026-10-21)で vocabulary.py に旗 2 つ・資金の句の表・P24・PROFILES の登録を足した(DEFAULT_PROFILE は P22 のまま)。
+                # f7b8d925eb6787ec(P23 の段 1)は残す(測った時点の値)、P24 の段 1 で 83498c04a7b70396。受け入れるのは、その封が履歴に在り、値が P24 の段 1 の後の値のときだけ。
+                "adapters/xbrl/vocabulary.py": ("83498c04a7b70396", SEAL_VOCAB)}
 
 # §1「過去の門の engine の留め」の一覧(封の字)と、実物の在りか
 PIN_FILES_ENGINE_LATER = ("tests/measure/test_xbrl_branch_a.py", "tests/measure/test_xbrl_role_swap_result.py",
@@ -351,7 +356,8 @@ class EngineAtSealTest(unittest.TestCase):
         self.assertIn("P22", V.PROFILES)
         self.assertTrue(V.PROFILES["P22"].period_bind)
         # 2026-10-21: P23 = P22 + 率の旗 + truncate_abs_band は period_bind を引き継ぐ(封 XBRL_ROUNDING_SEAL_2026-10-21)
-        self.assertEqual(["P22", "P23"], sorted(n for n, p in V.PROFILES.items() if p.period_bind))
+        # 2026-10-21: P24 = P23 + 旗 2 つも period_bind を引き継ぐ(封 XBRL_VOCAB_SEAL_2026-10-21)
+        self.assertEqual(["P22", "P23", "P24"], sorted(n for n, p in V.PROFILES.items() if p.period_bind))
 
 
 class LiveReproductionTest(unittest.TestCase):

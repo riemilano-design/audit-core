@@ -69,6 +69,8 @@ _UNVERIFIABLE_REASONS = (
     "prior is 0",
     # Core 接続 C-1h §1-2(profile P7 のみ)。
     "target_or_plan",
+    # P24 frame_rebind(試作 v3、profile P24 のみ): 同じ要素の別の枠でだけ合った数。合った枠の context は provenance。
+    "other_frame",
 )
 
 
