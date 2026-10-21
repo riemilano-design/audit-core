@@ -218,10 +218,10 @@ CLAIM_DECOMPOSITION 系の結果文書は、材料が audit-core の外にあり
 | A-03 | docs の markdown の本数 | 294 | 〔git c740e61 docs/ \.md$ = 294〕 | `python3 measure/facts_check_2026-10-20.py --check --row A-03` |
 | A-04 | fixtures の json の本数 | 473 | 〔git c740e61 fixtures/ \.json$ = 473〕 | `python3 measure/facts_check_2026-10-20.py --check --row A-04` |
 | A-05 | 試験 file の本数(`c740e61` の木) | 188 | 〔git c740e61 . (^¦/)test_[^/]*\.py$ = 188〕 | `python3 measure/facts_check_2026-10-20.py --check --row A-05` |
-| A-06 | 試験 file の本数(いまの木。この 1 冊の門と、後から足した門を含む) | 213 | 〔rec fixtures/suite_coverage_2026-10-16.json#test_files_on_disk = 213〕 | `python3 measure/facts_check_2026-10-20.py --check --row A-06` |
-| A-07 | うち `tests/measure`(いまの木) | 149 | 〔rec fixtures/suite_coverage_2026-10-16.json#by_directory > tests/measure = 149〕 | `python3 measure/facts_check_2026-10-20.py --check --row A-07` |
-| A-08 | pytest の収集本数(いまの木) | 4238 | 〔rec fixtures/suite_coverage_2026-10-16.json#commands > pytest > tests = 4238〕 | `python3 measure/facts_check_2026-10-20.py --check --row A-08` |
-| A-09 | unittest discover の収集本数(いまの木。`measure/tests/test_inject.py` を数え落とす) | 4142 | 〔rec fixtures/suite_coverage_2026-10-16.json#commands > discover > tests = 4142〕 | `python3 measure/facts_check_2026-10-20.py --check --row A-09` |
+| A-06 | 試験 file の本数(いまの木。この 1 冊の門と、後から足した門を含む) | 214 | 〔rec fixtures/suite_coverage_2026-10-16.json#test_files_on_disk = 214〕 | `python3 measure/facts_check_2026-10-20.py --check --row A-06` |
+| A-07 | うち `tests/measure`(いまの木) | 150 | 〔rec fixtures/suite_coverage_2026-10-16.json#by_directory > tests/measure = 150〕 | `python3 measure/facts_check_2026-10-20.py --check --row A-07` |
+| A-08 | pytest の収集本数(いまの木) | 4255 | 〔rec fixtures/suite_coverage_2026-10-16.json#commands > pytest > tests = 4255〕 | `python3 measure/facts_check_2026-10-20.py --check --row A-08` |
+| A-09 | unittest discover の収集本数(いまの木。`measure/tests/test_inject.py` を数え落とす) | 4159 | 〔rec fixtures/suite_coverage_2026-10-16.json#commands > discover > tests = 4159〕 | `python3 measure/facts_check_2026-10-20.py --check --row A-09` |
 | A-10 | XBRL の adapter への変異の本数 | 96 | 〔rec tests/adapters/xbrl/mutations.json# = 96〕 | `python3 measure/facts_check_2026-10-20.py --check --row A-10` |
 | A-11 | Core(`core/py/audit_core/*.py`)の行数 | 429 | 〔wc core/py/audit_core/__init__.py core/py/audit_core/model.py core/py/audit_core/registry.py core/py/audit_core/verify.py = 429〕 | `python3 measure/facts_check_2026-10-20.py --check --row A-11` |
 
