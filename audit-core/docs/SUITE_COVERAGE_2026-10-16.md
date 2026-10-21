@@ -32,7 +32,7 @@
 
 ## §2 測った事実 ― **変更前**(試験は走らせず、収集だけ数えた)
 
-### §2-1 ディスク上の試験 file: **206 本**(**いまの数**。門を足すと増える)
+### §2-1 ディスク上の試験 file: **207 本**(**いまの数**。門を足すと増える)
 
 | ディレクトリ | file |
 |---|---|
@@ -43,7 +43,7 @@
 | `tests/core` | 5 |
 | `tests/fixtures/xbrl` | 4 |
 | `tests/golden` | 4 |
-| `tests/measure` | 144 |
+| `tests/measure` | 145 |
 
 **2026-10-20 に +2**(`tests/measure/test_packaging.py`・`tests/measure/test_packaging_result.py`。
 包装の封 `docs/PACKAGING_SEAL_2026-10-20.md` の G-5)。176 → 178、`tests/measure` 118 → 120。
@@ -110,6 +110,9 @@
 
 **2026-10-21 に +2**(`tests/adapters/xbrl/test_recipes_p24.py`・`tests/measure/test_xbrl_vocab_result.py`。
 語彙の登録と枠の取り直しの直し(P24)の段 1 の engine の試験 68 本と、結果(記録 `fixtures/xbrl/vocab_2026-10-21.json`・文書 `docs/XBRL_VOCAB_RESULT_2026-10-21.md`)を縛る門)。204 → 206(`tests/adapters/xbrl` 28 → 29・`tests/measure` 143 → 144)。
+
+**2026-10-21 に +1**(`tests/measure/test_xbrl_lastbranch_seal.py`。
+最後の枝の名指しは証拠があるときだけ「違う」と言う直し(P25)の封 `docs/XBRL_LASTBRANCH_SEAL_2026-10-21.md` の封の門)。206 → 207(`tests/measure` 144 → 145)。
 
 **この節だけは「いま」の数である**(門 `DocTest` が記録と突き合わせる)。
 下の §2-2 は**変更前の実測**で、後の記録と結び付けない。
