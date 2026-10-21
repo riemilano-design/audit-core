@@ -32,7 +32,8 @@ FROZEN_PATHS = ("audit-core/core", "audit-core/adapters")
 # kokkai(2026-10-14、adapters/kokkai 9 本)が足されても誰もこの定数を直していなかった**(封
 # docs/XBRL_HOLDS_PRODUCT_PATH_SEAL_2026-10-19.md の予測 F-10「22 → 24」は、この取りこぼしで外れた)。
 # 2026-10-19 に holds.py・verify_external.py を足して 36 本。
-FROZEN_COUNT = 36
+# 2026-10-21 に report_customer.py(顧客向けの日本語の報告形。封 docs/XBRL_CUSTOMER_REPORT_SEAL_2026-10-21.md)を足して 37 本。
+FROZEN_COUNT = 37
 
 # 凍結の基準は**世代で伸びる**。古い値は消さない ― その日の記録はその値で正しい。
 # (本線の共通規則、2026-10-09: 「封じた値は上書きしない。訂正は日付つきの追記で」)
@@ -102,6 +103,11 @@ FROZEN_BUNDLE_GENERATIONS = (
      "registry_setup.py に理由 no_same_value を足した(+2 行)。comparators.py・core/py・instance.py・extract.py は 0 行。"
      "DEFAULT_PROFILE は P22 のまま。人間の事前承認 2026-10-21、封 docs/XBRL_LASTBRANCH_SEAL_2026-10-21.md(commit 80ca08d)。"
      "対象 36 本(本数は変わらない)。独立監査 GO の前に測った値(commit 前)"),
+    ("66f906c89205f0ef361e13fe051dbdeaed75a032e0d60ca832f6d605166f3b36",
+     "2026-10-21 feature/audit-core-final-eval-8(顧客向けの日本語の報告形): 新しい module adapters/xbrl/report_customer.py を足した(既存の file は 1 字も触らない。"
+     "report.py・verify_document.py・vocabulary.py・recipes.py・registry_setup.py・comparators.py・core/py は 0 行)。"
+     "人間の事前承認 2026-10-21、封 docs/XBRL_CUSTOMER_REPORT_SEAL_2026-10-21.md(commit 6b724ad)。"
+     "対象 36 本 → 37 本(FROZEN_COUNT 36 → 37)。独立監査 GO の前に測った値(commit 前。新しい file は git add 済みの状態で測った)"),
 )
 
 # 字で留めるのは**いまの世代**。--expect を値なしで渡したときの既定。

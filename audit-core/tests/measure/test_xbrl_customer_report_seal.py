@@ -75,7 +75,15 @@ FROZEN_BUNDLE_AT_SEAL = "8ffdc9177cdc4be7c059e5bd0a6f6e5b8466215918077591eb64371
 FROZEN_COUNT_AT_SEAL = 36
 # 宣言された遷移(実装の便の commit で足す): {欄: (後の値, 遷移を宣言した封の path)}。封の commit 時点では空。
 # 実装で adapter_xbrl_py_sha256 / adapter_xbrl_py_files(15 → 16)が動く。frozen_bundle は FROZEN_COUNT 36 → 37 と新しい世代。
-FINGERPRINT_LATER = {}
+FINGERPRINT_LATER = {
+    # 2026-10-21 実装の便(module report_customer.py を足した。封が宣言した遷移): adapters/xbrl の .py が 15 → 16 file、束ねた指紋が動く。
+    # module が動けばここも動く(測り直す)。測った当時の値(FINGERPRINT_AT_SEAL)は残す。
+    "adapter_xbrl_py_sha256": ("c556de1cb26e975a172d54a4e39f4971bb5c11a5fd8a02a8404b9a719eb27acb", SEAL_REL),
+    "adapter_xbrl_py_files": (16, SEAL_REL),
+}
+# 実装の便の後の frozen_bundle(FROZEN_COUNT 36 → 37・新しい世代。report_customer.py を git add した状態で測る)。封の commit 時点の値(FROZEN_BUNDLE_AT_SEAL)は残す。
+FROZEN_BUNDLE_AFTER = "66f906c89205f0ef361e13fe051dbdeaed75a032e0d60ca832f6d605166f3b36"
+FROZEN_COUNT_AFTER = 37
 
 
 def text(p):
@@ -413,14 +421,13 @@ class SealTest(unittest.TestCase):
 class SealedStateTest(unittest.TestCase):
     """封の commit 時点の木を字で留める。実装の便で赤くなるもの(新しい file が在る・指紋が動く)は docstring のとおり、遷移の宣言で直す。"""
 
-    def test_10_new_files_do_not_exist_yet_the_seal_comes_first(self):
-        """§4 の新規 6 本は、封の commit 時点で作業木に無い(封が実装より先)。実装の便で『在る』に直す(P25 の封の門 test_14 と同じ型)。"""
+    def test_10_new_files_exist_now_the_seal_came_first(self):
+        u"""封が実装より先であることは、実装の便で「在る」に直した(2026-10-21。封の commit 時点は §4 の新規 6 本が作業木にも履歴にも無かった = 測った当時の事実。
+        P25 の封の門 test_14 と同じ型)。いまは 6 本が作業木に在り、module は import できる。封が先であることは test_13(commit の順)が縛る。"""
         for rel in FILES:
-            self.assertFalse(os.path.exists(os.path.join(ROOT, rel)), u"封より先に在る(実装が封より先): " + rel)
-        # 実装が入る前の module の import も通らない
+            self.assertTrue(os.path.exists(os.path.join(ROOT, rel)), u"実装の便で作る file が無い: " + rel)
         r = subprocess.run([sys.executable, "-c", "import adapters.xbrl.report_customer"], cwd=ROOT, capture_output=True, text=True)
-        self.assertNotEqual(r.returncode, 0)
-        self.assertIn("ModuleNotFoundError", r.stderr)
+        self.assertEqual(r.returncode, 0, r.stderr)
 
     def test_11_untouched_files_keep_their_sha(self):
         """C-5: `report.py`(人間の決定 2026-10-13)・`verify_document.py` は 0 行。engine の他の 3 file(vocabulary・recipes・registry_setup)も
@@ -446,7 +453,7 @@ class SealedStateTest(unittest.TestCase):
                 self.assertEqual(got, later, u"**%s が、宣言された遷移の値とも違う**" % k)
                 continue
             self.assertEqual(got, want, u"**%s が動いている(実装の便の commit で FINGERPRINT_LATER に遷移を宣言する)**" % k)
-        # adapters/xbrl の .py の数は指紋の file 数と同じ(15)。__pycache__ は数えない
+        # adapters/xbrl の .py の数は指紋の file 数と同じ(いまは 16。封の commit 時点は 15)。__pycache__ は数えない
         py = [f for f in os.listdir(os.path.join(ROOT, "adapters", "xbrl")) if f.endswith(".py")]
         self.assertEqual(len(py), fp["adapter_xbrl_py_files"])
         # frozen_bundle: 字の本数 36 と git ls-files の本数・束ねた sha(repo の根で測る。frozen_bundle_sha.py は repo 相対の path で git に問う)
@@ -465,6 +472,11 @@ class SealedStateTest(unittest.TestCase):
         else:
             # 実装の便の後: 37 本・新しい世代。宣言(FINGERPRINT_LATER)が無ければ赤にする
             self.assertTrue(FINGERPRINT_LATER, u"**frozen_bundle の本数が %d(定数 %d)に動いているのに、遷移の宣言が無い**" % (n_files, count))
+            self.assertEqual((count, n_files), (FROZEN_COUNT_AFTER, FROZEN_COUNT_AFTER), u"遷移は 36 → 37 本だけ宣言されている")
+            self.assertEqual(r.returncode, 0, out)
+            self.assertIn(FROZEN_BUNDLE_AFTER, out)
+            self.assertEqual(gens[-1], FROZEN_BUNDLE_AFTER)
+            self.assertIn(FROZEN_BUNDLE_AT_SEAL, gens, u"封の commit 時点の世代は消さない")
         # 字で留めた本数は git が数える本数と同じ(今)
         ls = subprocess.run(["git", "ls-files", "audit-core/core", "audit-core/adapters"], cwd=REPO, capture_output=True, text=True).stdout.split()
         self.assertEqual(len(ls), n_files)

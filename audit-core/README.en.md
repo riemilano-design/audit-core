@@ -59,6 +59,16 @@ python3 measure/ritual_2026-10-20.py --out <output dir>
 - The input `fixtures/xbrl/ai_prose_instance_2026-10-09.zip` (sha256 `03521437be23c8e2a02d85b4bc29a215646803582e9101fdf185521041174799`, 580,260 bytes) is a public EDINET disclosure document (document ID S100Z4Q1, filer code E36539, DN Holdings Co., Ltd., filed 2026-09-30). **Its management-discussion section was replaced with AI-written text in the 2026-10-09 experiment, so it is not the original text.**
 - No key is used. It reads the bundled filing and the two label files under `~/.cache`, nothing else. To run it on your own filings you need an EDINET key and the filings downloaded.
 
+## Check your own filing's text and get a Japanese report (0 USD, no network)
+
+Give it your filing's ZIP (an EDINET securities report) and the text to check (it replaces the management-discussion section). The verdicts are the engine's, unchanged; the report reorders them and rewrites them in Japanese, nothing more (differs, needs a look, out of scope / not judged, matches; seal `docs/XBRL_CUSTOMER_REPORT_SEAL_2026-10-21.md`, result `docs/XBRL_CUSTOMER_REPORT_RESULT_2026-10-21.md`). Without the standard-taxonomy labels (step 0 above) the source column shows element names.
+
+```
+python3 -m adapters.xbrl.verify_document --zip <your filing.zip> --text <your text.txt> --out out.json
+python3 -m adapters.xbrl.report_customer --in out.json --out report.md --labels ~/.cache/audit-core/edinet-taxonomy/2025-11-01
+python3 -m adapters.xbrl.report_customer --in out.json --out report_full.md --labels ~/.cache/audit-core/edinet-taxonomy/2025-11-01 --full   # also list the matches
+```
+
 ## Install (0 cost, no network required at build time)
 
 ```
@@ -78,7 +88,7 @@ detail.
 
 ## Test suite
 
-210 test files (counted by the suite-coverage record; the collected-test count changes with every
+212 test files (counted by the suite-coverage record; the collected-test count changes with every
 added test and is kept in that record, not here), including 96
 adversarial mutations exercised against the XBRL adapter. The core verification engine
 itself is 429 lines (`core/py/audit_core/*.py`): existence and value checks, nothing

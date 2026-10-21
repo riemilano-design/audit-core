@@ -358,6 +358,7 @@ SEAL_PERIOD_BIND = "docs/XBRL_PERIOD_BIND_SEAL_2026-10-20.md"
 SEAL_ROUNDING = "docs/XBRL_ROUNDING_SEAL_2026-10-21.md"
 SEAL_VOCAB = "docs/XBRL_VOCAB_SEAL_2026-10-21.md"    # 2026-10-21 追記: 語彙の登録と枠の取り直し P24 の段 1(下の ENGINE_LATER の recipes.py・vocabulary.py の遷移)
 SEAL_LASTBRANCH = "docs/XBRL_LASTBRANCH_SEAL_2026-10-21.md"    # 2026-10-21 追記: 最後の枝 P25 の段 1(下の ENGINE_LATER の遷移)
+SEAL_CUSTOMER_REPORT = "docs/XBRL_CUSTOMER_REPORT_SEAL_2026-10-21.md"    # 2026-10-21 追記: 顧客向けの日本語の報告形(新しい module adapters/xbrl/report_customer.py。下の ENGINE_LATER の新規 file)
 # 2026-10-21(語彙の登録と枠の取り直し P24 の段 1): 封 docs/XBRL_VOCAB_SEAL_2026-10-21.md(engine を変える。人間の事前承認 2026-10-21)で recipes.py に旗 vocab_2026_10_21・frame_rebind の塊(+224 行・既存の行は 1 つも書き換えない)を足した(DEFAULT_PROFILE は P22 のまま)。
 # d5308700eae78c10(P23 の段 1)は残す(測った時点の値)、P24 の段 1 で 3461c3f8b7af6675。受け入れるのは、その封が履歴に在り、値が P24 の段 1 の後の値のときだけ。
 # 2026-10-21(最後の枝 P25 の段 1): 封 docs/XBRL_LASTBRANCH_SEAL_2026-10-21.md(engine を変える。人間の事前承認 2026-10-21)で recipes.py に最後の枝の証拠の判定の塊(+72 行・-0 行。既存の行は 1 つも書き換えない)、vocabulary.py に旗 last_branch_names_only_if_evidence・P25・PROFILES の登録(+7 行・-0 行)、registry_setup.py に理由 no_same_value(+2 行)を足した(DEFAULT_PROFILE は P22 のまま)。
@@ -369,7 +370,10 @@ ENGINE_LATER = {"adapters/xbrl/recipes.py": ("bff243f13429b553", SEAL_LASTBRANCH
                 # f7b8d925eb6787ec(P23 の段 1)は残す(測った時点の値)、P24 の段 1 で 83498c04a7b70396。受け入れるのは、その封が履歴に在り、値が P24 の段 1 の後の値のときだけ。
                 "adapters/xbrl/vocabulary.py": ("27e71e9861fc5aad", SEAL_LASTBRANCH),
                 # 2026-10-21(P24 の段 1): registry_setup.py に理由 other_frame を足した(+2 行)。この file はこの門が測った時点では動いていない(封の commit から 0 行だった)。
-                "adapters/xbrl/registry_setup.py": ("f42ffe23aaa7673b", SEAL_LASTBRANCH)}
+                "adapters/xbrl/registry_setup.py": ("f42ffe23aaa7673b", SEAL_LASTBRANCH),
+                # 2026-10-21(顧客向けの日本語の報告形): 封 docs/XBRL_CUSTOMER_REPORT_SEAL_2026-10-21.md(engine 側に module を足す。人間の事前承認 2026-10-21)で、新しい file adapters/xbrl/report_customer.py を足した
+                # (既存の file は 1 字も触らない。report.py・verify_document.py・vocabulary.py・recipes.py・registry_setup.py は 0 行)。新規 file なので「測った時点の値」は無い。受け入れるのは、その封が履歴に在り、sha16 が下の値のときだけ。
+                "adapters/xbrl/report_customer.py": ("d82481697762d167", SEAL_CUSTOMER_REPORT)}
 
 
 def only_declared_changes(numstat_out, status_out):

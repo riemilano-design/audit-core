@@ -497,6 +497,19 @@ class EvidenceIIITest(unittest.TestCase):
         self.assertEqual(1000.0, R._written_precision(500.0, s))      # 0.5 → 0
         self.assertEqual(1000.0, R._written_precision(1500.0, s))     # 1.5 → 2
 
+    def test_written_precision_rounds_and_does_not_truncate_a_value_that_is_not_a_multiple_of_the_scale(self):
+        """桁の倍数でない値(丸めと切り捨てで商が分かれる値)。P25 の監査の指摘(2026-10-21): 既存の値は全部、切り捨てにしても精度が同じで、
+        丸めを切り捨て(``int(abs(target) / scale)``)に変える変異が黙った。商 q の末尾の 0 の数が round と floor で変わる値だけを置く:
+        9.5 → round 10(0 が 1 つ)/ floor 9(0 なし)、10.6 → round 11(なし)/ floor 10(1 つ)、99.5 → round 100(2 つ)/ floor 99(なし)、
+        19.5 → round 20(1 つ)/ floor 19(なし)、100.6 → round 101(なし)/ floor 100(2 つ)。"""
+        s = 1000.0
+        self.assertEqual(10000.0, R._written_precision(9500.0, s))
+        self.assertEqual(1000.0, R._written_precision(10600.0, s))
+        self.assertEqual(100000.0, R._written_precision(99500.0, s))
+        self.assertEqual(10000.0, R._written_precision(19500.0, s))
+        self.assertEqual(1000.0, R._written_precision(100600.0, s))
+        self.assertEqual(10000.0, R._written_precision(-9500.0, s))   # 絶対値
+
     # ---- 当たらない例
     # 実物: S100Z42X N020「…売上高168百万円(前年同期比9.8%減少)、セグメント損失11百万円(前年同期はセグメント損失1百万円)となりました。」
     #       (「1百万円」と 当期のセグメントの売上 168,466,000 円 × 10^-2。偶然の近さ。VALUE_MISMATCH に残る)

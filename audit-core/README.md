@@ -37,6 +37,16 @@ python3 measure/ritual_2026-10-20.py --out <出力先>
 - 入力 `fixtures/xbrl/ai_prose_instance_2026-10-09.zip`(sha256 `03521437be23c8e2a02d85b4bc29a215646803582e9101fdf185521041174799`、580,260 bytes)は EDINET の公開の開示書類(書類 ID S100Z4Q1、提出者コード E36539 ＤＮホールディングス株式会社、提出日 2026-09-30)。**経営分析の節は 2026-10-09 の AI 文の実験で AI の文に差し替えてあり、原文ではない。**
 - 鍵は使わない。読むのは同梱の書類と `~/.cache` のラベル 2 file だけ。自分の書類で回すには、EDINET の鍵と書類の取得が要る。
 
+## 自分の有報の文を照合して、日本語の報告にする(0 USD・通信なし)
+
+自分の書類の ZIP(EDINET の有価証券報告書)と、照合したい文章(経営分析の節の代わりに差し替える文)を渡す。判定は engine が出したまま、報告は並べ方と字だけを日本語にする(違う → 要確認 → 対象外・判断しない → 一致。封 [docs/XBRL_CUSTOMER_REPORT_SEAL_2026-10-21.md](docs/XBRL_CUSTOMER_REPORT_SEAL_2026-10-21.md)・結果 [docs/XBRL_CUSTOMER_REPORT_RESULT_2026-10-21.md](docs/XBRL_CUSTOMER_REPORT_RESULT_2026-10-21.md))。標準ラベル(手順 0 の 2 file)が無ければ出典は要素名のまま出る。
+
+```
+python3 -m adapters.xbrl.verify_document --zip <自分の書類.zip> --text <自分の文.txt> --out out.json
+python3 -m adapters.xbrl.report_customer --in out.json --out report.md --labels ~/.cache/audit-core/edinet-taxonomy/2025-11-01
+python3 -m adapters.xbrl.report_customer --in out.json --out report_full.md --labels ~/.cache/audit-core/edinet-taxonomy/2025-11-01 --full   # 一致の行も出す
+```
+
 ## 置き場所
 
 | 場所 | 中身 |

@@ -761,7 +761,9 @@ def check_frozen_generation(generations, current):
     # 段 2 の宣言は最新の世代の 2 つ前になる(後の封の宣言を新しい順に 1 つずつ飛ばして読む)。
     i = len(generations) - 1
     # 2026-10-21 追記(pin の遷移): 最後の枝 P25 の段 1(docs/XBRL_LASTBRANCH_SEAL_2026-10-21.md)が世代をもう 1 つ足した後は、段 2 の宣言は最新の世代の 3 つ前になる。
-    for later in (u"XBRL_LASTBRANCH_SEAL_2026-10-21", u"XBRL_VOCAB_SEAL_2026-10-21", u"XBRL_ROUNDING_SEAL_2026-10-21"):
+    # 2026-10-21 追記(pin の遷移): 顧客向けの日本語の報告形(docs/XBRL_CUSTOMER_REPORT_SEAL_2026-10-21.md。新しい module report_customer.py を足して 36 → 37 本)が世代をもう 1 つ足した後は、
+    # 段 2 の宣言は最新の世代の 4 つ前になる(P23〜P25 の封と同じ型)。
+    for later in (u"XBRL_CUSTOMER_REPORT_SEAL_2026-10-21", u"XBRL_LASTBRANCH_SEAL_2026-10-21", u"XBRL_VOCAB_SEAL_2026-10-21", u"XBRL_ROUNDING_SEAL_2026-10-21"):
         if later in generations[i][1]:
             i -= 1
             assert i >= 0, u"後の封の宣言の前に段 2 の世代が無い"
