@@ -13,6 +13,13 @@ u"""顧客向けの日本語の報告形の結果 ― 封 docs/XBRL_CUSTOMER_REP
   5. 文書の表・数のある文を記録から作った字と完全一致させる。それ以外の散文に算用数字が在れば ``residual_numbers`` が見つけて赤にする(コード片・識別子・日付・節の番号は除く)。散文は漢数字で書く。
   6. 測った module の sha256 と engine の指紋(adapters 16 file)が、いまの木と一致すること。``report.py``・``verify_document.py``・engine 3 file の sha が封の commit 時点のままであること。
   7. cache とラベルが在る機械では、軽い走らせ直し(2 書類 × 2 profile)を script で走らせて記録の該当行と一致。全部の走らせ直し(約 一分)は ``AUDIT_CORE_CUSTOMER_REPORT=1`` のときだけ。
+**2026-10-21 追記(pin の遷移。顧客向けの報告形の直し、封 docs/XBRL_CUSTOMER_REPORT_FIX_SEAL_2026-10-21.md)**: 段 2 は module の中身だけを直した
+(判定と節の割り当ては変えない)ので、この門が測った当時の値(module の sha256・engine の指紋・末尾の指紋の行・末尾に指紋が在る本文)は、いまの木では再現しない。
+測った当時の記録は 1 字も直さない。この門は (1) 記録の module の sha256 が**履歴の c13a746 の module と一致**することを毎回確かめ(記録を履歴に縛る)、
+(2) いまの module / 指紋は「測った当時の値」か「宣言された遷移の値(段 2 の封が履歴に在るとき)」だけを受け入れ、(3) 記録の走らせ直し(軽い 2 書類・重い全部)と
+末尾の指紋の行の試験は、**履歴の c13a746 の module と当時のラベル 2 file** で行う(いまの module では行わない。いまの module の同じ数は
+``tests/measure/test_xbrl_customer_report_fix_result.py`` が記録 ``customer_report_fix_2026-10-21.json`` の R2-1 で、c13a746 の module と全行の節の割り当てを突き合わせて縛る)。
+
 縛っていないもの: 報告の日本語の字の良し悪し(客に伝わるか)、客 A の出力そのもの(repo の外。sha256 だけ)、抜粋の行の意味、変異(module)の手の実測そのもの、
   漢数字で書いた数(``residual_numbers`` は算用数字だけを探す。散文の数は記録から作った字で縛る約束)。
 """
@@ -57,6 +64,12 @@ UNTOUCHED = {"adapters/xbrl/report.py": "0d2854e659a5d8e0", "adapters/xbrl/verif
              "adapters/xbrl/registry_setup.py": "f42ffe23aaa7673b"}
 #: 測った時点の engine の束ねた指紋(module を足した後。adapters 16 file)。module が動けばここも動く = 測り直す。
 ENGINE_FP_AT_MEASURE = {"adapter_xbrl_py_files": 16, "core_py_sha256": "34e836bb39762d5af831a9aa11d4ea095e73221beb5bd4510d3b234363a2a6e8", "core_py_files": 4}
+#: 2026-10-21 追記(段 2 の遷移): 測った当時の module(c13a746)と、段 2 の後の module・指紋。段 2 の封が履歴に在るときだけ受け入れる。
+MODULE_COMMIT_AT_MEASURE = "c13a746"
+ENGINE_ADAPTER_SHA_AT_MEASURE = "c556de1cb26e975a172d54a4e39f4971bb5c11a5fd8a02a8404b9a719eb27acb"   # 測った当時(記録の C5 と同じ字)
+FIX_SEAL_REL = "docs/XBRL_CUSTOMER_REPORT_FIX_SEAL_2026-10-21.md"
+MODULE_LATER = {"sha16": "715468699973cc4a", "seal": FIX_SEAL_REL}
+ENGINE_ADAPTER_SHA_LATER = {"value": "11840a097f04dcb4c01f057ce78d39c3aedabf139e65dbc5620e28c109f64693", "seal": FIX_SEAL_REL}
 ALLOWED_RESIDUAL = []
 YEN_KEY = u"文の字に百万円・千円・億円・兆円があるが claim の単位が円の行(span の字から数えた概数)"
 #: 報告の末尾の指紋の行の prefix。報告の「本体」= この 1 行だけを除いた残り(git の欄は HEAD で、adapters の欄は engine の file で変わる)。
@@ -383,16 +396,31 @@ def check_p22_numbers(rec):
     assert (a[u"一致の内訳"][u"当期"], a[u"一致の内訳"][u"前期"], a[u"一致の内訳"][u"計算"]) == (1736, 180, 2326)
 
 
+def git_show_measured_module():
+    r = subprocess.run(["git", "show", "%s:audit-core/%s" % (MODULE_COMMIT_AT_MEASURE, MODULE_REL)], cwd=os.path.dirname(ROOT), capture_output=True)
+    assert r.returncode == 0, u"履歴に測った当時の module(%s)が無い" % MODULE_COMMIT_AT_MEASURE
+    return r.stdout
+
+
 def check_untouched_and_module(rec):
     for rel, want in sorted(UNTOUCHED.items()):
         assert sha16(rel) == want, u"**%s が動いている(この封は触らない)**" % rel
         assert rec[u"C5"][u"sha256"][rel][:16] == want
-    assert rec[u"C5"][u"report_customer.py の sha256"] == sha_path(os.path.join(ROOT, MODULE_REL)), u"**module が測った時点から動いている(測り直す)**"
+    # 記録の module の sha256 は、履歴の測った当時の module と一致する(記録を履歴に縛る)
+    assert rec[u"C5"][u"report_customer.py の sha256"] == hashlib.sha256(git_show_measured_module()).hexdigest(), u"**記録の module の sha256 が履歴の %s と違う**" % MODULE_COMMIT_AT_MEASURE
+    now = sha_path(os.path.join(ROOT, MODULE_REL))
     from adapters.xbrl import verify_document as VD
     fp = VD.engine_fingerprint()
     for k, v in ENGINE_FP_AT_MEASURE.items():
         assert fp[k] == v, k
-    assert fp["adapter_xbrl_py_sha256"] == rec[u"C5"][u"engine の指紋"][u"adapter_xbrl_py_sha256"], u"**engine の指紋が測った時点から動いている(測り直す)**"
+    assert rec[u"C5"][u"engine の指紋"][u"adapter_xbrl_py_sha256"] == ENGINE_ADAPTER_SHA_AT_MEASURE, u"記録の engine の指紋が測った当時の字と違う"
+    if now == rec[u"C5"][u"report_customer.py の sha256"]:
+        assert fp["adapter_xbrl_py_sha256"] == rec[u"C5"][u"engine の指紋"][u"adapter_xbrl_py_sha256"], u"**engine の指紋が測った時点から動いている(測り直す)**"
+        return
+    # module が動いている: 宣言された遷移(段 2 の封が履歴に在り、値が宣言の値)だけを受け入れる
+    assert git("log", "--diff-filter=A", "--format=%H", "--", MODULE_LATER["seal"]).stdout.split(), u"**module が動いているのに、遷移を宣言した封が履歴に無い**"
+    assert now[:16] == MODULE_LATER["sha16"], u"**module が、宣言された遷移の値とも違う**"
+    assert fp["adapter_xbrl_py_sha256"] == ENGINE_ADAPTER_SHA_LATER["value"], u"**engine の指紋が、宣言された遷移の値とも違う**"
 
 
 def have_cache(docs):
@@ -461,7 +489,7 @@ class RecordTest(unittest.TestCase):
         u"""記録の『報告の本体の sha256』は末尾の指紋の行(1 行だけ)を除いた本体。git の欄(HEAD)を変えても本体は変わらず、本体の 1 字を変えると変わる。
         門の側の report_body と script の body_of が同じ結果を返す。"""
         import importlib.util
-        from adapters.xbrl import report_customer as RC
+        RC = measured_module()      # 2026-10-21 追記(段 2 の遷移): 末尾の指紋の行を持つ形は、履歴の c13a746 の module が出す
         spec = importlib.util.spec_from_file_location("customer_report_script_for_gate", SCRIPT)
         S = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(S)
@@ -488,8 +516,46 @@ class RecordTest(unittest.TestCase):
         self.assertEqual(git("diff", "--numstat", "HEAD", "--", SEAL_REL).stdout.strip(), u"", u"封が封の commit から変わっている")
 
 
+def measured_module():
+    u"""履歴の測った当時の module(c13a746)を、記録の sha256 と一致を確かめてから exec して返す(相対 import だけ絶対に直す)。"""
+    import types
+    raw = git_show_measured_module()
+    assert hashlib.sha256(raw).hexdigest() == jload(REC)[u"C5"][u"report_customer.py の sha256"]
+    src = raw.decode("utf-8").replace("from .report import cell, fmt_num", "from adapters.xbrl.report import cell, fmt_num")
+    mod = types.ModuleType("report_customer_at_measure")
+    exec(compile(src, "report_customer_at_measure", "exec"), mod.__dict__)
+    return mod
+
+
+#: script を「測った当時の module と当時のラベル 2 file」で走らせる包み(2026-10-21 追記。段 2 で module が動いた後も、記録の走らせ直しを履歴の module で保つ)。
+RUN_AT_MEASURE = r"""
+import hashlib, os, runpy, subprocess, sys, types
+root, script, commit, want = sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4]
+sys.path.insert(0, root)
+sys.path.insert(0, os.path.join(root, "core", "py"))
+raw = subprocess.run(["git", "show", "%s:audit-core/adapters/xbrl/report_customer.py" % commit], cwd=os.path.dirname(root), capture_output=True).stdout
+assert hashlib.sha256(raw).hexdigest() == want, "測った当時の module の sha256 が記録と違う"
+import adapters.xbrl
+mod = types.ModuleType("adapters.xbrl.report_customer")
+mod.__package__ = "adapters.xbrl"
+exec(compile(raw.decode("utf-8"), "report_customer_at_measure", "exec"), mod.__dict__)
+def load_labels(directory):
+    out = {}
+    for fn in ("jpcrp_2025-11-01_lab.xml", "jppfs_2025-11-01_lab.xml"):
+        with open(os.path.join(directory, fn), "rb") as fh:
+            out.update(mod.parse_label_linkbase(fh.read()))
+    return out
+mod.load_labels = load_labels
+sys.modules["adapters.xbrl.report_customer"] = mod
+adapters.xbrl.report_customer = mod
+sys.argv = [script] + sys.argv[5:]
+runpy.run_path(script, run_name="__main__")
+"""
+
+
 def run_script(args):
-    return subprocess.run([sys.executable, SCRIPT] + args, cwd=ROOT, capture_output=True, text=True)
+    return subprocess.run([sys.executable, "-c", RUN_AT_MEASURE, ROOT, SCRIPT, MODULE_COMMIT_AT_MEASURE,
+                           jload(REC)[u"C5"][u"report_customer.py の sha256"]] + args, cwd=ROOT, capture_output=True, text=True)
 
 
 def drop_time(rows):
@@ -534,7 +600,16 @@ class RerunTest(unittest.TestCase):
         self.assertEqual(got[u"抜粋"], self.rec[u"抜粋"])
         self.assertEqual(got[u"C3"], self.rec[u"C3"])
         self.assertEqual(got[u"C4"], self.rec[u"C4"])
-        self.assertEqual(got[u"C5"], self.rec[u"C5"])
+        # 2026-10-21 追記(段 2 の遷移): C5 は「いまの木」の module の sha256・行数・engine の指紋を測るので、module が動いた後は記録と一致しない。
+        # 動いていないもの(触らない file の sha256・差分・.py の数・core/)は一致、動いたものは宣言された遷移の値であることを見る。
+        gc5, rc5 = dict(got[u"C5"]), dict(self.rec[u"C5"])
+        moved = (u"report_customer.py の sha256", u"report_customer.py の行数", u"engine の指紋")
+        if gc5[u"report_customer.py の sha256"] == rc5[u"report_customer.py の sha256"]:
+            self.assertEqual(gc5, rc5)
+        else:
+            self.assertEqual(dict((k, v) for k, v in gc5.items() if k not in moved), dict((k, v) for k, v in rc5.items() if k not in moved))
+            self.assertEqual(gc5[u"report_customer.py の sha256"][:16], MODULE_LATER["sha16"])
+            self.assertEqual(gc5[u"engine の指紋"][u"adapter_xbrl_py_sha256"], ENGINE_ADAPTER_SHA_LATER["value"])
 
 
 class MutationTest(unittest.TestCase):

@@ -401,6 +401,11 @@ class TaxonomyLabelFilesTest(unittest.TestCase):
         for line in open(path, encoding="utf-8"):
             sha, name = line.split()
             recorded[name] = sha
+        # 2026-10-21 追記(顧客向けの報告形の直し。封 docs/XBRL_CUSTOMER_REPORT_FIX_SEAL_2026-10-21.md): 名簿に jpigp(IFRS の標準ラベル)の 1 行を足した。
+        # jpigp は engine(instance.py)は読まず、報告の module(report_customer.py)だけが名簿で読む。だから engine の字面(TAXONOMY_LABEL_FILES)には入れない。
+        report_only = {"jpigp_2025-11-01_lab.xml": "d45c95cc634202973557f5ed935d747ba25e751b7386c5269fe3e7bdb2c82d09"}
+        for name, sha in report_only.items():
+            self.assertEqual(recorded.pop(name, None), sha, name)
         self.assertEqual(recorded, {name: sha for _ns, name, sha in I.TAXONOMY_LABEL_FILES})
 
     def test_the_version_matches_what_the_documents_reference(self):

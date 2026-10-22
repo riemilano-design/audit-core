@@ -108,6 +108,11 @@ FROZEN_BUNDLE_GENERATIONS = (
      "report.py・verify_document.py・vocabulary.py・recipes.py・registry_setup.py・comparators.py・core/py は 0 行)。"
      "人間の事前承認 2026-10-21、封 docs/XBRL_CUSTOMER_REPORT_SEAL_2026-10-21.md(commit 6b724ad)。"
      "対象 36 本 → 37 本(FROZEN_COUNT 36 → 37)。独立監査 GO の前に測った値(commit 前。新しい file は git add 済みの状態で測った)"),
+    ("5c4da2e2ff3f30b7dcb6ebcbc84a5c68b074e8dc495f2d260551d7e10a4ce66c",
+     "2026-10-21 feature/audit-core-final-eval-8(顧客向けの報告形の直し ― 単位・桁・符号・英字・但し書き・指紋・表題・抜粋): 既存の module adapters/xbrl/report_customer.py の中身だけを直した"
+     "(判定と節の割り当ては変えない。report.py・verify_document.py・vocabulary.py・recipes.py・registry_setup.py・comparators.py・core/py は 0 行)。"
+     "人間の事前承認 2026-10-21 朝「報告形の問題はきちんと解決して」「あとは全て任せる」、封 docs/XBRL_CUSTOMER_REPORT_FIX_SEAL_2026-10-21.md(commit 9dfb608)。"
+     "対象 37 本のまま(FROZEN_COUNT 37)。独立監査 GO の前に測った値(commit 前)"),
 )
 
 # 字で留めるのは**いまの世代**。--expect を値なしで渡したときの既定。

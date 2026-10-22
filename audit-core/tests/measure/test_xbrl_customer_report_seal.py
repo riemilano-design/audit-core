@@ -75,14 +75,21 @@ FROZEN_BUNDLE_AT_SEAL = "8ffdc9177cdc4be7c059e5bd0a6f6e5b8466215918077591eb64371
 FROZEN_COUNT_AT_SEAL = 36
 # 宣言された遷移(実装の便の commit で足す): {欄: (後の値, 遷移を宣言した封の path)}。封の commit 時点では空。
 # 実装で adapter_xbrl_py_sha256 / adapter_xbrl_py_files(15 → 16)が動く。frozen_bundle は FROZEN_COUNT 36 → 37 と新しい世代。
+FIX_SEAL_REL = "docs/XBRL_CUSTOMER_REPORT_FIX_SEAL_2026-10-21.md"
+# 段 1(c13a746)の後の値。**測った当時の値として残す**(段 2 で module の中身が動いたので、いまの木はこの値ではない)。
+FINGERPRINT_STAGE1 = {"adapter_xbrl_py_sha256": "c556de1cb26e975a172d54a4e39f4971bb5c11a5fd8a02a8404b9a719eb27acb", "adapter_xbrl_py_files": 16}
 FINGERPRINT_LATER = {
     # 2026-10-21 実装の便(module report_customer.py を足した。封が宣言した遷移): adapters/xbrl の .py が 15 → 16 file、束ねた指紋が動く。
     # module が動けばここも動く(測り直す)。測った当時の値(FINGERPRINT_AT_SEAL)は残す。
-    "adapter_xbrl_py_sha256": ("c556de1cb26e975a172d54a4e39f4971bb5c11a5fd8a02a8404b9a719eb27acb", SEAL_REL),
+    # 2026-10-21 追記(顧客向けの報告形の直し。封 docs/XBRL_CUSTOMER_REPORT_FIX_SEAL_2026-10-21.md が宣言した遷移): module の中身が動き、束ねた指紋が
+    # c556de1c…(段 1)から 11840a09… に動いた。file の数 16 は動かない。受け入れるのは、その封が履歴に在り、値が下の値のときだけ。
+    "adapter_xbrl_py_sha256": ("11840a097f04dcb4c01f057ce78d39c3aedabf139e65dbc5620e28c109f64693", FIX_SEAL_REL),
     "adapter_xbrl_py_files": (16, SEAL_REL),
 }
 # 実装の便の後の frozen_bundle(FROZEN_COUNT 36 → 37・新しい世代。report_customer.py を git add した状態で測る)。封の commit 時点の値(FROZEN_BUNDLE_AT_SEAL)は残す。
-FROZEN_BUNDLE_AFTER = "66f906c89205f0ef361e13fe051dbdeaed75a032e0d60ca832f6d605166f3b36"
+FROZEN_BUNDLE_STAGE1 = "66f906c89205f0ef361e13fe051dbdeaed75a032e0d60ca832f6d605166f3b36"   # 段 1(c13a746)の世代。消さない
+# 2026-10-21 追記(顧客向けの報告形の直し): 同じ 37 本のまま module の中身が動き、世代がもう 1 つ増えた。最新の世代はこの値。
+FROZEN_BUNDLE_AFTER = "5c4da2e2ff3f30b7dcb6ebcbc84a5c68b074e8dc495f2d260551d7e10a4ce66c"
 FROZEN_COUNT_AFTER = 37
 
 
@@ -477,6 +484,8 @@ class SealedStateTest(unittest.TestCase):
             self.assertIn(FROZEN_BUNDLE_AFTER, out)
             self.assertEqual(gens[-1], FROZEN_BUNDLE_AFTER)
             self.assertIn(FROZEN_BUNDLE_AT_SEAL, gens, u"封の commit 時点の世代は消さない")
+            self.assertIn(FROZEN_BUNDLE_STAGE1, gens, u"段 1(c13a746)の世代は消さない")
+            self.assertEqual(gens.index(FROZEN_BUNDLE_AFTER), gens.index(FROZEN_BUNDLE_STAGE1) + 1, u"段 2 の世代は段 1 の次")
         # 字で留めた本数は git が数える本数と同じ(今)
         ls = subprocess.run(["git", "ls-files", "audit-core/core", "audit-core/adapters"], cwd=REPO, capture_output=True, text=True).stdout.split()
         self.assertEqual(len(ls), n_files)

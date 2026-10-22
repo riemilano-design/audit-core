@@ -43,9 +43,11 @@ python3 measure/ritual_2026-10-20.py --out <出力先>
 
 ```
 python3 -m adapters.xbrl.verify_document --zip <自分の書類.zip> --text <自分の文.txt> --out out.json
-python3 -m adapters.xbrl.report_customer --in out.json --out report.md --labels ~/.cache/audit-core/edinet-taxonomy/2025-11-01
-python3 -m adapters.xbrl.report_customer --in out.json --out report_full.md --labels ~/.cache/audit-core/edinet-taxonomy/2025-11-01 --full   # 一致の行も出す
+python3 -m adapters.xbrl.report_customer --in out.json --out report.md --labels ~/.cache/audit-core/edinet-taxonomy/2025-11-01 --zip <自分の書類.zip>
+python3 -m adapters.xbrl.report_customer --in out.json --out report_full.md --labels ~/.cache/audit-core/edinet-taxonomy/2025-11-01 --zip <自分の書類.zip> --full   # 一致の行も出す
 ```
+
+`--zip` を渡すと、会社ごとの要素・区分が書類自身のラベルで日本語になり、表題が提出者名になる。指紋は本文に出さず、隣の `report.provenance.json`(機械用)に出る。ラベルは `fixtures/xbrl/taxonomy_labels_sha256.txt`(名簿)に在る file だけを読む。
 
 ## 置き場所
 

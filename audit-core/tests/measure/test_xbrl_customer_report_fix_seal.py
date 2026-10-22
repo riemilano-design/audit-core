@@ -41,7 +41,11 @@ SEAL = os.path.join(ROOT, SEAL_REL)
 RECORD_JSON = os.path.join(ROOT, "fixtures", "xbrl", "customer_report_2026-10-21.json")
 ROSTER = os.path.join(ROOT, "fixtures", "xbrl", "taxonomy_labels_sha256.txt")
 ROSTER_README = os.path.join(ROOT, "fixtures", "xbrl", "TAXONOMY_LABELS_README.md")
-IFRS_CACHE = os.path.expanduser("~/.cache/audit-core/edinet-taxonomy-ifrs/2025-11-01/jpigp_2025-11-01_lab.xml")
+# 封の commit 時点は標準の folder の外(edinet-taxonomy-ifrs)。実装の便(2026-10-21)で標準の folder に移した(名簿で読む module になったので、folder の中身が増えても報告は変わらない)。
+# どちらに在っても、封の sha256 と同じ file であることを見る。
+IFRS_CACHE_AT_SEAL = os.path.expanduser("~/.cache/audit-core/edinet-taxonomy-ifrs/2025-11-01/jpigp_2025-11-01_lab.xml")
+IFRS_CACHE_NOW = os.path.expanduser("~/.cache/audit-core/edinet-taxonomy/2025-11-01/jpigp_2025-11-01_lab.xml")
+IFRS_CACHE = IFRS_CACHE_NOW if os.path.exists(IFRS_CACHE_NOW) else IFRS_CACHE_AT_SEAL
 
 JPIGP_NAME = "jpigp_2025-11-01_lab.xml"
 JPIGP_BYTES = 2593515
@@ -51,7 +55,8 @@ JPIGP_URL = "http://disclosure.edinet-fsa.go.jp/taxonomy/jpigp/2025-11-01/label/
 # 直す対象(commit c13a746 で入った module)。封の commit 時点の sha16 と、宣言された遷移(実装の便で足す): {path: (後の sha16, 遷移を宣言した封の path)}
 TARGET = "adapters/xbrl/report_customer.py"
 TARGET_AT_SEAL = "d82481697762d167"
-LATER_TARGET = {}
+# 2026-10-21 実装の便(この封が宣言した遷移): report_customer.py の中身が動いた。封の commit 時点の値(TARGET_AT_SEAL)は残す。
+LATER_TARGET = {TARGET: ("715468699973cc4a", SEAL_REL)}
 
 # §4 の file 一覧。**新規**の 4 本は封の commit 時点で作業木にも履歴にも無い。既存を直す file は EXISTING_EDITED。
 NEW_FILES = ("measure/xbrl_customer_report_fix_2026-10-21.py",
@@ -88,10 +93,13 @@ FINGERPRINT_AT_SEAL = {"adapter_xbrl_py_sha256": "c556de1cb26e975a172d54a4e39f49
 FROZEN_BUNDLE_AT_SEAL = "66f906c89205f0ef361e13fe051dbdeaed75a032e0d60ca832f6d605166f3b36"   # frozen_bundle_sha.FROZEN_BUNDLE_GENERATIONS の最新(report_customer.py の段 1)
 FROZEN_COUNT_AT_SEAL = 37
 # 宣言された遷移(実装の便の commit で足す): {欄: (後の値, 遷移を宣言した封の path)}。封の commit 時点では空。
-LATER_FINGERPRINT = {}
-LATER_FROZEN = {}   # {"bundle": (後の sha, 封の path)}。本数は 37 のまま(module の中身だけが動く)
+# 2026-10-21 実装の便: module の中身が動くので束ねた指紋が動く(file の数 16 は動かない)。封の commit 時点の値(FINGERPRINT_AT_SEAL)は残す。
+LATER_FINGERPRINT = {"adapter_xbrl_py_sha256": ("11840a097f04dcb4c01f057ce78d39c3aedabf139e65dbc5620e28c109f64693", SEAL_REL)}
+# 2026-10-21 実装の便: frozen_bundle に新しい世代(5c4da2e2…)。本数は 37 のまま(module の中身だけが動く)。封の commit 時点の世代(FROZEN_BUNDLE_AT_SEAL)は消さない。
+LATER_FROZEN = {"bundle": ("5c4da2e2ff3f30b7dcb6ebcbc84a5c68b074e8dc495f2d260551d7e10a4ce66c", SEAL_REL)}
 # 名簿に jpigp が入る遷移: 封の commit 時点は名簿 2 行・README に jpigp 無し。後は {"roster": (行, 封の path), "readme_has_jpigp": True}
-LATER_ROSTER = {}
+# 2026-10-21 実装の便: 名簿に jpigp の 1 行、README に jpigp の取り方。封の commit 時点(名簿 2 行・README に jpigp 無し)は test_8 の docstring と上の定数が残す。
+LATER_ROSTER = {"roster": ("d45c95cc634202973557f5ed935d747ba25e751b7386c5269fe3e7bdb2c82d09  jpigp_2025-11-01_lab.xml", SEAL_REL), "readme_has_jpigp": True}
 
 
 def text(p):
@@ -362,6 +370,11 @@ class SealTest(unittest.TestCase):
             self.assertTrue(git("log", "--diff-filter=A", "--format=%H", "--", seal_rel).stdout.split(), u"遷移を宣言した封が履歴に無い")
             self.assertIn(line, text(ROSTER))
             self.assertEqual(line, "%s  %s" % (JPIGP_SHA, JPIGP_NAME))
+            if LATER_ROSTER.get("readme_has_jpigp"):
+                self.assertIn(JPIGP_NAME, text(ROSTER_README))
+                self.assertIn(JPIGP_SHA, text(ROSTER_README))
+                self.assertIn(JPIGP_URL, text(ROSTER_README))
+            self.assertEqual(len(lines), 3, lines)
         # 2 行の sha256 は封の外の正本(README の表)と同じ
         for l in lines:
             if "jppfs" in l:

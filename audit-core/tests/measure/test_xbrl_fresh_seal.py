@@ -111,6 +111,22 @@ def is_roster(path):
     return any(fnmatch.fnmatch(path, pat) for pat in ROSTER_PATTERNS)
 
 
+#: 2026-10-21 追記(pin の遷移。顧客向けの報告形の直し、封 docs/XBRL_CUSTOMER_REPORT_FIX_SEAL_2026-10-21.md): draw の commit の**後**に追跡された file で、docID を名指すもの。
+#: draw の再計算(test_23)は『draw の commit 時点で名前が出ていた file』と記録を比べるので、後の file は数えない。ここに足してよいのは、
+#: **draw の commit より後に足された file**だけ(追跡されているときは git の履歴で確かめる。draw は動かさない)。
+LATER_NAMING_FILES = ("fixtures/xbrl/customer_report_fix_2026-10-21.json",)
+
+
+def drop_later_naming_files(named):
+    """``names_in_tracked_files`` の結果から、宣言された後の file を除く(空になった docID は消す)。"""
+    out = {}
+    for doc, files in named.items():
+        keep = [f for f in files if f not in LATER_NAMING_FILES]
+        if keep:
+            out[doc] = keep
+    return out
+
+
 def names_in_tracked_files(docs):
     """{docID: [名前が出た追跡 file(名簿を除く)]}。repo 全体(git grep。作業木の追跡 file)。名簿の除外は Python 側で(pathspec の癖に頼らない)。"""
     args = ["grep", "-o", "-F"]
@@ -478,7 +494,7 @@ class DrawRecordTest(unittest.TestCase):
     def test_23_the_draw_is_recomputed_from_scratch_and_equals_the_record(self):
         order = self.order
         window = order[START:]
-        named = names_in_tracked_files(set(window))
+        named = drop_later_naming_files(names_in_tracked_files(set(window)))
         cached = effective_cache(self.d)
         taken, pos, skipped = redraw(order, cached, named)
         self.assertEqual(taken, self.d[u"引いた 40 件"])
@@ -489,6 +505,18 @@ class DrawRecordTest(unittest.TestCase):
             self.assertEqual("named" in why, bool(rec[u"名前が出た file"]), doc)
             self.assertEqual("cache" in why, rec[u"cache に在る"], doc)
             self.assertEqual(sorted(named.get(doc, [])), sorted(rec[u"名前が出た file"]), doc)
+
+    def test_23b_the_later_naming_files_were_added_after_the_draw_commit(self):
+        """宣言された後の file は、draw の commit より後に足されたものだけ(追跡されているとき)。draw の commit より前から在る file を宣言して名前を隠すことはできない。"""
+        draw_commit = [c for c in git("log", "--diff-filter=A", "--format=%H", "--", DRAW_REL).stdout.split() if c]
+        if not draw_commit:
+            self.skipTest(u"draw がまだ commit されていない")
+        for rel in LATER_NAMING_FILES:
+            added = [c for c in git("log", "--diff-filter=A", "--format=%H", "--", rel).stdout.split() if c]
+            if not added:
+                continue                                    # まだ追跡されていない(commit の前)
+            self.assertEqual(git("merge-base", "--is-ancestor", draw_commit[-1], added[-1]).returncode, 0, rel)
+            self.assertNotEqual(draw_commit[-1], added[-1], rel)
 
     def test_24_drawn_documents_are_not_cached_until_fetched(self):
         cur = cache_set()

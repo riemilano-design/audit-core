@@ -29,6 +29,14 @@ sha256 だけを残す**。」
 |---|---|---|
 | `jppfs_2025-11-01_lab.xml` | 5,053,378 | `bf56ea1585afe426b398a9053ec4de4dbeafc211a53675b5d6d19453e4e04bf4` |
 | `jpcrp_2025-11-01_lab.xml` | 3,309,364 | `df9c23764ec9a63cb65b5ef62e79a2907c590523797421442ea2a60e334cd684` |
+| `jpigp_2025-11-01_lab.xml` | 2,593,515 | `d45c95cc634202973557f5ed935d747ba25e751b7386c5269fe3e7bdb2c82d09` |
+
+`jpigp_2025-11-01_lab.xml`(IFRS の標準ラベル)は、日本語の報告(`adapters/xbrl/report_customer.py`)だけが使う。
+人間の許可(2026-10-21)「取って良い」。取り方(同じ置き場で、名前を `-o` で指定する):
+
+    curl -sS -o jpigp_2025-11-01_lab.xml http://disclosure.edinet-fsa.go.jp/taxonomy/jpigp/2025-11-01/label/jpigp_2025-11-01_lab.xml
+
+報告の module は、この名簿(`taxonomy_labels_sha256.txt`)に在る file 名だけを、sha256 が合うときだけ読む。名簿に無い file は置き場に在っても読まない。
 
 ## 版が書類と一致していることの確認
 

@@ -65,9 +65,11 @@ Give it your filing's ZIP (an EDINET securities report) and the text to check (i
 
 ```
 python3 -m adapters.xbrl.verify_document --zip <your filing.zip> --text <your text.txt> --out out.json
-python3 -m adapters.xbrl.report_customer --in out.json --out report.md --labels ~/.cache/audit-core/edinet-taxonomy/2025-11-01
-python3 -m adapters.xbrl.report_customer --in out.json --out report_full.md --labels ~/.cache/audit-core/edinet-taxonomy/2025-11-01 --full   # also list the matches
+python3 -m adapters.xbrl.report_customer --in out.json --out report.md --labels ~/.cache/audit-core/edinet-taxonomy/2025-11-01 --zip <your filing.zip>
+python3 -m adapters.xbrl.report_customer --in out.json --out report_full.md --labels ~/.cache/audit-core/edinet-taxonomy/2025-11-01 --zip <your filing.zip> --full   # also list the matches
 ```
+
+With `--zip`, company-specific elements and segments are read in Japanese from the filing's own labels and the title carries the filer's name. Fingerprints are not printed in the report; they go to `report.provenance.json` next to it (machine-readable). The label files it reads are the ones listed in `fixtures/xbrl/taxonomy_labels_sha256.txt`, checked against their sha256.
 
 ## Install (0 cost, no network required at build time)
 
@@ -88,7 +90,7 @@ detail.
 
 ## Test suite
 
-214 test files (counted by the suite-coverage record; the collected-test count changes with every
+215 test files (counted by the suite-coverage record; the collected-test count changes with every
 added test and is kept in that record, not here), including 96
 adversarial mutations exercised against the XBRL adapter. The core verification engine
 itself is 429 lines (`core/py/audit_core/*.py`): existence and value checks, nothing
