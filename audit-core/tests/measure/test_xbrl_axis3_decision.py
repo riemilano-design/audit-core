@@ -72,6 +72,7 @@ LATER_ENGINE_COMMITS = {
     "c7ad668": "docs/XBRL_VOCAB_SEAL_2026-10-21.md",                # 語彙の登録と枠の取り直し P24 段 1 ― engine(旗だけ、既定は P22 のまま。宣言 2026-10-21)
     "9577eab": "docs/XBRL_LASTBRANCH_SEAL_2026-10-21.md",           # 最後の枝の名指し P25 段 1 ― engine(旗だけ、既定は P22 のまま。宣言 2026-10-21)
     "c13a746": "docs/XBRL_CUSTOMER_REPORT_SEAL_2026-10-21.md",      # 日本語の報告形 ― 新しい module report_customer.py(判定は不変。宣言 2026-10-21)
+    "129ee9d": "docs/XBRL_CUSTOMER_REPORT_FIX_SEAL_2026-10-21.md",  # 報告形の直し ― report_customer.py だけ(判定と節の割り当ては不変。宣言 2026-10-22)
 }
 
 
