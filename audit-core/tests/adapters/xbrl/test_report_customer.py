@@ -248,14 +248,15 @@ class GoldenTest(unittest.TestCase):
 
 class ReasonTableTest(unittest.TestCase):
     def test_registry_has_sixteen_reasons_and_is_unbound_reason_state_plus_two(self):
+        # 2026-10-22 P26 の段 1(封 XBRL_P26_SEAL_2026-10-21 §2 Q-7「登録簿の理由 16 → 19」): 理由を 3 つ足した。名前の sixteen は 16 のときの名(測った当時)
         reg = registry_reasons()
-        self.assertEqual(len(reg), 16)
-        self.assertEqual(reg, set(R.UNBOUND_REASON_STATE) | {"other_frame", "no_same_value"})
+        self.assertEqual(len(reg), 19)
+        self.assertEqual(reg, set(R.UNBOUND_REASON_STATE) | {"other_frame", "no_same_value", "other_concept", "direction_on_cause_item", "rounded_diff_within_double_band"})
 
     def test_reason_table_is_exactly_the_registry(self):
         self.assertEqual(uncovered(RC.REASON_JA), [])
         self.assertEqual(sorted(set(RC.REASON_JA) - registry_reasons()), [])
-        self.assertEqual(len(RC.REASON_JA), 16)
+        self.assertEqual(len(RC.REASON_JA), 19)         # 2026-10-22 P26 の段 1: 16 → 19
 
     def test_removing_any_one_reason_turns_the_coverage_check_red(self):
         for k in sorted(RC.REASON_JA):

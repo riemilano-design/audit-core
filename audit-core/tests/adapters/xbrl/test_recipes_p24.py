@@ -129,8 +129,9 @@ class FlagShapeTest(unittest.TestCase):
         self.assertIs(False, fields["vocab_2026_10_21"].default)
         self.assertIs(False, fields["frame_rebind"].default)
         # 2026-10-21 P25 = P24 + 旗 1 つ(封 XBRL_LASTBRANCH_SEAL_2026-10-21)は P24 の旗 2 つを引き継ぐ
-        self.assertEqual(["P24", "P25"], sorted(n for n, p in V.PROFILES.items() if p.vocab_2026_10_21))
-        self.assertEqual(["P24", "P25"], sorted(n for n, p in V.PROFILES.items() if p.frame_rebind))
+        # 2026-10-22 P26 = P25 + 旗 5 つ(封 XBRL_P26_SEAL_2026-10-21)も引き継ぐ
+        self.assertEqual(["P24", "P25", "P26"], sorted(n for n, p in V.PROFILES.items() if p.vocab_2026_10_21))
+        self.assertEqual(["P24", "P25", "P26"], sorted(n for n, p in V.PROFILES.items() if p.frame_rebind))
 
     def test_with_both_flags_false_p24_is_p23(self):
         self.assertEqual(dataclasses.replace(V.P23, name="P24_OFF"), P24_OFF)

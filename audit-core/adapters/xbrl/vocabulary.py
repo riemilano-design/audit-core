@@ -427,6 +427,18 @@ class Profile:
     # P25(封 docs/XBRL_LASTBRANCH_SEAL_2026-10-21.md §1): 最後の枝で名指して VALUE_MISMATCH にするのは、証拠((i) 同じ要素・同じ枠の別の期に同じ値、
     # (ii) 差が recipes.LAST_BRANCH_DIGIT_K 単位以内、(iii) 桁・単位の取り違え)が在るときだけ。無ければ POINTER_NOT_FOUND(no_same_value)。偽なら 1 行も変わらない。
     last_branch_names_only_if_evidence: bool = False
+    # P26(封 docs/XBRL_P26_SEAL_2026-10-21.md §1): 「違う」に出る正しい文の主因を減らす旗 5 つ。どれも偽(空)なら 1 行も変わらない。
+    # G1 concept_gate: 「違う」と言う前に、当てた fact が文の項目と同じ概念かを機械で見る規則の組("unit_family" = 1 株当たりと総額の取り違え、
+    #    "loose_prefix" = 部分一致で語彙の要素の前に語が付いた要素)。当たれば結ばず POINTER_NOT_FOUND(recipes.OTHER_CONCEPT)。**GROUNDED は作らず、GROUNDED の行にも触らない。**
+    concept_gate: tuple = ()
+    # G2: P25 の証拠 (ii)(差が 2 単位以内)は、名指す値の絶対値が recipes.LAST_BRANCH_NAMED_MIN_K × 主張の桁 以上のときだけ証拠にする。P25 の旗と一緒に真のときだけ効く。
+    last_branch_digit_needs_size: bool = False
+    # G3: 増減の文が当期の残高の対(F3b)を選び、2 つの fact が主張の桁に丸めた値で差が 2 倍の帯の中なら、結ばずに UNVERIFIABLE(recipes.ROUNDED_DIFF_HOLD)。**GROUNDED にはしない。**
+    rounded_diff_hold: bool = False
+    # G4: 向きの語が主語でなく要因の項目にかかる形(「…N円等の増加」「Xの減少等により」で X が主語でない)は主語の向きの主張にしない(UNVERIFIABLE)。
+    cause_item_direction: bool = False
+    # G5: 数の読み取りで「兆」と「億(カンマ)」、「万」と「千」、「円」と「銭」を 1 つの数に読む(extract.iter_numbers_2026_10_21)。
+    numbers_2026_10_21: bool = False
 
 
 P1 = Profile(
@@ -763,3 +775,8 @@ DEFAULT_PROFILE = "P22"
 # P25 = P24 + 最後の枝は証拠があるときだけ名指す。段 1 では既定にしない。PROFILES の行(P24 まで)は字を変えず、ここで足す。
 P25 = dataclasses.replace(P24, name="P25", last_branch_names_only_if_evidence=True)
 PROFILES["P25"] = P25
+
+# P26 = P25 + 旗 5 つ(封 docs/XBRL_P26_SEAL_2026-10-21.md §1)。段 1 では既定にしない(DEFAULT_PROFILE は P22 のまま)。PROFILES の行(P25 まで)は字を変えず、ここで足す。
+# 旗 1 つずつの profile は engine に登録しない(旗ごとの効きは measure の中で dataclasses.replace して測る)。
+P26 = dataclasses.replace(P25, name="P26", concept_gate=("unit_family", "loose_prefix"), last_branch_digit_needs_size=True, rounded_diff_hold=True, cause_item_direction=True, numbers_2026_10_21=True)
+PROFILES["P26"] = P26

@@ -66,10 +66,13 @@ ENGINE_AT_MEASURE = {"adapters/xbrl/vocabulary.py": "f7b8d925eb6787ec", "adapter
 #: 上の ENGINE_AT_MEASURE は残す(測った時点の値)。受け入れるのは、その封が履歴に在り、値が P24 の段 1 の後の値のときだけ。
 SEAL_VOCAB = "docs/XBRL_VOCAB_SEAL_2026-10-21.md"
 SEAL_LASTBRANCH = "docs/XBRL_LASTBRANCH_SEAL_2026-10-21.md"    # 2026-10-21 追記: 最後の枝 P25 の段 1(下の ENGINE_LATER の遷移)
+SEAL_P26 = "docs/XBRL_P26_SEAL_2026-10-21.md"    # 2026-10-22 追記: P26 の段 1(下の ENGINE_LATER の遷移)
 # 2026-10-21(最後の枝 P25 の段 1): 封 docs/XBRL_LASTBRANCH_SEAL_2026-10-21.md(engine を変える。人間の事前承認 2026-10-21)で vocabulary.py に旗 last_branch_names_only_if_evidence・P25・PROFILES の登録(+7 行・-0 行)、recipes.py に最後の枝の証拠の判定の塊(+72 行・-0 行。既存の行は 1 つも書き換えない)を足した(DEFAULT_PROFILE は P22 のまま)。
 # vocabulary.py の 83498c04a7b70396・recipes.py の 3461c3f8b7af6675(P24 の段 1)は残す(測った時点の値)。受け入れるのは、その封が履歴に在り、値が P25 の段 1 の後の値のときだけ。
-ENGINE_LATER = {"adapters/xbrl/vocabulary.py": ("27e71e9861fc5aad", SEAL_LASTBRANCH),
-                "adapters/xbrl/recipes.py": ("bff243f13429b553", SEAL_LASTBRANCH)}
+ENGINE_LATER = {"adapters/xbrl/vocabulary.py": ("83025e9c0525d08b", SEAL_P26),
+                # 2026-10-22(P26 の段 1): 封 docs/XBRL_P26_SEAL_2026-10-21.md(engine を変える。人間の事前承認 2026-10-21)で recipes.py に G1〜G5 の塊(+251 行・-1 行。既存の行の書き換えは数の読み取りの for 文 1 行だけ) を足した。
+                # bff243f13429b553(P25 の段 1)は残す(測った時点の値)、P26 の段 1 で 181b370420ab751b。受け入れるのは、その封が履歴に在り、値が P26 の段 1 の後の値のときだけ。
+                "adapters/xbrl/recipes.py": ("181b370420ab751b", SEAL_P26)}
 
 
 def jtext(p):

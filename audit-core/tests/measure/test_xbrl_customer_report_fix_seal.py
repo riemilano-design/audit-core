@@ -56,7 +56,10 @@ JPIGP_URL = "http://disclosure.edinet-fsa.go.jp/taxonomy/jpigp/2025-11-01/label/
 TARGET = "adapters/xbrl/report_customer.py"
 TARGET_AT_SEAL = "d82481697762d167"
 # 2026-10-21 実装の便(この封が宣言した遷移): report_customer.py の中身が動いた。封の commit 時点の値(TARGET_AT_SEAL)は残す。
-LATER_TARGET = {TARGET: ("715468699973cc4a", SEAL_REL)}
+# 2026-10-22(P26 の段 1): 封 docs/XBRL_P26_SEAL_2026-10-21.md が report_customer.py の理由の表に 3 行を足した(+7 行・-2 行。判定と節の割り当ては変えない)。
+# 715468699973cc4a(この封の実装の便の値)は残す(測った時点の値)、P26 の段 1 で 141767d189b63733。受け入れるのは、その封が履歴に在り、値が P26 の段 1 の後の値のときだけ。
+SEAL_P26 = "docs/XBRL_P26_SEAL_2026-10-21.md"
+LATER_TARGET = {TARGET: ("141767d189b63733", SEAL_P26)}
 
 # §4 の file 一覧。**新規**の 4 本は封の commit 時点で作業木にも履歴にも無い。既存を直す file は EXISTING_EDITED。
 NEW_FILES = ("measure/xbrl_customer_report_fix_2026-10-21.py",
@@ -85,6 +88,14 @@ UNTOUCHED = {"adapters/xbrl/__init__.py": "65474b49e6b84626",
              "adapters/xbrl/verify_external.py": "0ae333392551912c",
              "adapters/xbrl/vocabulary.py": "27e71e9861fc5aad"}
 
+# 2026-10-22(P26 の段 1): 封 docs/XBRL_P26_SEAL_2026-10-21.md が engine の 4 file を書き換えた(extract.py +42・vocabulary.py +17・recipes.py +251/-1・registry_setup.py +6。
+# comparators.py・report.py・verify_document.py は 0 行)。上の UNTOUCHED は「この封は触らない」の値(封の commit 時点)で消さない。
+# 受け入れるのは、その封が履歴に在り、値が P26 の段 1 の後の値のときだけ(comparators.py ほかの 11 file は遷移を持たない: 動いたら赤のまま)。
+UNTOUCHED_LATER = {"adapters/xbrl/extract.py": ("9982599fc31cbab3", SEAL_P26),
+                   "adapters/xbrl/recipes.py": ("181b370420ab751b", SEAL_P26),
+                   "adapters/xbrl/registry_setup.py": ("7f2cbded9c830211", SEAL_P26),
+                   "adapters/xbrl/vocabulary.py": ("83025e9c0525d08b", SEAL_P26)}
+
 # 封の commit 時点の engine の束ねた指紋(verify_document.engine_fingerprint())と frozen_bundle。**宣言された遷移の前の値**で、消さない。
 FINGERPRINT_AT_SEAL = {"adapter_xbrl_py_sha256": "c556de1cb26e975a172d54a4e39f4971bb5c11a5fd8a02a8404b9a719eb27acb",
                        "adapter_xbrl_py_files": 16,
@@ -94,9 +105,12 @@ FROZEN_BUNDLE_AT_SEAL = "66f906c89205f0ef361e13fe051dbdeaed75a032e0d60ca832f6d60
 FROZEN_COUNT_AT_SEAL = 37
 # 宣言された遷移(実装の便の commit で足す): {欄: (後の値, 遷移を宣言した封の path)}。封の commit 時点では空。
 # 2026-10-21 実装の便: module の中身が動くので束ねた指紋が動く(file の数 16 は動かない)。封の commit 時点の値(FINGERPRINT_AT_SEAL)は残す。
-LATER_FINGERPRINT = {"adapter_xbrl_py_sha256": ("11840a097f04dcb4c01f057ce78d39c3aedabf139e65dbc5620e28c109f64693", SEAL_REL)}
+# 2026-10-22(P26 の段 1): 束ねた指紋が 11840a09…(この封の実装の便の値。残す)から 498993e2… に動いた(file の数 16 は動かない)。
+LATER_FINGERPRINT = {"adapter_xbrl_py_sha256": ("498993e29055472aaf2e691758e62c02a41cd291654cf205ae0a55a9e55df318", SEAL_P26)}
 # 2026-10-21 実装の便: frozen_bundle に新しい世代(5c4da2e2…)。本数は 37 のまま(module の中身だけが動く)。封の commit 時点の世代(FROZEN_BUNDLE_AT_SEAL)は消さない。
-LATER_FROZEN = {"bundle": ("5c4da2e2ff3f30b7dcb6ebcbc84a5c68b074e8dc495f2d260551d7e10a4ce66c", SEAL_REL)}
+# 2026-10-22(P26 の段 1): frozen_bundle の世代がもう 1 つ増えた(a97ecf7c…。本数は 37 のまま)。5c4da2e2…(この封の実装の便の世代)は消さない。
+LATER_FROZEN = {"bundle": ("a97ecf7c44e60c45bf6e6c23439c59955aad8bddf26b1174ee1e0ebabfd59c7c", SEAL_P26)}
+FROZEN_BUNDLE_FIX = "5c4da2e2ff3f30b7dcb6ebcbc84a5c68b074e8dc495f2d260551d7e10a4ce66c"
 # 名簿に jpigp が入る遷移: 封の commit 時点は名簿 2 行・README に jpigp 無し。後は {"roster": (行, 封の path), "readme_has_jpigp": True}
 # 2026-10-21 実装の便: 名簿に jpigp の 1 行、README に jpigp の取り方。封の commit 時点(名簿 2 行・README に jpigp 無し)は test_8 の docstring と上の定数が残す。
 LATER_ROSTER = {"roster": ("d45c95cc634202973557f5ed935d747ba25e751b7386c5269fe3e7bdb2c82d09  jpigp_2025-11-01_lab.xml", SEAL_REL), "readme_has_jpigp": True}
@@ -422,7 +436,18 @@ class SealTest(unittest.TestCase):
         self.assertEqual(["adapters/xbrl/" + f for f in py], sorted(list(UNTOUCHED) + [TARGET]), u"adapters/xbrl の file の集合が変わった")
         self.assertEqual(len(UNTOUCHED), 15)
         for rel, want in sorted(UNTOUCHED.items()):
-            self.assertEqual(sha16(rel), want, u"**%s が動いている(この封は触らない)**" % rel)
+            got = sha16(rel)
+            if got != want and rel in UNTOUCHED_LATER:
+                later, seal_rel = UNTOUCHED_LATER[rel]
+                self.assertTrue(git("log", "--diff-filter=A", "--format=%H", "--", seal_rel).stdout.split(),
+                                u"**%s が動いているのに、遷移を宣言した封 %s が履歴に無い**" % (rel, seal_rel))
+                self.assertEqual(got, later, u"**%s が、宣言された遷移の値とも違う**" % rel)
+                continue
+            self.assertEqual(got, want, u"**%s が動いている(この封は触らない)**" % rel)
+        # 遷移を持つのは P26 の封が書き換えた engine の 4 file だけ(comparators.py・report.py・verify_document.py ほかは遷移を持たない)
+        self.assertEqual(sorted(UNTOUCHED_LATER), ["adapters/xbrl/extract.py", "adapters/xbrl/recipes.py", "adapters/xbrl/registry_setup.py", "adapters/xbrl/vocabulary.py"])
+        for rel in ("comparators", "report", "verify_document"):
+            self.assertNotIn("adapters/xbrl/%s.py" % rel, UNTOUCHED_LATER)
         # R2-7 が名指す 7 つ(core/ は fingerprint の core_py_sha256 が縛る)
         for rel in ("report", "verify_document", "vocabulary", "recipes", "registry_setup", "comparators"):
             self.assertIn("adapters/xbrl/%s.py" % rel, UNTOUCHED)
@@ -466,6 +491,7 @@ class SealTest(unittest.TestCase):
             self.assertEqual(r.returncode, 0, out)
             self.assertIn(later, out)
             self.assertEqual(gens[-1], later)
+            self.assertIn(FROZEN_BUNDLE_FIX, gens, u"この封の実装の便の世代は消さない")
         else:
             self.assertEqual(r.returncode, 0, u"**frozen_bundle が動いている(実装の便の commit で LATER_FROZEN に遷移を宣言する)**\n" + out)
             self.assertIn(FROZEN_BUNDLE_AT_SEAL, out)

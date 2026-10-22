@@ -75,6 +75,15 @@ def _state_of(reason, result):
     if r == NO_SAME_VALUE:
         # P25 last_branch_names_only_if_evidence(封 docs/XBRL_LASTBRANCH_SEAL_2026-10-21.md): 最後の枝で証拠が無く名指さなかった数。
         return "POINTER_NOT_FOUND"
+    if r == OTHER_CONCEPT:
+        # P26 G1 concept_gate(封 docs/XBRL_P26_SEAL_2026-10-21.md): 当てた fact が文の項目と別の概念で、「違う」と言わなかった数。
+        return "POINTER_NOT_FOUND"
+    if r == ROUNDED_DIFF_HOLD:
+        # P26 G3 rounded_diff_hold(封 docs/XBRL_P26_SEAL_2026-10-21.md): 丸めた値の差が 2 倍の帯でだけ合う。一致とも違うとも言わない。
+        return "UNVERIFIABLE"
+    if r == CAUSE_ITEM_DIRECTION:
+        # P26 G4 cause_item_direction(封 docs/XBRL_P26_SEAL_2026-10-21.md): 向きの語が主語でなく要因の項目にかかる形。主語の向きの主張にしない。
+        return "UNVERIFIABLE"
     raise KeyError(r)
 
 
@@ -406,6 +415,20 @@ def _direct_value_claim(claim, s, a, b, sign, num, unit, prec, subj, elems, memb
                         claim["reason"] = "value differs(segment/other period?)"
                         return
                     mate = by.get(cur[0]["name"], {}).get(cur[0]["context"].replace("CurrentYear", "Prior1Year", 1))
+                    if (getattr(profile, "rounded_diff_hold", False) and rounding is not None and is_diff and mate
+                            and cur[0]["context"].startswith("CurrentYearInstant") and _rounded_diff_match(cur[0], mate, target, scale)):
+                        # P26 G3 rounded_diff_hold(封 docs/XBRL_P26_SEAL_2026-10-21.md §1): 下の F3b が名指す残高の対そのもので、2 つの fact が主張の桁に丸めた値で
+                        # 差が 2 倍の帯の中なら、結ばずに UNVERIFIABLE。**GROUNDED にはしない**(2 倍の帯は 1 単位の書き誤りと二重の丸めを見分けられない)。
+                        # 書類の丸め方を決めた 2 周目だけ(rounding が None の 1 周目は decide_rounding の根拠を数える軸なので P25 のまま)。
+                        claim["pointer"] = None
+                        claim["bound"] = False
+                        claim["result"] = None
+                        claim["recomputed"] = None
+                        claim["reason"] = ROUNDED_DIFF_HOLD
+                        claim["rounded_diff_hold"] = {"named": ["xbrl:%s@%s" % (cur[0]["name"], cur[0]["context"]),
+                                                                "xbrl:%s@%s" % (mate["name"], mate["context"])],
+                                                      "diff": cur[0]["value"] - mate["value"]}
+                        return
                     if is_diff and mate and cur[0]["context"].startswith("CurrentYearInstant"):
                         # F3b: 増減の文が当期の残高を選んだときは、残高 1 本ではなく残高の対(当期 - 前期)。
                         claim["form"] = "derived_value"
@@ -416,6 +439,10 @@ def _direct_value_claim(claim, s, a, b, sign, num, unit, prec, subj, elems, memb
                         claim["recomputed"] = cur[0]["value"] - mate["value"]
                         claim["reason"] = "value differs(segment/other period?)"
                         return
+                if (getattr(profile, "last_branch_names_only_if_evidence", False) and getattr(profile, "last_branch_digit_needs_size", False)
+                        and _last_branch_unname_2026_10_21(claim, target, scale, rounding, mag_trunc, cur[0], facts)):
+                    # P26 G2(封 docs/XBRL_P26_SEAL_2026-10-21.md): (ii) を名指す値の大きさで締めた証拠で先に見る。証拠があれば下の P25 の行が今までどおり名指す。
+                    return
                 if getattr(profile, "last_branch_names_only_if_evidence", False) and _last_branch_unname(claim, target, scale, rounding, mag_trunc, cur[0], facts):
                     # P25(封 docs/XBRL_LASTBRANCH_SEAL_2026-10-21.md): 証拠((i) 同じ要素・同じ枠の別の期に同じ値 / (ii) 差が LAST_BRANCH_DIGIT_K 単位以内 / (iii) 桁・単位の取り違え)が無ければ名指さない。
                     return
@@ -762,7 +789,7 @@ def _build_raw_num_claims(sentences, facts, contexts, profile, claim_member, rou
     num_claims = []
     cf_ctx = _cf_context_flags(sentences) if flow_base else None
     for si, s in enumerate(sentences):
-        for (a, b, signed, unit, prec) in E.iter_numbers(s):
+        for (a, b, signed, unit, prec) in _numbers_of(profile, s):
             member, msrc = claim_member(si, a)
             after = s[b:b + 3]
             around = s[max(0, a - 12):b + 4]
@@ -1332,6 +1359,214 @@ def _last_branch_unname(claim, target, scale, rounding, mag_trunc, named, facts)
     return True
 
 
+# ---------------------------------------------------------------------------
+# P26 G1 concept_gate(封 docs/XBRL_P26_SEAL_2026-10-21.md §1)。旗(profile.concept_gate)が空でないときだけ呼ばれる。
+# 「違う」(GROUNDED でない束縛)と言う前に、当てた fact が文の項目と同じ概念かを機械で見る。別の概念なら名指さず POINTER_NOT_FOUND、
+# reason は登録簿の固定の名前 OTHER_CONCEPT、名指した fact と当たった規則は provenance。GROUNDED の行には触らない(GROUNDED は作らず、減らさない)。
+#   unit_family : 文の単位が金額か単位なし(増減の語)で、主語が 1 株当たりの語(CONCEPT_GATE_PER_SHARE_WORD を含む)かどうかと、xbrl の pointer の
+#                 fact の単位が JPY そのものでない JPY の族(JPYPerShares 等)かどうかが食い違う(総額の主語に 1 株当たりの fact、またはその逆)。
+#                 (``pool``・``fs``・``cur`` の足切り ``unit.upper().startswith("JPY")`` が 1 株当たりを総額と同じ族に入れる穴。)
+#   loose_prefix: 先頭の xbrl の pointer の要素が語彙の要素に完全一致せず(``instance.facts_for`` の完全一致と同じ字)、部分一致した語彙の要素の
+#                 どれも、前に付いた字が CONCEPT_GATE_PREFIX_OK 以外(UnearnedRevenue の Unearned、ContractLiabilitiesCLIFRS の Contract 等)。
+# ---------------------------------------------------------------------------
+OTHER_CONCEPT = "other_concept"
+CONCEPT_GATE_MONEY_UNITS = ("百万円", "千円", "億円", "兆円", "円")          # 字で留める
+CONCEPT_GATE_PER_SHARE_WORD = "株当たり"                                    # 字で留める(主語が 1 株当たりの語か)
+CONCEPT_GATE_PREFIX_OK = ("", "Cash", "NetCashProvidedByUsedIn", "CashFlowsFromUsedIn")   # 字で留める(CF の合計・項目の頭だけ)
+
+
+def _concept_gate_why(claim, elems, facts_by_key, rules):
+    xptrs = [p for p in _pointer_list(claim.get("pointer")) if isinstance(p, str) and p.startswith("xbrl:")]
+    if not xptrs:
+        return None
+    if "unit_family" in rules and (claim.get("unit") in CONCEPT_GATE_MONEY_UNITS or claim.get("unit") is None):
+        per_share_subject = CONCEPT_GATE_PER_SHARE_WORD in (claim.get("subject") or "")
+        for p in xptrs:
+            f = facts_by_key.get(_ctx_of(p))
+            u = ((f or {}).get("unit") or "").upper()
+            if not u.startswith("JPY"):
+                continue
+            if (u != "JPY") != per_share_subject:
+                return "unit_family:%s/%s" % (f["unit"], "per_share_subject" if per_share_subject else "total_subject")
+    if "loose_prefix" in rules and elems:
+        local = _ctx_of(xptrs[0])[0].split(":")[-1]
+        exact = any(local == e or local == e + "SummaryOfBusinessResults"
+                    or local == e.replace("Income", "IncomeLoss") + "SummaryOfBusinessResults" for e in elems)
+        if not exact:
+            pres = [local[:local.lower().find(e.lower())] for e in elems if e.lower() in local.lower()]
+            if pres and all(pre not in CONCEPT_GATE_PREFIX_OK for pre in pres):
+                return "loose_prefix:%s" % local
+    return None
+
+
+def _core_grounded(claim):
+    """raw の result が GROUNDED でも、Core の比較器が一致にしない形は除く: 向きの語の ``builtin:sign(cur-prior)`` で差がちょうど 0
+    (comparators.builtin_sign_direction、C-1f。raw の ``1 if 差 > 0 else -1`` は差 0 を「減少」と数える古い字のまま)。"""
+    if claim.get("result") != "GROUNDED":
+        return False
+    if "builtin:sign(cur-prior)" in _pointer_list(claim.get("pointer")) and claim.get("recomputed") == 0:
+        return False
+    return True
+
+
+def _concept_gate(claim, profile, facts_by_key):
+    if not claim.get("bound") or _core_grounded(claim):
+        return
+    elems = None
+    if claim.get("subject_from") not in ("flow_item", "ratio_table"):
+        elems = _elements_for_word(profile.subjects, claim.get("subject"))
+    why = _concept_gate_why(claim, elems, facts_by_key, profile.concept_gate)
+    claim["concept_gate"] = why
+    if why is None:
+        return
+    named = _pointer_list(claim.get("pointer"))
+    claim["pointer"] = None
+    claim["bound"] = False
+    claim["result"] = None
+    claim["recomputed"] = None
+    claim.pop("match", None)
+    claim["reason"] = OTHER_CONCEPT
+    claim["other_concept"] = {"named": [p for p in named if p.startswith("xbrl:")], "why": why}
+
+
+# ---------------------------------------------------------------------------
+# P26 G2〜G5(封 docs/XBRL_P26_SEAL_2026-10-21.md §1)。それぞれの旗が真のときだけ呼ばれる。人間の決定の行の字は変えない。
+# ---------------------------------------------------------------------------
+LAST_BRANCH_NAMED_MIN_K = 2   # 字で留める(G2: (ii) を証拠にするのは |名指す値| >= この数 × 主張の桁 のときだけ)
+
+
+def _last_branch_unname_2026_10_21(claim, target, scale, rounding, mag_trunc, named, facts):
+    """G2: P25 の証拠のうち (ii) だけを、名指す値の絶対値が LAST_BRANCH_NAMED_MIN_K × 主張の桁 より小さいときは数えない。
+    (i)・(iii) は P25 と同じ字(_last_branch_evidence と同じ順・同じ帯)。証拠があれば False(呼び出し側の P25 の行が名指す)。
+    無ければ claim を POINTER_NOT_FOUND(no_same_value)にして True。"""
+
+    ev = _last_branch_evidence(target, scale, rounding, mag_trunc, named, facts)
+    if ev == "digit_within_k" and abs(named["value"]) < LAST_BRANCH_NAMED_MIN_K * scale:
+        ev = None
+        prec = _written_precision(target, scale)
+        for n in LAST_BRANCH_SCALE_EXPONENTS:
+            if V.match_value(named["value"], target * 10.0 ** (-n), prec * 10.0 ** (-n), rounding, mag_trunc):
+                ev = "scale_10^%d" % n
+                break
+        claim["last_branch_digit_floor"] = True
+    if ev is not None:
+        return False
+    claim["last_branch_evidence"] = None
+    claim["pointer"] = None
+    claim["bound"] = False
+    claim["result"] = None
+    claim["recomputed"] = None
+    claim["reason"] = NO_SAME_VALUE
+    claim["no_same_value"] = {"named": "xbrl:%s@%s" % (named["name"], named["context"]), "value": named["value"]}
+    return True
+
+
+ROUNDED_DIFF_BAND_X = 2         # 字で留める(G3: 当てる帯 0 <= |a − b| − |文の数| < 2 × 桁)
+ROUNDED_DIFF_HOLD = "rounded_diff_within_double_band"   # 登録簿の固定の名前(UNVERIFIABLE。G3)
+
+
+def _fact_precision(f):
+    """fact の精度 10^−decimals。decimals が無い・INF・数でなければ None。"""
+
+    try:
+        return 10.0 ** (-int(f.get("decimals")))
+    except (TypeError, ValueError):
+        return None
+
+
+def _rounded_diff_match(fa, fb, target, scale):
+    """G3: 2 つの fact の精度がどちらも主張の桁と同じ(= 表示桁に丸めた値)で、0 <= |a − b| − |文の数| < 2 × 桁 なら真。
+    丸めた値の差は丸めが 2 回積む(floor(A) − floor(B) は floor(A − B) より 1 単位大きくなりうる)ので、切り捨ての側だけ広げる。"""
+
+    pa, pb = _fact_precision(fa), _fact_precision(fb)
+    if pa is None or pb is None or abs(pa - scale) > 1e-9 * scale or abs(pb - scale) > 1e-9 * scale:
+        return False
+    return 0 <= abs(fa["value"] - fb["value"]) - abs(target) < ROUNDED_DIFF_BAND_X * scale
+
+
+CAUSE_ITEM_DIRECTION = "direction_on_cause_item"   # 登録簿の固定の名前(UNVERIFIABLE)
+CAUSE_ITEM_LIST_TAILS = ("等の", "などの")          # 字で留める(G4 形 A: 「…N円等の増加」)
+CAUSE_ITEM_AFTER = ("等によ", "などによ")           # 字で留める(G4 形 C: 「Xの減少等により」)
+
+
+def _cause_item_form(s, pos, word, subj):
+    """G4: 向きの語(s[pos:pos+len(word)])が主語でなく要因の項目にかかる形なら "A" か "C"、でなければ None。
+    主語と向きの語の間の字(gap)は、向きの語より前で最後に現れた主語の字の後ろから向きの語の前まで。
+      A: 語の直前が「等の」「などの」で、gap に金額(円の単位の数)が在る ―「売上債権の減少額61百万円等の増加によるもの」。
+         向きは列挙した要因の合計(資金・利益)の向きで、主語の残高の向きではない。
+      C: 語の直前が「の」、直後が「等によ」「などによ」で、gap が「の」だけでない ―「販売費及び一般管理費は、委託費の減少等により」。
+         向きは「の」の前の名詞(委託費)の向きで、主語の向きではない(gap が「の」だけ = 主語そのものの向き、は当てない)。"""
+
+    if not subj:
+        return None
+    pre, post = s[:pos], s[pos + len(word):]
+    i = pre.rfind(subj)
+    if i < 0:
+        return None
+    gap = pre[i + len(subj):]
+    if _subject_in_enumeration(gap):
+        # 封 §1 の除外(先に見る): 語のかかる列挙に主語の語が入っている(「減価償却費や水道光熱費の減少等により」)なら当てない。
+        return None
+    if pre.endswith(CAUSE_ITEM_LIST_TAILS) and any(u in V.UNIT_SCALE for (_a, _b, _v, u, _p) in E.iter_numbers(gap)):
+        return "A"
+    if pre.endswith("の") and post.startswith(CAUSE_ITEM_AFTER) and gap != "の":
+        return "C"
+    return None
+
+
+CAUSE_ITEM_ENUM_HEADS = ("や", "・", "、")           # 字で留める(G4 の除外: 主語の直後の列挙の字)
+CAUSE_ITEM_ENUM_TAILS = ("などの", "等の", "の")      # 字で留める(長い順。語の直前の字)
+_CAUSE_ITEM_ENUM_STOP_RE = re.compile(r"[0-9０-９はがをにで。()（）]")
+
+
+def _subject_in_enumeration(gap):
+    """G4 の除外: gap(主語の字の後ろから向きの語の前まで)が「列挙の字(や・・・、)+ 名詞の並び + の/等の/などの」だけなら真
+    = 主語は語のかかる列挙の 1 つ。並びの中に数字・助詞(は・が・を・に・で)・句点・括弧があれば偽(列挙でなく別の節)。"""
+
+    if not gap.startswith(CAUSE_ITEM_ENUM_HEADS):
+        return False
+    body = gap[1:]
+    for t in CAUSE_ITEM_ENUM_TAILS:
+        if body.endswith(t):
+            body = body[:-len(t)]
+            break
+    else:
+        return False
+    return bool(body) and not _CAUSE_ITEM_ENUM_STOP_RE.search(body)
+
+
+def _cause_item_gate(claim, sentences):
+    """G4: 文字の主張(向きの語)に当てる。既に UNVERIFIABLE の主張には触らない。当たれば結ばず UNVERIFIABLE(CAUSE_ITEM_DIRECTION)、
+    名指していた fact と形は provenance。GROUNDED の行にも当てる(主張の作り方の規則で、照合の結果に依らない)。"""
+
+    if claim.get("word") is None or not claim.get("subject"):
+        return
+    try:
+        if _state_of(claim.get("reason"), claim.get("result")) == "UNVERIFIABLE":
+            return
+    except KeyError:
+        pass
+    form = _cause_item_form(sentences[claim["sentence"]], claim["pos"], claim["word"], claim["subject"])
+    if form is None:
+        return
+    named = [p for p in _pointer_list(claim.get("pointer")) if isinstance(p, str) and p.startswith("xbrl:")]
+    claim["cause_item"] = {"form": form, "named": named, "was": claim.get("result")}
+    claim["pointer"] = None
+    claim["bound"] = False
+    claim["result"] = None
+    claim["recomputed"] = None
+    claim.pop("match", None)
+    claim["reason"] = CAUSE_ITEM_DIRECTION
+
+
+def _numbers_of(profile, s):
+    """G5: 旗が真なら extract.iter_numbers_2026_10_21、偽なら extract.iter_numbers(今までどおり)。"""
+
+    if getattr(profile, "numbers_2026_10_21", False):
+        return E.iter_numbers_2026_10_21(s)
+    return E.iter_numbers(s)
+
+
 _PCT_PHRASE_RE = re.compile(r"(\d+(?:\.\d+)?)\s*(％|%)\s*の?(?:大幅な?)?(増加|減少|増益|減益|増収|減収|増|減)")
 # 語と数の間に許すもの: 助詞、「前期の」、そして「32.5%から」(AからBへ の A)。
 _RATIO_PARTICLE_RE = re.compile(r"^(は|が|を|も|の|、|\s)*(前期(末)?の)?(\d+(?:\.\d+)?\s*[％%]から)?$")
@@ -1606,6 +1841,15 @@ def build_raw_claims(zb, profile, info=None):
             info["rounding_round_only"] = r_only
             info["rounding_truncate_only"] = t_only
     text_claims = _build_raw_text_claims(sentences, facts, contexts, profile, claim_member, rounding, flow_base=flow_base)
+    if getattr(profile, "cause_item_direction", False):
+        # P26 G4(封 docs/XBRL_P26_SEAL_2026-10-21.md): 全部の claim を作った後に 1 度だけ、文字の主張に。G1 より先。
+        for c in text_claims:
+            _cause_item_gate(c, sentences)
+    if getattr(profile, "concept_gate", ()):
+        # P26 G1 concept_gate(封 docs/XBRL_P26_SEAL_2026-10-21.md): 全部の claim を作った後に 1 度だけ。GROUNDED の行には触らない。
+        facts_by_key = {(f["name"], f["context"]): f for f in facts}
+        for c in num_claims + text_claims:
+            _concept_gate(c, profile, facts_by_key)
     if info is not None:
         info["sentences"] = len(sentences)
         info["mdna_chars"] = len(text)
@@ -1752,6 +1996,12 @@ def claim_to_recipe(raw, kind):
         provenance["other_frame"] = raw["other_frame"]   # P24 frame_rebind
     if raw.get("no_same_value") is not None:
         provenance["no_same_value"] = raw["no_same_value"]   # P25: 名指さなかった当期の fact(要素@期・値)
+    if raw.get("other_concept") is not None:
+        provenance["other_concept"] = raw["other_concept"]   # P26 G1: 名指さなかった fact と当たった規則
+    if raw.get("rounded_diff_hold") is not None:
+        provenance["rounded_diff_hold"] = raw["rounded_diff_hold"]   # P26 G3: 名指さなかった残高の対と差
+    if raw.get("cause_item") is not None:
+        provenance["cause_item"] = raw["cause_item"]   # P26 G4: 形と、名指していた fact・その結果
 
     claim = core.Claim(
         id=raw["id"], form=form, subject=raw.get("subject"), value=raw.get("value"),

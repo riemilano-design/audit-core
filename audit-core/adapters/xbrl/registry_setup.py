@@ -61,6 +61,8 @@ _POINTER_NOT_FOUND_REASONS = (
     "no_element(no prior2 for prior-year diff)",
     # P25 last_branch_names_only_if_evidence(封 docs/XBRL_LASTBRANCH_SEAL_2026-10-21.md、profile P25 のみ): 最後の枝で証拠が無く名指さなかった数。名指した fact は provenance。
     "no_same_value",
+    # P26 G1 concept_gate(封 docs/XBRL_P26_SEAL_2026-10-21.md): 当てた fact が文の項目と別の概念(1 株当たり・部分一致の前置き)で「違う」と言わなかった数。名指した fact は provenance。
+    "other_concept",
 )
 
 _UNVERIFIABLE_REASONS = (
@@ -73,6 +75,10 @@ _UNVERIFIABLE_REASONS = (
     "target_or_plan",
     # P24 frame_rebind(試作 v3、profile P24 のみ): 同じ要素の別の枠でだけ合った数。合った枠の context は provenance。
     "other_frame",
+    # P26 G4 cause_item_direction(封 docs/XBRL_P26_SEAL_2026-10-21.md): 向きの語が主語でなく要因の項目にかかる形。名指していた fact と形は provenance。
+    "direction_on_cause_item",
+    # P26 G3 rounded_diff_hold(封 docs/XBRL_P26_SEAL_2026-10-21.md): 丸めた値の差が 2 倍の切り捨ての帯でだけ合う数。名指した対は provenance。
+    "rounded_diff_within_double_band",
 )
 
 

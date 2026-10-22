@@ -61,6 +61,13 @@ ROSTER_SHAS = {"jpcrp_2025-11-01_lab.xml": "df9c23764ec9a63cb65b5ef62e79a2907c59
 UNTOUCHED = {"adapters/xbrl/report.py": "0d2854e659a5d8e0", "adapters/xbrl/verify_document.py": "67e7639de3f5f2ad",
              "adapters/xbrl/vocabulary.py": "27e71e9861fc5aad", "adapters/xbrl/recipes.py": "bff243f13429b553",
              "adapters/xbrl/registry_setup.py": "f42ffe23aaa7673b", "adapters/xbrl/comparators.py": "d8706338325e725b"}
+#: 2026-10-22(P26 の段 1): 封 docs/XBRL_P26_SEAL_2026-10-21.md が engine の 3 file(vocabulary・recipes・registry_setup)と report_customer.py(理由の表に 3 行)を書き換えた。
+#: 上の UNTOUCHED・下の MODULE_SHA16・ENGINE_FP は「測った時点」の値で消さない(記録の C5・R2-7 が測った値)。いまの値は下の *_LATER で、その封が履歴に在るときだけ受け入れる。
+SEAL_P26 = "docs/XBRL_P26_SEAL_2026-10-21.md"
+UNTOUCHED_LATER = {"adapters/xbrl/vocabulary.py": ("83025e9c0525d08b", SEAL_P26), "adapters/xbrl/recipes.py": ("181b370420ab751b", SEAL_P26),
+                   "adapters/xbrl/registry_setup.py": ("7f2cbded9c830211", SEAL_P26)}
+MODULE_LATER = {"sha16": "141767d189b63733", "seal": SEAL_P26}
+ENGINE_FP_LATER = {"adapter_xbrl_py_sha256": ("498993e29055472aaf2e691758e62c02a41cd291654cf205ae0a55a9e55df318", SEAL_P26)}
 #: 測った時点の module(report_customer.py)の sha256 の先頭 16 桁と engine の束ねた指紋。module が動けば測り直す。
 MODULE_SHA16 = "715468699973cc4a"
 ENGINE_FP = {"adapter_xbrl_py_sha256": "11840a097f04dcb4c01f057ce78d39c3aedabf139e65dbc5620e28c109f64693", "adapter_xbrl_py_files": 16,
@@ -297,17 +304,35 @@ def check_judgments(rec, seal):
     assert sorted(rec[u"予測の判定"]) == sorted(got) == ["R2-%d" % i for i in range(1, 8)]
 
 
+def declared(seal_rel):
+    return bool(subprocess.run(["git", "log", "--diff-filter=A", "--format=%H", "--", seal_rel], cwd=ROOT, capture_output=True, text=True).stdout.split())
+
+
 def check_untouched_and_module(rec):
     c7 = rec[u"R2-7"]
     for rel, want in sorted(UNTOUCHED.items()):
-        assert sha16(rel) == want, u"**%s が動いている(この封は触らない)**" % rel
+        got = sha16(rel)
+        if got != want and rel in UNTOUCHED_LATER:
+            later, seal_rel = UNTOUCHED_LATER[rel]
+            assert declared(seal_rel), u"**%s が動いているのに、遷移を宣言した封 %s が履歴に無い**" % (rel, seal_rel)
+            assert got == later, u"**%s が、宣言された遷移の値とも違う**" % rel
+        else:
+            assert got == want, u"**%s が動いている(この封は触らない)**" % rel
         assert c7[u"sha256"][rel][:16] == want
     assert c7[u"report_customer.py の sha256"][:16] == MODULE_SHA16
-    assert c7[u"report_customer.py の sha256"] == sha_path(os.path.join(ROOT, MODULE_REL)), u"**module が測った時点から動いている(測り直す)**"
+    now = sha_path(os.path.join(ROOT, MODULE_REL))
+    if now != c7[u"report_customer.py の sha256"]:
+        assert declared(MODULE_LATER["seal"]), u"**module が測った時点から動いているのに、遷移を宣言した封が履歴に無い**"
+        assert now[:16] == MODULE_LATER["sha16"], u"**module が、宣言された遷移の値とも違う**"
     from adapters.xbrl import verify_document as VD
     fp = VD.engine_fingerprint()
     for k, v in ENGINE_FP.items():
-        assert fp[k] == v, u"**engine の指紋 %s が測った時点から動いている(測り直す)**" % k
+        if fp[k] != v and k in ENGINE_FP_LATER:
+            later, seal_rel = ENGINE_FP_LATER[k]
+            assert declared(seal_rel), u"**engine の指紋 %s が動いているのに、遷移を宣言した封が履歴に無い**" % k
+            assert fp[k] == later, u"**engine の指紋 %s が、宣言された遷移の値とも違う**" % k
+        else:
+            assert fp[k] == v, u"**engine の指紋 %s が測った時点から動いている(測り直す)**" % k
     assert c7[u"engine の指紋"] == ENGINE_FP
     assert c7[u"core/ の HEAD からの差分"] == u"0 行"
 

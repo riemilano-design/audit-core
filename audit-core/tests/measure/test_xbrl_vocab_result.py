@@ -70,9 +70,14 @@ ENGINE_AT_MEASURE = {"adapters/xbrl/vocabulary.py": "83498c04a7b70396", "adapter
 #: registry_setup.py に理由 no_same_value(+2 行)を足した(DEFAULT_PROFILE は P22 のまま)。上の ENGINE_AT_MEASURE は残す(測った時点の値)。
 #: 受け入れるのは、その封が履歴に在り、値が P25 の段 1 の後の値のときだけ。
 SEAL_LASTBRANCH = "docs/XBRL_LASTBRANCH_SEAL_2026-10-21.md"
-ENGINE_LATER = {"adapters/xbrl/vocabulary.py": ("27e71e9861fc5aad", SEAL_LASTBRANCH),
-                "adapters/xbrl/recipes.py": ("bff243f13429b553", SEAL_LASTBRANCH),
-                "adapters/xbrl/registry_setup.py": ("f42ffe23aaa7673b", SEAL_LASTBRANCH)}
+SEAL_P26 = "docs/XBRL_P26_SEAL_2026-10-21.md"    # 2026-10-22 追記: P26 の段 1(下の ENGINE_LATER の遷移)
+ENGINE_LATER = {"adapters/xbrl/vocabulary.py": ("83025e9c0525d08b", SEAL_P26),
+                # 2026-10-22(P26 の段 1): 封 docs/XBRL_P26_SEAL_2026-10-21.md(engine を変える。人間の事前承認 2026-10-21)で recipes.py に G1〜G5 の塊(+251 行・-1 行。既存の行の書き換えは数の読み取りの for 文 1 行だけ) を足した。
+                # bff243f13429b553(P25 の段 1)は残す(測った時点の値)、P26 の段 1 で 181b370420ab751b。受け入れるのは、その封が履歴に在り、値が P26 の段 1 の後の値のときだけ。
+                "adapters/xbrl/recipes.py": ("181b370420ab751b", SEAL_P26),
+                # 2026-10-22(P26 の段 1): 封 docs/XBRL_P26_SEAL_2026-10-21.md(engine を変える。人間の事前承認 2026-10-21)で registry_setup.py に理由 3 つ(+6 行) を足した。
+                # f42ffe23aaa7673b(P25 の段 1)は残す(測った時点の値)、P26 の段 1 で 7f2cbded9c830211。受け入れるのは、その封が履歴に在り、値が P26 の段 1 の後の値のときだけ。
+                "adapters/xbrl/registry_setup.py": ("7f2cbded9c830211", SEAL_P26)}
 
 
 def jtext(p):

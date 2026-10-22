@@ -32,18 +32,18 @@
 
 ## §2 測った事実 ― **変更前**(試験は走らせず、収集だけ数えた)
 
-### §2-1 ディスク上の試験 file: **216 本**(**いまの数**。門を足すと増える)
+### §2-1 ディスク上の試験 file: **218 本**(**いまの数**。門を足すと増える)
 
 | ディレクトリ | file |
 |---|---|
 | `measure/tests` | 1 |
 | `tests/adapters/kokkai` | 11 |
 | `tests/adapters/shogi` | 8 |
-| `tests/adapters/xbrl` | 31 |
+| `tests/adapters/xbrl` | 32 |
 | `tests/core` | 5 |
 | `tests/fixtures/xbrl` | 4 |
 | `tests/golden` | 4 |
-| `tests/measure` | 152 |
+| `tests/measure` | 153 |
 
 **2026-10-20 に +2**(`tests/measure/test_packaging.py`・`tests/measure/test_packaging_result.py`。
 包装の封 `docs/PACKAGING_SEAL_2026-10-20.md` の G-5)。176 → 178、`tests/measure` 118 → 120。
@@ -134,6 +134,9 @@
 
 **2026-10-22 に +1**(`tests/measure/test_xbrl_p26_seal.py`。
 「違う」に出る正しい文の主因を減らす engine の直し P26 の封 `docs/XBRL_P26_SEAL_2026-10-21.md` の封の門)。215 → 216(`tests/measure` 151 → 152)。
+
+**2026-10-22 に +2**(`tests/adapters/xbrl/test_recipes_p26.py`・`tests/measure/test_xbrl_p26_result.py`。
+「違う」に出る正しい文の主因を減らす engine の直し P26 の段 1 の engine の試験と、結果(記録 `fixtures/xbrl/p26_2026-10-21.json`・文書 `docs/XBRL_P26_RESULT_2026-10-21.md`)を縛る門)。216 → 218(`tests/adapters/xbrl` 31 → 32・`tests/measure` 152 → 153)。
 
 **この節だけは「いま」の数である**(門 `DocTest` が記録と突き合わせる)。
 下の §2-2 は**変更前の実測**で、後の記録と結び付けない。

@@ -68,8 +68,14 @@ ENGINE_FP_AT_MEASURE = {"adapter_xbrl_py_files": 16, "core_py_sha256": "34e836bb
 MODULE_COMMIT_AT_MEASURE = "c13a746"
 ENGINE_ADAPTER_SHA_AT_MEASURE = "c556de1cb26e975a172d54a4e39f4971bb5c11a5fd8a02a8404b9a719eb27acb"   # 測った当時(記録の C5 と同じ字)
 FIX_SEAL_REL = "docs/XBRL_CUSTOMER_REPORT_FIX_SEAL_2026-10-21.md"
-MODULE_LATER = {"sha16": "715468699973cc4a", "seal": FIX_SEAL_REL}
-ENGINE_ADAPTER_SHA_LATER = {"value": "11840a097f04dcb4c01f057ce78d39c3aedabf139e65dbc5620e28c109f64693", "seal": FIX_SEAL_REL}
+#: 報告形の直し 段 1 の後の値は 715468699973cc4a・11840a09…(残す。測った時点の次の値)。2026-10-22(P26 の段 1): 封 docs/XBRL_P26_SEAL_2026-10-21.md が report_customer.py の理由の表に 3 行・
+#: engine の 4 file(extract・vocabulary・recipes・registry_setup)を書き換えたので、いまの値は下の値(その封が履歴に在るときだけ受け入れる)。
+SEAL_P26 = "docs/XBRL_P26_SEAL_2026-10-21.md"
+MODULE_LATER = {"sha16": "141767d189b63733", "seal": SEAL_P26}
+ENGINE_ADAPTER_SHA_LATER = {"value": "498993e29055472aaf2e691758e62c02a41cd291654cf205ae0a55a9e55df318", "seal": SEAL_P26}
+UNTOUCHED_LATER = {"adapters/xbrl/vocabulary.py": ("83025e9c0525d08b", SEAL_P26), "adapters/xbrl/recipes.py": ("181b370420ab751b", SEAL_P26),
+                   "adapters/xbrl/registry_setup.py": ("7f2cbded9c830211", SEAL_P26)}
+P26_REASONS = {"other_concept", "direction_on_cause_item", "rounded_diff_within_double_band"}
 ALLOWED_RESIDUAL = []
 YEN_KEY = u"文の字に百万円・千円・億円・兆円があるが claim の単位が円の行(span の字から数えた概数)"
 #: 報告の末尾の指紋の行の prefix。報告の「本体」= この 1 行だけを除いた残り(git の欄は HEAD で、adapters の欄は engine の file で変わる)。
@@ -249,12 +255,16 @@ def check_judgments(rec, seal):
 
 
 def live_c3():
-    u"""C-3 を記録でなく、いまの module と登録簿から求める。16 の集合が一致し、1 つ消すと網羅が赤、実測の reason が表の外に出ない。"""
+    u"""C-3 を記録でなく、いまの module と登録簿から求める。測った時点の 16 の集合(+ P26 の封が履歴に在るなら、P26 が足した 3 つ)が登録簿と一致し、
+    1 つ消すと網羅が赤、実測の reason が表の外に出ない。"""
     from adapters.xbrl import recipes as R
     from adapters.xbrl import registry_setup as RS
     from adapters.xbrl import report_customer as RC
     reg = set(RS._POINTER_NOT_FOUND_REASONS) | set(RS._UNVERIFIABLE_REASONS)
-    if len(reg) != 16 or reg != set(R.UNBOUND_REASON_STATE) | {"other_frame", "no_same_value"}:
+    want = set(R.UNBOUND_REASON_STATE) | {"other_frame", "no_same_value"}
+    if git("log", "--diff-filter=A", "--format=%H", "--", SEAL_P26).stdout.split():
+        want |= P26_REASONS         # 登録簿の理由 16 → 19(封 docs/XBRL_P26_SEAL_2026-10-21.md §2 Q-7)
+    if len(reg) != len(want) or reg != want:
         return False
     if set(RC.REASON_JA) != reg:
         return False
@@ -404,7 +414,13 @@ def git_show_measured_module():
 
 def check_untouched_and_module(rec):
     for rel, want in sorted(UNTOUCHED.items()):
-        assert sha16(rel) == want, u"**%s が動いている(この封は触らない)**" % rel
+        got = sha16(rel)
+        if got != want and rel in UNTOUCHED_LATER:
+            later, seal_rel = UNTOUCHED_LATER[rel]
+            assert git("log", "--diff-filter=A", "--format=%H", "--", seal_rel).stdout.split(), u"**%s が動いているのに、遷移を宣言した封 %s が履歴に無い**" % (rel, seal_rel)
+            assert got == later, u"**%s が、宣言された遷移の値とも違う**" % rel
+        else:
+            assert got == want, u"**%s が動いている(この封は触らない)**" % rel
         assert rec[u"C5"][u"sha256"][rel][:16] == want
     # 記録の module の sha256 は、履歴の測った当時の module と一致する(記録を履歴に縛る)
     assert rec[u"C5"][u"report_customer.py の sha256"] == hashlib.sha256(git_show_measured_module()).hexdigest(), u"**記録の module の sha256 が履歴の %s と違う**" % MODULE_COMMIT_AT_MEASURE

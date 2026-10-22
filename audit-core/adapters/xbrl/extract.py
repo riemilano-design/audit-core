@@ -86,6 +86,48 @@ def _iter_numbers(s):
         yield m.start(), m.end(), sign * num, unit, (V.UNIT_SCALE.get(unit) or 1.0)
 
 
+# ---------------------------------------------------------------------------
+# P26 G5(封 docs/XBRL_P26_SEAL_2026-10-21.md §1): 数の読み取りの 3 つの連結。profile.numbers_2026_10_21 が真のときだけ
+# recipes から呼ばれる。``iter_numbers`` は 1 字も変えない(写し元との照合 test_lineage はそのまま)。
+#   兆と億: 「2兆3,471億円」(億の数にカンマ。既存の AMOUNT_JP_RE は億の数にカンマを許さず、NUM_RE が「3,471億円」だけを読む)
+#   万と千: 「6万5千円」(既存は 千 を 万 の前の位として読むので「5千円」だけを読む)
+#   円と銭: 「148円22銭」(既存は「148円」だけを読む)
+# 当たった範囲は既存の読みより先に取り、既存の読みのうち範囲が重なるものは捨てる。単位は「円」、精度は書かれた最小の位。
+# ---------------------------------------------------------------------------
+_SIGN_2026_10_21 = r"(?<![\d.,])(△|▲|－|-|マイナス)?\s*"
+_CHO_OKU_RE_2026_10_21 = re.compile(_SIGN_2026_10_21 + r"(\d+(?:\.\d+)?)兆(\d{1,3}(?:,\d{3})+)億円")
+_MAN_SEN_RE_2026_10_21 = re.compile(_SIGN_2026_10_21 + r"(\d{1,3}(?:,\d{3})+|\d+)万(\d+)千(?:(\d+)百)?円")
+_YEN_SEN_RE_2026_10_21 = re.compile(_SIGN_2026_10_21 + r"(\d{1,3}(?:,\d{3})+|\d+)円(\d{1,2})銭")
+
+
+def _joined_numbers_2026_10_21(s):
+    for m in _CHO_OKU_RE_2026_10_21.finditer(s):
+        yen = float(m.group(2)) * 1e12 + float(m.group(3).replace(",", "")) * 1e8
+        yield m.start(), m.end(), (-1 if m.group(1) else 1) * yen, "円", 1e8
+    for m in _MAN_SEN_RE_2026_10_21.finditer(s):
+        yen = float(m.group(2).replace(",", "")) * 1e4 + float(m.group(3)) * 1e3
+        prec = 1e3
+        if m.group(4):
+            yen += float(m.group(4)) * 1e2
+            prec = 1e2
+        yield m.start(), m.end(), (-1 if m.group(1) else 1) * yen, "円", prec
+    for m in _YEN_SEN_RE_2026_10_21.finditer(s):
+        yen = float(m.group(2).replace(",", "")) + float(m.group(3)) / 100.0
+        yield m.start(), m.end(), (-1 if m.group(1) else 1) * yen, "円", 0.01
+
+
+def iter_numbers_2026_10_21(s):
+    """``iter_numbers`` に G5 の 3 つの連結を足した読み。連結に当たった範囲と重なる既存の読みは捨てる。"""
+
+    joined = sorted(_joined_numbers_2026_10_21(s), key=lambda t: t[0])
+    kept = []
+    for t in joined:
+        if not any(a < t[1] and t[0] < b for a, b, _v, _u, _p in kept):
+            kept.append(t)
+    rest = [t for t in _iter_numbers(s) if not any(a < t[1] and t[0] < b for a, b, _v, _u, _p in kept)]
+    return sorted(kept + rest, key=lambda t: t[0])
+
+
 # P17 B1(計画 docs/P17_PLAN_2026-10-14.md §1): 原因の印。字で書く。
 CAUSE_MARK_RE = re.compile(r"により|による|によって")
 

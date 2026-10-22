@@ -130,7 +130,8 @@ class FlagShapeTest(unittest.TestCase):
     def test_the_flag_is_false_by_default_and_true_only_for_p25(self):
         fields = {f.name: f for f in dataclasses.fields(V.Profile)}
         self.assertIs(False, fields["last_branch_names_only_if_evidence"].default)
-        self.assertEqual(["P25"], sorted(n for n, p in V.PROFILES.items() if p.last_branch_names_only_if_evidence))
+        # 2026-10-22 P26 = P25 + 旗 5 つ(封 XBRL_P26_SEAL_2026-10-21)は P25 の旗を引き継ぐ
+        self.assertEqual(["P25", "P26"], sorted(n for n, p in V.PROFILES.items() if p.last_branch_names_only_if_evidence))
 
     def test_with_the_flag_false_p25_is_p24(self):
         self.assertEqual(dataclasses.replace(V.P24, name="P25_OFF"), P25_OFF)
@@ -216,7 +217,7 @@ class FlagsOffIsP24Test(unittest.TestCase):
         """P1〜P24 は旗を持たない(偽)ので、証拠なしの文でも P21 の名指しのまま。"""
         facts = [nfact(5000000), nfact(4000000, PRI)]
         for p in sorted(V.PROFILES):
-            if p == "P25":
+            if p in ("P25", "P26"):       # P26 = P25 + 旗 5 つ(封 XBRL_P26_SEAL_2026-10-21)は P25 の旗を引き継ぐ
                 continue
             c = lb(p, sentence_of("7,777"), "7,777", "千円", facts)
             self.assertNotEqual(NSV, c["reason"], p)

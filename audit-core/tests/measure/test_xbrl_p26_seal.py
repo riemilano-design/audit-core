@@ -80,7 +80,14 @@ UNTOUCHED = {"adapters/xbrl/__init__.py": "65474b49e6b84626",
              "adapters/xbrl/verify_external.py": "0ae333392551912c"}
 # 宣言された遷移(段 1 の commit で足す): {path: (後の sha16, 遷移を宣言した封の path)}。封の commit 時点では空。ENGINE_AT_SEAL は消さない。
 # (変数名を ENGINE_LATER にしない: P25 の封の門 test_10 が tests/measure の「行頭の ENGINE_LATER = {」を数えて一覧と突き合わせるので、名前が同じだと既存の門が赤になる。段 1 の結果の門も同じ)
-ENGINE_TRANSITIONS = {}
+# 2026-10-22(段 1 の実装の便): 封が宣言した遷移。engine の 5 file が書き換わった(extract.py +42/-0・vocabulary.py +17/-0・recipes.py +251/-1・registry_setup.py +6/-0・
+# report_customer.py +7/-2。comparators.py・report.py・verify_document.py・core/ は 0 行)。ENGINE_AT_SEAL(封の commit 時点の値)は消さない。
+# 受け入れるのは、この封が履歴に在り、値が段 1 の後の値のときだけ。
+ENGINE_TRANSITIONS = {"adapters/xbrl/extract.py": ("9982599fc31cbab3", SEAL_REL),
+                      "adapters/xbrl/vocabulary.py": ("83025e9c0525d08b", SEAL_REL),
+                      "adapters/xbrl/recipes.py": ("181b370420ab751b", SEAL_REL),
+                      "adapters/xbrl/registry_setup.py": ("7f2cbded9c830211", SEAL_REL),
+                      "adapters/xbrl/report_customer.py": ("141767d189b63733", SEAL_REL)}
 
 # 封の commit 時点の engine の束ねた指紋(verify_document.engine_fingerprint())と frozen_bundle。**宣言された遷移の前の値**で、消さない。
 FINGERPRINT_AT_SEAL = {"adapter_xbrl_py_sha256": "11840a097f04dcb4c01f057ce78d39c3aedabf139e65dbc5620e28c109f64693",
@@ -91,8 +98,9 @@ FROZEN_BUNDLE_AT_SEAL = "5c4da2e2ff3f30b7dcb6ebcbc84a5c68b074e8dc495f2d260551d7e
 FROZEN_COUNT_AT_SEAL = 37
 # 宣言された遷移(段 1 の commit で足す): {欄: (後の値, 遷移を宣言した封の path)}。封の commit 時点では空。
 # adapter_xbrl_py_files は 16 のまま(file の数は動かない。段 1 が足すのは tests / measure / fixtures / docs で、adapters/ には 1 file も足さない)。
-LATER_FINGERPRINT = {}
-LATER_FROZEN = {}
+# 段 1 の実装の便: 束ねた指紋が 11840a09…(封の commit 時点)から 498993e2… に動き(file の数 16 は動かない)、frozen_bundle の世代がもう 1 つ増えた(a97ecf7c…。本数は 37 のまま)。
+LATER_FINGERPRINT = {"adapter_xbrl_py_sha256": ("498993e29055472aaf2e691758e62c02a41cd291654cf205ae0a55a9e55df318", SEAL_REL)}
+LATER_FROZEN = {"bundle": ("a97ecf7c44e60c45bf6e6c23439c59955aad8bddf26b1174ee1e0ebabfd59c7c", SEAL_REL)}
 
 # §1「触る枝の中の人間の決定」の 9 つ(封の字の順)と、決定の commit が履歴に在ること
 DECISIONS = (u"案ア(no_subject)", u"§1b の止め", u"C2 `period_cue`", u"C-1g §1-3 `_build_point_diff_claim`", u"P21 の最後の枝",
@@ -794,8 +802,9 @@ class EngineAtSealTest(unittest.TestCase):
         self.assertIn(u"- tests/adapters/xbrl の登録の一覧・profile の一覧・理由の表の試験(", pin)
         self.assertIn(u"新しい門で engine の留めを定義するときは `ENGINE_LATER` の名を使わない", pin)
         # 理由の数を字で留める門(Q-7 の 16)は報告形の封と登録簿の試験の 2 か所
-        self.assertIn("), 9)", text(os.path.join(ROOT, "tests/adapters/xbrl/test_registry_setup.py")))
-        self.assertIn(u"(9, 7)", text(os.path.join(ROOT, "tests/measure/test_xbrl_customer_report_seal.py")))
+        # 段 1 の実装の便(2026-10-22)で理由が 3 つ増えたので、留める数は (10, 9)・19。封の commit 時点の (9, 7)・16 は封の Q-7 の字「16 → 19」が持つ
+        self.assertIn("len(RS._POINTER_NOT_FOUND_REASONS), 10)", text(os.path.join(ROOT, "tests/adapters/xbrl/test_registry_setup.py")))
+        self.assertIn(u"(10, 9)", text(os.path.join(ROOT, "tests/measure/test_xbrl_customer_report_seal.py")))
 
 
 class OrderTest(unittest.TestCase):

@@ -40,6 +40,7 @@ sys.path.insert(0, ROOT)
 sys.path.insert(0, os.path.join(ROOT, "core", "py"))
 
 SEAL_REL = "docs/XBRL_LASTBRANCH_SEAL_2026-10-21.md"
+SEAL_P26 = "docs/XBRL_P26_SEAL_2026-10-21.md"    # 2026-10-22 追記: P26 の段 1(下の ENGINE_LATER の遷移)
 SEAL = os.path.join(ROOT, SEAL_REL)
 VOCAB_JSON = os.path.join(ROOT, "fixtures", "xbrl", "vocab_2026-10-21.json")
 
@@ -62,9 +63,13 @@ ENGINE_AT_SEAL = {"adapters/xbrl/vocabulary.py": "83498c04a7b70396",
 # 2026-10-21 追記(段 1 の実装): vocabulary.py は旗 last_branch_names_only_if_evidence・P25・PROFILES の登録(+7 行・-0 行)、recipes.py は最後の枝の証拠の判定の塊
 # (+72 行・-0 行。既存の行は 1 つも書き換えない)、registry_setup.py は理由 no_same_value(+2 行)。comparators.py・core/ は 0 行。DEFAULT_PROFILE は P22 のまま。
 # ENGINE_AT_SEAL は残す(封の commit 時点の値)。
-ENGINE_LATER = {"adapters/xbrl/vocabulary.py": ("27e71e9861fc5aad", SEAL_REL),
-                "adapters/xbrl/recipes.py": ("bff243f13429b553", SEAL_REL),
-                "adapters/xbrl/registry_setup.py": ("f42ffe23aaa7673b", SEAL_REL)}
+ENGINE_LATER = {"adapters/xbrl/vocabulary.py": ("83025e9c0525d08b", SEAL_P26),
+                # 2026-10-22(P26 の段 1): 封 docs/XBRL_P26_SEAL_2026-10-21.md(engine を変える。人間の事前承認 2026-10-21)で recipes.py に G1〜G5 の塊(+251 行・-1 行。既存の行の書き換えは数の読み取りの for 文 1 行だけ) を足した。
+                # bff243f13429b553(P25 の段 1)は残す(測った時点の値)、P26 の段 1 で 181b370420ab751b。受け入れるのは、その封が履歴に在り、値が P26 の段 1 の後の値のときだけ。
+                "adapters/xbrl/recipes.py": ("181b370420ab751b", SEAL_P26),
+                # 2026-10-22(P26 の段 1): 封 docs/XBRL_P26_SEAL_2026-10-21.md(engine を変える。人間の事前承認 2026-10-21)で registry_setup.py に理由 3 つ(+6 行) を足した。
+                # f42ffe23aaa7673b(P25 の段 1)は残す(測った時点の値)、P26 の段 1 で 7f2cbded9c830211。受け入れるのは、その封が履歴に在り、値が P26 の段 1 の後の値のときだけ。
+                "adapters/xbrl/registry_setup.py": ("7f2cbded9c830211", SEAL_P26)}
 
 # §1「過去の門の engine の留め」の一覧(封の字)と、実物の在りか。
 # ENGINE_LATER を持つ門 14 本 = ENGINE_LATER 系 6 本 + 結果 / 封の門 8 本(point_prior_result・ritual_result・period_bind seal/result・
@@ -503,7 +508,7 @@ class SealTest(unittest.TestCase):
         self.assertEqual(V.PROFILES["P24"], dataclasses.replace(V.P23, name="P24", vocab_2026_10_21=True, frame_rebind=True))
         self.assertEqual(V.DEFAULT_PROFILE, "P22")
         for flag in ("vocab_2026_10_21", "frame_rebind"):
-            self.assertEqual(sorted(n for n, p in V.PROFILES.items() if getattr(p, flag)), ["P24"] if "P25" not in V.PROFILES else ["P24", "P25"], flag)
+            self.assertEqual(sorted(n for n, p in V.PROFILES.items() if getattr(p, flag)), ["P24", "P25", "P26"], flag)   # 2026-10-22: P26 = P25 + 旗 5 つ(封 XBRL_P26_SEAL_2026-10-21)も引き継ぐ
 
     def test_10_engine_pins_list_is_written_and_exists(self):
         b = sec(self.t, "## §1", "## §2")
@@ -600,7 +605,7 @@ class EngineAtSealTest(unittest.TestCase):
         flag = "last_branch_names_only_if_evidence"
         self.assertIn(flag, fields)
         self.assertIs(fields[flag].default, False)
-        self.assertEqual(sorted(n for n, p in V.PROFILES.items() if getattr(p, flag)), ["P25"])
+        self.assertEqual(sorted(n for n, p in V.PROFILES.items() if getattr(p, flag)), ["P25", "P26"])   # 2026-10-22: P26 = P25 + 旗 5 つ(封 XBRL_P26_SEAL_2026-10-21)も引き継ぐ
         self.assertEqual(V.PROFILES["P25"], dataclasses.replace(V.P24, name="P25", last_branch_names_only_if_evidence=True))
         self.assertEqual(V.DEFAULT_PROFILE, "P22")
         from adapters.xbrl import registry_setup as RS

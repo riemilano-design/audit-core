@@ -113,6 +113,14 @@ FROZEN_BUNDLE_GENERATIONS = (
      "(判定と節の割り当ては変えない。report.py・verify_document.py・vocabulary.py・recipes.py・registry_setup.py・comparators.py・core/py は 0 行)。"
      "人間の事前承認 2026-10-21 朝「報告形の問題はきちんと解決して」「あとは全て任せる」、封 docs/XBRL_CUSTOMER_REPORT_FIX_SEAL_2026-10-21.md(commit 9dfb608)。"
      "対象 37 本のまま(FROZEN_COUNT 37)。独立監査 GO の前に測った値(commit 前)"),
+    ("a97ecf7c44e60c45bf6e6c23439c59955aad8bddf26b1174ee1e0ebabfd59c7c",
+     "2026-10-22 feature/audit-core-final-eval-8(「違う」に出る正しい文の主因を減らす P26 の段 1): vocabulary.py に旗 5 つ(concept_gate・last_branch_digit_needs_size・"
+     "rounded_diff_hold・cause_item_direction・numbers_2026_10_21)・P26(= P25 + 旗 5 つ)・PROFILES の登録を足し(+17 行・-0 行)、recipes.py に G1〜G5 の塊を足し"
+     "(+251 行・-1 行。既存の行の書き換えは数の読み取りの for 文 1 行だけ)、extract.py に新しい関数 iter_numbers_2026_10_21 を足し(+42 行・-0 行。iter_numbers の字は変えない)、"
+     "registry_setup.py に理由 3 つを足し(+6 行)、report_customer.py の理由の表に 3 行を足した(+7 行・-2 行。判定と節の割り当ては変えない)。"
+     "comparators.py・report.py・verify_document.py・core/py は 0 行。DEFAULT_PROFILE は P22 のまま。"
+     "人間の事前承認 2026-10-21、封 docs/XBRL_P26_SEAL_2026-10-21.md(commit a8d8099)。"
+     "対象 37 本のまま(FROZEN_COUNT 37)。独立監査 GO の前に測った値(commit 前)"),
 )
 
 # 字で留めるのは**いまの世代**。--expect を値なしで渡したときの既定。

@@ -68,7 +68,11 @@ RITUAL_ZIP_SHA = "03521437be23c8e2a02d85b4bc29a215646803582e9101fdf1855210411747
 ENGINE_AT_MEASURE = {"adapters/xbrl/vocabulary.py": "27e71e9861fc5aad", "adapters/xbrl/comparators.py": "d8706338325e725b",
                      "adapters/xbrl/recipes.py": "bff243f13429b553", "adapters/xbrl/registry_setup.py": "f42ffe23aaa7673b"}
 #: 段 2(既定の切り替え)などで動いたときの宣言された遷移: {path: (後の sha16, 遷移を宣言した封の path)}。段 1 の commit 時点では空。
-ENGINE_LATER = {}
+#: 2026-10-22(P26 の段 1): 封 docs/XBRL_P26_SEAL_2026-10-21.md(engine を変える。人間の事前承認 2026-10-21)で vocabulary.py・recipes.py・registry_setup.py が動いた。受け入れるのは、その封が履歴に在り、値が P26 の段 1 の後の値のときだけ。
+SEAL_P26 = "docs/XBRL_P26_SEAL_2026-10-21.md"
+ENGINE_LATER = {"adapters/xbrl/vocabulary.py": ("83025e9c0525d08b", SEAL_P26),
+                "adapters/xbrl/recipes.py": ("181b370420ab751b", SEAL_P26),
+                "adapters/xbrl/registry_setup.py": ("7f2cbded9c830211", SEAL_P26)}
 
 
 def jtext(p):
@@ -1047,12 +1051,17 @@ class MutationTest(unittest.TestCase):
         global ENGINE_AT_MEASURE, ENGINE_LATER
         old, old_later = dict(ENGINE_AT_MEASURE), dict(ENGINE_LATER)
         try:
-            ENGINE_LATER = {}
             for rel in sorted(old):
                 if rel == "adapters/xbrl/comparators.py":
                     continue
+                # 2026-10-22: 遷移が宣言されている file は、宣言された後の sha を取り違えたときに赤(測った時点の sha は遷移で見ないので)
+                if rel in old_later:
+                    ENGINE_LATER = dict(old_later, **{rel: ("0" * 16, old_later[rel][1])})
+                    self._red(engine_ok)
+                ENGINE_LATER = {}
                 ENGINE_AT_MEASURE = dict(old, **{rel: "0" * 16})
                 self._red(engine_ok)
+                ENGINE_AT_MEASURE = dict(old)
         finally:
             ENGINE_AT_MEASURE, ENGINE_LATER = old, old_later
         engine_ok()

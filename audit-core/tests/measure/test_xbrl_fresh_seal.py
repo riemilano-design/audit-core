@@ -114,7 +114,8 @@ def is_roster(path):
 #: 2026-10-21 追記(pin の遷移。顧客向けの報告形の直し、封 docs/XBRL_CUSTOMER_REPORT_FIX_SEAL_2026-10-21.md): draw の commit の**後**に追跡された file で、docID を名指すもの。
 #: draw の再計算(test_23)は『draw の commit 時点で名前が出ていた file』と記録を比べるので、後の file は数えない。ここに足してよいのは、
 #: **draw の commit より後に足された file**だけ(追跡されているときは git の履歴で確かめる。draw は動かさない)。
-LATER_NAMING_FILES = ("fixtures/xbrl/customer_report_fix_2026-10-21.json",)
+# 2026-10-22 追記(P26 の段 1): 結果の記録 fixtures/xbrl/p26_2026-10-21.json も docID を名指す(書類 67 本の sha256 の一覧)。前例と同じ扱いで、追跡された後も引きを動かさない。
+LATER_NAMING_FILES = ("fixtures/xbrl/customer_report_fix_2026-10-21.json", "fixtures/xbrl/p26_2026-10-21.json")
 
 
 def drop_later_naming_files(named):

@@ -66,6 +66,14 @@ UNTOUCHED = {"adapters/xbrl/report.py": "0d2854e659a5d8e0",              # 人�
              "adapters/xbrl/recipes.py": "bff243f13429b553",
              "adapters/xbrl/registry_setup.py": "f42ffe23aaa7673b"}
 
+# 2026-10-22(P26 の段 1): 封 docs/XBRL_P26_SEAL_2026-10-21.md が engine の vocabulary.py(+17)・recipes.py(+251/-1)・registry_setup.py(+6)を書き換えた
+# (extract.py・report_customer.py も。この封の UNTOUCHED の外)。上の UNTOUCHED は「この封は触らない」の値(封の commit 時点)で消さない。
+# 受け入れるのは、その封が履歴に在り、値が P26 の段 1 の後の値のときだけ。report.py・verify_document.py は遷移を持たない(動いたら赤のまま)。
+SEAL_P26 = "docs/XBRL_P26_SEAL_2026-10-21.md"
+UNTOUCHED_LATER = {"adapters/xbrl/vocabulary.py": ("83025e9c0525d08b", SEAL_P26), "adapters/xbrl/recipes.py": ("181b370420ab751b", SEAL_P26),
+                   "adapters/xbrl/registry_setup.py": ("7f2cbded9c830211", SEAL_P26)}
+P26_REASONS = ("other_concept", "direction_on_cause_item", "rounded_diff_within_double_band")
+
 # 封の commit 時点の engine の束ねた指紋(verify_document.engine_fingerprint())と frozen_bundle。**宣言された遷移の前の値**で、消さない。
 FINGERPRINT_AT_SEAL = {"adapter_xbrl_py_sha256": "8137596dc4eb7aa7d5446c85b46bcbf2cc6c2d458a0b439bd190ee291ac424c4",
                        "adapter_xbrl_py_files": 15,
@@ -83,13 +91,16 @@ FINGERPRINT_LATER = {
     # module が動けばここも動く(測り直す)。測った当時の値(FINGERPRINT_AT_SEAL)は残す。
     # 2026-10-21 追記(顧客向けの報告形の直し。封 docs/XBRL_CUSTOMER_REPORT_FIX_SEAL_2026-10-21.md が宣言した遷移): module の中身が動き、束ねた指紋が
     # c556de1c…(段 1)から 11840a09… に動いた。file の数 16 は動かない。受け入れるのは、その封が履歴に在り、値が下の値のときだけ。
-    "adapter_xbrl_py_sha256": ("11840a097f04dcb4c01f057ce78d39c3aedabf139e65dbc5620e28c109f64693", FIX_SEAL_REL),
+    # 2026-10-22 追記(P26 の段 1。封 docs/XBRL_P26_SEAL_2026-10-21.md が宣言した遷移): engine の 4 file と module が動き、束ねた指紋が 11840a09…(報告形の直し)から 498993e2… に動いた。
+    "adapter_xbrl_py_sha256": ("498993e29055472aaf2e691758e62c02a41cd291654cf205ae0a55a9e55df318", SEAL_P26),
     "adapter_xbrl_py_files": (16, SEAL_REL),
 }
 # 実装の便の後の frozen_bundle(FROZEN_COUNT 36 → 37・新しい世代。report_customer.py を git add した状態で測る)。封の commit 時点の値(FROZEN_BUNDLE_AT_SEAL)は残す。
 FROZEN_BUNDLE_STAGE1 = "66f906c89205f0ef361e13fe051dbdeaed75a032e0d60ca832f6d605166f3b36"   # 段 1(c13a746)の世代。消さない
 # 2026-10-21 追記(顧客向けの報告形の直し): 同じ 37 本のまま module の中身が動き、世代がもう 1 つ増えた。最新の世代はこの値。
 FROZEN_BUNDLE_AFTER = "5c4da2e2ff3f30b7dcb6ebcbc84a5c68b074e8dc495f2d260551d7e10a4ce66c"
+# 2026-10-22 追記(P26 の段 1): 同じ 37 本のまま engine の 4 file と module が動き、世代がもう 1 つ増えた。最新の世代はこの値。
+FROZEN_BUNDLE_P26 = "a97ecf7c44e60c45bf6e6c23439c59955aad8bddf26b1174ee1e0ebabfd59c7c"
 FROZEN_COUNT_AFTER = 37
 
 
@@ -367,10 +378,12 @@ class SealTest(unittest.TestCase):
         self.assertEqual(len(keys), n["unbound_keys"])
         self.assertEqual(len(keys), n["table_keys"])
         reg = set(RS._POINTER_NOT_FOUND_REASONS) | set(RS._UNVERIFIABLE_REASONS)
-        self.assertEqual((len(RS._POINTER_NOT_FOUND_REASONS), len(RS._UNVERIFIABLE_REASONS)), (9, 7))
-        self.assertEqual(len(reg), 16)
-        # 2 つの理由は UNBOUND_REASON_STATE に無く、_state_of の別の枝と登録簿に在る
-        self.assertEqual(sorted(reg - keys), ["no_same_value", "other_frame"])
+        # 2026-10-22(P26 の段 1。封 docs/XBRL_P26_SEAL_2026-10-21.md §2 Q-7「登録簿の理由 16 → 19」): 理由を 3 つ足した(POINTER_NOT_FOUND 9 → 10・UNVERIFIABLE 7 → 9)。
+        # この封の commit 時点は (9, 7) と 16(下の c3 の字 16 と n["unbound_keys"] 14 がその事実)。いまは宣言された 19。
+        self.assertEqual((len(RS._POINTER_NOT_FOUND_REASONS), len(RS._UNVERIFIABLE_REASONS)), (10, 9))
+        self.assertEqual(len(reg), 19)
+        # 2 つの理由は UNBOUND_REASON_STATE に無く、_state_of の別の枝と登録簿に在る(+ P26 の 3 つ)
+        self.assertEqual(sorted(reg - keys), sorted(["no_same_value", "other_frame"] + list(P26_REASONS)))
         self.assertEqual(keys - reg, set())
         self.assertNotIn("other_frame", keys)
         self.assertNotIn("no_same_value", keys)
@@ -381,7 +394,7 @@ class SealTest(unittest.TestCase):
             self.assertEqual(st, "POINTER_NOT_FOUND" if k in RS._POINTER_NOT_FOUND_REASONS else "UNVERIFIABLE", k)
         # C-3 の字 16 は登録簿の数と同じ(UNBOUND_REASON_STATE の 14 + 2 の分解も字で在る)
         c3 = dict(rows(sec(self.t, "## §2", "## §3"), "C"))["3"]
-        self.assertEqual(int(re.search(r"\*\*(\d+)\*\*", c3).group(1)), len(reg))
+        self.assertEqual(int(re.search(r"\*\*(\d+)\*\*", c3).group(1)), len(reg) - len(P26_REASONS))        # 封の字 16 = 測った時点の登録簿。いまは P26 の 3 つを足して 19
         self.assertIn(u"`UNBOUND_REASON_STATE` の 14 key + `other_frame` + `no_same_value`", c3)
 
     def test_9_closed_file_list_and_order(self):
@@ -440,7 +453,16 @@ class SealedStateTest(unittest.TestCase):
         """C-5: `report.py`(人間の決定 2026-10-13)・`verify_document.py` は 0 行。engine の他の 3 file(vocabulary・recipes・registry_setup)も
         封は触らない。宣言の遷移を持たない: 動いたら赤のまま。"""
         for rel, want in sorted(UNTOUCHED.items()):
-            self.assertEqual(sha16(rel), want, u"**%s が動いている(この封は触らない)**" % rel)
+            got = sha16(rel)
+            if got != want and rel in UNTOUCHED_LATER:
+                later, seal_rel = UNTOUCHED_LATER[rel]
+                self.assertTrue(git("log", "--diff-filter=A", "--format=%H", "--", seal_rel).stdout.split(),
+                                u"**%s が動いているのに、遷移を宣言した封 %s が履歴に無い**" % (rel, seal_rel))
+                self.assertEqual(got, later, u"**%s が、宣言された遷移の値とも違う**" % rel)
+                continue
+            self.assertEqual(got, want, u"**%s が動いている(この封は触らない)**" % rel)
+        for rel in ("report", "verify_document"):
+            self.assertNotIn("adapters/xbrl/%s.py" % rel, UNTOUCHED_LATER)
         # report.py の golden の試験が在る(C-4 の「不変」の相手)
         self.assertTrue(os.path.exists(os.path.join(ROOT, "tests", "adapters", "xbrl", "test_report.py")))
         t = text(os.path.join(ROOT, "tests", "adapters", "xbrl", "test_report.py"))
@@ -481,11 +503,12 @@ class SealedStateTest(unittest.TestCase):
             self.assertTrue(FINGERPRINT_LATER, u"**frozen_bundle の本数が %d(定数 %d)に動いているのに、遷移の宣言が無い**" % (n_files, count))
             self.assertEqual((count, n_files), (FROZEN_COUNT_AFTER, FROZEN_COUNT_AFTER), u"遷移は 36 → 37 本だけ宣言されている")
             self.assertEqual(r.returncode, 0, out)
-            self.assertIn(FROZEN_BUNDLE_AFTER, out)
-            self.assertEqual(gens[-1], FROZEN_BUNDLE_AFTER)
+            self.assertIn(FROZEN_BUNDLE_P26, out)
+            self.assertEqual(gens[-1], FROZEN_BUNDLE_P26)
             self.assertIn(FROZEN_BUNDLE_AT_SEAL, gens, u"封の commit 時点の世代は消さない")
             self.assertIn(FROZEN_BUNDLE_STAGE1, gens, u"段 1(c13a746)の世代は消さない")
             self.assertEqual(gens.index(FROZEN_BUNDLE_AFTER), gens.index(FROZEN_BUNDLE_STAGE1) + 1, u"段 2 の世代は段 1 の次")
+            self.assertEqual(gens.index(FROZEN_BUNDLE_P26), gens.index(FROZEN_BUNDLE_AFTER) + 1, u"P26 の段 1 の世代は報告形の直しの次")
         # 字で留めた本数は git が数える本数と同じ(今)
         ls = subprocess.run(["git", "ls-files", "audit-core/core", "audit-core/adapters"], cwd=REPO, capture_output=True, text=True).stdout.split()
         self.assertEqual(len(ls), n_files)

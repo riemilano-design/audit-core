@@ -70,8 +70,9 @@ NOT_JUDGED_REASONS = (
     "ambiguous(member)",
 )
 
-# reason → 日本語 1 行。登録簿の理由の全部(``registry_setup`` の POINTER_NOT_FOUND 9 + UNVERIFIABLE 7 = 16 =
-# ``recipes.UNBOUND_REASON_STATE`` の 14 key + ``other_frame`` + ``no_same_value``)を網羅する(門で縛る)。
+# reason → 日本語 1 行。登録簿の理由の全部(``registry_setup`` の POINTER_NOT_FOUND 10 + UNVERIFIABLE 9 = 19 =
+# ``recipes.UNBOUND_REASON_STATE`` の 14 key + ``other_frame`` + ``no_same_value`` + ``other_concept`` + ``direction_on_cause_item``
+# + ``rounded_diff_within_double_band``)を網羅する(門で縛る)。
 # 表に無い reason は字のまま出す(赤にしない)。
 REASON_JA = {
     "no_element": "文の項目に当たる数が出典(XBRL)に見つからなかった",
@@ -92,6 +93,10 @@ REASON_JA = {
     "other_frame": "同じ項目の別の区分(セグメント・単体等)の数と合う。どの区分の数かを確かめる",
     # P25 last_branch_names_only_if_evidence(登録簿の理由 ``no_same_value``)。封 §1 の字。
     "no_same_value": "出典の当期の数と合わず、同じ数も桁違いの数もこの項目に無い。参照先を確かめる",
+    # P26(登録簿の理由 ``other_concept``・``direction_on_cause_item``・``rounded_diff_within_double_band``)。封 docs/XBRL_P26_SEAL_2026-10-21.md §1 の字。
+    "other_concept": "道具が当てた出典の数が、文の項目と別のもの(1 株当たりの数や、名前の一部だけが同じ別の項目)だった。文の項目の数を確かめる",
+    "direction_on_cause_item": "増加・減少の語が文の主語でなく、要因に挙げた項目にかかる。主語が増えたか減ったかは道具は判断していない",
+    "rounded_diff_within_double_band": "出典の前期と当期の差と 1 単位だけずれる。丸めた数どうしの差で出るずれか、1 単位の書き誤りかを道具は見分けられない。元の数で確かめる",
 }
 
 # context の頭 → 期の字
