@@ -32,7 +32,7 @@
 
 ## §2 測った事実 ― **変更前**(試験は走らせず、収集だけ数えた)
 
-### §2-1 ディスク上の試験 file: **215 本**(**いまの数**。門を足すと増える)
+### §2-1 ディスク上の試験 file: **216 本**(**いまの数**。門を足すと増える)
 
 | ディレクトリ | file |
 |---|---|
@@ -43,7 +43,7 @@
 | `tests/core` | 5 |
 | `tests/fixtures/xbrl` | 4 |
 | `tests/golden` | 4 |
-| `tests/measure` | 151 |
+| `tests/measure` | 152 |
 
 **2026-10-20 に +2**(`tests/measure/test_packaging.py`・`tests/measure/test_packaging_result.py`。
 包装の封 `docs/PACKAGING_SEAL_2026-10-20.md` の G-5)。176 → 178、`tests/measure` 118 → 120。
@@ -131,6 +131,9 @@
 
 **2026-10-21 に +1**(`tests/measure/test_xbrl_customer_report_fix_result.py`。
 顧客向けの報告形の直しの結果(記録 `fixtures/xbrl/customer_report_fix_2026-10-21.json`・文書 `docs/XBRL_CUSTOMER_REPORT_FIX_RESULT_2026-10-21.md`)を縛る門)。214 → 215(`tests/measure` 150 → 151)。
+
+**2026-10-22 に +1**(`tests/measure/test_xbrl_p26_seal.py`。
+「違う」に出る正しい文の主因を減らす engine の直し P26 の封 `docs/XBRL_P26_SEAL_2026-10-21.md` の封の門)。215 → 216(`tests/measure` 151 → 152)。
 
 **この節だけは「いま」の数である**(門 `DocTest` が記録と突き合わせる)。
 下の §2-2 は**変更前の実測**で、後の記録と結び付けない。
