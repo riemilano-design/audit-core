@@ -1,0 +1,508 @@
+{
+ "G_registered": 90,
+ "pointer_recorded": 58,
+ "unrecorded_grounded": 32,
+ "stopped_in_L": 93,
+ "strict_mismatch": 13,
+ "equiv_mismatch": 6,
+ "detail": [
+  {
+   "id": "N168",
+   "strict_mismatch": false,
+   "equiv_mismatch": false,
+   "形": "単一",
+   "層": "値を持つ形",
+   "型5露出": false
+  },
+  {
+   "id": "T038",
+   "strict_mismatch": false,
+   "equiv_mismatch": false,
+   "形": "符号・方向",
+   "層": "方向の形",
+   "型5露出": false
+  },
+  {
+   "id": "N105",
+   "strict_mismatch": true,
+   "equiv_mismatch": false,
+   "形": "単一",
+   "層": "値を持つ形",
+   "型5露出": true
+  },
+  {
+   "id": "T018",
+   "strict_mismatch": false,
+   "equiv_mismatch": false,
+   "形": "符号・方向",
+   "層": "方向の形",
+   "型5露出": false
+  },
+  {
+   "id": "N175",
+   "strict_mismatch": false,
+   "equiv_mismatch": false,
+   "形": "単一",
+   "層": "値を持つ形",
+   "型5露出": false
+  },
+  {
+   "id": "N193",
+   "strict_mismatch": false,
+   "equiv_mismatch": false,
+   "形": "単一",
+   "層": "値を持つ形",
+   "型5露出": false
+  },
+  {
+   "id": "N303",
+   "strict_mismatch": false,
+   "equiv_mismatch": false,
+   "形": "単一",
+   "層": "値を持つ形",
+   "型5露出": true
+  },
+  {
+   "id": "T037",
+   "strict_mismatch": false,
+   "equiv_mismatch": false,
+   "形": "符号・方向",
+   "層": "方向の形",
+   "型5露出": false
+  },
+  {
+   "id": "N021",
+   "strict_mismatch": false,
+   "equiv_mismatch": false,
+   "形": "単一",
+   "層": "値を持つ形",
+   "型5露出": false
+  },
+  {
+   "id": "N024",
+   "strict_mismatch": false,
+   "equiv_mismatch": false,
+   "形": "単一",
+   "層": "値を持つ形",
+   "型5露出": false
+  },
+  {
+   "id": "N214",
+   "strict_mismatch": false,
+   "equiv_mismatch": false,
+   "形": "単一",
+   "層": "値を持つ形",
+   "型5露出": false
+  },
+  {
+   "id": "N178",
+   "strict_mismatch": false,
+   "equiv_mismatch": false,
+   "形": "単一",
+   "層": "値を持つ形",
+   "型5露出": false
+  },
+  {
+   "id": "N282",
+   "strict_mismatch": false,
+   "equiv_mismatch": false,
+   "形": "単一",
+   "層": "値を持つ形",
+   "型5露出": false
+  },
+  {
+   "id": "N205",
+   "strict_mismatch": false,
+   "equiv_mismatch": false,
+   "形": "単一",
+   "層": "値を持つ形",
+   "型5露出": false
+  },
+  {
+   "id": "N249",
+   "strict_mismatch": false,
+   "equiv_mismatch": false,
+   "形": "単一",
+   "層": "値を持つ形",
+   "型5露出": true
+  },
+  {
+   "id": "N187",
+   "strict_mismatch": false,
+   "equiv_mismatch": false,
+   "形": "単一",
+   "層": "値を持つ形",
+   "型5露出": false
+  },
+  {
+   "id": "N014",
+   "strict_mismatch": true,
+   "equiv_mismatch": false,
+   "形": "単一",
+   "層": "値を持つ形",
+   "型5露出": true
+  },
+  {
+   "id": "N174",
+   "strict_mismatch": false,
+   "equiv_mismatch": false,
+   "形": "単一",
+   "層": "値を持つ形",
+   "型5露出": false
+  },
+  {
+   "id": "N264",
+   "strict_mismatch": false,
+   "equiv_mismatch": false,
+   "形": "単一",
+   "層": "値を持つ形",
+   "型5露出": false
+  },
+  {
+   "id": "N278",
+   "strict_mismatch": false,
+   "equiv_mismatch": false,
+   "形": "差(当期−前期)",
+   "層": "値を持つ形",
+   "型5露出": false
+  },
+  {
+   "id": "N130",
+   "strict_mismatch": true,
+   "equiv_mismatch": false,
+   "形": "差(当期−前期)",
+   "層": "値を持つ形",
+   "型5露出": true
+  },
+  {
+   "id": "N063",
+   "strict_mismatch": false,
+   "equiv_mismatch": false,
+   "形": "差(当期−前期)",
+   "層": "値を持つ形",
+   "型5露出": false
+  },
+  {
+   "id": "N089",
+   "strict_mismatch": true,
+   "equiv_mismatch": true,
+   "形": "単一",
+   "層": "値を持つ形",
+   "型5露出": true
+  },
+  {
+   "id": "T020",
+   "strict_mismatch": true,
+   "equiv_mismatch": true,
+   "形": "符号・方向",
+   "層": "方向の形",
+   "型5露出": true
+  },
+  {
+   "id": "N289",
+   "strict_mismatch": true,
+   "equiv_mismatch": true,
+   "形": "単一",
+   "層": "値を持つ形",
+   "型5露出": false
+  },
+  {
+   "id": "T070",
+   "strict_mismatch": false,
+   "equiv_mismatch": false,
+   "形": "符号・方向",
+   "層": "方向の形",
+   "型5露出": true
+  },
+  {
+   "id": "N011",
+   "strict_mismatch": false,
+   "equiv_mismatch": false,
+   "形": "単一",
+   "層": "値を持つ形",
+   "型5露出": false
+  },
+  {
+   "id": "T023",
+   "strict_mismatch": true,
+   "equiv_mismatch": true,
+   "形": "符号・方向",
+   "層": "方向の形",
+   "型5露出": true
+  },
+  {
+   "id": "N131",
+   "strict_mismatch": true,
+   "equiv_mismatch": false,
+   "形": "率(比)",
+   "層": "値を持つ形",
+   "型5露出": true
+  },
+  {
+   "id": "N192",
+   "strict_mismatch": false,
+   "equiv_mismatch": false,
+   "形": "差(当期−前期)",
+   "層": "値を持つ形",
+   "型5露出": true
+  },
+  {
+   "id": "N112",
+   "strict_mismatch": false,
+   "equiv_mismatch": false,
+   "形": "単一",
+   "層": "値を持つ形",
+   "型5露出": false
+  },
+  {
+   "id": "N218",
+   "strict_mismatch": false,
+   "equiv_mismatch": false,
+   "形": "単一",
+   "層": "値を持つ形",
+   "型5露出": false
+  },
+  {
+   "id": "T066",
+   "strict_mismatch": false,
+   "equiv_mismatch": false,
+   "形": "符号・方向",
+   "層": "方向の形",
+   "型5露出": false
+  },
+  {
+   "id": "N003",
+   "strict_mismatch": false,
+   "equiv_mismatch": false,
+   "形": "単一",
+   "層": "値を持つ形",
+   "型5露出": false
+  },
+  {
+   "id": "T102",
+   "strict_mismatch": false,
+   "equiv_mismatch": false,
+   "形": "符号・方向",
+   "層": "方向の形",
+   "型5露出": false
+  },
+  {
+   "id": "T026",
+   "strict_mismatch": false,
+   "equiv_mismatch": false,
+   "形": "符号・方向",
+   "層": "方向の形",
+   "型5露出": false
+  },
+  {
+   "id": "T068",
+   "strict_mismatch": false,
+   "equiv_mismatch": false,
+   "形": "符号・方向",
+   "層": "方向の形",
+   "型5露出": false
+  },
+  {
+   "id": "N066",
+   "strict_mismatch": false,
+   "equiv_mismatch": false,
+   "形": "差(当期−前期)",
+   "層": "値を持つ形",
+   "型5露出": false
+  },
+  {
+   "id": "N137",
+   "strict_mismatch": false,
+   "equiv_mismatch": false,
+   "形": "差(当期−前期)",
+   "層": "値を持つ形",
+   "型5露出": true
+  },
+  {
+   "id": "N143",
+   "strict_mismatch": false,
+   "equiv_mismatch": false,
+   "形": "差(当期−前期)",
+   "層": "値を持つ形",
+   "型5露出": true
+  },
+  {
+   "id": "N009",
+   "strict_mismatch": true,
+   "equiv_mismatch": false,
+   "形": "単一",
+   "層": "値を持つ形",
+   "型5露出": true
+  },
+  {
+   "id": "N191",
+   "strict_mismatch": false,
+   "equiv_mismatch": false,
+   "形": "単一",
+   "層": "値を持つ形",
+   "型5露出": false
+  },
+  {
+   "id": "N026",
+   "strict_mismatch": false,
+   "equiv_mismatch": false,
+   "形": "差(当期−前期)",
+   "層": "値を持つ形",
+   "型5露出": false
+  },
+  {
+   "id": "N170",
+   "strict_mismatch": false,
+   "equiv_mismatch": false,
+   "形": "差(当期−前期)",
+   "層": "値を持つ形",
+   "型5露出": false
+  },
+  {
+   "id": "T049",
+   "strict_mismatch": true,
+   "equiv_mismatch": false,
+   "形": "符号・方向",
+   "層": "方向の形",
+   "型5露出": true
+  },
+  {
+   "id": "N219",
+   "strict_mismatch": true,
+   "equiv_mismatch": true,
+   "形": "和",
+   "層": "値を持つ形",
+   "型5露出": true
+  },
+  {
+   "id": "N291",
+   "strict_mismatch": false,
+   "equiv_mismatch": false,
+   "形": "単一",
+   "層": "値を持つ形",
+   "型5露出": false
+  },
+  {
+   "id": "T086",
+   "strict_mismatch": true,
+   "equiv_mismatch": true,
+   "形": "符号・方向",
+   "層": "方向の形",
+   "型5露出": false
+  },
+  {
+   "id": "N172",
+   "strict_mismatch": false,
+   "equiv_mismatch": false,
+   "形": "単一",
+   "層": "値を持つ形",
+   "型5露出": true
+  },
+  {
+   "id": "T044",
+   "strict_mismatch": true,
+   "equiv_mismatch": false,
+   "形": "符号・方向",
+   "層": "方向の形",
+   "型5露出": true
+  },
+  {
+   "id": "N181",
+   "strict_mismatch": false,
+   "equiv_mismatch": false,
+   "形": "単一",
+   "層": "値を持つ形",
+   "型5露出": false
+  },
+  {
+   "id": "T072",
+   "strict_mismatch": false,
+   "equiv_mismatch": false,
+   "形": "符号・方向",
+   "層": "方向の形",
+   "型5露出": false
+  },
+  {
+   "id": "N179",
+   "strict_mismatch": false,
+   "equiv_mismatch": false,
+   "形": "単一",
+   "層": "値を持つ形",
+   "型5露出": false
+  },
+  {
+   "id": "N298",
+   "strict_mismatch": false,
+   "equiv_mismatch": false,
+   "形": "単一",
+   "層": "値を持つ形",
+   "型5露出": false
+  },
+  {
+   "id": "N138",
+   "strict_mismatch": false,
+   "equiv_mismatch": false,
+   "形": "単一",
+   "層": "値を持つ形",
+   "型5露出": false
+  },
+  {
+   "id": "N267",
+   "strict_mismatch": false,
+   "equiv_mismatch": false,
+   "形": "単一",
+   "層": "値を持つ形",
+   "型5露出": true
+  },
+  {
+   "id": "N288",
+   "strict_mismatch": false,
+   "equiv_mismatch": false,
+   "形": "単一",
+   "層": "値を持つ形",
+   "型5露出": false
+  },
+  {
+   "id": "N241",
+   "strict_mismatch": false,
+   "equiv_mismatch": false,
+   "形": "単一",
+   "層": "値を持つ形",
+   "型5露出": true
+  }
+ ],
+ "unrecorded_ids": [
+  "N005",
+  "N006",
+  "N010",
+  "N038",
+  "N050",
+  "N061",
+  "N088",
+  "N123",
+  "N129",
+  "N135",
+  "N142",
+  "N169",
+  "N202",
+  "N204",
+  "N208",
+  "N215",
+  "N216",
+  "N222",
+  "N242",
+  "N247",
+  "N259",
+  "N277",
+  "N287",
+  "N302",
+  "T011",
+  "T022",
+  "T036",
+  "T053",
+  "T073",
+  "T080",
+  "T088",
+  "T095"
+ ]
+}

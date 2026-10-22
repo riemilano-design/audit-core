@@ -1,0 +1,122 @@
+[
+ {
+  "id": "R001",
+  "判定": "確認済み",
+  "参照先": "NetSales@CurrentYearDuration_NonConsolidatedMember"
+ },
+ {
+  "id": "R002",
+  "判定": "確認済み",
+  "参照先": "NetSales@CurrentYearDuration_NonConsolidatedMember"
+ },
+ {
+  "id": "R003",
+  "判定": "確認済み",
+  "参照先": "NetSales@CurrentYearDuration_NonConsolidatedMember"
+ },
+ {
+  "id": "R004",
+  "判定": "判定できない",
+  "参照先": "なし"
+ },
+ {
+  "id": "R005",
+  "判定": "確認済み",
+  "参照先": "OperatingIncome@CurrentYearDuration_NonConsolidatedMember"
+ },
+ {
+  "id": "R006",
+  "判定": "確認済み",
+  "参照先": "OperatingIncome@CurrentYearDuration_NonConsolidatedMember"
+ },
+ {
+  "id": "R007",
+  "判定": "確認済み",
+  "参照先": "OperatingIncome@CurrentYearDuration_NonConsolidatedMember"
+ },
+ {
+  "id": "R008",
+  "判定": "確認済み",
+  "参照先": "OrdinaryIncome@CurrentYearDuration_NonConsolidatedMember"
+ },
+ {
+  "id": "R009",
+  "判定": "確認済み",
+  "参照先": "OrdinaryIncome@CurrentYearDuration_NonConsolidatedMember"
+ },
+ {
+  "id": "R010",
+  "判定": "確認済み",
+  "参照先": "OrdinaryIncome@CurrentYearDuration_NonConsolidatedMember"
+ },
+ {
+  "id": "R011",
+  "判定": "確認済み",
+  "参照先": "ProfitLoss@CurrentYearDuration_NonConsolidatedMember"
+ },
+ {
+  "id": "R012",
+  "判定": "確認済み",
+  "参照先": "ProfitLoss@CurrentYearDuration_NonConsolidatedMember"
+ },
+ {
+  "id": "R013",
+  "判定": "確認済み",
+  "参照先": "ProfitLoss@CurrentYearDuration_NonConsolidatedMember"
+ },
+ {
+  "id": "R014",
+  "判定": "判定できない",
+  "参照先": "なし"
+ },
+ {
+  "id": "R015",
+  "判定": "確認済み",
+  "参照先": "Assets@CurrentYearInstant_NonConsolidatedMember"
+ },
+ {
+  "id": "R016",
+  "判定": "確認済み",
+  "参照先": "Assets@CurrentYearInstant_NonConsolidatedMember"
+ },
+ {
+  "id": "R017",
+  "判定": "確認済み",
+  "参照先": "CurrentAssets@CurrentYearInstant_NonConsolidatedMember"
+ },
+ {
+  "id": "R018",
+  "判定": "判定できない",
+  "参照先": "なし"
+ },
+ {
+  "id": "R019",
+  "判定": "誤りが在る",
+  "参照先": "ShortTermLoansPayable@CurrentYearInstant_NonConsolidatedMember"
+ },
+ {
+  "id": "R020",
+  "判定": "判定できない",
+  "参照先": "なし"
+ },
+ {
+  "id": "R021",
+  "判定": "判定できない",
+  "参照先": "なし"
+ },
+ {
+  "id": "R022",
+  "判定": "判定できない",
+  "参照先": "なし"
+ },
+ {
+  "id": "R023",
+  "判定": "判定できない",
+  "参照先": "なし"
+ },
+ {
+  "id": "R024",
+  "判定": "判定できない",
+  "参照先": "なし"
+ }
+]

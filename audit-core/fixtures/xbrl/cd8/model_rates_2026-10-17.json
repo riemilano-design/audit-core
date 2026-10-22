@@ -1,0 +1,212 @@
+{
+ "step": "**① の続き。モデル ID と単価の候補。0 USD・通信なし**",
+ "**人間の訂正を受ける**": "**opus の記録から解いた 5 / 25 は sonnet の単価ではない。****Sonnet の単価はバージョンで違う**ので、**使ったモデル ID を特定するのが先**(人間の指摘 2026-10-17)",
+ "1 記録に在るモデルの字": [
+  {
+   "字": "claude-sonnet-4-5",
+   "件数": 27,
+   "**モデル ID の形か**": true,
+   "例": [
+    "fixtures/sheet/m8_material_2026-10-16.json",
+    "fixtures/sheet/m7_label_material_2026-10-15.json"
+   ]
+  },
+  {
+   "字": "claude-haiku-4-5",
+   "件数": 20,
+   "**モデル ID の形か**": true,
+   "例": [
+    "fixtures/sheet/m7_label_material_2026-10-15.json",
+    "fixtures/sheet/errdet_score_2026-10-17.json"
+   ]
+  },
+  {
+   "字": "claude-sonnet-4-5(Agent, subagent_type=general-purpose, model=sonnet)",
+   "件数": 7,
+   "**モデル ID の形か**": false,
+   "例": [
+    "fixtures/sheet/m9_report_2026-10-16.json",
+    "fixtures/sheet/m8_report_2026-10-16.json"
+   ]
+  },
+  {
+   "字": "claude-opus-5",
+   "件数": 2,
+   "**モデル ID の形か**": true,
+   "例": [
+    "fixtures/xbrl/ai_prose_generation_meta_2026-10-09.json",
+    "fixtures/xbrl/cd8/cost_split_2026-10-17.json"
+   ]
+  },
+  {
+   "字": "sonnet(封 §4 のとおり 1 席)",
+   "件数": 1,
+   "**モデル ID の形か**": false,
+   "例": [
+    "fixtures/xbrl/cd8/cost_breakdown_2026-10-17.json"
+   ]
+  },
+  {
+   "字": "claude-sonnet-4-5(Agent, model=sonnet)",
+   "件数": 1,
+   "**モデル ID の形か**": false,
+   "例": [
+    "fixtures/sheet/m5_answers_seat1_2026-10-15.json"
+   ]
+  },
+  {
+   "字": "claude-haiku-4-5(Agent, model=haiku)",
+   "件数": 1,
+   "**モデル ID の形か**": false,
+   "例": [
+    "fixtures/sheet/m5_answers_seat2_2026-10-15.json"
+   ]
+  }
+ ],
+ "**席を呼んだときの実際の経路**": "記録の字は `claude-sonnet-4-5(Agent, subagent_type=general-purpose, model=sonnet)` のような形 ― **API を直接叩いたのではなく Agent(subagent)の harness を通している。****だから 1 便が API 何回に化けたかは私の記録に無い。**",
+ "2 単価の候補 × 入出力の割れ方": [
+  {
+   "単価の組": "Claude Sonnet 5",
+   "入力 USD/1M": 2.0,
+   "出力 USD/1M": 10.0,
+   "出どころ": "人間が公開料金表で確認(2026-10-17)",
+   "出力の割合(仮定)": 0.1,
+   "1 便 USD": 0.342,
+   "8 便 USD": 2.74,
+   "目安 3 USD の中": true
+  },
+  {
+   "単価の組": "Claude Sonnet 5",
+   "入力 USD/1M": 2.0,
+   "出力 USD/1M": 10.0,
+   "出どころ": "人間が公開料金表で確認(2026-10-17)",
+   "出力の割合(仮定)": 0.5,
+   "1 便 USD": 0.734,
+   "8 便 USD": 5.87,
+   "目安 3 USD の中": false
+  },
+  {
+   "単価の組": "Claude Sonnet 5",
+   "入力 USD/1M": 2.0,
+   "出力 USD/1M": 10.0,
+   "出どころ": "人間が公開料金表で確認(2026-10-17)",
+   "出力の割合(仮定)": 1.0,
+   "1 便 USD": 1.223,
+   "8 便 USD": 9.78,
+   "目安 3 USD の中": false
+  },
+  {
+   "単価の組": "Claude Sonnet 5",
+   "入力 USD/1M": 2.0,
+   "出力 USD/1M": 10.0,
+   "出どころ": "人間が公開料金表で確認(2026-10-17)",
+   "出力の割合(仮定)": "材料だけ入力 + 出力 6000",
+   "1 便 USD": 0.166,
+   "8 便 USD": 1.33,
+   "目安 3 USD の中": true
+  },
+  {
+   "単価の組": "Claude Sonnet 4.6",
+   "入力 USD/1M": 3.0,
+   "出力 USD/1M": 15.0,
+   "出どころ": "同上",
+   "出力の割合(仮定)": 0.1,
+   "1 便 USD": 0.514,
+   "8 便 USD": 4.11,
+   "目安 3 USD の中": false
+  },
+  {
+   "単価の組": "Claude Sonnet 4.6",
+   "入力 USD/1M": 3.0,
+   "出力 USD/1M": 15.0,
+   "出どころ": "同上",
+   "出力の割合(仮定)": 0.5,
+   "1 便 USD": 1.101,
+   "8 便 USD": 8.81,
+   "目安 3 USD の中": false
+  },
+  {
+   "単価の組": "Claude Sonnet 4.6",
+   "入力 USD/1M": 3.0,
+   "出力 USD/1M": 15.0,
+   "出どころ": "同上",
+   "出力の割合(仮定)": 1.0,
+   "1 便 USD": 1.835,
+   "8 便 USD": 14.68,
+   "目安 3 USD の中": false
+  },
+  {
+   "単価の組": "Claude Sonnet 4.6",
+   "入力 USD/1M": 3.0,
+   "出力 USD/1M": 15.0,
+   "出どころ": "同上",
+   "出力の割合(仮定)": "材料だけ入力 + 出力 6000",
+   "1 便 USD": 0.25,
+   "8 便 USD": 2.0,
+   "目安 3 USD の中": true
+  },
+  {
+   "単価の組": "opus の記録から解いた組",
+   "入力 USD/1M": 5.0,
+   "出力 USD/1M": 25.0,
+   "出どころ": "`ai_prose_generation_meta_2026-10-09`(model claude-opus-5)の実費を再現",
+   "出力の割合(仮定)": 0.1,
+   "1 便 USD": 0.856,
+   "8 便 USD": 6.85,
+   "目安 3 USD の中": false
+  },
+  {
+   "単価の組": "opus の記録から解いた組",
+   "入力 USD/1M": 5.0,
+   "出力 USD/1M": 25.0,
+   "出どころ": "`ai_prose_generation_meta_2026-10-09`(model claude-opus-5)の実費を再現",
+   "出力の割合(仮定)": 0.5,
+   "1 便 USD": 1.835,
+   "8 便 USD": 14.68,
+   "目安 3 USD の中": false
+  },
+  {
+   "単価の組": "opus の記録から解いた組",
+   "入力 USD/1M": 5.0,
+   "出力 USD/1M": 25.0,
+   "出どころ": "`ai_prose_generation_meta_2026-10-09`(model claude-opus-5)の実費を再現",
+   "出力の割合(仮定)": 1.0,
+   "1 便 USD": 3.058,
+   "8 便 USD": 24.46,
+   "目安 3 USD の中": false
+  },
+  {
+   "単価の組": "opus の記録から解いた組",
+   "入力 USD/1M": 5.0,
+   "出力 USD/1M": 25.0,
+   "出どころ": "`ai_prose_generation_meta_2026-10-09`(model claude-opus-5)の実費を再現",
+   "出力の割合(仮定)": "材料だけ入力 + 出力 6000",
+   "1 便 USD": 0.416,
+   "8 便 USD": 3.33,
+   "目安 3 USD の中": false
+  }
+ ],
+ "3 Console 照合用の記録": {
+  "csv": "fixtures/xbrl/cd8/seat_runs_for_console_2026-10-17.csv",
+  "件数": 7,
+  "欄": [
+   "file",
+   "model(記録のまま)",
+   "合計トークン(実測)",
+   "時刻"
+  ],
+  "**鍵は含まない**": true,
+  "note": "**入出力の内訳は記録に無いので csv にも無い**"
+ },
+ "**確定していないこと**": [
+  "**実験で使うモデル ID を封に字で固定していない**(本番の封は「sonnet 1 席」)",
+  "**`claude-sonnet-4-5` は人間が挙げた表(Sonnet 5 / Sonnet 4.6)に無い**",
+  "**席 1 便の API 呼び出し回数**(harness の中は記録に無い)",
+  "**キャッシュの課金**",
+  "**実請求額**(Console の Cost。私から見えない)"
+ ],
+ "limits": [
+  "**どの行も仮定を含む。実測は実請求額だけが決める**",
+  "**公開料金表は人間が確かめたものを写した。私は確かめていない**"
+ ]
+}

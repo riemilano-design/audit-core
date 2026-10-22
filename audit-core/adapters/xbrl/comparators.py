@@ -37,7 +37,7 @@ do not guard against a zero denominator themselves.
 import audit_core as core
 
 
-def _match_value(fact_value, target, unit):
+def _match_value(fact_value, target, unit, mode=None, magnitude_truncate=False):
     """Copy of ``vocabulary.match_value`` / ``xbrl_probe.py: match_value``.
 
     round    : |fact - target| <= unit/2
@@ -45,14 +45,25 @@ def _match_value(fact_value, target, unit):
     abs+...  : same two checks with both sides' sign dropped
     Returns one of "round" / "truncate" / "abs+round" / "abs+truncate",
     or ``None`` if neither check passes in either sign mode.
+
+    ``mode`` (XBRL 直し §2、人間の決定 2026-10-08) は省略可能。``None`` の
+    ときは写し元と同じ梯子(P1/P5F/P6/P7 はこちら)。``"round"`` /
+    ``"truncate"`` のときは**その 1 つだけ**を試す。値は
+    ``Contract.params["rounding"]`` で渡ってくる ― 書類単位で 1 つに決めた
+    丸め方を、組むときと検証するときの両方で同じものにするため。
+    ``vocabulary.match_value`` と同じ引数・同じ戻り値であることは
+    ``test_lineage`` が ``mode`` ごとに照合する。
     """
 
     for sign_mode, fv in (("", fact_value), ("abs", abs(fact_value))):
         t = abs(target) if sign_mode else target
-        if abs(fv - t) <= unit / 2:
+        if mode in (None, "round") and abs(fv - t) <= unit / 2:
             return (sign_mode + "+round").strip("+")
-        if 0 <= fv - t < unit:
-            return (sign_mode + "+truncate").strip("+")
+        if mode in (None, "truncate"):
+            # P19(``magnitude_truncate``、params 経由で渡る): 切り捨ての帯を絶対値で。
+            lo, hi = ((abs(fv), abs(t)) if magnitude_truncate else (fv, t))
+            if 0 <= lo - hi < unit:
+                return (sign_mode + "+truncate").strip("+")
     return None
 
 
@@ -90,13 +101,13 @@ def equals_within(evidence, claim, contract):
     claim_direction = params.get("claim_direction")
     if flow_convention is not None and claim_direction is not None:
         target_abs = abs(claim.value) * unit_scale
-        how = _match_value(abs(fact.value), target_abs, claim_scale)
+        how = _match_value(abs(fact.value), target_abs, claim_scale, params.get("rounding"), params.get("magnitude_truncate", False))
         fact_sign = 0 if fact.value == 0 else (1 if fact.value > 0 else -1)
         sign_ok = (fact_sign * flow_convention) == claim_direction
         detail = {"normalization": how, "flow_convention": flow_convention, "claim_direction": claim_direction, "fact_sign": fact_sign}
         return core.Comparison(match=(how is not None and sign_ok), recomputed=fact.value, depth="value_match", detail=detail)
     target = claim.value * unit_scale
-    how = _match_value(fact.value, target, claim_scale)
+    how = _match_value(fact.value, target, claim_scale, params.get("rounding"), params.get("magnitude_truncate", False))
     detail = {"normalization": how}
     return core.Comparison(match=how is not None, recomputed=fact.value, depth="value_match", detail=detail)
 
@@ -179,7 +190,7 @@ def diff_ab_equals_within(evidence, claim, contract):
     a, b = evidence[0], evidence[1]
     diff = a.value - b.value
     target = claim.value * unit_scale
-    how = _match_value(diff, target, claim_scale)
+    how = _match_value(diff, target, claim_scale, params.get("rounding"), params.get("magnitude_truncate", False))
     detail = {"normalization": how}
     return core.Comparison(match=how is not None, recomputed=diff, depth="value_match", detail=detail)
 
@@ -254,6 +265,34 @@ def builtin_sign_abs_diff_direction(evidence, claim, contract):
     actual = (1 if magnitude_diff > 0 else -1) if magnitude_diff != 0 else 0
     detail = {"direction": direction, "actual": actual}
     return core.Comparison(match=(direction == actual), recomputed=magnitude_diff, depth="value_match", detail=detail)
+
+
+def builtin_sign_direction_with_amount(evidence, claim, contract):
+    """A1(主語の規則の直し、人間の追加指示、2026-10-08)。
+    ``builtin:sign(cur-prior)==direction&amount``。
+
+    evidence = (cur, prior)。向きの判定は ``builtin_sign_direction`` と同じ
+    (差がちょうど 0 ならどちらの方向にも一致しない)。**そのうえで**、
+    Adapter が向きの語と同じ節から読んだ金額 (``claim.value``) を
+    ``|cur - prior|`` と照合する: ``_match_value(|diff|, |claim.value| *
+    unit_scale, claim_scale, rounding)``。
+
+    match = (向きが一致) **かつ** (金額が一致)。``recomputed`` は
+    ``builtin_sign_direction`` と同じ生の差。**この比較器は向きだけの
+    比較器より厳しい側にしか動かない** ― 向きが合っていても金額が合わなければ
+    一致しない。
+    """
+
+    params = contract.params or {}
+    direction = params["direction"]
+    cur, prior = evidence[0], evidence[1]
+    difference = cur.value - prior.value
+    sign_now = 0 if difference == 0 else (1 if difference > 0 else -1)
+    target_amount = abs(claim.value) * params["unit_scale"]
+    ladder = _match_value(abs(difference), target_amount, params["claim_scale"], params.get("rounding"), params.get("magnitude_truncate", False))
+    detail = {"direction": direction, "actual": sign_now, "normalization": ladder}
+    agree = (sign_now == direction) and (ladder is not None)
+    return core.Comparison(match=agree, recomputed=difference, depth="value_match", detail=detail)
 
 
 def diff_ab_pure100(evidence, claim, contract):

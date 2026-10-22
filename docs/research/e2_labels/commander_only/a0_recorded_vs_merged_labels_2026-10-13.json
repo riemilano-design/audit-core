@@ -1,0 +1,4062 @@
+{
+ "note": "統合ラベル(確定 183、同値候補の修正後)と main の記録済み出力の突き合わせ。engine 未実行。",
+ "labels_sha256": "1aa397f8c841c49e5b90de495062117eb17655c2d67b7887493ca517c91c7f79",
+ "prereg_sha256": "0353ad8206bba266213cc27fd9f2654144a2c19185e0493675905eed6d3c2415",
+ "rows": [
+  {
+   "id": "N296",
+   "state": "UNVERIFIABLE",
+   "実装席": null,
+   "engine": [],
+   "演算": [],
+   "label": [
+    [
+     "NetCashProvidedByUsedInFinancingActivities",
+     "Prior1YearDuration"
+    ]
+   ],
+   "一致": "pointer なし",
+   "形": "単一",
+   "層": "値を持つ形",
+   "型5露出": true,
+   "同値候補": [
+    [
+     "jpcrp_cor:NetCashProvidedByUsedInFinancingActivitiesSummaryOfBusinessResults",
+     "Prior1YearDuration"
+    ]
+   ]
+  },
+  {
+   "id": "N217",
+   "state": "POINTER_NOT_FOUND",
+   "実装席": null,
+   "engine": [],
+   "演算": [],
+   "label": [
+    [
+     "CurrentPortionOfLongTermLoansPayable",
+     "CurrentYearInstant"
+    ]
+   ],
+   "一致": "pointer なし",
+   "形": "単一",
+   "層": "値を持つ形",
+   "型5露出": false,
+   "同値候補": []
+  },
+  {
+   "id": "N290",
+   "state": "VALUE_MISMATCH",
+   "実装席": null,
+   "engine": [
+    [
+     "PurchaseOfIntangibleAssetsInvCF",
+     "CurrentYearDuration"
+    ]
+   ],
+   "演算": [],
+   "label": [
+    [
+     "OtherNetInvCF",
+     "CurrentYearDuration"
+    ]
+   ],
+   "一致": "不一致",
+   "形": "単一",
+   "層": "値を持つ形",
+   "型5露出": false,
+   "同値候補": []
+  },
+  {
+   "id": "N244",
+   "state": "UNVERIFIABLE",
+   "実装席": null,
+   "engine": [],
+   "演算": [],
+   "label": [
+    [
+     "ForeignCurrencyTranslationAdjustment",
+     "CurrentYearInstant"
+    ]
+   ],
+   "一致": "pointer なし",
+   "形": "単一",
+   "層": "値を持つ形",
+   "型5露出": true,
+   "同値候補": [
+    [
+     "jppfs_cor:NetAssets",
+     "CurrentYearInstant_ForeignCurrencyTranslationAdjustmentMember"
+    ]
+   ]
+  },
+  {
+   "id": "N148",
+   "state": "POINTER_NOT_FOUND",
+   "実装席": null,
+   "engine": [],
+   "演算": [],
+   "label": [
+    [
+     "Assets",
+     "CurrentYearInstant"
+    ],
+    [
+     "ContractAssets",
+     "CurrentYearInstant"
+    ]
+   ],
+   "一致": "pointer なし",
+   "形": "率(比)",
+   "層": "値を持つ形",
+   "型5露出": true,
+   "同値候補": [
+    [
+     "jpcrp_cor:TotalAssetsSummaryOfBusinessResults",
+     "CurrentYearInstant"
+    ],
+    [
+     "jppfs_cor:LiabilitiesAndNetAssets",
+     "CurrentYearInstant"
+    ]
+   ]
+  },
+  {
+   "id": "N285",
+   "state": "UNVERIFIABLE",
+   "実装席": null,
+   "engine": [],
+   "演算": [],
+   "label": [
+    [
+     "NetCashProvidedByUsedInInvestmentActivities",
+     "CurrentYearDuration"
+    ]
+   ],
+   "一致": "pointer なし",
+   "形": "単一",
+   "層": "値を持つ形",
+   "型5露出": true,
+   "同値候補": [
+    [
+     "jpcrp_cor:NetCashProvidedByUsedInInvestingActivitiesSummaryOfBusinessResults",
+     "CurrentYearDuration"
+    ]
+   ]
+  },
+  {
+   "id": "N093",
+   "state": "UNVERIFIABLE",
+   "実装席": null,
+   "engine": [],
+   "演算": [],
+   "label": [
+    [
+     "GainOnSalesOfNoncurrentAssetsEI",
+     "CurrentYearDuration"
+    ]
+   ],
+   "一致": "pointer なし",
+   "形": "単一",
+   "層": "値を持つ形",
+   "型5露出": true,
+   "同値候補": [
+    [
+     "jppfs_cor:ExtraordinaryIncome",
+     "CurrentYearDuration"
+    ]
+   ]
+  },
+  {
+   "id": "N099",
+   "state": "UNVERIFIABLE",
+   "実装席": null,
+   "engine": [],
+   "演算": [],
+   "label": [
+    [
+     "IncomeTaxes",
+     "CurrentYearDuration"
+    ]
+   ],
+   "一致": "pointer なし",
+   "形": "単一",
+   "層": "値を持つ形",
+   "型5露出": false,
+   "同値候補": []
+  },
+  {
+   "id": "T075",
+   "state": "UNVERIFIABLE",
+   "実装席": null,
+   "engine": [],
+   "演算": [],
+   "label": [
+    [
+     "ProvisionForShareBasedRemunerationForDirectorsAndOtherOfficersCL",
+     "CurrentYearInstant"
+    ],
+    [
+     "ProvisionForShareBasedRemunerationForDirectorsAndOtherOfficersCL",
+     "Prior1YearInstant"
+    ]
+   ],
+   "一致": "pointer なし",
+   "形": "符号・方向",
+   "層": "方向の形",
+   "型5露出": true,
+   "同値候補": [
+    [
+     "jppfs_cor:IncreaseDecreaseInProvisionForShareBasedRemunerationForDirectorsAndOtherOfficersOpeCF",
+     "CurrentYearDuration"
+    ],
+    [
+     "jppfs_cor:ProvisionForShareBasedRemunerationForDirectorsAndOtherOfficersCL",
+     "CurrentYearInstant_NonConsolidatedMember"
+    ],
+    [
+     "jppfs_cor:ProvisionForShareBasedRemunerationForDirectorsAndOtherOfficersCL",
+     "Prior1YearInstant_NonConsolidatedMember"
+    ]
+   ]
+  },
+  {
+   "id": "N168",
+   "state": "GROUNDED",
+   "実装席": "correct",
+   "engine": [
+    [
+     "InvestmentSecurities",
+     "CurrentYearInstant"
+    ]
+   ],
+   "演算": [],
+   "label": [
+    [
+     "InvestmentSecurities",
+     "CurrentYearInstant"
+    ]
+   ],
+   "一致": "一致(厳密)",
+   "形": "単一",
+   "層": "値を持つ形",
+   "型5露出": false,
+   "同値候補": []
+  },
+  {
+   "id": "N186",
+   "state": "POINTER_NOT_FOUND",
+   "実装席": null,
+   "engine": [],
+   "演算": [],
+   "label": [
+    [
+     "AccruedConsumptionTaxes",
+     "CurrentYearInstant"
+    ],
+    [
+     "AccruedConsumptionTaxes",
+     "Prior1YearInstant"
+    ]
+   ],
+   "一致": "pointer なし",
+   "形": "差(当期−前期)",
+   "層": "値を持つ形",
+   "型5露出": false,
+   "同値候補": []
+  },
+  {
+   "id": "T038",
+   "state": "GROUNDED",
+   "実装席": "wrong_binding",
+   "engine": [
+    [
+     "OperatingIncome",
+     "CurrentYearDuration"
+    ],
+    [
+     "OperatingIncome",
+     "Prior1YearDuration"
+    ]
+   ],
+   "演算": [
+    "builtin:sign(cur-prior)"
+   ],
+   "label": [
+    [
+     "OperatingIncome",
+     "CurrentYearDuration"
+    ],
+    [
+     "OperatingIncome",
+     "Prior1YearDuration"
+    ]
+   ],
+   "一致": "一致(厳密)",
+   "形": "符号・方向",
+   "層": "方向の形",
+   "型5露出": false,
+   "同値候補": []
+  },
+  {
+   "id": "N158",
+   "state": "UNVERIFIABLE",
+   "実装席": null,
+   "engine": [],
+   "演算": [],
+   "label": [
+    [
+     "IntangibleAssets",
+     "CurrentYearInstant"
+    ],
+    [
+     "IntangibleAssets",
+     "Prior1YearInstant"
+    ]
+   ],
+   "一致": "pointer なし",
+   "形": "差(当期−前期)",
+   "層": "値を持つ形",
+   "型5露出": false,
+   "同値候補": []
+  },
+  {
+   "id": "T058",
+   "state": "UNVERIFIABLE",
+   "実装席": null,
+   "engine": [],
+   "演算": [],
+   "label": [
+    [
+     "PropertyPlantAndEquipment",
+     "CurrentYearInstant"
+    ],
+    [
+     "PropertyPlantAndEquipment",
+     "Prior1YearInstant"
+    ]
+   ],
+   "一致": "pointer なし",
+   "形": "符号・方向",
+   "層": "方向の形",
+   "型5露出": false,
+   "同値候補": []
+  },
+  {
+   "id": "N243",
+   "state": "UNVERIFIABLE",
+   "実装席": null,
+   "engine": [],
+   "演算": [],
+   "label": [
+    [
+     "DeferredGainsOrLossesOnHedges",
+     "CurrentYearInstant"
+    ]
+   ],
+   "一致": "pointer なし",
+   "形": "単一",
+   "層": "値を持つ形",
+   "型5露出": true,
+   "同値候補": [
+    [
+     "jppfs_cor:DeferredGainsOrLossesOnHedgesNetOfTaxOCI",
+     "CurrentYearDuration"
+    ],
+    [
+     "jppfs_cor:NetAssets",
+     "CurrentYearInstant_DeferredGainsOrLossesOnHedgesMember"
+    ],
+    [
+     "jppfs_cor:NetChangesOfItemsOtherThanShareholdersEquity",
+     "CurrentYearDuration_DeferredGainsOrLossesOnHedgesMember"
+    ],
+    [
+     "jppfs_cor:TotalChangesOfItemsDuringThePeriod",
+     "CurrentYearDuration_DeferredGainsOrLossesOnHedgesMember"
+    ]
+   ]
+  },
+  {
+   "id": "N105",
+   "state": "GROUNDED",
+   "実装席": "correct",
+   "engine": [
+    [
+     "ProfitLossAttributableToOwnersOfParentSummaryOfBusinessResults",
+     "CurrentYearDuration"
+    ]
+   ],
+   "演算": [],
+   "label": [
+    [
+     "ProfitLossAttributableToOwnersOfParent",
+     "CurrentYearDuration"
+    ]
+   ],
+   "一致": "一致(同値類v0のみ)",
+   "形": "単一",
+   "層": "値を持つ形",
+   "型5露出": true,
+   "同値候補": [
+    [
+     "jpcrp_cor:ProfitLossAttributableToOwnersOfParentSummaryOfBusinessResults",
+     "CurrentYearDuration"
+    ],
+    [
+     "jppfs_cor:ProfitLoss",
+     "CurrentYearDuration"
+    ],
+    [
+     "jppfs_cor:ProfitLossAttributableToOwnersOfParent",
+     "CurrentYearDuration_RetainedEarningsMember"
+    ],
+    [
+     "jppfs_cor:ProfitLossAttributableToOwnersOfParent",
+     "CurrentYearDuration_ShareholdersEquityMember"
+    ]
+   ]
+  },
+  {
+   "id": "N281",
+   "state": "POINTER_NOT_FOUND",
+   "実装席": null,
+   "engine": [],
+   "演算": [],
+   "label": [
+    [
+     "IncreaseDecreaseInNetDefinedBenefitAssetOpeCF",
+     "CurrentYearDuration"
+    ],
+    [
+     "IncreaseDecreaseInNetDefinedBenefitAssetOpeCF",
+     "Prior1YearDuration"
+    ]
+   ],
+   "一致": "pointer なし",
+   "形": "差(当期−前期)",
+   "層": "値を持つ形",
+   "型5露出": false,
+   "同値候補": []
+  },
+  {
+   "id": "T018",
+   "state": "GROUNDED",
+   "実装席": "correct",
+   "engine": [
+    [
+     "GrossProfit",
+     "CurrentYearDuration"
+    ],
+    [
+     "GrossProfit",
+     "Prior1YearDuration"
+    ]
+   ],
+   "演算": [
+    "builtin:sign(cur-prior)"
+   ],
+   "label": [
+    [
+     "GrossProfit",
+     "CurrentYearDuration"
+    ],
+    [
+     "GrossProfit",
+     "Prior1YearDuration"
+    ]
+   ],
+   "一致": "一致(厳密)",
+   "形": "符号・方向",
+   "層": "方向の形",
+   "型5露出": false,
+   "同値候補": []
+  },
+  {
+   "id": "N236",
+   "state": "UNVERIFIABLE",
+   "実装席": null,
+   "engine": [],
+   "演算": [],
+   "label": [
+    [
+     "TreasuryStock",
+     "CurrentYearInstant"
+    ]
+   ],
+   "一致": "pointer なし",
+   "形": "単一",
+   "層": "値を持つ形",
+   "型5露出": true,
+   "同値候補": [
+    [
+     "jppfs_cor:NetAssets",
+     "CurrentYearInstant_TreasuryStockMember"
+    ]
+   ]
+  },
+  {
+   "id": "N279",
+   "state": "POINTER_NOT_FOUND",
+   "実装席": null,
+   "engine": [],
+   "演算": [],
+   "label": [
+    [
+     "IncreaseDecreaseInNetDefinedBenefitAssetOpeCF",
+     "Prior1YearDuration"
+    ]
+   ],
+   "一致": "pointer なし",
+   "形": "単一",
+   "層": "値を持つ形",
+   "型5露出": false,
+   "同値候補": []
+  },
+  {
+   "id": "N073",
+   "state": "UNVERIFIABLE",
+   "実装席": null,
+   "engine": [],
+   "演算": [],
+   "label": [
+    [
+     "NonOperatingIncome",
+     "CurrentYearDuration"
+    ],
+    [
+     "NonOperatingIncome",
+     "Prior1YearDuration"
+    ]
+   ],
+   "一致": "pointer なし",
+   "形": "差(当期−前期)",
+   "層": "値を持つ形",
+   "型5露出": false,
+   "同値候補": []
+  },
+  {
+   "id": "T076",
+   "state": "UNVERIFIABLE",
+   "実装席": null,
+   "engine": [],
+   "演算": [],
+   "label": [
+    [
+     "ProvisionForLossOnOrderReceivedCL",
+     "CurrentYearInstant"
+    ],
+    [
+     "ProvisionForLossOnOrderReceivedCL",
+     "Prior1YearInstant"
+    ]
+   ],
+   "一致": "pointer なし",
+   "形": "符号・方向",
+   "層": "方向の形",
+   "型5露出": true,
+   "同値候補": [
+    [
+     "jppfs_cor:IncreaseDecreaseInProvisionForLossOnOrderReceivedOpeCF",
+     "CurrentYearDuration"
+    ]
+   ]
+  },
+  {
+   "id": "N175",
+   "state": "GROUNDED",
+   "実装席": "correct",
+   "engine": [
+    [
+     "Liabilities",
+     "Prior1YearInstant"
+    ]
+   ],
+   "演算": [],
+   "label": [
+    [
+     "Liabilities",
+     "Prior1YearInstant"
+    ]
+   ],
+   "一致": "一致(厳密)",
+   "形": "単一",
+   "層": "値を持つ形",
+   "型5露出": false,
+   "同値候補": []
+  },
+  {
+   "id": "N067",
+   "state": "POINTER_NOT_FOUND",
+   "実装席": null,
+   "engine": [],
+   "演算": [],
+   "label": [
+    [
+     "OperatingIncome",
+     "CurrentYearDuration"
+    ],
+    [
+     "OperatingIncome",
+     "Prior1YearDuration"
+    ]
+   ],
+   "一致": "pointer なし",
+   "形": "率(比)",
+   "層": "値を持つ形",
+   "型5露出": false,
+   "同値候補": []
+  },
+  {
+   "id": "N028",
+   "state": "UNVERIFIABLE",
+   "実装席": null,
+   "engine": [],
+   "演算": [],
+   "label": [
+    [
+     "CostOfSales",
+     "CurrentYearDuration"
+    ]
+   ],
+   "一致": "pointer なし",
+   "形": "単一",
+   "層": "値を持つ形",
+   "型5露出": false,
+   "同値候補": []
+  },
+  {
+   "id": "N054",
+   "state": "UNVERIFIABLE",
+   "実装席": null,
+   "engine": [],
+   "演算": [],
+   "label": [
+    [
+     "ProvisionForShareBasedRemunerationForDirectorsAndOtherOfficersSGA",
+     "CurrentYearDuration"
+    ]
+   ],
+   "一致": "pointer なし",
+   "形": "単一",
+   "層": "値を持つ形",
+   "型5露出": true,
+   "同値候補": [
+    [
+     "jppfs_cor:ProvisionForShareBasedRemunerationForDirectorsAndOtherOfficersSGA",
+     "CurrentYearDuration_NonConsolidatedMember"
+    ]
+   ]
+  },
+  {
+   "id": "N036",
+   "state": "POINTER_NOT_FOUND",
+   "実装席": null,
+   "engine": [],
+   "演算": [],
+   "label": [
+    [
+     "GrossProfit",
+     "Prior1YearDuration"
+    ],
+    [
+     "NetSales",
+     "Prior1YearDuration"
+    ]
+   ],
+   "一致": "pointer なし",
+   "形": "率(比)",
+   "層": "値を持つ形",
+   "型5露出": true,
+   "同値候補": [
+    [
+     "jpcrp_cor:NetSalesSummaryOfBusinessResults",
+     "Prior1YearDuration"
+    ]
+   ]
+  },
+  {
+   "id": "N193",
+   "state": "GROUNDED",
+   "実装席": "correct",
+   "engine": [
+    [
+     "CurrentPortionOfLongTermLoansPayable",
+     "CurrentYearInstant"
+    ]
+   ],
+   "演算": [],
+   "label": [
+    [
+     "CurrentPortionOfLongTermLoansPayable",
+     "CurrentYearInstant"
+    ]
+   ],
+   "一致": "一致(厳密)",
+   "形": "単一",
+   "層": "値を持つ形",
+   "型5露出": false,
+   "同値候補": []
+  },
+  {
+   "id": "N153",
+   "state": "UNVERIFIABLE",
+   "実装席": null,
+   "engine": [],
+   "演算": [],
+   "label": [
+    [
+     "PropertyPlantAndEquipment",
+     "CurrentYearInstant"
+    ]
+   ],
+   "一致": "pointer なし",
+   "形": "単一",
+   "層": "値を持つ形",
+   "型5露出": false,
+   "同値候補": []
+  },
+  {
+   "id": "T001",
+   "state": "UNVERIFIABLE",
+   "実装席": null,
+   "engine": [],
+   "演算": [],
+   "label": [
+    [
+     "NetSales",
+     "CurrentYearDuration"
+    ],
+    [
+     "NetSales",
+     "Prior1YearDuration"
+    ]
+   ],
+   "一致": "pointer なし",
+   "形": "符号・方向",
+   "層": "方向の形",
+   "型5露出": true,
+   "同値候補": [
+    [
+     "jpcrp_cor:NetSalesSummaryOfBusinessResults",
+     "CurrentYearDuration"
+    ],
+    [
+     "jpcrp_cor:NetSalesSummaryOfBusinessResults",
+     "Prior1YearDuration"
+    ]
+   ]
+  },
+  {
+   "id": "N075",
+   "state": "UNVERIFIABLE",
+   "実装席": null,
+   "engine": [],
+   "演算": [],
+   "label": [
+    [
+     "InterestIncomeNOI",
+     "Prior1YearDuration"
+    ]
+   ],
+   "一致": "pointer なし",
+   "形": "単一",
+   "層": "値を持つ形",
+   "型5露出": false,
+   "同値候補": []
+  },
+  {
+   "id": "N303",
+   "state": "GROUNDED",
+   "実装席": "correct",
+   "engine": [
+    [
+     "CashAndDeposits",
+     "CurrentYearInstant"
+    ]
+   ],
+   "演算": [],
+   "label": [
+    [
+     "CashAndDeposits",
+     "CurrentYearInstant"
+    ]
+   ],
+   "一致": "一致(厳密)",
+   "形": "単一",
+   "層": "値を持つ形",
+   "型5露出": true,
+   "同値候補": [
+    [
+     "jpcrp_cor:CashAndCashEquivalentsSummaryOfBusinessResults",
+     "CurrentYearInstant"
+    ],
+    [
+     "jppfs_cor:CashAndCashEquivalents",
+     "CurrentYearInstant"
+    ]
+   ]
+  },
+  {
+   "id": "T085",
+   "state": "VALUE_MISMATCH",
+   "実装席": null,
+   "engine": [
+    [
+     "DividendsFromSurplus",
+     "CurrentYearDuration"
+    ],
+    [
+     "DividendsFromSurplus",
+     "Prior1YearDuration"
+    ]
+   ],
+   "演算": [
+    "builtin:sign(cur-prior)"
+   ],
+   "label": [
+    [
+     "RetainedEarnings",
+     "CurrentYearInstant"
+    ],
+    [
+     "RetainedEarnings",
+     "Prior1YearInstant"
+    ]
+   ],
+   "一致": "不一致",
+   "形": "符号・方向",
+   "層": "方向の形",
+   "型5露出": true,
+   "同値候補": [
+    [
+     "jppfs_cor:TotalChangesOfItemsDuringThePeriod",
+     "CurrentYearDuration_RetainedEarningsMember"
+    ]
+   ]
+  },
+  {
+   "id": "T037",
+   "state": "GROUNDED",
+   "実装席": "correct",
+   "engine": [
+    [
+     "OperatingIncome",
+     "CurrentYearDuration"
+    ],
+    [
+     "OperatingIncome",
+     "Prior1YearDuration"
+    ]
+   ],
+   "演算": [
+    "builtin:sign(cur-prior)"
+   ],
+   "label": [
+    [
+     "OperatingIncome",
+     "CurrentYearDuration"
+    ],
+    [
+     "OperatingIncome",
+     "Prior1YearDuration"
+    ]
+   ],
+   "一致": "一致(厳密)",
+   "形": "符号・方向",
+   "層": "方向の形",
+   "型5露出": false,
+   "同値候補": []
+  },
+  {
+   "id": "N101",
+   "state": "UNVERIFIABLE",
+   "実装席": null,
+   "engine": [],
+   "演算": [],
+   "label": [
+    [
+     "IncomeTaxesCurrent",
+     "CurrentYearDuration"
+    ]
+   ],
+   "一致": "pointer なし",
+   "形": "単一",
+   "層": "値を持つ形",
+   "型5露出": false,
+   "同値候補": []
+  },
+  {
+   "id": "N233",
+   "state": "UNVERIFIABLE",
+   "実装席": null,
+   "engine": [],
+   "演算": [],
+   "label": [
+    [
+     "RetainedEarnings",
+     "CurrentYearInstant"
+    ]
+   ],
+   "一致": "pointer なし",
+   "形": "単一",
+   "層": "値を持つ形",
+   "型5露出": true,
+   "同値候補": [
+    [
+     "jppfs_cor:NetAssets",
+     "CurrentYearInstant_RetainedEarningsMember"
+    ]
+   ]
+  },
+  {
+   "id": "N021",
+   "state": "GROUNDED",
+   "実装席": "correct",
+   "engine": [
+    [
+     "NotesAndAccountsReceivableTrade",
+     "CurrentYearInstant"
+    ]
+   ],
+   "演算": [],
+   "label": [
+    [
+     "NotesAndAccountsReceivableTrade",
+     "CurrentYearInstant"
+    ]
+   ],
+   "一致": "一致(厳密)",
+   "形": "単一",
+   "層": "値を持つ形",
+   "型5露出": false,
+   "同値候補": []
+  },
+  {
+   "id": "N024",
+   "state": "GROUNDED",
+   "実装席": "correct",
+   "engine": [
+    [
+     "GrossProfit",
+     "CurrentYearDuration"
+    ]
+   ],
+   "演算": [],
+   "label": [
+    [
+     "GrossProfit",
+     "CurrentYearDuration"
+    ]
+   ],
+   "一致": "一致(厳密)",
+   "形": "単一",
+   "層": "値を持つ形",
+   "型5露出": false,
+   "同値候補": []
+  },
+  {
+   "id": "N053",
+   "state": "UNVERIFIABLE",
+   "実装席": null,
+   "engine": [],
+   "演算": [],
+   "label": [
+    [
+     "RetirementBenefitExpensesSGA",
+     "CurrentYearDuration"
+    ],
+    [
+     "RetirementBenefitExpensesSGA",
+     "Prior1YearDuration"
+    ]
+   ],
+   "一致": "pointer なし",
+   "形": "差(当期−前期)",
+   "層": "値を持つ形",
+   "型5露出": false,
+   "同値候補": []
+  },
+  {
+   "id": "N220",
+   "state": "VALUE_MISMATCH",
+   "実装席": null,
+   "engine": [
+    [
+     "LongTermLoansPayable",
+     "CurrentYearInstant"
+    ]
+   ],
+   "演算": [],
+   "label": [
+    [
+     "CurrentPortionOfLongTermLoansPayable",
+     "Prior1YearInstant"
+    ],
+    [
+     "LongTermLoansPayable",
+     "Prior1YearInstant"
+    ]
+   ],
+   "一致": "不一致",
+   "形": "和",
+   "層": "値を持つ形",
+   "型5露出": false,
+   "同値候補": []
+  },
+  {
+   "id": "N080",
+   "state": "POINTER_NOT_FOUND",
+   "実装席": null,
+   "engine": [],
+   "演算": [],
+   "label": [
+    [
+     "OtherNOI",
+     "CurrentYearDuration"
+    ]
+   ],
+   "一致": "pointer なし",
+   "形": "単一",
+   "層": "値を持つ形",
+   "型5露出": false,
+   "同値候補": []
+  },
+  {
+   "id": "N245",
+   "state": "UNVERIFIABLE",
+   "実装席": null,
+   "engine": [],
+   "演算": [],
+   "label": [
+    [
+     "ForeignCurrencyTranslationAdjustment",
+     "Prior1YearInstant"
+    ]
+   ],
+   "一致": "pointer なし",
+   "形": "単一",
+   "層": "値を持つ形",
+   "型5露出": true,
+   "同値候補": [
+    [
+     "jppfs_cor:NetAssets",
+     "Prior1YearInstant_ForeignCurrencyTranslationAdjustmentMember"
+    ]
+   ]
+  },
+  {
+   "id": "N100",
+   "state": "UNVERIFIABLE",
+   "実装席": null,
+   "engine": [],
+   "演算": [],
+   "label": [
+    [
+     "IncomeTaxes",
+     "Prior1YearDuration"
+    ]
+   ],
+   "一致": "pointer なし",
+   "形": "単一",
+   "層": "値を持つ形",
+   "型5露出": false,
+   "同値候補": []
+  },
+  {
+   "id": "N126",
+   "state": "VALUE_MISMATCH",
+   "実装席": null,
+   "engine": [
+    [
+     "ValuationDifferenceOnAvailableForSaleSecurities",
+     "CurrentYearInstant"
+    ]
+   ],
+   "演算": [],
+   "label": [
+    [
+     "ForeignCurrencyTranslationAdjustmentNetOfTaxOCI",
+     "Prior1YearDuration"
+    ]
+   ],
+   "一致": "不一致",
+   "形": "単一",
+   "層": "値を持つ形",
+   "型5露出": true,
+   "同値候補": [
+    [
+     "jppfs_cor:NetChangesOfItemsOtherThanShareholdersEquity",
+     "Prior1YearDuration_ForeignCurrencyTranslationAdjustmentMember"
+    ],
+    [
+     "jppfs_cor:TotalChangesOfItemsDuringThePeriod",
+     "Prior1YearDuration_ForeignCurrencyTranslationAdjustmentMember"
+    ]
+   ]
+  },
+  {
+   "id": "T103",
+   "state": "VALUE_MISMATCH",
+   "実装席": null,
+   "engine": [
+    [
+     "DecreaseIncreaseInNotesAndAccountsReceivableTradeOpeCF",
+     "CurrentYearDuration"
+    ]
+   ],
+   "演算": [
+    "builtin:flow_sign(cur)==direction"
+   ],
+   "label": [
+    [
+     "DecreaseIncreaseInNotesAndAccountsReceivableTradeOpeCF",
+     "Prior1YearDuration"
+    ]
+   ],
+   "一致": "不一致",
+   "形": "符号・方向",
+   "層": "方向の形",
+   "型5露出": false,
+   "同値候補": []
+  },
+  {
+   "id": "N103",
+   "state": "POINTER_NOT_FOUND",
+   "実装席": null,
+   "engine": [],
+   "演算": [],
+   "label": [
+    [
+     "IncomeBeforeIncomeTaxes",
+     "CurrentYearDuration"
+    ],
+    [
+     "IncomeTaxes",
+     "CurrentYearDuration"
+    ]
+   ],
+   "一致": "pointer なし",
+   "形": "率(比)",
+   "層": "値を持つ形",
+   "型5露出": false,
+   "同値候補": []
+  },
+  {
+   "id": "N144",
+   "state": "UNVERIFIABLE",
+   "実装席": null,
+   "engine": [],
+   "演算": [],
+   "label": [
+    [
+     "OtherCA",
+     "CurrentYearInstant"
+    ]
+   ],
+   "一致": "pointer なし",
+   "形": "単一",
+   "層": "値を持つ形",
+   "型5露出": false,
+   "同値候補": []
+  },
+  {
+   "id": "N116",
+   "state": "VALUE_MISMATCH",
+   "実装席": null,
+   "engine": [
+    [
+     "ProfitLossAttributableToOwnersOfParentSummaryOfBusinessResults",
+     "CurrentYearDuration"
+    ]
+   ],
+   "演算": [],
+   "label": [
+    [
+     "ComprehensiveIncome",
+     "CurrentYearDuration"
+    ],
+    [
+     "ComprehensiveIncome",
+     "Prior1YearDuration"
+    ]
+   ],
+   "一致": "不一致",
+   "形": "差(当期−前期)",
+   "層": "値を持つ形",
+   "型5露出": true,
+   "同値候補": [
+    [
+     "jppfs_cor:ComprehensiveIncomeAttributableToOwnersOfTheParent",
+     "CurrentYearDuration"
+    ],
+    [
+     "jppfs_cor:ComprehensiveIncomeAttributableToOwnersOfTheParent",
+     "Prior1YearDuration"
+    ]
+   ]
+  },
+  {
+   "id": "T110",
+   "state": "UNVERIFIABLE",
+   "実装席": null,
+   "engine": [],
+   "演算": [],
+   "label": [
+    [
+     "NetCashProvidedByUsedInFinancingActivities",
+     "Prior1YearDuration"
+    ]
+   ],
+   "一致": "pointer なし",
+   "形": "符号・方向",
+   "層": "方向の形",
+   "型5露出": true,
+   "同値候補": [
+    [
+     "jpcrp_cor:NetCashProvidedByUsedInFinancingActivitiesSummaryOfBusinessResults",
+     "Prior1YearDuration"
+    ]
+   ]
+  },
+  {
+   "id": "N214",
+   "state": "GROUNDED",
+   "実装席": "correct",
+   "engine": [
+    [
+     "ProvisionForWarrantiesForCompletedOperationCL",
+     "CurrentYearInstant"
+    ]
+   ],
+   "演算": [],
+   "label": [
+    [
+     "ProvisionForWarrantiesForCompletedOperationCL",
+     "CurrentYearInstant"
+    ]
+   ],
+   "一致": "一致(厳密)",
+   "形": "単一",
+   "層": "値を持つ形",
+   "型5露出": false,
+   "同値候補": []
+  },
+  {
+   "id": "T039",
+   "state": "UNVERIFIABLE",
+   "実装席": null,
+   "engine": [],
+   "演算": [],
+   "label": [
+    [
+     "NonOperatingIncome",
+     "CurrentYearDuration"
+    ],
+    [
+     "NonOperatingIncome",
+     "Prior1YearDuration"
+    ]
+   ],
+   "一致": "pointer なし",
+   "形": "符号・方向",
+   "層": "方向の形",
+   "型5露出": false,
+   "同値候補": []
+  },
+  {
+   "id": "T084",
+   "state": "UNVERIFIABLE",
+   "実装席": null,
+   "engine": [],
+   "演算": [],
+   "label": [
+    [
+     "ValuationAndTranslationAdjustments",
+     "CurrentYearInstant"
+    ],
+    [
+     "ValuationAndTranslationAdjustments",
+     "Prior1YearInstant"
+    ]
+   ],
+   "一致": "pointer なし",
+   "形": "符号・方向",
+   "層": "方向の形",
+   "型5露出": true,
+   "同値候補": [
+    [
+     "jppfs_cor:OtherComprehensiveIncome",
+     "CurrentYearDuration"
+    ]
+   ]
+  },
+  {
+   "id": "N146",
+   "state": "UNVERIFIABLE",
+   "実装席": null,
+   "engine": [],
+   "演算": [],
+   "label": [
+    [
+     "OtherCA",
+     "CurrentYearInstant"
+    ],
+    [
+     "OtherCA",
+     "Prior1YearInstant"
+    ]
+   ],
+   "一致": "pointer なし",
+   "形": "差(当期−前期)",
+   "層": "値を持つ形",
+   "型5露出": false,
+   "同値候補": []
+  },
+  {
+   "id": "T054",
+   "state": "UNVERIFIABLE",
+   "実装席": null,
+   "engine": [],
+   "演算": [],
+   "label": [
+    [
+     "OtherCA",
+     "CurrentYearInstant"
+    ],
+    [
+     "OtherCA",
+     "Prior1YearInstant"
+    ]
+   ],
+   "一致": "pointer なし",
+   "形": "符号・方向",
+   "層": "方向の形",
+   "型5露出": false,
+   "同値候補": []
+  },
+  {
+   "id": "N178",
+   "state": "GROUNDED",
+   "実装席": "correct",
+   "engine": [
+    [
+     "CurrentLiabilities",
+     "CurrentYearInstant"
+    ]
+   ],
+   "演算": [],
+   "label": [
+    [
+     "CurrentLiabilities",
+     "CurrentYearInstant"
+    ]
+   ],
+   "一致": "一致(厳密)",
+   "形": "単一",
+   "層": "値を持つ形",
+   "型5露出": false,
+   "同値候補": []
+  },
+  {
+   "id": "N231",
+   "state": "UNVERIFIABLE",
+   "実装席": null,
+   "engine": [],
+   "演算": [],
+   "label": [
+    [
+     "CapitalSurplus",
+     "Prior1YearInstant"
+    ]
+   ],
+   "一致": "pointer なし",
+   "形": "単一",
+   "層": "値を持つ形",
+   "型5露出": true,
+   "同値候補": [
+    [
+     "jppfs_cor:NetAssets",
+     "Prior1YearInstant_CapitalSurplusMember"
+    ]
+   ]
+  },
+  {
+   "id": "T071",
+   "state": "UNVERIFIABLE",
+   "実装席": null,
+   "engine": [],
+   "演算": [],
+   "label": [
+    [
+     "AccruedConsumptionTaxes",
+     "CurrentYearInstant"
+    ],
+    [
+     "AccruedConsumptionTaxes",
+     "Prior1YearInstant"
+    ]
+   ],
+   "一致": "pointer なし",
+   "形": "符号・方向",
+   "層": "方向の形",
+   "型5露出": false,
+   "同値候補": []
+  },
+  {
+   "id": "T108",
+   "state": "UNVERIFIABLE",
+   "実装席": null,
+   "engine": [],
+   "演算": [],
+   "label": [
+    [
+     "NetCashProvidedByUsedInInvestmentActivities",
+     "Prior1YearDuration"
+    ]
+   ],
+   "一致": "pointer なし",
+   "形": "符号・方向",
+   "層": "方向の形",
+   "型5露出": true,
+   "同値候補": [
+    [
+     "jpcrp_cor:NetCashProvidedByUsedInInvestingActivitiesSummaryOfBusinessResults",
+     "Prior1YearDuration"
+    ]
+   ]
+  },
+  {
+   "id": "N282",
+   "state": "GROUNDED",
+   "実装席": "correct",
+   "engine": [
+    [
+     "DecreaseIncreaseInNotesAndAccountsReceivableTradeOpeCF",
+     "Prior1YearDuration"
+    ]
+   ],
+   "演算": [],
+   "label": [
+    [
+     "DecreaseIncreaseInNotesAndAccountsReceivableTradeOpeCF",
+     "Prior1YearDuration"
+    ]
+   ],
+   "一致": "一致(厳密)",
+   "形": "単一",
+   "層": "値を持つ形",
+   "型5露出": false,
+   "同値候補": []
+  },
+  {
+   "id": "N079",
+   "state": "POINTER_NOT_FOUND",
+   "実装席": null,
+   "engine": [],
+   "演算": [],
+   "label": [
+    [
+     "RealEstateRentNOI",
+     "Prior1YearDuration"
+    ]
+   ],
+   "一致": "pointer なし",
+   "形": "単一",
+   "層": "値を持つ形",
+   "型5露出": true,
+   "同値候補": [
+    [
+     "jppfs_cor:RealEstateRentNOI",
+     "CurrentYearDuration"
+    ]
+   ]
+  },
+  {
+   "id": "N122",
+   "state": "UNVERIFIABLE",
+   "実装席": null,
+   "engine": [],
+   "演算": [],
+   "label": [
+    [
+     "RemeasurementsOfDefinedBenefitPlansNetOfTaxOCI",
+     "Prior1YearDuration"
+    ]
+   ],
+   "一致": "pointer なし",
+   "形": "単一",
+   "層": "値を持つ形",
+   "型5露出": true,
+   "同値候補": [
+    [
+     "jppfs_cor:NetChangesOfItemsOtherThanShareholdersEquity",
+     "Prior1YearDuration_RemeasurementsOfDefinedBenefitPlansMember"
+    ],
+    [
+     "jppfs_cor:TotalChangesOfItemsDuringThePeriod",
+     "Prior1YearDuration_RemeasurementsOfDefinedBenefitPlansMember"
+    ]
+   ]
+  },
+  {
+   "id": "N113",
+   "state": "VALUE_MISMATCH",
+   "実装席": null,
+   "engine": [
+    [
+     "RateOfReturnOnEquitySummaryOfBusinessResults",
+     "CurrentYearDuration"
+    ]
+   ],
+   "演算": [],
+   "label": [
+    [
+     "RateOfReturnOnEquitySummaryOfBusinessResults",
+     "Prior1YearDuration"
+    ]
+   ],
+   "一致": "不一致",
+   "形": "単一",
+   "層": "値を持つ形",
+   "型5露出": false,
+   "同値候補": []
+  },
+  {
+   "id": "N237",
+   "state": "UNVERIFIABLE",
+   "実装席": null,
+   "engine": [],
+   "演算": [],
+   "label": [
+    [
+     "TreasuryStock",
+     "Prior1YearInstant"
+    ]
+   ],
+   "一致": "pointer なし",
+   "形": "単一",
+   "層": "値を持つ形",
+   "型5露出": true,
+   "同値候補": [
+    [
+     "jppfs_cor:NetAssets",
+     "Prior1YearInstant_TreasuryStockMember"
+    ]
+   ]
+  },
+  {
+   "id": "N035",
+   "state": "POINTER_NOT_FOUND",
+   "実装席": null,
+   "engine": [],
+   "演算": [],
+   "label": [
+    [
+     "CostOfSales",
+     "CurrentYearDuration"
+    ],
+    [
+     "CostOfSales",
+     "Prior1YearDuration"
+    ]
+   ],
+   "一致": "pointer なし",
+   "形": "ポイント差",
+   "層": "値を持つ形",
+   "型5露出": false,
+   "同値候補": []
+  },
+  {
+   "id": "N198",
+   "state": "UNVERIFIABLE",
+   "実装席": null,
+   "engine": [],
+   "演算": [],
+   "label": [
+    [
+     "ProvisionForShareBasedRemunerationForDirectorsAndOtherOfficersCL",
+     "CurrentYearInstant"
+    ],
+    [
+     "ProvisionForShareBasedRemunerationForDirectorsAndOtherOfficersCL",
+     "Prior1YearInstant"
+    ]
+   ],
+   "一致": "pointer なし",
+   "形": "差(当期−前期)",
+   "層": "値を持つ形",
+   "型5露出": true,
+   "同値候補": [
+    [
+     "jppfs_cor:IncreaseDecreaseInProvisionForShareBasedRemunerationForDirectorsAndOtherOfficersOpeCF",
+     "CurrentYearDuration"
+    ],
+    [
+     "jppfs_cor:ProvisionForShareBasedRemunerationForDirectorsAndOtherOfficersCL",
+     "CurrentYearInstant_NonConsolidatedMember"
+    ],
+    [
+     "jppfs_cor:ProvisionForShareBasedRemunerationForDirectorsAndOtherOfficersCL",
+     "Prior1YearInstant_NonConsolidatedMember"
+    ]
+   ]
+  },
+  {
+   "id": "N205",
+   "state": "GROUNDED",
+   "実装席": "correct",
+   "engine": [
+    [
+     "DeferredTaxLiabilities",
+     "CurrentYearInstant"
+    ]
+   ],
+   "演算": [],
+   "label": [
+    [
+     "DeferredTaxLiabilities",
+     "CurrentYearInstant"
+    ]
+   ],
+   "一致": "一致(厳密)",
+   "形": "単一",
+   "層": "値を持つ形",
+   "型5露出": false,
+   "同値候補": []
+  },
+  {
+   "id": "N046",
+   "state": "POINTER_NOT_FOUND",
+   "実装席": null,
+   "engine": [],
+   "演算": [],
+   "label": [
+    [
+     "EmployeesSalariesAndAllowancesSGA",
+     "CurrentYearDuration"
+    ]
+   ],
+   "一致": "pointer なし",
+   "形": "単一",
+   "層": "値を持つ形",
+   "型5露出": false,
+   "同値候補": []
+  },
+  {
+   "id": "N072",
+   "state": "UNVERIFIABLE",
+   "実装席": null,
+   "engine": [],
+   "演算": [],
+   "label": [
+    [
+     "NonOperatingIncome",
+     "Prior1YearDuration"
+    ]
+   ],
+   "一致": "pointer なし",
+   "形": "単一",
+   "層": "値を持つ形",
+   "型5露出": false,
+   "同値候補": []
+  },
+  {
+   "id": "N076",
+   "state": "POINTER_NOT_FOUND",
+   "実装席": null,
+   "engine": [],
+   "演算": [],
+   "label": [
+    [
+     "DividendsIncomeNOI",
+     "CurrentYearDuration"
+    ]
+   ],
+   "一致": "pointer なし",
+   "形": "単一",
+   "層": "値を持つ形",
+   "型5露出": false,
+   "同値候補": []
+  },
+  {
+   "id": "N239",
+   "state": "UNVERIFIABLE",
+   "実装席": null,
+   "engine": [],
+   "演算": [],
+   "label": [
+    [
+     "ValuationAndTranslationAdjustments",
+     "Prior1YearInstant"
+    ]
+   ],
+   "一致": "pointer なし",
+   "形": "単一",
+   "層": "値を持つ形",
+   "型5露出": true,
+   "同値候補": [
+    [
+     "jppfs_cor:NetAssets",
+     "Prior1YearInstant_ValuationAndTranslationAdjustmentsMember"
+    ]
+   ]
+  },
+  {
+   "id": "N273",
+   "state": "UNVERIFIABLE",
+   "実装席": null,
+   "engine": [],
+   "演算": [],
+   "label": [
+    [
+     "SubtotalOpeCF",
+     "CurrentYearDuration"
+    ]
+   ],
+   "一致": "pointer なし",
+   "形": "単一",
+   "層": "値を持つ形",
+   "型5露出": false,
+   "同値候補": []
+  },
+  {
+   "id": "N249",
+   "state": "GROUNDED",
+   "実装席": "ambiguous",
+   "engine": [
+    [
+     "DividendsFromSurplus",
+     "CurrentYearDuration"
+    ]
+   ],
+   "演算": [],
+   "label": [
+    [
+     "DividendsFromSurplus",
+     "CurrentYearDuration"
+    ]
+   ],
+   "一致": "一致(厳密)",
+   "形": "単一",
+   "層": "値を持つ形",
+   "型5露出": true,
+   "同値候補": [
+    [
+     "jppfs_cor:DividendsFromSurplus",
+     "CurrentYearDuration_NonConsolidatedMember"
+    ],
+    [
+     "jppfs_cor:DividendsFromSurplus",
+     "CurrentYearDuration_NonConsolidatedMember_RetainedEarningsBroughtForwardMember"
+    ],
+    [
+     "jppfs_cor:DividendsFromSurplus",
+     "CurrentYearDuration_NonConsolidatedMember_RetainedEarningsMember"
+    ],
+    [
+     "jppfs_cor:DividendsFromSurplus",
+     "CurrentYearDuration_NonConsolidatedMember_ShareholdersEquityMember"
+    ],
+    [
+     "jppfs_cor:DividendsFromSurplus",
+     "CurrentYearDuration_RetainedEarningsMember"
+    ],
+    [
+     "jppfs_cor:DividendsFromSurplus",
+     "CurrentYearDuration_ShareholdersEquityMember"
+    ]
+   ]
+  },
+  {
+   "id": "N187",
+   "state": "GROUNDED",
+   "実装席": "correct",
+   "engine": [
+    [
+     "IncomeTaxesPayable",
+     "CurrentYearInstant"
+    ]
+   ],
+   "演算": [],
+   "label": [
+    [
+     "IncomeTaxesPayable",
+     "CurrentYearInstant"
+    ]
+   ],
+   "一致": "一致(厳密)",
+   "形": "単一",
+   "層": "値を持つ形",
+   "型5露出": false,
+   "同値候補": []
+  },
+  {
+   "id": "N261",
+   "state": "UNVERIFIABLE",
+   "実装席": null,
+   "engine": [],
+   "演算": [],
+   "label": [
+    [
+     "NetCashProvidedByUsedInOperatingActivities",
+     "CurrentYearDuration"
+    ]
+   ],
+   "一致": "pointer なし",
+   "形": "単一",
+   "層": "値を持つ形",
+   "型5露出": true,
+   "同値候補": [
+    [
+     "jpcrp_cor:NetCashProvidedByUsedInOperatingActivitiesSummaryOfBusinessResults",
+     "CurrentYearDuration"
+    ]
+   ]
+  },
+  {
+   "id": "N037",
+   "state": "POINTER_NOT_FOUND",
+   "実装席": null,
+   "engine": [],
+   "演算": [],
+   "label": [
+    [
+     "GrossProfit",
+     "CurrentYearDuration"
+    ],
+    [
+     "NetSales",
+     "CurrentYearDuration"
+    ]
+   ],
+   "一致": "pointer なし",
+   "形": "率(比)",
+   "層": "値を持つ形",
+   "型5露出": true,
+   "同値候補": [
+    [
+     "jpcrp_cor:NetSalesSummaryOfBusinessResults",
+     "CurrentYearDuration"
+    ]
+   ]
+  },
+  {
+   "id": "N120",
+   "state": "UNVERIFIABLE",
+   "実装席": null,
+   "engine": [],
+   "演算": [],
+   "label": [
+    [
+     "OtherComprehensiveIncome",
+     "CurrentYearDuration"
+    ],
+    [
+     "OtherComprehensiveIncome",
+     "Prior1YearDuration"
+    ]
+   ],
+   "一致": "pointer なし",
+   "形": "差(当期−前期)",
+   "層": "値を持つ形",
+   "型5露出": false,
+   "同値候補": []
+  },
+  {
+   "id": "N152",
+   "state": "UNVERIFIABLE",
+   "実装席": null,
+   "engine": [],
+   "演算": [],
+   "label": [
+    [
+     "NoncurrentAssets",
+     "CurrentYearInstant"
+    ],
+    [
+     "NoncurrentAssets",
+     "Prior1YearInstant"
+    ]
+   ],
+   "一致": "pointer なし",
+   "形": "率(比)",
+   "層": "値を持つ形",
+   "型5露出": false,
+   "同値候補": []
+  },
+  {
+   "id": "N013",
+   "state": "UNVERIFIABLE",
+   "実装席": null,
+   "engine": [],
+   "演算": [],
+   "label": [
+    [
+     "ComprehensiveIncome",
+     "CurrentYearDuration"
+    ]
+   ],
+   "一致": "pointer なし",
+   "形": "単一",
+   "層": "値を持つ形",
+   "型5露出": true,
+   "同値候補": [
+    [
+     "jpcrp_cor:ComprehensiveIncomeSummaryOfBusinessResults",
+     "CurrentYearDuration"
+    ],
+    [
+     "jppfs_cor:ComprehensiveIncomeAttributableToOwnersOfTheParent",
+     "CurrentYearDuration"
+    ]
+   ]
+  },
+  {
+   "id": "N115",
+   "state": "VALUE_MISMATCH",
+   "実装席": null,
+   "engine": [
+    [
+     "ProfitLossAttributableToOwnersOfParentSummaryOfBusinessResults",
+     "CurrentYearDuration"
+    ]
+   ],
+   "演算": [],
+   "label": [
+    [
+     "ComprehensiveIncome",
+     "Prior1YearDuration"
+    ]
+   ],
+   "一致": "不一致",
+   "形": "単一",
+   "層": "値を持つ形",
+   "型5露出": true,
+   "同値候補": [
+    [
+     "jpcrp_cor:ComprehensiveIncomeSummaryOfBusinessResults",
+     "Prior1YearDuration"
+    ],
+    [
+     "jppfs_cor:ComprehensiveIncomeAttributableToOwnersOfTheParent",
+     "Prior1YearDuration"
+    ]
+   ]
+  },
+  {
+   "id": "N252",
+   "state": "VALUE_MISMATCH",
+   "実装席": null,
+   "engine": [
+    [
+     "EquityToAssetRatioSummaryOfBusinessResults",
+     "CurrentYearInstant"
+    ]
+   ],
+   "演算": [],
+   "label": [
+    [
+     "EquityToAssetRatioSummaryOfBusinessResults",
+     "Prior1YearInstant"
+    ]
+   ],
+   "一致": "不一致",
+   "形": "単一",
+   "層": "値を持つ形",
+   "型5露出": false,
+   "同値候補": []
+  },
+  {
+   "id": "T017",
+   "state": "VALUE_MISMATCH",
+   "実装席": null,
+   "engine": [
+    [
+     "GrossProfit",
+     "CurrentYearDuration"
+    ],
+    [
+     "GrossProfit",
+     "Prior1YearDuration"
+    ]
+   ],
+   "演算": [
+    "builtin:sign(cur-prior)"
+   ],
+   "label": [
+    [
+     "CostOfSales",
+     "CurrentYearDuration"
+    ],
+    [
+     "CostOfSales",
+     "Prior1YearDuration"
+    ]
+   ],
+   "一致": "不一致",
+   "形": "符号・方向",
+   "層": "方向の形",
+   "型5露出": false,
+   "同値候補": []
+  },
+  {
+   "id": "N020",
+   "state": "UNVERIFIABLE",
+   "実装席": null,
+   "engine": [],
+   "演算": [],
+   "label": [
+    [
+     "NetSalesSummaryOfBusinessResults",
+     "CurrentYearDuration"
+    ],
+    [
+     "NetSalesSummaryOfBusinessResults",
+     "Prior4YearDuration"
+    ]
+   ],
+   "一致": "pointer なし",
+   "形": "率(比)",
+   "層": "値を持つ形",
+   "型5露出": true,
+   "同値候補": [
+    [
+     "jppfs_cor:NetSales",
+     "CurrentYearDuration"
+    ]
+   ]
+  },
+  {
+   "id": "N297",
+   "state": "POINTER_NOT_FOUND",
+   "実装席": null,
+   "engine": [],
+   "演算": [],
+   "label": [
+    [
+     "RepaymentOfLongTermLoansPayableFinCF",
+     "CurrentYearDuration"
+    ]
+   ],
+   "一致": "pointer なし",
+   "形": "単一",
+   "層": "値を持つ形",
+   "型5露出": true,
+   "同値候補": [
+    [
+     "jppfs_cor:CurrentPortionOfLongTermLoansPayable",
+     "Prior1YearInstant"
+    ]
+   ]
+  },
+  {
+   "id": "N014",
+   "state": "GROUNDED",
+   "実装席": "correct",
+   "engine": [
+    [
+     "NetSalesSummaryOfBusinessResults",
+     "CurrentYearDuration"
+    ]
+   ],
+   "演算": [],
+   "label": [
+    [
+     "NetSales",
+     "CurrentYearDuration"
+    ]
+   ],
+   "一致": "一致(同値類v0のみ)",
+   "形": "単一",
+   "層": "値を持つ形",
+   "型5露出": true,
+   "同値候補": [
+    [
+     "jpcrp_cor:NetSalesSummaryOfBusinessResults",
+     "CurrentYearDuration"
+    ]
+   ]
+  },
+  {
+   "id": "N031",
+   "state": "UNVERIFIABLE",
+   "実装席": null,
+   "engine": [],
+   "演算": [],
+   "label": [
+    [
+     "CostOfSales",
+     "CurrentYearDuration"
+    ],
+    [
+     "CostOfSales",
+     "Prior1YearDuration"
+    ]
+   ],
+   "一致": "pointer なし",
+   "形": "率(比)",
+   "層": "値を持つ形",
+   "型5露出": false,
+   "同値候補": []
+  },
+  {
+   "id": "N174",
+   "state": "GROUNDED",
+   "実装席": "correct",
+   "engine": [
+    [
+     "Liabilities",
+     "CurrentYearInstant"
+    ]
+   ],
+   "演算": [],
+   "label": [
+    [
+     "Liabilities",
+     "CurrentYearInstant"
+    ]
+   ],
+   "一致": "一致(厳密)",
+   "形": "単一",
+   "層": "値を持つ形",
+   "型5露出": false,
+   "同値候補": []
+  },
+  {
+   "id": "N119",
+   "state": "UNVERIFIABLE",
+   "実装席": null,
+   "engine": [],
+   "演算": [],
+   "label": [
+    [
+     "OtherComprehensiveIncome",
+     "Prior1YearDuration"
+    ]
+   ],
+   "一致": "pointer なし",
+   "形": "単一",
+   "層": "値を持つ形",
+   "型5露出": true,
+   "同値候補": [
+    [
+     "jppfs_cor:NetChangesOfItemsOtherThanShareholdersEquity",
+     "Prior1YearDuration_ValuationAndTranslationAdjustmentsMember"
+    ],
+    [
+     "jppfs_cor:TotalChangesOfItemsDuringThePeriod",
+     "Prior1YearDuration_ValuationAndTranslationAdjustmentsMember"
+    ]
+   ]
+  },
+  {
+   "id": "N264",
+   "state": "GROUNDED",
+   "実装席": "correct",
+   "engine": [
+    [
+     "IncomeBeforeIncomeTaxes",
+     "CurrentYearDuration"
+    ]
+   ],
+   "演算": [],
+   "label": [
+    [
+     "IncomeBeforeIncomeTaxes",
+     "CurrentYearDuration"
+    ]
+   ],
+   "一致": "一致(厳密)",
+   "形": "単一",
+   "層": "値を持つ形",
+   "型5露出": false,
+   "同値候補": []
+  },
+  {
+   "id": "N278",
+   "state": "GROUNDED",
+   "実装席": "correct",
+   "engine": [
+    [
+     "IncomeBeforeIncomeTaxes",
+     "CurrentYearDuration"
+    ],
+    [
+     "IncomeBeforeIncomeTaxes",
+     "Prior1YearDuration"
+    ]
+   ],
+   "演算": [
+    "formula:a-b"
+   ],
+   "label": [
+    [
+     "IncomeBeforeIncomeTaxes",
+     "CurrentYearDuration"
+    ],
+    [
+     "IncomeBeforeIncomeTaxes",
+     "Prior1YearDuration"
+    ]
+   ],
+   "一致": "一致(厳密)",
+   "形": "差(当期−前期)",
+   "層": "値を持つ形",
+   "型5露出": false,
+   "同値候補": []
+  },
+  {
+   "id": "N304",
+   "state": "POINTER_NOT_FOUND",
+   "実装席": null,
+   "engine": [],
+   "演算": [],
+   "label": [
+    [
+     "CurrentPortionOfLongTermLoansPayable",
+     "CurrentYearInstant"
+    ],
+    [
+     "LongTermLoansPayable",
+     "CurrentYearInstant"
+    ]
+   ],
+   "一致": "pointer なし",
+   "形": "和",
+   "層": "値を持つ形",
+   "型5露出": true,
+   "同値候補": [
+    [
+     "jppfs_cor:LongTermLoansPayable",
+     "Prior1YearInstant"
+    ]
+   ]
+  },
+  {
+   "id": "N029",
+   "state": "UNVERIFIABLE",
+   "実装席": null,
+   "engine": [],
+   "演算": [],
+   "label": [
+    [
+     "CostOfSales",
+     "Prior1YearDuration"
+    ]
+   ],
+   "一致": "pointer なし",
+   "形": "単一",
+   "層": "値を持つ形",
+   "型5露出": false,
+   "同値候補": []
+  },
+  {
+   "id": "N058",
+   "state": "POINTER_NOT_FOUND",
+   "実装席": null,
+   "engine": [],
+   "演算": [],
+   "label": [
+    [
+     "OtherSGA",
+     "CurrentYearDuration"
+    ],
+    [
+     "OtherSGA",
+     "Prior1YearDuration"
+    ]
+   ],
+   "一致": "pointer なし",
+   "形": "差(当期−前期)",
+   "層": "値を持つ形",
+   "型5露出": false,
+   "同値候補": []
+  },
+  {
+   "id": "N108",
+   "state": "POINTER_NOT_FOUND",
+   "実装席": null,
+   "engine": [],
+   "演算": [],
+   "label": [
+    [
+     "ProfitLossAttributableToOwnersOfParent",
+     "CurrentYearDuration"
+    ],
+    [
+     "ProfitLossAttributableToOwnersOfParent",
+     "Prior1YearDuration"
+    ]
+   ],
+   "一致": "pointer なし",
+   "形": "率(比)",
+   "層": "値を持つ形",
+   "型5露出": true,
+   "同値候補": [
+    [
+     "jpcrp_cor:ProfitLossAttributableToOwnersOfParentSummaryOfBusinessResults",
+     "CurrentYearDuration"
+    ],
+    [
+     "jpcrp_cor:ProfitLossAttributableToOwnersOfParentSummaryOfBusinessResults",
+     "Prior1YearDuration"
+    ],
+    [
+     "jppfs_cor:ProfitLoss",
+     "CurrentYearDuration"
+    ],
+    [
+     "jppfs_cor:ProfitLoss",
+     "Prior1YearDuration"
+    ],
+    [
+     "jppfs_cor:ProfitLossAttributableToOwnersOfParent",
+     "CurrentYearDuration_RetainedEarningsMember"
+    ],
+    [
+     "jppfs_cor:ProfitLossAttributableToOwnersOfParent",
+     "CurrentYearDuration_ShareholdersEquityMember"
+    ],
+    [
+     "jppfs_cor:ProfitLossAttributableToOwnersOfParent",
+     "Prior1YearDuration_RetainedEarningsMember"
+    ],
+    [
+     "jppfs_cor:ProfitLossAttributableToOwnersOfParent",
+     "Prior1YearDuration_ShareholdersEquityMember"
+    ]
+   ]
+  },
+  {
+   "id": "N130",
+   "state": "GROUNDED",
+   "実装席": "correct",
+   "engine": [
+    [
+     "TotalAssetsSummaryOfBusinessResults",
+     "CurrentYearInstant"
+    ],
+    [
+     "TotalAssetsSummaryOfBusinessResults",
+     "Prior1YearInstant"
+    ]
+   ],
+   "演算": [
+    "formula:a-b"
+   ],
+   "label": [
+    [
+     "Assets",
+     "CurrentYearInstant"
+    ],
+    [
+     "Assets",
+     "Prior1YearInstant"
+    ]
+   ],
+   "一致": "一致(同値類v0のみ)",
+   "形": "差(当期−前期)",
+   "層": "値を持つ形",
+   "型5露出": true,
+   "同値候補": [
+    [
+     "jpcrp_cor:TotalAssetsSummaryOfBusinessResults",
+     "CurrentYearInstant"
+    ],
+    [
+     "jpcrp_cor:TotalAssetsSummaryOfBusinessResults",
+     "Prior1YearInstant"
+    ],
+    [
+     "jppfs_cor:LiabilitiesAndNetAssets",
+     "CurrentYearInstant"
+    ],
+    [
+     "jppfs_cor:LiabilitiesAndNetAssets",
+     "Prior1YearInstant"
+    ]
+   ]
+  },
+  {
+   "id": "N091",
+   "state": "POINTER_NOT_FOUND",
+   "実装席": null,
+   "engine": [],
+   "演算": [],
+   "label": [
+    [
+     "OrdinaryIncome",
+     "CurrentYearDuration"
+    ],
+    [
+     "OrdinaryIncome",
+     "Prior1YearDuration"
+    ]
+   ],
+   "一致": "pointer なし",
+   "形": "率(比)",
+   "層": "値を持つ形",
+   "型5露出": true,
+   "同値候補": [
+    [
+     "jpcrp_cor:OrdinaryIncomeLossSummaryOfBusinessResults",
+     "CurrentYearDuration"
+    ],
+    [
+     "jpcrp_cor:OrdinaryIncomeLossSummaryOfBusinessResults",
+     "Prior1YearDuration"
+    ]
+   ]
+  },
+  {
+   "id": "N164",
+   "state": "POINTER_NOT_FOUND",
+   "実装席": null,
+   "engine": [],
+   "演算": [],
+   "label": [
+    [
+     "InvestmentsAndOtherAssets",
+     "CurrentYearInstant"
+    ],
+    [
+     "InvestmentsAndOtherAssets",
+     "Prior1YearInstant"
+    ]
+   ],
+   "一致": "pointer なし",
+   "形": "差(当期−前期)",
+   "層": "値を持つ形",
+   "型5露出": false,
+   "同値候補": []
+  },
+  {
+   "id": "N063",
+   "state": "GROUNDED",
+   "実装席": "correct",
+   "engine": [
+    [
+     "OperatingIncome",
+     "CurrentYearDuration"
+    ],
+    [
+     "OperatingIncome",
+     "Prior1YearDuration"
+    ]
+   ],
+   "演算": [
+    "formula:a-b"
+   ],
+   "label": [
+    [
+     "OperatingIncome",
+     "CurrentYearDuration"
+    ],
+    [
+     "OperatingIncome",
+     "Prior1YearDuration"
+    ]
+   ],
+   "一致": "一致(厳密)",
+   "形": "差(当期−前期)",
+   "層": "値を持つ形",
+   "型5露出": false,
+   "同値候補": []
+  },
+  {
+   "id": "N089",
+   "state": "GROUNDED",
+   "実装席": "correct",
+   "engine": [
+    [
+     "OrdinaryIncomeLossSummaryOfBusinessResults",
+     "Prior1YearDuration"
+    ]
+   ],
+   "演算": [],
+   "label": [
+    [
+     "OrdinaryIncome",
+     "Prior1YearDuration"
+    ]
+   ],
+   "一致": "不一致",
+   "形": "単一",
+   "層": "値を持つ形",
+   "型5露出": true,
+   "同値候補": [
+    [
+     "jpcrp_cor:OrdinaryIncomeLossSummaryOfBusinessResults",
+     "Prior1YearDuration"
+    ]
+   ]
+  },
+  {
+   "id": "T020",
+   "state": "GROUNDED",
+   "実装席": "undecidable",
+   "engine": [
+    [
+     "NetSalesSummaryOfBusinessResults",
+     "CurrentYearDuration"
+    ],
+    [
+     "NetSalesSummaryOfBusinessResults",
+     "Prior1YearDuration"
+    ]
+   ],
+   "演算": [
+    "builtin:sign(cur-prior)"
+   ],
+   "label": [
+    [
+     "CostOfSales",
+     "CurrentYearDuration"
+    ],
+    [
+     "CostOfSales",
+     "Prior1YearDuration"
+    ],
+    [
+     "NetSales",
+     "CurrentYearDuration"
+    ],
+    [
+     "NetSales",
+     "Prior1YearDuration"
+    ]
+   ],
+   "一致": "不一致",
+   "形": "符号・方向",
+   "層": "方向の形",
+   "型5露出": true,
+   "同値候補": [
+    [
+     "jpcrp_cor:NetSalesSummaryOfBusinessResults",
+     "CurrentYearDuration"
+    ],
+    [
+     "jpcrp_cor:NetSalesSummaryOfBusinessResults",
+     "Prior1YearDuration"
+    ]
+   ]
+  },
+  {
+   "id": "N289",
+   "state": "GROUNDED",
+   "実装席": "wrong_binding",
+   "engine": [
+    [
+     "PurchaseOfIntangibleAssetsInvCF",
+     "CurrentYearDuration"
+    ],
+    [
+     "PurchaseOfIntangibleAssetsInvCF",
+     "Prior1YearDuration"
+    ]
+   ],
+   "演算": [
+    "formula:a-b"
+   ],
+   "label": [
+    [
+     "ProceedsFromSalesOfStocksOfSubsidiariesAndAffiliatesInvCF",
+     "CurrentYearDuration"
+    ]
+   ],
+   "一致": "不一致",
+   "形": "単一",
+   "層": "値を持つ形",
+   "型5露出": false,
+   "同値候補": []
+  },
+  {
+   "id": "T070",
+   "state": "GROUNDED",
+   "実装席": "correct",
+   "engine": [
+    [
+     "AccountsPayableOperatingSpecific",
+     "CurrentYearInstant"
+    ],
+    [
+     "AccountsPayableOperatingSpecific",
+     "Prior1YearInstant"
+    ]
+   ],
+   "演算": [
+    "builtin:sign(cur-prior)"
+   ],
+   "label": [
+    [
+     "AccountsPayableOperatingSpecific",
+     "CurrentYearInstant"
+    ],
+    [
+     "AccountsPayableOperatingSpecific",
+     "Prior1YearInstant"
+    ]
+   ],
+   "一致": "一致(厳密)",
+   "形": "符号・方向",
+   "層": "方向の形",
+   "型5露出": true,
+   "同値候補": [
+    [
+     "jppfs_cor:IncreaseDecreaseInNotesAndAccountsPayableTradeOpeCF",
+     "CurrentYearDuration"
+    ]
+   ]
+  },
+  {
+   "id": "N011",
+   "state": "GROUNDED",
+   "実装席": "correct",
+   "engine": [
+    [
+     "EquityToAssetRatioSummaryOfBusinessResults",
+     "CurrentYearInstant"
+    ]
+   ],
+   "演算": [],
+   "label": [
+    [
+     "EquityToAssetRatioSummaryOfBusinessResults",
+     "CurrentYearInstant"
+    ]
+   ],
+   "一致": "一致(厳密)",
+   "形": "単一",
+   "層": "値を持つ形",
+   "型5露出": false,
+   "同値候補": []
+  },
+  {
+   "id": "T027",
+   "state": "POINTER_NOT_FOUND",
+   "実装席": null,
+   "engine": [],
+   "演算": [],
+   "label": [
+    [
+     "EmployeesSalariesAndAllowancesSGA",
+     "CurrentYearDuration"
+    ],
+    [
+     "EmployeesSalariesAndAllowancesSGA",
+     "Prior1YearDuration"
+    ]
+   ],
+   "一致": "pointer なし",
+   "形": "符号・方向",
+   "層": "方向の形",
+   "型5露出": false,
+   "同値候補": []
+  },
+  {
+   "id": "T023",
+   "state": "GROUNDED",
+   "実装席": "wrong_binding",
+   "engine": [
+    [
+     "GrossProfit",
+     "CurrentYearDuration"
+    ],
+    [
+     "GrossProfit",
+     "Prior1YearDuration"
+    ]
+   ],
+   "演算": [
+    "builtin:sign(cur-prior)"
+   ],
+   "label": [
+    [
+     "GrossProfit",
+     "CurrentYearDuration"
+    ],
+    [
+     "GrossProfit",
+     "Prior1YearDuration"
+    ],
+    [
+     "NetSales",
+     "CurrentYearDuration"
+    ],
+    [
+     "NetSales",
+     "Prior1YearDuration"
+    ]
+   ],
+   "一致": "不一致",
+   "形": "符号・方向",
+   "層": "方向の形",
+   "型5露出": true,
+   "同値候補": [
+    [
+     "jpcrp_cor:NetSalesSummaryOfBusinessResults",
+     "CurrentYearDuration"
+    ],
+    [
+     "jpcrp_cor:NetSalesSummaryOfBusinessResults",
+     "Prior1YearDuration"
+    ]
+   ]
+  },
+  {
+   "id": "N131",
+   "state": "GROUNDED",
+   "実装席": "correct",
+   "engine": [
+    [
+     "TotalAssetsSummaryOfBusinessResults",
+     "CurrentYearInstant"
+    ],
+    [
+     "TotalAssetsSummaryOfBusinessResults",
+     "Prior1YearInstant"
+    ]
+   ],
+   "演算": [],
+   "label": [
+    [
+     "Assets",
+     "CurrentYearInstant"
+    ],
+    [
+     "Assets",
+     "Prior1YearInstant"
+    ]
+   ],
+   "一致": "一致(同値類v0のみ)",
+   "形": "率(比)",
+   "層": "値を持つ形",
+   "型5露出": true,
+   "同値候補": [
+    [
+     "jpcrp_cor:TotalAssetsSummaryOfBusinessResults",
+     "CurrentYearInstant"
+    ],
+    [
+     "jpcrp_cor:TotalAssetsSummaryOfBusinessResults",
+     "Prior1YearInstant"
+    ],
+    [
+     "jppfs_cor:LiabilitiesAndNetAssets",
+     "CurrentYearInstant"
+    ],
+    [
+     "jppfs_cor:LiabilitiesAndNetAssets",
+     "Prior1YearInstant"
+    ]
+   ]
+  },
+  {
+   "id": "N077",
+   "state": "POINTER_NOT_FOUND",
+   "実装席": null,
+   "engine": [],
+   "演算": [],
+   "label": [
+    [
+     "DividendsIncomeNOI",
+     "Prior1YearDuration"
+    ]
+   ],
+   "一致": "pointer なし",
+   "形": "単一",
+   "層": "値を持つ形",
+   "型5露出": false,
+   "同値候補": []
+  },
+  {
+   "id": "N192",
+   "state": "GROUNDED",
+   "実装席": "correct",
+   "engine": [
+    [
+     "ContractLiabilities",
+     "CurrentYearInstant"
+    ],
+    [
+     "ContractLiabilities",
+     "Prior1YearInstant"
+    ]
+   ],
+   "演算": [
+    "formula:a-b"
+   ],
+   "label": [
+    [
+     "ContractLiabilities",
+     "CurrentYearInstant"
+    ],
+    [
+     "ContractLiabilities",
+     "Prior1YearInstant"
+    ]
+   ],
+   "一致": "一致(厳密)",
+   "形": "差(当期−前期)",
+   "層": "値を持つ形",
+   "型5露出": true,
+   "同値候補": [
+    [
+     "jppfs_cor:IncreaseDecreaseInContractLiabilitiesOpeCF",
+     "CurrentYearDuration"
+    ]
+   ]
+  },
+  {
+   "id": "N112",
+   "state": "GROUNDED",
+   "実装席": "correct",
+   "engine": [
+    [
+     "RateOfReturnOnEquitySummaryOfBusinessResults",
+     "CurrentYearDuration"
+    ]
+   ],
+   "演算": [],
+   "label": [
+    [
+     "RateOfReturnOnEquitySummaryOfBusinessResults",
+     "CurrentYearDuration"
+    ]
+   ],
+   "一致": "一致(厳密)",
+   "形": "単一",
+   "層": "値を持つ形",
+   "型5露出": false,
+   "同値候補": []
+  },
+  {
+   "id": "N218",
+   "state": "GROUNDED",
+   "実装席": "correct",
+   "engine": [
+    [
+     "LongTermLoansPayable",
+     "CurrentYearInstant"
+    ]
+   ],
+   "演算": [],
+   "label": [
+    [
+     "LongTermLoansPayable",
+     "CurrentYearInstant"
+    ]
+   ],
+   "一致": "一致(厳密)",
+   "形": "単一",
+   "層": "値を持つ形",
+   "型5露出": false,
+   "同値候補": []
+  },
+  {
+   "id": "T066",
+   "state": "GROUNDED",
+   "実装席": "correct",
+   "engine": [
+    [
+     "InvestmentSecurities",
+     "CurrentYearInstant"
+    ],
+    [
+     "InvestmentSecurities",
+     "Prior1YearInstant"
+    ]
+   ],
+   "演算": [
+    "builtin:sign(cur-prior)"
+   ],
+   "label": [
+    [
+     "InvestmentSecurities",
+     "CurrentYearInstant"
+    ],
+    [
+     "InvestmentSecurities",
+     "Prior1YearInstant"
+    ]
+   ],
+   "一致": "一致(厳密)",
+   "形": "符号・方向",
+   "層": "方向の形",
+   "型5露出": false,
+   "同値候補": []
+  },
+  {
+   "id": "N003",
+   "state": "GROUNDED",
+   "実装席": "correct",
+   "engine": [
+    [
+     "OperatingIncome",
+     "CurrentYearDuration"
+    ]
+   ],
+   "演算": [],
+   "label": [
+    [
+     "OperatingIncome",
+     "CurrentYearDuration"
+    ]
+   ],
+   "一致": "一致(厳密)",
+   "形": "単一",
+   "層": "値を持つ形",
+   "型5露出": false,
+   "同値候補": []
+  },
+  {
+   "id": "T102",
+   "state": "GROUNDED",
+   "実装席": "correct",
+   "engine": [
+    [
+     "IncomeBeforeIncomeTaxes",
+     "CurrentYearDuration"
+    ],
+    [
+     "IncomeBeforeIncomeTaxes",
+     "Prior1YearDuration"
+    ]
+   ],
+   "演算": [
+    "builtin:sign(cur-prior)"
+   ],
+   "label": [
+    [
+     "IncomeBeforeIncomeTaxes",
+     "CurrentYearDuration"
+    ],
+    [
+     "IncomeBeforeIncomeTaxes",
+     "Prior1YearDuration"
+    ]
+   ],
+   "一致": "一致(厳密)",
+   "形": "符号・方向",
+   "層": "方向の形",
+   "型5露出": false,
+   "同値候補": []
+  },
+  {
+   "id": "T026",
+   "state": "GROUNDED",
+   "実装席": "correct",
+   "engine": [
+    [
+     "SellingGeneralAndAdministrativeExpenses",
+     "CurrentYearDuration"
+    ],
+    [
+     "SellingGeneralAndAdministrativeExpenses",
+     "Prior1YearDuration"
+    ]
+   ],
+   "演算": [
+    "builtin:sign(cur-prior)"
+   ],
+   "label": [
+    [
+     "SellingGeneralAndAdministrativeExpenses",
+     "CurrentYearDuration"
+    ],
+    [
+     "SellingGeneralAndAdministrativeExpenses",
+     "Prior1YearDuration"
+    ]
+   ],
+   "一致": "一致(厳密)",
+   "形": "符号・方向",
+   "層": "方向の形",
+   "型5露出": false,
+   "同値候補": []
+  },
+  {
+   "id": "T068",
+   "state": "GROUNDED",
+   "実装席": "correct",
+   "engine": [
+    [
+     "Liabilities",
+     "CurrentYearInstant"
+    ],
+    [
+     "Liabilities",
+     "Prior1YearInstant"
+    ]
+   ],
+   "演算": [
+    "builtin:sign(cur-prior)"
+   ],
+   "label": [
+    [
+     "Liabilities",
+     "CurrentYearInstant"
+    ],
+    [
+     "Liabilities",
+     "Prior1YearInstant"
+    ]
+   ],
+   "一致": "一致(厳密)",
+   "形": "符号・方向",
+   "層": "方向の形",
+   "型5露出": false,
+   "同値候補": []
+  },
+  {
+   "id": "N200",
+   "state": "UNVERIFIABLE",
+   "実装席": null,
+   "engine": [],
+   "演算": [],
+   "label": [
+    [
+     "ProvisionForLossOnOrderReceivedCL",
+     "Prior1YearInstant"
+    ]
+   ],
+   "一致": "pointer なし",
+   "形": "単一",
+   "層": "値を持つ形",
+   "型5露出": false,
+   "同値候補": []
+  },
+  {
+   "id": "N066",
+   "state": "GROUNDED",
+   "実装席": "correct",
+   "engine": [
+    [
+     "OperatingIncome",
+     "CurrentYearDuration"
+    ],
+    [
+     "OperatingIncome",
+     "Prior1YearDuration"
+    ]
+   ],
+   "演算": [
+    "formula:a-b"
+   ],
+   "label": [
+    [
+     "OperatingIncome",
+     "CurrentYearDuration"
+    ],
+    [
+     "OperatingIncome",
+     "Prior1YearDuration"
+    ]
+   ],
+   "一致": "一致(厳密)",
+   "形": "差(当期−前期)",
+   "層": "値を持つ形",
+   "型5露出": false,
+   "同値候補": []
+  },
+  {
+   "id": "N137",
+   "state": "GROUNDED",
+   "実装席": "correct",
+   "engine": [
+    [
+     "CashAndDeposits",
+     "CurrentYearInstant"
+    ],
+    [
+     "CashAndDeposits",
+     "Prior1YearInstant"
+    ]
+   ],
+   "演算": [
+    "formula:a-b"
+   ],
+   "label": [
+    [
+     "CashAndDeposits",
+     "CurrentYearInstant"
+    ],
+    [
+     "CashAndDeposits",
+     "Prior1YearInstant"
+    ]
+   ],
+   "一致": "一致(厳密)",
+   "形": "差(当期−前期)",
+   "層": "値を持つ形",
+   "型5露出": true,
+   "同値候補": [
+    [
+     "jpcrp_cor:CashAndCashEquivalentsSummaryOfBusinessResults",
+     "CurrentYearInstant"
+    ],
+    [
+     "jpcrp_cor:CashAndCashEquivalentsSummaryOfBusinessResults",
+     "Prior1YearInstant"
+    ],
+    [
+     "jppfs_cor:CashAndCashEquivalents",
+     "CurrentYearInstant"
+    ],
+    [
+     "jppfs_cor:CashAndCashEquivalents",
+     "Prior1YearInstant"
+    ],
+    [
+     "jppfs_cor:NetIncreaseDecreaseInCashAndCashEquivalents",
+     "CurrentYearDuration"
+    ]
+   ]
+  },
+  {
+   "id": "N157",
+   "state": "UNVERIFIABLE",
+   "実装席": null,
+   "engine": [],
+   "演算": [],
+   "label": [
+    [
+     "IntangibleAssets",
+     "Prior1YearInstant"
+    ]
+   ],
+   "一致": "pointer なし",
+   "形": "単一",
+   "層": "値を持つ形",
+   "型5露出": false,
+   "同値候補": []
+  },
+  {
+   "id": "N143",
+   "state": "GROUNDED",
+   "実装席": "correct",
+   "engine": [
+    [
+     "ContractAssets",
+     "CurrentYearInstant"
+    ],
+    [
+     "ContractAssets",
+     "Prior1YearInstant"
+    ]
+   ],
+   "演算": [
+    "formula:a-b"
+   ],
+   "label": [
+    [
+     "ContractAssets",
+     "CurrentYearInstant"
+    ],
+    [
+     "ContractAssets",
+     "Prior1YearInstant"
+    ]
+   ],
+   "一致": "一致(厳密)",
+   "形": "差(当期−前期)",
+   "層": "値を持つ形",
+   "型5露出": true,
+   "同値候補": [
+    [
+     "jpcrp030000-asr_E36539-000:DecreaseIncreaseInContractAssetsOpeCF",
+     "CurrentYearDuration"
+    ]
+   ]
+  },
+  {
+   "id": "N009",
+   "state": "GROUNDED",
+   "実装席": "correct",
+   "engine": [
+    [
+     "TotalAssetsSummaryOfBusinessResults",
+     "CurrentYearInstant"
+    ]
+   ],
+   "演算": [],
+   "label": [
+    [
+     "Assets",
+     "CurrentYearInstant"
+    ]
+   ],
+   "一致": "一致(同値類v0のみ)",
+   "形": "単一",
+   "層": "値を持つ形",
+   "型5露出": true,
+   "同値候補": [
+    [
+     "jpcrp_cor:TotalAssetsSummaryOfBusinessResults",
+     "CurrentYearInstant"
+    ],
+    [
+     "jppfs_cor:LiabilitiesAndNetAssets",
+     "CurrentYearInstant"
+    ]
+   ]
+  },
+  {
+   "id": "N191",
+   "state": "GROUNDED",
+   "実装席": "correct",
+   "engine": [
+    [
+     "ContractLiabilities",
+     "Prior1YearInstant"
+    ]
+   ],
+   "演算": [],
+   "label": [
+    [
+     "ContractLiabilities",
+     "Prior1YearInstant"
+    ]
+   ],
+   "一致": "一致(厳密)",
+   "形": "単一",
+   "層": "値を持つ形",
+   "型5露出": false,
+   "同値候補": []
+  },
+  {
+   "id": "T050",
+   "state": "UNVERIFIABLE",
+   "実装席": null,
+   "engine": [],
+   "演算": [],
+   "label": [
+    [
+     "CurrentAssets",
+     "CurrentYearInstant"
+    ],
+    [
+     "CurrentAssets",
+     "Prior1YearInstant"
+    ]
+   ],
+   "一致": "pointer なし",
+   "形": "符号・方向",
+   "層": "方向の形",
+   "型5露出": false,
+   "同値候補": []
+  },
+  {
+   "id": "N154",
+   "state": "UNVERIFIABLE",
+   "実装席": null,
+   "engine": [],
+   "演算": [],
+   "label": [
+    [
+     "PropertyPlantAndEquipment",
+     "Prior1YearInstant"
+    ]
+   ],
+   "一致": "pointer なし",
+   "形": "単一",
+   "層": "値を持つ形",
+   "型5露出": false,
+   "同値候補": []
+  },
+  {
+   "id": "N081",
+   "state": "POINTER_NOT_FOUND",
+   "実装席": null,
+   "engine": [],
+   "演算": [],
+   "label": [
+    [
+     "OtherNOI",
+     "Prior1YearDuration"
+    ]
+   ],
+   "一致": "pointer なし",
+   "形": "単一",
+   "層": "値を持つ形",
+   "型5露出": false,
+   "同値候補": []
+  },
+  {
+   "id": "N026",
+   "state": "GROUNDED",
+   "実装席": "correct",
+   "engine": [
+    [
+     "GrossProfit",
+     "CurrentYearDuration"
+    ],
+    [
+     "GrossProfit",
+     "Prior1YearDuration"
+    ]
+   ],
+   "演算": [
+    "formula:a-b"
+   ],
+   "label": [
+    [
+     "GrossProfit",
+     "CurrentYearDuration"
+    ],
+    [
+     "GrossProfit",
+     "Prior1YearDuration"
+    ]
+   ],
+   "一致": "一致(厳密)",
+   "形": "差(当期−前期)",
+   "層": "値を持つ形",
+   "型5露出": false,
+   "同値候補": []
+  },
+  {
+   "id": "N170",
+   "state": "GROUNDED",
+   "実装席": "correct",
+   "engine": [
+    [
+     "InvestmentSecurities",
+     "CurrentYearInstant"
+    ],
+    [
+     "InvestmentSecurities",
+     "Prior1YearInstant"
+    ]
+   ],
+   "演算": [
+    "formula:a-b"
+   ],
+   "label": [
+    [
+     "InvestmentSecurities",
+     "CurrentYearInstant"
+    ],
+    [
+     "InvestmentSecurities",
+     "Prior1YearInstant"
+    ]
+   ],
+   "一致": "一致(厳密)",
+   "形": "差(当期−前期)",
+   "層": "値を持つ形",
+   "型5露出": false,
+   "同値候補": []
+  },
+  {
+   "id": "T049",
+   "state": "GROUNDED",
+   "実装席": "correct",
+   "engine": [
+    [
+     "TotalAssetsSummaryOfBusinessResults",
+     "CurrentYearInstant"
+    ],
+    [
+     "TotalAssetsSummaryOfBusinessResults",
+     "Prior1YearInstant"
+    ]
+   ],
+   "演算": [
+    "builtin:sign(cur-prior)"
+   ],
+   "label": [
+    [
+     "Assets",
+     "CurrentYearInstant"
+    ],
+    [
+     "Assets",
+     "Prior1YearInstant"
+    ]
+   ],
+   "一致": "一致(同値類v0のみ)",
+   "形": "符号・方向",
+   "層": "方向の形",
+   "型5露出": true,
+   "同値候補": [
+    [
+     "jpcrp_cor:TotalAssetsSummaryOfBusinessResults",
+     "CurrentYearInstant"
+    ],
+    [
+     "jpcrp_cor:TotalAssetsSummaryOfBusinessResults",
+     "Prior1YearInstant"
+    ],
+    [
+     "jppfs_cor:LiabilitiesAndNetAssets",
+     "CurrentYearInstant"
+    ],
+    [
+     "jppfs_cor:LiabilitiesAndNetAssets",
+     "Prior1YearInstant"
+    ]
+   ]
+  },
+  {
+   "id": "N219",
+   "state": "GROUNDED",
+   "実装席": "wrong_binding",
+   "engine": [
+    [
+     "LongTermLoansPayable",
+     "Prior1YearInstant"
+    ]
+   ],
+   "演算": [],
+   "label": [
+    [
+     "CurrentPortionOfLongTermLoansPayable",
+     "CurrentYearInstant"
+    ],
+    [
+     "LongTermLoansPayable",
+     "CurrentYearInstant"
+    ]
+   ],
+   "一致": "不一致",
+   "形": "和",
+   "層": "値を持つ形",
+   "型5露出": true,
+   "同値候補": [
+    [
+     "jppfs_cor:LongTermLoansPayable",
+     "Prior1YearInstant"
+    ]
+   ]
+  },
+  {
+   "id": "N201",
+   "state": "UNVERIFIABLE",
+   "実装席": null,
+   "engine": [],
+   "演算": [],
+   "label": [
+    [
+     "ProvisionForLossOnOrderReceivedCL",
+     "CurrentYearInstant"
+    ],
+    [
+     "ProvisionForLossOnOrderReceivedCL",
+     "Prior1YearInstant"
+    ]
+   ],
+   "一致": "pointer なし",
+   "形": "差(当期−前期)",
+   "層": "値を持つ形",
+   "型5露出": true,
+   "同値候補": [
+    [
+     "jppfs_cor:IncreaseDecreaseInProvisionForLossOnOrderReceivedOpeCF",
+     "CurrentYearDuration"
+    ]
+   ]
+  },
+  {
+   "id": "N291",
+   "state": "GROUNDED",
+   "実装席": "correct",
+   "engine": [
+    [
+     "CapitalExpendituresOverviewOfCapitalExpendituresEtc",
+     "CurrentYearDuration"
+    ]
+   ],
+   "演算": [],
+   "label": [
+    [
+     "CapitalExpendituresOverviewOfCapitalExpendituresEtc",
+     "CurrentYearDuration"
+    ]
+   ],
+   "一致": "一致(厳密)",
+   "形": "単一",
+   "層": "値を持つ形",
+   "型5露出": false,
+   "同値候補": []
+  },
+  {
+   "id": "T086",
+   "state": "GROUNDED",
+   "実装席": "wrong_binding",
+   "engine": [
+    [
+     "NetAssetsSummaryOfBusinessResults",
+     "CurrentYearInstant"
+    ],
+    [
+     "NetAssetsSummaryOfBusinessResults",
+     "Prior1YearInstant"
+    ]
+   ],
+   "演算": [
+    "builtin:sign(cur-prior)"
+   ],
+   "label": [
+    [
+     "NetAssetsPerShareSummaryOfBusinessResults",
+     "CurrentYearInstant"
+    ],
+    [
+     "NetAssetsPerShareSummaryOfBusinessResults",
+     "Prior1YearInstant"
+    ]
+   ],
+   "一致": "不一致",
+   "形": "符号・方向",
+   "層": "方向の形",
+   "型5露出": false,
+   "同値候補": []
+  },
+  {
+   "id": "N232",
+   "state": "POINTER_NOT_FOUND",
+   "実装席": null,
+   "engine": [],
+   "演算": [],
+   "label": [
+    [
+     "CapitalSurplus",
+     "CurrentYearInstant"
+    ],
+    [
+     "CapitalSurplus",
+     "Prior1YearInstant"
+    ]
+   ],
+   "一致": "pointer なし",
+   "形": "差(当期−前期)",
+   "層": "値を持つ形",
+   "型5露出": true,
+   "同値候補": [
+    [
+     "jppfs_cor:DisposalOfTreasuryStock",
+     "CurrentYearDuration_CapitalSurplusMember"
+    ],
+    [
+     "jppfs_cor:NetAssets",
+     "CurrentYearInstant_CapitalSurplusMember"
+    ],
+    [
+     "jppfs_cor:NetAssets",
+     "Prior1YearInstant_CapitalSurplusMember"
+    ],
+    [
+     "jppfs_cor:TotalChangesOfItemsDuringThePeriod",
+     "CurrentYearDuration_CapitalSurplusMember"
+    ]
+   ]
+  },
+  {
+   "id": "N102",
+   "state": "UNVERIFIABLE",
+   "実装席": null,
+   "engine": [],
+   "演算": [],
+   "label": [
+    [
+     "IncomeTaxesDeferred",
+     "CurrentYearDuration"
+    ]
+   ],
+   "一致": "pointer なし",
+   "形": "単一",
+   "層": "値を持つ形",
+   "型5露出": false,
+   "同値候補": []
+  },
+  {
+   "id": "N172",
+   "state": "GROUNDED",
+   "実装席": "correct",
+   "engine": [
+    [
+     "ValuationDifferenceOnAvailableForSaleSecurities",
+     "CurrentYearInstant"
+    ]
+   ],
+   "演算": [],
+   "label": [
+    [
+     "ValuationDifferenceOnAvailableForSaleSecurities",
+     "CurrentYearInstant"
+    ]
+   ],
+   "一致": "一致(厳密)",
+   "形": "単一",
+   "層": "値を持つ形",
+   "型5露出": true,
+   "同値候補": [
+    [
+     "jppfs_cor:NetAssets",
+     "CurrentYearInstant_ValuationDifferenceOnAvailableForSaleSecuritiesMember"
+    ]
+   ]
+  },
+  {
+   "id": "T044",
+   "state": "GROUNDED",
+   "実装席": "correct",
+   "engine": [
+    [
+     "ProfitLossAttributableToOwnersOfParentSummaryOfBusinessResults",
+     "CurrentYearDuration"
+    ],
+    [
+     "ProfitLossAttributableToOwnersOfParentSummaryOfBusinessResults",
+     "Prior1YearDuration"
+    ]
+   ],
+   "演算": [
+    "builtin:sign(cur-prior)"
+   ],
+   "label": [
+    [
+     "ProfitLossAttributableToOwnersOfParent",
+     "CurrentYearDuration"
+    ],
+    [
+     "ProfitLossAttributableToOwnersOfParent",
+     "Prior1YearDuration"
+    ]
+   ],
+   "一致": "一致(同値類v0のみ)",
+   "形": "符号・方向",
+   "層": "方向の形",
+   "型5露出": true,
+   "同値候補": [
+    [
+     "jpcrp_cor:ProfitLossAttributableToOwnersOfParentSummaryOfBusinessResults",
+     "CurrentYearDuration"
+    ],
+    [
+     "jpcrp_cor:ProfitLossAttributableToOwnersOfParentSummaryOfBusinessResults",
+     "Prior1YearDuration"
+    ],
+    [
+     "jppfs_cor:ProfitLoss",
+     "CurrentYearDuration"
+    ],
+    [
+     "jppfs_cor:ProfitLoss",
+     "Prior1YearDuration"
+    ],
+    [
+     "jppfs_cor:ProfitLossAttributableToOwnersOfParent",
+     "CurrentYearDuration_RetainedEarningsMember"
+    ],
+    [
+     "jppfs_cor:ProfitLossAttributableToOwnersOfParent",
+     "CurrentYearDuration_ShareholdersEquityMember"
+    ],
+    [
+     "jppfs_cor:ProfitLossAttributableToOwnersOfParent",
+     "Prior1YearDuration_RetainedEarningsMember"
+    ],
+    [
+     "jppfs_cor:ProfitLossAttributableToOwnersOfParent",
+     "Prior1YearDuration_ShareholdersEquityMember"
+    ]
+   ]
+  },
+  {
+   "id": "N181",
+   "state": "GROUNDED",
+   "実装席": "correct",
+   "engine": [
+    [
+     "AccountsPayableOperatingSpecific",
+     "CurrentYearInstant"
+    ]
+   ],
+   "演算": [],
+   "label": [
+    [
+     "AccountsPayableOperatingSpecific",
+     "CurrentYearInstant"
+    ]
+   ],
+   "一致": "一致(厳密)",
+   "形": "単一",
+   "層": "値を持つ形",
+   "型5露出": false,
+   "同値候補": []
+  },
+  {
+   "id": "T072",
+   "state": "GROUNDED",
+   "実装席": "correct",
+   "engine": [
+    [
+     "IncomeTaxesPayable",
+     "CurrentYearInstant"
+    ],
+    [
+     "IncomeTaxesPayable",
+     "Prior1YearInstant"
+    ]
+   ],
+   "演算": [
+    "builtin:sign(cur-prior)"
+   ],
+   "label": [
+    [
+     "IncomeTaxesPayable",
+     "CurrentYearInstant"
+    ],
+    [
+     "IncomeTaxesPayable",
+     "Prior1YearInstant"
+    ]
+   ],
+   "一致": "一致(厳密)",
+   "形": "符号・方向",
+   "層": "方向の形",
+   "型5露出": false,
+   "同値候補": []
+  },
+  {
+   "id": "N179",
+   "state": "GROUNDED",
+   "実装席": "correct",
+   "engine": [
+    [
+     "CurrentLiabilities",
+     "Prior1YearInstant"
+    ]
+   ],
+   "演算": [],
+   "label": [
+    [
+     "CurrentLiabilities",
+     "Prior1YearInstant"
+    ]
+   ],
+   "一致": "一致(厳密)",
+   "形": "単一",
+   "層": "値を持つ形",
+   "型5露出": false,
+   "同値候補": []
+  },
+  {
+   "id": "N298",
+   "state": "GROUNDED",
+   "実装席": "correct",
+   "engine": [
+    [
+     "CashDividendsPaidFinCF",
+     "CurrentYearDuration"
+    ]
+   ],
+   "演算": [],
+   "label": [
+    [
+     "CashDividendsPaidFinCF",
+     "CurrentYearDuration"
+    ]
+   ],
+   "一致": "一致(厳密)",
+   "形": "単一",
+   "層": "値を持つ形",
+   "型5露出": false,
+   "同値候補": []
+  },
+  {
+   "id": "N085",
+   "state": "UNVERIFIABLE",
+   "実装席": null,
+   "engine": [],
+   "演算": [],
+   "label": [
+    [
+     "InterestExpensesNOE",
+     "CurrentYearDuration"
+    ]
+   ],
+   "一致": "pointer なし",
+   "形": "単一",
+   "層": "値を持つ形",
+   "型5露出": true,
+   "同値候補": [
+    [
+     "jppfs_cor:InterestExpensesOpeCF",
+     "CurrentYearDuration"
+    ]
+   ]
+  },
+  {
+   "id": "N138",
+   "state": "GROUNDED",
+   "実装席": "correct",
+   "engine": [
+    [
+     "NotesAndAccountsReceivableTrade",
+     "CurrentYearInstant"
+    ]
+   ],
+   "演算": [],
+   "label": [
+    [
+     "NotesAndAccountsReceivableTrade",
+     "CurrentYearInstant"
+    ]
+   ],
+   "一致": "一致(厳密)",
+   "形": "単一",
+   "層": "値を持つ形",
+   "型5露出": false,
+   "同値候補": []
+  },
+  {
+   "id": "N057",
+   "state": "UNVERIFIABLE",
+   "実装席": null,
+   "engine": [],
+   "演算": [],
+   "label": [
+    [
+     "OtherSGA",
+     "Prior1YearDuration"
+    ]
+   ],
+   "一致": "pointer なし",
+   "形": "単一",
+   "層": "値を持つ形",
+   "型5露出": false,
+   "同値候補": []
+  },
+  {
+   "id": "N087",
+   "state": "UNVERIFIABLE",
+   "実装席": null,
+   "engine": [],
+   "演算": [],
+   "label": [
+    [
+     "InterestExpensesNOE",
+     "CurrentYearDuration"
+    ],
+    [
+     "InterestExpensesNOE",
+     "Prior1YearDuration"
+    ]
+   ],
+   "一致": "pointer なし",
+   "形": "差(当期−前期)",
+   "層": "値を持つ形",
+   "型5露出": true,
+   "同値候補": [
+    [
+     "jppfs_cor:InterestExpensesOpeCF",
+     "CurrentYearDuration"
+    ],
+    [
+     "jppfs_cor:InterestExpensesOpeCF",
+     "Prior1YearDuration"
+    ]
+   ]
+  },
+  {
+   "id": "N056",
+   "state": "UNVERIFIABLE",
+   "実装席": null,
+   "engine": [],
+   "演算": [],
+   "label": [
+    [
+     "OtherSGA",
+     "CurrentYearDuration"
+    ]
+   ],
+   "一致": "pointer なし",
+   "形": "単一",
+   "層": "値を持つ形",
+   "型5露出": false,
+   "同値候補": []
+  },
+  {
+   "id": "N262",
+   "state": "UNVERIFIABLE",
+   "実装席": null,
+   "engine": [],
+   "演算": [],
+   "label": [
+    [
+     "NetCashProvidedByUsedInOperatingActivities",
+     "Prior1YearDuration"
+    ]
+   ],
+   "一致": "pointer なし",
+   "形": "単一",
+   "層": "値を持つ形",
+   "型5露出": true,
+   "同値候補": [
+    [
+     "jpcrp_cor:NetCashProvidedByUsedInOperatingActivitiesSummaryOfBusinessResults",
+     "Prior1YearDuration"
+    ]
+   ]
+  },
+  {
+   "id": "N034",
+   "state": "POINTER_NOT_FOUND",
+   "実装席": null,
+   "engine": [],
+   "演算": [],
+   "label": [
+    [
+     "CostOfSales",
+     "CurrentYearDuration"
+    ],
+    [
+     "NetSales",
+     "CurrentYearDuration"
+    ]
+   ],
+   "一致": "pointer なし",
+   "形": "率(比)",
+   "層": "値を持つ形",
+   "型5露出": true,
+   "同値候補": [
+    [
+     "jpcrp_cor:NetSalesSummaryOfBusinessResults",
+     "CurrentYearDuration"
+    ]
+   ]
+  },
+  {
+   "id": "N267",
+   "state": "GROUNDED",
+   "実装席": "correct",
+   "engine": [
+    [
+     "IncreaseDecreaseInProvisionForWarrantiesForCompletedOperationOpeCF",
+     "CurrentYearDuration"
+    ]
+   ],
+   "演算": [],
+   "label": [
+    [
+     "IncreaseDecreaseInProvisionForWarrantiesForCompletedOperationOpeCF",
+     "CurrentYearDuration"
+    ]
+   ],
+   "一致": "一致(厳密)",
+   "形": "単一",
+   "層": "値を持つ形",
+   "型5露出": true,
+   "同値候補": [
+    [
+     "jpcrp030000-asr_E36539-000:ProvisionForWarrantiesForCompletedOperationCL",
+     "CurrentYearInstant"
+    ],
+    [
+     "jpcrp030000-asr_E36539-000:ProvisionForWarrantiesForCompletedOperationCL",
+     "Prior1YearInstant"
+    ]
+   ]
+  },
+  {
+   "id": "N092",
+   "state": "UNVERIFIABLE",
+   "実装席": null,
+   "engine": [],
+   "演算": [],
+   "label": [
+    [
+     "ExtraordinaryIncome",
+     "CurrentYearDuration"
+    ]
+   ],
+   "一致": "pointer なし",
+   "形": "単一",
+   "層": "値を持つ形",
+   "型5露出": true,
+   "同値候補": [
+    [
+     "jppfs_cor:GainOnSalesOfNoncurrentAssetsEI",
+     "CurrentYearDuration"
+    ]
+   ]
+  },
+  {
+   "id": "N288",
+   "state": "GROUNDED",
+   "実装席": "correct",
+   "engine": [
+    [
+     "PurchaseOfIntangibleAssetsInvCF",
+     "CurrentYearDuration"
+    ]
+   ],
+   "演算": [],
+   "label": [
+    [
+     "PurchaseOfIntangibleAssetsInvCF",
+     "CurrentYearDuration"
+    ]
+   ],
+   "一致": "一致(厳密)",
+   "形": "単一",
+   "層": "値を持つ形",
+   "型5露出": false,
+   "同値候補": []
+  },
+  {
+   "id": "T059",
+   "state": "UNVERIFIABLE",
+   "実装席": null,
+   "engine": [],
+   "演算": [],
+   "label": [
+    [
+     "IntangibleAssets",
+     "CurrentYearInstant"
+    ],
+    [
+     "IntangibleAssets",
+     "Prior1YearInstant"
+    ]
+   ],
+   "一致": "pointer なし",
+   "形": "符号・方向",
+   "層": "方向の形",
+   "型5露出": false,
+   "同値候補": []
+  },
+  {
+   "id": "N241",
+   "state": "GROUNDED",
+   "実装席": "correct",
+   "engine": [
+    [
+     "ValuationDifferenceOnAvailableForSaleSecurities",
+     "CurrentYearInstant"
+    ]
+   ],
+   "演算": [],
+   "label": [
+    [
+     "ValuationDifferenceOnAvailableForSaleSecurities",
+     "CurrentYearInstant"
+    ]
+   ],
+   "一致": "一致(厳密)",
+   "形": "単一",
+   "層": "値を持つ形",
+   "型5露出": true,
+   "同値候補": [
+    [
+     "jppfs_cor:NetAssets",
+     "CurrentYearInstant_ValuationDifferenceOnAvailableForSaleSecuritiesMember"
+    ]
+   ]
+  }
+ ]
+}

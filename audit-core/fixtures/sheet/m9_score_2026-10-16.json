@@ -1,0 +1,2359 @@
+{
+ "purpose": "段 9 の採点。**③と G-4 を別々に判定する**",
+ "seal": "docs/DOMAIN1_M9_SEAL_2026-10-16.md",
+ "spec_version": "2026-10-16/m9",
+ "engine_sha": {
+  "sheet_m5_engine_2026-10-15.py": "6eb5723ef518e1b4",
+  "sheet_m7_engine_2026-10-15.py": "4574c3ea013d05a1",
+  "sheet_parent_backing_2026-10-16.py": "8e387958c69398e8"
+ },
+ "scored_claims": 25,
+ "missing_answers": [],
+ "主実験(③)": {
+  "A-1 ③が発火した主張": {
+   "count": 12,
+   "pass": "≥ 1 件",
+   "ok": true,
+   "ids": [
+    "R009",
+    "R010",
+    "R011",
+    "R012",
+    "R013",
+    "R014",
+    "R015",
+    "R017",
+    "R019",
+    "R020",
+    "R021",
+    "R022"
+   ]
+  },
+  "A-3 未確認の別名の行に結んだ主張": {
+   "count": 0,
+   "pass": "= 0 件",
+   "ok": true,
+   "ids": []
+  },
+  "E2 誤受理": {
+   "count": 0,
+   "pass": "= 0 件",
+   "ok": true,
+   "G-2": 0,
+   "G-3": 0
+  },
+  "X-2 抜粋に無い行に結んだ主張": {
+   "count": 0,
+   "pass": "= 0 件",
+   "ok": true
+  },
+  "G-5 母数": {
+   "count": 25,
+   "pass": "≥ 20",
+   "ok": true
+  },
+  "G-1′ ③で止めた主張を除いた接続の正確さ": {
+   "rate": 0.46153846153846156,
+   "num": 6,
+   "den": 13,
+   "pass": "≥ 50%",
+   "ok": false,
+   "status": "失敗"
+  }
+ },
+ "主実験の判定": "失敗",
+ "併測 G-4(③の合否に入れない)": {
+  "rate": null,
+  "num": 0,
+  "den": 0,
+  "pass": "≥ 80%",
+  "status": "未測定",
+  "(a) 両席が一致して保留": {
+   "den": 0,
+   "ok": 0
+  },
+  "(b) 2 席が食い違って保留": {
+   "den": 0,
+   "ok": 0
+  },
+  "注": "**(b) は「席が決められなかった」であって「保留が適切だった」ではない。**分母が 2 件以下なら「4 段続けて未確認」と書く",
+  "evaluable": false
+ },
+ "記録のみ": {
+  "生の G-1(線にしない)": {
+   "rate": 0.24,
+   "num": 6,
+   "den": 25
+  },
+  "G-7 正しい接続の増分(線にしない)": {
+   "count": 0,
+   "old": 6,
+   "new": 6
+  },
+  "G-8 誤受理の増分": {
+   "count": 0,
+   "pass": "= 0 件",
+   "ok": true,
+   "old": 0,
+   "new": 0
+  },
+  "A-2 ③以外の理由で保留": {
+   "count": 7,
+   "ids": [
+    "R002",
+    "R003",
+    "R016",
+    "R018",
+    "R023",
+    "R024",
+    "R025"
+   ],
+   "注": "**③の成功に数えない**"
+  },
+  "X-1": 6,
+  "X-3 X-2 のうち誤受理": 0,
+  "X-4 抜粋に在る行に結んで誤受理": 0,
+  "席の一致率(成果として書かない)": {
+   "num": 25,
+   "den": 25,
+   "rate": 1.0
+  },
+  "N-1 親で絞って親が合った": 7,
+  "N-2 親で絞って親が違った": 0,
+  "N-1 の分母(親で絞った主張)": 7
+ },
+ "G-1′ を成果として書けるか": {
+  "止めた主張(A-1 + A-2)": 19,
+  "採点対象": 25,
+  "usable": false,
+  "注": "**止めた主張が採点対象の半分を超えたら G-1′ を成果として書かない。**分母が偏っているので接続の正確さは測れていない"
+ },
+ "旧 engine": {
+  "G-1": 6,
+  "E2": 0,
+  "保留": 19
+ },
+ "rows": [
+  {
+   "id": "R001",
+   "value": 61204397000,
+   "novelty": "新規",
+   "sentence": "一般会計の総務費では、総務管理費の予算現額が61,204,397,000円、支出済額が56,182,202,564円で、不用額は5,022,194,436円となった",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "総務費",
+     "総務管理費",
+     "予算現額",
+     "61204397000"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "総務管理費",
+     "予算現額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!D19",
+   "hold_reason": null,
+   "parent_cues": [
+    "一般会計",
+    "総務費"
+   ],
+   "parent_filtered": true,
+   "parent_kept": [
+    "総務費"
+   ],
+   "engine_parent": "総務費",
+   "engine_key6": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "総務費",
+     "総務管理費",
+     "予算現額",
+     "61204397000"
+    ]
+   ],
+   "agree_6": true,
+   "agree_4": true,
+   "only_4": false,
+   "verdict": "正しい接続",
+   "parent_correct": true,
+   "label_parent": "総務費"
+  },
+  {
+   "id": "R002",
+   "value": 56182202564,
+   "novelty": "新規",
+   "sentence": "一般会計の総務費では、総務管理費の予算現額が61,204,397,000円、支出済額が56,182,202,564円で、不用額は5,022,194,436円となった",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "総務費",
+     "総務管理費",
+     "支出済額",
+     "56182202564"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "総務管理費",
+     "支出済額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "UNVERIFIABLE",
+   "route": null,
+   "pointer": null,
+   "hold_reason": "6 欄が一意でない(2 通り。値で選ばない)",
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "engine_parent": null,
+   "engine_key6": null,
+   "agree_6": false,
+   "agree_4": false,
+   "only_4": false,
+   "verdict": "結べなかった(誤接続ではない)",
+   "parent_correct": null
+  },
+  {
+   "id": "R003",
+   "value": 5022194436,
+   "novelty": "新規",
+   "sentence": "一般会計の総務費では、総務管理費の予算現額が61,204,397,000円、支出済額が56,182,202,564円で、不用額は5,022,194,436円となった",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "総務費",
+     "総務管理費",
+     "不用額",
+     "5022194436"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "総務管理費",
+     "不用額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "UNVERIFIABLE",
+   "route": null,
+   "pointer": null,
+   "hold_reason": "6 欄が一意でない(2 通り。値で選ばない)",
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "engine_parent": null,
+   "engine_key6": null,
+   "agree_6": false,
+   "agree_4": false,
+   "only_4": false,
+   "verdict": "結べなかった(誤接続ではない)",
+   "parent_correct": null
+  },
+  {
+   "id": "R004",
+   "value": 16096000000,
+   "novelty": "新規",
+   "sentence": "同じ総務費の政策企画費は予算現額16,096,000,000円に対し支出済額14,006,385,787円であった",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "総務費",
+     "政策企画費",
+     "予算現額",
+     "16096000000"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "政策企画費",
+     "予算現額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!D22",
+   "hold_reason": null,
+   "parent_cues": [
+    "総務費"
+   ],
+   "parent_filtered": true,
+   "parent_kept": [
+    "総務費"
+   ],
+   "engine_parent": "総務費",
+   "engine_key6": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "総務費",
+     "政策企画費",
+     "予算現額",
+     "16096000000"
+    ]
+   ],
+   "agree_6": true,
+   "agree_4": true,
+   "only_4": false,
+   "verdict": "正しい接続",
+   "parent_correct": true,
+   "label_parent": "総務費"
+  },
+  {
+   "id": "R005",
+   "value": 14006385787,
+   "novelty": "新規",
+   "sentence": "同じ総務費の政策企画費は予算現額16,096,000,000円に対し支出済額14,006,385,787円であった",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "総務費",
+     "政策企画費",
+     "支出済額",
+     "14006385787"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "政策企画費",
+     "支出済額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!E22",
+   "hold_reason": null,
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "engine_parent": "総務費",
+   "engine_key6": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "総務費",
+     "政策企画費",
+     "支出済額",
+     "14006385787"
+    ]
+   ],
+   "agree_6": true,
+   "agree_4": true,
+   "only_4": false,
+   "verdict": "正しい接続",
+   "parent_correct": null
+  },
+  {
+   "id": "R006",
+   "value": 34834004461,
+   "novelty": "新規",
+   "sentence": "徴税費のうち徴収費は支出済額34,834,004,461円、不用額148,618,539円、都市整備費の都市基盤整備費は支出済額103,567,354,999円に達した",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "徴税費",
+     "徴収費",
+     "支出済額",
+     "34834004461"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "徴収費",
+     "支出済額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!E70",
+   "hold_reason": null,
+   "parent_cues": [
+    "徴税費"
+   ],
+   "parent_filtered": true,
+   "parent_kept": [
+    "徴税費"
+   ],
+   "engine_parent": "徴税費",
+   "engine_key6": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "徴税費",
+     "徴収費",
+     "支出済額",
+     "34834004461"
+    ]
+   ],
+   "agree_6": true,
+   "agree_4": true,
+   "only_4": false,
+   "verdict": "正しい接続",
+   "parent_correct": true,
+   "label_parent": "徴税費"
+  },
+  {
+   "id": "R007",
+   "value": 148618539,
+   "novelty": "新規",
+   "sentence": "徴税費のうち徴収費は支出済額34,834,004,461円、不用額148,618,539円、都市整備費の都市基盤整備費は支出済額103,567,354,999円に達した",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "徴税費",
+     "徴収費",
+     "不用額",
+     "148618539"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "徴収費",
+     "不用額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!G70",
+   "hold_reason": null,
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "engine_parent": "徴税費",
+   "engine_key6": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "徴税費",
+     "徴収費",
+     "不用額",
+     "148618539"
+    ]
+   ],
+   "agree_6": true,
+   "agree_4": true,
+   "only_4": false,
+   "verdict": "正しい接続",
+   "parent_correct": null
+  },
+  {
+   "id": "R008",
+   "value": 103567354999,
+   "novelty": "新規",
+   "sentence": "徴税費のうち徴収費は支出済額34,834,004,461円、不用額148,618,539円、都市整備費の都市基盤整備費は支出済額103,567,354,999円に達した",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "都市整備費",
+     "都市基盤整備費",
+     "支出済額",
+     "103567354999"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "都市基盤整備費",
+     "支出済額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!E90",
+   "hold_reason": null,
+   "parent_cues": [
+    "都市整備費"
+   ],
+   "parent_filtered": true,
+   "parent_kept": [
+    "都市整備費"
+   ],
+   "engine_parent": "都市整備費",
+   "engine_key6": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "都市整備費",
+     "都市基盤整備費",
+     "支出済額",
+     "103567354999"
+    ]
+   ],
+   "agree_6": true,
+   "agree_4": true,
+   "only_4": false,
+   "verdict": "正しい接続",
+   "parent_correct": true,
+   "label_parent": "都市整備費"
+  },
+  {
+   "id": "R009",
+   "value": 1195965898000,
+   "novelty": "新規",
+   "sentence": "特別区財政調整会計では、特別区財政調整交付金のうち普通交付金の支出済額が1,195,965,898,000円、特別交付金が63,966,295,000円となり、いずれも大きな額を占めた",
+   "label6": [
+    "label",
+    [
+     "東京都特別区財政調整会計",
+     "目",
+     "特別区交付金>特別区財政調整交付金",
+     "普通交付金",
+     "支出済額",
+     "1195965898000"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "東京都特別区財政調整会計",
+     "目",
+     "普通交付金",
+     "支出済額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "UNVERIFIABLE",
+   "route": null,
+   "pointer": null,
+   "hold_reason": "会計が未確認の別名(独立した裏づけ 3 本未満。値が合っても結ばない)",
+   "parent_cues": [
+    "特別区財政調整交付金",
+    "特別区財政調整会計"
+   ],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "engine_parent": null,
+   "engine_key6": null,
+   "agree_6": false,
+   "agree_4": false,
+   "only_4": false,
+   "verdict": "結べなかった(誤接続ではない)",
+   "parent_correct": null
+  },
+  {
+   "id": "R010",
+   "value": 63966295000,
+   "novelty": "新規",
+   "sentence": "特別区財政調整会計では、特別区財政調整交付金のうち普通交付金の支出済額が1,195,965,898,000円、特別交付金が63,966,295,000円となり、いずれも大きな額を占めた",
+   "label6": [
+    "label",
+    [
+     "東京都特別区財政調整会計",
+     "目",
+     "特別区交付金>特別区財政調整交付金",
+     "特別交付金",
+     "支出済額",
+     "63966295000"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "東京都特別区財政調整会計",
+     "目",
+     "特別交付金",
+     "支出済額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "UNVERIFIABLE",
+   "route": null,
+   "pointer": null,
+   "hold_reason": "会計が未確認の別名(独立した裏づけ 3 本未満。値が合っても結ばない)",
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "engine_parent": null,
+   "engine_key6": null,
+   "agree_6": false,
+   "agree_4": false,
+   "only_4": false,
+   "verdict": "結べなかった(誤接続ではない)",
+   "parent_correct": null
+  },
+  {
+   "id": "R011",
+   "value": 1765535714479,
+   "novelty": "新規",
+   "sentence": "地方消費税清算会計では、地方消費税清算費のうち地方消費税清算金の支出済額が1,765,535,714,479円で表中最大となり、同じ地方消費税清算費の一般会計繰出金も779,784,675,465円に上った",
+   "label6": [
+    "label",
+    [
+     "東京都地方消費税清算会計",
+     "目",
+     "地方消費税清算費>地方消費税清算費",
+     "地方消費税清算金",
+     "支出済額",
+     "1765535714479"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "東京都地方消費税清算会計",
+     "目",
+     "地方消費税清算金",
+     "支出済額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "UNVERIFIABLE",
+   "route": null,
+   "pointer": null,
+   "hold_reason": "会計が未確認の別名(独立した裏づけ 3 本未満。値が合っても結ばない)",
+   "parent_cues": [
+    "地方消費税清算会計",
+    "地方消費税清算費"
+   ],
+   "parent_filtered": true,
+   "parent_kept": [
+    "地方消費税清算費 > 地方消費税清算費"
+   ],
+   "engine_parent": null,
+   "engine_key6": null,
+   "agree_6": false,
+   "agree_4": false,
+   "only_4": false,
+   "verdict": "結べなかった(誤接続ではない)",
+   "parent_correct": true,
+   "label_parent": "地方消費税清算費>地方消費税清算費"
+  },
+  {
+   "id": "R012",
+   "value": 779784675465,
+   "novelty": "新規",
+   "sentence": "地方消費税清算会計では、地方消費税清算費のうち地方消費税清算金の支出済額が1,765,535,714,479円で表中最大となり、同じ地方消費税清算費の一般会計繰出金も779,784,675,465円に上った",
+   "label6": [
+    "label",
+    [
+     "東京都地方消費税清算会計",
+     "目",
+     "地方消費税清算費>地方消費税清算費",
+     "一般会計繰出金",
+     "支出済額",
+     "779784675465"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "東京都地方消費税清算会計",
+     "目",
+     "一般会計繰出金",
+     "支出済額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "UNVERIFIABLE",
+   "route": null,
+   "pointer": null,
+   "hold_reason": "会計が未確認の別名(独立した裏づけ 3 本未満。値が合っても結ばない)",
+   "parent_cues": [
+    "地方消費税清算費"
+   ],
+   "parent_filtered": true,
+   "parent_kept": [
+    "地方消費税清算費 > 地方消費税清算費"
+   ],
+   "engine_parent": null,
+   "engine_key6": null,
+   "agree_6": false,
+   "agree_4": false,
+   "only_4": false,
+   "verdict": "結べなかった(誤接続ではない)",
+   "parent_correct": true,
+   "label_parent": "地方消費税清算費>地方消費税清算費"
+  },
+  {
+   "id": "R013",
+   "value": 809110424372,
+   "novelty": "新規",
+   "sentence": "国民健康保険事業会計では、保険給付費等交付金の支出済額が809,110,424,372円、後期高齢者支援金が174,560,871,060円、介護納付金が65,642,054,094円であった",
+   "label6": [
+    "label",
+    [
+     "東京都国民健康保険事業会計",
+     "目",
+     "国民健康保険事業費>国民健康保険事業費",
+     "保険給付費等交付金",
+     "支出済額",
+     "809110424372"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "東京都国民健康保険事業会計",
+     "目",
+     "保険給付費等交付金",
+     "支出済額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "UNVERIFIABLE",
+   "route": null,
+   "pointer": null,
+   "hold_reason": "会計が未確認の別名(独立した裏づけ 3 本未満。値が合っても結ばない)",
+   "parent_cues": [
+    "国民健康保険事業会計"
+   ],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "engine_parent": null,
+   "engine_key6": null,
+   "agree_6": false,
+   "agree_4": false,
+   "only_4": false,
+   "verdict": "結べなかった(誤接続ではない)",
+   "parent_correct": null
+  },
+  {
+   "id": "R014",
+   "value": 174560871060,
+   "novelty": "新規",
+   "sentence": "国民健康保険事業会計では、保険給付費等交付金の支出済額が809,110,424,372円、後期高齢者支援金が174,560,871,060円、介護納付金が65,642,054,094円であった",
+   "label6": [
+    "label",
+    [
+     "東京都国民健康保険事業会計",
+     "目",
+     "国民健康保険事業費>国民健康保険事業費",
+     "後期高齢者支援金",
+     "支出済額",
+     "174560871060"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "東京都国民健康保険事業会計",
+     "目",
+     "後期高齢者支援金",
+     "支出済額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "UNVERIFIABLE",
+   "route": null,
+   "pointer": null,
+   "hold_reason": "会計が未確認の別名(独立した裏づけ 3 本未満。値が合っても結ばない)",
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "engine_parent": null,
+   "engine_key6": null,
+   "agree_6": false,
+   "agree_4": false,
+   "only_4": false,
+   "verdict": "結べなかった(誤接続ではない)",
+   "parent_correct": null
+  },
+  {
+   "id": "R015",
+   "value": 65642054094,
+   "novelty": "新規",
+   "sentence": "国民健康保険事業会計では、保険給付費等交付金の支出済額が809,110,424,372円、後期高齢者支援金が174,560,871,060円、介護納付金が65,642,054,094円であった",
+   "label6": [
+    "label",
+    [
+     "東京都国民健康保険事業会計",
+     "目",
+     "国民健康保険事業費>国民健康保険事業費",
+     "介護納付金",
+     "支出済額",
+     "65642054094"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "東京都国民健康保険事業会計",
+     "目",
+     "介護納付金",
+     "支出済額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "UNVERIFIABLE",
+   "route": null,
+   "pointer": null,
+   "hold_reason": "会計が未確認の別名(独立した裏づけ 3 本未満。値が合っても結ばない)",
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "engine_parent": null,
+   "engine_key6": null,
+   "agree_6": false,
+   "agree_4": false,
+   "only_4": false,
+   "verdict": "結べなかった(誤接続ではない)",
+   "parent_correct": null
+  },
+  {
+   "id": "R016",
+   "value": 64325143583,
+   "novelty": "新規",
+   "sentence": "都営住宅等事業会計では、住宅管理費の支出済額が64,325,143,583円、住宅建設費が59,878,501,210円、特別会計繰出金が29,439,061,117円となった",
+   "label6": [
+    "label",
+    [
+     "東京都都営住宅等事業会計",
+     "目",
+     "都営住宅等事業費>都営住宅等事業費",
+     "住宅管理費",
+     "支出済額",
+     "64325143583"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "東京都都営住宅等事業会計",
+     "目",
+     "住宅管理費",
+     "支出済額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "UNVERIFIABLE",
+   "route": null,
+   "pointer": null,
+   "hold_reason": "6 欄が一意でない(2 通り。値で選ばない)",
+   "parent_cues": [
+    "都営住宅等事業会計"
+   ],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "engine_parent": null,
+   "engine_key6": null,
+   "agree_6": false,
+   "agree_4": false,
+   "only_4": false,
+   "verdict": "結べなかった(誤接続ではない)",
+   "parent_correct": null
+  },
+  {
+   "id": "R017",
+   "value": 59878501210,
+   "novelty": "新規",
+   "sentence": "都営住宅等事業会計では、住宅管理費の支出済額が64,325,143,583円、住宅建設費が59,878,501,210円、特別会計繰出金が29,439,061,117円となった",
+   "label6": [
+    "label",
+    [
+     "東京都都営住宅等事業会計",
+     "目",
+     "都営住宅等事業費>都営住宅等事業費",
+     "住宅建設費",
+     "支出済額",
+     "59878501210"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "東京都都営住宅等事業会計",
+     "目",
+     "住宅建設費",
+     "支出済額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "UNVERIFIABLE",
+   "route": null,
+   "pointer": null,
+   "hold_reason": "会計が未確認の別名(独立した裏づけ 3 本未満。値が合っても結ばない)",
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "engine_parent": null,
+   "engine_key6": null,
+   "agree_6": false,
+   "agree_4": false,
+   "only_4": false,
+   "verdict": "結べなかった(誤接続ではない)",
+   "parent_correct": null
+  },
+  {
+   "id": "R018",
+   "value": 29439061117,
+   "novelty": "新規",
+   "sentence": "都営住宅等事業会計では、住宅管理費の支出済額が64,325,143,583円、住宅建設費が59,878,501,210円、特別会計繰出金が29,439,061,117円となった",
+   "label6": [
+    "label",
+    [
+     "東京都都営住宅等事業会計",
+     "目",
+     "都営住宅等事業費>都営住宅等事業費",
+     "特別会計繰出金",
+     "支出済額",
+     "29439061117"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "東京都都営住宅等事業会計",
+     "目",
+     "特別会計繰出金",
+     "支出済額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "UNVERIFIABLE",
+   "route": null,
+   "pointer": null,
+   "hold_reason": "6 欄が一意でない(2 通り。値で選ばない)",
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "engine_parent": null,
+   "engine_key6": null,
+   "agree_6": false,
+   "agree_4": false,
+   "only_4": false,
+   "verdict": "結べなかった(誤接続ではない)",
+   "parent_correct": null
+  },
+  {
+   "id": "R019",
+   "value": 898462839262,
+   "novelty": "新規",
+   "sentence": "公債費会計では、公債費のうち元金償還金の支出済額が898,462,839,262円(補正予算額113,189,000,000円)、減債基金積立金が270,680,974,000円、利子償還金が56,117,196,637円であった",
+   "label6": [
+    "label",
+    [
+     "東京都公債費会計",
+     "目",
+     "公債費>公債費",
+     "元金償還金",
+     "支出済額",
+     "898462839262"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "東京都公債費会計",
+     "目",
+     "元金償還金",
+     "支出済額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "UNVERIFIABLE",
+   "route": null,
+   "pointer": null,
+   "hold_reason": "会計が未確認の別名(独立した裏づけ 3 本未満。値が合っても結ばない)",
+   "parent_cues": [
+    "公債費",
+    "公債費会計"
+   ],
+   "parent_filtered": true,
+   "parent_kept": [
+    "公債費 > 公債費"
+   ],
+   "engine_parent": null,
+   "engine_key6": null,
+   "agree_6": false,
+   "agree_4": false,
+   "only_4": false,
+   "verdict": "結べなかった(誤接続ではない)",
+   "parent_correct": true,
+   "label_parent": "公債費>公債費"
+  },
+  {
+   "id": "R020",
+   "value": 113189000000,
+   "novelty": "新規",
+   "sentence": "公債費会計では、公債費のうち元金償還金の支出済額が898,462,839,262円(補正予算額113,189,000,000円)、減債基金積立金が270,680,974,000円、利子償還金が56,117,196,637円であった",
+   "label6": [
+    "label",
+    [
+     "東京都公債費会計",
+     "目",
+     "公債費>公債費",
+     "元金償還金",
+     "補正予算額",
+     "113189000000"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "東京都公債費会計",
+     "目",
+     "元金償還金",
+     "補正予算額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "UNVERIFIABLE",
+   "route": null,
+   "pointer": null,
+   "hold_reason": "会計が未確認の別名(独立した裏づけ 3 本未満。値が合っても結ばない)",
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "engine_parent": null,
+   "engine_key6": null,
+   "agree_6": false,
+   "agree_4": false,
+   "only_4": false,
+   "verdict": "結べなかった(誤接続ではない)",
+   "parent_correct": null
+  },
+  {
+   "id": "R021",
+   "value": 270680974000,
+   "novelty": "新規",
+   "sentence": "公債費会計では、公債費のうち元金償還金の支出済額が898,462,839,262円(補正予算額113,189,000,000円)、減債基金積立金が270,680,974,000円、利子償還金が56,117,196,637円であった",
+   "label6": [
+    "label",
+    [
+     "東京都公債費会計",
+     "目",
+     "公債費>公債費",
+     "減債基金積立金",
+     "支出済額",
+     "270680974000"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "東京都公債費会計",
+     "目",
+     "減債基金積立金",
+     "支出済額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "UNVERIFIABLE",
+   "route": null,
+   "pointer": null,
+   "hold_reason": "会計が未確認の別名(独立した裏づけ 3 本未満。値が合っても結ばない)",
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "engine_parent": null,
+   "engine_key6": null,
+   "agree_6": false,
+   "agree_4": false,
+   "only_4": false,
+   "verdict": "結べなかった(誤接続ではない)",
+   "parent_correct": null
+  },
+  {
+   "id": "R022",
+   "value": 56117196637,
+   "novelty": "新規",
+   "sentence": "公債費会計では、公債費のうち元金償還金の支出済額が898,462,839,262円(補正予算額113,189,000,000円)、減債基金積立金が270,680,974,000円、利子償還金が56,117,196,637円であった",
+   "label6": [
+    "label",
+    [
+     "東京都公債費会計",
+     "目",
+     "公債費>公債費",
+     "利子償還金",
+     "支出済額",
+     "56117196637"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "東京都公債費会計",
+     "目",
+     "利子償還金",
+     "支出済額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "UNVERIFIABLE",
+   "route": null,
+   "pointer": null,
+   "hold_reason": "会計が未確認の別名(独立した裏づけ 3 本未満。値が合っても結ばない)",
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "engine_parent": null,
+   "engine_key6": null,
+   "agree_6": false,
+   "agree_4": false,
+   "only_4": false,
+   "verdict": "結べなかった(誤接続ではない)",
+   "parent_correct": null
+  },
+  {
+   "id": "R023",
+   "value": 6423890408,
+   "novelty": "新規",
+   "sentence": "その他、と場会計のと場事業費は支出済額6,423,890,408円、不用額233,506,592円、工業用水道事業清算会計の工業用水道事業清算費は支出済額3,643,799,407円であった",
+   "label6": [
+    "label",
+    [
+     "と場会計",
+     "款",
+     "",
+     "と場事業費",
+     "支出済額",
+     "6423890408"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "と場会計",
+     "款",
+     "と場事業費",
+     "支出済額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "UNVERIFIABLE",
+   "route": null,
+   "pointer": null,
+   "hold_reason": "6 欄が一意でない(4 通り。値で選ばない)",
+   "parent_cues": [
+    "と場会計"
+   ],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "engine_parent": null,
+   "engine_key6": null,
+   "agree_6": false,
+   "agree_4": false,
+   "only_4": false,
+   "verdict": "結べなかった(誤接続ではない)",
+   "parent_correct": null
+  },
+  {
+   "id": "R024",
+   "value": 233506592,
+   "novelty": "新規",
+   "sentence": "その他、と場会計のと場事業費は支出済額6,423,890,408円、不用額233,506,592円、工業用水道事業清算会計の工業用水道事業清算費は支出済額3,643,799,407円であった",
+   "label6": [
+    "label",
+    [
+     "と場会計",
+     "款",
+     "",
+     "と場事業費",
+     "不用額",
+     "233506592"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "と場会計",
+     "款",
+     "と場事業費",
+     "不用額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "UNVERIFIABLE",
+   "route": null,
+   "pointer": null,
+   "hold_reason": "6 欄が一意でない(4 通り。値で選ばない)",
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "engine_parent": null,
+   "engine_key6": null,
+   "agree_6": false,
+   "agree_4": false,
+   "only_4": false,
+   "verdict": "結べなかった(誤接続ではない)",
+   "parent_correct": null
+  },
+  {
+   "id": "R025",
+   "value": 3643799407,
+   "novelty": "新規",
+   "sentence": "その他、と場会計のと場事業費は支出済額6,423,890,408円、不用額233,506,592円、工業用水道事業清算会計の工業用水道事業清算費は支出済額3,643,799,407円であった",
+   "label6": [
+    "label",
+    [
+     "工業用水道事業清算会計",
+     "款",
+     "",
+     "工業用水道事業清算費",
+     "支出済額",
+     "3643799407"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "工業用水道事業清算会計",
+     "款",
+     "工業用水道事業清算費",
+     "支出済額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "UNVERIFIABLE",
+   "route": null,
+   "pointer": null,
+   "hold_reason": "6 欄が一意でない(5 通り。値で選ばない)",
+   "parent_cues": [
+    "工業用水道事業清算会計"
+   ],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "engine_parent": null,
+   "engine_key6": null,
+   "agree_6": false,
+   "agree_4": false,
+   "only_4": false,
+   "verdict": "結べなかった(誤接続ではない)",
+   "parent_correct": null
+  }
+ ],
+ "rows_old": [
+  {
+   "id": "R001",
+   "value": 61204397000,
+   "novelty": "新規",
+   "sentence": "一般会計の総務費では、総務管理費の予算現額が61,204,397,000円、支出済額が56,182,202,564円で、不用額は5,022,194,436円となった",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "総務費",
+     "総務管理費",
+     "予算現額",
+     "61204397000"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "総務管理費",
+     "予算現額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!D19",
+   "hold_reason": null,
+   "parent_cues": null,
+   "parent_filtered": null,
+   "parent_kept": null,
+   "engine_parent": "総務費",
+   "engine_key6": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "総務費",
+     "総務管理費",
+     "予算現額",
+     "61204397000"
+    ]
+   ],
+   "agree_6": true,
+   "agree_4": true,
+   "only_4": false,
+   "verdict": "正しい接続",
+   "parent_correct": null
+  },
+  {
+   "id": "R002",
+   "value": 56182202564,
+   "novelty": "新規",
+   "sentence": "一般会計の総務費では、総務管理費の予算現額が61,204,397,000円、支出済額が56,182,202,564円で、不用額は5,022,194,436円となった",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "総務費",
+     "総務管理費",
+     "支出済額",
+     "56182202564"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "総務管理費",
+     "支出済額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "UNVERIFIABLE",
+   "route": null,
+   "pointer": null,
+   "hold_reason": "6 欄が一意でない(2 通り。値で選ばない)",
+   "parent_cues": null,
+   "parent_filtered": null,
+   "parent_kept": null,
+   "engine_parent": null,
+   "engine_key6": null,
+   "agree_6": false,
+   "agree_4": false,
+   "only_4": false,
+   "verdict": "結べなかった(誤接続ではない)",
+   "parent_correct": null
+  },
+  {
+   "id": "R003",
+   "value": 5022194436,
+   "novelty": "新規",
+   "sentence": "一般会計の総務費では、総務管理費の予算現額が61,204,397,000円、支出済額が56,182,202,564円で、不用額は5,022,194,436円となった",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "総務費",
+     "総務管理費",
+     "不用額",
+     "5022194436"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "総務管理費",
+     "不用額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "UNVERIFIABLE",
+   "route": null,
+   "pointer": null,
+   "hold_reason": "6 欄が一意でない(2 通り。値で選ばない)",
+   "parent_cues": null,
+   "parent_filtered": null,
+   "parent_kept": null,
+   "engine_parent": null,
+   "engine_key6": null,
+   "agree_6": false,
+   "agree_4": false,
+   "only_4": false,
+   "verdict": "結べなかった(誤接続ではない)",
+   "parent_correct": null
+  },
+  {
+   "id": "R004",
+   "value": 16096000000,
+   "novelty": "新規",
+   "sentence": "同じ総務費の政策企画費は予算現額16,096,000,000円に対し支出済額14,006,385,787円であった",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "総務費",
+     "政策企画費",
+     "予算現額",
+     "16096000000"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "政策企画費",
+     "予算現額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!D22",
+   "hold_reason": null,
+   "parent_cues": null,
+   "parent_filtered": null,
+   "parent_kept": null,
+   "engine_parent": "総務費",
+   "engine_key6": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "総務費",
+     "政策企画費",
+     "予算現額",
+     "16096000000"
+    ]
+   ],
+   "agree_6": true,
+   "agree_4": true,
+   "only_4": false,
+   "verdict": "正しい接続",
+   "parent_correct": null
+  },
+  {
+   "id": "R005",
+   "value": 14006385787,
+   "novelty": "新規",
+   "sentence": "同じ総務費の政策企画費は予算現額16,096,000,000円に対し支出済額14,006,385,787円であった",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "総務費",
+     "政策企画費",
+     "支出済額",
+     "14006385787"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "政策企画費",
+     "支出済額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!E22",
+   "hold_reason": null,
+   "parent_cues": null,
+   "parent_filtered": null,
+   "parent_kept": null,
+   "engine_parent": "総務費",
+   "engine_key6": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "総務費",
+     "政策企画費",
+     "支出済額",
+     "14006385787"
+    ]
+   ],
+   "agree_6": true,
+   "agree_4": true,
+   "only_4": false,
+   "verdict": "正しい接続",
+   "parent_correct": null
+  },
+  {
+   "id": "R006",
+   "value": 34834004461,
+   "novelty": "新規",
+   "sentence": "徴税費のうち徴収費は支出済額34,834,004,461円、不用額148,618,539円、都市整備費の都市基盤整備費は支出済額103,567,354,999円に達した",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "徴税費",
+     "徴収費",
+     "支出済額",
+     "34834004461"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "徴収費",
+     "支出済額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!E70",
+   "hold_reason": null,
+   "parent_cues": null,
+   "parent_filtered": null,
+   "parent_kept": null,
+   "engine_parent": "徴税費",
+   "engine_key6": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "徴税費",
+     "徴収費",
+     "支出済額",
+     "34834004461"
+    ]
+   ],
+   "agree_6": true,
+   "agree_4": true,
+   "only_4": false,
+   "verdict": "正しい接続",
+   "parent_correct": null
+  },
+  {
+   "id": "R007",
+   "value": 148618539,
+   "novelty": "新規",
+   "sentence": "徴税費のうち徴収費は支出済額34,834,004,461円、不用額148,618,539円、都市整備費の都市基盤整備費は支出済額103,567,354,999円に達した",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "徴税費",
+     "徴収費",
+     "不用額",
+     "148618539"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "徴収費",
+     "不用額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!G70",
+   "hold_reason": null,
+   "parent_cues": null,
+   "parent_filtered": null,
+   "parent_kept": null,
+   "engine_parent": "徴税費",
+   "engine_key6": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "徴税費",
+     "徴収費",
+     "不用額",
+     "148618539"
+    ]
+   ],
+   "agree_6": true,
+   "agree_4": true,
+   "only_4": false,
+   "verdict": "正しい接続",
+   "parent_correct": null
+  },
+  {
+   "id": "R008",
+   "value": 103567354999,
+   "novelty": "新規",
+   "sentence": "徴税費のうち徴収費は支出済額34,834,004,461円、不用額148,618,539円、都市整備費の都市基盤整備費は支出済額103,567,354,999円に達した",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "都市整備費",
+     "都市基盤整備費",
+     "支出済額",
+     "103567354999"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "都市基盤整備費",
+     "支出済額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!E90",
+   "hold_reason": null,
+   "parent_cues": null,
+   "parent_filtered": null,
+   "parent_kept": null,
+   "engine_parent": "都市整備費",
+   "engine_key6": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "都市整備費",
+     "都市基盤整備費",
+     "支出済額",
+     "103567354999"
+    ]
+   ],
+   "agree_6": true,
+   "agree_4": true,
+   "only_4": false,
+   "verdict": "正しい接続",
+   "parent_correct": null
+  },
+  {
+   "id": "R009",
+   "value": 1195965898000,
+   "novelty": "新規",
+   "sentence": "特別区財政調整会計では、特別区財政調整交付金のうち普通交付金の支出済額が1,195,965,898,000円、特別交付金が63,966,295,000円となり、いずれも大きな額を占めた",
+   "label6": [
+    "label",
+    [
+     "東京都特別区財政調整会計",
+     "目",
+     "特別区交付金>特別区財政調整交付金",
+     "普通交付金",
+     "支出済額",
+     "1195965898000"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "東京都特別区財政調整会計",
+     "目",
+     "普通交付金",
+     "支出済額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "UNVERIFIABLE",
+   "route": null,
+   "pointer": null,
+   "hold_reason": "会計が未確認の別名(独立した裏づけ 3 本未満。値が合っても結ばない)",
+   "parent_cues": null,
+   "parent_filtered": null,
+   "parent_kept": null,
+   "engine_parent": null,
+   "engine_key6": null,
+   "agree_6": false,
+   "agree_4": false,
+   "only_4": false,
+   "verdict": "結べなかった(誤接続ではない)",
+   "parent_correct": null
+  },
+  {
+   "id": "R010",
+   "value": 63966295000,
+   "novelty": "新規",
+   "sentence": "特別区財政調整会計では、特別区財政調整交付金のうち普通交付金の支出済額が1,195,965,898,000円、特別交付金が63,966,295,000円となり、いずれも大きな額を占めた",
+   "label6": [
+    "label",
+    [
+     "東京都特別区財政調整会計",
+     "目",
+     "特別区交付金>特別区財政調整交付金",
+     "特別交付金",
+     "支出済額",
+     "63966295000"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "東京都特別区財政調整会計",
+     "目",
+     "特別交付金",
+     "支出済額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "UNVERIFIABLE",
+   "route": null,
+   "pointer": null,
+   "hold_reason": "会計が未確認の別名(独立した裏づけ 3 本未満。値が合っても結ばない)",
+   "parent_cues": null,
+   "parent_filtered": null,
+   "parent_kept": null,
+   "engine_parent": null,
+   "engine_key6": null,
+   "agree_6": false,
+   "agree_4": false,
+   "only_4": false,
+   "verdict": "結べなかった(誤接続ではない)",
+   "parent_correct": null
+  },
+  {
+   "id": "R011",
+   "value": 1765535714479,
+   "novelty": "新規",
+   "sentence": "地方消費税清算会計では、地方消費税清算費のうち地方消費税清算金の支出済額が1,765,535,714,479円で表中最大となり、同じ地方消費税清算費の一般会計繰出金も779,784,675,465円に上った",
+   "label6": [
+    "label",
+    [
+     "東京都地方消費税清算会計",
+     "目",
+     "地方消費税清算費>地方消費税清算費",
+     "地方消費税清算金",
+     "支出済額",
+     "1765535714479"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "東京都地方消費税清算会計",
+     "目",
+     "地方消費税清算金",
+     "支出済額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "UNVERIFIABLE",
+   "route": null,
+   "pointer": null,
+   "hold_reason": "会計が未確認の別名(独立した裏づけ 3 本未満。値が合っても結ばない)",
+   "parent_cues": null,
+   "parent_filtered": null,
+   "parent_kept": null,
+   "engine_parent": null,
+   "engine_key6": null,
+   "agree_6": false,
+   "agree_4": false,
+   "only_4": false,
+   "verdict": "結べなかった(誤接続ではない)",
+   "parent_correct": null
+  },
+  {
+   "id": "R012",
+   "value": 779784675465,
+   "novelty": "新規",
+   "sentence": "地方消費税清算会計では、地方消費税清算費のうち地方消費税清算金の支出済額が1,765,535,714,479円で表中最大となり、同じ地方消費税清算費の一般会計繰出金も779,784,675,465円に上った",
+   "label6": [
+    "label",
+    [
+     "東京都地方消費税清算会計",
+     "目",
+     "地方消費税清算費>地方消費税清算費",
+     "一般会計繰出金",
+     "支出済額",
+     "779784675465"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "東京都地方消費税清算会計",
+     "目",
+     "一般会計繰出金",
+     "支出済額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "UNVERIFIABLE",
+   "route": null,
+   "pointer": null,
+   "hold_reason": "6 欄が一意でない(4 通り。値で選ばない)",
+   "parent_cues": null,
+   "parent_filtered": null,
+   "parent_kept": null,
+   "engine_parent": null,
+   "engine_key6": null,
+   "agree_6": false,
+   "agree_4": false,
+   "only_4": false,
+   "verdict": "結べなかった(誤接続ではない)",
+   "parent_correct": null
+  },
+  {
+   "id": "R013",
+   "value": 809110424372,
+   "novelty": "新規",
+   "sentence": "国民健康保険事業会計では、保険給付費等交付金の支出済額が809,110,424,372円、後期高齢者支援金が174,560,871,060円、介護納付金が65,642,054,094円であった",
+   "label6": [
+    "label",
+    [
+     "東京都国民健康保険事業会計",
+     "目",
+     "国民健康保険事業費>国民健康保険事業費",
+     "保険給付費等交付金",
+     "支出済額",
+     "809110424372"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "東京都国民健康保険事業会計",
+     "目",
+     "保険給付費等交付金",
+     "支出済額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "UNVERIFIABLE",
+   "route": null,
+   "pointer": null,
+   "hold_reason": "会計が未確認の別名(独立した裏づけ 3 本未満。値が合っても結ばない)",
+   "parent_cues": null,
+   "parent_filtered": null,
+   "parent_kept": null,
+   "engine_parent": null,
+   "engine_key6": null,
+   "agree_6": false,
+   "agree_4": false,
+   "only_4": false,
+   "verdict": "結べなかった(誤接続ではない)",
+   "parent_correct": null
+  },
+  {
+   "id": "R014",
+   "value": 174560871060,
+   "novelty": "新規",
+   "sentence": "国民健康保険事業会計では、保険給付費等交付金の支出済額が809,110,424,372円、後期高齢者支援金が174,560,871,060円、介護納付金が65,642,054,094円であった",
+   "label6": [
+    "label",
+    [
+     "東京都国民健康保険事業会計",
+     "目",
+     "国民健康保険事業費>国民健康保険事業費",
+     "後期高齢者支援金",
+     "支出済額",
+     "174560871060"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "東京都国民健康保険事業会計",
+     "目",
+     "後期高齢者支援金",
+     "支出済額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "UNVERIFIABLE",
+   "route": null,
+   "pointer": null,
+   "hold_reason": "会計が未確認の別名(独立した裏づけ 3 本未満。値が合っても結ばない)",
+   "parent_cues": null,
+   "parent_filtered": null,
+   "parent_kept": null,
+   "engine_parent": null,
+   "engine_key6": null,
+   "agree_6": false,
+   "agree_4": false,
+   "only_4": false,
+   "verdict": "結べなかった(誤接続ではない)",
+   "parent_correct": null
+  },
+  {
+   "id": "R015",
+   "value": 65642054094,
+   "novelty": "新規",
+   "sentence": "国民健康保険事業会計では、保険給付費等交付金の支出済額が809,110,424,372円、後期高齢者支援金が174,560,871,060円、介護納付金が65,642,054,094円であった",
+   "label6": [
+    "label",
+    [
+     "東京都国民健康保険事業会計",
+     "目",
+     "国民健康保険事業費>国民健康保険事業費",
+     "介護納付金",
+     "支出済額",
+     "65642054094"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "東京都国民健康保険事業会計",
+     "目",
+     "介護納付金",
+     "支出済額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "UNVERIFIABLE",
+   "route": null,
+   "pointer": null,
+   "hold_reason": "会計が未確認の別名(独立した裏づけ 3 本未満。値が合っても結ばない)",
+   "parent_cues": null,
+   "parent_filtered": null,
+   "parent_kept": null,
+   "engine_parent": null,
+   "engine_key6": null,
+   "agree_6": false,
+   "agree_4": false,
+   "only_4": false,
+   "verdict": "結べなかった(誤接続ではない)",
+   "parent_correct": null
+  },
+  {
+   "id": "R016",
+   "value": 64325143583,
+   "novelty": "新規",
+   "sentence": "都営住宅等事業会計では、住宅管理費の支出済額が64,325,143,583円、住宅建設費が59,878,501,210円、特別会計繰出金が29,439,061,117円となった",
+   "label6": [
+    "label",
+    [
+     "東京都都営住宅等事業会計",
+     "目",
+     "都営住宅等事業費>都営住宅等事業費",
+     "住宅管理費",
+     "支出済額",
+     "64325143583"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "東京都都営住宅等事業会計",
+     "目",
+     "住宅管理費",
+     "支出済額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "UNVERIFIABLE",
+   "route": null,
+   "pointer": null,
+   "hold_reason": "6 欄が一意でない(2 通り。値で選ばない)",
+   "parent_cues": null,
+   "parent_filtered": null,
+   "parent_kept": null,
+   "engine_parent": null,
+   "engine_key6": null,
+   "agree_6": false,
+   "agree_4": false,
+   "only_4": false,
+   "verdict": "結べなかった(誤接続ではない)",
+   "parent_correct": null
+  },
+  {
+   "id": "R017",
+   "value": 59878501210,
+   "novelty": "新規",
+   "sentence": "都営住宅等事業会計では、住宅管理費の支出済額が64,325,143,583円、住宅建設費が59,878,501,210円、特別会計繰出金が29,439,061,117円となった",
+   "label6": [
+    "label",
+    [
+     "東京都都営住宅等事業会計",
+     "目",
+     "都営住宅等事業費>都営住宅等事業費",
+     "住宅建設費",
+     "支出済額",
+     "59878501210"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "東京都都営住宅等事業会計",
+     "目",
+     "住宅建設費",
+     "支出済額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "UNVERIFIABLE",
+   "route": null,
+   "pointer": null,
+   "hold_reason": "会計が未確認の別名(独立した裏づけ 3 本未満。値が合っても結ばない)",
+   "parent_cues": null,
+   "parent_filtered": null,
+   "parent_kept": null,
+   "engine_parent": null,
+   "engine_key6": null,
+   "agree_6": false,
+   "agree_4": false,
+   "only_4": false,
+   "verdict": "結べなかった(誤接続ではない)",
+   "parent_correct": null
+  },
+  {
+   "id": "R018",
+   "value": 29439061117,
+   "novelty": "新規",
+   "sentence": "都営住宅等事業会計では、住宅管理費の支出済額が64,325,143,583円、住宅建設費が59,878,501,210円、特別会計繰出金が29,439,061,117円となった",
+   "label6": [
+    "label",
+    [
+     "東京都都営住宅等事業会計",
+     "目",
+     "都営住宅等事業費>都営住宅等事業費",
+     "特別会計繰出金",
+     "支出済額",
+     "29439061117"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "東京都都営住宅等事業会計",
+     "目",
+     "特別会計繰出金",
+     "支出済額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "UNVERIFIABLE",
+   "route": null,
+   "pointer": null,
+   "hold_reason": "6 欄が一意でない(2 通り。値で選ばない)",
+   "parent_cues": null,
+   "parent_filtered": null,
+   "parent_kept": null,
+   "engine_parent": null,
+   "engine_key6": null,
+   "agree_6": false,
+   "agree_4": false,
+   "only_4": false,
+   "verdict": "結べなかった(誤接続ではない)",
+   "parent_correct": null
+  },
+  {
+   "id": "R019",
+   "value": 898462839262,
+   "novelty": "新規",
+   "sentence": "公債費会計では、公債費のうち元金償還金の支出済額が898,462,839,262円(補正予算額113,189,000,000円)、減債基金積立金が270,680,974,000円、利子償還金が56,117,196,637円であった",
+   "label6": [
+    "label",
+    [
+     "東京都公債費会計",
+     "目",
+     "公債費>公債費",
+     "元金償還金",
+     "支出済額",
+     "898462839262"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "東京都公債費会計",
+     "目",
+     "元金償還金",
+     "支出済額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "UNVERIFIABLE",
+   "route": null,
+   "pointer": null,
+   "hold_reason": "会計が未確認の別名(独立した裏づけ 3 本未満。値が合っても結ばない)",
+   "parent_cues": null,
+   "parent_filtered": null,
+   "parent_kept": null,
+   "engine_parent": null,
+   "engine_key6": null,
+   "agree_6": false,
+   "agree_4": false,
+   "only_4": false,
+   "verdict": "結べなかった(誤接続ではない)",
+   "parent_correct": null
+  },
+  {
+   "id": "R020",
+   "value": 113189000000,
+   "novelty": "新規",
+   "sentence": "公債費会計では、公債費のうち元金償還金の支出済額が898,462,839,262円(補正予算額113,189,000,000円)、減債基金積立金が270,680,974,000円、利子償還金が56,117,196,637円であった",
+   "label6": [
+    "label",
+    [
+     "東京都公債費会計",
+     "目",
+     "公債費>公債費",
+     "元金償還金",
+     "補正予算額",
+     "113189000000"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "東京都公債費会計",
+     "目",
+     "元金償還金",
+     "補正予算額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "UNVERIFIABLE",
+   "route": null,
+   "pointer": null,
+   "hold_reason": "会計が未確認の別名(独立した裏づけ 3 本未満。値が合っても結ばない)",
+   "parent_cues": null,
+   "parent_filtered": null,
+   "parent_kept": null,
+   "engine_parent": null,
+   "engine_key6": null,
+   "agree_6": false,
+   "agree_4": false,
+   "only_4": false,
+   "verdict": "結べなかった(誤接続ではない)",
+   "parent_correct": null
+  },
+  {
+   "id": "R021",
+   "value": 270680974000,
+   "novelty": "新規",
+   "sentence": "公債費会計では、公債費のうち元金償還金の支出済額が898,462,839,262円(補正予算額113,189,000,000円)、減債基金積立金が270,680,974,000円、利子償還金が56,117,196,637円であった",
+   "label6": [
+    "label",
+    [
+     "東京都公債費会計",
+     "目",
+     "公債費>公債費",
+     "減債基金積立金",
+     "支出済額",
+     "270680974000"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "東京都公債費会計",
+     "目",
+     "減債基金積立金",
+     "支出済額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "UNVERIFIABLE",
+   "route": null,
+   "pointer": null,
+   "hold_reason": "会計が未確認の別名(独立した裏づけ 3 本未満。値が合っても結ばない)",
+   "parent_cues": null,
+   "parent_filtered": null,
+   "parent_kept": null,
+   "engine_parent": null,
+   "engine_key6": null,
+   "agree_6": false,
+   "agree_4": false,
+   "only_4": false,
+   "verdict": "結べなかった(誤接続ではない)",
+   "parent_correct": null
+  },
+  {
+   "id": "R022",
+   "value": 56117196637,
+   "novelty": "新規",
+   "sentence": "公債費会計では、公債費のうち元金償還金の支出済額が898,462,839,262円(補正予算額113,189,000,000円)、減債基金積立金が270,680,974,000円、利子償還金が56,117,196,637円であった",
+   "label6": [
+    "label",
+    [
+     "東京都公債費会計",
+     "目",
+     "公債費>公債費",
+     "利子償還金",
+     "支出済額",
+     "56117196637"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "東京都公債費会計",
+     "目",
+     "利子償還金",
+     "支出済額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "UNVERIFIABLE",
+   "route": null,
+   "pointer": null,
+   "hold_reason": "会計が未確認の別名(独立した裏づけ 3 本未満。値が合っても結ばない)",
+   "parent_cues": null,
+   "parent_filtered": null,
+   "parent_kept": null,
+   "engine_parent": null,
+   "engine_key6": null,
+   "agree_6": false,
+   "agree_4": false,
+   "only_4": false,
+   "verdict": "結べなかった(誤接続ではない)",
+   "parent_correct": null
+  },
+  {
+   "id": "R023",
+   "value": 6423890408,
+   "novelty": "新規",
+   "sentence": "その他、と場会計のと場事業費は支出済額6,423,890,408円、不用額233,506,592円、工業用水道事業清算会計の工業用水道事業清算費は支出済額3,643,799,407円であった",
+   "label6": [
+    "label",
+    [
+     "と場会計",
+     "款",
+     "",
+     "と場事業費",
+     "支出済額",
+     "6423890408"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "と場会計",
+     "款",
+     "と場事業費",
+     "支出済額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "UNVERIFIABLE",
+   "route": null,
+   "pointer": null,
+   "hold_reason": "6 欄が一意でない(4 通り。値で選ばない)",
+   "parent_cues": null,
+   "parent_filtered": null,
+   "parent_kept": null,
+   "engine_parent": null,
+   "engine_key6": null,
+   "agree_6": false,
+   "agree_4": false,
+   "only_4": false,
+   "verdict": "結べなかった(誤接続ではない)",
+   "parent_correct": null
+  },
+  {
+   "id": "R024",
+   "value": 233506592,
+   "novelty": "新規",
+   "sentence": "その他、と場会計のと場事業費は支出済額6,423,890,408円、不用額233,506,592円、工業用水道事業清算会計の工業用水道事業清算費は支出済額3,643,799,407円であった",
+   "label6": [
+    "label",
+    [
+     "と場会計",
+     "款",
+     "",
+     "と場事業費",
+     "不用額",
+     "233506592"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "と場会計",
+     "款",
+     "と場事業費",
+     "不用額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "UNVERIFIABLE",
+   "route": null,
+   "pointer": null,
+   "hold_reason": "6 欄が一意でない(4 通り。値で選ばない)",
+   "parent_cues": null,
+   "parent_filtered": null,
+   "parent_kept": null,
+   "engine_parent": null,
+   "engine_key6": null,
+   "agree_6": false,
+   "agree_4": false,
+   "only_4": false,
+   "verdict": "結べなかった(誤接続ではない)",
+   "parent_correct": null
+  },
+  {
+   "id": "R025",
+   "value": 3643799407,
+   "novelty": "新規",
+   "sentence": "その他、と場会計のと場事業費は支出済額6,423,890,408円、不用額233,506,592円、工業用水道事業清算会計の工業用水道事業清算費は支出済額3,643,799,407円であった",
+   "label6": [
+    "label",
+    [
+     "工業用水道事業清算会計",
+     "款",
+     "",
+     "工業用水道事業清算費",
+     "支出済額",
+     "3643799407"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "工業用水道事業清算会計",
+     "款",
+     "工業用水道事業清算費",
+     "支出済額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "UNVERIFIABLE",
+   "route": null,
+   "pointer": null,
+   "hold_reason": "6 欄が一意でない(5 通り。値で選ばない)",
+   "parent_cues": null,
+   "parent_filtered": null,
+   "parent_kept": null,
+   "engine_parent": null,
+   "engine_key6": null,
+   "agree_6": false,
+   "agree_4": false,
+   "only_4": false,
+   "verdict": "結べなかった(誤接続ではない)",
+   "parent_correct": null
+  }
+ ]
+}

@@ -1,0 +1,122 @@
+{
+ "seed_blob_sha256": "f74146592f68b88dab89869a185d9f69bc68e8b4fa0c4eee1400581354b19f80",
+ "rng_label_without_the_seed": "<種>|document-allocation-2026-10-08|2026-09-04|2026-09-30",
+ "excluded_development_docs": [
+  "S100Z4Q1",
+  "S100Z4B6",
+  "S100YMFV",
+  "S100Z37J"
+ ],
+ "candidates_total": 186,
+ "pool_after_exclusion": 182,
+ "assigned": [
+  {
+   "docID": "S100Z3BW",
+   "filerName": "株式会社クレステック",
+   "periodEnd": "2026-06-30",
+   "date": "2026-09-24",
+   "role": "B-verify",
+   "role_ja": "B 確認用(主語の規則の直しの確認)",
+   "draw_order": 1
+  },
+  {
+   "docID": "S100Z4DE",
+   "filerName": "工藤建設株式会社",
+   "periodEnd": "2026-06-30",
+   "date": "2026-09-28",
+   "role": "B-verify",
+   "role_ja": "B 確認用(主語の規則の直しの確認)",
+   "draw_order": 2
+  },
+  {
+   "docID": "S100Z2S2",
+   "filerName": "株式会社エヌジェイホールディングス",
+   "periodEnd": "2026-06-30",
+   "date": "2026-09-18",
+   "role": "B-reserved",
+   "role_ja": "B 取り置き(資料用の最終の数字まで使わない)",
+   "draw_order": 3
+  },
+  {
+   "docID": "S100Z359",
+   "filerName": "澁谷工業株式会社",
+   "periodEnd": "2026-06-30",
+   "date": "2026-09-24",
+   "role": "B-reserved",
+   "role_ja": "B 取り置き(資料用の最終の数字まで使わない)",
+   "draw_order": 4
+  },
+  {
+   "docID": "S100Z2RN",
+   "filerName": "ロジザード株式会社",
+   "periodEnd": "2026-06-30",
+   "date": "2026-09-25",
+   "role": "showcase",
+   "role_ja": "ショーケース用(実行まで誰も中身を見ない)",
+   "draw_order": 5
+  },
+  {
+   "docID": "S100Z3PT",
+   "filerName": "株式会社Ａｎｄ　Ｄｏホールディングス",
+   "periodEnd": "2026-06-30",
+   "date": "2026-09-24",
+   "role": "showcase",
+   "role_ja": "ショーケース用(実行まで誰も中身を見ない)",
+   "draw_order": 6
+  },
+  {
+   "docID": "S100Z3T5",
+   "filerName": "株式会社アイスタイル",
+   "periodEnd": "2026-06-30",
+   "date": "2026-09-25",
+   "role": "showcase",
+   "role_ja": "ショーケース用(実行まで誰も中身を見ない)",
+   "draw_order": 7
+  },
+  {
+   "docID": "S100Z38M",
+   "filerName": "アトムリビンテック株式会社",
+   "periodEnd": "2026-06-30",
+   "date": "2026-09-25",
+   "role": "showcase",
+   "role_ja": "ショーケース用(実行まで誰も中身を見ない)",
+   "draw_order": 8
+  },
+  {
+   "docID": "S100Z1T7",
+   "filerName": "株式会社ジョイフル本田",
+   "periodEnd": "2026-06-20",
+   "date": "2026-09-15",
+   "role": "showcase",
+   "role_ja": "ショーケース用(実行まで誰も中身を見ない)",
+   "draw_order": 9
+  },
+  {
+   "docID": "S100Z3WK",
+   "filerName": "株式会社Ｌｉｂ　Ｗｏｒｋ",
+   "periodEnd": "2026-06-30",
+   "date": "2026-09-25",
+   "role": "showcase",
+   "role_ja": "ショーケース用(実行まで誰も中身を見ない)",
+   "draw_order": 10
+  },
+  {
+   "docID": "S100Z3CG",
+   "filerName": "株式会社グリーンズ",
+   "periodEnd": "2026-06-30",
+   "date": "2026-09-24",
+   "role": "showcase",
+   "role_ja": "ショーケース用(実行まで誰も中身を見ない)",
+   "draw_order": 11
+  },
+  {
+   "docID": "S100Z2EI",
+   "filerName": "ヒューマン・メタボローム・テクノロジーズ株式会社",
+   "periodEnd": "2026-06-30",
+   "date": "2026-09-17",
+   "role": "showcase",
+   "role_ja": "ショーケース用(実行まで誰も中身を見ない)",
+   "draw_order": 12
+  }
+ ]
+}

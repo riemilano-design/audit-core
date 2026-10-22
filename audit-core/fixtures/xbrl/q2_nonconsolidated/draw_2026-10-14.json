@@ -1,0 +1,42 @@
+{
+ "seal": "docs/Q2_NONCONSOLIDATED_SEAL_2026-10-14.md",
+ "rule": "order[22:] の順に 1 件ずつ。連結ありは中を読まずに送る。連結なしを 2 件採るまで。上限 30 件",
+ "tried": 4,
+ "cap": 30,
+ "taken": [
+  "S100Z40G",
+  "S100YYIA"
+ ],
+ "need": 2,
+ "complete": true,
+ "draws": [
+  {
+   "n": 1,
+   "docID": "S100YYVN",
+   "zip_sha256": "20d381114819b7608f4113d37fcd8920357a5da05f37f4542aaf6b5b3e92198d",
+   "consolidated_element_count": 182,
+   "verdict": "送る(連結あり。中を読まない)"
+  },
+  {
+   "n": 2,
+   "docID": "S100Z404",
+   "zip_sha256": "81de2055f7dc51ded49fad1d19291bbc84c59c9a26a23e1b634b2f9b01ce24ac",
+   "consolidated_element_count": 145,
+   "verdict": "送る(連結あり。中を読まない)"
+  },
+  {
+   "n": 3,
+   "docID": "S100Z40G",
+   "zip_sha256": "4cfd8ff692f81692cf79f9acfc71af0265e161dd4852755e01d84ebdd934c322",
+   "consolidated_element_count": 0,
+   "verdict": "採る(連結なし)"
+  },
+  {
+   "n": 4,
+   "docID": "S100YYIA",
+   "zip_sha256": "c37346d3285f33377d82e103a5192d496c85da7dada60754b1a7a0ee1968bf42",
+   "consolidated_element_count": 0,
+   "verdict": "採る(連結なし)"
+  }
+ ]
+}

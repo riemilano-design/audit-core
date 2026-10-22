@@ -1,0 +1,3840 @@
+{
+ "seal": "docs/XBRL_ROLE_SWAP_SEAL_2026-10-17.md",
+ "step": "**A / B / C を同じ行で比べた。engine 不変・0 USD・席は呼ばない**",
+ "**`検査通過` の意味**": "**現行 Core の検査を通過しただけ。「正しい」ではない。**未検査属性: 単位・期間・次元(連結区分)・重複",
+ "行": {
+  "合計": 192,
+  "注入": 64,
+  "無改変": 128,
+  "席が名指した": 85
+ },
+ "R-1 誤った参照先を検査通過にした": {
+  "(a) 検査通過のうち注入の行": {
+   "分子": 0,
+   "分母": 10,
+   "率": 0.0
+  },
+  "(b) 注入の行のうち検査通過": {
+   "分子": 0,
+   "分母": 64,
+   "率": 0.0
+  },
+  "正解と違う参照先で通した行": {
+   "分子": 0,
+   "分母": 10,
+   "率": 0.0
+  },
+  "明細": []
+ },
+ "R-2 正しい主張を不一致にした(無改変)": {
+  "率": {
+   "分子": 0,
+   "分母": 128,
+   "率": 0.0
+  },
+  "明細": []
+ },
+ "R-3 実証不能": {
+  "件数": {
+   "分子": 129,
+   "分母": 192,
+   "率": 67.2
+  },
+  "内訳": {
+   "参照先を名指していない": 98,
+   "contract が無い": 14,
+   "主張が無い": 11,
+   "参照先が 2 本要る": 6
+  }
+ },
+ "R-4 最終判定の正確性": {
+  "注入 64 行": {
+   "検出(誤りが在る)": {
+    "A": {
+     "分子": 51,
+     "分母": 64,
+     "率": 79.7
+    },
+    "B": {
+     "分子": 51,
+     "分母": 64,
+     "率": 79.7
+    }
+   },
+   "**危険な誤通過**": {
+    "A": {
+     "分子": 0,
+     "分母": 64,
+     "率": 0.0
+    },
+    "B": {
+     "分子": 0,
+     "分母": 64,
+     "率": 0.0
+    }
+   }
+  },
+  "無改変 128 行": {
+   "偽警報": {
+    "A": {
+     "分子": 2,
+     "分母": 128,
+     "率": 1.6
+    },
+    "B": {
+     "分子": 2,
+     "分母": 128,
+     "率": 1.6
+    }
+   },
+   "正しく通した": {
+    "A": {
+     "分子": 41,
+     "分母": 128,
+     "率": 32.0
+    },
+    "B": {
+     "分子": 10,
+     "分母": 128,
+     "率": 7.8
+    }
+   }
+  },
+  "注": "**`実証不能` はどちらの正しさにも数えていない**(封 §3)"
+ },
+ "R-5 検査通過の覆い": {
+  "率": {
+   "分子": 10,
+   "分母": 41,
+   "率": 24.4
+  },
+  "注": "分母は**無改変で席が `確認済み` と言い、参照先を名指した行**"
+ },
+ "R-6 差分・率の行(別集計)": {
+  "件数": 7,
+  "B の判定": {
+   "実証不能": 6,
+   "誤りが在る": 1
+  }
+ },
+ "R-7 contract が無い行(別集計)": {
+  "件数": 24,
+  "B の判定": {
+   "実証不能": 14,
+   "誤りが在る": 10
+  },
+  "注": "**その場で contract を足していない**(封 §2 の 2)"
+ },
+ "**予測との照合**": {
+  "欄ごと": [
+   {
+    "記号": "P-1",
+    "予測": "R-1 = 0 件",
+    "実測": 0,
+    "当たり": true
+   },
+   {
+    "記号": "P-2",
+    "予測": "R-2 = 0 件",
+    "実測": 0,
+    "当たり": true
+   },
+   {
+    "記号": "P-3",
+    "予測": "B の検出 = 51(A と同じ)",
+    "実測": "B 51 / A 51",
+    "当たり": true
+   },
+   {
+    "記号": "P-4",
+    "予測": "B の偽警報 = 2(A と同じ)",
+    "実測": "B 2 / A 2",
+    "当たり": true
+   },
+   {
+    "記号": "P-5",
+    "予測": "B の実証不能 = 150 行",
+    "実測": 129,
+    "当たり": false
+   },
+   {
+    "記号": "P-6",
+    "予測": "検査通過 = 10 行・すべて無改変",
+    "実測": "10 行・注入 0",
+    "当たり": true
+   },
+   {
+    "記号": "P-7",
+    "予測": "覆い = 10/41",
+    "実測": "10/41",
+    "当たり": true
+   },
+   {
+    "記号": "P-8",
+    "予測": "差分・率 7 行と contract 無し 24 行は全部 実証不能",
+    "実測": "7 / 24(別判定 11 件)",
+    "当たり": false
+   }
+  ],
+  "当たり": 6,
+  "外れ": 2
+ },
+ "rows": [
+  {
+   "doc": "S100YYRG",
+   "id": "R001",
+   "注入か": false,
+   "正解": null,
+   "A(席の判定)": "判定できない",
+   "席の参照先": null,
+   "Core の結果": null,
+   "検証できない理由": "参照先を名指していない",
+   "comparator": null,
+   "主張 id": null,
+   "**B の最終判定**": "実証不能",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YYRG",
+   "id": "R002",
+   "注入か": false,
+   "正解": null,
+   "A(席の判定)": "判定できない",
+   "席の参照先": null,
+   "Core の結果": null,
+   "検証できない理由": "参照先を名指していない",
+   "comparator": null,
+   "主張 id": null,
+   "**B の最終判定**": "実証不能",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YYRG",
+   "id": "R003",
+   "注入か": false,
+   "正解": null,
+   "A(席の判定)": "判定できない",
+   "席の参照先": null,
+   "Core の結果": null,
+   "検証できない理由": "参照先を名指していない",
+   "comparator": null,
+   "主張 id": null,
+   "**B の最終判定**": "実証不能",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YYRG",
+   "id": "R004",
+   "注入か": false,
+   "正解": null,
+   "A(席の判定)": "判定できない",
+   "席の参照先": null,
+   "Core の結果": null,
+   "検証できない理由": "参照先を名指していない",
+   "comparator": null,
+   "主張 id": null,
+   "**B の最終判定**": "実証不能",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YYRG",
+   "id": "R005",
+   "注入か": false,
+   "正解": null,
+   "A(席の判定)": "判定できない",
+   "席の参照先": null,
+   "Core の結果": null,
+   "検証できない理由": "参照先を名指していない",
+   "comparator": null,
+   "主張 id": null,
+   "**B の最終判定**": "実証不能",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YYRG",
+   "id": "R006",
+   "注入か": false,
+   "正解": null,
+   "A(席の判定)": "判定できない",
+   "席の参照先": null,
+   "Core の結果": null,
+   "検証できない理由": "参照先を名指していない",
+   "comparator": null,
+   "主張 id": null,
+   "**B の最終判定**": "実証不能",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YYRG",
+   "id": "R007",
+   "注入か": false,
+   "正解": null,
+   "A(席の判定)": "判定できない",
+   "席の参照先": null,
+   "Core の結果": null,
+   "検証できない理由": "参照先を名指していない",
+   "comparator": null,
+   "主張 id": null,
+   "**B の最終判定**": "実証不能",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YYRG",
+   "id": "R008",
+   "注入か": false,
+   "正解": null,
+   "A(席の判定)": "判定できない",
+   "席の参照先": null,
+   "Core の結果": null,
+   "検証できない理由": "参照先を名指していない",
+   "comparator": null,
+   "主張 id": null,
+   "**B の最終判定**": "実証不能",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YYRG",
+   "id": "R009",
+   "注入か": false,
+   "正解": null,
+   "A(席の判定)": "判定できない",
+   "席の参照先": null,
+   "Core の結果": null,
+   "検証できない理由": "参照先を名指していない",
+   "comparator": null,
+   "主張 id": null,
+   "**B の最終判定**": "実証不能",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YYRG",
+   "id": "R010",
+   "注入か": false,
+   "正解": null,
+   "A(席の判定)": "判定できない",
+   "席の参照先": null,
+   "Core の結果": null,
+   "検証できない理由": "参照先を名指していない",
+   "comparator": null,
+   "主張 id": null,
+   "**B の最終判定**": "実証不能",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YYRG",
+   "id": "R011",
+   "注入か": false,
+   "正解": null,
+   "A(席の判定)": "判定できない",
+   "席の参照先": null,
+   "Core の結果": null,
+   "検証できない理由": "参照先を名指していない",
+   "comparator": null,
+   "主張 id": null,
+   "**B の最終判定**": "実証不能",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YYRG",
+   "id": "R012",
+   "注入か": false,
+   "正解": null,
+   "A(席の判定)": "判定できない",
+   "席の参照先": null,
+   "Core の結果": null,
+   "検証できない理由": "参照先を名指していない",
+   "comparator": null,
+   "主張 id": null,
+   "**B の最終判定**": "実証不能",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YYRG",
+   "id": "R013",
+   "注入か": false,
+   "正解": null,
+   "A(席の判定)": "判定できない",
+   "席の参照先": null,
+   "Core の結果": null,
+   "検証できない理由": "参照先を名指していない",
+   "comparator": null,
+   "主張 id": null,
+   "**B の最終判定**": "実証不能",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YYRG",
+   "id": "R014",
+   "注入か": false,
+   "正解": null,
+   "A(席の判定)": "判定できない",
+   "席の参照先": null,
+   "Core の結果": null,
+   "検証できない理由": "参照先を名指していない",
+   "comparator": null,
+   "主張 id": null,
+   "**B の最終判定**": "実証不能",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YYRG",
+   "id": "R015",
+   "注入か": false,
+   "正解": null,
+   "A(席の判定)": "判定できない",
+   "席の参照先": null,
+   "Core の結果": null,
+   "検証できない理由": "参照先を名指していない",
+   "comparator": null,
+   "主張 id": null,
+   "**B の最終判定**": "実証不能",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YYRG",
+   "id": "R016",
+   "注入か": false,
+   "正解": null,
+   "A(席の判定)": "判定できない",
+   "席の参照先": null,
+   "Core の結果": null,
+   "検証できない理由": "参照先を名指していない",
+   "comparator": null,
+   "主張 id": null,
+   "**B の最終判定**": "実証不能",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YYRG",
+   "id": "R017",
+   "注入か": true,
+   "正解": "operatingincome@currentyearduration",
+   "A(席の判定)": "誤りが在る",
+   "席の参照先": "operatingincome@currentyearduration",
+   "Core の結果": "VALUE_MISMATCH",
+   "検証できない理由": null,
+   "comparator": "equals_within",
+   "主張 id": "N018",
+   "**B の最終判定**": "誤りが在る",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YYRG",
+   "id": "R018",
+   "注入か": true,
+   "正解": "liabilities@currentyearinstant",
+   "A(席の判定)": "誤りが在る",
+   "席の参照先": "liabilities@currentyearinstant",
+   "Core の結果": "VALUE_MISMATCH",
+   "検証できない理由": null,
+   "comparator": "equals_within",
+   "主張 id": "N029",
+   "**B の最終判定**": "誤りが在る",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YYRG",
+   "id": "R019",
+   "注入か": true,
+   "正解": "netincreasedecreaseincashandcashequivalents@currentyearduration",
+   "A(席の判定)": "誤りが在る",
+   "席の参照先": "netincreasedecreaseincashandcashequivalents@currentyearduration",
+   "Core の結果": "VALUE_MISMATCH",
+   "検証できない理由": null,
+   "comparator": "equals_within",
+   "主張 id": "N037",
+   "**B の最終判定**": "誤りが在る",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YYRG",
+   "id": "R020",
+   "注入か": true,
+   "正解": "incomebeforeincometaxes@currentyearduration",
+   "A(席の判定)": "誤りが在る",
+   "席の参照先": "incomebeforeincometaxes@currentyearduration",
+   "Core の結果": "VALUE_MISMATCH",
+   "検証できない理由": null,
+   "comparator": "equals_within",
+   "主張 id": "N041",
+   "**B の最終判定**": "誤りが在る",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YYRG",
+   "id": "R021",
+   "注入か": true,
+   "正解": "costofsales@currentyearduration",
+   "A(席の判定)": "誤りが在る",
+   "席の参照先": "costofsales@currentyearduration",
+   "Core の結果": "VALUE_MISMATCH",
+   "検証できない理由": null,
+   "comparator": "equals_within",
+   "主張 id": "N050",
+   "**B の最終判定**": "誤りが在る",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YYRG",
+   "id": "R022",
+   "注入か": true,
+   "正解": "sellinggeneralandadministrativeexpenses@currentyearduration",
+   "A(席の判定)": "誤りが在る",
+   "席の参照先": "sellinggeneralandadministrativeexpenses@currentyearduration",
+   "Core の結果": "VALUE_MISMATCH",
+   "検証できない理由": null,
+   "comparator": "equals_within",
+   "主張 id": "N052",
+   "**B の最終判定**": "誤りが在る",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YYRG",
+   "id": "R023",
+   "注入か": true,
+   "正解": "nonoperatingincome@currentyearduration",
+   "A(席の判定)": "誤りが在る",
+   "席の参照先": "nonoperatingincome@currentyearduration",
+   "Core の結果": "VALUE_MISMATCH",
+   "検証できない理由": null,
+   "comparator": "equals_within",
+   "主張 id": "N056",
+   "**B の最終判定**": "誤りが在る",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YYRG",
+   "id": "R024",
+   "注入か": true,
+   "正解": "incometaxes@currentyearduration",
+   "A(席の判定)": "誤りが在る",
+   "席の参照先": "incometaxes@currentyearduration",
+   "Core の結果": "VALUE_MISMATCH",
+   "検証できない理由": null,
+   "comparator": "equals_within",
+   "主張 id": "N060",
+   "**B の最終判定**": "誤りが在る",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YXMA",
+   "id": "R001",
+   "注入か": false,
+   "正解": null,
+   "A(席の判定)": "確認済み",
+   "席の参照先": "netsales@currentyearduration",
+   "Core の結果": "GROUNDED",
+   "検証できない理由": null,
+   "comparator": "equals_within",
+   "主張 id": "N002",
+   "**B の最終判定**": "検査通過",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YXMA",
+   "id": "R002",
+   "注入か": true,
+   "正解": "operatingincome@currentyearduration",
+   "A(席の判定)": "誤りが在る",
+   "席の参照先": null,
+   "Core の結果": null,
+   "検証できない理由": "参照先を名指していない",
+   "comparator": null,
+   "主張 id": null,
+   "**B の最終判定**": "誤りが在る",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YXMA",
+   "id": "R003",
+   "注入か": false,
+   "正解": null,
+   "A(席の判定)": "判定できない",
+   "席の参照先": null,
+   "Core の結果": null,
+   "検証できない理由": "参照先を名指していない",
+   "comparator": null,
+   "主張 id": null,
+   "**B の最終判定**": "実証不能",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YXMA",
+   "id": "R004",
+   "注入か": false,
+   "正解": null,
+   "A(席の判定)": "確認済み",
+   "席の参照先": "ordinaryincome@currentyearduration",
+   "Core の結果": null,
+   "検証できない理由": "contract が無い",
+   "comparator": null,
+   "主張 id": "N004",
+   "**B の最終判定**": "実証不能",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YXMA",
+   "id": "R005",
+   "注入か": false,
+   "正解": null,
+   "A(席の判定)": "確認済み",
+   "席の参照先": "impairmentlossel@currentyearduration",
+   "Core の結果": null,
+   "検証できない理由": "主張が無い",
+   "comparator": null,
+   "主張 id": null,
+   "**B の最終判定**": "実証不能",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YXMA",
+   "id": "R006",
+   "注入か": false,
+   "正解": null,
+   "A(席の判定)": "確認済み",
+   "席の参照先": "correctionrelatedcostel@currentyearduration",
+   "Core の結果": null,
+   "検証できない理由": "主張が無い",
+   "comparator": null,
+   "主張 id": null,
+   "**B の最終判定**": "実証不能",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YXMA",
+   "id": "R007",
+   "注入か": false,
+   "正解": null,
+   "A(席の判定)": "確認済み",
+   "席の参照先": "specialinvestigationexpensesel@currentyearduration",
+   "Core の結果": null,
+   "検証できない理由": "主張が無い",
+   "comparator": null,
+   "主張 id": null,
+   "**B の最終判定**": "実証不能",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YXMA",
+   "id": "R008",
+   "注入か": false,
+   "正解": null,
+   "A(席の判定)": "誤りが在る",
+   "席の参照先": null,
+   "Core の結果": null,
+   "検証できない理由": "参照先を名指していない",
+   "comparator": null,
+   "主張 id": null,
+   "**B の最終判定**": "誤りが在る",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YXMA",
+   "id": "R009",
+   "注入か": false,
+   "正解": null,
+   "A(席の判定)": "確認済み",
+   "席の参照先": "profitlossattributabletoownersofparent@currentyearduration",
+   "Core の結果": null,
+   "検証できない理由": "contract が無い",
+   "comparator": null,
+   "主張 id": "N009",
+   "**B の最終判定**": "実証不能",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YXMA",
+   "id": "R010",
+   "注入か": false,
+   "正解": null,
+   "A(席の判定)": "確認済み",
+   "席の参照先": "netsales@currentyearduration_jpcrp030000-asr_e05713-000solarpanelmanufacturingbusinessreportablesegmentmember",
+   "Core の結果": "GROUNDED",
+   "検証できない理由": null,
+   "comparator": "equals_within",
+   "主張 id": "N010",
+   "**B の最終判定**": "検査通過",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YXMA",
+   "id": "R011",
+   "注入か": false,
+   "正解": null,
+   "A(席の判定)": "確認済み",
+   "席の参照先": "operatingincome@currentyearduration_jpcrp030000-asr_e05713-000solarpanelmanufacturingbusinessreportablesegmentmember",
+   "Core の結果": "GROUNDED",
+   "検証できない理由": null,
+   "comparator": "equals_within",
+   "主張 id": "N011",
+   "**B の最終判定**": "検査通過",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YXMA",
+   "id": "R012",
+   "注入か": false,
+   "正解": null,
+   "A(席の判定)": "判定できない",
+   "席の参照先": null,
+   "Core の結果": null,
+   "検証できない理由": "参照先を名指していない",
+   "comparator": null,
+   "主張 id": null,
+   "**B の最終判定**": "実証不能",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YXMA",
+   "id": "R013",
+   "注入か": false,
+   "正解": null,
+   "A(席の判定)": "判定できない",
+   "席の参照先": null,
+   "Core の結果": null,
+   "検証できない理由": "参照先を名指していない",
+   "comparator": null,
+   "主張 id": null,
+   "**B の最終判定**": "実証不能",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YXMA",
+   "id": "R014",
+   "注入か": false,
+   "正解": null,
+   "A(席の判定)": "判定できない",
+   "席の参照先": null,
+   "Core の結果": null,
+   "検証できない理由": "参照先を名指していない",
+   "comparator": null,
+   "主張 id": null,
+   "**B の最終判定**": "実証不能",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YXMA",
+   "id": "R015",
+   "注入か": false,
+   "正解": null,
+   "A(席の判定)": "判定できない",
+   "席の参照先": null,
+   "Core の結果": null,
+   "検証できない理由": "参照先を名指していない",
+   "comparator": null,
+   "主張 id": null,
+   "**B の最終判定**": "実証不能",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YXMA",
+   "id": "R016",
+   "注入か": false,
+   "正解": null,
+   "A(席の判定)": "確認済み",
+   "席の参照先": "netsales@currentyearduration_jpcrp030000-asr_e05713-000greenenergyreportablesegmentmember",
+   "Core の結果": "GROUNDED",
+   "検証できない理由": null,
+   "comparator": "equals_within",
+   "主張 id": "N015",
+   "**B の最終判定**": "検査通過",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YXMA",
+   "id": "R017",
+   "注入か": false,
+   "正解": null,
+   "A(席の判定)": "確認済み",
+   "席の参照先": "operatingincome@currentyearduration_jpcrp030000-asr_e05713-000greenenergyreportablesegmentmember",
+   "Core の結果": null,
+   "検証できない理由": "主張が無い",
+   "comparator": null,
+   "主張 id": null,
+   "**B の最終判定**": "実証不能",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YXMA",
+   "id": "R018",
+   "注入か": true,
+   "正解": "incomebeforeincometaxes@currentyearduration",
+   "A(席の判定)": "誤りが在る",
+   "席の参照先": null,
+   "Core の結果": null,
+   "検証できない理由": "参照先を名指していない",
+   "comparator": null,
+   "主張 id": null,
+   "**B の最終判定**": "誤りが在る",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YXMA",
+   "id": "R019",
+   "注入か": true,
+   "正解": "decreaseincreaseinadvancepaymentsopecf@currentyearduration",
+   "A(席の判定)": "誤りが在る",
+   "席の参照先": null,
+   "Core の結果": null,
+   "検証できない理由": "参照先を名指していない",
+   "comparator": null,
+   "主張 id": null,
+   "**B の最終判定**": "誤りが在る",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YXMA",
+   "id": "R020",
+   "注入か": true,
+   "正解": "proceedsfromcollectionofdepositspaidinvcf@currentyearduration",
+   "A(席の判定)": "誤りが在る",
+   "席の参照先": null,
+   "Core の結果": null,
+   "検証できない理由": "参照先を名指していない",
+   "comparator": null,
+   "主張 id": null,
+   "**B の最終判定**": "誤りが在る",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YXMA",
+   "id": "R021",
+   "注入か": true,
+   "正解": "currentassets@currentyearinstant",
+   "A(席の判定)": "誤りが在る",
+   "席の参照先": null,
+   "Core の結果": null,
+   "検証できない理由": "参照先を名指していない",
+   "comparator": null,
+   "主張 id": null,
+   "**B の最終判定**": "誤りが在る",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YXMA",
+   "id": "R022",
+   "注入か": true,
+   "正解": "currentliabilities@currentyearinstant",
+   "A(席の判定)": "誤りが在る",
+   "席の参照先": null,
+   "Core の結果": null,
+   "検証できない理由": "参照先を名指していない",
+   "comparator": null,
+   "主張 id": null,
+   "**B の最終判定**": "誤りが在る",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YXMA",
+   "id": "R023",
+   "注入か": true,
+   "正解": "noncurrentliabilities@currentyearinstant",
+   "A(席の判定)": "誤りが在る",
+   "席の参照先": null,
+   "Core の結果": null,
+   "検証できない理由": "参照先を名指していない",
+   "comparator": null,
+   "主張 id": null,
+   "**B の最終判定**": "誤りが在る",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YXMA",
+   "id": "R024",
+   "注入か": true,
+   "正解": "totalchangesofitemsduringtheperiod@currentyearduration",
+   "A(席の判定)": "誤りが在る",
+   "席の参照先": null,
+   "Core の結果": null,
+   "検証できない理由": "参照先を名指していない",
+   "comparator": null,
+   "主張 id": null,
+   "**B の最終判定**": "誤りが在る",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YZ7E",
+   "id": "R001",
+   "注入か": false,
+   "正解": null,
+   "A(席の判定)": "判定できない",
+   "席の参照先": null,
+   "Core の結果": null,
+   "検証できない理由": "参照先を名指していない",
+   "comparator": null,
+   "主張 id": null,
+   "**B の最終判定**": "実証不能",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YZ7E",
+   "id": "R002",
+   "注入か": false,
+   "正解": null,
+   "A(席の判定)": "判定できない",
+   "席の参照先": null,
+   "Core の結果": null,
+   "検証できない理由": "参照先を名指していない",
+   "comparator": null,
+   "主張 id": null,
+   "**B の最終判定**": "実証不能",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YZ7E",
+   "id": "R003",
+   "注入か": false,
+   "正解": null,
+   "A(席の判定)": "判定できない",
+   "席の参照先": null,
+   "Core の結果": null,
+   "検証できない理由": "参照先を名指していない",
+   "comparator": null,
+   "主張 id": null,
+   "**B の最終判定**": "実証不能",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YZ7E",
+   "id": "R004",
+   "注入か": false,
+   "正解": null,
+   "A(席の判定)": "判定できない",
+   "席の参照先": null,
+   "Core の結果": null,
+   "検証できない理由": "参照先を名指していない",
+   "comparator": null,
+   "主張 id": null,
+   "**B の最終判定**": "実証不能",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YZ7E",
+   "id": "R005",
+   "注入か": false,
+   "正解": null,
+   "A(席の判定)": "判定できない",
+   "席の参照先": null,
+   "Core の結果": null,
+   "検証できない理由": "参照先を名指していない",
+   "comparator": null,
+   "主張 id": null,
+   "**B の最終判定**": "実証不能",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YZ7E",
+   "id": "R006",
+   "注入か": false,
+   "正解": null,
+   "A(席の判定)": "判定できない",
+   "席の参照先": null,
+   "Core の結果": null,
+   "検証できない理由": "参照先を名指していない",
+   "comparator": null,
+   "主張 id": null,
+   "**B の最終判定**": "実証不能",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YZ7E",
+   "id": "R007",
+   "注入か": false,
+   "正解": null,
+   "A(席の判定)": "判定できない",
+   "席の参照先": null,
+   "Core の結果": null,
+   "検証できない理由": "参照先を名指していない",
+   "comparator": null,
+   "主張 id": null,
+   "**B の最終判定**": "実証不能",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YZ7E",
+   "id": "R008",
+   "注入か": false,
+   "正解": null,
+   "A(席の判定)": "判定できない",
+   "席の参照先": null,
+   "Core の結果": null,
+   "検証できない理由": "参照先を名指していない",
+   "comparator": null,
+   "主張 id": null,
+   "**B の最終判定**": "実証不能",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YZ7E",
+   "id": "R009",
+   "注入か": false,
+   "正解": null,
+   "A(席の判定)": "判定できない",
+   "席の参照先": null,
+   "Core の結果": null,
+   "検証できない理由": "参照先を名指していない",
+   "comparator": null,
+   "主張 id": null,
+   "**B の最終判定**": "実証不能",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YZ7E",
+   "id": "R010",
+   "注入か": false,
+   "正解": null,
+   "A(席の判定)": "判定できない",
+   "席の参照先": null,
+   "Core の結果": null,
+   "検証できない理由": "参照先を名指していない",
+   "comparator": null,
+   "主張 id": null,
+   "**B の最終判定**": "実証不能",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YZ7E",
+   "id": "R011",
+   "注入か": false,
+   "正解": null,
+   "A(席の判定)": "判定できない",
+   "席の参照先": null,
+   "Core の結果": null,
+   "検証できない理由": "参照先を名指していない",
+   "comparator": null,
+   "主張 id": null,
+   "**B の最終判定**": "実証不能",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YZ7E",
+   "id": "R012",
+   "注入か": false,
+   "正解": null,
+   "A(席の判定)": "判定できない",
+   "席の参照先": null,
+   "Core の結果": null,
+   "検証できない理由": "参照先を名指していない",
+   "comparator": null,
+   "主張 id": null,
+   "**B の最終判定**": "実証不能",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YZ7E",
+   "id": "R013",
+   "注入か": false,
+   "正解": null,
+   "A(席の判定)": "判定できない",
+   "席の参照先": null,
+   "Core の結果": null,
+   "検証できない理由": "参照先を名指していない",
+   "comparator": null,
+   "主張 id": null,
+   "**B の最終判定**": "実証不能",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YZ7E",
+   "id": "R014",
+   "注入か": false,
+   "正解": null,
+   "A(席の判定)": "判定できない",
+   "席の参照先": null,
+   "Core の結果": null,
+   "検証できない理由": "参照先を名指していない",
+   "comparator": null,
+   "主張 id": null,
+   "**B の最終判定**": "実証不能",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YZ7E",
+   "id": "R015",
+   "注入か": false,
+   "正解": null,
+   "A(席の判定)": "判定できない",
+   "席の参照先": null,
+   "Core の結果": null,
+   "検証できない理由": "参照先を名指していない",
+   "comparator": null,
+   "主張 id": null,
+   "**B の最終判定**": "実証不能",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YZ7E",
+   "id": "R016",
+   "注入か": false,
+   "正解": null,
+   "A(席の判定)": "判定できない",
+   "席の参照先": null,
+   "Core の結果": null,
+   "検証できない理由": "参照先を名指していない",
+   "comparator": null,
+   "主張 id": null,
+   "**B の最終判定**": "実証不能",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YZ7E",
+   "id": "R017",
+   "注入か": true,
+   "正解": "operatingrevenue2summaryofbusinessresults@currentyearduration_nonconsolidatedmember",
+   "A(席の判定)": "誤りが在る",
+   "席の参照先": "operatingrevenue2@currentyearduration_nonconsolidatedmember",
+   "Core の結果": null,
+   "検証できない理由": "contract が無い",
+   "comparator": null,
+   "主張 id": "N022",
+   "**B の最終判定**": "誤りが在る",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YZ7E",
+   "id": "R018",
+   "注入か": true,
+   "正解": "ordinaryincomelosssummaryofbusinessresults@currentyearduration_nonconsolidatedmember",
+   "A(席の判定)": "誤りが在る",
+   "席の参照先": "ordinaryincome@currentyearduration_nonconsolidatedmember",
+   "Core の結果": null,
+   "検証できない理由": "contract が無い",
+   "comparator": null,
+   "主張 id": "N022",
+   "**B の最終判定**": "誤りが在る",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YZ7E",
+   "id": "R019",
+   "注入か": true,
+   "正解": "cashandcashequivalentssummaryofbusinessresults@currentyearinstant_nonconsolidatedmember",
+   "A(席の判定)": "誤りが在る",
+   "席の参照先": "cashandcashequivalents@currentyearinstant_nonconsolidatedmember",
+   "Core の結果": null,
+   "検証できない理由": "contract が無い",
+   "comparator": null,
+   "主張 id": "N022",
+   "**B の最終判定**": "誤りが在る",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YZ7E",
+   "id": "R020",
+   "注入か": true,
+   "正解": "netcashprovidedbyusedininvestingactivitiessummaryofbusinessresults@currentyearduration_nonconsolidatedmember",
+   "A(席の判定)": "誤りが在る",
+   "席の参照先": "netcashprovidedbyusedininvestmentactivities@currentyearduration_nonconsolidatedmember",
+   "Core の結果": null,
+   "検証できない理由": "contract が無い",
+   "comparator": null,
+   "主張 id": "N022",
+   "**B の最終判定**": "誤りが在る",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YZ7E",
+   "id": "R021",
+   "注入か": true,
+   "正解": null,
+   "A(席の判定)": "判定できない",
+   "席の参照先": null,
+   "Core の結果": null,
+   "検証できない理由": "参照先を名指していない",
+   "comparator": null,
+   "主張 id": null,
+   "**B の最終判定**": "実証不能",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YZ7E",
+   "id": "R022",
+   "注入か": true,
+   "正解": null,
+   "A(席の判定)": "判定できない",
+   "席の参照先": null,
+   "Core の結果": null,
+   "検証できない理由": "参照先を名指していない",
+   "comparator": null,
+   "主張 id": null,
+   "**B の最終判定**": "実証不能",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YZ7E",
+   "id": "R023",
+   "注入か": true,
+   "正解": "totalassetssummaryofbusinessresults@currentyearinstant_nonconsolidatedmember",
+   "A(席の判定)": "誤りが在る",
+   "席の参照先": "assets@currentyearinstant_nonconsolidatedmember",
+   "Core の結果": null,
+   "検証できない理由": "contract が無い",
+   "comparator": null,
+   "主張 id": "N066",
+   "**B の最終判定**": "誤りが在る",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YZ7E",
+   "id": "R024",
+   "注入か": true,
+   "正解": "netassetssummaryofbusinessresults@currentyearinstant_nonconsolidatedmember",
+   "A(席の判定)": "誤りが在る",
+   "席の参照先": "netassets@currentyearinstant_nonconsolidatedmember",
+   "Core の結果": null,
+   "検証できない理由": "contract が無い",
+   "comparator": null,
+   "主張 id": "N070",
+   "**B の最終判定**": "誤りが在る",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YWGX",
+   "id": "R001",
+   "注入か": false,
+   "正解": null,
+   "A(席の判定)": "判定できない",
+   "席の参照先": null,
+   "Core の結果": null,
+   "検証できない理由": "参照先を名指していない",
+   "comparator": null,
+   "主張 id": null,
+   "**B の最終判定**": "実証不能",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YWGX",
+   "id": "R002",
+   "注入か": false,
+   "正解": null,
+   "A(席の判定)": "判定できない",
+   "席の参照先": null,
+   "Core の結果": null,
+   "検証できない理由": "参照先を名指していない",
+   "comparator": null,
+   "主張 id": null,
+   "**B の最終判定**": "実証不能",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YWGX",
+   "id": "R003",
+   "注入か": false,
+   "正解": null,
+   "A(席の判定)": "確認済み",
+   "席の参照先": "netsales@currentyearduration",
+   "Core の結果": "GROUNDED",
+   "検証できない理由": null,
+   "comparator": "equals_within",
+   "主張 id": "N001",
+   "**B の最終判定**": "検査通過",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YWGX",
+   "id": "R004",
+   "注入か": false,
+   "正解": null,
+   "A(席の判定)": "確認済み",
+   "席の参照先": "netsales@currentyearduration",
+   "Core の結果": null,
+   "検証できない理由": "参照先が 2 本要る",
+   "comparator": null,
+   "主張 id": "N002",
+   "**B の最終判定**": "実証不能",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YWGX",
+   "id": "R005",
+   "注入か": false,
+   "正解": null,
+   "A(席の判定)": "確認済み",
+   "席の参照先": "ordinaryincome@currentyearduration",
+   "Core の結果": null,
+   "検証できない理由": "contract が無い",
+   "comparator": null,
+   "主張 id": "N003",
+   "**B の最終判定**": "実証不能",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YWGX",
+   "id": "R006",
+   "注入か": false,
+   "正解": null,
+   "A(席の判定)": "確認済み",
+   "席の参照先": "ordinaryincome@currentyearduration",
+   "Core の結果": null,
+   "検証できない理由": "contract が無い",
+   "comparator": null,
+   "主張 id": "N004",
+   "**B の最終判定**": "実証不能",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YWGX",
+   "id": "R007",
+   "注入か": false,
+   "正解": null,
+   "A(席の判定)": "確認済み",
+   "席の参照先": "profitlossattributabletoownersofparent@currentyearduration",
+   "Core の結果": null,
+   "検証できない理由": "contract が無い",
+   "comparator": null,
+   "主張 id": "N005",
+   "**B の最終判定**": "実証不能",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YWGX",
+   "id": "R008",
+   "注入か": false,
+   "正解": null,
+   "A(席の判定)": "確認済み",
+   "席の参照先": "profitlossattributabletoownersofparent@currentyearduration",
+   "Core の結果": null,
+   "検証できない理由": "contract が無い",
+   "comparator": null,
+   "主張 id": "N006",
+   "**B の最終判定**": "実証不能",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YWGX",
+   "id": "R009",
+   "注入か": false,
+   "正解": null,
+   "A(席の判定)": "判定できない",
+   "席の参照先": null,
+   "Core の結果": null,
+   "検証できない理由": "参照先を名指していない",
+   "comparator": null,
+   "主張 id": null,
+   "**B の最終判定**": "実証不能",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YWGX",
+   "id": "R010",
+   "注入か": true,
+   "正解": "revenuesfromexternalcustomers@currentyearduration_jpcrp030000-asr_e34102-000domesticbookoffbusinessreportablesegmentsmember",
+   "A(席の判定)": "誤りが在る",
+   "席の参照先": "revenuesfromexternalcustomers@currentyearduration_jpcrp030000-asr_e34102-000domesticbookoffbusinessreportablesegmentsmember",
+   "Core の結果": "VALUE_MISMATCH",
+   "検証できない理由": null,
+   "comparator": "equals_within",
+   "主張 id": "N013",
+   "**B の最終判定**": "誤りが在る",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YWGX",
+   "id": "R011",
+   "注入か": false,
+   "正解": null,
+   "A(席の判定)": "確認済み",
+   "席の参照先": "revenuesfromexternalcustomers@currentyearduration_jpcrp030000-asr_e34102-000domesticbookoffbusinessreportablesegmentsmember",
+   "Core の結果": null,
+   "検証できない理由": "参照先が 2 本要る",
+   "comparator": null,
+   "主張 id": "N014",
+   "**B の最終判定**": "実証不能",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YWGX",
+   "id": "R012",
+   "注入か": false,
+   "正解": null,
+   "A(席の判定)": "確認済み",
+   "席の参照先": "ordinaryincome@currentyearduration_jpcrp030000-asr_e34102-000domesticbookoffbusinessreportablesegmentsmember",
+   "Core の結果": "GROUNDED",
+   "検証できない理由": null,
+   "comparator": "equals_within",
+   "主張 id": "N015",
+   "**B の最終判定**": "検査通過",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YWGX",
+   "id": "R013",
+   "注入か": false,
+   "正解": null,
+   "A(席の判定)": "確認済み",
+   "席の参照先": "ordinaryincome@currentyearduration_jpcrp030000-asr_e34102-000domesticbookoffbusinessreportablesegmentsmember",
+   "Core の結果": null,
+   "検証できない理由": "参照先が 2 本要る",
+   "comparator": null,
+   "主張 id": "N016",
+   "**B の最終判定**": "実証不能",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YWGX",
+   "id": "R014",
+   "注入か": false,
+   "正解": null,
+   "A(席の判定)": "確認済み",
+   "席の参照先": "revenuesfromexternalcustomers@currentyearduration_jpcrp030000-asr_e34102-000premiumservicebusinessreportablesegmentsmember",
+   "Core の結果": "GROUNDED",
+   "検証できない理由": null,
+   "comparator": "equals_within",
+   "主張 id": "N019",
+   "**B の最終判定**": "検査通過",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YWGX",
+   "id": "R015",
+   "注入か": false,
+   "正解": null,
+   "A(席の判定)": "確認済み",
+   "席の参照先": "revenuesfromexternalcustomers@currentyearduration_jpcrp030000-asr_e34102-000premiumservicebusinessreportablesegmentsmember",
+   "Core の結果": null,
+   "検証できない理由": "参照先が 2 本要る",
+   "comparator": null,
+   "主張 id": "N020",
+   "**B の最終判定**": "実証不能",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YWGX",
+   "id": "R016",
+   "注入か": false,
+   "正解": null,
+   "A(席の判定)": "確認済み",
+   "席の参照先": "ordinaryincome@currentyearduration_jpcrp030000-asr_e34102-000premiumservicebusinessreportablesegmentsmember",
+   "Core の結果": null,
+   "検証できない理由": "主張が無い",
+   "comparator": null,
+   "主張 id": null,
+   "**B の最終判定**": "実証不能",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YWGX",
+   "id": "R017",
+   "注入か": false,
+   "正解": null,
+   "A(席の判定)": "誤りが在る",
+   "席の参照先": "ordinaryincome@currentyearduration_jpcrp030000-asr_e34102-000premiumservicebusinessreportablesegmentsmember",
+   "Core の結果": null,
+   "検証できない理由": "参照先が 2 本要る",
+   "comparator": null,
+   "主張 id": "N022",
+   "**B の最終判定**": "誤りが在る",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YWGX",
+   "id": "R018",
+   "注入か": true,
+   "正解": "currentassets@currentyearinstant",
+   "A(席の判定)": "誤りが在る",
+   "席の参照先": "currentassets@currentyearinstant",
+   "Core の結果": "VALUE_MISMATCH",
+   "検証できない理由": null,
+   "comparator": "equals_within",
+   "主張 id": "N030",
+   "**B の最終判定**": "誤りが在る",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YWGX",
+   "id": "R019",
+   "注入か": true,
+   "正解": "currentassets@prior1yearinstant",
+   "A(席の判定)": "誤りが在る",
+   "席の参照先": "currentassets@prior1yearinstant",
+   "Core の結果": "VALUE_MISMATCH",
+   "検証できない理由": null,
+   "comparator": "equals_within",
+   "主張 id": "N030",
+   "**B の最終判定**": "誤りが在る",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YWGX",
+   "id": "R020",
+   "注入か": true,
+   "正解": "noncurrentassets@prior1yearinstant",
+   "A(席の判定)": "誤りが在る",
+   "席の参照先": "noncurrentassets@prior1yearinstant",
+   "Core の結果": "VALUE_MISMATCH",
+   "検証できない理由": null,
+   "comparator": "equals_within",
+   "主張 id": "N030",
+   "**B の最終判定**": "誤りが在る",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YWGX",
+   "id": "R021",
+   "注入か": true,
+   "正解": "liabilities@currentyearinstant",
+   "A(席の判定)": "誤りが在る",
+   "席の参照先": "liabilities@currentyearinstant",
+   "Core の結果": "VALUE_MISMATCH",
+   "検証できない理由": null,
+   "comparator": "equals_within",
+   "主張 id": "N030",
+   "**B の最終判定**": "誤りが在る",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YWGX",
+   "id": "R022",
+   "注入か": true,
+   "正解": "liabilities@prior1yearinstant",
+   "A(席の判定)": "誤りが在る",
+   "席の参照先": "liabilities@prior1yearinstant",
+   "Core の結果": "VALUE_MISMATCH",
+   "検証できない理由": null,
+   "comparator": "equals_within",
+   "主張 id": "N030",
+   "**B の最終判定**": "誤りが在る",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YWGX",
+   "id": "R023",
+   "注入か": true,
+   "正解": "costofsales@currentyearduration",
+   "A(席の判定)": "誤りが在る",
+   "席の参照先": "costofsales@currentyearduration",
+   "Core の結果": "VALUE_MISMATCH",
+   "検証できない理由": null,
+   "comparator": "equals_within",
+   "主張 id": "N030",
+   "**B の最終判定**": "誤りが在る",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YWGX",
+   "id": "R024",
+   "注入か": true,
+   "正解": "sellinggeneralandadministrativeexpenses@currentyearduration",
+   "A(席の判定)": "誤りが在る",
+   "席の参照先": "sellinggeneralandadministrativeexpenses@currentyearduration",
+   "Core の結果": "VALUE_MISMATCH",
+   "検証できない理由": null,
+   "comparator": "equals_within",
+   "主張 id": "N030",
+   "**B の最終判定**": "誤りが在る",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YZCT",
+   "id": "R001",
+   "注入か": false,
+   "正解": null,
+   "A(席の判定)": "判定できない",
+   "席の参照先": null,
+   "Core の結果": null,
+   "検証できない理由": "参照先を名指していない",
+   "comparator": null,
+   "主張 id": null,
+   "**B の最終判定**": "実証不能",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YZCT",
+   "id": "R002",
+   "注入か": false,
+   "正解": null,
+   "A(席の判定)": "確認済み",
+   "席の参照先": "netsalessummaryofbusinessresults@currentyearduration",
+   "Core の結果": "GROUNDED",
+   "検証できない理由": null,
+   "comparator": "equals_within",
+   "主張 id": "N001",
+   "**B の最終判定**": "検査通過",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YZCT",
+   "id": "R003",
+   "注入か": false,
+   "正解": null,
+   "A(席の判定)": "確認済み",
+   "席の参照先": "netsalessummaryofbusinessresults@currentyearduration",
+   "Core の結果": null,
+   "検証できない理由": "参照先が 2 本要る",
+   "comparator": null,
+   "主張 id": "N002",
+   "**B の最終判定**": "実証不能",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YZCT",
+   "id": "R004",
+   "注入か": true,
+   "正解": "operatingincome@currentyearduration",
+   "A(席の判定)": "誤りが在る",
+   "席の参照先": "operatingincome@currentyearduration",
+   "Core の結果": "VALUE_MISMATCH",
+   "検証できない理由": null,
+   "comparator": "equals_within",
+   "主張 id": "N003",
+   "**B の最終判定**": "誤りが在る",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YZCT",
+   "id": "R005",
+   "注入か": false,
+   "正解": null,
+   "A(席の判定)": "確認済み",
+   "席の参照先": "operatingincome@currentyearduration",
+   "Core の結果": null,
+   "検証できない理由": "参照先が 2 本要る",
+   "comparator": null,
+   "主張 id": "N004",
+   "**B の最終判定**": "実証不能",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YZCT",
+   "id": "R006",
+   "注入か": false,
+   "正解": null,
+   "A(席の判定)": "確認済み",
+   "席の参照先": "ordinaryincomelosssummaryofbusinessresults@currentyearduration",
+   "Core の結果": null,
+   "検証できない理由": "contract が無い",
+   "comparator": null,
+   "主張 id": "N005",
+   "**B の最終判定**": "実証不能",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YZCT",
+   "id": "R007",
+   "注入か": false,
+   "正解": null,
+   "A(席の判定)": "確認済み",
+   "席の参照先": "ordinaryincomelosssummaryofbusinessresults@currentyearduration",
+   "Core の結果": null,
+   "検証できない理由": "contract が無い",
+   "comparator": null,
+   "主張 id": "N006",
+   "**B の最終判定**": "実証不能",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YZCT",
+   "id": "R008",
+   "注入か": false,
+   "正解": null,
+   "A(席の判定)": "確認済み",
+   "席の参照先": "profitlossattributabletoownersofparentsummaryofbusinessresults@currentyearduration",
+   "Core の結果": null,
+   "検証できない理由": "contract が無い",
+   "comparator": null,
+   "主張 id": "N007",
+   "**B の最終判定**": "実証不能",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YZCT",
+   "id": "R009",
+   "注入か": false,
+   "正解": null,
+   "A(席の判定)": "確認済み",
+   "席の参照先": "profitlossattributabletoownersofparentsummaryofbusinessresults@currentyearduration",
+   "Core の結果": null,
+   "検証できない理由": "contract が無い",
+   "comparator": null,
+   "主張 id": "N008",
+   "**B の最終判定**": "実証不能",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YZCT",
+   "id": "R010",
+   "注入か": false,
+   "正解": null,
+   "A(席の判定)": "判定できない",
+   "席の参照先": null,
+   "Core の結果": null,
+   "検証できない理由": "参照先を名指していない",
+   "comparator": null,
+   "主張 id": null,
+   "**B の最終判定**": "実証不能",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YZCT",
+   "id": "R011",
+   "注入か": false,
+   "正解": null,
+   "A(席の判定)": "判定できない",
+   "席の参照先": null,
+   "Core の結果": null,
+   "検証できない理由": "参照先を名指していない",
+   "comparator": null,
+   "主張 id": null,
+   "**B の最終判定**": "実証不能",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YZCT",
+   "id": "R012",
+   "注入か": false,
+   "正解": null,
+   "A(席の判定)": "判定できない",
+   "席の参照先": null,
+   "Core の結果": null,
+   "検証できない理由": "参照先を名指していない",
+   "comparator": null,
+   "主張 id": null,
+   "**B の最終判定**": "実証不能",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YZCT",
+   "id": "R013",
+   "注入か": false,
+   "正解": null,
+   "A(席の判定)": "判定できない",
+   "席の参照先": null,
+   "Core の結果": null,
+   "検証できない理由": "参照先を名指していない",
+   "comparator": null,
+   "主張 id": null,
+   "**B の最終判定**": "実証不能",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YZCT",
+   "id": "R014",
+   "注入か": false,
+   "正解": null,
+   "A(席の判定)": "判定できない",
+   "席の参照先": null,
+   "Core の結果": null,
+   "検証できない理由": "参照先を名指していない",
+   "comparator": null,
+   "主張 id": null,
+   "**B の最終判定**": "実証不能",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YZCT",
+   "id": "R015",
+   "注入か": false,
+   "正解": null,
+   "A(席の判定)": "判定できない",
+   "席の参照先": null,
+   "Core の結果": null,
+   "検証できない理由": "参照先を名指していない",
+   "comparator": null,
+   "主張 id": null,
+   "**B の最終判定**": "実証不能",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YZCT",
+   "id": "R016",
+   "注入か": false,
+   "正解": null,
+   "A(席の判定)": "判定できない",
+   "席の参照先": null,
+   "Core の結果": null,
+   "検証できない理由": "参照先を名指していない",
+   "comparator": null,
+   "主張 id": null,
+   "**B の最終判定**": "実証不能",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YZCT",
+   "id": "R017",
+   "注入か": false,
+   "正解": null,
+   "A(席の判定)": "判定できない",
+   "席の参照先": null,
+   "Core の結果": null,
+   "検証できない理由": "参照先を名指していない",
+   "comparator": null,
+   "主張 id": null,
+   "**B の最終判定**": "実証不能",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YZCT",
+   "id": "R018",
+   "注入か": true,
+   "正解": "currentassets@currentyearinstant",
+   "A(席の判定)": "誤りが在る",
+   "席の参照先": "currentassets@currentyearinstant",
+   "Core の結果": "VALUE_MISMATCH",
+   "検証できない理由": null,
+   "comparator": "equals_within",
+   "主張 id": "N035",
+   "**B の最終判定**": "誤りが在る",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YZCT",
+   "id": "R019",
+   "注入か": true,
+   "正解": "netincreasedecreaseincashandcashequivalents@currentyearduration",
+   "A(席の判定)": "誤りが在る",
+   "席の参照先": "netincreasedecreaseincashandcashequivalents@currentyearduration",
+   "Core の結果": "VALUE_MISMATCH",
+   "検証できない理由": null,
+   "comparator": "equals_within",
+   "主張 id": "N053",
+   "**B の最終判定**": "誤りが在る",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YZCT",
+   "id": "R020",
+   "注入か": true,
+   "正解": "netincreasedecreaseincashandcashequivalents@currentyearduration",
+   "A(席の判定)": "誤りが在る",
+   "席の参照先": "cashanddeposits@currentyearinstant",
+   "Core の結果": "VALUE_MISMATCH",
+   "検証できない理由": null,
+   "comparator": "equals_within",
+   "主張 id": "N077",
+   "**B の最終判定**": "誤りが在る",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YZCT",
+   "id": "R021",
+   "注入か": true,
+   "正解": "currentliabilities@currentyearinstant",
+   "A(席の判定)": "誤りが在る",
+   "席の参照先": "currentliabilities@currentyearinstant",
+   "Core の結果": "VALUE_MISMATCH",
+   "検証できない理由": null,
+   "comparator": "equals_within",
+   "主張 id": "N082",
+   "**B の最終判定**": "誤りが在る",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YZCT",
+   "id": "R022",
+   "注入か": true,
+   "正解": "grossprofit@currentyearduration",
+   "A(席の判定)": "誤りが在る",
+   "席の参照先": "grossprofit@currentyearduration",
+   "Core の結果": "VALUE_MISMATCH",
+   "検証できない理由": null,
+   "comparator": "equals_within",
+   "主張 id": "N097",
+   "**B の最終判定**": "誤りが在る",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YZCT",
+   "id": "R023",
+   "注入か": true,
+   "正解": "sellinggeneralandadministrativeexpenses@currentyearduration",
+   "A(席の判定)": "誤りが在る",
+   "席の参照先": "sellinggeneralandadministrativeexpenses@currentyearduration",
+   "Core の結果": "VALUE_MISMATCH",
+   "検証できない理由": null,
+   "comparator": "equals_within",
+   "主張 id": "N099",
+   "**B の最終判定**": "誤りが在る",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YZCT",
+   "id": "R024",
+   "注入か": true,
+   "正解": "operatingincome@currentyearduration",
+   "A(席の判定)": "誤りが在る",
+   "席の参照先": "operatingincome@currentyearduration",
+   "Core の結果": "VALUE_MISMATCH",
+   "検証できない理由": null,
+   "comparator": "equals_within",
+   "主張 id": "N103",
+   "**B の最終判定**": "誤りが在る",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YYRV",
+   "id": "R001",
+   "注入か": false,
+   "正解": null,
+   "A(席の判定)": "判定できない",
+   "席の参照先": null,
+   "Core の結果": null,
+   "検証できない理由": "参照先を名指していない",
+   "comparator": null,
+   "主張 id": null,
+   "**B の最終判定**": "実証不能",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YYRV",
+   "id": "R002",
+   "注入か": false,
+   "正解": null,
+   "A(席の判定)": "判定できない",
+   "席の参照先": null,
+   "Core の結果": null,
+   "検証できない理由": "参照先を名指していない",
+   "comparator": null,
+   "主張 id": null,
+   "**B の最終判定**": "実証不能",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YYRV",
+   "id": "R003",
+   "注入か": false,
+   "正解": null,
+   "A(席の判定)": "判定できない",
+   "席の参照先": null,
+   "Core の結果": null,
+   "検証できない理由": "参照先を名指していない",
+   "comparator": null,
+   "主張 id": null,
+   "**B の最終判定**": "実証不能",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YYRV",
+   "id": "R004",
+   "注入か": false,
+   "正解": null,
+   "A(席の判定)": "判定できない",
+   "席の参照先": null,
+   "Core の結果": null,
+   "検証できない理由": "参照先を名指していない",
+   "comparator": null,
+   "主張 id": null,
+   "**B の最終判定**": "実証不能",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YYRV",
+   "id": "R005",
+   "注入か": false,
+   "正解": null,
+   "A(席の判定)": "判定できない",
+   "席の参照先": null,
+   "Core の結果": null,
+   "検証できない理由": "参照先を名指していない",
+   "comparator": null,
+   "主張 id": null,
+   "**B の最終判定**": "実証不能",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YYRV",
+   "id": "R006",
+   "注入か": false,
+   "正解": null,
+   "A(席の判定)": "判定できない",
+   "席の参照先": null,
+   "Core の結果": null,
+   "検証できない理由": "参照先を名指していない",
+   "comparator": null,
+   "主張 id": null,
+   "**B の最終判定**": "実証不能",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YYRV",
+   "id": "R007",
+   "注入か": false,
+   "正解": null,
+   "A(席の判定)": "判定できない",
+   "席の参照先": null,
+   "Core の結果": null,
+   "検証できない理由": "参照先を名指していない",
+   "comparator": null,
+   "主張 id": null,
+   "**B の最終判定**": "実証不能",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YYRV",
+   "id": "R008",
+   "注入か": false,
+   "正解": null,
+   "A(席の判定)": "判定できない",
+   "席の参照先": null,
+   "Core の結果": null,
+   "検証できない理由": "参照先を名指していない",
+   "comparator": null,
+   "主張 id": null,
+   "**B の最終判定**": "実証不能",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YYRV",
+   "id": "R009",
+   "注入か": false,
+   "正解": null,
+   "A(席の判定)": "判定できない",
+   "席の参照先": null,
+   "Core の結果": null,
+   "検証できない理由": "参照先を名指していない",
+   "comparator": null,
+   "主張 id": null,
+   "**B の最終判定**": "実証不能",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YYRV",
+   "id": "R010",
+   "注入か": false,
+   "正解": null,
+   "A(席の判定)": "判定できない",
+   "席の参照先": null,
+   "Core の結果": null,
+   "検証できない理由": "参照先を名指していない",
+   "comparator": null,
+   "主張 id": null,
+   "**B の最終判定**": "実証不能",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YYRV",
+   "id": "R011",
+   "注入か": false,
+   "正解": null,
+   "A(席の判定)": "判定できない",
+   "席の参照先": null,
+   "Core の結果": null,
+   "検証できない理由": "参照先を名指していない",
+   "comparator": null,
+   "主張 id": null,
+   "**B の最終判定**": "実証不能",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YYRV",
+   "id": "R012",
+   "注入か": false,
+   "正解": null,
+   "A(席の判定)": "判定できない",
+   "席の参照先": null,
+   "Core の結果": null,
+   "検証できない理由": "参照先を名指していない",
+   "comparator": null,
+   "主張 id": null,
+   "**B の最終判定**": "実証不能",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YYRV",
+   "id": "R013",
+   "注入か": false,
+   "正解": null,
+   "A(席の判定)": "確認済み",
+   "席の参照先": "netsales@currentyearduration",
+   "Core の結果": "GROUNDED",
+   "検証できない理由": null,
+   "comparator": "equals_within",
+   "主張 id": "N014",
+   "**B の最終判定**": "検査通過",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YYRV",
+   "id": "R014",
+   "注入か": false,
+   "正解": null,
+   "A(席の判定)": "確認済み",
+   "席の参照先": "netsales@currentyearduration",
+   "Core の結果": null,
+   "検証できない理由": "主張が無い",
+   "comparator": null,
+   "主張 id": null,
+   "**B の最終判定**": "実証不能",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YYRV",
+   "id": "R015",
+   "注入か": false,
+   "正解": null,
+   "A(席の判定)": "確認済み",
+   "席の参照先": "ordinaryincome@currentyearduration",
+   "Core の結果": "GROUNDED",
+   "検証できない理由": null,
+   "comparator": "equals_within",
+   "主張 id": "N016",
+   "**B の最終判定**": "検査通過",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YYRV",
+   "id": "R016",
+   "注入か": false,
+   "正解": null,
+   "A(席の判定)": "確認済み",
+   "席の参照先": "ordinaryincome@currentyearduration",
+   "Core の結果": null,
+   "検証できない理由": "主張が無い",
+   "comparator": null,
+   "主張 id": null,
+   "**B の最終判定**": "実証不能",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YYRV",
+   "id": "R017",
+   "注入か": true,
+   "正解": "operatingincome@currentyearduration_jpcrp030000-asr_e02480-000publishingbusinessreportablesegmentsmember",
+   "A(席の判定)": "誤りが在る",
+   "席の参照先": "operatingincome@currentyearduration_jpcrp030000-asr_e02480-000publishingbusinessreportablesegmentsmember",
+   "Core の結果": "VALUE_MISMATCH",
+   "検証できない理由": null,
+   "comparator": "equals_within",
+   "主張 id": "N026",
+   "**B の最終判定**": "誤りが在る",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YYRV",
+   "id": "R018",
+   "注入か": true,
+   "正解": "operatingincome@currentyearduration_jpcrp030000-asr_e02480-000productsalesbusinessreportablesegmentsmember",
+   "A(席の判定)": "誤りが在る",
+   "席の参照先": "operatingincome@currentyearduration_jpcrp030000-asr_e02480-000productsalesbusinessreportablesegmentsmember",
+   "Core の結果": "VALUE_MISMATCH",
+   "検証できない理由": null,
+   "comparator": "equals_within",
+   "主張 id": "N034",
+   "**B の最終判定**": "誤りが在る",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YYRV",
+   "id": "R019",
+   "注入か": true,
+   "正解": "incomebeforeincometaxes@currentyearduration",
+   "A(席の判定)": "誤りが在る",
+   "席の参照先": "incomebeforeincometaxes@currentyearduration",
+   "Core の結果": "VALUE_MISMATCH",
+   "検証できない理由": null,
+   "comparator": "equals_within",
+   "主張 id": "N045",
+   "**B の最終判定**": "誤りが在る",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YYRV",
+   "id": "R020",
+   "注入か": true,
+   "正解": "depreciationandamortizationopecf@currentyearduration",
+   "A(席の判定)": "誤りが在る",
+   "席の参照先": "depreciationandamortizationopecf@currentyearduration",
+   "Core の結果": "VALUE_MISMATCH",
+   "検証できない理由": null,
+   "comparator": "equals_within",
+   "主張 id": "N045",
+   "**B の最終判定**": "誤りが在る",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YYRV",
+   "id": "R021",
+   "注入か": true,
+   "正解": "proceedsoflongtermborrowingsfincf@currentyearduration",
+   "A(席の判定)": "誤りが在る",
+   "席の参照先": "proceedsoflongtermborrowingsfincf@currentyearduration",
+   "Core の結果": "VALUE_MISMATCH",
+   "検証できない理由": null,
+   "comparator": "equals_within",
+   "主張 id": "N062",
+   "**B の最終判定**": "誤りが在る",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YYRV",
+   "id": "R022",
+   "注入か": true,
+   "正解": "extraordinaryloss@currentyearduration",
+   "A(席の判定)": "誤りが在る",
+   "席の参照先": "extraordinaryloss@currentyearduration",
+   "Core の結果": "VALUE_MISMATCH",
+   "検証できない理由": null,
+   "comparator": "equals_within",
+   "主張 id": "N073",
+   "**B の最終判定**": "誤りが在る",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YYRV",
+   "id": "R023",
+   "注入か": true,
+   "正解": "liabilities@currentyearinstant",
+   "A(席の判定)": "誤りが在る",
+   "席の参照先": "liabilities@currentyearinstant",
+   "Core の結果": "VALUE_MISMATCH",
+   "検証できない理由": null,
+   "comparator": "equals_within",
+   "主張 id": "N091",
+   "**B の最終判定**": "誤りが在る",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YYRV",
+   "id": "R024",
+   "注入か": true,
+   "正解": "increasedecreaseinprovisionforlossonorderreceivedopecf@currentyearduration",
+   "A(席の判定)": "誤りが在る",
+   "席の参照先": "increasedecreaseinprovisionforlossonorderreceivedopecf@currentyearduration",
+   "Core の結果": "VALUE_MISMATCH",
+   "検証できない理由": null,
+   "comparator": "equals_within",
+   "主張 id": "N062",
+   "**B の最終判定**": "誤りが在る",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YZEV",
+   "id": "R001",
+   "注入か": false,
+   "正解": null,
+   "A(席の判定)": "判定できない",
+   "席の参照先": null,
+   "Core の結果": null,
+   "検証できない理由": "参照先を名指していない",
+   "comparator": null,
+   "主張 id": null,
+   "**B の最終判定**": "実証不能",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YZEV",
+   "id": "R002",
+   "注入か": false,
+   "正解": null,
+   "A(席の判定)": "判定できない",
+   "席の参照先": null,
+   "Core の結果": null,
+   "検証できない理由": "参照先を名指していない",
+   "comparator": null,
+   "主張 id": null,
+   "**B の最終判定**": "実証不能",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YZEV",
+   "id": "R003",
+   "注入か": false,
+   "正解": null,
+   "A(席の判定)": "判定できない",
+   "席の参照先": null,
+   "Core の結果": null,
+   "検証できない理由": "参照先を名指していない",
+   "comparator": null,
+   "主張 id": null,
+   "**B の最終判定**": "実証不能",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YZEV",
+   "id": "R004",
+   "注入か": false,
+   "正解": null,
+   "A(席の判定)": "判定できない",
+   "席の参照先": null,
+   "Core の結果": null,
+   "検証できない理由": "参照先を名指していない",
+   "comparator": null,
+   "主張 id": null,
+   "**B の最終判定**": "実証不能",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YZEV",
+   "id": "R005",
+   "注入か": false,
+   "正解": null,
+   "A(席の判定)": "判定できない",
+   "席の参照先": null,
+   "Core の結果": null,
+   "検証できない理由": "参照先を名指していない",
+   "comparator": null,
+   "主張 id": null,
+   "**B の最終判定**": "実証不能",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YZEV",
+   "id": "R006",
+   "注入か": false,
+   "正解": null,
+   "A(席の判定)": "判定できない",
+   "席の参照先": null,
+   "Core の結果": null,
+   "検証できない理由": "参照先を名指していない",
+   "comparator": null,
+   "主張 id": null,
+   "**B の最終判定**": "実証不能",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YZEV",
+   "id": "R007",
+   "注入か": false,
+   "正解": null,
+   "A(席の判定)": "判定できない",
+   "席の参照先": null,
+   "Core の結果": null,
+   "検証できない理由": "参照先を名指していない",
+   "comparator": null,
+   "主張 id": null,
+   "**B の最終判定**": "実証不能",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YZEV",
+   "id": "R008",
+   "注入か": false,
+   "正解": null,
+   "A(席の判定)": "判定できない",
+   "席の参照先": null,
+   "Core の結果": null,
+   "検証できない理由": "参照先を名指していない",
+   "comparator": null,
+   "主張 id": null,
+   "**B の最終判定**": "実証不能",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YZEV",
+   "id": "R009",
+   "注入か": false,
+   "正解": null,
+   "A(席の判定)": "確認済み",
+   "席の参照先": "netsalessummaryofbusinessresults@currentyearduration_nonconsolidatedmember",
+   "Core の結果": null,
+   "検証できない理由": "contract が無い",
+   "comparator": null,
+   "主張 id": "N005",
+   "**B の最終判定**": "実証不能",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YZEV",
+   "id": "R010",
+   "注入か": false,
+   "正解": null,
+   "A(席の判定)": "確認済み",
+   "席の参照先": "netsalessummaryofbusinessresults@currentyearduration_nonconsolidatedmember",
+   "Core の結果": null,
+   "検証できない理由": "主張が無い",
+   "comparator": null,
+   "主張 id": null,
+   "**B の最終判定**": "実証不能",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YZEV",
+   "id": "R011",
+   "注入か": true,
+   "正解": "operatingincome@currentyearduration_nonconsolidatedmember",
+   "A(席の判定)": "誤りが在る",
+   "席の参照先": "operatingincome@currentyearduration_nonconsolidatedmember",
+   "Core の結果": null,
+   "検証できない理由": "contract が無い",
+   "comparator": null,
+   "主張 id": "N007",
+   "**B の最終判定**": "誤りが在る",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YZEV",
+   "id": "R012",
+   "注入か": false,
+   "正解": null,
+   "A(席の判定)": "確認済み",
+   "席の参照先": "operatingincome@currentyearduration_nonconsolidatedmember",
+   "Core の結果": null,
+   "検証できない理由": "主張が無い",
+   "comparator": null,
+   "主張 id": null,
+   "**B の最終判定**": "実証不能",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YZEV",
+   "id": "R013",
+   "注入か": false,
+   "正解": null,
+   "A(席の判定)": "確認済み",
+   "席の参照先": "ordinaryincomelosssummaryofbusinessresults@currentyearduration_nonconsolidatedmember",
+   "Core の結果": null,
+   "検証できない理由": "contract が無い",
+   "comparator": null,
+   "主張 id": "N009",
+   "**B の最終判定**": "実証不能",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YZEV",
+   "id": "R014",
+   "注入か": false,
+   "正解": null,
+   "A(席の判定)": "確認済み",
+   "席の参照先": "ordinaryincomelosssummaryofbusinessresults@currentyearduration_nonconsolidatedmember",
+   "Core の結果": null,
+   "検証できない理由": "主張が無い",
+   "comparator": null,
+   "主張 id": null,
+   "**B の最終判定**": "実証不能",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YZEV",
+   "id": "R015",
+   "注入か": false,
+   "正解": null,
+   "A(席の判定)": "確認済み",
+   "席の参照先": "netincomelosssummaryofbusinessresults@currentyearduration_nonconsolidatedmember",
+   "Core の結果": null,
+   "検証できない理由": "contract が無い",
+   "comparator": null,
+   "主張 id": "N011",
+   "**B の最終判定**": "実証不能",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YZEV",
+   "id": "R016",
+   "注入か": false,
+   "正解": null,
+   "A(席の判定)": "確認済み",
+   "席の参照先": "netincomelosssummaryofbusinessresults@currentyearduration_nonconsolidatedmember",
+   "Core の結果": null,
+   "検証できない理由": "主張が無い",
+   "comparator": null,
+   "主張 id": null,
+   "**B の最終判定**": "実証不能",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YZEV",
+   "id": "R017",
+   "注入か": false,
+   "正解": null,
+   "A(席の判定)": "確認済み",
+   "席の参照先": "currentassets@currentyearinstant_nonconsolidatedmember",
+   "Core の結果": null,
+   "検証できない理由": "contract が無い",
+   "comparator": null,
+   "主張 id": "N013",
+   "**B の最終判定**": "実証不能",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YZEV",
+   "id": "R018",
+   "注入か": true,
+   "正解": "currentassets@currentyearinstant_nonconsolidatedmember",
+   "A(席の判定)": "誤りが在る",
+   "席の参照先": "currentassets@currentyearinstant_nonconsolidatedmember",
+   "Core の結果": null,
+   "検証できない理由": "contract が無い",
+   "comparator": null,
+   "主張 id": "N014",
+   "**B の最終判定**": "誤りが在る",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YZEV",
+   "id": "R019",
+   "注入か": true,
+   "正解": "noncurrentassets@currentyearinstant_nonconsolidatedmember",
+   "A(席の判定)": "誤りが在る",
+   "席の参照先": "noncurrentassets@currentyearinstant_nonconsolidatedmember",
+   "Core の結果": null,
+   "検証できない理由": "contract が無い",
+   "comparator": null,
+   "主張 id": "N017",
+   "**B の最終判定**": "誤りが在る",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YZEV",
+   "id": "R020",
+   "注入か": true,
+   "正解": "increasedecreaseinaccountspayableotheropecf@currentyearduration_nonconsolidatedmember",
+   "A(席の判定)": "誤りが在る",
+   "席の参照先": "increasedecreaseinaccountspayableotheropecf@currentyearduration_nonconsolidatedmember",
+   "Core の結果": null,
+   "検証できない理由": "contract が無い",
+   "comparator": null,
+   "主張 id": "N007",
+   "**B の最終判定**": "誤りが在る",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YZEV",
+   "id": "R021",
+   "注入か": true,
+   "正解": null,
+   "A(席の判定)": "判定できない",
+   "席の参照先": null,
+   "Core の結果": null,
+   "検証できない理由": "参照先を名指していない",
+   "comparator": null,
+   "主張 id": null,
+   "**B の最終判定**": "実証不能",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YZEV",
+   "id": "R022",
+   "注入か": true,
+   "正解": null,
+   "A(席の判定)": "判定できない",
+   "席の参照先": null,
+   "Core の結果": null,
+   "検証できない理由": "参照先を名指していない",
+   "comparator": null,
+   "主張 id": null,
+   "**B の最終判定**": "実証不能",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YZEV",
+   "id": "R023",
+   "注入か": true,
+   "正解": null,
+   "A(席の判定)": "判定できない",
+   "席の参照先": null,
+   "Core の結果": null,
+   "検証できない理由": "参照先を名指していない",
+   "comparator": null,
+   "主張 id": null,
+   "**B の最終判定**": "実証不能",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YZEV",
+   "id": "R024",
+   "注入か": true,
+   "正解": null,
+   "A(席の判定)": "判定できない",
+   "席の参照先": null,
+   "Core の結果": null,
+   "検証できない理由": "参照先を名指していない",
+   "comparator": null,
+   "主張 id": null,
+   "**B の最終判定**": "実証不能",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YXF5",
+   "id": "R001",
+   "注入か": false,
+   "正解": null,
+   "A(席の判定)": "判定できない",
+   "席の参照先": null,
+   "Core の結果": null,
+   "検証できない理由": "参照先を名指していない",
+   "comparator": null,
+   "主張 id": null,
+   "**B の最終判定**": "実証不能",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YXF5",
+   "id": "R002",
+   "注入か": false,
+   "正解": null,
+   "A(席の判定)": "判定できない",
+   "席の参照先": null,
+   "Core の結果": null,
+   "検証できない理由": "参照先を名指していない",
+   "comparator": null,
+   "主張 id": null,
+   "**B の最終判定**": "実証不能",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YXF5",
+   "id": "R003",
+   "注入か": false,
+   "正解": null,
+   "A(席の判定)": "判定できない",
+   "席の参照先": null,
+   "Core の結果": null,
+   "検証できない理由": "参照先を名指していない",
+   "comparator": null,
+   "主張 id": null,
+   "**B の最終判定**": "実証不能",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YXF5",
+   "id": "R004",
+   "注入か": false,
+   "正解": null,
+   "A(席の判定)": "判定できない",
+   "席の参照先": null,
+   "Core の結果": null,
+   "検証できない理由": "参照先を名指していない",
+   "comparator": null,
+   "主張 id": null,
+   "**B の最終判定**": "実証不能",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YXF5",
+   "id": "R005",
+   "注入か": false,
+   "正解": null,
+   "A(席の判定)": "判定できない",
+   "席の参照先": null,
+   "Core の結果": null,
+   "検証できない理由": "参照先を名指していない",
+   "comparator": null,
+   "主張 id": null,
+   "**B の最終判定**": "実証不能",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YXF5",
+   "id": "R006",
+   "注入か": false,
+   "正解": null,
+   "A(席の判定)": "判定できない",
+   "席の参照先": null,
+   "Core の結果": null,
+   "検証できない理由": "参照先を名指していない",
+   "comparator": null,
+   "主張 id": null,
+   "**B の最終判定**": "実証不能",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YXF5",
+   "id": "R007",
+   "注入か": false,
+   "正解": null,
+   "A(席の判定)": "判定できない",
+   "席の参照先": null,
+   "Core の結果": null,
+   "検証できない理由": "参照先を名指していない",
+   "comparator": null,
+   "主張 id": null,
+   "**B の最終判定**": "実証不能",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YXF5",
+   "id": "R008",
+   "注入か": false,
+   "正解": null,
+   "A(席の判定)": "判定できない",
+   "席の参照先": null,
+   "Core の結果": null,
+   "検証できない理由": "参照先を名指していない",
+   "comparator": null,
+   "主張 id": null,
+   "**B の最終判定**": "実証不能",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YXF5",
+   "id": "R009",
+   "注入か": false,
+   "正解": null,
+   "A(席の判定)": "判定できない",
+   "席の参照先": null,
+   "Core の結果": null,
+   "検証できない理由": "参照先を名指していない",
+   "comparator": null,
+   "主張 id": null,
+   "**B の最終判定**": "実証不能",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YXF5",
+   "id": "R010",
+   "注入か": false,
+   "正解": null,
+   "A(席の判定)": "判定できない",
+   "席の参照先": null,
+   "Core の結果": null,
+   "検証できない理由": "参照先を名指していない",
+   "comparator": null,
+   "主張 id": null,
+   "**B の最終判定**": "実証不能",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YXF5",
+   "id": "R011",
+   "注入か": false,
+   "正解": null,
+   "A(席の判定)": "判定できない",
+   "席の参照先": null,
+   "Core の結果": null,
+   "検証できない理由": "参照先を名指していない",
+   "comparator": null,
+   "主張 id": null,
+   "**B の最終判定**": "実証不能",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YXF5",
+   "id": "R012",
+   "注入か": false,
+   "正解": null,
+   "A(席の判定)": "判定できない",
+   "席の参照先": null,
+   "Core の結果": null,
+   "検証できない理由": "参照先を名指していない",
+   "comparator": null,
+   "主張 id": null,
+   "**B の最終判定**": "実証不能",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YXF5",
+   "id": "R013",
+   "注入か": false,
+   "正解": null,
+   "A(席の判定)": "判定できない",
+   "席の参照先": null,
+   "Core の結果": null,
+   "検証できない理由": "参照先を名指していない",
+   "comparator": null,
+   "主張 id": null,
+   "**B の最終判定**": "実証不能",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YXF5",
+   "id": "R014",
+   "注入か": false,
+   "正解": null,
+   "A(席の判定)": "判定できない",
+   "席の参照先": null,
+   "Core の結果": null,
+   "検証できない理由": "参照先を名指していない",
+   "comparator": null,
+   "主張 id": null,
+   "**B の最終判定**": "実証不能",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YXF5",
+   "id": "R015",
+   "注入か": false,
+   "正解": null,
+   "A(席の判定)": "判定できない",
+   "席の参照先": null,
+   "Core の結果": null,
+   "検証できない理由": "参照先を名指していない",
+   "comparator": null,
+   "主張 id": null,
+   "**B の最終判定**": "実証不能",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YXF5",
+   "id": "R016",
+   "注入か": false,
+   "正解": null,
+   "A(席の判定)": "判定できない",
+   "席の参照先": null,
+   "Core の結果": null,
+   "検証できない理由": "参照先を名指していない",
+   "comparator": null,
+   "主張 id": null,
+   "**B の最終判定**": "実証不能",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YXF5",
+   "id": "R017",
+   "注入か": true,
+   "正解": null,
+   "A(席の判定)": "誤りが在る",
+   "席の参照先": "gainonsalesofnoncurrentassetsei@currentyearduration",
+   "Core の結果": null,
+   "検証できない理由": "主張が無い",
+   "comparator": null,
+   "主張 id": null,
+   "**B の最終判定**": "誤りが在る",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YXF5",
+   "id": "R018",
+   "注入か": true,
+   "正解": null,
+   "A(席の判定)": "判定できない",
+   "席の参照先": null,
+   "Core の結果": null,
+   "検証できない理由": "参照先を名指していない",
+   "comparator": null,
+   "主張 id": null,
+   "**B の最終判定**": "実証不能",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YXF5",
+   "id": "R019",
+   "注入か": true,
+   "正解": null,
+   "A(席の判定)": "判定できない",
+   "席の参照先": null,
+   "Core の結果": null,
+   "検証できない理由": "参照先を名指していない",
+   "comparator": null,
+   "主張 id": null,
+   "**B の最終判定**": "実証不能",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YXF5",
+   "id": "R020",
+   "注入か": true,
+   "正解": null,
+   "A(席の判定)": "判定できない",
+   "席の参照先": null,
+   "Core の結果": null,
+   "検証できない理由": "参照先を名指していない",
+   "comparator": null,
+   "主張 id": null,
+   "**B の最終判定**": "実証不能",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YXF5",
+   "id": "R021",
+   "注入か": true,
+   "正解": null,
+   "A(席の判定)": "判定できない",
+   "席の参照先": null,
+   "Core の結果": null,
+   "検証できない理由": "参照先を名指していない",
+   "comparator": null,
+   "主張 id": null,
+   "**B の最終判定**": "実証不能",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YXF5",
+   "id": "R022",
+   "注入か": true,
+   "正解": null,
+   "A(席の判定)": "判定できない",
+   "席の参照先": null,
+   "Core の結果": null,
+   "検証できない理由": "参照先を名指していない",
+   "comparator": null,
+   "主張 id": null,
+   "**B の最終判定**": "実証不能",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YXF5",
+   "id": "R023",
+   "注入か": true,
+   "正解": null,
+   "A(席の判定)": "判定できない",
+   "席の参照先": null,
+   "Core の結果": null,
+   "検証できない理由": "参照先を名指していない",
+   "comparator": null,
+   "主張 id": null,
+   "**B の最終判定**": "実証不能",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  },
+  {
+   "doc": "S100YXF5",
+   "id": "R024",
+   "注入か": true,
+   "正解": null,
+   "A(席の判定)": "判定できない",
+   "席の参照先": null,
+   "Core の結果": null,
+   "検証できない理由": "参照先を名指していない",
+   "comparator": null,
+   "主張 id": null,
+   "**B の最終判定**": "実証不能",
+   "**未検査属性**": [
+    "単位",
+    "期間",
+    "次元(連結区分)",
+    "重複"
+   ]
+  }
+ ],
+ "limits": [
+  "**A の危険な誤通過は 0 件なので、B が誤通過を減らすことはこの材料では示せない**(封 §5)",
+  "**`検査通過` は「正しい」ではない。**単位・期間・次元・重複は未検査",
+  "**contract を足していない。**実証不能のまま残した",
+  "**席の答えは A と B で同一である。**LLM の特定能力の差は測っていない(替えたのは実証の層だけ)",
+  "**同じ 8 書類である。**新しい標本での再現は測っていない",
+  "**engine は 1 行も変えていない。**"
+ ]
+}

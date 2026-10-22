@@ -1,0 +1,37 @@
+{
+ "seal": "docs/FINAL_EVAL_8_SEAL_2026-10-14.md",
+ "opened_at": "2026-10-14T13:13:15+09:00",
+ "engine_commit": "28f165c",
+ "how": "measure/final8_fetch_2026-10-14.py を人間の端末で 1 回実行(鍵は環境変数 EDINET_API_KEY の名前だけ。値はどこにも記録しない)",
+ "docs": [
+  "S100Z4LC",
+  "S100Z40H",
+  "S100Z46V",
+  "S100Z38F",
+  "S100Z3DU",
+  "S100Z4R8",
+  "S100Z3CI",
+  "S100Z461"
+ ],
+ "fetch_log": [
+  "S100Z4LC fetched 13cf3587a467a0af3869d0ecaa8d8a921e4d9fcb881b6bf369a5734a4060714d",
+  "S100Z40H fetched 566f171ee5e55dc2b12b7f84dd1c6c481642683b5feba49baa290fe830645c3e",
+  "S100Z46V fetched ac0a65a02d908b0dbfd4a56cc46cf0eb5384ef5d7db7926b244ca7443b30c9f4",
+  "S100Z38F fetched 02358db58564bca3b19b58bb60b0cca0c01f2b8c305366a7ea1083ed1edd9d70",
+  "S100Z3DU fetched edb9a67e11131f7bc189fb071128a65eef328e515528056b0550a27e006db61f",
+  "S100Z4R8 fetched b8bb37a7c8984f5bf7d7ac5761df502feea2fe35b00b3b3f25d4bd194e69b862",
+  "S100Z3CI fetched 35654a6bfa47e203c92c5bc33391bc48c68e792a29129996676ecfbf83da63b9",
+  "S100Z461 fetched b3d46992ceb5eb86b9bd230a1ab34d06bbf031fc9182d29cb211830afcd39b6d",
+  "present 8 / 8"
+ ],
+ "zip_sha256": {
+  "S100Z4LC": "13cf3587a467a0af3869d0ecaa8d8a921e4d9fcb881b6bf369a5734a4060714d",
+  "S100Z40H": "566f171ee5e55dc2b12b7f84dd1c6c481642683b5feba49baa290fe830645c3e",
+  "S100Z46V": "ac0a65a02d908b0dbfd4a56cc46cf0eb5384ef5d7db7926b244ca7443b30c9f4",
+  "S100Z38F": "02358db58564bca3b19b58bb60b0cca0c01f2b8c305366a7ea1083ed1edd9d70",
+  "S100Z3DU": "edb9a67e11131f7bc189fb071128a65eef328e515528056b0550a27e006db61f",
+  "S100Z4R8": "b8bb37a7c8984f5bf7d7ac5761df502feea2fe35b00b3b3f25d4bd194e69b862",
+  "S100Z3CI": "35654a6bfa47e203c92c5bc33391bc48c68e792a29129996676ecfbf83da63b9",
+  "S100Z461": "b3d46992ceb5eb86b9bd230a1ab34d06bbf031fc9182d29cb211830afcd39b6d"
+ }
+}

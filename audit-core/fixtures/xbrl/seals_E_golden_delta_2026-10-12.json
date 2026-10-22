@@ -1,0 +1,822 @@
+{
+ "1B": {
+  "N015": {
+   "fields": [
+    "form",
+    "population",
+    "time_range",
+    "normalization",
+    "pointers"
+   ],
+   "exp_form": "derived_value",
+   "act_form": "direct_value",
+   "exp_tr": [
+    "CurrentYear/Instant",
+    "Prior1Year/Instant"
+   ],
+   "act_tr": [],
+   "exp_ptr": [
+    "xbrl:jppfs_cor:Assets@CurrentYearInstant",
+    "xbrl:jppfs_cor:Assets@Prior1YearInstant",
+    "formula:a-b"
+   ],
+   "act_ptr": []
+  },
+  "N016": {
+   "fields": [
+    "time_range",
+    "pointers"
+   ],
+   "exp_form": "direct_value",
+   "act_form": "direct_value",
+   "exp_tr": [
+    "CurrentYear/Instant"
+   ],
+   "act_tr": [
+    "Prior1Year/Instant"
+   ],
+   "exp_ptr": [
+    "xbrl:jppfs_cor:Assets@CurrentYearInstant"
+   ],
+   "act_ptr": [
+    "xbrl:jppfs_cor:Assets@Prior1YearInstant"
+   ]
+  },
+  "N023": {
+   "fields": [
+    "form",
+    "time_range",
+    "normalization",
+    "pointers"
+   ],
+   "exp_form": "derived_value",
+   "act_form": "direct_value",
+   "exp_tr": [
+    "CurrentYear/Instant",
+    "Prior1Year/Instant"
+   ],
+   "act_tr": [
+    "CurrentYear/Instant"
+   ],
+   "exp_ptr": [
+    "xbrl:jppfs_cor:ContractAssets@CurrentYearInstant",
+    "xbrl:jppfs_cor:ContractAssets@Prior1YearInstant",
+    "formula:a-b"
+   ],
+   "act_ptr": [
+    "xbrl:jppfs_cor:ContractAssets@CurrentYearInstant"
+   ]
+  },
+  "N024": {
+   "fields": [
+    "form",
+    "population",
+    "time_range",
+    "normalization",
+    "pointers"
+   ],
+   "exp_form": "derived_value",
+   "act_form": "direct_value",
+   "exp_tr": [
+    "CurrentYear/Instant",
+    "Prior1Year/Instant"
+   ],
+   "act_tr": [],
+   "exp_ptr": [
+    "xbrl:jppfs_cor:Liabilities@CurrentYearInstant",
+    "xbrl:jppfs_cor:Liabilities@Prior1YearInstant",
+    "formula:a-b"
+   ],
+   "act_ptr": []
+  },
+  "N025": {
+   "fields": [
+    "time_range",
+    "pointers"
+   ],
+   "exp_form": "direct_value",
+   "act_form": "direct_value",
+   "exp_tr": [
+    "CurrentYear/Instant"
+   ],
+   "act_tr": [
+    "Prior1Year/Instant"
+   ],
+   "exp_ptr": [
+    "xbrl:jppfs_cor:Liabilities@CurrentYearInstant"
+   ],
+   "act_ptr": [
+    "xbrl:jppfs_cor:Liabilities@Prior1YearInstant"
+   ]
+  },
+  "N028": {
+   "fields": [
+    "population",
+    "time_range",
+    "normalization",
+    "pointers"
+   ],
+   "exp_form": "direct_value",
+   "act_form": "direct_value",
+   "exp_tr": [
+    "CurrentYear/Duration"
+   ],
+   "act_tr": [],
+   "exp_ptr": [
+    "xbrl:jpcrp030000-asr_E36539-000:IncreaseDecreaseInProvisionForWarrantiesForCompletedOperationOpeCF@CurrentYearDuration"
+   ],
+   "act_ptr": []
+  },
+  "N030": {
+   "fields": [
+    "population",
+    "time_range",
+    "normalization",
+    "pointers"
+   ],
+   "exp_form": "direct_value",
+   "act_form": "direct_value",
+   "exp_tr": [
+    "CurrentYear/Duration"
+   ],
+   "act_tr": [],
+   "exp_ptr": [
+    "xbrl:jppfs_cor:IncreaseDecreaseInNotesAndAccountsPayableTradeOpeCF@CurrentYearDuration"
+   ],
+   "act_ptr": []
+  },
+  "N032": {
+   "fields": [
+    "form",
+    "time_range",
+    "normalization",
+    "pointers"
+   ],
+   "exp_form": "derived_value",
+   "act_form": "direct_value",
+   "exp_tr": [
+    "CurrentYear/Instant",
+    "Prior1Year/Instant"
+   ],
+   "act_tr": [
+    "CurrentYear/Instant"
+   ],
+   "exp_ptr": [
+    "xbrl:jppfs_cor:LongTermLoansPayable@CurrentYearInstant",
+    "xbrl:jppfs_cor:LongTermLoansPayable@Prior1YearInstant",
+    "formula:a-b"
+   ],
+   "act_ptr": [
+    "xbrl:jppfs_cor:LongTermLoansPayable@CurrentYearInstant"
+   ]
+  },
+  "N033": {
+   "fields": [
+    "time_range",
+    "normalization",
+    "pointers"
+   ],
+   "exp_form": "derived_value",
+   "act_form": "derived_value",
+   "exp_tr": [
+    "CurrentYear/Instant",
+    "Prior1Year/Instant"
+   ],
+   "act_tr": [
+    "Prior1Year/Instant",
+    "Prior2Year/Instant"
+   ],
+   "exp_ptr": [
+    "xbrl:jpcrp_cor:NetAssetsSummaryOfBusinessResults@CurrentYearInstant",
+    "xbrl:jpcrp_cor:NetAssetsSummaryOfBusinessResults@Prior1YearInstant",
+    "formula:a-b"
+   ],
+   "act_ptr": [
+    "xbrl:jpcrp_cor:NetAssetsSummaryOfBusinessResults@Prior1YearInstant",
+    "xbrl:jpcrp_cor:NetAssetsSummaryOfBusinessResults@Prior2YearInstant",
+    "formula:a-b"
+   ]
+  },
+  "N034": {
+   "fields": [
+    "form",
+    "time_range",
+    "normalization",
+    "pointers"
+   ],
+   "exp_form": "derived_value",
+   "act_form": "direct_value",
+   "exp_tr": [
+    "Prior1Year/Instant",
+    "Prior2Year/Instant"
+   ],
+   "act_tr": [
+    "Prior1Year/Instant"
+   ],
+   "exp_ptr": [
+    "xbrl:jpcrp_cor:NetAssetsSummaryOfBusinessResults@Prior1YearInstant",
+    "xbrl:jpcrp_cor:NetAssetsSummaryOfBusinessResults@Prior2YearInstant",
+    "formula:a-b"
+   ],
+   "act_ptr": [
+    "xbrl:jpcrp_cor:NetAssetsSummaryOfBusinessResults@Prior1YearInstant"
+   ]
+  },
+  "N039": {
+   "fields": [
+    "form",
+    "time_range",
+    "normalization",
+    "pointers"
+   ],
+   "exp_form": "derived_value",
+   "act_form": "direct_value",
+   "exp_tr": [
+    "CurrentYear/Instant",
+    "Prior1Year/Instant"
+   ],
+   "act_tr": [
+    "CurrentYear/Instant"
+   ],
+   "exp_ptr": [
+    "xbrl:jppfs_cor:ValuationDifferenceOnAvailableForSaleSecurities@CurrentYearInstant",
+    "xbrl:jppfs_cor:ValuationDifferenceOnAvailableForSaleSecurities@Prior1YearInstant",
+    "formula:a-b"
+   ],
+   "act_ptr": [
+    "xbrl:jppfs_cor:ValuationDifferenceOnAvailableForSaleSecurities@CurrentYearInstant"
+   ]
+  },
+  "N040": {
+   "fields": [
+    "form",
+    "time_range",
+    "normalization",
+    "pointers"
+   ],
+   "exp_form": "derived_value",
+   "act_form": "direct_value",
+   "exp_tr": [
+    "CurrentYear/Instant",
+    "Prior1Year/Instant"
+   ],
+   "act_tr": [
+    "CurrentYear/Instant"
+   ],
+   "exp_ptr": [
+    "xbrl:jppfs_cor:RemeasurementsOfDefinedBenefitPlans@CurrentYearInstant",
+    "xbrl:jppfs_cor:RemeasurementsOfDefinedBenefitPlans@Prior1YearInstant",
+    "formula:a-b"
+   ],
+   "act_ptr": [
+    "xbrl:jppfs_cor:RemeasurementsOfDefinedBenefitPlans@CurrentYearInstant"
+   ]
+  },
+  "N046": {
+   "fields": [
+    "form",
+    "time_range",
+    "normalization",
+    "pointers"
+   ],
+   "exp_form": "direct_value",
+   "act_form": "derived_value",
+   "exp_tr": [
+    "CurrentYear/Duration"
+   ],
+   "act_tr": [
+    "CurrentYear/Duration",
+    "Prior1Year/Duration"
+   ],
+   "exp_ptr": [
+    "xbrl:jppfs_cor:IncomeBeforeIncomeTaxes@CurrentYearDuration"
+   ],
+   "act_ptr": [
+    "xbrl:jppfs_cor:IncomeBeforeIncomeTaxes@CurrentYearDuration",
+    "xbrl:jppfs_cor:IncomeBeforeIncomeTaxes@Prior1YearDuration",
+    "formula:a-b"
+   ]
+  },
+  "N048": {
+   "fields": [
+    "form",
+    "time_range",
+    "normalization",
+    "pointers"
+   ],
+   "exp_form": "direct_value",
+   "act_form": "derived_value",
+   "exp_tr": [
+    "CurrentYear/Duration"
+   ],
+   "act_tr": [
+    "CurrentYear/Duration",
+    "Prior1Year/Duration"
+   ],
+   "exp_ptr": [
+    "xbrl:jppfs_cor:DecreaseIncreaseInNotesAndAccountsReceivableTradeOpeCF@CurrentYearDuration"
+   ],
+   "act_ptr": [
+    "xbrl:jppfs_cor:DecreaseIncreaseInNotesAndAccountsReceivableTradeOpeCF@CurrentYearDuration",
+    "xbrl:jppfs_cor:DecreaseIncreaseInNotesAndAccountsReceivableTradeOpeCF@Prior1YearDuration",
+    "formula:a-b"
+   ]
+  },
+  "N050": {
+   "fields": [
+    "form",
+    "time_range",
+    "normalization",
+    "pointers"
+   ],
+   "exp_form": "direct_value",
+   "act_form": "derived_value",
+   "exp_tr": [
+    "CurrentYear/Duration"
+   ],
+   "act_tr": [
+    "CurrentYear/Duration",
+    "Prior1Year/Duration"
+   ],
+   "exp_ptr": [
+    "xbrl:jppfs_cor:IncreaseDecreaseInNotesAndAccountsPayableTradeOpeCF@CurrentYearDuration"
+   ],
+   "act_ptr": [
+    "xbrl:jppfs_cor:IncreaseDecreaseInNotesAndAccountsPayableTradeOpeCF@CurrentYearDuration",
+    "xbrl:jppfs_cor:IncreaseDecreaseInNotesAndAccountsPayableTradeOpeCF@Prior1YearDuration",
+    "formula:a-b"
+   ]
+  },
+  "N052": {
+   "fields": [
+    "form",
+    "time_range",
+    "normalization",
+    "pointers"
+   ],
+   "exp_form": "direct_value",
+   "act_form": "derived_value",
+   "exp_tr": [
+    "CurrentYear/Duration"
+   ],
+   "act_tr": [
+    "CurrentYear/Duration",
+    "Prior1Year/Duration"
+   ],
+   "exp_ptr": [
+    "xbrl:jppfs_cor:IncomeTaxesPaidOpeCF@CurrentYearDuration"
+   ],
+   "act_ptr": [
+    "xbrl:jppfs_cor:IncomeTaxesPaidOpeCF@CurrentYearDuration",
+    "xbrl:jppfs_cor:IncomeTaxesPaidOpeCF@Prior1YearDuration",
+    "formula:a-b"
+   ]
+  }
+ },
+ "5F": {
+  "N005": {
+   "fields": [
+    "form",
+    "time_range",
+    "normalization",
+    "pointers"
+   ],
+   "exp_form": "direct_value",
+   "act_form": "derived_value",
+   "exp_tr": [
+    "CurrentYear/Duration"
+   ],
+   "act_tr": [
+    "CurrentYear/Duration",
+    "Prior1Year/Duration"
+   ],
+   "exp_ptr": [
+    "xbrl:jpcrp_cor:NetSalesSummaryOfBusinessResults@CurrentYearDuration"
+   ],
+   "act_ptr": [
+    "xbrl:jpcrp_cor:NetSalesSummaryOfBusinessResults@CurrentYearDuration",
+    "xbrl:jpcrp_cor:NetSalesSummaryOfBusinessResults@Prior1YearDuration",
+    "formula:a-b"
+   ]
+  },
+  "N012": {
+   "fields": [
+    "time_range",
+    "pointers"
+   ],
+   "exp_form": "direct_value",
+   "act_form": "direct_value",
+   "exp_tr": [
+    "CurrentYear/Duration"
+   ],
+   "act_tr": [
+    "Prior1Year/Duration"
+   ],
+   "exp_ptr": [
+    "xbrl:jpcrp_cor:OrdinaryIncomeLossSummaryOfBusinessResults@CurrentYearDuration"
+   ],
+   "act_ptr": [
+    "xbrl:jpcrp_cor:OrdinaryIncomeLossSummaryOfBusinessResults@Prior1YearDuration"
+   ]
+  },
+  "N017": {
+   "fields": [
+    "form",
+    "time_range",
+    "normalization",
+    "pointers"
+   ],
+   "exp_form": "direct_value",
+   "act_form": "derived_value",
+   "exp_tr": [
+    "CurrentYear/Duration"
+   ],
+   "act_tr": [
+    "CurrentYear/Duration",
+    "Prior1Year/Duration"
+   ],
+   "exp_ptr": [
+    "xbrl:jppfs_cor:NetSales@CurrentYearDuration_jpcrp030000-asr_E05055-000DirectSalonReportableSegmentMember"
+   ],
+   "act_ptr": [
+    "xbrl:jppfs_cor:NetSales@CurrentYearDuration_jpcrp030000-asr_E05055-000DirectSalonReportableSegmentMember",
+    "xbrl:jppfs_cor:NetSales@Prior1YearDuration_jpcrp030000-asr_E05055-000DirectSalonReportableSegmentMember",
+    "formula:a-b"
+   ]
+  },
+  "N019": {
+   "fields": [
+    "form",
+    "time_range",
+    "normalization",
+    "pointers"
+   ],
+   "exp_form": "direct_value",
+   "act_form": "derived_value",
+   "exp_tr": [
+    "CurrentYear/Duration"
+   ],
+   "act_tr": [
+    "CurrentYear/Duration",
+    "Prior1Year/Duration"
+   ],
+   "exp_ptr": [
+    "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration_jpcrp030000-asr_E05055-000DirectSalonReportableSegmentMember"
+   ],
+   "act_ptr": [
+    "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration_jpcrp030000-asr_E05055-000DirectSalonReportableSegmentMember",
+    "xbrl:jppfs_cor:OperatingIncome@Prior1YearDuration_jpcrp030000-asr_E05055-000DirectSalonReportableSegmentMember",
+    "formula:a-b"
+   ]
+  },
+  "N031": {
+   "fields": [
+    "form",
+    "time_range",
+    "normalization",
+    "pointers"
+   ],
+   "exp_form": "direct_value",
+   "act_form": "derived_value",
+   "exp_tr": [
+    "CurrentYear/Duration"
+   ],
+   "act_tr": [
+    "CurrentYear/Duration",
+    "Prior1Year/Duration"
+   ],
+   "exp_ptr": [
+    "xbrl:jppfs_cor:NetSales@CurrentYearDuration_jpcrp030000-asr_E05055-000FranchiseReportableSegmentMember"
+   ],
+   "act_ptr": [
+    "xbrl:jppfs_cor:NetSales@CurrentYearDuration_jpcrp030000-asr_E05055-000FranchiseReportableSegmentMember",
+    "xbrl:jppfs_cor:NetSales@Prior1YearDuration_jpcrp030000-asr_E05055-000FranchiseReportableSegmentMember",
+    "formula:a-b"
+   ]
+  },
+  "N033": {
+   "fields": [
+    "form",
+    "time_range",
+    "normalization",
+    "pointers"
+   ],
+   "exp_form": "direct_value",
+   "act_form": "derived_value",
+   "exp_tr": [
+    "CurrentYear/Duration"
+   ],
+   "act_tr": [
+    "CurrentYear/Duration",
+    "Prior1Year/Duration"
+   ],
+   "exp_ptr": [
+    "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration_jpcrp030000-asr_E05055-000FranchiseReportableSegmentMember"
+   ],
+   "act_ptr": [
+    "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration_jpcrp030000-asr_E05055-000FranchiseReportableSegmentMember",
+    "xbrl:jppfs_cor:OperatingIncome@Prior1YearDuration_jpcrp030000-asr_E05055-000FranchiseReportableSegmentMember",
+    "formula:a-b"
+   ]
+  },
+  "N036": {
+   "fields": [
+    "form",
+    "time_range",
+    "normalization",
+    "pointers"
+   ],
+   "exp_form": "direct_value",
+   "act_form": "derived_value",
+   "exp_tr": [
+    "CurrentYear/Duration"
+   ],
+   "act_tr": [
+    "CurrentYear/Duration",
+    "Prior1Year/Duration"
+   ],
+   "exp_ptr": [
+    "xbrl:jppfs_cor:NetSales@CurrentYearDuration_jpcrp030000-asr_E05055-000HairMakeReportableSegmentMember"
+   ],
+   "act_ptr": [
+    "xbrl:jppfs_cor:NetSales@CurrentYearDuration_jpcrp030000-asr_E05055-000HairMakeReportableSegmentMember",
+    "xbrl:jppfs_cor:NetSales@Prior1YearDuration_jpcrp030000-asr_E05055-000HairMakeReportableSegmentMember",
+    "formula:a-b"
+   ]
+  },
+  "N038": {
+   "fields": [
+    "form",
+    "time_range",
+    "normalization",
+    "pointers"
+   ],
+   "exp_form": "direct_value",
+   "act_form": "derived_value",
+   "exp_tr": [
+    "CurrentYear/Duration"
+   ],
+   "act_tr": [
+    "CurrentYear/Duration",
+    "Prior1Year/Duration"
+   ],
+   "exp_ptr": [
+    "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration_jpcrp030000-asr_E05055-000HairMakeReportableSegmentMember"
+   ],
+   "act_ptr": [
+    "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration_jpcrp030000-asr_E05055-000HairMakeReportableSegmentMember",
+    "xbrl:jppfs_cor:OperatingIncome@Prior1YearDuration_jpcrp030000-asr_E05055-000HairMakeReportableSegmentMember",
+    "formula:a-b"
+   ]
+  },
+  "N040": {
+   "fields": [
+    "form",
+    "time_range",
+    "normalization",
+    "pointers"
+   ],
+   "exp_form": "direct_value",
+   "act_form": "derived_value",
+   "exp_tr": [
+    "CurrentYear/Duration"
+   ],
+   "act_tr": [
+    "CurrentYear/Duration",
+    "Prior1Year/Duration"
+   ],
+   "exp_ptr": [
+    "xbrl:jppfs_cor:NetSales@CurrentYearDuration_jpcrp030000-asr_E05055-000BeautyBusinessSupportBusinessReportableSegmentMember"
+   ],
+   "act_ptr": [
+    "xbrl:jppfs_cor:NetSales@CurrentYearDuration_jpcrp030000-asr_E05055-000BeautyBusinessSupportBusinessReportableSegmentMember",
+    "xbrl:jppfs_cor:NetSales@Prior1YearDuration_jpcrp030000-asr_E05055-000BeautyBusinessSupportBusinessReportableSegmentMember",
+    "formula:a-b"
+   ]
+  },
+  "N042": {
+   "fields": [
+    "form",
+    "time_range",
+    "normalization",
+    "pointers"
+   ],
+   "exp_form": "direct_value",
+   "act_form": "derived_value",
+   "exp_tr": [
+    "CurrentYear/Duration"
+   ],
+   "act_tr": [
+    "CurrentYear/Duration",
+    "Prior1Year/Duration"
+   ],
+   "exp_ptr": [
+    "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration_jpcrp030000-asr_E05055-000BeautyBusinessSupportBusinessReportableSegmentMember"
+   ],
+   "act_ptr": [
+    "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration_jpcrp030000-asr_E05055-000BeautyBusinessSupportBusinessReportableSegmentMember",
+    "xbrl:jppfs_cor:OperatingIncome@Prior1YearDuration_jpcrp030000-asr_E05055-000BeautyBusinessSupportBusinessReportableSegmentMember",
+    "formula:a-b"
+   ]
+  },
+  "N044": {
+   "fields": [
+    "form",
+    "time_range",
+    "normalization",
+    "pointers"
+   ],
+   "exp_form": "direct_value",
+   "act_form": "derived_value",
+   "exp_tr": [
+    "CurrentYear/Duration"
+   ],
+   "act_tr": [
+    "CurrentYear/Duration",
+    "Prior1Year/Duration"
+   ],
+   "exp_ptr": [
+    "xbrl:jppfs_cor:NetSales@CurrentYearDuration_jpcrp030000-asr_E05055-000CareerDesignReportableSegmentMember"
+   ],
+   "act_ptr": [
+    "xbrl:jppfs_cor:NetSales@CurrentYearDuration_jpcrp030000-asr_E05055-000CareerDesignReportableSegmentMember",
+    "xbrl:jppfs_cor:NetSales@Prior1YearDuration_jpcrp030000-asr_E05055-000CareerDesignReportableSegmentMember",
+    "formula:a-b"
+   ]
+  },
+  "N046": {
+   "fields": [
+    "form",
+    "time_range",
+    "normalization",
+    "pointers"
+   ],
+   "exp_form": "direct_value",
+   "act_form": "derived_value",
+   "exp_tr": [
+    "CurrentYear/Duration"
+   ],
+   "act_tr": [
+    "CurrentYear/Duration",
+    "Prior1Year/Duration"
+   ],
+   "exp_ptr": [
+    "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration_jpcrp030000-asr_E05055-000CareerDesignReportableSegmentMember"
+   ],
+   "act_ptr": [
+    "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration_jpcrp030000-asr_E05055-000CareerDesignReportableSegmentMember",
+    "xbrl:jppfs_cor:OperatingIncome@Prior1YearDuration_jpcrp030000-asr_E05055-000CareerDesignReportableSegmentMember",
+    "formula:a-b"
+   ]
+  },
+  "N055": {
+   "fields": [
+    "form",
+    "time_range",
+    "pointers"
+   ],
+   "exp_form": "direct_value",
+   "act_form": "derived_value",
+   "exp_tr": [
+    "CurrentYear/Duration"
+   ],
+   "act_tr": [
+    "CurrentYear/Duration",
+    "Prior1Year/Duration"
+   ],
+   "exp_ptr": [
+    "xbrl:jppfs_cor:DepreciationAndAmortizationOpeCF@CurrentYearDuration"
+   ],
+   "act_ptr": [
+    "xbrl:jppfs_cor:DepreciationAndAmortizationOpeCF@CurrentYearDuration",
+    "xbrl:jppfs_cor:DepreciationAndAmortizationOpeCF@Prior1YearDuration",
+    "formula:a-b"
+   ]
+  },
+  "N056": {
+   "fields": [
+    "form",
+    "time_range",
+    "pointers"
+   ],
+   "exp_form": "direct_value",
+   "act_form": "derived_value",
+   "exp_tr": [
+    "CurrentYear/Duration"
+   ],
+   "act_tr": [
+    "CurrentYear/Duration",
+    "Prior1Year/Duration"
+   ],
+   "exp_ptr": [
+    "xbrl:jppfs_cor:DepreciationAndAmortizationOpeCF@CurrentYearDuration"
+   ],
+   "act_ptr": [
+    "xbrl:jppfs_cor:DepreciationAndAmortizationOpeCF@CurrentYearDuration",
+    "xbrl:jppfs_cor:DepreciationAndAmortizationOpeCF@Prior1YearDuration",
+    "formula:a-b"
+   ]
+  },
+  "N057": {
+   "fields": [
+    "form",
+    "time_range",
+    "pointers"
+   ],
+   "exp_form": "direct_value",
+   "act_form": "derived_value",
+   "exp_tr": [
+    "CurrentYear/Duration"
+   ],
+   "act_tr": [
+    "CurrentYear/Duration",
+    "Prior1Year/Duration"
+   ],
+   "exp_ptr": [
+    "xbrl:jppfs_cor:DepreciationAndAmortizationOpeCF@CurrentYearDuration"
+   ],
+   "act_ptr": [
+    "xbrl:jppfs_cor:DepreciationAndAmortizationOpeCF@CurrentYearDuration",
+    "xbrl:jppfs_cor:DepreciationAndAmortizationOpeCF@Prior1YearDuration",
+    "formula:a-b"
+   ]
+  },
+  "N069": {
+   "fields": [
+    "time_range",
+    "normalization",
+    "pointers"
+   ],
+   "exp_form": "derived_value",
+   "act_form": "derived_value",
+   "exp_tr": [
+    "CurrentYear/Duration",
+    "Prior1Year/Duration"
+   ],
+   "act_tr": [
+    "Prior1Year/Duration",
+    "Prior2Year/Duration"
+   ],
+   "exp_ptr": [
+    "xbrl:jpcrp_cor:NetSalesSummaryOfBusinessResults@CurrentYearDuration",
+    "xbrl:jpcrp_cor:NetSalesSummaryOfBusinessResults@Prior1YearDuration",
+    "formula:a-b"
+   ],
+   "act_ptr": [
+    "xbrl:jpcrp_cor:NetSalesSummaryOfBusinessResults@Prior1YearDuration",
+    "xbrl:jpcrp_cor:NetSalesSummaryOfBusinessResults@Prior2YearDuration",
+    "formula:a-b"
+   ]
+  },
+  "N078": {
+   "fields": [
+    "form",
+    "time_range",
+    "normalization",
+    "pointers"
+   ],
+   "exp_form": "derived_value",
+   "act_form": "direct_value",
+   "exp_tr": [
+    "CurrentYear/Duration",
+    "Prior1Year/Duration"
+   ],
+   "act_tr": [
+    "Prior1Year/Duration"
+   ],
+   "exp_ptr": [
+    "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration",
+    "xbrl:jppfs_cor:OperatingIncome@Prior1YearDuration",
+    "formula:a-b"
+   ],
+   "act_ptr": [
+    "xbrl:jppfs_cor:OperatingIncome@Prior1YearDuration"
+   ]
+  },
+  "N083": {
+   "fields": [
+    "form",
+    "time_range",
+    "normalization",
+    "pointers"
+   ],
+   "exp_form": "derived_value",
+   "act_form": "direct_value",
+   "exp_tr": [
+    "CurrentYear/Duration",
+    "Prior1Year/Duration"
+   ],
+   "act_tr": [
+    "Prior1Year/Duration"
+   ],
+   "exp_ptr": [
+    "xbrl:jpcrp_cor:OrdinaryIncomeLossSummaryOfBusinessResults@CurrentYearDuration",
+    "xbrl:jpcrp_cor:OrdinaryIncomeLossSummaryOfBusinessResults@Prior1YearDuration",
+    "formula:a-b"
+   ],
+   "act_ptr": [
+    "xbrl:jpcrp_cor:OrdinaryIncomeLossSummaryOfBusinessResults@Prior1YearDuration"
+   ]
+  }
+ }
+}

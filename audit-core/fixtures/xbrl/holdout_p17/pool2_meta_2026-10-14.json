@@ -1,0 +1,2612 @@
+{
+ "perday": [
+  [
+   "2026-10-14",
+   0,
+   0
+  ],
+  [
+   "2026-10-13",
+   0,
+   268
+  ],
+  [
+   "2026-10-12",
+   0,
+   0
+  ],
+  [
+   "2026-10-11",
+   0,
+   0
+  ],
+  [
+   "2026-10-10",
+   0,
+   0
+  ],
+  [
+   "2026-10-09",
+   1,
+   447
+  ],
+  [
+   "2026-10-08",
+   0,
+   287
+  ],
+  [
+   "2026-10-07",
+   0,
+   298
+  ],
+  [
+   "2026-10-06",
+   0,
+   207
+  ],
+  [
+   "2026-10-05",
+   0,
+   206
+  ],
+  [
+   "2026-10-04",
+   0,
+   0
+  ],
+  [
+   "2026-10-03",
+   0,
+   0
+  ],
+  [
+   "2026-10-02",
+   0,
+   244
+  ],
+  [
+   "2026-10-01",
+   0,
+   211
+  ],
+  [
+   "2026-09-30",
+   14,
+   590
+  ],
+  [
+   "2026-09-29",
+   17,
+   342
+  ],
+  [
+   "2026-09-28",
+   50,
+   375
+  ],
+  [
+   "2026-09-27",
+   0,
+   0
+  ],
+  [
+   "2026-09-26",
+   0,
+   0
+  ],
+  [
+   "2026-09-25",
+   32,
+   399
+  ],
+  [
+   "2026-09-24",
+   47,
+   434
+  ],
+  [
+   "2026-09-23",
+   0,
+   0
+  ],
+  [
+   "2026-09-22",
+   0,
+   0
+  ],
+  [
+   "2026-09-21",
+   0,
+   0
+  ],
+  [
+   "2026-09-20",
+   0,
+   0
+  ],
+  [
+   "2026-09-19",
+   0,
+   0
+  ],
+  [
+   "2026-09-18",
+   15,
+   402
+  ],
+  [
+   "2026-09-17",
+   3,
+   235
+  ],
+  [
+   "2026-09-16",
+   3,
+   120
+  ],
+  [
+   "2026-09-15",
+   1,
+   294
+  ],
+  [
+   "2026-09-14",
+   1,
+   295
+  ],
+  [
+   "2026-09-13",
+   0,
+   0
+  ],
+  [
+   "2026-09-12",
+   0,
+   0
+  ],
+  [
+   "2026-09-11",
+   0,
+   308
+  ],
+  [
+   "2026-09-10",
+   0,
+   305
+  ],
+  [
+   "2026-09-09",
+   1,
+   162
+  ],
+  [
+   "2026-09-08",
+   0,
+   230
+  ],
+  [
+   "2026-09-07",
+   0,
+   284
+  ],
+  [
+   "2026-09-06",
+   0,
+   0
+  ],
+  [
+   "2026-09-05",
+   0,
+   0
+  ],
+  [
+   "2026-09-04",
+   1,
+   294
+  ],
+  [
+   "2026-09-03",
+   0,
+   183
+  ],
+  [
+   "2026-09-02",
+   0,
+   140
+  ],
+  [
+   "2026-09-01",
+   0,
+   173
+  ],
+  [
+   "2026-08-31",
+   2,
+   305
+  ],
+  [
+   "2026-08-30",
+   0,
+   0
+  ],
+  [
+   "2026-08-29",
+   0,
+   0
+  ],
+  [
+   "2026-08-28",
+   14,
+   433
+  ],
+  [
+   "2026-08-27",
+   13,
+   249
+  ],
+  [
+   "2026-08-26",
+   27,
+   227
+  ],
+  [
+   "2026-08-25",
+   15,
+   334
+  ],
+  [
+   "2026-08-24",
+   6,
+   150
+  ],
+  [
+   "2026-08-23",
+   0,
+   0
+  ],
+  [
+   "2026-08-22",
+   0,
+   0
+  ],
+  [
+   "2026-08-21",
+   6,
+   226
+  ],
+  [
+   "2026-08-20",
+   4,
+   313
+  ],
+  [
+   "2026-08-19",
+   4,
+   203
+  ],
+  [
+   "2026-08-18",
+   1,
+   192
+  ],
+  [
+   "2026-08-17",
+   0,
+   177
+  ],
+  [
+   "2026-08-16",
+   0,
+   0
+  ],
+  [
+   "2026-08-15",
+   0,
+   0
+  ],
+  [
+   "2026-08-14",
+   2,
+   648
+  ],
+  [
+   "2026-08-13",
+   0,
+   335
+  ],
+  [
+   "2026-08-12",
+   0,
+   292
+  ],
+  [
+   "2026-08-11",
+   0,
+   0
+  ],
+  [
+   "2026-08-10",
+   1,
+   468
+  ],
+  [
+   "2026-08-09",
+   0,
+   0
+  ],
+  [
+   "2026-08-08",
+   0,
+   0
+  ],
+  [
+   "2026-08-07",
+   0,
+   742
+  ],
+  [
+   "2026-08-06",
+   1,
+   374
+  ]
+ ],
+ "rows": [
+  {
+   "date": "2026-10-09",
+   "docID": "S100Z6XO",
+   "filerName": "株式会社内田洋行",
+   "periodEnd": "2026-07-20",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-30",
+   "docID": "S100Z57K",
+   "filerName": "株式会社武井工業所",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-30",
+   "docID": "S100Z50O",
+   "filerName": "株式会社オーネックス",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-30",
+   "docID": "S100Z590",
+   "filerName": "株式会社　りゅうとう",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-30",
+   "docID": "S100Z59R",
+   "filerName": "伏木海陸運送株式会社",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-30",
+   "docID": "S100Z5AL",
+   "filerName": "株式会社ゼロ",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-30",
+   "docID": "S100Z55N",
+   "filerName": "かがやきホールディングス株式会社",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-30",
+   "docID": "S100Z5CH",
+   "filerName": "瀬戸内開発株式会社",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-30",
+   "docID": "S100Z5DN",
+   "filerName": "株式会社エブリー",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-30",
+   "docID": "S100Z57M",
+   "filerName": "イリソ電子工業株式会社",
+   "periodEnd": "2026-03-31",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-30",
+   "docID": "S100Z571",
+   "filerName": "ＩＰＳホールディングス株式会社",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-30",
+   "docID": "S100Z5CA",
+   "filerName": "ニデック株式会社",
+   "periodEnd": "2026-03-31",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-30",
+   "docID": "S100Z4Q1",
+   "filerName": "ＤＮホールディングス株式会社",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-30",
+   "docID": "S100Z5HJ",
+   "filerName": "株式会社ＢｌｕｅＭｅｍｅ",
+   "periodEnd": "2026-03-31",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-30",
+   "docID": "S100Z5HU",
+   "filerName": "久米島製糖株式会社",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-29",
+   "docID": "S100Z4R8",
+   "filerName": "株式会社ニヤクコーポレーション",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-29",
+   "docID": "S100Z4BV",
+   "filerName": "オーミケンシ株式会社",
+   "periodEnd": "2026-03-31",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-29",
+   "docID": "S100Z3IX",
+   "filerName": "各務原開発株式会社",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-29",
+   "docID": "S100Z4UN",
+   "filerName": "北部製糖株式会社",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-29",
+   "docID": "S100Z4PA",
+   "filerName": "株式会社インサイト",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-29",
+   "docID": "S100Z4LC",
+   "filerName": "株式会社Ｂｉｒｄｍａｎ",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-29",
+   "docID": "S100Z4J5",
+   "filerName": "新中糖産業株式会社",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-29",
+   "docID": "S100Z4XU",
+   "filerName": "株式会社ＷＯＬＶＥＳ　ＨＡＮＤ",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-29",
+   "docID": "S100Z4Z3",
+   "filerName": "株式会社レイヤード",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-29",
+   "docID": "S100Z4GF",
+   "filerName": "サスメド株式会社",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-29",
+   "docID": "S100Z3K6",
+   "filerName": "フラー株式会社",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-29",
+   "docID": "S100Z4S4",
+   "filerName": "株式会社クラダシ",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-29",
+   "docID": "S100Z4LV",
+   "filerName": "株式会社グリッド",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-29",
+   "docID": "S100Z50D",
+   "filerName": "株式会社ブリーチ",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-29",
+   "docID": "S100Z4G9",
+   "filerName": "株式会社キャンバス",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-29",
+   "docID": "S100Z4WQ",
+   "filerName": "株式会社Ａｒｅｎｔ",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-29",
+   "docID": "S100Z4B6",
+   "filerName": "株式会社エム・エイチ・グループ",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-28",
+   "docID": "S100Z488",
+   "filerName": "株式会社高見澤",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-28",
+   "docID": "S100Z3XS",
+   "filerName": "西川計測株式会社",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-28",
+   "docID": "S100Z3MP",
+   "filerName": "株式会社ホーブ",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-28",
+   "docID": "S100Z3WT",
+   "filerName": "オルバディーブイエックスヘルスケア株式会社",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-28",
+   "docID": "S100Z433",
+   "filerName": "株式会社アスア",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-28",
+   "docID": "S100Z4C6",
+   "filerName": "北川精機株式会社",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-28",
+   "docID": "S100Z45G",
+   "filerName": "株式会社環境管理センター",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-28",
+   "docID": "S100Z3ZU",
+   "filerName": "アクシスコンサルティング株式会社",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-28",
+   "docID": "S100Z43N",
+   "filerName": "株式会社三東工業社",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-28",
+   "docID": "S100Z42V",
+   "filerName": "株式会社エリアクエスト",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-28",
+   "docID": "S100Z468",
+   "filerName": "テックファームホールディングス株式会社",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-28",
+   "docID": "S100YZ8R",
+   "filerName": "サイタホールディングス株式会社",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-28",
+   "docID": "S100Z48T",
+   "filerName": "メディアスホールディングス株式会社",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-28",
+   "docID": "S100Z4HA",
+   "filerName": "穴吹興産株式会社",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-28",
+   "docID": "S100Z4H9",
+   "filerName": "株式会社ＵＮＩＣＯＮホールディングス",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-28",
+   "docID": "S100Z3YQ",
+   "filerName": "Ｚｅｎｋｅｎ株式会社",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-28",
+   "docID": "S100Z4DE",
+   "filerName": "工藤建設株式会社",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-28",
+   "docID": "S100Z4HT",
+   "filerName": "株式会社ジェイテックコーポレーション",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-28",
+   "docID": "S100Z4HZ",
+   "filerName": "デジタル・インフォメーション・テクノロジー株式会社",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-28",
+   "docID": "S100Z4I4",
+   "filerName": "株式会社イード",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-28",
+   "docID": "S100Z4CW",
+   "filerName": "株式会社エーワン精密",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-28",
+   "docID": "S100Z4FH",
+   "filerName": "株式会社チャーム・ケア・コーポレーション",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-28",
+   "docID": "S100Z3L6",
+   "filerName": "第一カッター興業株式会社",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-28",
+   "docID": "S100Z4J8",
+   "filerName": "株式会社やまみ",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-28",
+   "docID": "S100Z4KK",
+   "filerName": "株式会社デュアルタップ",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-28",
+   "docID": "S100Z3SS",
+   "filerName": "朝日インテック株式会社",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-28",
+   "docID": "S100Z4JK",
+   "filerName": "ＡｅｒｏＥｄｇｅ株式会社",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-28",
+   "docID": "S100Z492",
+   "filerName": "日本情報クリエイト株式会社",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-28",
+   "docID": "S100Z4KT",
+   "filerName": "ＨＰＣシステムズ株式会社",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-28",
+   "docID": "S100Z46R",
+   "filerName": "株式会社マーケットエンタープライズ",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-28",
+   "docID": "S100Z4CX",
+   "filerName": "株式会社スカラ",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-28",
+   "docID": "S100Z4LD",
+   "filerName": "ＬｉＮＫＸ株式会社",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-28",
+   "docID": "S100Z40G",
+   "filerName": "株式会社ダイブグループ",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-28",
+   "docID": "S100Z1RU",
+   "filerName": "フィーチャ株式会社",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-28",
+   "docID": "S100YMFV",
+   "filerName": "株式会社プラッツ",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-28",
+   "docID": "S100Z4FT",
+   "filerName": "株式会社ファインズ",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-28",
+   "docID": "S100Z49G",
+   "filerName": "株式会社クロス・マーケティンググループ",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-28",
+   "docID": "S100Z4J4",
+   "filerName": "株式会社ブシロード",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-28",
+   "docID": "S100Z403",
+   "filerName": "株式会社フルヤ金属",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-28",
+   "docID": "S100Z4H1",
+   "filerName": "株式会社スマートバリュー",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-28",
+   "docID": "S100Z4LO",
+   "filerName": "フリー株式会社",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-28",
+   "docID": "S100Z40H",
+   "filerName": "株式会社ウイルプラスホールディングス",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-28",
+   "docID": "S100Z4IW",
+   "filerName": "株式会社オーケーウェブ",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-28",
+   "docID": "S100Z3K3",
+   "filerName": "株式会社みのや",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-28",
+   "docID": "S100Z4GS",
+   "filerName": "株式会社アイリックコーポレーション",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-28",
+   "docID": "S100Z448",
+   "filerName": "株式会社ビーブレイクシステムズ",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-28",
+   "docID": "S100Z4IM",
+   "filerName": "ＢＲＵＮＯ株式会社",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-28",
+   "docID": "S100Z4MR",
+   "filerName": "株式会社ボルテージ",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-28",
+   "docID": "S100Z4N9",
+   "filerName": "トラストホールディングス株式会社",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-28",
+   "docID": "S100Z4OA",
+   "filerName": "グリーンモンスター株式会社",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-25",
+   "docID": "S100Z38M",
+   "filerName": "アトムリビンテック株式会社",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-25",
+   "docID": "S100Z3BG",
+   "filerName": "ジャパンクラフトホールディングス株式会社",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-25",
+   "docID": "S100Z3YV",
+   "filerName": "株式会社テクニスコ",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-25",
+   "docID": "S100Z3I1",
+   "filerName": "新東株式会社",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-25",
+   "docID": "S100Z3V1",
+   "filerName": "サンネクスタグループ株式会社",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-25",
+   "docID": "S100Z3WK",
+   "filerName": "株式会社Ｌｉｂ　Ｗｏｒｋ",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-25",
+   "docID": "S100Z3CI",
+   "filerName": "株式会社日本能率協会マネジメントセンター",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-25",
+   "docID": "S100Z42D",
+   "filerName": "テスホールディングス株式会社",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-25",
+   "docID": "S100Z42G",
+   "filerName": "株式会社パン・パシフィック・インターナショナルホールディングス",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-25",
+   "docID": "S100Z429",
+   "filerName": "株式会社システムサポートホールディングス",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-25",
+   "docID": "S100Z44N",
+   "filerName": "株式会社平山ホールディングス",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-25",
+   "docID": "S100Z42X",
+   "filerName": "株式会社ユビテック",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-25",
+   "docID": "S100Z3WJ",
+   "filerName": "株式会社自重堂",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-25",
+   "docID": "S100Z45U",
+   "filerName": "あいホールディングス株式会社",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-25",
+   "docID": "S100Z461",
+   "filerName": "株式会社ＪＤＳＣ",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-25",
+   "docID": "S100Z3VX",
+   "filerName": "株式会社きちりホールディングス",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-25",
+   "docID": "S100Z3UE",
+   "filerName": "チャットプラス株式会社",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-25",
+   "docID": "S100Z3C1",
+   "filerName": "株式会社Ｇｅｏｌｏｃａｔｉｏｎ　Ｔｅｃｈｎｏｌｏｇｙ",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-25",
+   "docID": "S100Z3T5",
+   "filerName": "株式会社アイスタイル",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-25",
+   "docID": "S100Z3S0",
+   "filerName": "株式会社リファインバースグループ",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-25",
+   "docID": "S100Z45E",
+   "filerName": "株式会社ギックス",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-25",
+   "docID": "S100Z3KY",
+   "filerName": "株式会社　アルバック",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-25",
+   "docID": "S100Z3F1",
+   "filerName": "グリーホールディングス株式会社",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-25",
+   "docID": "S100Z39X",
+   "filerName": "株式会社アイキューブドシステムズ",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-25",
+   "docID": "S100Z45A",
+   "filerName": "株式会社エフオン",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-25",
+   "docID": "S100Z404",
+   "filerName": "株式会社ユニバーサル園芸社",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-25",
+   "docID": "S100Z2RN",
+   "filerName": "ロジザード株式会社",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-25",
+   "docID": "S100Z46T",
+   "filerName": "株式会社かんなん丸",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-25",
+   "docID": "S100Z3J0",
+   "filerName": "株式会社ＭＦＳ",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-25",
+   "docID": "S100Z46V",
+   "filerName": "株式会社ｕｎｅｒｒｙ",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-25",
+   "docID": "S100Z483",
+   "filerName": "ＫｅｅＰｅｒ技研株式会社",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-25",
+   "docID": "S100Z43C",
+   "filerName": "株式会社リオフジワラカントリー",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-24",
+   "docID": "S100Z3E4",
+   "filerName": "株式会社壽屋",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-24",
+   "docID": "S100Z383",
+   "filerName": "キュービーネットホールディングス株式会社",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-24",
+   "docID": "S100Z3FH",
+   "filerName": "株式会社ヒット",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-24",
+   "docID": "S100Z3JA",
+   "filerName": "株式会社三ツ知",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-24",
+   "docID": "S100Z3CO",
+   "filerName": "株式会社ナガオカ",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-24",
+   "docID": "S100Z3AF",
+   "filerName": "株式会社クオルテック",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-24",
+   "docID": "S100Z3L9",
+   "filerName": "株式会社メイホーホールディングス",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-24",
+   "docID": "S100Z3LJ",
+   "filerName": "梅乃宿酒造株式会社",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-24",
+   "docID": "S100Z39B",
+   "filerName": "協立電機株式会社",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-24",
+   "docID": "S100Z3JY",
+   "filerName": "株式会社総医研ホールディングス",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-24",
+   "docID": "S100Z3O7",
+   "filerName": "株式会社アクシーズ",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-24",
+   "docID": "S100Z359",
+   "filerName": "澁谷工業株式会社",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-24",
+   "docID": "S100Z3HP",
+   "filerName": "株式会社ハンズマン",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-24",
+   "docID": "S100Z3O3",
+   "filerName": "ショーボンドホールディングス株式会社",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-24",
+   "docID": "S100Z35F",
+   "filerName": "株式会社鈴木",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-24",
+   "docID": "S100Z3NV",
+   "filerName": "一正蒲鉾株式会社",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-24",
+   "docID": "S100Z3PM",
+   "filerName": "日本システムバンク株式会社",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-24",
+   "docID": "S100Z3PS",
+   "filerName": "株式会社アソインターナショナル",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-24",
+   "docID": "S100Z37J",
+   "filerName": "株式会社アーバネットコーポレーション",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-24",
+   "docID": "S100Z3BW",
+   "filerName": "株式会社クレステック",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-24",
+   "docID": "S100Z3IZ",
+   "filerName": "株式会社テー・オー・ダブリュー",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-24",
+   "docID": "S100Z3CG",
+   "filerName": "株式会社グリーンズ",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-24",
+   "docID": "S100Z3R0",
+   "filerName": "ＧＬＯＥ株式会社",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-24",
+   "docID": "S100Z3JM",
+   "filerName": "株式会社トーシンホールディングス",
+   "periodEnd": "2026-05-08",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-24",
+   "docID": "S100Z3RZ",
+   "filerName": "ベイシス株式会社",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-24",
+   "docID": "S100Z3H2",
+   "filerName": "アクモス株式会社",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-24",
+   "docID": "S100Z3CP",
+   "filerName": "株式会社アンビションＤＸホールディングス",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-24",
+   "docID": "S100Z3QG",
+   "filerName": "ウェルネット株式会社",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-24",
+   "docID": "S100Z3MW",
+   "filerName": "手間いらず株式会社",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-24",
+   "docID": "S100Z39P",
+   "filerName": "株式会社インテージホールディングス",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-24",
+   "docID": "S100Z3DU",
+   "filerName": "株式会社ＳＡＮＫＯ　ＭＡＲＫＥＴＩＮＧ　ＦＯＯＤＳ",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-24",
+   "docID": "S100Z3PT",
+   "filerName": "株式会社Ａｎｄ　Ｄｏホールディングス",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-24",
+   "docID": "S100Z32V",
+   "filerName": "レーザーテック株式会社",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-24",
+   "docID": "S100Z2YO",
+   "filerName": "株式会社アルペン",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-24",
+   "docID": "S100Z3FV",
+   "filerName": "株式会社アドベンチャー",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-24",
+   "docID": "S100Z3JC",
+   "filerName": "東洋ドライルーブ株式会社",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-24",
+   "docID": "S100Z33V",
+   "filerName": "笹徳印刷株式会社",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-24",
+   "docID": "S100Z3TN",
+   "filerName": "株式会社トライアルホールディングス",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-24",
+   "docID": "S100Z3D3",
+   "filerName": "株式会社Ｆｕｓｉｃ",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-24",
+   "docID": "S100Z3BY",
+   "filerName": "株式会社ビューティカダンホールディングス",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-24",
+   "docID": "S100Z3SN",
+   "filerName": "Ｓｏｌｖｖｙ株式会社",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-24",
+   "docID": "S100Z3ME",
+   "filerName": "株式会社物語コーポレーション",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-24",
+   "docID": "S100Z3AD",
+   "filerName": "株式会社ファイバーゲート",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-24",
+   "docID": "S100Z3FB",
+   "filerName": "ＡＩメカテック株式会社",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-24",
+   "docID": "S100Z3TC",
+   "filerName": "株式会社タウンズ",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-24",
+   "docID": "S100Z3ST",
+   "filerName": "株式会社エアークローゼット",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-24",
+   "docID": "S100Z3GH",
+   "filerName": "株式会社オカムラ食品工業",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-18",
+   "docID": "S100Z2KC",
+   "filerName": "株式会社インテリジェント　ウェイブ",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-18",
+   "docID": "S100Z2QT",
+   "filerName": "株式会社エンビプロ・ホールディングス",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-18",
+   "docID": "S100Z32U",
+   "filerName": "株式会社タウンニュース社",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-18",
+   "docID": "S100Z38F",
+   "filerName": "株式会社アバントグループ",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-18",
+   "docID": "S100Z2Z6",
+   "filerName": "コーア商事ホールディングス株式会社",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-18",
+   "docID": "S100Z2G0",
+   "filerName": "株式会社Ｗ　ＴＯＫＹＯ",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-18",
+   "docID": "S100Z35K",
+   "filerName": "株式会社オープンアップグループ",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-18",
+   "docID": "S100Z35T",
+   "filerName": "株式会社旅工房",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-18",
+   "docID": "S100Z33X",
+   "filerName": "株式会社ブロードバンドセキュリティ",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-18",
+   "docID": "S100Z37I",
+   "filerName": "株式会社ココルポート",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-18",
+   "docID": "S100Z3DI",
+   "filerName": "株式会社アイ・グリッド・ソリューションズ",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-18",
+   "docID": "S100Z2XO",
+   "filerName": "前田工繊株式会社",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-18",
+   "docID": "S100Z33F",
+   "filerName": "プレシジョン・システム・サイエンス株式会社",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-18",
+   "docID": "S100Z2S2",
+   "filerName": "株式会社エヌジェイホールディングス",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-18",
+   "docID": "S100Z2TG",
+   "filerName": "株式会社ジィ・シィ企画",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-17",
+   "docID": "S100Z2EI",
+   "filerName": "ヒューマン・メタボローム・テクノロジーズ株式会社",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-17",
+   "docID": "S100Z2BE",
+   "filerName": "株式会社メルカリ",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-17",
+   "docID": "S100Z32B",
+   "filerName": "マイクロ波化学株式会社",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-16",
+   "docID": "S100Z29T",
+   "filerName": "株式会社キングジム",
+   "periodEnd": "2026-06-20",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-16",
+   "docID": "S100Z2OT",
+   "filerName": "株式会社ユーザーローカル",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-16",
+   "docID": "S100Z2CK",
+   "filerName": "株式会社ＣＩＪ",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-15",
+   "docID": "S100Z1T7",
+   "filerName": "株式会社ジョイフル本田",
+   "periodEnd": "2026-06-20",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-14",
+   "docID": "S100Z1WR",
+   "filerName": "株式会社ジョイフル",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-09",
+   "docID": "S100Z0OS",
+   "filerName": "Ｇｅｎｋｙ　ＤｒｕｇＳｔｏｒｅｓ株式会社",
+   "periodEnd": "2026-06-20",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-09-04",
+   "docID": "S100Z0JO",
+   "filerName": "株式会社構造計画研究所ホールディングス",
+   "periodEnd": "2026-06-30",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-08-31",
+   "docID": "S100YYQN",
+   "filerName": "コタ株式会社",
+   "periodEnd": "2026-03-31",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-08-31",
+   "docID": "S100YZEV",
+   "filerName": "インテグループ株式会社",
+   "periodEnd": "2026-05-31",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-08-28",
+   "docID": "S100YZ7E",
+   "filerName": "互助会保証株式会社",
+   "periodEnd": "2026-05-31",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-08-28",
+   "docID": "S100YZ9G",
+   "filerName": "新橋演舞場株式会社",
+   "periodEnd": "2026-05-31",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-08-28",
+   "docID": "S100YZ2B",
+   "filerName": "三光合成株式会社",
+   "periodEnd": "2026-05-31",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-08-28",
+   "docID": "S100YXGH",
+   "filerName": "モジュレ株式会社",
+   "periodEnd": "2026-05-31",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-08-28",
+   "docID": "S100YZCT",
+   "filerName": "ライク株式会社",
+   "periodEnd": "2026-05-31",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-08-28",
+   "docID": "S100YYYH",
+   "filerName": "株式会社金太郎温泉",
+   "periodEnd": "2026-05-31",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-08-28",
+   "docID": "S100YZDE",
+   "filerName": "ＴＯＮＥ株式会社",
+   "periodEnd": "2026-05-31",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-08-28",
+   "docID": "S100YZ4M",
+   "filerName": "タケダ機械株式会社",
+   "periodEnd": "2026-05-31",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-08-28",
+   "docID": "S100YZC8",
+   "filerName": "サイバーステップホールディングス株式会社",
+   "periodEnd": "2026-05-31",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-08-28",
+   "docID": "S100YZBZ",
+   "filerName": "エレベーターコミュニケーションズ株式会社",
+   "periodEnd": "2026-05-31",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-08-28",
+   "docID": "S100YZF9",
+   "filerName": "株式会社プロパスト",
+   "periodEnd": "2026-05-31",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-08-28",
+   "docID": "S100YZC3",
+   "filerName": "Ｓｈｉｎｗａ　Ｗｉｓｅ　Ｈｏｌｄｉｎｇｓ株式会社",
+   "periodEnd": "2026-05-31",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-08-28",
+   "docID": "S100YZFP",
+   "filerName": "株式会社シーラホールディングス",
+   "periodEnd": "2026-05-31",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-08-28",
+   "docID": "S100YZFU",
+   "filerName": "ＧＯ株式会社",
+   "periodEnd": "2026-05-31",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-08-27",
+   "docID": "S100YYY4",
+   "filerName": "株式会社シー・エス・ランバー",
+   "periodEnd": "2026-05-31",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-08-27",
+   "docID": "S100YYVJ",
+   "filerName": "ミタチ産業株式会社",
+   "periodEnd": "2026-05-31",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-08-27",
+   "docID": "S100YZ0G",
+   "filerName": "株式会社ギークリー",
+   "periodEnd": "2026-05-31",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-08-27",
+   "docID": "S100YXXZ",
+   "filerName": "株式会社ケイブ",
+   "periodEnd": "2026-05-31",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-08-27",
+   "docID": "S100YYF5",
+   "filerName": "ダイコー通産株式会社",
+   "periodEnd": "2026-05-31",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-08-27",
+   "docID": "S100YYJX",
+   "filerName": "株式会社インターアクション",
+   "periodEnd": "2026-05-31",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-08-27",
+   "docID": "S100YYVN",
+   "filerName": "ＳＵＭＩＮＯＥ株式会社",
+   "periodEnd": "2026-05-31",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-08-27",
+   "docID": "S100YYUD",
+   "filerName": "東海ソフト株式会社",
+   "periodEnd": "2026-05-31",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-08-27",
+   "docID": "S100YZ0T",
+   "filerName": "日本エンタープライズ株式会社",
+   "periodEnd": "2026-05-31",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-08-27",
+   "docID": "S100YZ31",
+   "filerName": "株式会社ヴィレッジヴァンガードコーポレーション",
+   "periodEnd": "2026-05-31",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-08-27",
+   "docID": "S100YYT4",
+   "filerName": "株式会社三機サービス",
+   "periodEnd": "2026-05-31",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-08-27",
+   "docID": "S100YZ4E",
+   "filerName": "ＰｏｓｔＰｒｉｍｅ株式会社",
+   "periodEnd": "2026-05-31",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-08-27",
+   "docID": "S100YZ57",
+   "filerName": "株式会社Ｄ＆Ｍカンパニー",
+   "periodEnd": "2026-05-31",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-08-26",
+   "docID": "S100YYMP",
+   "filerName": "株式会社ニイタカ",
+   "periodEnd": "2026-05-31",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-08-26",
+   "docID": "S100YYLT",
+   "filerName": "Ｅ・Ｊホールディングス株式会社",
+   "periodEnd": "2026-05-31",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-08-26",
+   "docID": "S100YYOS",
+   "filerName": "東洋電機製造株式会社",
+   "periodEnd": "2026-05-31",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-08-26",
+   "docID": "S100YYNO",
+   "filerName": "株式会社ＴＡＫＡＲＡ　＆　ＣＯＭＰＡＮＹ",
+   "periodEnd": "2026-05-31",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-08-26",
+   "docID": "S100YYFP",
+   "filerName": "株式会社中北製作所",
+   "periodEnd": "2026-05-31",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-08-26",
+   "docID": "S100YYEO",
+   "filerName": "カネコ種苗株式会社",
+   "periodEnd": "2026-05-31",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-08-26",
+   "docID": "S100YYEW",
+   "filerName": "日本プロセス株式会社",
+   "periodEnd": "2026-05-31",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-08-26",
+   "docID": "S100YYSK",
+   "filerName": "株式会社早稲田学習研究会",
+   "periodEnd": "2026-05-31",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-08-26",
+   "docID": "S100YYRG",
+   "filerName": "株式会社シイエヌエス",
+   "periodEnd": "2026-05-31",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-08-26",
+   "docID": "S100YYTC",
+   "filerName": "株式会社ロゴスホールディングス",
+   "periodEnd": "2026-05-31",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-08-26",
+   "docID": "S100YYS4",
+   "filerName": "株式会社メディカルネット",
+   "periodEnd": "2026-05-31",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-08-26",
+   "docID": "S100YYIA",
+   "filerName": "メディアファイブ株式会社",
+   "periodEnd": "2026-05-31",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-08-26",
+   "docID": "S100YYNI",
+   "filerName": "ダイト株式会社",
+   "periodEnd": "2026-05-31",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-08-26",
+   "docID": "S100YYQX",
+   "filerName": "グロービング株式会社",
+   "periodEnd": "2026-05-31",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-08-26",
+   "docID": "S100YYFR",
+   "filerName": "タマホーム株式会社",
+   "periodEnd": "2026-05-31",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-08-26",
+   "docID": "S100YXP8",
+   "filerName": "株式会社テンダ",
+   "periodEnd": "2026-05-31",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-08-26",
+   "docID": "S100YYRV",
+   "filerName": "株式会社ＩＧポート",
+   "periodEnd": "2026-05-31",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-08-26",
+   "docID": "S100YYUS",
+   "filerName": "株式会社ジグザグ",
+   "periodEnd": "2026-05-31",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-08-26",
+   "docID": "S100YYQQ",
+   "filerName": "株式会社ＩＫホールディングス",
+   "periodEnd": "2026-05-31",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-08-26",
+   "docID": "S100YYN7",
+   "filerName": "三協立山株式会社",
+   "periodEnd": "2026-05-31",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-08-26",
+   "docID": "S100YYQB",
+   "filerName": "株式会社エムビーエス",
+   "periodEnd": "2026-05-31",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-08-26",
+   "docID": "S100YYGU",
+   "filerName": "ＥＲＩホールディングス株式会社",
+   "periodEnd": "2026-05-31",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-08-26",
+   "docID": "S100YYT8",
+   "filerName": "株式会社インテリックスホールディングス",
+   "periodEnd": "2026-05-31",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-08-26",
+   "docID": "S100YYO2",
+   "filerName": "株式会社レント",
+   "periodEnd": "2026-05-31",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-08-26",
+   "docID": "S100YYDI",
+   "filerName": "株式会社コスモス薬品",
+   "periodEnd": "2026-05-31",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-08-26",
+   "docID": "S100YYV1",
+   "filerName": "株式会社アクセルスペースホールディングス",
+   "periodEnd": "2026-05-31",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-08-26",
+   "docID": "S100YYOW",
+   "filerName": "株式会社ＱＰＳホールディングス",
+   "periodEnd": "2026-05-31",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-08-25",
+   "docID": "S100YYGF",
+   "filerName": "株式会社東武住販",
+   "periodEnd": "2026-05-31",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-08-25",
+   "docID": "S100YYHK",
+   "filerName": "大黒天物産株式会社",
+   "periodEnd": "2026-05-31",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-08-25",
+   "docID": "S100YXFY",
+   "filerName": "ヤマシタヘルスケアホールディングス株式会社",
+   "periodEnd": "2026-05-31",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-08-25",
+   "docID": "S100YYAI",
+   "filerName": "ビーウィズ株式会社",
+   "periodEnd": "2026-05-31",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-08-25",
+   "docID": "S100YYIN",
+   "filerName": "株式会社テーオーホールディングス",
+   "periodEnd": "2026-05-31",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-08-25",
+   "docID": "S100YYIV",
+   "filerName": "株式会社パシフィックネット",
+   "periodEnd": "2026-05-31",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-08-25",
+   "docID": "S100YYF7",
+   "filerName": "株式会社岡山製紙",
+   "periodEnd": "2026-05-31",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-08-25",
+   "docID": "S100YYK8",
+   "filerName": "ジェイフロンティア株式会社",
+   "periodEnd": "2026-05-31",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-08-25",
+   "docID": "S100YY0T",
+   "filerName": "株式会社オオバ",
+   "periodEnd": "2026-05-31",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-08-25",
+   "docID": "S100YY6D",
+   "filerName": "小津産業株式会社",
+   "periodEnd": "2026-05-31",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-08-25",
+   "docID": "S100YYBG",
+   "filerName": "室町ケミカル株式会社",
+   "periodEnd": "2026-05-31",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-08-25",
+   "docID": "S100YYKZ",
+   "filerName": "株式会社Ｇｕｎｏｓｙ",
+   "periodEnd": "2026-05-31",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-08-25",
+   "docID": "S100YYMC",
+   "filerName": "株式会社Ｇｌｏｂｅｅ",
+   "periodEnd": "2026-05-31",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-08-25",
+   "docID": "S100YYH7",
+   "filerName": "株式会社ＧａｍｅＷｉｔｈ",
+   "periodEnd": "2026-05-31",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-08-25",
+   "docID": "S100YYKB",
+   "filerName": "株式会社セイワホールディングス",
+   "periodEnd": "2026-05-31",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-08-24",
+   "docID": "S100YY3G",
+   "filerName": "アウンコンサルティング株式会社",
+   "periodEnd": "2026-05-31",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-08-24",
+   "docID": "S100YY3Q",
+   "filerName": "株式会社ハニーズホールディングス",
+   "periodEnd": "2026-05-31",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-08-24",
+   "docID": "S100YXKH",
+   "filerName": "シグマ光機株式会社",
+   "periodEnd": "2026-05-31",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-08-24",
+   "docID": "S100YXXB",
+   "filerName": "ファーストコーポレーション株式会社",
+   "periodEnd": "2026-05-31",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-08-24",
+   "docID": "S100YY3A",
+   "filerName": "株式会社毎日コムネット",
+   "periodEnd": "2026-05-31",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-08-24",
+   "docID": "S100YYE5",
+   "filerName": "フィードフォースグループ株式会社",
+   "periodEnd": "2026-05-31",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-08-21",
+   "docID": "S100YXLE",
+   "filerName": "株式会社ドーン",
+   "periodEnd": "2026-05-31",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-08-21",
+   "docID": "S100YXZQ",
+   "filerName": "株式会社ジーデップ・アドバンス",
+   "periodEnd": "2026-05-31",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-08-21",
+   "docID": "S100YY0V",
+   "filerName": "日本オラクル株式会社",
+   "periodEnd": "2026-05-31",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-08-21",
+   "docID": "S100YXXI",
+   "filerName": "日本国土開発株式会社",
+   "periodEnd": "2026-05-31",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-08-21",
+   "docID": "S100YXUM",
+   "filerName": "株式会社　サカタのタネ",
+   "periodEnd": "2026-05-31",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-08-21",
+   "docID": "S100YXYC",
+   "filerName": "株式会社Ｅｎｊｉｎ",
+   "periodEnd": "2026-05-31",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-08-20",
+   "docID": "S100YXNS",
+   "filerName": "株式会社クリエイトＳＤホールディングス",
+   "periodEnd": "2026-05-31",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-08-20",
+   "docID": "S100YXSF",
+   "filerName": "Ｃｏｃｏｌｉｖｅ株式会社",
+   "periodEnd": "2026-05-31",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-08-20",
+   "docID": "S100YXMM",
+   "filerName": "株式会社ウェザーニューズ",
+   "periodEnd": "2026-05-31",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-08-20",
+   "docID": "S100YXWI",
+   "filerName": "ファーマライズホールディングス株式会社",
+   "periodEnd": "2026-05-31",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-08-19",
+   "docID": "S100YXG0",
+   "filerName": "株式会社インターファクトリー",
+   "periodEnd": "2026-05-31",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-08-19",
+   "docID": "S100YXMA",
+   "filerName": "Ａｂａｌａｎｃｅ株式会社",
+   "periodEnd": "2026-03-31",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-08-19",
+   "docID": "S100YXFQ",
+   "filerName": "Ｓａｎｓａｎ株式会社",
+   "periodEnd": "2026-05-31",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-08-19",
+   "docID": "S100YXF5",
+   "filerName": "株式会社クスリのアオキホールディングス",
+   "periodEnd": "2026-05-20",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-08-18",
+   "docID": "S100YX88",
+   "filerName": "株式会社大光",
+   "periodEnd": "2026-05-31",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-08-14",
+   "docID": "S100YWGX",
+   "filerName": "ブックオフグループホールディングス株式会社",
+   "periodEnd": "2026-05-31",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-08-14",
+   "docID": "S100YW7F",
+   "filerName": "株式会社パソナグループ",
+   "periodEnd": "2026-05-31",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-08-10",
+   "docID": "S100YUI9",
+   "filerName": "コーセル株式会社",
+   "periodEnd": "2026-05-20",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  },
+  {
+   "date": "2026-08-06",
+   "docID": "S100YUHC",
+   "filerName": "サツドラホールディングス株式会社",
+   "periodEnd": "2026-05-15",
+   "ordinanceCode": "010",
+   "formCode": "030000"
+  }
+ ]
+}

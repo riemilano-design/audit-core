@@ -1,0 +1,909 @@
+{
+ "step": "**次元で露出した 6 行の診断。読むだけ・engine 不変・0 USD**",
+ "**偶然一致する側の次元(T5 の注入が借りた fact)**": {
+  "株主資本の内訳": 1,
+  "数値の fact 一覧に無い(文字・DEI など)": 14,
+  "連結・個別の区分": 21,
+  "明示次元なし": 8,
+  "セグメント": 4,
+  "その他の軸": 2
+ },
+ "**明示次元つきだった参照先(名指し)**": {
+  "基準 24 行": [
+   {
+    "doc": "S100YWGX",
+    "id": "R012",
+    "参照先": "ordinaryincome@currentyearduration_jpcrp030000-asr_e34102-000domesticbookoffbusinessreportablesegmentsmember",
+    "軸と枠": [
+     [
+      "jpcrp_cor:OperatingSegmentsAxis",
+      "jpcrp030000-asr_E34102-000:DomesticBookoffBusinessReportableSegmentsMember"
+     ]
+    ]
+   },
+   {
+    "doc": "S100YWGX",
+    "id": "R014",
+    "参照先": "revenuesfromexternalcustomers@currentyearduration_jpcrp030000-asr_e34102-000premiumservicebusinessreportablesegmentsmember",
+    "軸と枠": [
+     [
+      "jpcrp_cor:OperatingSegmentsAxis",
+      "jpcrp030000-asr_E34102-000:PremiumServiceBusinessReportableSegmentsMember"
+     ]
+    ]
+   },
+   {
+    "doc": "S100YWGX",
+    "id": "R016",
+    "参照先": "ordinaryincome@currentyearduration_jpcrp030000-asr_e34102-000premiumservicebusinessreportablesegmentsmember",
+    "軸と枠": [
+     [
+      "jpcrp_cor:OperatingSegmentsAxis",
+      "jpcrp030000-asr_E34102-000:PremiumServiceBusinessReportableSegmentsMember"
+     ]
+    ]
+   },
+   {
+    "doc": "S100YXMA",
+    "id": "R010",
+    "参照先": "netsales@currentyearduration_jpcrp030000-asr_e05713-000solarpanelmanufacturingbusinessreportablesegmentmember",
+    "軸と枠": [
+     [
+      "jpcrp_cor:OperatingSegmentsAxis",
+      "jpcrp030000-asr_E05713-000:SolarPanelManufacturingBusinessReportableSegmentMember"
+     ]
+    ]
+   },
+   {
+    "doc": "S100YXMA",
+    "id": "R011",
+    "参照先": "operatingincome@currentyearduration_jpcrp030000-asr_e05713-000solarpanelmanufacturingbusinessreportablesegmentmember",
+    "軸と枠": [
+     [
+      "jpcrp_cor:OperatingSegmentsAxis",
+      "jpcrp030000-asr_E05713-000:SolarPanelManufacturingBusinessReportableSegmentMember"
+     ]
+    ]
+   },
+   {
+    "doc": "S100YXMA",
+    "id": "R016",
+    "参照先": "netsales@currentyearduration_jpcrp030000-asr_e05713-000greenenergyreportablesegmentmember",
+    "軸と枠": [
+     [
+      "jpcrp_cor:OperatingSegmentsAxis",
+      "jpcrp030000-asr_E05713-000:GreenEnergyReportableSegmentMember"
+     ]
+    ]
+   },
+   {
+    "doc": "S100YXMA",
+    "id": "R017",
+    "参照先": "operatingincome@currentyearduration_jpcrp030000-asr_e05713-000greenenergyreportablesegmentmember",
+    "軸と枠": [
+     [
+      "jpcrp_cor:OperatingSegmentsAxis",
+      "jpcrp030000-asr_E05713-000:GreenEnergyReportableSegmentMember"
+     ]
+    ]
+   },
+   {
+    "doc": "S100YZEV",
+    "id": "R009",
+    "参照先": "netsalessummaryofbusinessresults@currentyearduration_nonconsolidatedmember",
+    "軸と枠": [
+     [
+      "jppfs_cor:ConsolidatedOrNonConsolidatedAxis",
+      "jppfs_cor:NonConsolidatedMember"
+     ]
+    ]
+   },
+   {
+    "doc": "S100YZEV",
+    "id": "R013",
+    "参照先": "ordinaryincomelosssummaryofbusinessresults@currentyearduration_nonconsolidatedmember",
+    "軸と枠": [
+     [
+      "jppfs_cor:ConsolidatedOrNonConsolidatedAxis",
+      "jppfs_cor:NonConsolidatedMember"
+     ]
+    ]
+   },
+   {
+    "doc": "S100YZEV",
+    "id": "R015",
+    "参照先": "netincomelosssummaryofbusinessresults@currentyearduration_nonconsolidatedmember",
+    "軸と枠": [
+     [
+      "jppfs_cor:ConsolidatedOrNonConsolidatedAxis",
+      "jppfs_cor:NonConsolidatedMember"
+     ]
+    ]
+   }
+  ],
+  "席が参照先を出した全部の行": [
+   {
+    "doc": "S100YWGX",
+    "id": "R010",
+    "参照先": "revenuesfromexternalcustomers@currentyearduration_jpcrp030000-asr_e34102-000domesticbookoffbusinessreportablesegmentsmember",
+    "軸と枠": [
+     [
+      "jpcrp_cor:OperatingSegmentsAxis",
+      "jpcrp030000-asr_E34102-000:DomesticBookoffBusinessReportableSegmentsMember"
+     ]
+    ]
+   },
+   {
+    "doc": "S100YWGX",
+    "id": "R011",
+    "参照先": "revenuesfromexternalcustomers@currentyearduration_jpcrp030000-asr_e34102-000domesticbookoffbusinessreportablesegmentsmember",
+    "軸と枠": [
+     [
+      "jpcrp_cor:OperatingSegmentsAxis",
+      "jpcrp030000-asr_E34102-000:DomesticBookoffBusinessReportableSegmentsMember"
+     ]
+    ]
+   },
+   {
+    "doc": "S100YWGX",
+    "id": "R012",
+    "参照先": "ordinaryincome@currentyearduration_jpcrp030000-asr_e34102-000domesticbookoffbusinessreportablesegmentsmember",
+    "軸と枠": [
+     [
+      "jpcrp_cor:OperatingSegmentsAxis",
+      "jpcrp030000-asr_E34102-000:DomesticBookoffBusinessReportableSegmentsMember"
+     ]
+    ]
+   },
+   {
+    "doc": "S100YWGX",
+    "id": "R013",
+    "参照先": "ordinaryincome@currentyearduration_jpcrp030000-asr_e34102-000domesticbookoffbusinessreportablesegmentsmember",
+    "軸と枠": [
+     [
+      "jpcrp_cor:OperatingSegmentsAxis",
+      "jpcrp030000-asr_E34102-000:DomesticBookoffBusinessReportableSegmentsMember"
+     ]
+    ]
+   },
+   {
+    "doc": "S100YWGX",
+    "id": "R014",
+    "参照先": "revenuesfromexternalcustomers@currentyearduration_jpcrp030000-asr_e34102-000premiumservicebusinessreportablesegmentsmember",
+    "軸と枠": [
+     [
+      "jpcrp_cor:OperatingSegmentsAxis",
+      "jpcrp030000-asr_E34102-000:PremiumServiceBusinessReportableSegmentsMember"
+     ]
+    ]
+   },
+   {
+    "doc": "S100YWGX",
+    "id": "R015",
+    "参照先": "revenuesfromexternalcustomers@currentyearduration_jpcrp030000-asr_e34102-000premiumservicebusinessreportablesegmentsmember",
+    "軸と枠": [
+     [
+      "jpcrp_cor:OperatingSegmentsAxis",
+      "jpcrp030000-asr_E34102-000:PremiumServiceBusinessReportableSegmentsMember"
+     ]
+    ]
+   },
+   {
+    "doc": "S100YWGX",
+    "id": "R016",
+    "参照先": "ordinaryincome@currentyearduration_jpcrp030000-asr_e34102-000premiumservicebusinessreportablesegmentsmember",
+    "軸と枠": [
+     [
+      "jpcrp_cor:OperatingSegmentsAxis",
+      "jpcrp030000-asr_E34102-000:PremiumServiceBusinessReportableSegmentsMember"
+     ]
+    ]
+   },
+   {
+    "doc": "S100YWGX",
+    "id": "R017",
+    "参照先": "ordinaryincome@currentyearduration_jpcrp030000-asr_e34102-000premiumservicebusinessreportablesegmentsmember",
+    "軸と枠": [
+     [
+      "jpcrp_cor:OperatingSegmentsAxis",
+      "jpcrp030000-asr_E34102-000:PremiumServiceBusinessReportableSegmentsMember"
+     ]
+    ]
+   },
+   {
+    "doc": "S100YXMA",
+    "id": "R010",
+    "参照先": "netsales@currentyearduration_jpcrp030000-asr_e05713-000solarpanelmanufacturingbusinessreportablesegmentmember",
+    "軸と枠": [
+     [
+      "jpcrp_cor:OperatingSegmentsAxis",
+      "jpcrp030000-asr_E05713-000:SolarPanelManufacturingBusinessReportableSegmentMember"
+     ]
+    ]
+   },
+   {
+    "doc": "S100YXMA",
+    "id": "R011",
+    "参照先": "operatingincome@currentyearduration_jpcrp030000-asr_e05713-000solarpanelmanufacturingbusinessreportablesegmentmember",
+    "軸と枠": [
+     [
+      "jpcrp_cor:OperatingSegmentsAxis",
+      "jpcrp030000-asr_E05713-000:SolarPanelManufacturingBusinessReportableSegmentMember"
+     ]
+    ]
+   },
+   {
+    "doc": "S100YXMA",
+    "id": "R016",
+    "参照先": "netsales@currentyearduration_jpcrp030000-asr_e05713-000greenenergyreportablesegmentmember",
+    "軸と枠": [
+     [
+      "jpcrp_cor:OperatingSegmentsAxis",
+      "jpcrp030000-asr_E05713-000:GreenEnergyReportableSegmentMember"
+     ]
+    ]
+   },
+   {
+    "doc": "S100YXMA",
+    "id": "R017",
+    "参照先": "operatingincome@currentyearduration_jpcrp030000-asr_e05713-000greenenergyreportablesegmentmember",
+    "軸と枠": [
+     [
+      "jpcrp_cor:OperatingSegmentsAxis",
+      "jpcrp030000-asr_E05713-000:GreenEnergyReportableSegmentMember"
+     ]
+    ]
+   },
+   {
+    "doc": "S100YYRV",
+    "id": "R017",
+    "参照先": "operatingincome@currentyearduration_jpcrp030000-asr_e02480-000publishingbusinessreportablesegmentsmember",
+    "軸と枠": [
+     [
+      "jpcrp_cor:OperatingSegmentsAxis",
+      "jpcrp030000-asr_E02480-000:PublishingBusinessReportableSegmentsMember"
+     ]
+    ]
+   },
+   {
+    "doc": "S100YYRV",
+    "id": "R018",
+    "参照先": "operatingincome@currentyearduration_jpcrp030000-asr_e02480-000productsalesbusinessreportablesegmentsmember",
+    "軸と枠": [
+     [
+      "jpcrp_cor:OperatingSegmentsAxis",
+      "jpcrp030000-asr_E02480-000:ProductSalesBusinessReportableSegmentsMember"
+     ]
+    ]
+   },
+   {
+    "doc": "S100YZ7E",
+    "id": "R017",
+    "参照先": "operatingrevenue2@currentyearduration_nonconsolidatedmember",
+    "軸と枠": [
+     [
+      "jppfs_cor:ConsolidatedOrNonConsolidatedAxis",
+      "jppfs_cor:NonConsolidatedMember"
+     ]
+    ]
+   },
+   {
+    "doc": "S100YZ7E",
+    "id": "R018",
+    "参照先": "ordinaryincome@currentyearduration_nonconsolidatedmember",
+    "軸と枠": [
+     [
+      "jppfs_cor:ConsolidatedOrNonConsolidatedAxis",
+      "jppfs_cor:NonConsolidatedMember"
+     ]
+    ]
+   },
+   {
+    "doc": "S100YZ7E",
+    "id": "R019",
+    "参照先": "cashandcashequivalents@currentyearinstant_nonconsolidatedmember",
+    "軸と枠": [
+     [
+      "jppfs_cor:ConsolidatedOrNonConsolidatedAxis",
+      "jppfs_cor:NonConsolidatedMember"
+     ]
+    ]
+   },
+   {
+    "doc": "S100YZ7E",
+    "id": "R020",
+    "参照先": "netcashprovidedbyusedininvestmentactivities@currentyearduration_nonconsolidatedmember",
+    "軸と枠": [
+     [
+      "jppfs_cor:ConsolidatedOrNonConsolidatedAxis",
+      "jppfs_cor:NonConsolidatedMember"
+     ]
+    ]
+   },
+   {
+    "doc": "S100YZ7E",
+    "id": "R023",
+    "参照先": "assets@currentyearinstant_nonconsolidatedmember",
+    "軸と枠": [
+     [
+      "jppfs_cor:ConsolidatedOrNonConsolidatedAxis",
+      "jppfs_cor:NonConsolidatedMember"
+     ]
+    ]
+   },
+   {
+    "doc": "S100YZ7E",
+    "id": "R024",
+    "参照先": "netassets@currentyearinstant_nonconsolidatedmember",
+    "軸と枠": [
+     [
+      "jppfs_cor:ConsolidatedOrNonConsolidatedAxis",
+      "jppfs_cor:NonConsolidatedMember"
+     ]
+    ]
+   },
+   {
+    "doc": "S100YZEV",
+    "id": "R009",
+    "参照先": "netsalessummaryofbusinessresults@currentyearduration_nonconsolidatedmember",
+    "軸と枠": [
+     [
+      "jppfs_cor:ConsolidatedOrNonConsolidatedAxis",
+      "jppfs_cor:NonConsolidatedMember"
+     ]
+    ]
+   },
+   {
+    "doc": "S100YZEV",
+    "id": "R010",
+    "参照先": "netsalessummaryofbusinessresults@currentyearduration_nonconsolidatedmember",
+    "軸と枠": [
+     [
+      "jppfs_cor:ConsolidatedOrNonConsolidatedAxis",
+      "jppfs_cor:NonConsolidatedMember"
+     ]
+    ]
+   },
+   {
+    "doc": "S100YZEV",
+    "id": "R011",
+    "参照先": "operatingincome@currentyearduration_nonconsolidatedmember",
+    "軸と枠": [
+     [
+      "jppfs_cor:ConsolidatedOrNonConsolidatedAxis",
+      "jppfs_cor:NonConsolidatedMember"
+     ]
+    ]
+   },
+   {
+    "doc": "S100YZEV",
+    "id": "R012",
+    "参照先": "operatingincome@currentyearduration_nonconsolidatedmember",
+    "軸と枠": [
+     [
+      "jppfs_cor:ConsolidatedOrNonConsolidatedAxis",
+      "jppfs_cor:NonConsolidatedMember"
+     ]
+    ]
+   },
+   {
+    "doc": "S100YZEV",
+    "id": "R013",
+    "参照先": "ordinaryincomelosssummaryofbusinessresults@currentyearduration_nonconsolidatedmember",
+    "軸と枠": [
+     [
+      "jppfs_cor:ConsolidatedOrNonConsolidatedAxis",
+      "jppfs_cor:NonConsolidatedMember"
+     ]
+    ]
+   },
+   {
+    "doc": "S100YZEV",
+    "id": "R014",
+    "参照先": "ordinaryincomelosssummaryofbusinessresults@currentyearduration_nonconsolidatedmember",
+    "軸と枠": [
+     [
+      "jppfs_cor:ConsolidatedOrNonConsolidatedAxis",
+      "jppfs_cor:NonConsolidatedMember"
+     ]
+    ]
+   },
+   {
+    "doc": "S100YZEV",
+    "id": "R015",
+    "参照先": "netincomelosssummaryofbusinessresults@currentyearduration_nonconsolidatedmember",
+    "軸と枠": [
+     [
+      "jppfs_cor:ConsolidatedOrNonConsolidatedAxis",
+      "jppfs_cor:NonConsolidatedMember"
+     ]
+    ]
+   },
+   {
+    "doc": "S100YZEV",
+    "id": "R016",
+    "参照先": "netincomelosssummaryofbusinessresults@currentyearduration_nonconsolidatedmember",
+    "軸と枠": [
+     [
+      "jppfs_cor:ConsolidatedOrNonConsolidatedAxis",
+      "jppfs_cor:NonConsolidatedMember"
+     ]
+    ]
+   },
+   {
+    "doc": "S100YZEV",
+    "id": "R017",
+    "参照先": "currentassets@currentyearinstant_nonconsolidatedmember",
+    "軸と枠": [
+     [
+      "jppfs_cor:ConsolidatedOrNonConsolidatedAxis",
+      "jppfs_cor:NonConsolidatedMember"
+     ]
+    ]
+   },
+   {
+    "doc": "S100YZEV",
+    "id": "R018",
+    "参照先": "currentassets@currentyearinstant_nonconsolidatedmember",
+    "軸と枠": [
+     [
+      "jppfs_cor:ConsolidatedOrNonConsolidatedAxis",
+      "jppfs_cor:NonConsolidatedMember"
+     ]
+    ]
+   },
+   {
+    "doc": "S100YZEV",
+    "id": "R019",
+    "参照先": "noncurrentassets@currentyearinstant_nonconsolidatedmember",
+    "軸と枠": [
+     [
+      "jppfs_cor:ConsolidatedOrNonConsolidatedAxis",
+      "jppfs_cor:NonConsolidatedMember"
+     ]
+    ]
+   },
+   {
+    "doc": "S100YZEV",
+    "id": "R020",
+    "参照先": "increasedecreaseinaccountspayableotheropecf@currentyearduration_nonconsolidatedmember",
+    "軸と枠": [
+     [
+      "jppfs_cor:ConsolidatedOrNonConsolidatedAxis",
+      "jppfs_cor:NonConsolidatedMember"
+     ]
+    ]
+   }
+  ],
+  "正解(T5)の参照先": [
+   {
+    "doc": "S100YWGX",
+    "id": "R010",
+    "参照先": "revenuesfromexternalcustomers@currentyearduration_jpcrp030000-asr_e34102-000domesticbookoffbusinessreportablesegmentsmember",
+    "軸と枠": [
+     [
+      "jpcrp_cor:OperatingSegmentsAxis",
+      "jpcrp030000-asr_E34102-000:DomesticBookoffBusinessReportableSegmentsMember"
+     ]
+    ]
+   },
+   {
+    "doc": "S100YYRV",
+    "id": "R017",
+    "参照先": "operatingincome@currentyearduration_jpcrp030000-asr_e02480-000publishingbusinessreportablesegmentsmember",
+    "軸と枠": [
+     [
+      "jpcrp_cor:OperatingSegmentsAxis",
+      "jpcrp030000-asr_E02480-000:PublishingBusinessReportableSegmentsMember"
+     ]
+    ]
+   },
+   {
+    "doc": "S100YYRV",
+    "id": "R018",
+    "参照先": "operatingincome@currentyearduration_jpcrp030000-asr_e02480-000productsalesbusinessreportablesegmentsmember",
+    "軸と枠": [
+     [
+      "jpcrp_cor:OperatingSegmentsAxis",
+      "jpcrp030000-asr_E02480-000:ProductSalesBusinessReportableSegmentsMember"
+     ]
+    ]
+   },
+   {
+    "doc": "S100YZ7E",
+    "id": "R017",
+    "参照先": "operatingrevenue2summaryofbusinessresults@currentyearduration_nonconsolidatedmember",
+    "軸と枠": [
+     [
+      "jppfs_cor:ConsolidatedOrNonConsolidatedAxis",
+      "jppfs_cor:NonConsolidatedMember"
+     ]
+    ]
+   },
+   {
+    "doc": "S100YZ7E",
+    "id": "R018",
+    "参照先": "ordinaryincomelosssummaryofbusinessresults@currentyearduration_nonconsolidatedmember",
+    "軸と枠": [
+     [
+      "jppfs_cor:ConsolidatedOrNonConsolidatedAxis",
+      "jppfs_cor:NonConsolidatedMember"
+     ]
+    ]
+   },
+   {
+    "doc": "S100YZ7E",
+    "id": "R019",
+    "参照先": "cashandcashequivalentssummaryofbusinessresults@currentyearinstant_nonconsolidatedmember",
+    "軸と枠": [
+     [
+      "jppfs_cor:ConsolidatedOrNonConsolidatedAxis",
+      "jppfs_cor:NonConsolidatedMember"
+     ]
+    ]
+   },
+   {
+    "doc": "S100YZ7E",
+    "id": "R020",
+    "参照先": "netcashprovidedbyusedininvestingactivitiessummaryofbusinessresults@currentyearduration_nonconsolidatedmember",
+    "軸と枠": [
+     [
+      "jppfs_cor:ConsolidatedOrNonConsolidatedAxis",
+      "jppfs_cor:NonConsolidatedMember"
+     ]
+    ]
+   },
+   {
+    "doc": "S100YZ7E",
+    "id": "R023",
+    "参照先": "totalassetssummaryofbusinessresults@currentyearinstant_nonconsolidatedmember",
+    "軸と枠": [
+     [
+      "jppfs_cor:ConsolidatedOrNonConsolidatedAxis",
+      "jppfs_cor:NonConsolidatedMember"
+     ]
+    ]
+   },
+   {
+    "doc": "S100YZ7E",
+    "id": "R024",
+    "参照先": "netassetssummaryofbusinessresults@currentyearinstant_nonconsolidatedmember",
+    "軸と枠": [
+     [
+      "jppfs_cor:ConsolidatedOrNonConsolidatedAxis",
+      "jppfs_cor:NonConsolidatedMember"
+     ]
+    ]
+   },
+   {
+    "doc": "S100YZEV",
+    "id": "R011",
+    "参照先": "operatingincome@currentyearduration_nonconsolidatedmember",
+    "軸と枠": [
+     [
+      "jppfs_cor:ConsolidatedOrNonConsolidatedAxis",
+      "jppfs_cor:NonConsolidatedMember"
+     ]
+    ]
+   },
+   {
+    "doc": "S100YZEV",
+    "id": "R018",
+    "参照先": "currentassets@currentyearinstant_nonconsolidatedmember",
+    "軸と枠": [
+     [
+      "jppfs_cor:ConsolidatedOrNonConsolidatedAxis",
+      "jppfs_cor:NonConsolidatedMember"
+     ]
+    ]
+   },
+   {
+    "doc": "S100YZEV",
+    "id": "R019",
+    "参照先": "noncurrentassets@currentyearinstant_nonconsolidatedmember",
+    "軸と枠": [
+     [
+      "jppfs_cor:ConsolidatedOrNonConsolidatedAxis",
+      "jppfs_cor:NonConsolidatedMember"
+     ]
+    ]
+   },
+   {
+    "doc": "S100YZEV",
+    "id": "R020",
+    "参照先": "increasedecreaseinaccountspayableotheropecf@currentyearduration_nonconsolidatedmember",
+    "軸と枠": [
+     [
+      "jppfs_cor:ConsolidatedOrNonConsolidatedAxis",
+      "jppfs_cor:NonConsolidatedMember"
+     ]
+    ]
+   }
+  ]
+ },
+ "入力": "fixtures/xbrl/cd8/attr_inject_2026-10-17.json",
+ "**対象**": {
+  "行": 6,
+  "選び方": "`別の次元` の露出が 1 件以上あった行"
+ },
+ "**競合の分類(fact の件数)**": {
+  "株主資本の内訳": 4,
+  "セグメント": 2,
+  "連結・個別の区分": 2
+ },
+ "**行の分類**": {
+  "株主資本の内訳": 2,
+  "セグメント": 2,
+  "連結・個別の区分": 2
+ },
+ "**文が連結・個別を言っていた行**": 3,
+ "**参照先に明示次元が付いていたか**": {
+  "基準 24 行": {
+   "明示次元なし": 14,
+   "明示次元つき": 10
+  },
+  "席が参照先を出した全部の行": {
+   "明示次元なし": 53,
+   "明示次元つき": 32
+  },
+  "正解(T5)の参照先": {
+   "明示次元つき": 13,
+   "明示次元なし": 37
+  }
+ },
+ "**instance から読めた軸(参照先の側)**": {
+  "jpcrp_cor:OperatingSegmentsAxis": 24,
+  "jppfs_cor:ConsolidatedOrNonConsolidatedAxis": 31
+ },
+ "**競合する fact の軸**": {
+  "jppfs_cor:ComponentsOfEquityAxis": 4,
+  "jpcrp_cor:OperatingSegmentsAxis": 2,
+  "jppfs_cor:ConsolidatedOrNonConsolidatedAxis": 2
+ },
+ "**書類ごとの連結・個別**": {
+  "S100YWGX": {
+   "連結の要素数": 155,
+   "**個別しか無い書類**": false
+  },
+  "S100YXF5": {
+   "連結の要素数": 158,
+   "**個別しか無い書類**": false
+  },
+  "S100YXMA": {
+   "連結の要素数": 195,
+   "**個別しか無い書類**": false
+  },
+  "S100YYRG": {
+   "連結の要素数": 121,
+   "**個別しか無い書類**": false
+  },
+  "S100YYRV": {
+   "連結の要素数": 159,
+   "**個別しか無い書類**": false
+  },
+  "S100YZ7E": {
+   "連結の要素数": 0,
+   "**個別しか無い書類**": true
+  },
+  "S100YZCT": {
+   "連結の要素数": 153,
+   "**個別しか無い書類**": false
+  },
+  "S100YZEV": {
+   "連結の要素数": 0,
+   "**個別しか無い書類**": true
+  }
+ },
+ "**候補規則 (b) の帯(規則にはしない)**": {
+  "参照先が個別(NonConsolidated)の枠": 18,
+  "**うち書類に連結の fact が 0 件(個別しか無い)**": 18,
+  "**うち同じ要素の「次元なし」の枠が無い**": 18
+ },
+ "**候補規則 (b) が当たった行**": [],
+ "**偶然一致する側が解けなかった例**": [
+  "securitycodedei@filingdateinstant"
+ ],
+ "rows": [
+  {
+   "doc": "S100YWGX",
+   "id": "R007",
+   "注入か": false,
+   "正解": null,
+   "値": 2763.0,
+   "単位": "百万円",
+   "文(抜粋)": "4,720百万円（前連結会計年度比20.9％増）、親会社株主に帰属する当期純利益2,763百万円（前連結会計年度比31.5％増）となりました。     　セグメントごとの",
+   "**文に在った字**": [
+    "連結",
+    "セグメント",
+    "当期"
+   ],
+   "席の参照先": "profitlossattributabletoownersofparent@currentyearduration",
+   "席の参照先の軸と枠": [],
+   "席の参照先は明示次元つきか": false,
+   "**競合**": [
+    {
+     "競合する fact": "jppfs_cor:ProfitLossAttributableToOwnersOfParent@CurrentYearDuration_RetainedEarningsMember",
+     "軸と枠": [
+      [
+       "jppfs_cor:ComponentsOfEquityAxis",
+       "jppfs_cor:RetainedEarningsMember"
+      ]
+     ],
+     "分類": "株主資本の内訳"
+    },
+    {
+     "競合する fact": "jppfs_cor:ProfitLossAttributableToOwnersOfParent@CurrentYearDuration_ShareholdersEquityMember",
+     "軸と枠": [
+      [
+       "jppfs_cor:ComponentsOfEquityAxis",
+       "jppfs_cor:ShareholdersEquityMember"
+      ]
+     ],
+     "分類": "株主資本の内訳"
+    }
+   ],
+   "**値は同じか**": true,
+   "**文だけで連結・個別を区別できるか**": true
+  },
+  {
+   "doc": "S100YXMA",
+   "id": "R001",
+   "注入か": false,
+   "正解": null,
+   "値": 120169.0,
+   "単位": "百万円",
+   "文(抜粋)": "期比(％)を記載せず説明しております。   以上の結果、当連結会計年度の売上高は120,169百万円、営業利益は38,560百万円、第4四半期に為替差益が2,120百万円発生",
+   "**文に在った字**": [
+    "連結",
+    "当連結会計年度"
+   ],
+   "席の参照先": "netsales@currentyearduration",
+   "席の参照先の軸と枠": [],
+   "席の参照先は明示次元つきか": false,
+   "**競合**": [
+    {
+     "競合する fact": "jppfs_cor:NetSales@CurrentYearDuration_TotalOfReportableSegmentsAndOthersMember",
+     "軸と枠": [
+      [
+       "jpcrp_cor:OperatingSegmentsAxis",
+       "jpcrp_cor:TotalOfReportableSegmentsAndOthersMember"
+      ]
+     ],
+     "分類": "セグメント"
+    }
+   ],
+   "**値は同じか**": true,
+   "**文だけで連結・個別を区別できるか**": true
+  },
+  {
+   "doc": "S100YXMA",
+   "id": "R006",
+   "注入か": false,
+   "正解": null,
+   "値": 272.0,
+   "単位": "百万円",
+   "文(抜粋)": "光発電所等の減損に伴う減損損失869百万円に加え、過年度決算に関する訂正関連費用272百万円及び特別調査費用181百万円並びに第4四半期で繰延税金資産が減少し法人税等",
+   "**文に在った字**": [],
+   "席の参照先": "correctionrelatedcostel@currentyearduration",
+   "席の参照先の軸と枠": [],
+   "席の参照先は明示次元つきか": false,
+   "**競合**": [
+    {
+     "競合する fact": "jpcrp030000-asr_E05713-000:CorrectionRelatedCostEL@CurrentYearDuration_NonConsolidatedMember",
+     "軸と枠": [
+      [
+       "jppfs_cor:ConsolidatedOrNonConsolidatedAxis",
+       "jppfs_cor:NonConsolidatedMember"
+      ]
+     ],
+     "分類": "連結・個別の区分"
+    }
+   ],
+   "**値は同じか**": true,
+   "**文だけで連結・個別を区別できるか**": false
+  },
+  {
+   "doc": "S100YXMA",
+   "id": "R007",
+   "注入か": false,
+   "正解": null,
+   "値": 181.0,
+   "単位": "百万円",
+   "文(抜粋)": "失869百万円に加え、過年度決算に関する訂正関連費用272百万円及び特別調査費用181百万円並びに第4四半期で繰延税金資産が減少し法人税等調整額が680百万円発生した",
+   "**文に在った字**": [],
+   "席の参照先": "specialinvestigationexpensesel@currentyearduration",
+   "席の参照先の軸と枠": [],
+   "席の参照先は明示次元つきか": false,
+   "**競合**": [
+    {
+     "競合する fact": "jpcrp030000-asr_E05713-000:SpecialInvestigationExpensesEL@CurrentYearDuration_NonConsolidatedMember",
+     "軸と枠": [
+      [
+       "jppfs_cor:ConsolidatedOrNonConsolidatedAxis",
+       "jppfs_cor:NonConsolidatedMember"
+      ]
+     ],
+     "分類": "連結・個別の区分"
+    }
+   ],
+   "**値は同じか**": true,
+   "**文だけで連結・個別を区別できるか**": false
+  },
+  {
+   "doc": "S100YXMA",
+   "id": "R009",
+   "注入か": false,
+   "正解": null,
+   "値": 7722.0,
+   "単位": "百万円",
+   "文(抜粋)": "法人税等調整額が680百万円発生したことにより、親会社株主に帰属する当期純利益は7,722百万円となりました。   太陽光パネル製造事業は、ベトナム国のVietnam S",
+   "**文に在った字**": [
+    "当期"
+   ],
+   "席の参照先": "profitlossattributabletoownersofparent@currentyearduration",
+   "席の参照先の軸と枠": [],
+   "席の参照先は明示次元つきか": false,
+   "**競合**": [
+    {
+     "競合する fact": "jppfs_cor:ProfitLossAttributableToOwnersOfParent@CurrentYearDuration_RetainedEarningsMember",
+     "軸と枠": [
+      [
+       "jppfs_cor:ComponentsOfEquityAxis",
+       "jppfs_cor:RetainedEarningsMember"
+      ]
+     ],
+     "分類": "株主資本の内訳"
+    },
+    {
+     "競合する fact": "jppfs_cor:ProfitLossAttributableToOwnersOfParent@CurrentYearDuration_ShareholdersEquityMember",
+     "軸と枠": [
+      [
+       "jppfs_cor:ComponentsOfEquityAxis",
+       "jppfs_cor:ShareholdersEquityMember"
+      ]
+     ],
+     "分類": "株主資本の内訳"
+    }
+   ],
+   "**値は同じか**": true,
+   "**文だけで連結・個別を区別できるか**": false
+  },
+  {
+   "doc": "S100YYRV",
+   "id": "R013",
+   "注入か": false,
+   "正解": null,
+   "値": 14064526.0,
+   "単位": "千円",
+   "文(抜粋)": "行い、前期に比べ減収減益となりました。  これらの結果、当連結会計年度の売上高は14,064,526千円（前期比3.7％減）、経常利益は920,265千円（前期比35.2％減）、親",
+   "**文に在った字**": [
+    "連結",
+    "当連結会計年度"
+   ],
+   "席の参照先": "netsales@currentyearduration",
+   "席の参照先の軸と枠": [],
+   "席の参照先は明示次元つきか": false,
+   "**競合**": [
+    {
+     "競合する fact": "jppfs_cor:NetSales@CurrentYearDuration_TotalOfReportableSegmentsAndOthersMember",
+     "軸と枠": [
+      [
+       "jpcrp_cor:OperatingSegmentsAxis",
+       "jpcrp_cor:TotalOfReportableSegmentsAndOthersMember"
+      ]
+     ],
+     "分類": "セグメント"
+    }
+   ],
+   "**値は同じか**": true,
+   "**文だけで連結・個別を区別できるか**": true
+  }
+ ],
+ "limits": [
+  "**この 6 行は contract v1 が通した 24 行の中の露出である。**通らなかった行・他の書類の率ではない",
+  "**値が同じ兄弟 fact が在ることは、席がそれを選ぶことではない。**選ばれる頻度は測っていない",
+  "**6 行はいずれも無改変の行で、正解(T5)の参照先は無い。**どちらが正しいかは文の読みに依る",
+  "**軸は instance の XML から読めたが、Core は今これを読んでいない。**読める = 規則が書けるとは限らない",
+  "**どの次元差を不一致にするかは決めない。**次の封で人間が決める"
+ ]
+}

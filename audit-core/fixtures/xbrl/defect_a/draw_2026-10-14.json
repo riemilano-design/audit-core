@@ -1,0 +1,17 @@
+{
+ "seal": "docs/DEFECT_A_EVAL_SEAL_2026-10-14.md",
+ "rule": "封じた並びの order[26:34] をそのまま。無作為性なし",
+ "seed_hex": "6a24d72",
+ "used_n": 26,
+ "need": 8,
+ "docs": [
+  "S100Z448",
+  "S100Z492",
+  "S100YYS4",
+  "S100YZ31",
+  "S100Z48T",
+  "S100Z5DN",
+  "S100YYDI",
+  "S100YYK8"
+ ]
+}

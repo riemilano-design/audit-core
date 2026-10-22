@@ -1,0 +1,2969 @@
+{
+ "counts": {
+  "確定(同値類v0)": 72,
+  "不一致": 4,
+  "判定不能(片側)": 2
+ },
+ "確定の内訳": {
+  "厳密": 71,
+  "役割違い": 1
+ },
+ "再監査B との比較": {
+  "B と同じ(同値類v0)": 67,
+  "未比較(未確定)": 5,
+  "B と違う": 1
+ },
+ "再判定6件(第1便は上書きしない)": [
+  {
+   "id": "N037",
+   "鍵": "F-033",
+   "由来": "再判定(不一致 6)",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "率(比)",
+    "率(比)"
+   ],
+   "fact(席1)": [
+    [
+     "分子",
+     "GrossProfit",
+     "CurrentYearDuration"
+    ],
+    [
+     "分母",
+     "NetSales",
+     "CurrentYearDuration"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "分子",
+     "GrossProfit",
+     "CurrentYearDuration"
+    ],
+    [
+     "分母",
+     "NetSales",
+     "CurrentYearDuration"
+    ]
+   ]
+  },
+  {
+   "id": "N148",
+   "鍵": "F-105",
+   "由来": "再判定(不一致 6)",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "率(比)",
+    "率(比)"
+   ],
+   "fact(席1)": [
+    [
+     "分子",
+     "ContractAssets",
+     "CurrentYearInstant"
+    ],
+    [
+     "分母",
+     "Assets",
+     "CurrentYearInstant"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "分子",
+     "ContractAssets",
+     "CurrentYearInstant"
+    ],
+    [
+     "分母",
+     "Assets",
+     "CurrentYearInstant"
+    ]
+   ]
+  },
+  {
+   "id": "T025",
+   "鍵": "F-116",
+   "由来": "再判定(不一致 6)",
+   "分類": "不一致",
+   "形": [
+    "符号・方向",
+    "符号・方向"
+   ],
+   "fact(席1)": [
+    [
+     "前期側",
+     "AverageNumberOfTemporaryWorkers",
+     "Prior1YearInstant"
+    ],
+    [
+     "当期側",
+     "AverageNumberOfTemporaryWorkers",
+     "CurrentYearInstant"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "前期側",
+     "AverageNumberOfTemporaryWorkers",
+     "Prior1YearInstant"
+    ],
+    [
+     "前期側",
+     "NumberOfEmployees",
+     "Prior1YearInstant"
+    ],
+    [
+     "当期側",
+     "AverageNumberOfTemporaryWorkers",
+     "CurrentYearInstant"
+    ],
+    [
+     "当期側",
+     "NumberOfEmployees",
+     "CurrentYearInstant"
+    ]
+   ]
+  },
+  {
+   "id": "N036",
+   "鍵": "F-124",
+   "由来": "再判定(不一致 6)",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "率(比)",
+    "率(比)"
+   ],
+   "fact(席1)": [
+    [
+     "分子",
+     "GrossProfit",
+     "Prior1YearDuration"
+    ],
+    [
+     "分母",
+     "NetSales",
+     "Prior1YearDuration"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "分子",
+     "GrossProfit",
+     "Prior1YearDuration"
+    ],
+    [
+     "分母",
+     "NetSales",
+     "Prior1YearDuration"
+    ]
+   ]
+  },
+  {
+   "id": "N103",
+   "鍵": "F-252",
+   "由来": "再判定(不一致 6)",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "率(比)",
+    "率(比)"
+   ],
+   "fact(席1)": [
+    [
+     "分子",
+     "IncomeTaxes",
+     "CurrentYearDuration"
+    ],
+    [
+     "分母",
+     "IncomeBeforeIncomeTaxes",
+     "CurrentYearDuration"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "分子",
+     "IncomeTaxes",
+     "CurrentYearDuration"
+    ],
+    [
+     "分母",
+     "IncomeBeforeIncomeTaxes",
+     "CurrentYearDuration"
+    ]
+   ],
+   "再監査Bとの比較(記録のみ)": "B と同じ(同値類v0)"
+  },
+  {
+   "id": "N220",
+   "鍵": "F-253",
+   "由来": "再判定(不一致 6)",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "和",
+    "和"
+   ],
+   "fact(席1)": [
+    [
+     "加算項",
+     "CurrentPortionOfLongTermLoansPayable",
+     "Prior1YearInstant"
+    ],
+    [
+     "加算項",
+     "LongTermLoansPayable",
+     "Prior1YearInstant"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "加算項",
+     "CurrentPortionOfLongTermLoansPayable",
+     "Prior1YearInstant"
+    ],
+    [
+     "加算項",
+     "LongTermLoansPayable",
+     "Prior1YearInstant"
+    ]
+   ]
+  }
+ ],
+ "labels": [
+  {
+   "id": "N031",
+   "鍵": "F-008",
+   "由来": "再監査B の残り",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "率(比)",
+    "率(比)"
+   ],
+   "fact(席1)": [
+    [
+     "分子",
+     "CostOfSales",
+     "CurrentYearDuration"
+    ],
+    [
+     "分母",
+     "CostOfSales",
+     "Prior1YearDuration"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "分子",
+     "CostOfSales",
+     "CurrentYearDuration"
+    ],
+    [
+     "分母",
+     "CostOfSales",
+     "Prior1YearDuration"
+    ]
+   ],
+   "再監査Bとの比較(記録のみ)": "B と同じ(同値類v0)"
+  },
+  {
+   "id": "N174",
+   "鍵": "F-009",
+   "由来": "再監査B の残り",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "fact(席1)": [
+    [
+     "単一",
+     "Liabilities",
+     "CurrentYearInstant"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "単一",
+     "Liabilities",
+     "CurrentYearInstant"
+    ]
+   ],
+   "再監査Bとの比較(記録のみ)": "B と同じ(同値類v0)"
+  },
+  {
+   "id": "T097",
+   "鍵": "F-011",
+   "由来": "再監査B の残り",
+   "分類": "不一致",
+   "形": [
+    "符号・方向",
+    "符号・方向"
+   ],
+   "fact(席1)": [
+    [
+     "単一",
+     "IncreaseDecreaseInContractLiabilitiesOpeCF",
+     "CurrentYearDuration"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "前期側",
+     "ContractLiabilities",
+     "Prior1YearInstant"
+    ],
+    [
+     "単一",
+     "IncreaseDecreaseInContractLiabilitiesOpeCF",
+     "CurrentYearDuration"
+    ],
+    [
+     "当期側",
+     "ContractLiabilities",
+     "CurrentYearInstant"
+    ]
+   ],
+   "再監査Bとの比較(記録のみ)": "未比較(未確定)"
+  },
+  {
+   "id": "N119",
+   "鍵": "F-012",
+   "由来": "再監査B の残り",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "fact(席1)": [
+    [
+     "単一",
+     "OtherComprehensiveIncome",
+     "Prior1YearDuration"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "単一",
+     "OtherComprehensiveIncome",
+     "Prior1YearDuration"
+    ]
+   ],
+   "再監査Bとの比較(記録のみ)": "B と同じ(同値類v0)"
+  },
+  {
+   "id": "N264",
+   "鍵": "F-014",
+   "由来": "再監査B の残り",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "fact(席1)": [
+    [
+     "単一",
+     "IncomeBeforeIncomeTaxes",
+     "CurrentYearDuration"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "単一",
+     "IncomeBeforeIncomeTaxes",
+     "CurrentYearDuration"
+    ]
+   ],
+   "再監査Bとの比較(記録のみ)": "B と同じ(同値類v0)"
+  },
+  {
+   "id": "N278",
+   "鍵": "F-017",
+   "由来": "再監査B の残り",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "差(当期−前期)",
+    "差(当期−前期)"
+   ],
+   "fact(席1)": [
+    [
+     "前期側",
+     "IncomeBeforeIncomeTaxes",
+     "Prior1YearDuration"
+    ],
+    [
+     "当期側",
+     "IncomeBeforeIncomeTaxes",
+     "CurrentYearDuration"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "前期側",
+     "IncomeBeforeIncomeTaxes",
+     "Prior1YearDuration"
+    ],
+    [
+     "当期側",
+     "IncomeBeforeIncomeTaxes",
+     "CurrentYearDuration"
+    ]
+   ],
+   "再監査Bとの比較(記録のみ)": "B と同じ(同値類v0)"
+  },
+  {
+   "id": "N304",
+   "鍵": "F-018",
+   "由来": "再監査B の残り",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "和",
+    "和"
+   ],
+   "fact(席1)": [
+    [
+     "加算項",
+     "CurrentPortionOfLongTermLoansPayable",
+     "CurrentYearInstant"
+    ],
+    [
+     "加算項",
+     "LongTermLoansPayable",
+     "CurrentYearInstant"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "加算項",
+     "CurrentPortionOfLongTermLoansPayable",
+     "CurrentYearInstant"
+    ],
+    [
+     "加算項",
+     "LongTermLoansPayable",
+     "CurrentYearInstant"
+    ]
+   ],
+   "再監査Bとの比較(記録のみ)": "B と同じ(同値類v0)"
+  },
+  {
+   "id": "N029",
+   "鍵": "F-021",
+   "由来": "再監査B の残り",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "fact(席1)": [
+    [
+     "単一",
+     "CostOfSales",
+     "Prior1YearDuration"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "単一",
+     "CostOfSales",
+     "Prior1YearDuration"
+    ]
+   ],
+   "再監査Bとの比較(記録のみ)": "B と同じ(同値類v0)"
+  },
+  {
+   "id": "N058",
+   "鍵": "F-027",
+   "由来": "再監査B の残り",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "差(当期−前期)",
+    "差(当期−前期)"
+   ],
+   "fact(席1)": [
+    [
+     "前期側",
+     "OtherSGA",
+     "Prior1YearDuration"
+    ],
+    [
+     "当期側",
+     "OtherSGA",
+     "CurrentYearDuration"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "前期側",
+     "OtherSGA",
+     "Prior1YearDuration"
+    ],
+    [
+     "当期側",
+     "OtherSGA",
+     "CurrentYearDuration"
+    ]
+   ],
+   "再監査Bとの比較(記録のみ)": "B と同じ(同値類v0)"
+  },
+  {
+   "id": "N108",
+   "鍵": "F-030",
+   "由来": "再監査B の残り",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "率(比)",
+    "率(比)"
+   ],
+   "fact(席1)": [
+    [
+     "分子",
+     "ProfitLossAttributableToOwnersOfParent",
+     "CurrentYearDuration"
+    ],
+    [
+     "分母",
+     "ProfitLossAttributableToOwnersOfParent",
+     "Prior1YearDuration"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "分子",
+     "ProfitLossAttributableToOwnersOfParent",
+     "CurrentYearDuration"
+    ],
+    [
+     "分母",
+     "ProfitLossAttributableToOwnersOfParent",
+     "Prior1YearDuration"
+    ]
+   ],
+   "再監査Bとの比較(記録のみ)": "B と同じ(同値類v0)"
+  },
+  {
+   "id": "N037",
+   "鍵": "F-033",
+   "由来": "再判定(不一致 6)",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "率(比)",
+    "率(比)"
+   ],
+   "fact(席1)": [
+    [
+     "分子",
+     "GrossProfit",
+     "CurrentYearDuration"
+    ],
+    [
+     "分母",
+     "NetSales",
+     "CurrentYearDuration"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "分子",
+     "GrossProfit",
+     "CurrentYearDuration"
+    ],
+    [
+     "分母",
+     "NetSales",
+     "CurrentYearDuration"
+    ]
+   ]
+  },
+  {
+   "id": "N130",
+   "鍵": "F-034",
+   "由来": "再監査B の残り",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "差(当期−前期)",
+    "差(当期−前期)"
+   ],
+   "fact(席1)": [
+    [
+     "前期側",
+     "Assets",
+     "Prior1YearInstant"
+    ],
+    [
+     "当期側",
+     "Assets",
+     "CurrentYearInstant"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "前期側",
+     "Assets",
+     "Prior1YearInstant"
+    ],
+    [
+     "当期側",
+     "Assets",
+     "CurrentYearInstant"
+    ]
+   ],
+   "再監査Bとの比較(記録のみ)": "B と同じ(同値類v0)"
+  },
+  {
+   "id": "N091",
+   "鍵": "F-036",
+   "由来": "再監査B の残り",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "率(比)",
+    "率(比)"
+   ],
+   "fact(席1)": [
+    [
+     "分子",
+     "OrdinaryIncome",
+     "CurrentYearDuration"
+    ],
+    [
+     "分母",
+     "OrdinaryIncome",
+     "Prior1YearDuration"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "分子",
+     "OrdinaryIncome",
+     "CurrentYearDuration"
+    ],
+    [
+     "分母",
+     "OrdinaryIncome",
+     "Prior1YearDuration"
+    ]
+   ],
+   "再監査Bとの比較(記録のみ)": "B と同じ(同値類v0)"
+  },
+  {
+   "id": "N164",
+   "鍵": "F-041",
+   "由来": "再監査B の残り",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "差(当期−前期)",
+    "差(当期−前期)"
+   ],
+   "fact(席1)": [
+    [
+     "前期側",
+     "InvestmentsAndOtherAssets",
+     "Prior1YearInstant"
+    ],
+    [
+     "当期側",
+     "InvestmentsAndOtherAssets",
+     "CurrentYearInstant"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "前期側",
+     "InvestmentsAndOtherAssets",
+     "Prior1YearInstant"
+    ],
+    [
+     "当期側",
+     "InvestmentsAndOtherAssets",
+     "CurrentYearInstant"
+    ]
+   ],
+   "再監査Bとの比較(記録のみ)": "B と同じ(同値類v0)"
+  },
+  {
+   "id": "N063",
+   "鍵": "F-044",
+   "由来": "再監査B の残り",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "差(当期−前期)",
+    "差(当期−前期)"
+   ],
+   "fact(席1)": [
+    [
+     "前期側",
+     "OperatingIncome",
+     "Prior1YearDuration"
+    ],
+    [
+     "当期側",
+     "OperatingIncome",
+     "CurrentYearDuration"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "前期側",
+     "OperatingIncome",
+     "Prior1YearDuration"
+    ],
+    [
+     "当期側",
+     "OperatingIncome",
+     "CurrentYearDuration"
+    ]
+   ],
+   "再監査Bとの比較(記録のみ)": "B と同じ(同値類v0)"
+  },
+  {
+   "id": "N089",
+   "鍵": "F-046",
+   "由来": "再監査B の残り",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "fact(席1)": [
+    [
+     "単一",
+     "OrdinaryIncome",
+     "Prior1YearDuration"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "単一",
+     "OrdinaryIncome",
+     "Prior1YearDuration"
+    ]
+   ],
+   "再監査Bとの比較(記録のみ)": "B と同じ(同値類v0)"
+  },
+  {
+   "id": "T020",
+   "鍵": "F-049",
+   "由来": "再監査B の残り",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "符号・方向",
+    "符号・方向"
+   ],
+   "fact(席1)": [
+    [
+     "前期側",
+     "CostOfSales",
+     "Prior1YearDuration"
+    ],
+    [
+     "前期側",
+     "NetSales",
+     "Prior1YearDuration"
+    ],
+    [
+     "当期側",
+     "CostOfSales",
+     "CurrentYearDuration"
+    ],
+    [
+     "当期側",
+     "NetSales",
+     "CurrentYearDuration"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "分子",
+     "CostOfSales",
+     "CurrentYearDuration"
+    ],
+    [
+     "分子",
+     "NetSales",
+     "CurrentYearDuration"
+    ],
+    [
+     "分母",
+     "CostOfSales",
+     "Prior1YearDuration"
+    ],
+    [
+     "分母",
+     "NetSales",
+     "Prior1YearDuration"
+    ]
+   ],
+   "再監査Bとの比較(記録のみ)": "B と違う"
+  },
+  {
+   "id": "N289",
+   "鍵": "F-052",
+   "由来": "再監査B の残り",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "fact(席1)": [
+    [
+     "単一",
+     "ProceedsFromSalesOfStocksOfSubsidiariesAndAffiliatesInvCF",
+     "CurrentYearDuration"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "単一",
+     "ProceedsFromSalesOfStocksOfSubsidiariesAndAffiliatesInvCF",
+     "CurrentYearDuration"
+    ]
+   ],
+   "再監査Bとの比較(記録のみ)": "B と同じ(同値類v0)"
+  },
+  {
+   "id": "T070",
+   "鍵": "F-063",
+   "由来": "再監査B の残り",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "符号・方向",
+    "符号・方向"
+   ],
+   "fact(席1)": [
+    [
+     "前期側",
+     "AccountsPayableOperatingSpecific",
+     "Prior1YearInstant"
+    ],
+    [
+     "当期側",
+     "AccountsPayableOperatingSpecific",
+     "CurrentYearInstant"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "前期側",
+     "AccountsPayableOperatingSpecific",
+     "Prior1YearInstant"
+    ],
+    [
+     "当期側",
+     "AccountsPayableOperatingSpecific",
+     "CurrentYearInstant"
+    ]
+   ],
+   "再監査Bとの比較(記録のみ)": "B と同じ(同値類v0)"
+  },
+  {
+   "id": "N011",
+   "鍵": "F-064",
+   "由来": "再監査B の残り",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "fact(席1)": [
+    [
+     "単一",
+     "EquityToAssetRatioSummaryOfBusinessResults",
+     "CurrentYearInstant"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "単一",
+     "EquityToAssetRatioSummaryOfBusinessResults",
+     "CurrentYearInstant"
+    ]
+   ],
+   "再監査Bとの比較(記録のみ)": "B と同じ(同値類v0)"
+  },
+  {
+   "id": "T034",
+   "鍵": "F-065",
+   "由来": "再監査B の残り",
+   "分類": "判定不能(片側)",
+   "形": [
+    null,
+    "符号・方向"
+   ],
+   "fact(席1)": [],
+   "fact(席2)": [
+    [
+     "前期側",
+     "ProvisionForWarrantiesForCompletedOperationCL",
+     "Prior1YearInstant"
+    ],
+    [
+     "単一",
+     "IncreaseDecreaseInProvisionForWarrantiesForCompletedOperationOpeCF",
+     "CurrentYearDuration"
+    ],
+    [
+     "当期側",
+     "ProvisionForWarrantiesForCompletedOperationCL",
+     "CurrentYearInstant"
+    ]
+   ],
+   "再監査Bとの比較(記録のみ)": "未比較(未確定)"
+  },
+  {
+   "id": "T027",
+   "鍵": "F-082",
+   "由来": "再監査B の残り",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "符号・方向",
+    "符号・方向"
+   ],
+   "fact(席1)": [
+    [
+     "前期側",
+     "EmployeesSalariesAndAllowancesSGA",
+     "Prior1YearDuration"
+    ],
+    [
+     "当期側",
+     "EmployeesSalariesAndAllowancesSGA",
+     "CurrentYearDuration"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "前期側",
+     "EmployeesSalariesAndAllowancesSGA",
+     "Prior1YearDuration"
+    ],
+    [
+     "当期側",
+     "EmployeesSalariesAndAllowancesSGA",
+     "CurrentYearDuration"
+    ]
+   ],
+   "再監査Bとの比較(記録のみ)": "B と同じ(同値類v0)"
+  },
+  {
+   "id": "T023",
+   "鍵": "F-085",
+   "由来": "再監査B の残り",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "符号・方向",
+    "符号・方向"
+   ],
+   "fact(席1)": [
+    [
+     "分子",
+     "GrossProfit",
+     "CurrentYearDuration"
+    ],
+    [
+     "分子",
+     "GrossProfit",
+     "Prior1YearDuration"
+    ],
+    [
+     "分母",
+     "NetSales",
+     "CurrentYearDuration"
+    ],
+    [
+     "分母",
+     "NetSales",
+     "Prior1YearDuration"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "分子",
+     "GrossProfit",
+     "CurrentYearDuration"
+    ],
+    [
+     "分子",
+     "GrossProfit",
+     "Prior1YearDuration"
+    ],
+    [
+     "分母",
+     "NetSales",
+     "CurrentYearDuration"
+    ],
+    [
+     "分母",
+     "NetSales",
+     "Prior1YearDuration"
+    ]
+   ],
+   "再監査Bとの比較(記録のみ)": "B と同じ(同値類v0)"
+  },
+  {
+   "id": "N131",
+   "鍵": "F-088",
+   "由来": "再監査B の残り",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "率(比)",
+    "率(比)"
+   ],
+   "fact(席1)": [
+    [
+     "分子",
+     "Assets",
+     "CurrentYearInstant"
+    ],
+    [
+     "分母",
+     "Assets",
+     "Prior1YearInstant"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "分子",
+     "Assets",
+     "CurrentYearInstant"
+    ],
+    [
+     "分母",
+     "Assets",
+     "Prior1YearInstant"
+    ]
+   ],
+   "再監査Bとの比較(記録のみ)": "B と同じ(同値類v0)"
+  },
+  {
+   "id": "N077",
+   "鍵": "F-099",
+   "由来": "再監査B の残り",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "fact(席1)": [
+    [
+     "単一",
+     "DividendsIncomeNOI",
+     "Prior1YearDuration"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "単一",
+     "DividendsIncomeNOI",
+     "Prior1YearDuration"
+    ]
+   ],
+   "再監査Bとの比較(記録のみ)": "B と同じ(同値類v0)"
+  },
+  {
+   "id": "N192",
+   "鍵": "F-104",
+   "由来": "再監査B の残り",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "差(当期−前期)",
+    "差(当期−前期)"
+   ],
+   "fact(席1)": [
+    [
+     "前期側",
+     "ContractLiabilities",
+     "Prior1YearInstant"
+    ],
+    [
+     "当期側",
+     "ContractLiabilities",
+     "CurrentYearInstant"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "前期側",
+     "ContractLiabilities",
+     "Prior1YearInstant"
+    ],
+    [
+     "当期側",
+     "ContractLiabilities",
+     "CurrentYearInstant"
+    ]
+   ],
+   "再監査Bとの比較(記録のみ)": "B と同じ(同値類v0)"
+  },
+  {
+   "id": "N148",
+   "鍵": "F-105",
+   "由来": "再判定(不一致 6)",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "率(比)",
+    "率(比)"
+   ],
+   "fact(席1)": [
+    [
+     "分子",
+     "ContractAssets",
+     "CurrentYearInstant"
+    ],
+    [
+     "分母",
+     "Assets",
+     "CurrentYearInstant"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "分子",
+     "ContractAssets",
+     "CurrentYearInstant"
+    ],
+    [
+     "分母",
+     "Assets",
+     "CurrentYearInstant"
+    ]
+   ]
+  },
+  {
+   "id": "N112",
+   "鍵": "F-108",
+   "由来": "再監査B の残り",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "fact(席1)": [
+    [
+     "単一",
+     "RateOfReturnOnEquitySummaryOfBusinessResults",
+     "CurrentYearDuration"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "単一",
+     "RateOfReturnOnEquitySummaryOfBusinessResults",
+     "CurrentYearDuration"
+    ]
+   ],
+   "再監査Bとの比較(記録のみ)": "B と同じ(同値類v0)"
+  },
+  {
+   "id": "N218",
+   "鍵": "F-113",
+   "由来": "再監査B の残り",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "fact(席1)": [
+    [
+     "単一",
+     "LongTermLoansPayable",
+     "CurrentYearInstant"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "単一",
+     "LongTermLoansPayable",
+     "CurrentYearInstant"
+    ]
+   ],
+   "再監査Bとの比較(記録のみ)": "B と同じ(同値類v0)"
+  },
+  {
+   "id": "T066",
+   "鍵": "F-114",
+   "由来": "再監査B の残り",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "符号・方向",
+    "符号・方向"
+   ],
+   "fact(席1)": [
+    [
+     "前期側",
+     "InvestmentSecurities",
+     "Prior1YearInstant"
+    ],
+    [
+     "当期側",
+     "InvestmentSecurities",
+     "CurrentYearInstant"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "前期側",
+     "InvestmentSecurities",
+     "Prior1YearInstant"
+    ],
+    [
+     "当期側",
+     "InvestmentSecurities",
+     "CurrentYearInstant"
+    ]
+   ],
+   "再監査Bとの比較(記録のみ)": "B と同じ(同値類v0)"
+  },
+  {
+   "id": "N003",
+   "鍵": "F-115",
+   "由来": "再監査B の残り",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "fact(席1)": [
+    [
+     "単一",
+     "OperatingIncome",
+     "CurrentYearDuration"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "単一",
+     "OperatingIncome",
+     "CurrentYearDuration"
+    ]
+   ],
+   "再監査Bとの比較(記録のみ)": "B と同じ(同値類v0)"
+  },
+  {
+   "id": "T025",
+   "鍵": "F-116",
+   "由来": "再判定(不一致 6)",
+   "分類": "不一致",
+   "形": [
+    "符号・方向",
+    "符号・方向"
+   ],
+   "fact(席1)": [
+    [
+     "前期側",
+     "AverageNumberOfTemporaryWorkers",
+     "Prior1YearInstant"
+    ],
+    [
+     "当期側",
+     "AverageNumberOfTemporaryWorkers",
+     "CurrentYearInstant"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "前期側",
+     "AverageNumberOfTemporaryWorkers",
+     "Prior1YearInstant"
+    ],
+    [
+     "前期側",
+     "NumberOfEmployees",
+     "Prior1YearInstant"
+    ],
+    [
+     "当期側",
+     "AverageNumberOfTemporaryWorkers",
+     "CurrentYearInstant"
+    ],
+    [
+     "当期側",
+     "NumberOfEmployees",
+     "CurrentYearInstant"
+    ]
+   ]
+  },
+  {
+   "id": "T102",
+   "鍵": "F-120",
+   "由来": "再監査B の残り",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "符号・方向",
+    "符号・方向"
+   ],
+   "fact(席1)": [
+    [
+     "前期側",
+     "IncomeBeforeIncomeTaxes",
+     "Prior1YearDuration"
+    ],
+    [
+     "当期側",
+     "IncomeBeforeIncomeTaxes",
+     "CurrentYearDuration"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "前期側",
+     "IncomeBeforeIncomeTaxes",
+     "Prior1YearDuration"
+    ],
+    [
+     "当期側",
+     "IncomeBeforeIncomeTaxes",
+     "CurrentYearDuration"
+    ]
+   ],
+   "再監査Bとの比較(記録のみ)": "B と同じ(同値類v0)"
+  },
+  {
+   "id": "N036",
+   "鍵": "F-124",
+   "由来": "再判定(不一致 6)",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "率(比)",
+    "率(比)"
+   ],
+   "fact(席1)": [
+    [
+     "分子",
+     "GrossProfit",
+     "Prior1YearDuration"
+    ],
+    [
+     "分母",
+     "NetSales",
+     "Prior1YearDuration"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "分子",
+     "GrossProfit",
+     "Prior1YearDuration"
+    ],
+    [
+     "分母",
+     "NetSales",
+     "Prior1YearDuration"
+    ]
+   ]
+  },
+  {
+   "id": "T026",
+   "鍵": "F-125",
+   "由来": "再監査B の残り",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "符号・方向",
+    "符号・方向"
+   ],
+   "fact(席1)": [
+    [
+     "前期側",
+     "SellingGeneralAndAdministrativeExpenses",
+     "Prior1YearDuration"
+    ],
+    [
+     "当期側",
+     "SellingGeneralAndAdministrativeExpenses",
+     "CurrentYearDuration"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "前期側",
+     "SellingGeneralAndAdministrativeExpenses",
+     "Prior1YearDuration"
+    ],
+    [
+     "当期側",
+     "SellingGeneralAndAdministrativeExpenses",
+     "CurrentYearDuration"
+    ]
+   ],
+   "再監査Bとの比較(記録のみ)": "B と同じ(同値類v0)"
+  },
+  {
+   "id": "T068",
+   "鍵": "F-130",
+   "由来": "再監査B の残り",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "符号・方向",
+    "符号・方向"
+   ],
+   "fact(席1)": [
+    [
+     "前期側",
+     "Liabilities",
+     "Prior1YearInstant"
+    ],
+    [
+     "当期側",
+     "Liabilities",
+     "CurrentYearInstant"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "前期側",
+     "Liabilities",
+     "Prior1YearInstant"
+    ],
+    [
+     "当期側",
+     "Liabilities",
+     "CurrentYearInstant"
+    ]
+   ],
+   "再監査Bとの比較(記録のみ)": "B と同じ(同値類v0)"
+  },
+  {
+   "id": "N200",
+   "鍵": "F-131",
+   "由来": "再監査B の残り",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "fact(席1)": [
+    [
+     "単一",
+     "ProvisionForLossOnOrderReceivedCL",
+     "Prior1YearInstant"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "単一",
+     "ProvisionForLossOnOrderReceivedCL",
+     "Prior1YearInstant"
+    ]
+   ],
+   "再監査Bとの比較(記録のみ)": "B と同じ(同値類v0)"
+  },
+  {
+   "id": "N066",
+   "鍵": "F-134",
+   "由来": "再監査B の残り",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "差(当期−前期)",
+    "差(当期−前期)"
+   ],
+   "fact(席1)": [
+    [
+     "前期側",
+     "OperatingIncome",
+     "Prior1YearDuration"
+    ],
+    [
+     "当期側",
+     "OperatingIncome",
+     "CurrentYearDuration"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "前期側",
+     "OperatingIncome",
+     "Prior1YearDuration"
+    ],
+    [
+     "当期側",
+     "OperatingIncome",
+     "CurrentYearDuration"
+    ]
+   ],
+   "再監査Bとの比較(記録のみ)": "B と同じ(同値類v0)"
+  },
+  {
+   "id": "N137",
+   "鍵": "F-138",
+   "由来": "再監査B の残り",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "差(当期−前期)",
+    "差(当期−前期)"
+   ],
+   "fact(席1)": [
+    [
+     "前期側",
+     "CashAndDeposits",
+     "Prior1YearInstant"
+    ],
+    [
+     "当期側",
+     "CashAndDeposits",
+     "CurrentYearInstant"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "前期側",
+     "CashAndDeposits",
+     "Prior1YearInstant"
+    ],
+    [
+     "当期側",
+     "CashAndDeposits",
+     "CurrentYearInstant"
+    ]
+   ],
+   "再監査Bとの比較(記録のみ)": "B と同じ(同値類v0)"
+  },
+  {
+   "id": "N157",
+   "鍵": "F-145",
+   "由来": "再監査B の残り",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "fact(席1)": [
+    [
+     "単一",
+     "IntangibleAssets",
+     "Prior1YearInstant"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "単一",
+     "IntangibleAssets",
+     "Prior1YearInstant"
+    ]
+   ],
+   "再監査Bとの比較(記録のみ)": "B と同じ(同値類v0)"
+  },
+  {
+   "id": "N143",
+   "鍵": "F-146",
+   "由来": "再監査B の残り",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "差(当期−前期)",
+    "差(当期−前期)"
+   ],
+   "fact(席1)": [
+    [
+     "前期側",
+     "ContractAssets",
+     "Prior1YearInstant"
+    ],
+    [
+     "当期側",
+     "ContractAssets",
+     "CurrentYearInstant"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "前期側",
+     "ContractAssets",
+     "Prior1YearInstant"
+    ],
+    [
+     "当期側",
+     "ContractAssets",
+     "CurrentYearInstant"
+    ]
+   ],
+   "再監査Bとの比較(記録のみ)": "B と同じ(同値類v0)"
+  },
+  {
+   "id": "N009",
+   "鍵": "F-153",
+   "由来": "再監査B の残り",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "fact(席1)": [
+    [
+     "単一",
+     "Assets",
+     "CurrentYearInstant"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "単一",
+     "Assets",
+     "CurrentYearInstant"
+    ]
+   ],
+   "再監査Bとの比較(記録のみ)": "B と同じ(同値類v0)"
+  },
+  {
+   "id": "N191",
+   "鍵": "F-154",
+   "由来": "再監査B の残り",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "fact(席1)": [
+    [
+     "単一",
+     "ContractLiabilities",
+     "Prior1YearInstant"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "単一",
+     "ContractLiabilities",
+     "Prior1YearInstant"
+    ]
+   ],
+   "再監査Bとの比較(記録のみ)": "B と同じ(同値類v0)"
+  },
+  {
+   "id": "T050",
+   "鍵": "F-156",
+   "由来": "再監査B の残り",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "符号・方向",
+    "符号・方向"
+   ],
+   "fact(席1)": [
+    [
+     "前期側",
+     "CurrentAssets",
+     "Prior1YearInstant"
+    ],
+    [
+     "当期側",
+     "CurrentAssets",
+     "CurrentYearInstant"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "前期側",
+     "CurrentAssets",
+     "Prior1YearInstant"
+    ],
+    [
+     "当期側",
+     "CurrentAssets",
+     "CurrentYearInstant"
+    ]
+   ],
+   "再監査Bとの比較(記録のみ)": "B と同じ(同値類v0)"
+  },
+  {
+   "id": "N154",
+   "鍵": "F-163",
+   "由来": "再監査B の残り",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "fact(席1)": [
+    [
+     "単一",
+     "PropertyPlantAndEquipment",
+     "Prior1YearInstant"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "単一",
+     "PropertyPlantAndEquipment",
+     "Prior1YearInstant"
+    ]
+   ],
+   "再監査Bとの比較(記録のみ)": "B と同じ(同値類v0)"
+  },
+  {
+   "id": "N081",
+   "鍵": "F-165",
+   "由来": "再監査B の残り",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "fact(席1)": [
+    [
+     "単一",
+     "OtherNOI",
+     "Prior1YearDuration"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "単一",
+     "OtherNOI",
+     "Prior1YearDuration"
+    ]
+   ],
+   "再監査Bとの比較(記録のみ)": "B と同じ(同値類v0)"
+  },
+  {
+   "id": "N026",
+   "鍵": "F-168",
+   "由来": "再監査B の残り",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "差(当期−前期)",
+    "差(当期−前期)"
+   ],
+   "fact(席1)": [
+    [
+     "前期側",
+     "GrossProfit",
+     "Prior1YearDuration"
+    ],
+    [
+     "当期側",
+     "GrossProfit",
+     "CurrentYearDuration"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "前期側",
+     "GrossProfit",
+     "Prior1YearDuration"
+    ],
+    [
+     "当期側",
+     "GrossProfit",
+     "CurrentYearDuration"
+    ]
+   ],
+   "再監査Bとの比較(記録のみ)": "B と同じ(同値類v0)"
+  },
+  {
+   "id": "N170",
+   "鍵": "F-169",
+   "由来": "再監査B の残り",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "差(当期−前期)",
+    "差(当期−前期)"
+   ],
+   "fact(席1)": [
+    [
+     "前期側",
+     "InvestmentSecurities",
+     "Prior1YearInstant"
+    ],
+    [
+     "当期側",
+     "InvestmentSecurities",
+     "CurrentYearInstant"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "前期側",
+     "InvestmentSecurities",
+     "Prior1YearInstant"
+    ],
+    [
+     "当期側",
+     "InvestmentSecurities",
+     "CurrentYearInstant"
+    ]
+   ],
+   "再監査Bとの比較(記録のみ)": "B と同じ(同値類v0)"
+  },
+  {
+   "id": "T049",
+   "鍵": "F-171",
+   "由来": "再監査B の残り",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "符号・方向",
+    "符号・方向"
+   ],
+   "fact(席1)": [
+    [
+     "前期側",
+     "Assets",
+     "Prior1YearInstant"
+    ],
+    [
+     "当期側",
+     "Assets",
+     "CurrentYearInstant"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "前期側",
+     "Assets",
+     "Prior1YearInstant"
+    ],
+    [
+     "当期側",
+     "Assets",
+     "CurrentYearInstant"
+    ]
+   ],
+   "再監査Bとの比較(記録のみ)": "B と同じ(同値類v0)"
+  },
+  {
+   "id": "N219",
+   "鍵": "F-178",
+   "由来": "再監査B の残り",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "和",
+    "和"
+   ],
+   "fact(席1)": [
+    [
+     "加算項",
+     "CurrentPortionOfLongTermLoansPayable",
+     "CurrentYearInstant"
+    ],
+    [
+     "加算項",
+     "LongTermLoansPayable",
+     "CurrentYearInstant"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "加算項",
+     "CurrentPortionOfLongTermLoansPayable",
+     "CurrentYearInstant"
+    ],
+    [
+     "加算項",
+     "LongTermLoansPayable",
+     "CurrentYearInstant"
+    ]
+   ],
+   "再監査Bとの比較(記録のみ)": "B と同じ(同値類v0)"
+  },
+  {
+   "id": "N201",
+   "鍵": "F-180",
+   "由来": "再監査B の残り",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "差(当期−前期)",
+    "差(当期−前期)"
+   ],
+   "fact(席1)": [
+    [
+     "前期側",
+     "ProvisionForLossOnOrderReceivedCL",
+     "Prior1YearInstant"
+    ],
+    [
+     "当期側",
+     "ProvisionForLossOnOrderReceivedCL",
+     "CurrentYearInstant"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "前期側",
+     "ProvisionForLossOnOrderReceivedCL",
+     "Prior1YearInstant"
+    ],
+    [
+     "当期側",
+     "ProvisionForLossOnOrderReceivedCL",
+     "CurrentYearInstant"
+    ]
+   ],
+   "再監査Bとの比較(記録のみ)": "B と同じ(同値類v0)"
+  },
+  {
+   "id": "N291",
+   "鍵": "F-181",
+   "由来": "再監査B の残り",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "fact(席1)": [
+    [
+     "単一",
+     "CapitalExpendituresOverviewOfCapitalExpendituresEtc",
+     "CurrentYearDuration"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "単一",
+     "CapitalExpendituresOverviewOfCapitalExpendituresEtc",
+     "CurrentYearDuration"
+    ]
+   ],
+   "再監査Bとの比較(記録のみ)": "B と同じ(同値類v0)"
+  },
+  {
+   "id": "T086",
+   "鍵": "F-188",
+   "由来": "再監査B の残り",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "符号・方向",
+    "符号・方向"
+   ],
+   "fact(席1)": [
+    [
+     "前期側",
+     "NetAssetsPerShareSummaryOfBusinessResults",
+     "Prior1YearInstant"
+    ],
+    [
+     "当期側",
+     "NetAssetsPerShareSummaryOfBusinessResults",
+     "CurrentYearInstant"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "前期側",
+     "NetAssetsPerShareSummaryOfBusinessResults",
+     "Prior1YearInstant"
+    ],
+    [
+     "当期側",
+     "NetAssetsPerShareSummaryOfBusinessResults",
+     "CurrentYearInstant"
+    ]
+   ],
+   "再監査Bとの比較(記録のみ)": "B と同じ(同値類v0)"
+  },
+  {
+   "id": "N232",
+   "鍵": "F-202",
+   "由来": "再監査B の残り",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "差(当期−前期)",
+    "差(当期−前期)"
+   ],
+   "fact(席1)": [
+    [
+     "前期側",
+     "CapitalSurplus",
+     "Prior1YearInstant"
+    ],
+    [
+     "当期側",
+     "CapitalSurplus",
+     "CurrentYearInstant"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "前期側",
+     "CapitalSurplus",
+     "Prior1YearInstant"
+    ],
+    [
+     "当期側",
+     "CapitalSurplus",
+     "CurrentYearInstant"
+    ]
+   ],
+   "再監査Bとの比較(記録のみ)": "B と同じ(同値類v0)"
+  },
+  {
+   "id": "T093",
+   "鍵": "F-208",
+   "由来": "再監査B の残り",
+   "分類": "不一致",
+   "形": [
+    "符号・方向",
+    "符号・方向"
+   ],
+   "fact(席1)": [
+    [
+     "単一",
+     "IncreaseDecreaseInNetDefinedBenefitAssetOpeCF",
+     "CurrentYearDuration"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "前期側",
+     "NetDefinedBenefitAsset",
+     "Prior1YearInstant"
+    ],
+    [
+     "単一",
+     "IncreaseDecreaseInNetDefinedBenefitAssetOpeCF",
+     "CurrentYearDuration"
+    ],
+    [
+     "当期側",
+     "NetDefinedBenefitAsset",
+     "CurrentYearInstant"
+    ]
+   ],
+   "再監査Bとの比較(記録のみ)": "未比較(未確定)"
+  },
+  {
+   "id": "N102",
+   "鍵": "F-211",
+   "由来": "再監査B の残り",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "fact(席1)": [
+    [
+     "単一",
+     "IncomeTaxesDeferred",
+     "CurrentYearDuration"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "単一",
+     "IncomeTaxesDeferred",
+     "CurrentYearDuration"
+    ]
+   ],
+   "再監査Bとの比較(記録のみ)": "B と同じ(同値類v0)"
+  },
+  {
+   "id": "N172",
+   "鍵": "F-219",
+   "由来": "再監査B の残り",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "fact(席1)": [
+    [
+     "単一",
+     "ValuationDifferenceOnAvailableForSaleSecurities",
+     "CurrentYearInstant"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "単一",
+     "ValuationDifferenceOnAvailableForSaleSecurities",
+     "CurrentYearInstant"
+    ]
+   ],
+   "再監査Bとの比較(記録のみ)": "B と同じ(同値類v0)"
+  },
+  {
+   "id": "T044",
+   "鍵": "F-220",
+   "由来": "再監査B の残り",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "符号・方向",
+    "符号・方向"
+   ],
+   "fact(席1)": [
+    [
+     "前期側",
+     "ProfitLossAttributableToOwnersOfParent",
+     "Prior1YearDuration"
+    ],
+    [
+     "当期側",
+     "ProfitLossAttributableToOwnersOfParent",
+     "CurrentYearDuration"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "前期側",
+     "ProfitLossAttributableToOwnersOfParent",
+     "Prior1YearDuration"
+    ],
+    [
+     "当期側",
+     "ProfitLossAttributableToOwnersOfParent",
+     "CurrentYearDuration"
+    ]
+   ],
+   "再監査Bとの比較(記録のみ)": "B と同じ(同値類v0)"
+  },
+  {
+   "id": "N181",
+   "鍵": "F-232",
+   "由来": "再監査B の残り",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "fact(席1)": [
+    [
+     "単一",
+     "AccountsPayableOperatingSpecific",
+     "CurrentYearInstant"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "単一",
+     "AccountsPayableOperatingSpecific",
+     "CurrentYearInstant"
+    ]
+   ],
+   "再監査Bとの比較(記録のみ)": "B と同じ(同値類v0)"
+  },
+  {
+   "id": "T072",
+   "鍵": "F-233",
+   "由来": "再監査B の残り",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "符号・方向",
+    "符号・方向"
+   ],
+   "fact(席1)": [
+    [
+     "前期側",
+     "IncomeTaxesPayable",
+     "Prior1YearInstant"
+    ],
+    [
+     "当期側",
+     "IncomeTaxesPayable",
+     "CurrentYearInstant"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "前期側",
+     "IncomeTaxesPayable",
+     "Prior1YearInstant"
+    ],
+    [
+     "当期側",
+     "IncomeTaxesPayable",
+     "CurrentYearInstant"
+    ]
+   ],
+   "再監査Bとの比較(記録のみ)": "B と同じ(同値類v0)"
+  },
+  {
+   "id": "N179",
+   "鍵": "F-236",
+   "由来": "再監査B の残り",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "fact(席1)": [
+    [
+     "単一",
+     "CurrentLiabilities",
+     "Prior1YearInstant"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "単一",
+     "CurrentLiabilities",
+     "Prior1YearInstant"
+    ]
+   ],
+   "再監査Bとの比較(記録のみ)": "B と同じ(同値類v0)"
+  },
+  {
+   "id": "N298",
+   "鍵": "F-238",
+   "由来": "再監査B の残り",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "fact(席1)": [
+    [
+     "単一",
+     "CashDividendsPaidFinCF",
+     "CurrentYearDuration"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "単一",
+     "CashDividendsPaidFinCF",
+     "CurrentYearDuration"
+    ]
+   ],
+   "再監査Bとの比較(記録のみ)": "B と同じ(同値類v0)"
+  },
+  {
+   "id": "N085",
+   "鍵": "F-240",
+   "由来": "再監査B の残り",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "fact(席1)": [
+    [
+     "単一",
+     "InterestExpensesNOE",
+     "CurrentYearDuration"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "単一",
+     "InterestExpensesNOE",
+     "CurrentYearDuration"
+    ]
+   ],
+   "再監査Bとの比較(記録のみ)": "B と同じ(同値類v0)"
+  },
+  {
+   "id": "N062",
+   "鍵": "F-242",
+   "由来": "再監査B の残り",
+   "分類": "判定不能(片側)",
+   "形": [
+    null,
+    "単一"
+   ],
+   "fact(席1)": [],
+   "fact(席2)": [
+    [
+     "単一",
+     "IncreaseDecreaseInProvisionForWarrantiesForCompletedOperationOpeCF",
+     "CurrentYearDuration"
+    ]
+   ],
+   "再監査Bとの比較(記録のみ)": "未比較(未確定)"
+  },
+  {
+   "id": "N138",
+   "鍵": "F-248",
+   "由来": "再監査B の残り",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "fact(席1)": [
+    [
+     "単一",
+     "NotesAndAccountsReceivableTrade",
+     "CurrentYearInstant"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "単一",
+     "NotesAndAccountsReceivableTrade",
+     "CurrentYearInstant"
+    ]
+   ],
+   "再監査Bとの比較(記録のみ)": "B と同じ(同値類v0)"
+  },
+  {
+   "id": "N103",
+   "鍵": "F-252",
+   "由来": "再判定(不一致 6)",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "率(比)",
+    "率(比)"
+   ],
+   "fact(席1)": [
+    [
+     "分子",
+     "IncomeTaxes",
+     "CurrentYearDuration"
+    ],
+    [
+     "分母",
+     "IncomeBeforeIncomeTaxes",
+     "CurrentYearDuration"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "分子",
+     "IncomeTaxes",
+     "CurrentYearDuration"
+    ],
+    [
+     "分母",
+     "IncomeBeforeIncomeTaxes",
+     "CurrentYearDuration"
+    ]
+   ],
+   "再監査Bとの比較(記録のみ)": "B と同じ(同値類v0)"
+  },
+  {
+   "id": "N220",
+   "鍵": "F-253",
+   "由来": "再判定(不一致 6)",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "和",
+    "和"
+   ],
+   "fact(席1)": [
+    [
+     "加算項",
+     "CurrentPortionOfLongTermLoansPayable",
+     "Prior1YearInstant"
+    ],
+    [
+     "加算項",
+     "LongTermLoansPayable",
+     "Prior1YearInstant"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "加算項",
+     "CurrentPortionOfLongTermLoansPayable",
+     "Prior1YearInstant"
+    ],
+    [
+     "加算項",
+     "LongTermLoansPayable",
+     "Prior1YearInstant"
+    ]
+   ]
+  },
+  {
+   "id": "N057",
+   "鍵": "F-255",
+   "由来": "再監査B の残り",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "fact(席1)": [
+    [
+     "単一",
+     "OtherSGA",
+     "Prior1YearDuration"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "単一",
+     "OtherSGA",
+     "Prior1YearDuration"
+    ]
+   ],
+   "再監査Bとの比較(記録のみ)": "B と同じ(同値類v0)"
+  },
+  {
+   "id": "N087",
+   "鍵": "F-260",
+   "由来": "再監査B の残り",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "差(当期−前期)",
+    "差(当期−前期)"
+   ],
+   "fact(席1)": [
+    [
+     "前期側",
+     "InterestExpensesNOE",
+     "Prior1YearDuration"
+    ],
+    [
+     "当期側",
+     "InterestExpensesNOE",
+     "CurrentYearDuration"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "前期側",
+     "InterestExpensesNOE",
+     "Prior1YearDuration"
+    ],
+    [
+     "当期側",
+     "InterestExpensesNOE",
+     "CurrentYearDuration"
+    ]
+   ],
+   "再監査Bとの比較(記録のみ)": "B と同じ(同値類v0)"
+  },
+  {
+   "id": "N056",
+   "鍵": "F-267",
+   "由来": "再監査B の残り",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "fact(席1)": [
+    [
+     "単一",
+     "OtherSGA",
+     "CurrentYearDuration"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "単一",
+     "OtherSGA",
+     "CurrentYearDuration"
+    ]
+   ],
+   "再監査Bとの比較(記録のみ)": "B と同じ(同値類v0)"
+  },
+  {
+   "id": "N262",
+   "鍵": "F-278",
+   "由来": "再監査B の残り",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "fact(席1)": [
+    [
+     "単一",
+     "NetCashProvidedByUsedInOperatingActivities",
+     "Prior1YearDuration"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "単一",
+     "NetCashProvidedByUsedInOperatingActivities",
+     "Prior1YearDuration"
+    ]
+   ],
+   "再監査Bとの比較(記録のみ)": "B と同じ(同値類v0)"
+  },
+  {
+   "id": "T092",
+   "鍵": "F-282",
+   "由来": "再監査B の残り",
+   "分類": "不一致",
+   "形": [
+    "符号・方向",
+    "符号・方向"
+   ],
+   "fact(席1)": [
+    [
+     "単一",
+     "IncreaseDecreaseInProvisionForWarrantiesForCompletedOperationOpeCF",
+     "CurrentYearDuration"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "前期側",
+     "ProvisionForWarrantiesForCompletedOperationCL",
+     "Prior1YearInstant"
+    ],
+    [
+     "単一",
+     "IncreaseDecreaseInProvisionForWarrantiesForCompletedOperationOpeCF",
+     "CurrentYearDuration"
+    ],
+    [
+     "当期側",
+     "ProvisionForWarrantiesForCompletedOperationCL",
+     "CurrentYearInstant"
+    ]
+   ],
+   "再監査Bとの比較(記録のみ)": "未比較(未確定)"
+  },
+  {
+   "id": "N034",
+   "鍵": "F-286",
+   "由来": "再監査B の残り",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "率(比)",
+    "率(比)"
+   ],
+   "fact(席1)": [
+    [
+     "分子",
+     "CostOfSales",
+     "CurrentYearDuration"
+    ],
+    [
+     "分母",
+     "NetSales",
+     "CurrentYearDuration"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "分子",
+     "CostOfSales",
+     "CurrentYearDuration"
+    ],
+    [
+     "分母",
+     "NetSales",
+     "CurrentYearDuration"
+    ]
+   ],
+   "再監査Bとの比較(記録のみ)": "B と同じ(同値類v0)"
+  },
+  {
+   "id": "N267",
+   "鍵": "F-288",
+   "由来": "再監査B の残り",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "fact(席1)": [
+    [
+     "単一",
+     "IncreaseDecreaseInProvisionForWarrantiesForCompletedOperationOpeCF",
+     "CurrentYearDuration"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "単一",
+     "IncreaseDecreaseInProvisionForWarrantiesForCompletedOperationOpeCF",
+     "CurrentYearDuration"
+    ]
+   ],
+   "再監査Bとの比較(記録のみ)": "B と同じ(同値類v0)"
+  },
+  {
+   "id": "N092",
+   "鍵": "F-289",
+   "由来": "再監査B の残り",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "fact(席1)": [
+    [
+     "単一",
+     "ExtraordinaryIncome",
+     "CurrentYearDuration"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "単一",
+     "ExtraordinaryIncome",
+     "CurrentYearDuration"
+    ]
+   ],
+   "再監査Bとの比較(記録のみ)": "B と同じ(同値類v0)"
+  },
+  {
+   "id": "N288",
+   "鍵": "F-290",
+   "由来": "再監査B の残り",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "fact(席1)": [
+    [
+     "単一",
+     "PurchaseOfIntangibleAssetsInvCF",
+     "CurrentYearDuration"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "単一",
+     "PurchaseOfIntangibleAssetsInvCF",
+     "CurrentYearDuration"
+    ]
+   ],
+   "再監査Bとの比較(記録のみ)": "B と同じ(同値類v0)"
+  },
+  {
+   "id": "T059",
+   "鍵": "F-294",
+   "由来": "再監査B の残り",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "符号・方向",
+    "符号・方向"
+   ],
+   "fact(席1)": [
+    [
+     "前期側",
+     "IntangibleAssets",
+     "Prior1YearInstant"
+    ],
+    [
+     "当期側",
+     "IntangibleAssets",
+     "CurrentYearInstant"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "前期側",
+     "IntangibleAssets",
+     "Prior1YearInstant"
+    ],
+    [
+     "当期側",
+     "IntangibleAssets",
+     "CurrentYearInstant"
+    ]
+   ],
+   "再監査Bとの比較(記録のみ)": "B と同じ(同値類v0)"
+  },
+  {
+   "id": "N241",
+   "鍵": "F-298",
+   "由来": "再監査B の残り",
+   "分類": "確定(同値類v0)",
+   "形": [
+    "単一",
+    "単一"
+   ],
+   "fact(席1)": [
+    [
+     "単一",
+     "ValuationDifferenceOnAvailableForSaleSecurities",
+     "CurrentYearInstant"
+    ]
+   ],
+   "fact(席2)": [
+    [
+     "単一",
+     "ValuationDifferenceOnAvailableForSaleSecurities",
+     "CurrentYearInstant"
+    ]
+   ],
+   "再監査Bとの比較(記録のみ)": "B と同じ(同値類v0)"
+  }
+ ],
+ "不一致の行": [
+  {
+   "鍵": "F-011",
+   "id": "T097",
+   "席1": {
+    "行の鍵": "F-011",
+    "判定": "独立判定",
+    "形": "符号・方向",
+    "fact": [
+     {
+      "役割": "単一",
+      "要素": "jppfs_cor:IncreaseDecreaseInContractLiabilitiesOpeCF",
+      "context": "CurrentYearDuration",
+      "期間": "2025-07-01..2026-06-30",
+      "値": -93465000.0,
+      "単位": "JPY"
+     }
+    ],
+    "計算": "CF の fact -93465000(負 = 契約負債の減少 = 支出要因)。文の語「減少」「支出要因」と整合。大きさ 93.465 → 93。検算: BS の契約負債 1,500,638,000 − 1,594,084,000 = −93,446,000(減少)",
+    "文が述べている単位": "百万円",
+    "母集団": "連結",
+    "値は一致するか": "一致(方向)",
+    "同値の他の候補": [
+     {
+      "要素": "jppfs_cor:ContractLiabilities",
+      "context": "CurrentYearInstant"
+     },
+     {
+      "要素": "jppfs_cor:ContractLiabilities",
+      "context": "Prior1YearInstant"
+     }
+    ],
+    "判定の理由": "抜粋の窓(直前 30 字)から対象は「契約負債の減少93百万円」の「減少」。この文は営業 CF の「主な内容」を CF 計算書の行の名前で列挙しており、「契約負債の減少」は CF の行 IncreaseDecreaseInContractLiabilitiesOpeCF(当期)。方向はこの 1 件の符号で決まる。",
+    "迷った点": "抜粋には「売上債権の増加」「仕入債務の減少」も含まれるが、窓の位置から契約負債の「減少」を対象とした。指示は「2 期の fact」だが文が名指すのは CF の 1 行なので CF の fact を答え、BS の契約負債 2 期(同じ方向)を同値の他の候補に列挙した。"
+   },
+   "席2": {
+    "行の鍵": "F-011",
+    "判定": "独立判定",
+    "形": "符号・方向",
+    "fact": [
+     {
+      "役割": "単一",
+      "要素": "jppfs_cor:IncreaseDecreaseInContractLiabilitiesOpeCF",
+      "context": "CurrentYearDuration",
+      "期間": "2025-07-01..2026-06-30",
+      "値": -93465000.0,
+      "単位": "JPY"
+     },
+     {
+      "役割": "当期側",
+      "要素": "jppfs_cor:ContractLiabilities",
+      "context": "CurrentYearInstant",
+      "期間": "2026-06-30",
+      "値": 1500638000.0,
+      "単位": "JPY"
+     },
+     {
+      "役割": "前期側",
+      "要素": "jppfs_cor:ContractLiabilities",
+      "context": "Prior1YearInstant",
+      "期間": "2025-06-30",
+      "値": 1594084000.0,
+      "単位": "JPY"
+     }
+    ],
+    "計算": "CF の契約負債の増減=-93,465千円(負=減少)。残高も 1,500,638千円<1,594,084千円 → 「減少」",
+    "文が述べている単位": "百万円",
+    "母集団": "連結",
+    "値は一致するか": "一致(方向)",
+    "同値の他の候補": [],
+    "判定の理由": "方向の語は「契約負債の減少93百万円などの支出要因」の「減少」(抜粋の中心)。この文はキャッシュ・フローの内容説明なので、93百万円は CF の調整項目 IncreaseDecreaseInContractLiabilitiesOpeCF(当期 -93,465千円)。方向は同項目の符号と貸借対照表の残高 2 時点の両方で決まる。",
+    "迷った点": "残高差(-93,446千円)と CF(-93,465千円)は 1 万9千円違いで、百万円表示ではどちらも 93。文が CF の内訳を列挙しているので CF 側を主に採り、方向の裏づけとして残高 2 件も挙げた。"
+   }
+  },
+  {
+   "鍵": "F-116",
+   "id": "T025",
+   "席1": {
+    "行の鍵": "F-116",
+    "判定": "独立判定",
+    "形": "符号・方向",
+    "fact": [
+     {
+      "役割": "当期側",
+      "要素": "jpcrp_cor:AverageNumberOfTemporaryWorkers",
+      "context": "CurrentYearInstant",
+      "期間": "2026-06-30",
+      "値": 409.0,
+      "単位": "pure"
+     },
+     {
+      "役割": "前期側",
+      "要素": "jpcrp_cor:AverageNumberOfTemporaryWorkers",
+      "context": "Prior1YearInstant",
+      "期間": "2025-06-30",
+      "値": 393.0,
+      "単位": "pure"
+     }
+    ],
+    "計算": "409 − 393 = 16 → 符号は正(=増加)。文の語「増加」。差の大きさ 16.000 → 16(切り捨て)で文の 16 と一致",
+    "文が述べている単位": "名",
+    "母集団": "連結",
+    "値は一致するか": "一致(方向)",
+    "同値の他の候補": [],
+    "判定の理由": "対象は「臨時従業員は年間平均409名(同393名)と人員は着実に増加」の「増加」。抜粋の位置が臨時従業員の対なので、臨時従業員の年間平均人数(AverageNumberOfTemporaryWorkers)の当期 409 と前期 393。「当社グループ」で連結。",
+    "迷った点": "「人員は着実に増加」は直前の従業員数 1,462 名(前期末 1,447 名、jpcrp_cor:NumberOfEmployees)も含めた総括とも読める。その対も増加(+15)で方向は同じ。抜粋の位置に従い臨時従業員の対を答えた。CurrentYearInstant の fact は 2 件重複している。"
+   },
+   "席2": {
+    "行の鍵": "F-116",
+    "判定": "独立判定",
+    "形": "符号・方向",
+    "fact": [
+     {
+      "役割": "当期側",
+      "要素": "jpcrp_cor:AverageNumberOfTemporaryWorkers",
+      "context": "CurrentYearInstant",
+      "期間": "2026-06-30",
+      "値": 409.0,
+      "単位": "pure"
+     },
+     {
+      "役割": "前期側",
+      "要素": "jpcrp_cor:AverageNumberOfTemporaryWorkers",
+      "context": "Prior1YearInstant",
+      "期間": "2025-06-30",
+      "値": 393.0,
+      "単位": "pure"
+     },
+     {
+      "役割": "当期側",
+      "要素": "jpcrp_cor:NumberOfEmployees",
+      "context": "CurrentYearInstant",
+      "期間": "2026-06-30",
+      "値": 1462.0,
+      "単位": "pure"
+     },
+     {
+      "役割": "前期側",
+      "要素": "jpcrp_cor:NumberOfEmployees",
+      "context": "Prior1YearInstant",
+      "期間": "2025-06-30",
+      "値": 1447.0,
+      "単位": "pure"
+     }
+    ],
+    "計算": "臨時従業員 409>393、従業員数 1462>1447 → いずれも「増加」",
+    "文が述べている単位": "名",
+    "母集団": "連結",
+    "値は一致するか": "一致(方向)",
+    "同値の他の候補": [],
+    "判定の理由": "方向の語は「人員は着実に増加しており」。「人員」は同じ文が挙げる従業員数(1,462名/前期末1,447名)と臨時従業員の年間平均(409名/同393名)の両方を受けるので、方向を決める fact は 2 系列 4 件。抜粋の位置は臨時従業員の側にある。",
+    "迷った点": "「増加」が従業員数と臨時従業員のどちらを主に受けるか文では決められない。抜粋位置からは臨時従業員だが、「人員」は両方を含む語なので 4 件すべてを挙げた。"
+   }
+  },
+  {
+   "鍵": "F-208",
+   "id": "T093",
+   "席1": {
+    "行の鍵": "F-208",
+    "判定": "独立判定",
+    "形": "符号・方向",
+    "fact": [
+     {
+      "役割": "単一",
+      "要素": "jppfs_cor:IncreaseDecreaseInNetDefinedBenefitAssetOpeCF",
+      "context": "CurrentYearDuration",
+      "期間": "2025-07-01..2026-06-30",
+      "値": -1828838000.0,
+      "単位": "JPY"
+     }
+    ],
+    "計算": "CF の fact -1828838000(負 = 資産の増加 = 支出要因)。文の語「増加」「支出要因」と整合。大きさ 1,828.838 → 1,828。検算: BS の退職給付に係る資産 6,174,228,000 − 4,345,389,000 = +1,828,839,000(増加)",
+    "文が述べている単位": "百万円",
+    "母集団": "連結",
+    "値は一致するか": "一致(方向)",
+    "同値の他の候補": [
+     {
+      "要素": "jppfs_cor:NetDefinedBenefitAsset",
+      "context": "CurrentYearInstant"
+     },
+     {
+      "要素": "jppfs_cor:NetDefinedBenefitAsset",
+      "context": "Prior1YearInstant"
+     }
+    ],
+    "判定の理由": "対象は「退職給付に係る資産の増加1,828」の「増加」。この文は営業 CF の「主な内容」を CF 計算書の行の名前で列挙しており、「退職給付に係る資産の増加」は CF の行 IncreaseDecreaseInNetDefinedBenefitAssetOpeCF(当期)そのもの。方向はこの 1 件の符号(負 = 資産増)で決まる。",
+    "迷った点": "指示は「方向を決める 2 期の fact」だが、文が名指すのは CF の 1 行なので CF の fact を答えた。BS の NetDefinedBenefitAsset の当期末・前期末の差でも同じ方向になる(同値の他の候補に列挙)。"
+   },
+   "席2": {
+    "行の鍵": "F-208",
+    "判定": "独立判定",
+    "形": "符号・方向",
+    "fact": [
+     {
+      "役割": "当期側",
+      "要素": "jppfs_cor:NetDefinedBenefitAsset",
+      "context": "CurrentYearInstant",
+      "期間": "2026-06-30",
+      "値": 6174228000.0,
+      "単位": "JPY"
+     },
+     {
+      "役割": "前期側",
+      "要素": "jppfs_cor:NetDefinedBenefitAsset",
+      "context": "Prior1YearInstant",
+      "期間": "2025-06-30",
+      "値": 4345389000.0,
+      "単位": "JPY"
+     },
+     {
+      "役割": "単一",
+      "要素": "jppfs_cor:IncreaseDecreaseInNetDefinedBenefitAssetOpeCF",
+      "context": "CurrentYearDuration",
+      "期間": "2025-07-01..2026-06-30",
+      "値": -1828838000.0,
+      "単位": "JPY"
+     }
+    ],
+    "計算": "キャッシュ・フローの「退職給付に係る資産の増加額」は -1,828,838千円(支出側)。残高は 6,174,228千円>4,345,389千円で差 1,828,839千円 → 「増加」",
+    "文が述べている単位": "百万円",
+    "母集団": "連結",
+    "値は一致するか": "一致(方向)",
+    "同値の他の候補": [],
+    "判定の理由": "方向の語は「退職給付に係る資産の増加1,828百万円」の「増加」(抜粋の中心)。キャッシュ・フロー計算書の調整項目 IncreaseDecreaseInNetDefinedBenefitAssetOpeCF(当期 -1,828,838千円)がこの 1,828百万円に当たり、方向(資産の増加=支出要因)は同項目の符号と、貸借対照表の退職給付に係る資産の 2 時点(6,174百万円/4,345百万円)の両方で裏づけられる。",
+    "迷った点": "CF の値は符号が負(資産増加=キャッシュ減)で、文の「増加」は資産側の増加を指す。方向を決める fact として残高 2 件と CF 1 件の 3 件を挙げた(CF 単独でも方向は決まる)。"
+   }
+  },
+  {
+   "鍵": "F-282",
+   "id": "T092",
+   "席1": {
+    "行の鍵": "F-282",
+    "判定": "独立判定",
+    "形": "符号・方向",
+    "fact": [
+     {
+      "役割": "単一",
+      "要素": "jpcrp030000-asr_E36539-000:IncreaseDecreaseInProvisionForWarrantiesForCompletedOperationOpeCF",
+      "context": "CurrentYearDuration",
+      "期間": "2025-07-01..2026-06-30",
+      "値": 786000000.0,
+      "単位": "JPY"
+     }
+    ],
+    "計算": "CF の fact 786000000(正 = 引当金の増加 = 収入要因)。文の語「増加」「収入要因」と整合。検算: BS の完成業務補償引当金 991,000,000 − 205,000,000 = +786,000,000(増加)",
+    "文が述べている単位": "百万円",
+    "母集団": "連結",
+    "値は一致するか": "一致(方向)",
+    "同値の他の候補": [
+     {
+      "要素": "jpcrp030000-asr_E36539-000:ProvisionForWarrantiesForCompletedOperationCL",
+      "context": "CurrentYearInstant"
+     },
+     {
+      "要素": "jpcrp030000-asr_E36539-000:ProvisionForWarrantiesForCompletedOperationCL",
+      "context": "Prior1YearInstant"
+     }
+    ],
+    "判定の理由": "抜粋の窓(直前 30 字)から対象は「完成業務補償引当金の増加786百万」の「増加」。CF の行 IncreaseDecreaseInProvisionForWarrantiesForCompletedOperationOpeCF(当期)の符号で決まる。",
+    "迷った点": "指示は「2 期の fact」だが文が名指すのは CF の 1 行なので CF の fact を答え、BS の完成業務補償引当金 2 期(同じ方向)を同値の他の候補に列挙した。"
+   },
+   "席2": {
+    "行の鍵": "F-282",
+    "判定": "独立判定",
+    "形": "符号・方向",
+    "fact": [
+     {
+      "役割": "単一",
+      "要素": "jpcrp030000-asr_E36539-000:IncreaseDecreaseInProvisionForWarrantiesForCompletedOperationOpeCF",
+      "context": "CurrentYearDuration",
+      "期間": "2025-07-01..2026-06-30",
+      "値": 786000000.0,
+      "単位": "JPY"
+     },
+     {
+      "役割": "当期側",
+      "要素": "jpcrp030000-asr_E36539-000:ProvisionForWarrantiesForCompletedOperationCL",
+      "context": "CurrentYearInstant",
+      "期間": "2026-06-30",
+      "値": 991000000.0,
+      "単位": "JPY"
+     },
+     {
+      "役割": "前期側",
+      "要素": "jpcrp030000-asr_E36539-000:ProvisionForWarrantiesForCompletedOperationCL",
+      "context": "Prior1YearInstant",
+      "期間": "2025-06-30",
+      "値": 205000000.0,
+      "単位": "JPY"
+     }
+    ],
+    "計算": "CF の完成業務補償引当金の増加=+786,000千円(正=増加)。残高も 991,000千円>205,000千円 → 「増加」",
+    "文が述べている単位": "百万円",
+    "母集団": "連結",
+    "値は一致するか": "一致(方向)",
+    "同値の他の候補": [],
+    "判定の理由": "方向の語は「完成業務補償引当金の増加786百万円」の「増加」(抜粋の中心)。この文はキャッシュ・フローの内容説明なので CF の調整項目が主で、方向は同項目の符号と引当金残高 2 時点の大小の両方で決まる。",
+    "迷った点": "残高差(991,000千円−205,000千円)でも 786百万円になるので、どちらを指しているかは値では区別できない。文が CF の内訳を列挙しているので CF 側を主に採った。"
+   }
+  }
+ ]
+}

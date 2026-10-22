@@ -1,0 +1,41 @@
+{
+ "purpose": "**試験 file が 1 本も標準の検証から漏れていないこと**。人間の指示 2026-10-16。**試験は走らせない。収集だけ数える**",
+ "test_files_on_disk": 219,
+ "by_directory": {
+  "measure/tests": 1,
+  "tests/adapters/kokkai": 11,
+  "tests/adapters/shogi": 8,
+  "tests/adapters/xbrl": 32,
+  "tests/core": 5,
+  "tests/fixtures/xbrl": 4,
+  "tests/golden": 4,
+  "tests/measure": 154
+ },
+ "unittest_modules": 218,
+ "commands": {
+  "pytest": {
+   "collected_files": 219,
+   "tests": 4505,
+   "missed_files": [],
+   "extra_files": [],
+   "collect_rc": 0,
+   "note": "全部を覆う唯一のコマンド(2026-10-14 の記録のとおり)",
+   "must_cover_everything": true
+  },
+  "discover": {
+   "collected_files": 218,
+   "tests": 4409,
+   "missed_files": [
+    "measure/tests/test_inject.py"
+   ],
+   "extra_files": [],
+   "collect_rc": 0,
+   "note": "`tests/` 以下の package だけ。**package でない下位は飛ばす**",
+   "must_cover_everything": false
+  }
+ },
+ "uncovered_files": [],
+ "failures": [],
+ "why_discover_misses": "`tests` は package だが `tests/measure` に `__init__.py` が無いので、unittest の探索は**package でない下位ディレクトリを飛ばす**。`measure/` も package でないので丸ごと飛ぶ",
+ "why_measure_cannot_be_a_package": "`measure/__init__.py` を足すと `measure.tests.test_inject` が`tests.*` より先に読み込まれ、その 39 行目の `sys.path.insert(0, MEASURE)` が **`import tests` を `measure/tests/` に解決させる**。実測で `tests.core` など 5 つが ImportError になり、収集が 2,087 本から 101 本に崩れた。**だから足さない**"
+}

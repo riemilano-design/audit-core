@@ -1,0 +1,4427 @@
+{
+ "train": {
+  "P16": {
+   "all": {
+    "L": 217,
+    "G": 158,
+    "E1_strict": 145,
+    "E2_strict": 13,
+    "E2_v0": 13,
+    "E3": 59,
+    "MISSING": 0
+   },
+   "value_form": {
+    "L": 156,
+    "G": 108,
+    "E1_strict": 104,
+    "E2_strict": 4,
+    "E2_v0": 4,
+    "E3": 48,
+    "MISSING": 0
+   },
+   "direction_form": {
+    "L": 61,
+    "G": 50,
+    "E1_strict": 41,
+    "E2_strict": 9,
+    "E2_v0": 9,
+    "E3": 11,
+    "MISSING": 0
+   },
+   "S100Z39P": {
+    "L": 86,
+    "G": 80,
+    "E1_strict": 74,
+    "E2_strict": 6,
+    "E2_v0": 6,
+    "E3": 6,
+    "MISSING": 0
+   },
+   "S100Z4N9": {
+    "L": 131,
+    "G": 78,
+    "E1_strict": 71,
+    "E2_strict": 7,
+    "E2_v0": 7,
+    "E3": 53,
+    "MISSING": 0
+   },
+   "rows": {
+    "S100Z39P:H-001": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-002": {
+     "state": "GROUNDED",
+     "strict": false
+    },
+    "S100Z39P:H-003": {
+     "state": "VALUE_MISMATCH",
+     "strict": false
+    },
+    "S100Z39P:H-004": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-005": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-006": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-008": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-009": {
+     "state": "VALUE_MISMATCH",
+     "strict": false
+    },
+    "S100Z39P:H-010": {
+     "state": "GROUNDED",
+     "strict": false
+    },
+    "S100Z39P:H-011": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-014": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-015": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-016": {
+     "state": "GROUNDED",
+     "strict": false
+    },
+    "S100Z39P:H-017": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-018": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-019": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-020": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-021": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-022": {
+     "state": "GROUNDED",
+     "strict": false
+    },
+    "S100Z39P:H-023": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-024": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-026": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-027": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-029": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-031": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-032": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-033": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-034": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-035": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-036": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-038": {
+     "state": "GROUNDED",
+     "strict": false
+    },
+    "S100Z39P:H-039": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-040": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-041": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-042": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-043": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-044": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-045": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-046": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-047": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-048": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-049": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-050": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-052": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-053": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-054": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-055": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-056": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-059": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-060": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-061": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-062": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-063": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-064": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-065": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-066": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-067": {
+     "state": "GROUNDED",
+     "strict": false
+    },
+    "S100Z39P:H-068": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-069": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-070": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-071": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-072": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-073": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-074": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-075": {
+     "state": "VALUE_MISMATCH",
+     "strict": false
+    },
+    "S100Z39P:H-076": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-077": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-079": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-081": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-082": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-084": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-085": {
+     "state": "POINTER_NOT_FOUND",
+     "strict": false
+    },
+    "S100Z39P:H-086": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-087": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-089": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-090": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-091": {
+     "state": "UNVERIFIABLE",
+     "strict": false
+    },
+    "S100Z39P:H-092": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-093": {
+     "state": "VALUE_MISMATCH",
+     "strict": false
+    },
+    "S100Z39P:H-095": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-097": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-098": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-099": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-101": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-102": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-103": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-001": {
+     "state": "VALUE_MISMATCH",
+     "strict": false
+    },
+    "S100Z4N9:H-002": {
+     "state": "GROUNDED",
+     "strict": false
+    },
+    "S100Z4N9:H-003": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-004": {
+     "state": "UNVERIFIABLE",
+     "strict": false
+    },
+    "S100Z4N9:H-005": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-006": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-007": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-008": {
+     "state": "UNVERIFIABLE",
+     "strict": false
+    },
+    "S100Z4N9:H-009": {
+     "state": "UNVERIFIABLE",
+     "strict": false
+    },
+    "S100Z4N9:H-010": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-011": {
+     "state": "VALUE_MISMATCH",
+     "strict": false
+    },
+    "S100Z4N9:H-012": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-013": {
+     "state": "GROUNDED",
+     "strict": false
+    },
+    "S100Z4N9:H-014": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-015": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-016": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-018": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-019": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-020": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-021": {
+     "state": "UNVERIFIABLE",
+     "strict": false
+    },
+    "S100Z4N9:H-022": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-023": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-024": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-026": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-027": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-028": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-030": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-033": {
+     "state": "GROUNDED",
+     "strict": false
+    },
+    "S100Z4N9:H-034": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-035": {
+     "state": "VALUE_MISMATCH",
+     "strict": false
+    },
+    "S100Z4N9:H-036": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-037": {
+     "state": "VALUE_MISMATCH",
+     "strict": false
+    },
+    "S100Z4N9:H-038": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-039": {
+     "state": "VALUE_MISMATCH",
+     "strict": false
+    },
+    "S100Z4N9:H-040": {
+     "state": "VALUE_MISMATCH",
+     "strict": false
+    },
+    "S100Z4N9:H-041": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-043": {
+     "state": "POINTER_NOT_FOUND",
+     "strict": false
+    },
+    "S100Z4N9:H-044": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-045": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-046": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-047": {
+     "state": "VALUE_MISMATCH",
+     "strict": false
+    },
+    "S100Z4N9:H-048": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-049": {
+     "state": "VALUE_MISMATCH",
+     "strict": false
+    },
+    "S100Z4N9:H-050": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-051": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-052": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-053": {
+     "state": "VALUE_MISMATCH",
+     "strict": false
+    },
+    "S100Z4N9:H-054": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-055": {
+     "state": "VALUE_MISMATCH",
+     "strict": false
+    },
+    "S100Z4N9:H-056": {
+     "state": "VALUE_MISMATCH",
+     "strict": false
+    },
+    "S100Z4N9:H-057": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-058": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-060": {
+     "state": "UNVERIFIABLE",
+     "strict": false
+    },
+    "S100Z4N9:H-061": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-062": {
+     "state": "VALUE_MISMATCH",
+     "strict": false
+    },
+    "S100Z4N9:H-063": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-064": {
+     "state": "VALUE_MISMATCH",
+     "strict": false
+    },
+    "S100Z4N9:H-066": {
+     "state": "VALUE_MISMATCH",
+     "strict": false
+    },
+    "S100Z4N9:H-067": {
+     "state": "VALUE_MISMATCH",
+     "strict": false
+    },
+    "S100Z4N9:H-069": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-070": {
+     "state": "VALUE_MISMATCH",
+     "strict": false
+    },
+    "S100Z4N9:H-071": {
+     "state": "VALUE_MISMATCH",
+     "strict": false
+    },
+    "S100Z4N9:H-072": {
+     "state": "VALUE_MISMATCH",
+     "strict": false
+    },
+    "S100Z4N9:H-074": {
+     "state": "VALUE_MISMATCH",
+     "strict": false
+    },
+    "S100Z4N9:H-075": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-076": {
+     "state": "VALUE_MISMATCH",
+     "strict": false
+    },
+    "S100Z4N9:H-077": {
+     "state": "VALUE_MISMATCH",
+     "strict": false
+    },
+    "S100Z4N9:H-078": {
+     "state": "VALUE_MISMATCH",
+     "strict": false
+    },
+    "S100Z4N9:H-079": {
+     "state": "UNVERIFIABLE",
+     "strict": false
+    },
+    "S100Z4N9:H-080": {
+     "state": "VALUE_MISMATCH",
+     "strict": false
+    },
+    "S100Z4N9:H-081": {
+     "state": "VALUE_MISMATCH",
+     "strict": false
+    },
+    "S100Z4N9:H-082": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-083": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-084": {
+     "state": "POINTER_NOT_FOUND",
+     "strict": false
+    },
+    "S100Z4N9:H-085": {
+     "state": "VALUE_MISMATCH",
+     "strict": false
+    },
+    "S100Z4N9:H-086": {
+     "state": "UNVERIFIABLE",
+     "strict": false
+    },
+    "S100Z4N9:H-087": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-088": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-089": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-091": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-093": {
+     "state": "GROUNDED",
+     "strict": false
+    },
+    "S100Z4N9:H-094": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-095": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-096": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-097": {
+     "state": "GROUNDED",
+     "strict": false
+    },
+    "S100Z4N9:H-098": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-099": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-100": {
+     "state": "GROUNDED",
+     "strict": false
+    },
+    "S100Z4N9:H-101": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-102": {
+     "state": "VALUE_MISMATCH",
+     "strict": false
+    },
+    "S100Z4N9:H-103": {
+     "state": "GROUNDED",
+     "strict": false
+    },
+    "S100Z4N9:H-104": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-106": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-107": {
+     "state": "VALUE_MISMATCH",
+     "strict": false
+    },
+    "S100Z4N9:H-108": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-109": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-110": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-111": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-113": {
+     "state": "VALUE_MISMATCH",
+     "strict": false
+    },
+    "S100Z4N9:H-114": {
+     "state": "VALUE_MISMATCH",
+     "strict": false
+    },
+    "S100Z4N9:H-116": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-117": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-118": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-120": {
+     "state": "VALUE_MISMATCH",
+     "strict": false
+    },
+    "S100Z4N9:H-121": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-122": {
+     "state": "VALUE_MISMATCH",
+     "strict": false
+    },
+    "S100Z4N9:H-123": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-124": {
+     "state": "VALUE_MISMATCH",
+     "strict": false
+    },
+    "S100Z4N9:H-125": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-126": {
+     "state": "UNVERIFIABLE",
+     "strict": false
+    },
+    "S100Z4N9:H-128": {
+     "state": "UNVERIFIABLE",
+     "strict": false
+    },
+    "S100Z4N9:H-129": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-130": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-131": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-132": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-133": {
+     "state": "VALUE_MISMATCH",
+     "strict": false
+    },
+    "S100Z4N9:H-134": {
+     "state": "VALUE_MISMATCH",
+     "strict": false
+    },
+    "S100Z4N9:H-135": {
+     "state": "VALUE_MISMATCH",
+     "strict": false
+    },
+    "S100Z4N9:H-136": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-137": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-138": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-139": {
+     "state": "VALUE_MISMATCH",
+     "strict": false
+    },
+    "S100Z4N9:H-140": {
+     "state": "VALUE_MISMATCH",
+     "strict": true
+    },
+    "S100Z4N9:H-141": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-142": {
+     "state": "VALUE_MISMATCH",
+     "strict": false
+    },
+    "S100Z4N9:H-143": {
+     "state": "UNVERIFIABLE",
+     "strict": false
+    },
+    "S100Z4N9:H-145": {
+     "state": "VALUE_MISMATCH",
+     "strict": false
+    },
+    "S100Z4N9:H-147": {
+     "state": "VALUE_MISMATCH",
+     "strict": false
+    },
+    "S100Z4N9:H-148": {
+     "state": "POINTER_NOT_FOUND",
+     "strict": false
+    },
+    "S100Z4N9:H-149": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-150": {
+     "state": "GROUNDED",
+     "strict": true
+    }
+   }
+  },
+  "P17": {
+   "all": {
+    "L": 217,
+    "G": 177,
+    "E1_strict": 161,
+    "E2_strict": 16,
+    "E2_v0": 16,
+    "E3": 40,
+    "MISSING": 0
+   },
+   "value_form": {
+    "L": 156,
+    "G": 127,
+    "E1_strict": 120,
+    "E2_strict": 7,
+    "E2_v0": 7,
+    "E3": 29,
+    "MISSING": 0
+   },
+   "direction_form": {
+    "L": 61,
+    "G": 50,
+    "E1_strict": 41,
+    "E2_strict": 9,
+    "E2_v0": 9,
+    "E3": 11,
+    "MISSING": 0
+   },
+   "S100Z39P": {
+    "L": 86,
+    "G": 75,
+    "E1_strict": 68,
+    "E2_strict": 7,
+    "E2_v0": 7,
+    "E3": 11,
+    "MISSING": 0
+   },
+   "S100Z4N9": {
+    "L": 131,
+    "G": 102,
+    "E1_strict": 93,
+    "E2_strict": 9,
+    "E2_v0": 9,
+    "E3": 29,
+    "MISSING": 0
+   },
+   "rows": {
+    "S100Z39P:H-001": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-002": {
+     "state": "GROUNDED",
+     "strict": false
+    },
+    "S100Z39P:H-003": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-004": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-005": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-006": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-008": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-009": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-010": {
+     "state": "GROUNDED",
+     "strict": false
+    },
+    "S100Z39P:H-011": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-014": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-015": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-016": {
+     "state": "GROUNDED",
+     "strict": false
+    },
+    "S100Z39P:H-017": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-018": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-019": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-020": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-021": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-022": {
+     "state": "GROUNDED",
+     "strict": false
+    },
+    "S100Z39P:H-023": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-024": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-026": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-027": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-029": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-031": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-032": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-033": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-034": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-035": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-036": {
+     "state": "POINTER_NOT_FOUND",
+     "strict": false
+    },
+    "S100Z39P:H-038": {
+     "state": "GROUNDED",
+     "strict": false
+    },
+    "S100Z39P:H-039": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-040": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-041": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-042": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-043": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-044": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-045": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-046": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-047": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-048": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-049": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-050": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-052": {
+     "state": "VALUE_MISMATCH",
+     "strict": false
+    },
+    "S100Z39P:H-053": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-054": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-055": {
+     "state": "POINTER_NOT_FOUND",
+     "strict": false
+    },
+    "S100Z39P:H-056": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-059": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-060": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-061": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-062": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-063": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-064": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-065": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-066": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-067": {
+     "state": "GROUNDED",
+     "strict": false
+    },
+    "S100Z39P:H-068": {
+     "state": "VALUE_MISMATCH",
+     "strict": false
+    },
+    "S100Z39P:H-069": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-070": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-071": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-072": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-073": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-074": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-075": {
+     "state": "VALUE_MISMATCH",
+     "strict": false
+    },
+    "S100Z39P:H-076": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-077": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-079": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-081": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-082": {
+     "state": "POINTER_NOT_FOUND",
+     "strict": false
+    },
+    "S100Z39P:H-084": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-085": {
+     "state": "POINTER_NOT_FOUND",
+     "strict": false
+    },
+    "S100Z39P:H-086": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-087": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-089": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-090": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-091": {
+     "state": "UNVERIFIABLE",
+     "strict": false
+    },
+    "S100Z39P:H-092": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-093": {
+     "state": "GROUNDED",
+     "strict": false
+    },
+    "S100Z39P:H-095": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-097": {
+     "state": "VALUE_MISMATCH",
+     "strict": false
+    },
+    "S100Z39P:H-098": {
+     "state": "POINTER_NOT_FOUND",
+     "strict": false
+    },
+    "S100Z39P:H-099": {
+     "state": "VALUE_MISMATCH",
+     "strict": false
+    },
+    "S100Z39P:H-101": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-102": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z39P:H-103": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-001": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-002": {
+     "state": "GROUNDED",
+     "strict": false
+    },
+    "S100Z4N9:H-003": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-004": {
+     "state": "UNVERIFIABLE",
+     "strict": false
+    },
+    "S100Z4N9:H-005": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-006": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-007": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-008": {
+     "state": "UNVERIFIABLE",
+     "strict": false
+    },
+    "S100Z4N9:H-009": {
+     "state": "UNVERIFIABLE",
+     "strict": false
+    },
+    "S100Z4N9:H-010": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-011": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-012": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-013": {
+     "state": "GROUNDED",
+     "strict": false
+    },
+    "S100Z4N9:H-014": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-015": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-016": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-018": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-019": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-020": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-021": {
+     "state": "VALUE_MISMATCH",
+     "strict": false
+    },
+    "S100Z4N9:H-022": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-023": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-024": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-026": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-027": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-028": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-030": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-033": {
+     "state": "GROUNDED",
+     "strict": false
+    },
+    "S100Z4N9:H-034": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-035": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-036": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-037": {
+     "state": "VALUE_MISMATCH",
+     "strict": false
+    },
+    "S100Z4N9:H-038": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-039": {
+     "state": "VALUE_MISMATCH",
+     "strict": false
+    },
+    "S100Z4N9:H-040": {
+     "state": "VALUE_MISMATCH",
+     "strict": false
+    },
+    "S100Z4N9:H-041": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-043": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-044": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-045": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-046": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-047": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-048": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-049": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-050": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-051": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-052": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-053": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-054": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-055": {
+     "state": "VALUE_MISMATCH",
+     "strict": false
+    },
+    "S100Z4N9:H-056": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-057": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-058": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-060": {
+     "state": "VALUE_MISMATCH",
+     "strict": false
+    },
+    "S100Z4N9:H-061": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-062": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-063": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-064": {
+     "state": "VALUE_MISMATCH",
+     "strict": false
+    },
+    "S100Z4N9:H-066": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-067": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-069": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-070": {
+     "state": "GROUNDED",
+     "strict": false
+    },
+    "S100Z4N9:H-071": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-072": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-074": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-075": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-076": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-077": {
+     "state": "VALUE_MISMATCH",
+     "strict": false
+    },
+    "S100Z4N9:H-078": {
+     "state": "VALUE_MISMATCH",
+     "strict": false
+    },
+    "S100Z4N9:H-079": {
+     "state": "UNVERIFIABLE",
+     "strict": false
+    },
+    "S100Z4N9:H-080": {
+     "state": "VALUE_MISMATCH",
+     "strict": false
+    },
+    "S100Z4N9:H-081": {
+     "state": "VALUE_MISMATCH",
+     "strict": false
+    },
+    "S100Z4N9:H-082": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-083": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-084": {
+     "state": "POINTER_NOT_FOUND",
+     "strict": false
+    },
+    "S100Z4N9:H-085": {
+     "state": "VALUE_MISMATCH",
+     "strict": false
+    },
+    "S100Z4N9:H-086": {
+     "state": "UNVERIFIABLE",
+     "strict": false
+    },
+    "S100Z4N9:H-087": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-088": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-089": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-091": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-093": {
+     "state": "GROUNDED",
+     "strict": false
+    },
+    "S100Z4N9:H-094": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-095": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-096": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-097": {
+     "state": "GROUNDED",
+     "strict": false
+    },
+    "S100Z4N9:H-098": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-099": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-100": {
+     "state": "GROUNDED",
+     "strict": false
+    },
+    "S100Z4N9:H-101": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-102": {
+     "state": "VALUE_MISMATCH",
+     "strict": false
+    },
+    "S100Z4N9:H-103": {
+     "state": "GROUNDED",
+     "strict": false
+    },
+    "S100Z4N9:H-104": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-106": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-107": {
+     "state": "VALUE_MISMATCH",
+     "strict": false
+    },
+    "S100Z4N9:H-108": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-109": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-110": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-111": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-113": {
+     "state": "VALUE_MISMATCH",
+     "strict": false
+    },
+    "S100Z4N9:H-114": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-116": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-117": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-118": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-120": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-121": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-122": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-123": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-124": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-125": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-126": {
+     "state": "UNVERIFIABLE",
+     "strict": false
+    },
+    "S100Z4N9:H-128": {
+     "state": "UNVERIFIABLE",
+     "strict": false
+    },
+    "S100Z4N9:H-129": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-130": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-131": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-132": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-133": {
+     "state": "GROUNDED",
+     "strict": false
+    },
+    "S100Z4N9:H-134": {
+     "state": "VALUE_MISMATCH",
+     "strict": false
+    },
+    "S100Z4N9:H-135": {
+     "state": "VALUE_MISMATCH",
+     "strict": false
+    },
+    "S100Z4N9:H-136": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-137": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-138": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-139": {
+     "state": "VALUE_MISMATCH",
+     "strict": false
+    },
+    "S100Z4N9:H-140": {
+     "state": "VALUE_MISMATCH",
+     "strict": true
+    },
+    "S100Z4N9:H-141": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-142": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-143": {
+     "state": "UNVERIFIABLE",
+     "strict": false
+    },
+    "S100Z4N9:H-145": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-147": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-148": {
+     "state": "POINTER_NOT_FOUND",
+     "strict": false
+    },
+    "S100Z4N9:H-149": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "S100Z4N9:H-150": {
+     "state": "GROUNDED",
+     "strict": true
+    }
+   }
+  }
+ },
+ "dev": {
+  "P16": {
+   "all": {
+    "L": 183,
+    "G": 154,
+    "E1_strict": 146,
+    "E2_strict": 8,
+    "E2_v0": 7,
+    "E3": 29,
+    "MISSING": 0
+   },
+   "value_form": {
+    "L": 145,
+    "G": 121,
+    "E1_strict": 119,
+    "E2_strict": 2,
+    "E2_v0": 2,
+    "E3": 24,
+    "MISSING": 0
+   },
+   "rows": {
+    "N296": {
+     "state": "UNVERIFIABLE",
+     "strict": false
+    },
+    "N217": {
+     "state": "POINTER_NOT_FOUND",
+     "strict": false
+    },
+    "N290": {
+     "state": "VALUE_MISMATCH",
+     "strict": false
+    },
+    "N244": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N010": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N148": {
+     "state": "POINTER_NOT_FOUND",
+     "strict": false
+    },
+    "N285": {
+     "state": "UNVERIFIABLE",
+     "strict": false
+    },
+    "N242": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N093": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N099": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "T075": {
+     "state": "UNVERIFIABLE",
+     "strict": false
+    },
+    "N168": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N186": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "T038": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N208": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "T053": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N158": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "T058": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N243": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N105": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N281": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N135": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N061": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N038": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "T018": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N236": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N279": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N073": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "T076": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N175": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "T095": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N067": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N028": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N054": {
+     "state": "UNVERIFIABLE",
+     "strict": false
+    },
+    "N036": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N193": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N050": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N153": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "T036": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "T001": {
+     "state": "UNVERIFIABLE",
+     "strict": false
+    },
+    "N287": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N075": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N303": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "T073": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N202": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "T085": {
+     "state": "VALUE_MISMATCH",
+     "strict": false
+    },
+    "T037": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N101": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N233": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "T022": {
+     "state": "GROUNDED",
+     "strict": false
+    },
+    "N021": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N024": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N053": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N220": {
+     "state": "VALUE_MISMATCH",
+     "strict": false
+    },
+    "N080": {
+     "state": "VALUE_MISMATCH",
+     "strict": false
+    },
+    "N245": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N100": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N126": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "T103": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N103": {
+     "state": "POINTER_NOT_FOUND",
+     "strict": false
+    },
+    "N144": {
+     "state": "VALUE_MISMATCH",
+     "strict": false
+    },
+    "N116": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "T110": {
+     "state": "UNVERIFIABLE",
+     "strict": false
+    },
+    "T088": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N214": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "T039": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N259": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "T080": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "T084": {
+     "state": "GROUNDED",
+     "strict": false
+    },
+    "N146": {
+     "state": "VALUE_MISMATCH",
+     "strict": false
+    },
+    "T054": {
+     "state": "GROUNDED",
+     "strict": false
+    },
+    "N178": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N231": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "T071": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N215": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "T108": {
+     "state": "UNVERIFIABLE",
+     "strict": false
+    },
+    "N282": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N079": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N204": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N122": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N113": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N237": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N035": {
+     "state": "POINTER_NOT_FOUND",
+     "strict": false
+    },
+    "T011": {
+     "state": "GROUNDED",
+     "strict": false
+    },
+    "N198": {
+     "state": "UNVERIFIABLE",
+     "strict": false
+    },
+    "N088": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N205": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N046": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N072": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N123": {
+     "state": "GROUNDED",
+     "strict": false
+    },
+    "N076": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N239": {
+     "state": "VALUE_MISMATCH",
+     "strict": false
+    },
+    "N273": {
+     "state": "UNVERIFIABLE",
+     "strict": false
+    },
+    "N249": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N169": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N187": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N261": {
+     "state": "UNVERIFIABLE",
+     "strict": false
+    },
+    "N302": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N006": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N037": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N247": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N277": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N120": {
+     "state": "VALUE_MISMATCH",
+     "strict": false
+    },
+    "N005": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N152": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N216": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N142": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N013": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N115": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N252": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "T017": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N222": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N020": {
+     "state": "UNVERIFIABLE",
+     "strict": false
+    },
+    "N297": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N014": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N129": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N031": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N174": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N119": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N264": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N278": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N304": {
+     "state": "POINTER_NOT_FOUND",
+     "strict": false
+    },
+    "N029": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N058": {
+     "state": "POINTER_NOT_FOUND",
+     "strict": false
+    },
+    "N108": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N130": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N091": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N164": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N063": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N089": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "T020": {
+     "state": "GROUNDED",
+     "strict": false
+    },
+    "N289": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "T070": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N011": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "T027": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "T023": {
+     "state": "GROUNDED",
+     "strict": false
+    },
+    "N131": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N077": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N192": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N112": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N218": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "T066": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N003": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "T102": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "T026": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "T068": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N200": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N066": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N137": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N157": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N143": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N009": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N191": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "T050": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N154": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N081": {
+     "state": "VALUE_MISMATCH",
+     "strict": false
+    },
+    "N026": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N170": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "T049": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N219": {
+     "state": "GROUNDED",
+     "strict": false
+    },
+    "N201": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N291": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "T086": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N232": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N102": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N172": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "T044": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N181": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "T072": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N179": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N298": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N085": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N138": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N057": {
+     "state": "UNVERIFIABLE",
+     "strict": false
+    },
+    "N087": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N056": {
+     "state": "UNVERIFIABLE",
+     "strict": false
+    },
+    "N262": {
+     "state": "UNVERIFIABLE",
+     "strict": false
+    },
+    "N034": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N267": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N092": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N288": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "T059": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N241": {
+     "state": "GROUNDED",
+     "strict": true
+    }
+   }
+  },
+  "P17": {
+   "all": {
+    "L": 183,
+    "G": 155,
+    "E1_strict": 147,
+    "E2_strict": 8,
+    "E2_v0": 7,
+    "E3": 28,
+    "MISSING": 0
+   },
+   "value_form": {
+    "L": 145,
+    "G": 121,
+    "E1_strict": 119,
+    "E2_strict": 2,
+    "E2_v0": 2,
+    "E3": 24,
+    "MISSING": 0
+   },
+   "rows": {
+    "N296": {
+     "state": "UNVERIFIABLE",
+     "strict": false
+    },
+    "N217": {
+     "state": "POINTER_NOT_FOUND",
+     "strict": false
+    },
+    "N290": {
+     "state": "VALUE_MISMATCH",
+     "strict": false
+    },
+    "N244": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N010": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N148": {
+     "state": "POINTER_NOT_FOUND",
+     "strict": false
+    },
+    "N285": {
+     "state": "UNVERIFIABLE",
+     "strict": false
+    },
+    "N242": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N093": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N099": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "T075": {
+     "state": "UNVERIFIABLE",
+     "strict": false
+    },
+    "N168": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N186": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "T038": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N208": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "T053": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N158": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "T058": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N243": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N105": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N281": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N135": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N061": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N038": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "T018": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N236": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N279": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N073": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "T076": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N175": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "T095": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N067": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N028": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N054": {
+     "state": "UNVERIFIABLE",
+     "strict": false
+    },
+    "N036": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N193": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N050": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N153": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "T036": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "T001": {
+     "state": "UNVERIFIABLE",
+     "strict": false
+    },
+    "N287": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N075": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N303": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "T073": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N202": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "T085": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "T037": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N101": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N233": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "T022": {
+     "state": "GROUNDED",
+     "strict": false
+    },
+    "N021": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N024": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N053": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N220": {
+     "state": "VALUE_MISMATCH",
+     "strict": false
+    },
+    "N080": {
+     "state": "VALUE_MISMATCH",
+     "strict": false
+    },
+    "N245": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N100": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N126": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "T103": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N103": {
+     "state": "POINTER_NOT_FOUND",
+     "strict": false
+    },
+    "N144": {
+     "state": "VALUE_MISMATCH",
+     "strict": false
+    },
+    "N116": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "T110": {
+     "state": "UNVERIFIABLE",
+     "strict": false
+    },
+    "T088": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N214": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "T039": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N259": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "T080": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "T084": {
+     "state": "GROUNDED",
+     "strict": false
+    },
+    "N146": {
+     "state": "VALUE_MISMATCH",
+     "strict": false
+    },
+    "T054": {
+     "state": "GROUNDED",
+     "strict": false
+    },
+    "N178": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N231": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "T071": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N215": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "T108": {
+     "state": "UNVERIFIABLE",
+     "strict": false
+    },
+    "N282": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N079": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N204": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N122": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N113": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N237": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N035": {
+     "state": "POINTER_NOT_FOUND",
+     "strict": false
+    },
+    "T011": {
+     "state": "GROUNDED",
+     "strict": false
+    },
+    "N198": {
+     "state": "UNVERIFIABLE",
+     "strict": false
+    },
+    "N088": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N205": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N046": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N072": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N123": {
+     "state": "GROUNDED",
+     "strict": false
+    },
+    "N076": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N239": {
+     "state": "VALUE_MISMATCH",
+     "strict": false
+    },
+    "N273": {
+     "state": "UNVERIFIABLE",
+     "strict": false
+    },
+    "N249": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N169": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N187": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N261": {
+     "state": "UNVERIFIABLE",
+     "strict": false
+    },
+    "N302": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N006": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N037": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N247": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N277": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N120": {
+     "state": "VALUE_MISMATCH",
+     "strict": false
+    },
+    "N005": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N152": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N216": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N142": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N013": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N115": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N252": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "T017": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N222": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N020": {
+     "state": "UNVERIFIABLE",
+     "strict": false
+    },
+    "N297": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N014": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N129": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N031": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N174": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N119": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N264": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N278": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N304": {
+     "state": "POINTER_NOT_FOUND",
+     "strict": false
+    },
+    "N029": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N058": {
+     "state": "POINTER_NOT_FOUND",
+     "strict": false
+    },
+    "N108": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N130": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N091": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N164": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N063": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N089": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "T020": {
+     "state": "GROUNDED",
+     "strict": false
+    },
+    "N289": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "T070": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N011": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "T027": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "T023": {
+     "state": "GROUNDED",
+     "strict": false
+    },
+    "N131": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N077": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N192": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N112": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N218": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "T066": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N003": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "T102": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "T026": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "T068": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N200": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N066": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N137": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N157": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N143": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N009": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N191": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "T050": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N154": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N081": {
+     "state": "VALUE_MISMATCH",
+     "strict": false
+    },
+    "N026": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N170": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "T049": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N219": {
+     "state": "GROUNDED",
+     "strict": false
+    },
+    "N201": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N291": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "T086": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N232": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N102": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N172": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "T044": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N181": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "T072": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N179": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N298": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N085": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N138": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N057": {
+     "state": "UNVERIFIABLE",
+     "strict": false
+    },
+    "N087": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N056": {
+     "state": "UNVERIFIABLE",
+     "strict": false
+    },
+    "N262": {
+     "state": "UNVERIFIABLE",
+     "strict": false
+    },
+    "N034": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N267": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N092": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N288": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "T059": {
+     "state": "GROUNDED",
+     "strict": true
+    },
+    "N241": {
+     "state": "GROUNDED",
+     "strict": true
+    }
+   }
+  }
+ },
+ "all_docs": {
+  "S100YMFV": {
+   "claims_p16": 133,
+   "claims_p17": 133,
+   "same_ids": true,
+   "transitions": {},
+   "grounded_lost_or_rebound": []
+  },
+  "S100Z1WR": {
+   "claims_p16": 91,
+   "claims_p17": 91,
+   "same_ids": true,
+   "transitions": {},
+   "grounded_lost_or_rebound": []
+  },
+  "S100Z35K": {
+   "claims_p16": 133,
+   "claims_p17": 133,
+   "same_ids": true,
+   "transitions": {
+    "POINTER_NOT_FOUND->GROUNDED": 6
+   },
+   "grounded_lost_or_rebound": []
+  },
+  "S100Z37J": {
+   "claims_p16": 129,
+   "claims_p17": 129,
+   "same_ids": true,
+   "transitions": {
+    "GROUNDED->VALUE_MISMATCH": 2,
+    "GROUNDED->POINTER_NOT_FOUND": 9,
+    "VALUE_MISMATCH->GROUNDED": 1,
+    "GROUNDED(pointer changed)": 3
+   },
+   "grounded_lost_or_rebound": [
+    {
+     "id": "N024",
+     "span": "末における財政状態については、総資産が前連結会計年度末に比べ167億28百万円増加した790億50",
+     "p16": [
+      "xbrl:jppfs_cor:Assets@CurrentYearInstant",
+      "xbrl:jppfs_cor:Assets@Prior1YearInstant",
+      "formula:a-b"
+     ],
+     "p17": [
+      "xbrl:jppfs_cor:Assets@CurrentYearInstant_jpcrp030000-asr_E04069-000HotelBusinessReportableSegmentsMember"
+     ],
+     "p17_state": "VALUE_MISMATCH"
+    },
+    {
+     "id": "N025",
+     "span": "は、総資産が前連結会計年度末に比べ167億28百万円増加した790億50百万円、負債が前連結会計年",
+     "p16": [
+      "xbrl:jppfs_cor:Assets@CurrentYearInstant"
+     ],
+     "p17": [
+      "xbrl:jppfs_cor:Assets@CurrentYearInstant_jpcrp030000-asr_E04069-000HotelBusinessReportableSegmentsMember"
+     ],
+     "p17_state": "VALUE_MISMATCH"
+    },
+    {
+     "id": "N026",
+     "span": "万円増加した790億50百万円、負債が前連結会計年度末に比べ145億80百万円増加した595億54",
+     "p16": [
+      "xbrl:jppfs_cor:Liabilities@CurrentYearInstant",
+      "xbrl:jppfs_cor:Liabilities@Prior1YearInstant",
+      "formula:a-b"
+     ],
+     "p17": [],
+     "p17_state": "POINTER_NOT_FOUND"
+    },
+    {
+     "id": "N027",
+     "span": "万円、負債が前連結会計年度末に比べ145億80百万円増加した595億54百万円、純資産が前連結会計",
+     "p16": [
+      "xbrl:jppfs_cor:Liabilities@CurrentYearInstant"
+     ],
+     "p17": [],
+     "p17_state": "POINTER_NOT_FOUND"
+    },
+    {
+     "id": "N028",
+     "span": "円増加した595億54百万円、純資産が前連結会計年度末に比べ21億48百万円増加した194億96",
+     "p16": [
+      "xbrl:jppfs_cor:NetAssets@CurrentYearInstant",
+      "xbrl:jppfs_cor:NetAssets@Prior1YearInstant",
+      "formula:a-b"
+     ],
+     "p17": [],
+     "p17_state": "POINTER_NOT_FOUND"
+    },
+    {
+     "id": "N029",
+     "span": "万円、純資産が前連結会計年度末に比べ21億48百万円増加した194億96百万円となりました。",
+     "p16": [
+      "xbrl:jppfs_cor:NetAssets@CurrentYearInstant"
+     ],
+     "p17": [],
+     "p17_state": "POINTER_NOT_FOUND"
+    },
+    {
+     "id": "N030",
+     "span": "当連結会計年度末における流動資産は、前連結会計年度末に比べ148億86百万円増加し、686億34",
+     "p16": [
+      "xbrl:jppfs_cor:CurrentAssets@CurrentYearInstant",
+      "xbrl:jppfs_cor:CurrentAssets@Prior1YearInstant",
+      "formula:a-b"
+     ],
+     "p17": [],
+     "p17_state": "POINTER_NOT_FOUND"
+    },
+    {
+     "id": "N031",
+     "span": "流動資産は、前連結会計年度末に比べ148億86百万円増加し、686億34百万円となりました。",
+     "p16": [
+      "xbrl:jppfs_cor:CurrentAssets@CurrentYearInstant"
+     ],
+     "p17": [],
+     "p17_state": "POINTER_NOT_FOUND"
+    },
+    {
+     "id": "N068",
+     "span": "当連結会計年度は、特別利益は固定資産売却益による19百万円、特別損失は固定資産",
+     "p16": [
+      "xbrl:jppfs_cor:GainOnSalesOfNoncurrentAssetsEI@CurrentYearDuration"
+     ],
+     "p17": [
+      "xbrl:jppfs_cor:ExtraordinaryIncome@CurrentYearDuration"
+     ],
+     "p17_state": "GROUNDED"
+    },
+    {
+     "id": "T005",
+     "span": "については、総資産が前連結会計年度末に比べ167億28百万円増加した790",
+     "p16": [
+      "xbrl:jppfs_cor:Assets@CurrentYearInstant",
+      "xbrl:jppfs_cor:Assets@Prior1YearInstant",
+      "builtin:sign(cur-prior)"
+     ],
+     "p17": [
+      "xbrl:jppfs_cor:Assets@CurrentYearInstant_jpcrp030000-asr_E04069-000HotelBusinessReportableSegmentsMember",
+      "xbrl:jppfs_cor:Assets@Prior1YearInstant_jpcrp030000-asr_E04069-000HotelBusinessReportableSegmentsMember",
+      "builtin:sign(cur-prior)"
+     ],
+     "p17_state": "GROUNDED"
+    },
+    {
+     "id": "T006",
+     "span": "億50百万円、負債が前連結会計年度末に比べ145億80百万円増加した595",
+     "p16": [
+      "xbrl:jppfs_cor:Liabilities@CurrentYearInstant",
+      "xbrl:jppfs_cor:Liabilities@Prior1YearInstant",
+      "builtin:sign(cur-prior)"
+     ],
+     "p17": [],
+     "p17_state": "POINTER_NOT_FOUND"
+    },
+    {
+     "id": "T007",
+     "span": "億54百万円、純資産が前連結会計年度末に比べ21億48百万円増加した194",
+     "p16": [
+      "xbrl:jppfs_cor:NetAssets@CurrentYearInstant",
+      "xbrl:jppfs_cor:NetAssets@Prior1YearInstant",
+      "builtin:sign(cur-prior)"
+     ],
+     "p17": [],
+     "p17_state": "POINTER_NOT_FOUND"
+    },
+    {
+     "id": "T008",
+     "span": "における流動資産は、前連結会計年度末に比べ148億86百万円増加し、686",
+     "p16": [
+      "xbrl:jppfs_cor:CurrentAssets@CurrentYearInstant",
+      "xbrl:jppfs_cor:CurrentAssets@Prior1YearInstant",
+      "builtin:sign(cur-prior)"
+     ],
+     "p17": [],
+     "p17_state": "POINTER_NOT_FOUND"
+    },
+    {
+     "id": "T041",
+     "span": "組みに係る費用等の増加により、前連結会計年度比7億18百万円増加しておりま",
+     "p16": [
+      "xbrl:jppfs_cor:CommissionFeeSGA@CurrentYearDuration",
+      "xbrl:jppfs_cor:CommissionFeeSGA@Prior1YearDuration",
+      "builtin:sign(cur-prior)"
+     ],
+     "p17": [
+      "xbrl:jppfs_cor:SellingGeneralAndAdministrativeExpenses@CurrentYearDuration",
+      "xbrl:jppfs_cor:SellingGeneralAndAdministrativeExpenses@Prior1YearDuration",
+      "builtin:sign(cur-prior)"
+     ],
+     "p17_state": "GROUNDED"
+    }
+   ]
+  },
+  "S100Z39P": {
+   "claims_p16": 103,
+   "claims_p17": 103,
+   "same_ids": true,
+   "transitions": {
+    "GROUNDED->VALUE_MISMATCH": 4,
+    "GROUNDED->POINTER_NOT_FOUND": 4,
+    "VALUE_MISMATCH->GROUNDED": 3
+   },
+   "grounded_lost_or_rebound": [
+    {
+     "id": "N001",
+     "span": "この結果、当社グループの当連結会計年度の業績は、売上高67,099百万円(前期比2.3%増)",
+     "p16": [
+      "xbrl:jppfs_cor:NetSales@CurrentYearDuration"
+     ],
+     "p17": [
+      "xbrl:jppfs_cor:NetSales@CurrentYearDuration_jpcrp030000-asr_E05239-000BusinessIntelligenceReportableSegmentsMember"
+     ],
+     "p17_state": "VALUE_MISMATCH"
+    },
+    {
+     "id": "N002",
+     "span": "プの当連結会計年度の業績は、売上高67,099百万円(前期比2.3%増)、営業利益5,7",
+     "p16": [
+      "xbrl:jppfs_cor:NetSales@CurrentYearDuration",
+      "xbrl:jppfs_cor:NetSales@Prior1YearDuration"
+     ],
+     "p17": [
+      "xbrl:jppfs_cor:NetSales@CurrentYearDuration_jpcrp030000-asr_E05239-000BusinessIntelligenceReportableSegmentsMember",
+      "xbrl:jppfs_cor:NetSales@Prior1YearDuration_jpcrp030000-asr_E05239-000BusinessIntelligenceReportableSegmentsMember"
+     ],
+     "p17_state": "VALUE_MISMATCH"
+    },
+    {
+     "id": "N003",
+     "span": "績は、売上高67,099百万円(前期比2.3%増)、営業利益5,752百万円(同35.6%増)、",
+     "p16": [
+      "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration"
+     ],
+     "p17": [
+      "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration_jpcrp030000-asr_E05239-000BusinessIntelligenceReportableSegmentsMember"
+     ],
+     "p17_state": "VALUE_MISMATCH"
+    },
+    {
+     "id": "N004",
+     "span": "99百万円(前期比2.3%増)、営業利益5,752百万円(同35.6%増)、経常利益5,7",
+     "p16": [
+      "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration",
+      "xbrl:jppfs_cor:OperatingIncome@Prior1YearDuration"
+     ],
+     "p17": [
+      "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration_jpcrp030000-asr_E05239-000BusinessIntelligenceReportableSegmentsMember",
+      "xbrl:jppfs_cor:OperatingIncome@Prior1YearDuration_jpcrp030000-asr_E05239-000BusinessIntelligenceReportableSegmentsMember"
+     ],
+     "p17_state": "VALUE_MISMATCH"
+    },
+    {
+     "id": "N005",
+     "span": "%増)、営業利益5,752百万円(同35.6%増)、経常利益5,753百万円(同39.3%増)、",
+     "p16": [
+      "xbrl:jppfs_cor:OrdinaryIncome@CurrentYearDuration"
+     ],
+     "p17": [],
+     "p17_state": "POINTER_NOT_FOUND"
+    },
+    {
+     "id": "N006",
+     "span": "752百万円(同35.6%増)、経常利益5,753百万円(同39.3%増)、親会社株主に帰",
+     "p16": [
+      "xbrl:jppfs_cor:OrdinaryIncome@CurrentYearDuration",
+      "xbrl:jppfs_cor:OrdinaryIncome@Prior1YearDuration"
+     ],
+     "p17": [],
+     "p17_state": "POINTER_NOT_FOUND"
+    },
+    {
+     "id": "N007",
+     "span": "3百万円(同39.3%増)、親会社株主に帰属する当期純利益は1,703百万円(同51.4%減)と",
+     "p16": [
+      "xbrl:jppfs_cor:ProfitLossAttributableToOwnersOfParent@CurrentYearDuration"
+     ],
+     "p17": [],
+     "p17_state": "POINTER_NOT_FOUND"
+    },
+    {
+     "id": "N008",
+     "span": "%増)、親会社株主に帰属する当期純利益は1,703百万円(同51.4%減)となりました。",
+     "p16": [
+      "xbrl:jppfs_cor:ProfitLossAttributableToOwnersOfParent@CurrentYearDuration",
+      "xbrl:jppfs_cor:ProfitLossAttributableToOwnersOfParent@Prior1YearDuration"
+     ],
+     "p17": [],
+     "p17_state": "POINTER_NOT_FOUND"
+    }
+   ]
+  },
+  "S100Z3BW": {
+   "claims_p16": 145,
+   "claims_p17": 145,
+   "same_ids": true,
+   "transitions": {
+    "VALUE_MISMATCH->POINTER_NOT_FOUND": 1,
+    "GROUNDED->POINTER_NOT_FOUND": 4,
+    "VALUE_MISMATCH->GROUNDED": 9
+   },
+   "grounded_lost_or_rebound": [
+    {
+     "id": "N035",
+     "span": "度末に比べ1,483,856千円増加し、当連結会計年度末には6,920,828千円となりました。",
+     "p16": [
+      "xbrl:jppfs_cor:CashAndCashEquivalents@CurrentYearInstant"
+     ],
+     "p17": [],
+     "p17_state": "POINTER_NOT_FOUND"
+    },
+    {
+     "id": "N036",
+     "span": "営業活動によるキャッシュ・フローは、2,206,719千円の収入(前連結会計年",
+     "p16": [
+      "xbrl:jppfs_cor:NetCashProvidedByUsedInOperatingActivities@CurrentYearDuration"
+     ],
+     "p17": [],
+     "p17_state": "POINTER_NOT_FOUND"
+    },
+    {
+     "id": "N037",
+     "span": "ュ・フローは、2,206,719千円の収入(前連結会計年度は1,981,469千円の収入)となりました",
+     "p16": [
+      "xbrl:jppfs_cor:NetCashProvidedByUsedInOperatingActivities@Prior1YearDuration"
+     ],
+     "p17": [],
+     "p17_state": "POINTER_NOT_FOUND"
+    },
+    {
+     "id": "T017",
+     "span": "び現金同等物は、前連結会計年度末に比べ1,483,856千円増加し、当連結",
+     "p16": [
+      "xbrl:jppfs_cor:CashAndCashEquivalents@CurrentYearInstant",
+      "xbrl:jppfs_cor:CashAndCashEquivalents@Prior1YearInstant",
+      "builtin:sign(cur-prior)"
+     ],
+     "p17": [],
+     "p17_state": "POINTER_NOT_FOUND"
+    }
+   ]
+  },
+  "S100Z3CO": {
+   "claims_p16": 143,
+   "claims_p17": 143,
+   "same_ids": true,
+   "transitions": {
+    "GROUNDED->VALUE_MISMATCH": 4,
+    "GROUNDED->POINTER_NOT_FOUND": 10,
+    "VALUE_MISMATCH->POINTER_NOT_FOUND": 1,
+    "VALUE_MISMATCH->GROUNDED": 5,
+    "GROUNDED(pointer changed)": 1
+   },
+   "grounded_lost_or_rebound": [
+    {
+     "id": "N003",
+     "span": "結果、当連結会計年度における当社グループの経営成績は、売上高7,468,151千円(前期比16.2%減",
+     "p16": [
+      "xbrl:jppfs_cor:NetSales@CurrentYearDuration"
+     ],
+     "p17": [
+      "xbrl:jppfs_cor:NetSales@CurrentYearDuration_jpcrp030000-asr_E31575-000EnergyReportableSegmentsMember"
+     ],
+     "p17_state": "VALUE_MISMATCH"
+    },
+    {
+     "id": "N004",
+     "span": "社グループの経営成績は、売上高7,468,151千円(前期比16.2%減)、営業利益499",
+     "p16": [
+      "xbrl:jppfs_cor:NetSales@CurrentYearDuration",
+      "xbrl:jppfs_cor:NetSales@Prior1YearDuration"
+     ],
+     "p17": [
+      "xbrl:jppfs_cor:NetSales@CurrentYearDuration_jpcrp030000-asr_E31575-000EnergyReportableSegmentsMember",
+      "xbrl:jppfs_cor:NetSales@Prior1YearDuration_jpcrp030000-asr_E31575-000EnergyReportableSegmentsMember"
+     ],
+     "p17_state": "VALUE_MISMATCH"
+    },
+    {
+     "id": "N005",
+     "span": "売上高7,468,151千円(前期比16.2%減)、営業利益499,530千円(前期比67.1%減",
+     "p16": [
+      "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration"
+     ],
+     "p17": [
+      "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration_jpcrp030000-asr_E31575-000EnergyReportableSegmentsMember"
+     ],
+     "p17_state": "VALUE_MISMATCH"
+    },
+    {
+     "id": "N006",
+     "span": "円(前期比16.2%減)、営業利益499,530千円(前期比67.1%減)、経常利益573",
+     "p16": [
+      "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration",
+      "xbrl:jppfs_cor:OperatingIncome@Prior1YearDuration"
+     ],
+     "p17": [
+      "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration_jpcrp030000-asr_E31575-000EnergyReportableSegmentsMember",
+      "xbrl:jppfs_cor:OperatingIncome@Prior1YearDuration_jpcrp030000-asr_E31575-000EnergyReportableSegmentsMember"
+     ],
+     "p17_state": "VALUE_MISMATCH"
+    },
+    {
+     "id": "N007",
+     "span": "、営業利益499,530千円(前期比67.1%減)、経常利益573,234千円(前期比62.0%減",
+     "p16": [
+      "xbrl:jppfs_cor:OrdinaryIncome@CurrentYearDuration"
+     ],
+     "p17": [],
+     "p17_state": "POINTER_NOT_FOUND"
+    },
+    {
+     "id": "N008",
+     "span": "円(前期比67.1%減)、経常利益573,234千円(前期比62.0%減)、親会社株主に帰",
+     "p16": [
+      "xbrl:jppfs_cor:OrdinaryIncome@CurrentYearDuration",
+      "xbrl:jppfs_cor:OrdinaryIncome@Prior1YearDuration"
+     ],
+     "p17": [],
+     "p17_state": "POINTER_NOT_FOUND"
+    },
+    {
+     "id": "N009",
+     "span": "4千円(前期比62.0%減)、親会社株主に帰属する当期純利益327,971千円(前期比66.2%減",
+     "p16": [
+      "xbrl:jppfs_cor:ProfitLossAttributableToOwnersOfParent@CurrentYearDuration"
+     ],
+     "p17": [],
+     "p17_state": "POINTER_NOT_FOUND"
+    },
+    {
+     "id": "N010",
+     "span": ")、親会社株主に帰属する当期純利益327,971千円(前期比66.2%減)となりました。",
+     "p16": [
+      "xbrl:jppfs_cor:ProfitLossAttributableToOwnersOfParent@CurrentYearDuration",
+      "xbrl:jppfs_cor:ProfitLossAttributableToOwnersOfParent@Prior1YearDuration"
+     ],
+     "p17": [],
+     "p17_state": "POINTER_NOT_FOUND"
+    },
+    {
+     "id": "N026",
+     "span": "また、営業外収益として為替差益64,194千円の計上があり、経常利",
+     "p16": [
+      "xbrl:jppfs_cor:ForeignExchangeGainsNOI@CurrentYearDuration"
+     ],
+     "p17": [],
+     "p17_state": "POINTER_NOT_FOUND"
+    },
+    {
+     "id": "N027",
+     "span": "外収益として為替差益64,194千円の計上があり、経常利益は573,234千円(前期比62.0%減",
+     "p16": [
+      "xbrl:jppfs_cor:OrdinaryIncome@CurrentYearDuration"
+     ],
+     "p17": [],
+     "p17_state": "POINTER_NOT_FOUND"
+    },
+    {
+     "id": "N028",
+     "span": "194千円の計上があり、経常利益は573,234千円(前期比62.0%減)、特別利益として",
+     "p16": [
+      "xbrl:jppfs_cor:OrdinaryIncome@CurrentYearDuration",
+      "xbrl:jppfs_cor:OrdinaryIncome@Prior1YearDuration"
+     ],
+     "p17": [],
+     "p17_state": "POINTER_NOT_FOUND"
+    },
+    {
+     "id": "N029",
+     "span": "千円(前期比62.0%減)、特別利益として投資有価証券売却益53,662千円の計上があり、親会社",
+     "p16": [
+      "xbrl:jppfs_cor:GainOnSalesOfInvestmentSecuritiesEI@CurrentYearDuration"
+     ],
+     "p17": [],
+     "p17_state": "POINTER_NOT_FOUND"
+    },
+    {
+     "id": "N030",
+     "span": "3,662千円の計上があり、親会社株主に帰属する当期純利益は327,971千円(前期比66.2%減",
+     "p16": [
+      "xbrl:jppfs_cor:ProfitLossAttributableToOwnersOfParent@CurrentYearDuration"
+     ],
+     "p17": [],
+     "p17_state": "POINTER_NOT_FOUND"
+    },
+    {
+     "id": "N031",
+     "span": "、親会社株主に帰属する当期純利益は327,971千円(前期比66.2%減)となりました。",
+     "p16": [
+      "xbrl:jppfs_cor:ProfitLossAttributableToOwnersOfParent@CurrentYearDuration",
+      "xbrl:jppfs_cor:ProfitLossAttributableToOwnersOfParent@Prior1YearDuration"
+     ],
+     "p17": [],
+     "p17_state": "POINTER_NOT_FOUND"
+    },
+    {
+     "id": "T012",
+     "span": "想定より後ろ倒しとなり、当連結会計年度の売上高は前年を大幅に下回る結果とな",
+     "p16": [
+      "xbrl:jppfs_cor:NetSales@CurrentYearDuration",
+      "xbrl:jppfs_cor:NetSales@Prior1YearDuration",
+      "builtin:sign(cur-prior)"
+     ],
+     "p17": [
+      "xbrl:jppfs_cor:NetSales@CurrentYearDuration_jpcrp030000-asr_E31575-000EnergyReportableSegmentsMember",
+      "xbrl:jppfs_cor:NetSales@Prior1YearDuration_jpcrp030000-asr_E31575-000EnergyReportableSegmentsMember",
+      "builtin:sign(cur-prior)"
+     ],
+     "p17_state": "GROUNDED"
+    }
+   ]
+  },
+  "S100Z3HP": {
+   "claims_p16": 62,
+   "claims_p17": 62,
+   "same_ids": true,
+   "transitions": {},
+   "grounded_lost_or_rebound": []
+  },
+  "S100Z3JY": {
+   "claims_p16": 135,
+   "claims_p17": 135,
+   "same_ids": true,
+   "transitions": {
+    "POINTER_NOT_FOUND->UNVERIFIABLE": 1,
+    "VALUE_MISMATCH->GROUNDED": 6,
+    "GROUNDED->POINTER_NOT_FOUND": 2,
+    "GROUNDED->VALUE_MISMATCH": 2,
+    "GROUNDED(pointer changed)": 3
+   },
+   "grounded_lost_or_rebound": [
+    {
+     "id": "N102",
+     "span": "販売費及び一般管理費は1,590百万円(前期比37.6%減",
+     "p16": [
+      "xbrl:jppfs_cor:SellingGeneralAndAdministrativeExpenses@CurrentYearDuration"
+     ],
+     "p17": [],
+     "p17_state": "POINTER_NOT_FOUND"
+    },
+    {
+     "id": "N103",
+     "span": "販売費及び一般管理費は1,590百万円(前期比37.6%減)となり、営業利益",
+     "p16": [
+      "xbrl:jppfs_cor:SellingGeneralAndAdministrativeExpenses@CurrentYearDuration",
+      "xbrl:jppfs_cor:SellingGeneralAndAdministrativeExpenses@Prior1YearDuration"
+     ],
+     "p17": [],
+     "p17_state": "POINTER_NOT_FOUND"
+    },
+    {
+     "id": "N104",
+     "span": "費は1,590百万円(前期比37.6%減)となり、営業利益は275百万円(前期は137百万円",
+     "p16": [
+      "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration"
+     ],
+     "p17": [
+      "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration_jpcrp030000-asr_E05367-000FunctionalCosmeticRetailingReportableSegmentsMember"
+     ],
+     "p17_state": "VALUE_MISMATCH"
+    },
+    {
+     "id": "N105",
+     "span": "(前期比37.6%減)となり、営業利益は275百万円(前期は137百万円の営業損失)となりま",
+     "p16": [
+      "xbrl:jppfs_cor:OperatingIncome@Prior1YearDuration"
+     ],
+     "p17": [
+      "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration_jpcrp030000-asr_E05367-000FunctionalCosmeticRetailingReportableSegmentsMember"
+     ],
+     "p17_state": "VALUE_MISMATCH"
+    },
+    {
+     "id": "T007",
+     "span": "、広告宣伝費及び販売促進費の効率化により、営業利益率は大幅に改善しました。",
+     "p16": [
+      "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration",
+      "xbrl:jppfs_cor:OperatingIncome@Prior1YearDuration",
+      "builtin:sign(cur-prior)"
+     ],
+     "p17": [
+      "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration_jpcrp030000-asr_E05367-000FunctionalFoodRetailingReportableSegmentsMember",
+      "xbrl:jppfs_cor:OperatingIncome@Prior1YearDuration_jpcrp030000-asr_E05367-000FunctionalFoodRetailingReportableSegmentsMember",
+      "builtin:sign(cur-prior)"
+     ],
+     "p17_state": "GROUNDED"
+    },
+    {
+     "id": "T008",
+     "span": "進へと集客方針を転換したことに伴い、売上高は、前期との比較で減収となりまし",
+     "p16": [
+      "xbrl:jppfs_cor:NetSales@CurrentYearDuration",
+      "xbrl:jppfs_cor:NetSales@Prior1YearDuration",
+      "builtin:sign(cur-prior)"
+     ],
+     "p17": [
+      "xbrl:jppfs_cor:NetSales@CurrentYearDuration_jpcrp030000-asr_E05367-000FunctionalFoodRetailingReportableSegmentsMember",
+      "xbrl:jppfs_cor:NetSales@Prior1YearDuration_jpcrp030000-asr_E05367-000FunctionalFoodRetailingReportableSegmentsMember",
+      "builtin:sign(cur-prior)"
+     ],
+     "p17_state": "GROUNDED"
+    },
+    {
+     "id": "T010",
+     "span": "、かつ、構造改革による固定費の削減により、営業利益率は大幅に改善しました。",
+     "p16": [
+      "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration",
+      "xbrl:jppfs_cor:OperatingIncome@Prior1YearDuration",
+      "builtin:sign(cur-prior)"
+     ],
+     "p17": [
+      "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration_jpcrp030000-asr_E05367-000FunctionalFoodRetailingReportableSegmentsMember",
+      "xbrl:jppfs_cor:OperatingIncome@Prior1YearDuration_jpcrp030000-asr_E05367-000FunctionalFoodRetailingReportableSegmentsMember",
+      "builtin:sign(cur-prior)"
+     ],
+     "p17_state": "GROUNDED"
+    }
+   ]
+  },
+  "S100Z3V1": {
+   "claims_p16": 109,
+   "claims_p17": 109,
+   "same_ids": true,
+   "transitions": {
+    "VALUE_MISMATCH->GROUNDED": 8,
+    "GROUNDED->POINTER_NOT_FOUND": 7
+   },
+   "grounded_lost_or_rebound": [
+    {
+     "id": "N031",
+     "span": "流動資産は、前連結会計年度末に比べ5億75百万円増加し、100億69",
+     "p16": [
+      "xbrl:jppfs_cor:CurrentAssets@CurrentYearInstant",
+      "xbrl:jppfs_cor:CurrentAssets@Prior1YearInstant",
+      "formula:a-b"
+     ],
+     "p17": [],
+     "p17_state": "POINTER_NOT_FOUND"
+    },
+    {
+     "id": "N032",
+     "span": "流動資産は、前連結会計年度末に比べ5億75百万円増加し、100億69百万円となりました。",
+     "p16": [
+      "xbrl:jppfs_cor:CurrentAssets@CurrentYearInstant"
+     ],
+     "p17": [],
+     "p17_state": "POINTER_NOT_FOUND"
+    },
+    {
+     "id": "N033",
+     "span": "これは主に、現金及び預金の増加6億85百万円、販売用不動産の増加",
+     "p16": [
+      "xbrl:jppfs_cor:CashAndDeposits@CurrentYearInstant",
+      "xbrl:jppfs_cor:CashAndDeposits@Prior1YearInstant",
+      "formula:a-b"
+     ],
+     "p17": [],
+     "p17_state": "POINTER_NOT_FOUND"
+    },
+    {
+     "id": "N034",
+     "span": "は主に、現金及び預金の増加6億85百万円、販売用不動産の増加1億1百万円、その他に含まれる未",
+     "p16": [
+      "xbrl:jppfs_cor:RealEstateForSale@CurrentYearInstant",
+      "xbrl:jppfs_cor:RealEstateForSale@Prior1YearInstant",
+      "formula:a-b"
+     ],
+     "p17": [],
+     "p17_state": "POINTER_NOT_FOUND"
+    },
+    {
+     "id": "T019",
+     "span": "流動資産は、前連結会計年度末に比べ5億75百万円増加し、100",
+     "p16": [
+      "xbrl:jppfs_cor:CurrentAssets@CurrentYearInstant",
+      "xbrl:jppfs_cor:CurrentAssets@Prior1YearInstant",
+      "builtin:sign(cur-prior)"
+     ],
+     "p17": [],
+     "p17_state": "POINTER_NOT_FOUND"
+    },
+    {
+     "id": "T020",
+     "span": "これは主に、現金及び預金の増加6億85百",
+     "p16": [
+      "xbrl:jppfs_cor:CashAndDeposits@CurrentYearInstant",
+      "xbrl:jppfs_cor:CashAndDeposits@Prior1YearInstant",
+      "builtin:sign(cur-prior)"
+     ],
+     "p17": [],
+     "p17_state": "POINTER_NOT_FOUND"
+    },
+    {
+     "id": "T021",
+     "span": "これは主に、現金及び預金の増加6億85百万円、販売用不動産の増加1億1百万",
+     "p16": [
+      "xbrl:jppfs_cor:RealEstateForSale@CurrentYearInstant",
+      "xbrl:jppfs_cor:RealEstateForSale@Prior1YearInstant",
+      "builtin:sign(cur-prior)"
+     ],
+     "p17": [],
+     "p17_state": "POINTER_NOT_FOUND"
+    }
+   ]
+  },
+  "S100Z433": {
+   "claims_p16": 87,
+   "claims_p17": 87,
+   "same_ids": true,
+   "transitions": {},
+   "grounded_lost_or_rebound": []
+  },
+  "S100Z4B6": {
+   "claims_p16": 123,
+   "claims_p17": 123,
+   "same_ids": true,
+   "transitions": {
+    "VALUE_MISMATCH->GROUNDED": 5,
+    "VALUE_MISMATCH->POINTER_NOT_FOUND": 2,
+    "UNVERIFIABLE->POINTER_NOT_FOUND": 2,
+    "UNVERIFIABLE->GROUNDED": 1
+   },
+   "grounded_lost_or_rebound": []
+  },
+  "S100Z4DE": {
+   "claims_p16": 117,
+   "claims_p17": 117,
+   "same_ids": true,
+   "transitions": {
+    "VALUE_MISMATCH->GROUNDED": 13,
+    "GROUNDED->POINTER_NOT_FOUND": 7,
+    "GROUNDED(pointer changed)": 1,
+    "GROUNDED->VALUE_MISMATCH": 2
+   },
+   "grounded_lost_or_rebound": [
+    {
+     "id": "N029",
+     "span": "当連結会計年度末における流動資産の残高は118億93百万円(前連結会計年度末残",
+     "p16": [
+      "xbrl:jppfs_cor:CurrentAssets@CurrentYearInstant"
+     ],
+     "p17": [],
+     "p17_state": "POINTER_NOT_FOUND"
+    },
+    {
+     "id": "N030",
+     "span": "ける流動資産の残高は118億93百万円(前連結会計年度末残高78億51百万円)となり40億42百",
+     "p16": [
+      "xbrl:jppfs_cor:CurrentAssets@Prior1YearInstant"
+     ],
+     "p17": [],
+     "p17_state": "POINTER_NOT_FOUND"
+    },
+    {
+     "id": "N031",
+     "span": "8億93百万円(前連結会計年度末残高78億51百万円)となり40億42百万円増加しました。",
+     "p16": [
+      "xbrl:jppfs_cor:CurrentAssets@CurrentYearInstant",
+      "xbrl:jppfs_cor:CurrentAssets@Prior1YearInstant",
+      "formula:a-b"
+     ],
+     "p17": [],
+     "p17_state": "POINTER_NOT_FOUND"
+    },
+    {
+     "id": "N032",
+     "span": "その主な要因は、完成工事未収入金が22億32百万円、現金預金が16億1",
+     "p16": [
+      "xbrl:jppfs_cor:AccountsReceivableFromCompletedConstructionContractsCNS@CurrentYearInstant",
+      "xbrl:jppfs_cor:AccountsReceivableFromCompletedConstructionContractsCNS@Prior1YearInstant",
+      "formula:a-b"
+     ],
+     "p17": [],
+     "p17_state": "POINTER_NOT_FOUND"
+    },
+    {
+     "id": "N033",
+     "span": "の主な要因は、完成工事未収入金が22億32百万円、現金預金が16億12百万円増加したことによるも",
+     "p16": [
+      "xbrl:jppfs_cor:CashAndDeposits@CurrentYearInstant",
+      "xbrl:jppfs_cor:CashAndDeposits@Prior1YearInstant",
+      "formula:a-b"
+     ],
+     "p17": [],
+     "p17_state": "POINTER_NOT_FOUND"
+    },
+    {
+     "id": "T007",
+     "span": "売上高は、完成工事の増加により、1",
+     "p16": [
+      "xbrl:jppfs_cor:NetSales@CurrentYearDuration",
+      "xbrl:jppfs_cor:NetSales@Prior1YearDuration",
+      "builtin:sign(cur-prior)"
+     ],
+     "p17": [
+      "xbrl:jppfs_cor:NetSales@CurrentYearDuration_jpcrp030000-asr_E00282-000ConstructionBusinessReportableSegmentsMember",
+      "xbrl:jppfs_cor:NetSales@Prior1YearDuration_jpcrp030000-asr_E00282-000ConstructionBusinessReportableSegmentsMember",
+      "builtin:sign(cur-prior)"
+     ],
+     "p17_state": "GROUNDED"
+    },
+    {
+     "id": "T008",
+     "span": "売上高は、建物管理業務による管理費改定や取引増加及び不動産",
+     "p16": [
+      "xbrl:jppfs_cor:NetSales@CurrentYearDuration",
+      "xbrl:jppfs_cor:NetSales@Prior1YearDuration",
+      "builtin:sign(cur-prior)"
+     ],
+     "p17": [
+      "xbrl:jppfs_cor:NetSales@CurrentYearDuration_jpcrp030000-asr_E00282-000RealEstateBusinessReportableSegmentMember",
+      "xbrl:jppfs_cor:NetSales@Prior1YearDuration_jpcrp030000-asr_E00282-000RealEstateBusinessReportableSegmentMember",
+      "builtin:sign(cur-prior)"
+     ],
+     "p17_state": "VALUE_MISMATCH"
+    },
+    {
+     "id": "T009",
+     "span": "、建物管理業務による管理費改定や取引増加及び不動産仲介の取引増加により、3",
+     "p16": [
+      "xbrl:jppfs_cor:NetSales@CurrentYearDuration",
+      "xbrl:jppfs_cor:NetSales@Prior1YearDuration",
+      "builtin:sign(cur-prior)"
+     ],
+     "p17": [
+      "xbrl:jppfs_cor:NetSales@CurrentYearDuration_jpcrp030000-asr_E00282-000RealEstateBusinessReportableSegmentMember",
+      "xbrl:jppfs_cor:NetSales@Prior1YearDuration_jpcrp030000-asr_E00282-000RealEstateBusinessReportableSegmentMember",
+      "builtin:sign(cur-prior)"
+     ],
+     "p17_state": "VALUE_MISMATCH"
+    },
+    {
+     "id": "T010",
+     "span": "前連結会計年度末残高78億51百万円)となり40億42百万円増加しました。",
+     "p16": [
+      "xbrl:jppfs_cor:CurrentAssets@CurrentYearInstant",
+      "xbrl:jppfs_cor:CurrentAssets@Prior1YearInstant",
+      "builtin:sign(cur-prior)"
+     ],
+     "p17": [],
+     "p17_state": "POINTER_NOT_FOUND"
+    },
+    {
+     "id": "T011",
+     "span": "成工事未収入金が22億32百万円、現金預金が16億12百万円増加したことに",
+     "p16": [
+      "xbrl:jppfs_cor:CashAndDeposits@CurrentYearInstant",
+      "xbrl:jppfs_cor:CashAndDeposits@Prior1YearInstant",
+      "builtin:sign(cur-prior)"
+     ],
+     "p17": [],
+     "p17_state": "POINTER_NOT_FOUND"
+    }
+   ]
+  },
+  "S100Z4N9": {
+   "claims_p16": 186,
+   "claims_p17": 186,
+   "same_ids": true,
+   "transitions": {
+    "VALUE_MISMATCH->GROUNDED": 29,
+    "UNVERIFIABLE->GROUNDED": 2,
+    "UNVERIFIABLE->VALUE_MISMATCH": 2,
+    "POINTER_NOT_FOUND->GROUNDED": 1,
+    "GROUNDED->POINTER_NOT_FOUND": 1,
+    "VALUE_MISMATCH->POINTER_NOT_FOUND": 1
+   },
+   "grounded_lost_or_rebound": [
+    {
+     "id": "T011",
+     "span": "一方で、医療法人への営業貸付金について、当該医療法人の経営改善の遅れによ",
+     "p16": [
+      "xbrl:jppfs_cor:OperatingLoansCA@CurrentYearInstant",
+      "xbrl:jppfs_cor:OperatingLoansCA@Prior1YearInstant",
+      "builtin:sign(cur-prior)"
+     ],
+     "p17": [],
+     "p17_state": "POINTER_NOT_FOUND"
+    }
+   ]
+  },
+  "S100Z4PA": {
+   "claims_p16": 125,
+   "claims_p17": 125,
+   "same_ids": true,
+   "transitions": {
+    "GROUNDED->VALUE_MISMATCH": 4,
+    "GROUNDED->POINTER_NOT_FOUND": 9
+   },
+   "grounded_lost_or_rebound": [
+    {
+     "id": "N001",
+     "span": "以上により、当社グループの当連結会計年度は、売上高が2,400,798千円(前連結会計年度比2",
+     "p16": [
+      "xbrl:jppfs_cor:NetSales@CurrentYearDuration"
+     ],
+     "p17": [
+      "xbrl:jppfs_cor:NetSales@CurrentYearDuration_jpcrp030000-asr_E05740-000AdvertisingAndMarketingBusinessReportableSegmentsMember"
+     ],
+     "p17_state": "VALUE_MISMATCH"
+    },
+    {
+     "id": "N002",
+     "span": "会計年度は、売上高が2,400,798千円(前連結会計年度比2.4%減)、売上総利益は6",
+     "p16": [
+      "xbrl:jppfs_cor:NetSales@CurrentYearDuration",
+      "xbrl:jppfs_cor:NetSales@Prior1YearDuration"
+     ],
+     "p17": [
+      "xbrl:jppfs_cor:NetSales@CurrentYearDuration_jpcrp030000-asr_E05740-000AdvertisingAndMarketingBusinessReportableSegmentsMember",
+      "xbrl:jppfs_cor:NetSales@Prior1YearDuration_jpcrp030000-asr_E05740-000AdvertisingAndMarketingBusinessReportableSegmentsMember"
+     ],
+     "p17_state": "VALUE_MISMATCH"
+    },
+    {
+     "id": "N003",
+     "span": "00,798千円(前連結会計年度比2.4%減)、売上総利益は683,355千円(同 1.1%増)、",
+     "p16": [
+      "xbrl:jppfs_cor:GrossProfit@CurrentYearDuration"
+     ],
+     "p17": [],
+     "p17_state": "POINTER_NOT_FOUND"
+    },
+    {
+     "id": "N004",
+     "span": "結会計年度比2.4%減)、売上総利益は683,355千円(同 1.1%増)、営業利益は58",
+     "p16": [
+      "xbrl:jppfs_cor:GrossProfit@CurrentYearDuration",
+      "xbrl:jppfs_cor:GrossProfit@Prior1YearDuration"
+     ],
+     "p17": [],
+     "p17_state": "POINTER_NOT_FOUND"
+    },
+    {
+     "id": "N005",
+     "span": "売上総利益は683,355千円(同 1.1%増)、営業利益は58,775千円(同 16.7%減)",
+     "p16": [
+      "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration"
+     ],
+     "p17": [
+      "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration_jpcrp030000-asr_E05740-000AdvertisingAndMarketingBusinessReportableSegmentsMember"
+     ],
+     "p17_state": "VALUE_MISMATCH"
+    },
+    {
+     "id": "N006",
+     "span": "355千円(同 1.1%増)、営業利益は58,775千円(同 16.7%減)、経常利益は61",
+     "p16": [
+      "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration",
+      "xbrl:jppfs_cor:OperatingIncome@Prior1YearDuration"
+     ],
+     "p17": [
+      "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration_jpcrp030000-asr_E05740-000AdvertisingAndMarketingBusinessReportableSegmentsMember",
+      "xbrl:jppfs_cor:OperatingIncome@Prior1YearDuration_jpcrp030000-asr_E05740-000AdvertisingAndMarketingBusinessReportableSegmentsMember"
+     ],
+     "p17_state": "VALUE_MISMATCH"
+    },
+    {
+     "id": "N007",
+     "span": "、営業利益は58,775千円(同 16.7%減)、経常利益は61,851千円(同13.9%減)と",
+     "p16": [
+      "xbrl:jppfs_cor:OrdinaryIncome@CurrentYearDuration"
+     ],
+     "p17": [],
+     "p17_state": "POINTER_NOT_FOUND"
+    },
+    {
+     "id": "N008",
+     "span": "75千円(同 16.7%減)、経常利益は61,851千円(同13.9%減)となりました。",
+     "p16": [
+      "xbrl:jppfs_cor:OrdinaryIncome@CurrentYearDuration",
+      "xbrl:jppfs_cor:OrdinaryIncome@Prior1YearDuration"
+     ],
+     "p17": [],
+     "p17_state": "POINTER_NOT_FOUND"
+    },
+    {
+     "id": "N009",
+     "span": "親会社株主に帰属する当期純利益は41,073千円(同 39.5%減)",
+     "p16": [
+      "xbrl:jppfs_cor:ProfitLossAttributableToOwnersOfParent@CurrentYearDuration"
+     ],
+     "p17": [],
+     "p17_state": "POINTER_NOT_FOUND"
+    },
+    {
+     "id": "N010",
+     "span": "親会社株主に帰属する当期純利益は41,073千円(同 39.5%減)となり、前連結会",
+     "p16": [
+      "xbrl:jppfs_cor:ProfitLossAttributableToOwnersOfParent@CurrentYearDuration",
+      "xbrl:jppfs_cor:ProfitLossAttributableToOwnersOfParent@Prior1YearDuration"
+     ],
+     "p17": [],
+     "p17_state": "POINTER_NOT_FOUND"
+    },
+    {
+     "id": "T019",
+     "span": ",073千円(同 39.5%減)となり、前連結会計年度に比べ減収減益となり",
+     "p16": [
+      "xbrl:jppfs_cor:ProfitLossAttributableToOwnersOfParent@CurrentYearDuration",
+      "xbrl:jppfs_cor:ProfitLossAttributableToOwnersOfParent@Prior1YearDuration",
+      "builtin:sign(cur-prior)"
+     ],
+     "p17": [],
+     "p17_state": "POINTER_NOT_FOUND"
+    },
+    {
+     "id": "T020",
+     "span": "73千円(同 39.5%減)となり、前連結会計年度に比べ減収減益となりまし",
+     "p16": [
+      "xbrl:jppfs_cor:ProfitLossAttributableToOwnersOfParent@CurrentYearDuration",
+      "xbrl:jppfs_cor:ProfitLossAttributableToOwnersOfParent@Prior1YearDuration",
+      "builtin:sign(cur-prior)"
+     ],
+     "p17": [],
+     "p17_state": "POINTER_NOT_FOUND"
+    },
+    {
+     "id": "T021",
+     "span": "要因の剥落が親会社株主に帰属する当期純利益の前連結会計年度比減益の一因とな",
+     "p16": [
+      "xbrl:jppfs_cor:ProfitLossAttributableToOwnersOfParent@CurrentYearDuration",
+      "xbrl:jppfs_cor:ProfitLossAttributableToOwnersOfParent@Prior1YearDuration",
+      "builtin:sign(cur-prior)"
+     ],
+     "p17": [],
+     "p17_state": "POINTER_NOT_FOUND"
+    }
+   ]
+  },
+  "S100Z4Q1": {
+   "claims_p16": 88,
+   "claims_p17": 88,
+   "same_ids": true,
+   "transitions": {},
+   "grounded_lost_or_rebound": []
+  }
+ },
+ "summary": {
+  "train_P16": {
+   "L": 217,
+   "G": 158,
+   "E1_strict": 145,
+   "E2_strict": 13,
+   "E2_v0": 13,
+   "E3": 59,
+   "MISSING": 0
+  },
+  "train_P17": {
+   "L": 217,
+   "G": 177,
+   "E1_strict": 161,
+   "E2_strict": 16,
+   "E2_v0": 16,
+   "E3": 40,
+   "MISSING": 0
+  },
+  "dev_P16": {
+   "L": 183,
+   "G": 154,
+   "E1_strict": 146,
+   "E2_strict": 8,
+   "E2_v0": 7,
+   "E3": 29,
+   "MISSING": 0
+  },
+  "dev_P17": {
+   "L": 183,
+   "G": 155,
+   "E1_strict": 147,
+   "E2_strict": 8,
+   "E2_v0": 7,
+   "E3": 28,
+   "MISSING": 0
+  },
+  "grounded_to_non_grounded_total": 71
+ }
+}

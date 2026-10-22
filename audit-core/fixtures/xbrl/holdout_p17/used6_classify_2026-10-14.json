@@ -1,0 +1,63 @@
+[
+ {
+  "doc": "S100YYQX",
+  "claims": 110,
+  "grounded": 44,
+  "plain": 131,
+  "nonconsolidated": 83,
+  "std": [
+   "jpigp",
+   "jppfs"
+  ]
+ },
+ {
+  "doc": "S100Z3LJ",
+  "claims": 128,
+  "grounded": 0,
+  "plain": 0,
+  "nonconsolidated": 142,
+  "std": [
+   "jppfs"
+  ]
+ },
+ {
+  "doc": "S100Z3IZ",
+  "claims": 121,
+  "grounded": 97,
+  "plain": 141,
+  "nonconsolidated": 114,
+  "std": [
+   "jppfs"
+  ]
+ },
+ {
+  "doc": "S100Z3H2",
+  "claims": 167,
+  "grounded": 106,
+  "plain": 130,
+  "nonconsolidated": 75,
+  "std": [
+   "jppfs"
+  ]
+ },
+ {
+  "doc": "S100YXLE",
+  "claims": 121,
+  "grounded": 0,
+  "plain": 0,
+  "nonconsolidated": 110,
+  "std": [
+   "jppfs"
+  ]
+ },
+ {
+  "doc": "S100Z3L6",
+  "claims": 95,
+  "grounded": 40,
+  "plain": 157,
+  "nonconsolidated": 129,
+  "std": [
+   "jppfs"
+  ]
+ }
+]

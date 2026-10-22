@@ -40,10 +40,15 @@ import sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from lib import numbers as N  # noqa: E402
 from lib import sites as S  # noqa: E402
+from lib import scales as SC  # noqa: E402
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 DEFAULT_RECORD_DIR = os.path.join(os.path.expanduser("~"), ".audit-core-measure", "injection-records")
 MACHINE_TYPES = ["T1_VALUE", "T2_UNIT", "T3_ABSENT", "T5_COINCIDENT"]
+# 2026-10-20 段 2(封 docs/XBRL_HYBRID_TRUST_SEAL_2026-10-20.md §2): 席が通しうる 2 型。
+# MACHINE_TYPES・TYPE_POLICY・--types の choices には**入れない**(既存の型と既定の一覧は 1 字も変えない)。
+# ``select(..., types=[...])`` に名前を明示したときだけ使われる。
+EXTRA_TYPES = ["T6_PRIOR", "T7_ROUND"]
 
 # Which types a machine may build, per corpus. Not a tuning knob: 型 1 and
 # 型 5 need to know that a prose number is a measured quantity and, for 型 5,
@@ -270,11 +275,174 @@ def build_t3(site, refs, rng, used_subjects=None, used_values=None):
     }
 
 
+def t6_sites(text, refs, diag=None):
+    """前期の値への置換(T6_PRIOR)の site. 段 2(2026-10-20)。
+
+    Site = 参照先が 1 つに決まる数(``sites.identified_sites``)のうち、参照先の枠が ``CurrentYear...`` で、
+    同じ要素・同じ枠の ``Prior1Year...`` の fact(1 件・同じ単位・値が違う・どちらも正)が refs に在り、
+    その値を数の字面の単位に戻して**元の字の形で 1 字違わず書ける**もの。置き換え後の値は書類の中に実在する。
+
+    ``diag`` (dict)を渡すと、絞り込みの各段の件数を足す(site が 0 のとき理由を 1 段ずつ読むため)。
+    """
+    def bump(k):
+        if diag is not None:
+            diag[k] = diag.get(k, 0) + 1
+
+    by_key = {}
+    for r in refs:
+        by_key.setdefault(r["key"], []).append(r)
+    out = []
+    for t, ref in S.identified_sites(text, refs):
+        bump("1 参照先が 1 つに決まる数")
+        elem, _, ctx = ref["key"].partition("@")
+        if not ctx.startswith("CurrentYear"):
+            continue
+        bump("2 参照先の枠が CurrentYear で始まる")
+        pk = "%s@%s" % (elem, "Prior1Year" + ctx[len("CurrentYear"):])
+        cands = by_key.get(pk, [])
+        if len(cands) != 1:
+            continue
+        prior = cands[0]
+        bump("3 同じ要素の Prior1Year の fact が 1 件在る")
+        if prior.get("unit") != ref.get("unit"):
+            continue
+        bump("4 単位が同じ")
+        if not (prior["value"] > 0 and ref["value"] > 0 and abs(prior["value"] - ref["value"]) > TOL):
+            continue
+        bump("5 どちらも正で値が違う")
+        factor = SC.scale_of(t.unit) or 1
+        cand = prior["value"] / float(factor)
+        rendered = N.render_value(cand, t)
+        try:
+            back = float(rendered.replace(",", "")) * factor
+        except ValueError:
+            continue
+        if abs(back - prior["value"]) > max(TOL, abs(prior["value"]) * 1e-9) or rendered == t.text:
+            continue
+        bump("6 元の字の形で 1 字違わず書ける")
+        out.append({"type": "T6_PRIOR", "token": t, "ref": ref, "prior": prior, "prior_key": pk,
+                    "element": elem, "new_value": cand, "rendered": rendered})
+    return out
+
+
+def build_t6(site, refs, rng):
+    """前期の値への置換: the replacement is the same element's Prior1Year value."""
+    t = site["token"]
+    return {
+        "new_value": site["new_value"],
+        "replacement": site["rendered"],
+        "span": [t.start, t.end],
+        "detail": {
+            "element": site["element"],
+            "original_value": t.value,
+            "prior_value": site["new_value"],
+            "prior_value_in_reference_units": site["prior"]["value"],
+            "true_ref_key": site["ref"]["key"],
+            "prior_ref_key": site["prior_key"],
+            "replacement_present_in_reference_numbers": True,
+        },
+        "expected": (
+            "値は書類の中に実在する(同じ要素の前期の値)。値だけを探す照合は通りうる。"
+            "参照先の期間まで解いて比べる照合だけが止める"
+        ),
+    }
+
+
+def _bump_last_digit(token, delta):
+    """``token`` の字面の**最後の桁**を delta(+1 / -1)する。繰り上がり・繰り下がりで桁数が変わる値、
+    0 以下になる値は None。位取りの区切りと小数点の位置は元の字のまま。"""
+    s = token.text.replace(",", "")
+    ip, _dot, fp = s.partition(".")
+    digits = ip + fp
+    n = int(digits)
+    m = n + delta
+    if m <= 0 or len(str(m)) != len(str(n)):
+        return None
+    nd = str(m).zfill(len(digits))
+    nip, nfp = nd[:len(ip)], nd[len(ip):]
+    if token.has_comma:
+        chunks, body = [], nip
+        while len(body) > 3:
+            chunks.insert(0, body[-3:])
+            body = body[:-3]
+        chunks.insert(0, body)
+        nip = ",".join(chunks)
+    out = nip + (("." + nfp) if fp else "")
+    return out
+
+
+def t7_sites(text, refs, rng, diag=None):
+    """有効数字の最後の桁を ±1 する(T7_ROUND)の site. 段 2(2026-10-20)。封の意図は 2,206 -> 2,207 = 丸めの帯の中。
+
+    Site = 値が refs のどこかに在る数(``sites.data_bearing_sites``。T1 と同じ「データを運ぶ数」)のうち、次を全部満たすもの。
+
+    1. 最後の桁を +1 か -1 しても桁数が変わらず 0 以下にならない
+    2. (a) 字面の桁(区切りと小数点を除いた数字の並びを整数にしたもの)が 3 桁以上 = ±1 が 1% 以下
+    3. (b) 後の値が refs のどの fact の値とも一致しない(偶然一致は T5 の型であって丸めではない)
+
+    符号は ``rng``(select が T7 専用に用意した乱数。主の乱数は使わない)で先に選び、選んだ側が作れなければ逆側。
+    ``diag`` (dict)を渡すと、各段を通った site の数を足す(1 つの数は 1 段に 1 回だけ数える)。
+    """
+    def bump(seen, k):
+        if k not in seen:
+            seen.add(k)
+            if diag is not None:
+                diag[k] = diag.get(k, 0) + 1
+
+    vindex = S._value_index(refs)
+    out = []
+    for t, cands in S.data_bearing_sites(text, refs):
+        seen = set()
+        bump(seen, "1 データを運ぶ数(値が refs に在る)")
+        if t.value == 0:
+            continue
+        order = [1, -1]
+        rng.shuffle(order)
+        for delta in order:
+            rendered = _bump_last_digit(t, delta)
+            if rendered is None or rendered == t.text:
+                continue
+            bump(seen, "2 最後の桁 ±1 で桁数が変わらず正")
+            if len(str(int(t.text.replace(",", "").replace(".", "")))) < 3:
+                continue
+            bump(seen, "3 (a) 字面の桁が 3 桁以上(±1 が 1% 以下)")
+            new = float(rendered.replace(",", ""))
+            if S._matches(new, t.unit, vindex):
+                continue
+            bump(seen, "4 (b) 後の値が refs のどの fact の値とも一致しない")
+            out.append({"type": "T7_ROUND", "token": t, "candidates": cands, "delta": delta,
+                        "new_value": new, "rendered": rendered, "new_value_present_in_refs": False})
+            break
+    return out
+
+
+def build_t7(site, refs, rng):
+    """最後の桁 ±1: the digits keep their length, the last digit moves by one."""
+    t = site["token"]
+    return {
+        "new_value": site["new_value"],
+        "replacement": site["rendered"],
+        "span": [t.start, t.end],
+        "detail": {
+            "original_value": t.value,
+            "replacement_value": site["new_value"],
+            "difference": site["new_value"] - t.value,
+            "last_digit_delta": site["delta"],
+            "replacement_present_in_reference_numbers": site["new_value_present_in_refs"],
+            "candidate_ref_keys": sorted({r["key"] for r in site["candidates"]})[:8],
+            "candidate_ref_count": len({r["key"] for r in site["candidates"]}),
+        },
+        "expected": "最後の桁だけ違う。丸めの帯の中に入りうる(許容帯で通る照合は通す)。帯の外へ出す照合だけが止める",
+    }
+
+
 BUILDERS = {
     "T1_VALUE": build_t1,
     "T2_UNIT": build_t2,
     "T3_ABSENT": build_t3,
     "T5_COINCIDENT": build_t5,
+    "T6_PRIOR": build_t6,
+    "T7_ROUND": build_t7,
 }
 
 
@@ -298,7 +466,7 @@ def _overlaps(span, chosen):
     return False
 
 
-def select(text, refs, kind, seed, doc_id, count, types=None):
+def select(text, refs, kind, seed, doc_id, count, types=None, quota=None, fallback=None):
     """Choose ``count`` injections, spread as evenly as the catalogue allows.
 
     The RNG is seeded from (sealed seed, document id) so each document draws
@@ -316,19 +484,39 @@ def select(text, refs, kind, seed, doc_id, count, types=None):
 
     counts = {t: len(catalog[t]) for t in MACHINE_TYPES}
     allowed = list(types or TYPE_POLICY[kind])
+    # 段 2 の 2 型は、名前で明示されたときだけ catalog に足す。上の 4 型の shuffle と builder が使う主の乱数 ``rng``
+    # には触れない(型ごとの別の乱数)ので、types を明示しない呼び出しの結果は 1 字も変わらない。
+    for et in EXTRA_TYPES:
+        if et in allowed:
+            erng = random.Random("%s|%s|%s" % (seed, doc_id, et))
+            if et == "T6_PRIOR":
+                catalog[et] = t6_sites(text, refs)
+            else:
+                catalog[et] = t7_sites(text, refs, erng)
+            erng.shuffle(catalog[et])
+            counts[et] = len(catalog[et])
     withheld = {t: counts[t] for t in MACHINE_TYPES if t not in allowed}
-    chosen, spans, cursor = [], [], {t: 0 for t in MACHINE_TYPES}
+    chosen, spans, cursor = [], [], {t: 0 for t in MACHINE_TYPES + EXTRA_TYPES}
     # One injection per number token. A value substitution and a unit shift on
     # the same number do not overlap as spans, but together they make the
     # record unattributable: a detection could not be credited to either type.
     claimed_tokens = set()
     used_subjects, used_values = set(), set()
     # Round-robin so no type is starved, then keep going while anything is left.
+    # ``quota`` (型 -> 件数)を渡したときだけ、まず各型を quota まで採り(phase 0)、足りない分を
+    # quota を外して同じ順で埋める(phase 1)。渡さなければ phase 1 だけ = 従来どおり。
+    # ``fallback`` (型の並び)を渡したときだけ、phase 1 でも誰も採れなくなってから、その型を最後の手段として
+    # ``allowed`` の後ろに足して続ける(既存の型 T1_VALUE などで埋めるとき)。渡さなければ従来どおり。
+    order = list(allowed)
+    pending = [t for t in (fallback or []) if t not in order]
+    phase = 0 if quota else 1
     while len(chosen) < count:
         progressed = False
-        for t in allowed:
+        for t in order:
             if len(chosen) >= count:
                 break
+            if phase == 0 and sum(1 for c in chosen if c["type"] == t) >= quota.get(t, count):
+                continue
             pool = catalog[t]
             while cursor[t] < len(pool):
                 site = pool[cursor[t]]
@@ -354,6 +542,13 @@ def select(text, refs, kind, seed, doc_id, count, types=None):
                 progressed = True
                 break
         if not progressed:
+            if phase == 0:
+                phase = 1
+                continue
+            if pending:
+                order += pending
+                pending = []
+                continue
             break
     return chosen, counts, allowed, withheld
 

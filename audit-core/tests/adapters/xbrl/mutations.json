@@ -1,318 +1,791 @@
 [
-  {
-    "id": "A-R1-remove-truncate",
-    "file": "vocabulary.py",
-    "old": "        if 0 <= fv - t < unit:\n            return (sign_mode + \"+truncate\").strip(\"+\")",
-    "new": "        if False:\n            return (sign_mode + \"+truncate\").strip(\"+\")",
-    "predicted": "red",
-    "note": "match_value の truncate 判定を外す(予測 §6 の候補のひとつ)。1B に truncate 一致が 13 件ある。"
-  },
-  {
-    "id": "A-R2-round-disabled-falls-through-to-truncate-label",
-    "file": "vocabulary.py",
-    "old": "        if abs(fv - t) <= unit / 2:",
-    "new": "        if False:",
-    "predicted": "red",
-    "note": "最初の試みは round の境界を <= から < に変えるだけだったが実測で green(実データに境界値ぴったりの差が無く等価変異だった、本文に記録)。round 判定を丸ごと外すと、差が 0 の完全一致も truncate 分岐(0<=diff<unit)で捕まり normalization のラベルが round→truncate に変わるため red になる。"
-  },
-  {
-    "id": "A-G1-tolof-max-arg-order",
-    "file": "vocabulary.py",
-    "old": "            return max(0.5 * (10 ** (-int(d))), 0.5 * claim_scale)",
-    "new": "            return max(0.5 * claim_scale, 0.5 * (10 ** (-int(d))))",
-    "predicted": "green",
-    "note": "max() は交換可能なので、引数順を入れ替えても出力は変わらない(等価変異の対照)。"
-  },
-  {
-    "id": "A-R3-ctx-ok-in-not-eq",
-    "file": "instance.py",
-    "old": "    return c.get(\"members\") == [member] and \"NonConsolidated\" not in cid",
-    "new": "    return member in (c.get(\"members\") or []) and \"NonConsolidated\" not in cid",
-    "predicted": "red",
-    "note": "C-1c 予測 §6 の候補: ctx_ok の == [member] を in にする(置き換えを合わせるへ変える)。"
-  },
-  {
-    "id": "A-G2-stripper-tag-tuple-reorder",
-    "file": "instance.py",
-    "old": "        if tag in (\"p\", \"br\", \"div\", \"tr\", \"li\", \"h1\", \"h2\", \"h3\", \"h4\", \"td\"):",
-    "new": "        if tag in (\"td\", \"h4\", \"h3\", \"h2\", \"h1\", \"li\", \"tr\", \"div\", \"br\", \"p\"):",
-    "predicted": "green",
-    "note": "同じ要素の順序を入れ替えただけ(in によるメンバーシップ判定は順序に依らない)の対照。"
-  },
-  {
-    "id": "A-R4-carry-back-1",
-    "file": "extract.py",
-    "old": "CARRY_BACK = 5  # xbrl_probe3.py §3.1-2: 同じ段落で 5 文以内",
-    "new": "CARRY_BACK = 1  # xbrl_probe3.py §3.1-2: 同じ段落で 5 文以内",
-    "predicted": "red",
-    "note": "C-1c 予測 §6 の候補: CARRY_BACK を変える。5F の member の carried 解決が変わる。"
-  },
-  {
-    "id": "A-R5-own-sign-match-first-hit",
-    "file": "extract.py",
-    "old": "    for pm in PCT_DIR_RE.finditer(window):\n        g = pm.group(2) or pm.group(5)\n        if g is not None and abs(float(g) - num) < 1e-9:\n            return pm\n    return None",
-    "new": "    return PCT_DIR_RE.search(window)",
-    "predicted": "red",
-    "note": "C-1c 予測 §6 の候補: own_sign_match を最初の一致に戻す(P-8 を外す)。"
-  },
-  {
-    "id": "A-R6-claim-member-b-never-ambiguous",
-    "file": "extract.py",
-    "old": "    if len({g[3] for g in group}) == 1:",
-    "new": "    if True:",
-    "predicted": "red",
-    "note": "最初の試みは接続語チェック(conn_re.match を True に)だったが実測で green(2 社目の実データでは群に 2 つ目の seg マークが連結語を介さず隣接する場面が無く、その分岐が到達されない等価変異だった、本文に記録)。群の異なり数チェック自体を外すと、5F の ambiguous(member) になっている Claim(claim_member_B 発の N004・T008 等)が claim 扱いに変わり red になる。"
-  },
-  {
-    "id": "A-R7-amount-jp-big-flag-drops-man",
-    "file": "extract.py",
-    "old": "        big = bool(m.group(2) or m.group(3) or m.group(7))",
-    "new": "        big = bool(m.group(2) or m.group(3))",
-    "predicted": "red",
-    "note": "漢数字混じりの金額(「万」単独の桁上げ)の big 判定から万を外す。293百万円 のような表記の値が変わる。"
-  },
-  {
-    "id": "A-R8-period-order-reversed",
-    "file": "recipes.py",
-    "old": "    tr = tuple(\"/\".join(_period(_ctx_of(p)[1])) for p in xptrs)",
-    "new": "    tr = tuple(\"/\".join(_period(_ctx_of(p)[1])) for p in reversed(xptrs))",
-    "predicted": "red",
-    "note": "C-1c 予測 §6 の候補: 期間の対の写し順を変える(time_range の並びが期待値と合わなくなる)。"
-  },
-  {
-    "id": "D-R1-remove-truncate-from-comparators",
-    "file": "comparators.py",
-    "old": "        if 0 <= fv - t < unit:\n            return (sign_mode + \"+truncate\").strip(\"+\")",
-    "new": "        if False:\n            return (sign_mode + \"+truncate\").strip(\"+\")",
-    "predicted": "red",
-    "note": "C-1d 予測 §3.6 D-R1。1B に truncate 13 件 + abs+truncate 6 件(本日既知)。"
-  },
-  {
-    "id": "D-R2-pct-change-signed-denominator",
-    "file": "comparators.py",
-    "old": "    pct = (cur.value - prior.value) / abs(prior.value) * 100",
-    "new": "    pct = (cur.value - prior.value) / prior.value * 100",
-    "predicted": "red",
-    "note": "C-1d 予測 §3.6 D-R2。5F の前期が負の N049・N078・N083 の符号が変わる。"
-  },
-  {
-    "id": "F-R3-sign-zero-counts-as-decrease-again",
-    "file": "comparators.py",
-    "old": "    actual = 0 if diff == 0 else (1 if diff > 0 else -1)",
-    "new": "    actual = 1 if diff > 0 else -1",
-    "predicted": "red",
-    "note": "C-1f 予測 §3 row 6(癖 b を戻す)。C-1d の D-R3 は予測 green・実測 red の外れとして記録された(prediction_miss)。C-1f で癖 b を直したため old が消え、この行に置き換えた。外れの記録は C-1d の結果文書 §3 と git 履歴(25f33e9)に残る。"
-  },
-  {
-    "id": "F-R3g-sign-zero-counts-as-decrease-again-gate-only",
-    "file": "comparators.py",
-    "old": "    actual = 0 if diff == 0 else (1 if diff > 0 else -1)",
-    "new": "    actual = 1 if diff > 0 else -1",
-    "predicted": "green",
-    "scope": "gate_only",
-    "note": "C-1f 予測 §3 row 6。224 件に該当 Claim 0 なので門は無言。直しは実データでは測れていない、を数で残す。"
-  },
-  {
-    "id": "D-R4-direction-match-inverted",
-    "file": "comparators.py",
-    "old": "    return core.Comparison(match=(actual == direction), recomputed=diff, depth=\"value_match\", detail=detail)",
-    "new": "    return core.Comparison(match=(actual != direction), recomputed=diff, depth=\"value_match\", detail=detail)",
-    "predicted": "red",
-    "note": "C-1d 予測 §3.6 D-R4。文章の Claim の GROUNDED/VALUE_MISMATCH が入れ替わる。"
-  },
-  {
-    "id": "D-R5-resolver-ignores-context",
-    "file": "resolve.py",
-    "old": "        matches = by_key.get((name, context))",
-    "new": "        matches = next((v for k, v in by_key.items() if k[0] == name), None)",
-    "predicted": "red",
-    "note": "C-1d 予測 §3.6 D-R5。当期・前期の pointer が同じ名前の最初の fact へ解決され、同じ値になる。"
-  },
-  {
-    "id": "D-R6-formula-scheme-registered-as-evidence",
-    "file": "registry_setup.py",
-    "old": "    registry.register_scheme(\"formula\", kind=\"operator\", trust=\"structural\")",
-    "new": "    registry.register_scheme(\"formula\", kind=\"evidence\", trust=\"structural\")",
-    "predicted": "red",
-    "note": "C-1d 予測 §3.6 D-R6。ratio*100・diff(a-b) の formula: pointer が resolver に渡り解決できず POINTER_NOT_FOUND になる。"
-  },
-  {
-    "id": "D-R7-ctx-ok-in-not-eq-instrument3-scope",
-    "file": "instance.py",
-    "old": "    return c.get(\"members\") == [member] and \"NonConsolidated\" not in cid",
-    "new": "    return member in (c.get(\"members\") or []) and \"NonConsolidated\" not in cid",
-    "predicted": "green",
-    "scope": "gate_only",
-    "note": "C-1d 予測 §3.6 D-R7。C-1 計画 §5 がこの変異を赤と予測し(A-R3 として C-1c の既定スコープでは実際に赤)、C-1c の監査が「224 件の門は黙る」ことを単体試験(test_instance、合成データ)で確かめた。このスコープ(test_claim_layer + test_instrument3 のみ、test_instance 抜き)では、2 社の実データに member を 2 つ以上持つ context が無いため green になる(計器 3 もこの分岐を見ない、という C-1 計画 §5 の予測の外れを公式に記録する)。"
-  },
-  {
-    "id": "D-R8-pure100-threshold-removed",
-    "file": "comparators.py",
-    "old": "    fvp = fv * 100 if abs(fv) <= pure_threshold else fv",
-    "new": "    fvp = fv",
-    "predicted": "red",
-    "note": "C-1d 予測 §3.6 D-R8。1B の N014・N041(pure×100 で GROUNDED)が ×100 されず VALUE_MISMATCH になる。"
-  },
-  {
-    "id": "D-R9-pct-change-recomputed-not-rounded",
-    "file": "comparators.py",
-    "old": "    recomputed = round(pct, 2)",
-    "new": "    recomputed = pct",
-    "predicted": "red",
-    "note": "C-1d 予測 §3.6 D-R9(pct_change 側)。recomputed が期待値の round(pct, 2) と float で == でなくなる(5F に pct_change の Claim が複数件)。"
-  },
-  {
-    "id": "F-R1-pure100-abs-claim-again",
-    "file": "comparators.py",
-    "old": "    match = abs(fvp - claim.value) <= tolerance",
-    "new": "    match = abs(fvp - abs(claim.value)) <= tolerance",
-    "predicted": "red",
-    "note": "C-1f 予測 §3 row 2(癖 a を pure100 側で戻す)。合成単体試験(test_negative_claim_value_mismatches_positive_fact)が claim.value=-5.8 を直接作るため既定スコープでは赤。"
-  },
-  {
-    "id": "F-R1g-pure100-abs-claim-again-gate-only",
-    "file": "comparators.py",
-    "old": "    match = abs(fvp - claim.value) <= tolerance",
-    "new": "    match = abs(fvp - abs(claim.value)) <= tolerance",
-    "predicted": "green",
-    "scope": "gate_only",
-    "note": "C-1f 予測 §3 row 2。1B の pure×100 該当 3 件(N013・N014・N041)は全部正の claim.value なので門は無言。直しは実データでは測れていない、を数で残す。"
-  },
-  {
-    "id": "F-R2-ratio100-abs-claim-again",
-    "file": "comparators.py",
-    "old": "    match = abs(ratio - claim.value) <= tolerance",
-    "new": "    match = abs(ratio - abs(claim.value)) <= tolerance",
-    "predicted": "red",
-    "note": "C-1f 予測 §3 row 3(癖 a を ratio100 側で戻す)。合成単体試験(test_negative_claim_value_mismatches_positive_ratio)が claim.value=-94.0 を直接作るため既定スコープでは赤。"
-  },
-  {
-    "id": "F-R2g-ratio100-abs-claim-again-gate-only",
-    "file": "comparators.py",
-    "old": "    match = abs(ratio - claim.value) <= tolerance",
-    "new": "    match = abs(ratio - abs(claim.value)) <= tolerance",
-    "predicted": "green",
-    "scope": "gate_only",
-    "note": "C-1f 予測 §3 row 3。1B の ratio×100 該当 4 件は全部正の claim.value なので門は無言。直しは実データでは測れていない、を数で残す。"
-  },
-  {
-    "id": "D-G1-comparators-docstring-wording",
-    "file": "comparators.py",
-    "old": "one piece of XBRL-adjacent logic it needs (the round/truncate/abs ladder",
-    "new": "one piece of XBRL-adjacent logic it requires (the round/truncate/abs ladder",
-    "predicted": "green",
-    "note": "C-1d 予測 §3.6 D-G1(対照)。docstring の言い回しのみの変更。"
-  },
-  {
-    "id": "D-G2-resolve-docstring-wording",
-    "file": "resolve.py",
-    "old": "\"\"\"The Adapter's pointer resolver (C-1d prediction §3.2): turns one",
-    "new": "\"\"\"The Adapter's pointer resolver (C-1d prediction §3.2): converts one",
-    "predicted": "green",
-    "note": "C-1d 予測 §3.6 D-G2(対照)。docstring の言い回しのみの変更。"
-  },
-  {
-    "id": "G-R1-flow-convention-sign-reversed",
-    "file": "vocabulary.py",
-    "old": "    if _FLOW_INCREASE_DECREASE_RE.match(local):\n        return 1\n    if _FLOW_DECREASE_INCREASE_RE.match(local):\n        return -1",
-    "new": "    if _FLOW_INCREASE_DECREASE_RE.match(local):\n        return -1\n    if _FLOW_DECREASE_INCREASE_RE.match(local):\n        return 1",
-    "predicted": "red",
-    "note": "C-1g 予測 §1-2(人間の決定、2026-10-06)。CF 流量項目の符号の規約(b)を反転する。tests/adapters/xbrl/test_vocabulary.py::FlowConventionTest の各ケース(DecreaseIncreaseIn=-1 / IncreaseDecreaseIn=+1 / Net…/会社拡張)が入れ替わって落ちる。P1/P5F はこの関数を一度も呼ばないので 224 件の門(test_claim_layer・test_instrument3)は無言。"
-  },
-  {
-    "id": "G-R2-flow-sign-zero-counts-as-match",
-    "file": "comparators.py",
-    "old": "    actual = 0 if cur.value == 0 else (1 if cur.value * flow_convention > 0 else -1)",
-    "new": "    actual = 1 if cur.value * flow_convention >= 0 else -1",
-    "predicted": "red",
-    "note": "C-1g 予測 §1-2。builtin:flow_sign(cur)==direction の差 0(fact 値 0)を「増加」扱いにする。tests/adapters/xbrl/test_comparators.py::BuiltinFlowSignDirectionTest::test_zero_value_matches_no_direction が落ちる(actual が 0 でなく 1 になり、direction=1 と match してしまう)。"
-  },
-  {
-    "id": "G-R3-point-diff-tolerance-1.5",
-    "file": "comparators.py",
-    "old": "    match = abs(recomputed - claim.value) <= tolerance",
-    "new": "    match = abs(recomputed - claim.value) <= 1.5",
-    "predicted": "red",
-    "note": "C-1g 予測 §1-3。diff(a-b)(pure*100) の許容を params の 0.15 でなく 1.5 に固定する。既存の 4 本(match/mismatch/boundary)は差が 0〜0.15 か 4.0 なので 1.5 でも結果が変わらず無言(本文に記録する点)。tests/adapters/xbrl/test_comparators.py::DiffAbPure100Test::test_mismatch_just_outside_015_tolerance(差 1.0 -- 0.15 では mismatch・1.5 なら誤って match になる)を専用に追加して red にする。"
-  },
-  {
-    "id": "G-R4-segment-denominator-namespace-check-removed",
-    "file": "instance.py",
-    "old": "            prefix = m.split(\":\", 1)[0] if \":\" in m else None\n            if prefix not in _STANDARD_MEMBER_NAMESPACE_PREFIXES:\n                ms.add(m)",
-    "new": "            prefix = m.split(\":\", 1)[0] if \":\" in m else None\n            ms.add(m)",
-    "predicted": "red",
-    "note": "C-1g 予測 §1-4(人間の承認、2026-10-06)。segment_member_denominator の名前空間判定を外し、member_denominator と同じ(全部数える)挙動に戻す。tests/adapters/xbrl/test_instance.py::SegmentMemberDenominatorTest(標準 member を除く 3 本)が落ちる。"
-  },
-  {
-    "id": "G-R5-vocab-line-removed-current-liabilities",
-    "file": "vocabulary.py",
-    "old": "    (\"流動負債\", [\"CurrentLiabilities\"]),\n    (\"固定負債\", [\"NoncurrentLiabilities\"]),",
-    "new": "    (\"固定負債\", [\"NoncurrentLiabilities\"]),",
-    "predicted": "red",
-    "note": "C-1g 予測 §1-1。P6 だけの語彙 7 行から「流動負債」を 1 行消す。tests/adapters/xbrl/test_vocabulary.py::P6ProfileTest::test_subjects_p6_extra_7_count/test_subjects_p6_extra_7_words/test_subjects_p6_is_extra_7_plus_74_in_order が落ちる。"
-  },
-  {
-    "id": "G-G1-diff-ab-pure100-docstring-wording",
-    "file": "comparators.py",
-    "old": "``XP-3rd-1`` point-difference form). evidence = (a, b) -- the current",
-    "new": "``XP-3rd-1`` point-difference shape). evidence = (a, b) -- the current",
-    "predicted": "green",
-    "note": "C-1g 予測 §1(対照)。docstring の言い回しのみの変更。"
-  },
-  {
-    "id": "G-G2-flow-convention-docstring-wording",
-    "file": "vocabulary.py",
-    "old": "def flow_convention(element_name):\n    \"\"\"CF 流量項目の符号の規約(C-1g §1-2)。``element_name`` は",
-    "new": "def flow_convention(element_name):\n    \"\"\"CF 流量項目の符号の規約(C-1g §1-2 の決定)。``element_name`` は",
-    "predicted": "green",
-    "note": "C-1g 予測 §1(対照)。docstring の言い回しのみの変更。"
-  },
-  {
-    "id": "H-R1-expenditure-magnitude-sign-reversed",
-    "file": "comparators.py",
-    "old": "    magnitude_diff = acur - aprior",
-    "new": "    magnitude_diff = aprior - acur",
-    "predicted": "red",
-    "note": "C-1h §1-1(封じた規則)。「支出」系項目の大きさの差を反転すると、test_recipes.ExpenditureConventionTextClaimBuildTest の T022/T025 型の GROUNDED/VALUE_MISMATCH が入れ替わり、test_comparators.BuiltinSignAbsDiffDirectionTest も壊れる。"
-  },
-  {
-    "id": "H-R2-target-word-window-disabled",
-    "file": "recipes.py",
-    "old": "            if profile.target_word and _TARGET_RE.search(s[max(0, a - _TARGET_WINDOW):a]):",
-    "new": "            if False and profile.target_word and _TARGET_RE.search(s[max(0, a - _TARGET_WINDOW):a]):",
-    "predicted": "red",
-    "note": "C-1h §1-2(封じた規則)。目標値・計画値の窓判定を外すと、test_recipes.TargetOrPlanWindowTest の reason が target_or_plan にならなくなる。"
-  },
-  {
-    "id": "H-R3-text-reason-split-disabled",
-    "file": "recipes.py",
-    "old": "    cur_any = [f for f in I.facts_for(elems, facts, contexts, member) if f[\"context\"].startswith(\"CurrentYear\")]",
-    "new": "    cur_any = []",
-    "predicted": "red",
-    "note": "C-1h §1-3(封じた規則)。cur_any を常に空にすると分割前の no_element だけが返り、test_recipes.TextUnboundReasonSplitBuildTest の (a)/(b) が壊れる。"
-  },
-  {
-    "id": "H-R4-flow-direction-word-window-widened",
-    "file": "recipes.py",
-    "old": "    window2 = s[b:b + 4]",
-    "new": "    window2 = s[b:b + 10]",
-    "predicted": "red",
-    "note": "C-1h §1-4(封じた規則、C-1g 監査の記録事項 3)。数の直後の窓を 4→10 に広げると、test_recipes.WindowBoundaryTest.test_flow_direction_word_does_not_catch_word_at_fifth_char が 拾ってしまい壊れる。"
-  },
-  {
-    "id": "H-R5-point-diff-prior-phrase-window-widened",
-    "file": "recipes.py",
-    "old": "    window = s[max(0, a - 25):a]",
-    "new": "    window = s[max(0, a - 30):a]",
-    "predicted": "red",
-    "note": "C-1h §1-4(封じた規則、C-1g 監査の記録事項 3)。前期の語の窓を 25→30 に広げると、test_recipes.WindowBoundaryTest.test_point_diff_prior_phrase_missed_one_char_earlier が 拾ってしまい壊れる。"
-  },
-  {
-    "id": "H-G1-registry-setup-docstring-wording",
-    "file": "registry_setup.py",
-    "old": "    # Core 接続 C-1h §1-1(profile P7 のみが参照する)。",
-    "new": "    # Core 接続 C-1h §1-1(P7 のみが参照する、比較子 1 件)。",
-    "predicted": "green",
-    "note": "コメントの字句だけの変更(C-1g の D-G1/D-G2/G-G1/G-G2 と同型)。挙動は変わらないので green のまま。"
-  }
+ {
+  "id": "A-R1-remove-truncate",
+  "file": "vocabulary.py",
+  "old": "        if mode in (None, \"truncate\"):\n            # P19(``magnitude_truncate``、計画 docs/P17_PLAN_2026-10-14.md §8):\n            # 切り捨ての帯を**絶対値で**当てる。符号つきのまま当てると、負の値で\n            # 「実際より絶対値が 1 単位大きい額」を通す(実測 2 件: fact −300,297,000 に\n            # 対して「4億円」)。偽なら写し元と 1 行も違わない。\n            lo, hi = ((abs(fv), abs(t)) if magnitude_truncate else (fv, t))\n            if 0 <= lo - hi < unit:\n                return (sign_mode + \"+truncate\").strip(\"+\")\n",
+  "new": "\n",
+  "predicted": "red",
+  "note": "match_value の truncate 判定を外す(予測 §6 の候補のひとつ)。1B に truncate 一致が 13 件ある。 2026-10-08 の XBRL 直し §2 で match_value に mode 引数が付いたため、同じ 2 行に当て直した(変異が外す性質 = truncate 判定そのもの、は変えていない)。 / 2026-10-15: P19 で枝の書き方が変わったので old を合わせた(狙いは同じ ― 切り捨ての枝を消す)。"
+ },
+ {
+  "id": "A-R2-round-disabled-falls-through-to-truncate-label",
+  "file": "vocabulary.py",
+  "old": "        if mode in (None, \"round\") and abs(fv - t) <= unit / 2:",
+  "new": "        if False and abs(fv - t) <= unit / 2:",
+  "predicted": "red",
+  "note": "最初の試みは round の境界を <= から < に変えるだけだったが実測で green(実データに境界値ぴったりの差が無く等価変異だった、本文に記録)。round 判定を丸ごと外すと、差が 0 の完全一致も truncate 分岐(0<=diff<unit)で捕まり normalization のラベルが round→truncate に変わるため red になる。 2026-10-08 の XBRL 直し §2 で同じ行に mode の条件が付いたため当て直した(外す性質 = round 判定そのもの、は不変)。"
+ },
+ {
+  "id": "A-G1-tolof-max-arg-order",
+  "file": "vocabulary.py",
+  "old": "            return max(0.5 * (10 ** (-int(d))), 0.5 * claim_scale)",
+  "new": "            return max(0.5 * claim_scale, 0.5 * (10 ** (-int(d))))",
+  "predicted": "green",
+  "note": "max() は交換可能なので、引数順を入れ替えても出力は変わらない(等価変異の対照)。"
+ },
+ {
+  "id": "A-R3-ctx-ok-in-not-eq",
+  "file": "instance.py",
+  "old": "    return c.get(\"members\") == [member] and \"NonConsolidated\" not in cid",
+  "new": "    return member in (c.get(\"members\") or []) and \"NonConsolidated\" not in cid",
+  "predicted": "red",
+  "note": "C-1c 予測 §6 の候補: ctx_ok の == [member] を in にする(置き換えを合わせるへ変える)。"
+ },
+ {
+  "id": "A-G2-stripper-tag-tuple-reorder",
+  "file": "instance.py",
+  "old": "        if tag in (\"p\", \"br\", \"div\", \"tr\", \"li\", \"h1\", \"h2\", \"h3\", \"h4\", \"td\"):",
+  "new": "        if tag in (\"td\", \"h4\", \"h3\", \"h2\", \"h1\", \"li\", \"tr\", \"div\", \"br\", \"p\"):",
+  "predicted": "green",
+  "note": "同じ要素の順序を入れ替えただけ(in によるメンバーシップ判定は順序に依らない)の対照。"
+ },
+ {
+  "id": "A-R4-carry-back-1",
+  "file": "extract.py",
+  "old": "CARRY_BACK = 5  # xbrl_probe3.py §3.1-2: 同じ段落で 5 文以内",
+  "new": "CARRY_BACK = 1  # xbrl_probe3.py §3.1-2: 同じ段落で 5 文以内",
+  "predicted": "red",
+  "note": "C-1c 予測 §6 の候補: CARRY_BACK を変える。5F の member の carried 解決が変わる。"
+ },
+ {
+  "id": "A-R5-own-sign-match-first-hit",
+  "file": "extract.py",
+  "old": "    for pm in PCT_DIR_RE.finditer(window):\n        g = pm.group(2) or pm.group(5)\n        if g is not None and abs(float(g) - num) < 1e-9:\n            return pm\n    return None",
+  "new": "    return PCT_DIR_RE.search(window)",
+  "predicted": "red",
+  "note": "C-1c 予測 §6 の候補: own_sign_match を最初の一致に戻す(P-8 を外す)。"
+ },
+ {
+  "id": "A-R6-claim-member-b-never-ambiguous",
+  "file": "extract.py",
+  "old": "    if len({g[3] for g in group}) == 1:",
+  "new": "    if True:",
+  "predicted": "red",
+  "note": "最初の試みは接続語チェック(conn_re.match を True に)だったが実測で green(2 社目の実データでは群に 2 つ目の seg マークが連結語を介さず隣接する場面が無く、その分岐が到達されない等価変異だった、本文に記録)。群の異なり数チェック自体を外すと、5F の ambiguous(member) になっている Claim(claim_member_B 発の N004・T008 等)が claim 扱いに変わり red になる。"
+ },
+ {
+  "id": "A-R7-amount-jp-big-flag-drops-man",
+  "file": "extract.py",
+  "old": "        big = bool(m.group(2) or m.group(3) or m.group(7))",
+  "new": "        big = bool(m.group(2) or m.group(3))",
+  "predicted": "red",
+  "note": "漢数字混じりの金額(「万」単独の桁上げ)の big 判定から万を外す。293百万円 のような表記の値が変わる。"
+ },
+ {
+  "id": "A-R8-period-order-reversed",
+  "file": "recipes.py",
+  "old": "    tr = tuple(\"/\".join(_period(_ctx_of(p)[1])) for p in xptrs)",
+  "new": "    tr = tuple(\"/\".join(_period(_ctx_of(p)[1])) for p in reversed(xptrs))",
+  "predicted": "red",
+  "note": "C-1c 予測 §6 の候補: 期間の対の写し順を変える(time_range の並びが期待値と合わなくなる)。"
+ },
+ {
+  "id": "D-R1-remove-truncate-from-comparators",
+  "file": "comparators.py",
+  "old": "        if mode in (None, \"truncate\"):\n            # P19(``magnitude_truncate``、params 経由で渡る): 切り捨ての帯を絶対値で。\n            lo, hi = ((abs(fv), abs(t)) if magnitude_truncate else (fv, t))\n            if 0 <= lo - hi < unit:\n                return (sign_mode + \"+truncate\").strip(\"+\")\n",
+  "new": "\n",
+  "predicted": "red",
+  "note": "C-1d 予測 §3.6 D-R1。1B に truncate 13 件 + abs+truncate 6 件(本日既知)。 2026-10-08 の XBRL 直し §2 で当て直した(外す性質は不変)。 / 2026-10-15: 同上(写しの側)。"
+ },
+ {
+  "id": "D-R2-pct-change-signed-denominator",
+  "file": "comparators.py",
+  "old": "    pct = (cur.value - prior.value) / abs(prior.value) * 100",
+  "new": "    pct = (cur.value - prior.value) / prior.value * 100",
+  "predicted": "red",
+  "note": "C-1d 予測 §3.6 D-R2。5F の前期が負の N049・N078・N083 の符号が変わる。"
+ },
+ {
+  "id": "F-R3-sign-zero-counts-as-decrease-again",
+  "file": "comparators.py",
+  "old": "    actual = 0 if diff == 0 else (1 if diff > 0 else -1)",
+  "new": "    actual = 1 if diff > 0 else -1",
+  "predicted": "red",
+  "note": "C-1f 予測 §3 row 6(癖 b を戻す)。C-1d の D-R3 は予測 green・実測 red の外れとして記録された(prediction_miss)。C-1f で癖 b を直したため old が消え、この行に置き換えた。外れの記録は C-1d の結果文書 §3 と git 履歴(25f33e9)に残る。"
+ },
+ {
+  "id": "F-R3g-sign-zero-counts-as-decrease-again-gate-only",
+  "file": "comparators.py",
+  "old": "    actual = 0 if diff == 0 else (1 if diff > 0 else -1)",
+  "new": "    actual = 1 if diff > 0 else -1",
+  "predicted": "green",
+  "scope": "gate_only",
+  "note": "C-1f 予測 §3 row 6。224 件に該当 Claim 0 なので門は無言。直しは実データでは測れていない、を数で残す。"
+ },
+ {
+  "id": "D-R4-direction-match-inverted",
+  "file": "comparators.py",
+  "old": "    return core.Comparison(match=(actual == direction), recomputed=diff, depth=\"value_match\", detail=detail)",
+  "new": "    return core.Comparison(match=(actual != direction), recomputed=diff, depth=\"value_match\", detail=detail)",
+  "predicted": "red",
+  "note": "C-1d 予測 §3.6 D-R4。文章の Claim の GROUNDED/VALUE_MISMATCH が入れ替わる。"
+ },
+ {
+  "id": "D-R5-resolver-ignores-context",
+  "file": "resolve.py",
+  "old": "        matches = by_key.get((name, context))",
+  "new": "        matches = next((v for k, v in by_key.items() if k[0] == name), None)",
+  "predicted": "red",
+  "note": "C-1d 予測 §3.6 D-R5。当期・前期の pointer が同じ名前の最初の fact へ解決され、同じ値になる。"
+ },
+ {
+  "id": "D-R6-formula-scheme-registered-as-evidence",
+  "file": "registry_setup.py",
+  "old": "    registry.register_scheme(\"formula\", kind=\"operator\", trust=\"structural\")",
+  "new": "    registry.register_scheme(\"formula\", kind=\"evidence\", trust=\"structural\")",
+  "predicted": "red",
+  "note": "C-1d 予測 §3.6 D-R6。ratio*100・diff(a-b) の formula: pointer が resolver に渡り解決できず POINTER_NOT_FOUND になる。"
+ },
+ {
+  "id": "D-R7-ctx-ok-in-not-eq-instrument3-scope",
+  "file": "instance.py",
+  "old": "    return c.get(\"members\") == [member] and \"NonConsolidated\" not in cid",
+  "new": "    return member in (c.get(\"members\") or []) and \"NonConsolidated\" not in cid",
+  "predicted": "green",
+  "scope": "gate_only",
+  "note": "C-1d 予測 §3.6 D-R7。C-1 計画 §5 がこの変異を赤と予測し(A-R3 として C-1c の既定スコープでは実際に赤)、C-1c の監査が「224 件の門は黙る」ことを単体試験(test_instance、合成データ)で確かめた。このスコープ(test_claim_layer + test_instrument3 のみ、test_instance 抜き)では、2 社の実データに member を 2 つ以上持つ context が無いため green になる(計器 3 もこの分岐を見ない、という C-1 計画 §5 の予測の外れを公式に記録する)。"
+ },
+ {
+  "id": "D-R8-pure100-threshold-removed",
+  "file": "comparators.py",
+  "old": "    fvp = fv * 100 if abs(fv) <= pure_threshold else fv",
+  "new": "    fvp = fv",
+  "predicted": "red",
+  "note": "C-1d 予測 §3.6 D-R8。1B の N014・N041(pure×100 で GROUNDED)が ×100 されず VALUE_MISMATCH になる。"
+ },
+ {
+  "id": "D-R9-pct-change-recomputed-not-rounded",
+  "file": "comparators.py",
+  "old": "    recomputed = round(pct, 2)",
+  "new": "    recomputed = pct",
+  "predicted": "red",
+  "note": "C-1d 予測 §3.6 D-R9(pct_change 側)。recomputed が期待値の round(pct, 2) と float で == でなくなる(5F に pct_change の Claim が複数件)。"
+ },
+ {
+  "id": "F-R1-pure100-abs-claim-again",
+  "file": "comparators.py",
+  "old": "    match = abs(fvp - claim.value) <= tolerance",
+  "new": "    match = abs(fvp - abs(claim.value)) <= tolerance",
+  "predicted": "red",
+  "note": "C-1f 予測 §3 row 2(癖 a を pure100 側で戻す)。合成単体試験(test_negative_claim_value_mismatches_positive_fact)が claim.value=-5.8 を直接作るため既定スコープでは赤。"
+ },
+ {
+  "id": "F-R1g-pure100-abs-claim-again-gate-only",
+  "file": "comparators.py",
+  "old": "    match = abs(fvp - claim.value) <= tolerance",
+  "new": "    match = abs(fvp - abs(claim.value)) <= tolerance",
+  "predicted": "green",
+  "scope": "gate_only",
+  "note": "C-1f 予測 §3 row 2。1B の pure×100 該当 3 件(N013・N014・N041)は全部正の claim.value なので門は無言。直しは実データでは測れていない、を数で残す。"
+ },
+ {
+  "id": "F-R2-ratio100-abs-claim-again",
+  "file": "comparators.py",
+  "old": "    match = abs(ratio - claim.value) <= tolerance",
+  "new": "    match = abs(ratio - abs(claim.value)) <= tolerance",
+  "predicted": "red",
+  "note": "C-1f 予測 §3 row 3(癖 a を ratio100 側で戻す)。合成単体試験(test_negative_claim_value_mismatches_positive_ratio)が claim.value=-94.0 を直接作るため既定スコープでは赤。"
+ },
+ {
+  "id": "F-R2g-ratio100-abs-claim-again-gate-only",
+  "file": "comparators.py",
+  "old": "    match = abs(ratio - claim.value) <= tolerance",
+  "new": "    match = abs(ratio - abs(claim.value)) <= tolerance",
+  "predicted": "green",
+  "scope": "gate_only",
+  "note": "C-1f 予測 §3 row 3。1B の ratio×100 該当 4 件は全部正の claim.value なので門は無言。直しは実データでは測れていない、を数で残す。"
+ },
+ {
+  "id": "D-G1-comparators-docstring-wording",
+  "file": "comparators.py",
+  "old": "one piece of XBRL-adjacent logic it needs (the round/truncate/abs ladder",
+  "new": "one piece of XBRL-adjacent logic it requires (the round/truncate/abs ladder",
+  "predicted": "green",
+  "note": "C-1d 予測 §3.6 D-G1(対照)。docstring の言い回しのみの変更。"
+ },
+ {
+  "id": "D-G2-resolve-docstring-wording",
+  "file": "resolve.py",
+  "old": "\"\"\"The Adapter's pointer resolver (C-1d prediction §3.2): turns one",
+  "new": "\"\"\"The Adapter's pointer resolver (C-1d prediction §3.2): converts one",
+  "predicted": "green",
+  "note": "C-1d 予測 §3.6 D-G2(対照)。docstring の言い回しのみの変更。"
+ },
+ {
+  "id": "G-R1-flow-convention-sign-reversed",
+  "file": "vocabulary.py",
+  "old": "    if _FLOW_INCREASE_DECREASE_RE.match(local):\n        return 1\n    if _FLOW_DECREASE_INCREASE_RE.match(local):\n        return -1",
+  "new": "    if _FLOW_INCREASE_DECREASE_RE.match(local):\n        return -1\n    if _FLOW_DECREASE_INCREASE_RE.match(local):\n        return 1",
+  "predicted": "red",
+  "note": "C-1g 予測 §1-2(人間の決定、2026-10-06)。CF 流量項目の符号の規約(b)を反転する。tests/adapters/xbrl/test_vocabulary.py::FlowConventionTest の各ケース(DecreaseIncreaseIn=-1 / IncreaseDecreaseIn=+1 / Net…/会社拡張)が入れ替わって落ちる。P1/P5F はこの関数を一度も呼ばないので 224 件の門(test_claim_layer・test_instrument3)は無言。"
+ },
+ {
+  "id": "G-R2-flow-sign-zero-counts-as-match",
+  "file": "comparators.py",
+  "old": "    actual = 0 if cur.value == 0 else (1 if cur.value * flow_convention > 0 else -1)",
+  "new": "    actual = 1 if cur.value * flow_convention >= 0 else -1",
+  "predicted": "red",
+  "note": "C-1g 予測 §1-2。builtin:flow_sign(cur)==direction の差 0(fact 値 0)を「増加」扱いにする。tests/adapters/xbrl/test_comparators.py::BuiltinFlowSignDirectionTest::test_zero_value_matches_no_direction が落ちる(actual が 0 でなく 1 になり、direction=1 と match してしまう)。"
+ },
+ {
+  "id": "G-R3-point-diff-tolerance-1.5",
+  "file": "comparators.py",
+  "old": "    match = abs(recomputed - claim.value) <= tolerance",
+  "new": "    match = abs(recomputed - claim.value) <= 1.5",
+  "predicted": "red",
+  "note": "C-1g 予測 §1-3。diff(a-b)(pure*100) の許容を params の 0.15 でなく 1.5 に固定する。既存の 4 本(match/mismatch/boundary)は差が 0〜0.15 か 4.0 なので 1.5 でも結果が変わらず無言(本文に記録する点)。tests/adapters/xbrl/test_comparators.py::DiffAbPure100Test::test_mismatch_just_outside_015_tolerance(差 1.0 -- 0.15 では mismatch・1.5 なら誤って match になる)を専用に追加して red にする。"
+ },
+ {
+  "id": "G-R4-segment-denominator-namespace-check-removed",
+  "file": "instance.py",
+  "old": "            prefix = m.split(\":\", 1)[0] if \":\" in m else None\n            if prefix not in _STANDARD_MEMBER_NAMESPACE_PREFIXES:\n                ms.add(m)",
+  "new": "            prefix = m.split(\":\", 1)[0] if \":\" in m else None\n            ms.add(m)",
+  "predicted": "red",
+  "note": "C-1g 予測 §1-4(人間の承認、2026-10-06)。segment_member_denominator の名前空間判定を外し、member_denominator と同じ(全部数える)挙動に戻す。tests/adapters/xbrl/test_instance.py::SegmentMemberDenominatorTest(標準 member を除く 3 本)が落ちる。"
+ },
+ {
+  "id": "G-R5-vocab-line-removed-current-liabilities",
+  "file": "vocabulary.py",
+  "old": "    (\"流動負債\", [\"CurrentLiabilities\"]),\n    (\"固定負債\", [\"NoncurrentLiabilities\"]),",
+  "new": "    (\"固定負債\", [\"NoncurrentLiabilities\"]),",
+  "predicted": "red",
+  "note": "C-1g 予測 §1-1。P6 だけの語彙 7 行から「流動負債」を 1 行消す。tests/adapters/xbrl/test_vocabulary.py::P6ProfileTest::test_subjects_p6_extra_7_count/test_subjects_p6_extra_7_words/test_subjects_p6_is_extra_7_plus_74_in_order が落ちる。"
+ },
+ {
+  "id": "G-G1-diff-ab-pure100-docstring-wording",
+  "file": "comparators.py",
+  "old": "``XP-3rd-1`` point-difference form). evidence = (a, b) -- the current",
+  "new": "``XP-3rd-1`` point-difference shape). evidence = (a, b) -- the current",
+  "predicted": "green",
+  "note": "C-1g 予測 §1(対照)。docstring の言い回しのみの変更。"
+ },
+ {
+  "id": "G-G2-flow-convention-docstring-wording",
+  "file": "vocabulary.py",
+  "old": "def flow_convention(element_name):\n    \"\"\"CF 流量項目の符号の規約(C-1g §1-2)。``element_name`` は",
+  "new": "def flow_convention(element_name):\n    \"\"\"CF 流量項目の符号の規約(C-1g §1-2 の決定)。``element_name`` は",
+  "predicted": "green",
+  "note": "C-1g 予測 §1(対照)。docstring の言い回しのみの変更。"
+ },
+ {
+  "id": "H-R1-expenditure-magnitude-sign-reversed",
+  "file": "comparators.py",
+  "old": "    magnitude_diff = acur - aprior",
+  "new": "    magnitude_diff = aprior - acur",
+  "predicted": "red",
+  "note": "C-1h §1-1(封じた規則)。「支出」系項目の大きさの差を反転すると、test_recipes.ExpenditureConventionTextClaimBuildTest の T022/T025 型の GROUNDED/VALUE_MISMATCH が入れ替わり、test_comparators.BuiltinSignAbsDiffDirectionTest も壊れる。"
+ },
+ {
+  "id": "H-R2-target-word-window-disabled",
+  "file": "recipes.py",
+  "old": "    if profile.target_word:\n        return bool(_TARGET_RE.search(s[max(0, a - _TARGET_WINDOW):a]))",
+  "new": "    if profile.target_word:\n        return False and bool(_TARGET_RE.search(s[max(0, a - _TARGET_WINDOW):a]))",
+  "predicted": "red",
+  "note": "C-1h §1-2(封じた規則)。目標値・計画値の窓判定を外すと、test_recipes.TargetOrPlanWindowTest の reason が target_or_plan にならなくなる。 2026-10-08 の XBRL 直し §3 で判定が _target_or_plan に出たため、P7 の枝(手前 10 字・目標|計画)に当て直した。外す性質は不変。"
+ },
+ {
+  "id": "H-R3-text-reason-split-disabled",
+  "file": "recipes.py",
+  "old": "    cur_any = [f for f in I.facts_for(elems, facts, contexts, member) if f[\"context\"].startswith(\"CurrentYear\")]",
+  "new": "    cur_any = []",
+  "predicted": "red",
+  "note": "C-1h §1-3(封じた規則)。cur_any を常に空にすると分割前の no_element だけが返り、test_recipes.TextUnboundReasonSplitBuildTest の (a)/(b) が壊れる。"
+ },
+ {
+  "id": "H-R4-flow-direction-word-window-widened",
+  "file": "recipes.py",
+  "old": "    window2 = s[b:b + 4]",
+  "new": "    window2 = s[b:b + 10]",
+  "predicted": "red",
+  "note": "C-1h §1-4(封じた規則、C-1g 監査の記録事項 3)。数の直後の窓を 4→10 に広げると、test_recipes.WindowBoundaryTest.test_flow_direction_word_does_not_catch_word_at_fifth_char が 拾ってしまい壊れる。"
+ },
+ {
+  "id": "H-R5-point-diff-prior-phrase-window-widened",
+  "file": "recipes.py",
+  "old": "    window = s[max(0, a - 25):a]",
+  "new": "    window = s[max(0, a - 30):a]",
+  "predicted": "red",
+  "note": "C-1h §1-4(封じた規則、C-1g 監査の記録事項 3)。前期の語の窓を 25→30 に広げると、test_recipes.WindowBoundaryTest.test_point_diff_prior_phrase_missed_one_char_earlier が 拾ってしまい壊れる。"
+ },
+ {
+  "id": "H-G1-registry-setup-docstring-wording",
+  "file": "registry_setup.py",
+  "old": "    # Core 接続 C-1h §1-1(profile P7 のみが参照する)。",
+  "new": "    # Core 接続 C-1h §1-1(P7 のみが参照する、比較子 1 件)。",
+  "predicted": "green",
+  "note": "コメントの字句だけの変更(C-1g の D-G1/D-G2/G-G1/G-G2 と同型)。挙動は変わらないので green のまま。"
+ },
+ {
+  "id": "X-R1a-total-assets-vocab-reverted",
+  "file": "vocabulary.py",
+  "old": "    (\"資産合計\", [\"Assets\", \"TotalAssets\"]) if w == \"資産合計\" else (w, e)",
+  "new": "    (w, e) if w == \"資産合計\" else (w, e)",
+  "predicted": "red",
+  "note": "XBRL 直し §1a を戻す(SUBJECTS_P8 の「資産合計」を P6 と同じ ['Assets'] に)。test_vocabulary.SubjectsP8Test と計器(P8 では N016 が業績概要の要素に届かなくなる)が捕まえる。"
+ },
+ {
+  "id": "X-R1b-prior2-stop-disabled",
+  "file": "recipes.py",
+  "old": "                if prev_year_phrase and profile is not None and profile.prior2_required:",
+  "new": "                if False and prev_year_phrase and profile is not None and profile.prior2_required:",
+  "predicted": "red",
+  "note": "XBRL 直し §1b を戻す(前々期が無いときの代用に落ちる)。test_recipes.Prior2RequiredTest.test_p8_stops_instead が捕まえる。 2026-10-08 の 2 社目の実測で枝を狭めた(代用の枝だけ)ため当て直した。外す性質は不変。"
+ },
+ {
+  "id": "X-R2a-decide-rounding-always-default",
+  "file": "vocabulary.py",
+  "old": "    return ((\"truncate\" if t > r else DOC_ROUNDING_DEFAULT), r, t)",
+  "new": "    return (DOC_ROUNDING_DEFAULT, r, t)",
+  "predicted": "red",
+  "note": "XBRL 直し §2 の決め方を潰す(証拠を見ずに既定の round にする)。test_vocabulary.DecideRoundingTest.test_truncate_when_truncate_only_evidence_wins が捕まえる。"
+ },
+ {
+  "id": "X-R2b-comparator-ignores-the-rounding-param",
+  "file": "comparators.py",
+  "old": "    how = _match_value(fact.value, target, claim_scale, params.get(\"rounding\"), params.get(\"magnitude_truncate\", False))",
+  "new": "    how = _match_value(fact.value, target, claim_scale, None, params.get(\"magnitude_truncate\", False))",
+  "predicted": "red",
+  "note": "XBRL 直し §2 で組むときと検証するときの丸め方を揃えた所を外す(検証だけ梯子に戻る)。test_comparators.RoundingParamTest.test_negative_side_is_refused_when_the_document_truncates が捕まえる。実データ 91 件では 1 件も動かないので、この変異が赤くなるのは合成の単体試験だけ(記録事項)。 / 2026-10-15: P19 で引数が 1 つ増えたので old/new を合わせた(狙いは同じ ― rounding の param を無視させる)。"
+ },
+ {
+  "id": "X-R3a-target-after-window-disabled",
+  "file": "recipes.py",
+  "old": "        after = s[b:b + _TARGET_AFTER_WINDOW]",
+  "new": "        after = \"\"",
+  "predicted": "red",
+  "note": "XBRL 直し §3 の「数の後ろ」の窓を外す。test_recipes.TargetOrPlanBothSidesTest.test_target_fifteen_chars_after_the_number_is_caught(N013 型)が捕まえる。"
+ },
+ {
+  "id": "X-R3b-after-window-not-cut-at-the-clause-end",
+  "file": "recipes.py",
+  "old": "        if cut is not None:\n            after = after[:cut.start()]",
+  "new": "        if False:\n            after = after[:cut.start()]",
+  "predicted": "red",
+  "note": "XBRL 直し §3 の「節の中だけ」を外す(後ろ 20 字を節をまたいで見る)。test_recipes.TargetOrPlanBothSidesTest.test_after_window_stops_at_a_comma(N014 型 = 実績の数を止めてしまう側)が捕まえる。"
+ },
+ {
+  "id": "X-R4-paren-aware-split-disabled",
+  "file": "extract.py",
+  "old": "        pieces = split_after_kuten_outside_parens(para) if paren_aware else re.split(r\"(?<=。)\", para)",
+  "new": "        pieces = re.split(r\"(?<=。)\", para)",
+  "predicted": "red",
+  "note": "XBRL 直し §4 を戻す(括弧の中の句点で切る)。test_extract.ParenSentenceSplitTest.test_paren_aware_split_keeps_the_sentence_whole が捕まえる。"
+ },
+ {
+  "id": "X-R5-drop-qualitative-disabled",
+  "file": "recipes.py",
+  "old": "                if profile.drop_qualitative and not claim.get(\"subject\"):",
+  "new": "                if False and profile.drop_qualitative and not claim.get(\"subject\"):",
+  "predicted": "red",
+  "note": "XBRL 直し §5(広い版)の「主語が引けない向きの語を落とす」枝を外す。test_recipes.DropQualitativeTest.test_direction_word_without_a_subject_is_dropped が捕まえる。2026-10-08 に §5' の狭い版を足して落とす側の条件が共有になったため、広い版だけの性質(主語なしの枝)に当て直した。狭い版の 2 本(X-R5n-*)とは別の性質を外している。"
+ },
+ {
+  "id": "X-G1-fix5-comment-wording",
+  "file": "vocabulary.py",
+  "old": "    # 1 つずつ独立に測れるように、5 つを 1 つのフラグに束ねていない。",
+  "new": "    # 5 つを 1 つのフラグに束ねていない(1 つずつ独立に測れるようにするため)。",
+  "predicted": "green",
+  "note": "コメントの字句だけの変更(A-G/D-G/G-G/H-G1 と同型の対照)。挙動は変わらないので green。"
+ },
+ {
+  "id": "X-R6a-prior-paren-detection-disabled",
+  "file": "recipes.py",
+  "old": "                    prior_paren = (profile.text_prior_year_paren and _in_prior_year_paren(s, m.start())) or \\",
+  "new": "                    prior_paren = (False and profile.text_prior_year_paren and _in_prior_year_paren(s, m.start())) or \\",
+  "predicted": "red",
+  "note": "XBRL 直し §6 を戻す(括弧内の前期の方向語を当期−前期に結ぶ)。test_recipes.TextPriorYearParenTest.test_p9_binds_the_paren_one_to_the_prior_pair が捕まえる。"
+ },
+ {
+  "id": "X-R6b-prior-pair-replaced-by-current-pair",
+  "file": "recipes.py",
+  "old": "                    a_pre, b_pre = (\"Prior1Year\", \"Prior2Year\") if prior_paren else (\"CurrentYear\", \"Prior1Year\")",
+  "new": "                    a_pre, b_pre = (\"CurrentYear\", \"Prior1Year\")",
+  "predicted": "red",
+  "note": "XBRL 直し §6 の期の組の差し替えだけを潰す(判定は通るが結ぶ相手が元のまま)。同じ試験が捕まえる。"
+ },
+ {
+  "id": "X-R6c-prior-paren-stop-falls-back",
+  "file": "recipes.py",
+  "old": "                    elif prior_paren:\n                        # 前々期が無いときは代用せず止める(数の側の §1b と同じ\n                        # 原因なので同じ理由の名前を使う。登録簿は増やさない)。\n                        claim[\"reason\"] = \"no_element(no prior2 for prior-year diff)\"",
+  "new": "                    elif False:\n                        # 前々期が無いときは代用せず止める(数の側の §1b と同じ\n                        # 原因なので同じ理由の名前を使う。登録簿は増やさない)。\n                        claim[\"reason\"] = \"no_element(no prior2 for prior-year diff)\"",
+  "predicted": "red",
+  "note": "XBRL 直し §6 の「前々期が無ければ止める」を外す(_text_unbound_reason の既定の理由に落ちる)。test_recipes.TextPriorYearParenTest.test_p9_stops_when_the_prior2_fact_is_absent が捕まえる。"
+ },
+ {
+  "id": "X-R5n-narrow-drop-filter-disabled",
+  "file": "recipes.py",
+  "old": "    if (profile.drop_qualitative or profile.drop_state_words_only\n            or profile.subject_direction_object or profile.direction_word_lexicon):",
+  "new": "    if (profile.drop_qualitative\n            or profile.subject_direction_object or profile.direction_word_lexicon):",
+  "predicted": "red",
+  "note": "XBRL 直し §5' の落とす側を狭い版から外す(印は付くが落ちない)。test_recipes.DropStateWordsOnlyTest.test_narrow_drops_the_state_word が捕まえる。"
+ },
+ {
+  "id": "X-R5n-narrow-mark-disabled",
+  "file": "recipes.py",
+  "old": "                if profile.drop_qualitative or profile.drop_state_words_only:",
+  "new": "                if profile.drop_qualitative:",
+  "predicted": "red",
+  "note": "XBRL 直し §5' の印を付ける側を狭い版から外す(狭い版が状態語を落とさなくなる)。同じ試験が捕まえる。落とす側と印の側の 2 か所を別の変異にしてあるのは、片方だけ直っていても緑にならないことを見るため。"
+ },
+ {
+  "id": "X-R7a-entity-not-unescaped",
+  "file": "instance.py",
+  "old": "        text = html.unescape(_TAG_RE.sub(\"\", cell))",
+  "new": "        text = _TAG_RE.sub(\"\", cell)",
+  "predicted": "red",
+  "note": "XBRL 直し §7 の実体参照の復号を外す(空のセルの &#160; が 6 文字の科目名として拾われる。最初の実装の誤りそのもの。1 社目では取れた名前が 226→105 に落ちるが、2 社目・3 社目は本物の nbsp なので落ちない = 1 書類だけでは気づかない型)。test_instance.InlineLabelsTest.test_numeric_entity_for_an_empty_cell_is_decoded_not_taken_as_a_name が捕まえる。"
+ },
+ {
+  "id": "X-R7b-label-subjects-placed-before-the-hand-vocabulary",
+  "file": "recipes.py",
+  "old": "        profile = dataclasses.replace(profile, subjects=tuple(hand_rows) + tuple(added))",
+  "new": "        profile = dataclasses.replace(profile, subjects=tuple(added) + tuple(hand_rows))",
+  "predicted": "red",
+  "note": "XBRL 直し §7 でラベルの語彙を手書きの語彙の**前**に置く。予測は red、1 回目の実測は **green**(外れとして固定する)。原因: _label_subjects が『手書きに在る語はラベルに足さない』で除外しているため、同じ語が両方に在ることがなく、**順序が等価変異になる**。司令塔が予測を書くときにこの除外を数えていなかった。本当の不変条件は『手書きに在る語を足さない』ことなので、そちらを test_recipes.LabelSubjectsTest.test_hand_words_are_not_added_again で留めた。scope を狭めて green にしたのではなく、予測の外れとして記録している。 **当て直し(2026-10-08、§7b の実装で行が変わった)**: 同じ性質(ラベルを手書きの前に置く)を新しい行に当て直した。§7b で手書きの行を差し替えるようになっても、ラベルから足すのは手書きに無い語だけなので**順序は等価のまま**であり、予測の外れは解消していない(scope は狭めない)。",
+  "prediction_miss": true,
+  "actual_first_measurement": "green"
+ },
+ {
+  "id": "X-R7c-label-deny-and-length-filter-disabled",
+  "file": "instance.py",
+  "old": "            if not label or len(label) < LABEL_MIN_LEN or label in LABEL_DENY:",
+  "new": "            if not label:",
+  "predicted": "red",
+  "note": "XBRL 直し §7 の除く名前(長さ 3 未満・その他/合計/計 等)を外す。「計」が監査報酬の 4 要素に当たるなど、勘定科目を一意に指さない語が主語になる。test_instance.InlineLabelsTest.test_short_names_are_dropped_at_the_written_threshold と test_denied_names_are_dropped が捕まえる。"
+ },
+ {
+  "id": "X-R7a2-statement-rows-member-check-removed",
+  "file": "instance.py",
+  "old": "    for _name, cid in pairs:\n        if (contexts.get(cid) or {}).get(\"members\"):\n            return []",
+  "new": "    for _name, cid in pairs:\n        if (contexts.get(cid) or {}).get(\"members\"):\n            continue",
+  "predicted": "red",
+  "note": "XBRL 直し §7a の 2 つの条件のうち **member の検査**を外す(行ごと捨てるのをやめる)。2 社目のセグメント名「美容室支援事業」がラベルに戻り、悪化 T009 の原因が復活する。test_instance.RowElementsStatementOnlyTest.test_a_member_on_any_fact_in_the_row_drops_the_whole_row と test_recipes.LabelStatementRowsOnlyTest.test_segment_name_is_gone_but_the_account_names_stay が捕まえる。"
+ },
+ {
+  "id": "X-R7a3-statement-prefix-filter-removed",
+  "file": "instance.py",
+  "old": "    return [name for name, _cid in pairs if name.split(\":\")[0] == STATEMENT_PREFIX]",
+  "new": "    return [name for name, _cid in pairs]",
+  "predicted": "red",
+  "note": "XBRL 直し §7a の 2 つの条件のうち **財務諸表タクソノミの接頭辞の検査**を外す。監査報酬の表(jpcrp_cor)の「連結子会社」がラベルに戻る ― member が付いていないので member の検査では落ちない型。test_instance.RowElementsStatementOnlyTest.test_only_the_statement_taxonomy_elements_are_taken と test_recipes の 連結子会社 の行が捕まえる。**2 つの条件を別々の変異にしているのは、どちらか 1 つでは消えない型が 2 つ在るからである。**"
+ },
+ {
+  "id": "X-R7b2-dead-hand-override-without-checking-the-label-resolves",
+  "file": "recipes.py",
+  "old": "                if cand and resolves(cand):",
+  "new": "                if cand:",
+  "predicted": "red",
+  "note": "XBRL 直し §7b の「ラベル側が fact を 1 件以上引けるときだけ差し替える」を外す。2 社目の 繰延税金負債(手書きもラベルも DeferredTaxLiabilities で両方引けない)が「切り替えた」と記録され、人間に報告する件数が嘘になる。test_recipes.LabelOverridesDeadHandTest.test_a_label_that_also_resolves_nothing_is_not_used が捕まえる。"
+ },
+ {
+  "id": "X-R7c-hand-vocabulary-fix-not-applied",
+  "file": "vocabulary.py",
+  "old": "    (w, list(SUBJECTS_P12_FIXES[w])) if w in SUBJECTS_P12_FIXES else (w, e)",
+  "new": "    (w, e)",
+  "predicted": "red",
+  "note": "XBRL 直し §7c の手書きの語彙の直しを当てない(SUBJECTS_P12 が SUBJECTS_P8 と同じになる)。1 社目 N021/T011・3 社目 T040(退職給付に係る資産・負債)が束縛できなくなる。test_vocabulary.SubjectsP12Test.test_the_two_words_gain_the_element_that_actually_exists と test_only_the_two_words_differ_from_p8 が捕まえる。"
+ },
+ {
+  "id": "X-R8a-taxonomy-total-label-instead-of-the-standard-label",
+  "file": "instance.py",
+  "old": "STANDARD_LABEL_ROLE = \"http://www.xbrl.org/2003/role/label\"",
+  "new": "STANDARD_LABEL_ROLE = \"http://www.xbrl.org/2003/role/totalLabel\"",
+  "predicted": "red",
+  "note": "XBRL 直し §8 で採る role を標準ラベルから **totalLabel** に替える。CurrentAssets の語が「流動資産」から「流動資産合計」に変わり、本文の「流動資産は…」と一致しなくなる(3 社目 T029/T032・N052/N054 が束縛できなくなる)。**この 1 行が §8 の効き目のほぼ全部である。** test_instance.ParseLabelLinkbaseTest.test_only_the_standard_label_role_is_taken と TaxonomyLabelsTest.test_the_real_files_give_the_two_words_the_document_labels_could_not が捕まえる。"
+ },
+ {
+  "id": "X-R8b-taxonomy-sha256-not-checked",
+  "file": "instance.py",
+  "old": "    if actual != expected_sha256:",
+  "new": "    if False:",
+  "predicted": "red",
+  "note": "XBRL 直し §8 の sha256 の照合を外す。人間の指示「取得したファイルはリポジトリの外に置いて sha256 だけを残す」の**残した側**が効かなくなり、別の版のラベルを黙って読む。test_instance.TaxonomyLabelFilesTest.test_a_wrong_sha256_raises が捕まえる。"
+ },
+ {
+  "id": "X-R8c-taxonomy-not-restricted-to-the-document-facts",
+  "file": "instance.py",
+  "old": "    for local in sorted(fact_locals):",
+  "new": "    for local in sorted(labels):",
+  "predicted": "red",
+  "note": "XBRL 直し §8 の「この書類に fact が在る要素だけ」を外し、タクソノミ全体 6,495 要素を語にする。「受注高」のように書類に無い語が主語になり、元データに無いことの裏取りが崩れる。test_instance.TaxonomyLabelsTest.test_only_elements_with_a_fact_become_words が捕まえる。"
+ },
+ {
+  "id": "X-R8d-taxonomy-namespace-filter-removed",
+  "file": "instance.py",
+  "old": "        if namespaces is not None and ns not in namespaces:",
+  "new": "        if False:",
+  "predicted": "red",
+  "note": "XBRL 直し §8 の名前空間の限定(jppfs だけ)を外す。**3 書類では P13 と P14(限定なし)が 1 行も違わなかった = 実物では差が出ない**ので、この分岐は実物の門では黙る。だから test_instance.TaxonomyLabelsTest.test_the_namespace_filter_keeps_jpcrp_out で仕組みを直に留めてある(「正常な入力では発火しない守りは、故障を作って当てないと測れない」の型)。"
+ },
+ {
+  "id": "X-S1a-cause-requirement-removed",
+  "file": "extract.py",
+  "old": "    _left, right = clause_span(sentence, start, end)\n    tail = sentence[end:right]\n    return any(suffix in tail for suffix in CAUSE_SUFFIXES)",
+  "new": "    _left, right = clause_span(sentence, start, end)\n    tail = sentence[end:right]\n    return True",
+  "predicted": "red",
+  "note": "S1 の「による/により が後に在る」要件を外し、並立の成分なら無条件に飛ばす。test_extract.SkipCoordinatedCauseTest.test_a_coordination_without_a_cause_is_kept が捕まえる。"
+ },
+ {
+  "id": "X-S1b-coordination-requirement-removed",
+  "file": "extract.py",
+  "old": "    end = start + len(word)\n    if not _is_coordinated(sentence, start, end):\n        return False\n    _left, right = clause_span(sentence, start, end)\n    tail = sentence[end:right]\n    return any(suffix in tail for suffix in CAUSE_SUFFIXES)",
+  "new": "    end = start + len(word)\n    _left, right = clause_span(sentence, start, end)\n    tail = sentence[end:right]\n    return any(suffix in tail for suffix in CAUSE_SUFFIXES)",
+  "predicted": "red",
+  "note": "S1 の「並立の成分である」要件を外す。N069 の「特別損失」まで落ちる(主語が無くなり N069 が GROUNDED にならない)。test_extract.SkipCoordinatedCauseTest.test_n069_keeps_the_topic_and_drops_both_sides_of_the_coordination と test_recipes.SubjectSkipS1Test.test_n069_moves_from_the_coordinated_member_to_the_topic が捕まえる。"
+ },
+ {
+  "id": "X-S1c-substring-arm-removed",
+  "file": "extract.py",
+  "old": "    _left, right = clause_span(sentence, start, end)\n    tail = sentence[end:right]\n    first = None\n    for token in COORDINATORS + PARTICLES:",
+  "new": "    return False\n    _left, right = clause_span(sentence, start, end)\n    tail = sentence[end:right]\n    first = None\n    for token in COORDINATORS + PARTICLES:",
+  "predicted": "red",
+  "note": "_is_coordinated の (b)(右へ進んで最初が並立の接続語)を外す。**1 回目の実装がこの形で、N069 が「固定資産」に結んで封じた予測を外した。** test_extract.SkipCoordinatedCauseTest.test_a_substring_of_a_dropped_member_is_dropped_too が捕まえる。"
+ },
+ {
+  "id": "X-S1d-particles-emptied",
+  "file": "extract.py",
+  "old": "PARTICLES = (\"は\", \"が\", \"を\", \"に\")",
+  "new": "PARTICLES = ()",
+  "predicted": "red",
+  "note": "句の切れ目と見なす助詞を空にする。「特別損失は固定資産除却損及び…」の「特別損失」が並立の成分と見なされて落ちる。test_extract.SkipCoordinatedCauseTest.test_n069_keeps_the_topic_and_drops_both_sides_of_the_coordination が捕まえる。"
+ },
+ {
+  "id": "X-S1e-clause-becomes-the-whole-sentence",
+  "file": "extract.py",
+  "old": "    left = 0\n    for k in range(start - 1, -1, -1):\n        if sentence[k] in CLAUSE_BREAKS:\n            left = k + 1\n            break",
+  "new": "    left = 0\n    for k in range(start - 1, -1, -1):\n        if False:\n            left = k + 1\n            break",
+  "predicted": "red",
+  "note": "節の左端を見ずに文頭にする。A1 が別の節の金額を拾い、S1 も節を越える。test_extract.ClauseSpanTest.test_bounded_by_the_japanese_comma が捕まえる。"
+ },
+ {
+  "id": "X-S2a-missing-object-binds-instead-of-dropping",
+  "file": "recipes.py",
+  "old": "                        if oelems is None:\n                            claim[\"dropped\"] = \"direction_object(no subject: %s)\" % obj",
+  "new": "                        if oelems is None:\n                            pass",
+  "predicted": "red",
+  "note": "S2 で目的語が語彙に無いとき、主張にしないのをやめる(たまたま近くの語に結んだまま通る)。test_recipes.SubjectDirectionObjectS2Test.test_t046_and_t047_are_dropped が捕まえる。"
+ },
+ {
+  "id": "X-S3a-aggregate-suffix-narrowed",
+  "file": "extract.py",
+  "old": "AGGREGATE_SUFFIXES = (\"の合計\", \"の合計額\")",
+  "new": "AGGREGATE_SUFFIXES = (\"の合計額\",)",
+  "predicted": "red",
+  "note": "S3 の「の合計」を落として「の合計額」だけにする。T020 の「資本金及び資本剰余金の合計」が拾えなくなる。test_extract.SkipPartOfAggregateTest.test_t020_drops_both_components_and_keeps_the_others が捕まえる。"
+ },
+ {
+  "id": "X-S4a-two-or-more-candidates-takes-the-first",
+  "file": "recipes.py",
+  "old": "                        if len(fam) != 1:\n                            claim[\"dropped\"] = \"direction_word(%d in the sentence)\" % len(fam)",
+  "new": "                        if len(fam) < 1:\n                            claim[\"dropped\"] = \"direction_word(%d in the sentence)\" % len(fam)",
+  "predicted": "red",
+  "note": "S4 で候補が 2 個以上でも先頭を採る(どれを指すか決められないのに決める)。T006(利益系 3 個)が落ちなくなる。test_recipes.DirectionWordLexiconS4Test.test_zogen_with_three_profit_words_is_dropped が捕まえる。"
+ },
+ {
+  "id": "X-S4b-nested-occurrence-not-collapsed",
+  "file": "vocabulary.py",
+  "old": "    kept = [(i, j, w) for (i, j, w) in spans\n            if not any((a <= i and j <= b and (b - a) > (j - i)) for (a, b, _x) in spans)]",
+  "new": "    kept = list(spans)",
+  "predicted": "red",
+  "note": "入れ子の出現を畳まない。「当期純損失」と「親会社株主に帰属する当期純損失」が 2 件になり、T042 が「決められない」ではなく別の理由で落ちる(数が変わる)。test_vocabulary.DirectionFamilyWordsTest.test_a_nested_occurrence_counts_once_as_the_longer_word が捕まえる。"
+ },
+ {
+  "id": "X-S4c-family-built-from-substrings",
+  "file": "vocabulary.py",
+  "old": "PROFIT_WORDS = (\"営業利益\", \"営業損失\", \"経常利益\", \"経常損失\",",
+  "new": "PROFIT_WORDS = (\"利益\", \"損失\", \"経常利益\", \"経常損失\",",
+  "predicted": "red",
+  "note": "利益系の語を部分一致の「利益」「損失」で作る。「減損損失」が利益系に入る。test_vocabulary.DirectionFamilyWordsTest.test_the_two_families_are_written_out_literally が捕まえる。"
+ },
+ {
+  "id": "X-A1a-attachment-requirement-removed",
+  "file": "recipes.py",
+  "old": "        if not (attached_after or attached_before):\n            continue",
+  "new": "        if False:\n            continue",
+  "predicted": "red",
+  "note": "A1 の「向きの語に直に付いた金額」要件を外し、節の中でいちばん近い金額を採る。**封を狭める前の形で、正しい主張を 3 件止めた。** test_recipes.DirectionAmountCheckA1Test.test_a_level_amount_after_the_direction_word_is_not_taken が捕まえる。"
+ },
+ {
+  "id": "X-A1b-amount-can-upgrade-a-mismatch",
+  "file": "recipes.py",
+  "old": "    if how is None and claim[\"result\"] == \"GROUNDED\":\n        claim[\"result\"] = \"VALUE_MISMATCH\"",
+  "new": "    if how is not None:\n        claim[\"result\"] = \"GROUNDED\"",
+  "predicted": "red",
+  "note": "A1 を「金額が合えば通す」側に反転させる。封じた合格条件(A1 で GROUNDED は増えない)が破れる。test_recipes.DirectionAmountCheckA1Test.test_it_never_upgrades_a_value_mismatch が捕まえる。"
+ },
+ {
+  "id": "X-A1c-comparator-ignores-the-amount",
+  "file": "comparators.py",
+  "old": "    agree = (sign_now == direction) and (ladder is not None)",
+  "new": "    agree = (sign_now == direction)",
+  "predicted": "red",
+  "note": "A1 の比較器が金額を見ない(向きだけの比較器と同じになる)。test_comparators.BuiltinSignDirectionWithAmountTest.test_sign_agrees_but_amount_does_not が捕まえる。"
+ },
+ {
+  "id": "X-A1d-comparator-ignores-the-sign",
+  "file": "comparators.py",
+  "old": "    detail = {\"direction\": direction, \"actual\": sign_now, \"normalization\": ladder}\n    agree = (sign_now == direction) and (ladder is not None)",
+  "new": "    detail = {\"direction\": direction, \"actual\": sign_now, \"normalization\": ladder}\n    agree = (ladder is not None)",
+  "predicted": "red",
+  "note": "A1 の比較器が向きを見ない(金額だけ)。test_comparators.BuiltinSignDirectionWithAmountTest.test_amount_agrees_but_sign_does_not が捕まえる。"
+ },
+ {
+  "id": "X-S2b-elements-for-word-uses-dict",
+  "file": "recipes.py",
+  "old": "    for w, elems in subjects:\n        if w == word:\n            return elems\n    return None",
+  "new": "    return dict(subjects).get(word)",
+  "predicted": "red",
+  "note": "語 -> 要素の引きを dict にする。同じ語が 2 回在る語彙で **最後**を採り、subject_of(早い方)と違う要素に結ぶ。test_recipes.ElementsForWordTest.test_the_first_duplicate_row_wins_not_the_last が捕まえる。"
+ },
+ {
+  "id": "X-S0a-subject-of-tie-goes-to-the-last-row",
+  "file": "extract.py",
+  "old": "        ranked.append((-(i + len(word)), -len(word), order, i, word, elems))",
+  "new": "        ranked.append((-(i + len(word)), -len(word), -order, i, word, elems))",
+  "predicted": "red",
+  "note": "同じ終わり・同じ長さのときに**一覧の遅い方**を採る。写し元は早い方を採る。test_extract.SubjectOfSkipNoneIsUnchangedTest.test_ties_go_to_the_earlier_row_of_the_list が捕まえる。"
+ },
+ {
+  "id": "X-S0b-subject-of-prefers-the-shorter-word",
+  "file": "extract.py",
+  "old": "        ranked.append((-(i + len(word)), -len(word), order, i, word, elems))",
+  "new": "        ranked.append((-(i + len(word)), len(word), order, i, word, elems))",
+  "predicted": "red",
+  "note": "同じ終わりのときに短い語を採る(「資産合計」>「純資産合計」)。test_extract.SubjectOfSkipNoneIsUnchangedTest.test_longer_word_wins_at_the_same_end が捕まえる。"
+ },
+ {
+  "id": "P20-M1",
+  "file": "instance.py",
+  "old": "FINANCIAL_PREFIXES = (\"jppfs_cor:\", \"jpigp_cor:\")",
+  "new": "FINANCIAL_PREFIXES = (\"jppfs_cor:\",)",
+  "predicted": "red",
+  "scope": "p20",
+  "note": "IFRS(jpigp_cor)を数えない。2026-10-14 に実際にこれで S100YYQX(連結枠 131)を「連結が無い」と誤分類した。test_p20.ClassificationTest.test_ifrs_elements_count_too。"
+ },
+ {
+  "id": "P20-M2",
+  "file": "instance.py",
+  "old": "    locals_ = [m.split(\":\")[-1] for m in (c.get(\"members\") or [])]\n    return locals_ == [NONCONSOLIDATED_MEMBER]",
+  "new": "    locals_ = list(c.get(\"members\") or [])\n    return locals_ == [NONCONSOLIDATED_MEMBER]",
+  "predicted": "red",
+  "scope": "p20",
+  "note": "接頭辞を外さず生の member で比べる(jppfs_cor:NonConsolidatedMember が当たらない)。2026-10-14 に実際にこれで「旗が効かない」と読み違えた。test_p20.FiresTest.test_the_member_value_carries_a_prefix。"
+ },
+ {
+  "id": "P20-M3",
+  "file": "instance.py",
+  "old": "    return locals_ == [NONCONSOLIDATED_MEMBER]",
+  "new": "    return NONCONSOLIDATED_MEMBER in locals_",
+  "predicted": "red",
+  "scope": "p20",
+  "note": "内訳(資本金・自己株式など member 2 つ)まで素の枠にする。本文の合計が内訳の数に結びつく。test_p20.DoesNotFireTest.test_breakdown_contexts_never_become_plain。"
+ },
+ {
+  "id": "P20-M4",
+  "file": "instance.py",
+  "old": "    if not enabled or consolidated_element_count(facts) != 0:\n        return contexts",
+  "new": "    if not enabled:\n        return contexts",
+  "predicted": "red",
+  "scope": "p20",
+  "note": "**連結の門を外す。**連結が在る書類でも単体へ落ち、違う対象の数値を根拠にする。test_p20.BehaviourTest.test_p20_does_not_take_the_matching_nonconsolidated_value_when_consolidated_exists。"
+ },
+ {
+  "id": "P20-M5",
+  "file": "instance.py",
+  "old": "    if not enabled or consolidated_element_count(facts) != 0:",
+  "new": "    if consolidated_element_count(facts) != 0:",
+  "predicted": "red",
+  "scope": "p20",
+  "note": "旗を見ない(P16 でも落とし込みが起きる)。test_p20.DoesNotFireTest.test_flag_off_returns_the_same_object。"
+ },
+ {
+  "id": "P20-M6",
+  "file": "instance.py",
+  "old": "        if name.startswith(FINANCIAL_PREFIXES) and fact.get(\"context\") in PLAIN_PERIOD_CONTEXTS:",
+  "new": "        if name.startswith(FINANCIAL_PREFIXES):",
+  "predicted": "red",
+  "scope": "p20",
+  "note": "枠の絞りを外す。単体の枠に在る財務の要素まで「連結が在る」証拠に数えるので、連結が無い書類が連結在りに見え、落とし込みが起きなくなる。test_p20.ClassificationTest.test_member_contexts_do_not_count。"
+ },
+ {
+  "id": "P20-M7",
+  "file": "recipes.py",
+  "old": "        inst[\"contexts\"], inst[\"facts\"], profile.nonconsolidated_fallback)",
+  "new": "        inst[\"contexts\"], inst[\"facts\"], False)",
+  "predicted": "red",
+  "scope": "p20",
+  "note": "**配線を切る。**旗は在るが本番で効かない(2026-10-09 の記録の型)。test_p20.WiringTest.test_the_flag_is_read_from_the_profile。"
+ },
+ {
+  "id": "P20-M8",
+  "file": "instance.py",
+  "old": "    # P20: 連結財務諸表が無い書類でだけ、**単体の member だけ**を持つ枠を素として扱う。\n    return bool(getattr(contexts, \"nonconsolidated_ok\", False)) and _nonconsolidated_only(cid, contexts)",
+  "new": "    return False",
+  "predicted": "red",
+  "scope": "p20",
+  "note": "落とし込みの枝そのものを消す(P16 と同じ振る舞いに戻る)。test_p20.FiresTest.test_single_member_nonconsolidated_contexts_become_plain。"
+ },
+ {
+  "id": "HOLD-R1-holds-move-non-grounded",
+  "file": "holds.py",
+  "old": "    if out.get(\"state\") != GROUNDED or f is None:\n        return out, fired\n    sd = dimension_siblings(facts, f, tol)\n",
+  "new": "    if f is None:\n        return out, fired\n    sd = dimension_siblings(facts, f, tol)\n",
+  "predicted": "red",
+  "scope": "holds",
+  "note": "保留規則が GROUNDED 以外の状態も動かす(封 §3 の表以外の遷移)。test_holds.ApplyHoldsTest.test_non_grounded_states_are_never_moved が赤になるはず。"
+ },
+ {
+  "id": "HOLD-R2-period-ignores-dimension",
+  "file": "holds.py",
+  "old": "        if dim_of(g[\"context\"]) != dim_of(f[\"context\"]):\n            continue                                   # 次元が違う → (d) の仕事\n",
+  "new": "        pass\n",
+  "predicted": "red",
+  "scope": "holds",
+  "note": "P が次元違いの兄弟も拾う(同じ兄弟を (d) と二重に数える)。test_holds.PeriodRuleTest と同値の格子が赤になるはず。"
+ },
+ {
+  "id": "HOLD-R3-axes-not-kept",
+  "file": "instance.py",
+  "old": "                \"members\": members,\n                \"axes\": axes,\n",
+  "new": "                \"members\": members,\n                \"axes\": [],\n",
+  "predicted": "red",
+  "scope": "holds",
+  "note": "枠の軸を記録しない(.xbrl の経路)。test_holds.AxesInInstanceTest.test_xbrl_path_keeps_axes_one_to_one が赤になるはず。"
+ },
+ {
+  "id": "PP-R1-sign-ignored",
+  "file": "holds.py",
+  "old": "    direction_checked = sign in (1, -1)\n",
+  "new": "    direction_checked = False\n",
+  "predicted": "red",
+  "scope": "holds",
+  "note": "封 docs/XBRL_PERIOD_PAIR_SEAL_2026-10-19.md §0 の 3(PP、2026-10-19 段 2)。pp_pick が符号を見ない(常に符号不明扱い)。test_holds.PPPickTest.test_exactly_one_sibling_reports_direction_checked_from_the_sign が赤になるはず。"
+ },
+ {
+  "id": "PP-R2-two-siblings-picks-the-first",
+  "file": "holds.py",
+  "old": "    if len(siblings) != 1:                             # ちょうど 1 本でなければ選ばない(PP-R2)\n",
+  "new": "    if len(siblings) < 1:                             # ちょうど 1 本でなければ選ばない(PP-R2)\n",
+  "predicted": "red",
+  "scope": "holds",
+  "note": "封 docs/XBRL_PERIOD_PAIR_SEAL_2026-10-19.md §0 の 2(PP)。兄弟が 2 本以上でも先頭を検算に使う(どれを選ぶかを機械で決めてしまう)。test_holds.PPPickTest.test_two_siblings_is_held_and_does_not_pick_the_first が赤になるはず。"
+ },
+ {
+  "id": "PP-R3-dimension-different-prior-counted",
+  "file": "holds.py",
+  "old": "        if dim_of(g[\"context\"]) != dim:\n            continue                                   # 次元が違う前期は数えない(PP-R3)\n",
+  "new": "        pass\n",
+  "predicted": "red",
+  "scope": "holds",
+  "note": "封 docs/XBRL_PERIOD_PAIR_SEAL_2026-10-19.md §0 の 1(PP)。次元の違う前期も兄弟に数える(当たらない例の 1 つ目を外す)。test_holds.PriorSiblingsTest.test_dimension_different_prior_is_not_counted が赤になるはず。"
+ },
+ {
+  "id": "PP-R4-duplicate-differing-values-collapsed",
+  "file": "holds.py",
+  "old": "        if len(values) == 1:                           # PP-2: 重複(値が全部同じ)は 1 本\n",
+  "new": "        if True:                           # PP-2: 重複(値が全部同じ)は 1 本\n",
+  "predicted": "red",
+  "scope": "holds",
+  "note": "封 docs/XBRL_PERIOD_PAIR_SEAL_2026-10-19.md 追記 1(PP-2)。instance 内の重複で値が 1 つでも違う場合も 1 本に数える(どれを選ぶかを機械で決めてしまう)。test_holds.PriorSiblingsTest.test_duplicate_different_value_keeps_the_count_and_flags_it が赤になるはず。"
+ }
 ]

@@ -1,0 +1,989 @@
+{
+ "step": "**棚卸し。engine 不変・0 USD・席は呼ばない・正解と照合しない**",
+ "人間の指示": "2026-10-17(役割を替える前に、何が機械的に証明できるかを棚卸しする)",
+ "**verify が見るもの(コードから)**": {
+  "file": "core/py/audit_core/verify.py",
+  "段": [
+   "1. `recipe.unverifiable_reason` が在れば UNVERIFIABLE",
+   "2. `recipe.not_found_reason` が在れば POINTER_NOT_FOUND",
+   "3. **各 pointer を resolver で解く。解けなければ POINTER_NOT_FOUND(`unresolved:…`)**",
+   "4. **contract の comparator で比べる。合えば GROUNDED、合わなければ VALUE_MISMATCH**"
+  ],
+  "state は 4 つだけ": [
+   "GROUNDED",
+   "VALUE_MISMATCH",
+   "POINTER_NOT_FOUND",
+   "UNVERIFIABLE"
+  ],
+  "**comparator が読む欄**": "`evidence[0].value` と `contract.params`(`unit_scale`・`claim_scale`・`rounding` 等)。**`evidence[0].unit` は読まない**",
+  "linkbase": "**読んでいない**(`calculation`/`presentation`/`definition` のリンクベースを読む場所が無い)"
+ },
+ "**第 1 部 人工の探り**": [
+  {
+   "探り": "0 **対照**: すべて一致",
+   "**何を試しているか**": "**探りの器が動いているか**(GROUNDED にならなければ、下の 6 件は何も示さない)",
+   "参照先": "jppfs_cor:CurrentAssets@CurrentYearInstant",
+   "主張の値": 771000.0,
+   "fact": [
+    {
+     "name": "jppfs_cor:CurrentAssets",
+     "context": "CurrentYearInstant",
+     "value": 771000.0,
+     "unit": "JPY"
+    }
+   ],
+   "**結果**": "GROUNDED",
+   "reason": null,
+   "recomputed": 771000.0,
+   "meta": {
+    "decimals": "-3",
+    "duplicates": 1,
+    "distinct_values": 1
+   },
+   "**止めたか**": false
+  },
+  {
+   "探り": "1 実在しない参照先",
+   "**何を試しているか**": "要素・context の実在",
+   "参照先": "jppfs_cor:NoSuchElement@CurrentYearInstant",
+   "主張の値": 771000.0,
+   "fact": [
+    {
+     "name": "jppfs_cor:CurrentAssets",
+     "context": "CurrentYearInstant",
+     "value": 771000.0,
+     "unit": "JPY"
+    }
+   ],
+   "**結果**": "POINTER_NOT_FOUND",
+   "reason": "unresolved:xbrl:jppfs_cor:NoSuchElement@CurrentYearInstant",
+   "recomputed": null,
+   "meta": null,
+   "**止めたか**": true
+  },
+  {
+   "探り": "2 値が違う",
+   "**何を試しているか**": "値の一致",
+   "参照先": "jppfs_cor:CurrentAssets@CurrentYearInstant",
+   "主張の値": 123456.0,
+   "fact": [
+    {
+     "name": "jppfs_cor:CurrentAssets",
+     "context": "CurrentYearInstant",
+     "value": 771000.0,
+     "unit": "JPY"
+    }
+   ],
+   "**結果**": "VALUE_MISMATCH",
+   "reason": null,
+   "recomputed": 771000.0,
+   "meta": {
+    "decimals": "-3",
+    "duplicates": 1,
+    "distinct_values": 1
+   },
+   "**止めたか**": true
+  },
+  {
+   "探り": "3 値は同じ・**単位が違う(USD)**",
+   "**何を試しているか**": "fact の単位(`unitRef`)を見るか",
+   "参照先": "jppfs_cor:CurrentAssets@CurrentYearInstant",
+   "主張の値": 771000.0,
+   "fact": [
+    {
+     "name": "jppfs_cor:CurrentAssets",
+     "context": "CurrentYearInstant",
+     "value": 771000.0,
+     "unit": "USD"
+    }
+   ],
+   "**結果**": "GROUNDED",
+   "reason": null,
+   "recomputed": 771000.0,
+   "meta": {
+    "decimals": "-3",
+    "duplicates": 1,
+    "distinct_values": 1
+   },
+   "**止めたか**": false
+  },
+  {
+   "探り": "4 値は同じ・**期間が違う(前期)**",
+   "**何を試しているか**": "context の期間を主張の期と照らすか",
+   "参照先": "jppfs_cor:CurrentAssets@Prior1YearInstant",
+   "主張の値": 771000.0,
+   "fact": [
+    {
+     "name": "jppfs_cor:CurrentAssets",
+     "context": "Prior1YearInstant",
+     "value": 771000.0,
+     "unit": "JPY"
+    }
+   ],
+   "**結果**": "GROUNDED",
+   "reason": null,
+   "recomputed": 771000.0,
+   "meta": {
+    "decimals": "-3",
+    "duplicates": 1,
+    "distinct_values": 1
+   },
+   "**止めたか**": false
+  },
+  {
+   "探り": "5 値は同じ・**次元が違う(単体 member)**",
+   "**何を試しているか**": "連結区分・次元を見るか",
+   "参照先": "jppfs_cor:CurrentAssets@CurrentYearInstant_NonConsolidatedMember",
+   "主張の値": 771000.0,
+   "fact": [
+    {
+     "name": "jppfs_cor:CurrentAssets",
+     "context": "CurrentYearInstant_NonConsolidatedMember",
+     "value": 771000.0,
+     "unit": "JPY"
+    }
+   ],
+   "**結果**": "GROUNDED",
+   "reason": null,
+   "recomputed": 771000.0,
+   "meta": {
+    "decimals": "-3",
+    "duplicates": 1,
+    "distinct_values": 1
+   },
+   "**止めたか**": false
+  },
+  {
+   "探り": "6 同じ鍵の fact が 2 件(値が違う)",
+   "**何を試しているか**": "重複を判定に使うか(meta には出る)",
+   "参照先": "jppfs_cor:CurrentAssets@CurrentYearInstant",
+   "主張の値": 771000.0,
+   "fact": [
+    {
+     "name": "jppfs_cor:CurrentAssets",
+     "context": "CurrentYearInstant",
+     "value": 771000.0,
+     "unit": "JPY"
+    },
+    {
+     "name": "jppfs_cor:CurrentAssets",
+     "context": "CurrentYearInstant",
+     "value": 999000.0,
+     "unit": "JPY"
+    }
+   ],
+   "**結果**": "GROUNDED",
+   "reason": null,
+   "recomputed": 771000.0,
+   "meta": {
+    "decimals": "-3",
+    "duplicates": 2,
+    "distinct_values": 2
+   },
+   "**止めたか**": false
+  }
+ ],
+ "**第 1 部の読み**": {
+  "対照(GROUNDED になるべき探り)": {
+   "探り": "0 **対照**: すべて一致",
+   "結果": "GROUNDED",
+   "注": "**対照は「通す」のが正しい。**下の 2 つの一覧から外してある"
+  },
+  "止めた探り": [
+   "1 実在しない参照先",
+   "2 値が違う"
+  ],
+  "**通した探り(= その属性は検査されていない)**": [
+   "3 値は同じ・**単位が違う(USD)**",
+   "4 値は同じ・**期間が違う(前期)**",
+   "5 値は同じ・**次元が違う(単体 member)**",
+   "6 同じ鍵の fact が 2 件(値が違う)"
+  ]
+ },
+ "**第 2 部 実物での発火**": {
+  "数": {
+   "席が名指さなかった行": 107,
+   "席が名指した行": 85,
+   "検証できた行": 42,
+   "state VALUE_MISMATCH": 32,
+   "state GROUNDED": 10,
+   "**contract が無い(検証できない)**": 24,
+   "**Core に主張が無い(検証できない)**": 12,
+   "**contract が参照先 2 本を要る(1 本渡しでは検証できない)**": 7
+  },
+  "rows": [
+   {
+    "doc": "S100YYRG",
+    "id": "R017",
+    "席の参照先": "operatingincome@currentyearduration",
+    "主張 id": "N018",
+    "Core 自身の state": "VALUE_MISMATCH",
+    "**差し替えた結果の state**": "VALUE_MISMATCH",
+    "reason": null,
+    "comparator": "equals_within",
+    "recomputed": 685445000.0
+   },
+   {
+    "doc": "S100YYRG",
+    "id": "R018",
+    "席の参照先": "liabilities@currentyearinstant",
+    "主張 id": "N029",
+    "Core 自身の state": "VALUE_MISMATCH",
+    "**差し替えた結果の state**": "VALUE_MISMATCH",
+    "reason": null,
+    "comparator": "equals_within",
+    "recomputed": 1524162000.0
+   },
+   {
+    "doc": "S100YYRG",
+    "id": "R019",
+    "席の参照先": "netincreasedecreaseincashandcashequivalents@currentyearduration",
+    "主張 id": "N037",
+    "Core 自身の state": "VALUE_MISMATCH",
+    "**差し替えた結果の state**": "VALUE_MISMATCH",
+    "reason": null,
+    "comparator": "equals_within",
+    "recomputed": 59781000.0
+   },
+   {
+    "doc": "S100YYRG",
+    "id": "R020",
+    "席の参照先": "incomebeforeincometaxes@currentyearduration",
+    "主張 id": "N041",
+    "Core 自身の state": "VALUE_MISMATCH",
+    "**差し替えた結果の state**": "VALUE_MISMATCH",
+    "reason": null,
+    "comparator": "equals_within",
+    "recomputed": 772107000.0
+   },
+   {
+    "doc": "S100YYRG",
+    "id": "R021",
+    "席の参照先": "costofsales@currentyearduration",
+    "主張 id": "N050",
+    "Core 自身の state": "VALUE_MISMATCH",
+    "**差し替えた結果の state**": "VALUE_MISMATCH",
+    "reason": null,
+    "comparator": "equals_within",
+    "recomputed": 5871158000.0
+   },
+   {
+    "doc": "S100YYRG",
+    "id": "R022",
+    "席の参照先": "sellinggeneralandadministrativeexpenses@currentyearduration",
+    "主張 id": "N052",
+    "Core 自身の state": "VALUE_MISMATCH",
+    "**差し替えた結果の state**": "VALUE_MISMATCH",
+    "reason": null,
+    "comparator": "equals_within",
+    "recomputed": 1217704000.0
+   },
+   {
+    "doc": "S100YYRG",
+    "id": "R023",
+    "席の参照先": "nonoperatingincome@currentyearduration",
+    "主張 id": "N056",
+    "Core 自身の state": "VALUE_MISMATCH",
+    "**差し替えた結果の state**": "VALUE_MISMATCH",
+    "reason": null,
+    "comparator": "equals_within",
+    "recomputed": 45422000.0
+   },
+   {
+    "doc": "S100YYRG",
+    "id": "R024",
+    "席の参照先": "incometaxes@currentyearduration",
+    "主張 id": "N060",
+    "Core 自身の state": "VALUE_MISMATCH",
+    "**差し替えた結果の state**": "VALUE_MISMATCH",
+    "reason": null,
+    "comparator": "equals_within",
+    "recomputed": 181285000.0
+   },
+   {
+    "doc": "S100YXMA",
+    "id": "R001",
+    "席の参照先": "netsales@currentyearduration",
+    "主張 id": "N002",
+    "Core 自身の state": "VALUE_MISMATCH",
+    "**差し替えた結果の state**": "GROUNDED",
+    "reason": null,
+    "comparator": "equals_within",
+    "recomputed": 120169000000.0
+   },
+   {
+    "doc": "S100YXMA",
+    "id": "R004",
+    "席の参照先": "ordinaryincome@currentyearduration",
+    "主張 id": "N004",
+    "**結果**": "contract が無い"
+   },
+   {
+    "doc": "S100YXMA",
+    "id": "R005",
+    "席の参照先": "impairmentlossel@currentyearduration",
+    "**結果**": "主張が無い"
+   },
+   {
+    "doc": "S100YXMA",
+    "id": "R006",
+    "席の参照先": "correctionrelatedcostel@currentyearduration",
+    "**結果**": "主張が無い"
+   },
+   {
+    "doc": "S100YXMA",
+    "id": "R007",
+    "席の参照先": "specialinvestigationexpensesel@currentyearduration",
+    "**結果**": "主張が無い"
+   },
+   {
+    "doc": "S100YXMA",
+    "id": "R009",
+    "席の参照先": "profitlossattributabletoownersofparent@currentyearduration",
+    "主張 id": "N009",
+    "**結果**": "contract が無い"
+   },
+   {
+    "doc": "S100YXMA",
+    "id": "R010",
+    "席の参照先": "netsales@currentyearduration_jpcrp030000-asr_e05713-000solarpanelmanufacturingbusinessreportablesegmentmember",
+    "主張 id": "N010",
+    "Core 自身の state": "VALUE_MISMATCH",
+    "**差し替えた結果の state**": "GROUNDED",
+    "reason": null,
+    "comparator": "equals_within",
+    "recomputed": 111768000000.0
+   },
+   {
+    "doc": "S100YXMA",
+    "id": "R011",
+    "席の参照先": "operatingincome@currentyearduration_jpcrp030000-asr_e05713-000solarpanelmanufacturingbusinessreportablesegmentmember",
+    "主張 id": "N011",
+    "Core 自身の state": "VALUE_MISMATCH",
+    "**差し替えた結果の state**": "GROUNDED",
+    "reason": null,
+    "comparator": "equals_within",
+    "recomputed": 13952000000.0
+   },
+   {
+    "doc": "S100YXMA",
+    "id": "R016",
+    "席の参照先": "netsales@currentyearduration_jpcrp030000-asr_e05713-000greenenergyreportablesegmentmember",
+    "主張 id": "N015",
+    "Core 自身の state": "VALUE_MISMATCH",
+    "**差し替えた結果の state**": "GROUNDED",
+    "reason": null,
+    "comparator": "equals_within",
+    "recomputed": 7879000000.0
+   },
+   {
+    "doc": "S100YXMA",
+    "id": "R017",
+    "席の参照先": "operatingincome@currentyearduration_jpcrp030000-asr_e05713-000greenenergyreportablesegmentmember",
+    "**結果**": "主張が無い"
+   },
+   {
+    "doc": "S100YZ7E",
+    "id": "R017",
+    "席の参照先": "operatingrevenue2@currentyearduration_nonconsolidatedmember",
+    "主張 id": "N022",
+    "**結果**": "contract が無い"
+   },
+   {
+    "doc": "S100YZ7E",
+    "id": "R018",
+    "席の参照先": "ordinaryincome@currentyearduration_nonconsolidatedmember",
+    "主張 id": "N022",
+    "**結果**": "contract が無い"
+   },
+   {
+    "doc": "S100YZ7E",
+    "id": "R019",
+    "席の参照先": "cashandcashequivalents@currentyearinstant_nonconsolidatedmember",
+    "主張 id": "N022",
+    "**結果**": "contract が無い"
+   },
+   {
+    "doc": "S100YZ7E",
+    "id": "R020",
+    "席の参照先": "netcashprovidedbyusedininvestmentactivities@currentyearduration_nonconsolidatedmember",
+    "主張 id": "N022",
+    "**結果**": "contract が無い"
+   },
+   {
+    "doc": "S100YZ7E",
+    "id": "R023",
+    "席の参照先": "assets@currentyearinstant_nonconsolidatedmember",
+    "主張 id": "N066",
+    "**結果**": "contract が無い"
+   },
+   {
+    "doc": "S100YZ7E",
+    "id": "R024",
+    "席の参照先": "netassets@currentyearinstant_nonconsolidatedmember",
+    "主張 id": "N070",
+    "**結果**": "contract が無い"
+   },
+   {
+    "doc": "S100YWGX",
+    "id": "R003",
+    "席の参照先": "netsales@currentyearduration",
+    "主張 id": "N001",
+    "Core 自身の state": "VALUE_MISMATCH",
+    "**差し替えた結果の state**": "GROUNDED",
+    "reason": null,
+    "comparator": "equals_within",
+    "recomputed": 130123000000.0
+   },
+   {
+    "doc": "S100YWGX",
+    "id": "R004",
+    "席の参照先": "netsales@currentyearduration",
+    "主張 id": "N002",
+    "comparator": "pct_change(cur,prior)",
+    "元の参照先の本数": 2,
+    "**結果**": "参照先が 1 本では検証できない"
+   },
+   {
+    "doc": "S100YWGX",
+    "id": "R005",
+    "席の参照先": "ordinaryincome@currentyearduration",
+    "主張 id": "N003",
+    "**結果**": "contract が無い"
+   },
+   {
+    "doc": "S100YWGX",
+    "id": "R006",
+    "席の参照先": "ordinaryincome@currentyearduration",
+    "主張 id": "N004",
+    "**結果**": "contract が無い"
+   },
+   {
+    "doc": "S100YWGX",
+    "id": "R007",
+    "席の参照先": "profitlossattributabletoownersofparent@currentyearduration",
+    "主張 id": "N005",
+    "**結果**": "contract が無い"
+   },
+   {
+    "doc": "S100YWGX",
+    "id": "R008",
+    "席の参照先": "profitlossattributabletoownersofparent@currentyearduration",
+    "主張 id": "N006",
+    "**結果**": "contract が無い"
+   },
+   {
+    "doc": "S100YWGX",
+    "id": "R010",
+    "席の参照先": "revenuesfromexternalcustomers@currentyearduration_jpcrp030000-asr_e34102-000domesticbookoffbusinessreportablesegmentsmember",
+    "主張 id": "N013",
+    "Core 自身の state": "VALUE_MISMATCH",
+    "**差し替えた結果の state**": "VALUE_MISMATCH",
+    "reason": null,
+    "comparator": "equals_within",
+    "recomputed": 112665000000.0
+   },
+   {
+    "doc": "S100YWGX",
+    "id": "R011",
+    "席の参照先": "revenuesfromexternalcustomers@currentyearduration_jpcrp030000-asr_e34102-000domesticbookoffbusinessreportablesegmentsmember",
+    "主張 id": "N014",
+    "comparator": "pct_change(cur,prior)",
+    "元の参照先の本数": 2,
+    "**結果**": "参照先が 1 本では検証できない"
+   },
+   {
+    "doc": "S100YWGX",
+    "id": "R012",
+    "席の参照先": "ordinaryincome@currentyearduration_jpcrp030000-asr_e34102-000domesticbookoffbusinessreportablesegmentsmember",
+    "主張 id": "N015",
+    "Core 自身の state": "VALUE_MISMATCH",
+    "**差し替えた結果の state**": "GROUNDED",
+    "reason": null,
+    "comparator": "equals_within",
+    "recomputed": 6369000000.0
+   },
+   {
+    "doc": "S100YWGX",
+    "id": "R013",
+    "席の参照先": "ordinaryincome@currentyearduration_jpcrp030000-asr_e34102-000domesticbookoffbusinessreportablesegmentsmember",
+    "主張 id": "N016",
+    "comparator": "pct_change(cur,prior)",
+    "元の参照先の本数": 2,
+    "**結果**": "参照先が 1 本では検証できない"
+   },
+   {
+    "doc": "S100YWGX",
+    "id": "R014",
+    "席の参照先": "revenuesfromexternalcustomers@currentyearduration_jpcrp030000-asr_e34102-000premiumservicebusinessreportablesegmentsmember",
+    "主張 id": "N019",
+    "Core 自身の state": "VALUE_MISMATCH",
+    "**差し替えた結果の state**": "GROUNDED",
+    "reason": null,
+    "comparator": "equals_within",
+    "recomputed": 8527000000.0
+   },
+   {
+    "doc": "S100YWGX",
+    "id": "R015",
+    "席の参照先": "revenuesfromexternalcustomers@currentyearduration_jpcrp030000-asr_e34102-000premiumservicebusinessreportablesegmentsmember",
+    "主張 id": "N020",
+    "comparator": "pct_change(cur,prior)",
+    "元の参照先の本数": 2,
+    "**結果**": "参照先が 1 本では検証できない"
+   },
+   {
+    "doc": "S100YWGX",
+    "id": "R016",
+    "席の参照先": "ordinaryincome@currentyearduration_jpcrp030000-asr_e34102-000premiumservicebusinessreportablesegmentsmember",
+    "**結果**": "主張が無い"
+   },
+   {
+    "doc": "S100YWGX",
+    "id": "R017",
+    "席の参照先": "ordinaryincome@currentyearduration_jpcrp030000-asr_e34102-000premiumservicebusinessreportablesegmentsmember",
+    "主張 id": "N022",
+    "comparator": "pct_change(cur,prior)",
+    "元の参照先の本数": 2,
+    "**結果**": "参照先が 1 本では検証できない"
+   },
+   {
+    "doc": "S100YWGX",
+    "id": "R018",
+    "席の参照先": "currentassets@currentyearinstant",
+    "主張 id": "N030",
+    "Core 自身の state": "VALUE_MISMATCH",
+    "**差し替えた結果の state**": "VALUE_MISMATCH",
+    "reason": null,
+    "comparator": "equals_within",
+    "recomputed": 35870000000.0
+   },
+   {
+    "doc": "S100YWGX",
+    "id": "R019",
+    "席の参照先": "currentassets@prior1yearinstant",
+    "主張 id": "N030",
+    "Core 自身の state": "VALUE_MISMATCH",
+    "**差し替えた結果の state**": "VALUE_MISMATCH",
+    "reason": null,
+    "comparator": "equals_within",
+    "recomputed": 33517000000.0
+   },
+   {
+    "doc": "S100YWGX",
+    "id": "R020",
+    "席の参照先": "noncurrentassets@prior1yearinstant",
+    "主張 id": "N030",
+    "Core 自身の state": "VALUE_MISMATCH",
+    "**差し替えた結果の state**": "VALUE_MISMATCH",
+    "reason": null,
+    "comparator": "equals_within",
+    "recomputed": 23863000000.0
+   },
+   {
+    "doc": "S100YWGX",
+    "id": "R021",
+    "席の参照先": "liabilities@currentyearinstant",
+    "主張 id": "N030",
+    "Core 自身の state": "VALUE_MISMATCH",
+    "**差し替えた結果の state**": "VALUE_MISMATCH",
+    "reason": null,
+    "comparator": "equals_within",
+    "recomputed": 39505000000.0
+   },
+   {
+    "doc": "S100YWGX",
+    "id": "R022",
+    "席の参照先": "liabilities@prior1yearinstant",
+    "主張 id": "N030",
+    "Core 自身の state": "VALUE_MISMATCH",
+    "**差し替えた結果の state**": "VALUE_MISMATCH",
+    "reason": null,
+    "comparator": "equals_within",
+    "recomputed": 38513000000.0
+   },
+   {
+    "doc": "S100YWGX",
+    "id": "R023",
+    "席の参照先": "costofsales@currentyearduration",
+    "主張 id": "N030",
+    "Core 自身の state": "VALUE_MISMATCH",
+    "**差し替えた結果の state**": "VALUE_MISMATCH",
+    "reason": null,
+    "comparator": "equals_within",
+    "recomputed": 56295000000.0
+   },
+   {
+    "doc": "S100YWGX",
+    "id": "R024",
+    "席の参照先": "sellinggeneralandadministrativeexpenses@currentyearduration",
+    "主張 id": "N030",
+    "Core 自身の state": "VALUE_MISMATCH",
+    "**差し替えた結果の state**": "VALUE_MISMATCH",
+    "reason": null,
+    "comparator": "equals_within",
+    "recomputed": 69422000000.0
+   },
+   {
+    "doc": "S100YZCT",
+    "id": "R002",
+    "席の参照先": "netsalessummaryofbusinessresults@currentyearduration",
+    "主張 id": "N001",
+    "Core 自身の state": "VALUE_MISMATCH",
+    "**差し替えた結果の state**": "GROUNDED",
+    "reason": null,
+    "comparator": "equals_within",
+    "recomputed": 67315520000.0
+   },
+   {
+    "doc": "S100YZCT",
+    "id": "R003",
+    "席の参照先": "netsalessummaryofbusinessresults@currentyearduration",
+    "主張 id": "N002",
+    "comparator": "pct_change(cur,prior)",
+    "元の参照先の本数": 2,
+    "**結果**": "参照先が 1 本では検証できない"
+   },
+   {
+    "doc": "S100YZCT",
+    "id": "R004",
+    "席の参照先": "operatingincome@currentyearduration",
+    "主張 id": "N003",
+    "Core 自身の state": "VALUE_MISMATCH",
+    "**差し替えた結果の state**": "VALUE_MISMATCH",
+    "reason": null,
+    "comparator": "equals_within",
+    "recomputed": 2981397000.0
+   },
+   {
+    "doc": "S100YZCT",
+    "id": "R005",
+    "席の参照先": "operatingincome@currentyearduration",
+    "主張 id": "N004",
+    "comparator": "pct_change(cur,prior)",
+    "元の参照先の本数": 2,
+    "**結果**": "参照先が 1 本では検証できない"
+   },
+   {
+    "doc": "S100YZCT",
+    "id": "R006",
+    "席の参照先": "ordinaryincomelosssummaryofbusinessresults@currentyearduration",
+    "主張 id": "N005",
+    "**結果**": "contract が無い"
+   },
+   {
+    "doc": "S100YZCT",
+    "id": "R007",
+    "席の参照先": "ordinaryincomelosssummaryofbusinessresults@currentyearduration",
+    "主張 id": "N006",
+    "**結果**": "contract が無い"
+   },
+   {
+    "doc": "S100YZCT",
+    "id": "R008",
+    "席の参照先": "profitlossattributabletoownersofparentsummaryofbusinessresults@currentyearduration",
+    "主張 id": "N007",
+    "**結果**": "contract が無い"
+   },
+   {
+    "doc": "S100YZCT",
+    "id": "R009",
+    "席の参照先": "profitlossattributabletoownersofparentsummaryofbusinessresults@currentyearduration",
+    "主張 id": "N008",
+    "**結果**": "contract が無い"
+   },
+   {
+    "doc": "S100YZCT",
+    "id": "R018",
+    "席の参照先": "currentassets@currentyearinstant",
+    "主張 id": "N035",
+    "Core 自身の state": "VALUE_MISMATCH",
+    "**差し替えた結果の state**": "VALUE_MISMATCH",
+    "reason": null,
+    "comparator": "equals_within",
+    "recomputed": 17830176000.0
+   },
+   {
+    "doc": "S100YZCT",
+    "id": "R019",
+    "席の参照先": "netincreasedecreaseincashandcashequivalents@currentyearduration",
+    "主張 id": "N053",
+    "Core 自身の state": "VALUE_MISMATCH",
+    "**差し替えた結果の state**": "VALUE_MISMATCH",
+    "reason": null,
+    "comparator": "equals_within",
+    "recomputed": 1121211000.0
+   },
+   {
+    "doc": "S100YZCT",
+    "id": "R020",
+    "席の参照先": "cashanddeposits@currentyearinstant",
+    "主張 id": "N077",
+    "Core 自身の state": "VALUE_MISMATCH",
+    "**差し替えた結果の state**": "VALUE_MISMATCH",
+    "reason": null,
+    "comparator": "equals_within",
+    "recomputed": 9958468000.0
+   },
+   {
+    "doc": "S100YZCT",
+    "id": "R021",
+    "席の参照先": "currentliabilities@currentyearinstant",
+    "主張 id": "N082",
+    "Core 自身の state": "VALUE_MISMATCH",
+    "**差し替えた結果の state**": "VALUE_MISMATCH",
+    "reason": null,
+    "comparator": "equals_within",
+    "recomputed": 13782310000.0
+   },
+   {
+    "doc": "S100YZCT",
+    "id": "R022",
+    "席の参照先": "grossprofit@currentyearduration",
+    "主張 id": "N097",
+    "Core 自身の state": "VALUE_MISMATCH",
+    "**差し替えた結果の state**": "VALUE_MISMATCH",
+    "reason": null,
+    "comparator": "equals_within",
+    "recomputed": 9259991000.0
+   },
+   {
+    "doc": "S100YZCT",
+    "id": "R023",
+    "席の参照先": "sellinggeneralandadministrativeexpenses@currentyearduration",
+    "主張 id": "N099",
+    "Core 自身の state": "VALUE_MISMATCH",
+    "**差し替えた結果の state**": "VALUE_MISMATCH",
+    "reason": null,
+    "comparator": "equals_within",
+    "recomputed": 6278594000.0
+   },
+   {
+    "doc": "S100YZCT",
+    "id": "R024",
+    "席の参照先": "operatingincome@currentyearduration",
+    "主張 id": "N103",
+    "Core 自身の state": "VALUE_MISMATCH",
+    "**差し替えた結果の state**": "VALUE_MISMATCH",
+    "reason": null,
+    "comparator": "equals_within",
+    "recomputed": 2981397000.0
+   },
+   {
+    "doc": "S100YYRV",
+    "id": "R013",
+    "席の参照先": "netsales@currentyearduration",
+    "主張 id": "N014",
+    "Core 自身の state": "GROUNDED",
+    "**差し替えた結果の state**": "GROUNDED",
+    "reason": null,
+    "comparator": "equals_within",
+    "recomputed": 14064526000.0
+   },
+   {
+    "doc": "S100YYRV",
+    "id": "R014",
+    "席の参照先": "netsales@currentyearduration",
+    "**結果**": "主張が無い"
+   },
+   {
+    "doc": "S100YYRV",
+    "id": "R015",
+    "席の参照先": "ordinaryincome@currentyearduration",
+    "主張 id": "N016",
+    "Core 自身の state": "GROUNDED",
+    "**差し替えた結果の state**": "GROUNDED",
+    "reason": null,
+    "comparator": "equals_within",
+    "recomputed": 920265000.0
+   },
+   {
+    "doc": "S100YYRV",
+    "id": "R016",
+    "席の参照先": "ordinaryincome@currentyearduration",
+    "**結果**": "主張が無い"
+   },
+   {
+    "doc": "S100YYRV",
+    "id": "R017",
+    "席の参照先": "operatingincome@currentyearduration_jpcrp030000-asr_e02480-000publishingbusinessreportablesegmentsmember",
+    "主張 id": "N026",
+    "Core 自身の state": "VALUE_MISMATCH",
+    "**差し替えた結果の state**": "VALUE_MISMATCH",
+    "reason": null,
+    "comparator": "equals_within",
+    "recomputed": 256555000.0
+   },
+   {
+    "doc": "S100YYRV",
+    "id": "R018",
+    "席の参照先": "operatingincome@currentyearduration_jpcrp030000-asr_e02480-000productsalesbusinessreportablesegmentsmember",
+    "主張 id": "N034",
+    "Core 自身の state": "VALUE_MISMATCH",
+    "**差し替えた結果の state**": "VALUE_MISMATCH",
+    "reason": null,
+    "comparator": "equals_within",
+    "recomputed": 621685000.0
+   },
+   {
+    "doc": "S100YYRV",
+    "id": "R019",
+    "席の参照先": "incomebeforeincometaxes@currentyearduration",
+    "主張 id": "N045",
+    "Core 自身の state": "VALUE_MISMATCH",
+    "**差し替えた結果の state**": "VALUE_MISMATCH",
+    "reason": null,
+    "comparator": "equals_within",
+    "recomputed": 898184000.0
+   },
+   {
+    "doc": "S100YYRV",
+    "id": "R020",
+    "席の参照先": "depreciationandamortizationopecf@currentyearduration",
+    "主張 id": "N045",
+    "Core 自身の state": "VALUE_MISMATCH",
+    "**差し替えた結果の state**": "VALUE_MISMATCH",
+    "reason": null,
+    "comparator": "equals_within",
+    "recomputed": 400542000.0
+   },
+   {
+    "doc": "S100YYRV",
+    "id": "R021",
+    "席の参照先": "proceedsoflongtermborrowingsfincf@currentyearduration",
+    "主張 id": "N062",
+    "Core 自身の state": "VALUE_MISMATCH",
+    "**差し替えた結果の state**": "VALUE_MISMATCH",
+    "reason": null,
+    "comparator": "equals_within",
+    "recomputed": 100000000.0
+   },
+   {
+    "doc": "S100YYRV",
+    "id": "R022",
+    "席の参照先": "extraordinaryloss@currentyearduration",
+    "主張 id": "N073",
+    "Core 自身の state": "VALUE_MISMATCH",
+    "**差し替えた結果の state**": "VALUE_MISMATCH",
+    "reason": null,
+    "comparator": "equals_within",
+    "recomputed": 22080000.0
+   },
+   {
+    "doc": "S100YYRV",
+    "id": "R023",
+    "席の参照先": "liabilities@currentyearinstant",
+    "主張 id": "N091",
+    "Core 自身の state": "VALUE_MISMATCH",
+    "**差し替えた結果の state**": "VALUE_MISMATCH",
+    "reason": null,
+    "comparator": "equals_within",
+    "recomputed": 5157679000.0
+   },
+   {
+    "doc": "S100YYRV",
+    "id": "R024",
+    "席の参照先": "increasedecreaseinprovisionforlossonorderreceivedopecf@currentyearduration",
+    "主張 id": "N062",
+    "Core 自身の state": "VALUE_MISMATCH",
+    "**差し替えた結果の state**": "VALUE_MISMATCH",
+    "reason": null,
+    "comparator": "equals_within",
+    "recomputed": 257955000.0
+   },
+   {
+    "doc": "S100YZEV",
+    "id": "R009",
+    "席の参照先": "netsalessummaryofbusinessresults@currentyearduration_nonconsolidatedmember",
+    "主張 id": "N005",
+    "**結果**": "contract が無い"
+   },
+   {
+    "doc": "S100YZEV",
+    "id": "R010",
+    "席の参照先": "netsalessummaryofbusinessresults@currentyearduration_nonconsolidatedmember",
+    "**結果**": "主張が無い"
+   },
+   {
+    "doc": "S100YZEV",
+    "id": "R011",
+    "席の参照先": "operatingincome@currentyearduration_nonconsolidatedmember",
+    "主張 id": "N007",
+    "**結果**": "contract が無い"
+   },
+   {
+    "doc": "S100YZEV",
+    "id": "R012",
+    "席の参照先": "operatingincome@currentyearduration_nonconsolidatedmember",
+    "**結果**": "主張が無い"
+   },
+   {
+    "doc": "S100YZEV",
+    "id": "R013",
+    "席の参照先": "ordinaryincomelosssummaryofbusinessresults@currentyearduration_nonconsolidatedmember",
+    "主張 id": "N009",
+    "**結果**": "contract が無い"
+   },
+   {
+    "doc": "S100YZEV",
+    "id": "R014",
+    "席の参照先": "ordinaryincomelosssummaryofbusinessresults@currentyearduration_nonconsolidatedmember",
+    "**結果**": "主張が無い"
+   },
+   {
+    "doc": "S100YZEV",
+    "id": "R015",
+    "席の参照先": "netincomelosssummaryofbusinessresults@currentyearduration_nonconsolidatedmember",
+    "主張 id": "N011",
+    "**結果**": "contract が無い"
+   },
+   {
+    "doc": "S100YZEV",
+    "id": "R016",
+    "席の参照先": "netincomelosssummaryofbusinessresults@currentyearduration_nonconsolidatedmember",
+    "**結果**": "主張が無い"
+   },
+   {
+    "doc": "S100YZEV",
+    "id": "R017",
+    "席の参照先": "currentassets@currentyearinstant_nonconsolidatedmember",
+    "主張 id": "N013",
+    "**結果**": "contract が無い"
+   },
+   {
+    "doc": "S100YZEV",
+    "id": "R018",
+    "席の参照先": "currentassets@currentyearinstant_nonconsolidatedmember",
+    "主張 id": "N014",
+    "**結果**": "contract が無い"
+   },
+   {
+    "doc": "S100YZEV",
+    "id": "R019",
+    "席の参照先": "noncurrentassets@currentyearinstant_nonconsolidatedmember",
+    "主張 id": "N017",
+    "**結果**": "contract が無い"
+   },
+   {
+    "doc": "S100YZEV",
+    "id": "R020",
+    "席の参照先": "increasedecreaseinaccountspayableotheropecf@currentyearduration_nonconsolidatedmember",
+    "主張 id": "N007",
+    "**結果**": "contract が無い"
+   },
+   {
+    "doc": "S100YXF5",
+    "id": "R017",
+    "席の参照先": "gainonsalesofnoncurrentassetsei@currentyearduration",
+    "**結果**": "主張が無い"
+   }
+  ]
+ },
+ "limits": [
+  "**これは棚卸しであり、精度の測定ではない。**正解とは照合していない",
+  "**第 1 部は人工の 1 件ずつである。**実物の分布を代表しない",
+  "**第 2 部は席が名指した参照先を差し替えただけ。**どちらが正しいかはここでは判定しない(盲検比較は別の封)",
+  "**「できない」は今のコードについてである。**材料(期間・次元・単位)は instance に在るので、**検査を足せないという意味ではない**",
+  "**engine は 1 行も変えていない。**"
+ ]
+}

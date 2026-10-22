@@ -1,0 +1,415 @@
+{
+ "purpose": "最終評価用 8 書類で、修正を当てた worktree の engine を走らせた結果(封 §6 の予測 P-1/P-2 の照合用)。この 8 書類は使用済みなので合否の証拠には使わない",
+ "profile": "P16",
+ "sibling_presence": {
+  "E1' | 同じ文・同じ fact の金額の主張が無い": 3,
+  "E1' | 在る → VALUE_MISMATCH(engine 自身が落としていた)": 4,
+  "E1' | 在る → 落ちていない": 25,
+  "E2 | 同じ文・同じ fact の金額の主張が無い": 9,
+  "E2 | 在る → VALUE_MISMATCH(engine 自身が落としていた)": 7,
+  "E2 | 在る → 落ちていない": 4
+ },
+ "bad_sibling_kinds": {
+  "E1' | C 別の要素に当たる(数を別の主語に付けた)": 4,
+  "E2 | B 同じ要素の別の枠に当たる(接続 = 枠の選び方)": 3,
+  "E2 | C 別の要素に当たる(数を別の主語に付けた)": 4
+ },
+ "money_claim_census": {
+  "VALUE_MISMATCH の中身 | 対になる期間の fact が無い": 6,
+  "VALUE_MISMATCH の中身 | 差でもない": 74,
+  "VALUE_MISMATCH の中身 | 文の数は『差』だった(欠陥 A)": 2,
+  "全体 | GROUNDED": 323,
+  "全体 | None": 55,
+  "全体 | UNVERIFIABLE": 4,
+  "全体 | VALUE_MISMATCH": 82
+ },
+ "rows": [
+  {
+   "id": "S100Z38F:H-010",
+   "kind": "E2",
+   "siblings": 1,
+   "bad": 1,
+   "classes": [
+    "C"
+   ]
+  },
+  {
+   "id": "S100Z38F:H-052",
+   "kind": "E2",
+   "siblings": 1,
+   "bad": 1,
+   "classes": [
+    "B"
+   ]
+  },
+  {
+   "id": "S100Z38F:H-071",
+   "kind": "E1'",
+   "siblings": 1,
+   "bad": 0,
+   "classes": []
+  },
+  {
+   "id": "S100Z38F:H-078",
+   "kind": "E2",
+   "siblings": 1,
+   "bad": 1,
+   "classes": [
+    "C"
+   ]
+  },
+  {
+   "id": "S100Z38F:H-080",
+   "kind": "E1'",
+   "siblings": 1,
+   "bad": 0,
+   "classes": []
+  },
+  {
+   "id": "S100Z38F:H-081",
+   "kind": "E2",
+   "siblings": 1,
+   "bad": 1,
+   "classes": [
+    "B"
+   ]
+  },
+  {
+   "id": "S100Z3DU:H-027",
+   "kind": "E1'",
+   "siblings": 2,
+   "bad": 0,
+   "classes": []
+  },
+  {
+   "id": "S100Z3DU:H-036",
+   "kind": "E1'",
+   "siblings": 2,
+   "bad": 0,
+   "classes": []
+  },
+  {
+   "id": "S100Z3DU:H-052",
+   "kind": "E1'",
+   "siblings": 2,
+   "bad": 0,
+   "classes": []
+  },
+  {
+   "id": "S100Z3DU:H-057",
+   "kind": "E1'",
+   "siblings": 2,
+   "bad": 0,
+   "classes": []
+  },
+  {
+   "id": "S100Z3DU:H-080",
+   "kind": "E1'",
+   "siblings": 1,
+   "bad": 0,
+   "classes": []
+  },
+  {
+   "id": "S100Z40H:H-003",
+   "kind": "E1'",
+   "siblings": 0,
+   "bad": 0,
+   "classes": []
+  },
+  {
+   "id": "S100Z40H:H-005",
+   "kind": "E1'",
+   "siblings": 1,
+   "bad": 1,
+   "classes": [
+    "C"
+   ]
+  },
+  {
+   "id": "S100Z40H:H-019",
+   "kind": "E2",
+   "siblings": 1,
+   "bad": 1,
+   "classes": [
+    "B"
+   ]
+  },
+  {
+   "id": "S100Z40H:H-024",
+   "kind": "E2",
+   "siblings": 0,
+   "bad": 0,
+   "classes": []
+  },
+  {
+   "id": "S100Z40H:H-053",
+   "kind": "E2",
+   "siblings": 1,
+   "bad": 1,
+   "classes": [
+    "C"
+   ]
+  },
+  {
+   "id": "S100Z40H:H-055",
+   "kind": "E2",
+   "siblings": 0,
+   "bad": 0,
+   "classes": []
+  },
+  {
+   "id": "S100Z40H:H-057",
+   "kind": "E1'",
+   "siblings": 1,
+   "bad": 0,
+   "classes": []
+  },
+  {
+   "id": "S100Z40H:H-069",
+   "kind": "E2",
+   "siblings": 2,
+   "bad": 1,
+   "classes": [
+    "C"
+   ]
+  },
+  {
+   "id": "S100Z40H:H-071",
+   "kind": "E1'",
+   "siblings": 1,
+   "bad": 0,
+   "classes": []
+  },
+  {
+   "id": "S100Z40H:H-074",
+   "kind": "E2",
+   "siblings": 0,
+   "bad": 0,
+   "classes": []
+  },
+  {
+   "id": "S100Z40H:H-087",
+   "kind": "E1'",
+   "siblings": 1,
+   "bad": 0,
+   "classes": []
+  },
+  {
+   "id": "S100Z40H:H-091",
+   "kind": "E1'",
+   "siblings": 1,
+   "bad": 0,
+   "classes": []
+  },
+  {
+   "id": "S100Z40H:H-097",
+   "kind": "E1'",
+   "siblings": 0,
+   "bad": 0,
+   "classes": []
+  },
+  {
+   "id": "S100Z461:H-001",
+   "kind": "E1'",
+   "siblings": 1,
+   "bad": 1,
+   "classes": [
+    "C"
+   ]
+  },
+  {
+   "id": "S100Z461:H-007",
+   "kind": "E2",
+   "siblings": 0,
+   "bad": 0,
+   "classes": []
+  },
+  {
+   "id": "S100Z461:H-015",
+   "kind": "E1'",
+   "siblings": 1,
+   "bad": 1,
+   "classes": [
+    "C"
+   ]
+  },
+  {
+   "id": "S100Z461:H-030",
+   "kind": "E2",
+   "siblings": 0,
+   "bad": 0,
+   "classes": []
+  },
+  {
+   "id": "S100Z46V:H-016",
+   "kind": "E1'",
+   "siblings": 1,
+   "bad": 0,
+   "classes": []
+  },
+  {
+   "id": "S100Z46V:H-049",
+   "kind": "E1'",
+   "siblings": 1,
+   "bad": 0,
+   "classes": []
+  },
+  {
+   "id": "S100Z4LC:H-002",
+   "kind": "E1'",
+   "siblings": 2,
+   "bad": 0,
+   "classes": []
+  },
+  {
+   "id": "S100Z4LC:H-007",
+   "kind": "E1'",
+   "siblings": 3,
+   "bad": 0,
+   "classes": []
+  },
+  {
+   "id": "S100Z4LC:H-017",
+   "kind": "E2",
+   "siblings": 1,
+   "bad": 0,
+   "classes": []
+  },
+  {
+   "id": "S100Z4LC:H-018",
+   "kind": "E1'",
+   "siblings": 2,
+   "bad": 0,
+   "classes": []
+  },
+  {
+   "id": "S100Z4LC:H-026",
+   "kind": "E1'",
+   "siblings": 2,
+   "bad": 0,
+   "classes": []
+  },
+  {
+   "id": "S100Z4LC:H-031",
+   "kind": "E2",
+   "siblings": 1,
+   "bad": 0,
+   "classes": []
+  },
+  {
+   "id": "S100Z4LC:H-032",
+   "kind": "E1'",
+   "siblings": 2,
+   "bad": 0,
+   "classes": []
+  },
+  {
+   "id": "S100Z4LC:H-043",
+   "kind": "E1'",
+   "siblings": 2,
+   "bad": 1,
+   "classes": [
+    "C"
+   ]
+  },
+  {
+   "id": "S100Z4LC:H-058",
+   "kind": "E1'",
+   "siblings": 2,
+   "bad": 0,
+   "classes": []
+  },
+  {
+   "id": "S100Z4LC:H-068",
+   "kind": "E1'",
+   "siblings": 2,
+   "bad": 0,
+   "classes": []
+  },
+  {
+   "id": "S100Z4LC:H-084",
+   "kind": "E1'",
+   "siblings": 2,
+   "bad": 0,
+   "classes": []
+  },
+  {
+   "id": "S100Z4LC:H-095",
+   "kind": "E1'",
+   "siblings": 2,
+   "bad": 0,
+   "classes": []
+  },
+  {
+   "id": "S100Z4R8:H-002",
+   "kind": "E1'",
+   "siblings": 0,
+   "bad": 0,
+   "classes": []
+  },
+  {
+   "id": "S100Z4R8:H-005",
+   "kind": "E1'",
+   "siblings": 2,
+   "bad": 0,
+   "classes": []
+  },
+  {
+   "id": "S100Z4R8:H-009",
+   "kind": "E2",
+   "siblings": 0,
+   "bad": 0,
+   "classes": []
+  },
+  {
+   "id": "S100Z4R8:H-021",
+   "kind": "E2",
+   "siblings": 0,
+   "bad": 0,
+   "classes": []
+  },
+  {
+   "id": "S100Z4R8:H-027",
+   "kind": "E1'",
+   "siblings": 2,
+   "bad": 0,
+   "classes": []
+  },
+  {
+   "id": "S100Z4R8:H-037",
+   "kind": "E2",
+   "siblings": 0,
+   "bad": 0,
+   "classes": []
+  },
+  {
+   "id": "S100Z4R8:H-047",
+   "kind": "E2",
+   "siblings": 0,
+   "bad": 0,
+   "classes": []
+  },
+  {
+   "id": "S100Z4R8:H-057",
+   "kind": "E2",
+   "siblings": 2,
+   "bad": 0,
+   "classes": []
+  },
+  {
+   "id": "S100Z4R8:H-068",
+   "kind": "E2",
+   "siblings": 2,
+   "bad": 0,
+   "classes": []
+  },
+  {
+   "id": "S100Z4R8:H-070",
+   "kind": "E1'",
+   "siblings": 2,
+   "bad": 0,
+   "classes": []
+  }
+ ],
+ "note": "worktree(修正あり)での出力。共有の木の fixtures/xbrl/final8/ は触っていない"
+}

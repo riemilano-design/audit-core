@@ -1,0 +1,240 @@
+--- a/audit-core/adapters/xbrl/recipes.py	2026-10-13 00:18:27
++++ b/audit-core/adapters/xbrl/recipes.py	2026-10-13 00:18:27
+@@ -99,9 +99,64 @@
+ # member_source / sign_token / word.
+ # ---------------------------------------------------------------------------
+ 
+-_MONEY_UNIT_RE_AFTER = re.compile(r"(増加|減少|増|減)")
+-_MONEY_DIFF_PHRASE_RE = re.compile(r"(増加額|減少額|比べて)")
+-_PREV_YEAR_PHRASE = "前連結会計年度は"
++# ---------------------------------------------------------------------------
++# 抽出の封 v2(EXTRACTION_SEAL_V2_2026-10-12 §2、D-015)。金額の数 1 つごとに、
++# 期間(当期 / 前期)と形(単一 / 対)を **文の字面だけ** で決める。
++# 値(match_value・target・fact の値)はここに一切入らない(§2 R-4)。
++# 正本は fixtures/xbrl/premeasure_assign_2026-10-12.py の v2_rule。
++# ---------------------------------------------------------------------------
++_PRIOR_PAREN_RE = re.compile(r"[(（]\s*(前連結会計年度は|前期は|同)")
++_PRIOR_CUE_RE = re.compile(r"(前期末|前期|前連結会計年度)")
++_FLOW_BEFORE_RE = re.compile(r"(増加額|減少額)$")                            # R-2f
++_DIFFW = r"(?:(?:増加|減少)(?!額)|(?:増益|減益|増収|減収)額?)"                  # 増加額・減少額は含まない
++_BARE = r"[増減](?![一-龥])"                                                  # 減価・減損などの複合語を除く
++_F1_RE = re.compile(r"(?:" + _DIFFW + r"|比べて?)$")                            # 数の直前(隙間 0)
++_F2_RE = re.compile(r"^(?:の)?(?:" + _DIFFW + r"|" + _BARE + r")")             # 数の直後(隙間 0・「の」1 つまで)
++_F3_RE = re.compile(r"^[(（][^()（）%％]*[)）]の?" + _DIFFW)                    # 数 + (…)の増減語(括弧の中に % が無い)
++_F5_RE = re.compile(r"^[、,]\s*[0-9.,]+[%％]の?(?:大幅な?)?" + _DIFFW)          # 数、P%の増減語
++_BASELINE_AFTER_CUE_RE = re.compile(r"^末?(?:に|と)?(?:比べ|比して|対し)")      # 「前期に比べ」= 比較の基準
++
++
++def _inside_prior_paren(s, a):
++    """数(位置 a)が (前連結会計年度は…)・(前期は…)・(同…) の括弧の中にあるか。"""
++
++    o = max(s.rfind("(", 0, a), s.rfind("（", 0, a))
++    if o < 0:
++        return False
++    cl = [x for x in (s.find(")", o), s.find("）", o)) if x >= 0]
++    c = min(cl) if cl else len(s)
++    return o < a < c and bool(_PRIOR_PAREN_RE.match(s, o))
++
++
++def _assign_period_form(s, a, b):
++    """封 v2 R-1〜R-3。返り値 (period, pair): period は "Current" か "Prior1"、
++    pair は (当期 − 前期) の対にするか(偽なら単一)。文と数の位置だけを見る。
++    """
++
++    spans = [(x, y) for (x, y, _v, _u, _p) in E.iter_numbers(s)]
++    # R-1 期間
++    period = "Current"
++    if _inside_prior_paren(s, a):
++        period = "Prior1"
++    else:
++        idx = next((i for i, (x, _y) in enumerate(spans) if x == a), None)
++        base = max(0, a - 15)
++        left_cue = s[base:a]
++        prev_end = spans[idx - 1][1] if (idx is not None and idx > 0) else -1
++        for m in _PRIOR_CUE_RE.finditer(left_cue):
++            ce = base + m.end()
++            if prev_end >= ce:                 # 手がかりと数の間に別の数 → その数のもの
++                continue
++            if _BASELINE_AFTER_CUE_RE.match(s[ce:ce + 6]) or s[ce:ce + 1] == "比":
++                continue                       # 比較の基準 / 前期比
++            period = "Prior1"
++            break
++    # R-2 差の形 / R-3 衝突
++    left, right = s[max(0, a - 8):a], s[b:b + 40]
++    flow = bool(_FLOW_BEFORE_RE.search(left))
++    has_form = bool(_F1_RE.search(left) or _F2_RE.match(right) or _F3_RE.match(right) or _F5_RE.match(right))
++    diff = has_form and not flow and not _inside_prior_paren(s, a)
++    return period, (diff and period == "Current")                  # C-1: 前期なら必ず単一
+ 
+ # ---------------------------------------------------------------------------
+ # Core 接続 C-1g §1-2(人間の決定、2026-10-06): CF 流量項目の符号の規約。
+@@ -223,7 +278,8 @@
+     # reproduce this function's own `scale`/`target` at verify time.
+     claim["unit_scale"] = unit_scale
+     claim["claim_scale"] = scale
+-    is_diff = bool(_MONEY_UNIT_RE_AFTER.search(s[b:b + 4])) or bool(_MONEY_DIFF_PHRASE_RE.search(s[max(0, a - 25):a]))
++    # 封 EXTRACTION_SEAL_V2_2026-10-12: 期間と形は文だけから数ごとに決める(値は使わない)。
++    period, is_pair = _assign_period_form(s, a, b)
+ 
+     if not subj:
+         # 封 BINDING_FIX_PLAN_2026-10-08(案ア、人間の決定 2026-10-08)のまま
+@@ -256,12 +312,11 @@
+     # 候補集合を概念(elems)と期間(want_ctx)で先に絞り、値では絞らない
+     # (規則 1)。候補が 0 件/複数件なら値を使わずに停止する(規則 3・4)。
+     # 候補が 1 件のときだけ pointer を確定し、値の比較はその pointer に
+-    # 対してのみ行う(規則 5・6)。対の形(is_diff)へ進むのは文に増減の語
++    # 対してのみ行う(規則 5・6)。対の形(is_pair)へ進むのは文に増減の語
+     # があるときだけで、単一 fact が値に一致しなかったことを理由に対の形
+     # へ落ちる経路は無い(いまの `N289` の誤りの経路)。
+-    if is_diff:
+-        prev_year_phrase = _PREV_YEAR_PHRASE in s[max(0, a - 15):a]
+-        want_a, want_b = ("Prior1Year", "Prior2Year") if prev_year_phrase else ("CurrentYear", "Prior1Year")
++    if is_pair:
++        want_a, want_b = "CurrentYear", "Prior1Year"          # 対は (当期 − 前期) だけ(封 v2 C-1・C-2)
+         pool_a = [f for f in I.facts_for(elems, facts, contexts, member, want_ctx=want_a)
+                   if f["unit"] and f["unit"].upper().startswith("JPY")]
+         pool_b = [f for f in I.facts_for(elems, facts, contexts, member, want_ctx=want_b)
+@@ -286,7 +341,8 @@
+             claim["match"] = how
+         return
+ 
+-    pool = [f for f in I.facts_for(elems, facts, contexts, member, want_ctx="CurrentYear")
++    want_single = "Prior1Year" if period == "Prior1" else "CurrentYear"
++    pool = [f for f in I.facts_for(elems, facts, contexts, member, want_ctx=want_single)
+             if f["unit"] and f["unit"].upper().startswith("JPY")]
+     if not pool:
+         claim["reason"] = "no_element"
+--- /dev/null	2026-10-13 00:18:27
++++ b/audit-core/tests/adapters/xbrl/test_extraction_v2.py	2026-10-13 00:18:27
+@@ -0,0 +1,131 @@
++# -*- coding: utf-8 -*-
++"""抽出の封 v2(docs/EXTRACTION_SEAL_V2_2026-10-12.md)§2.1 の表の試験。
++
++数 1 つごとの期間(Current / Prior1)と形(単一 / 対)を、文と数の位置だけから決める
++純粋関数 ``recipes._assign_period_form(s, a, b)`` を直接呼ぶ。数の位置は文の中の
++``【…】`` で示す(試験が数の位置を持つための印であり、文字そのものは本物の文)。
++
++1B / 5F の行は、追跡されている書類(キャッシュの ZIP)の同じ id の文と一致することも
++確かめる。P7(AI 文)の ZIP は git 管理外なので、P7 の行は文字を写して持つ。
++"""
++
++import inspect
++import unittest
++
++from adapters.xbrl import extract as E
++from adapters.xbrl import recipes as R
++from adapters.xbrl import vocabulary as V
++
++from . import _material as M
++
++# (doc, id, 印つきの文, 期間, 対か, 理由)
++ROWS = [
++    ("1B", "N015", "当連結会計年度末における資産合計は、前連結会計年度末と比べて【22億8千1百万円】増加(前連結会計年度は14億7千5百万円増加)し、278億3千6百万円(前連結会計年度は255億5千4百万円)となりました。", "Current", True, "R-1.3 基準 + F1・F2(C-3: 対は 1 つ)"),
++    ("1B", "N016", "当連結会計年度末における資産合計は、前連結会計年度末と比べて22億8千1百万円増加(前連結会計年度は【14億7千5百万円】増加)し、278億3千6百万円(前連結会計年度は255億5千4百万円)となりました。", "Prior1", False, "C-1・C-4"),
++    ("1B", "N018", "当連結会計年度末における資産合計は、前連結会計年度末と比べて22億8千1百万円増加(前連結会計年度は14億7千5百万円増加)し、278億3千6百万円(前連結会計年度は【255億5千4百万円】)となりました。", "Prior1", False, "R-1.1"),
++    ("1B", "N019", "主な変動は、受取手形及び売掛金の増加【8億4百万円】、投資有価証券の増加3億1百万円、退職給付に係る資産の増加18億2千8百万円、現金及び預金の減少2億9千3百万円、契約資産の減少1億6千1百万円であります。", "Current", True, "F1"),
++    ("1B", "N046", "これは主に、税金等調整前当期純利益【14億5千2百万円】に、減価償却費4億5千2百万円の非資金費用のほか、売上債権の増加額8億2百万円、契約資産の減少額1億6千1百万円、仕入債務の減少額3億円、契約負債の減少額9千3百万円、法人税等の支払額7億8千万円によるものであります。", "Current", False, "減価 は漢字が続く(v1 の ①)"),
++    ("1B", "N048", "これは主に、税金等調整前当期純利益14億5千2百万円に、減価償却費4億5千2百万円の非資金費用のほか、売上債権の増加額【8億2百万円】、契約資産の減少額1億6千1百万円、仕入債務の減少額3億円、契約負債の減少額9千3百万円、法人税等の支払額7億8千万円によるものであります。", "Current", False, "R-2f"),
++    ("1B", "N043", ")は、前連結会計年度末と比べて2億9千3百万円減少し、【26億5百万円】となりました。", "Current", False, "後ろに増減語が付かない"),
++    ("5F", "N005", "以上の結果、当連結会計年度の業績は、売上高【1,850,502千円】(前期比0.3%増)、営業損失52,196千円(前期は営業損失9,709千円)、経常損失98,576千円(前期は経常損失7,091千円)、親会社株主に帰属する当期純損失105,873千円(前期は親会社株主に帰属する当期純損失17,621千円)となりました。", "Current", False, "前期比 は基準・増は金額の語でない(v1 の ②)"),
++    ("5F", "N069", "売上高は、1,850,502千円と前連結会計年度に比べ【6,442千円】増加(前連結会計年度比0.3%増)いたしました。", "Current", True, "F1・F2"),
++    ("5F", "N078", "営業損益につきましては、営業損失52,196千円と前連結会計年度に比べ【42,487千円】(前連結会計年度は営業損失9,709千円)の減益となりました。", "Current", True, "F1・F3"),
++    ("5F", "N079", "営業損益につきましては、営業損失52,196千円と前連結会計年度に比べ42,487千円(前連結会計年度は営業損失【9,709千円】)の減益となりました。", "Prior1", False, "R-1.1・C-4"),
++    ("5F", "N074", "売上原価は30,950千円増加(前連結会計年度比2.3%増)し、1,377,499千円となり、販売費及び一般管理費につきましては、【17,979千円】増加(前連結会計年度比3.5%増)し、525,200千円となりました。", "Current", True, "F2"),
++    ("P7", "N026", "売上総利益は11,334百万円となり、前期の12,018百万円から【684百万円】、5.7%の減少となりました。", "Current", True, "F5"),
++    ("P7", "N066", "この結果、営業利益は1,465百万円となり、前期の2,715百万円から【1,250百万円】、46.0%の大幅減益となりました。", "Current", True, "F5(大幅)"),
++    ("P7", "N089", "以上の結果、経常利益は1,457百万円(前期【2,709百万円】)となり、1,251百万円、46.2%の減益となりました。", "Prior1", False, "R-1.2"),
++    ("P7", "N175", "負債合計は10,670百万円となり、前期末の【10,055百万円】から614百万円、6.1%増加しました。", "Prior1", False, "R-1.2(から は基準でない)"),
++    ("P7", "N179", "**流動負債**は8,041百万円(前期末【7,642百万円】)と398百万円増加しました。", "Prior1", False, "C-1(v1 は対にして前々期が無く停止)"),
++    ("P7", "N191", "- 契約負債:1,500百万円(同【1,594百万円】)、93百万円の減少", "Prior1", False, "R-1.1(同)"),
++    ("P7", "N282", "前期からの減少の主因は、1税金等調整前当期純利益が1,255百万円減少したこと、2退職給付に係る資産の増加額が前期890百万円から当期1,828百万円へと938百万円拡大したこと、3前期は売上債権が【209百万円】減少したのに対し当期は802百万円増加し、差引1,012百万円のマイナス要因となったことです。", "Prior1", False, "C-1(F2 に当たるが前期なので対にしない)"),
++    ("P7", "N063", "この786百万円の増加は、当期の営業利益の減益額【1,250百万円】の約6割に相当する規模であり、減益の最大の単独要因となっております。", "Current", True, "F1(減益額)"),
++    ("P7", "N219", "有利子負債は1年内返済予定分234百万円と長期借入金275百万円の合計【510百万円】(前期末843百万円)まで減少しており、現預金2,605百万円に対して実質無借金に近い状態を維持しております。", "Current", False, "手がかりが別の数に付く(間の数の規則)"),
++    ("P7", "N267", "主な内容は、税金等調整前当期純利益1,452百万円、減価償却費452百万円、のれん償却額53百万円、完成業務補償引当金の増加【786百万円】、契約資産の減少161百万円などの収入要因に対し、退職給付に係る資産の増加1,828百万円、売上債権の増加802百万円、仕入債務の減少300百万円、契約負債の減少93百万円などの支出要因がありました。", "Current", True, "F1 ― 文字では 1B N019 と区別できない(封 §5-1)"),
++    ("P7", "N229", "- 資本金【2,000百万円】(増減なし)", "Current", False, "増減 は F2 の語でない"),
++]
++
++
++def _unmark(marked):
++    a = marked.index("【")
++    b = marked.index("】")
++    return marked[:a] + marked[a + 1:b] + marked[b + 1:], a, b - 1
++
++
++class AssignPeriodFormTable(unittest.TestCase):
++    def test_every_row_of_section_2_1(self):
++        for doc, cid, marked, period, pair, why in ROWS:
++            s, a, b = _unmark(marked)
++            self.assertTrue(any(x == a and y == b for (x, y, _v, _u, _p) in E.iter_numbers(s)),
++                            "%s %s: 印の位置が iter_numbers の数と一致しない" % (doc, cid))
++            self.assertEqual(R._assign_period_form(s, a, b), (period, pair), "%s %s (%s)" % (doc, cid, why))
++
++    def test_assignment_takes_only_the_sentence_and_the_position(self):
++        # R-4: 値(fact の値・match_value・target)は割当に入らない
++        self.assertEqual(list(inspect.signature(R._assign_period_form).parameters), ["s", "a", "b"])
++
++    def test_prior_is_never_a_pair(self):
++        # C-1: 期間が前期なら必ず単一
++        for doc, cid, marked, period, pair, why in ROWS:
++            s, a, b = _unmark(marked)
++            per, p = R._assign_period_form(s, a, b)
++            if per == "Prior1":
++                self.assertFalse(p, "%s %s" % (doc, cid))
++
++    def test_other_money_numbers_in_the_same_sentence_do_not_borrow_the_word(self):
++        # 同じ文でも数ごとに決まる: N015 の 1 つ目だけが対、(前連結会計年度は…増加) の中の数は単一の前期
++        s, a, b = _unmark(ROWS[0][2])
++        spans = [(x, y) for (x, y, _v, _u, _p) in E.iter_numbers(s)]
++        got = [R._assign_period_form(s, x, y) for (x, y) in spans]
++        self.assertEqual(got, [("Current", True), ("Prior1", False), ("Current", False), ("Prior1", False)])
++
++
++class SentenceOfRealDocuments(unittest.TestCase):
++    """1B / 5F の行は、書類の同じ id の文・位置と一致する(試験の文が本物であること)。"""
++
++    @classmethod
++    def setUpClass(cls):
++        spn = {}
++        orig = R._dispatch_num_claim
++
++        def spy(claim, s, a, b, *rest):
++            spn[claim["id"]] = (s, a, b)
++            return orig(claim, s, a, b, *rest)
++
++        cls.real = {}
++        R._dispatch_num_claim = spy
++        try:
++            for tag, doc, prof in (("1B", M.DOC_1, V.P1), ("5F", M.DOC_5, V.P5F)):
++                spn.clear()
++                cls.claims = {}
++                num, _ = R.build_raw_claims(M.load_zip_bytes(doc["docID"], doc["sha256"]), prof)
++                cls.real[tag] = (dict(spn), {c["id"]: c for c in num})
++        finally:
++            R._dispatch_num_claim = orig
++
++    def test_literal_sentences_are_the_documents(self):
++        for doc, cid, marked, _p, _q, _w in ROWS:
++            if doc not in ("1B", "5F"):
++                continue
++            s, a, b = _unmark(marked)
++            self.assertEqual(self.real[doc][0][cid], (s, a, b), "%s %s" % (doc, cid))
++
++    def test_bound_pointers_follow_the_assignment(self):
++        # 束縛できた金額の数では、pointer の形(対 = 2 本 + a-b / 単一 = 1 本)と期間が割当どおり
++        checked = 0
++        for tag, (spn, claims) in self.real.items():
++            for cid, (s, a, b) in spn.items():
++                c = claims[cid]
++                if c.get("unit") not in V.UNIT_SCALE or not c.get("bound"):
++                    continue
++                period, pair = R._assign_period_form(s, a, b)
++                p = c["pointer"]
++                self.assertEqual(isinstance(p, list), pair, "%s %s" % (tag, cid))
++                first = (p if isinstance(p, list) else [p])[0].split("@")[1]
++                self.assertTrue(first.startswith("Prior1Year" if period == "Prior1" else "CurrentYear"), "%s %s %s" % (tag, cid, first))
++                checked += 1
++        self.assertGreater(checked, 20)
++
++
++if __name__ == "__main__":
++    unittest.main()

@@ -1,0 +1,2723 @@
+{
+  "判定者": "席1",
+  "読んだファイル": [
+    "fixtures/xbrl/q2_nonconsolidated/seat/seat_instruction_2026-10-14.md",
+    "fixtures/xbrl/q2_nonconsolidated/seat/material_S100Z40G.json",
+    "fixtures/xbrl/q2_nonconsolidated/seat/facts_S100Z40G.json",
+    "fixtures/xbrl/q2_nonconsolidated/seat/contexts_S100Z40G.json"
+  ],
+  "行": [
+    {
+      "行の鍵": "H-001",
+      "判定": "独立判定",
+      "形": "差(当期−前期)",
+      "fact": [
+        {
+          "役割": "当期側",
+          "要素": "jppfs_cor:StocksOfSubsidiariesAndAffiliates",
+          "context": "CurrentYearInstant_NonConsolidatedMember",
+          "期間": "CurrentYearInstant_NonConsolidatedMember",
+          "値": 146900000.0,
+          "単位": "JPY"
+        },
+        {
+          "役割": "前期側",
+          "要素": "jppfs_cor:StocksOfSubsidiariesAndAffiliates",
+          "context": "Prior1YearInstant_NonConsolidatedMember",
+          "期間": "Prior1YearInstant_NonConsolidatedMember",
+          "値": 21900000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "関係会社株式(StocksOfSubsidiariesAndAffiliates) 当期146,900千円 − 前期21,900千円 = 125,000千円増加。方向(増加)と金額が文の抜粋と一致。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "会社(非連結)",
+      "値は一致するか": "一致",
+      "同値の他の候補": [
+        {
+          "役割": "単一",
+          "要素": "jppfs_cor:PurchaseOfStocksOfSubsidiariesAndAffiliatesInvCF",
+          "context": "CurrentYearDuration_NonConsolidatedMember",
+          "期間": "CurrentYearDuration_NonConsolidatedMember",
+          "値": -125000000.0,
+          "単位": "JPY"
+        },
+        {
+          "役割": "単一",
+          "要素": "jpcrp_cor:TotalAcquisitionCostForIncreasedSharesSharesNotListedInvestmentSharesHeldForPurposesOtherThanPureInvestmentReportingCompany",
+          "context": "CurrentYearDuration",
+          "期間": "CurrentYearDuration",
+          "値": 125000000.0,
+          "単位": "JPY"
+        }
+      ],
+      "判定不能の理由": null,
+      "判定の理由": "対象の数は null(方向語「増加」が対象)。関係会社株式の当期末残高と前期末残高の差が125,000千円増加で文の記述と一致する。",
+      "迷った点": "同じ125,000千円は投資CFの関係会社株式取得による支出(符号は支出でマイナス)にも現れるため、どちらが文の『残高が増加した』を直接表すかで迷ったが、残高の差の方を主として選んだ。"
+    },
+    {
+      "行の鍵": "H-002",
+      "判定": "独立判定",
+      "形": "率(比)",
+      "fact": [
+        {
+          "役割": "当期側",
+          "要素": "jppfs_cor:OperatingIncome",
+          "context": "CurrentYearDuration_NonConsolidatedMember",
+          "期間": "CurrentYearDuration_NonConsolidatedMember",
+          "値": 819147000.0,
+          "単位": "JPY"
+        },
+        {
+          "役割": "前期側",
+          "要素": "jppfs_cor:OperatingIncome",
+          "context": "Prior1YearDuration_NonConsolidatedMember",
+          "期間": "Prior1YearDuration_NonConsolidatedMember",
+          "値": 755966000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "(819,147,000−755,966,000)/755,966,000 = 8.358%、小数第1位四捨五入で8.4%。文の8.4%と一致。",
+      "文が述べている単位": "%",
+      "対象の範囲(文から読める範囲)": "会社(非連結)",
+      "値は一致するか": "一致",
+      "同値の他の候補": [],
+      "判定不能の理由": null,
+      "判定の理由": "営業利益の前期比成長率が文の8.4%と一致する。",
+      "迷った点": "特になし"
+    },
+    {
+      "行の鍵": "H-003",
+      "判定": "独立判定",
+      "形": "率(比)",
+      "fact": [
+        {
+          "役割": "当期側",
+          "要素": "jppfs_cor:IncomeTaxes",
+          "context": "CurrentYearDuration_NonConsolidatedMember",
+          "期間": "CurrentYearDuration_NonConsolidatedMember",
+          "値": 259177000.0,
+          "単位": "JPY"
+        },
+        {
+          "役割": "前期側",
+          "要素": "jppfs_cor:IncomeTaxes",
+          "context": "Prior1YearDuration_NonConsolidatedMember",
+          "期間": "Prior1YearDuration_NonConsolidatedMember",
+          "値": 177253000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "(259,177,000−177,253,000)/177,253,000 = 46.22%、四捨五入で46.2%。文の46.2%と一致。",
+      "文が述べている単位": "%",
+      "対象の範囲(文から読める範囲)": "会社(非連結)",
+      "値は一致するか": "一致",
+      "同値の他の候補": [],
+      "判定不能の理由": null,
+      "判定の理由": "法人税等合計の前期比成長率が文の46.2%と一致する。",
+      "迷った点": "特になし"
+    },
+    {
+      "行の鍵": "H-004",
+      "判定": "独立判定",
+      "形": "率(比)",
+      "fact": [
+        {
+          "役割": "当期側",
+          "要素": "jppfs_cor:ProfitLoss",
+          "context": "CurrentYearDuration_NonConsolidatedMember",
+          "期間": "CurrentYearDuration_NonConsolidatedMember",
+          "値": 563426000.0,
+          "単位": "JPY"
+        },
+        {
+          "役割": "前期側",
+          "要素": "jppfs_cor:ProfitLoss",
+          "context": "Prior1YearDuration_NonConsolidatedMember",
+          "期間": "Prior1YearDuration_NonConsolidatedMember",
+          "値": 454620000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "(563,426,000−454,620,000)/454,620,000 = 23.95%、四捨五入で23.9%(23.95未満のため)。文の23.9%と一致。",
+      "文が述べている単位": "%",
+      "対象の範囲(文から読める範囲)": "会社(非連結)",
+      "値は一致するか": "一致",
+      "同値の他の候補": [],
+      "判定不能の理由": null,
+      "判定の理由": "当期純利益の前期比成長率が文の23.9%と一致する。",
+      "迷った点": "23.9%か23.95%ぎりぎりの値のため四捨五入の境界を確認した。"
+    },
+    {
+      "行の鍵": "H-005",
+      "判定": "独立判定",
+      "形": "和",
+      "fact": [
+        {
+          "役割": "当期側",
+          "要素": "jppfs_cor:PropertyPlantAndEquipment",
+          "context": "CurrentYearInstant_NonConsolidatedMember",
+          "期間": "CurrentYearInstant_NonConsolidatedMember",
+          "値": 535850000.0,
+          "単位": "JPY"
+        },
+        {
+          "役割": "前期側",
+          "要素": "jppfs_cor:PropertyPlantAndEquipment",
+          "context": "Prior1YearInstant_NonConsolidatedMember",
+          "期間": "Prior1YearInstant_NonConsolidatedMember",
+          "値": 576636000.0,
+          "単位": "JPY"
+        },
+        {
+          "役割": "加算項",
+          "要素": "jppfs_cor:IntangibleAssets",
+          "context": "CurrentYearInstant_NonConsolidatedMember",
+          "期間": "CurrentYearInstant_NonConsolidatedMember",
+          "値": 225365000.0,
+          "単位": "JPY"
+        },
+        {
+          "役割": "加算項",
+          "要素": "jppfs_cor:IntangibleAssets",
+          "context": "Prior1YearInstant_NonConsolidatedMember",
+          "期間": "Prior1YearInstant_NonConsolidatedMember",
+          "値": 259232000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "有形固定資産(PropertyPlantAndEquipment) 当期535,850千円−前期576,636千円=−40,786千円。無形固定資産(IntangibleAssets) 当期225,365千円−前期259,232千円=−33,867千円。両方とも減少しており、文の『減価償却により減少した』という方向と一致する。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "会社(非連結)",
+      "値は一致するか": "一致(方向)",
+      "同値の他の候補": [],
+      "判定不能の理由": null,
+      "判定の理由": "対象の数は null(方向語「減少」が対象)。有形固定資産・無形固定資産とも当期末残高が前期末残高より減少しており、方向が一致する。具体的な減少額は文中に示されていないため金額の一致は確認していない。",
+      "迷った点": "『有形固定資産・無形固定資産』が1つの合算対象として書かれているため、2つの資産区分をどう1つの fact にまとめるかで迷った。個別の差として両方提示した。"
+    },
+    {
+      "行の鍵": "H-006",
+      "判定": "判定不能",
+      "形": null,
+      "fact": [],
+      "計算": "該当する fact が無いため計算していない。",
+      "文が述べている単位": null,
+      "対象の範囲(文から読める範囲)": "会社全体の取組み(アライアンス締結先の数)",
+      "値は一致するか": "確かめていない",
+      "同値の他の候補": [],
+      "判定不能の理由": "対象が文書に無い",
+      "判定の理由": "『大手3社とアライアンス締結』は取組みの説明であり、提携先数を表す fact は元データに存在しない。",
+      "迷った点": "特になし"
+    },
+    {
+      "行の鍵": "H-007",
+      "判定": "独立判定",
+      "形": "単一",
+      "fact": [
+        {
+          "役割": "単一",
+          "要素": "jppfs_cor:ProfitLoss",
+          "context": "CurrentYearDuration_NonConsolidatedMember_RetainedEarningsBroughtForwardMember",
+          "期間": "CurrentYearDuration_NonConsolidatedMember_RetainedEarningsBroughtForwardMember",
+          "値": 563426000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "株主資本等変動表における当期純利益の計上(利益剰余金/繰越利益剰余金への加算)563,426千円。文の563,426千円と一致。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "会社(非連結)",
+      "値は一致するか": "一致",
+      "同値の他の候補": [
+        {
+          "役割": "単一",
+          "要素": "jppfs_cor:ProfitLoss",
+          "context": "CurrentYearDuration_NonConsolidatedMember",
+          "期間": "CurrentYearDuration_NonConsolidatedMember",
+          "値": 563426000.0,
+          "単位": "JPY"
+        },
+        {
+          "役割": "単一",
+          "要素": "jpcrp_cor:NetIncomeLossSummaryOfBusinessResults",
+          "context": "CurrentYearDuration_NonConsolidatedMember",
+          "期間": "CurrentYearDuration_NonConsolidatedMember",
+          "値": 563426000.0,
+          "単位": "JPY"
+        }
+      ],
+      "判定不能の理由": null,
+      "判定の理由": "『当期純利益の計上により利益剰余金が563,426千円増加した』に対応する株主資本等変動表のProfitLoss(利益剰余金欄)が一致。",
+      "迷った点": "特になし"
+    },
+    {
+      "行の鍵": "H-008",
+      "判定": "独立判定",
+      "形": "単一",
+      "fact": [
+        {
+          "役割": "単一",
+          "要素": "jppfs_cor:NonOperatingIncome",
+          "context": "CurrentYearDuration_NonConsolidatedMember",
+          "期間": "CurrentYearDuration_NonConsolidatedMember",
+          "値": 21158000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "営業外収益21,158千円。文の21,158千円と一致。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "会社(非連結)",
+      "値は一致するか": "一致",
+      "同値の他の候補": [],
+      "判定不能の理由": null,
+      "判定の理由": "営業外収益の当期額が文の数値と一致する。",
+      "迷った点": "特になし"
+    },
+    {
+      "行の鍵": "H-009",
+      "判定": "独立判定",
+      "形": "率(比)",
+      "fact": [
+        {
+          "役割": "当期側",
+          "要素": "jppfs_cor:NonOperatingIncome",
+          "context": "CurrentYearDuration_NonConsolidatedMember",
+          "期間": "CurrentYearDuration_NonConsolidatedMember",
+          "値": 21158000.0,
+          "単位": "JPY"
+        },
+        {
+          "役割": "前期側",
+          "要素": "jppfs_cor:NonOperatingIncome",
+          "context": "Prior1YearDuration_NonConsolidatedMember",
+          "期間": "Prior1YearDuration_NonConsolidatedMember",
+          "値": 19047000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "(21,158,000−19,047,000)/19,047,000 = 11.08%、四捨五入で11.1%。文の11.1%と一致。",
+      "文が述べている単位": "%",
+      "対象の範囲(文から読める範囲)": "会社(非連結)",
+      "値は一致するか": "一致",
+      "同値の他の候補": [],
+      "判定不能の理由": null,
+      "判定の理由": "営業外収益の前期比成長率が文の11.1%と一致する。",
+      "迷った点": "特になし"
+    },
+    {
+      "行の鍵": "H-010",
+      "判定": "独立判定",
+      "形": "単一",
+      "fact": [
+        {
+          "役割": "単一",
+          "要素": "jppfs_cor:CashAndCashEquivalents",
+          "context": "Prior1YearInstant_NonConsolidatedMember",
+          "期間": "Prior1YearInstant_NonConsolidatedMember",
+          "値": 2065504000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "前期末の現金及び現金同等物2,065,504千円。文の『前期末2,065,504千円』と一致。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "会社(非連結)",
+      "値は一致するか": "一致",
+      "同値の他の候補": [
+        {
+          "役割": "単一",
+          "要素": "jpcrp_cor:CashAndCashEquivalentsSummaryOfBusinessResults",
+          "context": "Prior1YearInstant_NonConsolidatedMember",
+          "期間": "Prior1YearInstant_NonConsolidatedMember",
+          "値": 2065504000.0,
+          "単位": "JPY"
+        }
+      ],
+      "判定不能の理由": null,
+      "判定の理由": "前期末の現金及び現金同等物残高が文の数値と一致する。",
+      "迷った点": "特になし"
+    },
+    {
+      "行の鍵": "H-011",
+      "判定": "独立判定",
+      "形": "率(比)",
+      "fact": [
+        {
+          "役割": "当期側",
+          "要素": "jppfs_cor:ProfitLoss",
+          "context": "CurrentYearDuration_NonConsolidatedMember",
+          "期間": "CurrentYearDuration_NonConsolidatedMember",
+          "値": 563426000.0,
+          "単位": "JPY"
+        },
+        {
+          "役割": "前期側",
+          "要素": "jppfs_cor:ProfitLoss",
+          "context": "Prior1YearDuration_NonConsolidatedMember",
+          "期間": "Prior1YearDuration_NonConsolidatedMember",
+          "値": 454620000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "(563,426,000−454,620,000)/454,620,000 = 23.95%、四捨五入で23.9%。文の23.9%と一致。",
+      "文が述べている単位": "%",
+      "対象の範囲(文から読める範囲)": "会社(非連結)",
+      "値は一致するか": "一致",
+      "同値の他の候補": [],
+      "判定不能の理由": null,
+      "判定の理由": "当期純利益の前期比成長率が文の23.9%と一致する(H-004と同じ fact)。",
+      "迷った点": "特になし"
+    },
+    {
+      "行の鍵": "H-012",
+      "判定": "独立判定",
+      "形": "単一",
+      "fact": [
+        {
+          "役割": "単一",
+          "要素": "jppfs_cor:NonOperatingExpenses",
+          "context": "CurrentYearDuration_NonConsolidatedMember",
+          "期間": "CurrentYearDuration_NonConsolidatedMember",
+          "値": 9841000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "営業外費用9,841千円。文の9,841千円と一致。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "会社(非連結)",
+      "値は一致するか": "一致",
+      "同値の他の候補": [],
+      "判定不能の理由": null,
+      "判定の理由": "営業外費用の当期額が文の数値と一致する。",
+      "迷った点": "特になし"
+    },
+    {
+      "行の鍵": "H-013",
+      "判定": "独立判定",
+      "形": "差(当期−前期)",
+      "fact": [
+        {
+          "役割": "当期側",
+          "要素": "jppfs_cor:SalariesAndAllowancesOECNA",
+          "context": "CurrentYearDuration_NonConsolidatedMember",
+          "期間": "CurrentYearDuration_NonConsolidatedMember",
+          "値": 832437000.0,
+          "単位": "JPY"
+        },
+        {
+          "役割": "前期側",
+          "要素": "jppfs_cor:SalariesAndAllowancesOECNA",
+          "context": "Prior1YearDuration_NonConsolidatedMember",
+          "期間": "Prior1YearDuration_NonConsolidatedMember",
+          "値": 772073000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "給料手当(販管費) 当期832,437千円−前期772,073千円=60,364千円増加。文の『給料手当が増加した』という方向と一致。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "会社(非連結)",
+      "値は一致するか": "一致(方向)",
+      "同値の他の候補": [],
+      "判定不能の理由": null,
+      "判定の理由": "対象の数は null(方向語「給料手当が増加」が対象)。給料手当の当期額が前期より増加しており方向が一致する。",
+      "迷った点": "特になし"
+    },
+    {
+      "行の鍵": "H-014",
+      "判定": "判定不能",
+      "形": null,
+      "fact": [],
+      "計算": "該当する fact が無いため計算していない。",
+      "文が述べている単位": null,
+      "対象の範囲(文から読める範囲)": "観光・宿泊業界全体(外部調査)",
+      "値は一致するか": "確かめていない",
+      "同値の他の候補": [],
+      "判定不能の理由": "対象が文書に無い",
+      "判定の理由": "『人手不足』と感じる事業者の割合(72.7%)は日本・東京商工会議所の外部調査結果であり、提出会社のXBRL fact には存在しない。",
+      "迷った点": "特になし"
+    },
+    {
+      "行の鍵": "H-015",
+      "判定": "独立判定",
+      "形": "単一",
+      "fact": [
+        {
+          "役割": "単一",
+          "要素": "jppfs_cor:NoncurrentLiabilities",
+          "context": "CurrentYearInstant_NonConsolidatedMember",
+          "期間": "CurrentYearInstant_NonConsolidatedMember",
+          "値": 211645000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "固定負債211,645千円。文の211,645千円と一致。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "会社(非連結)",
+      "値は一致するか": "一致",
+      "同値の他の候補": [],
+      "判定不能の理由": null,
+      "判定の理由": "固定負債の当期末残高が文の数値と一致する。",
+      "迷った点": "特になし"
+    },
+    {
+      "行の鍵": "H-016",
+      "判定": "独立判定",
+      "形": "率(比)",
+      "fact": [
+        {
+          "役割": "当期側",
+          "要素": "jppfs_cor:OrdinaryIncome",
+          "context": "CurrentYearDuration_NonConsolidatedMember",
+          "期間": "CurrentYearDuration_NonConsolidatedMember",
+          "値": 830465000.0,
+          "単位": "JPY"
+        },
+        {
+          "役割": "前期側",
+          "要素": "jppfs_cor:OrdinaryIncome",
+          "context": "Prior1YearDuration_NonConsolidatedMember",
+          "期間": "Prior1YearDuration_NonConsolidatedMember",
+          "値": 769087000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "(830,465,000−769,087,000)/769,087,000 = 7.98%、四捨五入で8.0%。文の8.0%と一致。",
+      "文が述べている単位": "%",
+      "対象の範囲(文から読める範囲)": "会社(非連結)",
+      "値は一致するか": "一致",
+      "同値の他の候補": [],
+      "判定不能の理由": null,
+      "判定の理由": "経常利益の前期比成長率が文の8.0%と一致する。",
+      "迷った点": "特になし"
+    },
+    {
+      "行の鍵": "H-017",
+      "判定": "独立判定",
+      "形": "率(比)",
+      "fact": [
+        {
+          "役割": "当期側",
+          "要素": "jppfs_cor:CostOfSales",
+          "context": "CurrentYearDuration_NonConsolidatedMember",
+          "期間": "CurrentYearDuration_NonConsolidatedMember",
+          "値": 11576282000.0,
+          "単位": "JPY"
+        },
+        {
+          "役割": "前期側",
+          "要素": "jppfs_cor:CostOfSales",
+          "context": "Prior1YearDuration_NonConsolidatedMember",
+          "期間": "Prior1YearDuration_NonConsolidatedMember",
+          "値": 10314540000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "(11,576,282,000−10,314,540,000)/10,314,540,000 = 12.23%、四捨五入で12.2%。文の12.2%と一致。",
+      "文が述べている単位": "%",
+      "対象の範囲(文から読める範囲)": "会社(非連結)",
+      "値は一致するか": "一致",
+      "同値の他の候補": [],
+      "判定不能の理由": null,
+      "判定の理由": "売上原価の前期比成長率が文の12.2%と一致する。",
+      "迷った点": "特になし"
+    },
+    {
+      "行の鍵": "H-018",
+      "判定": "独立判定",
+      "形": "率(比)",
+      "fact": [
+        {
+          "役割": "当期側",
+          "要素": "jppfs_cor:ExtraordinaryLoss",
+          "context": "CurrentYearDuration_NonConsolidatedMember",
+          "期間": "CurrentYearDuration_NonConsolidatedMember",
+          "値": 7861000.0,
+          "単位": "JPY"
+        },
+        {
+          "役割": "前期側",
+          "要素": "jppfs_cor:ExtraordinaryLoss",
+          "context": "Prior1YearDuration_NonConsolidatedMember",
+          "期間": "Prior1YearDuration_NonConsolidatedMember",
+          "値": 184122000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "(7,861,000−184,122,000)/184,122,000 = −95.73%、四捨五入で−95.7%。文の『前期比95.7%減』と一致。",
+      "文が述べている単位": "%",
+      "対象の範囲(文から読める範囲)": "会社(非連結)",
+      "値は一致するか": "一致",
+      "同値の他の候補": [],
+      "判定不能の理由": null,
+      "判定の理由": "特別損失合計(当期は固定資産除却損のみ)の前期比減少率が文の95.7%減と一致する。前期は減損損失等も含むため前期の特別損失合計を使った。",
+      "迷った点": "文は『固定資産の除却による損失を7,861千円計上(前期比95.7%減)』としており、95.7%減が『特別損失全体』の前期比か『除却損のみ』の前期比かで迷ったが、除却損単体の前期比(30,839千円比)では−74.5%となり文の数値と合わないため、特別損失合計を用いた。"
+    },
+    {
+      "行の鍵": "H-019",
+      "判定": "独立判定",
+      "形": "単一",
+      "fact": [
+        {
+          "役割": "単一",
+          "要素": "jppfs_cor:NetSales",
+          "context": "CurrentYearDuration_NonConsolidatedMember_jpcrp030000-asr_E39476-000RegionalRevitalizationBusinessReportableSegmentMember",
+          "期間": "CurrentYearDuration_NonConsolidatedMember_jpcrp030000-asr_E39476-000RegionalRevitalizationBusinessReportableSegmentMember",
+          "値": 817588000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "地方創生事業セグメントの売上高817,588千円。文の817,588千円と一致。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "セグメント(地方創生事業)",
+      "値は一致するか": "一致",
+      "同値の他の候補": [],
+      "判定不能の理由": null,
+      "判定の理由": "地方創生事業セグメントの売上高が文の数値と一致する。",
+      "迷った点": "特になし"
+    },
+    {
+      "行の鍵": "H-020",
+      "判定": "独立判定",
+      "形": "差(当期−前期)",
+      "fact": [
+        {
+          "役割": "当期側",
+          "要素": "jppfs_cor:Assets",
+          "context": "CurrentYearInstant_NonConsolidatedMember",
+          "期間": "CurrentYearInstant_NonConsolidatedMember",
+          "値": 4981346000.0,
+          "単位": "JPY"
+        },
+        {
+          "役割": "前期側",
+          "要素": "jppfs_cor:Assets",
+          "context": "Prior1YearInstant_NonConsolidatedMember",
+          "期間": "Prior1YearInstant_NonConsolidatedMember",
+          "値": 4439368000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "総資産 当期4,981,346千円−前期4,439,368千円=541,978千円増加。文の『541,978千円増加』と一致。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "会社(非連結)",
+      "値は一致するか": "一致",
+      "同値の他の候補": [
+        {
+          "役割": "当期側",
+          "要素": "jpcrp_cor:TotalAssetsSummaryOfBusinessResults",
+          "context": "CurrentYearInstant_NonConsolidatedMember",
+          "期間": "CurrentYearInstant_NonConsolidatedMember",
+          "値": 4981346000.0,
+          "単位": "JPY"
+        },
+        {
+          "役割": "前期側",
+          "要素": "jpcrp_cor:TotalAssetsSummaryOfBusinessResults",
+          "context": "Prior1YearInstant_NonConsolidatedMember",
+          "期間": "Prior1YearInstant_NonConsolidatedMember",
+          "値": 4439368000.0,
+          "単位": "JPY"
+        }
+      ],
+      "判定不能の理由": null,
+      "判定の理由": "対象の数は null(方向語『増加』が対象)だが、総資産の当期末・前期末の差が541,978千円増加で文の数値(H-060と同じ)に一致する。",
+      "迷った点": "特になし"
+    },
+    {
+      "行の鍵": "H-021",
+      "判定": "独立判定",
+      "形": "率(比)",
+      "fact": [
+        {
+          "役割": "当期側",
+          "要素": "jppfs_cor:GrossProfit",
+          "context": "CurrentYearDuration_NonConsolidatedMember",
+          "期間": "CurrentYearDuration_NonConsolidatedMember",
+          "値": 3749136000.0,
+          "単位": "JPY"
+        },
+        {
+          "役割": "前期側",
+          "要素": "jppfs_cor:GrossProfit",
+          "context": "Prior1YearDuration_NonConsolidatedMember",
+          "期間": "Prior1YearDuration_NonConsolidatedMember",
+          "値": 3467307000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "(3,749,136,000−3,467,307,000)/3,467,307,000 = 8.13%、四捨五入で8.1%。文の8.1%と一致。",
+      "文が述べている単位": "%",
+      "対象の範囲(文から読める範囲)": "会社(非連結)",
+      "値は一致するか": "一致",
+      "同値の他の候補": [],
+      "判定不能の理由": null,
+      "判定の理由": "売上総利益の前期比成長率が文の8.1%と一致する。",
+      "迷った点": "特になし"
+    },
+    {
+      "行の鍵": "H-022",
+      "判定": "独立判定",
+      "形": "率(比)",
+      "fact": [
+        {
+          "役割": "当期側",
+          "要素": "jppfs_cor:NetSales",
+          "context": "CurrentYearDuration_NonConsolidatedMember_jpcrp030000-asr_E39476-000TourismHRBusinessReportableSegmentMember",
+          "期間": "CurrentYearDuration_NonConsolidatedMember_jpcrp030000-asr_E39476-000TourismHRBusinessReportableSegmentMember",
+          "値": 14505330000.0,
+          "単位": "JPY"
+        },
+        {
+          "役割": "前期側",
+          "要素": "jppfs_cor:NetSales",
+          "context": "Prior1YearDuration_NonConsolidatedMember_jpcrp030000-asr_E39476-000TourismHRBusinessReportableSegmentMember",
+          "期間": "Prior1YearDuration_NonConsolidatedMember_jpcrp030000-asr_E39476-000TourismHRBusinessReportableSegmentMember",
+          "値": 12973477000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "観光HR事業セグメント売上高 当期14,505,330千円−前期12,973,477千円、成長率=1,531,853/12,973,477=11.81%、四捨五入で11.8%。文の11.8%と一致。",
+      "文が述べている単位": "%",
+      "対象の範囲(文から読める範囲)": "セグメント(観光HR事業)",
+      "値は一致するか": "一致",
+      "同値の他の候補": [],
+      "判定不能の理由": null,
+      "判定の理由": "観光HR事業セグメントの売上高前期比成長率が文の11.8%と一致する。",
+      "迷った点": "同じ文中の『就業者数15,726名(前期比8.0%増)』は別のH-062で扱い、こちらは売上高の成長率のみを対象とした。"
+    },
+    {
+      "行の鍵": "H-023",
+      "判定": "判定不能",
+      "形": null,
+      "fact": [],
+      "計算": "該当する fact が無いため計算していない。",
+      "文が述べている単位": null,
+      "対象の範囲(文から読める範囲)": "訪日外客数全体(JNTO統計、6月単月)",
+      "値は一致するか": "確かめていない",
+      "同値の他の候補": [],
+      "判定不能の理由": "対象が文書に無い",
+      "判定の理由": "6月の訪日外客数(前年同月比6.8%減)は日本政府観光局(JNTO)の外部統計であり、提出会社のXBRL factには存在しない。",
+      "迷った点": "特になし"
+    },
+    {
+      "行の鍵": "H-024",
+      "判定": "判定不能",
+      "形": null,
+      "fact": [],
+      "計算": "該当する fact が無いため計算していない。",
+      "文が述べている単位": null,
+      "対象の範囲(文から読める範囲)": "宿泊・飲食業界全体(外部調査)",
+      "値は一致するか": "確かめていない",
+      "同値の他の候補": [],
+      "判定不能の理由": "対象が文書に無い",
+      "判定の理由": "宿泊・飲食業の離職率25.1%は厚生労働省の外部調査結果であり、提出会社のXBRL factには存在しない。",
+      "迷った点": "特になし"
+    },
+    {
+      "行の鍵": "H-025",
+      "判定": "独立判定",
+      "形": "単一",
+      "fact": [
+        {
+          "役割": "単一",
+          "要素": "jppfs_cor:PurchaseOfTreasuryStock",
+          "context": "CurrentYearDuration_NonConsolidatedMember",
+          "期間": "CurrentYearDuration_NonConsolidatedMember",
+          "値": -83281000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "自己株式の取得83,281千円(株主資本等変動表、符号は取得による減少項目だが絶対値で83,281千円)。文の『自己株式が83,281千円増加した』と絶対値で一致。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "会社(非連結)",
+      "値は一致するか": "一致",
+      "同値の他の候補": [
+        {
+          "役割": "単一",
+          "要素": "jppfs_cor:PurchaseOfTreasuryStock",
+          "context": "CurrentYearDuration_NonConsolidatedMember_TreasuryStockMember",
+          "期間": "CurrentYearDuration_NonConsolidatedMember_TreasuryStockMember",
+          "値": -83281000.0,
+          "単位": "JPY"
+        },
+        {
+          "役割": "単一",
+          "要素": "jppfs_cor:PurchaseOfTreasuryStock",
+          "context": "CurrentYearDuration_NonConsolidatedMember_ShareholdersEquityMember",
+          "期間": "CurrentYearDuration_NonConsolidatedMember_ShareholdersEquityMember",
+          "値": -83281000.0,
+          "単位": "JPY"
+        }
+      ],
+      "判定不能の理由": null,
+      "判定の理由": "対象の数は null(方向語『自己株式が増加』が対象)。自己株式の取得額83,281千円が、自己株式残高の増加を説明する単一のfactとして一致する(残高の前期末・当期末の差は83,282千円でわずかに異なるため、取得額そのものを採用)。",
+      "迷った点": "自己株式『残高』の差(当期−前期)で計算すると83,282千円となり文の83,281千円と1千円ずれるため、株主資本等変動表の取得額(83,281千円)を主とした。"
+    },
+    {
+      "行の鍵": "H-026",
+      "判定": "独立判定",
+      "形": "単一",
+      "fact": [
+        {
+          "役割": "単一",
+          "要素": "jppfs_cor:GrossProfit",
+          "context": "CurrentYearDuration_NonConsolidatedMember",
+          "期間": "CurrentYearDuration_NonConsolidatedMember",
+          "値": 3749136000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "売上総利益3,749,136千円。文の3,749,136千円と一致。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "会社(非連結)",
+      "値は一致するか": "一致",
+      "同値の他の候補": [],
+      "判定不能の理由": null,
+      "判定の理由": "売上総利益の当期額が文の数値と一致する。",
+      "迷った点": "特になし"
+    },
+    {
+      "行の鍵": "H-027",
+      "判定": "独立判定",
+      "形": "単一",
+      "fact": [
+        {
+          "役割": "単一",
+          "要素": "jppfs_cor:NetIncreaseDecreaseInCashAndCashEquivalents",
+          "context": "CurrentYearDuration_NonConsolidatedMember",
+          "期間": "CurrentYearDuration_NonConsolidatedMember",
+          "値": 419982000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "現金及び現金同等物の増加額419,982千円。文の『期初に比べ419,982千円増加』と一致。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "会社(非連結)",
+      "値は一致するか": "一致",
+      "同値の他の候補": [],
+      "判定不能の理由": null,
+      "判定の理由": "現金及び現金同等物の当期中増加額が文の数値と一致する。",
+      "迷った点": "特になし"
+    },
+    {
+      "行の鍵": "H-028",
+      "判定": "独立判定",
+      "形": "差(当期−前期)",
+      "fact": [
+        {
+          "役割": "当期側",
+          "要素": "jppfs_cor:StocksOfSubsidiariesAndAffiliates",
+          "context": "CurrentYearInstant_NonConsolidatedMember",
+          "期間": "CurrentYearInstant_NonConsolidatedMember",
+          "値": 146900000.0,
+          "単位": "JPY"
+        },
+        {
+          "役割": "前期側",
+          "要素": "jppfs_cor:StocksOfSubsidiariesAndAffiliates",
+          "context": "Prior1YearInstant_NonConsolidatedMember",
+          "期間": "Prior1YearInstant_NonConsolidatedMember",
+          "値": 21900000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "関係会社株式 当期146,900千円−前期21,900千円=125,000千円増加。文の125,000千円と一致。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "会社(非連結)",
+      "値は一致するか": "一致",
+      "同値の他の候補": [
+        {
+          "役割": "単一",
+          "要素": "jppfs_cor:PurchaseOfStocksOfSubsidiariesAndAffiliatesInvCF",
+          "context": "CurrentYearDuration_NonConsolidatedMember",
+          "期間": "CurrentYearDuration_NonConsolidatedMember",
+          "値": -125000000.0,
+          "単位": "JPY"
+        },
+        {
+          "役割": "単一",
+          "要素": "jpcrp_cor:TotalAcquisitionCostForIncreasedSharesSharesNotListedInvestmentSharesHeldForPurposesOtherThanPureInvestmentReportingCompany",
+          "context": "CurrentYearDuration",
+          "期間": "CurrentYearDuration",
+          "値": 125000000.0,
+          "単位": "JPY"
+        }
+      ],
+      "判定不能の理由": null,
+      "判定の理由": "関係会社株式の当期末・前期末残高の差が文の125,000千円と一致する(H-001と同じ計算)。",
+      "迷った点": "特になし"
+    },
+    {
+      "行の鍵": "H-029",
+      "判定": "独立判定",
+      "形": "単一",
+      "fact": [
+        {
+          "役割": "単一",
+          "要素": "jppfs_cor:CurrentAssets",
+          "context": "CurrentYearInstant_NonConsolidatedMember",
+          "期間": "CurrentYearInstant_NonConsolidatedMember",
+          "値": 3887776000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "流動資産3,887,776千円。文の3,887,776千円と一致。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "会社(非連結)",
+      "値は一致するか": "一致",
+      "同値の他の候補": [],
+      "判定不能の理由": null,
+      "判定の理由": "流動資産の当期末残高が文の数値と一致する。",
+      "迷った点": "特になし"
+    },
+    {
+      "行の鍵": "H-030",
+      "判定": "独立判定",
+      "形": "差(当期−前期)",
+      "fact": [
+        {
+          "役割": "当期側",
+          "要素": "jppfs_cor:CashAndDeposits",
+          "context": "CurrentYearInstant_NonConsolidatedMember",
+          "期間": "CurrentYearInstant_NonConsolidatedMember",
+          "値": 2485487000.0,
+          "単位": "JPY"
+        },
+        {
+          "役割": "前期側",
+          "要素": "jppfs_cor:CashAndDeposits",
+          "context": "Prior1YearInstant_NonConsolidatedMember",
+          "期間": "Prior1YearInstant_NonConsolidatedMember",
+          "値": 2065504000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "現金及び預金 当期2,485,487千円−前期2,065,504千円=419,982千円増加。文の『現預金が増加した』という方向及び金額(他箇所の419,982千円)と一致。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "会社(非連結)",
+      "値は一致するか": "一致",
+      "同値の他の候補": [],
+      "判定不能の理由": null,
+      "判定の理由": "対象の数は null(方向語『現預金が増加』が対象)。現金及び預金の当期末残高が前期末より419,982千円増加しており、方向・金額ともに一致する。",
+      "迷った点": "特になし"
+    },
+    {
+      "行の鍵": "H-031",
+      "判定": "独立判定",
+      "形": "差(当期−前期)",
+      "fact": [
+        {
+          "役割": "当期側",
+          "要素": "jppfs_cor:AdvertisingExpensesSGA",
+          "context": "CurrentYearDuration_NonConsolidatedMember",
+          "期間": "CurrentYearDuration_NonConsolidatedMember",
+          "値": 543026000.0,
+          "単位": "JPY"
+        },
+        {
+          "役割": "前期側",
+          "要素": "jppfs_cor:AdvertisingExpensesSGA",
+          "context": "Prior1YearDuration_NonConsolidatedMember",
+          "期間": "Prior1YearDuration_NonConsolidatedMember",
+          "値": 479334000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "広告宣伝費(販管費) 当期543,026千円−前期479,334千円=63,692千円増加。文の『広告宣伝費が増加した』という方向と一致。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "会社(非連結)",
+      "値は一致するか": "一致(方向)",
+      "同値の他の候補": [],
+      "判定不能の理由": null,
+      "判定の理由": "対象の数は null(方向語『広告宣伝費が増加』が対象)。広告宣伝費の当期額が前期より増加しており方向が一致する。",
+      "迷った点": "特になし"
+    },
+    {
+      "行の鍵": "H-032",
+      "判定": "独立判定",
+      "形": "差(当期−前期)",
+      "fact": [
+        {
+          "役割": "当期側",
+          "要素": "jppfs_cor:NoncurrentLiabilities",
+          "context": "CurrentYearInstant_NonConsolidatedMember",
+          "期間": "CurrentYearInstant_NonConsolidatedMember",
+          "値": 211645000.0,
+          "単位": "JPY"
+        },
+        {
+          "役割": "前期側",
+          "要素": "jppfs_cor:NoncurrentLiabilities",
+          "context": "Prior1YearInstant_NonConsolidatedMember",
+          "期間": "Prior1YearInstant_NonConsolidatedMember",
+          "値": 269603000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "固定負債 前期269,603千円−当期211,645千円=57,958千円減少。文の『57,957千円減少』という方向と一致(金額は1千円の差)。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "会社(非連結)",
+      "値は一致するか": "一致(方向)",
+      "同値の他の候補": [],
+      "判定不能の理由": null,
+      "判定の理由": "対象の数は null(方向語『固定負債が減少』が対象)。固定負債は前期末より減少しており方向が一致する。金額は57,958千円で文の57,957千円と1千円ずれるが、方向のみを確認した。",
+      "迷った点": "H-083(数値そのもの)では1千円のずれを不一致として報告した。"
+    },
+    {
+      "行の鍵": "H-033",
+      "判定": "独立判定",
+      "形": "単一",
+      "fact": [
+        {
+          "役割": "単一",
+          "要素": "jppfs_cor:OperatingIncome",
+          "context": "CurrentYearDuration_NonConsolidatedMember_jpcrp030000-asr_E39476-000TourismHRBusinessReportableSegmentMember",
+          "期間": "CurrentYearDuration_NonConsolidatedMember_jpcrp030000-asr_E39476-000TourismHRBusinessReportableSegmentMember",
+          "値": 1359794000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "観光HR事業セグメント利益(営業利益)1,359,794千円。文の1,359,794千円と一致。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "セグメント(観光HR事業)",
+      "値は一致するか": "一致",
+      "同値の他の候補": [],
+      "判定不能の理由": null,
+      "判定の理由": "観光HR事業セグメントの営業利益が文の数値と一致する。",
+      "迷った点": "特になし"
+    },
+    {
+      "行の鍵": "H-034",
+      "判定": "独立判定",
+      "形": "単一",
+      "fact": [
+        {
+          "役割": "単一",
+          "要素": "jppfs_cor:OperatingIncome",
+          "context": "CurrentYearDuration_NonConsolidatedMember",
+          "期間": "CurrentYearDuration_NonConsolidatedMember",
+          "値": 819147000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "営業利益819,147千円。文の819,147千円と一致。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "会社(非連結)",
+      "値は一致するか": "一致",
+      "同値の他の候補": [],
+      "判定不能の理由": null,
+      "判定の理由": "営業利益の当期額が文の数値と一致する。",
+      "迷った点": "特になし"
+    },
+    {
+      "行の鍵": "H-035",
+      "判定": "独立判定",
+      "形": "単一",
+      "fact": [
+        {
+          "役割": "単一",
+          "要素": "jppfs_cor:NetSales",
+          "context": "CurrentYearDuration_NonConsolidatedMember_jpcrp030000-asr_E39476-000TourismHRBusinessReportableSegmentMember",
+          "期間": "CurrentYearDuration_NonConsolidatedMember_jpcrp030000-asr_E39476-000TourismHRBusinessReportableSegmentMember",
+          "値": 14505330000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "観光HR事業セグメント売上高14,505,330千円。文の14,505,330千円と一致。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "セグメント(観光HR事業)",
+      "値は一致するか": "一致",
+      "同値の他の候補": [],
+      "判定不能の理由": null,
+      "判定の理由": "観光HR事業セグメントの売上高が文の数値と一致する。",
+      "迷った点": "特になし"
+    },
+    {
+      "行の鍵": "H-036",
+      "判定": "独立判定",
+      "形": "単一",
+      "fact": [
+        {
+          "役割": "単一",
+          "要素": "jppfs_cor:ProfitLoss",
+          "context": "CurrentYearDuration_NonConsolidatedMember_RetainedEarningsBroughtForwardMember",
+          "期間": "CurrentYearDuration_NonConsolidatedMember_RetainedEarningsBroughtForwardMember",
+          "値": 563426000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "株主資本等変動表における当期純利益の計上(利益剰余金/繰越利益剰余金への加算)563,426千円。文の『利益剰余金が563,426千円増加した』と一致。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "会社(非連結)",
+      "値は一致するか": "一致",
+      "同値の他の候補": [
+        {
+          "役割": "単一",
+          "要素": "jppfs_cor:ProfitLoss",
+          "context": "CurrentYearDuration_NonConsolidatedMember",
+          "期間": "CurrentYearDuration_NonConsolidatedMember",
+          "値": 563426000.0,
+          "単位": "JPY"
+        },
+        {
+          "役割": "単一",
+          "要素": "jpcrp_cor:NetIncomeLossSummaryOfBusinessResults",
+          "context": "CurrentYearDuration_NonConsolidatedMember",
+          "期間": "CurrentYearDuration_NonConsolidatedMember",
+          "値": 563426000.0,
+          "単位": "JPY"
+        }
+      ],
+      "判定不能の理由": null,
+      "判定の理由": "対象の数は null(方向語『利益剰余金が増加』が対象)だが、H-007と同じfactで金額も一致する。",
+      "迷った点": "特になし"
+    },
+    {
+      "行の鍵": "H-037",
+      "判定": "独立判定",
+      "形": "差(当期−前期)",
+      "fact": [
+        {
+          "役割": "当期側",
+          "要素": "jppfs_cor:NoncurrentAssets",
+          "context": "CurrentYearInstant_NonConsolidatedMember",
+          "期間": "CurrentYearInstant_NonConsolidatedMember",
+          "値": 1093570000.0,
+          "単位": "JPY"
+        },
+        {
+          "役割": "前期側",
+          "要素": "jppfs_cor:NoncurrentAssets",
+          "context": "Prior1YearInstant_NonConsolidatedMember",
+          "期間": "Prior1YearInstant_NonConsolidatedMember",
+          "値": 1067906000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "固定資産 当期1,093,570千円−前期1,067,906千円=25,664千円増加。文の『25,663千円増加』という方向と一致(金額は1千円の差)。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "会社(非連結)",
+      "値は一致するか": "一致(方向)",
+      "同値の他の候補": [],
+      "判定不能の理由": null,
+      "判定の理由": "対象の数は null(方向語『固定資産が増加』が対象)。固定資産は前期末より増加しており方向が一致する。金額は25,664千円で文の25,663千円と1千円ずれるが、方向のみを確認した。",
+      "迷った点": "H-066(数値そのもの)では1千円のずれを不一致として報告した。"
+    },
+    {
+      "行の鍵": "H-038",
+      "判定": "判定不能",
+      "形": null,
+      "fact": [],
+      "計算": "該当する fact が無いため計算していない。",
+      "文が述べている単位": null,
+      "対象の範囲(文から読める範囲)": "インバウンド消費動向全体(観光庁統計)",
+      "値は一致するか": "確かめていない",
+      "同値の他の候補": [],
+      "判定不能の理由": "対象が文書に無い",
+      "判定の理由": "訪日外国人旅行消費額2兆5,096億円は観光庁の外部統計であり、提出会社のXBRL factには存在しない。",
+      "迷った点": "特になし"
+    },
+    {
+      "行の鍵": "H-039",
+      "判定": "独立判定",
+      "形": "単一",
+      "fact": [
+        {
+          "役割": "単一",
+          "要素": "jppfs_cor:NoncurrentAssets",
+          "context": "CurrentYearInstant_NonConsolidatedMember",
+          "期間": "CurrentYearInstant_NonConsolidatedMember",
+          "値": 1093570000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "固定資産1,093,570千円。文の1,093,570千円と一致。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "会社(非連結)",
+      "値は一致するか": "一致",
+      "同値の他の候補": [],
+      "判定不能の理由": null,
+      "判定の理由": "固定資産の当期末残高が文の数値と一致する。",
+      "迷った点": "特になし"
+    },
+    {
+      "行の鍵": "H-040",
+      "判定": "独立判定",
+      "形": "差(当期−前期)",
+      "fact": [
+        {
+          "役割": "当期側",
+          "要素": "jppfs_cor:Liabilities",
+          "context": "CurrentYearInstant_NonConsolidatedMember",
+          "期間": "CurrentYearInstant_NonConsolidatedMember",
+          "値": 2205063000.0,
+          "単位": "JPY"
+        },
+        {
+          "役割": "前期側",
+          "要素": "jppfs_cor:Liabilities",
+          "context": "Prior1YearInstant_NonConsolidatedMember",
+          "期間": "Prior1YearInstant_NonConsolidatedMember",
+          "値": 2167071000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "負債合計 当期2,205,063千円−前期2,167,071千円=37,992千円増加。文の『37,992千円増加』と一致。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "会社(非連結)",
+      "値は一致するか": "一致",
+      "同値の他の候補": [],
+      "判定不能の理由": null,
+      "判定の理由": "対象の数は null(方向語『増加』が対象)だが、負債合計の差が文の数値(H-097と同じ)に一致する。",
+      "迷った点": "特になし"
+    },
+    {
+      "行の鍵": "H-041",
+      "判定": "判定不能",
+      "形": null,
+      "fact": [],
+      "計算": "該当する fact が無いため計算していない。",
+      "文が述べている単位": null,
+      "対象の範囲(文から読める範囲)": "訪日外客数の月次動向と取引先宿泊施設への影響(定性的判断)",
+      "値は一致するか": "確かめていない",
+      "同値の他の候補": [],
+      "判定不能の理由": "対象が文書に無い",
+      "判定の理由": "『影響は極めて軽微に留まった』という評価は定性的な記述であり、これに対応する数値factは元データに存在しない。",
+      "迷った点": "特になし"
+    },
+    {
+      "行の鍵": "H-042",
+      "判定": "判定不能",
+      "形": null,
+      "fact": [],
+      "計算": "該当する fact が無いため計算していない。",
+      "文が述べている単位": null,
+      "対象の範囲(文から読める範囲)": "観光HR事業における派遣スタッフ数(人員の増加)",
+      "値は一致するか": "確かめていない",
+      "同値の他の候補": [],
+      "判定不能の理由": "対象が文書に無い",
+      "判定の理由": "『派遣スタッフの増加』は、クライアント先に派遣している人員の増減を指すと読めるが、これに対応するfact(派遣スタッフ数)は元データに存在しない(AverageNumberOfTemporaryWorkersは自社の臨時従業員数であり概念が異なる)。",
+      "迷った点": "特になし"
+    },
+    {
+      "行の鍵": "H-043",
+      "判定": "独立判定",
+      "形": "単一",
+      "fact": [
+        {
+          "役割": "単一",
+          "要素": "jppfs_cor:OperatingIncome",
+          "context": "CurrentYearDuration_NonConsolidatedMember",
+          "期間": "CurrentYearDuration_NonConsolidatedMember",
+          "値": 819147000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "営業利益819,147千円。文の819,147千円と一致。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "会社(非連結)",
+      "値は一致するか": "一致",
+      "同値の他の候補": [],
+      "判定不能の理由": null,
+      "判定の理由": "営業利益の当期額が文の数値と一致する(H-034と同じfact)。",
+      "迷った点": "特になし"
+    },
+    {
+      "行の鍵": "H-044",
+      "判定": "独立判定",
+      "形": "単一",
+      "fact": [
+        {
+          "役割": "単一",
+          "要素": "jppfs_cor:NetIncreaseDecreaseInCashAndCashEquivalents",
+          "context": "CurrentYearDuration_NonConsolidatedMember",
+          "期間": "CurrentYearDuration_NonConsolidatedMember",
+          "値": 419982000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "現金及び現金同等物の増加額419,982千円。文の419,982千円と一致。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "会社(非連結)",
+      "値は一致するか": "一致",
+      "同値の他の候補": [],
+      "判定不能の理由": null,
+      "判定の理由": "現金及び現金同等物の当期中増加額が文の数値と一致する(H-027と同じfact)。",
+      "迷った点": "特になし"
+    },
+    {
+      "行の鍵": "H-045",
+      "判定": "独立判定",
+      "形": "単一",
+      "fact": [
+        {
+          "役割": "単一",
+          "要素": "jppfs_cor:Liabilities",
+          "context": "CurrentYearInstant_NonConsolidatedMember",
+          "期間": "CurrentYearInstant_NonConsolidatedMember",
+          "値": 2205063000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "負債合計2,205,063千円。文の2,205,063千円と一致。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "会社(非連結)",
+      "値は一致するか": "一致",
+      "同値の他の候補": [],
+      "判定不能の理由": null,
+      "判定の理由": "負債合計の当期末残高が文の数値と一致する。",
+      "迷った点": "特になし"
+    },
+    {
+      "行の鍵": "H-046",
+      "判定": "判定不能",
+      "形": null,
+      "fact": [],
+      "計算": "該当する fact が無いため計算していない。",
+      "文が述べている単位": null,
+      "対象の範囲(文から読める範囲)": "運転資金需要の内容(人件費・広告宣伝費・新規開業費用、定性的説明)",
+      "値は一致するか": "確かめていない",
+      "同値の他の候補": [],
+      "判定不能の理由": "対象が文書に無い",
+      "判定の理由": "運転資金需要の説明は定性的な記述であり、文中に数値が無く、対応する単一のfactを特定できない。",
+      "迷った点": "特になし"
+    },
+    {
+      "行の鍵": "H-047",
+      "判定": "独立判定",
+      "形": "単一",
+      "fact": [
+        {
+          "役割": "単一",
+          "要素": "jppfs_cor:IncomeBeforeIncomeTaxes",
+          "context": "CurrentYearDuration_NonConsolidatedMember",
+          "期間": "CurrentYearDuration_NonConsolidatedMember",
+          "値": 822604000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "キャッシュ・フロー計算書の起点である税引前当期純利益822,604千円。文の『増加要因として税引前当期純利益が822,604千円あった』と一致。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "会社(非連結)",
+      "値は一致するか": "一致(方向)",
+      "同値の他の候補": [],
+      "判定不能の理由": null,
+      "判定の理由": "対象の数は null(方向語『増加要因として』が対象)。税引前当期純利益がキャッシュ・フロー計算書上の増加要因(正の値)として一致する。",
+      "迷った点": "この行の抜粋はH-072・H-095(減少要因の個別項目)と同じ文の冒頭部分であり、どの数値を対象とすべきか迷ったが、冒頭に最も近い『税引前当期純利益』を対象とした。"
+    },
+    {
+      "行の鍵": "H-048",
+      "判定": "独立判定",
+      "形": "単一",
+      "fact": [
+        {
+          "役割": "単一",
+          "要素": "jppfs_cor:DecreaseIncreaseInNotesAndAccountsReceivableTradeOpeCF",
+          "context": "CurrentYearDuration_NonConsolidatedMember",
+          "期間": "CurrentYearDuration_NonConsolidatedMember",
+          "値": -163586000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "キャッシュ・フロー計算書の売上債権の増減(△163,586千円、売上債権増加によるキャッシュ減少要因)。文の『売上債権が163,586千円増加した』と絶対値で一致。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "会社(非連結)",
+      "値は一致するか": "一致(方向)",
+      "同値の他の候補": [],
+      "判定不能の理由": null,
+      "判定の理由": "対象の数は null(方向語『売上債権が増加』が対象)。キャッシュ・フロー計算書上は売上債権の増加がキャッシュの減少要因としてマイナス表記されるが、絶対値163,586千円は一致する。",
+      "迷った点": "H-095(数値そのもの)と対象が重なるため、本行は方向の確認として報告した。"
+    },
+    {
+      "行の鍵": "H-049",
+      "判定": "独立判定",
+      "形": "率(比)",
+      "fact": [
+        {
+          "役割": "当期側",
+          "要素": "jppfs_cor:OperatingIncome",
+          "context": "CurrentYearDuration_NonConsolidatedMember_jpcrp030000-asr_E39476-000RegionalRevitalizationBusinessReportableSegmentMember",
+          "期間": "CurrentYearDuration_NonConsolidatedMember_jpcrp030000-asr_E39476-000RegionalRevitalizationBusinessReportableSegmentMember",
+          "値": 17415000.0,
+          "単位": "JPY"
+        },
+        {
+          "役割": "前期側",
+          "要素": "jppfs_cor:OperatingIncome",
+          "context": "Prior1YearDuration_NonConsolidatedMember_jpcrp030000-asr_E39476-000RegionalRevitalizationBusinessReportableSegmentMember",
+          "期間": "Prior1YearDuration_NonConsolidatedMember_jpcrp030000-asr_E39476-000RegionalRevitalizationBusinessReportableSegmentMember",
+          "値": 5772000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "地方創生事業セグメント利益 前期5,772千円→当期17,415千円。成長率=(17,415−5,772)/5,772=201.72%、四捨五入で201.7%。文の201.7%と一致。",
+      "文が述べている単位": "%",
+      "対象の範囲(文から読める範囲)": "セグメント(地方創生事業)",
+      "値は一致するか": "一致",
+      "同値の他の候補": [],
+      "判定不能の理由": null,
+      "判定の理由": "地方創生事業セグメントの営業利益前期比成長率が文の201.7%と一致する。",
+      "迷った点": "特になし"
+    },
+    {
+      "行の鍵": "H-050",
+      "判定": "独立判定",
+      "形": "率(比)",
+      "fact": [
+        {
+          "役割": "当期側",
+          "要素": "jppfs_cor:SellingGeneralAndAdministrativeExpenses",
+          "context": "CurrentYearDuration_NonConsolidatedMember",
+          "期間": "CurrentYearDuration_NonConsolidatedMember",
+          "値": 2929988000.0,
+          "単位": "JPY"
+        },
+        {
+          "役割": "前期側",
+          "要素": "jppfs_cor:SellingGeneralAndAdministrativeExpenses",
+          "context": "Prior1YearDuration_NonConsolidatedMember",
+          "期間": "Prior1YearDuration_NonConsolidatedMember",
+          "値": 2711340000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "(2,929,988,000−2,711,340,000)/2,711,340,000 = 8.07%、四捨五入で8.1%。文の8.1%と一致。",
+      "文が述べている単位": "%",
+      "対象の範囲(文から読める範囲)": "会社(非連結)",
+      "値は一致するか": "一致",
+      "同値の他の候補": [],
+      "判定不能の理由": null,
+      "判定の理由": "販売費及び一般管理費の前期比成長率が文の8.1%と一致する。",
+      "迷った点": "特になし"
+    },
+    {
+      "行の鍵": "H-051",
+      "判定": "判定不能",
+      "形": null,
+      "fact": [],
+      "計算": "該当する fact が無いため計算していない。",
+      "文が述べている単位": null,
+      "対象の範囲(文から読める範囲)": "運転資金需要の内容(人件費・広告宣伝費・新規開業費用、定性的説明)",
+      "値は一致するか": "確かめていない",
+      "同値の他の候補": [],
+      "判定不能の理由": "対象が文書に無い",
+      "判定の理由": "H-046と同一文であり、数値を含まない定性的な記述のため対応するfactを特定できない。",
+      "迷った点": "特になし"
+    },
+    {
+      "行の鍵": "H-052",
+      "判定": "独立判定",
+      "形": "単一",
+      "fact": [
+        {
+          "役割": "単一",
+          "要素": "jppfs_cor:ExtraordinaryLoss",
+          "context": "CurrentYearDuration_NonConsolidatedMember",
+          "期間": "CurrentYearDuration_NonConsolidatedMember",
+          "値": 7861000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "特別損失(固定資産除却損のみ)7,861千円。文の7,861千円と一致。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "会社(非連結)",
+      "値は一致するか": "一致",
+      "同値の他の候補": [
+        {
+          "役割": "単一",
+          "要素": "jppfs_cor:LossOnRetirementOfNoncurrentAssetsEL",
+          "context": "CurrentYearDuration_NonConsolidatedMember",
+          "期間": "CurrentYearDuration_NonConsolidatedMember",
+          "値": 7861000.0,
+          "単位": "JPY"
+        },
+        {
+          "役割": "単一",
+          "要素": "jppfs_cor:AccountsPayableTrade",
+          "context": "CurrentYearInstant_NonConsolidatedMember",
+          "期間": "CurrentYearInstant_NonConsolidatedMember",
+          "値": 7861000.0,
+          "単位": "JPY"
+        }
+      ],
+      "判定不能の理由": null,
+      "判定の理由": "特別損失の当期額(今期は固定資産除却損のみ)が文の数値と一致する。",
+      "迷った点": "買掛金(AccountsPayableTrade)も偶然同じ7,861千円のため同値候補に挙げたが、文脈上無関係と判断した。"
+    },
+    {
+      "行の鍵": "H-053",
+      "判定": "判定不能",
+      "形": null,
+      "fact": [],
+      "計算": "該当する fact が無いため計算していない。",
+      "文が述べている単位": null,
+      "対象の範囲(文から読める範囲)": "インバウンド消費動向全体(観光庁統計)",
+      "値は一致するか": "確かめていない",
+      "同値の他の候補": [],
+      "判定不能の理由": "対象が文書に無い",
+      "判定の理由": "訪日外国人旅行消費額2兆5,096億円は観光庁の外部統計であり、提出会社のXBRL factには存在しない。",
+      "迷った点": "特になし"
+    },
+    {
+      "行の鍵": "H-054",
+      "判定": "判定不能",
+      "形": null,
+      "fact": [],
+      "計算": "該当する fact が無いため計算していない。",
+      "文が述べている単位": null,
+      "対象の範囲(文から読める範囲)": "インバウンド消費動向全体(観光庁統計)",
+      "値は一致するか": "確かめていない",
+      "同値の他の候補": [],
+      "判定不能の理由": "対象が文書に無い",
+      "判定の理由": "訪日外国人旅行消費額の前期比0.2%増は観光庁の外部統計であり、提出会社のXBRL factには存在しない。",
+      "迷った点": "特になし"
+    },
+    {
+      "行の鍵": "H-055",
+      "判定": "独立判定",
+      "形": "差(当期−前期)",
+      "fact": [
+        {
+          "役割": "当期側",
+          "要素": "jppfs_cor:SalariesAndAllowancesOECNA",
+          "context": "CurrentYearDuration_NonConsolidatedMember",
+          "期間": "CurrentYearDuration_NonConsolidatedMember",
+          "値": 832437000.0,
+          "単位": "JPY"
+        },
+        {
+          "役割": "前期側",
+          "要素": "jppfs_cor:SalariesAndAllowancesOECNA",
+          "context": "Prior1YearDuration_NonConsolidatedMember",
+          "期間": "Prior1YearDuration_NonConsolidatedMember",
+          "値": 772073000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "給料手当 当期832,437千円−前期772,073千円=60,364千円増加。文の『人件費の増加』という方向と一致。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "会社(非連結)",
+      "値は一致するか": "一致(方向)",
+      "同値の他の候補": [],
+      "判定不能の理由": null,
+      "判定の理由": "対象の数は null(方向語『人件費の増加』が対象)。『人件費』そのものを表す単一のfactは無いが、給料手当(人件費の主要素)が増加しており方向が一致する。",
+      "迷った点": "『人件費』という総称に対応する単一のfactが無いため、その主要素である給料手当で代替した。"
+    },
+    {
+      "行の鍵": "H-056",
+      "判定": "独立判定",
+      "形": "単一",
+      "fact": [
+        {
+          "役割": "単一",
+          "要素": "jppfs_cor:NetCashProvidedByUsedInFinancingActivities",
+          "context": "CurrentYearDuration_NonConsolidatedMember",
+          "期間": "CurrentYearDuration_NonConsolidatedMember",
+          "値": -161315000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "財務活動によるキャッシュ・フロー△161,315千円(支出)。文の『減少要因として…あった』という方向と一致。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "会社(非連結)",
+      "値は一致するか": "一致(方向)",
+      "同値の他の候補": [],
+      "判定不能の理由": null,
+      "判定の理由": "対象の数は null(方向語『減少要因として』が対象)。財務活動によるキャッシュ・フローが支出(マイナス)であることが文の記述と一致する。個別の長期借入金返済支出・自己株式取得支出はそれぞれH-075等が別途対象とした。",
+      "迷った点": "長期借入金の返済(68,286千円)自体には対応する個別行が無いため、全体の財務活動キャッシュ・フローで代表させた。"
+    },
+    {
+      "行の鍵": "H-057",
+      "判定": "独立判定",
+      "形": "単一",
+      "fact": [
+        {
+          "役割": "単一",
+          "要素": "jppfs_cor:SellingGeneralAndAdministrativeExpenses",
+          "context": "CurrentYearDuration_NonConsolidatedMember",
+          "期間": "CurrentYearDuration_NonConsolidatedMember",
+          "値": 2929988000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "販売費及び一般管理費2,929,988千円。文の2,929,988千円と一致。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "会社(非連結)",
+      "値は一致するか": "一致",
+      "同値の他の候補": [],
+      "判定不能の理由": null,
+      "判定の理由": "販管費の当期額が文の数値と一致する。",
+      "迷った点": "特になし"
+    },
+    {
+      "行の鍵": "H-058",
+      "判定": "独立判定",
+      "形": "単一",
+      "fact": [
+        {
+          "役割": "単一",
+          "要素": "jppfs_cor:NetCashProvidedByUsedInInvestmentActivities",
+          "context": "CurrentYearDuration_NonConsolidatedMember",
+          "期間": "CurrentYearDuration_NonConsolidatedMember",
+          "値": -219583000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "投資活動によるキャッシュ・フロー△219,583千円。文の『投資活動の結果支出した資金は219,583千円』と絶対値で一致。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "会社(非連結)",
+      "値は一致するか": "一致",
+      "同値の他の候補": [],
+      "判定不能の理由": null,
+      "判定の理由": "投資活動によるキャッシュ・フローの絶対値が文の数値と一致する(符号は支出のためマイナス)。",
+      "迷った点": "特になし"
+    },
+    {
+      "行の鍵": "H-059",
+      "判定": "独立判定",
+      "形": "単一",
+      "fact": [
+        {
+          "役割": "単一",
+          "要素": "jppfs_cor:CashAndCashEquivalents",
+          "context": "CurrentYearInstant_NonConsolidatedMember",
+          "期間": "CurrentYearInstant_NonConsolidatedMember",
+          "値": 2485487000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "現金及び現金同等物2,485,487千円。文の2,485,487千円と一致。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "会社(非連結)",
+      "値は一致するか": "一致",
+      "同値の他の候補": [
+        {
+          "役割": "単一",
+          "要素": "jpcrp_cor:CashAndCashEquivalentsSummaryOfBusinessResults",
+          "context": "CurrentYearInstant_NonConsolidatedMember",
+          "期間": "CurrentYearInstant_NonConsolidatedMember",
+          "値": 2485487000.0,
+          "単位": "JPY"
+        }
+      ],
+      "判定不能の理由": null,
+      "判定の理由": "現金及び現金同等物の当期末残高が文の数値と一致する。",
+      "迷った点": "特になし"
+    },
+    {
+      "行の鍵": "H-060",
+      "判定": "独立判定",
+      "形": "差(当期−前期)",
+      "fact": [
+        {
+          "役割": "当期側",
+          "要素": "jppfs_cor:Assets",
+          "context": "CurrentYearInstant_NonConsolidatedMember",
+          "期間": "CurrentYearInstant_NonConsolidatedMember",
+          "値": 4981346000.0,
+          "単位": "JPY"
+        },
+        {
+          "役割": "前期側",
+          "要素": "jppfs_cor:Assets",
+          "context": "Prior1YearInstant_NonConsolidatedMember",
+          "期間": "Prior1YearInstant_NonConsolidatedMember",
+          "値": 4439368000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "総資産 当期4,981,346千円−前期4,439,368千円=541,978千円増加。文の541,978千円と一致。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "会社(非連結)",
+      "値は一致するか": "一致",
+      "同値の他の候補": [
+        {
+          "役割": "当期側",
+          "要素": "jpcrp_cor:TotalAssetsSummaryOfBusinessResults",
+          "context": "CurrentYearInstant_NonConsolidatedMember",
+          "期間": "CurrentYearInstant_NonConsolidatedMember",
+          "値": 4981346000.0,
+          "単位": "JPY"
+        },
+        {
+          "役割": "前期側",
+          "要素": "jpcrp_cor:TotalAssetsSummaryOfBusinessResults",
+          "context": "Prior1YearInstant_NonConsolidatedMember",
+          "期間": "Prior1YearInstant_NonConsolidatedMember",
+          "値": 4439368000.0,
+          "単位": "JPY"
+        }
+      ],
+      "判定不能の理由": null,
+      "判定の理由": "総資産の当期末・前期末の差が文の数値と一致する(H-020と同じ計算)。",
+      "迷った点": "特になし"
+    },
+    {
+      "行の鍵": "H-061",
+      "判定": "独立判定",
+      "形": "差(当期−前期)",
+      "fact": [
+        {
+          "役割": "当期側",
+          "要素": "jppfs_cor:NetAssets",
+          "context": "CurrentYearInstant_NonConsolidatedMember",
+          "期間": "CurrentYearInstant_NonConsolidatedMember",
+          "値": 2776283000.0,
+          "単位": "JPY"
+        },
+        {
+          "役割": "前期側",
+          "要素": "jppfs_cor:NetAssets",
+          "context": "Prior1YearInstant_NonConsolidatedMember",
+          "期間": "Prior1YearInstant_NonConsolidatedMember",
+          "値": 2272297000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "純資産 当期2,776,283千円−前期2,272,297千円=503,986千円増加。文の503,986千円と一致。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "会社(非連結)",
+      "値は一致するか": "一致",
+      "同値の他の候補": [],
+      "判定不能の理由": null,
+      "判定の理由": "対象の数は null(方向語『増加』が対象)だが、純資産の差が文の数値(H-067と同じ)に一致する。",
+      "迷った点": "特になし"
+    },
+    {
+      "行の鍵": "H-062",
+      "判定": "判定不能",
+      "形": null,
+      "fact": [],
+      "計算": "該当する fact が無いため計算していない。",
+      "文が述べている単位": null,
+      "対象の範囲(文から読める範囲)": "観光HR事業における就業者数(前期比8.0%増)",
+      "値は一致するか": "確かめていない",
+      "同値の他の候補": [],
+      "判定不能の理由": "対象が文書に無い",
+      "判定の理由": "『就業者数15,726名(前期比8.0%増)』に対応するfact(就業者数)が元データに存在しない。",
+      "迷った点": "特になし"
+    },
+    {
+      "行の鍵": "H-063",
+      "判定": "独立判定",
+      "形": "単一",
+      "fact": [
+        {
+          "役割": "単一",
+          "要素": "jppfs_cor:PurchaseOfStocksOfSubsidiariesAndAffiliatesInvCF",
+          "context": "CurrentYearDuration_NonConsolidatedMember",
+          "期間": "CurrentYearDuration_NonConsolidatedMember",
+          "値": -125000000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "投資活動によるキャッシュ・フロー内の関係会社株式の取得による支出△125,000千円。文の『関係会社株式の取得による支出が125,000千円あった』と絶対値で一致。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "会社(非連結)",
+      "値は一致するか": "一致",
+      "同値の他の候補": [
+        {
+          "役割": "当期側",
+          "要素": "jppfs_cor:StocksOfSubsidiariesAndAffiliates",
+          "context": "CurrentYearInstant_NonConsolidatedMember",
+          "期間": "CurrentYearInstant_NonConsolidatedMember",
+          "値": 146900000.0,
+          "単位": "JPY"
+        },
+        {
+          "役割": "前期側",
+          "要素": "jppfs_cor:StocksOfSubsidiariesAndAffiliates",
+          "context": "Prior1YearInstant_NonConsolidatedMember",
+          "期間": "Prior1YearInstant_NonConsolidatedMember",
+          "値": 21900000.0,
+          "単位": "JPY"
+        },
+        {
+          "役割": "単一",
+          "要素": "jpcrp_cor:TotalAcquisitionCostForIncreasedSharesSharesNotListedInvestmentSharesHeldForPurposesOtherThanPureInvestmentReportingCompany",
+          "context": "CurrentYearDuration",
+          "期間": "CurrentYearDuration",
+          "値": 125000000.0,
+          "単位": "JPY"
+        }
+      ],
+      "判定不能の理由": null,
+      "判定の理由": "投資活動によるキャッシュ・フローの関係会社株式取得支出が文の数値と絶対値で一致する。",
+      "迷った点": "特になし"
+    },
+    {
+      "行の鍵": "H-064",
+      "判定": "独立判定",
+      "形": "率(比)",
+      "fact": [
+        {
+          "役割": "当期側",
+          "要素": "jppfs_cor:NetSales",
+          "context": "CurrentYearDuration_NonConsolidatedMember",
+          "期間": "CurrentYearDuration_NonConsolidatedMember",
+          "値": 15325418000.0,
+          "単位": "JPY"
+        },
+        {
+          "役割": "前期側",
+          "要素": "jppfs_cor:NetSales",
+          "context": "Prior1YearDuration_NonConsolidatedMember",
+          "期間": "Prior1YearDuration_NonConsolidatedMember",
+          "値": 13781848000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "(15,325,418,000−13,781,848,000)/13,781,848,000 = 11.20%、四捨五入で11.2%。文の11.2%と一致。",
+      "文が述べている単位": "%",
+      "対象の範囲(文から読める範囲)": "会社(非連結)",
+      "値は一致するか": "一致",
+      "同値の他の候補": [],
+      "判定不能の理由": null,
+      "判定の理由": "売上高の前期比成長率が文の11.2%と一致する。",
+      "迷った点": "特になし"
+    },
+    {
+      "行の鍵": "H-065",
+      "判定": "判定不能",
+      "形": null,
+      "fact": [],
+      "計算": "該当する fact が無いため計算していない。",
+      "文が述べている単位": null,
+      "対象の範囲(文から読める範囲)": "主な相手先別の販売実績(総販売実績に対する割合10%以上の相手先)",
+      "値は一致するか": "確かめていない",
+      "同値の他の候補": [],
+      "判定不能の理由": "対象が文書に無い",
+      "判定の理由": "文自体が『10%以上の相手先が存在しないため記載を省略』と述べており、対応する顧客別売上比率のfactは元データに存在しない。",
+      "迷った点": "特になし"
+    },
+    {
+      "行の鍵": "H-066",
+      "判定": "独立判定",
+      "形": "差(当期−前期)",
+      "fact": [
+        {
+          "役割": "当期側",
+          "要素": "jppfs_cor:NoncurrentAssets",
+          "context": "CurrentYearInstant_NonConsolidatedMember",
+          "期間": "CurrentYearInstant_NonConsolidatedMember",
+          "値": 1093570000.0,
+          "単位": "JPY"
+        },
+        {
+          "役割": "前期側",
+          "要素": "jppfs_cor:NoncurrentAssets",
+          "context": "Prior1YearInstant_NonConsolidatedMember",
+          "期間": "Prior1YearInstant_NonConsolidatedMember",
+          "値": 1067906000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "固定資産 当期1,093,570千円−前期1,067,906千円=25,664千円増加。文の25,663千円と1千円の差があり、不一致。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "会社(非連結)",
+      "値は一致するか": "不一致",
+      "同値の他の候補": [],
+      "判定不能の理由": null,
+      "判定の理由": "固定資産の当期末・前期末の差を計算すると25,664千円となり、文の25,663千円と1千円異なる。合わせるために別のfactは選ばず、計算結果をそのまま報告する。",
+      "迷った点": "内訳項目(建物等・無形固定資産等)の個別の千円未満四捨五入の積み上げによる差と推測されるが、確認はしていない。"
+    },
+    {
+      "行の鍵": "H-067",
+      "判定": "独立判定",
+      "形": "差(当期−前期)",
+      "fact": [
+        {
+          "役割": "当期側",
+          "要素": "jppfs_cor:NetAssets",
+          "context": "CurrentYearInstant_NonConsolidatedMember",
+          "期間": "CurrentYearInstant_NonConsolidatedMember",
+          "値": 2776283000.0,
+          "単位": "JPY"
+        },
+        {
+          "役割": "前期側",
+          "要素": "jppfs_cor:NetAssets",
+          "context": "Prior1YearInstant_NonConsolidatedMember",
+          "期間": "Prior1YearInstant_NonConsolidatedMember",
+          "値": 2272297000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "純資産 当期2,776,283千円−前期2,272,297千円=503,986千円増加。文の503,986千円と一致。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "会社(非連結)",
+      "値は一致するか": "一致",
+      "同値の他の候補": [],
+      "判定不能の理由": null,
+      "判定の理由": "純資産の当期末・前期末の差が文の数値と一致する。",
+      "迷った点": "特になし"
+    },
+    {
+      "行の鍵": "H-068",
+      "判定": "判定不能",
+      "形": null,
+      "fact": [],
+      "計算": "該当する fact が無いため計算していない。",
+      "文が述べている単位": null,
+      "対象の範囲(文から読める範囲)": "観光HR事業における派遣人件費",
+      "値は一致するか": "確かめていない",
+      "同値の他の候補": [],
+      "判定不能の理由": "対象が文書に無い",
+      "判定の理由": "『派遣人件費が増加した』に対応するfact(派遣人件費)は元データに存在しない。",
+      "迷った点": "特になし"
+    },
+    {
+      "行の鍵": "H-069",
+      "判定": "独立判定",
+      "形": "率(比)",
+      "fact": [
+        {
+          "役割": "当期側",
+          "要素": "jppfs_cor:OperatingIncome",
+          "context": "CurrentYearDuration_NonConsolidatedMember_jpcrp030000-asr_E39476-000TourismHRBusinessReportableSegmentMember",
+          "期間": "CurrentYearDuration_NonConsolidatedMember_jpcrp030000-asr_E39476-000TourismHRBusinessReportableSegmentMember",
+          "値": 1359794000.0,
+          "単位": "JPY"
+        },
+        {
+          "役割": "前期側",
+          "要素": "jppfs_cor:OperatingIncome",
+          "context": "Prior1YearDuration_NonConsolidatedMember_jpcrp030000-asr_E39476-000TourismHRBusinessReportableSegmentMember",
+          "期間": "Prior1YearDuration_NonConsolidatedMember_jpcrp030000-asr_E39476-000TourismHRBusinessReportableSegmentMember",
+          "値": 1273363000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "観光HR事業セグメント利益 前期1,273,363千円→当期1,359,794千円。成長率=(1,359,794−1,273,363)/1,273,363=6.79%、四捨五入で6.8%。文の6.8%と一致。",
+      "文が述べている単位": "%",
+      "対象の範囲(文から読める範囲)": "セグメント(観光HR事業)",
+      "値は一致するか": "一致",
+      "同値の他の候補": [],
+      "判定不能の理由": null,
+      "判定の理由": "観光HR事業セグメントの営業利益前期比成長率が文の6.8%と一致する。",
+      "迷った点": "特になし"
+    },
+    {
+      "行の鍵": "H-070",
+      "判定": "独立判定",
+      "形": "単一",
+      "fact": [
+        {
+          "役割": "単一",
+          "要素": "jppfs_cor:NetCashProvidedByUsedInFinancingActivities",
+          "context": "CurrentYearDuration_NonConsolidatedMember",
+          "期間": "CurrentYearDuration_NonConsolidatedMember",
+          "値": -161315000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "財務活動によるキャッシュ・フロー△161,315千円。文の『財務活動の結果支出した資金は161,315千円』と絶対値で一致。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "会社(非連結)",
+      "値は一致するか": "一致",
+      "同値の他の候補": [],
+      "判定不能の理由": null,
+      "判定の理由": "財務活動によるキャッシュ・フローの絶対値が文の数値と一致する(符号は支出のためマイナス)。",
+      "迷った点": "特になし"
+    },
+    {
+      "行の鍵": "H-071",
+      "判定": "独立判定",
+      "形": "差(当期−前期)",
+      "fact": [
+        {
+          "役割": "当期側",
+          "要素": "jppfs_cor:CurrentLiabilities",
+          "context": "CurrentYearInstant_NonConsolidatedMember",
+          "期間": "CurrentYearInstant_NonConsolidatedMember",
+          "値": 1993417000.0,
+          "単位": "JPY"
+        },
+        {
+          "役割": "前期側",
+          "要素": "jppfs_cor:CurrentLiabilities",
+          "context": "Prior1YearInstant_NonConsolidatedMember",
+          "期間": "Prior1YearInstant_NonConsolidatedMember",
+          "値": 1897467000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "流動負債 当期1,993,417千円−前期1,897,467千円=95,950千円増加。文の『95,950千円増加』と一致。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "会社(非連結)",
+      "値は一致するか": "一致",
+      "同値の他の候補": [],
+      "判定不能の理由": null,
+      "判定の理由": "対象の数は null(方向語『増加』が対象)だが、流動負債の差が文の数値95,950千円に一致する。",
+      "迷った点": "特になし"
+    },
+    {
+      "行の鍵": "H-072",
+      "判定": "独立判定",
+      "形": "単一",
+      "fact": [
+        {
+          "役割": "単一",
+          "要素": "jppfs_cor:IncomeTaxesPaidOpeCF",
+          "context": "CurrentYearDuration_NonConsolidatedMember",
+          "期間": "CurrentYearDuration_NonConsolidatedMember",
+          "値": -252313000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "キャッシュ・フロー計算書の法人税等の支払い△252,313千円。文の『法人税等の支払いが252,313千円』と絶対値で一致。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "会社(非連結)",
+      "値は一致するか": "一致",
+      "同値の他の候補": [],
+      "判定不能の理由": null,
+      "判定の理由": "法人税等の支払い額の絶対値が文の数値と一致する(符号は支出のためマイナス)。",
+      "迷った点": "特になし"
+    },
+    {
+      "行の鍵": "H-073",
+      "判定": "独立判定",
+      "形": "和",
+      "fact": [
+        {
+          "役割": "当期側",
+          "要素": "jppfs_cor:AccountsPayableOther",
+          "context": "CurrentYearInstant_NonConsolidatedMember",
+          "期間": "CurrentYearInstant_NonConsolidatedMember",
+          "値": 802244000.0,
+          "単位": "JPY"
+        },
+        {
+          "役割": "前期側",
+          "要素": "jppfs_cor:AccountsPayableOther",
+          "context": "Prior1YearInstant_NonConsolidatedMember",
+          "期間": "Prior1YearInstant_NonConsolidatedMember",
+          "値": 733382000.0,
+          "単位": "JPY"
+        },
+        {
+          "役割": "加算項",
+          "要素": "jppfs_cor:AccruedExpenses",
+          "context": "CurrentYearInstant_NonConsolidatedMember",
+          "期間": "CurrentYearInstant_NonConsolidatedMember",
+          "値": 251776000.0,
+          "単位": "JPY"
+        },
+        {
+          "役割": "加算項",
+          "要素": "jppfs_cor:AccruedExpenses",
+          "context": "Prior1YearInstant_NonConsolidatedMember",
+          "期間": "Prior1YearInstant_NonConsolidatedMember",
+          "値": 201213000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "未払金(AccountsPayableOther) 当期802,244千円−前期733,382千円=68,862千円増加。未払費用(AccruedExpenses) 当期251,776千円−前期201,213千円=50,563千円増加。いずれも増加しており、文の『未払金や未払費用が増加した』と方向が一致。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "会社(非連結)",
+      "値は一致するか": "一致(方向)",
+      "同値の他の候補": [],
+      "判定不能の理由": null,
+      "判定の理由": "対象の数は null(方向語『未払金や未払費用が増加』が対象)。未払金・未払費用とも前期より増加しており方向が一致する。",
+      "迷った点": "特になし"
+    },
+    {
+      "行の鍵": "H-074",
+      "判定": "独立判定",
+      "形": "単一",
+      "fact": [
+        {
+          "役割": "単一",
+          "要素": "jppfs_cor:NetSales",
+          "context": "CurrentYearDuration_NonConsolidatedMember",
+          "期間": "CurrentYearDuration_NonConsolidatedMember",
+          "値": 15325418000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "売上高15,325,418千円。文の15,325,418千円と一致。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "会社(非連結)",
+      "値は一致するか": "一致",
+      "同値の他の候補": [],
+      "判定不能の理由": null,
+      "判定の理由": "売上高の当期額が文の数値と一致する。",
+      "迷った点": "特になし"
+    },
+    {
+      "行の鍵": "H-075",
+      "判定": "独立判定",
+      "形": "単一",
+      "fact": [
+        {
+          "役割": "単一",
+          "要素": "jppfs_cor:PurchaseOfTreasuryStockFinCF",
+          "context": "CurrentYearDuration_NonConsolidatedMember",
+          "期間": "CurrentYearDuration_NonConsolidatedMember",
+          "値": -84409000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "キャッシュ・フロー計算書の自己株式の取得による支出△84,409千円。文の『自己株式の取得による支出が84,409千円あった』と絶対値で一致。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "会社(非連結)",
+      "値は一致するか": "一致",
+      "同値の他の候補": [],
+      "判定不能の理由": null,
+      "判定の理由": "自己株式取得による支出額の絶対値が文の数値と一致する(符号は支出のためマイナス)。",
+      "迷った点": "特になし"
+    },
+    {
+      "行の鍵": "H-076",
+      "判定": "独立判定",
+      "形": "単一",
+      "fact": [
+        {
+          "役割": "単一",
+          "要素": "jppfs_cor:IncomeTaxes",
+          "context": "CurrentYearDuration_NonConsolidatedMember",
+          "期間": "CurrentYearDuration_NonConsolidatedMember",
+          "値": 259177000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "法人税等合計259,177千円。文の259,177千円と一致。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "会社(非連結)",
+      "値は一致するか": "一致",
+      "同値の他の候補": [],
+      "判定不能の理由": null,
+      "判定の理由": "法人税等合計の当期額が文の数値と一致する。",
+      "迷った点": "特になし"
+    },
+    {
+      "行の鍵": "H-077",
+      "判定": "独立判定",
+      "形": "率(比)",
+      "fact": [
+        {
+          "役割": "当期側",
+          "要素": "jppfs_cor:NetSales",
+          "context": "CurrentYearDuration_NonConsolidatedMember",
+          "期間": "CurrentYearDuration_NonConsolidatedMember",
+          "値": 15325418000.0,
+          "単位": "JPY"
+        },
+        {
+          "役割": "前期側",
+          "要素": "jppfs_cor:NetSales",
+          "context": "Prior1YearDuration_NonConsolidatedMember",
+          "期間": "Prior1YearDuration_NonConsolidatedMember",
+          "値": 13781848000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "(15,325,418,000−13,781,848,000)/13,781,848,000 = 11.20%、四捨五入で11.2%。文の11.2%と一致。",
+      "文が述べている単位": "%",
+      "対象の範囲(文から読める範囲)": "会社(非連結)",
+      "値は一致するか": "一致",
+      "同値の他の候補": [],
+      "判定不能の理由": null,
+      "判定の理由": "売上高の前期比成長率が文の11.2%と一致する(H-064と同じfact)。",
+      "迷った点": "特になし"
+    },
+    {
+      "行の鍵": "H-078",
+      "判定": "判定不能",
+      "形": null,
+      "fact": [],
+      "計算": "該当する fact が無いため計算していない。",
+      "文が述べている単位": null,
+      "対象の範囲(文から読める範囲)": "訪日外客数全体(JNTO統計、6月単月)",
+      "値は一致するか": "確かめていない",
+      "同値の他の候補": [],
+      "判定不能の理由": "対象が文書に無い",
+      "判定の理由": "6月の訪日外客数3,148,600人は日本政府観光局(JNTO)の外部統計であり、提出会社のXBRL factには存在しない。",
+      "迷った点": "特になし"
+    },
+    {
+      "行の鍵": "H-079",
+      "判定": "独立判定",
+      "形": "単一",
+      "fact": [
+        {
+          "役割": "単一",
+          "要素": "jppfs_cor:OrdinaryIncome",
+          "context": "CurrentYearDuration_NonConsolidatedMember",
+          "期間": "CurrentYearDuration_NonConsolidatedMember",
+          "値": 830465000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "経常利益830,465千円。文の830,465千円と一致。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "会社(非連結)",
+      "値は一致するか": "一致",
+      "同値の他の候補": [],
+      "判定不能の理由": null,
+      "判定の理由": "経常利益の当期額が文の数値と一致する。",
+      "迷った点": "特になし"
+    },
+    {
+      "行の鍵": "H-080",
+      "判定": "独立判定",
+      "形": "単一",
+      "fact": [
+        {
+          "役割": "単一",
+          "要素": "jppfs_cor:NetAssets",
+          "context": "CurrentYearInstant_NonConsolidatedMember",
+          "期間": "CurrentYearInstant_NonConsolidatedMember",
+          "値": 2776283000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "純資産2,776,283千円。文の2,776,283千円と一致。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "会社(非連結)",
+      "値は一致するか": "一致",
+      "同値の他の候補": [],
+      "判定不能の理由": null,
+      "判定の理由": "純資産の当期末残高が文の数値と一致する。",
+      "迷った点": "特になし"
+    },
+    {
+      "行の鍵": "H-081",
+      "判定": "独立判定",
+      "形": "率(比)",
+      "fact": [
+        {
+          "役割": "当期側",
+          "要素": "jppfs_cor:NonOperatingExpenses",
+          "context": "CurrentYearDuration_NonConsolidatedMember",
+          "期間": "CurrentYearDuration_NonConsolidatedMember",
+          "値": 9841000.0,
+          "単位": "JPY"
+        },
+        {
+          "役割": "前期側",
+          "要素": "jppfs_cor:NonOperatingExpenses",
+          "context": "Prior1YearDuration_NonConsolidatedMember",
+          "期間": "Prior1YearDuration_NonConsolidatedMember",
+          "値": 5926000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "(9,841,000−5,926,000)/5,926,000 = 66.07%、四捨五入で66.1%。文の66.1%と一致。",
+      "文が述べている単位": "%",
+      "対象の範囲(文から読める範囲)": "会社(非連結)",
+      "値は一致するか": "一致",
+      "同値の他の候補": [],
+      "判定不能の理由": null,
+      "判定の理由": "営業外費用の前期比成長率が文の66.1%と一致する。",
+      "迷った点": "特になし"
+    },
+    {
+      "行の鍵": "H-082",
+      "判定": "独立判定",
+      "形": "差(当期−前期)",
+      "fact": [
+        {
+          "役割": "当期側",
+          "要素": "jpcrp_cor:NumberOfEmployees",
+          "context": "CurrentYearInstant_NonConsolidatedMember",
+          "期間": "CurrentYearInstant_NonConsolidatedMember",
+          "値": 158.0,
+          "単位": "pure"
+        },
+        {
+          "役割": "前期側",
+          "要素": "jpcrp_cor:NumberOfEmployees",
+          "context": "Prior1YearInstant_NonConsolidatedMember",
+          "期間": "Prior1YearInstant_NonConsolidatedMember",
+          "値": 159.0,
+          "単位": "pure"
+        }
+      ],
+      "計算": "従業員数 当期158名−前期159名=1名減少。文の『従業員が増加した』という方向とは一致しない。",
+      "文が述べている単位": "名",
+      "対象の範囲(文から読める範囲)": "会社(非連結)",
+      "値は一致するか": "不一致",
+      "同値の他の候補": [],
+      "判定不能の理由": null,
+      "判定の理由": "対象の数は null(方向語『従業員が増加』が対象)。従業員数(NumberOfEmployees)は前期159名から当期158名へ1名減少しており、文の『増加』という方向と逆である。合わせるために別のfactは選ばず、不一致として報告する。",
+      "迷った点": "『従業員』が本社正社員数(NumberOfEmployees)を指すか、観光HR事業の派遣スタッフ等を含む広い概念を指すかで迷った。派遣スタッフ数に対応するfactは無いため、本社従業員数のfactを用いた。"
+    },
+    {
+      "行の鍵": "H-083",
+      "判定": "独立判定",
+      "形": "差(当期−前期)",
+      "fact": [
+        {
+          "役割": "前期側",
+          "要素": "jppfs_cor:NoncurrentLiabilities",
+          "context": "Prior1YearInstant_NonConsolidatedMember",
+          "期間": "Prior1YearInstant_NonConsolidatedMember",
+          "値": 269603000.0,
+          "単位": "JPY"
+        },
+        {
+          "役割": "当期側",
+          "要素": "jppfs_cor:NoncurrentLiabilities",
+          "context": "CurrentYearInstant_NonConsolidatedMember",
+          "期間": "CurrentYearInstant_NonConsolidatedMember",
+          "値": 211645000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "固定負債 前期269,603千円−当期211,645千円=57,958千円減少。文の57,957千円と1千円の差があり、不一致。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "会社(非連結)",
+      "値は一致するか": "不一致",
+      "同値の他の候補": [],
+      "判定不能の理由": null,
+      "判定の理由": "固定負債の前期末・当期末の差を計算すると57,958千円の減少となり、文の57,957千円と1千円異なる。合わせるために別のfactは選ばず、計算結果をそのまま報告する。",
+      "迷った点": "内訳項目の千円未満四捨五入の積み上げによる差と推測されるが、確認はしていない。"
+    },
+    {
+      "行の鍵": "H-084",
+      "判定": "独立判定",
+      "形": "率(比)",
+      "fact": [
+        {
+          "役割": "当期側",
+          "要素": "jppfs_cor:NetSales",
+          "context": "CurrentYearDuration_NonConsolidatedMember_jpcrp030000-asr_E39476-000RegionalRevitalizationBusinessReportableSegmentMember",
+          "期間": "CurrentYearDuration_NonConsolidatedMember_jpcrp030000-asr_E39476-000RegionalRevitalizationBusinessReportableSegmentMember",
+          "値": 817588000.0,
+          "単位": "JPY"
+        },
+        {
+          "役割": "前期側",
+          "要素": "jppfs_cor:NetSales",
+          "context": "Prior1YearDuration_NonConsolidatedMember_jpcrp030000-asr_E39476-000RegionalRevitalizationBusinessReportableSegmentMember",
+          "期間": "Prior1YearDuration_NonConsolidatedMember_jpcrp030000-asr_E39476-000RegionalRevitalizationBusinessReportableSegmentMember",
+          "値": 792118000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "地方創生事業セグメント売上高 前期792,118千円→当期817,588千円。成長率=(817,588−792,118)/792,118=3.21%、四捨五入で3.2%。文の3.2%と一致。",
+      "文が述べている単位": "%",
+      "対象の範囲(文から読める範囲)": "セグメント(地方創生事業)",
+      "値は一致するか": "一致",
+      "同値の他の候補": [],
+      "判定不能の理由": null,
+      "判定の理由": "地方創生事業セグメントの売上高前期比成長率が文の3.2%と一致する。",
+      "迷った点": "特になし"
+    },
+    {
+      "行の鍵": "H-085",
+      "判定": "独立判定",
+      "形": "差(当期−前期)",
+      "fact": [
+        {
+          "役割": "当期側",
+          "要素": "jppfs_cor:NetSales",
+          "context": "CurrentYearDuration_NonConsolidatedMember",
+          "期間": "CurrentYearDuration_NonConsolidatedMember",
+          "値": 15325418000.0,
+          "単位": "JPY"
+        },
+        {
+          "役割": "前期側",
+          "要素": "jppfs_cor:NetSales",
+          "context": "Prior1YearDuration_NonConsolidatedMember",
+          "期間": "Prior1YearDuration_NonConsolidatedMember",
+          "値": 13781848000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "売上高 当期15,325,418千円−前期13,781,848千円=1,543,570千円増加。文の『売上の増加』という方向と一致。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "会社(非連結)",
+      "値は一致するか": "一致(方向)",
+      "同値の他の候補": [],
+      "判定不能の理由": null,
+      "判定の理由": "対象の数は null(方向語『売上の増加』が対象)。売上高が前期より増加しており方向が一致する。",
+      "迷った点": "特になし"
+    },
+    {
+      "行の鍵": "H-086",
+      "判定": "独立判定",
+      "形": "差(当期−前期)",
+      "fact": [
+        {
+          "役割": "当期側",
+          "要素": "jppfs_cor:CurrentAssets",
+          "context": "CurrentYearInstant_NonConsolidatedMember",
+          "期間": "CurrentYearInstant_NonConsolidatedMember",
+          "値": 3887776000.0,
+          "単位": "JPY"
+        },
+        {
+          "役割": "前期側",
+          "要素": "jppfs_cor:CurrentAssets",
+          "context": "Prior1YearInstant_NonConsolidatedMember",
+          "期間": "Prior1YearInstant_NonConsolidatedMember",
+          "値": 3371461000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "流動資産 当期3,887,776千円−前期3,371,461千円=516,315千円増加。文の516,315千円と一致。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "会社(非連結)",
+      "値は一致するか": "一致",
+      "同値の他の候補": [],
+      "判定不能の理由": null,
+      "判定の理由": "流動資産の当期末・前期末の差が文の数値と一致する。",
+      "迷った点": "特になし"
+    },
+    {
+      "行の鍵": "H-087",
+      "判定": "独立判定",
+      "形": "単一",
+      "fact": [
+        {
+          "役割": "単一",
+          "要素": "jppfs_cor:NetCashProvidedByUsedInOperatingActivities",
+          "context": "CurrentYearDuration_NonConsolidatedMember",
+          "期間": "CurrentYearDuration_NonConsolidatedMember",
+          "値": 800880000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "営業活動によるキャッシュ・フロー800,880千円。文の『営業活動の結果得られた資金は800,880千円』と一致。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "会社(非連結)",
+      "値は一致するか": "一致",
+      "同値の他の候補": [],
+      "判定不能の理由": null,
+      "判定の理由": "営業活動によるキャッシュ・フローの当期額が文の数値と一致する。",
+      "迷った点": "特になし"
+    },
+    {
+      "行の鍵": "H-088",
+      "判定": "判定不能",
+      "形": null,
+      "fact": [],
+      "計算": "該当する fact が無いため計算していない。",
+      "文が述べている単位": null,
+      "対象の範囲(文から読める範囲)": "インバウンド消費動向全体(観光庁統計)",
+      "値は一致するか": "確かめていない",
+      "同値の他の候補": [],
+      "判定不能の理由": "対象が文書に無い",
+      "判定の理由": "訪日外国人旅行消費額に関する観光庁の外部統計であり、提出会社のXBRL factには存在しない。",
+      "迷った点": "特になし"
+    },
+    {
+      "行の鍵": "H-089",
+      "判定": "独立判定",
+      "形": "単一",
+      "fact": [
+        {
+          "役割": "単一",
+          "要素": "jppfs_cor:NetSales",
+          "context": "CurrentYearDuration_NonConsolidatedMember",
+          "期間": "CurrentYearDuration_NonConsolidatedMember",
+          "値": 15325418000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "売上高15,325,418千円。文の15,325,418千円と一致。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "会社(非連結)",
+      "値は一致するか": "一致",
+      "同値の他の候補": [],
+      "判定不能の理由": null,
+      "判定の理由": "売上高の当期額が文の数値と一致する(H-074と同じfact)。",
+      "迷った点": "特になし"
+    },
+    {
+      "行の鍵": "H-090",
+      "判定": "独立判定",
+      "形": "単一",
+      "fact": [
+        {
+          "役割": "単一",
+          "要素": "jppfs_cor:PurchaseOfTreasuryStock",
+          "context": "CurrentYearDuration_NonConsolidatedMember",
+          "期間": "CurrentYearDuration_NonConsolidatedMember",
+          "値": -83281000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "自己株式の取得83,281千円。文の『自己株式が83,281千円増加した』と絶対値で一致。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "会社(非連結)",
+      "値は一致するか": "一致",
+      "同値の他の候補": [
+        {
+          "役割": "単一",
+          "要素": "jppfs_cor:PurchaseOfTreasuryStock",
+          "context": "CurrentYearDuration_NonConsolidatedMember_TreasuryStockMember",
+          "期間": "CurrentYearDuration_NonConsolidatedMember_TreasuryStockMember",
+          "値": -83281000.0,
+          "単位": "JPY"
+        },
+        {
+          "役割": "単一",
+          "要素": "jppfs_cor:PurchaseOfTreasuryStock",
+          "context": "CurrentYearDuration_NonConsolidatedMember_ShareholdersEquityMember",
+          "期間": "CurrentYearDuration_NonConsolidatedMember_ShareholdersEquityMember",
+          "値": -83281000.0,
+          "単位": "JPY"
+        }
+      ],
+      "判定不能の理由": null,
+      "判定の理由": "自己株式の取得額が文の数値と絶対値で一致する(H-025と同じfact)。",
+      "迷った点": "特になし"
+    },
+    {
+      "行の鍵": "H-091",
+      "判定": "独立判定",
+      "形": "単一",
+      "fact": [
+        {
+          "役割": "単一",
+          "要素": "jppfs_cor:CurrentLiabilities",
+          "context": "CurrentYearInstant_NonConsolidatedMember",
+          "期間": "CurrentYearInstant_NonConsolidatedMember",
+          "値": 1993417000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "流動負債1,993,417千円。文の1,993,417千円と一致。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "会社(非連結)",
+      "値は一致するか": "一致",
+      "同値の他の候補": [],
+      "判定不能の理由": null,
+      "判定の理由": "流動負債の当期末残高が文の数値と一致する。",
+      "迷った点": "特になし"
+    },
+    {
+      "行の鍵": "H-092",
+      "判定": "独立判定",
+      "形": "単一",
+      "fact": [
+        {
+          "役割": "単一",
+          "要素": "jppfs_cor:OperatingIncome",
+          "context": "CurrentYearDuration_NonConsolidatedMember_jpcrp030000-asr_E39476-000RegionalRevitalizationBusinessReportableSegmentMember",
+          "期間": "CurrentYearDuration_NonConsolidatedMember_jpcrp030000-asr_E39476-000RegionalRevitalizationBusinessReportableSegmentMember",
+          "値": 17415000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "地方創生事業セグメント利益(営業利益)17,415千円。文の17,415千円と一致。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "セグメント(地方創生事業)",
+      "値は一致するか": "一致",
+      "同値の他の候補": [],
+      "判定不能の理由": null,
+      "判定の理由": "地方創生事業セグメントの営業利益が文の数値と一致する。",
+      "迷った点": "特になし"
+    },
+    {
+      "行の鍵": "H-093",
+      "判定": "独立判定",
+      "形": "単一",
+      "fact": [
+        {
+          "役割": "単一",
+          "要素": "jppfs_cor:PurchaseOfPropertyPlantAndEquipmentInvCF",
+          "context": "CurrentYearDuration_NonConsolidatedMember",
+          "期間": "CurrentYearDuration_NonConsolidatedMember",
+          "値": -53179000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "キャッシュ・フロー計算書の有形固定資産の取得による支出△53,179千円。文の『有形固定資産の取得による支出が53,179千円あった』と絶対値で一致。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "会社(非連結)",
+      "値は一致するか": "一致",
+      "同値の他の候補": [],
+      "判定不能の理由": null,
+      "判定の理由": "有形固定資産の取得による支出額の絶対値が文の数値と一致する(符号は支出のためマイナス)。",
+      "迷った点": "特になし"
+    },
+    {
+      "行の鍵": "H-094",
+      "判定": "独立判定",
+      "形": "単一",
+      "fact": [
+        {
+          "役割": "単一",
+          "要素": "jppfs_cor:OrdinaryIncome",
+          "context": "CurrentYearDuration_NonConsolidatedMember",
+          "期間": "CurrentYearDuration_NonConsolidatedMember",
+          "値": 830465000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "経常利益830,465千円。文の830,465千円と一致。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "会社(非連結)",
+      "値は一致するか": "一致",
+      "同値の他の候補": [],
+      "判定不能の理由": null,
+      "判定の理由": "経常利益の当期額が文の数値と一致する(H-079と同じfact)。",
+      "迷った点": "特になし"
+    },
+    {
+      "行の鍵": "H-095",
+      "判定": "独立判定",
+      "形": "単一",
+      "fact": [
+        {
+          "役割": "単一",
+          "要素": "jppfs_cor:DecreaseIncreaseInNotesAndAccountsReceivableTradeOpeCF",
+          "context": "CurrentYearDuration_NonConsolidatedMember",
+          "期間": "CurrentYearDuration_NonConsolidatedMember",
+          "値": -163586000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "キャッシュ・フロー計算書の売上債権の増減△163,586千円。文の『売上債権が163,586千円増加した』と絶対値で一致。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "会社(非連結)",
+      "値は一致するか": "一致",
+      "同値の他の候補": [],
+      "判定不能の理由": null,
+      "判定の理由": "売上債権の増減額の絶対値が文の数値と一致する(符号は売上債権増加によるキャッシュ減少のためマイナス)。",
+      "迷った点": "特になし"
+    },
+    {
+      "行の鍵": "H-096",
+      "判定": "独立判定",
+      "形": "率(比)",
+      "fact": [
+        {
+          "役割": "当期側",
+          "要素": "jppfs_cor:OperatingIncome",
+          "context": "CurrentYearDuration_NonConsolidatedMember",
+          "期間": "CurrentYearDuration_NonConsolidatedMember",
+          "値": 819147000.0,
+          "単位": "JPY"
+        },
+        {
+          "役割": "前期側",
+          "要素": "jppfs_cor:OperatingIncome",
+          "context": "Prior1YearDuration_NonConsolidatedMember",
+          "期間": "Prior1YearDuration_NonConsolidatedMember",
+          "値": 755966000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "(819,147,000−755,966,000)/755,966,000 = 8.36%、四捨五入で8.4%。文の8.4%と一致。",
+      "文が述べている単位": "%",
+      "対象の範囲(文から読める範囲)": "会社(非連結)",
+      "値は一致するか": "一致",
+      "同値の他の候補": [],
+      "判定不能の理由": null,
+      "判定の理由": "営業利益の前期比成長率が文の8.4%と一致する(H-002と同じfact)。",
+      "迷った点": "特になし"
+    },
+    {
+      "行の鍵": "H-097",
+      "判定": "独立判定",
+      "形": "差(当期−前期)",
+      "fact": [
+        {
+          "役割": "当期側",
+          "要素": "jppfs_cor:Liabilities",
+          "context": "CurrentYearInstant_NonConsolidatedMember",
+          "期間": "CurrentYearInstant_NonConsolidatedMember",
+          "値": 2205063000.0,
+          "単位": "JPY"
+        },
+        {
+          "役割": "前期側",
+          "要素": "jppfs_cor:Liabilities",
+          "context": "Prior1YearInstant_NonConsolidatedMember",
+          "期間": "Prior1YearInstant_NonConsolidatedMember",
+          "値": 2167071000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "負債合計 当期2,205,063千円−前期2,167,071千円=37,992千円増加。文の37,992千円と一致。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "会社(非連結)",
+      "値は一致するか": "一致",
+      "同値の他の候補": [],
+      "判定不能の理由": null,
+      "判定の理由": "負債合計の当期末・前期末の差が文の数値と一致する。",
+      "迷った点": "対象の数があるため形は差(当期−前期)。役割欄は便宜上『当期側/前期側』としたが差の結果が単一の数値に対応する。"
+    },
+    {
+      "行の鍵": "H-098",
+      "判定": "独立判定",
+      "形": "差(当期−前期)",
+      "fact": [
+        {
+          "役割": "当期側",
+          "要素": "jppfs_cor:CurrentAssets",
+          "context": "CurrentYearInstant_NonConsolidatedMember",
+          "期間": "CurrentYearInstant_NonConsolidatedMember",
+          "値": 3887776000.0,
+          "単位": "JPY"
+        },
+        {
+          "役割": "前期側",
+          "要素": "jppfs_cor:CurrentAssets",
+          "context": "Prior1YearInstant_NonConsolidatedMember",
+          "期間": "Prior1YearInstant_NonConsolidatedMember",
+          "値": 3371461000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "流動資産 当期3,887,776千円−前期3,371,461千円=516,315千円増加。文の516,315千円と一致。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "会社(非連結)",
+      "値は一致するか": "一致",
+      "同値の他の候補": [],
+      "判定不能の理由": null,
+      "判定の理由": "対象の数は null(方向語『増加』が対象)だが、流動資産の差が文の数値(H-086と同じ)に一致する。",
+      "迷った点": "特になし"
+    },
+    {
+      "行の鍵": "H-099",
+      "判定": "判定不能",
+      "形": null,
+      "fact": [],
+      "計算": "該当する fact が無いため計算していない。",
+      "文が述べている単位": null,
+      "対象の範囲(文から読める範囲)": "観光HR事業における人材需要・人材オーダー(定性的説明)",
+      "値は一致するか": "確かめていない",
+      "同値の他の候補": [],
+      "判定不能の理由": "対象が文書に無い",
+      "判定の理由": "『人材需要が旺盛』『人材オーダーも増加』は定性的な記述であり、対応する数値factは元データに存在しない。",
+      "迷った点": "特になし"
+    },
+    {
+      "行の鍵": "H-100",
+      "判定": "独立判定",
+      "形": "単一",
+      "fact": [
+        {
+          "役割": "単一",
+          "要素": "jppfs_cor:ProfitLoss",
+          "context": "CurrentYearDuration_NonConsolidatedMember",
+          "期間": "CurrentYearDuration_NonConsolidatedMember",
+          "値": 563426000.0,
+          "単位": "JPY"
+        }
+      ],
+      "計算": "当期純利益563,426千円。文の563,426千円と一致。",
+      "文が述べている単位": "千円",
+      "対象の範囲(文から読める範囲)": "会社(非連結)",
+      "値は一致するか": "一致",
+      "同値の他の候補": [
+        {
+          "役割": "単一",
+          "要素": "jpcrp_cor:NetIncomeLossSummaryOfBusinessResults",
+          "context": "CurrentYearDuration_NonConsolidatedMember",
+          "期間": "CurrentYearDuration_NonConsolidatedMember",
+          "値": 563426000.0,
+          "単位": "JPY"
+        }
+      ],
+      "判定不能の理由": null,
+      "判定の理由": "当期純利益の当期額が文の数値と一致する。",
+      "迷った点": "特になし"
+    }
+  ]
+}

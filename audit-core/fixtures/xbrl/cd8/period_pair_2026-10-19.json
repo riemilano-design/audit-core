@@ -1,0 +1,890 @@
+{
+ "seal": "docs/XBRL_PERIOD_PAIR_SEAL_2026-10-19.md",
+ "seal_commit": "790a5c5",
+ "step": "**期間の対(PP)の実測。段 1(engine 不変)。0 USD・席は呼ばない**",
+ "行": {
+  "192 行": 192,
+  "率の主張(％/%)": 37,
+  "うち参照先 1 本": 17,
+  "参照先なし": 20
+ },
+ "**第 1 部 兄弟の本数**": {
+  "1": 13,
+  "2": 4
+ },
+ "**第 2 部 符号・検算**": {
+  "符号の分布": {
+   "1": 7,
+   "-1": 6
+  },
+  "state の分布(13 行)": {
+   "GROUNDED": 12,
+   "VALUE_MISMATCH": 1
+  }
+ },
+ "R017 の明細(H-4)": {
+  "参照先": {
+   "name": "jppfs_cor:OrdinaryIncome",
+   "context": "CurrentYearDuration_jpcrp030000-asr_E34102-000PremiumServiceBusinessReportableSegmentsMember",
+   "値": 160000000.0
+  },
+  "同じセグメント枠の別の要素": []
+ },
+ "**対照(13 行すべて)**": {
+  "値": {
+   "VALUE_MISMATCH": 13
+  },
+  "符号": {
+   "VALUE_MISMATCH": 13
+  },
+  "前期を消す": {
+   "('UNPROVABLE', 'prior_sibling:0')": 13
+  },
+  "前期を増やす": {
+   "('UNPROVABLE', 'prior_sibling:2')": 13
+  }
+ },
+ "H-9 当てていない行数": {
+  "参照先なし": 20,
+  "金額の主張": 155,
+  "PP を当てた行数": 0
+ },
+ "H-10 (d)PU の発火(13 行)": {
+  "d": 1,
+  "P": 0,
+  "U": 0
+ },
+ "H-11 実証できた行": {
+  "v1(合成の後)": 62,
+  "PP を足した後": 75
+ },
+ "**予測との照合**": {
+  "欄ごと": [
+   {
+    "記号": "H-1",
+    "予測": "13・4・0",
+    "実測": "1 本: 13・2 本: 4・0 本: 0",
+    "当たり": true
+   },
+   {
+    "記号": "H-2",
+    "予測": "13 / 13 で符号が取れる",
+    "実測": "13 / 13",
+    "当たり": true
+   },
+   {
+    "記号": "H-3",
+    "予測": "GROUNDED 12・VALUE_MISMATCH 1(S100YWGX R017)",
+    "実測": {
+     "GROUNDED": 12,
+     "VALUE_MISMATCH": 1
+    },
+    "当たり": true
+   },
+   {
+    "記号": "H-4",
+    "予測": "別の要素(SegmentProfit/OperatingIncome)が在り 258.0 が再現する",
+    "実測": {
+     "参照先": {
+      "name": "jppfs_cor:OrdinaryIncome",
+      "context": "CurrentYearDuration_jpcrp030000-asr_E34102-000PremiumServiceBusinessReportableSegmentsMember",
+      "値": 160000000.0
+     },
+     "同じセグメント枠の別の要素": []
+    },
+    "当たり": false
+   },
+   {
+    "記号": "H-5",
+    "予測": "対照 値 13/13 が VALUE_MISMATCH",
+    "実測": {
+     "VALUE_MISMATCH": 13
+    },
+    "当たり": true
+   },
+   {
+    "記号": "H-6",
+    "予測": "対照 符号 13/13 が VALUE_MISMATCH",
+    "実測": {
+     "VALUE_MISMATCH": 13
+    },
+    "当たり": true
+   },
+   {
+    "記号": "H-7",
+    "予測": "対照 前期を消す 13/13 が UNPROVABLE prior_sibling:0",
+    "実測": {
+     "('UNPROVABLE', 'prior_sibling:0')": 13
+    },
+    "当たり": true
+   },
+   {
+    "記号": "H-8",
+    "予測": "対照 前期を増やす 13/13 が UNPROVABLE prior_sibling:2",
+    "実測": {
+     "('UNPROVABLE', 'prior_sibling:2')": 13
+    },
+    "当たり": true
+   },
+   {
+    "記号": "H-9",
+    "予測": "参照先なし 20 行・金額の主張 155 行は 1 行も動かない(当てた行数 0)",
+    "実測": {
+     "参照先なしの行": 20,
+     "金額の主張の行": 155,
+     "PP を当てた行数": 0
+    },
+    "当たり": true
+   },
+   {
+    "記号": "H-10",
+    "予測": "13 行で (d)・P・U の発火は 0",
+    "実測": {
+     "d": 1,
+     "P": 0,
+     "U": 0
+    },
+    "当たり": false
+   },
+   {
+    "記号": "H-11",
+    "予測": "実証できた行(GROUNDED + VALUE_MISMATCH)は 192 行で 62 → 75",
+    "実測": "62 → 75",
+    "当たり": true
+   },
+   {
+    "記号": "H-12",
+    "予測": "段 2 の 192 行再現は段 1 の記録と 192/192 一致・engine の欄以外 byte 同一",
+    "実測": "段 2 で測る",
+    "当たり": "段 2 で測る"
+   },
+   {
+    "記号": "H-13",
+    "予測": "PP-R1〜R3 の 3 本とも red",
+    "実測": "段 2 で測る",
+    "当たり": "段 2 で測る"
+   },
+   {
+    "記号": "H-14",
+    "予測": "独立監査は REVISE 1 回 → GO",
+    "実測": "段 2 で測る",
+    "当たり": "段 2 で測る"
+   },
+   {
+    "記号": "H-15",
+    "予測": "run_tests.sh 1 回目で赤くなるのは test_xbrl_axis3_decision.py test_9 だけ",
+    "実測": "段 2 で測る",
+    "当たり": "段 2 で測る"
+   }
+  ],
+  "当たり": 9,
+  "外れ": 2
+ },
+ "rows": [
+  {
+   "doc": "S100YYRG",
+   "id": "R003",
+   "単位": "％",
+   "値": 10.0,
+   "席の参照先": null,
+   "抜粋": "ジネスの創出）に取り組み、最終年度における数値目標の売上高100億円、営業利益率10.0％以上の達成を目指しています。     　当連結会計年度においては、これらの戦略",
+   "数の字面": "10.0"
+  },
+  {
+   "doc": "S100YYRG",
+   "id": "R006",
+   "単位": "％",
+   "値": 27.2,
+   "席の参照先": null,
+   "抜粋": "   [テクノロジーソリューション事業]  売上高3,579,977千円（前期比27.2％増）、売上総利益1,034,587千円（同27.1％増）となりました。  　大",
+   "数の字面": "27.2"
+  },
+  {
+   "doc": "S100YYRG",
+   "id": "R008",
+   "単位": "％",
+   "値": 27.1,
+   "席の参照先": null,
+   "抜粋": ",579,977千円（前期比27.2％増）、売上総利益1,034,587千円（同27.1％増）となりました。  　大手SIer向けの生成AI案件の拡大を中心として、次世",
+   "数の字面": "27.1"
+  },
+  {
+   "doc": "S100YYRG",
+   "id": "R010",
+   "単位": "％",
+   "値": 0.2,
+   "席の参照先": null,
+   "抜粋": "     [ビジネスソリューション事業]  売上高3,459,593千円（前期比0.2％増）、売上総利益617,620千円（同11.1％減）となりました。  金融機関",
+   "数の字面": "0.2"
+  },
+  {
+   "doc": "S100YYRG",
+   "id": "R012",
+   "単位": "％",
+   "値": 11.1,
+   "席の参照先": null,
+   "抜粋": "上高3,459,593千円（前期比0.2％増）、売上総利益617,620千円（同11.1％減）となりました。  金融機関向け案件が安定的に推移したほか、クラウド基盤を活",
+   "数の字面": "11.1"
+  },
+  {
+   "doc": "S100YYRG",
+   "id": "R014",
+   "単位": "％",
+   "値": 0.6,
+   "席の参照先": null,
+   "抜粋": "りました。     [コンサルティング事業]  売上高734,738千円（前期比0.6％減）、売上総利益250,941千円（同26.5％増）となりました。  　エンド",
+   "数の字面": "0.6"
+  },
+  {
+   "doc": "S100YYRG",
+   "id": "R016",
+   "単位": "％",
+   "値": 26.5,
+   "席の参照先": null,
+   "抜粋": " 売上高734,738千円（前期比0.6％減）、売上総利益250,941千円（同26.5％増）となりました。  　エンドユーザーとの直接取引の拡大に注力するなか、製造業",
+   "数の字面": "26.5"
+  },
+  {
+   "doc": "S100YZ7E",
+   "id": "R001",
+   "単位": "%",
+   "値": 0.5,
+   "席の参照先": null,
+   "抜粋": "況が続きました。  　金融市場においては、日本銀行の政策正常化を背景に短期金利は0.5%から0.75%程度へ引き上げられ、長期金利も期初の1%台前半から上昇し、期末に",
+   "数の字面": "0.5"
+  },
+  {
+   "doc": "S100YZ7E",
+   "id": "R002",
+   "単位": "%",
+   "値": 0.75,
+   "席の参照先": null,
+   "抜粋": "た。  　金融市場においては、日本銀行の政策正常化を背景に短期金利は0.5%から0.75%程度へ引き上げられ、長期金利も期初の1%台前半から上昇し、期末には2.5%台半",
+   "数の字面": "0.75"
+  },
+  {
+   "doc": "S100YZ7E",
+   "id": "R003",
+   "単位": "%",
+   "値": 1.0,
+   "席の参照先": null,
+   "抜粋": "常化を背景に短期金利は0.5%から0.75%程度へ引き上げられ、長期金利も期初の1%台前半から上昇し、期末には2.5%台半ばに達しました。一方、米国の長期金利は4",
+   "数の字面": "1"
+  },
+  {
+   "doc": "S100YZ7E",
+   "id": "R004",
+   "単位": "%",
+   "値": 2.5,
+   "席の参照先": null,
+   "抜粋": "から0.75%程度へ引き上げられ、長期金利も期初の1%台前半から上昇し、期末には2.5%台半ばに達しました。一方、米国の長期金利は4%台半ばで高止まりしており、為替市",
+   "数の字面": "2.5"
+  },
+  {
+   "doc": "S100YZ7E",
+   "id": "R005",
+   "単位": "%",
+   "値": 4.0,
+   "席の参照先": null,
+   "抜粋": "1%台前半から上昇し、期末には2.5%台半ばに達しました。一方、米国の長期金利は4%台半ばで高止まりしており、為替市場においては、こうした日米金利差を背景として円",
+   "数の字面": "4"
+  },
+  {
+   "doc": "S100YZ7E",
+   "id": "R012",
+   "単位": "%",
+   "値": 1.8,
+   "席の参照先": null,
+   "抜粋": "なり、同基準日における当社の契約先互助会139社の前受金残高も、第105基準日比1.8%減の2兆1,291億円と391億円減少しました。  　当社の当事業年度の業績を",
+   "数の字面": "1.8"
+  },
+  {
+   "doc": "S100YZ7E",
+   "id": "R014",
+   "単位": "%",
+   "値": 1.0,
+   "席の参照先": null,
+   "抜粋": "た。  　当社の当事業年度の業績を報告いたします。  　当社の契約残高は前年度比1.0%減の7,724億円と78億円の減少となりました。  　損益状況は次のとおりであ",
+   "数の字面": "1.0"
+  },
+  {
+   "doc": "S100YWGX",
+   "id": "R004",
+   "単位": "％",
+   "値": 9.2,
+   "席の参照先": "netsales@currentyearduration",
+   "抜粋": "て、売上高は前連結会計年度を上回り、売上高130,123百万円（前連結会計年度比9.2％増）となりました。国内ブックオフ事業、プレミアムサービス事業において増益となっ",
+   "数の字面": "9.2",
+   "兄弟の本数": 2,
+   "符号": 1,
+   "state": "UNPROVABLE",
+   "reason": "prior_sibling:2",
+   "recomputed": null,
+   "derived_pointers": [],
+   "sign_checked": true
+  },
+  {
+   "doc": "S100YWGX",
+   "id": "R006",
+   "単位": "％",
+   "値": 20.9,
+   "席の参照先": "ordinaryincome@currentyearduration",
+   "抜粋": "ス事業において増益となったことにより、経常利益4,720百万円（前連結会計年度比20.9％増）、親会社株主に帰属する当期純利益2,763百万円（前連結会計年度比31.5",
+   "数の字面": "20.9",
+   "兄弟の本数": 2,
+   "符号": 1,
+   "state": "UNPROVABLE",
+   "reason": "prior_sibling:2",
+   "recomputed": null,
+   "derived_pointers": [],
+   "sign_checked": true
+  },
+  {
+   "doc": "S100YWGX",
+   "id": "R008",
+   "単位": "％",
+   "値": 31.5,
+   "席の参照先": "profitlossattributabletoownersofparent@currentyearduration",
+   "抜粋": "20.9％増）、親会社株主に帰属する当期純利益2,763百万円（前連結会計年度比31.5％増）となりました。     　セグメントごとの経営成績は、次のとおりであります",
+   "数の字面": "31.5",
+   "兄弟の本数": 2,
+   "符号": 1,
+   "state": "UNPROVABLE",
+   "reason": "prior_sibling:2",
+   "recomputed": null,
+   "derived_pointers": [],
+   "sign_checked": true
+  },
+  {
+   "doc": "S100YWGX",
+   "id": "R011",
+   "単位": "％",
+   "値": 8.0,
+   "席の参照先": "revenuesfromexternalcustomers@currentyearduration_jpcrp030000-asr_e34102-000domesticbookoffbusinessreportablesegmentsmember",
+   "抜粋": "前連結会計年度を上回ったことで、売上高1,000,000百万円（前連結会計年度比8.0％増）となりました。人件費等の増加に対して、既存店売上高の伸長に伴い売上総利益が",
+   "数の字面": "8.0",
+   "兄弟の本数": 1,
+   "符号": 1,
+   "state": "GROUNDED",
+   "reason": null,
+   "recomputed": 8.01,
+   "derived_pointers": [
+    "jpcrp_cor:RevenuesFromExternalCustomers@Prior1YearDuration_jpcrp030000-asr_E34102-000DomesticBookoffBusinessReportableSegmentsMember"
+   ],
+   "sign_checked": true,
+   "対照": {
+    "値": "VALUE_MISMATCH",
+    "符号": "VALUE_MISMATCH",
+    "前期を消す": {
+     "state": "UNPROVABLE",
+     "reason": "prior_sibling:0"
+    },
+    "前期を増やす": {
+     "state": "UNPROVABLE",
+     "reason": "prior_sibling:2"
+    }
+   },
+   "発火(当期 fact・(d)PU)": {
+    "d": false,
+    "P": false,
+    "U": false
+   }
+  },
+  {
+   "doc": "S100YWGX",
+   "id": "R013",
+   "単位": "％",
+   "値": 19.1,
+   "席の参照先": "ordinaryincome@currentyearduration_jpcrp030000-asr_e34102-000domesticbookoffbusinessreportablesegmentsmember",
+   "抜粋": "に伴い売上総利益が増加した結果、セグメント利益6,369百万円（前連結会計年度比19.1％増）となりました。     （プレミアムサービス事業）  　当連結会計年度にお",
+   "数の字面": "19.1",
+   "兄弟の本数": 1,
+   "符号": 1,
+   "state": "GROUNDED",
+   "reason": null,
+   "recomputed": 19.11,
+   "derived_pointers": [
+    "jppfs_cor:OrdinaryIncome@Prior1YearDuration_jpcrp030000-asr_E34102-000DomesticBookoffBusinessReportableSegmentsMember"
+   ],
+   "sign_checked": true,
+   "対照": {
+    "値": "VALUE_MISMATCH",
+    "符号": "VALUE_MISMATCH",
+    "前期を消す": {
+     "state": "UNPROVABLE",
+     "reason": "prior_sibling:0"
+    },
+    "前期を増やす": {
+     "state": "UNPROVABLE",
+     "reason": "prior_sibling:2"
+    }
+   },
+   "発火(当期 fact・(d)PU)": {
+    "d": false,
+    "P": false,
+    "U": false
+   }
+  },
+  {
+   "doc": "S100YWGX",
+   "id": "R015",
+   "単位": "％",
+   "値": 18.8,
+   "席の参照先": "revenuesfromexternalcustomers@currentyearduration_jpcrp030000-asr_e34102-000premiumservicebusinessreportablesegmentsmember",
+   "抜粋": "に伴い、売上高は前連結会計年度を上回り、売上高8,527百万円（前連結会計年度比18.8％増）となりました。人件費等の増加を売上総利益の増加が上回った結果、セグメント利",
+   "数の字面": "18.8",
+   "兄弟の本数": 1,
+   "符号": 1,
+   "state": "GROUNDED",
+   "reason": null,
+   "recomputed": 18.81,
+   "derived_pointers": [
+    "jpcrp_cor:RevenuesFromExternalCustomers@Prior1YearDuration_jpcrp030000-asr_E34102-000PremiumServiceBusinessReportableSegmentsMember"
+   ],
+   "sign_checked": true,
+   "対照": {
+    "値": "VALUE_MISMATCH",
+    "符号": "VALUE_MISMATCH",
+    "前期を消す": {
+     "state": "UNPROVABLE",
+     "reason": "prior_sibling:0"
+    },
+    "前期を増やす": {
+     "state": "UNPROVABLE",
+     "reason": "prior_sibling:2"
+    }
+   },
+   "発火(当期 fact・(d)PU)": {
+    "d": false,
+    "P": false,
+    "U": false
+   }
+  },
+  {
+   "doc": "S100YWGX",
+   "id": "R017",
+   "単位": "％",
+   "値": 258.0,
+   "席の参照先": "ordinaryincome@currentyearduration_jpcrp030000-asr_e34102-000premiumservicebusinessreportablesegmentsmember",
+   "抜粋": "加を売上総利益の増加が上回った結果、セグメント利益160百万円（前連結会計年度比258.0％増）となりました。        （海外事業）  　当連結会計年度において、ア",
+   "数の字面": "258.0",
+   "兄弟の本数": 1,
+   "符号": 1,
+   "state": "VALUE_MISMATCH",
+   "reason": null,
+   "recomputed": 263.64,
+   "derived_pointers": [
+    "jppfs_cor:OrdinaryIncome@Prior1YearDuration_jpcrp030000-asr_E34102-000PremiumServiceBusinessReportableSegmentsMember"
+   ],
+   "sign_checked": true,
+   "対照": {
+    "値": "VALUE_MISMATCH",
+    "符号": "VALUE_MISMATCH",
+    "前期を消す": {
+     "state": "UNPROVABLE",
+     "reason": "prior_sibling:0"
+    },
+    "前期を増やす": {
+     "state": "UNPROVABLE",
+     "reason": "prior_sibling:2"
+    }
+   },
+   "発火(当期 fact・(d)PU)": {
+    "d": false,
+    "P": false,
+    "U": false
+   }
+  },
+  {
+   "doc": "S100YZCT",
+   "id": "R003",
+   "単位": "％",
+   "値": 8.0,
+   "席の参照先": "netsalessummaryofbusinessresults@currentyearduration",
+   "抜粋": "事業では堅調に施設が稼働したことから、売上高67,315,520千円（前年同期比8.0％増）、営業利益10,319,000千円（同1.0％増）、子育て支援サービス事業",
+   "数の字面": "8.0",
+   "兄弟の本数": 1,
+   "符号": 1,
+   "state": "GROUNDED",
+   "reason": null,
+   "recomputed": 7.99,
+   "derived_pointers": [
+    "jpcrp_cor:NetSalesSummaryOfBusinessResults@Prior1YearDuration"
+   ],
+   "sign_checked": true,
+   "対照": {
+    "値": "VALUE_MISMATCH",
+    "符号": "VALUE_MISMATCH",
+    "前期を消す": {
+     "state": "UNPROVABLE",
+     "reason": "prior_sibling:0"
+    },
+    "前期を増やす": {
+     "state": "UNPROVABLE",
+     "reason": "prior_sibling:2"
+    }
+   },
+   "発火(当期 fact・(d)PU)": {
+    "d": false,
+    "P": false,
+    "U": false
+   }
+  },
+  {
+   "doc": "S100YZCT",
+   "id": "R005",
+   "単位": "％",
+   "値": 1.0,
+   "席の参照先": "operatingincome@currentyearduration",
+   "抜粋": "315,520千円（前年同期比8.0％増）、営業利益10,319,000千円（同1.0％増）、子育て支援サービス事業における施設開設に伴う設備補助金収入があったことか",
+   "数の字面": "1.0",
+   "兄弟の本数": 2,
+   "符号": 1,
+   "state": "UNPROVABLE",
+   "reason": "prior_sibling:2",
+   "recomputed": null,
+   "derived_pointers": [],
+   "sign_checked": true
+  },
+  {
+   "doc": "S100YZCT",
+   "id": "R007",
+   "単位": "％",
+   "値": 4.9,
+   "席の参照先": "ordinaryincomelosssummaryofbusinessresults@currentyearduration",
+   "抜粋": "る施設開設に伴う設備補助金収入があったことから経常利益3,668,106千円（同4.9％増）、親会社株主に帰属する当期純利益2,328,492千円（同11.0％増）と",
+   "数の字面": "4.9",
+   "兄弟の本数": 1,
+   "符号": 1,
+   "state": "GROUNDED",
+   "reason": null,
+   "recomputed": 4.86,
+   "derived_pointers": [
+    "jpcrp_cor:OrdinaryIncomeLossSummaryOfBusinessResults@Prior1YearDuration"
+   ],
+   "sign_checked": true,
+   "対照": {
+    "値": "VALUE_MISMATCH",
+    "符号": "VALUE_MISMATCH",
+    "前期を消す": {
+     "state": "UNPROVABLE",
+     "reason": "prior_sibling:0"
+    },
+    "前期を増やす": {
+     "state": "UNPROVABLE",
+     "reason": "prior_sibling:2"
+    }
+   },
+   "発火(当期 fact・(d)PU)": {
+    "d": false,
+    "P": false,
+    "U": false
+   }
+  },
+  {
+   "doc": "S100YZCT",
+   "id": "R009",
+   "単位": "％",
+   "値": 11.0,
+   "席の参照先": "profitlossattributabletoownersofparentsummaryofbusinessresults@currentyearduration",
+   "抜粋": "6千円（同4.9％増）、親会社株主に帰属する当期純利益2,328,492千円（同11.0％増）となりました。     　各セグメント別の経営成績は、次のとおりであります",
+   "数の字面": "11.0",
+   "兄弟の本数": 1,
+   "符号": 1,
+   "state": "GROUNDED",
+   "reason": null,
+   "recomputed": 11.03,
+   "derived_pointers": [
+    "jpcrp_cor:ProfitLossAttributableToOwnersOfParentSummaryOfBusinessResults@Prior1YearDuration"
+   ],
+   "sign_checked": true,
+   "対照": {
+    "値": "VALUE_MISMATCH",
+    "符号": "VALUE_MISMATCH",
+    "前期を消す": {
+     "state": "UNPROVABLE",
+     "reason": "prior_sibling:0"
+    },
+    "前期を増やす": {
+     "state": "UNPROVABLE",
+     "reason": "prior_sibling:2"
+    }
+   },
+   "発火(当期 fact・(d)PU)": {
+    "d": false,
+    "P": false,
+    "U": false
+   }
+  },
+  {
+   "doc": "S100YYRV",
+   "id": "R004",
+   "単位": "％",
+   "値": 1.7,
+   "席の参照先": null,
+   "抜粋": "によると2025年（1～12月期累計）の紙と電子を合わせたコミック市場は、前年比1.7％減の6,925億円と、7年連続のプラスの前年から一転、マイナスとなりました。内",
+   "数の字面": "1.7"
+  },
+  {
+   "doc": "S100YYRV",
+   "id": "R006",
+   "単位": "％",
+   "値": 14.0,
+   "席の参照先": null,
+   "抜粋": "なりました。内訳は紙のコミックス（単行本）とコミック誌を合わせた推定販売金額が同14.0％減の1,652億円、電子コミックが同2.9％増の5,273億円。電子コミックは",
+   "数の字面": "14.0"
+  },
+  {
+   "doc": "S100YYRV",
+   "id": "R008",
+   "単位": "％",
+   "値": 2.9,
+   "席の参照先": null,
+   "抜粋": "ミック誌を合わせた推定販売金額が同14.0％減の1,652億円、電子コミックが同2.9％増の5,273億円。電子コミックは引き続き伸長しましたが、伸び率の鈍化が鮮明に",
+   "数の字面": "2.9"
+  },
+  {
+   "doc": "S100YYRV",
+   "id": "R010",
+   "単位": "％",
+   "値": 23.9,
+   "席の参照先": null,
+   "抜粋": "続き伸長しましたが、伸び率の鈍化が鮮明になっています。コミック市場のシェアは紙が23.9％、電子が76.1％、出版市場におけるコミック（紙＋電子）のシェアは前年同率の4",
+   "数の字面": "23.9"
+  },
+  {
+   "doc": "S100YYRV",
+   "id": "R011",
+   "単位": "％",
+   "値": 76.1,
+   "席の参照先": null,
+   "抜粋": "、伸び率の鈍化が鮮明になっています。コミック市場のシェアは紙が23.9％、電子が76.1％、出版市場におけるコミック（紙＋電子）のシェアは前年同率の44.8％となりまし",
+   "数の字面": "76.1"
+  },
+  {
+   "doc": "S100YYRV",
+   "id": "R012",
+   "単位": "％",
+   "値": 44.8,
+   "席の参照先": null,
+   "抜粋": "9％、電子が76.1％、出版市場におけるコミック（紙＋電子）のシェアは前年同率の44.8％となりました。  このような情勢のもと当社グループは、テレビ・配信・ビデオ用ア",
+   "数の字面": "44.8"
+  },
+  {
+   "doc": "S100YYRV",
+   "id": "R014",
+   "単位": "％",
+   "値": 3.7,
+   "席の参照先": "netsales@currentyearduration",
+   "抜粋": "した。  これらの結果、当連結会計年度の売上高は14,064,526千円（前期比3.7％減）、経常利益は920,265千円（前期比35.2％減）、親会社株主に帰属する",
+   "数の字面": "3.7",
+   "兄弟の本数": 1,
+   "符号": -1,
+   "state": "GROUNDED",
+   "reason": null,
+   "recomputed": -3.66,
+   "derived_pointers": [
+    "jppfs_cor:NetSales@Prior1YearDuration"
+   ],
+   "sign_checked": true,
+   "対照": {
+    "値": "VALUE_MISMATCH",
+    "符号": "VALUE_MISMATCH",
+    "前期を消す": {
+     "state": "UNPROVABLE",
+     "reason": "prior_sibling:0"
+    },
+    "前期を増やす": {
+     "state": "UNPROVABLE",
+     "reason": "prior_sibling:2"
+    }
+   },
+   "発火(当期 fact・(d)PU)": {
+    "d": true,
+    "P": false,
+    "U": false
+   }
+  },
+  {
+   "doc": "S100YYRV",
+   "id": "R016",
+   "単位": "％",
+   "値": 35.2,
+   "席の参照先": "ordinaryincome@currentyearduration",
+   "抜粋": "4,064,526千円（前期比3.7％減）、経常利益は920,265千円（前期比35.2％減）、親会社株主に帰属する当期純利益は669,640千円（前期比19.1％減）",
+   "数の字面": "35.2",
+   "兄弟の本数": 1,
+   "符号": -1,
+   "state": "GROUNDED",
+   "reason": null,
+   "recomputed": -35.21,
+   "derived_pointers": [
+    "jppfs_cor:OrdinaryIncome@Prior1YearDuration"
+   ],
+   "sign_checked": true,
+   "対照": {
+    "値": "VALUE_MISMATCH",
+    "符号": "VALUE_MISMATCH",
+    "前期を消す": {
+     "state": "UNPROVABLE",
+     "reason": "prior_sibling:0"
+    },
+    "前期を増やす": {
+     "state": "UNPROVABLE",
+     "reason": "prior_sibling:2"
+    }
+   },
+   "発火(当期 fact・(d)PU)": {
+    "d": false,
+    "P": false,
+    "U": false
+   }
+  },
+  {
+   "doc": "S100YZEV",
+   "id": "R010",
+   "単位": "％",
+   "値": 17.7,
+   "席の参照先": "netsalessummaryofbusinessresults@currentyearduration_nonconsolidatedmember",
+   "抜粋": "は、成約組数が49組（前事業年度は43組）、売上高1,558,064千円（前期比17.7％減）、営業利益1,000,000千円（同75.9％減）、経常利益127,630",
+   "数の字面": "17.7",
+   "兄弟の本数": 1,
+   "符号": -1,
+   "state": "GROUNDED",
+   "reason": null,
+   "recomputed": -17.66,
+   "derived_pointers": [
+    "jpcrp_cor:NetSalesSummaryOfBusinessResults@Prior1YearDuration_NonConsolidatedMember"
+   ],
+   "sign_checked": true,
+   "対照": {
+    "値": "VALUE_MISMATCH",
+    "符号": "VALUE_MISMATCH",
+    "前期を消す": {
+     "state": "UNPROVABLE",
+     "reason": "prior_sibling:0"
+    },
+    "前期を増やす": {
+     "state": "UNPROVABLE",
+     "reason": "prior_sibling:2"
+    }
+   },
+   "発火(当期 fact・(d)PU)": {
+    "d": false,
+    "P": false,
+    "U": false
+   }
+  },
+  {
+   "doc": "S100YZEV",
+   "id": "R012",
+   "単位": "％",
+   "値": 75.9,
+   "席の参照先": "operatingincome@currentyearduration_nonconsolidatedmember",
+   "抜粋": "1,558,064千円（前期比17.7％減）、営業利益1,000,000千円（同75.9％減）、経常利益127,630千円（同73.8％減）となり、当期純利益85,84",
+   "数の字面": "75.9",
+   "兄弟の本数": 1,
+   "符号": -1,
+   "state": "GROUNDED",
+   "reason": null,
+   "recomputed": -75.88,
+   "derived_pointers": [
+    "jppfs_cor:OperatingIncome@Prior1YearDuration_NonConsolidatedMember"
+   ],
+   "sign_checked": true,
+   "対照": {
+    "値": "VALUE_MISMATCH",
+    "符号": "VALUE_MISMATCH",
+    "前期を消す": {
+     "state": "UNPROVABLE",
+     "reason": "prior_sibling:0"
+    },
+    "前期を増やす": {
+     "state": "UNPROVABLE",
+     "reason": "prior_sibling:2"
+    }
+   },
+   "発火(当期 fact・(d)PU)": {
+    "d": false,
+    "P": false,
+    "U": false
+   }
+  },
+  {
+   "doc": "S100YZEV",
+   "id": "R014",
+   "単位": "％",
+   "値": 73.8,
+   "席の参照先": "ordinaryincomelosssummaryofbusinessresults@currentyearduration_nonconsolidatedmember",
+   "抜粋": "営業利益1,000,000千円（同75.9％減）、経常利益127,630千円（同73.8％減）となり、当期純利益85,842千円（同72.4％減）となりました。  　な",
+   "数の字面": "73.8",
+   "兄弟の本数": 1,
+   "符号": -1,
+   "state": "GROUNDED",
+   "reason": null,
+   "recomputed": -73.75,
+   "derived_pointers": [
+    "jpcrp_cor:OrdinaryIncomeLossSummaryOfBusinessResults@Prior1YearDuration_NonConsolidatedMember"
+   ],
+   "sign_checked": true,
+   "対照": {
+    "値": "VALUE_MISMATCH",
+    "符号": "VALUE_MISMATCH",
+    "前期を消す": {
+     "state": "UNPROVABLE",
+     "reason": "prior_sibling:0"
+    },
+    "前期を増やす": {
+     "state": "UNPROVABLE",
+     "reason": "prior_sibling:2"
+    }
+   },
+   "発火(当期 fact・(d)PU)": {
+    "d": false,
+    "P": false,
+    "U": false
+   }
+  },
+  {
+   "doc": "S100YZEV",
+   "id": "R016",
+   "単位": "％",
+   "値": 72.4,
+   "席の参照先": "netincomelosssummaryofbusinessresults@currentyearduration_nonconsolidatedmember",
+   "抜粋": "常利益127,630千円（同73.8％減）となり、当期純利益85,842千円（同72.4％減）となりました。  　なお、当社はＭ＆Ａ仲介事業のみの単一セグメントであるた",
+   "数の字面": "72.4",
+   "兄弟の本数": 1,
+   "符号": -1,
+   "state": "GROUNDED",
+   "reason": null,
+   "recomputed": -72.41,
+   "derived_pointers": [
+    "jpcrp_cor:NetIncomeLossSummaryOfBusinessResults@Prior1YearDuration_NonConsolidatedMember"
+   ],
+   "sign_checked": true,
+   "対照": {
+    "値": "VALUE_MISMATCH",
+    "符号": "VALUE_MISMATCH",
+    "前期を消す": {
+     "state": "UNPROVABLE",
+     "reason": "prior_sibling:0"
+    },
+    "前期を増やす": {
+     "state": "UNPROVABLE",
+     "reason": "prior_sibling:2"
+    }
+   },
+   "発火(当期 fact・(d)PU)": {
+    "d": false,
+    "P": false,
+    "U": false
+   }
+  }
+ ],
+ "limits": [
+  "**同じ 8 書類である。**規則 × 標本の積で、新しい書類で 13 が 13 である保証は無い(`memory: diagnosis-does-not-transfer-to-a-new-sample`)。",
+  "**「前期比」の字は見ない。**前年同期比(四半期)・2 期前比は annual の有報に出ないとして扱い、出たら誤って `Prior1Year` と対にしうる(限界として記録)。",
+  "**方向だけの主張(数が付かない 52 行の型)は触らない。**PP の符号の規則はそちらの土台になるが、測るのは別の封。",
+  "**PP は「席が当期を正しく名指した」ことを前提にする。**名指しの誤り(要素の取り違え T5)は PP では検出できない(R017 が示す型)。"
+ ]
+}

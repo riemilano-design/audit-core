@@ -1,0 +1,2652 @@
+{
+ "N001": {
+  "pointers": [
+   "xbrl:jppfs_cor:NetSales@CurrentYearDuration"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "N002": {
+  "pointers": [
+   "xbrl:jpcrp_cor:NetSalesSummaryOfBusinessResults@CurrentYearDuration",
+   "xbrl:jpcrp_cor:NetSalesSummaryOfBusinessResults@Prior1YearDuration"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "N003": {
+  "pointers": [
+   "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "N004": {
+  "pointers": [
+   "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration",
+   "xbrl:jppfs_cor:OperatingIncome@Prior1YearDuration"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "N005": {
+  "pointers": [
+   "xbrl:jppfs_cor:OrdinaryIncome@CurrentYearDuration"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "N006": {
+  "pointers": [
+   "xbrl:jpcrp_cor:OrdinaryIncomeLossSummaryOfBusinessResults@CurrentYearDuration",
+   "xbrl:jpcrp_cor:OrdinaryIncomeLossSummaryOfBusinessResults@Prior1YearDuration"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "N007": {
+  "pointers": [
+   "xbrl:jppfs_cor:ProfitLossAttributableToOwnersOfParent@CurrentYearDuration"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "N008": {
+  "pointers": [
+   "xbrl:jpcrp_cor:ProfitLossAttributableToOwnersOfParentSummaryOfBusinessResults@CurrentYearDuration",
+   "xbrl:jpcrp_cor:ProfitLossAttributableToOwnersOfParentSummaryOfBusinessResults@Prior1YearDuration"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "N009": {
+  "pointers": [
+   "xbrl:jppfs_cor:Assets@CurrentYearInstant"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "N010": {
+  "pointers": [
+   "xbrl:jppfs_cor:NetAssets@CurrentYearInstant"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "N011": {
+  "pointers": [
+   "xbrl:jpcrp_cor:EquityToAssetRatioSummaryOfBusinessResults@CurrentYearInstant"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "N012": {
+  "pointers": [
+   "xbrl:jpcrp_cor:EquityToAssetRatioSummaryOfBusinessResults@CurrentYearInstant"
+  ],
+  "reason": null,
+  "state": "VALUE_MISMATCH"
+ },
+ "N013": {
+  "pointers": [],
+  "reason": "ambiguous(elements)",
+  "state": "UNVERIFIABLE"
+ },
+ "N014": {
+  "pointers": [
+   "xbrl:jppfs_cor:NetSales@CurrentYearDuration"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "N015": {
+  "pointers": [
+   "xbrl:jppfs_cor:NetSales@Prior1YearDuration"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "N016": {
+  "pointers": [
+   "xbrl:jppfs_cor:NetSales@CurrentYearDuration"
+  ],
+  "reason": null,
+  "state": "VALUE_MISMATCH"
+ },
+ "N017": {
+  "pointers": [],
+  "reason": "no_element(ratio without fact)",
+  "state": "POINTER_NOT_FOUND"
+ },
+ "N018": {
+  "pointers": [
+   "xbrl:jppfs_cor:NetSales@CurrentYearDuration"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "N019": {
+  "pointers": [],
+  "reason": "no_element",
+  "state": "POINTER_NOT_FOUND"
+ },
+ "N020": {
+  "pointers": [],
+  "reason": "no_subject",
+  "state": "UNVERIFIABLE"
+ },
+ "N021": {
+  "pointers": [
+   "xbrl:jppfs_cor:NotesAndAccountsReceivableTrade@CurrentYearInstant"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "N022": {
+  "pointers": [
+   "xbrl:jppfs_cor:NotesAndAccountsReceivableTrade@Prior1YearInstant"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "N023": {
+  "pointers": [
+   "xbrl:jppfs_cor:NotesAndAccountsReceivableTrade@CurrentYearInstant",
+   "xbrl:jppfs_cor:NotesAndAccountsReceivableTrade@Prior1YearInstant",
+   "formula:a-b"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "N024": {
+  "pointers": [
+   "xbrl:jppfs_cor:GrossProfit@CurrentYearDuration"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "N025": {
+  "pointers": [
+   "xbrl:jppfs_cor:GrossProfit@Prior1YearDuration"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "N026": {
+  "pointers": [
+   "xbrl:jppfs_cor:GrossProfit@CurrentYearDuration",
+   "xbrl:jppfs_cor:GrossProfit@Prior1YearDuration",
+   "formula:a-b"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "N027": {
+  "pointers": [],
+  "reason": "no_element(ratio without fact)",
+  "state": "POINTER_NOT_FOUND"
+ },
+ "N028": {
+  "pointers": [],
+  "reason": "no_subject",
+  "state": "UNVERIFIABLE"
+ },
+ "N029": {
+  "pointers": [],
+  "reason": "no_subject",
+  "state": "UNVERIFIABLE"
+ },
+ "N030": {
+  "pointers": [],
+  "reason": "no_element",
+  "state": "POINTER_NOT_FOUND"
+ },
+ "N031": {
+  "pointers": [],
+  "reason": "no_subject",
+  "state": "UNVERIFIABLE"
+ },
+ "N032": {
+  "pointers": [],
+  "reason": "no_element(ratio without fact)",
+  "state": "POINTER_NOT_FOUND"
+ },
+ "N033": {
+  "pointers": [],
+  "reason": "no_element(ratio without fact)",
+  "state": "POINTER_NOT_FOUND"
+ },
+ "N034": {
+  "pointers": [],
+  "reason": "no_element(ratio without fact)",
+  "state": "POINTER_NOT_FOUND"
+ },
+ "N035": {
+  "pointers": [],
+  "reason": "no_element(point without prior phrase)",
+  "state": "POINTER_NOT_FOUND"
+ },
+ "N036": {
+  "pointers": [],
+  "reason": "no_element(ratio without fact)",
+  "state": "POINTER_NOT_FOUND"
+ },
+ "N037": {
+  "pointers": [],
+  "reason": "no_element(ratio without fact)",
+  "state": "POINTER_NOT_FOUND"
+ },
+ "N038": {
+  "pointers": [
+   "xbrl:jpcrp_cor:NumberOfEmployees@CurrentYearInstant"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "N039": {
+  "pointers": [
+   "xbrl:jpcrp_cor:NumberOfEmployees@CurrentYearInstant"
+  ],
+  "reason": null,
+  "state": "VALUE_MISMATCH"
+ },
+ "N040": {
+  "pointers": [
+   "xbrl:jpcrp_cor:NumberOfEmployees@CurrentYearInstant"
+  ],
+  "reason": null,
+  "state": "VALUE_MISMATCH"
+ },
+ "N041": {
+  "pointers": [
+   "xbrl:jpcrp_cor:NumberOfEmployees@CurrentYearInstant"
+  ],
+  "reason": null,
+  "state": "VALUE_MISMATCH"
+ },
+ "N042": {
+  "pointers": [
+   "xbrl:jppfs_cor:SellingGeneralAndAdministrativeExpenses@CurrentYearDuration"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "N043": {
+  "pointers": [
+   "xbrl:jppfs_cor:SellingGeneralAndAdministrativeExpenses@Prior1YearDuration"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "N044": {
+  "pointers": [
+   "xbrl:jppfs_cor:SellingGeneralAndAdministrativeExpenses@CurrentYearDuration",
+   "xbrl:jppfs_cor:SellingGeneralAndAdministrativeExpenses@Prior1YearDuration",
+   "formula:a-b"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "N045": {
+  "pointers": [
+   "xbrl:jppfs_cor:SellingGeneralAndAdministrativeExpenses@CurrentYearDuration",
+   "xbrl:jppfs_cor:SellingGeneralAndAdministrativeExpenses@Prior1YearDuration"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "N046": {
+  "pointers": [],
+  "reason": "no_element",
+  "state": "POINTER_NOT_FOUND"
+ },
+ "N047": {
+  "pointers": [],
+  "reason": "no_element",
+  "state": "POINTER_NOT_FOUND"
+ },
+ "N048": {
+  "pointers": [],
+  "reason": "no_element",
+  "state": "POINTER_NOT_FOUND"
+ },
+ "N049": {
+  "pointers": [],
+  "reason": "ambiguous(elements)",
+  "state": "UNVERIFIABLE"
+ },
+ "N050": {
+  "pointers": [
+   "xbrl:jppfs_cor:ResearchAndDevelopmentExpensesSGA@Prior1YearDuration"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "N051": {
+  "pointers": [],
+  "reason": "no_subject",
+  "state": "UNVERIFIABLE"
+ },
+ "N052": {
+  "pointers": [],
+  "reason": "no_subject",
+  "state": "UNVERIFIABLE"
+ },
+ "N053": {
+  "pointers": [],
+  "reason": "ambiguous(elements)",
+  "state": "UNVERIFIABLE"
+ },
+ "N054": {
+  "pointers": [],
+  "reason": "ambiguous(elements)",
+  "state": "UNVERIFIABLE"
+ },
+ "N055": {
+  "pointers": [],
+  "reason": "ambiguous(elements)",
+  "state": "UNVERIFIABLE"
+ },
+ "N056": {
+  "pointers": [],
+  "reason": "no_subject",
+  "state": "UNVERIFIABLE"
+ },
+ "N057": {
+  "pointers": [],
+  "reason": "no_subject",
+  "state": "UNVERIFIABLE"
+ },
+ "N058": {
+  "pointers": [],
+  "reason": "no_element",
+  "state": "POINTER_NOT_FOUND"
+ },
+ "N059": {
+  "pointers": [],
+  "reason": "ambiguous(elements)",
+  "state": "UNVERIFIABLE"
+ },
+ "N060": {
+  "pointers": [],
+  "reason": "ambiguous(elements)",
+  "state": "UNVERIFIABLE"
+ },
+ "N061": {
+  "pointers": [],
+  "reason": "ambiguous(elements)",
+  "state": "UNVERIFIABLE"
+ },
+ "N062": {
+  "pointers": [],
+  "reason": "no_subject",
+  "state": "UNVERIFIABLE"
+ },
+ "N063": {
+  "pointers": [
+   "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration",
+   "xbrl:jppfs_cor:OperatingIncome@Prior1YearDuration",
+   "formula:a-b"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "N064": {
+  "pointers": [
+   "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "N065": {
+  "pointers": [
+   "xbrl:jppfs_cor:OperatingIncome@Prior1YearDuration"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "N066": {
+  "pointers": [
+   "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration",
+   "xbrl:jppfs_cor:OperatingIncome@Prior1YearDuration",
+   "formula:a-b"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "N067": {
+  "pointers": [],
+  "reason": "no_element(ratio without fact)",
+  "state": "POINTER_NOT_FOUND"
+ },
+ "N068": {
+  "pointers": [],
+  "reason": "no_element(ratio without fact)",
+  "state": "POINTER_NOT_FOUND"
+ },
+ "N069": {
+  "pointers": [],
+  "reason": "no_element(ratio without fact)",
+  "state": "POINTER_NOT_FOUND"
+ },
+ "N070": {
+  "pointers": [],
+  "reason": "no_element(point without prior phrase)",
+  "state": "POINTER_NOT_FOUND"
+ },
+ "N071": {
+  "pointers": [],
+  "reason": "no_subject",
+  "state": "UNVERIFIABLE"
+ },
+ "N072": {
+  "pointers": [],
+  "reason": "no_subject",
+  "state": "UNVERIFIABLE"
+ },
+ "N073": {
+  "pointers": [],
+  "reason": "ambiguous(elements)",
+  "state": "UNVERIFIABLE"
+ },
+ "N074": {
+  "pointers": [],
+  "reason": "ambiguous(elements)",
+  "state": "UNVERIFIABLE"
+ },
+ "N075": {
+  "pointers": [],
+  "reason": "ambiguous(elements)",
+  "state": "UNVERIFIABLE"
+ },
+ "N076": {
+  "pointers": [],
+  "reason": "no_element",
+  "state": "POINTER_NOT_FOUND"
+ },
+ "N077": {
+  "pointers": [],
+  "reason": "no_element",
+  "state": "POINTER_NOT_FOUND"
+ },
+ "N078": {
+  "pointers": [],
+  "reason": "no_element",
+  "state": "POINTER_NOT_FOUND"
+ },
+ "N079": {
+  "pointers": [],
+  "reason": "no_element",
+  "state": "POINTER_NOT_FOUND"
+ },
+ "N080": {
+  "pointers": [],
+  "reason": "no_element",
+  "state": "POINTER_NOT_FOUND"
+ },
+ "N081": {
+  "pointers": [],
+  "reason": "no_element",
+  "state": "POINTER_NOT_FOUND"
+ },
+ "N082": {
+  "pointers": [],
+  "reason": "no_subject",
+  "state": "UNVERIFIABLE"
+ },
+ "N083": {
+  "pointers": [],
+  "reason": "no_subject",
+  "state": "UNVERIFIABLE"
+ },
+ "N084": {
+  "pointers": [],
+  "reason": "ambiguous(elements)",
+  "state": "UNVERIFIABLE"
+ },
+ "N085": {
+  "pointers": [],
+  "reason": "ambiguous(elements)",
+  "state": "UNVERIFIABLE"
+ },
+ "N086": {
+  "pointers": [],
+  "reason": "ambiguous(elements)",
+  "state": "UNVERIFIABLE"
+ },
+ "N087": {
+  "pointers": [],
+  "reason": "ambiguous(elements)",
+  "state": "UNVERIFIABLE"
+ },
+ "N088": {
+  "pointers": [
+   "xbrl:jppfs_cor:OrdinaryIncome@CurrentYearDuration"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "N089": {
+  "pointers": [
+   "xbrl:jppfs_cor:OrdinaryIncome@Prior1YearDuration"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "N090": {
+  "pointers": [
+   "xbrl:jppfs_cor:OrdinaryIncome@CurrentYearDuration",
+   "xbrl:jppfs_cor:OrdinaryIncome@Prior1YearDuration",
+   "formula:a-b"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "N091": {
+  "pointers": [],
+  "reason": "no_element(ratio without fact)",
+  "state": "POINTER_NOT_FOUND"
+ },
+ "N092": {
+  "pointers": [],
+  "reason": "ambiguous(elements)",
+  "state": "UNVERIFIABLE"
+ },
+ "N093": {
+  "pointers": [],
+  "reason": "ambiguous(elements)",
+  "state": "UNVERIFIABLE"
+ },
+ "N094": {
+  "pointers": [],
+  "reason": "ambiguous(elements)",
+  "state": "UNVERIFIABLE"
+ },
+ "N095": {
+  "pointers": [],
+  "reason": "ambiguous(elements)",
+  "state": "UNVERIFIABLE"
+ },
+ "N096": {
+  "pointers": [],
+  "reason": "ambiguous(elements)",
+  "state": "UNVERIFIABLE"
+ },
+ "N097": {
+  "pointers": [
+   "xbrl:jppfs_cor:IncomeBeforeIncomeTaxes@CurrentYearDuration"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "N098": {
+  "pointers": [
+   "xbrl:jppfs_cor:IncomeBeforeIncomeTaxes@Prior1YearDuration"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "N099": {
+  "pointers": [],
+  "reason": "ambiguous(elements)",
+  "state": "UNVERIFIABLE"
+ },
+ "N100": {
+  "pointers": [],
+  "reason": "no_subject",
+  "state": "UNVERIFIABLE"
+ },
+ "N101": {
+  "pointers": [],
+  "reason": "no_subject",
+  "state": "UNVERIFIABLE"
+ },
+ "N102": {
+  "pointers": [],
+  "reason": "no_subject",
+  "state": "UNVERIFIABLE"
+ },
+ "N103": {
+  "pointers": [],
+  "reason": "no_element(ratio without fact)",
+  "state": "POINTER_NOT_FOUND"
+ },
+ "N104": {
+  "pointers": [],
+  "reason": "no_element(ratio without fact)",
+  "state": "POINTER_NOT_FOUND"
+ },
+ "N105": {
+  "pointers": [
+   "xbrl:jppfs_cor:ProfitLossAttributableToOwnersOfParent@CurrentYearDuration"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "N106": {
+  "pointers": [
+   "xbrl:jppfs_cor:ProfitLossAttributableToOwnersOfParent@Prior1YearDuration"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "N107": {
+  "pointers": [
+   "xbrl:jppfs_cor:ProfitLossAttributableToOwnersOfParent@CurrentYearDuration",
+   "xbrl:jppfs_cor:ProfitLossAttributableToOwnersOfParent@Prior1YearDuration",
+   "formula:a-b"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "N108": {
+  "pointers": [],
+  "reason": "no_element(ratio without fact)",
+  "state": "POINTER_NOT_FOUND"
+ },
+ "N109": {
+  "pointers": [],
+  "reason": "no_element(unit not in XBRL)",
+  "state": "POINTER_NOT_FOUND"
+ },
+ "N110": {
+  "pointers": [
+   "xbrl:jpcrp_cor:BasicEarningsLossPerShareSummaryOfBusinessResults@CurrentYearDuration"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "N111": {
+  "pointers": [
+   "xbrl:jpcrp_cor:BasicEarningsLossPerShareSummaryOfBusinessResults@Prior1YearDuration"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "N112": {
+  "pointers": [
+   "xbrl:jpcrp_cor:RateOfReturnOnEquitySummaryOfBusinessResults@CurrentYearDuration"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "N113": {
+  "pointers": [
+   "xbrl:jpcrp_cor:RateOfReturnOnEquitySummaryOfBusinessResults@CurrentYearDuration"
+  ],
+  "reason": null,
+  "state": "VALUE_MISMATCH"
+ },
+ "N114": {
+  "pointers": [],
+  "reason": "ambiguous(elements)",
+  "state": "UNVERIFIABLE"
+ },
+ "N115": {
+  "pointers": [],
+  "reason": "ambiguous(elements)",
+  "state": "UNVERIFIABLE"
+ },
+ "N116": {
+  "pointers": [],
+  "reason": "ambiguous(elements)",
+  "state": "UNVERIFIABLE"
+ },
+ "N117": {
+  "pointers": [],
+  "reason": "no_element(ratio without fact)",
+  "state": "POINTER_NOT_FOUND"
+ },
+ "N118": {
+  "pointers": [],
+  "reason": "no_subject",
+  "state": "UNVERIFIABLE"
+ },
+ "N119": {
+  "pointers": [],
+  "reason": "ambiguous(elements)",
+  "state": "UNVERIFIABLE"
+ },
+ "N120": {
+  "pointers": [],
+  "reason": "no_subject",
+  "state": "UNVERIFIABLE"
+ },
+ "N121": {
+  "pointers": [],
+  "reason": "no_subject",
+  "state": "UNVERIFIABLE"
+ },
+ "N122": {
+  "pointers": [],
+  "reason": "no_subject",
+  "state": "UNVERIFIABLE"
+ },
+ "N123": {
+  "pointers": [
+   "xbrl:jppfs_cor:ValuationDifferenceOnAvailableForSaleSecurities@CurrentYearInstant"
+  ],
+  "reason": null,
+  "state": "VALUE_MISMATCH"
+ },
+ "N124": {
+  "pointers": [
+   "xbrl:jppfs_cor:ValuationDifferenceOnAvailableForSaleSecurities@Prior1YearInstant"
+  ],
+  "reason": null,
+  "state": "VALUE_MISMATCH"
+ },
+ "N125": {
+  "pointers": [
+   "xbrl:jppfs_cor:ValuationDifferenceOnAvailableForSaleSecurities@CurrentYearInstant"
+  ],
+  "reason": null,
+  "state": "VALUE_MISMATCH"
+ },
+ "N126": {
+  "pointers": [
+   "xbrl:jppfs_cor:ValuationDifferenceOnAvailableForSaleSecurities@Prior1YearInstant"
+  ],
+  "reason": null,
+  "state": "VALUE_MISMATCH"
+ },
+ "N127": {
+  "pointers": [
+   "xbrl:jppfs_cor:ValuationDifferenceOnAvailableForSaleSecurities@CurrentYearInstant"
+  ],
+  "reason": null,
+  "state": "VALUE_MISMATCH"
+ },
+ "N128": {
+  "pointers": [
+   "xbrl:jppfs_cor:Assets@CurrentYearInstant"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "N129": {
+  "pointers": [
+   "xbrl:jppfs_cor:Assets@Prior1YearInstant"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "N130": {
+  "pointers": [
+   "xbrl:jppfs_cor:Assets@CurrentYearInstant",
+   "xbrl:jppfs_cor:Assets@Prior1YearInstant",
+   "formula:a-b"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "N131": {
+  "pointers": [
+   "xbrl:jpcrp_cor:TotalAssetsSummaryOfBusinessResults@CurrentYearInstant",
+   "xbrl:jpcrp_cor:TotalAssetsSummaryOfBusinessResults@Prior1YearInstant"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "N132": {
+  "pointers": [],
+  "reason": "no_subject",
+  "state": "UNVERIFIABLE"
+ },
+ "N133": {
+  "pointers": [],
+  "reason": "no_subject",
+  "state": "UNVERIFIABLE"
+ },
+ "N134": {
+  "pointers": [],
+  "reason": "no_element",
+  "state": "POINTER_NOT_FOUND"
+ },
+ "N135": {
+  "pointers": [
+   "xbrl:jppfs_cor:CashAndDeposits@CurrentYearInstant"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "N136": {
+  "pointers": [
+   "xbrl:jppfs_cor:CashAndDeposits@Prior1YearInstant"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "N137": {
+  "pointers": [
+   "xbrl:jppfs_cor:CashAndDeposits@CurrentYearInstant",
+   "xbrl:jppfs_cor:CashAndDeposits@Prior1YearInstant",
+   "formula:a-b"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "N138": {
+  "pointers": [
+   "xbrl:jppfs_cor:NotesAndAccountsReceivableTrade@CurrentYearInstant"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "N139": {
+  "pointers": [
+   "xbrl:jppfs_cor:NotesAndAccountsReceivableTrade@Prior1YearInstant"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "N140": {
+  "pointers": [
+   "xbrl:jppfs_cor:NotesAndAccountsReceivableTrade@CurrentYearInstant",
+   "xbrl:jppfs_cor:NotesAndAccountsReceivableTrade@Prior1YearInstant",
+   "formula:a-b"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "N141": {
+  "pointers": [
+   "xbrl:jppfs_cor:ContractAssets@CurrentYearInstant"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "N142": {
+  "pointers": [
+   "xbrl:jppfs_cor:ContractAssets@Prior1YearInstant"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "N143": {
+  "pointers": [
+   "xbrl:jppfs_cor:ContractAssets@CurrentYearInstant",
+   "xbrl:jppfs_cor:ContractAssets@Prior1YearInstant",
+   "formula:a-b"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "N144": {
+  "pointers": [],
+  "reason": "no_subject",
+  "state": "UNVERIFIABLE"
+ },
+ "N145": {
+  "pointers": [],
+  "reason": "no_subject",
+  "state": "UNVERIFIABLE"
+ },
+ "N146": {
+  "pointers": [],
+  "reason": "ambiguous(elements)",
+  "state": "UNVERIFIABLE"
+ },
+ "N147": {
+  "pointers": [
+   "xbrl:jppfs_cor:ContractAssets@CurrentYearInstant"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "N148": {
+  "pointers": [],
+  "reason": "no_element(ratio without fact)",
+  "state": "POINTER_NOT_FOUND"
+ },
+ "N149": {
+  "pointers": [],
+  "reason": "no_subject",
+  "state": "UNVERIFIABLE"
+ },
+ "N150": {
+  "pointers": [],
+  "reason": "no_subject",
+  "state": "UNVERIFIABLE"
+ },
+ "N151": {
+  "pointers": [],
+  "reason": "no_element",
+  "state": "POINTER_NOT_FOUND"
+ },
+ "N152": {
+  "pointers": [],
+  "reason": "no_subject",
+  "state": "UNVERIFIABLE"
+ },
+ "N153": {
+  "pointers": [],
+  "reason": "no_subject",
+  "state": "UNVERIFIABLE"
+ },
+ "N154": {
+  "pointers": [],
+  "reason": "no_subject",
+  "state": "UNVERIFIABLE"
+ },
+ "N155": {
+  "pointers": [],
+  "reason": "ambiguous(elements)",
+  "state": "UNVERIFIABLE"
+ },
+ "N156": {
+  "pointers": [],
+  "reason": "no_subject",
+  "state": "UNVERIFIABLE"
+ },
+ "N157": {
+  "pointers": [],
+  "reason": "ambiguous(elements)",
+  "state": "UNVERIFIABLE"
+ },
+ "N158": {
+  "pointers": [],
+  "reason": "no_subject",
+  "state": "UNVERIFIABLE"
+ },
+ "N159": {
+  "pointers": [],
+  "reason": "no_subject",
+  "state": "UNVERIFIABLE"
+ },
+ "N160": {
+  "pointers": [],
+  "reason": "no_subject",
+  "state": "UNVERIFIABLE"
+ },
+ "N161": {
+  "pointers": [],
+  "reason": "ambiguous(elements)",
+  "state": "UNVERIFIABLE"
+ },
+ "N162": {
+  "pointers": [],
+  "reason": "no_subject",
+  "state": "UNVERIFIABLE"
+ },
+ "N163": {
+  "pointers": [],
+  "reason": "no_subject",
+  "state": "UNVERIFIABLE"
+ },
+ "N164": {
+  "pointers": [],
+  "reason": "no_element",
+  "state": "POINTER_NOT_FOUND"
+ },
+ "N165": {
+  "pointers": [],
+  "reason": "no_element",
+  "state": "POINTER_NOT_FOUND"
+ },
+ "N166": {
+  "pointers": [],
+  "reason": "no_element",
+  "state": "POINTER_NOT_FOUND"
+ },
+ "N167": {
+  "pointers": [],
+  "reason": "no_element",
+  "state": "POINTER_NOT_FOUND"
+ },
+ "N168": {
+  "pointers": [
+   "xbrl:jppfs_cor:InvestmentSecurities@CurrentYearInstant"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "N169": {
+  "pointers": [
+   "xbrl:jppfs_cor:InvestmentSecurities@Prior1YearInstant"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "N170": {
+  "pointers": [
+   "xbrl:jppfs_cor:InvestmentSecurities@CurrentYearInstant",
+   "xbrl:jppfs_cor:InvestmentSecurities@Prior1YearInstant",
+   "formula:a-b"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "N171": {
+  "pointers": [
+   "xbrl:jppfs_cor:ValuationDifferenceOnAvailableForSaleSecurities@CurrentYearInstant"
+  ],
+  "reason": null,
+  "state": "VALUE_MISMATCH"
+ },
+ "N172": {
+  "pointers": [
+   "xbrl:jppfs_cor:ValuationDifferenceOnAvailableForSaleSecurities@CurrentYearInstant"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "N173": {
+  "pointers": [
+   "xbrl:jppfs_cor:ValuationDifferenceOnAvailableForSaleSecurities@CurrentYearInstant"
+  ],
+  "reason": null,
+  "state": "VALUE_MISMATCH"
+ },
+ "N174": {
+  "pointers": [
+   "xbrl:jppfs_cor:Liabilities@CurrentYearInstant"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "N175": {
+  "pointers": [
+   "xbrl:jppfs_cor:Liabilities@Prior1YearInstant"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "N176": {
+  "pointers": [
+   "xbrl:jppfs_cor:Liabilities@CurrentYearInstant",
+   "xbrl:jppfs_cor:Liabilities@Prior1YearInstant",
+   "formula:a-b"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "N177": {
+  "pointers": [
+   "xbrl:jppfs_cor:Liabilities@CurrentYearInstant",
+   "xbrl:jppfs_cor:Liabilities@Prior1YearInstant"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "N178": {
+  "pointers": [
+   "xbrl:jppfs_cor:CurrentLiabilities@CurrentYearInstant"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "N179": {
+  "pointers": [
+   "xbrl:jppfs_cor:CurrentLiabilities@Prior1YearInstant"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "N180": {
+  "pointers": [
+   "xbrl:jppfs_cor:CurrentLiabilities@CurrentYearInstant",
+   "xbrl:jppfs_cor:CurrentLiabilities@Prior1YearInstant",
+   "formula:a-b"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "N181": {
+  "pointers": [],
+  "reason": "ambiguous(elements)",
+  "state": "UNVERIFIABLE"
+ },
+ "N182": {
+  "pointers": [],
+  "reason": "ambiguous(elements)",
+  "state": "UNVERIFIABLE"
+ },
+ "N183": {
+  "pointers": [],
+  "reason": "ambiguous(elements)",
+  "state": "UNVERIFIABLE"
+ },
+ "N184": {
+  "pointers": [],
+  "reason": "no_subject",
+  "state": "UNVERIFIABLE"
+ },
+ "N185": {
+  "pointers": [],
+  "reason": "no_subject",
+  "state": "UNVERIFIABLE"
+ },
+ "N186": {
+  "pointers": [],
+  "reason": "no_element",
+  "state": "POINTER_NOT_FOUND"
+ },
+ "N187": {
+  "pointers": [
+   "xbrl:jppfs_cor:IncomeTaxesPayable@CurrentYearInstant"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "N188": {
+  "pointers": [
+   "xbrl:jppfs_cor:IncomeTaxesPayable@Prior1YearInstant"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "N189": {
+  "pointers": [
+   "xbrl:jppfs_cor:IncomeTaxesPayable@CurrentYearInstant",
+   "xbrl:jppfs_cor:IncomeTaxesPayable@Prior1YearInstant",
+   "formula:a-b"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "N190": {
+  "pointers": [
+   "xbrl:jppfs_cor:ContractLiabilities@CurrentYearInstant"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "N191": {
+  "pointers": [
+   "xbrl:jppfs_cor:ContractLiabilities@Prior1YearInstant"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "N192": {
+  "pointers": [
+   "xbrl:jppfs_cor:ContractLiabilities@CurrentYearInstant",
+   "xbrl:jppfs_cor:ContractLiabilities@Prior1YearInstant",
+   "formula:a-b"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "N193": {
+  "pointers": [
+   "xbrl:jppfs_cor:CurrentPortionOfLongTermLoansPayable@CurrentYearInstant"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "N194": {
+  "pointers": [
+   "xbrl:jppfs_cor:CurrentPortionOfLongTermLoansPayable@Prior1YearInstant"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "N195": {
+  "pointers": [
+   "xbrl:jppfs_cor:CurrentPortionOfLongTermLoansPayable@CurrentYearInstant",
+   "xbrl:jppfs_cor:CurrentPortionOfLongTermLoansPayable@Prior1YearInstant",
+   "formula:a-b"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "N196": {
+  "pointers": [],
+  "reason": "ambiguous(elements)",
+  "state": "UNVERIFIABLE"
+ },
+ "N197": {
+  "pointers": [],
+  "reason": "ambiguous(elements)",
+  "state": "UNVERIFIABLE"
+ },
+ "N198": {
+  "pointers": [],
+  "reason": "ambiguous(elements)",
+  "state": "UNVERIFIABLE"
+ },
+ "N199": {
+  "pointers": [],
+  "reason": "ambiguous(elements)",
+  "state": "UNVERIFIABLE"
+ },
+ "N200": {
+  "pointers": [],
+  "reason": "ambiguous(elements)",
+  "state": "UNVERIFIABLE"
+ },
+ "N201": {
+  "pointers": [],
+  "reason": "ambiguous(elements)",
+  "state": "UNVERIFIABLE"
+ },
+ "N202": {
+  "pointers": [
+   "xbrl:jppfs_cor:NoncurrentLiabilities@CurrentYearInstant"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "N203": {
+  "pointers": [
+   "xbrl:jppfs_cor:NoncurrentLiabilities@Prior1YearInstant"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "N204": {
+  "pointers": [
+   "xbrl:jppfs_cor:NoncurrentLiabilities@CurrentYearInstant",
+   "xbrl:jppfs_cor:NoncurrentLiabilities@Prior1YearInstant",
+   "formula:a-b"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "N205": {
+  "pointers": [
+   "xbrl:jppfs_cor:DeferredTaxLiabilities@CurrentYearInstant"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "N206": {
+  "pointers": [
+   "xbrl:jppfs_cor:DeferredTaxLiabilities@Prior1YearInstant"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "N207": {
+  "pointers": [
+   "xbrl:jppfs_cor:DeferredTaxLiabilities@CurrentYearInstant",
+   "xbrl:jppfs_cor:DeferredTaxLiabilities@Prior1YearInstant",
+   "formula:a-b"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "N208": {
+  "pointers": [
+   "xbrl:jppfs_cor:LongTermLoansPayable@CurrentYearInstant"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "N209": {
+  "pointers": [
+   "xbrl:jppfs_cor:LongTermLoansPayable@Prior1YearInstant"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "N210": {
+  "pointers": [
+   "xbrl:jppfs_cor:LongTermLoansPayable@Prior1YearInstant"
+  ],
+  "reason": null,
+  "state": "VALUE_MISMATCH"
+ },
+ "N211": {
+  "pointers": [
+   "xbrl:jppfs_cor:LongTermLoansPayable@CurrentYearInstant"
+  ],
+  "reason": null,
+  "state": "VALUE_MISMATCH"
+ },
+ "N212": {
+  "pointers": [
+   "xbrl:jppfs_cor:LongTermLoansPayable@Prior1YearInstant"
+  ],
+  "reason": null,
+  "state": "VALUE_MISMATCH"
+ },
+ "N213": {
+  "pointers": [
+   "xbrl:jppfs_cor:LongTermLoansPayable@CurrentYearInstant"
+  ],
+  "reason": null,
+  "state": "VALUE_MISMATCH"
+ },
+ "N214": {
+  "pointers": [],
+  "reason": "ambiguous(elements)",
+  "state": "UNVERIFIABLE"
+ },
+ "N215": {
+  "pointers": [],
+  "reason": "ambiguous(elements)",
+  "state": "UNVERIFIABLE"
+ },
+ "N216": {
+  "pointers": [],
+  "reason": "ambiguous(elements)",
+  "state": "UNVERIFIABLE"
+ },
+ "N217": {
+  "pointers": [],
+  "reason": "no_element",
+  "state": "POINTER_NOT_FOUND"
+ },
+ "N218": {
+  "pointers": [
+   "xbrl:jppfs_cor:LongTermLoansPayable@CurrentYearInstant"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "N219": {
+  "pointers": [
+   "xbrl:jppfs_cor:LongTermLoansPayable@CurrentYearInstant"
+  ],
+  "reason": null,
+  "state": "VALUE_MISMATCH"
+ },
+ "N220": {
+  "pointers": [
+   "xbrl:jppfs_cor:LongTermLoansPayable@Prior1YearInstant"
+  ],
+  "reason": null,
+  "state": "VALUE_MISMATCH"
+ },
+ "N221": {
+  "pointers": [
+   "xbrl:jppfs_cor:LongTermLoansPayable@CurrentYearInstant"
+  ],
+  "reason": null,
+  "state": "VALUE_MISMATCH"
+ },
+ "N222": {
+  "pointers": [
+   "xbrl:jppfs_cor:NetAssets@CurrentYearInstant"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "N223": {
+  "pointers": [
+   "xbrl:jppfs_cor:NetAssets@Prior1YearInstant"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "N224": {
+  "pointers": [
+   "xbrl:jppfs_cor:NetAssets@CurrentYearInstant",
+   "xbrl:jppfs_cor:NetAssets@Prior1YearInstant",
+   "formula:a-b"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "N225": {
+  "pointers": [
+   "xbrl:jpcrp_cor:NetAssetsSummaryOfBusinessResults@CurrentYearInstant",
+   "xbrl:jpcrp_cor:NetAssetsSummaryOfBusinessResults@Prior1YearInstant"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "N226": {
+  "pointers": [],
+  "reason": "no_subject",
+  "state": "UNVERIFIABLE"
+ },
+ "N227": {
+  "pointers": [],
+  "reason": "no_subject",
+  "state": "UNVERIFIABLE"
+ },
+ "N228": {
+  "pointers": [],
+  "reason": "no_element",
+  "state": "POINTER_NOT_FOUND"
+ },
+ "N229": {
+  "pointers": [],
+  "reason": "no_subject",
+  "state": "UNVERIFIABLE"
+ },
+ "N230": {
+  "pointers": [],
+  "reason": "no_subject",
+  "state": "UNVERIFIABLE"
+ },
+ "N231": {
+  "pointers": [],
+  "reason": "no_subject",
+  "state": "UNVERIFIABLE"
+ },
+ "N232": {
+  "pointers": [],
+  "reason": "no_element",
+  "state": "POINTER_NOT_FOUND"
+ },
+ "N233": {
+  "pointers": [],
+  "reason": "no_subject",
+  "state": "UNVERIFIABLE"
+ },
+ "N234": {
+  "pointers": [],
+  "reason": "no_subject",
+  "state": "UNVERIFIABLE"
+ },
+ "N235": {
+  "pointers": [],
+  "reason": "no_element",
+  "state": "POINTER_NOT_FOUND"
+ },
+ "N236": {
+  "pointers": [],
+  "reason": "ambiguous(elements)",
+  "state": "UNVERIFIABLE"
+ },
+ "N237": {
+  "pointers": [],
+  "reason": "ambiguous(elements)",
+  "state": "UNVERIFIABLE"
+ },
+ "N238": {
+  "pointers": [],
+  "reason": "no_subject",
+  "state": "UNVERIFIABLE"
+ },
+ "N239": {
+  "pointers": [],
+  "reason": "no_subject",
+  "state": "UNVERIFIABLE"
+ },
+ "N240": {
+  "pointers": [],
+  "reason": "no_subject",
+  "state": "UNVERIFIABLE"
+ },
+ "N241": {
+  "pointers": [
+   "xbrl:jppfs_cor:ValuationDifferenceOnAvailableForSaleSecurities@CurrentYearInstant"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "N242": {
+  "pointers": [
+   "xbrl:jppfs_cor:ValuationDifferenceOnAvailableForSaleSecurities@Prior1YearInstant"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "N243": {
+  "pointers": [],
+  "reason": "ambiguous(elements)",
+  "state": "UNVERIFIABLE"
+ },
+ "N244": {
+  "pointers": [],
+  "reason": "ambiguous(elements)",
+  "state": "UNVERIFIABLE"
+ },
+ "N245": {
+  "pointers": [],
+  "reason": "ambiguous(elements)",
+  "state": "UNVERIFIABLE"
+ },
+ "N246": {
+  "pointers": [
+   "xbrl:jppfs_cor:RemeasurementsOfDefinedBenefitPlans@CurrentYearInstant"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "N247": {
+  "pointers": [
+   "xbrl:jppfs_cor:RemeasurementsOfDefinedBenefitPlans@Prior1YearInstant"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "N248": {
+  "pointers": [],
+  "reason": "ambiguous(elements)",
+  "state": "UNVERIFIABLE"
+ },
+ "N249": {
+  "pointers": [
+   "xbrl:jppfs_cor:DividendsFromSurplus@CurrentYearDuration"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "N250": {
+  "pointers": [
+   "xbrl:jppfs_cor:DividendsFromSurplus@CurrentYearDuration",
+   "xbrl:jppfs_cor:DividendsFromSurplus@Prior1YearDuration",
+   "formula:a-b"
+  ],
+  "reason": null,
+  "state": "VALUE_MISMATCH"
+ },
+ "N251": {
+  "pointers": [
+   "xbrl:jpcrp_cor:EquityToAssetRatioSummaryOfBusinessResults@CurrentYearInstant"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "N252": {
+  "pointers": [
+   "xbrl:jpcrp_cor:EquityToAssetRatioSummaryOfBusinessResults@CurrentYearInstant"
+  ],
+  "reason": null,
+  "state": "VALUE_MISMATCH"
+ },
+ "N253": {
+  "pointers": [],
+  "reason": "no_element(point without prior phrase)",
+  "state": "POINTER_NOT_FOUND"
+ },
+ "N254": {
+  "pointers": [],
+  "reason": "no_element(unit not in XBRL)",
+  "state": "POINTER_NOT_FOUND"
+ },
+ "N255": {
+  "pointers": [
+   "xbrl:jppfs_cor:NetAssets@CurrentYearInstant"
+  ],
+  "reason": null,
+  "state": "VALUE_MISMATCH"
+ },
+ "N256": {
+  "pointers": [
+   "xbrl:jppfs_cor:NetAssets@Prior1YearInstant"
+  ],
+  "reason": null,
+  "state": "VALUE_MISMATCH"
+ },
+ "N257": {
+  "pointers": [
+   "xbrl:jppfs_cor:NetAssets@CurrentYearInstant",
+   "xbrl:jppfs_cor:NetAssets@Prior1YearInstant",
+   "formula:a-b"
+  ],
+  "reason": null,
+  "state": "VALUE_MISMATCH"
+ },
+ "N258": {
+  "pointers": [
+   "xbrl:jppfs_cor:CashAndCashEquivalents@CurrentYearInstant"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "N259": {
+  "pointers": [
+   "xbrl:jppfs_cor:CashAndCashEquivalents@Prior1YearInstant"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "N260": {
+  "pointers": [
+   "xbrl:jppfs_cor:CashAndCashEquivalents@CurrentYearInstant",
+   "xbrl:jppfs_cor:CashAndCashEquivalents@Prior1YearInstant",
+   "formula:a-b"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "N261": {
+  "pointers": [],
+  "reason": "ambiguous(elements)",
+  "state": "UNVERIFIABLE"
+ },
+ "N262": {
+  "pointers": [],
+  "reason": "ambiguous(elements)",
+  "state": "UNVERIFIABLE"
+ },
+ "N263": {
+  "pointers": [],
+  "reason": "no_element",
+  "state": "POINTER_NOT_FOUND"
+ },
+ "N264": {
+  "pointers": [
+   "xbrl:jppfs_cor:IncomeBeforeIncomeTaxes@CurrentYearDuration"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "N265": {
+  "pointers": [
+   "xbrl:jppfs_cor:DepreciationAndAmortizationOpeCF@CurrentYearDuration"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "N266": {
+  "pointers": [
+   "xbrl:jppfs_cor:DepreciationAndAmortizationOpeCF@CurrentYearDuration"
+  ],
+  "reason": null,
+  "state": "VALUE_MISMATCH"
+ },
+ "N267": {
+  "pointers": [],
+  "reason": "ambiguous(elements)",
+  "state": "UNVERIFIABLE"
+ },
+ "N268": {
+  "pointers": [
+   "xbrl:jppfs_cor:ContractAssets@CurrentYearInstant",
+   "xbrl:jppfs_cor:ContractAssets@Prior1YearInstant",
+   "formula:a-b"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "N269": {
+  "pointers": [],
+  "reason": "no_element",
+  "state": "POINTER_NOT_FOUND"
+ },
+ "N270": {
+  "pointers": [
+   "xbrl:jppfs_cor:DecreaseIncreaseInNotesAndAccountsReceivableTradeOpeCF@CurrentYearDuration",
+   "xbrl:jppfs_cor:DecreaseIncreaseInNotesAndAccountsReceivableTradeOpeCF@Prior1YearDuration",
+   "formula:a-b"
+  ],
+  "reason": null,
+  "state": "VALUE_MISMATCH"
+ },
+ "N271": {
+  "pointers": [
+   "xbrl:jppfs_cor:IncreaseDecreaseInNotesAndAccountsPayableTradeOpeCF@CurrentYearDuration",
+   "xbrl:jppfs_cor:IncreaseDecreaseInNotesAndAccountsPayableTradeOpeCF@Prior1YearDuration",
+   "formula:a-b"
+  ],
+  "reason": null,
+  "state": "VALUE_MISMATCH"
+ },
+ "N272": {
+  "pointers": [
+   "xbrl:jppfs_cor:ContractLiabilities@CurrentYearInstant",
+   "xbrl:jppfs_cor:ContractLiabilities@Prior1YearInstant",
+   "formula:a-b"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "N273": {
+  "pointers": [],
+  "reason": "no_subject",
+  "state": "UNVERIFIABLE"
+ },
+ "N274": {
+  "pointers": [],
+  "reason": "no_subject",
+  "state": "UNVERIFIABLE"
+ },
+ "N275": {
+  "pointers": [],
+  "reason": "no_element",
+  "state": "POINTER_NOT_FOUND"
+ },
+ "N276": {
+  "pointers": [],
+  "reason": "no_element",
+  "state": "POINTER_NOT_FOUND"
+ },
+ "N277": {
+  "pointers": [
+   "xbrl:jppfs_cor:IncomeTaxesPaidOpeCF@CurrentYearDuration"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "N278": {
+  "pointers": [
+   "xbrl:jppfs_cor:IncomeBeforeIncomeTaxes@CurrentYearDuration",
+   "xbrl:jppfs_cor:IncomeBeforeIncomeTaxes@Prior1YearDuration",
+   "formula:a-b"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "N279": {
+  "pointers": [],
+  "reason": "no_element",
+  "state": "POINTER_NOT_FOUND"
+ },
+ "N280": {
+  "pointers": [],
+  "reason": "no_element",
+  "state": "POINTER_NOT_FOUND"
+ },
+ "N281": {
+  "pointers": [],
+  "reason": "no_element",
+  "state": "POINTER_NOT_FOUND"
+ },
+ "N282": {
+  "pointers": [
+   "xbrl:jppfs_cor:DecreaseIncreaseInNotesAndAccountsReceivableTradeOpeCF@Prior1YearDuration"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "N283": {
+  "pointers": [
+   "xbrl:jppfs_cor:DecreaseIncreaseInNotesAndAccountsReceivableTradeOpeCF@CurrentYearDuration",
+   "xbrl:jppfs_cor:DecreaseIncreaseInNotesAndAccountsReceivableTradeOpeCF@Prior1YearDuration",
+   "formula:a-b"
+  ],
+  "reason": null,
+  "state": "VALUE_MISMATCH"
+ },
+ "N284": {
+  "pointers": [
+   "xbrl:jppfs_cor:DecreaseIncreaseInNotesAndAccountsReceivableTradeOpeCF@CurrentYearDuration"
+  ],
+  "reason": null,
+  "state": "VALUE_MISMATCH"
+ },
+ "N285": {
+  "pointers": [],
+  "reason": "ambiguous(elements)",
+  "state": "UNVERIFIABLE"
+ },
+ "N286": {
+  "pointers": [],
+  "reason": "ambiguous(elements)",
+  "state": "UNVERIFIABLE"
+ },
+ "N287": {
+  "pointers": [
+   "xbrl:jppfs_cor:PurchaseOfPropertyPlantAndEquipmentInvCF@CurrentYearDuration"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "N288": {
+  "pointers": [
+   "xbrl:jppfs_cor:PurchaseOfIntangibleAssetsInvCF@CurrentYearDuration"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "N289": {
+  "pointers": [
+   "xbrl:jppfs_cor:PurchaseOfIntangibleAssetsInvCF@CurrentYearDuration"
+  ],
+  "reason": null,
+  "state": "VALUE_MISMATCH"
+ },
+ "N290": {
+  "pointers": [
+   "xbrl:jppfs_cor:PurchaseOfIntangibleAssetsInvCF@CurrentYearDuration"
+  ],
+  "reason": null,
+  "state": "VALUE_MISMATCH"
+ },
+ "N291": {
+  "pointers": [
+   "xbrl:jpcrp_cor:CapitalExpendituresOverviewOfCapitalExpendituresEtc@CurrentYearDuration"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "N292": {
+  "pointers": [],
+  "reason": "no_element",
+  "state": "POINTER_NOT_FOUND"
+ },
+ "N293": {
+  "pointers": [
+   "xbrl:jpcrp_cor:NetCashProvidedByUsedInInvestingActivitiesSummaryOfBusinessResults@CurrentYearDuration"
+  ],
+  "reason": null,
+  "state": "VALUE_MISMATCH"
+ },
+ "N294": {
+  "pointers": [
+   "xbrl:jpcrp_cor:NetCashProvidedByUsedInInvestingActivitiesSummaryOfBusinessResults@Prior1YearDuration"
+  ],
+  "reason": null,
+  "state": "VALUE_MISMATCH"
+ },
+ "N295": {
+  "pointers": [],
+  "reason": "ambiguous(elements)",
+  "state": "UNVERIFIABLE"
+ },
+ "N296": {
+  "pointers": [],
+  "reason": "ambiguous(elements)",
+  "state": "UNVERIFIABLE"
+ },
+ "N297": {
+  "pointers": [],
+  "reason": "no_element",
+  "state": "POINTER_NOT_FOUND"
+ },
+ "N298": {
+  "pointers": [
+   "xbrl:jppfs_cor:CashDividendsPaidFinCF@CurrentYearDuration"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "N299": {
+  "pointers": [
+   "xbrl:jppfs_cor:CashDividendsPaidFinCF@CurrentYearDuration"
+  ],
+  "reason": null,
+  "state": "VALUE_MISMATCH"
+ },
+ "N300": {
+  "pointers": [],
+  "reason": "no_subject",
+  "state": "UNVERIFIABLE"
+ },
+ "N301": {
+  "pointers": [
+   "xbrl:jppfs_cor:CashDividendsPaidFinCF@Prior1YearDuration"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "N302": {
+  "pointers": [
+   "xbrl:jppfs_cor:CashDividendsPaidFinCF@CurrentYearDuration",
+   "xbrl:jppfs_cor:CashDividendsPaidFinCF@Prior1YearDuration",
+   "formula:a-b"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "N303": {
+  "pointers": [
+   "xbrl:jppfs_cor:CashAndDeposits@CurrentYearInstant"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "N304": {
+  "pointers": [],
+  "reason": "no_element",
+  "state": "POINTER_NOT_FOUND"
+ },
+ "T001": {
+  "pointers": [],
+  "reason": "no_subject",
+  "state": "UNVERIFIABLE"
+ },
+ "T002": {
+  "pointers": [],
+  "reason": "no_subject",
+  "state": "UNVERIFIABLE"
+ },
+ "T003": {
+  "pointers": [],
+  "reason": "no_subject",
+  "state": "UNVERIFIABLE"
+ },
+ "T004": {
+  "pointers": [],
+  "reason": "state_word(no line)",
+  "state": "UNVERIFIABLE"
+ },
+ "T005": {
+  "pointers": [
+   "xbrl:jppfs_cor:SellingGeneralAndAdministrativeExpenses@CurrentYearDuration",
+   "xbrl:jppfs_cor:SellingGeneralAndAdministrativeExpenses@Prior1YearDuration",
+   "builtin:sign(cur-prior)"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "T006": {
+  "pointers": [],
+  "reason": "no_subject",
+  "state": "UNVERIFIABLE"
+ },
+ "T007": {
+  "pointers": [
+   "xbrl:jppfs_cor:GrossProfit@CurrentYearDuration",
+   "xbrl:jppfs_cor:GrossProfit@Prior1YearDuration",
+   "builtin:sign(cur-prior)"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "T008": {
+  "pointers": [],
+  "reason": "no_subject",
+  "state": "UNVERIFIABLE"
+ },
+ "T009": {
+  "pointers": [
+   "xbrl:jpcrp_cor:ProfitLossAttributableToOwnersOfParentSummaryOfBusinessResults@CurrentYearDuration",
+   "xbrl:jpcrp_cor:ProfitLossAttributableToOwnersOfParentSummaryOfBusinessResults@Prior1YearDuration",
+   "builtin:sign(cur-prior)"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "T010": {
+  "pointers": [
+   "xbrl:jpcrp_cor:NetSalesSummaryOfBusinessResults@CurrentYearDuration",
+   "xbrl:jpcrp_cor:NetSalesSummaryOfBusinessResults@Prior1YearDuration",
+   "builtin:sign(cur-prior)"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "T011": {
+  "pointers": [
+   "xbrl:jpcrp_cor:NetSalesSummaryOfBusinessResults@CurrentYearDuration",
+   "xbrl:jpcrp_cor:NetSalesSummaryOfBusinessResults@Prior1YearDuration",
+   "builtin:sign(cur-prior)"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "T012": {
+  "pointers": [],
+  "reason": "state_word(no line)",
+  "state": "UNVERIFIABLE"
+ },
+ "T013": {
+  "pointers": [],
+  "reason": "state_word(no line)",
+  "state": "UNVERIFIABLE"
+ },
+ "T014": {
+  "pointers": [
+   "xbrl:jppfs_cor:NotesAndAccountsReceivableTrade@CurrentYearInstant",
+   "xbrl:jppfs_cor:NotesAndAccountsReceivableTrade@Prior1YearInstant",
+   "builtin:sign(cur-prior)"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "T015": {
+  "pointers": [
+   "xbrl:jppfs_cor:GrossProfit@CurrentYearDuration",
+   "xbrl:jppfs_cor:GrossProfit@Prior1YearDuration",
+   "builtin:sign(cur-prior)"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "T016": {
+  "pointers": [],
+  "reason": "no_subject",
+  "state": "UNVERIFIABLE"
+ },
+ "T017": {
+  "pointers": [
+   "xbrl:jppfs_cor:GrossProfit@CurrentYearDuration",
+   "xbrl:jppfs_cor:GrossProfit@Prior1YearDuration",
+   "builtin:sign(cur-prior)"
+  ],
+  "reason": null,
+  "state": "VALUE_MISMATCH"
+ },
+ "T018": {
+  "pointers": [
+   "xbrl:jppfs_cor:GrossProfit@CurrentYearDuration",
+   "xbrl:jppfs_cor:GrossProfit@Prior1YearDuration",
+   "builtin:sign(cur-prior)"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "T019": {
+  "pointers": [],
+  "reason": "no_subject",
+  "state": "UNVERIFIABLE"
+ },
+ "T020": {
+  "pointers": [
+   "xbrl:jpcrp_cor:NetSalesSummaryOfBusinessResults@CurrentYearDuration",
+   "xbrl:jpcrp_cor:NetSalesSummaryOfBusinessResults@Prior1YearDuration",
+   "builtin:sign(cur-prior)"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "T021": {
+  "pointers": [
+   "xbrl:jpcrp_cor:NetSalesSummaryOfBusinessResults@CurrentYearDuration",
+   "xbrl:jpcrp_cor:NetSalesSummaryOfBusinessResults@Prior1YearDuration",
+   "builtin:sign(cur-prior)"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "T022": {
+  "pointers": [
+   "xbrl:jpcrp_cor:NetSalesSummaryOfBusinessResults@CurrentYearDuration",
+   "xbrl:jpcrp_cor:NetSalesSummaryOfBusinessResults@Prior1YearDuration",
+   "builtin:sign(cur-prior)"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "T023": {
+  "pointers": [
+   "xbrl:jppfs_cor:GrossProfit@CurrentYearDuration",
+   "xbrl:jppfs_cor:GrossProfit@Prior1YearDuration",
+   "builtin:sign(cur-prior)"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "T024": {
+  "pointers": [],
+  "reason": "no_subject",
+  "state": "UNVERIFIABLE"
+ },
+ "T025": {
+  "pointers": [],
+  "reason": "no_element(text needs money fact)",
+  "state": "POINTER_NOT_FOUND"
+ },
+ "T026": {
+  "pointers": [
+   "xbrl:jppfs_cor:SellingGeneralAndAdministrativeExpenses@CurrentYearDuration",
+   "xbrl:jppfs_cor:SellingGeneralAndAdministrativeExpenses@Prior1YearDuration",
+   "builtin:sign(cur-prior)"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "T027": {
+  "pointers": [],
+  "reason": "no_element(text needs money fact)",
+  "state": "POINTER_NOT_FOUND"
+ },
+ "T028": {
+  "pointers": [],
+  "reason": "no_subject",
+  "state": "UNVERIFIABLE"
+ },
+ "T029": {
+  "pointers": [],
+  "reason": "no_subject",
+  "state": "UNVERIFIABLE"
+ },
+ "T030": {
+  "pointers": [],
+  "reason": "no_subject",
+  "state": "UNVERIFIABLE"
+ },
+ "T031": {
+  "pointers": [],
+  "reason": "no_subject",
+  "state": "UNVERIFIABLE"
+ },
+ "T032": {
+  "pointers": [],
+  "reason": "no_subject",
+  "state": "UNVERIFIABLE"
+ },
+ "T033": {
+  "pointers": [
+   "xbrl:jpcrp030000-asr_E36539-000:ProvisionForWarrantiesForCompletedOperationCL@CurrentYearInstant",
+   "xbrl:jpcrp030000-asr_E36539-000:ProvisionForWarrantiesForCompletedOperationCL@Prior1YearInstant",
+   "builtin:sign(cur-prior)"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "T034": {
+  "pointers": [],
+  "reason": "no_subject",
+  "state": "UNVERIFIABLE"
+ },
+ "T035": {
+  "pointers": [
+   "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration",
+   "xbrl:jppfs_cor:OperatingIncome@Prior1YearDuration",
+   "builtin:sign(cur-prior)"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "T036": {
+  "pointers": [
+   "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration",
+   "xbrl:jppfs_cor:OperatingIncome@Prior1YearDuration",
+   "builtin:sign(cur-prior)"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "T037": {
+  "pointers": [
+   "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration",
+   "xbrl:jppfs_cor:OperatingIncome@Prior1YearDuration",
+   "builtin:sign(cur-prior)"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "T038": {
+  "pointers": [
+   "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration",
+   "xbrl:jppfs_cor:OperatingIncome@Prior1YearDuration",
+   "builtin:sign(cur-prior)"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "T039": {
+  "pointers": [],
+  "reason": "no_subject",
+  "state": "UNVERIFIABLE"
+ },
+ "T040": {
+  "pointers": [],
+  "reason": "no_subject",
+  "state": "UNVERIFIABLE"
+ },
+ "T041": {
+  "pointers": [],
+  "reason": "no_subject",
+  "state": "UNVERIFIABLE"
+ },
+ "T042": {
+  "pointers": [],
+  "reason": "no_subject",
+  "state": "UNVERIFIABLE"
+ },
+ "T043": {
+  "pointers": [
+   "xbrl:jpcrp_cor:OrdinaryIncomeLossSummaryOfBusinessResults@CurrentYearDuration",
+   "xbrl:jpcrp_cor:OrdinaryIncomeLossSummaryOfBusinessResults@Prior1YearDuration",
+   "builtin:sign(cur-prior)"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "T044": {
+  "pointers": [
+   "xbrl:jpcrp_cor:ProfitLossAttributableToOwnersOfParentSummaryOfBusinessResults@CurrentYearDuration",
+   "xbrl:jpcrp_cor:ProfitLossAttributableToOwnersOfParentSummaryOfBusinessResults@Prior1YearDuration",
+   "builtin:sign(cur-prior)"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "T045": {
+  "pointers": [
+   "xbrl:jpcrp_cor:ProfitLossAttributableToOwnersOfParentSummaryOfBusinessResults@CurrentYearDuration",
+   "xbrl:jpcrp_cor:ProfitLossAttributableToOwnersOfParentSummaryOfBusinessResults@Prior1YearDuration",
+   "builtin:sign(cur-prior)"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "T046": {
+  "pointers": [
+   "xbrl:jpcrp_cor:ProfitLossAttributableToOwnersOfParentSummaryOfBusinessResults@CurrentYearDuration",
+   "xbrl:jpcrp_cor:ProfitLossAttributableToOwnersOfParentSummaryOfBusinessResults@Prior1YearDuration",
+   "builtin:sign(cur-prior)"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "T047": {
+  "pointers": [],
+  "reason": "no_subject",
+  "state": "UNVERIFIABLE"
+ },
+ "T048": {
+  "pointers": [],
+  "reason": "no_element",
+  "state": "POINTER_NOT_FOUND"
+ },
+ "T049": {
+  "pointers": [
+   "xbrl:jpcrp_cor:TotalAssetsSummaryOfBusinessResults@CurrentYearInstant",
+   "xbrl:jpcrp_cor:TotalAssetsSummaryOfBusinessResults@Prior1YearInstant",
+   "builtin:sign(cur-prior)"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "T050": {
+  "pointers": [],
+  "reason": "no_subject",
+  "state": "UNVERIFIABLE"
+ },
+ "T051": {
+  "pointers": [
+   "xbrl:jppfs_cor:CashAndDeposits@CurrentYearInstant",
+   "xbrl:jppfs_cor:CashAndDeposits@Prior1YearInstant",
+   "builtin:sign(cur-prior)"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "T052": {
+  "pointers": [
+   "xbrl:jppfs_cor:NotesAndAccountsReceivableTrade@CurrentYearInstant",
+   "xbrl:jppfs_cor:NotesAndAccountsReceivableTrade@Prior1YearInstant",
+   "builtin:sign(cur-prior)"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "T053": {
+  "pointers": [
+   "xbrl:jppfs_cor:ContractAssets@CurrentYearInstant",
+   "xbrl:jppfs_cor:ContractAssets@Prior1YearInstant",
+   "builtin:sign(cur-prior)"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "T054": {
+  "pointers": [],
+  "reason": "no_subject",
+  "state": "UNVERIFIABLE"
+ },
+ "T055": {
+  "pointers": [
+   "xbrl:jppfs_cor:DecreaseIncreaseInNotesAndAccountsReceivableTradeOpeCF@CurrentYearDuration",
+   "builtin:flow_sign(cur)==direction"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "T056": {
+  "pointers": [
+   "xbrl:jppfs_cor:ContractAssets@CurrentYearInstant",
+   "xbrl:jppfs_cor:ContractAssets@Prior1YearInstant",
+   "builtin:sign(cur-prior)"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "T057": {
+  "pointers": [],
+  "reason": "no_subject",
+  "state": "UNVERIFIABLE"
+ },
+ "T058": {
+  "pointers": [],
+  "reason": "no_subject",
+  "state": "UNVERIFIABLE"
+ },
+ "T059": {
+  "pointers": [],
+  "reason": "no_subject",
+  "state": "UNVERIFIABLE"
+ },
+ "T060": {
+  "pointers": [],
+  "reason": "no_subject",
+  "state": "UNVERIFIABLE"
+ },
+ "T061": {
+  "pointers": [],
+  "reason": "no_subject",
+  "state": "UNVERIFIABLE"
+ },
+ "T062": {
+  "pointers": [],
+  "reason": "no_subject",
+  "state": "UNVERIFIABLE"
+ },
+ "T063": {
+  "pointers": [],
+  "reason": "no_element",
+  "state": "POINTER_NOT_FOUND"
+ },
+ "T064": {
+  "pointers": [],
+  "reason": "no_subject",
+  "state": "UNVERIFIABLE"
+ },
+ "T065": {
+  "pointers": [],
+  "reason": "no_subject",
+  "state": "UNVERIFIABLE"
+ },
+ "T066": {
+  "pointers": [
+   "xbrl:jppfs_cor:InvestmentSecurities@CurrentYearInstant",
+   "xbrl:jppfs_cor:InvestmentSecurities@Prior1YearInstant",
+   "builtin:sign(cur-prior)"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "T067": {
+  "pointers": [
+   "xbrl:jppfs_cor:ValuationDifferenceOnAvailableForSaleSecurities@CurrentYearInstant",
+   "xbrl:jppfs_cor:ValuationDifferenceOnAvailableForSaleSecurities@Prior1YearInstant",
+   "builtin:sign(cur-prior)"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "T068": {
+  "pointers": [
+   "xbrl:jppfs_cor:Liabilities@CurrentYearInstant",
+   "xbrl:jppfs_cor:Liabilities@Prior1YearInstant",
+   "builtin:sign(cur-prior)"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "T069": {
+  "pointers": [
+   "xbrl:jppfs_cor:CurrentLiabilities@CurrentYearInstant",
+   "xbrl:jppfs_cor:CurrentLiabilities@Prior1YearInstant",
+   "builtin:sign(cur-prior)"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "T070": {
+  "pointers": [
+   "xbrl:jppfs_cor:AccountsPayableOperatingSpecific@CurrentYearInstant",
+   "xbrl:jppfs_cor:AccountsPayableOperatingSpecific@Prior1YearInstant",
+   "builtin:sign(cur-prior)"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "T071": {
+  "pointers": [],
+  "reason": "no_subject",
+  "state": "UNVERIFIABLE"
+ },
+ "T072": {
+  "pointers": [
+   "xbrl:jppfs_cor:IncomeTaxesPayable@CurrentYearInstant",
+   "xbrl:jppfs_cor:IncomeTaxesPayable@Prior1YearInstant",
+   "builtin:sign(cur-prior)"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "T073": {
+  "pointers": [
+   "xbrl:jppfs_cor:ContractLiabilities@CurrentYearInstant",
+   "xbrl:jppfs_cor:ContractLiabilities@Prior1YearInstant",
+   "builtin:sign(cur-prior)"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "T074": {
+  "pointers": [
+   "xbrl:jppfs_cor:CurrentPortionOfLongTermLoansPayable@CurrentYearInstant",
+   "xbrl:jppfs_cor:CurrentPortionOfLongTermLoansPayable@Prior1YearInstant",
+   "builtin:sign(cur-prior)"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "T075": {
+  "pointers": [],
+  "reason": "no_subject",
+  "state": "UNVERIFIABLE"
+ },
+ "T076": {
+  "pointers": [],
+  "reason": "no_subject",
+  "state": "UNVERIFIABLE"
+ },
+ "T077": {
+  "pointers": [
+   "xbrl:jppfs_cor:NoncurrentLiabilities@CurrentYearInstant",
+   "xbrl:jppfs_cor:NoncurrentLiabilities@Prior1YearInstant",
+   "builtin:sign(cur-prior)"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "T078": {
+  "pointers": [
+   "xbrl:jppfs_cor:DeferredTaxLiabilities@CurrentYearInstant",
+   "xbrl:jppfs_cor:DeferredTaxLiabilities@Prior1YearInstant",
+   "builtin:sign(cur-prior)"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "T079": {
+  "pointers": [
+   "xbrl:jppfs_cor:InvestmentSecurities@CurrentYearInstant",
+   "xbrl:jppfs_cor:InvestmentSecurities@Prior1YearInstant",
+   "builtin:sign(cur-prior)"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "T080": {
+  "pointers": [
+   "xbrl:jpcrp030000-asr_E36539-000:ProvisionForWarrantiesForCompletedOperationCL@CurrentYearInstant",
+   "xbrl:jpcrp030000-asr_E36539-000:ProvisionForWarrantiesForCompletedOperationCL@Prior1YearInstant",
+   "builtin:sign(cur-prior)"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "T081": {
+  "pointers": [
+   "xbrl:jppfs_cor:LongTermLoansPayable@CurrentYearInstant",
+   "xbrl:jppfs_cor:LongTermLoansPayable@Prior1YearInstant",
+   "builtin:sign(cur-prior)"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "T082": {
+  "pointers": [
+   "xbrl:jpcrp_cor:NetAssetsSummaryOfBusinessResults@CurrentYearInstant",
+   "xbrl:jpcrp_cor:NetAssetsSummaryOfBusinessResults@Prior1YearInstant",
+   "builtin:sign(cur-prior)"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "T083": {
+  "pointers": [],
+  "reason": "no_subject",
+  "state": "UNVERIFIABLE"
+ },
+ "T084": {
+  "pointers": [],
+  "reason": "no_subject",
+  "state": "UNVERIFIABLE"
+ },
+ "T085": {
+  "pointers": [
+   "xbrl:jppfs_cor:DividendsFromSurplus@CurrentYearDuration",
+   "xbrl:jppfs_cor:DividendsFromSurplus@Prior1YearDuration",
+   "builtin:sign(cur-prior)"
+  ],
+  "reason": null,
+  "state": "VALUE_MISMATCH"
+ },
+ "T086": {
+  "pointers": [
+   "xbrl:jpcrp_cor:NetAssetsSummaryOfBusinessResults@CurrentYearInstant",
+   "xbrl:jpcrp_cor:NetAssetsSummaryOfBusinessResults@Prior1YearInstant",
+   "builtin:sign(cur-prior)"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "T087": {
+  "pointers": [],
+  "reason": "no_element(text needs money fact)",
+  "state": "POINTER_NOT_FOUND"
+ },
+ "T088": {
+  "pointers": [
+   "xbrl:jpcrp_cor:CashAndCashEquivalentsSummaryOfBusinessResults@CurrentYearInstant",
+   "xbrl:jpcrp_cor:CashAndCashEquivalentsSummaryOfBusinessResults@Prior1YearInstant",
+   "builtin:sign(cur-prior)"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "T089": {
+  "pointers": [],
+  "reason": "no_subject",
+  "state": "UNVERIFIABLE"
+ },
+ "T090": {
+  "pointers": [],
+  "reason": "no_subject",
+  "state": "UNVERIFIABLE"
+ },
+ "T091": {
+  "pointers": [],
+  "reason": "no_subject",
+  "state": "UNVERIFIABLE"
+ },
+ "T092": {
+  "pointers": [
+   "xbrl:jpcrp030000-asr_E36539-000:ProvisionForWarrantiesForCompletedOperationCL@CurrentYearInstant",
+   "xbrl:jpcrp030000-asr_E36539-000:ProvisionForWarrantiesForCompletedOperationCL@Prior1YearInstant",
+   "builtin:sign(cur-prior)"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "T093": {
+  "pointers": [],
+  "reason": "no_element",
+  "state": "POINTER_NOT_FOUND"
+ },
+ "T094": {
+  "pointers": [
+   "xbrl:jppfs_cor:DecreaseIncreaseInNotesAndAccountsReceivableTradeOpeCF@CurrentYearDuration",
+   "builtin:flow_sign(cur)==direction"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "T095": {
+  "pointers": [
+   "xbrl:jppfs_cor:ContractAssets@CurrentYearInstant",
+   "xbrl:jppfs_cor:ContractAssets@Prior1YearInstant",
+   "builtin:sign(cur-prior)"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "T096": {
+  "pointers": [
+   "xbrl:jppfs_cor:IncreaseDecreaseInNotesAndAccountsPayableTradeOpeCF@CurrentYearDuration",
+   "builtin:flow_sign(cur)==direction"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "T097": {
+  "pointers": [
+   "xbrl:jppfs_cor:ContractLiabilities@CurrentYearInstant",
+   "xbrl:jppfs_cor:ContractLiabilities@Prior1YearInstant",
+   "builtin:sign(cur-prior)"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "T098": {
+  "pointers": [],
+  "reason": "no_element",
+  "state": "POINTER_NOT_FOUND"
+ },
+ "T099": {
+  "pointers": [
+   "xbrl:jppfs_cor:DecreaseIncreaseInNotesAndAccountsReceivableTradeOpeCF@CurrentYearDuration",
+   "builtin:flow_sign(cur)==direction"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "T100": {
+  "pointers": [],
+  "reason": "no_element",
+  "state": "POINTER_NOT_FOUND"
+ },
+ "T101": {
+  "pointers": [],
+  "reason": "no_subject",
+  "state": "UNVERIFIABLE"
+ },
+ "T102": {
+  "pointers": [
+   "xbrl:jppfs_cor:IncomeBeforeIncomeTaxes@CurrentYearDuration",
+   "xbrl:jppfs_cor:IncomeBeforeIncomeTaxes@Prior1YearDuration",
+   "builtin:sign(cur-prior)"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ },
+ "T103": {
+  "pointers": [
+   "xbrl:jppfs_cor:DecreaseIncreaseInNotesAndAccountsReceivableTradeOpeCF@CurrentYearDuration",
+   "builtin:flow_sign(cur)==direction"
+  ],
+  "reason": null,
+  "state": "VALUE_MISMATCH"
+ },
+ "T104": {
+  "pointers": [],
+  "reason": "no_element",
+  "state": "POINTER_NOT_FOUND"
+ },
+ "T105": {
+  "pointers": [],
+  "reason": "no_element",
+  "state": "POINTER_NOT_FOUND"
+ },
+ "T106": {
+  "pointers": [],
+  "reason": "no_subject",
+  "state": "UNVERIFIABLE"
+ },
+ "T107": {
+  "pointers": [],
+  "reason": "no_subject",
+  "state": "UNVERIFIABLE"
+ },
+ "T108": {
+  "pointers": [],
+  "reason": "no_subject",
+  "state": "UNVERIFIABLE"
+ },
+ "T109": {
+  "pointers": [],
+  "reason": "no_subject",
+  "state": "UNVERIFIABLE"
+ },
+ "T110": {
+  "pointers": [],
+  "reason": "no_subject",
+  "state": "UNVERIFIABLE"
+ },
+ "T111": {
+  "pointers": [
+   "xbrl:jppfs_cor:CashDividendsPaidFinCF@CurrentYearDuration",
+   "xbrl:jppfs_cor:CashDividendsPaidFinCF@Prior1YearDuration",
+   "builtin:sign(|cur|-|prior|)"
+  ],
+  "reason": null,
+  "state": "GROUNDED"
+ }
+}

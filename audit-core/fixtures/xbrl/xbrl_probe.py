@@ -8,6 +8,10 @@
 """
 import os, sys, re, json, zipfile, io, html, math, unicodedata, urllib.request, urllib.parse
 from html.parser import HTMLParser
+import os as _os_gate
+import sys as _sys_gate
+_sys_gate.path.insert(0, _os_gate.path.dirname(_os_gate.path.abspath(__file__)))
+from sealed_material import refuse_if_sealed  # noqa: E402  **取る直前に呼ぶ**
 
 API = "https://api.edinet-fsa.go.jp/api/v2/"
 KEY = os.environ.get("EDINET_API_KEY")  # 取りに行くときだけ要る(検査の import では要らない)
@@ -128,6 +132,10 @@ def _iter_numbers(s):
 
 
 def api(path, **params):
+    # **封じた材料への関門。** path が "documents/<docID>" の形なら docID を見る。
+    # 一覧の取得(documents.json)は docID を含まないので素通りする。
+    if path.startswith("documents/") and not path.endswith(".json"):
+        refuse_if_sealed(doc_id=path.split("/", 1)[1], where="xbrl_probe.api")
     params["Subscription-Key"] = KEY
     url = API + path + "?" + urllib.parse.urlencode(params)
     return urllib.request.urlopen(url, timeout=120).read()
@@ -270,6 +278,8 @@ def facts_for(elems, facts, contexts, want_ctx=None):
 
 
 def main(date, pick_index=0):
+    # **この道具は日付で選ぶ。**名前の一覧では守れないので、入口で日付を見る。
+    refuse_if_sealed(date=date, where="xbrl_probe.main")
     os.makedirs(OUT, exist_ok=True)
     lst = json.loads(api("documents.json", date=date, type=2).decode("utf-8"))
     allc = sorted([d for d in lst.get("results", []) if d.get("docTypeCode") == "120" and d.get("xbrlFlag") == "1"], key=lambda d: d["docID"])

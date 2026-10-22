@@ -1,0 +1,6800 @@
+{
+ "tool": "adapters.xbrl.verify_document",
+ "engine": {
+  "adapter_xbrl_py_sha256": "c413e10b4a5048e88b566ff7bb840cbd29debb394754e48cd753a6c70e4aba02",
+  "adapter_xbrl_py_files": 12,
+  "core_py_sha256": "34e836bb39762d5af831a9aa11d4ea095e73221beb5bd4510d3b234363a2a6e8",
+  "core_py_files": 4,
+  "git_commit": "a1c14017180bf6c33f0dd54f9fd6f2b8f379df02"
+ },
+ "profile": "P16",
+ "input": {
+  "zip_sha256": "0731a291f10af5dd207e05d54df8e2b5dc34e79a84de94af1c1a5d4e207228f6",
+  "zip_bytes": 580260,
+  "instance_source": "XBRL/PublicDoc/jpcrp030000-asr-001_E36539-000_2026-06-30_01_2026-09-30.xbrl",
+  "facts": 863,
+  "contexts": 162,
+  "text_replaced": {
+   "element": "jpcrp_cor:ManagementAnalysisOfFinancialPositionOperatingResultsAndCashFlowsTextBlock",
+   "member": "XBRL/PublicDoc/jpcrp030000-asr-001_E36539-000_2026-06-30_01_2026-09-30.xbrl",
+   "text_sha256": "898ff5c54d94c746118cc997dd360c497702386b25d461924bbc4290edc26bbb",
+   "text_chars": 7084
+  }
+ },
+ "document": {
+  "claims": 412,
+  "states": {
+   "GROUNDED": 330,
+   "POINTER_NOT_FOUND": 16,
+   "UNVERIFIABLE": 41,
+   "VALUE_MISMATCH": 25
+  },
+  "unverifiable": false,
+  "unverifiable_why": null,
+  "rule": "Claim 件数が 0 件の場合、書類レベルを UNVERIFIABLE とする。Claim 件数が 1 件以上の場合、GROUNDED 件数が 0 件、かつ POINTER_NOT_FOUND 件数 ÷ 全 Claim 件数が 0.5 を超える場合、書類レベルを UNVERIFIABLE とする。それ以外は、この規則によって UNVERIFIABLE とは判定しない。Claim 個別の state は変更しない。"
+ },
+ "claims": [
+  {
+   "id": "N001",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "売上高",
+   "value": 38064.0,
+   "unit": "百万円",
+   "word": null,
+   "span": "6月30日まで)における当社グループの連結経営成績は、売上高38,064百万円(前期比2.9%増)",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:NetSales@CurrentYearDuration"
+   ],
+   "reason": null,
+   "recomputed": 38064274000.0
+  },
+  {
+   "id": "N002",
+   "kind": "num",
+   "form": "derived_value",
+   "subject": "売上高",
+   "value": 2.9,
+   "unit": "%",
+   "word": null,
+   "span": "社グループの連結経営成績は、売上高38,064百万円(前期比2.9%増)と過去最高を更新",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:NetSales@CurrentYearDuration",
+    "xbrl:jppfs_cor:NetSales@Prior1YearDuration"
+   ],
+   "reason": null,
+   "recomputed": 2.94
+  },
+  {
+   "id": "N003",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "営業利益",
+   "value": 1465.0,
+   "unit": "百万円",
+   "word": null,
+   "span": "万円(前期比2.9%増)と過去最高を更新した一方、営業利益は1,465百万円(同46.0%減)、",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration"
+   ],
+   "reason": null,
+   "recomputed": 1465387000.0
+  },
+  {
+   "id": "N004",
+   "kind": "num",
+   "form": "derived_value",
+   "subject": "営業利益",
+   "value": -46.0,
+   "unit": "%",
+   "word": null,
+   "span": "増)と過去最高を更新した一方、営業利益は1,465百万円(同46.0%減)、経常利益は1,",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration",
+    "xbrl:jppfs_cor:OperatingIncome@Prior1YearDuration"
+   ],
+   "reason": null,
+   "recomputed": -46.04
+  },
+  {
+   "id": "N005",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "経常利益",
+   "value": 1457.0,
+   "unit": "百万円",
+   "word": null,
+   "span": "方、営業利益は1,465百万円(同46.0%減)、経常利益は1,457百万円(同46.2%減)、",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:OrdinaryIncome@CurrentYearDuration"
+   ],
+   "reason": null,
+   "recomputed": 1457848000.0
+  },
+  {
+   "id": "N006",
+   "kind": "num",
+   "form": "derived_value",
+   "subject": "経常利益",
+   "value": -46.2,
+   "unit": "%",
+   "word": null,
+   "span": "65百万円(同46.0%減)、経常利益は1,457百万円(同46.2%減)、親会社株主に帰",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:OrdinaryIncome@CurrentYearDuration",
+    "xbrl:jppfs_cor:OrdinaryIncome@Prior1YearDuration"
+   ],
+   "reason": null,
+   "recomputed": -46.19
+  },
+  {
+   "id": "N007",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "親会社株主に帰属する当期純利益",
+   "value": 945000000.0,
+   "unit": "円",
+   "word": null,
+   "span": "7百万円(同46.2%減)、親会社株主に帰属する当期純利益は945百万円(同50.8%減)と",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:ProfitLossAttributableToOwnersOfParent@CurrentYearDuration"
+   ],
+   "reason": null,
+   "recomputed": 945793000.0
+  },
+  {
+   "id": "N008",
+   "kind": "num",
+   "form": "derived_value",
+   "subject": "親会社株主に帰属する当期純利益",
+   "value": -50.8,
+   "unit": "%",
+   "word": null,
+   "span": ".2%減)、親会社株主に帰属する当期純利益は945百万円(同50.8%減)となりました。",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:ProfitLossAttributableToOwnersOfParent@CurrentYearDuration",
+    "xbrl:jppfs_cor:ProfitLossAttributableToOwnersOfParent@Prior1YearDuration"
+   ],
+   "reason": null,
+   "recomputed": -50.81
+  },
+  {
+   "id": "N009",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "総資産",
+   "value": 27836.0,
+   "unit": "百万円",
+   "word": null,
+   "span": "一方で、財政状態につきましては、総資産27,836百万円、純資産17,165",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:Assets@CurrentYearInstant"
+   ],
+   "reason": null,
+   "recomputed": 27836421000.0
+  },
+  {
+   "id": "N010",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "純資産",
+   "value": 17165.0,
+   "unit": "百万円",
+   "word": null,
+   "span": "で、財政状態につきましては、総資産27,836百万円、純資産17,165百万円、自己資本比率61.",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:NetAssets@CurrentYearInstant"
+   ],
+   "reason": null,
+   "recomputed": 17165944000.0
+  },
+  {
+   "id": "N011",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "自己資本比率",
+   "value": 61.7,
+   "unit": "%",
+   "word": null,
+   "span": "産27,836百万円、純資産17,165百万円、自己資本比率61.7%(前期末60.6%)",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jpcrp_cor:EquityToAssetRatioSummaryOfBusinessResults@CurrentYearInstant"
+   ],
+   "reason": null,
+   "recomputed": 61.7
+  },
+  {
+   "id": "N012",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "自己資本比率",
+   "value": 60.6,
+   "unit": "%",
+   "word": null,
+   "span": "円、純資産17,165百万円、自己資本比率61.7%(前期末60.6%)と財務の健全性はさ",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jpcrp_cor:EquityToAssetRatioSummaryOfBusinessResults@Prior1YearInstant"
+   ],
+   "reason": null,
+   "recomputed": 60.6
+  },
+  {
+   "id": "N013",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "包括利益",
+   "value": 2256.0,
+   "unit": "百万円",
+   "word": null,
+   "span": "また、包括利益は2,256百万円を計上しており、退職",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:ComprehensiveIncome@CurrentYearDuration"
+   ],
+   "reason": null,
+   "recomputed": 2256683000.0
+  },
+  {
+   "id": "N014",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "売上高",
+   "value": 38064.0,
+   "unit": "百万円",
+   "word": null,
+   "span": "当連結会計年度の売上高は38,064百万円となり、前連結会計年",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:NetSales@CurrentYearDuration"
+   ],
+   "reason": null,
+   "recomputed": 38064274000.0
+  },
+  {
+   "id": "N015",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "売上高",
+   "value": 36975.0,
+   "unit": "百万円",
+   "word": null,
+   "span": "会計年度の売上高は38,064百万円となり、前連結会計年度の36,975百万円から1,088百万円",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:NetSales@Prior1YearDuration"
+   ],
+   "reason": null,
+   "recomputed": 36975577000.0
+  },
+  {
+   "id": "N016",
+   "kind": "num",
+   "form": "derived_value",
+   "subject": "売上高",
+   "value": 1088.0,
+   "unit": "百万円",
+   "word": null,
+   "span": ",064百万円となり、前連結会計年度の36,975百万円から1,088百万円、率にして2.9%の",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:NetSales@CurrentYearDuration",
+    "xbrl:jppfs_cor:NetSales@Prior1YearDuration",
+    "formula:a-b"
+   ],
+   "reason": null,
+   "recomputed": 1088697000.0
+  },
+  {
+   "id": "N017",
+   "kind": "num",
+   "form": "derived_value",
+   "subject": "売上高",
+   "value": 2.9,
+   "unit": "%",
+   "word": null,
+   "span": "結会計年度の36,975百万円から1,088百万円、率にして2.9%の増収となりました。",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:NetSales@CurrentYearDuration",
+    "xbrl:jppfs_cor:NetSales@Prior1YearDuration"
+   ],
+   "reason": null,
+   "recomputed": 2.94
+  },
+  {
+   "id": "N018",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "売上高",
+   "value": 38064.0,
+   "unit": "百万円",
+   "word": null,
+   "span": "131百万円、2025年6月期36,975百万円、そして当期38,064百万円と、5期連続で増収を",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:NetSales@CurrentYearDuration"
+   ],
+   "reason": null,
+   "recomputed": 38064274000.0
+  },
+  {
+   "id": "N019",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": null,
+   "value": 5951.0,
+   "unit": "百万円",
+   "word": null,
+   "span": "5年間で約5,951百万円、18.5%の成長で",
+   "state": "POINTER_NOT_FOUND",
+   "pointers": [],
+   "reason": "no_element",
+   "recomputed": null
+  },
+  {
+   "id": "N020",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": null,
+   "value": 18.5,
+   "unit": "%",
+   "word": null,
+   "span": "5年間で約5,951百万円、18.5%の成長であり、受注環",
+   "state": "UNVERIFIABLE",
+   "pointers": [],
+   "reason": "no_subject",
+   "recomputed": null
+  },
+  {
+   "id": "N021",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "受取手形及び売掛金",
+   "value": 2556.0,
+   "unit": "百万円",
+   "word": null,
+   "span": "なお、売上債権(受取手形及び売掛金)は期末時点で2,556百万円と前期末の1,751",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:NotesAndAccountsReceivableTrade@CurrentYearInstant"
+   ],
+   "reason": null,
+   "recomputed": 2556498000.0
+  },
+  {
+   "id": "N022",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "受取手形及び売掛金",
+   "value": 1751.0,
+   "unit": "百万円",
+   "word": null,
+   "span": "(受取手形及び売掛金)は期末時点で2,556百万円と前期末の1,751百万円から804百万円増加",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:NotesAndAccountsReceivableTrade@Prior1YearInstant"
+   ],
+   "reason": null,
+   "recomputed": 1751723000.0
+  },
+  {
+   "id": "N023",
+   "kind": "num",
+   "form": "derived_value",
+   "subject": "受取手形及び売掛金",
+   "value": 804000000.0,
+   "unit": "円",
+   "word": null,
+   "span": ")は期末時点で2,556百万円と前期末の1,751百万円から804百万円増加しており、期末近",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:NotesAndAccountsReceivableTrade@CurrentYearInstant",
+    "xbrl:jppfs_cor:NotesAndAccountsReceivableTrade@Prior1YearInstant",
+    "formula:a-b"
+   ],
+   "reason": null,
+   "recomputed": 804775000.0
+  },
+  {
+   "id": "N024",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "売上総利益",
+   "value": 11334.0,
+   "unit": "百万円",
+   "word": null,
+   "span": "売上総利益は11,334百万円となり、前期の12,",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:GrossProfit@CurrentYearDuration"
+   ],
+   "reason": null,
+   "recomputed": 11334658000.0
+  },
+  {
+   "id": "N025",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "売上総利益",
+   "value": 12018.0,
+   "unit": "百万円",
+   "word": null,
+   "span": "売上総利益は11,334百万円となり、前期の12,018百万円から684百万円、5",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:GrossProfit@Prior1YearDuration"
+   ],
+   "reason": null,
+   "recomputed": 12018937000.0
+  },
+  {
+   "id": "N026",
+   "kind": "num",
+   "form": "derived_value",
+   "subject": "売上総利益",
+   "value": 684000000.0,
+   "unit": "円",
+   "word": null,
+   "span": "利益は11,334百万円となり、前期の12,018百万円から684百万円、5.7%の減少とな",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:GrossProfit@CurrentYearDuration",
+    "xbrl:jppfs_cor:GrossProfit@Prior1YearDuration",
+    "formula:a-b"
+   ],
+   "reason": null,
+   "recomputed": -684279000.0
+  },
+  {
+   "id": "N027",
+   "kind": "num",
+   "form": "derived_value",
+   "subject": "売上総利益",
+   "value": -5.7,
+   "unit": "%",
+   "word": null,
+   "span": "34百万円となり、前期の12,018百万円から684百万円、5.7%の減少となりました。",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:GrossProfit@CurrentYearDuration",
+    "xbrl:jppfs_cor:GrossProfit@Prior1YearDuration"
+   ],
+   "reason": null,
+   "recomputed": -5.69
+  },
+  {
+   "id": "N028",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "売上原価",
+   "value": 26729.0,
+   "unit": "百万円",
+   "word": null,
+   "span": "売上原価は26,729百万円(前期24,956百",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:CostOfSales@CurrentYearDuration"
+   ],
+   "reason": null,
+   "recomputed": 26729616000.0
+  },
+  {
+   "id": "N029",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "売上原価",
+   "value": 24956.0,
+   "unit": "百万円",
+   "word": null,
+   "span": "売上原価は26,729百万円(前期24,956百万円)と1,772百万円",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:CostOfSales@Prior1YearDuration"
+   ],
+   "reason": null,
+   "recomputed": 24956639000.0
+  },
+  {
+   "id": "N030",
+   "kind": "num",
+   "form": "derived_value",
+   "subject": "売上原価",
+   "value": 1772.0,
+   "unit": "百万円",
+   "word": null,
+   "span": "売上原価は26,729百万円(前期24,956百万円)と1,772百万円、7.1%増加しまし",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:CostOfSales@CurrentYearDuration",
+    "xbrl:jppfs_cor:CostOfSales@Prior1YearDuration",
+    "formula:a-b"
+   ],
+   "reason": null,
+   "recomputed": 1772977000.0
+  },
+  {
+   "id": "N031",
+   "kind": "num",
+   "form": "derived_value",
+   "subject": "売上原価",
+   "value": 7.1,
+   "unit": "%",
+   "word": null,
+   "span": ",729百万円(前期24,956百万円)と1,772百万円、7.1%増加しました。",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:CostOfSales@CurrentYearDuration",
+    "xbrl:jppfs_cor:CostOfSales@Prior1YearDuration"
+   ],
+   "reason": null,
+   "recomputed": 7.1
+  },
+  {
+   "id": "N032",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "売上高",
+   "value": 2.9,
+   "unit": "%",
+   "word": null,
+   "span": "売上高の伸び率2.9%を大きく上回る原価の",
+   "state": "POINTER_NOT_FOUND",
+   "pointers": [],
+   "reason": "no_element(ratio without fact)",
+   "recomputed": null
+  },
+  {
+   "id": "N033",
+   "kind": "num",
+   "form": "derived_value",
+   "subject": "売上原価率",
+   "value": 67.5,
+   "unit": "%",
+   "word": null,
+   "span": "9%を大きく上回る原価の伸びとなった結果、売上原価率は前期の67.5%から70.2%へと2",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:CostOfSales@Prior1YearDuration",
+    "xbrl:jppfs_cor:NetSales@Prior1YearDuration",
+    "formula:a/b*100"
+   ],
+   "reason": null,
+   "recomputed": 67.49
+  },
+  {
+   "id": "N034",
+   "kind": "num",
+   "form": "derived_value",
+   "subject": "売上原価率",
+   "value": 70.2,
+   "unit": "%",
+   "word": null,
+   "span": "回る原価の伸びとなった結果、売上原価率は前期の67.5%から70.2%へと2.7ポイント上",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:CostOfSales@CurrentYearDuration",
+    "xbrl:jppfs_cor:NetSales@CurrentYearDuration",
+    "formula:a/b*100"
+   ],
+   "reason": null,
+   "recomputed": 70.22
+  },
+  {
+   "id": "N035",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "売上原価",
+   "value": 2.7,
+   "unit": "ポイント",
+   "word": null,
+   "span": "となった結果、売上原価率は前期の67.5%から70.2%へと2.7ポイント上昇し、売上総利益率",
+   "state": "POINTER_NOT_FOUND",
+   "pointers": [],
+   "reason": "no_element(point without prior phrase)",
+   "recomputed": null
+  },
+  {
+   "id": "N036",
+   "kind": "num",
+   "form": "derived_value",
+   "subject": "売上総利益率",
+   "value": 32.5,
+   "unit": "%",
+   "word": null,
+   "span": ".5%から70.2%へと2.7ポイント上昇し、売上総利益率は32.5%から29.8%へと低",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:GrossProfit@Prior1YearDuration",
+    "xbrl:jppfs_cor:NetSales@Prior1YearDuration",
+    "formula:a/b*100"
+   ],
+   "reason": null,
+   "recomputed": 32.51
+  },
+  {
+   "id": "N037",
+   "kind": "num",
+   "form": "derived_value",
+   "subject": "売上総利益率",
+   "value": 29.8,
+   "unit": "%",
+   "word": null,
+   "span": ".2%へと2.7ポイント上昇し、売上総利益率は32.5%から29.8%へと低下しております",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:GrossProfit@CurrentYearDuration",
+    "xbrl:jppfs_cor:NetSales@CurrentYearDuration",
+    "formula:a/b*100"
+   ],
+   "reason": null,
+   "recomputed": 29.78
+  },
+  {
+   "id": "N038",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "従業員数",
+   "value": 1462.0,
+   "unit": "名",
+   "word": null,
+   "span": "当社グループの従業員数は1,462名(前期末1,447名",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jpcrp_cor:NumberOfEmployees@CurrentYearInstant"
+   ],
+   "reason": null,
+   "recomputed": 1462.0
+  },
+  {
+   "id": "N039",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "従業員数",
+   "value": 1447.0,
+   "unit": "名",
+   "word": null,
+   "span": "当社グループの従業員数は1,462名(前期末1,447名)、臨時従業員は年間",
+   "state": "VALUE_MISMATCH",
+   "pointers": [
+    "xbrl:jpcrp_cor:NumberOfEmployees@CurrentYearInstant"
+   ],
+   "reason": null,
+   "recomputed": 1462.0
+  },
+  {
+   "id": "N040",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "従業員",
+   "value": 409.0,
+   "unit": "名",
+   "word": null,
+   "span": "数は1,462名(前期末1,447名)、臨時従業員は年間平均409名(同393名)と人員",
+   "state": "VALUE_MISMATCH",
+   "pointers": [
+    "xbrl:jpcrp_cor:NumberOfEmployees@CurrentYearInstant"
+   ],
+   "reason": null,
+   "recomputed": 1462.0
+  },
+  {
+   "id": "N041",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "従業員",
+   "value": 393.0,
+   "unit": "名",
+   "word": null,
+   "span": "2名(前期末1,447名)、臨時従業員は年間平均409名(同393名)と人員は着実に増加",
+   "state": "VALUE_MISMATCH",
+   "pointers": [
+    "xbrl:jpcrp_cor:NumberOfEmployees@CurrentYearInstant"
+   ],
+   "reason": null,
+   "recomputed": 1462.0
+  },
+  {
+   "id": "N042",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "販売費及び一般管理費",
+   "value": 9869.0,
+   "unit": "百万円",
+   "word": null,
+   "span": "販売費及び一般管理費は9,869百万円となり、前期の9,3",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:SellingGeneralAndAdministrativeExpenses@CurrentYearDuration"
+   ],
+   "reason": null,
+   "recomputed": 9869271000.0
+  },
+  {
+   "id": "N043",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "販売費及び一般管理費",
+   "value": 9303.0,
+   "unit": "百万円",
+   "word": null,
+   "span": "販売費及び一般管理費は9,869百万円となり、前期の9,303百万円から566百万円、6",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:SellingGeneralAndAdministrativeExpenses@Prior1YearDuration"
+   ],
+   "reason": null,
+   "recomputed": 9303013000.0
+  },
+  {
+   "id": "N044",
+   "kind": "num",
+   "form": "derived_value",
+   "subject": "販売費及び一般管理費",
+   "value": 566000000.0,
+   "unit": "円",
+   "word": null,
+   "span": "般管理費は9,869百万円となり、前期の9,303百万円から566百万円、6.1%増加しまし",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:SellingGeneralAndAdministrativeExpenses@CurrentYearDuration",
+    "xbrl:jppfs_cor:SellingGeneralAndAdministrativeExpenses@Prior1YearDuration",
+    "formula:a-b"
+   ],
+   "reason": null,
+   "recomputed": 566258000.0
+  },
+  {
+   "id": "N045",
+   "kind": "num",
+   "form": "derived_value",
+   "subject": "販売費及び一般管理費",
+   "value": 6.1,
+   "unit": "%",
+   "word": null,
+   "span": "869百万円となり、前期の9,303百万円から566百万円、6.1%増加しました。",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:SellingGeneralAndAdministrativeExpenses@CurrentYearDuration",
+    "xbrl:jppfs_cor:SellingGeneralAndAdministrativeExpenses@Prior1YearDuration"
+   ],
+   "reason": null,
+   "recomputed": 6.09
+  },
+  {
+   "id": "N046",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "従業員給料及び手当",
+   "value": 3559.0,
+   "unit": "百万円",
+   "word": null,
+   "span": "内訳を見ますと、従業員給料及び手当は3,559百万円(前期3,441百万",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:EmployeesSalariesAndAllowancesSGA@CurrentYearDuration"
+   ],
+   "reason": null,
+   "recomputed": 3559936000.0
+  },
+  {
+   "id": "N047",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "従業員給料及び手当",
+   "value": 3441.0,
+   "unit": "百万円",
+   "word": null,
+   "span": "内訳を見ますと、従業員給料及び手当は3,559百万円(前期3,441百万円)と118百万円増加",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:EmployeesSalariesAndAllowancesSGA@Prior1YearDuration"
+   ],
+   "reason": null,
+   "recomputed": 3441694000.0
+  },
+  {
+   "id": "N048",
+   "kind": "num",
+   "form": "derived_value",
+   "subject": "従業員給料及び手当",
+   "value": 118000000.0,
+   "unit": "円",
+   "word": null,
+   "span": "業員給料及び手当は3,559百万円(前期3,441百万円)と118百万円増加しております。",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:EmployeesSalariesAndAllowancesSGA@CurrentYearDuration",
+    "xbrl:jppfs_cor:EmployeesSalariesAndAllowancesSGA@Prior1YearDuration",
+    "formula:a-b"
+   ],
+   "reason": null,
+   "recomputed": 118242000.0
+  },
+  {
+   "id": "N049",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "研究開発費",
+   "value": 255000000.0,
+   "unit": "円",
+   "word": null,
+   "span": "研究開発費は255百万円(前期257百万円)",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:ResearchAndDevelopmentExpensesSGA@CurrentYearDuration"
+   ],
+   "reason": null,
+   "recomputed": 255928000.0
+  },
+  {
+   "id": "N050",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "研究開発費",
+   "value": 257000000.0,
+   "unit": "円",
+   "word": null,
+   "span": "研究開発費は255百万円(前期257百万円)とほぼ前年並みの水",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:ResearchAndDevelopmentExpensesSGA@Prior1YearDuration"
+   ],
+   "reason": null,
+   "recomputed": 257810000.0
+  },
+  {
+   "id": "N051",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "退職給付費用",
+   "value": 118000000.0,
+   "unit": "円",
+   "word": null,
+   "span": "退職給付費用は118百万円(前期137百万円)",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:RetirementBenefitExpensesSGA@CurrentYearDuration"
+   ],
+   "reason": null,
+   "recomputed": 118308000.0
+  },
+  {
+   "id": "N052",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "退職給付費用",
+   "value": 137000000.0,
+   "unit": "円",
+   "word": null,
+   "span": "退職給付費用は118百万円(前期137百万円)と18百万円減少し",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:RetirementBenefitExpensesSGA@Prior1YearDuration"
+   ],
+   "reason": null,
+   "recomputed": 137251000.0
+  },
+  {
+   "id": "N053",
+   "kind": "num",
+   "form": "derived_value",
+   "subject": "退職給付費用",
+   "value": 18000000.0,
+   "unit": "円",
+   "word": null,
+   "span": "退職給付費用は118百万円(前期137百万円)と18百万円減少しました。",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:RetirementBenefitExpensesSGA@CurrentYearDuration",
+    "xbrl:jppfs_cor:RetirementBenefitExpensesSGA@Prior1YearDuration",
+    "formula:a-b"
+   ],
+   "reason": null,
+   "recomputed": -18943000.0
+  },
+  {
+   "id": "N054",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": null,
+   "value": -28000000.0,
+   "unit": "円",
+   "word": null,
+   "span": "また、役員株式報酬引当金繰入額は△28百万円(前期58百万円)と",
+   "state": "UNVERIFIABLE",
+   "pointers": [],
+   "reason": "ambiguous(elements)",
+   "recomputed": null
+  },
+  {
+   "id": "N055",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": null,
+   "value": 58000000.0,
+   "unit": "円",
+   "word": null,
+   "span": "また、役員株式報酬引当金繰入額は△28百万円(前期58百万円)と戻入となっており",
+   "state": "UNVERIFIABLE",
+   "pointers": [],
+   "reason": "ambiguous(elements)",
+   "recomputed": null
+  },
+  {
+   "id": "N056",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": null,
+   "value": 5962.0,
+   "unit": "百万円",
+   "word": null,
+   "span": "これらを除く「その他」の販管費は5,962百万円(前期5,407百万",
+   "state": "UNVERIFIABLE",
+   "pointers": [],
+   "reason": "no_subject",
+   "recomputed": null
+  },
+  {
+   "id": "N057",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": null,
+   "value": 5407.0,
+   "unit": "百万円",
+   "word": null,
+   "span": "これらを除く「その他」の販管費は5,962百万円(前期5,407百万円)と554百万円増加",
+   "state": "UNVERIFIABLE",
+   "pointers": [],
+   "reason": "no_subject",
+   "recomputed": null
+  },
+  {
+   "id": "N058",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": null,
+   "value": 554000000.0,
+   "unit": "円",
+   "word": null,
+   "span": "その他」の販管費は5,962百万円(前期5,407百万円)と554百万円増加しており、増加額",
+   "state": "POINTER_NOT_FOUND",
+   "pointers": [],
+   "reason": "no_element",
+   "recomputed": null
+  },
+  {
+   "id": "N059",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "完成業務補償引当金",
+   "value": 991000000.0,
+   "unit": "円",
+   "word": null,
+   "span": "完成業務補償引当金は期末残高が991百万円となり、前期末の20",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jpcrp030000-asr_E36539-000:ProvisionForWarrantiesForCompletedOperationCL@CurrentYearInstant"
+   ],
+   "reason": null,
+   "recomputed": 991000000.0
+  },
+  {
+   "id": "N060",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "完成業務補償引当金",
+   "value": 205000000.0,
+   "unit": "円",
+   "word": null,
+   "span": "完成業務補償引当金は期末残高が991百万円となり、前期末の205百万円から786百万円増加",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jpcrp030000-asr_E36539-000:ProvisionForWarrantiesForCompletedOperationCL@Prior1YearInstant"
+   ],
+   "reason": null,
+   "recomputed": 205000000.0
+  },
+  {
+   "id": "N061",
+   "kind": "num",
+   "form": "derived_value",
+   "subject": "完成業務補償引当金",
+   "value": 786000000.0,
+   "unit": "円",
+   "word": null,
+   "span": "当金は期末残高が991百万円となり、前期末の205百万円から786百万円増加いたしました。",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jpcrp030000-asr_E36539-000:ProvisionForWarrantiesForCompletedOperationCL@CurrentYearInstant",
+    "xbrl:jpcrp030000-asr_E36539-000:ProvisionForWarrantiesForCompletedOperationCL@Prior1YearInstant",
+    "formula:a-b"
+   ],
+   "reason": null,
+   "recomputed": 786000000.0
+  },
+  {
+   "id": "N062",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": null,
+   "value": 786000000.0,
+   "unit": "円",
+   "word": null,
+   "span": "この786百万円の増加は、当期の営業",
+   "state": "UNVERIFIABLE",
+   "pointers": [],
+   "reason": "no_subject",
+   "recomputed": null
+  },
+  {
+   "id": "N063",
+   "kind": "num",
+   "form": "derived_value",
+   "subject": "営業利益",
+   "value": 1250.0,
+   "unit": "百万円",
+   "word": null,
+   "span": "この786百万円の増加は、当期の営業利益の減益額1,250百万円の約6割に相当する規",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration",
+    "xbrl:jppfs_cor:OperatingIncome@Prior1YearDuration",
+    "formula:a-b"
+   ],
+   "reason": null,
+   "recomputed": -1250537000.0
+  },
+  {
+   "id": "N064",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "営業利益",
+   "value": 1465.0,
+   "unit": "百万円",
+   "word": null,
+   "span": "この結果、営業利益は1,465百万円となり、前期の2,7",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration"
+   ],
+   "reason": null,
+   "recomputed": 1465387000.0
+  },
+  {
+   "id": "N065",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "営業利益",
+   "value": 2715.0,
+   "unit": "百万円",
+   "word": null,
+   "span": "この結果、営業利益は1,465百万円となり、前期の2,715百万円から1,250百万円",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:OperatingIncome@Prior1YearDuration"
+   ],
+   "reason": null,
+   "recomputed": 2715924000.0
+  },
+  {
+   "id": "N066",
+   "kind": "num",
+   "form": "derived_value",
+   "subject": "営業利益",
+   "value": 1250.0,
+   "unit": "百万円",
+   "word": null,
+   "span": "営業利益は1,465百万円となり、前期の2,715百万円から1,250百万円、46.0%の大幅減",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration",
+    "xbrl:jppfs_cor:OperatingIncome@Prior1YearDuration",
+    "formula:a-b"
+   ],
+   "reason": null,
+   "recomputed": -1250537000.0
+  },
+  {
+   "id": "N067",
+   "kind": "num",
+   "form": "derived_value",
+   "subject": "営業利益",
+   "value": -46.0,
+   "unit": "%",
+   "word": null,
+   "span": "5百万円となり、前期の2,715百万円から1,250百万円、46.0%の大幅減益となりまし",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration",
+    "xbrl:jppfs_cor:OperatingIncome@Prior1YearDuration"
+   ],
+   "reason": null,
+   "recomputed": -46.04
+  },
+  {
+   "id": "N068",
+   "kind": "num",
+   "form": "derived_value",
+   "subject": "売上高営業利益率",
+   "value": 7.3,
+   "unit": "%",
+   "word": null,
+   "span": "売上高営業利益率は前期の7.3%から3.8%へと3.",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:OperatingIncome@Prior1YearDuration",
+    "xbrl:jppfs_cor:NetSales@Prior1YearDuration",
+    "formula:a/b*100"
+   ],
+   "reason": null,
+   "recomputed": 7.35
+  },
+  {
+   "id": "N069",
+   "kind": "num",
+   "form": "derived_value",
+   "subject": "売上高営業利益率",
+   "value": 3.8,
+   "unit": "%",
+   "word": null,
+   "span": "売上高営業利益率は前期の7.3%から3.8%へと3.5ポイント低",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration",
+    "xbrl:jppfs_cor:NetSales@CurrentYearDuration",
+    "formula:a/b*100"
+   ],
+   "reason": null,
+   "recomputed": 3.85
+  },
+  {
+   "id": "N070",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "営業利益",
+   "value": 3.5,
+   "unit": "ポイント",
+   "word": null,
+   "span": "売上高営業利益率は前期の7.3%から3.8%へと3.5ポイント低下しております。",
+   "state": "POINTER_NOT_FOUND",
+   "pointers": [],
+   "reason": "no_element(point without prior phrase)",
+   "recomputed": null
+  },
+  {
+   "id": "N071",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "営業外収益",
+   "value": 87000000.0,
+   "unit": "円",
+   "word": null,
+   "span": "営業外収益は87百万円(前期72百万円)と",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:NonOperatingIncome@CurrentYearDuration"
+   ],
+   "reason": null,
+   "recomputed": 87537000.0
+  },
+  {
+   "id": "N072",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "営業外収益",
+   "value": 72000000.0,
+   "unit": "円",
+   "word": null,
+   "span": "営業外収益は87百万円(前期72百万円)と14百万円増加し",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:NonOperatingIncome@Prior1YearDuration"
+   ],
+   "reason": null,
+   "recomputed": 72687000.0
+  },
+  {
+   "id": "N073",
+   "kind": "num",
+   "form": "derived_value",
+   "subject": "営業外収益",
+   "value": 14000000.0,
+   "unit": "円",
+   "word": null,
+   "span": "営業外収益は87百万円(前期72百万円)と14百万円増加しました。",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:NonOperatingIncome@CurrentYearDuration",
+    "xbrl:jppfs_cor:NonOperatingIncome@Prior1YearDuration",
+    "formula:a-b"
+   ],
+   "reason": null,
+   "recomputed": 14850000.0
+  },
+  {
+   "id": "N074",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "受取利息",
+   "value": 9000000.0,
+   "unit": "円",
+   "word": null,
+   "span": "主な内訳は、受取利息9百万円(前期1百万円)、受",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:InterestIncomeNOI@CurrentYearDuration"
+   ],
+   "reason": null,
+   "recomputed": 9510000.0
+  },
+  {
+   "id": "N075",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "受取利息",
+   "value": 1000000.0,
+   "unit": "円",
+   "word": null,
+   "span": "主な内訳は、受取利息9百万円(前期1百万円)、受取配当金25百",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:InterestIncomeNOI@Prior1YearDuration"
+   ],
+   "reason": null,
+   "recomputed": 1901000.0
+  },
+  {
+   "id": "N076",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "受取配当金",
+   "value": 25000000.0,
+   "unit": "円",
+   "word": null,
+   "span": "主な内訳は、受取利息9百万円(前期1百万円)、受取配当金25百万円(同20百万円)、不",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:DividendsIncomeNOI@CurrentYearDuration"
+   ],
+   "reason": null,
+   "recomputed": 25567000.0
+  },
+  {
+   "id": "N077",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "受取配当金",
+   "value": 20000000.0,
+   "unit": "円",
+   "word": null,
+   "span": "、受取利息9百万円(前期1百万円)、受取配当金25百万円(同20百万円)、不動産賃貸料15",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:DividendsIncomeNOI@Prior1YearDuration"
+   ],
+   "reason": null,
+   "recomputed": 20161000.0
+  },
+  {
+   "id": "N078",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "不動産賃貸料",
+   "value": 15000000.0,
+   "unit": "円",
+   "word": null,
+   "span": "百万円)、受取配当金25百万円(同20百万円)、不動産賃貸料15百万円(同15百万円)、そ",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:RealEstateRentNOI@Prior1YearDuration"
+   ],
+   "reason": null,
+   "recomputed": 15296000.0
+  },
+  {
+   "id": "N079",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "不動産賃貸料",
+   "value": 15000000.0,
+   "unit": "円",
+   "word": null,
+   "span": "配当金25百万円(同20百万円)、不動産賃貸料15百万円(同15百万円)、その他37百万円",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:RealEstateRentNOI@Prior1YearDuration"
+   ],
+   "reason": null,
+   "recomputed": 15296000.0
+  },
+  {
+   "id": "N080",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "不動産賃貸料",
+   "value": 37000000.0,
+   "unit": "円",
+   "word": null,
+   "span": "20百万円)、不動産賃貸料15百万円(同15百万円)、その他37百万円(同35百万円)です",
+   "state": "VALUE_MISMATCH",
+   "pointers": [
+    "xbrl:jppfs_cor:RealEstateRentNOI@CurrentYearDuration"
+   ],
+   "reason": null,
+   "recomputed": 15315000.0
+  },
+  {
+   "id": "N081",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "不動産賃貸料",
+   "value": 35000000.0,
+   "unit": "円",
+   "word": null,
+   "span": "不動産賃貸料15百万円(同15百万円)、その他37百万円(同35百万円)です。",
+   "state": "VALUE_MISMATCH",
+   "pointers": [
+    "xbrl:jppfs_cor:RealEstateRentNOI@CurrentYearDuration"
+   ],
+   "reason": null,
+   "recomputed": 15315000.0
+  },
+  {
+   "id": "N082",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "営業外費用",
+   "value": 95000000.0,
+   "unit": "円",
+   "word": null,
+   "span": "営業外費用は95百万円(前期79百万円)と",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:NonOperatingExpenses@CurrentYearDuration"
+   ],
+   "reason": null,
+   "recomputed": 95075000.0
+  },
+  {
+   "id": "N083",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "営業外費用",
+   "value": 79000000.0,
+   "unit": "円",
+   "word": null,
+   "span": "営業外費用は95百万円(前期79百万円)と15百万円増加し",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:NonOperatingExpenses@Prior1YearDuration"
+   ],
+   "reason": null,
+   "recomputed": 79560000.0
+  },
+  {
+   "id": "N084",
+   "kind": "num",
+   "form": "derived_value",
+   "subject": "営業外費用",
+   "value": 15000000.0,
+   "unit": "円",
+   "word": null,
+   "span": "営業外費用は95百万円(前期79百万円)と15百万円増加しました。",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:NonOperatingExpenses@CurrentYearDuration",
+    "xbrl:jppfs_cor:NonOperatingExpenses@Prior1YearDuration",
+    "formula:a-b"
+   ],
+   "reason": null,
+   "recomputed": 15515000.0
+  },
+  {
+   "id": "N085",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "支払利息",
+   "value": 80000000.0,
+   "unit": "円",
+   "word": null,
+   "span": "主な内訳は支払利息80百万円(前期58百万円)で",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:InterestExpensesNOE@CurrentYearDuration"
+   ],
+   "reason": null,
+   "recomputed": 80579000.0
+  },
+  {
+   "id": "N086",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "支払利息",
+   "value": 58000000.0,
+   "unit": "円",
+   "word": null,
+   "span": "主な内訳は支払利息80百万円(前期58百万円)で、金利上昇の影響",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:InterestExpensesNOE@Prior1YearDuration"
+   ],
+   "reason": null,
+   "recomputed": 58689000.0
+  },
+  {
+   "id": "N087",
+   "kind": "num",
+   "form": "derived_value",
+   "subject": "支払利息",
+   "value": 21000000.0,
+   "unit": "円",
+   "word": null,
+   "span": "支払利息80百万円(前期58百万円)で、金利上昇の影響により21百万円増加しております。",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:InterestExpensesNOE@CurrentYearDuration",
+    "xbrl:jppfs_cor:InterestExpensesNOE@Prior1YearDuration",
+    "formula:a-b"
+   ],
+   "reason": null,
+   "recomputed": 21890000.0
+  },
+  {
+   "id": "N088",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "経常利益",
+   "value": 1457.0,
+   "unit": "百万円",
+   "word": null,
+   "span": "以上の結果、経常利益は1,457百万円(前期2,709百万",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:OrdinaryIncome@CurrentYearDuration"
+   ],
+   "reason": null,
+   "recomputed": 1457848000.0
+  },
+  {
+   "id": "N089",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "経常利益",
+   "value": 2709.0,
+   "unit": "百万円",
+   "word": null,
+   "span": "以上の結果、経常利益は1,457百万円(前期2,709百万円)となり、1,251",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:OrdinaryIncome@Prior1YearDuration"
+   ],
+   "reason": null,
+   "recomputed": 2709051000.0
+  },
+  {
+   "id": "N090",
+   "kind": "num",
+   "form": "derived_value",
+   "subject": "経常利益",
+   "value": 1251.0,
+   "unit": "百万円",
+   "word": null,
+   "span": "、経常利益は1,457百万円(前期2,709百万円)となり、1,251百万円、46.2%の減益と",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:OrdinaryIncome@CurrentYearDuration",
+    "xbrl:jppfs_cor:OrdinaryIncome@Prior1YearDuration",
+    "formula:a-b"
+   ],
+   "reason": null,
+   "recomputed": -1251203000.0
+  },
+  {
+   "id": "N091",
+   "kind": "num",
+   "form": "derived_value",
+   "subject": "経常利益",
+   "value": -46.2,
+   "unit": "%",
+   "word": null,
+   "span": "57百万円(前期2,709百万円)となり、1,251百万円、46.2%の減益となりました。",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:OrdinaryIncome@CurrentYearDuration",
+    "xbrl:jppfs_cor:OrdinaryIncome@Prior1YearDuration"
+   ],
+   "reason": null,
+   "recomputed": -46.19
+  },
+  {
+   "id": "N092",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "特別利益",
+   "value": 1000000.0,
+   "unit": "円",
+   "word": null,
+   "span": "特別利益は1百万円で、固定資産売却益1",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:ExtraordinaryIncome@CurrentYearDuration"
+   ],
+   "reason": null,
+   "recomputed": 1232000.0
+  },
+  {
+   "id": "N093",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "固定資産売却益",
+   "value": 1000000.0,
+   "unit": "円",
+   "word": null,
+   "span": "特別利益は1百万円で、固定資産売却益1百万円を計上しました。",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:GainOnSalesOfNoncurrentAssetsEI@CurrentYearDuration"
+   ],
+   "reason": null,
+   "recomputed": 1232000.0
+  },
+  {
+   "id": "N094",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "特別損失",
+   "value": 7000000.0,
+   "unit": "円",
+   "word": null,
+   "span": "特別損失は7百万円で、内訳は関係会社株",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:ExtraordinaryLoss@CurrentYearDuration"
+   ],
+   "reason": null,
+   "recomputed": 7068000.0
+  },
+  {
+   "id": "N095",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "関係会社株式売却損",
+   "value": 6000000.0,
+   "unit": "円",
+   "word": null,
+   "span": "特別損失は7百万円で、内訳は関係会社株式売却損6百万円および減損損失0百万",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:LossOnSalesOfStocksOfSubsidiariesAndAffiliatesEL@CurrentYearDuration"
+   ],
+   "reason": null,
+   "recomputed": 6165000.0
+  },
+  {
+   "id": "N096",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "減損損失",
+   "value": 0.0,
+   "unit": "円",
+   "word": null,
+   "span": "は7百万円で、内訳は関係会社株式売却損6百万円および減損損失0百万円です。",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:ImpairmentLossEL@CurrentYearDuration"
+   ],
+   "reason": null,
+   "recomputed": 903000.0
+  },
+  {
+   "id": "N097",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "税金等調整前当期純利益",
+   "value": 1452.0,
+   "unit": "百万円",
+   "word": null,
+   "span": "この結果、税金等調整前当期純利益は1,452百万円(前期2,707百万",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:IncomeBeforeIncomeTaxes@CurrentYearDuration"
+   ],
+   "reason": null,
+   "recomputed": 1452012000.0
+  },
+  {
+   "id": "N098",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "税金等調整前当期純利益",
+   "value": 2707.0,
+   "unit": "百万円",
+   "word": null,
+   "span": "この結果、税金等調整前当期純利益は1,452百万円(前期2,707百万円)となりました。",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:IncomeBeforeIncomeTaxes@Prior1YearDuration"
+   ],
+   "reason": null,
+   "recomputed": 2707871000.0
+  },
+  {
+   "id": "N099",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "法人税等合計",
+   "value": 506000000.0,
+   "unit": "円",
+   "word": null,
+   "span": "法人税等合計は506百万円(前期785百万円)",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:IncomeTaxes@CurrentYearDuration"
+   ],
+   "reason": null,
+   "recomputed": 506218000.0
+  },
+  {
+   "id": "N100",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "法人税等合計",
+   "value": 785000000.0,
+   "unit": "円",
+   "word": null,
+   "span": "法人税等合計は506百万円(前期785百万円)で、内訳は法人税等",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:IncomeTaxes@Prior1YearDuration"
+   ],
+   "reason": null,
+   "recomputed": 785289000.0
+  },
+  {
+   "id": "N101",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "法人税、住民税及び事業税",
+   "value": 626000000.0,
+   "unit": "円",
+   "word": null,
+   "span": "円)で、内訳は法人税等調整額を除く法人税、住民税及び事業税が626百万円、法人税等調整額が△",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:IncomeTaxesCurrent@CurrentYearDuration"
+   ],
+   "reason": null,
+   "recomputed": 626340000.0
+  },
+  {
+   "id": "N102",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "法人税等調整額",
+   "value": -120000000.0,
+   "unit": "円",
+   "word": null,
+   "span": "除く法人税、住民税及び事業税が626百万円、法人税等調整額が△120百万円です。",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:IncomeTaxesDeferred@CurrentYearDuration"
+   ],
+   "reason": null,
+   "recomputed": -120121000.0
+  },
+  {
+   "id": "N103",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "税金等調整前当期純利益",
+   "value": 34.9,
+   "unit": "%",
+   "word": null,
+   "span": "税金等調整前当期純利益に対する負担率は34.9%(前期29.0%)と",
+   "state": "POINTER_NOT_FOUND",
+   "pointers": [],
+   "reason": "no_element(ratio without fact)",
+   "recomputed": null
+  },
+  {
+   "id": "N104",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "税金等調整前当期純利益",
+   "value": 29.0,
+   "unit": "%",
+   "word": null,
+   "span": "税金等調整前当期純利益に対する負担率は34.9%(前期29.0%)と上昇しております",
+   "state": "POINTER_NOT_FOUND",
+   "pointers": [],
+   "reason": "no_element(ratio without fact)",
+   "recomputed": null
+  },
+  {
+   "id": "N105",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "親会社株主に帰属する当期純利益",
+   "value": 945000000.0,
+   "unit": "円",
+   "word": null,
+   "span": "以上により、親会社株主に帰属する当期純利益は945百万円(前期1,922百万",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:ProfitLossAttributableToOwnersOfParent@CurrentYearDuration"
+   ],
+   "reason": null,
+   "recomputed": 945793000.0
+  },
+  {
+   "id": "N106",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "親会社株主に帰属する当期純利益",
+   "value": 1922.0,
+   "unit": "百万円",
+   "word": null,
+   "span": "上により、親会社株主に帰属する当期純利益は945百万円(前期1,922百万円)となり、976百万",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:ProfitLossAttributableToOwnersOfParent@Prior1YearDuration"
+   ],
+   "reason": null,
+   "recomputed": 1922581000.0
+  },
+  {
+   "id": "N107",
+   "kind": "num",
+   "form": "derived_value",
+   "subject": "親会社株主に帰属する当期純利益",
+   "value": 976000000.0,
+   "unit": "円",
+   "word": null,
+   "span": "する当期純利益は945百万円(前期1,922百万円)となり、976百万円、50.8%の減益と",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:ProfitLossAttributableToOwnersOfParent@CurrentYearDuration",
+    "xbrl:jppfs_cor:ProfitLossAttributableToOwnersOfParent@Prior1YearDuration",
+    "formula:a-b"
+   ],
+   "reason": null,
+   "recomputed": -976788000.0
+  },
+  {
+   "id": "N108",
+   "kind": "num",
+   "form": "derived_value",
+   "subject": "親会社株主に帰属する当期純利益",
+   "value": -50.8,
+   "unit": "%",
+   "word": null,
+   "span": "は945百万円(前期1,922百万円)となり、976百万円、50.8%の減益となりました。",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:ProfitLossAttributableToOwnersOfParent@CurrentYearDuration",
+    "xbrl:jppfs_cor:ProfitLossAttributableToOwnersOfParent@Prior1YearDuration"
+   ],
+   "reason": null,
+   "recomputed": -50.81
+  },
+  {
+   "id": "N109",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": null,
+   "value": 1.0,
+   "unit": "株",
+   "word": null,
+   "span": "1株当たり当期純利益は1",
+   "state": "POINTER_NOT_FOUND",
+   "pointers": [],
+   "reason": "no_element(unit not in XBRL)",
+   "recomputed": null
+  },
+  {
+   "id": "N110",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "1株当たり当期純利益",
+   "value": 115.0,
+   "unit": "円",
+   "word": null,
+   "span": "1株当たり当期純利益は115円43銭(前期236円",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jpcrp_cor:BasicEarningsLossPerShareSummaryOfBusinessResults@CurrentYearDuration"
+   ],
+   "reason": null,
+   "recomputed": 115.43
+  },
+  {
+   "id": "N111",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "1株当たり当期純利益",
+   "value": 236.0,
+   "unit": "円",
+   "word": null,
+   "span": "1株当たり当期純利益は115円43銭(前期236円28銭)、自己資本当",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jpcrp_cor:BasicEarningsLossPerShareSummaryOfBusinessResults@Prior1YearDuration"
+   ],
+   "reason": null,
+   "recomputed": 236.28
+  },
+  {
+   "id": "N112",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "ROE",
+   "value": 5.8,
+   "unit": "%",
+   "word": null,
+   "span": "3銭(前期236円28銭)、自己資本当期純利益率(ROE)は5.8%(前期13.3%)と",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jpcrp_cor:RateOfReturnOnEquitySummaryOfBusinessResults@CurrentYearDuration"
+   ],
+   "reason": null,
+   "recomputed": 5.8
+  },
+  {
+   "id": "N113",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "ROE",
+   "value": 13.3,
+   "unit": "%",
+   "word": null,
+   "span": "6円28銭)、自己資本当期純利益率(ROE)は5.8%(前期13.3%)となっております。",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jpcrp_cor:RateOfReturnOnEquitySummaryOfBusinessResults@Prior1YearDuration"
+   ],
+   "reason": null,
+   "recomputed": 13.3
+  },
+  {
+   "id": "N114",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "包括利益",
+   "value": 2256.0,
+   "unit": "百万円",
+   "word": null,
+   "span": "当期純利益が大幅減益となった一方、**包括利益は2,256百万円**(前期2,451",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:ComprehensiveIncome@CurrentYearDuration"
+   ],
+   "reason": null,
+   "recomputed": 2256683000.0
+  },
+  {
+   "id": "N115",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "包括利益",
+   "value": 2451.0,
+   "unit": "百万円",
+   "word": null,
+   "span": "幅減益となった一方、**包括利益は2,256百万円**(前期2,451百万円)と、前期比では19",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:ComprehensiveIncome@Prior1YearDuration"
+   ],
+   "reason": null,
+   "recomputed": 2451498000.0
+  },
+  {
+   "id": "N116",
+   "kind": "num",
+   "form": "derived_value",
+   "subject": "包括利益",
+   "value": 194000000.0,
+   "unit": "円",
+   "word": null,
+   "span": "は2,256百万円**(前期2,451百万円)と、前期比では194百万円、7.9%の減少にと",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:ComprehensiveIncome@CurrentYearDuration",
+    "xbrl:jppfs_cor:ComprehensiveIncome@Prior1YearDuration",
+    "formula:a-b"
+   ],
+   "reason": null,
+   "recomputed": -194815000.0
+  },
+  {
+   "id": "N117",
+   "kind": "num",
+   "form": "derived_value",
+   "subject": "包括利益",
+   "value": -7.9,
+   "unit": "%",
+   "word": null,
+   "span": "万円**(前期2,451百万円)と、前期比では194百万円、7.9%の減少にとどまりまし",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:ComprehensiveIncome@CurrentYearDuration",
+    "xbrl:jppfs_cor:ComprehensiveIncome@Prior1YearDuration"
+   ],
+   "reason": null,
+   "recomputed": -7.95
+  },
+  {
+   "id": "N118",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "その他の包括利益",
+   "value": 1310.0,
+   "unit": "百万円",
+   "word": null,
+   "span": "その他の包括利益は1,310百万円(前期528百万円)",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:OtherComprehensiveIncome@CurrentYearDuration"
+   ],
+   "reason": null,
+   "recomputed": 1310889000.0
+  },
+  {
+   "id": "N119",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "その他の包括利益",
+   "value": 528000000.0,
+   "unit": "円",
+   "word": null,
+   "span": "その他の包括利益は1,310百万円(前期528百万円)と782百万円増加",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:OtherComprehensiveIncome@Prior1YearDuration"
+   ],
+   "reason": null,
+   "recomputed": 528917000.0
+  },
+  {
+   "id": "N120",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "その他の包括利益",
+   "value": 782000000.0,
+   "unit": "円",
+   "word": null,
+   "span": "その他の包括利益は1,310百万円(前期528百万円)と782百万円増加しております。",
+   "state": "VALUE_MISMATCH",
+   "pointers": [
+    "xbrl:jppfs_cor:OtherComprehensiveIncome@CurrentYearDuration"
+   ],
+   "reason": null,
+   "recomputed": 1310889000.0
+  },
+  {
+   "id": "N121",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "退職給付に係る調整額",
+   "value": 1085.0,
+   "unit": "百万円",
+   "word": null,
+   "span": "内訳は、退職給付に係る調整額1,085百万円(前期470百万円)",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:RemeasurementsOfDefinedBenefitPlansNetOfTaxOCI@CurrentYearDuration"
+   ],
+   "reason": null,
+   "recomputed": 1085488000.0
+  },
+  {
+   "id": "N122",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "退職給付に係る調整額",
+   "value": 470000000.0,
+   "unit": "円",
+   "word": null,
+   "span": "内訳は、退職給付に係る調整額1,085百万円(前期470百万円)、その他有価証券評",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:RemeasurementsOfDefinedBenefitPlansNetOfTaxOCI@Prior1YearDuration"
+   ],
+   "reason": null,
+   "recomputed": 470303000.0
+  },
+  {
+   "id": "N123",
+   "kind": "num",
+   "form": "derived_value",
+   "subject": "その他有価証券評価差額金",
+   "value": 217000000.0,
+   "unit": "円",
+   "word": null,
+   "span": ",085百万円(前期470百万円)、その他有価証券評価差額金217百万円(同62百万円)、為",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:ValuationDifferenceOnAvailableForSaleSecurities@CurrentYearInstant",
+    "xbrl:jppfs_cor:ValuationDifferenceOnAvailableForSaleSecurities@Prior1YearInstant",
+    "formula:a-b"
+   ],
+   "reason": null,
+   "recomputed": 217490000.0
+  },
+  {
+   "id": "N124",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "その他有価証券評価差額金",
+   "value": 62000000.0,
+   "unit": "円",
+   "word": null,
+   "span": "前期470百万円)、その他有価証券評価差額金217百万円(同62百万円)、為替換算調整勘定",
+   "state": "VALUE_MISMATCH",
+   "pointers": [
+    "xbrl:jppfs_cor:ValuationDifferenceOnAvailableForSaleSecurities@CurrentYearInstant"
+   ],
+   "reason": null,
+   "recomputed": 631931000.0
+  },
+  {
+   "id": "N125",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "為替換算調整勘定",
+   "value": 2000000.0,
+   "unit": "円",
+   "word": null,
+   "span": "証券評価差額金217百万円(同62百万円)、為替換算調整勘定2百万円(同△3百万円)、繰",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:ForeignCurrencyTranslationAdjustmentNetOfTaxOCI@CurrentYearDuration"
+   ],
+   "reason": null,
+   "recomputed": 2918000.0
+  },
+  {
+   "id": "N126",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "為替換算調整勘定",
+   "value": -3000000.0,
+   "unit": "円",
+   "word": null,
+   "span": "金217百万円(同62百万円)、為替換算調整勘定2百万円(同△3百万円)、繰延ヘッジ損益4",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:ForeignCurrencyTranslationAdjustmentNetOfTaxOCI@Prior1YearDuration"
+   ],
+   "reason": null,
+   "recomputed": -3621000.0
+  },
+  {
+   "id": "N127",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "繰延ヘッジ損益",
+   "value": 4000000.0,
+   "unit": "円",
+   "word": null,
+   "span": ")、為替換算調整勘定2百万円(同△3百万円)、繰延ヘッジ損益4百万円です。",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:DeferredGainsOrLossesOnHedges@CurrentYearInstant"
+   ],
+   "reason": null,
+   "recomputed": 4992000.0
+  },
+  {
+   "id": "N128",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "総資産",
+   "value": 27836.0,
+   "unit": "百万円",
+   "word": null,
+   "span": "当連結会計年度末の総資産は27,836百万円となり、前連結会計年",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:Assets@CurrentYearInstant"
+   ],
+   "reason": null,
+   "recomputed": 27836421000.0
+  },
+  {
+   "id": "N129",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "総資産",
+   "value": 25554.0,
+   "unit": "百万円",
+   "word": null,
+   "span": "年度末の総資産は27,836百万円となり、前連結会計年度末の25,554百万円から2,281百万円",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:Assets@Prior1YearInstant"
+   ],
+   "reason": null,
+   "recomputed": 25554675000.0
+  },
+  {
+   "id": "N130",
+   "kind": "num",
+   "form": "derived_value",
+   "subject": "総資産",
+   "value": 2281.0,
+   "unit": "百万円",
+   "word": null,
+   "span": "836百万円となり、前連結会計年度末の25,554百万円から2,281百万円、8.9%増加しまし",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:Assets@CurrentYearInstant",
+    "xbrl:jppfs_cor:Assets@Prior1YearInstant",
+    "formula:a-b"
+   ],
+   "reason": null,
+   "recomputed": 2281746000.0
+  },
+  {
+   "id": "N131",
+   "kind": "num",
+   "form": "derived_value",
+   "subject": "総資産",
+   "value": 8.9,
+   "unit": "%",
+   "word": null,
+   "span": "、前連結会計年度末の25,554百万円から2,281百万円、8.9%増加しました。",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:Assets@CurrentYearInstant",
+    "xbrl:jppfs_cor:Assets@Prior1YearInstant"
+   ],
+   "reason": null,
+   "recomputed": 8.93
+  },
+  {
+   "id": "N132",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "流動資産",
+   "value": 16943.0,
+   "unit": "百万円",
+   "word": null,
+   "span": "**流動資産**は16,943百万円(前期末16,533",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:CurrentAssets@CurrentYearInstant"
+   ],
+   "reason": null,
+   "recomputed": 16943470000.0
+  },
+  {
+   "id": "N133",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "流動資産",
+   "value": 16533.0,
+   "unit": "百万円",
+   "word": null,
+   "span": "**流動資産**は16,943百万円(前期末16,533百万円)と409百万円増加",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:CurrentAssets@Prior1YearInstant"
+   ],
+   "reason": null,
+   "recomputed": 16533523000.0
+  },
+  {
+   "id": "N134",
+   "kind": "num",
+   "form": "derived_value",
+   "subject": "流動資産",
+   "value": 409000000.0,
+   "unit": "円",
+   "word": null,
+   "span": "動資産**は16,943百万円(前期末16,533百万円)と409百万円増加しました。",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:CurrentAssets@CurrentYearInstant",
+    "xbrl:jppfs_cor:CurrentAssets@Prior1YearInstant",
+    "formula:a-b"
+   ],
+   "reason": null,
+   "recomputed": 409947000.0
+  },
+  {
+   "id": "N135",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "現金及び預金",
+   "value": 2605.0,
+   "unit": "百万円",
+   "word": null,
+   "span": "- 現金及び預金:2,605百万円(前期末2,899百",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:CashAndDeposits@CurrentYearInstant"
+   ],
+   "reason": null,
+   "recomputed": 2605950000.0
+  },
+  {
+   "id": "N136",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "現金及び預金",
+   "value": 2899.0,
+   "unit": "百万円",
+   "word": null,
+   "span": "- 現金及び預金:2,605百万円(前期末2,899百万円)、293百万円の減",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:CashAndDeposits@Prior1YearInstant"
+   ],
+   "reason": null,
+   "recomputed": 2899140000.0
+  },
+  {
+   "id": "N137",
+   "kind": "num",
+   "form": "derived_value",
+   "subject": "現金及び預金",
+   "value": 293000000.0,
+   "unit": "円",
+   "word": null,
+   "span": " 現金及び預金:2,605百万円(前期末2,899百万円)、293百万円の減少",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:CashAndDeposits@CurrentYearInstant",
+    "xbrl:jppfs_cor:CashAndDeposits@Prior1YearInstant",
+    "formula:a-b"
+   ],
+   "reason": null,
+   "recomputed": -293190000.0
+  },
+  {
+   "id": "N138",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "受取手形及び売掛金",
+   "value": 2556.0,
+   "unit": "百万円",
+   "word": null,
+   "span": "- 受取手形及び売掛金:2,556百万円(同1,751百万円",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:NotesAndAccountsReceivableTrade@CurrentYearInstant"
+   ],
+   "reason": null,
+   "recomputed": 2556498000.0
+  },
+  {
+   "id": "N139",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "受取手形及び売掛金",
+   "value": 1751.0,
+   "unit": "百万円",
+   "word": null,
+   "span": "- 受取手形及び売掛金:2,556百万円(同1,751百万円)、804百万円の増",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:NotesAndAccountsReceivableTrade@Prior1YearInstant"
+   ],
+   "reason": null,
+   "recomputed": 1751723000.0
+  },
+  {
+   "id": "N140",
+   "kind": "num",
+   "form": "derived_value",
+   "subject": "受取手形及び売掛金",
+   "value": 804000000.0,
+   "unit": "円",
+   "word": null,
+   "span": "受取手形及び売掛金:2,556百万円(同1,751百万円)、804百万円の増加",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:NotesAndAccountsReceivableTrade@CurrentYearInstant",
+    "xbrl:jppfs_cor:NotesAndAccountsReceivableTrade@Prior1YearInstant",
+    "formula:a-b"
+   ],
+   "reason": null,
+   "recomputed": 804775000.0
+  },
+  {
+   "id": "N141",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "契約資産",
+   "value": 11267.0,
+   "unit": "百万円",
+   "word": null,
+   "span": "- 契約資産:11,267百万円(同11,428百万",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:ContractAssets@CurrentYearInstant"
+   ],
+   "reason": null,
+   "recomputed": 11267515000.0
+  },
+  {
+   "id": "N142",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "契約資産",
+   "value": 11428.0,
+   "unit": "百万円",
+   "word": null,
+   "span": "- 契約資産:11,267百万円(同11,428百万円)、161百万円の減",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:ContractAssets@Prior1YearInstant"
+   ],
+   "reason": null,
+   "recomputed": 11428545000.0
+  },
+  {
+   "id": "N143",
+   "kind": "num",
+   "form": "derived_value",
+   "subject": "契約資産",
+   "value": 161000000.0,
+   "unit": "円",
+   "word": null,
+   "span": "- 契約資産:11,267百万円(同11,428百万円)、161百万円の減少",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:ContractAssets@CurrentYearInstant",
+    "xbrl:jppfs_cor:ContractAssets@Prior1YearInstant",
+    "formula:a-b"
+   ],
+   "reason": null,
+   "recomputed": -161030000.0
+  },
+  {
+   "id": "N144",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "流動資産",
+   "value": 513000000.0,
+   "unit": "円",
+   "word": null,
+   "span": "- その他の流動資産:513百万円(同454百万円)、",
+   "state": "VALUE_MISMATCH",
+   "pointers": [
+    "xbrl:jppfs_cor:CurrentAssets@CurrentYearInstant"
+   ],
+   "reason": null,
+   "recomputed": 16943470000.0
+  },
+  {
+   "id": "N145",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "流動資産",
+   "value": 454000000.0,
+   "unit": "円",
+   "word": null,
+   "span": "- その他の流動資産:513百万円(同454百万円)、59百万円の増加",
+   "state": "VALUE_MISMATCH",
+   "pointers": [
+    "xbrl:jppfs_cor:CurrentAssets@CurrentYearInstant"
+   ],
+   "reason": null,
+   "recomputed": 16943470000.0
+  },
+  {
+   "id": "N146",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "流動資産",
+   "value": 59000000.0,
+   "unit": "円",
+   "word": null,
+   "span": "- その他の流動資産:513百万円(同454百万円)、59百万円の増加",
+   "state": "VALUE_MISMATCH",
+   "pointers": [
+    "xbrl:jppfs_cor:CurrentAssets@CurrentYearInstant"
+   ],
+   "reason": null,
+   "recomputed": 16943470000.0
+  },
+  {
+   "id": "N147",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "契約資産",
+   "value": 11267.0,
+   "unit": "百万円",
+   "word": null,
+   "span": "なお、契約資産11,267百万円は総資産の40.5%",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:ContractAssets@CurrentYearInstant"
+   ],
+   "reason": null,
+   "recomputed": 11267515000.0
+  },
+  {
+   "id": "N148",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "総資産",
+   "value": 40.5,
+   "unit": "%",
+   "word": null,
+   "span": "なお、契約資産11,267百万円は総資産の40.5%を占めており、当社グ",
+   "state": "POINTER_NOT_FOUND",
+   "pointers": [],
+   "reason": "no_element(ratio without fact)",
+   "recomputed": null
+  },
+  {
+   "id": "N149",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "固定資産",
+   "value": 10892.0,
+   "unit": "百万円",
+   "word": null,
+   "span": "**固定資産**は10,892百万円(前期末9,021百",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:NoncurrentAssets@CurrentYearInstant"
+   ],
+   "reason": null,
+   "recomputed": 10892950000.0
+  },
+  {
+   "id": "N150",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "固定資産",
+   "value": 9021.0,
+   "unit": "百万円",
+   "word": null,
+   "span": "**固定資産**は10,892百万円(前期末9,021百万円)と1,871百万円",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:NoncurrentAssets@Prior1YearInstant"
+   ],
+   "reason": null,
+   "recomputed": 9021152000.0
+  },
+  {
+   "id": "N151",
+   "kind": "num",
+   "form": "derived_value",
+   "subject": "固定資産",
+   "value": 1871.0,
+   "unit": "百万円",
+   "word": null,
+   "span": "固定資産**は10,892百万円(前期末9,021百万円)と1,871百万円、20.7%の大幅増",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:NoncurrentAssets@CurrentYearInstant",
+    "xbrl:jppfs_cor:NoncurrentAssets@Prior1YearInstant",
+    "formula:a-b"
+   ],
+   "reason": null,
+   "recomputed": 1871798000.0
+  },
+  {
+   "id": "N152",
+   "kind": "num",
+   "form": "derived_value",
+   "subject": "固定資産",
+   "value": 20.7,
+   "unit": "%",
+   "word": null,
+   "span": ",892百万円(前期末9,021百万円)と1,871百万円、20.7%の大幅増加となりまし",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:NoncurrentAssets@CurrentYearInstant",
+    "xbrl:jppfs_cor:NoncurrentAssets@Prior1YearInstant"
+   ],
+   "reason": null,
+   "recomputed": 20.75
+  },
+  {
+   "id": "N153",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "有形固定資産",
+   "value": 2092.0,
+   "unit": "百万円",
+   "word": null,
+   "span": "- 有形固定資産:2,092百万円(前期末2,083百",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:PropertyPlantAndEquipment@CurrentYearInstant"
+   ],
+   "reason": null,
+   "recomputed": 2092189000.0
+  },
+  {
+   "id": "N154",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "有形固定資産",
+   "value": 2083.0,
+   "unit": "百万円",
+   "word": null,
+   "span": "- 有形固定資産:2,092百万円(前期末2,083百万円)、9百万円の増加",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:PropertyPlantAndEquipment@Prior1YearInstant"
+   ],
+   "reason": null,
+   "recomputed": 2083066000.0
+  },
+  {
+   "id": "N155",
+   "kind": "num",
+   "form": "derived_value",
+   "subject": "有形固定資産",
+   "value": 9000000.0,
+   "unit": "円",
+   "word": null,
+   "span": " 有形固定資産:2,092百万円(前期末2,083百万円)、9百万円の増加",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:PropertyPlantAndEquipment@CurrentYearInstant",
+    "xbrl:jppfs_cor:PropertyPlantAndEquipment@Prior1YearInstant",
+    "formula:a-b"
+   ],
+   "reason": null,
+   "recomputed": 9123000.0
+  },
+  {
+   "id": "N156",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "無形固定資産",
+   "value": 371000000.0,
+   "unit": "円",
+   "word": null,
+   "span": "- 無形固定資産:371百万円(同528百万円)、",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:IntangibleAssets@CurrentYearInstant"
+   ],
+   "reason": null,
+   "recomputed": 371901000.0
+  },
+  {
+   "id": "N157",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "無形固定資産",
+   "value": 528000000.0,
+   "unit": "円",
+   "word": null,
+   "span": "- 無形固定資産:371百万円(同528百万円)、157百万円の減",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:IntangibleAssets@Prior1YearInstant"
+   ],
+   "reason": null,
+   "recomputed": 528971000.0
+  },
+  {
+   "id": "N158",
+   "kind": "num",
+   "form": "derived_value",
+   "subject": "無形固定資産",
+   "value": 157000000.0,
+   "unit": "円",
+   "word": null,
+   "span": "- 無形固定資産:371百万円(同528百万円)、157百万円の減少(うち、のれん",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:IntangibleAssets@CurrentYearInstant",
+    "xbrl:jppfs_cor:IntangibleAssets@Prior1YearInstant",
+    "formula:a-b"
+   ],
+   "reason": null,
+   "recomputed": -157070000.0
+  },
+  {
+   "id": "N159",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "のれん",
+   "value": 213000000.0,
+   "unit": "円",
+   "word": null,
+   "span": "百万円(同528百万円)、157百万円の減少(うち、のれんが213百万円から159百万円へ5",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:Goodwill@Prior1YearInstant"
+   ],
+   "reason": null,
+   "recomputed": 213025000.0
+  },
+  {
+   "id": "N160",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "のれん",
+   "value": 159000000.0,
+   "unit": "円",
+   "word": null,
+   "span": "百万円)、157百万円の減少(うち、のれんが213百万円から159百万円へ53百万円減少)",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:Goodwill@CurrentYearInstant"
+   ],
+   "reason": null,
+   "recomputed": 159768000.0
+  },
+  {
+   "id": "N161",
+   "kind": "num",
+   "form": "derived_value",
+   "subject": "のれん",
+   "value": 53000000.0,
+   "unit": "円",
+   "word": null,
+   "span": "7百万円の減少(うち、のれんが213百万円から159百万円へ53百万円減少)",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:Goodwill@CurrentYearInstant",
+    "xbrl:jppfs_cor:Goodwill@Prior1YearInstant",
+    "formula:a-b"
+   ],
+   "reason": null,
+   "recomputed": -53257000.0
+  },
+  {
+   "id": "N162",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "投資その他の資産",
+   "value": 8428.0,
+   "unit": "百万円",
+   "word": null,
+   "span": "- 投資その他の資産:8,428百万円(同6,409百万円",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:InvestmentsAndOtherAssets@CurrentYearInstant"
+   ],
+   "reason": null,
+   "recomputed": 8428859000.0
+  },
+  {
+   "id": "N163",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "投資その他の資産",
+   "value": 6409.0,
+   "unit": "百万円",
+   "word": null,
+   "span": "- 投資その他の資産:8,428百万円(同6,409百万円)、2,019百万円",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:InvestmentsAndOtherAssets@Prior1YearInstant"
+   ],
+   "reason": null,
+   "recomputed": 6409114000.0
+  },
+  {
+   "id": "N164",
+   "kind": "num",
+   "form": "derived_value",
+   "subject": "投資その他の資産",
+   "value": 2019.0,
+   "unit": "百万円",
+   "word": null,
+   "span": " 投資その他の資産:8,428百万円(同6,409百万円)、2,019百万円の増加",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:InvestmentsAndOtherAssets@CurrentYearInstant",
+    "xbrl:jppfs_cor:InvestmentsAndOtherAssets@Prior1YearInstant",
+    "formula:a-b"
+   ],
+   "reason": null,
+   "recomputed": 2019745000.0
+  },
+  {
+   "id": "N165",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "退職給付に係る資産",
+   "value": 6174.0,
+   "unit": "百万円",
+   "word": null,
+   "span": "固定資産増加の最大の要因は、**退職給付に係る資産**が6,174百万円(前期末4,345百",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:NetDefinedBenefitAsset@CurrentYearInstant"
+   ],
+   "reason": null,
+   "recomputed": 6174228000.0
+  },
+  {
+   "id": "N166",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "退職給付に係る資産",
+   "value": 4345.0,
+   "unit": "百万円",
+   "word": null,
+   "span": "要因は、**退職給付に係る資産**が6,174百万円(前期末4,345百万円)と1,828百万円",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:NetDefinedBenefitAsset@Prior1YearInstant"
+   ],
+   "reason": null,
+   "recomputed": 4345389000.0
+  },
+  {
+   "id": "N167",
+   "kind": "num",
+   "form": "derived_value",
+   "subject": "退職給付に係る資産",
+   "value": 1828.0,
+   "unit": "百万円",
+   "word": null,
+   "span": "に係る資産**が6,174百万円(前期末4,345百万円)と1,828百万円増加したことです。",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:NetDefinedBenefitAsset@CurrentYearInstant",
+    "xbrl:jppfs_cor:NetDefinedBenefitAsset@Prior1YearInstant",
+    "formula:a-b"
+   ],
+   "reason": null,
+   "recomputed": 1828839000.0
+  },
+  {
+   "id": "N168",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "投資有価証券",
+   "value": 1203.0,
+   "unit": "百万円",
+   "word": null,
+   "span": "また、投資有価証券も1,203百万円(同901百万円)と",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:InvestmentSecurities@CurrentYearInstant"
+   ],
+   "reason": null,
+   "recomputed": 1203225000.0
+  },
+  {
+   "id": "N169",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "投資有価証券",
+   "value": 901000000.0,
+   "unit": "円",
+   "word": null,
+   "span": "また、投資有価証券も1,203百万円(同901百万円)と301百万円増加",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:InvestmentSecurities@Prior1YearInstant"
+   ],
+   "reason": null,
+   "recomputed": 901714000.0
+  },
+  {
+   "id": "N170",
+   "kind": "num",
+   "form": "derived_value",
+   "subject": "投資有価証券",
+   "value": 301000000.0,
+   "unit": "円",
+   "word": null,
+   "span": "また、投資有価証券も1,203百万円(同901百万円)と301百万円増加しました。",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:InvestmentSecurities@CurrentYearInstant",
+    "xbrl:jppfs_cor:InvestmentSecurities@Prior1YearInstant",
+    "formula:a-b"
+   ],
+   "reason": null,
+   "recomputed": 301511000.0
+  },
+  {
+   "id": "N171",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "その他有価証券評価差額金",
+   "value": 414000000.0,
+   "unit": "円",
+   "word": null,
+   "span": "これは保有株式の時価上昇(その他有価証券評価差額金が414百万円から631百万円へ増",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:ValuationDifferenceOnAvailableForSaleSecurities@Prior1YearInstant"
+   ],
+   "reason": null,
+   "recomputed": 414441000.0
+  },
+  {
+   "id": "N172",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "その他有価証券評価差額金",
+   "value": 631000000.0,
+   "unit": "円",
+   "word": null,
+   "span": "有株式の時価上昇(その他有価証券評価差額金が414百万円から631百万円へ増加)および一部銘",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:ValuationDifferenceOnAvailableForSaleSecurities@CurrentYearInstant"
+   ],
+   "reason": null,
+   "recomputed": 631931000.0
+  },
+  {
+   "id": "N173",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "その他有価証券評価差額金",
+   "value": 3000000.0,
+   "unit": "円",
+   "word": null,
+   "span": "万円から631百万円へ増加)および一部銘柄の追加取得(取得額3百万円)によるものです。",
+   "state": "VALUE_MISMATCH",
+   "pointers": [
+    "xbrl:jppfs_cor:ValuationDifferenceOnAvailableForSaleSecurities@CurrentYearInstant"
+   ],
+   "reason": null,
+   "recomputed": 631931000.0
+  },
+  {
+   "id": "N174",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "負債合計",
+   "value": 10670.0,
+   "unit": "百万円",
+   "word": null,
+   "span": "負債合計は10,670百万円となり、前期末の10",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:Liabilities@CurrentYearInstant"
+   ],
+   "reason": null,
+   "recomputed": 10670476000.0
+  },
+  {
+   "id": "N175",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "負債合計",
+   "value": 10055.0,
+   "unit": "百万円",
+   "word": null,
+   "span": "負債合計は10,670百万円となり、前期末の10,055百万円から614百万円、6",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:Liabilities@Prior1YearInstant"
+   ],
+   "reason": null,
+   "recomputed": 10055929000.0
+  },
+  {
+   "id": "N176",
+   "kind": "num",
+   "form": "derived_value",
+   "subject": "負債合計",
+   "value": 614000000.0,
+   "unit": "円",
+   "word": null,
+   "span": "計は10,670百万円となり、前期末の10,055百万円から614百万円、6.1%増加しまし",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:Liabilities@CurrentYearInstant",
+    "xbrl:jppfs_cor:Liabilities@Prior1YearInstant",
+    "formula:a-b"
+   ],
+   "reason": null,
+   "recomputed": 614547000.0
+  },
+  {
+   "id": "N177",
+   "kind": "num",
+   "form": "derived_value",
+   "subject": "負債合計",
+   "value": 6.1,
+   "unit": "%",
+   "word": null,
+   "span": "0百万円となり、前期末の10,055百万円から614百万円、6.1%増加しました。",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:Liabilities@CurrentYearInstant",
+    "xbrl:jppfs_cor:Liabilities@Prior1YearInstant"
+   ],
+   "reason": null,
+   "recomputed": 6.11
+  },
+  {
+   "id": "N178",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "流動負債",
+   "value": 8041.0,
+   "unit": "百万円",
+   "word": null,
+   "span": "**流動負債**は8,041百万円(前期末7,642百",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:CurrentLiabilities@CurrentYearInstant"
+   ],
+   "reason": null,
+   "recomputed": 8041190000.0
+  },
+  {
+   "id": "N179",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "流動負債",
+   "value": 7642.0,
+   "unit": "百万円",
+   "word": null,
+   "span": "**流動負債**は8,041百万円(前期末7,642百万円)と398百万円増加",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:CurrentLiabilities@Prior1YearInstant"
+   ],
+   "reason": null,
+   "recomputed": 7642406000.0
+  },
+  {
+   "id": "N180",
+   "kind": "num",
+   "form": "derived_value",
+   "subject": "流動負債",
+   "value": 398000000.0,
+   "unit": "円",
+   "word": null,
+   "span": "*流動負債**は8,041百万円(前期末7,642百万円)と398百万円増加しました。",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:CurrentLiabilities@CurrentYearInstant",
+    "xbrl:jppfs_cor:CurrentLiabilities@Prior1YearInstant",
+    "formula:a-b"
+   ],
+   "reason": null,
+   "recomputed": 398784000.0
+  },
+  {
+   "id": "N181",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "業務未払金",
+   "value": 1757.0,
+   "unit": "百万円",
+   "word": null,
+   "span": "- 業務未払金:1,757百万円(前期末2,057百",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:AccountsPayableOperatingSpecific@CurrentYearInstant"
+   ],
+   "reason": null,
+   "recomputed": 1757446000.0
+  },
+  {
+   "id": "N182",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "業務未払金",
+   "value": 2057.0,
+   "unit": "百万円",
+   "word": null,
+   "span": "- 業務未払金:1,757百万円(前期末2,057百万円)、300百万円の減",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:AccountsPayableOperatingSpecific@Prior1YearInstant"
+   ],
+   "reason": null,
+   "recomputed": 2057744000.0
+  },
+  {
+   "id": "N183",
+   "kind": "num",
+   "form": "derived_value",
+   "subject": "業務未払金",
+   "value": 300000000.0,
+   "unit": "円",
+   "word": null,
+   "span": "- 業務未払金:1,757百万円(前期末2,057百万円)、300百万円の減少",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:AccountsPayableOperatingSpecific@CurrentYearInstant",
+    "xbrl:jppfs_cor:AccountsPayableOperatingSpecific@Prior1YearInstant",
+    "formula:a-b"
+   ],
+   "reason": null,
+   "recomputed": -300298000.0
+  },
+  {
+   "id": "N184",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "未払消費税等",
+   "value": 1490.0,
+   "unit": "百万円",
+   "word": null,
+   "span": "- 未払消費税等:1,490百万円(同1,191百万円",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:AccruedConsumptionTaxes@CurrentYearInstant"
+   ],
+   "reason": null,
+   "recomputed": 1490580000.0
+  },
+  {
+   "id": "N185",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "未払消費税等",
+   "value": 1191.0,
+   "unit": "百万円",
+   "word": null,
+   "span": "- 未払消費税等:1,490百万円(同1,191百万円)、299百万円の増",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:AccruedConsumptionTaxes@Prior1YearInstant"
+   ],
+   "reason": null,
+   "recomputed": 1191514000.0
+  },
+  {
+   "id": "N186",
+   "kind": "num",
+   "form": "derived_value",
+   "subject": "未払消費税等",
+   "value": 299000000.0,
+   "unit": "円",
+   "word": null,
+   "span": "- 未払消費税等:1,490百万円(同1,191百万円)、299百万円の増加",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:AccruedConsumptionTaxes@CurrentYearInstant",
+    "xbrl:jppfs_cor:AccruedConsumptionTaxes@Prior1YearInstant",
+    "formula:a-b"
+   ],
+   "reason": null,
+   "recomputed": 299066000.0
+  },
+  {
+   "id": "N187",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "未払法人税等",
+   "value": 579000000.0,
+   "unit": "円",
+   "word": null,
+   "span": "- 未払法人税等:579百万円(同687百万円)、",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:IncomeTaxesPayable@CurrentYearInstant"
+   ],
+   "reason": null,
+   "recomputed": 579515000.0
+  },
+  {
+   "id": "N188",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "未払法人税等",
+   "value": 687000000.0,
+   "unit": "円",
+   "word": null,
+   "span": "- 未払法人税等:579百万円(同687百万円)、107百万円の減",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:IncomeTaxesPayable@Prior1YearInstant"
+   ],
+   "reason": null,
+   "recomputed": 687368000.0
+  },
+  {
+   "id": "N189",
+   "kind": "num",
+   "form": "derived_value",
+   "subject": "未払法人税等",
+   "value": 107000000.0,
+   "unit": "円",
+   "word": null,
+   "span": "- 未払法人税等:579百万円(同687百万円)、107百万円の減少",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:IncomeTaxesPayable@CurrentYearInstant",
+    "xbrl:jppfs_cor:IncomeTaxesPayable@Prior1YearInstant",
+    "formula:a-b"
+   ],
+   "reason": null,
+   "recomputed": -107853000.0
+  },
+  {
+   "id": "N190",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "契約負債",
+   "value": 1500.0,
+   "unit": "百万円",
+   "word": null,
+   "span": "- 契約負債:1,500百万円(同1,594百万円",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:ContractLiabilities@CurrentYearInstant"
+   ],
+   "reason": null,
+   "recomputed": 1500638000.0
+  },
+  {
+   "id": "N191",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "契約負債",
+   "value": 1594.0,
+   "unit": "百万円",
+   "word": null,
+   "span": "- 契約負債:1,500百万円(同1,594百万円)、93百万円の減少",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:ContractLiabilities@Prior1YearInstant"
+   ],
+   "reason": null,
+   "recomputed": 1594084000.0
+  },
+  {
+   "id": "N192",
+   "kind": "num",
+   "form": "derived_value",
+   "subject": "契約負債",
+   "value": 93000000.0,
+   "unit": "円",
+   "word": null,
+   "span": "- 契約負債:1,500百万円(同1,594百万円)、93百万円の減少",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:ContractLiabilities@CurrentYearInstant",
+    "xbrl:jppfs_cor:ContractLiabilities@Prior1YearInstant",
+    "formula:a-b"
+   ],
+   "reason": null,
+   "recomputed": -93446000.0
+  },
+  {
+   "id": "N193",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "1年内返済予定の長期借入金",
+   "value": 234000000.0,
+   "unit": "円",
+   "word": null,
+   "span": "- 1年内返済予定の長期借入金:234百万円(同332百万円)、",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:CurrentPortionOfLongTermLoansPayable@CurrentYearInstant"
+   ],
+   "reason": null,
+   "recomputed": 234864000.0
+  },
+  {
+   "id": "N194",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "1年内返済予定の長期借入金",
+   "value": 332000000.0,
+   "unit": "円",
+   "word": null,
+   "span": "- 1年内返済予定の長期借入金:234百万円(同332百万円)、98百万円の減少",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:CurrentPortionOfLongTermLoansPayable@Prior1YearInstant"
+   ],
+   "reason": null,
+   "recomputed": 332864000.0
+  },
+  {
+   "id": "N195",
+   "kind": "num",
+   "form": "derived_value",
+   "subject": "1年内返済予定の長期借入金",
+   "value": 98000000.0,
+   "unit": "円",
+   "word": null,
+   "span": "1年内返済予定の長期借入金:234百万円(同332百万円)、98百万円の減少",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:CurrentPortionOfLongTermLoansPayable@CurrentYearInstant",
+    "xbrl:jppfs_cor:CurrentPortionOfLongTermLoansPayable@Prior1YearInstant",
+    "formula:a-b"
+   ],
+   "reason": null,
+   "recomputed": -98000000.0
+  },
+  {
+   "id": "N196",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": null,
+   "value": 7000000.0,
+   "unit": "円",
+   "word": null,
+   "span": "- 役員株式報酬引当金:7百万円(同69百万円)、6",
+   "state": "UNVERIFIABLE",
+   "pointers": [],
+   "reason": "ambiguous(elements)",
+   "recomputed": null
+  },
+  {
+   "id": "N197",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": null,
+   "value": 69000000.0,
+   "unit": "円",
+   "word": null,
+   "span": "- 役員株式報酬引当金:7百万円(同69百万円)、62百万円の減少",
+   "state": "UNVERIFIABLE",
+   "pointers": [],
+   "reason": "no_subject",
+   "recomputed": null
+  },
+  {
+   "id": "N198",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": null,
+   "value": 62000000.0,
+   "unit": "円",
+   "word": null,
+   "span": "- 役員株式報酬引当金:7百万円(同69百万円)、62百万円の減少",
+   "state": "UNVERIFIABLE",
+   "pointers": [],
+   "reason": "ambiguous(elements)",
+   "recomputed": null
+  },
+  {
+   "id": "N199",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "受注損失引当金",
+   "value": 19000000.0,
+   "unit": "円",
+   "word": null,
+   "span": "- 受注損失引当金:19百万円(同18百万円)、1",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:ProvisionForLossOnOrderReceivedCL@CurrentYearInstant"
+   ],
+   "reason": null,
+   "recomputed": 19680000.0
+  },
+  {
+   "id": "N200",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "受注損失引当金",
+   "value": 18000000.0,
+   "unit": "円",
+   "word": null,
+   "span": "- 受注損失引当金:19百万円(同18百万円)、1百万円の増加",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:ProvisionForLossOnOrderReceivedCL@Prior1YearInstant"
+   ],
+   "reason": null,
+   "recomputed": 18500000.0
+  },
+  {
+   "id": "N201",
+   "kind": "num",
+   "form": "derived_value",
+   "subject": "受注損失引当金",
+   "value": 1000000.0,
+   "unit": "円",
+   "word": null,
+   "span": "- 受注損失引当金:19百万円(同18百万円)、1百万円の増加",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:ProvisionForLossOnOrderReceivedCL@CurrentYearInstant",
+    "xbrl:jppfs_cor:ProvisionForLossOnOrderReceivedCL@Prior1YearInstant",
+    "formula:a-b"
+   ],
+   "reason": null,
+   "recomputed": 1180000.0
+  },
+  {
+   "id": "N202",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "固定負債",
+   "value": 2629.0,
+   "unit": "百万円",
+   "word": null,
+   "span": "**固定負債**は2,629百万円(前期末2,413百",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:NoncurrentLiabilities@CurrentYearInstant"
+   ],
+   "reason": null,
+   "recomputed": 2629286000.0
+  },
+  {
+   "id": "N203",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "固定負債",
+   "value": 2413.0,
+   "unit": "百万円",
+   "word": null,
+   "span": "**固定負債**は2,629百万円(前期末2,413百万円)と215百万円増加",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:NoncurrentLiabilities@Prior1YearInstant"
+   ],
+   "reason": null,
+   "recomputed": 2413522000.0
+  },
+  {
+   "id": "N204",
+   "kind": "num",
+   "form": "derived_value",
+   "subject": "固定負債",
+   "value": 215000000.0,
+   "unit": "円",
+   "word": null,
+   "span": "*固定負債**は2,629百万円(前期末2,413百万円)と215百万円増加しました。",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:NoncurrentLiabilities@CurrentYearInstant",
+    "xbrl:jppfs_cor:NoncurrentLiabilities@Prior1YearInstant",
+    "formula:a-b"
+   ],
+   "reason": null,
+   "recomputed": 215764000.0
+  },
+  {
+   "id": "N205",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "繰延税金負債",
+   "value": 1738.0,
+   "unit": "百万円",
+   "word": null,
+   "span": "主な内訳は、繰延税金負債1,738百万円(前期末1,290百",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:DeferredTaxLiabilities@CurrentYearInstant"
+   ],
+   "reason": null,
+   "recomputed": 1738948000.0
+  },
+  {
+   "id": "N206",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "繰延税金負債",
+   "value": 1290.0,
+   "unit": "百万円",
+   "word": null,
+   "span": "主な内訳は、繰延税金負債1,738百万円(前期末1,290百万円、448百万円増)、",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:DeferredTaxLiabilities@Prior1YearInstant"
+   ],
+   "reason": null,
+   "recomputed": 1290441000.0
+  },
+  {
+   "id": "N207",
+   "kind": "num",
+   "form": "derived_value",
+   "subject": "繰延税金負債",
+   "value": 448000000.0,
+   "unit": "円",
+   "word": null,
+   "span": "訳は、繰延税金負債1,738百万円(前期末1,290百万円、448百万円増)、長期借入金27",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:DeferredTaxLiabilities@CurrentYearInstant",
+    "xbrl:jppfs_cor:DeferredTaxLiabilities@Prior1YearInstant",
+    "formula:a-b"
+   ],
+   "reason": null,
+   "recomputed": 448507000.0
+  },
+  {
+   "id": "N208",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "長期借入金",
+   "value": 275000000.0,
+   "unit": "円",
+   "word": null,
+   "span": "百万円(前期末1,290百万円、448百万円増)、長期借入金275百万円(同510百万円、2",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:LongTermLoansPayable@CurrentYearInstant"
+   ],
+   "reason": null,
+   "recomputed": 275773000.0
+  },
+  {
+   "id": "N209",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "長期借入金",
+   "value": 510000000.0,
+   "unit": "円",
+   "word": null,
+   "span": ",290百万円、448百万円増)、長期借入金275百万円(同510百万円、234百万円減)、",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:LongTermLoansPayable@Prior1YearInstant"
+   ],
+   "reason": null,
+   "recomputed": 510637000.0
+  },
+  {
+   "id": "N210",
+   "kind": "num",
+   "form": "derived_value",
+   "subject": "長期借入金",
+   "value": 234000000.0,
+   "unit": "円",
+   "word": null,
+   "span": "、448百万円増)、長期借入金275百万円(同510百万円、234百万円減)、資産除去債務2",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:LongTermLoansPayable@CurrentYearInstant",
+    "xbrl:jppfs_cor:LongTermLoansPayable@Prior1YearInstant",
+    "formula:a-b"
+   ],
+   "reason": null,
+   "recomputed": -234864000.0
+  },
+  {
+   "id": "N211",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "資産除去債務",
+   "value": 215000000.0,
+   "unit": "円",
+   "word": null,
+   "span": "275百万円(同510百万円、234百万円減)、資産除去債務215百万円(同198百万円)、",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:AssetRetirementObligationsNCL@CurrentYearInstant"
+   ],
+   "reason": null,
+   "recomputed": 215469000.0
+  },
+  {
+   "id": "N212",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "資産除去債務",
+   "value": 198000000.0,
+   "unit": "円",
+   "word": null,
+   "span": "510百万円、234百万円減)、資産除去債務215百万円(同198百万円)、その他242百万",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:AssetRetirementObligationsNCL@Prior1YearInstant"
+   ],
+   "reason": null,
+   "recomputed": 198269000.0
+  },
+  {
+   "id": "N213",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "資産除去債務",
+   "value": 242000000.0,
+   "unit": "円",
+   "word": null,
+   "span": "万円減)、資産除去債務215百万円(同198百万円)、その他242百万円です。",
+   "state": "VALUE_MISMATCH",
+   "pointers": [
+    "xbrl:jppfs_cor:AssetRetirementObligationsNCL@CurrentYearInstant"
+   ],
+   "reason": null,
+   "recomputed": 215469000.0
+  },
+  {
+   "id": "N214",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "完成業務補償引当金",
+   "value": 991000000.0,
+   "unit": "円",
+   "word": null,
+   "span": "また、完成業務補償引当金991百万円(前期末205百万円",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jpcrp030000-asr_E36539-000:ProvisionForWarrantiesForCompletedOperationCL@CurrentYearInstant"
+   ],
+   "reason": null,
+   "recomputed": 991000000.0
+  },
+  {
+   "id": "N215",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "完成業務補償引当金",
+   "value": 205000000.0,
+   "unit": "円",
+   "word": null,
+   "span": "また、完成業務補償引当金991百万円(前期末205百万円)が前述のとおり78",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jpcrp030000-asr_E36539-000:ProvisionForWarrantiesForCompletedOperationCL@Prior1YearInstant"
+   ],
+   "reason": null,
+   "recomputed": 205000000.0
+  },
+  {
+   "id": "N216",
+   "kind": "num",
+   "form": "derived_value",
+   "subject": "完成業務補償引当金",
+   "value": 786000000.0,
+   "unit": "円",
+   "word": null,
+   "span": "務補償引当金991百万円(前期末205百万円)が前述のとおり786百万円増加しております。",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jpcrp030000-asr_E36539-000:ProvisionForWarrantiesForCompletedOperationCL@CurrentYearInstant",
+    "xbrl:jpcrp030000-asr_E36539-000:ProvisionForWarrantiesForCompletedOperationCL@Prior1YearInstant",
+    "formula:a-b"
+   ],
+   "reason": null,
+   "recomputed": 786000000.0
+  },
+  {
+   "id": "N217",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "有利子負債",
+   "value": 234000000.0,
+   "unit": "円",
+   "word": null,
+   "span": "有利子負債は1年内返済予定分234百万円と長期借入金275百",
+   "state": "POINTER_NOT_FOUND",
+   "pointers": [],
+   "reason": "no_element",
+   "recomputed": null
+  },
+  {
+   "id": "N218",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "長期借入金",
+   "value": 275000000.0,
+   "unit": "円",
+   "word": null,
+   "span": "有利子負債は1年内返済予定分234百万円と長期借入金275百万円の合計510百万円(",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:LongTermLoansPayable@CurrentYearInstant"
+   ],
+   "reason": null,
+   "recomputed": 275773000.0
+  },
+  {
+   "id": "N219",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "長期借入金",
+   "value": 510000000.0,
+   "unit": "円",
+   "word": null,
+   "span": "は1年内返済予定分234百万円と長期借入金275百万円の合計510百万円(前期末843百万円",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:LongTermLoansPayable@Prior1YearInstant"
+   ],
+   "reason": null,
+   "recomputed": 510637000.0
+  },
+  {
+   "id": "N220",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "長期借入金",
+   "value": 843000000.0,
+   "unit": "円",
+   "word": null,
+   "span": "34百万円と長期借入金275百万円の合計510百万円(前期末843百万円)まで減少しており、",
+   "state": "VALUE_MISMATCH",
+   "pointers": [
+    "xbrl:jppfs_cor:LongTermLoansPayable@CurrentYearInstant"
+   ],
+   "reason": null,
+   "recomputed": 275773000.0
+  },
+  {
+   "id": "N221",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "長期借入金",
+   "value": 2605.0,
+   "unit": "百万円",
+   "word": null,
+   "span": "計510百万円(前期末843百万円)まで減少しており、現預金2,605百万円に対して実質無借金に",
+   "state": "VALUE_MISMATCH",
+   "pointers": [
+    "xbrl:jppfs_cor:LongTermLoansPayable@CurrentYearInstant"
+   ],
+   "reason": null,
+   "recomputed": 275773000.0
+  },
+  {
+   "id": "N222",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "純資産合計",
+   "value": 17165.0,
+   "unit": "百万円",
+   "word": null,
+   "span": "純資産合計は17,165百万円となり、前期末の15",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:NetAssets@CurrentYearInstant"
+   ],
+   "reason": null,
+   "recomputed": 17165944000.0
+  },
+  {
+   "id": "N223",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "純資産合計",
+   "value": 15498.0,
+   "unit": "百万円",
+   "word": null,
+   "span": "純資産合計は17,165百万円となり、前期末の15,498百万円から1,667百万円",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:NetAssets@Prior1YearInstant"
+   ],
+   "reason": null,
+   "recomputed": 15498746000.0
+  },
+  {
+   "id": "N224",
+   "kind": "num",
+   "form": "derived_value",
+   "subject": "純資産合計",
+   "value": 1667.0,
+   "unit": "百万円",
+   "word": null,
+   "span": "計は17,165百万円となり、前期末の15,498百万円から1,667百万円、10.8%増加しま",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:NetAssets@CurrentYearInstant",
+    "xbrl:jppfs_cor:NetAssets@Prior1YearInstant",
+    "formula:a-b"
+   ],
+   "reason": null,
+   "recomputed": 1667198000.0
+  },
+  {
+   "id": "N225",
+   "kind": "num",
+   "form": "derived_value",
+   "subject": "純資産合計",
+   "value": 10.8,
+   "unit": "%",
+   "word": null,
+   "span": "万円となり、前期末の15,498百万円から1,667百万円、10.8%増加しました。",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:NetAssets@CurrentYearInstant",
+    "xbrl:jppfs_cor:NetAssets@Prior1YearInstant"
+   ],
+   "reason": null,
+   "recomputed": 10.76
+  },
+  {
+   "id": "N226",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "株主資本",
+   "value": 14258.0,
+   "unit": "百万円",
+   "word": null,
+   "span": "- 株主資本:14,258百万円(前期末13,890",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:ShareholdersEquity@CurrentYearInstant"
+   ],
+   "reason": null,
+   "recomputed": 14258142000.0
+  },
+  {
+   "id": "N227",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "株主資本",
+   "value": 13890.0,
+   "unit": "百万円",
+   "word": null,
+   "span": "- 株主資本:14,258百万円(前期末13,890百万円)、367百万円の増",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:ShareholdersEquity@Prior1YearInstant"
+   ],
+   "reason": null,
+   "recomputed": 13890595000.0
+  },
+  {
+   "id": "N228",
+   "kind": "num",
+   "form": "derived_value",
+   "subject": "株主資本",
+   "value": 367000000.0,
+   "unit": "円",
+   "word": null,
+   "span": " 株主資本:14,258百万円(前期末13,890百万円)、367百万円の増加",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:ShareholdersEquity@CurrentYearInstant",
+    "xbrl:jppfs_cor:ShareholdersEquity@Prior1YearInstant",
+    "formula:a-b"
+   ],
+   "reason": null,
+   "recomputed": 367547000.0
+  },
+  {
+   "id": "N229",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "資本金",
+   "value": 2000.0,
+   "unit": "百万円",
+   "word": null,
+   "span": "- 資本金2,000百万円(増減なし)",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:CapitalStock@Prior1YearInstant"
+   ],
+   "reason": null,
+   "recomputed": 2000000000.0
+  },
+  {
+   "id": "N230",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "資本剰余金",
+   "value": 1766.0,
+   "unit": "百万円",
+   "word": null,
+   "span": "- 資本剰余金1,766百万円(同1,696百万円",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:CapitalSurplus@CurrentYearInstant"
+   ],
+   "reason": null,
+   "recomputed": 1766366000.0
+  },
+  {
+   "id": "N231",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "資本剰余金",
+   "value": 1696.0,
+   "unit": "百万円",
+   "word": null,
+   "span": "- 資本剰余金1,766百万円(同1,696百万円)、70百万円増",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:CapitalSurplus@Prior1YearInstant"
+   ],
+   "reason": null,
+   "recomputed": 1696099000.0
+  },
+  {
+   "id": "N232",
+   "kind": "num",
+   "form": "derived_value",
+   "subject": "資本剰余金",
+   "value": 70000000.0,
+   "unit": "円",
+   "word": null,
+   "span": "- 資本剰余金1,766百万円(同1,696百万円)、70百万円増",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:CapitalSurplus@CurrentYearInstant",
+    "xbrl:jppfs_cor:CapitalSurplus@Prior1YearInstant",
+    "formula:a-b"
+   ],
+   "reason": null,
+   "recomputed": 70267000.0
+  },
+  {
+   "id": "N233",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "利益剰余金",
+   "value": 10510.0,
+   "unit": "百万円",
+   "word": null,
+   "span": "- 利益剰余金10,510百万円(同10,217百万",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:RetainedEarnings@CurrentYearInstant"
+   ],
+   "reason": null,
+   "recomputed": 10510398000.0
+  },
+  {
+   "id": "N234",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "利益剰余金",
+   "value": 10217.0,
+   "unit": "百万円",
+   "word": null,
+   "span": "- 利益剰余金10,510百万円(同10,217百万円)、292百万円増",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:RetainedEarnings@Prior1YearInstant"
+   ],
+   "reason": null,
+   "recomputed": 10217485000.0
+  },
+  {
+   "id": "N235",
+   "kind": "num",
+   "form": "derived_value",
+   "subject": "利益剰余金",
+   "value": 292000000.0,
+   "unit": "円",
+   "word": null,
+   "span": "- 利益剰余金10,510百万円(同10,217百万円)、292百万円増",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:RetainedEarnings@CurrentYearInstant",
+    "xbrl:jppfs_cor:RetainedEarnings@Prior1YearInstant",
+    "formula:a-b"
+   ],
+   "reason": null,
+   "recomputed": 292913000.0
+  },
+  {
+   "id": "N236",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "自己株式",
+   "value": -18000000.0,
+   "unit": "円",
+   "word": null,
+   "span": "- 自己株式△18百万円(同△22百万円)",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:TreasuryStock@CurrentYearInstant"
+   ],
+   "reason": null,
+   "recomputed": -18621000.0
+  },
+  {
+   "id": "N237",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "自己株式",
+   "value": -22000000.0,
+   "unit": "円",
+   "word": null,
+   "span": "- 自己株式△18百万円(同△22百万円)",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:TreasuryStock@Prior1YearInstant"
+   ],
+   "reason": null,
+   "recomputed": -22989000.0
+  },
+  {
+   "id": "N238",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "その他の包括利益",
+   "value": 2907.0,
+   "unit": "百万円",
+   "word": null,
+   "span": "- その他の包括利益累計額:2,907百万円(同1,596百万円",
+   "state": "VALUE_MISMATCH",
+   "pointers": [
+    "xbrl:jppfs_cor:OtherComprehensiveIncome@CurrentYearDuration"
+   ],
+   "reason": null,
+   "recomputed": 1310889000.0
+  },
+  {
+   "id": "N239",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "その他の包括利益",
+   "value": 1596.0,
+   "unit": "百万円",
+   "word": null,
+   "span": "- その他の包括利益累計額:2,907百万円(同1,596百万円)、1,310百万円",
+   "state": "VALUE_MISMATCH",
+   "pointers": [
+    "xbrl:jppfs_cor:OtherComprehensiveIncome@CurrentYearDuration"
+   ],
+   "reason": null,
+   "recomputed": 1310889000.0
+  },
+  {
+   "id": "N240",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "その他の包括利益",
+   "value": 1310.0,
+   "unit": "百万円",
+   "word": null,
+   "span": "他の包括利益累計額:2,907百万円(同1,596百万円)、1,310百万円の増加",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:OtherComprehensiveIncome@CurrentYearDuration"
+   ],
+   "reason": null,
+   "recomputed": 1310889000.0
+  },
+  {
+   "id": "N241",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "その他有価証券評価差額金",
+   "value": 631000000.0,
+   "unit": "円",
+   "word": null,
+   "span": "- その他有価証券評価差額金631百万円(同414百万円)",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:ValuationDifferenceOnAvailableForSaleSecurities@CurrentYearInstant"
+   ],
+   "reason": null,
+   "recomputed": 631931000.0
+  },
+  {
+   "id": "N242",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "その他有価証券評価差額金",
+   "value": 414000000.0,
+   "unit": "円",
+   "word": null,
+   "span": "- その他有価証券評価差額金631百万円(同414百万円)",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:ValuationDifferenceOnAvailableForSaleSecurities@Prior1YearInstant"
+   ],
+   "reason": null,
+   "recomputed": 414441000.0
+  },
+  {
+   "id": "N243",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "繰延ヘッジ損益",
+   "value": 4000000.0,
+   "unit": "円",
+   "word": null,
+   "span": "- 繰延ヘッジ損益4百万円",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:DeferredGainsOrLossesOnHedges@CurrentYearInstant"
+   ],
+   "reason": null,
+   "recomputed": 4992000.0
+  },
+  {
+   "id": "N244",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "為替換算調整勘定",
+   "value": -16000000.0,
+   "unit": "円",
+   "word": null,
+   "span": "- 為替換算調整勘定△16百万円(同△19百万円)",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:ForeignCurrencyTranslationAdjustment@CurrentYearInstant"
+   ],
+   "reason": null,
+   "recomputed": -16146000.0
+  },
+  {
+   "id": "N245",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "為替換算調整勘定",
+   "value": -19000000.0,
+   "unit": "円",
+   "word": null,
+   "span": "- 為替換算調整勘定△16百万円(同△19百万円)",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:ForeignCurrencyTranslationAdjustment@Prior1YearInstant"
+   ],
+   "reason": null,
+   "recomputed": -19064000.0
+  },
+  {
+   "id": "N246",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "退職給付に係る調整累計額",
+   "value": 2287.0,
+   "unit": "百万円",
+   "word": null,
+   "span": "- 退職給付に係る調整累計額2,287百万円(同1,201百万円",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:RemeasurementsOfDefinedBenefitPlans@CurrentYearInstant"
+   ],
+   "reason": null,
+   "recomputed": 2287023000.0
+  },
+  {
+   "id": "N247",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "退職給付に係る調整累計額",
+   "value": 1201.0,
+   "unit": "百万円",
+   "word": null,
+   "span": "- 退職給付に係る調整累計額2,287百万円(同1,201百万円)",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:RemeasurementsOfDefinedBenefitPlans@Prior1YearInstant"
+   ],
+   "reason": null,
+   "recomputed": 1201534000.0
+  },
+  {
+   "id": "N248",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "当期純利益",
+   "value": 945000000.0,
+   "unit": "円",
+   "word": null,
+   "span": "利益剰余金は当期純利益945百万円の計上と剰余金の配当",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:ProfitLoss@CurrentYearDuration"
+   ],
+   "reason": null,
+   "recomputed": 945793000.0
+  },
+  {
+   "id": "N249",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "剰余金の配当",
+   "value": 652000000.0,
+   "unit": "円",
+   "word": null,
+   "span": "利益剰余金は当期純利益945百万円の計上と剰余金の配当652百万円により292百万円の",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:DividendsFromSurplus@CurrentYearDuration"
+   ],
+   "reason": null,
+   "recomputed": -652881000.0
+  },
+  {
+   "id": "N250",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "剰余金の配当",
+   "value": 292000000.0,
+   "unit": "円",
+   "word": null,
+   "span": "当期純利益945百万円の計上と剰余金の配当652百万円により292百万円の増加にとどまりまし",
+   "state": "VALUE_MISMATCH",
+   "pointers": [
+    "xbrl:jppfs_cor:DividendsFromSurplus@CurrentYearDuration"
+   ],
+   "reason": null,
+   "recomputed": -652881000.0
+  },
+  {
+   "id": "N251",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "自己資本比率",
+   "value": 61.7,
+   "unit": "%",
+   "word": null,
+   "span": "この結果、自己資本比率は61.7%(前期末60.6%)",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jpcrp_cor:EquityToAssetRatioSummaryOfBusinessResults@CurrentYearInstant"
+   ],
+   "reason": null,
+   "recomputed": 61.7
+  },
+  {
+   "id": "N252",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "自己資本比率",
+   "value": 60.6,
+   "unit": "%",
+   "word": null,
+   "span": "この結果、自己資本比率は61.7%(前期末60.6%)と1.1ポイント上",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jpcrp_cor:EquityToAssetRatioSummaryOfBusinessResults@Prior1YearInstant"
+   ],
+   "reason": null,
+   "recomputed": 60.6
+  },
+  {
+   "id": "N253",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "自己資本比率",
+   "value": 1.1,
+   "unit": "ポイント",
+   "word": null,
+   "span": "この結果、自己資本比率は61.7%(前期末60.6%)と1.1ポイント上昇し、1株当たり純",
+   "state": "POINTER_NOT_FOUND",
+   "pointers": [],
+   "reason": "no_element(point without prior phrase)",
+   "recomputed": null
+  },
+  {
+   "id": "N254",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "自己資本比率",
+   "value": 1.0,
+   "unit": "株",
+   "word": null,
+   "span": "比率は61.7%(前期末60.6%)と1.1ポイント上昇し、1株当たり純資産額は2,",
+   "state": "POINTER_NOT_FOUND",
+   "pointers": [],
+   "reason": "no_element(unit not in XBRL)",
+   "recomputed": null
+  },
+  {
+   "id": "N255",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "1株当たり純資産額",
+   "value": 2096.0,
+   "unit": "円",
+   "word": null,
+   "span": "期末60.6%)と1.1ポイント上昇し、1株当たり純資産額は2,096円83銭(同1,897",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jpcrp_cor:NetAssetsPerShareSummaryOfBusinessResults@CurrentYearInstant"
+   ],
+   "reason": null,
+   "recomputed": 2096.83
+  },
+  {
+   "id": "N256",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "1株当たり純資産額",
+   "value": 1897.0,
+   "unit": "円",
+   "word": null,
+   "span": "1ポイント上昇し、1株当たり純資産額は2,096円83銭(同1,897円74銭)と199円増",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jpcrp_cor:NetAssetsPerShareSummaryOfBusinessResults@Prior1YearInstant"
+   ],
+   "reason": null,
+   "recomputed": 1897.74
+  },
+  {
+   "id": "N257",
+   "kind": "num",
+   "form": "derived_value",
+   "subject": "1株当たり純資産額",
+   "value": 199.0,
+   "unit": "円",
+   "word": null,
+   "span": "当たり純資産額は2,096円83銭(同1,897円74銭)と199円増加しております。",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jpcrp_cor:NetAssetsPerShareSummaryOfBusinessResults@CurrentYearInstant",
+    "xbrl:jpcrp_cor:NetAssetsPerShareSummaryOfBusinessResults@Prior1YearInstant",
+    "formula:a-b"
+   ],
+   "reason": null,
+   "recomputed": 199.08999999999992
+  },
+  {
+   "id": "N258",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "現金及び現金同等物",
+   "value": 2605.0,
+   "unit": "百万円",
+   "word": null,
+   "span": "当連結会計年度末の現金及び現金同等物(以下「資金」)は2,605百万円となり、前連結会計年",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:CashAndCashEquivalents@CurrentYearInstant"
+   ],
+   "reason": null,
+   "recomputed": 2605950000.0
+  },
+  {
+   "id": "N259",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "現金及び現金同等物",
+   "value": 2899.0,
+   "unit": "百万円",
+   "word": null,
+   "span": "(以下「資金」)は2,605百万円となり、前連結会計年度末の2,899百万円から293百万円減少",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:CashAndCashEquivalents@Prior1YearInstant"
+   ],
+   "reason": null,
+   "recomputed": 2899140000.0
+  },
+  {
+   "id": "N260",
+   "kind": "num",
+   "form": "derived_value",
+   "subject": "現金及び現金同等物",
+   "value": 293000000.0,
+   "unit": "円",
+   "word": null,
+   "span": ",605百万円となり、前連結会計年度末の2,899百万円から293百万円減少しました。",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:CashAndCashEquivalents@CurrentYearInstant",
+    "xbrl:jppfs_cor:CashAndCashEquivalents@Prior1YearInstant",
+    "formula:a-b"
+   ],
+   "reason": null,
+   "recomputed": -293190000.0
+  },
+  {
+   "id": "N261",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": null,
+   "value": 1032.0,
+   "unit": "百万円",
+   "word": null,
+   "span": "営業活動による資金の増加は1,032百万円(前期は3,029百",
+   "state": "UNVERIFIABLE",
+   "pointers": [],
+   "reason": "ambiguous(elements)",
+   "recomputed": null
+  },
+  {
+   "id": "N262",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": null,
+   "value": 3029.0,
+   "unit": "百万円",
+   "word": null,
+   "span": "営業活動による資金の増加は1,032百万円(前期は3,029百万円の増加)となり、前期",
+   "state": "UNVERIFIABLE",
+   "pointers": [],
+   "reason": "ambiguous(elements)",
+   "recomputed": null
+  },
+  {
+   "id": "N263",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": null,
+   "value": 1996.0,
+   "unit": "百万円",
+   "word": null,
+   "span": "032百万円(前期は3,029百万円の増加)となり、前期比で1,996百万円の収入減少となりまし",
+   "state": "POINTER_NOT_FOUND",
+   "pointers": [],
+   "reason": "no_element",
+   "recomputed": null
+  },
+  {
+   "id": "N264",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "税金等調整前当期純利益",
+   "value": 1452.0,
+   "unit": "百万円",
+   "word": null,
+   "span": "主な内容は、税金等調整前当期純利益1,452百万円、減価償却費452百",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:IncomeBeforeIncomeTaxes@CurrentYearDuration"
+   ],
+   "reason": null,
+   "recomputed": 1452012000.0
+  },
+  {
+   "id": "N265",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "減価償却費",
+   "value": 452000000.0,
+   "unit": "円",
+   "word": null,
+   "span": "な内容は、税金等調整前当期純利益1,452百万円、減価償却費452百万円、のれん償却額53百",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:DepreciationAndAmortizationOpeCF@CurrentYearDuration"
+   ],
+   "reason": null,
+   "recomputed": 452168000.0
+  },
+  {
+   "id": "N266",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "のれん償却額",
+   "value": 53000000.0,
+   "unit": "円",
+   "word": null,
+   "span": "純利益1,452百万円、減価償却費452百万円、のれん償却額53百万円、完成業務補償引当金",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:AmortizationOfGoodwillOpeCF@Prior1YearDuration"
+   ],
+   "reason": null,
+   "recomputed": 53256000.0
+  },
+  {
+   "id": "N267",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "完成業務補償引当金",
+   "value": 786000000.0,
+   "unit": "円",
+   "word": null,
+   "span": "52百万円、のれん償却額53百万円、完成業務補償引当金の増加786百万円、契約資産の減少16",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jpcrp030000-asr_E36539-000:IncreaseDecreaseInProvisionForWarrantiesForCompletedOperationOpeCF@CurrentYearDuration"
+   ],
+   "reason": null,
+   "recomputed": 786000000.0
+  },
+  {
+   "id": "N268",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "契約資産",
+   "value": 161000000.0,
+   "unit": "円",
+   "word": null,
+   "span": "百万円、完成業務補償引当金の増加786百万円、契約資産の減少161百万円などの収入要因に対し",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jpcrp030000-asr_E36539-000:DecreaseIncreaseInContractAssetsOpeCF@CurrentYearDuration"
+   ],
+   "reason": null,
+   "recomputed": 161030000.0
+  },
+  {
+   "id": "N269",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "退職給付に係る資産",
+   "value": 1828.0,
+   "unit": "百万円",
+   "word": null,
+   "span": "少161百万円などの収入要因に対し、退職給付に係る資産の増加1,828百万円、売上債権の増加80",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:IncreaseDecreaseInNetDefinedBenefitAssetOpeCF@CurrentYearDuration"
+   ],
+   "reason": null,
+   "recomputed": -1828838000.0
+  },
+  {
+   "id": "N270",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "売上債権",
+   "value": 802000000.0,
+   "unit": "円",
+   "word": null,
+   "span": "し、退職給付に係る資産の増加1,828百万円、売上債権の増加802百万円、仕入債務の減少30",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:DecreaseIncreaseInNotesAndAccountsReceivableTradeOpeCF@CurrentYearDuration"
+   ],
+   "reason": null,
+   "recomputed": -802686000.0
+  },
+  {
+   "id": "N271",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "仕入債務",
+   "value": 300000000.0,
+   "unit": "円",
+   "word": null,
+   "span": "1,828百万円、売上債権の増加802百万円、仕入債務の減少300百万円、契約負債の減少93",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:IncreaseDecreaseInNotesAndAccountsPayableTradeOpeCF@CurrentYearDuration"
+   ],
+   "reason": null,
+   "recomputed": -300297000.0
+  },
+  {
+   "id": "N272",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "契約負債",
+   "value": 93000000.0,
+   "unit": "円",
+   "word": null,
+   "span": "増加802百万円、仕入債務の減少300百万円、契約負債の減少93百万円などの支出要因があり",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:IncreaseDecreaseInContractLiabilitiesOpeCF@CurrentYearDuration"
+   ],
+   "reason": null,
+   "recomputed": -93465000.0
+  },
+  {
+   "id": "N273",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": null,
+   "value": 1813.0,
+   "unit": "百万円",
+   "word": null,
+   "span": "小計は1,813百万円(前期4,032百万",
+   "state": "UNVERIFIABLE",
+   "pointers": [],
+   "reason": "no_subject",
+   "recomputed": null
+  },
+  {
+   "id": "N274",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": null,
+   "value": 4032.0,
+   "unit": "百万円",
+   "word": null,
+   "span": "小計は1,813百万円(前期4,032百万円)となり、これに利息",
+   "state": "UNVERIFIABLE",
+   "pointers": [],
+   "reason": "no_subject",
+   "recomputed": null
+  },
+  {
+   "id": "N275",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "利息及び配当金の受取額",
+   "value": 35000000.0,
+   "unit": "円",
+   "word": null,
+   "span": "(前期4,032百万円)となり、これに利息及び配当金の受取額35百万円、利息の支払額△80",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:InterestAndDividendsIncomeReceivedOpeCFInvCF@CurrentYearDuration"
+   ],
+   "reason": null,
+   "recomputed": 35005000.0
+  },
+  {
+   "id": "N276",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "利息の支払額",
+   "value": -80000000.0,
+   "unit": "円",
+   "word": null,
+   "span": "となり、これに利息及び配当金の受取額35百万円、利息の支払額△80百万円、法人税等の支払額△",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:InterestExpensesPaidOpeCFFinCF@CurrentYearDuration"
+   ],
+   "reason": null,
+   "recomputed": -80414000.0
+  },
+  {
+   "id": "N277",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "法人税等の支払額",
+   "value": -780000000.0,
+   "unit": "円",
+   "word": null,
+   "span": "受取額35百万円、利息の支払額△80百万円、法人税等の支払額△780百万円を加減しております。",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:IncomeTaxesPaidOpeCF@CurrentYearDuration"
+   ],
+   "reason": null,
+   "recomputed": -780243000.0
+  },
+  {
+   "id": "N278",
+   "kind": "num",
+   "form": "derived_value",
+   "subject": "税金等調整前当期純利益",
+   "value": 1255.0,
+   "unit": "百万円",
+   "word": null,
+   "span": "前期からの減少の主因は、1税金等調整前当期純利益が1,255百万円減少したこと、2退職",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:IncomeBeforeIncomeTaxes@CurrentYearDuration",
+    "xbrl:jppfs_cor:IncomeBeforeIncomeTaxes@Prior1YearDuration",
+    "formula:a-b"
+   ],
+   "reason": null,
+   "recomputed": -1255859000.0
+  },
+  {
+   "id": "N279",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "退職給付に係る資産",
+   "value": 890000000.0,
+   "unit": "円",
+   "word": null,
+   "span": "255百万円減少したこと、2退職給付に係る資産の増加額が前期890百万円から当期1,828百",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:IncreaseDecreaseInNetDefinedBenefitAssetOpeCF@Prior1YearDuration"
+   ],
+   "reason": null,
+   "recomputed": -890115000.0
+  },
+  {
+   "id": "N280",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "退職給付に係る資産",
+   "value": 1828.0,
+   "unit": "百万円",
+   "word": null,
+   "span": "こと、2退職給付に係る資産の増加額が前期890百万円から当期1,828百万円へと938百万円拡大",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:IncreaseDecreaseInNetDefinedBenefitAssetOpeCF@CurrentYearDuration"
+   ],
+   "reason": null,
+   "recomputed": -1828838000.0
+  },
+  {
+   "id": "N281",
+   "kind": "num",
+   "form": "derived_value",
+   "subject": "退職給付に係る資産",
+   "value": 938000000.0,
+   "unit": "円",
+   "word": null,
+   "span": "る資産の増加額が前期890百万円から当期1,828百万円へと938百万円拡大したこと、3前期",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:IncreaseDecreaseInNetDefinedBenefitAssetOpeCF@CurrentYearDuration",
+    "xbrl:jppfs_cor:IncreaseDecreaseInNetDefinedBenefitAssetOpeCF@Prior1YearDuration",
+    "formula:a-b"
+   ],
+   "reason": null,
+   "recomputed": -938723000.0
+  },
+  {
+   "id": "N282",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "売上債権",
+   "value": 209000000.0,
+   "unit": "円",
+   "word": null,
+   "span": "828百万円へと938百万円拡大したこと、3前期は売上債権が209百万円減少したのに対し当期",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:DecreaseIncreaseInNotesAndAccountsReceivableTradeOpeCF@Prior1YearDuration"
+   ],
+   "reason": null,
+   "recomputed": 209659000.0
+  },
+  {
+   "id": "N283",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "売上債権",
+   "value": 802000000.0,
+   "unit": "円",
+   "word": null,
+   "span": "たこと、3前期は売上債権が209百万円減少したのに対し当期は802百万円増加し、差引1,01",
+   "state": "VALUE_MISMATCH",
+   "pointers": [
+    "xbrl:jppfs_cor:DecreaseIncreaseInNotesAndAccountsReceivableTradeOpeCF@CurrentYearDuration"
+   ],
+   "reason": null,
+   "recomputed": -802686000.0
+  },
+  {
+   "id": "N284",
+   "kind": "num",
+   "form": "derived_value",
+   "subject": "売上債権",
+   "value": 1012.0,
+   "unit": "百万円",
+   "word": null,
+   "span": "が209百万円減少したのに対し当期は802百万円増加し、差引1,012百万円のマイナス要因となっ",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:DecreaseIncreaseInNotesAndAccountsReceivableTradeOpeCF@CurrentYearDuration",
+    "xbrl:jppfs_cor:DecreaseIncreaseInNotesAndAccountsReceivableTradeOpeCF@Prior1YearDuration",
+    "formula:a-b"
+   ],
+   "reason": null,
+   "recomputed": -1012345000.0
+  },
+  {
+   "id": "N285",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": null,
+   "value": 259000000.0,
+   "unit": "円",
+   "word": null,
+   "span": "投資活動による資金の減少は259百万円(前期は506百万円",
+   "state": "UNVERIFIABLE",
+   "pointers": [],
+   "reason": "ambiguous(elements)",
+   "recomputed": null
+  },
+  {
+   "id": "N286",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": null,
+   "value": 506000000.0,
+   "unit": "円",
+   "word": null,
+   "span": "投資活動による資金の減少は259百万円(前期は506百万円の減少)となりました",
+   "state": "UNVERIFIABLE",
+   "pointers": [],
+   "reason": "ambiguous(elements)",
+   "recomputed": null
+  },
+  {
+   "id": "N287",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "有形固定資産の取得による支出",
+   "value": 307000000.0,
+   "unit": "円",
+   "word": null,
+   "span": "主な内訳は、有形固定資産の取得による支出307百万円、無形固定資産の取得",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:PurchaseOfPropertyPlantAndEquipmentInvCF@CurrentYearDuration"
+   ],
+   "reason": null,
+   "recomputed": -307279000.0
+  },
+  {
+   "id": "N288",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "無形固定資産の取得による支出",
+   "value": 44000000.0,
+   "unit": "円",
+   "word": null,
+   "span": "産の取得による支出307百万円、無形固定資産の取得による支出44百万円、関係会社株式の売却",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:PurchaseOfIntangibleAssetsInvCF@CurrentYearDuration"
+   ],
+   "reason": null,
+   "recomputed": -44037000.0
+  },
+  {
+   "id": "N289",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "関係会社株式の売却による収入",
+   "value": 9000000.0,
+   "unit": "円",
+   "word": null,
+   "span": "資産の取得による支出44百万円、関係会社株式の売却による収入9百万円、その他47百万円の",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:ProceedsFromSalesOfStocksOfSubsidiariesAndAffiliatesInvCF@CurrentYearDuration"
+   ],
+   "reason": null,
+   "recomputed": 9834000.0
+  },
+  {
+   "id": "N290",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "関係会社株式の売却による収入",
+   "value": 47000000.0,
+   "unit": "円",
+   "word": null,
+   "span": "支出44百万円、関係会社株式の売却による収入9百万円、その他47百万円の収入です。",
+   "state": "VALUE_MISMATCH",
+   "pointers": [
+    "xbrl:jppfs_cor:ProceedsFromSalesOfStocksOfSubsidiariesAndAffiliatesInvCF@CurrentYearDuration"
+   ],
+   "reason": null,
+   "recomputed": 9834000.0
+  },
+  {
+   "id": "N291",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "設備投資",
+   "value": 341000000.0,
+   "unit": "円",
+   "word": null,
+   "span": "当期の設備投資総額は341百万円であり、業務効率化の",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jpcrp_cor:CapitalExpendituresOverviewOfCapitalExpendituresEtc@CurrentYearDuration"
+   ],
+   "reason": null,
+   "recomputed": 341000000.0
+  },
+  {
+   "id": "N292",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "設備投資",
+   "value": 453000000.0,
+   "unit": "円",
+   "word": null,
+   "span": "前期(設備投資関連453百万円)と比べ投資額は抑制",
+   "state": "VALUE_MISMATCH",
+   "pointers": [
+    "xbrl:jpcrp_cor:CapitalExpendituresOverviewOfCapitalExpendituresEtc@CurrentYearDuration"
+   ],
+   "reason": null,
+   "recomputed": 341000000.0
+  },
+  {
+   "id": "N293",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "投資活動によるキャッシュ・フロー",
+   "value": 773000000.0,
+   "unit": "円",
+   "word": null,
+   "span": "るキャッシュ・フローを差し引いたフリー・キャッシュ・フローは773百万円のプラス(前期2,5",
+   "state": "VALUE_MISMATCH",
+   "pointers": [
+    "xbrl:jpcrp_cor:NetCashProvidedByUsedInInvestingActivitiesSummaryOfBusinessResults@CurrentYearDuration"
+   ],
+   "reason": null,
+   "recomputed": -259037000.0
+  },
+  {
+   "id": "N294",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "投資活動によるキャッシュ・フロー",
+   "value": 2522.0,
+   "unit": "百万円",
+   "word": null,
+   "span": "引いたフリー・キャッシュ・フローは773百万円のプラス(前期2,522百万円のプラス)を確保して",
+   "state": "VALUE_MISMATCH",
+   "pointers": [
+    "xbrl:jpcrp_cor:NetCashProvidedByUsedInInvestingActivitiesSummaryOfBusinessResults@CurrentYearDuration"
+   ],
+   "reason": null,
+   "recomputed": -259037000.0
+  },
+  {
+   "id": "N295",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": null,
+   "value": 1073.0,
+   "unit": "百万円",
+   "word": null,
+   "span": "財務活動による資金の減少は1,073百万円(前期は1,740百",
+   "state": "UNVERIFIABLE",
+   "pointers": [],
+   "reason": "ambiguous(elements)",
+   "recomputed": null
+  },
+  {
+   "id": "N296",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": null,
+   "value": 1740.0,
+   "unit": "百万円",
+   "word": null,
+   "span": "財務活動による資金の減少は1,073百万円(前期は1,740百万円の減少)となりました",
+   "state": "UNVERIFIABLE",
+   "pointers": [],
+   "reason": "ambiguous(elements)",
+   "recomputed": null
+  },
+  {
+   "id": "N297",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "長期借入金の返済による支出",
+   "value": 332000000.0,
+   "unit": "円",
+   "word": null,
+   "span": "主な内訳は、長期借入金の返済による支出332百万円、配当金の支払額65",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:RepaymentOfLongTermLoansPayableFinCF@CurrentYearDuration"
+   ],
+   "reason": null,
+   "recomputed": -332864000.0
+  },
+  {
+   "id": "N298",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "配当金の支払額",
+   "value": 651000000.0,
+   "unit": "円",
+   "word": null,
+   "span": "訳は、長期借入金の返済による支出332百万円、配当金の支払額651百万円、その他7百万円の支",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:CashDividendsPaidFinCF@CurrentYearDuration"
+   ],
+   "reason": null,
+   "recomputed": -651749000.0
+  },
+  {
+   "id": "N299",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "配当金の支払額",
+   "value": 7000000.0,
+   "unit": "円",
+   "word": null,
+   "span": "済による支出332百万円、配当金の支払額651百万円、その他7百万円の支出です。",
+   "state": "VALUE_MISMATCH",
+   "pointers": [
+    "xbrl:jppfs_cor:CashDividendsPaidFinCF@CurrentYearDuration"
+   ],
+   "reason": null,
+   "recomputed": -651749000.0
+  },
+  {
+   "id": "N300",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": null,
+   "value": 905000000.0,
+   "unit": "円",
+   "word": null,
+   "span": "前期は短期借入金の純減905百万円がありましたが、当期",
+   "state": "UNVERIFIABLE",
+   "pointers": [],
+   "reason": "no_subject",
+   "recomputed": null
+  },
+  {
+   "id": "N301",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "配当金の支払額",
+   "value": 529000000.0,
+   "unit": "円",
+   "word": null,
+   "span": "配当金の支払額は前期の529百万円から122百万円増加",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:CashDividendsPaidFinCF@Prior1YearDuration"
+   ],
+   "reason": null,
+   "recomputed": -529177000.0
+  },
+  {
+   "id": "N302",
+   "kind": "num",
+   "form": "derived_value",
+   "subject": "配当金の支払額",
+   "value": 122000000.0,
+   "unit": "円",
+   "word": null,
+   "span": "配当金の支払額は前期の529百万円から122百万円増加しており、株主還",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:CashDividendsPaidFinCF@CurrentYearDuration",
+    "xbrl:jppfs_cor:CashDividendsPaidFinCF@Prior1YearDuration",
+    "formula:a-b"
+   ],
+   "reason": null,
+   "recomputed": -122572000.0
+  },
+  {
+   "id": "N303",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "現金及び預金",
+   "value": 2605.0,
+   "unit": "百万円",
+   "word": null,
+   "span": "当期末の現金及び預金は2,605百万円、有利子負債は510",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:CashAndDeposits@CurrentYearInstant"
+   ],
+   "reason": null,
+   "recomputed": 2605950000.0
+  },
+  {
+   "id": "N304",
+   "kind": "num",
+   "form": "direct_value",
+   "subject": "有利子負債",
+   "value": 510000000.0,
+   "unit": "円",
+   "word": null,
+   "span": "当期末の現金及び預金は2,605百万円、有利子負債は510百万円であり、ネットキャ",
+   "state": "POINTER_NOT_FOUND",
+   "pointers": [],
+   "reason": "no_element",
+   "recomputed": null
+  },
+  {
+   "id": "T001",
+   "kind": "text",
+   "form": "threshold",
+   "subject": null,
+   "value": null,
+   "unit": null,
+   "word": "増収",
+   "span": "増収減益という",
+   "state": "UNVERIFIABLE",
+   "pointers": [],
+   "reason": "no_subject",
+   "recomputed": null
+  },
+  {
+   "id": "T002",
+   "kind": "text",
+   "form": "threshold",
+   "subject": null,
+   "value": null,
+   "unit": null,
+   "word": "減益",
+   "span": "増収減益という結果",
+   "state": "UNVERIFIABLE",
+   "pointers": [],
+   "reason": "no_subject",
+   "recomputed": null
+  },
+  {
+   "id": "T003",
+   "kind": "text",
+   "form": "threshold",
+   "subject": null,
+   "value": null,
+   "unit": null,
+   "word": "下回",
+   "span": "増収減益という結果であり、特に利益面では前期の水準を大きく下回る厳しい決",
+   "state": "UNVERIFIABLE",
+   "pointers": [],
+   "reason": "no_subject",
+   "recomputed": null
+  },
+  {
+   "id": "T005",
+   "kind": "text",
+   "form": "threshold",
+   "subject": "販売費及び一般管理費",
+   "value": null,
+   "unit": null,
+   "word": "増加",
+   "span": "成業務補償引当金の大幅な積み増しを含む販売費及び一般管理費の増加、の二点に",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:SellingGeneralAndAdministrativeExpenses@CurrentYearDuration",
+    "xbrl:jppfs_cor:SellingGeneralAndAdministrativeExpenses@Prior1YearDuration",
+    "builtin:sign(cur-prior)"
+   ],
+   "reason": null,
+   "recomputed": 566258000.0
+  },
+  {
+   "id": "T006",
+   "kind": "text",
+   "form": "threshold",
+   "subject": null,
+   "value": null,
+   "unit": null,
+   "word": "減益",
+   "span": "減益の主たる要",
+   "state": "UNVERIFIABLE",
+   "pointers": [],
+   "reason": "no_subject",
+   "recomputed": null
+  },
+  {
+   "id": "T007",
+   "kind": "text",
+   "form": "threshold",
+   "subject": "売上総利益",
+   "value": null,
+   "unit": null,
+   "word": "減少",
+   "span": "減益の主たる要因は、(1)売上原価率の上昇による売上総利益の減少、(2)完",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:GrossProfit@CurrentYearDuration",
+    "xbrl:jppfs_cor:GrossProfit@Prior1YearDuration",
+    "builtin:sign(cur-prior)"
+   ],
+   "reason": null,
+   "recomputed": -684279000.0
+  },
+  {
+   "id": "T008",
+   "kind": "text",
+   "form": "threshold",
+   "subject": "退職給付に係る調整額",
+   "value": null,
+   "unit": null,
+   "word": "増加",
+   "span": "給付に係る調整額や保有株式の評価差額を含めた広義の企業価値の増加という観点",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:RemeasurementsOfDefinedBenefitPlansNetOfTaxOCI@CurrentYearDuration",
+    "xbrl:jppfs_cor:RemeasurementsOfDefinedBenefitPlansNetOfTaxOCI@Prior1YearDuration",
+    "builtin:sign(cur-prior)"
+   ],
+   "reason": null,
+   "recomputed": 615185000.0
+  },
+  {
+   "id": "T009",
+   "kind": "text",
+   "form": "threshold",
+   "subject": "当期純利益",
+   "value": null,
+   "unit": null,
+   "word": "減少",
+   "span": "差額を含めた広義の企業価値の増加という観点では、当期純利益の減少ほどには毀",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:ProfitLoss@CurrentYearDuration",
+    "xbrl:jppfs_cor:ProfitLoss@Prior1YearDuration",
+    "builtin:sign(cur-prior)"
+   ],
+   "reason": null,
+   "recomputed": -976788000.0
+  },
+  {
+   "id": "T010",
+   "kind": "text",
+   "form": "threshold",
+   "subject": "売上高",
+   "value": null,
+   "unit": null,
+   "word": "増収",
+   "span": "の36,975百万円から1,088百万円、率にして2.9%の増収となりまし",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:NetSales@CurrentYearDuration",
+    "xbrl:jppfs_cor:NetSales@Prior1YearDuration",
+    "builtin:sign(cur-prior)"
+   ],
+   "reason": null,
+   "recomputed": 1088697000.0
+  },
+  {
+   "id": "T011",
+   "kind": "text",
+   "form": "threshold",
+   "subject": "売上高",
+   "value": null,
+   "unit": null,
+   "word": "増収",
+   "span": "6,975百万円、そして当期38,064百万円と、5期連続で増収を続けてお",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:NetSales@CurrentYearDuration",
+    "xbrl:jppfs_cor:NetSales@Prior1YearDuration",
+    "builtin:sign(cur-prior)"
+   ],
+   "reason": null,
+   "recomputed": 1088697000.0
+  },
+  {
+   "id": "T014",
+   "kind": "text",
+   "form": "threshold",
+   "subject": "受取手形及び売掛金",
+   "value": null,
+   "unit": null,
+   "word": "増加",
+   "span": "で2,556百万円と前期末の1,751百万円から804百万円増加しており、",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:NotesAndAccountsReceivableTrade@CurrentYearInstant",
+    "xbrl:jppfs_cor:NotesAndAccountsReceivableTrade@Prior1YearInstant",
+    "builtin:sign(cur-prior)"
+   ],
+   "reason": null,
+   "recomputed": 804775000.0
+  },
+  {
+   "id": "T015",
+   "kind": "text",
+   "form": "threshold",
+   "subject": "売上総利益",
+   "value": null,
+   "unit": null,
+   "word": "減少",
+   "span": "となり、前期の12,018百万円から684百万円、5.7%の減少となりまし",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:GrossProfit@CurrentYearDuration",
+    "xbrl:jppfs_cor:GrossProfit@Prior1YearDuration",
+    "builtin:sign(cur-prior)"
+   ],
+   "reason": null,
+   "recomputed": -684279000.0
+  },
+  {
+   "id": "T016",
+   "kind": "text",
+   "form": "threshold",
+   "subject": null,
+   "value": null,
+   "unit": null,
+   "word": "増収",
+   "span": "増収にもかかわ",
+   "state": "UNVERIFIABLE",
+   "pointers": [],
+   "reason": "no_subject",
+   "recomputed": null
+  },
+  {
+   "id": "T017",
+   "kind": "text",
+   "form": "threshold",
+   "subject": "売上原価",
+   "value": null,
+   "unit": null,
+   "word": "増加",
+   "span": "増収にもかかわらず売上総利益が減少した背景には、売上原価の増加があります",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:CostOfSales@CurrentYearDuration",
+    "xbrl:jppfs_cor:CostOfSales@Prior1YearDuration",
+    "builtin:sign(cur-prior)"
+   ],
+   "reason": null,
+   "recomputed": 1772977000.0
+  },
+  {
+   "id": "T018",
+   "kind": "text",
+   "form": "threshold",
+   "subject": "売上総利益",
+   "value": null,
+   "unit": null,
+   "word": "減少",
+   "span": "増収にもかかわらず売上総利益が減少した背景に",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:GrossProfit@CurrentYearDuration",
+    "xbrl:jppfs_cor:GrossProfit@Prior1YearDuration",
+    "builtin:sign(cur-prior)"
+   ],
+   "reason": null,
+   "recomputed": -684279000.0
+  },
+  {
+   "id": "T019",
+   "kind": "text",
+   "form": "threshold",
+   "subject": "売上原価",
+   "value": null,
+   "unit": null,
+   "word": "増加",
+   "span": "百万円(前期24,956百万円)と1,772百万円、7.1%増加しました。",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:CostOfSales@CurrentYearDuration",
+    "xbrl:jppfs_cor:CostOfSales@Prior1YearDuration",
+    "builtin:sign(cur-prior)"
+   ],
+   "reason": null,
+   "recomputed": 1772977000.0
+  },
+  {
+   "id": "T020",
+   "kind": "text",
+   "form": "threshold",
+   "subject": "売上高",
+   "value": null,
+   "unit": null,
+   "word": "上回",
+   "span": "売上高の伸び率2.9%を大きく上回る原価の伸",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:NetSales@CurrentYearDuration",
+    "xbrl:jppfs_cor:NetSales@Prior1YearDuration",
+    "builtin:sign(cur-prior)"
+   ],
+   "reason": null,
+   "recomputed": 1088697000.0
+  },
+  {
+   "id": "T021",
+   "kind": "text",
+   "form": "threshold",
+   "subject": "売上高",
+   "value": null,
+   "unit": null,
+   "word": "伸び",
+   "span": "売上高の伸び率2.9%",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:NetSales@CurrentYearDuration",
+    "xbrl:jppfs_cor:NetSales@Prior1YearDuration",
+    "builtin:sign(cur-prior)"
+   ],
+   "reason": null,
+   "recomputed": 1088697000.0
+  },
+  {
+   "id": "T022",
+   "kind": "text",
+   "form": "threshold",
+   "subject": "売上高",
+   "value": null,
+   "unit": null,
+   "word": "伸び",
+   "span": "売上高の伸び率2.9%を大きく上回る原価の伸びとなった結",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:NetSales@CurrentYearDuration",
+    "xbrl:jppfs_cor:NetSales@Prior1YearDuration",
+    "builtin:sign(cur-prior)"
+   ],
+   "reason": null,
+   "recomputed": 1088697000.0
+  },
+  {
+   "id": "T023",
+   "kind": "text",
+   "form": "threshold",
+   "subject": "売上総利益",
+   "value": null,
+   "unit": null,
+   "word": "低下",
+   "span": "7ポイント上昇し、売上総利益率は32.5%から29.8%へと低下しておりま",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:GrossProfit@CurrentYearDuration",
+    "xbrl:jppfs_cor:GrossProfit@Prior1YearDuration",
+    "builtin:sign(cur-prior)"
+   ],
+   "reason": null,
+   "recomputed": -684279000.0
+  },
+  {
+   "id": "T024",
+   "kind": "text",
+   "form": "threshold",
+   "subject": null,
+   "value": null,
+   "unit": null,
+   "word": "改善",
+   "span": "価率上昇の主たる背景としては、技術者の確保・定着に向けた処遇改善に伴う人件",
+   "state": "UNVERIFIABLE",
+   "pointers": [],
+   "reason": "no_subject",
+   "recomputed": null
+  },
+  {
+   "id": "T025",
+   "kind": "text",
+   "form": "threshold",
+   "subject": "従業員",
+   "value": null,
+   "unit": null,
+   "word": "増加",
+   "span": ")、臨時従業員は年間平均409名(同393名)と人員は着実に増加しており、",
+   "state": "POINTER_NOT_FOUND",
+   "pointers": [],
+   "reason": "no_element(text needs money fact)",
+   "recomputed": null
+  },
+  {
+   "id": "T026",
+   "kind": "text",
+   "form": "threshold",
+   "subject": "販売費及び一般管理費",
+   "value": null,
+   "unit": null,
+   "word": "増加",
+   "span": "万円となり、前期の9,303百万円から566百万円、6.1%増加しました。",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:SellingGeneralAndAdministrativeExpenses@CurrentYearDuration",
+    "xbrl:jppfs_cor:SellingGeneralAndAdministrativeExpenses@Prior1YearDuration",
+    "builtin:sign(cur-prior)"
+   ],
+   "reason": null,
+   "recomputed": 566258000.0
+  },
+  {
+   "id": "T027",
+   "kind": "text",
+   "form": "threshold",
+   "subject": "従業員給料及び手当",
+   "value": null,
+   "unit": null,
+   "word": "増加",
+   "span": "手当は3,559百万円(前期3,441百万円)と118百万円増加しておりま",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:EmployeesSalariesAndAllowancesSGA@CurrentYearDuration",
+    "xbrl:jppfs_cor:EmployeesSalariesAndAllowancesSGA@Prior1YearDuration",
+    "builtin:sign(cur-prior)"
+   ],
+   "reason": null,
+   "recomputed": 118242000.0
+  },
+  {
+   "id": "T028",
+   "kind": "text",
+   "form": "threshold",
+   "subject": null,
+   "value": null,
+   "unit": null,
+   "word": "増加",
+   "span": "これは人員の増加および賃金",
+   "state": "UNVERIFIABLE",
+   "pointers": [],
+   "reason": "no_subject",
+   "recomputed": null
+  },
+  {
+   "id": "T029",
+   "kind": "text",
+   "form": "threshold",
+   "subject": "退職給付費用",
+   "value": null,
+   "unit": null,
+   "word": "減少",
+   "span": "退職給付費用は118百万円(前期137百万円)と18百万円減少しました。",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:RetirementBenefitExpensesSGA@CurrentYearDuration",
+    "xbrl:jppfs_cor:RetirementBenefitExpensesSGA@Prior1YearDuration",
+    "builtin:sign(cur-prior)"
+   ],
+   "reason": null,
+   "recomputed": -18943000.0
+  },
+  {
+   "id": "T030",
+   "kind": "text",
+   "form": "threshold",
+   "subject": null,
+   "value": null,
+   "unit": null,
+   "word": "減少",
+   "span": "28百万円(前期58百万円)と戻入となっており、この点は費用減少要因として",
+   "state": "UNVERIFIABLE",
+   "pointers": [],
+   "reason": "no_subject",
+   "recomputed": null
+  },
+  {
+   "id": "T031",
+   "kind": "text",
+   "form": "threshold",
+   "subject": null,
+   "value": null,
+   "unit": null,
+   "word": "増加",
+   "span": "管費は5,962百万円(前期5,407百万円)と554百万円増加しており、",
+   "state": "UNVERIFIABLE",
+   "pointers": [],
+   "reason": "no_subject",
+   "recomputed": null
+  },
+  {
+   "id": "T032",
+   "kind": "text",
+   "form": "threshold",
+   "subject": null,
+   "value": null,
+   "unit": null,
+   "word": "増加",
+   "span": "2百万円(前期5,407百万円)と554百万円増加しており、増加額の大半が",
+   "state": "UNVERIFIABLE",
+   "pointers": [],
+   "reason": "no_subject",
+   "recomputed": null
+  },
+  {
+   "id": "T033",
+   "kind": "text",
+   "form": "threshold",
+   "subject": "完成業務補償引当金",
+   "value": null,
+   "unit": null,
+   "word": "増加",
+   "span": "高が991百万円となり、前期末の205百万円から786百万円増加いたしまし",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jpcrp030000-asr_E36539-000:ProvisionForWarrantiesForCompletedOperationCL@CurrentYearInstant",
+    "xbrl:jpcrp030000-asr_E36539-000:ProvisionForWarrantiesForCompletedOperationCL@Prior1YearInstant",
+    "builtin:sign(cur-prior)"
+   ],
+   "reason": null,
+   "recomputed": 786000000.0
+  },
+  {
+   "id": "T034",
+   "kind": "text",
+   "form": "threshold",
+   "subject": null,
+   "value": null,
+   "unit": null,
+   "word": "増加",
+   "span": "この786百万円の増加は、当期の",
+   "state": "UNVERIFIABLE",
+   "pointers": [],
+   "reason": "no_subject",
+   "recomputed": null
+  },
+  {
+   "id": "T035",
+   "kind": "text",
+   "form": "threshold",
+   "subject": "営業利益",
+   "value": null,
+   "unit": null,
+   "word": "減益",
+   "span": "この786百万円の増加は、当期の営業利益の減益額1,25",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration",
+    "xbrl:jppfs_cor:OperatingIncome@Prior1YearDuration",
+    "builtin:sign(cur-prior)"
+   ],
+   "reason": null,
+   "recomputed": -1250537000.0
+  },
+  {
+   "id": "T036",
+   "kind": "text",
+   "form": "threshold",
+   "subject": "営業利益",
+   "value": null,
+   "unit": null,
+   "word": "減益",
+   "span": "業利益の減益額1,250百万円の約6割に相当する規模であり、減益の最大の単",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration",
+    "xbrl:jppfs_cor:OperatingIncome@Prior1YearDuration",
+    "builtin:sign(cur-prior)"
+   ],
+   "reason": null,
+   "recomputed": -1250537000.0
+  },
+  {
+   "id": "T037",
+   "kind": "text",
+   "form": "threshold",
+   "subject": "営業利益",
+   "value": null,
+   "unit": null,
+   "word": "減益",
+   "span": "前期の2,715百万円から1,250百万円、46.0%の大幅減益となりまし",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration",
+    "xbrl:jppfs_cor:OperatingIncome@Prior1YearDuration",
+    "builtin:sign(cur-prior)"
+   ],
+   "reason": null,
+   "recomputed": -1250537000.0
+  },
+  {
+   "id": "T038",
+   "kind": "text",
+   "form": "threshold",
+   "subject": "営業利益",
+   "value": null,
+   "unit": null,
+   "word": "低下",
+   "span": "上高営業利益率は前期の7.3%から3.8%へと3.5ポイント低下しておりま",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration",
+    "xbrl:jppfs_cor:OperatingIncome@Prior1YearDuration",
+    "builtin:sign(cur-prior)"
+   ],
+   "reason": null,
+   "recomputed": -1250537000.0
+  },
+  {
+   "id": "T039",
+   "kind": "text",
+   "form": "threshold",
+   "subject": "営業外収益",
+   "value": null,
+   "unit": null,
+   "word": "増加",
+   "span": "営業外収益は87百万円(前期72百万円)と14百万円増加しました。",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:NonOperatingIncome@CurrentYearDuration",
+    "xbrl:jppfs_cor:NonOperatingIncome@Prior1YearDuration",
+    "builtin:sign(cur-prior)"
+   ],
+   "reason": null,
+   "recomputed": 14850000.0
+  },
+  {
+   "id": "T040",
+   "kind": "text",
+   "form": "threshold",
+   "subject": "受取利息",
+   "value": null,
+   "unit": null,
+   "word": "増加",
+   "span": "受取利息の増加は国内金利",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:InterestIncomeNOI@CurrentYearDuration",
+    "xbrl:jppfs_cor:InterestIncomeNOI@Prior1YearDuration",
+    "builtin:sign(cur-prior)"
+   ],
+   "reason": null,
+   "recomputed": 7609000.0
+  },
+  {
+   "id": "T041",
+   "kind": "text",
+   "form": "threshold",
+   "subject": "営業外費用",
+   "value": null,
+   "unit": null,
+   "word": "増加",
+   "span": "営業外費用は95百万円(前期79百万円)と15百万円増加しました。",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:NonOperatingExpenses@CurrentYearDuration",
+    "xbrl:jppfs_cor:NonOperatingExpenses@Prior1YearDuration",
+    "builtin:sign(cur-prior)"
+   ],
+   "reason": null,
+   "recomputed": 15515000.0
+  },
+  {
+   "id": "T042",
+   "kind": "text",
+   "form": "threshold",
+   "subject": "支払利息",
+   "value": null,
+   "unit": null,
+   "word": "増加",
+   "span": "0百万円(前期58百万円)で、金利上昇の影響により21百万円増加しておりま",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:InterestExpensesNOE@CurrentYearDuration",
+    "xbrl:jppfs_cor:InterestExpensesNOE@Prior1YearDuration",
+    "builtin:sign(cur-prior)"
+   ],
+   "reason": null,
+   "recomputed": 21890000.0
+  },
+  {
+   "id": "T043",
+   "kind": "text",
+   "form": "threshold",
+   "subject": "経常利益",
+   "value": null,
+   "unit": null,
+   "word": "減益",
+   "span": "前期2,709百万円)となり、1,251百万円、46.2%の減益となりまし",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:OrdinaryIncome@CurrentYearDuration",
+    "xbrl:jppfs_cor:OrdinaryIncome@Prior1YearDuration",
+    "builtin:sign(cur-prior)"
+   ],
+   "reason": null,
+   "recomputed": -1251203000.0
+  },
+  {
+   "id": "T044",
+   "kind": "text",
+   "form": "threshold",
+   "subject": "親会社株主に帰属する当期純利益",
+   "value": null,
+   "unit": null,
+   "word": "減益",
+   "span": "円(前期1,922百万円)となり、976百万円、50.8%の減益となりまし",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:ProfitLossAttributableToOwnersOfParent@CurrentYearDuration",
+    "xbrl:jppfs_cor:ProfitLossAttributableToOwnersOfParent@Prior1YearDuration",
+    "builtin:sign(cur-prior)"
+   ],
+   "reason": null,
+   "recomputed": -976788000.0
+  },
+  {
+   "id": "T045",
+   "kind": "text",
+   "form": "threshold",
+   "subject": "当期純利益",
+   "value": null,
+   "unit": null,
+   "word": "減益",
+   "span": "当期純利益が大幅減益となった一",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:ProfitLoss@CurrentYearDuration",
+    "xbrl:jppfs_cor:ProfitLoss@Prior1YearDuration",
+    "builtin:sign(cur-prior)"
+   ],
+   "reason": null,
+   "recomputed": -976788000.0
+  },
+  {
+   "id": "T046",
+   "kind": "text",
+   "form": "threshold",
+   "subject": "包括利益",
+   "value": null,
+   "unit": null,
+   "word": "減少",
+   "span": "前期2,451百万円)と、前期比では194百万円、7.9%の減少にとどまり",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:ComprehensiveIncome@CurrentYearDuration",
+    "xbrl:jppfs_cor:ComprehensiveIncome@Prior1YearDuration",
+    "builtin:sign(cur-prior)"
+   ],
+   "reason": null,
+   "recomputed": -194815000.0
+  },
+  {
+   "id": "T047",
+   "kind": "text",
+   "form": "threshold",
+   "subject": "その他の包括利益",
+   "value": null,
+   "unit": null,
+   "word": "増加",
+   "span": "包括利益は1,310百万円(前期528百万円)と782百万円増加しておりま",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:OtherComprehensiveIncome@CurrentYearDuration",
+    "xbrl:jppfs_cor:OtherComprehensiveIncome@Prior1YearDuration",
+    "builtin:sign(cur-prior)"
+   ],
+   "reason": null,
+   "recomputed": 781972000.0
+  },
+  {
+   "id": "T048",
+   "kind": "text",
+   "form": "threshold",
+   "subject": "退職給付に係る資産",
+   "value": null,
+   "unit": null,
+   "word": "増加",
+   "span": "これは後述する退職給付に係る資産の大幅増加と表裏一体",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:NetDefinedBenefitAsset@CurrentYearInstant",
+    "xbrl:jppfs_cor:NetDefinedBenefitAsset@Prior1YearInstant",
+    "builtin:sign(cur-prior)"
+   ],
+   "reason": null,
+   "recomputed": 1828839000.0
+  },
+  {
+   "id": "T049",
+   "kind": "text",
+   "form": "threshold",
+   "subject": "総資産",
+   "value": null,
+   "unit": null,
+   "word": "増加",
+   "span": "会計年度末の25,554百万円から2,281百万円、8.9%増加しました。",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:Assets@CurrentYearInstant",
+    "xbrl:jppfs_cor:Assets@Prior1YearInstant",
+    "builtin:sign(cur-prior)"
+   ],
+   "reason": null,
+   "recomputed": 2281746000.0
+  },
+  {
+   "id": "T050",
+   "kind": "text",
+   "form": "threshold",
+   "subject": "流動資産",
+   "value": null,
+   "unit": null,
+   "word": "増加",
+   "span": "16,943百万円(前期末16,533百万円)と409百万円増加しました。",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:CurrentAssets@CurrentYearInstant",
+    "xbrl:jppfs_cor:CurrentAssets@Prior1YearInstant",
+    "builtin:sign(cur-prior)"
+   ],
+   "reason": null,
+   "recomputed": 409947000.0
+  },
+  {
+   "id": "T051",
+   "kind": "text",
+   "form": "threshold",
+   "subject": "現金及び預金",
+   "value": null,
+   "unit": null,
+   "word": "減少",
+   "span": ":2,605百万円(前期末2,899百万円)、293百万円の減少",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:CashAndDeposits@CurrentYearInstant",
+    "xbrl:jppfs_cor:CashAndDeposits@Prior1YearInstant",
+    "builtin:sign(cur-prior)"
+   ],
+   "reason": null,
+   "recomputed": -293190000.0
+  },
+  {
+   "id": "T052",
+   "kind": "text",
+   "form": "threshold",
+   "subject": "受取手形及び売掛金",
+   "value": null,
+   "unit": null,
+   "word": "増加",
+   "span": "掛金:2,556百万円(同1,751百万円)、804百万円の増加",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:NotesAndAccountsReceivableTrade@CurrentYearInstant",
+    "xbrl:jppfs_cor:NotesAndAccountsReceivableTrade@Prior1YearInstant",
+    "builtin:sign(cur-prior)"
+   ],
+   "reason": null,
+   "recomputed": 804775000.0
+  },
+  {
+   "id": "T053",
+   "kind": "text",
+   "form": "threshold",
+   "subject": "契約資産",
+   "value": null,
+   "unit": null,
+   "word": "減少",
+   "span": ":11,267百万円(同11,428百万円)、161百万円の減少",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:ContractAssets@CurrentYearInstant",
+    "xbrl:jppfs_cor:ContractAssets@Prior1YearInstant",
+    "builtin:sign(cur-prior)"
+   ],
+   "reason": null,
+   "recomputed": -161030000.0
+  },
+  {
+   "id": "T054",
+   "kind": "text",
+   "form": "threshold",
+   "subject": "流動資産",
+   "value": null,
+   "unit": null,
+   "word": "増加",
+   "span": "の他の流動資産:513百万円(同454百万円)、59百万円の増加",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:CurrentAssets@CurrentYearInstant",
+    "xbrl:jppfs_cor:CurrentAssets@Prior1YearInstant",
+    "builtin:sign(cur-prior)"
+   ],
+   "reason": null,
+   "recomputed": 409947000.0
+  },
+  {
+   "id": "T055",
+   "kind": "text",
+   "form": "threshold",
+   "subject": "売上債権",
+   "value": null,
+   "unit": null,
+   "word": "増加",
+   "span": "売上債権の増加は期末近傍",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:DecreaseIncreaseInNotesAndAccountsReceivableTradeOpeCF@CurrentYearDuration",
+    "builtin:flow_sign(cur)==direction"
+   ],
+   "reason": null,
+   "recomputed": -802686000.0
+  },
+  {
+   "id": "T056",
+   "kind": "text",
+   "form": "threshold",
+   "subject": "契約資産",
+   "value": null,
+   "unit": null,
+   "word": "減少",
+   "span": "売上債権の増加は期末近傍の検収集中によるもので、契約資産の減少とあわせて",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:ContractAssets@CurrentYearInstant",
+    "xbrl:jppfs_cor:ContractAssets@Prior1YearInstant",
+    "builtin:sign(cur-prior)"
+   ],
+   "reason": null,
+   "recomputed": -161030000.0
+  },
+  {
+   "id": "T057",
+   "kind": "text",
+   "form": "threshold",
+   "subject": "固定資産",
+   "value": null,
+   "unit": null,
+   "word": "増加",
+   "span": "前期末9,021百万円)と1,871百万円、20.7%の大幅増加となりまし",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:NoncurrentAssets@CurrentYearInstant",
+    "xbrl:jppfs_cor:NoncurrentAssets@Prior1YearInstant",
+    "builtin:sign(cur-prior)"
+   ],
+   "reason": null,
+   "recomputed": 1871798000.0
+  },
+  {
+   "id": "T058",
+   "kind": "text",
+   "form": "threshold",
+   "subject": "有形固定資産",
+   "value": null,
+   "unit": null,
+   "word": "増加",
+   "span": "資産:2,092百万円(前期末2,083百万円)、9百万円の増加",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:PropertyPlantAndEquipment@CurrentYearInstant",
+    "xbrl:jppfs_cor:PropertyPlantAndEquipment@Prior1YearInstant",
+    "builtin:sign(cur-prior)"
+   ],
+   "reason": null,
+   "recomputed": 9123000.0
+  },
+  {
+   "id": "T059",
+   "kind": "text",
+   "form": "threshold",
+   "subject": "無形固定資産",
+   "value": null,
+   "unit": null,
+   "word": "減少",
+   "span": "無形固定資産:371百万円(同528百万円)、157百万円の減少(うち、の",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:IntangibleAssets@CurrentYearInstant",
+    "xbrl:jppfs_cor:IntangibleAssets@Prior1YearInstant",
+    "builtin:sign(cur-prior)"
+   ],
+   "reason": null,
+   "recomputed": -157070000.0
+  },
+  {
+   "id": "T060",
+   "kind": "text",
+   "form": "threshold",
+   "subject": "のれん",
+   "value": null,
+   "unit": null,
+   "word": "減少",
+   "span": "減少(うち、のれんが213百万円から159百万円へ53百万円減少)",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:Goodwill@CurrentYearInstant",
+    "xbrl:jppfs_cor:Goodwill@Prior1YearInstant",
+    "builtin:sign(cur-prior)"
+   ],
+   "reason": null,
+   "recomputed": -53257000.0
+  },
+  {
+   "id": "T061",
+   "kind": "text",
+   "form": "threshold",
+   "subject": "投資その他の資産",
+   "value": null,
+   "unit": null,
+   "word": "増加",
+   "span": ":8,428百万円(同6,409百万円)、2,019百万円の増加",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:InvestmentsAndOtherAssets@CurrentYearInstant",
+    "xbrl:jppfs_cor:InvestmentsAndOtherAssets@Prior1YearInstant",
+    "builtin:sign(cur-prior)"
+   ],
+   "reason": null,
+   "recomputed": 2019745000.0
+  },
+  {
+   "id": "T062",
+   "kind": "text",
+   "form": "threshold",
+   "subject": "固定資産",
+   "value": null,
+   "unit": null,
+   "word": "増加",
+   "span": "固定資産増加の最大の要",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:NoncurrentAssets@CurrentYearInstant",
+    "xbrl:jppfs_cor:NoncurrentAssets@Prior1YearInstant",
+    "builtin:sign(cur-prior)"
+   ],
+   "reason": null,
+   "recomputed": 1871798000.0
+  },
+  {
+   "id": "T063",
+   "kind": "text",
+   "form": "threshold",
+   "subject": "退職給付に係る資産",
+   "value": null,
+   "unit": null,
+   "word": "増加",
+   "span": "6,174百万円(前期末4,345百万円)と1,828百万円増加したことで",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:NetDefinedBenefitAsset@CurrentYearInstant",
+    "xbrl:jppfs_cor:NetDefinedBenefitAsset@Prior1YearInstant",
+    "builtin:sign(cur-prior)"
+   ],
+   "reason": null,
+   "recomputed": 1828839000.0
+  },
+  {
+   "id": "T064",
+   "kind": "text",
+   "form": "threshold",
+   "subject": null,
+   "value": null,
+   "unit": null,
+   "word": "上回",
+   "span": "境が良好に推移したことにより、年金資産が退職給付債務を大きく上回る積立超過",
+   "state": "UNVERIFIABLE",
+   "pointers": [],
+   "reason": "no_subject",
+   "recomputed": null
+  },
+  {
+   "id": "T065",
+   "kind": "text",
+   "form": "threshold",
+   "subject": null,
+   "value": null,
+   "unit": null,
+   "word": "拡大",
+   "span": "、年金資産が退職給付債務を大きく上回る積立超過の状態がさらに拡大しておりま",
+   "state": "UNVERIFIABLE",
+   "pointers": [],
+   "reason": "no_subject",
+   "recomputed": null
+  },
+  {
+   "id": "T066",
+   "kind": "text",
+   "form": "threshold",
+   "subject": "投資有価証券",
+   "value": null,
+   "unit": null,
+   "word": "増加",
+   "span": "資有価証券も1,203百万円(同901百万円)と301百万円増加しました。",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:InvestmentSecurities@CurrentYearInstant",
+    "xbrl:jppfs_cor:InvestmentSecurities@Prior1YearInstant",
+    "builtin:sign(cur-prior)"
+   ],
+   "reason": null,
+   "recomputed": 301511000.0
+  },
+  {
+   "id": "T067",
+   "kind": "text",
+   "form": "threshold",
+   "subject": "その他有価証券評価差額金",
+   "value": null,
+   "unit": null,
+   "word": "増加",
+   "span": "昇(その他有価証券評価差額金が414百万円から631百万円へ増加)および一",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:ValuationDifferenceOnAvailableForSaleSecurities@CurrentYearInstant",
+    "xbrl:jppfs_cor:ValuationDifferenceOnAvailableForSaleSecurities@Prior1YearInstant",
+    "builtin:sign(cur-prior)"
+   ],
+   "reason": null,
+   "recomputed": 217490000.0
+  },
+  {
+   "id": "T068",
+   "kind": "text",
+   "form": "threshold",
+   "subject": "負債合計",
+   "value": null,
+   "unit": null,
+   "word": "増加",
+   "span": "となり、前期末の10,055百万円から614百万円、6.1%増加しました。",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:Liabilities@CurrentYearInstant",
+    "xbrl:jppfs_cor:Liabilities@Prior1YearInstant",
+    "builtin:sign(cur-prior)"
+   ],
+   "reason": null,
+   "recomputed": 614547000.0
+  },
+  {
+   "id": "T069",
+   "kind": "text",
+   "form": "threshold",
+   "subject": "流動負債",
+   "value": null,
+   "unit": null,
+   "word": "増加",
+   "span": "*は8,041百万円(前期末7,642百万円)と398百万円増加しました。",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:CurrentLiabilities@CurrentYearInstant",
+    "xbrl:jppfs_cor:CurrentLiabilities@Prior1YearInstant",
+    "builtin:sign(cur-prior)"
+   ],
+   "reason": null,
+   "recomputed": 398784000.0
+  },
+  {
+   "id": "T070",
+   "kind": "text",
+   "form": "threshold",
+   "subject": "業務未払金",
+   "value": null,
+   "unit": null,
+   "word": "減少",
+   "span": ":1,757百万円(前期末2,057百万円)、300百万円の減少",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:AccountsPayableOperatingSpecific@CurrentYearInstant",
+    "xbrl:jppfs_cor:AccountsPayableOperatingSpecific@Prior1YearInstant",
+    "builtin:sign(cur-prior)"
+   ],
+   "reason": null,
+   "recomputed": -300298000.0
+  },
+  {
+   "id": "T071",
+   "kind": "text",
+   "form": "threshold",
+   "subject": "未払消費税等",
+   "value": null,
+   "unit": null,
+   "word": "増加",
+   "span": "税等:1,490百万円(同1,191百万円)、299百万円の増加",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:AccruedConsumptionTaxes@CurrentYearInstant",
+    "xbrl:jppfs_cor:AccruedConsumptionTaxes@Prior1YearInstant",
+    "builtin:sign(cur-prior)"
+   ],
+   "reason": null,
+   "recomputed": 299066000.0
+  },
+  {
+   "id": "T072",
+   "kind": "text",
+   "form": "threshold",
+   "subject": "未払法人税等",
+   "value": null,
+   "unit": null,
+   "word": "減少",
+   "span": "未払法人税等:579百万円(同687百万円)、107百万円の減少",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:IncomeTaxesPayable@CurrentYearInstant",
+    "xbrl:jppfs_cor:IncomeTaxesPayable@Prior1YearInstant",
+    "builtin:sign(cur-prior)"
+   ],
+   "reason": null,
+   "recomputed": -107853000.0
+  },
+  {
+   "id": "T073",
+   "kind": "text",
+   "form": "threshold",
+   "subject": "契約負債",
+   "value": null,
+   "unit": null,
+   "word": "減少",
+   "span": "約負債:1,500百万円(同1,594百万円)、93百万円の減少",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:ContractLiabilities@CurrentYearInstant",
+    "xbrl:jppfs_cor:ContractLiabilities@Prior1YearInstant",
+    "builtin:sign(cur-prior)"
+   ],
+   "reason": null,
+   "recomputed": -93446000.0
+  },
+  {
+   "id": "T074",
+   "kind": "text",
+   "form": "threshold",
+   "subject": "1年内返済予定の長期借入金",
+   "value": null,
+   "unit": null,
+   "word": "減少",
+   "span": "定の長期借入金:234百万円(同332百万円)、98百万円の減少",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:CurrentPortionOfLongTermLoansPayable@CurrentYearInstant",
+    "xbrl:jppfs_cor:CurrentPortionOfLongTermLoansPayable@Prior1YearInstant",
+    "builtin:sign(cur-prior)"
+   ],
+   "reason": null,
+   "recomputed": -98000000.0
+  },
+  {
+   "id": "T075",
+   "kind": "text",
+   "form": "threshold",
+   "subject": null,
+   "value": null,
+   "unit": null,
+   "word": "減少",
+   "span": " 役員株式報酬引当金:7百万円(同69百万円)、62百万円の減少",
+   "state": "UNVERIFIABLE",
+   "pointers": [],
+   "reason": "no_subject",
+   "recomputed": null
+  },
+  {
+   "id": "T076",
+   "kind": "text",
+   "form": "threshold",
+   "subject": "受注損失引当金",
+   "value": null,
+   "unit": null,
+   "word": "増加",
+   "span": "- 受注損失引当金:19百万円(同18百万円)、1百万円の増加",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:ProvisionForLossOnOrderReceivedCL@CurrentYearInstant",
+    "xbrl:jppfs_cor:ProvisionForLossOnOrderReceivedCL@Prior1YearInstant",
+    "builtin:sign(cur-prior)"
+   ],
+   "reason": null,
+   "recomputed": 1180000.0
+  },
+  {
+   "id": "T077",
+   "kind": "text",
+   "form": "threshold",
+   "subject": "固定負債",
+   "value": null,
+   "unit": null,
+   "word": "増加",
+   "span": "*は2,629百万円(前期末2,413百万円)と215百万円増加しました。",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:NoncurrentLiabilities@CurrentYearInstant",
+    "xbrl:jppfs_cor:NoncurrentLiabilities@Prior1YearInstant",
+    "builtin:sign(cur-prior)"
+   ],
+   "reason": null,
+   "recomputed": 215764000.0
+  },
+  {
+   "id": "T078",
+   "kind": "text",
+   "form": "threshold",
+   "subject": "繰延税金負債",
+   "value": null,
+   "unit": null,
+   "word": "増加",
+   "span": "繰延税金負債の増加は、退職給",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:DeferredTaxLiabilities@CurrentYearInstant",
+    "xbrl:jppfs_cor:DeferredTaxLiabilities@Prior1YearInstant",
+    "builtin:sign(cur-prior)"
+   ],
+   "reason": null,
+   "recomputed": 448507000.0
+  },
+  {
+   "id": "T079",
+   "kind": "text",
+   "form": "threshold",
+   "subject": "投資有価証券",
+   "value": null,
+   "unit": null,
+   "word": "増加",
+   "span": "金負債の増加は、退職給付に係る資産および投資有価証券の評価益増加に対応する",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:InvestmentSecurities@CurrentYearInstant",
+    "xbrl:jppfs_cor:InvestmentSecurities@Prior1YearInstant",
+    "builtin:sign(cur-prior)"
+   ],
+   "reason": null,
+   "recomputed": 301511000.0
+  },
+  {
+   "id": "T080",
+   "kind": "text",
+   "form": "threshold",
+   "subject": "完成業務補償引当金",
+   "value": null,
+   "unit": null,
+   "word": "増加",
+   "span": "991百万円(前期末205百万円)が前述のとおり786百万円増加しておりま",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jpcrp030000-asr_E36539-000:ProvisionForWarrantiesForCompletedOperationCL@CurrentYearInstant",
+    "xbrl:jpcrp030000-asr_E36539-000:ProvisionForWarrantiesForCompletedOperationCL@Prior1YearInstant",
+    "builtin:sign(cur-prior)"
+   ],
+   "reason": null,
+   "recomputed": 786000000.0
+  },
+  {
+   "id": "T081",
+   "kind": "text",
+   "form": "threshold",
+   "subject": "長期借入金",
+   "value": null,
+   "unit": null,
+   "word": "減少",
+   "span": "入金275百万円の合計510百万円(前期末843百万円)まで減少しており、",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:LongTermLoansPayable@CurrentYearInstant",
+    "xbrl:jppfs_cor:LongTermLoansPayable@Prior1YearInstant",
+    "builtin:sign(cur-prior)"
+   ],
+   "reason": null,
+   "recomputed": -234864000.0
+  },
+  {
+   "id": "T082",
+   "kind": "text",
+   "form": "threshold",
+   "subject": "純資産合計",
+   "value": null,
+   "unit": null,
+   "word": "増加",
+   "span": "、前期末の15,498百万円から1,667百万円、10.8%増加しました。",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:NetAssets@CurrentYearInstant",
+    "xbrl:jppfs_cor:NetAssets@Prior1YearInstant",
+    "builtin:sign(cur-prior)"
+   ],
+   "reason": null,
+   "recomputed": 1667198000.0
+  },
+  {
+   "id": "T083",
+   "kind": "text",
+   "form": "threshold",
+   "subject": "株主資本",
+   "value": null,
+   "unit": null,
+   "word": "増加",
+   "span": "4,258百万円(前期末13,890百万円)、367百万円の増加",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:ShareholdersEquity@CurrentYearInstant",
+    "xbrl:jppfs_cor:ShareholdersEquity@Prior1YearInstant",
+    "builtin:sign(cur-prior)"
+   ],
+   "reason": null,
+   "recomputed": 367547000.0
+  },
+  {
+   "id": "T084",
+   "kind": "text",
+   "form": "threshold",
+   "subject": "その他の包括利益",
+   "value": null,
+   "unit": null,
+   "word": "増加",
+   "span": ":2,907百万円(同1,596百万円)、1,310百万円の増加",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:OtherComprehensiveIncome@CurrentYearDuration",
+    "xbrl:jppfs_cor:OtherComprehensiveIncome@Prior1YearDuration",
+    "builtin:sign(cur-prior)"
+   ],
+   "reason": null,
+   "recomputed": 781972000.0
+  },
+  {
+   "id": "T085",
+   "kind": "text",
+   "form": "threshold",
+   "subject": "剰余金の配当",
+   "value": null,
+   "unit": null,
+   "word": "増加",
+   "span": "5百万円の計上と剰余金の配当652百万円により292百万円の増加にとどまり",
+   "state": "VALUE_MISMATCH",
+   "pointers": [
+    "xbrl:jppfs_cor:DividendsFromSurplus@CurrentYearDuration",
+    "xbrl:jppfs_cor:DividendsFromSurplus@Prior1YearDuration",
+    "builtin:sign(cur-prior)"
+   ],
+   "reason": null,
+   "recomputed": -126564000.0
+  },
+  {
+   "id": "T086",
+   "kind": "text",
+   "form": "threshold",
+   "subject": "1株当たり純資産額",
+   "value": null,
+   "unit": null,
+   "word": "増加",
+   "span": "資産額は2,096円83銭(同1,897円74銭)と199円増加しておりま",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jpcrp_cor:NetAssetsPerShareSummaryOfBusinessResults@CurrentYearInstant",
+    "xbrl:jpcrp_cor:NetAssetsPerShareSummaryOfBusinessResults@Prior1YearInstant",
+    "builtin:sign(cur-prior)"
+   ],
+   "reason": null,
+   "recomputed": 199.08999999999992
+  },
+  {
+   "id": "T087",
+   "kind": "text",
+   "form": "threshold",
+   "subject": "自己資本比率",
+   "value": null,
+   "unit": null,
+   "word": "改善",
+   "span": "自己資本比率は2022年6月期の50.6%から5期連続で改善しており、",
+   "state": "POINTER_NOT_FOUND",
+   "pointers": [],
+   "reason": "no_element(text needs money fact)",
+   "recomputed": null
+  },
+  {
+   "id": "T088",
+   "kind": "text",
+   "form": "threshold",
+   "subject": "現金及び現金同等物",
+   "value": null,
+   "unit": null,
+   "word": "減少",
+   "span": "円となり、前連結会計年度末の2,899百万円から293百万円減少しました。",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:CashAndCashEquivalents@CurrentYearInstant",
+    "xbrl:jppfs_cor:CashAndCashEquivalents@Prior1YearInstant",
+    "builtin:sign(cur-prior)"
+   ],
+   "reason": null,
+   "recomputed": -293190000.0
+  },
+  {
+   "id": "T089",
+   "kind": "text",
+   "form": "threshold",
+   "subject": null,
+   "value": null,
+   "unit": null,
+   "word": "増加",
+   "span": "営業活動による資金の増加は1,03",
+   "state": "UNVERIFIABLE",
+   "pointers": [],
+   "reason": "no_subject",
+   "recomputed": null
+  },
+  {
+   "id": "T090",
+   "kind": "text",
+   "form": "threshold",
+   "subject": null,
+   "value": null,
+   "unit": null,
+   "word": "増加",
+   "span": "による資金の増加は1,032百万円(前期は3,029百万円の増加)となり、",
+   "state": "UNVERIFIABLE",
+   "pointers": [],
+   "reason": "no_subject",
+   "recomputed": null
+  },
+  {
+   "id": "T091",
+   "kind": "text",
+   "form": "threshold",
+   "subject": null,
+   "value": null,
+   "unit": null,
+   "word": "減少",
+   "span": ",029百万円の増加)となり、前期比で1,996百万円の収入減少となりまし",
+   "state": "UNVERIFIABLE",
+   "pointers": [],
+   "reason": "no_subject",
+   "recomputed": null
+  },
+  {
+   "id": "T092",
+   "kind": "text",
+   "form": "threshold",
+   "subject": "完成業務補償引当金",
+   "value": null,
+   "unit": null,
+   "word": "増加",
+   "span": "費452百万円、のれん償却額53百万円、完成業務補償引当金の増加786百万",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jpcrp030000-asr_E36539-000:IncreaseDecreaseInProvisionForWarrantiesForCompletedOperationOpeCF@CurrentYearDuration",
+    "builtin:flow_sign(cur)==direction"
+   ],
+   "reason": null,
+   "recomputed": 786000000.0
+  },
+  {
+   "id": "T093",
+   "kind": "text",
+   "form": "threshold",
+   "subject": "退職給付に係る資産",
+   "value": null,
+   "unit": null,
+   "word": "増加",
+   "span": "の減少161百万円などの収入要因に対し、退職給付に係る資産の増加1,828",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:IncreaseDecreaseInNetDefinedBenefitAssetOpeCF@CurrentYearDuration",
+    "builtin:flow_sign(cur)==direction"
+   ],
+   "reason": null,
+   "recomputed": -1828838000.0
+  },
+  {
+   "id": "T094",
+   "kind": "text",
+   "form": "threshold",
+   "subject": "売上債権",
+   "value": null,
+   "unit": null,
+   "word": "増加",
+   "span": "に対し、退職給付に係る資産の増加1,828百万円、売上債権の増加802百万",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:DecreaseIncreaseInNotesAndAccountsReceivableTradeOpeCF@CurrentYearDuration",
+    "builtin:flow_sign(cur)==direction"
+   ],
+   "reason": null,
+   "recomputed": -802686000.0
+  },
+  {
+   "id": "T095",
+   "kind": "text",
+   "form": "threshold",
+   "subject": "契約資産",
+   "value": null,
+   "unit": null,
+   "word": "減少",
+   "span": "53百万円、完成業務補償引当金の増加786百万円、契約資産の減少161百万",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jpcrp030000-asr_E36539-000:DecreaseIncreaseInContractAssetsOpeCF@CurrentYearDuration",
+    "builtin:flow_sign(cur)==direction"
+   ],
+   "reason": null,
+   "recomputed": 161030000.0
+  },
+  {
+   "id": "T096",
+   "kind": "text",
+   "form": "threshold",
+   "subject": "仕入債務",
+   "value": null,
+   "unit": null,
+   "word": "減少",
+   "span": "増加1,828百万円、売上債権の増加802百万円、仕入債務の減少300百万",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:IncreaseDecreaseInNotesAndAccountsPayableTradeOpeCF@CurrentYearDuration",
+    "builtin:flow_sign(cur)==direction"
+   ],
+   "reason": null,
+   "recomputed": -300297000.0
+  },
+  {
+   "id": "T097",
+   "kind": "text",
+   "form": "threshold",
+   "subject": "契約負債",
+   "value": null,
+   "unit": null,
+   "word": "減少",
+   "span": "権の増加802百万円、仕入債務の減少300百万円、契約負債の減少93百万円",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:IncreaseDecreaseInContractLiabilitiesOpeCF@CurrentYearDuration",
+    "builtin:flow_sign(cur)==direction"
+   ],
+   "reason": null,
+   "recomputed": -93465000.0
+  },
+  {
+   "id": "T098",
+   "kind": "text",
+   "form": "threshold",
+   "subject": "退職給付に係る資産",
+   "value": null,
+   "unit": null,
+   "word": "増加",
+   "span": "純利益が1,255百万円減少したこと、2退職給付に係る資産の増加額が前期8",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:IncreaseDecreaseInNetDefinedBenefitAssetOpeCF@CurrentYearDuration",
+    "builtin:flow_sign(cur)==direction"
+   ],
+   "reason": null,
+   "recomputed": -1828838000.0
+  },
+  {
+   "id": "T099",
+   "kind": "text",
+   "form": "threshold",
+   "subject": "売上債権",
+   "value": null,
+   "unit": null,
+   "word": "増加",
+   "span": "期は売上債権が209百万円減少したのに対し当期は802百万円増加し、差引1",
+   "state": "VALUE_MISMATCH",
+   "pointers": [
+    "xbrl:jppfs_cor:DecreaseIncreaseInNotesAndAccountsReceivableTradeOpeCF@Prior1YearDuration",
+    "builtin:flow_sign(cur)==direction"
+   ],
+   "reason": null,
+   "recomputed": 209659000.0
+  },
+  {
+   "id": "T100",
+   "kind": "text",
+   "form": "threshold",
+   "subject": "退職給付に係る資産",
+   "value": null,
+   "unit": null,
+   "word": "拡大",
+   "span": "額が前期890百万円から当期1,828百万円へと938百万円拡大したこと、",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:NetDefinedBenefitAsset@CurrentYearInstant",
+    "xbrl:jppfs_cor:NetDefinedBenefitAsset@Prior1YearInstant",
+    "builtin:sign(cur-prior)"
+   ],
+   "reason": null,
+   "recomputed": 1828839000.0
+  },
+  {
+   "id": "T101",
+   "kind": "text",
+   "form": "threshold",
+   "subject": null,
+   "value": null,
+   "unit": null,
+   "word": "減少",
+   "span": "前期からの減少の主因は、",
+   "state": "UNVERIFIABLE",
+   "pointers": [],
+   "reason": "no_subject",
+   "recomputed": null
+  },
+  {
+   "id": "T102",
+   "kind": "text",
+   "form": "threshold",
+   "subject": "税金等調整前当期純利益",
+   "value": null,
+   "unit": null,
+   "word": "減少",
+   "span": "らの減少の主因は、1税金等調整前当期純利益が1,255百万円減少したこと、",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:IncomeBeforeIncomeTaxes@CurrentYearDuration",
+    "xbrl:jppfs_cor:IncomeBeforeIncomeTaxes@Prior1YearDuration",
+    "builtin:sign(cur-prior)"
+   ],
+   "reason": null,
+   "recomputed": -1255859000.0
+  },
+  {
+   "id": "T103",
+   "kind": "text",
+   "form": "threshold",
+   "subject": "売上債権",
+   "value": null,
+   "unit": null,
+   "word": "減少",
+   "span": "へと938百万円拡大したこと、3前期は売上債権が209百万円減少したのに対",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:DecreaseIncreaseInNotesAndAccountsReceivableTradeOpeCF@Prior1YearDuration",
+    "builtin:flow_sign(cur)==direction"
+   ],
+   "reason": null,
+   "recomputed": 209659000.0
+  },
+  {
+   "id": "T104",
+   "kind": "text",
+   "form": "threshold",
+   "subject": "退職給付に係る資産",
+   "value": null,
+   "unit": null,
+   "word": "増加",
+   "span": "なお、2の退職給付に係る資産の増加は年金資産",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:IncreaseDecreaseInNetDefinedBenefitAssetOpeCF@CurrentYearDuration",
+    "builtin:flow_sign(cur)==direction"
+   ],
+   "reason": null,
+   "recomputed": -1828838000.0
+  },
+  {
+   "id": "T105",
+   "kind": "text",
+   "form": "threshold",
+   "subject": "退職給付に係る資産",
+   "value": null,
+   "unit": null,
+   "word": "増加",
+   "span": "ー調整項目であり、3は期末の検収集中による一時的な運転資本の増加です。",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:IncreaseDecreaseInNetDefinedBenefitAssetOpeCF@CurrentYearDuration",
+    "builtin:flow_sign(cur)==direction"
+   ],
+   "reason": null,
+   "recomputed": -1828838000.0
+  },
+  {
+   "id": "T106",
+   "kind": "text",
+   "form": "threshold",
+   "subject": null,
+   "value": null,
+   "unit": null,
+   "word": "低下",
+   "span": "これらは当社の収益力そのものの低下を意味する",
+   "state": "UNVERIFIABLE",
+   "pointers": [],
+   "reason": "no_subject",
+   "recomputed": null
+  },
+  {
+   "id": "T107",
+   "kind": "text",
+   "form": "threshold",
+   "subject": null,
+   "value": null,
+   "unit": null,
+   "word": "減少",
+   "span": "投資活動による資金の減少は259百",
+   "state": "UNVERIFIABLE",
+   "pointers": [],
+   "reason": "no_subject",
+   "recomputed": null
+  },
+  {
+   "id": "T108",
+   "kind": "text",
+   "form": "threshold",
+   "subject": null,
+   "value": null,
+   "unit": null,
+   "word": "減少",
+   "span": "投資活動による資金の減少は259百万円(前期は506百万円の減少)となりま",
+   "state": "UNVERIFIABLE",
+   "pointers": [],
+   "reason": "no_subject",
+   "recomputed": null
+  },
+  {
+   "id": "T109",
+   "kind": "text",
+   "form": "threshold",
+   "subject": null,
+   "value": null,
+   "unit": null,
+   "word": "減少",
+   "span": "財務活動による資金の減少は1,07",
+   "state": "UNVERIFIABLE",
+   "pointers": [],
+   "reason": "no_subject",
+   "recomputed": null
+  },
+  {
+   "id": "T110",
+   "kind": "text",
+   "form": "threshold",
+   "subject": null,
+   "value": null,
+   "unit": null,
+   "word": "減少",
+   "span": "による資金の減少は1,073百万円(前期は1,740百万円の減少)となりま",
+   "state": "UNVERIFIABLE",
+   "pointers": [],
+   "reason": "no_subject",
+   "recomputed": null
+  },
+  {
+   "id": "T111",
+   "kind": "text",
+   "form": "threshold",
+   "subject": "配当金の支払額",
+   "value": null,
+   "unit": null,
+   "word": "増加",
+   "span": "配当金の支払額は前期の529百万円から122百万円増加しており、",
+   "state": "GROUNDED",
+   "pointers": [
+    "xbrl:jppfs_cor:CashDividendsPaidFinCF@CurrentYearDuration",
+    "xbrl:jppfs_cor:CashDividendsPaidFinCF@Prior1YearDuration",
+    "builtin:sign(|cur|-|prior|)"
+   ],
+   "reason": null,
+   "recomputed": 122572000.0
+  }
+ ]
+}

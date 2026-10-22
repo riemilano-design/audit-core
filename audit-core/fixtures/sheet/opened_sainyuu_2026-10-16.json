@@ -1,0 +1,48 @@
+{
+ "seal": "docs/DOMAIN1_SAIIRU_SEAL_2026-10-16.md",
+ "purpose": "**独立した証拠になるかを測るための取得**。取得しただけでは本実験を続行しない(封 §2)",
+ "dataset": "令和６年度東京都各会計歳入歳出決算書及び東京都各会計歳入歳出決算附属書類等(東京都会計管理局、CC BY 4.0)",
+ "license": "CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/deed.ja)",
+ "source": "東京都オープンデータカタログサイト / 東京都会計管理局",
+ "opened_at": "2026-10-16T19:44:52+09:00",
+ "engine_commit": "1933e59",
+ "cache_dir": "~/.cache/audit-core/sheet",
+ "fetch_log": [
+  {
+   "name": "op20251218_06kessan_02_sainyuu.xlsx",
+   "result": "fetched",
+   "last_modified": "Thu, 15 Jan 2026 02:59:25 GMT"
+  },
+  {
+   "name": "op20251218_06kessan_04_jikoubetu_sainyuu.xlsx",
+   "result": "fetched",
+   "last_modified": "Thu, 15 Jan 2026 02:59:25 GMT"
+  }
+ ],
+ "files": {
+  "op20251218_06kessan_02_sainyuu.xlsx": {
+   "label": "決算書 歳入",
+   "sha256": "cc2da5f72370f814faedaafd9034d7e3dc9effea590b9334f609615c5c257084",
+   "bytes": 96925,
+   "expected_bytes": 96925,
+   "url": "https://www.opendata.metro.tokyo.lg.jp/kaikeikanri/op20251218_06kessan_02_sainyuu.xlsx"
+  },
+  "op20251218_06kessan_04_jikoubetu_sainyuu.xlsx": {
+   "label": "事項別明細 歳入",
+   "sha256": "2047189d97ed4b6b5599ced323c3a4d3569a37cff534c036474ff40e9a56833f",
+   "bytes": 706250,
+   "expected_bytes": 706250,
+   "url": "https://www.opendata.metro.tokyo.lg.jp/kaikeikanri/op20251218_06kessan_04_jikoubetu_sainyuu.xlsx"
+  }
+ },
+ "present": 2,
+ "not_fetched": [
+  {
+   "label": "実質収支",
+   "name": "op20251218_06kessan_06_jissitusyuusi.xlsx",
+   "why": "歳入と歳出から導出される数。封 §1・R-独立-2"
+  }
+ ],
+ "scope_note": "**他の年度・他の自治体は取らない**(人間の指示 2026-10-16)。令和 5〜2 年度も同じ構成で公開されているが、**今回の結果を見てから判断する**",
+ "not_a_continuation": "**段 10 の停止規則は維持する。**診断で新しい正しい接続が 1 件も生まれなければこの経路は打ち切る。**規則も閾値も緩めない**"
+}

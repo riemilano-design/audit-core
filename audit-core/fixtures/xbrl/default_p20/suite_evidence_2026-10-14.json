@@ -1,0 +1,8 @@
+{
+ "head": "dd3cff1",
+ "heads_seen": 4,
+ "pytest_passed": 1185,
+ "mutations_suite": "5 passed",
+ "discover_ran": 1050,
+ "discover_ok": true
+}

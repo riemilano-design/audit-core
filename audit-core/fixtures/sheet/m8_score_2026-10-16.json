@@ -1,0 +1,2534 @@
+{
+ "purpose": "段 8 の採点(封 §3〜§5)。閾値は封じたもので、結果を見て変えていない",
+ "seal": "docs/DOMAIN1_M8_SEAL_2026-10-16.md",
+ "verdict_from": "新 engine。旧は増分のためだけに並べた(封 §4)",
+ "scorable": 25,
+ "seats_agree_6": 24,
+ "hold_total": 1,
+ "E2_誤受理": 0,
+ "lines": {
+  "G-1 接続の正確さ": {
+   "rate": 0.76,
+   "num": 19,
+   "den": 25,
+   "pass": "≥ 50%",
+   "ok": true
+  },
+  "G-2 誤接続": {
+   "count": 0,
+   "pass": "= 0 件",
+   "ok": true
+  },
+  "G-3 根拠なしの接続": {
+   "count": 0,
+   "pass": "= 0 件",
+   "ok": true
+  },
+  "G-4 保留の適切さ": {
+   "rate": 1.0,
+   "num": 1,
+   "den": 1,
+   "pass": "≥ 80%",
+   "status": "合格",
+   "ok": true
+  },
+  "G-5 母数": {
+   "count": 25,
+   "pass": "≥ 20",
+   "ok": true
+  },
+  "G-7 正しい接続の増分": {
+   "count": 2,
+   "pass": "≥ 1 件",
+   "ok": true,
+   "old": 17,
+   "new": 19
+  },
+  "G-8 誤受理の増分": {
+   "count": 0,
+   "pass": "= 0 件",
+   "ok": true,
+   "old": 0,
+   "new": 0
+  }
+ },
+ "overall": "合格",
+ "main_objective_status": "合格",
+ "N-1_親を正しく抽出": 6,
+ "N-2_親を誤って抽出": 0,
+ "N-1_分母_親で絞った主張": 6,
+ "N-1_判定できず": 0,
+ "N-3_正しく接続": 19,
+ "N-4_誤接続": 0,
+ "N-5_保留": 6,
+ "X": {
+  "X-1 抜粋に在る行に結んだ": 19,
+  "X-2 抜粋に無い行に結んだ": 0,
+  "X-3 X-2 のうち誤受理": 0,
+  "X-4 抜粋に在る行に結んで誤受理": 0
+ },
+ "X_詳細": [],
+ "X_note": "封 §4-1。段 7 の実測は X-1 20・X-2 6・X-3 6・X-4 0 で、**抜粋に無い行に結んだ 6 件が 6 件すべて誤受理**だった",
+ "old": {
+  "g1": 17,
+  "g2": 0,
+  "g3": 0,
+  "e2": 0,
+  "split": {
+   "接続数": 17,
+   "保留数": 8,
+   "対象外数": 0
+  },
+  "hold_reasons": {
+   "6 欄が一意でない(2 通り。値で選ばない)": 5,
+   "6 欄が一意でない(5 通り。値で選ばない)": 3
+  },
+  "agree_4": 17,
+  "only_4": 0,
+  "hold_total": 1,
+  "hold_ok": 1
+ },
+ "new_split": {
+  "接続数": 19,
+  "保留数": 6,
+  "対象外数": 0
+ },
+ "new_hold_reasons": {
+  "6 欄が一意でない(2 通り。値で選ばない)": 4,
+  "6 欄が一意でない(5 通り。値で選ばない)": 2
+ },
+ "reference_only": {
+  "agree_4": 19,
+  "only_4": 0
+ },
+ "g4_unmeasured": false,
+ "spec_version": "2026-10-15/m6",
+ "novelty": {
+  "新規": 25
+ },
+ "independent_confirmation": true,
+ "novelty_rule": "新規 10 件未満なら『独立に確認した』とは表現しない",
+ "missing_answers": [],
+ "rows": [
+  {
+   "id": "R001",
+   "value": 83878594000,
+   "novelty": "新規",
+   "sentence": "徴税費は予算現額83,878,594,000円に対し支出済額82,838,827,751円で、不用額は1,039,766,249円にとどまり、執行率の高さがうかがえる",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "",
+     "徴税費",
+     "予算現額",
+     "83878594000"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "徴税費",
+     "予算現額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!D61",
+   "hold_reason": null,
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "engine_parent": null,
+   "engine_key6": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "",
+     "徴税費",
+     "予算現額",
+     "83878594000"
+    ]
+   ],
+   "agree_6": true,
+   "agree_4": true,
+   "only_4": false,
+   "verdict": "正しい接続",
+   "parent_correct": null
+  },
+  {
+   "id": "R002",
+   "value": 82838827751,
+   "novelty": "新規",
+   "sentence": "徴税費は予算現額83,878,594,000円に対し支出済額82,838,827,751円で、不用額は1,039,766,249円にとどまり、執行率の高さがうかがえる",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "",
+     "徴税費",
+     "支出済額",
+     "82838827751"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "徴税費",
+     "支出済額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!E61",
+   "hold_reason": null,
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "engine_parent": null,
+   "engine_key6": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "",
+     "徴税費",
+     "支出済額",
+     "82838827751"
+    ]
+   ],
+   "agree_6": true,
+   "agree_4": true,
+   "only_4": false,
+   "verdict": "正しい接続",
+   "parent_correct": null
+  },
+  {
+   "id": "R003",
+   "value": 1039766249,
+   "novelty": "新規",
+   "sentence": "徴税費は予算現額83,878,594,000円に対し支出済額82,838,827,751円で、不用額は1,039,766,249円にとどまり、執行率の高さがうかがえる",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "",
+     "徴税費",
+     "不用額",
+     "1039766249"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "徴税費",
+     "不用額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!G61",
+   "hold_reason": null,
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "engine_parent": null,
+   "engine_key6": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "",
+     "徴税費",
+     "不用額",
+     "1039766249"
+    ]
+   ],
+   "agree_6": true,
+   "agree_4": true,
+   "only_4": false,
+   "verdict": "正しい接続",
+   "parent_correct": null
+  },
+  {
+   "id": "R004",
+   "value": 89434821000,
+   "novelty": "新規",
+   "sentence": "生活文化スポーツ費は予算現額89,434,821,000円である",
+   "label6": [
+    "verdict",
+    "判定不能"
+   ],
+   "label4": [
+    "verdict",
+    "判定不能"
+   ],
+   "seats_agree": false,
+   "state": "UNVERIFIABLE",
+   "route": null,
+   "pointer": null,
+   "hold_reason": "6 欄が一意でない(2 通り。値で選ばない)",
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "engine_parent": null,
+   "engine_key6": null,
+   "agree_6": false,
+   "agree_4": false,
+   "only_4": false,
+   "verdict": "正しく保留",
+   "parent_correct": null
+  },
+  {
+   "id": "R005",
+   "value": 182607162000,
+   "novelty": "新規",
+   "sentence": "環境費は予算現額182,607,162,000円、支出済額163,882,866,133円、不用額15,078,334,867円で、徴税費より不用額の割合が大きい",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "",
+     "環境費",
+     "予算現額",
+     "182607162000"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "環境費",
+     "予算現額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!D102",
+   "hold_reason": null,
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "engine_parent": null,
+   "engine_key6": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "",
+     "環境費",
+     "予算現額",
+     "182607162000"
+    ]
+   ],
+   "agree_6": true,
+   "agree_4": true,
+   "only_4": false,
+   "verdict": "正しい接続",
+   "parent_correct": null
+  },
+  {
+   "id": "R006",
+   "value": 163882866133,
+   "novelty": "新規",
+   "sentence": "環境費は予算現額182,607,162,000円、支出済額163,882,866,133円、不用額15,078,334,867円で、徴税費より不用額の割合が大きい",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "",
+     "環境費",
+     "支出済額",
+     "163882866133"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "環境費",
+     "支出済額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!E102",
+   "hold_reason": null,
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "engine_parent": null,
+   "engine_key6": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "",
+     "環境費",
+     "支出済額",
+     "163882866133"
+    ]
+   ],
+   "agree_6": true,
+   "agree_4": true,
+   "only_4": false,
+   "verdict": "正しい接続",
+   "parent_correct": null
+  },
+  {
+   "id": "R007",
+   "value": 15078334867,
+   "novelty": "新規",
+   "sentence": "環境費は予算現額182,607,162,000円、支出済額163,882,866,133円、不用額15,078,334,867円で、徴税費より不用額の割合が大きい",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "",
+     "環境費",
+     "不用額",
+     "15078334867"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "環境費",
+     "不用額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!G102",
+   "hold_reason": null,
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "engine_parent": null,
+   "engine_key6": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "",
+     "環境費",
+     "不用額",
+     "15078334867"
+    ]
+   ],
+   "agree_6": true,
+   "agree_4": true,
+   "only_4": false,
+   "verdict": "正しい接続",
+   "parent_correct": null
+  },
+  {
+   "id": "R008",
+   "value": 116988223000,
+   "novelty": "新規",
+   "sentence": "港湾費は予算現額116,988,223,000円、支出済額98,215,584,612円である",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "",
+     "港湾費",
+     "予算現額",
+     "116988223000"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "港湾費",
+     "予算現額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!D197",
+   "hold_reason": null,
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "engine_parent": null,
+   "engine_key6": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "",
+     "港湾費",
+     "予算現額",
+     "116988223000"
+    ]
+   ],
+   "agree_6": true,
+   "agree_4": true,
+   "only_4": false,
+   "verdict": "正しい接続",
+   "parent_correct": null
+  },
+  {
+   "id": "R009",
+   "value": 98215584612,
+   "novelty": "新規",
+   "sentence": "港湾費は予算現額116,988,223,000円、支出済額98,215,584,612円である",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "",
+     "港湾費",
+     "支出済額",
+     "98215584612"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "港湾費",
+     "支出済額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!E197",
+   "hold_reason": null,
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "engine_parent": null,
+   "engine_key6": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "",
+     "港湾費",
+     "支出済額",
+     "98215584612"
+    ]
+   ],
+   "agree_6": true,
+   "agree_4": true,
+   "only_4": false,
+   "verdict": "正しい接続",
+   "parent_correct": null
+  },
+  {
+   "id": "R010",
+   "value": 495954780000,
+   "novelty": "新規",
+   "sentence": "項別で最も規模が大きいのは、福祉費のうち子供・子育て支援費で、予算現額495,954,780,000円、支出済額472,209,223,487円、不用額22,246,432,513円に達する",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "福祉費",
+     "子供・子育て支援費",
+     "予算現額",
+     "495954780000"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "子供・子育て支援費",
+     "予算現額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!D123",
+   "hold_reason": null,
+   "parent_cues": [
+    "福祉費"
+   ],
+   "parent_filtered": true,
+   "parent_kept": [
+    "福祉費"
+   ],
+   "engine_parent": "福祉費",
+   "engine_key6": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "福祉費",
+     "子供・子育て支援費",
+     "予算現額",
+     "495954780000"
+    ]
+   ],
+   "agree_6": true,
+   "agree_4": true,
+   "only_4": false,
+   "verdict": "正しい接続",
+   "parent_correct": true,
+   "label_parent": "福祉費"
+  },
+  {
+   "id": "R011",
+   "value": 472209223487,
+   "novelty": "新規",
+   "sentence": "項別で最も規模が大きいのは、福祉費のうち子供・子育て支援費で、予算現額495,954,780,000円、支出済額472,209,223,487円、不用額22,246,432,513円に達する",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "福祉費",
+     "子供・子育て支援費",
+     "支出済額",
+     "472209223487"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "子供・子育て支援費",
+     "支出済額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!E123",
+   "hold_reason": null,
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "engine_parent": "福祉費",
+   "engine_key6": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "福祉費",
+     "子供・子育て支援費",
+     "支出済額",
+     "472209223487"
+    ]
+   ],
+   "agree_6": true,
+   "agree_4": true,
+   "only_4": false,
+   "verdict": "正しい接続",
+   "parent_correct": null
+  },
+  {
+   "id": "R012",
+   "value": 22246432513,
+   "novelty": "新規",
+   "sentence": "項別で最も規模が大きいのは、福祉費のうち子供・子育て支援費で、予算現額495,954,780,000円、支出済額472,209,223,487円、不用額22,246,432,513円に達する",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "福祉費",
+     "子供・子育て支援費",
+     "不用額",
+     "22246432513"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "子供・子育て支援費",
+     "不用額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!G123",
+   "hold_reason": null,
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "engine_parent": "福祉費",
+   "engine_key6": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "福祉費",
+     "子供・子育て支援費",
+     "不用額",
+     "22246432513"
+    ]
+   ],
+   "agree_6": true,
+   "agree_4": true,
+   "only_4": false,
+   "verdict": "正しい接続",
+   "parent_correct": null
+  },
+  {
+   "id": "R013",
+   "value": 269181718000,
+   "novelty": "新規",
+   "sentence": "同じ福祉費の中では、高齢者施策推進費が予算現額269,181,718,000円、障害者施策推進費が予算現額246,647,886,000円で、いずれも大きな予算が割かれている",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "福祉費",
+     "高齢者施策推進費",
+     "予算現額",
+     "269181718000"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "高齢者施策推進費",
+     "予算現額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!D126",
+   "hold_reason": null,
+   "parent_cues": [
+    "福祉費"
+   ],
+   "parent_filtered": true,
+   "parent_kept": [
+    "福祉費"
+   ],
+   "engine_parent": "福祉費",
+   "engine_key6": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "福祉費",
+     "高齢者施策推進費",
+     "予算現額",
+     "269181718000"
+    ]
+   ],
+   "agree_6": true,
+   "agree_4": true,
+   "only_4": false,
+   "verdict": "正しい接続",
+   "parent_correct": true,
+   "label_parent": "福祉費"
+  },
+  {
+   "id": "R014",
+   "value": 246647886000,
+   "novelty": "新規",
+   "sentence": "同じ福祉費の中では、高齢者施策推進費が予算現額269,181,718,000円、障害者施策推進費が予算現額246,647,886,000円で、いずれも大きな予算が割かれている",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "福祉費",
+     "障害者施策推進費",
+     "予算現額",
+     "246647886000"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "障害者施策推進費",
+     "予算現額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!D129",
+   "hold_reason": null,
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "engine_parent": "福祉費",
+   "engine_key6": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "福祉費",
+     "障害者施策推進費",
+     "予算現額",
+     "246647886000"
+    ]
+   ],
+   "agree_6": true,
+   "agree_4": true,
+   "only_4": false,
+   "verdict": "正しい接続",
+   "parent_correct": null
+  },
+  {
+   "id": "R015",
+   "value": 578327016000,
+   "novelty": "新規",
+   "sentence": "産業労働費の商工業振興費はさらに規模が大きく、予算現額578,327,016,000円、支出済額528,300,268,968円、不用額48,036,908,032円で、挙げた科目の中で最も不用額の金額が大きい",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "産業労働費",
+     "商工業振興費",
+     "予算現額",
+     "578327016000"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "商工業振興費",
+     "予算現額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!D170",
+   "hold_reason": null,
+   "parent_cues": [
+    "産業労働費"
+   ],
+   "parent_filtered": true,
+   "parent_kept": [
+    "産業労働費"
+   ],
+   "engine_parent": "産業労働費",
+   "engine_key6": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "産業労働費",
+     "商工業振興費",
+     "予算現額",
+     "578327016000"
+    ]
+   ],
+   "agree_6": true,
+   "agree_4": true,
+   "only_4": false,
+   "verdict": "正しい接続",
+   "parent_correct": true,
+   "label_parent": "産業労働費"
+  },
+  {
+   "id": "R016",
+   "value": 528300268968,
+   "novelty": "新規",
+   "sentence": "産業労働費の商工業振興費はさらに規模が大きく、予算現額578,327,016,000円、支出済額528,300,268,968円、不用額48,036,908,032円で、挙げた科目の中で最も不用額の金額が大きい",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "産業労働費",
+     "商工業振興費",
+     "支出済額",
+     "528300268968"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "商工業振興費",
+     "支出済額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!E170",
+   "hold_reason": null,
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "engine_parent": "産業労働費",
+   "engine_key6": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "産業労働費",
+     "商工業振興費",
+     "支出済額",
+     "528300268968"
+    ]
+   ],
+   "agree_6": true,
+   "agree_4": true,
+   "only_4": false,
+   "verdict": "正しい接続",
+   "parent_correct": null
+  },
+  {
+   "id": "R017",
+   "value": 48036908032,
+   "novelty": "新規",
+   "sentence": "産業労働費の商工業振興費はさらに規模が大きく、予算現額578,327,016,000円、支出済額528,300,268,968円、不用額48,036,908,032円で、挙げた科目の中で最も不用額の金額が大きい",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "産業労働費",
+     "商工業振興費",
+     "不用額",
+     "48036908032"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "商工業振興費",
+     "不用額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!G170",
+   "hold_reason": null,
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "engine_parent": "産業労働費",
+   "engine_key6": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "産業労働費",
+     "商工業振興費",
+     "不用額",
+     "48036908032"
+    ]
+   ],
+   "agree_6": true,
+   "agree_4": true,
+   "only_4": false,
+   "verdict": "正しい接続",
+   "parent_correct": null
+  },
+  {
+   "id": "R018",
+   "value": 339500232000,
+   "novelty": "新規",
+   "sentence": "保健医療費では保健政策費が予算現額339,500,232,000円、感染症対策費は不用額8,765,815,948円で、不用額の割合が目立つ",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "保健医療費",
+     "保健政策費",
+     "予算現額",
+     "339500232000"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "保健政策費",
+     "予算現額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!D141",
+   "hold_reason": null,
+   "parent_cues": [
+    "保健医療費"
+   ],
+   "parent_filtered": true,
+   "parent_kept": [
+    "保健医療費"
+   ],
+   "engine_parent": "保健医療費",
+   "engine_key6": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "保健医療費",
+     "保健政策費",
+     "予算現額",
+     "339500232000"
+    ]
+   ],
+   "agree_6": true,
+   "agree_4": true,
+   "only_4": false,
+   "verdict": "正しい接続",
+   "parent_correct": true,
+   "label_parent": "保健医療費"
+  },
+  {
+   "id": "R019",
+   "value": 8765815948,
+   "novelty": "新規",
+   "sentence": "保健医療費では保健政策費が予算現額339,500,232,000円、感染症対策費は不用額8,765,815,948円で、不用額の割合が目立つ",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "保健医療費",
+     "感染症対策費",
+     "不用額",
+     "8765815948"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "感染症対策費",
+     "不用額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "UNVERIFIABLE",
+   "route": null,
+   "pointer": null,
+   "hold_reason": "6 欄が一意でない(2 通り。値で選ばない)",
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "engine_parent": null,
+   "engine_key6": null,
+   "agree_6": false,
+   "agree_4": false,
+   "only_4": false,
+   "verdict": "結べなかった(誤接続ではない)",
+   "parent_correct": null
+  },
+  {
+   "id": "R020",
+   "value": 4986000000,
+   "novelty": "新規",
+   "sentence": "消防費・建設費の改修費は計4,986,000,000円、支出済額4,207,499,634円、不用額778,500,366円",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "目",
+     "消防費>建設費",
+     "改修費",
+     "予算現額",
+     "4986000000"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "目",
+     "改修費",
+     "予算現額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:事項別明細!K15798",
+   "hold_reason": null,
+   "parent_cues": [
+    "建設費",
+    "消防費"
+   ],
+   "parent_filtered": true,
+   "parent_kept": [
+    "消防費 > 建設費"
+   ],
+   "engine_parent": "消防費 > 建設費",
+   "engine_key6": [
+    "label",
+    [
+     "一般会計",
+     "目",
+     "消防費>建設費",
+     "改修費",
+     "予算現額",
+     "4986000000"
+    ]
+   ],
+   "agree_6": true,
+   "agree_4": true,
+   "only_4": false,
+   "verdict": "正しい接続",
+   "parent_correct": true,
+   "label_parent": "消防費>建設費"
+  },
+  {
+   "id": "R021",
+   "value": 4207499634,
+   "novelty": "新規",
+   "sentence": "消防費・建設費の改修費は計4,986,000,000円、支出済額4,207,499,634円、不用額778,500,366円",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "目",
+     "消防費>建設費",
+     "改修費",
+     "支出済額",
+     "4207499634"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "目",
+     "改修費",
+     "支出済額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "UNVERIFIABLE",
+   "route": null,
+   "pointer": null,
+   "hold_reason": "6 欄が一意でない(2 通り。値で選ばない)",
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "engine_parent": null,
+   "engine_key6": null,
+   "agree_6": false,
+   "agree_4": false,
+   "only_4": false,
+   "verdict": "結べなかった(誤接続ではない)",
+   "parent_correct": null
+  },
+  {
+   "id": "R022",
+   "value": 778500366,
+   "novelty": "新規",
+   "sentence": "消防費・建設費の改修費は計4,986,000,000円、支出済額4,207,499,634円、不用額778,500,366円",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "目",
+     "消防費>建設費",
+     "改修費",
+     "不用額",
+     "778500366"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "目",
+     "改修費",
+     "不用額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "UNVERIFIABLE",
+   "route": null,
+   "pointer": null,
+   "hold_reason": "6 欄が一意でない(2 通り。値で選ばない)",
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "engine_parent": null,
+   "engine_key6": null,
+   "agree_6": false,
+   "agree_4": false,
+   "only_4": false,
+   "verdict": "結べなかった(誤接続ではない)",
+   "parent_correct": null
+  },
+  {
+   "id": "R023",
+   "value": 38590000,
+   "novelty": "新規",
+   "sentence": "諸支出金・収用委員会費の委員会費は計38,590,000円、支出済額37,897,962円、不用額692,038円で、挙げた科目の中では最も小さい規模である",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "目",
+     "諸支出金>収用委員会費",
+     "委員会費",
+     "予算現額",
+     "38590000"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "目",
+     "委員会費",
+     "予算現額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:事項別明細!K16101",
+   "hold_reason": null,
+   "parent_cues": [
+    "収用委員会費",
+    "諸支出金"
+   ],
+   "parent_filtered": true,
+   "parent_kept": [
+    "諸支出金 > 収用委員会費"
+   ],
+   "engine_parent": "諸支出金 > 収用委員会費",
+   "engine_key6": [
+    "label",
+    [
+     "一般会計",
+     "目",
+     "諸支出金>収用委員会費",
+     "委員会費",
+     "予算現額",
+     "38590000"
+    ]
+   ],
+   "agree_6": true,
+   "agree_4": true,
+   "only_4": false,
+   "verdict": "正しい接続",
+   "parent_correct": true,
+   "label_parent": "諸支出金>収用委員会費"
+  },
+  {
+   "id": "R024",
+   "value": 37897962,
+   "novelty": "新規",
+   "sentence": "諸支出金・収用委員会費の委員会費は計38,590,000円、支出済額37,897,962円、不用額692,038円で、挙げた科目の中では最も小さい規模である",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "目",
+     "諸支出金>収用委員会費",
+     "委員会費",
+     "支出済額",
+     "37897962"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "目",
+     "委員会費",
+     "支出済額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "UNVERIFIABLE",
+   "route": null,
+   "pointer": null,
+   "hold_reason": "6 欄が一意でない(5 通り。値で選ばない)",
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "engine_parent": null,
+   "engine_key6": null,
+   "agree_6": false,
+   "agree_4": false,
+   "only_4": false,
+   "verdict": "結べなかった(誤接続ではない)",
+   "parent_correct": null
+  },
+  {
+   "id": "R025",
+   "value": 692038,
+   "novelty": "新規",
+   "sentence": "諸支出金・収用委員会費の委員会費は計38,590,000円、支出済額37,897,962円、不用額692,038円で、挙げた科目の中では最も小さい規模である",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "目",
+     "諸支出金>収用委員会費",
+     "委員会費",
+     "不用額",
+     "692038"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "目",
+     "委員会費",
+     "不用額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "UNVERIFIABLE",
+   "route": null,
+   "pointer": null,
+   "hold_reason": "6 欄が一意でない(5 通り。値で選ばない)",
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "engine_parent": null,
+   "engine_key6": null,
+   "agree_6": false,
+   "agree_4": false,
+   "only_4": false,
+   "verdict": "結べなかった(誤接続ではない)",
+   "parent_correct": null
+  }
+ ],
+ "rows_old": [
+  {
+   "id": "R001",
+   "value": 83878594000,
+   "novelty": "新規",
+   "sentence": "徴税費は予算現額83,878,594,000円に対し支出済額82,838,827,751円で、不用額は1,039,766,249円にとどまり、執行率の高さがうかがえる",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "",
+     "徴税費",
+     "予算現額",
+     "83878594000"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "徴税費",
+     "予算現額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!D61",
+   "hold_reason": null,
+   "parent_cues": null,
+   "parent_filtered": null,
+   "parent_kept": null,
+   "engine_parent": null,
+   "engine_key6": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "",
+     "徴税費",
+     "予算現額",
+     "83878594000"
+    ]
+   ],
+   "agree_6": true,
+   "agree_4": true,
+   "only_4": false,
+   "verdict": "正しい接続",
+   "parent_correct": null
+  },
+  {
+   "id": "R002",
+   "value": 82838827751,
+   "novelty": "新規",
+   "sentence": "徴税費は予算現額83,878,594,000円に対し支出済額82,838,827,751円で、不用額は1,039,766,249円にとどまり、執行率の高さがうかがえる",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "",
+     "徴税費",
+     "支出済額",
+     "82838827751"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "徴税費",
+     "支出済額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!E61",
+   "hold_reason": null,
+   "parent_cues": null,
+   "parent_filtered": null,
+   "parent_kept": null,
+   "engine_parent": null,
+   "engine_key6": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "",
+     "徴税費",
+     "支出済額",
+     "82838827751"
+    ]
+   ],
+   "agree_6": true,
+   "agree_4": true,
+   "only_4": false,
+   "verdict": "正しい接続",
+   "parent_correct": null
+  },
+  {
+   "id": "R003",
+   "value": 1039766249,
+   "novelty": "新規",
+   "sentence": "徴税費は予算現額83,878,594,000円に対し支出済額82,838,827,751円で、不用額は1,039,766,249円にとどまり、執行率の高さがうかがえる",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "",
+     "徴税費",
+     "不用額",
+     "1039766249"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "徴税費",
+     "不用額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!G61",
+   "hold_reason": null,
+   "parent_cues": null,
+   "parent_filtered": null,
+   "parent_kept": null,
+   "engine_parent": null,
+   "engine_key6": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "",
+     "徴税費",
+     "不用額",
+     "1039766249"
+    ]
+   ],
+   "agree_6": true,
+   "agree_4": true,
+   "only_4": false,
+   "verdict": "正しい接続",
+   "parent_correct": null
+  },
+  {
+   "id": "R004",
+   "value": 89434821000,
+   "novelty": "新規",
+   "sentence": "生活文化スポーツ費は予算現額89,434,821,000円である",
+   "label6": [
+    "verdict",
+    "判定不能"
+   ],
+   "label4": [
+    "verdict",
+    "判定不能"
+   ],
+   "seats_agree": false,
+   "state": "UNVERIFIABLE",
+   "route": null,
+   "pointer": null,
+   "hold_reason": "6 欄が一意でない(2 通り。値で選ばない)",
+   "parent_cues": null,
+   "parent_filtered": null,
+   "parent_kept": null,
+   "engine_parent": null,
+   "engine_key6": null,
+   "agree_6": false,
+   "agree_4": false,
+   "only_4": false,
+   "verdict": "正しく保留",
+   "parent_correct": null
+  },
+  {
+   "id": "R005",
+   "value": 182607162000,
+   "novelty": "新規",
+   "sentence": "環境費は予算現額182,607,162,000円、支出済額163,882,866,133円、不用額15,078,334,867円で、徴税費より不用額の割合が大きい",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "",
+     "環境費",
+     "予算現額",
+     "182607162000"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "環境費",
+     "予算現額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!D102",
+   "hold_reason": null,
+   "parent_cues": null,
+   "parent_filtered": null,
+   "parent_kept": null,
+   "engine_parent": null,
+   "engine_key6": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "",
+     "環境費",
+     "予算現額",
+     "182607162000"
+    ]
+   ],
+   "agree_6": true,
+   "agree_4": true,
+   "only_4": false,
+   "verdict": "正しい接続",
+   "parent_correct": null
+  },
+  {
+   "id": "R006",
+   "value": 163882866133,
+   "novelty": "新規",
+   "sentence": "環境費は予算現額182,607,162,000円、支出済額163,882,866,133円、不用額15,078,334,867円で、徴税費より不用額の割合が大きい",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "",
+     "環境費",
+     "支出済額",
+     "163882866133"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "環境費",
+     "支出済額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!E102",
+   "hold_reason": null,
+   "parent_cues": null,
+   "parent_filtered": null,
+   "parent_kept": null,
+   "engine_parent": null,
+   "engine_key6": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "",
+     "環境費",
+     "支出済額",
+     "163882866133"
+    ]
+   ],
+   "agree_6": true,
+   "agree_4": true,
+   "only_4": false,
+   "verdict": "正しい接続",
+   "parent_correct": null
+  },
+  {
+   "id": "R007",
+   "value": 15078334867,
+   "novelty": "新規",
+   "sentence": "環境費は予算現額182,607,162,000円、支出済額163,882,866,133円、不用額15,078,334,867円で、徴税費より不用額の割合が大きい",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "",
+     "環境費",
+     "不用額",
+     "15078334867"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "環境費",
+     "不用額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!G102",
+   "hold_reason": null,
+   "parent_cues": null,
+   "parent_filtered": null,
+   "parent_kept": null,
+   "engine_parent": null,
+   "engine_key6": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "",
+     "環境費",
+     "不用額",
+     "15078334867"
+    ]
+   ],
+   "agree_6": true,
+   "agree_4": true,
+   "only_4": false,
+   "verdict": "正しい接続",
+   "parent_correct": null
+  },
+  {
+   "id": "R008",
+   "value": 116988223000,
+   "novelty": "新規",
+   "sentence": "港湾費は予算現額116,988,223,000円、支出済額98,215,584,612円である",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "",
+     "港湾費",
+     "予算現額",
+     "116988223000"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "港湾費",
+     "予算現額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!D197",
+   "hold_reason": null,
+   "parent_cues": null,
+   "parent_filtered": null,
+   "parent_kept": null,
+   "engine_parent": null,
+   "engine_key6": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "",
+     "港湾費",
+     "予算現額",
+     "116988223000"
+    ]
+   ],
+   "agree_6": true,
+   "agree_4": true,
+   "only_4": false,
+   "verdict": "正しい接続",
+   "parent_correct": null
+  },
+  {
+   "id": "R009",
+   "value": 98215584612,
+   "novelty": "新規",
+   "sentence": "港湾費は予算現額116,988,223,000円、支出済額98,215,584,612円である",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "",
+     "港湾費",
+     "支出済額",
+     "98215584612"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "港湾費",
+     "支出済額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!E197",
+   "hold_reason": null,
+   "parent_cues": null,
+   "parent_filtered": null,
+   "parent_kept": null,
+   "engine_parent": null,
+   "engine_key6": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "",
+     "港湾費",
+     "支出済額",
+     "98215584612"
+    ]
+   ],
+   "agree_6": true,
+   "agree_4": true,
+   "only_4": false,
+   "verdict": "正しい接続",
+   "parent_correct": null
+  },
+  {
+   "id": "R010",
+   "value": 495954780000,
+   "novelty": "新規",
+   "sentence": "項別で最も規模が大きいのは、福祉費のうち子供・子育て支援費で、予算現額495,954,780,000円、支出済額472,209,223,487円、不用額22,246,432,513円に達する",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "福祉費",
+     "子供・子育て支援費",
+     "予算現額",
+     "495954780000"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "子供・子育て支援費",
+     "予算現額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!D123",
+   "hold_reason": null,
+   "parent_cues": null,
+   "parent_filtered": null,
+   "parent_kept": null,
+   "engine_parent": "福祉費",
+   "engine_key6": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "福祉費",
+     "子供・子育て支援費",
+     "予算現額",
+     "495954780000"
+    ]
+   ],
+   "agree_6": true,
+   "agree_4": true,
+   "only_4": false,
+   "verdict": "正しい接続",
+   "parent_correct": null
+  },
+  {
+   "id": "R011",
+   "value": 472209223487,
+   "novelty": "新規",
+   "sentence": "項別で最も規模が大きいのは、福祉費のうち子供・子育て支援費で、予算現額495,954,780,000円、支出済額472,209,223,487円、不用額22,246,432,513円に達する",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "福祉費",
+     "子供・子育て支援費",
+     "支出済額",
+     "472209223487"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "子供・子育て支援費",
+     "支出済額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!E123",
+   "hold_reason": null,
+   "parent_cues": null,
+   "parent_filtered": null,
+   "parent_kept": null,
+   "engine_parent": "福祉費",
+   "engine_key6": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "福祉費",
+     "子供・子育て支援費",
+     "支出済額",
+     "472209223487"
+    ]
+   ],
+   "agree_6": true,
+   "agree_4": true,
+   "only_4": false,
+   "verdict": "正しい接続",
+   "parent_correct": null
+  },
+  {
+   "id": "R012",
+   "value": 22246432513,
+   "novelty": "新規",
+   "sentence": "項別で最も規模が大きいのは、福祉費のうち子供・子育て支援費で、予算現額495,954,780,000円、支出済額472,209,223,487円、不用額22,246,432,513円に達する",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "福祉費",
+     "子供・子育て支援費",
+     "不用額",
+     "22246432513"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "子供・子育て支援費",
+     "不用額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!G123",
+   "hold_reason": null,
+   "parent_cues": null,
+   "parent_filtered": null,
+   "parent_kept": null,
+   "engine_parent": "福祉費",
+   "engine_key6": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "福祉費",
+     "子供・子育て支援費",
+     "不用額",
+     "22246432513"
+    ]
+   ],
+   "agree_6": true,
+   "agree_4": true,
+   "only_4": false,
+   "verdict": "正しい接続",
+   "parent_correct": null
+  },
+  {
+   "id": "R013",
+   "value": 269181718000,
+   "novelty": "新規",
+   "sentence": "同じ福祉費の中では、高齢者施策推進費が予算現額269,181,718,000円、障害者施策推進費が予算現額246,647,886,000円で、いずれも大きな予算が割かれている",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "福祉費",
+     "高齢者施策推進費",
+     "予算現額",
+     "269181718000"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "高齢者施策推進費",
+     "予算現額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!D126",
+   "hold_reason": null,
+   "parent_cues": null,
+   "parent_filtered": null,
+   "parent_kept": null,
+   "engine_parent": "福祉費",
+   "engine_key6": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "福祉費",
+     "高齢者施策推進費",
+     "予算現額",
+     "269181718000"
+    ]
+   ],
+   "agree_6": true,
+   "agree_4": true,
+   "only_4": false,
+   "verdict": "正しい接続",
+   "parent_correct": null
+  },
+  {
+   "id": "R014",
+   "value": 246647886000,
+   "novelty": "新規",
+   "sentence": "同じ福祉費の中では、高齢者施策推進費が予算現額269,181,718,000円、障害者施策推進費が予算現額246,647,886,000円で、いずれも大きな予算が割かれている",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "福祉費",
+     "障害者施策推進費",
+     "予算現額",
+     "246647886000"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "障害者施策推進費",
+     "予算現額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!D129",
+   "hold_reason": null,
+   "parent_cues": null,
+   "parent_filtered": null,
+   "parent_kept": null,
+   "engine_parent": "福祉費",
+   "engine_key6": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "福祉費",
+     "障害者施策推進費",
+     "予算現額",
+     "246647886000"
+    ]
+   ],
+   "agree_6": true,
+   "agree_4": true,
+   "only_4": false,
+   "verdict": "正しい接続",
+   "parent_correct": null
+  },
+  {
+   "id": "R015",
+   "value": 578327016000,
+   "novelty": "新規",
+   "sentence": "産業労働費の商工業振興費はさらに規模が大きく、予算現額578,327,016,000円、支出済額528,300,268,968円、不用額48,036,908,032円で、挙げた科目の中で最も不用額の金額が大きい",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "産業労働費",
+     "商工業振興費",
+     "予算現額",
+     "578327016000"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "商工業振興費",
+     "予算現額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!D170",
+   "hold_reason": null,
+   "parent_cues": null,
+   "parent_filtered": null,
+   "parent_kept": null,
+   "engine_parent": "産業労働費",
+   "engine_key6": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "産業労働費",
+     "商工業振興費",
+     "予算現額",
+     "578327016000"
+    ]
+   ],
+   "agree_6": true,
+   "agree_4": true,
+   "only_4": false,
+   "verdict": "正しい接続",
+   "parent_correct": null
+  },
+  {
+   "id": "R016",
+   "value": 528300268968,
+   "novelty": "新規",
+   "sentence": "産業労働費の商工業振興費はさらに規模が大きく、予算現額578,327,016,000円、支出済額528,300,268,968円、不用額48,036,908,032円で、挙げた科目の中で最も不用額の金額が大きい",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "産業労働費",
+     "商工業振興費",
+     "支出済額",
+     "528300268968"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "商工業振興費",
+     "支出済額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!E170",
+   "hold_reason": null,
+   "parent_cues": null,
+   "parent_filtered": null,
+   "parent_kept": null,
+   "engine_parent": "産業労働費",
+   "engine_key6": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "産業労働費",
+     "商工業振興費",
+     "支出済額",
+     "528300268968"
+    ]
+   ],
+   "agree_6": true,
+   "agree_4": true,
+   "only_4": false,
+   "verdict": "正しい接続",
+   "parent_correct": null
+  },
+  {
+   "id": "R017",
+   "value": 48036908032,
+   "novelty": "新規",
+   "sentence": "産業労働費の商工業振興費はさらに規模が大きく、予算現額578,327,016,000円、支出済額528,300,268,968円、不用額48,036,908,032円で、挙げた科目の中で最も不用額の金額が大きい",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "産業労働費",
+     "商工業振興費",
+     "不用額",
+     "48036908032"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "商工業振興費",
+     "不用額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!G170",
+   "hold_reason": null,
+   "parent_cues": null,
+   "parent_filtered": null,
+   "parent_kept": null,
+   "engine_parent": "産業労働費",
+   "engine_key6": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "産業労働費",
+     "商工業振興費",
+     "不用額",
+     "48036908032"
+    ]
+   ],
+   "agree_6": true,
+   "agree_4": true,
+   "only_4": false,
+   "verdict": "正しい接続",
+   "parent_correct": null
+  },
+  {
+   "id": "R018",
+   "value": 339500232000,
+   "novelty": "新規",
+   "sentence": "保健医療費では保健政策費が予算現額339,500,232,000円、感染症対策費は不用額8,765,815,948円で、不用額の割合が目立つ",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "保健医療費",
+     "保健政策費",
+     "予算現額",
+     "339500232000"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "保健政策費",
+     "予算現額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!D141",
+   "hold_reason": null,
+   "parent_cues": null,
+   "parent_filtered": null,
+   "parent_kept": null,
+   "engine_parent": "保健医療費",
+   "engine_key6": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "保健医療費",
+     "保健政策費",
+     "予算現額",
+     "339500232000"
+    ]
+   ],
+   "agree_6": true,
+   "agree_4": true,
+   "only_4": false,
+   "verdict": "正しい接続",
+   "parent_correct": null
+  },
+  {
+   "id": "R019",
+   "value": 8765815948,
+   "novelty": "新規",
+   "sentence": "保健医療費では保健政策費が予算現額339,500,232,000円、感染症対策費は不用額8,765,815,948円で、不用額の割合が目立つ",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "保健医療費",
+     "感染症対策費",
+     "不用額",
+     "8765815948"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "感染症対策費",
+     "不用額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "UNVERIFIABLE",
+   "route": null,
+   "pointer": null,
+   "hold_reason": "6 欄が一意でない(2 通り。値で選ばない)",
+   "parent_cues": null,
+   "parent_filtered": null,
+   "parent_kept": null,
+   "engine_parent": null,
+   "engine_key6": null,
+   "agree_6": false,
+   "agree_4": false,
+   "only_4": false,
+   "verdict": "結べなかった(誤接続ではない)",
+   "parent_correct": null
+  },
+  {
+   "id": "R020",
+   "value": 4986000000,
+   "novelty": "新規",
+   "sentence": "消防費・建設費の改修費は計4,986,000,000円、支出済額4,207,499,634円、不用額778,500,366円",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "目",
+     "消防費>建設費",
+     "改修費",
+     "予算現額",
+     "4986000000"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "目",
+     "改修費",
+     "予算現額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "UNVERIFIABLE",
+   "route": null,
+   "pointer": null,
+   "hold_reason": "6 欄が一意でない(2 通り。値で選ばない)",
+   "parent_cues": null,
+   "parent_filtered": null,
+   "parent_kept": null,
+   "engine_parent": null,
+   "engine_key6": null,
+   "agree_6": false,
+   "agree_4": false,
+   "only_4": false,
+   "verdict": "結べなかった(誤接続ではない)",
+   "parent_correct": null
+  },
+  {
+   "id": "R021",
+   "value": 4207499634,
+   "novelty": "新規",
+   "sentence": "消防費・建設費の改修費は計4,986,000,000円、支出済額4,207,499,634円、不用額778,500,366円",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "目",
+     "消防費>建設費",
+     "改修費",
+     "支出済額",
+     "4207499634"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "目",
+     "改修費",
+     "支出済額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "UNVERIFIABLE",
+   "route": null,
+   "pointer": null,
+   "hold_reason": "6 欄が一意でない(2 通り。値で選ばない)",
+   "parent_cues": null,
+   "parent_filtered": null,
+   "parent_kept": null,
+   "engine_parent": null,
+   "engine_key6": null,
+   "agree_6": false,
+   "agree_4": false,
+   "only_4": false,
+   "verdict": "結べなかった(誤接続ではない)",
+   "parent_correct": null
+  },
+  {
+   "id": "R022",
+   "value": 778500366,
+   "novelty": "新規",
+   "sentence": "消防費・建設費の改修費は計4,986,000,000円、支出済額4,207,499,634円、不用額778,500,366円",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "目",
+     "消防費>建設費",
+     "改修費",
+     "不用額",
+     "778500366"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "目",
+     "改修費",
+     "不用額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "UNVERIFIABLE",
+   "route": null,
+   "pointer": null,
+   "hold_reason": "6 欄が一意でない(2 通り。値で選ばない)",
+   "parent_cues": null,
+   "parent_filtered": null,
+   "parent_kept": null,
+   "engine_parent": null,
+   "engine_key6": null,
+   "agree_6": false,
+   "agree_4": false,
+   "only_4": false,
+   "verdict": "結べなかった(誤接続ではない)",
+   "parent_correct": null
+  },
+  {
+   "id": "R023",
+   "value": 38590000,
+   "novelty": "新規",
+   "sentence": "諸支出金・収用委員会費の委員会費は計38,590,000円、支出済額37,897,962円、不用額692,038円で、挙げた科目の中では最も小さい規模である",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "目",
+     "諸支出金>収用委員会費",
+     "委員会費",
+     "予算現額",
+     "38590000"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "目",
+     "委員会費",
+     "予算現額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "UNVERIFIABLE",
+   "route": null,
+   "pointer": null,
+   "hold_reason": "6 欄が一意でない(5 通り。値で選ばない)",
+   "parent_cues": null,
+   "parent_filtered": null,
+   "parent_kept": null,
+   "engine_parent": null,
+   "engine_key6": null,
+   "agree_6": false,
+   "agree_4": false,
+   "only_4": false,
+   "verdict": "結べなかった(誤接続ではない)",
+   "parent_correct": null
+  },
+  {
+   "id": "R024",
+   "value": 37897962,
+   "novelty": "新規",
+   "sentence": "諸支出金・収用委員会費の委員会費は計38,590,000円、支出済額37,897,962円、不用額692,038円で、挙げた科目の中では最も小さい規模である",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "目",
+     "諸支出金>収用委員会費",
+     "委員会費",
+     "支出済額",
+     "37897962"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "目",
+     "委員会費",
+     "支出済額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "UNVERIFIABLE",
+   "route": null,
+   "pointer": null,
+   "hold_reason": "6 欄が一意でない(5 通り。値で選ばない)",
+   "parent_cues": null,
+   "parent_filtered": null,
+   "parent_kept": null,
+   "engine_parent": null,
+   "engine_key6": null,
+   "agree_6": false,
+   "agree_4": false,
+   "only_4": false,
+   "verdict": "結べなかった(誤接続ではない)",
+   "parent_correct": null
+  },
+  {
+   "id": "R025",
+   "value": 692038,
+   "novelty": "新規",
+   "sentence": "諸支出金・収用委員会費の委員会費は計38,590,000円、支出済額37,897,962円、不用額692,038円で、挙げた科目の中では最も小さい規模である",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "目",
+     "諸支出金>収用委員会費",
+     "委員会費",
+     "不用額",
+     "692038"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "目",
+     "委員会費",
+     "不用額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "UNVERIFIABLE",
+   "route": null,
+   "pointer": null,
+   "hold_reason": "6 欄が一意でない(5 通り。値で選ばない)",
+   "parent_cues": null,
+   "parent_filtered": null,
+   "parent_kept": null,
+   "engine_parent": null,
+   "engine_key6": null,
+   "agree_6": false,
+   "agree_4": false,
+   "only_4": false,
+   "verdict": "結べなかった(誤接続ではない)",
+   "parent_correct": null
+  }
+ ]
+}

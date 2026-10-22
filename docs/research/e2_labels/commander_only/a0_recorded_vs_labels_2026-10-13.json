@@ -1,0 +1,1623 @@
+{
+ "note": "既にリポジトリに記録されている main の出力(停止 214 件の材料・GROUNDED 60 件の検査)と新しい独立ラベル(確定 111)の突き合わせ。engine は走らせていない。pointer の解析は複合文字列(A + B + builtin/formula)と会社独自接頭辞に対応させた版。",
+ "prereg_sha256": "0353ad8206bba266213cc27fd9f2654144a2c19185e0493675905eed6d3c2415",
+ "counts": {
+  "('停止 214 件', 'UNVERIFIABLE', 'pointer なし')": 42,
+  "('停止 214 件', 'POINTER_NOT_FOUND', 'pointer なし')": 11,
+  "('停止 214 件', 'VALUE_MISMATCH', '不一致')": 9,
+  "突き合わせ不能(GROUNDED だが 60 件の標本外)": 32,
+  "('GROUNDED(60 件の検査)', 'GROUNDED', '一致(厳密)')": 15,
+  "('GROUNDED(60 件の検査)', 'GROUNDED', '一致(同値類v0のみ)')": 2
+ },
+ "rows": [
+  {
+   "id": "N296",
+   "出どころ": "停止 214 件",
+   "state": "UNVERIFIABLE",
+   "実装席の判定": null,
+   "engine": [],
+   "engine の演算": [],
+   "label": [
+    [
+     "NetCashProvidedByUsedInFinancingActivities",
+     "Prior1YearDuration"
+    ]
+   ],
+   "一致": "pointer なし",
+   "型5露出": true,
+   "形(ラベル)": "単一"
+  },
+  {
+   "id": "N217",
+   "出どころ": "停止 214 件",
+   "state": "POINTER_NOT_FOUND",
+   "実装席の判定": null,
+   "engine": [],
+   "engine の演算": [],
+   "label": [
+    [
+     "CurrentPortionOfLongTermLoansPayable",
+     "CurrentYearInstant"
+    ]
+   ],
+   "一致": "pointer なし",
+   "型5露出": false,
+   "形(ラベル)": "単一"
+  },
+  {
+   "id": "N290",
+   "出どころ": "停止 214 件",
+   "state": "VALUE_MISMATCH",
+   "実装席の判定": null,
+   "engine": [
+    [
+     "PurchaseOfIntangibleAssetsInvCF",
+     "CurrentYearDuration"
+    ]
+   ],
+   "engine の演算": [],
+   "label": [
+    [
+     "OtherNetInvCF",
+     "CurrentYearDuration"
+    ]
+   ],
+   "一致": "不一致",
+   "型5露出": false,
+   "形(ラベル)": "単一"
+  },
+  {
+   "id": "N244",
+   "出どころ": "停止 214 件",
+   "state": "UNVERIFIABLE",
+   "実装席の判定": null,
+   "engine": [],
+   "engine の演算": [],
+   "label": [
+    [
+     "ForeignCurrencyTranslationAdjustment",
+     "CurrentYearInstant"
+    ]
+   ],
+   "一致": "pointer なし",
+   "型5露出": true,
+   "形(ラベル)": "単一"
+  },
+  {
+   "id": "N285",
+   "出どころ": "停止 214 件",
+   "state": "UNVERIFIABLE",
+   "実装席の判定": null,
+   "engine": [],
+   "engine の演算": [],
+   "label": [
+    [
+     "NetCashProvidedByUsedInInvestmentActivities",
+     "CurrentYearDuration"
+    ]
+   ],
+   "一致": "pointer なし",
+   "型5露出": true,
+   "形(ラベル)": "単一"
+  },
+  {
+   "id": "N093",
+   "出どころ": "停止 214 件",
+   "state": "UNVERIFIABLE",
+   "実装席の判定": null,
+   "engine": [],
+   "engine の演算": [],
+   "label": [
+    [
+     "GainOnSalesOfNoncurrentAssetsEI",
+     "CurrentYearDuration"
+    ]
+   ],
+   "一致": "pointer なし",
+   "型5露出": true,
+   "形(ラベル)": "単一"
+  },
+  {
+   "id": "N099",
+   "出どころ": "停止 214 件",
+   "state": "UNVERIFIABLE",
+   "実装席の判定": null,
+   "engine": [],
+   "engine の演算": [],
+   "label": [
+    [
+     "IncomeTaxes",
+     "CurrentYearDuration"
+    ]
+   ],
+   "一致": "pointer なし",
+   "型5露出": false,
+   "形(ラベル)": "単一"
+  },
+  {
+   "id": "T075",
+   "出どころ": "停止 214 件",
+   "state": "UNVERIFIABLE",
+   "実装席の判定": null,
+   "engine": [],
+   "engine の演算": [],
+   "label": [
+    [
+     "ProvisionForShareBasedRemunerationForDirectorsAndOtherOfficersCL",
+     "CurrentYearInstant"
+    ],
+    [
+     "ProvisionForShareBasedRemunerationForDirectorsAndOtherOfficersCL",
+     "Prior1YearInstant"
+    ]
+   ],
+   "一致": "pointer なし",
+   "型5露出": true,
+   "形(ラベル)": "符号・方向"
+  },
+  {
+   "id": "N168",
+   "出どころ": "GROUNDED(60 件の検査)",
+   "state": "GROUNDED",
+   "実装席の判定": "correct",
+   "engine": [
+    [
+     "InvestmentSecurities",
+     "CurrentYearInstant"
+    ]
+   ],
+   "engine の演算": [],
+   "label": [
+    [
+     "InvestmentSecurities",
+     "CurrentYearInstant"
+    ]
+   ],
+   "一致": "一致(厳密)",
+   "型5露出": false,
+   "形(ラベル)": "単一"
+  },
+  {
+   "id": "N186",
+   "出どころ": "停止 214 件",
+   "state": "POINTER_NOT_FOUND",
+   "実装席の判定": null,
+   "engine": [],
+   "engine の演算": [],
+   "label": [
+    [
+     "AccruedConsumptionTaxes",
+     "CurrentYearInstant"
+    ],
+    [
+     "AccruedConsumptionTaxes",
+     "Prior1YearInstant"
+    ]
+   ],
+   "一致": "pointer なし",
+   "型5露出": false,
+   "形(ラベル)": "差(当期−前期)"
+  },
+  {
+   "id": "T038",
+   "出どころ": "GROUNDED(60 件の検査)",
+   "state": "GROUNDED",
+   "実装席の判定": "wrong_binding",
+   "engine": [
+    [
+     "OperatingIncome",
+     "CurrentYearDuration"
+    ],
+    [
+     "OperatingIncome",
+     "Prior1YearDuration"
+    ]
+   ],
+   "engine の演算": [
+    "builtin:sign(cur-prior)"
+   ],
+   "label": [
+    [
+     "OperatingIncome",
+     "CurrentYearDuration"
+    ],
+    [
+     "OperatingIncome",
+     "Prior1YearDuration"
+    ]
+   ],
+   "一致": "一致(厳密)",
+   "型5露出": false,
+   "形(ラベル)": "符号・方向"
+  },
+  {
+   "id": "N158",
+   "出どころ": "停止 214 件",
+   "state": "UNVERIFIABLE",
+   "実装席の判定": null,
+   "engine": [],
+   "engine の演算": [],
+   "label": [
+    [
+     "IntangibleAssets",
+     "CurrentYearInstant"
+    ],
+    [
+     "IntangibleAssets",
+     "Prior1YearInstant"
+    ]
+   ],
+   "一致": "pointer なし",
+   "型5露出": false,
+   "形(ラベル)": "差(当期−前期)"
+  },
+  {
+   "id": "T058",
+   "出どころ": "停止 214 件",
+   "state": "UNVERIFIABLE",
+   "実装席の判定": null,
+   "engine": [],
+   "engine の演算": [],
+   "label": [
+    [
+     "PropertyPlantAndEquipment",
+     "CurrentYearInstant"
+    ],
+    [
+     "PropertyPlantAndEquipment",
+     "Prior1YearInstant"
+    ]
+   ],
+   "一致": "pointer なし",
+   "型5露出": false,
+   "形(ラベル)": "符号・方向"
+  },
+  {
+   "id": "N243",
+   "出どころ": "停止 214 件",
+   "state": "UNVERIFIABLE",
+   "実装席の判定": null,
+   "engine": [],
+   "engine の演算": [],
+   "label": [
+    [
+     "DeferredGainsOrLossesOnHedges",
+     "CurrentYearInstant"
+    ]
+   ],
+   "一致": "pointer なし",
+   "型5露出": true,
+   "形(ラベル)": "単一"
+  },
+  {
+   "id": "N105",
+   "出どころ": "GROUNDED(60 件の検査)",
+   "state": "GROUNDED",
+   "実装席の判定": "correct",
+   "engine": [
+    [
+     "ProfitLossAttributableToOwnersOfParentSummaryOfBusinessResults",
+     "CurrentYearDuration"
+    ]
+   ],
+   "engine の演算": [],
+   "label": [
+    [
+     "ProfitLossAttributableToOwnersOfParent",
+     "CurrentYearDuration"
+    ]
+   ],
+   "一致": "一致(同値類v0のみ)",
+   "型5露出": true,
+   "形(ラベル)": "単一"
+  },
+  {
+   "id": "N281",
+   "出どころ": "停止 214 件",
+   "state": "POINTER_NOT_FOUND",
+   "実装席の判定": null,
+   "engine": [],
+   "engine の演算": [],
+   "label": [
+    [
+     "IncreaseDecreaseInNetDefinedBenefitAssetOpeCF",
+     "CurrentYearDuration"
+    ],
+    [
+     "IncreaseDecreaseInNetDefinedBenefitAssetOpeCF",
+     "Prior1YearDuration"
+    ]
+   ],
+   "一致": "pointer なし",
+   "型5露出": false,
+   "形(ラベル)": "差(当期−前期)"
+  },
+  {
+   "id": "T018",
+   "出どころ": "GROUNDED(60 件の検査)",
+   "state": "GROUNDED",
+   "実装席の判定": "correct",
+   "engine": [
+    [
+     "GrossProfit",
+     "CurrentYearDuration"
+    ],
+    [
+     "GrossProfit",
+     "Prior1YearDuration"
+    ]
+   ],
+   "engine の演算": [
+    "builtin:sign(cur-prior)"
+   ],
+   "label": [
+    [
+     "GrossProfit",
+     "CurrentYearDuration"
+    ],
+    [
+     "GrossProfit",
+     "Prior1YearDuration"
+    ]
+   ],
+   "一致": "一致(厳密)",
+   "型5露出": false,
+   "形(ラベル)": "符号・方向"
+  },
+  {
+   "id": "N236",
+   "出どころ": "停止 214 件",
+   "state": "UNVERIFIABLE",
+   "実装席の判定": null,
+   "engine": [],
+   "engine の演算": [],
+   "label": [
+    [
+     "TreasuryStock",
+     "CurrentYearInstant"
+    ]
+   ],
+   "一致": "pointer なし",
+   "型5露出": true,
+   "形(ラベル)": "単一"
+  },
+  {
+   "id": "N279",
+   "出どころ": "停止 214 件",
+   "state": "POINTER_NOT_FOUND",
+   "実装席の判定": null,
+   "engine": [],
+   "engine の演算": [],
+   "label": [
+    [
+     "IncreaseDecreaseInNetDefinedBenefitAssetOpeCF",
+     "Prior1YearDuration"
+    ]
+   ],
+   "一致": "pointer なし",
+   "型5露出": false,
+   "形(ラベル)": "単一"
+  },
+  {
+   "id": "N073",
+   "出どころ": "停止 214 件",
+   "state": "UNVERIFIABLE",
+   "実装席の判定": null,
+   "engine": [],
+   "engine の演算": [],
+   "label": [
+    [
+     "NonOperatingIncome",
+     "CurrentYearDuration"
+    ],
+    [
+     "NonOperatingIncome",
+     "Prior1YearDuration"
+    ]
+   ],
+   "一致": "pointer なし",
+   "型5露出": false,
+   "形(ラベル)": "差(当期−前期)"
+  },
+  {
+   "id": "T076",
+   "出どころ": "停止 214 件",
+   "state": "UNVERIFIABLE",
+   "実装席の判定": null,
+   "engine": [],
+   "engine の演算": [],
+   "label": [
+    [
+     "ProvisionForLossOnOrderReceivedCL",
+     "CurrentYearInstant"
+    ],
+    [
+     "ProvisionForLossOnOrderReceivedCL",
+     "Prior1YearInstant"
+    ]
+   ],
+   "一致": "pointer なし",
+   "型5露出": true,
+   "形(ラベル)": "符号・方向"
+  },
+  {
+   "id": "N175",
+   "出どころ": "GROUNDED(60 件の検査)",
+   "state": "GROUNDED",
+   "実装席の判定": "correct",
+   "engine": [
+    [
+     "Liabilities",
+     "Prior1YearInstant"
+    ]
+   ],
+   "engine の演算": [],
+   "label": [
+    [
+     "Liabilities",
+     "Prior1YearInstant"
+    ]
+   ],
+   "一致": "一致(厳密)",
+   "型5露出": false,
+   "形(ラベル)": "単一"
+  },
+  {
+   "id": "N067",
+   "出どころ": "停止 214 件",
+   "state": "POINTER_NOT_FOUND",
+   "実装席の判定": null,
+   "engine": [],
+   "engine の演算": [],
+   "label": [
+    [
+     "OperatingIncome",
+     "CurrentYearDuration"
+    ],
+    [
+     "OperatingIncome",
+     "Prior1YearDuration"
+    ]
+   ],
+   "一致": "pointer なし",
+   "型5露出": false,
+   "形(ラベル)": "率(比)"
+  },
+  {
+   "id": "N028",
+   "出どころ": "停止 214 件",
+   "state": "UNVERIFIABLE",
+   "実装席の判定": null,
+   "engine": [],
+   "engine の演算": [],
+   "label": [
+    [
+     "CostOfSales",
+     "CurrentYearDuration"
+    ]
+   ],
+   "一致": "pointer なし",
+   "型5露出": false,
+   "形(ラベル)": "単一"
+  },
+  {
+   "id": "N054",
+   "出どころ": "停止 214 件",
+   "state": "UNVERIFIABLE",
+   "実装席の判定": null,
+   "engine": [],
+   "engine の演算": [],
+   "label": [
+    [
+     "ProvisionForShareBasedRemunerationForDirectorsAndOtherOfficersSGA",
+     "CurrentYearDuration"
+    ]
+   ],
+   "一致": "pointer なし",
+   "型5露出": true,
+   "形(ラベル)": "単一"
+  },
+  {
+   "id": "N193",
+   "出どころ": "GROUNDED(60 件の検査)",
+   "state": "GROUNDED",
+   "実装席の判定": "correct",
+   "engine": [
+    [
+     "CurrentPortionOfLongTermLoansPayable",
+     "CurrentYearInstant"
+    ]
+   ],
+   "engine の演算": [],
+   "label": [
+    [
+     "CurrentPortionOfLongTermLoansPayable",
+     "CurrentYearInstant"
+    ]
+   ],
+   "一致": "一致(厳密)",
+   "型5露出": false,
+   "形(ラベル)": "単一"
+  },
+  {
+   "id": "N153",
+   "出どころ": "停止 214 件",
+   "state": "UNVERIFIABLE",
+   "実装席の判定": null,
+   "engine": [],
+   "engine の演算": [],
+   "label": [
+    [
+     "PropertyPlantAndEquipment",
+     "CurrentYearInstant"
+    ]
+   ],
+   "一致": "pointer なし",
+   "型5露出": false,
+   "形(ラベル)": "単一"
+  },
+  {
+   "id": "T001",
+   "出どころ": "停止 214 件",
+   "state": "UNVERIFIABLE",
+   "実装席の判定": null,
+   "engine": [],
+   "engine の演算": [],
+   "label": [
+    [
+     "NetSales",
+     "CurrentYearDuration"
+    ],
+    [
+     "NetSales",
+     "Prior1YearDuration"
+    ]
+   ],
+   "一致": "pointer なし",
+   "型5露出": true,
+   "形(ラベル)": "符号・方向"
+  },
+  {
+   "id": "N075",
+   "出どころ": "停止 214 件",
+   "state": "UNVERIFIABLE",
+   "実装席の判定": null,
+   "engine": [],
+   "engine の演算": [],
+   "label": [
+    [
+     "InterestIncomeNOI",
+     "Prior1YearDuration"
+    ]
+   ],
+   "一致": "pointer なし",
+   "型5露出": false,
+   "形(ラベル)": "単一"
+  },
+  {
+   "id": "N303",
+   "出どころ": "GROUNDED(60 件の検査)",
+   "state": "GROUNDED",
+   "実装席の判定": "correct",
+   "engine": [
+    [
+     "CashAndDeposits",
+     "CurrentYearInstant"
+    ]
+   ],
+   "engine の演算": [],
+   "label": [
+    [
+     "CashAndDeposits",
+     "CurrentYearInstant"
+    ]
+   ],
+   "一致": "一致(厳密)",
+   "型5露出": true,
+   "形(ラベル)": "単一"
+  },
+  {
+   "id": "T085",
+   "出どころ": "停止 214 件",
+   "state": "VALUE_MISMATCH",
+   "実装席の判定": null,
+   "engine": [
+    [
+     "DividendsFromSurplus",
+     "CurrentYearDuration"
+    ],
+    [
+     "DividendsFromSurplus",
+     "Prior1YearDuration"
+    ]
+   ],
+   "engine の演算": [
+    "builtin:sign(cur-prior)"
+   ],
+   "label": [
+    [
+     "RetainedEarnings",
+     "CurrentYearInstant"
+    ],
+    [
+     "RetainedEarnings",
+     "Prior1YearInstant"
+    ]
+   ],
+   "一致": "不一致",
+   "型5露出": true,
+   "形(ラベル)": "符号・方向"
+  },
+  {
+   "id": "T037",
+   "出どころ": "GROUNDED(60 件の検査)",
+   "state": "GROUNDED",
+   "実装席の判定": "correct",
+   "engine": [
+    [
+     "OperatingIncome",
+     "CurrentYearDuration"
+    ],
+    [
+     "OperatingIncome",
+     "Prior1YearDuration"
+    ]
+   ],
+   "engine の演算": [
+    "builtin:sign(cur-prior)"
+   ],
+   "label": [
+    [
+     "OperatingIncome",
+     "CurrentYearDuration"
+    ],
+    [
+     "OperatingIncome",
+     "Prior1YearDuration"
+    ]
+   ],
+   "一致": "一致(厳密)",
+   "型5露出": false,
+   "形(ラベル)": "符号・方向"
+  },
+  {
+   "id": "N101",
+   "出どころ": "停止 214 件",
+   "state": "UNVERIFIABLE",
+   "実装席の判定": null,
+   "engine": [],
+   "engine の演算": [],
+   "label": [
+    [
+     "IncomeTaxesCurrent",
+     "CurrentYearDuration"
+    ]
+   ],
+   "一致": "pointer なし",
+   "型5露出": false,
+   "形(ラベル)": "単一"
+  },
+  {
+   "id": "N233",
+   "出どころ": "停止 214 件",
+   "state": "UNVERIFIABLE",
+   "実装席の判定": null,
+   "engine": [],
+   "engine の演算": [],
+   "label": [
+    [
+     "RetainedEarnings",
+     "CurrentYearInstant"
+    ]
+   ],
+   "一致": "pointer なし",
+   "型5露出": true,
+   "形(ラベル)": "単一"
+  },
+  {
+   "id": "N021",
+   "出どころ": "GROUNDED(60 件の検査)",
+   "state": "GROUNDED",
+   "実装席の判定": "correct",
+   "engine": [
+    [
+     "NotesAndAccountsReceivableTrade",
+     "CurrentYearInstant"
+    ]
+   ],
+   "engine の演算": [],
+   "label": [
+    [
+     "NotesAndAccountsReceivableTrade",
+     "CurrentYearInstant"
+    ]
+   ],
+   "一致": "一致(厳密)",
+   "型5露出": false,
+   "形(ラベル)": "単一"
+  },
+  {
+   "id": "N024",
+   "出どころ": "GROUNDED(60 件の検査)",
+   "state": "GROUNDED",
+   "実装席の判定": "correct",
+   "engine": [
+    [
+     "GrossProfit",
+     "CurrentYearDuration"
+    ]
+   ],
+   "engine の演算": [],
+   "label": [
+    [
+     "GrossProfit",
+     "CurrentYearDuration"
+    ]
+   ],
+   "一致": "一致(厳密)",
+   "型5露出": false,
+   "形(ラベル)": "単一"
+  },
+  {
+   "id": "N053",
+   "出どころ": "停止 214 件",
+   "state": "UNVERIFIABLE",
+   "実装席の判定": null,
+   "engine": [],
+   "engine の演算": [],
+   "label": [
+    [
+     "RetirementBenefitExpensesSGA",
+     "CurrentYearDuration"
+    ],
+    [
+     "RetirementBenefitExpensesSGA",
+     "Prior1YearDuration"
+    ]
+   ],
+   "一致": "pointer なし",
+   "型5露出": false,
+   "形(ラベル)": "差(当期−前期)"
+  },
+  {
+   "id": "N080",
+   "出どころ": "停止 214 件",
+   "state": "POINTER_NOT_FOUND",
+   "実装席の判定": null,
+   "engine": [],
+   "engine の演算": [],
+   "label": [
+    [
+     "OtherNOI",
+     "CurrentYearDuration"
+    ]
+   ],
+   "一致": "pointer なし",
+   "型5露出": false,
+   "形(ラベル)": "単一"
+  },
+  {
+   "id": "N245",
+   "出どころ": "停止 214 件",
+   "state": "UNVERIFIABLE",
+   "実装席の判定": null,
+   "engine": [],
+   "engine の演算": [],
+   "label": [
+    [
+     "ForeignCurrencyTranslationAdjustment",
+     "Prior1YearInstant"
+    ]
+   ],
+   "一致": "pointer なし",
+   "型5露出": true,
+   "形(ラベル)": "単一"
+  },
+  {
+   "id": "N100",
+   "出どころ": "停止 214 件",
+   "state": "UNVERIFIABLE",
+   "実装席の判定": null,
+   "engine": [],
+   "engine の演算": [],
+   "label": [
+    [
+     "IncomeTaxes",
+     "Prior1YearDuration"
+    ]
+   ],
+   "一致": "pointer なし",
+   "型5露出": false,
+   "形(ラベル)": "単一"
+  },
+  {
+   "id": "N126",
+   "出どころ": "停止 214 件",
+   "state": "VALUE_MISMATCH",
+   "実装席の判定": null,
+   "engine": [
+    [
+     "ValuationDifferenceOnAvailableForSaleSecurities",
+     "CurrentYearInstant"
+    ]
+   ],
+   "engine の演算": [],
+   "label": [
+    [
+     "ForeignCurrencyTranslationAdjustmentNetOfTaxOCI",
+     "Prior1YearDuration"
+    ]
+   ],
+   "一致": "不一致",
+   "型5露出": true,
+   "形(ラベル)": "単一"
+  },
+  {
+   "id": "T103",
+   "出どころ": "停止 214 件",
+   "state": "VALUE_MISMATCH",
+   "実装席の判定": null,
+   "engine": [
+    [
+     "DecreaseIncreaseInNotesAndAccountsReceivableTradeOpeCF",
+     "CurrentYearDuration"
+    ]
+   ],
+   "engine の演算": [
+    "builtin:flow_sign(cur)==direction"
+   ],
+   "label": [
+    [
+     "DecreaseIncreaseInNotesAndAccountsReceivableTradeOpeCF",
+     "Prior1YearDuration"
+    ]
+   ],
+   "一致": "不一致",
+   "型5露出": false,
+   "形(ラベル)": "符号・方向"
+  },
+  {
+   "id": "N144",
+   "出どころ": "停止 214 件",
+   "state": "UNVERIFIABLE",
+   "実装席の判定": null,
+   "engine": [],
+   "engine の演算": [],
+   "label": [
+    [
+     "OtherCA",
+     "CurrentYearInstant"
+    ]
+   ],
+   "一致": "pointer なし",
+   "型5露出": false,
+   "形(ラベル)": "単一"
+  },
+  {
+   "id": "N116",
+   "出どころ": "停止 214 件",
+   "state": "VALUE_MISMATCH",
+   "実装席の判定": null,
+   "engine": [
+    [
+     "ProfitLossAttributableToOwnersOfParentSummaryOfBusinessResults",
+     "CurrentYearDuration"
+    ]
+   ],
+   "engine の演算": [],
+   "label": [
+    [
+     "ComprehensiveIncome",
+     "CurrentYearDuration"
+    ],
+    [
+     "ComprehensiveIncome",
+     "Prior1YearDuration"
+    ]
+   ],
+   "一致": "不一致",
+   "型5露出": true,
+   "形(ラベル)": "差(当期−前期)"
+  },
+  {
+   "id": "T110",
+   "出どころ": "停止 214 件",
+   "state": "UNVERIFIABLE",
+   "実装席の判定": null,
+   "engine": [],
+   "engine の演算": [],
+   "label": [
+    [
+     "NetCashProvidedByUsedInFinancingActivities",
+     "Prior1YearDuration"
+    ]
+   ],
+   "一致": "pointer なし",
+   "型5露出": true,
+   "形(ラベル)": "符号・方向"
+  },
+  {
+   "id": "N214",
+   "出どころ": "GROUNDED(60 件の検査)",
+   "state": "GROUNDED",
+   "実装席の判定": "correct",
+   "engine": [
+    [
+     "ProvisionForWarrantiesForCompletedOperationCL",
+     "CurrentYearInstant"
+    ]
+   ],
+   "engine の演算": [],
+   "label": [
+    [
+     "ProvisionForWarrantiesForCompletedOperationCL",
+     "CurrentYearInstant"
+    ]
+   ],
+   "一致": "一致(厳密)",
+   "型5露出": false,
+   "形(ラベル)": "単一"
+  },
+  {
+   "id": "T039",
+   "出どころ": "停止 214 件",
+   "state": "UNVERIFIABLE",
+   "実装席の判定": null,
+   "engine": [],
+   "engine の演算": [],
+   "label": [
+    [
+     "NonOperatingIncome",
+     "CurrentYearDuration"
+    ],
+    [
+     "NonOperatingIncome",
+     "Prior1YearDuration"
+    ]
+   ],
+   "一致": "pointer なし",
+   "型5露出": false,
+   "形(ラベル)": "符号・方向"
+  },
+  {
+   "id": "T084",
+   "出どころ": "停止 214 件",
+   "state": "UNVERIFIABLE",
+   "実装席の判定": null,
+   "engine": [],
+   "engine の演算": [],
+   "label": [
+    [
+     "ValuationAndTranslationAdjustments",
+     "CurrentYearInstant"
+    ],
+    [
+     "ValuationAndTranslationAdjustments",
+     "Prior1YearInstant"
+    ]
+   ],
+   "一致": "pointer なし",
+   "型5露出": true,
+   "形(ラベル)": "符号・方向"
+  },
+  {
+   "id": "N146",
+   "出どころ": "停止 214 件",
+   "state": "UNVERIFIABLE",
+   "実装席の判定": null,
+   "engine": [],
+   "engine の演算": [],
+   "label": [
+    [
+     "OtherCA",
+     "CurrentYearInstant"
+    ],
+    [
+     "OtherCA",
+     "Prior1YearInstant"
+    ]
+   ],
+   "一致": "pointer なし",
+   "型5露出": false,
+   "形(ラベル)": "差(当期−前期)"
+  },
+  {
+   "id": "T054",
+   "出どころ": "停止 214 件",
+   "state": "UNVERIFIABLE",
+   "実装席の判定": null,
+   "engine": [],
+   "engine の演算": [],
+   "label": [
+    [
+     "OtherCA",
+     "CurrentYearInstant"
+    ],
+    [
+     "OtherCA",
+     "Prior1YearInstant"
+    ]
+   ],
+   "一致": "pointer なし",
+   "型5露出": false,
+   "形(ラベル)": "符号・方向"
+  },
+  {
+   "id": "N178",
+   "出どころ": "GROUNDED(60 件の検査)",
+   "state": "GROUNDED",
+   "実装席の判定": "correct",
+   "engine": [
+    [
+     "CurrentLiabilities",
+     "CurrentYearInstant"
+    ]
+   ],
+   "engine の演算": [],
+   "label": [
+    [
+     "CurrentLiabilities",
+     "CurrentYearInstant"
+    ]
+   ],
+   "一致": "一致(厳密)",
+   "型5露出": false,
+   "形(ラベル)": "単一"
+  },
+  {
+   "id": "N231",
+   "出どころ": "停止 214 件",
+   "state": "UNVERIFIABLE",
+   "実装席の判定": null,
+   "engine": [],
+   "engine の演算": [],
+   "label": [
+    [
+     "CapitalSurplus",
+     "Prior1YearInstant"
+    ]
+   ],
+   "一致": "pointer なし",
+   "型5露出": true,
+   "形(ラベル)": "単一"
+  },
+  {
+   "id": "T071",
+   "出どころ": "停止 214 件",
+   "state": "UNVERIFIABLE",
+   "実装席の判定": null,
+   "engine": [],
+   "engine の演算": [],
+   "label": [
+    [
+     "AccruedConsumptionTaxes",
+     "CurrentYearInstant"
+    ],
+    [
+     "AccruedConsumptionTaxes",
+     "Prior1YearInstant"
+    ]
+   ],
+   "一致": "pointer なし",
+   "型5露出": false,
+   "形(ラベル)": "符号・方向"
+  },
+  {
+   "id": "T108",
+   "出どころ": "停止 214 件",
+   "state": "UNVERIFIABLE",
+   "実装席の判定": null,
+   "engine": [],
+   "engine の演算": [],
+   "label": [
+    [
+     "NetCashProvidedByUsedInInvestmentActivities",
+     "Prior1YearDuration"
+    ]
+   ],
+   "一致": "pointer なし",
+   "型5露出": true,
+   "形(ラベル)": "符号・方向"
+  },
+  {
+   "id": "N282",
+   "出どころ": "GROUNDED(60 件の検査)",
+   "state": "GROUNDED",
+   "実装席の判定": "correct",
+   "engine": [
+    [
+     "DecreaseIncreaseInNotesAndAccountsReceivableTradeOpeCF",
+     "Prior1YearDuration"
+    ]
+   ],
+   "engine の演算": [],
+   "label": [
+    [
+     "DecreaseIncreaseInNotesAndAccountsReceivableTradeOpeCF",
+     "Prior1YearDuration"
+    ]
+   ],
+   "一致": "一致(厳密)",
+   "型5露出": false,
+   "形(ラベル)": "単一"
+  },
+  {
+   "id": "N079",
+   "出どころ": "停止 214 件",
+   "state": "POINTER_NOT_FOUND",
+   "実装席の判定": null,
+   "engine": [],
+   "engine の演算": [],
+   "label": [
+    [
+     "RealEstateRentNOI",
+     "Prior1YearDuration"
+    ]
+   ],
+   "一致": "pointer なし",
+   "型5露出": true,
+   "形(ラベル)": "単一"
+  },
+  {
+   "id": "N122",
+   "出どころ": "停止 214 件",
+   "state": "UNVERIFIABLE",
+   "実装席の判定": null,
+   "engine": [],
+   "engine の演算": [],
+   "label": [
+    [
+     "RemeasurementsOfDefinedBenefitPlansNetOfTaxOCI",
+     "Prior1YearDuration"
+    ]
+   ],
+   "一致": "pointer なし",
+   "型5露出": true,
+   "形(ラベル)": "単一"
+  },
+  {
+   "id": "N113",
+   "出どころ": "停止 214 件",
+   "state": "VALUE_MISMATCH",
+   "実装席の判定": null,
+   "engine": [
+    [
+     "RateOfReturnOnEquitySummaryOfBusinessResults",
+     "CurrentYearDuration"
+    ]
+   ],
+   "engine の演算": [],
+   "label": [
+    [
+     "RateOfReturnOnEquitySummaryOfBusinessResults",
+     "Prior1YearDuration"
+    ]
+   ],
+   "一致": "不一致",
+   "型5露出": false,
+   "形(ラベル)": "単一"
+  },
+  {
+   "id": "N237",
+   "出どころ": "停止 214 件",
+   "state": "UNVERIFIABLE",
+   "実装席の判定": null,
+   "engine": [],
+   "engine の演算": [],
+   "label": [
+    [
+     "TreasuryStock",
+     "Prior1YearInstant"
+    ]
+   ],
+   "一致": "pointer なし",
+   "型5露出": true,
+   "形(ラベル)": "単一"
+  },
+  {
+   "id": "N035",
+   "出どころ": "停止 214 件",
+   "state": "POINTER_NOT_FOUND",
+   "実装席の判定": null,
+   "engine": [],
+   "engine の演算": [],
+   "label": [
+    [
+     "CostOfSales",
+     "CurrentYearDuration"
+    ],
+    [
+     "CostOfSales",
+     "Prior1YearDuration"
+    ]
+   ],
+   "一致": "pointer なし",
+   "型5露出": false,
+   "形(ラベル)": "ポイント差"
+  },
+  {
+   "id": "N198",
+   "出どころ": "停止 214 件",
+   "state": "UNVERIFIABLE",
+   "実装席の判定": null,
+   "engine": [],
+   "engine の演算": [],
+   "label": [
+    [
+     "ProvisionForShareBasedRemunerationForDirectorsAndOtherOfficersCL",
+     "CurrentYearInstant"
+    ],
+    [
+     "ProvisionForShareBasedRemunerationForDirectorsAndOtherOfficersCL",
+     "Prior1YearInstant"
+    ]
+   ],
+   "一致": "pointer なし",
+   "型5露出": true,
+   "形(ラベル)": "差(当期−前期)"
+  },
+  {
+   "id": "N205",
+   "出どころ": "GROUNDED(60 件の検査)",
+   "state": "GROUNDED",
+   "実装席の判定": "correct",
+   "engine": [
+    [
+     "DeferredTaxLiabilities",
+     "CurrentYearInstant"
+    ]
+   ],
+   "engine の演算": [],
+   "label": [
+    [
+     "DeferredTaxLiabilities",
+     "CurrentYearInstant"
+    ]
+   ],
+   "一致": "一致(厳密)",
+   "型5露出": false,
+   "形(ラベル)": "単一"
+  },
+  {
+   "id": "N046",
+   "出どころ": "停止 214 件",
+   "state": "POINTER_NOT_FOUND",
+   "実装席の判定": null,
+   "engine": [],
+   "engine の演算": [],
+   "label": [
+    [
+     "EmployeesSalariesAndAllowancesSGA",
+     "CurrentYearDuration"
+    ]
+   ],
+   "一致": "pointer なし",
+   "型5露出": false,
+   "形(ラベル)": "単一"
+  },
+  {
+   "id": "N072",
+   "出どころ": "停止 214 件",
+   "state": "UNVERIFIABLE",
+   "実装席の判定": null,
+   "engine": [],
+   "engine の演算": [],
+   "label": [
+    [
+     "NonOperatingIncome",
+     "Prior1YearDuration"
+    ]
+   ],
+   "一致": "pointer なし",
+   "型5露出": false,
+   "形(ラベル)": "単一"
+  },
+  {
+   "id": "N076",
+   "出どころ": "停止 214 件",
+   "state": "POINTER_NOT_FOUND",
+   "実装席の判定": null,
+   "engine": [],
+   "engine の演算": [],
+   "label": [
+    [
+     "DividendsIncomeNOI",
+     "CurrentYearDuration"
+    ]
+   ],
+   "一致": "pointer なし",
+   "型5露出": false,
+   "形(ラベル)": "単一"
+  },
+  {
+   "id": "N239",
+   "出どころ": "停止 214 件",
+   "state": "UNVERIFIABLE",
+   "実装席の判定": null,
+   "engine": [],
+   "engine の演算": [],
+   "label": [
+    [
+     "ValuationAndTranslationAdjustments",
+     "Prior1YearInstant"
+    ]
+   ],
+   "一致": "pointer なし",
+   "型5露出": true,
+   "形(ラベル)": "単一"
+  },
+  {
+   "id": "N273",
+   "出どころ": "停止 214 件",
+   "state": "UNVERIFIABLE",
+   "実装席の判定": null,
+   "engine": [],
+   "engine の演算": [],
+   "label": [
+    [
+     "SubtotalOpeCF",
+     "CurrentYearDuration"
+    ]
+   ],
+   "一致": "pointer なし",
+   "型5露出": false,
+   "形(ラベル)": "単一"
+  },
+  {
+   "id": "N249",
+   "出どころ": "GROUNDED(60 件の検査)",
+   "state": "GROUNDED",
+   "実装席の判定": "ambiguous",
+   "engine": [
+    [
+     "DividendsFromSurplus",
+     "CurrentYearDuration"
+    ]
+   ],
+   "engine の演算": [],
+   "label": [
+    [
+     "DividendsFromSurplus",
+     "CurrentYearDuration"
+    ]
+   ],
+   "一致": "一致(厳密)",
+   "型5露出": true,
+   "形(ラベル)": "単一"
+  },
+  {
+   "id": "N187",
+   "出どころ": "GROUNDED(60 件の検査)",
+   "state": "GROUNDED",
+   "実装席の判定": "correct",
+   "engine": [
+    [
+     "IncomeTaxesPayable",
+     "CurrentYearInstant"
+    ]
+   ],
+   "engine の演算": [],
+   "label": [
+    [
+     "IncomeTaxesPayable",
+     "CurrentYearInstant"
+    ]
+   ],
+   "一致": "一致(厳密)",
+   "型5露出": false,
+   "形(ラベル)": "単一"
+  },
+  {
+   "id": "N261",
+   "出どころ": "停止 214 件",
+   "state": "UNVERIFIABLE",
+   "実装席の判定": null,
+   "engine": [],
+   "engine の演算": [],
+   "label": [
+    [
+     "NetCashProvidedByUsedInOperatingActivities",
+     "CurrentYearDuration"
+    ]
+   ],
+   "一致": "pointer なし",
+   "型5露出": true,
+   "形(ラベル)": "単一"
+  },
+  {
+   "id": "N120",
+   "出どころ": "停止 214 件",
+   "state": "UNVERIFIABLE",
+   "実装席の判定": null,
+   "engine": [],
+   "engine の演算": [],
+   "label": [
+    [
+     "OtherComprehensiveIncome",
+     "CurrentYearDuration"
+    ],
+    [
+     "OtherComprehensiveIncome",
+     "Prior1YearDuration"
+    ]
+   ],
+   "一致": "pointer なし",
+   "型5露出": false,
+   "形(ラベル)": "差(当期−前期)"
+  },
+  {
+   "id": "N152",
+   "出どころ": "停止 214 件",
+   "state": "UNVERIFIABLE",
+   "実装席の判定": null,
+   "engine": [],
+   "engine の演算": [],
+   "label": [
+    [
+     "NoncurrentAssets",
+     "CurrentYearInstant"
+    ],
+    [
+     "NoncurrentAssets",
+     "Prior1YearInstant"
+    ]
+   ],
+   "一致": "pointer なし",
+   "型5露出": false,
+   "形(ラベル)": "率(比)"
+  },
+  {
+   "id": "N013",
+   "出どころ": "停止 214 件",
+   "state": "UNVERIFIABLE",
+   "実装席の判定": null,
+   "engine": [],
+   "engine の演算": [],
+   "label": [
+    [
+     "ComprehensiveIncome",
+     "CurrentYearDuration"
+    ]
+   ],
+   "一致": "pointer なし",
+   "型5露出": true,
+   "形(ラベル)": "単一"
+  },
+  {
+   "id": "N115",
+   "出どころ": "停止 214 件",
+   "state": "VALUE_MISMATCH",
+   "実装席の判定": null,
+   "engine": [
+    [
+     "ProfitLossAttributableToOwnersOfParentSummaryOfBusinessResults",
+     "CurrentYearDuration"
+    ]
+   ],
+   "engine の演算": [],
+   "label": [
+    [
+     "ComprehensiveIncome",
+     "Prior1YearDuration"
+    ]
+   ],
+   "一致": "不一致",
+   "型5露出": true,
+   "形(ラベル)": "単一"
+  },
+  {
+   "id": "N252",
+   "出どころ": "停止 214 件",
+   "state": "VALUE_MISMATCH",
+   "実装席の判定": null,
+   "engine": [
+    [
+     "EquityToAssetRatioSummaryOfBusinessResults",
+     "CurrentYearInstant"
+    ]
+   ],
+   "engine の演算": [],
+   "label": [
+    [
+     "EquityToAssetRatioSummaryOfBusinessResults",
+     "Prior1YearInstant"
+    ]
+   ],
+   "一致": "不一致",
+   "型5露出": false,
+   "形(ラベル)": "単一"
+  },
+  {
+   "id": "T017",
+   "出どころ": "停止 214 件",
+   "state": "VALUE_MISMATCH",
+   "実装席の判定": null,
+   "engine": [
+    [
+     "GrossProfit",
+     "CurrentYearDuration"
+    ],
+    [
+     "GrossProfit",
+     "Prior1YearDuration"
+    ]
+   ],
+   "engine の演算": [
+    "builtin:sign(cur-prior)"
+   ],
+   "label": [
+    [
+     "CostOfSales",
+     "CurrentYearDuration"
+    ],
+    [
+     "CostOfSales",
+     "Prior1YearDuration"
+    ]
+   ],
+   "一致": "不一致",
+   "型5露出": false,
+   "形(ラベル)": "符号・方向"
+  },
+  {
+   "id": "N020",
+   "出どころ": "停止 214 件",
+   "state": "UNVERIFIABLE",
+   "実装席の判定": null,
+   "engine": [],
+   "engine の演算": [],
+   "label": [
+    [
+     "NetSalesSummaryOfBusinessResults",
+     "CurrentYearDuration"
+    ],
+    [
+     "NetSalesSummaryOfBusinessResults",
+     "Prior4YearDuration"
+    ]
+   ],
+   "一致": "pointer なし",
+   "型5露出": true,
+   "形(ラベル)": "率(比)"
+  },
+  {
+   "id": "N297",
+   "出どころ": "停止 214 件",
+   "state": "POINTER_NOT_FOUND",
+   "実装席の判定": null,
+   "engine": [],
+   "engine の演算": [],
+   "label": [
+    [
+     "RepaymentOfLongTermLoansPayableFinCF",
+     "CurrentYearDuration"
+    ]
+   ],
+   "一致": "pointer なし",
+   "型5露出": true,
+   "形(ラベル)": "単一"
+  },
+  {
+   "id": "N014",
+   "出どころ": "GROUNDED(60 件の検査)",
+   "state": "GROUNDED",
+   "実装席の判定": "correct",
+   "engine": [
+    [
+     "NetSalesSummaryOfBusinessResults",
+     "CurrentYearDuration"
+    ]
+   ],
+   "engine の演算": [],
+   "label": [
+    [
+     "NetSales",
+     "CurrentYearDuration"
+    ]
+   ],
+   "一致": "一致(同値類v0のみ)",
+   "型5露出": true,
+   "形(ラベル)": "単一"
+  }
+ ]
+}

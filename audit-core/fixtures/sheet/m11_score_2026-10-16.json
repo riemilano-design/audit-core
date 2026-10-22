@@ -1,0 +1,3514 @@
+{
+ "purpose": "段 11 の採点。**線は 7 本。合否に増分を入れない**",
+ "seal": "docs/DOMAIN1_M11_SEAL_2026-10-16.md",
+ "spec_version": "2026-10-16/m9",
+ "engine_sha": {
+  "sheet_m5_engine_2026-10-15.py": "6eb5723ef518e1b4",
+  "sheet_m7_engine_2026-10-15.py": "4574c3ea013d05a1",
+  "sheet_parent_backing_2026-10-16.py": "8e387958c69398e8",
+  "sheet_sainyuu_engine_2026-10-16.py": "3a70b599672832d3",
+  "sheet_sainyuu_p1_2026-10-16.py": "91b15e0f7eaa5442",
+  "sheet_sainyuu_p2_2026-10-16.py": "671c7dd81cea0ffe"
+ },
+ "min_independent": 3,
+ "scored_claims": 35,
+ "missing_answers": [],
+ "主実験の線(7 本)": {
+  "A-1(旧)③が発火した主張": {
+   "count": 1,
+   "pass": "≥ 1 件",
+   "ok": true,
+   "ids": [
+    "R035"
+   ],
+   "注": "**新 engine では構造的に 0 件**(封 §3)"
+  },
+  "E2(新・対称)誤受理": {
+   "count": 0,
+   "pass": "= 0 件",
+   "ok": true,
+   "G-2 誤接続": 0,
+   "G-3 根拠なし": 0
+  },
+  "X-2対称(新)": {
+   "count": 0,
+   "pass": "= 0 件",
+   "ok": true
+  },
+  "X-2三欄(新)": {
+   "count": 0,
+   "pass": "= 0 件",
+   "ok": true
+  },
+  "β の 5 欄の食い違い": {
+   "count": 0,
+   "pass": "= 0 件",
+   "ok": true,
+   "β": 0,
+   "空振りか": true
+  },
+  "G-5 母数": {
+   "count": 35,
+   "pass": "≥ 20",
+   "ok": true
+  },
+  "G-1′(新)③で止めた主張を除いた接続の正確さ": {
+   "rate": 0.45714285714285713,
+   "num": 16,
+   "den": 35,
+   "pass": "≥ 50%",
+   "ok": false,
+   "status": "失敗"
+  }
+ },
+ "主実験の判定": "**失敗**",
+ "X-2 の 3 通り(封 §4)": {
+  "X-2対称(合否)": 0,
+  "X-2非対称(開示だけ)": 0,
+  "X-2三欄(裏取り)": 0,
+  "X-1対称": 16,
+  "結んだ主張": 16,
+  "判定": {
+   "判定": "合格",
+   "合格": true,
+   "理由": "X-2対称 = 0 件・X-2三欄 = 0 件(線はどちらも 0 件)。**非対称 = 0 件は開示だけで、性能として書かない**"
+  },
+  "X-3 X-2 のうち誤受理": 0,
+  "X-4 抜粋に在る行に結んで誤受理": 0,
+  "機会": "fixtures/sheet/m11_opportunity_2026-10-16.json の O-8",
+  "計数器の歯": "fixtures/sheet/m11_x2_teeth_2026-10-16.json(**人工材料**)"
+ },
+ "β と 5 欄(封 §5。循環を切る)": {
+  "β 別名表に依って一致した主張": 0,
+  "ids": [],
+  "5 欄の一致": 0,
+  "5 欄の食い違い": 0,
+  "5 欄の判定不能": 0,
+  "食い違いの明細": [],
+  "欄": [
+   "階層",
+   "親",
+   "科目名",
+   "列",
+   "値"
+  ],
+  "空振りか": true,
+  "注": "**β = 0 なら、この線は空振りである** ― どの接続も別名表に依っていないので、循環を切る必要が生じなかった。**空振りを「安全性の証拠」として書かない。**"
+ },
+ "**非対称にしたときの数(開示。性能として書かない)**": {
+  "正しい接続": 16,
+  "誤接続": 0,
+  "根拠なし": 0,
+  "E2": 0,
+  "注": "**採点器だけ旧 engine の別名表にした場合。**片側だけ正規化を掛けるのは段 8 の欠陥そのものなので、**合否には使わない**(封 §4)"
+ },
+ "5 つを分けて数える(封 §6-1)": {
+  "N-接続-正": {
+   "旧": 16,
+   "新": 16,
+   "5 欄で落とした件": 0,
+   "採用した数": 16
+  },
+  "N-接続-誤": {
+   "旧": 0,
+   "新": 0
+  },
+  "N-保留": {
+   "旧": 0,
+   "新": 0,
+   "理由ごと(新)": {
+    "列 の手がかりが 2 つ以上: 予算現額・歳出決算額": 1,
+    "6 欄が一意でない(4 通り。値で選ばない)": 1,
+    "6 欄が一意でない(9 通り。値で選ばない)": 2,
+    "6 欄が一意でない(6 通り。値で選ばない)": 1,
+    "6 欄が一意でない(7 通り。値で選ばない)": 3,
+    "6 欄が一意でない(2 通り。値で選ばない)": 3,
+    "6 欄が一意でない(3 通り。値で選ばない)": 3,
+    "6 欄が一意でない(35 通り。値で選ばない)": 1,
+    "6 欄が一意でない(61 通り。値で選ばない)": 2,
+    "列 の手がかりが 2 つ以上: 支出済額・計": 1,
+    "(理由なし)": 1
+   }
+  },
+  "N-別名-通": {
+   "旧": 1,
+   "新": 19,
+   "歳入で昇格した会計": [
+    "東京都と場会計",
+    "東京都中小企業設備導入等資金会計",
+    "東京都公債費会計",
+    "東京都国民健康保険事業会計",
+    "東京都地方消費税清算会計",
+    "東京都地方独立行政法人東京都立病院機構貸付等事業会計 ",
+    "東京都小笠原諸島生活再建資金会計",
+    "東京都工業用水道事業清算会計",
+    "東京都心身障害者扶養年金会計",
+    "東京都林業・木材産業改善資金助成会計",
+    "東京都母子父子福祉貸付資金会計",
+    "東京都沿岸漁業改善資金助成会計",
+    "東京都特別区財政調整会計",
+    "東京都用地会計",
+    "東京都臨海都市基盤整備事業会計",
+    "東京都都営住宅等事業会計",
+    "東京都都営住宅等保証金会計",
+    "東京都都市開発資金会計"
+   ]
+  },
+  "N-別名-止": {
+   "旧": 18,
+   "新": 0,
+   "理由ごと(旧)": {
+    "独立した裏づけが 1 本(要 3 本)": 17,
+    "独立した裏づけが 2 本(要 3 本)": 1
+   }
+  }
+ },
+ "併測 G-4(合否に入れない)": {
+  "rate": null,
+  "num": 0,
+  "den": 0,
+  "pass": "≥ 80%",
+  "status": "未測定",
+  "(a) 両席が一致して保留": {
+   "den": 0,
+   "ok": 0
+  },
+  "(b) 2 席が食い違って保留": {
+   "den": 0,
+   "ok": 0
+  },
+  "注": "**(b) は「席が決められなかった」であって「保留が適切だった」ではない**"
+ },
+ "記録のみ(線にしない)": {
+  "生の G-1": {
+   "rate": 0.45714285714285713,
+   "num": 16,
+   "den": 35
+  },
+  "N-接続-増(合否に入れない)": {
+   "count": 0,
+   "旧": 16,
+   "新": 16,
+   "注": "**増えても合格にしない。減っても失敗にしない**"
+  },
+  "G-8 誤受理の増分": {
+   "count": 0,
+   "旧": 0,
+   "新": 0
+  },
+  "A-2 ③以外の理由で保留(新)": {
+   "count": 19,
+   "ids": [
+    "R001",
+    "R018",
+    "R019",
+    "R020",
+    "R021",
+    "R022",
+    "R023",
+    "R024",
+    "R025",
+    "R026",
+    "R027",
+    "R028",
+    "R029",
+    "R030",
+    "R031",
+    "R032",
+    "R033",
+    "R034",
+    "R035"
+   ],
+   "注": "**③の成功に数えない**"
+  },
+  "A-3(新)": 0,
+  "席の一致率(成果として書かない)": {
+   "num": 35,
+   "den": 35,
+   "rate": 1.0
+  },
+  "N-1 親で絞って親が合った": 4,
+  "N-2 親で絞って親が違った": 0,
+  "N-1 の分母": 4
+ },
+ "G-1′ を成果として書けるか": {
+  "止めた主張(A-1 + A-2)": 19,
+  "採点対象": 35,
+  "usable": false,
+  "注": "**止めた主張が採点対象の半分を超えたら G-1′ を成果として書かない。**分母が偏っているので接続の正確さは測れていない"
+ },
+ "rows": [
+  {
+   "id": "R001",
+   "value": 10169000000,
+   "novelty": "新規",
+   "sentence": "一般会計の歳出では、総務費のうち子供政策連携費が予算現在額10,169,000,000円に対し支出済額8,311,548,667円で、不用額は1,857,451,333円となった",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "総務費",
+     "子供政策連携費",
+     "予算現額",
+     "10169000000"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "子供政策連携費",
+     "予算現額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "UNVERIFIABLE",
+   "route": null,
+   "pointer": null,
+   "hold_reason": "列 の手がかりが 2 つ以上: 予算現額・歳出決算額",
+   "parent_cues": [
+    "一般会計",
+    "総務費"
+   ],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "engine_parent": null,
+   "engine_key6": null,
+   "agree_6": false,
+   "agree_4": false,
+   "only_4": false,
+   "verdict": "結べなかった(誤接続ではない)",
+   "parent_correct": null
+  },
+  {
+   "id": "R002",
+   "value": 8311548667,
+   "novelty": "新規",
+   "sentence": "一般会計の歳出では、総務費のうち子供政策連携費が予算現在額10,169,000,000円に対し支出済額8,311,548,667円で、不用額は1,857,451,333円となった",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "総務費",
+     "子供政策連携費",
+     "支出済額",
+     "8311548667"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "子供政策連携費",
+     "支出済額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!E25",
+   "hold_reason": null,
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "engine_parent": "総務費",
+   "engine_key6": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "総務費",
+     "子供政策連携費",
+     "支出済額",
+     "8311548667"
+    ]
+   ],
+   "agree_6": true,
+   "agree_4": true,
+   "only_4": false,
+   "verdict": "正しい接続",
+   "parent_correct": null
+  },
+  {
+   "id": "R003",
+   "value": 1857451333,
+   "novelty": "新規",
+   "sentence": "一般会計の歳出では、総務費のうち子供政策連携費が予算現在額10,169,000,000円に対し支出済額8,311,548,667円で、不用額は1,857,451,333円となった",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "総務費",
+     "子供政策連携費",
+     "不用額",
+     "1857451333"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "子供政策連携費",
+     "不用額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!G25",
+   "hold_reason": null,
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "engine_parent": "総務費",
+   "engine_key6": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "総務費",
+     "子供政策連携費",
+     "不用額",
+     "1857451333"
+    ]
+   ],
+   "agree_6": true,
+   "agree_4": true,
+   "only_4": false,
+   "verdict": "正しい接続",
+   "parent_correct": null
+  },
+  {
+   "id": "R004",
+   "value": 28268927000,
+   "novelty": "新規",
+   "sentence": "同じ総務費のスタートアップ・国際金融都市戦略費は予算現在額28,268,927,000円に対し支出済額23,506,146,400円、防災管理費は予算現在額16,512,904,000円に対し支出済額13,352,967,071円で不用額3,146,001,929円であった",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "総務費",
+     "スタートアップ・国際金融都市戦略費",
+     "予算現額",
+     "28268927000"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "スタートアップ・国際金融都市戦略費",
+     "予算現額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!D28",
+   "hold_reason": null,
+   "parent_cues": [
+    "総務費"
+   ],
+   "parent_filtered": true,
+   "parent_kept": [
+    "総務費"
+   ],
+   "engine_parent": "総務費",
+   "engine_key6": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "総務費",
+     "スタートアップ・国際金融都市戦略費",
+     "予算現額",
+     "28268927000"
+    ]
+   ],
+   "agree_6": true,
+   "agree_4": true,
+   "only_4": false,
+   "verdict": "正しい接続",
+   "parent_correct": true,
+   "label_parent": "総務費"
+  },
+  {
+   "id": "R005",
+   "value": 23506146400,
+   "novelty": "新規",
+   "sentence": "同じ総務費のスタートアップ・国際金融都市戦略費は予算現在額28,268,927,000円に対し支出済額23,506,146,400円、防災管理費は予算現在額16,512,904,000円に対し支出済額13,352,967,071円で不用額3,146,001,929円であった",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "総務費",
+     "スタートアップ・国際金融都市戦略費",
+     "支出済額",
+     "23506146400"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "スタートアップ・国際金融都市戦略費",
+     "支出済額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!E28",
+   "hold_reason": null,
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "engine_parent": "総務費",
+   "engine_key6": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "総務費",
+     "スタートアップ・国際金融都市戦略費",
+     "支出済額",
+     "23506146400"
+    ]
+   ],
+   "agree_6": true,
+   "agree_4": true,
+   "only_4": false,
+   "verdict": "正しい接続",
+   "parent_correct": null
+  },
+  {
+   "id": "R006",
+   "value": 16512904000,
+   "novelty": "新規",
+   "sentence": "同じ総務費のスタートアップ・国際金融都市戦略費は予算現在額28,268,927,000円に対し支出済額23,506,146,400円、防災管理費は予算現在額16,512,904,000円に対し支出済額13,352,967,071円で不用額3,146,001,929円であった",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "総務費",
+     "防災管理費",
+     "予算現額",
+     "16512904000"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "防災管理費",
+     "予算現額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!D40",
+   "hold_reason": null,
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "engine_parent": "総務費",
+   "engine_key6": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "総務費",
+     "防災管理費",
+     "予算現額",
+     "16512904000"
+    ]
+   ],
+   "agree_6": true,
+   "agree_4": true,
+   "only_4": false,
+   "verdict": "正しい接続",
+   "parent_correct": null
+  },
+  {
+   "id": "R007",
+   "value": 13352967071,
+   "novelty": "新規",
+   "sentence": "同じ総務費のスタートアップ・国際金融都市戦略費は予算現在額28,268,927,000円に対し支出済額23,506,146,400円、防災管理費は予算現在額16,512,904,000円に対し支出済額13,352,967,071円で不用額3,146,001,929円であった",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "総務費",
+     "防災管理費",
+     "支出済額",
+     "13352967071"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "防災管理費",
+     "支出済額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!E40",
+   "hold_reason": null,
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "engine_parent": "総務費",
+   "engine_key6": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "総務費",
+     "防災管理費",
+     "支出済額",
+     "13352967071"
+    ]
+   ],
+   "agree_6": true,
+   "agree_4": true,
+   "only_4": false,
+   "verdict": "正しい接続",
+   "parent_correct": null
+  },
+  {
+   "id": "R008",
+   "value": 3146001929,
+   "novelty": "新規",
+   "sentence": "同じ総務費のスタートアップ・国際金融都市戦略費は予算現在額28,268,927,000円に対し支出済額23,506,146,400円、防災管理費は予算現在額16,512,904,000円に対し支出済額13,352,967,071円で不用額3,146,001,929円であった",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "総務費",
+     "防災管理費",
+     "不用額",
+     "3146001929"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "防災管理費",
+     "不用額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!G40",
+   "hold_reason": null,
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "engine_parent": "総務費",
+   "engine_key6": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "総務費",
+     "防災管理費",
+     "不用額",
+     "3146001929"
+    ]
+   ],
+   "agree_6": true,
+   "agree_4": true,
+   "only_4": false,
+   "verdict": "正しい接続",
+   "parent_correct": null
+  },
+  {
+   "id": "R009",
+   "value": 14286115103,
+   "novelty": "新規",
+   "sentence": "総務費退職手当及年金費の退職費は支出済額14,286,115,103円に達している",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "目",
+     "総務費>退職手当及年金費",
+     "退職費",
+     "支出済額",
+     "14286115103"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "目",
+     "退職費",
+     "支出済額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:事項別明細!R2259",
+   "hold_reason": null,
+   "parent_cues": [
+    "総務費",
+    "退職手当及年金費"
+   ],
+   "parent_filtered": true,
+   "parent_kept": [
+    "総務費 > 退職手当及年金費"
+   ],
+   "engine_parent": "総務費 > 退職手当及年金費",
+   "engine_key6": [
+    "label",
+    [
+     "一般会計",
+     "目",
+     "総務費>退職手当及年金費",
+     "退職費",
+     "支出済額",
+     "14286115103"
+    ]
+   ],
+   "agree_6": true,
+   "agree_4": true,
+   "only_4": false,
+   "verdict": "正しい接続",
+   "parent_correct": true,
+   "label_parent": "総務費>退職手当及年金費"
+  },
+  {
+   "id": "R010",
+   "value": 33285483000,
+   "novelty": "新規",
+   "sentence": "徴税費の徴税管理費は予算現在額33,285,483,000円に対し支出済額32,593,444,531円であった",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "徴税費",
+     "徴税管理費",
+     "予算現額",
+     "33285483000"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "徴税管理費",
+     "予算現額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!D64",
+   "hold_reason": null,
+   "parent_cues": [
+    "徴税費"
+   ],
+   "parent_filtered": true,
+   "parent_kept": [
+    "徴税費"
+   ],
+   "engine_parent": "徴税費",
+   "engine_key6": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "徴税費",
+     "徴税管理費",
+     "予算現額",
+     "33285483000"
+    ]
+   ],
+   "agree_6": true,
+   "agree_4": true,
+   "only_4": false,
+   "verdict": "正しい接続",
+   "parent_correct": true,
+   "label_parent": "徴税費"
+  },
+  {
+   "id": "R011",
+   "value": 32593444531,
+   "novelty": "新規",
+   "sentence": "徴税費の徴税管理費は予算現在額33,285,483,000円に対し支出済額32,593,444,531円であった",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "徴税費",
+     "徴税管理費",
+     "支出済額",
+     "32593444531"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "徴税管理費",
+     "支出済額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!E64",
+   "hold_reason": null,
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "engine_parent": "徴税費",
+   "engine_key6": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "徴税費",
+     "徴税管理費",
+     "支出済額",
+     "32593444531"
+    ]
+   ],
+   "agree_6": true,
+   "agree_4": true,
+   "only_4": false,
+   "verdict": "正しい接続",
+   "parent_correct": null
+  },
+  {
+   "id": "R012",
+   "value": 46526037000,
+   "novelty": "新規",
+   "sentence": "都市整備費では、市街地整備費が予算現在額46,526,037,000円に対し支出済額30,202,256,663円にとどまり、不用額は12,588,375,337円となった",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "都市整備費",
+     "市街地整備費",
+     "予算現額",
+     "46526037000"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "市街地整備費",
+     "予算現額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!D93",
+   "hold_reason": null,
+   "parent_cues": [
+    "都市整備費"
+   ],
+   "parent_filtered": true,
+   "parent_kept": [
+    "都市整備費"
+   ],
+   "engine_parent": "都市整備費",
+   "engine_key6": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "都市整備費",
+     "市街地整備費",
+     "予算現額",
+     "46526037000"
+    ]
+   ],
+   "agree_6": true,
+   "agree_4": true,
+   "only_4": false,
+   "verdict": "正しい接続",
+   "parent_correct": true,
+   "label_parent": "都市整備費"
+  },
+  {
+   "id": "R013",
+   "value": 30202256663,
+   "novelty": "新規",
+   "sentence": "都市整備費では、市街地整備費が予算現在額46,526,037,000円に対し支出済額30,202,256,663円にとどまり、不用額は12,588,375,337円となった",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "都市整備費",
+     "市街地整備費",
+     "支出済額",
+     "30202256663"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "市街地整備費",
+     "支出済額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!E93",
+   "hold_reason": null,
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "engine_parent": "都市整備費",
+   "engine_key6": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "都市整備費",
+     "市街地整備費",
+     "支出済額",
+     "30202256663"
+    ]
+   ],
+   "agree_6": true,
+   "agree_4": true,
+   "only_4": false,
+   "verdict": "正しい接続",
+   "parent_correct": null
+  },
+  {
+   "id": "R014",
+   "value": 12588375337,
+   "novelty": "新規",
+   "sentence": "都市整備費では、市街地整備費が予算現在額46,526,037,000円に対し支出済額30,202,256,663円にとどまり、不用額は12,588,375,337円となった",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "都市整備費",
+     "市街地整備費",
+     "不用額",
+     "12588375337"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "市街地整備費",
+     "不用額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!G93",
+   "hold_reason": null,
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "engine_parent": "都市整備費",
+   "engine_key6": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "都市整備費",
+     "市街地整備費",
+     "不用額",
+     "12588375337"
+    ]
+   ],
+   "agree_6": true,
+   "agree_4": true,
+   "only_4": false,
+   "verdict": "正しい接続",
+   "parent_correct": null
+  },
+  {
+   "id": "R015",
+   "value": 45485360000,
+   "novelty": "新規",
+   "sentence": "住宅政策費は予算現在額45,485,360,000円に対し支出済額39,660,519,320円、不用額5,415,041,680円であった",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "都市整備費",
+     "住宅政策費",
+     "予算現額",
+     "45485360000"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "住宅政策費",
+     "予算現額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!D99",
+   "hold_reason": null,
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "engine_parent": "都市整備費",
+   "engine_key6": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "都市整備費",
+     "住宅政策費",
+     "予算現額",
+     "45485360000"
+    ]
+   ],
+   "agree_6": true,
+   "agree_4": true,
+   "only_4": false,
+   "verdict": "正しい接続",
+   "parent_correct": null
+  },
+  {
+   "id": "R016",
+   "value": 39660519320,
+   "novelty": "新規",
+   "sentence": "住宅政策費は予算現在額45,485,360,000円に対し支出済額39,660,519,320円、不用額5,415,041,680円であった",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "都市整備費",
+     "住宅政策費",
+     "支出済額",
+     "39660519320"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "住宅政策費",
+     "支出済額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!E99",
+   "hold_reason": null,
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "engine_parent": "都市整備費",
+   "engine_key6": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "都市整備費",
+     "住宅政策費",
+     "支出済額",
+     "39660519320"
+    ]
+   ],
+   "agree_6": true,
+   "agree_4": true,
+   "only_4": false,
+   "verdict": "正しい接続",
+   "parent_correct": null
+  },
+  {
+   "id": "R017",
+   "value": 5415041680,
+   "novelty": "新規",
+   "sentence": "住宅政策費は予算現在額45,485,360,000円に対し支出済額39,660,519,320円、不用額5,415,041,680円であった",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "都市整備費",
+     "住宅政策費",
+     "不用額",
+     "5415041680"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "住宅政策費",
+     "不用額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!G99",
+   "hold_reason": null,
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "engine_parent": "都市整備費",
+   "engine_key6": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "都市整備費",
+     "住宅政策費",
+     "不用額",
+     "5415041680"
+    ]
+   ],
+   "agree_6": true,
+   "agree_4": true,
+   "only_4": false,
+   "verdict": "正しい接続",
+   "parent_correct": null
+  },
+  {
+   "id": "R018",
+   "value": 372000000,
+   "novelty": "新規",
+   "sentence": "特別会計では、小笠原諸島生活再建資金会計の貸付費が予算現在額372,000,000円に対し支出済額0円で、不用額がそのまま372,000,000円となっている",
+   "label6": [
+    "label",
+    [
+     "小笠原諸島生活再建資金会計",
+     "款",
+     "",
+     "貸付費",
+     "予算現額",
+     "372000000"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "小笠原諸島生活再建資金会計",
+     "款",
+     "貸付費",
+     "予算現額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "UNVERIFIABLE",
+   "route": null,
+   "pointer": null,
+   "hold_reason": "6 欄が一意でない(4 通り。値で選ばない)",
+   "parent_cues": [
+    "小笠原諸島生活再建資金会計"
+   ],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "engine_parent": null,
+   "engine_key6": null,
+   "agree_6": false,
+   "agree_4": false,
+   "only_4": false,
+   "verdict": "結べなかった(誤接続ではない)",
+   "parent_correct": null
+  },
+  {
+   "id": "R019",
+   "value": 0,
+   "novelty": "再出",
+   "sentence": "特別会計では、小笠原諸島生活再建資金会計の貸付費が予算現在額372,000,000円に対し支出済額0円で、不用額がそのまま372,000,000円となっている",
+   "label6": [
+    "label",
+    [
+     "小笠原諸島生活再建資金会計",
+     "款",
+     "",
+     "貸付費",
+     "支出済額",
+     "0"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "小笠原諸島生活再建資金会計",
+     "款",
+     "貸付費",
+     "支出済額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "UNVERIFIABLE",
+   "route": null,
+   "pointer": null,
+   "hold_reason": "6 欄が一意でない(9 通り。値で選ばない)",
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "engine_parent": null,
+   "engine_key6": null,
+   "agree_6": false,
+   "agree_4": false,
+   "only_4": false,
+   "verdict": "結べなかった(誤接続ではない)",
+   "parent_correct": null
+  },
+  {
+   "id": "R020",
+   "value": 372000000,
+   "novelty": "新規",
+   "sentence": "特別会計では、小笠原諸島生活再建資金会計の貸付費が予算現在額372,000,000円に対し支出済額0円で、不用額がそのまま372,000,000円となっている",
+   "label6": [
+    "label",
+    [
+     "小笠原諸島生活再建資金会計",
+     "款",
+     "",
+     "貸付費",
+     "不用額",
+     "372000000"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "小笠原諸島生活再建資金会計",
+     "款",
+     "貸付費",
+     "不用額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "UNVERIFIABLE",
+   "route": null,
+   "pointer": null,
+   "hold_reason": "6 欄が一意でない(9 通り。値で選ばない)",
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "engine_parent": null,
+   "engine_key6": null,
+   "agree_6": false,
+   "agree_4": false,
+   "only_4": false,
+   "verdict": "結べなかった(誤接続ではない)",
+   "parent_correct": null
+  },
+  {
+   "id": "R021",
+   "value": 48000000,
+   "novelty": "新規",
+   "sentence": "沿岸漁業改善資金助成会計の助成費も予算現在額48,000,000円に対し支出済額はわずか44,385円にとどまり、不用額47,955,615円が生じた",
+   "label6": [
+    "label",
+    [
+     "沿岸漁業改善資金助成会計",
+     "款",
+     "",
+     "助成費",
+     "予算現額",
+     "48000000"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "沿岸漁業改善資金助成会計",
+     "款",
+     "助成費",
+     "予算現額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "UNVERIFIABLE",
+   "route": null,
+   "pointer": null,
+   "hold_reason": "6 欄が一意でない(6 通り。値で選ばない)",
+   "parent_cues": [
+    "沿岸漁業改善資金助成会計"
+   ],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "engine_parent": null,
+   "engine_key6": null,
+   "agree_6": false,
+   "agree_4": false,
+   "only_4": false,
+   "verdict": "結べなかった(誤接続ではない)",
+   "parent_correct": null
+  },
+  {
+   "id": "R022",
+   "value": 44385,
+   "novelty": "新規",
+   "sentence": "沿岸漁業改善資金助成会計の助成費も予算現在額48,000,000円に対し支出済額はわずか44,385円にとどまり、不用額47,955,615円が生じた",
+   "label6": [
+    "label",
+    [
+     "沿岸漁業改善資金助成会計",
+     "款",
+     "",
+     "助成費",
+     "支出済額",
+     "44385"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "沿岸漁業改善資金助成会計",
+     "款",
+     "助成費",
+     "支出済額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "UNVERIFIABLE",
+   "route": null,
+   "pointer": null,
+   "hold_reason": "6 欄が一意でない(7 通り。値で選ばない)",
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "engine_parent": null,
+   "engine_key6": null,
+   "agree_6": false,
+   "agree_4": false,
+   "only_4": false,
+   "verdict": "結べなかった(誤接続ではない)",
+   "parent_correct": null
+  },
+  {
+   "id": "R023",
+   "value": 47955615,
+   "novelty": "新規",
+   "sentence": "沿岸漁業改善資金助成会計の助成費も予算現在額48,000,000円に対し支出済額はわずか44,385円にとどまり、不用額47,955,615円が生じた",
+   "label6": [
+    "label",
+    [
+     "沿岸漁業改善資金助成会計",
+     "款",
+     "",
+     "助成費",
+     "不用額",
+     "47955615"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "沿岸漁業改善資金助成会計",
+     "款",
+     "助成費",
+     "不用額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "UNVERIFIABLE",
+   "route": null,
+   "pointer": null,
+   "hold_reason": "6 欄が一意でない(7 通り。値で選ばない)",
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "engine_parent": null,
+   "engine_key6": null,
+   "agree_6": false,
+   "agree_4": false,
+   "only_4": false,
+   "verdict": "結べなかった(誤接続ではない)",
+   "parent_correct": null
+  },
+  {
+   "id": "R024",
+   "value": 3155000000,
+   "novelty": "新規",
+   "sentence": "心身障害者扶養年金会計の扶養年金費は予算現在額3,155,000,000円に対し支出済額2,866,560,633円、都市開発資金会計の用地費は予算現在額7,966,000,000円に対し支出済額5,990,312,855円、臨海都市基盤整備事業会計の臨海都市基盤整備費は予算現在額1,411,988,000円に対し支出済額405,774,394円であった",
+   "label6": [
+    "label",
+    [
+     "心身障害者扶養年金会計",
+     "款",
+     "",
+     "扶養年金費",
+     "予算現額",
+     "3155000000"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "心身障害者扶養年金会計",
+     "款",
+     "扶養年金費",
+     "予算現額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "UNVERIFIABLE",
+   "route": null,
+   "pointer": null,
+   "hold_reason": "6 欄が一意でない(2 通り。値で選ばない)",
+   "parent_cues": [
+    "心身障害者扶養年金会計"
+   ],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "engine_parent": null,
+   "engine_key6": null,
+   "agree_6": false,
+   "agree_4": false,
+   "only_4": false,
+   "verdict": "結べなかった(誤接続ではない)",
+   "parent_correct": null
+  },
+  {
+   "id": "R025",
+   "value": 2866560633,
+   "novelty": "新規",
+   "sentence": "心身障害者扶養年金会計の扶養年金費は予算現在額3,155,000,000円に対し支出済額2,866,560,633円、都市開発資金会計の用地費は予算現在額7,966,000,000円に対し支出済額5,990,312,855円、臨海都市基盤整備事業会計の臨海都市基盤整備費は予算現在額1,411,988,000円に対し支出済額405,774,394円であった",
+   "label6": [
+    "label",
+    [
+     "心身障害者扶養年金会計",
+     "款",
+     "",
+     "扶養年金費",
+     "支出済額",
+     "2866560633"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "心身障害者扶養年金会計",
+     "款",
+     "扶養年金費",
+     "支出済額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "UNVERIFIABLE",
+   "route": null,
+   "pointer": null,
+   "hold_reason": "6 欄が一意でない(3 通り。値で選ばない)",
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "engine_parent": null,
+   "engine_key6": null,
+   "agree_6": false,
+   "agree_4": false,
+   "only_4": false,
+   "verdict": "結べなかった(誤接続ではない)",
+   "parent_correct": null
+  },
+  {
+   "id": "R026",
+   "value": 7966000000,
+   "novelty": "新規",
+   "sentence": "心身障害者扶養年金会計の扶養年金費は予算現在額3,155,000,000円に対し支出済額2,866,560,633円、都市開発資金会計の用地費は予算現在額7,966,000,000円に対し支出済額5,990,312,855円、臨海都市基盤整備事業会計の臨海都市基盤整備費は予算現在額1,411,988,000円に対し支出済額405,774,394円であった",
+   "label6": [
+    "label",
+    [
+     "都市開発資金会計",
+     "款",
+     "",
+     "用地費",
+     "予算現額",
+     "7966000000"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "都市開発資金会計",
+     "款",
+     "用地費",
+     "予算現額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "UNVERIFIABLE",
+   "route": null,
+   "pointer": null,
+   "hold_reason": "6 欄が一意でない(3 通り。値で選ばない)",
+   "parent_cues": [
+    "都市開発資金会計"
+   ],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "engine_parent": null,
+   "engine_key6": null,
+   "agree_6": false,
+   "agree_4": false,
+   "only_4": false,
+   "verdict": "結べなかった(誤接続ではない)",
+   "parent_correct": null
+  },
+  {
+   "id": "R027",
+   "value": 5990312855,
+   "novelty": "新規",
+   "sentence": "心身障害者扶養年金会計の扶養年金費は予算現在額3,155,000,000円に対し支出済額2,866,560,633円、都市開発資金会計の用地費は予算現在額7,966,000,000円に対し支出済額5,990,312,855円、臨海都市基盤整備事業会計の臨海都市基盤整備費は予算現在額1,411,988,000円に対し支出済額405,774,394円であった",
+   "label6": [
+    "label",
+    [
+     "都市開発資金会計",
+     "款",
+     "",
+     "用地費",
+     "支出済額",
+     "5990312855"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "都市開発資金会計",
+     "款",
+     "用地費",
+     "支出済額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "UNVERIFIABLE",
+   "route": null,
+   "pointer": null,
+   "hold_reason": "6 欄が一意でない(3 通り。値で選ばない)",
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "engine_parent": null,
+   "engine_key6": null,
+   "agree_6": false,
+   "agree_4": false,
+   "only_4": false,
+   "verdict": "結べなかった(誤接続ではない)",
+   "parent_correct": null
+  },
+  {
+   "id": "R028",
+   "value": 1411988000,
+   "novelty": "新規",
+   "sentence": "心身障害者扶養年金会計の扶養年金費は予算現在額3,155,000,000円に対し支出済額2,866,560,633円、都市開発資金会計の用地費は予算現在額7,966,000,000円に対し支出済額5,990,312,855円、臨海都市基盤整備事業会計の臨海都市基盤整備費は予算現在額1,411,988,000円に対し支出済額405,774,394円であった",
+   "label6": [
+    "label",
+    [
+     "臨海都市基盤整備事業会計",
+     "款",
+     "",
+     "臨海都市基盤整備費",
+     "予算現額",
+     "1411988000"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "臨海都市基盤整備事業会計",
+     "款",
+     "臨海都市基盤整備費",
+     "予算現額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "UNVERIFIABLE",
+   "route": null,
+   "pointer": null,
+   "hold_reason": "6 欄が一意でない(2 通り。値で選ばない)",
+   "parent_cues": [
+    "臨海都市基盤整備事業会計"
+   ],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "engine_parent": null,
+   "engine_key6": null,
+   "agree_6": false,
+   "agree_4": false,
+   "only_4": false,
+   "verdict": "結べなかった(誤接続ではない)",
+   "parent_correct": null
+  },
+  {
+   "id": "R029",
+   "value": 405774394,
+   "novelty": "新規",
+   "sentence": "心身障害者扶養年金会計の扶養年金費は予算現在額3,155,000,000円に対し支出済額2,866,560,633円、都市開発資金会計の用地費は予算現在額7,966,000,000円に対し支出済額5,990,312,855円、臨海都市基盤整備事業会計の臨海都市基盤整備費は予算現在額1,411,988,000円に対し支出済額405,774,394円であった",
+   "label6": [
+    "label",
+    [
+     "臨海都市基盤整備事業会計",
+     "款",
+     "",
+     "臨海都市基盤整備費",
+     "支出済額",
+     "405774394"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "臨海都市基盤整備事業会計",
+     "款",
+     "臨海都市基盤整備費",
+     "支出済額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "UNVERIFIABLE",
+   "route": null,
+   "pointer": null,
+   "hold_reason": "6 欄が一意でない(2 通り。値で選ばない)",
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "engine_parent": null,
+   "engine_key6": null,
+   "agree_6": false,
+   "agree_4": false,
+   "only_4": false,
+   "verdict": "結べなかった(誤接続ではない)",
+   "parent_correct": null
+  },
+  {
+   "id": "R030",
+   "value": 5942803687,
+   "novelty": "新規",
+   "sentence": "目別では、国民健康保険事業会計の財政安定化基金積立金が5,942,803,687円、東京都立病院機構貸付等事業会計の貸付費が15,018,000,000円の支出済額となっている",
+   "label6": [
+    "label",
+    [
+     "国民健康保険事業会計",
+     "目",
+     "国民健康保険事業費>国民健康保険事業費",
+     "財政安定化基金積立金",
+     "支出済額",
+     "5942803687"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "国民健康保険事業会計",
+     "目",
+     "財政安定化基金積立金",
+     "支出済額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "UNVERIFIABLE",
+   "route": null,
+   "pointer": null,
+   "hold_reason": "6 欄が一意でない(7 通り。値で選ばない)",
+   "parent_cues": [
+    "国民健康保険事業会計"
+   ],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "engine_parent": null,
+   "engine_key6": null,
+   "agree_6": false,
+   "agree_4": false,
+   "only_4": false,
+   "verdict": "結べなかった(誤接続ではない)",
+   "parent_correct": null
+  },
+  {
+   "id": "R031",
+   "value": 15018000000,
+   "novelty": "新規",
+   "sentence": "目別では、国民健康保険事業会計の財政安定化基金積立金が5,942,803,687円、東京都立病院機構貸付等事業会計の貸付費が15,018,000,000円の支出済額となっている",
+   "label6": [
+    "label",
+    [
+     "地方独立行政法人東京都立病院機構貸付等事業会計",
+     "目",
+     "貸付等事業費>貸付等事業費",
+     "貸付費",
+     "支出済額",
+     "15018000000"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "地方独立行政法人東京都立病院機構貸付等事業会計",
+     "目",
+     "貸付費",
+     "支出済額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "UNVERIFIABLE",
+   "route": null,
+   "pointer": null,
+   "hold_reason": "6 欄が一意でない(35 通り。値で選ばない)",
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "engine_parent": null,
+   "engine_key6": null,
+   "agree_6": false,
+   "agree_4": false,
+   "only_4": false,
+   "verdict": "結べなかった(誤接続ではない)",
+   "parent_correct": null
+  },
+  {
+   "id": "R032",
+   "value": 2231253401,
+   "novelty": "新規",
+   "sentence": "公債費会計の管理費は支出済額2,231,253,401円に対し補正予算額10,500,388,000円が計上され、と場会計の運営費は支出済額3,129,389,173円に対し補正予算額はマイナス48,327,000円であった",
+   "label6": [
+    "label",
+    [
+     "公債費会計",
+     "目",
+     "公債費>公債費",
+     "管理費",
+     "支出済額",
+     "2231253401"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "公債費会計",
+     "目",
+     "管理費",
+     "支出済額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "UNVERIFIABLE",
+   "route": null,
+   "pointer": null,
+   "hold_reason": "6 欄が一意でない(61 通り。値で選ばない)",
+   "parent_cues": [
+    "公債費会計"
+   ],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "engine_parent": null,
+   "engine_key6": null,
+   "agree_6": false,
+   "agree_4": false,
+   "only_4": false,
+   "verdict": "結べなかった(誤接続ではない)",
+   "parent_correct": null
+  },
+  {
+   "id": "R033",
+   "value": 10500388000,
+   "novelty": "新規",
+   "sentence": "公債費会計の管理費は支出済額2,231,253,401円に対し補正予算額10,500,388,000円が計上され、と場会計の運営費は支出済額3,129,389,173円に対し補正予算額はマイナス48,327,000円であった",
+   "label6": [
+    "label",
+    [
+     "公債費会計",
+     "目",
+     "公債費>公債費",
+     "管理費",
+     "補正予算額",
+     "10500388000"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "公債費会計",
+     "目",
+     "管理費",
+     "補正予算額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "UNVERIFIABLE",
+   "route": null,
+   "pointer": null,
+   "hold_reason": "6 欄が一意でない(61 通り。値で選ばない)",
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "engine_parent": null,
+   "engine_key6": null,
+   "agree_6": false,
+   "agree_4": false,
+   "only_4": false,
+   "verdict": "結べなかった(誤接続ではない)",
+   "parent_correct": null
+  },
+  {
+   "id": "R034",
+   "value": 3129389173,
+   "novelty": "新規",
+   "sentence": "公債費会計の管理費は支出済額2,231,253,401円に対し補正予算額10,500,388,000円が計上され、と場会計の運営費は支出済額3,129,389,173円に対し補正予算額はマイナス48,327,000円であった",
+   "label6": [
+    "label",
+    [
+     "と場会計",
+     "目",
+     "と場事業費>と場事業費",
+     "運営費",
+     "支出済額",
+     "3129389173"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "と場会計",
+     "目",
+     "運営費",
+     "支出済額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "UNVERIFIABLE",
+   "route": null,
+   "pointer": null,
+   "hold_reason": "列 の手がかりが 2 つ以上: 支出済額・計",
+   "parent_cues": [
+    "と場会計"
+   ],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "engine_parent": null,
+   "engine_key6": null,
+   "agree_6": false,
+   "agree_4": false,
+   "only_4": false,
+   "verdict": "結べなかった(誤接続ではない)",
+   "parent_correct": null
+  },
+  {
+   "id": "R035",
+   "value": 48327000,
+   "novelty": "新規",
+   "sentence": "公債費会計の管理費は支出済額2,231,253,401円に対し補正予算額10,500,388,000円が計上され、と場会計の運営費は支出済額3,129,389,173円に対し補正予算額はマイナス48,327,000円であった",
+   "label6": [
+    "label",
+    [
+     "と場会計",
+     "目",
+     "と場事業費>と場事業費",
+     "運営費",
+     "補正予算額",
+     "-48327000"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "と場会計",
+     "目",
+     "運営費",
+     "補正予算額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "VALUE_MISMATCH",
+   "route": null,
+   "pointer": "sheet:事項別明細!G51",
+   "hold_reason": null,
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "engine_parent": null,
+   "engine_key6": null,
+   "agree_6": false,
+   "agree_4": false,
+   "only_4": false,
+   "verdict": "結べなかった(誤接続ではない)",
+   "parent_correct": null
+  }
+ ],
+ "rows_old": [
+  {
+   "id": "R001",
+   "value": 10169000000,
+   "novelty": "新規",
+   "sentence": "一般会計の歳出では、総務費のうち子供政策連携費が予算現在額10,169,000,000円に対し支出済額8,311,548,667円で、不用額は1,857,451,333円となった",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "総務費",
+     "子供政策連携費",
+     "予算現額",
+     "10169000000"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "子供政策連携費",
+     "予算現額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "UNVERIFIABLE",
+   "route": null,
+   "pointer": null,
+   "hold_reason": "列 の手がかりが 2 つ以上: 予算現額・歳出決算額",
+   "parent_cues": [
+    "一般会計",
+    "総務費"
+   ],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "engine_parent": null,
+   "engine_key6": null,
+   "agree_6": false,
+   "agree_4": false,
+   "only_4": false,
+   "verdict": "結べなかった(誤接続ではない)",
+   "parent_correct": null
+  },
+  {
+   "id": "R002",
+   "value": 8311548667,
+   "novelty": "新規",
+   "sentence": "一般会計の歳出では、総務費のうち子供政策連携費が予算現在額10,169,000,000円に対し支出済額8,311,548,667円で、不用額は1,857,451,333円となった",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "総務費",
+     "子供政策連携費",
+     "支出済額",
+     "8311548667"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "子供政策連携費",
+     "支出済額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!E25",
+   "hold_reason": null,
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "engine_parent": "総務費",
+   "engine_key6": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "総務費",
+     "子供政策連携費",
+     "支出済額",
+     "8311548667"
+    ]
+   ],
+   "agree_6": true,
+   "agree_4": true,
+   "only_4": false,
+   "verdict": "正しい接続",
+   "parent_correct": null
+  },
+  {
+   "id": "R003",
+   "value": 1857451333,
+   "novelty": "新規",
+   "sentence": "一般会計の歳出では、総務費のうち子供政策連携費が予算現在額10,169,000,000円に対し支出済額8,311,548,667円で、不用額は1,857,451,333円となった",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "総務費",
+     "子供政策連携費",
+     "不用額",
+     "1857451333"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "子供政策連携費",
+     "不用額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!G25",
+   "hold_reason": null,
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "engine_parent": "総務費",
+   "engine_key6": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "総務費",
+     "子供政策連携費",
+     "不用額",
+     "1857451333"
+    ]
+   ],
+   "agree_6": true,
+   "agree_4": true,
+   "only_4": false,
+   "verdict": "正しい接続",
+   "parent_correct": null
+  },
+  {
+   "id": "R004",
+   "value": 28268927000,
+   "novelty": "新規",
+   "sentence": "同じ総務費のスタートアップ・国際金融都市戦略費は予算現在額28,268,927,000円に対し支出済額23,506,146,400円、防災管理費は予算現在額16,512,904,000円に対し支出済額13,352,967,071円で不用額3,146,001,929円であった",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "総務費",
+     "スタートアップ・国際金融都市戦略費",
+     "予算現額",
+     "28268927000"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "スタートアップ・国際金融都市戦略費",
+     "予算現額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!D28",
+   "hold_reason": null,
+   "parent_cues": [
+    "総務費"
+   ],
+   "parent_filtered": true,
+   "parent_kept": [
+    "総務費"
+   ],
+   "engine_parent": "総務費",
+   "engine_key6": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "総務費",
+     "スタートアップ・国際金融都市戦略費",
+     "予算現額",
+     "28268927000"
+    ]
+   ],
+   "agree_6": true,
+   "agree_4": true,
+   "only_4": false,
+   "verdict": "正しい接続",
+   "parent_correct": true,
+   "label_parent": "総務費"
+  },
+  {
+   "id": "R005",
+   "value": 23506146400,
+   "novelty": "新規",
+   "sentence": "同じ総務費のスタートアップ・国際金融都市戦略費は予算現在額28,268,927,000円に対し支出済額23,506,146,400円、防災管理費は予算現在額16,512,904,000円に対し支出済額13,352,967,071円で不用額3,146,001,929円であった",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "総務費",
+     "スタートアップ・国際金融都市戦略費",
+     "支出済額",
+     "23506146400"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "スタートアップ・国際金融都市戦略費",
+     "支出済額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!E28",
+   "hold_reason": null,
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "engine_parent": "総務費",
+   "engine_key6": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "総務費",
+     "スタートアップ・国際金融都市戦略費",
+     "支出済額",
+     "23506146400"
+    ]
+   ],
+   "agree_6": true,
+   "agree_4": true,
+   "only_4": false,
+   "verdict": "正しい接続",
+   "parent_correct": null
+  },
+  {
+   "id": "R006",
+   "value": 16512904000,
+   "novelty": "新規",
+   "sentence": "同じ総務費のスタートアップ・国際金融都市戦略費は予算現在額28,268,927,000円に対し支出済額23,506,146,400円、防災管理費は予算現在額16,512,904,000円に対し支出済額13,352,967,071円で不用額3,146,001,929円であった",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "総務費",
+     "防災管理費",
+     "予算現額",
+     "16512904000"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "防災管理費",
+     "予算現額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!D40",
+   "hold_reason": null,
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "engine_parent": "総務費",
+   "engine_key6": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "総務費",
+     "防災管理費",
+     "予算現額",
+     "16512904000"
+    ]
+   ],
+   "agree_6": true,
+   "agree_4": true,
+   "only_4": false,
+   "verdict": "正しい接続",
+   "parent_correct": null
+  },
+  {
+   "id": "R007",
+   "value": 13352967071,
+   "novelty": "新規",
+   "sentence": "同じ総務費のスタートアップ・国際金融都市戦略費は予算現在額28,268,927,000円に対し支出済額23,506,146,400円、防災管理費は予算現在額16,512,904,000円に対し支出済額13,352,967,071円で不用額3,146,001,929円であった",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "総務費",
+     "防災管理費",
+     "支出済額",
+     "13352967071"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "防災管理費",
+     "支出済額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!E40",
+   "hold_reason": null,
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "engine_parent": "総務費",
+   "engine_key6": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "総務費",
+     "防災管理費",
+     "支出済額",
+     "13352967071"
+    ]
+   ],
+   "agree_6": true,
+   "agree_4": true,
+   "only_4": false,
+   "verdict": "正しい接続",
+   "parent_correct": null
+  },
+  {
+   "id": "R008",
+   "value": 3146001929,
+   "novelty": "新規",
+   "sentence": "同じ総務費のスタートアップ・国際金融都市戦略費は予算現在額28,268,927,000円に対し支出済額23,506,146,400円、防災管理費は予算現在額16,512,904,000円に対し支出済額13,352,967,071円で不用額3,146,001,929円であった",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "総務費",
+     "防災管理費",
+     "不用額",
+     "3146001929"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "防災管理費",
+     "不用額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!G40",
+   "hold_reason": null,
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "engine_parent": "総務費",
+   "engine_key6": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "総務費",
+     "防災管理費",
+     "不用額",
+     "3146001929"
+    ]
+   ],
+   "agree_6": true,
+   "agree_4": true,
+   "only_4": false,
+   "verdict": "正しい接続",
+   "parent_correct": null
+  },
+  {
+   "id": "R009",
+   "value": 14286115103,
+   "novelty": "新規",
+   "sentence": "総務費退職手当及年金費の退職費は支出済額14,286,115,103円に達している",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "目",
+     "総務費>退職手当及年金費",
+     "退職費",
+     "支出済額",
+     "14286115103"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "目",
+     "退職費",
+     "支出済額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:事項別明細!R2259",
+   "hold_reason": null,
+   "parent_cues": [
+    "総務費",
+    "退職手当及年金費"
+   ],
+   "parent_filtered": true,
+   "parent_kept": [
+    "総務費 > 退職手当及年金費"
+   ],
+   "engine_parent": "総務費 > 退職手当及年金費",
+   "engine_key6": [
+    "label",
+    [
+     "一般会計",
+     "目",
+     "総務費>退職手当及年金費",
+     "退職費",
+     "支出済額",
+     "14286115103"
+    ]
+   ],
+   "agree_6": true,
+   "agree_4": true,
+   "only_4": false,
+   "verdict": "正しい接続",
+   "parent_correct": true,
+   "label_parent": "総務費>退職手当及年金費"
+  },
+  {
+   "id": "R010",
+   "value": 33285483000,
+   "novelty": "新規",
+   "sentence": "徴税費の徴税管理費は予算現在額33,285,483,000円に対し支出済額32,593,444,531円であった",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "徴税費",
+     "徴税管理費",
+     "予算現額",
+     "33285483000"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "徴税管理費",
+     "予算現額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!D64",
+   "hold_reason": null,
+   "parent_cues": [
+    "徴税費"
+   ],
+   "parent_filtered": true,
+   "parent_kept": [
+    "徴税費"
+   ],
+   "engine_parent": "徴税費",
+   "engine_key6": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "徴税費",
+     "徴税管理費",
+     "予算現額",
+     "33285483000"
+    ]
+   ],
+   "agree_6": true,
+   "agree_4": true,
+   "only_4": false,
+   "verdict": "正しい接続",
+   "parent_correct": true,
+   "label_parent": "徴税費"
+  },
+  {
+   "id": "R011",
+   "value": 32593444531,
+   "novelty": "新規",
+   "sentence": "徴税費の徴税管理費は予算現在額33,285,483,000円に対し支出済額32,593,444,531円であった",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "徴税費",
+     "徴税管理費",
+     "支出済額",
+     "32593444531"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "徴税管理費",
+     "支出済額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!E64",
+   "hold_reason": null,
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "engine_parent": "徴税費",
+   "engine_key6": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "徴税費",
+     "徴税管理費",
+     "支出済額",
+     "32593444531"
+    ]
+   ],
+   "agree_6": true,
+   "agree_4": true,
+   "only_4": false,
+   "verdict": "正しい接続",
+   "parent_correct": null
+  },
+  {
+   "id": "R012",
+   "value": 46526037000,
+   "novelty": "新規",
+   "sentence": "都市整備費では、市街地整備費が予算現在額46,526,037,000円に対し支出済額30,202,256,663円にとどまり、不用額は12,588,375,337円となった",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "都市整備費",
+     "市街地整備費",
+     "予算現額",
+     "46526037000"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "市街地整備費",
+     "予算現額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!D93",
+   "hold_reason": null,
+   "parent_cues": [
+    "都市整備費"
+   ],
+   "parent_filtered": true,
+   "parent_kept": [
+    "都市整備費"
+   ],
+   "engine_parent": "都市整備費",
+   "engine_key6": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "都市整備費",
+     "市街地整備費",
+     "予算現額",
+     "46526037000"
+    ]
+   ],
+   "agree_6": true,
+   "agree_4": true,
+   "only_4": false,
+   "verdict": "正しい接続",
+   "parent_correct": true,
+   "label_parent": "都市整備費"
+  },
+  {
+   "id": "R013",
+   "value": 30202256663,
+   "novelty": "新規",
+   "sentence": "都市整備費では、市街地整備費が予算現在額46,526,037,000円に対し支出済額30,202,256,663円にとどまり、不用額は12,588,375,337円となった",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "都市整備費",
+     "市街地整備費",
+     "支出済額",
+     "30202256663"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "市街地整備費",
+     "支出済額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!E93",
+   "hold_reason": null,
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "engine_parent": "都市整備費",
+   "engine_key6": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "都市整備費",
+     "市街地整備費",
+     "支出済額",
+     "30202256663"
+    ]
+   ],
+   "agree_6": true,
+   "agree_4": true,
+   "only_4": false,
+   "verdict": "正しい接続",
+   "parent_correct": null
+  },
+  {
+   "id": "R014",
+   "value": 12588375337,
+   "novelty": "新規",
+   "sentence": "都市整備費では、市街地整備費が予算現在額46,526,037,000円に対し支出済額30,202,256,663円にとどまり、不用額は12,588,375,337円となった",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "都市整備費",
+     "市街地整備費",
+     "不用額",
+     "12588375337"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "市街地整備費",
+     "不用額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!G93",
+   "hold_reason": null,
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "engine_parent": "都市整備費",
+   "engine_key6": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "都市整備費",
+     "市街地整備費",
+     "不用額",
+     "12588375337"
+    ]
+   ],
+   "agree_6": true,
+   "agree_4": true,
+   "only_4": false,
+   "verdict": "正しい接続",
+   "parent_correct": null
+  },
+  {
+   "id": "R015",
+   "value": 45485360000,
+   "novelty": "新規",
+   "sentence": "住宅政策費は予算現在額45,485,360,000円に対し支出済額39,660,519,320円、不用額5,415,041,680円であった",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "都市整備費",
+     "住宅政策費",
+     "予算現額",
+     "45485360000"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "住宅政策費",
+     "予算現額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!D99",
+   "hold_reason": null,
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "engine_parent": "都市整備費",
+   "engine_key6": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "都市整備費",
+     "住宅政策費",
+     "予算現額",
+     "45485360000"
+    ]
+   ],
+   "agree_6": true,
+   "agree_4": true,
+   "only_4": false,
+   "verdict": "正しい接続",
+   "parent_correct": null
+  },
+  {
+   "id": "R016",
+   "value": 39660519320,
+   "novelty": "新規",
+   "sentence": "住宅政策費は予算現在額45,485,360,000円に対し支出済額39,660,519,320円、不用額5,415,041,680円であった",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "都市整備費",
+     "住宅政策費",
+     "支出済額",
+     "39660519320"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "住宅政策費",
+     "支出済額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!E99",
+   "hold_reason": null,
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "engine_parent": "都市整備費",
+   "engine_key6": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "都市整備費",
+     "住宅政策費",
+     "支出済額",
+     "39660519320"
+    ]
+   ],
+   "agree_6": true,
+   "agree_4": true,
+   "only_4": false,
+   "verdict": "正しい接続",
+   "parent_correct": null
+  },
+  {
+   "id": "R017",
+   "value": 5415041680,
+   "novelty": "新規",
+   "sentence": "住宅政策費は予算現在額45,485,360,000円に対し支出済額39,660,519,320円、不用額5,415,041,680円であった",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "都市整備費",
+     "住宅政策費",
+     "不用額",
+     "5415041680"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "住宅政策費",
+     "不用額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!G99",
+   "hold_reason": null,
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "engine_parent": "都市整備費",
+   "engine_key6": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "都市整備費",
+     "住宅政策費",
+     "不用額",
+     "5415041680"
+    ]
+   ],
+   "agree_6": true,
+   "agree_4": true,
+   "only_4": false,
+   "verdict": "正しい接続",
+   "parent_correct": null
+  },
+  {
+   "id": "R018",
+   "value": 372000000,
+   "novelty": "新規",
+   "sentence": "特別会計では、小笠原諸島生活再建資金会計の貸付費が予算現在額372,000,000円に対し支出済額0円で、不用額がそのまま372,000,000円となっている",
+   "label6": [
+    "label",
+    [
+     "小笠原諸島生活再建資金会計",
+     "款",
+     "",
+     "貸付費",
+     "予算現額",
+     "372000000"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "小笠原諸島生活再建資金会計",
+     "款",
+     "貸付費",
+     "予算現額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "UNVERIFIABLE",
+   "route": null,
+   "pointer": null,
+   "hold_reason": "6 欄が一意でない(4 通り。値で選ばない)",
+   "parent_cues": [
+    "小笠原諸島生活再建資金会計"
+   ],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "engine_parent": null,
+   "engine_key6": null,
+   "agree_6": false,
+   "agree_4": false,
+   "only_4": false,
+   "verdict": "結べなかった(誤接続ではない)",
+   "parent_correct": null
+  },
+  {
+   "id": "R019",
+   "value": 0,
+   "novelty": "再出",
+   "sentence": "特別会計では、小笠原諸島生活再建資金会計の貸付費が予算現在額372,000,000円に対し支出済額0円で、不用額がそのまま372,000,000円となっている",
+   "label6": [
+    "label",
+    [
+     "小笠原諸島生活再建資金会計",
+     "款",
+     "",
+     "貸付費",
+     "支出済額",
+     "0"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "小笠原諸島生活再建資金会計",
+     "款",
+     "貸付費",
+     "支出済額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "UNVERIFIABLE",
+   "route": null,
+   "pointer": null,
+   "hold_reason": "6 欄が一意でない(13 通り。値で選ばない)",
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "engine_parent": null,
+   "engine_key6": null,
+   "agree_6": false,
+   "agree_4": false,
+   "only_4": false,
+   "verdict": "結べなかった(誤接続ではない)",
+   "parent_correct": null
+  },
+  {
+   "id": "R020",
+   "value": 372000000,
+   "novelty": "新規",
+   "sentence": "特別会計では、小笠原諸島生活再建資金会計の貸付費が予算現在額372,000,000円に対し支出済額0円で、不用額がそのまま372,000,000円となっている",
+   "label6": [
+    "label",
+    [
+     "小笠原諸島生活再建資金会計",
+     "款",
+     "",
+     "貸付費",
+     "不用額",
+     "372000000"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "小笠原諸島生活再建資金会計",
+     "款",
+     "貸付費",
+     "不用額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "UNVERIFIABLE",
+   "route": null,
+   "pointer": null,
+   "hold_reason": "6 欄が一意でない(13 通り。値で選ばない)",
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "engine_parent": null,
+   "engine_key6": null,
+   "agree_6": false,
+   "agree_4": false,
+   "only_4": false,
+   "verdict": "結べなかった(誤接続ではない)",
+   "parent_correct": null
+  },
+  {
+   "id": "R021",
+   "value": 48000000,
+   "novelty": "新規",
+   "sentence": "沿岸漁業改善資金助成会計の助成費も予算現在額48,000,000円に対し支出済額はわずか44,385円にとどまり、不用額47,955,615円が生じた",
+   "label6": [
+    "label",
+    [
+     "沿岸漁業改善資金助成会計",
+     "款",
+     "",
+     "助成費",
+     "予算現額",
+     "48000000"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "沿岸漁業改善資金助成会計",
+     "款",
+     "助成費",
+     "予算現額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "UNVERIFIABLE",
+   "route": null,
+   "pointer": null,
+   "hold_reason": "6 欄が一意でない(6 通り。値で選ばない)",
+   "parent_cues": [
+    "沿岸漁業改善資金助成会計"
+   ],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "engine_parent": null,
+   "engine_key6": null,
+   "agree_6": false,
+   "agree_4": false,
+   "only_4": false,
+   "verdict": "結べなかった(誤接続ではない)",
+   "parent_correct": null
+  },
+  {
+   "id": "R022",
+   "value": 44385,
+   "novelty": "新規",
+   "sentence": "沿岸漁業改善資金助成会計の助成費も予算現在額48,000,000円に対し支出済額はわずか44,385円にとどまり、不用額47,955,615円が生じた",
+   "label6": [
+    "label",
+    [
+     "沿岸漁業改善資金助成会計",
+     "款",
+     "",
+     "助成費",
+     "支出済額",
+     "44385"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "沿岸漁業改善資金助成会計",
+     "款",
+     "助成費",
+     "支出済額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "UNVERIFIABLE",
+   "route": null,
+   "pointer": null,
+   "hold_reason": "6 欄が一意でない(13 通り。値で選ばない)",
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "engine_parent": null,
+   "engine_key6": null,
+   "agree_6": false,
+   "agree_4": false,
+   "only_4": false,
+   "verdict": "結べなかった(誤接続ではない)",
+   "parent_correct": null
+  },
+  {
+   "id": "R023",
+   "value": 47955615,
+   "novelty": "新規",
+   "sentence": "沿岸漁業改善資金助成会計の助成費も予算現在額48,000,000円に対し支出済額はわずか44,385円にとどまり、不用額47,955,615円が生じた",
+   "label6": [
+    "label",
+    [
+     "沿岸漁業改善資金助成会計",
+     "款",
+     "",
+     "助成費",
+     "不用額",
+     "47955615"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "沿岸漁業改善資金助成会計",
+     "款",
+     "助成費",
+     "不用額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "UNVERIFIABLE",
+   "route": null,
+   "pointer": null,
+   "hold_reason": "6 欄が一意でない(13 通り。値で選ばない)",
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "engine_parent": null,
+   "engine_key6": null,
+   "agree_6": false,
+   "agree_4": false,
+   "only_4": false,
+   "verdict": "結べなかった(誤接続ではない)",
+   "parent_correct": null
+  },
+  {
+   "id": "R024",
+   "value": 3155000000,
+   "novelty": "新規",
+   "sentence": "心身障害者扶養年金会計の扶養年金費は予算現在額3,155,000,000円に対し支出済額2,866,560,633円、都市開発資金会計の用地費は予算現在額7,966,000,000円に対し支出済額5,990,312,855円、臨海都市基盤整備事業会計の臨海都市基盤整備費は予算現在額1,411,988,000円に対し支出済額405,774,394円であった",
+   "label6": [
+    "label",
+    [
+     "心身障害者扶養年金会計",
+     "款",
+     "",
+     "扶養年金費",
+     "予算現額",
+     "3155000000"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "心身障害者扶養年金会計",
+     "款",
+     "扶養年金費",
+     "予算現額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "UNVERIFIABLE",
+   "route": null,
+   "pointer": null,
+   "hold_reason": "6 欄が一意でない(2 通り。値で選ばない)",
+   "parent_cues": [
+    "心身障害者扶養年金会計"
+   ],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "engine_parent": null,
+   "engine_key6": null,
+   "agree_6": false,
+   "agree_4": false,
+   "only_4": false,
+   "verdict": "結べなかった(誤接続ではない)",
+   "parent_correct": null
+  },
+  {
+   "id": "R025",
+   "value": 2866560633,
+   "novelty": "新規",
+   "sentence": "心身障害者扶養年金会計の扶養年金費は予算現在額3,155,000,000円に対し支出済額2,866,560,633円、都市開発資金会計の用地費は予算現在額7,966,000,000円に対し支出済額5,990,312,855円、臨海都市基盤整備事業会計の臨海都市基盤整備費は予算現在額1,411,988,000円に対し支出済額405,774,394円であった",
+   "label6": [
+    "label",
+    [
+     "心身障害者扶養年金会計",
+     "款",
+     "",
+     "扶養年金費",
+     "支出済額",
+     "2866560633"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "心身障害者扶養年金会計",
+     "款",
+     "扶養年金費",
+     "支出済額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "UNVERIFIABLE",
+   "route": null,
+   "pointer": null,
+   "hold_reason": "6 欄が一意でない(5 通り。値で選ばない)",
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "engine_parent": null,
+   "engine_key6": null,
+   "agree_6": false,
+   "agree_4": false,
+   "only_4": false,
+   "verdict": "結べなかった(誤接続ではない)",
+   "parent_correct": null
+  },
+  {
+   "id": "R026",
+   "value": 7966000000,
+   "novelty": "新規",
+   "sentence": "心身障害者扶養年金会計の扶養年金費は予算現在額3,155,000,000円に対し支出済額2,866,560,633円、都市開発資金会計の用地費は予算現在額7,966,000,000円に対し支出済額5,990,312,855円、臨海都市基盤整備事業会計の臨海都市基盤整備費は予算現在額1,411,988,000円に対し支出済額405,774,394円であった",
+   "label6": [
+    "label",
+    [
+     "都市開発資金会計",
+     "款",
+     "",
+     "用地費",
+     "予算現額",
+     "7966000000"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "都市開発資金会計",
+     "款",
+     "用地費",
+     "予算現額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "UNVERIFIABLE",
+   "route": null,
+   "pointer": null,
+   "hold_reason": "6 欄が一意でない(3 通り。値で選ばない)",
+   "parent_cues": [
+    "都市開発資金会計"
+   ],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "engine_parent": null,
+   "engine_key6": null,
+   "agree_6": false,
+   "agree_4": false,
+   "only_4": false,
+   "verdict": "結べなかった(誤接続ではない)",
+   "parent_correct": null
+  },
+  {
+   "id": "R027",
+   "value": 5990312855,
+   "novelty": "新規",
+   "sentence": "心身障害者扶養年金会計の扶養年金費は予算現在額3,155,000,000円に対し支出済額2,866,560,633円、都市開発資金会計の用地費は予算現在額7,966,000,000円に対し支出済額5,990,312,855円、臨海都市基盤整備事業会計の臨海都市基盤整備費は予算現在額1,411,988,000円に対し支出済額405,774,394円であった",
+   "label6": [
+    "label",
+    [
+     "都市開発資金会計",
+     "款",
+     "",
+     "用地費",
+     "支出済額",
+     "5990312855"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "都市開発資金会計",
+     "款",
+     "用地費",
+     "支出済額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "UNVERIFIABLE",
+   "route": null,
+   "pointer": null,
+   "hold_reason": "6 欄が一意でない(6 通り。値で選ばない)",
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "engine_parent": null,
+   "engine_key6": null,
+   "agree_6": false,
+   "agree_4": false,
+   "only_4": false,
+   "verdict": "結べなかった(誤接続ではない)",
+   "parent_correct": null
+  },
+  {
+   "id": "R028",
+   "value": 1411988000,
+   "novelty": "新規",
+   "sentence": "心身障害者扶養年金会計の扶養年金費は予算現在額3,155,000,000円に対し支出済額2,866,560,633円、都市開発資金会計の用地費は予算現在額7,966,000,000円に対し支出済額5,990,312,855円、臨海都市基盤整備事業会計の臨海都市基盤整備費は予算現在額1,411,988,000円に対し支出済額405,774,394円であった",
+   "label6": [
+    "label",
+    [
+     "臨海都市基盤整備事業会計",
+     "款",
+     "",
+     "臨海都市基盤整備費",
+     "予算現額",
+     "1411988000"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "臨海都市基盤整備事業会計",
+     "款",
+     "臨海都市基盤整備費",
+     "予算現額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "UNVERIFIABLE",
+   "route": null,
+   "pointer": null,
+   "hold_reason": "6 欄が一意でない(2 通り。値で選ばない)",
+   "parent_cues": [
+    "臨海都市基盤整備事業会計"
+   ],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "engine_parent": null,
+   "engine_key6": null,
+   "agree_6": false,
+   "agree_4": false,
+   "only_4": false,
+   "verdict": "結べなかった(誤接続ではない)",
+   "parent_correct": null
+  },
+  {
+   "id": "R029",
+   "value": 405774394,
+   "novelty": "新規",
+   "sentence": "心身障害者扶養年金会計の扶養年金費は予算現在額3,155,000,000円に対し支出済額2,866,560,633円、都市開発資金会計の用地費は予算現在額7,966,000,000円に対し支出済額5,990,312,855円、臨海都市基盤整備事業会計の臨海都市基盤整備費は予算現在額1,411,988,000円に対し支出済額405,774,394円であった",
+   "label6": [
+    "label",
+    [
+     "臨海都市基盤整備事業会計",
+     "款",
+     "",
+     "臨海都市基盤整備費",
+     "支出済額",
+     "405774394"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "臨海都市基盤整備事業会計",
+     "款",
+     "臨海都市基盤整備費",
+     "支出済額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "UNVERIFIABLE",
+   "route": null,
+   "pointer": null,
+   "hold_reason": "6 欄が一意でない(4 通り。値で選ばない)",
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "engine_parent": null,
+   "engine_key6": null,
+   "agree_6": false,
+   "agree_4": false,
+   "only_4": false,
+   "verdict": "結べなかった(誤接続ではない)",
+   "parent_correct": null
+  },
+  {
+   "id": "R030",
+   "value": 5942803687,
+   "novelty": "新規",
+   "sentence": "目別では、国民健康保険事業会計の財政安定化基金積立金が5,942,803,687円、東京都立病院機構貸付等事業会計の貸付費が15,018,000,000円の支出済額となっている",
+   "label6": [
+    "label",
+    [
+     "東京都国民健康保険事業会計",
+     "目",
+     "国民健康保険事業費>国民健康保険事業費",
+     "財政安定化基金積立金",
+     "支出済額",
+     "5942803687"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "東京都国民健康保険事業会計",
+     "目",
+     "財政安定化基金積立金",
+     "支出済額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "UNVERIFIABLE",
+   "route": null,
+   "pointer": null,
+   "hold_reason": "6 欄が一意でない(7 通り。値で選ばない)",
+   "parent_cues": [
+    "国民健康保険事業会計"
+   ],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "engine_parent": null,
+   "engine_key6": null,
+   "agree_6": false,
+   "agree_4": false,
+   "only_4": false,
+   "verdict": "結べなかった(誤接続ではない)",
+   "parent_correct": null
+  },
+  {
+   "id": "R031",
+   "value": 15018000000,
+   "novelty": "新規",
+   "sentence": "目別では、国民健康保険事業会計の財政安定化基金積立金が5,942,803,687円、東京都立病院機構貸付等事業会計の貸付費が15,018,000,000円の支出済額となっている",
+   "label6": [
+    "label",
+    [
+     "東京都地方独立行政法人東京都立病院機構貸付等事業会計",
+     "目",
+     "貸付等事業費>貸付等事業費",
+     "貸付費",
+     "支出済額",
+     "15018000000"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "東京都地方独立行政法人東京都立病院機構貸付等事業会計",
+     "目",
+     "貸付費",
+     "支出済額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "UNVERIFIABLE",
+   "route": null,
+   "pointer": null,
+   "hold_reason": "6 欄が一意でない(35 通り。値で選ばない)",
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "engine_parent": null,
+   "engine_key6": null,
+   "agree_6": false,
+   "agree_4": false,
+   "only_4": false,
+   "verdict": "結べなかった(誤接続ではない)",
+   "parent_correct": null
+  },
+  {
+   "id": "R032",
+   "value": 2231253401,
+   "novelty": "新規",
+   "sentence": "公債費会計の管理費は支出済額2,231,253,401円に対し補正予算額10,500,388,000円が計上され、と場会計の運営費は支出済額3,129,389,173円に対し補正予算額はマイナス48,327,000円であった",
+   "label6": [
+    "label",
+    [
+     "東京都公債費会計",
+     "目",
+     "公債費>公債費",
+     "管理費",
+     "支出済額",
+     "2231253401"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "東京都公債費会計",
+     "目",
+     "管理費",
+     "支出済額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "UNVERIFIABLE",
+   "route": null,
+   "pointer": null,
+   "hold_reason": "6 欄が一意でない(61 通り。値で選ばない)",
+   "parent_cues": [
+    "公債費会計"
+   ],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "engine_parent": null,
+   "engine_key6": null,
+   "agree_6": false,
+   "agree_4": false,
+   "only_4": false,
+   "verdict": "結べなかった(誤接続ではない)",
+   "parent_correct": null
+  },
+  {
+   "id": "R033",
+   "value": 10500388000,
+   "novelty": "新規",
+   "sentence": "公債費会計の管理費は支出済額2,231,253,401円に対し補正予算額10,500,388,000円が計上され、と場会計の運営費は支出済額3,129,389,173円に対し補正予算額はマイナス48,327,000円であった",
+   "label6": [
+    "label",
+    [
+     "東京都公債費会計",
+     "目",
+     "公債費>公債費",
+     "管理費",
+     "補正予算額",
+     "10500388000"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "東京都公債費会計",
+     "目",
+     "管理費",
+     "補正予算額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "UNVERIFIABLE",
+   "route": null,
+   "pointer": null,
+   "hold_reason": "6 欄が一意でない(61 通り。値で選ばない)",
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "engine_parent": null,
+   "engine_key6": null,
+   "agree_6": false,
+   "agree_4": false,
+   "only_4": false,
+   "verdict": "結べなかった(誤接続ではない)",
+   "parent_correct": null
+  },
+  {
+   "id": "R034",
+   "value": 3129389173,
+   "novelty": "新規",
+   "sentence": "公債費会計の管理費は支出済額2,231,253,401円に対し補正予算額10,500,388,000円が計上され、と場会計の運営費は支出済額3,129,389,173円に対し補正予算額はマイナス48,327,000円であった",
+   "label6": [
+    "label",
+    [
+     "東京都と場会計",
+     "目",
+     "と場事業費>と場事業費",
+     "運営費",
+     "支出済額",
+     "3129389173"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "東京都と場会計",
+     "目",
+     "運営費",
+     "支出済額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "UNVERIFIABLE",
+   "route": null,
+   "pointer": null,
+   "hold_reason": "列 の手がかりが 2 つ以上: 支出済額・計",
+   "parent_cues": [
+    "と場会計"
+   ],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "engine_parent": null,
+   "engine_key6": null,
+   "agree_6": false,
+   "agree_4": false,
+   "only_4": false,
+   "verdict": "結べなかった(誤接続ではない)",
+   "parent_correct": null
+  },
+  {
+   "id": "R035",
+   "value": 48327000,
+   "novelty": "新規",
+   "sentence": "公債費会計の管理費は支出済額2,231,253,401円に対し補正予算額10,500,388,000円が計上され、と場会計の運営費は支出済額3,129,389,173円に対し補正予算額はマイナス48,327,000円であった",
+   "label6": [
+    "label",
+    [
+     "東京都と場会計",
+     "目",
+     "と場事業費>と場事業費",
+     "運営費",
+     "補正予算額",
+     "-48327000"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "東京都と場会計",
+     "目",
+     "運営費",
+     "補正予算額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "UNVERIFIABLE",
+   "route": null,
+   "pointer": null,
+   "hold_reason": "会計が未確認の別名(独立した裏づけ 3 本未満。値が合っても結ばない)",
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "engine_parent": null,
+   "engine_key6": null,
+   "agree_6": false,
+   "agree_4": false,
+   "only_4": false,
+   "verdict": "結べなかった(誤接続ではない)",
+   "parent_correct": null
+  }
+ ]
+}

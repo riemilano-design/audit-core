@@ -1,0 +1,641 @@
+{
+ "60": {
+  "N003": {
+   "state": "GROUNDED",
+   "pointer": [
+    "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration"
+   ],
+   "reason": null
+  },
+  "N009": {
+   "state": "GROUNDED",
+   "pointer": [
+    "xbrl:jpcrp_cor:TotalAssetsSummaryOfBusinessResults@CurrentYearInstant"
+   ],
+   "reason": null
+  },
+  "N011": {
+   "state": "GROUNDED",
+   "pointer": [
+    "xbrl:jpcrp_cor:EquityToAssetRatioSummaryOfBusinessResults@CurrentYearInstant"
+   ],
+   "reason": null
+  },
+  "N014": {
+   "state": "GROUNDED",
+   "pointer": [
+    "xbrl:jpcrp_cor:NetSalesSummaryOfBusinessResults@CurrentYearDuration"
+   ],
+   "reason": null
+  },
+  "N021": {
+   "state": "GROUNDED",
+   "pointer": [
+    "xbrl:jppfs_cor:NotesAndAccountsReceivableTrade@CurrentYearInstant"
+   ],
+   "reason": null
+  },
+  "N024": {
+   "state": "GROUNDED",
+   "pointer": [
+    "xbrl:jppfs_cor:GrossProfit@CurrentYearDuration"
+   ],
+   "reason": null
+  },
+  "N026": {
+   "state": "GROUNDED",
+   "pointer": [
+    "xbrl:jppfs_cor:GrossProfit@CurrentYearDuration",
+    "xbrl:jppfs_cor:GrossProfit@Prior1YearDuration",
+    "formula:a-b"
+   ],
+   "reason": null
+  },
+  "N063": {
+   "state": "GROUNDED",
+   "pointer": [
+    "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration",
+    "xbrl:jppfs_cor:OperatingIncome@Prior1YearDuration",
+    "formula:a-b"
+   ],
+   "reason": null
+  },
+  "N066": {
+   "state": "GROUNDED",
+   "pointer": [
+    "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration",
+    "xbrl:jppfs_cor:OperatingIncome@Prior1YearDuration",
+    "formula:a-b"
+   ],
+   "reason": null
+  },
+  "N089": {
+   "state": "GROUNDED",
+   "pointer": [
+    "xbrl:jpcrp_cor:OrdinaryIncomeLossSummaryOfBusinessResults@Prior1YearDuration"
+   ],
+   "reason": null
+  },
+  "N105": {
+   "state": "GROUNDED",
+   "pointer": [
+    "xbrl:jpcrp_cor:ProfitLossAttributableToOwnersOfParentSummaryOfBusinessResults@CurrentYearDuration"
+   ],
+   "reason": null
+  },
+  "N112": {
+   "state": "GROUNDED",
+   "pointer": [
+    "xbrl:jpcrp_cor:RateOfReturnOnEquitySummaryOfBusinessResults@CurrentYearDuration"
+   ],
+   "reason": null
+  },
+  "N130": {
+   "state": "GROUNDED",
+   "pointer": [
+    "xbrl:jpcrp_cor:TotalAssetsSummaryOfBusinessResults@CurrentYearInstant",
+    "xbrl:jpcrp_cor:TotalAssetsSummaryOfBusinessResults@Prior1YearInstant",
+    "formula:a-b"
+   ],
+   "reason": null
+  },
+  "N131": {
+   "state": "GROUNDED",
+   "pointer": [
+    "xbrl:jpcrp_cor:TotalAssetsSummaryOfBusinessResults@CurrentYearInstant",
+    "xbrl:jpcrp_cor:TotalAssetsSummaryOfBusinessResults@Prior1YearInstant"
+   ],
+   "reason": null
+  },
+  "N137": {
+   "state": "GROUNDED",
+   "pointer": [
+    "xbrl:jppfs_cor:CashAndDeposits@CurrentYearInstant",
+    "xbrl:jppfs_cor:CashAndDeposits@Prior1YearInstant",
+    "formula:a-b"
+   ],
+   "reason": null
+  },
+  "N138": {
+   "state": "GROUNDED",
+   "pointer": [
+    "xbrl:jppfs_cor:NotesAndAccountsReceivableTrade@CurrentYearInstant"
+   ],
+   "reason": null
+  },
+  "N143": {
+   "state": "GROUNDED",
+   "pointer": [
+    "xbrl:jppfs_cor:ContractAssets@CurrentYearInstant",
+    "xbrl:jppfs_cor:ContractAssets@Prior1YearInstant",
+    "formula:a-b"
+   ],
+   "reason": null
+  },
+  "N168": {
+   "state": "GROUNDED",
+   "pointer": [
+    "xbrl:jppfs_cor:InvestmentSecurities@CurrentYearInstant"
+   ],
+   "reason": null
+  },
+  "N170": {
+   "state": "GROUNDED",
+   "pointer": [
+    "xbrl:jppfs_cor:InvestmentSecurities@CurrentYearInstant",
+    "xbrl:jppfs_cor:InvestmentSecurities@Prior1YearInstant",
+    "formula:a-b"
+   ],
+   "reason": null
+  },
+  "N172": {
+   "state": "GROUNDED",
+   "pointer": [
+    "xbrl:jppfs_cor:ValuationDifferenceOnAvailableForSaleSecurities@CurrentYearInstant"
+   ],
+   "reason": null
+  },
+  "N174": {
+   "state": "GROUNDED",
+   "pointer": [
+    "xbrl:jppfs_cor:Liabilities@CurrentYearInstant"
+   ],
+   "reason": null
+  },
+  "N175": {
+   "state": "GROUNDED",
+   "pointer": [
+    "xbrl:jppfs_cor:Liabilities@Prior1YearInstant"
+   ],
+   "reason": null
+  },
+  "N178": {
+   "state": "GROUNDED",
+   "pointer": [
+    "xbrl:jppfs_cor:CurrentLiabilities@CurrentYearInstant"
+   ],
+   "reason": null
+  },
+  "N179": {
+   "state": "GROUNDED",
+   "pointer": [
+    "xbrl:jppfs_cor:CurrentLiabilities@Prior1YearInstant"
+   ],
+   "reason": null
+  },
+  "N181": {
+   "state": "UNVERIFIABLE",
+   "pointer": [],
+   "reason": "ambiguous(elements)"
+  },
+  "N187": {
+   "state": "GROUNDED",
+   "pointer": [
+    "xbrl:jppfs_cor:IncomeTaxesPayable@CurrentYearInstant"
+   ],
+   "reason": null
+  },
+  "N191": {
+   "state": "GROUNDED",
+   "pointer": [
+    "xbrl:jppfs_cor:ContractLiabilities@Prior1YearInstant"
+   ],
+   "reason": null
+  },
+  "N192": {
+   "state": "GROUNDED",
+   "pointer": [
+    "xbrl:jppfs_cor:ContractLiabilities@CurrentYearInstant",
+    "xbrl:jppfs_cor:ContractLiabilities@Prior1YearInstant",
+    "formula:a-b"
+   ],
+   "reason": null
+  },
+  "N193": {
+   "state": "GROUNDED",
+   "pointer": [
+    "xbrl:jppfs_cor:CurrentPortionOfLongTermLoansPayable@CurrentYearInstant"
+   ],
+   "reason": null
+  },
+  "N205": {
+   "state": "GROUNDED",
+   "pointer": [
+    "xbrl:jppfs_cor:DeferredTaxLiabilities@CurrentYearInstant"
+   ],
+   "reason": null
+  },
+  "N214": {
+   "state": "UNVERIFIABLE",
+   "pointer": [],
+   "reason": "ambiguous(elements)"
+  },
+  "N218": {
+   "state": "GROUNDED",
+   "pointer": [
+    "xbrl:jppfs_cor:LongTermLoansPayable@CurrentYearInstant"
+   ],
+   "reason": null
+  },
+  "N219": {
+   "state": "VALUE_MISMATCH",
+   "pointer": [
+    "xbrl:jppfs_cor:LongTermLoansPayable@CurrentYearInstant"
+   ],
+   "reason": null
+  },
+  "N241": {
+   "state": "GROUNDED",
+   "pointer": [
+    "xbrl:jppfs_cor:ValuationDifferenceOnAvailableForSaleSecurities@CurrentYearInstant"
+   ],
+   "reason": null
+  },
+  "N249": {
+   "state": "GROUNDED",
+   "pointer": [
+    "xbrl:jppfs_cor:DividendsFromSurplus@CurrentYearDuration"
+   ],
+   "reason": null
+  },
+  "N264": {
+   "state": "GROUNDED",
+   "pointer": [
+    "xbrl:jppfs_cor:IncomeBeforeIncomeTaxes@CurrentYearDuration"
+   ],
+   "reason": null
+  },
+  "N267": {
+   "state": "UNVERIFIABLE",
+   "pointer": [],
+   "reason": "ambiguous(elements)"
+  },
+  "N278": {
+   "state": "GROUNDED",
+   "pointer": [
+    "xbrl:jppfs_cor:IncomeBeforeIncomeTaxes@CurrentYearDuration",
+    "xbrl:jppfs_cor:IncomeBeforeIncomeTaxes@Prior1YearDuration",
+    "formula:a-b"
+   ],
+   "reason": null
+  },
+  "N282": {
+   "state": "GROUNDED",
+   "pointer": [
+    "xbrl:jppfs_cor:DecreaseIncreaseInNotesAndAccountsReceivableTradeOpeCF@Prior1YearDuration"
+   ],
+   "reason": null
+  },
+  "N288": {
+   "state": "GROUNDED",
+   "pointer": [
+    "xbrl:jppfs_cor:PurchaseOfIntangibleAssetsInvCF@CurrentYearDuration"
+   ],
+   "reason": null
+  },
+  "N289": {
+   "state": "VALUE_MISMATCH",
+   "pointer": [
+    "xbrl:jppfs_cor:PurchaseOfIntangibleAssetsInvCF@CurrentYearDuration"
+   ],
+   "reason": null
+  },
+  "N291": {
+   "state": "GROUNDED",
+   "pointer": [
+    "xbrl:jpcrp_cor:CapitalExpendituresOverviewOfCapitalExpendituresEtc@CurrentYearDuration"
+   ],
+   "reason": null
+  },
+  "N298": {
+   "state": "GROUNDED",
+   "pointer": [
+    "xbrl:jppfs_cor:CashDividendsPaidFinCF@CurrentYearDuration"
+   ],
+   "reason": null
+  },
+  "N303": {
+   "state": "GROUNDED",
+   "pointer": [
+    "xbrl:jppfs_cor:CashAndDeposits@CurrentYearInstant"
+   ],
+   "reason": null
+  },
+  "T018": {
+   "state": "GROUNDED",
+   "pointer": [
+    "xbrl:jppfs_cor:GrossProfit@CurrentYearDuration",
+    "xbrl:jppfs_cor:GrossProfit@Prior1YearDuration",
+    "builtin:sign(cur-prior)"
+   ],
+   "reason": null
+  },
+  "T020": {
+   "state": "GROUNDED",
+   "pointer": [
+    "xbrl:jpcrp_cor:NetSalesSummaryOfBusinessResults@CurrentYearDuration",
+    "xbrl:jpcrp_cor:NetSalesSummaryOfBusinessResults@Prior1YearDuration",
+    "builtin:sign(cur-prior)"
+   ],
+   "reason": null
+  },
+  "T023": {
+   "state": "GROUNDED",
+   "pointer": [
+    "xbrl:jppfs_cor:GrossProfit@CurrentYearDuration",
+    "xbrl:jppfs_cor:GrossProfit@Prior1YearDuration",
+    "builtin:sign(cur-prior)"
+   ],
+   "reason": null
+  },
+  "T026": {
+   "state": "GROUNDED",
+   "pointer": [
+    "xbrl:jppfs_cor:SellingGeneralAndAdministrativeExpenses@CurrentYearDuration",
+    "xbrl:jppfs_cor:SellingGeneralAndAdministrativeExpenses@Prior1YearDuration",
+    "builtin:sign(cur-prior)"
+   ],
+   "reason": null
+  },
+  "T037": {
+   "state": "GROUNDED",
+   "pointer": [
+    "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration",
+    "xbrl:jppfs_cor:OperatingIncome@Prior1YearDuration",
+    "builtin:sign(cur-prior)"
+   ],
+   "reason": null
+  },
+  "T038": {
+   "state": "GROUNDED",
+   "pointer": [
+    "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration",
+    "xbrl:jppfs_cor:OperatingIncome@Prior1YearDuration",
+    "builtin:sign(cur-prior)"
+   ],
+   "reason": null
+  },
+  "T044": {
+   "state": "GROUNDED",
+   "pointer": [
+    "xbrl:jpcrp_cor:ProfitLossAttributableToOwnersOfParentSummaryOfBusinessResults@CurrentYearDuration",
+    "xbrl:jpcrp_cor:ProfitLossAttributableToOwnersOfParentSummaryOfBusinessResults@Prior1YearDuration",
+    "builtin:sign(cur-prior)"
+   ],
+   "reason": null
+  },
+  "T049": {
+   "state": "GROUNDED",
+   "pointer": [
+    "xbrl:jpcrp_cor:TotalAssetsSummaryOfBusinessResults@CurrentYearInstant",
+    "xbrl:jpcrp_cor:TotalAssetsSummaryOfBusinessResults@Prior1YearInstant",
+    "builtin:sign(cur-prior)"
+   ],
+   "reason": null
+  },
+  "T066": {
+   "state": "GROUNDED",
+   "pointer": [
+    "xbrl:jppfs_cor:InvestmentSecurities@CurrentYearInstant",
+    "xbrl:jppfs_cor:InvestmentSecurities@Prior1YearInstant",
+    "builtin:sign(cur-prior)"
+   ],
+   "reason": null
+  },
+  "T068": {
+   "state": "GROUNDED",
+   "pointer": [
+    "xbrl:jppfs_cor:Liabilities@CurrentYearInstant",
+    "xbrl:jppfs_cor:Liabilities@Prior1YearInstant",
+    "builtin:sign(cur-prior)"
+   ],
+   "reason": null
+  },
+  "T070": {
+   "state": "GROUNDED",
+   "pointer": [
+    "xbrl:jppfs_cor:AccountsPayableOperatingSpecific@CurrentYearInstant",
+    "xbrl:jppfs_cor:AccountsPayableOperatingSpecific@Prior1YearInstant",
+    "builtin:sign(cur-prior)"
+   ],
+   "reason": null
+  },
+  "T072": {
+   "state": "GROUNDED",
+   "pointer": [
+    "xbrl:jppfs_cor:IncomeTaxesPayable@CurrentYearInstant",
+    "xbrl:jppfs_cor:IncomeTaxesPayable@Prior1YearInstant",
+    "builtin:sign(cur-prior)"
+   ],
+   "reason": null
+  },
+  "T086": {
+   "state": "GROUNDED",
+   "pointer": [
+    "xbrl:jpcrp_cor:NetAssetsSummaryOfBusinessResults@CurrentYearInstant",
+    "xbrl:jpcrp_cor:NetAssetsSummaryOfBusinessResults@Prior1YearInstant",
+    "builtin:sign(cur-prior)"
+   ],
+   "reason": null
+  },
+  "T092": {
+   "state": "GROUNDED",
+   "pointer": [
+    "xbrl:jpcrp030000-asr_E36539-000:ProvisionForWarrantiesForCompletedOperationCL@CurrentYearInstant",
+    "xbrl:jpcrp030000-asr_E36539-000:ProvisionForWarrantiesForCompletedOperationCL@Prior1YearInstant",
+    "builtin:sign(cur-prior)"
+   ],
+   "reason": null
+  },
+  "T097": {
+   "state": "GROUNDED",
+   "pointer": [
+    "xbrl:jppfs_cor:ContractLiabilities@CurrentYearInstant",
+    "xbrl:jppfs_cor:ContractLiabilities@Prior1YearInstant",
+    "builtin:sign(cur-prior)"
+   ],
+   "reason": null
+  },
+  "T102": {
+   "state": "GROUNDED",
+   "pointer": [
+    "xbrl:jppfs_cor:IncomeBeforeIncomeTaxes@CurrentYearDuration",
+    "xbrl:jppfs_cor:IncomeBeforeIncomeTaxes@Prior1YearDuration",
+    "builtin:sign(cur-prior)"
+   ],
+   "reason": null
+  }
+ },
+ "stop60": [
+  "N181",
+  "N214",
+  "N219",
+  "N267",
+  "N289"
+ ],
+ "53_grounded": [
+  "N003",
+  "N009",
+  "N011",
+  "N014",
+  "N021",
+  "N024",
+  "N026",
+  "N063",
+  "N066",
+  "N089",
+  "N105",
+  "N112",
+  "N130",
+  "N131",
+  "N137",
+  "N138",
+  "N143",
+  "N168",
+  "N170",
+  "N172",
+  "N174",
+  "N175",
+  "N178",
+  "N179",
+  "N187",
+  "N191",
+  "N192",
+  "N193",
+  "N205",
+  "N218",
+  "N241",
+  "N264",
+  "N278",
+  "N282",
+  "N288",
+  "N291",
+  "N298",
+  "N303",
+  "T018",
+  "T026",
+  "T037",
+  "T044",
+  "T049",
+  "T066",
+  "T068",
+  "T070",
+  "T072",
+  "T092",
+  "T097",
+  "T102"
+ ],
+ "53_stopped": [
+  [
+   "N181",
+   "UNVERIFIABLE",
+   "ambiguous(elements)"
+  ],
+  [
+   "N214",
+   "UNVERIFIABLE",
+   "ambiguous(elements)"
+  ],
+  [
+   "N267",
+   "UNVERIFIABLE",
+   "ambiguous(elements)"
+  ]
+ ],
+ "special": {
+  "N219": {
+   "state": "VALUE_MISMATCH",
+   "pointer": [
+    "xbrl:jppfs_cor:LongTermLoansPayable@CurrentYearInstant"
+   ],
+   "reason": null
+  },
+  "N289": {
+   "state": "VALUE_MISMATCH",
+   "pointer": [
+    "xbrl:jppfs_cor:PurchaseOfIntangibleAssetsInvCF@CurrentYearDuration"
+   ],
+   "reason": null
+  },
+  "T023": {
+   "state": "GROUNDED",
+   "pointer": [
+    "xbrl:jppfs_cor:GrossProfit@CurrentYearDuration",
+    "xbrl:jppfs_cor:GrossProfit@Prior1YearDuration",
+    "builtin:sign(cur-prior)"
+   ],
+   "reason": null
+  },
+  "T038": {
+   "state": "GROUNDED",
+   "pointer": [
+    "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration",
+    "xbrl:jppfs_cor:OperatingIncome@Prior1YearDuration",
+    "builtin:sign(cur-prior)"
+   ],
+   "reason": null
+  },
+  "T086": {
+   "state": "GROUNDED",
+   "pointer": [
+    "xbrl:jpcrp_cor:NetAssetsSummaryOfBusinessResults@CurrentYearInstant",
+    "xbrl:jpcrp_cor:NetAssetsSummaryOfBusinessResults@Prior1YearInstant",
+    "builtin:sign(cur-prior)"
+   ],
+   "reason": null
+  },
+  "T087": {
+   "state": "POINTER_NOT_FOUND",
+   "pointer": [],
+   "reason": "no_element(text needs money fact)"
+  },
+  "N021": {
+   "state": "GROUNDED",
+   "pointer": [
+    "xbrl:jppfs_cor:NotesAndAccountsReceivableTrade@CurrentYearInstant"
+   ],
+   "reason": null
+  },
+  "N138": {
+   "state": "GROUNDED",
+   "pointer": [
+    "xbrl:jppfs_cor:NotesAndAccountsReceivableTrade@CurrentYearInstant"
+   ],
+   "reason": null
+  },
+  "N264": {
+   "state": "GROUNDED",
+   "pointer": [
+    "xbrl:jppfs_cor:IncomeBeforeIncomeTaxes@CurrentYearDuration"
+   ],
+   "reason": null
+  },
+  "N137": {
+   "state": "GROUNDED",
+   "pointer": [
+    "xbrl:jppfs_cor:CashAndDeposits@CurrentYearInstant",
+    "xbrl:jppfs_cor:CashAndDeposits@Prior1YearInstant",
+    "formula:a-b"
+   ],
+   "reason": null
+  },
+  "N143": {
+   "state": "GROUNDED",
+   "pointer": [
+    "xbrl:jppfs_cor:ContractAssets@CurrentYearInstant",
+    "xbrl:jppfs_cor:ContractAssets@Prior1YearInstant",
+    "formula:a-b"
+   ],
+   "reason": null
+  },
+  "N192": {
+   "state": "GROUNDED",
+   "pointer": [
+    "xbrl:jppfs_cor:ContractLiabilities@CurrentYearInstant",
+    "xbrl:jppfs_cor:ContractLiabilities@Prior1YearInstant",
+    "formula:a-b"
+   ],
+   "reason": null
+  }
+ }
+}

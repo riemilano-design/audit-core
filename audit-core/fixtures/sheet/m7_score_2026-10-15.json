@@ -1,0 +1,3685 @@
+{
+ "purpose": "段 7 の採点(封 §3〜§5)。閾値は封じたもので、結果を見て変えていない",
+ "seal": "docs/DOMAIN1_M7_SEAL_2026-10-15.md",
+ "verdict_from": "新 engine。旧は増分のためだけに並べた(封 §4)",
+ "scorable": 39,
+ "seats_agree_6": 33,
+ "hold_total": 6,
+ "E2_誤受理": 6,
+ "lines": {
+  "G-1 接続の正確さ": {
+   "rate": 0.5128205128205128,
+   "num": 20,
+   "den": 39,
+   "pass": "≥ 50%",
+   "ok": true
+  },
+  "G-2 誤接続": {
+   "count": 6,
+   "pass": "= 0 件",
+   "ok": false
+  },
+  "G-3 根拠なしの接続": {
+   "count": 0,
+   "pass": "= 0 件",
+   "ok": true
+  },
+  "G-4 保留の適切さ": {
+   "rate": 0.0,
+   "num": 0,
+   "den": 6,
+   "pass": "≥ 80%",
+   "status": "失敗",
+   "ok": false
+  },
+  "G-5 母数": {
+   "count": 39,
+   "pass": "≥ 20",
+   "ok": true
+  },
+  "G-7 正しい接続の増分": {
+   "count": 3,
+   "pass": "≥ 1 件",
+   "ok": true,
+   "old": 17,
+   "new": 20
+  },
+  "G-8 誤受理の増分": {
+   "count": 0,
+   "pass": "= 0 件",
+   "ok": true,
+   "old": 6,
+   "new": 6
+  }
+ },
+ "overall": "失敗",
+ "main_objective_status": "合格",
+ "N-1_親を正しく抽出": 3,
+ "N-2_親を誤って抽出": 0,
+ "N-1_分母_親で絞った主張": 3,
+ "N-1_判定できず": 0,
+ "N-3_正しく接続": 20,
+ "N-4_誤接続": 6,
+ "N-5_保留": 13,
+ "old": {
+  "g1": 17,
+  "g2": 6,
+  "g3": 0,
+  "e2": 6,
+  "split": {
+   "接続数": 23,
+   "保留数": 16,
+   "対象外数": 0
+  },
+  "hold_reasons": {
+   "列 の手がかりが 2 つ以上: 予算現額・歳出決算額": 1,
+   "6 欄が一意でない(4 通り。値で選ばない)": 1,
+   "6 欄が一意でない(6 通り。値で選ばない)": 2,
+   "列 の手がかりが 2 つ以上: 予備費支出及び流用増減・予算現額": 1,
+   "6 欄が一意でない(3 通り。値で選ばない)": 1,
+   "列 の手がかりが 2 つ以上: 不用額・予算現額": 1,
+   "6 欄が一意でない(61 通り。値で選ばない)": 6,
+   "6 欄が一意でない(2 通り。値で選ばない)": 3
+  },
+  "agree_4": 17,
+  "only_4": 0,
+  "hold_total": 6,
+  "hold_ok": 0
+ },
+ "new_split": {
+  "接続数": 26,
+  "保留数": 13,
+  "対象外数": 0
+ },
+ "new_hold_reasons": {
+  "列 の手がかりが 2 つ以上: 予算現額・歳出決算額": 1,
+  "6 欄が一意でない(4 通り。値で選ばない)": 1,
+  "6 欄が一意でない(6 通り。値で選ばない)": 2,
+  "列 の手がかりが 2 つ以上: 予備費支出及び流用増減・予算現額": 1,
+  "6 欄が一意でない(3 通り。値で選ばない)": 1,
+  "列 の手がかりが 2 つ以上: 不用額・予算現額": 1,
+  "6 欄が一意でない(61 通り。値で選ばない)": 4,
+  "6 欄が一意でない(2 通り。値で選ばない)": 2
+ },
+ "reference_only": {
+  "agree_4": 20,
+  "only_4": 0
+ },
+ "g4_unmeasured": false,
+ "spec_version": "2026-10-15/m6",
+ "novelty": {
+  "新規": 38,
+  "再出": 1
+ },
+ "independent_confirmation": true,
+ "novelty_rule": "新規 10 件未満なら『独立に確認した』とは表現しない",
+ "missing_answers": [],
+ "rows": [
+  {
+   "id": "R001",
+   "value": 514736980000,
+   "novelty": "新規",
+   "sentence": "令和６年度歳出決算について、一般会計の款別の状況をみると、保健医療費は予算現額514,736,980,000円に対し支出済額474,450,019,679円、不用額34,178,072,321円であった",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "",
+     "保健医療費",
+     "予算現額",
+     "514736980000"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "保健医療費",
+     "予算現額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "UNVERIFIABLE",
+   "route": null,
+   "pointer": null,
+   "hold_reason": "列 の手がかりが 2 つ以上: 予算現額・歳出決算額",
+   "parent_cues": [
+    "一般会計"
+   ],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "engine_parent": null,
+   "engine_key6": null,
+   "agree_6": false,
+   "agree_4": false,
+   "only_4": false,
+   "verdict": "結べなかった(誤接続ではない)",
+   "parent_correct": null
+  },
+  {
+   "id": "R002",
+   "value": 474450019679,
+   "novelty": "新規",
+   "sentence": "令和６年度歳出決算について、一般会計の款別の状況をみると、保健医療費は予算現額514,736,980,000円に対し支出済額474,450,019,679円、不用額34,178,072,321円であった",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "",
+     "保健医療費",
+     "支出済額",
+     "474450019679"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "保健医療費",
+     "支出済額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!E135",
+   "hold_reason": null,
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "engine_parent": null,
+   "engine_key6": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "",
+     "保健医療費",
+     "支出済額",
+     "474450019679"
+    ]
+   ],
+   "agree_6": true,
+   "agree_4": true,
+   "only_4": false,
+   "verdict": "正しい接続",
+   "parent_correct": null
+  },
+  {
+   "id": "R003",
+   "value": 34178072321,
+   "novelty": "新規",
+   "sentence": "令和６年度歳出決算について、一般会計の款別の状況をみると、保健医療費は予算現額514,736,980,000円に対し支出済額474,450,019,679円、不用額34,178,072,321円であった",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "",
+     "保健医療費",
+     "不用額",
+     "34178072321"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "保健医療費",
+     "不用額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!G135",
+   "hold_reason": null,
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "engine_parent": null,
+   "engine_key6": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "",
+     "保健医療費",
+     "不用額",
+     "34178072321"
+    ]
+   ],
+   "agree_6": true,
+   "agree_4": true,
+   "only_4": false,
+   "verdict": "正しい接続",
+   "parent_correct": null
+  },
+  {
+   "id": "R004",
+   "value": 608605218000,
+   "novelty": "新規",
+   "sentence": "総務費は予算現額608,605,218,000円、支出済額525,048,004,615円、不用額57,452,189,385円",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "",
+     "総務費",
+     "予算現額",
+     "608605218000"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "総務費",
+     "予算現額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!D16",
+   "hold_reason": null,
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "engine_parent": null,
+   "engine_key6": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "",
+     "総務費",
+     "予算現額",
+     "608605218000"
+    ]
+   ],
+   "agree_6": true,
+   "agree_4": true,
+   "only_4": false,
+   "verdict": "正しい接続",
+   "parent_correct": null
+  },
+  {
+   "id": "R005",
+   "value": 525048004615,
+   "novelty": "新規",
+   "sentence": "総務費は予算現額608,605,218,000円、支出済額525,048,004,615円、不用額57,452,189,385円",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "",
+     "総務費",
+     "支出済額",
+     "525048004615"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "総務費",
+     "支出済額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!E16",
+   "hold_reason": null,
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "engine_parent": null,
+   "engine_key6": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "",
+     "総務費",
+     "支出済額",
+     "525048004615"
+    ]
+   ],
+   "agree_6": true,
+   "agree_4": true,
+   "only_4": false,
+   "verdict": "正しい接続",
+   "parent_correct": null
+  },
+  {
+   "id": "R006",
+   "value": 57452189385,
+   "novelty": "新規",
+   "sentence": "総務費は予算現額608,605,218,000円、支出済額525,048,004,615円、不用額57,452,189,385円",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "",
+     "総務費",
+     "不用額",
+     "57452189385"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "総務費",
+     "不用額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!G16",
+   "hold_reason": null,
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "engine_parent": null,
+   "engine_key6": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "",
+     "総務費",
+     "不用額",
+     "57452189385"
+    ]
+   ],
+   "agree_6": true,
+   "agree_4": true,
+   "only_4": false,
+   "verdict": "正しい接続",
+   "parent_correct": null
+  },
+  {
+   "id": "R007",
+   "value": 412955089000,
+   "novelty": "新規",
+   "sentence": "公債費は予算現額412,955,089,000円、支出済額406,655,395,056円、不用額6,299,693,944円",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "",
+     "公債費",
+     "予算現額",
+     "412955089000"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "公債費",
+     "予算現額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "UNVERIFIABLE",
+   "route": null,
+   "pointer": null,
+   "hold_reason": "6 欄が一意でない(4 通り。値で選ばない)",
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "engine_parent": null,
+   "engine_key6": null,
+   "agree_6": false,
+   "agree_4": false,
+   "only_4": false,
+   "verdict": "結べなかった(誤接続ではない)",
+   "parent_correct": null
+  },
+  {
+   "id": "R008",
+   "value": 406655395056,
+   "novelty": "新規",
+   "sentence": "公債費は予算現額412,955,089,000円、支出済額406,655,395,056円、不用額6,299,693,944円",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "",
+     "公債費",
+     "支出済額",
+     "406655395056"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "公債費",
+     "支出済額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "UNVERIFIABLE",
+   "route": null,
+   "pointer": null,
+   "hold_reason": "6 欄が一意でない(6 通り。値で選ばない)",
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "engine_parent": null,
+   "engine_key6": null,
+   "agree_6": false,
+   "agree_4": false,
+   "only_4": false,
+   "verdict": "結べなかった(誤接続ではない)",
+   "parent_correct": null
+  },
+  {
+   "id": "R009",
+   "value": 6299693944,
+   "novelty": "新規",
+   "sentence": "公債費は予算現額412,955,089,000円、支出済額406,655,395,056円、不用額6,299,693,944円",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "",
+     "公債費",
+     "不用額",
+     "6299693944"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "公債費",
+     "不用額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "UNVERIFIABLE",
+   "route": null,
+   "pointer": null,
+   "hold_reason": "6 欄が一意でない(6 通り。値で選ばない)",
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "engine_parent": null,
+   "engine_key6": null,
+   "agree_6": false,
+   "agree_4": false,
+   "only_4": false,
+   "verdict": "結べなかった(誤接続ではない)",
+   "parent_correct": null
+  },
+  {
+   "id": "R010",
+   "value": 297687808000,
+   "novelty": "新規",
+   "sentence": "学務費は予算現額297,687,808,000円、支出済額278,713,178,716円、不用額18,974,629,284円",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "",
+     "学務費",
+     "予算現額",
+     "297687808000"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "学務費",
+     "予算現額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!D239",
+   "hold_reason": null,
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "engine_parent": null,
+   "engine_key6": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "",
+     "学務費",
+     "予算現額",
+     "297687808000"
+    ]
+   ],
+   "agree_6": true,
+   "agree_4": true,
+   "only_4": false,
+   "verdict": "正しい接続",
+   "parent_correct": null
+  },
+  {
+   "id": "R011",
+   "value": 278713178716,
+   "novelty": "新規",
+   "sentence": "学務費は予算現額297,687,808,000円、支出済額278,713,178,716円、不用額18,974,629,284円",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "",
+     "学務費",
+     "支出済額",
+     "278713178716"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "学務費",
+     "支出済額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!E239",
+   "hold_reason": null,
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "engine_parent": null,
+   "engine_key6": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "",
+     "学務費",
+     "支出済額",
+     "278713178716"
+    ]
+   ],
+   "agree_6": true,
+   "agree_4": true,
+   "only_4": false,
+   "verdict": "正しい接続",
+   "parent_correct": null
+  },
+  {
+   "id": "R012",
+   "value": 18974629284,
+   "novelty": "新規",
+   "sentence": "学務費は予算現額297,687,808,000円、支出済額278,713,178,716円、不用額18,974,629,284円",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "",
+     "学務費",
+     "不用額",
+     "18974629284"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "学務費",
+     "不用額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!G239",
+   "hold_reason": null,
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "engine_parent": null,
+   "engine_key6": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "",
+     "学務費",
+     "不用額",
+     "18974629284"
+    ]
+   ],
+   "agree_6": true,
+   "agree_4": true,
+   "only_4": false,
+   "verdict": "正しい接続",
+   "parent_correct": null
+  },
+  {
+   "id": "R013",
+   "value": 288683607000,
+   "novelty": "新規",
+   "sentence": "消防費は予算現額288,683,607,000円、支出済額278,455,504,028円、不用額6,639,452,972円",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "",
+     "消防費",
+     "予算現額",
+     "288683607000"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "消防費",
+     "予算現額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!D268",
+   "hold_reason": null,
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "engine_parent": null,
+   "engine_key6": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "",
+     "消防費",
+     "予算現額",
+     "288683607000"
+    ]
+   ],
+   "agree_6": true,
+   "agree_4": true,
+   "only_4": false,
+   "verdict": "正しい接続",
+   "parent_correct": null
+  },
+  {
+   "id": "R014",
+   "value": 278455504028,
+   "novelty": "新規",
+   "sentence": "消防費は予算現額288,683,607,000円、支出済額278,455,504,028円、不用額6,639,452,972円",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "",
+     "消防費",
+     "支出済額",
+     "278455504028"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "消防費",
+     "支出済額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!E268",
+   "hold_reason": null,
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "engine_parent": null,
+   "engine_key6": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "",
+     "消防費",
+     "支出済額",
+     "278455504028"
+    ]
+   ],
+   "agree_6": true,
+   "agree_4": true,
+   "only_4": false,
+   "verdict": "正しい接続",
+   "parent_correct": null
+  },
+  {
+   "id": "R015",
+   "value": 6639452972,
+   "novelty": "新規",
+   "sentence": "消防費は予算現額288,683,607,000円、支出済額278,455,504,028円、不用額6,639,452,972円",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "",
+     "消防費",
+     "不用額",
+     "6639452972"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "消防費",
+     "不用額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!G268",
+   "hold_reason": null,
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "engine_parent": null,
+   "engine_key6": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "",
+     "消防費",
+     "不用額",
+     "6639452972"
+    ]
+   ],
+   "agree_6": true,
+   "agree_4": true,
+   "only_4": false,
+   "verdict": "正しい接続",
+   "parent_correct": null
+  },
+  {
+   "id": "R016",
+   "value": 215282697000,
+   "novelty": "新規",
+   "sentence": "都市整備費は予算現額215,282,697,000円、支出済額187,000,862,896円、不用額21,941,943,104円",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "",
+     "都市整備費",
+     "予算現額",
+     "215282697000"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "都市整備費",
+     "予算現額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!D84",
+   "hold_reason": null,
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "engine_parent": null,
+   "engine_key6": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "",
+     "都市整備費",
+     "予算現額",
+     "215282697000"
+    ]
+   ],
+   "agree_6": true,
+   "agree_4": true,
+   "only_4": false,
+   "verdict": "正しい接続",
+   "parent_correct": null
+  },
+  {
+   "id": "R017",
+   "value": 187000862896,
+   "novelty": "新規",
+   "sentence": "都市整備費は予算現額215,282,697,000円、支出済額187,000,862,896円、不用額21,941,943,104円",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "",
+     "都市整備費",
+     "支出済額",
+     "187000862896"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "都市整備費",
+     "支出済額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!E84",
+   "hold_reason": null,
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "engine_parent": null,
+   "engine_key6": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "",
+     "都市整備費",
+     "支出済額",
+     "187000862896"
+    ]
+   ],
+   "agree_6": true,
+   "agree_4": true,
+   "only_4": false,
+   "verdict": "正しい接続",
+   "parent_correct": null
+  },
+  {
+   "id": "R018",
+   "value": 21941943104,
+   "novelty": "新規",
+   "sentence": "都市整備費は予算現額215,282,697,000円、支出済額187,000,862,896円、不用額21,941,943,104円",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "",
+     "都市整備費",
+     "不用額",
+     "21941943104"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "都市整備費",
+     "不用額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!G84",
+   "hold_reason": null,
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "engine_parent": null,
+   "engine_key6": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "",
+     "都市整備費",
+     "不用額",
+     "21941943104"
+    ]
+   ],
+   "agree_6": true,
+   "agree_4": true,
+   "only_4": false,
+   "verdict": "正しい接続",
+   "parent_correct": null
+  },
+  {
+   "id": "R019",
+   "value": 5314472000,
+   "novelty": "新規",
+   "sentence": "議会費は予算現額5,314,472,000円、支出済額4,802,993,869円、不用額511,478,131円と、款の中では規模が小さい",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "",
+     "議会費",
+     "予算現額",
+     "5314472000"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "議会費",
+     "予算現額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!D10",
+   "hold_reason": null,
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "engine_parent": null,
+   "engine_key6": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "",
+     "議会費",
+     "予算現額",
+     "5314472000"
+    ]
+   ],
+   "agree_6": true,
+   "agree_4": true,
+   "only_4": false,
+   "verdict": "正しい接続",
+   "parent_correct": null
+  },
+  {
+   "id": "R020",
+   "value": 4802993869,
+   "novelty": "新規",
+   "sentence": "議会費は予算現額5,314,472,000円、支出済額4,802,993,869円、不用額511,478,131円と、款の中では規模が小さい",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "",
+     "議会費",
+     "支出済額",
+     "4802993869"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "議会費",
+     "支出済額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!E10",
+   "hold_reason": null,
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "engine_parent": null,
+   "engine_key6": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "",
+     "議会費",
+     "支出済額",
+     "4802993869"
+    ]
+   ],
+   "agree_6": true,
+   "agree_4": true,
+   "only_4": false,
+   "verdict": "正しい接続",
+   "parent_correct": null
+  },
+  {
+   "id": "R021",
+   "value": 511478131,
+   "novelty": "新規",
+   "sentence": "議会費は予算現額5,314,472,000円、支出済額4,802,993,869円、不用額511,478,131円と、款の中では規模が小さい",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "",
+     "議会費",
+     "不用額",
+     "511478131"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "議会費",
+     "不用額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!G10",
+   "hold_reason": null,
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "engine_parent": null,
+   "engine_key6": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "",
+     "議会費",
+     "不用額",
+     "511478131"
+    ]
+   ],
+   "agree_6": true,
+   "agree_4": true,
+   "only_4": false,
+   "verdict": "正しい接続",
+   "parent_correct": null
+  },
+  {
+   "id": "R022",
+   "value": 2568489000,
+   "novelty": "新規",
+   "sentence": "予備費は予算現額2,568,489,000円に対し支出済額が0円で、不用額は予算現額と同額の2,568,489,000円であった",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "",
+     "予備費",
+     "予算現額",
+     "2568489000"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "予備費",
+     "予算現額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "UNVERIFIABLE",
+   "route": null,
+   "pointer": null,
+   "hold_reason": "列 の手がかりが 2 つ以上: 予備費支出及び流用増減・予算現額",
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "engine_parent": null,
+   "engine_key6": null,
+   "agree_6": false,
+   "agree_4": false,
+   "only_4": false,
+   "verdict": "結べなかった(誤接続ではない)",
+   "parent_correct": null
+  },
+  {
+   "id": "R023",
+   "value": 0,
+   "novelty": "再出",
+   "sentence": "予備費は予算現額2,568,489,000円に対し支出済額が0円で、不用額は予算現額と同額の2,568,489,000円であった",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "",
+     "予備費",
+     "支出済額",
+     "0"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "予備費",
+     "支出済額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "UNVERIFIABLE",
+   "route": null,
+   "pointer": null,
+   "hold_reason": "6 欄が一意でない(3 通り。値で選ばない)",
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "engine_parent": null,
+   "engine_key6": null,
+   "agree_6": false,
+   "agree_4": false,
+   "only_4": false,
+   "verdict": "結べなかった(誤接続ではない)",
+   "parent_correct": null
+  },
+  {
+   "id": "R024",
+   "value": 2568489000,
+   "novelty": "新規",
+   "sentence": "予備費は予算現額2,568,489,000円に対し支出済額が0円で、不用額は予算現額と同額の2,568,489,000円であった",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "",
+     "予備費",
+     "不用額",
+     "2568489000"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "予備費",
+     "不用額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "UNVERIFIABLE",
+   "route": null,
+   "pointer": null,
+   "hold_reason": "列 の手がかりが 2 つ以上: 不用額・予算現額",
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "engine_parent": null,
+   "engine_key6": null,
+   "agree_6": false,
+   "agree_4": false,
+   "only_4": false,
+   "verdict": "結べなかった(誤接続ではない)",
+   "parent_correct": null
+  },
+  {
+   "id": "R025",
+   "value": 278429543000,
+   "novelty": "新規",
+   "sentence": "項別では、区市町村振興費が予算現額278,429,543,000円、支出済額228,858,882,603円、不用額24,419,571,397円",
+   "label6": [
+    "verdict",
+    "判定不能"
+   ],
+   "label4": [
+    "verdict",
+    "判定不能"
+   ],
+   "seats_agree": false,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!D34",
+   "hold_reason": null,
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "engine_parent": "総務費",
+   "engine_key6": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "総務費",
+     "区市町村振興費",
+     "予算現額",
+     "278429543000"
+    ]
+   ],
+   "agree_6": false,
+   "agree_4": false,
+   "only_4": false,
+   "verdict": "根拠なし/判定不能なのに接続した",
+   "parent_correct": null
+  },
+  {
+   "id": "R026",
+   "value": 228858882603,
+   "novelty": "新規",
+   "sentence": "項別では、区市町村振興費が予算現額278,429,543,000円、支出済額228,858,882,603円、不用額24,419,571,397円",
+   "label6": [
+    "verdict",
+    "判定不能"
+   ],
+   "label4": [
+    "verdict",
+    "判定不能"
+   ],
+   "seats_agree": false,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!E34",
+   "hold_reason": null,
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "engine_parent": "総務費",
+   "engine_key6": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "総務費",
+     "区市町村振興費",
+     "支出済額",
+     "228858882603"
+    ]
+   ],
+   "agree_6": false,
+   "agree_4": false,
+   "only_4": false,
+   "verdict": "根拠なし/判定不能なのに接続した",
+   "parent_correct": null
+  },
+  {
+   "id": "R027",
+   "value": 24419571397,
+   "novelty": "新規",
+   "sentence": "項別では、区市町村振興費が予算現額278,429,543,000円、支出済額228,858,882,603円、不用額24,419,571,397円",
+   "label6": [
+    "verdict",
+    "判定不能"
+   ],
+   "label4": [
+    "verdict",
+    "判定不能"
+   ],
+   "seats_agree": false,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!G34",
+   "hold_reason": null,
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "engine_parent": "総務費",
+   "engine_key6": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "総務費",
+     "区市町村振興費",
+     "不用額",
+     "24419571397"
+    ]
+   ],
+   "agree_6": false,
+   "agree_4": false,
+   "only_4": false,
+   "verdict": "根拠なし/判定不能なのに接続した",
+   "parent_correct": null
+  },
+  {
+   "id": "R028",
+   "value": 163039162000,
+   "novelty": "新規",
+   "sentence": "環境保全費は予算現額163,039,162,000円、支出済額146,484,842,584円、不用額12,908,358,416円",
+   "label6": [
+    "verdict",
+    "判定不能"
+   ],
+   "label4": [
+    "verdict",
+    "判定不能"
+   ],
+   "seats_agree": false,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!D108",
+   "hold_reason": null,
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "engine_parent": "環境費",
+   "engine_key6": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "環境費",
+     "環境保全費",
+     "予算現額",
+     "163039162000"
+    ]
+   ],
+   "agree_6": false,
+   "agree_4": false,
+   "only_4": false,
+   "verdict": "根拠なし/判定不能なのに接続した",
+   "parent_correct": null
+  },
+  {
+   "id": "R029",
+   "value": 146484842584,
+   "novelty": "新規",
+   "sentence": "環境保全費は予算現額163,039,162,000円、支出済額146,484,842,584円、不用額12,908,358,416円",
+   "label6": [
+    "verdict",
+    "判定不能"
+   ],
+   "label4": [
+    "verdict",
+    "判定不能"
+   ],
+   "seats_agree": false,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!E108",
+   "hold_reason": null,
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "engine_parent": "環境費",
+   "engine_key6": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "環境費",
+     "環境保全費",
+     "支出済額",
+     "146484842584"
+    ]
+   ],
+   "agree_6": false,
+   "agree_4": false,
+   "only_4": false,
+   "verdict": "根拠なし/判定不能なのに接続した",
+   "parent_correct": null
+  },
+  {
+   "id": "R030",
+   "value": 12908358416,
+   "novelty": "新規",
+   "sentence": "環境保全費は予算現額163,039,162,000円、支出済額146,484,842,584円、不用額12,908,358,416円",
+   "label6": [
+    "verdict",
+    "判定不能"
+   ],
+   "label4": [
+    "verdict",
+    "判定不能"
+   ],
+   "seats_agree": false,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!G108",
+   "hold_reason": null,
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "engine_parent": "環境費",
+   "engine_key6": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "環境費",
+     "環境保全費",
+     "不用額",
+     "12908358416"
+    ]
+   ],
+   "agree_6": false,
+   "agree_4": false,
+   "only_4": false,
+   "verdict": "根拠なし/判定不能なのに接続した",
+   "parent_correct": null
+  },
+  {
+   "id": "R031",
+   "value": 154209834000,
+   "novelty": "新規",
+   "sentence": "目別では、教育費のうち高等学校費(管理費)は計154,209,834,000円、支出済額145,658,309,067円、不用額8,551,524,933円",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "目",
+     "教育費>高等学校費",
+     "管理費",
+     "予算現額",
+     "154209834000"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "目",
+     "管理費",
+     "予算現額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:事項別明細!K13236",
+   "hold_reason": null,
+   "parent_cues": [
+    "教育費",
+    "高等学校費"
+   ],
+   "parent_filtered": true,
+   "parent_kept": [
+    "教育費 > 高等学校費"
+   ],
+   "engine_parent": "教育費 > 高等学校費",
+   "engine_key6": [
+    "label",
+    [
+     "一般会計",
+     "目",
+     "教育費>高等学校費",
+     "管理費",
+     "予算現額",
+     "154209834000"
+    ]
+   ],
+   "agree_6": true,
+   "agree_4": true,
+   "only_4": false,
+   "verdict": "正しい接続",
+   "parent_correct": true,
+   "label_parent": "教育費>高等学校費"
+  },
+  {
+   "id": "R032",
+   "value": 145658309067,
+   "novelty": "新規",
+   "sentence": "目別では、教育費のうち高等学校費(管理費)は計154,209,834,000円、支出済額145,658,309,067円、不用額8,551,524,933円",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "目",
+     "教育費>高等学校費",
+     "管理費",
+     "支出済額",
+     "145658309067"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "目",
+     "管理費",
+     "支出済額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "UNVERIFIABLE",
+   "route": null,
+   "pointer": null,
+   "hold_reason": "6 欄が一意でない(61 通り。値で選ばない)",
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "engine_parent": null,
+   "engine_key6": null,
+   "agree_6": false,
+   "agree_4": false,
+   "only_4": false,
+   "verdict": "結べなかった(誤接続ではない)",
+   "parent_correct": null
+  },
+  {
+   "id": "R033",
+   "value": 8551524933,
+   "novelty": "新規",
+   "sentence": "目別では、教育費のうち高等学校費(管理費)は計154,209,834,000円、支出済額145,658,309,067円、不用額8,551,524,933円",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "目",
+     "教育費>高等学校費",
+     "管理費",
+     "不用額",
+     "8551524933"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "目",
+     "管理費",
+     "不用額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "UNVERIFIABLE",
+   "route": null,
+   "pointer": null,
+   "hold_reason": "6 欄が一意でない(61 通り。値で選ばない)",
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "engine_parent": null,
+   "engine_key6": null,
+   "agree_6": false,
+   "agree_4": false,
+   "only_4": false,
+   "verdict": "結べなかった(誤接続ではない)",
+   "parent_correct": null
+  },
+  {
+   "id": "R034",
+   "value": 213142461000,
+   "novelty": "新規",
+   "sentence": "消防費のうち消防管理費(管理費)は計213,142,461,000円、支出済額209,950,978,921円、不用額3,191,482,079円",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "目",
+     "消防費>消防管理費",
+     "管理費",
+     "予算現額",
+     "213142461000"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "目",
+     "管理費",
+     "予算現額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:事項別明細!K15207",
+   "hold_reason": null,
+   "parent_cues": [
+    "消防管理費",
+    "消防費"
+   ],
+   "parent_filtered": true,
+   "parent_kept": [
+    "消防費 > 消防管理費"
+   ],
+   "engine_parent": "消防費 > 消防管理費",
+   "engine_key6": [
+    "label",
+    [
+     "一般会計",
+     "目",
+     "消防費>消防管理費",
+     "管理費",
+     "予算現額",
+     "213142461000"
+    ]
+   ],
+   "agree_6": true,
+   "agree_4": true,
+   "only_4": false,
+   "verdict": "正しい接続",
+   "parent_correct": true,
+   "label_parent": "消防費>消防管理費"
+  },
+  {
+   "id": "R035",
+   "value": 209950978921,
+   "novelty": "新規",
+   "sentence": "消防費のうち消防管理費(管理費)は計213,142,461,000円、支出済額209,950,978,921円、不用額3,191,482,079円",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "目",
+     "消防費>消防管理費",
+     "管理費",
+     "支出済額",
+     "209950978921"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "目",
+     "管理費",
+     "支出済額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "UNVERIFIABLE",
+   "route": null,
+   "pointer": null,
+   "hold_reason": "6 欄が一意でない(61 通り。値で選ばない)",
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "engine_parent": null,
+   "engine_key6": null,
+   "agree_6": false,
+   "agree_4": false,
+   "only_4": false,
+   "verdict": "結べなかった(誤接続ではない)",
+   "parent_correct": null
+  },
+  {
+   "id": "R036",
+   "value": 3191482079,
+   "novelty": "新規",
+   "sentence": "消防費のうち消防管理費(管理費)は計213,142,461,000円、支出済額209,950,978,921円、不用額3,191,482,079円",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "目",
+     "消防費>消防管理費",
+     "管理費",
+     "不用額",
+     "3191482079"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "目",
+     "管理費",
+     "不用額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "UNVERIFIABLE",
+   "route": null,
+   "pointer": null,
+   "hold_reason": "6 欄が一意でない(61 通り。値で選ばない)",
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "engine_parent": null,
+   "engine_key6": null,
+   "agree_6": false,
+   "agree_4": false,
+   "only_4": false,
+   "verdict": "結べなかった(誤接続ではない)",
+   "parent_correct": null
+  },
+  {
+   "id": "R037",
+   "value": 45295762000,
+   "novelty": "新規",
+   "sentence": "港湾費のうち東京港整備費(港湾整備費)は計45,295,762,000円、支出済額39,708,284,680円、不用額4,265,332,320円",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "目",
+     "港湾費>東京港整備費",
+     "港湾整備費",
+     "予算現額",
+     "45295762000"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "目",
+     "港湾整備費",
+     "予算現額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:事項別明細!K11769",
+   "hold_reason": null,
+   "parent_cues": [
+    "東京港整備費",
+    "港湾費"
+   ],
+   "parent_filtered": true,
+   "parent_kept": [
+    "港湾費 > 東京港整備費"
+   ],
+   "engine_parent": "港湾費 > 東京港整備費",
+   "engine_key6": [
+    "label",
+    [
+     "一般会計",
+     "目",
+     "港湾費>東京港整備費",
+     "港湾整備費",
+     "予算現額",
+     "45295762000"
+    ]
+   ],
+   "agree_6": true,
+   "agree_4": true,
+   "only_4": false,
+   "verdict": "正しい接続",
+   "parent_correct": true,
+   "label_parent": "港湾費>東京港整備費"
+  },
+  {
+   "id": "R038",
+   "value": 39708284680,
+   "novelty": "新規",
+   "sentence": "港湾費のうち東京港整備費(港湾整備費)は計45,295,762,000円、支出済額39,708,284,680円、不用額4,265,332,320円",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "目",
+     "港湾費>東京港整備費",
+     "港湾整備費",
+     "支出済額",
+     "39708284680"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "目",
+     "港湾整備費",
+     "支出済額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "UNVERIFIABLE",
+   "route": null,
+   "pointer": null,
+   "hold_reason": "6 欄が一意でない(2 通り。値で選ばない)",
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "engine_parent": null,
+   "engine_key6": null,
+   "agree_6": false,
+   "agree_4": false,
+   "only_4": false,
+   "verdict": "結べなかった(誤接続ではない)",
+   "parent_correct": null
+  },
+  {
+   "id": "R039",
+   "value": 4265332320,
+   "novelty": "新規",
+   "sentence": "港湾費のうち東京港整備費(港湾整備費)は計45,295,762,000円、支出済額39,708,284,680円、不用額4,265,332,320円",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "目",
+     "港湾費>東京港整備費",
+     "港湾整備費",
+     "不用額",
+     "4265332320"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "目",
+     "港湾整備費",
+     "不用額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "UNVERIFIABLE",
+   "route": null,
+   "pointer": null,
+   "hold_reason": "6 欄が一意でない(2 通り。値で選ばない)",
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "engine_parent": null,
+   "engine_key6": null,
+   "agree_6": false,
+   "agree_4": false,
+   "only_4": false,
+   "verdict": "結べなかった(誤接続ではない)",
+   "parent_correct": null
+  }
+ ],
+ "rows_old": [
+  {
+   "id": "R001",
+   "value": 514736980000,
+   "novelty": "新規",
+   "sentence": "令和６年度歳出決算について、一般会計の款別の状況をみると、保健医療費は予算現額514,736,980,000円に対し支出済額474,450,019,679円、不用額34,178,072,321円であった",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "",
+     "保健医療費",
+     "予算現額",
+     "514736980000"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "保健医療費",
+     "予算現額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "UNVERIFIABLE",
+   "route": null,
+   "pointer": null,
+   "hold_reason": "列 の手がかりが 2 つ以上: 予算現額・歳出決算額",
+   "parent_cues": null,
+   "parent_filtered": null,
+   "parent_kept": null,
+   "engine_parent": null,
+   "engine_key6": null,
+   "agree_6": false,
+   "agree_4": false,
+   "only_4": false,
+   "verdict": "結べなかった(誤接続ではない)",
+   "parent_correct": null
+  },
+  {
+   "id": "R002",
+   "value": 474450019679,
+   "novelty": "新規",
+   "sentence": "令和６年度歳出決算について、一般会計の款別の状況をみると、保健医療費は予算現額514,736,980,000円に対し支出済額474,450,019,679円、不用額34,178,072,321円であった",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "",
+     "保健医療費",
+     "支出済額",
+     "474450019679"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "保健医療費",
+     "支出済額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!E135",
+   "hold_reason": null,
+   "parent_cues": null,
+   "parent_filtered": null,
+   "parent_kept": null,
+   "engine_parent": null,
+   "engine_key6": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "",
+     "保健医療費",
+     "支出済額",
+     "474450019679"
+    ]
+   ],
+   "agree_6": true,
+   "agree_4": true,
+   "only_4": false,
+   "verdict": "正しい接続",
+   "parent_correct": null
+  },
+  {
+   "id": "R003",
+   "value": 34178072321,
+   "novelty": "新規",
+   "sentence": "令和６年度歳出決算について、一般会計の款別の状況をみると、保健医療費は予算現額514,736,980,000円に対し支出済額474,450,019,679円、不用額34,178,072,321円であった",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "",
+     "保健医療費",
+     "不用額",
+     "34178072321"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "保健医療費",
+     "不用額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!G135",
+   "hold_reason": null,
+   "parent_cues": null,
+   "parent_filtered": null,
+   "parent_kept": null,
+   "engine_parent": null,
+   "engine_key6": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "",
+     "保健医療費",
+     "不用額",
+     "34178072321"
+    ]
+   ],
+   "agree_6": true,
+   "agree_4": true,
+   "only_4": false,
+   "verdict": "正しい接続",
+   "parent_correct": null
+  },
+  {
+   "id": "R004",
+   "value": 608605218000,
+   "novelty": "新規",
+   "sentence": "総務費は予算現額608,605,218,000円、支出済額525,048,004,615円、不用額57,452,189,385円",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "",
+     "総務費",
+     "予算現額",
+     "608605218000"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "総務費",
+     "予算現額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!D16",
+   "hold_reason": null,
+   "parent_cues": null,
+   "parent_filtered": null,
+   "parent_kept": null,
+   "engine_parent": null,
+   "engine_key6": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "",
+     "総務費",
+     "予算現額",
+     "608605218000"
+    ]
+   ],
+   "agree_6": true,
+   "agree_4": true,
+   "only_4": false,
+   "verdict": "正しい接続",
+   "parent_correct": null
+  },
+  {
+   "id": "R005",
+   "value": 525048004615,
+   "novelty": "新規",
+   "sentence": "総務費は予算現額608,605,218,000円、支出済額525,048,004,615円、不用額57,452,189,385円",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "",
+     "総務費",
+     "支出済額",
+     "525048004615"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "総務費",
+     "支出済額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!E16",
+   "hold_reason": null,
+   "parent_cues": null,
+   "parent_filtered": null,
+   "parent_kept": null,
+   "engine_parent": null,
+   "engine_key6": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "",
+     "総務費",
+     "支出済額",
+     "525048004615"
+    ]
+   ],
+   "agree_6": true,
+   "agree_4": true,
+   "only_4": false,
+   "verdict": "正しい接続",
+   "parent_correct": null
+  },
+  {
+   "id": "R006",
+   "value": 57452189385,
+   "novelty": "新規",
+   "sentence": "総務費は予算現額608,605,218,000円、支出済額525,048,004,615円、不用額57,452,189,385円",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "",
+     "総務費",
+     "不用額",
+     "57452189385"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "総務費",
+     "不用額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!G16",
+   "hold_reason": null,
+   "parent_cues": null,
+   "parent_filtered": null,
+   "parent_kept": null,
+   "engine_parent": null,
+   "engine_key6": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "",
+     "総務費",
+     "不用額",
+     "57452189385"
+    ]
+   ],
+   "agree_6": true,
+   "agree_4": true,
+   "only_4": false,
+   "verdict": "正しい接続",
+   "parent_correct": null
+  },
+  {
+   "id": "R007",
+   "value": 412955089000,
+   "novelty": "新規",
+   "sentence": "公債費は予算現額412,955,089,000円、支出済額406,655,395,056円、不用額6,299,693,944円",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "",
+     "公債費",
+     "予算現額",
+     "412955089000"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "公債費",
+     "予算現額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "UNVERIFIABLE",
+   "route": null,
+   "pointer": null,
+   "hold_reason": "6 欄が一意でない(4 通り。値で選ばない)",
+   "parent_cues": null,
+   "parent_filtered": null,
+   "parent_kept": null,
+   "engine_parent": null,
+   "engine_key6": null,
+   "agree_6": false,
+   "agree_4": false,
+   "only_4": false,
+   "verdict": "結べなかった(誤接続ではない)",
+   "parent_correct": null
+  },
+  {
+   "id": "R008",
+   "value": 406655395056,
+   "novelty": "新規",
+   "sentence": "公債費は予算現額412,955,089,000円、支出済額406,655,395,056円、不用額6,299,693,944円",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "",
+     "公債費",
+     "支出済額",
+     "406655395056"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "公債費",
+     "支出済額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "UNVERIFIABLE",
+   "route": null,
+   "pointer": null,
+   "hold_reason": "6 欄が一意でない(6 通り。値で選ばない)",
+   "parent_cues": null,
+   "parent_filtered": null,
+   "parent_kept": null,
+   "engine_parent": null,
+   "engine_key6": null,
+   "agree_6": false,
+   "agree_4": false,
+   "only_4": false,
+   "verdict": "結べなかった(誤接続ではない)",
+   "parent_correct": null
+  },
+  {
+   "id": "R009",
+   "value": 6299693944,
+   "novelty": "新規",
+   "sentence": "公債費は予算現額412,955,089,000円、支出済額406,655,395,056円、不用額6,299,693,944円",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "",
+     "公債費",
+     "不用額",
+     "6299693944"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "公債費",
+     "不用額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "UNVERIFIABLE",
+   "route": null,
+   "pointer": null,
+   "hold_reason": "6 欄が一意でない(6 通り。値で選ばない)",
+   "parent_cues": null,
+   "parent_filtered": null,
+   "parent_kept": null,
+   "engine_parent": null,
+   "engine_key6": null,
+   "agree_6": false,
+   "agree_4": false,
+   "only_4": false,
+   "verdict": "結べなかった(誤接続ではない)",
+   "parent_correct": null
+  },
+  {
+   "id": "R010",
+   "value": 297687808000,
+   "novelty": "新規",
+   "sentence": "学務費は予算現額297,687,808,000円、支出済額278,713,178,716円、不用額18,974,629,284円",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "",
+     "学務費",
+     "予算現額",
+     "297687808000"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "学務費",
+     "予算現額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!D239",
+   "hold_reason": null,
+   "parent_cues": null,
+   "parent_filtered": null,
+   "parent_kept": null,
+   "engine_parent": null,
+   "engine_key6": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "",
+     "学務費",
+     "予算現額",
+     "297687808000"
+    ]
+   ],
+   "agree_6": true,
+   "agree_4": true,
+   "only_4": false,
+   "verdict": "正しい接続",
+   "parent_correct": null
+  },
+  {
+   "id": "R011",
+   "value": 278713178716,
+   "novelty": "新規",
+   "sentence": "学務費は予算現額297,687,808,000円、支出済額278,713,178,716円、不用額18,974,629,284円",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "",
+     "学務費",
+     "支出済額",
+     "278713178716"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "学務費",
+     "支出済額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!E239",
+   "hold_reason": null,
+   "parent_cues": null,
+   "parent_filtered": null,
+   "parent_kept": null,
+   "engine_parent": null,
+   "engine_key6": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "",
+     "学務費",
+     "支出済額",
+     "278713178716"
+    ]
+   ],
+   "agree_6": true,
+   "agree_4": true,
+   "only_4": false,
+   "verdict": "正しい接続",
+   "parent_correct": null
+  },
+  {
+   "id": "R012",
+   "value": 18974629284,
+   "novelty": "新規",
+   "sentence": "学務費は予算現額297,687,808,000円、支出済額278,713,178,716円、不用額18,974,629,284円",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "",
+     "学務費",
+     "不用額",
+     "18974629284"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "学務費",
+     "不用額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!G239",
+   "hold_reason": null,
+   "parent_cues": null,
+   "parent_filtered": null,
+   "parent_kept": null,
+   "engine_parent": null,
+   "engine_key6": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "",
+     "学務費",
+     "不用額",
+     "18974629284"
+    ]
+   ],
+   "agree_6": true,
+   "agree_4": true,
+   "only_4": false,
+   "verdict": "正しい接続",
+   "parent_correct": null
+  },
+  {
+   "id": "R013",
+   "value": 288683607000,
+   "novelty": "新規",
+   "sentence": "消防費は予算現額288,683,607,000円、支出済額278,455,504,028円、不用額6,639,452,972円",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "",
+     "消防費",
+     "予算現額",
+     "288683607000"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "消防費",
+     "予算現額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!D268",
+   "hold_reason": null,
+   "parent_cues": null,
+   "parent_filtered": null,
+   "parent_kept": null,
+   "engine_parent": null,
+   "engine_key6": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "",
+     "消防費",
+     "予算現額",
+     "288683607000"
+    ]
+   ],
+   "agree_6": true,
+   "agree_4": true,
+   "only_4": false,
+   "verdict": "正しい接続",
+   "parent_correct": null
+  },
+  {
+   "id": "R014",
+   "value": 278455504028,
+   "novelty": "新規",
+   "sentence": "消防費は予算現額288,683,607,000円、支出済額278,455,504,028円、不用額6,639,452,972円",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "",
+     "消防費",
+     "支出済額",
+     "278455504028"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "消防費",
+     "支出済額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!E268",
+   "hold_reason": null,
+   "parent_cues": null,
+   "parent_filtered": null,
+   "parent_kept": null,
+   "engine_parent": null,
+   "engine_key6": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "",
+     "消防費",
+     "支出済額",
+     "278455504028"
+    ]
+   ],
+   "agree_6": true,
+   "agree_4": true,
+   "only_4": false,
+   "verdict": "正しい接続",
+   "parent_correct": null
+  },
+  {
+   "id": "R015",
+   "value": 6639452972,
+   "novelty": "新規",
+   "sentence": "消防費は予算現額288,683,607,000円、支出済額278,455,504,028円、不用額6,639,452,972円",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "",
+     "消防費",
+     "不用額",
+     "6639452972"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "消防費",
+     "不用額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!G268",
+   "hold_reason": null,
+   "parent_cues": null,
+   "parent_filtered": null,
+   "parent_kept": null,
+   "engine_parent": null,
+   "engine_key6": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "",
+     "消防費",
+     "不用額",
+     "6639452972"
+    ]
+   ],
+   "agree_6": true,
+   "agree_4": true,
+   "only_4": false,
+   "verdict": "正しい接続",
+   "parent_correct": null
+  },
+  {
+   "id": "R016",
+   "value": 215282697000,
+   "novelty": "新規",
+   "sentence": "都市整備費は予算現額215,282,697,000円、支出済額187,000,862,896円、不用額21,941,943,104円",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "",
+     "都市整備費",
+     "予算現額",
+     "215282697000"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "都市整備費",
+     "予算現額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!D84",
+   "hold_reason": null,
+   "parent_cues": null,
+   "parent_filtered": null,
+   "parent_kept": null,
+   "engine_parent": null,
+   "engine_key6": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "",
+     "都市整備費",
+     "予算現額",
+     "215282697000"
+    ]
+   ],
+   "agree_6": true,
+   "agree_4": true,
+   "only_4": false,
+   "verdict": "正しい接続",
+   "parent_correct": null
+  },
+  {
+   "id": "R017",
+   "value": 187000862896,
+   "novelty": "新規",
+   "sentence": "都市整備費は予算現額215,282,697,000円、支出済額187,000,862,896円、不用額21,941,943,104円",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "",
+     "都市整備費",
+     "支出済額",
+     "187000862896"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "都市整備費",
+     "支出済額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!E84",
+   "hold_reason": null,
+   "parent_cues": null,
+   "parent_filtered": null,
+   "parent_kept": null,
+   "engine_parent": null,
+   "engine_key6": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "",
+     "都市整備費",
+     "支出済額",
+     "187000862896"
+    ]
+   ],
+   "agree_6": true,
+   "agree_4": true,
+   "only_4": false,
+   "verdict": "正しい接続",
+   "parent_correct": null
+  },
+  {
+   "id": "R018",
+   "value": 21941943104,
+   "novelty": "新規",
+   "sentence": "都市整備費は予算現額215,282,697,000円、支出済額187,000,862,896円、不用額21,941,943,104円",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "",
+     "都市整備費",
+     "不用額",
+     "21941943104"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "都市整備費",
+     "不用額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!G84",
+   "hold_reason": null,
+   "parent_cues": null,
+   "parent_filtered": null,
+   "parent_kept": null,
+   "engine_parent": null,
+   "engine_key6": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "",
+     "都市整備費",
+     "不用額",
+     "21941943104"
+    ]
+   ],
+   "agree_6": true,
+   "agree_4": true,
+   "only_4": false,
+   "verdict": "正しい接続",
+   "parent_correct": null
+  },
+  {
+   "id": "R019",
+   "value": 5314472000,
+   "novelty": "新規",
+   "sentence": "議会費は予算現額5,314,472,000円、支出済額4,802,993,869円、不用額511,478,131円と、款の中では規模が小さい",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "",
+     "議会費",
+     "予算現額",
+     "5314472000"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "議会費",
+     "予算現額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!D10",
+   "hold_reason": null,
+   "parent_cues": null,
+   "parent_filtered": null,
+   "parent_kept": null,
+   "engine_parent": null,
+   "engine_key6": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "",
+     "議会費",
+     "予算現額",
+     "5314472000"
+    ]
+   ],
+   "agree_6": true,
+   "agree_4": true,
+   "only_4": false,
+   "verdict": "正しい接続",
+   "parent_correct": null
+  },
+  {
+   "id": "R020",
+   "value": 4802993869,
+   "novelty": "新規",
+   "sentence": "議会費は予算現額5,314,472,000円、支出済額4,802,993,869円、不用額511,478,131円と、款の中では規模が小さい",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "",
+     "議会費",
+     "支出済額",
+     "4802993869"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "議会費",
+     "支出済額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!E10",
+   "hold_reason": null,
+   "parent_cues": null,
+   "parent_filtered": null,
+   "parent_kept": null,
+   "engine_parent": null,
+   "engine_key6": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "",
+     "議会費",
+     "支出済額",
+     "4802993869"
+    ]
+   ],
+   "agree_6": true,
+   "agree_4": true,
+   "only_4": false,
+   "verdict": "正しい接続",
+   "parent_correct": null
+  },
+  {
+   "id": "R021",
+   "value": 511478131,
+   "novelty": "新規",
+   "sentence": "議会費は予算現額5,314,472,000円、支出済額4,802,993,869円、不用額511,478,131円と、款の中では規模が小さい",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "",
+     "議会費",
+     "不用額",
+     "511478131"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "議会費",
+     "不用額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!G10",
+   "hold_reason": null,
+   "parent_cues": null,
+   "parent_filtered": null,
+   "parent_kept": null,
+   "engine_parent": null,
+   "engine_key6": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "",
+     "議会費",
+     "不用額",
+     "511478131"
+    ]
+   ],
+   "agree_6": true,
+   "agree_4": true,
+   "only_4": false,
+   "verdict": "正しい接続",
+   "parent_correct": null
+  },
+  {
+   "id": "R022",
+   "value": 2568489000,
+   "novelty": "新規",
+   "sentence": "予備費は予算現額2,568,489,000円に対し支出済額が0円で、不用額は予算現額と同額の2,568,489,000円であった",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "",
+     "予備費",
+     "予算現額",
+     "2568489000"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "予備費",
+     "予算現額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "UNVERIFIABLE",
+   "route": null,
+   "pointer": null,
+   "hold_reason": "列 の手がかりが 2 つ以上: 予備費支出及び流用増減・予算現額",
+   "parent_cues": null,
+   "parent_filtered": null,
+   "parent_kept": null,
+   "engine_parent": null,
+   "engine_key6": null,
+   "agree_6": false,
+   "agree_4": false,
+   "only_4": false,
+   "verdict": "結べなかった(誤接続ではない)",
+   "parent_correct": null
+  },
+  {
+   "id": "R023",
+   "value": 0,
+   "novelty": "再出",
+   "sentence": "予備費は予算現額2,568,489,000円に対し支出済額が0円で、不用額は予算現額と同額の2,568,489,000円であった",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "",
+     "予備費",
+     "支出済額",
+     "0"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "予備費",
+     "支出済額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "UNVERIFIABLE",
+   "route": null,
+   "pointer": null,
+   "hold_reason": "6 欄が一意でない(3 通り。値で選ばない)",
+   "parent_cues": null,
+   "parent_filtered": null,
+   "parent_kept": null,
+   "engine_parent": null,
+   "engine_key6": null,
+   "agree_6": false,
+   "agree_4": false,
+   "only_4": false,
+   "verdict": "結べなかった(誤接続ではない)",
+   "parent_correct": null
+  },
+  {
+   "id": "R024",
+   "value": 2568489000,
+   "novelty": "新規",
+   "sentence": "予備費は予算現額2,568,489,000円に対し支出済額が0円で、不用額は予算現額と同額の2,568,489,000円であった",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "",
+     "予備費",
+     "不用額",
+     "2568489000"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "款",
+     "予備費",
+     "不用額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "UNVERIFIABLE",
+   "route": null,
+   "pointer": null,
+   "hold_reason": "列 の手がかりが 2 つ以上: 不用額・予算現額",
+   "parent_cues": null,
+   "parent_filtered": null,
+   "parent_kept": null,
+   "engine_parent": null,
+   "engine_key6": null,
+   "agree_6": false,
+   "agree_4": false,
+   "only_4": false,
+   "verdict": "結べなかった(誤接続ではない)",
+   "parent_correct": null
+  },
+  {
+   "id": "R025",
+   "value": 278429543000,
+   "novelty": "新規",
+   "sentence": "項別では、区市町村振興費が予算現額278,429,543,000円、支出済額228,858,882,603円、不用額24,419,571,397円",
+   "label6": [
+    "verdict",
+    "判定不能"
+   ],
+   "label4": [
+    "verdict",
+    "判定不能"
+   ],
+   "seats_agree": false,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!D34",
+   "hold_reason": null,
+   "parent_cues": null,
+   "parent_filtered": null,
+   "parent_kept": null,
+   "engine_parent": "総務費",
+   "engine_key6": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "総務費",
+     "区市町村振興費",
+     "予算現額",
+     "278429543000"
+    ]
+   ],
+   "agree_6": false,
+   "agree_4": false,
+   "only_4": false,
+   "verdict": "根拠なし/判定不能なのに接続した",
+   "parent_correct": null
+  },
+  {
+   "id": "R026",
+   "value": 228858882603,
+   "novelty": "新規",
+   "sentence": "項別では、区市町村振興費が予算現額278,429,543,000円、支出済額228,858,882,603円、不用額24,419,571,397円",
+   "label6": [
+    "verdict",
+    "判定不能"
+   ],
+   "label4": [
+    "verdict",
+    "判定不能"
+   ],
+   "seats_agree": false,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!E34",
+   "hold_reason": null,
+   "parent_cues": null,
+   "parent_filtered": null,
+   "parent_kept": null,
+   "engine_parent": "総務費",
+   "engine_key6": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "総務費",
+     "区市町村振興費",
+     "支出済額",
+     "228858882603"
+    ]
+   ],
+   "agree_6": false,
+   "agree_4": false,
+   "only_4": false,
+   "verdict": "根拠なし/判定不能なのに接続した",
+   "parent_correct": null
+  },
+  {
+   "id": "R027",
+   "value": 24419571397,
+   "novelty": "新規",
+   "sentence": "項別では、区市町村振興費が予算現額278,429,543,000円、支出済額228,858,882,603円、不用額24,419,571,397円",
+   "label6": [
+    "verdict",
+    "判定不能"
+   ],
+   "label4": [
+    "verdict",
+    "判定不能"
+   ],
+   "seats_agree": false,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!G34",
+   "hold_reason": null,
+   "parent_cues": null,
+   "parent_filtered": null,
+   "parent_kept": null,
+   "engine_parent": "総務費",
+   "engine_key6": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "総務費",
+     "区市町村振興費",
+     "不用額",
+     "24419571397"
+    ]
+   ],
+   "agree_6": false,
+   "agree_4": false,
+   "only_4": false,
+   "verdict": "根拠なし/判定不能なのに接続した",
+   "parent_correct": null
+  },
+  {
+   "id": "R028",
+   "value": 163039162000,
+   "novelty": "新規",
+   "sentence": "環境保全費は予算現額163,039,162,000円、支出済額146,484,842,584円、不用額12,908,358,416円",
+   "label6": [
+    "verdict",
+    "判定不能"
+   ],
+   "label4": [
+    "verdict",
+    "判定不能"
+   ],
+   "seats_agree": false,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!D108",
+   "hold_reason": null,
+   "parent_cues": null,
+   "parent_filtered": null,
+   "parent_kept": null,
+   "engine_parent": "環境費",
+   "engine_key6": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "環境費",
+     "環境保全費",
+     "予算現額",
+     "163039162000"
+    ]
+   ],
+   "agree_6": false,
+   "agree_4": false,
+   "only_4": false,
+   "verdict": "根拠なし/判定不能なのに接続した",
+   "parent_correct": null
+  },
+  {
+   "id": "R029",
+   "value": 146484842584,
+   "novelty": "新規",
+   "sentence": "環境保全費は予算現額163,039,162,000円、支出済額146,484,842,584円、不用額12,908,358,416円",
+   "label6": [
+    "verdict",
+    "判定不能"
+   ],
+   "label4": [
+    "verdict",
+    "判定不能"
+   ],
+   "seats_agree": false,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!E108",
+   "hold_reason": null,
+   "parent_cues": null,
+   "parent_filtered": null,
+   "parent_kept": null,
+   "engine_parent": "環境費",
+   "engine_key6": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "環境費",
+     "環境保全費",
+     "支出済額",
+     "146484842584"
+    ]
+   ],
+   "agree_6": false,
+   "agree_4": false,
+   "only_4": false,
+   "verdict": "根拠なし/判定不能なのに接続した",
+   "parent_correct": null
+  },
+  {
+   "id": "R030",
+   "value": 12908358416,
+   "novelty": "新規",
+   "sentence": "環境保全費は予算現額163,039,162,000円、支出済額146,484,842,584円、不用額12,908,358,416円",
+   "label6": [
+    "verdict",
+    "判定不能"
+   ],
+   "label4": [
+    "verdict",
+    "判定不能"
+   ],
+   "seats_agree": false,
+   "state": "GROUNDED",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!G108",
+   "hold_reason": null,
+   "parent_cues": null,
+   "parent_filtered": null,
+   "parent_kept": null,
+   "engine_parent": "環境費",
+   "engine_key6": [
+    "label",
+    [
+     "一般会計",
+     "項",
+     "環境費",
+     "環境保全費",
+     "不用額",
+     "12908358416"
+    ]
+   ],
+   "agree_6": false,
+   "agree_4": false,
+   "only_4": false,
+   "verdict": "根拠なし/判定不能なのに接続した",
+   "parent_correct": null
+  },
+  {
+   "id": "R031",
+   "value": 154209834000,
+   "novelty": "新規",
+   "sentence": "目別では、教育費のうち高等学校費(管理費)は計154,209,834,000円、支出済額145,658,309,067円、不用額8,551,524,933円",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "目",
+     "教育費>高等学校費",
+     "管理費",
+     "予算現額",
+     "154209834000"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "目",
+     "管理費",
+     "予算現額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "UNVERIFIABLE",
+   "route": null,
+   "pointer": null,
+   "hold_reason": "6 欄が一意でない(61 通り。値で選ばない)",
+   "parent_cues": null,
+   "parent_filtered": null,
+   "parent_kept": null,
+   "engine_parent": null,
+   "engine_key6": null,
+   "agree_6": false,
+   "agree_4": false,
+   "only_4": false,
+   "verdict": "結べなかった(誤接続ではない)",
+   "parent_correct": null
+  },
+  {
+   "id": "R032",
+   "value": 145658309067,
+   "novelty": "新規",
+   "sentence": "目別では、教育費のうち高等学校費(管理費)は計154,209,834,000円、支出済額145,658,309,067円、不用額8,551,524,933円",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "目",
+     "教育費>高等学校費",
+     "管理費",
+     "支出済額",
+     "145658309067"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "目",
+     "管理費",
+     "支出済額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "UNVERIFIABLE",
+   "route": null,
+   "pointer": null,
+   "hold_reason": "6 欄が一意でない(61 通り。値で選ばない)",
+   "parent_cues": null,
+   "parent_filtered": null,
+   "parent_kept": null,
+   "engine_parent": null,
+   "engine_key6": null,
+   "agree_6": false,
+   "agree_4": false,
+   "only_4": false,
+   "verdict": "結べなかった(誤接続ではない)",
+   "parent_correct": null
+  },
+  {
+   "id": "R033",
+   "value": 8551524933,
+   "novelty": "新規",
+   "sentence": "目別では、教育費のうち高等学校費(管理費)は計154,209,834,000円、支出済額145,658,309,067円、不用額8,551,524,933円",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "目",
+     "教育費>高等学校費",
+     "管理費",
+     "不用額",
+     "8551524933"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "目",
+     "管理費",
+     "不用額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "UNVERIFIABLE",
+   "route": null,
+   "pointer": null,
+   "hold_reason": "6 欄が一意でない(61 通り。値で選ばない)",
+   "parent_cues": null,
+   "parent_filtered": null,
+   "parent_kept": null,
+   "engine_parent": null,
+   "engine_key6": null,
+   "agree_6": false,
+   "agree_4": false,
+   "only_4": false,
+   "verdict": "結べなかった(誤接続ではない)",
+   "parent_correct": null
+  },
+  {
+   "id": "R034",
+   "value": 213142461000,
+   "novelty": "新規",
+   "sentence": "消防費のうち消防管理費(管理費)は計213,142,461,000円、支出済額209,950,978,921円、不用額3,191,482,079円",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "目",
+     "消防費>消防管理費",
+     "管理費",
+     "予算現額",
+     "213142461000"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "目",
+     "管理費",
+     "予算現額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "UNVERIFIABLE",
+   "route": null,
+   "pointer": null,
+   "hold_reason": "6 欄が一意でない(61 通り。値で選ばない)",
+   "parent_cues": null,
+   "parent_filtered": null,
+   "parent_kept": null,
+   "engine_parent": null,
+   "engine_key6": null,
+   "agree_6": false,
+   "agree_4": false,
+   "only_4": false,
+   "verdict": "結べなかった(誤接続ではない)",
+   "parent_correct": null
+  },
+  {
+   "id": "R035",
+   "value": 209950978921,
+   "novelty": "新規",
+   "sentence": "消防費のうち消防管理費(管理費)は計213,142,461,000円、支出済額209,950,978,921円、不用額3,191,482,079円",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "目",
+     "消防費>消防管理費",
+     "管理費",
+     "支出済額",
+     "209950978921"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "目",
+     "管理費",
+     "支出済額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "UNVERIFIABLE",
+   "route": null,
+   "pointer": null,
+   "hold_reason": "6 欄が一意でない(61 通り。値で選ばない)",
+   "parent_cues": null,
+   "parent_filtered": null,
+   "parent_kept": null,
+   "engine_parent": null,
+   "engine_key6": null,
+   "agree_6": false,
+   "agree_4": false,
+   "only_4": false,
+   "verdict": "結べなかった(誤接続ではない)",
+   "parent_correct": null
+  },
+  {
+   "id": "R036",
+   "value": 3191482079,
+   "novelty": "新規",
+   "sentence": "消防費のうち消防管理費(管理費)は計213,142,461,000円、支出済額209,950,978,921円、不用額3,191,482,079円",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "目",
+     "消防費>消防管理費",
+     "管理費",
+     "不用額",
+     "3191482079"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "目",
+     "管理費",
+     "不用額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "UNVERIFIABLE",
+   "route": null,
+   "pointer": null,
+   "hold_reason": "6 欄が一意でない(61 通り。値で選ばない)",
+   "parent_cues": null,
+   "parent_filtered": null,
+   "parent_kept": null,
+   "engine_parent": null,
+   "engine_key6": null,
+   "agree_6": false,
+   "agree_4": false,
+   "only_4": false,
+   "verdict": "結べなかった(誤接続ではない)",
+   "parent_correct": null
+  },
+  {
+   "id": "R037",
+   "value": 45295762000,
+   "novelty": "新規",
+   "sentence": "港湾費のうち東京港整備費(港湾整備費)は計45,295,762,000円、支出済額39,708,284,680円、不用額4,265,332,320円",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "目",
+     "港湾費>東京港整備費",
+     "港湾整備費",
+     "予算現額",
+     "45295762000"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "目",
+     "港湾整備費",
+     "予算現額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "UNVERIFIABLE",
+   "route": null,
+   "pointer": null,
+   "hold_reason": "6 欄が一意でない(2 通り。値で選ばない)",
+   "parent_cues": null,
+   "parent_filtered": null,
+   "parent_kept": null,
+   "engine_parent": null,
+   "engine_key6": null,
+   "agree_6": false,
+   "agree_4": false,
+   "only_4": false,
+   "verdict": "結べなかった(誤接続ではない)",
+   "parent_correct": null
+  },
+  {
+   "id": "R038",
+   "value": 39708284680,
+   "novelty": "新規",
+   "sentence": "港湾費のうち東京港整備費(港湾整備費)は計45,295,762,000円、支出済額39,708,284,680円、不用額4,265,332,320円",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "目",
+     "港湾費>東京港整備費",
+     "港湾整備費",
+     "支出済額",
+     "39708284680"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "目",
+     "港湾整備費",
+     "支出済額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "UNVERIFIABLE",
+   "route": null,
+   "pointer": null,
+   "hold_reason": "6 欄が一意でない(2 通り。値で選ばない)",
+   "parent_cues": null,
+   "parent_filtered": null,
+   "parent_kept": null,
+   "engine_parent": null,
+   "engine_key6": null,
+   "agree_6": false,
+   "agree_4": false,
+   "only_4": false,
+   "verdict": "結べなかった(誤接続ではない)",
+   "parent_correct": null
+  },
+  {
+   "id": "R039",
+   "value": 4265332320,
+   "novelty": "新規",
+   "sentence": "港湾費のうち東京港整備費(港湾整備費)は計45,295,762,000円、支出済額39,708,284,680円、不用額4,265,332,320円",
+   "label6": [
+    "label",
+    [
+     "一般会計",
+     "目",
+     "港湾費>東京港整備費",
+     "港湾整備費",
+     "不用額",
+     "4265332320"
+    ]
+   ],
+   "label4": [
+    "label",
+    [
+     "一般会計",
+     "目",
+     "港湾整備費",
+     "不用額"
+    ]
+   ],
+   "seats_agree": true,
+   "state": "UNVERIFIABLE",
+   "route": null,
+   "pointer": null,
+   "hold_reason": "6 欄が一意でない(2 通り。値で選ばない)",
+   "parent_cues": null,
+   "parent_filtered": null,
+   "parent_kept": null,
+   "engine_parent": null,
+   "engine_key6": null,
+   "agree_6": false,
+   "agree_4": false,
+   "only_4": false,
+   "verdict": "結べなかった(誤接続ではない)",
+   "parent_correct": null
+  }
+ ]
+}

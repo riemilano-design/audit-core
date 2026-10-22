@@ -1,0 +1,3099 @@
+{
+ "purpose": "段 11 の接続の結果(旧・新の 2 本)。**合否は採点の script で出す**",
+ "seal": "docs/DOMAIN1_M11_SEAL_2026-10-16.md",
+ "old_engine": "measure/sheet_m7_engine_2026-10-15.py",
+ "new_engine": "measure/sheet_sainyuu_engine_2026-10-16.py",
+ "engine_sha": {
+  "sheet_m5_engine_2026-10-15.py": "6eb5723ef518e1b4",
+  "sheet_m7_engine_2026-10-15.py": "4574c3ea013d05a1",
+  "sheet_parent_backing_2026-10-16.py": "8e387958c69398e8",
+  "sheet_sainyuu_engine_2026-10-16.py": "3a70b599672832d3",
+  "sheet_sainyuu_p1_2026-10-16.py": "91b15e0f7eaa5442",
+  "sheet_sainyuu_p2_2026-10-16.py": "671c7dd81cea0ffe"
+ },
+ "engine_unchanged": true,
+ "applied_times": 1,
+ "min_independent": 3,
+ "entries": 4209,
+ "vocabulary": 381,
+ "column_cues": 53,
+ "alias_old": {
+  "通った": [
+   "東京都一般会計"
+  ],
+  "未確認": 18
+ },
+ "alias_new": {
+  "通った": [
+   "東京都と場会計",
+   "東京都一般会計",
+   "東京都中小企業設備導入等資金会計",
+   "東京都公債費会計",
+   "東京都国民健康保険事業会計",
+   "東京都地方消費税清算会計",
+   "東京都地方独立行政法人東京都立病院機構貸付等事業会計 ",
+   "東京都小笠原諸島生活再建資金会計",
+   "東京都工業用水道事業清算会計",
+   "東京都心身障害者扶養年金会計",
+   "東京都林業・木材産業改善資金助成会計",
+   "東京都母子父子福祉貸付資金会計",
+   "東京都沿岸漁業改善資金助成会計",
+   "東京都特別区財政調整会計",
+   "東京都用地会計",
+   "東京都臨海都市基盤整備事業会計",
+   "東京都都営住宅等事業会計",
+   "東京都都営住宅等保証金会計",
+   "東京都都市開発資金会計"
+  ],
+  "未確認": 0,
+  "歳入で昇格": [
+   "東京都と場会計",
+   "東京都中小企業設備導入等資金会計",
+   "東京都公債費会計",
+   "東京都国民健康保険事業会計",
+   "東京都地方消費税清算会計",
+   "東京都地方独立行政法人東京都立病院機構貸付等事業会計 ",
+   "東京都小笠原諸島生活再建資金会計",
+   "東京都工業用水道事業清算会計",
+   "東京都心身障害者扶養年金会計",
+   "東京都林業・木材産業改善資金助成会計",
+   "東京都母子父子福祉貸付資金会計",
+   "東京都沿岸漁業改善資金助成会計",
+   "東京都特別区財政調整会計",
+   "東京都用地会計",
+   "東京都臨海都市基盤整備事業会計",
+   "東京都都営住宅等事業会計",
+   "東京都都営住宅等保証金会計",
+   "東京都都市開発資金会計"
+  ]
+ },
+ "counts": {
+  "claims": 35,
+  "scorable": 35,
+  "old_split": {
+   "接続数": 16,
+   "保留数": 19,
+   "対象外数": 0
+  },
+  "new_split": {
+   "接続数": 16,
+   "保留数": 19,
+   "対象外数": 0
+  },
+  "old_hold_reasons": {
+   "列 の手がかりが 2 つ以上: 予算現額・歳出決算額": 1,
+   "6 欄が一意でない(4 通り。値で選ばない)": 2,
+   "6 欄が一意でない(13 通り。値で選ばない)": 4,
+   "6 欄が一意でない(6 通り。値で選ばない)": 2,
+   "6 欄が一意でない(2 通り。値で選ばない)": 2,
+   "6 欄が一意でない(5 通り。値で選ばない)": 1,
+   "6 欄が一意でない(3 通り。値で選ばない)": 1,
+   "6 欄が一意でない(7 通り。値で選ばない)": 1,
+   "6 欄が一意でない(35 通り。値で選ばない)": 1,
+   "6 欄が一意でない(61 通り。値で選ばない)": 2,
+   "列 の手がかりが 2 つ以上: 支出済額・計": 1,
+   "会計が未確認の別名(独立した裏づけ 3 本未満。値が合っても結ばない)": 1
+  },
+  "new_hold_reasons": {
+   "列 の手がかりが 2 つ以上: 予算現額・歳出決算額": 1,
+   "6 欄が一意でない(4 通り。値で選ばない)": 1,
+   "6 欄が一意でない(9 通り。値で選ばない)": 2,
+   "6 欄が一意でない(6 通り。値で選ばない)": 1,
+   "6 欄が一意でない(7 通り。値で選ばない)": 3,
+   "6 欄が一意でない(2 通り。値で選ばない)": 3,
+   "6 欄が一意でない(3 通り。値で選ばない)": 3,
+   "6 欄が一意でない(35 通り。値で選ばない)": 1,
+   "6 欄が一意でない(61 通り。値で選ばない)": 2,
+   "列 の手がかりが 2 つ以上: 支出済額・計": 1,
+   "(理由なし)": 1
+  },
+  "novelty": {
+   "新規": 34,
+   "再出": 1
+  },
+  "novelty_scorable": {
+   "新規": 34,
+   "再出": 1
+  }
+ },
+ "claim_level_counts": {
+  "A-1 ③が発火した主張(旧 engine)": 1,
+  "A-1 ③が発火した主張(新 engine)": 0,
+  "A-2 ③以外の理由で保留(旧 / 新)": [
+   18,
+   19
+  ],
+  "A-3 未確認の別名の行に結んだ主張(旧 / 新)": [
+   0,
+   0
+  ],
+  "未確認の別名の数(旧 / 新)": [
+   18,
+   0
+  ],
+  "X-1 抜粋に在る行に結んだ主張(新・対称)": 16,
+  "X-2対称(新。**合否**)": 0,
+  "X-2非対称(新。**開示だけ**)": 0,
+  "X-2三欄(新。**裏取り**)": 0,
+  "X-2対称(旧)": 0,
+  "C-1 親の手がかりになり得る名前が区間に在る主張": 13,
+  "C-2 親の全成分が支持され、絞りが働いた主張": 4,
+  "C-3 列の手がかりが在る主張": 31,
+  "C-3 列の手がかりが無い主張": 4,
+  "C-4 旧では保留・新では接続になった主張": 0
+ },
+ "A(旧 engine)": {
+  "A-1": [
+   {
+    "id": "R035",
+    "会計": "東京都と場会計",
+    "理由": "会計が未確認の別名(独立した裏づけ 3 本未満。値が合っても結ばない)"
+   }
+  ],
+  "A-2": [
+   {
+    "id": "R001",
+    "理由": "列 の手がかりが 2 つ以上: 予算現額・歳出決算額"
+   },
+   {
+    "id": "R018",
+    "理由": "6 欄が一意でない(4 通り。値で選ばない)"
+   },
+   {
+    "id": "R019",
+    "理由": "6 欄が一意でない(13 通り。値で選ばない)"
+   },
+   {
+    "id": "R020",
+    "理由": "6 欄が一意でない(13 通り。値で選ばない)"
+   },
+   {
+    "id": "R021",
+    "理由": "6 欄が一意でない(6 通り。値で選ばない)"
+   },
+   {
+    "id": "R022",
+    "理由": "6 欄が一意でない(13 通り。値で選ばない)"
+   },
+   {
+    "id": "R023",
+    "理由": "6 欄が一意でない(13 通り。値で選ばない)"
+   },
+   {
+    "id": "R024",
+    "理由": "6 欄が一意でない(2 通り。値で選ばない)"
+   },
+   {
+    "id": "R025",
+    "理由": "6 欄が一意でない(5 通り。値で選ばない)"
+   },
+   {
+    "id": "R026",
+    "理由": "6 欄が一意でない(3 通り。値で選ばない)"
+   },
+   {
+    "id": "R027",
+    "理由": "6 欄が一意でない(6 通り。値で選ばない)"
+   },
+   {
+    "id": "R028",
+    "理由": "6 欄が一意でない(2 通り。値で選ばない)"
+   },
+   {
+    "id": "R029",
+    "理由": "6 欄が一意でない(4 通り。値で選ばない)"
+   },
+   {
+    "id": "R030",
+    "理由": "6 欄が一意でない(7 通り。値で選ばない)"
+   },
+   {
+    "id": "R031",
+    "理由": "6 欄が一意でない(35 通り。値で選ばない)"
+   },
+   {
+    "id": "R032",
+    "理由": "6 欄が一意でない(61 通り。値で選ばない)"
+   },
+   {
+    "id": "R033",
+    "理由": "6 欄が一意でない(61 通り。値で選ばない)"
+   },
+   {
+    "id": "R034",
+    "理由": "列 の手がかりが 2 つ以上: 支出済額・計"
+   }
+  ],
+  "A-3": [],
+  "未確認の別名の数": 18
+ },
+ "A(新 engine)": {
+  "A-1": [],
+  "A-2": [
+   {
+    "id": "R001",
+    "理由": "列 の手がかりが 2 つ以上: 予算現額・歳出決算額"
+   },
+   {
+    "id": "R018",
+    "理由": "6 欄が一意でない(4 通り。値で選ばない)"
+   },
+   {
+    "id": "R019",
+    "理由": "6 欄が一意でない(9 通り。値で選ばない)"
+   },
+   {
+    "id": "R020",
+    "理由": "6 欄が一意でない(9 通り。値で選ばない)"
+   },
+   {
+    "id": "R021",
+    "理由": "6 欄が一意でない(6 通り。値で選ばない)"
+   },
+   {
+    "id": "R022",
+    "理由": "6 欄が一意でない(7 通り。値で選ばない)"
+   },
+   {
+    "id": "R023",
+    "理由": "6 欄が一意でない(7 通り。値で選ばない)"
+   },
+   {
+    "id": "R024",
+    "理由": "6 欄が一意でない(2 通り。値で選ばない)"
+   },
+   {
+    "id": "R025",
+    "理由": "6 欄が一意でない(3 通り。値で選ばない)"
+   },
+   {
+    "id": "R026",
+    "理由": "6 欄が一意でない(3 通り。値で選ばない)"
+   },
+   {
+    "id": "R027",
+    "理由": "6 欄が一意でない(3 通り。値で選ばない)"
+   },
+   {
+    "id": "R028",
+    "理由": "6 欄が一意でない(2 通り。値で選ばない)"
+   },
+   {
+    "id": "R029",
+    "理由": "6 欄が一意でない(2 通り。値で選ばない)"
+   },
+   {
+    "id": "R030",
+    "理由": "6 欄が一意でない(7 通り。値で選ばない)"
+   },
+   {
+    "id": "R031",
+    "理由": "6 欄が一意でない(35 通り。値で選ばない)"
+   },
+   {
+    "id": "R032",
+    "理由": "6 欄が一意でない(61 通り。値で選ばない)"
+   },
+   {
+    "id": "R033",
+    "理由": "6 欄が一意でない(61 通り。値で選ばない)"
+   },
+   {
+    "id": "R034",
+    "理由": "列 の手がかりが 2 つ以上: 支出済額・計"
+   },
+   {
+    "id": "R035",
+    "理由": null
+   }
+  ],
+  "A-3": [],
+  "未確認の別名の数": 0
+ },
+ "X-2(旧 engine)": {
+  "X-2対称": 0,
+  "X-2非対称": 0,
+  "X-2三欄": 0,
+  "X-1対称": 16,
+  "結んだ主張": 16,
+  "X-2対称の明細": [],
+  "X-2非対称の明細": [],
+  "X-2三欄の明細": []
+ },
+ "X-2(新 engine)": {
+  "X-2対称": 0,
+  "X-2非対称": 0,
+  "X-2三欄": 0,
+  "X-1対称": 16,
+  "結んだ主張": 16,
+  "X-2対称の明細": [],
+  "X-2非対称の明細": [],
+  "X-2三欄の明細": []
+ },
+ "X-2 の判定(新)": {
+  "判定": "合格",
+  "合格": true,
+  "理由": "X-2対称 = 0 件・X-2三欄 = 0 件(線はどちらも 0 件)。**非対称 = 0 件は開示だけで、性能として書かない**"
+ },
+ "note": "A-1〜A-3 と X-2 は**ラベルを使わない**指標。**新 engine では未確認が 0 件なので A-1・A-3 は構造的に 0**(封 §3。**生成より先に書いた**)。**③の発火機会は旧 engine で観測する。**",
+ "x2_note": "**X-2 は 3 通り。**合否は対称、非対称は**開示だけ**、三欄は**別名表に依らない裏取り**(封 §4)。**計数器の歯は人工材料で別に当ててある**(`m11_x2_teeth_2026-10-16.json`)",
+ "unit_note": "C-1〜C-4 は**主張の単位**。生成前に数えた `m11_opportunity_2026-10-16.json` は**行(セル)の単位**で、**単位が違うので並べて比べない**",
+ "claims": [
+  {
+   "id": "R001",
+   "sentence_index": 1,
+   "sentence": "一般会計の歳出では、総務費のうち子供政策連携費が予算現在額10,169,000,000円に対し支出済額8,311,548,667円で、不用額は1,857,451,333円となった",
+   "text": "10,169,000,000円",
+   "value": 10169000000,
+   "written_scale": 1,
+   "subject": "子供政策連携費",
+   "subject_candidates": [
+    "一般会計",
+    "総務費"
+   ],
+   "column": null,
+   "column_ambiguous": [
+    "予算現額",
+    "歳出決算額"
+   ],
+   "level": null,
+   "level_ambiguous": null,
+   "paren_depth": 0,
+   "parent_cues": [
+    "一般会計",
+    "総務費"
+   ],
+   "scorable": true,
+   "undecidable": true,
+   "novelty": "新規"
+  },
+  {
+   "id": "R002",
+   "sentence_index": 1,
+   "sentence": "一般会計の歳出では、総務費のうち子供政策連携費が予算現在額10,169,000,000円に対し支出済額8,311,548,667円で、不用額は1,857,451,333円となった",
+   "text": "8,311,548,667円",
+   "value": 8311548667,
+   "written_scale": 1,
+   "subject": "子供政策連携費",
+   "subject_candidates": [
+    "一般会計",
+    "総務費"
+   ],
+   "column": "支出済額",
+   "column_ambiguous": null,
+   "level": null,
+   "level_ambiguous": null,
+   "paren_depth": 0,
+   "parent_cues": [],
+   "scorable": true,
+   "undecidable": true,
+   "novelty": "新規"
+  },
+  {
+   "id": "R003",
+   "sentence_index": 1,
+   "sentence": "一般会計の歳出では、総務費のうち子供政策連携費が予算現在額10,169,000,000円に対し支出済額8,311,548,667円で、不用額は1,857,451,333円となった",
+   "text": "1,857,451,333円",
+   "value": 1857451333,
+   "written_scale": 1,
+   "subject": "子供政策連携費",
+   "subject_candidates": [
+    "一般会計",
+    "総務費"
+   ],
+   "column": "不用額",
+   "column_ambiguous": null,
+   "level": null,
+   "level_ambiguous": null,
+   "paren_depth": 0,
+   "parent_cues": [],
+   "scorable": true,
+   "undecidable": true,
+   "novelty": "新規"
+  },
+  {
+   "id": "R004",
+   "sentence_index": 2,
+   "sentence": "同じ総務費のスタートアップ・国際金融都市戦略費は予算現在額28,268,927,000円に対し支出済額23,506,146,400円、防災管理費は予算現在額16,512,904,000円に対し支出済額13,352,967,071円で不用額3,146,001,929円であった",
+   "text": "28,268,927,000円",
+   "value": 28268927000,
+   "written_scale": 1,
+   "subject": "スタートアップ・国際金融都市戦略費",
+   "subject_candidates": [
+    "総務費",
+    "防災管理費"
+   ],
+   "column": "予算現額",
+   "column_ambiguous": null,
+   "level": null,
+   "level_ambiguous": null,
+   "paren_depth": 0,
+   "parent_cues": [
+    "総務費"
+   ],
+   "scorable": true,
+   "undecidable": true,
+   "novelty": "新規"
+  },
+  {
+   "id": "R005",
+   "sentence_index": 2,
+   "sentence": "同じ総務費のスタートアップ・国際金融都市戦略費は予算現在額28,268,927,000円に対し支出済額23,506,146,400円、防災管理費は予算現在額16,512,904,000円に対し支出済額13,352,967,071円で不用額3,146,001,929円であった",
+   "text": "23,506,146,400円",
+   "value": 23506146400,
+   "written_scale": 1,
+   "subject": "スタートアップ・国際金融都市戦略費",
+   "subject_candidates": [
+    "総務費",
+    "防災管理費"
+   ],
+   "column": "支出済額",
+   "column_ambiguous": null,
+   "level": null,
+   "level_ambiguous": null,
+   "paren_depth": 0,
+   "parent_cues": [],
+   "scorable": true,
+   "undecidable": true,
+   "novelty": "新規"
+  },
+  {
+   "id": "R006",
+   "sentence_index": 2,
+   "sentence": "同じ総務費のスタートアップ・国際金融都市戦略費は予算現在額28,268,927,000円に対し支出済額23,506,146,400円、防災管理費は予算現在額16,512,904,000円に対し支出済額13,352,967,071円で不用額3,146,001,929円であった",
+   "text": "16,512,904,000円",
+   "value": 16512904000,
+   "written_scale": 1,
+   "subject": "防災管理費",
+   "subject_candidates": [
+    "総務費",
+    "スタートアップ・国際金融都市戦略費"
+   ],
+   "column": "予算現額",
+   "column_ambiguous": null,
+   "level": null,
+   "level_ambiguous": null,
+   "paren_depth": 0,
+   "parent_cues": [],
+   "scorable": true,
+   "undecidable": true,
+   "novelty": "新規"
+  },
+  {
+   "id": "R007",
+   "sentence_index": 2,
+   "sentence": "同じ総務費のスタートアップ・国際金融都市戦略費は予算現在額28,268,927,000円に対し支出済額23,506,146,400円、防災管理費は予算現在額16,512,904,000円に対し支出済額13,352,967,071円で不用額3,146,001,929円であった",
+   "text": "13,352,967,071円",
+   "value": 13352967071,
+   "written_scale": 1,
+   "subject": "防災管理費",
+   "subject_candidates": [
+    "総務費",
+    "スタートアップ・国際金融都市戦略費"
+   ],
+   "column": "支出済額",
+   "column_ambiguous": null,
+   "level": null,
+   "level_ambiguous": null,
+   "paren_depth": 0,
+   "parent_cues": [],
+   "scorable": true,
+   "undecidable": true,
+   "novelty": "新規"
+  },
+  {
+   "id": "R008",
+   "sentence_index": 2,
+   "sentence": "同じ総務費のスタートアップ・国際金融都市戦略費は予算現在額28,268,927,000円に対し支出済額23,506,146,400円、防災管理費は予算現在額16,512,904,000円に対し支出済額13,352,967,071円で不用額3,146,001,929円であった",
+   "text": "3,146,001,929円",
+   "value": 3146001929,
+   "written_scale": 1,
+   "subject": "防災管理費",
+   "subject_candidates": [
+    "総務費",
+    "スタートアップ・国際金融都市戦略費"
+   ],
+   "column": "不用額",
+   "column_ambiguous": null,
+   "level": null,
+   "level_ambiguous": null,
+   "paren_depth": 0,
+   "parent_cues": [],
+   "scorable": true,
+   "undecidable": true,
+   "novelty": "新規"
+  },
+  {
+   "id": "R009",
+   "sentence_index": 3,
+   "sentence": "総務費退職手当及年金費の退職費は支出済額14,286,115,103円に達している",
+   "text": "14,286,115,103円",
+   "value": 14286115103,
+   "written_scale": 1,
+   "subject": "退職費",
+   "subject_candidates": [
+    "退職手当及年金費",
+    "総務費"
+   ],
+   "column": "支出済額",
+   "column_ambiguous": null,
+   "level": null,
+   "level_ambiguous": null,
+   "paren_depth": 0,
+   "parent_cues": [
+    "総務費",
+    "退職手当及年金費"
+   ],
+   "scorable": true,
+   "undecidable": true,
+   "novelty": "新規"
+  },
+  {
+   "id": "R010",
+   "sentence_index": 4,
+   "sentence": "徴税費の徴税管理費は予算現在額33,285,483,000円に対し支出済額32,593,444,531円であった",
+   "text": "33,285,483,000円",
+   "value": 33285483000,
+   "written_scale": 1,
+   "subject": "徴税管理費",
+   "subject_candidates": [
+    "徴税費"
+   ],
+   "column": "予算現額",
+   "column_ambiguous": null,
+   "level": null,
+   "level_ambiguous": null,
+   "paren_depth": 0,
+   "parent_cues": [
+    "徴税費"
+   ],
+   "scorable": true,
+   "undecidable": true,
+   "novelty": "新規"
+  },
+  {
+   "id": "R011",
+   "sentence_index": 4,
+   "sentence": "徴税費の徴税管理費は予算現在額33,285,483,000円に対し支出済額32,593,444,531円であった",
+   "text": "32,593,444,531円",
+   "value": 32593444531,
+   "written_scale": 1,
+   "subject": "徴税管理費",
+   "subject_candidates": [
+    "徴税費"
+   ],
+   "column": "支出済額",
+   "column_ambiguous": null,
+   "level": null,
+   "level_ambiguous": null,
+   "paren_depth": 0,
+   "parent_cues": [],
+   "scorable": true,
+   "undecidable": true,
+   "novelty": "新規"
+  },
+  {
+   "id": "R012",
+   "sentence_index": 7,
+   "sentence": "都市整備費では、市街地整備費が予算現在額46,526,037,000円に対し支出済額30,202,256,663円にとどまり、不用額は12,588,375,337円となった",
+   "text": "46,526,037,000円",
+   "value": 46526037000,
+   "written_scale": 1,
+   "subject": "市街地整備費",
+   "subject_candidates": [
+    "都市整備費"
+   ],
+   "column": "予算現額",
+   "column_ambiguous": null,
+   "level": null,
+   "level_ambiguous": null,
+   "paren_depth": 0,
+   "parent_cues": [
+    "都市整備費"
+   ],
+   "scorable": true,
+   "undecidable": true,
+   "novelty": "新規"
+  },
+  {
+   "id": "R013",
+   "sentence_index": 7,
+   "sentence": "都市整備費では、市街地整備費が予算現在額46,526,037,000円に対し支出済額30,202,256,663円にとどまり、不用額は12,588,375,337円となった",
+   "text": "30,202,256,663円",
+   "value": 30202256663,
+   "written_scale": 1,
+   "subject": "市街地整備費",
+   "subject_candidates": [
+    "都市整備費"
+   ],
+   "column": "支出済額",
+   "column_ambiguous": null,
+   "level": null,
+   "level_ambiguous": null,
+   "paren_depth": 0,
+   "parent_cues": [],
+   "scorable": true,
+   "undecidable": true,
+   "novelty": "新規"
+  },
+  {
+   "id": "R014",
+   "sentence_index": 7,
+   "sentence": "都市整備費では、市街地整備費が予算現在額46,526,037,000円に対し支出済額30,202,256,663円にとどまり、不用額は12,588,375,337円となった",
+   "text": "12,588,375,337円",
+   "value": 12588375337,
+   "written_scale": 1,
+   "subject": "市街地整備費",
+   "subject_candidates": [
+    "都市整備費"
+   ],
+   "column": "不用額",
+   "column_ambiguous": null,
+   "level": null,
+   "level_ambiguous": null,
+   "paren_depth": 0,
+   "parent_cues": [],
+   "scorable": true,
+   "undecidable": true,
+   "novelty": "新規"
+  },
+  {
+   "id": "R015",
+   "sentence_index": 8,
+   "sentence": "住宅政策費は予算現在額45,485,360,000円に対し支出済額39,660,519,320円、不用額5,415,041,680円であった",
+   "text": "45,485,360,000円",
+   "value": 45485360000,
+   "written_scale": 1,
+   "subject": "住宅政策費",
+   "subject_candidates": [],
+   "column": "予算現額",
+   "column_ambiguous": null,
+   "level": null,
+   "level_ambiguous": null,
+   "paren_depth": 0,
+   "parent_cues": [],
+   "scorable": true,
+   "undecidable": false,
+   "novelty": "新規"
+  },
+  {
+   "id": "R016",
+   "sentence_index": 8,
+   "sentence": "住宅政策費は予算現在額45,485,360,000円に対し支出済額39,660,519,320円、不用額5,415,041,680円であった",
+   "text": "39,660,519,320円",
+   "value": 39660519320,
+   "written_scale": 1,
+   "subject": "住宅政策費",
+   "subject_candidates": [],
+   "column": "支出済額",
+   "column_ambiguous": null,
+   "level": null,
+   "level_ambiguous": null,
+   "paren_depth": 0,
+   "parent_cues": [],
+   "scorable": true,
+   "undecidable": false,
+   "novelty": "新規"
+  },
+  {
+   "id": "R017",
+   "sentence_index": 8,
+   "sentence": "住宅政策費は予算現在額45,485,360,000円に対し支出済額39,660,519,320円、不用額5,415,041,680円であった",
+   "text": "5,415,041,680円",
+   "value": 5415041680,
+   "written_scale": 1,
+   "subject": "住宅政策費",
+   "subject_candidates": [],
+   "column": "不用額",
+   "column_ambiguous": null,
+   "level": null,
+   "level_ambiguous": null,
+   "paren_depth": 0,
+   "parent_cues": [],
+   "scorable": true,
+   "undecidable": false,
+   "novelty": "新規"
+  },
+  {
+   "id": "R018",
+   "sentence_index": 11,
+   "sentence": "特別会計では、小笠原諸島生活再建資金会計の貸付費が予算現在額372,000,000円に対し支出済額0円で、不用額がそのまま372,000,000円となっている",
+   "text": "372,000,000円",
+   "value": 372000000,
+   "written_scale": 1,
+   "subject": "貸付費",
+   "subject_candidates": [
+    "小笠原諸島生活再建資金会計"
+   ],
+   "column": "予算現額",
+   "column_ambiguous": null,
+   "level": null,
+   "level_ambiguous": null,
+   "paren_depth": 0,
+   "parent_cues": [
+    "小笠原諸島生活再建資金会計"
+   ],
+   "scorable": true,
+   "undecidable": true,
+   "novelty": "新規"
+  },
+  {
+   "id": "R019",
+   "sentence_index": 11,
+   "sentence": "特別会計では、小笠原諸島生活再建資金会計の貸付費が予算現在額372,000,000円に対し支出済額0円で、不用額がそのまま372,000,000円となっている",
+   "text": "0円",
+   "value": 0,
+   "written_scale": 1,
+   "subject": "貸付費",
+   "subject_candidates": [
+    "小笠原諸島生活再建資金会計"
+   ],
+   "column": "支出済額",
+   "column_ambiguous": null,
+   "level": null,
+   "level_ambiguous": null,
+   "paren_depth": 0,
+   "parent_cues": [],
+   "scorable": true,
+   "undecidable": true,
+   "novelty": "再出"
+  },
+  {
+   "id": "R020",
+   "sentence_index": 11,
+   "sentence": "特別会計では、小笠原諸島生活再建資金会計の貸付費が予算現在額372,000,000円に対し支出済額0円で、不用額がそのまま372,000,000円となっている",
+   "text": "372,000,000円",
+   "value": 372000000,
+   "written_scale": 1,
+   "subject": "貸付費",
+   "subject_candidates": [
+    "小笠原諸島生活再建資金会計"
+   ],
+   "column": "不用額",
+   "column_ambiguous": null,
+   "level": null,
+   "level_ambiguous": null,
+   "paren_depth": 0,
+   "parent_cues": [],
+   "scorable": true,
+   "undecidable": true,
+   "novelty": "新規"
+  },
+  {
+   "id": "R021",
+   "sentence_index": 12,
+   "sentence": "沿岸漁業改善資金助成会計の助成費も予算現在額48,000,000円に対し支出済額はわずか44,385円にとどまり、不用額47,955,615円が生じた",
+   "text": "48,000,000円",
+   "value": 48000000,
+   "written_scale": 1,
+   "subject": "助成費",
+   "subject_candidates": [
+    "沿岸漁業改善資金助成会計"
+   ],
+   "column": "予算現額",
+   "column_ambiguous": null,
+   "level": null,
+   "level_ambiguous": null,
+   "paren_depth": 0,
+   "parent_cues": [
+    "沿岸漁業改善資金助成会計"
+   ],
+   "scorable": true,
+   "undecidable": true,
+   "novelty": "新規"
+  },
+  {
+   "id": "R022",
+   "sentence_index": 12,
+   "sentence": "沿岸漁業改善資金助成会計の助成費も予算現在額48,000,000円に対し支出済額はわずか44,385円にとどまり、不用額47,955,615円が生じた",
+   "text": "44,385円",
+   "value": 44385,
+   "written_scale": 1,
+   "subject": "助成費",
+   "subject_candidates": [
+    "沿岸漁業改善資金助成会計"
+   ],
+   "column": "支出済額",
+   "column_ambiguous": null,
+   "level": null,
+   "level_ambiguous": null,
+   "paren_depth": 0,
+   "parent_cues": [],
+   "scorable": true,
+   "undecidable": true,
+   "novelty": "新規"
+  },
+  {
+   "id": "R023",
+   "sentence_index": 12,
+   "sentence": "沿岸漁業改善資金助成会計の助成費も予算現在額48,000,000円に対し支出済額はわずか44,385円にとどまり、不用額47,955,615円が生じた",
+   "text": "47,955,615円",
+   "value": 47955615,
+   "written_scale": 1,
+   "subject": "助成費",
+   "subject_candidates": [
+    "沿岸漁業改善資金助成会計"
+   ],
+   "column": "不用額",
+   "column_ambiguous": null,
+   "level": null,
+   "level_ambiguous": null,
+   "paren_depth": 0,
+   "parent_cues": [],
+   "scorable": true,
+   "undecidable": true,
+   "novelty": "新規"
+  },
+  {
+   "id": "R024",
+   "sentence_index": 13,
+   "sentence": "心身障害者扶養年金会計の扶養年金費は予算現在額3,155,000,000円に対し支出済額2,866,560,633円、都市開発資金会計の用地費は予算現在額7,966,000,000円に対し支出済額5,990,312,855円、臨海都市基盤整備事業会計の臨海都市基盤整備費は予算現在額1,411,988,000円に対し支出済額405,774,394円であった",
+   "text": "3,155,000,000円",
+   "value": 3155000000,
+   "written_scale": 1,
+   "subject": "扶養年金費",
+   "subject_candidates": [
+    "臨海都市基盤整備費",
+    "心身障害者扶養年金会計",
+    "臨海都市基盤整備事業会計",
+    "用地費",
+    "都市開発資金会計"
+   ],
+   "column": "予算現額",
+   "column_ambiguous": null,
+   "level": null,
+   "level_ambiguous": null,
+   "paren_depth": 0,
+   "parent_cues": [
+    "心身障害者扶養年金会計"
+   ],
+   "scorable": true,
+   "undecidable": true,
+   "novelty": "新規"
+  },
+  {
+   "id": "R025",
+   "sentence_index": 13,
+   "sentence": "心身障害者扶養年金会計の扶養年金費は予算現在額3,155,000,000円に対し支出済額2,866,560,633円、都市開発資金会計の用地費は予算現在額7,966,000,000円に対し支出済額5,990,312,855円、臨海都市基盤整備事業会計の臨海都市基盤整備費は予算現在額1,411,988,000円に対し支出済額405,774,394円であった",
+   "text": "2,866,560,633円",
+   "value": 2866560633,
+   "written_scale": 1,
+   "subject": "扶養年金費",
+   "subject_candidates": [
+    "臨海都市基盤整備費",
+    "心身障害者扶養年金会計",
+    "臨海都市基盤整備事業会計",
+    "用地費",
+    "都市開発資金会計"
+   ],
+   "column": "支出済額",
+   "column_ambiguous": null,
+   "level": null,
+   "level_ambiguous": null,
+   "paren_depth": 0,
+   "parent_cues": [],
+   "scorable": true,
+   "undecidable": true,
+   "novelty": "新規"
+  },
+  {
+   "id": "R026",
+   "sentence_index": 13,
+   "sentence": "心身障害者扶養年金会計の扶養年金費は予算現在額3,155,000,000円に対し支出済額2,866,560,633円、都市開発資金会計の用地費は予算現在額7,966,000,000円に対し支出済額5,990,312,855円、臨海都市基盤整備事業会計の臨海都市基盤整備費は予算現在額1,411,988,000円に対し支出済額405,774,394円であった",
+   "text": "7,966,000,000円",
+   "value": 7966000000,
+   "written_scale": 1,
+   "subject": "用地費",
+   "subject_candidates": [
+    "臨海都市基盤整備費",
+    "扶養年金費",
+    "心身障害者扶養年金会計",
+    "臨海都市基盤整備事業会計",
+    "都市開発資金会計"
+   ],
+   "column": "予算現額",
+   "column_ambiguous": null,
+   "level": null,
+   "level_ambiguous": null,
+   "paren_depth": 0,
+   "parent_cues": [
+    "都市開発資金会計"
+   ],
+   "scorable": true,
+   "undecidable": true,
+   "novelty": "新規"
+  },
+  {
+   "id": "R027",
+   "sentence_index": 13,
+   "sentence": "心身障害者扶養年金会計の扶養年金費は予算現在額3,155,000,000円に対し支出済額2,866,560,633円、都市開発資金会計の用地費は予算現在額7,966,000,000円に対し支出済額5,990,312,855円、臨海都市基盤整備事業会計の臨海都市基盤整備費は予算現在額1,411,988,000円に対し支出済額405,774,394円であった",
+   "text": "5,990,312,855円",
+   "value": 5990312855,
+   "written_scale": 1,
+   "subject": "用地費",
+   "subject_candidates": [
+    "臨海都市基盤整備費",
+    "扶養年金費",
+    "心身障害者扶養年金会計",
+    "臨海都市基盤整備事業会計",
+    "都市開発資金会計"
+   ],
+   "column": "支出済額",
+   "column_ambiguous": null,
+   "level": null,
+   "level_ambiguous": null,
+   "paren_depth": 0,
+   "parent_cues": [],
+   "scorable": true,
+   "undecidable": true,
+   "novelty": "新規"
+  },
+  {
+   "id": "R028",
+   "sentence_index": 13,
+   "sentence": "心身障害者扶養年金会計の扶養年金費は予算現在額3,155,000,000円に対し支出済額2,866,560,633円、都市開発資金会計の用地費は予算現在額7,966,000,000円に対し支出済額5,990,312,855円、臨海都市基盤整備事業会計の臨海都市基盤整備費は予算現在額1,411,988,000円に対し支出済額405,774,394円であった",
+   "text": "1,411,988,000円",
+   "value": 1411988000,
+   "written_scale": 1,
+   "subject": "臨海都市基盤整備費",
+   "subject_candidates": [
+    "扶養年金費",
+    "心身障害者扶養年金会計",
+    "臨海都市基盤整備事業会計",
+    "用地費",
+    "都市開発資金会計"
+   ],
+   "column": "予算現額",
+   "column_ambiguous": null,
+   "level": null,
+   "level_ambiguous": null,
+   "paren_depth": 0,
+   "parent_cues": [
+    "臨海都市基盤整備事業会計"
+   ],
+   "scorable": true,
+   "undecidable": true,
+   "novelty": "新規"
+  },
+  {
+   "id": "R029",
+   "sentence_index": 13,
+   "sentence": "心身障害者扶養年金会計の扶養年金費は予算現在額3,155,000,000円に対し支出済額2,866,560,633円、都市開発資金会計の用地費は予算現在額7,966,000,000円に対し支出済額5,990,312,855円、臨海都市基盤整備事業会計の臨海都市基盤整備費は予算現在額1,411,988,000円に対し支出済額405,774,394円であった",
+   "text": "405,774,394円",
+   "value": 405774394,
+   "written_scale": 1,
+   "subject": "臨海都市基盤整備費",
+   "subject_candidates": [
+    "扶養年金費",
+    "心身障害者扶養年金会計",
+    "臨海都市基盤整備事業会計",
+    "用地費",
+    "都市開発資金会計"
+   ],
+   "column": "支出済額",
+   "column_ambiguous": null,
+   "level": null,
+   "level_ambiguous": null,
+   "paren_depth": 0,
+   "parent_cues": [],
+   "scorable": true,
+   "undecidable": true,
+   "novelty": "新規"
+  },
+  {
+   "id": "R030",
+   "sentence_index": 16,
+   "sentence": "目別では、国民健康保険事業会計の財政安定化基金積立金が5,942,803,687円、東京都立病院機構貸付等事業会計の貸付費が15,018,000,000円の支出済額となっている",
+   "text": "5,942,803,687円",
+   "value": 5942803687,
+   "written_scale": 1,
+   "subject": "財政安定化基金積立金",
+   "subject_candidates": [
+    "貸付費",
+    "国民健康保険事業会計"
+   ],
+   "column": null,
+   "column_ambiguous": null,
+   "level": "目",
+   "level_ambiguous": null,
+   "paren_depth": 0,
+   "parent_cues": [
+    "国民健康保険事業会計"
+   ],
+   "scorable": true,
+   "undecidable": true,
+   "novelty": "新規"
+  },
+  {
+   "id": "R031",
+   "sentence_index": 16,
+   "sentence": "目別では、国民健康保険事業会計の財政安定化基金積立金が5,942,803,687円、東京都立病院機構貸付等事業会計の貸付費が15,018,000,000円の支出済額となっている",
+   "text": "15,018,000,000円",
+   "value": 15018000000,
+   "written_scale": 1,
+   "subject": "貸付費",
+   "subject_candidates": [
+    "財政安定化基金積立金",
+    "国民健康保険事業会計"
+   ],
+   "column": null,
+   "column_ambiguous": null,
+   "level": "目",
+   "level_ambiguous": null,
+   "paren_depth": 0,
+   "parent_cues": [],
+   "scorable": true,
+   "undecidable": true,
+   "novelty": "新規"
+  },
+  {
+   "id": "R032",
+   "sentence_index": 17,
+   "sentence": "公債費会計の管理費は支出済額2,231,253,401円に対し補正予算額10,500,388,000円が計上され、と場会計の運営費は支出済額3,129,389,173円に対し補正予算額はマイナス48,327,000円であった",
+   "text": "2,231,253,401円",
+   "value": 2231253401,
+   "written_scale": 1,
+   "subject": "管理費",
+   "subject_candidates": [
+    "と場会計",
+    "運営費",
+    "公債費会計"
+   ],
+   "column": "支出済額",
+   "column_ambiguous": null,
+   "level": null,
+   "level_ambiguous": null,
+   "paren_depth": 0,
+   "parent_cues": [
+    "公債費会計"
+   ],
+   "scorable": true,
+   "undecidable": true,
+   "novelty": "新規"
+  },
+  {
+   "id": "R033",
+   "sentence_index": 17,
+   "sentence": "公債費会計の管理費は支出済額2,231,253,401円に対し補正予算額10,500,388,000円が計上され、と場会計の運営費は支出済額3,129,389,173円に対し補正予算額はマイナス48,327,000円であった",
+   "text": "10,500,388,000円",
+   "value": 10500388000,
+   "written_scale": 1,
+   "subject": "管理費",
+   "subject_candidates": [
+    "と場会計",
+    "運営費",
+    "公債費会計"
+   ],
+   "column": "補正予算額",
+   "column_ambiguous": null,
+   "level": null,
+   "level_ambiguous": null,
+   "paren_depth": 0,
+   "parent_cues": [],
+   "scorable": true,
+   "undecidable": true,
+   "novelty": "新規"
+  },
+  {
+   "id": "R034",
+   "sentence_index": 17,
+   "sentence": "公債費会計の管理費は支出済額2,231,253,401円に対し補正予算額10,500,388,000円が計上され、と場会計の運営費は支出済額3,129,389,173円に対し補正予算額はマイナス48,327,000円であった",
+   "text": "3,129,389,173円",
+   "value": 3129389173,
+   "written_scale": 1,
+   "subject": "運営費",
+   "subject_candidates": [
+    "と場会計",
+    "管理費",
+    "公債費会計"
+   ],
+   "column": null,
+   "column_ambiguous": [
+    "支出済額",
+    "計"
+   ],
+   "level": null,
+   "level_ambiguous": null,
+   "paren_depth": 0,
+   "parent_cues": [
+    "と場会計"
+   ],
+   "scorable": true,
+   "undecidable": true,
+   "novelty": "新規"
+  },
+  {
+   "id": "R035",
+   "sentence_index": 17,
+   "sentence": "公債費会計の管理費は支出済額2,231,253,401円に対し補正予算額10,500,388,000円が計上され、と場会計の運営費は支出済額3,129,389,173円に対し補正予算額はマイナス48,327,000円であった",
+   "text": "48,327,000円",
+   "value": 48327000,
+   "written_scale": 1,
+   "subject": "運営費",
+   "subject_candidates": [
+    "と場会計",
+    "管理費",
+    "公債費会計"
+   ],
+   "column": "補正予算額",
+   "column_ambiguous": null,
+   "level": null,
+   "level_ambiguous": null,
+   "paren_depth": 0,
+   "parent_cues": [],
+   "scorable": true,
+   "undecidable": true,
+   "novelty": "新規"
+  }
+ ],
+ "binds_old": [
+  {
+   "claim_id": "R001",
+   "route": null,
+   "pointer": null,
+   "recomputed": null,
+   "range_identified": false,
+   "value_match": false,
+   "state": "UNVERIFIABLE",
+   "evidence": null,
+   "match_kind": null,
+   "candidates": 0,
+   "hold_reason": "列 の手がかりが 2 つ以上: 予算現額・歳出決算額",
+   "parent_cues": [
+    "一般会計",
+    "総務費"
+   ],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "parent_before": null,
+   "parent_after": null
+  },
+  {
+   "claim_id": "R002",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!E25",
+   "recomputed": 8311548667,
+   "range_identified": true,
+   "value_match": true,
+   "state": "GROUNDED",
+   "evidence": {
+    "scope_from": "決算書のブロックの表題行",
+    "code_ref": "B24",
+    "name_ref": "C24",
+    "value_ref": "E25",
+    "header_ref": "E7",
+    "scope": "一般会計",
+    "level": "項",
+    "parent": "総務費",
+    "name": "子供政策連携費",
+    "column": "支出済額",
+    "value": 8311548667,
+    "duplicate_pointers": [
+     "sheet:決算書 歳出!E25",
+     "sheet:事項別明細!R684"
+    ]
+   },
+   "match_kind": "完全一致",
+   "candidates": 2,
+   "hold_reason": null,
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "parent_before": 2,
+   "parent_after": 2,
+   "duplicates": 2
+  },
+  {
+   "claim_id": "R003",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!G25",
+   "recomputed": 1857451333,
+   "range_identified": true,
+   "value_match": true,
+   "state": "GROUNDED",
+   "evidence": {
+    "scope_from": "決算書のブロックの表題行",
+    "code_ref": "B24",
+    "name_ref": "C24",
+    "value_ref": "G25",
+    "header_ref": "G7",
+    "scope": "一般会計",
+    "level": "項",
+    "parent": "総務費",
+    "name": "子供政策連携費",
+    "column": "不用額",
+    "value": 1857451333,
+    "duplicate_pointers": [
+     "sheet:決算書 歳出!G25",
+     "sheet:事項別明細!V684"
+    ]
+   },
+   "match_kind": "完全一致",
+   "candidates": 2,
+   "hold_reason": null,
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "parent_before": 2,
+   "parent_after": 2,
+   "duplicates": 2
+  },
+  {
+   "claim_id": "R004",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!D28",
+   "recomputed": 28268927000,
+   "range_identified": true,
+   "value_match": true,
+   "state": "GROUNDED",
+   "evidence": {
+    "scope_from": "決算書のブロックの表題行",
+    "code_ref": "B27",
+    "name_ref": "C27",
+    "value_ref": "D28",
+    "header_ref": "D7",
+    "scope": "一般会計",
+    "level": "項",
+    "parent": "総務費",
+    "name": "スタートアップ・国際金融都市戦略費",
+    "column": "予算現額",
+    "value": 28268927000
+   },
+   "match_kind": "完全一致",
+   "candidates": 1,
+   "hold_reason": null,
+   "parent_cues": [
+    "総務費"
+   ],
+   "parent_filtered": true,
+   "parent_kept": [
+    "総務費"
+   ],
+   "parent_before": 1,
+   "parent_after": 1,
+   "duplicates": 1
+  },
+  {
+   "claim_id": "R005",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!E28",
+   "recomputed": 23506146400,
+   "range_identified": true,
+   "value_match": true,
+   "state": "GROUNDED",
+   "evidence": {
+    "scope_from": "決算書のブロックの表題行",
+    "code_ref": "B27",
+    "name_ref": "C27",
+    "value_ref": "E28",
+    "header_ref": "E7",
+    "scope": "一般会計",
+    "level": "項",
+    "parent": "総務費",
+    "name": "スタートアップ・国際金融都市戦略費",
+    "column": "支出済額",
+    "value": 23506146400,
+    "duplicate_pointers": [
+     "sheet:決算書 歳出!E28",
+     "sheet:事項別明細!R768"
+    ]
+   },
+   "match_kind": "完全一致",
+   "candidates": 2,
+   "hold_reason": null,
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "parent_before": 2,
+   "parent_after": 2,
+   "duplicates": 2
+  },
+  {
+   "claim_id": "R006",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!D40",
+   "recomputed": 16512904000,
+   "range_identified": true,
+   "value_match": true,
+   "state": "GROUNDED",
+   "evidence": {
+    "scope_from": "決算書のブロックの表題行",
+    "code_ref": "B39",
+    "name_ref": "C39",
+    "value_ref": "D40",
+    "header_ref": "D7",
+    "scope": "一般会計",
+    "level": "項",
+    "parent": "総務費",
+    "name": "防災管理費",
+    "column": "予算現額",
+    "value": 16512904000
+   },
+   "match_kind": "完全一致",
+   "candidates": 1,
+   "hold_reason": null,
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "parent_before": 1,
+   "parent_after": 1,
+   "duplicates": 1
+  },
+  {
+   "claim_id": "R007",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!E40",
+   "recomputed": 13352967071,
+   "range_identified": true,
+   "value_match": true,
+   "state": "GROUNDED",
+   "evidence": {
+    "scope_from": "決算書のブロックの表題行",
+    "code_ref": "B39",
+    "name_ref": "C39",
+    "value_ref": "E40",
+    "header_ref": "E7",
+    "scope": "一般会計",
+    "level": "項",
+    "parent": "総務費",
+    "name": "防災管理費",
+    "column": "支出済額",
+    "value": 13352967071,
+    "duplicate_pointers": [
+     "sheet:決算書 歳出!E40",
+     "sheet:事項別明細!R1446"
+    ]
+   },
+   "match_kind": "完全一致",
+   "candidates": 2,
+   "hold_reason": null,
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "parent_before": 2,
+   "parent_after": 2,
+   "duplicates": 2
+  },
+  {
+   "claim_id": "R008",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!G40",
+   "recomputed": 3146001929,
+   "range_identified": true,
+   "value_match": true,
+   "state": "GROUNDED",
+   "evidence": {
+    "scope_from": "決算書のブロックの表題行",
+    "code_ref": "B39",
+    "name_ref": "C39",
+    "value_ref": "G40",
+    "header_ref": "G7",
+    "scope": "一般会計",
+    "level": "項",
+    "parent": "総務費",
+    "name": "防災管理費",
+    "column": "不用額",
+    "value": 3146001929,
+    "duplicate_pointers": [
+     "sheet:決算書 歳出!G40",
+     "sheet:事項別明細!V1446"
+    ]
+   },
+   "match_kind": "完全一致",
+   "candidates": 2,
+   "hold_reason": null,
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "parent_before": 2,
+   "parent_after": 2,
+   "duplicates": 2
+  },
+  {
+   "claim_id": "R009",
+   "route": "R-1",
+   "pointer": "sheet:事項別明細!R2259",
+   "recomputed": 14286115103,
+   "range_identified": true,
+   "value_match": true,
+   "state": "GROUNDED",
+   "evidence": {
+    "scope_from": "明細の目次(シート名と会計名)",
+    "code_ref": "C2259",
+    "name_ref": "D2258",
+    "value_ref": "R2259",
+    "sign_ref": null,
+    "scope_as_written": "東京都一般会計",
+    "scope_alias_evidence": {
+     "接尾一致": [
+      "東京都一般会計",
+      "一般会計"
+     ],
+     "独立した裏づけ": 18,
+     "食い違い": 0,
+     "裏づけの行": [
+      "予備費",
+      "保健医療費",
+      "公債費",
+      "土木費",
+      "学務費",
+      "徴税費",
+      "教育費",
+      "消防費",
+      "港湾費",
+      "環境費",
+      "生活文化スポーツ費",
+      "産業労働費",
+      "福祉費",
+      "総務費",
+      "諸支出金",
+      "警察費",
+      "議会費",
+      "都市整備費"
+     ]
+    },
+    "scope": "一般会計",
+    "level": "目",
+    "parent": "総務費 > 退職手当及年金費",
+    "name": "退職費",
+    "column": "支出済額",
+    "value": 14286115103
+   },
+   "match_kind": "完全一致",
+   "candidates": 1,
+   "hold_reason": null,
+   "parent_cues": [
+    "総務費",
+    "退職手当及年金費"
+   ],
+   "parent_filtered": true,
+   "parent_kept": [
+    "総務費 > 退職手当及年金費"
+   ],
+   "parent_before": 4,
+   "parent_after": 1,
+   "duplicates": 1
+  },
+  {
+   "claim_id": "R010",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!D64",
+   "recomputed": 33285483000,
+   "range_identified": true,
+   "value_match": true,
+   "state": "GROUNDED",
+   "evidence": {
+    "scope_from": "決算書のブロックの表題行",
+    "code_ref": "B63",
+    "name_ref": "C63",
+    "value_ref": "D64",
+    "header_ref": "D7",
+    "scope": "一般会計",
+    "level": "項",
+    "parent": "徴税費",
+    "name": "徴税管理費",
+    "column": "予算現額",
+    "value": 33285483000
+   },
+   "match_kind": "完全一致",
+   "candidates": 1,
+   "hold_reason": null,
+   "parent_cues": [
+    "徴税費"
+   ],
+   "parent_filtered": true,
+   "parent_kept": [
+    "徴税費"
+   ],
+   "parent_before": 1,
+   "parent_after": 1,
+   "duplicates": 1
+  },
+  {
+   "claim_id": "R011",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!E64",
+   "recomputed": 32593444531,
+   "range_identified": true,
+   "value_match": true,
+   "state": "GROUNDED",
+   "evidence": {
+    "scope_from": "決算書のブロックの表題行",
+    "code_ref": "B63",
+    "name_ref": "C63",
+    "value_ref": "E64",
+    "header_ref": "E7",
+    "scope": "一般会計",
+    "level": "項",
+    "parent": "徴税費",
+    "name": "徴税管理費",
+    "column": "支出済額",
+    "value": 32593444531,
+    "duplicate_pointers": [
+     "sheet:決算書 歳出!E64",
+     "sheet:事項別明細!R2352"
+    ]
+   },
+   "match_kind": "完全一致",
+   "candidates": 2,
+   "hold_reason": null,
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "parent_before": 2,
+   "parent_after": 2,
+   "duplicates": 2
+  },
+  {
+   "claim_id": "R012",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!D93",
+   "recomputed": 46526037000,
+   "range_identified": true,
+   "value_match": true,
+   "state": "GROUNDED",
+   "evidence": {
+    "scope_from": "決算書のブロックの表題行",
+    "code_ref": "B92",
+    "name_ref": "C92",
+    "value_ref": "D93",
+    "header_ref": "D7",
+    "scope": "一般会計",
+    "level": "項",
+    "parent": "都市整備費",
+    "name": "市街地整備費",
+    "column": "予算現額",
+    "value": 46526037000
+   },
+   "match_kind": "完全一致",
+   "candidates": 1,
+   "hold_reason": null,
+   "parent_cues": [
+    "都市整備費"
+   ],
+   "parent_filtered": true,
+   "parent_kept": [
+    "都市整備費"
+   ],
+   "parent_before": 1,
+   "parent_after": 1,
+   "duplicates": 1
+  },
+  {
+   "claim_id": "R013",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!E93",
+   "recomputed": 30202256663,
+   "range_identified": true,
+   "value_match": true,
+   "state": "GROUNDED",
+   "evidence": {
+    "scope_from": "決算書のブロックの表題行",
+    "code_ref": "B92",
+    "name_ref": "C92",
+    "value_ref": "E93",
+    "header_ref": "E7",
+    "scope": "一般会計",
+    "level": "項",
+    "parent": "都市整備費",
+    "name": "市街地整備費",
+    "column": "支出済額",
+    "value": 30202256663,
+    "duplicate_pointers": [
+     "sheet:決算書 歳出!E93",
+     "sheet:事項別明細!R3753"
+    ]
+   },
+   "match_kind": "完全一致",
+   "candidates": 2,
+   "hold_reason": null,
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "parent_before": 2,
+   "parent_after": 2,
+   "duplicates": 2
+  },
+  {
+   "claim_id": "R014",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!G93",
+   "recomputed": 12588375337,
+   "range_identified": true,
+   "value_match": true,
+   "state": "GROUNDED",
+   "evidence": {
+    "scope_from": "決算書のブロックの表題行",
+    "code_ref": "B92",
+    "name_ref": "C92",
+    "value_ref": "G93",
+    "header_ref": "G7",
+    "scope": "一般会計",
+    "level": "項",
+    "parent": "都市整備費",
+    "name": "市街地整備費",
+    "column": "不用額",
+    "value": 12588375337,
+    "duplicate_pointers": [
+     "sheet:決算書 歳出!G93",
+     "sheet:事項別明細!V3753"
+    ]
+   },
+   "match_kind": "完全一致",
+   "candidates": 2,
+   "hold_reason": null,
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "parent_before": 2,
+   "parent_after": 2,
+   "duplicates": 2
+  },
+  {
+   "claim_id": "R015",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!D99",
+   "recomputed": 45485360000,
+   "range_identified": true,
+   "value_match": true,
+   "state": "GROUNDED",
+   "evidence": {
+    "scope_from": "決算書のブロックの表題行",
+    "code_ref": "B98",
+    "name_ref": "C98",
+    "value_ref": "D99",
+    "header_ref": "D7",
+    "scope": "一般会計",
+    "level": "項",
+    "parent": "都市整備費",
+    "name": "住宅政策費",
+    "column": "予算現額",
+    "value": 45485360000
+   },
+   "match_kind": "完全一致",
+   "candidates": 1,
+   "hold_reason": null,
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "parent_before": 1,
+   "parent_after": 1,
+   "duplicates": 1
+  },
+  {
+   "claim_id": "R016",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!E99",
+   "recomputed": 39660519320,
+   "range_identified": true,
+   "value_match": true,
+   "state": "GROUNDED",
+   "evidence": {
+    "scope_from": "決算書のブロックの表題行",
+    "code_ref": "B98",
+    "name_ref": "C98",
+    "value_ref": "E99",
+    "header_ref": "E7",
+    "scope": "一般会計",
+    "level": "項",
+    "parent": "都市整備費",
+    "name": "住宅政策費",
+    "column": "支出済額",
+    "value": 39660519320,
+    "duplicate_pointers": [
+     "sheet:決算書 歳出!E99",
+     "sheet:事項別明細!R4326"
+    ]
+   },
+   "match_kind": "完全一致",
+   "candidates": 2,
+   "hold_reason": null,
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "parent_before": 2,
+   "parent_after": 2,
+   "duplicates": 2
+  },
+  {
+   "claim_id": "R017",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!G99",
+   "recomputed": 5415041680,
+   "range_identified": true,
+   "value_match": true,
+   "state": "GROUNDED",
+   "evidence": {
+    "scope_from": "決算書のブロックの表題行",
+    "code_ref": "B98",
+    "name_ref": "C98",
+    "value_ref": "G99",
+    "header_ref": "G7",
+    "scope": "一般会計",
+    "level": "項",
+    "parent": "都市整備費",
+    "name": "住宅政策費",
+    "column": "不用額",
+    "value": 5415041680,
+    "duplicate_pointers": [
+     "sheet:決算書 歳出!G99",
+     "sheet:事項別明細!V4326"
+    ]
+   },
+   "match_kind": "完全一致",
+   "candidates": 2,
+   "hold_reason": null,
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "parent_before": 2,
+   "parent_after": 2,
+   "duplicates": 2
+  },
+  {
+   "claim_id": "R018",
+   "route": null,
+   "pointer": null,
+   "recomputed": null,
+   "range_identified": false,
+   "value_match": false,
+   "state": "UNVERIFIABLE",
+   "evidence": null,
+   "match_kind": "完全一致",
+   "candidates": 4,
+   "hold_reason": "6 欄が一意でない(4 通り。値で選ばない)",
+   "parent_cues": [
+    "小笠原諸島生活再建資金会計"
+   ],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "parent_before": 4,
+   "parent_after": 4,
+   "distinct_keys": 4
+  },
+  {
+   "claim_id": "R019",
+   "route": null,
+   "pointer": null,
+   "recomputed": null,
+   "range_identified": false,
+   "value_match": false,
+   "state": "UNVERIFIABLE",
+   "evidence": null,
+   "match_kind": "完全一致",
+   "candidates": 13,
+   "hold_reason": "6 欄が一意でない(13 通り。値で選ばない)",
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "parent_before": 13,
+   "parent_after": 13,
+   "distinct_keys": 13
+  },
+  {
+   "claim_id": "R020",
+   "route": null,
+   "pointer": null,
+   "recomputed": null,
+   "range_identified": false,
+   "value_match": false,
+   "state": "UNVERIFIABLE",
+   "evidence": null,
+   "match_kind": "完全一致",
+   "candidates": 13,
+   "hold_reason": "6 欄が一意でない(13 通り。値で選ばない)",
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "parent_before": 13,
+   "parent_after": 13,
+   "distinct_keys": 13
+  },
+  {
+   "claim_id": "R021",
+   "route": null,
+   "pointer": null,
+   "recomputed": null,
+   "range_identified": false,
+   "value_match": false,
+   "state": "UNVERIFIABLE",
+   "evidence": null,
+   "match_kind": "完全一致",
+   "candidates": 6,
+   "hold_reason": "6 欄が一意でない(6 通り。値で選ばない)",
+   "parent_cues": [
+    "沿岸漁業改善資金助成会計"
+   ],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "parent_before": 6,
+   "parent_after": 6,
+   "distinct_keys": 6
+  },
+  {
+   "claim_id": "R022",
+   "route": null,
+   "pointer": null,
+   "recomputed": null,
+   "range_identified": false,
+   "value_match": false,
+   "state": "UNVERIFIABLE",
+   "evidence": null,
+   "match_kind": "完全一致",
+   "candidates": 13,
+   "hold_reason": "6 欄が一意でない(13 通り。値で選ばない)",
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "parent_before": 13,
+   "parent_after": 13,
+   "distinct_keys": 13
+  },
+  {
+   "claim_id": "R023",
+   "route": null,
+   "pointer": null,
+   "recomputed": null,
+   "range_identified": false,
+   "value_match": false,
+   "state": "UNVERIFIABLE",
+   "evidence": null,
+   "match_kind": "完全一致",
+   "candidates": 13,
+   "hold_reason": "6 欄が一意でない(13 通り。値で選ばない)",
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "parent_before": 13,
+   "parent_after": 13,
+   "distinct_keys": 13
+  },
+  {
+   "claim_id": "R024",
+   "route": null,
+   "pointer": null,
+   "recomputed": null,
+   "range_identified": false,
+   "value_match": false,
+   "state": "UNVERIFIABLE",
+   "evidence": null,
+   "match_kind": "完全一致",
+   "candidates": 2,
+   "hold_reason": "6 欄が一意でない(2 通り。値で選ばない)",
+   "parent_cues": [
+    "心身障害者扶養年金会計"
+   ],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "parent_before": 2,
+   "parent_after": 2,
+   "distinct_keys": 2
+  },
+  {
+   "claim_id": "R025",
+   "route": null,
+   "pointer": null,
+   "recomputed": null,
+   "range_identified": false,
+   "value_match": false,
+   "state": "UNVERIFIABLE",
+   "evidence": null,
+   "match_kind": "完全一致",
+   "candidates": 5,
+   "hold_reason": "6 欄が一意でない(5 通り。値で選ばない)",
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "parent_before": 5,
+   "parent_after": 5,
+   "distinct_keys": 5
+  },
+  {
+   "claim_id": "R026",
+   "route": null,
+   "pointer": null,
+   "recomputed": null,
+   "range_identified": false,
+   "value_match": false,
+   "state": "UNVERIFIABLE",
+   "evidence": null,
+   "match_kind": "完全一致",
+   "candidates": 3,
+   "hold_reason": "6 欄が一意でない(3 通り。値で選ばない)",
+   "parent_cues": [
+    "都市開発資金会計"
+   ],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "parent_before": 3,
+   "parent_after": 3,
+   "distinct_keys": 3
+  },
+  {
+   "claim_id": "R027",
+   "route": null,
+   "pointer": null,
+   "recomputed": null,
+   "range_identified": false,
+   "value_match": false,
+   "state": "UNVERIFIABLE",
+   "evidence": null,
+   "match_kind": "完全一致",
+   "candidates": 6,
+   "hold_reason": "6 欄が一意でない(6 通り。値で選ばない)",
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "parent_before": 6,
+   "parent_after": 6,
+   "distinct_keys": 6
+  },
+  {
+   "claim_id": "R028",
+   "route": null,
+   "pointer": null,
+   "recomputed": null,
+   "range_identified": false,
+   "value_match": false,
+   "state": "UNVERIFIABLE",
+   "evidence": null,
+   "match_kind": "完全一致",
+   "candidates": 2,
+   "hold_reason": "6 欄が一意でない(2 通り。値で選ばない)",
+   "parent_cues": [
+    "臨海都市基盤整備事業会計"
+   ],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "parent_before": 2,
+   "parent_after": 2,
+   "distinct_keys": 2
+  },
+  {
+   "claim_id": "R029",
+   "route": null,
+   "pointer": null,
+   "recomputed": null,
+   "range_identified": false,
+   "value_match": false,
+   "state": "UNVERIFIABLE",
+   "evidence": null,
+   "match_kind": "完全一致",
+   "candidates": 4,
+   "hold_reason": "6 欄が一意でない(4 通り。値で選ばない)",
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "parent_before": 4,
+   "parent_after": 4,
+   "distinct_keys": 4
+  },
+  {
+   "claim_id": "R030",
+   "route": null,
+   "pointer": null,
+   "recomputed": null,
+   "range_identified": false,
+   "value_match": false,
+   "state": "UNVERIFIABLE",
+   "evidence": null,
+   "match_kind": "完全一致",
+   "candidates": 7,
+   "hold_reason": "6 欄が一意でない(7 通り。値で選ばない)",
+   "parent_cues": [
+    "国民健康保険事業会計"
+   ],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "parent_before": 7,
+   "parent_after": 7,
+   "distinct_keys": 7
+  },
+  {
+   "claim_id": "R031",
+   "route": null,
+   "pointer": null,
+   "recomputed": null,
+   "range_identified": false,
+   "value_match": false,
+   "state": "UNVERIFIABLE",
+   "evidence": null,
+   "match_kind": "完全一致",
+   "candidates": 35,
+   "hold_reason": "6 欄が一意でない(35 通り。値で選ばない)",
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "parent_before": 35,
+   "parent_after": 35,
+   "distinct_keys": 35
+  },
+  {
+   "claim_id": "R032",
+   "route": null,
+   "pointer": null,
+   "recomputed": null,
+   "range_identified": false,
+   "value_match": false,
+   "state": "UNVERIFIABLE",
+   "evidence": null,
+   "match_kind": "完全一致",
+   "candidates": 61,
+   "hold_reason": "6 欄が一意でない(61 通り。値で選ばない)",
+   "parent_cues": [
+    "公債費会計"
+   ],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "parent_before": 61,
+   "parent_after": 61,
+   "distinct_keys": 61
+  },
+  {
+   "claim_id": "R033",
+   "route": null,
+   "pointer": null,
+   "recomputed": null,
+   "range_identified": false,
+   "value_match": false,
+   "state": "UNVERIFIABLE",
+   "evidence": null,
+   "match_kind": "完全一致",
+   "candidates": 61,
+   "hold_reason": "6 欄が一意でない(61 通り。値で選ばない)",
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "parent_before": 61,
+   "parent_after": 61,
+   "distinct_keys": 61
+  },
+  {
+   "claim_id": "R034",
+   "route": null,
+   "pointer": null,
+   "recomputed": null,
+   "range_identified": false,
+   "value_match": false,
+   "state": "UNVERIFIABLE",
+   "evidence": null,
+   "match_kind": null,
+   "candidates": 0,
+   "hold_reason": "列 の手がかりが 2 つ以上: 支出済額・計",
+   "parent_cues": [
+    "と場会計"
+   ],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "parent_before": null,
+   "parent_after": null
+  },
+  {
+   "claim_id": "R035",
+   "route": null,
+   "pointer": null,
+   "recomputed": null,
+   "range_identified": false,
+   "value_match": false,
+   "state": "UNVERIFIABLE",
+   "evidence": null,
+   "match_kind": "完全一致",
+   "candidates": 1,
+   "hold_reason": "会計が未確認の別名(独立した裏づけ 3 本未満。値が合っても結ばない)",
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "parent_before": 1,
+   "parent_after": 1,
+   "unconfirmed_scope": "東京都と場会計"
+  }
+ ],
+ "binds_new": [
+  {
+   "claim_id": "R001",
+   "route": null,
+   "pointer": null,
+   "recomputed": null,
+   "range_identified": false,
+   "value_match": false,
+   "state": "UNVERIFIABLE",
+   "evidence": null,
+   "match_kind": null,
+   "candidates": 0,
+   "hold_reason": "列 の手がかりが 2 つ以上: 予算現額・歳出決算額",
+   "parent_cues": [
+    "一般会計",
+    "総務費"
+   ],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "parent_before": null,
+   "parent_after": null
+  },
+  {
+   "claim_id": "R002",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!E25",
+   "recomputed": 8311548667,
+   "range_identified": true,
+   "value_match": true,
+   "state": "GROUNDED",
+   "evidence": {
+    "scope_from": "決算書のブロックの表題行",
+    "code_ref": "B24",
+    "name_ref": "C24",
+    "value_ref": "E25",
+    "header_ref": "E7",
+    "scope": "一般会計",
+    "level": "項",
+    "parent": "総務費",
+    "name": "子供政策連携費",
+    "column": "支出済額",
+    "value": 8311548667,
+    "duplicate_pointers": [
+     "sheet:決算書 歳出!E25",
+     "sheet:事項別明細!R684"
+    ]
+   },
+   "match_kind": "完全一致",
+   "candidates": 2,
+   "hold_reason": null,
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "parent_before": 2,
+   "parent_after": 2,
+   "duplicates": 2
+  },
+  {
+   "claim_id": "R003",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!G25",
+   "recomputed": 1857451333,
+   "range_identified": true,
+   "value_match": true,
+   "state": "GROUNDED",
+   "evidence": {
+    "scope_from": "決算書のブロックの表題行",
+    "code_ref": "B24",
+    "name_ref": "C24",
+    "value_ref": "G25",
+    "header_ref": "G7",
+    "scope": "一般会計",
+    "level": "項",
+    "parent": "総務費",
+    "name": "子供政策連携費",
+    "column": "不用額",
+    "value": 1857451333,
+    "duplicate_pointers": [
+     "sheet:決算書 歳出!G25",
+     "sheet:事項別明細!V684"
+    ]
+   },
+   "match_kind": "完全一致",
+   "candidates": 2,
+   "hold_reason": null,
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "parent_before": 2,
+   "parent_after": 2,
+   "duplicates": 2
+  },
+  {
+   "claim_id": "R004",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!D28",
+   "recomputed": 28268927000,
+   "range_identified": true,
+   "value_match": true,
+   "state": "GROUNDED",
+   "evidence": {
+    "scope_from": "決算書のブロックの表題行",
+    "code_ref": "B27",
+    "name_ref": "C27",
+    "value_ref": "D28",
+    "header_ref": "D7",
+    "scope": "一般会計",
+    "level": "項",
+    "parent": "総務費",
+    "name": "スタートアップ・国際金融都市戦略費",
+    "column": "予算現額",
+    "value": 28268927000
+   },
+   "match_kind": "完全一致",
+   "candidates": 1,
+   "hold_reason": null,
+   "parent_cues": [
+    "総務費"
+   ],
+   "parent_filtered": true,
+   "parent_kept": [
+    "総務費"
+   ],
+   "parent_before": 1,
+   "parent_after": 1,
+   "duplicates": 1
+  },
+  {
+   "claim_id": "R005",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!E28",
+   "recomputed": 23506146400,
+   "range_identified": true,
+   "value_match": true,
+   "state": "GROUNDED",
+   "evidence": {
+    "scope_from": "決算書のブロックの表題行",
+    "code_ref": "B27",
+    "name_ref": "C27",
+    "value_ref": "E28",
+    "header_ref": "E7",
+    "scope": "一般会計",
+    "level": "項",
+    "parent": "総務費",
+    "name": "スタートアップ・国際金融都市戦略費",
+    "column": "支出済額",
+    "value": 23506146400,
+    "duplicate_pointers": [
+     "sheet:決算書 歳出!E28",
+     "sheet:事項別明細!R768"
+    ]
+   },
+   "match_kind": "完全一致",
+   "candidates": 2,
+   "hold_reason": null,
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "parent_before": 2,
+   "parent_after": 2,
+   "duplicates": 2
+  },
+  {
+   "claim_id": "R006",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!D40",
+   "recomputed": 16512904000,
+   "range_identified": true,
+   "value_match": true,
+   "state": "GROUNDED",
+   "evidence": {
+    "scope_from": "決算書のブロックの表題行",
+    "code_ref": "B39",
+    "name_ref": "C39",
+    "value_ref": "D40",
+    "header_ref": "D7",
+    "scope": "一般会計",
+    "level": "項",
+    "parent": "総務費",
+    "name": "防災管理費",
+    "column": "予算現額",
+    "value": 16512904000
+   },
+   "match_kind": "完全一致",
+   "candidates": 1,
+   "hold_reason": null,
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "parent_before": 1,
+   "parent_after": 1,
+   "duplicates": 1
+  },
+  {
+   "claim_id": "R007",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!E40",
+   "recomputed": 13352967071,
+   "range_identified": true,
+   "value_match": true,
+   "state": "GROUNDED",
+   "evidence": {
+    "scope_from": "決算書のブロックの表題行",
+    "code_ref": "B39",
+    "name_ref": "C39",
+    "value_ref": "E40",
+    "header_ref": "E7",
+    "scope": "一般会計",
+    "level": "項",
+    "parent": "総務費",
+    "name": "防災管理費",
+    "column": "支出済額",
+    "value": 13352967071,
+    "duplicate_pointers": [
+     "sheet:決算書 歳出!E40",
+     "sheet:事項別明細!R1446"
+    ]
+   },
+   "match_kind": "完全一致",
+   "candidates": 2,
+   "hold_reason": null,
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "parent_before": 2,
+   "parent_after": 2,
+   "duplicates": 2
+  },
+  {
+   "claim_id": "R008",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!G40",
+   "recomputed": 3146001929,
+   "range_identified": true,
+   "value_match": true,
+   "state": "GROUNDED",
+   "evidence": {
+    "scope_from": "決算書のブロックの表題行",
+    "code_ref": "B39",
+    "name_ref": "C39",
+    "value_ref": "G40",
+    "header_ref": "G7",
+    "scope": "一般会計",
+    "level": "項",
+    "parent": "総務費",
+    "name": "防災管理費",
+    "column": "不用額",
+    "value": 3146001929,
+    "duplicate_pointers": [
+     "sheet:決算書 歳出!G40",
+     "sheet:事項別明細!V1446"
+    ]
+   },
+   "match_kind": "完全一致",
+   "candidates": 2,
+   "hold_reason": null,
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "parent_before": 2,
+   "parent_after": 2,
+   "duplicates": 2
+  },
+  {
+   "claim_id": "R009",
+   "route": "R-1",
+   "pointer": "sheet:事項別明細!R2259",
+   "recomputed": 14286115103,
+   "range_identified": true,
+   "value_match": true,
+   "state": "GROUNDED",
+   "evidence": {
+    "scope_from": "明細の目次(シート名と会計名)",
+    "code_ref": "C2259",
+    "name_ref": "D2258",
+    "value_ref": "R2259",
+    "sign_ref": null,
+    "scope_as_written": "東京都一般会計",
+    "scope_alias_evidence": {
+     "接尾一致": [
+      "東京都一般会計",
+      "一般会計"
+     ],
+     "独立した裏づけ": 18,
+     "食い違い": 0,
+     "裏づけの行": [
+      "予備費",
+      "保健医療費",
+      "公債費",
+      "土木費",
+      "学務費",
+      "徴税費",
+      "教育費",
+      "消防費",
+      "港湾費",
+      "環境費",
+      "生活文化スポーツ費",
+      "産業労働費",
+      "福祉費",
+      "総務費",
+      "諸支出金",
+      "警察費",
+      "議会費",
+      "都市整備費"
+     ]
+    },
+    "scope": "一般会計",
+    "level": "目",
+    "parent": "総務費 > 退職手当及年金費",
+    "name": "退職費",
+    "column": "支出済額",
+    "value": 14286115103
+   },
+   "match_kind": "完全一致",
+   "candidates": 1,
+   "hold_reason": null,
+   "parent_cues": [
+    "総務費",
+    "退職手当及年金費"
+   ],
+   "parent_filtered": true,
+   "parent_kept": [
+    "総務費 > 退職手当及年金費"
+   ],
+   "parent_before": 4,
+   "parent_after": 1,
+   "duplicates": 1
+  },
+  {
+   "claim_id": "R010",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!D64",
+   "recomputed": 33285483000,
+   "range_identified": true,
+   "value_match": true,
+   "state": "GROUNDED",
+   "evidence": {
+    "scope_from": "決算書のブロックの表題行",
+    "code_ref": "B63",
+    "name_ref": "C63",
+    "value_ref": "D64",
+    "header_ref": "D7",
+    "scope": "一般会計",
+    "level": "項",
+    "parent": "徴税費",
+    "name": "徴税管理費",
+    "column": "予算現額",
+    "value": 33285483000
+   },
+   "match_kind": "完全一致",
+   "candidates": 1,
+   "hold_reason": null,
+   "parent_cues": [
+    "徴税費"
+   ],
+   "parent_filtered": true,
+   "parent_kept": [
+    "徴税費"
+   ],
+   "parent_before": 1,
+   "parent_after": 1,
+   "duplicates": 1
+  },
+  {
+   "claim_id": "R011",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!E64",
+   "recomputed": 32593444531,
+   "range_identified": true,
+   "value_match": true,
+   "state": "GROUNDED",
+   "evidence": {
+    "scope_from": "決算書のブロックの表題行",
+    "code_ref": "B63",
+    "name_ref": "C63",
+    "value_ref": "E64",
+    "header_ref": "E7",
+    "scope": "一般会計",
+    "level": "項",
+    "parent": "徴税費",
+    "name": "徴税管理費",
+    "column": "支出済額",
+    "value": 32593444531,
+    "duplicate_pointers": [
+     "sheet:決算書 歳出!E64",
+     "sheet:事項別明細!R2352"
+    ]
+   },
+   "match_kind": "完全一致",
+   "candidates": 2,
+   "hold_reason": null,
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "parent_before": 2,
+   "parent_after": 2,
+   "duplicates": 2
+  },
+  {
+   "claim_id": "R012",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!D93",
+   "recomputed": 46526037000,
+   "range_identified": true,
+   "value_match": true,
+   "state": "GROUNDED",
+   "evidence": {
+    "scope_from": "決算書のブロックの表題行",
+    "code_ref": "B92",
+    "name_ref": "C92",
+    "value_ref": "D93",
+    "header_ref": "D7",
+    "scope": "一般会計",
+    "level": "項",
+    "parent": "都市整備費",
+    "name": "市街地整備費",
+    "column": "予算現額",
+    "value": 46526037000
+   },
+   "match_kind": "完全一致",
+   "candidates": 1,
+   "hold_reason": null,
+   "parent_cues": [
+    "都市整備費"
+   ],
+   "parent_filtered": true,
+   "parent_kept": [
+    "都市整備費"
+   ],
+   "parent_before": 1,
+   "parent_after": 1,
+   "duplicates": 1
+  },
+  {
+   "claim_id": "R013",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!E93",
+   "recomputed": 30202256663,
+   "range_identified": true,
+   "value_match": true,
+   "state": "GROUNDED",
+   "evidence": {
+    "scope_from": "決算書のブロックの表題行",
+    "code_ref": "B92",
+    "name_ref": "C92",
+    "value_ref": "E93",
+    "header_ref": "E7",
+    "scope": "一般会計",
+    "level": "項",
+    "parent": "都市整備費",
+    "name": "市街地整備費",
+    "column": "支出済額",
+    "value": 30202256663,
+    "duplicate_pointers": [
+     "sheet:決算書 歳出!E93",
+     "sheet:事項別明細!R3753"
+    ]
+   },
+   "match_kind": "完全一致",
+   "candidates": 2,
+   "hold_reason": null,
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "parent_before": 2,
+   "parent_after": 2,
+   "duplicates": 2
+  },
+  {
+   "claim_id": "R014",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!G93",
+   "recomputed": 12588375337,
+   "range_identified": true,
+   "value_match": true,
+   "state": "GROUNDED",
+   "evidence": {
+    "scope_from": "決算書のブロックの表題行",
+    "code_ref": "B92",
+    "name_ref": "C92",
+    "value_ref": "G93",
+    "header_ref": "G7",
+    "scope": "一般会計",
+    "level": "項",
+    "parent": "都市整備費",
+    "name": "市街地整備費",
+    "column": "不用額",
+    "value": 12588375337,
+    "duplicate_pointers": [
+     "sheet:決算書 歳出!G93",
+     "sheet:事項別明細!V3753"
+    ]
+   },
+   "match_kind": "完全一致",
+   "candidates": 2,
+   "hold_reason": null,
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "parent_before": 2,
+   "parent_after": 2,
+   "duplicates": 2
+  },
+  {
+   "claim_id": "R015",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!D99",
+   "recomputed": 45485360000,
+   "range_identified": true,
+   "value_match": true,
+   "state": "GROUNDED",
+   "evidence": {
+    "scope_from": "決算書のブロックの表題行",
+    "code_ref": "B98",
+    "name_ref": "C98",
+    "value_ref": "D99",
+    "header_ref": "D7",
+    "scope": "一般会計",
+    "level": "項",
+    "parent": "都市整備費",
+    "name": "住宅政策費",
+    "column": "予算現額",
+    "value": 45485360000
+   },
+   "match_kind": "完全一致",
+   "candidates": 1,
+   "hold_reason": null,
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "parent_before": 1,
+   "parent_after": 1,
+   "duplicates": 1
+  },
+  {
+   "claim_id": "R016",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!E99",
+   "recomputed": 39660519320,
+   "range_identified": true,
+   "value_match": true,
+   "state": "GROUNDED",
+   "evidence": {
+    "scope_from": "決算書のブロックの表題行",
+    "code_ref": "B98",
+    "name_ref": "C98",
+    "value_ref": "E99",
+    "header_ref": "E7",
+    "scope": "一般会計",
+    "level": "項",
+    "parent": "都市整備費",
+    "name": "住宅政策費",
+    "column": "支出済額",
+    "value": 39660519320,
+    "duplicate_pointers": [
+     "sheet:決算書 歳出!E99",
+     "sheet:事項別明細!R4326"
+    ]
+   },
+   "match_kind": "完全一致",
+   "candidates": 2,
+   "hold_reason": null,
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "parent_before": 2,
+   "parent_after": 2,
+   "duplicates": 2
+  },
+  {
+   "claim_id": "R017",
+   "route": "R-1",
+   "pointer": "sheet:決算書 歳出!G99",
+   "recomputed": 5415041680,
+   "range_identified": true,
+   "value_match": true,
+   "state": "GROUNDED",
+   "evidence": {
+    "scope_from": "決算書のブロックの表題行",
+    "code_ref": "B98",
+    "name_ref": "C98",
+    "value_ref": "G99",
+    "header_ref": "G7",
+    "scope": "一般会計",
+    "level": "項",
+    "parent": "都市整備費",
+    "name": "住宅政策費",
+    "column": "不用額",
+    "value": 5415041680,
+    "duplicate_pointers": [
+     "sheet:決算書 歳出!G99",
+     "sheet:事項別明細!V4326"
+    ]
+   },
+   "match_kind": "完全一致",
+   "candidates": 2,
+   "hold_reason": null,
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "parent_before": 2,
+   "parent_after": 2,
+   "duplicates": 2
+  },
+  {
+   "claim_id": "R018",
+   "route": null,
+   "pointer": null,
+   "recomputed": null,
+   "range_identified": false,
+   "value_match": false,
+   "state": "UNVERIFIABLE",
+   "evidence": null,
+   "match_kind": "完全一致",
+   "candidates": 4,
+   "hold_reason": "6 欄が一意でない(4 通り。値で選ばない)",
+   "parent_cues": [
+    "小笠原諸島生活再建資金会計"
+   ],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "parent_before": 4,
+   "parent_after": 4,
+   "distinct_keys": 4
+  },
+  {
+   "claim_id": "R019",
+   "route": null,
+   "pointer": null,
+   "recomputed": null,
+   "range_identified": false,
+   "value_match": false,
+   "state": "UNVERIFIABLE",
+   "evidence": null,
+   "match_kind": "完全一致",
+   "candidates": 13,
+   "hold_reason": "6 欄が一意でない(9 通り。値で選ばない)",
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "parent_before": 13,
+   "parent_after": 13,
+   "distinct_keys": 9
+  },
+  {
+   "claim_id": "R020",
+   "route": null,
+   "pointer": null,
+   "recomputed": null,
+   "range_identified": false,
+   "value_match": false,
+   "state": "UNVERIFIABLE",
+   "evidence": null,
+   "match_kind": "完全一致",
+   "candidates": 13,
+   "hold_reason": "6 欄が一意でない(9 通り。値で選ばない)",
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "parent_before": 13,
+   "parent_after": 13,
+   "distinct_keys": 9
+  },
+  {
+   "claim_id": "R021",
+   "route": null,
+   "pointer": null,
+   "recomputed": null,
+   "range_identified": false,
+   "value_match": false,
+   "state": "UNVERIFIABLE",
+   "evidence": null,
+   "match_kind": "完全一致",
+   "candidates": 6,
+   "hold_reason": "6 欄が一意でない(6 通り。値で選ばない)",
+   "parent_cues": [
+    "沿岸漁業改善資金助成会計"
+   ],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "parent_before": 6,
+   "parent_after": 6,
+   "distinct_keys": 6
+  },
+  {
+   "claim_id": "R022",
+   "route": null,
+   "pointer": null,
+   "recomputed": null,
+   "range_identified": false,
+   "value_match": false,
+   "state": "UNVERIFIABLE",
+   "evidence": null,
+   "match_kind": "完全一致",
+   "candidates": 13,
+   "hold_reason": "6 欄が一意でない(7 通り。値で選ばない)",
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "parent_before": 13,
+   "parent_after": 13,
+   "distinct_keys": 7
+  },
+  {
+   "claim_id": "R023",
+   "route": null,
+   "pointer": null,
+   "recomputed": null,
+   "range_identified": false,
+   "value_match": false,
+   "state": "UNVERIFIABLE",
+   "evidence": null,
+   "match_kind": "完全一致",
+   "candidates": 13,
+   "hold_reason": "6 欄が一意でない(7 通り。値で選ばない)",
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "parent_before": 13,
+   "parent_after": 13,
+   "distinct_keys": 7
+  },
+  {
+   "claim_id": "R024",
+   "route": null,
+   "pointer": null,
+   "recomputed": null,
+   "range_identified": false,
+   "value_match": false,
+   "state": "UNVERIFIABLE",
+   "evidence": null,
+   "match_kind": "完全一致",
+   "candidates": 2,
+   "hold_reason": "6 欄が一意でない(2 通り。値で選ばない)",
+   "parent_cues": [
+    "心身障害者扶養年金会計"
+   ],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "parent_before": 2,
+   "parent_after": 2,
+   "distinct_keys": 2
+  },
+  {
+   "claim_id": "R025",
+   "route": null,
+   "pointer": null,
+   "recomputed": null,
+   "range_identified": false,
+   "value_match": false,
+   "state": "UNVERIFIABLE",
+   "evidence": null,
+   "match_kind": "完全一致",
+   "candidates": 5,
+   "hold_reason": "6 欄が一意でない(3 通り。値で選ばない)",
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "parent_before": 5,
+   "parent_after": 5,
+   "distinct_keys": 3
+  },
+  {
+   "claim_id": "R026",
+   "route": null,
+   "pointer": null,
+   "recomputed": null,
+   "range_identified": false,
+   "value_match": false,
+   "state": "UNVERIFIABLE",
+   "evidence": null,
+   "match_kind": "完全一致",
+   "candidates": 3,
+   "hold_reason": "6 欄が一意でない(3 通り。値で選ばない)",
+   "parent_cues": [
+    "都市開発資金会計"
+   ],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "parent_before": 3,
+   "parent_after": 3,
+   "distinct_keys": 3
+  },
+  {
+   "claim_id": "R027",
+   "route": null,
+   "pointer": null,
+   "recomputed": null,
+   "range_identified": false,
+   "value_match": false,
+   "state": "UNVERIFIABLE",
+   "evidence": null,
+   "match_kind": "完全一致",
+   "candidates": 6,
+   "hold_reason": "6 欄が一意でない(3 通り。値で選ばない)",
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "parent_before": 6,
+   "parent_after": 6,
+   "distinct_keys": 3
+  },
+  {
+   "claim_id": "R028",
+   "route": null,
+   "pointer": null,
+   "recomputed": null,
+   "range_identified": false,
+   "value_match": false,
+   "state": "UNVERIFIABLE",
+   "evidence": null,
+   "match_kind": "完全一致",
+   "candidates": 2,
+   "hold_reason": "6 欄が一意でない(2 通り。値で選ばない)",
+   "parent_cues": [
+    "臨海都市基盤整備事業会計"
+   ],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "parent_before": 2,
+   "parent_after": 2,
+   "distinct_keys": 2
+  },
+  {
+   "claim_id": "R029",
+   "route": null,
+   "pointer": null,
+   "recomputed": null,
+   "range_identified": false,
+   "value_match": false,
+   "state": "UNVERIFIABLE",
+   "evidence": null,
+   "match_kind": "完全一致",
+   "candidates": 4,
+   "hold_reason": "6 欄が一意でない(2 通り。値で選ばない)",
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "parent_before": 4,
+   "parent_after": 4,
+   "distinct_keys": 2
+  },
+  {
+   "claim_id": "R030",
+   "route": null,
+   "pointer": null,
+   "recomputed": null,
+   "range_identified": false,
+   "value_match": false,
+   "state": "UNVERIFIABLE",
+   "evidence": null,
+   "match_kind": "完全一致",
+   "candidates": 7,
+   "hold_reason": "6 欄が一意でない(7 通り。値で選ばない)",
+   "parent_cues": [
+    "国民健康保険事業会計"
+   ],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "parent_before": 7,
+   "parent_after": 7,
+   "distinct_keys": 7
+  },
+  {
+   "claim_id": "R031",
+   "route": null,
+   "pointer": null,
+   "recomputed": null,
+   "range_identified": false,
+   "value_match": false,
+   "state": "UNVERIFIABLE",
+   "evidence": null,
+   "match_kind": "完全一致",
+   "candidates": 35,
+   "hold_reason": "6 欄が一意でない(35 通り。値で選ばない)",
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "parent_before": 35,
+   "parent_after": 35,
+   "distinct_keys": 35
+  },
+  {
+   "claim_id": "R032",
+   "route": null,
+   "pointer": null,
+   "recomputed": null,
+   "range_identified": false,
+   "value_match": false,
+   "state": "UNVERIFIABLE",
+   "evidence": null,
+   "match_kind": "完全一致",
+   "candidates": 61,
+   "hold_reason": "6 欄が一意でない(61 通り。値で選ばない)",
+   "parent_cues": [
+    "公債費会計"
+   ],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "parent_before": 61,
+   "parent_after": 61,
+   "distinct_keys": 61
+  },
+  {
+   "claim_id": "R033",
+   "route": null,
+   "pointer": null,
+   "recomputed": null,
+   "range_identified": false,
+   "value_match": false,
+   "state": "UNVERIFIABLE",
+   "evidence": null,
+   "match_kind": "完全一致",
+   "candidates": 61,
+   "hold_reason": "6 欄が一意でない(61 通り。値で選ばない)",
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "parent_before": 61,
+   "parent_after": 61,
+   "distinct_keys": 61
+  },
+  {
+   "claim_id": "R034",
+   "route": null,
+   "pointer": null,
+   "recomputed": null,
+   "range_identified": false,
+   "value_match": false,
+   "state": "UNVERIFIABLE",
+   "evidence": null,
+   "match_kind": null,
+   "candidates": 0,
+   "hold_reason": "列 の手がかりが 2 つ以上: 支出済額・計",
+   "parent_cues": [
+    "と場会計"
+   ],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "parent_before": null,
+   "parent_after": null
+  },
+  {
+   "claim_id": "R035",
+   "route": null,
+   "pointer": "sheet:事項別明細!G51",
+   "recomputed": -48327000,
+   "range_identified": true,
+   "value_match": false,
+   "state": "VALUE_MISMATCH",
+   "evidence": {
+    "scope_from": "明細の目次(シート名と会計名)",
+    "code_ref": "C51",
+    "name_ref": "D50",
+    "value_ref": "G51",
+    "sign_ref": "F51",
+    "scope_as_written": "東京都と場会計",
+    "scope_alias_evidence": {
+     "接尾一致": [
+      "東京都と場会計",
+      "と場会計"
+     ],
+     "独立した裏づけ": 5,
+     "食い違い": 0,
+     "歳出側の本数": 1,
+     "歳入側の本数": 4,
+     "歳入側の列": [
+      "予算現額"
+     ],
+     "裏づけの行": [
+      "使用料及手数料",
+      "繰入金",
+      "諸収入",
+      "都債"
+     ]
+    }
+   },
+   "match_kind": "完全一致",
+   "candidates": 1,
+   "hold_reason": null,
+   "parent_cues": [],
+   "parent_filtered": false,
+   "parent_kept": [],
+   "parent_before": 1,
+   "parent_after": 1,
+   "duplicates": 1
+  }
+ ]
+}

@@ -1,0 +1,28 @@
+=== HEAD(この run の間は 1 commit もしない) ===
+dd3cff1 test(既定 P20): 既定の変更で動いた 3 本を直す。記録した P16 の数は 1 つも書き換えない
+=== status(前) ===
+=== 1) pytest(path 指定なし = measure/tests も含む) ===
+........................................................................ [ 97%]
+.................................                                        [100%]
+1185 passed in 1195.43s (0:19:55)
+=== 2) unittest discover -s tests -t .(-t . は必須) ===
+written: /var/folders/hz/c094sjk50b1c5r8t13csvcph0000gn/T/tmp57_t1n4t/out.json claims: 123
+written: /var/folders/hz/c094sjk50b1c5r8t13csvcph0000gn/T/tmp7dy3rlh0/out.json claims: 133
+written: /var/folders/hz/c094sjk50b1c5r8t13csvcph0000gn/T/tmp6i0jrv0t/out.json  profile=P20  claims=123  {'GROUNDED': 65, 'POINTER_NOT_FOUND': 18, 'UNVERIFIABLE': 27, 'VALUE_MISMATCH': 13}  document_unverifiable=False
+=== 3) 変異 89 本 ===
+.....                                                                    [100%]
+5 passed in 1003.88s (0:16:43)
+=== status(後) ===
+=== HEAD(後。前と同じであること) ===
+dd3cff1 test(既定 P20): 既定の変更で動いた 3 本を直す。記録した P16 の数は 1 つも書き換えない
+
+### discover は tail -3 では Ran/OK 行が取れなかったので、行を名指しで取り直した(別 run・同じ HEAD)
+=== HEAD(前) ===
+dd3cff1 test(既定 P20): 既定の変更で動いた 3 本を直す。記録した P16 の数は 1 つも書き換えない
+=== status(前) ===
+=== unittest discover -s tests -t .(Ran / OK の行だけを取る) ===
+Ran 1050 tests in 1196.785s
+OK
+=== status(後) ===
+=== HEAD(後) ===
+dd3cff1 test(既定 P20): 既定の変更で動いた 3 本を直す。記録した P16 の数は 1 つも書き換えない

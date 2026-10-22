@@ -1,0 +1,1195 @@
+{
+ "checker": "A 本線・実装席(2026-10-12)",
+ "decision": "docs/DECISION_LOG.md D-006 追加 1",
+ "material_sha256": "a2eb562d1fa5ebcb2d8f6530af195fb75791038264e9a8ba3e0ff812a8ce8b21",
+ "zip_sha256": "03521437be23c8e2a02d85b4bc29a215646803582e9101fdf185521041174799",
+ "zip_matches_material": true,
+ "all_60_are_grounded": true,
+ "rows": [
+  {
+   "id": "N003",
+   "文が指す項目": "営業利益(連結・当期)",
+   "engine_pointer": "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration",
+   "pointer_fact": {
+    "element": "jppfs_cor:OperatingIncome",
+    "context": "CurrentYearDuration",
+    "period": "2025-07-01..2026-06-30",
+    "value": "1465387000.0",
+    "decimals": "-3",
+    "unit": "JPY"
+   },
+   "同じ値を持つ fact の件数": 1,
+   "同じ値を持つ fact の要素名": [
+    "jppfs_cor:OperatingIncome@CurrentYearDuration"
+   ],
+   "判定": "correct",
+   "why": "要素 OperatingIncome・当期 duration・member 無し(連結)が文の営業利益1,465百万円と一致し、同値の fact は1件。"
+  },
+  {
+   "id": "N009",
+   "文が指す項目": "総資産(連結・当期末)",
+   "engine_pointer": "xbrl:jpcrp_cor:TotalAssetsSummaryOfBusinessResults@CurrentYearInstant",
+   "pointer_fact": {
+    "element": "jpcrp_cor:TotalAssetsSummaryOfBusinessResults",
+    "context": "CurrentYearInstant",
+    "period": "instant 2026-06-30",
+    "value": "27836421000.0",
+    "decimals": "-3",
+    "unit": "JPY"
+   },
+   "同じ値を持つ fact の件数": 3,
+   "同じ値を持つ fact の要素名": [
+    "jpcrp_cor:TotalAssetsSummaryOfBusinessResults@CurrentYearInstant",
+    "jppfs_cor:Assets@CurrentYearInstant",
+    "jppfs_cor:LiabilitiesAndNetAssets@CurrentYearInstant"
+   ],
+   "判定": "correct",
+   "why": "要素 TotalAssetsSummaryOfBusinessResults(総資産)・当期末 instant が一致。同値3件は Assets・LiabilitiesAndNetAssets で、うち総資産を名に持つ要素が選ばれている。"
+  },
+  {
+   "id": "N011",
+   "文が指す項目": "自己資本比率(連結・当期末)",
+   "engine_pointer": "xbrl:jpcrp_cor:EquityToAssetRatioSummaryOfBusinessResults@CurrentYearInstant",
+   "pointer_fact": {
+    "element": "jpcrp_cor:EquityToAssetRatioSummaryOfBusinessResults",
+    "context": "CurrentYearInstant",
+    "period": "instant 2026-06-30",
+    "value": "0.617",
+    "decimals": "3",
+    "unit": "pure"
+   },
+   "同じ値を持つ fact の件数": 1,
+   "同じ値を持つ fact の要素名": [
+    "jpcrp_cor:EquityToAssetRatioSummaryOfBusinessResults@CurrentYearInstant"
+   ],
+   "判定": "correct",
+   "why": "EquityToAssetRatio(自己資本比率)・当期末 instant の pure 0.617→61.7 が一致し、同値1件。"
+  },
+  {
+   "id": "N014",
+   "文が指す項目": "売上高(連結・当期)",
+   "engine_pointer": "xbrl:jpcrp_cor:NetSalesSummaryOfBusinessResults@CurrentYearDuration",
+   "pointer_fact": {
+    "element": "jpcrp_cor:NetSalesSummaryOfBusinessResults",
+    "context": "CurrentYearDuration",
+    "period": "2025-07-01..2026-06-30",
+    "value": "38064274000.0",
+    "decimals": "-3",
+    "unit": "JPY"
+   },
+   "同じ値を持つ fact の件数": 2,
+   "同じ値を持つ fact の要素名": [
+    "jpcrp_cor:NetSalesSummaryOfBusinessResults@CurrentYearDuration",
+    "jppfs_cor:NetSales@CurrentYearDuration"
+   ],
+   "判定": "correct",
+   "why": "NetSalesSummaryOfBusinessResults・当期 duration が一致。同値2件はもう一方が同義の jppfs_cor:NetSales。"
+  },
+  {
+   "id": "N021",
+   "文が指す項目": "受取手形及び売掛金(連結・当期末)",
+   "engine_pointer": "xbrl:jppfs_cor:NotesAndAccountsReceivableTrade@CurrentYearInstant",
+   "pointer_fact": {
+    "element": "jppfs_cor:NotesAndAccountsReceivableTrade",
+    "context": "CurrentYearInstant",
+    "period": "instant 2026-06-30",
+    "value": "2556498000.0",
+    "decimals": "-3",
+    "unit": "JPY"
+   },
+   "同じ値を持つ fact の件数": 1,
+   "同じ値を持つ fact の要素名": [
+    "jppfs_cor:NotesAndAccountsReceivableTrade@CurrentYearInstant"
+   ],
+   "判定": "correct",
+   "why": "NotesAndAccountsReceivableTrade・当期末 instant が「期末時点で2,556百万円」と一致し、同値は同一要素同一 context の重複のみ(1件)。"
+  },
+  {
+   "id": "N024",
+   "文が指す項目": "売上総利益(連結・当期)",
+   "engine_pointer": "xbrl:jppfs_cor:GrossProfit@CurrentYearDuration",
+   "pointer_fact": {
+    "element": "jppfs_cor:GrossProfit",
+    "context": "CurrentYearDuration",
+    "period": "2025-07-01..2026-06-30",
+    "value": "11334658000.0",
+    "decimals": "-3",
+    "unit": "JPY"
+   },
+   "同じ値を持つ fact の件数": 1,
+   "同じ値を持つ fact の要素名": [
+    "jppfs_cor:GrossProfit@CurrentYearDuration"
+   ],
+   "判定": "correct",
+   "why": "GrossProfit・当期 duration が一致し、同値1件。"
+  },
+  {
+   "id": "N026",
+   "文が指す項目": "売上総利益の前期からの減少額(連結・当期-前期)",
+   "engine_pointer": "xbrl:jppfs_cor:GrossProfit@CurrentYearDuration + xbrl:jppfs_cor:GrossProfit@Prior1YearDuration + formula:a-b",
+   "pointer_fact": {
+    "element": "jppfs_cor:GrossProfit | jppfs_cor:GrossProfit",
+    "context": "CurrentYearDuration | Prior1YearDuration",
+    "period": "2025-07-01..2026-06-30 | 2024-07-01..2025-06-30",
+    "value": "11334658000.0 | 12018937000.0",
+    "decimals": "-3 | -3",
+    "unit": "JPY | JPY"
+   },
+   "同じ値を持つ fact の件数": 0,
+   "同じ値を持つ fact の要素名": [
+    "(0 件。この主張は差額なので、差額と同じ値を持つ単一 fact が無いだけであり、束縛の候補が無いという意味ではない ― 同じ 2 context で差が一致する要素対は 1 件、すなわち engine が選んだ要素自身のみ)"
+   ],
+   "判定": "correct",
+   "why": "GrossProfit の当期-前期=-684,279,000 が文の「684百万円の減少」と一致(符号は abs 梯子で吸収)。同値の単一 fact は0件。"
+  },
+  {
+   "id": "N063",
+   "文が指す項目": "営業利益の減益額(連結・当期-前期)",
+   "engine_pointer": "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration + xbrl:jppfs_cor:OperatingIncome@Prior1YearDuration + formula:a-b",
+   "pointer_fact": {
+    "element": "jppfs_cor:OperatingIncome | jppfs_cor:OperatingIncome",
+    "context": "CurrentYearDuration | Prior1YearDuration",
+    "period": "2025-07-01..2026-06-30 | 2024-07-01..2025-06-30",
+    "value": "1465387000.0 | 2715924000.0",
+    "decimals": "-3 | -3",
+    "unit": "JPY | JPY"
+   },
+   "同じ値を持つ fact の件数": 0,
+   "同じ値を持つ fact の要素名": [
+    "(0 件。この主張は差額なので、差額と同じ値を持つ単一 fact が無いだけであり、束縛の候補が無いという意味ではない ― 同じ 2 context で差が一致する要素対は 1 件、すなわち engine が選んだ要素自身のみ)"
+   ],
+   "判定": "correct",
+   "why": "OperatingIncome の当期-前期=-1,250,537,000 が「減益額1,250百万円」と一致。同値の単一 fact は0件。"
+  },
+  {
+   "id": "N066",
+   "文が指す項目": "営業利益の減益額(連結・当期-前期)",
+   "engine_pointer": "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration + xbrl:jppfs_cor:OperatingIncome@Prior1YearDuration + formula:a-b",
+   "pointer_fact": {
+    "element": "jppfs_cor:OperatingIncome | jppfs_cor:OperatingIncome",
+    "context": "CurrentYearDuration | Prior1YearDuration",
+    "period": "2025-07-01..2026-06-30 | 2024-07-01..2025-06-30",
+    "value": "1465387000.0 | 2715924000.0",
+    "decimals": "-3 | -3",
+    "unit": "JPY | JPY"
+   },
+   "同じ値を持つ fact の件数": 0,
+   "同じ値を持つ fact の要素名": [
+    "(0 件。この主張は差額なので、差額と同じ値を持つ単一 fact が無いだけであり、束縛の候補が無いという意味ではない ― 同じ 2 context で差が一致する要素対は 1 件、すなわち engine が選んだ要素自身のみ)"
+   ],
+   "判定": "correct",
+   "why": "同じ OperatingIncome の当期-前期で、文の「前期の2,715百万円から1,250百万円」と一致。"
+  },
+  {
+   "id": "N089",
+   "文が指す項目": "経常利益(連結・前期)",
+   "engine_pointer": "xbrl:jpcrp_cor:OrdinaryIncomeLossSummaryOfBusinessResults@Prior1YearDuration",
+   "pointer_fact": {
+    "element": "jpcrp_cor:OrdinaryIncomeLossSummaryOfBusinessResults",
+    "context": "Prior1YearDuration",
+    "period": "2024-07-01..2025-06-30",
+    "value": "2709051000.0",
+    "decimals": "-3",
+    "unit": "JPY"
+   },
+   "同じ値を持つ fact の件数": 2,
+   "同じ値を持つ fact の要素名": [
+    "jpcrp_cor:OrdinaryIncomeLossSummaryOfBusinessResults@Prior1YearDuration",
+    "jppfs_cor:OrdinaryIncome@Prior1YearDuration"
+   ],
+   "判定": "correct",
+   "why": "OrdinaryIncomeLoss...・**前期** duration が文の「(前期2,709百万円)」と一致。同値2件はもう一方が同義の jppfs_cor:OrdinaryIncome。"
+  },
+  {
+   "id": "N105",
+   "文が指す項目": "親会社株主に帰属する当期純利益(連結・当期)",
+   "engine_pointer": "xbrl:jpcrp_cor:ProfitLossAttributableToOwnersOfParentSummaryOfBusinessResults@CurrentYearDuration",
+   "pointer_fact": {
+    "element": "jpcrp_cor:ProfitLossAttributableToOwnersOfParentSummaryOfBusinessResults",
+    "context": "CurrentYearDuration",
+    "period": "2025-07-01..2026-06-30",
+    "value": "945793000.0",
+    "decimals": "-3",
+    "unit": "JPY"
+   },
+   "同じ値を持つ fact の件数": 5,
+   "同じ値を持つ fact の要素名": [
+    "jpcrp_cor:ProfitLossAttributableToOwnersOfParentSummaryOfBusinessResults@CurrentYearDuration",
+    "jppfs_cor:ProfitLoss@CurrentYearDuration",
+    "jppfs_cor:ProfitLossAttributableToOwnersOfParent@CurrentYearDuration",
+    "jppfs_cor:ProfitLossAttributableToOwnersOfParent@CurrentYearDuration_RetainedEarningsMember",
+    "jppfs_cor:ProfitLossAttributableToOwnersOfParent@CurrentYearDuration_ShareholdersEquityMember"
+   ],
+   "判定": "correct",
+   "why": "ProfitLossAttributableToOwnersOfParentSummaryOfBusinessResults・当期 duration が文の科目名と字句まで一致。同値5件(ProfitLoss 等、非支配株主持分が無いため一致)のうち名が一致する要素が選ばれている。"
+  },
+  {
+   "id": "N112",
+   "文が指す項目": "自己資本当期純利益率ROE(連結・当期)",
+   "engine_pointer": "xbrl:jpcrp_cor:RateOfReturnOnEquitySummaryOfBusinessResults@CurrentYearDuration",
+   "pointer_fact": {
+    "element": "jpcrp_cor:RateOfReturnOnEquitySummaryOfBusinessResults",
+    "context": "CurrentYearDuration",
+    "period": "2025-07-01..2026-06-30",
+    "value": "0.058",
+    "decimals": "3",
+    "unit": "pure"
+   },
+   "同じ値を持つ fact の件数": 2,
+   "同じ値を持つ fact の要素名": [
+    "jpcrp_cor:PriceEarningsRatioSummaryOfBusinessResults@Prior4YearDuration",
+    "jpcrp_cor:RateOfReturnOnEquitySummaryOfBusinessResults@CurrentYearDuration"
+   ],
+   "判定": "correct",
+   "why": "RateOfReturnOnEquity...・当期 duration の pure 0.058→5.8 が一致。同値2件のもう一方は Prior4Year の PER 5.65 で期も科目も違う。"
+  },
+  {
+   "id": "N130",
+   "文が指す項目": "総資産の増加額(連結・当期末-前期末)",
+   "engine_pointer": "xbrl:jpcrp_cor:TotalAssetsSummaryOfBusinessResults@CurrentYearInstant + xbrl:jpcrp_cor:TotalAssetsSummaryOfBusinessResults@Prior1YearInstant + formula:a-b",
+   "pointer_fact": {
+    "element": "jpcrp_cor:TotalAssetsSummaryOfBusinessResults | jpcrp_cor:TotalAssetsSummaryOfBusinessResults",
+    "context": "CurrentYearInstant | Prior1YearInstant",
+    "period": "instant 2026-06-30 | instant 2025-06-30",
+    "value": "27836421000.0 | 25554675000.0",
+    "decimals": "-3 | -3",
+    "unit": "JPY | JPY"
+   },
+   "同じ値を持つ fact の件数": 0,
+   "同じ値を持つ fact の要素名": [
+    "(0 件。この主張は差額なので、差額と同じ値を持つ単一 fact が無いだけであり、束縛の候補が無いという意味ではない ― 同じ 2 context で差が一致する要素対は 1 件、すなわち engine が選んだ要素自身のみ)"
+   ],
+   "判定": "correct",
+   "why": "TotalAssets... の当期末-前期末=2,281,746,000 が「2,281百万円」と一致。"
+  },
+  {
+   "id": "N131",
+   "文が指す項目": "総資産の増加率(連結・当期末対前期末)",
+   "engine_pointer": "xbrl:jpcrp_cor:TotalAssetsSummaryOfBusinessResults@CurrentYearInstant + xbrl:jpcrp_cor:TotalAssetsSummaryOfBusinessResults@Prior1YearInstant",
+   "pointer_fact": {
+    "element": "jpcrp_cor:TotalAssetsSummaryOfBusinessResults | jpcrp_cor:TotalAssetsSummaryOfBusinessResults",
+    "context": "CurrentYearInstant | Prior1YearInstant",
+    "period": "instant 2026-06-30 | instant 2025-06-30",
+    "value": "27836421000.0 | 25554675000.0",
+    "decimals": "-3 | -3",
+    "unit": "JPY | JPY"
+   },
+   "同じ値を持つ fact の件数": 1,
+   "同じ値を持つ fact の要素名": [
+    "jpcrp_cor:PriceEarningsRatioSummaryOfBusinessResults@Prior1YearDuration"
+   ],
+   "判定": "correct",
+   "why": "TotalAssets... の当期末/前期末の変化率 8.93% が「8.9%増加」と一致。"
+  },
+  {
+   "id": "N137",
+   "文が指す項目": "現金及び預金の減少額(連結・当期末-前期末)",
+   "engine_pointer": "xbrl:jppfs_cor:CashAndDeposits@CurrentYearInstant + xbrl:jppfs_cor:CashAndDeposits@Prior1YearInstant + formula:a-b",
+   "pointer_fact": {
+    "element": "jppfs_cor:CashAndDeposits | jppfs_cor:CashAndDeposits",
+    "context": "CurrentYearInstant | Prior1YearInstant",
+    "period": "instant 2026-06-30 | instant 2025-06-30",
+    "value": "2605950000.0 | 2899140000.0",
+    "decimals": "-3 | -3",
+    "unit": "JPY | JPY"
+   },
+   "同じ値を持つ fact の件数": 3,
+   "同じ値を持つ fact の要素名": [
+    "jppfs_cor:NetIncreaseDecreaseInCashAndCashEquivalents@CurrentYearDuration",
+    "jppfs_cor:SellingGeneralAndAdministrativeExpenses@CurrentYearDuration_NonConsolidatedMember",
+    "jppfs_cor:TotalChangesOfItemsDuringThePeriod@CurrentYearDuration_RetainedEarningsMember"
+   ],
+   "判定": "correct",
+   "why": "CashAndDeposits の当期末-前期末=-293,190,000 が箇条書きの「293百万円の減少」と一致。同値3件のうち同義の NetIncreaseDecreaseInCashAndCashEquivalents 以外は無関係科目。"
+  },
+  {
+   "id": "N138",
+   "文が指す項目": "受取手形及び売掛金(連結・当期末)",
+   "engine_pointer": "xbrl:jppfs_cor:NotesAndAccountsReceivableTrade@CurrentYearInstant",
+   "pointer_fact": {
+    "element": "jppfs_cor:NotesAndAccountsReceivableTrade",
+    "context": "CurrentYearInstant",
+    "period": "instant 2026-06-30",
+    "value": "2556498000.0",
+    "decimals": "-3",
+    "unit": "JPY"
+   },
+   "同じ値を持つ fact の件数": 1,
+   "同じ値を持つ fact の要素名": [
+    "jppfs_cor:NotesAndAccountsReceivableTrade@CurrentYearInstant"
+   ],
+   "判定": "correct",
+   "why": "NotesAndAccountsReceivableTrade・当期末 instant が箇条書きの2,556百万円と一致。"
+  },
+  {
+   "id": "N143",
+   "文が指す項目": "契約資産の減少額(連結・当期末-前期末)",
+   "engine_pointer": "xbrl:jppfs_cor:ContractAssets@CurrentYearInstant + xbrl:jppfs_cor:ContractAssets@Prior1YearInstant + formula:a-b",
+   "pointer_fact": {
+    "element": "jppfs_cor:ContractAssets | jppfs_cor:ContractAssets",
+    "context": "CurrentYearInstant | Prior1YearInstant",
+    "period": "instant 2026-06-30 | instant 2025-06-30",
+    "value": "11267515000.0 | 11428545000.0",
+    "decimals": "-3 | -3",
+    "unit": "JPY | JPY"
+   },
+   "同じ値を持つ fact の件数": 1,
+   "同じ値を持つ fact の要素名": [
+    "jpcrp030000-asr_E36539-000:DecreaseIncreaseInContractAssetsOpeCF@CurrentYearDuration"
+   ],
+   "判定": "correct",
+   "why": "ContractAssets の当期末-前期末=-161,030,000 が「161百万円の減少」と一致。同値の単一 fact は0件。"
+  },
+  {
+   "id": "N168",
+   "文が指す項目": "投資有価証券(連結・当期末)",
+   "engine_pointer": "xbrl:jppfs_cor:InvestmentSecurities@CurrentYearInstant",
+   "pointer_fact": {
+    "element": "jppfs_cor:InvestmentSecurities",
+    "context": "CurrentYearInstant",
+    "period": "instant 2026-06-30",
+    "value": "1203225000.0",
+    "decimals": "-3",
+    "unit": "JPY"
+   },
+   "同じ値を持つ fact の件数": 1,
+   "同じ値を持つ fact の要素名": [
+    "jppfs_cor:InvestmentSecurities@CurrentYearInstant"
+   ],
+   "判定": "correct",
+   "why": "InvestmentSecurities・当期末 instant が1,203百万円と一致し、同値1件。"
+  },
+  {
+   "id": "N170",
+   "文が指す項目": "投資有価証券の増加額(連結・当期末-前期末)",
+   "engine_pointer": "xbrl:jppfs_cor:InvestmentSecurities@CurrentYearInstant + xbrl:jppfs_cor:InvestmentSecurities@Prior1YearInstant + formula:a-b",
+   "pointer_fact": {
+    "element": "jppfs_cor:InvestmentSecurities | jppfs_cor:InvestmentSecurities",
+    "context": "CurrentYearInstant | Prior1YearInstant",
+    "period": "instant 2026-06-30 | instant 2025-06-30",
+    "value": "1203225000.0 | 901714000.0",
+    "decimals": "-3 | -3",
+    "unit": "JPY | JPY"
+   },
+   "同じ値を持つ fact の件数": 0,
+   "同じ値を持つ fact の要素名": [
+    "(0 件。この主張は差額なので、差額と同じ値を持つ単一 fact が無いだけであり、束縛の候補が無いという意味ではない ― 同じ 2 context で差が一致する要素対は 1 件、すなわち engine が選んだ要素自身のみ)"
+   ],
+   "判定": "correct",
+   "why": "InvestmentSecurities の当期末-前期末=301,511,000 が「301百万円増加」と一致。"
+  },
+  {
+   "id": "N172",
+   "文が指す項目": "その他有価証券評価差額金(連結・当期末)",
+   "engine_pointer": "xbrl:jppfs_cor:ValuationDifferenceOnAvailableForSaleSecurities@CurrentYearInstant",
+   "pointer_fact": {
+    "element": "jppfs_cor:ValuationDifferenceOnAvailableForSaleSecurities",
+    "context": "CurrentYearInstant",
+    "period": "instant 2026-06-30",
+    "value": "631931000.0",
+    "decimals": "-3",
+    "unit": "JPY"
+   },
+   "同じ値を持つ fact の件数": 2,
+   "同じ値を持つ fact の要素名": [
+    "jppfs_cor:NetAssets@CurrentYearInstant_ValuationDifferenceOnAvailableForSaleSecuritiesMember",
+    "jppfs_cor:ValuationDifferenceOnAvailableForSaleSecurities@CurrentYearInstant"
+   ],
+   "判定": "correct",
+   "why": "ValuationDifferenceOnAvailableForSaleSecurities・当期末 instant が「631百万円へ増加」と一致。同値2件のもう一方は同じ内訳を NetAssets+member で表した同義 fact。"
+  },
+  {
+   "id": "N174",
+   "文が指す項目": "負債合計(連結・当期末)",
+   "engine_pointer": "xbrl:jppfs_cor:Liabilities@CurrentYearInstant",
+   "pointer_fact": {
+    "element": "jppfs_cor:Liabilities",
+    "context": "CurrentYearInstant",
+    "period": "instant 2026-06-30",
+    "value": "10670476000.0",
+    "decimals": "-3",
+    "unit": "JPY"
+   },
+   "同じ値を持つ fact の件数": 1,
+   "同じ値を持つ fact の要素名": [
+    "jppfs_cor:Liabilities@CurrentYearInstant"
+   ],
+   "判定": "correct",
+   "why": "Liabilities・当期末 instant が負債合計10,670百万円と一致し、同値1件。"
+  },
+  {
+   "id": "N175",
+   "文が指す項目": "負債合計(連結・前期末)",
+   "engine_pointer": "xbrl:jppfs_cor:Liabilities@Prior1YearInstant",
+   "pointer_fact": {
+    "element": "jppfs_cor:Liabilities",
+    "context": "Prior1YearInstant",
+    "period": "instant 2025-06-30",
+    "value": "10055929000.0",
+    "decimals": "-3",
+    "unit": "JPY"
+   },
+   "同じ値を持つ fact の件数": 1,
+   "同じ値を持つ fact の要素名": [
+    "jppfs_cor:Liabilities@Prior1YearInstant"
+   ],
+   "判定": "correct",
+   "why": "Liabilities・**前期末** instant が「前期末の10,055百万円」と一致し、同値1件。"
+  },
+  {
+   "id": "N178",
+   "文が指す項目": "流動負債(連結・当期末)",
+   "engine_pointer": "xbrl:jppfs_cor:CurrentLiabilities@CurrentYearInstant",
+   "pointer_fact": {
+    "element": "jppfs_cor:CurrentLiabilities",
+    "context": "CurrentYearInstant",
+    "period": "instant 2026-06-30",
+    "value": "8041190000.0",
+    "decimals": "-3",
+    "unit": "JPY"
+   },
+   "同じ値を持つ fact の件数": 1,
+   "同じ値を持つ fact の要素名": [
+    "jppfs_cor:CurrentLiabilities@CurrentYearInstant"
+   ],
+   "判定": "correct",
+   "why": "CurrentLiabilities・当期末 instant が8,041百万円と一致し、同値1件。"
+  },
+  {
+   "id": "N179",
+   "文が指す項目": "流動負債(連結・前期末)",
+   "engine_pointer": "xbrl:jppfs_cor:CurrentLiabilities@Prior1YearInstant",
+   "pointer_fact": {
+    "element": "jppfs_cor:CurrentLiabilities",
+    "context": "Prior1YearInstant",
+    "period": "instant 2025-06-30",
+    "value": "7642406000.0",
+    "decimals": "-3",
+    "unit": "JPY"
+   },
+   "同じ値を持つ fact の件数": 1,
+   "同じ値を持つ fact の要素名": [
+    "jppfs_cor:CurrentLiabilities@Prior1YearInstant"
+   ],
+   "判定": "correct",
+   "why": "CurrentLiabilities・**前期末** instant が「(前期末7,642百万円)」と一致し、同値1件。"
+  },
+  {
+   "id": "N181",
+   "文が指す項目": "業務未払金(連結・当期末)",
+   "engine_pointer": "xbrl:jppfs_cor:AccountsPayableOperatingSpecific@CurrentYearInstant",
+   "pointer_fact": {
+    "element": "jppfs_cor:AccountsPayableOperatingSpecific",
+    "context": "CurrentYearInstant",
+    "period": "instant 2026-06-30",
+    "value": "1757446000.0",
+    "decimals": "-3",
+    "unit": "JPY"
+   },
+   "同じ値を持つ fact の件数": 1,
+   "同じ値を持つ fact の要素名": [
+    "jppfs_cor:AccountsPayableOperatingSpecific@CurrentYearInstant"
+   ],
+   "判定": "correct",
+   "why": "AccountsPayableOperatingSpecific(業務未払金)・当期末 instant が一致し、同値1件。"
+  },
+  {
+   "id": "N187",
+   "文が指す項目": "未払法人税等(連結・当期末)",
+   "engine_pointer": "xbrl:jppfs_cor:IncomeTaxesPayable@CurrentYearInstant",
+   "pointer_fact": {
+    "element": "jppfs_cor:IncomeTaxesPayable",
+    "context": "CurrentYearInstant",
+    "period": "instant 2026-06-30",
+    "value": "579515000.0",
+    "decimals": "-3",
+    "unit": "JPY"
+   },
+   "同じ値を持つ fact の件数": 3,
+   "同じ値を持つ fact の要素名": [
+    "jppfs_cor:IncomeTaxesPayable@CurrentYearInstant",
+    "jppfs_cor:NetAssets@Prior2YearInstant_NonConsolidatedMember_RetainedEarningsBroughtForwardMember",
+    "jppfs_cor:NetAssets@Prior2YearInstant_NonConsolidatedMember_RetainedEarningsMember"
+   ],
+   "判定": "correct",
+   "why": "IncomeTaxesPayable・当期末 instant が579百万円と一致。同値3件の他2件は前々期・単体の NetAssets で科目も期も違う。"
+  },
+  {
+   "id": "N191",
+   "文が指す項目": "契約負債(連結・前期末)",
+   "engine_pointer": "xbrl:jppfs_cor:ContractLiabilities@Prior1YearInstant",
+   "pointer_fact": {
+    "element": "jppfs_cor:ContractLiabilities",
+    "context": "Prior1YearInstant",
+    "period": "instant 2025-06-30",
+    "value": "1594084000.0",
+    "decimals": "-3",
+    "unit": "JPY"
+   },
+   "同じ値を持つ fact の件数": 1,
+   "同じ値を持つ fact の要素名": [
+    "jppfs_cor:ContractLiabilities@Prior1YearInstant"
+   ],
+   "判定": "correct",
+   "why": "ContractLiabilities・**前期末** instant が「(同1,594百万円)」と一致し、同値1件。"
+  },
+  {
+   "id": "N192",
+   "文が指す項目": "契約負債の減少額(連結・当期末-前期末)",
+   "engine_pointer": "xbrl:jppfs_cor:ContractLiabilities@CurrentYearInstant + xbrl:jppfs_cor:ContractLiabilities@Prior1YearInstant + formula:a-b",
+   "pointer_fact": {
+    "element": "jppfs_cor:ContractLiabilities | jppfs_cor:ContractLiabilities",
+    "context": "CurrentYearInstant | Prior1YearInstant",
+    "period": "instant 2026-06-30 | instant 2025-06-30",
+    "value": "1500638000.0 | 1594084000.0",
+    "decimals": "-3 | -3",
+    "unit": "JPY | JPY"
+   },
+   "同じ値を持つ fact の件数": 5,
+   "同じ値を持つ fact の要素名": [
+    "jppfs_cor:DisposalOfTreasuryStock@Prior1YearDuration",
+    "jppfs_cor:DisposalOfTreasuryStock@Prior1YearDuration_NonConsolidatedMember",
+    "jppfs_cor:DisposalOfTreasuryStock@Prior1YearDuration_NonConsolidatedMember_ShareholdersEquityMember",
+    "jppfs_cor:DisposalOfTreasuryStock@Prior1YearDuration_ShareholdersEquityMember",
+    "jppfs_cor:IncreaseDecreaseInContractLiabilitiesOpeCF@CurrentYearDuration"
+   ],
+   "判定": "correct",
+   "why": "ContractLiabilities の当期末-前期末=-93,446,000 が「93百万円の減少」と一致。同値5件のうち同義は営業CF の増減額のみ。"
+  },
+  {
+   "id": "N193",
+   "文が指す項目": "1年内返済予定の長期借入金(連結・当期末)",
+   "engine_pointer": "xbrl:jppfs_cor:CurrentPortionOfLongTermLoansPayable@CurrentYearInstant",
+   "pointer_fact": {
+    "element": "jppfs_cor:CurrentPortionOfLongTermLoansPayable",
+    "context": "CurrentYearInstant",
+    "period": "instant 2026-06-30",
+    "value": "234864000.0",
+    "decimals": "-3",
+    "unit": "JPY"
+   },
+   "同じ値を持つ fact の件数": 1,
+   "同じ値を持つ fact の要素名": [
+    "jppfs_cor:CurrentPortionOfLongTermLoansPayable@CurrentYearInstant"
+   ],
+   "判定": "correct",
+   "why": "CurrentPortionOfLongTermLoansPayable・当期末 instant が234百万円と一致し、同値1件。"
+  },
+  {
+   "id": "N205",
+   "文が指す項目": "繰延税金負債(連結・当期末)",
+   "engine_pointer": "xbrl:jppfs_cor:DeferredTaxLiabilities@CurrentYearInstant",
+   "pointer_fact": {
+    "element": "jppfs_cor:DeferredTaxLiabilities",
+    "context": "CurrentYearInstant",
+    "period": "instant 2026-06-30",
+    "value": "1738948000.0",
+    "decimals": "-3",
+    "unit": "JPY"
+   },
+   "同じ値を持つ fact の件数": 1,
+   "同じ値を持つ fact の要素名": [
+    "jppfs_cor:DeferredTaxLiabilities@CurrentYearInstant"
+   ],
+   "判定": "correct",
+   "why": "DeferredTaxLiabilities・当期末 instant が1,738百万円と一致し、同値1件。"
+  },
+  {
+   "id": "N214",
+   "文が指す項目": "完成業務補償引当金(連結・当期末)",
+   "engine_pointer": "xbrl:jpcrp030000-asr_E36539-000:ProvisionForWarrantiesForCompletedOperationCL@CurrentYearInstant",
+   "pointer_fact": {
+    "element": "jpcrp030000-asr_E36539-000:ProvisionForWarrantiesForCompletedOperationCL",
+    "context": "CurrentYearInstant",
+    "period": "instant 2026-06-30",
+    "value": "991000000.0",
+    "decimals": "-3",
+    "unit": "JPY"
+   },
+   "同じ値を持つ fact の件数": 1,
+   "同じ値を持つ fact の要素名": [
+    "jpcrp030000-asr_E36539-000:ProvisionForWarrantiesForCompletedOperationCL@CurrentYearInstant"
+   ],
+   "判定": "correct",
+   "why": "会社独自要素 ProvisionForWarrantiesForCompletedOperationCL・当期末 instant が991百万円と一致し、同値1件。"
+  },
+  {
+   "id": "N218",
+   "文が指す項目": "長期借入金(連結・当期末)",
+   "engine_pointer": "xbrl:jppfs_cor:LongTermLoansPayable@CurrentYearInstant",
+   "pointer_fact": {
+    "element": "jppfs_cor:LongTermLoansPayable",
+    "context": "CurrentYearInstant",
+    "period": "instant 2026-06-30",
+    "value": "275773000.0",
+    "decimals": "-3",
+    "unit": "JPY"
+   },
+   "同じ値を持つ fact の件数": 1,
+   "同じ値を持つ fact の要素名": [
+    "jppfs_cor:LongTermLoansPayable@CurrentYearInstant"
+   ],
+   "判定": "correct",
+   "why": "LongTermLoansPayable・**当期末** instant が「長期借入金275百万円」と一致し、同値1件。"
+  },
+  {
+   "id": "N219",
+   "文が指す項目": "有利子負債合計(1年内返済予定分234+長期借入金275)(連結・当期末)",
+   "engine_pointer": "xbrl:jppfs_cor:LongTermLoansPayable@Prior1YearInstant",
+   "pointer_fact": {
+    "element": "jppfs_cor:LongTermLoansPayable",
+    "context": "Prior1YearInstant",
+    "period": "instant 2025-06-30",
+    "value": "510637000.0",
+    "decimals": "-3",
+    "unit": "JPY"
+   },
+   "同じ値を持つ fact の件数": 1,
+   "同じ値を持つ fact の要素名": [
+    "jppfs_cor:LongTermLoansPayable@Prior1YearInstant"
+   ],
+   "判定": "wrong_binding",
+   "why": "文の510百万円は当期末の有利子負債合計(234,864千円+275,773千円=510,637千円)だが、engine は長期借入金の**前期末**残高 510,637,000 に結んだ ― 科目も期も違い、値が1円単位まで偶然一致して通った(有利子負債合計の fact は存在しない)。"
+  },
+  {
+   "id": "N241",
+   "文が指す項目": "その他有価証券評価差額金(連結・当期末)",
+   "engine_pointer": "xbrl:jppfs_cor:ValuationDifferenceOnAvailableForSaleSecurities@CurrentYearInstant",
+   "pointer_fact": {
+    "element": "jppfs_cor:ValuationDifferenceOnAvailableForSaleSecurities",
+    "context": "CurrentYearInstant",
+    "period": "instant 2026-06-30",
+    "value": "631931000.0",
+    "decimals": "-3",
+    "unit": "JPY"
+   },
+   "同じ値を持つ fact の件数": 2,
+   "同じ値を持つ fact の要素名": [
+    "jppfs_cor:NetAssets@CurrentYearInstant_ValuationDifferenceOnAvailableForSaleSecuritiesMember",
+    "jppfs_cor:ValuationDifferenceOnAvailableForSaleSecurities@CurrentYearInstant"
+   ],
+   "判定": "correct",
+   "why": "ValuationDifferenceOnAvailableForSaleSecurities・当期末 instant が箇条書きの631百万円と一致。"
+  },
+  {
+   "id": "N249",
+   "文が指す項目": "剰余金の配当(連結・当期、利益剰余金の減少要因)",
+   "engine_pointer": "xbrl:jppfs_cor:DividendsFromSurplus@CurrentYearDuration",
+   "pointer_fact": {
+    "element": "jppfs_cor:DividendsFromSurplus",
+    "context": "CurrentYearDuration",
+    "period": "2025-07-01..2026-06-30",
+    "value": "-652881000.0",
+    "decimals": "-3",
+    "unit": "JPY"
+   },
+   "同じ値を持つ fact の件数": 8,
+   "同じ値を持つ fact の要素名": [
+    "jppfs_cor:CashDividendsPaidFinCF@CurrentYearDuration",
+    "jppfs_cor:DividendsFromSurplus@CurrentYearDuration",
+    "jppfs_cor:DividendsFromSurplus@CurrentYearDuration_NonConsolidatedMember",
+    "jppfs_cor:DividendsFromSurplus@CurrentYearDuration_NonConsolidatedMember_RetainedEarningsBroughtForwardMember",
+    "jppfs_cor:DividendsFromSurplus@CurrentYearDuration_NonConsolidatedMember_RetainedEarningsMember",
+    "jppfs_cor:DividendsFromSurplus@CurrentYearDuration_NonConsolidatedMember_ShareholdersEquityMember",
+    "jppfs_cor:DividendsFromSurplus@CurrentYearDuration_RetainedEarningsMember",
+    "jppfs_cor:DividendsFromSurplus@CurrentYearDuration_ShareholdersEquityMember"
+   ],
+   "判定": "ambiguous",
+   "why": "剰余金の配当652百万円と同値の fact が7件(DividendsFromSurplus の member 無し=連結合計・RetainedEarningsMember・ShareholdersEquityMember・同じ4つの NonConsolidatedMember 版)在り、文は利益剰余金の変動を述べているので連結合計を指すとも利益剰余金欄を指すとも読めるため、engine が選んだ member 無しが正しいとも誤りとも決められない(単体版も同値なので、連結を選べたことが選別規則の証拠にはならない)。"
+  },
+  {
+   "id": "N264",
+   "文が指す項目": "税金等調整前当期純利益(連結・当期)",
+   "engine_pointer": "xbrl:jppfs_cor:IncomeBeforeIncomeTaxes@CurrentYearDuration",
+   "pointer_fact": {
+    "element": "jppfs_cor:IncomeBeforeIncomeTaxes",
+    "context": "CurrentYearDuration",
+    "period": "2025-07-01..2026-06-30",
+    "value": "1452012000.0",
+    "decimals": "-3",
+    "unit": "JPY"
+   },
+   "同じ値を持つ fact の件数": 1,
+   "同じ値を持つ fact の要素名": [
+    "jppfs_cor:IncomeBeforeIncomeTaxes@CurrentYearDuration"
+   ],
+   "判定": "correct",
+   "why": "IncomeBeforeIncomeTaxes・当期 duration が1,452百万円と一致(同値2件は同一要素同一 context の重複)。"
+  },
+  {
+   "id": "N267",
+   "文が指す項目": "完成業務補償引当金の増加額(営業CF調整項目・当期)",
+   "engine_pointer": "xbrl:jpcrp030000-asr_E36539-000:IncreaseDecreaseInProvisionForWarrantiesForCompletedOperationOpeCF@CurrentYearDuration",
+   "pointer_fact": {
+    "element": "jpcrp030000-asr_E36539-000:IncreaseDecreaseInProvisionForWarrantiesForCompletedOperationOpeCF",
+    "context": "CurrentYearDuration",
+    "period": "2025-07-01..2026-06-30",
+    "value": "786000000.0",
+    "decimals": "-3",
+    "unit": "JPY"
+   },
+   "同じ値を持つ fact の件数": 1,
+   "同じ値を持つ fact の要素名": [
+    "jpcrp030000-asr_E36539-000:IncreaseDecreaseInProvisionForWarrantiesForCompletedOperationOpeCF@CurrentYearDuration"
+   ],
+   "判定": "correct",
+   "why": "会社独自要素 IncreaseDecreaseInProvisionForWarrantiesForCompletedOperationOpeCF・当期 duration が「引当金の増加786百万円」と一致し、同値1件。"
+  },
+  {
+   "id": "N278",
+   "文が指す項目": "税金等調整前当期純利益の前期からの減少額(連結・当期-前期)",
+   "engine_pointer": "xbrl:jppfs_cor:IncomeBeforeIncomeTaxes@CurrentYearDuration + xbrl:jppfs_cor:IncomeBeforeIncomeTaxes@Prior1YearDuration + formula:a-b",
+   "pointer_fact": {
+    "element": "jppfs_cor:IncomeBeforeIncomeTaxes | jppfs_cor:IncomeBeforeIncomeTaxes",
+    "context": "CurrentYearDuration | Prior1YearDuration",
+    "period": "2025-07-01..2026-06-30 | 2024-07-01..2025-06-30",
+    "value": "1452012000.0 | 2707871000.0",
+    "decimals": "-3 | -3",
+    "unit": "JPY | JPY"
+   },
+   "同じ値を持つ fact の件数": 0,
+   "同じ値を持つ fact の要素名": [
+    "(0 件。この主張は差額なので、差額と同じ値を持つ単一 fact が無いだけであり、束縛の候補が無いという意味ではない ― 同じ 2 context で差が一致する要素対は 1 件、すなわち engine が選んだ要素自身のみ)"
+   ],
+   "判定": "correct",
+   "why": "IncomeBeforeIncomeTaxes の当期-前期=-1,255,859,000 が「1,255百万円減少」と一致。"
+  },
+  {
+   "id": "N282",
+   "文が指す項目": "売上債権の減少額(営業CF・前期)",
+   "engine_pointer": "xbrl:jppfs_cor:DecreaseIncreaseInNotesAndAccountsReceivableTradeOpeCF@Prior1YearDuration",
+   "pointer_fact": {
+    "element": "jppfs_cor:DecreaseIncreaseInNotesAndAccountsReceivableTradeOpeCF",
+    "context": "Prior1YearDuration",
+    "period": "2024-07-01..2025-06-30",
+    "value": "209659000.0",
+    "decimals": "-3",
+    "unit": "JPY"
+   },
+   "同じ値を持つ fact の件数": 1,
+   "同じ値を持つ fact の要素名": [
+    "jppfs_cor:DecreaseIncreaseInNotesAndAccountsReceivableTradeOpeCF@Prior1YearDuration"
+   ],
+   "判定": "correct",
+   "why": "DecreaseIncreaseInNotesAndAccountsReceivableTradeOpeCF・**前期** duration が「前期は売上債権が209百万円減少」と一致し、同値1件。"
+  },
+  {
+   "id": "N288",
+   "文が指す項目": "無形固定資産の取得による支出(投資CF・当期)",
+   "engine_pointer": "xbrl:jppfs_cor:PurchaseOfIntangibleAssetsInvCF@CurrentYearDuration",
+   "pointer_fact": {
+    "element": "jppfs_cor:PurchaseOfIntangibleAssetsInvCF",
+    "context": "CurrentYearDuration",
+    "period": "2025-07-01..2026-06-30",
+    "value": "-44037000.0",
+    "decimals": "-3",
+    "unit": "JPY"
+   },
+   "同じ値を持つ fact の件数": 2,
+   "同じ値を持つ fact の要素名": [
+    "jppfs_cor:OtherCA@Prior1YearInstant_NonConsolidatedMember",
+    "jppfs_cor:PurchaseOfIntangibleAssetsInvCF@CurrentYearDuration"
+   ],
+   "判定": "correct",
+   "why": "PurchaseOfIntangibleAssetsInvCF・当期 duration=-44,037,000 が「44百万円」と一致。同値2件の他1件は前期単体の流動資産その他。"
+  },
+  {
+   "id": "N289",
+   "文が指す項目": "関係会社株式の売却による収入(投資CF・当期)",
+   "engine_pointer": "xbrl:jppfs_cor:PurchaseOfIntangibleAssetsInvCF@CurrentYearDuration + xbrl:jppfs_cor:PurchaseOfIntangibleAssetsInvCF@Prior1YearDuration + formula:a-b",
+   "pointer_fact": {
+    "element": "jppfs_cor:PurchaseOfIntangibleAssetsInvCF | jppfs_cor:PurchaseOfIntangibleAssetsInvCF",
+    "context": "CurrentYearDuration | Prior1YearDuration",
+    "period": "2025-07-01..2026-06-30 | 2024-07-01..2025-06-30",
+    "value": "-44037000.0 | -52919000.0",
+    "decimals": "-3 | -3",
+    "unit": "JPY | JPY"
+   },
+   "同じ値を持つ fact の件数": 3,
+   "同じ値を持つ fact の要素名": [
+    "jppfs_cor:AccountsPayableOther@Prior1YearInstant_NonConsolidatedMember",
+    "jppfs_cor:InterestIncomeNOI@CurrentYearDuration",
+    "jppfs_cor:ProceedsFromSalesOfStocksOfSubsidiariesAndAffiliatesInvCF@CurrentYearDuration"
+   ],
+   "判定": "wrong_binding",
+   "why": "文の9百万円は「関係会社株式の売却による収入」だが、engine は直前の語彙語「無形固定資産の取得による支出」の当期-前期の差 8,882,000 に結んだ。正しい fact jppfs_cor:ProceedsFromSalesOfStocksOfSubsidiariesAndAffiliatesInvCF@CurrentYearDuration=9,834,000 も同じ梯子で一致するのに選ばれていない。"
+  },
+  {
+   "id": "N291",
+   "文が指す項目": "設備投資総額(当期)",
+   "engine_pointer": "xbrl:jpcrp_cor:CapitalExpendituresOverviewOfCapitalExpendituresEtc@CurrentYearDuration",
+   "pointer_fact": {
+    "element": "jpcrp_cor:CapitalExpendituresOverviewOfCapitalExpendituresEtc",
+    "context": "CurrentYearDuration",
+    "period": "2025-07-01..2026-06-30",
+    "value": "341000000.0",
+    "decimals": "-6",
+    "unit": "JPY"
+   },
+   "同じ値を持つ fact の件数": 1,
+   "同じ値を持つ fact の要素名": [
+    "jpcrp_cor:CapitalExpendituresOverviewOfCapitalExpendituresEtc@CurrentYearDuration"
+   ],
+   "判定": "correct",
+   "why": "CapitalExpenditures...・当期 duration が「設備投資総額341百万円」と一致し、同値1件。"
+  },
+  {
+   "id": "N298",
+   "文が指す項目": "配当金の支払額(財務CF・当期)",
+   "engine_pointer": "xbrl:jppfs_cor:CashDividendsPaidFinCF@CurrentYearDuration",
+   "pointer_fact": {
+    "element": "jppfs_cor:CashDividendsPaidFinCF",
+    "context": "CurrentYearDuration",
+    "period": "2025-07-01..2026-06-30",
+    "value": "-651749000.0",
+    "decimals": "-3",
+    "unit": "JPY"
+   },
+   "同じ値を持つ fact の件数": 1,
+   "同じ値を持つ fact の要素名": [
+    "jppfs_cor:CashDividendsPaidFinCF@CurrentYearDuration"
+   ],
+   "判定": "correct",
+   "why": "CashDividendsPaidFinCF・当期 duration=-651,749,000 が「配当金の支払額651百万円」と一致し、同値1件。"
+  },
+  {
+   "id": "N303",
+   "文が指す項目": "現金及び預金(連結・当期末)",
+   "engine_pointer": "xbrl:jppfs_cor:CashAndDeposits@CurrentYearInstant",
+   "pointer_fact": {
+    "element": "jppfs_cor:CashAndDeposits",
+    "context": "CurrentYearInstant",
+    "period": "instant 2026-06-30",
+    "value": "2605950000.0",
+    "decimals": "-3",
+    "unit": "JPY"
+   },
+   "同じ値を持つ fact の件数": 3,
+   "同じ値を持つ fact の要素名": [
+    "jpcrp_cor:CashAndCashEquivalentsSummaryOfBusinessResults@CurrentYearInstant",
+    "jppfs_cor:CashAndCashEquivalents@CurrentYearInstant",
+    "jppfs_cor:CashAndDeposits@CurrentYearInstant"
+   ],
+   "判定": "correct",
+   "why": "CashAndDeposits・当期末 instant が「現金及び預金2,605百万円」と科目名まで一致。同値3件の他2件は現金及び現金同等物。"
+  },
+  {
+   "id": "T018",
+   "文が指す項目": "売上総利益(額)が当期に減少したこと(連結)",
+   "engine_pointer": "xbrl:jppfs_cor:GrossProfit@CurrentYearDuration + xbrl:jppfs_cor:GrossProfit@Prior1YearDuration + builtin:sign(cur-prior)",
+   "pointer_fact": {
+    "element": "jppfs_cor:GrossProfit | jppfs_cor:GrossProfit",
+    "context": "CurrentYearDuration | Prior1YearDuration",
+    "period": "2025-07-01..2026-06-30 | 2024-07-01..2025-06-30",
+    "value": "11334658000.0 | 12018937000.0",
+    "decimals": "-3 | -3",
+    "unit": "JPY | JPY"
+   },
+   "同じ値を持つ fact の件数": 45,
+   "同じ値を持つ fact の要素名": [
+    "(方向が一致する要素対 45 件。値を持たない主張のため同値 fact は数えられない)"
+   ],
+   "判定": "correct",
+   "why": "GrossProfit の当期-前期=-684,279,000 の符号が「売上総利益が減少」と一致(同じ向きの要素対は45件)。"
+  },
+  {
+   "id": "T020",
+   "文が指す項目": "原価の伸びが売上高の伸び率2.9%を上回ったこと(2つの伸び率の比較)",
+   "engine_pointer": "xbrl:jpcrp_cor:NetSalesSummaryOfBusinessResults@CurrentYearDuration + xbrl:jpcrp_cor:NetSalesSummaryOfBusinessResults@Prior1YearDuration + builtin:sign(cur-prior)",
+   "pointer_fact": {
+    "element": "jpcrp_cor:NetSalesSummaryOfBusinessResults | jpcrp_cor:NetSalesSummaryOfBusinessResults",
+    "context": "CurrentYearDuration | Prior1YearDuration",
+    "period": "2025-07-01..2026-06-30 | 2024-07-01..2025-06-30",
+    "value": "38064274000.0 | 36975577000.0",
+    "decimals": "-3 | -3",
+    "unit": "JPY | JPY"
+   },
+   "同じ値を持つ fact の件数": 43,
+   "同じ値を持つ fact の要素名": [
+    "(方向が一致する要素対 43 件。値を持たない主張のため同値 fact は数えられない)"
+   ],
+   "判定": "undecidable",
+   "why": "「上回る」の主語は原価の伸びで、文は2つの伸び率の比較を述べており、どの単一項目の当期-前期の符号を主張しているか文からは決まらない(engine は売上高の当期-前期=+1,088,697,000 の符号に結んで通した。同じ向きの要素対は43件)。"
+  },
+  {
+   "id": "T023",
+   "文が指す項目": "売上総利益率(32.5%→29.8%)が低下したこと",
+   "engine_pointer": "xbrl:jppfs_cor:GrossProfit@CurrentYearDuration + xbrl:jppfs_cor:GrossProfit@Prior1YearDuration + builtin:sign(cur-prior)",
+   "pointer_fact": {
+    "element": "jppfs_cor:GrossProfit | jppfs_cor:GrossProfit",
+    "context": "CurrentYearDuration | Prior1YearDuration",
+    "period": "2025-07-01..2026-06-30 | 2024-07-01..2025-06-30",
+    "value": "11334658000.0 | 12018937000.0",
+    "decimals": "-3 | -3",
+    "unit": "JPY | JPY"
+   },
+   "同じ値を持つ fact の件数": 45,
+   "同じ値を持つ fact の要素名": [
+    "(方向が一致する要素対 45 件。値を持たない主張のため同値 fact は数えられない)"
+   ],
+   "判定": "wrong_binding",
+   "why": "文が低下したと述べているのは売上総利益**率**(32.5%→29.8%)だが、engine は売上総利益の**額**(当期-前期=-684,279,000)の符号に結んだ ― 率の fact はこの instance に無く、額も同じ向きに動いたため偶然通った(増収下では率が下がりつつ額が増える場合があり、その時は誤った不一致になる)。"
+  },
+  {
+   "id": "T026",
+   "文が指す項目": "販売費及び一般管理費が増加したこと(連結)",
+   "engine_pointer": "xbrl:jppfs_cor:SellingGeneralAndAdministrativeExpenses@CurrentYearDuration + xbrl:jppfs_cor:SellingGeneralAndAdministrativeExpenses@Prior1YearDuration + builtin:sign(cur-prior)",
+   "pointer_fact": {
+    "element": "jppfs_cor:SellingGeneralAndAdministrativeExpenses | jppfs_cor:SellingGeneralAndAdministrativeExpenses",
+    "context": "CurrentYearDuration | Prior1YearDuration",
+    "period": "2025-07-01..2026-06-30 | 2024-07-01..2025-06-30",
+    "value": "9869271000.0 | 9303013000.0",
+    "decimals": "-3 | -3",
+    "unit": "JPY | JPY"
+   },
+   "同じ値を持つ fact の件数": 43,
+   "同じ値を持つ fact の要素名": [
+    "(方向が一致する要素対 43 件。値を持たない主張のため同値 fact は数えられない)"
+   ],
+   "判定": "correct",
+   "why": "SellingGeneralAndAdministrativeExpenses の当期-前期=+566,258,000 の符号が「566百万円、6.1%増加」と一致。"
+  },
+  {
+   "id": "T037",
+   "文が指す項目": "営業利益が減益となったこと(連結)",
+   "engine_pointer": "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration + xbrl:jppfs_cor:OperatingIncome@Prior1YearDuration + builtin:sign(cur-prior)",
+   "pointer_fact": {
+    "element": "jppfs_cor:OperatingIncome | jppfs_cor:OperatingIncome",
+    "context": "CurrentYearDuration | Prior1YearDuration",
+    "period": "2025-07-01..2026-06-30 | 2024-07-01..2025-06-30",
+    "value": "1465387000.0 | 2715924000.0",
+    "decimals": "-3 | -3",
+    "unit": "JPY | JPY"
+   },
+   "同じ値を持つ fact の件数": 45,
+   "同じ値を持つ fact の要素名": [
+    "(方向が一致する要素対 45 件。値を持たない主張のため同値 fact は数えられない)"
+   ],
+   "判定": "correct",
+   "why": "OperatingIncome の当期-前期=-1,250,537,000 の符号が「減益」と一致。"
+  },
+  {
+   "id": "T038",
+   "文が指す項目": "売上高営業利益率(7.3%→3.8%)が低下したこと",
+   "engine_pointer": "xbrl:jppfs_cor:OperatingIncome@CurrentYearDuration + xbrl:jppfs_cor:OperatingIncome@Prior1YearDuration + builtin:sign(cur-prior)",
+   "pointer_fact": {
+    "element": "jppfs_cor:OperatingIncome | jppfs_cor:OperatingIncome",
+    "context": "CurrentYearDuration | Prior1YearDuration",
+    "period": "2025-07-01..2026-06-30 | 2024-07-01..2025-06-30",
+    "value": "1465387000.0 | 2715924000.0",
+    "decimals": "-3 | -3",
+    "unit": "JPY | JPY"
+   },
+   "同じ値を持つ fact の件数": 45,
+   "同じ値を持つ fact の要素名": [
+    "(方向が一致する要素対 45 件。値を持たない主張のため同値 fact は数えられない)"
+   ],
+   "判定": "wrong_binding",
+   "why": "文が低下したと述べているのは売上高営業利益**率**(7.3%→3.8%)だが、engine は営業利益の**額**(当期-前期=-1,250,537,000)の符号に結んだ ― 率の fact は無く、額も同じ向きだったため偶然通った。"
+  },
+  {
+   "id": "T044",
+   "文が指す項目": "親会社株主に帰属する当期純利益が減益となったこと(連結)",
+   "engine_pointer": "xbrl:jpcrp_cor:ProfitLossAttributableToOwnersOfParentSummaryOfBusinessResults@CurrentYearDuration + xbrl:jpcrp_cor:ProfitLossAttributableToOwnersOfParentSummaryOfBusinessResults@Prior1YearDuration + builtin:sign(cur-prior)",
+   "pointer_fact": {
+    "element": "jpcrp_cor:ProfitLossAttributableToOwnersOfParentSummaryOfBusinessResults | jpcrp_cor:ProfitLossAttributableToOwnersOfParentSummaryOfBusinessResults",
+    "context": "CurrentYearDuration | Prior1YearDuration",
+    "period": "2025-07-01..2026-06-30 | 2024-07-01..2025-06-30",
+    "value": "945793000.0 | 1922581000.0",
+    "decimals": "-3 | -3",
+    "unit": "JPY | JPY"
+   },
+   "同じ値を持つ fact の件数": 45,
+   "同じ値を持つ fact の要素名": [
+    "(方向が一致する要素対 45 件。値を持たない主張のため同値 fact は数えられない)"
+   ],
+   "判定": "correct",
+   "why": "ProfitLossAttributableToOwnersOfParent... の当期-前期=-976,788,000 の符号が「976百万円、50.8%の減益」と一致。"
+  },
+  {
+   "id": "T049",
+   "文が指す項目": "総資産が増加したこと(連結)",
+   "engine_pointer": "xbrl:jpcrp_cor:TotalAssetsSummaryOfBusinessResults@CurrentYearInstant + xbrl:jpcrp_cor:TotalAssetsSummaryOfBusinessResults@Prior1YearInstant + builtin:sign(cur-prior)",
+   "pointer_fact": {
+    "element": "jpcrp_cor:TotalAssetsSummaryOfBusinessResults | jpcrp_cor:TotalAssetsSummaryOfBusinessResults",
+    "context": "CurrentYearInstant | Prior1YearInstant",
+    "period": "instant 2026-06-30 | instant 2025-06-30",
+    "value": "27836421000.0 | 25554675000.0",
+    "decimals": "-3 | -3",
+    "unit": "JPY | JPY"
+   },
+   "同じ値を持つ fact の件数": 40,
+   "同じ値を持つ fact の要素名": [
+    "(方向が一致する要素対 40 件。値を持たない主張のため同値 fact は数えられない)"
+   ],
+   "判定": "correct",
+   "why": "TotalAssets... の当期末-前期末=+2,281,746,000 の符号が「8.9%増加」と一致。"
+  },
+  {
+   "id": "T066",
+   "文が指す項目": "投資有価証券が増加したこと(連結)",
+   "engine_pointer": "xbrl:jppfs_cor:InvestmentSecurities@CurrentYearInstant + xbrl:jppfs_cor:InvestmentSecurities@Prior1YearInstant + builtin:sign(cur-prior)",
+   "pointer_fact": {
+    "element": "jppfs_cor:InvestmentSecurities | jppfs_cor:InvestmentSecurities",
+    "context": "CurrentYearInstant | Prior1YearInstant",
+    "period": "instant 2026-06-30 | instant 2025-06-30",
+    "value": "1203225000.0 | 901714000.0",
+    "decimals": "-3 | -3",
+    "unit": "JPY | JPY"
+   },
+   "同じ値を持つ fact の件数": 40,
+   "同じ値を持つ fact の要素名": [
+    "(方向が一致する要素対 40 件。値を持たない主張のため同値 fact は数えられない)"
+   ],
+   "判定": "correct",
+   "why": "InvestmentSecurities の当期末-前期末=+301,511,000 の符号が「301百万円増加」と一致。"
+  },
+  {
+   "id": "T068",
+   "文が指す項目": "負債合計が増加したこと(連結)",
+   "engine_pointer": "xbrl:jppfs_cor:Liabilities@CurrentYearInstant + xbrl:jppfs_cor:Liabilities@Prior1YearInstant + builtin:sign(cur-prior)",
+   "pointer_fact": {
+    "element": "jppfs_cor:Liabilities | jppfs_cor:Liabilities",
+    "context": "CurrentYearInstant | Prior1YearInstant",
+    "period": "instant 2026-06-30 | instant 2025-06-30",
+    "value": "10670476000.0 | 10055929000.0",
+    "decimals": "-3 | -3",
+    "unit": "JPY | JPY"
+   },
+   "同じ値を持つ fact の件数": 40,
+   "同じ値を持つ fact の要素名": [
+    "(方向が一致する要素対 40 件。値を持たない主張のため同値 fact は数えられない)"
+   ],
+   "判定": "correct",
+   "why": "Liabilities の当期末-前期末=+614,547,000 の符号が「614百万円、6.1%増加」と一致。"
+  },
+  {
+   "id": "T070",
+   "文が指す項目": "業務未払金が減少したこと(連結)",
+   "engine_pointer": "xbrl:jppfs_cor:AccountsPayableOperatingSpecific@CurrentYearInstant + xbrl:jppfs_cor:AccountsPayableOperatingSpecific@Prior1YearInstant + builtin:sign(cur-prior)",
+   "pointer_fact": {
+    "element": "jppfs_cor:AccountsPayableOperatingSpecific | jppfs_cor:AccountsPayableOperatingSpecific",
+    "context": "CurrentYearInstant | Prior1YearInstant",
+    "period": "instant 2026-06-30 | instant 2025-06-30",
+    "value": "1757446000.0 | 2057744000.0",
+    "decimals": "-3 | -3",
+    "unit": "JPY | JPY"
+   },
+   "同じ値を持つ fact の件数": 21,
+   "同じ値を持つ fact の要素名": [
+    "(方向が一致する要素対 21 件。値を持たない主張のため同値 fact は数えられない)"
+   ],
+   "判定": "correct",
+   "why": "AccountsPayableOperatingSpecific の当期末-前期末=-300,298,000 の符号が「300百万円の減少」と一致。"
+  },
+  {
+   "id": "T072",
+   "文が指す項目": "未払法人税等が減少したこと(連結)",
+   "engine_pointer": "xbrl:jppfs_cor:IncomeTaxesPayable@CurrentYearInstant + xbrl:jppfs_cor:IncomeTaxesPayable@Prior1YearInstant + builtin:sign(cur-prior)",
+   "pointer_fact": {
+    "element": "jppfs_cor:IncomeTaxesPayable | jppfs_cor:IncomeTaxesPayable",
+    "context": "CurrentYearInstant | Prior1YearInstant",
+    "period": "instant 2026-06-30 | instant 2025-06-30",
+    "value": "579515000.0 | 687368000.0",
+    "decimals": "-3 | -3",
+    "unit": "JPY | JPY"
+   },
+   "同じ値を持つ fact の件数": 21,
+   "同じ値を持つ fact の要素名": [
+    "(方向が一致する要素対 21 件。値を持たない主張のため同値 fact は数えられない)"
+   ],
+   "判定": "correct",
+   "why": "IncomeTaxesPayable の当期末-前期末=-107,853,000 の符号が「107百万円の減少」と一致。"
+  },
+  {
+   "id": "T086",
+   "文が指す項目": "1株当たり純資産額(2,096円83銭→1,897円74銭、199円増)が増加したこと",
+   "engine_pointer": "xbrl:jpcrp_cor:NetAssetsSummaryOfBusinessResults@CurrentYearInstant + xbrl:jpcrp_cor:NetAssetsSummaryOfBusinessResults@Prior1YearInstant + builtin:sign(cur-prior)",
+   "pointer_fact": {
+    "element": "jpcrp_cor:NetAssetsSummaryOfBusinessResults | jpcrp_cor:NetAssetsSummaryOfBusinessResults",
+    "context": "CurrentYearInstant | Prior1YearInstant",
+    "period": "instant 2026-06-30 | instant 2025-06-30",
+    "value": "17165944000.0 | 15498746000.0",
+    "decimals": "-3 | -3",
+    "unit": "JPY | JPY"
+   },
+   "同じ値を持つ fact の件数": 40,
+   "同じ値を持つ fact の要素名": [
+    "(方向が一致する要素対 40 件。値を持たない主張のため同値 fact は数えられない)"
+   ],
+   "判定": "wrong_binding",
+   "why": "文の「増加」は1株当たり純資産額(2,096円83銭→1,897円74銭)に係るが、engine は部分一致した「純資産」の総額(17,165,944,000 vs 15,498,746,000)の符号に結んだ ― 正しい fact jpcrp_cor:NetAssetsPerShareSummaryOfBusinessResults@CurrentYearInstant/Prior1YearInstant が instance に在り、両方とも増加のため偶然通った。"
+  },
+  {
+   "id": "T092",
+   "文が指す項目": "完成業務補償引当金が増加したこと(当期)",
+   "engine_pointer": "xbrl:jpcrp030000-asr_E36539-000:ProvisionForWarrantiesForCompletedOperationCL@CurrentYearInstant + xbrl:jpcrp030000-asr_E36539-000:ProvisionForWarrantiesForCompletedOperationCL@Prior1YearInstant + builtin:sign(cur-prior)",
+   "pointer_fact": {
+    "element": "jpcrp030000-asr_E36539-000:ProvisionForWarrantiesForCompletedOperationCL | jpcrp030000-asr_E36539-000:ProvisionForWarrantiesForCompletedOperationCL",
+    "context": "CurrentYearInstant | Prior1YearInstant",
+    "period": "instant 2026-06-30 | instant 2025-06-30",
+    "value": "991000000.0 | 205000000.0",
+    "decimals": "-3 | -3",
+    "unit": "JPY | JPY"
+   },
+   "同じ値を持つ fact の件数": 40,
+   "同じ値を持つ fact の要素名": [
+    "(方向が一致する要素対 40 件。値を持たない主張のため同値 fact は数えられない)"
+   ],
+   "判定": "correct",
+   "why": "ProvisionForWarrantiesForCompletedOperationCL の当期末-前期末=+786,000,000 が「引当金の増加786百万円」と同じ量で、符号も一致。"
+  },
+  {
+   "id": "T097",
+   "文が指す項目": "契約負債が減少したこと(連結)",
+   "engine_pointer": "xbrl:jppfs_cor:ContractLiabilities@CurrentYearInstant + xbrl:jppfs_cor:ContractLiabilities@Prior1YearInstant + builtin:sign(cur-prior)",
+   "pointer_fact": {
+    "element": "jppfs_cor:ContractLiabilities | jppfs_cor:ContractLiabilities",
+    "context": "CurrentYearInstant | Prior1YearInstant",
+    "period": "instant 2026-06-30 | instant 2025-06-30",
+    "value": "1500638000.0 | 1594084000.0",
+    "decimals": "-3 | -3",
+    "unit": "JPY | JPY"
+   },
+   "同じ値を持つ fact の件数": 21,
+   "同じ値を持つ fact の要素名": [
+    "(方向が一致する要素対 21 件。値を持たない主張のため同値 fact は数えられない)"
+   ],
+   "判定": "correct",
+   "why": "ContractLiabilities の当期末-前期末=-93,446,000 の符号が「契約負債の減少93百万円」と一致。"
+  },
+  {
+   "id": "T102",
+   "文が指す項目": "税金等調整前当期純利益が減少したこと(連結)",
+   "engine_pointer": "xbrl:jppfs_cor:IncomeBeforeIncomeTaxes@CurrentYearDuration + xbrl:jppfs_cor:IncomeBeforeIncomeTaxes@Prior1YearDuration + builtin:sign(cur-prior)",
+   "pointer_fact": {
+    "element": "jppfs_cor:IncomeBeforeIncomeTaxes | jppfs_cor:IncomeBeforeIncomeTaxes",
+    "context": "CurrentYearDuration | Prior1YearDuration",
+    "period": "2025-07-01..2026-06-30 | 2024-07-01..2025-06-30",
+    "value": "1452012000.0 | 2707871000.0",
+    "decimals": "-3 | -3",
+    "unit": "JPY | JPY"
+   },
+   "同じ値を持つ fact の件数": 45,
+   "同じ値を持つ fact の要素名": [
+    "(方向が一致する要素対 45 件。値を持たない主張のため同値 fact は数えられない)"
+   ],
+   "判定": "correct",
+   "why": "IncomeBeforeIncomeTaxes の当期-前期=-1,255,859,000 の符号が「1,255百万円減少」と一致。"
+  }
+ ],
+ "counts": {
+  "correct": 53,
+  "wrong_binding": 5,
+  "ambiguous": 1,
+  "undecidable": 1
+ },
+ "false_pass_candidates": [
+  "N219",
+  "N289",
+  "T023",
+  "T038",
+  "T086"
+ ],
+ "method_notes": "(1) 対象は材料 reaudit_B_strata['GROUNDED']['ids'] の 60 件のみ(封じた種 e7dbf93 で引かれたもの)。engine は tests/golden/_instrument.run_verification('S100Z4Q1', vocabulary.P7) で 415 件を再現し、60 件の Result.state.value は全て 'GROUNDED'(非 GROUNDED は 0 件)。ZIP の sha256 は材料の identity.modified_zip_sha256 と一致。core/adapters/tests は 1 行も変更していない(読み取りのみ)。 (2) 判定は、文(provenance.span とそれを含む文)から人(この席)が科目・期・連結/単体・member を読み、pointer の fact(要素名・context の期間・member)と突き合わせた。全 60 件の pointer context は member 無し(=連結)で、単体 member への束縛は 1 件も無かった。 (3) 「同じ値を持つ fact の件数」は、値を持つ 44 件については **instance の 863 fact のうち、engine 自身の梯子(comparators._match_value: round 半単位以内 / truncate 0〜1単位 / 両者の abs 版、単位は百万円)で claim の数と一致する単一 fact を(要素名, context) で重複排除して数えた件数**。% の 2 件は pure 規則(|fv*100 - claim| <= 0.15)。この数え方は claim_scale=百万円に固定しており、decimals や元の桁は見ていない。 (4) 値を持たない 16 件(builtin:sign)は同値 fact を数えられないため、代わりに **同じ 2 つの context を持ち差の符号が direction と一致する要素対の件数**(21〜45 件)を入れ、要素名欄にその旨を書いた。方向の主張は粗く、40 件以上の要素対が同じ向きに動くため、符号が通ったことは束縛の正しさの証拠にほとんどならない ― T023・T038・T086 の 3 件は実際にこれで偽通過していた。 (5) 取りこぼしうる点: (a) diff/pct_change/sign の 27 件について、私の「同じ値を持つ fact」は**単一 fact** だけを数え、『別の要素対の差が同じ値になる』組み合わせは別に数えた(binding_table の alt_n。N026 など 6 件は単一 fact が 0 件だが、これは差を単一 fact と比べたためで、欠陥ではない)。(b) N219 は同値 fact が 1 件しか無いのに束縛が誤っていた ― 件数が 1 であることは正しさを意味しない(文の『合計510百万円』に対応する有利子負債合計の fact がそもそも存在せず、engine は別科目・別期の 1 件に当てた)。したがって件数だけで篩うと N219 型は取りこぼす。(c) 文の読みは私 1 人の読みであり、独立の第 2 読者と突き合わせていない。特に T020(undecidable)と N249(ambiguous)は読みが分かれうる。(d) 符号の扱い: _match_value の abs 版により、claim が正・fact が負(N026/N137/N143/N192/N249/N288/N298 等)でも通っている。これは束縛ではなく比較器の緩さだが、『値が偶然一致する』余地を広げており、本測定の 5 件のうち N219 はこの緩さ無しでも一致した(完全一致)。(e) 要素の日本語ラベルは ZIP の lab.xml に会社独自要素 15 件分しか入っておらず、標準タクソノミ(jppfs_cor/jpcrp_cor)のラベルは引けなかったため、要素名の意味は英語の要素名から読んだ。 (f) 「同じ値を持つ fact の件数」欄の数は、値を持つ 44 件では単一 fact の件数、値を持たない 16 件(builtin:sign)では方向が一致する要素対の件数であり、2 つを合算して読んではいけない。2 件以上だったのは、値を持つ 44 件のうち 14 件。"
+}

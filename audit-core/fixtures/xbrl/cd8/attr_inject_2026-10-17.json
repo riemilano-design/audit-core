@@ -1,0 +1,1326 @@
+{
+ "seal": "docs/XBRL_ATTR_INJECT_SEAL_2026-10-17.md",
+ "step": "**属性注入の実測。engine 不変・規則不変・0 USD・席は呼ばない**",
+ "基準": "contract v1 が検査通過させた行(`**B′ の最終判定**` = 検査通過)",
+ "行": {
+  "基準": 24,
+  "**対照が通った(有効)**": 24,
+  "無効": []
+ },
+ "**第 1 部 注入**": {
+  "単位": {
+   "試せた": 24,
+   "作れなかった": 0,
+   "**誤って通した**": {
+    "分子": 24,
+    "分母": 24,
+    "率": 100.0
+   }
+  },
+  "期間(注入)": {
+   "試せた": 18,
+   "作れなかった": 6,
+   "**誤って通した**": {
+    "分子": 18,
+    "分母": 18,
+    "率": 100.0
+   }
+  },
+  "期間(実在の枠を指す)": {
+   "試せた": 21,
+   "作れなかった": 3,
+   "**誤って通した**": {
+    "分子": 0,
+    "分母": 21,
+    "率": 0.0
+   }
+  },
+  "次元": {
+   "試せた": 24,
+   "作れなかった": 0,
+   "**誤って通した**": {
+    "分子": 24,
+    "分母": 24,
+    "率": 100.0
+   }
+  }
+ },
+ "**第 2 部 露出(注入なし)**": {
+  "別の期間": {
+   "分子": 0,
+   "分母": 24,
+   "率": 0.0
+  },
+  "別の次元": {
+   "分子": 6,
+   "分母": 24,
+   "率": 25.0
+  },
+  "別の単位": {
+   "分子": 0,
+   "分母": 24,
+   "率": 0.0
+  }
+ },
+ "**予測との照合**": {
+  "欄ごと": [
+   {
+    "記号": "Q-1",
+    "予測": "対照 = 24/24 が GROUNDED",
+    "実測": "24/24",
+    "当たり": true
+   },
+   {
+    "記号": "Q-2",
+    "予測": "単位注入 → 24/24 が誤って通過",
+    "実測": "24/24",
+    "当たり": true
+   },
+   {
+    "記号": "Q-3",
+    "予測": "期間注入 → 24/24 が誤って通過",
+    "実測": "18/18",
+    "当たり": false
+   },
+   {
+    "記号": "Q-4",
+    "予測": "次元注入 → 24/24 が誤って通過",
+    "実測": "24/24",
+    "当たり": true
+   },
+   {
+    "記号": "Q-5",
+    "予測": "別の期間に同じ値 = 1 行以上",
+    "実測": 0,
+    "当たり": false
+   },
+   {
+    "記号": "Q-6",
+    "予測": "別の次元に同じ値 = 1 行以上",
+    "実測": 6,
+    "当たり": true
+   },
+   {
+    "記号": "Q-7",
+    "予測": "別の単位に同じ値 = 0 行",
+    "実測": 0,
+    "当たり": true
+   },
+   {
+    "記号": "Q-8",
+    "予測": "注入で POINTER_NOT_FOUND / 実証不能 = 0 行",
+    "実測": 0,
+    "当たり": true,
+    "注": "**VALUE_MISMATCH は数えない**(予測は見つからない・規則が無いの 2 つについて。第 1 便の器は VALUE_MISMATCH も数えていた)"
+   }
+  ],
+  "当たり": 6,
+  "外れ": 2
+ },
+ "rows": [
+  {
+   "doc": "S100YWGX",
+   "id": "R003",
+   "値": 130123.0,
+   "単位": "百万円",
+   "参照先": "netsales@currentyearduration",
+   "fact の値": 130123000000.0,
+   "fact の単位": "JPY",
+   "枝": {
+    "対照": {
+     "注入した key": "jppfs_cor:NetSales@CurrentYearDuration",
+     "state": "GROUNDED",
+     "**誤って通した**": false
+    },
+    "単位": {
+     "注入した key": "jppfs_cor:NetSales@CurrentYearDuration_UnitTest",
+     "state": "GROUNDED",
+     "**誤って通した**": true
+    },
+    "期間(注入)": {
+     "注入した key": "jppfs_cor:NetSales@Prior2YearDuration",
+     "state": "GROUNDED",
+     "**誤って通した**": true
+    },
+    "期間(実在の枠を指す)": {
+     "注入した key": "jppfs_cor:NetSales@Prior1YearDuration",
+     "state": "VALUE_MISMATCH",
+     "**誤って通した**": false
+    },
+    "次元": {
+     "注入した key": "jppfs_cor:NetSales@CurrentYearDuration_AttrInjectTestMember",
+     "state": "GROUNDED",
+     "**誤って通した**": true
+    }
+   },
+   "露出(注入なし)": {
+    "別の期間": {
+     "件数": 0,
+     "例": []
+    },
+    "別の次元": {
+     "件数": 0,
+     "例": []
+    },
+    "別の単位": {
+     "件数": 0,
+     "例": []
+    }
+   }
+  },
+  {
+   "doc": "S100YWGX",
+   "id": "R005",
+   "値": 4720.0,
+   "単位": "百万円",
+   "参照先": "ordinaryincome@currentyearduration",
+   "fact の値": 4720000000.0,
+   "fact の単位": "JPY",
+   "枝": {
+    "対照": {
+     "注入した key": "jppfs_cor:OrdinaryIncome@CurrentYearDuration",
+     "state": "GROUNDED",
+     "**誤って通した**": false
+    },
+    "単位": {
+     "注入した key": "jppfs_cor:OrdinaryIncome@CurrentYearDuration_UnitTest",
+     "state": "GROUNDED",
+     "**誤って通した**": true
+    },
+    "期間(注入)": {
+     "注入した key": "jppfs_cor:OrdinaryIncome@Prior2YearDuration",
+     "state": "GROUNDED",
+     "**誤って通した**": true
+    },
+    "期間(実在の枠を指す)": {
+     "注入した key": "jppfs_cor:OrdinaryIncome@Prior1YearDuration",
+     "state": "VALUE_MISMATCH",
+     "**誤って通した**": false
+    },
+    "次元": {
+     "注入した key": "jppfs_cor:OrdinaryIncome@CurrentYearDuration_AttrInjectTestMember",
+     "state": "GROUNDED",
+     "**誤って通した**": true
+    }
+   },
+   "露出(注入なし)": {
+    "別の期間": {
+     "件数": 0,
+     "例": []
+    },
+    "別の次元": {
+     "件数": 0,
+     "例": []
+    },
+    "別の単位": {
+     "件数": 0,
+     "例": []
+    }
+   }
+  },
+  {
+   "doc": "S100YWGX",
+   "id": "R007",
+   "値": 2763.0,
+   "単位": "百万円",
+   "参照先": "profitlossattributabletoownersofparent@currentyearduration",
+   "fact の値": 2763000000.0,
+   "fact の単位": "JPY",
+   "枝": {
+    "対照": {
+     "注入した key": "jppfs_cor:ProfitLossAttributableToOwnersOfParent@CurrentYearDuration",
+     "state": "GROUNDED",
+     "**誤って通した**": false
+    },
+    "単位": {
+     "注入した key": "jppfs_cor:ProfitLossAttributableToOwnersOfParent@CurrentYearDuration_UnitTest",
+     "state": "GROUNDED",
+     "**誤って通した**": true
+    },
+    "期間(注入)": {
+     "注入した key": "jppfs_cor:ProfitLossAttributableToOwnersOfParent@Prior2YearDuration",
+     "state": "GROUNDED",
+     "**誤って通した**": true
+    },
+    "期間(実在の枠を指す)": {
+     "注入した key": "jppfs_cor:ProfitLossAttributableToOwnersOfParent@Prior1YearDuration",
+     "state": "VALUE_MISMATCH",
+     "**誤って通した**": false
+    },
+    "次元": {
+     "注入した key": "jppfs_cor:ProfitLossAttributableToOwnersOfParent@CurrentYearDuration_AttrInjectTestMember",
+     "state": "GROUNDED",
+     "**誤って通した**": true
+    }
+   },
+   "露出(注入なし)": {
+    "別の期間": {
+     "件数": 0,
+     "例": []
+    },
+    "別の次元": {
+     "件数": 2,
+     "例": [
+      "jppfs_cor:ProfitLossAttributableToOwnersOfParent@CurrentYearDuration_RetainedEarningsMember",
+      "jppfs_cor:ProfitLossAttributableToOwnersOfParent@CurrentYearDuration_ShareholdersEquityMember"
+     ]
+    },
+    "別の単位": {
+     "件数": 0,
+     "例": []
+    }
+   }
+  },
+  {
+   "doc": "S100YWGX",
+   "id": "R012",
+   "値": 6369.0,
+   "単位": "百万円",
+   "参照先": "ordinaryincome@currentyearduration_jpcrp030000-asr_e34102-000domesticbookoffbusinessreportablesegmentsmember",
+   "fact の値": 6369000000.0,
+   "fact の単位": "JPY",
+   "枝": {
+    "対照": {
+     "注入した key": "jppfs_cor:OrdinaryIncome@CurrentYearDuration_jpcrp030000-asr_E34102-000DomesticBookoffBusinessReportableSegmentsMember",
+     "state": "GROUNDED",
+     "**誤って通した**": false
+    },
+    "単位": {
+     "注入した key": "jppfs_cor:OrdinaryIncome@CurrentYearDuration_jpcrp030000-asr_E34102-000DomesticBookoffBusinessReportableSegmentsMember_UnitTest",
+     "state": "GROUNDED",
+     "**誤って通した**": true
+    },
+    "期間(注入)": {
+     "注入した key": "jppfs_cor:OrdinaryIncome@Prior2YearDuration_jpcrp030000-asr_E34102-000DomesticBookoffBusinessReportableSegmentsMember",
+     "state": "GROUNDED",
+     "**誤って通した**": true
+    },
+    "期間(実在の枠を指す)": {
+     "注入した key": "jppfs_cor:OrdinaryIncome@Prior1YearDuration_jpcrp030000-asr_E34102-000DomesticBookoffBusinessReportableSegmentsMember",
+     "state": "VALUE_MISMATCH",
+     "**誤って通した**": false
+    },
+    "次元": {
+     "注入した key": "jppfs_cor:OrdinaryIncome@CurrentYearDuration_jpcrp030000-asr_E34102-000DomesticBookoffBusinessReportableSegmentsMember_AttrInjectTestMember",
+     "state": "GROUNDED",
+     "**誤って通した**": true
+    }
+   },
+   "露出(注入なし)": {
+    "別の期間": {
+     "件数": 0,
+     "例": []
+    },
+    "別の次元": {
+     "件数": 0,
+     "例": []
+    },
+    "別の単位": {
+     "件数": 0,
+     "例": []
+    }
+   }
+  },
+  {
+   "doc": "S100YWGX",
+   "id": "R014",
+   "値": 8527.0,
+   "単位": "百万円",
+   "参照先": "revenuesfromexternalcustomers@currentyearduration_jpcrp030000-asr_e34102-000premiumservicebusinessreportablesegmentsmember",
+   "fact の値": 8527000000.0,
+   "fact の単位": "JPY",
+   "枝": {
+    "対照": {
+     "注入した key": "jpcrp_cor:RevenuesFromExternalCustomers@CurrentYearDuration_jpcrp030000-asr_E34102-000PremiumServiceBusinessReportableSegmentsMember",
+     "state": "GROUNDED",
+     "**誤って通した**": false
+    },
+    "単位": {
+     "注入した key": "jpcrp_cor:RevenuesFromExternalCustomers@CurrentYearDuration_jpcrp030000-asr_E34102-000PremiumServiceBusinessReportableSegmentsMember_UnitTest",
+     "state": "GROUNDED",
+     "**誤って通した**": true
+    },
+    "期間(注入)": {
+     "注入した key": "jpcrp_cor:RevenuesFromExternalCustomers@Prior2YearDuration_jpcrp030000-asr_E34102-000PremiumServiceBusinessReportableSegmentsMember",
+     "state": "GROUNDED",
+     "**誤って通した**": true
+    },
+    "期間(実在の枠を指す)": {
+     "注入した key": "jpcrp_cor:RevenuesFromExternalCustomers@Prior1YearDuration_jpcrp030000-asr_E34102-000PremiumServiceBusinessReportableSegmentsMember",
+     "state": "VALUE_MISMATCH",
+     "**誤って通した**": false
+    },
+    "次元": {
+     "注入した key": "jpcrp_cor:RevenuesFromExternalCustomers@CurrentYearDuration_jpcrp030000-asr_E34102-000PremiumServiceBusinessReportableSegmentsMember_AttrInjectTestMember",
+     "state": "GROUNDED",
+     "**誤って通した**": true
+    }
+   },
+   "露出(注入なし)": {
+    "別の期間": {
+     "件数": 0,
+     "例": []
+    },
+    "別の次元": {
+     "件数": 0,
+     "例": []
+    },
+    "別の単位": {
+     "件数": 0,
+     "例": []
+    }
+   }
+  },
+  {
+   "doc": "S100YWGX",
+   "id": "R016",
+   "値": 160.0,
+   "単位": "百万円",
+   "参照先": "ordinaryincome@currentyearduration_jpcrp030000-asr_e34102-000premiumservicebusinessreportablesegmentsmember",
+   "fact の値": 160000000.0,
+   "fact の単位": "JPY",
+   "枝": {
+    "対照": {
+     "注入した key": "jppfs_cor:OrdinaryIncome@CurrentYearDuration_jpcrp030000-asr_E34102-000PremiumServiceBusinessReportableSegmentsMember",
+     "state": "GROUNDED",
+     "**誤って通した**": false
+    },
+    "単位": {
+     "注入した key": "jppfs_cor:OrdinaryIncome@CurrentYearDuration_jpcrp030000-asr_E34102-000PremiumServiceBusinessReportableSegmentsMember_UnitTest",
+     "state": "GROUNDED",
+     "**誤って通した**": true
+    },
+    "期間(注入)": {
+     "注入した key": "jppfs_cor:OrdinaryIncome@Prior2YearDuration_jpcrp030000-asr_E34102-000PremiumServiceBusinessReportableSegmentsMember",
+     "state": "GROUNDED",
+     "**誤って通した**": true
+    },
+    "期間(実在の枠を指す)": {
+     "注入した key": "jppfs_cor:OrdinaryIncome@Prior1YearDuration_jpcrp030000-asr_E34102-000PremiumServiceBusinessReportableSegmentsMember",
+     "state": "VALUE_MISMATCH",
+     "**誤って通した**": false
+    },
+    "次元": {
+     "注入した key": "jppfs_cor:OrdinaryIncome@CurrentYearDuration_jpcrp030000-asr_E34102-000PremiumServiceBusinessReportableSegmentsMember_AttrInjectTestMember",
+     "state": "GROUNDED",
+     "**誤って通した**": true
+    }
+   },
+   "露出(注入なし)": {
+    "別の期間": {
+     "件数": 0,
+     "例": []
+    },
+    "別の次元": {
+     "件数": 0,
+     "例": []
+    },
+    "別の単位": {
+     "件数": 0,
+     "例": []
+    }
+   }
+  },
+  {
+   "doc": "S100YXMA",
+   "id": "R001",
+   "値": 120169.0,
+   "単位": "百万円",
+   "参照先": "netsales@currentyearduration",
+   "fact の値": 120169000000.0,
+   "fact の単位": "JPY",
+   "枝": {
+    "対照": {
+     "注入した key": "jppfs_cor:NetSales@CurrentYearDuration",
+     "state": "GROUNDED",
+     "**誤って通した**": false
+    },
+    "単位": {
+     "注入した key": "jppfs_cor:NetSales@CurrentYearDuration_UnitTest",
+     "state": "GROUNDED",
+     "**誤って通した**": true
+    },
+    "期間(注入)": {
+     "注入した key": "jppfs_cor:NetSales@Prior2YearDuration",
+     "state": "GROUNDED",
+     "**誤って通した**": true
+    },
+    "期間(実在の枠を指す)": {
+     "注入した key": "jppfs_cor:NetSales@Prior1YearDuration",
+     "state": "VALUE_MISMATCH",
+     "**誤って通した**": false
+    },
+    "次元": {
+     "注入した key": "jppfs_cor:NetSales@CurrentYearDuration_AttrInjectTestMember",
+     "state": "GROUNDED",
+     "**誤って通した**": true
+    }
+   },
+   "露出(注入なし)": {
+    "別の期間": {
+     "件数": 0,
+     "例": []
+    },
+    "別の次元": {
+     "件数": 1,
+     "例": [
+      "jppfs_cor:NetSales@CurrentYearDuration_TotalOfReportableSegmentsAndOthersMember"
+     ]
+    },
+    "別の単位": {
+     "件数": 0,
+     "例": []
+    }
+   }
+  },
+  {
+   "doc": "S100YXMA",
+   "id": "R004",
+   "値": 12497.0,
+   "単位": "百万円",
+   "参照先": "ordinaryincome@currentyearduration",
+   "fact の値": 12497000000.0,
+   "fact の単位": "JPY",
+   "枝": {
+    "対照": {
+     "注入した key": "jppfs_cor:OrdinaryIncome@CurrentYearDuration",
+     "state": "GROUNDED",
+     "**誤って通した**": false
+    },
+    "単位": {
+     "注入した key": "jppfs_cor:OrdinaryIncome@CurrentYearDuration_UnitTest",
+     "state": "GROUNDED",
+     "**誤って通した**": true
+    },
+    "期間(注入)": {
+     "注入した key": "jppfs_cor:OrdinaryIncome@Prior2YearDuration",
+     "state": "GROUNDED",
+     "**誤って通した**": true
+    },
+    "期間(実在の枠を指す)": {
+     "注入した key": "jppfs_cor:OrdinaryIncome@Prior1YearDuration",
+     "state": "VALUE_MISMATCH",
+     "**誤って通した**": false
+    },
+    "次元": {
+     "注入した key": "jppfs_cor:OrdinaryIncome@CurrentYearDuration_AttrInjectTestMember",
+     "state": "GROUNDED",
+     "**誤って通した**": true
+    }
+   },
+   "露出(注入なし)": {
+    "別の期間": {
+     "件数": 0,
+     "例": []
+    },
+    "別の次元": {
+     "件数": 0,
+     "例": []
+    },
+    "別の単位": {
+     "件数": 0,
+     "例": []
+    }
+   }
+  },
+  {
+   "doc": "S100YXMA",
+   "id": "R005",
+   "値": 869.0,
+   "単位": "百万円",
+   "参照先": "impairmentlossel@currentyearduration",
+   "fact の値": 869000000.0,
+   "fact の単位": "JPY",
+   "枝": {
+    "対照": {
+     "注入した key": "jppfs_cor:ImpairmentLossEL@CurrentYearDuration",
+     "state": "GROUNDED",
+     "**誤って通した**": false
+    },
+    "単位": {
+     "注入した key": "jppfs_cor:ImpairmentLossEL@CurrentYearDuration_UnitTest",
+     "state": "GROUNDED",
+     "**誤って通した**": true
+    },
+    "期間(注入)": {
+     "注入した key": "jppfs_cor:ImpairmentLossEL@Prior1YearDuration",
+     "state": "GROUNDED",
+     "**誤って通した**": true
+    },
+    "期間(実在の枠を指す)": {
+     "作れなかった": "期間だけ違う実在の枠が無い"
+    },
+    "次元": {
+     "注入した key": "jppfs_cor:ImpairmentLossEL@CurrentYearDuration_AttrInjectTestMember",
+     "state": "GROUNDED",
+     "**誤って通した**": true
+    }
+   },
+   "露出(注入なし)": {
+    "別の期間": {
+     "件数": 0,
+     "例": []
+    },
+    "別の次元": {
+     "件数": 0,
+     "例": []
+    },
+    "別の単位": {
+     "件数": 0,
+     "例": []
+    }
+   }
+  },
+  {
+   "doc": "S100YXMA",
+   "id": "R006",
+   "値": 272.0,
+   "単位": "百万円",
+   "参照先": "correctionrelatedcostel@currentyearduration",
+   "fact の値": 272000000.0,
+   "fact の単位": "JPY",
+   "枝": {
+    "対照": {
+     "注入した key": "jpcrp030000-asr_E05713-000:CorrectionRelatedCostEL@CurrentYearDuration",
+     "state": "GROUNDED",
+     "**誤って通した**": false
+    },
+    "単位": {
+     "注入した key": "jpcrp030000-asr_E05713-000:CorrectionRelatedCostEL@CurrentYearDuration_UnitTest",
+     "state": "GROUNDED",
+     "**誤って通した**": true
+    },
+    "期間(注入)": {
+     "注入した key": "jpcrp030000-asr_E05713-000:CorrectionRelatedCostEL@Prior1YearDuration",
+     "state": "GROUNDED",
+     "**誤って通した**": true
+    },
+    "期間(実在の枠を指す)": {
+     "作れなかった": "期間だけ違う実在の枠が無い"
+    },
+    "次元": {
+     "注入した key": "jpcrp030000-asr_E05713-000:CorrectionRelatedCostEL@CurrentYearDuration_AttrInjectTestMember",
+     "state": "GROUNDED",
+     "**誤って通した**": true
+    }
+   },
+   "露出(注入なし)": {
+    "別の期間": {
+     "件数": 0,
+     "例": []
+    },
+    "別の次元": {
+     "件数": 1,
+     "例": [
+      "jpcrp030000-asr_E05713-000:CorrectionRelatedCostEL@CurrentYearDuration_NonConsolidatedMember"
+     ]
+    },
+    "別の単位": {
+     "件数": 0,
+     "例": []
+    }
+   }
+  },
+  {
+   "doc": "S100YXMA",
+   "id": "R007",
+   "値": 181.0,
+   "単位": "百万円",
+   "参照先": "specialinvestigationexpensesel@currentyearduration",
+   "fact の値": 181000000.0,
+   "fact の単位": "JPY",
+   "枝": {
+    "対照": {
+     "注入した key": "jpcrp030000-asr_E05713-000:SpecialInvestigationExpensesEL@CurrentYearDuration",
+     "state": "GROUNDED",
+     "**誤って通した**": false
+    },
+    "単位": {
+     "注入した key": "jpcrp030000-asr_E05713-000:SpecialInvestigationExpensesEL@CurrentYearDuration_UnitTest",
+     "state": "GROUNDED",
+     "**誤って通した**": true
+    },
+    "期間(注入)": {
+     "注入した key": "jpcrp030000-asr_E05713-000:SpecialInvestigationExpensesEL@Prior1YearDuration",
+     "state": "GROUNDED",
+     "**誤って通した**": true
+    },
+    "期間(実在の枠を指す)": {
+     "作れなかった": "期間だけ違う実在の枠が無い"
+    },
+    "次元": {
+     "注入した key": "jpcrp030000-asr_E05713-000:SpecialInvestigationExpensesEL@CurrentYearDuration_AttrInjectTestMember",
+     "state": "GROUNDED",
+     "**誤って通した**": true
+    }
+   },
+   "露出(注入なし)": {
+    "別の期間": {
+     "件数": 0,
+     "例": []
+    },
+    "別の次元": {
+     "件数": 1,
+     "例": [
+      "jpcrp030000-asr_E05713-000:SpecialInvestigationExpensesEL@CurrentYearDuration_NonConsolidatedMember"
+     ]
+    },
+    "別の単位": {
+     "件数": 0,
+     "例": []
+    }
+   }
+  },
+  {
+   "doc": "S100YXMA",
+   "id": "R009",
+   "値": 7722.0,
+   "単位": "百万円",
+   "参照先": "profitlossattributabletoownersofparent@currentyearduration",
+   "fact の値": 7722000000.0,
+   "fact の単位": "JPY",
+   "枝": {
+    "対照": {
+     "注入した key": "jppfs_cor:ProfitLossAttributableToOwnersOfParent@CurrentYearDuration",
+     "state": "GROUNDED",
+     "**誤って通した**": false
+    },
+    "単位": {
+     "注入した key": "jppfs_cor:ProfitLossAttributableToOwnersOfParent@CurrentYearDuration_UnitTest",
+     "state": "GROUNDED",
+     "**誤って通した**": true
+    },
+    "期間(注入)": {
+     "注入した key": "jppfs_cor:ProfitLossAttributableToOwnersOfParent@Prior2YearDuration",
+     "state": "GROUNDED",
+     "**誤って通した**": true
+    },
+    "期間(実在の枠を指す)": {
+     "注入した key": "jppfs_cor:ProfitLossAttributableToOwnersOfParent@Prior1YearDuration",
+     "state": "VALUE_MISMATCH",
+     "**誤って通した**": false
+    },
+    "次元": {
+     "注入した key": "jppfs_cor:ProfitLossAttributableToOwnersOfParent@CurrentYearDuration_AttrInjectTestMember",
+     "state": "GROUNDED",
+     "**誤って通した**": true
+    }
+   },
+   "露出(注入なし)": {
+    "別の期間": {
+     "件数": 0,
+     "例": []
+    },
+    "別の次元": {
+     "件数": 2,
+     "例": [
+      "jppfs_cor:ProfitLossAttributableToOwnersOfParent@CurrentYearDuration_RetainedEarningsMember",
+      "jppfs_cor:ProfitLossAttributableToOwnersOfParent@CurrentYearDuration_ShareholdersEquityMember"
+     ]
+    },
+    "別の単位": {
+     "件数": 0,
+     "例": []
+    }
+   }
+  },
+  {
+   "doc": "S100YXMA",
+   "id": "R010",
+   "値": 111768.0,
+   "単位": "百万円",
+   "参照先": "netsales@currentyearduration_jpcrp030000-asr_e05713-000solarpanelmanufacturingbusinessreportablesegmentmember",
+   "fact の値": 111768000000.0,
+   "fact の単位": "JPY",
+   "枝": {
+    "対照": {
+     "注入した key": "jppfs_cor:NetSales@CurrentYearDuration_jpcrp030000-asr_E05713-000SolarPanelManufacturingBusinessReportableSegmentMember",
+     "state": "GROUNDED",
+     "**誤って通した**": false
+    },
+    "単位": {
+     "注入した key": "jppfs_cor:NetSales@CurrentYearDuration_jpcrp030000-asr_E05713-000SolarPanelManufacturingBusinessReportableSegmentMember_UnitTest",
+     "state": "GROUNDED",
+     "**誤って通した**": true
+    },
+    "期間(注入)": {
+     "注入した key": "jppfs_cor:NetSales@Prior2YearDuration_jpcrp030000-asr_E05713-000SolarPanelManufacturingBusinessReportableSegmentMember",
+     "state": "GROUNDED",
+     "**誤って通した**": true
+    },
+    "期間(実在の枠を指す)": {
+     "注入した key": "jppfs_cor:NetSales@Prior1YearDuration_jpcrp030000-asr_E05713-000SolarPanelManufacturingBusinessReportableSegmentMember",
+     "state": "VALUE_MISMATCH",
+     "**誤って通した**": false
+    },
+    "次元": {
+     "注入した key": "jppfs_cor:NetSales@CurrentYearDuration_jpcrp030000-asr_E05713-000SolarPanelManufacturingBusinessReportableSegmentMember_AttrInjectTestMember",
+     "state": "GROUNDED",
+     "**誤って通した**": true
+    }
+   },
+   "露出(注入なし)": {
+    "別の期間": {
+     "件数": 0,
+     "例": []
+    },
+    "別の次元": {
+     "件数": 0,
+     "例": []
+    },
+    "別の単位": {
+     "件数": 0,
+     "例": []
+    }
+   }
+  },
+  {
+   "doc": "S100YXMA",
+   "id": "R011",
+   "値": 13952.0,
+   "単位": "百万円",
+   "参照先": "operatingincome@currentyearduration_jpcrp030000-asr_e05713-000solarpanelmanufacturingbusinessreportablesegmentmember",
+   "fact の値": 13952000000.0,
+   "fact の単位": "JPY",
+   "枝": {
+    "対照": {
+     "注入した key": "jppfs_cor:OperatingIncome@CurrentYearDuration_jpcrp030000-asr_E05713-000SolarPanelManufacturingBusinessReportableSegmentMember",
+     "state": "GROUNDED",
+     "**誤って通した**": false
+    },
+    "単位": {
+     "注入した key": "jppfs_cor:OperatingIncome@CurrentYearDuration_jpcrp030000-asr_E05713-000SolarPanelManufacturingBusinessReportableSegmentMember_UnitTest",
+     "state": "GROUNDED",
+     "**誤って通した**": true
+    },
+    "期間(注入)": {
+     "注入した key": "jppfs_cor:OperatingIncome@Prior2YearDuration_jpcrp030000-asr_E05713-000SolarPanelManufacturingBusinessReportableSegmentMember",
+     "state": "GROUNDED",
+     "**誤って通した**": true
+    },
+    "期間(実在の枠を指す)": {
+     "注入した key": "jppfs_cor:OperatingIncome@Prior1YearDuration_jpcrp030000-asr_E05713-000SolarPanelManufacturingBusinessReportableSegmentMember",
+     "state": "VALUE_MISMATCH",
+     "**誤って通した**": false
+    },
+    "次元": {
+     "注入した key": "jppfs_cor:OperatingIncome@CurrentYearDuration_jpcrp030000-asr_E05713-000SolarPanelManufacturingBusinessReportableSegmentMember_AttrInjectTestMember",
+     "state": "GROUNDED",
+     "**誤って通した**": true
+    }
+   },
+   "露出(注入なし)": {
+    "別の期間": {
+     "件数": 0,
+     "例": []
+    },
+    "別の次元": {
+     "件数": 0,
+     "例": []
+    },
+    "別の単位": {
+     "件数": 0,
+     "例": []
+    }
+   }
+  },
+  {
+   "doc": "S100YXMA",
+   "id": "R016",
+   "値": 7879.0,
+   "単位": "百万円",
+   "参照先": "netsales@currentyearduration_jpcrp030000-asr_e05713-000greenenergyreportablesegmentmember",
+   "fact の値": 7879000000.0,
+   "fact の単位": "JPY",
+   "枝": {
+    "対照": {
+     "注入した key": "jppfs_cor:NetSales@CurrentYearDuration_jpcrp030000-asr_E05713-000GreenEnergyReportableSegmentMember",
+     "state": "GROUNDED",
+     "**誤って通した**": false
+    },
+    "単位": {
+     "注入した key": "jppfs_cor:NetSales@CurrentYearDuration_jpcrp030000-asr_E05713-000GreenEnergyReportableSegmentMember_UnitTest",
+     "state": "GROUNDED",
+     "**誤って通した**": true
+    },
+    "期間(注入)": {
+     "注入した key": "jppfs_cor:NetSales@Prior2YearDuration_jpcrp030000-asr_E05713-000GreenEnergyReportableSegmentMember",
+     "state": "GROUNDED",
+     "**誤って通した**": true
+    },
+    "期間(実在の枠を指す)": {
+     "注入した key": "jppfs_cor:NetSales@Prior1YearDuration_jpcrp030000-asr_E05713-000GreenEnergyReportableSegmentMember",
+     "state": "VALUE_MISMATCH",
+     "**誤って通した**": false
+    },
+    "次元": {
+     "注入した key": "jppfs_cor:NetSales@CurrentYearDuration_jpcrp030000-asr_E05713-000GreenEnergyReportableSegmentMember_AttrInjectTestMember",
+     "state": "GROUNDED",
+     "**誤って通した**": true
+    }
+   },
+   "露出(注入なし)": {
+    "別の期間": {
+     "件数": 0,
+     "例": []
+    },
+    "別の次元": {
+     "件数": 0,
+     "例": []
+    },
+    "別の単位": {
+     "件数": 0,
+     "例": []
+    }
+   }
+  },
+  {
+   "doc": "S100YXMA",
+   "id": "R017",
+   "値": 803.0,
+   "単位": "百万円",
+   "参照先": "operatingincome@currentyearduration_jpcrp030000-asr_e05713-000greenenergyreportablesegmentmember",
+   "fact の値": 803000000.0,
+   "fact の単位": "JPY",
+   "枝": {
+    "対照": {
+     "注入した key": "jppfs_cor:OperatingIncome@CurrentYearDuration_jpcrp030000-asr_E05713-000GreenEnergyReportableSegmentMember",
+     "state": "GROUNDED",
+     "**誤って通した**": false
+    },
+    "単位": {
+     "注入した key": "jppfs_cor:OperatingIncome@CurrentYearDuration_jpcrp030000-asr_E05713-000GreenEnergyReportableSegmentMember_UnitTest",
+     "state": "GROUNDED",
+     "**誤って通した**": true
+    },
+    "期間(注入)": {
+     "注入した key": "jppfs_cor:OperatingIncome@Prior2YearDuration_jpcrp030000-asr_E05713-000GreenEnergyReportableSegmentMember",
+     "state": "GROUNDED",
+     "**誤って通した**": true
+    },
+    "期間(実在の枠を指す)": {
+     "注入した key": "jppfs_cor:OperatingIncome@Prior1YearDuration_jpcrp030000-asr_E05713-000GreenEnergyReportableSegmentMember",
+     "state": "VALUE_MISMATCH",
+     "**誤って通した**": false
+    },
+    "次元": {
+     "注入した key": "jppfs_cor:OperatingIncome@CurrentYearDuration_jpcrp030000-asr_E05713-000GreenEnergyReportableSegmentMember_AttrInjectTestMember",
+     "state": "GROUNDED",
+     "**誤って通した**": true
+    }
+   },
+   "露出(注入なし)": {
+    "別の期間": {
+     "件数": 0,
+     "例": []
+    },
+    "別の次元": {
+     "件数": 0,
+     "例": []
+    },
+    "別の単位": {
+     "件数": 0,
+     "例": []
+    }
+   }
+  },
+  {
+   "doc": "S100YYRV",
+   "id": "R013",
+   "値": 14064526.0,
+   "単位": "千円",
+   "参照先": "netsales@currentyearduration",
+   "fact の値": 14064526000.0,
+   "fact の単位": "JPY",
+   "枝": {
+    "対照": {
+     "注入した key": "jppfs_cor:NetSales@CurrentYearDuration",
+     "state": "GROUNDED",
+     "**誤って通した**": false
+    },
+    "単位": {
+     "注入した key": "jppfs_cor:NetSales@CurrentYearDuration_UnitTest",
+     "state": "GROUNDED",
+     "**誤って通した**": true
+    },
+    "期間(注入)": {
+     "注入した key": "jppfs_cor:NetSales@Prior2YearDuration",
+     "state": "GROUNDED",
+     "**誤って通した**": true
+    },
+    "期間(実在の枠を指す)": {
+     "注入した key": "jppfs_cor:NetSales@Prior1YearDuration",
+     "state": "VALUE_MISMATCH",
+     "**誤って通した**": false
+    },
+    "次元": {
+     "注入した key": "jppfs_cor:NetSales@CurrentYearDuration_AttrInjectTestMember",
+     "state": "GROUNDED",
+     "**誤って通した**": true
+    }
+   },
+   "露出(注入なし)": {
+    "別の期間": {
+     "件数": 0,
+     "例": []
+    },
+    "別の次元": {
+     "件数": 1,
+     "例": [
+      "jppfs_cor:NetSales@CurrentYearDuration_TotalOfReportableSegmentsAndOthersMember"
+     ]
+    },
+    "別の単位": {
+     "件数": 0,
+     "例": []
+    }
+   }
+  },
+  {
+   "doc": "S100YYRV",
+   "id": "R015",
+   "値": 920265.0,
+   "単位": "千円",
+   "参照先": "ordinaryincome@currentyearduration",
+   "fact の値": 920265000.0,
+   "fact の単位": "JPY",
+   "枝": {
+    "対照": {
+     "注入した key": "jppfs_cor:OrdinaryIncome@CurrentYearDuration",
+     "state": "GROUNDED",
+     "**誤って通した**": false
+    },
+    "単位": {
+     "注入した key": "jppfs_cor:OrdinaryIncome@CurrentYearDuration_UnitTest",
+     "state": "GROUNDED",
+     "**誤って通した**": true
+    },
+    "期間(注入)": {
+     "注入した key": "jppfs_cor:OrdinaryIncome@Prior2YearDuration",
+     "state": "GROUNDED",
+     "**誤って通した**": true
+    },
+    "期間(実在の枠を指す)": {
+     "注入した key": "jppfs_cor:OrdinaryIncome@Prior1YearDuration",
+     "state": "VALUE_MISMATCH",
+     "**誤って通した**": false
+    },
+    "次元": {
+     "注入した key": "jppfs_cor:OrdinaryIncome@CurrentYearDuration_AttrInjectTestMember",
+     "state": "GROUNDED",
+     "**誤って通した**": true
+    }
+   },
+   "露出(注入なし)": {
+    "別の期間": {
+     "件数": 0,
+     "例": []
+    },
+    "別の次元": {
+     "件数": 0,
+     "例": []
+    },
+    "別の単位": {
+     "件数": 0,
+     "例": []
+    }
+   }
+  },
+  {
+   "doc": "S100YZCT",
+   "id": "R002",
+   "値": 67315520.0,
+   "単位": "千円",
+   "参照先": "netsalessummaryofbusinessresults@currentyearduration",
+   "fact の値": 67315520000.0,
+   "fact の単位": "JPY",
+   "枝": {
+    "対照": {
+     "注入した key": "jpcrp_cor:NetSalesSummaryOfBusinessResults@CurrentYearDuration",
+     "state": "GROUNDED",
+     "**誤って通した**": false
+    },
+    "単位": {
+     "注入した key": "jpcrp_cor:NetSalesSummaryOfBusinessResults@CurrentYearDuration_UnitTest",
+     "state": "GROUNDED",
+     "**誤って通した**": true
+    },
+    "期間(注入)": {
+     "作れなかった": "実在しない期間の枠を作れない(CurrentYearDuration)"
+    },
+    "期間(実在の枠を指す)": {
+     "注入した key": "jpcrp_cor:NetSalesSummaryOfBusinessResults@Prior1YearDuration",
+     "state": "VALUE_MISMATCH",
+     "**誤って通した**": false
+    },
+    "次元": {
+     "注入した key": "jpcrp_cor:NetSalesSummaryOfBusinessResults@CurrentYearDuration_AttrInjectTestMember",
+     "state": "GROUNDED",
+     "**誤って通した**": true
+    }
+   },
+   "露出(注入なし)": {
+    "別の期間": {
+     "件数": 0,
+     "例": []
+    },
+    "別の次元": {
+     "件数": 0,
+     "例": []
+    },
+    "別の単位": {
+     "件数": 0,
+     "例": []
+    }
+   }
+  },
+  {
+   "doc": "S100YZCT",
+   "id": "R006",
+   "値": 3668106.0,
+   "単位": "千円",
+   "参照先": "ordinaryincomelosssummaryofbusinessresults@currentyearduration",
+   "fact の値": 3668106000.0,
+   "fact の単位": "JPY",
+   "枝": {
+    "対照": {
+     "注入した key": "jpcrp_cor:OrdinaryIncomeLossSummaryOfBusinessResults@CurrentYearDuration",
+     "state": "GROUNDED",
+     "**誤って通した**": false
+    },
+    "単位": {
+     "注入した key": "jpcrp_cor:OrdinaryIncomeLossSummaryOfBusinessResults@CurrentYearDuration_UnitTest",
+     "state": "GROUNDED",
+     "**誤って通した**": true
+    },
+    "期間(注入)": {
+     "作れなかった": "実在しない期間の枠を作れない(CurrentYearDuration)"
+    },
+    "期間(実在の枠を指す)": {
+     "注入した key": "jpcrp_cor:OrdinaryIncomeLossSummaryOfBusinessResults@Prior1YearDuration",
+     "state": "VALUE_MISMATCH",
+     "**誤って通した**": false
+    },
+    "次元": {
+     "注入した key": "jpcrp_cor:OrdinaryIncomeLossSummaryOfBusinessResults@CurrentYearDuration_AttrInjectTestMember",
+     "state": "GROUNDED",
+     "**誤って通した**": true
+    }
+   },
+   "露出(注入なし)": {
+    "別の期間": {
+     "件数": 0,
+     "例": []
+    },
+    "別の次元": {
+     "件数": 0,
+     "例": []
+    },
+    "別の単位": {
+     "件数": 0,
+     "例": []
+    }
+   }
+  },
+  {
+   "doc": "S100YZCT",
+   "id": "R008",
+   "値": 2328492.0,
+   "単位": "千円",
+   "参照先": "profitlossattributabletoownersofparentsummaryofbusinessresults@currentyearduration",
+   "fact の値": 2328492000.0,
+   "fact の単位": "JPY",
+   "枝": {
+    "対照": {
+     "注入した key": "jpcrp_cor:ProfitLossAttributableToOwnersOfParentSummaryOfBusinessResults@CurrentYearDuration",
+     "state": "GROUNDED",
+     "**誤って通した**": false
+    },
+    "単位": {
+     "注入した key": "jpcrp_cor:ProfitLossAttributableToOwnersOfParentSummaryOfBusinessResults@CurrentYearDuration_UnitTest",
+     "state": "GROUNDED",
+     "**誤って通した**": true
+    },
+    "期間(注入)": {
+     "作れなかった": "実在しない期間の枠を作れない(CurrentYearDuration)"
+    },
+    "期間(実在の枠を指す)": {
+     "注入した key": "jpcrp_cor:ProfitLossAttributableToOwnersOfParentSummaryOfBusinessResults@Prior1YearDuration",
+     "state": "VALUE_MISMATCH",
+     "**誤って通した**": false
+    },
+    "次元": {
+     "注入した key": "jpcrp_cor:ProfitLossAttributableToOwnersOfParentSummaryOfBusinessResults@CurrentYearDuration_AttrInjectTestMember",
+     "state": "GROUNDED",
+     "**誤って通した**": true
+    }
+   },
+   "露出(注入なし)": {
+    "別の期間": {
+     "件数": 0,
+     "例": []
+    },
+    "別の次元": {
+     "件数": 0,
+     "例": []
+    },
+    "別の単位": {
+     "件数": 0,
+     "例": []
+    }
+   }
+  },
+  {
+   "doc": "S100YZEV",
+   "id": "R009",
+   "値": 1558064.0,
+   "単位": "千円",
+   "参照先": "netsalessummaryofbusinessresults@currentyearduration_nonconsolidatedmember",
+   "fact の値": 1558064000.0,
+   "fact の単位": "JPY",
+   "枝": {
+    "対照": {
+     "注入した key": "jpcrp_cor:NetSalesSummaryOfBusinessResults@CurrentYearDuration_NonConsolidatedMember",
+     "state": "GROUNDED",
+     "**誤って通した**": false
+    },
+    "単位": {
+     "注入した key": "jpcrp_cor:NetSalesSummaryOfBusinessResults@CurrentYearDuration_NonConsolidatedMember_UnitTest",
+     "state": "GROUNDED",
+     "**誤って通した**": true
+    },
+    "期間(注入)": {
+     "作れなかった": "実在しない期間の枠を作れない(CurrentYearDuration_NonConsolidatedMember)"
+    },
+    "期間(実在の枠を指す)": {
+     "注入した key": "jpcrp_cor:NetSalesSummaryOfBusinessResults@Prior1YearDuration_NonConsolidatedMember",
+     "state": "VALUE_MISMATCH",
+     "**誤って通した**": false
+    },
+    "次元": {
+     "注入した key": "jpcrp_cor:NetSalesSummaryOfBusinessResults@CurrentYearDuration_NonConsolidatedMember_AttrInjectTestMember",
+     "state": "GROUNDED",
+     "**誤って通した**": true
+    }
+   },
+   "露出(注入なし)": {
+    "別の期間": {
+     "件数": 0,
+     "例": []
+    },
+    "別の次元": {
+     "件数": 0,
+     "例": []
+    },
+    "別の単位": {
+     "件数": 0,
+     "例": []
+    }
+   }
+  },
+  {
+   "doc": "S100YZEV",
+   "id": "R013",
+   "値": 127630.0,
+   "単位": "千円",
+   "参照先": "ordinaryincomelosssummaryofbusinessresults@currentyearduration_nonconsolidatedmember",
+   "fact の値": 127630000.0,
+   "fact の単位": "JPY",
+   "枝": {
+    "対照": {
+     "注入した key": "jpcrp_cor:OrdinaryIncomeLossSummaryOfBusinessResults@CurrentYearDuration_NonConsolidatedMember",
+     "state": "GROUNDED",
+     "**誤って通した**": false
+    },
+    "単位": {
+     "注入した key": "jpcrp_cor:OrdinaryIncomeLossSummaryOfBusinessResults@CurrentYearDuration_NonConsolidatedMember_UnitTest",
+     "state": "GROUNDED",
+     "**誤って通した**": true
+    },
+    "期間(注入)": {
+     "作れなかった": "実在しない期間の枠を作れない(CurrentYearDuration_NonConsolidatedMember)"
+    },
+    "期間(実在の枠を指す)": {
+     "注入した key": "jpcrp_cor:OrdinaryIncomeLossSummaryOfBusinessResults@Prior1YearDuration_NonConsolidatedMember",
+     "state": "VALUE_MISMATCH",
+     "**誤って通した**": false
+    },
+    "次元": {
+     "注入した key": "jpcrp_cor:OrdinaryIncomeLossSummaryOfBusinessResults@CurrentYearDuration_NonConsolidatedMember_AttrInjectTestMember",
+     "state": "GROUNDED",
+     "**誤って通した**": true
+    }
+   },
+   "露出(注入なし)": {
+    "別の期間": {
+     "件数": 0,
+     "例": []
+    },
+    "別の次元": {
+     "件数": 0,
+     "例": []
+    },
+    "別の単位": {
+     "件数": 0,
+     "例": []
+    }
+   }
+  },
+  {
+   "doc": "S100YZEV",
+   "id": "R015",
+   "値": 85842.0,
+   "単位": "千円",
+   "参照先": "netincomelosssummaryofbusinessresults@currentyearduration_nonconsolidatedmember",
+   "fact の値": 85842000.0,
+   "fact の単位": "JPY",
+   "枝": {
+    "対照": {
+     "注入した key": "jpcrp_cor:NetIncomeLossSummaryOfBusinessResults@CurrentYearDuration_NonConsolidatedMember",
+     "state": "GROUNDED",
+     "**誤って通した**": false
+    },
+    "単位": {
+     "注入した key": "jpcrp_cor:NetIncomeLossSummaryOfBusinessResults@CurrentYearDuration_NonConsolidatedMember_UnitTest",
+     "state": "GROUNDED",
+     "**誤って通した**": true
+    },
+    "期間(注入)": {
+     "作れなかった": "実在しない期間の枠を作れない(CurrentYearDuration_NonConsolidatedMember)"
+    },
+    "期間(実在の枠を指す)": {
+     "注入した key": "jpcrp_cor:NetIncomeLossSummaryOfBusinessResults@Prior1YearDuration_NonConsolidatedMember",
+     "state": "VALUE_MISMATCH",
+     "**誤って通した**": false
+    },
+    "次元": {
+     "注入した key": "jpcrp_cor:NetIncomeLossSummaryOfBusinessResults@CurrentYearDuration_NonConsolidatedMember_AttrInjectTestMember",
+     "state": "GROUNDED",
+     "**誤って通した**": true
+    }
+   },
+   "露出(注入なし)": {
+    "別の期間": {
+     "件数": 0,
+     "例": []
+    },
+    "別の次元": {
+     "件数": 0,
+     "例": []
+    },
+    "別の単位": {
+     "件数": 0,
+     "例": []
+    }
+   }
+  }
+ ],
+ "limits": [
+  "**人工の注入は穴の存在を示すが、実務で何件起きるかではない**(封 §4)",
+  "**誤通過の件数は注入を作った私の手で決まる。**危険度は第 2 部で語る",
+  "**24 行は contract v1 が通した行である。**通らなかった行の穴は測っていない",
+  "**0 件でも「放置してよい」とは書かない**(封 §5)",
+  "**engine を直していない。規則も増やしていない。**",
+  "**注入は instance の fact 一覧に足しただけで、repo にも書類にも残さない。**"
+ ]
+}
