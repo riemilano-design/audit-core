@@ -32,7 +32,7 @@
 
 ## §2 測った事実 ― **変更前**(試験は走らせず、収集だけ数えた)
 
-### §2-1 ディスク上の試験 file: **218 本**(**いまの数**。門を足すと増える)
+### §2-1 ディスク上の試験 file: **219 本**(**いまの数**。門を足すと増える)
 
 | ディレクトリ | file |
 |---|---|
@@ -43,7 +43,7 @@
 | `tests/core` | 5 |
 | `tests/fixtures/xbrl` | 4 |
 | `tests/golden` | 4 |
-| `tests/measure` | 153 |
+| `tests/measure` | 154 |
 
 **2026-10-20 に +2**(`tests/measure/test_packaging.py`・`tests/measure/test_packaging_result.py`。
 包装の封 `docs/PACKAGING_SEAL_2026-10-20.md` の G-5)。176 → 178、`tests/measure` 118 → 120。
@@ -137,6 +137,9 @@
 
 **2026-10-22 に +2**(`tests/adapters/xbrl/test_recipes_p26.py`・`tests/measure/test_xbrl_p26_result.py`。
 「違う」に出る正しい文の主因を減らす engine の直し P26 の段 1 の engine の試験と、結果(記録 `fixtures/xbrl/p26_2026-10-21.json`・文書 `docs/XBRL_P26_RESULT_2026-10-21.md`)を縛る門)。216 → 218(`tests/adapters/xbrl` 31 → 32・`tests/measure` 152 → 153)。
+
+**2026-10-22 に +1**(`tests/measure/test_xbrl_fresh_fetch.py`。
+新しい標本 40 件の取得 script `measure/xbrl_fresh_fetch_2026-10-21.py`(封 `docs/XBRL_FRESH_SAMPLE_SEAL_2026-10-21.md` §1-3・§1-4)の試験。通信を差し替え、鍵は偽の字)。218 → 219(`tests/measure` 153 → 154)。
 
 **この節だけは「いま」の数である**(門 `DocTest` が記録と突き合わせる)。
 下の §2-2 は**変更前の実測**で、後の記録と結び付けない。
