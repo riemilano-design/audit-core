@@ -22,6 +22,10 @@ u"""顧客向けの日本語の報告形の結果 ― 封 docs/XBRL_CUSTOMER_REP
 
 縛っていないもの: 報告の日本語の字の良し悪し(客に伝わるか)、客 A の出力そのもの(repo の外。sha256 だけ)、抜粋の行の意味、変異(module)の手の実測そのもの、
   漢数字で書いた数(``residual_numbers`` は算用数字だけを探す。散文の数は記録から作った字で縛る約束)。
+**2026-10-27 追記(重い走らせ直しの遷移。封 docs/XBRL_HEAVY_RERUN_FIX_SEAL_2026-10-27.md §2-2)**: ``AUDIT_CORE_CUSTOMER_REPORT=1`` の重い試験は、P26 の段 1・段 2 の後の engine で
+``C3``(登録簿の理由 16 -> 19)と ``C5``(sha256 の 3 file・report_customer.py の sha256 と行数・engine の指紋)が記録と違って赤だった。重い試験の比べは ``heavy_rerun_check`` に移し、
+``HEAVY_RERUN_LATER`` に名指しした欄だけを、封が履歴に在り値が宣言の値のときに限って記録の値に戻す。C3 は P26 の 3 つの理由が足されただけの形に限る。名前の無い欄は 1 字でも違えば赤。
+遷移の規則は ``MutationTest.test_mh_heavy_rerun_transitions`` が環境変数なしで毎回試す。
 """
 import copy
 import hashlib
@@ -583,6 +587,67 @@ def drop_time(rows):
     return [dict((k, v) for k, v in r.items() if k != u"verify 秒") for r in rows]
 
 
+#: 2026-10-27(重い走らせ直しの遷移。封 docs/XBRL_HEAVY_RERUN_FIX_SEAL_2026-10-27.md §2-2): 重い試験の出力が記録と違ってよい欄の全部。{path: (後の値, 遷移を宣言した封, 桁)}。
+#: 桁が 16 なら頭 16 字で、None なら値そのもので比べる。既存の定数が持つ値はその定数を参照する(同じ sha を 2 か所に字で書かない)。ここに名前の無い欄は 1 字でも違えば赤。
+HEAVY_RERUN_LATER = {
+    (u"C5", u"sha256", "adapters/xbrl/vocabulary.py"): (UNTOUCHED_LATER["adapters/xbrl/vocabulary.py"][0], UNTOUCHED_LATER["adapters/xbrl/vocabulary.py"][1], 16),
+    (u"C5", u"sha256", "adapters/xbrl/recipes.py"): (UNTOUCHED_LATER["adapters/xbrl/recipes.py"][0], UNTOUCHED_LATER["adapters/xbrl/recipes.py"][1], 16),
+    (u"C5", u"sha256", "adapters/xbrl/registry_setup.py"): (UNTOUCHED_LATER["adapters/xbrl/registry_setup.py"][0], UNTOUCHED_LATER["adapters/xbrl/registry_setup.py"][1], 16),
+    (u"C5", u"report_customer.py の sha256"): (MODULE_LATER["sha16"], MODULE_LATER["seal"], 16),
+    (u"C5", u"report_customer.py の行数"): (1025, SEAL_P26, None),
+    (u"C5", u"engine の指紋", u"adapter_xbrl_py_sha256"): (ENGINE_ADAPTER_SHA_LATER["value"], ENGINE_ADAPTER_SHA_LATER["seal"], None),
+}
+
+
+def heavy_rerun_check(got, rec, later):
+    u"""重い走らせ直しの出力 ``got`` を記録 ``rec`` と比べる(封 §2-1)。``later`` に名指しした欄は、封が履歴に在り値が宣言の値のときだけ記録の値に戻す。
+    C3 は P26 の 3 つの理由が登録簿に足されただけの形(封 §2-2 の (i)〜(vii))のときだけ戻す。最後に ``g == r``(名前の無い欄は 1 字でも違えば AssertionError)。"""
+    def pick(o):
+        return copy.deepcopy({u"書類別": dict((p, drop_time(o[u"書類別"][p])) for p in BOTH), u"集計": dict((p, o[u"集計"][p]) for p in BOTH),
+                              u"抜粋": o[u"抜粋"], u"C3": o[u"C3"], u"C4": o[u"C4"], u"C5": o[u"C5"]})
+
+    def walk(d, path):
+        for k in path:
+            assert isinstance(d, dict) and k in d, u"欄が無い: %r" % (path,)
+            d = d[k]
+        return d
+
+    def declared(seal_rel):
+        return bool(git("log", "--diff-filter=A", "--format=%H", "--", seal_rel).stdout.split())
+
+    g, r = pick(got), pick(rec)
+    for path, (after, seal_rel, digits) in sorted(later.items()):
+        v, w = walk(g, path), walk(r, path)
+        if digits:
+            v, w = v[:digits], w[:digits]
+        if v == w:
+            continue
+        assert declared(seal_rel), u"**%s が動いているのに、遷移を宣言した封 %s が履歴に無い**" % ("/".join(path), seal_rel)
+        assert v == after, u"**%s が、宣言された遷移の値とも違う**" % "/".join(path)
+        walk(g, path[:-1])[path[-1]] = walk(r, path)
+    g3, r3 = g[u"C3"], r[u"C3"]
+    if g3 != r3:
+        reg, tbl, one = u"登録簿の理由", u"1 つ消したときの網羅の検査(消した key → 表に無い登録簿の理由)", u"登録簿 − 理由の表"
+        A = sorted(P26_REASONS)
+        assert declared(SEAL_P26), u"**C3 が動いているのに、遷移を宣言した封が履歴に無い**"
+        assert set(g3) == set(r3), u"C3 の key の集合が違う"
+        assert set(g3[reg]) == set(r3[reg]), u"登録簿の理由の key の集合が違う"
+        assert g3[reg][u"POINTER_NOT_FOUND"] == r3[reg][u"POINTER_NOT_FOUND"] + [u"other_concept"], u"(i)"
+        assert g3[reg][u"UNVERIFIABLE"] == r3[reg][u"UNVERIFIABLE"] + [u"direction_on_cause_item", u"rounded_diff_within_double_band"], u"(ii)"
+        assert g3[reg][u"数"] == r3[reg][u"数"] + 3, u"(iii)"
+        assert g3[one] == A, u"(iv)"
+        for k in (u"登録簿 − UNBOUND_REASON_STATE", u"実測に出なかった登録簿の理由"):
+            assert g3[k] == sorted(set(r3[k]) | set(A)), u"(v) %s" % k
+        assert set(g3[tbl]) == set(r3[tbl]), u"(vi) key の集合"
+        for k in r3[tbl]:
+            assert g3[tbl][k] == sorted(set(r3[tbl][k]) | set(A)), u"(vi) %s" % k
+        for k in (u"UNBOUND_REASON_STATE の key の数", u"UNBOUND_REASON_STATE − 登録簿", u"理由の表の key の数", u"理由の表 − 登録簿",
+                  u"実測に出た reason", u"実測に出た reason のうち表の外", u"profile 別の reason の件数"):
+            assert g3[k] == r3[k], u"(vii) %s" % k
+        g[u"C3"] = r3
+    assert g == r, u"重い走らせ直しの出力が記録と違う(名前の無い欄)"
+
+
 class RerunTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
@@ -615,22 +680,7 @@ class RerunTest(unittest.TestCase):
             p = run_script(["--stage", "all", "--out", out])
             self.assertEqual(p.returncode, 0, p.stderr[-2000:])
             got = jload(out)
-        for prof in BOTH:
-            self.assertEqual(drop_time(got[u"書類別"][prof]), drop_time(self.rec[u"書類別"][prof]), prof)
-            self.assertEqual(got[u"集計"][prof], self.rec[u"集計"][prof], prof)
-        self.assertEqual(got[u"抜粋"], self.rec[u"抜粋"])
-        self.assertEqual(got[u"C3"], self.rec[u"C3"])
-        self.assertEqual(got[u"C4"], self.rec[u"C4"])
-        # 2026-10-21 追記(段 2 の遷移): C5 は「いまの木」の module の sha256・行数・engine の指紋を測るので、module が動いた後は記録と一致しない。
-        # 動いていないもの(触らない file の sha256・差分・.py の数・core/)は一致、動いたものは宣言された遷移の値であることを見る。
-        gc5, rc5 = dict(got[u"C5"]), dict(self.rec[u"C5"])
-        moved = (u"report_customer.py の sha256", u"report_customer.py の行数", u"engine の指紋")
-        if gc5[u"report_customer.py の sha256"] == rc5[u"report_customer.py の sha256"]:
-            self.assertEqual(gc5, rc5)
-        else:
-            self.assertEqual(dict((k, v) for k, v in gc5.items() if k not in moved), dict((k, v) for k, v in rc5.items() if k not in moved))
-            self.assertEqual(gc5[u"report_customer.py の sha256"][:16], MODULE_LATER["sha16"])
-            self.assertEqual(gc5[u"engine の指紋"][u"adapter_xbrl_py_sha256"], ENGINE_ADAPTER_SHA_LATER["value"])
+        heavy_rerun_check(got, self.rec, HEAVY_RERUN_LATER)
 
 
 class MutationTest(unittest.TestCase):
@@ -777,6 +827,68 @@ class MutationTest(unittest.TestCase):
         r = self._mut()
         r[u"書類別"]["P22"][0][YEN_KEY][u"違う"] = r[u"書類別"]["P22"][0][u"節"][u"違う"] + 1     # 節の件数を越える
         self._red(check_record, r)
+
+    def test_mh_heavy_rerun_transitions(self):
+        u"""2026-10-27(封 docs/XBRL_HEAVY_RERUN_FIX_SEAL_2026-10-27.md §4-1): 重い走らせ直しの遷移の規則を、環境変数なしで毎回試す。V-0 は緑、V-1〜V-7 は赤。"""
+        rec = self.rec
+        reg, tbl = u"登録簿の理由", u"1 つ消したときの網羅の検査(消した key → 表に無い登録簿の理由)"
+
+        def walk(d, path):
+            for k in path:
+                d = d[k]
+            return d
+
+        def got0():
+            u"""記録から作った『engine の遷移の後の出力』の標本(封 §4-1)。HEAVY_RERUN_LATER の後の値と、C3 に P26 の 3 つの理由を入れる。"""
+            g = copy.deepcopy(rec)
+            for path, (after, _seal, digits) in HEAVY_RERUN_LATER.items():
+                parent = walk(g, path[:-1])
+                parent[path[-1]] = after + parent[path[-1]][digits:] if digits else after
+            c3 = g[u"C3"]
+            c3[reg][u"POINTER_NOT_FOUND"] = c3[reg][u"POINTER_NOT_FOUND"] + [u"other_concept"]
+            c3[reg][u"UNVERIFIABLE"] = c3[reg][u"UNVERIFIABLE"] + [u"direction_on_cause_item", u"rounded_diff_within_double_band"]
+            c3[reg][u"数"] += 3
+            c3[u"登録簿 − 理由の表"] = sorted(P26_REASONS)
+            for k in (u"登録簿 − UNBOUND_REASON_STATE", u"実測に出なかった登録簿の理由"):
+                c3[k] = sorted(set(c3[k]) | P26_REASONS)
+            for k in c3[tbl]:
+                c3[tbl][k] = sorted(set(c3[tbl][k]) | P26_REASONS)
+            return g
+
+        with self.subTest(u"V-0 基準"):
+            heavy_rerun_check(got0(), rec, HEAVY_RERUN_LATER)
+            heavy_rerun_check(copy.deepcopy(rec), rec, HEAVY_RERUN_LATER)
+        for path in sorted(HEAVY_RERUN_LATER):
+            after = HEAVY_RERUN_LATER[path][0]
+            with self.subTest(u"V-1 封の path が在らない file " + "/".join(path)):
+                bad = dict((k, (a, u"docs/XBRL_NO_SUCH_SEAL_2026-10-27.md" if k == path else s_, d)) for k, (a, s_, d) in HEAVY_RERUN_LATER.items())
+                self._red(heavy_rerun_check, got0(), rec, bad)
+            with self.subTest(u"V-2 後の値を 1 字変える " + "/".join(path)):
+                new = after + 1 if not isinstance(after, str) else after[:-1] + (u"0" if after[-1] != u"0" else u"1")
+                bad = dict((k, (new if k == path else a, s_, d)) for k, (a, s_, d) in HEAVY_RERUN_LATER.items())
+                self._red(heavy_rerun_check, got0(), rec, bad)
+        with self.subTest(u"V-3 測った値の欄を 1 つ変える"):
+            g = got0()
+            g[u"集計"]["P22"][u"節"][u"違う"] += 1
+            self._red(heavy_rerun_check, g, rec, HEAVY_RERUN_LATER)
+        with self.subTest(u"V-4 byte 一致のままの留めを変える"):
+            g = got0()
+            g[u"C5"][u"engine の指紋"][u"core_py_sha256"] = "0" * 64
+            self._red(heavy_rerun_check, g, rec, HEAVY_RERUN_LATER)
+        with self.subTest(u"V-5 宣言の無い欄に後の値を入れる"):
+            g = got0()
+            g[u"C5"][u"sha256"]["adapters/xbrl/report.py"] = HEAVY_RERUN_LATER[(u"C5", u"sha256", "adapters/xbrl/vocabulary.py")][0] + rec[u"C5"][u"sha256"]["adapters/xbrl/report.py"][16:]
+            self._red(heavy_rerun_check, g, rec, HEAVY_RERUN_LATER)
+        with self.subTest(u"V-6 P26_REASONS に無い理由を C3 に足す"):
+            g = got0()
+            g[u"C3"][reg][u"UNVERIFIABLE"] = g[u"C3"][reg][u"UNVERIFIABLE"] + [u"zz_reason"]
+            g[u"C3"][reg][u"数"] += 1
+            self._red(heavy_rerun_check, g, rec, HEAVY_RERUN_LATER)
+        with self.subTest(u"V-7 other_concept を別の群へ移す"):
+            g = got0()
+            g[u"C3"][reg][u"POINTER_NOT_FOUND"] = [x for x in g[u"C3"][reg][u"POINTER_NOT_FOUND"] if x != u"other_concept"]
+            g[u"C3"][reg][u"UNVERIFIABLE"] = g[u"C3"][reg][u"UNVERIFIABLE"] + [u"other_concept"]
+            self._red(heavy_rerun_check, g, rec, HEAVY_RERUN_LATER)
 
     def test_m18_the_p25_and_p22_numbers_must_equal_their_records(self):
         r = self._mut()

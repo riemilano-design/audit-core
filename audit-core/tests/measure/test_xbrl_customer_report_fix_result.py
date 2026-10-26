@@ -18,6 +18,11 @@ commit で HEAD が動いても本文は変わらない)と、``.provenance.json
 provenance の中身(engine の git_commit = HEAD を含む)のバイト列そのものは記録に置かない(commit のたびに変わる欄を含むため)。
 縛っていないもの: 報告の日本語の字の良し悪し(客に伝わるか)、客 A の出力そのもの(repo の外。sha256 だけ)、抜粋の行の意味、
   漢数字で書いた数(``residual_numbers`` は算用数字だけを探す。散文の数は記録から作った字で縛る約束)。
+**2026-10-27 追記(重い走らせ直しの遷移。封 docs/XBRL_HEAVY_RERUN_FIX_SEAL_2026-10-27.md §2-3)**: ``AUDIT_CORE_CUSTOMER_REPORT_FIX=1`` の重い試験は、P26 の段 1・段 2 の後の engine で
+``R2-7``(sha256・sha16 の 3 file・report_customer.py の sha256 と行数・engine の指紋・封の commit 時点の sha16 との真偽)と ``予測の判定`` の R2-7(当たり -> 外れ)が記録と違って赤だった。
+重い試験の比べは ``heavy_rerun_check`` に移し、``HEAVY_RERUN_LATER`` に名指しした欄だけを、封が履歴に在り値が宣言の値のときに限って記録の値に戻す。
+真偽は同じ file の sha16 の遷移を受け入れたときだけ、判定の外れは真偽を戻していて実測の字が True -> False の 1 か所だけ違うときだけ戻す。記録の判定「当たり」は直さない。
+名前の無い欄は 1 字でも違えば赤。遷移の規則は ``MutationTest.test_mh_heavy_rerun_transitions`` が環境変数なしで毎回試す。
 """
 import copy
 import hashlib
@@ -563,6 +568,63 @@ def drop_time(rows):
     return [dict((k, v) for k, v in r.items() if k != u"verify 秒") for r in rows]
 
 
+#: 2026-10-27(重い走らせ直しの遷移。封 docs/XBRL_HEAVY_RERUN_FIX_SEAL_2026-10-27.md §2-3): 重い試験の出力が記録と違ってよい欄の全部。{path: (後の値, 遷移を宣言した封, 桁)}。
+#: 桁が 16 なら頭 16 字で、None なら値そのもので比べる。既存の定数が持つ値はその定数を参照する(同じ sha を 2 か所に字で書かない)。ここに名前の無い欄は 1 字でも違えば赤。
+HEAVY_RERUN_LATER = dict(
+    [((u"R2-7", kind, rel), (UNTOUCHED_LATER[rel][0], UNTOUCHED_LATER[rel][1], 16)) for rel in sorted(UNTOUCHED_LATER) for kind in (u"sha256", u"sha16")]
+    + [((u"R2-7", u"report_customer.py の sha256"), (MODULE_LATER["sha16"], MODULE_LATER["seal"], 16)),
+       ((u"R2-7", u"report_customer.py の行数"), (1025, SEAL_P26, None)),
+       ((u"R2-7", u"engine の指紋", u"adapter_xbrl_py_sha256"), (ENGINE_FP_LATER["adapter_xbrl_py_sha256"][0], ENGINE_FP_LATER["adapter_xbrl_py_sha256"][1], None))])
+
+
+def heavy_rerun_check(got, rec, later, cust):
+    u"""重い走らせ直しの出力 ``got`` を記録 ``rec`` と比べる(封 §2-1)。``later`` に名指しした欄は、封が履歴に在り値が宣言の値のときだけ記録の値に戻す。
+    R2-7 の真偽と判定は封 §2-3 の条件のときだけ戻す。``cust``(客 A の出力を渡したか)が真のときだけ R2-6 も比べる。最後に ``g == r``(名前の無い欄は 1 字でも違えば AssertionError)。"""
+    tags = [u"R2-%d" % i for i in range(1, 8) if i != 6 or cust]
+
+    def pick(o):
+        d = {u"書類別": dict((p, drop_time(o[u"書類別"][p])) for p in BOTH), u"集計": dict((p, o[u"集計"][p]) for p in BOTH),
+             u"抜粋": o[u"抜粋"], u"R2-5": o[u"R2-5"], u"R2-7": o[u"R2-7"], u"予測の判定": dict((t, o[u"予測の判定"][t][u"判定"]) for t in tags)}
+        if cust:
+            d[u"R2-6"] = o[u"R2-6"]
+        return copy.deepcopy(d)
+
+    def walk(d, path):
+        for k in path:
+            assert isinstance(d, dict) and k in d, u"欄が無い: %r" % (path,)
+            d = d[k]
+        return d
+
+    g, r = pick(got), pick(rec)
+    accepted = set()
+    for path, (after, seal_rel, digits) in sorted(later.items()):
+        v, w = walk(g, path), walk(r, path)
+        if digits:
+            v, w = v[:digits], w[:digits]
+        if v == w:
+            continue
+        assert declared(seal_rel), u"**%s が動いているのに、遷移を宣言した封 %s が履歴に無い**" % ("/".join(path), seal_rel)
+        assert v == after, u"**%s が、宣言された遷移の値とも違う**" % "/".join(path)
+        walk(g, path[:-1])[path[-1]] = walk(r, path)
+        accepted.add(path)
+    same = u"封の commit 時点の sha16 と同じ"
+    restored = []
+    for rel in sorted(r[u"R2-7"][same]):
+        gv, rv = walk(g, (u"R2-7", same, rel)), r[u"R2-7"][same][rel]
+        if gv is False and rv is True:
+            assert (u"R2-7", u"sha16", rel) in accepted, u"**%s の真偽が false なのに、同じ file の sha16 の遷移を受け入れていない**" % rel
+            g[u"R2-7"][same][rel] = rv
+            restored.append(rel)
+    if g[u"予測の判定"][u"R2-7"] != r[u"予測の判定"][u"R2-7"]:
+        old, new = u"sha16 が封の commit 時点と同じ True", u"sha16 が封の commit 時点と同じ False"
+        gj, rj = got[u"予測の判定"][u"R2-7"], rec[u"予測の判定"][u"R2-7"]
+        assert restored, u"**R2-7 の判定が違うのに、真偽を戻した file が無い**"
+        assert gj[u"判定"] == u"外れ", u"**R2-7 の判定が外れでない**"
+        assert rj[u"実測"].count(old) == 1 and gj[u"実測"] == rj[u"実測"].replace(old, new), u"**R2-7 の実測の字が、真偽の True -> False の 1 か所だけの違いでない**"
+        g[u"予測の判定"][u"R2-7"] = r[u"予測の判定"][u"R2-7"]
+    assert g == r, u"重い走らせ直しの出力が記録と違う(名前の無い欄)"
+
+
 class RerunTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
@@ -596,16 +658,7 @@ class RerunTest(unittest.TestCase):
             p = run_script(["--stage", "all", "--out", out] + (["--customer-out", cust] if cust else []))
             self.assertEqual(p.returncode, 0, p.stderr[-2000:])
             got = jload(out)
-        for prof in BOTH:
-            self.assertEqual(drop_time(got[u"書類別"][prof]), drop_time(self.rec[u"書類別"][prof]), prof)
-            self.assertEqual(got[u"集計"][prof], self.rec[u"集計"][prof], prof)
-        self.assertEqual(got[u"抜粋"], self.rec[u"抜粋"])
-        self.assertEqual(got[u"R2-5"], self.rec[u"R2-5"])
-        self.assertEqual(got[u"R2-7"], self.rec[u"R2-7"])
-        if cust:
-            self.assertEqual(got[u"R2-6"], self.rec[u"R2-6"])
-        for tag in ["R2-%d" % i for i in range(1, 8) if i != 6 or cust]:
-            self.assertEqual(got[u"予測の判定"][tag][u"判定"], self.rec[u"予測の判定"][tag][u"判定"], tag)
+        heavy_rerun_check(got, self.rec, HEAVY_RERUN_LATER, cust)
 
 
 class MutationTest(unittest.TestCase):
@@ -634,6 +687,63 @@ class MutationTest(unittest.TestCase):
         check_doc(self.rec, self.doc)
         check_untouched_and_module(self.rec)
         self.assertEqual(set(judgments(self.rec, self.seal).values()), {u"当たり"})
+
+    def test_mh_heavy_rerun_transitions(self):
+        u"""2026-10-27(封 docs/XBRL_HEAVY_RERUN_FIX_SEAL_2026-10-27.md §4-1): 重い走らせ直しの遷移の規則を、環境変数なしで毎回試す。V-0 は緑、V-1〜V-7 は赤。"""
+        rec = self.rec
+        same = u"封の commit 時点の sha16 と同じ"
+        old, new = u"sha16 が封の commit 時点と同じ True", u"sha16 が封の commit 時点と同じ False"
+
+        def walk(d, path):
+            for k in path:
+                d = d[k]
+            return d
+
+        def got0():
+            u"""記録から作った『engine の遷移の後の出力』の標本(封 §4-1)。HEAVY_RERUN_LATER の後の値、真偽 3 file を false、R2-7 の判定を外れ・実測を置き換えた字に。"""
+            g = copy.deepcopy(rec)
+            for path, (after, _seal, digits) in HEAVY_RERUN_LATER.items():
+                parent = walk(g, path[:-1])
+                parent[path[-1]] = after + parent[path[-1]][digits:] if digits else after
+            for rel in UNTOUCHED_LATER:
+                g[u"R2-7"][same][rel] = False
+            g[u"予測の判定"][u"R2-7"] = {u"実測": rec[u"予測の判定"][u"R2-7"][u"実測"].replace(old, new), u"判定": u"外れ"}
+            return g
+
+        for cust in (False, True):
+            with self.subTest(u"V-0 基準 cust=%s" % cust):
+                heavy_rerun_check(got0(), rec, HEAVY_RERUN_LATER, cust)
+                heavy_rerun_check(copy.deepcopy(rec), rec, HEAVY_RERUN_LATER, cust)
+        for path in sorted(HEAVY_RERUN_LATER):
+            after = HEAVY_RERUN_LATER[path][0]
+            with self.subTest(u"V-1 封の path が在らない file " + "/".join(path)):
+                bad = dict((k, (a, u"docs/XBRL_NO_SUCH_SEAL_2026-10-27.md" if k == path else s_, d)) for k, (a, s_, d) in HEAVY_RERUN_LATER.items())
+                self._red(heavy_rerun_check, got0(), rec, bad, False)
+            with self.subTest(u"V-2 後の値を 1 字変える " + "/".join(path)):
+                chg = after + 1 if not isinstance(after, str) else after[:-1] + (u"0" if after[-1] != u"0" else u"1")
+                bad = dict((k, (chg if k == path else a, s_, d)) for k, (a, s_, d) in HEAVY_RERUN_LATER.items())
+                self._red(heavy_rerun_check, got0(), rec, bad, False)
+        with self.subTest(u"V-3 測った値の欄を 1 つ変える"):
+            g = got0()
+            g[u"集計"]["P25"][u"節"][u"一致"] += 1
+            self._red(heavy_rerun_check, g, rec, HEAVY_RERUN_LATER, False)
+        with self.subTest(u"V-4 byte 一致のままの留めを変える"):
+            g = got0()
+            g[u"R2-7"][u"sha16"]["adapters/xbrl/report.py"] = "0" * 16
+            self._red(heavy_rerun_check, g, rec, HEAVY_RERUN_LATER, False)
+        with self.subTest(u"V-5 宣言の無い欄に後の値を入れる"):
+            g = got0()
+            g[u"R2-7"][u"sha16"]["adapters/xbrl/comparators.py"] = "181b370420ab751b"
+            self._red(heavy_rerun_check, g, rec, HEAVY_RERUN_LATER, False)
+        with self.subTest(u"V-6 遷移が無いのに真偽が false"):
+            g = got0()
+            for rel in UNTOUCHED_LATER:
+                g[u"R2-7"][u"sha16"][rel] = rec[u"R2-7"][u"sha16"][rel]
+            self._red(heavy_rerun_check, g, rec, HEAVY_RERUN_LATER, False)
+        with self.subTest(u"V-7 R2-7 の実測の字に 1 字足す"):
+            g = got0()
+            g[u"予測の判定"][u"R2-7"][u"実測"] += u"。"
+            self._red(heavy_rerun_check, g, rec, HEAVY_RERUN_LATER, False)
 
     def test_m1_a_section_count_that_does_not_sum_to_the_claims_is_red(self):
         r = self._mut()

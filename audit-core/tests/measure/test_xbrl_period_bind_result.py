@@ -26,6 +26,10 @@ u"""期を縛る直し P22 の段 1 の結果 ― 封 docs/XBRL_PERIOD_BIND_SEAL
 縛っていないもの: 型の読みの正しさ(人の読み)、A〜C の例などの引用文(コード片の中の数)、限界の文の主張(中身は人の読み)、
   変異の手の実測そのもの(表は記録の写しを縛るだけで、変異を走らせ直すのは ``mutate.py`` を手で)、tests/measure 全体の所要。
   漢数字で書いた数(``residual_numbers`` は算用数字だけを探す。散文の数は記録から作った字で縛る約束で、漢数字の数は縛らない ― 2026-10-20 の独立監査の軽い指摘)。
+**2026-10-27 追記(重い走らせ直しの遷移。封 docs/XBRL_HEAVY_RERUN_FIX_SEAL_2026-10-27.md §2-4)**: ``AUDIT_CORE_PERIOD_BIND=1`` の ``test_heavy_stage2_default_matches_the_record`` は、
+P23 の段 1 以後の engine の commit で動いた ``recipes.py の sha16``・``vocabulary.py の sha16``・``engine の束ねた sha256`` が記録(段 2 の当時の値)と違って赤だった。
+比べは ``heavy_rerun_check`` に移し、``HEAVY_RERUN_LATER`` に名指しした 3 欄だけを、封が履歴に在り値が宣言の値のときに限って記録の値に戻す。測った値の欄
+(E1・E2・E5・対照・差 0 の行数・差のあった行の合計・DEFAULT_PROFILE)は byte 一致のまま。遷移の規則は ``MutationTest.test_mh_heavy_rerun_transitions`` が環境変数なしで毎回試す。
 """
 import copy
 import hashlib
@@ -999,6 +1003,47 @@ def run_script(args):
     return subprocess.run([sys.executable, SCRIPT] + args, cwd=ROOT, capture_output=True, text=True)
 
 
+#: 2026-10-27(重い走らせ直しの遷移。封 docs/XBRL_HEAVY_RERUN_FIX_SEAL_2026-10-27.md §2-4): 重い試験(段 2)の出力が記録と違ってよい欄の全部。{path: (後の値, 遷移を宣言した封, 桁)}。
+#: 桁は全部 None(値そのもので比べる)。recipes.py・vocabulary.py は ENGINE_LATER を参照する。束ねた sha256 は他の門の定数を import せず字で書く。ここに名前の無い欄は 1 字でも違えば赤。
+HEAVY_RERUN_LATER = {
+    (u"recipes.py の sha16",): (ENGINE_LATER["adapters/xbrl/recipes.py"][0], ENGINE_LATER["adapters/xbrl/recipes.py"][1], None),
+    (u"vocabulary.py の sha16",): (ENGINE_LATER["adapters/xbrl/vocabulary.py"][0], ENGINE_LATER["adapters/xbrl/vocabulary.py"][1], None),
+    (u"engine の束ねた sha256(core/ と adapters/ の file。__pycache__ を除く。repo 相対の path 順)",):
+        ("4f417562d322caa7241199d8462783e6a260a275a4e2794d18396a3bc6dc6b39", SEAL_DEFAULT_P26, None),
+}
+
+
+def heavy_rerun_check(got, rec, later):
+    u"""段 2 の重い走らせ直しの出力 ``got`` を記録 ``rec``(= 記録の stage2_default)と比べる(封 §2-1)。``later`` に名指しした欄は、封が履歴に在り値が宣言の値のときだけ記録の値に戻す。
+    最後に ``g == r``(名前の無い欄は 1 字でも違えば AssertionError)。``所要秒`` は走らせるたびに違うので比べない。"""
+    keys = (u"E1", u"E2", u"対照: 既定を P21 に戻す変異(比較器が差を拾えるか)", u"差 0 の行数", u"差のあった行の合計", u"DEFAULT_PROFILE",
+            u"recipes.py の sha16", u"vocabulary.py の sha16",
+            u"engine の束ねた sha256(core/ と adapters/ の file。__pycache__ を除く。repo 相対の path 順)")
+
+    def pick(o):
+        d = dict((k, o[k]) for k in keys)
+        d[u"E5"] = dict((k, v) for k, v in o[u"E5"].items() if k != u"所要秒")
+        return copy.deepcopy(d)
+
+    def walk(d, path):
+        for k in path:
+            assert isinstance(d, dict) and k in d, u"欄が無い: %r" % (path,)
+            d = d[k]
+        return d
+
+    g, r = pick(got), pick(rec)
+    for path, (after, seal_rel, digits) in sorted(later.items()):
+        v, w = walk(g, path), walk(r, path)
+        if digits:
+            v, w = v[:digits], w[:digits]
+        if v == w:
+            continue
+        assert git("log", "--diff-filter=A", "--format=%H", "--", seal_rel).stdout.split(), u"**%s が動いているのに、遷移を宣言した封 %s が履歴に無い**" % ("/".join(path), seal_rel)
+        assert v == after, u"**%s が、宣言された遷移の値とも違う**" % "/".join(path)
+        walk(g, path[:-1])[path[-1]] = walk(r, path)
+    assert g == r, u"重い走らせ直しの出力が記録と違う(名前の無い欄)"
+
+
 class RerunTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
@@ -1096,13 +1141,7 @@ class RerunTest(unittest.TestCase):
         label_shas, why = m.RIT.check_labels()
         self.assertFalse(why)
         got = m.stage2_default(label_shas)
-        want = self.rec[STAGE2]
-        for k in (u"E1", u"E2", u"対照: 既定を P21 に戻す変異(比較器が差を拾えるか)", u"差 0 の行数", u"差のあった行の合計", u"DEFAULT_PROFILE",
-                  u"recipes.py の sha16", u"vocabulary.py の sha16",
-                  u"engine の束ねた sha256(core/ と adapters/ の file。__pycache__ を除く。repo 相対の path 順)"):
-            self.assertEqual(got[k], want[k], k)
-        strip = lambda d: dict((k, v) for k, v in d.items() if k != u"所要秒")
-        self.assertEqual(strip(got[u"E5"]), strip(want[u"E5"]))
+        heavy_rerun_check(got, self.rec[STAGE2], HEAVY_RERUN_LATER)
 
     def test_heavy_everything_matches_the_record(self):
         if not RUN_HEAVY:
@@ -1253,6 +1292,50 @@ class MutationTest(unittest.TestCase):
             V.PROFILES["P22"] = old
         self.assertNotEqual(got, want)
         self.assertGreater(sum(1 for x in got if e1_kind(x[u"P22"], x) in PASSED_KINDS), sum(1 for x in want if e1_kind(x[u"P22"], x) in PASSED_KINDS))
+
+    def test_mh_heavy_rerun_transitions(self):
+        u"""2026-10-27(封 docs/XBRL_HEAVY_RERUN_FIX_SEAL_2026-10-27.md §4-1): 重い走らせ直しの遷移の規則を、環境変数なしで毎回試す。V-0 は緑、V-1〜V-7 は赤。"""
+        rec = self.rec[STAGE2]
+
+        def got0():
+            u"""記録から作った『engine の遷移の後の出力』の標本(封 §4-1)。HEAVY_RERUN_LATER の後の値を入れる。"""
+            g = copy.deepcopy(rec)
+            for path, (after, _seal, _digits) in HEAVY_RERUN_LATER.items():
+                g[path[0]] = after
+            return g
+
+        with self.subTest(u"V-0 基準"):
+            heavy_rerun_check(got0(), rec, HEAVY_RERUN_LATER)
+            heavy_rerun_check(copy.deepcopy(rec), rec, HEAVY_RERUN_LATER)
+        for path in sorted(HEAVY_RERUN_LATER):
+            after = HEAVY_RERUN_LATER[path][0]
+            with self.subTest(u"V-1 封の path が在らない file " + path[0][:20]):
+                bad = dict((k, (a, u"docs/XBRL_NO_SUCH_SEAL_2026-10-27.md" if k == path else s_, d)) for k, (a, s_, d) in HEAVY_RERUN_LATER.items())
+                self._red(heavy_rerun_check, got0(), rec, bad)
+            with self.subTest(u"V-2 後の値を 1 字変える " + path[0][:20]):
+                chg = after[:-1] + (u"0" if after[-1] != u"0" else u"1")
+                bad = dict((k, (chg if k == path else a, s_, d)) for k, (a, s_, d) in HEAVY_RERUN_LATER.items())
+                self._red(heavy_rerun_check, got0(), rec, bad)
+        with self.subTest(u"V-3 測った値の欄を 1 つ変える"):
+            g = got0()
+            g[u"差のあった行の合計"] += 1
+            self._red(heavy_rerun_check, g, rec, HEAVY_RERUN_LATER)
+        with self.subTest(u"V-4 byte 一致のままの留めを変える"):
+            g = got0()
+            g[u"DEFAULT_PROFILE"] = "P26"
+            self._red(heavy_rerun_check, g, rec, HEAVY_RERUN_LATER)
+        with self.subTest(u"V-5 宣言の無い欄に後の値を入れる"):
+            g = got0()
+            g[u"E5"][u"通した"][u"件"] += 1
+            self._red(heavy_rerun_check, g, rec, HEAVY_RERUN_LATER)
+        with self.subTest(u"V-6 束ねた sha256 が段 2 の値でも後の値でもない"):
+            g = got0()
+            g[u"engine の束ねた sha256(core/ と adapters/ の file。__pycache__ を除く。repo 相対の path 順)"] = "0" * 64
+            self._red(heavy_rerun_check, g, rec, HEAVY_RERUN_LATER)
+        with self.subTest(u"V-7 recipes.py の sha16 が途中の値(宣言していない)"):
+            g = got0()
+            g[u"recipes.py の sha16"] = u"d5308700eae78c10"
+            self._red(heavy_rerun_check, g, rec, HEAVY_RERUN_LATER)
 
     def test_ms1_stage2_a_row_that_differs_is_red(self):
         for path, newv in (((u"E1", u"段 1 の P22 の欄と違った行"), 1), ((u"E2", u"記録の動いた行のうち違った行(P21・P22 の欄)"), 1),
