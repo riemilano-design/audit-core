@@ -80,6 +80,7 @@ LATER_ENGINE_COMMITS = {
     "c13a746": "docs/XBRL_CUSTOMER_REPORT_SEAL_2026-10-21.md",      # 日本語の報告形 ― 新しい module report_customer.py(判定は不変。宣言 2026-10-21)
     "129ee9d": "docs/XBRL_CUSTOMER_REPORT_FIX_SEAL_2026-10-21.md",  # 報告形の直し ― report_customer.py だけ(判定と節の割り当ては不変。宣言 2026-10-22)
     "b778dd9": "docs/XBRL_P26_SEAL_2026-10-21.md",                 # P26 段 1 ― engine(旗だけ、既定は P22 のまま。宣言 2026-10-22)
+    "917157c": "docs/XBRL_DEFAULT_P26_SEAL_2026-10-23.md",         # P26 段 2 ― 既定 P22 -> P26(vocabulary.py +4/−1。宣言 2026-10-27)
 }
 
 
