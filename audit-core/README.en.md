@@ -91,7 +91,7 @@ detail.
 
 ## Test suite
 
-222 test files (counted by the suite-coverage record; the collected-test count changes with every
+224 test files (counted by the suite-coverage record; the collected-test count changes with every
 added test and is kept in that record, not here), including 96
 adversarial mutations exercised against the XBRL adapter. The core verification engine
 itself is 429 lines (`core/py/audit_core/*.py`): existence and value checks, nothing
