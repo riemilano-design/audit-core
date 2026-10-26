@@ -359,6 +359,7 @@ SEAL_ROUNDING = "docs/XBRL_ROUNDING_SEAL_2026-10-21.md"
 SEAL_VOCAB = "docs/XBRL_VOCAB_SEAL_2026-10-21.md"    # 2026-10-21 追記: 語彙の登録と枠の取り直し P24 の段 1(下の ENGINE_LATER の recipes.py・vocabulary.py の遷移)
 SEAL_LASTBRANCH = "docs/XBRL_LASTBRANCH_SEAL_2026-10-21.md"    # 2026-10-21 追記: 最後の枝 P25 の段 1(下の ENGINE_LATER の遷移)
 SEAL_P26 = "docs/XBRL_P26_SEAL_2026-10-21.md"    # 2026-10-22 追記: P26 の段 1(下の ENGINE_LATER の遷移)
+SEAL_DEFAULT_P26 = "docs/XBRL_DEFAULT_P26_SEAL_2026-10-23.md"    # 2026-10-23 追記: 既定を P22 -> P26 に切り替える 段 2(下の遷移)
 SEAL_CUSTOMER_REPORT = "docs/XBRL_CUSTOMER_REPORT_SEAL_2026-10-21.md"    # 2026-10-21 追記: 顧客向けの日本語の報告形(新しい module adapters/xbrl/report_customer.py。下の ENGINE_LATER の新規 file)
 SEAL_CUSTOMER_REPORT_FIX = "docs/XBRL_CUSTOMER_REPORT_FIX_SEAL_2026-10-21.md"    # 2026-10-21 追記: 顧客向けの報告形の直し(report_customer.py の中身だけ。下の ENGINE_LATER)
 # 2026-10-21(語彙の登録と枠の取り直し P24 の段 1): 封 docs/XBRL_VOCAB_SEAL_2026-10-21.md(engine を変える。人間の事前承認 2026-10-21)で recipes.py に旗 vocab_2026_10_21・frame_rebind の塊(+224 行・既存の行は 1 つも書き換えない)を足した(DEFAULT_PROFILE は P22 のまま)。
@@ -372,7 +373,9 @@ ENGINE_LATER = {"adapters/xbrl/recipes.py": ("181b370420ab751b", SEAL_P26),
                 # f7b8d925eb6787ec(P23 の段 1)は残す(測った時点の値)、P24 の段 1 で 83498c04a7b70396。受け入れるのは、その封が履歴に在り、値が P24 の段 1 の後の値のときだけ。
                 # 2026-10-22(P26 の段 1): 封 docs/XBRL_P26_SEAL_2026-10-21.md(engine を変える。人間の事前承認 2026-10-21)で vocabulary.py に旗 5 つ・P26・PROFILES の登録(+17 行・-0 行) を足した。
                 # 27e71e9861fc5aad(P25 の段 1)は残す(測った時点の値)、P26 の段 1 で 83025e9c0525d08b。受け入れるのは、その封が履歴に在り、値が P26 の段 1 の後の値のときだけ。
-                "adapters/xbrl/vocabulary.py": ("83025e9c0525d08b", SEAL_P26),
+                # 2026-10-23(既定を P22 -> P26 に切り替える 段 2): 封 docs/XBRL_DEFAULT_P26_SEAL_2026-10-23.md(engine の差分は vocabulary.py の DEFAULT_PROFILE の 1 行と決定の注記 +4 行・-1 行だけ。人間の事前承認 2026-10-21)。
+                # 83025e9c0525d08b(P26 の段 1)は残す(測った時点の値)、段 2 で e28733067b1f17f5。受け入れるのは、その封が履歴に在り、値が段 2 の後の値のときだけ。
+                "adapters/xbrl/vocabulary.py": ("e28733067b1f17f5", SEAL_DEFAULT_P26),
                 # 2026-10-21(P24 の段 1): registry_setup.py に理由 other_frame を足した(+2 行)。この file はこの門が測った時点では動いていない(封の commit から 0 行だった)。
                 # 2026-10-22(P26 の段 1): 封 docs/XBRL_P26_SEAL_2026-10-21.md(engine を変える。人間の事前承認 2026-10-21)で registry_setup.py に理由 3 つ(+6 行) を足した。
                 # f42ffe23aaa7673b(P25 の段 1)は残す(測った時点の値)、P26 の段 1 で 7f2cbded9c830211。受け入れるのは、その封が履歴に在り、値が P26 の段 1 の後の値のときだけ。

@@ -160,3 +160,23 @@ AUDIT_CORE_RITUAL=1 python3 -m pytest -q tests/measure/test_xbrl_ritual_result.p
 - README の節は P22 の記録と 1 対 1(門が節の全文を縛る)。README には『既定は P22・前期の値を当期として書くと止まる』の 1 行と、P21 のときの数の 1 行を足した。
 - 走らせ直しの門(`AUDIT_CORE_RITUAL=1`)は P22 の記録と出力が一致することを見る。engine の束ねた sha256 は P22 の記録を採ったときの値に縛る。
 - **HUMAN の残り 1 点(変わらず)**: `adapters/xbrl/verify_document.py` の docstring『`--profile` を省くと P20』は、既定 P22 と食い違う。engine の file なので触っていない(承認待ち)。
+
+
+## 7. 追記(2026-10-23、P26 の段 2 ― 既定が P26 になった)
+
+本文(§0〜§5)の数は P21 のときの記録(`fixtures/xbrl/ritual_2026-10-20_p21.json`)に、§6 の数は P22 のときの記録(`fixtures/xbrl/ritual_2026-10-20_p22.json`)に縛ったまま、1 字も直さない。この追記は日付つきの足しだけ。
+
+- 買い手が clone して走らせるのは今の既定である。2026-10-23 の P26 の段 2(封 `docs/XBRL_DEFAULT_P26_SEAL_2026-10-23.md`。人間の決定 2026-10-21「あとは全て任せる」。既定にするかどうかの判定は commit `52289c4` の新しい標本の結果で P26)で既定が P22 から P26 になったので、`fixtures/xbrl/ritual_2026-10-20.json` と README の数は P26(既定)で走らせ直して置き換えた。P22 のときの記録は同じバイト列の写し `fixtures/xbrl/ritual_2026-10-20_p22.json` と git の履歴(`d0b544c`)に残る。
+- **通した 2 / 243 = 0.8%・止めた 210 / 243 = 86.4%**(P26 = 既定。P22 のときは 通した 15 / 240 = 6.2%・止めた 225 / 240 = 93.8%、P21 のときは 通した 17 / 241 = 7.1%・止めた 224 / 241 = 92.9%)。
+- 止めた(VALUE_MISMATCH)のほかに、参照先が結べず止めた(POINTER_NOT_FOUND)が 31(P22 のときは 0)。
+- 通した 2 の中身: 丸めの帯の中 1(率 1・金額ほか 0)・退化値 1・帯の外 0(P22 のときは 通した 15 の中身が 帯の中 14(率 12・金額ほか 2)・退化値 1)。
+- P22 で通した 15 のうち 13 は P26 で止まり(VALUE_MISMATCH)、2(N069 V2・N096 V1)は通したまま。
+- 参照先が前期へ移って通した行は 0(P21 では 2 行、P22 では 0 行)。
+- 注入の対象は 240 → 243(P22 → P26。外れた行: N110 V1・N111 V2・N255 V2・N256 V1、増えた行: N261 V2・N262 V1・N263 V2・N285 V2・N286 V1・N295 V2・N296 V1)。
+- 素の書類(claim 412)の state(P22 → P26): GROUNDED 329 → 340・VALUE_MISMATCH 26 → 14・POINTER_NOT_FOUND 16 → 27・UNVERIFIABLE 41 → 31。
+- 所要 19.0 秒(P26 の記録を採った機械。P22 のときは 23.2 秒)。
+- 三本の記録: P21 のとき `fixtures/xbrl/ritual_2026-10-20_p21.json`(sha256 `dad4c56e7aeeadd1c1d07fe6dc3f844f62be2d127a5e7f9cac10df761ecac6d8`)、P22 のとき `fixtures/xbrl/ritual_2026-10-20_p22.json`(sha256 `c89824f71e8002421fd27eb98044884ef94b2adb047c9fab0235a489d69f0249`)、P26(既定)`fixtures/xbrl/ritual_2026-10-20.json`。
+- 予測 R-1〜R-8 は封の字のまま、判定は P21 のときの記録に対するもの(本文 §1)。P22・P26 の数は封の予測の対象外で、既定が変わった結果として別に記す。外れではなく、測る対象が変わったということ。封 `docs/XBRL_DEFAULT_P26_SEAL_2026-10-23.md` の予測 S-4(儀式の数)の当たり外れは `docs/XBRL_DEFAULT_P26_RESULT_2026-10-23.md` に記す。
+- README の節は P26 の記録と 1 対 1(門が節の全文を縛る)。README には P22 のときの数の 1 行を足し、P21 のときの数の 1 行は残した。
+- 走らせ直しの門(`AUDIT_CORE_RITUAL=1`)は P26 の記録と出力が一致することを見る。engine の束ねた sha256 は P26 の記録を採ったときの値に縛る。
+- **HUMAN の残り 1 点(変わらず)**: `adapters/xbrl/verify_document.py` の docstring『`--profile` を省くと P20』は、既定 P26 と食い違う(P20・P21・P22 に続き 4 つめ)。engine の file なので触っていない(承認待ち)。

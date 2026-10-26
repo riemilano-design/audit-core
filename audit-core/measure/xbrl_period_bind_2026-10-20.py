@@ -82,7 +82,12 @@ POINT_PRIOR_REL = "fixtures/xbrl/point_prior_2026-10-20.json"
 #: 同じ中身(sha256 dad4c56e…)の写し ``ritual_2026-10-20_p21.json`` を読む。段 1 の記録の ``入力の sha256`` の欄の名前は変えない(RITUAL_KEY_AT_MEASURE)。
 RITUAL_REL = "fixtures/xbrl/ritual_2026-10-20_p21.json"
 RITUAL_KEY_AT_MEASURE = "fixtures/xbrl/ritual_2026-10-20.json"
-RITUAL_P22_REL = "fixtures/xbrl/ritual_2026-10-20.json"
+#: 2026-10-23(既定を P22 -> P26 に切り替える 段 2): ``ritual_2026-10-20.json`` は P26(既定)で採り直した。P22 のときの記録は同じバイト列(sha256 c89824f7…)の写しを読む。
+#: 記録の欄の名前(``採り直した儀式の記録(ritual_2026-10-20.json)と違う欄…``)は測った当時の字で変えない。
+RITUAL_P22_REL = "fixtures/xbrl/ritual_2026-10-20_p22.json"
+#: 2026-10-23: 段 2 の測定は**測った当時の既定 P22 を明示して**行う(profile を省く = 既定 に頼らない)。既定が P26 になった今も記録が再現する。
+#: 記録の字(``profile: 省略(None = vocabulary.DEFAULT_PROFILE)``・``対照: 既定を P21 に戻す変異``・``DEFAULT_PROFILE: P22``)は測った当時のもので変えない。
+STAGE2_PROFILE_AT_MEASURE = "P22"
 STAGE2_KEY = "stage2_default_2026-10-20"
 CONTROL_DOC = "S100YMFV"      # 注入 4 件(P21 では 4 件とも通し、P22 では 4 件とも止める)。『0 件』の対照に使う軽い書類
 NAMING_REL = "fixtures/xbrl/naming_fix/p21_2026-10-20.json"
@@ -604,8 +609,9 @@ def p22_view(r):
             u"手がかり(注入後の文)": r.get(u"_cue"), u"注入後の文脈": r.get(u"_文")}
 
 
-def stage2_e1(texts, rec):
-    u"""E-1: 穴 B の注入 485 件を **profile 省略**(= 既定)で再検証し、段 1 の記録の P22 の欄と 1 行ずつ比べる。"""
+def stage2_e1(texts, rec, profile=STAGE2_PROFILE_AT_MEASURE):
+    u"""E-1: 穴 B の注入 485 件を **profile 省略**(= 測った当時の既定 P22 を明示)で再検証し、段 1 の記録の P22 の欄と 1 行ずつ比べる。
+    ``profile`` を P21 にすると対照(比較器が差を拾えるか)になる。"""
     want = dict(((r[u"書類"], r[u"id"]), r) for r in rec[u"E1"][u"行"] if r[u"書類"] in texts)      # texts が全 67 書類なら全 485 行
     got_rows, diff = {}, []
     for d in sorted(texts):
@@ -613,7 +619,7 @@ def stage2_e1(texts, rec):
         sites, _diag, _b, _o, sentences, _base = PP.find_sites(zb, text)
         for st in sites:
             st[u"書類"] = d
-        for r in inject_with_profile(d, zb, text, sites, sentences, None):
+        for r in inject_with_profile(d, zb, text, sites, sentences, profile):
             got_rows[(d, r[u"id"])] = r
     for k in sorted(want):
         g = got_rows.get(k)
@@ -631,15 +637,16 @@ def stage2_e1(texts, rec):
             u"通した のうち参照先が Prior1Year": frac(kinds[PP.K_MOVED], n)}
 
 
-def stage2_e2(texts, rec):
-    u"""E-2: 67 書類の無改変を P21 と **profile 省略** で verify_document し、動いた行が段 1 の記録の動いた行と過不足なく同じか。"""
+def stage2_e2(texts, rec, profile=STAGE2_PROFILE_AT_MEASURE):
+    u"""E-2: 67 書類の無改変を P21 と **profile 省略**(= 測った当時の既定 P22 を明示)で verify_document し、動いた行が段 1 の記録の動いた行と過不足なく同じか。
+    ``profile`` を P21 にすると対照になる。"""
     want = dict(((r[u"doc"], r[u"id"]), r) for r in rec[u"E2"][u"動いた行"] if r[u"doc"] in texts)      # texts が全 67 書類なら全部
     n_claims = 0
     moved, diff = {}, []
     for d in sorted(texts):
         zb, _text = texts[d]
         a = VD.verify_document(zb, OLD)
-        b = VD.verify_document(zb, None)
+        b = VD.verify_document(zb, profile)
         if [c["id"] for c in a["claims"]] != [c["id"] for c in b["claims"]]:
             raise SystemExit(u"**claim の id の並びが P21 と既定で違う: %s。止める**" % d)
         for x, y in zip(a["claims"], b["claims"]):
@@ -668,7 +675,7 @@ def stage2_e5(label_shas):
         zb = fh.read()
     if hashlib.sha256(zb).hexdigest() != RIT.ZIP_SHA256:
         raise SystemExit(u"**儀式の入力の sha256 が封の字と違う。止める**")
-    built = RIT.build(zb, V.DEFAULT_PROFILE, label_shas)
+    built = RIT.build(zb, STAGE2_PROFILE_AT_MEASURE, label_shas)
     p21 = jload(RITUAL_REL)
     e5_rec = jload(OUT_REL)[u"E5"]
     key = lambda x: (x[u"id"], x[u"型"])
@@ -683,10 +690,10 @@ def stage2_e5(label_shas):
     diff_exp = sorted(k for k in set(expect) | set(got) if expect.get(k) != got.get(k))
     new_rec = jload(RITUAL_P22_REL)
     vol = lambda r: dict((k, v) for k, v in r.items() if k not in (u"所要秒", u"実行環境"))
-    plain_def = VD.verify_document(zb, None, None)["claims"]
+    plain_def = VD.verify_document(zb, STAGE2_PROFILE_AT_MEASURE, None)["claims"]      # 2026-10-23: 測った当時の既定 P22 を明示(今の既定 P26 では省略できない)
     plain_p22 = VD.verify_document(zb, NEW, None)["claims"]
     plain_diff = sum(1 for x, y in zip(plain_def, plain_p22) if claim_key(x) != claim_key(y)) + abs(len(plain_def) - len(plain_p22))
-    return {u"profile": built[u"入力"][u"profile"] if u"入力" in built else V.DEFAULT_PROFILE,
+    return {u"profile": built[u"入力"][u"profile"] if u"入力" in built else STAGE2_PROFILE_AT_MEASURE,
             u"通した": built[u"通した"], u"止めた": built[u"止めた"],
             u"期待(P21 の記録 + 段 1 の動いた行・外れた行)の行": len(expect), u"今回の行": len(got),
             u"期待と違った行": len(diff_exp), u"違った行の id": [u"%s %s" % k for k in diff_exp[:20]],
@@ -696,8 +703,8 @@ def stage2_e5(label_shas):
 
 
 def stage2_default(label_shas, run_tests=False):
-    if V.DEFAULT_PROFILE != NEW:
-        raise SystemExit(u"**既定 profile が %s でない: %r(段 2 の測定は既定が P22 になった後)。止める**" % (NEW, V.DEFAULT_PROFILE))
+    if STAGE2_PROFILE_AT_MEASURE != NEW:
+        raise SystemExit(u"**段 2 の測定の profile が %s でない: %r。止める**" % (NEW, STAGE2_PROFILE_AT_MEASURE))
     rec = jload(OUT_REL)
     zips = PP.list_zips()
     texts = {}
@@ -719,15 +726,9 @@ def stage2_default(label_shas, run_tests=False):
     secs[u"E2"] = round(time.time() - t, 1)
     # 対照(『0 件』が自分の欠陥でないことの確かめ): 既定を P21 に戻す変異。比較器が差を拾えるなら、E-1 の軽い書類で違った行が出る。
     ctrl_doc = CONTROL_DOC
-    old_default = V.DEFAULT_PROFILE
-    V.DEFAULT_PROFILE = OLD
-    try:
-        ctrl = stage2_e1({ctrl_doc: texts[ctrl_doc]}, rec)
-    finally:
-        V.DEFAULT_PROFILE = old_default
+    # 2026-10-23: 対照は『実行中だけ既定を P21 に戻す』でなく、測定の profile を P21 にして同じ比較器に当てる(測定は既定に頼らないため)。記録の字(変異の説明)は測った当時のまま。
+    ctrl = stage2_e1({ctrl_doc: texts[ctrl_doc]}, rec, profile=OLD)
     ctrl_ = {u"書類": ctrl_doc, u"変異": u"vocabulary.DEFAULT_PROFILE を実行中だけ P21 に戻す", u"比べた行": ctrl[u"今回の行"], u"段 1 の P22 の欄と違った行": ctrl[u"段 1 の P22 の欄と違った行"]}
-    if V.DEFAULT_PROFILE != old_default:
-        raise SystemExit(u"**変異を戻せていない。止める**")
     t = time.time()
     e5_ = stage2_e5(label_shas)
     secs[u"E5"] = round(time.time() - t, 1)
@@ -737,7 +738,7 @@ def stage2_default(label_shas, run_tests=False):
            u"engine の束ねた sha256(core/ と adapters/ の file。__pycache__ を除く。repo 相対の path 順)": bundle, u"engine の file 数": n_files,
            u"recipes.py の sha16": sha_file(os.path.join(ROOT, "adapters/xbrl/recipes.py"))[:16],
            u"vocabulary.py の sha16": sha_file(os.path.join(ROOT, "adapters/xbrl/vocabulary.py"))[:16],
-           u"DEFAULT_PROFILE": V.DEFAULT_PROFILE,
+           u"DEFAULT_PROFILE": STAGE2_PROFILE_AT_MEASURE,
            u"鍵の名前の有無(値は読まない)": dict((k, (k in os.environ)) for k in KEY_NAMES),
            u"ラベル 2 file の sha256(起動時に照合)": label_shas,
            u"費用": u"0 USD",

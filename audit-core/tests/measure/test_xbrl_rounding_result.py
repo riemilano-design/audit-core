@@ -41,7 +41,8 @@ SEAL_COMMIT = "5008985"
 SCRIPT = os.path.join(ROOT, "measure", "xbrl_rounding_2026-10-21.py")
 CACHE = os.path.join(os.path.expanduser("~"), ".cache", "audit-core", "edinet")
 RUN_HEAVY = os.environ.get("AUDIT_CORE_ROUNDING") == "1"
-RITUAL_P22 = os.path.join(ROOT, "fixtures", "xbrl", "ritual_2026-10-20.json")
+# 2026-10-23(P26 の段 2。封 docs/XBRL_DEFAULT_P26_SEAL_2026-10-23.md)で ritual_2026-10-20.json は P26(既定)で採り直したので、P22 のときの記録は同じバイト列(sha256 c89824f7…)の写し ritual_2026-10-20_p22.json を読む
+RITUAL_P22 = os.path.join(ROOT, "fixtures", "xbrl", "ritual_2026-10-20_p22.json")
 PERIOD_BIND = os.path.join(ROOT, "fixtures", "xbrl", "period_bind_2026-10-20.json")
 VOCAB = os.path.join(ROOT, "adapters", "xbrl", "vocabulary.py")
 LIGHT_R2_DOCS = ("S100YMFV", "S100YUHC")      # 動いた行 3 件(％ 2・ポイント 1)
@@ -67,9 +68,12 @@ ENGINE_AT_MEASURE = {"adapters/xbrl/vocabulary.py": "f7b8d925eb6787ec", "adapter
 SEAL_VOCAB = "docs/XBRL_VOCAB_SEAL_2026-10-21.md"
 SEAL_LASTBRANCH = "docs/XBRL_LASTBRANCH_SEAL_2026-10-21.md"    # 2026-10-21 追記: 最後の枝 P25 の段 1(下の ENGINE_LATER の遷移)
 SEAL_P26 = "docs/XBRL_P26_SEAL_2026-10-21.md"    # 2026-10-22 追記: P26 の段 1(下の ENGINE_LATER の遷移)
+SEAL_DEFAULT_P26 = "docs/XBRL_DEFAULT_P26_SEAL_2026-10-23.md"    # 2026-10-23 追記: 既定を P22 -> P26 に切り替える 段 2(下の遷移)
 # 2026-10-21(最後の枝 P25 の段 1): 封 docs/XBRL_LASTBRANCH_SEAL_2026-10-21.md(engine を変える。人間の事前承認 2026-10-21)で vocabulary.py に旗 last_branch_names_only_if_evidence・P25・PROFILES の登録(+7 行・-0 行)、recipes.py に最後の枝の証拠の判定の塊(+72 行・-0 行。既存の行は 1 つも書き換えない)を足した(DEFAULT_PROFILE は P22 のまま)。
 # vocabulary.py の 83498c04a7b70396・recipes.py の 3461c3f8b7af6675(P24 の段 1)は残す(測った時点の値)。受け入れるのは、その封が履歴に在り、値が P25 の段 1 の後の値のときだけ。
-ENGINE_LATER = {"adapters/xbrl/vocabulary.py": ("83025e9c0525d08b", SEAL_P26),
+# 2026-10-23(既定を P22 -> P26 に切り替える 段 2): 封 docs/XBRL_DEFAULT_P26_SEAL_2026-10-23.md(engine の差分は vocabulary.py の DEFAULT_PROFILE の 1 行と決定の注記 +4 行・-1 行だけ。人間の事前承認 2026-10-21)。
+# 83025e9c0525d08b(P26 の段 1)は残す(測った時点の値)、段 2 で e28733067b1f17f5。受け入れるのは、その封が履歴に在り、値が段 2 の後の値のときだけ。
+ENGINE_LATER = {"adapters/xbrl/vocabulary.py": ("e28733067b1f17f5", SEAL_DEFAULT_P26),
                 # 2026-10-22(P26 の段 1): 封 docs/XBRL_P26_SEAL_2026-10-21.md(engine を変える。人間の事前承認 2026-10-21)で recipes.py に G1〜G5 の塊(+251 行・-1 行。既存の行の書き換えは数の読み取りの for 文 1 行だけ) を足した。
                 # bff243f13429b553(P25 の段 1)は残す(測った時点の値)、P26 の段 1 で 181b370420ab751b。受け入れるのは、その封が履歴に在り、値が P26 の段 1 の後の値のときだけ。
                 "adapters/xbrl/recipes.py": ("181b370420ab751b", SEAL_P26)}
@@ -589,9 +593,9 @@ class RecordTest(unittest.TestCase):
         self.assertEqual(out.returncode, 0)
         self.assertEqual(out.stdout.strip(), u"", u"core/ が封の commit から動いている")
         src = jtext(VOCAB)
-        self.assertEqual(re.findall(r'(?m)^DEFAULT_PROFILE = "(P\d+)"$', src), ["P22"], u"段 1 は既定を P22 のままにする(切り替えは段 2)")
+        self.assertEqual(re.findall(r'(?m)^DEFAULT_PROFILE = "(P\d+)"$', src), ["P26"], u"段 1 の commit 時点は既定が P22 だった。2026-10-23 の P26 の段 2(封 docs/XBRL_DEFAULT_P26_SEAL_2026-10-23.md)で P26")
         from adapters.xbrl import vocabulary as V
-        self.assertEqual(V.DEFAULT_PROFILE, "P22")
+        self.assertEqual(V.DEFAULT_PROFILE, "P26")
         self.assertTrue(V.PROFILES["P23"].truncate_abs_band)
         self.assertFalse(V.PROFILES["P22"].truncate_abs_band)
 
@@ -609,7 +613,8 @@ class RecordTest(unittest.TestCase):
         for d in names:
             self.assertEqual(sha_path(os.path.join(CACHE, d + ".zip")), inp[u"書類 67(経営分析の文を持つ)の sha256"][d], d)
         for rel in INPUT_SHAS:
-            self.assertEqual(sha_path(os.path.join(ROOT, rel)), inp[rel], rel)
+            real = "fixtures/xbrl/ritual_2026-10-20_p22.json" if rel == "fixtures/xbrl/ritual_2026-10-20.json" else rel      # 2026-10-23(P26 の段 2。封 docs/XBRL_DEFAULT_P26_SEAL_2026-10-23.md)
+            self.assertEqual(sha_path(os.path.join(ROOT, real)), inp[rel], rel)
         self.assertEqual(sha_path(os.path.join(ROOT, "fixtures/xbrl/ai_prose_instance_2026-10-09.zip")), inp[u"儀式の同梱書類"])
 
 

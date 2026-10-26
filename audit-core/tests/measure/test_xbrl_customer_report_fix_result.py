@@ -64,10 +64,14 @@ UNTOUCHED = {"adapters/xbrl/report.py": "0d2854e659a5d8e0", "adapters/xbrl/verif
 #: 2026-10-22(P26 の段 1): 封 docs/XBRL_P26_SEAL_2026-10-21.md が engine の 3 file(vocabulary・recipes・registry_setup)と report_customer.py(理由の表に 3 行)を書き換えた。
 #: 上の UNTOUCHED・下の MODULE_SHA16・ENGINE_FP は「測った時点」の値で消さない(記録の C5・R2-7 が測った値)。いまの値は下の *_LATER で、その封が履歴に在るときだけ受け入れる。
 SEAL_P26 = "docs/XBRL_P26_SEAL_2026-10-21.md"
-UNTOUCHED_LATER = {"adapters/xbrl/vocabulary.py": ("83025e9c0525d08b", SEAL_P26), "adapters/xbrl/recipes.py": ("181b370420ab751b", SEAL_P26),
+SEAL_DEFAULT_P26 = "docs/XBRL_DEFAULT_P26_SEAL_2026-10-23.md"    # 2026-10-23 追記: 既定を P22 -> P26 に切り替える 段 2(下の遷移)
+# 2026-10-23(既定を P22 -> P26 に切り替える 段 2): 封 docs/XBRL_DEFAULT_P26_SEAL_2026-10-23.md(engine の差分は vocabulary.py の DEFAULT_PROFILE の 1 行と決定の注記 +4 行・-1 行だけ。人間の事前承認 2026-10-21)。
+# 83025e9c0525d08b(P26 の段 1)は残す(測った時点の値)、段 2 で e28733067b1f17f5。受け入れるのは、その封が履歴に在り、値が段 2 の後の値のときだけ。
+UNTOUCHED_LATER = {"adapters/xbrl/vocabulary.py": ("e28733067b1f17f5", SEAL_DEFAULT_P26), "adapters/xbrl/recipes.py": ("181b370420ab751b", SEAL_P26),
                    "adapters/xbrl/registry_setup.py": ("7f2cbded9c830211", SEAL_P26)}
 MODULE_LATER = {"sha16": "141767d189b63733", "seal": SEAL_P26}
-ENGINE_FP_LATER = {"adapter_xbrl_py_sha256": ("498993e29055472aaf2e691758e62c02a41cd291654cf205ae0a55a9e55df318", SEAL_P26)}
+# 2026-10-23(既定を P22 -> P26 に切り替える 段 2): 束ねた指紋 498993e29055472a…(P26 の段 1)は残す(測った時点の次の値)、段 2 で 5aba774925968356…。受け入れるのは、封 docs/XBRL_DEFAULT_P26_SEAL_2026-10-23.md が履歴に在り、値が段 2 の後の値のときだけ。
+ENGINE_FP_LATER = {"adapter_xbrl_py_sha256": ("5aba7749259683563c37e62353717f64b4e4828931998a7c42518aca107f3504", SEAL_DEFAULT_P26)}
 #: 測った時点の module(report_customer.py)の sha256 の先頭 16 桁と engine の束ねた指紋。module が動けば測り直す。
 MODULE_SHA16 = "715468699973cc4a"
 ENGINE_FP = {"adapter_xbrl_py_sha256": "11840a097f04dcb4c01f057ce78d39c3aedabf139e65dbc5620e28c109f64693", "adapter_xbrl_py_files": 16,

@@ -51,7 +51,7 @@ CACHE = os.path.join(os.path.expanduser("~"), ".cache", "audit-core", "edinet")
 RUN_HEAVY = os.environ.get("AUDIT_CORE_PERIOD_BIND") == "1"
 VOCAB = os.path.join(ROOT, "adapters", "xbrl", "vocabulary.py")
 RITUAL_P21 = os.path.join(ROOT, "fixtures", "xbrl", "ritual_2026-10-20_p21.json")       # P21 のときの儀式の記録(段 1 の対照)
-RITUAL_P22 = os.path.join(ROOT, "fixtures", "xbrl", "ritual_2026-10-20.json")           # 段 2 で P22(既定)で採り直した儀式の記録
+RITUAL_P22 = os.path.join(ROOT, "fixtures", "xbrl", "ritual_2026-10-20_p22.json")       # 段 2 で P22(既定)で採り直した儀式の記録。2026-10-23 の P26 の段 2 で ritual_2026-10-20.json は P26 で採り直したので、同じバイト列(sha256 c89824f7…)の写し
 STAGE2 = u"stage2_default_2026-10-20"
 STAGE2_HEAD = u"## 14. 段 2(2026-10-20、既定 P21 → P22)"
 #: 既定で測った記録を持つ measure。測った当時の P21 を字で留めた(段 2)。vocabulary.DEFAULT_PROFILE を読まない。
@@ -76,6 +76,7 @@ SEAL_ROUNDING = "docs/XBRL_ROUNDING_SEAL_2026-10-21.md"
 SEAL_VOCAB = "docs/XBRL_VOCAB_SEAL_2026-10-21.md"    # 2026-10-21 追記: 語彙の登録と枠の取り直し P24 の段 1(下の ENGINE_LATER の recipes.py・vocabulary.py の遷移)
 SEAL_LASTBRANCH = "docs/XBRL_LASTBRANCH_SEAL_2026-10-21.md"    # 2026-10-21 追記: 最後の枝 P25 の段 1(下の ENGINE_LATER の遷移)
 SEAL_P26 = "docs/XBRL_P26_SEAL_2026-10-21.md"    # 2026-10-22 追記: P26 の段 1(下の ENGINE_LATER の遷移)
+SEAL_DEFAULT_P26 = "docs/XBRL_DEFAULT_P26_SEAL_2026-10-23.md"    # 2026-10-23 追記: 既定を P22 -> P26 に切り替える 段 2(下の遷移)
 # 2026-10-21(語彙の登録と枠の取り直し P24 の段 1): 封 docs/XBRL_VOCAB_SEAL_2026-10-21.md(engine を変える。人間の事前承認 2026-10-21)で recipes.py に旗 vocab_2026_10_21・frame_rebind の塊(+224 行・既存の行は 1 つも書き換えない)を足した(DEFAULT_PROFILE は P22 のまま)。
 # d5308700eae78c10(P23 の段 1)は残す(測った時点の値)、P24 の段 1 で 3461c3f8b7af6675。受け入れるのは、その封が履歴に在り、値が P24 の段 1 の後の値のときだけ。
 # 2026-10-21(最後の枝 P25 の段 1): 封 docs/XBRL_LASTBRANCH_SEAL_2026-10-21.md(engine を変える。人間の事前承認 2026-10-21)で recipes.py に最後の枝の証拠の判定の塊(+72 行・-0 行。既存の行は 1 つも書き換えない)、vocabulary.py に旗 last_branch_names_only_if_evidence・P25・PROFILES の登録(+7 行・-0 行)を足した(DEFAULT_PROFILE は P22 のまま)。
@@ -85,7 +86,9 @@ ENGINE_LATER = {"adapters/xbrl/recipes.py": ("181b370420ab751b", SEAL_P26),
                 # f7b8d925eb6787ec(P23 の段 1)は残す(測った時点の値)、P24 の段 1 で 83498c04a7b70396。受け入れるのは、その封が履歴に在り、値が P24 の段 1 の後の値のときだけ。
                 # 2026-10-22(P26 の段 1): 封 docs/XBRL_P26_SEAL_2026-10-21.md(engine を変える。人間の事前承認 2026-10-21)で vocabulary.py に旗 5 つ・P26・PROFILES の登録(+17 行・-0 行) を足した。
                 # 27e71e9861fc5aad(P25 の段 1)は残す(測った時点の値)、P26 の段 1 で 83025e9c0525d08b。受け入れるのは、その封が履歴に在り、値が P26 の段 1 の後の値のときだけ。
-                "adapters/xbrl/vocabulary.py": ("83025e9c0525d08b", SEAL_P26)}
+                # 2026-10-23(既定を P22 -> P26 に切り替える 段 2): 封 docs/XBRL_DEFAULT_P26_SEAL_2026-10-23.md(engine の差分は vocabulary.py の DEFAULT_PROFILE の 1 行と決定の注記 +4 行・-1 行だけ。人間の事前承認 2026-10-21)。
+                # 83025e9c0525d08b(P26 の段 1)は残す(測った時点の値)、段 2 で e28733067b1f17f5。受け入れるのは、その封が履歴に在り、値が段 2 の後の値のときだけ。
+                "adapters/xbrl/vocabulary.py": ("e28733067b1f17f5", SEAL_DEFAULT_P26)}
 FACT = {
     "e1": (485, 1, 482, 2),                    # 注入・P22 で通した・止めた・その他
     "e1_p21": (459, 458),                      # P21(対照)で通した・うち前期へ移った(穴 B の記録と同じ 459・458)
@@ -737,7 +740,7 @@ def check_stage2(rec):
 
 
 def check_default_note(src):
-    u"""vocabulary.py の字: 既定が P22・日付つきの決定の注記・P21 以前の注記が消えていない。"""
+    u"""vocabulary.py の字: 日付つきの決定の注記・P21 以前の注記が消えていない。既定は P22(2026-10-20 の段 2)から、2026-10-23 の P26 の段 2(封 docs/XBRL_DEFAULT_P26_SEAL_2026-10-23.md)で P26。"""
     i = src.index("\nDEFAULT_PROFILE = ")
     note = src[:i][src[:i].index(u"# **既定 profile(人間の決定 2026-10-13、第 2 段階)"):]
     for lit in (u"# 2026-10-14 の人間の決定で P16 -> P20。", u"# 2026-10-20 に P20 -> P21(段 2)。",
@@ -745,8 +748,9 @@ def check_default_note(src):
                 u"段 1 3320c8c の結果", u"客の席の回し直し", u"**P21 の字は消さず**", u"P21 の既定は 2026-10-20 a516288"):
         assert lit in note, lit
     assert note.index(u"# 2026-10-14 の人間の決定で P16 -> P20。") < note.index(u"# 2026-10-20 に P20 -> P21(段 2)。") < note.index(u"# 2026-10-20 に P21 -> P22(期を縛る P22 の段 2)。")
+    assert u"# 2026-10-23 に P22 -> P26(P26 の段 2)。" in src and u"**P22 の字は消さず**" in src, u"P26 の段 2 の注記が無い"      # 2026-10-23 追記
     found = re.findall(r'(?m)^DEFAULT_PROFILE = "(P\d+)"$', src)
-    assert found == ["P22"], found
+    assert found == ["P26"], found
 
 
 FROZEN_SRC = os.path.join(ROOT, "fixtures", "frozen_bundle_sha.py")
@@ -769,7 +773,8 @@ def check_frozen_generation(generations, current):
     # 2026-10-21 追記(pin の遷移): 顧客向けの報告形の直し(docs/XBRL_CUSTOMER_REPORT_FIX_SEAL_2026-10-21.md。report_customer.py の中身だけを直し、37 本のまま世代をもう 1 つ足した)の後は、
     # 段 2 の宣言は最新の世代の 5 つ前になる。
     # 2026-10-22 追記(pin の遷移): P26 の段 1(docs/XBRL_P26_SEAL_2026-10-21.md。engine 5 file を変え 37 本のまま世代をもう 1 つ足した)の後は、段 2 の宣言は最新の世代の 6 つ前になる。
-    for later in (u"XBRL_P26_SEAL_2026-10-21", u"XBRL_CUSTOMER_REPORT_FIX_SEAL_2026-10-21", u"XBRL_CUSTOMER_REPORT_SEAL_2026-10-21", u"XBRL_LASTBRANCH_SEAL_2026-10-21", u"XBRL_VOCAB_SEAL_2026-10-21", u"XBRL_ROUNDING_SEAL_2026-10-21"):
+    # 2026-10-23 追記(pin の遷移): 既定を P22 -> P26 に切り替える 段 2(docs/XBRL_DEFAULT_P26_SEAL_2026-10-23.md。vocabulary.py だけ、37 本のまま世代をもう 1 つ足した)の後は、段 2 の宣言は最新の世代の 7 つ前になる。
+    for later in (u"XBRL_DEFAULT_P26_SEAL_2026-10-23", u"XBRL_P26_SEAL_2026-10-21", u"XBRL_CUSTOMER_REPORT_FIX_SEAL_2026-10-21", u"XBRL_CUSTOMER_REPORT_SEAL_2026-10-21", u"XBRL_LASTBRANCH_SEAL_2026-10-21", u"XBRL_VOCAB_SEAL_2026-10-21", u"XBRL_ROUNDING_SEAL_2026-10-21"):
         if later in generations[i][1]:
             i -= 1
             assert i >= 0, u"後の封の宣言の前に段 2 の世代が無い"
@@ -904,8 +909,8 @@ class RecordTest(unittest.TestCase):
         self.assertEqual(out.returncode, 0)
         self.assertEqual(out.stdout.strip(), u"", u"core/ が封の commit から動いている")
         from adapters.xbrl import vocabulary as V
-        # 段 1(3320c8c)では P21 のままだった。2026-10-20 の段 2(人間の決定「任せる」)で P22 になった。
-        self.assertEqual(V.DEFAULT_PROFILE, "P22")
+        # 段 1(3320c8c)では P21 のままだった。2026-10-20 の段 2(人間の決定「任せる」)で P22 になった。2026-10-23 の P26 の段 2(封 docs/XBRL_DEFAULT_P26_SEAL_2026-10-23.md)で P26 になった。
+        self.assertEqual(V.DEFAULT_PROFILE, "P26")
         self.assertTrue(V.PROFILES["P22"].period_bind)
         self.assertIn("P21", V.PROFILES)
         self.assertFalse(V.PROFILES["P21"].period_bind)
@@ -1063,18 +1068,23 @@ class RerunTest(unittest.TestCase):
         self.assertEqual((got[u"既定と P21 で動いた行"], got[u"記録の動いた行のうち違った行(P21・P22 の欄)"], got[u"記録に無い動いた行"]), (len(want), 0, 0))
 
     def test_light_stage2_the_comparator_sees_a_wrong_default(self):
-        u"""対照(変異): 既定を実行中だけ P21 に戻すと、同じ比較器が違った行を拾う(『差 0』が自分の欠陥でない)。"""
+        u"""対照(変異): 測定の profile を P21 に取り違えると、同じ比較器が違った行を拾う(『差 0』が自分の欠陥でない)。
+        2026-10-23(既定を P22 -> P26 に切り替える 段 2): 測定は既定に頼らず測った当時の P22 を明示するので、『既定を実行中だけ P21 に戻す』でなく profile を P21 にして当てる。
+        既定が P26 の今、既定を P21 に戻しても測定が動かないこと(既定に頼っていないこと)も見る。"""
         self._need(LIGHT_E1_DOCS + LIGHT_E2_DOCS)
         m = self._script()
         from adapters.xbrl import vocabulary as V
+        self.assertEqual(m.STAGE2_PROFILE_AT_MEASURE, "P22")
+        e1 = m.stage2_e1(self._texts(m, LIGHT_E1_DOCS), self.rec, profile="P21")
+        e2 = m.stage2_e2(self._texts(m, LIGHT_E2_DOCS), self.rec, profile="P21")
         old = V.DEFAULT_PROFILE
         V.DEFAULT_PROFILE = "P21"
         try:
-            e1 = m.stage2_e1(self._texts(m, LIGHT_E1_DOCS), self.rec)
-            e2 = m.stage2_e2(self._texts(m, LIGHT_E2_DOCS), self.rec)
+            e1_def = m.stage2_e1(self._texts(m, LIGHT_E1_DOCS), self.rec)
         finally:
             V.DEFAULT_PROFILE = old
-        self.assertEqual(V.DEFAULT_PROFILE, "P22")
+        self.assertEqual(V.DEFAULT_PROFILE, "P26")
+        self.assertEqual(e1_def[u"段 1 の P22 の欄と違った行"], 0)       # 既定を動かしても測定は動かない
         self.assertGreater(e1[u"段 1 の P22 の欄と違った行"], 0)
         self.assertGreater(e2[u"記録の動いた行のうち違った行(P21・P22 の欄)"], 0)
 
@@ -1307,7 +1317,7 @@ class MutationTest(unittest.TestCase):
     def test_ms6_stage2_default_note_mutations_are_red(self):
         src = jtext(VOCAB)
         check_default_note(src)
-        for a, b in ((u'DEFAULT_PROFILE = "P22"', u'DEFAULT_PROFILE = "P21"'),
+        for a, b in ((u'DEFAULT_PROFILE = "P26"', u'DEFAULT_PROFILE = "P21"'),
                      (u"# 2026-10-20 に P21 -> P22(期を縛る P22 の段 2)。", u"# 2026-10-20 に P21 -> P22(期を縛る P22 の段 1)。"),
                      (u"**P21 の字は消さず**", u"P21 の字は消し"),
                      (u"# 2026-10-20 に P20 -> P21(段 2)。", u"# 2026-10-20 に P20 -> P21。")):

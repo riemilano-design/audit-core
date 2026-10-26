@@ -37,7 +37,8 @@ sys.path.insert(0, os.path.join(ROOT, "core", "py"))
 SEAL_REL = "docs/XBRL_ROUNDING_SEAL_2026-10-21.md"
 SEAL = os.path.join(ROOT, SEAL_REL)
 RITUAL_P21_JSON = os.path.join(ROOT, "fixtures", "xbrl", "ritual_2026-10-20_p21.json")
-RITUAL_P22_JSON = os.path.join(ROOT, "fixtures", "xbrl", "ritual_2026-10-20.json")
+# 2026-10-23(P26 の段 2。封 docs/XBRL_DEFAULT_P26_SEAL_2026-10-23.md)で ritual_2026-10-20.json は P26(既定)で採り直したので、P22 のときの記録は同じバイト列(sha256 c89824f7…)の写し ritual_2026-10-20_p22.json を読む
+RITUAL_P22_JSON = os.path.join(ROOT, "fixtures", "xbrl", "ritual_2026-10-20_p22.json")
 PERIOD_BIND_JSON = os.path.join(ROOT, "fixtures", "xbrl", "period_bind_2026-10-20.json")
 POINT_PRIOR_JSON = os.path.join(ROOT, "fixtures", "xbrl", "point_prior_2026-10-20.json")
 RITUAL_ZIP = os.path.join(ROOT, "fixtures", "xbrl", "ai_prose_instance_2026-10-09.zip")
@@ -67,9 +68,12 @@ ENGINE_AT_SEAL = {"adapters/xbrl/vocabulary.py": "25a3c0992e10daaa",
 SEAL_VOCAB = "docs/XBRL_VOCAB_SEAL_2026-10-21.md"
 SEAL_LASTBRANCH = "docs/XBRL_LASTBRANCH_SEAL_2026-10-21.md"    # 2026-10-21 追記: 最後の枝 P25 の段 1(下の ENGINE_LATER の遷移)
 SEAL_P26 = "docs/XBRL_P26_SEAL_2026-10-21.md"    # 2026-10-22 追記: P26 の段 1(下の ENGINE_LATER の遷移)
+SEAL_DEFAULT_P26 = "docs/XBRL_DEFAULT_P26_SEAL_2026-10-23.md"    # 2026-10-23 追記: 既定を P22 -> P26 に切り替える 段 2(下の遷移)
 # 2026-10-21(最後の枝 P25 の段 1): 封 docs/XBRL_LASTBRANCH_SEAL_2026-10-21.md(engine を変える。人間の事前承認 2026-10-21)で vocabulary.py に旗 last_branch_names_only_if_evidence・P25・PROFILES の登録(+7 行・-0 行)、recipes.py に最後の枝の証拠の判定の塊(+72 行・-0 行。既存の行は 1 つも書き換えない)を足した(DEFAULT_PROFILE は P22 のまま)。
 # vocabulary.py の 83498c04a7b70396・recipes.py の 3461c3f8b7af6675(P24 の段 1)は残す(測った時点の値)。受け入れるのは、その封が履歴に在り、値が P25 の段 1 の後の値のときだけ。
-ENGINE_LATER = {"adapters/xbrl/vocabulary.py": ("83025e9c0525d08b", SEAL_P26),
+# 2026-10-23(既定を P22 -> P26 に切り替える 段 2): 封 docs/XBRL_DEFAULT_P26_SEAL_2026-10-23.md(engine の差分は vocabulary.py の DEFAULT_PROFILE の 1 行と決定の注記 +4 行・-1 行だけ。人間の事前承認 2026-10-21)。
+# 83025e9c0525d08b(P26 の段 1)は残す(測った時点の値)、段 2 で e28733067b1f17f5。受け入れるのは、その封が履歴に在り、値が段 2 の後の値のときだけ。
+ENGINE_LATER = {"adapters/xbrl/vocabulary.py": ("e28733067b1f17f5", SEAL_DEFAULT_P26),
                 # 2026-10-22(P26 の段 1): 封 docs/XBRL_P26_SEAL_2026-10-21.md(engine を変える。人間の事前承認 2026-10-21)で recipes.py に G1〜G5 の塊(+251 行・-1 行。既存の行の書き換えは数の読み取りの for 文 1 行だけ) を足した。
                 # bff243f13429b553(P25 の段 1)は残す(測った時点の値)、P26 の段 1 で 181b370420ab751b。受け入れるのは、その封が履歴に在り、値が P26 の段 1 の後の値のときだけ。
                 "adapters/xbrl/recipes.py": ("181b370420ab751b", SEAL_P26)}
@@ -386,7 +390,7 @@ class EngineAtSealTest(unittest.TestCase):
             self.assertFalse(V.PROFILES[n].truncate_on_magnitude, n)
         # 封の commit 時点は「新しい旗 `truncate_abs_band` は Profile に無い・P23 は PROFILES に無い」だった(測った当時の事実)。
         # 段 1 の commit で「旗は在り P23 だけが真・P23 は在り既定は P22 のまま」に直した(docstring)。
-        self.assertEqual(V.DEFAULT_PROFILE, "P22")
+        self.assertEqual(V.DEFAULT_PROFILE, "P26")      # 段 1 の commit 時点は P22。2026-10-23 の P26 の段 2(封 docs/XBRL_DEFAULT_P26_SEAL_2026-10-23.md)で P26
         self.assertIn("truncate_abs_band", fields)
         self.assertFalse(fields["truncate_abs_band"].default)
         # 2026-10-21: P24 = P23 + 旗 2 つ(封 XBRL_VOCAB_SEAL_2026-10-21)は truncate_abs_band・率の旗を引き継ぐ

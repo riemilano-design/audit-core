@@ -64,7 +64,9 @@ from adapters.xbrl import vocabulary as V        # noqa: E402
 
 SEAL = "docs/XBRL_ROUNDING_SEAL_2026-10-21.md"
 OUT_REL = "fixtures/xbrl/rounding_2026-10-21.json"
-RITUAL_REL = "fixtures/xbrl/ritual_2026-10-20.json"                 # P22(既定)で採り直した儀式の記録
+RITUAL_REL = "fixtures/xbrl/ritual_2026-10-20.json"                 # 記録の欄の名前(測った当時の字。P22(既定)で採り直した儀式の記録)
+# 2026-10-23(P26 の段 2。封 docs/XBRL_DEFAULT_P26_SEAL_2026-10-23.md)で ritual_2026-10-20.json は P26(既定)で採り直したので、P22 のときの記録は同じバイト列(sha256 c89824f7…)の写し ritual_2026-10-20_p22.json を読む。記録の欄の名前(RITUAL_REL)は測った当時の字で変えない
+RITUAL_P22_FILE = "fixtures/xbrl/ritual_2026-10-20_p22.json"
 PERIOD_BIND_REL = "fixtures/xbrl/period_bind_2026-10-20.json"
 S2_MATERIAL_REL = PB.S2_MATERIAL_REL
 S2_REC_REL = PB.S2_REC_REL
@@ -95,7 +97,7 @@ def r1(label_shas):
         raise SystemExit(u"**儀式の入力の sha256 が封の字と違う。止める**")
     old = RIT.build(zb, OLD, label_shas)
     new = RIT.build(zb, NEW, label_shas)
-    rec = jload(RITUAL_REL)
+    rec = jload(RITUAL_P22_FILE)
     key = lambda x: (x[u"id"], x[u"型"])
     by_rec = dict((key(x), x[u"結果"]) for x in rec[u"注入の一覧"])
     by_old = dict((key(x), x[u"結果"]) for x in old[u"注入の一覧"])
@@ -463,7 +465,7 @@ def judge(rec):
 def inputs_block(doc_ids_67):
     d = {}
     for rel in (RITUAL_REL, PERIOD_BIND_REL, S2_MATERIAL_REL, S2_REC_REL):
-        d[rel] = sha_file(os.path.join(ROOT, rel))
+        d[rel] = sha_file(os.path.join(ROOT, RITUAL_P22_FILE if rel == RITUAL_REL else rel))
     d[u"seat answers(hybrid_s2_answers)"] = dict((fn, sha_file(os.path.join(PB.HS2.ANS_DIR, fn))) for fn in sorted(os.listdir(PB.HS2.ANS_DIR)) if fn.endswith("_answer.json"))
     d[u"儀式の同梱書類"] = sha_file(os.path.join(ROOT, RIT.ZIP_REL))
     d[u"書類 67(経営分析の文を持つ)の sha256"] = dict((x, sha_file(ED.cache_path(x))) for x in doc_ids_67 if os.path.exists(ED.cache_path(x)))

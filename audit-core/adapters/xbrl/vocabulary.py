@@ -770,7 +770,10 @@ PROFILES = {"P1": P1, "P5F": P5F, "P6": P6, "P7": P7, "P8": P8, "P9": P9, "P10":
 # 通した 458 / 485 -> 1 / 485、代価は正しい GROUNDED を離れた 25 行うち正しい前期の文 11 が VALUE_MISMATCH)と、客の席の回し直し(同じ書類で
 # 誤り 5 / 5 止め・正しい 39 行の空振り 0。開発側でない客の席の日記。repo の外 = scratchpad、記録なし。司令塔が読んで諮った数)を見てから。封 docs/XBRL_PERIOD_BIND_SEAL_2026-10-20.md の段 2(E-8)、結果は
 # docs/XBRL_PERIOD_BIND_RESULT_2026-10-20.md。**P21 の字は消さず**、P21 を明示した呼び出しは変えない(P21 の既定は 2026-10-20 a516288)。
-DEFAULT_PROFILE = "P22"
+# 2026-10-23 に P22 -> P26(P26 の段 2)。人間の決定 2026-10-21「新しい標本取り、テストしてP25にするか判断したらどう?」「あとは全て任せる」・engine の事前承認 2026-10-21。
+# 封 docs/XBRL_FRESH_SAMPLE_SEAL_2026-10-21.md §3(commit 14cdd21)の基準を、新しい標本 30 書類の結果 docs/XBRL_FRESH_SAMPLE_RESULT_2026-10-21.md(commit 52289c4)の
+# 記録の数から機械で求めた判定が P26。段 2 の封は docs/XBRL_DEFAULT_P26_SEAL_2026-10-23.md、結果は docs/XBRL_DEFAULT_P26_RESULT_2026-10-23.md。**P22 の字は消さず**、P22 を明示した呼び出しは変えない。
+DEFAULT_PROFILE = "P26"
 
 # P25 = P24 + 最後の枝は証拠があるときだけ名指す。段 1 では既定にしない。PROFILES の行(P24 まで)は字を変えず、ここで足す。
 P25 = dataclasses.replace(P24, name="P25", last_branch_names_only_if_evidence=True)

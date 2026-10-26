@@ -290,7 +290,9 @@ def compose(std_labels, std_meta, zip_path):
 
 def doc_row(d, profile, labels, meta, lab_old, old_mod, zb, zip_path):
     t0 = time.time()
-    out = VD.verify_document(zb, None if profile == "P22" else profile, None)
+    # 2026-10-23(既定を P22 -> P26 に切り替える 段 2。封 docs/XBRL_DEFAULT_P26_SEAL_2026-10-23.md §1-2): 記録は既定が P22 のときに測った。P22 は profile を渡さず(None)でなく**明示**して
+    # 測った当時の値を再現する(None のままだと既定が P26 の今は P26 になる)。記録の字(「比べた profile」の P22(既定。profile を渡さない))は測った当時のもので直さない。
+    out = VD.verify_document(zb, profile, None)
     t1 = time.time()
     claims = out["claims"]
     dei = RC.dei_from_zip(zip_path, (out.get("input") or {}).get("instance_source"))

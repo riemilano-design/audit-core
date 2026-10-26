@@ -70,7 +70,10 @@ UNTOUCHED = {"adapters/xbrl/report.py": "0d2854e659a5d8e0",              # 人�
 # (extract.py・report_customer.py も。この封の UNTOUCHED の外)。上の UNTOUCHED は「この封は触らない」の値(封の commit 時点)で消さない。
 # 受け入れるのは、その封が履歴に在り、値が P26 の段 1 の後の値のときだけ。report.py・verify_document.py は遷移を持たない(動いたら赤のまま)。
 SEAL_P26 = "docs/XBRL_P26_SEAL_2026-10-21.md"
-UNTOUCHED_LATER = {"adapters/xbrl/vocabulary.py": ("83025e9c0525d08b", SEAL_P26), "adapters/xbrl/recipes.py": ("181b370420ab751b", SEAL_P26),
+SEAL_DEFAULT_P26 = "docs/XBRL_DEFAULT_P26_SEAL_2026-10-23.md"    # 2026-10-23 追記: 既定を P22 -> P26 に切り替える 段 2(下の遷移)
+# 2026-10-23(既定を P22 -> P26 に切り替える 段 2): 封 docs/XBRL_DEFAULT_P26_SEAL_2026-10-23.md(engine の差分は vocabulary.py の DEFAULT_PROFILE の 1 行と決定の注記 +4 行・-1 行だけ。人間の事前承認 2026-10-21)。
+# 83025e9c0525d08b(P26 の段 1)は残す(測った時点の値)、段 2 で e28733067b1f17f5。受け入れるのは、その封が履歴に在り、値が段 2 の後の値のときだけ。
+UNTOUCHED_LATER = {"adapters/xbrl/vocabulary.py": ("e28733067b1f17f5", SEAL_DEFAULT_P26), "adapters/xbrl/recipes.py": ("181b370420ab751b", SEAL_P26),
                    "adapters/xbrl/registry_setup.py": ("7f2cbded9c830211", SEAL_P26)}
 P26_REASONS = ("other_concept", "direction_on_cause_item", "rounded_diff_within_double_band")
 
@@ -92,7 +95,8 @@ FINGERPRINT_LATER = {
     # 2026-10-21 追記(顧客向けの報告形の直し。封 docs/XBRL_CUSTOMER_REPORT_FIX_SEAL_2026-10-21.md が宣言した遷移): module の中身が動き、束ねた指紋が
     # c556de1c…(段 1)から 11840a09… に動いた。file の数 16 は動かない。受け入れるのは、その封が履歴に在り、値が下の値のときだけ。
     # 2026-10-22 追記(P26 の段 1。封 docs/XBRL_P26_SEAL_2026-10-21.md が宣言した遷移): engine の 4 file と module が動き、束ねた指紋が 11840a09…(報告形の直し)から 498993e2… に動いた。
-    "adapter_xbrl_py_sha256": ("498993e29055472aaf2e691758e62c02a41cd291654cf205ae0a55a9e55df318", SEAL_P26),
+    # 2026-10-23 追記(既定を P22 -> P26 に切り替える 段 2。封 docs/XBRL_DEFAULT_P26_SEAL_2026-10-23.md が宣言した遷移): vocabulary.py の 1 行と注記が動き、束ねた指紋が 498993e2…(P26 の段 1。残す)から 5aba7749… に動いた。
+    "adapter_xbrl_py_sha256": ("5aba7749259683563c37e62353717f64b4e4828931998a7c42518aca107f3504", SEAL_DEFAULT_P26),
     "adapter_xbrl_py_files": (16, SEAL_REL),
 }
 # 実装の便の後の frozen_bundle(FROZEN_COUNT 36 → 37・新しい世代。report_customer.py を git add した状態で測る)。封の commit 時点の値(FROZEN_BUNDLE_AT_SEAL)は残す。
@@ -101,6 +105,8 @@ FROZEN_BUNDLE_STAGE1 = "66f906c89205f0ef361e13fe051dbdeaed75a032e0d60ca832f6d605
 FROZEN_BUNDLE_AFTER = "5c4da2e2ff3f30b7dcb6ebcbc84a5c68b074e8dc495f2d260551d7e10a4ce66c"
 # 2026-10-22 追記(P26 の段 1): 同じ 37 本のまま engine の 4 file と module が動き、世代がもう 1 つ増えた。最新の世代はこの値。
 FROZEN_BUNDLE_P26 = "a97ecf7c44e60c45bf6e6c23439c59955aad8bddf26b1174ee1e0ebabfd59c7c"
+# 2026-10-23 追記(既定を P22 -> P26 に切り替える 段 2): 同じ 37 本のまま vocabulary.py が動き、世代がもう 1 つ増えた。最新の世代はこの値。
+FROZEN_BUNDLE_DEFAULT_P26 = "26b5270646f2d8d8fcb7ca829f5f36066f9e2e9a1c3d1f0e4cdde1822e5d6fb6"
 FROZEN_COUNT_AFTER = 37
 
 
@@ -503,12 +509,13 @@ class SealedStateTest(unittest.TestCase):
             self.assertTrue(FINGERPRINT_LATER, u"**frozen_bundle の本数が %d(定数 %d)に動いているのに、遷移の宣言が無い**" % (n_files, count))
             self.assertEqual((count, n_files), (FROZEN_COUNT_AFTER, FROZEN_COUNT_AFTER), u"遷移は 36 → 37 本だけ宣言されている")
             self.assertEqual(r.returncode, 0, out)
-            self.assertIn(FROZEN_BUNDLE_P26, out)
-            self.assertEqual(gens[-1], FROZEN_BUNDLE_P26)
+            self.assertIn(FROZEN_BUNDLE_DEFAULT_P26, out)
+            self.assertEqual(gens[-1], FROZEN_BUNDLE_DEFAULT_P26)
             self.assertIn(FROZEN_BUNDLE_AT_SEAL, gens, u"封の commit 時点の世代は消さない")
             self.assertIn(FROZEN_BUNDLE_STAGE1, gens, u"段 1(c13a746)の世代は消さない")
             self.assertEqual(gens.index(FROZEN_BUNDLE_AFTER), gens.index(FROZEN_BUNDLE_STAGE1) + 1, u"段 2 の世代は段 1 の次")
             self.assertEqual(gens.index(FROZEN_BUNDLE_P26), gens.index(FROZEN_BUNDLE_AFTER) + 1, u"P26 の段 1 の世代は報告形の直しの次")
+            self.assertEqual(gens.index(FROZEN_BUNDLE_DEFAULT_P26), gens.index(FROZEN_BUNDLE_P26) + 1, u"既定を P26 にした段 2 の世代は P26 の段 1 の次")
         # 字で留めた本数は git が数える本数と同じ(今)
         ls = subprocess.run(["git", "ls-files", "audit-core/core", "audit-core/adapters"], cwd=REPO, capture_output=True, text=True).stdout.split()
         self.assertEqual(len(ls), n_files)

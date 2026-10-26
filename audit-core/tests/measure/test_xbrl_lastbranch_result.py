@@ -70,7 +70,10 @@ ENGINE_AT_MEASURE = {"adapters/xbrl/vocabulary.py": "27e71e9861fc5aad", "adapter
 #: 段 2(既定の切り替え)などで動いたときの宣言された遷移: {path: (後の sha16, 遷移を宣言した封の path)}。段 1 の commit 時点では空。
 #: 2026-10-22(P26 の段 1): 封 docs/XBRL_P26_SEAL_2026-10-21.md(engine を変える。人間の事前承認 2026-10-21)で vocabulary.py・recipes.py・registry_setup.py が動いた。受け入れるのは、その封が履歴に在り、値が P26 の段 1 の後の値のときだけ。
 SEAL_P26 = "docs/XBRL_P26_SEAL_2026-10-21.md"
-ENGINE_LATER = {"adapters/xbrl/vocabulary.py": ("83025e9c0525d08b", SEAL_P26),
+SEAL_DEFAULT_P26 = "docs/XBRL_DEFAULT_P26_SEAL_2026-10-23.md"    # 2026-10-23 追記: 既定を P22 -> P26 に切り替える 段 2(下の遷移)
+# 2026-10-23(既定を P22 -> P26 に切り替える 段 2): 封 docs/XBRL_DEFAULT_P26_SEAL_2026-10-23.md(engine の差分は vocabulary.py の DEFAULT_PROFILE の 1 行と決定の注記 +4 行・-1 行だけ。人間の事前承認 2026-10-21)。
+# 83025e9c0525d08b(P26 の段 1)は残す(測った時点の値)、段 2 で e28733067b1f17f5。受け入れるのは、その封が履歴に在り、値が段 2 の後の値のときだけ。
+ENGINE_LATER = {"adapters/xbrl/vocabulary.py": ("e28733067b1f17f5", SEAL_DEFAULT_P26),
                 "adapters/xbrl/recipes.py": ("181b370420ab751b", SEAL_P26),
                 "adapters/xbrl/registry_setup.py": ("7f2cbded9c830211", SEAL_P26)}
 
@@ -712,9 +715,9 @@ class RecordTest(unittest.TestCase):
         self.assertEqual(out.returncode, 0)
         self.assertEqual(out.stdout.strip(), u"", u"core/ が封の commit から動いている")
         src = jtext(VOCAB)
-        self.assertEqual(re.findall(r'(?m)^DEFAULT_PROFILE = "(P\d+)"$', src), ["P22"], u"段 1 は既定を P22 のままにする(切り替えは段 2)")
+        self.assertEqual(re.findall(r'(?m)^DEFAULT_PROFILE = "(P\d+)"$', src), ["P26"], u"段 1 の commit 時点は既定が P22 だった。2026-10-23 の P26 の段 2(封 docs/XBRL_DEFAULT_P26_SEAL_2026-10-23.md)で P26")
         from adapters.xbrl import vocabulary as V
-        self.assertEqual(V.DEFAULT_PROFILE, "P22")
+        self.assertEqual(V.DEFAULT_PROFILE, "P26")
         self.assertTrue(V.PROFILES["P25"].last_branch_names_only_if_evidence)
         self.assertFalse(V.PROFILES["P24"].last_branch_names_only_if_evidence)
         self.assertFalse(V.PROFILES["P22"].last_branch_names_only_if_evidence or V.PROFILES["P23"].last_branch_names_only_if_evidence)

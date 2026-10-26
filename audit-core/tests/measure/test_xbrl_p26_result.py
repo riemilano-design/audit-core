@@ -65,7 +65,10 @@ ENGINE_AT_MEASURE = {"adapters/xbrl/extract.py": "9982599fc31cbab3", "adapters/x
                      "adapters/xbrl/registry_setup.py": "7f2cbded9c830211", "adapters/xbrl/report_customer.py": "141767d189b63733",
                      "adapters/xbrl/comparators.py": "d8706338325e725b"}
 #: 段 2(既定の切り替え)などで動いたときの宣言された遷移: {path: (後の sha16, 遷移を宣言した封の path)}。段 1 の commit 時点では空。
-ENGINE_TRANSITIONS = {}
+#: 2026-10-23(既定を P22 -> P26 に切り替える 段 2): 封 docs/XBRL_DEFAULT_P26_SEAL_2026-10-23.md が宣言した遷移。vocabulary.py は DEFAULT_PROFILE の 1 行と決定の注記(+4 行・-1 行)だけ動いた。
+#: 83025e9c0525d08b(P26 の段 1。ENGINE_AT_MEASURE に残す = 測った時点の値)から段 2 で e28733067b1f17f5。受け入れるのは、その封が履歴に在り、値が段 2 の後の値のときだけ。
+SEAL_DEFAULT_P26 = "docs/XBRL_DEFAULT_P26_SEAL_2026-10-23.md"
+ENGINE_TRANSITIONS = {"adapters/xbrl/vocabulary.py": ("e28733067b1f17f5", SEAL_DEFAULT_P26)}
 #: 封の commit から 0 行でなければならない file(core/ は別に見る)。
 UNTOUCHED = ("adapters/xbrl/report.py", "adapters/xbrl/verify_document.py", "adapters/xbrl/comparators.py")
 
@@ -676,7 +679,9 @@ class RecordTest(unittest.TestCase):
             self.assertEqual(git("diff", "--numstat", SEAL_COMMIT, "--", rel).stdout, "", rel)
             self.assertEqual(git("status", "--porcelain", "--", rel).stdout, "", rel)
         from adapters.xbrl import vocabulary as V
-        self.assertEqual(V.DEFAULT_PROFILE, "P22")
+        # 段 1 の結果の commit では P22。段 2 の遷移(vocabulary.py が宣言された値)の後は P26(封 docs/XBRL_DEFAULT_P26_SEAL_2026-10-23.md)
+        moved = sha16("adapters/xbrl/vocabulary.py") != ENGINE_AT_MEASURE["adapters/xbrl/vocabulary.py"]
+        self.assertEqual(V.DEFAULT_PROFILE, "P26" if moved else "P22")
         self.assertIn("P26", V.PROFILES)
 
     def test_9_q8_is_not_judged_and_the_seal_was_not_edited(self):

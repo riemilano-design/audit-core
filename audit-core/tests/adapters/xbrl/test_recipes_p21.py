@@ -54,13 +54,14 @@ class FlagShapeTest(unittest.TestCase):
         # 2026-10-22 P26 = P25 + 旗 5 つ も引き継ぐ(封 XBRL_P26_SEAL_2026-10-21)
         self.assertEqual(["P21", "P22", "P23", "P24", "P25", "P26"], sorted(n for n, p in V.PROFILES.items() if p.last_branch_cues))
 
-    def test_the_default_profile_was_p21_from_step_2_and_is_p22_since_period_bind_step_2(self):
+    def test_the_default_profile_was_p21_from_step_2_and_p22_since_period_bind_step_2_and_is_p26_since_default_p26_step_2(self):
         """段 1(5eb80a2)では既定は P20 のままだった。段 2(2026-10-20)で P21 に切り替えた
         (封 docs/XBRL_NAMING_FIX_SEAL_2026-10-20.md §0・§5。N-4・N-5 が当たったとき)。
         同じ日の期を縛る P22 の段 2(封 docs/XBRL_PERIOD_BIND_SEAL_2026-10-20.md の E-8。人間の決定「任せる」)で既定は P22 になった。
-        P22 は P21 から作るので P21 の旗は引き継がれ、P21 の字は消えていない(明示で呼べる)。"""
+        P22 は P21 から作るので P21 の旗は引き継がれ、P21 の字は消えていない(明示で呼べる)。
+        2026-10-23 の P26 の段 2(封 docs/XBRL_DEFAULT_P26_SEAL_2026-10-23.md)で既定は P26 になった。P26 も P21 の旗を引き継ぐ。"""
 
-        self.assertEqual("P22", V.DEFAULT_PROFILE)
+        self.assertEqual("P26", V.DEFAULT_PROFILE)
         self.assertIn("P21", V.PROFILES)
         self.assertTrue(V.PROFILES[V.DEFAULT_PROFILE].last_branch_cues)
 

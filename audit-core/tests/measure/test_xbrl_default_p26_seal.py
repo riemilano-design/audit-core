@@ -86,8 +86,12 @@ FINGERPRINT_AT_BASE = {"adapter_xbrl_py_sha256": "498993e29055472aaf2e691758e62c
                        "core_py_files": 4}
 FROZEN_AT_BASE = "a97ecf7c44e60c45bf6e6c23439c59955aad8bddf26b1174ee1e0ebabfd59c7c"
 FROZEN_COUNT_AT_BASE = 37
-# 宣言された遷移(段 2 の commit で足す): {欄: (後の値, 遷移を宣言した封の path)}。封の commit 時点では空。
-DECLARED = {}
+# 宣言された遷移(段 2 の commit で足す): {欄: (後の値, 遷移を宣言した封の path)}。封の commit 時点では空だった。
+# 2026-10-23(段 2 の実装の便): vocabulary.py の DEFAULT_PROFILE の 1 行と決定の注記(+4 行・-1 行)だけが動いた。上の ADAPTERS_AT_BASE・FINGERPRINT_AT_BASE・FROZEN_AT_BASE は
+# 封の commit 時点の値で消さない。受け入れるのは、この封が履歴に在り、値が段 2 の後の値のときだけ。
+DECLARED = {"vocabulary_sha16": ("e28733067b1f17f5", SEAL_REL),
+            "adapter_xbrl_py_sha256": ("5aba7749259683563c37e62353717f64b4e4828931998a7c42518aca107f3504", SEAL_REL),
+            "frozen_bundle": ("26b5270646f2d8d8fcb7ca829f5f36066f9e2e9a1c3d1f0e4cdde1822e5d6fb6", SEAL_REL)}
 
 CRITERIA_ORDER = ("P26", "P25", "P24")
 STATES = ("GROUNDED", "VALUE_MISMATCH", "UNVERIFIABLE", "POINTER_NOT_FOUND")

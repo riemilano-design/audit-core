@@ -79,7 +79,9 @@ FROZEN_LATER = {
     # 83498c04a7b70396(P24 の段 1)は残す(測った時点の値)、P25 の段 1 で 27e71e9861fc5aad。受け入れるのは、その封が履歴に在り、値が P25 の段 1 の後の値のときだけ。
     # 2026-10-22(P26 の段 1): 封 docs/XBRL_P26_SEAL_2026-10-21.md(engine を変える。人間の事前承認 2026-10-21)で vocabulary.py に旗 5 つ・P26・PROFILES の登録を足した(+17 行。DEFAULT_PROFILE は P22 のまま)。
     # 27e71e9861fc5aad(P25 の段 1)は残す(測った時点の値)、P26 の段 1 で 83025e9c0525d08b。受け入れるのは、その封が履歴に在り、値が P26 の段 1 の後の値のときだけ。
-    "adapters/xbrl/vocabulary.py": ("83025e9c0525d08b", "docs/XBRL_P26_SEAL_2026-10-21.md"),
+    # 2026-10-23(既定を P22 -> P26 に切り替える 段 2): 封 docs/XBRL_DEFAULT_P26_SEAL_2026-10-23.md(engine の差分は vocabulary.py の DEFAULT_PROFILE の 1 行と決定の注記 +4 行・-1 行だけ。人間の事前承認 2026-10-21)。
+    # 83025e9c0525d08b(P26 の段 1)は残す(測った時点の値)、段 2 で e28733067b1f17f5。受け入れるのは、その封が履歴に在り、値が段 2 の後の値のときだけ。
+    "adapters/xbrl/vocabulary.py": ("e28733067b1f17f5", "docs/XBRL_DEFAULT_P26_SEAL_2026-10-23.md"),
     # 2026-10-22(P26 の段 1): 同じ封で extract.py に数の読み取りの新しい関数 iter_numbers_2026_10_21(+42 行・-0 行。iter_numbers の字は変えない)を足した。
     # 封 G-9 の 68a78f99f4d4c216 は消さない。受け入れるのは、その封が履歴に在り、値が P26 の段 1 の後の値のときだけ。
     "adapters/xbrl/extract.py": ("9982599fc31cbab3", "docs/XBRL_P26_SEAL_2026-10-21.md"),

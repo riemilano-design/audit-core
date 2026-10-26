@@ -136,9 +136,11 @@ class FlagShapeTest(unittest.TestCase):
     def test_with_the_flag_false_p25_is_p24(self):
         self.assertEqual(dataclasses.replace(V.P24, name="P25_OFF"), P25_OFF)
 
-    def test_the_default_profile_is_still_p22_in_step_1(self):
-        self.assertEqual("P22", V.DEFAULT_PROFILE)
-        self.assertFalse(V.PROFILES[V.DEFAULT_PROFILE].last_branch_names_only_if_evidence)
+    def test_the_default_profile_was_p22_in_step_1_and_is_p26_since_default_p26_step_2(self):
+        """段 1 では既定にしなかった。2026-10-23 の P26 の段 2(封 docs/XBRL_DEFAULT_P26_SEAL_2026-10-23.md)で既定は P26 になり、
+        P25 の旗は既定で真(P26 は P25 を引き継ぐ)。"""
+        self.assertEqual("P26", V.DEFAULT_PROFILE)
+        self.assertTrue(V.PROFILES[V.DEFAULT_PROFILE].last_branch_names_only_if_evidence)
 
     def test_the_profiles_literal_line_is_not_touched(self):
         """``PROFILES = {...}`` の行の字は変えない(P25 は ``PROFILES["P25"] = P25`` で足す)。"""

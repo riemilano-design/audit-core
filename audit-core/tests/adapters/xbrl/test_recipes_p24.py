@@ -136,11 +136,12 @@ class FlagShapeTest(unittest.TestCase):
     def test_with_both_flags_false_p24_is_p23(self):
         self.assertEqual(dataclasses.replace(V.P23, name="P24_OFF"), P24_OFF)
 
-    def test_the_default_profile_is_still_p22_in_step_1(self):
-        """段 1 では既定にしない(封 §1)。"""
-        self.assertEqual("P22", V.DEFAULT_PROFILE)
-        self.assertFalse(V.PROFILES[V.DEFAULT_PROFILE].vocab_2026_10_21)
-        self.assertFalse(V.PROFILES[V.DEFAULT_PROFILE].frame_rebind)
+    def test_the_default_profile_was_p22_in_step_1_and_is_p26_since_default_p26_step_2(self):
+        """段 1 では既定にしなかった(封 §1)。2026-10-23 の P26 の段 2(封 docs/XBRL_DEFAULT_P26_SEAL_2026-10-23.md)で既定は P26 になり、
+        P24 の旗 2 つは既定で真(P26 は P24 を引き継ぐ)。"""
+        self.assertEqual("P26", V.DEFAULT_PROFILE)
+        self.assertTrue(V.PROFILES[V.DEFAULT_PROFILE].vocab_2026_10_21)
+        self.assertTrue(V.PROFILES[V.DEFAULT_PROFILE].frame_rebind)
 
     def test_other_frame_is_a_registered_unverifiable_reason(self):
         self.assertIn("other_frame", RS._UNVERIFIABLE_REASONS)

@@ -71,9 +71,13 @@ FIX_SEAL_REL = "docs/XBRL_CUSTOMER_REPORT_FIX_SEAL_2026-10-21.md"
 #: 報告形の直し 段 1 の後の値は 715468699973cc4a・11840a09…(残す。測った時点の次の値)。2026-10-22(P26 の段 1): 封 docs/XBRL_P26_SEAL_2026-10-21.md が report_customer.py の理由の表に 3 行・
 #: engine の 4 file(extract・vocabulary・recipes・registry_setup)を書き換えたので、いまの値は下の値(その封が履歴に在るときだけ受け入れる)。
 SEAL_P26 = "docs/XBRL_P26_SEAL_2026-10-21.md"
+SEAL_DEFAULT_P26 = "docs/XBRL_DEFAULT_P26_SEAL_2026-10-23.md"    # 2026-10-23 追記: 既定を P22 -> P26 に切り替える 段 2(下の遷移)
 MODULE_LATER = {"sha16": "141767d189b63733", "seal": SEAL_P26}
-ENGINE_ADAPTER_SHA_LATER = {"value": "498993e29055472aaf2e691758e62c02a41cd291654cf205ae0a55a9e55df318", "seal": SEAL_P26}
-UNTOUCHED_LATER = {"adapters/xbrl/vocabulary.py": ("83025e9c0525d08b", SEAL_P26), "adapters/xbrl/recipes.py": ("181b370420ab751b", SEAL_P26),
+# 2026-10-23(既定を P22 -> P26 に切り替える 段 2): engine の束ねた指紋は vocabulary.py の 1 行と注記で動く。498993e29055472a…(P26 の段 1)は残す(測った時点の次の値)、段 2 で 5aba774925968356…。受け入れるのは、封 docs/XBRL_DEFAULT_P26_SEAL_2026-10-23.md が履歴に在り、値が段 2 の後の値のときだけ。
+ENGINE_ADAPTER_SHA_LATER = {"value": "5aba7749259683563c37e62353717f64b4e4828931998a7c42518aca107f3504", "seal": SEAL_DEFAULT_P26}
+# 2026-10-23(既定を P22 -> P26 に切り替える 段 2): 封 docs/XBRL_DEFAULT_P26_SEAL_2026-10-23.md(engine の差分は vocabulary.py の DEFAULT_PROFILE の 1 行と決定の注記 +4 行・-1 行だけ。人間の事前承認 2026-10-21)。
+# 83025e9c0525d08b(P26 の段 1)は残す(測った時点の値)、段 2 で e28733067b1f17f5。受け入れるのは、その封が履歴に在り、値が段 2 の後の値のときだけ。
+UNTOUCHED_LATER = {"adapters/xbrl/vocabulary.py": ("e28733067b1f17f5", SEAL_DEFAULT_P26), "adapters/xbrl/recipes.py": ("181b370420ab751b", SEAL_P26),
                    "adapters/xbrl/registry_setup.py": ("7f2cbded9c830211", SEAL_P26)}
 P26_REASONS = {"other_concept", "direction_on_cause_item", "rounded_diff_within_double_band"}
 ALLOWED_RESIDUAL = []
@@ -436,6 +440,7 @@ def check_untouched_and_module(rec):
     # module が動いている: 宣言された遷移(段 2 の封が履歴に在り、値が宣言の値)だけを受け入れる
     assert git("log", "--diff-filter=A", "--format=%H", "--", MODULE_LATER["seal"]).stdout.split(), u"**module が動いているのに、遷移を宣言した封が履歴に無い**"
     assert now[:16] == MODULE_LATER["sha16"], u"**module が、宣言された遷移の値とも違う**"
+    assert git("log", "--diff-filter=A", "--format=%H", "--", ENGINE_ADAPTER_SHA_LATER["seal"]).stdout.split(), u"**engine の指紋が動いているのに、遷移を宣言した封が履歴に無い**"
     assert fp["adapter_xbrl_py_sha256"] == ENGINE_ADAPTER_SHA_LATER["value"], u"**engine の指紋が、宣言された遷移の値とも違う**"
 
 

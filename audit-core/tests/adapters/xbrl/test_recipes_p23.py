@@ -76,10 +76,11 @@ class FlagShapeTest(unittest.TestCase):
         self.assertFalse(V.P23.truncate_on_magnitude)
         self.assertEqual(["P19"], sorted(n for n, p in V.PROFILES.items() if p.truncate_on_magnitude))
 
-    def test_the_default_profile_is_still_p22_in_step_1(self):
-        """段 1 では既定にしない(封 §1)。"""
-        self.assertEqual("P22", V.DEFAULT_PROFILE)
-        self.assertFalse(V.PROFILES[V.DEFAULT_PROFILE].truncate_abs_band)
+    def test_the_default_profile_was_p22_in_step_1_and_is_p26_since_default_p26_step_2(self):
+        """段 1 では既定にしなかった(封 §1)。2026-10-23 の P26 の段 2(封 docs/XBRL_DEFAULT_P26_SEAL_2026-10-23.md)で既定は P26 になり、
+        P23 の旗 truncate_abs_band は既定で真(P26 は P23 を引き継ぐ)。"""
+        self.assertEqual("P26", V.DEFAULT_PROFILE)
+        self.assertTrue(V.PROFILES[V.DEFAULT_PROFILE].truncate_abs_band)
 
 
 class NegativeAmountTruncationTest(unittest.TestCase):

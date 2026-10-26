@@ -36,6 +36,7 @@ sys.path.insert(0, os.path.join(ROOT, "core", "py"))
 SEAL_REL = "docs/XBRL_VOCAB_SEAL_2026-10-21.md"
 SEAL_LASTBRANCH = "docs/XBRL_LASTBRANCH_SEAL_2026-10-21.md"    # 2026-10-21 追記: 最後の枝 P25 の段 1(下の ENGINE_LATER の遷移)
 SEAL_P26 = "docs/XBRL_P26_SEAL_2026-10-21.md"    # 2026-10-22 追記: P26 の段 1(下の ENGINE_LATER の遷移)
+SEAL_DEFAULT_P26 = "docs/XBRL_DEFAULT_P26_SEAL_2026-10-23.md"    # 2026-10-23 追記: 既定を P22 -> P26 に切り替える 段 2(下の遷移)
 SEAL = os.path.join(ROOT, SEAL_REL)
 ROUNDING_JSON = os.path.join(ROOT, "fixtures", "xbrl", "rounding_2026-10-21.json")
 POINT_PRIOR_JSON = os.path.join(ROOT, "fixtures", "xbrl", "point_prior_2026-10-20.json")
@@ -61,7 +62,9 @@ ENGINE_AT_SEAL = {"adapters/xbrl/vocabulary.py": "f7b8d925eb6787ec",
 # comparators.py・core/ は 0 行。DEFAULT_PROFILE は P22 のまま。ENGINE_AT_SEAL は残す(封の commit 時点の値)。
 # 2026-10-21(最後の枝 P25 の段 1): 封 docs/XBRL_LASTBRANCH_SEAL_2026-10-21.md(engine を変える。人間の事前承認 2026-10-21)で vocabulary.py に旗 last_branch_names_only_if_evidence・P25・PROFILES の登録(+7 行・-0 行)、recipes.py に最後の枝の証拠の判定の塊(+72 行・-0 行。既存の行は 1 つも書き換えない)、registry_setup.py に理由 no_same_value(+2 行)を足した(DEFAULT_PROFILE は P22 のまま)。
 # vocabulary.py の 83498c04a7b70396・recipes.py の 3461c3f8b7af6675・registry_setup.py の 9a0b08954cf22639(P24 の段 1)は残す(測った時点の値)。受け入れるのは、その封が履歴に在り、値が P25 の段 1 の後の値のときだけ。
-ENGINE_LATER = {"adapters/xbrl/vocabulary.py": ("83025e9c0525d08b", SEAL_P26),
+# 2026-10-23(既定を P22 -> P26 に切り替える 段 2): 封 docs/XBRL_DEFAULT_P26_SEAL_2026-10-23.md(engine の差分は vocabulary.py の DEFAULT_PROFILE の 1 行と決定の注記 +4 行・-1 行だけ。人間の事前承認 2026-10-21)。
+# 83025e9c0525d08b(P26 の段 1)は残す(測った時点の値)、段 2 で e28733067b1f17f5。受け入れるのは、その封が履歴に在り、値が段 2 の後の値のときだけ。
+ENGINE_LATER = {"adapters/xbrl/vocabulary.py": ("e28733067b1f17f5", SEAL_DEFAULT_P26),
                 # 2026-10-22(P26 の段 1): 封 docs/XBRL_P26_SEAL_2026-10-21.md(engine を変える。人間の事前承認 2026-10-21)で recipes.py に G1〜G5 の塊(+251 行・-1 行。既存の行の書き換えは数の読み取りの for 文 1 行だけ) を足した。
                 # bff243f13429b553(P25 の段 1)は残す(測った時点の値)、P26 の段 1 で 181b370420ab751b。受け入れるのは、その封が履歴に在り、値が P26 の段 1 の後の値のときだけ。
                 "adapters/xbrl/recipes.py": ("181b370420ab751b", SEAL_P26),
@@ -515,7 +518,7 @@ class EngineAtSealTest(unittest.TestCase):
         fields = dict((f.name, f) for f in dataclasses.fields(V.Profile))
         self.assertIn("P23", V.PROFILES)
         self.assertEqual(V.PROFILES["P23"], dataclasses.replace(V.P22, name="P23", pct_tolerance_from_decimals=True, truncate_abs_band=True))
-        self.assertEqual(V.DEFAULT_PROFILE, "P22")
+        self.assertEqual(V.DEFAULT_PROFILE, "P26")      # 段 1 の commit 時点は P22。2026-10-23 の P26 の段 2(封 docs/XBRL_DEFAULT_P26_SEAL_2026-10-23.md)で P26
         for flag in ("vocab_2026_10_21", "frame_rebind"):
             self.assertIn(flag, fields)
             self.assertIs(fields[flag].default, False)

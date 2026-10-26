@@ -121,6 +121,12 @@ FROZEN_BUNDLE_GENERATIONS = (
      "comparators.py・report.py・verify_document.py・core/py は 0 行。DEFAULT_PROFILE は P22 のまま。"
      "人間の事前承認 2026-10-21、封 docs/XBRL_P26_SEAL_2026-10-21.md(commit a8d8099)。"
      "対象 37 本のまま(FROZEN_COUNT 37)。独立監査 GO の前に測った値(commit 前)"),
+    ("26b5270646f2d8d8fcb7ca829f5f36066f9e2e9a1c3d1f0e4cdde1822e5d6fb6",
+     "2026-10-23 feature/audit-core-final-eval-8(既定を P22 -> P26 に切り替える 段 2): vocabulary.py の DEFAULT_PROFILE を P22 -> P26 にし、"
+     "決定の注記に日付と根拠を足した(vocabulary.py だけ。+4 行・-1 行。recipes.py・extract.py・registry_setup.py・report_customer.py・comparators.py・core/py ほか他の file は 0 行)。"
+     "判定は封 docs/XBRL_FRESH_SAMPLE_SEAL_2026-10-21.md §3(commit 14cdd21)の基準を記録の数から機械で求めた結果(commit 52289c4)で P26。"
+     "人間の方針 2026-10-21「あとは全て任せる」・engine の事前承認 2026-10-21、封 docs/XBRL_DEFAULT_P26_SEAL_2026-10-23.md(commit 6a78b42)。"
+     "対象 37 本のまま(FROZEN_COUNT 37)。独立監査 GO の前に測った値(commit 前)"),
 )
 
 # 字で留めるのは**いまの世代**。--expect を値なしで渡したときの既定。

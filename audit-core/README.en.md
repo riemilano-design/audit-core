@@ -50,12 +50,13 @@ Right after cloning, one command run inside `audit-core/` lets you see by hand w
 python3 measure/ritual_2026-10-20.py --out <output dir>
 ```
 
-- **Passed 15 / 240 = 6.2%**: each number in the management-discussion text is deliberately changed, one per sentence (the last digit changed / +-1 in the last printed unit), and the count is how many the engine still reports as GROUNDED.
-- Stopped 225 / 240 = 93.8% (VALUE_MISMATCH).
-- What the 15 passed are: inside the rounding band (+-1 last unit) 14 (rates 12, amounts and others 2); degenerate (`0` becoming `00` before the unit word: the text changes but the value does not) 1; outside the band 0. Whether these are defects is for the reader to decide.
-- The default is P22 (the period is pinned; 2026-10-20). Writing a prior-period value as a current-period number now stops: N125, N199, whose injected value matched the prior-period fact under P21 so the reference moved from the current period to the prior period and was still reported as GROUNDED, are stopped (VALUE_MISMATCH) under P22. Passed rows whose reference moved to the prior period: 0.
+- **Passed 2 / 243 = 0.8%**: each number in the management-discussion text is deliberately changed, one per sentence (the last digit changed / +-1 in the last printed unit), and the count is how many the engine still reports as GROUNDED.
+- Stopped 210 / 243 = 86.4% (VALUE_MISMATCH); in addition 31 were stopped because the reference could not be tied (POINTER_NOT_FOUND).
+- What the 2 passed are: inside the rounding band (+-1 last unit) 1 (rates 1, amounts and others 0); degenerate (`0` becoming `00` before the unit word: the text changes but the value does not) 1; outside the band 0. Whether these are defects is for the reader to decide.
+- The default is P26 (2026-10-23: P22 with the P23-P26 fixes on top). Writing a prior-period value as a current-period number stops, as it has since P22 (the period is pinned; 2026-10-20): N125, N199, whose injected value matched the prior-period fact under P21 so the reference moved from the current period to the prior period and was still reported as GROUNDED, are stopped under P26 (N125: POINTER_NOT_FOUND, N199: VALUE_MISMATCH). Passed rows whose reference moved to the prior period: 0.
+- Under P22 (2026-10-20 from `d0b544c`, until the P26 step 2 on 2026-10-23) it was passed 15 / 240, stopped 225 / 240 (record `fixtures/xbrl/ritual_2026-10-20_p22.json`).
 - Under P21 (2026-10-20, up to `cb4b497`) it was passed 17 / 241, stopped 224 / 241 (record `fixtures/xbrl/ritual_2026-10-20_p21.json`).
-- Run time 23.2 seconds (the machine that took the record).
+- Run time 19.0 seconds (the machine that took the record).
 - The input `fixtures/xbrl/ai_prose_instance_2026-10-09.zip` (sha256 `03521437be23c8e2a02d85b4bc29a215646803582e9101fdf185521041174799`, 580,260 bytes) is a public EDINET disclosure document (document ID S100Z4Q1, filer code E36539, DN Holdings Co., Ltd., filed 2026-09-30). **Its management-discussion section was replaced with AI-written text in the 2026-10-09 experiment, so it is not the original text.**
 - No key is used. It reads the bundled filing and the two label files under `~/.cache`, nothing else. To run it on your own filings you need an EDINET key and the filings downloaded.
 
@@ -90,7 +91,7 @@ detail.
 
 ## Test suite
 
-221 test files (counted by the suite-coverage record; the collected-test count changes with every
+222 test files (counted by the suite-coverage record; the collected-test count changes with every
 added test and is kept in that record, not here), including 96
 adversarial mutations exercised against the XBRL adapter. The core verification engine
 itself is 429 lines (`core/py/audit_core/*.py`): existence and value checks, nothing

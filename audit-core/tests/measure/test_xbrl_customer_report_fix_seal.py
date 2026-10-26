@@ -59,6 +59,7 @@ TARGET_AT_SEAL = "d82481697762d167"
 # 2026-10-22(P26 の段 1): 封 docs/XBRL_P26_SEAL_2026-10-21.md が report_customer.py の理由の表に 3 行を足した(+7 行・-2 行。判定と節の割り当ては変えない)。
 # 715468699973cc4a(この封の実装の便の値)は残す(測った時点の値)、P26 の段 1 で 141767d189b63733。受け入れるのは、その封が履歴に在り、値が P26 の段 1 の後の値のときだけ。
 SEAL_P26 = "docs/XBRL_P26_SEAL_2026-10-21.md"
+SEAL_DEFAULT_P26 = "docs/XBRL_DEFAULT_P26_SEAL_2026-10-23.md"    # 2026-10-23 追記: 既定を P22 -> P26 に切り替える 段 2(下の遷移)
 LATER_TARGET = {TARGET: ("141767d189b63733", SEAL_P26)}
 
 # §4 の file 一覧。**新規**の 4 本は封の commit 時点で作業木にも履歴にも無い。既存を直す file は EXISTING_EDITED。
@@ -94,7 +95,9 @@ UNTOUCHED = {"adapters/xbrl/__init__.py": "65474b49e6b84626",
 UNTOUCHED_LATER = {"adapters/xbrl/extract.py": ("9982599fc31cbab3", SEAL_P26),
                    "adapters/xbrl/recipes.py": ("181b370420ab751b", SEAL_P26),
                    "adapters/xbrl/registry_setup.py": ("7f2cbded9c830211", SEAL_P26),
-                   "adapters/xbrl/vocabulary.py": ("83025e9c0525d08b", SEAL_P26)}
+                   # 2026-10-23(既定を P22 -> P26 に切り替える 段 2): 封 docs/XBRL_DEFAULT_P26_SEAL_2026-10-23.md(engine の差分は vocabulary.py の DEFAULT_PROFILE の 1 行と決定の注記 +4 行・-1 行だけ。人間の事前承認 2026-10-21)。
+                   # 83025e9c0525d08b(P26 の段 1)は残す(測った時点の値)、段 2 で e28733067b1f17f5。受け入れるのは、その封が履歴に在り、値が段 2 の後の値のときだけ。
+                   "adapters/xbrl/vocabulary.py": ("e28733067b1f17f5", SEAL_DEFAULT_P26)}
 
 # 封の commit 時点の engine の束ねた指紋(verify_document.engine_fingerprint())と frozen_bundle。**宣言された遷移の前の値**で、消さない。
 FINGERPRINT_AT_SEAL = {"adapter_xbrl_py_sha256": "c556de1cb26e975a172d54a4e39f4971bb5c11a5fd8a02a8404b9a719eb27acb",
@@ -106,10 +109,12 @@ FROZEN_COUNT_AT_SEAL = 37
 # 宣言された遷移(実装の便の commit で足す): {欄: (後の値, 遷移を宣言した封の path)}。封の commit 時点では空。
 # 2026-10-21 実装の便: module の中身が動くので束ねた指紋が動く(file の数 16 は動かない)。封の commit 時点の値(FINGERPRINT_AT_SEAL)は残す。
 # 2026-10-22(P26 の段 1): 束ねた指紋が 11840a09…(この封の実装の便の値。残す)から 498993e2… に動いた(file の数 16 は動かない)。
-LATER_FINGERPRINT = {"adapter_xbrl_py_sha256": ("498993e29055472aaf2e691758e62c02a41cd291654cf205ae0a55a9e55df318", SEAL_P26)}
+# 2026-10-23(既定を P22 -> P26 に切り替える 段 2): 束ねた指紋が 498993e2…(P26 の段 1。残す)から 5aba7749… に動いた(file の数 16 は動かない)。受け入れるのは、封 docs/XBRL_DEFAULT_P26_SEAL_2026-10-23.md が履歴に在り、値が段 2 の後の値のときだけ。
+LATER_FINGERPRINT = {"adapter_xbrl_py_sha256": ("5aba7749259683563c37e62353717f64b4e4828931998a7c42518aca107f3504", SEAL_DEFAULT_P26)}
 # 2026-10-21 実装の便: frozen_bundle に新しい世代(5c4da2e2…)。本数は 37 のまま(module の中身だけが動く)。封の commit 時点の世代(FROZEN_BUNDLE_AT_SEAL)は消さない。
 # 2026-10-22(P26 の段 1): frozen_bundle の世代がもう 1 つ増えた(a97ecf7c…。本数は 37 のまま)。5c4da2e2…(この封の実装の便の世代)は消さない。
-LATER_FROZEN = {"bundle": ("a97ecf7c44e60c45bf6e6c23439c59955aad8bddf26b1174ee1e0ebabfd59c7c", SEAL_P26)}
+# 2026-10-23(既定を P22 -> P26 に切り替える 段 2): frozen_bundle の世代がもう 1 つ増えた(26b52706…。本数は 37 のまま)。a97ecf7c…(P26 の段 1 の世代)は消さない。
+LATER_FROZEN = {"bundle": ("26b5270646f2d8d8fcb7ca829f5f36066f9e2e9a1c3d1f0e4cdde1822e5d6fb6", SEAL_DEFAULT_P26)}
 FROZEN_BUNDLE_FIX = "5c4da2e2ff3f30b7dcb6ebcbc84a5c68b074e8dc495f2d260551d7e10a4ce66c"
 # 名簿に jpigp が入る遷移: 封の commit 時点は名簿 2 行・README に jpigp 無し。後は {"roster": (行, 封の path), "readme_has_jpigp": True}
 # 2026-10-21 実装の便: 名簿に jpigp の 1 行、README に jpigp の取り方。封の commit 時点(名簿 2 行・README に jpigp 無し)は test_8 の docstring と上の定数が残す。

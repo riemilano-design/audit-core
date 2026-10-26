@@ -43,6 +43,7 @@ sys.path.insert(0, ROOT)
 sys.path.insert(0, os.path.join(ROOT, "core", "py"))
 
 SEAL_REL = "docs/XBRL_P26_SEAL_2026-10-21.md"
+SEAL_DEFAULT_P26 = "docs/XBRL_DEFAULT_P26_SEAL_2026-10-23.md"    # 2026-10-23 追記: 既定を P22 -> P26 に切り替える 段 2(下の遷移)
 SEAL = os.path.join(ROOT, SEAL_REL)
 LASTBRANCH_JSON = os.path.join(ROOT, "fixtures", "xbrl", "lastbranch_2026-10-21.json")
 FRESH_SEAL_REL = "docs/XBRL_FRESH_SAMPLE_SEAL_2026-10-21.md"
@@ -84,7 +85,9 @@ UNTOUCHED = {"adapters/xbrl/__init__.py": "65474b49e6b84626",
 # report_customer.py +7/-2。comparators.py・report.py・verify_document.py・core/ は 0 行)。ENGINE_AT_SEAL(封の commit 時点の値)は消さない。
 # 受け入れるのは、この封が履歴に在り、値が段 1 の後の値のときだけ。
 ENGINE_TRANSITIONS = {"adapters/xbrl/extract.py": ("9982599fc31cbab3", SEAL_REL),
-                      "adapters/xbrl/vocabulary.py": ("83025e9c0525d08b", SEAL_REL),
+                      # 2026-10-23(既定を P22 -> P26 に切り替える 段 2): 封 docs/XBRL_DEFAULT_P26_SEAL_2026-10-23.md(vocabulary.py の DEFAULT_PROFILE の 1 行と決定の注記 +4 行・-1 行だけ)。
+                      # 83025e9c0525d08b(P26 の段 1)は残す(測った時点の値)、段 2 で e28733067b1f17f5。受け入れるのは、その封が履歴に在り、値が段 2 の後の値のときだけ。
+                      "adapters/xbrl/vocabulary.py": ("e28733067b1f17f5", SEAL_DEFAULT_P26),
                       "adapters/xbrl/recipes.py": ("181b370420ab751b", SEAL_REL),
                       "adapters/xbrl/registry_setup.py": ("7f2cbded9c830211", SEAL_REL),
                       "adapters/xbrl/report_customer.py": ("141767d189b63733", SEAL_REL)}
@@ -99,8 +102,10 @@ FROZEN_COUNT_AT_SEAL = 37
 # 宣言された遷移(段 1 の commit で足す): {欄: (後の値, 遷移を宣言した封の path)}。封の commit 時点では空。
 # adapter_xbrl_py_files は 16 のまま(file の数は動かない。段 1 が足すのは tests / measure / fixtures / docs で、adapters/ には 1 file も足さない)。
 # 段 1 の実装の便: 束ねた指紋が 11840a09…(封の commit 時点)から 498993e2… に動き(file の数 16 は動かない)、frozen_bundle の世代がもう 1 つ増えた(a97ecf7c…。本数は 37 のまま)。
-LATER_FINGERPRINT = {"adapter_xbrl_py_sha256": ("498993e29055472aaf2e691758e62c02a41cd291654cf205ae0a55a9e55df318", SEAL_REL)}
-LATER_FROZEN = {"bundle": ("a97ecf7c44e60c45bf6e6c23439c59955aad8bddf26b1174ee1e0ebabfd59c7c", SEAL_REL)}
+# 2026-10-23(既定を P22 -> P26 に切り替える 段 2): 束ねた指紋が 498993e2…(P26 の段 1。残す)から 5aba7749… に動いた(file の数 16 は動かない)。受け入れるのは、封 docs/XBRL_DEFAULT_P26_SEAL_2026-10-23.md が履歴に在り、値が段 2 の後の値のときだけ。
+LATER_FINGERPRINT = {"adapter_xbrl_py_sha256": ("5aba7749259683563c37e62353717f64b4e4828931998a7c42518aca107f3504", SEAL_DEFAULT_P26)}
+# 2026-10-23(既定を P22 -> P26 に切り替える 段 2): frozen_bundle の世代がもう 1 つ増えた(26b52706…。本数は 37 のまま)。a97ecf7c…(P26 の段 1 の世代)は消さない。
+LATER_FROZEN = {"bundle": ("26b5270646f2d8d8fcb7ca829f5f36066f9e2e9a1c3d1f0e4cdde1822e5d6fb6", SEAL_DEFAULT_P26)}
 
 # §1「触る枝の中の人間の決定」の 9 つ(封の字の順)と、決定の commit が履歴に在ること
 DECISIONS = (u"案ア(no_subject)", u"§1b の止め", u"C2 `period_cue`", u"C-1g §1-3 `_build_point_diff_claim`", u"P21 の最後の枝",

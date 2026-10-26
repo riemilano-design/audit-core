@@ -112,10 +112,12 @@ class FlagShapeTest(unittest.TestCase):
     def test_with_all_flags_false_p26_is_p25(self):
         self.assertEqual(dataclasses.replace(V.P25, name="P26_OFF"), P26_OFF)
 
-    def test_the_default_profile_is_still_p22_in_step_1(self):
-        self.assertEqual("P22", V.DEFAULT_PROFILE)
+    def test_the_default_profile_was_p22_in_step_1_and_is_p26_since_default_p26_step_2(self):
+        """段 1 では既定にしなかった。2026-10-23 の P26 の段 2(封 docs/XBRL_DEFAULT_P26_SEAL_2026-10-23.md)で既定は P26 になり、P26 の旗 5 つは既定で全部入っている。"""
+        self.assertEqual("P26", V.DEFAULT_PROFILE)
+        self.assertIs(V.PROFILES[V.DEFAULT_PROFILE], V.P26)
         for f in FLAGS:
-            self.assertEqual(OFF[f], getattr(V.PROFILES[V.DEFAULT_PROFILE], f))
+            self.assertNotEqual(OFF[f], getattr(V.PROFILES[V.DEFAULT_PROFILE], f), f)
 
     def test_the_constants_are_pinned_in_letters(self):
         self.assertEqual(2, R.LAST_BRANCH_NAMED_MIN_K)

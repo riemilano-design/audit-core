@@ -56,9 +56,10 @@ class FlagShapeTest(unittest.TestCase):
         # 2026-10-22 P26 = P25 + 旗 5 つ も period_bind を引き継ぐ(封 XBRL_P26_SEAL_2026-10-21)
         self.assertEqual(["P22", "P23", "P24", "P25", "P26"], sorted(n for n, p in V.PROFILES.items() if p.period_bind))
 
-    def test_the_default_profile_is_p22_from_step_2(self):
-        """段 1(3320c8c)では既定にしなかった(封 §1)。段 2(2026-10-20。人間の決定「任せる」。封の E-8)で P22 にした。"""
-        self.assertEqual("P22", V.DEFAULT_PROFILE)
+    def test_the_default_profile_was_p22_from_step_2_and_is_p26_since_default_p26_step_2(self):
+        """段 1(3320c8c)では既定にしなかった(封 §1)。段 2(2026-10-20。人間の決定「任せる」。封の E-8)で P22 にした。
+        2026-10-23 の P26 の段 2(封 docs/XBRL_DEFAULT_P26_SEAL_2026-10-23.md)で既定は P26 になった。P26 も period_bind を引き継ぐ。"""
+        self.assertEqual("P26", V.DEFAULT_PROFILE)
         self.assertTrue(V.PROFILES[V.DEFAULT_PROFILE].period_bind)
 
 
