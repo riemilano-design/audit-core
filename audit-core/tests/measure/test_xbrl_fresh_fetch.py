@@ -242,7 +242,8 @@ class T(unittest.TestCase):
         self.assertTrue(F.key_leaks('{"a": "%s"}' % FAKE_KEY))
         self.assertTrue(F.key_leaks('{"a": "%s"}' % FAKE_HEX_KEY))            # 32 桁 16 進も赤
         self.assertTrue(F.key_leaks("?Subscription-Key=abc"))
-        self.assertTrue(F.key_leaks("EDINET_API_KEY=abcdefgh1"))
+        # 字を分けて組む: tests/core/test_boundary.py が `EDINET_API_KEY=<8 字以上>` の形を repo 全体で禁じている
+        self.assertTrue(F.key_leaks(F.KEY_NAME + "=" + "abcdefgh1"))
         self.assertTrue(F.key_leaks("short-but-exact", key_value="short-but-exact"))
         self.assertEqual(F.key_leaks('{"sha256": "%s"}' % ("ab" * 32)), [])    # sha256 の 64 桁は通す
         self.assertEqual(F.key_leaks("通常の文 S100YXFQ 12345"), [])

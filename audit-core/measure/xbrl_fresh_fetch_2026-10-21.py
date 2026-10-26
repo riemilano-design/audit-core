@@ -16,7 +16,9 @@ URL は印字しない(鍵が付く)。生 ZIP は **既存の cache `~/.cache/a
      30 に届かなければ届いた数で測る(**引き直さない**)
   5. **記録に鍵らしい字が無いことを確かめてから書く**(書いた後にもう一度 file を読んで確かめる)
 
-    EDINET_API_KEY="$(security find-generic-password -s EDINET_API_KEY -w)" python3 measure/xbrl_fresh_fetch_2026-10-21.py
+    EDINET_API_KEY=<鍵> python3 measure/xbrl_fresh_fetch_2026-10-21.py
+    (鍵はキーチェーンから `security find-generic-password -s EDINET_API_KEY -w` で取り、その場で環境変数に入れる。字で書かない ―
+     tests/core/test_boundary.py の SecretKeyBoundaryTest が `EDINET_API_KEY=<8 字以上>` の形を repo 全体で禁じている)
 
 通信は `fetch_one` の中の `adapters.xbrl.edinet.fetch` だけ(試験は fetcher を差し替える)。
 """
