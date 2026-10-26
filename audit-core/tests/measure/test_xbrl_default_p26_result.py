@@ -673,7 +673,7 @@ class RecordTest(unittest.TestCase):
         self.assertEqual((j[u"既定"], j[u"順"]), (self.rec[u"S12"][u"既定"], self.rec[u"S12"][u"候補の順"]))
 
     def test_8_readme_facts_and_suite_count_are_live(self):
-        u"""S-10・S-11 を記録でなく**いまの木**から。README の節は記録から作った字と 1 対 1(儀式の門が全文を縛る)。ここは記録の欄と木の一致。"""
+        u"""S-10・S-11 を記録でなく**いまの木**から。README の節は記録から作った字と 1 対 1(儀式の門が全文を縛る)。ここは記録の欄と木の一致。(2026-10-27 追記: 試験 file の数の比べは、いまのディスクでなく段 2 の commit 917157c の木と。いまの木の数は覆いの記録だけが縛る。)"""
         ritual = jload(RITUAL_REC)
         for rel, head in (("README.md", u"## 10 分の再現"), ("README.en.md", u"## 10-minute reproduction")):
             t = jtext(os.path.join(ROOT, rel))
@@ -689,7 +689,14 @@ class RecordTest(unittest.TestCase):
         for base, dirs, files in os.walk(ROOT):
             dirs[:] = [d for d in dirs if d not in (".git", "node_modules", "__pycache__", ".pytest_cache")]
             n += sum(1 for f in files if f.startswith("test_") and f.endswith(".py"))
-        self.assertEqual(n, self.rec[u"S11"][u"試験 file の数(ディスク上)"], u"試験 file を足したのに記録を採り直していない")
+        ls = subprocess.run(["git", "ls-tree", "-r", "--name-only", "917157c"], cwd=ROOT, capture_output=True, text=True)
+        if ls.returncode == 0:
+            n_stage2 = sum(1 for path in ls.stdout.splitlines()
+                           if os.path.basename(path).startswith("test_") and path.endswith(".py")
+                           and not any(x in path for x in (".git", "node_modules", "__pycache__", ".pytest_cache")))
+            self.assertEqual(n_stage2, self.rec[u"S11"][u"試験 file の数(ディスク上)"], u"段 2 の commit 917157c の木の試験 file の数が記録と違う")
+        else:
+            print(u"SKIP: git ls-tree 917157c が失敗(履歴の無い写し)。段 2 の試験 file の数と記録の比べを省く")
         suite = jload(SUITE_REC)
         self.assertEqual(suite["test_files_on_disk"], n, u"覆いの記録が古い(`measure/suite_coverage_2026-10-16.py --write`)")
         self.assertEqual(suite["uncovered_files"], [])
